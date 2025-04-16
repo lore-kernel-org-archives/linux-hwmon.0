@@ -1,140 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E52296D1C;
-	Tue, 15 Apr 2025 16:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5AE231A55;
+	Wed, 16 Apr 2025 06:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744733632; cv=none; b=qldK0s1lxbg7c//gX1wpFmGP5Nk0CCRR5yXi6Wsu1BbSqC23+lm1pUCshydSd3yZRi9O9gY7MGnQ8RAPjY3WJkZTgUqE8FY2+xal/hJB5ZDGE3H3exniu45AijLancNMksZGRy7ZXeno9K2Ma5uL2YYKQsM/oBTlWahR2PEn16Q=
+	t=1744786506; cv=none; b=bp/DOgfBtI5YzAAjVrKMbPvm+ch9aqbMfo4C9fuH/8cH9/nzACS5OvHo6j9OqGgFuzA40tUZaO+afLKQ/S3GSlyYcLXDkXV1CpfKF7GBOpLg+XV0EQpTIe/iMA63H7O9rfHHPSzOdSALSUH6ikcqtgC24+ABvjlMyctVIhCZSJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744733632; c=relaxed/simple;
-	bh=1jFrBy0lzqpyUKpmfkbxvJvV2QeeBiFeu/gLSlD6DXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7h7e48Rg0EVMvLug2TXBcg7hFYStYFsb2Tqve7syzw2nBkNI64Dc0XKQOyo+9RcWYYK00PZ1sxt6258ZS+eUoUjTyDSUos5LlnSnsCH4qNv93VCA+g7VxXB9BjxV4cMygi7xDbgC5wGqedteRDIno6ubvWuhXhV7cp3F88xIeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iwf/xepf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1744786506; c=relaxed/simple;
+	bh=LdqJZkfsrO3LCmSC/7OtcVJEOkHFEt8gdt49MCebZzo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=R/ir2dyX+RxrZyaO7brlW0ieEjHLVQS4SmiSsn8DJgDjK3GQ2k0UqikLq+HNtI5PUO2yUsQc86hoOR4LddUN9eZMko5jI7gyepDn7OcteW9K60fQiHyjI0y1O1tSdSl1A6VL76Ej2+XLoFxS+RrUm8Og7Iajdlq/3A0C2/jv/RQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=Nk5GKatR; arc=none smtp.client-ip=185.125.188.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iwf/xepf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382BAC4CEEB;
-	Tue, 15 Apr 2025 16:13:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744733631;
-	bh=1jFrBy0lzqpyUKpmfkbxvJvV2QeeBiFeu/gLSlD6DXw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Iwf/xepfn8XdaQPkl3OXO2pziEP0MlRo4kLwGSJsiPog0Lg5Q1zc16D6DMGJwuihR
-	 wFxPHaCtVDUNGtTLwsWTrCyK5ML3+2kHLLu+hLOI9049UI/1wvm6ANh7f1RkqDDqZE
-	 sfK6i25rKsc+rZPzOJjQiMNZCqS9qAsXy/ekUZsqbaFi5M/YNucILhk7ZNjcpj8xhR
-	 cTpu1IqsMZdWOGrrLhNg9KBwOnjf8is+U1vUkxZI9HftXGggDq4mt6mtnKRdxCOmja
-	 JYxKuYVHbxzBtX6yyWjjBDmrCV6qBEG+qekX20hC4nqmB77hh3oQmv7Pech6xvsaet
-	 8MiIM487OnzWg==
-Date: Tue, 15 Apr 2025 17:13:37 +0100
-From: Simon Horman <horms@kernel.org>
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
-	joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
-	neil.armstrong@linaro.org, rfoss@kernel.org,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	dmitry.torokhov@gmail.com, mchehab@kernel.org,
-	awalls@md.metrocast.net, hverkuil@xs4all.nl,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	louis.peens@corigine.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-	johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, yury.norov@gmail.com,
-	akpm@linux-foundation.org, jdelvare@suse.com, linux@roeck-us.net,
-	alexandre.belloni@bootlin.com, pgaj@cadence.com, hpa@zytor.com,
-	alistair@popple.id.au, linux@rasmusvillemoes.dk,
-	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-	jernej.skrabec@gmail.com, kuba@kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-	dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	oss-drivers@corigine.com, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-	brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-	bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
-	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-	david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
-	Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: Re: [PATCH v4 09/13] wifi: brcm80211: Replace open-coded parity
- calculation with parity_odd()
-Message-ID: <20250415161337.GZ395307@horms.kernel.org>
-References: <20250409154356.423512-1-visitorckw@gmail.com>
- <20250409154356.423512-10-visitorckw@gmail.com>
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Nk5GKatR"
+Received: from 2001-b400-e2a9-54f6-6e67-7778-9cb9-7043.emome-ip6.hinet.net (unknown [10.101.200.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2A06242463;
+	Wed, 16 Apr 2025 06:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1744786018;
+	bh=sM6chi8lTFnRlrr86zejeakRXpamF60oS2LkgrHrDug=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc;
+	b=Nk5GKatRHD4qM1Pzl/Hj5YyNwjLh6doA8x+xlD4uX8jilA5dbtS9q6oHQ8fr4vRQL
+	 WwfZXJO0syHyGE7LMOavRdCZEUGkMzMK2QmD6S6JTXnTMkgfQmaRH/NBvJ8C8xCIwM
+	 SYSwnwyFvCrIbl189vq/IBvSChoo6Yv0+9qf9dWBqDTh9eYsoOannJMTEgagBXvo5E
+	 xxGXcU4oujOQ3LyJ+2TJKzKrW5gEcsfFpZr7lG2mwCGM/xNbP4lbmdB7WieBpweueS
+	 uUJbA46f5p14R2Ilc9SguDJS9UiQJSX/DonkjCU66YoEtEfOjJ1kH+lCGt5bGdX6fu
+	 l1SGqwvlseqGA==
+From: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
+Date: Wed, 16 Apr 2025 14:46:26 +0800
+Subject: [PATCH 1/2] hwmon: (spd5118) pass spd5118_data to hwmon callbacks
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250409154356.423512-10-visitorckw@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250416-for-upstream-spd5118-spd-write-prot-detect-v1-1-8b3bcafe9dad@canonical.com>
+References: <20250416-for-upstream-spd5118-spd-write-prot-detect-v1-0-8b3bcafe9dad@canonical.com>
+In-Reply-To: <20250416-for-upstream-spd5118-spd-write-prot-detect-v1-0-8b3bcafe9dad@canonical.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Yo-Jung Lin (Leo)" <leo.lin@canonical.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1876; i=leo.lin@canonical.com;
+ h=from:subject:message-id; bh=LdqJZkfsrO3LCmSC/7OtcVJEOkHFEt8gdt49MCebZzo=;
+ b=owEBbQKS/ZANAwAKAV8XsZZKKe6GAcsmYgBn/1JbyttZ5/3ZC32UnKPNvHukuYm+MvtCw75gT
+ j6Q751LKUWJAjMEAAEKAB0WIQQzqV4kW+yguuqHrw5fF7GWSinuhgUCZ/9SWwAKCRBfF7GWSinu
+ hjnUD/wOB4mCzbrbcgGgMPd7cl5EJ2hUIsNRpALZG6OBW84wgEF4JOzAIPm+MiJLLoZQ9vA0pIq
+ 3tj6QIeqFS8oaAXnvC2lw1hDa89Eewl7cLD2P9nnFzV3GBL8Gw8b66rR4KzGMF62wv3t7Z7cf+q
+ LmN7MgT759T07YWlJCZCqFcXdWm+7gLd+jy6+iUG3DqBot4Yr/XMdiSLeQ2+sRrRL6dg6j+BopK
+ ehhK2K9/C69dFd+jjh9sAX+06ABH2iYBkXTx2QTK8K+kD9ppVIP68g6i46ZpRXsM/iB8VsnBAEe
+ Cjga2s9EnmkLqsBhrkfziRNfHWzzmU7iglHxtZy62ewZfx+TDaHEkEdiJ2COYt+4iAi2vBX4mEi
+ rabXZaWZPDAAgwHnYEpjWHhNPiUYGAUyODLtZLttUyunP4ZCaU35ZuZ0xOMdW+y2bwIzV7E+eb3
+ F0yWXeNMT4L9bATHOSkvXyrRXnBzqs3aSzyKH00zC4juZ41YLOLGVzmpr32InF6h5d5bHhzQCw0
+ DM3u2TYEHl2/VcJm1v++gpVvLSWS1jYosGuPe3COdwwP8+iyFDtfrpGVpfEbFqdtJQqAivdeNc8
+ tyBhjF8/crmA8pp6cToAUa4Nc9r7hsiHi4mpMqAB4gGE71fiX8TDfrToiPMHmIGUuDZdRyKww2d
+ +caeNwBJQgZBH4g==
+X-Developer-Key: i=leo.lin@canonical.com; a=openpgp;
+ fpr=33A95E245BECA0BAEA87AF0E5F17B1964A29EE86
 
-On Wed, Apr 09, 2025 at 11:43:52PM +0800, Kuan-Wei Chiu wrote:
-> Refactor parity calculations to use the standard parity_odd() helper.
-> This change eliminates redundant implementations.
-> 
-> Co-developed-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> Signed-off-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> ---
->  .../wireless/broadcom/brcm80211/brcmsmac/dma.c | 18 ++----------------
->  1 file changed, 2 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/dma.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/dma.c
-> index 80c35027787a..5d7500ee2d3b 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/dma.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/dma.c
-> @@ -17,6 +17,7 @@
->  #include <linux/slab.h>
->  #include <linux/delay.h>
->  #include <linux/pci.h>
-> +#include <linux/bitops.h>
->  #include <net/cfg80211.h>
->  #include <net/mac80211.h>
->  
-> @@ -283,24 +284,9 @@ struct dma_info {
->  	bool aligndesc_4k;
->  };
->  
-> -/* Check for odd number of 1's */
-> -static u32 parity32(__le32 data)
-> -{
-> -	/* no swap needed for counting 1's */
-> -	u32 par_data = *(u32 *)&data;
-> -
-> -	par_data ^= par_data >> 16;
-> -	par_data ^= par_data >> 8;
-> -	par_data ^= par_data >> 4;
-> -	par_data ^= par_data >> 2;
-> -	par_data ^= par_data >> 1;
-> -
-> -	return par_data & 1;
-> -}
-> -
->  static bool dma64_dd_parity(struct dma64desc *dd)
->  {
-> -	return parity32(dd->addrlow ^ dd->addrhigh ^ dd->ctrl1 ^ dd->ctrl2);
-> +	return parity_odd(dd->addrlow ^ dd->addrhigh ^ dd->ctrl1 ^ dd->ctrl2);
->  }
+Currently only the regcache is passed to the hwmon device. Pass the
+whole spd5118_data for better flexibility.
 
-parity32 expected a little-endian integer as it's argument
-while parity_odd expects a host byte order value.
+Signed-off-by: Yo-Jung (Leo) Lin <leo.lin@canonical.com>
+---
+ drivers/hwmon/spd5118.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-I realise that the existing code just casts-away the endianness
-annotation, but this patch adds a Sparse warning.
+diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+index 358152868d96..3cb2eb2e0227 100644
+--- a/drivers/hwmon/spd5118.c
++++ b/drivers/hwmon/spd5118.c
+@@ -174,7 +174,8 @@ static int spd5118_read_enable(struct regmap *regmap, long *val)
+ static int spd5118_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *val)
+ {
+-	struct regmap *regmap = dev_get_drvdata(dev);
++	struct spd5118_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
+ 
+ 	if (type != hwmon_temp)
+ 		return -EOPNOTSUPP;
+@@ -256,7 +257,8 @@ static int spd5118_temp_write(struct regmap *regmap, u32 attr, long val)
+ static int spd5118_write(struct device *dev, enum hwmon_sensor_types type,
+ 			 u32 attr, int channel, long val)
+ {
+-	struct regmap *regmap = dev_get_drvdata(dev);
++	struct spd5118_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+@@ -269,6 +271,8 @@ static int spd5118_write(struct device *dev, enum hwmon_sensor_types type,
+ static umode_t spd5118_is_visible(const void *_data, enum hwmon_sensor_types type,
+ 				  u32 attr, int channel)
+ {
++	struct spd5118_data *data = (struct spd5118_data *)_data;
++
+ 	if (type != hwmon_temp)
+ 		return 0;
+ 
+@@ -611,7 +615,7 @@ static int spd5118_probe(struct i2c_client *client)
+ 	}
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "spd5118",
+-							 regmap, &spd5118_chip_info,
++							 data, &spd5118_chip_info,
+ 							 NULL);
+ 	if (IS_ERR(hwmon_dev))
+ 		return PTR_ERR(hwmon_dev);
 
- .../brcmsmac/dma.c:289:66: warning: incorrect type in argument 1 (different base types)
- .../brcmsmac/dma.c:289:66:    expected unsigned long long [usertype] val
- .../brcmsmac/dma.c:289:66:    got restricted __le32
+-- 
+2.43.0
 
->  
->  /* descriptor bumping functions */
-> -- 
-> 2.34.1
-> 
-> 
