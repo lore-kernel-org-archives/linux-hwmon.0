@@ -1,174 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A85A1A7045
-	for <linux-hwmon@vger.kernel.org>; Thu, 17 Apr 2025 23:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963C63FFD
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Apr 2025 01:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744934370; cv=none; b=LtXu68oRJhEhRK/LP5PwB5I3ZbBVfFDkfDvWh+pBaHV7W4fIgdvxJlsa3ivD4verNWBWgavX/mpWapCtUxxl1xhysQmO5TwiHQMNA372ODJOSW7kClGqjUunUxrTGjWPYtT+tzn0OH0uk/TlYPkwNFhjqbF4TRNWpuABZNzNwJ0=
+	t=1744939311; cv=none; b=FpVv/F0dFBc/b5nfWEje02jMTVWHgPPUqfqSdZOPtrD5yHo6HO1JXTu5A0PueXcMRMXwBtT7wHwW1mwSiSOsNBZQo1ksOYILegH2M/9BIhYaAYMCRWoob6D9FUVaDPciqNj+gboJBLux40JFkqA4tjGOo5pd1Va4rnV+Mp8dQfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744934370; c=relaxed/simple;
-	bh=Rp0lr7ue634mm9wJTN4yY1A68g5RE3nL5is0oc8engQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=i3XqR2bB0C7xEdrhDXw9u3hkWPQ9RuvK5aNm/5IoUhL4BUWQ7rjyHnmpLhvZFDMQcfEsO99+x52VBJOSLD0BE2cntUd+KcBcqmmkUS/DqL9pwRoV7QQdn/zvAn/AYpxgTmhe+hsl30FuO4xD2mWj8R8kH+ylYk0FMUiCNPQ8I3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KhGRscFy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1744939311; c=relaxed/simple;
+	bh=16L6biUykWAlzzPiLULHukQSvUzbPRn6DPecRvxecVE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OrQLcQFQ0x8v1k1X4TfEv4uroHSGxUI9qlBnxXic8P3WuxbRd3CkruGx0n5VPelYN7f0c5jyJtie+27jukTdLGP3pVsRi1Ox/d+o01iadlfoQltiMhnF9S2rkohcfdL5s6VXK8eCQN+Xt+MFLvBaFM5iA62yGcnD+C8pQkNnS9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XasRaXkv; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KhGRscFy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744934369; x=1776470369;
-  h=date:from:to:cc:subject:message-id;
-  bh=Rp0lr7ue634mm9wJTN4yY1A68g5RE3nL5is0oc8engQ=;
-  b=KhGRscFyFXu6Ka6fQPL+aotT0YkcpgaosOUsMnakFkT1ter0mfF67H6n
-   qQNHBVDmnQ8gucW4bAK+BihAywN4gVWqGkr5CykbOPW2+Hcaw9FwsjZrQ
-   0YUVaR8GEsUDcdw6TnNxvCLHwNeQT6ZNEM07V3sbuTvhg2ZgUhOugf1I5
-   B9aAtcOD/f6L0byfNXst1lWyvgRml1e/rk2oEmqKz7sj34t1z1A7z/VcP
-   rnFq0cOzIe71OaoAMUw6Fz/FE4LKjXL67A4nyQ+6XPHmeYrnM4N9TZ3vc
-   yhw/+8CdajnZBw2pBf69gUyXaBdwW3q16qCVI2VmvVeNqF7tL1EtVpfDt
-   w==;
-X-CSE-ConnectionGUID: 02s7sbbfR/GG0/9wkqxKew==
-X-CSE-MsgGUID: AIevPrgHTg2BtZryngcNBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11406"; a="49235864"
-X-IronPort-AV: E=Sophos;i="6.15,220,1739865600"; 
-   d="scan'208";a="49235864"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 16:59:28 -0700
-X-CSE-ConnectionGUID: YZfNAwzFSdykcLdzn3i5uQ==
-X-CSE-MsgGUID: FhVIq0LVQwq/2KZBXKSgcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,220,1739865600"; 
-   d="scan'208";a="162016296"
-Received: from lkp-server01.sh.intel.com (HELO 61e10e65ea0f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 17 Apr 2025 16:59:27 -0700
-Received: from kbuild by 61e10e65ea0f with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u5Z8e-0002Ar-2a;
-	Thu, 17 Apr 2025 23:59:24 +0000
-Date: Fri, 18 Apr 2025 07:59:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 86d264b68309d9f9804db4079642b98104ca15df
-Message-ID: <202504180701.jxhRX29E-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XasRaXkv"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-303a66af07eso1124202a91.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Apr 2025 18:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744939309; x=1745544109; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=B2/H1GF1px3soqq8j3SIPpZ6FPZ7geE6FZpwqZX7C5I=;
+        b=XasRaXkvNLetJRmTv2+c61G3DUMVOSkXomVBn6A1Ig/mRkWf0SOV4GgeBWUYfsuLRh
+         ZwottUsIoqxcRgoigjApVywbfb2/yG5RtGG/+yaASvbvM7A1Fpjyc5g0tJzNRX6CF4xR
+         LyQYHJec2T1CcD70QkBuO4Q3k6Ga7dcepbQ9h+EnMMeXTLZeo3BnjbmuoFtYrwdeOKvS
+         DvS1LzodUou6O4oULPBhdOCuOZipJRI9AGRcOXMgYse91p87XNRv7HrCw1AmoqnCsOA1
+         A1U/SXO0gR8BUpw0IqEXHmR/pHA1YLqi8MResMdtbSKYk/OaLbOMXVU6+PmOrGwQsN+F
+         KGtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744939309; x=1745544109;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B2/H1GF1px3soqq8j3SIPpZ6FPZ7geE6FZpwqZX7C5I=;
+        b=Mm5jQxC2B9p+ZkZNp4T3sJrXh958X4eoDJLZA0zjWr2ssL0Wgqu16Xru68U2vU1Zgc
+         whc+FtAFsyfRbkxjDKHRI9+sLi/xkSoiqHb9Nr8LQtqlcKJ017P0O9iASwXz/zTnvqps
+         FtPYkZ7XXD2X8GiqdGsIMkvK1QbqzSK9GpW75zOp7RLWPB/WGoMI23kIqOs89z7DabS4
+         4ecJ9VdsaLGdSBS2ET/Y5w6JTyDdMJ+zQzzFTTGyNiT2PcR9MLonnBzniFX79yUPfmf8
+         Oxa9Sb53qBK+lU5ezoP2TqgpE0s7EjkP3zuNBeUzeuv9Ioj9VEiwM6zKqOfChOXacB+t
+         FZnQ==
+X-Gm-Message-State: AOJu0Yzl1Z+ZzjBEPCRfdGLh1YnqEcNKIFeu86LYGAH1UIb+GhULj0lN
+	/3QvUw5WBRsMPZZWKu5or3Eju62BJhZCdC91Shk8BNJ0TgYJCinq0YXMKQ==
+X-Gm-Gg: ASbGncs/jrKJkmPLzNKiT4jUIW2eLYa7J2eVmC9o8dnIfPPrQC1xy+G3S1F/HRiyVtE
+	lqQi/10rwmS+Hd1VCBmzMiH0Yzu7HDYgajczDgflHUkPwAmwUQS4U9zpVVOaU2/oLBbnC1qZC9h
+	uNS3OmzzjS1+bNdLojweViZUnJ1g+ZcMdv4DI86TOCoaqe5jYxvnPI0fJU2js6yLYsBuUYGV3kn
+	Z1phpeSadM6h/4uFZn2C7+7dOCEarnI8XO13CiSrtOCyVUsqxzm19isntZvKChs071tp9aTzaaH
+	zh+unECghTZKyudjQFRMrbsOkQUddPJzxxOcfxH2cJerfuQfL3ruQc49aFMUo5lfuXIPoCWDzVh
+	Ls+pM3d2S2+q6EA==
+X-Google-Smtp-Source: AGHT+IFB+K5LrzUi8rZZETiOA2IY0tqJmdwKx/Q1RSGrbwMC9rLedEDkf/ZrhTxYbjvgUeYIQPjSWg==
+X-Received: by 2002:a17:90b:37c5:b0:2fe:8902:9ecd with SMTP id 98e67ed59e1d1-3087bb3e830mr1298325a91.1.1744939308757;
+        Thu, 17 Apr 2025 18:21:48 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3087e0feac1sm108488a91.33.2025.04.17.18.21.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Apr 2025 18:21:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
+Date: Thu, 17 Apr 2025 18:21:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: PMBus memory overflow
+To: Matt Corallo <yalbrymrb@mattcorallo.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <985cd95f-155b-4b8a-9fe7-59938d0c2b8f@mattcorallo.com>
+ <9e01e3ec-3ac5-4d83-a065-d00d568b9cc7@roeck-us.net>
+ <e030f44f-11ee-4739-b9d3-c22883bbbf02@mattcorallo.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <e030f44f-11ee-4739-b9d3-c22883bbbf02@mattcorallo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 86d264b68309d9f9804db4079642b98104ca15df  hwmon: (aht10) Drop doctype annotations from static functions
+On 4/17/25 11:14, Matt Corallo wrote:
+> 
+> 
+> On 4/17/25 2:00 PM, Guenter Roeck wrote:
+>> On Thu, Apr 17, 2025 at 11:39:14AM -0400, Matt Corallo wrote:
+>>> When adding the PMBus entry for a FSP520-20RAB (actually FSP Twins Pro but
+>>> it appears to be identical hardware with a provided SMBus -> USB adapter and
+>>> it self-reports as an FSP520-20RAB when queried over PMBus using the old
+>>> pmbus_peek.c script) with `echo pmbus 0x59 >
+>>> /sys/bus/i2c/devices/i2c-3/new_device` I got the following BUG_ON (on
+>>> Proxmox's 6.8.12-8-pve kernel). Its redundant and reports back fine on 0x60
+>>> and 0x59 for both of its modules (using pmbus_peek.c) and I'd already added
+>>> 0x60 and it BUG'd adding the second module at 0x59.
+>>>
+>> ...
+>>> Apr 17 15:31:19 rackchill-refresh kernel:  i2c_smbus_read_block_data+0x116/0x120
+>>> Apr 17 15:31:19 rackchill-refresh kernel:
+>>> pmbus_check_block_register.constprop.0+0x77/0x100 [pmbus_core]
+>>
+>> Interesting. That function reads into a buffer which is larger than the
+>> largest valid PMBus transaction. I can only imagine that the controller
+>> returns invalid data in that transaction, where the first returned byte
+>> is not the length of the transfer but something else.
+>> i2c_smbus_read_block_data() does an unconditional
+>>     memcpy(values, &data.block[1], data.block[0]);
+>> which of course will go haywire if data.block[0] (or in other words the
+>> first data byte returned from the device) exceeds the size of the
+>> data buffer. Do you happen to have a datasheet ?
+> 
+> I do not, sadly (though FSP support has been rumored to help out at least marginally, though they haven't been useful for me). Interestingly the (I guess ancient now) pmbus_peek.c script has no issues reading from it (added a quick print on the -E2BIG line and it didn't get hit). pmbuss_peek.c says the following:
+> 
+> root@rackchill-refresh:~# ./a.out -b /dev/i2c-3 -s 0x59
+> PMBus slave on /dev/i2c-3, address 0x59
+> 
 
-elapsed time: 1454m
+pmbus_peek supports reading up to 255 bytes into the receive buffer.
+Anything above 32 bytes violates the SMBus specification. I found that
+the I2C controller driver should block that. If it doesn't, all kinds
+of chips could trigger this problem. Do you know which I2C controller
+is used by that system ? You mentioned an SMBus - USB adapter. The drivers
+for the adapters I am aware of (Diolan, Devantech) do validate the return
+length, so I assume you use something else or maybe an out-of-tree driver.
 
-configs tested: 97
-configs skipped: 5
+Please let me know the adapter you use. If the driver is not upstream,
+a pointer to the driver source would also be helpful.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Guenter
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                   randconfig-001-20250417    gcc-13.3.0
-arc                   randconfig-002-20250417    gcc-13.3.0
-arm                               allnoconfig    clang-21
-arm                   randconfig-001-20250417    gcc-7.5.0
-arm                   randconfig-002-20250417    clang-16
-arm                   randconfig-003-20250417    gcc-10.5.0
-arm                   randconfig-004-20250417    gcc-6.5.0
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250417    gcc-7.5.0
-arm64                 randconfig-002-20250417    gcc-5.5.0
-arm64                 randconfig-003-20250417    clang-21
-arm64                 randconfig-004-20250417    gcc-9.5.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250417    gcc-13.3.0
-csky                  randconfig-002-20250417    gcc-11.5.0
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250417    clang-21
-hexagon               randconfig-002-20250417    clang-21
-i386                             alldefconfig    gcc-12
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250417    clang-20
-i386        buildonly-randconfig-002-20250417    gcc-12
-i386        buildonly-randconfig-003-20250417    gcc-12
-i386        buildonly-randconfig-004-20250417    gcc-12
-i386        buildonly-randconfig-005-20250417    clang-20
-i386        buildonly-randconfig-006-20250417    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250417    gcc-14.2.0
-loongarch             randconfig-002-20250417    gcc-13.3.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250417    gcc-11.5.0
-nios2                 randconfig-002-20250417    gcc-9.3.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                randconfig-001-20250417    gcc-12.4.0
-parisc                randconfig-002-20250417    gcc-6.5.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250417    clang-21
-powerpc               randconfig-002-20250417    gcc-9.3.0
-powerpc               randconfig-003-20250417    gcc-9.3.0
-powerpc64             randconfig-001-20250417    clang-21
-powerpc64             randconfig-002-20250417    clang-21
-powerpc64             randconfig-003-20250417    gcc-5.5.0
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250417    gcc-7.5.0
-riscv                 randconfig-002-20250417    clang-21
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250417    gcc-7.5.0
-s390                  randconfig-002-20250417    clang-21
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250417    gcc-13.3.0
-sh                    randconfig-002-20250417    gcc-7.5.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250417    gcc-12.4.0
-sparc                 randconfig-002-20250417    gcc-14.2.0
-sparc64               randconfig-001-20250417    gcc-14.2.0
-sparc64               randconfig-002-20250417    gcc-10.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250417    gcc-12
-um                    randconfig-002-20250417    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250417    clang-20
-x86_64      buildonly-randconfig-002-20250417    clang-20
-x86_64      buildonly-randconfig-003-20250417    gcc-12
-x86_64      buildonly-randconfig-004-20250417    clang-20
-x86_64      buildonly-randconfig-005-20250417    clang-20
-x86_64      buildonly-randconfig-006-20250417    clang-20
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250417    gcc-8.5.0
-xtensa                randconfig-002-20250417    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
