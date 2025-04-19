@@ -1,70 +1,70 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4164D1DF755
-	for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 16:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10881DF75D
+	for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 16:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745079253; cv=none; b=PToTRyYn50TbOYCBFoKtRSRyL+MXB/3v0B9k9Jgdts/Q3l4f3zDsEO5KEQemGzHjrv7CkpBlf3JLQ4Mn4zsLVILnH0z+C2Uv0u2PTD5Qcq7d10URuHNvhc8svuU8Ktq14pWTztD7dpA2yA5Cw2SGTSKzYeCpljilhVJKlUubvIc=
+	t=1745079253; cv=none; b=t18doKDJ0fCy8WfFiGcI6qvZ8Ne3Ey4CXKMre2+UDAxEEVX5hiN3NjTihQ52F1LwToKmPVR9KFl8NofCGF8qJggv7wLHCJYP+mtS27wxqifoLu3KPI605rWyipr7xpYhlPUOY5t8qVk2xwRROvAIORjoLbiFap3PaMufWloz3SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745079253; c=relaxed/simple;
-	bh=eUVRveT0QuJE/mglDXQJGhC1AZVO9YeFB5k9dTJw7jU=;
+	bh=HfOvNRmTrnYq7uZ5W3tf7dReO1r6x15ggQmyTSlSkeE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jeTiVOqjaTEBzv18AYaQGGmmDZGUcDCagMjhYs/wT29O8d6SzPOg4/FWC8y4aBGOECOfrOwwi4wq7o3rwqgV1pkWe+IhvxNMDnlMA32s6BkJJprxnDA+UER2m8MtgnIZzqbCVteFX+3lHITjLS5FAhb32+6KgzrlRcFS6JPRhcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdwawtdS; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=oPn7JRKqEwu+nZtBzEKmXNHspBIKnU/yDC8uT0nsmzIDhp9BhXdUyk3WtWkglxaVbd7FHjy7Oug6dK0PsvO6rNGWhxf0DGEueiS/1qdUZLqsUGpuX9upYHLgdVukjN8Wt9XEEIVn2xU77GHFVH2SIS3OMThKqpprUfvoTM8BCAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eg2rcki8; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdwawtdS"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-73bf1cef6ceso2393285b3a.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 09:14:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eg2rcki8"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22409077c06so38228815ad.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 09:14:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745079249; x=1745684049; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745079251; x=1745684051; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=29FUw9/Hxgix1Uz9WJce15eOGjKrI/6EwisvQKPr4DI=;
-        b=RdwawtdSTt98Nb/ZQKTBC0KJTR9m3LDrNcC0EULeH1TnPzrXr2Qk3Xc4RIlHnZr0wL
-         TbAM/Ez7ocoqTDdXDcPbLubypE0T95BVAuLs4lZ7XoSQCp1sFS/X+/p8WDjPp1qWw+8w
-         LYpKG688v7mIHkZPCW8ML9X6w3k6CP4eihqJKZI1g3xKEkLcI/cohiCwGxpsFf7sAlMN
-         A1X4RLRHKmuDiXrwa9BIBh5V7lPtHJ8+FgbImPupIfrlxvp/5EaizcX+UQz6QBrLOjfC
-         sK/bNPOXSASUcjM5ST/3Doefq7ofR2F6mLrXdRFzLlkthUvkimaZo4zIYk+mz0k5gHhM
-         +Fkg==
+        bh=efUMDb4S/Z1FeSk/nVMA4SMohFSucI4981VCY3EWPGQ=;
+        b=eg2rcki8+B0oDpMKEcF7Ao2sSozMrg++frPsF4f0Fwb4aJ9B7AVY7elymaXPBUNxJY
+         i2Orgg9ydQ+R/YrS27Y98yz8mUdMMlKcTwyI7J1cGu5sfSDFOhS7qqrHlXSeZgT5T8eN
+         ZP+J0vq4Hf7LonXKdIA85OsXEUDc2mIK5Mza/heS8kjyD+Zf29orJmLfXqTCy3LJgV+B
+         YSeZ9hC2BVyiKoxK3fR7M/tF6AfiUeGvkTRqUl/BU5gsohue1q6w6BTqJp7sPNdLN9ry
+         i9wAhuktTDyIJzB3jdyVhZxjVQgzErrdFn7RtdUDuqe5Ms7DNqAh1P/3XhgsqmanJysv
+         LPbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745079249; x=1745684049;
+        d=1e100.net; s=20230601; t=1745079251; x=1745684051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=29FUw9/Hxgix1Uz9WJce15eOGjKrI/6EwisvQKPr4DI=;
-        b=ZC58Sxodhsvm2Wj0rhezxZQeZHw/DXlcv4xYgD8PXECfMI6aZexL/69AjO3SLnFqM/
-         O/UvRM/txGQRwcJ1LghHjho7m4OslEdxYh2cQBpvVCR/e3pFChHb0srlWGUYdrX7/MYp
-         JHRHvXBWRGhDOs0QsPOaUTW+QwC9MfY+H7PyCTVNmXFi+qkti0PT+KL3kTVAgJkD+6J5
-         q17+xGihVvYIRTQwcTBG5np8dwxWEkM9RH4wElbL1x+GanMt/wHQO5b0Y97lRvU8UVlo
-         6/YphSibY+EVbknOLXWKt50lt1C6fsIm7yNmbEhyaqrQPPSKBHSghFZwMzXPKaos5Wbw
-         WSQQ==
-X-Gm-Message-State: AOJu0Ywb1exQsLOR04FOJicdqNtIKqPI3BaycYBobaIcF8UwPSbU6J+M
-	2qz6Xi+08YIhsEWU2Tca6ewfBwmPiNO2VytXi97lNaqSTYqqSuY3mXj5Ug==
-X-Gm-Gg: ASbGncuniHVgpcC1KHUQmFp2I/HfqvaPbwh6++UoKYBsfUXi2jnn+8MBsPABcZXOQDn
-	70Q1n04vFotJxAKJgffVs3n27CaoahAbTVjXdNJV7Y+9QhCXF3/mgkwHSYXJN2bD4LyRd0cgC8d
-	eyAql3B/Tz1XfOKvG1h+7mI2oQr1WWvhymQ7eGRA5j/mbzdlJum2ylzUrfHGu+T8NiUajIZdUqG
-	a1OE9ILFJSdwMEI64qo/SnCqTKGZ1WHnvE0L7ls7tcpaYsSlS1TU7RSNxHGTwvU952XEeqWDhJd
-	YV0cEurKyATebidAW5X8V7xoSX8qPsC4VMbhhN88zMWTr5bCRDRb8A==
-X-Google-Smtp-Source: AGHT+IE1qocqkFQdIhpGYJv9IZiBSW49lHgclQNZsKmjng4WFIJDFu44Iwhxhdy8UyVzUNSZ2F3s+w==
-X-Received: by 2002:a05:6a00:1a93:b0:736:ff65:3fcc with SMTP id d2e1a72fcca58-73dc15d8753mr8088114b3a.16.1745079249295;
-        Sat, 19 Apr 2025 09:14:09 -0700 (PDT)
+        bh=efUMDb4S/Z1FeSk/nVMA4SMohFSucI4981VCY3EWPGQ=;
+        b=rl4cYgaPS3D+b4s6BN6+s8+oas723SBIENzByvlVh0XVPwAmYybeJAsJkY8aOdyBLp
+         udXX4zR3eTtyoEEgxmcqsdXn44Bp1w1Q8DXl/YlxzCzqGZ6CdQlwincH28MxPYYbaKOi
+         Fy9hjSbSfl4EhI43I/AqC8OK+jTj4CTxn+YFeECSy4ToLz+S1Ugoss44V+ux9B+zefsU
+         RprrB0C9XvHWRbBh+Uv8Y40qiL4ZDV4OK0XijgSGLZhTKb3sH86k29beqJFltPZEEBd6
+         5ZcszR7lmfZDHMJySb/3pCf3qv7g2oX8ctKLawKxDQuBR/v0OdhDSygw/QYzg1zIsfF5
+         1AMQ==
+X-Gm-Message-State: AOJu0YywOY3wjHmKh2JTE0cRze0jpzGiMc2f9/Kca0Wvr7kWH3hf7t6U
+	CLV/EjrDLJAGmTCMGYsvPiDPoyCvtnldyu992Ug42adK9YIkHlYSi+8+UA==
+X-Gm-Gg: ASbGncsyttHoNfhvfRQevw6oIDESiU5IVSIITzEVlT4X+HqPvFiW9vOnJqzYFvk9lqj
+	B8ywusZfcmOS2/Ymn+ibja5hGuYabkhFL1h79QEwwvshThnb+EH8TYHwRhzhUepciGhctSgojkf
+	dhA3NxXjHUpp/CXgNnYPf0AkA1tMByPyeom+91HO60k3r6WbLu7KlTjtADgaEf9RC7bI25M3A89
+	PViuLP4QbrlYNC5yIdc4xLamsne/rec6O8aKielhxmiERkiZQvYB+WZyOyQrRqCsL099RP3Ushe
+	eFxon9RBr6V5YWNbJZ9Y57d+C5xVADYwnAHyHV7Qt4xandkNqzmsOw==
+X-Google-Smtp-Source: AGHT+IHnpDmLo3j8sJsi2Vt+nq5ApedY2Sr8VUbf7QqfgMYl6KOvu5862P84uY4rqVLhO5maX0LDvQ==
+X-Received: by 2002:a17:902:db01:b0:220:e5be:29c8 with SMTP id d9443c01a7336-22c536060d4mr99503695ad.32.1745079250657;
+        Sat, 19 Apr 2025 09:14:10 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbfa5960dsm3477926b3a.87.2025.04.19.09.14.08
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50bda4f5sm35597905ad.8.2025.04.19.09.14.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Apr 2025 09:14:08 -0700 (PDT)
+        Sat, 19 Apr 2025 09:14:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Yo-Jung Lin <leo.lin@canonical.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/5] hwmon: (spd5118) Support 16-bit addressing for NVMEM accesses
-Date: Sat, 19 Apr 2025 09:13:53 -0700
-Message-ID: <20250419161356.2528986-4-linux@roeck-us.net>
+Subject: [PATCH 4/5] hwmon: (spd5118) Detect and support 16-bit register addressing
+Date: Sat, 19 Apr 2025 09:13:54 -0700
+Message-ID: <20250419161356.2528986-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250419161356.2528986-1-linux@roeck-us.net>
 References: <20250419161356.2528986-1-linux@roeck-us.net>
@@ -76,89 +76,140 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I3C uses 16-bit register addresses. Setting the page through the legacy
-mode access pointer in the legacy mode device configuration register (MR11)
-is not needed. This is similar to 16-bit addressing in legacy mode.
+Add support for SPD5118 compatible chips with 16-bit addressing enabled
+which are connected to I2C controllers.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/spd5118.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+ drivers/hwmon/spd5118.c | 75 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 64 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-index c5ad06b90cbf..92a3cb0bb515 100644
+index 92a3cb0bb515..5da44571b6a0 100644
 --- a/drivers/hwmon/spd5118.c
 +++ b/drivers/hwmon/spd5118.c
-@@ -66,6 +66,9 @@ static const unsigned short normal_i2c[] = {
- #define SPD5118_EEPROM_BASE		0x80
- #define SPD5118_EEPROM_SIZE		(SPD5118_PAGE_SIZE * SPD5118_NUM_PAGES)
- 
-+#define PAGE_ADDR0(page)		(((page) & BIT(0)) << 6)
-+#define PAGE_ADDR1_4(page)		(((page) & GENMASK(4, 1)) >> 1)
-+
- /* Temperature unit in millicelsius */
- #define SPD5118_TEMP_UNIT		(MILLIDEGREE_PER_DEGREE / 4)
- /* Representable temperature range in millicelsius */
-@@ -75,6 +78,7 @@ static const unsigned short normal_i2c[] = {
- struct spd5118_data {
- 	struct regmap *regmap;
- 	struct mutex nvmem_lock;
-+	bool is_16bit;
+@@ -461,7 +461,7 @@ static const struct regmap_range_cfg spd5118_i2c_regmap_range_cfg[] = {
+ 	},
  };
  
- /* hwmon */
-@@ -331,11 +335,12 @@ static const struct hwmon_chip_info spd5118_chip_info = {
+-static const struct regmap_config spd5118_i2c_regmap_config = {
++static const struct regmap_config spd5118_regmap8_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+ 	.max_register = 0x7ff,
+@@ -473,6 +473,15 @@ static const struct regmap_config spd5118_i2c_regmap_config = {
+ 	.num_ranges = ARRAY_SIZE(spd5118_i2c_regmap_range_cfg),
+ };
  
- /* nvmem */
- 
--static ssize_t spd5118_nvmem_read_page(struct regmap *regmap, char *buf,
-+static ssize_t spd5118_nvmem_read_page(struct spd5118_data *data, char *buf,
- 				       unsigned int offset, size_t count)
++static const struct regmap_config spd5118_regmap16_config = {
++	.reg_bits = 16,
++	.val_bits = 8,
++	.max_register = 0x7ff,
++	.writeable_reg = spd5118_writeable_reg,
++	.volatile_reg = spd5118_volatile_reg,
++	.cache_type = REGCACHE_MAPLE,
++};
++
+ static int spd5118_suspend(struct device *dev)
  {
--	int addr = (offset >> SPD5118_PAGE_SHIFT) * 0x100 + SPD5118_EEPROM_BASE;
--	int err;
-+	int page = offset >> SPD5118_PAGE_SHIFT;
-+	struct regmap *regmap = data->regmap;
-+	int err, addr;
+ 	struct spd5118_data *data = dev_get_drvdata(dev);
+@@ -510,7 +519,8 @@ static int spd5118_resume(struct device *dev)
  
- 	offset &= SPD5118_PAGE_MASK;
+ static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
  
-@@ -343,6 +348,12 @@ static ssize_t spd5118_nvmem_read_page(struct regmap *regmap, char *buf,
- 	if (offset + count > SPD5118_PAGE_SIZE)
- 		count = SPD5118_PAGE_SIZE - offset;
- 
-+	if (data->is_16bit) {
-+		addr = SPD5118_EEPROM_BASE | PAGE_ADDR0(page) |
-+		  (PAGE_ADDR1_4(page) << 8);
-+	} else {
-+		addr = page * 0x100 + SPD5118_EEPROM_BASE;
-+	}
- 	err = regmap_bulk_read(regmap, addr + offset, buf, count);
- 	if (err)
- 		return err;
-@@ -365,7 +376,7 @@ static int spd5118_nvmem_read(void *priv, unsigned int off, void *val, size_t co
- 	mutex_lock(&data->nvmem_lock);
- 
- 	while (count) {
--		ret = spd5118_nvmem_read_page(data->regmap, buf, off, count);
-+		ret = spd5118_nvmem_read_page(data, buf, off, count);
- 		if (ret < 0) {
- 			mutex_unlock(&data->nvmem_lock);
- 			return ret;
-@@ -516,6 +527,13 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap)
+-static int spd5118_common_probe(struct device *dev, struct regmap *regmap)
++static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
++				bool is_16bit)
+ {
+ 	unsigned int capability, revision, vendor, bank;
+ 	struct spd5118_data *data;
+@@ -527,12 +537,7 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap)
  	if (!(capability & SPD5118_CAP_TS_SUPPORT))
  		return -ENODEV;
  
-+	/*
-+	 * 16-bit register addresses are not (yet) supported with I2C.
-+	 * Therefore, if this is an I2C device, register addresses must be
-+	 * 8 bit wide.
-+	 */
-+	data->is_16bit = !!i2c_verify_adapter(dev);
-+
+-	/*
+-	 * 16-bit register addresses are not (yet) supported with I2C.
+-	 * Therefore, if this is an I2C device, register addresses must be
+-	 * 8 bit wide.
+-	 */
+-	data->is_16bit = !!i2c_verify_adapter(dev);
++	data->is_16bit = is_16bit;
+ 
  	err = regmap_read(regmap, SPD5118_REG_REVISION, &revision);
  	if (err)
+@@ -675,21 +680,69 @@ static int spd5118_i2c_init(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++/*
++ * 16-bit addressing note:
++ *
++ * If I2C_FUNC_I2C is not supported by an I2C adapter driver, regmap uses
++ * SMBus operations as alternative. To simulate a read operation with a 16-bit
++ * address, it writes the address using i2c_smbus_write_byte_data(), followed
++ * by one or more calls to i2c_smbus_read_byte() to read the data.
++ * Per spd5118 standard, a read operation after writing the address must start
++ * with <Sr> (Repeat Start). However, a SMBus read byte operation starts with
++ * <S> (Start). This resets the register address in the spd5118 chip. As result,
++ * i2c_smbus_read_byte() always returns data from register address 0x00.
++ *
++ * A working alternative to access chips with 16-bit register addresses in the
++ * absence of I2C_FUNC_I2C support is not known.
++ *
++ * For this reason, 16-bit addressing can only be supported with I2C if the
++ * adapter supports I2C_FUNC_I2C.
++ *
++ * For I2C, the addressing mode selected by the BIOS must not be changed.
++ * Experiments show that at least some PC BIOS versions will not change the
++ * addressing mode on a soft reboot and end up in setup, claiming that some
++ * configuration change happened. This will happen again after a power cycle,
++ * which does reset the addressing mode. To prevent this from happening,
++ * detect if 16-bit addressing is enabled and always use the currently
++ * configured addressing mode.
++ */
++
+ static int spd5118_i2c_probe(struct i2c_client *client)
+ {
++	const struct regmap_config *config;
+ 	struct device *dev = &client->dev;
+ 	struct regmap *regmap;
+-	int err;
++	int err, mode;
++	bool is_16bit;
+ 
+ 	err = spd5118_i2c_init(client);
+ 	if (err)
  		return err;
+ 
+-	regmap = devm_regmap_init_i2c(client, &spd5118_i2c_regmap_config);
++	mode = i2c_smbus_read_byte_data(client, SPD5118_REG_I2C_LEGACY_MODE);
++	if (mode < 0)
++		return mode;
++
++	is_16bit = mode & SPD5118_LEGACY_MODE_ADDR;
++	if (is_16bit) {
++		/*
++		 * See 16-bit addressing note above explaining why it is
++		 * necessary to check for I2C_FUNC_I2C support here.
++		 */
++		if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
++			dev_err(dev, "Adapter does not support 16-bit register addresses\n");
++			return -ENODEV;
++		}
++		config = &spd5118_regmap16_config;
++	} else {
++		config = &spd5118_regmap8_config;
++	}
++
++	regmap = devm_regmap_init_i2c(client, config);
+ 	if (IS_ERR(regmap))
+ 		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
+ 
+-	return spd5118_common_probe(dev, regmap);
++	return spd5118_common_probe(dev, regmap, is_16bit);
+ }
+ 
+ static const struct i2c_device_id spd5118_i2c_id[] = {
 -- 
 2.45.2
 
