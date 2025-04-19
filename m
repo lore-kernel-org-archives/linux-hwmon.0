@@ -1,57 +1,75 @@
-Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055C01DD866
-	for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 19:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E621EB5CF
+	for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 22:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745091005; cv=none; b=KPc2zdpok0KT6WJuEAG3WpAcmoAnbA+gfGIz+WziKC6+4xZHx2KnMi6Yjyg1PdyKOs4EpA6IBwURHGww2OmSZwXFCuyWDSbEQ1UTPUqv84MENeiOA01RC1TtzWeEOQjapTiFKqGbnFfmaTn2jiCt1UmxTImHGd6CCCbfyNXvxvE=
+	t=1745102336; cv=none; b=YrXn4i0SUKlEwvO09whyiTV/aHva9ZqAsueCLvSxE/+yLKuG4oVfKE3SnoY/A/zvbPtYkiYQ+dHZ2tyuUJJYb1B7gU8w+EGg4ocQBpTZ00DEOtyIngnwE9LpDPQA9FR1Niep6iYa1x6daxwEk6NXGeEnt1EMD4wWXiFsspl50Xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745091005; c=relaxed/simple;
-	bh=lWkUbCZ9Q0A4BnQjsAqRqLctfZ+BFuau96WIf5qpWSE=;
+	s=arc-20240116; t=1745102336; c=relaxed/simple;
+	bh=U750WMqu40iLciT/mTogBYr6harB3KvLgXN/fLg+AOE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rv3mlOJ1pJ2rsaMx3W9X7Ndo4jloAlG+Q1sIhRDSzykm7jxXTCIMM0UIb2Fq2xYKcAs2fL0OWTXgENEzyoNumyJMaEXa2sHquYSJJ5ZvYUgo0/8XwXm0PCIg80fG6UO5Y3/q7iwxGpsFTU106iji08I1W01taU6H1kSWUj4oyNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=B5H9zNt0; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=TyOVG8oI; arc=none smtp.client-ip=69.59.18.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
+	 In-Reply-To:Content-Type; b=QkTmwWa3yce7XYZLqIQzuvGJthmTOQNps2fghRTftNxd/h90jfAWP0N2Q/5u7Xvq5+V4G3Mgah16gBBU7klAZ6HxsKBbRCqS767OhCvE8zBOVvasZbOOq3e7WsyX47oJXrxJm1wiXn9ynIgfa6QfxaV6+9a/na0ynhsVU1sAzyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eiQ+NO7o; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="B5H9zNt0";
-	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="TyOVG8oI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mattcorallo.com; s=1745089263; h=In-Reply-To:From:References:Cc:To:Subject:
-	From:Subject:To:Cc:Reply-To; bh=npwtTpA0NzF8nc/tw9pHwJzqkQMnQ2w4PFAc3O+Ak4o=;
-	b=B5H9zNt0SxCfaYwmaCrE7tJwknYNgTtMWH9t7gDS76JPYbvnSAafnYawB9qqKLxJegxHa3sS+IY
-	VXg3tXOf4UNS3r+tumiI8KKzTiqDbrBEfyd/yEty7wwAxb+eDK61XnN4IXzV9fH+3xhGDGkWaZHvV
-	YZ74HxiT9yI6HxJlY2xrTmzDKMGCIT8MVuOnKl3YZhDIdyO6vLOXb4/CzNYiipb+meJ+eiXKVEmao
-	nhXBkhEJYs4PPnIcxfyyi9Qv6ItG/AJmIzEeKgsLataK5YRoqhS5IA/mhCYQbdKz8Mn2+W55hheFZ
-	xU+9EWGf5zH4HlRdxMki+UxaqJsz72f57W1Q==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=clients.mail.as397444.net; s=1745089265; h=In-Reply-To:From:References:Cc:
-	To:Subject:From:Subject:To:Cc:Reply-To;
-	bh=npwtTpA0NzF8nc/tw9pHwJzqkQMnQ2w4PFAc3O+Ak4o=; b=TyOVG8oI4Q4vg1xR+1UCI3H2mr
-	6Z1bN5Ig5NIVHLBWolCZBOmXaZa6VFQiSUEElFcuIwsLE/hdpu/OQkwhr/2wwsvfHD5/2VgRcu6jX
-	1NQiRSEh7GtFs9x/Wly7TwcgmJFMTQufrXHwwT40O9CurEUAMsLAvWyceZvEbJ2zkBgAseo6+fVYA
-	M48IlxI+aL4HoM5FXgJ6gzujuqKG192S+rzPpEobd28nxItW5Y4xQ0sMzdL4RnoCn5/9Szp+8DXm4
-	FbT0bZ9ghtW7rIxML3iehdiqfYxT1Dvwj5thDYJ+reTynHchyhQnz0PQK6emDVar9bhLTYh7rTTRw
-	P5leJKgQ==;
-X-DKIM-Note: Keys used to sign are likely public at
-X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
-X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
-X-DKIM-Note: For more info, see https://as397444.net/dkim/
-Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
-	(envelope-from <yalbrymrb@mattcorallo.com>)
-	id 1u6Dt2-009hI1-20;
-	Sat, 19 Apr 2025 19:30:00 +0000
-Message-ID: <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
-Date: Sat, 19 Apr 2025 15:29:59 -0400
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eiQ+NO7o"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-736c1cf75e4so2685934b3a.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Apr 2025 15:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745102334; x=1745707134; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QBYHQ4JnuwsmkkqEwegYrlQyKiFdsE20ywWr4x5+QhI=;
+        b=eiQ+NO7orRwQFGaFhn48+rwBDNL8Tp1eBiC4EB1LTZrror8IIJcWZyamJujJvrObbY
+         6PriNWpoIY0AwBpeaOsBqGHJaleATOHHOG2Vxria5nTpbHZVvD8Sd8FVpSwX6dXkRSae
+         5BckiJI4JLsZ2TKiRuS/YJm73j85JlqvRzq6gji5hONteNAxCmcXvfB3pgCoY0pmchdp
+         XfVqQ+UPchjXQDZV4WusU6guXtRvoK9cxqCyOIWvK6tbn4lpnCdFyd0iB7NID6RYF30y
+         THVNVBKHfFh3YDc7bast9vKJsCfQrrnAx/ty/Tpc3L7x/CVG3P0sFvIpaLK/7Lpr0pww
+         NIaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745102334; x=1745707134;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QBYHQ4JnuwsmkkqEwegYrlQyKiFdsE20ywWr4x5+QhI=;
+        b=KBWCjfvHxpVXwKF7bwHS9MyYn8g/bfGvUXgnTx1iTTCLIAkxUDk9RhLF8O7AOY/Djs
+         viLq81tZJr3LDa6a269bw1yvAPs7xMy1614aK1lonIWRMcepWOhVKRMVI/GvqGQnhZem
+         K41ekCSLPY0eZLvfXCFS2dvi15DBIz1nd1BM6U7RydylMQJORU39iagIffGpCvf74JBs
+         RcnrBVEdKiU9Y8W04csKLJq08+kQm8D9poHferoR52AeX+vLr4ILj7tmpzvwh7mrjmCI
+         K4hTi9Kqi/lVn3vrCDU4SHz8nW/KGK6E8Y8YeArsWk9+FzDnrEcfy/+hqt6+Mt41lTV3
+         7v+A==
+X-Gm-Message-State: AOJu0Yy+TqXXA8ijj/CXfkcWYWMdhFLUCQJchkEkap74tfJq+NaHTSDS
+	+HrzObK5sEv8MvDGlIcjUk7pibHymK94+mK2uOXJmFl7r1lwJ2UkPFfVNQ==
+X-Gm-Gg: ASbGncsisIz9oRT6j6NxH0h0HJEBRjWccdIy2MRh8BrmmAa8Cp9gH53bKX+T2clGvEZ
+	L24ndGVrGog2ugogBueaONBOh76yq9k9eZvgDXOOCEPPcaOlmIVqVq6H/x+katnbbsrF0NtNlg3
+	j2QZSyJsFYHiTreoMFA6ZRHl8u4OTlmNKfNrlCX1nxEXFb/2yWE9oDA933H7MLhnwHtMEYoMqt9
+	hqGq6pVd0Ff3fJtsJxLciFEoco2UUqrS1xj/XnbcY9y/LBsTdX1DJm3ibO0CS0fvhFow4KG/gjv
+	ik33cyTfhwKYMpdRApGT/gMN31jYDpn2o16crWUPPMNYQFCR+Klw56tZX8VMvaZdO4UNVdDEvuX
+	iZR9jORgELmK5xg==
+X-Google-Smtp-Source: AGHT+IHfBHLARaADdc7r8EHFWi9IUcG4ALJ3nI5REFxU9pPRcqk7qDQE/fpGaxg3Ub1i8VY9qtFVnQ==
+X-Received: by 2002:a05:6a21:1645:b0:1f5:706b:5410 with SMTP id adf61e73a8af0-203cbd46b3amr11070261637.38.1745102333770;
+        Sat, 19 Apr 2025 15:38:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8e4e5dsm3925816b3a.61.2025.04.19.15.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Apr 2025 15:38:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
+Date: Sat, 19 Apr 2025 15:38:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: PMBus memory overflow
-To: Guenter Roeck <linux@roeck-us.net>
+To: Matt Corallo <yalbrymrb@mattcorallo.com>
 Cc: linux-hwmon@vger.kernel.org
 References: <985cd95f-155b-4b8a-9fe7-59938d0c2b8f@mattcorallo.com>
  <9e01e3ec-3ac5-4d83-a065-d00d568b9cc7@roeck-us.net>
@@ -61,150 +79,64 @@ References: <985cd95f-155b-4b8a-9fe7-59938d0c2b8f@mattcorallo.com>
  <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
  <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
  <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
+ <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
 Content-Language: en-US
-From: Matt Corallo <yalbrymrb@mattcorallo.com>
-In-Reply-To: <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
+On 4/19/25 12:29, Matt Corallo wrote:
 
-
-On 4/19/25 3:05 PM, Guenter Roeck wrote:
-> On 4/19/25 10:53, Matt Corallo wrote:
->>
->> Sure, of course. Obviously easier to do in pmbus_peek if you have any suggested logs you want. The 
->> device caps output is (and still never hit my BAD LEN printf):
->>
->> ./a.out -b /dev/i2c-3 -l -v 0x58
->> PMBus slave on /dev/i2c-3, address 0x58
->>
->> Inventory Data:
->>    Manufacturer:        FSP-GROUP
->>    Model:        FSP520-20RAB
->>    Revision:        (null)
->>    Built on:
->>    Serial:
->>    IC Device:        PIC24FJ32GA004
->>
->> PMBus revisions (0x22):    part I, ver 1.1; part II, ver 1.2
->> Capabilities (0x90):    PEC, SMBALERT#, 100 KHz
->>
->> Supported Commands:
->>    00 page                      rw u8 (bitmask)
->>    01 operation                 rw u8 (bitmask)
->>    02 on_off_config             rw u8 (bitmask)
->>    03 clear_fault                w nodata
->>    05 page_plus_read             w block
->>    19 capability                r  u8 (bitmask)
->>    1a query                     rw process_call
+> Hmm, doesn't seem to trigger it at least with pmbus_peek.c, the following diff still doesn't hit the too big prints:
 > 
-> pmbus_peek uses the query command to determine if a command
-> is supported or not. It doesn't try to read other commands.
-> 
->>    1b smbalert_mask             rw block
->>    20 vout_mode                 r  u8 (bitmask)
->>    30 coefficients              r  process_call
->>    3b fan_command_1             rw s16 (LINEAR)
->>    79 status_word               r  u16 (bitmask)
->>    7a status_vout               r  u8 (bitmask)
->>    7b status_iout               r  u8 (bitmask)
->>    7c status_input              r  u8 (bitmask)
->>    7d status_temperature        r  u8 (bitmask)
->>    81 status_fans_1_2           rw u8 (bitmask)
->>    86 read_ein                  r  block(6), Energy counter (DIRECT)
->>    87 read_eout                 r  block(6), Energy counter (DIRECT)
->>    88 read_vin                  r  s16 (LINEAR), Volts
->>    89 read_iin                  r  s16 (LINEAR), Amperes
->>    8b read_vout                 r  x16 (VOUT_MODE), Volts
->>    8c read_iout                 r  s16 (LINEAR), Amperes
->>    8d read_temperature_1        r  s16 (LINEAR), degrees Celsius
->>    8e read_temperature_2        r  s16 (LINEAR), degrees Celsius
->>    90 read_fan_speed_1          r  s16 (LINEAR)
->>    95 read_frequency            r  s16 (LINEAR)
->>    96 read_pout                 r  s16 (LINEAR), Watts
->>    97 read_pin                  r  s16 (LINEAR), Watts
->>    98 pmbus_revision            r  u8 (bitmask)
->>    99 mfr_id                    r  block, ISO 8859/1 string
->>    9a mfr_model                 r  block, ISO 8859/1 string
->>    9d mfr_date                  r  block, ISO 8859/1 string
->>    9e mfr_serial                r  block, ISO 8859/1 string
-> 
-> That also means it does not try to read mfr_revision or mfr_location
-> since that is not supported. The PMBus driver in the kernel does
-> try to read those (it doesn't use the query command to determine
-> if a command is supported or not).
-> 
-> My suspicion is that the power supply returns something (but not
-> valid SMBus block data) when reading those commands. If modifying
-> the kernel to find out is not easy, another option might be to
-> enable smbus tracing. Would it be possible to do that ?
-> Another option might be to modify the pmbus_peek command to read
-> those registers, or maybe even better to use i2cget to read the
-> data directly.
 
-Hmm, doesn't seem to trigger it at least with pmbus_peek.c, the following diff still doesn't hit the 
-too big prints:
+Only idea I have at this point is to either enable smbus tracing in the kernel
+or (better) to add test code into i2c_smbus_read_block_data() to see what
+exactly triggers the problem.
 
-diff -U5 orig.c pmbus_peek.c
---- orig.c	2025-04-19 19:28:44.314887951 +0000
-+++ pmbus_peek.c	2025-04-19 19:26:42.721194496 +0000
-@@ -619,16 +619,19 @@
-  	}
-
-  	if (data.block[0] <= read_len) {
-  		if (data.block[0] > 32) {
-  			/* NOTE:  this probably won't be visible */
-+fprintf(stderr, "\nERR too big 32!\n");
-  			retval = -EFBIG;
-  			goto try_i2c;
-  		}
-  		retval = read_len = data.block[0];
--	} else
-+	} else {
-+fprintf(stderr, "\nERR too big!\n");
-  		retval = -E2BIG;
-+}
-  	memcpy(read_buf, &data.block[1], read_len);
-
-  	return retval;
-
-  try_i2c:
-@@ -1016,11 +1019,11 @@
-  	 *
-  	 * NOTE:  this assumes we can check prefixes for PMB_MFR_EXT(x)
-  	 * and PMB_EXT(x) operations, even though we can't query those
-  	 * operations directly...
-  	 */
--	if (is_pmb_extended(cmd))
-+	//if (is_pmb_extended(cmd))
-  		return -1;
-
-  	if (pmdev->op[PMB_QUERY] == &unsupported || pmdev->no_query)
-  		return -1;
-
-@@ -1044,12 +1047,12 @@
-  	int status;
-
-  	/* For non-queryable devices we'll still try to read inventory
-  	 * data strings.  That should be harmless but informative.
-  	 */
--	if (checksupport(pmdev, cmd) == 0)
--		return NULL;
-+	//if (checksupport(pmdev, cmd) == 0)
-+	//	return NULL;
-
-  	memset(buf, 0, sizeof buf);
-  	status = pmbus_read_block(pmdev, cmd, sizeof buf - 1, buf);
-  	return (status > 0) ? strdup((void *)buf) : NULL;
-  }
-
-> Somewhat unrelated to this, it might be time to revisit using the
-> QUERY command to determine what is supported. If only I had an endless
-> amount of time ... oh well. When I wrote the kernel driver, none of
-> the chips I had available at the time supported that command :-(.
-> 
-> Thanks,
-> Guenter
-> 
-> 
+Guenter
 
