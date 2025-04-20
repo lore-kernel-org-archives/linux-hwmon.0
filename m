@@ -1,174 +1,134 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BD31BC073;
-	Sun, 20 Apr 2025 16:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2227E0E8;
+	Sun, 20 Apr 2025 22:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745165212; cv=none; b=symlNWoJ9uLuGAGgIeHo+5f9wDi3apr1Y7l7N0Jjha7Er3Ap2rGcSXgHfG9yuVBC9lkur1NF0Gh2TyQ9uOqivvveH7hzPz/NcaUddrC7u2nUI3uotQH1CZ9p5JDHwbtGmrD2tkowqfxJMVNmypJQ4fjWhnlKmK/gem6nSH9caho=
+	t=1745188428; cv=none; b=Ng3Kc0RGcxHFojazy3zCAV0qS8dzXaJCDYBmcVBDK+66Va2OcFzbITeoEqS8DQvszInS84qfpSoZHVPkA/2+dej5mpzFt36ZxFP2BcGT774dBS5TKOpRUhbWor9SL0Do45GBXKx6kju8mAi8hDy4bWDOjqsc7OM7Ruf7ZvqFd7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745165212; c=relaxed/simple;
-	bh=f8o0YqoaCdkz5M4EDpBxsMii02vnCaO4nDunSrkU9HY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t9UHpR/qq0eA3YtAnAW2HIcKjxKvQzQpoBBO6Mfxi+eE5XdWzzAoxK0wYrUgVK2TQs97kq2tArSI6C03cxcHS81hv4FKP4OMwyyf1xI/+uDqAoWSZK4UHbSa7K7WHJgNqZtY1u68Rnn8jiDcT3O8fpxscpTJZTX54ecOvRH1cko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JASJIPlu; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1745188428; c=relaxed/simple;
+	bh=Qx3z+j2HX+QOxtcS4rs6ymT9x6wbAF7BUh+b0bmZ6yc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cMnkHuDpGPLa10WVTbkpOPponzqCSzDEeC/BTKQt1gU66s3qb9avF4h6QFPJaDG9OWmCtBY4r994bjYmk2vXVG3M2k/yLElv3OKRdZggU2f+e4kAnfgv4nGCof8NNxUn2jZeS/em1PgbFy+vjhO+ZsUDbJ3F45a5dsc811QMMAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=HBp5SRi5; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JASJIPlu"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7399a2dc13fso4325746b3a.2;
-        Sun, 20 Apr 2025 09:06:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745165210; x=1745770010; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=eaTel79kLv9h6H86adMPeXI6zNau/2ZZGbG/qqarm3w=;
-        b=JASJIPlu0RI2SV0VxhmSYHFImxPjexwlOG7wCMDsaAE9V8lGoTuY0XQVnc82MRo+k0
-         PDu5nBmjZdaEP/a32ToOWp6EAmv3ytSqfRvnhpi93i6lHML8vJYZka/AaIfpY7BIEAcG
-         i4jU3j96Bxu+yeynA2mlEnCHfHBBv95sts9LRTsB+XhM6p1BDyaQGLMYiR3A/VRbhkef
-         7RHXWxlx8ZBC5L0ZBS3F8Zw1C23FZ1v/w/RCZ1g8xkCSIVR5TzwpZhsTWSOss7c73bld
-         MqVSLF7QQmpIx85v7NCUvYWqancVKfVu6jaXI5zjiHxFoaCowG4HS/j7cuNX6R2T7Q/f
-         fecQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745165210; x=1745770010;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eaTel79kLv9h6H86adMPeXI6zNau/2ZZGbG/qqarm3w=;
-        b=ei2ZUQLh9331v9GntcuhcB9k5LSDu/4pQue5fuOj7prkVhz7vPWo4DdwcFO9Fdt1sg
-         Uu1sAX22LoFlKnM+u/1wd8qeZWGbZmv/UX/d9rApv6z1Bvh4vypqXl5hN2KlxydfLUSi
-         7Zx0pXa25j3TYdhgMZQWh0o4rpqZkEmpQdISIP0D0DiPCMqdP8esMUeeOBhPUXrDI1po
-         sBhNlupulwYpZSj0FBEsvQP3Bxh3uizA493iYLfOaaZY/ilen+4DjeJ5cr+qYi+GUz9o
-         qoFKtHPVk220g/lzF5X9R6X+lj0uer8E2kGFajlTP44qIdcsGfZquczpU0ssizVIwMAj
-         HoyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrD+7gUlipb9Goutri0EWvsDCY3PkrGTRK4GFP6xrEKdygviOYVi7q5RZjdEi00KNX5D2uoivl7Kw=@vger.kernel.org, AJvYcCWYC/ZZnZ1Vyo65c7lLa0A/PGVKoPmAZHQOMRblmQnE6LCJhwTEBu4/TwPXcG07dM2jOE9DgZrbUVOIxCVG@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyLL9R2Fzt+u1X6ky2r6QLUdlUURAnNdxP2c+mcJwOeOxnfTtH
-	waLS2ZZE4wSbMHU/ROynhhUPj9lOhd5bnsp04cENH/NiGw2RuGnI
-X-Gm-Gg: ASbGnctCJvo1qRvo+jELNrl5plAUB4sSamEABIFXAs4qkWVqwIMTBePYxembQky6aoQ
-	kFnmH1eloaqNhXcPQPNcKijdSwNaCtwq/Ilu203Oe3qvllFePGc1Sz+ohmQyMfSFYWNRaOhsdXY
-	wlHHKkw/Bb/qen/6EeFcURlGF11gBKfpjeMeXkX8EM3zHahDmBIYcRZdHM2X2KDMU3wU2YOcqjA
-	cijkvbp9pFK/5lXRvHfVyBOsPRiVl2V9sPFI6LJv6KO9Yrx/pMWaUwCpsTCG+usqjDBclNU9tcD
-	uIlCnODopzmHOwGorQsAHkOXkaZ3xYpc6TD0ysNru6L7+UsVuZtSMkDbh+8hMA7y4TUPtjCgglC
-	kRHAzUBflJaNsMg==
-X-Google-Smtp-Source: AGHT+IEf3HEg9kXxIHuYovHMfUl3ZTyD6jYPPMZaFFv3CL1nHmlF0UMJl9Kb1oJfcbIXiec8F6eMwg==
-X-Received: by 2002:a05:6a00:35ca:b0:730:8a0a:9f09 with SMTP id d2e1a72fcca58-73dc156f804mr13078124b3a.18.1745165209848;
-        Sun, 20 Apr 2025 09:06:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbfa58333sm4892516b3a.118.2025.04.20.09.06.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Apr 2025 09:06:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3bc76874-2942-4454-b785-896772bdad6d@roeck-us.net>
-Date: Sun, 20 Apr 2025 09:06:48 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="HBp5SRi5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1745188418; x=1745793218; i=w_armin@gmx.de;
+	bh=fthjne6OmtQsqrjZYqKaJ4Y0cGO+9TN6rwmAoJnV36A=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=HBp5SRi5FDnGpsPuGehLj43E9TSci625Ms23qz/namDjhFwxSQGC6Htkiq8ZD935
+	 9QjViiZ3JtzIxFCGUqk8195Y2nIu3WWncjJpJTsiW2vjwFwOfHuyJ3uptvaWBplgN
+	 v8iZTlzl3ZGfc/T+ChionqcrnufRBgjUxKA4/niW9nSPGTilar1tfVQF5oXlACL1A
+	 dYonfNPgkVqrNPMMj55lkAaEEurCUNqPNZcXNzN9zL4vZUtZgMc4bH/iu01hp5yip
+	 HEwNMUQPg7h0dcJY8tUAhwoafaK/fR4bYJaKKCp1aNa4tZg3sFwlvOHDHvQJiqCNn
+	 8W9AGUuDJ7VhAs05xA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MGQj7-1uKbsK2zHx-00B2vC; Mon, 21 Apr 2025 00:33:37 +0200
+From: Armin Wolf <W_Armin@gmx.de>
+To: pali@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add the Dell OptiPlex 7050 to the DMI whitelist
+Date: Mon, 21 Apr 2025 00:33:34 +0200
+Message-Id: <20250420223334.12920-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] hwmon: (max77705) add initial support
-To: Dzmitry Sankouski <dsankouski@gmail.com>, Jean Delvare
- <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Chanwoo Choi <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250419-initial-support-for-max77705-sensors-v5-1-4504a9b48ba1@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250419-initial-support-for-max77705-sensors-v5-1-4504a9b48ba1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:a5v2M1/aVJwtTiYXPCtpcf4tGhECL+5M5JZHEDptnwwmKwvauOo
+ 2ELyPGJEVMdpvKo23OSHq1qt4p75/jU7QuHB07bCV/T4IqgufsgsNr/EPvhZBoG4o3twCCX
+ 0E7zkwIAV2EoqB5rMUeH2Ze6BX2PKQzffXQ5aQGOlfQISl7vfanIkwiGA9oeIWgTbdQQjsg
+ o23ruW2UakLh4sxCuOj3g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:iWCLIIbyJjA=;s395TWvMMMz4XcIM9PeTCaMAZ3/
+ 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
+ BxJx3qR85GFSs=
 
-On 4/19/25 12:03, Dzmitry Sankouski wrote:
-> Add support for max77705 hwmon. Includes charger input, system bus, and
-> vbyp measurements.
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
-> Maxim MAX77705 is a Companion Power Management and Type-C interface IC.
-> It includes charger and fuel gauge blocks, and is capable of measuring
-> charger input current, system bus volatage and current, and bypass
-> voltage.
-> 
-> Add support for mentioned measurements.
-> ---
-> Changes in v5:
-> - fix compile warning
-> - review fixes
-> - Link to v4: https://lore.kernel.org/r/20250412-initial-support-for-max77705-sensors-v4-1-2e4cf268a3d0@gmail.com
-> 
-> Changes in v4:
-> - Fix review comments.
-> - Link to v3: https://lore.kernel.org/r/20250405-initial-support-for-max77705-sensors-v3-1-e5f64fccd005@gmail.com
-> 
-> Changes in v3:
-> - Fix review comments.
-> - Fix v2 changed message.
-> - Link to v2: https://lore.kernel.org/r/20250304-initial-support-for-max77705-sensors-v2-1-58d2207c732b@gmail.com
-> 
-> Changes in v2:
-> - Fix review comments.
-> - Link to v1: https://lore.kernel.org/r/20250225-initial-support-for-max77705-sensors-v1-1-2be6467628b0@gmail.com
-> ---
-> Changes in v5:
-> - remove now unneeded max77705_hwmon_readable_table
-> - remove channel num check in max77705_is_visible, since there's only 2
->    channels
-> - make is_signed bool
-> - remove is_signed: pass is_signed as true/false
-> 
-...
-> +static const struct regmap_range max77705_hwmon_readable_ranges[] = {
+A user reported that the driver works on the OptiPlex 7050. Add this
+machine to the DMI whitelist.
 
-As 0-day (and builds with W=1) points out, this is now also unused.
+Closes: https://github.com/Wer-Wolf/i8kutils/issues/12
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Guenter
-
-
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 79e5606e6d2f..1e2c8e284001 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1273,6 +1273,13 @@ static const struct dmi_system_id i8k_dmi_table[] _=
+_initconst =3D {
+ 			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7060"),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell OptiPlex 7050",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7050"),
++		},
++	},
+ 	{
+ 		.ident =3D "Dell Precision",
+ 		.matches =3D {
+=2D-=20
+2.39.5
 
