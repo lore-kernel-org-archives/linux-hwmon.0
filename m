@@ -1,468 +1,563 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A01D2749F6;
-	Wed, 23 Apr 2025 09:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2981202C4A;
+	Wed, 23 Apr 2025 12:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745401305; cv=none; b=MvOq3I6I+txKixNnCFTAIvuktOqk9VTAHi55KMgZkMT9G088Cl5fMDRuSB5xvwUuH8uHjkVFm7QncUd1Q4kv9lkvjO1vIScJN/T4WvB16juoZ4Sx1Fuz8Hmfb4LI1mG9AL9lYS9ZpNjq+ptzPDylGKV8MqgycQjkzfjO6zYepss=
+	t=1745410096; cv=none; b=TlkFje47VclnYnlfgq1/sNUJDErnFVm+VoDkw0YF5MP9f2YcfHmRfvWvNcrp3sKOQIIbBcK1aivnyq5V393rir13ye9hJ0bkbyiBHF52zfNRHkl2EJs4gjRgtqJMtwZX6aW9Qe2qYdAXWp6ta1FCTKTYOszmNc+Xfa7IWg5/gdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745401305; c=relaxed/simple;
-	bh=8ZWT716Kvf9Nmir1qWbHYxD7A02pPultL0YPRcp8J0I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gc33yBDNj/gk2xn/oQu+bD12yyVLBMxbvV3G44aR1XcG+1t07f1ptNR26wk7JeIuUE8OKPby3pd1hliZ1DLSA5VSPslvngQx7s7SDKNZlBRCK6cF3xHocuxr3Q/+KZU3f0TiqgH7iQ9QfdO/PNXQqX5p93Jd1NgxehYxs/jEz+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QeNlUiiO; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1745410096; c=relaxed/simple;
+	bh=A0ne8vqICHUtsR49n4iOpmDCYmNxZVDz7o4X8BaCUUA=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=HXdwWpOtbCEhEkYvA39fyOkmPD/FFeMVcs5wX2Br3M4aGsgJ0zOJXD/adamBgvjIYaCDD6tPbeD1pF3mFfbk75AM78fXOrnFav8QE4L3D1Au7BqJq/pDzH/JXw6dVUpNVo9VfSgoaOgpxtDxfXszN4RVNvmESj+xDw4/1/6o6A0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KNEjouHQ; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QeNlUiiO"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22c33677183so72489605ad.2;
-        Wed, 23 Apr 2025 02:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745401303; x=1746006103; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sog+/W6AVctfHjoxm2zZUHdfyp4KwnzETFplxHLsp8g=;
-        b=QeNlUiiO9wQGB+IJ+CkkMFsWG4cQkMOhb13OZqRbbyof/4NmznYWWEAFGL9dJfsYsJ
-         +KpiyPHEm2t0w4vdmYsm0NfZKFJX4z2eggXYnAkhTk30H4BlWcpEgPpc5+Z+880ztEkW
-         9QKX3vNfGkwPmhpw/jPsqCthzggXUeEAe7DfHZBwwFed2NDKfVVxzJtGY6nxBQtigV5T
-         swTWXgn0QN4CvuDkY/DuXPsxh+hv81QINwsWWL+cglVHefdSiURy0+UoL4sVTpMxvo+0
-         3Mz1rvX8GgCxNOu8HO2jJvwhxrfLF4xaWNMAh1QjVLAvzHvchZrZnTFD6lHI/1a4T9c3
-         eUXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745401303; x=1746006103;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sog+/W6AVctfHjoxm2zZUHdfyp4KwnzETFplxHLsp8g=;
-        b=gX53t/6MmZGOvMFXLAp7SHDhplfF7uFIX5FEFtrZ2SxAR3llowhLpQm+6iRZROGxn+
-         ptosc2vtBnPRk/86sm2XoNT68FNIEAxH/Gyrdlttx8tDUvLRlxvr6+KnRaRbg5g3uyjb
-         KWHy7idXW2fG1X/zSqMk7aRemttYwn+Zp6Ws98Zqqr+hBFfrUI3bIIV/okrwbueHKinF
-         UcVyQz+dsJQT8XIwZlNlCtZxEv35y3JNp2RobU9ztP4ulHIyCGl+qGycxN1IVDBkSlKY
-         04NKQhLxoOUOgk41AeVMick+/lb5fu+WxH3DxfJRtxj94n8+fZytnGW/2dOW45Ps2alr
-         2Cmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEuhnLiQCU9rMYC8ipRqt9hOATYFL7D/r8PnYdQasX3fupZjrPUnDgrwP+YKxHyBquduTVr9JRm0Y=@vger.kernel.org, AJvYcCUKPCsJWvstqgbGF68uMXgo03TMWF6Xj2ABNMXRDoX5lxW5K8NbpuN69XhFnKia8FKWuEV2Wa+u@vger.kernel.org, AJvYcCUddnZMviwJteFh29gBJtQf+mOzxhvD43TMY5LddzzEUHPUNR5f1lA2RC6R5qoeoKsJ+h0dZtfHgL1j/ak=@vger.kernel.org, AJvYcCWCRVZBvYcWXEsFKu6u42CUJqhlQJxEn/7tmR8bIsClSmdNzwcAHtopZrtSU30lLmjDoatCxu2vDl1gyA==@vger.kernel.org, AJvYcCWK4d/wNxEyomzDxrktSDq1d20ZaPx82Nw37veOeONyyIwfRx4/uMHtCtctBwORAu0LKO3oTmA1f/V3@vger.kernel.org, AJvYcCWucO6oo70vkd2mK5xfd1Gu07KWBrfiL4m+dv/QQwjufm/esirwq7dUofoaTO+TH3Zqk0nwkW+Ubobl@vger.kernel.org, AJvYcCXHQRGq3Uemxlx/5xRoynYsjk080hQlrWsHh1ehGAZsEn1Jj4GikGAoJEjR47vI3IXi4FkYvWmwAsJW@vger.kernel.org, AJvYcCXb9PZ0GAu3gnB5+x9BQrT9ugEzZztfxD3TT/n61ahtEqq+31x4SSKCIo+pHKNWRwoRwiDmJeFZ8oDYcZmxh/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6Fo63Anb5YC8zdPNeLWKlbeBxe5nwjQabjHtTCSeI5yJABjl4
-	7JLj+otcSt/D88BPKvVXkqpZjd6nd265zDLu9tKjHVz+sBXfI0DW
-X-Gm-Gg: ASbGnct85X6P4cvzCVHvO+WUcYs24WcT6eVAoWxP3RucMGeWhoHtULIs2BCIigTGklP
-	8gnZvvz7Y91M3J2RpKd//i5jzUEMmGOCO/u4mRproPb70WazD102FmPn41nvNCVels/tlBlJ6NX
-	z7UE7crPoFMrc6bXDW4Y4/EWYKBIIe1WlWK/HD9e7WpYvC+UJi/qIlExYPxOqy16KJJU/tpcknB
-	XHvmAqWzOMMMBO1Hn9/MkPEj+IaUnnvPPNLBdfwCCASi3jHAl6By5sUrTVdf2jNSCmBAk96XHxO
-	7xPV+V1l6rFjQ37ZvsDRfSCdIx69zNJQxwT+w3jdDbqFWHEzf8Q1Qf03V4uTs+4QulfZIYzCxV8
-	gYyA=
-X-Google-Smtp-Source: AGHT+IErZyJ7tT8dzYSmK+hrSa5NYGbKDJ5zpqYD7lrhUFQQUR6L51YgyQh6NQl+PA3JRfhf2AdxAQ==
-X-Received: by 2002:a17:903:986:b0:224:e33:889b with SMTP id d9443c01a7336-22c5359a406mr311914135ad.12.1745401303161;
-        Wed, 23 Apr 2025 02:41:43 -0700 (PDT)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22c50eb4b8esm99972775ad.124.2025.04.23.02.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Apr 2025 02:41:42 -0700 (PDT)
-From: a0282524688@gmail.com
-X-Google-Original-From: tmyu0@nuvoton.com
-To: lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: [PATCH v10 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Wed, 23 Apr 2025 17:40:58 +0800
-Message-Id: <20250423094058.1656204-8-tmyu0@nuvoton.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250423094058.1656204-1-tmyu0@nuvoton.com>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KNEjouHQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745410094; x=1776946094;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=A0ne8vqICHUtsR49n4iOpmDCYmNxZVDz7o4X8BaCUUA=;
+  b=KNEjouHQEM5kUTXCVCh61e04opxP7t14NsFInNbNHbXABnYe1K2rW2oC
+   BBbB2vx87dJV9r0hDGeRFL7pja1P9Qqg97vLHpuWah2aTWtCU3weityaH
+   F08ASx5NwWnnXA8E4B7dDsmkmWXZQ1m61yqowdYV+jpfxGI/Ki8Ag2yAY
+   /GxuLufersyubq1A/OYIQYUcqg8/SZksMbtdU237jQBCQBoYx/UPfDY89
+   JSOT3NedWivVDXnJ6GELpAPrRafda5g8WWpBoP6T+CV3WXEdSwclHlZae
+   N/i53+RTlxeG0ez5KW6ESs+kfSPh5CH4piQGoXK4O9ZnkxKWm+hkySI/I
+   A==;
+X-CSE-ConnectionGUID: OKf1CckJRt+qMlpMPRzCxA==
+X-CSE-MsgGUID: KU4xylETQJS8S0wdgNG1fA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11411"; a="57988196"
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="57988196"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 05:08:13 -0700
+X-CSE-ConnectionGUID: XYAUZl2IRDW8iDLVefCRDA==
+X-CSE-MsgGUID: 5A2va2tETrK8W4ktoTuQmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,233,1739865600"; 
+   d="scan'208";a="132217688"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.36])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2025 05:08:09 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 23 Apr 2025 15:08:05 +0300 (EEST)
+To: =?ISO-8859-2?Q?Micha=B3_Kope=E6?= <michal.kopec@3mdeb.com>
+cc: Hans de Goede <hdegoede@redhat.com>, tomasz.pakula.oficjalny@gmail.com, 
+    jdelvare@suse.com, linux@roeck-us.net, platform-driver-x86@vger.kernel.org, 
+    piotr.krol@3mdeb.com, maciej.pijanowski@3mdeb.com, 
+    linux-hwmon@vger.kernel.org, 
+    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH v7 1/1] platform/x86: Introduce dasharo-acpi platform
+ driver
+In-Reply-To: <20250407125210.215794-2-michal.kopec@3mdeb.com>
+Message-ID: <e10a94ae-745e-9ee0-11af-f6ca583d54b7@linux.intel.com>
+References: <20250407125210.215794-1-michal.kopec@3mdeb.com> <20250407125210.215794-2-michal.kopec@3mdeb.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-885999988-1745410086=:1158"
 
-From: Ming Yu <tmyu0@nuvoton.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
+--8323328-885999988-1745410086=:1158
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
----
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 298 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 310 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
+On Mon, 7 Apr 2025, Micha=C5=82 Kope=C4=87 wrote:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8f76bf3bdbf4..885e74f8ff5a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17366,6 +17366,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 838bdc138ffe..d8662b5d1e47 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
- 
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 31473b3276d9..da091d66e2d7 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..a6e79304d7ac
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2024 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+	int irq;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void nct6694_irq_dispose_mapping(void *d)
-+{
-+	struct nct6694_rtc_data *data = d;
-+
-+	irq_dispose_mapping(data->irq);
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!data->irq)
-+		return -EINVAL;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, nct6694_irq_dispose_mapping,
-+				       data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_device_init_wakeup(&pdev->dev);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to init wakeup\n");
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, data->irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"rtc-nct6694", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	return devm_rtc_register_device(data->rtc);
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
--- 
-2.34.1
+> Introduce a driver for devices running Dasharo firmware. The driver
+> supports thermal monitoring using a new ACPI interface in Dasharo. The
+> initial version supports monitoring fan speeds, fan PWM duty cycles and
+> system temperatures as well as determining which specific interfaces are
+> implemented by firmware.
+>=20
+> It has been tested on a NovaCustom laptop running pre-release Dasharo
+> firmware, which implements fan and thermal monitoring for the CPU and
+> the discrete GPU, if present.
+>=20
+> Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> Signed-off-by: Micha=C5=82 Kope=C4=87 <michal.kopec@3mdeb.com>
+>=20
+> Address Ilpo's review
+>=20
+> Signed-off-by: Micha=C5=82 Kope=C4=87 <michal.kopec@3mdeb.com>
+> ---
+>  MAINTAINERS                         |   6 +
+>  drivers/platform/x86/Kconfig        |  10 +
+>  drivers/platform/x86/Makefile       |   3 +
+>  drivers/platform/x86/dasharo-acpi.c | 357 ++++++++++++++++++++++++++++
+>  4 files changed, 376 insertions(+)
+>  create mode 100644 drivers/platform/x86/dasharo-acpi.c
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 00e94bec401e..6d2e0909ac63 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6404,6 +6404,12 @@ F:=09net/ax25/ax25_out.c
+>  F:=09net/ax25/ax25_timer.c
+>  F:=09net/ax25/sysctl_net_ax25.c
+> =20
+> +DASHARO ACPI PLATFORM DRIVER
+> +M:=09Micha=C5=82 Kope=C4=87 <michal.kopec@3mdeb.com>
+> +S:=09Maintained
+> +W:=09https://docs.dasharo.com/
+> +F:=09drivers/platform/x86/dasharo_acpi.c
+> +
+>  DATA ACCESS MONITOR
+>  M:=09SeongJae Park <sj@kernel.org>
+>  L:=09damon@lists.linux.dev
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 0258dd879d64..8168c5274a08 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1060,6 +1060,16 @@ config LENOVO_WMI_CAMERA
+>  =09  To compile this driver as a module, choose M here: the module
+>  =09  will be called lenovo-wmi-camera.
+> =20
+> +config DASHARO_ACPI
+> +=09tristate "Dasharo ACPI Platform Driver"
+> +=09depends on ACPI
+> +=09depends on HWMON
+> +=09help
+> +=09  This driver provides HWMON support for devices running Dasharo
+> +=09  firmware.
+> +
+> +=09  If you have a device with Dasharo firmware, choose Y or M here.
+> +
+>  source "drivers/platform/x86/x86-android-tablets/Kconfig"
+> =20
+>  config FW_ATTR_CLASS
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
+e
+> index e1b142947067..3ca53ae01d93 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -110,6 +110,9 @@ obj-$(CONFIG_ACPI_TOSHIBA)=09+=3D toshiba_acpi.o
+>  # Inspur
+>  obj-$(CONFIG_INSPUR_PLATFORM_PROFILE)=09+=3D inspur_platform_profile.o
+> =20
+> +# Dasharo
+> +obj-$(CONFIG_DASHARO_ACPI)=09+=3D dasharo-acpi.o
+> +
+>  # Laptop drivers
+>  obj-$(CONFIG_ACPI_CMPC)=09=09+=3D classmate-laptop.o
+>  obj-$(CONFIG_COMPAL_LAPTOP)=09+=3D compal-laptop.o
+> diff --git a/drivers/platform/x86/dasharo-acpi.c b/drivers/platform/x86/d=
+asharo-acpi.c
+> new file mode 100644
+> index 000000000000..f3f01d4604b5
+> --- /dev/null
+> +++ b/drivers/platform/x86/dasharo-acpi.c
+> @@ -0,0 +1,357 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Dasharo ACPI Driver
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/array_size.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/types.h>
+> +#include <linux/units.h>
+> +
+> +enum dasharo_feature {
+> +=09DASHARO_FEATURE_TEMPERATURE =3D 0,
+> +=09DASHARO_FEATURE_FAN_PWM,
+> +=09DASHARO_FEATURE_FAN_TACH,
+> +=09DASHARO_FEATURE_MAX
+> +};
+> +
+> +enum dasharo_temperature {
+> +=09DASHARO_TEMPERATURE_CPU_PACKAGE =3D 0,
+> +=09DASHARO_TEMPERATURE_CPU_CORE,
+> +=09DASHARO_TEMPERATURE_GPU,
+> +=09DASHARO_TEMPERATURE_BOARD,
+> +=09DASHARO_TEMPERATURE_CHASSIS,
+> +=09DASHARO_TEMPERATURE_MAX
+> +};
+> +
+> +enum dasharo_fan {
+> +=09DASHARO_FAN_CPU =3D 0,
+> +=09DASHARO_FAN_GPU,
+> +=09DASHARO_FAN_CHASSIS,
+> +=09DASHARO_FAN_MAX
+> +};
+> +
+> +#define MAX_GROUPS_PER_FEAT 8
+> +
+> +static const char * const dasharo_group_names[DASHARO_FEATURE_MAX][MAX_G=
+ROUPS_PER_FEAT] =3D {
+> +=09[DASHARO_FEATURE_TEMPERATURE] =3D {
+> +=09=09[DASHARO_TEMPERATURE_CPU_PACKAGE] =3D "CPU Package",
+> +=09=09[DASHARO_TEMPERATURE_CPU_CORE] =3D "CPU Core",
+> +=09=09[DASHARO_TEMPERATURE_GPU] =3D "GPU",
+> +=09=09[DASHARO_TEMPERATURE_BOARD] =3D "Board",
+> +=09=09[DASHARO_TEMPERATURE_CHASSIS] =3D "Chassis",
+> +=09},
+> +=09[DASHARO_FEATURE_FAN_PWM] =3D {
+> +=09=09[DASHARO_FAN_CPU] =3D "CPU",
+> +=09=09[DASHARO_FAN_GPU] =3D "GPU",
+> +=09=09[DASHARO_FAN_CHASSIS] =3D "Chassis",
+> +=09},
+> +=09[DASHARO_FEATURE_FAN_TACH] =3D {
+> +=09=09[DASHARO_FAN_CPU] =3D "CPU",
+> +=09=09[DASHARO_FAN_GPU] =3D "GPU",
+> +=09=09[DASHARO_FAN_CHASSIS] =3D "Chassis",
+> +=09},
+> +};
+> +
+> +struct dasharo_capability {
+> +=09unsigned int group;
+> +=09unsigned int index;
+> +=09char name[16];
+> +};
+> +
+> +#define MAX_CAPS_PER_FEAT 24
+> +
+> +struct dasharo_data {
+> +=09struct platform_device *pdev;
+> +=09int caps_found[DASHARO_FEATURE_MAX];
+> +=09struct dasharo_capability capabilities[DASHARO_FEATURE_MAX][MAX_CAPS_=
+PER_FEAT];
+> +};
+> +
+> +static int dasharo_get_feature_cap_count(struct dasharo_data *data, enum=
+ dasharo_feature feat, int cap)
+> +{
+> +=09struct acpi_object_list obj_list;
+> +=09union acpi_object obj[2];
+> +=09acpi_handle handle;
+> +=09acpi_status status;
+> +=09u64 count;
+> +
+> +=09obj[0].type =3D ACPI_TYPE_INTEGER;
+> +=09obj[0].integer.value =3D feat;
+> +=09obj[1].type =3D ACPI_TYPE_INTEGER;
+> +=09obj[1].integer.value =3D cap;
+> +=09obj_list.count =3D 2;
+> +=09obj_list.pointer =3D &obj[0];
+> +
+> +=09handle =3D ACPI_HANDLE(&data->pdev->dev);
+> +=09status =3D acpi_evaluate_integer(handle, "GFCP", &obj_list, &count);
+> +=09if (ACPI_FAILURE(status))
+> +=09=09return -ENODEV;
+> +
+> +=09return count;
+> +}
+> +
+> +static int dasharo_read_channel(struct dasharo_data *data, char *method,=
+ enum dasharo_feature feat, int channel, long *value)
+> +{
+> +=09struct acpi_object_list obj_list;
+> +=09union acpi_object obj[2];
+> +=09acpi_handle handle;
+> +=09acpi_status status;
+> +=09u64 val;
+> +
+> +=09if (feat > ARRAY_SIZE(data->capabilities))
+> +=09=09return -EINVAL;
+> +
+> +=09if (channel > data->caps_found[feat])
+> +=09=09return -EINVAL;
+> +
+> +=09obj[0].type =3D ACPI_TYPE_INTEGER;
+> +=09obj[0].integer.value =3D data->capabilities[feat][channel].group;
+> +=09obj[1].type =3D ACPI_TYPE_INTEGER;
+> +=09obj[1].integer.value =3D data->capabilities[feat][channel].index;
+> +=09obj_list.count =3D 2;
+> +=09obj_list.pointer =3D &obj[0];
+> +
+> +=09handle =3D ACPI_HANDLE(&data->pdev->dev);
+> +=09status =3D acpi_evaluate_integer(handle, method, &obj_list, &val);
+> +=09if (ACPI_FAILURE(status))
+> +=09=09return -ENODEV;
+> +
+> +=09*value =3D val;
+> +=09return 0;
+> +}
+> +
+> +static int dasharo_hwmon_read(struct device *dev, enum hwmon_sensor_type=
+s type,
+> +=09=09=09      u32 attr, int channel, long *val)
+> +{
+> +=09struct dasharo_data *data =3D dev_get_drvdata(dev);
+> +=09long value;
+> +=09int ret;
+> +
+> +=09switch (type) {
+> +=09case hwmon_temp:
+> +=09=09ret =3D dasharo_read_channel(data, "GTMP", DASHARO_FEATURE_TEMPERA=
+TURE, channel, &value);
+> +=09=09if (!ret)
+> +=09=09=09*val =3D value * MILLIDEGREE_PER_DEGREE;
+> +=09=09break;
+> +=09case hwmon_fan:
+> +=09=09ret =3D dasharo_read_channel(data, "GFTH", DASHARO_FEATURE_FAN_TAC=
+H, channel, &value);
+> +=09=09if (!ret)
+> +=09=09=09*val =3D value;
+> +=09=09break;
+> +=09case hwmon_pwm:
+> +=09=09ret =3D dasharo_read_channel(data, "GFDC", DASHARO_FEATURE_FAN_PWM=
+, channel, &value);
+> +=09=09if (!ret)
+> +=09=09=09*val =3D value;
+> +=09=09break;
+> +=09default:
+> +=09=09return -ENODEV;
+> +=09=09break;
+> +=09}
+> +
+> +=09return ret;
+> +}
+> +
+> +static int dasharo_hwmon_read_string(struct device *dev, enum hwmon_sens=
+or_types type,
+> +=09=09=09=09     u32 attr, int channel, const char **str)
+> +{
+> +=09struct dasharo_data *data =3D dev_get_drvdata(dev);
+> +
+> +=09switch (type) {
+> +=09case hwmon_temp:
+> +=09=09if (channel >=3D data->caps_found[DASHARO_FEATURE_TEMPERATURE])
+> +=09=09=09return -EINVAL;
+> +
+> +=09=09*str =3D data->capabilities[DASHARO_FEATURE_TEMPERATURE][channel].=
+name;
+> +=09=09break;
+> +=09case hwmon_fan:
+> +=09=09if (channel >=3D data->caps_found[DASHARO_FEATURE_FAN_TACH])
+> +=09=09=09return -EINVAL;
+> +
+> +=09=09*str =3D data->capabilities[DASHARO_FEATURE_FAN_TACH][channel].nam=
+e;
+> +=09=09break;
+> +=09default:
+> +=09=09return -EOPNOTSUPP;
+> +=09}
+> +
+> +=09return 0;
+> +}
+> +
+> +static umode_t dasharo_hwmon_is_visible(const void *drvdata, enum hwmon_=
+sensor_types type,
+> +=09=09=09=09=09u32 attr, int channel)
+> +{
+> +=09const struct dasharo_data *data =3D drvdata;
+> +
+> +=09switch (type) {
+> +=09case hwmon_temp:
+> +=09=09if (channel < data->caps_found[DASHARO_FEATURE_TEMPERATURE])
+> +=09=09=09return 0444;
+> +=09=09break;
+> +=09case hwmon_pwm:
+> +=09=09if (channel < data->caps_found[DASHARO_FEATURE_FAN_PWM])
+> +=09=09=09return 0444;
+> +=09=09break;
+> +=09case hwmon_fan:
+> +=09=09if (channel < data->caps_found[DASHARO_FEATURE_FAN_TACH])
+> +=09=09=09return 0444;
+> +=09=09break;
+> +=09default:
+> +=09=09break;
+> +=09}
+> +
+> +=09return 0;
+> +}
+> +
+> +static const struct hwmon_ops dasharo_hwmon_ops =3D {
+> +=09.is_visible =3D dasharo_hwmon_is_visible,
+> +=09.read_string =3D dasharo_hwmon_read_string,
+> +=09.read =3D dasharo_hwmon_read,
+> +};
+> +
+> +// Max 24 capabilities per feature
+> +static const struct hwmon_channel_info * const dasharo_hwmon_info[] =3D =
+{
+> +=09HWMON_CHANNEL_INFO(fan,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL,
+> +=09=09HWMON_F_INPUT | HWMON_F_LABEL),
+> +=09HWMON_CHANNEL_INFO(temp,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL,
+> +=09=09HWMON_T_INPUT | HWMON_T_LABEL),
+> +=09HWMON_CHANNEL_INFO(pwm,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT,
+> +=09=09HWMON_PWM_INPUT),
+> +=09NULL
+> +};
+> +
+> +static const struct hwmon_chip_info dasharo_hwmon_chip_info =3D {
+> +=09.ops =3D &dasharo_hwmon_ops,
+> +=09.info =3D dasharo_hwmon_info,
+> +};
+> +
+> +static void dasharo_fill_feature_caps(struct dasharo_data *data, enum da=
+sharo_feature feat)
+> +{
+> +=09struct dasharo_capability *cap;
+> +=09int cap_count =3D 0;
+> +=09int count;
+> +
+> +=09for (int group =3D 0; group < MAX_GROUPS_PER_FEAT; ++group) {
+> +=09=09count =3D dasharo_get_feature_cap_count(data, feat, group);
+> +
+> +=09=09if (count <=3D 0)
 
+This relates to the previous line, it's sort of error handling so please=20
+remove the empty line between them.
+
+> +=09=09=09continue;
+> +
+> +=09=09for (unsigned int i =3D 0; i < count && cap_count < ARRAY_SIZE(dat=
+a->capabilities[feat]); ++i) {
+
+This exceeds 100 chars which is the current hard limit for code line=20
+lengths.
+
+I suggest you make that cap_count check a separate if () check, I'm not=20
+sure though if it should just goto to the final assignment of the function=
+=20
+as there's nothing more to do here in these loops if the array fills up
+(or break the inner loop, that reads a few counts unnecessarily in the=20
+outer loop but I guess this is just a safety check that is never=20
+supposed to match anyway so doesn't matter much I think which way it is=20
+done).
+
+> +=09=09=09cap =3D &data->capabilities[feat][cap_count];
+> +=09=09=09cap->group =3D group;
+> +=09=09=09cap->index =3D i;
+> +=09=09=09scnprintf(cap->name, sizeof(cap->name), "%s %d", dasharo_group_=
+names[feat][group], i);
+
+This too is beyond 100 chars.
+
+After you've addressed these, please add:
+
+Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+
+> +=09=09=09cap_count++;
+> +=09=09}
+> +=09}
+> +=09data->caps_found[feat] =3D cap_count;
+> +}
+> +
+> +static int dasharo_probe(struct platform_device *pdev)
+> +{
+> +=09struct dasharo_data *data;
+> +=09struct device *hwmon;
+> +
+> +=09data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +=09if (!data)
+> +=09=09return -ENOMEM;
+> +=09data->pdev =3D pdev;
+> +
+> +=09for (unsigned int i =3D 0; i < DASHARO_FEATURE_MAX; ++i)
+> +=09=09dasharo_fill_feature_caps(data, i);
+> +
+> +=09hwmon =3D devm_hwmon_device_register_with_info(&pdev->dev, "dasharo_a=
+cpi", data,
+> +=09=09=09=09=09=09     &dasharo_hwmon_chip_info, NULL);
+> +
+> +=09return PTR_ERR_OR_ZERO(hwmon);
+> +}
+> +
+> +static const struct acpi_device_id dasharo_device_ids[] =3D {
+> +=09{"DSHR0001", 0},
+> +=09{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, dasharo_device_ids);
+> +
+> +static struct platform_driver dasharo_driver =3D {
+> +=09.driver =3D {
+> +=09=09.name =3D "dasharo-acpi",
+> +=09=09.acpi_match_table =3D dasharo_device_ids,
+> +=09},
+> +=09.probe =3D dasharo_probe,
+> +};
+> +module_platform_driver(dasharo_driver);
+> +
+> +MODULE_DESCRIPTION("Dasharo ACPI Driver");
+> +MODULE_AUTHOR("Micha=C5=82 Kope=C4=87 <michal.kopec@3mdeb.com>");
+> +MODULE_LICENSE("GPL");
+>=20
+
+--=20
+ i.
+
+--8323328-885999988-1745410086=:1158--
