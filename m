@@ -1,281 +1,248 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A42320C001
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 10:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50C416DEB1
+	for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 13:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745489787; cv=none; b=sUByRb/fAE3riIVV+lrY8A9z1ljHBCpM91Cs7RZ0hMiDSf9FnZSMAXGMkdm2oy8PjZ1k6ZDUViVLWq+Zb5JeIA/s+kuJNX0naERIHdBsKbzWu6EyGsV1PpjY+92STSxKUEL8OSNOOL8hWixmF01Elm6C1zta2LeBragSbiY3dl4=
+	t=1745501637; cv=none; b=EoscXMWMxCwVLY1dXa8/r62TXQJKDYjkLNfPAQlMvk6PeFYNVaQfzkAzssSIB/yoREgcfj+cs4kiNxjJm/Zb+s4DLooKSpvNQO1gnVjaFpNRfjR5kJ9+BpROVY3iu7LSBGpZo2f0baGjT5a9ItYftCsn5GlDmid3KEzxFKvjgC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745489787; c=relaxed/simple;
-	bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OoS4nOUry4qx2Ro+6C2REkk+Nlf1BspJRDNAaXqZxmEnWqqybNKRi/Yau14guu/voBAE886T0UjpjW3pEi0Q3CDmoIRNB4e5Ag6n0phXKt4teQpeL4jqwA1HGbt/OLGe2R2Bh+3rT4UkviiCE91QSBb9r2/l6Y8FwH2bmO0qKDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Uc1LIfFS; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1745501637; c=relaxed/simple;
+	bh=PmojUCnrJqdi6ctPr2LDOJj4If88C0jCyODfzBPkVZw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=LED9T54sB9WhzvaVOHJwlyLZzmXLcEGfaM62aar3MnqMoQq1wHPQAH/yc+/l3i2fHkdPSb4HmKYw0vMHbAYOVxy5jJAbqnDcUb5W8Kdr6e0cnU5FZotzDPaxtazoC4QIgrxo/08nh/yu7Q7he/2F9uBAMGiMAw20mR6KIBmwbBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=HffbYUUv; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Uc1LIfFS"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acbb85ce788so174349266b.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 03:16:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="HffbYUUv"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-af548cb1f83so946134a12.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 06:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1745489784; x=1746094584; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-        b=Uc1LIfFSDIHNQ23wMS5iHv24uVL5h9lN210nzT7FaSizPbik0nQTdA9QkYqCPBx4BG
-         lko+Fozdla4PPvEkvWF90NLY4byvoeV/wC8ea15qjAF+pqysPNTaJf5Nm6+H4mHfnsL+
-         XNruFElKeCgdQszJHWaqhOXtVXMIRglK18ueuTFOY6riRw3u6uxJLR1G1FUPiZbYctZx
-         QanAHAbVecEhPTp12dAgBCbZZx2Mpw6srdJ5MubqXxWAvMI1+Lnz7tfRQ8GryKLlCKU0
-         eZLzaQ0nGc4fqSq6nqpw0BE6XRGe29/3q+akS9bdzgVSlde1Aoqyuy/mUC/dMHZQgHAS
-         NVrA==
+        d=inventec.com; s=google; t=1745501633; x=1746106433; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xAd6NcWDbAEkgnYX5ETwh+0vWLsl9guxGLJqEAiLt0U=;
+        b=HffbYUUvoCFOU/h1qQUwRgPCJYaEXF6WlbwroPu7WNatjmO+rR7vEKUAHsCGxrjaKa
+         IP4REwSUPXNyfOih2HIZZ4ML1UNtSnmUi4X72GlVYngk5pfAYupFLZgWt8wSwFx7G3K3
+         IMd8Rd1DN6wxLMnW09sP+pXJMcWd2uEoW6Ao5Mt953OrGLLnId8zjsWnDBM8KmVD9OVq
+         xQdz1Dq83Hb96ZLT99TfzqjgOYJlCc6fNO7LYU5rFNlZXFJ4vMR+7QM/9wismHzvQ97k
+         LJJ7QOvW6dpT469Hdsfljux+lYexR6E8fuHHd4QK1LHR3ZWeCG1j1+k2d91BfISS0RxD
+         2IAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745489784; x=1746094584;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7yeb9KlYqqGD/ZehSL+UaW5Mu1Sv69xuG2EIsa3T9HE=;
-        b=WBmnCwrBFajR8ycwTySLgH0KaUtpnOW706FXwOA6jlGBaQJlQkyyA5zvDXxh1XPxTE
-         fDlceiCJ/5f/JxkmkmxO1BUCYkgII3D8uJvz7rOnpp44BDDavimjvOLPvkScyaBSKFfj
-         KhXbS4OEBJA0ih7DqCMFByEgUtbLZ7QZPyaiY5brVP8lziUpluO4lLxT8ESeAzIbx/4t
-         s+tZ4zF86s6FeBbz2JvZJS3+W9WbPq7cW4sEAlqV9cTXsYICCKmH15U/LcnhLQoXzFxB
-         qM8hBZJuvJY2Po1A6tBZHAwcyGUrkVOtn3PF6IWas++t0sr2QyCzB/YzA+9ZdcLbRmr9
-         Yp7w==
-X-Forwarded-Encrypted: i=1; AJvYcCVd85Pec1MffuvzC6LvO6XYAYeUe6gSmnRbFW35RpHOk5iWvH9odsdMMxNmcL6Txa2zUzcBmDLi3g8TRQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfeBF2Zzu8k+cihp1Us7x2rs5ZAPxNRwtZTO3O8WMvCfnYWp8m
-	obpQ6/Tv+Xj7E/0rMJ/+2xXWeROXqrSa+DnuA6+43gQQ3IRw14VV/ZloYhOzZ2s=
-X-Gm-Gg: ASbGncutO7qg4hpp1j7uA7FfCErUe8Pm0zNLUw7zb7DhUxcFGs8nBnbph9QD5ty9GCu
-	alydDEHZhIJnaKUyUzTs3ulE89IfBoTJoHEISdvr/JDbGq22WNfbBFP0INBLeMImX1PiWc8cQDi
-	oqK53l1pIzms/ZR9oKoa62X2AMBY6kYuiWAdjKmfFfNJQzH4WjHAbAx87QBn/jBeZA2wyYGdeSA
-	twoS+PkD0bLg3HX8qpnX2nDjF8FH329ufhihkfU++02rWyM8CG2bzUPk8+UY03XtVxF2huxH9A2
-	P7sJByNGlYmaQw0+loCqDSb80n4CFy0Bwer9+Y+WT8FtNCdr+hK/myy7h7vmM/I6vo1/IEbsvMn
-	uU0pFRPMn8bSG16y6wKMtkLG6qkNB9mwn0xnDsLHuhDf7R/m81pcqrA64ZDTH8IPcEw==
-X-Google-Smtp-Source: AGHT+IEm0tqe1Y6NrZYwZAPw8mP7gfJu/rS857Ou/Nw00s8avdEvZrPp9A2s5JSOi+lWLJhyNrhoNw==
-X-Received: by 2002:a17:907:3f9e:b0:aca:d4f6:440d with SMTP id a640c23a62f3a-ace5723afaemr234662066b.17.1745489783619;
-        Thu, 24 Apr 2025 03:16:23 -0700 (PDT)
-Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace59c5e9ccsm85183966b.178.2025.04.24.03.16.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 03:16:23 -0700 (PDT)
-Message-ID: <054eec5c-1f36-454b-9220-b7f975d2717b@suse.com>
-Date: Thu, 24 Apr 2025 12:16:21 +0200
+        d=1e100.net; s=20230601; t=1745501633; x=1746106433;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xAd6NcWDbAEkgnYX5ETwh+0vWLsl9guxGLJqEAiLt0U=;
+        b=e4km5ifwO2NbxG/wuwxBIwoFGbd/EE5O0AOzGqoMBqJI44xedDBfNv7a4GLZWSDFyg
+         q4pkl6hxzLMgDePhrynaoW/UB8nkh+u69ImmYMjQBFkge4rvzjgR0TNH87Wq7bB3jZ0a
+         jGNy9dLTpipPQMYT89fs4Ky3Rs+tZHD6oVFbpjuoXGpoY8blqPe/H4D3mabKjdhR1Ao7
+         4eI7Ezc4VDoIQp0WGKEeLSvCCIO4jkhUTqVO8FAB6VV20Q/Sp4xK5cX2OLMf1pVAQpQj
+         KaCnIXdFagBCeJfvSrb8uX5cf8XB52R3PPvOgCPTRPNy+7C7MLiaXKy3B9429qvjHMc4
+         oITA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsqQwtMYULnAIn7XKQTdj0QT4frAHulevQ8Ho37sazxykKZcUBjkGEQmo1gul69rYM84GSEl7GEFQ6EA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwoDPiYR3BN+FxLX/I5hAgfGtatNzs1KemUPhf0cztkz170+5+
+	qzWQL7kJBXz5S/3jANWAjT4sg9cqWSncfb0smdLTx2++rvac65xJIBsZ+RB9i+E=
+X-Gm-Gg: ASbGnctzvPgK4m1zNQPjZC+JBdAOuP4UwkVoNLuGoGJ1iD/QxIUvPUS1hBXgwI9FVEV
+	5BhBQn6Fl05Q0x3O8HPLc2eJaBozn+1umGSqetV2hm7wdq4z1ChVrLn9ikkhjNhg6K3c/UGpnMG
+	zoLJ7xN6or/4SMkJdVgSeVARA83l1WibhIOhYTY1QTCpSUcbO7WEc2VPKhcrYAFTzbZRlApeku+
+	L7FOCPRcQxhltYFw4fXW4f5q9CMM2++KSTile6G5RMjswFEN7ySXE2s1rN8wM1LVUmOdVy4x6ni
+	FpZYQIxQPM/L2c/jNrDUGMp4WGgi0njl0uPJ4LFs3xdhmqh4EG3CrXhRzZYFL0UOywIEty7EPtr
+	sRhKiD2t8pH55fDQRFAiRHFe8BgjKhQ0RU9pvYYLiYHX5yynSqNwGt3GT
+X-Google-Smtp-Source: AGHT+IE5MxG2v6sAMsA9v4eeCn0OWfJW+7T9eGpMN/cvo+iq3Qr4O9mPR89K/lfCHHiHtXjigxiacQ==
+X-Received: by 2002:a17:90b:2d10:b0:2f5:88bb:12f with SMTP id 98e67ed59e1d1-309ed28e9f7mr3454247a91.21.1745501632892;
+        Thu, 24 Apr 2025 06:33:52 -0700 (PDT)
+Received: from localhost.localdomain (60-248-18-139.hinet-ip.hinet.net. [60.248.18.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef0d5c72sm1321147a91.43.2025.04.24.06.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 06:33:52 -0700 (PDT)
+From: Chiang Brian <chiang.brian@inventec.com>
+X-Google-Original-From: Chiang Brian <chiang.brian@inventec.corp-partner.google.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Chiang Brian <chiang.brian@inventec.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+Date: Thu, 24 Apr 2025 21:25:37 +0800
+Message-Id: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250424132538.2004510-1-chiang.brian@inventec.corp-partner.google.com>
+References: <20250424132538.2004510-1-chiang.brian@inventec.corp-partner.google.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 14/34] x86/msr: refactor
- pv_cpu_ops.write_msr{_safe}()
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-15-xin@zytor.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <20250422082216.1954310-15-xin@zytor.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pWVoNv7WLwVBgb4mHgM007fn"
+Content-Transfer-Encoding: 8bit
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pWVoNv7WLwVBgb4mHgM007fn
-Content-Type: multipart/mixed; boundary="------------b3S9hpqWlrcvhJkKaKAw7Czp";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
- platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
- andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
- mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
- irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
- wei.liu@kernel.org, ajay.kaher@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
- pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
- luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
- haiyangz@microsoft.com, decui@microsoft.com
-Message-ID: <054eec5c-1f36-454b-9220-b7f975d2717b@suse.com>
-Subject: Re: [RFC PATCH v2 14/34] x86/msr: refactor
- pv_cpu_ops.write_msr{_safe}()
-References: <20250422082216.1954310-1-xin@zytor.com>
- <20250422082216.1954310-15-xin@zytor.com>
-In-Reply-To: <20250422082216.1954310-15-xin@zytor.com>
+From: Chiang Brian <chiang.brian@inventec.com>
 
---------------b3S9hpqWlrcvhJkKaKAw7Czp
-Content-Type: multipart/mixed; boundary="------------BppMQx0iku6Wc7Pk9I10DjXt"
+The TPS53685 is a fully AMD SVI3 compliant step down
+controller with trans-inductor voltage regulator
+(TLVR) topology support, dual channels, built-in
+non-volatile memory (NVM), PMBus interface, and
+full compatible with TI NexFET smart power
+stages.
+Add support for it to the tps53679 driver.
 
---------------BppMQx0iku6Wc7Pk9I10DjXt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
+---
+V5 -> V6:
+	1. Add information about tps53685 into tps53679.rst
+	2. Add additional flags when identifing the chip as tps53685
+	3. Adjust length once returned device id is terminated by null character
+V4 -> V5: 
+	1. document the compatible of tps53685 into dt-bindings
+	2. add the buffer length as argument for %*ph
+	3. Add Changelog
+V3 -> V4: 
+	1. Add length comparison into the comparison of "id",or it may be true when 
+	   the substring of "id" matches device id. 
+	2. Restore `return 0;` in `tps53679_identify_chip()`
+V2 -> V3:
+	1. Remove the length comparsion in the comparison of "id".
+V1 -> V2: 
+	1. Modify subject and description to meet requirements
+	2. Add "tps53685" into enum chips with numeric order
+	3. Modify the content of marco "TPS53681_DEVICE_ID" from 0x81 to "\x81"
+	   Add marco "TPS53685_DEVICE_ID" with content "TIShP"
+	4. Modify the type of "id" from u16 to char* in `tps53679_identify_chip()`
+	5. Modify the comparison of "id". It will be true if the string "id" matches 
+	   device ID and compare with type char*,
+	6. Add the length comparsion into the comparison of "id".
+	7. Modify "len" as return code in `tps53679_identify_chip()`
+	8. Output device error log with %*ph, instead of 0x%x\n" 
+	9. Use existing tps53679_identify_multiphase() with argument 
+	   "TPS53685_DEVICE_ID" in tps53685_identify() rather than creating one
+	   tps53685_identify_multiphase()
 
-T24gMjIuMDQuMjUgMTA6MjEsIFhpbiBMaSAoSW50ZWwpIHdyb3RlOg0KPiBBbiBNU1IgdmFs
-dWUgaXMgcmVwcmVzZW50ZWQgYXMgYSA2NC1iaXQgdW5zaWduZWQgaW50ZWdlciwgd2l0aCBl
-eGlzdGluZw0KPiBNU1IgaW5zdHJ1Y3Rpb25zIHN0b3JpbmcgaXQgaW4gRURYOkVBWCBhcyB0
-d28gMzItYml0IHNlZ21lbnRzLg0KPiANCj4gVGhlIG5ldyBpbW1lZGlhdGUgZm9ybSBNU1Ig
-aW5zdHJ1Y3Rpb25zLCBob3dldmVyLCB1dGlsaXplIGEgNjQtYml0DQo+IGdlbmVyYWwtcHVy
-cG9zZSByZWdpc3RlciB0byBzdG9yZSB0aGUgTVNSIHZhbHVlLiAgVG8gdW5pZnkgdGhlIHVz
-YWdlIG9mDQo+IGFsbCBNU1IgaW5zdHJ1Y3Rpb25zLCBsZXQgdGhlIGRlZmF1bHQgTVNSIGFj
-Y2VzcyBBUElzIGFjY2VwdCBhbiBNU1INCj4gdmFsdWUgYXMgYSBzaW5nbGUgNjQtYml0IGFy
-Z3VtZW50IGluc3RlYWQgb2YgdHdvIDMyLWJpdCBzZWdtZW50cy4NCj4gDQo+IFRoZSBkdWFs
-IDMyLWJpdCBBUElzIGFyZSBzdGlsbCBhdmFpbGFibGUgYXMgY29udmVuaWVudCB3cmFwcGVy
-cyBvdmVyIHRoZQ0KPiBBUElzIHRoYXQgaGFuZGxlIGFuIE1TUiB2YWx1ZSBhcyBhIHNpbmds
-ZSA2NC1iaXQgYXJndW1lbnQuDQo+IA0KPiBUaGUgZm9sbG93aW5nIGlsbHVzdHJhdGVzIHRo
-ZSB1cGRhdGVkIGRlcml2YXRpb24gb2YgdGhlIE1TUiB3cml0ZSBBUElzOg0KPiANCj4gICAg
-ICAgICAgICAgICAgICAgX193cm1zcnEodTMyIG1zciwgdTY0IHZhbCkNCj4gICAgICAgICAg
-ICAgICAgICAgICAvICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICAgICAgICAg
-LyAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICBuYXRpdmVfd3Jtc3JxKG1z
-ciwgdmFsKSAgICBuYXRpdmVfd3Jtc3IobXNyLCBsb3csIGhpZ2gpDQo+ICAgICAgICAgICAg
-ICAgICAgIHwNCj4gICAgICAgICAgICAgICAgICAgfA0KPiAgICAgICAgICAgICBuYXRpdmVf
-d3JpdGVfbXNyKG1zciwgdmFsKQ0KPiAgICAgICAgICAgICAgICAgIC8gICAgICAgICAgXA0K
-PiAgICAgICAgICAgICAgICAgLyAgICAgICAgICAgIFwNCj4gICAgICAgICB3cm1zcnEobXNy
-LCB2YWwpICAgIHdybXNyKG1zciwgbG93LCBoaWdoKQ0KPiANCj4gV2hlbiBDT05GSUdfUEFS
-QVZJUlQgaXMgZW5hYmxlZCwgd3Jtc3JxKCkgYW5kIHdybXNyKCkgYXJlIGRlZmluZWQgb24g
-dG9wDQo+IG9mIHBhcmF2aXJ0X3dyaXRlX21zcigpOg0KPiANCj4gICAgICAgICAgICAgIHBh
-cmF2aXJ0X3dyaXRlX21zcih1MzIgbXNyLCB1NjQgdmFsKQ0KPiAgICAgICAgICAgICAgICAg
-LyAgICAgICAgICAgICBcDQo+ICAgICAgICAgICAgICAgIC8gICAgICAgICAgICAgICBcDQo+
-ICAgICAgICAgICAgd3Jtc3JxKG1zciwgdmFsKSAgICB3cm1zcihtc3IsIGxvdywgaGlnaCkN
-Cj4gDQo+IHBhcmF2aXJ0X3dyaXRlX21zcigpIGludm9rZXMgY3B1LndyaXRlX21zcihtc3Is
-IHZhbCksIGFuIGluZGlyZWN0IGxheWVyDQo+IG9mIHB2X29wcyBNU1Igd3JpdGUgY2FsbDoN
-Cj4gDQo+ICAgICAgSWYgb24gbmF0aXZlOg0KPiANCj4gICAgICAgICAgICAgIGNwdS53cml0
-ZV9tc3IgPSBuYXRpdmVfd3JpdGVfbXNyDQo+IA0KPiAgICAgIElmIG9uIFhlbjoNCj4gDQo+
-ICAgICAgICAgICAgICBjcHUud3JpdGVfbXNyID0geGVuX3dyaXRlX21zcg0KPiANCj4gVGhl
-cmVmb3JlLCByZWZhY3RvciBwdl9jcHVfb3BzLndyaXRlX21zcntfc2FmZX0oKSB0byBhY2Nl
-cHQgYW4gTVNSIHZhbHVlDQo+IGluIGEgc2luZ2xlIHU2NCBhcmd1bWVudCwgcmVwbGFjaW5n
-IHRoZSBjdXJyZW50IGR1YWwgdTMyIGFyZ3VtZW50cy4NCj4gDQo+IE5vIGZ1bmN0aW9uYWwg
-Y2hhbmdlIGludGVuZGVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogWGluIExpIChJbnRlbCkg
-PHhpbkB6eXRvci5jb20+DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NA
-c3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------BppMQx0iku6Wc7Pk9I10DjXt
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+ Documentation/hwmon/tps53679.rst |  8 +++++++
+ drivers/hwmon/pmbus/tps53679.c   | 36 +++++++++++++++++++++++++++-----
+ 2 files changed, 39 insertions(+), 5 deletions(-)
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps53679.rst
+index 3b9561648c24..dd5e4a37375d 100644
+--- a/Documentation/hwmon/tps53679.rst
++++ b/Documentation/hwmon/tps53679.rst
+@@ -43,6 +43,14 @@ Supported chips:
+ 
+     Datasheet: https://www.ti.com/lit/gpn/TPS53681
+ 
++  * Texas Instruments TPS53685
++
++    Prefix: 'tps53685'
++
++    Addresses scanned: -
++
++    Datasheet: https://www.ti.com/lit/gpn/TPS53685
++
+   * Texas Instruments TPS53688
+ 
+     Prefix: 'tps53688'
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+index 63524dff5e75..01fefaef1688 100644
+--- a/drivers/hwmon/pmbus/tps53679.c
++++ b/drivers/hwmon/pmbus/tps53679.c
+@@ -16,7 +16,7 @@
+ #include "pmbus.h"
+ 
+ enum chips {
+-	tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
++	tps53647, tps53667, tps53676, tps53679, tps53681, tps53685, tps53688
+ };
+ 
+ #define TPS53647_PAGE_NUM		1
+@@ -31,7 +31,8 @@ enum chips {
+ #define TPS53679_PROT_VR13_5MV		0x07 /* VR13.0 mode, 5-mV DAC */
+ #define TPS53679_PAGE_NUM		2
+ 
+-#define TPS53681_DEVICE_ID		0x81
++#define TPS53681_DEVICE_ID     "\x81"
++#define TPS53685_DEVICE_ID     "TIShP"
+ 
+ #define TPS53681_PMBUS_REVISION		0x33
+ 
+@@ -86,10 +87,12 @@ static int tps53679_identify_phases(struct i2c_client *client,
+ }
+ 
+ static int tps53679_identify_chip(struct i2c_client *client,
+-				  u8 revision, u16 id)
++				  u8 revision, char *id)
+ {
+ 	u8 buf[I2C_SMBUS_BLOCK_MAX];
+ 	int ret;
++	int buf_len;
++	int id_len;
+ 
+ 	ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
+ 	if (ret < 0)
+@@ -102,8 +105,14 @@ static int tps53679_identify_chip(struct i2c_client *client,
+ 	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
+ 	if (ret < 0)
+ 		return ret;
+-	if (ret != 1 || buf[0] != id) {
+-		dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
++
++	/* Adjust length if null terminator if present */
++	buf_len = (buf[ret - 1] != '\x00' ? ret : ret - 1);
++
++	id_len = strlen(id);
++
++	if (buf_len != id_len || strncmp(id, buf, id_len)) {
++		dev_err(&client->dev, "Unexpected device ID: %*ph\n", ret, buf);
+ 		return -ENODEV;
+ 	}
+ 	return 0;
+@@ -138,6 +147,16 @@ static int tps53679_identify(struct i2c_client *client,
+ 	return tps53679_identify_mode(client, info);
+ }
+ 
++static int tps53685_identify(struct i2c_client *client,
++				 struct pmbus_driver_info *info)
++{
++	info->func[1] |= PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
++			 PMBUS_HAVE_STATUS_INPUT;
++	info->format[PSC_VOLTAGE_OUT] = linear;
++	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
++					   TPS53685_DEVICE_ID);
++}
++
+ static int tps53681_identify(struct i2c_client *client,
+ 			     struct pmbus_driver_info *info)
+ {
+@@ -263,6 +282,10 @@ static int tps53679_probe(struct i2c_client *client)
+ 		info->identify = tps53681_identify;
+ 		info->read_word_data = tps53681_read_word_data;
+ 		break;
++	case tps53685:
++	    info->pages = TPS53679_PAGE_NUM;
++	    info->identify = tps53685_identify;
++		break;
+ 	default:
+ 		return -ENODEV;
+ 	}
+@@ -277,6 +300,7 @@ static const struct i2c_device_id tps53679_id[] = {
+ 	{"tps53676", tps53676},
+ 	{"tps53679", tps53679},
+ 	{"tps53681", tps53681},
++	{"tps53685", tps53685},
+ 	{"tps53688", tps53688},
+ 	{}
+ };
+@@ -289,6 +313,7 @@ static const struct of_device_id __maybe_unused tps53679_of_match[] = {
+ 	{.compatible = "ti,tps53676", .data = (void *)tps53676},
+ 	{.compatible = "ti,tps53679", .data = (void *)tps53679},
+ 	{.compatible = "ti,tps53681", .data = (void *)tps53681},
++	{.compatible = "ti,tps53685", .data = (void *)tps53685},
+ 	{.compatible = "ti,tps53688", .data = (void *)tps53688},
+ 	{}
+ };
+-- 
+2.43.0
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
-
---------------BppMQx0iku6Wc7Pk9I10DjXt--
-
---------------b3S9hpqWlrcvhJkKaKAw7Czp--
-
---------------pWVoNv7WLwVBgb4mHgM007fn
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgKD3UFAwAAAAAACgkQsN6d1ii/Ey8e
-hQf+IyaGfaANfYLf1gQb5JWLRkUgyz/njZG+UwVqy+rsaIYD+pEhdKw5SCCnD0k0rYwGX+humDna
-09S/SBtqSMJ6op9sp+0UMcix59tVByTG+d8H/RBLf2IWAPI0XKU6b3m310+4u3nyopkvf/rjeJWt
-SfFxXPA+0soMqiPgLiqLfQOcImvL7By/Ic4k7iCcQ8r2tUX4e49qE7Ceu6m2OhnWo7gegbiK3g3a
-o5e9jvL464VbQ0jA76OH8KY4kcOV8y0TQXP2dC3WWvN7O1iNoEL9KIIg3/K4iTHOY10ayy/UVXOd
-NK1TCl85M2LuLTmu8q4pp9E3JwXRobXErwdZe+JYvQ==
-=xegw
------END PGP SIGNATURE-----
-
---------------pWVoNv7WLwVBgb4mHgM007fn--
