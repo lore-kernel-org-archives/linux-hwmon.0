@@ -1,248 +1,340 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50C416DEB1
-	for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 13:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6301B3929;
+	Thu, 24 Apr 2025 13:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745501637; cv=none; b=EoscXMWMxCwVLY1dXa8/r62TXQJKDYjkLNfPAQlMvk6PeFYNVaQfzkAzssSIB/yoREgcfj+cs4kiNxjJm/Zb+s4DLooKSpvNQO1gnVjaFpNRfjR5kJ9+BpROVY3iu7LSBGpZo2f0baGjT5a9ItYftCsn5GlDmid3KEzxFKvjgC0=
+	t=1745502534; cv=none; b=t7L+mWZGRmzwR8emGUP4T/+2xmIi+mh39iSfl/3ZTFjAym19yryt6rR4LvPZl/12xd7E8Fx3kJCCFFgmXTWE+XKCYh0CZmD/uND0QJ7yjjBGFbCD1/emtQSiOKIkelKFvLlxCKcQovC50lj0hre9v2nD1mI2Fg/GiPLJK1gJWSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745501637; c=relaxed/simple;
-	bh=PmojUCnrJqdi6ctPr2LDOJj4If88C0jCyODfzBPkVZw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LED9T54sB9WhzvaVOHJwlyLZzmXLcEGfaM62aar3MnqMoQq1wHPQAH/yc+/l3i2fHkdPSb4HmKYw0vMHbAYOVxy5jJAbqnDcUb5W8Kdr6e0cnU5FZotzDPaxtazoC4QIgrxo/08nh/yu7Q7he/2F9uBAMGiMAw20mR6KIBmwbBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=HffbYUUv; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
+	s=arc-20240116; t=1745502534; c=relaxed/simple;
+	bh=4FlVdAMHwr32o+T5a8iielNhGK5S+TqpCQF4fydWrKQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=tFMq6K7aZq5VcGaQFPk0oFctamz8ptjcpfrgrL6FfeKWTYXVDzgsdCtNOP8DQB6dCHjRoO8JpkjOZnwbLUkJXA/uqnO/UyXKyuDGOfNOx9wsrrnpcBMF6Vqe0rtTlV/L1I4E37ievuk31uCaGHyUZspDmpUCyt9R++OQkiSucVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RFVgqhHQ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="HffbYUUv"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-af548cb1f83so946134a12.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 24 Apr 2025 06:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=inventec.com; s=google; t=1745501633; x=1746106433; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xAd6NcWDbAEkgnYX5ETwh+0vWLsl9guxGLJqEAiLt0U=;
-        b=HffbYUUvoCFOU/h1qQUwRgPCJYaEXF6WlbwroPu7WNatjmO+rR7vEKUAHsCGxrjaKa
-         IP4REwSUPXNyfOih2HIZZ4ML1UNtSnmUi4X72GlVYngk5pfAYupFLZgWt8wSwFx7G3K3
-         IMd8Rd1DN6wxLMnW09sP+pXJMcWd2uEoW6Ao5Mt953OrGLLnId8zjsWnDBM8KmVD9OVq
-         xQdz1Dq83Hb96ZLT99TfzqjgOYJlCc6fNO7LYU5rFNlZXFJ4vMR+7QM/9wismHzvQ97k
-         LJJ7QOvW6dpT469Hdsfljux+lYexR6E8fuHHd4QK1LHR3ZWeCG1j1+k2d91BfISS0RxD
-         2IAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745501633; x=1746106433;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xAd6NcWDbAEkgnYX5ETwh+0vWLsl9guxGLJqEAiLt0U=;
-        b=e4km5ifwO2NbxG/wuwxBIwoFGbd/EE5O0AOzGqoMBqJI44xedDBfNv7a4GLZWSDFyg
-         q4pkl6hxzLMgDePhrynaoW/UB8nkh+u69ImmYMjQBFkge4rvzjgR0TNH87Wq7bB3jZ0a
-         jGNy9dLTpipPQMYT89fs4Ky3Rs+tZHD6oVFbpjuoXGpoY8blqPe/H4D3mabKjdhR1Ao7
-         4eI7Ezc4VDoIQp0WGKEeLSvCCIO4jkhUTqVO8FAB6VV20Q/Sp4xK5cX2OLMf1pVAQpQj
-         KaCnIXdFagBCeJfvSrb8uX5cf8XB52R3PPvOgCPTRPNy+7C7MLiaXKy3B9429qvjHMc4
-         oITA==
-X-Forwarded-Encrypted: i=1; AJvYcCXsqQwtMYULnAIn7XKQTdj0QT4frAHulevQ8Ho37sazxykKZcUBjkGEQmo1gul69rYM84GSEl7GEFQ6EA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwoDPiYR3BN+FxLX/I5hAgfGtatNzs1KemUPhf0cztkz170+5+
-	qzWQL7kJBXz5S/3jANWAjT4sg9cqWSncfb0smdLTx2++rvac65xJIBsZ+RB9i+E=
-X-Gm-Gg: ASbGnctzvPgK4m1zNQPjZC+JBdAOuP4UwkVoNLuGoGJ1iD/QxIUvPUS1hBXgwI9FVEV
-	5BhBQn6Fl05Q0x3O8HPLc2eJaBozn+1umGSqetV2hm7wdq4z1ChVrLn9ikkhjNhg6K3c/UGpnMG
-	zoLJ7xN6or/4SMkJdVgSeVARA83l1WibhIOhYTY1QTCpSUcbO7WEc2VPKhcrYAFTzbZRlApeku+
-	L7FOCPRcQxhltYFw4fXW4f5q9CMM2++KSTile6G5RMjswFEN7ySXE2s1rN8wM1LVUmOdVy4x6ni
-	FpZYQIxQPM/L2c/jNrDUGMp4WGgi0njl0uPJ4LFs3xdhmqh4EG3CrXhRzZYFL0UOywIEty7EPtr
-	sRhKiD2t8pH55fDQRFAiRHFe8BgjKhQ0RU9pvYYLiYHX5yynSqNwGt3GT
-X-Google-Smtp-Source: AGHT+IE5MxG2v6sAMsA9v4eeCn0OWfJW+7T9eGpMN/cvo+iq3Qr4O9mPR89K/lfCHHiHtXjigxiacQ==
-X-Received: by 2002:a17:90b:2d10:b0:2f5:88bb:12f with SMTP id 98e67ed59e1d1-309ed28e9f7mr3454247a91.21.1745501632892;
-        Thu, 24 Apr 2025 06:33:52 -0700 (PDT)
-Received: from localhost.localdomain (60-248-18-139.hinet-ip.hinet.net. [60.248.18.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309ef0d5c72sm1321147a91.43.2025.04.24.06.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 06:33:52 -0700 (PDT)
-From: Chiang Brian <chiang.brian@inventec.com>
-X-Google-Original-From: Chiang Brian <chiang.brian@inventec.corp-partner.google.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Chiang Brian <chiang.brian@inventec.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
-Date: Thu, 24 Apr 2025 21:25:37 +0800
-Message-Id: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250424132538.2004510-1-chiang.brian@inventec.corp-partner.google.com>
-References: <20250424132538.2004510-1-chiang.brian@inventec.corp-partner.google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RFVgqhHQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745502532; x=1777038532;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=4FlVdAMHwr32o+T5a8iielNhGK5S+TqpCQF4fydWrKQ=;
+  b=RFVgqhHQ257wdwjqlVeClQXfMxx0jNoYoAa9VrEcS7LzTWNW4l53gbIt
+   AirtyiEsUiTJmU683MmKTaIgZYRcwxN2U6sjUqrc8u5KoEXm81hPtPN9C
+   att8kslf+3ZXuQedzAwt3I0UMYDeFDu5ijlfSJ/GImdwClxgwQkehb175
+   1iEStKekra/bnyXp94qfWzw0PMh09XueGRqeakv79ClOJSScwkg3vCl9l
+   Xqjhuurl01km4vcjCy9X56Fb/eT+dFbh5Q6AxIdqqbTQhu7eVrn56WW/2
+   1ElffPdEBjiRlo+ZQ0TLaTGVMOtmaiw1FcFU14CWgS9v1MFhYrVU7XEqf
+   A==;
+X-CSE-ConnectionGUID: f7tYdETbQWS021SBEbu3VQ==
+X-CSE-MsgGUID: kii36djRQ1W74LTEi6oxmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="47271631"
+X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
+   d="scan'208";a="47271631"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 06:48:51 -0700
+X-CSE-ConnectionGUID: cwSN99nbSq+pREGEli4Q0Q==
+X-CSE-MsgGUID: g9/ijGsFSJKcDzs2j/F8JQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,236,1739865600"; 
+   d="scan'208";a="155849228"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.213])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 06:48:44 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 24 Apr 2025 16:48:41 +0300 (EEST)
+To: Antheas Kapenekakis <lkml@antheas.dev>
+cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+    Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, 
+    Jonathan Corbet <corbet@lwn.net>, 
+    Joaquin Ignacio Aramendia <samsagax@gmail.com>, 
+    Derek J Clark <derekjohn.clark@gmail.com>, 
+    Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+    Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
+    Eileen <eileen@one-netbook.com>, LKML <linux-kernel@vger.kernel.org>, 
+    sre@kernel.org, linux@weissschuh.net, Hans de Goede <hdegoede@redhat.com>, 
+    mario.limonciello@amd.com
+Subject: Re: [PATCH v9 14/15] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+In-Reply-To: <20250417175310.3552671-15-lkml@antheas.dev>
+Message-ID: <5423a653-01ac-95d2-fa52-31d849df65ef@linux.intel.com>
+References: <20250417175310.3552671-1-lkml@antheas.dev> <20250417175310.3552671-15-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-327762574-1745502521=:944"
 
-From: Chiang Brian <chiang.brian@inventec.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The TPS53685 is a fully AMD SVI3 compliant step down
-controller with trans-inductor voltage regulator
-(TLVR) topology support, dual channels, built-in
-non-volatile memory (NVM), PMBus interface, and
-full compatible with TI NexFET smart power
-stages.
-Add support for it to the tps53679 driver.
+--8323328-327762574-1745502521=:944
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
----
-V5 -> V6:
-	1. Add information about tps53685 into tps53679.rst
-	2. Add additional flags when identifing the chip as tps53685
-	3. Adjust length once returned device id is terminated by null character
-V4 -> V5: 
-	1. document the compatible of tps53685 into dt-bindings
-	2. add the buffer length as argument for %*ph
-	3. Add Changelog
-V3 -> V4: 
-	1. Add length comparison into the comparison of "id",or it may be true when 
-	   the substring of "id" matches device id. 
-	2. Restore `return 0;` in `tps53679_identify_chip()`
-V2 -> V3:
-	1. Remove the length comparsion in the comparison of "id".
-V1 -> V2: 
-	1. Modify subject and description to meet requirements
-	2. Add "tps53685" into enum chips with numeric order
-	3. Modify the content of marco "TPS53681_DEVICE_ID" from 0x81 to "\x81"
-	   Add marco "TPS53685_DEVICE_ID" with content "TIShP"
-	4. Modify the type of "id" from u16 to char* in `tps53679_identify_chip()`
-	5. Modify the comparison of "id". It will be true if the string "id" matches 
-	   device ID and compare with type char*,
-	6. Add the length comparsion into the comparison of "id".
-	7. Modify "len" as return code in `tps53679_identify_chip()`
-	8. Output device error log with %*ph, instead of 0x%x\n" 
-	9. Use existing tps53679_identify_multiphase() with argument 
-	   "TPS53685_DEVICE_ID" in tps53685_identify() rather than creating one
-	   tps53685_identify_multiphase()
+On Thu, 17 Apr 2025, Antheas Kapenekakis wrote:
 
- Documentation/hwmon/tps53679.rst |  8 +++++++
- drivers/hwmon/pmbus/tps53679.c   | 36 +++++++++++++++++++++++++++-----
- 2 files changed, 39 insertions(+), 5 deletions(-)
+> With the X1 (AMD), OneXPlayer added a charge limit and charge inhibit
+> feature to their devices. Charge limit allows for choosing an arbitrary
+> battery charge setpoint in percentages. Charge ihibit allows to instruct
+> the device to stop charging either when it is awake or always.
+>=20
+> This feature was then extended for the F1Pro as well. OneXPlayer also
+> released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices that
+> add support for this feature. Therefore, enable it for all F1 and
+> X1 devices.
+>=20
+> Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>  drivers/platform/x86/Kconfig |   1 +
+>  drivers/platform/x86/oxpec.c | 155 ++++++++++++++++++++++++++++++++++-
+>  2 files changed, 155 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 739740c4bb535..6c9e64a03aaef 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1204,6 +1204,7 @@ config SEL3350_PLATFORM
+>  config OXP_EC
+>  =09tristate "OneXPlayer EC platform control"
+>  =09depends on ACPI_EC
+> +=09depends on ACPI_BATTERY
+>  =09depends on HWMON
+>  =09depends on X86
+>  =09help
+> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+> index f0b9fff704de2..ce20bf70027df 100644
+> --- a/drivers/platform/x86/oxpec.c
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/processor.h>
+> +#include <acpi/battery.h>
+> =20
+>  /* Handle ACPI lock mechanism */
+>  static u32 oxp_mutex;
+> @@ -60,6 +61,7 @@ enum oxp_board {
+>  };
+> =20
+>  static enum oxp_board board;
+> +static struct device *oxp_dev;
+> =20
+>  /* Fan reading and PWM */
+>  #define OXP_SENSOR_FAN_REG             0x76 /* Fan reading is 2 register=
+s long */
+> @@ -93,6 +95,23 @@ static enum oxp_board board;
+>  #define OXP_X1_TURBO_LED_OFF           0x01
+>  #define OXP_X1_TURBO_LED_ON            0x02
+> =20
+> +/* Battery extension settings */
+> +#define EC_CHARGE_CONTROL_BEHAVIOURS=09(BIT(POWER_SUPPLY_CHARGE_BEHAVIOU=
+R_AUTO)             | \
+> +=09=09=09=09=09 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)    | \
 
-diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps53679.rst
-index 3b9561648c24..dd5e4a37375d 100644
---- a/Documentation/hwmon/tps53679.rst
-+++ b/Documentation/hwmon/tps53679.rst
-@@ -43,6 +43,14 @@ Supported chips:
- 
-     Datasheet: https://www.ti.com/lit/gpn/TPS53681
- 
-+  * Texas Instruments TPS53685
-+
-+    Prefix: 'tps53685'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.ti.com/lit/gpn/TPS53685
-+
-   * Texas Instruments TPS53688
- 
-     Prefix: 'tps53688'
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index 63524dff5e75..01fefaef1688 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -16,7 +16,7 @@
- #include "pmbus.h"
- 
- enum chips {
--	tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
-+	tps53647, tps53667, tps53676, tps53679, tps53681, tps53685, tps53688
- };
- 
- #define TPS53647_PAGE_NUM		1
-@@ -31,7 +31,8 @@ enum chips {
- #define TPS53679_PROT_VR13_5MV		0x07 /* VR13.0 mode, 5-mV DAC */
- #define TPS53679_PAGE_NUM		2
- 
--#define TPS53681_DEVICE_ID		0x81
-+#define TPS53681_DEVICE_ID     "\x81"
-+#define TPS53685_DEVICE_ID     "TIShP"
- 
- #define TPS53681_PMBUS_REVISION		0x33
- 
-@@ -86,10 +87,12 @@ static int tps53679_identify_phases(struct i2c_client *client,
- }
- 
- static int tps53679_identify_chip(struct i2c_client *client,
--				  u8 revision, u16 id)
-+				  u8 revision, char *id)
- {
- 	u8 buf[I2C_SMBUS_BLOCK_MAX];
- 	int ret;
-+	int buf_len;
-+	int id_len;
- 
- 	ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
- 	if (ret < 0)
-@@ -102,8 +105,14 @@ static int tps53679_identify_chip(struct i2c_client *client,
- 	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
- 	if (ret < 0)
- 		return ret;
--	if (ret != 1 || buf[0] != id) {
--		dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
-+
-+	/* Adjust length if null terminator if present */
-+	buf_len = (buf[ret - 1] != '\x00' ? ret : ret - 1);
-+
-+	id_len = strlen(id);
-+
-+	if (buf_len != id_len || strncmp(id, buf, id_len)) {
-+		dev_err(&client->dev, "Unexpected device ID: %*ph\n", ret, buf);
- 		return -ENODEV;
- 	}
- 	return 0;
-@@ -138,6 +147,16 @@ static int tps53679_identify(struct i2c_client *client,
- 	return tps53679_identify_mode(client, info);
- }
- 
-+static int tps53685_identify(struct i2c_client *client,
-+				 struct pmbus_driver_info *info)
-+{
-+	info->func[1] |= PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-+			 PMBUS_HAVE_STATUS_INPUT;
-+	info->format[PSC_VOLTAGE_OUT] = linear;
-+	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
-+					   TPS53685_DEVICE_ID);
-+}
-+
- static int tps53681_identify(struct i2c_client *client,
- 			     struct pmbus_driver_info *info)
- {
-@@ -263,6 +282,10 @@ static int tps53679_probe(struct i2c_client *client)
- 		info->identify = tps53681_identify;
- 		info->read_word_data = tps53681_read_word_data;
- 		break;
-+	case tps53685:
-+	    info->pages = TPS53679_PAGE_NUM;
-+	    info->identify = tps53685_identify;
-+		break;
- 	default:
- 		return -ENODEV;
- 	}
-@@ -277,6 +300,7 @@ static const struct i2c_device_id tps53679_id[] = {
- 	{"tps53676", tps53676},
- 	{"tps53679", tps53679},
- 	{"tps53681", tps53681},
-+	{"tps53685", tps53685},
- 	{"tps53688", tps53688},
- 	{}
- };
-@@ -289,6 +313,7 @@ static const struct of_device_id __maybe_unused tps53679_of_match[] = {
- 	{.compatible = "ti,tps53676", .data = (void *)tps53676},
- 	{.compatible = "ti,tps53679", .data = (void *)tps53679},
- 	{.compatible = "ti,tps53681", .data = (void *)tps53681},
-+	{.compatible = "ti,tps53685", .data = (void *)tps53685},
- 	{.compatible = "ti,tps53688", .data = (void *)tps53688},
- 	{}
- };
--- 
-2.43.0
+Please change the endings to:
 
+=2E..) | <tabs>\
+
+> +=09=09=09=09=09 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE))
+> +
+> +#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
+> +#define OXP_X1_CHARGE_INHIBIT_REG     0xA4 /* X1 bypass charging */
+
+Please use tabs for aligning the values (there were a few other defines=20
+in the earlier patches with spaces too). (I know the earlier ones used=20
+space but they don't seem to be in the same group so lets just move to=20
+tabs with new stuff, optionally, you can add a patch to change also the=20
+pre-existing ones to use space).
+
+> +
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_AWAKE 0x01
+> +/*
+> + * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
+> + * but the extra bit on the X1 does nothing.
+
+Reflow to fill 80 chars.
+
+> + */
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_OFF 0x02
+> +#define OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS (OXP_X1_CHARGE_INHIBIT_MASK_AW=
+AKE | \
+> +=09OXP_X1_CHARGE_INHIBIT_MASK_OFF)
+
+Align to (.
+
+--=20
+ i.
+
+> +
+>  static const struct dmi_system_id dmi_table[] =3D {
+>  =09{
+>  =09=09.matches =3D {
+> @@ -507,6 +526,129 @@ static ssize_t tt_led_show(struct device *dev,
+> =20
+>  static DEVICE_ATTR_RW(tt_led);
+> =20
+> +/* Callbacks for charge behaviour attributes */
+> +static bool oxp_psy_ext_supported(void)
+> +{
+> +=09switch (board) {
+> +=09case oxp_x1:
+> +=09case oxp_fly:
+> +=09=09return true;
+> +=09default:
+> +=09=09break;
+> +=09}
+> +=09return false;
+> +}
+> +
+> +static int oxp_psy_ext_get_prop(struct power_supply *psy,
+> +=09=09=09=09       const struct power_supply_ext *ext,
+> +=09=09=09=09       void *data,
+> +=09=09=09=09       enum power_supply_property psp,
+> +=09=09=09=09       union power_supply_propval *val)
+> +{
+> +=09long raw_val;
+> +=09int ret;
+> +
+> +=09switch (psp) {
+> +=09case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +=09=09ret =3D read_from_ec(OXP_X1_CHARGE_LIMIT_REG, 1, &raw_val);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +=09=09if (raw_val < 0 || raw_val > 100)
+> +=09=09=09return -EINVAL;
+> +=09=09val->intval =3D raw_val;
+> +=09=09return 0;
+> +=09case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +=09=09ret =3D read_from_ec(OXP_X1_CHARGE_INHIBIT_REG, 1, &raw_val);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +=09=09if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS) =3D=3D
+> +=09=09    OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS)
+> +=09=09=09val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
+> +=09=09else if ((raw_val & OXP_X1_CHARGE_INHIBIT_MASK_AWAKE) =3D=3D
+> +=09=09=09 OXP_X1_CHARGE_INHIBIT_MASK_AWAKE)
+> +=09=09=09val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AW=
+AKE;
+> +=09=09else
+> +=09=09=09val->intval =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
+> +=09=09return 0;
+> +=09default:
+> +=09=09return -EINVAL;
+> +=09}
+> +}
+> +
+> +static int oxp_psy_ext_set_prop(struct power_supply *psy,
+> +=09=09=09=09       const struct power_supply_ext *ext,
+> +=09=09=09=09       void *data,
+> +=09=09=09=09       enum power_supply_property psp,
+> +=09=09=09=09       const union power_supply_propval *val)
+> +{
+> +=09long raw_val;
+> +
+> +=09switch (psp) {
+> +=09case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+> +=09=09if (val->intval > 100)
+> +=09=09=09return -EINVAL;
+> +=09=09return write_to_ec(OXP_X1_CHARGE_LIMIT_REG, val->intval);
+> +=09case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +=09=09switch (val->intval) {
+> +=09=09case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
+> +=09=09=09raw_val =3D 0;
+> +=09=09=09break;
+> +=09=09case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_AWAKE:
+> +=09=09=09raw_val =3D OXP_X1_CHARGE_INHIBIT_MASK_AWAKE;
+> +=09=09=09break;
+> +=09=09case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
+> +=09=09=09raw_val =3D OXP_X1_CHARGE_INHIBIT_MASK_ALWAYS;
+> +=09=09=09break;
+> +=09=09default:
+> +=09=09=09return -EINVAL;
+> +=09=09}
+> +
+> +=09=09return write_to_ec(OXP_X1_CHARGE_INHIBIT_REG, raw_val);
+> +=09default:
+> +=09=09return -EINVAL;
+> +=09}
+> +}
+> +
+> +static int oxp_psy_prop_is_writeable(struct power_supply *psy,
+> +=09=09=09=09=09    const struct power_supply_ext *ext,
+> +=09=09=09=09=09    void *data,
+> +=09=09=09=09=09    enum power_supply_property psp)
+> +{
+> +=09return true;
+> +}
+> +
+> +static const enum power_supply_property oxp_psy_ext_props[] =3D {
+> +=09POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> +=09POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD,
+> +};
+> +
+> +static const struct power_supply_ext oxp_psy_ext =3D {
+> +=09.name=09=09=09=3D "oxp-charge-control",
+> +=09.properties=09=09=3D oxp_psy_ext_props,
+> +=09.num_properties=09=09=3D ARRAY_SIZE(oxp_psy_ext_props),
+> +=09.charge_behaviours=09=3D EC_CHARGE_CONTROL_BEHAVIOURS,
+> +=09.get_property=09=09=3D oxp_psy_ext_get_prop,
+> +=09.set_property=09=09=3D oxp_psy_ext_set_prop,
+> +=09.property_is_writeable=09=3D oxp_psy_prop_is_writeable,
+> +};
+> +
+> +static int oxp_add_battery(struct power_supply *battery, struct acpi_bat=
+tery_hook *hook)
+> +{
+> +=09return power_supply_register_extension(battery, &oxp_psy_ext, oxp_dev=
+, NULL);
+> +}
+> +
+> +static int oxp_remove_battery(struct power_supply *battery, struct acpi_=
+battery_hook *hook)
+> +{
+> +=09power_supply_unregister_extension(battery, &oxp_psy_ext);
+> +=09return 0;
+> +}
+> +
+> +static struct acpi_battery_hook battery_hook =3D {
+> +=09.add_battery=09=3D oxp_add_battery,
+> +=09.remove_battery=09=3D oxp_remove_battery,
+> +=09.name=09=09=3D "OneXPlayer Battery",
+> +};
+> +
+>  /* PWM enable/disable functions */
+>  static int oxp_pwm_enable(void)
+>  {
+> @@ -847,11 +989,22 @@ static int oxp_platform_probe(struct platform_devic=
+e *pdev)
+>  {
+>  =09struct device *dev =3D &pdev->dev;
+>  =09struct device *hwdev;
+> +=09int ret;
+> =20
+> +=09oxp_dev =3D dev;
+>  =09hwdev =3D devm_hwmon_device_register_with_info(dev, "oxp_ec", NULL,
+>  =09=09=09=09=09=09     &oxp_ec_chip_info, NULL);
+> =20
+> -=09return PTR_ERR_OR_ZERO(hwdev);
+> +=09if (IS_ERR(hwdev))
+> +=09=09return PTR_ERR(hwdev);
+> +
+> +=09if (oxp_psy_ext_supported()) {
+> +=09=09ret =3D devm_battery_hook_register(dev, &battery_hook);
+> +=09=09if (ret)
+> +=09=09=09return ret;
+> +=09}
+> +
+> +=09return 0;
+>  }
+> =20
+>  static struct platform_driver oxp_platform_driver =3D {
+>=20
+--8323328-327762574-1745502521=:944--
