@@ -1,131 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B4471747;
-	Fri, 25 Apr 2025 13:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFFE26B953;
+	Fri, 25 Apr 2025 15:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745589072; cv=none; b=QZf7ZHWSrjWcNcYSevLMWVqYrUR5VrhKvh6K4uHnNbJsWhTF9iFZjQTvcuWVyf1btXGwMH5Anc2HoovfTIrr9iD9gLcfT/33NCTItSEKdY8vWc4NA0vfjpyB5fT+00GYRraifdc0+aYPWttIR3i7Iz16Gg4ZrMZHPRBiGoLMZLg=
+	t=1745594945; cv=none; b=LdOKxIsUPSORAyXAcIPs1XlBhaLn8CAxMCtkrM4e3KeSW0orrRDq5z7jXvsDhmd90w1uDliUYtPXpPnfP1hTrAHmVMuR+7jdAGKLNhhBcPTMLuRmOX0ElapeP5gQoBISMWuzb/Mxi3xxDMVeWpvHZzyXbcs6MgEwlERDdKA1TtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745589072; c=relaxed/simple;
-	bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Y3uBEwUTz1y/AdR/MWlV+Z2dbkK/10ijvrcSykTek4CawjFz1m1L2ctc99MM2TdlIuQrtTYKJcz96JOf3/Az5Gx1iJHdSI8BB+6GdhcD0BvOo/TpVuKSB9dLWh/nOfFKYYkhAfocgk/esZxa+bBmEa2dHLCt6D2/yDXPthqCsm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAVPoJQL; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1745594945; c=relaxed/simple;
+	bh=VXq1PHnajmb8IhmTG7In4mFZ7EewzJEbGitlsKd4G50=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=NAaBJ/F2ChQdHs7i2a9wtBfnc6mGczTvH7E9J3Mjx15xoxrs3lJ6sHJzCHGTyIluUnvG/9LJF8Fym96/35xffhUOVu4k2vMOEXZjqwRp5oLoMed71Xa32o3VYJ0kLujH4ZHFLKTsAEx9ODz+9NoLuWKcsoB937ihViUuozqmMD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=e8sSKlOE; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAVPoJQL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745589071; x=1777125071;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
-  b=ZAVPoJQLRHhmJ2advrNRsFva3K7C9aGDvJBcxDwNlg+1oy7u8BxdV3iV
-   ybh5VxV0CLWl9/xtMTZtIqzd0ZSiFwtWOoVgDCyq5xceJaIg3YBY5gGBR
-   lQMvOWAL7iBjXty/8NYXaERN4JP/YuHePGMj9TNoV2U0KKJDa2saMP6FW
-   do4WbVV1WKdF3okTErJndahHzNSeUV0Zrze7hH/huN2MUsYLm+BxzDqyJ
-   xAXsFjMcsWfqW7Fg3MqjoD01ehx+7Y+W3czuE8Pivq2J0dcaygtF+LB5t
-   OnCBELDIre0ITrFmVAK197LB1DJudSVWlmiUKi+pPJOlU17YdL0kcs1Xc
-   w==;
-X-CSE-ConnectionGUID: 77xyvPGySFi2WBKZPmBQ9w==
-X-CSE-MsgGUID: aj6lyNgmT9ubvaAOL7uahA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="50917497"
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="50917497"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:10 -0700
-X-CSE-ConnectionGUID: bD/JDR3LQ9yWdeM3F6uVBA==
-X-CSE-MsgGUID: VK6mzkL+SLKFFR+xFJka7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="137722441"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.154])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:04 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: platform-driver-x86@vger.kernel.org, 
- Antheas Kapenekakis <lkml@antheas.dev>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
- Joaquin Ignacio Aramendia <samsagax@gmail.com>, 
- Derek J Clark <derekjohn.clark@gmail.com>, 
- Kevin Greenberg <kdgreenberg234@protonmail.com>, 
- Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
- Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
- sre@kernel.org, linux@weissschuh.net, hdegoede@redhat.com, 
- mario.limonciello@amd.com
-In-Reply-To: <20250425111821.88746-1-lkml@antheas.dev>
-References: <20250425111821.88746-1-lkml@antheas.dev>
-Subject: Re: [PATCH v10 00/16] hwmon: (oxpsensors) Add devices, features,
- fix ABI and move to platform/x86
-Message-Id: <174558905993.2965.3080490340204327476.b4-ty@linux.intel.com>
-Date: Fri, 25 Apr 2025 16:50:59 +0300
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="e8sSKlOE"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53PFSG7j2879055
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 25 Apr 2025 08:28:18 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53PFSG7j2879055
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745594899;
+	bh=VXq1PHnajmb8IhmTG7In4mFZ7EewzJEbGitlsKd4G50=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=e8sSKlOE29QVRsUNwa5Glun405WCr1ZH8x+o/lM1uZO65MH8ZxHfRZ9Vpxe5VnEA+
+	 exbTNWCfO9mqnsVBdWqxPuN5ymfnVoRJTE6z+MBGn61/u3Qm2DjxXhiGfR2jMZhqHr
+	 TVyHxknF9aW5yNQDR1IeB4wNDPkNeqbiDL9Y9B0Tf3kbrU9Cizj1ktB/G9v+xJzUqp
+	 CHyGasv5e/2REjIUjeW5ato0YPXhMP5OYJMXpoIgD7CMZRrKMKSc6nMzj9uhQk4uBg
+	 IJzYx36Il8whoA9nZiKMg7YdPVo4z5Ujq2ijkY4iAHziVAchpEmHBwdMKS7/pwXclD
+	 IBJVqUYnPG0ng==
+Date: Fri, 25 Apr 2025 08:28:14 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>, Xin Li <xin@zytor.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
+CC: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, acme@kernel.org,
+        andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v2_21/34=5D_x86/msr=3A_Utiliz?=
+ =?US-ASCII?Q?e_the_alternatives_mechanism_to_write_MSR?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <6ef898f7-c8a3-4326-96ab-42aa90c48e1c@suse.com>
+References: <20250422082216.1954310-1-xin@zytor.com> <20250422082216.1954310-22-xin@zytor.com> <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com> <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com> <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com> <bb8f6b85-4e7d-440a-a8c3-0e0da45864b8@zytor.com> <0cdc6e9d-88eb-4ead-8d55-985474257d53@suse.com> <483eb20c-7302-4733-a15f-21d140396919@zytor.com> <72516271-5b28-434a-838b-d8532e1b4fc1@zytor.com> <6ef898f7-c8a3-4326-96ab-42aa90c48e1c@suse.com>
+Message-ID: <D7218B8B-B9D6-46F8-9397-C44398E24253@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 25 Apr 2025 13:18:05 +0200, Antheas Kapenekakis wrote:
+On April 25, 2025 12:01:29 AM PDT, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=2Ec=
+om> wrote:
+>On 25=2E04=2E25 05:44, H=2E Peter Anvin wrote:
+>> On 4/24/25 18:15, H=2E Peter Anvin wrote:
+>>> On 4/24/25 01:14, J=C3=BCrgen Gro=C3=9F wrote:
+>>>>>=20
+>>>>> Actually, that is how we get this patch with the existing alternativ=
+es
+>>>>> infrastructure=2E=C2=A0 And we took a step further to also remove th=
+e pv_ops
+>>>>> MSR APIs=2E=2E=2E
+>>>>=20
+>>>> And this is what I'm questioning=2E IMHO this approach is adding more
+>>>> code by removing the pv_ops MSR_APIs just because "pv_ops is bad"=2E =
+And
+>>>> I believe most refusal of pv_ops is based on no longer valid reasonin=
+g=2E
+>>>>=20
+>>>=20
+>>> pvops are a headache because it is effectively a secondary alternative=
+s infrastructure that is incompatible with the alternatives one=2E=2E=2E
+>>>=20
+>>>>> It looks to me that you want to add a new facility to the alternativ=
+es
+>>>>> infrastructure first?
+>>>>=20
+>>>> Why would we need a new facility in the alternatives infrastructure?
+>>>=20
+>>> I'm not sure what Xin means with "facility", but a key motivation for =
+this is to:
+>>>=20
+>>> a=2E Avoid using the pvops for MSRs when on the only remaining user th=
+ereof (Xen) is only using it for a very small subset of MSRs and for the re=
+st it is just overhead, even for Xen;
+>>>=20
+>>> b=2E Being able to do wrmsrns immediate/wrmsrns/wrmsr and rdmsr immedi=
+ate/ rdmsr alternatives=2E
+>>>=20
+>>> Of these, (b) is by far the biggest motivation=2E The architectural di=
+rection for supervisor states is to avoid ad hoc and XSAVES ISA and instead=
+ use MSRs=2E The immediate forms are expected to be significantly faster, b=
+ecause they make the MSR index available at the very beginning of the pipel=
+ine instead of at a relatively late stage=2E
+>>>=20
+>>=20
+>> Note that to support the immediate forms, we *must* do these inline, or=
+ the const-ness of the MSR index -- which applies to by far the vast majori=
+ty of MSR references -- gets lost=2E pvops does exactly that=2E
+>>=20
+>> Furthermore, the MSR immediate instructions take a 64-bit number in a s=
+ingle register; as these instructions are by necessity relatively long, it =
+makes sense for the alternative sequence to accept a 64-bit input register =
+and do the %eax/ %edx shuffle in the legacy fallback code=2E=2E=2E we did a=
+ bunch of experiments to see what made most sense=2E
+>
+>Yes, I understand that=2E
+>
+>And I'm totally in favor of Xin's rework of the MSR low level functions=
+=2E
+>
+>Inlining the MSR access instructions with pv_ops should not be very
+>complicated=2E We do that with other instructions (STI/CLI, PTE accesses)
+>today, so this is no new kind of functionality=2E
+>
+>I could have a try writing a patch achieving that, but I would only start
+>that work in case you might consider taking it instead of Xin's patch
+>removing the pv_ops usage for rdmsr/wrmsr=2E In case it turns out that my
+>version results in more code changes than Xin's patch, I'd be fine to dro=
+p
+>my patch, of course=2E
+>
+>
+>Juergen
 
-> This four part series updates the oxpsensors module to bring it in line
-> with its Windows OneXPlayer counterpart. First, it adds support for all
-> 2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
-> the module to platform/x86 to allow for including more EC features.
-> 
-> Then, it adds the new charge limiting and bypass features that were first
-> introduced in the X1 and retrofit to older OneXFly variants and for
-> controlling the turbo led found in the X1 models. For Bypass, it adds a new
-> charge_behaviour variant called inhibit-charge-s0.
-> 
-> [...]
+The wrapper in question is painfully opaque, but if it is much simpler, th=
+en I'm certainly willing to consider it=2E=2E=2E but I don't really see how=
+ it would be possible given among other things the need for trap points for=
+ the safe MSRs=2E
 
+Keep in mind this needs to work even without PV enabled!
 
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
-
-The list of commits applied:
-[01/16] hwmon: (oxp-sensors) Distinguish the X1 variants
-        commit: 217d55ca13d22ba6af7e96ac2d28c2ef6927fc54
-[02/16] hwmon: (oxp-sensors) Add all OneXFly variants
-        commit: 9f4c9ec158fa8fa4afcdbcbff9c9a9a900dc9c2f
-[03/16] platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
-        commit: fe812896e55d0d8e2a45bcf994cadc80fe912fb5
-[04/16] ABI: testing: sysfs-class-oxp: add missing documentation
-        commit: 05f8e5928bfd37416380e8e0994c5f4fd1b615c8
-[05/16] ABI: testing: sysfs-class-oxp: add tt_led attribute documentation
-        commit: 7ba14e4eec62985ae2021ef7e06d537b8e4c8712
-[06/16] platform/x86: oxpec: Rename ec group to tt_toggle
-        commit: 8e1963b9d84a3db10cdd2a807dc3fe401837d228
-[07/16] platform/x86: oxpec: Add turbo led support to X1 devices
-        commit: 5485a80150ff03b6784bfbb194858244ae5f991d
-[08/16] platform/x86: oxpec: Move pwm_enable read to its own function
-        commit: aa682cff3097dfa2370298ecebd33ff1fb64bab8
-[09/16] platform/x86: oxpec: Move pwm value read/write to separate functions
-        commit: 0ba0d67b0608c15b407491712af1c2a3d5140492
-[10/16] platform/x86: oxpec: Move fan speed read to separate function
-        commit: 653feeccdd2eb1dfe44923f4c0bbf50a948c7a07
-[11/16] platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
-        commit: 7dea472a8b2814013213f4fed290f5f86c6cc7cb
-[12/16] platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
-        commit: bb9854e9819ae5c29602d4985313cde2d07f6847
-[13/16] power: supply: add inhibit-charge-awake to charge_behaviour
-        commit: 468182a839f88fecab915792cbb98ad7328be266
-[14/16] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
-        commit: 202593d1e86bf3ccb1c1091713760b6f44641718
-[15/16] platform/x86: oxpec: Rename rval to ret in tt_toggle
-        commit: 57c775a990a742f7cc2650a5cbfc103d6b4a015d
-[16/16] platform/x86: oxpec: Convert defines to using tabs
-        commit: f5612600314bcce86934318601501e2d8301176d
-
---
- i.
-
+Note that Andrew encouraged us to pursue the pvops removal for MSRs=2E Not=
+e that Xen benefits pretty heavily because it can dispatch the proper path =
+of the few that are left for the common case of fixed MSRs=2E
