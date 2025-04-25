@@ -1,70 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E21183CC3;
-	Fri, 25 Apr 2025 11:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1148223D2BA;
+	Fri, 25 Apr 2025 11:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745579634; cv=none; b=P/xzN8flQ+1xwYUZxOvHfnRzrQyJKWMdpWo7ALqvWoDeL+XnJExRC9Q2vgxTW/kIoz0Dth3srfQMCgcAb346ocYBVYAaZH6K/AmW67lDPrq64AKGuZiRfVpzkPxOpifDtuHYnxcLkcxq2WvcQe8ZxzWYtQ7Z9qlh4+dos7ViqyU=
+	t=1745579912; cv=none; b=mjXWCEd7CNev92Sccb642HP5QtzEflAeDgAOVTUcZu97QDdVhq89vAfDaYAaiPwQXaiKKd4o3xGod4y7ckXuPZ7mIrqYMMpVpZIlXF/0pVatY0yk8oDPvM8XtBg54cYl25Emd+Nb3VtWljNUUoMhpdXne8GCbVwZaWCAPHZOVsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745579634; c=relaxed/simple;
-	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jmXDvssfrCBJ67GUorV7XR5WaVsWEz7S/TH462lxmwgR9OaRPfiU6QhnHBfCUuMw133nsiof9McIggVcw7tp5i2rgA5YKPQwWLCr/t8l4+jrLFjf7DSs5z6ihONZlxaGD1SUrupdsZQlMtoD5JqdjuIjWISq+PIbrEaDO5TB3Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzfPp44h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745579912; c=relaxed/simple;
+	bh=azP9R//yUd3y5xSiHZSqZVFVUGg1StaFMpCzpZ10L/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tCXx7rO6W6pE+rN8sdox0ucdXrDc194AWtzx8qzN46XDRkGsHRzbNr2rhSJgmMDEOjKWvxGZH3e+MYNWqcJwBKorfH8eCYgrTYWfy2mS1dqvfdJ+FZpJWjzUBYblMyJutGkEZGTDnkoxm47BIAqdau7dC5wONWrluko5O9WoTQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=stSaLV1H; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzfPp44h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF51C4CEE4;
-	Fri, 25 Apr 2025 11:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745579634;
-	bh=Ezqd4VS2tdUP8uwDrS78FIFfjyaT1c46Eo4Ie3SLLAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nzfPp44hY80vim38LVUi0AJaVzHubxBfSYQh9zqjDYTgTQ+pEa7LzF82G6mkiZ0Wk
-	 gHP6U4AFnQML6cW+mEhJ5YqqMn0Ql+q158Onv6pmYnXPJyufAHAnCMj+AQ4Iz7ZihQ
-	 7HJSN9CKwHety5cLGSX4G5gxDwFP4BKNoBjPziAJDnUS4gstYvpoNjsXt+duZYlSnD
-	 QUWk2MAcn5wdWKjkbA4o+a7mkCSAcc+ZokZs6XaWQmth9mMMSKmeD6CysTl2obgbEN
-	 hSVcFqsPomfniiuL5nctH2FuCDX/zr7L7rxp8I9zhrcWMRkt9EvCnCb2uiI5oeUeS9
-	 0jkh3Aoavf8Yw==
-Date: Fri, 25 Apr 2025 13:13:49 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: a0282524688@gmail.com
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 3/7] i2c: Add Nuvoton NCT6694 I2C support
-Message-ID: <qalofwnbulbpzl7542l7756radnx5ks7pt6wsbsblyqayxcycl@rl4ety27l27t>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-4-tmyu0@nuvoton.com>
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="stSaLV1H"
+Received: from localhost.localdomain (unknown [IPv6:2a02:2149:8a3b:5a00:3490:6581:3910:8337])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 0B0002E08D31;
+	Fri, 25 Apr 2025 14:18:26 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1745579907;
+	bh=B46fOP7F4O5Q9kYipJf9WysyVm2OwQxbttBN2mgY+e8=; h=From:To:Subject;
+	b=stSaLV1HhfYIPrA9/wOqsz56q9wTUVnysMnalaRb2fiGrGRnxWo+UCUEZkXxKsZM9
+	 1QhqD1fkr9XMBNCtzzrsKvkZgevXyDdI3d35ejOiYprOI2CEHrviajcpRafAyv+qqh
+	 1F/LQeqhJn5d7NS7rTA7HiI/li48YYkUAbBOhzf4=
+Authentication-Results: linux1587.grserver.gr;
+	spf=pass (sender IP is 2a02:2149:8a3b:5a00:3490:6581:3910:8337) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+From: Antheas Kapenekakis <lkml@antheas.dev>
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	linux-kernel@vger.kernel.org,
+	sre@kernel.org,
+	linux@weissschuh.net,
+	ilpo.jarvinen@linux.intel.com,
+	hdegoede@redhat.com,
+	mario.limonciello@amd.com,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: [PATCH v10 01/16] hwmon: (oxp-sensors) Distinguish the X1 variants
+Date: Fri, 25 Apr 2025 13:18:06 +0200
+Message-ID: <20250425111821.88746-2-lkml@antheas.dev>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250425111821.88746-1-lkml@antheas.dev>
+References: <20250425111821.88746-1-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250423094058.1656204-4-tmyu0@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: 
+ <174557990684.22197.4530897932196290193@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Hi,
+Currently, the oxp-sensors driver fuzzy matches the X1 variants. Luckily,
+X1 and X1 mini share most hardware features so this works. However, they
+are completely different product lines, and there is an expectation that
+OneXPlayer will release more devices in the X1 line that may have
+differences.
 
-On Wed, Apr 23, 2025 at 05:40:54PM +0800, a0282524688@gmail.com wrote:
-> From: Ming Yu <tmyu0@nuvoton.com>
-> 
-> This driver supports I2C adapter functionality for NCT6694 MFD
-> device based on USB interface.
-> 
-> Each I2C controller uses the default baudrate of 100kHz, which
-> can be overridden via module parameters.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+Therefore, distinguish the 3 devices that currently exist in the market.
+These are the OneXPlayer X1 AMD and Intel variants, and the X1 mini which
+only has an AMD variant. As far as registers go, all three support the
+current driver functionality.
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+---
+ drivers/hwmon/oxp-sensors.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-Thanks,
-Andi
+diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+index 83730d9318240..5a4230ad3757e 100644
+--- a/drivers/hwmon/oxp-sensors.c
++++ b/drivers/hwmon/oxp-sensors.c
+@@ -205,7 +205,28 @@ static const struct dmi_system_id dmi_table[] = {
+ 	{
+ 		.matches = {
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+-			DMI_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 A"),
++		},
++		.driver_data = (void *)oxp_x1,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 i"),
++		},
++		.driver_data = (void *)oxp_x1,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 mini"),
++		},
++		.driver_data = (void *)oxp_x1,
++	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1Pro"),
+ 		},
+ 		.driver_data = (void *)oxp_x1,
+ 	},
+-- 
+2.49.0
+
