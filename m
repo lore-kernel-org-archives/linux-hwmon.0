@@ -1,135 +1,115 @@
-Received: from 13.mo583.mail-out.ovh.net (13.mo583.mail-out.ovh.net [87.98.182.191])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01AA2459F0
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Apr 2025 11:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=87.98.182.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5B712CD8B;
+	Fri, 25 Apr 2025 12:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745581288; cv=none; b=VAswRGFI/3Qzug6SJnkR6o76pmeIg/dI3LFmZ9KqAWrxzoPZ6hwQ7b/d4tur5pDTighgPLQuNR+vY2cTeLwqEourKEaNW+DQFGNWnwmwi7yO5jhPDujoe4B1+DQVt3VV1qdUg05IEDrFIO03anSpHx5zFc2fwhktsfhyFGs5nJ4=
+	t=1745584410; cv=none; b=KDuUWVafjitUa4Y/UJJ1zJiCcxCd/PqDHll+eJYK1s2coJTqJBMnZu0mLh9+Nu2gbUw9l15Woc750oI61mrNqp9v3pH+L0doAjPNRid1HcTYy7tkvwUefvAePNSPbQ8S0m0my1OTTyhUKwG0q8t4xB/ybo7j4drg3RoeIyskebw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745581288; c=relaxed/simple;
-	bh=1tBiExbO/dqP9Y43zSGXcf1iO42e1kbQ/zg5CeWF7Qc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SQ5ZX8y4dzT9t8kmzwVzPNSKaIYcch5YSPCZ+m5fM70Vpp6qqOGQ3RriBswAMPwMddD5QWkF5gKsbaJE8gNvAE+tjuYopPN8cmYEQtuViUjzmaFL41Got7HFWFTqmAVB1+yOS7/2kBXlGfzsSwK/F8qdG1aVYlJ9OLsIH1b416U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com; spf=pass smtp.mailfrom=3mdeb.com; dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b=T8Iaa2PJ; arc=none smtp.client-ip=87.98.182.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=3mdeb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=3mdeb.com
+	s=arc-20240116; t=1745584410; c=relaxed/simple;
+	bh=z0kssRXr0Jmr2iLuPqygq8fHDe3P+7Q6+7xMZ7CRFpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iX53u3wdIfTBtEkqns/iG4Lwz2tVMr4O/O21tpOKpAYFU2ekZ3cdc88hoL8MQ4IbqvRnCbdC6ot+uXqi/4DpNwsaHfPjYeOeZEWcR4IWY7DqtxDxio96djbklEjs/6OR91X1ABUC5ewlWBB0+fE0d8dH9CN+H6T5h+E37NJmYCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=n62i0DvK; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=3mdeb.com header.i=@3mdeb.com header.b="T8Iaa2PJ"
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.109.148.126])
-	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4ZkVmc5B0fz1WS4
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Apr 2025 11:22:08 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-tf4sx (unknown [10.110.164.115])
-	by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 4E8B91FE7E;
-	Fri, 25 Apr 2025 11:22:07 +0000 (UTC)
-Received: from 3mdeb.com ([37.59.142.96])
-	by ghost-submission-5b5ff79f4f-tf4sx with ESMTPSA
-	id Aq1wBF9wC2jbfgAAIqE1SQ
-	(envelope-from <michal.kopec@3mdeb.com>); Fri, 25 Apr 2025 11:22:07 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-96R00148a07b6e-124c-464c-bd2d-5114462cf9c1,
-                    189BF360F9312264DCAC3AB77C65C4FB1C0F3093) smtp.auth=michal.kopec@3mdeb.com
-X-OVh-ClientIp:213.192.77.249
-From: =?UTF-8?q?Micha=C5=82=20Kope=C4=87?= <michal.kopec@3mdeb.com>
-To: hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	tomasz.pakula.oficjalny@gmail.com,
-	jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: platform-driver-x86@vger.kernel.org,
-	piotr.krol@3mdeb.com,
-	maciej.pijanowski@3mdeb.com,
-	michal.kopec@3mdeb.com,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v8 0/1] platform/x86: Introduce dasharo-acpi platform driver
-Date: Fri, 25 Apr 2025 13:21:46 +0200
-Message-ID: <20250425112147.69308-1-michal.kopec@3mdeb.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n62i0DvK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=z0kssRXr0Jmr2iLuPqygq8fHDe3P+7Q6+7xMZ7CRFpA=; b=n62i0DvKUkkS19M6Grw/IA6BJM
+	6eax7WEzMDhdsLLdBaVpyql0sL3uwAA/S4ABBYyHfp8Tx/iU0ee0EuTw7NJfGf9EI8UsjXrlSl0sS
+	02tBYqSgzmjI/Kny3gI739/JKlgl+9wGdEidVTiMFctgk47RLsTlqNTkCUR+iW8cVDyF62mXAMwh5
+	XkywTMBNuRYpIwM9+ushQW73ekmtzH4pzyRk9psYN+bzsnJD1auXiTevc+ivI+Y1ZKlYKr7ewsVRG
+	jovxOw3NEqLfi+p+LosTspxc/ZhCArckwjJxCRVQhZyFjxgfcqmpAHeIJnZG6UgRJMQ7uJJh6ZqZe
+	G7VOYhcg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u8IF4-0000000C2S5-1fLP;
+	Fri, 25 Apr 2025 12:33:18 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id DA9983003C4; Fri, 25 Apr 2025 14:33:17 +0200 (CEST)
+Date: Fri, 25 Apr 2025 14:33:17 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: =?iso-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>
+Cc: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+	andrew.cooper3@citrix.com, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+Subject: Re: [RFC PATCH v2 21/34] x86/msr: Utilize the alternatives mechanism
+ to write MSR
+Message-ID: <20250425123317.GB22125@noisy.programming.kicks-ass.net>
+References: <20250422082216.1954310-1-xin@zytor.com>
+ <20250422082216.1954310-22-xin@zytor.com>
+ <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com>
+ <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com>
+ <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8097472130927955353
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvhedvvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepofhitghhrghlucfmohhpvggtuceomhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmqeenucggtffrrghtthgvrhhnpeduledtfffgueeugfffieeivdfhfeeutdfhffeigedttdefheektedvgefgueeugfenucfkphepuddvjedrtddrtddruddpvddufedrudelvddrjeejrddvgeelpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepmhhitghhrghlrdhkohhpvggtseefmhguvggsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfegmpdhmohguvgepshhmthhpohhuth
-DKIM-Signature: a=rsa-sha256; bh=EIesLx6eJsuvXKzvGp2e9K8hauzF2VkB0WHxEx/C4CA=;
- c=relaxed/relaxed; d=3mdeb.com; h=From; s=ovhmo3617313-selector1;
- t=1745580128; v=1;
- b=T8Iaa2PJg5vZkoFdio7iW0nt+gPmX9YKSCgpDTJ2L/B0Z4wHUtHXWF4YzgCBlSikRbbLstju
- TcSKN6Wwm+HApzYzqjNF1LhsEO1GNvqRoY92bSt7KeLI0K0q0SsAVTt2LQmMadmp+LKltxIcnPo
- mHLWVWMmEql3UF7FJEJv1ZofptzVMocGsnM9INYA7xopDsWSYNCTbNirMN84SsKVZnV1L35kf1e
- TftEiBPCvOWsO0nTEiTADxW1hSsIf7Hacv15P28EL7WD6BoL4UBMnjkfhURzmIzDI6NsgJPYsE0
- pyU7MWIl3UiG5PPu1EHonBO+L7LsOoriwkomOt/3ImkWQ==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/MHZas7e8A04P/yf"
+Content-Disposition: inline
+In-Reply-To: <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com>
 
-Introduce a driver for devices running Dasharo firmware. The driver
-supports thermal monitoring using a new ACPI interface in Dasharo. The
-initial version supports monitoring fan speeds, fan PWM duty cycles and
-system temperatures as well as determining which specific interfaces are
-implemented by firmware.
 
-It has been tested on a NovaCustom laptop running pre-release Dasharo
-firmware, which implements fan and thermal monitoring for the CPU and
-the discrete GPU, if present.
+--/MHZas7e8A04P/yf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes in v2:
-- Remove redundant copyright information
-- Turn dasharo_fill_* functions into single dasharo_fill_feature_caps
-  function
-- Code style fixes
-- Turn large if / else blocks into switch / case
-- Fix possible positive return values in hwmon read handler
-- Change while loops to for loops
-- Add local variable for data->sensors[data->sensors_count] in
-  dasharo_fill_feature_caps
-- Replace snprintf with scnprintf per Ilpo's review
-- Keep the "ok" path silent
+On Wed, Apr 23, 2025 at 06:05:19PM +0200, J=FCrgen Gro=DF wrote:
 
-Changes in V3:
-- Simplify dasharo_read_value_by_cap_idx arguments and rename to
-  dasharo_read_channel
+> > It's not a major change, but when it is patched to use the immediate
+> > form MSR write instruction, it's straightforwardly streamlined.
+>=20
+> It should be rather easy to switch the current wrmsr/rdmsr paravirt patch=
+ing
+> locations to use the rdmsr/wrmsr instructions instead of doing a call to
+> native_*msr().
 
-Changes in V4:
-- Remove unnecessary linebreaks
-- Simplify naming of variables
-- Constify zone lookup table
-- Remove unneeded includes
-- Switch to platform_device API
-- Remove unneeded driver remove handler
-- Add myself to MAINTAINERS
+Right, just make the Xen functions asm stubs that expect the instruction
+registers instead of C-abi and ALT_NOT_XEN the thing.
 
-Changes in V5:
-- Fix up the MAINTAINERS entry
-- Use PTR_ERR_OR_ZERO for the hwmon pointer in the register func
-- Simplify if blocks in dasharo_hwmon_read
-- Use ACPI_FAILURE instead of !ACPI_SUCCESS
+Shouldn't be hard at all.
 
-Changes in V6:
-- Validate input parameters in dasharo_read_channel
-- Add default return code in dasharo_hwmon_read
-- Return error if invalid channel is requested in hwmon_read_string
-- Add missing include for ARRAY_SIZE
-- Align line continuations in dasharo_probe
+--/MHZas7e8A04P/yf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Changes in V7:
-- Use cap count for bound checking in dasharo_read_channel
+-----BEGIN PGP SIGNATURE-----
 
-Changes in V8:
-- Fix line breaks over 100 chars
-- Remove unneeded empty line
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAmgLgQUACgkQdkfhpEvA
+5LqJKRAAkGelIfMDPEkg613aLM0RL5GIPigFIL9+IaLhypRMpJMp1rKIwy8kLaRd
+NwdJ0yX6iqAzFF/AHn3KvVp7MxNCeDWNTXTcCpxuCSB8NoKfph2JduGzhUylWdg3
+AhemoMrgzBgwkVVk2mDD2kvewJ0Axr2isfs+ugJLAo+GvKhnV+qJRvSE/FB0V7XV
+LC+r1B6ZXIcUBjvYOW2JbRYPW/UDT/LS9CZDWr2pu+A3jJ8vmlOwAb0Yeh3/2yKB
+/LdGM2PIII/0x66JaVvZawFSLjeUT18HxLAAh8MDDLgWCiwp+Uk3RzgrnaSj9oC0
+6uV/J7czytoK4haaV70zPcWqzZPIurtpgcG9AynaG05VjJ5ARgEG6EFJd91NnbM+
+7dZWXM6y1PI6IFuh1ldUJUD3YnEd3VuXAWaYE4aBr63rXaUYuVpAKRUY0NFZmxHw
+KGaVmss4AtUGeDBTPMvYyx+d1BTxPiYVeVbLzodtjl/mQPfpne5vlQomBolxd/0a
+fkeL0zUZoVgLfndRNVN+dIa2cPWo+BHNNM8tI92aFQ0YrxaTpdSjrOJ0bobnBUch
+deYEsdgKUEpUcFZqcp/ox1cc73kPeJ9365RwavrAN8sZIUSs+vvtu36/WIVI12eK
+qw6upySrPM0KLVTItTbNxKmS5uvFrc2fDPMAoru3P2Y5VkKPa2Q=
+=6Oyb
+-----END PGP SIGNATURE-----
 
-Michał Kopeć (1):
-  platform/x86: Introduce dasharo-acpi platform driver
-
- MAINTAINERS                         |   6 +
- drivers/platform/x86/Kconfig        |  10 +
- drivers/platform/x86/Makefile       |   3 +
- drivers/platform/x86/dasharo-acpi.c | 360 ++++++++++++++++++++++++++++
- 4 files changed, 379 insertions(+)
- create mode 100644 drivers/platform/x86/dasharo-acpi.c
-
--- 
-2.49.0
-
+--/MHZas7e8A04P/yf--
