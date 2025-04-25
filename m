@@ -1,105 +1,97 @@
-Received: from forward201a.mail.yandex.net (forward201a.mail.yandex.net [178.154.239.92])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BD921B910;
-	Fri, 25 Apr 2025 20:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF7018DB02;
+	Fri, 25 Apr 2025 20:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745611613; cv=none; b=d6pPP7XWUNAwxZ0CX71CohrtBtzySxq8xOgsHSkzWcbzPSd0d9cjtRCFXSog9mDZV3gzZTS905OING7htji1XHyO1U31KYG+C4dGd4/lhqGkPavaXEgJHc6RoP1opXKk3nw8z0/RQq96zynmCAr8cPus/3Z6EVbfQ1mKqm1TwJM=
+	t=1745612044; cv=none; b=sp91BArNqj6Phs9RWqq1MVLvwgfgUHUJ4KqFkOmKpLEUbAkITnWByLNJz6YiCTxjKGE6I4buakGEE1x8oO6XJPBHsI4wk6rE/QETq/FCSmm1Q7SUHYpkr45s6xS2nvM0Kv81p/v0i0NfL8yLNeVqeBUVx92rAgrwNj6eKEJmii0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745611613; c=relaxed/simple;
-	bh=k/zP33OjbSmeuXYLwPcWfcL/pxTHOmfYtJxHon6HXVM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eq1EBM4ZvjvyinbXjlvu738lBK02zcF0y0JzuBaQ8LIAJShboJ5rDo7pNHfHnvWHF129EAaOUTrSHDUQwsJCmVxUzax87+60dLObecAHuaGTD2yrM6BBxpnO1X+86w7jjotmcGJD7aF8YIGxSIjfWmQE/bvczsJo0ylQIyZKFW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosa.ru; spf=pass smtp.mailfrom=rosa.ru; dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b=bqEkieYt; arc=none smtp.client-ip=178.154.239.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rosa.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rosa.ru
+	s=arc-20240116; t=1745612044; c=relaxed/simple;
+	bh=Pgn/TZ1ujuuwbnzguLrmQLLDyPec5k7g882M+f0Gsi8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=M9+r+P3gfZZetmZPbQhgWB/kwEhQGCGOHh6DMLbBvuv28JJuzmumxl9PNeMdB0spGiXuGhjl55np4YEU91C1+fiudletsi2dNvqfI4/I0LQHK7DAkDRM+XiIbBUTghzGQUMTt+PIEkszl1ft79YZ0NKgeLvpx8STCVscfwmNI/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LoudM2O5; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rosa.ru header.i=@rosa.ru header.b="bqEkieYt"
-Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d100])
-	by forward201a.mail.yandex.net (Yandex) with ESMTPS id 4ADDC64420;
-	Fri, 25 Apr 2025 23:01:03 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:623d:0:640:ecee:0])
-	by forward100a.mail.yandex.net (Yandex) with ESMTPS id 57714470D7;
-	Fri, 25 Apr 2025 23:00:55 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id s0YsVLCLh8c0-wB4UUojE;
-	Fri, 25 Apr 2025 23:00:54 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosa.ru; s=mail;
-	t=1745611254; bh=1icPC1dV+orrOweNu0r0k0DOqWLOZGhjxwAB5E3wruM=;
-	h=Message-Id:Date:Cc:Subject:To:From;
-	b=bqEkieYt/zZUuEb5ku/DbLQIZdrgjXxYGVOdguHUmGa51VZPw7RqbbWW7dQleg0uw
-	 0b0/KorIcjBWKQhGNR/B0x41Izqyq4cBBSeV85YZiUN7eiyBQMOpm31QtytJpKc0rX
-	 wZoCL6ExfeRK6+zO/kGCBwL/cGDvAb5H3E6KLj1E=
-Authentication-Results: mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net; dkim=pass header.i=@rosa.ru
-From: Alexei Safin <a.safin@rosa.ru>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Alexei Safin <a.safin@rosa.ru>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH v2] hwmon: (asus-ec-sensors) add WARN_ONCE() on invalid sensor index
-Date: Fri, 25 Apr 2025 23:00:51 +0300
-Message-Id: <20250425200051.2410-1-a.safin@rosa.ru>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LoudM2O5"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53PKCYWU3252234
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 25 Apr 2025 13:12:35 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53PKCYWU3252234
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745611957;
+	bh=Pgn/TZ1ujuuwbnzguLrmQLLDyPec5k7g882M+f0Gsi8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=LoudM2O5Ggb8UKAE6BloQQgcPc3DDE93Uie4tiM2kEIfkYTDiUipcf8Neu/KvASRD
+	 bE9VD4R7oFqzmvtHTCFXcREprEax191bGlgx7zIbx5omdo51jLm5RkfhQX4yDbIVRa
+	 GVL5VijALlpGtEZskIkKxZJvEBt7FnMylbJIzjd/5nwjnzxaNo83Yy1fNK7XF6PF8t
+	 DnRu+iOKDqlUdSjj+DZ7GCvEpBZIZH9XdMoGw1VbkegsrdCwgEQlt1Pl2oarHuisPj
+	 gl4+pko/7dDkS+MuVeY76Vou/tfvTznub+Ylyb0SFF25MRCp2uGdpU5pdOUWL4jNE7
+	 1qvVj2z6FqDTA==
+Date: Fri, 25 Apr 2025 13:12:33 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC: Xin Li <xin@zytor.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, acme@kernel.org,
+        andrew.cooper3@citrix.com, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v2_21/34=5D_x86/msr=3A_Utiliz?=
+ =?US-ASCII?Q?e_the_alternatives_mechanism_to_write_MSR?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <35979102-2eb2-4566-b32a-f2b02ded8ae6@suse.com>
+References: <20250422082216.1954310-1-xin@zytor.com> <20250422082216.1954310-22-xin@zytor.com> <b2624e84-6fab-44a3-affc-ce0847cd3da4@suse.com> <f7198308-e8f8-4cc5-b884-24bc5f408a2a@zytor.com> <37c88ea3-dd24-4607-9ee1-0f19025aaef3@suse.com> <20250425123317.GB22125@noisy.programming.kicks-ass.net> <35979102-2eb2-4566-b32a-f2b02ded8ae6@suse.com>
+Message-ID: <D4ADDBA5-D9B8-4DD5-8D83-8CD482700E71@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Prevent undefined behavior by adding WARN_ONCE() when find_ec_sensor_index()
-returns a negative value.
+On April 25, 2025 5:51:27 AM PDT, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=2Eco=
+m> wrote:
+>On 25=2E04=2E25 14:33, Peter Zijlstra wrote:
+>> On Wed, Apr 23, 2025 at 06:05:19PM +0200, J=C3=BCrgen Gro=C3=9F wrote:
+>>=20
+>>>> It's not a major change, but when it is patched to use the immediate
+>>>> form MSR write instruction, it's straightforwardly streamlined=2E
+>>>=20
+>>> It should be rather easy to switch the current wrmsr/rdmsr paravirt pa=
+tching
+>>> locations to use the rdmsr/wrmsr instructions instead of doing a call =
+to
+>>> native_*msr()=2E
+>>=20
+>> Right, just make the Xen functions asm stubs that expect the instructio=
+n
+>> registers instead of C-abi and ALT_NOT_XEN the thing=2E
+>>=20
+>> Shouldn't be hard at all=2E
+>
+>Correct=2E And for the new immediate form we can use ALTERNATIVE_3()=2E
+>
+>
+>Juergen
 
-Even though unsupported attributes are filtered out by asus_ec_hwmon_is_visible(),
-a programming error could still cause an invalid sensor access.
-
-Instead of silently returning an error, log a warning to highlight the problem,
-and propagate the original error code.
-
-Update both asus_ec_hwmon_read() and asus_ec_hwmon_read_string() accordingly.
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: d0ddfd241e57 ("hwmon: (asus-ec-sensors) add driver for ASUS EC")
-Signed-off-by: Alexei Safin <a.safin@rosa.ru>
----
-v2: Use WARN_ONCE() instead of returning -EINVAL, and update
-    both asus_ec_hwmon_read() and asus_ec_hwmon_read_string()
-    as suggested by Eugene Shalygin.
-    
- drivers/hwmon/asus-ec-sensors.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index d893cfd1cb82..a563d7acef2e 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -820,9 +820,8 @@ static int asus_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
- 	struct ec_sensors_data *state = dev_get_drvdata(dev);
- 	int sidx = find_ec_sensor_index(state, type, channel);
- 
--	if (sidx < 0) {
-+	if (WARN_ONCE(sidx < 0, "asus-ec-sensors: sensor not found\n"))
- 		return sidx;
--	}
- 
- 	ret = get_cached_value_or_update(dev, sidx, state, &value);
- 	if (!ret) {
-@@ -839,6 +838,10 @@ static int asus_ec_hwmon_read_string(struct device *dev,
- {
- 	struct ec_sensors_data *state = dev_get_drvdata(dev);
- 	int sensor_index = find_ec_sensor_index(state, type, channel);
-+
-+	if (WARN_ONCE(sensor_index < 0, "asus-ec-sensors: sensor not found\n"))
-+		return sensor_index;
-+
- 	*str = get_sensor_info(state, sensor_index)->label;
- 
- 	return 0;
--- 
-2.39.5 (Apple Git-154)
-
+Yes; in the ultimate case there are *four* alternatives, but the concept i=
+s the same and again we have it implemented already=2E
