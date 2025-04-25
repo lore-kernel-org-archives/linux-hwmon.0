@@ -1,111 +1,131 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468D224E4A6;
-	Fri, 25 Apr 2025 12:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B4471747;
+	Fri, 25 Apr 2025 13:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745585577; cv=none; b=bqB3VJi85B0bX2MIgD8RESm5D5EEqgazM7hniPcyPXWASZ+OQr5Ipeax69xzcgtXX4V3QSd8kdDV9c0oj1b+orjf4wewppRNYEx0lnccvwhyE+H7Sq1Ljn6+cQSp3kb7Lo1CffgCr5DJzPzP2IQq/74XDvIdL/llnfRkuDVk4TU=
+	t=1745589072; cv=none; b=QZf7ZHWSrjWcNcYSevLMWVqYrUR5VrhKvh6K4uHnNbJsWhTF9iFZjQTvcuWVyf1btXGwMH5Anc2HoovfTIrr9iD9gLcfT/33NCTItSEKdY8vWc4NA0vfjpyB5fT+00GYRraifdc0+aYPWttIR3i7Iz16Gg4ZrMZHPRBiGoLMZLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745585577; c=relaxed/simple;
-	bh=S+IO/pqeJx2r5uEpbaBnOD7++pwsoffwNlWOODS3MS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T9FgMAx0db0gHRChGyffV12FW8H77WHSa4yfufImKUPSrOpqOtSSvBardRYUwPBK9E6VNRZgoHnGYTY1CmjFu9V6t3wWkyw/au+tPCUVYqvTRMDlsDdIoV9q4wdLcGwUcxzIQQx3m9pdkVdjZZSlQOF7lxb3ZQ/bXItMktLg0gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WC7YSMHk; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1745589072; c=relaxed/simple;
+	bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Y3uBEwUTz1y/AdR/MWlV+Z2dbkK/10ijvrcSykTek4CawjFz1m1L2ctc99MM2TdlIuQrtTYKJcz96JOf3/Az5Gx1iJHdSI8BB+6GdhcD0BvOo/TpVuKSB9dLWh/nOfFKYYkhAfocgk/esZxa+bBmEa2dHLCt6D2/yDXPthqCsm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZAVPoJQL; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WC7YSMHk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=IDYQFrDJHA7L8jf52g4kfnTitAFJx9ur9V0d2b50BLo=; b=WC7YSMHkPF6hShCY786xiHVHDr
-	zbWZEoDWt7bacv4YBSZjyeuzd86Hs+DM9z1RnOCJQ5xBDY8fzsuMOP9nz+hxSYkX8GWF+7Hcfd5GY
-	y9XAgi28oYrUDuf79WmTYUQ4rYSrUCc+ti4P994Grej6mWoEbXrvRT1Znq7C8PiN0wGwEE2TCP7Ta
-	IuyucF2BGfKx+iZgRxhCuCkO9O6vufW91a9tlgB/cQWrA5X6Fgbd7WhC72owqwZ4ziVmITn1Ygvpo
-	g1O3mI6ZWJdPLtdB/AOnAYdH/GQcnroDkK5y+ZyfJ79ZewuBEVt4rRKLKSFqPHLgMvZsVeAKOv3c+
-	Wjij67/A==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1u8IXt-0000000C2bD-2jfU;
-	Fri, 25 Apr 2025 12:52:45 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3849A300073; Fri, 25 Apr 2025 14:52:45 +0200 (CEST)
-Date: Fri, 25 Apr 2025 14:52:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-	namhyung@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, wei.liu@kernel.org,
-	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
-	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
-	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-	dapeng1.mi@linux.intel.com
-Subject: Re: [PATCH v3 00/14] MSR code cleanup part one
-Message-ID: <20250425125245.GC22125@noisy.programming.kicks-ass.net>
-References: <20250425083442.2390017-1-xin@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZAVPoJQL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745589071; x=1777125071;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=OhZMVslTMFHk1PYXUziNNqXZhgpB08GxxfE5qfU9SMk=;
+  b=ZAVPoJQLRHhmJ2advrNRsFva3K7C9aGDvJBcxDwNlg+1oy7u8BxdV3iV
+   ybh5VxV0CLWl9/xtMTZtIqzd0ZSiFwtWOoVgDCyq5xceJaIg3YBY5gGBR
+   lQMvOWAL7iBjXty/8NYXaERN4JP/YuHePGMj9TNoV2U0KKJDa2saMP6FW
+   do4WbVV1WKdF3okTErJndahHzNSeUV0Zrze7hH/huN2MUsYLm+BxzDqyJ
+   xAXsFjMcsWfqW7Fg3MqjoD01ehx+7Y+W3czuE8Pivq2J0dcaygtF+LB5t
+   OnCBELDIre0ITrFmVAK197LB1DJudSVWlmiUKi+pPJOlU17YdL0kcs1Xc
+   w==;
+X-CSE-ConnectionGUID: 77xyvPGySFi2WBKZPmBQ9w==
+X-CSE-MsgGUID: aj6lyNgmT9ubvaAOL7uahA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="50917497"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="50917497"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:10 -0700
+X-CSE-ConnectionGUID: bD/JDR3LQ9yWdeM3F6uVBA==
+X-CSE-MsgGUID: VK6mzkL+SLKFFR+xFJka7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="137722441"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.154])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 06:51:04 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: platform-driver-x86@vger.kernel.org, 
+ Antheas Kapenekakis <lkml@antheas.dev>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>, 
+ Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Joaquin Ignacio Aramendia <samsagax@gmail.com>, 
+ Derek J Clark <derekjohn.clark@gmail.com>, 
+ Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+ Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
+ Eileen <eileen@one-netbook.com>, linux-kernel@vger.kernel.org, 
+ sre@kernel.org, linux@weissschuh.net, hdegoede@redhat.com, 
+ mario.limonciello@amd.com
+In-Reply-To: <20250425111821.88746-1-lkml@antheas.dev>
+References: <20250425111821.88746-1-lkml@antheas.dev>
+Subject: Re: [PATCH v10 00/16] hwmon: (oxpsensors) Add devices, features,
+ fix ABI and move to platform/x86
+Message-Id: <174558905993.2965.3080490340204327476.b4-ty@linux.intel.com>
+Date: Fri, 25 Apr 2025 16:50:59 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250425083442.2390017-1-xin@zytor.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Fri, Apr 25, 2025 at 01:34:23AM -0700, Xin Li (Intel) wrote:
-> This patch set is the first part of the patch set:
-> 
->   MSR refactor with new MSR instructions support
-> 
-> @ https://lore.kernel.org/lkml/20250422082216.1954310-1-xin@zytor.com/T/#m5a34be7d4ed55f0baca965cb65452a08e9ad7c8a
-> 
-> 
-> It's getting *WAY* too big, and whether to zap the pv_ops MSR APIs is
-> still under argument.  Dave Hansen suggested to focus on rename stuff
-> first, most of which he acked.
-> 
-> Jürgen Groß also gave his RBs to most of the Xen MSR cleanup patches.
-> 
-> So here comes the first MSR cleanup patch set with version 3.
-> 
-> 
-> This patch series is based on:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/msr
-> 
-> 
-> Xin Li (Intel) (14):
->   x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
->   x86/msr: Remove rdpmc()
->   x86/msr: Rename rdpmcl() to rdpmc()
->   x86/msr: Convert the rdpmc() macro into an always inline function
->   x86/msr: Return u64 consistently in Xen PMC read functions
->   x86/msr: Convert __wrmsr() uses to native_wrmsr{,q}() uses
->   x86/msr: Add the native_rdmsrq() helper
->   x86/msr: Convert __rdmsr() uses to native_rdmsrq() uses
->   x86/xen/msr: Remove calling native_{read,write}_msr{,_safe}() in
->     pmu_msr_{read,write}()
->   x86/xen/msr: Remove pmu_msr_{read,write}()
->   x86/xen/msr: Remove the error pointer argument from set_seg()
->   x86/pvops/msr: refactor pv_cpu_ops.write_msr{,_safe}()
->   x86/msr: Replace wrmsr(msr, low, 0) with wrmsrq(msr, low)
->   x86/msr: Change the function type of native_read_msr_safe()
+On Fri, 25 Apr 2025 13:18:05 +0200, Antheas Kapenekakis wrote:
 
-These look ok.
+> This four part series updates the oxpsensors module to bring it in line
+> with its Windows OneXPlayer counterpart. First, it adds support for all
+> 2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
+> the module to platform/x86 to allow for including more EC features.
+> 
+> Then, it adds the new charge limiting and bypass features that were first
+> introduced in the X1 and retrofit to older OneXFly variants and for
+> controlling the turbo led found in the X1 models. For Bypass, it adds a new
+> charge_behaviour variant called inhibit-charge-s0.
+> 
+> [...]
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[01/16] hwmon: (oxp-sensors) Distinguish the X1 variants
+        commit: 217d55ca13d22ba6af7e96ac2d28c2ef6927fc54
+[02/16] hwmon: (oxp-sensors) Add all OneXFly variants
+        commit: 9f4c9ec158fa8fa4afcdbcbff9c9a9a900dc9c2f
+[03/16] platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+        commit: fe812896e55d0d8e2a45bcf994cadc80fe912fb5
+[04/16] ABI: testing: sysfs-class-oxp: add missing documentation
+        commit: 05f8e5928bfd37416380e8e0994c5f4fd1b615c8
+[05/16] ABI: testing: sysfs-class-oxp: add tt_led attribute documentation
+        commit: 7ba14e4eec62985ae2021ef7e06d537b8e4c8712
+[06/16] platform/x86: oxpec: Rename ec group to tt_toggle
+        commit: 8e1963b9d84a3db10cdd2a807dc3fe401837d228
+[07/16] platform/x86: oxpec: Add turbo led support to X1 devices
+        commit: 5485a80150ff03b6784bfbb194858244ae5f991d
+[08/16] platform/x86: oxpec: Move pwm_enable read to its own function
+        commit: aa682cff3097dfa2370298ecebd33ff1fb64bab8
+[09/16] platform/x86: oxpec: Move pwm value read/write to separate functions
+        commit: 0ba0d67b0608c15b407491712af1c2a3d5140492
+[10/16] platform/x86: oxpec: Move fan speed read to separate function
+        commit: 653feeccdd2eb1dfe44923f4c0bbf50a948c7a07
+[11/16] platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
+        commit: 7dea472a8b2814013213f4fed290f5f86c6cc7cb
+[12/16] platform/x86: oxpec: Follow reverse xmas convention for tt_toggle
+        commit: bb9854e9819ae5c29602d4985313cde2d07f6847
+[13/16] power: supply: add inhibit-charge-awake to charge_behaviour
+        commit: 468182a839f88fecab915792cbb98ad7328be266
+[14/16] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+        commit: 202593d1e86bf3ccb1c1091713760b6f44641718
+[15/16] platform/x86: oxpec: Rename rval to ret in tt_toggle
+        commit: 57c775a990a742f7cc2650a5cbfc103d6b4a015d
+[16/16] platform/x86: oxpec: Convert defines to using tabs
+        commit: f5612600314bcce86934318601501e2d8301176d
+
+--
+ i.
+
