@@ -1,21 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EDB1EB182;
-	Fri, 25 Apr 2025 08:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5881B234963
+	for <linux-hwmon@vger.kernel.org>; Fri, 25 Apr 2025 09:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745571130; cv=none; b=vGm3VyQZTdiUFwrwGE7OXWEMT2jRnli/dqKZ6PiqmnVZYi96NEC+X4j+P0lUXozWcnLFO4lapYrUnhZi56g325arM1ML5ja/2JixDYx0t1qj+qNeO2JQthop80FUgfk5Z26lk+FVXOkpj1JDIJKvl2tL6vkntEH7YhQEiq0VolA=
+	t=1745574920; cv=none; b=GnunEz9GdqJanb0JKghl/i83/d31Fr7trx/TDZ/+9dAFBn6cKWMEn6PTsSHEfPTtWQAl0aRXvi5BKkEGlTXa6yRKoa2brePX4CkXksX2kZTtS1mzAUL8zEbqydZMHhQcR86vv4GVD8SXVed+SXkSuiNNV++fCx2Qi6J/dhS9+5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745571130; c=relaxed/simple;
-	bh=8ZH6zMNlcpVLFG6magXR7gpafd8wfFKx+N3DPWKz6bw=;
+	s=arc-20240116; t=1745574920; c=relaxed/simple;
+	bh=NcWE1bJYcLRfud/TYBaEGj5sNWQY2z4fAnt1IKr2YXk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CEwDdLeyvL2a6pqxqKdFSfZckYLALdJ6MQoNvWBZHzrPnYlbZSsUvdrBu+V5HTGDXI5N+FAsiobwl/9udzjGKK/neqfgXXZ0azA/MeZkSkd/obcEaudrNMhD9aXW9Tsi1D/9Db5K2FeZ53M+G91ruG7NZLaQCVxyOOtjxk17vPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAE6C4CEE4;
-	Fri, 25 Apr 2025 08:51:58 +0000 (UTC)
-Message-ID: <8c1e6d90-c394-4d98-96f9-eff526a987ed@xs4all.nl>
-Date: Fri, 25 Apr 2025 10:51:56 +0200
+	 In-Reply-To:Content-Type; b=ZINXdU0cXj7y8MpCVSPIFWCgmSCwGJ3Yn3lcgYEcN4M3TQp6Sqzag+ejUDoeVzTJnZvio0JiC/T9UhRbn2wYZmkrf5QrbUgJxEV8/+MCxYFTp1XnDZiUsV2/DU6Ee1FS5wYDMW/YJbDJo/cPTkPjfAR9jA5AlQvZZGRLiaSAWQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cLlY3RsX; arc=none smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cLlY3RsX"
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-43d04dc73b7so18064885e9.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Apr 2025 02:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1745574916; x=1746179716; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NcWE1bJYcLRfud/TYBaEGj5sNWQY2z4fAnt1IKr2YXk=;
+        b=cLlY3RsXlPeTvasPGFhVLZYUZYUji3IZ2EkeMmoArEbr/EXXNHvR/jmIou23N80taf
+         wc7o8mmGWi7+ZSMi+pc9Ne2wWnHOtS76g0psoOVjZj7qFQ3gDOU13HoAXTgtZlt1hcLb
+         ppxslYGeVQsNNXazU0pghIHu8WC0uuBGRKNpv2gzgJ9hHJKHxOA5mBafN/tgfNKoNuus
+         QliAVyVp+VOvmCHtvrNryovV5+kcCcipBgFv0VYmaj1zqRUCvlia4kYxqyqL+mcwOvYp
+         i4R8FamD4//qqXn/5eou0oiWzxJq6b+vBULY1hOSbZcMU1m3MEDKN9LgmS9KfQvEpJR0
+         0Pfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745574916; x=1746179716;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NcWE1bJYcLRfud/TYBaEGj5sNWQY2z4fAnt1IKr2YXk=;
+        b=W5F3cU+RQhw+fgvKvCVD0Fsrw0LZox27cd9K5RAUkyq/H3YsFUvuPrG7sbvPdERilg
+         RzHRQzuURMQfIb23B1zK9EUb3iwDli/QidvRHTAlm/jFtlPhyWTopbrj7+nqcjBFSk7Q
+         lQ0drz2BNqBeqPhx9IzNxws3iD4Rc7m+DBSUIvjRyJ7Y/AnxWrHBQP5CgEsztdKL9gdJ
+         2QpkcUyLmu7BntOTpCTicrPUVVqPEW18IfKlixJGNCEJcGQDYtfxtVzZYbopjFxT7tuV
+         NGY5O1G9eqay80BNtfboVAIATWO90kLAmDK0//uoF7Bw1Qe0lGyUzq1YtOYy3p3o657k
+         7aPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTWAr1JIaOJInU1JA7c3lYH4cudfaqbsiPAcohSSotUg1kmuDMk+UGXj5SyX4WfD2wJZF1WK1VTOucgA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8cQxsq3VpPKVEUPX+XLZCJYynUvBeSHnc4Mifbh3OFh2VYK3c
+	SALwbEGDHVHJopx9VBDBnvxu8V1IWu9NpEQInd/taLeb3rIPbfA9vS8ua5pgG6g=
+X-Gm-Gg: ASbGncvPEw0xYZB7rwaMrqzSRt5wOlYbUTM8Hhp9rg35m+xgzDui2khtDJKlAnBFqHk
+	HltPQ9AE4F/1MFYsJ7ieI0hP5cb9PLw/iqoJer7w7rfFEy9S03ookZPjE20IWruXjbDeSqpws0h
+	c2Uye/lnmHgHDV5hjOWgIuEoyzBCVJTXnl5/RWFJIFwg1EfZ8R4xLF8L5pBzDZYln9Ywb9Z8Y63
+	dWf1BkIoKOvg0F63LkLsvjSz4RMogW70Ml6v4pHVi0fySG5ImAsYhC3LbGPL6t7Qzalu/013H/X
+	pbRSqradpXXft+iEMnoUxCY0Gnt/iQqCWhP8jcq0bQRh0pjVC1Qk8z1v/0OP7RM34VxlNEUqQ83
+	T+5AVaAcd2lDblozJgNYvCzGEr1NNfzd/TTIkZC73VLz5cvgI4o4UAt1IrMetKtwMSg==
+X-Google-Smtp-Source: AGHT+IHtx1TOSgXcL+wm9ZIPfyr+4YgzzXRNPlhTDP9N/InsP2TFGU+fY9WmjuTgX4ibBWR0TYzRDw==
+X-Received: by 2002:a05:600c:3491:b0:43b:ce3c:19d0 with SMTP id 5b1f17b1804b1-440a66b6fb1mr13860625e9.29.1745574915455;
+        Fri, 25 Apr 2025 02:55:15 -0700 (PDT)
+Received: from ?IPV6:2003:e5:870f:e000:6c64:75fd:2c51:3fef? (p200300e5870fe0006c6475fd2c513fef.dip0.t-ipconnect.de. [2003:e5:870f:e000:6c64:75fd:2c51:3fef])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a52f89b2sm19712325e9.8.2025.04.25.02.55.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Apr 2025 02:55:15 -0700 (PDT)
+Message-ID: <524349a7-55da-42a2-b9cc-ec0d2ce66ae4@suse.com>
+Date: Fri, 25 Apr 2025 11:55:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -23,138 +67,202 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/13] media: saa7115: Replace open-coded parity
- calculation with parity_odd()
-To: Kuan-Wei Chiu <visitorckw@gmail.com>, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
- andrzej.hajda@intel.com, neil.armstrong@linaro.org, rfoss@kernel.org,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- airlied@gmail.com, simona@ffwll.ch, dmitry.torokhov@gmail.com,
- mchehab@kernel.org, awalls@md.metrocast.net, hverkuil@xs4all.nl,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- louis.peens@corigine.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, parthiban.veerasooran@microchip.com,
- arend.vanspriel@broadcom.com, johannes@sipsolutions.net,
- gregkh@linuxfoundation.org, jirislaby@kernel.org, yury.norov@gmail.com,
- akpm@linux-foundation.org, jdelvare@suse.com, linux@roeck-us.net,
- alexandre.belloni@bootlin.com, pgaj@cadence.com
-Cc: hpa@zytor.com, alistair@popple.id.au, linux@rasmusvillemoes.dk,
- Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
- jernej.skrabec@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
- linux-input@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mtd@lists.infradead.org, oss-drivers@corigine.com,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-serial@vger.kernel.org, bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
- Frank.Li@nxp.com, linux-hwmon@vger.kernel.org,
- linux-i3c@lists.infradead.org, david.laight.linux@gmail.com,
- andrew.cooper3@citrix.com, Yu-Chun Lin <eleanor15x@gmail.com>
-References: <20250409154356.423512-1-visitorckw@gmail.com>
- <20250409154356.423512-5-visitorckw@gmail.com>
-Content-Language: en-US, nl
-From: Hans Verkuil <hverkuil@xs4all.nl>
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <20250409154356.423512-5-visitorckw@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 09/14] x86/xen/msr: Remove calling
+ native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
+To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ wei.liu@kernel.org, ajay.kaher@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+ pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+ luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+ haiyangz@microsoft.com, decui@microsoft.com, dapeng1.mi@linux.intel.com
+References: <20250425083442.2390017-1-xin@zytor.com>
+ <20250425083442.2390017-10-xin@zytor.com>
+Content-Language: en-US
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+Autocrypt: addr=jgross@suse.com; keydata=
+ xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
+ ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
+ dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
+ NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
+ XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
+ AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
+ CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
+ mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
+ G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
+ kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
+ Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
+ RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
+ vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
+ sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
+ aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
+ w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
+ auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
+ 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
+ fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
+ HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
+ QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
+ ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
+In-Reply-To: <20250425083442.2390017-10-xin@zytor.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------umyLmQJXz7NbwmBml0jM4Ng1"
 
-On 09/04/2025 17:43, Kuan-Wei Chiu wrote:
-> Refactor parity calculations to use the standard parity_odd() helper.
-> This change eliminates redundant implementations.
-> 
-> Co-developed-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> Signed-off-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------umyLmQJXz7NbwmBml0jM4Ng1
+Content-Type: multipart/mixed; boundary="------------ILcDmpjOr8sgvBFsIPNfJu0U";
+ protected-headers="v1"
+From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+To: "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, acme@kernel.org,
+ andrew.cooper3@citrix.com, peterz@infradead.org, namhyung@kernel.org,
+ mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+ irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+ wei.liu@kernel.org, ajay.kaher@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+ pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+ luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+ haiyangz@microsoft.com, decui@microsoft.com, dapeng1.mi@linux.intel.com
+Message-ID: <524349a7-55da-42a2-b9cc-ec0d2ce66ae4@suse.com>
+Subject: Re: [PATCH v3 09/14] x86/xen/msr: Remove calling
+ native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
+References: <20250425083442.2390017-1-xin@zytor.com>
+ <20250425083442.2390017-10-xin@zytor.com>
+In-Reply-To: <20250425083442.2390017-10-xin@zytor.com>
 
-Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
+--------------ILcDmpjOr8sgvBFsIPNfJu0U
+Content-Type: multipart/mixed; boundary="------------KIfLsXjXNDGJVTPgM3MpoiKp"
 
-Regards,
+--------------KIfLsXjXNDGJVTPgM3MpoiKp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-	Hans
+T24gMjUuMDQuMjUgMTA6MzQsIFhpbiBMaSAoSW50ZWwpIHdyb3RlOg0KPiBocGEgZm91bmQg
+dGhhdCBwbXVfbXNyX3dyaXRlKCkgaXMgYWN0dWFsbHkgYSBjb21wbGV0ZWx5IHBvaW50bGVz
+cw0KPiBmdW5jdGlvbiBbMV06IGFsbCBpdCBkb2VzIGlzIHNodWZmbGUgc29tZSBhcmd1bWVu
+dHMsIHRoZW4gY2FsbHMNCj4gcG11X21zcl9jaGtfZW11bGF0ZWQoKSBhbmQgaWYgaXQgcmV0
+dXJucyB0cnVlIEFORCB0aGUgZW11bGF0ZWQgZmxhZw0KPiBpcyBjbGVhciB0aGVuIGRvZXMg
+KmV4YWN0bHkgdGhlIHNhbWUgdGhpbmcqIHRoYXQgdGhlIGNhbGxpbmcgY29kZQ0KPiB3b3Vs
+ZCBoYXZlIGRvbmUgaWYgcG11X21zcl93cml0ZSgpIGl0c2VsZiBoYWQgcmV0dXJuZWQgdHJ1
+ZS4gIEFuZA0KPiBwbXVfbXNyX3JlYWQoKSBkb2VzIHRoZSBlcXVpdmFsZW50IHN0dXBpZGl0
+eS4NCj4gDQo+IFJlbW92ZSB0aGUgY2FsbHMgdG8gbmF0aXZlX3tyZWFkLHdyaXRlfV9tc3J7
+LF9zYWZlfSgpIHdpdGhpbg0KPiBwbXVfbXNyX3tyZWFkLHdyaXRlfSgpLiAgSW5zdGVhZCBy
+ZXVzZSB0aGUgZXhpc3RpbmcgY2FsbGluZyBjb2RlDQo+IHRoYXQgZGVjaWRlcyB3aGV0aGVy
+IHRvIGNhbGwgbmF0aXZlX3tyZWFkLHdyaXRlfV9tc3J7LF9zYWZlfSgpIGJhc2VkDQo+IG9u
+IHRoZSByZXR1cm4gdmFsdWUgZnJvbSBwbXVfbXNyX3tyZWFkLHdyaXRlfSgpLiAgQ29uc2Vx
+dWVudGx5LA0KPiBlbGltaW5hdGUgdGhlIG5lZWQgdG8gcGFzcyBhbiBlcnJvciBwb2ludGVy
+IHRvIHBtdV9tc3Jfe3JlYWQsd3JpdGV9KCkuDQo+IA0KPiBXaGlsZSBhdCBpdCwgcmVmYWN0
+b3IgcG11X21zcl93cml0ZSgpIHRvIHRha2UgdGhlIE1TUiB2YWx1ZSBhcyBhIHU2NA0KPiBh
+cmd1bWVudCwgcmVwbGFjaW5nIHRoZSBjdXJyZW50IGR1YWwgdTMyIGFyZ3VtZW50cywgYmVj
+YXVzZSB0aGUgZHVhbA0KPiB1MzIgYXJndW1lbnRzIHdlcmUgb25seSB1c2VkIHRvIGNhbGwg
+bmF0aXZlX3dyaXRlX21zcnssX3NhZmV9KCksIHdoaWNoDQo+IGhhcyBub3cgYmVlbiByZW1v
+dmVkLg0KPiANCj4gWzFdOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzBlYzQ4Yjg0
+LWQxNTgtNDdjNi1iMTRjLTM1NjNmZDE0YmNjNEB6eXRvci5jb20vDQo+IA0KPiBTdWdnZXN0
+ZWQtYnk6IEguIFBldGVyIEFudmluIChJbnRlbCkgPGhwYUB6eXRvci5jb20+DQo+IFNpZ24t
+b2ZmLWJ5OiBYaW4gTGkgKEludGVsKSA8eGluQHp5dG9yLmNvbT4NCg0KUmV2aWV3ZWQtYnk6
+IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
+--------------KIfLsXjXNDGJVTPgM3MpoiKp
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/media/i2c/saa7115.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/saa7115.c b/drivers/media/i2c/saa7115.c
-> index a1c71187e773..a7886269dcfc 100644
-> --- a/drivers/media/i2c/saa7115.c
-> +++ b/drivers/media/i2c/saa7115.c
-> @@ -25,6 +25,7 @@
->  
->  #include "saa711x_regs.h"
->  
-> +#include <linux/bitops.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
-> @@ -664,15 +665,6 @@ static const unsigned char saa7115_init_misc[] = {
->  	0x00, 0x00
->  };
->  
-> -static int saa711x_odd_parity(u8 c)
-> -{
-> -	c ^= (c >> 4);
-> -	c ^= (c >> 2);
-> -	c ^= (c >> 1);
-> -
-> -	return c & 1;
-> -}
-> -
->  static int saa711x_decode_vps(u8 *dst, u8 *p)
->  {
->  	static const u8 biphase_tbl[] = {
-> @@ -1227,7 +1219,7 @@ static int saa711x_decode_vbi_line(struct v4l2_subdev *sd, struct v4l2_decode_vb
->  		vbi->type = V4L2_SLICED_TELETEXT_B;
->  		break;
->  	case 4:
-> -		if (!saa711x_odd_parity(p[0]) || !saa711x_odd_parity(p[1]))
-> +		if (!parity_odd(p[0]) || !parity_odd(p[1]))
->  			return 0;
->  		vbi->type = V4L2_SLICED_CAPTION_525;
->  		break;
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
+=3DeeAB
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------KIfLsXjXNDGJVTPgM3MpoiKp--
+
+--------------ILcDmpjOr8sgvBFsIPNfJu0U--
+
+--------------umyLmQJXz7NbwmBml0jM4Ng1
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmgLXAEFAwAAAAAACgkQsN6d1ii/Ey88
+Cgf+MAp/YWFiSmqylTxTDIt7kHncN7KNk+/Iat64QmjTwZbgOO6Ol0/EWdPH9IKncht38/BsQQbc
+Kpm8hyi72Q8JqBJXFbhsZQPFShJWtlgXy8oJ5o96+HR0j/BUlj+kUU3qjrxzFb6wsaLjo8j/guKM
+cj9Vi4kIRazqWp0L8GIURgfnQIvtQdY5C1IU6+wR1JzSKlUZKDTXkc+aYaCRheR7pXHyHxMk1zsC
+z31EStqcPz83sn9uj3GfIrGzroOELJyGJYGQm+6pJlaQDKSnOQGmdJWd5v0HysMQB2kYSTn/8I8T
+Owl3spzB9/MRmcopaSWd/n53lPf8oXlOAiI/Wh2UcA==
+=/QzV
+-----END PGP SIGNATURE-----
+
+--------------umyLmQJXz7NbwmBml0jM4Ng1--
