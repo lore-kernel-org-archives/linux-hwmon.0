@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B5199E84;
-	Fri, 25 Apr 2025 16:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C71F19F462;
+	Fri, 25 Apr 2025 16:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745598279; cv=none; b=JSl8iFtUQVOmesRET3rzAEgmSgIWBwKAKlbTuRK5J8A0y6MMdRMSAQo1MosZQ50VlQi8G6SAB9aiFRP3M08uKoELwRJZr6NqBEpzw1pCm9UaeHB00qbYMllVCvR42RdRitm3ToHpMYLM8/54iFs3Th47HI0GssUk6T5pjkv8eo4=
+	t=1745598939; cv=none; b=gyRVp2R2+nZQEEx6F1w0puNFBh43pAg2ZUeYJMHGO68sDSjqSRlE0Bb2nWm38ZEPA9e+hRHv2TySG3xiO5kWj61VVrvuuCSAwrra1CQyDuUB5aIBI5hBcy1hkN5Ctxg7tvlqnRe8hOerX9fsKZsHZOV5gpAzMi3sa4y+ZsbfvEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745598279; c=relaxed/simple;
-	bh=NkU7tAkxyRI3+ZzeXQF0hq98MO5Gc/uMx+ZHCBqiJ0M=;
+	s=arc-20240116; t=1745598939; c=relaxed/simple;
+	bh=IwlW95eWpCO6M+vqI93vv/SoGGqqOVR+bLCM30GouPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b7ea9fHfUFw0t09tJG9QTcxt8VHYHTEAUSaMQsGWxNuJY0JspX7Q/qf+SundOfnzCWOAR89xdaXvT5i6yr7Ne85WGuDJSQNpgSmU0mh5UFJorCA5CY+Rht3AVAWkSAYAvlDMVt4asDXgh7P3sm7qLtpRxk9JsBvc2IO5ZGWQ16E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SdGAYdfw; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=SoZQSYMIwp1hqx3e/tQVwyw3xfxLH07C/WJVkXdaFy54KdyD3KXl6GBLjlah1VdhelptKcQ9Ot8QrsLEwUlQpZ7JRDZXz1KQG8dDWS9Gtw5IQVdv8ks+vVkofdNPrsY6D29D3jKJSrp012znPwF1lgpnYkYosh3zvbBYOImXmcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jFIwDVv/; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SdGAYdfw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jFIwDVv/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745598277; x=1777134277;
+  t=1745598937; x=1777134937;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NkU7tAkxyRI3+ZzeXQF0hq98MO5Gc/uMx+ZHCBqiJ0M=;
-  b=SdGAYdfw/tyEr1qaOvd/iC+L5x+bedyXtPaG0cPsDVkBmIZ4pDfRhTUM
-   cc62ilA7eRX7uyH5eoBYrPWnpEalPIk17W2a4FJSfZKCCWVYqm1Hq1sn9
-   Bg0PBBwOxWx9MK0NycguxVHsd/PFQ5z4dj0y5mdo8srGaSzJf6nbMFpqi
-   Dq35rxlaT6jzMEnV5km1+4w3n91XvsZja4MH9Eilg78duUBWAt3hEPsk+
-   b+yabeuVzpVzfQfVaMpYkR6PRNBX0KKA3FW/cNm6q6btsu+SEEWGcy1Wh
-   6iaFjJOgdjOvad/64NyAqOLB9VN9lpc/yNxsMzEtfLMLjrzy15YW/FGwV
-   A==;
-X-CSE-ConnectionGUID: 0Q7RCBIvSsy7NVoAjV+n5w==
-X-CSE-MsgGUID: TxCTSjgLSpauD+eCLJZBlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="57906601"
+  bh=IwlW95eWpCO6M+vqI93vv/SoGGqqOVR+bLCM30GouPY=;
+  b=jFIwDVv/aKJhGnt94h3xE05xc+27Dj5plbykInloVZYOLWh+Wt9gX3O6
+   2Yd9LrzsowFjwQzakhmWsrk1wLluE3ooTjHt7ibTi2LqAFhhiY3IpDC09
+   /gYdkHDl11JDkAOfj/mdadFYa4ptbC8IMjYM/nPNJSjShWNb/hLrRs/l7
+   WbkN4RlZbrJyHy/rC8C5fn4/E5G1N9RrAGJFj5Jb7P+cPJ2qkCnK5sANk
+   CwOTPXth7RDhErKUHqZ5nHv6ymHbEEuthSg6iNCJVdVc6+o+ubIyo+Hvz
+   CjhBuXNCZN/YFud3uBcOHlnry1VuUyBiJ13nF3pxoxluFSwL3eIjJT6J3
+   w==;
+X-CSE-ConnectionGUID: he/oCGfWR0qo4JkIzFM3QA==
+X-CSE-MsgGUID: deGL/P33SQybS0EhQNinhw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11414"; a="47179027"
 X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="57906601"
+   d="scan'208";a="47179027"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 09:24:36 -0700
-X-CSE-ConnectionGUID: AB0hULXiSEiLUC0D3wqTkQ==
-X-CSE-MsgGUID: NHCw9QsNTnaRuBFdsyFb/w==
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2025 09:35:37 -0700
+X-CSE-ConnectionGUID: r4Gh3fh4R3SGqCSuBywSvQ==
+X-CSE-MsgGUID: euek9dRVQ8moohYNtIqCLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="133472533"
+   d="scan'208";a="133474373"
 Received: from lkp-server01.sh.intel.com (HELO 050dd05385d1) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 25 Apr 2025 09:24:33 -0700
+  by orviesa007.jf.intel.com with ESMTP; 25 Apr 2025 09:35:35 -0700
 Received: from kbuild by 050dd05385d1 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1u8Lqp-0005LZ-13;
-	Fri, 25 Apr 2025 16:24:31 +0000
-Date: Sat, 26 Apr 2025 00:24:09 +0800
+	id 1u8M1U-0005MT-0m;
+	Fri, 25 Apr 2025 16:35:32 +0000
+Date: Sat, 26 Apr 2025 00:35:20 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chiang Brian <chiang.brian@inventec.com>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -57,7 +57,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Chiang Brian <chiang.brian@inventec.com>,
 	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
-Message-ID: <202504260027.mOmzx213-lkp@intel.com>
+Message-ID: <202504260043.Q4NkFYgs-lkp@intel.com>
 References: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -71,10 +71,10 @@ In-Reply-To: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google
 
 Hi Chiang,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on robh/for-next linus/master v6.15-rc3 next-20250424]
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.15-rc3 next-20250424]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -83,19 +83,19 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Chiang-Brian/dt-bindings-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20250424132538.2004510-2-chiang.brian%40inventec.corp-partner.google.com
 patch subject: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
-config: loongarch-randconfig-001-20250425 (https://download.01.org/0day-ci/archive/20250426/202504260027.mOmzx213-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504260027.mOmzx213-lkp@intel.com/reproduce)
+config: nios2-randconfig-002-20250425 (https://download.01.org/0day-ci/archive/20250426/202504260043.Q4NkFYgs-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250426/202504260043.Q4NkFYgs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504260027.mOmzx213-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504260043.Q4NkFYgs-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
    drivers/hwmon/pmbus/tps53679.c: In function 'tps53679_identify_multiphase':
->> drivers/hwmon/pmbus/tps53679.c:133:57: error: passing argument 3 of 'tps53679_identify_chip' makes pointer from integer without a cast [-Wint-conversion]
+>> drivers/hwmon/pmbus/tps53679.c:133:57: warning: passing argument 3 of 'tps53679_identify_chip' makes pointer from integer without a cast [-Wint-conversion]
      133 |         ret = tps53679_identify_chip(client, pmbus_rev, device_id);
          |                                                         ^~~~~~~~~
          |                                                         |
@@ -104,7 +104,7 @@ All errors (new ones prefixed by >>):
       90 |                                   u8 revision, char *id)
          |                                                ~~~~~~^~
    drivers/hwmon/pmbus/tps53679.c: In function 'tps53681_identify':
->> drivers/hwmon/pmbus/tps53679.c:34:32: error: passing argument 4 of 'tps53679_identify_multiphase' makes integer from pointer without a cast [-Wint-conversion]
+>> drivers/hwmon/pmbus/tps53679.c:34:32: warning: passing argument 4 of 'tps53679_identify_multiphase' makes integer from pointer without a cast [-Wint-conversion]
       34 | #define TPS53681_DEVICE_ID     "\x81"
          |                                ^~~~~~
          |                                |
