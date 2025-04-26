@@ -1,102 +1,83 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9D91C36;
-	Sat, 26 Apr 2025 09:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C3D1DE4F3;
+	Sat, 26 Apr 2025 11:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745658883; cv=none; b=PfjN9q7+Sum2uGRPAsJKSXpZIl+Xd7//hrZHbb0KVZ6s7MugpcstRYqtuUspBi48q035F8r6JJUpKG4OsGPrkQ4VeWLPhw2vIPx9D4+LkwrpmXugqFv3RImBi/+jNFweQuSWKCJtfyXQUzCD1+741e6HV3i6UUTGUKs6ikimQFc=
+	t=1745666654; cv=none; b=EMCsXlmJc1E2FXRT1XN6cQZoSMhgF2Ns5UNijJOuq4ZYGAshZYDzEsEHVpEO9qpYOIf1EViFifWtNkpL13GDielHd0m7UfkFM92ReWOcl5OSzw7Eql7ylQATZjU5ZnpXhl3uKI1dFdbsxoC8FJKimjjTSFGw+ik9jSTK1t96FMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745658883; c=relaxed/simple;
-	bh=ajA2/KThvOLmdGQMQlMZ8JSc3s7TdqFCTO4mxSXZP2s=;
+	s=arc-20240116; t=1745666654; c=relaxed/simple;
+	bh=D56xyUsRNjS6kGwI5WFwC9fzpNAmFejvLD+smYXxh4w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bWfBx05yVWw5DGWEceUyIj9Qe29A1yxv6ETxf+Z7Uc1qFsceOCmAoJDxEx0gM8CDt0P6HSY0izNe6/+xe5DE1jo88XmbRJNuhNAZjM8FU0vnlPDWLm31+TGbvtkpD68jO6FkyTlt5pjsw/9K0ygqu+O837fR94kJHoa5gaX2GFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baMaB2TE; arc=none smtp.client-ip=209.85.210.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2KXie0zQr9Szpazl/uWyeSGTrY8uqYty7897KN2WqD7U1dzcMvg2BE2aw0FaB7Vk++EEZTxR0RcbInlBu059MIrjDI3emP33ntAMGyhS8FfXz53heMaYf0JU/xYQlXisHbsCfJ/diL2NUQAqvYhxkJ/Nu1YsRK4aMCt71oqrNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e7uDT957; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baMaB2TE"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7376dd56eccso3383664b3a.0;
-        Sat, 26 Apr 2025 02:14:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e7uDT957"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7c5e2fe5f17so330969485a.3;
+        Sat, 26 Apr 2025 04:24:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745658881; x=1746263681; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1745666651; x=1746271451; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dpw6EJump0TSOrBYBam8lLy7cnOl6Tzi7s2IdyQv1Eo=;
-        b=baMaB2TELWaNJ+72R5Y0/2CcMD+vTQDoO5alQ9SD7HHMjv8TEso9p6i5BZV3GoKmRz
-         PW2/dD8d+Ab+8WNQEo3TqNUWg4Bd2m1PAqwY0QDBmMSbtXs7mWfYVvcILfXmN/NaC87R
-         KUY+qKogKD4N40rQe+2G/GbS+ZRzMwe6rgkydDP8A+SkJ14hAbRYTvTuz1cmZ+8CfnS3
-         KePlJoih4lDtBA9m8FbgABqn4RsIttUhhvmjGMrzHuL4NnvPTgXqu2x2wN3zbqUuJ2mQ
-         tYonrB1gItZuNPs6pgrsXpBIcyDVia2FMradrNnFC6wBC3fc3nFwONC1dHAtV5hGz1Pt
-         ffkw==
+        bh=pqnzJpyxKOv8D4bjtcYPnfE8mIr/LA4bSJZ1glU6cV8=;
+        b=e7uDT957IdMvj7RowpbWuXtZH6eGBnkIA5wpQHInNvhH+dEtcp+p7QZvv80Zdf9Zu+
+         bZVP3J/ytal60CLY2O7O6GgfyskmaENIjsoIo6xt+vYoJFIjEcALmU2lxkWD+EfnRlpJ
+         hsUEhyx5Bj5Cj+lCJka565tgMApXlMBbV7qqh8tU3l7DehGDTzfxXyhh5i6kuKyVMwVU
+         p+js1tkbaRxQV/rR5NW0gKY1UWsDU0V43Lr6eIbWPZUj3qhdAWyzZGrq9x5wFenLW19B
+         L+dLNa5h2u8WPFfoQoGwh4dSsIJf1dqUDOMe4dFkflpXktcoWs6MocQ/7oqtPYfFK0tC
+         2h3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745658881; x=1746263681;
+        d=1e100.net; s=20230601; t=1745666651; x=1746271451;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dpw6EJump0TSOrBYBam8lLy7cnOl6Tzi7s2IdyQv1Eo=;
-        b=LXD1xOUqjFHbItrm/xdFH5zVZJ8+St6JuaAJpGv1lUr1hIqJprvbJoAUpsLzUBlWrW
-         3RZUQONwoQt5KeP2aIJCrrTqR/xvpHwQunZ3vSztZSNk1xN2Z3KEvgYesYBAlGMOAMdm
-         2q+DS5UpzbwhT/H66OwqBQ1vyc2J/sqwgP+cmc90cuQ0jAipqfJlGrcv7LAJmoUumehO
-         Gcs+SDRGoubh4MtxHVCmmCn3ALbchaSdByG8njuN6Av35/obvZQ1hecLkYGA3B3QINxN
-         f40OG62+iJu+CE6//nnrYxFkN5SoPDBOAul5wfX/vP+ravajLk+/OQzXvBrkW8E0UGzg
-         z89g==
-X-Forwarded-Encrypted: i=1; AJvYcCUHmL3MRTyYH53zJFe/FhMjs8CZ5eH/cTRDHpJhh+zy+kRfrMQAJ/69rBJ9vcc0D/qCBQZcutkMITJDGTN4@vger.kernel.org, AJvYcCUO9jFbvNWjMknO+qYdcoau2GLV2IQ5vQm7lBUSPqvS6tLfV6OFY1PzdfIVZkyu8aaX5IcQvFgQ@vger.kernel.org, AJvYcCUmd4TUIeNWuF+Q2w3tLWqIPGamN2dNRcAvVHsA1sOhgBT2MW/U821B23VGxUmzCYjbK39wZmantsruUyc=@vger.kernel.org, AJvYcCV1wffdBc8IUd/bf/uNLA2GIG5CSBVcWe5c8tdaAvROagmS6uGGD3bFlR0Jd72P4vDcZSlKSE3AYoSVweQ=@vger.kernel.org, AJvYcCVGl+JkgkKgU8T8EmZcg2A0Nfx2z3yeX4V1HOyZGhb/rsUwgD/6MY45W7EPNEuHvWB0lIiYFkOdLvyEYiM8hto=@vger.kernel.org, AJvYcCVvn79c+RkbUr3SC5Xe6rPXRemTpf7Y/8O4c2YrBFF5T3/I1OeIX2N8gZS2Fpli2tFXIfw=@vger.kernel.org, AJvYcCW6g7RQE8FGKLeSdrXZTFQFx/6kCbL+5MhDOIaoUyofezzQHryrdnIyzwNmOCxPfoQFr9CaeabIhfLaz4sL@vger.kernel.org, AJvYcCXdna5tYEyZPZUZzQ4M+eDzjKLPKABxy2rus/XGxcZeF7mImgw/YGOO4DminwC3/1C9hzGA4qPNu0K7Vqo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy19PXovEmwjPh5CceM33CLQCN9uRdvC0SFT0VY2UW3HXc9Wv1U
-	3EiAP3D/inaCfGXiNNL3TeMeQTdth26A4Dk/mNO/e88ntO4da4hx
-X-Gm-Gg: ASbGncvfkEqpBZOp6NmoidGmlOg/H6Alef5TOOMeFS3BhqEg/xm6stFwQ2Fg1o+sS6L
-	0iaG4xBzrNjQIfmYgh92t1cwgCkf7ulfXo4SNev4FHsa+PckPQuhn6XMzabQ4AEKKgxDfYSJs+d
-	jra33XU8hzClUiPmKKTENCxlfxMbG68/bzIyKntuQrsTtXVVOHOQc2u4b9ALYMLCbVYYF7kZ5lu
-	gnaDC0PLj8/vYXRtHWCAqk6d9WsOWag2lXOE13yKzpDSN6IMUM3R8Or8VCLmP3qDraTaLl0WTLx
-	aZvoZo4NF7Zt0yQ9PM7eRPrdvbPhZLEMylq4g8qjrInS2vljmT9FwKVfGnJ1iXHzdY8H
-X-Google-Smtp-Source: AGHT+IFgnshRXYAm4vLgOrmgYGZWM8t1SObZHkSRdPxsGHvAJ5uKKQ60xC74a/vGxL92untQtleJTA==
-X-Received: by 2002:a05:6a00:1306:b0:736:73ad:365b with SMTP id d2e1a72fcca58-73fd74c23c4mr7475320b3a.14.1745658881199;
-        Sat, 26 Apr 2025 02:14:41 -0700 (PDT)
-Received: from visitorckw-System-Product-Name ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e259412b2sm4594535b3a.66.2025.04.26.02.14.31
+        bh=pqnzJpyxKOv8D4bjtcYPnfE8mIr/LA4bSJZ1glU6cV8=;
+        b=QApXOoOPS5AZG6BVFhPCc7VJoDnyAC2mSfl7segIcN4cxgcuzdBCTX4LRyqdf5+bxc
+         x0EyXVo8o+auNFZTYyAMwG63PzmLG8M12HhW7uSNNFXNH7AWU8nUCKEPV+tKb/1l04bG
+         OwpURPkrtLFeceMluDZPL/xfX+FIoK/OHCcME7QCAtwERehFcqXxW1+yzQs3e4A0XYYC
+         n8qloNWTKZYzuj9PDinnOigf0p+k72GJW30/5c641YdnT2J4pvlA+voNbEUBJRG+iRKp
+         Kk7kqjPR0lbUewFN/+AZeZ1U4fvFWw9GwhrroF5PObzrDbLsVSaiGVSmohTvAdPgX5v+
+         i+zQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlUznq0DrWVnDV+XsTX02NVzknSmxTENUop9MS2rq8De0hZ3qRGpn4jmOM+humEU+vXqOZeAp4mFUWlQsH@vger.kernel.org, AJvYcCUqj/SCVoIh4/f3YDmgL+4dha3XzJoyct5UofP5Vgy2supDIX8e93FZI1cL/Ecm3rNwqLnOY8BlVgfL@vger.kernel.org, AJvYcCVEbeSDFKoORc7FMpTvFHCh90UcBYTfAU1VCHW27iohQETdyfqpnQrQZqpTpstXgwhJ0tACroz+3gKB@vger.kernel.org, AJvYcCXcM676fNq03EStAySDszAUKnYlUooGRYJig0XRjDKPNa9MeyzBAcvBD3Lr6spiMcLwGH8AEF1AmSpG@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfN29lvRR8T0NCwriFwzuygkNQMSC6jxqTABz9btAhkWJHzuKZ
+	84iU46l5/PBzBuRWC+IInqr0teZjc+i74/HYQphDc0DF+izMZuqb
+X-Gm-Gg: ASbGnct2C8sK+yTPT74Ds4z9nbCdzj/cqIqjIVdYlS6icdZyARyTxhG6gN3kItyJCgh
+	CaYGwWWsofB0wswszITWqW73M3hvPp0chCEql3Aw/wBYclZtYEY9BpRSxkK5M3ZoKLnMhg0vkUW
+	YvkL6ztif417EkcBy1+em87BVbSWIEPT+8+TK7TfKQ9LGitvVWGHOxUNeKYOb0i6uKLZ2pJkVlH
+	1CuxyyDNsXnBWGf1o48oDiQHSAJ30diqu0kngJ7ualrX44KmS5ed/xuWb2Zdc6aUh53i9RkOLx2
+	vG7OAAfpILiduy8W
+X-Google-Smtp-Source: AGHT+IHTJyjJW4zRKKH13NlfTIwZIg4GsuvT7hEkrKwp+YV3SS8iaJApxOfdun7TkRMs5S8LELbrRQ==
+X-Received: by 2002:a05:620a:460a:b0:7c5:562d:cd01 with SMTP id af79cd13be357-7c9606f9a48mr802679585a.16.1745666651286;
+        Sat, 26 Apr 2025 04:24:11 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c958c91a10sm337284985a.22.2025.04.26.04.24.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Apr 2025 02:14:40 -0700 (PDT)
-Date: Sat, 26 Apr 2025 17:14:29 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: "H. Peter Anvin" <hpa@zytor.com>, Yury Norov <yury.norov@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
-	andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-	rfoss@kernel.org, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	simona@ffwll.ch, dmitry.torokhov@gmail.com, mchehab@kernel.org,
-	awalls@md.metrocast.net, hverkuil@xs4all.nl,
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	louis.peens@corigine.com, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-	johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
-	linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
-	alistair@popple.id.au, linux@rasmusvillemoes.dk,
-	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-	jernej.skrabec@gmail.com, kuba@kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-	dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	oss-drivers@corigine.com, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-	brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-	bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
-	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-	david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
-	Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: Re: [PATCH v4 00/13] Introduce parity_odd() and refactor redundant
- parity code
-Message-ID: <aAyj9SMvYrN9tXZC@visitorckw-System-Product-Name>
-References: <20250409154356.423512-1-visitorckw@gmail.com>
- <Z_amQp3gK5Dm8Qz3@yury>
- <Z/a5Qh/OeLT8JBS4@visitorckw-System-Product-Name>
- <Z_a9YpE46Xf8581l@yury>
- <e97a83a2-dabd-4dc3-b69a-840ca17d70b5@zytor.com>
- <Z/lEkDwefWvw4ZA3@visitorckw-System-Product-Name>
- <8571fd6f-4e71-4a6d-b2e8-16d9d72fa56e@zytor.com>
+        Sat, 26 Apr 2025 04:24:10 -0700 (PDT)
+Date: Sat, 26 Apr 2025 19:23:58 +0800
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>, 
+	Longbin Li <looong.bin@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
+Subject: Re: [PATCH v2 00/10] riscv: sophgo: Introduce SG2044 SRD3-10 board
+ support
+Message-ID: <2feyvebloqdcxxzmywe6azmwnz7zqulh2lixhw53ciw2ldisch@n2q3duucrp2r>
+References: <20250413223507.46480-1-inochiama@gmail.com>
+ <MA0P287MB22626253965E96829B7371A1FE872@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -105,40 +86,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8571fd6f-4e71-4a6d-b2e8-16d9d72fa56e@zytor.com>
+In-Reply-To: <MA0P287MB22626253965E96829B7371A1FE872@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
 
-On Fri, Apr 25, 2025 at 12:33:21PM -0700, H. Peter Anvin wrote:
-> On 4/11/25 09:34, Kuan-Wei Chiu wrote:
-> > > 
-> > > In either case, instead of packing the cascade into one function, make good
-> > > use of it.
-> > > 
-> > > In the latter case, __builtin_constant_p() isn't necessary as it puts the
-> > > onus on the architecture to separate out const and non-const cases, if it
-> > > matters -- which it doesn't if the architecture simply wants to use
-> > > __builtin_parity:
-> > > 
-> > > #define parity8(x)  ((bool) __builtin_parity((u8)(x)))
-> > > #define parity16(x) ((bool) __builtin_parity((u16)(x)))
-> > > #define parity32(x) ((bool) __builtin_parity((u32)(x)))
-> > > #define parity64(x) ((bool) __builtin_parityll((u64)(x)))
-> > > 
-> > > As stated before, I don't really see that the parity function itself would
-> > > be very suitable for a generic helper, but if it were to, then using the
-> > > "standard" macro construct for it would seem to be the better option.
-> > > 
-> > > (And I would be very much in favor of not open-coding the helper everywhere
-> > > but to macroize it; effectively creating a C++ template equivalent. It is
-> > > out of scope for this project, though.)
-> > > 
-> > IIUC, you prefer using the parity8/16/32/64() interface with
-> > __builtin_parity(), regardless of whether there are users on the hot
-> > path?
+On Sat, Apr 26, 2025 at 03:36:41PM +0800, Chen Wang wrote:
+> Hi, Inochi,
 > 
-> As a per-architecture opt-in, yes.
+> Will you apply this patchset on sophgo/for-next? I see there are changes
+> just about dts/bindings.
 > 
-I'd prefer to see Yury agree first, otherwise there's a high risk of a
-maintainer NAK after the next submission.
+> Chen
+> 
+
+I can only take 2, 3, 4, 9, 10 for now. The left I think they
+should be take by the subsystem maintainers.
 
 Regards,
-Kuan-Wei
+Inochi
