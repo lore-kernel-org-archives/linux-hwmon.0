@@ -1,415 +1,183 @@
-Received: from mx08lb.world4you.com (mx08lb.world4you.com [81.19.149.118])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F31186E20
-	for <linux-hwmon@vger.kernel.org>; Fri, 25 Apr 2025 20:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCCD192D97;
+	Sat, 26 Apr 2025 07:28:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745613215; cv=none; b=crLIAgOX0THr5EGfl/Nwq2qyWya+vjNnOePKE+3Ql+XNOh5wA9Pyr17Q670WNJjm2R/8yPzFAmx8s4H2zs7XMYUbP5NoU7TfDBeUK0TuAmhNFsAQVYAZ+hx23NnxOXeh0Zqbz04VyrgDZOMaZ/KtsEsCn9iR4x/9hd2xHXIYJsw=
+	t=1745652496; cv=none; b=FsM5Jp3qVceYJEXqiwhGuR+18GDtWCZQFpMdAvM8RABNLDbpm/GAXkkHDqty+OyBkuWxX8SS11qjkUsswjSOCKz1Z3T9TR23p2gwGBbUhAz9+P/a/aQxYAtyngrjKd3gVmm4zxml6UZRsmksTcE2Z0oNb4WVUU3WZiofF6MriOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745613215; c=relaxed/simple;
-	bh=rIp3+BIaCgtzU9fsanaifjcpjmA/jkrtSJbUIy0/RQg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WFykLunGsqAz+abg9quYkKHgdv2bzr0uvHWczoq9mZFBh7qxsPGv4Qbd2o72u9Ofy7LPxc6j7V7GIliMEaoeyTNGG9D3K3QSU8AjTjTjoCLGfIv2VPi7omMcZfgjZh/rY6kY5v6d1nCEBq5dZnQYl+OlN9pFeNzZnN2DyuTeSbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=QiXAb7Q/; arc=none smtp.client-ip=81.19.149.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
+	s=arc-20240116; t=1745652496; c=relaxed/simple;
+	bh=XjMjO7HflcfiRrSXpoSWT54pSI6eenhpN6xe1KG2F+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lcGye+Fzy4pavwNqtPvdn59Msv2TM2y7fFhc1wTRX75ClwZ+unhkArnSlEUMcLHqvgLuZSrENgFvmrYg3bq5DFTXLi251uy4LrvK0LWyEMZG21EFCSR1k6PmMeGhxbZxMtX4olELmw4AQI3PxTDjYjMpRwgWz5hfr3Y73Z0Cr20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=RjCSEzfE; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="QiXAb7Q/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=bj7Gy+1wol1f1ETiP/VC44jfg+MKsngoN2yVwO0cdxM=; b=QiXAb7Q/Ut3A9pzj80+RVf8Y+E
-	mptZ0GMKu1dR5fkxDTWdNvRRweFgOV0FJ65n+9065uN+GUCWFHEYccRt35mlbI23nhz075C0Q3mu4
-	JTczMV5kZoRBNKfi15hGXxSdoxcP6/7ZjdKG8V3iZqW95pnn2Jf6L1vF2MDHvgHz5bzY=;
-Received: from [188.22.4.210] (helo=hornet.engleder.at)
-	by mx08lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1u8P2D-0000000085N-2Tpm;
-	Fri, 25 Apr 2025 21:48:30 +0200
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-To: linux-hwmon@vger.kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	Gerhard Engleder <gerhard@engleder-embedded.com>,
-	Gerhard Engleder <eg@keba.com>
-Subject: [PATCH] hwmon: Add KEBA fan controller support
-Date: Fri, 25 Apr 2025 21:48:23 +0200
-Message-Id: <20250425194823.54664-1-gerhard@engleder-embedded.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="RjCSEzfE"
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53Q7RDlh4064371
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Sat, 26 Apr 2025 00:27:14 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53Q7RDlh4064371
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025042001; t=1745652440;
+	bh=9M1Htgas0CGK26R6ri7TrX3Gr2qZnASXeVTeX3rMiIs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RjCSEzfElpajKkgYYkV/+MBKINyow1AsiXOQ9t25nN80YY48sfqpaQzNKvS9wovLg
+	 89fcrOmFuSALWEVhtziqyKoX4p5+bDKC5sOXnITQu0I9pzln1i6o6Kx+Zinny/P5J/
+	 NtEGeb3UHVlgAvvXUqporCfcK2cJ/ScxE0e/jUuyshXzNKua/GrB89ci8uE7KvUwGr
+	 Y+kiGMd8OPAUFViUOU2URxLWLLEYaoVuPqTFFCaZP8kPE0qL1U3xNnaxmiw3VuRSm3
+	 mSAabdcMTMuBrPZX+0RkvM1HHS/HvGIAZaennDGAFdhkrlTWeAl7NP0whBGetXW0Sb
+	 G0dkIqzJjgfFg==
+Message-ID: <e62b81f3-1952-43e6-85fd-18c6f37d531d@zytor.com>
+Date: Sat, 26 Apr 2025 00:27:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 01/14] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, platform-driver-x86@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
+        wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
+        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        dapeng1.mi@linux.intel.com
+References: <20250425083442.2390017-1-xin@zytor.com>
+ <20250425083442.2390017-2-xin@zytor.com>
+ <42dc90e1-df2a-2324-d28c-d75fb525e4a2@linux.intel.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <42dc90e1-df2a-2324-d28c-d75fb525e4a2@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AV-Do-Run: Yes
-X-ACL-Warn: X-W4Y-Internal
 
-From: Gerhard Engleder <eg@keba.com>
+On 4/25/2025 8:45 AM, Ilpo Järvinen wrote:
+> To me this looks really a random set of source files, maybe it helped some
+> build success but it's hard for me to review this because there are still
+> cases that depend on indirect include chains.
+> 
+> Could you just look into solving all missing msr.h includes instead
+> as clearly some are still missing after 3 pre-existing ones and you adding
+> it into 3 files:
+> 
+> $ git grep -e rdmsr -e wrmsr -l drivers/platform/x86/
+> drivers/platform/x86/intel/ifs/core.c
+> drivers/platform/x86/intel/ifs/load.c
+> drivers/platform/x86/intel/ifs/runtest.c
+> drivers/platform/x86/intel/pmc/cnp.c
+> drivers/platform/x86/intel/pmc/core.c
+> drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> drivers/platform/x86/intel/speed_select_if/isst_if_mbox_msr.c
+> drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
+> drivers/platform/x86/intel/tpmi_power_domains.c
+> drivers/platform/x86/intel/turbo_max_3.c
+> drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+> drivers/platform/x86/intel_ips.c
+> 
+> $ git grep -e 'msr.h' -l drivers/platform/x86/
+> drivers/platform/x86/intel/pmc/core.c
+> drivers/platform/x86/intel/tpmi_power_domains.c
+> drivers/platform/x86/intel_ips.c
 
-The KEBA fan controller is found in the system FPGA of KEBA PLC devices.
-It detects if the fan is removed or blocked. For fans with tacho signal
-the monitoring of the speed of the fan is supported. It also supports to
-regulate the speed of fans with PWM input.
+I think you want me to add all necessary direct inclusions, right?
 
-The auxiliary device for this driver is instantiated by the cp500 misc
-driver.
+This is the right thing to do, and I did try it but gave up later.
 
-Signed-off-by: Gerhard Engleder <eg@keba.com>
----
- Documentation/hwmon/index.rst |   1 +
- Documentation/hwmon/kfan.rst  |  39 ++++++
- drivers/hwmon/Kconfig         |  10 ++
- drivers/hwmon/Makefile        |   1 +
- drivers/hwmon/kfan.c          | 243 ++++++++++++++++++++++++++++++++++
- 5 files changed, 294 insertions(+)
- create mode 100644 Documentation/hwmon/kfan.rst
- create mode 100644 drivers/hwmon/kfan.c
+I will do it in the next iteration as you asked.  But I want to make my
+points:
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 946b8a266d89..983aa0233e4a 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -107,6 +107,7 @@ Hardware Monitoring Kernel Drivers
-    k10temp
-    k8temp
-    kbatt
-+   kfan
-    lan966x
-    lineage-pem
-    lm25066
-diff --git a/Documentation/hwmon/kfan.rst b/Documentation/hwmon/kfan.rst
-new file mode 100644
-index 000000000000..ce02dddfb4b8
---- /dev/null
-+++ b/Documentation/hwmon/kfan.rst
-@@ -0,0 +1,39 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver kfan
-+==================
-+
-+Supported chips:
-+
-+  * KEBA fan controller (IP core in FPGA)
-+
-+    Prefix: 'kfan'
-+
-+Authors:
-+
-+	Gerhard Engleder <eg@keba.com>
-+	Petar Bojanic <boja@keba.com>
-+
-+Description
-+-----------
-+
-+The KEBA fan controller is an IP core for FPGAs, which monitors the health
-+and controls the speed of a fan. The fan is typically used to cool the CPU
-+and the whole device. E.g., the CP500 FPGA includes this IP core to monitor
-+and control the fan of PLCs and the corresponding cp500 driver creates an
-+auxiliary device for the kfan driver.
-+
-+This driver provides information about the fan health to user space.
-+The user space shall be informed if the fan is removed or blocked.
-+Additionally, the speed in RPM is reported for fans with tacho signal.
-+
-+For fan control PWM is supported. For PWM 255 equals 100%. None-regulable
-+fans can be turned on with PWM 255 and turned off with PWM 0.
-+
-+====================== ==== ===================================================
-+Attribute              R/W  Contents
-+====================== ==== ===================================================
-+fan1_fault             R    Fan fault
-+fan1_input             R    Fan tachometer input (in RPM)
-+pwm1                   RW   Fan target duty cycle (0..255)
-+====================== ==== ===================================================
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 80e277448c71..01b21fe55ccd 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -345,6 +345,16 @@ config SENSORS_KBATT
- 	  This driver can also be built as a module. If so, the module
- 	  will be called kbatt.
- 
-+config SENSORS_KFAN
-+	tristate "KEBA fan controller support"
-+	depends on KEBA_CP500
-+	help
-+	  This driver supports the fan controller found in KEBA system
-+	  FPGA devices.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called kfan.
-+
- config SENSORS_FAM15H_POWER
- 	tristate "AMD Family 15h processor power"
- 	depends on X86 && PCI && CPU_SUP_AMD
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 50df221f67c2..c34a0ae658e0 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -111,6 +111,7 @@ obj-$(CONFIG_SENSORS_JC42)	+= jc42.o
- obj-$(CONFIG_SENSORS_K8TEMP)	+= k8temp.o
- obj-$(CONFIG_SENSORS_K10TEMP)	+= k10temp.o
- obj-$(CONFIG_SENSORS_KBATT)	+= kbatt.o
-+obj-$(CONFIG_SENSORS_KFAN)	+= kfan.o
- obj-$(CONFIG_SENSORS_LAN966X)	+= lan966x-hwmon.o
- obj-$(CONFIG_SENSORS_LENOVO_EC)	+= lenovo-ec-sensors.o
- obj-$(CONFIG_SENSORS_LINEAGE)	+= lineage-pem.o
-diff --git a/drivers/hwmon/kfan.c b/drivers/hwmon/kfan.c
-new file mode 100644
-index 000000000000..c4f799b79e4d
---- /dev/null
-+++ b/drivers/hwmon/kfan.c
-@@ -0,0 +1,243 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2025 KEBA Industrial Automation GmbH
-+ *
-+ * Driver for KEBA fan controller FPGA IP core
-+ *
-+ */
-+
-+#include <linux/hwmon.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/device.h>
-+#include <linux/auxiliary_bus.h>
-+#include <linux/misc/keba.h>
-+
-+#define KFAN "kfan"
-+
-+#define KFAN_CONTROL_REG	0x04
-+
-+#define KFAN_STATUS_REG		0x08
-+#define   KFAN_STATUS_PRESENT	0x01
-+#define   KFAN_STATUS_REGULABLE	0x02
-+#define   KFAN_STATUS_TACHO	0x04
-+#define   KFAN_STATUS_BLOCKED	0x08
-+
-+#define KFAN_TACHO_REG		0x0c
-+
-+#define KFAN_DEFAULT_DIV	2
-+
-+struct kfan {
-+	void __iomem *base;
-+	bool tacho;
-+	bool regulable;
-+
-+	/* hwmon API configuration */
-+	u32 fan_channel_config[2];
-+	struct hwmon_channel_info fan_info;
-+	u32 pwm_channel_config[2];
-+	struct hwmon_channel_info pwm_info;
-+	const struct hwmon_channel_info *info[3];
-+	struct hwmon_chip_info chip;
-+};
-+
-+static bool kfan_get_fault(struct kfan *kfan)
-+{
-+	u8 status = ioread8(kfan->base + KFAN_STATUS_REG);
-+
-+	if (!(status & KFAN_STATUS_PRESENT))
-+		return true;
-+
-+	if (!kfan->tacho && (status & KFAN_STATUS_BLOCKED))
-+		return true;
-+
-+	return false;
-+}
-+
-+static unsigned int kfan_count_to_rpm(u16 count)
-+{
-+	if (count == 0 || count == 0xffff)
-+		return 0;
-+
-+	return 5000000UL / (KFAN_DEFAULT_DIV * count);
-+}
-+
-+static unsigned int kfan_get_rpm(struct kfan *kfan)
-+{
-+	unsigned int rpm;
-+	u16 count;
-+
-+	count = ioread16(kfan->base + KFAN_TACHO_REG);
-+	rpm = kfan_count_to_rpm(count);
-+
-+	return rpm;
-+}
-+
-+static unsigned int kfan_get_pwm(struct kfan *kfan)
-+{
-+	return ioread8(kfan->base + KFAN_CONTROL_REG);
-+}
-+
-+static int kfan_set_pwm(struct kfan *kfan, long val)
-+{
-+	if (val < 0 || val > 0xff)
-+		return -EINVAL;
-+
-+	/* if none-regulable, then only 0 or 0xff can be written */
-+	if (!kfan->regulable && val > 0)
-+		val = 0xff;
-+
-+	iowrite8(val, kfan->base + KFAN_CONTROL_REG);
-+
-+	return 0;
-+}
-+
-+static int kfan_write(struct device *dev, enum hwmon_sensor_types type,
-+		      u32 attr, int channel, long val)
-+{
-+	struct kfan *kfan = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			return kfan_set_pwm(kfan, val);
-+		default:
-+			break;
-+		}
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int kfan_read(struct device *dev, enum hwmon_sensor_types type,
-+		     u32 attr, int channel, long *val)
-+{
-+	struct kfan *kfan = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_fault:
-+			*val = kfan_get_fault(kfan);
-+			return 0;
-+		case hwmon_fan_input:
-+			*val = kfan_get_rpm(kfan);
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			*val = kfan_get_pwm(kfan);
-+			return 0;
-+		default:
-+			break;
-+		}
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static umode_t kfan_is_visible(const void *data, enum hwmon_sensor_types type,
-+			       u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			return 0444;
-+		case hwmon_fan_fault:
-+			return 0444;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			return 0644;
-+		default:
-+			break;
-+		}
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops kfan_hwmon_ops = {
-+	.is_visible = kfan_is_visible,
-+	.read = kfan_read,
-+	.write = kfan_write,
-+};
-+
-+static int kfan_probe(struct auxiliary_device *auxdev,
-+		      const struct auxiliary_device_id *id)
-+{
-+	struct keba_fan_auxdev *kfan_auxdev =
-+		container_of(auxdev, struct keba_fan_auxdev, auxdev);
-+	struct device *dev = &auxdev->dev;
-+	struct device *hwmon_dev;
-+	struct kfan *kfan;
-+	u8 status;
-+
-+	kfan = devm_kzalloc(dev, sizeof(*kfan), GFP_KERNEL);
-+	if (!kfan)
-+		return -ENOMEM;
-+
-+	kfan->base = devm_ioremap_resource(dev, &kfan_auxdev->io);
-+	if (IS_ERR(kfan->base))
-+		return PTR_ERR(kfan->base);
-+
-+	status = ioread8(kfan->base + KFAN_STATUS_REG);
-+	if (status & KFAN_STATUS_REGULABLE)
-+		kfan->regulable = true;
-+	if (status & KFAN_STATUS_TACHO)
-+		kfan->tacho = true;
-+
-+	/* fan */
-+	kfan->fan_channel_config[0] = HWMON_F_FAULT;
-+	if (kfan->tacho)
-+		kfan->fan_channel_config[0] |= HWMON_F_INPUT;
-+	kfan->fan_info.type = hwmon_fan;
-+	kfan->fan_info.config = kfan->fan_channel_config;
-+	kfan->info[0] = &kfan->fan_info;
-+
-+	/* PWM */
-+	kfan->pwm_channel_config[0] = HWMON_PWM_INPUT;
-+	kfan->pwm_info.type = hwmon_pwm;
-+	kfan->pwm_info.config = kfan->pwm_channel_config;
-+	kfan->info[1] = &kfan->pwm_info;
-+
-+	kfan->chip.ops = &kfan_hwmon_ops;
-+	kfan->chip.info = kfan->info;
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, KFAN, kfan,
-+							 &kfan->chip, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct auxiliary_device_id kfan_devtype_aux[] = {
-+	{ .name = "keba.fan" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, kfan_devtype_aux);
-+
-+static struct auxiliary_driver kfan_driver_aux = {
-+	.name = KFAN,
-+	.id_table = kfan_devtype_aux,
-+	.probe = kfan_probe,
-+};
-+module_auxiliary_driver(kfan_driver_aux);
-+
-+MODULE_AUTHOR("Petar Bojanic <boja@keba.com>");
-+MODULE_AUTHOR("Gerhard Engleder <eg@keba.com>");
-+MODULE_DESCRIPTION("KEBA fan controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.5
+1) It's not just two patterns {rd,wr}msr, there are a lot of definitions
+    in <asm/msr.h> and we need to cover all of them:
 
+       struct msr_info
+       struct msr_regs_info
+       struct saved_msr
+       struct saved_msrs
+       {read,write}_msr
+       rdpmc
+       .*msr.*_on_cpu
+
+2) Once all necessary direct inclusions are in place, it's easy to
+    overlook adding a header inclusion in practice, especially if the
+    build passes.  Besides we often forget to remove a header when a
+    definition is removed.  In other words, direct inclusion is hard to
+    maintain.
+
+3) Some random kernel configuration combinations can cause the current
+    kernel build to fail.  I hit one in x86 UML.
+
+
+We all know Ingo is the best person to discuss this with :).  While my
+understanding of the header inclusion issue may be inaccurate or
+outdated.
+
+So for me, using "make allyesconfig" is a practical method for a quick
+local build check, plus I always send my patches to Intel LKP.
+
+
+There probably wants a script that identifies all files that reference a
+definition in a header thus need to include it explicitly.  And indirect
+includes should be zapped.
+
+
+> 
+> I'd also prefer the patch(es) adding missing includes be in a different
+> patch.
+
+Great suggestion!  It clearly highlights the most significant changes.
+
+Thanks!
+     Xin
