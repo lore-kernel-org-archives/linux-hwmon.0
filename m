@@ -1,120 +1,144 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927761A83F5;
-	Sat, 26 Apr 2025 07:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9D91C36;
+	Sat, 26 Apr 2025 09:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745653289; cv=none; b=YmAGAR4IXnEOStJrUtXWupjFnJR6RHPiRx15XV5yeUkOXtv6nJVtoLIW1kyxf+NA4uhQ7MMUh52R1TuP3l7bV9+00+1BMwN2aCaUrT90vUyVd5Izmcg31lEDOqNVcUO1sdF3N0i4StaAWVPELYD9A/EjQZBtGpvGJdXuC7nSd8U=
+	t=1745658883; cv=none; b=PfjN9q7+Sum2uGRPAsJKSXpZIl+Xd7//hrZHbb0KVZ6s7MugpcstRYqtuUspBi48q035F8r6JJUpKG4OsGPrkQ4VeWLPhw2vIPx9D4+LkwrpmXugqFv3RImBi/+jNFweQuSWKCJtfyXQUzCD1+741e6HV3i6UUTGUKs6ikimQFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745653289; c=relaxed/simple;
-	bh=hS1jPAiEqHUvDMPkv5Lj+oeUpVA95gPZF2GujwJl4JY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ExcYtYeac3hhvXdhD3qtxPE2fV9AVcLmJFl5yZgio0+4c6z8LPGz0I9dT1mZTYt3KHusO4diWjjB3S7EFlKKue9JLTtJvrHLdsGCScNtqB51fIeoL9sRskLKfkhz1QRjGvmuX9Of0XGIW7n6iGZlTFcjGodKb+qUkUntaXbCM3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=bvhYUcCC; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1745658883; c=relaxed/simple;
+	bh=ajA2/KThvOLmdGQMQlMZ8JSc3s7TdqFCTO4mxSXZP2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bWfBx05yVWw5DGWEceUyIj9Qe29A1yxv6ETxf+Z7Uc1qFsceOCmAoJDxEx0gM8CDt0P6HSY0izNe6/+xe5DE1jo88XmbRJNuhNAZjM8FU0vnlPDWLm31+TGbvtkpD68jO6FkyTlt5pjsw/9K0ygqu+O837fR94kJHoa5gaX2GFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baMaB2TE; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="bvhYUcCC"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53Q7eZXY4077669
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 26 Apr 2025 00:40:36 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53Q7eZXY4077669
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745653241;
-	bh=EnzZeIbi73Uf9UHrFp1u6oVId+aFUuWUYzex7VH6YZ8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bvhYUcCCrcNPHPHMfra8pagGFHBS1eIdachPY1j/LcLKf75gVtMgjo4Z3lxW/Nwx8
-	 K3abxiwtE5S6sAYo2Z6xAFmeJAbufNq9L8ADk5XuAUJ+H1tQ3G+X0J9m0VZjBLaA+s
-	 5n4Z890DiCiOntXIwifwugz7hNqwSnsVHa6YIIwsPaR3Ir9ZolFZmCw+gTKQ62dE4J
-	 YecUoTzxNgG+BOaBljb6+z0Do/A8o3VQ615cdunTjaM57EXYYspTWEBwIZzokrA2Wq
-	 9fiFpIsxxWxYHBZiB5dJyiIoZFVhM3/ZEzW/zA5+lZDd3b8R/C+bYjqUDXonYDLCCo
-	 u8/14ZBKTETHw==
-Message-ID: <3a25ce15-f95c-41c9-8f8a-3b01cffc95e5@zytor.com>
-Date: Sat, 26 Apr 2025 00:40:34 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baMaB2TE"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7376dd56eccso3383664b3a.0;
+        Sat, 26 Apr 2025 02:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745658881; x=1746263681; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dpw6EJump0TSOrBYBam8lLy7cnOl6Tzi7s2IdyQv1Eo=;
+        b=baMaB2TELWaNJ+72R5Y0/2CcMD+vTQDoO5alQ9SD7HHMjv8TEso9p6i5BZV3GoKmRz
+         PW2/dD8d+Ab+8WNQEo3TqNUWg4Bd2m1PAqwY0QDBmMSbtXs7mWfYVvcILfXmN/NaC87R
+         KUY+qKogKD4N40rQe+2G/GbS+ZRzMwe6rgkydDP8A+SkJ14hAbRYTvTuz1cmZ+8CfnS3
+         KePlJoih4lDtBA9m8FbgABqn4RsIttUhhvmjGMrzHuL4NnvPTgXqu2x2wN3zbqUuJ2mQ
+         tYonrB1gItZuNPs6pgrsXpBIcyDVia2FMradrNnFC6wBC3fc3nFwONC1dHAtV5hGz1Pt
+         ffkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745658881; x=1746263681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dpw6EJump0TSOrBYBam8lLy7cnOl6Tzi7s2IdyQv1Eo=;
+        b=LXD1xOUqjFHbItrm/xdFH5zVZJ8+St6JuaAJpGv1lUr1hIqJprvbJoAUpsLzUBlWrW
+         3RZUQONwoQt5KeP2aIJCrrTqR/xvpHwQunZ3vSztZSNk1xN2Z3KEvgYesYBAlGMOAMdm
+         2q+DS5UpzbwhT/H66OwqBQ1vyc2J/sqwgP+cmc90cuQ0jAipqfJlGrcv7LAJmoUumehO
+         Gcs+SDRGoubh4MtxHVCmmCn3ALbchaSdByG8njuN6Av35/obvZQ1hecLkYGA3B3QINxN
+         f40OG62+iJu+CE6//nnrYxFkN5SoPDBOAul5wfX/vP+ravajLk+/OQzXvBrkW8E0UGzg
+         z89g==
+X-Forwarded-Encrypted: i=1; AJvYcCUHmL3MRTyYH53zJFe/FhMjs8CZ5eH/cTRDHpJhh+zy+kRfrMQAJ/69rBJ9vcc0D/qCBQZcutkMITJDGTN4@vger.kernel.org, AJvYcCUO9jFbvNWjMknO+qYdcoau2GLV2IQ5vQm7lBUSPqvS6tLfV6OFY1PzdfIVZkyu8aaX5IcQvFgQ@vger.kernel.org, AJvYcCUmd4TUIeNWuF+Q2w3tLWqIPGamN2dNRcAvVHsA1sOhgBT2MW/U821B23VGxUmzCYjbK39wZmantsruUyc=@vger.kernel.org, AJvYcCV1wffdBc8IUd/bf/uNLA2GIG5CSBVcWe5c8tdaAvROagmS6uGGD3bFlR0Jd72P4vDcZSlKSE3AYoSVweQ=@vger.kernel.org, AJvYcCVGl+JkgkKgU8T8EmZcg2A0Nfx2z3yeX4V1HOyZGhb/rsUwgD/6MY45W7EPNEuHvWB0lIiYFkOdLvyEYiM8hto=@vger.kernel.org, AJvYcCVvn79c+RkbUr3SC5Xe6rPXRemTpf7Y/8O4c2YrBFF5T3/I1OeIX2N8gZS2Fpli2tFXIfw=@vger.kernel.org, AJvYcCW6g7RQE8FGKLeSdrXZTFQFx/6kCbL+5MhDOIaoUyofezzQHryrdnIyzwNmOCxPfoQFr9CaeabIhfLaz4sL@vger.kernel.org, AJvYcCXdna5tYEyZPZUZzQ4M+eDzjKLPKABxy2rus/XGxcZeF7mImgw/YGOO4DminwC3/1C9hzGA4qPNu0K7Vqo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy19PXovEmwjPh5CceM33CLQCN9uRdvC0SFT0VY2UW3HXc9Wv1U
+	3EiAP3D/inaCfGXiNNL3TeMeQTdth26A4Dk/mNO/e88ntO4da4hx
+X-Gm-Gg: ASbGncvfkEqpBZOp6NmoidGmlOg/H6Alef5TOOMeFS3BhqEg/xm6stFwQ2Fg1o+sS6L
+	0iaG4xBzrNjQIfmYgh92t1cwgCkf7ulfXo4SNev4FHsa+PckPQuhn6XMzabQ4AEKKgxDfYSJs+d
+	jra33XU8hzClUiPmKKTENCxlfxMbG68/bzIyKntuQrsTtXVVOHOQc2u4b9ALYMLCbVYYF7kZ5lu
+	gnaDC0PLj8/vYXRtHWCAqk6d9WsOWag2lXOE13yKzpDSN6IMUM3R8Or8VCLmP3qDraTaLl0WTLx
+	aZvoZo4NF7Zt0yQ9PM7eRPrdvbPhZLEMylq4g8qjrInS2vljmT9FwKVfGnJ1iXHzdY8H
+X-Google-Smtp-Source: AGHT+IFgnshRXYAm4vLgOrmgYGZWM8t1SObZHkSRdPxsGHvAJ5uKKQ60xC74a/vGxL92untQtleJTA==
+X-Received: by 2002:a05:6a00:1306:b0:736:73ad:365b with SMTP id d2e1a72fcca58-73fd74c23c4mr7475320b3a.14.1745658881199;
+        Sat, 26 Apr 2025 02:14:41 -0700 (PDT)
+Received: from visitorckw-System-Product-Name ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e259412b2sm4594535b3a.66.2025.04.26.02.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Apr 2025 02:14:40 -0700 (PDT)
+Date: Sat, 26 Apr 2025 17:14:29 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: "H. Peter Anvin" <hpa@zytor.com>, Yury Norov <yury.norov@gmail.com>
+Cc: Yury Norov <yury.norov@gmail.com>, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
+	andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+	rfoss@kernel.org, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+	simona@ffwll.ch, dmitry.torokhov@gmail.com, mchehab@kernel.org,
+	awalls@md.metrocast.net, hverkuil@xs4all.nl,
+	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+	louis.peens@corigine.com, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+	parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
+	johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
+	linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
+	alistair@popple.id.au, linux@rasmusvillemoes.dk,
+	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+	jernej.skrabec@gmail.com, kuba@kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+	dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	oss-drivers@corigine.com, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+	brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
+	bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
+	linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+	david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
+	Yu-Chun Lin <eleanor15x@gmail.com>
+Subject: Re: [PATCH v4 00/13] Introduce parity_odd() and refactor redundant
+ parity code
+Message-ID: <aAyj9SMvYrN9tXZC@visitorckw-System-Product-Name>
+References: <20250409154356.423512-1-visitorckw@gmail.com>
+ <Z_amQp3gK5Dm8Qz3@yury>
+ <Z/a5Qh/OeLT8JBS4@visitorckw-System-Product-Name>
+ <Z_a9YpE46Xf8581l@yury>
+ <e97a83a2-dabd-4dc3-b69a-840ca17d70b5@zytor.com>
+ <Z/lEkDwefWvw4ZA3@visitorckw-System-Product-Name>
+ <8571fd6f-4e71-4a6d-b2e8-16d9d72fa56e@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/14] x86/xen/msr: Remove pmu_msr_{read,write}()
-To: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, andrew.cooper3@citrix.com, peterz@infradead.org,
-        namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com,
-        dapeng1.mi@linux.intel.com
-References: <20250425083442.2390017-1-xin@zytor.com>
- <20250425083442.2390017-11-xin@zytor.com>
- <04d47f21-6183-42d5-bc18-f23a8c3c2009@suse.com>
-Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <04d47f21-6183-42d5-bc18-f23a8c3c2009@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8571fd6f-4e71-4a6d-b2e8-16d9d72fa56e@zytor.com>
 
-On 4/25/2025 3:08 AM, Jürgen Groß wrote:
+On Fri, Apr 25, 2025 at 12:33:21PM -0700, H. Peter Anvin wrote:
+> On 4/11/25 09:34, Kuan-Wei Chiu wrote:
+> > > 
+> > > In either case, instead of packing the cascade into one function, make good
+> > > use of it.
+> > > 
+> > > In the latter case, __builtin_constant_p() isn't necessary as it puts the
+> > > onus on the architecture to separate out const and non-const cases, if it
+> > > matters -- which it doesn't if the architecture simply wants to use
+> > > __builtin_parity:
+> > > 
+> > > #define parity8(x)  ((bool) __builtin_parity((u8)(x)))
+> > > #define parity16(x) ((bool) __builtin_parity((u16)(x)))
+> > > #define parity32(x) ((bool) __builtin_parity((u32)(x)))
+> > > #define parity64(x) ((bool) __builtin_parityll((u64)(x)))
+> > > 
+> > > As stated before, I don't really see that the parity function itself would
+> > > be very suitable for a generic helper, but if it were to, then using the
+> > > "standard" macro construct for it would seem to be the better option.
+> > > 
+> > > (And I would be very much in favor of not open-coding the helper everywhere
+> > > but to macroize it; effectively creating a C++ template equivalent. It is
+> > > out of scope for this project, though.)
+> > > 
+> > IIUC, you prefer using the parity8/16/32/64() interface with
+> > __builtin_parity(), regardless of whether there are users on the hot
+> > path?
 > 
-> Can you please remove the two "else" instances above? With directly 
-> returning
-> form the "if" clause they are no longer needed.
-
-I thought about it but forgot to do it later.
-
+> As a per-architecture opt-in, yes.
 > 
-> With that you can add my:
-> 
-> Reviewed-by: Juergen Gross <jgross@suse.com>
+I'd prefer to see Yury agree first, otherwise there's a high risk of a
+maintainer NAK after the next submission.
 
-Thanks a lot!
+Regards,
+Kuan-Wei
