@@ -1,39 +1,66 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B99622D4FF;
-	Sun, 27 Apr 2025 09:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6E64A11
+	for <linux-hwmon@vger.kernel.org>; Sun, 27 Apr 2025 17:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745746027; cv=none; b=us3Dlcy84H2RbkuKvJ5n2DT/yVm0nTnkzhtNHs8NbbHuHeZm2SG4Rga7MXyG5m/Tj7IJkhMPtSGR8ofSFdp1Z04X/lXtbXgMeEJ+OIjH+YEOzfTR9S6kB7ZfQCEglyawTyvlULqb53F8fs4FMQG4uOuiwusC4WhHAYnxJnr7wrc=
+	t=1745773696; cv=none; b=Xcbnc5oj86DDHbgdRiLfbmD3xfcIVLtSsMuGiMNcwScrL0Dx/LxDa9nbJJ/So83yXzKAFbl+Q3oWOL5qGQt+g+00T19Dfk+PwXEvbk6Te7JVFzsGc+CBbLVy79XSfqW/JiOlOuR+Wj3vXJADPSMq248JNmJduWxLOSdBOlhIoCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745746027; c=relaxed/simple;
-	bh=MIEw6Uk+Yy3hODU6rwhHvIU2GjFINvMLe/ajDksnc7g=;
+	s=arc-20240116; t=1745773696; c=relaxed/simple;
+	bh=uCAodYVxX7b4tsiWkmjBmSv8SY5Pc0vrbPtrpr7nsTQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TIuVWn0tMG8l0AhF0zED3/GcYcaapiBhYth42B7oI8vwV1j3sNGQhGbiLCctcb6kCfwqbg+7a8RmZzuaOC1a2o4HfKYkuDx9mU0eRH4z+YUgsp4QYJCNxoPO2Pm0CTkEeAROWz5SPkrm/jHaPUdNIHRln5QgIAx9D3OwWgj9qiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=M//ALZ9S; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	 In-Reply-To:Content-Type; b=QJhTEt6wsX2QXM4otT+bQc6Ag29SCbmKSbpBf6KDc3+9GVcEW2KhzjwvwdT12y7HgYu9yfsBpyzcKAK6x7wgFp58YkMAQOPE9iVPnq7LJ7wP4yBc14wPEsfHW/4PKe+PL2Ct+Tb/F7EZxjb/Kb0mvn3D3vBcaTwqOK4hAEM+GfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A+tdJiOD; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="M//ALZ9S"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53R9QJ7P1607230
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sun, 27 Apr 2025 02:26:19 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53R9QJ7P1607230
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1745745982;
-	bh=MIEw6Uk+Yy3hODU6rwhHvIU2GjFINvMLe/ajDksnc7g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M//ALZ9Sj+luXQrDMRpV2wKmumbHvDVNiTfeqhmsOqEn27FbweEdRBGxeQudcHytg
-	 mjZ0mzPUGKx3F/LVuWSdCk4ViQohkiMVOe6rMp1EIjc/BK+o1SZ+H9XVTS5+G+kSeO
-	 zQ3NHolfCn7sahiOBdM1OBsESpcIUtcW9qo6sKNY60Vfxfvch+08cpnvAyLmXFnYsQ
-	 93Y7Wskrdj3G6wb4UcX3Mz6aoc2egCpy0NZxMDGruB37nyn5jhzeGyVdMqPgshwSiv
-	 6FXv61KqgGYM/rKMdEXcU26QtoBhaWUY+LA1ZxkaC+aC++GFPJfxtH4TbeC8zG4BPw
-	 6m/0oO6Lz9THg==
-Message-ID: <5a953dcc-96c1-4312-a8b5-25ca7ee4d0f7@zytor.com>
-Date: Sun, 27 Apr 2025 02:26:18 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A+tdJiOD"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-736c1138ae5so3977544b3a.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 27 Apr 2025 10:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745773694; x=1746378494; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1hQW/b22vanJ1X+GZzw2Py4nTQlhiXL+6L5qHlidSi8=;
+        b=A+tdJiODTCbfHXkbzPFdQt0UjO/mDsnOwRlCfZodHlRuNc8tHX1+xARgoSCgFrY3x3
+         7it4zuiJj9HLk9CKnDnRqeTRl6SmirJDsMTy1bQFSCFSmLoCb+RzMyTg88vDQsOJRBcN
+         75aGFAbgDBvL31OzP+rjt28Uzpx1ljiuMOr72tkPS06pZXRsohzTALB5bZhahx7Y/Hpt
+         Pwhrc3We/KEiTeM3eXuZT/kM41abPitgp0+pWw5/rQrdiO8sx3QOEEJiQyrla8jA18y3
+         yLd7MafZ9nK1kdgENpSYwuduY+FqiGuCBtwYYHu2JdBanOPMEE0UEMf2ftZ1amoTLlu8
+         LkAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745773694; x=1746378494;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1hQW/b22vanJ1X+GZzw2Py4nTQlhiXL+6L5qHlidSi8=;
+        b=vJmYnNp/68jIQoEm65keVzx8Dpb8T7E3ioAI+lZx4Jd84l4asuEb6+6kpwUtC76lCd
+         bCZPs7uNiYDFapyNxZ+CYEpgjnlK19mIGy6l13jfzzB8rZ14zETSGzN9ZrO9GeH8HjpG
+         nH2XXpDknMqspcvdOT1NUcsq3QMJjr4QBTnxj/tJ4R96ir06Mol81Upb0t0D4kzeQv6D
+         HEOFv/+LA7SKayspJ7ujTNdCwcJ5qRmMIccSoVw+VsHlYDibYlztF5NT99aso0B60UM7
+         drWN7jzJjQSvRT91opR4QT7EoK1IRa6b65c4ctqPv5ceHWIJ3wa/cTeTUmy0UVrct2Bx
+         agXQ==
+X-Gm-Message-State: AOJu0Yz8TF2TGgDWdiyp8uHGZBM5TdhkXP5xmoBHIlq5SlIP09hZyyXk
+	vSn4e/5elga4oYGst7rBOEurKboe1e0Hhr/XoNDbf0m1rCvvEvOtzrBLLg==
+X-Gm-Gg: ASbGncsIZRuzhbd5iZt+9A0tcdrRDhNQ+LDI2tq2/iobWHBRZNcI3ZDUNaXkzZXqVH8
+	zDl3Gjii5NWiu598qyC7VP9YlrqtOVZr+nkWYaacNh0FtR2LRDJHvqCrMpGsMOsdmHx97Xppodc
+	fLDZ4QifXwHVOIBl9Bl6P+e1w+yWkn7id9enYgNKPslTwq+vsay5/EUzMBfxPeA9YUmxiaQrmO4
+	97NVOqQHZH2IHfMVM050VOAjRp3D6cVW4OpFbZCm/Lv0/76Shy7kTU6vY8/ERvEVnRYHWjPNvZV
+	BTcO8iQHFu3tbAOgR+MdlAQNjJk0jux6M3TE/A2UEMQy02hfI+2UfXQ4tGg/T8sEA3CzPozngps
+	Mc/cdBimm4N2eO0zzob2zSekJ
+X-Google-Smtp-Source: AGHT+IFANtajIyThFfdXCM1jmd5CQx7PZVo7Vcl1bcLgIoOSmLodtr6+m1sgQOpAY/QSlxPpMv7fpQ==
+X-Received: by 2002:a05:6a00:986:b0:736:46b4:bef2 with SMTP id d2e1a72fcca58-73ff729d47fmr8174711b3a.6.1745773693982;
+        Sun, 27 Apr 2025 10:08:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e25a9abf2sm6322922b3a.122.2025.04.27.10.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Apr 2025 10:08:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2562b90c-39fa-4fd6-8acf-777fe17b2611@roeck-us.net>
+Date: Sun, 27 Apr 2025 10:08:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,73 +68,105 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/14] x86/xen/msr: Remove calling
- native_{read,write}_msr{,_safe}() in pmu_msr_{read,write}()
-To: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-        peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com,
-        wei.liu@kernel.org, ajay.kaher@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-        luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com
-References: <20250425083442.2390017-1-xin@zytor.com>
- <20250425083442.2390017-10-xin@zytor.com>
- <d2bdd61d-cab6-401f-9b6a-17b28f3cd19c@linux.intel.com>
+Subject: Re: Consultation on extending hwmon channel attributes number to 64
+To: "lihuisong (C)" <lihuisong@huawei.com>
+Cc: linux-hwmon@vger.kernel.org
+References: <1f8f24e8-0ca2-4fb0-bb69-21965e1c70c2@huawei.com>
 Content-Language: en-US
-From: Xin Li <xin@zytor.com>
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <d2bdd61d-cab6-401f-9b6a-17b28f3cd19c@linux.intel.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <1f8f24e8-0ca2-4fb0-bb69-21965e1c70c2@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/27/2025 2:21 AM, Mi, Dapeng wrote:
-> Reviewed-by: Dapeng Mi<dapeng1.mi@linux.intel.com>
+On 4/26/25 23:32, lihuisong (C) wrote:
+> Hi Guenter,
+> 
+> Currently, the implementation of hwmon core limits the maximum number of hwmon channel attributes is 32.
+> The maximum number of used attributes in hwmon.h is 31(namely, hwmon_power_attributes) .
+> Actually, we can extend this upper limit to 64 without any impact on driver. And the main modification is as follows.
+> It's also mentioned in series[1].
+> I want to know what do you think about this? I will drop this thing If it's not necessary to you.
+> 
 
-Thanks!
+I dislike complicate solutions if a simpler one is available.
 
-I just sent out v4, so unless a v5 is needed, leave it to our x86
-maintainers.
+Your suggested change still increases the size of struct hwmon_channel_info
+for every single driver. It is also not complete, because any definitions
+exceeding 32 bit would have to use BIT_ULL(), not BIT(). If we need the
+increased size, we can either add a second group of power attributes or
+something like
+
+diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+index 3a63dff62d03..837c11fb1e3b 100644
+--- a/include/linux/hwmon.h
++++ b/include/linux/hwmon.h
+@@ -433,13 +433,13 @@ struct hwmon_ops {
+   */
+  struct hwmon_channel_info {
+         enum hwmon_sensor_types type;
+-       const u32 *config;
++       const u64 *config;
+  };
+
+  #define HWMON_CHANNEL_INFO(stype, ...)         \
+         (&(const struct hwmon_channel_info) {   \
+                 .type = hwmon_##stype,          \
+-               .config = (const u32 []) {      \
++               .config = (const u64 []) {      \
+                         __VA_ARGS__, 0          \
+                 }                               \
+         })
+
+[ plus BIT() -> BIT_ULL() in include/drivers/hwmon.h ]
+
+and handle the fallout for affected drivers which assign .config manually.
+
+I still hesitate doing that though because of the data size increase.
+My strong preference is to add a second group of power attributes if
+and when needed.
+
+Guenter
+
