@@ -1,79 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CBE2D29BB;
-	Tue, 29 Apr 2025 14:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366B221C19D;
+	Tue, 29 Apr 2025 15:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745936157; cv=none; b=K+uagobktVl+xBNeJ/vqFiRopzc2oV9Fo/Rg0FS4L5oEK/lHt2yTGetjy7HDEhXAvub+ssYjniKA5vs8qRg3gXbVyP85H5p/5AuYwwIOkO32rh/8aq1cbLbynLrrPwXuMo1I408Vr/+Feprnu2skjOComzxymxtuInvE4zgTdio=
+	t=1745938920; cv=none; b=Se0QKlu7D4rI2H/Qsk/ekaseSL6EtJsOsBc01/IAiQtUbo3Ao+LkgElOLMJKR1wGkZI86JxBik7PwuArPwehaHFU0QkesiUuQcY4aUHUPibXeeTC6A3iq50We1NYdVLewfLDP8vXPZ2WB8xyRo7ovF0UD3jOOfcSpd5RwaWbOZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745936157; c=relaxed/simple;
-	bh=Eguz7VoDXnoR8Ggv8PmbdGUYJ1KeoxNUaPMyEWLjYfA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UHeBQPG9jOq/pM+9hGVPX1kjjWQZRClFLawP/XE+RZsx5WbkzZl4rPOo4n6u4weQtVB9JlNLyix9jBDKZZvD5rO4QgxCU+98IsDY9w5hHGduxaT2blvSbe4wXk5CD4XmPdKPjfZxNpc9YlRtfRbvaOp2RGj07cu9zhObMbVd9bA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q6lK2eW3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745938920; c=relaxed/simple;
+	bh=QFQFyq311N2wlvsxda46p2j/TaWrlH6O3EDvJxMOMGI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=adST7NmpsSVQT0TzVTMz8r8nYYNWPF8e2ixIgEMeNOavUCD9cKWPH00yqlgjMknJtPlF522Zq0+v9M6WKhXOWG+ii0fwcKIFcdHZiz3ltAiylHAQ3cb2FLER2hczAWZZl3PeGptncvYv573Ftv6986lXSJdaozEy+ssg2jc1hrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GXzYhvun; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6lK2eW3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E58CC4CEE3;
-	Tue, 29 Apr 2025 14:15:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745936156;
-	bh=Eguz7VoDXnoR8Ggv8PmbdGUYJ1KeoxNUaPMyEWLjYfA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q6lK2eW3Gpx25noiTu2sbDpKMnDbNpi2r7i35mS/8S0ekhxQPA4Z3cVbbtX2Yqtjg
-	 6lju0kR7Wfks3j+ZMmLfPaMo8PDEt6PzEFgkdLSmcLnax1wLBmR1wPjJG+6LX29nWU
-	 A+a/MS1is4JrQB642aUaQz7YDgKTCN9e1PAdGmT+bMx9pm1yS4RvbIJO1elMiuV11D
-	 rFVTVpZyMDYs5nQa+va7mpEdePdDSxeOhz1HY3F00DPAEqHLnYoUlKM8UJZJrfPVp7
-	 0vlAfOgJqv4L9mok283m/XuB7t8VwTY9reyj5QLeIpVywuttr2bfWkDVNPynbcRUWz
-	 KKXmGnKkOrOWg==
-Date: Tue, 29 Apr 2025 16:15:51 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Inochi Amaoto <inochiama@gmail.com>
-Cc: Chen Wang <unicorn_wang@outlook.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, 
-	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
-Subject: Re: [PATCH v2 00/10] riscv: sophgo: Introduce SG2044 SRD3-10 board
- support
-Message-ID: <egkwz23tyr3psl3eaqhzdhmvxlufem5vqdlwvl4y6henyeazuz@ch3oflv4ekw7>
-References: <20250413223507.46480-1-inochiama@gmail.com>
- <MA0P287MB22626253965E96829B7371A1FE872@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
- <2feyvebloqdcxxzmywe6azmwnz7zqulh2lixhw53ciw2ldisch@n2q3duucrp2r>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GXzYhvun"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745938919; x=1777474919;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=QFQFyq311N2wlvsxda46p2j/TaWrlH6O3EDvJxMOMGI=;
+  b=GXzYhvungJCtRV5VDUQteBYqKS3Bc8anXfQ0gzQ5bAb9/ZEIlotDm91B
+   OtVDJcZGwzhUK/PTC26n+lRuTow2bwE0q4STzaRPA7552swam0IbQzRTQ
+   m8fhwrEEZEEC+H/QljL2rHM2UoO80zw9MXy1WxX3v1C7yAh/uL+fEfj4X
+   nCYYqOskyXovhNNifg7nAaN2findNaGuL+C7T0uvyou9roNpme8pUQD8/
+   NlBfqTJmUvNYB3xOywj32nD2+b8Zk00Lv83Il3r8Zf/ev0Hxt3NvcZ/A0
+   RyMco1wM73EyWT0zM2SMDycTT8+g+EzI01IqGOXy89+YTA3zdB0IRnXZL
+   g==;
+X-CSE-ConnectionGUID: E5WTvvkpQxqWS3NcvQ7FVg==
+X-CSE-MsgGUID: Xm4H/yEAQ5O3kTtOiZo6zw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="35179110"
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="35179110"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 08:01:58 -0700
+X-CSE-ConnectionGUID: AqYG3e6sTsejC9NKXF2obg==
+X-CSE-MsgGUID: bwG0HarmSSCm2mszUETx+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
+   d="scan'208";a="138833143"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.205])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 08:01:55 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: hdegoede@redhat.com, tomasz.pakula.oficjalny@gmail.com, 
+ jdelvare@suse.com, linux@roeck-us.net, 
+ =?utf-8?q?Micha=C5=82_Kope=C4=87?= <michal.kopec@3mdeb.com>
+Cc: platform-driver-x86@vger.kernel.org, piotr.krol@3mdeb.com, 
+ maciej.pijanowski@3mdeb.com, linux-hwmon@vger.kernel.org
+In-Reply-To: <20250425112147.69308-1-michal.kopec@3mdeb.com>
+References: <20250425112147.69308-1-michal.kopec@3mdeb.com>
+Subject: Re: [PATCH v8 0/1] platform/x86: Introduce dasharo-acpi platform
+ driver
+Message-Id: <174593891016.4147.10484642457203999002.b4-ty@linux.intel.com>
+Date: Tue, 29 Apr 2025 18:01:50 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2feyvebloqdcxxzmywe6azmwnz7zqulh2lixhw53ciw2ldisch@n2q3duucrp2r>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13.0
 
-Hi,
+On Fri, 25 Apr 2025 13:21:46 +0200, Michał Kopeć wrote:
 
-On Sat, Apr 26, 2025 at 07:23:58PM +0800, Inochi Amaoto wrote:
-> On Sat, Apr 26, 2025 at 03:36:41PM +0800, Chen Wang wrote:
-> > Hi, Inochi,
-> > 
-> > Will you apply this patchset on sophgo/for-next? I see there are changes
-> > just about dts/bindings.
-> > 
-> > Chen
-> > 
+> Introduce a driver for devices running Dasharo firmware. The driver
+> supports thermal monitoring using a new ACPI interface in Dasharo. The
+> initial version supports monitoring fan speeds, fan PWM duty cycles and
+> system temperatures as well as determining which specific interfaces are
+> implemented by firmware.
 > 
-> I can only take 2, 3, 4, 9, 10 for now. The left I think they
-> should be take by the subsystem maintainers.
+> It has been tested on a NovaCustom laptop running pre-release Dasharo
+> firmware, which implements fan and thermal monitoring for the CPU and
+> the discrete GPU, if present.
+> 
+> [...]
 
-Please, go ahead. I just merged patch 1 and 8 in i2c/i2c-host.
 
-Thanks,
-Andi
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/1] platform/x86: Introduce dasharo-acpi platform driver
+      commit: e04e0911c4e057c4699a05962d70ce1b9e332ac7
+
+--
+ i.
+
