@@ -1,121 +1,112 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7510A224FA
-	for <linux-hwmon@vger.kernel.org>; Wed, 30 Apr 2025 01:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCD41373;
+	Wed, 30 Apr 2025 03:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745977871; cv=none; b=kMtwjjzuqKKML8KEp+FVtMCV0c4pr+W16heQtWEUzWRvgEhBHDuORxCiki3O2cwIw8FsKgEP44ZIrK+yQv/DSyZWJbxkeR/Zwp+3aQ/M+2qLQwPToK8Il1osNdVsGzgHqBbCckVIuSigWcvKXaWCgyJ0CUD67vM7ASAz3dY6Wwk=
+	t=1745985440; cv=none; b=UAkZk2sqFYI5rtXPQg8otYrmaQv+eTQCyS0/hB+dy+BnlOGgx6IJogD/paw0TFEIl79ozyWecISnRr+fETf9rSE0CS+K9UryVqArwwJmD4fgfOuEQwTEiwB8K8FCU+bCekzy+cK51MMZYP8Jrcc7XGx4LeSGT3L531A1W/d0elw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745977871; c=relaxed/simple;
-	bh=rfrOgKpBCk7qPpaO75GltUUxet8hLfjCpRs6KwLqCqw=;
+	s=arc-20240116; t=1745985440; c=relaxed/simple;
+	bh=Nvuefhy7SkxmyXEjkN5uyEWBh1+CMbm33k3AWIeHcLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OMOW7qMQNtEKBzBBfahEOsVrdmvCPK+jMY4w67oJg/X88WtiHIt/r/HlDpEoDGBn4y6LV1eDwYpO0gfk4fmNxPN6emHsDhawkzVn8kB4B/RMukeGivpMPCTPJKWSsz+tC+oXIpVZyBzO5fk+Q/f/PyQxBh1z80bz2g2pQn0Fyg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Iukovl82; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=NJuqnXecclNv5ylkR7SlhOVnctGSDlG+6XuPGDIORLb97WdNPdPw0ZgaKQQXln/90Z+IZmB9oCAlN0MaQ/xp9PYwVRK2q9EaCQcjJuJGLdQTOt0kgA7cH8PqJSj450mOsVBczwq3r/RZPh9jKbx1gZ8fIm6aDWUIYgngOqDkUzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JuwZ7434; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Iukovl82"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-736c3e7b390so6835212b3a.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Apr 2025 18:51:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JuwZ7434"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22409077c06so108937425ad.1;
+        Tue, 29 Apr 2025 20:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1745977869; x=1746582669; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=x7xSxmgjA4Hl8qCX2/f7trj++E1dgn0NeNi1d5opTig=;
-        b=Iukovl82ZHl1ppBm+387EtfClLxZe6Yj2QLC62o8i8UrQlA/oUKm+jFp+9H/+xpd4I
-         +ButersfAMeX5/Je7k09mN0iTHG1CSgAUSRF0fi15RmzFyhHSlrk8itB41hQmKH1V4wX
-         8Y4QjgcThlx9tM4G1FNAPYI2DwTy3nEEulsPI=
+        d=gmail.com; s=20230601; t=1745985438; x=1746590238; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VyLc3Zik1vXa0yun6h3Hm25QI+ZOjteMPcqNd+zv4kw=;
+        b=JuwZ7434hwk0XRDnDqIxjk2jwyhIajJZIFVQvDdYfNorEMpX0DMddQXMxrpW36oxry
+         W2Vt5Cz/3Yt5dgmcfap50Zi4NIzb+XgTZ6vS4fjnQrpqv4YGZdLoY1Ra76VfVBz/GxMI
+         974e5vjKiXuDJmsaMpGQxJsFffybD50SBlmeFOdnlvflFXWEIunLCHHnUxDnWRa/twL3
+         jEvEyZ81qQcsQnvP+kfpi7UYOAxytpi5JM6KUft3OrA6Fh2QvnYr71PXJIi0M6grkOSr
+         bmCdJRPAw2oE00/ZPlkJhGGvYkCOFs66TUf61SyoT/w/Bspk68kXF/HDjtV5ZYeJaQs1
+         go+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745977869; x=1746582669;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7xSxmgjA4Hl8qCX2/f7trj++E1dgn0NeNi1d5opTig=;
-        b=gxKkFQRXw9CcdbHL64Ryc+XkXTY/D7KMbgrZNKrw4PdkqhPztDgEw8jMnKuH596WOA
-         iOHh5sGpRVLV/8Q49V/6lFtfHOdH+mEARk+xUMoOPRWSSpI2asRGfQgXSmZAZw18l+cK
-         CAgaXw7jyMLBki6RTagc+Y7PzOD5VrwvX17D/R9MN+y7KbACbwm8Uame9zvuPOqGuVhS
-         xtFDmJVi3JGmcpql26bspP+Tk+vuzMxXl8T03jkLtjJkBakIqOwC+GVTTr61MV7StdJU
-         BQPNq8vTtcqTPm4lyMs+zSItc7T2xlhMWDebxbdwTHEyMTbafXcZ5K6mGSY4n8fis7gC
-         A4jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvQ/yzdTUmgypVUw7N2LkkDsKtDS2GxxiCUBn9BKXLPB5fgi4WjBxpo/AcSYd4LMKBVoP8lQgQisXO+A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye1NBLeCZkRrcDFonK8N4f4BJYSETDpzTyjJ5weALI6WsNkiHs
-	MJslinDnQ5hjx9LZyaN2pgOAOYwr+H1u/BCnDb+VYZ9sZwSc3RWw+yiuNrOeeA==
-X-Gm-Gg: ASbGnctk8hjmLGXDUggK8S77rncBlOXyWcu3k2i1HRqPB1sSh49BeGQYa2irEMRiFo2
-	C6qFim8REJs8fVq4I8VFcUfNmWAuFBiGR608in8qRZ/sd4qICtebj/KywT98NuaUQXsPDKXfOMj
-	QhQICjfrU5VwOsP4JgM5GuOpWzxtKlQExeF+IAQ5JftOZVwbjhBwwd/jnUmYGGis/yXyAsOaS0y
-	DwhmQwnPUOdYQlCkS8OUXnvswegTYrOSzFFXW9VZZPGFfYuQ/qtdRZB9Ayuma4EeoWhToyA5a4h
-	BnLVD9U8OzXy800jQDkCfRqwnCHmEuGLHQ==
-X-Google-Smtp-Source: AGHT+IFRB1rzS2EHxndlOMO/eNYOCxxmki6CfyHz/pgYJY8goCmO9VQbnakhTKfmm95vXeql2kPVtA==
-X-Received: by 2002:a05:6a00:3e03:b0:73d:fa54:afb9 with SMTP id d2e1a72fcca58-7403899f538mr1991527b3a.7.1745977868695;
-        Tue, 29 Apr 2025 18:51:08 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:d326:d929:40d:c7f6])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74039a31018sm416334b3a.113.2025.04.29.18.51.06
+        d=1e100.net; s=20230601; t=1745985438; x=1746590238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VyLc3Zik1vXa0yun6h3Hm25QI+ZOjteMPcqNd+zv4kw=;
+        b=lmD49t6Lw+JSu1IHPKRg7am7OqXq8f0hhKqwf6G+pY/tC08O/CYRhln0f2UoIQHuRt
+         EsWHi+tS0QqoJyKW/Bdsb1ro12gTXqYZke6O/AVfIRD6t7yxDhJCZhdAnYXjWEss/8Lq
+         a0ma9aphYB9QTRPRAZZdDt+O025yUJmS8vBpHV0e6jeAPQ4eVjS0k38YtG8mD0hmtJ9v
+         ySMZvX2rSbdBIlfeh3fwvFYxbdPPxRJ7iruZfKXqh026t3E5azLIf/GoTQR6xSfdkfyA
+         AItZJoMimac3PN2/kv90Q55eFvS4/onTWjZouuXuu1NsOxnfXugjfgNcrva9YU087+ld
+         n0aA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIQdhTr2OaI8xYYr5CflA9cqyooUoTCxKH1T6g/PYO8PGDTjkYitwcoA7ol3R6EPJ9WyxqmoDSr510@vger.kernel.org, AJvYcCUs93CBNSF7Uez+nmVeb4ZcCQnFBFXr9WqB2XR5Oxkupesh2GhIizes8Lw6NUXACmF7kqmwiCCO/0x4@vger.kernel.org, AJvYcCW4jbxhl8klzOpc+17wKzR4M3iXle2Yzm2IF6foglPq2xdvRHYWJsmF/2dzwjL6R78lKDWogXiq6lheRdJZ@vger.kernel.org, AJvYcCWY6ajZwZG5CEXrRjfdUkjRZlzILlKtdERs9OP6Kctly8Egi5XYsLDyAZtcm7Cn14FIlybxtFPUDv/j3rk=@vger.kernel.org, AJvYcCWj87wqkTgfRFzNQ6M+WL7elSi3H1T4OqtPHoPIJcPf2SK4Qe/4xYdbdlGQo/akBlAcAM3xRNEME+Iq@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMLAfDn/aXMY00usU+YD+xfoB3p8wmRYLdT5QRIxvQhNN5rCFW
+	Ny3dYvP/Yq8sudit98AKOAQEtmtwaDXrWDAZ9NKfCnb0Fjoq45or
+X-Gm-Gg: ASbGncvp7lO4O0wimywMRH39b4GzXLJVVWad9SmrnYeinKgaoTSvXGDgAIQuwFpKzqp
+	vsfb2RD0YXDGaRn75LpNuzGYlvslHWYdD4EFEnVOcjzYsCklLOR3lZgU6xRZ725igucoOm+BcIe
+	ulA05/eNOFLWPHwwPXsk4DYugyKjN6PWCtF43NW7vaKhycOhUpmy7RYTc3mKFglDt3ElaRklVz9
+	BRWP1qrDsXOrX0kyUBY1nglp5oEiZ46iVs+DJC8JtJslPV3zmIVwZ1wiD8ZZFprfvGQISqp/3fS
+	NOXp/Bdz/voLczi3AW/BCjJesRLM9URzD4pO5CAaYiBMMgn5nAAEuA==
+X-Google-Smtp-Source: AGHT+IEaMGTDmHzgNvzoHNMd9tZbR/u1Q5bg83MPGafcuW9LIhwRqcxCq0Nvid7OBBWwbxOwjAE/Fw==
+X-Received: by 2002:a17:903:364d:b0:21b:b3c9:38ff with SMTP id d9443c01a7336-22df3576fbbmr27513405ad.37.1745985437588;
+        Tue, 29 Apr 2025 20:57:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db5100ab2sm111814375ad.183.2025.04.29.20.57.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Apr 2025 18:51:08 -0700 (PDT)
-Date: Wed, 30 Apr 2025 09:51:03 +0800
-From: Sung-Chi Li <lschyi@chromium.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, chrome-platform@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (cros_ec) register fans into thermal
- framework cooling devices
-Message-ID: <aBGCB6_4XR4Z-vFI@google.com>
-References: <20250429-cros_ec_fan-v1-0-a8d9e3efbb1a@chromium.org>
- <20250429-cros_ec_fan-v1-3-a8d9e3efbb1a@chromium.org>
- <ec2f7e54-0582-475d-af91-42d9be65cd3e@t-8ch.de>
+        Tue, 29 Apr 2025 20:57:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 29 Apr 2025 20:57:15 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Inochi Amaoto <inochiama@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
+	Longbin Li <looong.bin@gmail.com>
+Subject: Re: [PATCH v2 06/10] dt-bindings: hwmon: Add Sophgo SG2044 external
+ hardware monitor support
+Message-ID: <08bbfb1a-57cf-4133-bd03-147ce107aeb9@roeck-us.net>
+References: <20250413223507.46480-1-inochiama@gmail.com>
+ <20250413223507.46480-7-inochiama@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ec2f7e54-0582-475d-af91-42d9be65cd3e@t-8ch.de>
+In-Reply-To: <20250413223507.46480-7-inochiama@gmail.com>
 
-On Tue, Apr 29, 2025 at 10:45:56PM +0200, Thomas Weißschuh wrote:
-> On 2025-04-29 16:14:23+0800, Sung-Chi Li via B4 Relay wrote:
-> > From: Sung-Chi Li <lschyi@chromium.org>
-> > 
-> > Register fans connected under EC as thermal cooling devices as well, so
-> > these fans can then work with the thermal framework.
-> > 
-> > During the driver probing phase, we will also try to register each fan
-> > as a thermal cooling device based on previous probe result (whether the
-> > there are fans connected on that channel, and whether EC supports fan
-> > control). The basic get max state, get current state, and set current
-> > state methods are then implemented as well.
+On Mon, Apr 14, 2025 at 06:35:00AM +0800, Inochi Amaoto wrote:
+> The MCU device on SG2044 exposes the same interface as SG2042, which is
+> already supported by the kernel.
 > 
-> There is also HWMON_C_REGISTER_TZ, however it depends on OF.
-> But this patch looks very generic, so maybe it makes sense to implement
-> it in the hwmon core.
+> Add compatible string for monitor device of SG2044.
 > 
+> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Hi, the HWMON_C_REGISTER_TZ is for registering a thermal sensor, and here I
-registered it as thermal cooling devices, so they are different. I followed
-other hwmon drivers:
+Applied to hwmon-next.
 
-  - gpio-fan.c
-  - aspeed-pwm-tacho.c
-  - max6650.c
-  - qnap-mcu-hwmon.c
-  - ...
-
-. These hwmon drivers also manually registered other cooling devices, and that
-makes sense to me, so I think it is good to just register cooling devices rather
-than make big changes to hwmon core.
-
-> > Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
-> > ---
-> >  Documentation/hwmon/cros_ec_hwmon.rst |  2 +
-> >  drivers/hwmon/cros_ec_hwmon.c         | 72 +++++++++++++++++++++++++++++++++++
-> >  2 files changed, 74 insertions(+)
-> 
-> <snip>
+Thanks,
+Guenter
