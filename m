@@ -1,338 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422431EFFA3;
-	Thu,  1 May 2025 12:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2373E1EA90;
+	Thu,  1 May 2025 12:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746102143; cv=none; b=OYoh0dO452P2walPgNqVe/NuCUDvTlNz/2piGlNRDR31iv0A7WTy2isW5JqLrxDlOfhB5jB4vHXKvWP8r8YxIyjmHTza74AmepbbBPIUh/yPGWrrIJZ/Ijvkndp2toj5Gcm+AXXiAE+MhF7huxSbEURSIKeTjQa//NSOYIr6TzY=
+	t=1746102887; cv=none; b=lmBLhwi7wpu7JmmdqzBr71h5F8CUDfJ37bE/IZTxVeG2M324/gwnQ3vOB6XFRR+Ec1NuK9BXEuwSEdmLJqX0TrRDjrbu5lIE0KRulacVQECEHzdTv0nH/5A/joEuFaUk7lDIxH1GxFjBP7CerDBpy9Uo3rRlYGG+l3QBlREyCsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746102143; c=relaxed/simple;
-	bh=CHMvBUGmp7PP9u6wrn26Zh6LkyOXYpzbY4BnHG5wesw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iy2bZb8sRxCe51O7NhMu4thGDJybrwelFTONY6uIGvfwe8z5s6MWTyQJufoULXBwYPkIVIqiY1fy4m5gvWPtuhRLQ75EgDadldoKE73noq7t2dXeXBWMz/VimO0xfbV7T3Sv4tlqa1AdQVGRU0ys7EXPvouO8wRRGhkUathfGu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rY85XMTI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746102887; c=relaxed/simple;
+	bh=5/47oM652hn/79kxkr3QT8Z0GJypWAqZvYJH2zuujRM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A3IfZBeJTuoMSjiPylINc5ctZ+y4cGXI8iAIxeapKLn1ULb3rfEHYG+95s/qwP1tYtRuTh3fFI5NNA8oGUn6FA+8bJsouSKTWe/jI4u+O3OEkUMj/yuBQmrVSdWRVit0Ev9DgUfPVeAq+jCX0YHkigFs/3eN4UUAILY1LfND42Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HJnQviWh; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rY85XMTI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08B2C4CEE4;
-	Thu,  1 May 2025 12:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746102141;
-	bh=CHMvBUGmp7PP9u6wrn26Zh6LkyOXYpzbY4BnHG5wesw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rY85XMTI6MbZ+LCxioQwyydm/BV/5bdRBS5900pseyqPBzx+6y4nLbIoa7MQm89A1
-	 6TkhN7Rz+4vt7mI2OI2ZOqzUORIx0Z/XcQL8MdkV1yRx48WFwxcNd8YLmx4r48kB6k
-	 nGVDECPtZ/7D6azN4C5QSV0TfeD8S0g0jqg/hpU5RV930nI5cRGiYkjcwjPY/6GF93
-	 urghkRfWvrQgnaT8s7i6G4MamvW/e6amZ7uyv2gVwHei6qzdhdNI56uXVOg5H2hjfM
-	 MacFCtzT671ZxJ5yWD3YvmKFQAADo6/LlI32B0wTICXoHkBcvmMJy9lT0DlowYlotE
-	 Zv1gGRP5mlJ7g==
-Date: Thu, 1 May 2025 13:22:14 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250501122214.GK1567507@google.com>
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
- <20250423094058.1656204-2-tmyu0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HJnQviWh"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-309f3bf23b8so1148770a91.3;
+        Thu, 01 May 2025 05:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746102885; x=1746707685; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9NV21R/zc5PuT2I2keLkWswBwHpgakQpo6sbiCsHEjo=;
+        b=HJnQviWhBNgAwdnvf0lLokd4d5tfRLP2IqhUV5i8uRud+eq1/H4L43lzuuZ1ISUpYR
+         2TChI7NYBvF4jzcXLcOPRQ5H+5aYgWD/E/jP7YYaSPpNESTLz0iN7AjiwW1zc2B2MKBE
+         n1NwOe60THAE11YdWjM25SJaQYWN/sRZKP0QyOPULHIxI6cgD9F3vAia/oxf9pvbFc+u
+         TjISNvdcx/Ku59wpouns0IUYS2pepPAXEy4kKlW4xafyAUdQPzxVFzfdN9TdW2+RPZvk
+         2SieNkCyFVgTSLecPlD70n+hQGbMj3eJbE40ny2mOgIaV+m9G3aEYlZm9zWoq77vFZ79
+         l2Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746102885; x=1746707685;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9NV21R/zc5PuT2I2keLkWswBwHpgakQpo6sbiCsHEjo=;
+        b=AEdGHlfkTfZf0saL6BM0hJImXHU/aOsBLO9OwXt2F3dqSnelyvSlsqUyZNEBhpzV4Z
+         bUKhd6JQR0mXArQyLX0lXf/w+PwMQArxPHCkVdF9xUrtPWjT8B73VLVH6tyf0Z/Lc5UN
+         lLznU6dHY1GZvWKSdWREZCtHPUdVuAbNyau+oJJyFVza3cAoqCXJN8dCjwYjYFl3keRB
+         tJHyTxsIZiKPumR+uvan0/Bod2O2T879BSrV+bx861GBMDaCbnHAQ+C6yE6dio85i5rV
+         6iZAxfojVsoaZQGBKQm+ytA+gbNbVwTszhP+kX3l71UA352puQOzmjAj4WLbv1nK0ktU
+         bauw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXZRk/8NkjZM3klq2ctvyvLBRrjF2vWAooYqNWeDbXB+x9/0RnyplJGkEYkZF8wleFi0X1kkygckA6Btyd@vger.kernel.org, AJvYcCWVKNv81/+T31kx+NM4rH+o57wHbC5+ji6hQD8CXk2+OiVJO7wF/HioOlaP9b/SqgXDyjjA00v3zec3Hg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuUGD+kTC43ZD91Qv/UUYK1hDpqgYzFyW1RVJSsibUz+iizken
+	w0OjG1UVlOK5lTL7UulQBjSTbaoVhzyom2ay9D2OdrRPfeYQMB6n
+X-Gm-Gg: ASbGncsyQQLLwJhS0bURElYKgiOi/Y4vbc9FsBX07uAmF55LF0kyoZYhKAKLLbCPMj5
+	lBdxlxRQlXDHSHfQxb1cGnWcYdMLKPo07gb9kAabOxJC/OZ2xZJsueA0YINmVkZnu1p6x9kQ3R2
+	SS+y4d33Xk0lC/nVszuxNSL57dSPE4Xki5pWyOAmYwt2sUy2RHfzQovMuOtF/ScriNtNMj0eS5N
+	wC3qPe9DzGyR8oYy/lvxOXgyR1FMe9lp3mxyqdRTMyyAoZOB66fNw2yGbUW/gOSuKxdwnrT5fSX
+	5Nqb6Y7RNzcrCToMat95hhdMoMAld16YLJxMR7NulUUL/AX++pMbG8isxzjEdyEGgloVGgQGYQS
+	PpQmmf9MMNegeWg==
+X-Google-Smtp-Source: AGHT+IEnQGcndxaGD6Yafmcj4g+I7fwdfOqb1Itql8MMJVBaPkwsGQLl+wQHPp2bvW8Dsgrk16zgog==
+X-Received: by 2002:a17:90b:2247:b0:2ff:52e1:c49f with SMTP id 98e67ed59e1d1-30a34467cbfmr8555216a91.26.1746102885196;
+        Thu, 01 May 2025 05:34:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a4747749dsm739921a91.18.2025.05.01.05.34.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 May 2025 05:34:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1e5fc32c-04dd-46b1-8943-03fd9370bfdc@roeck-us.net>
+Date: Thu, 1 May 2025 05:34:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250423094058.1656204-2-tmyu0@nuvoton.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] hwmon: (asus-ec-sensors) add WARN_ONCE() on invalid
+ sensor index
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Alexei Safin <a.safin@rosa.ru>, Jean Delvare <jdelvare@suse.com>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lvc-project@linuxtesting.org
+References: <20250425200051.2410-1-a.safin@rosa.ru>
+ <CAB95QATm-iNJokfcSxpen3YBbx6xNUrecELD44squoaqCQ-b7w@mail.gmail.com>
+ <8dec9c47-d13d-4e59-b1ca-fcb9e3beccbd@roeck-us.net>
+ <CAB95QAT4JJFYiXviJB78KELFnsitDj=Zb3EM_1F8uqiRHMwBhw@mail.gmail.com>
+ <38c7114e-3ea0-4f4b-bb12-5715c992656a@roeck-us.net>
+ <CAB95QASErsOGibQ1+kB2LjNr-v3-KS86w8KvGLurB67D_4Bt4Q@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <CAB95QASErsOGibQ1+kB2LjNr-v3-KS86w8KvGLurB67D_4Bt4Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 23 Apr 2025, a0282524688@gmail.com wrote:
-
-> From: Ming Yu <tmyu0@nuvoton.com>
+On 5/1/25 01:07, Eugene Shalygin wrote:
+> On Wed, 30 Apr 2025 at 06:13, Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> The Nuvoton NCT6694 provides an USB interface to the host to
-> access its features.
+>>> Thanks for the explanation! I'm still not convinced that such a
+>>> generic error message (without the type and channel) can be of great
+>>
+>> Feel free to suggest a better one. Maybe I misunderstood your earlier
+>> concerns, but it seemed to me that you objected to having a message
+>> in the first place, not to its contents.
 > 
-> Sub-devices can use the USB functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-
-v10 and no change log?  Please add a change log.
-
->  MAINTAINERS                 |   6 +
->  drivers/mfd/Kconfig         |  15 ++
->  drivers/mfd/Makefile        |   2 +
->  drivers/mfd/nct6694.c       | 387 ++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/nct6694.h | 101 ++++++++++
->  5 files changed, 511 insertions(+)
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 include/linux/mfd/nct6694.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fa1e04e87d1d..b2dfcc063f88 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17358,6 +17358,12 @@ F:	drivers/nubus/
->  F:	include/linux/nubus.h
->  F:	include/uapi/linux/nubus.h
->  
-> +NUVOTON NCT6694 MFD DRIVER
-> +M:	Ming Yu <tmyu0@nuvoton.com>
-> +S:	Supported
-> +F:	drivers/mfd/nct6694.c
-> +F:	include/linux/mfd/nct6694.h
-> +
->  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
->  M:	Antonino Daplas <adaplas@gmail.com>
->  L:	linux-fbdev@vger.kernel.org
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 22b936310039..cd4d826a7fcb 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1058,6 +1058,21 @@ config MFD_MENF21BMC
->  	  This driver can also be built as a module. If so the module
->  	  will be called menf21bmc.
->  
-> +config MFD_NCT6694
-> +	tristate "Nuvoton NCT6694 support"
-> +	select MFD_CORE
-> +	depends on USB
-> +	help
-> +	  This enables support for the Nuvoton USB device NCT6694, which shares
-> +	  peripherals.
-> +	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> +	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> +	  PWM, and RTC.
-> +	  This driver provides core APIs to access the NCT6694 hardware
-> +	  monitoring and control features.
-> +	  Additional drivers must be enabled to utilize the specific
-> +	  functionalities of the device.
-> +
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
->  	depends on SPI_MASTER
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 948cbdf42a18..471dc1f183b8 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
->  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
->  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
->  
-> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
-> +
->  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
->  
->  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
-> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> new file mode 100644
-> index 000000000000..2480ca56f350
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694.c
-> @@ -0,0 +1,387 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2024 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 core driver using USB interface to provide
-> + * access to the NCT6694 hardware monitoring and control features.
-> + *
-> + * The NCT6694 is an integrated controller that provides GPIO, I2C,
-> + * CAN, WDT, HWMON and RTC management.
-> + *
-
-Superfluous blank line.
-
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb.h>
-> +
-> +static const struct mfd_cell nct6694_devs[] = {
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-
-These are all identical.
-
-I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, you are
-already using PLATFORM_DEVID_AUTO since you are calling
-mfd_add_hotplug_devices().  So you don't need this IDs.
-
-MFD_CELL_NAME() should do.
-
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> +
-> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 1),
-> +
-> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 1),
-> +
-> +	MFD_CELL_NAME("nct6694-hwmon"),
-> +	MFD_CELL_NAME("nct6694-rtc"),
-> +};
-
-[...]
-
-> diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
-> new file mode 100644
-> index 000000000000..7a02e5b14bbb
-> --- /dev/null
-> +++ b/include/linux/mfd/nct6694.h
-> @@ -0,0 +1,101 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2024 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 USB transaction and data structure.
-> + *
-
-Remove this line please.
-
-> + */
-> +
-> +#ifndef __MFD_NCT6694_H
-> +#define __MFD_NCT6694_H
-> +
-> +#define NCT6694_VENDOR_ID	0x0416
-> +#define NCT6694_PRODUCT_ID	0x200B
-> +#define NCT6694_INT_IN_EP	0x81
-> +#define NCT6694_BULK_IN_EP	0x02
-> +#define NCT6694_BULK_OUT_EP	0x03
-> +
-> +#define NCT6694_HCTRL_SET	0x40
-> +#define NCT6694_HCTRL_GET	0x80
-> +
-> +#define NCT6694_URB_TIMEOUT	1000
-> +
-> +enum nct6694_irq_id {
-> +	NCT6694_IRQ_GPIO0 = 0,
-> +	NCT6694_IRQ_GPIO1,
-> +	NCT6694_IRQ_GPIO2,
-> +	NCT6694_IRQ_GPIO3,
-> +	NCT6694_IRQ_GPIO4,
-> +	NCT6694_IRQ_GPIO5,
-> +	NCT6694_IRQ_GPIO6,
-> +	NCT6694_IRQ_GPIO7,
-> +	NCT6694_IRQ_GPIO8,
-> +	NCT6694_IRQ_GPIO9,
-> +	NCT6694_IRQ_GPIOA,
-> +	NCT6694_IRQ_GPIOB,
-> +	NCT6694_IRQ_GPIOC,
-> +	NCT6694_IRQ_GPIOD,
-> +	NCT6694_IRQ_GPIOE,
-> +	NCT6694_IRQ_GPIOF,
-> +	NCT6694_IRQ_CAN0,
-> +	NCT6694_IRQ_CAN1,
-> +	NCT6694_IRQ_RTC,
-> +	NCT6694_NR_IRQS,
-> +};
-> +
-> +enum nct6694_response_err_status {
-> +	NCT6694_NO_ERROR = 0,
-> +	NCT6694_FORMAT_ERROR,
-> +	NCT6694_RESERVED1,
-> +	NCT6694_RESERVED2,
-> +	NCT6694_NOT_SUPPORT_ERROR,
-> +	NCT6694_NO_RESPONSE_ERROR,
-> +	NCT6694_TIMEOUT_ERROR,
-> +	NCT6694_PENDING,
-> +};
-> +
-> +struct __packed nct6694_cmd_header {
-> +	u8 rsv1;
-> +	u8 mod;
-> +	union __packed {
-> +		__le16 offset;
-> +		struct __packed {
-> +			u8 cmd;
-> +			u8 sel;
-> +		};
-> +	};
-> +	u8 hctrl;
-> +	u8 rsv2;
-> +	__le16 len;
-> +};
-> +
-> +struct __packed nct6694_response_header {
-> +	u8 sequence_id;
-> +	u8 sts;
-> +	u8 reserved[4];
-> +	__le16 len;
-> +};
-> +
-> +union __packed nct6694_usb_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +};
-> +
-> +struct nct6694 {
-> +	struct device *dev;
-> +	struct irq_domain *domain;
-> +	/* Mutex to protect access to the device */
-
-Place these single line comments on the end of the line you're commenting.
-
-Actually, considering the nomenclature here, they're probably not
-required at all.
-
-> +	struct mutex access_lock;
-> +	/* Mutex to protect access to the IRQ */
-> +	struct mutex irq_lock;
-> +	struct urb *int_in_urb;
-> +	struct usb_device *udev;
-> +	union nct6694_usb_msg *usb_msg;
-> +	unsigned char *int_buffer;
-> +	unsigned int irq_enable;
-> +};
-> +
-> +int nct6694_read_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
-> +int nct6694_write_msg(struct nct6694 *nct6694, const struct nct6694_cmd_header *cmd_hd, void *buf);
-> +
-> +#endif
-> -- 
-> 2.34.1
+> The only two conditions I can imaging to trigger the log message are
+> hardware and/or firmware change and RAM instability. In both cases the
+> message is not helpful: for the hardware change case I would need
+> sensor type and channel, for the RAM-related cases I would need to
+> know how often the problem repeats itself. Neither is possible with
+> this log message, and therefore I'd rather log every time and with
+> sensor type and channel.
 > 
 
--- 
-Lee Jones [李琼斯]
+The message would only be expected if there is some programming error,
+where is_visible does not correctly disable non-existing sensors.
+That is the situation the messages try to catch.
+
+You do have an excellent point, though: The messages should display the
+sensor type and channel. As for logging it every time: No, because _if_
+there is a programming error it would clog the log, so once is enough
+to tell "something is wrong with the code, fix it". The same is actually
+true if the hardware changes "under the hood".
+
+Regarding RAM errors: Those won't be caught by checks like this. You'd have
+to litter the whole kernel with checks at almost every line of code
+to even have a remote chance to catch problems like bit flips. Even
+then you'd still not catch cases where the code itself is changed.
+Even trying to catch that would be futile.
+
+Thanks,
+Guenter
+
