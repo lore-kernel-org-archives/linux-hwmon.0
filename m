@@ -1,135 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8FB1B041E;
-	Fri,  2 May 2025 05:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0D01D515A
+	for <linux-hwmon@vger.kernel.org>; Fri,  2 May 2025 05:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746164094; cv=none; b=BfoFc8AcIOHLIn8YYBNXwJ9WEeBDVrIazAEmJy0eUgmtfG3Pybhj7DtfIhPCGPqd6Jw0+A8nCU0kqQKaTpj9GDUNo65IkCw2PdtC+8xAQGK+W8KZvP5ZIOVtOo9WJfMHYBKbHke2AsoKoV+0gNm54dLg4y0SimzsV4UowjXSf4k=
+	t=1746164137; cv=none; b=VKOvWG8tbsHnt6Wh5PqVc+d7wvoJ+Lr4v+kGDoyFloBUMzwhStCg25Dgmy8OEz+WPTgzwaah329htHIDpvu/H1tBczRzAvUYk0nL4pg+mmVEuZdsI/WeDbK6HILeN+5qKYYS/FgnoN+0Po2exS/2X72N8sZiv3XOpI2qHPBNpDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746164094; c=relaxed/simple;
-	bh=ZHF6lZG6H0CLXxqER5TXOaxCAJ/9ZDc6g5NfObH5I+w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BvIwiZOZy20nhsWbOAPQtIWI+unvyliJ2xWIdn7/TePVAODImm028Szn0PWWXIkHvNEUCU3QACrRoWoshsdkrfWexzM8JYR8t790v5RqdHlh3CCvb/gGmx1RSuAB9JJdKVlNoYhXnWPWR1gK8vTd9SdQNZO6T99gRISpE6/H//w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWmRM4v5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746164137; c=relaxed/simple;
+	bh=2fKNAd0m/28SZvQm9wt/n28vAWZEcdn9JNM6XgU03NM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R50KQAdsJg1ybBnRKfU9leFzYkIzfPbX7bedAEpBmm81UvohOTzBSbYWkQOQzQHclOo3mylr8ilMiTpH1b0vhj1qK3Fq/v53Xu8WFHNZcKqMNtsvfCm5A8bmHfi8xMRWtOx7H88IsSgAm8MDm4NoZyBCRucBkx9pS29cqbde5+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QFuhHOub; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWmRM4v5"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3CA6C4CEEE;
-	Fri,  2 May 2025 05:34:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746164093;
-	bh=ZHF6lZG6H0CLXxqER5TXOaxCAJ/9ZDc6g5NfObH5I+w=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=mWmRM4v5wNhXj/mTCWE3K5ZU0VpXsxfUMd2MCqIk9yJXn92u91JvyUKr5A+lNkX6K
-	 OFp8hJP6Z1AKK/A98VaMsw10uq0OLTDDJOTiQRy765H45sfoDcNd/IJDDdYU7+iXIr
-	 xE2fZXPMuF7f4SNaZZd2A0P8A/7zue5t4OA4HGM6rZ+AReOjKPg+ysCJA4zP/TjIID
-	 mWiUjAWbPZz4nCIMa7WydqQxIS/J70YsR3K6elicPHo7v9+zdya85ZUiuiWWaYfp2u
-	 sgdp1AWeo+WCMvwvgfZIwwI624C5fbIHTlVSlMm+lLdLVqJ6FCwK8LpgVZn+uLmz3A
-	 xPotZgASfr3yA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C35E6C3ABA3;
-	Fri,  2 May 2025 05:34:53 +0000 (UTC)
-From: Sung-Chi Li via B4 Relay <devnull+lschyi.chromium.org@kernel.org>
-Date: Fri, 02 May 2025 13:34:45 +0800
-Subject: [PATCH v2 1/3] platform/chrome: update pwm fan control host
- commands
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QFuhHOub"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b1f7f239b31so2331919a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 01 May 2025 22:35:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1746164135; x=1746768935; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tz4yf40mtzEV4/YpTdm2/hirFctImt4in0cV4OGFkho=;
+        b=QFuhHOub+uwLfAC3BKlmHncsmy0oQtKELmvLbyfZaWeHFKyJjPd0Wkli/YKuFx8uS2
+         yAu3qZuMi/Mso6mNTL2slj6Xzw5s06kacWNDUuQoOf0PSGS4Bmkl3xBqoXoejbawMLOf
+         b2pWR81sg1qcVqhrwKOxCh0luopqOlTt7Zjzs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746164135; x=1746768935;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tz4yf40mtzEV4/YpTdm2/hirFctImt4in0cV4OGFkho=;
+        b=ZGtrpTxWokUwdKZ2PdeUeIpZxOcEFgjE9DqT65n0uBxM4SuLi7jKgF5y26yx3p2fvm
+         5BpSesfVthuTzLjKeWBd0QWdlo8s+4e6VM12ohhVJvXEk0hQeWF0xLjHuEaovfm4tyeI
+         tFkzJVn7spYef6Q034vHMJbflRTaLGd+g72Murgfo5PASnFC0TQ8vOTIihyO2l42AQct
+         rzVeb3AT7VMt/sYM1b2myDT0FR+kRoofYQ4MxJOiNXrPNxpl8v/gT/8TDUBCMz5ohE1M
+         1/i+pEz74+zusrxMe3RQNandpCDdfl4kz62EClj+LOOGx8dTeM1HnOi3ocPrJ0FycUbi
+         kmWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGuaWWG84/itpklDlIX/U94cjIE8VVVfaD2AKbu2lHhqAmMOGLR/zooAXPSksQbgeMgEd/CBze/TicUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7HC7aTRG7HQ8CiN/ttyCW1W29Yd2SoOYMbfOSVRMFqQfsac2V
+	OCzolmPJ2Kw5fqolkkggRfxQc1f+EB65TSIVBFeZaIr//5uZcnWDk+iMI+vHMYw5XUOF3NBwi0o
+	=
+X-Gm-Gg: ASbGncv6MgwrfZgZKRBoq+H1rcJ9qeESv3oUYHMRJ5gURn/yTX7WEigePACgvzWXwCL
+	TYUT2jBzqIuWDq4P99pdxvYcMTQfFYE0n+b6DruEGOk9/j+Fh7gR8G0DAm+zORz3CF28jWLO9Q8
+	Uu1N2DWPfc3bGwWSUvnfitK0fBakcK4kLlYHIRqpOX2C2jU2znXonmVmCvONdPkySvH3FSHzCLE
+	BUawnpXD/wxIbgUMuSBD6f68rNZN0GlqOJ9DNw+C8R7nFp1buKzZHX42YgX1t5d1w1MXoKmEwWG
+	3Qe36VPM5geTBNTHUZpOROxt9YK6jaCuyA==
+X-Google-Smtp-Source: AGHT+IF7WZbxLedaOYtnoAo4B+GdGFwceB1cOYhZurL9ySD5fBpkCR2CSB9s+2yvylGfqu1unwieKA==
+X-Received: by 2002:a17:903:1c5:b0:223:5187:a886 with SMTP id d9443c01a7336-22e100b754fmr26447245ad.22.1746164134693;
+        Thu, 01 May 2025 22:35:34 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:e66e:6e73:436b:6b0])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e108fb8ebsm5785905ad.118.2025.05.01.22.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 May 2025 22:35:34 -0700 (PDT)
+Date: Fri, 2 May 2025 13:35:30 +0800
+From: Sung-Chi Li <lschyi@chromium.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (cros_ec) register fans into thermal
+ framework cooling devices
+Message-ID: <4x3ouuawdtee3cbj7wwad5aazgfsjo2vbzsib5oxbmjcmny4re@kiseb26pciyj>
+References: <20250429-cros_ec_fan-v1-0-a8d9e3efbb1a@chromium.org>
+ <20250429-cros_ec_fan-v1-3-a8d9e3efbb1a@chromium.org>
+ <ec2f7e54-0582-475d-af91-42d9be65cd3e@t-8ch.de>
+ <aBGCB6_4XR4Z-vFI@google.com>
+ <2518c6a3-6524-48b3-8e64-8990a61cc608@t-8ch.de>
+ <63b2d985-92d4-40dd-b2b2-ab55796abc52@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250502-cros_ec_fan-v2-1-4d588504a01f@chromium.org>
-References: <20250502-cros_ec_fan-v2-0-4d588504a01f@chromium.org>
-In-Reply-To: <20250502-cros_ec_fan-v2-0-4d588504a01f@chromium.org>
-To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- Sung-Chi Li <lschyi@google.com>, Sung-Chi Li <lschyi@chromium.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746164092; l=2190;
- i=lschyi@chromium.org; s=20250429; h=from:subject:message-id;
- bh=4T0NUcv5bDwOZ86UnzqLmBBo6gQiZCHpqea0lTmvUmo=;
- b=XLKkGq/1Nn45mqPASW5UteQy9xW/ap+7lqblzHQgsw7oA1mTAIaHJcpuMFdmruZvAvvDHxCu3
- x2BTKrf3vB9DC3oACybKeVEc+my275KhfDxr2JDLNtISgQofArILAzU
-X-Developer-Key: i=lschyi@chromium.org; a=ed25519;
- pk=9gCZPRJmYyHDt6VN9FV2UreFcUr73JFrwYvmsltW9Y8=
-X-Endpoint-Received: by B4 Relay for lschyi@chromium.org/20250429 with
- auth_id=392
-X-Original-From: Sung-Chi Li <lschyi@chromium.org>
-Reply-To: lschyi@chromium.org
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <63b2d985-92d4-40dd-b2b2-ab55796abc52@roeck-us.net>
 
-From: Sung-Chi Li <lschyi@chromium.org>
+On Wed, Apr 30, 2025 at 08:38:06AM -0700, Guenter Roeck wrote:
+> On 4/30/25 07:36, Thomas Weißschuh wrote:
+> > On 2025-04-30 09:51:03+0800, Sung-Chi Li wrote:
+> > > On Tue, Apr 29, 2025 at 10:45:56PM +0200, Thomas Weißschuh wrote:
+> > > > On 2025-04-29 16:14:23+0800, Sung-Chi Li via B4 Relay wrote:
+> > > > > From: Sung-Chi Li <lschyi@chromium.org>
+> > > > > 
+> > > > > Register fans connected under EC as thermal cooling devices as well, so
+> > > > > these fans can then work with the thermal framework.
+> > > > > 
+> > > > > During the driver probing phase, we will also try to register each fan
+> > > > > as a thermal cooling device based on previous probe result (whether the
+> > > > > there are fans connected on that channel, and whether EC supports fan
+> > > > > control). The basic get max state, get current state, and set current
+> > > > > state methods are then implemented as well.
+> > > > 
+> > > > There is also HWMON_C_REGISTER_TZ, however it depends on OF.
+> > > > But this patch looks very generic, so maybe it makes sense to implement
+> > > > it in the hwmon core.
+> > > > 
+> > > 
+> > > Hi, the HWMON_C_REGISTER_TZ is for registering a thermal sensor, and here I
+> > > registered it as thermal cooling devices, so they are different. I followed
+> > > other hwmon drivers:
+> > > 
+> > >    - gpio-fan.c
+> > >    - aspeed-pwm-tacho.c
+> > >    - max6650.c
+> > >    - qnap-mcu-hwmon.c
+> > >    - ...
+> > 
+> > Indeed, sorry.
+> > 
+> > > . These hwmon drivers also manually registered other cooling devices, and that
+> > > makes sense to me, so I think it is good to just register cooling devices rather
+> > > than make big changes to hwmon core.
+> > 
+> > The implementation does look like a lot of boilerplate.
+> > If Guenter doesn't chime in, let's stick with the current approach.
+> > 
+> 
+> Someone could make the necessary improvements to the hwmon core and clean up the drivers
+> implementing that boilerplate today, but that should be a separate patch series, and this
+> series should not depend on it.
+> 
+> Patches welcome ...
+> 
+> Thanks,
+> Guenter
+> 
 
-Update cros_ec_commands.h to include definitions for getting PWM fan
-duty, getting and setting the fan control mode.
-
-Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
----
- include/linux/platform_data/cros_ec_commands.h | 29 +++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index 1f4e4f2b89bb936b4b1c3f4162fec203b196cbc8..2ac1a30f9a3195bfc9dffc72fe5c5b92d83f1ef2 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -1825,6 +1825,16 @@ struct ec_response_pwm_get_duty {
- 	uint16_t duty;     /* Duty cycle, EC_PWM_MAX_DUTY = 100% */
- } __ec_align2;
- 
-+#define EC_CMD_PWM_GET_FAN_DUTY 0x0027
-+
-+struct ec_params_pwm_get_fan_duty {
-+	uint8_t fan_idx;
-+} __ec_align1;
-+
-+struct ec_response_pwm_get_fan_duty {
-+	uint32_t percent; /* Percentage of duty cycle, ranging from 0 ~ 100 */
-+} __ec_align4;
-+
- /*****************************************************************************/
- /*
-  * Lightbar commands. This looks worse than it is. Since we only use one HOST
-@@ -3105,14 +3115,31 @@ struct ec_params_thermal_set_threshold_v1 {
- 
- /****************************************************************************/
- 
--/* Toggle automatic fan control */
-+/* Set or get fan control mode */
- #define EC_CMD_THERMAL_AUTO_FAN_CTRL 0x0052
- 
-+enum ec_auto_fan_ctrl_cmd {
-+	EC_AUTO_FAN_CONTROL_CMD_SET = 0,
-+	EC_AUTO_FAN_CONTROL_CMD_GET,
-+};
-+
- /* Version 1 of input params */
- struct ec_params_auto_fan_ctrl_v1 {
- 	uint8_t fan_idx;
- } __ec_align1;
- 
-+/* Version 2 of input params */
-+struct ec_params_auto_fan_ctrl_v2 {
-+	uint8_t fan_idx;
-+	uint8_t cmd; /* enum ec_auto_fan_ctrl_cmd */
-+	uint8_t set_auto; /* only used with EC_AUTO_FAN_CONTROL_CMD_SET - bool
-+			   */
-+} __ec_align4;
-+
-+struct ec_response_auto_fan_control {
-+	uint8_t is_auto; /* bool */
-+} __ec_align1;
-+
- /* Get/Set TMP006 calibration data */
- #define EC_CMD_TMP006_GET_CALIBRATION 0x0053
- #define EC_CMD_TMP006_SET_CALIBRATION 0x0054
-
--- 
-2.49.0.906.g1f30a19c02-goog
-
-
+Thank you, I will first complete this series, and see how to improve hwmon core
+afterwards.
