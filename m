@@ -1,138 +1,114 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0D01D515A
-	for <linux-hwmon@vger.kernel.org>; Fri,  2 May 2025 05:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D3426772A;
+	Fri,  2 May 2025 08:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746164137; cv=none; b=VKOvWG8tbsHnt6Wh5PqVc+d7wvoJ+Lr4v+kGDoyFloBUMzwhStCg25Dgmy8OEz+WPTgzwaah329htHIDpvu/H1tBczRzAvUYk0nL4pg+mmVEuZdsI/WeDbK6HILeN+5qKYYS/FgnoN+0Po2exS/2X72N8sZiv3XOpI2qHPBNpDw=
+	t=1746172957; cv=none; b=SsNGsBRXJZfNjBj2nlca3vZEuGbvN3I7SRrrLrzOeaE3tp8BZn43mf1SWIYNiu04HBLXibI4LRyX2YHVuLX70JMLW1Idv8qEOVu4OzWnPJQgHvdR6Kolvxin3w+DWKsBLBjGGMEe99ljp3HGaBSmm5f8l3HwQGKv1nkdRYM889U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746164137; c=relaxed/simple;
-	bh=2fKNAd0m/28SZvQm9wt/n28vAWZEcdn9JNM6XgU03NM=;
+	s=arc-20240116; t=1746172957; c=relaxed/simple;
+	bh=VrP6FYMiM8APrbbiFFr3vwipUq0BMzeGXIdgg8yPKw0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R50KQAdsJg1ybBnRKfU9leFzYkIzfPbX7bedAEpBmm81UvohOTzBSbYWkQOQzQHclOo3mylr8ilMiTpH1b0vhj1qK3Fq/v53Xu8WFHNZcKqMNtsvfCm5A8bmHfi8xMRWtOx7H88IsSgAm8MDm4NoZyBCRucBkx9pS29cqbde5+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=QFuhHOub; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=LCHlu1zSYY41ig/48LvnpO9otB1H8qnK5lJAz2V6++HLw/UNq3c6aR9r71UgJfjDGbsy+AtpDOc80YBA+a7cdxtk3Xv3w2GG7KlqKU8a5xw35u3t9UPtw39myLGqHMyXhxviHVio+U1AdfuDH/o+ZZtfR1jfVUXrKkoKQxEE3Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o40ruDpd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QFuhHOub"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b1f7f239b31so2331919a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 01 May 2025 22:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1746164135; x=1746768935; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tz4yf40mtzEV4/YpTdm2/hirFctImt4in0cV4OGFkho=;
-        b=QFuhHOub+uwLfAC3BKlmHncsmy0oQtKELmvLbyfZaWeHFKyJjPd0Wkli/YKuFx8uS2
-         yAu3qZuMi/Mso6mNTL2slj6Xzw5s06kacWNDUuQoOf0PSGS4Bmkl3xBqoXoejbawMLOf
-         b2pWR81sg1qcVqhrwKOxCh0luopqOlTt7Zjzs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746164135; x=1746768935;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tz4yf40mtzEV4/YpTdm2/hirFctImt4in0cV4OGFkho=;
-        b=ZGtrpTxWokUwdKZ2PdeUeIpZxOcEFgjE9DqT65n0uBxM4SuLi7jKgF5y26yx3p2fvm
-         5BpSesfVthuTzLjKeWBd0QWdlo8s+4e6VM12ohhVJvXEk0hQeWF0xLjHuEaovfm4tyeI
-         tFkzJVn7spYef6Q034vHMJbflRTaLGd+g72Murgfo5PASnFC0TQ8vOTIihyO2l42AQct
-         rzVeb3AT7VMt/sYM1b2myDT0FR+kRoofYQ4MxJOiNXrPNxpl8v/gT/8TDUBCMz5ohE1M
-         1/i+pEz74+zusrxMe3RQNandpCDdfl4kz62EClj+LOOGx8dTeM1HnOi3ocPrJ0FycUbi
-         kmWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXGuaWWG84/itpklDlIX/U94cjIE8VVVfaD2AKbu2lHhqAmMOGLR/zooAXPSksQbgeMgEd/CBze/TicUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7HC7aTRG7HQ8CiN/ttyCW1W29Yd2SoOYMbfOSVRMFqQfsac2V
-	OCzolmPJ2Kw5fqolkkggRfxQc1f+EB65TSIVBFeZaIr//5uZcnWDk+iMI+vHMYw5XUOF3NBwi0o
-	=
-X-Gm-Gg: ASbGncv6MgwrfZgZKRBoq+H1rcJ9qeESv3oUYHMRJ5gURn/yTX7WEigePACgvzWXwCL
-	TYUT2jBzqIuWDq4P99pdxvYcMTQfFYE0n+b6DruEGOk9/j+Fh7gR8G0DAm+zORz3CF28jWLO9Q8
-	Uu1N2DWPfc3bGwWSUvnfitK0fBakcK4kLlYHIRqpOX2C2jU2znXonmVmCvONdPkySvH3FSHzCLE
-	BUawnpXD/wxIbgUMuSBD6f68rNZN0GlqOJ9DNw+C8R7nFp1buKzZHX42YgX1t5d1w1MXoKmEwWG
-	3Qe36VPM5geTBNTHUZpOROxt9YK6jaCuyA==
-X-Google-Smtp-Source: AGHT+IF7WZbxLedaOYtnoAo4B+GdGFwceB1cOYhZurL9ySD5fBpkCR2CSB9s+2yvylGfqu1unwieKA==
-X-Received: by 2002:a17:903:1c5:b0:223:5187:a886 with SMTP id d9443c01a7336-22e100b754fmr26447245ad.22.1746164134693;
-        Thu, 01 May 2025 22:35:34 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:e66e:6e73:436b:6b0])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e108fb8ebsm5785905ad.118.2025.05.01.22.35.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 22:35:34 -0700 (PDT)
-Date: Fri, 2 May 2025 13:35:30 +0800
-From: Sung-Chi Li <lschyi@chromium.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (cros_ec) register fans into thermal
- framework cooling devices
-Message-ID: <4x3ouuawdtee3cbj7wwad5aazgfsjo2vbzsib5oxbmjcmny4re@kiseb26pciyj>
-References: <20250429-cros_ec_fan-v1-0-a8d9e3efbb1a@chromium.org>
- <20250429-cros_ec_fan-v1-3-a8d9e3efbb1a@chromium.org>
- <ec2f7e54-0582-475d-af91-42d9be65cd3e@t-8ch.de>
- <aBGCB6_4XR4Z-vFI@google.com>
- <2518c6a3-6524-48b3-8e64-8990a61cc608@t-8ch.de>
- <63b2d985-92d4-40dd-b2b2-ab55796abc52@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o40ruDpd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE92BC4CEE4;
+	Fri,  2 May 2025 08:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746172956;
+	bh=VrP6FYMiM8APrbbiFFr3vwipUq0BMzeGXIdgg8yPKw0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o40ruDpdxuzYi5SlPXBVO3KE83CyehxDNrNO/541PgVjFTDFgkp9ttfsSywwoC2Xi
+	 deyF+fk2wjQxxc5XQRBVm8Bmt2O6KE/EWUyWPBtkP4DjmRVUsgvwR4qUU7TcNGYno2
+	 LrsDSCZuBZAWl/LYiTehIFOfFP/Ile60POceUApHmDdzreBk3ZrpTs99IMSeErgzEI
+	 qcVRENdvjn60dt64quynSDl7VztBTPTl/yjYLXHI6ByaM4mPy/wh1yniu8zkGauz6l
+	 KWZFS4mxzAp7qh9gzlauN/px1lSmL30l6NU2jcy73WKeezA7wFlGHek2h34pt4xuBA
+	 QpbqWIpAjreaA==
+Date: Fri, 2 May 2025 10:02:26 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: "Xin Li (Intel)" <xin@zytor.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-edac@vger.kernel.org, xen-devel@lists.xenproject.org,
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	acme@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
+	peterz@infradead.org, namhyung@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, wei.liu@kernel.org,
+	ajay.kaher@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+	tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+	seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+	kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+	dapeng1.mi@linux.intel.com, ilpo.jarvinen@linux.intel.com
+Subject: Re: [PATCH v4 02/15] x86/msr: Move rdtsc{,_ordered}() to <asm/tsc.h>
+Message-ID: <aBR8EoYkxaFHwZN2@gmail.com>
+References: <20250427092027.1598740-1-xin@zytor.com>
+ <20250427092027.1598740-3-xin@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <63b2d985-92d4-40dd-b2b2-ab55796abc52@roeck-us.net>
+In-Reply-To: <20250427092027.1598740-3-xin@zytor.com>
 
-On Wed, Apr 30, 2025 at 08:38:06AM -0700, Guenter Roeck wrote:
-> On 4/30/25 07:36, Thomas Weißschuh wrote:
-> > On 2025-04-30 09:51:03+0800, Sung-Chi Li wrote:
-> > > On Tue, Apr 29, 2025 at 10:45:56PM +0200, Thomas Weißschuh wrote:
-> > > > On 2025-04-29 16:14:23+0800, Sung-Chi Li via B4 Relay wrote:
-> > > > > From: Sung-Chi Li <lschyi@chromium.org>
-> > > > > 
-> > > > > Register fans connected under EC as thermal cooling devices as well, so
-> > > > > these fans can then work with the thermal framework.
-> > > > > 
-> > > > > During the driver probing phase, we will also try to register each fan
-> > > > > as a thermal cooling device based on previous probe result (whether the
-> > > > > there are fans connected on that channel, and whether EC supports fan
-> > > > > control). The basic get max state, get current state, and set current
-> > > > > state methods are then implemented as well.
-> > > > 
-> > > > There is also HWMON_C_REGISTER_TZ, however it depends on OF.
-> > > > But this patch looks very generic, so maybe it makes sense to implement
-> > > > it in the hwmon core.
-> > > > 
-> > > 
-> > > Hi, the HWMON_C_REGISTER_TZ is for registering a thermal sensor, and here I
-> > > registered it as thermal cooling devices, so they are different. I followed
-> > > other hwmon drivers:
-> > > 
-> > >    - gpio-fan.c
-> > >    - aspeed-pwm-tacho.c
-> > >    - max6650.c
-> > >    - qnap-mcu-hwmon.c
-> > >    - ...
-> > 
-> > Indeed, sorry.
-> > 
-> > > . These hwmon drivers also manually registered other cooling devices, and that
-> > > makes sense to me, so I think it is good to just register cooling devices rather
-> > > than make big changes to hwmon core.
-> > 
-> > The implementation does look like a lot of boilerplate.
-> > If Guenter doesn't chime in, let's stick with the current approach.
-> > 
-> 
-> Someone could make the necessary improvements to the hwmon core and clean up the drivers
-> implementing that boilerplate today, but that should be a separate patch series, and this
-> series should not depend on it.
-> 
-> Patches welcome ...
-> 
-> Thanks,
-> Guenter
-> 
 
-Thank you, I will first complete this series, and see how to improve hwmon core
-afterwards.
+* Xin Li (Intel) <xin@zytor.com> wrote:
+
+> index 94408a784c8e..13335a130edf 100644
+> --- a/arch/x86/include/asm/tsc.h
+> +++ b/arch/x86/include/asm/tsc.h
+> @@ -7,7 +7,81 @@
+>  
+>  #include <asm/cpufeature.h>
+>  #include <asm/processor.h>
+> -#include <asm/msr.h>
+> +
+> +/*
+> + * both i386 and x86_64 returns 64-bit value in edx:eax, but gcc's "A"
+> + * constraint has different meanings. For i386, "A" means exactly
+> + * edx:eax, while for x86_64 it doesn't mean rdx:rax or edx:eax. Instead,
+> + * it means rax *or* rdx.
+> + */
+> +#ifdef CONFIG_X86_64
+> +/* Using 64-bit values saves one instruction clearing the high half of low */
+> +#define DECLARE_ARGS(val, low, high)	unsigned long low, high
+> +#define EAX_EDX_VAL(val, low, high)	((low) | (high) << 32)
+> +#define EAX_EDX_RET(val, low, high)	"=a" (low), "=d" (high)
+> +#else
+> +#define DECLARE_ARGS(val, low, high)	u64 val
+> +#define EAX_EDX_VAL(val, low, high)	(val)
+> +#define EAX_EDX_RET(val, low, high)	"=A" (val)
+> +#endif
+
+Meh, this patch creates a duplicate copy of DECLARE_ARGS() et al in 
+<asm/tsc.h> now:
+
+ arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
+ arch/x86/include/asm/msr.h:#define DECLARE_ARGS(val, low, high) u64 val
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/msr.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) unsigned long low, high
+ arch/x86/include/asm/tsc.h:#define DECLARE_ARGS(val, low, high) u64 val
+ arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:     DECLARE_ARGS(val, low, high);
+ arch/x86/include/asm/tsc.h:#undef DECLARE_ARGS
+
+Which was both an undeclared change, bloats the code, causes various 
+problems, and is totally unnecessary to boot.
+
+Please don't do that ...
+
+Thanks,
+
+	Ingo
