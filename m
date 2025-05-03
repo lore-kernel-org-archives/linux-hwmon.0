@@ -1,111 +1,131 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFADFF4ED;
-	Sat,  3 May 2025 00:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319202E645;
+	Sat,  3 May 2025 00:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746232418; cv=none; b=CdtNSA7drOHRB/hlzCRBdXOe7s/7CM9IDbNCXmOOn8LY8+BP5rWaySaUEjd1muGF/dKt6uOpWNGdY4lmkteVikFwgcszuM4UhRpp/7oLjdWjDdq9T1WVXEZmfXDxS7vy6O5M0t2hFyT0T7xA22omnhIyrRRyi5ton0wjP9qwy18=
+	t=1746233913; cv=none; b=n4IkoSr8uuxWO84CKSzSEc9NaBvcn4IC6PsurPUFUl2Ufo1x8ahgGZdqqNu/0SnkzCejgxfjdn3LGGEepv4LO+MGwG9WlTq1Van5ABvmA/xCbU7dtx2e/60zu9AmTID3EH1VUeKtrzjYCuGmU720+TK7KmNPg7wupfaKx58qRds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746232418; c=relaxed/simple;
-	bh=LTFSqRPGVj9+2UnDPZdR4t+X833DnDXklT+MH1u2efg=;
+	s=arc-20240116; t=1746233913; c=relaxed/simple;
+	bh=NelxhxA2brLaj9mkGx4gim0g538OqrsJ1Ezvn6KqVKo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a65tN8IpOnfLWnWPqa4xVrQlsKUNPbpinfY996LkhzVJhH99M1QbaF8SmAk6/zJtTy5ImVYE08tRL90iKCedwFqznGuaByGSb3gvHOy6KZvxwqWsC65BO7z7qG8rQ6HpPQGPz+J/EH5S2pBw2ldqgGkcAe9lYQAEE3xlseJhmbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ez2a3965; arc=none smtp.client-ip=209.85.218.51
+	 MIME-Version:Content-Type; b=j7LqGP7P/gu8xEcisl8cVvQtiCVRqQDE8v+DG0MjuRJkofDR2MizlMPkw3xx4R/htb2WxPqpI31m3C0+ozLjoMBeA2yNvsumYG2/nLJepHklYk82lZYGhc0kS3nNWsDQxW0mzSM0g0YWtPpmHJrV12AiLKOUqs+2VLSH9v6myaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fLQurU98; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ez2a3965"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ac2bb7ca40bso420658766b.3;
-        Fri, 02 May 2025 17:33:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fLQurU98"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5f5bef591d6so5080903a12.1;
+        Fri, 02 May 2025 17:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746232415; x=1746837215; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746233909; x=1746838709; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+E+nfEIr9NP36BWGBRQtg1rt+NJr2xiXzbROWvXLKsI=;
-        b=ez2a3965lvaHEwNpoMTeKP0ufSCnlSkNMjZ+p+EUTDb6Fqh6HOiZr/o6OsWtV5pvU0
-         2jodku7oSpC3XfcLHMAOipaJ8/slFyCZOXjAfOYUO2HoV1t1O8XLaULS2F9H3YZJdT/O
-         ANztSRTCoaQ3OUZFw69ZIzO9u8lLeclEY9p+TJM2wYPGqAyxyHjP9fBup3VTswU+tYX9
-         KdvtB9c1S+75vxkGMw4OCbjAlKbwD9bpjpdCeolD3S/JX3W07N240pfKLh/obI8U5aK+
-         O++TzabBv4UgAEjFCgGj/Y39g7cOJv8a9gVHh334iT5Sc2d/B2NM2ybh0A/KppqBzXTU
-         BDMQ==
+        bh=WKpuVnvGd7lDlqZRr06ArGAIPOrdgharI02KJ8vLSvQ=;
+        b=fLQurU980Eh2H0Ul4GqVMFLpBEFLLwAkdp/HDbTxoQ/T8cd8FJvqenYoDZUSE3q8yw
+         fAlACXWkyrllYmSLbG9dErn5g6BkeQdZcyoi5HQ93ptDGOZnydmJr4NlsoNnWcH3mfqM
+         YumuG9pJ9uWLSNFxr9M/ZNq/fY3NB2eetv04tykqoNgnhuqKOjsMR/kunb/knDhh4mp3
+         cr8quqoooV1rV9xddRjx0qNshfH8RrqJiD7ZzQ6zSYnx55mmzczZusjSvYLiWq++7BsQ
+         y2UW3wGzRHovQ6L2QgRXJlbXdp0RQ+CvtWgtxXXlpJkKv3tGW/04KU372SB5e5nQ/u/i
+         8KVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746232415; x=1746837215;
+        d=1e100.net; s=20230601; t=1746233909; x=1746838709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+E+nfEIr9NP36BWGBRQtg1rt+NJr2xiXzbROWvXLKsI=;
-        b=Qm1SLTyb11CPNaC5vZUJ1AF9q3mOZWWCvVpbB72f8CP32ECjMSobhBAAdixnje/AX8
-         xJ2TBF3G/KgvpoVT6z5WaQcZy6v87di+d1XpDpZvfi9fPlXfOaVDAWcaK/ZesounEdiT
-         PA70Rc4hBu/m1gbUfg8YG9ruVuhDO70bcTR++jB1bpjkQ2gjpPlpVswHMZXgyZroVj7U
-         pfviNQcO0ZyQWEQqAxCxaeSnYuct3F9OoAo268qTYbICKbs9JH3ircAlDakDuwOmX235
-         mR6nx31ETzZyyNZSEhZxw8+yXzZiUGaiqv5p4v0xiB0IcDpv7uEpK2TEPGa863Zb4Tmw
-         GnyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcRMnHjl0FY7hRqDWFNzCyr0xka8Ump3iEjkIOELFN9QtssWjNm012vqbFXF3ioUH4TUw1z3NuypYmLgv1@vger.kernel.org, AJvYcCXELKwl3MqVIx6E87ppRUx/gXI+gs3vow5qEPRv6ii5tvo65p4T5MyYX0JxeKg77+Xn8B6hxiITgmnmgA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ4CMcc712VL8TqKbW5selJCxinV2/SXONLJnCvG87dJwJm6WL
-	Xdcv4xQ0R4vfwoFZU9psVm/R92j1wMJ83vMJsYYG5mFrCsFX/usW
-X-Gm-Gg: ASbGncvsxPSA+1Syc99SGhPTpoxEkkN8rFKTPir3a5X2j7DpWZVFTo2ccerAbtu+y9d
-	HIlxJh8TOyuQjuVmhJRMxYdSZ5U/0ctTCk0TnwdQtcwN4v0DIlOypOVo6rYBPmA0z/ZQwz5Is0X
-	gVWIdSFnyV13KtNtRHu5/8zac7GQDd7Ff5CvlP0If/Covgo+EkFVWMfiW5+SSObeFHhPOVb2WXy
-	Z2hEM2zrDt2yG/wnou1qlvQLUgvsEurAiNUWoMByfDFRrI88tbzlaJ/UvwnVUi74V5QOEtJyyQA
-	n2bz+5dAo0s8PBr72jQKjBQlmGOh4HKIbqYzVHZZeX905iHGGc/O9TiqvejZNPtHTB79fL+cpTg
-	Z7Ld99aTlIS5AkpM7Itj+rsnVtGc=
-X-Google-Smtp-Source: AGHT+IFM6+9C5okAv1Q2Ar6XRN4BhOe7EdlWhBGPViB13IYuUYqQrOlnTc3vqHqy4JoYQUI57MlrfQ==
-X-Received: by 2002:a17:907:9725:b0:ac6:f3f5:3aa5 with SMTP id a640c23a62f3a-ad17b5a8abemr525443766b.16.1746232414604;
-        Fri, 02 May 2025 17:33:34 -0700 (PDT)
+        bh=WKpuVnvGd7lDlqZRr06ArGAIPOrdgharI02KJ8vLSvQ=;
+        b=u4P8uDYkZIvTN+RnyTKsq5Hi2+St3mYRfIMCyMlXbyFUHrCltX8L8q/i/3YDCsjs+b
+         KAyO+qDxpqPxB4g5ophm5oPkGC4yRiSNZYa2F8MtvbkSPeMHRa50ShfZR7x8LrdP61gi
+         XD+E6xW9azU9MJMwMrmv1qHKTJZDK82ksSOgI81Yw+wyIFCKWz1fi9SMzw73+S3i4IkF
+         gpRn1VEITTVA6EnWWzXyxugQFhHI3PdFDNKFY9RFrBHZ2s1JMxPsoQ3Vzl+8NpJcWtnO
+         WbICFSFQ2k1mtAXa+EPkmsn/MK+h0E0uOGG3YIrFUI7WoEvEqmxIDZUo5Gds2JX4vRpA
+         bLeg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxJCxzqtzNa3NlHybH7AJvG1BtkaDBo8AtOJixpQ3y44oosCDS91ZYqlmxVrl85sUZRi7regbXwRExBA==@vger.kernel.org, AJvYcCXPZ5Luxr6zY6Qoqpbv3vFuExomwNC6qZnfSZ+OXzhfyb5intVZ02nmLUDtczeAu7waeTXty8Fs7A8015eu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyy2IGNZxHncMQMVoBXJhHixx/4ERgvTD2N/wdGnELenZ3rZjj+
+	f2KbaEF4evoOOeuTdWVzxEgwQTj95cfMlEOKbZIWKTaitZxxABSG
+X-Gm-Gg: ASbGncuReCxfLvKvvlz+ry8O1/8Go9ePyguVHHQQTcjgafeXDT8N62vyYNYtnMzj4C2
+	qjPPCiNaNeD3chmNCsjYqB3WN6Dcz+lMOJgJg/mLpOjq/rBwYhys6WtpvRGgd5uvStP6/3B1ckb
+	6kvLiLj3gburkISY4/+wjTyppVsiRois0yjmSMBKihm/wffkS+zopVIjdwZDOEZOEvoMIqAFVAC
+	4W7ShupMZbs5AVUIsGPGqs+9i3SREJlMmgSmGgS+igy6892WeARSkG2LlBFDsuPba71UO4LWnpX
+	JZ2IAi+XSjWE8HL9JYXE4otMjau8aIk35dc8180VbR6Kz6jEUVdCjnDYVvFeEaKC8fLV5EGSb6c
+	Pncligz4nG+vaMdKf2SQ7QZZSY9o=
+X-Google-Smtp-Source: AGHT+IHapbeoTS39z84uwW2wovhCwFdtNV0s5AfE31ezxCF6RlFUwijhewHJ38X5magRkHprboCYsw==
+X-Received: by 2002:a05:6402:5187:b0:5f8:e330:ff3d with SMTP id 4fb4d7f45d1cf-5fa780261b0mr4235478a12.11.1746233909168;
+        Fri, 02 May 2025 17:58:29 -0700 (PDT)
 Received: from localhost.localdomain (host-82-56-126-113.retail.telecomitalia.it. [82.56.126.113])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1894c032fsm116057366b.123.2025.05.02.17.33.34
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa7775ca27sm1967571a12.5.2025.05.02.17.58.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 17:33:34 -0700 (PDT)
+        Fri, 02 May 2025 17:58:28 -0700 (PDT)
 From: Luca Carlon <carlon.luca@gmail.com>
-To: w_armin@gmx.de
+To: linux@roeck-us.net
 Cc: carlon.luca@gmail.com,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
 	lucas.demarchi@intel.com
 Subject: Re: Suspend/resume failing due to SPD5118
-Date: Sat,  3 May 2025 02:33:33 +0200
-Message-ID: <20250503003333.5693-1-carlon.luca@gmail.com>
+Date: Sat,  3 May 2025 02:58:10 +0200
+Message-ID: <20250503005828.6128-1-carlon.luca@gmail.com>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <666a5de4-92a1-4ffa-9535-c34ec7cf49bc@gmx.de>
-References: <666a5de4-92a1-4ffa-9535-c34ec7cf49bc@gmx.de>
+In-Reply-To: <4e0827d4-137f-465c-8af6-41cc68ddaa8b@roeck-us.net>
+References: <4e0827d4-137f-465c-8af6-41cc68ddaa8b@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-> Interesting, please check which i2c controller handles the SPD5118 chip (cat /sys/bus/i2c/devices/i2c-1/name).
+> From the context it looks like the "sensors" command was never executed. To get
+> another data point, it would help if you could load the driver, run the "sensors"
+> command, and then try to hibernate.
 
-$ cat /sys/bus/i2c/devices/i2c-1/name
-SMBus I801 adapter at efa0
+Hello,
 
-> Can you access the i2c bus (using i2cdetect) and/or the spd5118 chip after such a failed resume attempt?
+yes, I did not have the sensors command installed.
 
-In my case, the suspend fails, and therefore I do not think I can reach the resume.
+I removed SPD5118 from the blacklist and I rebooted the system. This is what the
+"sensors" command is reporting after the boot:
 
-However, if you mean to list the installed busses, this is the list before trying to suspend:
+spd5118-i2c-1-50
+Adapter: SMBus I801 adapter at efa0
+ERROR: Can't get value of subfeature temp1_lcrit_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_min_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_max_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_crit_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_min: Can't read
+ERROR: Can't get value of subfeature temp1_max: Can't read
+ERROR: Can't get value of subfeature temp1_lcrit: Can't read
+ERROR: Can't get value of subfeature temp1_crit: Can't read
+temp1:            N/A  (low  =  +0.0°C, high =  +0.0°C)
+                       (crit low =  +0.0°C, crit =  +0.0°C)
 
-i2c-0   unknown         Synopsys DesignWare I2C adapter         N/A
-i2c-1   unknown         SMBus I801 adapter at efa0              N/A
-i2c-2   i2c             i915 gmbus dpa                          I2C adapter
-i2c-3   i2c             i915 gmbus dpb                          I2C adapter
-i2c-4   i2c             i915 gmbus dpc                          I2C adapter
-i2c-5   i2c             i915 gmbus dpd                          I2C adapter
-i2c-6   i2c             i915 gmbus tc1                          I2C adapter
-i2c-7   i2c             AUX A/DDI A/PHY A                       I2C adapter
-i2c-8   i2c             AUX C/DDI C/PHY C                       I2C adapter
-i2c-9   i2c             AUX D/DDI D/PHY D                       I2C adapter
+[...]
 
-after the failed attempt, the list is unchanged.
+spd5118-i2c-1-51
+Adapter: SMBus I801 adapter at efa0
+ERROR: Can't get value of subfeature temp1_lcrit_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_min_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_max_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_crit_alarm: Can't read
+ERROR: Can't get value of subfeature temp1_min: Can't read
+ERROR: Can't get value of subfeature temp1_max: Can't read
+ERROR: Can't get value of subfeature temp1_lcrit: Can't read
+ERROR: Can't get value of subfeature temp1_crit: Can't read
+temp1:            N/A  (low  =  +0.0°C, high =  +0.0°C)
+                       (crit low =  +0.0°C, crit =  +0.0°C)
 
-If this is not what you wanted, please let me know, I can try to provide more info.
+I then tried to hibernate. Hibernation failed and the output of the "sensors"
+command did not change.
 
-Thank you.
+I also tried to rmmod spd5118 and modprobe it. The output of the sensors
+command does not show spd5118 anymore.
+
+Hope I did what you asked properly.
+Thanks for your answer.
 
 Luca Carlon
