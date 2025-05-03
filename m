@@ -1,41 +1,67 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E5F22A7E6;
-	Fri,  2 May 2025 23:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC7733DF;
+	Sat,  3 May 2025 00:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746229939; cv=none; b=oE/DvbbVv16rGE0utwKJVLlwpJl1lHj/sV5Z8JmCik6G8HhUtTzuxmbZkxE5vgrIMiCICGuNC4C38lFhsqf3Q4A9+H4PxWqV0Eq0WEYaKem+7cJdSheK1YkXLTTzqy8iF2iQ6Jusd18Hl2achvBc2BCpNQZf72KNELiG7OYUUTk=
+	t=1746231296; cv=none; b=VDUNlAWB8LVf5RqySWJlICPTMbl0UfkP+WttMlO9DUCLQWF5tlXPuLfYx36gAHJVgdgqCeko7bGCKJfwB6C3qWeX25kS1BOHdJyfqVKnXeQ5dXORSl3oTIOvEkdO816UroeXmqIOs4zw7SrEJ7+8CUGHDIcps4vcy9AQ0Tr2RaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746229939; c=relaxed/simple;
-	bh=/6qP9qVCVKgB0iacvpz5uSsA0b6JMWSlHOczG/mXoKA=;
+	s=arc-20240116; t=1746231296; c=relaxed/simple;
+	bh=MA0iae6Ty8QxGs89/b27UkwWdG+4I7Jz+B9qj2xph/A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOxaxRs2rAzEvI7ckcYcMrO1PQsuGAJ2f83E8ykOZJblDwdGlNVCtmaK8043tMrbKs2Ib+MiPHgVm/3pY5ZzQHjiqwFrZdOs8zAjJGJ+2IJrcpKh1rC/VK9wICHLZOv+tBXuuC0xlMLZWiS74n7AVDQ7MzNLYd8ew1SMvg0+GPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=pIuId8dp; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=cG4jcIMcAt6Uq+mX+oqUhvwGshkV6cJZ5+GHbbQx4244gluTEujmxVAKGjlHwHB4nGfahnsOd5M7i1tyTzXL7rOz6Ld9Ov8v1Qr3q0ieOYz2/r2Ju2OIq3Xx4s4ntua/JAd1ZfvL5+uf4aDqCMVT7xqAzCRqBVhPNhhijjlvB7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5xclnIK; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="pIuId8dp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1746229916; x=1746834716; i=w_armin@gmx.de;
-	bh=hjHKLKtXun0kxa9uokkbN0zM9P/9kbN/sNgraHZQW1I=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=pIuId8dptbRi+FrSGAjXASc+fFwQ5E3LTVcV4jhCMtS3G/uT43TzqM1WPH6vibYI
-	 fYQkd/vi/k81jW7f5g387EStQw4XsekJX6EbO9qQcBLSdOvYYQJ/ccdBFEvELwqYj
-	 0gkhCK9Vaf5xXFlsPzItME2/fx2ZVzZwVNOCIgmudWQV+05JcbsbHgjfLBh2lNLW7
-	 y3Oh0/wjLPO405QVj3BJCXOkTDiJ1JUzQoTRyPGsj9Clg12Vc2qI5JGITRmj+IlGJ
-	 IBcJmXpF9Zx/xRlVMUq4DBdMPnM8WSmg9bGMecSPOejlu3QT+SUTK/f9guPlqOgNZ
-	 2+Wxolr0qi8O1jdlkw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MFbVu-1uH3uk0Yuc-006Gzk; Sat, 03
- May 2025 01:51:56 +0200
-Message-ID: <666a5de4-92a1-4ffa-9535-c34ec7cf49bc@gmx.de>
-Date: Sat, 3 May 2025 01:51:53 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5xclnIK"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22c336fcdaaso32951205ad.3;
+        Fri, 02 May 2025 17:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746231294; x=1746836094; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=0SWZFivnLy2sRTOiE6ju7U9IzRqpw2HsQtTRsT46xoY=;
+        b=d5xclnIKdYJkVQx5ttTwWkbr5O3P+H2yz6UTPuiSrbXorUQyV0vQamehPa69whTQe/
+         sImxvovGiqpSN7wutzauY8yOiVKtnpfl1sr1uYKWMMgrn2QD5F0je4LGzl/pawpIWKox
+         Lw17PGeBTdGHG8ltWYt+81qM/224OZKlcyj1rQ9B15jd9t6jA5cpHjOjQ1CnY7WFRGEc
+         sNH8rHSlLNsfFXlBPLeTlrIs1NLL8wU+8mvsjtmyD18KCVLNtJeEalIyxvyGlDPq3Dnz
+         WmbIfD4nrFyKPMIztNGJrD4eJ/hixyzh/lYqVZgVXqEgWfumGGbuJC+a2psXFXMvZf01
+         R/uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746231294; x=1746836094;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0SWZFivnLy2sRTOiE6ju7U9IzRqpw2HsQtTRsT46xoY=;
+        b=uP6x8IpkiT2Yq/m/vmYtQX2T2kT2QbEn86EDr3NlUl9IBH2mV9hRrzzFVebRHIn7JT
+         cy7Rcd4pgsJfNpesI8yW+XczSgplFglfV9lzwumZkKOKPs+twt9X/mH5h5781sbMr4U8
+         wy35Id6OirUsh7oKNd42pr67vkxEjtjge8N8JRziPAk8LmuoKsZd8FK8Z6ZArMmXTxf6
+         cTRrNHlRbQ1ETcjy4sx7oSGfM2TRYbJHUR+jUyv7kcqC4QIUApogrUPJKSEN9xcu577V
+         4mJlYIvaAnfi9iuyhjAe0/NJIObIZ+4UeBZ+nhmoFt5tjje+0/6sePj9cGeu6iBhcZja
+         TuwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPDW/ojQOpRpbjkIcbB4Wc+FSjQClr4nt/Q2hWFqMtau54mQyTV8OdVpTEhgF8z8Y1WcpOfwbiKkAz9Q==@vger.kernel.org, AJvYcCV6iH/MJyeOJL2bYL49JGyNW7vRYp6GzssfM4xFV0trsA4TXmcuRtIWxMe45XNuesm10TOqpjaIDWONwgAg@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcuzuI29pXwRg/xldOO8hvrnqUNNSiWJg4zWrI8WJL0hPd1QFz
+	5u7fBbJCsgjAq+DRGv3d2qmJzJECVvRpWNIDyL213wa7PWe2y1o5U8GTug==
+X-Gm-Gg: ASbGncs73GeuP6xtBmNDe398J1Xf1Vj98drgQdr8Vrhn+IffY3xXkfX34vSnkJsPuvg
+	IN0Eu6yPbtOpR0SzsgqJu7pJ+W6BEytjLDdrPcWFSuPqgDUu1gPDJ/8zh8iqf3FI2IVjVT4U85m
+	MFhwwCGY+RHo3CKI5eCT5+yLblT/6WZ+wIf+N6y7n7FezoTmLIIGPQAfZ5pY7TduNrPUQN8QCIc
+	dQYIvCAaehS7DB0i0y9RDzPtc2/T1GEqJYAoTG5Uzo5Eljwi478W85ycwFSBpt9cs2LbbsUfaHq
+	IZONJ4sh8UfrvY4W8sgFhrwSrZN61ctf91JWn0dM86Zejn3QLpsngtz2BZ7K9h3M5oPg1mf0KPD
+	kDA+reqQwx9i/og==
+X-Google-Smtp-Source: AGHT+IEgd0SvosbDtG5aqA6fEGMHeRtGwuqk9eGUdkzCMgP4ejY3PmNUtMUj3UG0+tHrpTpFjnbn6A==
+X-Received: by 2002:a17:902:dac2:b0:224:a74:28cd with SMTP id d9443c01a7336-22e10367e4fmr71487945ad.31.1746231293592;
+        Fri, 02 May 2025 17:14:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e174db5c6sm7918155ad.0.2025.05.02.17.14.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 May 2025 17:14:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4e0827d4-137f-465c-8af6-41cc68ddaa8b@roeck-us.net>
+Date: Fri, 2 May 2025 17:14:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -44,67 +70,61 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Suspend/resume failing due to SPD5118
-To: carlon.luca@gmail.com, linux@roeck-us.net
+To: carlon.luca@gmail.com
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org, lucas.demarchi@intel.com
 References: <92a841f0-ab20-4243-9d95-54205790d616@roeck-us.net>
  <20250502230753.616322-1-carlon.luca@gmail.com>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
 In-Reply-To: <20250502230753.616322-1-carlon.luca@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:LqToRxxL8TPNH6jVlMuhq74Gh6QZw6yVROtNRygsOv+VwkPmQil
- YLR2KcaNfC3VDeAafrEFg6I/lFagTca+mgNF513UFikIavASnbjPHrTU7cXZsKTnkWwlszx
- v+WZOzPyu/Bhd/zjuukoOk/JNjXvQdL8ygReTEyOvaYwP8fS6/cTCqpEGJEfml9jIh+VnT+
- yZaexJFwapJIn5Nfj/6kA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:LFPun9IX9tc=;VVLEk7cIvauHWkVuiMEsmo2KWqo
- 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
- YrXt4ss8FRSqPIvHi6UH30l3BwZ1tzE=
 
-Am 03.05.25 um 01:07 schrieb carlon.luca@gmail.com:
-
+On 5/2/25 16:07, carlon.luca@gmail.com wrote:
 >> The timeout is observed when the resume code tries to write data back to the
 >> spd5118 chip. It originates from the i2c controller driver, not from the spd5118
 >> driver. I have no idea why the i2c controller would time out in this situation.
@@ -115,11 +135,12 @@ Am 03.05.25 um 01:07 schrieb carlon.luca@gmail.com:
 >> that it works. It might help to enable debugging of the i2c controller driver if that
 >> is possible. Other than that I have no idea what might cause this problem or how to
 >> track it down.
+> 
 > Hi,
->
+> 
 > I recently bought a new machine, and trying to hibernate results in these messages
 > from the kernel:
->
+> 
 > [  195.176483] PM: hibernation: hibernation entry
 > [  195.200054] Filesystems sync: 0.005 seconds
 > [  195.200760] Freezing user space processes
@@ -150,23 +171,24 @@ Am 03.05.25 um 01:07 schrieb carlon.luca@gmail.com:
 > [  199.029104] Restarting tasks ... done.
 > [  199.088935] efivarfs: resyncing variable state
 > [  199.326219] PM: hibernation: hibernation exit
->
+> 
 > the operation aborts and I cannot hibernate the machine. I fixed the problem by
 > blacklisting the driver spd5118.
->
+> 
 > I see that the reported problem was in the resume operation, mine is in the suspend
 > operation, so I'm not sure if this is related and if the logs can help.
->
-> My kernel version is 6.14.4-arch1-1.
->
-> Regards.
->
-> Luca Carlon
+> 
 
-Interesting, please check which i2c controller handles the SPD5118 chip (cat /sys/bus/i2c/devices/i2c-1/name).
+That must be something different. If normal operation works (the sensors command
+shows correct temperatures if the driver is loaded, and it is possible to read the
+SPD eeprom), maybe the I2C controller is already suspended when the spd5118 driver's
+suspend function is called. I don't know how that can happen, though. I would expect
+that I2C controllers are only suspended after all its connected devices are suspended.
 
-Can you access the i2c bus (using i2cdetect) and/or the spd5118 chip after such a failed resume attempt?
+ From the context it looks like the "sensors" command was never executed. To get
+another data point, it would help if you could load the driver, run the "sensors"
+command, and then try to hibernate.
 
 Thanks,
-Armin Wolf
+Guenter
 
