@@ -1,206 +1,233 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB79BE46;
-	Sun,  4 May 2025 16:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F92119F489;
+	Sun,  4 May 2025 18:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746377986; cv=none; b=X8CXsp9f668OR60sM7X0AVQqVQ+srFTqA3sAh7GWAQ9SGCfnX1wvjpFXebwSilJubBUghE6SC2vWI3ZtWnQ5/3urj5wvdde1KpvuPIHmI6EdwBk+vGVesPh+64L3fHuhTCUNzSc+HUFjET/gfw8E1NO2rdWgDGtgOQO0DyZ2fug=
+	t=1746384084; cv=none; b=GZDXGdESposLfvwHp+OHhwxfk+0Epd2/43K9N1WGZV6/u0+fci3zp7sAk+Y7NBnOSV/pS8gxbnH6ukfzW2Id2b9Stf1YqPwi21xE4sMzAuntDEsMvCseVxr7e7Do+fStp2axVhskRH/rWF52biaPDFvWbzwoIFQJRd9S1b7LjyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746377986; c=relaxed/simple;
-	bh=aSF3nFwPaiFyuTF0BU2N2hLX0xrN81msykKS7jpgkFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bt4dSzAduVcOU+z6KV+G/o36KySRW/2UiAjUoPCAz2/1BrLAs7HihxHblZ8n23oQI8QpIldbTPlE9Gp7aZ8Sthxbq+4aaY23WGHq+2HdLjP8qzzeLNU5A+xIud8EBp61KySAhw262Anu0GsuvewmNSvwuMI/pO96LOUAJOIMJy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=YzyfbYbK; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1746384084; c=relaxed/simple;
+	bh=LCuS5NoxIHqW7U/55a3sx8jUo05O82HlTJ+VcahI7u4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pSv7ip7SZOphV/taNdoeH26+niCseX9gtYK8easLDWt2zxuajqmb5pfWvLmKHTAQldgztsOQ8EKzQYGfFT/xWk09MxdVltNK5/Mv+CfhJQnsxjEmH1nqOcAHS0sjLIokgAebqu9mwErqCCTTCtMRu+/gSAQh+yqIOxsBytcgfB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OkIRcbI7; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="YzyfbYbK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1746377982; x=1746982782; i=w_armin@gmx.de;
-	bh=kqeH+gbAVdLwtZNHkBz1OoS8RrOD0otkZxqyLCeTfzs=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=YzyfbYbKaDVuqpYXR0bX9CQYuMVbicHs7kgVhQtF15H20yHosbv4glJKIwKiKN2t
-	 cxirhVRFsTRV70n7mX9jTwvq64hnXPwHRjK89w1JNqyfPuvra0t+iPrOEAPIRZ1HT
-	 rKfHK6vBMEPS0Agg3txkecW3SjZ3tnJWsicFBxiKwxS6euP5h2Bjs5g0uK9IJSxfw
-	 614rpLIimTvzOlJS0jNyvOYn9R9YJnN9c+xPmD8RNCij81CzIvCkmukpTz0DKPEy0
-	 8yc6DtFpAKh+cJqj/KYeU8DdXc7nPYbxDuCchsuRXSz7vzx8uo0gzPCL+Zm8Jns7T
-	 U4LA3jziBzOBcDkImA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ml6qC-1uubTN41me-00aMny; Sun, 04
- May 2025 18:59:42 +0200
-Message-ID: <9625330e-e3e9-49ea-9979-653091dfbe16@gmx.de>
-Date: Sun, 4 May 2025 18:59:39 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OkIRcbI7"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acb5ec407b1so634465966b.1;
+        Sun, 04 May 2025 11:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746384079; x=1746988879; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4FoJU6gJaDGitgWGlVAW43BYakx3dl8orcQipQm/HMY=;
+        b=OkIRcbI7aqvgnyoBHILvpdOyxLRd8v43v66NSTGKk/wtWxxLqupm+N54t5eYqYlF2X
+         yN4f9z32XkhRY7h6ZZQ3ui+Fylu3DEw1+SnxapLL2301KmkFEFAitnIWer9Qf+8Gb0F5
+         eh2YwfSA98E2FeGXDM5nLsRmH164pXdld5qPSGeg5QLQpnGTKb6II1MO0/SXJ7WRU5t9
+         mUV4jMSF8T+s+pbHvTjRvTCMjrz2HWlgDkA3nXb38mQ2swXvhQIe22Ch8lg8BOBlIXPu
+         0TMLbCQFDeVVRl7uoZuwiUEGacxtPOxY/T4a1MMY+xR5q58ynuCYgNmvxrtDqA2lxIIN
+         fiwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746384079; x=1746988879;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4FoJU6gJaDGitgWGlVAW43BYakx3dl8orcQipQm/HMY=;
+        b=j1zzcGYcnuEX8UrTLj/wCrxOFoZtOHRnHmLvAHDZ7/PNZysWg2oE+vQ0wkcDA2eT2d
+         svTXzRcPkcAZwR1OyYpK5k/8n7URTyK75/GUPI8oBNIrpWuqAlTD1obIzTjNZtxH61tB
+         Gx706gELbN7f4TndrFM9ivp1WWH2HRkRhpRQ5qaUA/odHzHNpQyCszLnmy1BmyQX0vMy
+         SOGgKlcIKMuXDoWbSdDmiZH5omhbAtVo77o0wwrGBFGxyj5cQ2HtLafOpbMhOoLizKmr
+         9Be8M06iwiztInenyu4hQuSP2lmefwHOzDHCeeE98Bf9x3wU7lrbeyF6EVUib7HF+x8d
+         vMCg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/eBy7HCBUWqqYCWPu01lNpVBjN/oEZfTwt4W5mJi539OWbPkNfLMuSxPObOCv5GbOn0QLoyuGvH2b4YU1@vger.kernel.org, AJvYcCVAJ8PGdQBJJbWIF7IFSuWl0jCT0tqvHk+FxtRwxq+PnwvEl08lmZhhb59QSGpufuXQI/+/mWTFAvNYlw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPZvUpmyOJaCQHs0J/axOD03SFV3JOrr7/lKz5qu1vHRKCM80Q
+	AkYTxTAvNBjKTUiYu9mvzst6X+pC9GsQ7VUefKCGWuHmlnHjZlH6
+X-Gm-Gg: ASbGncsqEODXFveeGb4kDCx94vyCvv7QETpLPa2P+5rrsI1LvTTutKqTesCBLiWeXyt
+	/hlGNgiUbJ1lPRBCfpS7D0b/I16eSzcxHHneb4DhBHYVqgWol1nsfMZqg7/atxPlmTPxxF2m9sU
+	yBUAkZ5b3q7DgwrQU5F91SxpSmFuviZ84wIC484sLnvq9MZA++CMjvWrevi3Uir0hraMmexn+aq
+	0O5rXDubf1igArJJ+8J1x0m0G61tFHSvH5hUfk2Owp3BWzcE/I3XumkZgPK9AmTjf7QnuvLobqP
+	QM8iZQVyuQO4FvJbDGKN5EHvaHM1iZQ8hbfjdtpxlkO3Ywmo4KVUZ9/L08WzCWe9DcAZj4i5mBf
+	pooA6BYJmrBlvxQVxI093HLoNDzo=
+X-Google-Smtp-Source: AGHT+IGcVy2BmP9mdTZ/08ewUk+k9GqfugKPdeUvqNO+PamBR4KorE6NmevFhG419TK3CNg6KkNXJA==
+X-Received: by 2002:a17:907:970b:b0:aca:d5a1:c324 with SMTP id a640c23a62f3a-ad1a45bead1mr390805666b.0.1746384079008;
+        Sun, 04 May 2025 11:41:19 -0700 (PDT)
+Received: from localhost.localdomain (host-82-56-126-113.retail.telecomitalia.it. [82.56.126.113])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1894c02b8sm354556766b.118.2025.05.04.11.41.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 May 2025 11:41:18 -0700 (PDT)
+From: Luca Carlon <carlon.luca@gmail.com>
+To: w_armin@gmx.de
+Cc: carlon.luca@gmail.com,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	lucas.demarchi@intel.com
+Subject: Re: Suspend/resume failing due to SPD5118
+Date: Sun,  4 May 2025 20:41:17 +0200
+Message-ID: <20250504184117.4795-1-carlon.luca@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <9625330e-e3e9-49ea-9979-653091dfbe16@gmx.de>
+References: <9625330e-e3e9-49ea-9979-653091dfbe16@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Suspend/resume failing due to SPD5118
-To: Guenter Roeck <linux@roeck-us.net>, Luca Carlon <carlon.luca@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, lucas.demarchi@intel.com
-References: <4e0827d4-137f-465c-8af6-41cc68ddaa8b@roeck-us.net>
- <20250503005828.6128-1-carlon.luca@gmail.com>
- <f1ef9677-2650-48e3-834a-fbe9e2830b04@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <f1ef9677-2650-48e3-834a-fbe9e2830b04@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RqmtiPxl3j4B7+y72PFRCpFoO/uI0QCvdzjVnf+HAvNnLHBdcEH
- p87Mqq67QyvAw6k1pTUyAYheFiRJLCjF0gcCbS3PRmT8+KssfCXE78PhibhNHRTNMfHnmK/
- PMXop/jdGeCbg4kuiFX7/f5Md1pYGKIZM2i+LenlnrTyI6h6kSXzLjB3666yKOlk+6K93OM
- dQYXmr0W9A35oxN74xJpA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:f+1ImPVzKqs=;K4d0KnkWlPW1PNBvpDqegB+vjjc
- 7Y3J7Jfx+BErHfKsDSc5jmtDnn8h+Heaprf5r0ZDMyu+VsepEJs0yMKHhDLriv0rey6d+Y0Tu
- +XkOjZm5rYNTiZHNaaPk+4oYA4/+r3/gMULA9b/csD3fbgvqUCjBU6PasnjcAUx2AOuY+hq76
- WXtF0rvqNLnyg8Md3fYk0wxqRDqJcmCKoN4qHKBXTWfrqqlbAoGc+CtVhzUY+P4PgtTWQZ02i
- uINdY88f6iWipGO9F8oA8+yyKdS1V1Iu8VqqdW2bSJRCPNXLINWbMFZ5ErWR4/IijVVtsh4AV
- 8MvhrtanlJKHGhZHZh+eKWOk3ojkcCWGT64PsqILZPRV6lI44H8XdllmfFYU+hFaFBMPEC1Zp
- 3lxmwMHlY2Sm1KjlSGjHWbL0ChBAiBkKTH/ZgukBlAMY01ADMGQvgxI2SUyNq/ySYpVtdnWZd
- O/nTg9+OTu0qL1oMETj7XGNaPtFqBVBk6c9T/2A/vtCUhzxcmERo02B+wAS4470IGgdsltA0I
- AKYAoocf21YdGUTXEkmA9geEVlsLzJ/VloRLEJChZDlOwmgH93KhHRHV0rgesQrAhBkkrBhd1
- EOk1BbYxLzDBd0a/A0EKHDIsOZEwyNrHtfZeSTuFicsywruoIv74lk9xv/vu4lo1iDQDHvppk
- 9pA4qp/9SWv7eM0tB9ciI4KUeHrqUCP9HEGce76jTgRS006HOFPJkjqQy6TIKsVPUmPBSacU3
- LHlc5TkJvbLkwDMytmeqCdn3UK7pff+NyQ8ZIMue/BdAutPItml8Zpq4AtAVken1JMtvAp34J
- uSfJdg8KrvTTBMPL7+nE61AFABRVLJP+rYHKl4pYzZ3gDHHDxAoIqByrLbAHvw9s3QRWUveUa
- rQpgEQZjnQZiNzF1dvlA9n8aq+VxjkXncr95lVM2VHv6o7vYGu3ltN/IW/o6XKof3hegQg3hh
- Z6yjJAk37ByBYioqjNrjIj9uQZW+qXPQQHPaRBXFEx7XcJCOIYV4wp3OA4Bsi+nGxZ600Jb5s
- tERb7qXJEXFAzRY6qz8DqiVA6onjhAx9dNZt6jcN8tKZfCOeUyya9fhq/qX3IbsqWSpJ/WsB8
- TXUeBRo2XfaZFAShz957O2kZbwaEv8lgM4Y3TnrnHrM4I823irnoxNiq8aNkEmzforWUwfjLh
- Yz5q1We+T+e5hdFUq099mPUQDHcXwO7PWMdcLcNfKbnib3c4c0P6co2MMJbdUB2WBSlSQPJdb
- UJTu5EqtPrQmQxbpre/+94wR9HrzMRjDxc6k4JeM/BVN8MmlQ7JBjvcJTgnW0uvnX/aJf8TrT
- Ja+hYjHW2W5X5+6uJU0Ddt8Ju/eR8aydbMC9YsykG1H6GUxm9J89QldhDLXT9WCs6EcwCbngw
- /IwlrZnLcg+CP8g4Ts9L015yZxFXyHr/JCCp3fz5lc9gu5oVu821UiwXYLbK9MGbIEM7vZSsw
- 2diYaOXRA430ejFsNgOkXptNVSVu3U60phi/FqfETgp6l0qvYTqiNOnIuGSUtlONDO3ure5r/
- y56yEanz+v8Lh1w8hT+0umxqWfZt93S9AyTJ7YYBZ67ZpI+XmxRbzEYYQ9dqTOF3ewD7gaixW
- YaSWzbR101AxkLMiByI2aVQt0o/QZpgqFSSA8Gex9CUhwR87j88luBCMjtlQ19ykKc3B1YuvY
- gDO3VuNsiC0uF6SQjeJFBkjArOjpbLsmhEfpo4IC+mVe9Nvk0yyXTFnGMVCvKzFx58CoIdFUU
- FozivRcd4BGRFg5IpeCBy3SlnS10QrxTClL6qjjhnf8aGlcHpAAbzOk/lQUK+lIHI79EAvEvk
- aQO0IL0IHRbnyreYvtc61qORB4QWBDBmbINfneq3CBBzUCKH4+NHQD2VzywxpZegIvBajNG26
- ndB6oUtFhDaYTF09Y0GImxFkSW0tKbovKeQxSyaPg2mFDtw2h6xWS/PdQWQ/BHhTl/McTRJ/0
- WNIpQDP3Yrp3khbYusOUhNCAYgYe7EbDJ+m920qz9+nMi6AmmUK55Af4Xc0mi1uWFkIqVkDTo
- BIBHpRo8eaWAyJnuR1GUs3Ia3uCwp4UXJQj/c1rmXuKPdvvXdtwDNqLgvB9yegoCLK+T29/wE
- 3X3stkVhe97W4ZgReSHYhQWDfQ+dpqUqe5XdIxpdo1iwTKLxlMl/kbq7nzeZDb88y2odKPCFE
- IRTNTP+BJxsByNZpDe2XnuHPh0DLi2W6XlqK/Z9L5gv8Uz7y1mnrRqDQJuQqxm1PmfSCPFxGE
- vAsatj2c6z3HA+o3u4M5lEsgqGWAhNe62kCEu9a8IJOfzwPnr8SlJgkKl0ItgIE2LnR6Xwmd7
- bBI1S6pdrVAGOLcEx3rk3kXu1L5swnRLNstTZh2Mxt1U+rl894S499oB6qv5wiB5Yqc9SGRot
- SE+fndeKRNLqkgaJ2xI2OCd4eWqCCM5HxsappMmhkcXmE2anwkzZCL4uhl6w3C3G2uDlzNdl3
- CtUh8/rr3FuxqZ7O5FQ9gmhOPcQ1znJ64ioZplMbLJb+BbDtjguZ+UWO54sSA3i14+5GFCCnk
- tmV0WhUMDbfJNAsA/Wgswh721NfWnjfBOj+MMg9OQ95M1lC8UVMtaxy0YF3iMkNWBFrs9Dx2h
- s6itrLy34tL/F6mzAyu9WqBNDlNvK5914d1m/0trtRVsNod+XpxTw6vexoDF79fxg4u4QNNqj
- LsBdtEnlim4W/rguVFcEjZ6aLn+OicW5oaQh/cJauFqHFdMR0b3GHeMQ6ka5d6Bw9EJzjeqcO
- kwinkBlPwA407ghRsaUx4A9RGcOjZf4Czbk1yvvGbuRXQ8nqW0tFN/s50ERggMaNABm+bp+t5
- xBV+wKGQK+7yw2U8MfQaiyJzrcD/Q1w64pAi4mAhjJroKMELq1/eeX++9qjCMSOyC9G45uN2j
- n1y+6H8Mm/QZnH2gMmY4qAxIw8549CFMDn3FvGIxYybFfXuzRVAqzvFoQ/dbkBM0YKjGL2lL5
- ffkd+cpN2P/5duOERbsDl2lnjZFxBsV1VqChkFc0KquB4i1AVdeL
+Content-Transfer-Encoding: 8bit
 
-Am 03.05.25 um 03:40 schrieb Guenter Roeck:
+> Please you load the i2c-dev module (sudo modprobe i2c-dev) and share the results of the following commands:
+> 
+> 	sudo i2cdump 1 0x50
+> 	sudo i2cdump 1 0x51
+> 
+> This should return the register contents of the spd5118 devices. Please make sure that the spd5118 driver
+> as been blacklisted and unloaded before executing those commands.
 
-> On 5/2/25 17:58, Luca Carlon wrote:
->>> =C2=A0From the context it looks like the "sensors" command was never=
-=20
->>> executed. To get
->>> another data point, it would help if you could load the driver, run=20
->>> the "sensors"
->>> command, and then try to hibernate.
->>
->> Hello,
->>
->> yes, I did not have the sensors command installed.
->>
->> I removed SPD5118 from the blacklist and I rebooted the system. This=20
->> is what the
->> "sensors" command is reporting after the boot:
->>
->> spd5118-i2c-1-50
->> Adapter: SMBus I801 adapter at efa0
->> ERROR: Can't get value of subfeature temp1_lcrit_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_min_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_max_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_crit_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_min: Can't read
->> ERROR: Can't get value of subfeature temp1_max: Can't read
->> ERROR: Can't get value of subfeature temp1_lcrit: Can't read
->> ERROR: Can't get value of subfeature temp1_crit: Can't read
->> temp1:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 N/A=C2=A0 (low=C2=A0 =3D=C2=A0 +0.0=C2=B0C, high =3D=C2=A0 +0.0=C2=B0C=
-)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (cri=
-t low =3D=C2=A0 +0.0=C2=B0C, crit =3D=C2=A0 +0.0=C2=B0C)
->>
->> [...]
->>
->> spd5118-i2c-1-51
->> Adapter: SMBus I801 adapter at efa0
->> ERROR: Can't get value of subfeature temp1_lcrit_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_min_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_max_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_crit_alarm: Can't read
->> ERROR: Can't get value of subfeature temp1_min: Can't read
->> ERROR: Can't get value of subfeature temp1_max: Can't read
->> ERROR: Can't get value of subfeature temp1_lcrit: Can't read
->> ERROR: Can't get value of subfeature temp1_crit: Can't read
->> temp1:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 N/A=C2=A0 (low=C2=A0 =3D=C2=A0 +0.0=C2=B0C, high =3D=C2=A0 +0.0=C2=B0C=
-)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (cri=
-t low =3D=C2=A0 +0.0=C2=B0C, crit =3D=C2=A0 +0.0=C2=B0C)
->>
->
-> That means there is a problem with the I2C controller, and you'll have t=
-o
-> black-list the driver. I don't have a better solution, sorry.
->
-> Guenter
+Hello,
 
-I do not thing that the i2c controller is at fault here. It seems that whe=
-n loading the spd5118 driver
-for the first time everything works until some point where the spd5118 dev=
-ice stops responding to i2c
-requests.
+I followed what you asked:
 
-Please you load the i2c-dev module (sudo modprobe i2c-dev) and share the r=
-esults of the following commands:
+# lsmod | grep spd
+# modprobe i2c-dev
+# lsmod | grep i2c
+i2c_algo_bit           24576  2 xe,i915
+i2c_i801               40960  0
+i2c_smbus              20480  1 i2c_i801
+i2c_mux                16384  1 i2c_i801
+i2c_hid_acpi           12288  0
+i2c_hid                45056  1 i2c_hid_acpi
+i2c_dev                28672  0
+# i2cdump 1 0x50
+No size specified (using byte-data access)
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1, address 0x50, mode byte
+Continue? [Y/n]  
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+10: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+80: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+90: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+a0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+b0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+c0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+d0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+e0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+f0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+# i2cdump 1 0x51
+No size specified (using byte-data access)
+WARNING! This program can confuse your I2C bus, cause data loss and worse!
+I will probe file /dev/i2c-1, address 0x51, mode byte
+Continue? [Y/n] 
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+00: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+10: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+80: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+90: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+a0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+b0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+c0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+d0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+e0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+f0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
 
-	sudo i2cdump 1 0x50
-	sudo i2cdump 1 0x51
+> Could you also please tell us the name of the RAM sticks you are using?
 
-This should return the register contents of the spd5118 devices. Please ma=
-ke sure that the spd5118 driver
-as been blacklisted and unloaded before executing those commands.
+Of course. I have two 32GB modules. One was provided with the machine and it
+would be difficult for me to reach that physically. The other one is simple
+to reach and I installed it myself: it is marketed as Crucial CL46 - CT32G56C46S5.
+This is what I can get from dmidecode:
 
-I suspect that somehow the spd5118 driver confuses the spd5118 devices, ca=
-using them to lock up.
+Handle 0x0002, DMI type 17, 92 bytes
+Memory Device
+        Array Handle: 0x0001
+        Error Information Handle: Not Provided
+        Total Width: 64 bits
+        Data Width: 64 bits
+        Size: 32 GB
+        Form Factor: SODIMM
+        Set: None
+        Locator: Controller0-ChannelA/B-DIMM0
+        Bank Locator: BANK 0/1
+        Type: DDR5
+        Type Detail: Synchronous
+        Speed: 5600 MT/s
+        Manufacturer: Micron Technology
+        Serial Number: E97A5953
+        Asset Tag: None
+        Part Number: CT32G56C46S5.C16D   
+        Rank: 2
+        Configured Memory Speed: 3600 MT/s
+        Minimum Voltage: Unknown
+        Maximum Voltage: Unknown
+        Configured Voltage: 1.1 V
+        Memory Technology: DRAM
+        Memory Operating Mode Capability: Volatile memory
+        Firmware Version: Not Specified
+        Module Manufacturer ID: Bank 1, Hex 0x2C
+        Module Product ID: Unknown
+        Memory Subsystem Controller Manufacturer ID: Unknown
+        Memory Subsystem Controller Product ID: Unknown
+        Non-Volatile Size: None
+        Volatile Size: 32 GB
+        Cache Size: None
+        Logical Size: None
 
-Could you also please tell us the name of the RAM sticks you are using?
+Handle 0x0003, DMI type 17, 92 bytes
+Memory Device
+        Array Handle: 0x0001
+        Error Information Handle: Not Provided
+        Total Width: 64 bits
+        Data Width: 64 bits
+        Size: 32 GB
+        Form Factor: SODIMM
+        Set: None
+        Locator: Controller0-ChannelA/B-DIMM1
+        Bank Locator: BANK 0/1
+        Type: DDR5
+        Type Detail: Synchronous
+        Speed: 5600 MT/s
+        Manufacturer: SK Hynix
+        Serial Number: 2C3B11DE
+        Asset Tag: None
+        Part Number: HMCG88AGBSA095N     
+        Rank: 2
+        Configured Memory Speed: 3600 MT/s
+        Minimum Voltage: Unknown
+        Maximum Voltage: Unknown
+        Configured Voltage: 1.1 V
+        Memory Technology: DRAM
+        Memory Operating Mode Capability: Volatile memory
+        Firmware Version: Not Specified
+        Module Manufacturer ID: Bank 1, Hex 0xAD
+        Module Product ID: Unknown
+        Memory Subsystem Controller Manufacturer ID: Unknown
+        Memory Subsystem Controller Product ID: Unknown
+        Non-Volatile Size: None
+        Volatile Size: 32 GB
+        Cache Size: None
+        Logical Size: None
 
-Thanks,
-Armin Wolf
+When I was told that the problem may lie in the i2c bus, I started to search elsewhere
+and this thread came up: https://bugzilla.kernel.org/show_bug.cgi?id=213345. I
+therefore provided in that thread some more info I collected.
 
->
->> I then tried to hibernate. Hibernation failed and the output of the=20
->> "sensors"
->> command did not change.
->>
->> I also tried to rmmod spd5118 and modprobe it. The output of the sensor=
-s
->> command does not show spd5118 anymore.
->>
->> Hope I did what you asked properly.
->> Thanks for your answer.
->>
->> Luca Carlon
->
->
+Please let me know if I did something wrong.
+Thank you.
+Luca Carlon
