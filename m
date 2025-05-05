@@ -1,67 +1,41 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4F217578;
-	Sun,  4 May 2025 23:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B64118C02E;
+	Mon,  5 May 2025 00:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746401495; cv=none; b=OMxJ8Pqt2dyWF2gT8knw91m86I6Jfy7v4OI0ikEnF2objCERecAU5d7q2OwfbmoE3201JrjE9pOhf1NIZ7FDkfkDU2m0e4vkfYlsPpI6+qYp51PYGddFuzdaY6evTBs3nvA+KjzNBSJQ8/y35nGdWPT2U1JoWJErZGZw1Ilj23c=
+	t=1746404890; cv=none; b=tvGQh0L9xbcRO9QgYazAgdYcTw217oqh1P3RxBqeU47cdrWvxgpMwke/ZC4DNj/99i+bqkbL9Uptk0nFZAZ4yAsevbgH7kU2E9MPZT13HIShCgcb8F4+DslNy9WMSroCvi+rk/hbzh2hmYv9SWVZgf10TfHYbft9WH55tShzjlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746401495; c=relaxed/simple;
-	bh=5GtgY/EnvKFlpJ2uw99+BwLzQQ0PZUdXBdDqLf4Xn+0=;
+	s=arc-20240116; t=1746404890; c=relaxed/simple;
+	bh=43gFJ5Fa97xaAvKTcfonW16J7pZGJrnSHDvMCF0kVPQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n5BuPBM9lom2QoFv6fVy+/dncWGCbMrr7BDLlg0ijS7kQ3eu6Mm1IW5SrfLzoIldFpfbfAYa20Vbu4vLRQrCG6c8AXABh/iuXX1tAg2heOxyXpWGSXpRZ8vQJ5Lv3eRwBgDvzW7QeG20xJjVD8T77L4suG3VCkpHLWu/tm//wps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+Yu98hD; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=XhANinXIlKchd2iDbBO7LyNOSW9NSS2VLwAtbiTAxsG9/8wi2p/rox4BfV7+Us+Q7GtsMPECojnOhqpqUrnJDJ7UHiYEqjSQRT7WmBhwfGorFW6NXFXaDiIVZpMU1qqw9NnXQroeqF+xR6HUtX/LCC0ijALR15TkbJRWk61btus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=poMkWxer; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+Yu98hD"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3035858c687so2787743a91.2;
-        Sun, 04 May 2025 16:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746401493; x=1747006293; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1k0adX3nlVCzUCfyT6I0QyXQncvcxoU5bJZ8Verleyc=;
-        b=Y+Yu98hDfjRKFOxvotDG3BZUEHWBq8HAf/SDuOUeUtaUo8nfO5wFI3JCi18nlbBBzz
-         CtagM9F0xdh+VvpV5bJx3tg3hxEda6qk17DOxC1bZNjIP37ni61QluRsXGKXXBbX1aod
-         IVqnCpgBtxsdM1v+w/PxUE/l82brnP+/mgzXT/+9HqzSAvKEE5gmnBQ+3DuxwaDvXwG6
-         abE6qiBO2HuFVORodysYtD3dNf1vo9L0mtGNDPFNcm3bGPm/re/tZf/E7P7yp2Ib3tRV
-         jwgivp7VIkYC8f7n+sWIWWVNwox3ohxsjBkkH07A41KsjSOKqy4JHO6kWnH6w2Mw84lC
-         A3gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746401493; x=1747006293;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1k0adX3nlVCzUCfyT6I0QyXQncvcxoU5bJZ8Verleyc=;
-        b=SWML8KSYSGeieVjRI/WCyRuZwMSakHjV3qOu3HDRtee9f4oBQmNRKPJakmHzmSZyV4
-         uelyg12A96nejVQGIRWh0B/OVoG0HkZObmSp3/eRSxWHGhmuhizCOKpMPwAsbiO7VsGG
-         3n1bVYeHMFO0G14TMVRUiYu0snMDHqwjJaVngTd0bqo4eoF3qZ1KnW1K88zlDL0O7R08
-         duOJolN41dRicgybU89S/jqjTmOAI2av8ju5Go/T70h5REujfVaBTAPLN1Cs1Uv2IGXZ
-         5SJ6HCHh9G2SV6KiRGh1S6yrmbZ/+S1Fgz2341p3JBF33EqhsfRQ4ke1EhQJjbsi7O+Y
-         tM2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWDIDjgggwazOiKrM4gchGR/IcbsY4VSm0bb5NkYnvxUSjkJtDeCeD2Qj8iMsvAY6ThEJN8lMfgThBPNjRU@vger.kernel.org, AJvYcCXgTLdZPuc5WNGc2vKrmtq88zy4lLNzwLU89jJCR1WRawYDRTLl6sSAoMSkxy2JRMX+72YxCQyl8w4nvg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMACP+c5h9bq42dZvcWb7UGNCNxlGMAbGZFTmsf7JqKBnkFT4L
-	JJqshoTizUSiHZjGK14iJpgTzBbI3I3tG9QpcSNVeavmhOR1TdmN9AypsA==
-X-Gm-Gg: ASbGncsLjpkioTM7K0Zi3K4qw3HwPiFzgMr78opsqKGwDS1Byk8LGzFJGzLUFg5VDHf
-	t9kdzGb6G4nzTjRf4iBFmIOB2wncHd4PJT/dtL5n3FyTsxCYaIvnq3mnsEwaQIV6oiVrTFhoA9F
-	lxD0J2xPzBXPuibtpG2fO8w99QHAXiM7zroDYB3Zf+ocBWjRprrgLUmEOgicfYMhVbJFSUKObL8
-	e3opXIuRBneWMnG8vlofCekhta0vs34Y2IPPRJawcNabpmWRfDTk7pw5H7PKk/G3WwQqCDMG+Gn
-	iOiLfPCpWWDs6ea1/qT3UnNYXSIyrJqoFE2UACcYJVEOcYcNpDHIAURhJB5cfLKnjl/+lY+oyYz
-	hsKgQ7TzFiX0ZLpelGG78MLe5
-X-Google-Smtp-Source: AGHT+IHupJUM8SOyCsiTuXxkKu54Du+BzTghrqHsFNOu1cXqgRHmByJ7iSMj/852ykYP5BWtp/TPjA==
-X-Received: by 2002:a17:90a:da85:b0:2ff:6488:e01c with SMTP id 98e67ed59e1d1-30a61a6f82cmr6957662a91.29.1746401493140;
-        Sun, 04 May 2025 16:31:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e1522a3d0sm42392965ad.199.2025.05.04.16.31.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 May 2025 16:31:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <310fe3a3-e585-46e0-aae7-3e4d41af1f53@roeck-us.net>
-Date: Sun, 4 May 2025 16:31:31 -0700
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="poMkWxer"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1746404881; x=1747009681; i=w_armin@gmx.de;
+	bh=43gFJ5Fa97xaAvKTcfonW16J7pZGJrnSHDvMCF0kVPQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=poMkWxerht/HO7XoGZlXFps7kZiTmYI7cUoTBUwLPWe+y8zaq+YPo6RU7CyRvqRc
+	 jAPQDOG5F2xXohQWeaI2SM5F/+zS6zbV03ft+/oMaczcLv0Ay9OyS6BDncdW6srOI
+	 PJSYlKxyfojnQmIH+wLK9zf4Id1hct/kMkxkdC5LxygiWBTpGrGDwbGQQPrUIAtao
+	 AbuyudwQiob9W2z0RNB7JnQ85pubEYDrHWLWMuMY3HDwGwUsQh0/PNdoBNbs6oyxD
+	 yyV62LIrfAMzZVjOBLRJFPBxlWYqDiY1PQ1BcGjNsGXDqbCz8Ci4rrCbUv3CZmxwF
+	 G3dE0sNQXUIHN70Eig==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.24] ([87.177.78.219]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbFs-1v4NoF1hH4-00uZSp; Mon, 05
+ May 2025 02:28:01 +0200
+Message-ID: <6cbabcc6-a5e8-43d1-8398-1b272384841d@gmx.de>
+Date: Mon, 5 May 2025 02:27:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,81 +44,108 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Suspend/resume failing due to SPD5118
-To: Luca Carlon <carlon.luca@gmail.com>, w_armin@gmx.de
+To: Guenter Roeck <linux@roeck-us.net>, Luca Carlon <carlon.luca@gmail.com>
 Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org, lucas.demarchi@intel.com
 References: <9625330e-e3e9-49ea-9979-653091dfbe16@gmx.de>
  <20250504184117.4795-1-carlon.luca@gmail.com>
+ <310fe3a3-e585-46e0-aae7-3e4d41af1f53@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250504184117.4795-1-carlon.luca@gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <310fe3a3-e585-46e0-aae7-3e4d41af1f53@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yOcn1uPogfJJl7+uL12LnnDKiz+FN3ca/Jrqefb5dZOLKd+Mrp8
+ 1rzKOgJtZbXxSTrxfiTLctzy8qc4w3z2JOHkIwa8cs0ozTntfCLQc2D5b6ifPodiyP/WJ3x
+ uRhMMxCI9wHFxiq6wO0dqT3JbeU3fKsS55m39CIocUevh61clRr8Z6emao6Um80YSzpUl3k
+ W8euxIBp2zQpVyb5wfRNg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:KrYgkjHguME=;IxYAPBEhOzhiEsFsKVVpJyXIiqx
+ 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
 
-On 5/4/25 11:41, Luca Carlon wrote:
-...
-> When I was told that the problem may lie in the i2c bus, I started to search elsewhere
-> and this thread came up: https://bugzilla.kernel.org/show_bug.cgi?id=213345. I
-> therefore provided in that thread some more info I collected.
-> 
+Am 05.05.25 um 01:31 schrieb Guenter Roeck:
 
- From there:
+> On 5/4/25 11:41, Luca Carlon wrote:
+> ...
+>> When I was told that the problem may lie in the i2c bus, I started to=
+=20
+>> search elsewhere
+>> and this thread came up:=20
+>> https://bugzilla.kernel.org/show_bug.cgi?id=3D213345. I
+>> therefore provided in that thread some more info I collected.
+>>
+>
+> From there:
+>
+> [=C2=A0=C2=A0=C2=A0 5.416572] i801_smbus 0000:00:1f.4: SPD Write Disable=
+ is set
+>
+> I think you are out of luck. The above is incompatible with spd5118=20
+> devices;
+> See [1] for details. I don't immediately see why that would cause the=20
+> i2c bus
+> to lock up, but even if it didn't lock up the bus I don't see a means=20
+> to get
+> this to work.
+>
+> It is still puzzling that reading the i2c data using i2cdump fails.=20
+> The spd5118
+> driver should not even probe if that is the case. Maybe Armin has an=20
+> idea.
+>
+> Guenter
 
-[    5.416572] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+I have an idea, see the bugzilla post for details.
 
-I think you are out of luck. The above is incompatible with spd5118 devices;
-See [1] for details. I don't immediately see why that would cause the i2c bus
-to lock up, but even if it didn't lock up the bus I don't see a means to get
-this to work.
+Thanks,
+Armin Wolf
 
-It is still puzzling that reading the i2c data using i2cdump fails. The spd5118
-driver should not even probe if that is the case. Maybe Armin has an idea.
-
-Guenter
-
----
-[1] https://lore.kernel.org/linux-i2c/20250430-for-upstream-i801-spd5118-no-instantiate-v2-0-2f54d91ae2c7@canonical.com/
-
+>
+> ---
+> [1]=20
+> https://lore.kernel.org/linux-i2c/20250430-for-upstream-i801-spd5118-no-=
+instantiate-v2-0-2f54d91ae2c7@canonical.com/
+>
+>
