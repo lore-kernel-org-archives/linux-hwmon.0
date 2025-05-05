@@ -1,45 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3933829AB1A;
-	Mon,  5 May 2025 22:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B294035C90E;
+	Mon,  5 May 2025 22:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746485055; cv=none; b=VCqnSILg4umso3+snNONrDEQVopG1kYyyYGYB1NghJnEPw+FR9j4AclEZgwZhyXxvH8Iy8fKL5SAiO3myJ0JKKViM8XVbLw2GmtatqMQ+XCkfSRpebV6EsW0qXTltbr9NH3qQdyxAxmBHhM22/9vHCBOOH3I2ZnYvg7d/ZvYlzU=
+	t=1746485232; cv=none; b=nGSJJyj+ssoU6o4+daVR0wvfvwkTe9HpQR0kix+cUlYa+YHqve70L+34zFgVWh46oGJBrq+tL5PIU1T8MEp5xRinjq9X6C9MbNGv+vYMpMcn2OTIhP6YXcYsRZh4L2AgMeAmYr3Yb82bfsRvNz6vceyyUhAXUWA3cf3TCIHQJvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746485055; c=relaxed/simple;
-	bh=D7eXuyELba5Og2esZH36Lvj9LlUf/dCO03XC8wf+1jM=;
+	s=arc-20240116; t=1746485232; c=relaxed/simple;
+	bh=QB5BDmNQRFBOKORRB1IUyzjlT4+1l2j7PdDoCOiaFtk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GLIhbgiB/KLOdfrs3mF+hrCAdqX4MnW2x6W5Y6lJ8lJXNP9/Yv6dyIHTWWsN8N3P0LXb5SsDMtDGFI9Q8+yF4IaJnDuHp/pyde7+SVlg0i9j5JPawpXbIIquigu7zSwSOuctRKU0++ufh79wRFShY0cQYN5JE/qrv/whN8zk5YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDjIenEc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=cBaICYQIuylnJleL2Il2jn6FWlXq/s+ee52bWhH2++VcpaV60myYJ7OufRToccQCYhatYoq4O250boNhDkUgWvFdo2jAvhRWrNk1wrKwexTeSAxwdQi89oVoA+GVP9oBMoflxD2/TC5yxCekobhc2Ma5S8wmercmi57LSoBE1yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BK6GzS4g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDjIenEc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D8AC4CEE4;
-	Mon,  5 May 2025 22:44:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BK6GzS4g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629C4C4CEED;
+	Mon,  5 May 2025 22:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746485054;
-	bh=D7eXuyELba5Og2esZH36Lvj9LlUf/dCO03XC8wf+1jM=;
+	s=k20201202; t=1746485232;
+	bh=QB5BDmNQRFBOKORRB1IUyzjlT4+1l2j7PdDoCOiaFtk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DDjIenEc7+SddyqzYhSNLo1Ilcu5Cdjhhj2lHqU0XydVJK5Ehettu/5kZ0LFUyDv4
-	 bof/WZVsX6ab7cQ5YlQ2aSpoxw0bhReRuBaPx05fjLtyOq062yOUAFebUyNgFqrf0b
-	 tJINE/2ILRlsps9zn9JIZaGqdArfaa8nZxUsZA55esEew+P5/Wykqb+XbWjEfvOowa
-	 uUoAm/B7Ol8S3L3es2mNe12jSe7PyeOGMF24hk1fMzZzl4JN2dIDVXUH5d/sePUDUC
-	 BhG7P60PzBiN3gPs3RUrHPEcNaKdr0sSE9HGbKrqXWv6jWxZnpYGKsksLappEb52UE
-	 YtR8eRBKILNHA==
+	b=BK6GzS4gn3Eu4I4+aHTkNgZ4LWb/UcD9cV3M4acIGkSfr6do5KyTVEapYsrVDz30q
+	 0YjGtF8goeglcEwN60YIuARP8GJimsvlUP/JJhk2MU2YRLpEX9msXoIZzefekw3Q0A
+	 MbUNv6HcRxXMHjlX0/o6ITSnsGsm5Z7wm8xN83ePUEOy8DyMqucMNv5tvmejUg41St
+	 gKUPMMV+1s7TZa2326fxiHcKQe95FfuAfXPAU4JdwMi12rqJZnNH9zW4ARzpfVd20h
+	 QjtSyp8MImeZvBUJ2KR+HJHdNW/VtalP7MRQk/w4MJMsSry+WCsAdMMLFnnOnaWVPa
+	 E/lQNH3pzEFeA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Kurt Borja <kuurtb@gmail.com>,
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
-	corbet@lwn.net,
-	pali@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 144/486] hwmon: (dell-smm) Increment the number of fans
-Date: Mon,  5 May 2025 18:33:40 -0400
-Message-Id: <20250505223922.2682012-144-sashal@kernel.org>
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 224/486] hwmon: (gpio-fan) Add missing mutex locks
+Date: Mon,  5 May 2025 18:35:00 -0400
+Message-Id: <20250505223922.2682012-224-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
 References: <20250505223922.2682012-1-sashal@kernel.org>
@@ -54,84 +51,73 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
-From: Kurt Borja <kuurtb@gmail.com>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-[ Upstream commit dbcfcb239b3b452ef8782842c36fb17dd1b9092f ]
+[ Upstream commit 9fee7d19bab635f89223cc40dfd2c8797fdc4988 ]
 
-Some Alienware laptops that support the SMM interface, may have up to 4
-fans.
+set_fan_speed() is expected to be called with fan_data->lock being locked.
+Add locking for proper synchronization.
 
-Tested on an Alienware x15 r1.
-
-Signed-off-by: Kurt Borja <kuurtb@gmail.com>
-Link: https://lore.kernel.org/r/20250304055249.51940-2-kuurtb@gmail.com
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20250210145934.761280-3-alexander.stein@ew.tq-group.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/hwmon/dell-smm-hwmon.rst | 14 +++++++-------
- drivers/hwmon/dell-smm-hwmon.c         |  5 ++++-
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/hwmon/gpio-fan.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-index 74905675d71f9..5a4edb6565cf9 100644
---- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -32,12 +32,12 @@ Temperature sensors and fans can be queried and set via the standard
- =============================== ======= =======================================
- Name				Perm	Description
- =============================== ======= =======================================
--fan[1-3]_input                  RO      Fan speed in RPM.
--fan[1-3]_label                  RO      Fan label.
--fan[1-3]_min                    RO      Minimal Fan speed in RPM
--fan[1-3]_max                    RO      Maximal Fan speed in RPM
--fan[1-3]_target                 RO      Expected Fan speed in RPM
--pwm[1-3]                        RW      Control the fan PWM duty-cycle.
-+fan[1-4]_input                  RO      Fan speed in RPM.
-+fan[1-4]_label                  RO      Fan label.
-+fan[1-4]_min                    RO      Minimal Fan speed in RPM
-+fan[1-4]_max                    RO      Maximal Fan speed in RPM
-+fan[1-4]_target                 RO      Expected Fan speed in RPM
-+pwm[1-4]                        RW      Control the fan PWM duty-cycle.
- pwm1_enable                     WO      Enable or disable automatic BIOS fan
-                                         control (not supported on all laptops,
-                                         see below for details).
-@@ -93,7 +93,7 @@ Again, when you find new codes, we'd be happy to have your patches!
- ---------------------------
+diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+index d92c536be9af7..b779240328d59 100644
+--- a/drivers/hwmon/gpio-fan.c
++++ b/drivers/hwmon/gpio-fan.c
+@@ -393,7 +393,12 @@ static int gpio_fan_set_cur_state(struct thermal_cooling_device *cdev,
+ 	if (state >= fan_data->num_speed)
+ 		return -EINVAL;
  
- The driver also exports the fans as thermal cooling devices with
--``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
-+``type`` set to ``dell-smm-fan[1-4]``. This allows for easy fan control
- using one of the thermal governors.
++	mutex_lock(&fan_data->lock);
++
+ 	set_fan_speed(fan_data, state);
++
++	mutex_unlock(&fan_data->lock);
++
+ 	return 0;
+ }
  
- Module parameters
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index f5bdf842040e6..b043fbd15c9da 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -73,7 +73,7 @@
- #define DELL_SMM_LEGACY_EXECUTE	0x1
+@@ -489,7 +494,11 @@ MODULE_DEVICE_TABLE(of, of_gpio_fan_match);
  
- #define DELL_SMM_NO_TEMP	10
--#define DELL_SMM_NO_FANS	3
-+#define DELL_SMM_NO_FANS	4
+ static void gpio_fan_stop(void *data)
+ {
++	struct gpio_fan_data *fan_data = data;
++
++	mutex_lock(&fan_data->lock);
+ 	set_fan_speed(data, 0);
++	mutex_unlock(&fan_data->lock);
+ }
  
- struct smm_regs {
- 	unsigned int eax;
-@@ -1074,11 +1074,14 @@ static const struct hwmon_channel_info * const dell_smm_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
- 			   HWMON_F_TARGET,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-+			   HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
- 			   HWMON_F_TARGET
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT
- 			   ),
- 	NULL
+ static int gpio_fan_probe(struct platform_device *pdev)
+@@ -562,7 +571,9 @@ static int gpio_fan_suspend(struct device *dev)
+ 
+ 	if (fan_data->gpios) {
+ 		fan_data->resume_speed = fan_data->speed_index;
++		mutex_lock(&fan_data->lock);
+ 		set_fan_speed(fan_data, 0);
++		mutex_unlock(&fan_data->lock);
+ 	}
+ 
+ 	return 0;
+@@ -572,8 +583,11 @@ static int gpio_fan_resume(struct device *dev)
+ {
+ 	struct gpio_fan_data *fan_data = dev_get_drvdata(dev);
+ 
+-	if (fan_data->gpios)
++	if (fan_data->gpios) {
++		mutex_lock(&fan_data->lock);
+ 		set_fan_speed(fan_data, fan_data->resume_speed);
++		mutex_unlock(&fan_data->lock);
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.39.5
 
