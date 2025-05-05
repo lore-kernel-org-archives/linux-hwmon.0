@@ -1,45 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179882DA104;
-	Mon,  5 May 2025 22:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0392FB2C1;
+	Mon,  5 May 2025 22:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746483684; cv=none; b=mGXAZetVpqq8h4CL0cFykyCbypNfJQH9LV+q9r5UgTht3YQokxMNFnMy4tpJ8Do9tfNss5HDBhJfOabTc9OiMhEi2ndvIteZjkz3zs9Elm8VNzE6+ZrkuQUaSpOGIEeea7E3Hy1U/7+t17bSVTsWn6Bzr2lLYrX++DLZsV+yXh4=
+	t=1746483949; cv=none; b=NGWkOBeKI4u94t6zpQPDwgKK6iryFnUArpFQtUgeBgJlh3Qs6Zua/VOI6/UffiKSkewOeolGrM+6oPi0NMdePrqtoaUvwT+SvUu3LO97X5K9u6aVD+6B+QmWalRijhv+aH9Fdza9MUqiPMTnN8oOVitTfNWUXiZ576jpQlcFYe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746483684; c=relaxed/simple;
-	bh=4A6iHzWNOnohZZamH2T5qzWaSp4/sasUPIzHpMwtFuQ=;
+	s=arc-20240116; t=1746483949; c=relaxed/simple;
+	bh=BuukV9p7q0CplVSlDrk4UoIvI5j7bdvSBn3FGiLexF4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CQFiD+D5tbCcGmxRj549Tt6E34GiIxJ2gcTP6B7m06eoZ/L8toxuvslP2fdkJZZFKs7OqAsXI+3aNiW9JHu9gsue1bYG5cgGI/NHCkx3b1Qbgs05VkwS1jQGKmMXDtAK38VmrMlRxxCvQixuJG+zFxcljAjbFDU6jj1+Y8Cf1fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHLdCOoM; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=QI00CIlE1jb1wo7TZpUuObDWYA7fqI3Sc+VbS6rjHbfrixvYqVirVJF7SI66jY5Nuw+mS+vxA1kUj67CytXfp2ZEZynPCMpJBC9UHWj39bG2E39DEZkXlcVAgYDqm22GXAKart/Skg2c7qT5+/6NGIKA6Se1+At+grodrTthsc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cU9TtSD+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHLdCOoM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0DEC4CEE4;
-	Mon,  5 May 2025 22:21:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cU9TtSD+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A07C4CEE4;
+	Mon,  5 May 2025 22:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746483683;
-	bh=4A6iHzWNOnohZZamH2T5qzWaSp4/sasUPIzHpMwtFuQ=;
+	s=k20201202; t=1746483948;
+	bh=BuukV9p7q0CplVSlDrk4UoIvI5j7bdvSBn3FGiLexF4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FHLdCOoMK3C4HYsEjSTeMLfR0wV+Ix0AlwWiNRBv2DLFiI+6+/6tu9R0RgW2HBy1h
-	 J6rd16CkBbFsBIjfmv1EOGB28WqC3Cj3d94t0yvQtUPq45vCDrkzhvnOMkX2G6ZEw7
-	 GrcLxb+3vM+pMLpAFQ4nbWu2tmOod+HzTHscaHWsZZATXgp0BBFetfvXKCJXF2m7dG
-	 GPFke+UrADgbEVxDvp1GZ718jiHWYvC6Uovp2MOrF9VAfPfq88n6y8RSFXaK34ded7
-	 dRowFIC0MdB4UzhdHLrXuHhIsgyuMKUEWsxX8Wm+t4njEO7dPPWDHeiBLjkPplhpqB
-	 Dl9xheHj2v/yg==
+	b=cU9TtSD+dZLxhrv2KVTqnnrlwr/ZveyM4Kudw/uutTDb4ZQOE9QhGQI/D1Ma9JqMC
+	 qDWhAwqnPdakcEwb4Tzc6JP5QwdV+EKdWI/gCxm2yqVZTVrDeQVNqKH3uIgCXTuzH8
+	 jAT/b4H9TAY8OMh+JC8/P/SkKU0mYo9w9LrZ6KFhQHYIjgukRkL4ZFzX0R4B5u+Cbw
+	 z/p8kEYvjI8gmktI7TZou9+bqJlJW+y2BrFXXWjyhYcSUn4yiduQ0UHNbVIMAFJY1Z
+	 AEGa/2rPAX2tuzAvBDddBzsfRdV9g0N7iu2cM6OYVwyPh61dAPEt8opnxqq4b5ZEfF
+	 1U1IiG0A+b8PA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Kurt Borja <kuurtb@gmail.com>,
+Cc: Huisong Li <lihuisong@huawei.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	jdelvare@suse.com,
-	corbet@lwn.net,
-	pali@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 178/642] hwmon: (dell-smm) Increment the number of fans
-Date: Mon,  5 May 2025 18:06:34 -0400
-Message-Id: <20250505221419.2672473-178-sashal@kernel.org>
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 284/642] hwmon: (acpi_power_meter) Fix the fake power alarm reporting
+Date: Mon,  5 May 2025 18:08:20 -0400
+Message-Id: <20250505221419.2672473-284-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
 References: <20250505221419.2672473-1-sashal@kernel.org>
@@ -54,84 +51,49 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.14.5
 Content-Transfer-Encoding: 8bit
 
-From: Kurt Borja <kuurtb@gmail.com>
+From: Huisong Li <lihuisong@huawei.com>
 
-[ Upstream commit dbcfcb239b3b452ef8782842c36fb17dd1b9092f ]
+[ Upstream commit 0ea627381eb527a0ebd262c690c3992085b87ff4 ]
 
-Some Alienware laptops that support the SMM interface, may have up to 4
-fans.
+We encountered a problem that a fake power alarm is reported to
+user on the platform unsupported notifications at the second step
+below:
+1> Query 'power1_alarm' attribute when the power capping occurs.
+2> Query 'power1_alarm' attribute when the power capping is over
+   and the current average power is less then power cap value.
 
-Tested on an Alienware x15 r1.
+The root cause is that the resource->power_alarm is set to true
+at the first step. And power meter use this old value to show
+the power alarm state instead of the current the comparison value.
 
-Signed-off-by: Kurt Borja <kuurtb@gmail.com>
-Link: https://lore.kernel.org/r/20250304055249.51940-2-kuurtb@gmail.com
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+Link: https://lore.kernel.org/r/20250220030832.2976-1-lihuisong@huawei.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/hwmon/dell-smm-hwmon.rst | 14 +++++++-------
- drivers/hwmon/dell-smm-hwmon.c         |  5 ++++-
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/hwmon/acpi_power_meter.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
-index 74905675d71f9..5a4edb6565cf9 100644
---- a/Documentation/hwmon/dell-smm-hwmon.rst
-+++ b/Documentation/hwmon/dell-smm-hwmon.rst
-@@ -32,12 +32,12 @@ Temperature sensors and fans can be queried and set via the standard
- =============================== ======= =======================================
- Name				Perm	Description
- =============================== ======= =======================================
--fan[1-3]_input                  RO      Fan speed in RPM.
--fan[1-3]_label                  RO      Fan label.
--fan[1-3]_min                    RO      Minimal Fan speed in RPM
--fan[1-3]_max                    RO      Maximal Fan speed in RPM
--fan[1-3]_target                 RO      Expected Fan speed in RPM
--pwm[1-3]                        RW      Control the fan PWM duty-cycle.
-+fan[1-4]_input                  RO      Fan speed in RPM.
-+fan[1-4]_label                  RO      Fan label.
-+fan[1-4]_min                    RO      Minimal Fan speed in RPM
-+fan[1-4]_max                    RO      Maximal Fan speed in RPM
-+fan[1-4]_target                 RO      Expected Fan speed in RPM
-+pwm[1-4]                        RW      Control the fan PWM duty-cycle.
- pwm1_enable                     WO      Enable or disable automatic BIOS fan
-                                         control (not supported on all laptops,
-                                         see below for details).
-@@ -93,7 +93,7 @@ Again, when you find new codes, we'd be happy to have your patches!
- ---------------------------
- 
- The driver also exports the fans as thermal cooling devices with
--``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
-+``type`` set to ``dell-smm-fan[1-4]``. This allows for easy fan control
- using one of the thermal governors.
- 
- Module parameters
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index cd00adaad1b41..79e5606e6d2f8 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -73,7 +73,7 @@
- #define DELL_SMM_LEGACY_EXECUTE	0x1
- 
- #define DELL_SMM_NO_TEMP	10
--#define DELL_SMM_NO_FANS	3
-+#define DELL_SMM_NO_FANS	4
- 
- struct smm_regs {
- 	unsigned int eax;
-@@ -1074,11 +1074,14 @@ static const struct hwmon_channel_info * const dell_smm_info[] = {
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
- 			   HWMON_F_TARGET,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
-+			   HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
- 			   HWMON_F_TARGET
- 			   ),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT,
- 			   HWMON_PWM_INPUT
- 			   ),
- 	NULL
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 44afb07409a46..f05986e4f3792 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -437,9 +437,13 @@ static ssize_t show_val(struct device *dev,
+ 			ret = update_cap(resource);
+ 			if (ret)
+ 				return ret;
++			resource->power_alarm = resource->power > resource->cap;
++			val = resource->power_alarm;
++		} else {
++			val = resource->power_alarm ||
++				 resource->power > resource->cap;
++			resource->power_alarm = resource->power > resource->cap;
+ 		}
+-		val = resource->power_alarm || resource->power > resource->cap;
+-		resource->power_alarm = resource->power > resource->cap;
+ 		break;
+ 	case 7:
+ 	case 8:
 -- 
 2.39.5
 
