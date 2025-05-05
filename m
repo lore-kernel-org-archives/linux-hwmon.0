@@ -1,93 +1,137 @@
-Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C5D202C31;
-	Mon,  5 May 2025 21:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179882DA104;
+	Mon,  5 May 2025 22:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746479256; cv=none; b=bnBOvU3NvBDKLvtS53HAZYPl/cOe1cRgVAaFOOx6tpW+zmFNzOGSBsK5KrdHzbRiPOyFaYUN3Kjrno5deT143ieXuXBopSstx8wb8k/RkW8zeveVMUJoC94YydTOGUdDQqK1KDCINEo9ta1lsohhOOEbXiNUj0VlST0jbrSOqVw=
+	t=1746483684; cv=none; b=mGXAZetVpqq8h4CL0cFykyCbypNfJQH9LV+q9r5UgTht3YQokxMNFnMy4tpJ8Do9tfNss5HDBhJfOabTc9OiMhEi2ndvIteZjkz3zs9Elm8VNzE6+ZrkuQUaSpOGIEeea7E3Hy1U/7+t17bSVTsWn6Bzr2lLYrX++DLZsV+yXh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746479256; c=relaxed/simple;
-	bh=OeKSYQM0y4acgK9Dg3KckFONPyAn/+wg5t5V/RDgh3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=b9rlcXuUL2ovQYdQi4Oz6sdCI3ATDzzwkdfYgsNGCTLceT3lBuarwZoVtiRE6MDfexhK8IhBWfymn3q7psxhQPNpEWVNiMhD8BmxbH5p5vU14qwdWoFMeaaOgubfH3fUCYwfwPRyP8IBHDafOYpKXOW8/fvkw5amTcmq+lfqq6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=jGY3MJlz; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=IAoWBOUV; arc=none smtp.client-ip=69.59.18.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
+	s=arc-20240116; t=1746483684; c=relaxed/simple;
+	bh=4A6iHzWNOnohZZamH2T5qzWaSp4/sasUPIzHpMwtFuQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CQFiD+D5tbCcGmxRj549Tt6E34GiIxJ2gcTP6B7m06eoZ/L8toxuvslP2fdkJZZFKs7OqAsXI+3aNiW9JHu9gsue1bYG5cgGI/NHCkx3b1Qbgs05VkwS1jQGKmMXDtAK38VmrMlRxxCvQixuJG+zFxcljAjbFDU6jj1+Y8Cf1fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FHLdCOoM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="jGY3MJlz";
-	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="IAoWBOUV"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=mattcorallo.com; s=1746477663; h=In-Reply-To:From:References:To:Subject:
-	From:Subject:To:Cc:Cc:Reply-To;
-	bh=kvFNPuKhYHPYwuvjJeByf4oFzEWjO5/uCzgmJyvUC2s=; b=jGY3MJlzH1ZLOEC4J+8HeADl6N
-	NUCkE0kXqjhrOP9y+cvLdb41kYSfKm8Zw3SaBxZ7vzVcXUSbySd4eqV1pllSMmGcUBBR2fHc2U1mB
-	Ft6a8wGE+H5Bq5Q/p+kl8MbrWMNF2GaAzGOx9au4j09AayAvWbKXQwjvlSf2Lk63O5EvA9xPXqXeq
-	d3/YFriuwu6qEUKJQwPxRXek+tWBgbATiePxowW40yriZLMQ2PnST0gasXAMB+tJQvMzvhoHygAnI
-	DLEx9eEU2w2xxKnReR13/8N+TZ8PdBXAEx06MycE85zttMpHmYU8bWlTDsV4Uut8pd79kwnFBs+m6
-	B5mvzZAA==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=clients.mail.as397444.net; s=1746477665; h=In-Reply-To:From:References:To:
-	Subject:From:Subject:To:Cc:Cc:Reply-To;
-	bh=kvFNPuKhYHPYwuvjJeByf4oFzEWjO5/uCzgmJyvUC2s=; b=IAoWBOUVppqL6f/UhCJMh6z8if
-	WYXPaMBvjD/wQtSmeb7VarcMHuHjfNCVt188sjlIcId7GTO3dDu+rh1YQ3AKx2zEltIb2UGw6/x3/
-	ZUATrfy6XgZwHBxY7hlpUTc1aHbJ7nIuvvLXdr7y/ZLyHEZrYNTZYUVs40bvEWYF0el51T1lyxTFj
-	5x7ic25bPX6DXObYmWgxYp7nKNfQie8j+POjUXfWVVMV3MRa/640/7y1oKASk2gGNBoiQMrL3L0om
-	cYsG/PGUv8KEIjAdm7/mf0sCt5/Q75AoBUvHXN2S/R/l/F0QdGArvuQfEvGtxKW2fEg1+vW4/SaFt
-	FPaISjAw==;
-X-DKIM-Note: Keys used to sign are likely public at
-X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
-X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
-X-DKIM-Note: For more info, see https://as397444.net/dkim/
-Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
-	(envelope-from <yalbrymrb@mattcorallo.com>)
-	id 1uC2ch-00CHmI-1D;
-	Mon, 05 May 2025 20:41:11 +0000
-Message-ID: <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
-Date: Mon, 5 May 2025 16:41:09 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FHLdCOoM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0DEC4CEE4;
+	Mon,  5 May 2025 22:21:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746483683;
+	bh=4A6iHzWNOnohZZamH2T5qzWaSp4/sasUPIzHpMwtFuQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FHLdCOoMK3C4HYsEjSTeMLfR0wV+Ix0AlwWiNRBv2DLFiI+6+/6tu9R0RgW2HBy1h
+	 J6rd16CkBbFsBIjfmv1EOGB28WqC3Cj3d94t0yvQtUPq45vCDrkzhvnOMkX2G6ZEw7
+	 GrcLxb+3vM+pMLpAFQ4nbWu2tmOod+HzTHscaHWsZZATXgp0BBFetfvXKCJXF2m7dG
+	 GPFke+UrADgbEVxDvp1GZ718jiHWYvC6Uovp2MOrF9VAfPfq88n6y8RSFXaK34ded7
+	 dRowFIC0MdB4UzhdHLrXuHhIsgyuMKUEWsxX8Wm+t4njEO7dPPWDHeiBLjkPplhpqB
+	 Dl9xheHj2v/yg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Kurt Borja <kuurtb@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	jdelvare@suse.com,
+	corbet@lwn.net,
+	pali@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 178/642] hwmon: (dell-smm) Increment the number of fans
+Date: Mon,  5 May 2025 18:06:34 -0400
+Message-Id: <20250505221419.2672473-178-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
+References: <20250505221419.2672473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: PMBus memory overflow
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- Linux I2C <linux-i2c@vger.kernel.org>
-References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
- <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
- <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
- <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
- <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
- <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
- <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
- <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
- <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
- <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
- <aAtEydwUfVcE0XeA@shikoro>
-Content-Language: en-US
-From: Matt Corallo <yalbrymrb@mattcorallo.com>
-In-Reply-To: <aAtEydwUfVcE0XeA@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.5
+Content-Transfer-Encoding: 8bit
 
+From: Kurt Borja <kuurtb@gmail.com>
 
+[ Upstream commit dbcfcb239b3b452ef8782842c36fb17dd1b9092f ]
 
-On 4/25/25 4:16 AM, Wolfram Sang wrote:
-> 
->> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
->> I do wonder if a check such as the one above would be appropriate as well, possibly
->> even combined with a WARN_ONCE().
-> 
-> How annoying, there was still an unchecked case left? Sorry. Yes, the
-> core can have a check for a short-term solution. The long-term solution
-> is to support SMBUS3.x which allows for 255 byte transfers.
+Some Alienware laptops that support the SMM interface, may have up to 4
+fans.
 
-Thanks!
+Tested on an Alienware x15 r1.
 
-Any update here? I guess we already have a patch so no use in me trying to write one. Would be nice 
-to get this in a pull so it can head through backports.
+Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+Link: https://lore.kernel.org/r/20250304055249.51940-2-kuurtb@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ Documentation/hwmon/dell-smm-hwmon.rst | 14 +++++++-------
+ drivers/hwmon/dell-smm-hwmon.c         |  5 ++++-
+ 2 files changed, 11 insertions(+), 8 deletions(-)
 
-Thanks,
-Matt
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+index 74905675d71f9..5a4edb6565cf9 100644
+--- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -32,12 +32,12 @@ Temperature sensors and fans can be queried and set via the standard
+ =============================== ======= =======================================
+ Name				Perm	Description
+ =============================== ======= =======================================
+-fan[1-3]_input                  RO      Fan speed in RPM.
+-fan[1-3]_label                  RO      Fan label.
+-fan[1-3]_min                    RO      Minimal Fan speed in RPM
+-fan[1-3]_max                    RO      Maximal Fan speed in RPM
+-fan[1-3]_target                 RO      Expected Fan speed in RPM
+-pwm[1-3]                        RW      Control the fan PWM duty-cycle.
++fan[1-4]_input                  RO      Fan speed in RPM.
++fan[1-4]_label                  RO      Fan label.
++fan[1-4]_min                    RO      Minimal Fan speed in RPM
++fan[1-4]_max                    RO      Maximal Fan speed in RPM
++fan[1-4]_target                 RO      Expected Fan speed in RPM
++pwm[1-4]                        RW      Control the fan PWM duty-cycle.
+ pwm1_enable                     WO      Enable or disable automatic BIOS fan
+                                         control (not supported on all laptops,
+                                         see below for details).
+@@ -93,7 +93,7 @@ Again, when you find new codes, we'd be happy to have your patches!
+ ---------------------------
+ 
+ The driver also exports the fans as thermal cooling devices with
+-``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
++``type`` set to ``dell-smm-fan[1-4]``. This allows for easy fan control
+ using one of the thermal governors.
+ 
+ Module parameters
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index cd00adaad1b41..79e5606e6d2f8 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -73,7 +73,7 @@
+ #define DELL_SMM_LEGACY_EXECUTE	0x1
+ 
+ #define DELL_SMM_NO_TEMP	10
+-#define DELL_SMM_NO_FANS	3
++#define DELL_SMM_NO_FANS	4
+ 
+ struct smm_regs {
+ 	unsigned int eax;
+@@ -1074,11 +1074,14 @@ static const struct hwmon_channel_info * const dell_smm_info[] = {
+ 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
+ 			   HWMON_F_TARGET,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
++			   HWMON_F_TARGET,
++			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
+ 			   HWMON_F_TARGET
+ 			   ),
+ 	HWMON_CHANNEL_INFO(pwm,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT,
++			   HWMON_PWM_INPUT,
+ 			   HWMON_PWM_INPUT
+ 			   ),
+ 	NULL
+-- 
+2.39.5
+
