@@ -1,185 +1,198 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E42F2D4B64
-	for <linux-hwmon@vger.kernel.org>; Tue,  6 May 2025 02:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E53E28B404;
+	Tue,  6 May 2025 05:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746499784; cv=none; b=FXCfkdfZryCe34bX+FFSt3Zgk7tL2o+VPJ12GOx8pUIL6U4H5rwDpoZjkXzlO9yBBuP1sXz1qT9pxf+vvnlOXvqKM8UkugXyZ1T+m6tfvTkekk7ezMJI6kGEOdWyt8hadz9Rq3C4RB6WCqa0i6QXs0bxngap8+ei5ZWyCFnz5QI=
+	t=1746509945; cv=none; b=kjJY9w76bGDXJlavl5jeb5+YmgL4nzzPeyXbzSpMLbix7WgdjvEvbF6nYdveG46jrmbgQ5uB6v1s5oK0Kwb+ozvWFzivq5hZ21NI999MZYxZ7PxUyZyqQ4BMOFHD9I4qXL+Fo5KSu649Fsa8bRVqSaiP9A8b81yjsQLI30GTu/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746499784; c=relaxed/simple;
-	bh=BVcS6y/RkytdfYbg6aiFphNw4k53SlFmqyW2ahlf+8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nCpuwj/+Urav5Mgs3y8dHsLQfLEXEBCuOWtmzXXep2Kb+5r2Vx4/reBF1WKuR4UYdM6A707oDNRGFCEqnzhJzBh6DUhn69MkrsdyX6aOOkjxw5lGa+KGGvAV2LhG6FQlIuHhTmmKO8JU8KDDxevRGl3EVgjXM07eTUGoMEHNwvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KTjtg1OE; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1746509945; c=relaxed/simple;
+	bh=VqaefWIeeAWB8AF8A6vwJaER/pKdcIdNGd5Xi4YlzC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=E7ZYWpJS9TEyHyUJ+Op84zUu7j7OEGtVpa/EKb8ZrwYHGtY/dCa5ynTqomVp/g+1i3d/ArFqcC2xlI9ukb5WX/ly/AORnE+pQoYvxTD16JJUUJT+1RMMcBE84w0cboQeLMrq4q04IMILAsQ+uT5bbUzSrYwqQKMN51u6CJVzFp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iQdv+nBk; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KTjtg1OE"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74019695377so4215268b3a.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 May 2025 19:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1746499782; x=1747104582; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=q0+JSDpYT5BNX3k6gPTP+QpNOml9kj6YJgCfvY0JCRs=;
-        b=KTjtg1OEHaijcvjo+g0DgZpMEWvryOFq4uOnmLvDSZPE3l2KjSX2P4zaX2XVZosm+J
-         NyeEkECA21eh5/ct5hV+99+fu76Oymt6THZe40hSXSO9eYiCB6okRSEZjhNzUZr5TVt/
-         +ZllpcB7MgSLRdW0LAbb9J5lLI90bV2245AYY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746499782; x=1747104582;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0+JSDpYT5BNX3k6gPTP+QpNOml9kj6YJgCfvY0JCRs=;
-        b=D95WKP0No6CZJFsrN+Hj7VTFYCDDCH2dLwAuG9wYfL2nlNOimup/2pGeBzHxyiigR2
-         b6/o+zSo5aSdh9JAB6/ESlINbsxpVlD4laZd9jMrmbDKAAAJ0YOaqA9C6NeZLJ0yOPgJ
-         lmbT3JjUWtgNBY+D5BA3BmwWV4D3OnyK9VVJjplMoJlPWSS02wkFfGKl+hGNtN3Zps7L
-         6OeGsiwVnQtx+9PzdzfkVPVNwp/iCPksZoA6SritYHI+mAyCFlJFzLljSvyQF3sSnIBA
-         EwfPJZnTcC6oJUTN5dhoN167IAhIXaFIyad4XujyeDIa72ZGZaqVWqAPyyrtKxscnD9s
-         swCg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8W12RH309N3KYig3+iErOyTuCF4gFrzci0E91wq11+I/OH8ay/pHjPoMt82pS2CCekcRAH1WDg9De1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4PRsCeJn7/OLhEYCLta1MQFg8huA6pQ4svu/aZ1PjdKE+9IGF
-	I/INBiGMJ2wkQKO7hilFk5fiX5zUD3WmbwkeGxJRtHqhQNo4qzBCdGiE7m8sEA==
-X-Gm-Gg: ASbGncuAu6+rpcAc3xzUAETUw8hL1cdUOHNW5hm+65HhHhb+c3VGqFogm8Ry0yhKdBI
-	Akzo3Oc37pKjdC5xuNssANcVNiQI6D+EvAT383fBIpLvCP4cB/6e3dyUdjqDUyZoeff+RdWUewG
-	TqzPZiWhDuEPLIwJuO+uAGDq13ssDWiqKiLvD6uQSdNX2aSoVk5r6A3SJ2tkdB+bxCo/IVkVRw8
-	QKa5DObRT2iiNVdTQP6B59BtRnlOIypXmQYY+v2XoVyJtKDxC3Wwbb1+mOZYo/lnGSKLGPAb3o9
-	L8s2uVNPF3mYrXfJ1SAs4lt1UFe/hRCG9g==
-X-Google-Smtp-Source: AGHT+IEEZ1PfoCNd1C1LjNnH37ZRF5k8qCVtLcVSMSDNAUIZcoEsuzle0aPuWxV/v0FJ4LrYSFQ+Ew==
-X-Received: by 2002:a05:6a20:2d2b:b0:1f5:619a:8f75 with SMTP id adf61e73a8af0-20e96108b51mr15452923637.2.1746499782489;
-        Mon, 05 May 2025 19:49:42 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:d4bd:e7e5:608:dbd7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b1fb3c6b6d8sm6384494a12.69.2025.05.05.19.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 May 2025 19:49:42 -0700 (PDT)
-Date: Tue, 6 May 2025 10:49:37 +0800
-From: Sung-Chi Li <lschyi@chromium.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>, chrome-platform@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (cros_ec) register fans into thermal
- framework cooling devices
-Message-ID: <aBl4wcX889otz_ms@google.com>
-References: <20250502-cros_ec_fan-v2-0-4d588504a01f@chromium.org>
- <20250502-cros_ec_fan-v2-3-4d588504a01f@chromium.org>
- <b2432c5c-2589-4cfe-821f-47e5128af2d0@t-8ch.de>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iQdv+nBk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=AqqRBuCmSkqKBix9v4
+	uiNk3uih1aJj44EwU4vrNzXFQ=; b=iQdv+nBkRg2YU97jYPbe0Xnf+m+Wjnp2ul
+	qOwqs8EkspQG20LI7GW3eXLI4e+xUgrbzW2SO2ktVcxRkxfnsAkJY0ELi4dYEOTE
+	ASHBZSUrYvWCIZAdtDkDp3+KCzQhiICGKcaQcxnAtzUoDSQCq/7nQBws2kto9ErX
+	g7dVho2M8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wBHxSpEoBloZ2M1Ew--.50689S3;
+	Tue, 06 May 2025 13:38:18 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	derek.lin@silergycorp.com,
+	miguel.lee@silergycorp.com,
+	chris.ho@silergycorp.com,
+	eason.liao@silergycorp.com
+Subject: [PATCH v7 1/4] hwmon:(ina238)Add ina238_config to save configurations for different chips
+Date: Tue,  6 May 2025 01:37:38 -0400
+Message-Id: <20250506053741.4837-2-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20250506053741.4837-1-wenliang202407@163.com>
+References: <20250506053741.4837-1-wenliang202407@163.com>
+X-CM-TRANSID:_____wBHxSpEoBloZ2M1Ew--.50689S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXw1kWr4rWr1fuw48WF15Jwb_yoWrCrWrpF
+	Z3Ga45JrWUXF4aga9xta97uFn8Kwn7Jr17Kr47Ww1S9F1kWry0kFZrKF1UAFsrKr95XF4I
+	yry8tryrCwnFv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEk9NDUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbibgFF02gZnfc1tgABsg
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b2432c5c-2589-4cfe-821f-47e5128af2d0@t-8ch.de>
 
-On Sat, May 03, 2025 at 09:27:18AM +0200, Thomas Weißschuh wrote:
-> On 2025-05-02 13:34:47+0800, Sung-Chi Li via B4 Relay wrote:
-> > From: Sung-Chi Li <lschyi@chromium.org>
-> > 
-> > Register fans connected under EC as thermal cooling devices as well, so
-> > these fans can then work with the thermal framework.
-> > 
-> > During the driver probing phase, we will also try to register each fan
-> > as a thermal cooling device based on previous probe result (whether the
-> > there are fans connected on that channel, and whether EC supports fan
-> > control). The basic get max state, get current state, and set current
-> > state methods are then implemented as well.
-> > 
-> > Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
-> > ---
-> >  Documentation/hwmon/cros_ec_hwmon.rst |  2 ++
-> >  drivers/hwmon/cros_ec_hwmon.c         | 66 +++++++++++++++++++++++++++++++++++
-> >  2 files changed, 68 insertions(+)
-> > 
-> > diff --git a/Documentation/hwmon/cros_ec_hwmon.rst b/Documentation/hwmon/cros_ec_hwmon.rst
-> > index 5b802be120438732529c3d25b1afa8b4ee353305..82c75bdaf912a116eaafa3149dc1252b3f7007d2 100644
-> > --- a/Documentation/hwmon/cros_ec_hwmon.rst
-> > +++ b/Documentation/hwmon/cros_ec_hwmon.rst
-> > @@ -27,3 +27,5 @@ Fan and temperature readings are supported. PWM fan control is also supported if
-> >  the EC also supports setting fan PWM values and fan mode. Note that EC will
-> >  switch fan control mode back to auto when suspended. This driver will restore
-> >  the fan state before suspended.
-> > +If a fan is controllable, this driver will register that fan as a cooling device
-> > +in the thermal framework as well.
-> > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > index c5e42e2a03a0c8c68d3f8afbb2bb45b93a58b955..abfcf44fb7505189124e78c651b0eb1e0533b4e8 100644
-> > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> > @@ -13,6 +13,7 @@
-> >  #include <linux/platform_device.h>
-> >  #include <linux/platform_data/cros_ec_commands.h>
-> >  #include <linux/platform_data/cros_ec_proto.h>
-> > +#include <linux/thermal.h>
-> 
-> Needs a dependency on CONFIG_THERMAL.
-> 
+Add structure ina238_config to store proprietary properties for different
+chips to meet different chip adaptations
 
-I think adding the `if (!IS_ENABLED(CONFIG_THERMAL))` you suggested is
-sufficient, and turning on or off CONFIG_THERMAL both can compile, so I'll only
-add the guarding statement in the `cros_ec_hwmon_register_fan_cooling_devices`.
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
 
-> > +
-> > +	if (!priv->fan_control_supported)
-> > +		return;
-> > +
-> > +	for (i = 0; i < EC_FAN_SPEED_ENTRIES; i++) {
-> > +		if (!(priv->usable_fans & BIT(i)))
-> > +			continue;
-> > +
-> > +		cpriv = devm_kzalloc(dev, sizeof(*cpriv), GFP_KERNEL);
-> > +		if (!cpriv)
-> > +			return;
-> > +
-> > +		cpriv->hwmon_priv = priv;
-> > +		cpriv->index = i;
-> > +		devm_thermal_of_cooling_device_register(
-> > +			dev, NULL, devm_kasprintf(dev, GFP_KERNEL, "cros-ec-fan%zu", i), cpriv,
-> 
-> What happens for multiple/chained ECs? If both provide sensors the
-> thermal device names will collide.
-> 
+v6->v7:Maintain the previous changes
 
-How about changing the "cros-ec-fan%zu" to "%s-fan%zu", which prefixes the
-`dev_name()`? Here is an example from a device: cros-ec-hwmon.12.auto-fan0.
+v5->v6:Split the patch, this patch add a structure with the following contents: 
+1. 'has_power_highest' is used to determine whether peak power can be
+detected (New features for SQ52206)
+2. 'has_energy' is used to determine non-energy detection energy
+consumption (new feature for SQ52206)
+3. 'temp_shift' is used to distinguish the data bits of the
+temperature register
+4. 'power_calculate_factor' is used to calculate power
+5. 'config_default' is used to save the initial configuration
+6. 'bus_voltage_lsb' is used to save the least significant bit
+corresponding to bus voltage
+7. 'temp_lsb' is used tosave the least significant bit corresponding
+to temperature
 
-> Error handling for devm_kasprintf() is missing.
-> 
+Configure the architecture content for ina237 and ina238 respectively to
+lay the foundation for subsequent adaptation to new chips.
 
-Thank you for catching this, I will skip registering that device if the
-devm_kasprintf() fails.
+ drivers/hwmon/ina238.c | 57 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 52 insertions(+), 5 deletions(-)
 
-> > +			&cros_ec_thermal_cooling_ops);
-> 
-> Error handling for devm_thermal_of_cooling_device_register() is missing.
-> 
+diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
+index 2d9f12f68d50..c8d6bd3041b3 100644
+--- a/drivers/hwmon/ina238.c
++++ b/drivers/hwmon/ina238.c
+@@ -102,7 +102,20 @@ static const struct regmap_config ina238_regmap_config = {
+ 	.val_bits = 16,
+ };
+ 
++enum ina238_ids { ina238, ina237 };
++
++struct ina238_config {
++	bool has_power_highest;		/* chip detection power peak */
++	bool has_energy;			/* chip detection energy */
++	u8 temp_shift;				/* fixed parameters for temp calculate */
++	u32 power_calculate_factor;	/* fixed parameters for power calculate */
++	u16 config_default;			/* Power-on default state */
++	int bus_voltage_lsb;		/* use for temperature calculate, uV/lsb */
++	int temp_lsb;				/* use for temperature calculate */
++};
++
+ struct ina238_data {
++	const struct ina238_config *config;
+ 	struct i2c_client *client;
+ 	struct mutex config_lock;
+ 	struct regmap *regmap;
+@@ -110,6 +123,27 @@ struct ina238_data {
+ 	int gain;
+ };
+ 
++static const struct ina238_config ina238_config[] = {
++	[ina238] = {
++		.has_energy = false,
++		.has_power_highest = false,
++		.temp_shift = 4,
++		.power_calculate_factor = 20,
++		.config_default = INA238_CONFIG_DEFAULT,
++		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
++		.temp_lsb = INA238_DIE_TEMP_LSB,
++	},
++	[ina237] = {
++		.has_energy = false,
++		.has_power_highest = false,
++		.temp_shift = 4,
++		.power_calculate_factor = 20,
++		.config_default = INA238_CONFIG_DEFAULT,
++		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
++		.temp_lsb = INA238_DIE_TEMP_LSB,
++	},
++};
++
+ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
+ {
+ 	u8 data[3];
+@@ -536,14 +570,20 @@ static int ina238_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct device *hwmon_dev;
+ 	struct ina238_data *data;
++	enum ina238_ids chip;
+ 	int config;
+ 	int ret;
+ 
++	chip = (uintptr_t)i2c_get_match_data(client);
++
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+ 	data->client = client;
++	/* set the device type */
++	data->config = &ina238_config[chip];
++
+ 	mutex_init(&data->config_lock);
+ 
+ 	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+@@ -570,7 +610,7 @@ static int ina238_probe(struct i2c_client *client)
+ 	}
+ 
+ 	/* Setup CONFIG register */
+-	config = INA238_CONFIG_DEFAULT;
++	config = data->config->config_default;
+ 	if (data->gain == 1)
+ 		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
+ 	ret = regmap_write(data->regmap, INA238_CONFIG, config);
+@@ -616,15 +656,22 @@ static int ina238_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id ina238_id[] = {
+-	{ "ina238" },
++	{ "ina237", ina237 },
++	{ "ina238", ina238 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ina238_id);
+ 
+ static const struct of_device_id __maybe_unused ina238_of_match[] = {
+-	{ .compatible = "ti,ina237" },
+-	{ .compatible = "ti,ina238" },
+-	{ },
++	{
++		.compatible = "ti,ina237",
++		.data = (void *)ina237
++	},
++	{
++		.compatible = "ti,ina238",
++		.data = (void *)ina238
++	},
++	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ina238_of_match);
+ 
+-- 
+2.17.1
 
-I think we should continue registering other fans, so maybe we add a warning
-here if the registration fails?
-
-> > +	}
-> > +}
-> > +
-> >  static int cros_ec_hwmon_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device *dev = &pdev->dev;
-> > @@ -402,6 +467,7 @@ static int cros_ec_hwmon_probe(struct platform_device *pdev)
-> >  	cros_ec_hwmon_probe_fans(priv);
-> >  	priv->fan_control_supported =
-> >  		cros_ec_hwmon_probe_fan_control_supported(priv->cros_ec);
-> > +	cros_ec_hwmon_register_fan_cooling_devices(dev, priv);
-> >  
-> >  	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
-> >  							 &cros_ec_hwmon_chip_info, NULL);
-> > 
-> > -- 
-> > 2.49.0.906.g1f30a19c02-goog
-> > 
-> > 
