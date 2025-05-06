@@ -1,171 +1,185 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57F2C0306;
-	Tue,  6 May 2025 01:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E42F2D4B64
+	for <linux-hwmon@vger.kernel.org>; Tue,  6 May 2025 02:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746495600; cv=none; b=iBVlMKd5Z67zRGTtKjedliQVKa+QSPlmgJ1ROeijdz8SztprwDhYRE6vDdg8drsaIXNn2maWDePcd+UjihYYquUDH59eQsrsJf9qXC84xGuuITc2ljpkrYBhfyLI8phbH1iiHkOqld80RWkA3KviZikUYlkBokg1nhHypVK1A7g=
+	t=1746499784; cv=none; b=FXCfkdfZryCe34bX+FFSt3Zgk7tL2o+VPJ12GOx8pUIL6U4H5rwDpoZjkXzlO9yBBuP1sXz1qT9pxf+vvnlOXvqKM8UkugXyZ1T+m6tfvTkekk7ezMJI6kGEOdWyt8hadz9Rq3C4RB6WCqa0i6QXs0bxngap8+ei5ZWyCFnz5QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746495600; c=relaxed/simple;
-	bh=u1WbMmqIPYHmg4ZpMHmZTcrcFke7vDkf0GAa/y7+usQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=g34i0X9io7FGcsSrsyeEMZPedBwp7dzC+y16zz6F6Vccx8qUKWk3j7bBXT7evxb8iWmOPKxwiTQjmrvFrIZNVy5y0Uv7zy9Tu+eAWJO0OokN7BzFJr7LrxUYHSZubY2GaFNgucWcAGlrWSdw5JtaJiF2Uk37jIsbk602hejnodU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TvvpZ8jn; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746499784; c=relaxed/simple;
+	bh=BVcS6y/RkytdfYbg6aiFphNw4k53SlFmqyW2ahlf+8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nCpuwj/+Urav5Mgs3y8dHsLQfLEXEBCuOWtmzXXep2Kb+5r2Vx4/reBF1WKuR4UYdM6A707oDNRGFCEqnzhJzBh6DUhn69MkrsdyX6aOOkjxw5lGa+KGGvAV2LhG6FQlIuHhTmmKO8JU8KDDxevRGl3EVgjXM07eTUGoMEHNwvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KTjtg1OE; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TvvpZ8jn"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-74068f95d9fso2260938b3a.0;
-        Mon, 05 May 2025 18:39:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KTjtg1OE"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-74019695377so4215268b3a.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 May 2025 19:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746495597; x=1747100397; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pmsBCeE+JylrhzVHnlF0iL2vbbeaTYULW+ECUdnQOE=;
-        b=TvvpZ8jn1qPkfvSVkXiROtqsiMFTKd1dCyqJP/wR7zkrKQnmiA9D/8uWSAIwwtqnvc
-         4qXlZZpWjelYeGDBT18VHf8e12FLSdsu/Tmjj86en1LHQjCCU3YEej41RWRH3366sasS
-         uymqIjh3eZoXlQ+WXkV/ZB4qIlJGFJuU+Hzj7fcQPZEFtGL2bxgxetV/v1RO3wCPSVC2
-         8F9oR2Le9ASKYT0xBwYkYnYATrE/nszQ9vo1Vt1w+xc6vOTBlysHCRgwmafmg0cBf0FY
-         oRkSD8OkVmlv+YOgfgunK+PIeKWqU2AZbJpRJH9lsh8PyxWZC43t+C4lf90M1YUV7eNx
-         wltA==
+        d=chromium.org; s=google; t=1746499782; x=1747104582; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q0+JSDpYT5BNX3k6gPTP+QpNOml9kj6YJgCfvY0JCRs=;
+        b=KTjtg1OEHaijcvjo+g0DgZpMEWvryOFq4uOnmLvDSZPE3l2KjSX2P4zaX2XVZosm+J
+         NyeEkECA21eh5/ct5hV+99+fu76Oymt6THZe40hSXSO9eYiCB6okRSEZjhNzUZr5TVt/
+         +ZllpcB7MgSLRdW0LAbb9J5lLI90bV2245AYY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746495597; x=1747100397;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3pmsBCeE+JylrhzVHnlF0iL2vbbeaTYULW+ECUdnQOE=;
-        b=CuJdXdT31T5eSxbZ0LnPXbcGtDlP1FgjTlJG7xKkLrkW+UbY2ygrjwl03IbNMLjIx3
-         ZYdzYCssK0k/nLrvVeV0HCV4JOvpw/biHHFl0b5FwOwqpLHUrXjo4gtXisRx69afE3XU
-         8zxvIOQf1LTn0ZtVSINbGAyZiHSulXpppBgR5iNMi3/NhMFv7Bfpc4u8b+NZdp/JjOI+
-         gU9LlY3so94VLOudDZ5xKuQhai7tg6AUIi3dDaiuRxx/x+uXpk9PLslPa731E6j/h+fC
-         RVi3nF6eDHQUaFKyrsE6KPFlcNE8UVTJw1mVEHGJLMgpxqBIrmWD+uUBbtTQRJ0nKkF3
-         +Zyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUsKjMa2zuyQcu2dvmvfydgFXDeGBElp5+sa8dg6x2slyaK4fAmi1xaINSK5KzfMsmXVhWiCVT87aEvrA==@vger.kernel.org, AJvYcCWMX9zIEIXU1tZgjQSpO+oko11vDlQbLJ2QUABgW8u/Nyci9vqDZffT8yhUnOF4Wu2+syGmAOdJx2+v@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAymx6dTOJp3wbhxP1F2c4vMcVFhaPhUigSQ25jmKcv93jPE0F
-	DwZSiHpDXEkH5r51Jn8VdhE0i/n6hobpCPSE+y5dCL9BVYeErGu6/2z+jA==
-X-Gm-Gg: ASbGnctsUHRiGHMevXO9guepf03CyKd0uH+oBQQVKUjXYyYAkm9mKh5G40u3QQqb2f+
-	XGJo3u7Zw4o12PposX6uYohKxpPzOVtZmssfM6/6Fy2h+HP8innASenKGkW1s+1FHihXWsHFkMC
-	eShBTRiOpSkblpdjobNWcklu5Z+dg24Upse1HTR+2oS6voVuYn1CbMB0O8SSLBnKtSCtGOBjii8
-	USSSakuevhgWnFIY2FT68SYeSRh7oiklpq4KuDHkUvC7yuN4MBWsNGGSI/Ii+oy1hLtJ+hoo2Uv
-	Bsk3mz2zRLOap12CpbKtzfgi7IPl8SqgnCbT5axQqEmQny6LQzbvyNEPTB7/NCd6OwH9Fto/YdN
-	uk1MswLSH+LDMfw==
-X-Google-Smtp-Source: AGHT+IGIlUvBjrCzREI1SJ0LDTDWDrIg6fQCZMBOkZGzTzPAYKBTMGTdIc4yr/CyamSieTlACxKxgQ==
-X-Received: by 2002:a05:6a00:f0b:b0:73c:b86:b47f with SMTP id d2e1a72fcca58-740919adee9mr1827170b3a.4.1746495597575;
-        Mon, 05 May 2025 18:39:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-740590a5bfesm7867956b3a.171.2025.05.05.18.39.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 18:39:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
-Date: Mon, 5 May 2025 18:39:55 -0700
+        d=1e100.net; s=20230601; t=1746499782; x=1747104582;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0+JSDpYT5BNX3k6gPTP+QpNOml9kj6YJgCfvY0JCRs=;
+        b=D95WKP0No6CZJFsrN+Hj7VTFYCDDCH2dLwAuG9wYfL2nlNOimup/2pGeBzHxyiigR2
+         b6/o+zSo5aSdh9JAB6/ESlINbsxpVlD4laZd9jMrmbDKAAAJ0YOaqA9C6NeZLJ0yOPgJ
+         lmbT3JjUWtgNBY+D5BA3BmwWV4D3OnyK9VVJjplMoJlPWSS02wkFfGKl+hGNtN3Zps7L
+         6OeGsiwVnQtx+9PzdzfkVPVNwp/iCPksZoA6SritYHI+mAyCFlJFzLljSvyQF3sSnIBA
+         EwfPJZnTcC6oJUTN5dhoN167IAhIXaFIyad4XujyeDIa72ZGZaqVWqAPyyrtKxscnD9s
+         swCg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8W12RH309N3KYig3+iErOyTuCF4gFrzci0E91wq11+I/OH8ay/pHjPoMt82pS2CCekcRAH1WDg9De1Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4PRsCeJn7/OLhEYCLta1MQFg8huA6pQ4svu/aZ1PjdKE+9IGF
+	I/INBiGMJ2wkQKO7hilFk5fiX5zUD3WmbwkeGxJRtHqhQNo4qzBCdGiE7m8sEA==
+X-Gm-Gg: ASbGncuAu6+rpcAc3xzUAETUw8hL1cdUOHNW5hm+65HhHhb+c3VGqFogm8Ry0yhKdBI
+	Akzo3Oc37pKjdC5xuNssANcVNiQI6D+EvAT383fBIpLvCP4cB/6e3dyUdjqDUyZoeff+RdWUewG
+	TqzPZiWhDuEPLIwJuO+uAGDq13ssDWiqKiLvD6uQSdNX2aSoVk5r6A3SJ2tkdB+bxCo/IVkVRw8
+	QKa5DObRT2iiNVdTQP6B59BtRnlOIypXmQYY+v2XoVyJtKDxC3Wwbb1+mOZYo/lnGSKLGPAb3o9
+	L8s2uVNPF3mYrXfJ1SAs4lt1UFe/hRCG9g==
+X-Google-Smtp-Source: AGHT+IEEZ1PfoCNd1C1LjNnH37ZRF5k8qCVtLcVSMSDNAUIZcoEsuzle0aPuWxV/v0FJ4LrYSFQ+Ew==
+X-Received: by 2002:a05:6a20:2d2b:b0:1f5:619a:8f75 with SMTP id adf61e73a8af0-20e96108b51mr15452923637.2.1746499782489;
+        Mon, 05 May 2025 19:49:42 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:d4bd:e7e5:608:dbd7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b1fb3c6b6d8sm6384494a12.69.2025.05.05.19.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 May 2025 19:49:42 -0700 (PDT)
+Date: Tue, 6 May 2025 10:49:37 +0800
+From: Sung-Chi Li <lschyi@chromium.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] hwmon: (cros_ec) register fans into thermal
+ framework cooling devices
+Message-ID: <aBl4wcX889otz_ms@google.com>
+References: <20250502-cros_ec_fan-v2-0-4d588504a01f@chromium.org>
+ <20250502-cros_ec_fan-v2-3-4d588504a01f@chromium.org>
+ <b2432c5c-2589-4cfe-821f-47e5128af2d0@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PMBus memory overflow
-To: Matt Corallo <yalbrymrb@mattcorallo.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>
-References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
- <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
- <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
- <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
- <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
- <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
- <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
- <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
- <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
- <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
- <aAtEydwUfVcE0XeA@shikoro>
- <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
- <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
- <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2432c5c-2589-4cfe-821f-47e5128af2d0@t-8ch.de>
 
-On 5/5/25 13:57, Matt Corallo wrote:
+On Sat, May 03, 2025 at 09:27:18AM +0200, Thomas Weißschuh wrote:
+> On 2025-05-02 13:34:47+0800, Sung-Chi Li via B4 Relay wrote:
+> > From: Sung-Chi Li <lschyi@chromium.org>
+> > 
+> > Register fans connected under EC as thermal cooling devices as well, so
+> > these fans can then work with the thermal framework.
+> > 
+> > During the driver probing phase, we will also try to register each fan
+> > as a thermal cooling device based on previous probe result (whether the
+> > there are fans connected on that channel, and whether EC supports fan
+> > control). The basic get max state, get current state, and set current
+> > state methods are then implemented as well.
+> > 
+> > Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+> > ---
+> >  Documentation/hwmon/cros_ec_hwmon.rst |  2 ++
+> >  drivers/hwmon/cros_ec_hwmon.c         | 66 +++++++++++++++++++++++++++++++++++
+> >  2 files changed, 68 insertions(+)
+> > 
+> > diff --git a/Documentation/hwmon/cros_ec_hwmon.rst b/Documentation/hwmon/cros_ec_hwmon.rst
+> > index 5b802be120438732529c3d25b1afa8b4ee353305..82c75bdaf912a116eaafa3149dc1252b3f7007d2 100644
+> > --- a/Documentation/hwmon/cros_ec_hwmon.rst
+> > +++ b/Documentation/hwmon/cros_ec_hwmon.rst
+> > @@ -27,3 +27,5 @@ Fan and temperature readings are supported. PWM fan control is also supported if
+> >  the EC also supports setting fan PWM values and fan mode. Note that EC will
+> >  switch fan control mode back to auto when suspended. This driver will restore
+> >  the fan state before suspended.
+> > +If a fan is controllable, this driver will register that fan as a cooling device
+> > +in the thermal framework as well.
+> > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> > index c5e42e2a03a0c8c68d3f8afbb2bb45b93a58b955..abfcf44fb7505189124e78c651b0eb1e0533b4e8 100644
+> > --- a/drivers/hwmon/cros_ec_hwmon.c
+> > +++ b/drivers/hwmon/cros_ec_hwmon.c
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/platform_device.h>
+> >  #include <linux/platform_data/cros_ec_commands.h>
+> >  #include <linux/platform_data/cros_ec_proto.h>
+> > +#include <linux/thermal.h>
 > 
-> 
-> On 5/5/25 4:50 PM, Guenter Roeck wrote:
->> On 5/5/25 13:41, Matt Corallo wrote:
->>>
->>>
->>> On 4/25/25 4:16 AM, Wolfram Sang wrote:
->>>>
->>>>> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
->>>>> I do wonder if a check such as the one above would be appropriate as well, possibly
->>>>> even combined with a WARN_ONCE().
->>>>
->>>> How annoying, there was still an unchecked case left? Sorry. Yes, the
->>>> core can have a check for a short-term solution. The long-term solution
->>>> is to support SMBUS3.x which allows for 255 byte transfers.
->>>
->>> Thanks!
->>>
->>> Any update here? I guess we already have a patch so no use in me trying to write one. Would be nice to get this in a pull so it can head through backports.
->>>
->>
->> Not from my side, sorry. I am deeply buried in work and don't have time for anything
->> that isn't super-urgent :-(
-> 
-> Mmm, shame, its kinda annoying to leave a buffer overflow reachable from a malicious USB device sitting around (okay, with the default hardening configs it gets caught, but still). Can we just land the above patch from Wolfram to check the length before writing the buffer? Happy to clean it up as a formal patch submission if its easier for you.
+> Needs a dependency on CONFIG_THERMAL.
 > 
 
-Please go ahead.
+I think adding the `if (!IS_ENABLED(CONFIG_THERMAL))` you suggested is
+sufficient, and turning on or off CONFIG_THERMAL both can compile, so I'll only
+add the guarding statement in the `cros_ec_hwmon_register_fan_cooling_devices`.
 
-Thanks,
-Guenter
+> > +
+> > +	if (!priv->fan_control_supported)
+> > +		return;
+> > +
+> > +	for (i = 0; i < EC_FAN_SPEED_ENTRIES; i++) {
+> > +		if (!(priv->usable_fans & BIT(i)))
+> > +			continue;
+> > +
+> > +		cpriv = devm_kzalloc(dev, sizeof(*cpriv), GFP_KERNEL);
+> > +		if (!cpriv)
+> > +			return;
+> > +
+> > +		cpriv->hwmon_priv = priv;
+> > +		cpriv->index = i;
+> > +		devm_thermal_of_cooling_device_register(
+> > +			dev, NULL, devm_kasprintf(dev, GFP_KERNEL, "cros-ec-fan%zu", i), cpriv,
+> 
+> What happens for multiple/chained ECs? If both provide sensors the
+> thermal device names will collide.
+> 
 
+How about changing the "cros-ec-fan%zu" to "%s-fan%zu", which prefixes the
+`dev_name()`? Here is an example from a device: cros-ec-hwmon.12.auto-fan0.
+
+> Error handling for devm_kasprintf() is missing.
+> 
+
+Thank you for catching this, I will skip registering that device if the
+devm_kasprintf() fails.
+
+> > +			&cros_ec_thermal_cooling_ops);
+> 
+> Error handling for devm_thermal_of_cooling_device_register() is missing.
+> 
+
+I think we should continue registering other fans, so maybe we add a warning
+here if the registration fails?
+
+> > +	}
+> > +}
+> > +
+> >  static int cros_ec_hwmon_probe(struct platform_device *pdev)
+> >  {
+> >  	struct device *dev = &pdev->dev;
+> > @@ -402,6 +467,7 @@ static int cros_ec_hwmon_probe(struct platform_device *pdev)
+> >  	cros_ec_hwmon_probe_fans(priv);
+> >  	priv->fan_control_supported =
+> >  		cros_ec_hwmon_probe_fan_control_supported(priv->cros_ec);
+> > +	cros_ec_hwmon_register_fan_cooling_devices(dev, priv);
+> >  
+> >  	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
+> >  							 &cros_ec_hwmon_chip_info, NULL);
+> > 
+> > -- 
+> > 2.49.0.906.g1f30a19c02-goog
+> > 
+> > 
