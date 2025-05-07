@@ -1,173 +1,158 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716DA1D61BC;
-	Wed,  7 May 2025 07:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD2821CC45;
+	Wed,  7 May 2025 11:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746601893; cv=none; b=F1kDVd7cEc/TRfWlmOt4esAaUrkS4vcbSKrAxp093eUJFsMi+wDE81G4D5cZRLZOahFLA0H/UzaG4B5cVcOvHbcX8w+oXX/J+/6XfyOgiFDAGAHV7hHZ8fiUW4ul215dAuyLRQI4drMFHnmNtFsQiqRUkjN+QuyhZ06tn78pNr4=
+	t=1746617767; cv=none; b=gaYHGCW4RXPG5b2oPvn2dr55oCh7Svf01pLM3QTTLYxWe7FczmxphJD3iuREwlr4Js4Ccu3U5HYealb10D9797py0zB6/9HYvifRc1dDwQ6vADPxkXGEWgOv2D6yuyHacLr7bfXHuQSmmU6QGA0yLKdSEr9zpTOWL0rZOOdRGKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746601893; c=relaxed/simple;
-	bh=HNkP2z7fO8dRjzXPZ7zZcqQkaQmQMB+gSMGx+hs7H8A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F5cnYyKqGJlNSxUtYceXyXDY6K+eaf57L5h+h51Esq8SycuSfWSTRjaslespmAXf+bZDDiQqEjhOFb6AwwqrZCuRYdonEYU4RrjAhMI8ZIJVdfH+kazx9seE0vHXJY9KRV/SK8r6l4OKy/ozYJ2H0NtDGUusFVdWrBy4nJ9KMv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5RX8B9N; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746617767; c=relaxed/simple;
+	bh=49oBLtVDl/a7eoaCQ18JFPDgN5OMlYWx4iq2ZQubEEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=noyjuJ4vza6770v1d1sf0hdLsifYkK8p6a2VfB2bZ3AXkio7dnubHN7Q0vxBiv0WJdxOroUthPx01rRP1VvfsW9CPbvAdY59J+Sf+XF4x7jhj4ibCasqSH0YNbQ+fjCSYoZ45MFODd6cBRTPYh75EI66hDCt70mbKefzEOdFsaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cxVwit8Y; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5RX8B9N"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-441d437cfaaso3408585e9.1;
-        Wed, 07 May 2025 00:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746601890; x=1747206690; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Jn2G++5P5iR4QIZl9LBB+QOBbe9aArcNf9gSE3QaJs8=;
-        b=l5RX8B9N5xlX1AessZ1yBLDY6pk4rXVmApcN52SPgRXWbhXOIF+pPjhRaFoASxl1MJ
-         M4RRWIkWDXF83R6taA6gegJ0t8Y2d9APDn95HXTKpUcxo9LE0nqV6QGl4D/X+0r/rDrk
-         8kzyl/GEzEyClsbOcFTDT1RPVKGJ6O7Zk5zv4nHjp/dZtyVccW5TcfCfN4jcVl3Zjp/p
-         Q1iG/xjW8oqKtIHLqHg0/mOSF3Irc2OxVtVJJ8rxXLd/8QJRFS+pdJ81vsoGpCcC41oT
-         yqiEX0QyPHHMO2aJLlr212GPYEujfOxoqvRYZ/7BREkNOf+4jVYrgO66E+wgzeZ2drlK
-         aOYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746601890; x=1747206690;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jn2G++5P5iR4QIZl9LBB+QOBbe9aArcNf9gSE3QaJs8=;
-        b=upTo1AQAerSJ0sypdZTAR5J14jfG4iLK+TVJgbdSfbwuY4mER5XwBTO6zXEwUoiMC5
-         imLnYVMSdejPxnBdZA3wmwrW0ntFxbNKrLBkSHGaeKKDXG9E5G1l90uzoYnGm5pX0EMn
-         qFAPeU0vP466JgS18InkkdVlBla30PPTsvgRSX131KWkC+DryaDqUYOGjh4ZUSIP3Nc1
-         PNRIpDUF/xIotJu56eDmoKSW9ieEV0wguqr9H5N28qXVtGX26Ia1QtOD5QYcqvLd9qz1
-         VpyCX9cFJhTr4TXH3EgHimk9XDr3ooPrx8satsQegLCnuNSSlFdIvYFOBNi87i8RWSmn
-         pkOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+GOTOmdQGql8m5H2005rwsY/OdSF+D/QMKLl6jkY4aSs87RhTXETkVhlsKL57YlAfqeGtX3GV0b2+@vger.kernel.org, AJvYcCU8cnQKqAJdTqoreQ//Z0HW3GPYrMZzmP84unHlY2DQMcK/uhw6UihFo1wV/cReEz8XaeogoBW/bZT0@vger.kernel.org, AJvYcCUf/IdUbPCnx9/JENEQMmIePXxBEFtnKXAvR5rLBBOQfHFNcoBqxEFY68UKlvvxR6ddhvIXV47WpzQ=@vger.kernel.org, AJvYcCV8Kdczc3DWLlw8StWhjTZ/Tv/3ZfFmj9ZdHUQ5AnRN4WY4nrnCuzzrstFpeV13qweRrHbz9aruLTVV@vger.kernel.org, AJvYcCWKNNXHGX68zQGVYc6qBtlqmBYKcJObkfTD2hhpIgMDW1YTIDlVkHJIy+GYVHxwPj7oAHCr7vu6RA8u@vger.kernel.org, AJvYcCWtHqZuiAGRhONDWA42p+KzPPba//QPmLa3S6fiUv6d7sA25VePr2m+pUcDdVGNJKdU7Tf7deylVBGKjg==@vger.kernel.org, AJvYcCWu4ez2Lvqxe5DnmpmOwe7KweQzlWi+AYk7wJYNWykjoQnpOh2t58mjsAs0J8UdhcgU8HR9JMiPrDYIslg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxayOEO05l816MxYEfASy3S5X3KkFR/yBjKLrsRcibyE3cqz95P
-	wzjArMfNjX4cea7W5+yh8zjbEud5tmD63GB2/3fG5V6NhavspBJz
-X-Gm-Gg: ASbGncu1ZttCnXmhy8wqux31Z5EnGBediXWiuBHO+vYuVGGckx/vyaxNklld6VE+DiZ
-	tMYbGkt6neDkBE8s90pQIsugXkfzTCYYHNiHGtNqhbpmELuF9scrUZHNqESvRckDPqkqp4KlpGs
-	FXonwQ+7zT6HjhhMaS6DNxiRmACs+PNwLNCQcxSI6+jAmH8/96b6fDQNiKm0c2blIhftCinENFT
-	ldvkaR73RVEDayY6IQZDthkfQZJbvgTQElQ5AnB82fmTExHyB16oD+wchJWYgzsLfrikG9cFCg/
-	GUGuQ7Tmnlh7NzR4B2W/Hiz2C0fhLxkEnw9Pn6lElc6Mo49weYLJS2t36HIyoPudpqmllOpwzHC
-	SR+CBmhLG0lIQH5I=
-X-Google-Smtp-Source: AGHT+IFP/BGLUhNjkANF9Q5NNHil9mQ7V1wjQN+dodd00ido4Dc9LAmYaJnyVsjC3DmY9ZMTKkKmAQ==
-X-Received: by 2002:a05:600c:6749:b0:43d:ea:51d2 with SMTP id 5b1f17b1804b1-441d44c3a91mr16863985e9.14.1746601889628;
-        Wed, 07 May 2025 00:11:29 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441d43cb584sm20895405e9.8.2025.05.07.00.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 00:11:29 -0700 (PDT)
-Message-ID: <ffebef8dd4255da67a8d6b7228f4e04e789532d5.camel@gmail.com>
-Subject: Re: [PATCH v4 4/7] include: fpga: adi-axi-common: add new helper
- macros
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, nuno.sa@analog.com, 
- linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org,  linux-pwm@vger.kernel.org,
- linux-spi@vger.kernel.org
-Cc: Stephen Boyd <sboyd@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>,  Moritz Fischer <mdf@kernel.org>, Wu Hao
- <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,  Tom Rix
- <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare
- <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor
- Gamblin <tgamblin@baylibre.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, Mike Turquette
- <mturquette@linaro.org>
-Date: Wed, 07 May 2025 07:11:53 +0100
-In-Reply-To: <79c256ab-3d21-481c-ab9d-eca643d3d998@baylibre.com>
-References: <20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com>
-	 <20250505-dev-axi-clkgen-limits-v4-4-3ad5124e19e1@analog.com>
-	 <79c256ab-3d21-481c-ab9d-eca643d3d998@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cxVwit8Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746617766; x=1778153766;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=49oBLtVDl/a7eoaCQ18JFPDgN5OMlYWx4iq2ZQubEEg=;
+  b=cxVwit8Y2PifFb+5IL1q3OfndKn54YFdU9JfsFtoI7nGDbE4vMi7u7o9
+   cArlkuaMniZ7IkHIAaOr/MVmQibv9+/CIbzVEHw8qru6n00UxjyGaIv62
+   GY8ifOU4zYkp0QAZ+MMmL3QwLEJRrwstbrDXR4vc+a5Za4C1SkBW7KDku
+   un1IHo8h/6UcZ9+7nnsKR1iBW3Gg6gjCq0RstFteWDdRslVH80LFWg0U7
+   wHi4NFAsk2+LnWzgXRTYW5FewKjRGdWJiAfdHMxZiDLaoqYUeWDSSf3IH
+   jFzFkmi2MqgPTVk45gMdmvbzRMCK7rFkjO7fjHGgzZHsmoOMFgRjGowHW
+   A==;
+X-CSE-ConnectionGUID: m48hsSsuSJm9QClvODiiZg==
+X-CSE-MsgGUID: 5RyERPSfQNGFXnxaFzMp4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48243595"
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="48243595"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 04:36:05 -0700
+X-CSE-ConnectionGUID: X5e6XJ8GRXaTzAwMUqYDWQ==
+X-CSE-MsgGUID: u7fHLKZYQ6a9CF74WHQAUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
+   d="scan'208";a="135841842"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 07 May 2025 04:36:03 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCd4C-0007gv-0f;
+	Wed, 07 May 2025 11:36:00 +0000
+Date: Wed, 7 May 2025 19:35:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chiang Brian <chiang.brian@inventec.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: oe-kbuild-all@lists.linux.dev, Chiang Brian <chiang.brian@inventec.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+Message-ID: <202505071941.RISL4lFW-lkp@intel.com>
+References: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com>
 
-On Mon, 2025-05-05 at 12:21 -0500, David Lechner wrote:
-> On 5/5/25 11:41 AM, Nuno S=C3=A1 via B4 Relay wrote:
-> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
-> >=20
-> > Add new helper macros and enums to help identifying the platform and so=
-me
-> > characteristics of it at runtime.
-> >=20
-> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > ---
-> > =C2=A0include/linux/adi-axi-common.h | 35 +++++++++++++++++++++++++++++=
-++++++
->=20
-> Since this file was moved in the previous patch, should we drop "fpga:" f=
-rom the
-> subject of this patch?
+Hi Chiang,
 
-sure
+kernel test robot noticed the following build warnings:
 
->=20
-> > =C2=A01 file changed, 35 insertions(+)
-> >=20
-> > diff --git a/include/linux/adi-axi-common.h b/include/linux/adi-axi-com=
-mon.h
-> > index
-> > 141ac3f251e6f256526812b9d55cd440a2a46e76..a832ef9b37473ca339a2a2ff8a4a5=
-716d428fd2
-> > 9 100644
-> > --- a/include/linux/adi-axi-common.h
-> > +++ b/include/linux/adi-axi-common.h
-> > @@ -12,6 +12,8 @@
-> > =C2=A0#define ADI_AXI_COMMON_H_
-> > =C2=A0
-> > =C2=A0#define ADI_AXI_REG_VERSION			0x0000
-> > +#define ADI_AXI_REG_FPGA_INFO			0x001C
-> > +#define ADI_AXI_REG_FPGA_VOLTAGE		0x0140
->=20
-> Doesn't the voltage register only apply to AXI CLKGEN and therefore would
-> belong in the clock driver rather than here? 0x1C seems to be the last of=
- the
-> defined "common to all IP cores" address before we possibly get into
-> core-specific register definitions starting at 0x40.
->=20
-> I guess there are 1 or 2 other cores that define it at the same place, bu=
-t it
-> still seems not-global.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.15-rc5 next-20250507]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Chiang-Brian/dt-bindings-trivial-Add-tps53685-support/20250424-222559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250424132538.2004510-2-chiang.brian%40inventec.corp-partner.google.com
+patch subject: [PATCH v6 1/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+config: riscv-randconfig-r112-20250426 (https://download.01.org/0day-ci/archive/20250507/202505071941.RISL4lFW-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 8.5.0
+reproduce: (https://download.01.org/0day-ci/archive/20250507/202505071941.RISL4lFW-lkp@intel.com/reproduce)
 
-Hmm, to be honest I did not checked. This patch was out of tree and I blind=
-ly pushed
-it (as its straightforward). Will drop the above.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071941.RISL4lFW-lkp@intel.com/
 
->=20
-> > =C2=A0
-> > =C2=A0#define ADI_AXI_PCORE_VER(major, minor, patch)	\
-> > =C2=A0	(((major) << 16) | ((minor) << 8) | (patch))
-> > @@ -20,4 +22,37 @@
-> > =C2=A0#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff=
-)
-> > =C2=A0#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
-> > =C2=A0
-> > +#define ADI_AXI_INFO_FPGA_TECH(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 24) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_FAMILY(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 16) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)=C2=A0=C2=A0=C2=A0=C2=A0 ((=
-(info) >> 8) & 0xff)
->=20
-> I guess we don't care about the DEV_PACKAGE field?
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hwmon/pmbus/tps53679.c:133:57: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected char *id @@     got int device_id @@
+   drivers/hwmon/pmbus/tps53679.c:133:57: sparse:     expected char *id
+   drivers/hwmon/pmbus/tps53679.c:133:57: sparse:     got int device_id
+>> drivers/hwmon/pmbus/tps53679.c:165:45: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected int device_id @@     got char * @@
+   drivers/hwmon/pmbus/tps53679.c:165:45: sparse:     expected int device_id
+   drivers/hwmon/pmbus/tps53679.c:165:45: sparse:     got char *
+>> drivers/hwmon/pmbus/tps53679.c:133:57: sparse: sparse: non size-preserving integer to pointer cast
+>> drivers/hwmon/pmbus/tps53679.c:165:45: sparse: sparse: non size-preserving pointer to integer cast
 
-ack
+vim +133 drivers/hwmon/pmbus/tps53679.c
 
->=20
-> > +#define ADI_AXI_INFO_FPGA_VOLTAGE(val)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 ((val) & 0xffff)
->=20
-> This VOLTAGE also goes applies to the first comment.
->=20
+53030bcc87e4a4 Guenter Roeck 2020-01-20  120  
+53030bcc87e4a4 Guenter Roeck 2020-01-20  121  /*
+53030bcc87e4a4 Guenter Roeck 2020-01-20  122   * Common identification function for chips with multi-phase support.
+53030bcc87e4a4 Guenter Roeck 2020-01-20  123   * Since those chips have special configuration registers, we want to have
+53030bcc87e4a4 Guenter Roeck 2020-01-20  124   * some level of reassurance that we are really talking with the chip
+53030bcc87e4a4 Guenter Roeck 2020-01-20  125   * being probed. Check PMBus revision and chip ID.
+53030bcc87e4a4 Guenter Roeck 2020-01-20  126   */
+53030bcc87e4a4 Guenter Roeck 2020-01-20  127  static int tps53679_identify_multiphase(struct i2c_client *client,
+53030bcc87e4a4 Guenter Roeck 2020-01-20  128  					struct pmbus_driver_info *info,
+53030bcc87e4a4 Guenter Roeck 2020-01-20  129  					int pmbus_rev, int device_id)
+53030bcc87e4a4 Guenter Roeck 2020-01-20  130  {
+53030bcc87e4a4 Guenter Roeck 2020-01-20  131  	int ret;
+53030bcc87e4a4 Guenter Roeck 2020-01-20  132  
+53030bcc87e4a4 Guenter Roeck 2020-01-20 @133  	ret = tps53679_identify_chip(client, pmbus_rev, device_id);
+53030bcc87e4a4 Guenter Roeck 2020-01-20  134  	if (ret < 0)
+53030bcc87e4a4 Guenter Roeck 2020-01-20  135  		return ret;
+53030bcc87e4a4 Guenter Roeck 2020-01-20  136  
+53030bcc87e4a4 Guenter Roeck 2020-01-20  137  	ret = tps53679_identify_mode(client, info);
+53030bcc87e4a4 Guenter Roeck 2020-01-20  138  	if (ret < 0)
+53030bcc87e4a4 Guenter Roeck 2020-01-20  139  		return ret;
+53030bcc87e4a4 Guenter Roeck 2020-01-20  140  
+53030bcc87e4a4 Guenter Roeck 2020-01-20  141  	return tps53679_identify_phases(client, info);
+53030bcc87e4a4 Guenter Roeck 2020-01-20  142  }
+53030bcc87e4a4 Guenter Roeck 2020-01-20  143  
+53030bcc87e4a4 Guenter Roeck 2020-01-20  144  static int tps53679_identify(struct i2c_client *client,
+53030bcc87e4a4 Guenter Roeck 2020-01-20  145  			     struct pmbus_driver_info *info)
+53030bcc87e4a4 Guenter Roeck 2020-01-20  146  {
+53030bcc87e4a4 Guenter Roeck 2020-01-20  147  	return tps53679_identify_mode(client, info);
+53030bcc87e4a4 Guenter Roeck 2020-01-20  148  }
+53030bcc87e4a4 Guenter Roeck 2020-01-20  149  
+a49c0dafb304b8 Chiang Brian  2025-04-24  150  static int tps53685_identify(struct i2c_client *client,
+a49c0dafb304b8 Chiang Brian  2025-04-24  151  				 struct pmbus_driver_info *info)
+a49c0dafb304b8 Chiang Brian  2025-04-24  152  {
+a49c0dafb304b8 Chiang Brian  2025-04-24  153  	info->func[1] |= PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+a49c0dafb304b8 Chiang Brian  2025-04-24  154  			 PMBUS_HAVE_STATUS_INPUT;
+a49c0dafb304b8 Chiang Brian  2025-04-24  155  	info->format[PSC_VOLTAGE_OUT] = linear;
+a49c0dafb304b8 Chiang Brian  2025-04-24  156  	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
+a49c0dafb304b8 Chiang Brian  2025-04-24  157  					   TPS53685_DEVICE_ID);
+a49c0dafb304b8 Chiang Brian  2025-04-24  158  }
+a49c0dafb304b8 Chiang Brian  2025-04-24  159  
+53030bcc87e4a4 Guenter Roeck 2020-01-20  160  static int tps53681_identify(struct i2c_client *client,
+53030bcc87e4a4 Guenter Roeck 2020-01-20  161  			     struct pmbus_driver_info *info)
+53030bcc87e4a4 Guenter Roeck 2020-01-20  162  {
+53030bcc87e4a4 Guenter Roeck 2020-01-20  163  	return tps53679_identify_multiphase(client, info,
+53030bcc87e4a4 Guenter Roeck 2020-01-20  164  					    TPS53681_PMBUS_REVISION,
+53030bcc87e4a4 Guenter Roeck 2020-01-20 @165  					    TPS53681_DEVICE_ID);
+53030bcc87e4a4 Guenter Roeck 2020-01-20  166  }
+53030bcc87e4a4 Guenter Roeck 2020-01-20  167  
 
-ack
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
