@@ -1,178 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771FB28C2C2;
-	Wed,  7 May 2025 16:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DCDF4E2
+	for <linux-hwmon@vger.kernel.org>; Thu,  8 May 2025 01:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746634763; cv=none; b=GQxIzk6+DwZ+9A7aGCt7gdiZbR0A3rberCuq8yfU63X9lJ5D7nlYVc20O2sYm9nvy3h2KemnCnDL5t8SnnMN407Djf3osrN1vjsI5+j5jNapaxKWXx7lP1TS9G0r+jldIgTjQj+fmaZ2MiTjUQVHNHtwRpCjTIP4bDgBSfou/ic=
+	t=1746668994; cv=none; b=TSlpXsV5sjRinyXpwny01D4+dmpoYmmbtQlammAi2RalImaaRRonJbTm6KrnesMY38YUIYd81I2WpWXwMWQ8ROCxx7veoKdnzRrsAdL4EonDi3NmLV8G1ohZvwClD69SwB3vTWstsccYUC3jkqobL8bTuuvsXJbN3LXUrRbPSU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746634763; c=relaxed/simple;
-	bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s6ApguIN5erGByg/IeRtb2ANogKZiXrNGL+lu7H+BeLP4rp4RbeylcEsUrbDeBRn06AV2NeR3U15lSbLU6ghS4RVWWtFVl2pt993VTr6lXvAwhFeg6I+CX4oQ16hVmY3FVdcR0MfEsyv/lPYFPG+u2FPixgXcton2xRsfjPyWE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kde1Y7nx; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1746668994; c=relaxed/simple;
+	bh=5llhB/+7YLXJI/fh4fRs3vsCOunF9dWhfq94aJJgOCs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=osm5Op6EBu0kq+WvvorEUVxH2ujV5IcnlOP3S6quXAFm2LpEnFOnyvMHDaX59PDEu7syz09N8dm1rlFKJ28sukRduZXQVtCbFfEICM8iH9ajUktFGt/pC0rqyvGBD83ixV6gedhdOVOPKmbNlDNkC/HYpDTDR0P+CxylRqmzdVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKSere17; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kde1Y7nx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKSere17"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746634761; x=1778170761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bjvKIxu4eG9uCBmREGHiuI3YzEktQh1+u8s53l9D5c0=;
-  b=kde1Y7nxnJK+llHE2wJylU5eyF7s1whCukTnhHvIXyR8X+b5vtqQdely
-   QtloJaj/kaYuW3Tujk2s/Ip3a5NUhVhXCvf7hICsMu5ZA0867w2jp2doL
-   vdd2MkTSalbHiHdferPXkw70efj0mfNuACMkJxpX8G4zWX4d9Z99P7MKD
-   nIXGdLiRuhDLGZo5H4ygqYxGIkl0HNiiO9UgZqTsFIqWOdZ+x2dqH1kOT
-   aQR6ILW0GYopITUxE358n1YUQUQpi6U0496X6Qh6e4QBSH7vSO7TAhfEx
-   sZPjVfC/lorD+luygBEyNHMabn3MiG01YiXqCcyS9yUSI5wfhqudptY+h
-   A==;
-X-CSE-ConnectionGUID: 6TTN1G5CQCutI7U6mwcJdQ==
-X-CSE-MsgGUID: b76AnggTS26A/vkoOsm9qA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="59772965"
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="59772965"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 09:19:20 -0700
-X-CSE-ConnectionGUID: b/FN9FoPQpuKIolEffre2w==
-X-CSE-MsgGUID: fdCGD3zBSKSaMGmZkOdFcw==
+  t=1746668992; x=1778204992;
+  h=date:from:to:cc:subject:message-id;
+  bh=5llhB/+7YLXJI/fh4fRs3vsCOunF9dWhfq94aJJgOCs=;
+  b=hKSere170Xoy9pAbVr9KruDOImod3iJa5/wgHtxyq06U0aNPMLSY+++D
+   zniD1KRA8C9r792m4s2G4tDnp/Ayp8hDr9WB0+rKRiK16vO65u+cOYGFS
+   38LR2yqbAgPrlZJA6iJmc+PindP5plcJAPdfl0voH3wRh8peZm/1fvcKX
+   jZVARnf6dW2gi8iLmafm340pBZIcA2eMelGaMjvLpluOXGHzM11rBjPtq
+   9+sUK2jaQn8Rk3tMW2uyGuLrs8sXSpvk3Cr4naUQ+icgNvBEhlMFYFySL
+   Cf1L/G3/potTIUO08gltw8x+UePu/QZ1uzju+vfSpf5d4PuEO5Y3+JYri
+   w==;
+X-CSE-ConnectionGUID: OPT8A3sPTlWtse7cN29iww==
+X-CSE-MsgGUID: 7o1ozTExSDufWWg0VSqlQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48338680"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="48338680"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 18:49:51 -0700
+X-CSE-ConnectionGUID: p3IC6mH1RIqgjWTgKfvlTQ==
+X-CSE-MsgGUID: 8ZsoJ+n+Q3GPm9QzkCePPQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,269,1739865600"; 
-   d="scan'208";a="141200324"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="136533536"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 May 2025 09:19:13 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 07 May 2025 18:49:49 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uChUE-00089N-22;
-	Wed, 07 May 2025 16:19:10 +0000
-Date: Thu, 8 May 2025 00:18:37 +0800
+	id 1uCqOR-0009DH-2N;
+	Thu, 08 May 2025 01:49:47 +0000
+Date: Thu, 08 May 2025 09:49:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <202505072336.mhh6H9Ma-lkp@intel.com>
-References: <20250423094058.1656204-5-tmyu0@nuvoton.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 0c0c84e4869895091c3029bc2625caa0feec99b9
+Message-ID: <202505080923.vnStaID2-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250423094058.1656204-5-tmyu0@nuvoton.com>
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 0c0c84e4869895091c3029bc2625caa0feec99b9  hwmon: (ausus-ec-sensors) add MAXIMUS VI HERO.
 
-kernel test robot noticed the following build errors:
+elapsed time: 4145m
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on brgl/gpio/for-next andi-shyti/i2c/i2c-host mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc5 next-20250507]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+configs tested: 102
+configs skipped: 3
 
-url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250423-174637
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250423094058.1656204-5-tmyu0%40nuvoton.com
-patch subject: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505072336.mhh6H9Ma-lkp@intel.com/reproduce)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505072336.mhh6H9Ma-lkp@intel.com/
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250506    gcc-8.5.0
+arc                   randconfig-002-20250506    gcc-12.4.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20250506    clang-21
+arm                   randconfig-002-20250506    clang-21
+arm                   randconfig-003-20250506    clang-17
+arm                   randconfig-004-20250506    clang-21
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250506    clang-21
+arm64                 randconfig-002-20250506    gcc-8.5.0
+arm64                 randconfig-003-20250506    clang-21
+arm64                 randconfig-004-20250506    gcc-8.5.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250506    gcc-14.2.0
+csky                  randconfig-002-20250506    gcc-14.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250506    clang-21
+hexagon               randconfig-002-20250506    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250506    clang-20
+i386        buildonly-randconfig-002-20250506    clang-20
+i386        buildonly-randconfig-003-20250506    clang-20
+i386        buildonly-randconfig-004-20250506    gcc-12
+i386        buildonly-randconfig-005-20250506    clang-20
+i386        buildonly-randconfig-006-20250506    clang-20
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250506    gcc-14.2.0
+loongarch             randconfig-002-20250506    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250506    gcc-8.5.0
+nios2                 randconfig-002-20250506    gcc-6.5.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250506    gcc-11.5.0
+parisc                randconfig-002-20250506    gcc-5.5.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc               randconfig-001-20250506    clang-21
+powerpc               randconfig-002-20250506    gcc-8.5.0
+powerpc               randconfig-003-20250506    gcc-8.5.0
+powerpc64             randconfig-001-20250506    clang-20
+powerpc64             randconfig-002-20250506    gcc-8.5.0
+powerpc64             randconfig-003-20250506    clang-18
+riscv                             allnoconfig    gcc-14.2.0
+riscv                 randconfig-001-20250506    clang-19
+riscv                 randconfig-002-20250506    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250506    gcc-9.3.0
+s390                  randconfig-002-20250506    clang-21
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250506    gcc-12.4.0
+sh                    randconfig-002-20250506    gcc-12.4.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250506    gcc-11.5.0
+sparc                 randconfig-002-20250506    gcc-6.5.0
+sparc64               randconfig-001-20250506    gcc-7.5.0
+sparc64               randconfig-002-20250506    gcc-5.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250506    clang-17
+um                    randconfig-002-20250506    clang-21
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-002-20250506    gcc-12
+x86_64      buildonly-randconfig-003-20250506    gcc-12
+x86_64      buildonly-randconfig-005-20250506    clang-20
+x86_64      buildonly-randconfig-006-20250506    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250506    gcc-13.3.0
+xtensa                randconfig-002-20250506    gcc-9.3.0
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/can/usb/nct6694_canfd.c:543:30: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     543 |         setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
-         |                                     ^
-   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
-      88 | #define cpu_to_le32 __cpu_to_le32
-         |                     ^
-   1 error generated.
-
-
-vim +/FIELD_PREP +543 drivers/net/can/usb/nct6694_canfd.c
-
-   512	
-   513	static int nct6694_canfd_start(struct net_device *ndev)
-   514	{
-   515		struct nct6694_canfd_priv *priv = netdev_priv(ndev);
-   516		const struct can_bittiming *d_bt = &priv->can.data_bittiming;
-   517		const struct can_bittiming *n_bt = &priv->can.bittiming;
-   518		struct nct6694_canfd_setting *setting __free(kfree) = NULL;
-   519		const struct nct6694_cmd_header cmd_hd = {
-   520			.mod = NCT6694_CANFD_MOD,
-   521			.cmd = NCT6694_CANFD_SETTING,
-   522			.sel = ndev->dev_port,
-   523			.len = cpu_to_le16(sizeof(*setting))
-   524		};
-   525		int ret;
-   526	
-   527		setting = kzalloc(sizeof(*setting), GFP_KERNEL);
-   528		if (!setting)
-   529			return -ENOMEM;
-   530	
-   531		if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-   532			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_MON);
-   533	
-   534		if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-   535			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_NISO);
-   536	
-   537		if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-   538			setting->ctrl1 |= cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_LBCK);
-   539	
-   540		/* Disable clock divider */
-   541		setting->ctrl2 = 0;
-   542	
- > 543		setting->nbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NSJW,
-   544						       n_bt->sjw - 1) |
-   545					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NBRP,
-   546						       n_bt->brp - 1) |
-   547					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG2,
-   548						       n_bt->phase_seg2 - 1) |
-   549					    FIELD_PREP(NCT6694_CANFD_SETTING_NBTP_NTSEG1,
-   550						       n_bt->prop_seg + n_bt->phase_seg1 - 1));
-   551	
-   552		setting->dbtp = cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DSJW,
-   553						       d_bt->sjw - 1) |
-   554					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DBRP,
-   555						       d_bt->brp - 1) |
-   556					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG2,
-   557						       d_bt->phase_seg2 - 1) |
-   558					    FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG1,
-   559						       d_bt->prop_seg + d_bt->phase_seg1 - 1));
-   560	
-   561		setting->active = NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
-   562				  NCT6694_CANFD_SETTING_ACTIVE_CTRL2 |
-   563				  NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
-   564	
-   565		ret = nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-   566		if (ret)
-   567			return ret;
-   568	
-   569		priv->can.state = CAN_STATE_ERROR_ACTIVE;
-   570	
-   571		return 0;
-   572	}
-   573	
-
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
