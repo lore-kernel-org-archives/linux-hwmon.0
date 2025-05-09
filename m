@@ -1,218 +1,129 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EB214AD20;
-	Fri,  9 May 2025 14:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8621E5B82;
+	Fri,  9 May 2025 14:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746800131; cv=none; b=Juw0Q8lph1qRckm0BWrO358/r34fDThhHdfkQRH9dIvhg+/+p7vaWkChbJ065YVFEXRlYLSAzk1D1rU6KP9+Zb2NtznaVgN7m3PmFAc4idFZBmxpviPnCZvhslXC2uqGvBKGG0z1Qo4OMvDVwh+fKZd2sE+4stF4aNy9pQ9T9cg=
+	t=1746800907; cv=none; b=BAOb7n2X+B+v/1ZwSVORKAi5KFFCD21PUPm4nLEDXMaemSEkp0dYJ5F7j695LlraGbPM5P1Ww2ZHDuu0H8xixMGcI1v+4CeiJDgw/p5cLaxe2AGO/9Ytt1Za/JCK4/U0gYrVOFofv48Ixga+gHn3/9a2yYIPZJJD2JWi2v89idk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746800131; c=relaxed/simple;
-	bh=0BiCNOUFnkpzOO91cAoJnS1M4EUHO5w58eE/kjs2ZiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qHmWtxNq/BQxK8A/5h13y3wfcdnm31lf1t8w/KAnF5+uF77b4riCTv5THFcyL0WcFGB/l/MaUuIp/t3MLWTQkCYCBrFGi62umFpsZMA75uwzwzSj6e4059o5K+GLaaMJwTfScvOGD4tLqArvL32o2k0A1E4/IDguW7UKR4HHxPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nn90T+7l; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746800907; c=relaxed/simple;
+	bh=fNRLig7bAYi1L1Kq7n0i/6zijpbMaAknetCXULDY9CM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ksJny0jhVHTzkHXk7Rw1W4Cvhii6VzjvjKABXNmp+eZkiWo5G5uSsYQLlieIRSQgUif+1QlOL9TUfHYwglTzS3e9UCFFOuYdHOj1o1/22P+Jjbs7JH8iBLe/eTRSWXZXE5R37t/eIPkS3MSmtpO/6kHKCYa4J5VXexFVDtzpCRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDeY3Ffu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nn90T+7l"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7415d28381dso1503774b3a.1;
-        Fri, 09 May 2025 07:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746800129; x=1747404929; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UUsPrNUgpKsFUlaD1VZnobsq90ksMPvk4UKUBwJKzf8=;
-        b=Nn90T+7lSUEfTDxV7t1PxAOsgkfUYg4rLACsn4+DuakSN8LsKEqUOmPis2/FJTzMcR
-         Yw5hySSlOtjgC0ErqnU80q1yk7V0YzOaY7b72ys1Js9jfntIDZW1VwfuanXAiKRr6+a8
-         1vX4zlfk5J11v9UegUriowPKa2srN8T9lAPK6ORvh3ZwKA2ZoUBKiHpiNz5YYSijwIF8
-         g7XR59WiCuhRoCNYw65wLSd5pgNhlTF+PpptXQIHnz97FDKoA0u/p5YuDCsUlws3hI5g
-         EdhS6UsgCYwpoBVMXJpwoRtoSshpiunugREaRH+Un1COYZmuXqsqWYUqb3cH5zHRzZyi
-         MBGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746800129; x=1747404929;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UUsPrNUgpKsFUlaD1VZnobsq90ksMPvk4UKUBwJKzf8=;
-        b=XJYQ0LjNE/IDhQvoe4MDLZxW0F1i4nik697oQL3LPw/pZW7+31ysFCV03imxM0AVaR
-         s2/R0gX1uVbJMqEV/drOeLcEFUNnrQ8WsaEzzn7IapCkqTgETZDMqsYloOGV9UuYerHn
-         uI7jvf0fgmO7x+7OD5XZwX9DgL23Qj0bGPDQL5SebHpxCu2KUZ8F/Tpf8cs6OtmGk1OA
-         f240S9KD2Zus+R0z0uBeR73XIqZXOc6/tiXPzOzBTrz2T9Dzh4+PCusxu4SZhf/bp8t5
-         vMu3Em9xZTx69KClNMOlGG6ZjvfmOC0tCl/1oVnUcrnN2z60DKOHEPzwjo+bwiPh8d//
-         W2hw==
-X-Forwarded-Encrypted: i=1; AJvYcCUH2dOYQAHUehCqld+UWVvE+p5xUOMTgqzjZ1xgTey1Pe0E7q8+78PJvERwW/Vho/DUYeiJ+bg6ue8n@vger.kernel.org, AJvYcCUyY0EqAgS7Q/b87lIlXB9uTjQot6obPp5TPemXK/fMvor3rgD4EW7gcz52u+8tpL3J2SkigmXAHnYi@vger.kernel.org, AJvYcCVXFp9IjT8OVL1cK3/BfnfR2nspaRw8/EkAG9Xnh6FzXWfzq6mUAuAt/Te7RgEOu1nrCW4XqD31HPE7I6JH@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDlsxKRXuzBDSL+6WHYhP6qqKFRR2Yu+CLNkhV5TBeq/7bfd6J
-	rDFLiqOTZFInqa4Shd0Isn5QoztlFUcPvxNIODcjBpY/h9XDwWXd
-X-Gm-Gg: ASbGncuGWJ5WFcMZUNSir2cp8ha50rrcr96lhor6YMK4Sn554bkYl7n6zoqizSKH7Jd
-	f29QFb/Xyrevn5xuxqzGgJz9pGisCA6wDGH27rMGgcyD/dGJQZpNmoJ7RCScXUvYMw4BtwcZ/7T
-	rJsLgI/yCupOA3VwjvR+hlyoN/6nrT8aLe9IRr7FSitOV29HCGbChayDbdL8rXEaVa2EFWsFF59
-	4yZ81tkesSt4tSlGrqvOEdARtODVhkiKVwVbOqPLrY2OfoJBctTvksPo667urMExeL2qCxAwSv9
-	TAeBI/la9dSpYda6R+SmhvBxg2AVUG4hWZR2mskOBhH68kcXq0rpIhgShJTwSjt+H+KI4Rgxzmo
-	pnQpz4vsCu/3cpUpaZzBZgQ50
-X-Google-Smtp-Source: AGHT+IGI2KhMXqBBYHZVR6Inyy03cS/0NUSvrLdEUuf4rCMOjafLJezMDNO1gkbp2p3qk/eLogk1GQ==
-X-Received: by 2002:a05:6a00:23c8:b0:737:9b:582a with SMTP id d2e1a72fcca58-7423c087158mr5756482b3a.24.1746800129052;
-        Fri, 09 May 2025 07:15:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74237a3c600sm1781394b3a.134.2025.05.09.07.15.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 07:15:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9bcdd707-4920-4ed8-a808-22988ef0b2da@roeck-us.net>
-Date: Fri, 9 May 2025 07:15:26 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDeY3Ffu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51886C4CEE4;
+	Fri,  9 May 2025 14:28:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746800906;
+	bh=fNRLig7bAYi1L1Kq7n0i/6zijpbMaAknetCXULDY9CM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CDeY3FfuWHHr5ejCUZjrZfxLJ19JvZe/RsVbusBSk3mJbCZBndZddB5O2dP/eV8HK
+	 ik/fCKZlR7BGiQ8VI7eGCgcWeQOEahApJyI22knewmpxyfvWp3wlc9gq8Ak86xvDzp
+	 pBbq/9/fR4Kky+db9ieJJltllj/DLGK2f2fHtldJI4g721+ez5je893Bp8YPKGaAfL
+	 FOPT+WtvsI5JyP6T1rRcCX09RcQlvcfP80a5gCTNvqotCeJzW7gkrH+4tQR/I/m241
+	 w3WWYeZcEBdUTPqwtf9w+4hHfkhMWt0JJiQiGKgkNxCuNbrtZaQgSajZFKkSkQxAfD
+	 MJHjru/wqRDkw==
+Date: Fri, 9 May 2025 15:28:19 +0100
+From: Lee Jones <lee@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250509142819.GG2492385@google.com>
+References: <20250423094058.1656204-1-tmyu0@nuvoton.com>
+ <20250423094058.1656204-2-tmyu0@nuvoton.com>
+ <20250501122214.GK1567507@google.com>
+ <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
+ <20250502080754.GD3865826@google.com>
+ <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] hwmon: pmbus: mpq8785: Prepare driver for multiple
- device support
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Noah Wang <noahwang.wang@outlook.com>,
- Naresh Solanki <naresh.solanki@9elements.com>,
- Fabio Estevam <festevam@gmail.com>, Michal Simek <michal.simek@amd.com>,
- Grant Peltier <grantpeltier93@gmail.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Shen Lichuan <shenlichuan@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg KH <gregkh@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20250509065237.2392692-1-paweldembicki@gmail.com>
- <20250509065237.2392692-2-paweldembicki@gmail.com>
- <272301e5-6561-499a-91eb-615fed4727fa@kernel.org>
- <CAJN1KkxPOuZqRwysx3zu_5ChODn2wnizKXzfEZHD2AiHAbd0ig@mail.gmail.com>
- <e002674f-f180-425a-9f60-ce8f9126b058@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <e002674f-f180-425a-9f60-ce8f9126b058@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
 
-On 5/9/25 02:22, Krzysztof Kozlowski wrote:
-> On 09/05/2025 09:41, Paweł Dembicki wrote:
->> pt., 9 maj 2025 o 09:03 Krzysztof Kozlowski <krzk@kernel.org> napisał(a):
->>>
->>> On 09/05/2025 08:51, Pawel Dembicki wrote:
->>>> Refactor the driver to support multiple Monolithic Power Systems devices.
->>>> Introduce chip ID handling based on device tree matching.
->>>>
->>>> No functional changes intended.
->>>>
->>>> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
->>>>
->>>> ---
->>>> v2:
->>>>   - no changes done
->>>> ---
->>>>   drivers/hwmon/pmbus/mpq8785.c | 38 +++++++++++++++++++++++++++--------
->>>>   1 file changed, 30 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
->>>> index 331c274ca892..00ec21b081cb 100644
->>>> --- a/drivers/hwmon/pmbus/mpq8785.c
->>>> +++ b/drivers/hwmon/pmbus/mpq8785.c
->>>> @@ -8,6 +8,8 @@
->>>>   #include <linux/of_device.h>
->>>>   #include "pmbus.h"
->>>>
->>>> +enum chips { mpq8785 };
->>>
->>> Use Linux coding style, so:
->>> 1. missing wrapping after/before each {}
->>> 2. missing descriptive name for the type (mpq8785_chips)
->>> 3. CAPITALICS see Linux coding style - there is a chapter exactly about
->>> this.
->>>
->>>
->>
->> Sorry, I was thinking that it is a local pmbus tradition.
->> Many drivers have the same enum without capitalics :
->>
+On Fri, 02 May 2025, Ming Yu wrote:
 
-hwmon, really, not just pmbus.
-
->> grep -r "enum chips {" .
->> ./isl68137.c:enum chips {
->> ./bel-pfe.c:enum chips {pfe1100, pfe3000};
->> ./mp2975.c:enum chips {
->> ./ucd9200.c:enum chips { ucd9200, ucd9220, ucd9222, ucd9224, ucd9240,
->> ucd9244, ucd9246,
->> ./zl6100.c:enum chips { zl2004, zl2005, zl2006, zl2008, zl2105,
->> zl2106, zl6100, zl6105,
->> ./ucd9000.c:enum chips { ucd9000, ucd90120, ucd90124, ucd90160,
->> ucd90320, ucd9090,
->> ./max16601.c:enum chips { max16508, max16600, max16601, max16602 };
->> ./q54sj108a2.c:enum chips {
->> ./bpa-rs600.c:enum chips { bpa_rs600, bpd_rs600 };
->> ./adm1275.c:enum chips { adm1075, adm1272, adm1273, adm1275, adm1276,
->> adm1278, adm1281, adm1293, adm1294 };
->> ./max20730.c:enum chips {
->> ./mp2856.c:enum chips { mp2856, mp2857 };
->> ./tps53679.c:enum chips {
->> ./ltc2978.c:enum chips {
->> ./max34440.c:enum chips {
->> ./pim4328.c:enum chips { pim4006, pim4328, pim4820 };
->> ./fsp-3y.c:enum chips {
->> ./lm25066.c:enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+> Lee Jones <lee@kernel.org> 於 2025年5月2日 週五 下午4:08寫道：
+> >
+> ...
+> > > > > +static const struct mfd_cell nct6694_devs[] = {
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > >
+> > > > These are all identical.
+> > > >
+> > > > I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, you are
+> > > > already using PLATFORM_DEVID_AUTO since you are calling
+> > > > mfd_add_hotplug_devices().  So you don't need this IDs.
+> > > >
+> > > > MFD_CELL_NAME() should do.
+> > > >
+> > >
+> > > Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
+> > > sub-devices use cell->id instead of platform_device->id, so it doesn't
+> > > affect the current behavior.
+> > > However, if you think there's a better approach or that this should be
+> > > changed for consistency or correctness, I'm happy to update it, please
+> > > let me know your recommendation.
+> > >
+> > > When using MFD_CELL_NAME(), the platform_device->id for the GPIO
+> > > devices is assigned values from 1 to 16, and for the I2C devices from
+> > > 1 to 6, but I need the ID offset to start from 0 instead.
+> >
+> > Oh no, don't do that.  mfd_cell isn't supposed to be used outside of MFD.
+> >
+> > Just use the platform_device id-- if you really need to start from 0.
+> >
+> > As an aside, I'm surprised numbering starts from 1.
+> >
 > 
-> If that's standard for this subsystem, then it's fine, although to me it
-> feels odd to see all over the code lower case constant.
+> OK, I will use platform_device->id instead. However, I'm still unsure
+> why the ID starts from1.
 > 
+> Additionally, I noticed that when calling mfd_add_devices()
+> separately, the IDs are also assigned consecutively (e.g., GPIO: 1~16,
+> I2C: 17~22, ...).
+> 
+> Do you have any recommendations on how I should implement this?
 
-hwmon traditionally (as in: from the very beginning) uses lowercase enums
-for chip types. It would be even more odd to change that now.
+If you are to use this mechanism, you'd have to submit separate
+mfd_add_devices() calls I guess.
 
-Thanks,
-Guenter
+However, this all seems a bit silly for simple, contextless (where
+device 3 is identical to device 10, etc) enumeration.  Can you use IDA
+instead?
 
+-- 
+Lee Jones [李琼斯]
