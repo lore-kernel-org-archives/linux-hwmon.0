@@ -1,33 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10782701C1;
-	Fri,  9 May 2025 09:22:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8CCEAC7;
+	Fri,  9 May 2025 13:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746782552; cv=none; b=hHpko2Wk9+RdzGsIVm5Gh3rI5cEcpgSWZ8w6RqY+4uQOy1kweWK15cRBkMZtXFNmAZ+8/1eWVVMPKkyQWbIdrvO0r+r2kpQmVy72omY5Sucf6AbuN0MM2PivZYOrlNnNA4AI32XYvcie1/VpjP4vf1FFKoOadERYg1uqodgeBZA=
+	t=1746797205; cv=none; b=qPUj3w5mfk8Eq9dd66is+PsV9uPNgn23MqnJ7oYjJG6WXFbx/Cw8klw+XGwpxLFEPw+qdsB6aH0gTsiPnV35HF6ceMvzsdcMns5mDCXhdUbP/NiTZGqkqSVjkFQmZMBG7aTGHSbxkLU87YuzGdDw4q3kf2junCHm5Z5+/0g6jlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746782552; c=relaxed/simple;
-	bh=9RwaVCJoB2QX52Fzfwg1Ie9/qtAgL82D53jNjXgnjjQ=;
+	s=arc-20240116; t=1746797205; c=relaxed/simple;
+	bh=4ljaswZvpLa11JnKtqLJZzlpXgbUNueMnGcwfKTV9KY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UkkfYkPo0t72AzmWFe8gfrd4HreBmLUi7ytj+nTCfffY4RYRw0nJdl3uo9Ir8cG7ffuIu51KBoq2dGLT3otdEAiQC5xIfr/MOOhNOcSjghtgXe42JnqIVe6VOKj+Kp2keYZjtJ1AP84O5z/aanfk3hfdrwWyMd213Ps/F0MSEDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qDcVTB7u; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Hnd61pGdTLGdfqCNBn+sTQE7qkah1h4xaaqite59A+PTv2CJE59A7gK/eKFLfnIzZC6LkFhNQk3uwcl1oFML0XT4sHVT29Bgulbk18LJePUJSdgGJeZacjiJRNApPT+U0nyCAnce1Ft0/madR5PuMnZ0ge7aylQ+Z3R+BmLYI/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+ojOsY+; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qDcVTB7u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E87EC4CEE9;
-	Fri,  9 May 2025 09:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746782552;
-	bh=9RwaVCJoB2QX52Fzfwg1Ie9/qtAgL82D53jNjXgnjjQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qDcVTB7uRdZVUEn57NM9lVN1IeezZySRSG6biuzKx5NsoWnb3bmGeNilt5WQn14zF
-	 MZHkWmmIWgTG/BHC2DibkuAvfEr5oWjw1FiNHXarZ7gfD8xakVDj5Pg8UoQyQ+l3Wx
-	 MScDqxI7g5xO90TjO48SLrAFLdChEgOzNKQ8VVdbn8DUGs+B9mzum9ClzwoDWX6gPP
-	 0JdRQUFc9ovZ0BC1NTLJ/urJLLrPEU1U4RHIXwoWKaJjuo/lviQ+s5PpLhS86wgQu8
-	 8uSnFLiM3GECugygpYSKqlqr9XfQizblc11s/ZqjV+6zt2fL4XwUdvAtGZ1acbsJML
-	 Kmhee+Lrul25A==
-Message-ID: <e002674f-f180-425a-9f60-ce8f9126b058@kernel.org>
-Date: Fri, 9 May 2025 11:22:25 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+ojOsY+"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22e6a088e16so15850375ad.1;
+        Fri, 09 May 2025 06:26:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746797201; x=1747402001; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=M99M9pqDd4HY7ZTat7gh8dmPe+mFUSH3NvZfT0ucCMI=;
+        b=Y+ojOsY+a/sMZxNxgDofV5WF4P/9rq203HpyuwUMcZup2BS/do/JxdPYXwcpSCvAs6
+         cH5sL2OZejeAPtUOGsGxYuYDuc5oJMeWnwdmSPCu2Ux8vnlW8sJpKCRuaUQJ+bel//J0
+         ltwOTke/+Xk1PZWUOp9Mdm14apZcICG3EtMt6e1KzW+iQNSgVbwhILSYCvS61lRuJGwO
+         6SqD2q/glWuCBeDhw8hE1EU0ixgPYfzBEiOVmYJVkzdujFbevQ7RqWEN3VK/vpazcd8Z
+         41SusGstvv6grZyLLZnsMWhOl1Bgu7jfY/gkE4G6rZY7d2gHHidhA8DBA+jKQXB4HPnP
+         BXbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746797201; x=1747402001;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M99M9pqDd4HY7ZTat7gh8dmPe+mFUSH3NvZfT0ucCMI=;
+        b=vd54j602V5GWSyshctNwDgBMwMhXvdrOq/TtYIt3CKpyNMv6wT+6S9yKnJRiIRKhf7
+         BVVQ1tghOaKHSxwIV/8ln4KuqW/SfwcewBt5Nbfm6JS1geQUe+5rJU6Ab1y9dgHNDlwH
+         SRBDZKLtVlv9wah3BFPBznVB8qlBmHJOHxo/uqxbYm6vFhNyreQYczvfegoNa6c4VtV0
+         mTfiQbOcU9IQ14zEFFjsaVR0Z3k1WszrxZr4Hu6vOP6v+wdiiQKv5107TXrDmv1BF5fi
+         /9CYBhHy3F4uGoWI9vZHChxBHvN3mBmc4k3r/bygeoUx/ACCZUPPd/hbAqUHhcODJ4Yp
+         uKFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUY2t9+1XHvCZ6zaYxX4QCWl8Roya+K2EiuV2ENQYwwJU39UdkDzu3MVUeJvg5SrPTjypFTQr1uzH7w@vger.kernel.org, AJvYcCVNf2WRy786nijvNfaxRkXvaVmpocklyoYhtVivB17WeJa65K8IOFmump0XHjjWNIn27o8FM9Jk+jcW@vger.kernel.org, AJvYcCVxHKerErTmIo+me8uq+64h2rVONJX5uLl1K+QhCTIFuAIWWRls8ToWXDayxhXumfW1yyezqhbaCTncd/c=@vger.kernel.org, AJvYcCX1zM5qXio66AfYa0xKifQM0ZrC7NHKjKYUNEmJpUNWZSlzbnkWxvfhDw2HqYX1QWtB283jCISQ7a0G58Qo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8IIEfDgng40nSwPRNUHdBkAsII2UGk7XbsreUTk0uod0vIdTT
+	8YPZWougJXySLsz89kbp/PqVmpEZkgQ6EUqAIXJVAzJldft/in8I
+X-Gm-Gg: ASbGnctOQ0LLYCEejTtT0WGbApl9iTvIClheXYacCO+1zShqSt3ChY+x8QpE6SOyd1a
+	uzinS3IDIGGa44Gwp98bkYZ7lb1RmBhiMhrutN1J3emst6S85G/ZD2IJJY0vUYkKbe7rFlGGITG
+	u3MBHDEjAvlid0cXx4wA0mwWPKyUvLQerRqfcJoTlkqmZkcvl4eyd6K/0zuC6gVz8ZlPc/fD8XV
+	i7yck3BkmZtCKiyp+xL4+WwkdMKXkBVjCxUJnoRUDxSqO7iUfYMYiZa0NWNNiS/StXQzXRfZU6o
+	LVtGDahgl3rl7zdesBl63XVn1KVO7hCrv2I2VrdzFn+gf8WfErWZIBWNz2XRyVOeBQ8rKh3/C/5
+	cAC+vXu5S5RBlUQ==
+X-Google-Smtp-Source: AGHT+IF1kr7NFCr8YU3Cp/1fNg8yu3Ky0zpKNpL2nfPUiW9hl80G8AZThU5x1ZRytfbBPlKxXYUu7Q==
+X-Received: by 2002:a17:903:1c7:b0:215:6c5f:d142 with SMTP id d9443c01a7336-22fc93dbc45mr46429305ad.20.1746797201019;
+        Fri, 09 May 2025 06:26:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc7b2a004sm16950085ad.106.2025.05.09.06.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 May 2025 06:26:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d578893e-167a-404f-bdd0-8e5b187af816@roeck-us.net>
+Date: Fri, 9 May 2025 06:26:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,141 +69,151 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] hwmon: pmbus: mpq8785: Prepare driver for multiple
- device support
-To: =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH v2 4/5] hwmon: pmbus: mpq8785: Implement VOUT feedback
+ resistor divider ratio configuration
+To: Pawel Dembicki <paweldembicki@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Noah Wang <noahwang.wang@outlook.com>,
+ Noah Wang <noahwang.wang@outlook.com>, Michal Simek <michal.simek@amd.com>,
  Naresh Solanki <naresh.solanki@9elements.com>,
- Fabio Estevam <festevam@gmail.com>, Michal Simek <michal.simek@amd.com>,
- Grant Peltier <grantpeltier93@gmail.com>,
+ Fabio Estevam <festevam@gmail.com>, Grant Peltier
+ <grantpeltier93@gmail.com>,
  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
  Shen Lichuan <shenlichuan@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
  Greg KH <gregkh@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org
 References: <20250509065237.2392692-1-paweldembicki@gmail.com>
- <20250509065237.2392692-2-paweldembicki@gmail.com>
- <272301e5-6561-499a-91eb-615fed4727fa@kernel.org>
- <CAJN1KkxPOuZqRwysx3zu_5ChODn2wnizKXzfEZHD2AiHAbd0ig@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20250509065237.2392692-5-paweldembicki@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CAJN1KkxPOuZqRwysx3zu_5ChODn2wnizKXzfEZHD2AiHAbd0ig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250509065237.2392692-5-paweldembicki@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 09/05/2025 09:41, Paweł Dembicki wrote:
-> pt., 9 maj 2025 o 09:03 Krzysztof Kozlowski <krzk@kernel.org> napisał(a):
->>
->> On 09/05/2025 08:51, Pawel Dembicki wrote:
->>> Refactor the driver to support multiple Monolithic Power Systems devices.
->>> Introduce chip ID handling based on device tree matching.
->>>
->>> No functional changes intended.
->>>
->>> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
->>>
->>> ---
->>> v2:
->>>  - no changes done
->>> ---
->>>  drivers/hwmon/pmbus/mpq8785.c | 38 +++++++++++++++++++++++++++--------
->>>  1 file changed, 30 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
->>> index 331c274ca892..00ec21b081cb 100644
->>> --- a/drivers/hwmon/pmbus/mpq8785.c
->>> +++ b/drivers/hwmon/pmbus/mpq8785.c
->>> @@ -8,6 +8,8 @@
->>>  #include <linux/of_device.h>
->>>  #include "pmbus.h"
->>>
->>> +enum chips { mpq8785 };
->>
->> Use Linux coding style, so:
->> 1. missing wrapping after/before each {}
->> 2. missing descriptive name for the type (mpq8785_chips)
->> 3. CAPITALICS see Linux coding style - there is a chapter exactly about
->> this.
->>
->>
+On 5/8/25 23:51, Pawel Dembicki wrote:
+> Implement support for setting the VOUT_SCALE_LOOP PMBus register
+> based on an optional device tree property
+> "mps,vout-fb-divider-ratio-permille".
 > 
-> Sorry, I was thinking that it is a local pmbus tradition.
-> Many drivers have the same enum without capitalics :
+> This allows the driver to provide the correct VOUT value depending
+> on the feedback voltage divider configuration for chips where the
+> bootloader does not configure the VOUT_SCALE_LOOP register.
 > 
-> grep -r "enum chips {" .
-> ./isl68137.c:enum chips {
-> ./bel-pfe.c:enum chips {pfe1100, pfe3000};
-> ./mp2975.c:enum chips {
-> ./ucd9200.c:enum chips { ucd9200, ucd9220, ucd9222, ucd9224, ucd9240,
-> ucd9244, ucd9246,
-> ./zl6100.c:enum chips { zl2004, zl2005, zl2006, zl2008, zl2105,
-> zl2106, zl6100, zl6105,
-> ./ucd9000.c:enum chips { ucd9000, ucd90120, ucd90124, ucd90160,
-> ucd90320, ucd9090,
-> ./max16601.c:enum chips { max16508, max16600, max16601, max16602 };
-> ./q54sj108a2.c:enum chips {
-> ./bpa-rs600.c:enum chips { bpa_rs600, bpd_rs600 };
-> ./adm1275.c:enum chips { adm1075, adm1272, adm1273, adm1275, adm1276,
-> adm1278, adm1281, adm1293, adm1294 };
-> ./max20730.c:enum chips {
-> ./mp2856.c:enum chips { mp2856, mp2857 };
-> ./tps53679.c:enum chips {
-> ./ltc2978.c:enum chips {
-> ./max34440.c:enum chips {
-> ./pim4328.c:enum chips { pim4006, pim4328, pim4820 };
-> ./fsp-3y.c:enum chips {
-> ./lm25066.c:enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+> 
+> ---
+> v2:
+>    - rename property to mps,vout-fb-divider-ratio-permille
+>    - add register value range checking
+> ---
+>   drivers/hwmon/pmbus/mpq8785.c | 21 +++++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
+> index 34245d0d2125..1d0e7ac9daf4 100644
+> --- a/drivers/hwmon/pmbus/mpq8785.c
+> +++ b/drivers/hwmon/pmbus/mpq8785.c
+> @@ -12,6 +12,13 @@
+>   
+>   enum chips { mpq8785, mpm82504, mpm3695, mpm3695_25 };
+>   
+> +static u16 voltage_scale_loop_max_val[] = {
+> +	GENMASK(10, 0), /* mpq8785 */
+> +	GENMASK(9, 0), /* mpm82504 */
+> +	GENMASK(9, 0), /* mpm3695 */
+> +	GENMASK(11, 0), /* mpm3695_25 */
 
-If that's standard for this subsystem, then it's fine, although to me it
-feels odd to see all over the code lower case constant.
+Use
+	[... ] = GENMASK()
+as suggested.
 
+> +};
+> +
+>   static int mpq8785_identify(struct i2c_client *client,
+>   			    struct pmbus_driver_info *info)
+>   {
+> @@ -99,6 +106,8 @@ static int mpq8785_probe(struct i2c_client *client)
+>   	struct device *dev = &client->dev;
+>   	struct pmbus_driver_info *info;
+>   	enum chips chip_id;
+> +	u32 voltage_scale;
+> +	int ret;
+>   
+>   	info = devm_kmemdup(dev, &mpq8785_info, sizeof(*info), GFP_KERNEL);
+>   	if (!info)
+> @@ -126,6 +135,18 @@ static int mpq8785_probe(struct i2c_client *client)
+>   		return -ENODEV;
+>   	}
+>   
+> +	if (!of_property_read_u32(dev->of_node,
 
-Best regards,
-Krzysztof
+s/of_property/device_property/ (and include linux/property.h) to make this
+usable from non-devicetree systems.
+
+Also, please swap this patch with the previous patch to address the concern
+about patch order (i.e., introduce the property first and then add support
+for the new chips).
+
+Thanks,
+Guenter
+
+> +				  "mps,vout-fb-divider-ratio-permille",
+> +				  &voltage_scale)) {
+> +		if (voltage_scale > voltage_scale_loop_max_val[chip_id])
+> +			return -EINVAL;
+> +
+> +		ret = i2c_smbus_write_word_data(client, PMBUS_VOUT_SCALE_LOOP,
+> +						voltage_scale);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	return pmbus_do_probe(client, info);
+>   };
+>   
+
