@@ -1,144 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB812701C2;
-	Fri,  9 May 2025 07:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8555E26FA6C;
+	Fri,  9 May 2025 07:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746774466; cv=none; b=UkuDLT2PWieLe8pliRCQE8RjtYFXtMFj6Y1RyKmtRWHpu+3vOX5a1B/49pWLZ/0vpyx6HqTiu9PC5sCXy28VrdCqkEDK4OK++Cspv1sxqrZLQEyjs5zwd1QDH+PDAKytgf1A+QuNG2x9iI2z0393RcdTwtDGmh3FVz71PI2vICI=
+	t=1746776494; cv=none; b=NG1PBqQKO7M/Ph4OlhQf2Wi3kxzv/RImJiRSsyp7pTolltUngDEgg+c7D5k9vpPTDcEVwA85AyGkcpFw+EHkFcfdaN+CpLgrJdEjNzf81oHf9Pj/kL11SWKpwxb9ffS3uhzLdxioZuEJ33fWS0LOA+Z295kh1ebA2E84Ir0z5TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746774466; c=relaxed/simple;
-	bh=SILWPNo+P+95Jq6C6hfiWn96F7bB++jW8DpztCoUBns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WHZd2O7A56SeDKIDN05IjlOg+HmnSQR4QctRhrQVket0iJACpnk8iujQbFd9uXNqoAiO11Zmk2XEJmEe+v7w/YYyhdpT+hT/LQst8LOTIRoR0LtbCzmilKYK6XHy83ptpWi2RR/XLfJFHhZLn9Z32sv9A3H4RBdSfebpChw3TXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SgPo24C9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746776494; c=relaxed/simple;
+	bh=jyO31/jl+RDl/d/ZdCzc5ZoO0zv88j+FCcX6tIa4kvA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e4JjyQSeZeEl+XhYq+Da1SDmIqYJBtCcEFcZpEFb+JNhSWJgjw+O2Mjis/kCjOXH+engEVTv/mqy5yWv++5WL67D4sBkVOG1OeCy0eK7rQ9zprMjknRf/4TpxwIMrZH8YeSfrcLbnin81wFj7MLeVFh/J6hvQFcYC2YuYtsRb0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LxW/AdrP; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SgPo24C9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C913C4CEE4;
-	Fri,  9 May 2025 07:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746774466;
-	bh=SILWPNo+P+95Jq6C6hfiWn96F7bB++jW8DpztCoUBns=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SgPo24C9wtY5Z7J5nSe1zrWHtmzWUq+pM2ucELbLDJYasaQZBT0+3/yBUdJgWPvZK
-	 ddr7qg8Mkal2Sh+aS9orVJv5o1hOGbES1sXDviGOZZoOzX/SQgAxg3EJGh4hp+4WF4
-	 MZStldWkT8pcAS8k6aL99SdKQVZBoV+J2v9XkroturneN1U5SVoRCRcpRQFNVJhrvZ
-	 18XEB0wWMTyPvcs0FEUNZT9noqIaW7eRJeS7dqMHREhJiKeY1ayKsO55D/NwkCAPkg
-	 z1sB7GdIqI0BQ89zO6e/CqyRuYlJTlviHs/81Vbv/98xG098uMWP+W1KYllZ5lh/6V
-	 Fm+441pUMYyVg==
-Message-ID: <881c4ed3-51a1-4859-8417-6a46a4d7de2c@kernel.org>
-Date: Fri, 9 May 2025 09:07:39 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxW/AdrP"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-708a853c362so17142697b3.2;
+        Fri, 09 May 2025 00:41:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746776491; x=1747381291; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ye7rIPGO7oKTOhURnZxVJsCn/qQWh5VCeJGEhsIu90E=;
+        b=LxW/AdrPPTEWFDzmLrK89bae22NsAaXFucsHc03Pda8EQVHVpUEPVv4d7uhCitvVun
+         nPnOWdrECeKbkDyne5kIEdSdpDeCuRNdQWgF78sGxhA0pqcTGcVIFB/O4IaH/HcEqSvU
+         +MRRKCAifF3IV8yq4diW5vntQQKb5FhklL46AUlg7Y8AqICfnwdCGSFSPCkPdxJo5v/F
+         YwR1bWJk6H2NpIQ2Jrsx+pK7Pe7p8mcyEStRDe7vm7pVhq8mhsVjKxBVz4UnO0Sqjme4
+         evZ7wp3iXVr3dY9GYCzXikS0rI2BTR4BIb68/Qw2EJsgYVkT4TMdqKhdUVoNnm525AZu
+         mcOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746776491; x=1747381291;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ye7rIPGO7oKTOhURnZxVJsCn/qQWh5VCeJGEhsIu90E=;
+        b=tg6wzBEEtlJuA5jlGznLW6d9+4WtY+wxxwRa4kkCg0nAFuCJRnEjYMr/BiFH2m5HX1
+         wPJyxZKIymUTiAk3ykVeGb7i5th8IbMeILxu69CFKx6OqukMRDzfpMX2ZX3jeaS0D+/G
+         TkMKscCTYEeST0/6P+SDJ9hi1/k4OfXQsEQqqc+bMDgeHcq84fx7OtTqbfspqrDh6cs4
+         zDUr5yI8c/9SQRdqftxHfEqp4/mB4Rj1tXyNPpZy9Z+HpdwTJkuI56WAKbaRhCE9V0/v
+         ZLlFVya4+6Gc7cJE6FjYDRbJ+IiLksZXUawSOxTeoTeEEHLgZUs2YYLVId5z1H4FuLf2
+         09BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCPXr4Hr54Hrol4Iwe416AtYphl/px6qUkdzKl4BppMGI0Vc3Ps03XMX9kIngGTrun8WtgxqAqXhOc@vger.kernel.org, AJvYcCVJgSCNO0gloOt/q1yvu2Pv7ejy/S1bcmseBgqO46+wwfiHjC3hY6BsgkymAwINZZ6uycXoEFrbeQYU@vger.kernel.org, AJvYcCWSj3cW9Sdv00NC1kr2IKkpVFV/DAGpi14CGaPGN58YVrpFN+eZr+qr+uVYSIBkBYj4/ENp616leq1fXX8I@vger.kernel.org
+X-Gm-Message-State: AOJu0YywbP7CJqpLkXB6NEfzNjtBfq8tHXFvieKe7K8QpRuvhfK4cusT
+	qlD+r07q8RKKPii9J5T8YlenTVwm5W4TiqWJB+xNnWAZq+GKZeefDIxHY+WptZZkndZvBkG1hZT
+	WermsXXTq5qpI0uDbSoevWdLChuY=
+X-Gm-Gg: ASbGncv/fLW6p3oOcOXeeO+SZjrsnNKvbPNC0JTgDo9e7r7JTgGbOiFjc3YZkuOSuSv
+	lcyFBjGq5Fdlm9boYlXs87YA7SHKnxlp7G2tIXzs2zqMC7q7Zkp5bkLfHw9Wn8PhvmsTqdDsbMp
+	3CP62/4xS1mDtAp4NSltfKsSI=
+X-Google-Smtp-Source: AGHT+IGvkBefmqT0OnG87syXeRA3zl+7ZbjUE1o+Op5MMkoHcI93LSKQldFIuzU5TcJjgkm7YP+ahU+NuCOdLYn387w=
+X-Received: by 2002:a05:690c:3606:b0:708:be8b:8415 with SMTP id
+ 00721157ae682-70a3f9ec7bamr32338747b3.1.1746776491333; Fri, 09 May 2025
+ 00:41:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] hwmon: pmbus: mpq8785: Implement VOUT feedback
- resistor divider ratio configuration
-To: Pawel Dembicki <paweldembicki@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Noah Wang <noahwang.wang@outlook.com>, Michal Simek <michal.simek@amd.com>,
- Naresh Solanki <naresh.solanki@9elements.com>,
- Fabio Estevam <festevam@gmail.com>, Grant Peltier
- <grantpeltier93@gmail.com>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Shen Lichuan <shenlichuan@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg KH <gregkh@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
 References: <20250509065237.2392692-1-paweldembicki@gmail.com>
- <20250509065237.2392692-5-paweldembicki@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250509065237.2392692-5-paweldembicki@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20250509065237.2392692-2-paweldembicki@gmail.com> <272301e5-6561-499a-91eb-615fed4727fa@kernel.org>
+In-Reply-To: <272301e5-6561-499a-91eb-615fed4727fa@kernel.org>
+From: =?UTF-8?Q?Pawe=C5=82_Dembicki?= <paweldembicki@gmail.com>
+Date: Fri, 9 May 2025 09:41:20 +0200
+X-Gm-Features: ATxdqUHXjtSflO8ksX9UgpKJ0JRin_SxPFkWNwLey2-t_RPh9BHyKI_7T9j8Rjk
+Message-ID: <CAJN1KkxPOuZqRwysx3zu_5ChODn2wnizKXzfEZHD2AiHAbd0ig@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] hwmon: pmbus: mpq8785: Prepare driver for multiple
+ device support
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Noah Wang <noahwang.wang@outlook.com>, 
+	Naresh Solanki <naresh.solanki@9elements.com>, Fabio Estevam <festevam@gmail.com>, 
+	Michal Simek <michal.simek@amd.com>, Grant Peltier <grantpeltier93@gmail.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Shen Lichuan <shenlichuan@vivo.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Greg KH <gregkh@linuxfoundation.org>, 
+	Charles Hsu <ythsu0511@gmail.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/05/2025 08:51, Pawel Dembicki wrote:
-> Implement support for setting the VOUT_SCALE_LOOP PMBus register
-> based on an optional device tree property
-> "mps,vout-fb-divider-ratio-permille".
-> 
-> This allows the driver to provide the correct VOUT value depending
-> on the feedback voltage divider configuration for chips where the
-> bootloader does not configure the VOUT_SCALE_LOOP register.
-> 
-> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
-> 
-> ---
-> v2:
->   - rename property to mps,vout-fb-divider-ratio-permille
->   - add register value range checking
-> ---
->  drivers/hwmon/pmbus/mpq8785.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-> index 34245d0d2125..1d0e7ac9daf4 100644
-> --- a/drivers/hwmon/pmbus/mpq8785.c
-> +++ b/drivers/hwmon/pmbus/mpq8785.c
-> @@ -12,6 +12,13 @@
->  
->  enum chips { mpq8785, mpm82504, mpm3695, mpm3695_25 };
->  
-> +static u16 voltage_scale_loop_max_val[] = {
-> +	GENMASK(10, 0), /* mpq8785 */
+pt., 9 maj 2025 o 09:03 Krzysztof Kozlowski <krzk@kernel.org> napisa=C5=82(=
+a):
+>
+> On 09/05/2025 08:51, Pawel Dembicki wrote:
+> > Refactor the driver to support multiple Monolithic Power Systems device=
+s.
+> > Introduce chip ID handling based on device tree matching.
+> >
+> > No functional changes intended.
+> >
+> > Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+> >
+> > ---
+> > v2:
+> >  - no changes done
+> > ---
+> >  drivers/hwmon/pmbus/mpq8785.c | 38 +++++++++++++++++++++++++++--------
+> >  1 file changed, 30 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq878=
+5.c
+> > index 331c274ca892..00ec21b081cb 100644
+> > --- a/drivers/hwmon/pmbus/mpq8785.c
+> > +++ b/drivers/hwmon/pmbus/mpq8785.c
+> > @@ -8,6 +8,8 @@
+> >  #include <linux/of_device.h>
+> >  #include "pmbus.h"
+> >
+> > +enum chips { mpq8785 };
+>
+> Use Linux coding style, so:
+> 1. missing wrapping after/before each {}
+> 2. missing descriptive name for the type (mpq8785_chips)
+> 3. CAPITALICS see Linux coding style - there is a chapter exactly about
+> this.
+>
+>
 
-Drop comments and index the table with enums instead. It makes clear and
-obvious code. Code should be readable and self-documenting instead of
-adding comments as an substitute of non-obvious code.
+Sorry, I was thinking that it is a local pmbus tradition.
+Many drivers have the same enum without capitalics :
 
-> +	GENMASK(9, 0), /* mpm82504 */
-> +	GENMASK(9, 0), /* mpm3695 */
-> +	GENMASK(11, 0), /* mpm3695_25 */
-> +};
-> +
+grep -r "enum chips {" .
+./isl68137.c:enum chips {
+./bel-pfe.c:enum chips {pfe1100, pfe3000};
+./mp2975.c:enum chips {
+./ucd9200.c:enum chips { ucd9200, ucd9220, ucd9222, ucd9224, ucd9240,
+ucd9244, ucd9246,
+./zl6100.c:enum chips { zl2004, zl2005, zl2006, zl2008, zl2105,
+zl2106, zl6100, zl6105,
+./ucd9000.c:enum chips { ucd9000, ucd90120, ucd90124, ucd90160,
+ucd90320, ucd9090,
+./max16601.c:enum chips { max16508, max16600, max16601, max16602 };
+./q54sj108a2.c:enum chips {
+./bpa-rs600.c:enum chips { bpa_rs600, bpd_rs600 };
+./adm1275.c:enum chips { adm1075, adm1272, adm1273, adm1275, adm1276,
+adm1278, adm1281, adm1293, adm1294 };
+./max20730.c:enum chips {
+./mp2856.c:enum chips { mp2856, mp2857 };
+./tps53679.c:enum chips {
+./ltc2978.c:enum chips {
+./max34440.c:enum chips {
+./pim4328.c:enum chips { pim4006, pim4328, pim4820 };
+./fsp-3y.c:enum chips {
+./lm25066.c:enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
+
+> > +
+> >  static int mpq8785_identify(struct i2c_client *client,
+> >                           struct pmbus_driver_info *info)
+> >  {
+> > @@ -53,26 +55,46 @@ static struct pmbus_driver_info mpq8785_info =3D {
+> >               PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> >               PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> >               PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> > -     .identify =3D mpq8785_identify,
+> > -};
+> > -
+> > -static int mpq8785_probe(struct i2c_client *client)
+> > -{
+> > -     return pmbus_do_probe(client, &mpq8785_info);
+> >  };
+> >
+> >  static const struct i2c_device_id mpq8785_id[] =3D {
+> > -     { "mpq8785" },
+> > +     { "mpq8785", mpq8785 },
+> >       { },
+> >  };
+> >  MODULE_DEVICE_TABLE(i2c, mpq8785_id);
+> >
+> >  static const struct of_device_id __maybe_unused mpq8785_of_match[] =3D=
+ {
+> > -     { .compatible =3D "mps,mpq8785" },
+> > +     { .compatible =3D "mps,mpq8785", .data =3D (void *)mpq8785 },
+> >       {}
+> >  };
+> >  MODULE_DEVICE_TABLE(of, mpq8785_of_match);
+> >
+> > +static int mpq8785_probe(struct i2c_client *client)
+> > +{
+> > +     struct device *dev =3D &client->dev;
+> > +     struct pmbus_driver_info *info;
+> > +     enum chips chip_id;
+> > +
+> > +     info =3D devm_kmemdup(dev, &mpq8785_info, sizeof(*info), GFP_KERN=
+EL);
+> > +     if (!info)
+> > +             return -ENOMEM;
+> > +
+> > +     if (dev->of_node)
+> > +             chip_id =3D (uintptr_t)of_device_get_match_data(dev);
+>
+> (kernel_ulong_t) instead
+>
+> > +     else
+> > +             chip_id =3D i2c_match_id(mpq8785_id, client)->driver_data=
+;
+>
+> Do not open-code i2c_get_match_data().
+>
+>
+> Best regards,
+> Krzysztof
+
+
+
 Best regards,
-Krzysztof
+Pawe=C5=82 Dembicki
