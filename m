@@ -1,127 +1,126 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30751DE2B4;
-	Sat, 10 May 2025 07:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58195477F;
+	Sat, 10 May 2025 09:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746863896; cv=none; b=tei9jnGyN7RG/MDtFWKVTRWejm6wKLzNfNrxEopto7y/t19zoEaiuSlcn3sOF2cJSv7t56IkarTp0r6XUZcNKS0oPvAltwHA6SeQlngcLkdJ9aioKAh/f6kc5CRAMJkTR3afUnN/k446FQfYmNnAKzO54JIC0OFYEA3SWNqSrJk=
+	t=1746868847; cv=none; b=c1eZinrjz2KnrLe0C9+9QKi0xH2uu+KEyKDZKm3PoI9fvhjvi10kJmpN7oHtTroOs7rktBWrIj0T7ax2WxBbO6sG3GvwnQ5klNlOGYGCr64Nqza9lmYH3xwlhWAMFZP2ZaahQ6u/y4qqX3D4YMhSAfOrL0GD10LX2M3pFVSxt8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746863896; c=relaxed/simple;
-	bh=kftq25OgRn+R8pj3LPI+z7IFsfDRBzwEA5nhTmffpLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dpZMCdul1+TQ0J8AoITVSG39b3KkrtNg5ry/rRtt5c2xzQby/Ik7uUyL8dqqfkesZSIFAGMEF6AqzsR2dQnmtfLjrj8kIDwcDyjZjrhslaHDLY7sPTqsMgqtDAHIF2cEaQ52UpPHyHARoyy8GXd7fdq31QCgKCquKjv0RC34Q0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FPctQsuF; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1746868847; c=relaxed/simple;
+	bh=vCF/5xuRbFnc41DDoRuqpdTT8j5kjjqRrKLNDXa+R7o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dX4RSz40vk/z3cTKqH0EyPRKcU37uDljBSabt6AFfZWXLGbDirFwp0UxEDElFFyq7ayf2SnkPnOCry64aJ/iUEsjZvbT8RBBiaSfxuj8uMWusPohSGByDyZ2WEuO4cC+ruCz5Tl5lP7+hjwewesMhh4KOdS7jAOBcPEJKaQl/og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFqxC+yY; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FPctQsuF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1746863891;
-	bh=kftq25OgRn+R8pj3LPI+z7IFsfDRBzwEA5nhTmffpLs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FPctQsuF2cP0Y2uBS7Z+3vDaP592VwNqZo/rxicMFNj2jfjQ3TIWa3vxSRwWX+MQM
-	 OZdS7hywOyIlfx4g5FVtB6cWoExBFItpNozHjy9wNOmxNjRHB8RtJRvYJMW4Feb0to
-	 n5PpfhMylUQuiygTAVtJ3wdbzOKEZoBtgJdZTzXQ=
-Date: Sat, 10 May 2025 09:58:10 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sung-Chi Li <lschyi@chromium.org>
-Cc: Benson Leung <bleung@chromium.org>, 
-	Guenter Roeck <groeck@chromium.org>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFqxC+yY"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43cf06eabdaso28521055e9.2;
+        Sat, 10 May 2025 02:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746868844; x=1747473644; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ERk94FJo2I+nhqkg3uZ4mky2ZS0le31BrUmfDAtnQw=;
+        b=EFqxC+yYV5ZOnt1/JG2cpb27wy1n4EblLoVzoP0F5RPjO8yCKSbKTh/M8fPytYoly/
+         5KRiUsmB35aErXhuZWki7UV9wyOApa4Rqhyn5t2NT4B6UYqaNL9m2Hu77B/5bmyQmZiQ
+         i4s9RXmr9kLZllt+8hZWMQh/JQqhkPMhPs9Px7x+bYJZgxWmLu7aya3O5+598JevzoVM
+         WoNz5Q4FbtIcha9RC8fUKXK9xSfH26eJzDY0/6C+HM2zAdxG4NV1Vdwlhxjcl0nSlj9U
+         ZCu8gLOKoEUX/aKuqJAvZilaf0QVXoNBcBfQZ4dT0X0v2eEOEL5ejvJ3U5MQ/qx7AXa9
+         iCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746868844; x=1747473644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ERk94FJo2I+nhqkg3uZ4mky2ZS0le31BrUmfDAtnQw=;
+        b=w2C4VahuenbHgo0xd2RhO5f0uVsM1/q7pAIZl69ttE2X8gge00g0NDdFjkhZrmohKP
+         zLyZN2QsfhtlRVoHu1GuvR9KOMyhAlejp1eYJ+radS1dBUIeJk2l4yqffCIr5o+55JFm
+         9rIcv3ZQBsaH0UGgzJtNDKQMIQAXcRZYs3thaiKRd6Tzy6pjsOQpITgjIpuyBcgwoQqC
+         9HM53Orcxbd6kJXk59/FWBEL6YQeZu71dWF3Z9SKAbk04167R+KfOctSM7xT1GZaWMaG
+         xfSDNVBL63c7vpY8jkrlReMGNA9kXeS4NdJ3b2sBiw6Uilb8ET3eEYyIxrbVCU8iHl4a
+         t8hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7rg9dL549jhZq4vtKzznDuGZ1Wy0JtK38VXMqfXH/NaMdcVg0SYn0cVW8JhruL7w2oK22XKbgCwpj@vger.kernel.org, AJvYcCU8vBAn5Fvhfl2Wxn7+2ijOV8dTVWeWJ9AS01QdaZg2dpiMrKhbf1bYrvAOUeN64CYKvnb+8LOtM7ugK1FG@vger.kernel.org, AJvYcCWo0GeYbCxOmevE1FhBxaLB6cZ4rCEPhnNxmoTyDwdFmAxhPjtWYLGFvBpo7XnvqS1d1i2Ur8m2MSOk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0Wx1TlvFedRV3twgDCytMpX+LzOFFitLVlw+c9Z+PGkWHJXXN
+	vlPXQxX09HpAJqutMerZJ3BX9OOBsgIHF04AXF4gpl2L5LZkztHEtGLUWVHd
+X-Gm-Gg: ASbGncsPxDJtynDO7fzJUpacIremvaM3t7AME1H/lvSyXfkt2nIQAG3XDPxvLjiz6xb
+	4u+3/BKHFdKgA2hFRDRfpfvIZjwXDR2Q9t9MaQZYMIjPk+KlGEp+E+9icOTmo0L6mrZNlV3yEYn
+	H+EthyAa5jeueeyIGTOytX2Q5gjOlaHDy2AFAkWL8IV3r9cVf+pZXt++AGbsJxOSvy7yuEydgWM
+	LUkMmSdj9ByPNXese5thHOv/xpo7dRVV9PAT0WxQHI7ZLdhkAU9t0ym8VeI78flID27A1+dQQBk
+	XVnw8TSZeX5Eek7ho+jOqdGBgdwgzHnZWqd63Zj9MTO5HXxr1cKC1pf/DuMogh2xli504txm+q9
+	+
+X-Google-Smtp-Source: AGHT+IFGOLjcCMtVhz1MxaltaMoTEbTdcOOSuwUxitdQ3lnKbTU8OCemlylfzPjg0tJcpC/HYRB8Ww==
+X-Received: by 2002:a05:600c:348a:b0:43d:fa59:be39 with SMTP id 5b1f17b1804b1-442d6ddf515mr51214805e9.33.1746868843500;
+        Sat, 10 May 2025 02:20:43 -0700 (PDT)
+Received: from tempest2.110.lan (xt27dd.stansat.pl. [83.243.39.221])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442d687ae5asm55901985e9.36.2025.05.10.02.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 May 2025 02:20:43 -0700 (PDT)
+From: Pawel Dembicki <paweldembicki@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Pawel Dembicki <paweldembicki@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Noah Wang <noahwang.wang@outlook.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Shen Lichuan <shenlichuan@vivo.com>,
+	Charles Hsu <ythsu0511@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] hwmon: (cros_ec) register fans into thermal
- framework cooling devices
-Message-ID: <ad81f125-90e1-4033-8037-10be83088b12@t-8ch.de>
-References: <20250502-cros_ec_fan-v2-0-4d588504a01f@chromium.org>
- <20250502-cros_ec_fan-v2-3-4d588504a01f@chromium.org>
- <b2432c5c-2589-4cfe-821f-47e5128af2d0@t-8ch.de>
- <aBl4wcX889otz_ms@google.com>
+Subject: [PATCH v3 0/5] hwmon: pmbus: Add support for MPM82504 and MPM3695 family
+Date: Sat, 10 May 2025 11:18:43 +0200
+Message-ID: <20250510091937.2298256-1-paweldembicki@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aBl4wcX889otz_ms@google.com>
 
-On 2025-05-06 10:49:37+0800, Sung-Chi Li wrote:
-> On Sat, May 03, 2025 at 09:27:18AM +0200, Thomas Weißschuh wrote:
-> > On 2025-05-02 13:34:47+0800, Sung-Chi Li via B4 Relay wrote:
-> > > From: Sung-Chi Li <lschyi@chromium.org>
+This series extends the hwmon PMBus driver for the MPS MPQ8785 to support
+two additional Monolithic Power Systems devices: the MPM82504 and
+MPM3695 family.
 
-<snip>
+The driver is restructured to support multiple devices using device tree
+matching. It also introduces an optional
+"mps,vout-fb-divider-ratio-permille" property to configure the
+VOUT_SCALE_LOOP PMBus register, which adjusts reported output voltages
+depending on the external feedback divider.
 
-> > > diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
-> > > index c5e42e2a03a0c8c68d3f8afbb2bb45b93a58b955..abfcf44fb7505189124e78c651b0eb1e0533b4e8 100644
-> > > --- a/drivers/hwmon/cros_ec_hwmon.c
-> > > +++ b/drivers/hwmon/cros_ec_hwmon.c
-> > > @@ -13,6 +13,7 @@
-> > >  #include <linux/platform_device.h>
-> > >  #include <linux/platform_data/cros_ec_commands.h>
-> > >  #include <linux/platform_data/cros_ec_proto.h>
-> > > +#include <linux/thermal.h>
-> > 
-> > Needs a dependency on CONFIG_THERMAL.
-> > 
-> 
-> I think adding the `if (!IS_ENABLED(CONFIG_THERMAL))` you suggested is
-> sufficient, and turning on or off CONFIG_THERMAL both can compile, so I'll only
-> add the guarding statement in the `cros_ec_hwmon_register_fan_cooling_devices`.
+Device tree bindings are updated accordingly.
 
-Agreed.
+Changes have been tested on hardware with device-tree based matching
+using the MPM82504 and MPM3695-10.
 
-> > > +
-> > > +	if (!priv->fan_control_supported)
-> > > +		return;
-> > > +
-> > > +	for (i = 0; i < EC_FAN_SPEED_ENTRIES; i++) {
-> > > +		if (!(priv->usable_fans & BIT(i)))
-> > > +			continue;
-> > > +
-> > > +		cpriv = devm_kzalloc(dev, sizeof(*cpriv), GFP_KERNEL);
-> > > +		if (!cpriv)
-> > > +			return;
-> > > +
-> > > +		cpriv->hwmon_priv = priv;
-> > > +		cpriv->index = i;
-> > > +		devm_thermal_of_cooling_device_register(
-> > > +			dev, NULL, devm_kasprintf(dev, GFP_KERNEL, "cros-ec-fan%zu", i), cpriv,
-> > 
-> > What happens for multiple/chained ECs? If both provide sensors the
-> > thermal device names will collide.
-> > 
-> 
-> How about changing the "cros-ec-fan%zu" to "%s-fan%zu", which prefixes the
-> `dev_name()`? Here is an example from a device: cros-ec-hwmon.12.auto-fan0.
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+Pawel Dembicki (5):
+  dt-bindings: hwmon: Add bindings for mpq8785 driver
+  hwmon: pmbus: mpq8785: Prepare driver for multiple device support
+  hwmon: pmbus: mpq8785: Implement VOUT feedback resistor divider ratio
+    configuration
+  hwmon: pmbus: mpq8785: Add support for MPM82504
+  hwmon: pmbus: mpq8785: Add support for MPM3695 family
 
-Sounds good in general.
-It should match what a potential future HWMON_C_REGISTER_TCD would do.
-Which in turn should mirror HWMON_C_REGISTER_TZ, if that has a specific
-naming scheme.
+ .../bindings/hwmon/pmbus/mps,mpq8785.yaml     | 74 +++++++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |  2 -
+ Documentation/hwmon/mpq8785.rst               | 27 ++++--
+ drivers/hwmon/pmbus/mpq8785.c                 | 95 +++++++++++++++++--
+ 4 files changed, 182 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
 
-> > Error handling for devm_kasprintf() is missing.
-> > 
-> 
-> Thank you for catching this, I will skip registering that device if the
-> devm_kasprintf() fails.
+-- 
+2.43.0
 
-This should also mirror what HWMON_C_REGISTER_TZ is doing on errors.
-If I read the code correctly, probing is aborted there.
-
-> 
-> > > +			&cros_ec_thermal_cooling_ops);
-> > 
-> > Error handling for devm_thermal_of_cooling_device_register() is missing.
-> > 
-> 
-> I think we should continue registering other fans, so maybe we add a warning
-> here if the registration fails?
-
-Same as above.
-
-<snip>
