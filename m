@@ -1,207 +1,154 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F2E189912;
-	Sun, 11 May 2025 03:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4262E2F3E;
+	Sun, 11 May 2025 05:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746935872; cv=none; b=G1TXtYOT8YRtFnJZwOBS2ZWWiLdABSu6IwpTag2ydxsxpCwboyQP2BNwP8NU/6kGby3hSR4n1wwkilVZM2bD6kd1TqMmTZlwIptsT5+tYf4zRB+vNE5CfIKPp3Mdq1Q6wIskKEswB3uC8jjUxa8DCZLhhyG7KRtS6xs6GkojMaw=
+	t=1746940203; cv=none; b=HRMQ4dksA7oYk9dhMoAYkLBoqlSuiDHsjDZsyEj6Ieol5VC+LrDsO1JsErdh1m0153zYFuUWeoRX72BJz4SV5dMzluDuijfEgXFZmqna0FGxHGYMOFI7MlIfUrWJqxMXxhTr20vMZnB0dfcRp0kUevdv0iUzB3tlRGI8yInRzE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746935872; c=relaxed/simple;
-	bh=HLK6PiDnz7E2MMqNzDx5rVqMDXwXP+M194AWuImHFJY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bLk/gQNF3Ka5WUVTgaHh9ZNYtZm7RVAymjrASCBwPVu1IQwgUmvK2abZzwbR4x7xfnWopMx7zKPMGGe/84E8RC3KJyZrfvU4elNLY2/RHWVzer4LRxYpn8kEKlUJxUiLZ2VJfGnaV1v0V2BfQyrIq59bTKJwZZsjmRFWhRPUvy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lBtpeFoZ; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1746940203; c=relaxed/simple;
+	bh=7gn5B164aaUyVv9vQQibdqZoLupxqFDEsStDg4ux3xw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dIcDCzwWt4oBhElYoiqgGGOLeHuVLLQLknC3z9LbmbqK9AbSpfhricTxpyhg7ZvjkOFQhCHwgYrYwyyoGCF0zEeqSc9/V+Ta9LYeqjpp813bLxpwbwW1D4zou+2P6xIH3FWNRekD6tn2gLt9K7I6n7FhlYl3jDonap2mt9Fbu7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hOooRwMr; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lBtpeFoZ"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a1f5d2d91eso1562283f8f.1;
-        Sat, 10 May 2025 20:57:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hOooRwMr"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-30572effb26so3149079a91.0;
+        Sat, 10 May 2025 22:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746935868; x=1747540668; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pk8Os/KQV8g3d7fEWFNmmi62uW1E+WMBGyh6BXQrDnY=;
-        b=lBtpeFoZOEPid9WkomPgn8EAyx80AVyNDBDfE2vjHTzyPTUKYJKT5e/YN0eY3NAjUG
-         gIJVhPzfONIO9J6wfOJBvvIxBdKpDTbMM9BUkcCQ/401zsEXn3ttetgcUGV8mua+OIwR
-         FF5kFr7fIV0HOh8E9z87S4ssBjD4U7+68q7F6YqD4ruaneF4J/RCj0H49zmRGBXmKBoy
-         pJfGr8QwzaaJfM2WsmsDJW1ED7zmDcSrJuCNTF3JX+dwKUnat+jRo+AjDICpLyAt0Vmx
-         6zWzenNtbk0X2ivq3T7U7kmEP/jCryYPJGvvBVQxUYh19G1MFnpGy1pnauV5u9nYydKH
-         q4Kg==
+        d=gmail.com; s=20230601; t=1746940200; x=1747545000; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3aTqzHSoz66LlbF3IBknlQpFjT/GlirHvtZMYx3NltU=;
+        b=hOooRwMrUpeJFNOQZ1dXFrwv8GYEj9WzxyaoUVV5pMr2vRG2DjOJQeXxUbXI2yNQyv
+         uvyrFDOH+sgnhQtM0mtdxkmoZD46Ww40HxtwO5N9EDK2Bimnn4X50lpWJ1JPdWXqyhrz
+         PglTZsAcUPyNOc22upVR1sxJZC5lhOTJC40idI2efV8Q5K0Yw9DEaODUdQ9x1GxkZAi3
+         XRrGoWoWbwAaoybwdtWEa83leEDWczSqSuMXnPF8Oa7JLVyPIBgA0NhmQ2tz+GvJM5wN
+         OWjTTohFJfGOUN6u/Mq7RjcQGRzGE5RvoH4gZ8Pw8nmUxVIwCUZukmGpcbK6QUtlvSpo
+         D3PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746935868; x=1747540668;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pk8Os/KQV8g3d7fEWFNmmi62uW1E+WMBGyh6BXQrDnY=;
-        b=Yv3zosIzoODVHPhO604GeEzpfxrpDTxWQVGTh4AvEddVKvTnb9bDNGa2ub6jCQ7UHp
-         9EVj92CXTtOsbmoHKajoQUleZ9N3p3KGI8Kr8WMCZrpBzJy870w+nOCx+qAMhEvlTtqy
-         vziyQoKAvTXYXp93/cVO1uSoLNF6lF9CK6+DiZ0amc0nVZep0dZb8DQNnA9XbZK9hsRE
-         BleJ2SgxC4u7nsR2omx9WkfVb6c8nYPATjCSq5kDt5bAyh12L7EA7FhNzxgyJ5zFPg6z
-         A9fJFxhUjrz9rTJPgi8L1XQUBb1C7Mmze0f5tyJ5S/yGFjHJC7BjHtpUz5T4vVfeHBFB
-         qKgw==
-X-Forwarded-Encrypted: i=1; AJvYcCWWVSx08vXCFd+CWYd2XbkWlNfaS5kG3jNwUk4Zi0jQph/24YhKyK+Ct/lOOnuhzcqO5as2trKEQWLXdguK@vger.kernel.org, AJvYcCX9rRT51qhy2Y0Hu3MpblCHAJdMGAL50jeQr/KTmBjjy6vmzX3plkLoG/peVhcaSHaW7dEPCkLgE/Jz@vger.kernel.org, AJvYcCXuJtNrA3fbLp0dPoHfs9KuY0VL0x3gjZ+eMht0Vd06xlq1Z8xEeSgYjRAC//8zx39xEf7T6jO1P1ya@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQDgkWWmmuhS2Y4qqH/DYhd6fX3w01enrza0q3kAaTzJYLcqVt
-	qC2f5d6bDZ9SIfxPwSNPwUDtSB3m7DepekDidW4wMWW9qaIX0/cyYF0Hur7e
-X-Gm-Gg: ASbGncufoWeAEIJe1pQ+/BrzQKhYUe3O8t+FWAxc0gdwM3ezK6ZB7dfpf6lmAWt+pNl
-	0Y81o3XKtqyWkG/Gfyc1Z+djS6Vid4pa7eJWMR4yuBPUIZv5WB3sXIDS252Y6jntNr414i+IeRc
-	u2vo2Scm0TMSHiERKgtQvqGKWtg46gA4/z2eHMv570VpNcGvirsRNg3yG0vKbli+xVLNbmZq09D
-	MlVOD0kBThdfynzoPImLrOw25CL8PSr5FQORDIC0DUDsELGRdCyD7bSd1x22TRkrc9pqmh0iZg4
-	YMenXmDaddGpUi/IupEANOPxkrlcuSRUbnSfbUgvhY6V3Szv8F5f6enCuAvHPwErPqqOKVluCVQ
-	+1DiC2qwhofo=
-X-Google-Smtp-Source: AGHT+IHgD1DbRvr6b/N7zrlgQm2zrrzBhf+EbCUtMPcWsg4I47d7yiKsvb4JKwQGNpEesyBMQIUUyw==
-X-Received: by 2002:a05:6000:1a87:b0:3a2:6b2:e558 with SMTP id ffacd0b85a97d-3a206b2e7cbmr189612f8f.28.1746935868044;
-        Sat, 10 May 2025 20:57:48 -0700 (PDT)
-Received: from tempest2.110.lan (xt27dd.stansat.pl. [83.243.39.221])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a4c76dsm8163963f8f.92.2025.05.10.20.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 May 2025 20:57:47 -0700 (PDT)
-From: Pawel Dembicki <paweldembicki@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: Pawel Dembicki <paweldembicki@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Noah Wang <noahwang.wang@outlook.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Fabio Estevam <festevam@gmail.com>,
-	Grant Peltier <grantpeltier93@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Shen Lichuan <shenlichuan@vivo.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Charles Hsu <ythsu0511@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v4 5/5] hwmon: pmbus: mpq8785: Add support for MPM3695 family
-Date: Sun, 11 May 2025 05:55:48 +0200
-Message-ID: <20250511035701.2607947-6-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250511035701.2607947-1-paweldembicki@gmail.com>
-References: <20250511035701.2607947-1-paweldembicki@gmail.com>
+        d=1e100.net; s=20230601; t=1746940200; x=1747545000;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3aTqzHSoz66LlbF3IBknlQpFjT/GlirHvtZMYx3NltU=;
+        b=JeuP0AuN7z6bv7mztEznJU9SloJZ8NtVIlXfyJHEn2fdgNJjmMlRgq6QIhHupC5uju
+         vJ9Z5zpux43BtYyxzIRAdBYJ4ooRDLQsxa7M39DXvjkwTVMus7X2agIpmXkI463nl5Q6
+         xwxXR9EDWQako6sAhzem7VqDAvuMvoXtnwyosrEg5d6wEqyogHGv4c2/kOZzukgfoKty
+         bztK0L6QE0uxcidZNSFeqw1pl48JveoznNgd9+Ei+bggj7hccivoPxLnVhradz0Glacw
+         hu8mgf1pVyonZZzc18kKxG/S0+BhZxyRDoJbcG8IIqqncDBUslECu/1DMvJo0JMmlRXH
+         0PUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcZCUAutHZ89zvvfxTgyt7VOzemlwtZMfjoR1gBxAesiEBW5UiD5OOi0YYtwMZoWsJiSo/sdb52O+0Ibc=@vger.kernel.org, AJvYcCUiZ9ju5xfLk//O0oWQhJ/em6rYxQFJNAf3PuKhccYpVEmmQuucNxPBj8fAZhKEeg5JuZ0F4uUrNQGj@vger.kernel.org, AJvYcCVQRRVnMZ76Zc7UYJOvKvi1f4iDI38kMBFJtRUebW6cSxaZFcnm1Os4VjTc6dhsoUewJeZ1KRrj9FBJkFZY@vger.kernel.org, AJvYcCVShVvoQdzCcbCso/FxMRhMrhzRBcgiuA77yWtLRtZvCTwNjEMjsqulLpTbD+aYrWOeH2qony828i2+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLnW5R/tvVflCuW4Z9nvFE8663Rq14kQJfUcgDlyirmU1VtbzO
+	uaq/jPKQse0cfCejptCgWcspTOQQEcX4k5ZIV1bqbtpHHE3fZK9o
+X-Gm-Gg: ASbGncuIcpedxLqlPftRuSk7yD/ZyLAY8h/LcYG1fABHI1Xm0J/ohnhU7t3Pcvwb9Y8
+	aacY4SvjGipK5l/oed9UWyNesNWLBKp07J+zd3zJKwIAb4PX4DnJVsjKcGXCSRmGAZfy10ezzvh
+	i5SxIuj0kvoMiE+XbNn5fl+sFBFdasWJ6JnZLojkl6Jw8l4zj+DyrOaq0mkSn7xNPNQ5fwzOgtT
+	auzhR4DwhGXxnqMB3Wk005sG+3qgrm+8IiE/maRPPw4XXh7tDTbHI1/zfGF91OqEG+QGCq73YHw
+	zIt49ESIZh5K9yxDEGEj6z5XU6QIZAf6aLG4vc40FV+gtRELm/x533aWVaGs/1fng4rJe6z+RdP
+	gbWbD3CQPl2qCdx9AK44y7Kac
+X-Google-Smtp-Source: AGHT+IFc9LCqMi9ZDb9Ge8jM/AUoYlaAUbifBpt22U+zx5pUBuuYNEmCd9BPXmmAZrbZ2X2eQyoK7g==
+X-Received: by 2002:a17:903:32d2:b0:224:de2:7fd0 with SMTP id d9443c01a7336-22fc8c7bce2mr135948855ad.25.1746940200395;
+        Sat, 10 May 2025 22:10:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc764a536sm41076415ad.66.2025.05.10.22.09.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 May 2025 22:09:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <628c7a6e-d9fd-44c6-ab2d-977074332f65@roeck-us.net>
+Date: Sat, 10 May 2025 22:09:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/5] hwmon: pmbus: mpq8785: Add support for MPM3695
+ family
+To: Pawel Dembicki <paweldembicki@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Noah Wang <noahwang.wang@outlook.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>,
+ Michal Simek <michal.simek@amd.com>, Fabio Estevam <festevam@gmail.com>,
+ Grant Peltier <grantpeltier93@gmail.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Shen Lichuan <shenlichuan@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
+ Greg KH <gregkh@linuxfoundation.org>, Charles Hsu <ythsu0511@gmail.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20250511035701.2607947-1-paweldembicki@gmail.com>
+ <20250511035701.2607947-6-paweldembicki@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250511035701.2607947-6-paweldembicki@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add support for the Monolithic Power Systems MPM3695 family.
-It contains four devices with suffixes: -10, -20, -25 and -100.
-The device is PMBus compliant and shares characteristics with the
-MPM82504.
+On 5/10/25 20:55, Pawel Dembicki wrote:
+> Add support for the Monolithic Power Systems MPM3695 family.
+> It contains four devices with suffixes: -10, -20, -25 and -100.
+> The device is PMBus compliant and shares characteristics with the
+> MPM82504.
+> 
+> MPM3695-25 has different VOLTAGE_SCALE_LOOP register size [11:0]
+> and it needs to be separated because it will be configured in the next
+> commit.
+> 
 
-MPM3695-25 has different VOLTAGE_SCALE_LOOP register size [11:0]
-and it needs to be separated because it will be configured in the next
-commit.
+Leftover from previous version. No need to resend just for this, I can drop
+it when applying. Only resend if the devicetree patches need further changes.
 
-Tested with device tree based matching (MPM3695-10).
-
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
-
----
-v4:
-  - no changes done
-v3:
-  - fix alphabetical order in couple places
-  - adjust patch after patch order change
-v2:
-  - Added whole MPM3695 family
----
- Documentation/hwmon/mpq8785.rst | 13 +++++++++----
- drivers/hwmon/pmbus/mpq8785.c   | 10 +++++++++-
- 2 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/hwmon/mpq8785.rst b/Documentation/hwmon/mpq8785.rst
-index b91fefb1a84c..198d5dfd7c30 100644
---- a/Documentation/hwmon/mpq8785.rst
-+++ b/Documentation/hwmon/mpq8785.rst
-@@ -5,6 +5,7 @@ Kernel driver mpq8785
- 
- Supported chips:
- 
-+  * MPS MPM3695 family
-   * MPS MPM82504
-   * MPS MPQ8785
- 
-@@ -15,6 +16,14 @@ Author: Charles Hsu <ythsu0511@gmail.com>
- Description
- -----------
- 
-+The MPM3695 family is a scalable, ultra-thin, fully integrated power module with
-+a PMBus interface. It offers a complete power solution that achieves up to
-+10A (-10 variant), 20A (-25 variant), 25A (-20 variant), 100A (-100 variant)
-+of output current with excellent load and line regulation across a wide input
-+voltage range. It operates at high efficiency over a wide load range, and can
-+be parallled to deliver higher current. Variants -10,-20 and -100 have different
-+voltage scale configuration register range (10 bits) than -25 version (11 bits).
-+
- The MPM82504 is a quad 25A, scalable, fully integrated power module with a PMBus
- interface. The device offers a complete power solution that achieves up to 25A
- per output channel. The MPM82504 has four output channels that can be paralleled
-@@ -42,10 +51,6 @@ Fully integrated protection features include over-current protection (OCP),
- over-voltage protection (OVP), under-voltage protection (UVP), and
- over-temperature protection (OTP).
- 
--All supported modules require a minimal number of readily available, standard
--external components. The MPM82504 is available in a BGA (15mmx30mmx5.18mm)
--package and the MPQ8785 is available in a TLGA (5mmx6mm) package.
--
- Device compliant with:
- 
- - PMBus rev 1.3 interface.
-diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-index 8827d5a57310..1f56aaf4dde8 100644
---- a/drivers/hwmon/pmbus/mpq8785.c
-+++ b/drivers/hwmon/pmbus/mpq8785.c
-@@ -12,9 +12,11 @@
- 
- #define MPM82504_READ_TEMPERATURE_1_SIGN_POS	9
- 
--enum chips { mpm82504, mpq8785 };
-+enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785 };
- 
- static u16 voltage_scale_loop_max_val[] = {
-+	[mpm3695] = GENMASK(9, 0),
-+	[mpm3695_25] = GENMASK(11, 0),
- 	[mpm82504] = GENMASK(9, 0),
- 	[mpq8785] = GENMASK(10, 0),
- };
-@@ -81,6 +83,8 @@ static struct pmbus_driver_info mpq8785_info = {
- };
- 
- static const struct i2c_device_id mpq8785_id[] = {
-+	{ "mpm3695", mpm3695 },
-+	{ "mpm3695-25", mpm3695_25 },
- 	{ "mpm82504", mpm82504 },
- 	{ "mpq8785", mpq8785 },
- 	{ },
-@@ -88,6 +92,8 @@ static const struct i2c_device_id mpq8785_id[] = {
- MODULE_DEVICE_TABLE(i2c, mpq8785_id);
- 
- static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
-+	{ .compatible = "mps,mpm3695", .data = (void *)mpm3695 },
-+	{ .compatible = "mps,mpm3695-25", .data = (void *)mpm3695_25 },
- 	{ .compatible = "mps,mpm82504", .data = (void *)mpm82504 },
- 	{ .compatible = "mps,mpq8785", .data = (void *)mpq8785 },
- 	{}
-@@ -112,6 +118,8 @@ static int mpq8785_probe(struct i2c_client *client)
- 		chip_id = (kernel_ulong_t)i2c_get_match_data(client);
- 
- 	switch (chip_id) {
-+	case mpm3695:
-+	case mpm3695_25:
- 	case mpm82504:
- 		info->format[PSC_VOLTAGE_OUT] = direct;
- 		info->m[PSC_VOLTAGE_OUT] = 8;
--- 
-2.43.0
+Thanks,
+Guenter
 
