@@ -1,49 +1,49 @@
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DF5257436;
-	Mon, 12 May 2025 10:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA19929D0B;
+	Mon, 12 May 2025 10:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747044994; cv=none; b=tmJ2fNMv9vflbI17VDbU5vR5b4iSTERBZSAvsHzl2qTrO5BBDhbK/DO+i1j9N0ST6f+6BlenNa8IH+iHH08XT7oba8wantxoTMzMu5BwEJkIN8yj+g2O7YfcwEzBfSpFvDx63J7zUqTpjvPfJPGyeDmHQqKSdS6imVJW5SBejJ8=
+	t=1747045370; cv=none; b=RZ41yiTpa/uvy/2JKoJFv/cGfcYukceccglb14ScFWhbFtMxSzR0iLkwFHMEAQ8fqywbiWJwfORqIynCSGsdX1G2u7IdlE//iENeyjYyM9aaVHIIn9GOQcXDyu5eNctN2rY7EfGwekkrL1uptLxNV+9c8iy4mh1jcHd2e1ofnD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747044994; c=relaxed/simple;
-	bh=x47o99WWq54f1B7dp6ChhOM/NYXsBJx5IlYwnzky/CI=;
+	s=arc-20240116; t=1747045370; c=relaxed/simple;
+	bh=y++feBpYS2yhJbLN7RauAAM0tm/rlodrzGivJXlk+aM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pCPIrG0dwV8BcBFc8j7zzwADi+j7ykUpEpyzEGa1omKLLq+kDwYE3BFJIuyznoCy6WRTo35UyT0z1TczF64RrLyVHUr99gxuE7lXFK2xAjB3rJn/bqcM2/yodswzL2iIQzQzeTus0pwXFcI2Pcw9vB53D1CUQ2Yh74ItsvuoZH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=pSMqnJTD; arc=none smtp.client-ip=185.138.42.100
+	 To:Cc:Content-Type; b=VelJd2HpJ/8tGLPI1Jq0uCVGgvGJs+JoPGVYfKnDf+WRQgt4A9J+w62iAwa+BteC9Nc3k6fRWkjCg14CUz2+M663su5auEaso3ZRmSvMB4Lo9EyObj33BRS9e9wn/y3eyCrLoV6vc642youZ5XZOaBWRPZ287XHsUjcRF9HnsH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=uOTtc1wE; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="pSMqnJTD"
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 7B9682E01935;
-	Mon, 12 May 2025 13:16:26 +0300 (EEST)
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="uOTtc1wE"
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 3C9C32E09F0E;
+	Mon, 12 May 2025 13:22:42 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1747044987;
-	bh=OTHX52PGxLTtNGWPpt9j694BPNPZbGM7vPRnoWGCaj8=;
+	s=default; t=1747045364;
+	bh=IaG5h+uHMEU3JCbpf+1PwbXCW59K43zhFj3arQhtd/o=;
 	h=Received:From:Subject:To;
-	b=pSMqnJTDIq+JK8bEPeaaJUPiIcr09cHS5fH77CUKXOff1moX+6RRSf6T4u5HOo4Ab
-	 dbZMVO/4Hyj3Knx9RTKYaNWJmdj2S0VI7fjtVvEEBDgYbuWr6X1f1MGOjydmo68FdT
-	 K+CW9LwHhGDHkgwYCIXewxCu/E0CrWdbGZHNxIYQ=
+	b=uOTtc1wE1OaRRx2NN/w01OJZnZzefqIlxImA1Oe01ly0iEZDoJ2hmIgx8Z9uC7nrx
+	 QGnnFsnBjNzA0gNkAUFsRLxZWxwOH62TwHZAYjkAFoATaJ/rbPExOhmY8tQHmdH0WH
+	 kn+BGjhlZcmbBbHxk+MLX2vu3aXDoYrNSkZI0t9M=
 Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.170) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f170.google.com
+        spf=pass (sender IP is 209.85.208.179) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f179.google.com
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f170.google.com with SMTP id
- 38308e7fff4ca-326c1f3655eso30300531fa.1;
-        Mon, 12 May 2025 03:16:26 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id
+ 38308e7fff4ca-326d67aacc4so18200231fa.3;
+        Mon, 12 May 2025 03:22:42 -0700 (PDT)
 X-Forwarded-Encrypted: i=1;
- AJvYcCUufefQFZkYdDKJrVAY4RGdnhae9BWzyVmWsL/azG7cMZsqjxlGwp8uECx+B+GsiRg3M9493qqugas=@vger.kernel.org,
- AJvYcCWIZFIAVFAkuufdHHK0va3TG8j4X8ksaTMsFtlHKaxFOd+Znkq33CbIWYjaiSy3VwAavIRiUkY5J9pDSzA=@vger.kernel.org,
- AJvYcCXEDKJbpOL0/0NPSX2VaNhhUsDPnsXLgqVcoLKDCKBD/s0WPuVvmhGkgTMbY2MkuauS5p1ntWzmXhbj5T28@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRlROBLQl0kaKyleByMhKXwqV6+XuRqSxLabJt5K0BCw9ROI6B
-	jFg8vY83QSqBx1Dl572Lh1zE9UVKa/GOxALq/+3HbThg4g3kiOfup1M/BQr2t9vlOhnyyxOja7X
-	uIC3LRvF/20g+dxueBYCEzPxB4Bg=
+ AJvYcCU18mLf2Pdz77g7JT3q74z2Ikad0g2lHLhS9CfEpoQiuCfNmu6+mDsczaaAvkpto1mZQchgaLS+eDjqJgE=@vger.kernel.org,
+ AJvYcCUwsVj4RdgKh3v7e8bkZRy0TXbNvO0ZY2Gk9NhDXXDW8swEcV66bSw6ORoSLuJlf/smCgVKVDv6oXc=@vger.kernel.org,
+ AJvYcCW3bRmpjUfbZvysf+cve4JMh+4vtH7cD98q/QfsHYAl/0qY5WojThKu+IIyTlH+sbWJBxDzlOKmx9WxnT9t@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu6njCUbQThz2Os5pLMxwS4jzVxnOJOAH/vjecOOUQsvJryvRa
+	Y07G3pSQMTiyLoKxK6z+BmT/K4bCuMe+q7RozVDDfCmPiXHDbMwygX0jZPtWzvmqURaejE/gp0l
+	Y2AfXqgA+CORif6dmZnUAkF6BfRs=
 X-Google-Smtp-Source: 
- AGHT+IFw5A+OcMQWiTpmDThG4iT3S00ecaSR5XN3PPYP8Daj9AbNazUCokipeEHqlGTHSZxIvj3aYKVk1S9KVQy8VpE=
-X-Received: by 2002:a05:651c:30c6:b0:30b:b956:53d4 with SMTP id
- 38308e7fff4ca-326c453d60cmr48709821fa.5.1747044985845; Mon, 12 May 2025
- 03:16:25 -0700 (PDT)
+ AGHT+IEfOMQPGHpM16kbGmKH72oODVzy3/QrmWs19fr7mNbji++6YukQx4EKzq3Y5LYS1ccLiLwJtnywY8F8kkQVz1M=
+X-Received: by 2002:a2e:be9c:0:b0:30b:b7c3:ea71 with SMTP id
+ 38308e7fff4ca-326c45da855mr40172211fa.15.1747045361445; Mon, 12 May 2025
+ 03:22:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -51,17 +51,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250511204427.327558-1-lkml@antheas.dev>
- <D9TQ0LYKISGB.3QAOHFXVL9PEO@gmail.com>
-In-Reply-To: <D9TQ0LYKISGB.3QAOHFXVL9PEO@gmail.com>
+ <20250511204427.327558-7-lkml@antheas.dev>
+ <D9TQ3YPQDD4W.3JQOYGQB5GS7P@gmail.com>
+In-Reply-To: <D9TQ3YPQDD4W.3JQOYGQB5GS7P@gmail.com>
 From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 12 May 2025 12:16:14 +0200
+Date: Mon, 12 May 2025 12:22:29 +0200
 X-Gmail-Original-Message-ID: 
- <CAGwozwFJnR2aMhj6LJKU8aF+MDzF9FR21fXPPd7_=44M+KUJGg@mail.gmail.com>
-X-Gm-Features: AX0GCFuArtFUaWkkLJa1COmLkMRLR7iabLhAEIG80zqyIm0niW2BE_gm6mMX3S4
+ <CAGwozwHo61uX_Xy3g-YtQg1dgs7bXu9uFqF0BrK3ThkpUUtmHA@mail.gmail.com>
+X-Gm-Features: AX0GCFs87ueiENXcgrg2D_nbN4EwykAcuqDzXVMMPWwsA-toAfHwNpOTJuy1894
 Message-ID: 
- <CAGwozwFJnR2aMhj6LJKU8aF+MDzF9FR21fXPPd7_=44M+KUJGg@mail.gmail.com>
-Subject: Re: [PATCH v1 00/10] platform/x86: msi-wmi-platform: Add fan
- curves/platform profile/tdp/battery limiting
+ <CAGwozwHo61uX_Xy3g-YtQg1dgs7bXu9uFqF0BrK3ThkpUUtmHA@mail.gmail.com>
+Subject: Re: [PATCH v1 06/10] platform/x86: msi-wmi-platform: Add PL1/PL2
+ support via firmware attributes
 To: Kurt Borja <kuurtb@gmail.com>
 Cc: platform-driver-x86@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
 	Jonathan Corbet <corbet@lwn.net>, Hans de Goede <hdegoede@redhat.com>,
@@ -71,104 +72,481 @@ Cc: platform-driver-x86@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
 	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-PPP-Message-ID: 
- <174704498690.13136.1383982283804880591@linux1587.grserver.gr>
+ <174704536359.7951.12336531955247682423@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-On Mon, 12 May 2025 at 01:30, Kurt Borja <kuurtb@gmail.com> wrote:
->
-> Hi Antheas,
+On Mon, 12 May 2025 at 01:34, Kurt Borja <kuurtb@gmail.com> wrote:
 >
 > On Sun May 11, 2025 at 5:44 PM -03, Antheas Kapenekakis wrote:
-> > This draft patch series brings into parity the msi-wmi-platform driver with
-> > the MSI Center M Windows application for the MSI Claw (all models).
-> > Unfortunately, MSI Center M and this interface do not have a discovery API,
-> > necessitating the introduction of a quirk system.
+> > Adds PL1, and PL2 support through the firmware attributes interface.
+> > The min and max values are quirked, and the attributes are only defined
+> > if they are set to a non-zero value. These values are meant to be set
+> > in conjunction with shift mode, where shift mode automatically sets
+> > an upper bound on PL1/PL2 (e.g., low-power would be used with 8W).
 > >
-> > While this patch series is fully functional and tested, there are still
-> > some issues that need to be addressed:
-> >   - Armin notes we need to disable fan curve support by default and quirk
-> >     it as well, as it is not supported on all models. However, the way
-> >     PWM enable ops work, this makes it a bit difficult, so I would like
-> >     some suggestions on how to rework this.
+> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > ---
+> >  drivers/platform/x86/Kconfig            |   1 +
+> >  drivers/platform/x86/msi-wmi-platform.c | 361 +++++++++++++++++++++++-
+> >  2 files changed, 360 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> > index 57a48910c8fd4..fd3da718731e7 100644
+> > --- a/drivers/platform/x86/Kconfig
+> > +++ b/drivers/platform/x86/Kconfig
+> > @@ -747,6 +747,7 @@ config MSI_WMI_PLATFORM
+> >       depends on ACPI_WMI
+> >       depends on HWMON
+> >       select ACPI_PLATFORM_PROFILE
+> > +     select FW_ATTR_CLASS
+> >       help
+> >         Say Y here if you want to have support for WMI-based platform features
+> >         like fan sensor access on MSI machines.
+> > diff --git a/drivers/platform/x86/msi-wmi-platform.c b/drivers/platform/x86/msi-wmi-platform.c
+> > index c0b577c95c079..6498f4b44fe53 100644
+> > --- a/drivers/platform/x86/msi-wmi-platform.c
+> > +++ b/drivers/platform/x86/msi-wmi-platform.c
+> > @@ -34,6 +34,8 @@
+> >
+> >  #include <linux/unaligned.h>
+> >
+> > +#include "firmware_attributes_class.h"
+> > +
+> >  #define DRIVER_NAME  "msi-wmi-platform"
+> >
+> >  #define MSI_PLATFORM_GUID    "ABBC0F6E-8EA1-11d1-00A0-C90629100000"
+> > @@ -74,6 +76,10 @@
+> >  #define MSI_PLATFORM_SHIFT_ECO               (MSI_PLATFORM_SHIFT_ENABLE + 2)
+> >  #define MSI_PLATFORM_SHIFT_USER              (MSI_PLATFORM_SHIFT_ENABLE + 3)
+> >
+> > +/* Get_Data() and Set_Data() Params */
+> > +#define MSI_PLATFORM_PL1_ADDR        0x50
+> > +#define MSI_PLATFORM_PL2_ADDR        0x51
+> > +
+> >  static bool force;
+> >  module_param_unsafe(force, bool, 0);
+> >  MODULE_PARM_DESC(force, "Force loading without checking for supported WMI interface versions");
+> > @@ -112,6 +118,9 @@ enum msi_wmi_platform_method {
+> >
+> >  struct msi_wmi_platform_quirk {
+> >       bool shift_mode;        /* Shift mode is supported */
+> > +     int pl_min;             /* Minimum PLx value */
+> > +     int pl1_max;            /* Maximum PL1 value */
+> > +     int pl2_max;            /* Maximum PL2 value */
+> >  };
+> >
+> >  struct msi_wmi_platform_data {
+> > @@ -119,6 +128,44 @@ struct msi_wmi_platform_data {
+> >       struct msi_wmi_platform_quirk *quirks;
+> >       struct mutex wmi_lock;  /* Necessary when calling WMI methods */
+> >       struct device *ppdev;
+> > +     struct device *fw_attrs_dev;
+> > +     struct kset *fw_attrs_kset;
+> > +};
+> > +
+> > +enum msi_fw_attr_id {
+> > +     MSI_ATTR_PPT_PL1_SPL,
+> > +     MSI_ATTR_PPT_PL2_SPPT,
+> > +};
+> > +
+> > +static const char *const msi_fw_attr_name[] = {
+> > +     [MSI_ATTR_PPT_PL1_SPL] = "ppt_pl1_spl",
+> > +     [MSI_ATTR_PPT_PL2_SPPT] = "ppt_pl2_sppt",
+> > +};
+> > +
+> > +static const char *const msi_fw_attr_desc[] = {
+> > +     [MSI_ATTR_PPT_PL1_SPL] = "CPU Steady package limit (PL1/SPL)",
+> > +     [MSI_ATTR_PPT_PL2_SPPT] = "CPU Boost slow package limit (PL2/SPPT)",
+> > +};
+> > +
+> > +#define MSI_ATTR_LANGUAGE_CODE "en_US.UTF-8"
+> > +
+> > +struct msi_fw_attr {
+> > +     struct msi_wmi_platform_data *data;
+> > +     enum msi_fw_attr_id fw_attr_id;
+> > +     struct attribute_group attr_group;
+> > +     struct kobj_attribute display_name;
+> > +     struct kobj_attribute current_value;
+> > +     struct kobj_attribute min_value;
+> > +     struct kobj_attribute max_value;
+> > +
+> > +     u32 min;
+> > +     u32 max;
+> > +
+> > +     int (*get_value)(struct msi_wmi_platform_data *data,
+> > +                      struct msi_fw_attr *fw_attr, char *buf);
+> > +     ssize_t (*set_value)(struct msi_wmi_platform_data *data,
+> > +                          struct msi_fw_attr *fw_attr, const char *buf,
+> > +                          size_t count);
+> >  };
+> >
+> >  struct msi_wmi_platform_debugfs_data {
+> > @@ -163,10 +210,16 @@ static const char * const msi_wmi_platform_debugfs_names[] = {
+> >
+> >  static struct msi_wmi_platform_quirk quirk_default = {};
+> >  static struct msi_wmi_platform_quirk quirk_gen1 = {
+> > -     .shift_mode = true
+> > +     .shift_mode = true,
+> > +     .pl_min = 8,
+> > +     .pl1_max = 43,
+> > +     .pl2_max = 45
+> >  };
+> >  static struct msi_wmi_platform_quirk quirk_gen2 = {
+> > -     .shift_mode = true
+> > +     .shift_mode = true,
+> > +     .pl_min = 8,
+> > +     .pl1_max = 30,
+> > +     .pl2_max = 37
+> >  };
+> >
+> >  static const struct dmi_system_id msi_quirks[] = {
+> > @@ -660,6 +713,306 @@ static const struct platform_profile_ops msi_wmi_platform_profile_ops = {
+> >       .profile_set = msi_wmi_platform_profile_set,
+> >  };
+> >
+> > +/* Firmware Attributes setup */
+> > +static int data_get_addr(struct msi_wmi_platform_data *data,
+> > +                      const enum msi_fw_attr_id id)
+> > +{
+> > +     switch (id) {
+> > +     case MSI_ATTR_PPT_PL1_SPL:
+> > +             return MSI_PLATFORM_PL1_ADDR;
+> > +     case MSI_ATTR_PPT_PL2_SPPT:
+> > +             return MSI_PLATFORM_PL2_ADDR;
+> > +     default:
+> > +             pr_warn("Invalid attribute id %d\n", id);
+> > +             return -EINVAL;
+> > +     }
+> > +}
+> > +
+> > +static ssize_t data_set_value(struct msi_wmi_platform_data *data,
+> > +                           struct msi_fw_attr *fw_attr, const char *buf,
+> > +                           size_t count)
+> > +{
+> > +     u8 buffer[32] = { 0 };
+> > +     int ret, fwid;
+> > +     u32 value;
+> > +
+> > +     fwid = data_get_addr(data, fw_attr->fw_attr_id);
+> > +     if (fwid < 0)
+> > +             return fwid;
+> > +
+> > +     ret = kstrtou32(buf, 10, &value);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (fw_attr->min >= 0 && value < fw_attr->min)
+> > +             return -EINVAL;
+> > +     if (fw_attr->max >= 0 && value > fw_attr->max)
+> > +             return -EINVAL;
 >
-> If I understood the question correctly, then you should control the
-> visibility of all "curve" related attributes with the quirk.
-
-Yep, this is what I was wondering. I will investigate this. It would
-be good to get some comments on the quirk naming as well.
-
-> The custom hwmon attribute_group has an is_visible callback, and so do
-> the hwmon_ops.
+> Maybe clamp instead of failing?
 >
-> >   - It turns out that to fully disable the fan curve, we have to restore
-> >     the default fan values. This is also what is done on the OEM software.
-> >     For this, the last patch in the series is used, which is a bit dirty.
+> > +
+> > +     buffer[0] = fwid;
+> > +     put_unaligned_le32(value, &buffer[1]);
+> > +
+> > +     ret = msi_wmi_platform_query(data, MSI_PLATFORM_SET_DATA, buffer, sizeof(buffer));
+> > +     if (ret) {
+> > +             pr_warn("Failed to set_data with id %d: %d\n",
+> > +                     fw_attr->fw_attr_id, ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     return count;
+> > +}
+> > +
+> > +static int data_get_value(struct msi_wmi_platform_data *data,
+> > +                       struct msi_fw_attr *fw_attr, char *buf)
+> > +{
+> > +     u8 buffer[32] = { 0 };
+> > +     u32 value;
+> > +     int ret, addr;
+> > +
+> > +     addr = data_get_addr(data, fw_attr->fw_attr_id);
+> > +     if (addr < 0)
+> > +             return addr;
+> > +
+> > +     buffer[0] = addr;
+> > +
+> > +     ret = msi_wmi_platform_query(data, MSI_PLATFORM_GET_DATA, buffer, sizeof(buffer));
+> > +     if (ret) {
+> > +             pr_warn("Failed to show set_data for id %d: %d\n",
+> > +                     fw_attr->fw_attr_id, ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     value = get_unaligned_le32(&buffer[1]);
+> > +
+> > +     return sysfs_emit(buf, "%d\n", value);
+> > +}
+> > +
+> > +static ssize_t display_name_language_code_show(struct kobject *kobj, struct kobj_attribute *attr,
+> > +                                            char *buf)
+> > +{
+> > +     return sysfs_emit(buf, "%s\n", MSI_ATTR_LANGUAGE_CODE);
+> > +}
+> > +
+> > +static struct kobj_attribute fw_attr_display_name_language_code =
+> > +     __ATTR_RO(display_name_language_code);
+> > +
+> > +static ssize_t scalar_increment_show(struct kobject *kobj,
+> > +                                            struct kobj_attribute *attr,
+> > +                                            char *buf)
+> > +{
+> > +     return sysfs_emit(buf, "1\n");
+> > +}
+> > +
+> > +static struct kobj_attribute fw_attr_scalar_increment =
+> > +     __ATTR_RO(scalar_increment);
+> > +
+> > +static ssize_t pending_reboot_show(struct kobject *kobj,
+> > +                                  struct kobj_attribute *attr, char *buf)
+> > +{
+> > +     return sysfs_emit(buf, "0\n");
+> > +}
+> > +
+> > +static struct kobj_attribute fw_attr_pending_reboot = __ATTR_RO(pending_reboot);
+> > +
+> > +static ssize_t display_name_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+> > +{
+> > +     struct msi_fw_attr *fw_attr =
+> > +             container_of(attr, struct msi_fw_attr, display_name);
+> > +
+> > +     return sysfs_emit(buf, "%s\n", msi_fw_attr_desc[fw_attr->fw_attr_id]);
+> > +}
+> > +
+> > +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+> > +{
+> > +     struct msi_fw_attr *fw_attr =
+> > +             container_of(attr, struct msi_fw_attr, current_value);
+> > +
+> > +     return fw_attr->get_value(fw_attr->data, fw_attr, buf);
+> > +}
+> > +
+> > +static ssize_t current_value_store(struct kobject *kobj, struct kobj_attribute *attr,
+> > +                                const char *buf, size_t count)
+> > +{
+> > +     struct msi_fw_attr *fw_attr =
+> > +             container_of(attr, struct msi_fw_attr, current_value);
+> > +
+> > +     return fw_attr->set_value(fw_attr->data, fw_attr, buf, count);
+> > +}
+> > +
+> > +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
+> > +                      char *buf)
+> > +{
+> > +     return sysfs_emit(buf, "integer\n");
+> > +}
+> > +
+> > +static struct kobj_attribute fw_attr_type_int = {
+> > +     .attr = { .name = "type", .mode = 0444 },
+> > +     .show = type_show,
+> > +};
 >
-> I have a couple questions about this.
+> Use __ATTR_RO().
 >
-> * What are the default fan curves? Can these be statically defined?
-> * Are user-defined fan curves persistent between reboots?
+> > +
+> > +static ssize_t min_value_show(struct kobject *kobj, struct kobj_attribute *attr,
+> > +                           char *buf)
+> > +{
+> > +     struct msi_fw_attr *fw_attr =
+> > +             container_of(attr, struct msi_fw_attr, min_value);
+> > +
+> > +     return sysfs_emit(buf, "%d\n", fw_attr->min);
+> > +}
+> > +
+> > +static ssize_t max_value_show(struct kobject *kobj, struct kobj_attribute *attr,
+> > +                           char *buf)
+> > +{
+> > +     struct msi_fw_attr *fw_attr =
+> > +             container_of(attr, struct msi_fw_attr, max_value);
+> > +
+> > +     return sysfs_emit(buf, "%d\n", fw_attr->max);
+> > +}
+> > +
+> > +#define FW_ATTR_ENUM_MAX_ATTRS  7
+> > +
+> > +static int
+> > +msi_fw_attr_init(struct msi_wmi_platform_data *data,
+> > +              const enum msi_fw_attr_id fw_attr_id,
+> > +              struct kobj_attribute *fw_attr_type, const s32 min,
+> > +              const s32 max,
+> > +              int (*get_value)(struct msi_wmi_platform_data *data,
+> > +                               struct msi_fw_attr *fw_attr, char *buf),
+> > +              ssize_t (*set_value)(struct msi_wmi_platform_data *data,
+> > +                                   struct msi_fw_attr *fw_attr,
+> > +                                   const char *buf, size_t count))
+> > +{
+> > +     struct msi_fw_attr *fw_attr;
+> > +     struct attribute **attrs;
+> > +     int idx = 0;
+> > +
+> > +     fw_attr = devm_kzalloc(&data->wdev->dev, sizeof(*fw_attr), GFP_KERNEL);
+> > +     if (!fw_attr)
+> > +             return -ENOMEM;
+> > +
+> > +     attrs = devm_kcalloc(&data->wdev->dev, FW_ATTR_ENUM_MAX_ATTRS + 1,
+> > +                          sizeof(*attrs), GFP_KERNEL);
+> > +     if (!attrs)
+> > +             return -ENOMEM;
+> > +
+> > +     fw_attr->data = data;
+> > +     fw_attr->fw_attr_id = fw_attr_id;
+> > +     fw_attr->attr_group.name = msi_fw_attr_name[fw_attr_id];
+> > +     fw_attr->attr_group.attrs = attrs;
+> > +     fw_attr->get_value = get_value;
+> > +     fw_attr->set_value = set_value;
+> > +
+> > +     attrs[idx++] = &fw_attr_type->attr;
+> > +     if (fw_attr_type == &fw_attr_type_int)
+> > +             attrs[idx++] = &fw_attr_scalar_increment.attr;
+> > +     attrs[idx++] = &fw_attr_display_name_language_code.attr;
+> > +
+> > +     sysfs_attr_init(&fw_attr->display_name.attr);
+> > +     fw_attr->display_name.attr.name = "display_name";
+> > +     fw_attr->display_name.attr.mode = 0444;
+> > +     fw_attr->display_name.show = display_name_show;
+> > +     attrs[idx++] = &fw_attr->display_name.attr;
+> > +
+> > +     sysfs_attr_init(&fw_attr->current_value.attr);
+> > +     fw_attr->current_value.attr.name = "current_value";
+> > +     fw_attr->current_value.attr.mode = 0644;
+> > +     fw_attr->current_value.show = current_value_show;
+> > +     fw_attr->current_value.store = current_value_store;
+> > +     attrs[idx++] = &fw_attr->current_value.attr;
+> > +
+> > +     if (min >= 0) {
+> > +             fw_attr->min = min;
+> > +             sysfs_attr_init(&fw_attr->min_value.attr);
+> > +             fw_attr->min_value.attr.name = "min_value";
+> > +             fw_attr->min_value.attr.mode = 0444;
+> > +             fw_attr->min_value.show = min_value_show;
+> > +             attrs[idx++] = &fw_attr->min_value.attr;
+> > +     } else {
+> > +             fw_attr->min = -1;
+> > +     }
+> > +
+> > +     if (max >= 0) {
+> > +             fw_attr->max = max;
+> > +             sysfs_attr_init(&fw_attr->max_value.attr);
+> > +             fw_attr->max_value.attr.name = "max_value";
+> > +             fw_attr->max_value.attr.mode = 0444;
+> > +             fw_attr->max_value.show = max_value_show;
+> > +             attrs[idx++] = &fw_attr->max_value.attr;
+> > +     } else {
+> > +             fw_attr->max = -1;
+> > +     }
+> > +
+> > +     attrs[idx] = NULL;
 >
-> I have some doubts about the approach you took on the last patch, but I
-> want to understand how the platform works first.
+> kcalloc already sets this to 0.
+>
+> > +     return sysfs_create_group(&data->fw_attrs_kset->kobj, &fw_attr->attr_group);
+>
+> This group is never removed.
+>
+> I think it's not that big of a deal? But you should probably do it
+> anyway.
+>
+> > +}
+> > +
+> > +static void msi_kset_unregister(void *data)
+> > +{
+> > +     struct kset *kset = data;
+> > +
+> > +     sysfs_remove_file(&kset->kobj, &fw_attr_pending_reboot.attr);
+> > +     kset_unregister(kset);
+> > +}
+> > +
+> > +static void msi_fw_attrs_dev_unregister(void *data)
+> > +{
+> > +     struct device *fw_attrs_dev = data;
+> > +
+> > +     device_unregister(fw_attrs_dev);
+> > +}
+> > +
+> > +static int msi_wmi_fw_attrs_init(struct msi_wmi_platform_data *data)
+> > +{
+> > +     int err;
+> > +
+> > +     data->fw_attrs_dev = device_create(&firmware_attributes_class, NULL, MKDEV(0, 0),
+> > +                                              NULL, "%s", DRIVER_NAME);
+>
+> Set the wmi device as the parent.
+>
+> > +     if (IS_ERR(data->fw_attrs_dev))
+> > +             return PTR_ERR(data->fw_attrs_dev);
+> > +
+> > +     err = devm_add_action_or_reset(&data->wdev->dev,
+> > +                                    msi_fw_attrs_dev_unregister,
+> > +                                    data->fw_attrs_dev);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     data->fw_attrs_kset = kset_create_and_add("attributes", NULL,
+> > +                                               &data->fw_attrs_dev->kobj);
+> > +     if (!data->fw_attrs_kset)
+> > +             return -ENOMEM;
+> > +
+> > +     err = sysfs_create_file(&data->fw_attrs_kset->kobj,
+> > +                             &fw_attr_pending_reboot.attr);
+>
+> If it's always 0 why include it? It's not mandatory anyway.
 
-So do I. Essentially here is how the Windows software works: when it
-first opens, it saves the current curve in Windows registry. Then,
-when the user sets a fan curve, it applies it in the same way we do
-here and sets a bit in AP. When the custom curve is removed, it unsets
-that bit and restores the original curve in WMI.
-
-The logical reasoning would be that that bit controls the fan curve.
-This is how it is named in the software. However, when setting that
-bit on its own, it seems to only partially affect the fan curve. E.g.,
-when the fan curve is 100% in all points, unsetting that bit makes it
-go down to 50% when no load occurs. When using the default fan curve,
-it goes to 0%. Therefore, it seems like that bit makes the fan curve
-semi-autonomous?
-
-The fan curve seems to be hardware specific and resets after reboots.
-So a straightforward way to get it is to grab it on a fresh boot.
+fwupd complained. I am fine either way but without this there is no
+userspace tooling to test the interface with. Ack for the rest.
 
 Antheas
 
-> >
-> > Sleep was tested with all values being preserved during S0iX (platform
-> > profile, fan curve, PL1/PL2), so we do not need suspend/resume hooks, at
-> > least for the Claw devices.
-> >
-> > For PL1/PL2, we use firmware-attributes. So for that I +cc Kurt since if
-> > his new high level interface is merged beforehand, we can use that instead.
->
-> Hopefully!
->
 > --
 >  ~ Kurt
 >
+> > +     if (err) {
+> > +             kset_unregister(data->fw_attrs_kset);
+> > +             return err;
+> > +     }
+> > +
+> > +     err = devm_add_action_or_reset(&data->wdev->dev, msi_kset_unregister,
+> > +                                    data->fw_attrs_kset);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     if (data->quirks->pl1_max) {
+> > +             err = msi_fw_attr_init(data, MSI_ATTR_PPT_PL1_SPL,
+> > +                                     &fw_attr_type_int, data->quirks->pl_min,
+> > +                                     data->quirks->pl1_max, &data_get_value,
+> > +                                     &data_set_value);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> > +
+> > +     if (data->quirks->pl2_max) {
+> > +             err = msi_fw_attr_init(data, MSI_ATTR_PPT_PL2_SPPT,
+> > +                                    &fw_attr_type_int, data->quirks->pl_min,
+> > +                                    data->quirks->pl2_max, &data_get_value,
+> > +                                    &data_set_value);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static ssize_t msi_wmi_platform_debugfs_write(struct file *fp, const char __user *input,
+> >                                             size_t length, loff_t *offset)
+> >  {
+> > @@ -888,6 +1241,10 @@ static int msi_wmi_platform_probe(struct wmi_device *wdev, const void *context)
+> >       if (ret < 0)
+> >               return ret;
 > >
-> > Antheas Kapenekakis (8):
-> >   platform/x86: msi-wmi-platform: Add unlocked msi_wmi_platform_query
-> >   platform/x86: msi-wmi-platform: Add quirk system
-> >   platform/x86: msi-wmi-platform: Add platform profile through shift
-> >     mode
-> >   platform/x86: msi-wmi-platform: Add PL1/PL2 support via firmware
-> >     attributes
-> >   platform/x86: msi-wmi-platform: Add charge_threshold support
-> >   platform/x86: msi-wmi-platform: Drop excess fans in dual fan devices
-> >   platform/x86: msi-wmi-platform: Update header text
-> >   platform/x86: msi-wmi-platform: Restore fan curves on PWM disable and
-> >     unload
+> > +     ret = msi_wmi_fw_attrs_init(data);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> >       msi_wmi_platform_debugfs_init(data);
 > >
-> > Armin Wolf (2):
-> >   platform/x86: msi-wmi-platform: Use input buffer for returning result
-> >   platform/x86: msi-wmi-platform: Add support for fan control
-> >
-> >  .../wmi/devices/msi-wmi-platform.rst          |   26 +
-> >  drivers/platform/x86/Kconfig                  |    3 +
-> >  drivers/platform/x86/msi-wmi-platform.c       | 1181 ++++++++++++++++-
-> >  3 files changed, 1156 insertions(+), 54 deletions(-)
-> >
-> >
-> > base-commit: 62b1dcf2e7af3dc2879d1a39bf6823c99486a8c2
+> >       msi_wmi_platform_profile_setup(data);
 >
