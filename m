@@ -1,166 +1,174 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E86E2586F6;
-	Mon, 12 May 2025 08:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DF5257436;
+	Mon, 12 May 2025 10:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747039738; cv=none; b=GF6FYdsnJTTP744gq0vzxlw2j3hTeNJesDxbLrNPzmECbJZ30MfmfUPh7XJrf3tfGba9zmiMvVQTGCYGCX1Xn1KzHtIH0CvOkRubo1N8Ak+mlsjoDJRb5vhkf1jzsBVy4S28mxI4wL3lcb/98PvB2+Ovmr+svqDifDKgQXdL3/g=
+	t=1747044994; cv=none; b=tmJ2fNMv9vflbI17VDbU5vR5b4iSTERBZSAvsHzl2qTrO5BBDhbK/DO+i1j9N0ST6f+6BlenNa8IH+iHH08XT7oba8wantxoTMzMu5BwEJkIN8yj+g2O7YfcwEzBfSpFvDx63J7zUqTpjvPfJPGyeDmHQqKSdS6imVJW5SBejJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747039738; c=relaxed/simple;
-	bh=lkeydaDQhOVDY2emwYy+Nki7xldXDJATMBo1Zd76lPI=;
+	s=arc-20240116; t=1747044994; c=relaxed/simple;
+	bh=x47o99WWq54f1B7dp6ChhOM/NYXsBJx5IlYwnzky/CI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ly1wmnxeIUDTpsGWNtN5zsy7CFCZ9jn2mlpp2DeJfensLK1Nu4XyhmW2yU2ahBbAELaJBihhpsZbvEeTz+jeesWDdh2jJMO3crEx8wYBbp0yMHk8ckXeV3Yp4/1pffs2gXdAKIvonx1Jh9cs1d3KAK3oEGzhPn7Q/OlIlDT6bm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LwTjYDGN; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=pCPIrG0dwV8BcBFc8j7zzwADi+j7ykUpEpyzEGa1omKLLq+kDwYE3BFJIuyznoCy6WRTo35UyT0z1TczF64RrLyVHUr99gxuE7lXFK2xAjB3rJn/bqcM2/yodswzL2iIQzQzeTus0pwXFcI2Pcw9vB53D1CUQ2Yh74ItsvuoZH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=pSMqnJTD; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LwTjYDGN"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-70a32708b4eso27069697b3.3;
-        Mon, 12 May 2025 01:48:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747039735; x=1747644535; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9owvXXSS3Z25bfsyDSETQw2QiBL7MzvlYy/z9dIazY=;
-        b=LwTjYDGNs5Zj1xpkWAVZN3g9T2Evpqz2frfre58jqvBS52v0rUPniF265feswYzVao
-         H/Nbf1C20qCZfcoT8oZF3C+ibAkjZ8cZuqcnPYFrN8phxTTGh6Nj2Yrpv4QS7YrXfi6v
-         zW40fjjqp2ImujZz9zgSnufEnRyV8kV7QpTKhDbOC2vy/qgZXygsi5NtfISj8jgIjlLf
-         E5zRN4IIZ+wNhzqlSNnSwAr/9b0JWGpy8QXYNZp7cOQhVPvInlBEfhylZRu5c1Aw5/un
-         9LnnYOmZ+GxWjsMgasWYGaLgAdIdcQruzc4eg1At6EIQtvcPHeMLwFUwjePDvzv/Rtay
-         HanQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747039735; x=1747644535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f9owvXXSS3Z25bfsyDSETQw2QiBL7MzvlYy/z9dIazY=;
-        b=uclt0JgnM9udzS4iLh5BVyqcP1e4jd6jawUwQQzVUU489xf8grc/K3dVoHbmkSBbyr
-         Mfr9jdZgtgpb0Trv3QQWqA8VwVZnr48zVEyS6VYpsq3sujkfo9oNN+Um0ZudoAZzSEMd
-         G3anvfa3mgPb933mOrhsY2RnOkgDdH5m0jU4PNymAO+YDVyTjxdrfvzC1iBqBdTT90br
-         lJY8b0pE0GM73PPGOARqY2i2kyq/ICJLJ/Ogw6Bb4bukXDJmAvzYNNfBUgATlPtiAEbN
-         O7bh0fah8Xa6M9YnsPqvmP4o4Pqo2usmY4pqopIk2RJFehsh+qRs12RNUcjXL6TcNZvI
-         uGmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJPHXnPfT5WMqzvXYOJIU3q3gNFr+rl2B2LeqCeOS9NynJYnW2zbPiwq7rkGdEGP+QubNQxRuYvj+1@vger.kernel.org, AJvYcCUJxnPVKjGBVHphIkrvcepZfukGOX2nEAMIkHb4CPI8dJlKBotfsr5Ai3ev5SFJmn9HIQWq2qEjko29Wg==@vger.kernel.org, AJvYcCUVR92qcIR5PJxVG97DAXHd8DG+Hxe+04jW8C11Gq5YZO8RAI56vh/szMXfweO4AS5mQ4wbKqN2KUb9@vger.kernel.org, AJvYcCVNG7cAf+3ampJzkRtTp+jKlixhIHgdPrAA+G9P+ryqaxGQT7HcW7SJ7sUVEI+VP00k2sDnEapubRurjdY4@vger.kernel.org, AJvYcCVVU9Jd/XQdJHAfOziCGuD7UL6zaDbvliqMelC57qWyiacYrZ6NlrMWS2gkNO63LVHFWHTGmlqxbPk+tHI=@vger.kernel.org, AJvYcCW+hudjkRwvAHMHacecLNhrzm+L2PNATDh213l6FKarASCeiCcdivHp2GcGKvT3EKyciuK3b6787yc=@vger.kernel.org, AJvYcCW4Boupptr2ZLKRUz+AZwSijnKpm1z5c5JleT1c/HysN3MahggMuMDsyDJadKWNP2YkcABAuOkO@vger.kernel.org, AJvYcCWOXskcMjyu+iz3FWO/9Ksg/15AvUadQUOlzxQmwMuY6wYN/KuuDCLEAwuOS/5sgN0NyhZUcTocBccZ@vger.kernel.org, AJvYcCWbRypAitLKx3EdBzUpWLn2QGI2L7e7Epj3vrFrhyEMeEV+BvJuM0ov5l+9cJpNOP07DU/yc1JKd6AQWsYBu+g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbbHvCBSN1t2LPwOl5xBqzeMBmVPTB8+B49E8tiTvc3vQ6vGhL
-	vfjApqtTaPspiP21vSv0nq7F+Xtyg1ZBIs9DF2X1Qw5PJezh6qsrb3wx3Er1yuMKwoQihvFb/Ks
-	cJud27p918ZBB7R+bWJAX46cEk5s=
-X-Gm-Gg: ASbGncvcGTBBFc10anjJJU+hzZNGJzzFGuo82d1CNJBW4J5P7+KXMaWeM4ZU4ykYwcj
-	wAfC7E3i8kxIdP+QMTgGK2JMclpgLtazi3fc0IuIL+SD1HlUQPYte5a+tznj4gP9cFm8nJCRSpj
-	Iqiflj4fStismdAYVNEtZXHGAtlgAqxM8S1DVF/YgVePbNtXtfDcqmsMImCN+7iJQiwIQ=
-X-Google-Smtp-Source: AGHT+IGoV/9Uhqv+Fns6NNN0/nBMkui2r5bJm6i3AohL6oVMnwKeqZTPBLmpOVCazRLyrYCpscO9SNAXRpjxx0PT0z0=
-X-Received: by 2002:a05:690c:45ca:b0:708:bfc6:c7cd with SMTP id
- 00721157ae682-70a3f9f3123mr178533627b3.6.1747039735377; Mon, 12 May 2025
- 01:48:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="pSMqnJTD"
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 7B9682E01935;
+	Mon, 12 May 2025 13:16:26 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1747044987;
+	bh=OTHX52PGxLTtNGWPpt9j694BPNPZbGM7vPRnoWGCaj8=;
+	h=Received:From:Subject:To;
+	b=pSMqnJTDIq+JK8bEPeaaJUPiIcr09cHS5fH77CUKXOff1moX+6RRSf6T4u5HOo4Ab
+	 dbZMVO/4Hyj3Knx9RTKYaNWJmdj2S0VI7fjtVvEEBDgYbuWr6X1f1MGOjydmo68FdT
+	 K+CW9LwHhGDHkgwYCIXewxCu/E0CrWdbGZHNxIYQ=
+Authentication-Results: linux1587.grserver.gr;
+        spf=pass (sender IP is 209.85.208.170) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f170.google.com
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f170.google.com with SMTP id
+ 38308e7fff4ca-326c1f3655eso30300531fa.1;
+        Mon, 12 May 2025 03:16:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUufefQFZkYdDKJrVAY4RGdnhae9BWzyVmWsL/azG7cMZsqjxlGwp8uECx+B+GsiRg3M9493qqugas=@vger.kernel.org,
+ AJvYcCWIZFIAVFAkuufdHHK0va3TG8j4X8ksaTMsFtlHKaxFOd+Znkq33CbIWYjaiSy3VwAavIRiUkY5J9pDSzA=@vger.kernel.org,
+ AJvYcCXEDKJbpOL0/0NPSX2VaNhhUsDPnsXLgqVcoLKDCKBD/s0WPuVvmhGkgTMbY2MkuauS5p1ntWzmXhbj5T28@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRlROBLQl0kaKyleByMhKXwqV6+XuRqSxLabJt5K0BCw9ROI6B
+	jFg8vY83QSqBx1Dl572Lh1zE9UVKa/GOxALq/+3HbThg4g3kiOfup1M/BQr2t9vlOhnyyxOja7X
+	uIC3LRvF/20g+dxueBYCEzPxB4Bg=
+X-Google-Smtp-Source: 
+ AGHT+IFw5A+OcMQWiTpmDThG4iT3S00ecaSR5XN3PPYP8Daj9AbNazUCokipeEHqlGTHSZxIvj3aYKVk1S9KVQy8VpE=
+X-Received: by 2002:a05:651c:30c6:b0:30b:b956:53d4 with SMTP id
+ 38308e7fff4ca-326c453d60cmr48709821fa.5.1747044985845; Mon, 12 May 2025
+ 03:16:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com> <20250423094058.1656204-2-tmyu0@nuvoton.com>
- <20250501122214.GK1567507@google.com> <CAOoeyxVL2MV83CJaYCXMiw0b5YUzk728H4B9GY1q9h_P8D43fg@mail.gmail.com>
- <20250502080754.GD3865826@google.com> <CAOoeyxWpYmcg1_FBXYqDfMi28R5ZXp2Sk2PhUo=cL10Nn3iVEw@mail.gmail.com>
- <20250509142819.GG2492385@google.com>
-In-Reply-To: <20250509142819.GG2492385@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 12 May 2025 16:48:44 +0800
-X-Gm-Features: AX0GCFuSSgbm9l1EHQJ-GKZ1ptNofQdnhKrnmSKJDnk1WNlyff_Q4jNqRqJqio0
-Message-ID: <CAOoeyxXxS21S-puegHiCZg-XxEz4rBtq=WJ0Veo1UvbqkbG4GQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
+References: <20250511204427.327558-1-lkml@antheas.dev>
+ <D9TQ0LYKISGB.3QAOHFXVL9PEO@gmail.com>
+In-Reply-To: <D9TQ0LYKISGB.3QAOHFXVL9PEO@gmail.com>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Mon, 12 May 2025 12:16:14 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwFJnR2aMhj6LJKU8aF+MDzF9FR21fXPPd7_=44M+KUJGg@mail.gmail.com>
+X-Gm-Features: AX0GCFuArtFUaWkkLJa1COmLkMRLR7iabLhAEIG80zqyIm0niW2BE_gm6mMX3S4
+Message-ID: 
+ <CAGwozwFJnR2aMhj6LJKU8aF+MDzF9FR21fXPPd7_=44M+KUJGg@mail.gmail.com>
+Subject: Re: [PATCH v1 00/10] platform/x86: msi-wmi-platform: Add fan
+ curves/platform profile/tdp/battery limiting
+To: Kurt Borja <kuurtb@gmail.com>
+Cc: platform-driver-x86@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+	Jonathan Corbet <corbet@lwn.net>, Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-PPP-Message-ID: 
+ <174704498690.13136.1383982283804880591@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B45=E6=9C=889=E6=97=A5 =E9=
-=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:28=E5=AF=AB=E9=81=93=EF=BC=9A
+On Mon, 12 May 2025 at 01:30, Kurt Borja <kuurtb@gmail.com> wrote:
 >
-> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B45=E6=9C=882=E6=97=A5 =
-=E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:08=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > ...
-> > > > > > +static const struct mfd_cell nct6694_devs[] =3D {
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > >
-> > > > > These are all identical.
-> > > > >
-> > > > > I thought you were going to use PLATFORM_DEVID_AUTO?  In fact, yo=
-u are
-> > > > > already using PLATFORM_DEVID_AUTO since you are calling
-> > > > > mfd_add_hotplug_devices().  So you don't need this IDs.
-> > > > >
-> > > > > MFD_CELL_NAME() should do.
-> > > > >
-> > > >
-> > > > Yes, it uses PLATFORM_DEVID_AUTO, but in my implementation, the
-> > > > sub-devices use cell->id instead of platform_device->id, so it does=
-n't
-> > > > affect the current behavior.
-> > > > However, if you think there's a better approach or that this should=
- be
-> > > > changed for consistency or correctness, I'm happy to update it, ple=
-ase
-> > > > let me know your recommendation.
-> > > >
-> > > > When using MFD_CELL_NAME(), the platform_device->id for the GPIO
-> > > > devices is assigned values from 1 to 16, and for the I2C devices fr=
-om
-> > > > 1 to 6, but I need the ID offset to start from 0 instead.
-> > >
-> > > Oh no, don't do that.  mfd_cell isn't supposed to be used outside of =
-MFD.
-> > >
-> > > Just use the platform_device id-- if you really need to start from 0.
-> > >
-> > > As an aside, I'm surprised numbering starts from 1.
-> > >
+> Hi Antheas,
+>
+> On Sun May 11, 2025 at 5:44 PM -03, Antheas Kapenekakis wrote:
+> > This draft patch series brings into parity the msi-wmi-platform driver with
+> > the MSI Center M Windows application for the MSI Claw (all models).
+> > Unfortunately, MSI Center M and this interface do not have a discovery API,
+> > necessitating the introduction of a quirk system.
 > >
-> > OK, I will use platform_device->id instead. However, I'm still unsure
-> > why the ID starts from1.
+> > While this patch series is fully functional and tested, there are still
+> > some issues that need to be addressed:
+> >   - Armin notes we need to disable fan curve support by default and quirk
+> >     it as well, as it is not supported on all models. However, the way
+> >     PWM enable ops work, this makes it a bit difficult, so I would like
+> >     some suggestions on how to rework this.
+>
+> If I understood the question correctly, then you should control the
+> visibility of all "curve" related attributes with the quirk.
+
+Yep, this is what I was wondering. I will investigate this. It would
+be good to get some comments on the quirk naming as well.
+
+> The custom hwmon attribute_group has an is_visible callback, and so do
+> the hwmon_ops.
+>
+> >   - It turns out that to fully disable the fan curve, we have to restore
+> >     the default fan values. This is also what is done on the OEM software.
+> >     For this, the last patch in the series is used, which is a bit dirty.
+>
+> I have a couple questions about this.
+>
+> * What are the default fan curves? Can these be statically defined?
+> * Are user-defined fan curves persistent between reboots?
+>
+> I have some doubts about the approach you took on the last patch, but I
+> want to understand how the platform works first.
+
+So do I. Essentially here is how the Windows software works: when it
+first opens, it saves the current curve in Windows registry. Then,
+when the user sets a fan curve, it applies it in the same way we do
+here and sets a bit in AP. When the custom curve is removed, it unsets
+that bit and restores the original curve in WMI.
+
+The logical reasoning would be that that bit controls the fan curve.
+This is how it is named in the software. However, when setting that
+bit on its own, it seems to only partially affect the fan curve. E.g.,
+when the fan curve is 100% in all points, unsetting that bit makes it
+go down to 50% when no load occurs. When using the default fan curve,
+it goes to 0%. Therefore, it seems like that bit makes the fan curve
+semi-autonomous?
+
+The fan curve seems to be hardware specific and resets after reboots.
+So a straightforward way to get it is to grab it on a fresh boot.
+
+Antheas
+
 > >
-> > Additionally, I noticed that when calling mfd_add_devices()
-> > separately, the IDs are also assigned consecutively (e.g., GPIO: 1~16,
-> > I2C: 17~22, ...).
+> > Sleep was tested with all values being preserved during S0iX (platform
+> > profile, fan curve, PL1/PL2), so we do not need suspend/resume hooks, at
+> > least for the Claw devices.
 > >
-> > Do you have any recommendations on how I should implement this?
+> > For PL1/PL2, we use firmware-attributes. So for that I +cc Kurt since if
+> > his new high level interface is merged beforehand, we can use that instead.
 >
-> If you are to use this mechanism, you'd have to submit separate
-> mfd_add_devices() calls I guess.
+> Hopefully!
 >
-> However, this all seems a bit silly for simple, contextless (where
-> device 3 is identical to device 10, etc) enumeration.  Can you use IDA
-> instead?
+> --
+>  ~ Kurt
 >
-
-Okay, I will switch to using MFD_CELL_NAME() and adopt IDA for
-managing sub-device driver IDs in the next patch.
-
-
-Thanks,
-Ming
+> >
+> > Antheas Kapenekakis (8):
+> >   platform/x86: msi-wmi-platform: Add unlocked msi_wmi_platform_query
+> >   platform/x86: msi-wmi-platform: Add quirk system
+> >   platform/x86: msi-wmi-platform: Add platform profile through shift
+> >     mode
+> >   platform/x86: msi-wmi-platform: Add PL1/PL2 support via firmware
+> >     attributes
+> >   platform/x86: msi-wmi-platform: Add charge_threshold support
+> >   platform/x86: msi-wmi-platform: Drop excess fans in dual fan devices
+> >   platform/x86: msi-wmi-platform: Update header text
+> >   platform/x86: msi-wmi-platform: Restore fan curves on PWM disable and
+> >     unload
+> >
+> > Armin Wolf (2):
+> >   platform/x86: msi-wmi-platform: Use input buffer for returning result
+> >   platform/x86: msi-wmi-platform: Add support for fan control
+> >
+> >  .../wmi/devices/msi-wmi-platform.rst          |   26 +
+> >  drivers/platform/x86/Kconfig                  |    3 +
+> >  drivers/platform/x86/msi-wmi-platform.c       | 1181 ++++++++++++++++-
+> >  3 files changed, 1156 insertions(+), 54 deletions(-)
+> >
+> >
+> > base-commit: 62b1dcf2e7af3dc2879d1a39bf6823c99486a8c2
+>
