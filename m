@@ -1,138 +1,149 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2161C8601;
-	Tue, 13 May 2025 04:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8F71DED6D;
+	Tue, 13 May 2025 07:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747109953; cv=none; b=fhPQ6sV6Wp2RMS95TfOS6I7S8e3gPF/YyFEtm7mLKAHVGiL9ztzavl31+zl8k8tDH8WG9me3WC1D9gdGleBev1kvvgw/1vJp+oDy0lBJSSKkigibDQVxOkdSlAXEWFgngM5Mu2oKFqQ1+uyn6x0bBLpIqjPR/UizwZMK+I9F+wQ=
+	t=1747123176; cv=none; b=tG48c/K5b++rlLu1dwBbp1G4qwM81rdlWZQYU3u4boTtkaV5jOXY1ZNvGPBIiXNK+0+8ZC1Xtu+3FCmujLKNgFmpcAUCATmbNdvJwn26/1seAx6mYRGtKwJA0dc9iu1EQJ6XocCpUGOF6ksVheLPWd9FSIXLH1+lqbUGtTwVZiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747109953; c=relaxed/simple;
-	bh=T+3x9Od6e/lqvamBfshpd2ms4FrKOSPZgnkhArtmF8o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aEG/Sw81ZjfX5GmU+JJFHdToKjGNbnf4a5P19CP3ffi0FrBbdPaKXSi+qlnmLNuLgUTUNe5A25iCa7Nh2Nbs3Bb3uvmnpi5m9ZjIfbpUDTlBQLHPAChZa78UnBb1lnyJ6bKk18TNa5L93EXFucAhkLLBuozg+f9NRkDdHPOkeMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdhnYKmD; arc=none smtp.client-ip=209.85.222.181
+	s=arc-20240116; t=1747123176; c=relaxed/simple;
+	bh=zVQDiOX9CGuUmhYtJQXVsD42iRaEY3++AII5n41vnDE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cdGImiR7/lyZOJXQbfWxHtxT01XyItypUJKYbuDare7S2XsgQGwPfjZvtDTK06aaMeU0ZOvFDbZgOk++uWOHALot95qMIkmgNKnI+3WtqcnS+ulF7dk0c0RCa2R5RnB4qMakNQzCjOyLbt0fKXrspEQqfQ5hkd4FiPE0Gd/2bPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DF35bCi+; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdhnYKmD"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c55500d08cso571756085a.0;
-        Mon, 12 May 2025 21:19:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DF35bCi+"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a1fa0d8884so2363728f8f.3;
+        Tue, 13 May 2025 00:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747109949; x=1747714749; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CbE8qOEQ8Cewj2pW9YzTwebuhpk4BnHjgjL+T/zo0qQ=;
-        b=BdhnYKmDhujv+fpU7SDwNquHJHVcECZf7DgngjcNPhWEaWoKQg23zM47MfBClh455o
-         94Xwp3uBfXsVmc+lZuVSOe36O5PL9hxtl4+jxpGcsMTR+YY7W1muTLini5l3mSGxqkes
-         L3wAiu8eRFtl2VsQM7CKMedW1vcpLmXOL91govBQ0jYZsN/8mChqNUfI8U/+18qnXAMo
-         QmUHnZzLeDG1ElAD6j2qKcBQE7KqX1koiLxpvuKoFYrdGbrEwPLbZPQc/Fz966Nd45sG
-         +BnOhGn8VA3MhNfkhr8IzqRTO6Yc7q3hQ4sr64/LRmNiWpXjTKZZJeVa6G9jT5Dric/E
-         zyJA==
+        d=gmail.com; s=20230601; t=1747123173; x=1747727973; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o2Ki80ZABGEJg4AxOlmxgap7pzHGqhGsMpYaN6EjGbw=;
+        b=DF35bCi+JZI2oiQzfDJmDpLeuSJmomrbBNJDAX8bHacY+bMJcGKQZDhWbCeN4/4iKW
+         m/Dp2UkPlL8wGAzeFwAFg4/t08AQCq/mwJHi4O7N0CQl5PNy/1PQFhyhdResgi0xCVFx
+         PeHcZA1R1H3nYZDoHTP1BOVxyLBpwHQgenaD6EcwY0dEx1/f4t7kXG98QJEKV9/hPp+n
+         wvkbHzXEG+zWqvqepisl0sl/PIgg4zhSPvJcdz77oLtLNB7ScD+2Fj4WB6p+XcEzpj4m
+         x+rGGjy1T+MtoHZ4IZ8icGDRWcLeVFG5LR3ws6yITnm1EYOYsDWMk9SQV5pKoAwh8yCM
+         o2Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747109949; x=1747714749;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CbE8qOEQ8Cewj2pW9YzTwebuhpk4BnHjgjL+T/zo0qQ=;
-        b=COEaupu+ZA4lzmx4PMJ7FWtlQFjZW4YS3CW2WpyR5tmYWhpihmJQrVa40POE6OHV3r
-         ymwtxLWhRzCbEhbZwvdvpXKNwkCsexFsf1s3cA8fTEDuATjMI7uFCJPf8bma/X7WC/NK
-         +KjgfFzSS++EJQXbMdRb0Sq9PRnS8J9HdzXt6J5XxMebw3Y3P8+i893YWclrVxx3zteF
-         jXB3FTpUGclmRzeXjX2/yErnoSGS5Pp52+2b1uH51wgkrqaIqhuIRTvzd9A6ejJh7fXn
-         DejJ7NIrg6fsgo/36s1ZtvbNlW2DhH+/00U84l7ZnPUPdoq956zfRuR9pAJdM0NXyY75
-         Fr0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVCZeMwz4z/ToHkpVB8i7yQ0Olk0DeqYmDRaQAcUCU7JJfMKZl4wELA8ziAD8seKlVTvxQPUEK/fq6x@vger.kernel.org, AJvYcCVHUdRTtHgbX4Rurc6YkkdCuY//3zS0fwxhmtwTeAEDo9qq44BiAasdb82AkxVNcAcgfUbp40cAAx8Bu0v9@vger.kernel.org, AJvYcCVLAVtoNHeRL7/b6EOUqlevHMdWO1504Xw/1SWHrWTvMK13Koz5lqzSuKrNsafOscTw82iwkMyip79F@vger.kernel.org, AJvYcCWHOUMwl8oH1kCmRDDuOlBFzi7Oe4Egy6gTDwCLWkNVtETzOvday5lXos4wvxXyAwYaL3vfj46kleKl@vger.kernel.org
-X-Gm-Message-State: AOJu0YybwKUZd4B1BdErcb6f4zO0UpWm9dDL/or0e/FDvdmynQYS4x5l
-	/RYXDknvly6b637c0+qy+wXPv5fDotYrkV6NWKZZoTJ/WERmKnHz
-X-Gm-Gg: ASbGncukiKqSUGfTltsJCrKQf8gL7PIXT2al5AKfwP7/Or5aWRfdclBB2CHICethDdc
-	eCJGZbscrFTbLi8xogeTj281qNENlQHqHUjQtoDxKeZ6u7xq9baQfypDEGLxD8MScgbPDtfgM+L
-	F/5dNtld0vz2JVdaUsjrVO0w23fb9lnAoGn6tYirLlwLClvDG3CnzFDlynE4JJjLUnM+t35Ia9v
-	e0ErLHuhDK3VS/adGeUHARJ/RnXIc6epqUr7vGF61RAo2/8xChwu4UGEUnkIXcCzDMoVNOVyGla
-	lm7Do7DM21oZIARwZSEDFvAS1iI=
-X-Google-Smtp-Source: AGHT+IGaGXEPNSY7gDD/YfTu/S9mOVv0B4S4N0WdSovqwATeGF5yrD8SEU/YDNwaJa71opCgKDqwWg==
-X-Received: by 2002:a05:620a:40cc:b0:7cd:1ebe:9ad8 with SMTP id af79cd13be357-7cd1ebe9b28mr177227385a.10.1747109949442;
-        Mon, 12 May 2025 21:19:09 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7cd00f6423esm652274985a.30.2025.05.12.21.19.08
+        d=1e100.net; s=20230601; t=1747123173; x=1747727973;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o2Ki80ZABGEJg4AxOlmxgap7pzHGqhGsMpYaN6EjGbw=;
+        b=o+7Pc7N/QkVRQRtuiOzDtuhfuq82n39TuqowGzUSFnR7IVQr+xQYNBWV4sTZnZPdNn
+         dzyXgWQRKqgUyRth+OVfficnihR5QLIo/uURHn3qjAZ6vSKiPAJS7RtRDFAYYEmGJ00G
+         NzURV/tEIZR1apL6kgOsALMJ8Oytbn5/8FCB/tB39hflOf8tgN1YZJ4GX5UZmNVxc0gB
+         /3yC4cXziHw5m+FiQ+hipzDUdeFAdSrEvWGO04Dgclg0vgBzca7F4agXvvAfEp6dr+WH
+         J8YxUA0fkmgk4Bp0707DRZnj4ZO3TFZNUvY63+Ug8ZQ7U+LkI6HK9e+DCDBXO77v6lJF
+         3uRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUp0MyCJAhUBGDpYO2aq5cRXe4WbTWJLTY0hcoFOVM5Hx1WUnA6IuWbggaXsTzgIfXGcIhccltGAQb5@vger.kernel.org, AJvYcCVS/RzJ6EmrpG5eHHq8oGkTO1u0uRAExjltbqP8YTMFUoBQp6kvpQo+QH5vg12QUbJWEgBi8Z2PHJ1XMaQ=@vger.kernel.org, AJvYcCVsTBYEydLNKOBkCIvQaohm1ojajC32uJuyctIbvz1IG6bFz2jJztKpMr3FqKTwmmj1787AQ9D5JdFoJw==@vger.kernel.org, AJvYcCWIfd2fYPKKfG2rRJE95R9PVMAGME92PCjDvO6eVjzVI7i/eT/2KsTELFIi3q7t1pXqDR8YorOBr2qQ@vger.kernel.org, AJvYcCWOHFRk8W9L2YtsOUx8zszIehLGeFfyz8HwESIN+0GONJuYonW09Qk5wHiwUaKZ17d8BEByw4Fwa0Ra@vger.kernel.org, AJvYcCWqf1Ura1cAVfYokY16klMKy3SvRAIO5VLKZlGVgEQx9mGXyOCcq2dXuVTuD8AfPYBbsZq1p2GslrE=@vger.kernel.org, AJvYcCX7EyftZl8q4uGXAX0aAqVP2qqQqOAByx2UaKjWfDTGXUdPvgTUMwlGdhyHX1bX0AWmoAppNGpMu4L8@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpJKsLRpp7bHymeiKBeaf6lRCdGvYiG5ZY1W2xM37eKyy91L5h
+	dugy1yYtoXHJSFnqfMXHFJIPI7nqJNf2AYbwBLiyAIy0/Q86ZDqO
+X-Gm-Gg: ASbGncvZM6NaVi7BoQcfmQRhpBqhi12pKGEDKq2GkEjF/uLdAE/+w0qhQgWy8rbDrlU
+	hhD3p2u2fxm/MUVDbSG3vnayxoO0hKrfyFxO4dK9nDF6QG/uHhjS1pA2+xEvpJNOgAwhKUXNqpV
+	y1JKB2TBCX6ktRf7LNV/lH4rme4dw9ReZw1alyv9T/BJWq5b148LKmPF6Ds74TNDZvgDR1a3FVh
+	eZodoDrSpBl7XaKU5gM9zOQ1VBxvWir24nNJg3/vJgCKaVTygnfhBni6HJlzT2VGQtrV5Usw+GY
+	LAHelZBQQyuuIB8Pq9XJmzMKxM0q9RmAiRZyRrMG9TtkoaaDIWOMKlbrrB/q3Q2sCCbo+GkbM7N
+	MGzDfABHQMALcyufoEQLXZpOj0Q==
+X-Google-Smtp-Source: AGHT+IHVSjFApFWecKfyKzV3L2zKQlG2ldSYHxNj4NtNCLFuSKyvtc3joGoU0hu6Hbf4lfBZu9pEvg==
+X-Received: by 2002:a05:6000:4008:b0:3a0:9fe1:c298 with SMTP id ffacd0b85a97d-3a1f6438efdmr13156979f8f.18.1747123173091;
+        Tue, 13 May 2025 00:59:33 -0700 (PDT)
+Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd34bd84sm198145575e9.22.2025.05.13.00.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 May 2025 21:19:09 -0700 (PDT)
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Chao Wei <chao.wei@sophgo.com>,
-	Inochi Amaoto <inochiama@gmail.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	sophgo@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-mmc@vger.kernel.org,
-	Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>
-Subject: Re: (subset) [PATCH v2 00/10] riscv: sophgo: Introduce SG2044 SRD3-10 board support
-Date: Tue, 13 May 2025 12:18:22 +0800
-Message-ID: <174710989164.597941.2410446871539052309.b4-ty@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250413223507.46480-1-inochiama@gmail.com>
-References: <20250413223507.46480-1-inochiama@gmail.com>
+        Tue, 13 May 2025 00:59:32 -0700 (PDT)
+Message-ID: <874de9179208e2724769cbba515b188e82962d62.camel@gmail.com>
+Subject: Re: [PATCH v5 3/7] include: linux: move adi-axi-common.h out of fpga
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: David Lechner <dlechner@baylibre.com>, nuno.sa@analog.com, 
+ linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
+ dmaengine@vger.kernel.org,  linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org,  linux-pwm@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, Michael Turquette
+ <mturquette@baylibre.com>,  Moritz Fischer <mdf@kernel.org>, Wu Hao
+ <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,  Tom Rix
+ <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare
+ <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor
+ Gamblin <tgamblin@baylibre.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, Mike Turquette
+ <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>, Jonathan
+ Cameron <Jonathan.Cameron@huawei.com>
+Date: Tue, 13 May 2025 07:59:56 +0100
+In-Reply-To: <44929bd2-4abf-4c7b-b3c0-382bd030800f@baylibre.com>
+References: <20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com>
+	 <20250512-dev-axi-clkgen-limits-v5-3-a86b9a368e05@analog.com>
+	 <44929bd2-4abf-4c7b-b3c0-382bd030800f@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-On Mon, 14 Apr 2025 06:34:54 +0800, Inochi Amaoto wrote:
-> Sophgo SG2044 SRD3-10 is an ATX board bases on Sophgo SG2044 SoC.
-> This board includes 5 uart ports, 5 pcie x8 slots, 1 1G Ethernet port,
-> 1 microSD slot.
-> 
-> Introduce basic support for this board and Sophgo SG2044 SoC
-> 
-> Changed from v1:
-> - https://lore.kernel.org/all/20250407010616.749833-1-inochiama@gmail.com
-> 1. apply Rob's tag
-> 2. patch 1: new patch for grouping all similar compatible ids.
-> 3. patch 7: remove unnecessary compatible check
-> 4. patch 8: adapt for the new patch 1
-> 5. patch 9: fix copyright e-mail
-> 
-> [...]
+On Mon, 2025-05-12 at 10:15 -0500, David Lechner wrote:
+> On 5/12/25 9:46 AM, Nuno S=C3=A1 via B4 Relay wrote:
+> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
+> >=20
+> > The adi-axi-common.h header has some common defines used in various ADI
+> > IPs. However they are not specific for any fpga manager so it's
+> > questionable for the header to live under include/linux/fpga. Hence
+> > let's just move one directory up and update all users.
+> >=20
+> > Suggested-by: Xu Yilun <yilun.xu@linux.intel.com>
+> > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
+> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> > ---
+> > =C2=A0drivers/clk/clk-axi-clkgen.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 ++
+> > =C2=A0drivers/dma/dma-axi-dmac.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+> > =C2=A0drivers/hwmon/axi-fan-control.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+> > =C2=A0drivers/iio/adc/adi-axi-adc.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 +--
+> > =C2=A0drivers/iio/dac/adi-axi-dac.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+> > =C2=A0drivers/pwm/pwm-axi-pwmgen.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+> > =C2=A0drivers/spi/spi-axi-spi-engine.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+> > =C2=A0include/linux/{fpga =3D> }/adi-axi-common.h | 0
+> > =C2=A08 files changed, 8 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.=
+c
+> > index
+> > 2a95f9b220234a1245024a821c50e1eb9c104ac9..31915f8f5565f2ef5d17c0b4a0c91=
+a648005b3e
+> > 6 100644
+> > --- a/drivers/clk/clk-axi-clkgen.c
+> > +++ b/drivers/clk/clk-axi-clkgen.c
+> > @@ -16,6 +16,8 @@
+> > =C2=A0#include <linux/mod_devicetable.h>
+> > =C2=A0#include <linux/err.h>
+> > =C2=A0
+> > +#include <linux/adi-axi-common.h>
+> > +
+>=20
+> This one is adding, not changing. Was it supposed to be in a later patch?
 
-Applied to for-next, thanks!
+Oh, indeed... This was "bot mode"...
 
-[02/10] dt-bindings: timer: Add Sophgo SG2044 ACLINT timer
-        https://github.com/sophgo/linux/commit/1e76b39eda76f7317ab75dacccaeda5a5b02c519
-[03/10] dt-bindings: interrupt-controller: Add Sophgo SG2044 CLINT mswi
-        https://github.com/sophgo/linux/commit/a3cc46f7925b6b48e80c70815e3f637abcda77b9
-[04/10] dt-bindings: interrupt-controller: Add Sophgo SG2044 PLIC
-        https://github.com/sophgo/linux/commit/a7470f20e271203494b4cd427e687c12649f0087
-[09/10] dt-bindings: riscv: sophgo: Add SG2044 compatible string
-        https://github.com/sophgo/linux/commit/9ee1f97cf3e1743591ae76324d96082c8fb496d8
-[10/10] riscv: dts: sophgo: Add initial device tree of Sophgo SRD3-10
-        https://github.com/sophgo/linux/commit/c8b1ca99c8485036cefa962aead3a0c57cb27d3f
-
-Thanks,
-Inochi
+- Nuno S=C3=A1
+>=20
+> > =C2=A0#define AXI_CLKGEN_V2_REG_RESET		0x40
+> > =C2=A0#define AXI_CLKGEN_V2_REG_CLKSEL	0x44
+> > =C2=A0#define AXI_CLKGEN_V2_REG_DRP_CNTRL	0x70
 
