@@ -1,130 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CC9130A73
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 May 2025 00:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2161C8601;
+	Tue, 13 May 2025 04:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747097628; cv=none; b=HVBi2iLj0lAwi/W3tGZiAkyIA++DwnnNrTyshvCVBjlfT8dxoqDFN5UV90y/haHU6SgBPXEELfj12SYzAzey9mEb1SaWpeblSvIvDI+cvMXtVfTRpJiGGhTvelL5e2xSYsZV0My0uLGRe8Yh1hX3BdrdRowDC14QIw7dy4nkJqQ=
+	t=1747109953; cv=none; b=fhPQ6sV6Wp2RMS95TfOS6I7S8e3gPF/YyFEtm7mLKAHVGiL9ztzavl31+zl8k8tDH8WG9me3WC1D9gdGleBev1kvvgw/1vJp+oDy0lBJSSKkigibDQVxOkdSlAXEWFgngM5Mu2oKFqQ1+uyn6x0bBLpIqjPR/UizwZMK+I9F+wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747097628; c=relaxed/simple;
-	bh=fXUtVEOU25fjuC90YfQVRzFA5zzYMzHnlvzLVa79PV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EXPaGrz5mFHlGz/4niCCnnRNgaH4rKaFz6byvnukzpxBYkG+blmcah4TYgVvl+r9TVRHYHAv2qh+pxbMLKBXVtLNW8qJayZuXwgVA8cNzFyt5pZEzb8+EaJeBtwLmvB2oE00h1hrmOpffuUNK5k40+/kdL1U7SLE64NMPSAEqO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivVRVAgO; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747109953; c=relaxed/simple;
+	bh=T+3x9Od6e/lqvamBfshpd2ms4FrKOSPZgnkhArtmF8o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aEG/Sw81ZjfX5GmU+JJFHdToKjGNbnf4a5P19CP3ffi0FrBbdPaKXSi+qlnmLNuLgUTUNe5A25iCa7Nh2Nbs3Bb3uvmnpi5m9ZjIfbpUDTlBQLHPAChZa78UnBb1lnyJ6bKk18TNa5L93EXFucAhkLLBuozg+f9NRkDdHPOkeMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdhnYKmD; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivVRVAgO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747097626; x=1778633626;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fXUtVEOU25fjuC90YfQVRzFA5zzYMzHnlvzLVa79PV0=;
-  b=ivVRVAgODXrCQLyZpkYDLtA5hW+U4jPZzf8YwYKanM6svmENEuKMeQuo
-   +fpNle3dSnS0e7XczWvsV1Rk5vArJ3hGuKm/hgbRyM1RHvKfIycK7pmU+
-   4hWEzNIJwnAhKfTjWiWYy73LHrTAOpmUWuo4BT+x8Bu4i9SUDxMi0v8XM
-   RbFeSefazbVVkqjfSkOEDneBvite4cUsL+wdOVWGdv0pghOLd84Fqukmj
-   baVZvkwalJ2jaKeraPHW0uJDiYt6wxZjNk5zsxYXheAa9t7/Ty2Dp+hvl
-   fcSnTlceOgjn+oV99OVCaoc1s+N5imcOfvdI3FyhjtVy4KlG0XUoaYHRE
-   g==;
-X-CSE-ConnectionGUID: gDQnpHE6Q7KDZ7+en62T+w==
-X-CSE-MsgGUID: 404pCwFITDClLJtbXHMCqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="59558360"
-X-IronPort-AV: E=Sophos;i="6.15,283,1739865600"; 
-   d="scan'208";a="59558360"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 17:53:46 -0700
-X-CSE-ConnectionGUID: hMDF6ac6RB6jPyWTgKuxwQ==
-X-CSE-MsgGUID: TJ1/pZkoQo62wwP5TOkc8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,283,1739865600"; 
-   d="scan'208";a="174678078"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 12 May 2025 17:53:45 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uEdtu-000FYx-0A;
-	Tue, 13 May 2025 00:53:42 +0000
-Date: Tue, 13 May 2025 08:53:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gerhard Engleder <eg@keba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 45/45] drivers/hwmon/kfan.c:108:2:
- warning: unannotated fall-through between switch labels
-Message-ID: <202505130827.32HeaRdb-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdhnYKmD"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7c55500d08cso571756085a.0;
+        Mon, 12 May 2025 21:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747109949; x=1747714749; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CbE8qOEQ8Cewj2pW9YzTwebuhpk4BnHjgjL+T/zo0qQ=;
+        b=BdhnYKmDhujv+fpU7SDwNquHJHVcECZf7DgngjcNPhWEaWoKQg23zM47MfBClh455o
+         94Xwp3uBfXsVmc+lZuVSOe36O5PL9hxtl4+jxpGcsMTR+YY7W1muTLini5l3mSGxqkes
+         L3wAiu8eRFtl2VsQM7CKMedW1vcpLmXOL91govBQ0jYZsN/8mChqNUfI8U/+18qnXAMo
+         QmUHnZzLeDG1ElAD6j2qKcBQE7KqX1koiLxpvuKoFYrdGbrEwPLbZPQc/Fz966Nd45sG
+         +BnOhGn8VA3MhNfkhr8IzqRTO6Yc7q3hQ4sr64/LRmNiWpXjTKZZJeVa6G9jT5Dric/E
+         zyJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747109949; x=1747714749;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CbE8qOEQ8Cewj2pW9YzTwebuhpk4BnHjgjL+T/zo0qQ=;
+        b=COEaupu+ZA4lzmx4PMJ7FWtlQFjZW4YS3CW2WpyR5tmYWhpihmJQrVa40POE6OHV3r
+         ymwtxLWhRzCbEhbZwvdvpXKNwkCsexFsf1s3cA8fTEDuATjMI7uFCJPf8bma/X7WC/NK
+         +KjgfFzSS++EJQXbMdRb0Sq9PRnS8J9HdzXt6J5XxMebw3Y3P8+i893YWclrVxx3zteF
+         jXB3FTpUGclmRzeXjX2/yErnoSGS5Pp52+2b1uH51wgkrqaIqhuIRTvzd9A6ejJh7fXn
+         DejJ7NIrg6fsgo/36s1ZtvbNlW2DhH+/00U84l7ZnPUPdoq956zfRuR9pAJdM0NXyY75
+         Fr0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVCZeMwz4z/ToHkpVB8i7yQ0Olk0DeqYmDRaQAcUCU7JJfMKZl4wELA8ziAD8seKlVTvxQPUEK/fq6x@vger.kernel.org, AJvYcCVHUdRTtHgbX4Rurc6YkkdCuY//3zS0fwxhmtwTeAEDo9qq44BiAasdb82AkxVNcAcgfUbp40cAAx8Bu0v9@vger.kernel.org, AJvYcCVLAVtoNHeRL7/b6EOUqlevHMdWO1504Xw/1SWHrWTvMK13Koz5lqzSuKrNsafOscTw82iwkMyip79F@vger.kernel.org, AJvYcCWHOUMwl8oH1kCmRDDuOlBFzi7Oe4Egy6gTDwCLWkNVtETzOvday5lXos4wvxXyAwYaL3vfj46kleKl@vger.kernel.org
+X-Gm-Message-State: AOJu0YybwKUZd4B1BdErcb6f4zO0UpWm9dDL/or0e/FDvdmynQYS4x5l
+	/RYXDknvly6b637c0+qy+wXPv5fDotYrkV6NWKZZoTJ/WERmKnHz
+X-Gm-Gg: ASbGncukiKqSUGfTltsJCrKQf8gL7PIXT2al5AKfwP7/Or5aWRfdclBB2CHICethDdc
+	eCJGZbscrFTbLi8xogeTj281qNENlQHqHUjQtoDxKeZ6u7xq9baQfypDEGLxD8MScgbPDtfgM+L
+	F/5dNtld0vz2JVdaUsjrVO0w23fb9lnAoGn6tYirLlwLClvDG3CnzFDlynE4JJjLUnM+t35Ia9v
+	e0ErLHuhDK3VS/adGeUHARJ/RnXIc6epqUr7vGF61RAo2/8xChwu4UGEUnkIXcCzDMoVNOVyGla
+	lm7Do7DM21oZIARwZSEDFvAS1iI=
+X-Google-Smtp-Source: AGHT+IGaGXEPNSY7gDD/YfTu/S9mOVv0B4S4N0WdSovqwATeGF5yrD8SEU/YDNwaJa71opCgKDqwWg==
+X-Received: by 2002:a05:620a:40cc:b0:7cd:1ebe:9ad8 with SMTP id af79cd13be357-7cd1ebe9b28mr177227385a.10.1747109949442;
+        Mon, 12 May 2025 21:19:09 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7cd00f6423esm652274985a.30.2025.05.12.21.19.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 May 2025 21:19:09 -0700 (PDT)
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>,
+	Inochi Amaoto <inochiama@gmail.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	sophgo@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-mmc@vger.kernel.org,
+	Yixun Lan <dlan@gentoo.org>,
+	Longbin Li <looong.bin@gmail.com>
+Subject: Re: (subset) [PATCH v2 00/10] riscv: sophgo: Introduce SG2044 SRD3-10 board support
+Date: Tue, 13 May 2025 12:18:22 +0800
+Message-ID: <174710989164.597941.2410446871539052309.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250413223507.46480-1-inochiama@gmail.com>
+References: <20250413223507.46480-1-inochiama@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   b35fa477e6b6784401732d6d17ca643f7f73e4c5
-commit: b35fa477e6b6784401732d6d17ca643f7f73e4c5 [45/45] hwmon: Add KEBA fan controller support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250513/202505130827.32HeaRdb-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250513/202505130827.32HeaRdb-lkp@intel.com/reproduce)
+On Mon, 14 Apr 2025 06:34:54 +0800, Inochi Amaoto wrote:
+> Sophgo SG2044 SRD3-10 is an ATX board bases on Sophgo SG2044 SoC.
+> This board includes 5 uart ports, 5 pcie x8 slots, 1 1G Ethernet port,
+> 1 microSD slot.
+> 
+> Introduce basic support for this board and Sophgo SG2044 SoC
+> 
+> Changed from v1:
+> - https://lore.kernel.org/all/20250407010616.749833-1-inochiama@gmail.com
+> 1. apply Rob's tag
+> 2. patch 1: new patch for grouping all similar compatible ids.
+> 3. patch 7: remove unnecessary compatible check
+> 4. patch 8: adapt for the new patch 1
+> 5. patch 9: fix copyright e-mail
+> 
+> [...]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505130827.32HeaRdb-lkp@intel.com/
+Applied to for-next, thanks!
 
-All warnings (new ones prefixed by >>):
+[02/10] dt-bindings: timer: Add Sophgo SG2044 ACLINT timer
+        https://github.com/sophgo/linux/commit/1e76b39eda76f7317ab75dacccaeda5a5b02c519
+[03/10] dt-bindings: interrupt-controller: Add Sophgo SG2044 CLINT mswi
+        https://github.com/sophgo/linux/commit/a3cc46f7925b6b48e80c70815e3f637abcda77b9
+[04/10] dt-bindings: interrupt-controller: Add Sophgo SG2044 PLIC
+        https://github.com/sophgo/linux/commit/a7470f20e271203494b4cd427e687c12649f0087
+[09/10] dt-bindings: riscv: sophgo: Add SG2044 compatible string
+        https://github.com/sophgo/linux/commit/9ee1f97cf3e1743591ae76324d96082c8fb496d8
+[10/10] riscv: dts: sophgo: Add initial device tree of Sophgo SRD3-10
+        https://github.com/sophgo/linux/commit/c8b1ca99c8485036cefa962aead3a0c57cb27d3f
 
->> drivers/hwmon/kfan.c:108:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     108 |         default:
-         |         ^
-   drivers/hwmon/kfan.c:108:2: note: insert 'break;' to avoid fall-through
-     108 |         default:
-         |         ^
-         |         break; 
-   drivers/hwmon/kfan.c:141:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     141 |         default:
-         |         ^
-   drivers/hwmon/kfan.c:141:2: note: insert 'break;' to avoid fall-through
-     141 |         default:
-         |         ^
-         |         break; 
-   drivers/hwmon/kfan.c:169:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     169 |         default:
-         |         ^
-   drivers/hwmon/kfan.c:169:2: note: insert 'break;' to avoid fall-through
-     169 |         default:
-         |         ^
-         |         break; 
-   3 warnings generated.
+Thanks,
+Inochi
 
-
-vim +108 drivers/hwmon/kfan.c
-
-    94	
-    95	static int kfan_write(struct device *dev, enum hwmon_sensor_types type,
-    96			      u32 attr, int channel, long val)
-    97	{
-    98		struct kfan *kfan = dev_get_drvdata(dev);
-    99	
-   100		switch (type) {
-   101		case hwmon_pwm:
-   102			switch (attr) {
-   103			case hwmon_pwm_input:
-   104				return kfan_set_pwm(kfan, val);
-   105			default:
-   106				break;
-   107			}
- > 108		default:
-   109			break;
-   110		}
-   111	
-   112		return -EOPNOTSUPP;
-   113	}
-   114	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
