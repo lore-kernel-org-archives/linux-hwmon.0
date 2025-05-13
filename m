@@ -1,149 +1,89 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8F71DED6D;
-	Tue, 13 May 2025 07:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C6223F424
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 May 2025 11:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747123176; cv=none; b=tG48c/K5b++rlLu1dwBbp1G4qwM81rdlWZQYU3u4boTtkaV5jOXY1ZNvGPBIiXNK+0+8ZC1Xtu+3FCmujLKNgFmpcAUCATmbNdvJwn26/1seAx6mYRGtKwJA0dc9iu1EQJ6XocCpUGOF6ksVheLPWd9FSIXLH1+lqbUGtTwVZiY=
+	t=1747135066; cv=none; b=lyZnIHhK0SedEmXB4P/RJNcSPrQtRveqkA9nmQrxEAQwitKvrd8VZ+1mhsGaQynPbX/nIksnPOLeTo8JDYbXXNBsPmyWDAi1N8+iSxuVhoIYr7ctbbc2z8rFtv1mDWoZ1BYM1BXVvtSmWTDmbXWUIV7ay/rbbPL6NrOGlQh2o2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747123176; c=relaxed/simple;
-	bh=zVQDiOX9CGuUmhYtJQXVsD42iRaEY3++AII5n41vnDE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cdGImiR7/lyZOJXQbfWxHtxT01XyItypUJKYbuDare7S2XsgQGwPfjZvtDTK06aaMeU0ZOvFDbZgOk++uWOHALot95qMIkmgNKnI+3WtqcnS+ulF7dk0c0RCa2R5RnB4qMakNQzCjOyLbt0fKXrspEQqfQ5hkd4FiPE0Gd/2bPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DF35bCi+; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747135066; c=relaxed/simple;
+	bh=gY0+lzBHxjGS8oAMdy4i3jHm+0ZUb1Gud0N76496ZYg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qo0o8FOgpyepuciaosoU+fSBF+DOnqS4EBr0goRx5TJLyXwBL/VSsuFdBmQyPHBAxYN8YmIDsWxlSfaEn6ytK6EmO2egg+MZ3p4Fl5GH3d2l7N9HqUhNeAKQkds2t2G2JAPaEyJrixL/rboF2p2hz51AFBuUSQ/+N+bUVr70/ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YvU5kO6C; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DF35bCi+"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a1fa0d8884so2363728f8f.3;
-        Tue, 13 May 2025 00:59:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747123173; x=1747727973; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=o2Ki80ZABGEJg4AxOlmxgap7pzHGqhGsMpYaN6EjGbw=;
-        b=DF35bCi+JZI2oiQzfDJmDpLeuSJmomrbBNJDAX8bHacY+bMJcGKQZDhWbCeN4/4iKW
-         m/Dp2UkPlL8wGAzeFwAFg4/t08AQCq/mwJHi4O7N0CQl5PNy/1PQFhyhdResgi0xCVFx
-         PeHcZA1R1H3nYZDoHTP1BOVxyLBpwHQgenaD6EcwY0dEx1/f4t7kXG98QJEKV9/hPp+n
-         wvkbHzXEG+zWqvqepisl0sl/PIgg4zhSPvJcdz77oLtLNB7ScD+2Fj4WB6p+XcEzpj4m
-         x+rGGjy1T+MtoHZ4IZ8icGDRWcLeVFG5LR3ws6yITnm1EYOYsDWMk9SQV5pKoAwh8yCM
-         o2Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747123173; x=1747727973;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o2Ki80ZABGEJg4AxOlmxgap7pzHGqhGsMpYaN6EjGbw=;
-        b=o+7Pc7N/QkVRQRtuiOzDtuhfuq82n39TuqowGzUSFnR7IVQr+xQYNBWV4sTZnZPdNn
-         dzyXgWQRKqgUyRth+OVfficnihR5QLIo/uURHn3qjAZ6vSKiPAJS7RtRDFAYYEmGJ00G
-         NzURV/tEIZR1apL6kgOsALMJ8Oytbn5/8FCB/tB39hflOf8tgN1YZJ4GX5UZmNVxc0gB
-         /3yC4cXziHw5m+FiQ+hipzDUdeFAdSrEvWGO04Dgclg0vgBzca7F4agXvvAfEp6dr+WH
-         J8YxUA0fkmgk4Bp0707DRZnj4ZO3TFZNUvY63+Ug8ZQ7U+LkI6HK9e+DCDBXO77v6lJF
-         3uRw==
-X-Forwarded-Encrypted: i=1; AJvYcCUp0MyCJAhUBGDpYO2aq5cRXe4WbTWJLTY0hcoFOVM5Hx1WUnA6IuWbggaXsTzgIfXGcIhccltGAQb5@vger.kernel.org, AJvYcCVS/RzJ6EmrpG5eHHq8oGkTO1u0uRAExjltbqP8YTMFUoBQp6kvpQo+QH5vg12QUbJWEgBi8Z2PHJ1XMaQ=@vger.kernel.org, AJvYcCVsTBYEydLNKOBkCIvQaohm1ojajC32uJuyctIbvz1IG6bFz2jJztKpMr3FqKTwmmj1787AQ9D5JdFoJw==@vger.kernel.org, AJvYcCWIfd2fYPKKfG2rRJE95R9PVMAGME92PCjDvO6eVjzVI7i/eT/2KsTELFIi3q7t1pXqDR8YorOBr2qQ@vger.kernel.org, AJvYcCWOHFRk8W9L2YtsOUx8zszIehLGeFfyz8HwESIN+0GONJuYonW09Qk5wHiwUaKZ17d8BEByw4Fwa0Ra@vger.kernel.org, AJvYcCWqf1Ura1cAVfYokY16klMKy3SvRAIO5VLKZlGVgEQx9mGXyOCcq2dXuVTuD8AfPYBbsZq1p2GslrE=@vger.kernel.org, AJvYcCX7EyftZl8q4uGXAX0aAqVP2qqQqOAByx2UaKjWfDTGXUdPvgTUMwlGdhyHX1bX0AWmoAppNGpMu4L8@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpJKsLRpp7bHymeiKBeaf6lRCdGvYiG5ZY1W2xM37eKyy91L5h
-	dugy1yYtoXHJSFnqfMXHFJIPI7nqJNf2AYbwBLiyAIy0/Q86ZDqO
-X-Gm-Gg: ASbGncvZM6NaVi7BoQcfmQRhpBqhi12pKGEDKq2GkEjF/uLdAE/+w0qhQgWy8rbDrlU
-	hhD3p2u2fxm/MUVDbSG3vnayxoO0hKrfyFxO4dK9nDF6QG/uHhjS1pA2+xEvpJNOgAwhKUXNqpV
-	y1JKB2TBCX6ktRf7LNV/lH4rme4dw9ReZw1alyv9T/BJWq5b148LKmPF6Ds74TNDZvgDR1a3FVh
-	eZodoDrSpBl7XaKU5gM9zOQ1VBxvWir24nNJg3/vJgCKaVTygnfhBni6HJlzT2VGQtrV5Usw+GY
-	LAHelZBQQyuuIB8Pq9XJmzMKxM0q9RmAiRZyRrMG9TtkoaaDIWOMKlbrrB/q3Q2sCCbo+GkbM7N
-	MGzDfABHQMALcyufoEQLXZpOj0Q==
-X-Google-Smtp-Source: AGHT+IHVSjFApFWecKfyKzV3L2zKQlG2ldSYHxNj4NtNCLFuSKyvtc3joGoU0hu6Hbf4lfBZu9pEvg==
-X-Received: by 2002:a05:6000:4008:b0:3a0:9fe1:c298 with SMTP id ffacd0b85a97d-3a1f6438efdmr13156979f8f.18.1747123173091;
-        Tue, 13 May 2025 00:59:33 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd34bd84sm198145575e9.22.2025.05.13.00.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 00:59:32 -0700 (PDT)
-Message-ID: <874de9179208e2724769cbba515b188e82962d62.camel@gmail.com>
-Subject: Re: [PATCH v5 3/7] include: linux: move adi-axi-common.h out of fpga
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, nuno.sa@analog.com, 
- linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org,  linux-pwm@vger.kernel.org,
- linux-spi@vger.kernel.org
-Cc: Stephen Boyd <sboyd@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>,  Moritz Fischer <mdf@kernel.org>, Wu Hao
- <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,  Tom Rix
- <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare
- <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor
- Gamblin <tgamblin@baylibre.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, Mike Turquette
- <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>, Jonathan
- Cameron <Jonathan.Cameron@huawei.com>
-Date: Tue, 13 May 2025 07:59:56 +0100
-In-Reply-To: <44929bd2-4abf-4c7b-b3c0-382bd030800f@baylibre.com>
-References: <20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com>
-	 <20250512-dev-axi-clkgen-limits-v5-3-a86b9a368e05@analog.com>
-	 <44929bd2-4abf-4c7b-b3c0-382bd030800f@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YvU5kO6C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747135064; x=1778671064;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gY0+lzBHxjGS8oAMdy4i3jHm+0ZUb1Gud0N76496ZYg=;
+  b=YvU5kO6CAMy9r2Kg4Z4thpz2peq11Wv+55ggJJ742fEnNPlpXyktRmUZ
+   ym+Xi9uVAlNNTHn+0RHWpm2tFp79KrxnRBLRNSedwrl1Dg2NuiOmjfmrR
+   M+QTBGn3y0zDKf5pUh/uur7dDvsxVWrcer4RJEwvlw5Vh7gpNzmN61w+i
+   rD549vuY5escTJ7+a3vm8NpyljAJTgDNdwC81zfC1KhzCFeGJtDqXu5HO
+   tNmp4dQpNum9rcuN8vk9yBmPn8yAZIKRyyoqL3yo+EzucpDmP8cvM+kty
+   zdTnjdpcWMOjonahzga9mqy0GOozMQA4mbXyYtThAnspSSG3TAYxSHeHP
+   w==;
+X-CSE-ConnectionGUID: R1KkWd5HRDuKhfsObMslOA==
+X-CSE-MsgGUID: 0O2J0u0HR3WxfC9N2BmuLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="74370980"
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="74370980"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 04:17:44 -0700
+X-CSE-ConnectionGUID: hCCnSXOmRKy7hhfcrTl4aQ==
+X-CSE-MsgGUID: d43umFUvTAmQfOa8rxseCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,285,1739865600"; 
+   d="scan'208";a="174811890"
+Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.151])
+  by orviesa001.jf.intel.com with ESMTP; 13 May 2025 04:17:42 -0700
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To: linux-hwmon@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] hwmon: (lm75) Fix I3C transfer buffer pointer for incoming data
+Date: Tue, 13 May 2025 14:17:39 +0300
+Message-ID: <20250513111739.508886-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2025-05-12 at 10:15 -0500, David Lechner wrote:
-> On 5/12/25 9:46 AM, Nuno S=C3=A1 via B4 Relay wrote:
-> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
-> >=20
-> > The adi-axi-common.h header has some common defines used in various ADI
-> > IPs. However they are not specific for any fpga manager so it's
-> > questionable for the header to live under include/linux/fpga. Hence
-> > let's just move one directory up and update all users.
-> >=20
-> > Suggested-by: Xu Yilun <yilun.xu@linux.intel.com>
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
-> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > ---
-> > =C2=A0drivers/clk/clk-axi-clkgen.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 ++
-> > =C2=A0drivers/dma/dma-axi-dmac.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
-> > =C2=A0drivers/hwmon/axi-fan-control.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
-> > =C2=A0drivers/iio/adc/adi-axi-adc.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 3 +--
-> > =C2=A0drivers/iio/dac/adi-axi-dac.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
-> > =C2=A0drivers/pwm/pwm-axi-pwmgen.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
-> > =C2=A0drivers/spi/spi-axi-spi-engine.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 2 +-
-> > =C2=A0include/linux/{fpga =3D> }/adi-axi-common.h | 0
-> > =C2=A08 files changed, 8 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.=
-c
-> > index
-> > 2a95f9b220234a1245024a821c50e1eb9c104ac9..31915f8f5565f2ef5d17c0b4a0c91=
-a648005b3e
-> > 6 100644
-> > --- a/drivers/clk/clk-axi-clkgen.c
-> > +++ b/drivers/clk/clk-axi-clkgen.c
-> > @@ -16,6 +16,8 @@
-> > =C2=A0#include <linux/mod_devicetable.h>
-> > =C2=A0#include <linux/err.h>
-> > =C2=A0
-> > +#include <linux/adi-axi-common.h>
-> > +
->=20
-> This one is adding, not changing. Was it supposed to be in a later patch?
+Use the I3C private transfer input buffer pointer for incoming data
+instead of output buffer. For now this is harmless since both of those
+pointers are union members but may confuse when reading the code.
 
-Oh, indeed... This was "bot mode"...
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+Build tested only.
+---
+ drivers/hwmon/lm75.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Nuno S=C3=A1
->=20
-> > =C2=A0#define AXI_CLKGEN_V2_REG_RESET		0x40
-> > =C2=A0#define AXI_CLKGEN_V2_REG_CLKSEL	0x44
-> > =C2=A0#define AXI_CLKGEN_V2_REG_DRP_CNTRL	0x70
+diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+index d95a3c6c245c..9b4875e2fd8d 100644
+--- a/drivers/hwmon/lm75.c
++++ b/drivers/hwmon/lm75.c
+@@ -622,7 +622,7 @@ static int lm75_i3c_reg_read(void *context, unsigned int reg, unsigned int *val)
+ 		{
+ 			.rnw = true,
+ 			.len = 2,
+-			.data.out = data->val_buf,
++			.data.in = data->val_buf,
+ 		},
+ 	};
+ 	int ret;
+-- 
+2.47.2
 
