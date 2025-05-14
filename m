@@ -1,84 +1,66 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69653D984;
-	Wed, 14 May 2025 01:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC9D204F99;
+	Wed, 14 May 2025 08:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747185430; cv=none; b=sfbN9WxxUCUkOIrCzHihjlUbXqBsxcPnZr/7H0OtxfHYoyY5Rw2gCUajjwgOZXT5FrxG66YwtKPjV6KuAVeEaTsbNtBH7JEWr/oqoT7z5+26H5v9Wx6b+b3llKm7MJE2i5J5ta/9B+fzlcF3CbmE/2WuhBfah6uUL8/sq8QCnAM=
+	t=1747212684; cv=none; b=i0dV/YR+AWXztX5lxPDu+l8QWuI/GaJN1kxca0BTo+UcIplx5z8C3Vxg6xWlpcrS/Uz2CipiCbo/eCssDCmdyo+9O9Uipk6LOyvb6yZNGeZTgflA9wC3vYBl3uKTWvLz4ZblEqSV5o5mogau23idKUUOtnP43EmqQ/gZItHolFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747185430; c=relaxed/simple;
-	bh=nSrQLIIz5NOYeKv3kZaGWloZT+mJKQ6M7Z/Z39vrA4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G9kttIrdSA4BDmVb5XdFaZEMNhbM2TFE/BCTLdNvhS9bdCu9yPsVwDdMf4YwRInw0NCporIIXmqAdbawdcXWTy5Um/JyMIqPhpdoNGTqqFTI+CYzvpKW7223lLJBwwNvGJdd6PNfm2Q4LUrrjfw7i0xL9loKMK45DiQSxGwnjko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWdg4JyX; arc=none smtp.client-ip=209.85.219.53
+	s=arc-20240116; t=1747212684; c=relaxed/simple;
+	bh=JiAiQjNJuZ24gKYWQrxFS7VMAB0adN2kRwbSwer10rs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lPOYL5SjzRR/W0htbAZ/9lwy8gZikcuizRwBhD/LRRtG4He91S2acoj1t/lPoFs4BUtZgIetVEA762H3ZrIWvlNQj2knmh676fju2tSYA46dq5okoGgIsaCXkPbpokV2baTHC8xG01Zq9lUaZIkV9BxUtLeDd1KeJcDFRwrWJ/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2dywBlz; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWdg4JyX"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6f5373067b3so88991426d6.2;
-        Tue, 13 May 2025 18:17:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2dywBlz"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a1fb18420aso4587943f8f.1;
+        Wed, 14 May 2025 01:51:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747185427; x=1747790227; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nEaVOh/9lfsZXQCmNPE6lSqX4P2H8nzTwz/gMp/qKyg=;
-        b=NWdg4JyX+k3PGBStFbWwTw1A7SF6FnE9w9WR1oBl0IbO9YbLgS2Ym+ChmRdGA4m/2v
-         n40tn5RWhUDlCWOgzfKW4zUHDJxN3ZsEvYhXwsTQyWwsEpa6rANqgJLMmWJwzKKhx+2H
-         hU5/XxuGbjtVtCrRVWLAT2mqMxxrvNNw5oQJP860lF1E2BRAyiUNFBQERLqHBwK7KOj9
-         KfHdOxxsSmAsrlxZLZ4guj11L/WDGN03utEM4U5LXkj5ykiyzy8aLxwsbVSgACr6Fzw6
-         G8HGT0hDFqp74ZbLsoDrf92l2HF4X7ZX7xj0wQpf8WeQByz/O32qkD6HsmbQ0EtJWuDz
-         OBOA==
+        d=gmail.com; s=20230601; t=1747212681; x=1747817481; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uwTuwiO0RezGpL8y2KLoL2zHlsfe9yOrP+auJU9r1M4=;
+        b=l2dywBlzKJ07+UePa6xSm9ouM6wM2jgyuZDL4erm2KnW1QV+PQztlmk8X6DjVg9fHf
+         QA7QA80sFck/dFzRqAzZANyh2tjvK1FL6R4DdP21J/v07oRGfVGUv0XgCCGok+YXHU4b
+         XHsyKNa/xrwXUrzzI7poeiHrRD6hcoZk5GhNhD/u2LEkRUcPAMS2NNOkhofh0/epkM2J
+         SOBcBYc/VTnncXifg2v47yZ4NWZ7CWwiWLKkvowFGjiso4KsaoitdnElGBlO5MKYFqsM
+         1qZFnNyYhN9wIVYg4OV37/pbLIFyfAgEGE1q3vQqIIfdDP+cjM+Dwxa9jsQSUcRoWSAL
+         9CyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747185427; x=1747790227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nEaVOh/9lfsZXQCmNPE6lSqX4P2H8nzTwz/gMp/qKyg=;
-        b=E2e3kNPUAP/9tfAE7ICVzc2YXe76mmfk0H1AbOhmoU+miWI8fAbDajTdSMvHMCmHs3
-         e0A8iZ7U2vt6rfSX+uSwVjd2S+1osy4qOaYbMXX4OWyPeC8RPd6tPuYke0JRgaeARp9v
-         EDpGNHILYg95mta92hohu9MFiNyfPtg7xOa9LIFrN1g/PZfekMYDUKYgHXF3pBO928v/
-         HjjjmXsWFSrseB2snmRJtCNSisb5Ipe+d+04V8fPSskBvfGntIV8DvF56alb0AV5YY82
-         xF9ovAtxzmmVhxSJUPTepA19aDggQeMTepmgxypPtUv8ef7WrsxxvY8Ol88LzdoJDhyW
-         zT/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUdzOOHr2ij+GdVONp47UVhytscV3icsMi1tdqCVQbVMQA7kt1gaZWQyTXqNlfBlOhnwLYVVaPU7IWY@vger.kernel.org, AJvYcCVjn13RECH4tglXPaDJDuMYX+qNMVmKEGiBz2+ZjunfYPZDeQYiLVkAYFjq+5XLWTtP/NRJP6lktEIKnQLn@vger.kernel.org, AJvYcCVpEiOlSllR1f6W4SpjBG7nkUT/4ihMthXxrPlNvv0kvilJXJJ1GyS9hDcG7FhG8iyAoirSM6OTHHM9@vger.kernel.org, AJvYcCVpigvjM6nC3jsaWFQ1fSvDWkM1BAaxbxP/0SVP/u0k2j9ztg6gavanyG8BTQmmU0WnDUCIHS03JVai@vger.kernel.org, AJvYcCXhminsnedlBW3vF7JvAO0IGqGISrcNIZrMBMMrPr3e1kDJl9YibzxgnluSDHfH23jBIci8Xzhj83EDlVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyry1cmqnmo1rSGHOU5znnjYgaD+CceGxCAJWWSQ+EY7U+B488J
-	eyJotgQ0msaqSeS8WVpodfZamOXj/Wi+Mh8MrOxzvtPpvtTF7RAF
-X-Gm-Gg: ASbGncs+XNjovWJGQyftVMo+1Ys6K6pFLMgfB2BXbRupm9x8IbgOCeyhkOKmheuKlpX
-	+gGuX43KEC82fG0VWmmT+aRlU2FrfZbRrxQYqfe5s82aQCTorhpHZvvFJoEBfzYMgT2Fy5GWjkt
-	/TzPgNlyabfWMa77M/mPaVndE61+z1d5Q9MzvRzcjdpB8nQo5GzAZXkNkNJ7bk4cYlVWkwoxbIM
-	5Bd/zdFhWBHC3wr0qfPIny/SxWfJXRpNn3Ha5gvqWQmJC4S0XEFMX1ZZpaJ0WAsQqdiC2LRcR0O
-	VYoo3bbPD/9DzG7IFSWpNEY6vkI=
-X-Google-Smtp-Source: AGHT+IFq80xt7wr+N4Is1nsHfkVqlHuQBXPmL2/8vRvaUgO/7OiqL00yD+wmu1pLVR3Zg8H9LoV5EQ==
-X-Received: by 2002:a05:6214:2468:b0:6d4:238e:35b0 with SMTP id 6a1803df08f44-6f896e4c936mr24184336d6.17.1747185427543;
-        Tue, 13 May 2025 18:17:07 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f6e39f588asm74175596d6.49.2025.05.13.18.17.06
+        d=1e100.net; s=20230601; t=1747212681; x=1747817481;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uwTuwiO0RezGpL8y2KLoL2zHlsfe9yOrP+auJU9r1M4=;
+        b=c90zss4PHZm4Taf6kAWYiHthLtrnjf4UES0oMa59x7HBp71MYfUJkBjTG197OFQU0B
+         8p6ieqtQkGTlbgC7Ow2Q1WB+UhJ7RbL0LY5o627e0xfEtNO2EKQmePyYMr6etk5t9D8N
+         BRSrAAHDva0uVZkJx5UZhxRAJkUXHaSNL7IdHu14Cak2XGt7mOqPikLV5f9pcNTaCzbv
+         LSJI+mELUyVpyGIB/uLDkm9ERyLAl+/lYjz/O5itDvW7MAFqz5ihf7DsSxBXlWfSboat
+         CpOem4FxFiEB2tO9AX7CV0DCQk+lj3FTdLcX6WhLb9uRZ/HJSHY9kojk0202K8JrRcO1
+         PssA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPEUJadsFFMY0t5QRbcMZsMAAwGBYPUhuH0iXYQlmfe+uJbZdGI1jNijM9nsgmOXi6PH5rYJUpX1/MFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkR6VRQLs37Dv/IDT+HkGa7E9/JcTkstGZgJXB2SimBoY4Tams
+	aAMjwGBGSbodq/1kB36lpZrTcLV3vKJLmLUFM1uarzyInpJW+RgN
+X-Gm-Gg: ASbGncsY2jEWqn3Behbr3heMAtlx49LXmk6jO6mOvWWp62uqB5IBma1uy8kNLRgT3Oo
+	TMjdJRX/kEu4tStapbPcel0rLCO0BnZKSA/nE2FkhE75ZmTs+TckUsBCclDLVHh7DjK/W39Zvhv
+	WvEk/z8Ag4CD9P4mq/eHqQmKLK4C3Bcru98JnR+png6yDYGj0vOBbI0JQrHfTpEpQCRsxilWez7
+	2SDvaCTV4h3GG5dgBusq6i9QUlfh+9euGXTczMven0UyaX5C/3P78H5K9rOcREYa7gsK2wt8568
+	wr9lFqvDoYM9bayCeLIMyA8p34LDQtJec36UsFlqLz1LIKfsCk0=
+X-Google-Smtp-Source: AGHT+IFn+wdYZm/JO2PEbWTM3UyxmLPVI5Atb7bVxxVXxA4J2E/IMnmzP1HdVeyoVLSg+Fpxiw+n4g==
+X-Received: by 2002:a5d:43ca:0:b0:3a3:4b9b:f0c2 with SMTP id ffacd0b85a97d-3a34b9bf138mr948644f8f.59.1747212680804;
+        Wed, 14 May 2025 01:51:20 -0700 (PDT)
+Received: from Red ([2a01:cb1d:898:ab00:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2d2c8sm19014642f8f.61.2025.05.14.01.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 18:17:07 -0700 (PDT)
-Date: Wed, 14 May 2025 09:16:35 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Inochi Amaoto <inochiama@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen Wang <unicorn_wang@outlook.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Thomas Bonnefille <thomas.bonnefille@bootlin.com>, 
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>, Jisheng Zhang <jszhang@kernel.org>, 
-	Chao Wei <chao.wei@sophgo.com>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>, 
-	Longbin Li <looong.bin@gmail.com>
-Subject: Re: [PATCH v2 02/10] dt-bindings: timer: Add Sophgo SG2044 ACLINT
- timer
-Message-ID: <g45xqtuit7apkduwsfsmw7giqttrb7kjtobejs44rtslx37ynp@ugic2medlczo>
-References: <20250413223507.46480-1-inochiama@gmail.com>
- <20250413223507.46480-3-inochiama@gmail.com>
- <aCNYItP6SWImMvFv@mai.linaro.org>
+        Wed, 14 May 2025 01:51:20 -0700 (PDT)
+Date: Wed, 14 May 2025 10:51:18 +0200
+From: Corentin Labbe <clabbe.montjoie@gmail.com>
+To: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Subject: w83627hf crash when loaded on ARM
+Message-ID: <aCRZhtgOKC7kCPG6@Red>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -87,22 +69,71 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aCNYItP6SWImMvFv@mai.linaro.org>
 
-On Tue, May 13, 2025 at 04:33:06PM +0200, Daniel Lezcano wrote:
-> On Mon, Apr 14, 2025 at 06:34:56AM +0800, Inochi Amaoto wrote:
-> > Like SG2042, SG2044 implements an enhanced ACLINT, so add necessary
-> > compatible string for SG2044 SoC.
-> > 
-> > Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> > Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> > ---
-> 
-> Applied patch 2, thanks!
-> 
+Hello
 
-Thanks, as you take this patch, I will drop this one in our repo
-to avoid duplicate.
+On my sun8i-a33-olinuxino, when w83627hf is modprobed, it crashes:
+[  177.854109] 8<--- cut here ---
+[  177.854166] Unable to handle kernel paging request at virtual address fee0002e when write
+[  177.854189] [fee0002e] *pgd=00000000
+[  177.854227] Internal error: Oops: 805 [#1] SMP ARM
+[  177.859231] Modules linked in: w83627hf(+) hwmon_vid dm_crypt twofish_generic twofish_common serpent_generic sha3_generic jitterentropy_rng drbg ccm algif_aead cmac cfg80211 bluetooth ecdh_generic ecc ctr axp20x_usb_power sun4i_backend axp20x_pek sun4i_frontend des_generic lima drm_shmem_helper gpu_sched drm_dma_helper aes_arm_bs sun6i_drc aes_arm snd_soc_simple_card snd_soc_simple_card_utils sunxi snd_soc_core sun4i_gpadc_iio musb_hdrc sun4i_ss libdes ac97_bus snd_pcm_dmaengine snd_pcm snd_timer snd soundcore iio_hwmon
+[  177.908280] CPU: 0 UID: 0 PID: 7279 Comm: modprobe Not tainted 6.15.0-rc6-next-20250513-00001-g1d1183a441d8 #64 NONE 
+[  177.918890] Hardware name: Allwinner sun8i Family
+[  177.923593] PC is at w83627hf_find+0x5c/0x234 [w83627hf]
+[  177.928953] LR is at w83627hf_find+0x4c/0x234 [w83627hf]
+[  177.934280] pc : [<bf2ce05c>]    lr : [<bf2ce04c>]    psr: 60000013
+[  177.940544] sp : f0e61df0  ip : 00000000  fp : c2236f00
+[  177.945766] r10: c918bb90  r9 : 00000000  r8 : 00000000
+[  177.950989] r7 : c2236f00  r6 : f0e61e0e  r5 : ffffff87  r4 : f0e61e10
+[  177.957513] r3 : fee0002e  r2 : 00000000  r1 : 00000000  r0 : c8dd3640
+[  177.964038] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+[  177.971172] Control: 10c5387d  Table: 478dc06a  DAC: 00000051
+[  177.976914] Register r0 information: slab kmalloc-64 start c8dd3640 pointer offset 0 size 64
+[  177.985375] Register r1 information: NULL pointer
+[  177.990086] Register r2 information: NULL pointer
+[  177.994791] Register r3 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x30
+[  178.005498] Register r4 information: 2-page vmalloc region starting at 0xf0e60000 allocated at kernel_clone+0xa4/0x384
+[  178.016203] Register r5 information: non-paged memory
+[  178.021257] Register r6 information: 2-page vmalloc region starting at 0xf0e60000 allocated at kernel_clone+0xa4/0x384
+[  178.031955] Register r7 information: slab filp start c2236f00 pointer offset 0 size 136
+[  178.039976] Register r8 information: NULL pointer
+[  178.044681] Register r9 information: NULL pointer
+[  178.049386] Register r10 information: slab inode_cache start c918bb90 pointer offset 0 size 384
+[  178.058099] Register r11 information: slab filp start c2236f00 pointer offset 0 size 136
+[  178.066203] Register r12 information: NULL pointer
+[  178.070996] Process modprobe (pid: 7279, stack limit = 0x80574f80)
+[  178.077179] Stack: (0xf0e61df0 to 0xf0e62000)
+[  178.081539] 1de0:                                     00400000 00000000 bf2ce234 c1f6fe00
+[  178.089715] 1e00: c794abc0 bf2ce26c 00000000 00000000 00000000 0000002e 00000000 00000000
+[  178.097888] 1e20: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 14ef0d3e
+[  178.106062] 1e40: bf2ce234 bf2ce234 c1f6fe00 c031ca28 00000000 00000000 00000000 00000000
+[  178.114237] 1e60: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  178.122412] 1e80: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 14ef0d3e
+[  178.130586] 1ea0: bf2c9940 c8dd3f80 000d6b18 c2236f00 c1fa6350 c03f2794 c2236f00 c1fa6350
+[  178.138760] 1ec0: 00000000 c2236f00 000d6b18 c03f4860 f0e61ee4 7fffffff 00000000 00000002
+[  178.146935] 1ee0: 00000000 f0e73000 f0e76ca4 f0e77768 f0e73000 00009230 f0e7bb50 f0e7b9a4
+[  178.155109] 1f00: f0e78c88 00000c00 00000f90 00002560 0000126d 00000000 00002550 00000029
+[  178.163283] 1f20: 0000002a 00000027 00000000 00000017 00000000 00000000 00000000 14ef0d3e
+[  178.171457] 1f40: 000000d0 c1fa5f40 00000001 c03f4bc0 c1fa6290 000d6b18 c918bb90 00000000
+[  178.179632] 1f60: c1fa6290 00000000 00000000 f0e61f6c f0e61f6c fffffffc 000a0000 14ef0d3e
+[  178.187807] 1f80: 00000000 000d6b18 000d66d0 000d6b18 0000017b c0300324 c794abc0 0000017b
+[  178.195981] 1fa0: 000d4c94 c03000c0 000d6b18 000d66d0 00000003 000d6b18 00000000 000d6af0
+[  178.204155] 1fc0: 000d6b18 000d66d0 000d6b18 0000017b 000d6af0 00000000 00000001 000d4c94
+[  178.212330] 1fe0: becffaa0 becffa90 0002ef30 b6ee6300 80000010 00000003 00000000 00000000
+[  178.220500] Call trace: 
+[  178.220539]  w83627hf_find [w83627hf] from sensors_w83627hf_init+0x38/0xdcc [w83627hf]
+[  178.231022]  sensors_w83627hf_init [w83627hf] from do_one_initcall+0x58/0x200
+[  178.238190]  do_one_initcall from do_init_module+0x54/0x200
+[  178.243783]  do_init_module from init_module_from_file+0x94/0xd0
+[  178.249805]  init_module_from_file from sys_finit_module+0x1a4/0x300
+[  178.256174]  sys_finit_module from ret_fast_syscall+0x0/0x54
+[  178.261844] Exception stack(0xf0e61fa8 to 0xf0e61ff0)
+[  178.266897] 1fa0:                   000d6b18 000d66d0 00000003 000d6b18 00000000 000d6af0
+[  178.275072] 1fc0: 000d6b18 000d66d0 000d6b18 0000017b 000d6af0 00000000 00000001 000d4c94
+[  178.283243] 1fe0: becffaa0 becffa90 0002ef30 b6ee6300
+[  178.288299] Code: e5943004 e3e05078 e7f33053 e2433612 (e5c35000) 
+[  178.294391] ---[ end trace 0000000000000000 ]---
+[  178.299008] note: modprobe[7279] exited with irqs disabled
 
-Regards,
-Inochi
+Regards
