@@ -1,191 +1,303 @@
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010009.outbound.protection.outlook.com [52.103.68.9])
+Received: from clean103.mxserver.ro (clean103.mxserver.ro [176.223.125.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647AA10E3;
-	Thu, 15 May 2025 00:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.68.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747267418; cv=fail; b=TDAIw3iY7B1IDhgdHMW61Xadpp4GOvQ2iqS8+Xu9HKRHeRhdxIQ5U5M8U40NwI89mhdwh24AgMUxJZwdoX5l1Sumti0xM+E91MDzNs2Y9I/XIguuHQKbNdkDlM7aMz3Rlw6bqcHihQlGuwv/jUcpu0VmTqkIkMTlo9rR5UTg6iA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747267418; c=relaxed/simple;
-	bh=75Ug1xlnmSAfi4u7MqBcZT3i04RGVCncoLtlw3bIdbI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TpN29361+nOpF6uC1eIltdHWCLoUuhn5tNxs3nkJrksZtbZ31p5KGj4r25d57pus+KfDvk6jeRhHZKOkWobytJf0SCrdxKVcugHsIq8663miCEvUAg297KZambOosxAKUcdd9aJ7V/1cjX4FBIaszRcxIbyGYArGiw/JnXkcOwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=baCfs1Tf; arc=fail smtp.client-ip=52.103.68.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251F22874F6;
+	Thu, 15 May 2025 08:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.223.125.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747297048; cv=none; b=XTqIKe4qnuIAai7EXUWnWAX/aiMmTf5nTSvqGIzRCBHOsFC5pMKKsdJVrj0HB9UGSFv/N6Xx4BOlV9iU/qYeICkayRz/HRWywq0OoFgE6KjMAukA5DgtNxyJKSgukSB9LIbEorUyvKhhO2fWvrgMQnOszehL8vSoDhNxKsxYCpM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747297048; c=relaxed/simple;
+	bh=59EvuJKTItg/MQf3XkZzL1WEDvsOtpA/YLaURewi72g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SYPIwsCLWj0W6J99xTF6Qoo77EN0ru72AvIxq4SnyCHfNa3kKDROyygwLlpnKAKJOwkiqpPwCmnO35DcY+xYq/3CB35abvpCLezcO3uGwN7WkfgMJZgfG93r+LgxNa3daTF6og+OxUqYuSZroVo+4cDJ79hGs4aORIhE8n3TRg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro; spf=pass smtp.mailfrom=taladin.ro; dkim=pass (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b=KRYbtfwK; arc=none smtp.client-ip=176.223.125.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=taladin.ro
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="baCfs1Tf"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PAMlKBZ1KwVilGHAR9/XZGX6qLkE+y33RnTwACcozdWwNLYqRTPmIC+KY1VTO3L44FKqgGJABOvgmIG/A1pczxaCnjbVACKhU4O/8XgYr8o8MazGtuh03gDIVZoKzNuit09DZHwfCuwqKDCyXIYGuBVojsbfq5tjWUTM0/UqLc4PMJ/0/bLLUU3biu8HLZ+rmGZP3QX4ipi6OriyUujuKMPEk0K7MFuJe4cRaTminlAphSqD0RPIv9eXqJGtcBd6bVYxuBLWfj+uT9fvV2uNudoCeSAoAhjVQipCy7AjWaV0EYdbGlkGEMUww2eah6qjDNFnwb6G/BEPg1rH3VDSkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n1kXJLed8108yXDUW+d0MIhE8HONk53CeM8yQyJ4dZc=;
- b=N8WxSpvXC6vLI0cKRFtQMGlPAFsJtJkqLugXw1DplA3mrN9ByOwCLreDsf+90S9PoXUJ5KngSTLa99ebQWHYybHF7b9Bnd0oQmlMyGFkPB0GnJ52t7xt++QisppTf7T+v/h+aIESGtbt1a2spdjCgpLgrU2l5kHp8nKrvSgp2sOgqm8VbB6gEb2i6Q4WjC9h4IQLeXzFCY418oFxTzSxoNIldiNo5+VlZzshoBkCnwrlVRODa/7fjMIb2Zgafdjes4D30V27j5/nelBdtvSQidhnfUjyWxM/kiSVvj6bdcb0ROuiHlNT4kH8VgW/DHTnWv6KhHuD5nrjnZJXX4CskQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n1kXJLed8108yXDUW+d0MIhE8HONk53CeM8yQyJ4dZc=;
- b=baCfs1Tfh/ioDXobK1yH3QoROMysac59Mxcq/jRckOsXR4FtynVLhzLYrWeIYt6gsehrFAjnzuQCJwmGStcJVBjScC0zJ24DhkkzwY9YizEwSnlcSB27EwzP5plD37u6RsUHo9zTPjxFSteCsrBPhhHWE+9TlqJKvSlUwTQ0qPJW3Gu0T0nPEfECs7/lxmTmMx8TvBi6gNieKhQwUixKfY26wswjOIsTElmuotZw9BOFxhFgAIfZmwxoe3p2YpiTGcInYXMER47JtDdSDW9w/l3tPyLCg8Lw2plf1Dn7hQqI+SPnoQh4l0lqlBVUdfAfk2uWueR0ycfpYkB3C4lZuw==
-Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:100::6)
- by PN3P287MB2154.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1d4::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.31; Thu, 15 May
- 2025 00:03:25 +0000
-Received: from MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- ([fe80::ca81:3600:b1e4:fcf4]) by MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- ([fe80::ca81:3600:b1e4:fcf4%5]) with mapi id 15.20.8722.031; Thu, 15 May 2025
- 00:03:25 +0000
-Message-ID:
- <MA0P287MB2262A447A98778BF4BC3DB2BFE90A@MA0P287MB2262.INDP287.PROD.OUTLOOK.COM>
-Date: Thu, 15 May 2025 08:03:19 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/9] dt-bindings: timer: Add Sophgo SG2044 ACLINT timer
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
- Inochi Amaoto <inochiama@gmail.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Samuel Holland <samuel.holland@sifive.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Philipp Zabel
- <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>, ghost
- <2990955050@qq.com>, Jarkko Nikula <jarkko.nikula@linux.intel.com>,
- Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-mmc@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
- Longbin Li <looong.bin@gmail.com>
-References: <20250407010616.749833-1-inochiama@gmail.com>
- <20250407010616.749833-2-inochiama@gmail.com>
- <aCSmNRTVXQ51xj0m@mai.linaro.org>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <aCSmNRTVXQ51xj0m@mai.linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0017.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::19) To MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:100::6)
-X-Microsoft-Original-Message-ID:
- <2f8587c7-ac55-46a3-b89f-a48dd6d23edd@outlook.com>
+	dkim=pass (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b="KRYbtfwK"
+Received: from cloud347.c-f.ro ([185.236.86.218])
+	by cleanserver1.mxserver.ro with esmtps (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <asoponar@taladin.ro>)
+	id 1uFTmD-00H1kv-CP; Thu, 15 May 2025 04:17:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=taladin.ro;
+	s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=5qQNra+2Cp8u7mp46CFqnKOn4bpY4tOymWLSppXXVgQ=; b=KRYbtfwKrP5JWyHDZyJ+LsM4TM
+	ko5g12ztP9SwDdjndz/buqYuuXqDtqQKnyiflgq1UFxBOSmPhitIHUzGy7mnvtCpjhWfUFb4HS/tJ
+	42duJd6hAlw30bu+iN8P2nlho9hCXMaOZRAr2n5UDKEXPuNynFscveZyrfzzFXNsIFO/7gD3iA8ah
+	6q5P4UCrT4W51CgWGbrMQt8l9K9UUD2b/O4TrMOVwzdr+cCYBeOKx827YWv6uPZdNtR9lu9Yeznpo
+	xU4hKjixEQ3bnAo/kHGe6LBvh3j5b4IDagHVH4teVi4MqB7Pq1UaomwKl/5hiUEDLeyiDWHRT5TNA
+	UTH0G8mA==;
+Received: from [109.166.137.172] (port=55940 helo=localhost)
+	by cloud347.c-f.ro with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.1)
+	(envelope-from <asoponar@taladin.ro>)
+	id 1uFTm3-00000006qMV-1X5D;
+	Thu, 15 May 2025 11:17:12 +0300
+From: Alexandru Soponar <asoponar@taladin.ro>
+To: linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	jic23@kernel.org,
+	pavel@ucw.cz,
+	lee@kernel.org,
+	baocheng.su@siemens.com,
+	wim@linux-watchdog.org,
+	tobias.schaffner@siemens.com,
+	angelogioacchino.delregno@collabora.com,
+	benedikt.niedermayr@siemens.com,
+	matthias.bgg@gmail.com,
+	aardelean@baylibre.com,
+	contact@sopy.one,
+	Alexandru Soponar <asoponar@taladin.ro>
+Subject: [PATCH 16/16] lib: move find_closest() and find_closest_descending() to lib functions
+Date: Thu, 15 May 2025 11:13:32 +0300
+Message-ID: <20250515081332.151250-17-asoponar@taladin.ro>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250515081332.151250-1-asoponar@taladin.ro>
+References: <20250515081332.151250-1-asoponar@taladin.ro>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2262:EE_|PN3P287MB2154:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93aab453-f537-4a42-65f3-08dd9343e9cd
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799006|6090799003|8060799009|7092599006|461199028|15080799009|5072599009|1602099012|440099028|4302099013|3412199025|10035399007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?QXdRYzBMS0tYRkJmYXpBVGx6eTdEU0Rqd0h5MS82UTZqRUowUTQ2WVhlajRE?=
- =?utf-8?B?Ym0zbHFmYXg2WUp1QWp1VFVRQ1FQWDk5cXk3aXVEVENoMlArSzBkWm9pbzda?=
- =?utf-8?B?bmNQSWRjTE5pcEM3TE5TWW8ycEVDL0tPU2E4MlpWNEp1VW1yVE1sNXBsWUtv?=
- =?utf-8?B?dzBKWUo3c3hwZTRRb0NMZWhFSGxnd0JLT2xaNU10dHRBcnFLaFhaTGkwdDR2?=
- =?utf-8?B?SGEzN2ZVd00zc2lGK0ptV2R0ZEZPUTE5TS9TTkRPS0NTa3dkQW9PdmtxaSty?=
- =?utf-8?B?WU9JYVRuRU41dmpOSmlwYlhLQlR1cjdUV2JJZjU3Sks4cElrMy9NdWMvZ0dj?=
- =?utf-8?B?aEZxMDZvY3FDMU5mRFZtTEIxUElrdHRWKzdsTHZDYVRGTW5rVkJZRnl5aFlm?=
- =?utf-8?B?dFo3WnB4M3ozdGVHTnZoeGJKRXlnUmJSZXdUTmRFb3pxLy94enNCK0I4RGtz?=
- =?utf-8?B?bGV4WlBtZmxaN2V5enZNRXo4M1pYaFIzaTUwYVhqcmlHYnM2aWZpQS9NVXhk?=
- =?utf-8?B?VUUxTTFwRWhVSUlpQm96dkttVmM4TGJwcG9qNDF4OWd3OWE0blFiK3dNZjZ5?=
- =?utf-8?B?YzRxU0JGMDgzS1NRdTNOSXB1dDBuR3RncmlRd0xNTDJyaTRSMDdqRTFsOEdB?=
- =?utf-8?B?bkJtWFNjcFpjNzR0K1U2VEFDRTMxUzNVVkNBYkVPRzhvMTcvWjhHUlBwWHhT?=
- =?utf-8?B?S1VVamZBNm5hc3l1MXRVeSszU0cvaEtjdmlBam5nQ1JIcXMvd1dNU0lnWnlm?=
- =?utf-8?B?c21VMlFIcDB4ZWNVTXRPMGRTZ3lLbmppRk9FOVdLOXBwOXFpV2ZvbWhubEVE?=
- =?utf-8?B?L3BqOHdOWGZSOXcwZjB2TDRpTUd0TVhGcHJnYXU0UnJwRVgxNVVMVllhUXJa?=
- =?utf-8?B?VmhiY052cXowMXFEMmExclRmQlJydDhRVDE4MVRmc2ZIdS8rWGNyOEk1RXVn?=
- =?utf-8?B?R2NWbFBsbEJwZHVnaXFKZWtETHQ4R3V6MG96VUt6emM1SThkQ2hmQkxjWGJB?=
- =?utf-8?B?ZHp5SmVUM0taWHQxalpaN1JNSllpZkdqY1U5VU9Xb29jY0xZc0VzU3pwU09W?=
- =?utf-8?B?RnZFblF1bjBMaUxtbTV1NWtyZ2hnY296RWZQTUVSbmtHcnNhTU5wQy8zQzBD?=
- =?utf-8?B?REZPUTdZN0dUaHNxUWZuWVZxa3lnRU9WNUVhTzU5SDV5bGxhaXZoM3dmRFht?=
- =?utf-8?B?akxOVU56blk4TUp4TUd5UDVMcjFFNml6ZnBxcExyWnVmOXlsS3ozR2QxSnhI?=
- =?utf-8?B?b2U4MzNCMXBYMkpQVUNJcE9DK2hvWWdYOGY5NXU3QkJmU2ZUWmNubnI2bFFa?=
- =?utf-8?B?U2RVN3pHRWRhUm05aUJBSlhKdStTRTdPb2ZyYVRUKzY2T0l6d1VsMmxGZ1Zk?=
- =?utf-8?B?OC9JbWNkOFc5V2xlRlNDUWRtSDVzemJnVGhsYVRWTlAvYXFiR3NwR3Jtc2c2?=
- =?utf-8?B?bjZWS1ZKMGdmK3I5ZitEQTl5NmdFeTd1aGNRNFo3SFlpakoxOWZiQnhKbE9U?=
- =?utf-8?B?cDdZSEF2bHBxK1FqamdKNG51d3VSVjMvOGlyR0JOeUV4VXg2aGxpQm1NU05j?=
- =?utf-8?B?UjErem50elBpSjdUbU91NzlPc3Y4ZHRWQTlzV2RvSndPd0pqNS9tZ1JRWWxT?=
- =?utf-8?B?N2RweElETUJXZW9QeFhxN1ZheHpiK204cDZwSDJqL1lrclN1SCtBSy9Oc3ZS?=
- =?utf-8?B?K3NuWUpDSmZzUG0zNEhnMEl4RGZlTE12SGxIaDVjNnhNUmEybE93VjBnPT0=?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cFRSaDd3OXRNS2JENFQwUnZNZXZMMW1xVWErZFZYVldYQXAvM09hQmN2TXBZ?=
- =?utf-8?B?V21Wbkh4a3FKcy91dEdVMjgzZzVyZGRTUnMzNVVTMWp2ai9DRG1JQkgzOFZL?=
- =?utf-8?B?Qk9udlhYWm45RW9VbGRnaXZlT04vMnBRTzM4TGdmMWlYVDdXMDltMEVxWFNX?=
- =?utf-8?B?WlI5ZnZVbkZRSW5UVEZqUkpyOExGcGY3T01heXp1SU96SWxXdnp4UDFiNkti?=
- =?utf-8?B?U0psSHJrMldnMHc5MGkrbG5NQ1lxdG16RGozRUxSbjhKcWc1VktKeG9uUG1p?=
- =?utf-8?B?R1pFVE5YNm5FdnVsNllTZFhXbzk2bTJidWVUUE1OUk9vQVlDSEtPVmhST0Yz?=
- =?utf-8?B?ZkNicmVENjArRHV3NnhIK0hEQ3B5a05lTm9JT1docWlaakNaQ1VmeU5ucncz?=
- =?utf-8?B?Y3NxbzlHMVRtdmJXYWxnd3Y0a3ZoZlIrcVJ0RzRoOTVOS3JRWklkZWNxUzVo?=
- =?utf-8?B?cTFISjhMdzdoamhBbTNPYVBTdHdQUWxaMndRTUVWWHVMNDZQT0o4SFV2c1Vo?=
- =?utf-8?B?YlBJQld2WmJhdVhpVityZUVEenpvMWlWWitLL3JaUXFVTTR3aCt4NTM2RUcx?=
- =?utf-8?B?YzNkYit3R3RNK0hNK1lXK3VaaVJKSEU1VlBYdlpTYVM1S2dhbVMyL0JoZVV3?=
- =?utf-8?B?Nk0rUmJqZWZHQ2JneE1FTWFZYzhMNFpqZnJTdUkvWXVBUHRoTjhJVm5yUzNk?=
- =?utf-8?B?M3lWRVNDTzBhcEd2Vmh3MzlMRVpBVHJ5dDJQTndPV2hlQWVqdGFGdmpERzhY?=
- =?utf-8?B?eXRiNVB5Ry9tdUFQeTgyekQ2enpXc0U5WVVMVFdWVE9aWnhhTzFDZDNkcmlE?=
- =?utf-8?B?L0JweUJRYnVzSnNJS0VNdmNNdW9hMEIwUmNEaG1oaDJ0V0IreU5IYjNkUEdQ?=
- =?utf-8?B?di9IRUcvcE1aYUtLWWdHbVdSOThFNnVhdTJ4SkVDSThVN2VKTTJGcEtUeXVr?=
- =?utf-8?B?dmVOQnQrZXpnbmtIZytlWmFIUGRrRitQVStDL1BBeHpyTlVyY3hqTTVaNlJh?=
- =?utf-8?B?TEtQTGllS1dEVjErbWhpSlpiOFVFYUFGQ285MzBUWC9LQnZMMFh0OEtvN0d2?=
- =?utf-8?B?R3czeVdNODJzRE92Z05IeWd0bGoxNURDSWh4SDBSWFBVeHNaelRMYmNMamdH?=
- =?utf-8?B?OWpnL0tGNm5USWFXQ2FOVXl0VTNUN0xQcTFuTjBTdDJRa0VZYjZKVkJCVW9D?=
- =?utf-8?B?UUNqWjc2Qmo4ZDFPREY4dS9GYW91V0hpSFMwWStFTGwzWU9Oc09FdTYvTVNn?=
- =?utf-8?B?WkJSSE9NcUgrRTgwUU9YcFBJWlRNK0ZyYml1ajQzaGU3OEVaUDVxNnRqMzhB?=
- =?utf-8?B?cjZqMWhUYWo3Tk1sZHFTU2dHaXF0YlExTHB6VTdnMFZCR1V3cndLWEkvbVFB?=
- =?utf-8?B?dlZBelVsdXROQys3NFJzM0ZXdzhneVJ2MDJ2cUhRUXhYejc2cTZlUCtZMzVn?=
- =?utf-8?B?Q1ZvOXM4QmVTcU9JNHZZS2ZibEVOYTA3YmN1RGpMVWtzTnVTU3d6cGYvc3Js?=
- =?utf-8?B?dGFwYzB2T1cyMmdTdXhzTEc3MFdsSkRJNWFSQzZkWUdSSHEyV25UU29HQkJ2?=
- =?utf-8?B?UnhzRjNVWDRFN2h4Ym5tYk1Hd3JOL0l1dFlBdGg3dTdBTlhKQmFyQW1ML2JP?=
- =?utf-8?B?bk5QeWRzdnEwbDlZM3FTWWNEZHlMR3JxTXNYUVE0OHB6S3lJYzNBeFdocFJ6?=
- =?utf-8?B?bTl4d3c5OHBoTEFISUc2T1hDdW9BK0pmd0h5NVFNWEdYU0dhQlZkUjFBR1ZX?=
- =?utf-8?Q?hq1yFoopU7WTXCmhX3CL+cBlQynKVIlWkG+cGz0?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93aab453-f537-4a42-65f3-08dd9343e9cd
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2262.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2025 00:03:25.4295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3P287MB2154
+Content-Transfer-Encoding: 8bit
+X-SpamExperts-Domain: cloud347.c-f.ro
+X-SpamExperts-Username: 185.236.86.218
+Authentication-Results: mxserver.ro; auth=pass smtp.auth=185.236.86.218@cloud347.c-f.ro
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.000242666053139)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT98ZpYtbjLMlHLIMLfKiMBSPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w1OL79HMxE022P+rQy8YAdcSeERs4TOTnIH1kc1IWc5TSx
+ S75yz9IFZiY7BarU/NrpK8SEOwGmfn6ucAKqn/OHRh3BqzFaEnAEj4UixLJBjVNiLZt/QXQnOBRD
+ +jq1HsIBmHTFdhqXZEtguZY7iGKpkcJnJKaJfT+dw1udmv00tbIRNtoyOobb3xnDyRRylAVTYi2b
+ f0F0JzgUQ/o6tR7C8pLPCtTiVLo0r89ClJHDKhDGKgJ+T00JeCnHBmMdB1eMZAyYlfUtEN4pUyes
+ jVRntA/J5DcfwvG53FyVviDO9UET3GKmqv1jT0lY+AQz8YX4CVph7ctC7tRH2SPTQJ/0klTuXKq/
+ B9rqRWsYzNfBLt79i78aPHyWnIqxGMxPZotYvH/es1vXuByXo2bkrYMqq0x5CzaUoJIoBUQayHle
+ UvbvCQmh9x4kn6NeQcRkc6G+OgAcq5x+BzhRyg9rYO6I0H7Q2OEpckvWJAOmdJd77Z9vwc+QHB+X
+ +u7aTqYHtT2CBuxNPBc9JM2jck1NnIBf0tvflhq7Xjhll72AYgnW/6M0ftSpvLIx+X1vKami8KF6
+ jWQ71uVNIY/EFPWeDmcZuFRQy1vmjjPiYw8fUCp0/qY6cmSW9oUDdvKuTRfTGZ6f8nTXoYFaQ71l
+ mMti8uxA0gKVmIzBXtbLDVvAQ/KVNbF0n38s4PnjIiWSgo0iehuSAN5VcIfsMVILjVAz6RZsCHxD
+ lgOJwEwCFaF+62b2lf1UUDu9jECN1V/lwmsioRLmNJoHOZOE/9e5UD715p61XAQw85DCXa0iAPEd
+ fYyrF5wMRSLGyY+i0m2IxQLxQUxLMkCVXN63lz38Up+2UgeFSDBPqdRoFsq0hfzdx0oxkgNI/jhY
+ WFhu7VV+HdWjdZLlmQ5z83qEVVG/6RJ+BW7FmGcwL889DSW2cZWGkIYVQAbHnYkWUz1gRIjAiMvi
+ vM7um7t0SVa5NVZ2g1u6DnOpqk1nwAzTSgytNKIH5lfAuQc8I07FTFcjpdfX/Jcr87en7cKbI0NU
+ afdkQMG+6qjtXoANVR89VM6f75a5kmRIbungV7ywXD8VtmM8wef5C6IkqMFhROX1HYRo9Sm1kZOW
+ saz62DSUUd/fn3Ix/aSqJVglEtnFggTvi4y/qO0sxBxzHDeqqFz43py4SDhdaHkWxEWqfohU+1d2
+ sh7IKZpXLgBCJ476nn5Gmr/PK603nEEgvmn7Dzq8wsrwxhZMoHvqxJYqN+GmyxwR+V15PgePOPPI
+ vtB/lrJsWW29FRnUbXCk3//yGA2OaEkyEoP0Kl1YERWeKKG4PAQYNyavp7c49JwbmBalBK3QvTzZ
+ aymz/kAx9sNOIdFDvUNZLdaRhCZaMx8xtwV1+Gg8ihl6LJV8o3nXKu/l5TM8iMLe4AKyoGlZj2VA
+ 3aW/vPi2AMAbWLs/EIKEbeDIxNYIJ7Ews1OEan6m+UeFXprlCOm3BAEbJtATHIdhc/Osc/lXM+l8
+ 06U7GxUAPGlXms+D1TI22+vIvtmOpB8mDzWv8vBwVi5XkC8ewLVRqANj6mzlzL3VH5WM/aCyI5/o
+ yhoezeIJy3L+cB4hBppwR1r+Bof9KZqCMQkUV4VT4TerS/vbL3R5w07g
+X-Report-Abuse-To: spam@cleanserver1.mxserver.ro
+X-Complaints-To: abuse@cleanserver1.mxserver.ro
 
-Hi, Daniel,
+Move the utility macros find_closest() and find_closest_descending()
+from inline macros to proper library functions in lib/.
 
-Just a kindly reminder. There is a v2 of this patcheset [1], and I see 
-[1/9] of v2 has been picked by Andi [2].
+Signed-off-by: Alexandru Soponar <asoponar@taladin.ro>
+---
+ include/linux/find_closest.h | 13 +++++++
+ include/linux/util_macros.h  | 61 +------------------------------
+ lib/Makefile                 |  2 +-
+ lib/find_closest.c           | 71 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 86 insertions(+), 61 deletions(-)
+ create mode 100644 include/linux/find_closest.h
+ create mode 100644 lib/find_closest.c
 
-Please double check if anything wrong or conflicted.
+diff --git a/include/linux/find_closest.h b/include/linux/find_closest.h
+new file mode 100644
+index 000000000000..28a5c4d0c768
+--- /dev/null
++++ b/include/linux/find_closest.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Find closest element functions
++ */
++#ifndef _LINUX_FIND_CLOSEST_H_
++#define _LINUX_FIND_CLOSEST_H_
++
++#include <linux/types.h>
++
++unsigned int find_closest(int x, const int *a, unsigned int as);
++unsigned int find_closest_descending(int x, const int *a, unsigned int as);
++
++#endif /* _LINUX_FIND_CLOSEST_H_ */
+diff --git a/include/linux/util_macros.h b/include/linux/util_macros.h
+index 825487fb66fa..478d4821f2d1 100644
+--- a/include/linux/util_macros.h
++++ b/include/linux/util_macros.h
+@@ -3,66 +3,7 @@
+ #define _LINUX_HELPER_MACROS_H_
+ 
+ #include <linux/math.h>
+-
+-/**
+- * find_closest - locate the closest element in a sorted array
+- * @x: The reference value.
+- * @a: The array in which to look for the closest element. Must be sorted
+- *  in ascending order.
+- * @as: Size of 'a'.
+- *
+- * Returns the index of the element closest to 'x'.
+- * Note: If using an array of negative numbers (or mixed positive numbers),
+- *       then be sure that 'x' is of a signed-type to get good results.
+- */
+-#define find_closest(x, a, as)						\
+-({									\
+-	typeof(as) __fc_i, __fc_as = (as) - 1;				\
+-	long __fc_mid_x, __fc_x = (x);					\
+-	long __fc_left, __fc_right;					\
+-	typeof(*a) const *__fc_a = (a);					\
+-	for (__fc_i = 0; __fc_i < __fc_as; __fc_i++) {			\
+-		__fc_mid_x = (__fc_a[__fc_i] + __fc_a[__fc_i + 1]) / 2;	\
+-		if (__fc_x <= __fc_mid_x) {				\
+-			__fc_left = __fc_x - __fc_a[__fc_i];		\
+-			__fc_right = __fc_a[__fc_i + 1] - __fc_x;	\
+-			if (__fc_right < __fc_left)			\
+-				__fc_i++;				\
+-			break;						\
+-		}							\
+-	}								\
+-	(__fc_i);							\
+-})
+-
+-/**
+- * find_closest_descending - locate the closest element in a sorted array
+- * @x: The reference value.
+- * @a: The array in which to look for the closest element. Must be sorted
+- *  in descending order.
+- * @as: Size of 'a'.
+- *
+- * Similar to find_closest() but 'a' is expected to be sorted in descending
+- * order. The iteration is done in reverse order, so that the comparison
+- * of '__fc_right' & '__fc_left' also works for unsigned numbers.
+- */
+-#define find_closest_descending(x, a, as)				\
+-({									\
+-	typeof(as) __fc_i, __fc_as = (as) - 1;				\
+-	long __fc_mid_x, __fc_x = (x);					\
+-	long __fc_left, __fc_right;					\
+-	typeof(*a) const *__fc_a = (a);					\
+-	for (__fc_i = __fc_as; __fc_i >= 1; __fc_i--) {			\
+-		__fc_mid_x = (__fc_a[__fc_i] + __fc_a[__fc_i - 1]) / 2;	\
+-		if (__fc_x <= __fc_mid_x) {				\
+-			__fc_left = __fc_x - __fc_a[__fc_i];		\
+-			__fc_right = __fc_a[__fc_i - 1] - __fc_x;	\
+-			if (__fc_right < __fc_left)			\
+-				__fc_i--;				\
+-			break;						\
+-		}							\
+-	}								\
+-	(__fc_i);							\
+-})
++#include <linux/find_closest.h>
+ 
+ /**
+  * is_insidevar - check if the @ptr points inside the @var memory range.
+diff --git a/lib/Makefile b/lib/Makefile
+index f1c6e9d76a7c..e8e738c9ced8 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -35,7 +35,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+ 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+ 	 nmi_backtrace.o win_minmax.o memcat_p.o \
+-	 buildid.o objpool.o iomem_copy.o
++	 buildid.o objpool.o iomem_copy.o find_closest.o
+ 
+ lib-$(CONFIG_UNION_FIND) += union_find.o
+ lib-$(CONFIG_PRINTK) += dump_stack.o
+diff --git a/lib/find_closest.c b/lib/find_closest.c
+new file mode 100644
+index 000000000000..d481625cae9d
+--- /dev/null
++++ b/lib/find_closest.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Find closest element functions
++ *
++ * Based on previous util_macros.h implementation
++ */
++
++#include <linux/find_closest.h>
++#include <linux/module.h>
++
++/**
++ * find_closest - locate the closest element in a sorted array
++ * @x: The reference value.
++ * @a: The array in which to look for the closest element. Must be sorted
++ *  in ascending order.
++ * @as: Size of 'a'.
++ *
++ * Returns the index of the element closest to 'x'.
++ */
++unsigned int find_closest(int x, const int *a, unsigned int as)
++{
++	unsigned int array_size = as - 1;
++	int mid_x, left, right;
++	unsigned int i;
++
++	for (i = 0; i < array_size; i++) {
++		mid_x = (a[i] + a[i + 1]) / 2;
++		if (x <= mid_x) {
++			left = x - a[i];
++			right = a[i + 1] - x;
++			if (right < left)
++				i++;
++			break;
++		}
++	}
++
++	return i;
++}
++EXPORT_SYMBOL_GPL(find_closest);
++
++/**
++ * find_closest_descending - locate the closest element in a sorted array
++ * @x: The reference value.
++ * @a: The array in which to look for the closest element. Must be sorted
++ *  in descending order.
++ * @as: Size of 'a'.
++ *
++ * Similar to find_closest() but 'a' is expected to be sorted in descending
++ * order. The iteration is done in reverse order, so that the comparison
++ * of 'right' & 'left' also works for unsigned numbers.
++ */
++unsigned int find_closest_descending(int x, const int *a, unsigned int as)
++{
++	unsigned int array_size = as - 1;
++	int mid_x, left, right;
++	unsigned int i;
++
++	for (i = array_size; i >= 1; i--) {
++		mid_x = (a[i] + a[i - 1]) / 2;
++		if (x <= mid_x) {
++			left = x - a[i];
++			right = a[i - 1] - x;
++			if (right < left)
++				i--;
++			break;
++		}
++	}
++
++	return i;
++}
++EXPORT_SYMBOL_GPL(find_closest_descending);
+-- 
+2.49.0
 
-Thanks,
-
-Chen
-
-Link: 
-https://lore.kernel.org/linux-riscv/20250413223507.46480-1-inochiama@gmail.com/ 
-[1]
-
-Link: 
-https://lore.kernel.org/linux-riscv/egkwz23tyr3psl3eaqhzdhmvxlufem5vqdlwvl4y6henyeazuz@ch3oflv4ekw7/ 
-[2]
-
-
-On 2025/5/14 22:18, Daniel Lezcano wrote:
-> On Mon, Apr 07, 2025 at 09:06:06AM +0800, Inochi Amaoto wrote:
->> Like SG2042, SG2044 implements an enhanced ACLINT, so add necessary
->> compatible string for SG2044 SoC.
->>
->> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
->> ---
-> Applied, thanks
->
