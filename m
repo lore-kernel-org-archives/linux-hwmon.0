@@ -1,192 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45769155C97
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 May 2025 13:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA15253F17;
+	Thu, 15 May 2025 17:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747316268; cv=none; b=F7/qdwS4mFwxWgp0io88U8HX27+yhjLVYkkurPyIko+YyCwi32B4z5F5o6j0HGd2XdKQ+PRsPT7MPRiWwgvcHs86Q6NMqltrt1KkAvPsH62xE2bowv3yo1uGO4am24yr0WP2GPLpGyh/uXAfwYTa2wTE+YbU7UEzHAStgBORWHE=
+	t=1747329234; cv=none; b=bpyfwGAC91Nb3DjI2KszRyiv6j5KHOxa0LBIgEgVwnTcT6GWZNo2rVQ4o2FAmPkjHwWujokVBrWC6DP1vWYHkRL46xqxuxLmvjLLPbOevLRb2/llMpVde0/DzE4K+RsDuVrMF2ed6t0a8cjH6YuLOCYlHhak1n04uspI1euV2/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747316268; c=relaxed/simple;
-	bh=ZcCXRIcoUBBDWEEzgqjshw4t5N+n8sizKbTc8hoXm6s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=YZs8efwx5cA8gTQ0/jrBp2ctqRv2Nb55vFKbH64qn0jmB1QBRj5eZtiKJZUMumKRz8V2PFwx81jdZxAUtI2YNkviA3eK5Es7AvUVIWx/8lxibFudg7tq6EykGEMTNU/XVKQ8cuzDB7wpkzTruD3sHj8Y9QEOIW77xdwWDMVOpu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8zrJYiw; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747329234; c=relaxed/simple;
+	bh=s+w59KNDaZNiOoDU5/q0UldHUVQeIBR1e/UnvwS/GPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rVME9YVoNmEW514PngCOQFWYR2/5k+gvRcNLMh42YYbY1O/ODSgujVf4vzmIuA4CIKmXXTf+ltBOCT9pLNvbm4lLFzqPyIhL60L95bZqQ01H4RuluSHS3nvK1fMyxnWGfI7a86XJpnsw7ydSfnKN1pcyMiIgzGr+EW9PKaB51oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GOqj+eyH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8zrJYiw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747316266; x=1778852266;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZcCXRIcoUBBDWEEzgqjshw4t5N+n8sizKbTc8hoXm6s=;
-  b=Z8zrJYiwGBSuO2o9ABa3D3R8tht+GPPZLcK6RN6/kzAIgd2282urfqOd
-   yFQzYPYEwa2BJ52n0AI/QZQ7zdzmxnF4IkgyarbCXvY2WLNYl00+u7AMN
-   U3KNaK7W8rXfNV6Ys/iSk5Jihdz9jeAb/G4qCmQJjQ0v31nHq4PAJr89i
-   HpakP4ABG6B1Gsi69Wm2ZdEvrdKDja05gLDjCWZ0Pkr5Fa1onBQ4mgESQ
-   GaXwNFKqd+jSI2lhxRg9n0a+4ENIake4vKAp/PE+XeojcqpXRzSqxlepy
-   VLD1Pa2fZ3mULwI46swjRyuqS72c2/W9TXnzeSuR6xLHd4cTw6dmTyRew
-   w==;
-X-CSE-ConnectionGUID: c2k3EtroQeq4/ABqQV/OqQ==
-X-CSE-MsgGUID: wmB4d8kLShOv1SUFBhBWDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="71762313"
-X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="71762313"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 06:37:45 -0700
-X-CSE-ConnectionGUID: 9dj9YFSyTQmKkMhegNDDqw==
-X-CSE-MsgGUID: tq9hU9nLQEiBX9gOBQCryg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,291,1739865600"; 
-   d="scan'208";a="143478851"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 May 2025 06:37:44 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uFYmL-000IPt-10;
-	Thu, 15 May 2025 13:37:41 +0000
-Date: Thu, 15 May 2025 21:37:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 0ddce5549012a3f3b9ddcf59822aa0d1be61e8e8
-Message-ID: <202505152110.xLQHiLX4-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GOqj+eyH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22BEC4CEE7;
+	Thu, 15 May 2025 17:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747329233;
+	bh=s+w59KNDaZNiOoDU5/q0UldHUVQeIBR1e/UnvwS/GPM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GOqj+eyHYtGdpVurCumeppr4T1Laoo42tzXHTWNtnXwwQpjFB27BNaJ5Wz0kpDl+n
+	 aOSWMSQYZenW3j80+uQ2B5QbTOpBvUI5IY8s9fdBvSrO9FIqnXMbAVlTe7h38/5ceU
+	 6qw+kSN+wVh1PNtsKw/al2TPEYXi8Xl1vLeW8ZCnckltjYflA2vUXLJiFUdcJIlE4O
+	 WaFGaT8QO1dW9/nsioLIbQTmcO9ta8D44CsJnkkBQbxVGotNmtdAikAakArq1RU55m
+	 SgYlXoAQPLYBvVVynQ1eXovYOy6OvOvx9k3NVz8UKlDE53yziJBCTia76f36QkKEP7
+	 okiYw8afp2ztw==
+Date: Thu, 15 May 2025 18:13:44 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Alexandru Soponar <asoponar@taladin.ro>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+ pavel@ucw.cz, lee@kernel.org, baocheng.su@siemens.com,
+ wim@linux-watchdog.org, tobias.schaffner@siemens.com,
+ angelogioacchino.delregno@collabora.com, benedikt.niedermayr@siemens.com,
+ matthias.bgg@gmail.com, aardelean@baylibre.com, contact@sopy.one
+Subject: Re: [PATCH 10/16] iio: ad7606: Fix type incompatibility with
+ non-macro find_closest
+Message-ID: <20250515181344.504143ff@jic23-huawei>
+In-Reply-To: <20250515081332.151250-11-asoponar@taladin.ro>
+References: <20250515081332.151250-1-asoponar@taladin.ro>
+	<20250515081332.151250-11-asoponar@taladin.ro>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 0ddce5549012a3f3b9ddcf59822aa0d1be61e8e8  hwmon: (lm75) Fix I3C transfer buffer pointer for incoming data
+On Thu, 15 May 2025 11:13:26 +0300
+Alexandru Soponar <asoponar@taladin.ro> wrote:
 
-elapsed time: 1444m
+> The ad7606_oversampling_avail and ad7616_oversampling_avail arrays were
+> previously declared as unsigned int but used with find_closest(). With
+> find_closest() now implemented as a function taking signed int parameters
+> instead of a macro, passing unsigned arrays causes type incompatibility
+> errors. This patch changes the arrays type from unsigned int to int to
+> ensure compatibility with the function signature and prevent compilation
+> errors.
+> 
+> Signed-off-by: Alexandru Soponar <asoponar@taladin.ro>
+Assuming overall approach is fine, this change is fine wrt to ranges
+etc.
 
-configs tested: 115
-configs skipped: 5
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> ---
+>  drivers/iio/adc/ad7606.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad7606.c b/drivers/iio/adc/ad7606.c
+> index d8e3c7a43678..41b477ea386d 100644
+> --- a/drivers/iio/adc/ad7606.c
+> +++ b/drivers/iio/adc/ad7606.c
+> @@ -81,11 +81,11 @@ static const unsigned int ad7609_hw_scale_avail[2][2] = {
+>  	{ 0, 152588 }, { 0, 305176 }
+>  };
+>  
+> -static const unsigned int ad7606_oversampling_avail[7] = {
+> +static const int ad7606_oversampling_avail[7] = {
+>  	1, 2, 4, 8, 16, 32, 64,
+>  };
+>  
+> -static const unsigned int ad7616_oversampling_avail[8] = {
+> +static const int ad7616_oversampling_avail[8] = {
+>  	1, 2, 4, 8, 16, 32, 64, 128,
+>  };
+>  
+> @@ -835,7 +835,7 @@ static int ad7606_write_raw(struct iio_dev *indio_dev,
+>  			    long mask)
+>  {
+>  	struct ad7606_state *st = iio_priv(indio_dev);
+> -	unsigned int scale_avail_uv[AD760X_MAX_SCALES];
+> +	int scale_avail_uv[AD760X_MAX_SCALES];
+>  	struct ad7606_chan_scale *cs;
+>  	int i, ret, ch = 0;
+>  
+> @@ -884,7 +884,7 @@ static ssize_t ad7606_oversampling_ratio_avail(struct device *dev,
+>  {
+>  	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+>  	struct ad7606_state *st = iio_priv(indio_dev);
+> -	const unsigned int *vals = st->oversampling_avail;
+> +	const int *vals = st->oversampling_avail;
+>  	unsigned int i;
+>  	size_t len = 0;
+>  
 
-tested configs:
-alpha                            alldefconfig    gcc-14.2.0
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-14.2.0
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    gcc-14.2.0
-arc                      axs103_smp_defconfig    gcc-14.2.0
-arc                        nsim_700_defconfig    gcc-14.2.0
-arc                   randconfig-001-20250514    gcc-13.3.0
-arc                   randconfig-002-20250514    gcc-14.2.0
-arc                           tb10x_defconfig    gcc-14.2.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-14.2.0
-arm                          collie_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250514    clang-21
-arm                   randconfig-002-20250514    clang-21
-arm                   randconfig-003-20250514    gcc-7.5.0
-arm                   randconfig-004-20250514    gcc-7.5.0
-arm                         socfpga_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250514    clang-17
-arm64                 randconfig-002-20250514    gcc-5.5.0
-arm64                 randconfig-003-20250514    gcc-5.5.0
-arm64                 randconfig-004-20250514    clang-21
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250515    gcc-14.2.0
-csky                  randconfig-002-20250515    gcc-14.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250515    clang-16
-hexagon               randconfig-002-20250515    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250514    clang-20
-i386        buildonly-randconfig-002-20250514    gcc-12
-i386        buildonly-randconfig-003-20250514    clang-20
-i386        buildonly-randconfig-004-20250514    clang-20
-i386        buildonly-randconfig-005-20250514    gcc-12
-i386        buildonly-randconfig-006-20250514    gcc-12
-i386                                defconfig    clang-20
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250515    gcc-12.4.0
-loongarch             randconfig-002-20250515    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          eyeq5_defconfig    gcc-14.2.0
-mips                           ip27_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250515    gcc-12.4.0
-nios2                 randconfig-002-20250515    gcc-6.5.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20250515    gcc-13.3.0
-parisc                randconfig-002-20250515    gcc-13.3.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250515    gcc-8.5.0
-powerpc               randconfig-002-20250515    gcc-6.5.0
-powerpc               randconfig-003-20250515    clang-21
-powerpc64             randconfig-001-20250515    clang-21
-powerpc64             randconfig-002-20250515    gcc-8.5.0
-powerpc64             randconfig-003-20250515    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250515    gcc-8.5.0
-riscv                 randconfig-002-20250515    gcc-14.2.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250515    clang-21
-s390                  randconfig-002-20250515    gcc-9.3.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                ecovec24-romimage_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250515    gcc-14.2.0
-sh                    randconfig-002-20250515    gcc-10.5.0
-sh                   secureedge5410_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250515    gcc-6.5.0
-sparc                 randconfig-002-20250515    gcc-10.3.0
-sparc64               randconfig-001-20250515    gcc-9.3.0
-sparc64               randconfig-002-20250515    gcc-9.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250515    gcc-12
-um                    randconfig-002-20250515    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250514    clang-20
-x86_64      buildonly-randconfig-002-20250514    gcc-12
-x86_64      buildonly-randconfig-003-20250514    gcc-12
-x86_64      buildonly-randconfig-004-20250514    gcc-12
-x86_64      buildonly-randconfig-005-20250514    clang-20
-x86_64      buildonly-randconfig-006-20250514    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250515    gcc-14.2.0
-xtensa                randconfig-002-20250515    gcc-13.3.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
