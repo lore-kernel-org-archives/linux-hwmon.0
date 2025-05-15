@@ -1,70 +1,82 @@
-Received: from clean103.mxserver.ro (clean103.mxserver.ro [176.223.125.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251F22874F6;
-	Thu, 15 May 2025 08:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.223.125.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9816328688B
+	for <linux-hwmon@vger.kernel.org>; Thu, 15 May 2025 08:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747297048; cv=none; b=XTqIKe4qnuIAai7EXUWnWAX/aiMmTf5nTSvqGIzRCBHOsFC5pMKKsdJVrj0HB9UGSFv/N6Xx4BOlV9iU/qYeICkayRz/HRWywq0OoFgE6KjMAukA5DgtNxyJKSgukSB9LIbEorUyvKhhO2fWvrgMQnOszehL8vSoDhNxKsxYCpM=
+	t=1747297364; cv=none; b=WrwxJA8hh7R4mJMBBrerQWexxlOnVjg9cAAZRzsBU6c4WaVx1qfqv8JCbNomiTOTV/onTYct/8eSqP4aTQ082wSP53TClf/5BEW0YLp3zHlJAPO87nFsBuAlOdoXgGs1YF0A7ddivPchBy6pHAfAtgrQkh2+zsdU/7OuRuIJhZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747297048; c=relaxed/simple;
-	bh=59EvuJKTItg/MQf3XkZzL1WEDvsOtpA/YLaURewi72g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SYPIwsCLWj0W6J99xTF6Qoo77EN0ru72AvIxq4SnyCHfNa3kKDROyygwLlpnKAKJOwkiqpPwCmnO35DcY+xYq/3CB35abvpCLezcO3uGwN7WkfgMJZgfG93r+LgxNa3daTF6og+OxUqYuSZroVo+4cDJ79hGs4aORIhE8n3TRg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro; spf=pass smtp.mailfrom=taladin.ro; dkim=pass (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b=KRYbtfwK; arc=none smtp.client-ip=176.223.125.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=taladin.ro
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=taladin.ro
+	s=arc-20240116; t=1747297364; c=relaxed/simple;
+	bh=92odk2sd4sfHthMDJynyDSvgpIspg2D4IeMy8RWB//k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VQurrQbhb9cjuzUQKlY3rTlB+E8lQazd+irP990hrrKRGsF8swe7HpgCCi2+8q+DOaZbJOJZYmw2DvMfTsttjaOQtw/SJ9nX8NtEvI7Tgtk/TXpPVJu1kqPo1DksYDkj01SH90lODq+DXXk3qBHPEVk/MnjjvUKRREKhub4b7e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com; spf=pass smtp.mailfrom=inventec.com; dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b=BprQF6cf; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=taladin.ro header.i=@taladin.ro header.b="KRYbtfwK"
-Received: from cloud347.c-f.ro ([185.236.86.218])
-	by cleanserver1.mxserver.ro with esmtps (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <asoponar@taladin.ro>)
-	id 1uFTmD-00H1kv-CP; Thu, 15 May 2025 04:17:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=taladin.ro;
-	s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=5qQNra+2Cp8u7mp46CFqnKOn4bpY4tOymWLSppXXVgQ=; b=KRYbtfwKrP5JWyHDZyJ+LsM4TM
-	ko5g12ztP9SwDdjndz/buqYuuXqDtqQKnyiflgq1UFxBOSmPhitIHUzGy7mnvtCpjhWfUFb4HS/tJ
-	42duJd6hAlw30bu+iN8P2nlho9hCXMaOZRAr2n5UDKEXPuNynFscveZyrfzzFXNsIFO/7gD3iA8ah
-	6q5P4UCrT4W51CgWGbrMQt8l9K9UUD2b/O4TrMOVwzdr+cCYBeOKx827YWv6uPZdNtR9lu9Yeznpo
-	xU4hKjixEQ3bnAo/kHGe6LBvh3j5b4IDagHVH4teVi4MqB7Pq1UaomwKl/5hiUEDLeyiDWHRT5TNA
-	UTH0G8mA==;
-Received: from [109.166.137.172] (port=55940 helo=localhost)
-	by cloud347.c-f.ro with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.1)
-	(envelope-from <asoponar@taladin.ro>)
-	id 1uFTm3-00000006qMV-1X5D;
-	Thu, 15 May 2025 11:17:12 +0300
-From: Alexandru Soponar <asoponar@taladin.ro>
-To: linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=inventec.com header.i=@inventec.com header.b="BprQF6cf"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b26d4a28872so466920a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 15 May 2025 01:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=inventec.com; s=google; t=1747297362; x=1747902162; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kwF2mpLnEXgp6MS24DBfTJGU9J3NTQxVKIISS1QkMRY=;
+        b=BprQF6cf1DYwGex5AP/dD5Mwqo9uYIXNN04hG2y2+onqfdzzL48z3MiLi9n+fJg+UE
+         WvDj6icQu3/o+m5pULXWX99o286OPsRIOXQfo5YHm5JS/fwN261MXgFuENHZON1YV9LD
+         aqy/cQqUe9PSvbvDdnuS/8WDfU/o5Aaw4Su5OOTTUVd9tS1p01FaUworE+UVnBumxdKw
+         42EAQMe//ZLPggVyxYAq7V+lZLSmsEFY+LG6fW1w4KpR7G2Une1eKU/65sXMp7IKGG62
+         s6DzguPmyYchw779JJ1n6tBEfV4tySWH5pOAD/XfwE3A/VCOwqDlBT4bx9Qsx0R1wZqd
+         II4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747297362; x=1747902162;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kwF2mpLnEXgp6MS24DBfTJGU9J3NTQxVKIISS1QkMRY=;
+        b=Ay3oJjr5egayxANhxVdoOvCs64rUkzgM7MtA5Ug9TpsqEvnlbtupO1dYIUiUxRN+ss
+         EV+ebw0jVAl17EAY2l4l8skZK/Q6zYEhJRG5bOT/WW1nhU8icqRyhqdBlcvjvSpGKEGa
+         SK1rLZKZe9bei95/HsYXWqY+f0zjTmyMlkAAiVz4zHN2zpUZzZY09jLrt8k0RHW5D33q
+         RFZZG6wmX44YGu7OxVTZdCsoF58tmR3YXpK9zIezzlxR2gZ1A56QCSH8XSoWUAMdAkxR
+         INFMeyw8XAaCNfQ/16rf5jT5kEwDnJq2yZTKGLSaUVJ6eKqwk/3MyPuJdrKFH/hjO7vc
+         PHfA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxc+6vD07Pw4toNHoqD1dtBKxhJlLzf+gmzO+UaarXMtZ40Oa7MNk8Vc6Yqs8oYD+UU0FXbJBs4MmaMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkC6BLBIYVYsvfO5kUtHUiw2PbBkgcd1VIhXw4Kb/LnoTzArQx
+	wtHrDMeM1tX18/yuWHC8Dr69HIjwKktsiqK4zmCP16NDyoZ0cLDTteeYjj0bNyY=
+X-Gm-Gg: ASbGncsF0uovnX1To3PpFw+4ntVUSBc+cqN7r5fEwmRPXlIflQ2ik2EkT55FTuFrRTU
+	iZZendJ3xoU3MJp8zQzu2b7VI+AKveBjkOz6URoeUMA6QmVXHHJQHGHCKlR95ZHXtTl2aGGPo5/
+	DedfRvYYFcG5eaQGRSyC9rc8NnK542KWe/z0aTnEl59jguyJn6C9XwbV4Ndh408l43GQvCoohn7
+	Yi/rIw1KN7kToGthRv1SENB4QujRkTBpsn9IDOay0UilH4UL58FtnoEfcsBHw7bx02lRpseNJLJ
+	R0tzF07kqrYfogpbDZXct7iXRKoZ3hvPx36XYCr7V7yI4uuavnse6RyFBjt6rO6Ljwk/ECoNjx2
+	0TXKgDvTt8w3hvaKv6Th9lARSFNED6VZ1Psgqjc0hUiQ=
+X-Google-Smtp-Source: AGHT+IFoAqDUpGzwC9J9Vfxc7d04H0Ld+rHi4ImfRVH+QnmmS1i9bVST/jFIeL7kigUyfhHbFokLQQ==
+X-Received: by 2002:a17:90b:55d0:b0:309:fac6:44f9 with SMTP id 98e67ed59e1d1-30e51947471mr2175743a91.31.1747297361651;
+        Thu, 15 May 2025 01:22:41 -0700 (PDT)
+Received: from localhost.localdomain (59-120-179-172.hinet-ip.hinet.net. [59.120.179.172])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e33451e97sm2909715a91.25.2025.05.15.01.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 May 2025 01:22:41 -0700 (PDT)
+From: Chiang Brian <chiang.brian@inventec.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>
+Cc: Chiang Brian <chiang.brian@inventec.com>,
 	linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-leds@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	jic23@kernel.org,
-	pavel@ucw.cz,
-	lee@kernel.org,
-	baocheng.su@siemens.com,
-	wim@linux-watchdog.org,
-	tobias.schaffner@siemens.com,
-	angelogioacchino.delregno@collabora.com,
-	benedikt.niedermayr@siemens.com,
-	matthias.bgg@gmail.com,
-	aardelean@baylibre.com,
-	contact@sopy.one,
-	Alexandru Soponar <asoponar@taladin.ro>
-Subject: [PATCH 16/16] lib: move find_closest() and find_closest_descending() to lib functions
-Date: Thu, 15 May 2025 11:13:32 +0300
-Message-ID: <20250515081332.151250-17-asoponar@taladin.ro>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250515081332.151250-1-asoponar@taladin.ro>
-References: <20250515081332.151250-1-asoponar@taladin.ro>
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH v7 2/2] hwmon: (pmbus/tps53679) Add support for TPS53685
+Date: Thu, 15 May 2025 16:14:39 +0800
+Message-Id: <20250515081449.1433772-3-chiang.brian@inventec.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250515081449.1433772-1-chiang.brian@inventec.com>
+References: <20250515081449.1433772-1-chiang.brian@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,232 +84,181 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SpamExperts-Domain: cloud347.c-f.ro
-X-SpamExperts-Username: 185.236.86.218
-Authentication-Results: mxserver.ro; auth=pass smtp.auth=185.236.86.218@cloud347.c-f.ro
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: SB/global_tokens (0.000242666053139)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT98ZpYtbjLMlHLIMLfKiMBSPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w1OL79HMxE022P+rQy8YAdcSeERs4TOTnIH1kc1IWc5TSx
- S75yz9IFZiY7BarU/NrpK8SEOwGmfn6ucAKqn/OHRh3BqzFaEnAEj4UixLJBjVNiLZt/QXQnOBRD
- +jq1HsIBmHTFdhqXZEtguZY7iGKpkcJnJKaJfT+dw1udmv00tbIRNtoyOobb3xnDyRRylAVTYi2b
- f0F0JzgUQ/o6tR7C8pLPCtTiVLo0r89ClJHDKhDGKgJ+T00JeCnHBmMdB1eMZAyYlfUtEN4pUyes
- jVRntA/J5DcfwvG53FyVviDO9UET3GKmqv1jT0lY+AQz8YX4CVph7ctC7tRH2SPTQJ/0klTuXKq/
- B9rqRWsYzNfBLt79i78aPHyWnIqxGMxPZotYvH/es1vXuByXo2bkrYMqq0x5CzaUoJIoBUQayHle
- UvbvCQmh9x4kn6NeQcRkc6G+OgAcq5x+BzhRyg9rYO6I0H7Q2OEpckvWJAOmdJd77Z9vwc+QHB+X
- +u7aTqYHtT2CBuxNPBc9JM2jck1NnIBf0tvflhq7Xjhll72AYgnW/6M0ftSpvLIx+X1vKami8KF6
- jWQ71uVNIY/EFPWeDmcZuFRQy1vmjjPiYw8fUCp0/qY6cmSW9oUDdvKuTRfTGZ6f8nTXoYFaQ71l
- mMti8uxA0gKVmIzBXtbLDVvAQ/KVNbF0n38s4PnjIiWSgo0iehuSAN5VcIfsMVILjVAz6RZsCHxD
- lgOJwEwCFaF+62b2lf1UUDu9jECN1V/lwmsioRLmNJoHOZOE/9e5UD715p61XAQw85DCXa0iAPEd
- fYyrF5wMRSLGyY+i0m2IxQLxQUxLMkCVXN63lz38Up+2UgeFSDBPqdRoFsq0hfzdx0oxkgNI/jhY
- WFhu7VV+HdWjdZLlmQ5z83qEVVG/6RJ+BW7FmGcwL889DSW2cZWGkIYVQAbHnYkWUz1gRIjAiMvi
- vM7um7t0SVa5NVZ2g1u6DnOpqk1nwAzTSgytNKIH5lfAuQc8I07FTFcjpdfX/Jcr87en7cKbI0NU
- afdkQMG+6qjtXoANVR89VM6f75a5kmRIbungV7ywXD8VtmM8wef5C6IkqMFhROX1HYRo9Sm1kZOW
- saz62DSUUd/fn3Ix/aSqJVglEtnFggTvi4y/qO0sxBxzHDeqqFz43py4SDhdaHkWxEWqfohU+1d2
- sh7IKZpXLgBCJ476nn5Gmr/PK603nEEgvmn7Dzq8wsrwxhZMoHvqxJYqN+GmyxwR+V15PgePOPPI
- vtB/lrJsWW29FRnUbXCk3//yGA2OaEkyEoP0Kl1YERWeKKG4PAQYNyavp7c49JwbmBalBK3QvTzZ
- aymz/kAx9sNOIdFDvUNZLdaRhCZaMx8xtwV1+Gg8ihl6LJV8o3nXKu/l5TM8iMLe4AKyoGlZj2VA
- 3aW/vPi2AMAbWLs/EIKEbeDIxNYIJ7Ews1OEan6m+UeFXprlCOm3BAEbJtATHIdhc/Osc/lXM+l8
- 06U7GxUAPGlXms+D1TI22+vIvtmOpB8mDzWv8vBwVi5XkC8ewLVRqANj6mzlzL3VH5WM/aCyI5/o
- yhoezeIJy3L+cB4hBppwR1r+Bof9KZqCMQkUV4VT4TerS/vbL3R5w07g
-X-Report-Abuse-To: spam@cleanserver1.mxserver.ro
-X-Complaints-To: abuse@cleanserver1.mxserver.ro
 
-Move the utility macros find_closest() and find_closest_descending()
-from inline macros to proper library functions in lib/.
+The TPS53685 is a fully AMD SVI3 compliant step down
+controller with trans-inductor voltage regulator
+(TLVR) topology support, dual channels, built-in
+non-volatile memory (NVM), PMBus interface, and
+full compatible with TI NexFET smart power
+stages.
+Add support for it to the tps53679 driver.
 
-Signed-off-by: Alexandru Soponar <asoponar@taladin.ro>
+Signed-off-by: Chiang Brian <chiang.brian@inventec.com>
 ---
- include/linux/find_closest.h | 13 +++++++
- include/linux/util_macros.h  | 61 +------------------------------
- lib/Makefile                 |  2 +-
- lib/find_closest.c           | 71 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 86 insertions(+), 61 deletions(-)
- create mode 100644 include/linux/find_closest.h
- create mode 100644 lib/find_closest.c
+v6 -> v7:
+	1. Modify the type of device_id from u16 to char *
+	2. Run make.cross with ARCH nios2, powerpc, and riscv
+	- Link to v6: https://lore.kernel.org/all/20250424132538.2004510-2-chiang.brian@inventec.corp-partner.google.com/
 
-diff --git a/include/linux/find_closest.h b/include/linux/find_closest.h
-new file mode 100644
-index 000000000000..28a5c4d0c768
---- /dev/null
-+++ b/include/linux/find_closest.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Find closest element functions
-+ */
-+#ifndef _LINUX_FIND_CLOSEST_H_
-+#define _LINUX_FIND_CLOSEST_H_
-+
-+#include <linux/types.h>
-+
-+unsigned int find_closest(int x, const int *a, unsigned int as);
-+unsigned int find_closest_descending(int x, const int *a, unsigned int as);
-+
-+#endif /* _LINUX_FIND_CLOSEST_H_ */
-diff --git a/include/linux/util_macros.h b/include/linux/util_macros.h
-index 825487fb66fa..478d4821f2d1 100644
---- a/include/linux/util_macros.h
-+++ b/include/linux/util_macros.h
-@@ -3,66 +3,7 @@
- #define _LINUX_HELPER_MACROS_H_
+v5 -> v6:
+	1. Add information about tps53685 into tps53679.rst
+	2. Add additional flags when identifing the chip as tps53685
+	3. Adjust length once returned device id is terminated by null character
+	- Link to v5: https://lore.kernel.org/all/20250314033040.3190642-1-chiang.brian@inventec.com/
+
+v4 -> v5: 
+	1. document the compatible of tps53685 into dt-bindings
+	2. add the buffer length as argument for %*ph
+	3. Add Changelog
+	- Link to v4: https://lore.kernel.org/all/CAJCfHmW61d2jd_tYpNEqBG_Z58bEnVKAmsvhrEP1zXQoXqrUVw@mail.gmail.com/
+
+v3 -> v4: 
+	1. Add length comparison into the comparison of "id",or it may be true when 
+	   the substring of "id" matches device id. 
+	2. Restore `return 0;` in `tps53679_identify_chip()`
+	- Link to v3: https://lore.kernel.org/all/CAJCfHmVyaDPh0_ThPjhBP0zMO1oE1AR=4=Zsa0cMPXU3J4v6dw@mail.gmail.com/
+
+v2 -> v3:
+	1. Remove the length comparsion in the comparison of "id".
+	- Link to v2: https://lore.kernel.org/all/CAJCfHmUteFM+nUZWBWvmwFjALg1QUL5r+=syU1HmYTL1ewQWqA@mail.gmail.com/
+
+v1 -> v2: 
+	1. Modify subject and description to meet requirements
+	2. Add "tps53685" into enum chips with numeric order
+	3. Modify the content of marco "TPS53681_DEVICE_ID" from 0x81 to "\x81"
+	   Add marco "TPS53685_DEVICE_ID" with content "TIShP"
+	4. Modify the type of "id" from u16 to char* in `tps53679_identify_chip()`
+	5. Modify the comparison of "id". It will be true if the string "id" matches 
+	   device ID and compare with type char*,
+	6. Add the length comparsion into the comparison of "id".
+	7. Modify "len" as return code in `tps53679_identify_chip()`
+	8. Output device error log with %*ph, instead of 0x%x\n" 
+	9. Use existing tps53679_identify_multiphase() with argument 
+	   "TPS53685_DEVICE_ID" in tps53685_identify() rather than creating one
+	   tps53685_identify_multiphase()
+	- Link to v1: https://lore.kernel.org/all/CAJCfHmVy3O4-nz2_PKF7TcXYr+HqTte1-bdUWLBmV7JOS7He1g@mail.gmail.com/
+
+ Documentation/hwmon/tps53679.rst |  8 +++++++
+ drivers/hwmon/pmbus/tps53679.c   | 36 +++++++++++++++++++++++++++-----
+ 2 files changed, 39 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps53679.rst
+index 3b9561648c24..dd5e4a37375d 100644
+--- a/Documentation/hwmon/tps53679.rst
++++ b/Documentation/hwmon/tps53679.rst
+@@ -43,6 +43,14 @@ Supported chips:
  
- #include <linux/math.h>
--
--/**
-- * find_closest - locate the closest element in a sorted array
-- * @x: The reference value.
-- * @a: The array in which to look for the closest element. Must be sorted
-- *  in ascending order.
-- * @as: Size of 'a'.
-- *
-- * Returns the index of the element closest to 'x'.
-- * Note: If using an array of negative numbers (or mixed positive numbers),
-- *       then be sure that 'x' is of a signed-type to get good results.
-- */
--#define find_closest(x, a, as)						\
--({									\
--	typeof(as) __fc_i, __fc_as = (as) - 1;				\
--	long __fc_mid_x, __fc_x = (x);					\
--	long __fc_left, __fc_right;					\
--	typeof(*a) const *__fc_a = (a);					\
--	for (__fc_i = 0; __fc_i < __fc_as; __fc_i++) {			\
--		__fc_mid_x = (__fc_a[__fc_i] + __fc_a[__fc_i + 1]) / 2;	\
--		if (__fc_x <= __fc_mid_x) {				\
--			__fc_left = __fc_x - __fc_a[__fc_i];		\
--			__fc_right = __fc_a[__fc_i + 1] - __fc_x;	\
--			if (__fc_right < __fc_left)			\
--				__fc_i++;				\
--			break;						\
--		}							\
--	}								\
--	(__fc_i);							\
--})
--
--/**
-- * find_closest_descending - locate the closest element in a sorted array
-- * @x: The reference value.
-- * @a: The array in which to look for the closest element. Must be sorted
-- *  in descending order.
-- * @as: Size of 'a'.
-- *
-- * Similar to find_closest() but 'a' is expected to be sorted in descending
-- * order. The iteration is done in reverse order, so that the comparison
-- * of '__fc_right' & '__fc_left' also works for unsigned numbers.
-- */
--#define find_closest_descending(x, a, as)				\
--({									\
--	typeof(as) __fc_i, __fc_as = (as) - 1;				\
--	long __fc_mid_x, __fc_x = (x);					\
--	long __fc_left, __fc_right;					\
--	typeof(*a) const *__fc_a = (a);					\
--	for (__fc_i = __fc_as; __fc_i >= 1; __fc_i--) {			\
--		__fc_mid_x = (__fc_a[__fc_i] + __fc_a[__fc_i - 1]) / 2;	\
--		if (__fc_x <= __fc_mid_x) {				\
--			__fc_left = __fc_x - __fc_a[__fc_i];		\
--			__fc_right = __fc_a[__fc_i - 1] - __fc_x;	\
--			if (__fc_right < __fc_left)			\
--				__fc_i--;				\
--			break;						\
--		}							\
--	}								\
--	(__fc_i);							\
--})
-+#include <linux/find_closest.h>
+     Datasheet: https://www.ti.com/lit/gpn/TPS53681
  
- /**
-  * is_insidevar - check if the @ptr points inside the @var memory range.
-diff --git a/lib/Makefile b/lib/Makefile
-index f1c6e9d76a7c..e8e738c9ced8 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -35,7 +35,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
- 	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
- 	 nmi_backtrace.o win_minmax.o memcat_p.o \
--	 buildid.o objpool.o iomem_copy.o
-+	 buildid.o objpool.o iomem_copy.o find_closest.o
++  * Texas Instruments TPS53685
++
++    Prefix: 'tps53685'
++
++    Addresses scanned: -
++
++    Datasheet: https://www.ti.com/lit/gpn/TPS53685
++
+   * Texas Instruments TPS53688
  
- lib-$(CONFIG_UNION_FIND) += union_find.o
- lib-$(CONFIG_PRINTK) += dump_stack.o
-diff --git a/lib/find_closest.c b/lib/find_closest.c
-new file mode 100644
-index 000000000000..d481625cae9d
---- /dev/null
-+++ b/lib/find_closest.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Find closest element functions
-+ *
-+ * Based on previous util_macros.h implementation
-+ */
+     Prefix: 'tps53688'
+diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+index 63524dff5e75..01fefaef1688 100644
+--- a/drivers/hwmon/pmbus/tps53679.c
++++ b/drivers/hwmon/pmbus/tps53679.c
+@@ -16,7 +16,7 @@
+ #include "pmbus.h"
+ 
+ enum chips {
+-	tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
++	tps53647, tps53667, tps53676, tps53679, tps53681, tps53685, tps53688
+ };
+ 
+ #define TPS53647_PAGE_NUM		1
+@@ -31,7 +31,8 @@ enum chips {
+ #define TPS53679_PROT_VR13_5MV		0x07 /* VR13.0 mode, 5-mV DAC */
+ #define TPS53679_PAGE_NUM		2
+ 
+-#define TPS53681_DEVICE_ID		0x81
++#define TPS53681_DEVICE_ID     "\x81"
++#define TPS53685_DEVICE_ID     "TIShP"
+ 
+ #define TPS53681_PMBUS_REVISION		0x33
+ 
+@@ -86,10 +87,12 @@ static int tps53679_identify_phases(struct i2c_client *client,
+ }
+ 
+ static int tps53679_identify_chip(struct i2c_client *client,
+-				  u8 revision, u16 id)
++				  u8 revision, char *id)
+ {
+ 	u8 buf[I2C_SMBUS_BLOCK_MAX];
+ 	int ret;
++	int buf_len;
++	int id_len;
+ 
+ 	ret = pmbus_read_byte_data(client, 0, PMBUS_REVISION);
+ 	if (ret < 0)
+@@ -102,8 +105,14 @@ static int tps53679_identify_chip(struct i2c_client *client,
+ 	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
+ 	if (ret < 0)
+ 		return ret;
+-	if (ret != 1 || buf[0] != id) {
+-		dev_err(&client->dev, "Unexpected device ID 0x%x\n", buf[0]);
 +
-+#include <linux/find_closest.h>
-+#include <linux/module.h>
++	/* Adjust length if null terminator if present */
++	buf_len = (buf[ret - 1] != '\x00' ? ret : ret - 1);
 +
-+/**
-+ * find_closest - locate the closest element in a sorted array
-+ * @x: The reference value.
-+ * @a: The array in which to look for the closest element. Must be sorted
-+ *  in ascending order.
-+ * @as: Size of 'a'.
-+ *
-+ * Returns the index of the element closest to 'x'.
-+ */
-+unsigned int find_closest(int x, const int *a, unsigned int as)
++	id_len = strlen(id);
++
++	if (buf_len != id_len || strncmp(id, buf, id_len)) {
++		dev_err(&client->dev, "Unexpected device ID: %*ph\n", ret, buf);
+ 		return -ENODEV;
+ 	}
+ 	return 0;
+@@ -138,6 +147,16 @@ static int tps53679_identify(struct i2c_client *client,
+ 	return tps53679_identify_mode(client, info);
+ }
+ 
++static int tps53685_identify(struct i2c_client *client,
++				 struct pmbus_driver_info *info)
 +{
-+	unsigned int array_size = as - 1;
-+	int mid_x, left, right;
-+	unsigned int i;
-+
-+	for (i = 0; i < array_size; i++) {
-+		mid_x = (a[i] + a[i + 1]) / 2;
-+		if (x <= mid_x) {
-+			left = x - a[i];
-+			right = a[i + 1] - x;
-+			if (right < left)
-+				i++;
-+			break;
-+		}
-+	}
-+
-+	return i;
++	info->func[1] |= PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
++			 PMBUS_HAVE_STATUS_INPUT;
++	info->format[PSC_VOLTAGE_OUT] = linear;
++	return tps53679_identify_chip(client, TPS53681_PMBUS_REVISION,
++					   TPS53685_DEVICE_ID);
 +}
-+EXPORT_SYMBOL_GPL(find_closest);
 +
-+/**
-+ * find_closest_descending - locate the closest element in a sorted array
-+ * @x: The reference value.
-+ * @a: The array in which to look for the closest element. Must be sorted
-+ *  in descending order.
-+ * @as: Size of 'a'.
-+ *
-+ * Similar to find_closest() but 'a' is expected to be sorted in descending
-+ * order. The iteration is done in reverse order, so that the comparison
-+ * of 'right' & 'left' also works for unsigned numbers.
-+ */
-+unsigned int find_closest_descending(int x, const int *a, unsigned int as)
-+{
-+	unsigned int array_size = as - 1;
-+	int mid_x, left, right;
-+	unsigned int i;
-+
-+	for (i = array_size; i >= 1; i--) {
-+		mid_x = (a[i] + a[i - 1]) / 2;
-+		if (x <= mid_x) {
-+			left = x - a[i];
-+			right = a[i - 1] - x;
-+			if (right < left)
-+				i--;
-+			break;
-+		}
-+	}
-+
-+	return i;
-+}
-+EXPORT_SYMBOL_GPL(find_closest_descending);
+ static int tps53681_identify(struct i2c_client *client,
+ 			     struct pmbus_driver_info *info)
+ {
+@@ -263,6 +282,10 @@ static int tps53679_probe(struct i2c_client *client)
+ 		info->identify = tps53681_identify;
+ 		info->read_word_data = tps53681_read_word_data;
+ 		break;
++	case tps53685:
++	    info->pages = TPS53679_PAGE_NUM;
++	    info->identify = tps53685_identify;
++		break;
+ 	default:
+ 		return -ENODEV;
+ 	}
+@@ -277,6 +300,7 @@ static const struct i2c_device_id tps53679_id[] = {
+ 	{"tps53676", tps53676},
+ 	{"tps53679", tps53679},
+ 	{"tps53681", tps53681},
++	{"tps53685", tps53685},
+ 	{"tps53688", tps53688},
+ 	{}
+ };
+@@ -289,6 +313,7 @@ static const struct of_device_id __maybe_unused tps53679_of_match[] = {
+ 	{.compatible = "ti,tps53676", .data = (void *)tps53676},
+ 	{.compatible = "ti,tps53679", .data = (void *)tps53679},
+ 	{.compatible = "ti,tps53681", .data = (void *)tps53681},
++	{.compatible = "ti,tps53685", .data = (void *)tps53685},
+ 	{.compatible = "ti,tps53688", .data = (void *)tps53688},
+ 	{}
+ };
 -- 
-2.49.0
+2.43.0
 
