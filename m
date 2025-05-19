@@ -1,67 +1,67 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB24E1A83E5;
-	Mon, 19 May 2025 13:17:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353911FF5E3;
+	Mon, 19 May 2025 13:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747660634; cv=none; b=j2F4lZRgMcOhwG+4WnouC7SgOuMXs3vaMMO+gtLM02rCHQIcUxg3mE9HZnm+bmRKsuWBwzSVJi2BHHFU9mC1PkD+brZIAL55unGdmMb10O/8SlBQnZrIhTLtBwDyy/4+ltNd7810yj4qxTvxtxSSx0Cj85BTS4jLeDmzEjfP1DE=
+	t=1747660957; cv=none; b=kn7+1O/SIEyWNmOI9K1YdNxorN/il8/uThHl8OXguBfQz/hYm+DuY/Agf+bX/GrOfYeDcPuObOjPaVIGB1JYfXKCbpgjOrE6GvwOxUQsgGAgGXb/jYMtCCGjImeNd/BSATDlhj5HIUQGqfKfwhuXvQGpjtIeVCuSJHJ7eZTcEcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747660634; c=relaxed/simple;
-	bh=ShS45SLKyx9/hEQGf1873oppf6FARI9JuFIIMkNsylI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UmEyNHpxXvNMEDxSx/6yprqqFUc0mERSTE8Ce5ubK67iy4ROSD81kA15GALCF2NHB7cf2LTL31VgcfyGIDKS3Yvb9x/QLL1l0AXJDSZwKeduoNwznZoFjBp9yxkh7xm/G7YVxBpd2Ljh6slUVUIL1y0R+Zj2p6nPT/W7+ZddgJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOuay9lT; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1747660957; c=relaxed/simple;
+	bh=h3RirWupTiq3ph0qoBGX50U2KSkdgMd4lvAREh03cdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sWMzu1jUK6OG2aA5nXLjfjbrziM33b98TPvhENIRXkAT7L0XqP/xjxAO5ge30cxmwELMUt7oyramgvjqj4cVO6EK+xaMJM6hZKYxA1lbyxEZhb0/T1l5nQ77TgtpbCsJdAISr4zcf8my1uzpxCBHGrVrdC14LAeh1H8qb9/se8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksVFMnAj; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOuay9lT"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7398d65476eso3459273b3a.1;
-        Mon, 19 May 2025 06:17:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksVFMnAj"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7370a2d1981so3493584b3a.2;
+        Mon, 19 May 2025 06:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747660632; x=1748265432; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747660955; x=1748265755; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rKHxkVpPGrcJ5aoPUgUachsbB6pAEZeFNSzqYfEk8w8=;
-        b=NOuay9lTUz/N5Ey4MxdHkm8PRDnM37cliB78egEK1MdhOve2YkqDHvrmV+OSuYbh+S
-         BFZJUk8+ShwnwEvV+vvL6IqfOk0kQalFk6B9CcSLMQKF+6Iwp4CE23Eh0Tl5v39jjM5l
-         PKNt+g2k3Klv7ffUBaGRnlZXT8e8vzyCgZQ8Ligz+7He97sdQrM5lPdaQ0cUh5ezS9G/
-         KjKXdkPzY6DFJ0AycykRL4qloWMVLg2dkrITVr4mDB+lZHt1xbZc98/aAqO6N/Axq2Z1
-         fyvuN/iT0ErRH6su4befBCavh2EiPk7novrzayf6HcKx+hFwUkXa/xifNUlLFPRCuuUj
-         86QA==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=85yjgPl/D7hyp3saZ50f5GyE/pfLpFoyJilLZqqr78o=;
+        b=ksVFMnAj2A8BjRXyM4asETUdgSG1TvwlmnpLLcmZjkzOygxOrgpypzbWzWzVimICkM
+         SOZ43hb3WbRYUh5Duy5QiiasIWBDTqatxIQmlFZjIsYV80MXUfpNZ8uqibVYv+CPESKV
+         Sfy5YR7S8laperM9cs71hB5LpxfODXd2cb+FhRFjJCQT6Ee5bQqS/dNobOJNW6CAqZ7g
+         mki8iVXSva1fFLnhdvAilOXZZfHRTreHgepn6EsD/aAcCsz2IKqzRlT9CskkeEmIrT5N
+         9NWV2zLykhhip5JsRZVVDrQrbHBM7unWlsDYJEKw8uv3Uts4KMjv6B1OAvoJzWDaKcRA
+         uQ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747660632; x=1748265432;
+        d=1e100.net; s=20230601; t=1747660955; x=1748265755;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rKHxkVpPGrcJ5aoPUgUachsbB6pAEZeFNSzqYfEk8w8=;
-        b=vpONHcX3b9GkimcVVvfFOey/SnjFojBXcTyFT6sk27sNGsKd+Gw3InNlv44nQ4sOsP
-         KUBiJVkypRAhSMPCPZmUPF8k7PKzuPCcAYO39qmyyiC7qfz2xAzL3jBiuRx0t+7dbmqO
-         cJIi3FcjFNW0p1pgitJu/4UNJbzo2aB+YYZIbNQvMScAhTnqlynVIMoDOwksX4pGzzmD
-         uOXhz5EN05RBID7N9Zo61Jjpa1zjkP92QI+3+sy/1+1zkWEAPAHdZr4bUkQpfJMHXbyX
-         WiIn4uoxMiCVsCRntKPmSLJS40OuIwPXTz/E/quIctcOsUEYPEvwOSLa5cRKCd8Fp8Lr
-         0plg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpCy12mV3guvBRAEZhfoRwCrzqRsQNyZz36DETlbQKkfIW9DNHk7C13SJRQAYlmebt70YZ0hRtd1M=@vger.kernel.org, AJvYcCWWNe0GzciBNfapINLGszeqkfFF0HLchiWF4epgOVMYLmKg/Tg4O5EydWJTa4LeNXvZTxBGAlGZaZuKnFWq@vger.kernel.org, AJvYcCWuXQc45qPkqNVhW7zX3XTsz7rl/mFy4LOKOym9E1Jw4NRiYXsB72on2uo06QWvSZDn2UOfti8IcJbXKSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKUDADlr9pBzQuBwtCTbsMZLxfMEMXXDKAWwg0Jg52JBCc0aak
-	6u1eJMQNmVNTgFWGYrteDShC4bIH6TocHQnAOg3gOOfySjm9c45Etjlj
-X-Gm-Gg: ASbGnctpneQZ7cjJVCI9dLFfhu5YI0uawXb2zc7ov0OIuJIblLZ1eqTCRj+4k/QYg5X
-	aN6VJAqpSfjn4KGbhmF/ax8AjAlXhu9RTMMRlI0W6bpgvVzAoB3ayROX7pGrp0m3mDd94cHUnyv
-	k0UvPcdoB6LAIKRVhYv3TQ97pqAl4+nJqUpQ+Mr2Cyx5LrByGT51i6FyzKmhTxUElSfZtPkM/p2
-	akwsC96iRJk232rDXoaGecgCxc4KgVcfsrjhCrB2Pqxgje3f/wZaCZ7El9taVnIxaxbAVfF42GJ
-	YJWGwusI5MHc14nQLkEwwSeQTc40xrC5j45GQebFPAVod56bcX/1UHGwyVbl32d8Y2GK37QDN4d
-	2iDRjcBGK7lFM9/RU2yuoNeRD
-X-Google-Smtp-Source: AGHT+IHeb6ElEWDfLEqIDtJznvPX4SYwbZxQpVzqW6uNySbEtm2tI0RaRIlzSVXQ/KwPteKi+EuBvg==
-X-Received: by 2002:a05:6a00:10cb:b0:73c:3f2e:5df5 with SMTP id d2e1a72fcca58-742a9afe772mr14954748b3a.9.1747660631626;
-        Mon, 19 May 2025 06:17:11 -0700 (PDT)
+        bh=85yjgPl/D7hyp3saZ50f5GyE/pfLpFoyJilLZqqr78o=;
+        b=W0C6f6axT1DGK3IYPxiJEq/gS5aEDAoDGn9TL57BKKJ8Tm9YW+o4GgJhx0pN2165KZ
+         kgqFowhKw6b/B0283GrfUHIjSELh7T6GcVwsOFqikpJhd7PeI1gFkR88XJ25COorHCct
+         wBrtQSMeEzXZhQ95fU0vhOho00GENH74S5KOYMns7TjgLIZmbaC2NdzoO1V03ju0rL/9
+         q+m8JTRxcsh0IM4OAGUsOHn6LqQ042xR2YOZNDS++X04MlJshLI+/LFiyU4F4ASAW0bk
+         LdQitLkknSsjhVMWGhYvjcF/YTRFnIwnfZD+uI/lLWkAQWqwisJf65W+5lwSi3fLtrB+
+         mIyw==
+X-Forwarded-Encrypted: i=1; AJvYcCXk86+OGMaXNLqNgSn8UIMzXRV+g4Lwx3Kg49+5T16vsvbuaPXfO87LQ9GruAKI7QdPzaSGl72SSdTkRgI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwbZdnpyddDra0euYHOia/iNAxvylsNw+9Dw4rwZtHs5PyG9Xl
+	yIOG7He3/37TuZehNuCD282kjY/0JFS3Y1oErVl4K9/q4a68B/PD8CPx
+X-Gm-Gg: ASbGnctBYc02OxCykmeVk2wsqVdtWHj9Pwq45BzM4t6iGQ5AkTXsWMVCXPgRWKZsBC8
+	ce1b2qQmxldMib934Wkd26lID1OchJAxb8C3hxRnBL9I7BzLfPG2wcN0AFUQtsl7PIDPQT+9g62
+	pi1v3eHvfYEI6BIrZkAmhPXOsfqJHbVHIMHMwVBqlj9iUlVsrAcbZ3PBG4Y8Jzi9Q7IO3YE1zfB
+	34GjLkNhf9DTdyj8jybTN32V/+eXpVTjlmtk2Jl2jR+GeRE3ThhyqOogsm6D1g+Up1EknONCpug
+	XpLQiGiw305udaUM4rJ/4hsbd11DLmTOW/V/kGsyg7I36ykrKZi4c+Tx+iuiE2hKto2CtjUx6tg
+	dtlJZ7g0yWBxy6f3uxzzGOaRC
+X-Google-Smtp-Source: AGHT+IF7dpsS9iFxEyD+PFTOc1/y++G0GTKvVv1kX/3PQ+ag+YlXc933NEzDF01REvu7Jzl6p0ENNA==
+X-Received: by 2002:a05:6a21:1089:b0:1f3:2e85:c052 with SMTP id adf61e73a8af0-2170ce31534mr18821238637.35.1747660955225;
+        Mon, 19 May 2025 06:22:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a970b7bcsm6330137b3a.52.2025.05.19.06.17.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eaf6fd3bsm6160784a12.23.2025.05.19.06.22.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 May 2025 06:17:11 -0700 (PDT)
+        Mon, 19 May 2025 06:22:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a82015f1-0a19-451e-9087-060a1d2c6c4d@roeck-us.net>
-Date: Mon, 19 May 2025 06:17:09 -0700
+Message-ID: <61b2f38c-ef37-41ec-9102-61903f2f044b@roeck-us.net>
+Date: Mon, 19 May 2025 06:22:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,12 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] doc: hwmon: acpi_power_meter: Add information about
- enabling the power capping feature.
-To: Shinji Nomoto <fj5851bi@fujitsu.com>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250519072756.1512244-1-fj5851bi@fujitsu.com>
+Subject: Re: [PATCH v1 1/1] hwmon: (isl28022) Fix current reading calculation
+To: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>, patrick@stwcx.xyz,
+ =?UTF-8?Q?Carsten_Spie=C3=9F?= <mail@carsten-spiess.de>,
+ Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250519061637.8796-1-yikai.tsai.wiwynn@gmail.com>
+ <20250519061637.8796-2-yikai.tsai.wiwynn@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,70 +121,40 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250519072756.1512244-1-fj5851bi@fujitsu.com>
+In-Reply-To: <20250519061637.8796-2-yikai.tsai.wiwynn@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/19/25 00:27, Shinji Nomoto wrote:
-> To enable the power capping feature of the acpi_power_meter driver on
-> systems other than IBM products, you must explicitly specify
-> the force_cap_on module parameter.
+On 5/18/25 23:16, Yikai Tsai wrote:
+> According to the ISL28022 datasheet, bit15 of the current register is
+> representing -32768. Fix the calculation to properly handle this bit,
+> ensuring correct measurements for negative values.
 > 
-> Add information to the documentation about enabling the power capping
-> feature with this driver, including the above, to improve user convenience.
-> 
-> Signed-off-by: Shinji Nomoto <fj5851bi@fujitsu.com>
+> Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
 > ---
->   Documentation/hwmon/acpi_power_meter.rst | 25 +++++++++++++++++++++---
->   1 file changed, 22 insertions(+), 3 deletions(-)
+>   drivers/hwmon/isl28022.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/acpi_power_meter.rst b/Documentation/hwmon/acpi_power_meter.rst
-> index 8628c1161015..334054afc498 100644
-> --- a/Documentation/hwmon/acpi_power_meter.rst
-> +++ b/Documentation/hwmon/acpi_power_meter.rst
-> @@ -37,9 +37,16 @@ arbitrary strings that ACPI provides with the meter.  The measures/ directory
->   contains symlinks to the devices that this meter measures.
->   
->   Some computers have the ability to enforce a power cap in hardware.  If this is
-> -the case, the `power[1-*]_cap` and related sysfs files will appear.  When the
-> -average power consumption exceeds the cap, an ACPI event will be broadcast on
-> -the netlink event socket and a poll notification will be sent to the
-> +the case, the `power[1-*]_cap` and related sysfs files will appear.
-> +For information on enabling the power cap feature, refer to the description
-> +of the "force_on_cap" option in the "Module Parameters" chapter.
-> +To use the power cap feature properly, you need to set appropriate value
-> +(in microWatts) to the `power[1-*]_cap` sysfs files.
-> +The value must be within the range between the minimum value at `power[1-]_cap_min`
-> +and the maximum value at `power[1-]_cap_max (both in microWatts)`.
-> +
-> +When the average power consumption exceeds the cap, an ACPI event will be
-> +broadcast on the netlink event socket and a poll notification will be sent to the
->   appropriate `power[1-*]_alarm` file to indicate that capping has begun, and the
->   hardware has taken action to reduce power consumption.  Most likely this will
->   result in reduced performance.
-> @@ -52,3 +59,15 @@ follows:
->   `power[1-*]_cap` will be notified if the firmware changes the power cap.
->   `power[1-*]_interval` will be notified if the firmware changes the averaging
->   interval.
-> +
-> +Module Parameters
-> +-----------------
-> +
-> +* force_cap_on: bool
-> +                        Forcefully enable the power capping feature to specify
-> +                        the upper limit of the system's power consumption.
-> +
-> +                        By default, the driver's power capping feature is only
-> +                        enabled on IBM products.
-> +                        Therefore, on other systems that support power capping,
-> +                        you will need to use the option to enable it .
+> diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
+> index 1fb9864635db..6d8cdf80c9ea 100644
+> --- a/drivers/hwmon/isl28022.c
+> +++ b/drivers/hwmon/isl28022.c
+> @@ -161,8 +161,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
+>   				  ISL28022_REG_CURRENT, &regval);
+>   		if (err < 0)
+>   			return err;
+> -		*val = ((long)regval * 1250L * (long)data->gain) /
+> -			(long)data->shunt;
+> +		sign_bit = (regval >> 15) & 0x01;
 
-This is potentially unsafe if not really supported, which needs to be mentioned.
-
-FWIW, if there are other systems known to support power cap in hardware, they
-should be added to the driver in the dmi table. A more generic solution should
-check if the _GHL and _SHL methods exist to enable the attributes. force_cap_on
-should be the last resort to enable it.
+Just use (s16)(regval) or sign_extend() [granted, the rest of the code should
+have done the same]. At the very least make sure that the code compiles.
 
 Guenter
+
+> +		*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
+> +			1250L * (long)data->gain) / (long)data->shunt;
+>   		break;
+>   	default:
+>   		return -EOPNOTSUPP;
 
