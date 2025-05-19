@@ -1,118 +1,179 @@
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B00D26B2D8;
-	Mon, 19 May 2025 08:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F671DFD84;
+	Mon, 19 May 2025 12:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747644124; cv=none; b=FTkcT+dPsCXUmxchSZCs7phxv4I1Ddi7n375jHGY3Yuav0aOXWf3B4y0vqOW9MoCQtx2bJefzQRdR7IyNhmBbeCo3NR/Ohv+4uE/cgXQ0Af9bFeauvIWiv3yG14jL8CeLdN85Mz0LPWJmhEZuIv/6XQiXgXlOZmOIlmS5OSdAZ8=
+	t=1747658433; cv=none; b=L3N+T18CgO2qdDnQV5yzKLt2YDgGJQ0ySepicN9cBTy5nk1K+8db5rmABWkr7tiD846SZOq5ekZGI0RsKoUIdSrZUkGb+xthXI90sVhwxl8ibZ89BoBmBapWgyZlWJ2D+2VkNiBq4g2HqF4CY5KEGhGmhin6yRtTCH/Uaq8zuAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747644124; c=relaxed/simple;
-	bh=M6YH7hLJw/FAhL1abjDJ4cyTRkLOUbxnR154Ohgc8dY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ze6J3DFoVJ22QRvz3wm+tTgVe7AYgtn3ih4bVTuAvibzqZLzObfFDl70cmU/C/SDkCbNSHbtJev3hXwbmUf9ToBHqV1dj1UxB3YLjqLQ4ZLGBKR1j/60PHvlwH7X8OREsEunrpoL5NPaKxw8Ty/5WsijDtBx5/zpg92wDR7GHDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRvkv4ke; arc=none smtp.client-ip=209.85.216.68
+	s=arc-20240116; t=1747658433; c=relaxed/simple;
+	bh=dG9OJXrzeBQcmp2ENNcvBN9tLfbZo5E+wUXYJrzdr6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYiiOxfwwUp7cAh04NBekQUYqi5Cpky7Rfc/gBRdhGrQ5q3qnmHgM4gb7XAsVb6iyASxYWF29zyL25XaUU+pYxq1pgsPFMBci0wKcXqRCS+V+Bte/ha7E/yFucuwZCeMCNQpTRAkWFAw9fHe/iV4pDFHI7WkLvZ6wOdtLUsBVSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jKDFLM/c; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRvkv4ke"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-30ea7f783a0so2238503a91.1;
-        Mon, 19 May 2025 01:42:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jKDFLM/c"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-60119cd50b6so4891546a12.0;
+        Mon, 19 May 2025 05:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747644122; x=1748248922; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TzWt6m0lDRu2ZdNfH+iSSvH3DFXB/9zKcDZo79oc998=;
-        b=mRvkv4ke7n7/lmoA4eI2Sj8uSMoJdE0wB8zzzYr8CnkmpnzV5oA6iasWR0Y18h8cTs
-         CbDHafolUNPQQSJwxKYXyYbQMZvRxXr/eT1ByApe3e+YFZDXxDAe++nKNTEhOlH456Tw
-         qO5c1eN8BzIuxOYI4leYN7/lKayfDtSpEEnd7hcNZRNdCBdr0BOoFvEkMpo753Y4mEUK
-         u0G9rYTXIFNIgZFNAfeO3sFHwEhzHA8SvU0a2OzMF1JNILmVhSI9uQy4jDpxX+6n6jkx
-         nyetwZe+EqtJKuXDjlOAb/vJJzvm/xOCsnGVgTed7EGiNoAEXv5iF6wsFtsHdEelg4cP
-         G8Rw==
+        d=gmail.com; s=20230601; t=1747658430; x=1748263230; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9JSHeno+xJiiaDay6iz2yV2CTlTnkq+BUkMGKsqpt7M=;
+        b=jKDFLM/cIQ447pesn4BKFzyjoXTltOSPGm7flBxjQ33AUNQ9JeCtKwnBYBUhslqI5X
+         fpEgGxpBJfe0teAzYMBRBD9rLAHpkcknaRfzzb49izqnwu2QHHX9xCDGLnN/mqR+Wvy0
+         PO/5VlF1KIjcY/HWOW/KnknIYxil0ZLChgtnFRvraho/WDa0y88VGe38dDCoMv9BvMQO
+         k5O+96+mGIL14GIB29QhOY+bmeubOAcCQqQPcWABqfV1OA0SnOYfj4SzZzu/7afE7rM0
+         gZIYAvAJLk3jQuW+53XFSXLYpQntP9XMEsW/JKY5qfXlun7WSSsdwvKaFHFOrYwqI91X
+         rAUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747644122; x=1748248922;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TzWt6m0lDRu2ZdNfH+iSSvH3DFXB/9zKcDZo79oc998=;
-        b=C2SMgmqH0nj8IcKA/Y5F2Td1IdIqcgb+EbE00auK1/g5hfenHY5kimpJyc5DjsOL/T
-         n3HAasAGZUTUhL5lsrU9s7uPOHzd5PHT0Tx0eB5LNs9Pz+byMO3zF2I0aFfdVMty3uyT
-         TKHamwExpcX6E/8fS5kVqXSQkftxNYCb12b1gCW3ibePhBG9/Nw+uKI+LAXA/nBd6zNg
-         BktNcCSNZF7jAXAfKQYmnGuk7nJHFUozMhjbCPm1P93ybMqJaRSOzDfThGpMEUZ/HMzz
-         Fei50a5z+9pnxNKqP/+Ew7X+E3vOnZMIKlusBVOfhdVqxrscE+QKsdU0oSECSiRaz7dK
-         wjYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxCMMmXtTNtF2cOdGhNfVCrlx5laoWitG8EDuNDm0/Hnt/QDP9USz7iLdgrir/Niky/+UIsXDyLoEeww==@vger.kernel.org, AJvYcCWrPUv+uq1rEnAeXkK20OO9bs0zrsZXW6G4itdRMPIUPVAlgA8juTkfGLquHGk54R1otq5WQHjZNMgyV0EI@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG5y02fnn0BlJXOIpKdzVswxW2TtbBT/dtCvClWDVxtb4HLYNZ
-	B6PecFBj0oFNQM7siVi8yj24xbXcM+09OEdM0UKJ3VkZGi1/gNFWebJX
-X-Gm-Gg: ASbGnct22VvrJZihhzZgwxNTjajDMm9Fu2OBflwrzHbmUOsWwYNJG/3k1AokSmHB/aF
-	i60VkBEyDM+hUvZyTgM9mSAOutn+RNkXk2V3olEdmquiMZ+OIV9fu+yq8ufsXSzvYygN+3okQ+L
-	kYFk2XpL4muWT0NYFWcWPFqs65gQ9ejiSZfY7quJNin7dzaxGB/8QCyeKWBMkH1vmMdopwQNan7
-	4T5sLztCdq8ugbJbSMx9D4YB3lxMWAtiubI+EiWdDN2fHQeDBcHQrcZps5gvn/ECglRP6wTRJV/
-	IFiEnAcCB4ju7Bq3VvbFWtaSHxO2K4sSJxlmR25RVYKXenaOwB5pevEQ/1/eB0s3uFykBZEHTsj
-	GvNOxXJm5DSkEUCFLo+miheKiD5F/pq022s4=
-X-Google-Smtp-Source: AGHT+IHp2B3z4W2bMyd5TBuk4PgK8+n1UaYCOLFHzmeY+snMZLImvlBRPKDCnxDxS2d4pCyCurKslw==
-X-Received: by 2002:a17:90b:3905:b0:2fe:b8ba:62de with SMTP id 98e67ed59e1d1-30e7d5a96d7mr18939544a91.25.1747644122485;
-        Mon, 19 May 2025 01:42:02 -0700 (PDT)
-Received: from ubuntu20.wiwynn.corp (39-14-65-183.adsl.fetnet.net. [39.14.65.183])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e33401768sm9870275a91.3.2025.05.19.01.42.00
+        d=1e100.net; s=20230601; t=1747658430; x=1748263230;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9JSHeno+xJiiaDay6iz2yV2CTlTnkq+BUkMGKsqpt7M=;
+        b=YfwjJabZJBlz7so3BRS01KyMMUHBk8Y9B+JI2my0goF99dx36RVry1NnX1GDak5L7p
+         3ZL1gIgT+QCeyZwWrL6pGvrT3kbFbTZqlfqTGtsan6qaKk/rQDfpeYDXuqey3MxUgfyR
+         nkjfnPi55UBmOo1OxuW3jufFKUNnleZ5te8/pkWCHk3H/nQMBLWVJj0p7BM8fc0Di6VM
+         xEkOZpU6cLoPY9xGdiB/yPzlkRi6U5ql+ASaLuLCyoQFS1z7VJCQC3v53Wp3KGZR8RL9
+         RYBZpr3q11TKVkM0pGkmL/hGjufGXhjPhxbszg2ktdhlJiHoD1xHUFug1LFYO6kJ4kCS
+         vIAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnSckKwxNZoq3aoAyZZbXOeVKR2Qxf3TjWIhV2ZAkYz4ANcmfB8uj13Fzl6HU6gqzf6PGJi7i8v9RBLb6v@vger.kernel.org, AJvYcCVvYOblgDrs12nX0tfaCKX6XLdDQNpqeymOCai4Ec8ZZUkv9zwQvkKoRQrHwoEme4JP5o2tOn5Fb34TqA==@vger.kernel.org, AJvYcCXCQrFi3bfJf0I+MmvdcGo8NbbmR6q8AMJrRCHmObSe5a2AZzUGdYBZgL9xC/guYR2ExoNt/trhfbbx@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPk+A/L3+xsHZROsAZbt95qAvC1TnnrI55CfFUOgd0V7z25TT3
+	nB4nUSaC/EZIEuxfvK+SyN5ZxNUY22iz4vzcLsOrcN4tarlrRI7/RWYg
+X-Gm-Gg: ASbGncu0PXy0qsRepOL2Cri1qKO4n/BQEiCTtVG3ehcwDECcpvLK+xTUqDVrq4ByoDx
+	zgHBHLgMTY9i3w+NGoqwaiAhiNsHF+SQkyqf6z5xcLSSRjgrLaQuyTUWvEUIXSwGQo8SsUvWcy0
+	pjjppVntCaVux+xLi5wo4U/Yducwk6HaC2qZUAPbN1INz5VEG9WS53AE0WZZ39hsJHd+T0PcYoF
+	MLEXvtjxy7MvyPwkgU3bGQ+/QVtLxaTjciD9F+PhUhVttYt6ISCKHTb1Z/R0ZCfcwbWaB1fV5QO
+	SoSNSYK0rqcptCDeXAGlSiWgdCYQ85SsgODDWoGS0NRc9XFg3fYI12xA6UTj
+X-Google-Smtp-Source: AGHT+IGvVkzIVWbfpQWFpqrdJS+tPeSk+0ZwUBS8L7f8oWG1HDIcHiEqiBPkSfBvh2zfXs+bntusQQ==
+X-Received: by 2002:a17:906:f5a4:b0:ad2:450b:f8da with SMTP id a640c23a62f3a-ad52d4ca492mr1133788966b.19.1747658430184;
+        Mon, 19 May 2025 05:40:30 -0700 (PDT)
+Received: from legfed1 ([2a00:79c0:604:5d00:22ea:3d6a:5919:85f8])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d49889asm590773066b.141.2025.05.19.05.40.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 01:42:02 -0700 (PDT)
-From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
-To: patrick@stwcx.xyz,
-	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] hwmon: (isl28022) Fix current reading calculation
-Date: Mon, 19 May 2025 16:40:51 +0800
-Message-Id: <20250519084055.3787-2-yikai.tsai.wiwynn@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250519084055.3787-1-yikai.tsai.wiwynn@gmail.com>
-References: <20250519084055.3787-1-yikai.tsai.wiwynn@gmail.com>
+        Mon, 19 May 2025 05:40:29 -0700 (PDT)
+Date: Mon, 19 May 2025 14:40:28 +0200
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: dimitri.fedrau@liebherr.com, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, linux-pwm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] pwm: mc33xs2410: add support for temperature sensors
+Message-ID: <20250519124028.GA423953@legfed1>
+References: <20250515-mc33xs2410-hwmon-v2-1-8d2e78f7e30d@liebherr.com>
+ <mjmrgvw7dg6wlipvku4yzaazbxomsfpr42hdvh37c3r5zybjyh@4olym5bwde45>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <mjmrgvw7dg6wlipvku4yzaazbxomsfpr42hdvh37c3r5zybjyh@4olym5bwde45>
 
-According to the ISL28022 datasheet, bit15 of the current register is
-representing -32768. Fix the calculation to properly handle this bit,
-ensuring correct measurements for negative values.
+Hi Uwe,
 
-Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
----
- drivers/hwmon/isl28022.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Am Fri, May 16, 2025 at 11:24:33AM +0200 schrieb Uwe Kleine-König:
+> Hello Dimitri,
+> 
+> On Thu, May 15, 2025 at 02:40:54PM +0200, Dimitri Fedrau via B4 Relay wrote:
+> > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > 
+> > The MC33XS2410 provides temperature sensors for the central die temperature
+> > and the four outputs. Additionally a common temperature warning threshold
+> > can be configured for the outputs. Add hwmon support for the sensors.
+> > 
+> > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > ---
+> > Changes in v2:
+> > - Remove helper mc33xs2410_hwmon_read_out_status and report the last
+> >   latched status.
+> > - Link to v1: https://lore.kernel.org/r/20250512-mc33xs2410-hwmon-v1-1-addba77c78f9@liebherr.com
+> > ---
+> 
+> Mostly fine from my POV. I suggest to squash the following change into
+> your patch:
+> 
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index a0c077af9c98..d9bcd1e8413e 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -425,7 +425,6 @@ config PWM_LPSS_PLATFORM
+>  
+>  config PWM_MC33XS2410
+>  	tristate "MC33XS2410 PWM support"
+> -	depends on HWMON || HWMON=n
+>  	depends on OF
+>  	depends on SPI
+>  	help
+> diff --git a/drivers/pwm/pwm-mc33xs2410.c b/drivers/pwm/pwm-mc33xs2410.c
+> index c1b99b114314..f5bba1a7bcc5 100644
+> --- a/drivers/pwm/pwm-mc33xs2410.c
+> +++ b/drivers/pwm/pwm-mc33xs2410.c
+> @@ -163,7 +163,6 @@ static int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val
+>  	return mc33xs2410_write_reg(spi, reg, tmp);
+>  }
+>  
+> -#if IS_ENABLED(CONFIG_HWMON)
+>  static const struct hwmon_channel_info * const mc33xs2410_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_LABEL | HWMON_T_INPUT,
+> @@ -286,21 +285,20 @@ static const struct hwmon_chip_info mc33xs2410_hwmon_chip_info = {
+>  static int mc33xs2410_hwmon_probe(struct spi_device *spi)
+>  {
+>  	struct device *dev = &spi->dev;
+> -	struct device *hwmon;
+>  
+> -	hwmon = devm_hwmon_device_register_with_info(dev, NULL, spi,
+> -						     &mc33xs2410_hwmon_chip_info,
+> -						     NULL);
+> +	if (IS_REACHABLE(CONFIG_HWMON)) {
+> +		struct device *hwmon;
+>  
+> -	return PTR_ERR_OR_ZERO(hwmon);
+> -}
+> +		hwmon = devm_hwmon_device_register_with_info(dev, NULL, spi,
+> +							     &mc33xs2410_hwmon_chip_info,
+> +							     NULL);
+>  
+> -#else
+> -static int mc33xs2410_hwmon_probe(struct spi_device *spi)
+> -{
+> -	return 0;
+> +		return PTR_ERR_OR_ZERO(hwmon);
+> +	} else {
+> +		dev_dbg(dev, "Not registering hwmon sensors\n");
+> +		return 0;
+> +	}
+>  }
+> -#endif
+>  
+>  static u8 mc33xs2410_pwm_get_freq(u64 period)
+>  {
+> @@ -523,7 +521,11 @@ static int mc33xs2410_probe(struct spi_device *spi)
+>  	if (ret < 0)
+>  		return dev_err_probe(dev, ret, "Failed to add pwm chip\n");
+>  
+> -	return mc33xs2410_hwmon_probe(spi);
+> +	ret = mc33xs2410_hwmon_probe(spi);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to register hwmon sensors\n");
+> +
+> +	return 0;
+>  }
+>  
+>  static const struct spi_device_id mc33xs2410_spi_id[] = {
 
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index 1fb9864635db..1b4fb0824d6c 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
- 	struct isl28022_data *data = dev_get_drvdata(dev);
- 	unsigned int regval;
- 	int err;
-+	u16 sign_bit;
- 
- 	switch (attr) {
- 	case hwmon_curr_input:
-@@ -161,8 +162,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
- 				  ISL28022_REG_CURRENT, &regval);
- 		if (err < 0)
- 			return err;
--		*val = ((long)regval * 1250L * (long)data->gain) /
--			(long)data->shunt;
-+		sign_bit = (regval >> 15) & 0x01;
-+		*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
-+			1250L * (long)data->gain) / (long)data->shunt;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
--- 
-2.25.1
+Perfering IS_REACHABLE over IS_ENABLED is fine for me. Is there a reason
+why you just didn't replace IS_ENABLED with IS_REACHABLE ?
+
+Best regards,
+Dimitri Fedrau
 
