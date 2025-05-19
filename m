@@ -1,133 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330FD2676FF;
-	Mon, 19 May 2025 08:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121E3EEB1;
+	Mon, 19 May 2025 08:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747643167; cv=none; b=tt08uysG1HtzapAdzd4Sa6v/FLJ98DxKWfZMuWjAYN+AuZkTOpfRf41eapAb73SbYS7PgUQMg1gLaQllt2FR+acDlWypKp9i09pWNA7lLaFsaHUb8ySM1BuoaurcVdWled6pQMrO91t3chyY3BVIc4ZilhbR2lq5DJCT7IrZD2A=
+	t=1747644107; cv=none; b=GW9QRPGILLfh3grnI2niOIkX9dXRQuXa0MKJ/+XR8c3S6LoSIXoWUiuXNq6ZZC5wHVdYXmIbnbl2Mxw6Y1z8TaX0BaWMMfpL1ySbmzuB1Li9J1+mPzm6uSWRDMhGLTV1XauO3RSYt8CELN1rbL9QpNRnAUlI6wbuMULr1IACv4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747643167; c=relaxed/simple;
-	bh=yAQG7CT+mqanmUd2f1Pd4pOmu/OZwX6kWCA/QHpkodk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LcoCJW915BPDmRhaXo19xT/C+0gxQNrMSFxf9Fo1Z0j7yjaSjntKtqgiGTYBhzoZwTmce/cZn2aL6UGqH260UCs3OAWEL7+OQV6Fku1Ys+SeeLRaC9ahoRq3Gi4aktsjSM5QLjCznA8AqFywUSt/rBiWqWioXBa3/BVMaP/hgc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WnCHcLiT; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1747644107; c=relaxed/simple;
+	bh=FfeXpaI/Ry0jTNfKMExK6pstVzErw1I4Sfr4H3AVZGg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V5NgCtRbDNURseRAnsg8gMBT8cxyAt25/ZqR9ER3GkmUwXnSdWi5BolA7MwHDAx8dG/fP2hOHtgRnNEeb+DN+r4gbDtiXqHrfc0LmIOx729nte+2s855vXxgfveG+bXtt1Pqwxs5j65j9kaXsnXWxn+7auyZqap8SGMZdSZEQ6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2s9fGln; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WnCHcLiT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747643166; x=1779179166;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yAQG7CT+mqanmUd2f1Pd4pOmu/OZwX6kWCA/QHpkodk=;
-  b=WnCHcLiTiBX8tdYkhGwtGHnywmDvrItxLA4UrBcOTjBJiz/O58u2pTFv
-   JFNulL53Krs0uzLvLJ4gpK4yv/uH6QLq16GYHmnbVEls75n8ttfsSYpiU
-   Xvw5Z+Syv/SEJB+rVaxzsUE94mDhhdGj534+sQaZf/qp+PocwN42sd6k1
-   82xw1AcVXuUUjFa6IlU85KFnEJ85UkMK94doCZ4CuC+cGsGdS7GjuMut5
-   /Cq8M339hyofR5kXBXwVqr4mf07IkhIcN57YNYg62oz/veVPCjZuPJzwI
-   YnRSwO+0lM+r0gxVjwhhqEBKDQdBuyOyyypRlfrkfJp+Ibb21CWkQ4xpt
-   Q==;
-X-CSE-ConnectionGUID: LDvQ6KBuQqWKJLInVt0WFQ==
-X-CSE-MsgGUID: 1mPdJcvXRkSEGpw0tjY4cQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11437"; a="49434163"
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="49434163"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 01:26:04 -0700
-X-CSE-ConnectionGUID: TCqkIGRPSdSk5dN3KrV3Sw==
-X-CSE-MsgGUID: H3z9d4RPRgmoHVY3/zQ7xg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,300,1739865600"; 
-   d="scan'208";a="139043905"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 19 May 2025 01:26:02 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uGvot-000LHX-2I;
-	Mon, 19 May 2025 08:25:59 +0000
-Date: Mon, 19 May 2025 16:25:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>, patrick@stwcx.xyz,
-	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2s9fGln"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-30e8f4dbb72so2876699a91.1;
+        Mon, 19 May 2025 01:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747644104; x=1748248904; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvRUDBggjQrkeFVZcFd8aL7npkTR9uKvpgi0YdQ9wUA=;
+        b=R2s9fGln2CZxSz5Z4gJRWlvuD+rbQ8tazhovSjMaaTkHUQx6cDGqjVLZfRNEcUJnhv
+         c2Jx3wFGWWc0/Nt/93yi5+nyrsbfQH0Vl6wEhDGUGZ+5syp5IlqcEZG28fvFzn/lya1s
+         Tf36+G0uhWC6be8qCjr5le1FIlPmGsU3l3bsxByiRV6l+Obx7ZUQpIU78IMFL/zyRObw
+         gSeumfNBKk3HfJ5gnRd+xb7dorqTUvEWb4G3zrFrUZECqWd7hqJ6eWPynO9wEcDpgD2H
+         dquogKhKTnGHV5PxNe1tfOwf6OxsJ/e57VtKz84kT1o4FFeJzhktHAWPD9L3lDv7c92g
+         wMHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747644104; x=1748248904;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AvRUDBggjQrkeFVZcFd8aL7npkTR9uKvpgi0YdQ9wUA=;
+        b=W/74HvESe/4sSNhb54xx87YiBnh+0Lsj3Eq5OCGkML9+gbMrAkvig4WmJbDOIkP1rY
+         P3aho0ZTJQahDaJ53qdCLzx02aFxmfgC70iu0Gs51vUoRmpXhtk8/3Iwn56oAsOIoyzc
+         MNS7yJcHHNKZx/5MfxMjWH8BkwGGwUiL65OCy6uZPZ1L0WjxtupXl4ogK7/8JyKsfVqp
+         Vy1LqXPuIM9w90Mruc8F+zi7Zr/GefbZ+Anz32pRH6kes1BEp+T6Yqsd9hNrZta/uIsA
+         aBotTJGyM63qYApMjxoaoQWK3o0Yi+omRBsgXIx0FRt+tYBjPPKk7Wl88UPuUtKfYskH
+         chVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWb1tF5Y9mVZBOLb2uZHW0kwJd1KNxiHm+e+txua9SsfoVI4I5lT3VftXbaEpY7vwCQ+aB4fD0bAzHE3g==@vger.kernel.org, AJvYcCWfDvW6CFD1gG4iIuTib5LRf8J7Mr5nRuiYdpHZ/wHZ15G6HzuiyKkFnnSCICb68LQ2z8S76lg1gvVBgeTC@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLg41zRHgRethVJ/UTrhclFMsiNRMPGARc/1l/JQJtvO+/SAAQ
+	dGRulle2INO4iZA+67ka62qP+bqvTQEOnsfP0tvV9KIkgzM3xuqJ+ZV5
+X-Gm-Gg: ASbGncvZbo61j/1NYT5v9MwHuu3Rn2101yFppXHnH+XPbX6lwBxyjey5xb42hFVB2Ma
+	hU963QZwysr3vZDtff2hQf+f+8nztixsTUp9tjvKMdNalpdh69G7OPFeh8prbOhTGv4Iuxf0YUb
+	+Ug/rWcY/YXlKPE6yr+Ef+sxPb7lQMATRR0V3uKbrxGi8LQXIoFIAo4HOcgCfUk3Ja1J8tsRwqu
+	11O0vv7p8wk7Dl80Txv1XjQWA8e1PS1QXNqRa2Ys17UoTCJMy+0cdPW5PIx1Lpv71r+qcjUOrSc
+	9wA+8I9t3msNoBWyhVhcj+5hDzufkkf+0+rx0A3d1VcupBw5ZOPjq/NZoMlIOTA/is5zn91lZtt
+	pb8lC0+nqB8zWEURG+wYgx+ZA5k63BLCSs1s=
+X-Google-Smtp-Source: AGHT+IF/EL/A6KgYWtiUE/oefYxhyRZnJUOJ1QhsszUFMdKx1Dg67NU7yO6eBgLxi0Q5L5yTdX8p0A==
+X-Received: by 2002:a17:90b:3a48:b0:2ff:72f8:3708 with SMTP id 98e67ed59e1d1-30e8314fdb5mr22269718a91.17.1747644104272;
+        Mon, 19 May 2025 01:41:44 -0700 (PDT)
+Received: from ubuntu20.wiwynn.corp (39-14-65-183.adsl.fetnet.net. [39.14.65.183])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e33401768sm9870275a91.3.2025.05.19.01.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 May 2025 01:41:43 -0700 (PDT)
+From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
+To: patrick@stwcx.xyz
+Cc: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
+	=?UTF-8?q?Carsten=20Spie=C3=9F?= <mail@carsten-spiess.de>,
 	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] hwmon: (isl28022) Fix current reading calculation
-Message-ID: <202505191635.mix4vgrC-lkp@intel.com>
-References: <20250519061637.8796-2-yikai.tsai.wiwynn@gmail.com>
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] hwmon: (isl28022) Fix current reading calculation
+Date: Mon, 19 May 2025 16:40:50 +0800
+Message-Id: <20250519084055.3787-1-yikai.tsai.wiwynn@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250519061637.8796-2-yikai.tsai.wiwynn@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Yikai,
+Fix the driver for Renesas ISL28022 power monitor chip.
+According to the ISL28022 datasheet, bit15 of the current register is
+representing -32768. Fix the calculation to properly handle this bit,
+ensuring correct measurements for negative values.
 
-kernel test robot noticed the following build errors:
+v2: Add the missing variable declaration
+v1: fix current reading calculation
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.15-rc7 next-20250516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yikai Tsai (1):
+  hwmon: (isl28022) Fix current reading calculation
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yikai-Tsai/hwmon-isl28022-Fix-current-reading-calculation/20250519-142038
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250519061637.8796-2-yikai.tsai.wiwynn%40gmail.com
-patch subject: [PATCH v1 1/1] hwmon: (isl28022) Fix current reading calculation
-config: s390-randconfig-001-20250519 (https://download.01.org/0day-ci/archive/20250519/202505191635.mix4vgrC-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250519/202505191635.mix4vgrC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505191635.mix4vgrC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/hwmon/isl28022.c: In function 'isl28022_read_current':
->> drivers/hwmon/isl28022.c:164:3: error: 'sign_bit' undeclared (first use in this function); did you mean 'assign_bit'?
-      sign_bit = (regval >> 15) & 0x01;
-      ^~~~~~~~
-      assign_bit
-   drivers/hwmon/isl28022.c:164:3: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +164 drivers/hwmon/isl28022.c
-
-   151	
-   152	static int isl28022_read_current(struct device *dev, u32 attr, long *val)
-   153	{
-   154		struct isl28022_data *data = dev_get_drvdata(dev);
-   155		unsigned int regval;
-   156		int err;
-   157	
-   158		switch (attr) {
-   159		case hwmon_curr_input:
-   160			err = regmap_read(data->regmap,
-   161					  ISL28022_REG_CURRENT, &regval);
-   162			if (err < 0)
-   163				return err;
- > 164			sign_bit = (regval >> 15) & 0x01;
-   165			*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
-   166				1250L * (long)data->gain) / (long)data->shunt;
-   167			break;
-   168		default:
-   169			return -EOPNOTSUPP;
-   170		}
-   171	
-   172		return 0;
-   173	}
-   174	
+ drivers/hwmon/isl28022.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
