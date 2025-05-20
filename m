@@ -1,505 +1,210 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa1.fujitsucc.c3s2.iphmx.com (esa1.fujitsucc.c3s2.iphmx.com [68.232.152.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88DE25C81A;
-	Tue, 20 May 2025 02:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747706681; cv=none; b=sCB8SkHyqUxyvyXT/AwgY9C5QCT7z5wZtKmO677MGyGzoETdZX/M7FIKyAWUPcLHxB8tS9fVkzmpvI0sPB2HuCQLzm5+hy67Nx0llc6Wjw+0YA/qN32Ac3C2fpHtlB5TqtLBhP4+uMP8dEdvDpNVkofvQBd3mC7xrLFKMXzLhdw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747706681; c=relaxed/simple;
-	bh=gv3jROYmmy5OuIPSin5GvRHRP65GFul/edwoC/XLnTg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=D2wmE6ntgRXEgjhAe8rtO9Cx0WAygbaJYB+dXqu5oZSGh6TBFZtmuP3aWuFylBp3adlg55TLdlvFAtyDllUHxKsCrjJ6DGmRIpZqo57IL3kIBqt664QngtXkmADIpIX/tPbBiJlMk7DcrNjWhJ315UwJOboxrMZ2HyJ0jomArYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHRzASBU; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A829525487D;
+	Tue, 20 May 2025 02:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=68.232.152.245
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747709663; cv=fail; b=D3k8ibwP4tmTVoSTVFTxLKOD32bWKJjHElB2kWrLdXZn2+XAjS4MjVV2w50+WgDupd3ChlzSi7x4Hf+aEayoDx8U7khPXos/ue8qyxFbmIW3T8Fhfzp2JJ4xoHZULsh08QiwZSjMlMAFVJi9/xDkfbgogaJ+n3mRFdJs+m2UaYA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747709663; c=relaxed/simple;
+	bh=NwoBIBl5XQbEaBtXph9+TudOv4Qk5DXcfSkDXIFpGYw=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WLO5NlbNNHsAKwV6FCzWItExwtBxrt6n7v8OG3zmjBlvzGdw+CDnH1hsU6y0yVilv8rffwMuYoXghngzdGiKL1ore6I8eyXifVO7h0GY2/VIl/4fChBOCuvVbkyApFjKIuGZD/BBblE72pnFZeKSIQDNOBAEobx5swC9OJKKNto=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=JHtr4itA; arc=fail smtp.client-ip=68.232.152.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHRzASBU"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2320d2a7852so19330965ad.3;
-        Mon, 19 May 2025 19:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747706679; x=1748311479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FhDHTmLGe4Aw+TV8M70GrLKaReLMCHE0YVjdnwPrHVw=;
-        b=YHRzASBUZmXX1VKoUL+zCuFN6w8xAkDOIaWyEb7Jc6aOmpXhkCeRRHYyEuiBz7hfQG
-         U4DN5tHxwE86IpP2PSOzOIErX12HiUfIihOH3uOJiVXcJhJ74F2mY6djbfOkLoqQ3AMD
-         Z8XflbZIdQDOyhVoBway1xnJ/6N2eYW16Z3coBytuum43grlf+pKFNiW9h5N4c1VueOI
-         OteRpqqnwe7hGwpTlQKYlmh/HJfPKnOxxF3fAwVwnoyPu3Gi53dB8tvvrdT5kZxQHuPC
-         TTB+q7Qb+gXHqkqrJxRs3nsVrMBpY6y6zjPaPC6VmCEa+EFFr1zWqiymOOlxJLCj0U7E
-         9QZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747706679; x=1748311479;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FhDHTmLGe4Aw+TV8M70GrLKaReLMCHE0YVjdnwPrHVw=;
-        b=Nwpjm9EN9/BavfiX3XIQS0dGdnjaoMQCj+X/0wmDlZoUiarXrnbaZ1ioShu/6Eekw0
-         QVzxj0sX2gBu5dtWeoAXWAS/2U7UtcVQa3cVXSdHgg8XQZ3x3zgtqdqf41Ep22qItGL+
-         3MVXAJf2UE4PD5pY208gq+XeN+HzTbSs4mMeidLWJQrsQ5DZ5poTZB6k056Q8asYdW20
-         CA9ap4YmfePI/kDBMQKE2ZldF8MJ87P9zpejs9FJ3qXWnbTdGOrf5ewPoZmZGn9o8Bl/
-         ZDpc1QwWuKYG0+KMX0PIYhUMeVzlrAGzFxJlU3TIbFtkHhSlzPMCcWhgTcNInN6u6Rep
-         g2VA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHxZ8h0XJMFKNreQ++ssahrL7splUJWO/iwn/RaAXcA/ELUfNfrbVVTx8hjY4gkXFKtJgzIMIRHBBf@vger.kernel.org, AJvYcCUhKiXH2Lzii7KDSVFSlWuoeICwY1G7CB9WbEg2dFTS17y3j77vJ+g6fSVp1q5qJQvr5ZE5xWjl@vger.kernel.org, AJvYcCVvtL8iBEZ7iozYc6C06lW39CNxHl+wPVYpLUzxJH1XPsYFDiYh9pHoZIEuJHjSzGnJBRPS3C46T5wSqU8X4yM=@vger.kernel.org, AJvYcCWMqlvp6oBdjHdl3QHq/uv0wo2P9cQ3aBS3te8YDo1/PB+cwuRe3rre879FwEHAV8nfXp9rBkp2VnjM@vger.kernel.org, AJvYcCWzOjThriYW1OLI6bAqam188eNXVOqBfItCiRm9WK1KScrTEZvD4qUGx8xqPruPaCZbl/jiIOucQ3eqHPg=@vger.kernel.org, AJvYcCXL7zzhIucufcCndObLeqdUb7ghfHb64Xk4xhtXuv6ww+k6Hx1IYRhV0rznCPjodIZxuVVEmFhDNZZ4Vw==@vger.kernel.org, AJvYcCXR5C+fUjIKdKLnsaX3fTn5jy2r96blHTFejkT3tzv1AlDxCs5IAS7c+sLocC3mtCQSsF+jNsxNmRNO@vger.kernel.org, AJvYcCXpPCm/+HseTBNcwDZXb17Tfx+H9ad7d7Kq2wqG9dd+85JUvt9Z9SxNjmgV7oZPp96+un12e7tcRCI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoO+iBRZhOx8anue0O9kKhzE+5YKWQODcC3ujM0wCiz1Rh1xlA
-	AcckEwYne45wgaf/0gmRC+YOJsswZjVY1hgGv7OpqZ48lNOHi9bWaZQ5
-X-Gm-Gg: ASbGnct6M8waQ2fXIbw+16HmVWisgRMhH23OCG6aaV5B1M1vP0nlYFvlarlumgfbkcf
-	w3MVTO8XlPwsPh5/vitpVPysCB3NGhGH7dluV050pqsoKPSbq2gbliznsNGQWjJp2wwD3HIG8Xg
-	xJOCWg9AlVq6f6NlHZ89nzb6HTvvZcBVjuokqxMFn3herX4OuAtDAD7v1t9wENK1gKf6c3qRj6o
-	9gl3Eb0CNNwA0mhNWApJffr/ddx2g8OhF0/wnEKU1OB3OHoy9JZiQDXLfVQ7k6S2KH+osniF4sK
-	HArzb1LcW9OhtnZ+bW35Mxct4uymHAVuuT6R1XxUygFF8Nxy4Hd+N6rsI0VDQitGL3UCIjY62Dh
-	gQD9xVEMdkWzLBA==
-X-Google-Smtp-Source: AGHT+IEwMwmBnwd9oHAp/qdOb2DHfhiwm4y9PhjuuRCIxicbZNMXHe8PfD0N/7gHr8v2Xt+jj4qSgg==
-X-Received: by 2002:a17:902:cf42:b0:22e:8062:f77a with SMTP id d9443c01a7336-231de3baf69mr185743715ad.52.1747706679031;
-        Mon, 19 May 2025 19:04:39 -0700 (PDT)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9fc8sm66543855ad.27.2025.05.19.19.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 19:04:38 -0700 (PDT)
-From: a0282524688@gmail.com
-X-Google-Original-From: tmyu0@nuvoton.com
-To: lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: [PATCH v11 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Tue, 20 May 2025 10:03:55 +0800
-Message-Id: <20250520020355.3885597-8-tmyu0@nuvoton.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250520020355.3885597-1-tmyu0@nuvoton.com>
-References: <20250520020355.3885597-1-tmyu0@nuvoton.com>
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="JHtr4itA"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1747709662; x=1779245662;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=NwoBIBl5XQbEaBtXph9+TudOv4Qk5DXcfSkDXIFpGYw=;
+  b=JHtr4itAUdStxiIzb6hJsLpXRVDflcKmpVc5ehovCJ1ap1DUn97BnknJ
+   lj3f1zBG2vG2XZ60S4G96e8yPfHbATJo86gFxgN9OuPuDFHzkWvWUqjdD
+   3QT2HHQRC0I9cm7tVSfnfep8+OLBNAgJRHQ6ZJpcWNQqBy7YG9KKxQWP7
+   wHex3GJJVMNPaWtOKWT3QUUNPTrf3zXNSjlL8SlhK1ntI5dGfIMbLChnZ
+   oYqOFsYQIC85JFnNROnpa2k/UgWwtqwKmOkILkbIzSklEs+Jfay29Tjwu
+   k0qKEa046TqC1FWB0Uk1BnP94lljsT+0pZqEzU3PCrRDjPKSDqZ1y3nal
+   Q==;
+X-CSE-ConnectionGUID: 7liNoaGjQf2/SFUwd/Jgbw==
+X-CSE-MsgGUID: uBtWatBHT+GgS9l0cbu+mQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="67019262"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739804400"; 
+   d="scan'208";a="67019262"
+Received: from mail-japaneastazlp17010005.outbound.protection.outlook.com (HELO TY3P286CU002.outbound.protection.outlook.com) ([40.93.73.5])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:54:11 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tg9hdP2GeNFAu7bliw32w5GFAhJpfRkh/N9btSR3MmfMoHxIXeQar/vI8hC4trZ7J4+S9pcQizojpviRwPLolePYCot0rJE3/p4HujGoAmFDT25axH/GnCyTtsWuixn/QLJnJ0qFeXQD92PRvWX047kL1zBbFib4SUxqMJPSiEx3lI7WMEVNOLCQzHAcBz8nWlnAEW+O9R3UP6PPibB+XxHmYHddN6XGl2w22D74D/pvibbH67w0t5z4pV8YJhlNEbzcreXJ5Tm/lp5OdlSKdHYUVyJzyPzKjgOYswpGhKOKlC3g790+NMVa5sTQEb4Eq8DGrRghm9D55mHGZ9gfWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NwoBIBl5XQbEaBtXph9+TudOv4Qk5DXcfSkDXIFpGYw=;
+ b=R7/mvxbo4+xq8AAOA4jzcOW1Rkr/lOghsTebEg+GpHG+Cw1z9aYLD4qUt2iw5bxMNKHchMohyTf4Xi6upPK52uHdiryu9oH0Zr2OnqNf6a+8wCgYMnXtzsm8PFVnXSjGfaGeY1jdDyw98/YmdsBLMkdXVYB4w3PL2QavAdQu0OAA8+Yri2NAYxlgn/whKACPj1EfMgoVK2ii594uORvmto10x5mub9OkYIIbRnYiq7ODgfRukkU07KFIiRNqY2Wa/Raf6Wo4O7xIXLLmIXg+29QcciAZQgv0Hz63HIHgVPC5ZzuQhgwGlelnjUh4STe481TIw1ADjK0DLsvHZFXubA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from OS3PR01MB9382.jpnprd01.prod.outlook.com (2603:1096:604:1ce::6)
+ by TYWPR01MB8429.jpnprd01.prod.outlook.com (2603:1096:400:176::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Tue, 20 May
+ 2025 02:54:04 +0000
+Received: from OS3PR01MB9382.jpnprd01.prod.outlook.com
+ ([fe80::948a:2ed9:c684:905a]) by OS3PR01MB9382.jpnprd01.prod.outlook.com
+ ([fe80::948a:2ed9:c684:905a%4]) with mapi id 15.20.8746.030; Tue, 20 May 2025
+ 02:54:03 +0000
+From: "Shinji Nomoto (Fujitsu)" <fj5851bi@fujitsu.com>
+To: 'Guenter Roeck' <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+CC: "Shinji Nomoto (Fujitsu)" <fj5851bi@fujitsu.com>
+Subject: RE: [PATCH] doc: hwmon: acpi_power_meter: Add information about
+ enabling the power capping feature.
+Thread-Topic: [PATCH] doc: hwmon: acpi_power_meter: Add information about
+ enabling the power capping feature.
+Thread-Index: AQHbyI+Sus8zrfmpRUiAL/7jGhowP7PZ74aAgADhu0A=
+Date: Tue, 20 May 2025 02:54:03 +0000
+Message-ID:
+ <OS3PR01MB938276CD2B8841B7E76C8B8FD99FA@OS3PR01MB9382.jpnprd01.prod.outlook.com>
+References: <20250519072756.1512244-1-fj5851bi@fujitsu.com>
+ <a82015f1-0a19-451e-9087-060a1d2c6c4d@roeck-us.net>
+In-Reply-To: <a82015f1-0a19-451e-9087-060a1d2c6c4d@roeck-us.net>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
+ =?utf-8?B?NTBfQWN0aW9uSWQ9NWUwZjVhNjYtZmI1Ny00NTBlLThhZTUtNTY0ZWQ2YjFh?=
+ =?utf-8?B?ZGY1O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
+ =?utf-8?B?ZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5?=
+ =?utf-8?B?LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
+ =?utf-8?B?ZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX01ldGhv?=
+ =?utf-8?B?ZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
+ =?utf-8?B?LTNiMGY0ZmVjZTA1MF9OYW1lPUZVSklUU1UtUkVTVFJJQ1RFROKAiztNU0lQ?=
+ =?utf-8?B?X0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9T?=
+ =?utf-8?B?ZXREYXRlPTIwMjUtMDUtMjBUMDI6NDU6MDRaO01TSVBfTGFiZWxfYTcyOTVj?=
+ =?utf-8?B?YzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?utf-8?Q?d-81e1-4858-a9d8-736e267fd4c7;?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS3PR01MB9382:EE_|TYWPR01MB8429:EE_
+x-ms-office365-filtering-correlation-id: 5c225a15-b69a-4ef4-bf86-08dd9749947f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|366016|38070700018|1580799027;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?RG5LZ2I1MzJUZDMzcXRBTkp6RUZqaUtDWCtTVzJmZlZBUDlUbTR6ZzZCY3Bt?=
+ =?utf-8?B?M3BLd0FSMW5wZm12bTdoMUU4SUpBZ1BYOFA5VDZITXA4dHFleStCSXdZVEFD?=
+ =?utf-8?B?QjVwYStQTVpRYTU0NlJ6aHpHYUdURTJYNUo1YTZzZENyUHFab0JuSkNmVnlE?=
+ =?utf-8?B?OFVJUEVrTmJiZlE1WDc4SzNtLzFxbHVYeC9rN1A5VVBkZmxiTHNPanM1Lytn?=
+ =?utf-8?B?ZzFhZ2tXdGhReFp3b2xqcE5majVoQ3BacTRlUmRaNGZlL3B4VUFaRWZhSXpo?=
+ =?utf-8?B?aE5oWG5KM096bnZCVll3UjV0K1F3RStQa2orYWlLZzRVcVZmQXppU1RIeWt5?=
+ =?utf-8?B?S2ZlclJlWk9pZVNXMGljZktld3VFazk0MXRZbldOOWZIOFhXMzVZSXpxemY3?=
+ =?utf-8?B?MDNEOFVZNjMrdUhILzc5TEh6Nm1JRERoOE1vbkVKZWorbFR4ektkc2dKa1Ev?=
+ =?utf-8?B?KytMNzB1RzVwRktiQXdWaGhwK3U1N1hJUytYTnBzVHJZamhWZWM3V3pML1RX?=
+ =?utf-8?B?aUtvUUltMVg1WWM4YVFlWVo0SjdPdjlDVDRNWkViSWpPblJadjdNWDVQZ1Vx?=
+ =?utf-8?B?QThHTU1SVEJ6Wi9Mam5IMDkrRnpTMWhoYjg3OFg5RzdNRHg5TGpqOWdDc2x4?=
+ =?utf-8?B?Zjh4ZTlPcFlmVzY0cHhPR1FyNTBUd3UzbjdLRExGckhuaE1iWWtzSGxJSXdI?=
+ =?utf-8?B?NW9qZitHalY5MFBseXkva1ZOaC9ka3VJdzMvbDNPRy84N3Z3SXVGbE5wbFFF?=
+ =?utf-8?B?R0htZTZ2RUZEQ2t6VFd4dFRiRG03djd4bDVtMnQwdUFsMncwb3VJU2diYmtw?=
+ =?utf-8?B?UTVTeS9GOS81SEx1R2JzVGNMRVRzc2hVQjl4WnUvWlVHemlzZGRoUVk0SHZG?=
+ =?utf-8?B?d0JtVUxRNVdIQzNodjlLaTVlZktwVnJNZ0RlRi83UE4wcThJeHlHbXpJOFpD?=
+ =?utf-8?B?YmZ6QWhLYy82bmJiUFlXb3NzdGpQUGNRTHMxT2VwM29vTnU4SU5lVW92WGp2?=
+ =?utf-8?B?R2ZrNVBONTYya0tXN2ZIWmFVdTg4eUdINkY4Z253Vjh0aENvZCtLYWE5dzln?=
+ =?utf-8?B?SFRJUUdBMUxyaER5M0NRa1dtSjlRUW03c0VZN0d5NTlPeHlQVXZ2eFBDQXhq?=
+ =?utf-8?B?Nld3a1M1MkZBb3g1UE5BNTBxMTVSbmEyaWZ2YU52cEdiQjRTaUJUTzNLU2Jj?=
+ =?utf-8?B?NDMrRS9KLzZ6Q2x0VWM0c09QY1VaOEVHL2U2NVE5MGY3amJIUnpKQXNuQmV4?=
+ =?utf-8?B?QnlQZXFvMFl5amx4UVJvamgvZE9rZlA1V1VvbDdNamM4YmlvOFhYaWlFQlUx?=
+ =?utf-8?B?Z3hSQzhtbDB0OFlMS1U5MHVYQVpYdVg3N3FJWnFOR3VCeVdLTnZma21UOFNa?=
+ =?utf-8?B?T2YvMG1TSEg5bS9CKzZHZFJNNkJZQzF2UEQzQjN2S0Q5ajZDcXRBZWx5Zk1q?=
+ =?utf-8?B?dXhXOTJ2R1BzSGRBTmN2WHQ5WWhnRzdMWWtObXNWdDk1VjJrc21BSmRZRCtk?=
+ =?utf-8?B?Zkc3QlNWR0VTcFZ0b1NUazJFSStwZno4YUI5QnVUSXMrRGpmREZDN3JBcG5C?=
+ =?utf-8?B?MXRnandldzBjS2hWUjJEc1p4elNQeGFubUVTMWdDcVpEVGJmeXd2UnZWMzBz?=
+ =?utf-8?B?OWNqdm1VN1ZlVzlNY3NET0JiZmJybWtta3RvMWpNVEVEWTFkVTFxb3dHeDBE?=
+ =?utf-8?B?TnFsTWVYWkdQSlFvTmZnTUlYck5ZUWp4UlJoQ1NEcHpHZDcraUQrSmhpYWk1?=
+ =?utf-8?B?cTBRWjdxc0tCakdJRVNDZmd6aldrOG9uZ1ZFaGVjeUZjOWpYQUEzYXU5RHR0?=
+ =?utf-8?B?SUdzdS9kZ0Y1d1JaWUZjYzNFVmZVNEZ4c3FqNWxFWXNZcjlMeTFCbUlPQUI3?=
+ =?utf-8?B?cVRtcHIzYTBPMXVjWDE0QkRwWXZ1bUM1UTZkTEl1ekZCM29ZWktGRFNIcThq?=
+ =?utf-8?B?UWdXYVJYT01IVVZiVU1jdWV4VkpOTno5UzhrZEh3MkdVZTA1SXR0Y016ZS81?=
+ =?utf-8?B?eTdzcUFFZ2gzLzdHVVRMdjJ4SHhWUjd3cUxLZzZaRTBGNWNEL3ltR2lOaDUr?=
+ =?utf-8?Q?SQ/kOX?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:ja;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB9382.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018)(1580799027);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?enN2cjJyY1RsN2hHUEpxcUJRU1FKNDFITHFQaVpzaEFOT0ZhMWhTS2hsZXVl?=
+ =?utf-8?B?dUh3SDVGOWJFR1hyOWhZTnNXVllsdVdaNDZ3R1lCVTZCVDdqSnBwZm5kQzM0?=
+ =?utf-8?B?clplWGtJcGdGeGFqVm9qSGF3dlVIdlRrMTUwZXdoakxXLyszWGVTMnJUZDFu?=
+ =?utf-8?B?aS9SQlhPaiszemc2NFVLVjhiWStqSGtnc2pVdVVHTVBkazhOZU5nWVZTQk01?=
+ =?utf-8?B?bkhUaHRmdUxGV0s4SUVSRnNCWHJxczNBVEd1RFYrK1p5WUdjaDFrRmlmL2Jo?=
+ =?utf-8?B?UDljVzJNMCt3bk9KRks4S3VKYU42WVBNZk9PdUhGK3JySkFncXc4NzYxWFc4?=
+ =?utf-8?B?UTAzRGR3a3NRTVdVREoyckZMK3VWTkM4TzIrQk0yLzgzNitaWEtXbHZiUWMr?=
+ =?utf-8?B?c0x6WERBWWM1TkVLWElOaFhoeHc5R2Y2SCtzNGVhRFZjSVVUK2pGd2cxQmp6?=
+ =?utf-8?B?angrSk1PZ3AveFp4Y1dVUk5KdzhxZ1ZLajR0TXRIM1pjSE9TNWlPWjZYanpO?=
+ =?utf-8?B?MnFwYlM1Qlo5dlJaSm11R3N1SjMzd01DTGtLT25oR3ZYd2U3SHpJd2YwRG52?=
+ =?utf-8?B?Q095OVdkdmlvcWJhTlhXekRjVS9ScjZWQ0ZjaVJaUjZBdlNDWm1kem9MZGs3?=
+ =?utf-8?B?Z2M3UldPeWhOZ3JwL2RGUUxjWjFBeHRpUndHSHB1NXpUcnpLakFEaDg0M1gz?=
+ =?utf-8?B?NFQrN3o1RTAxeTE3NE1hOVBYUnFKbmZ6Wk9MMjRSbFY2U2RROXQybGRHRlh6?=
+ =?utf-8?B?TXR1UXBvdXF4cVVOMTFHa0p1S1BPbm5rRWZ5MFVvMGk3UDgzaStpTTArTWhw?=
+ =?utf-8?B?b3ZvbGNleXNtUjJPYVNyZnRyQjhwTEIzNjNKNm14Q0NOcHZPaXlVL21DMEhK?=
+ =?utf-8?B?MWdRampBWVNwK2lGelhjK204WVRyNUhFWE9ZcTAyakR0QU5vL3VRNURSN3Iz?=
+ =?utf-8?B?V0IzWUhVUDR1UzlHQVZRN0tCTmZ5TWV4aTZpN2p0YzVSaGY0QVdjMitLc2VG?=
+ =?utf-8?B?OERJcXcwTUlPcG0rL0U4T0R0NWh0WFc0MG5wM3FvbFg0SjRWZjAwb1YvaFBC?=
+ =?utf-8?B?MUdQMytOWVM5QlJodndvSEdIeGFyNWRLVXl4cXMwMmNSVUlQK0pHb2dyT08v?=
+ =?utf-8?B?UHNvR0NQWlU4TnFkYkNhQ3pwT3Rid1FVZlVCOVoxQUdjV2duc3ZmVU1OTnhz?=
+ =?utf-8?B?cnYyV1NCWmtldENjWm1Lbm9aN0hTWlRSVGF1YkE5ajFGOTdRTU9NSENqZXJK?=
+ =?utf-8?B?cnJRWU9uQmJKNW15WVNQWk1yQkpXTmt2ckNmOEdYQXhpVnYwUjF4R0N6SnlP?=
+ =?utf-8?B?cllKT25FT1ZIeVZhdkxGdjNQL25xVzJ0L054aGR0TTlieGFxZnBiTUpySG5U?=
+ =?utf-8?B?OUVjdi9HUHZkTjFvRDE0d0JpZG9ObWI3eXk2NVdzbEVoRkxqR2tyZHgwQVVL?=
+ =?utf-8?B?NDg4K3ZqcDJsMTk2eEJON2ZsdXVaYnF2U1lPemVVSWo0eWxWaHhMN2VsNzlS?=
+ =?utf-8?B?VGFRajBlMG9sdGlDWVBCanFlZFNXNFFmRFMzck5wZUdzcFJRakNLYk5RQUQ5?=
+ =?utf-8?B?TTJabk16UnJJYTQyc0JpY2xTa09mNDBqWWZUMFFuUDRVTEVMSjBvSktlMHZ3?=
+ =?utf-8?B?ZTJ5K2c1TGI0Q3JxR3JacFg5WW1FOVVUNWNzYkJUaUZ1ajdSYjdjaC9IUUl6?=
+ =?utf-8?B?QkpJbXdMc0M5aTkxb3loWGpJZVJqbzlYR2hNejBnYzdJbjZFMlZSSVNzUTZX?=
+ =?utf-8?B?M2NhaE41bEZ2bUlIOHNjdElXbUxPaEJhaUNsUklWTHd3Q0pWNXBqYUFab0t4?=
+ =?utf-8?B?Q0xmZmtFT3JYNEhNMXdNVU5DTDZGV1VmTC9xaDVzd2RtclZSZUZqcVFZYzFj?=
+ =?utf-8?B?NTA5Ky9mVUFqNzdFQ1FscHpMclcvL3RlQmRFc3hLclpxYjRMQ0gvdGlmcXpW?=
+ =?utf-8?B?SDZzQUIzYkkvdUVldTEwcDcxeUZMWkN5YlFGaUIzK0luano0aDJ0Q1hSY2lx?=
+ =?utf-8?B?QXovdHpvYWlvdlpZMGFFRlRNZTBtcTkwdkFPbDBQTmZ5d3JuTXFhWDVtNCtq?=
+ =?utf-8?B?TFNZR1J5YmpBYXVNbXFBWGk0ZFFmWnU0U01lUUdrWHFwSGpmVkt3ZS9vTWt4?=
+ =?utf-8?B?cG5XQkVQaTBsd1d1bDM3ZUNWM05hUmxtbzBnVFk0RWp6c29ZT3VVU2dmeGtj?=
+ =?utf-8?B?akE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	PI5vR2ZQCbtOawWql/QWjzQOnsgLuBtERh0mOrOh3pHDgTh7Ojy1nD0dFhD7bD2ak5QpmGU1Fa6QEF+sMKqF/p6BUBMSHHo6LUbmXUwbRIJUusm3pIdx0T+kokRUCQw+9dkHzZ8SQlGu78X3ChDQeMvYq0dlOyGruHECiHPY8vr4Ids9aRUeUoGF0rl0OiyWua8bNLIfZjadfR/3d0B6utcYIoGB5T73lDIZwdS5muT2uRzovGjObX/zjhK4WVtOloBjqb3OE0DBPYwmZFLZatAuHjngydZAw2cK7v9ZIzlaok4SggpVx+vmI4ee95to0NvUAjzMzdf0gbBcxzt/2n4P24QzgoEXZXArlqfm7fykGHbUd2SKHoc36f08wXpuvFKNFzL8r1fLKZj6yCsPjPZMTGjh/11ToHq3jTJuT7Q5k8qku1LWeAL3mssqDRNWfZNi+WsrAZdNOvzaDrqzbe/oj/VMchMfXdkYvkGsl9WAHI2UccwWwH2HNA0YfmN9AY7lP05qA6dbUnrBiDNPxMts/g9sppmBHk9yOKIsGxVTTPC0T95mgRskWFuNVFbzsPYt8clhTY4aVFwLSYpK3XMoa+m56N5tSmlJ/LXn/x7QOcI+u6A3AEOSc5gutyh5
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB9382.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c225a15-b69a-4ef4-bf86-08dd9749947f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2025 02:54:03.6182
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BTtM/era5CUJp42eS9VA45LQ0rf5QORu343Qigg7wjleaC5GHz+j3mg8UO+d9sIya1ZIlVLKdL/MsjU/LMIASphWn1zzE8c85qOBjJosGhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8429
 
-From: Ming Yu <tmyu0@nuvoton.com>
-
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
-
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
----
-
-Changes since version 10:
-
-Changes since version 9:
-- Add devm_add_action_or_reset() to dispose irq mapping
-
-Changes since version 8:
-- Modify the signed-off-by with my work address
-- Add irq_dispose_mapping() in the error handling path and in the remove
-  function
-
-Changes since version 7:
-
-Changes since version 6:
-
-Changes since version 5:
-- Modify the module name and the driver name consistently
-
-Changes since version 4:
-- Modify arguments in read/write function to a pointer to cmd_header
-- Modify all callers that call the read/write function
-
-Changes since version 3:
-- Modify array buffer to structure
-- Fix defines and comments
-- Drop private mutex and use rtc core lock
-- Modify device_set_wakeup_capable() to device_init_wakeup()
-
-Changes since version 2:
-- Add MODULE_ALIAS()
-
-Changes since version 1:
-- Add each driver's command structure
-- Fix platform driver registration
-- Drop unnecessary logs
-- Fix overwrite error return values
-- Modify to use dev_err_probe API
-
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 297 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 309 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 661646cab68f..91ea3eafc533 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17459,6 +17459,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 838bdc138ffe..d8662b5d1e47 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
- 
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 31473b3276d9..da091d66e2d7 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..35401a0d9cf5
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,297 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2025 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+	int irq;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	static const struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void nct6694_irq_dispose_mapping(void *d)
-+{
-+	struct nct6694_rtc_data *data = d;
-+
-+	irq_dispose_mapping(data->irq);
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!data->irq)
-+		return -EINVAL;
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, nct6694_irq_dispose_mapping,
-+				       data);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_device_init_wakeup(&pdev->dev);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to init wakeup\n");
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, data->irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"rtc-nct6694", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	return devm_rtc_register_device(data->rtc);
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
--- 
-2.34.1
-
+R3VlbnRlciB3cm90ZToNCj4gVGhpcyBpcyBwb3RlbnRpYWxseSB1bnNhZmUgaWYgbm90IHJlYWxs
+eSBzdXBwb3J0ZWQsIHdoaWNoIG5lZWRzIHRvIGJlIG1lbnRpb25lZC4NCg0KVGhhbmsgeW91IGZv
+ciB5b3VyIGNvbW1lbnQuDQoNCkkgd2lsbCBhZGQgYSBub3RlIG9mICJwb3RlbnRpYWxseSB1bnNh
+ZmUiIGluIHYyLg0KV2UgYXJlIGNvbnNpZGVyaW5nIGluc3RhbGxpbmcgQUNQSSBwb3dlciBtZXRl
+ciBvbiBhIG1hY2hpbmUgdW5kZXIgZGV2ZWxvcG1lbnQsIGJ1dCBJIGJlbGlldmUgdGhhdCB0aGUg
+RE1JIChTWVNfVkVORE9SKSBjaGVjayBpbmNsdWRlZCBpbiB0aGUgZHJpdmVyIGhhcyB0b28gYnJv
+YWQgYSBzY29wZS4NCkkgd2lsbCB1cGRhdGUgdGhlIGNvZGUgaWYgdGhlIGFwcHJvcHJpYXRlIGNv
+bmRpdGlub24gaXMgZGV0ZXJtaW5lZCwgYnV0IEkgd291bGQgbGlrZSB0byBjb3JyZWN0IHRoZSBk
+b2N1bWVudCBmaXJzdC4NCg0KU2hpbmppDQoNCg==
