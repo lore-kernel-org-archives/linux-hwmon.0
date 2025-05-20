@@ -1,220 +1,263 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90977286D7E
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 May 2025 16:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DF41DC9A3;
+	Tue, 20 May 2025 02:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747672554; cv=none; b=pnMGknP5fe56P7JXzX0BwUFKQPPKDGvWrdRBtlGf3yzPD/U7OF2jigH8/oHhI1jTW75ebxZBuaI8LzoW/GipdJgHkwro22eqFyAmquO/NTt3/8pjA6jQvNQfFZjO7db1gFx46A6NhPqr/tajsyHZ7JY0h6SR9ccreTftaEKU31w=
+	t=1747706653; cv=none; b=MRkvMPoaEBuJ7L6EYoQ7pdIma7USInxdxt5c+Tmho9EL3IUGrEasUkfDOCYUr/4VuT8/iRvRRl/MqWUzkYAzXrxjZskNkshCJBE5q9rBZLWNOuuIomU53SR5dhE3ftSIX689GA6WQklZwrnhWa8dB1dlDCQzjy8TIpbpGHfUrBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747672554; c=relaxed/simple;
-	bh=0QbvWiCAa+GioZRtVuR1peg4Ser/UC7UOzTp8JIZmZ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VG3kVAhhxWADeLxSBAbBDIHm53vrHP9TFLq5VBm/tROqTzRFXpDWnOugNYOWBmRokXP2+hSaS58lHEili+N/MwTnalAdQCKFrJzc0V5SrINkZfOV5R8KqW1blmxpTzZYfW+RsjZWUuhynT7Sr/3aPF/i4XI6UfW/ddhpDkxA2/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=hY3aAFwM; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1747706653; c=relaxed/simple;
+	bh=eZevjrBJDQd84ux4Hn0Tssg/hRPdrOsP77nOURTRkoo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eMmh9FaOsKDQdx63P3OAOXYN5EiYsTARX7hg0u9NeDNdKoH6alPCrMAU/gQJwYc8oAEtrT3kGzuutfF2lnqDjquxlx+V4btDCxhlVxUDL1d3aMzrGJRtSbkqshhf8E/etQlfndjesqdQllvyPc4COceTa0TSJjzZxQeDxVrjTAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YH/fteTS; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="hY3aAFwM"
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2c76a1b574cso851745fac.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 May 2025 09:35:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YH/fteTS"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b26f01c638fso3481784a12.1;
+        Mon, 19 May 2025 19:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1747672550; x=1748277350; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W58GfmIWiZ3U0eNBo2ssjSmziqMleoXnnwt1PGdnFxg=;
-        b=hY3aAFwMukUfRB4AEd3dg6nw0Qs+GhudysQ/b7DPD6wJ1IDksewyTz7pA7Xiu4wBsC
-         MdCc81yOBJZ5HMK3/TqeQaPyH8yLJmvyU3rW1mN96Y2d0AIJHZPI8++eTkfrj86/ZjXy
-         3j8xWG9XVMpO15C6FKlCxVwPju6N5yWS9gdZy1ADxJghtsX18J/c3vnfYNWmiySrNc3t
-         0s0NP5/TMh6Nc5m2ly6XV+2GDT9mu1cf0N9BxJfHih+0X9r2HcUfBcyM3+T5O3E85oKB
-         EIF2F0yxJsExwNsc8BcUkUF8gO6w5aZNt64W7FcA0fdYz2VecfhatUXstNNyhlQouFzV
-         d+tQ==
+        d=gmail.com; s=20230601; t=1747706650; x=1748311450; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHhCVuI9jfUfhhUD36lWqRN5JsHeOM1NCpeDQ6ZpDpQ=;
+        b=YH/fteTSJD/2LIVshKu/BOibn8pC/aPFm9QR+xx7SUrVw3OV5hcYni8N3lAp46rTmO
+         73KnbILWPlPtsxextpRrGyoWgXEiwof63dmdhx3aC1wxQtBVHarE31ryAIbS+3nIk44r
+         O4gyk1qrOUxExcpjF6qXgpF6LYZ5xBqYXSJzslGtqlbN1ukM6IyhZkqVRAGfGK1RKf2j
+         z3h6o8nU/RHwQ72QLWyoZWqu86rvXgGKfE9fJ5xp7Ic288oRYvoXCD81hUvY51Lt6g5e
+         XDXixAp2nPahK/5pEgJuBwsB58Q+5D3RUkYa3e1+ja5P2IEK+eUtHDxrribAnquFxi2j
+         PYEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747672550; x=1748277350;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W58GfmIWiZ3U0eNBo2ssjSmziqMleoXnnwt1PGdnFxg=;
-        b=wq6F93B66n6lyUtZ0BA9o0D1KmD1xeeU/3pnwxl0I4wNvNvCo05MlX86Cp9VgxMzzo
-         z9pGBeX9BbQa3KATR7EC+kBLAQ3J9vUUa77qZU1tdL3fs5qHL0hXwrUxsrfcwvnNCVwE
-         S9kIBVBXT0+p77U2OTDNjxynUH3Nxb8+fp98KJHapAgjTJtWMvKOT9JPjIr6REe+rC12
-         95aC1M1RxV+sanqXteQbTTaz48rP7tJCsEzZe1WHNp3/mk4/b4x2vhSI1vRqy497HJlu
-         k7MeGwfHnwzmY9kpOQHusemzxWvqJ/JaXi1/qMvEE/v02XhjpXqhZhvEmjantSqSrdZz
-         ibGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXBR2MRTCBjLwIpqtSCAnE6gmtbORuYr+ZmjOpzrzIVFti7OxqLXlMKzvuh3EqBHl+rf+AkUMU2eLtAtA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgygVsK7KolLbmOmSjuzzKRAn499LdDOMR9vQhVSd5srWWDJMH
-	3FMQ+cJ7U11tR4nRZJWYu9iSVyZIqsXZ04qZPWQwOxrf4WsrBCr3i2texQiNnu5g6c4=
-X-Gm-Gg: ASbGncvqnUkwmBwrMwpFO7Z1aPLvn0bJtPGrx4Njg8P7mgFA3+RzDipRAdcfw6NJo12
-	qzLcdzzAK7gQJBrr4Ei4rGcj0tf/L5FbGta1wOWPcINLONljnZIs/HX6K+zF0Esxcc8IKqoLNo8
-	W3EDcuE9qJcMJPNPECAi/sO6UULAakTA/IKj4C+7VrRPRnMhkTfTJmEWwoR9+3Qm+60c9slezuH
-	TUYS/yH71A4yejOagX6HQU29CV/tpgahzk9q7b0TMHGO8j/A1rt/DhN9QePHCkgXkRdwIMepQkW
-	K4kXID2fLxFYiP9mWqUbrF4ts2bCjfLzMHNIpcYPAawXwAfWoISDldBqDL5v2Bn5Agh7ebZ2aH4
-	2BlV8Mk+xFEf+LzX5rd76hh2MXD2nGreyYntA
-X-Google-Smtp-Source: AGHT+IEqxryGUIrvlFRjjbZt/fpBB4e1H0kstalMU3B2lw3tKXhvZEegqt/3++j3ZSdhGSKMO3o38w==
-X-Received: by 2002:a05:6870:ad97:b0:2d9:45b7:8ffc with SMTP id 586e51a60fabf-2e3c817196amr7065629fac.3.1747672550446;
-        Mon, 19 May 2025 09:35:50 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:a628:91ca:eb5:d6f5? ([2600:8803:e7e4:1d00:a628:91ca:eb5:d6f5])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2e3c06baca3sm1795657fac.19.2025.05.19.09.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 May 2025 09:35:50 -0700 (PDT)
-Message-ID: <ba79221f-9acd-4919-abe9-e2c49e80fb6c@baylibre.com>
-Date: Mon, 19 May 2025 11:35:48 -0500
+        d=1e100.net; s=20230601; t=1747706650; x=1748311450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHhCVuI9jfUfhhUD36lWqRN5JsHeOM1NCpeDQ6ZpDpQ=;
+        b=LqZIYaAzQZIHm1kqmldJt7OIIJwsxm4nInggkIugz2MzTZbb0SWfH1g5X9aRuVXuHO
+         CtcTFwYU2t/bTIvzFkNsFUVeq1uZUXS9bLSWeessO4paKp3xFbQlrW49MWLULbOf5mTw
+         1UqyY/xnI+/WucrNJdnEclvfuOCgd5dOmN5mSAjdygt1jHL9e5y0hWzenyFCeoDJIvkq
+         +YTHkPLuE8j6dyAx/KibYPGrQ+wGvywjCQ4ulZ+yA3v2d4xVLlNdtFLPcvZFmtj3PikC
+         W7uyB+dIExhlqkwecSqnioWEEuByoB06RXmbR9rml7pioRFKKt5Pzl9XdBHiQay1fraX
+         RFsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbKi8hTwJ/OR86vU3xv2zhcAYlOVfKsogpyrIvRV1yT/ebU24lFSMVjM+5YDvL02oqb88u6DfI+oQ=@vger.kernel.org, AJvYcCUbwkhL2BIm5pm9mferv+dPVvUY+Nz1N+9zBmN0Zq4jzMSJQbYhUSfeFUMHXADJztH+mrq5fYbh@vger.kernel.org, AJvYcCUfjRUFS653UbPnfc2eKiCWtJoztWcWjEs5Kd/pDtAoOf42NgFEj8o+LNPCVSWjIHG7Km0QkeXXlUaQ@vger.kernel.org, AJvYcCV1rqFnCk+tPsDrIpiP/qFc8VUyLepKLyI945IS+LoHmBiQrnswOkvxnUAHv6hCeWBw2WxRcXjdnsSPyg==@vger.kernel.org, AJvYcCVQ9GeA63u+VsoEGfuqFKgZ/mtRWA42SEdr4R8W+jcAM5NGSnHNGi/XvvGOUU59y8zrVLdI/KgBXsRJq9o=@vger.kernel.org, AJvYcCVXzJaX37Sv0Qws4VSALOhWLyzyy/5nk/wsnaamYPfJ5pZzbet4CsK0/yso42Jq8rUGb87+9nm8F2Sc@vger.kernel.org, AJvYcCVkOIyy8lcURSJVIOy17w3pYyeXTWLd3dhE83CubjZ3/TrUPiX6GMUgDLHXdPWxZCLbBOFFeg5Ffsq7@vger.kernel.org, AJvYcCWFlVw6Ofrcr4DmqOMtgjKhXMU67bcLSolu1/Eiu5RUKWufg0CTG29ujlNtZ+5b4Gb5o1bs9ZP+uC7ThzLlNDw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXqtzE2PsxdA3VJzQ1f8JqEb9W9sJDjvUkgOBfaVGWdC1YlrTQ
+	EmTeIrtZvAT1Lgu7j2mHwz0VkD+Yt8os8wKLnNK+OEYLBcpW0CI8uKj5
+X-Gm-Gg: ASbGncsQp4zh9CZD0g2Ike0VjuYTiq2qL/z/NAaCGBxD3+4gaY0e8S76H5pPd9A5z1W
+	Jl4y3V0cIH6072MFCpIIBXOs9UdWIRZ1ks0IdBc7XvNVCfhN7FDk/5dz6OAvG3nboOaqLdsSj0N
+	yRyNa2SFVJL1cPl1sh0nIGIYIl+XrTdmktAhN+DFqn70xqTzu2MqESbboXKS0A38W0p9+fnjJkI
+	Jw3KTrE8j1qroSCC36FzF/I5zG/2G9CH2a5Ob7OUvifgXbfO3NJVga+0GRf0JJSQgO7XltB6bTg
+	EYzjH0daadrrqy6RWQNSwGhPTjbu5PktPPVPUy7Y6V2fttR8PT3BXuAyoTwDYRzx0S6cmbvw1Oa
+	hbqnVXhdRagNqJebn6kjgCFUV
+X-Google-Smtp-Source: AGHT+IHmvL20VOsrYUkJJnx0emX68OO0uubs/euN6jS0aBRwShJx/pvE5WZTxmq6zBIHRTSrcJQstA==
+X-Received: by 2002:a17:903:acb:b0:21d:dfae:300c with SMTP id d9443c01a7336-231d438b4cfmr192393265ad.3.1747706650362;
+        Mon, 19 May 2025 19:04:10 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-231d4ac9fc8sm66543855ad.27.2025.05.19.19.04.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 May 2025 19:04:09 -0700 (PDT)
+From: a0282524688@gmail.com
+X-Google-Original-From: tmyu0@nuvoton.com
+To: lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: [PATCH v11 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Tue, 20 May 2025 10:03:48 +0800
+Message-Id: <20250520020355.3885597-1-tmyu0@nuvoton.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/16] lib: move find_closest() and
- find_closest_descending() to lib functions
-To: Alexandru Soponar <asoponar@taladin.ro>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net, jic23@kernel.org, pavel@ucw.cz,
- lee@kernel.org, baocheng.su@siemens.com, wim@linux-watchdog.org,
- tobias.schaffner@siemens.com, angelogioacchino.delregno@collabora.com,
- benedikt.niedermayr@siemens.com, matthias.bgg@gmail.com,
- aardelean@baylibre.com, contact@sopy.one
-References: <20250515081332.151250-1-asoponar@taladin.ro>
- <20250515081332.151250-17-asoponar@taladin.ro>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250515081332.151250-17-asoponar@taladin.ro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/15/25 3:13 AM, Alexandru Soponar wrote:
-> Move the utility macros find_closest() and find_closest_descending()
-> from inline macros to proper library functions in lib/.
-> 
-> Signed-off-by: Alexandru Soponar <asoponar@taladin.ro>
-> ---
->  include/linux/find_closest.h | 13 +++++++
->  include/linux/util_macros.h  | 61 +------------------------------
->  lib/Makefile                 |  2 +-
->  lib/find_closest.c           | 71 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 86 insertions(+), 61 deletions(-)
->  create mode 100644 include/linux/find_closest.h
->  create mode 100644 lib/find_closest.c
-> 
-> diff --git a/include/linux/find_closest.h b/include/linux/find_closest.h
-> new file mode 100644
-> index 000000000000..28a5c4d0c768
-> --- /dev/null
-> +++ b/include/linux/find_closest.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Find closest element functions
-> + */
-> +#ifndef _LINUX_FIND_CLOSEST_H_
-> +#define _LINUX_FIND_CLOSEST_H_
-> +
-> +#include <linux/types.h>
+From: Ming Yu <tmyu0@nuvoton.com>
 
-Is this header really needed?
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-> +
-> +unsigned int find_closest(int x, const int *a, unsigned int as);
-> +unsigned int find_closest_descending(int x, const int *a, unsigned int as);
-> +
-> +#endif /* _LINUX_FIND_CLOSEST_H_ */
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
 
-...
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
 
-> diff --git a/lib/find_closest.c b/lib/find_closest.c
-> new file mode 100644
-> index 000000000000..d481625cae9d
-> --- /dev/null
-> +++ b/lib/find_closest.c
-> @@ -0,0 +1,71 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Find closest element functions
-> + *
-> + * Based on previous util_macros.h implementation
-> + */
-> +
-> +#include <linux/find_closest.h>
-> +#include <linux/module.h>
-> +
-> +/**
-> + * find_closest - locate the closest element in a sorted array
-> + * @x: The reference value.
-> + * @a: The array in which to look for the closest element. Must be sorted
-> + *  in ascending order.
-> + * @as: Size of 'a'.
-> + *
-> + * Returns the index of the element closest to 'x'.
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			   Send bulk-out pipe to write data packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
 
-s/Returns/Returns:/
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
 
-for kernel-doc semantics
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
 
-> + */
-> +unsigned int find_closest(int x, const int *a, unsigned int as)
-> +{
-> +	unsigned int array_size = as - 1;
-> +	int mid_x, left, right;
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < array_size; i++) {
-> +		mid_x = (a[i] + a[i + 1]) / 2;
-> +		if (x <= mid_x) {
-> +			left = x - a[i];
-> +			right = a[i + 1] - x;
-> +			if (right < left)
-> +				i++;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return i;
-> +}
-> +EXPORT_SYMBOL_GPL(find_closest);
-> +
-> +/**
-> + * find_closest_descending - locate the closest element in a sorted array
-> + * @x: The reference value.
-> + * @a: The array in which to look for the closest element. Must be sorted
-> + *  in descending order.
-> + * @as: Size of 'a'.
-> + *
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
 
-Would repeat the Returns: section here for completeness.
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
 
-> + * Similar to find_closest() but 'a' is expected to be sorted in descending
-> + * order.
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
 
-This seems redundant since @a already says this.
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
 
->             The iteration is done in reverse order, so that the comparison> + * of 'right' & 'left' also works for unsigned numbers.
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
 
-This seems like an implementation detail so would be better as a comment inside
-the function. Although, since @a is always signed, is this comment actually
-still applicable?
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
 
-> + */
-> +unsigned int find_closest_descending(int x, const int *a, unsigned int as)
-> +{
-> +	unsigned int array_size = as - 1;
-> +	int mid_x, left, right;
-> +	unsigned int i;
-> +
-> +	for (i = array_size; i >= 1; i--) {
-> +		mid_x = (a[i] + a[i - 1]) / 2;
-> +		if (x <= mid_x) {
-> +			left = x - a[i];
-> +			right = a[i - 1] - x;
-> +			if (right < left)
-> +				i--;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return i;
-> +}
-> +EXPORT_SYMBOL_GPL(find_closest_descending);
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 496 +++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 193 ++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 387 ++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 837 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 320 ++++++++++
+ include/linux/mfd/nct6694.h         |  98 +++
+ 23 files changed, 3676 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
+-- 
+2.34.1
 
