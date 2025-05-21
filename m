@@ -1,120 +1,206 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C524C09E;
-	Tue, 20 May 2025 21:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB272673BD
+	for <linux-hwmon@vger.kernel.org>; Wed, 21 May 2025 12:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747776824; cv=none; b=BG4NHua2dY6u1/EPm2vPDRejZA6QgUD/Tw19FACYiBehGkdLk7Mo3r4TDdpvyq0O8pSStOORQQp1/ObF2CbV4mSLgmlv5WPHWB28qW/EGiM0c/Jc20cQ7xFQuV6S+HLnmSFhjA5XiSRV5TiqNgNDMu41YlA5OpqPpt70Vn01DP4=
+	t=1747831020; cv=none; b=ILTfHdmLKHC1T1wIiFe87DwLICiFSBzygBAx/5TADkS7hgL9BM7rZ/roDifX4o0ZjDhrL95MMSWiZcAu9bfL6qq231mjPs5T/kcyuTQNJ301EEDdzoZgTFBDLEG606amX26AKjhxI+rVseeQSAmEd9fNlyS0UA0a9hDSgjXMsnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747776824; c=relaxed/simple;
-	bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mV/twWMJeYfcGzs1uNwmtMrYTsfNZ9+Z7oM1GmU0V8wXuTMesf9vLKbKxxfIGbzxh0x76mdgxkV2zAGoN9pTb9rf/LaJJU5r06SPYaok3C6Y4l/2QU7j+FaaQocA3ap9yHFIbG7kXN1ICaeVPFgOe9l9jdz/QlsT4HZVJkvmAmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U3VL1+gF; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1747831020; c=relaxed/simple;
+	bh=QNaV6OrrEXr9rYeKWGQ1L13AMgHwP4CT+o39H0imYkU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=iy2/vdL8y3m4zVkMCQ4nCpd3csY9rXcOFWNAfs4hB3OTH6Y5DLJPuYpndX/0IoGkR4XJOm/D5R8Oxz5hWx0B/9G8bERYu7u4gdU+GgvRwHj4LzbpsW9ylI8B4Qk0DEk0wI7Zfy5qaG22h7nhI7kRA2ljgwdrIF41Gv0dJVmysXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1gKolHO; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U3VL1+gF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1gKolHO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747776823; x=1779312823;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2dBBkVKAjPqMQO6yAxkJdcJQvunb0imiwfvphMP3bMs=;
-  b=U3VL1+gFt75Uj4DOsCKLH8QYfNgR1GPQY25lWmrGXmqBYWIqCGGvhOI2
-   98x8ef9oOE/zUESh2vz7JOiX7n743wjbCbOU+oxyMjIg3tbpIB4aTTSm2
-   K5vsfPpNre5pjFCby2u4AH7tyQBT0JnnpmUhGSfbwr9O/2CyIpw9+1n94
-   j37ai65XObRaCs62/h/1ZFZttnMil1/YAh3VFSKGLR7RklFSiKxqgQboX
-   HVARqCR13II+eoh8NNPg3E0ZwHbWIIcAHbntV2JaCeI05dPCE0pyHIdbf
-   lnwATr0nFw+A4a7E90pYxamnvm1QWvlv4q5/I2Y47Qed1yKy9qHXwf5mu
-   g==;
-X-CSE-ConnectionGUID: FX8r+Xt7Q9SzCLKEYX4Fig==
-X-CSE-MsgGUID: dvasTuh4QGuMPUdGONXEgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49886560"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="49886560"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 14:33:41 -0700
-X-CSE-ConnectionGUID: qKGsHbZ/Soe+T5yrGWF48w==
-X-CSE-MsgGUID: Rx5ednNxSfq2WVZorJIWPg==
+  t=1747831019; x=1779367019;
+  h=date:from:to:cc:subject:message-id;
+  bh=QNaV6OrrEXr9rYeKWGQ1L13AMgHwP4CT+o39H0imYkU=;
+  b=a1gKolHOXueePOK1NpZ2tOlm0zt5wf+BvzGfLdBcZP5htyXFjhRin3CS
+   0hpylEdpCELAUqHhL4OwuJuNU1098lDvAsWBmh+YXZjwb6K9yagNvsAv9
+   0ObuyR7A+DBfmYxvODPrQv57eK+XR7ZA0KyvNjRLKKPzKW/VL+wA+D1Rb
+   y70tdVOl7z0kZDu7Z4Du1S69mexAQc0AMTdn2xM9c7RT3L6gSn71gPtdV
+   RmELjHkHaqxumtBMPfz2lR7Rw1+vur6MjLdVzlxJxpev+wwMeY+Yy53/5
+   cbznqcioz9UndSIZwf3rVWsQhNG2/wDdInWYcTaHd+NebWqEBrc6OgvSi
+   w==;
+X-CSE-ConnectionGUID: K7n4MH1qRp+WRLs/NZmslA==
+X-CSE-MsgGUID: XN/GvibMQvSfcoEt1cdzcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="49961429"
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="49961429"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 05:36:59 -0700
+X-CSE-ConnectionGUID: HGM/8j0JQ2iqBvs73vLXag==
+X-CSE-MsgGUID: e3BkcQJYSvOxtymBNydtLQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="143811827"
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="140569434"
 Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 May 2025 14:33:35 -0700
+  by orviesa007.jf.intel.com with ESMTP; 21 May 2025 05:36:57 -0700
 Received: from kbuild by 1992f890471c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1uHUab-000NaO-0J;
-	Tue, 20 May 2025 21:33:33 +0000
-Date: Wed, 21 May 2025 05:32:50 +0800
+	id 1uHigp-000OF6-0A;
+	Wed, 21 May 2025 12:36:55 +0000
+Date: Wed, 21 May 2025 20:36:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: a0282524688@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-Message-ID: <202505210555.mud6jZoi-lkp@intel.com>
-References: <20250520020355.3885597-7-tmyu0@nuvoton.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 46d40b2479ab6417db4d7174f7a938c994435b3f
+Message-ID: <202505212007.JobUwzCQ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250520020355.3885597-7-tmyu0@nuvoton.com>
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 46d40b2479ab6417db4d7174f7a938c994435b3f  doc: hwmon: acpi_power_meter: Add information about enabling the power capping feature.
 
-kernel test robot noticed the following build errors:
+elapsed time: 1392m
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on mkl-can-next/testing groeck-staging/hwmon-next abelloni/rtc-next linus/master lee-mfd/for-mfd-fixes v6.15-rc7]
-[cannot apply to lee-mfd/for-mfd-next brgl/gpio/for-next next-20250516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+configs tested: 129
+configs skipped: 4
 
-url:    https://github.com/intel-lab-lkp/linux/commits/a0282524688-gmail-com/mfd-Add-core-driver-for-Nuvoton-NCT6694/20250520-100732
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20250520020355.3885597-7-tmyu0%40nuvoton.com
-patch subject: [PATCH v11 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-config: i386-randconfig-013-20250521 (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250521/202505210555.mud6jZoi-lkp@intel.com/reproduce)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202505210555.mud6jZoi-lkp@intel.com/
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-14.2.0
+arc                   randconfig-001-20250520    gcc-11.5.0
+arc                   randconfig-002-20250520    gcc-15.1.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                         bcm2835_defconfig    clang-21
+arm                   randconfig-001-20250520    gcc-6.5.0
+arm                   randconfig-002-20250520    gcc-10.5.0
+arm                   randconfig-003-20250520    clang-19
+arm                   randconfig-004-20250520    gcc-7.5.0
+arm                       versatile_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250520    clang-21
+arm64                 randconfig-002-20250520    gcc-9.5.0
+arm64                 randconfig-003-20250520    clang-18
+arm64                 randconfig-004-20250520    gcc-9.5.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250520    gcc-15.1.0
+csky                  randconfig-002-20250520    gcc-9.3.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250520    clang-21
+hexagon               randconfig-002-20250520    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250520    gcc-12
+i386        buildonly-randconfig-002-20250520    gcc-12
+i386        buildonly-randconfig-003-20250520    clang-20
+i386        buildonly-randconfig-004-20250520    gcc-12
+i386        buildonly-randconfig-005-20250520    clang-20
+i386        buildonly-randconfig-006-20250520    gcc-12
+i386                                defconfig    clang-20
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                 loongson3_defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250520    gcc-15.1.0
+loongarch             randconfig-002-20250520    gcc-15.1.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                           virt_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250520    gcc-9.3.0
+nios2                 randconfig-002-20250520    gcc-13.3.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+openrisc                    or1ksim_defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250520    gcc-10.5.0
+parisc                randconfig-002-20250520    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc                       ebony_defconfig    clang-21
+powerpc                       holly_defconfig    clang-21
+powerpc                    mvme5100_defconfig    gcc-14.2.0
+powerpc                      ppc6xx_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250520    gcc-5.5.0
+powerpc               randconfig-002-20250520    clang-17
+powerpc               randconfig-003-20250520    gcc-7.5.0
+powerpc                     tqm8541_defconfig    clang-21
+powerpc                      tqm8xx_defconfig    clang-19
+powerpc64             randconfig-001-20250520    clang-21
+powerpc64             randconfig-002-20250520    gcc-7.5.0
+powerpc64             randconfig-003-20250520    gcc-5.5.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-21
+riscv                    nommu_k210_defconfig    clang-21
+riscv                 randconfig-001-20250520    gcc-9.3.0
+riscv                 randconfig-002-20250520    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-21
+s390                  randconfig-001-20250520    clang-21
+s390                  randconfig-002-20250520    clang-21
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                    randconfig-001-20250520    gcc-9.3.0
+sh                    randconfig-002-20250520    gcc-9.3.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250520    gcc-8.5.0
+sparc                 randconfig-002-20250520    gcc-12.4.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250520    gcc-8.5.0
+sparc64               randconfig-002-20250520    gcc-12.4.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250520    clang-21
+um                    randconfig-002-20250520    clang-21
+um                           x86_64_defconfig    clang-21
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250520    gcc-12
+x86_64      buildonly-randconfig-002-20250520    gcc-12
+x86_64      buildonly-randconfig-003-20250520    gcc-12
+x86_64      buildonly-randconfig-004-20250520    gcc-12
+x86_64      buildonly-randconfig-005-20250520    gcc-12
+x86_64      buildonly-randconfig-006-20250520    gcc-12
+x86_64                              defconfig    gcc-11
+x86_64                          rhel-9.4-rust    clang-18
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                  cadence_csp_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250520    gcc-6.5.0
+xtensa                randconfig-002-20250520    gcc-12.4.0
+xtensa                    xip_kc705_defconfig    gcc-14.2.0
 
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/nct6694-hwmon.c:12:10: fatal error: linux<mfd/core.h: No such file or directory
-      12 | #include <linux<mfd/core.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +12 drivers/hwmon/nct6694-hwmon.c
-
-  > 12	#include <linux<mfd/core.h>
-    13	#include <linux/mfd/nct6694.h>
-    14	#include <linux/module.h>
-    15	#include <linux/platform_device.h>
-    16	#include <linux/slab.h>
-    17	
-
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
