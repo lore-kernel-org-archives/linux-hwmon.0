@@ -1,156 +1,176 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C35F1DEFE0
-	for <linux-hwmon@vger.kernel.org>; Wed, 28 May 2025 21:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5AA2192FB;
+	Thu, 29 May 2025 09:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748467128; cv=none; b=hZZ51+53TDXvHkGHGp+e5HDw+7rE6PQTpKS7o1xtJcEttrmM0GqrT0srXxPrREGdmJjL4kXJqiXE+eRC8yCEr4eLdcTXL5pOHt8DtdnTR+7NHzKn3aY9gQgw+cX4FXxHyWYqbQTHQYxjy7H9UrhEBP5x7ZP3Q/IGRwUDpGYd720=
+	t=1748509351; cv=none; b=Ord4PchMtW3YJmT6WcqRK3cXrx+alQojHCXmuBF0zCVg4FlHQykc8O8z+8JynkPT/fjC+aSlBkHMS2ZmhlOVB1zA+ZVm+rlFXWeqifUwtoQ8wb2+iQIajo1pauFX9qB+tlSYFFR32rkE/C2BWBlGHC8Zpzw3R6DFi1EVOTMHzFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748467128; c=relaxed/simple;
-	bh=87Z8jQXIblyl3Z9604ErRyHcGxDcrQBw2aE0xqUIGhw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=aL7Yb57RI/VL8/AbqMgz0pTJnvFNv1v9yEE5r+tQLslPfjBaw2DIKHPzcprunzcOSNs5tA8BkduKV1Ns8kSJrcRQd3J0L22Gz9/zYStQoOVT3xhDL3YMO88r2s8RFUm/BNN7OMIoQ6QUhuk/a1IKtaRzPSkEeK3Q3RJp5JkUzSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=rUy4DsoE; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1748509351; c=relaxed/simple;
+	bh=sMkdftC0+Tx/IZelfW2inRhlPRbTlYeUucKCNb7CRMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iuWRJ6Cc8KrHZu1U5MzTX8L5Pemcm+Gqa7l9g/8cN/lHIAbgJGbOt23URgCcZ1janGgRvWEghRcF44vPaGkyes1ZxFHNBA0YQH+yLCJVWxB8WYJe74zXCas+xfoubaQaKr23247KbqHpoArZ8cBkB4ouOqXkaO7+foXRNePqrqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNFiDfnm; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rUy4DsoE"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id C981B2C04F7;
-	Thu, 29 May 2025 09:18:37 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1748467117;
-	bh=87Z8jQXIblyl3Z9604ErRyHcGxDcrQBw2aE0xqUIGhw=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=rUy4DsoE0k8DBFK9dco1+WePCSomm7HXxiaX0Gc+Wq+477xHV/redd/RoRKg4x2S5
-	 GxMmoBDGuPOqb80kEZTPfyoXmpStyYr4AdbiWa2suSudULedzRg1qu7vf41in9VP25
-	 CTmCbd/bi1jYQPmE9q2Y/oh+6e279UNdRW9FmTjzf5K5Dk0kogaX+WM0u0KEeVHefb
-	 mlWFThnSrSxvCc9xrzX3H3iB8Uf+owIlBZXmRf04YbcRq9bYR0jUWx5395aAUS6tGU
-	 iLGJQ6/ERuBHPYGGqPbF6olnoNRCkMReHCr+48+T75phyam1m6+WRZXKD1CmiSFJHk
-	 3SokYYk10WsyA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B68377dad0001>; Thu, 29 May 2025 09:18:37 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Thu, 29 May 2025 09:18:37 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Thu, 29 May 2025 09:18:37 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <ukleinek@kernel.org>
-CC: "jdelvare@suse.com" <jdelvare@suse.com>, "linux@roeck-us.net"
-	<linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pwm@vger.kernel.org"
-	<linux-pwm@vger.kernel.org>
-Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
-Thread-Topic: [PATCH v7 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm
- properties
-Thread-Index: AQHa3IT3bvX/iipZGkiPmVYc9wkwxrPnwi+AgABGbYCAAKO4gIAA/Z6A
-Date: Wed, 28 May 2025 21:18:37 +0000
-Message-ID: <4858ce06-2081-4335-af09-f118872317ea@alliedtelesis.co.nz>
-References: <20240722221737.3407958-1-chris.packham@alliedtelesis.co.nz>
- <20240722221737.3407958-2-chris.packham@alliedtelesis.co.nz>
- <jzxu6mcbxf5zwyirnb2jjpm2i7sln3v5mz3gyhc5xhpqexicvb@atrcjvh7wuh5>
- <bc99a27e-74ec-45a0-b77c-48f993269586@alliedtelesis.co.nz>
- <jmxmxzzfyobuheqe75lj7qcq5rlt625wddb3rlhiernunjdodu@tgxghvfef4tl>
-In-Reply-To: <jmxmxzzfyobuheqe75lj7qcq5rlt625wddb3rlhiernunjdodu@tgxghvfef4tl>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BD1E180607F2854AB434C83AC9E114CC@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNFiDfnm"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43ea40a6e98so7263405e9.1;
+        Thu, 29 May 2025 02:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748509348; x=1749114148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AXfRWEnLXngbO6ozFx9Vdj+sRj7LpGEVmnez0nbKG8=;
+        b=JNFiDfnmrDT7w1plt23ylGhR00wAkKHlbXfiMaCspLQKscn9bg4b3ML4nVae1XGPIk
+         RCQeGUlSi/AG/Y85vnsjsB4Gv8OqubUCGRApEG6C8iVFPOek7mezRXLnaeMY3A6pq84Y
+         dvV53si2iZqzXGCHXxXiH+0DjEWSMfQRp9wwk5lBjAd6xjwBvmIGlmhRF0LO5duyf3BT
+         64JjINN+nfUKHss3Eqz8gq73qT2G5rV4qSh/zcwo54FaGgl/v4ecGrhnpUcMpyBcOIn6
+         +fRjwbai9TfYj1WQmiOg0+bYR5Du1fFiOZ+8Mo3ynyrnwVI4Ztsunnuda5V2/ZWsNcN5
+         FxyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748509348; x=1749114148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8AXfRWEnLXngbO6ozFx9Vdj+sRj7LpGEVmnez0nbKG8=;
+        b=bOssOGdAiUmMhNFg+8T50+71K9CZpXa8zTQsbOyoXWgQzmE7gPt7Ifm6Has/p1JSFG
+         9ubZscNiMSY9MCWDgLpX5c/Ko/9IBwrB9C4izN2MP9fMsI1tKryyk/bp63dw50alGYs8
+         M0VPiITEtOr0f0y5i1CiprmE+WQvVXN5Yucjt6MRY6lesn7MW8eRJ/EecsES6CpIRlzy
+         SfTVa0n/PfqZZ4s74S6mi3kwWfgGPgX28RxCwEs4gqePLNmTrheu2xLoCF4gbEPCwZRB
+         TFXPvYldjY0xiCDYk+/w+cETRt4UlePt1PAwdRQAXaxOJiTM5g4hT+Y9bYVs0samjmpw
+         k3HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUD8Oak8C3hyPujTQp7p5qQNtKuQvqlqftJUudaHp7Yc2PyN8Wt/2MTvV/w2YCaDykbafy9wulboHo=@vger.kernel.org, AJvYcCX3y+PRBK866Uc/7JHfNpBaMc0TulswOxt5u3vBFnrq/VXpuWnCkOvM6BzxJhn/oxYNmfNA339KUdCHKcu6@vger.kernel.org, AJvYcCXg+K1WHPCYjRF6OrC7h5eX+Al/u70kboWo37GnaWo1RwKbpnjF4Z1HH5EgVop/Qtu8/irK/jpug+CfmPk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCAX6KtIlAq/QuE2pjIHzLHSGkDzq0k0kgJwNT/O4Gxj2AatJ+
+	RlplPL1oo6k2nYIvJD2mqh6L3bV3JAnXayEWFJYU4i6Gil8NFs6f4Nc7
+X-Gm-Gg: ASbGncsBOr44S/yeeusPcAiS1bL+VhN7tnS2YyYmgJn3/F0+eV8GPBpqMrVdnPuQkNq
+	BzgryWv3UXZFmkqVdZ/TVWBoaQAvjBGN4zATCiIcbBtehnCLoBzOOH5Y+2PEODmfbuub0XeAWfc
+	+ugIAcsc+G1cGLQKreBn880UCFTEmnogV7kMFLEWnBW69C1WTWJTdIFbDKcwmNTV8sI8i/TUD3i
+	vaAhf+VMnUS/gUipqeckbbOSZ15E+S5qcimgSI173V8DNDZAZ6VOlHnEFvuL8AMEaDpxi2WVpzW
+	SGbGaQld7Q5qh1l2PWM0pYN+Ckq6HWwro5JX7RE1GZRnJVYh2VELcVOpGgYLRR95SqrWYBPqmm3
+	DcBIikE/EvNQ8hd89PIIZMVMHLf2xLZQNyejQGpXED+obknwGBewq1A==
+X-Google-Smtp-Source: AGHT+IFS+6s+jXMSUM+bVy+Oz+xiERYfpm6I7yWMzURvuDDqqqnXdeEsGmmT/Co0X8obLIFaytbc0g==
+X-Received: by 2002:a05:600c:3b25:b0:450:b240:aaab with SMTP id 5b1f17b1804b1-450d0566ea5mr13600055e9.8.1748509348003;
+        Thu, 29 May 2025 02:02:28 -0700 (PDT)
+Received: from puma.museclub.art (p200300cf9f4db30084345851a1a1c45b.dip0.t-ipconnect.de. [2003:cf:9f4d:b300:8434:5851:a1a1:c45b])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450cfc17a04sm14057565e9.24.2025.05.29.02.02.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 May 2025 02:02:27 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Roy Seitz <royseitz@bluewin.ch>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add support for ROG STRIX Z490-F GAMING
+Date: Thu, 29 May 2025 11:01:41 +0200
+Message-ID: <20250529090222.154696-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=KqPu2nWN c=1 sm=1 tr=0 ts=68377dad a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=ju0T-9Nitl0fB73lcS8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=pWnsn8mx59Rxsc26IHH0:22
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
 
-SGkgVXdlLA0KDQpPbiAyOC8wNS8yMDI1IDE4OjEwLCBVd2UgS2xlaW5lLUvDtm5pZyB3cm90ZToN
-Cj4gSGVsbG8gQ2hyaXMsDQo+DQo+IE9uIFR1ZSwgTWF5IDI3LCAyMDI1IGF0IDA4OjI0OjU2UE0g
-KzAwMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBPbiAyOC8wNS8yMDI1IDA0OjEyLCBVd2Ug
-S2xlaW5lLUvDtm5pZyB3cm90ZToNCj4+PiBIZWxsbywNCj4+Pg0KPj4+IE9uIFR1ZSwgSnVsIDIz
-LCAyMDI0IGF0IDEwOjE3OjM1QU0gKzEyMDAsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+Pj4+IEFk
-ZCBmYW4gY2hpbGQgbm9kZXMgdGhhdCBhbGxvdyBkZXNjcmliaW5nIHRoZSBjb25uZWN0aW9ucyBm
-b3IgdGhlDQo+Pj4+IEFEVDc0NzUgdG8gdGhlIGZhbnMgaXQgY29udHJvbHMuIFRoaXMgYWxzbyBh
-bGxvd3Mgc2V0dGluZyBzb21lDQo+Pj4+IGluaXRpYWwgdmFsdWVzIGZvciB0aGUgcHdtIGR1dHkg
-Y3ljbGUgYW5kIGZyZXF1ZW5jeS4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFj
-a2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4+PiBSZXZpZXdlZC1i
-eTogUm9iIEhlcnJpbmcgKEFybSkgPHJvYmhAa2VybmVsLm9yZz4NCj4+Pj4gLS0tDQo+Pj4+DQo+
-Pj4+IE5vdGVzOg0KPj4+PiAgICAgICBDaGFuZ2VzIGluIHY3Og0KPj4+PiAgICAgICAtIE5vbmUN
-Cj4+Pj4gICAgICAgQ2hhbmdlcyBpbiB2NjoNCj4+Pj4gICAgICAgLSBDb2xsZWN0IHItYnkgZnJv
-bSBSb2INCj4+Pj4gICAgICAgQ2hhbmdlcyBpbiB2NToNCj4+Pj4gICAgICAgLSBVc2UgbmFub3Nl
-Y29uZHMgZm9yIFBXTSBmcmVxdWVuY3kgYW5kIGR1dHkgY3ljbGUgYXMgcGVyIGV4aXN0aW5nDQo+
-Pj4+ICAgICAgICAgY29udmVudGlvbnMgZm9yIFBXTXMNCj4+Pj4gICAgICAgLSBTZXQgZmxhZ3Mg
-dG8gMCBpbiBleGFtcGxlIHRvIG1hdGNoIGFkaSxwd20tYWN0aXZlLXN0YXRlIHNldHRpbmcNCj4+
-Pj4gICAgICAgQ2hhbmdlcyBpbiB2NDoNCj4+Pj4gICAgICAgLSAwIGlzIG5vdCBhIHZhbGlkIGZy
-ZXF1ZW5jeSB2YWx1ZQ0KPj4+PiAgICAgICBDaGFuZ2VzIGluIHYzOg0KPj4+PiAgICAgICAtIFVz
-ZSB0aGUgcHdtIHByb3ZpZGVyL2NvbnN1bWVyIGJpbmRpbmdzDQo+Pj4+ICAgICAgIENoYW5nZXMg
-aW4gdjI6DQo+Pj4+ICAgICAgIC0gRG9jdW1lbnQgMCBhcyBhIHZhbGlkIHZhbHVlIChsZWF2ZXMg
-aGFyZHdhcmUgYXMtaXMpDQo+Pj4+DQo+Pj4+ICAgIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2h3
-bW9uL2FkdDc0NzUueWFtbCAgICB8IDM1ICsrKysrKysrKysrKysrKysrKy0NCj4+Pj4gICAgMSBm
-aWxlIGNoYW5nZWQsIDM0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4+Pj4NCj4+Pj4g
-ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9hZHQ3
-NDc1LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vYWR0NzQ3
-NS55YW1sDQo+Pj4+IGluZGV4IDA1MWM5NzZhYjcxMS4uZGYyYjViODg5ZTRkIDEwMDY0NA0KPj4+
-PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vYWR0NzQ3NS55
-YW1sDQo+Pj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9h
-ZHQ3NDc1LnlhbWwNCj4+Pj4gQEAgLTUxLDYgKzUxLDI0IEBAIHByb3BlcnRpZXM6DQo+Pj4+ICAg
-ICAgICAgIGVudW06IFswLCAxXQ0KPj4+PiAgICAgICAgICBkZWZhdWx0OiAxDQo+Pj4+ICAgIA0K
-Pj4+PiArICAiI3B3bS1jZWxscyI6DQo+Pj4+ICsgICAgY29uc3Q6IDQNCj4+PiBJIGFza2VkIHRv
-IGFkZCBzdXBwb3J0IGZvciAjcHdtLWNlbGxzID0gPDQ+IHRvIHRoZSBwd20gY29yZSBpbiByZXBs
-eSB0bw0KPj4+IHY0IChzZWUNCj4+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1wd20v
-ZHJxdmFvbjVsYjJlaTNqcW9mdXRicjZkZW1pYnlmZGhibXIyNHN2YTI3Z3pwcWRub25AZnhhN3Jw
-bDMzaWloLykuDQo+Pj4NCj4+PiBJJ20gdW5oYXBweSB0byBzZWUgdGhpcyBtZXJnZWQgYW55aG93
-IGluIGNvbWJpbmF0aW9uIHdpdGggYWQtaG9jIHBhcnNpbmcNCj4+PiBvZiB0aGUgcHdtIHByb3Bl
-cnRpZXMgaW4gdGhlIGRyaXZlciA6LVwNCj4+IEFzIEkgbWVudGlvbmVkIGF0IHRoZSB0aW1lIHRo
-ZSBhZHQ3NDc1IGlzIG5vdCBjdXJyZW50bHkgcHdtX2NoaXAgc28gSQ0KPj4gbmVlZCB0aGUgYWQt
-aG9jIHBhcnNpbmcgaW4gdGhhdCBkcml2ZXIuIEknZCBiZSBoYXBweSB0byB0YWtlIHlvdQ0KPj4g
-cHJvdG90eXBlIHBhdGNoIGZvciBwd20vY29yZS5jIGFuZCBwb2xpc2ggaXQgYWx0aG91Z2ggSSBk
-b24ndCByZWFsbHkNCj4+IGhhdmUgYSBnb29kIHdheSBvZiB0ZXN0aW5nIGl0Lg0KPiBJdCdzIG1v
-cmUgdGhlIGRldmlhdGlvbiBvZiB0aGUgZGVmYXVsdCBiaW5kaW5nIGZvciBQV01zIHRoYXQgSSBk
-b24ndA0KPiBsaWtlIHRoYW4gdGhlIGFkLWhvYyBwYXJzaW5nLiBJZGVhbGx5IHRoZSBhZHQ3NDc1
-IHdvdWxkIHByb3ZpZGUgYQ0KPiBwd21jaGlwIChhcyB0aGUgYmluZGluZyBzdWdnZXN0cykgYW5k
-IHRoZSBmYW4gd291bGQgYmUgZm9ybWFsaXplZCBhcyBhDQo+IHB3bS1mYW4uIFdpdGggdGhlIGJp
-bmRpbmcgdGhhdCB3YXMgY2hvc2VuIGhlcmUgdGhhdCBvcHRpb24gYmVjb21lcyBtb3JlDQo+IHVn
-bHkgdGhhbiBuZWNlc3NhcnkgdG8gaW1wbGVtZW50Lg0KPg0KPiBJZiBJIHVuZGVyc3RhbmQgY29y
-cmVjdGx5IHlvdSBuZWVkIHRoZSBkZWZhdWx0IHZhbHVlIGZvciBkdXR5IHRvDQo+IHN0YXRpY2Fs
-bHkgc2V0dXAgKG9yIG9ubHkgaW5pdGlhbGl6ZT8pIGEgZmFuLCByaWdodD8NCkNvcnJlY3QuDQo+
-IEknbSBub3Qgc3VyZSBJIGxpa2UNCj4gZXh0ZW5kaW5nICNwd20tY2VsbHMgZm9yIGEgZGVmYXVs
-dCBkdXR5IHZhbHVlLiBUaGlua2luZyBhYm91dCB0aGF0IGENCj4gd2hpbGUgSSdkIHByZWZlciBh
-IGJpbmRpbmcgdGhhdCBsb29rcyBtb3JlIGxpa2UgdGhlIGNsb2NrIGNvbmZpZ3VyYXRpb24NCj4g
-c3R1ZmYgYmVjYXVzZSBhY3R1YWxseSBoYXZpbmcgdGhlIHBlcmlvZCBhbmQgZmxhZ3MgYXMgcGFy
-dCBvZiB0aGUNCj4gcmVmZXJlbmNlIHRvIHRoZSBQV00gdG8gYmUgdXNlZCBpcyBhbHNvIGEgYml0
-IHN0cmFuZ2UuIFNvIEkgaW1hZ2luZQ0KPiBzb21ldGhpbmcgbGlrZToNCj4NCj4gCW15cHdtOiBw
-d20gew0KPiAJCWNvbXBhdGlibGUgPSAiLi4uLiINCj4gCQkjcHdtLWNlbGxzID0gPDE+Ow0KPiAJ
-fTsNCj4NCj4gCWZhbiB7DQo+IAkJY29tcGF0aWJsZSA9ICJwd20tZmFuIjsNCj4gCQlwd21zID0g
-PCZteXB3bSAxPjsNCj4gCQlhc3NpZ25lZC1wd21zID0gPCZteXB3bT47DQo+IAkJYXNzaWduZWQt
-cHdtLWRlZmF1bHQtcGVyaW9kLWxlbmd0aHMtbnMgPSA8NDAwMDA+Ow0KPiAJCWFzc2lnbmVkLXB3
-bS1kZWZhdWx0LWZsYWdzID0gPFBXTV9QT0xBUklUWV9JTlZFUlRFRD47DQo+IAl9Ow0KPg0KPiBU
-aGVuIHNwZWNpZnlpbmcgYSBwZXJpb2QgKG9yIGxhdGVyIGEgZHV0eSBjeWNsZSBsZW5ndGgpIHdv
-dWxkIGJlDQo+IG9wdGlvbmFsIGFuZCBjb3VsZCBiZSBwcm92aWRlZCBpZmYgdGhlIGRldmljZSBu
-ZWVkcyB0aGF0IGZvciBvcGVyYXRpb24uDQoNClRoZSBmcmVxdWVuY3kgYW5kIGZsYWdzIHdlcmUg
-YWxyZWFkeSBwYXJ0IG9mIHRoZSBzdGFuZGFyZCAjcHdtLWNlbGxzIA0Kd2hpY2ggSSB0aGluayBp
-cyB3aHkgSSB3YXMgZW5jb3VyYWdlZCB0byB1c2UgdGhlbS4gSSB3YXMgYWxzbyB0cnlpbmcgdG8g
-DQpnZXQgc29tZXRoaW5nIHRoYXQgd291bGQgd29yayBhcyBhbiBBQ1BJIG92ZXJsYXkgd2hpY2gg
-dHVybmVkIG91dCB0byBiZSANCnJlYWxseSBoYXJkLg0KDQo+IE15IG1haWwgd2FzIGp1c3QgbWUg
-YmVpbmcgZnJ1c3RyYXRlZCBhYm91dCBhbm90aGVyIHNwZWNpYWwgY2FzZSB0aGF0IEknZA0KPiBo
-YXZlIHRvIGhhbmRsZSBpZiBJIGdvIGludG8gdGhhdCBkaXJlY3Rpb24uIEkgc2hvdWxkIGhhdmUg
-YmVlbiBtb3JlDQo+IGF0dGVudGl2ZSB0byB0aGF0IGRldmVsb3BtZW50IGJlZm9yZSBpdCBlbnRl
-cmVkIHRoZSBtYWlubGluZS4NCkknZCBiZSBoYXBweSB0byBkZXByZWNhdGUgdGhlIDQgY2VsbCB0
-aGluZyBhbmQgcmVwbGFjZSBpdCB3aXRoIDMgY2VsbCArIA0KdmVuZG9yIHByb3BlcnR5IGZvciB0
-aGUgZGVmYXVsdCBwZXJpb2QgaWYgdGhhdCBoZWxwcy4NCj4NCj4gQmVzdCByZWdhcmRzDQo+IFV3
-ZQ==
+From: Roy Seitz <royseitz@bluewin.ch>
+
+This adds support for the ROG STRIX Z490-F GAMING board.
+
+Signed-off-by: Roy Seitz <royseitz@bluewin.ch>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 32 +++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
+
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 816d1f9947ea..502b0faf3b31 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -29,6 +29,7 @@ Supported boards:
+  * ROG STRIX X570-F GAMING
+  * ROG STRIX X570-I GAMING
+  * ROG STRIX Z390-F GAMING
++ * ROG STRIX Z490-F GAMING
+  * ROG STRIX Z690-A GAMING WIFI D4
+  * ROG ZENITH II EXTREME
+  * ROG ZENITH II EXTREME ALPHA
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index e0a95197c71b..c3d5bcbd63f8 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -166,6 +166,7 @@ enum board_family {
+ 	family_amd_500_series,
+ 	family_amd_600_series,
+ 	family_intel_300_series,
++	family_intel_400_series,
+ 	family_intel_600_series
+ };
+ 
+@@ -279,6 +280,20 @@ static const struct ec_sensor_info sensors_family_intel_300[] = {
+ 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
+ };
+ 
++static const struct ec_sensor_info sensors_family_intel_400[] = {
++	[ec_sensor_temp_chipset] =
++		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
++	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
++	[ec_sensor_temp_mb] =
++		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
++	[ec_sensor_temp_t_sensor] =
++		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
++	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
++	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
++};
++
+ static const struct ec_sensor_info sensors_family_intel_600[] = {
+ 	[ec_sensor_temp_t_sensor] =
+ 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
+@@ -498,6 +513,18 @@ static const struct ec_board_info board_info_strix_z390_f_gaming = {
+ 	.family = family_intel_300_series,
+ };
+ 
++static const struct ec_board_info board_info_strix_z490_f_gaming = {
++	.sensors = SENSOR_TEMP_CHIPSET |
++		SENSOR_TEMP_CPU |
++		SENSOR_TEMP_MB |
++		SENSOR_TEMP_T_SENSOR |
++		SENSOR_TEMP_VRM |
++		SENSOR_FAN_CPU_OPT |
++		SENSOR_FAN_VRM_HS,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
++	.family = family_intel_400_series,
++};
++
+ static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
+ 	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
+ 	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
+@@ -586,6 +613,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_x570_i_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
+ 					&board_info_strix_z390_f_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-F GAMING",
++					&board_info_strix_z490_f_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
+ 					&board_info_strix_z690_a_gaming_wifi_d4),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+@@ -1061,6 +1090,9 @@ static int asus_ec_probe(struct platform_device *pdev)
+ 	case family_intel_300_series:
+ 		ec_data->sensors_info = sensors_family_intel_300;
+ 		break;
++	case family_intel_400_series:
++		ec_data->sensors_info = sensors_family_intel_400;
++		break;
+ 	case family_intel_600_series:
+ 		ec_data->sensors_info = sensors_family_intel_600;
+ 		break;
+-- 
+2.49.0
+
