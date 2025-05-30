@@ -1,176 +1,137 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5AA2192FB;
-	Thu, 29 May 2025 09:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA27021D5BE;
+	Fri, 30 May 2025 09:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748509351; cv=none; b=Ord4PchMtW3YJmT6WcqRK3cXrx+alQojHCXmuBF0zCVg4FlHQykc8O8z+8JynkPT/fjC+aSlBkHMS2ZmhlOVB1zA+ZVm+rlFXWeqifUwtoQ8wb2+iQIajo1pauFX9qB+tlSYFFR32rkE/C2BWBlGHC8Zpzw3R6DFi1EVOTMHzFQ=
+	t=1748597912; cv=none; b=tVWu17GHlKlmpDj7En4aEekW76bYWAN6pooFhDE2ZvDoil94KSsUYPhw+e1KQ9wM9NACHylMJ82eFctnz4gX7AVecSeVvgY8mAe22mCGnKrUS2kcfwyNOuwOe2qPBXnRRKSrAkiUBV+AQ1MVaUpYLGXtQ8ukwLM/kBbEOpQFejU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748509351; c=relaxed/simple;
-	bh=sMkdftC0+Tx/IZelfW2inRhlPRbTlYeUucKCNb7CRMM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iuWRJ6Cc8KrHZu1U5MzTX8L5Pemcm+Gqa7l9g/8cN/lHIAbgJGbOt23URgCcZ1janGgRvWEghRcF44vPaGkyes1ZxFHNBA0YQH+yLCJVWxB8WYJe74zXCas+xfoubaQaKr23247KbqHpoArZ8cBkB4ouOqXkaO7+foXRNePqrqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNFiDfnm; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1748597912; c=relaxed/simple;
+	bh=ICSGQ0Zax6RfiU1eNFI15hxlnpkjaqK5BGkuN+umx5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gRsH+xDKixXLZ0tlL7p36OM/vsDJUfB7StBh36e/qOgamJPeYOeFFT7JFOm9GeS/XuHOWOQZhmjaIihaeVSlo+HVpv9DsgkCl4Uowzw1BAoB8ngbItmQjE4hKwmG2zzRrl++KyEWFbWYEXZj7zo/sZhfWsldz1LUklwSBxOiNQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inxk4Yp8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNFiDfnm"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43ea40a6e98so7263405e9.1;
-        Thu, 29 May 2025 02:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748509348; x=1749114148; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8AXfRWEnLXngbO6ozFx9Vdj+sRj7LpGEVmnez0nbKG8=;
-        b=JNFiDfnmrDT7w1plt23ylGhR00wAkKHlbXfiMaCspLQKscn9bg4b3ML4nVae1XGPIk
-         RCQeGUlSi/AG/Y85vnsjsB4Gv8OqubUCGRApEG6C8iVFPOek7mezRXLnaeMY3A6pq84Y
-         dvV53si2iZqzXGCHXxXiH+0DjEWSMfQRp9wwk5lBjAd6xjwBvmIGlmhRF0LO5duyf3BT
-         64JjINN+nfUKHss3Eqz8gq73qT2G5rV4qSh/zcwo54FaGgl/v4ecGrhnpUcMpyBcOIn6
-         +fRjwbai9TfYj1WQmiOg0+bYR5Du1fFiOZ+8Mo3ynyrnwVI4Ztsunnuda5V2/ZWsNcN5
-         FxyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748509348; x=1749114148;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8AXfRWEnLXngbO6ozFx9Vdj+sRj7LpGEVmnez0nbKG8=;
-        b=bOssOGdAiUmMhNFg+8T50+71K9CZpXa8zTQsbOyoXWgQzmE7gPt7Ifm6Has/p1JSFG
-         9ubZscNiMSY9MCWDgLpX5c/Ko/9IBwrB9C4izN2MP9fMsI1tKryyk/bp63dw50alGYs8
-         M0VPiITEtOr0f0y5i1CiprmE+WQvVXN5Yucjt6MRY6lesn7MW8eRJ/EecsES6CpIRlzy
-         SfTVa0n/PfqZZ4s74S6mi3kwWfgGPgX28RxCwEs4gqePLNmTrheu2xLoCF4gbEPCwZRB
-         TFXPvYldjY0xiCDYk+/w+cETRt4UlePt1PAwdRQAXaxOJiTM5g4hT+Y9bYVs0samjmpw
-         k3HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUD8Oak8C3hyPujTQp7p5qQNtKuQvqlqftJUudaHp7Yc2PyN8Wt/2MTvV/w2YCaDykbafy9wulboHo=@vger.kernel.org, AJvYcCX3y+PRBK866Uc/7JHfNpBaMc0TulswOxt5u3vBFnrq/VXpuWnCkOvM6BzxJhn/oxYNmfNA339KUdCHKcu6@vger.kernel.org, AJvYcCXg+K1WHPCYjRF6OrC7h5eX+Al/u70kboWo37GnaWo1RwKbpnjF4Z1HH5EgVop/Qtu8/irK/jpug+CfmPk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCAX6KtIlAq/QuE2pjIHzLHSGkDzq0k0kgJwNT/O4Gxj2AatJ+
-	RlplPL1oo6k2nYIvJD2mqh6L3bV3JAnXayEWFJYU4i6Gil8NFs6f4Nc7
-X-Gm-Gg: ASbGncsBOr44S/yeeusPcAiS1bL+VhN7tnS2YyYmgJn3/F0+eV8GPBpqMrVdnPuQkNq
-	BzgryWv3UXZFmkqVdZ/TVWBoaQAvjBGN4zATCiIcbBtehnCLoBzOOH5Y+2PEODmfbuub0XeAWfc
-	+ugIAcsc+G1cGLQKreBn880UCFTEmnogV7kMFLEWnBW69C1WTWJTdIFbDKcwmNTV8sI8i/TUD3i
-	vaAhf+VMnUS/gUipqeckbbOSZ15E+S5qcimgSI173V8DNDZAZ6VOlHnEFvuL8AMEaDpxi2WVpzW
-	SGbGaQld7Q5qh1l2PWM0pYN+Ckq6HWwro5JX7RE1GZRnJVYh2VELcVOpGgYLRR95SqrWYBPqmm3
-	DcBIikE/EvNQ8hd89PIIZMVMHLf2xLZQNyejQGpXED+obknwGBewq1A==
-X-Google-Smtp-Source: AGHT+IFS+6s+jXMSUM+bVy+Oz+xiERYfpm6I7yWMzURvuDDqqqnXdeEsGmmT/Co0X8obLIFaytbc0g==
-X-Received: by 2002:a05:600c:3b25:b0:450:b240:aaab with SMTP id 5b1f17b1804b1-450d0566ea5mr13600055e9.8.1748509348003;
-        Thu, 29 May 2025 02:02:28 -0700 (PDT)
-Received: from puma.museclub.art (p200300cf9f4db30084345851a1a1c45b.dip0.t-ipconnect.de. [2003:cf:9f4d:b300:8434:5851:a1a1:c45b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450cfc17a04sm14057565e9.24.2025.05.29.02.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 02:02:27 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Roy Seitz <royseitz@bluewin.ch>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add support for ROG STRIX Z490-F GAMING
-Date: Thu, 29 May 2025 11:01:41 +0200
-Message-ID: <20250529090222.154696-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inxk4Yp8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C537CC4CEE9;
+	Fri, 30 May 2025 09:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748597912;
+	bh=ICSGQ0Zax6RfiU1eNFI15hxlnpkjaqK5BGkuN+umx5U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=inxk4Yp8xtNFcmPalhY09ck1qo1uYRCOcIWDRzIjZrLR7sPqhhXwCHPFDqMHLJd9g
+	 sHZFVXK6FD1UizbfB6DLmzqePp11GrU+bAvzTM2yyDUq4QFT+Mmn1w1ZCzuMd3Z++r
+	 2rfN38whXYJrJfbDDPu65/kN4bHjMqPADKnsMQtO+wyQwtLzyKI5dwaU3yVgl+CY6c
+	 mwSjpaGlZA383yCa/07eaFq5rD2szRfYhwQl84F4vK2iGD8hYyW2MfktL8fRWru7Gh
+	 0Cd2BNMrPJjHKZ+QZivVRi85ri4A4dqVmlF2ll/8UBkqvHhrhjueT0WLFbZE49Ec2S
+	 It9sSic/aD+Tg==
+Date: Fri, 30 May 2025 11:38:29 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: "jdelvare@suse.com" <jdelvare@suse.com>, 
+	"linux@roeck-us.net" <linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>, 
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+Message-ID: <dirkbdd5oeofjhy5pk6jiaixbuhmuq7axewhrd7bdghc3dp5x6@ok2uhywwz5ls>
+References: <20240722221737.3407958-1-chris.packham@alliedtelesis.co.nz>
+ <20240722221737.3407958-2-chris.packham@alliedtelesis.co.nz>
+ <jzxu6mcbxf5zwyirnb2jjpm2i7sln3v5mz3gyhc5xhpqexicvb@atrcjvh7wuh5>
+ <bc99a27e-74ec-45a0-b77c-48f993269586@alliedtelesis.co.nz>
+ <jmxmxzzfyobuheqe75lj7qcq5rlt625wddb3rlhiernunjdodu@tgxghvfef4tl>
+ <4858ce06-2081-4335-af09-f118872317ea@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iwycug4hm3mtqr5n"
+Content-Disposition: inline
+In-Reply-To: <4858ce06-2081-4335-af09-f118872317ea@alliedtelesis.co.nz>
 
-From: Roy Seitz <royseitz@bluewin.ch>
 
-This adds support for the ROG STRIX Z490-F GAMING board.
+--iwycug4hm3mtqr5n
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 1/3] dt-bindings: hwmon: Add adt7475 fan/pwm properties
+MIME-Version: 1.0
 
-Signed-off-by: Roy Seitz <royseitz@bluewin.ch>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 32 +++++++++++++++++++++++++
- 2 files changed, 33 insertions(+)
+Hello Chris,
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 816d1f9947ea..502b0faf3b31 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -29,6 +29,7 @@ Supported boards:
-  * ROG STRIX X570-F GAMING
-  * ROG STRIX X570-I GAMING
-  * ROG STRIX Z390-F GAMING
-+ * ROG STRIX Z490-F GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-  * ROG ZENITH II EXTREME
-  * ROG ZENITH II EXTREME ALPHA
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index e0a95197c71b..c3d5bcbd63f8 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -166,6 +166,7 @@ enum board_family {
- 	family_amd_500_series,
- 	family_amd_600_series,
- 	family_intel_300_series,
-+	family_intel_400_series,
- 	family_intel_600_series
- };
- 
-@@ -279,6 +280,20 @@ static const struct ec_sensor_info sensors_family_intel_300[] = {
- 		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_400[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-+	[ec_sensor_fan_vrm_hs] = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-+};
-+
- static const struct ec_sensor_info sensors_family_intel_600[] = {
- 	[ec_sensor_temp_t_sensor] =
- 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-@@ -498,6 +513,18 @@ static const struct ec_board_info board_info_strix_z390_f_gaming = {
- 	.family = family_intel_300_series,
- };
- 
-+static const struct ec_board_info board_info_strix_z490_f_gaming = {
-+	.sensors = SENSOR_TEMP_CHIPSET |
-+		SENSOR_TEMP_CPU |
-+		SENSOR_TEMP_MB |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_VRM |
-+		SENSOR_FAN_CPU_OPT |
-+		SENSOR_FAN_VRM_HS,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_intel_400_series,
-+};
-+
- static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
- 	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
- 	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-@@ -586,6 +613,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_x570_i_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
- 					&board_info_strix_z390_f_gaming),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-F GAMING",
-+					&board_info_strix_z490_f_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
- 					&board_info_strix_z690_a_gaming_wifi_d4),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
-@@ -1061,6 +1090,9 @@ static int asus_ec_probe(struct platform_device *pdev)
- 	case family_intel_300_series:
- 		ec_data->sensors_info = sensors_family_intel_300;
- 		break;
-+	case family_intel_400_series:
-+		ec_data->sensors_info = sensors_family_intel_400;
-+		break;
- 	case family_intel_600_series:
- 		ec_data->sensors_info = sensors_family_intel_600;
- 		break;
--- 
-2.49.0
+On Wed, May 28, 2025 at 09:18:37PM +0000, Chris Packham wrote:
+> On 28/05/2025 18:10, Uwe Kleine-K=F6nig wrote:
+> > If I understand correctly you need the default value for duty to
+> > statically setup (or only initialize?) a fan, right?
+>=20
+> Correct.
+>=20
+> > I'm not sure I like
+> > extending #pwm-cells for a default duty value. Thinking about that a
+> > while I'd prefer a binding that looks more like the clock configuration
+> > stuff because actually having the period and flags as part of the
+> > reference to the PWM to be used is also a bit strange. So I imagine
+> > something like:
+> >
+> > 	mypwm: pwm {
+> > 		compatible =3D "...."
+> > 		#pwm-cells =3D <1>;
+> > 	};
+> >
+> > 	fan {
+> > 		compatible =3D "pwm-fan";
+> > 		pwms =3D <&mypwm 1>;
+> > 		assigned-pwms =3D <&mypwm>;
+> > 		assigned-pwm-default-period-lengths-ns =3D <40000>;
+> > 		assigned-pwm-default-flags =3D <PWM_POLARITY_INVERTED>;
+> > 	};
+> >
+> > Then specifying a period (or later a duty cycle length) would be
+> > optional and could be provided iff the device needs that for operation.
+>=20
+> The frequency and flags were already part of the standard #pwm-cells=20
+> which I think is why I was encouraged to use them.
 
+Yeah, that part is fine. This might not be the long-term future, but
+today that's the norm.
+
+> I was also trying to get something that would work as an ACPI overlay
+> which turned out to be really hard.
+
+I don't know enough about ACPI to be helpful with this quest.
+
+> > My mail was just me being frustrated about another special case that I'd
+> > have to handle if I go into that direction. I should have been more
+> > attentive to that development before it entered the mainline.
+>=20
+> I'd be happy to deprecate the 4 cell thing and replace it with 3 cell +=
+=20
+> vendor property for the default period if that helps.
+
+I wonder how other similar devices determine the default duty cycle.
+Isn't the norm to make the fan rotate at max speed and then when
+userspace takes over it's speeded down?
+
+Best regards
+Uwe
+
+--iwycug4hm3mtqr5n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmg5fJIACgkQj4D7WH0S
+/k7Q/QgAhpRbbtxTmdd1TU+JKciJM1ubiQ6suwb+RqEXC/4zfLvLc7QwkWAm16v3
+MMCqJxvwSwXVWPxPoaaFEU9k4S9YHi5ggLfT4/1Bde79ynsdCFHbL6zfaH3Fq3gH
+m15Q2/Z9yPQ2z3tWe0b2PskubMtRGXpzWsEk3M2SwTb09J421hWW8qFxV//OqMf+
+PM8qkChq3fe9ZZgkHzNepPYfmJEl6uhs1mEN7FinZi6ZHqxRSF2L92celgIcmYWK
+6VqNq8381esfPA9OeA2oLFEuz2sQv5DtDE2PVsSea8iGggRFrYbGMC/oYTBLwjBp
+1WTJLq7hrYJSTtyNu1HKGvIDfj+Gew==
+=y7cT
+-----END PGP SIGNATURE-----
+
+--iwycug4hm3mtqr5n--
