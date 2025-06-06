@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8184D288CB7;
-	Fri,  6 Jun 2025 15:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE88728A1F8;
+	Fri,  6 Jun 2025 15:42:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749224527; cv=none; b=ppsD/K5pvIFWfciBIbiVkbw7/DZV2ikuxOeRGQmCFtyTNBEgGs7qPwKaUfh1hOZEh9OSA9FBSTui0S2LbeDCxfQuFRpM1uei4Px0Li+xc/MwopPUum+haLQ9cAbqxQywFBm85ggRqs9OOhVlTCsAI5I79cWuUNZ7aTeTiuy4NBk=
+	t=1749224565; cv=none; b=gTpY6opVv4Pymd1kUoHh6qd6mpkX8YOE6bYymoolSdcRB86fqyaimcfugkSLjnkpu762yZRXHRwbde+jKyBBwHVw3timoD34IMewUHA8359+15bf24S87rSFe3wf+6znMnNG90xV8a86DFFfPD5s25TI6UjCLEK2nYLOFFv8a30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749224527; c=relaxed/simple;
-	bh=DwYUtryMDTr5IZsXqtMbi37uib8JAFsJzodmtBIYXmI=;
+	s=arc-20240116; t=1749224565; c=relaxed/simple;
+	bh=3JpeczwQLVI3xj5GeoUodGCtRP2PFojaoMV7mgOmhP0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BC0ObFyz+Piat/tGDcv08xgL/TKL/ztcc7wEAYOE09zQAi0ttD5wSbnsieQf7uIkH2eDFo67pfXc2h2EqzG97Mey10cQLLBhcwh2JArM6mTZW4NdWGRqibiWGCRL7CPoiiE0nemhQLWPPvRlaSrYzIl6YGnG8PbUpfZDvrPbsnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3BEM6lG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=etKnGb7Z3iSgua4YqTB5EAyWLKywOcWFOAmnewggYNAArA+9A+m/igOvsJkXoRV7W/hn620oWwsp2rBiArCF03fsK0ARFkktIKZ/MMVLXaKvAItvVHabdGXqsWAhN1TBidxWKy0RUjTsgY5XBIIAd5sc9LjvUNRju2qVNx+ZniA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CXjdzHQp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3BEM6lG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB14C4CEF0;
-	Fri,  6 Jun 2025 15:42:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CXjdzHQp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B813BC4CEEB;
+	Fri,  6 Jun 2025 15:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749224527;
-	bh=DwYUtryMDTr5IZsXqtMbi37uib8JAFsJzodmtBIYXmI=;
+	s=k20201202; t=1749224564;
+	bh=3JpeczwQLVI3xj5GeoUodGCtRP2PFojaoMV7mgOmhP0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U3BEM6lGtn26Ral9r5G+301E+90L/8Z9R8aMWFVl89q7SVshn2Q1lyUmsMOKOVpq5
-	 jk/LK4XlEfl/3AphiwNrK2nQ94KacddaClwEf6n+qPa4w6x4f5H+sVixkKPaFAcrf4
-	 40DdYBlKFbopCAJAoVzKWfDyFq5fc9e2/+C8C2EFnrDV+S44SkwrKAtSDlJYPbNA1w
-	 mfWo2W8HeXnc37qswIMsQhOX4DqjUYKgdeZxygP6xrALWZ3sdlzTGRBnOlpEBHoux8
-	 HL1PFr+qj73Ymu74sCj0zbpmUkO6aOrJVKK61y5uCb0RyQ/3150QLCUUJsLbltbdpJ
-	 jHHjzCEtyXHEw==
+	b=CXjdzHQpdQl1XFrcqq8ui6Xp7TuzWTHoFdPoL9P5bZ0lBOc7X8ZvERmsyLE5tz0eJ
+	 T9xP/xZEBMwiRaVQugILa/EdM3jFxGrTFP7H5NwazCnNHOdkS1KlpqOuWhOxOU3HYv
+	 esXM0ruMMtqZ2q4tz/RzANq4AiyWjmdOXQah6eSxm3CsdF2cyouuvQRV7PG4+T6wrs
+	 hH6y/VR7JfW88ZwFbcdN4jKbPGIC/ABSZ0FD9JgGxQp93heM74GvIePcgOC2wpnb4W
+	 /p78t/4sdsSZdDmtZ1Yb1GchBOPBDO2+Nz1KYMEZDGQ6IhNd6sIj9jjZKK8S9RTKrJ
+	 FCeqaNCdbP2rA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
 	mail@carsten-spiess.de,
 	jdelvare@suse.com,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 14/21] hwmon: (isl28022) Fix current reading calculation
-Date: Fri,  6 Jun 2025 11:41:39 -0400
-Message-Id: <20250606154147.546388-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.14 13/19] hwmon: (isl28022) Fix current reading calculation
+Date: Fri,  6 Jun 2025 11:42:19 -0400
+Message-Id: <20250606154225.546969-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250606154147.546388-1-sashal@kernel.org>
-References: <20250606154147.546388-1-sashal@kernel.org>
+In-Reply-To: <20250606154225.546969-1-sashal@kernel.org>
+References: <20250606154225.546969-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.1
+X-stable-base: Linux 6.14.10
 Content-Transfer-Encoding: 8bit
 
 From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
@@ -164,7 +164,7 @@ functionality.
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index 1fb9864635db9..1b4fb0824d6c0 100644
+index 3f9b4520b53ef..ed5a3ef1aef88 100644
 --- a/drivers/hwmon/isl28022.c
 +++ b/drivers/hwmon/isl28022.c
 @@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
