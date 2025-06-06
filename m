@@ -1,41 +1,67 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A5A23E34C;
-	Fri,  6 Jun 2025 21:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C72126C17;
+	Fri,  6 Jun 2025 23:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749245445; cv=none; b=aPWDz8xmgcCPG3jEw7DqhZcmrg+udHAeZq8C4WJloKzS7vV6Bp4V9FUEQ6c9paHMdHQJvwl/xgQk3Czlm/5OmMAVxa98o1CuYmfPBevcCY21SSklCmmrtAvHzZbexuHJOFAKBPVdG5I7BoEMpn3PbJOv78NTevJm1vayxQGBCQU=
+	t=1749252014; cv=none; b=dYk6kxvu8XSnsia9811LNIqupfKEJns2uTldQAAY9Us+ZSWAPXNQR32BL5iVRdO2HVo3RsRcm4BjnhTZ0qjAXK8qXs3oBExsS3V8A//7E1c7PM+WKeL3+MfYf5Yv9J7SKibAdvGsoofQLqsu9QiFMeqBociCSPbw8J1pKZEnCAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749245445; c=relaxed/simple;
-	bh=SS4GSe+jGz1c7YxTaBkkzauoL8PE0XuM11Xm2pzctDA=;
+	s=arc-20240116; t=1749252014; c=relaxed/simple;
+	bh=pylFDSoovx1eheY6L0fuY2PkOFx41ur5gKrOoQv3lNU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r6TQDmiXJUNjAHYT8Ir06ddtsV2zxxxIiYnWzSOP8OHeaAEBNuA+qHKO5ZIHIPIH4nQDmgM0H6ADGOduvjDdwv5gNV6KpgZDe/+S720IbU4hTSyb38qT7t6rhE6Orm3E3mRRnBFdox+ynM9qcP3SPda0Ys0CNBaJNOXOOtPkCd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=r4fUomNF; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=DxgHTSs/zndrGMoODNmg4lsi6qR2VsTrYralLDQ9htkalB5pgEUqqx7jzF2zmbvsL57OwBLx4I5IOJ5fTSfMU8JkGBVkYbI6xbuo/6WzIzA1y6O+zsTelaX3AJECHbG/NtaAbOYWR5IPpB9CWKUsgQxob5BqCZHJDik6QkV87NY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvW4Ls09; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="r4fUomNF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1749245424; x=1749850224; i=w_armin@gmx.de;
-	bh=SS4GSe+jGz1c7YxTaBkkzauoL8PE0XuM11Xm2pzctDA=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=r4fUomNFPJlUVeBTAbl1sSj1bueBru91psWusanmY6sICZ7d2Z+qOZCCBgutVI6t
-	 5sS61SYAGyBLe7mTcozF675SYPm69BcL7M3FO3HGskdZwj2atiopYULvSEpWhlNnv
-	 z8Ics7Nh9NNCusr8bgcMldThG5aewoylQsKN18OCC9/CBFg4pl6PMDniiFg+kwVaB
-	 8SkfVwJLXxFdcFbAWVgsbj09ZdvfcSOk65Ejr36hZtv51rSMZuFDvdlS5kVL/ZDqt
-	 qsr1zyrse5Buvi4rR4Pk2WIEo5AlpsVgGgodSuo53sZvS5WpMirclJFG3/erOA5OF
-	 MYzujW64SVXufxZupA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mlf4c-1v5H7K06pm-00c1st; Fri, 06
- Jun 2025 23:30:24 +0200
-Message-ID: <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
-Date: Fri, 6 Jun 2025 23:30:22 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvW4Ls09"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b1ff9b276c2so1346994a12.1;
+        Fri, 06 Jun 2025 16:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749252012; x=1749856812; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZDG+brYeDJSMPDJyK2aKomnouK2UpyUMRQzFahwJIo=;
+        b=OvW4Ls09OsjYLhT4sBOS+LHpPixgaStOKCZMlr1cayECoAUFfMLdao6K/b7gsay+Nj
+         O2bcHMJfR5d8i5zmn7XCwGkjApPNkcVC5wATPfPl5Ic0Xk3GJOnx6MS0eW0ax484h+NC
+         rM2qFPjDx/EB5Oubm9uOkoguKvuKsLvLJJaMt3Y4eZ40TeJP61c0+uDF04YbKQeyrRam
+         FbPbhjo/IEFvZMX60It4GIYZppypjneTTl6yTHWik/JrWIH2YGMbC9Y0w7C2gG1/g4Ta
+         gzfyHFDswF6/QRzR6IYslie0xmhFw47BWkUaqv4IYm/iQBsh2gQ6wNJtaD/+2kMMfsxu
+         xb/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749252012; x=1749856812;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FZDG+brYeDJSMPDJyK2aKomnouK2UpyUMRQzFahwJIo=;
+        b=cbjxZ+fQbddRDYDMRKW4/xY0vm/AvTiqZjr30nCeoJro/ExbEDUUuW42ZlqYXmUfai
+         9AKiOAcShwxu0f7WQVx9pixgOthCUQkUZk+Jl1729T2ZN6qLinDz7LInSxbjdgh70N7g
+         ev1BijwFWcICSAkOdODYgLCpBF6FTdcCKW40mEIX435b6xDjeUZDOQmXgsKA4ONhRt8P
+         wipBM4Opd6xETJj20JcFrRZogwK44nfxPqEn3BOzdwYLK83CeX3sGofkA6vbXukYwwId
+         26xrb/vYVisru7k/AK9AbrpEqlnHQkD5hc1DM6/Whx0cdlnxLYTDzE2Dj12gJs7DCCaE
+         Oeyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqXyzr7NJkn3qaPwpNJWg1TC7IOskccdPTRqCqCNBSibqTWADuPslanqa4lGhhn6tYfbKnhvBJeGX1y2YS@vger.kernel.org, AJvYcCWbZNJZ7mnDja4YIRAHO3NxZ3HlccHUbsYlfuThdqjnmoHa9WdqwRF/dmeHAdTCFrMPfxD7vUGfmj+8Ew==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/s8cTcUniMwqOoYZ4Esgxz+ErRmnQr2vcrQng2+efS0EpYZGI
+	IyqDIk9Zhvkf+pBTIfuJVdvsZE8J6F/MZxm2dOPipgb28K1yTzhRjeDL
+X-Gm-Gg: ASbGncsO6qMHDyvy7rMnwUSuHqeeuYlZ6aY1DAg/hw0T/nR/W6R4FnYJkf4YiUpKHLG
+	gN3VocvLcGZHk4UQ9fSyRyI8tc2JZYNhZ+83AnQ6Kq+HyXxhazUl1WpHVEIPgWYs12iZGF2F686
+	5H2IAQqUXL+Td5D8M40zXhrD4pXRxAslZVyMssKNzq/kKj1gsswSKgkMzFNks6T4zTvOWA/YUQt
+	MM2fdWNmS7Nc+yZjkJJesx+ofqTloodfo7/GciKFrVzeP5teJ5+f1XWs+tyiRJRQRYWa3moU4/z
+	OsTJX4S8jmwiOc8gD71AJGYZm/NPe1JdUX4Q/pXWpnWDVNZ09ANLQCiyu2pd8M65TviqOw7G5S2
+	6Ban8HiTVWmIIFBRv5LvrMB5f
+X-Google-Smtp-Source: AGHT+IE+FduGJg/M+00PM7BQpb42nYmhb30gyIG51HLSFNqu1KWYb7qAQ9Pf5P4bU8rm6yUVrfjsUA==
+X-Received: by 2002:a17:90b:3b42:b0:312:959:dc42 with SMTP id 98e67ed59e1d1-31347302b63mr7480258a91.11.1749252011919;
+        Fri, 06 Jun 2025 16:20:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31349fdfe58sm1833405a91.38.2025.06.06.16.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jun 2025 16:20:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
+Date: Fri, 6 Jun 2025 16:20:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,7 +71,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon
  subsystem
-To: Gui-Dong Han <hanguidong02@gmail.com>, Guenter Roeck <linux@roeck-us.net>
+To: Armin Wolf <W_Armin@gmx.de>, Gui-Dong Han <hanguidong02@gmail.com>
 Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net,
  jdelvare@suse.com, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
@@ -53,113 +79,89 @@ References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
  <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
  <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
  <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
+ <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:1xmPSwo0fCqaCoqdIIQHY62NXf3hfCLgjgilXUpYNWlaZhI32xN
- 1npMoBsw/UxMxkC8oTmFBM3omQPXw32i/lSrUSspb4SytqAcfGP80Kj/WVmrMUMcsukyJnG
- tC76vJenSMFN1ZrUaPQ8gjCteoCTvsad5KJNtyhhWFViQ7niDMrQl/SDJX1eF5Q8uUVMBYG
- b46/YPu1bCUh+rlEZZBsw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Vda5T44NeT0=;xgkkiwdrri+54rCks6aazaArMso
- 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
- SoPoWyzQYVfk4UFwZvPdiGR9w
 
-Am 06.06.25 um 09:03 schrieb Gui-Dong Han:
-
->> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
->>>> I would like to discuss these issues further and collaborate on the
->>>> best way to address them comprehensively.
+On 6/6/25 14:30, Armin Wolf wrote:
+> Am 06.06.25 um 09:03 schrieb Gui-Dong Han:
+> 
+>>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
+>>>>> I would like to discuss these issues further and collaborate on the
+>>>>> best way to address them comprehensively.
+>>>>>
+>>>> I'd suggest to start submitting patches, with the goal of minimizing
+>>>> the scope of changes. Sometimes that may mean expanding the scope of
+>>>> locks, sometimes it may mean converting macros to functions. When
+>>>> converting to functions, it doesn't have to be inline functions: I'd
+>>>> leave that up to the compiler to decide. None of that code is performance
+>>>> critical.
 >>>>
->>> I'd suggest to start submitting patches, with the goal of minimizing
->>> the scope of changes. Sometimes that may mean expanding the scope of
->>> locks, sometimes it may mean converting macros to functions. When
->>> converting to functions, it doesn't have to be inline functions: I'd
->>> leave that up to the compiler to decide. None of that code is performance
->>> critical.
->>>
->> Actualy, that makes me wonder if it would make sense to introduce
->> subsystem-level locking. We could introduce a lock in struct
->> hwmon_device_attribute and lock it whenever a show or store function
->> executes in drivers/hwmon/hwmon.c. That would only help for drivers
->> using the _with_info API, but it would simplify driver code a lot.
->> Any thoughts on that ?
+>>> Actualy, that makes me wonder if it would make sense to introduce
+>>> subsystem-level locking. We could introduce a lock in struct
+>>> hwmon_device_attribute and lock it whenever a show or store function
+>>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
+>>> using the _with_info API, but it would simplify driver code a lot.
+>>> Any thoughts on that ?
+> 
+> Hi,
+> 
+> i am against adding a subsystem lock just to work around buggy drivers. Many drivers
+> should use fine-grained locking to avoid high latencies when reading a single attribute.
+> 
 
-Hi,
+The point would be driver code simplification and increasing robustness, not
+working around buggy drivers.
 
-i am against adding a subsystem lock just to work around buggy drivers. Many drivers
-should use fine-grained locking to avoid high latencies when reading a single attribute.
+Anyway, what high latency are you talking about ? Serialization of attribute
+accesses would only increase latency if multiple processes read attributes from
+the same driver at the same time, which is hardly a typical use case.
 
-Thanks,
-Armin Wolf
+Guenter
 
-> Hi Guenter,
->
-> Thanks for your quick and insightful feedback!
->
-> I agree with your suggestion. Adding a note to
-> Documentation/hwmon/submitting-patches.rst about avoiding calculations
-> in macros is also a great idea to prevent this class of bugs in the
-> future.
->
-> Regarding your thoughts on subsystem-level locking, it sounds like a
-> promising approach to simplify the drivers using the _with_info API.
-> As you mentioned, some drivers don't use this API, so they would still
-> require manual fixes.
->
-> For the subsystem-level lock itself, I was wondering if a read-write
-> semaphore might be more appropriate than a standard mutex. This would
-> prevent a single show operation from blocking other concurrent reads.
-> I'm not entirely sure about all the implications, but it might be
-> worth considering to maintain read performance.
->
-> Thanks again for your guidance.
->
-> Best regards,
-> Gui-Dong Han
->
