@@ -1,112 +1,192 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114D4433AC;
-	Fri,  6 Jun 2025 13:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8184D288CB7;
+	Fri,  6 Jun 2025 15:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749216500; cv=none; b=b1rCbjb2U/3CORzmh/9flZcNCvlGE+IVInTjbAjM2J4xmS+bgMVuOgMzI0pMyjodWUoO0pJgB+CBf4iN/2wb5rm8tCuLkymTkLMyUiTzZqwMiCnY4WKhiWEAgX3dECuz/KptAF3+I2VmB8pT0BCTH8+Q9LwR8BZEzW5ylNGn71k=
+	t=1749224527; cv=none; b=ppsD/K5pvIFWfciBIbiVkbw7/DZV2ikuxOeRGQmCFtyTNBEgGs7qPwKaUfh1hOZEh9OSA9FBSTui0S2LbeDCxfQuFRpM1uei4Px0Li+xc/MwopPUum+haLQ9cAbqxQywFBm85ggRqs9OOhVlTCsAI5I79cWuUNZ7aTeTiuy4NBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749216500; c=relaxed/simple;
-	bh=lStWFN05KBUEosEhtBYZ9ONh/8t5JOiGDv2syrsmQe8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4GmtXNeKCVcXJE1kWB+Aqf+PRCg16a0yyiFR26D6Jrg6/4oSEn9XI7LozlgWa4hf7yWp8JiSl9X1TfLD9Okqw2jDJhL4D6Fa07ZQour/6Y598NzGplXGYQTjMPUZqSL/NKkRBPbB64DA5shqGk1z5GflzQ/b4wsTpRRimJsbn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4YzpGvl; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749224527; c=relaxed/simple;
+	bh=DwYUtryMDTr5IZsXqtMbi37uib8JAFsJzodmtBIYXmI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BC0ObFyz+Piat/tGDcv08xgL/TKL/ztcc7wEAYOE09zQAi0ttD5wSbnsieQf7uIkH2eDFo67pfXc2h2EqzG97Mey10cQLLBhcwh2JArM6mTZW4NdWGRqibiWGCRL7CPoiiE0nemhQLWPPvRlaSrYzIl6YGnG8PbUpfZDvrPbsnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3BEM6lG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4YzpGvl"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-234d366e5f2so25580015ad.1;
-        Fri, 06 Jun 2025 06:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749216497; x=1749821297; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KTegNuqrzt3gKagTIOaKfGpBHiW0UAiaKMfj1a7uVEs=;
-        b=A4YzpGvlbKN2k7RnY7DikQVAae2JxfLdB8dMCVjTxeTAzqKzDybEq8s2LA7BtWJQYf
-         Bj1e2kP1I3tJcfPdMt1zvxqtRt8u4KpQ7y8cbBRlM1wA8kpIdjIyluW93WtISdJj801h
-         jiR5McvyylRAd6Fk46g6KJX8LZ2i1eaAFsfxs9XLCpuh72oLadJDbKWMZlab8goxW7Xd
-         7AEeewT3mZOZDfcp2dWQ+0EycPSVpMUvpM06IhbtxbhfkSY41WMM5rOrdUS4CPzCNT2o
-         mMZwnpX5mNXdq/dSellELlK44jqVKxckoOri+kcTTEYIj6Flq5FE9U3t6Su0S26C00BY
-         L8Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749216497; x=1749821297;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KTegNuqrzt3gKagTIOaKfGpBHiW0UAiaKMfj1a7uVEs=;
-        b=PCPfh2JSbFTiAWuRVTNMNJbkCJS76uSRajYlbbr/hl13yAdYQVfFGabsUfxA2DuDXB
-         mxc3HCXHiT3v8DWeDiVJ53IK4ogRTzElNIfzFAI7UUTp3wSi3zs0Yg/gb5+6hvO+yct8
-         hZOXTvGnUFNcaFr0ez5FqpTb5B5dWEDpn17cATBYU129W+GSY9+aoL1U0Af+oZkwfOZb
-         /DRHFxeI3K0pvqE99o1HxOGmK3IKMVr8h6hYGgQ0vi88qkMi0/qRZQEWi/Nx4ggGDe69
-         PFC1LBa9OqWuq0BtewOx/ySVUo684nPi5kFtpZ4jZCcikfD4yNl8F7Tku/46yoExhO/2
-         hV7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWIBEMElSkysdbETNNwF1vfp1sza9f+O+ePRsAXiAluMHPuFjA8YbuVT2jcd761dCgfPSGrfGoL@vger.kernel.org, AJvYcCWgs2tS4DLivFxGkIDVTbq+mPs6m2Ah6uZslkSVCGiFbEXX4LAVFXvkAaGcJn6PDBiThUhib01K3ua1zA==@vger.kernel.org, AJvYcCXIgw5h5o0mVAsMh1hwVEnH/3prCeFn5rYzOayeWj1h8kOB5y9aVsRT/Pu9N2aHJxzEBeLpmi7O2iOqkE9m@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+IJu0HfBlclvlnLl04tJ/LnDnYPhzPdqMOBfkvLq95k+yVugx
-	1wHcI5Zng25ytuBYJqRnL9+F/oHDzHATnxJoytL0HMI6DHJYfFTX+vn2
-X-Gm-Gg: ASbGncvf5QagD+V/NwUN0XuUa2nn1KLSu51m/lQJcnz0/lYYoomtA2H6fI4jh1syqew
-	HazqYnDk/M/VAprHEt/SyQadv97xFJSJPXKGCp3wbhvRpDICCB7AF8yZASNdeKaIafricaNf2Nr
-	Y2mpENT5mrydR5vPmy+5dnnDZrDd/E8K7CvYI6oWezu+SuIWvC/BvLojqzmj8CI1I+gmGtZETrd
-	RtLjBPfELt6DSL1RZiz8bv9hom2hE//sqWCigcYmAVQAJ6K7TwB5+e0ET9PVO3Wkhzh6mNCtCtk
-	j9tbEag7WJdXQX8/qpoKjyc6vLuxjwTnW/Z1PXuePitS6XvwG8EN1BlX65xEbHHzDtg61aNVMWQ
-	=
-X-Google-Smtp-Source: AGHT+IHE8g080vlp+6jRvIwvEJW60lAMP7cUpeAu9+WDcZPbdxQ6k42dMYN4XsYp4WIx1kOYxtI9IA==
-X-Received: by 2002:a17:902:e80d:b0:235:e96b:191c with SMTP id d9443c01a7336-23601d25bcbmr50342415ad.29.1749216497128;
-        Fri, 06 Jun 2025 06:28:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236032fcf2esm12172135ad.123.2025.06.06.06.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 06:28:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 6 Jun 2025 06:28:15 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3BEM6lG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB14C4CEF0;
+	Fri,  6 Jun 2025 15:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749224527;
+	bh=DwYUtryMDTr5IZsXqtMbi37uib8JAFsJzodmtBIYXmI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=U3BEM6lGtn26Ral9r5G+301E+90L/8Z9R8aMWFVl89q7SVshn2Q1lyUmsMOKOVpq5
+	 jk/LK4XlEfl/3AphiwNrK2nQ94KacddaClwEf6n+qPa4w6x4f5H+sVixkKPaFAcrf4
+	 40DdYBlKFbopCAJAoVzKWfDyFq5fc9e2/+C8C2EFnrDV+S44SkwrKAtSDlJYPbNA1w
+	 mfWo2W8HeXnc37qswIMsQhOX4DqjUYKgdeZxygP6xrALWZ3sdlzTGRBnOlpEBHoux8
+	 HL1PFr+qj73Ymu74sCj0zbpmUkO6aOrJVKK61y5uCb0RyQ/3150QLCUUJsLbltbdpJ
+	 jHHjzCEtyXHEw==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ftsteutates) Fix TOCTOU race in fts_read()
-Message-ID: <98f33209-be61-4a5f-8f0d-41f6570f79dc@roeck-us.net>
-References: <20250606071640.501262-1-hanguidong02@gmail.com>
+Cc: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	mail@carsten-spiess.de,
+	jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.15 14/21] hwmon: (isl28022) Fix current reading calculation
+Date: Fri,  6 Jun 2025 11:41:39 -0400
+Message-Id: <20250606154147.546388-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250606154147.546388-1-sashal@kernel.org>
+References: <20250606154147.546388-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250606071640.501262-1-hanguidong02@gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.15.1
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 06, 2025 at 07:16:40AM +0000, Gui-Dong Han wrote:
-> In the fts_read() function, when handling hwmon_pwm_auto_channels_temp,
-> the code accesses the shared variable data->fan_source[channel] twice
-> without holding any locks. It is first checked against
-> FTS_FAN_SOURCE_INVALID, and if the check passes, it is read again
-> when used as an argument to the BIT() macro.
-> 
-> This creates a Time-of-Check to Time-of-Use (TOCTOU) race condition.
-> Another thread executing fts_update_device() can modify the value of
-> data->fan_source[channel] between the check and its use. If the value
-> is changed to FTS_FAN_SOURCE_INVALID (0xff) during this window, the
-> BIT() macro will be called with a large shift value (BIT(255)).
-> A bit shift by a value greater than or equal to the type width is
-> undefined behavior and can lead to a crash or incorrect values being
-> returned to userspace.
-> 
-> Fix this by reading data->fan_source[channel] into a local variable
-> once, eliminating the race condition. Additionally, add a bounds check
-> to ensure the value is less than BITS_PER_LONG before passing it to
-> the BIT() macro, making the code more robust against undefined behavior.
-> 
-> This possible bug was found by an experimental static analysis tool
-> developed by our team.
-> 
-> Fixes: 1c5759d8ce05 ("hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
 
-Applied.
+[ Upstream commit b2446a16dbf2347a07af0cf994ca36576d94df77 ]
 
-Thanks,
-Guenter
+According to the ISL28022 datasheet, bit15 of the current register is
+representing -32768. Fix the calculation to properly handle this bit,
+ensuring correct measurements for negative values.
+
+Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
+Link: https://lore.kernel.org/r/20250519084055.3787-2-yikai.tsai.wiwynn@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+Now let me check for similar current register handling issues in other
+hwmon drivers. Let me look at the commit to understand the exact issue:
+
+Looking at the commit changes, I can see that:
+
+**Before (broken):**
+```c
+*val = ((long)regval * 1250L * (long)data->gain) / (long)data->shunt;
+```
+
+**After (fixed):**
+```c
+u16 sign_bit;
+sign_bit = (regval >> 15) & 0x01;
+*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) * 1250L *
+(long)data->gain) / (long)data->shunt;
+```
+
+The issue is that the ISL28022 current register is a 16-bit two's
+complement signed integer where bit 15 represents the sign bit
+(equivalent to -32768), but the original code was treating it as an
+unsigned value.
+
+Let me analyze based on the established criteria:
+
+**Analysis:**
+
+**YES - This commit should be backported to stable kernel trees.**
+
+**Detailed Analysis:**
+
+1. **Bug Fix Nature**: This is a clear bug fix that addresses incorrect
+   current readings for negative values. According to the ISL28022
+   datasheet mentioned in the commit, the current register (04h) is a
+   16-bit two's complement value where bit 15 represents -32768, but the
+   driver was treating it as unsigned.
+
+2. **User Impact**: This bug significantly affects users who rely on
+   accurate current measurements, especially when current flows in the
+   negative direction. The bug would cause:
+   - Incorrect reporting of negative currents as large positive values
+   - Complete failure to detect reverse current flow
+   - Invalid power calculations that depend on current readings
+
+3. **Code Analysis**:
+   - **Problem**: Lines 164-165 in
+     `/home/sasha/linux/drivers/hwmon/isl28022.c:164-165` treat `regval`
+     as unsigned, causing negative currents to be interpreted as large
+     positive values
+   - **Solution**: The fix properly implements sign extension by
+     extracting bit 15 as the sign bit and manually computing the two's
+     complement value: `(value & 0x7FFF) - (sign_bit * 32768)`
+   - **Consistency**: The fix follows the exact same pattern already
+     used in the shunt voltage reading function (`isl28022_read_in`) at
+     lines 120-122, showing this is the established correct approach in
+     this driver
+
+4. **Risk Assessment**:
+   - **Minimal Risk**: The change is very small and localized to the
+     current reading calculation
+   - **Well-Tested Pattern**: Uses the identical sign handling logic
+     already proven correct in the shunt voltage function
+   - **No Side Effects**: Only affects current register interpretation,
+     doesn't change any other functionality
+
+5. **Driver Context**:
+   - The ISL28022 driver was introduced in October 2024 (commit
+     39671a14df4f), making it relatively new
+   - The driver is hardware-specific and contained within the hwmon
+     subsystem
+   - This follows the same pattern as other successful backports shown
+     in the examples
+
+6. **Comparison to Similar Commits**: This commit is nearly identical to
+   the reference examples that were marked for backporting:
+   - **Similar Commit #1** (ina2xx): Fixed sign extension for current
+     register by adding `(s16)` cast
+   - **Similar Commit #3** (tmp513): Fixed sign extension with
+     `sign_extend32(regval, 15)` and type casting
+   - **Similar Commit #4** (nct7904): Fixed sign extension by converting
+     to `s8`
+   - **Similar Commit #5** (ina3221): Fixed shunt sum register bit
+     shifting
+
+7. **Critical Subsystem**: Hardware monitoring is critical for system
+   health monitoring, thermal management, and power management.
+   Incorrect current readings could lead to improper system behavior or
+   failure to detect dangerous conditions.
+
+**Conclusion**: This is a textbook stable tree candidate - it fixes a
+clear functional bug with minimal risk, follows established patterns,
+and addresses a real user-impacting issue in hardware monitoring
+functionality.
+
+ drivers/hwmon/isl28022.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
+index 1fb9864635db9..1b4fb0824d6c0 100644
+--- a/drivers/hwmon/isl28022.c
++++ b/drivers/hwmon/isl28022.c
+@@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
+ 	struct isl28022_data *data = dev_get_drvdata(dev);
+ 	unsigned int regval;
+ 	int err;
++	u16 sign_bit;
+ 
+ 	switch (attr) {
+ 	case hwmon_curr_input:
+@@ -161,8 +162,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
+ 				  ISL28022_REG_CURRENT, &regval);
+ 		if (err < 0)
+ 			return err;
+-		*val = ((long)regval * 1250L * (long)data->gain) /
+-			(long)data->shunt;
++		sign_bit = (regval >> 15) & 0x01;
++		*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
++			1250L * (long)data->gain) / (long)data->shunt;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+-- 
+2.39.5
+
