@@ -1,118 +1,134 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31441C2335;
-	Fri,  6 Jun 2025 07:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8D3149C7B;
+	Fri,  6 Jun 2025 07:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749193429; cv=none; b=N+6NeEGxavKO/U23+94ggicYfeZeUWhk5lNzItddwiKZ1Hp60P8L7SZuit+fpF+IRAEmr6FzHwwjiIb7XuwhGUP60ieIryGt2s5UBmFoFSV5h9993eGhLdu9GrO0JYHCxa1Ldx6rcICCGNf1pta+sreJR7ctn2g2nW9w/469pUM=
+	t=1749194218; cv=none; b=Gcv5Z0yy6bxS/lljXpfmr/OHdp6KEEeOfJMz5DJskXOjrI8Vstki/7T/vfk+lqZ9VXw8jdqL0YIWPnu2X3roQCVN8yzrI/kcxXMPRXukos91qUd+k/8XOV8LZQoSq4nMh7NNjChd/7u0nOZdlQntaYFvh4bsUHe6y23r/NXgttg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749193429; c=relaxed/simple;
-	bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PAOtx2zIo5lAggSdXKOwQ9KO5OQs5ETbFeZheMfon/0S5Ph4OFqZSu+eCJ4JoooUOxeB256JwhhxpLqap7etne4Q8eidEsJX4wCSoZGCYyGwtr+6Pfkv6GLz97Enq9xcMKojxcMDtxBamFkp/dRPXUMpR2Zz9dSVjusQ32mgJSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJlXrhv9; arc=none smtp.client-ip=209.85.161.43
+	s=arc-20240116; t=1749194218; c=relaxed/simple;
+	bh=UlP3CPYKKYt3AdibsoMkCj0+1S83KV8eyOy9q/HeNvU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oBQz6NxH20qO0XFpMO9ylEy680TToJ0Z0PcgvusxpjqUXFu8xst/oPxn34FaEW9lKh9b8vcpXEPCgudjvZHZByqL892KlcONZCNLwK0K7+FQu1GgVjsvxIiDXYgZ+x1OADj1asKBhTaeggBwngnNG1lpcSZUE9aDyHenmaFQzlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eRwEvzJE; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJlXrhv9"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-60eefb805a4so349291eaf.2;
-        Fri, 06 Jun 2025 00:03:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eRwEvzJE"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7399a2dc13fso2141984b3a.2;
+        Fri, 06 Jun 2025 00:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749193427; x=1749798227; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
-        b=IJlXrhv9Fpr3igE57295siSmwtLzorv6/SmuOxtWpCRsOcVtRok89/nq9QvFfWTF7l
-         PVgZxuKULnkM07I/2J+K5s8ZJK+LKlWicB8kQcoEHpf7M7nomI9qUjFLOR1MOmyfnf3p
-         e/nUs83st/DAS8WxqNp4JG0rDbNWyZhddazFR7l5KG/rATrGUVIub5p0ZNZQ6rhqT4x/
-         aXbPTfTmcf9OfWi/zC6QQ6XqcB+v8lSjUbX/FVap/KfZcX3uhjEipIyNq7YcukofGqx1
-         7wnAW0hjDNegfWFXZmwcmza/gf7fKHONMzgLnCHWBJEOk6gUfHGd3tM46MA5jeRQnhcQ
-         WbVA==
+        d=gmail.com; s=20230601; t=1749194216; x=1749799016; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Op+Qtpfm2MCMUy1ujuvIkaXazDWxwmwSZEgD+0eih2w=;
+        b=eRwEvzJElk8F94fYZAKbIhmve1YRoe5+NL4fDlntj+Xu10huSWZpoFGxbh8bXSYMBl
+         mMN6qk6e5pTUc4DWrp/rKhaFpDVx1vsh152z1o07Z73a+ICDSXMtaTU2652paG+pV3U8
+         ML0K7zSyN3PIzhWga8MyCGPH+QuJWV1U2jJkGSrCr6l9CJqU8jXNbDIZx8j+sKfJZOI0
+         87Tkv58T8z8I0/LrFkpFgYcAJmts/5af6TZfgiE0r2wjlXr9nOPXakh0FysAus7/JsuU
+         4tBmDbLj8FFHzPQVn0Pd/5r0FQUsiIrxCUPz7v8AnoxI7fqC2qU/a3++Znj/MUddW7T8
+         BM1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749193427; x=1749798227;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1749194216; x=1749799016;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
-        b=u2OUcrX2+Cge592xkauEMBPZikxbGN9FcQjFWnZXcfwVsu6X6bu6mXcDjJSODyB6/N
-         8V4rF4w2iZEziUHKlFESIgy2zx07yb+AvaXrvvRVVXJ2KWIr7s8hCqyxcfoHT3YwdfVs
-         kv2jFe4oLtJUh52oUm5p1F+MoemlIAfzdyyEVGfe8ts2Lr6cLvIO8L/9zr2MXF7ExHJf
-         BkzjQ+4mjl88jLwlOmbfNgICeSy2sk0igBctgQohszV5dzbYGNoWEPQRXSHsfWuJrhuX
-         dGaYdLtiqs4oE3hgVT+jtPk5xJvgNKYIIdZEX/HMbROQo/hVCbow7D91hUoL53r8F8z6
-         mqyg==
-X-Forwarded-Encrypted: i=1; AJvYcCWqBhBlmfijdcT3Q1v/itVpR+i54G2MrVyJwKIUwR8z74mdsF++5IIbVARBJNa499qi+dz1X+uZPRd9sA==@vger.kernel.org, AJvYcCXzoDzgG9d3S593AWbdRi13yw8aCpu9Sk8oZQ7TcY8OVCEotF0pnhqnlAgBAiyeUbBHX0QRcDdN/D5e6yiu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgQt7IZvoTC+YUdYScQmfAB47YadAmIBBSAtsfExDRpRAGibyX
-	pQY+GbscxWxq3PltJkQetZAuZiAjbeXfG6R9baoB4P/guu7Q0TB41wroAVe6NuhwG5z/bsFuHNY
-	ZDwovrT47HyXvkFAiILymc6Za5bgwEKc=
-X-Gm-Gg: ASbGnctN9G0xByrcvuSj6o8VDVkWwry2gx1FwvcOrHHD0n2q8nuKfKz8JI9tadLtS3E
-	2GRlhouYSP2BHnIawhMkwBKSo9G9GI7rzzV2YpAeD0ab7bxZmQO18Kz1T32+A8TwNmGDTP1oLOZ
-	kxR7KKtXW4JnPRmRqa2gKLH3cL0CbG8gl+7EJ6nx2aPg==
-X-Google-Smtp-Source: AGHT+IGlLabyThzSeqYMlNHv20wA1II+mVIoLCdAPVSiaLGXvMH7P7mfv8u9CX+Vb8T93FWYRw3sqml41XcsV4pgZoQ=
-X-Received: by 2002:a05:6820:8c1:b0:60e:d9a3:dc32 with SMTP id
- 006d021491bc7-60f3cef153cmr1136958eaf.4.1749193426701; Fri, 06 Jun 2025
- 00:03:46 -0700 (PDT)
+        bh=Op+Qtpfm2MCMUy1ujuvIkaXazDWxwmwSZEgD+0eih2w=;
+        b=OCEGDDbLBg15I5Xb9qpy3kbgsOLimI0le4/KHs1mMggAQfHPKXjJAeSL7pizg45ZU/
+         d88NduCDhzok85fW6WFbTCCNwDuE3ag40lADRHWN10nc7RgVxmHPVpKocEGkcOwtJ2rg
+         GNiWu2jEmMU9sbExyCfatJY/BYnLPRHHgEPGTyactD+bOKyVO6Lqd8/MFYla1KE1sana
+         R/As/a7mHAwe7Jul7tIyvC/gIEXnxSlXOEGF380tpxaRdao2wc8FwtKXWimYojeWXrRU
+         67r2yOAASDNy7FOv3x0z+4cLXGWkKKAGvanb11zuvAL1k0nQCTJw3jQlishH6A1mzEj9
+         BQ6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXV02xSs5hbLAjWB2RKZLTplPVLb66AE2ZXo7RlMkzRIrD4KUhtZP9pPk5dx0Eg+5heoTGrFn5V@vger.kernel.org, AJvYcCXaSC8Z3qAwV69zy0OuOmErfW7ymlQTbN0sHMLNC9HLY80mP82XcudxCn2xLFmp0DceHQQED69dOOgPufU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1/s6QPKTSHIWvSI8SqeY8ZYcsr2k7rjZXJghn/B2iylq+eXER
+	WZf3tQBNARpkF4+8M10Pl7xc0rWbT4pFBEhDKJx1sk8ZtqX0hagoYZi6UH+Vw09tMrQ=
+X-Gm-Gg: ASbGncsoyHqmuCyQygpRg50vu1mYZj684JojmiGE23UppnakmdgMZ6dox4+O5YRyTxD
+	DHGy0yKVq6zCLcdM6EcugWHpTF1cw7Zulfg3Nlv+m6BxRzCCQR11Br0IOdp97AAwVlzw0cQTNNb
+	XzIJDuiE28dc+mb2BSPF90ljKOSUTmpls+K69i51zHliOZvTFRRivqTl3p3aYh+FvOu6y7PrbDT
+	TnxZ7FmajRxb51ShmehULbTILTgkWF0A8JrE47D6CbcQ67L1IBL9fkbSkFhEmZhwv+L/r0/Yt6R
+	Eubm+bq71WijVtctGwXQjhdX4xdgeummW7fvz5di8Q1hZxCd25KozUcS6f0K7LEwruM=
+X-Google-Smtp-Source: AGHT+IGhUpAbWq+54xvZKi30Ot5Ktc9ysFyqQgxtqXZzYUo9SybvjX4C13xxRSAukBjjZ+ozZxcpdg==
+X-Received: by 2002:a05:6a20:d80d:b0:1f5:8a1d:3904 with SMTP id adf61e73a8af0-21ee684e093mr3491091637.7.1749194215803;
+        Fri, 06 Jun 2025 00:16:55 -0700 (PDT)
+Received: from localhost.localdomain ([124.127.236.5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7482af7ab09sm718469b3a.58.2025.06.06.00.16.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jun 2025 00:16:55 -0700 (PDT)
+From: Gui-Dong Han <hanguidong02@gmail.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] hwmon: (ftsteutates) Fix TOCTOU race in fts_read()
+Date: Fri,  6 Jun 2025 07:16:40 +0000
+Message-Id: <20250606071640.501262-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
- <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net> <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
-In-Reply-To: <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
-From: Gui-Dong Han <hanguidong02@gmail.com>
-Date: Fri, 6 Jun 2025 15:03:34 +0800
-X-Gm-Features: AX0GCFvMmpIHumCzGzvB3zmLEKid9CPhshqnMkw_DscjH3mld0W5o7UCfRZe7mA
-Message-ID: <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
-Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon subsystem
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net, 
-	jdelvare@suse.com, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	baijiaju1990@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
-> > >
-> > > I would like to discuss these issues further and collaborate on the
-> > > best way to address them comprehensively.
-> > >
-> >
-> > I'd suggest to start submitting patches, with the goal of minimizing
-> > the scope of changes. Sometimes that may mean expanding the scope of
-> > locks, sometimes it may mean converting macros to functions. When
-> > converting to functions, it doesn't have to be inline functions: I'd
-> > leave that up to the compiler to decide. None of that code is performance
-> > critical.
-> >
-> Actualy, that makes me wonder if it would make sense to introduce
-> subsystem-level locking. We could introduce a lock in struct
-> hwmon_device_attribute and lock it whenever a show or store function
-> executes in drivers/hwmon/hwmon.c. That would only help for drivers
-> using the _with_info API, but it would simplify driver code a lot.
-> Any thoughts on that ?
+In the fts_read() function, when handling hwmon_pwm_auto_channels_temp,
+the code accesses the shared variable data->fan_source[channel] twice
+without holding any locks. It is first checked against
+FTS_FAN_SOURCE_INVALID, and if the check passes, it is read again
+when used as an argument to the BIT() macro.
 
-Hi Guenter,
+This creates a Time-of-Check to Time-of-Use (TOCTOU) race condition.
+Another thread executing fts_update_device() can modify the value of
+data->fan_source[channel] between the check and its use. If the value
+is changed to FTS_FAN_SOURCE_INVALID (0xff) during this window, the
+BIT() macro will be called with a large shift value (BIT(255)).
+A bit shift by a value greater than or equal to the type width is
+undefined behavior and can lead to a crash or incorrect values being
+returned to userspace.
 
-Thanks for your quick and insightful feedback!
+Fix this by reading data->fan_source[channel] into a local variable
+once, eliminating the race condition. Additionally, add a bounds check
+to ensure the value is less than BITS_PER_LONG before passing it to
+the BIT() macro, making the code more robust against undefined behavior.
 
-I agree with your suggestion. Adding a note to
-Documentation/hwmon/submitting-patches.rst about avoiding calculations
-in macros is also a great idea to prevent this class of bugs in the
-future.
+This possible bug was found by an experimental static analysis tool
+developed by our team.
 
-Regarding your thoughts on subsystem-level locking, it sounds like a
-promising approach to simplify the drivers using the _with_info API.
-As you mentioned, some drivers don't use this API, so they would still
-require manual fixes.
+Fixes: 1c5759d8ce05 ("hwmon: (ftsteutates) Replace fanX_source with pwmX_auto_channels_temp")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+---
+ drivers/hwmon/ftsteutates.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-For the subsystem-level lock itself, I was wondering if a read-write
-semaphore might be more appropriate than a standard mutex. This would
-prevent a single show operation from blocking other concurrent reads.
-I'm not entirely sure about all the implications, but it might be
-worth considering to maintain read performance.
+diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+index a3a07662e491..8aeec16a7a90 100644
+--- a/drivers/hwmon/ftsteutates.c
++++ b/drivers/hwmon/ftsteutates.c
+@@ -423,13 +423,16 @@ static int fts_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		break;
+ 	case hwmon_pwm:
+ 		switch (attr) {
+-		case hwmon_pwm_auto_channels_temp:
+-			if (data->fan_source[channel] == FTS_FAN_SOURCE_INVALID)
++		case hwmon_pwm_auto_channels_temp: {
++			u8 fan_source = data->fan_source[channel];
++
++			if (fan_source == FTS_FAN_SOURCE_INVALID || fan_source >= BITS_PER_LONG)
+ 				*val = 0;
+ 			else
+-				*val = BIT(data->fan_source[channel]);
++				*val = BIT(fan_source);
+ 
+ 			return 0;
++		}
+ 		default:
+ 			break;
+ 		}
+-- 
+2.25.1
 
-Thanks again for your guidance.
-
-Best regards,
-Gui-Dong Han
