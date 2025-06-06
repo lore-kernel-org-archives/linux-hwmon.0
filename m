@@ -1,192 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE88728A1F8;
-	Fri,  6 Jun 2025 15:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA6221CA03;
+	Fri,  6 Jun 2025 21:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749224565; cv=none; b=gTpY6opVv4Pymd1kUoHh6qd6mpkX8YOE6bYymoolSdcRB86fqyaimcfugkSLjnkpu762yZRXHRwbde+jKyBBwHVw3timoD34IMewUHA8359+15bf24S87rSFe3wf+6znMnNG90xV8a86DFFfPD5s25TI6UjCLEK2nYLOFFv8a30=
+	t=1749244057; cv=none; b=aqiextdTsS3eomuJ/QA8zkgRZVWMoPrV+hpR2I+TrfH2GWPCwfFYinVtNMYy7PQLoZ+zvlYQjiIXgFTHGC9sNzfe2OZ/QgZOCsSE34P4NMh9BMPM+//xzoIpcNjps6J7e0aMqx3ow/MVXocVdVVXVL35hdCRa5j2CXHF8RpyRW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749224565; c=relaxed/simple;
-	bh=3JpeczwQLVI3xj5GeoUodGCtRP2PFojaoMV7mgOmhP0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=etKnGb7Z3iSgua4YqTB5EAyWLKywOcWFOAmnewggYNAArA+9A+m/igOvsJkXoRV7W/hn620oWwsp2rBiArCF03fsK0ARFkktIKZ/MMVLXaKvAItvVHabdGXqsWAhN1TBidxWKy0RUjTsgY5XBIIAd5sc9LjvUNRju2qVNx+ZniA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CXjdzHQp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749244057; c=relaxed/simple;
+	bh=UM+vRO5hSydtuoeDrU+ex28r71pECYQGzzhBILiPAJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YElnSJu4k5QpfV6pb+J5S35UW+TpVP7AqEZb8XeeU7ONpZfBtCTjpKfJU2Wj0RAqdHdBQ4iVWV5uZjEzfh4UfTxxmvSwvCH+N1dXqerb9uNKUfW1LZ9RhtPjCbXoZxrCq39X2KBupuHW8b+0KtPbAKrFaHD4AK/y30uMaXikeoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=ipVhB3pI; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=ES2fhaDp; arc=none smtp.client-ip=69.59.18.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CXjdzHQp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B813BC4CEEB;
-	Fri,  6 Jun 2025 15:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749224564;
-	bh=3JpeczwQLVI3xj5GeoUodGCtRP2PFojaoMV7mgOmhP0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CXjdzHQpdQl1XFrcqq8ui6Xp7TuzWTHoFdPoL9P5bZ0lBOc7X8ZvERmsyLE5tz0eJ
-	 T9xP/xZEBMwiRaVQugILa/EdM3jFxGrTFP7H5NwazCnNHOdkS1KlpqOuWhOxOU3HYv
-	 esXM0ruMMtqZ2q4tz/RzANq4AiyWjmdOXQah6eSxm3CsdF2cyouuvQRV7PG4+T6wrs
-	 hH6y/VR7JfW88ZwFbcdN4jKbPGIC/ABSZ0FD9JgGxQp93heM74GvIePcgOC2wpnb4W
-	 /p78t/4sdsSZdDmtZ1Yb1GchBOPBDO2+Nz1KYMEZDGQ6IhNd6sIj9jjZKK8S9RTKrJ
-	 FCeqaNCdbP2rA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sasha Levin <sashal@kernel.org>,
-	mail@carsten-spiess.de,
-	jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 13/19] hwmon: (isl28022) Fix current reading calculation
-Date: Fri,  6 Jun 2025 11:42:19 -0400
-Message-Id: <20250606154225.546969-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250606154225.546969-1-sashal@kernel.org>
-References: <20250606154225.546969-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="ipVhB3pI";
+	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="ES2fhaDp"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=mattcorallo.com; s=1749242463; h=In-Reply-To:From:References:To:Subject:
+	From:Subject:To:Cc:Cc:Reply-To;
+	bh=uX+SmtXFw2vm97wnzVAxVc1ps9775QcFr3R+1Xmhi7U=; b=ipVhB3pIhsSZPdDjR2Tawiqam5
+	Ms9cpnO5PqQgmXmZDW58mStfhAgKVFNskY6OaKVNC5II/jHu5gmb+O4vBNOkxNXqKMmTi5UsK9gqV
+	LbUodKHn0FP5kPzWlAulqIKwa4ZnhifA2Sd3kRjg+NHo6gvqR8B5QJgu3VXUNlLUr3LsHpIvvMg6O
+	YQdypP+p2GogSi5lJx6jyQbYpHoIFQJ1+nDie7XZKNAmNRxiUwUf14H9xccd+WEBR4VdTpVH3J2hL
+	dDs/i8ihgJskjsCRP+xOYrfnrouyYVW13PyDuFRg05ioo3OOPN5r3GBTyvRH1BSm0DZ8ShjLPZyeH
+	gdCuMRTw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=clients.mail.as397444.net; s=1749242465; h=In-Reply-To:From:References:To:
+	Subject:From:Subject:To:Cc:Cc:Reply-To;
+	bh=uX+SmtXFw2vm97wnzVAxVc1ps9775QcFr3R+1Xmhi7U=; b=ES2fhaDpRNAC4t0gdRYaV3xYDL
+	whC+jGwtvKn+d8EDLkHuvzngBkfEKa0joHJYs8Y+DxiFlhdg8mehm3AsGRj5XQ95k3y9cQZiQqtL5
+	tjanVijdSdQnOfdBuGnD+QDHrqoNuyMnZzKKZSKm2P/uj5haZ45iR0gSo+mlTol8IF8Gar3YbAqry
+	J2mASx0hsywBtgzZxpiPIxZQq1osUsontK59fQEoHa5OaczmtZxvOVz3cXG+ynsxTOx8ucXqLDlwc
+	ri69ifYMXuIHaGGXnF52voMILW+RcDjsrnp5DOkPguDCwNr4oGafASqzpW1NJbahuTxawKFUWqjtW
+	d14TiKcg==;
+X-DKIM-Note: Keys used to sign are likely public at
+X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
+X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
+X-DKIM-Note: For more info, see https://as397444.net/dkim/
+Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
+	(envelope-from <yalbrymrb@mattcorallo.com>)
+	id 1uNe8B-000EHH-0V;
+	Fri, 06 Jun 2025 20:57:39 +0000
+Message-ID: <03da7997-74f4-4435-a6c5-6aa5aea2f6d7@mattcorallo.com>
+Date: Fri, 6 Jun 2025 16:57:37 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.10
-Content-Transfer-Encoding: 8bit
+Subject: Re: PMBus memory overflow
+To: Guenter Roeck <linux@roeck-us.net>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
+ security@kernel.org
+References: <336f298f-497f-4dd9-97ee-50b81221be06@roeck-us.net>
+ <1b1eccff-a306-4e17-a6bf-fd3203c61605@mattcorallo.com>
+ <1edc8396-535d-4cdf-bbb7-11d559d4c257@roeck-us.net>
+ <cfc2b3c8-3f94-407a-a4d5-e7d81686eb2d@mattcorallo.com>
+ <84258b48-03b5-4129-bed5-f8200996f2eb@roeck-us.net>
+ <fcfd78d2-238d-4b68-b6ec-5ee809c4ef08@mattcorallo.com>
+ <eb5796e8-de76-4e91-9192-65b9af7a4d49@roeck-us.net>
+ <284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net>
+ <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
+ <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
+ <aAtEydwUfVcE0XeA@shikoro>
+ <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
+ <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
+ <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
+ <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+Content-Language: en-US
+From: Matt Corallo <yalbrymrb@mattcorallo.com>
+In-Reply-To: <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
+Adding security@kernel.org cause probably they should make sure this gets fixed.
 
-[ Upstream commit b2446a16dbf2347a07af0cf994ca36576d94df77 ]
-
-According to the ISL28022 datasheet, bit15 of the current register is
-representing -32768. Fix the calculation to properly handle this bit,
-ensuring correct measurements for negative values.
-
-Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
-Link: https://lore.kernel.org/r/20250519084055.3787-2-yikai.tsai.wiwynn@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-Now let me check for similar current register handling issues in other
-hwmon drivers. Let me look at the commit to understand the exact issue:
-
-Looking at the commit changes, I can see that:
-
-**Before (broken):**
-```c
-*val = ((long)regval * 1250L * (long)data->gain) / (long)data->shunt;
-```
-
-**After (fixed):**
-```c
-u16 sign_bit;
-sign_bit = (regval >> 15) & 0x01;
-*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) * 1250L *
-(long)data->gain) / (long)data->shunt;
-```
-
-The issue is that the ISL28022 current register is a 16-bit two's
-complement signed integer where bit 15 represents the sign bit
-(equivalent to -32768), but the original code was treating it as an
-unsigned value.
-
-Let me analyze based on the established criteria:
-
-**Analysis:**
-
-**YES - This commit should be backported to stable kernel trees.**
-
-**Detailed Analysis:**
-
-1. **Bug Fix Nature**: This is a clear bug fix that addresses incorrect
-   current readings for negative values. According to the ISL28022
-   datasheet mentioned in the commit, the current register (04h) is a
-   16-bit two's complement value where bit 15 represents -32768, but the
-   driver was treating it as unsigned.
-
-2. **User Impact**: This bug significantly affects users who rely on
-   accurate current measurements, especially when current flows in the
-   negative direction. The bug would cause:
-   - Incorrect reporting of negative currents as large positive values
-   - Complete failure to detect reverse current flow
-   - Invalid power calculations that depend on current readings
-
-3. **Code Analysis**:
-   - **Problem**: Lines 164-165 in
-     `/home/sasha/linux/drivers/hwmon/isl28022.c:164-165` treat `regval`
-     as unsigned, causing negative currents to be interpreted as large
-     positive values
-   - **Solution**: The fix properly implements sign extension by
-     extracting bit 15 as the sign bit and manually computing the two's
-     complement value: `(value & 0x7FFF) - (sign_bit * 32768)`
-   - **Consistency**: The fix follows the exact same pattern already
-     used in the shunt voltage reading function (`isl28022_read_in`) at
-     lines 120-122, showing this is the established correct approach in
-     this driver
-
-4. **Risk Assessment**:
-   - **Minimal Risk**: The change is very small and localized to the
-     current reading calculation
-   - **Well-Tested Pattern**: Uses the identical sign handling logic
-     already proven correct in the shunt voltage function
-   - **No Side Effects**: Only affects current register interpretation,
-     doesn't change any other functionality
-
-5. **Driver Context**:
-   - The ISL28022 driver was introduced in October 2024 (commit
-     39671a14df4f), making it relatively new
-   - The driver is hardware-specific and contained within the hwmon
-     subsystem
-   - This follows the same pattern as other successful backports shown
-     in the examples
-
-6. **Comparison to Similar Commits**: This commit is nearly identical to
-   the reference examples that were marked for backporting:
-   - **Similar Commit #1** (ina2xx): Fixed sign extension for current
-     register by adding `(s16)` cast
-   - **Similar Commit #3** (tmp513): Fixed sign extension with
-     `sign_extend32(regval, 15)` and type casting
-   - **Similar Commit #4** (nct7904): Fixed sign extension by converting
-     to `s8`
-   - **Similar Commit #5** (ina3221): Fixed shunt sum register bit
-     shifting
-
-7. **Critical Subsystem**: Hardware monitoring is critical for system
-   health monitoring, thermal management, and power management.
-   Incorrect current readings could lead to improper system behavior or
-   failure to detect dangerous conditions.
-
-**Conclusion**: This is a textbook stable tree candidate - it fixes a
-clear functional bug with minimal risk, follows established patterns,
-and addresses a real user-impacting issue in hardware monitoring
-functionality.
-
- drivers/hwmon/isl28022.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwmon/isl28022.c b/drivers/hwmon/isl28022.c
-index 3f9b4520b53ef..ed5a3ef1aef88 100644
---- a/drivers/hwmon/isl28022.c
-+++ b/drivers/hwmon/isl28022.c
-@@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
- 	struct isl28022_data *data = dev_get_drvdata(dev);
- 	unsigned int regval;
- 	int err;
-+	u16 sign_bit;
- 
- 	switch (attr) {
- 	case hwmon_curr_input:
-@@ -161,8 +162,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
- 				  ISL28022_REG_CURRENT, &regval);
- 		if (err < 0)
- 			return err;
--		*val = ((long)regval * 1250L * (long)data->gain) /
--			(long)data->shunt;
-+		sign_bit = (regval >> 15) & 0x01;
-+		*val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
-+			1250L * (long)data->gain) / (long)data->shunt;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
--- 
-2.39.5
+On 5/5/25 9:39 PM, Guenter Roeck wrote:
+> On 5/5/25 13:57, Matt Corallo wrote:
+>>
+>>
+>> On 5/5/25 4:50 PM, Guenter Roeck wrote:
+>>> On 5/5/25 13:41, Matt Corallo wrote:
+>>>>
+>>>>
+>>>> On 4/25/25 4:16 AM, Wolfram Sang wrote:
+>>>>>
+>>>>>> Wolfram, what do you suggest ? Fixing the cp2112 driver is obviously necessary, but
+>>>>>> I do wonder if a check such as the one above would be appropriate as well, possibly
+>>>>>> even combined with a WARN_ONCE().
+>>>>>
+>>>>> How annoying, there was still an unchecked case left? Sorry. Yes, the
+>>>>> core can have a check for a short-term solution. The long-term solution
+>>>>> is to support SMBUS3.x which allows for 255 byte transfers.
+>>>>
+>>>> Thanks!
+>>>>
+>>>> Any update here? I guess we already have a patch so no use in me trying to write one. Would be 
+>>>> nice to get this in a pull so it can head through backports.
+>>>>
+>>>
+>>> Not from my side, sorry. I am deeply buried in work and don't have time for anything
+>>> that isn't super-urgent :-(
+>>
+>> Mmm, shame, its kinda annoying to leave a buffer overflow reachable from a malicious USB device 
+>> sitting around (okay, with the default hardening configs it gets caught, but still). Can we just 
+>> land the above patch from Wolfram to check the length before writing the buffer? Happy to clean it 
+>> up as a formal patch submission if its easier for you.
+>>
+> 
+> Please go ahead.
+> 
+> Thanks,
+> Guenter
+> 
 
