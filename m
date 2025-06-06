@@ -1,103 +1,118 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3819C78F2B;
-	Thu,  5 Jun 2025 14:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31441C2335;
+	Fri,  6 Jun 2025 07:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749134233; cv=none; b=at8UI+r8aQZzvlL+/atTTK6yR+o4xXUG+/6d3NYVi79Ir5fLWm/gPUyd36m3U2WmFxcykhgecDOwN7ELoq6KhvsMlEUejegC8jzh5HFIuxHgrv8Wsp3fnzyN3vsd+Rmb4he6tO+R5db4TYv4Qn32b1xx7YJqThCoOhpgK9srOwc=
+	t=1749193429; cv=none; b=N+6NeEGxavKO/U23+94ggicYfeZeUWhk5lNzItddwiKZ1Hp60P8L7SZuit+fpF+IRAEmr6FzHwwjiIb7XuwhGUP60ieIryGt2s5UBmFoFSV5h9993eGhLdu9GrO0JYHCxa1Ldx6rcICCGNf1pta+sreJR7ctn2g2nW9w/469pUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749134233; c=relaxed/simple;
-	bh=Rgv3aEFT01W6pBFbvtgJnQIouV+GXwKPnoeK6d1BPpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UZ7m0jHGf2C+OtZEdY9NsmzaK1ilAveoiFzyMvqYkNVtvdFvU9Gu6I8NaA8QTC72guFCaLEv5ZOnMCAfruvd8SsqLQTg5lPXNFCbSSyoBWZ3KSIUs7wDLTIxxuOG1zZUSBShT7Wkcc85KfwuTeRAX5tQNsPn8PGRhtQrrN/4KBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iiIZhS83; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1749193429; c=relaxed/simple;
+	bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PAOtx2zIo5lAggSdXKOwQ9KO5OQs5ETbFeZheMfon/0S5Ph4OFqZSu+eCJ4JoooUOxeB256JwhhxpLqap7etne4Q8eidEsJX4wCSoZGCYyGwtr+6Pfkv6GLz97Enq9xcMKojxcMDtxBamFkp/dRPXUMpR2Zz9dSVjusQ32mgJSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJlXrhv9; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iiIZhS83"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7fd35b301bdso925590a12.2;
-        Thu, 05 Jun 2025 07:37:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJlXrhv9"
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-60eefb805a4so349291eaf.2;
+        Fri, 06 Jun 2025 00:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749134231; x=1749739031; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uNn7a9qROZttKIZEwUmD1+YxXegVVdWl/LW5vkAVcH4=;
-        b=iiIZhS83FRxd1kcfyGuFqu6OHnTR6F0qmS0+twNMeqao/WofmhsYhn/sbXvUmOSnoc
-         Y/nikgNIbXtFqPakSZPSEzobkf/i7NH2wedmcGly/5oPL4cYmZw0HyKr0EqFzwg7EkRH
-         rMsos5X+mZTje2+IIzxlW2zXFvN26MTgKLU3RhStTH/L0tiEVT7SVCoe4cjCfAFRRaEH
-         9DRrvB0ftinnFkYcvs+DBnGTZ3prfhjVnBWvHrWW53jolS3qUPwwSIiFMpxAmRaRrldD
-         Cp4zkWhHFBxpaHvXYiWyokDF3Y4p/sy/WtNbyg8ecc+jJctK7R9Tgc+CZatXRh8LvFJX
-         DYvQ==
+        d=gmail.com; s=20230601; t=1749193427; x=1749798227; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
+        b=IJlXrhv9Fpr3igE57295siSmwtLzorv6/SmuOxtWpCRsOcVtRok89/nq9QvFfWTF7l
+         PVgZxuKULnkM07I/2J+K5s8ZJK+LKlWicB8kQcoEHpf7M7nomI9qUjFLOR1MOmyfnf3p
+         e/nUs83st/DAS8WxqNp4JG0rDbNWyZhddazFR7l5KG/rATrGUVIub5p0ZNZQ6rhqT4x/
+         aXbPTfTmcf9OfWi/zC6QQ6XqcB+v8lSjUbX/FVap/KfZcX3uhjEipIyNq7YcukofGqx1
+         7wnAW0hjDNegfWFXZmwcmza/gf7fKHONMzgLnCHWBJEOk6gUfHGd3tM46MA5jeRQnhcQ
+         WbVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749134231; x=1749739031;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uNn7a9qROZttKIZEwUmD1+YxXegVVdWl/LW5vkAVcH4=;
-        b=ZPj4ZFS+ZfGOH5kO/9FPgXIR0RvnP1l0bSS/NbiT9oflFfTZxke2cQgA0xjtRJc6c3
-         ZGsB98oOetpL2WTMTulOL8CQePBP7iC1drScl9V49D1fzTxP7KZGrhaKhQER4+oaWcYd
-         twigb8E4leJcxsDJUpct9qEKxa+ul5HkR0RIh9rflLRrrvD96/rr4CjENGz6zCadDvVj
-         LgEfE8aNm3shcAlHdzIt79v4HoCmjbZabwWjOlN9QZprIYcnFfFznbK/EkMMCrFxleCG
-         s5rsPiz3zKr1mEaU5EUnKup7tOzvlszrwFdSi7otwWj2VirhFyT8zEPa8/KBbliPUApl
-         6vOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVg9Fln3uz5FOKHUc4dj+AnTc4ZbTTDu3xlavOKQqskbrrEo7LIPzJOCmviXriqEs2l6MyRR7Xsk82dow==@vger.kernel.org, AJvYcCWHk5oc9qRl7J+7qjx4s12XaVQ4ztUwSCeeX7A35Ox1JBFrt/TSsiTl1HdVzEzUUc870pfyh5D2hbwB8XC0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZEIsTeTNijxkB+fxMmtjzE4BQVub7D2wKaLHdcH7xGZqXibbB
-	tblrT+lpaTe9Fas+zNmX9cgXGew5xNh4c1/iY/xYZkK+MmhJQvJiGEVo
-X-Gm-Gg: ASbGncslEApcJ697aYIYs6u8Gzpjf2N0L+TH9tlCtSuaybSdjeRH9aAPutkhmVstOIE
-	U9Ig5MwLYVERnBWWiPwhGcltooCuvcSLY3GirSXV7HgUnjo9eVdx40KvD6UE5BHROlpxvkGPSZR
-	7W3X11Q/xXcvNIUKIATiypreYFNoUZ1oKnYWNmXf4+pHZSblWIMMiNI3+GdTNTUaE46a4a5YitJ
-	5muZ3ifDIx22+o3pf7iOsVCZ5AVmk++ySQYGrjnl7tDEyeYDuK6cm55dt91iHHRFaDfVBiVeqnl
-	pgQY8/N+2klS/+mP+wJS5PPEMd1UfpZ/OUoWP/cLQG1NBeQcK/1JjEGJeYsbjKrZ
-X-Google-Smtp-Source: AGHT+IE8N25cN9MB83DxlCzn/Mw1Qu09btXYxMfWgyAPV41dG8BeUQkQo4iTDpTTRdjVq0EgIbYTCg==
-X-Received: by 2002:a17:90b:4e8f:b0:311:da03:3437 with SMTP id 98e67ed59e1d1-3130cd6a9ecmr10669485a91.27.1749134231359;
-        Thu, 05 Jun 2025 07:37:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3132c003065sm1613381a91.13.2025.06.05.07.37.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 07:37:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 5 Jun 2025 07:37:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net,
-	jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon
- subsystem
-Message-ID: <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
-References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
- <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
+        d=1e100.net; s=20230601; t=1749193427; x=1749798227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+t8nyFXhbkZnOjq8PogUNmGpTnMslub0IohHtzrxenk=;
+        b=u2OUcrX2+Cge592xkauEMBPZikxbGN9FcQjFWnZXcfwVsu6X6bu6mXcDjJSODyB6/N
+         8V4rF4w2iZEziUHKlFESIgy2zx07yb+AvaXrvvRVVXJ2KWIr7s8hCqyxcfoHT3YwdfVs
+         kv2jFe4oLtJUh52oUm5p1F+MoemlIAfzdyyEVGfe8ts2Lr6cLvIO8L/9zr2MXF7ExHJf
+         BkzjQ+4mjl88jLwlOmbfNgICeSy2sk0igBctgQohszV5dzbYGNoWEPQRXSHsfWuJrhuX
+         dGaYdLtiqs4oE3hgVT+jtPk5xJvgNKYIIdZEX/HMbROQo/hVCbow7D91hUoL53r8F8z6
+         mqyg==
+X-Forwarded-Encrypted: i=1; AJvYcCWqBhBlmfijdcT3Q1v/itVpR+i54G2MrVyJwKIUwR8z74mdsF++5IIbVARBJNa499qi+dz1X+uZPRd9sA==@vger.kernel.org, AJvYcCXzoDzgG9d3S593AWbdRi13yw8aCpu9Sk8oZQ7TcY8OVCEotF0pnhqnlAgBAiyeUbBHX0QRcDdN/D5e6yiu@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgQt7IZvoTC+YUdYScQmfAB47YadAmIBBSAtsfExDRpRAGibyX
+	pQY+GbscxWxq3PltJkQetZAuZiAjbeXfG6R9baoB4P/guu7Q0TB41wroAVe6NuhwG5z/bsFuHNY
+	ZDwovrT47HyXvkFAiILymc6Za5bgwEKc=
+X-Gm-Gg: ASbGnctN9G0xByrcvuSj6o8VDVkWwry2gx1FwvcOrHHD0n2q8nuKfKz8JI9tadLtS3E
+	2GRlhouYSP2BHnIawhMkwBKSo9G9GI7rzzV2YpAeD0ab7bxZmQO18Kz1T32+A8TwNmGDTP1oLOZ
+	kxR7KKtXW4JnPRmRqa2gKLH3cL0CbG8gl+7EJ6nx2aPg==
+X-Google-Smtp-Source: AGHT+IGlLabyThzSeqYMlNHv20wA1II+mVIoLCdAPVSiaLGXvMH7P7mfv8u9CX+Vb8T93FWYRw3sqml41XcsV4pgZoQ=
+X-Received: by 2002:a05:6820:8c1:b0:60e:d9a3:dc32 with SMTP id
+ 006d021491bc7-60f3cef153cmr1136958eaf.4.1749193426701; Fri, 06 Jun 2025
+ 00:03:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
+References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
+ <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net> <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
+In-Reply-To: <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
+From: Gui-Dong Han <hanguidong02@gmail.com>
+Date: Fri, 6 Jun 2025 15:03:34 +0800
+X-Gm-Features: AX0GCFvMmpIHumCzGzvB3zmLEKid9CPhshqnMkw_DscjH3mld0W5o7UCfRZe7mA
+Message-ID: <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
+Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon subsystem
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net, 
+	jdelvare@suse.com, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	baijiaju1990@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
-> > 
-> > I would like to discuss these issues further and collaborate on the
-> > best way to address them comprehensively.
-> > 
-> 
-> I'd suggest to start submitting patches, with the goal of minimizing
-> the scope of changes. Sometimes that may mean expanding the scope of
-> locks, sometimes it may mean converting macros to functions. When
-> converting to functions, it doesn't have to be inline functions: I'd
-> leave that up to the compiler to decide. None of that code is performance
-> critical.
-> 
-Actualy, that makes me wonder if it would make sense to introduce
-subsystem-level locking. We could introduce a lock in struct
-hwmon_device_attribute and lock it whenever a show or store function
-executes in drivers/hwmon/hwmon.c. That would only help for drivers
-using the _with_info API, but it would simplify driver code a lot.
-Any thoughts on that ?
+> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
+> > >
+> > > I would like to discuss these issues further and collaborate on the
+> > > best way to address them comprehensively.
+> > >
+> >
+> > I'd suggest to start submitting patches, with the goal of minimizing
+> > the scope of changes. Sometimes that may mean expanding the scope of
+> > locks, sometimes it may mean converting macros to functions. When
+> > converting to functions, it doesn't have to be inline functions: I'd
+> > leave that up to the compiler to decide. None of that code is performance
+> > critical.
+> >
+> Actualy, that makes me wonder if it would make sense to introduce
+> subsystem-level locking. We could introduce a lock in struct
+> hwmon_device_attribute and lock it whenever a show or store function
+> executes in drivers/hwmon/hwmon.c. That would only help for drivers
+> using the _with_info API, but it would simplify driver code a lot.
+> Any thoughts on that ?
 
-Thanks,
-Guenter
+Hi Guenter,
+
+Thanks for your quick and insightful feedback!
+
+I agree with your suggestion. Adding a note to
+Documentation/hwmon/submitting-patches.rst about avoiding calculations
+in macros is also a great idea to prevent this class of bugs in the
+future.
+
+Regarding your thoughts on subsystem-level locking, it sounds like a
+promising approach to simplify the drivers using the _with_info API.
+As you mentioned, some drivers don't use this API, so they would still
+require manual fixes.
+
+For the subsystem-level lock itself, I was wondering if a read-write
+semaphore might be more appropriate than a standard mutex. This would
+prevent a single show operation from blocking other concurrent reads.
+I'm not entirely sure about all the implications, but it might be
+worth considering to maintain read performance.
+
+Thanks again for your guidance.
+
+Best regards,
+Gui-Dong Han
