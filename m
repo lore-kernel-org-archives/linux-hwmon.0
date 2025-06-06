@@ -1,67 +1,67 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C72126C17;
-	Fri,  6 Jun 2025 23:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7CF126C17;
+	Fri,  6 Jun 2025 23:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749252014; cv=none; b=dYk6kxvu8XSnsia9811LNIqupfKEJns2uTldQAAY9Us+ZSWAPXNQR32BL5iVRdO2HVo3RsRcm4BjnhTZ0qjAXK8qXs3oBExsS3V8A//7E1c7PM+WKeL3+MfYf5Yv9J7SKibAdvGsoofQLqsu9QiFMeqBociCSPbw8J1pKZEnCAI=
+	t=1749252156; cv=none; b=V6HA/yWjhuvQT8fLMMq4OsJNwqbQLfevYEljLzGEas7jbGCHivIMe8+EHxdUkZ5Wbt/H0d8P6hLoXwR0MDsUvU4LgkewkP/Xv/VyGL6CsQrAf4AdzRWNmlrVZrIrfJQSpfVZPv1SH4gGBbqBtOQA8iTIWcYk2WiXM9jvPicineY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749252014; c=relaxed/simple;
-	bh=pylFDSoovx1eheY6L0fuY2PkOFx41ur5gKrOoQv3lNU=;
+	s=arc-20240116; t=1749252156; c=relaxed/simple;
+	bh=eU6dJTRuSepL+YXxHQcCQugYvZ4dpFlIG/FuE/Zk4uQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DxgHTSs/zndrGMoODNmg4lsi6qR2VsTrYralLDQ9htkalB5pgEUqqx7jzF2zmbvsL57OwBLx4I5IOJ5fTSfMU8JkGBVkYbI6xbuo/6WzIzA1y6O+zsTelaX3AJECHbG/NtaAbOYWR5IPpB9CWKUsgQxob5BqCZHJDik6QkV87NY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvW4Ls09; arc=none smtp.client-ip=209.85.215.171
+	 In-Reply-To:Content-Type; b=ruepToSV+lqeLIEgYeHTr1TaKrrvd9Rw2jpgQlwKafeBlZkR9Ilr43n3hgMqbqnRkEOGmDfo7PwV5vuHz8LCE+OYmdkjS/wjmYsvM6nNIjaUvmG/gLXYbd9iMYUhqA4R+8VikcgywHO0EwUGQjN8J5uyXDZaDTCn0f7OAnezsUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GLTb49um; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvW4Ls09"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b1ff9b276c2so1346994a12.1;
-        Fri, 06 Jun 2025 16:20:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLTb49um"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-73972a54919so2353276b3a.3;
+        Fri, 06 Jun 2025 16:22:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749252012; x=1749856812; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1749252154; x=1749856954; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FZDG+brYeDJSMPDJyK2aKomnouK2UpyUMRQzFahwJIo=;
-        b=OvW4Ls09OsjYLhT4sBOS+LHpPixgaStOKCZMlr1cayECoAUFfMLdao6K/b7gsay+Nj
-         O2bcHMJfR5d8i5zmn7XCwGkjApPNkcVC5wATPfPl5Ic0Xk3GJOnx6MS0eW0ax484h+NC
-         rM2qFPjDx/EB5Oubm9uOkoguKvuKsLvLJJaMt3Y4eZ40TeJP61c0+uDF04YbKQeyrRam
-         FbPbhjo/IEFvZMX60It4GIYZppypjneTTl6yTHWik/JrWIH2YGMbC9Y0w7C2gG1/g4Ta
-         gzfyHFDswF6/QRzR6IYslie0xmhFw47BWkUaqv4IYm/iQBsh2gQ6wNJtaD/+2kMMfsxu
-         xb/A==
+        bh=DHT5NNzIwTrIO0R9BCW1/mpj8WR664Wz8IKyxl721Do=;
+        b=GLTb49umYRu6kSssHf3SaCuRpDZnF8kjgVt3B7hglq087iqLt222B0e4eYdjvkdmxS
+         /16l9cAK1x7KrLtpO2OCYqYJ8rLS/N4PhYTFO+W2eIE9w4lrJ81KELOqO4zgQLZyqVPj
+         BkLbUJtNYr/qIASzsznRVmYQUv29XqNLBSZJkpQmZTLJh765iM0ERxulkWOtS6kO0axo
+         9/LSF6Ulxh619ZYocvVUmRN2BERgFXmkDCEzfXbX1X7Q8tmzYLg2Kf89N/adqVoWBYHj
+         CfvSaCEdNxYDKsi+RdurcxF9W7b3950XavPVK+caZjQxloD80Kh9aFYYaXiyVnCke5jx
+         3O+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749252012; x=1749856812;
+        d=1e100.net; s=20230601; t=1749252154; x=1749856954;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FZDG+brYeDJSMPDJyK2aKomnouK2UpyUMRQzFahwJIo=;
-        b=cbjxZ+fQbddRDYDMRKW4/xY0vm/AvTiqZjr30nCeoJro/ExbEDUUuW42ZlqYXmUfai
-         9AKiOAcShwxu0f7WQVx9pixgOthCUQkUZk+Jl1729T2ZN6qLinDz7LInSxbjdgh70N7g
-         ev1BijwFWcICSAkOdODYgLCpBF6FTdcCKW40mEIX435b6xDjeUZDOQmXgsKA4ONhRt8P
-         wipBM4Opd6xETJj20JcFrRZogwK44nfxPqEn3BOzdwYLK83CeX3sGofkA6vbXukYwwId
-         26xrb/vYVisru7k/AK9AbrpEqlnHQkD5hc1DM6/Whx0cdlnxLYTDzE2Dj12gJs7DCCaE
-         Oeyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqXyzr7NJkn3qaPwpNJWg1TC7IOskccdPTRqCqCNBSibqTWADuPslanqa4lGhhn6tYfbKnhvBJeGX1y2YS@vger.kernel.org, AJvYcCWbZNJZ7mnDja4YIRAHO3NxZ3HlccHUbsYlfuThdqjnmoHa9WdqwRF/dmeHAdTCFrMPfxD7vUGfmj+8Ew==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/s8cTcUniMwqOoYZ4Esgxz+ErRmnQr2vcrQng2+efS0EpYZGI
-	IyqDIk9Zhvkf+pBTIfuJVdvsZE8J6F/MZxm2dOPipgb28K1yTzhRjeDL
-X-Gm-Gg: ASbGncsO6qMHDyvy7rMnwUSuHqeeuYlZ6aY1DAg/hw0T/nR/W6R4FnYJkf4YiUpKHLG
-	gN3VocvLcGZHk4UQ9fSyRyI8tc2JZYNhZ+83AnQ6Kq+HyXxhazUl1WpHVEIPgWYs12iZGF2F686
-	5H2IAQqUXL+Td5D8M40zXhrD4pXRxAslZVyMssKNzq/kKj1gsswSKgkMzFNks6T4zTvOWA/YUQt
-	MM2fdWNmS7Nc+yZjkJJesx+ofqTloodfo7/GciKFrVzeP5teJ5+f1XWs+tyiRJRQRYWa3moU4/z
-	OsTJX4S8jmwiOc8gD71AJGYZm/NPe1JdUX4Q/pXWpnWDVNZ09ANLQCiyu2pd8M65TviqOw7G5S2
-	6Ban8HiTVWmIIFBRv5LvrMB5f
-X-Google-Smtp-Source: AGHT+IE+FduGJg/M+00PM7BQpb42nYmhb30gyIG51HLSFNqu1KWYb7qAQ9Pf5P4bU8rm6yUVrfjsUA==
-X-Received: by 2002:a17:90b:3b42:b0:312:959:dc42 with SMTP id 98e67ed59e1d1-31347302b63mr7480258a91.11.1749252011919;
-        Fri, 06 Jun 2025 16:20:11 -0700 (PDT)
+        bh=DHT5NNzIwTrIO0R9BCW1/mpj8WR664Wz8IKyxl721Do=;
+        b=YjtqIpywA7MZKNs+Cf3LuohSEH2hZCDSXjX/Vsw6Jq1X9F4mO6ZBhSYbj1AkYnIMpV
+         ko4at+Hg6ZAbTXmYQrcN5E46f7oqQcgLoae6dmVs445yfwC27hZ9JnBfwP+BSTbUW+Zw
+         cdma1jCmnG1YtRD5CdJCoEOyElgm6ue9VT5ZSroGhsSiISVrgZigYwsQWShGEN2aP+3J
+         CVlxTv/X8rmWosEwd6UF49Tp7SqZv8B0PxLGicanrKk3CV9J3JLkNWKT4N02aarkIfw3
+         Wi0LujEqrLVytpiPI0ETzRQsOHC5Oo6SW8fK0ogg7YE/cmTvRB2TgkoJE4DNpL3swQ0E
+         fWRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUIQUBecoe+3bv2YBqND9nGF+fQxrpfDZv0QMdIe+oIl7hrRvw4lcCnJ2gyaJVMinFhhSW6DVGVcvjqzVul@vger.kernel.org, AJvYcCWYoyukMb342uxJoKrE/KbIiL6gH1f9ouVPNAqkQhgx7Yk8YfnjfT26aSQC0jalZYfMq7HRfCGBO9I9Dg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk+2R/1Pa9jSbgfgSTmjCaT6b+UzIdK/FpkxMMGAr4+pbbMbo2
+	W/B1mWbVLJR2FYg/D0DUtTsUmDyyh2CBpmOHGZJz8rXvDRsFaWBb0AyfvV3bd1Tm
+X-Gm-Gg: ASbGncvYXOWfkYv7d8kf9GiETzg6Ikz9HOSWN9PuPIQoZ6j+JlI/niBZ9h6IJYEpWKZ
+	9B2ak4m9AGy/JNpkHpW77bthBjLUp1pFeOoEiRx83vdlOdAQZqtnDRdP7n+/B8EKYm8wwy1ZVsC
+	KsssFBY6OEY7ubXIbgVy3WsfQD069GZdkw0aJ3vBm5SfxCvIbMYkQE9RZx2pV3vlb+dZd0C9RU1
+	6I9IBoXoU/mgMrF2q8qWZaVCU2jmGeM96dbWL/unw7ZB8MIcf/s4nV1Q1zbNd0hW//avDKedkSJ
+	cy4oiZi6sWdaJdHx6KnPalj5QyjlKTFiJpsQbghkTgQQw0fypStr3mZ8F/VkYqYs9kdiOjyUvrM
+	fahrqOK87LHuh5svP4m5UUxfQGtX8iI3x0kw=
+X-Google-Smtp-Source: AGHT+IGHTvu028ZoHLu/wVKArhIW0nBJg+enw9a8b6/JbqWjTI9dJuXjFPtlTBoOAbcq72XCs4MSZA==
+X-Received: by 2002:a05:6a00:cce:b0:742:a91d:b2f6 with SMTP id d2e1a72fcca58-74827ea58b7mr6886276b3a.13.1749252154129;
+        Fri, 06 Jun 2025 16:22:34 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31349fdfe58sm1833405a91.38.2025.06.06.16.20.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2f5f7825c8sm1669147a12.52.2025.06.06.16.22.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jun 2025 16:20:10 -0700 (PDT)
+        Fri, 06 Jun 2025 16:22:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
-Date: Fri, 6 Jun 2025 16:20:09 -0700
+Message-ID: <3f56be7b-d5b4-4753-8649-62ee21d2c6bd@roeck-us.net>
+Date: Fri, 6 Jun 2025 16:22:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,7 +71,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon
  subsystem
-To: Armin Wolf <W_Armin@gmx.de>, Gui-Dong Han <hanguidong02@gmail.com>
+To: Gui-Dong Han <hanguidong02@gmail.com>
 Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net,
  jdelvare@suse.com, linux-hwmon@vger.kernel.org,
  linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
@@ -79,7 +79,6 @@ References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
  <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
  <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
  <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
- <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,43 +124,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
+In-Reply-To: <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/6/25 14:30, Armin Wolf wrote:
-> Am 06.06.25 um 09:03 schrieb Gui-Dong Han:
-> 
->>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
->>>>> I would like to discuss these issues further and collaborate on the
->>>>> best way to address them comprehensively.
->>>>>
->>>> I'd suggest to start submitting patches, with the goal of minimizing
->>>> the scope of changes. Sometimes that may mean expanding the scope of
->>>> locks, sometimes it may mean converting macros to functions. When
->>>> converting to functions, it doesn't have to be inline functions: I'd
->>>> leave that up to the compiler to decide. None of that code is performance
->>>> critical.
+On 6/6/25 00:03, Gui-Dong Han wrote:
+>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
 >>>>
->>> Actualy, that makes me wonder if it would make sense to introduce
->>> subsystem-level locking. We could introduce a lock in struct
->>> hwmon_device_attribute and lock it whenever a show or store function
->>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
->>> using the _with_info API, but it would simplify driver code a lot.
->>> Any thoughts on that ?
+>>>> I would like to discuss these issues further and collaborate on the
+>>>> best way to address them comprehensively.
+>>>>
+>>>
+>>> I'd suggest to start submitting patches, with the goal of minimizing
+>>> the scope of changes. Sometimes that may mean expanding the scope of
+>>> locks, sometimes it may mean converting macros to functions. When
+>>> converting to functions, it doesn't have to be inline functions: I'd
+>>> leave that up to the compiler to decide. None of that code is performance
+>>> critical.
+>>>
+>> Actualy, that makes me wonder if it would make sense to introduce
+>> subsystem-level locking. We could introduce a lock in struct
+>> hwmon_device_attribute and lock it whenever a show or store function
+>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
+>> using the _with_info API, but it would simplify driver code a lot.
+>> Any thoughts on that ?
 > 
-> Hi,
+> Hi Guenter,
 > 
-> i am against adding a subsystem lock just to work around buggy drivers. Many drivers
-> should use fine-grained locking to avoid high latencies when reading a single attribute.
+> Thanks for your quick and insightful feedback!
+> 
+> I agree with your suggestion. Adding a note to
+> Documentation/hwmon/submitting-patches.rst about avoiding calculations
+> in macros is also a great idea to prevent this class of bugs in the
+> future.
+> 
+> Regarding your thoughts on subsystem-level locking, it sounds like a
+> promising approach to simplify the drivers using the _with_info API.
+> As you mentioned, some drivers don't use this API, so they would still
+> require manual fixes.
+> 
+> For the subsystem-level lock itself, I was wondering if a read-write
+> semaphore might be more appropriate than a standard mutex. This would
+> prevent a single show operation from blocking other concurrent reads.
+> I'm not entirely sure about all the implications, but it might be
+> worth considering to maintain read performance.
 > 
 
-The point would be driver code simplification and increasing robustness, not
-working around buggy drivers.
-
-Anyway, what high latency are you talking about ? Serialization of attribute
-accesses would only increase latency if multiple processes read attributes from
-the same driver at the same time, which is hardly a typical use case.
+Various drivers need write locks when reading attributes, so that would not
+work well. We'd need some flag indicating "this driver needs write locks
+when reading data", and then things become complicated again, defeating the
+benefit.
 
 Guenter
 
