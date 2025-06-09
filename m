@@ -1,41 +1,41 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0CA20E71D;
-	Mon,  9 Jun 2025 15:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7314E19F41C;
+	Mon,  9 Jun 2025 15:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749481407; cv=none; b=dnSTxlWCF5ZgQow6vSIlRv/R0TmdDR2PJYz4H06yuBeUXxISet4ZmxzhAhfrmQuj6Z/Vn6qhqBDn+qMXc+lDt/Mmo3PHKUn4/p45qas2lSu60eOHBbOXP/+eN9SZky+bRzGYEyOtNuTD0Ti71TFb6Atyy1NM9T5N6wQoqkr+eqo=
+	t=1749481624; cv=none; b=fZBpQH835vvzSx8v8wrDKC2pAmjsZ/L1CLXpvvdUT7jKcI+AGrV9TlzzvwXLvuWrN0TxKyUGNH3v58PGe+GpFtKGClUS4e/Xm3sch4+kfS+MA9aPiouhgLDlSygSdAPCfmHoUD0nyK8gOuiTW3LBuH8gPyLbfd8zAvR8ERAUpVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749481407; c=relaxed/simple;
-	bh=te9mvffqCREp87q3ohFeOWU95PBzSm1z999O0/Nq+YA=;
+	s=arc-20240116; t=1749481624; c=relaxed/simple;
+	bh=LOaEDRQ4kYrwi4Xn/mnj3m+pzhRaACbyXtEqKfL92Yg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PFC8oM6KBVeOAuVl+2LNKUxqcyqgl/M9yZH0dJ2ILKTl5t2UcqkjqBkOPtUhhwLD4qqWozgOz4Hrz+bHcYEm+1pB4QK8YxrVE+r3SLJT5K/jUeIGa6uPnoY1eS90dYc71ZNk5v1WkiTVE2syTSySinIRObu+5ZLemE7cJB2AkgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=PcWfWChQ; arc=none smtp.client-ip=212.227.17.22
+	 In-Reply-To:Content-Type; b=c/ETga7oSA/fjsoZvVBkTBQDVf0btQ6qQyYHDQjOAHW9giqjMEilrevaxhIxBhYJCGStuyHXf/RjWNeo+WwMxYNXdfhBXJ3gMQGRArquUK0YvOpnfqqRVBhEa1ih55GF8Jbm8Z+yH6heHrP3sN2DPqX7PxIRLSFiQdep4oLJMks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=MGoQBXIz; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="PcWfWChQ"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="MGoQBXIz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1749481388; x=1750086188; i=w_armin@gmx.de;
-	bh=te9mvffqCREp87q3ohFeOWU95PBzSm1z999O0/Nq+YA=;
+	s=s31663417; t=1749481618; x=1750086418; i=w_armin@gmx.de;
+	bh=LOaEDRQ4kYrwi4Xn/mnj3m+pzhRaACbyXtEqKfL92Yg=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=PcWfWChQ5s0VFspucQzX3Ft2vkh+c6Gur1httrG90ASIJT1/Pj6L7ES+Yy8bMXSY
-	 USPOI3UV43pi3BwnWNg5iYXC5T7IIYhn0/O2rmYBc7ZwBfpm7rVEWvxHO78TsJmCu
-	 MRHYt5bDUBCBImUd5sJONIQYs8BR/uhLApOYaKF9+95FNGuwyOSokph8lx0/cmMWP
-	 5x8eNFFZ64Nz3khlg4WbSebYU+Pvt9eeP+whlEvj2Una+Cq2D7/fUAUnNKa97O7Vn
-	 rhDNrwBDYLFw5YDOQQacfyElio1hsq41QGkYxBspqVmGpXhx20DS9U1bn7009fYaR
-	 icvKmdPY24euSz+9fA==
+	b=MGoQBXIz5mmdHjbAmMo3uGXNLq5YMACJbK/KBOz+wdVCHJiIKz/RpNZPRIPiC1Ro
+	 KC9OQpjbAafRoZX8ABuB7FFMMfge+xp/hBwPzMW6WANyomZTan7ZrLcPbhNo5k3AA
+	 UdxJNGBHJOP9ZH4SjeABtznE/bu9AKnOT2LBKeKkVdfK2hb979PK0GP7SVh84U4ws
+	 HJNlZl60UVRR89jFR/BpQgmE0CBU15FOfRD4nkhXPbOpOun95Yn+ltA2R7oPPJ1Ww
+	 L5W788GYgsKAYxxE1oAzYrFSG+yjPUravj0AtS7D6fh0CAqKeeeEQvbhzNogXf6iF
+	 2J6vzCbRwDLFfuI+2g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3DNt-1uQ1T71rHZ-005XPH; Mon, 09
- Jun 2025 17:03:08 +0200
-Message-ID: <06476e3b-3334-4c26-8762-6b410feb740d@gmx.de>
-Date: Mon, 9 Jun 2025 17:03:06 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtOGU-1ugaNg0OtS-00xMg8; Mon, 09
+ Jun 2025 17:06:58 +0200
+Message-ID: <474af450-fe05-46d6-90d6-d5ac3408cf68@gmx.de>
+Date: Mon, 9 Jun 2025 17:06:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -53,114 +53,123 @@ References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
  <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
  <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
  <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
- <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
- <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
+ <3f56be7b-d5b4-4753-8649-62ee21d2c6bd@roeck-us.net>
 Content-Language: en-US
 From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
+In-Reply-To: <3f56be7b-d5b4-4753-8649-62ee21d2c6bd@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:g4/ClnNOa8Zi1pUoL05tePh2J3ypd/Jkg/gqCbkgbFWK0/V0EDi
- DQ38244iaoed5jo6BLqY2shRqY23bKQtTL16E3RlnQjbfz1DYh8m+5FTRDoir929yHSMDdy
- 6Z2jFodbp0QBF4FzFnq2kwYKdoVy6y0pg8DLHwZ0nLGAM0IOiJd06SRyKSZJ8jbHP4e9Ta/
- PX2qW8g6HrmAn5jAl0WTQ==
+X-Provags-ID: V03:K1:xsgQzJV4+yM2+gisrx6ewIahjPqv4GmwxppmExVkL0RmeiYsQhw
+ A2QGDrccch6X2QhUCJnqpsT8XzlLCrEWbHcs4cmQ5wl9G9oyB7GirdJcBo8q8KI2rY7aPZk
+ sWcXZbT5QWESpBDMND2HBOIeacDyOJ1fuM58YG1GUJAJim9eGpvgdVuXsaYlu1iZiJ63iyJ
+ Zgjj5SVSogvfb29tYl7Ew==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:43tp462bf/0=;w3Sz38rme9aD9wFO1omhI2sss48
- 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
- 3sELztm6lHMPJC6kFzY6JTQmv
+UI-OutboundReport: notjunk:1;M01:P0:lqURk9qVMWk=;IK90yXlHprrrLWOEcGtOsyZ5KG9
+ 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
+ PitI=
 
-Am 07.06.25 um 01:20 schrieb Guenter Roeck:
+Am 07.06.25 um 01:22 schrieb Guenter Roeck:
 
-> On 6/6/25 14:30, Armin Wolf wrote:
->> Am 06.06.25 um 09:03 schrieb Gui-Dong Han:
->>
->>>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
->>>>>> I would like to discuss these issues further and collaborate on the
->>>>>> best way to address them comprehensively.
->>>>>>
->>>>> I'd suggest to start submitting patches, with the goal of minimizing
->>>>> the scope of changes. Sometimes that may mean expanding the scope of
->>>>> locks, sometimes it may mean converting macros to functions. When
->>>>> converting to functions, it doesn't have to be inline functions: I'd
->>>>> leave that up to the compiler to decide. None of that code is=20
->>>>> performance
->>>>> critical.
+> On 6/6/25 00:03, Gui-Dong Han wrote:
+>>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
 >>>>>
->>>> Actualy, that makes me wonder if it would make sense to introduce
->>>> subsystem-level locking. We could introduce a lock in struct
->>>> hwmon_device_attribute and lock it whenever a show or store function
->>>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
->>>> using the _with_info API, but it would simplify driver code a lot.
->>>> Any thoughts on that ?
+>>>>> I would like to discuss these issues further and collaborate on the
+>>>>> best way to address them comprehensively.
+>>>>>
+>>>>
+>>>> I'd suggest to start submitting patches, with the goal of minimizing
+>>>> the scope of changes. Sometimes that may mean expanding the scope of
+>>>> locks, sometimes it may mean converting macros to functions. When
+>>>> converting to functions, it doesn't have to be inline functions: I'd
+>>>> leave that up to the compiler to decide. None of that code is=20
+>>>> performance
+>>>> critical.
+>>>>
+>>> Actualy, that makes me wonder if it would make sense to introduce
+>>> subsystem-level locking. We could introduce a lock in struct
+>>> hwmon_device_attribute and lock it whenever a show or store function
+>>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
+>>> using the _with_info API, but it would simplify driver code a lot.
+>>> Any thoughts on that ?
 >>
->> Hi,
+>> Hi Guenter,
 >>
->> i am against adding a subsystem lock just to work around buggy=20
->> drivers. Many drivers
->> should use fine-grained locking to avoid high latencies when reading=20
->> a single attribute.
+>> Thanks for your quick and insightful feedback!
+>>
+>> I agree with your suggestion. Adding a note to
+>> Documentation/hwmon/submitting-patches.rst about avoiding calculations
+>> in macros is also a great idea to prevent this class of bugs in the
+>> future.
+>>
+>> Regarding your thoughts on subsystem-level locking, it sounds like a
+>> promising approach to simplify the drivers using the _with_info API.
+>> As you mentioned, some drivers don't use this API, so they would still
+>> require manual fixes.
+>>
+>> For the subsystem-level lock itself, I was wondering if a read-write
+>> semaphore might be more appropriate than a standard mutex. This would
+>> prevent a single show operation from blocking other concurrent reads.
+>> I'm not entirely sure about all the implications, but it might be
+>> worth considering to maintain read performance.
 >>
 >
-> The point would be driver code simplification and increasing=20
-> robustness, not
-> working around buggy drivers.
->
-> Anyway, what high latency are you talking about ? Serialization of=20
-> attribute
-> accesses would only increase latency if multiple processes read=20
-> attributes from
-> the same driver at the same time, which is hardly a typical use case.
+> Various drivers need write locks when reading attributes, so that=20
+> would not
+> work well. We'd need some flag indicating "this driver needs write locks
+> when reading data", and then things become complicated again,=20
+> defeating the
+> benefit.
 >
 > Guenter
 
-Some drivers read all registers (fan, temperature, etc) when updating the =
-readings, and depending
-on the underlying bus system this might take some time. With a global lock=
- reading a single value will thus
-take as much time as reading all values.
+I agree, different drivers need different locks. From my point of view dri=
+vers using the
+with_info-API can easily implement such a global lock themself by using gu=
+ard(). This also
+allows them to choose the type of lock to use.
 
 Thanks,
 Armin Wolf
