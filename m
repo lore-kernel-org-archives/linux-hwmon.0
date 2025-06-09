@@ -1,422 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A760DCF;
-	Mon,  9 Jun 2025 14:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0CA20E71D;
+	Mon,  9 Jun 2025 15:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749479782; cv=none; b=L2qO9OvSG88VUcyWg0taMBfPApgj6TrjcnL0mWj7YUxWNT+YNBoHDDJl9B2J2TORjiOoyMESBYaFnP656FPkerMDw0Ore0gG9NNY1XfdkkesycmO5OOQTiLC2l1aBdZsY3pD8wPhq19jjwkqLbAU/PiOt5llLlPx70aqboYg9IY=
+	t=1749481407; cv=none; b=dnSTxlWCF5ZgQow6vSIlRv/R0TmdDR2PJYz4H06yuBeUXxISet4ZmxzhAhfrmQuj6Z/Vn6qhqBDn+qMXc+lDt/Mmo3PHKUn4/p45qas2lSu60eOHBbOXP/+eN9SZky+bRzGYEyOtNuTD0Ti71TFb6Atyy1NM9T5N6wQoqkr+eqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749479782; c=relaxed/simple;
-	bh=dtDoz4lFxHUrcNFFc2ksHg5b9nQk/UBSA45CCM1lT3M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fd4N2H/BoWaFNhS/a1+0ryJ0a7R7V1/YOFgU2lKs9Zbrp/CGJxl0ka/EDI1ZGiljvzTQvXCTQRyimLei11x5Ya9QaXwvVbjcrx0Rdr1zCJo1dAiMWsbLPKEbulP/LFpCDDzuh5RFH2P9aBDcnA09DJ3ztAZcCLYnyQ8oo5IJUfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIB0bmtg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749481407; c=relaxed/simple;
+	bh=te9mvffqCREp87q3ohFeOWU95PBzSm1z999O0/Nq+YA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PFC8oM6KBVeOAuVl+2LNKUxqcyqgl/M9yZH0dJ2ILKTl5t2UcqkjqBkOPtUhhwLD4qqWozgOz4Hrz+bHcYEm+1pB4QK8YxrVE+r3SLJT5K/jUeIGa6uPnoY1eS90dYc71ZNk5v1WkiTVE2syTSySinIRObu+5ZLemE7cJB2AkgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=PcWfWChQ; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIB0bmtg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D8FC4CEF0;
-	Mon,  9 Jun 2025 14:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749479780;
-	bh=dtDoz4lFxHUrcNFFc2ksHg5b9nQk/UBSA45CCM1lT3M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IIB0bmtgUJBIR6dCR1po5pvdKRHtFE7AWpA+ome6M7jicyY/jzw9KPr6R3dFOzszN
-	 KgTjtQoDJ+Up/RvX95bNTyMOp+rNqGzT44TBBXdaOX0SOgNt7bimDW4esCJO0pbTgt
-	 f68icJ2iX3ohNucKrXxthOCFqbUxPthojzuSjM/0its+2Ty2Gd8gocLCurtk5LjtBh
-	 WH4bNgMK5frossZ/5EZXFAXR7/qMafJ/rcenzo4KRAZeFm6UKtvACpOYd3Wn/pYJy9
-	 6iuTltXaVu33mYMlfymtYYPxYGC+oek+puV0fhsMlwKX87lUpF2k6Yr/IJwCXCBeUL
-	 SuFC9iBCED0ug==
-From: Hans de Goede <hansg@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Hans de Goede <hansg@kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-ide@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 1/1] MAINTAINERS: .mailmap: Update Hans de Goede's email address
-Date: Mon,  9 Jun 2025 16:35:57 +0200
-Message-ID: <20250609143558.42941-2-hansg@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250609143558.42941-1-hansg@kernel.org>
-References: <20250609143558.42941-1-hansg@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="PcWfWChQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1749481388; x=1750086188; i=w_armin@gmx.de;
+	bh=te9mvffqCREp87q3ohFeOWU95PBzSm1z999O0/Nq+YA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=PcWfWChQ5s0VFspucQzX3Ft2vkh+c6Gur1httrG90ASIJT1/Pj6L7ES+Yy8bMXSY
+	 USPOI3UV43pi3BwnWNg5iYXC5T7IIYhn0/O2rmYBc7ZwBfpm7rVEWvxHO78TsJmCu
+	 MRHYt5bDUBCBImUd5sJONIQYs8BR/uhLApOYaKF9+95FNGuwyOSokph8lx0/cmMWP
+	 5x8eNFFZ64Nz3khlg4WbSebYU+Pvt9eeP+whlEvj2Una+Cq2D7/fUAUnNKa97O7Vn
+	 rhDNrwBDYLFw5YDOQQacfyElio1hsq41QGkYxBspqVmGpXhx20DS9U1bn7009fYaR
+	 icvKmdPY24euSz+9fA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M3DNt-1uQ1T71rHZ-005XPH; Mon, 09
+ Jun 2025 17:03:08 +0200
+Message-ID: <06476e3b-3334-4c26-8762-6b410feb740d@gmx.de>
+Date: Mon, 9 Jun 2025 17:03:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BUG] hwmon: Widespread TOCTOU vulnerabilities in the hwmon
+ subsystem
+To: Guenter Roeck <linux@roeck-us.net>, Gui-Dong Han <hanguidong02@gmail.com>
+Cc: vt8231@hiddenengine.co.uk, steve.glendinning@shawell.net,
+ jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
+References: <CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com>
+ <3f5feb87-330c-4342-88a1-d5076538a86d@roeck-us.net>
+ <3401727c-ad93-42df-8130-413eda41ab3a@roeck-us.net>
+ <CALbr=LYe3p9GW2Z_RUxKG+w2Q1wfWGRW=dRLoTraS7qJ7imdgw@mail.gmail.com>
+ <0a3a06df-5da9-4b39-bf38-0894b8084132@gmx.de>
+ <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <72661c37-c4f4-4265-9fa4-e4b31b43f6df@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:g4/ClnNOa8Zi1pUoL05tePh2J3ypd/Jkg/gqCbkgbFWK0/V0EDi
+ DQ38244iaoed5jo6BLqY2shRqY23bKQtTL16E3RlnQjbfz1DYh8m+5FTRDoir929yHSMDdy
+ 6Z2jFodbp0QBF4FzFnq2kwYKdoVy6y0pg8DLHwZ0nLGAM0IOiJd06SRyKSZJ8jbHP4e9Ta/
+ PX2qW8g6HrmAn5jAl0WTQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:43tp462bf/0=;w3Sz38rme9aD9wFO1omhI2sss48
+ 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
+ 3sELztm6lHMPJC6kFzY6JTQmv
 
-I'm moving all my kernel work over to using my kernel.org email address.
-Update .mailmap and MAINTAINER entries still using hdegoede@redhat.com.
+Am 07.06.25 um 01:20 schrieb Guenter Roeck:
 
-Signed-off-by: Hans de Goede <hansg@kernel.org>
----
- .mailmap    |  1 +
- MAINTAINERS | 72 ++++++++++++++++++++++++++---------------------------
- 2 files changed, 37 insertions(+), 36 deletions(-)
+> On 6/6/25 14:30, Armin Wolf wrote:
+>> Am 06.06.25 um 09:03 schrieb Gui-Dong Han:
+>>
+>>>> On Thu, Jun 05, 2025 at 07:33:24AM -0700, Guenter Roeck wrote:
+>>>>>> I would like to discuss these issues further and collaborate on the
+>>>>>> best way to address them comprehensively.
+>>>>>>
+>>>>> I'd suggest to start submitting patches, with the goal of minimizing
+>>>>> the scope of changes. Sometimes that may mean expanding the scope of
+>>>>> locks, sometimes it may mean converting macros to functions. When
+>>>>> converting to functions, it doesn't have to be inline functions: I'd
+>>>>> leave that up to the compiler to decide. None of that code is=20
+>>>>> performance
+>>>>> critical.
+>>>>>
+>>>> Actualy, that makes me wonder if it would make sense to introduce
+>>>> subsystem-level locking. We could introduce a lock in struct
+>>>> hwmon_device_attribute and lock it whenever a show or store function
+>>>> executes in drivers/hwmon/hwmon.c. That would only help for drivers
+>>>> using the _with_info API, but it would simplify driver code a lot.
+>>>> Any thoughts on that ?
+>>
+>> Hi,
+>>
+>> i am against adding a subsystem lock just to work around buggy=20
+>> drivers. Many drivers
+>> should use fine-grained locking to avoid high latencies when reading=20
+>> a single attribute.
+>>
+>
+> The point would be driver code simplification and increasing=20
+> robustness, not
+> working around buggy drivers.
+>
+> Anyway, what high latency are you talking about ? Serialization of=20
+> attribute
+> accesses would only increase latency if multiple processes read=20
+> attributes from
+> the same driver at the same time, which is hardly a typical use case.
+>
+> Guenter
 
-diff --git a/.mailmap b/.mailmap
-index 9b0dc7c30e6d..6ea2677ae494 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -276,6 +276,7 @@ Gustavo Padovan <gustavo@las.ic.unicamp.br>
- Gustavo Padovan <padovan@profusion.mobi>
- Hamza Mahfooz <hamzamahfooz@linux.microsoft.com> <hamza.mahfooz@amd.com>
- Hanjun Guo <guohanjun@huawei.com> <hanjun.guo@linaro.org>
-+Hans de Goede <hansg@kernel.org> <hdegoede@redhat.com>
- Hans Verkuil <hverkuil@xs4all.nl> <hansverk@cisco.com>
- Hans Verkuil <hverkuil@xs4all.nl> <hverkuil-cisco@xs4all.nl>
- Harry Yoo <harry.yoo@oracle.com> <42.hyeyoo@gmail.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b8a8d8a5a2e1..020ee13d64c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -207,7 +207,7 @@ X:	arch/*/include/uapi/
- X:	include/uapi/
- 
- ABIT UGURU 1,2 HARDWARE MONITOR DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
- F:	drivers/hwmon/abituguru.c
-@@ -371,7 +371,7 @@ S:	Maintained
- F:	drivers/platform/x86/quickstart.c
- 
- ACPI SERIAL MULTI INSTANTIATE DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/serial-multi-instantiate.c
-@@ -3506,7 +3506,7 @@ F:	arch/arm64/boot/Makefile
- F:	scripts/make_fit.py
- 
- ARM64 PLATFORM DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- R:	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
- L:	platform-driver-x86@vger.kernel.org
-@@ -3667,7 +3667,7 @@ F:	drivers/platform/x86/asus*.c
- F:	drivers/platform/x86/eeepc*.c
- 
- ASUS TF103C DOCK DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-@@ -5553,14 +5553,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
- F:	drivers/usb/chipidea/
- 
- CHIPONE ICN8318 I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/touchscreen/chipone,icn8318.yaml
- F:	drivers/input/touchscreen/chipone_icn8318.c
- 
- CHIPONE ICN8505 I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/touchscreen/chipone_icn8505.c
-@@ -6844,7 +6844,7 @@ F:	include/dt-bindings/pmu/exynos_ppmu.h
- F:	include/linux/devfreq-event.h
- 
- DEVICE RESOURCE MANAGEMENT HELPERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- R:	Matti Vaittinen <mazziesaccount@gmail.com>
- S:	Maintained
- F:	include/linux/devm-helpers.h
-@@ -7435,7 +7435,7 @@ F:	drivers/gpu/drm/gud/
- F:	include/drm/gud.h
- 
- DRM DRIVER FOR GRAIN MEDIA GM12U320 PROJECTORS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
- F:	drivers/gpu/drm/tiny/gm12u320.c
-@@ -7809,7 +7809,7 @@ F:	drivers/gpu/drm/ci/xfails/vkms*
- F:	drivers/gpu/drm/vkms/
- 
- DRM DRIVER FOR VIRTUALBOX VIRTUAL GPU
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
-@@ -8208,7 +8208,7 @@ F:	drivers/gpu/drm/panel/
- F:	include/drm/drm_panel.h
- 
- DRM PRIVACY-SCREEN CLASS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	dri-devel@lists.freedesktop.org
- S:	Maintained
- T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
-@@ -10101,7 +10101,7 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml
- 
- GOODIX TOUCHSCREEN
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/touchscreen/goodix*
-@@ -10139,7 +10139,7 @@ F:	include/dt-bindings/clock/google,gs101.h
- K:	[gG]oogle.?[tT]ensor
- 
- GPD POCKET FAN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/gpd-pocket-fan.c
-@@ -11287,7 +11287,7 @@ F:	drivers/i2c/busses/i2c-via.c
- F:	drivers/i2c/busses/i2c-viapro.c
- 
- I2C/SMBUS INTEL CHT WHISKEY COVE PMIC DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- F:	drivers/i2c/busses/i2c-cht-wc.c
-@@ -11868,13 +11868,13 @@ S:	Supported
- F:	sound/soc/intel/
- 
- INTEL ATOMISP2 DUMMY / POWER-MANAGEMENT DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/intel/atomisp2/pm.c
- 
- INTEL ATOMISP2 LED DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/intel/atomisp2/led.c
-@@ -13535,7 +13535,7 @@ S:	Maintained
- F:	drivers/platform/x86/lenovo-wmi-hotkey-utilities.c
- 
- LETSKETCH HID TABLET DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-@@ -13585,7 +13585,7 @@ F:	drivers/ata/sata_gemini.c
- F:	drivers/ata/sata_gemini.h
- 
- LIBATA SATA AHCI PLATFORM devices support
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-ide@vger.kernel.org
- S:	Maintained
- F:	drivers/ata/ahci_platform.c
-@@ -13956,7 +13956,7 @@ F:	Documentation/admin-guide/ldm.rst
- F:	block/partitions/ldm.*
- 
- LOGITECH HID GAMING KEYBOARDS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-@@ -14623,7 +14623,7 @@ F:	Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
- F:	drivers/power/supply/max17040_battery.c
- 
- MAXIM MAX17042 FAMILY FUEL GAUGE DRIVERS
--R:	Hans de Goede <hdegoede@redhat.com>
-+R:	Hans de Goede <hansg@kernel.org>
- R:	Krzysztof Kozlowski <krzk@kernel.org>
- R:	Marek Szyprowski <m.szyprowski@samsung.com>
- R:	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-@@ -15414,7 +15414,7 @@ Q:	https://patchwork.kernel.org/project/netdevbpf/list/
- F:	drivers/net/ethernet/mellanox/mlxfw/
- 
- MELLANOX HARDWARE PLATFORM SUPPORT
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- M:	Vadim Pasternak <vadimp@nvidia.com>
- L:	platform-driver-x86@vger.kernel.org
-@@ -16332,7 +16332,7 @@ S:	Maintained
- F:	drivers/platform/surface/surface_gpe.c
- 
- MICROSOFT SURFACE HARDWARE PLATFORM SUPPORT
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- M:	Maximilian Luz <luzmaximilian@gmail.com>
- L:	platform-driver-x86@vger.kernel.org
-@@ -17496,7 +17496,7 @@ F:	tools/include/nolibc/
- F:	tools/testing/selftests/nolibc/
- 
- NOVATEK NVT-TS I2C TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/touchscreen/novatek,nvt-ts.yaml
-@@ -22430,7 +22430,7 @@ K:	fu[57]40
- K:	[^@]sifive
- 
- SILEAD TOUCHSCREEN DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
-@@ -22463,7 +22463,7 @@ F:	Documentation/devicetree/bindings/i3c/silvaco,i3c-master.yaml
- F:	drivers/i3c/master/svc-i3c-master.c
- 
- SIMPLEFB FB DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-fbdev@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/display/simple-framebuffer.yaml
-@@ -22592,7 +22592,7 @@ F:	Documentation/hwmon/emc2103.rst
- F:	drivers/hwmon/emc2103.c
- 
- SMSC SCH5627 HARDWARE MONITOR DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-hwmon@vger.kernel.org
- S:	Supported
- F:	Documentation/hwmon/sch5627.rst
-@@ -23241,7 +23241,7 @@ S:	Supported
- F:	Documentation/process/stable-kernel-rules.rst
- 
- STAGING - ATOMISP DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Mauro Carvalho Chehab <mchehab@kernel.org>
- R:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
-@@ -23538,7 +23538,7 @@ F:	arch/m68k/sun3*/
- F:	drivers/net/ethernet/i825xx/sun3*
- 
- SUN4I LOW RES ADC ATTACHED TABLET KEYS DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
-@@ -25258,7 +25258,7 @@ F:	Documentation/hid/hiddev.rst
- F:	drivers/hid/usbhid/
- 
- USB INTEL XHCI ROLE MUX DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/usb/roles/intel-xhci-usb-role-switch.c
-@@ -25449,7 +25449,7 @@ F:	Documentation/firmware-guide/acpi/intel-pmc-mux.rst
- F:	drivers/usb/typec/mux/intel_pmc_mux.c
- 
- USB TYPEC PI3USB30532 MUX DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
- F:	drivers/usb/typec/mux/pi3usb30532.c
-@@ -25478,7 +25478,7 @@ F:	drivers/usb/host/uhci*
- 
- USB VIDEO CLASS
- M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- W:	http://www.ideasonboard.org/uvc/
-@@ -26001,7 +26001,7 @@ F:	include/uapi/linux/virtio_snd.h
- F:	sound/virtio/*
- 
- VIRTUAL BOX GUEST DEVICE DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Arnd Bergmann <arnd@arndb.de>
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- S:	Maintained
-@@ -26010,7 +26010,7 @@ F:	include/linux/vbox_utils.h
- F:	include/uapi/linux/vbox*.h
- 
- VIRTUAL BOX SHARED FOLDER VFS DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/vboxsf/*
-@@ -26263,7 +26263,7 @@ F:	drivers/mmc/host/wbsd.*
- 
- WACOM PROTOCOL 4 SERIAL TABLETS
- M:	Julian Squires <julian@cipht.net>
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	linux-input@vger.kernel.org
- S:	Maintained
- F:	drivers/input/tablet/wacom_serial4.c
-@@ -26424,7 +26424,7 @@ F:	include/linux/wwan.h
- F:	include/uapi/linux/wwan.h
- 
- X-POWERS AXP288 PMIC DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- S:	Maintained
- F:	drivers/acpi/pmic/intel_pmic_xpower.c
- N:	axp288
-@@ -26516,14 +26516,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
- F:	arch/x86/mm/
- 
- X86 PLATFORM ANDROID TABLETS DSDT FIXUP DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
- F:	drivers/platform/x86/x86-android-tablets/
- 
- X86 PLATFORM DRIVERS
--M:	Hans de Goede <hdegoede@redhat.com>
-+M:	Hans de Goede <hansg@kernel.org>
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
--- 
-2.49.0
+Some drivers read all registers (fan, temperature, etc) when updating the =
+readings, and depending
+on the underlying bus system this might take some time. With a global lock=
+ reading a single value will thus
+take as much time as reading all values.
+
+Thanks,
+Armin Wolf
 
