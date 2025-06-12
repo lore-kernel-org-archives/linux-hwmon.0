@@ -1,152 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF391DACB1;
-	Thu, 12 Jun 2025 18:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD3610957;
+	Thu, 12 Jun 2025 18:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749752149; cv=none; b=XRSyaJerWimisSXeMTQ7FVkaw9P84bo7K9tMH2kDtRk63QCLezkkAltrmAxeAuhmByQZ5Arts6e/sfHVyIt+vf/ujwwjjE6HnqafRWvFc7sOKybnAcxQINIDueqBSm8oNNPk9yk7ukjtvYjNAup3eBPep2vPeTklY4HmMEjUpV0=
+	t=1749753828; cv=none; b=Jithc3+e7fi71pVvr7MzlodvcwZ0HilBvVjaocBVstiUfFcCNCNdUqwSlwjuP/HxCMOeZjAuIGnTy1pqveBUD4/lZSR1YSGIKAERDsTdVDeqbmQXoe6JhKa32s97nnDOMAy7Xxz/+fwGavpECjdsX/VDXt411eY1rtSD5WvmTSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749752149; c=relaxed/simple;
-	bh=4OofUxrS1VHn2NikWkMKBtNsbAo1AC+xDhX2JTKKUZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d79wF9Igm9frZZibc3/+iUhmP/QF3rGrQoFyeLnheFQe8uLA9ilieYHm2YDtfr7RA/dq9+aEuMkAoUgH7EyVEaRTz/6+62MBwC9ID4CHO3GcnqJVfAHZvsT2ijr/9PsVIiUkbjj6GmDV1mHxIqVo2PWE3DfnpAA+jtja1+M2Nqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QD3mk8JJ; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749753828; c=relaxed/simple;
+	bh=/3k0Je/+h39bAuq8J1HlcAIFG5fJvuyqjCMW1xdl1XY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JPFaFQ2NB09zR7K2dy0FFE6s+1xv41LC6o5Ce2bk6ob7f2vnazegNQTYEoHstBk5mPubPIZenrakokdYV5XO/5u6CQx+gi+wBOvf2f4klb3PvcxfcphDaLYJtva51I4JxsHhMZKC1mO+Wm6yQ+LOeAawjmwQ7Wuq/SXaF/pd6d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CWP8m4Jt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QD3mk8JJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749752148; x=1781288148;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4OofUxrS1VHn2NikWkMKBtNsbAo1AC+xDhX2JTKKUZU=;
-  b=QD3mk8JJIFzzkgnZdWtI/u612YZzpHaK2oMQA3cqPe/QzxshiXE2pF+9
-   8di4GBJxMvrCGNOF6R0KnBhymCclbnU692LYJVSUCHFQg5qc1Dcw3f+db
-   4i3cMIVstIZQk4Ua84c34bpllfexHE8FB49ITmk6Wn1CPbgCk3G892mlk
-   k/qc/1Vyz25lz1lTLMV0BzO0ZLU0d37a2/EsMGD4NZF1ODGbedXUfPch5
-   w/5CWMfT7D5PpZ6x4TkUk67gs+NwybepHhRxCtJundu2vHrBC7PCsU48E
-   dYdxCtWumMmdeXhXtv8cPfSxHL0yXO5Gj5tZzxGkskx7JYff6F67Mm16R
-   A==;
-X-CSE-ConnectionGUID: tFCkgajiRpO7GZrhcpt3Og==
-X-CSE-MsgGUID: PLDy0RCIRdejemds94WQ4w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="62228330"
-X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
-   d="scan'208";a="62228330"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 11:15:47 -0700
-X-CSE-ConnectionGUID: jdO72gOWSsyQQXv8GZky7Q==
-X-CSE-MsgGUID: dZNBe+geS7+6msjZDxxpBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
-   d="scan'208";a="147511276"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 12 Jun 2025 11:15:43 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uPmSi-000BrG-2m;
-	Thu, 12 Jun 2025 18:15:40 +0000
-Date: Fri, 13 Jun 2025 02:15:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chiang Brian <chiang.brian@inventec.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: oe-kbuild-all@lists.linux.dev, Chiang Brian <chiang.brian@inventec.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 2/2] hwmon: (pmbus/tps53679) Add support for TPS53685
-Message-ID: <202506130217.6OQ8zSf5-lkp@intel.com>
-References: <20250610102556.236300-3-chiang.brian@inventec.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CWP8m4Jt"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55CCoHV0001157;
+	Thu, 12 Jun 2025 18:43:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=wr9q00w4ILHr79t+qu7qbDsCjzlNlCWYFL/7rhx0k
+	J4=; b=CWP8m4JtDUSDDdccSip2js8r8F7iHaVKPd2JaqRJBcodATjBPGCKFBqoa
+	Rgs6eH8eN2ZtV15SOz/ejK7psztCemjTvPw8c/gwtdsHDIL44TEbDdrFrG44X9u3
+	NaM+Dy4cQwJ+zp4V5oSSiWaQJ1YlI4Z/haQfkR8gcNA9sGF6+aN+R5Fe8ppglsJm
+	RdF2iE9yPn6C+PkKmRagnUV9GFG8D9XQCYZPxrIv/WNBg1ZIn4kkUI+Kg/ou3yuf
+	mtAYAzTfSyWKtQBetX/Qo7EzdcyWEk3Dct4F1uxFFIrLaqhgoGQukeeHcu7d/3x5
+	ysL2YfKDkMkib9AB1kpfd6R76ZiPQ==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4769x01cd2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Jun 2025 18:43:33 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55CHjDAZ021879;
+	Thu, 12 Jun 2025 18:43:31 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47505069n2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Jun 2025 18:43:31 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55CIhRPg27525850
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Jun 2025 18:43:28 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ABAE45805E;
+	Thu, 12 Jun 2025 18:43:27 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D4ED858050;
+	Thu, 12 Jun 2025 18:43:26 +0000 (GMT)
+Received: from spec2code.sl.cloud9.ibm.com (unknown [9.59.201.160])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 12 Jun 2025 18:43:26 +0000 (GMT)
+From: Qiushi Wu <qiushi@linux.ibm.com>
+To: linux-kernel@vger.kernel.org
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        zohar@linux.ibm.com, qiushi.wu@ibm.com,
+        Qiushi Wu <qiushi@linux.ibm.com>
+Subject: [PATCH] hwmon: ibmaem: match return type of wait_for_completion_timeout
+Date: Thu, 12 Jun 2025 14:43:24 -0400
+Message-Id: <20250612184324.1355854-1-qiushi@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250610102556.236300-3-chiang.brian@inventec.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: as2x7WG83AblcHTf1ucP3kP1sy5kDXNt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEyMDE0MSBTYWx0ZWRfX/8zVgA25E157 3TcFLGYdZRxoSyVRsSGTX6xCsvwEcsJVABP6vPSDFXMoLEvphTlODCQXIYxaaU97Eap4RC98Os8 rnqlkRAeXUcbC8kYgSb67ps3O0C4hizBg4ihtYnP+Eo5hWJNtFRcOCne2/6HekpYLaxl56s+j5F
+ 0tVO0dEfKlW9SEsKDTMUTtK2HkI8CKxFdnWOq+Yrv79TgrgaiMLHCmKM6FhImpGLxSKH56QjCnE 0hBl8w2h5EuB5LiQ2MxSihJ7gBPdZmAoiy40s1a40wUPdfE9z7BPeaW6PtJT92KtGNxEuQrgBo1 KWuJgL2uGk1eNWMyqbReyWz+eH2j3uIi0o3tEy9ldpHSnlfCnJSZhnNEN2drH/MOU7DJX298zej
+ u99z2KF7Ni11JX01gkICJfI5XV/iWPJN8Ih2f0glPVmotFC1lZFXnOmPRFZAejgeTrW6v7Ls
+X-Authority-Analysis: v=2.4 cv=YKGfyQGx c=1 sm=1 tr=0 ts=684b1fd5 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=6IFa9wvqVegA:10 a=VnNF1IyMAAAA:8 a=0tZVAJr0HtVguEOAQVkA:9
+X-Proofpoint-GUID: as2x7WG83AblcHTf1ucP3kP1sy5kDXNt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-12_10,2025-06-12_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ malwarescore=0 bulkscore=0 priorityscore=1501 phishscore=0 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506120141
 
-Hi Chiang,
+Return type of wait_for_completion_timeout is unsigned long not int.
+Check its return value inline instead of introducing a throw-away
+variable.
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Qiushi Wu <qiushi@linux.ibm.com>
+---
+ drivers/hwmon/ibmaem.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on groeck-staging/hwmon-next krzk-dt/for-next linus/master v6.16-rc1 next-20250612]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chiang-Brian/hwmon-pmbus-tps53679-Add-support-for-TPS53685/20250610-192612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250610102556.236300-3-chiang.brian%40inventec.com
-patch subject: [PATCH v9 2/2] hwmon: (pmbus/tps53679) Add support for TPS53685
-config: s390-randconfig-r073-20250611 (https://download.01.org/0day-ci/archive/20250613/202506130217.6OQ8zSf5-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506130217.6OQ8zSf5-lkp@intel.com/
-
-smatch warnings:
-drivers/hwmon/pmbus/tps53679.c:288 tps53679_probe() warn: inconsistent indenting
-
-vim +288 drivers/hwmon/pmbus/tps53679.c
-
-   249	
-   250	static int tps53679_probe(struct i2c_client *client)
-   251	{
-   252		struct device *dev = &client->dev;
-   253		struct pmbus_driver_info *info;
-   254		enum chips chip_id;
-   255	
-   256		if (dev->of_node)
-   257			chip_id = (uintptr_t)of_device_get_match_data(dev);
-   258		else
-   259			chip_id = i2c_match_id(tps53679_id, client)->driver_data;
-   260	
-   261		info = devm_kmemdup(dev, &tps53679_info, sizeof(*info), GFP_KERNEL);
-   262		if (!info)
-   263			return -ENOMEM;
-   264	
-   265		switch (chip_id) {
-   266		case tps53647:
-   267		case tps53667:
-   268			info->pages = TPS53647_PAGE_NUM;
-   269			info->identify = tps53679_identify;
-   270			break;
-   271		case tps53676:
-   272			info->identify = tps53676_identify;
-   273			break;
-   274		case tps53679:
-   275		case tps53688:
-   276			info->pages = TPS53679_PAGE_NUM;
-   277			info->identify = tps53679_identify;
-   278			break;
-   279		case tps53681:
-   280			info->pages = TPS53679_PAGE_NUM;
-   281			info->phases[0] = 6;
-   282			info->identify = tps53681_identify;
-   283			info->read_word_data = tps53681_read_word_data;
-   284			break;
-   285		case tps53685:
-   286		    info->pages = TPS53679_PAGE_NUM;
-   287		    info->identify = tps53685_identify;
- > 288			break;
-   289		default:
-   290			return -ENODEV;
-   291		}
-   292	
-   293		return pmbus_do_probe(client, info);
-   294	}
-   295	
-
+diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+index 157e232aace0..e52e937a396c 100644
+--- a/drivers/hwmon/ibmaem.c
++++ b/drivers/hwmon/ibmaem.c
+@@ -383,8 +383,7 @@ static int aem_read_sensor(struct aem_data *data, u8 elt, u8 reg,
+ 
+ 	aem_send_message(ipmi);
+ 
+-	res = wait_for_completion_timeout(&ipmi->read_complete, IPMI_TIMEOUT);
+-	if (!res) {
++	if (!wait_for_completion_timeout(&ipmi->read_complete, IPMI_TIMEOUT)) {
+ 		res = -ETIMEDOUT;
+ 		goto out;
+ 	}
+@@ -491,7 +490,6 @@ static void aem_delete(struct aem_data *data)
+ /* Retrieve version and module handle for an AEM1 instance */
+ static int aem_find_aem1_count(struct aem_ipmi_data *data)
+ {
+-	int res;
+ 	struct aem_find_firmware_req	ff_req;
+ 	struct aem_find_firmware_resp	ff_resp;
+ 
+@@ -508,8 +506,7 @@ static int aem_find_aem1_count(struct aem_ipmi_data *data)
+ 
+ 	aem_send_message(data);
+ 
+-	res = wait_for_completion_timeout(&data->read_complete, IPMI_TIMEOUT);
+-	if (!res)
++	if (!wait_for_completion_timeout(&data->read_complete, IPMI_TIMEOUT))
+ 		return -ETIMEDOUT;
+ 
+ 	if (data->rx_result || data->rx_msg_len != sizeof(ff_resp) ||
+@@ -632,7 +629,6 @@ static int aem_find_aem2(struct aem_ipmi_data *data,
+ 			    struct aem_find_instance_resp *fi_resp,
+ 			    int instance_num)
+ {
+-	int res;
+ 	struct aem_find_instance_req fi_req;
+ 
+ 	fi_req.id = system_x_id;
+@@ -648,8 +644,7 @@ static int aem_find_aem2(struct aem_ipmi_data *data,
+ 
+ 	aem_send_message(data);
+ 
+-	res = wait_for_completion_timeout(&data->read_complete, IPMI_TIMEOUT);
+-	if (!res)
++	if (!wait_for_completion_timeout(&data->read_complete, IPMI_TIMEOUT))
+ 		return -ETIMEDOUT;
+ 
+ 	if (data->rx_result || data->rx_msg_len != sizeof(*fi_resp) ||
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
