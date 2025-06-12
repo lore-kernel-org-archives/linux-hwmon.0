@@ -1,91 +1,252 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CDC192B8C
-	for <linux-hwmon@vger.kernel.org>; Wed, 11 Jun 2025 16:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBBC2745E;
+	Thu, 12 Jun 2025 14:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749660363; cv=none; b=hHwM5FPUmi0ydKVxDS1CFOmwWpGLvLJ+ptLVhn4OQdI7RY4ePluuHByr/wzIo7lfasD2ghNVOyb7LkteHQXVpV6yAYwelgxJuhw8MZx7so+zvS+S84m2qDYS6ephOLJmisdxj2DAO7nOAzTUXNgN/oWi2Jn8E1mH5QHrcXlkaXU=
+	t=1749736849; cv=none; b=c57uZvRrXIF1YP2dQ1G1iJCDot+4FrY+Qtfwa0vMJK7CjeuqhV7F+bWBFQB64FEU3T3aSp4NDx2XguyBfqatqi4M87XEmYOtxyfD4oW+u7P4OR2K2lLa2eJ0vuuYERiABiRQkRFhwKckiu6daUUGvzhjN8/gpH+UU9yGq4JdbKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749660363; c=relaxed/simple;
-	bh=8KBptTwsDhaXfo8/AGrkIdmJm5hTPP0DyYVr9LxgMf0=;
+	s=arc-20240116; t=1749736849; c=relaxed/simple;
+	bh=b/HubsKTNPeTRSAp6TCHMgHzCQE3BmzRFQuGAGVx1pg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yu+KIZPfhDJbpIPpn+HK21iN7VtTtFI9VulsQ5hLfNjkexVo+wb0DuPe2xIGZf50REDkILPPT2b7DxAyyfU8t4fGIA04F+Nb1EErnItQ4VcFn+JGG8o7EsVAdFgVds2cXIkky1kRfGqONdMZRt1ywplSVA/KFg1IOpnEebKRCfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SeysNkQn; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=MU0bl7DTV2oUOx7pEaU+pa/0K8V0lkKgEkIHYUkpXLUcAZ7ewYXZn2Au1lU7S4PHkAEu1CWYvok1MdH2vAqgGgRuqu39w9RpeLY1+GuXv10jM+KeE4K2oelwlmEPixirKEdZ0cMezvRpv6sl3Oh0cNJvQf/2jTHFRaSIRRL+1Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBN8jJ3j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SeysNkQn"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-235f9ea8d08so118025ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Jun 2025 09:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749660361; x=1750265161; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jUHgQF8lhZQOf9RIASPGPpXroMGca2auBnMZnJWTY/I=;
-        b=SeysNkQnrfuBowc28kGZNXHFnHMkQkWTX8Gicz0+CjNdw9nsW54sAZa3sv8W7frx57
-         2ln34GfaiklcMiBXn7BlisvHJkMqQc/rfdrK3HquBD+nxSl1rFyQFOPF7AhkkEFp0S9z
-         QRA2a9a1Pzl7b4oLx2b2VxmoxUE73lUOS3y/T7/M2gWSJsc2zxGyHHDI6NVQDTENM/kn
-         IhST73Nvc0cw7Tu6OLVH85Xz/LIjkKq62utk4C9IJU27dxWwl0/Yp+jLGE8pSMCcNeEh
-         vhB65h7m0UJdJwGLzwporjJAfmE5wAZZxMHWwv4MGnPyow5C6V4I+sPidil+U+0nlPBX
-         zqBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749660361; x=1750265161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jUHgQF8lhZQOf9RIASPGPpXroMGca2auBnMZnJWTY/I=;
-        b=sVD5mF3GpUuWhdS6qCN21jF9+1ccSiWI5jykJEoTk1yp/R+PyMFUp7OFcAsdpMkT/B
-         32g+qB18UDaCbhYtFT+8iwW0Z8Tr5VJv98EK/0HgJ06B9XuqoZZmM6V0ItB9F5UKOZmS
-         BVPsnr8wXgwPcaS9lCorNQ6vdJkngsozTLL7nU5SoRs9OZBcVvik4Qh/92Rfu2V5ezmd
-         9k4H4Zt4voGRISZDtBCDSViwLI+Iwz0NHw1qpAxW9Citf4gVIYEmiuuI2UnW8er5O5t/
-         qPbWO4U4M3fY8es7iXHgThRNDXwU7p1FcPkxoPHd5rYebnw07KkAGzCPFpvq2O92KXPG
-         2LnA==
-X-Gm-Message-State: AOJu0YwMEF+bosZO9MguYQGVsaeneXpKOpyYuwYlpVsfclNnMk+3cAYq
-	/Yr9+0uXbrAtLSJSICKC3XtjAk/RHmkpjlK59NYS8D0Bo49RLqmFLuaV
-X-Gm-Gg: ASbGncvJ24fcxovxYG8aJcvFYr5Iza+W+r9Czh2Ka69jBlZHMJebAgDzHD+pZrhlKWO
-	F1gbSqHg870Z8zis1BmW4jninzsfh3lCoDNLzqaycfAxxxRyEP/As6UO0zPWuvtJCespR5MrZdU
-	ZsGr4CQXPWDxBjb4YHknykOUPiPF3a80RuTytTLqyKqeIHSZFOBdB0iR1BCIO/yoRbow/+ZPduA
-	eA3VnD+BcIdAeP8PGM1gPL77QnlR6OyHx80HDsIUFbBXEfqwh5MWUpKcallodcfESwdbLJ1MkeN
-	MP2S3pAYOeRkLcO8VJ5qYELZw4oXL1Gi1Xu/d1gqYy9JQ+8saA/p7qGqhhMRQ1vb/zFUTdPCMO9
-	tj7+6rSEFTQ==
-X-Google-Smtp-Source: AGHT+IG7MkM6eguPMW+yOT85TxC9eWhgteUYR3QVDXa2sJiet7pYi6Q4YOewR3/ZgbO3pbyTCXkfDg==
-X-Received: by 2002:a17:903:1ae7:b0:234:9374:cfae with SMTP id d9443c01a7336-23641abe519mr60879695ad.19.1749660360557;
-        Wed, 11 Jun 2025 09:46:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23603405161sm90273955ad.147.2025.06.11.09.45.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 09:46:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 11 Jun 2025 09:45:59 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 2/2] hwmon: ltc4282: fix copy past on variable name
-Message-ID: <b7f262cb-deff-4da6-a12f-0df7f5427391@roeck-us.net>
-References: <20250611-fix-ltc4282-repetead-write-v1-0-fe46edd08cf1@analog.com>
- <20250611-fix-ltc4282-repetead-write-v1-2-fe46edd08cf1@analog.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBN8jJ3j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C71DC4CEEB;
+	Thu, 12 Jun 2025 14:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749736849;
+	bh=b/HubsKTNPeTRSAp6TCHMgHzCQE3BmzRFQuGAGVx1pg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TBN8jJ3j/nD9SkRH3SZ2FjuvzuqbmCx00Z16QXYn7b8lFktXXebNl7vmpa0++ML4v
+	 bOxBaHYiP7DdiYLNTvtH1FzmOQDoJLCq/OHvG1C2lCDpMzW9QT6KIkf+XZMkyZEI1Y
+	 bLtjIkPrzk7kxSIMFdKjYwBhjekGm+8PuXEzKurCg7k4y/H+VZZP76948rtqznjb6o
+	 Wy21rMZ9Y54R74JsZJtB8OA4dgznGaI8n3J7wiX13wRG33spDDVZljvWbTVSS5jCv8
+	 qK46AmrpJP8IHJJEa6aGTS+HMRzFdLdZdN5FpLfI81lRoTsu/gzO5+Uq9LOCobFKT7
+	 /UEMhZAQ4F0BQ==
+Date: Thu, 12 Jun 2025 15:00:41 +0100
+From: Lee Jones <lee@kernel.org>
+To: a0282524688@gmail.com
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+	linux@roeck-us.net, jdelvare@suse.com,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ming Yu <tmyu0@nuvoton.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250612140041.GF381401@google.com>
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
+ <20250604041418.1188792-2-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250611-fix-ltc4282-repetead-write-v1-2-fe46edd08cf1@analog.com>
+In-Reply-To: <20250604041418.1188792-2-tmyu0@nuvoton.com>
 
-On Wed, Jun 11, 2025 at 05:26:13PM +0100, Nuno S· wrote:
-> From: Nuno S· <nuno.sa@analog.com>
+On Wed, 04 Jun 2025, a0282524688@gmail.com wrote:
+
+> From: Ming Yu <tmyu0@nuvoton.com>
 > 
-> The struct hwmon_chip_info was named ltc2947_chip_info which is
-> obviously a copy paste leftover. Name it accordingly.
+> The Nuvoton NCT6694 provides an USB interface to the host to
+> access its features.
 > 
-> Signed-off-by: Nuno S· <nuno.sa@analog.com>
+> Sub-devices can use the USB functions nct6694_read_msg() and
+> nct6694_write_msg() to issue a command. They can also request
+> interrupt that will be called when the USB device receives its
+> interrupt pipe.
+> 
+> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> ---
+> Changes since version 11:
+> - Modify the irq_domain_add_simple() to irq_domain_create_simple()
+> - Fix mfd_cell back to v9, and use Use platform_device's id to replace IDA
+>   in sub-drivers
+> 
+> Changes since version 10:
+> - Add change log for the patch
+> - Fix mfd_cell to MFD_CELL_NAME()
+> - Remove unnecessary blank line
+> 
+> Changes since version 9:
+> - Add KernelDoc to exported functions
+> 
+> Changes since version 8:
+> - Modify the signed-off-by with my work address
+> - Rename all MFD cell names to "nct6694-xxx"
+> - Fix some comments in nct6694.c and in nct6694.h
+> 
+> Changes since version 7:
+> - Add error handling for devm_mutex_init()
+> 
+> Changes since version 6:
+> 
+> Changes since version 5:
+> - Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+> - Drop unnecessary macros
+> 
+> Changes since version 4:
+> - Modify arguments in read/write function to a pointer to cmd_header
+> 
+> Changes since version 3:
+> - Modify array buffer to structure
+> - Fix defines and comments
+> - Add header <linux/bits.h> and use BIT macro
+> - Modify mutex_init() to devm_mutex_init()
+> 
+> Changes since version 2:
+> 
+> Changes since version 1:
+> - Implement IRQ domain to handle IRQ demux
+> - Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API
+> - Add command structure
+> - Fix USB functions
+> - Sort each driver's header files alphabetically
+> 
+>  MAINTAINERS                 |   6 +
+>  drivers/mfd/Kconfig         |  15 ++
+>  drivers/mfd/Makefile        |   2 +
+>  drivers/mfd/nct6694.c       | 386 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/nct6694.h |  98 +++++++++
+>  5 files changed, 507 insertions(+)
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 include/linux/mfd/nct6694.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 98201e1f4ab5..29d2d05bac22 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17679,6 +17679,12 @@ F:	drivers/nubus/
+>  F:	include/linux/nubus.h
+>  F:	include/uapi/linux/nubus.h
+>  
+> +NUVOTON NCT6694 MFD DRIVER
+> +M:	Ming Yu <tmyu0@nuvoton.com>
+> +S:	Supported
+> +F:	drivers/mfd/nct6694.c
+> +F:	include/linux/mfd/nct6694.h
+> +
+>  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
+>  M:	Antonino Daplas <adaplas@gmail.com>
+>  L:	linux-fbdev@vger.kernel.org
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 96992af22565..489c1950f1ac 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1078,6 +1078,21 @@ config MFD_MENF21BMC
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menf21bmc.
+>  
+> +config MFD_NCT6694
+> +	tristate "Nuvoton NCT6694 support"
+> +	select MFD_CORE
+> +	depends on USB
+> +	help
+> +	  This enables support for the Nuvoton USB device NCT6694, which shares
+> +	  peripherals.
+> +	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
+> +	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
+> +	  PWM, and RTC.
+> +	  This driver provides core APIs to access the NCT6694 hardware
+> +	  monitoring and control features.
+> +	  Additional drivers must be enabled to utilize the specific
+> +	  functionalities of the device.
+> +
+>  config MFD_OCELOT
+>  	tristate "Microsemi Ocelot External Control Support"
+>  	depends on SPI_MASTER
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 5e5cc279af60..a96204d938fc 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
+>  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
+>  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
+>  
+> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
+> +
+>  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
+>  
+>  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
+> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
+> new file mode 100644
+> index 000000000000..82d378ee47ed
+> --- /dev/null
+> +++ b/drivers/mfd/nct6694.c
+> @@ -0,0 +1,386 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2025 Nuvoton Technology Corp.
+> + *
+> + * Nuvoton NCT6694 core driver using USB interface to provide
+> + * access to the NCT6694 hardware monitoring and control features.
+> + *
+> + * The NCT6694 is an integrated controller that provides GPIO, I2C,
+> + * CAN, WDT, HWMON and RTC management.
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nct6694.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +static const struct mfd_cell nct6694_devs[] = {
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> +
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
 
-Applied.
+Why have we gone back to this silly numbering scheme?
 
-Thanks,
-Guenter
+What happened to using IDA in the child driver?
+
+> +
+> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 0),
+> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 1),
+> +
+> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 0),
+> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 1),
+> +
+> +	MFD_CELL_NAME("nct6694-hwmon"),
+> +
+> +	MFD_CELL_NAME("nct6694-rtc"),
+> +};
+
+-- 
+Lee Jones [ÊùéÁêºÊñØ]
