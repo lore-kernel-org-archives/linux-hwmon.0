@@ -1,136 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B8D2BF3DF;
-	Thu, 12 Jun 2025 15:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B827429C339;
+	Thu, 12 Jun 2025 17:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749741801; cv=none; b=ubFsq8l3K9/SEBP/fqQvoC0QsSeKuX/nrLrT8XPTrNrxvfS0yJdt7XiwN6lMxMbKFICh9S17nx0przsl+U3wl8emRfCT7cGqmaYJBVJOIEQAXl+0nl4jqCDRBsf5yJePDPZdMidUT4wVhP+OsYgBkKV3nco5A4Zkex2VJvdhc2g=
+	t=1749749315; cv=none; b=NWj6aB3WUQS4pHQhuada4ZgqhFrwmchtl9wddKE5fdtIAUWySJw/kRu4E54LfkpmXJiBUsndfp7sQruTnz+rblpmc9irb2+knVQkDsO6vEWPg/k4teyLMo9medzxq+8sarHMxXCQz/3qfr8S3pdvXrTY2kFVdXE/8RQ5NNn1Kg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749741801; c=relaxed/simple;
-	bh=7+POKnao7dJbjl1goCWSf3SOuai5TxMCVJI0eCvMhl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNkO2JWjTzeqHm438qpva+KTCIUGy1joYCwlHdBWwYQXKIKxhGru2FUdgaC9J9jmTJ1J5m/+Eb9oaLMjw7rb8KunAoQzG9JiVUztZA4Wjn1mrwtyOdQH/5pKjFr/DCfwHLyJjwunRdFBkE/KoNYrjmFerj5JpAtgn9HFm6FaqhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBK70+8m; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749749315; c=relaxed/simple;
+	bh=PH8QKM2zIfjbs2XiWW6oY3idX+GiqDPjFhwl34h04vU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=juyhDxrr9qs3DYlwp5YXl4r0QYDF5ESbSgnnMyXWS429bqgSChrkAxDRaljQflNjtH0Qs6UgOnGv1Jr51KoJjPPLJdmdS6ZpGF2nc/8sYip9MPLOU+M/qBPP6j7nkFeAv5Zuo5O0+r/bNi/zjOhaILDpySCtV4rd0veoAPHFaEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RGhmqAoz; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBK70+8m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7476AC4CEEA;
-	Thu, 12 Jun 2025 15:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749741801;
-	bh=7+POKnao7dJbjl1goCWSf3SOuai5TxMCVJI0eCvMhl0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XBK70+8mAD6hUz34u1ynNTORuPkMNSYLirTEViOINENBZ5407zYk4HLRqeP17W/9B
-	 r2T/RngfGRyjBXFassi3AwAo//t5JSlaSdlpTbSuktY5YqTigeFGAe14UPRecFFGrZ
-	 h4ANsE8KM7zyJ+MYcjcoFhRZh1spF96TQOIJ6ll/bwZ63quYEUyuRF3RQZ0aFaWp5z
-	 B7wzht3/RTptjwaOhYWbWSbdiH1a41WZVhZ3YqtuyUzJgiZa6Xf8DoATPYsjAnkWyw
-	 GbRMD5Y3RQ3ktzKKHY9r4VFDpYLxoWpTAVt4wQDa4FF7eEXPjkrKK3xkJNquJNO65f
-	 rwCl5GmA+SldA==
-Date: Thu, 12 Jun 2025 16:23:13 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250612152313.GP381401@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com>
- <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RGhmqAoz"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2349f096605so16311285ad.3;
+        Thu, 12 Jun 2025 10:28:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749749313; x=1750354113; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Z1CAnDtsn56h094ipnFC5TjpsgKkprOu65PkgheDX4=;
+        b=RGhmqAozMiW1opD0dGXVtV4JWy6r0KxsewBFkiiWNWeNTUOgqgYazOoOCGi7JtFEgK
+         uULTg3NnfDBLn2+x1lPTpbjgiLFybH/gZL4pgd6BMim56FDn5kCHpbZslXaOgclSbRRR
+         +czxw0Cwun+K7UZygmydUqQ9PbGnN2qHjjmpQxStkRLt4+OA9SBYJ1BP4L/w3e9oJupG
+         PZvnA8PI/yJGfjy/ai0vyiz9nKwRqaNXUDIe37LPDJDYVAm0lMnXQa4FeXJt1GxVMYjY
+         82hDTRZkB3kwE6TXn9rTakZEnJUrUIFMfcWvtB6ReFnTOiSwAHfY2V/W2k+KZGiRVUtc
+         owAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749749313; x=1750354113;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Z1CAnDtsn56h094ipnFC5TjpsgKkprOu65PkgheDX4=;
+        b=JD11mBrQwpc4GKSQf0od/qdUFDxHCyFZr/MiTF2rQZFLcOaV5PFZ+Rht+h4TEDfxNL
+         jq3ftcAN+rzUhosuvL9a/Ym54uBD7bAHjQQpDcNhFCj1DevVe6FGO6S7kkYs68F9kUEK
+         2mr9GuGRq/xeZhmynqSOHJLqDPHDvq6Kz7zkuJS0qQtyZCO97KAujWMV3LYbhHWOMS+g
+         K/ybh6ocaj3WXS/BtbOkQQIaFvVXnKsMpRWCf0kL3RyX+mtHqDRK76WEQ4rbIba7zDAu
+         TEvskNEtFfR9tDWnxJH2vgDqfVGEleHWKH/FjuJ1y1taOt1ZpP2u8X+OxfRAHRQtktZV
+         gWGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQZFbpIumPAk+QqGjdBuJ4OupQGmHVFq6e5cRw4nO05tRytzmWq8cq3jdTcdQRBt5F3Rgs+hKn37K5Rkad@vger.kernel.org, AJvYcCXye6UtevbqAnRAi3TK7CDoeWh2kHDO+BpW21YB7NIuv+YO5Tti+VONaZwkfv5BAG/aX6BtOhIdb8yJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyujPraqScwX5v4bFH3nj8CE6hJ7hbY0pGk950gJwdBHSAPAMiy
+	MVNhRX6LLRbf0olLSOF7ngzf4me2AQ6zqKSVB9dMXnm1k72600VG/Hdv
+X-Gm-Gg: ASbGncvDclw0k3KxpDpeIfhcmnd13vQ11wc6Evq8BScPXJi9NCMwE2V5+V1fb2hd1ik
+	8r5h+PR0ghsUL54yZvQDyDyMWi4nOlR2SSZGrAiVmuTL9BFmh0m3YS/UbnXBlgjUFcrrnO2HS2j
+	sU0Nl90ReHyMvYJv/5eQNfjOT8p+yYchCbFV7QidJjrdxdnRln1gw/chIbWXaJE+efRvDhDWLST
+	bMt5FljBQoXSPKVvEDsgWGm1jQfrdlO/VezGj8Ac6ugGp6MhlLKjtcBZfWtIYAF43m4FoZglNmf
+	7ZFgKKe2iiryWyKI46pAxsN2gv+y9bln+lYbjMBhrxLtKVM+Hcf7M6fJL/zUqZwRZc3ciQb1uFg
+	LZQ+SU6lQ13EpNJKpGJQO
+X-Google-Smtp-Source: AGHT+IFIVXOyOM5DFIT9gmbEUNOHuQMUX2pMymqDTVsNqy3aJEAFqXUop0eA4qDVx2/oR9mypI1WqA==
+X-Received: by 2002:a17:902:d485:b0:234:e655:a632 with SMTP id d9443c01a7336-2365c576d27mr4057365ad.51.1749749313056;
+        Thu, 12 Jun 2025 10:28:33 -0700 (PDT)
+Received: from joaog-nb.corp.toradex.com ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fd6362e28sm1665891a12.66.2025.06.12.10.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jun 2025 10:28:32 -0700 (PDT)
+From: =?utf-8?q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <jpaulo.silvagoncalves@gmail.com>
+Subject: [PATCH v3 0/3] hwmon: (amc6821) Add cooling device support
+Date: Thu, 12 Jun 2025 14:28:07 -0300
+Message-Id: <20250612-b4-amc6821-cooling-device-support-v3-0-360681a7652c@toradex.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+X-B4-Tracking: v=1; b=H4sIACgOS2gC/42Nyw6CMBBFf4V07Zja8mhd+R+GRZlWmERo0yLBE
+ P7dSuLe5bnJPWdjyUVyiV2LjUW3UCI/ZZCnguFgpt4B2cxMcFHxmgvoSjAj1kpcAL1/0tSDzT9
+ 0kF4h+DgDctlxo7SWVcOyJ0T3oPVo3NvMA6XZx/eRXMR3/dnlH/ZFAIem1KVEpbQR9pZlxrr1j
+ H5k7b7vH2wpd3nUAAAA
+X-Change-ID: 20250602-b4-amc6821-cooling-device-support-c03b0a899357
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Farouk Bouabid <farouk.bouabid@cherry.de>, 
+ Quentin Schulz <quentin.schulz@cherry.de>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Jo=C3=A3o_Paulo_Gon=C3=A7alves?= <joao.goncalves@toradex.com>
+X-Mailer: b4 0.14.2
 
-On Thu, 12 Jun 2025, Ming Yu wrote:
+Add support for using the AMC6821 as a cooling device. The AMC6821
+registers with the thermal framework only if the `cooling-levels`
+property is present in the fan device tree child node. If this property
+is present, the driver assumes the fan will operate in open-loop, and
+the kernel will control it directly. In this case, the driver will
+change the AMC6821 mode to manual (software DCY) and set the initial PWM
+duty cycle to the maximum fan cooling state level as defined in the DT.
+It is worth mentioning that the cooling device is registered on the
+child fan node, not on the fan controller node. Existing behavior is
+unchanged, so the AMC6821 can still be used without the thermal
+framework (hwmon only).
 
-> Dear Lee,
-> 
-> Thank you for reviewing,
-> 
-> Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> >
-> ...
-> > > +static const struct mfd_cell nct6694_devs[] = {
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > +
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> >
-> > Why have we gone back to this silly numbering scheme?
-> >
-> > What happened to using IDA in the child driver?
-> >
-> 
-> In a previous version, I tried to maintain a static IDA in each
-> sub-driver. However, I didn’t consider the case where multiple NCT6694
-> devices are bound to the same driver — in that case, the IDs are not
-> fixed and become unusable for my purpose.
+Signed-off-by: João Paulo Gonçalves <joao.goncalves@toradex.com>
+---
+v3:
+- Fix using fan node after of_node_put() with scope based free
+- Add setting the pwm duty cycle to max fan cooling state level on
+  initialization
+v2: https://lore.kernel.org/lkml/20250603-b4-amc6821-cooling-device-support-v2-0-74943c889a2d@toradex.com/
+- Remove devm_action on release and call of_node_put() manually
+- Change of_pwm_polarity to store resulting pwm polarity on driver
+  private data
+v1: https://lore.kernel.org/lkml/20250530-b4-v1-amc6821-cooling-device-support-b4-v1-0-7bb98496c969@toradex.com/
 
-Not sure I understand.
+---
+João Paulo Gonçalves (3):
+      dt-bindings: hwmon: amc6821: Add cooling levels
+      hwmon: (amc6821) Move reading fan data from OF to a function
+      hwmon: (amc6821) Add cooling device support
 
-> I’ve since realized that using pdev->id avoids the need for cell->id,
-> so I reverted to the earlier approach.
-> 
-> That said, do you think it would be a better solution to manage all
-> the IDAs centrally within the driver? For example:
-> in nct6694.c
-> struct nct6694 {
->     struct device *dev;
-> 
->     struct ida gpio_ida;
->     struct ida i2c_ida;
->     struct ida can_ida;
->     struct ida wdt_ida;
-> };
-> 
-> static int nct6694_probe(struct platform_device *pdev)
-> {
->     ida_init(&nct6694->gpio_ida);
->     ...
-> }
-> 
-> in gpio-nct6694.c
-> static int nct6694_gpio_probe(struct platform_device *pdev)
-> {
->     id = ida_alloc(&nct6694->gpio_ida, GFP_KERNEL);
-> }
+ .../devicetree/bindings/hwmon/ti,amc6821.yaml      |   6 +
+ drivers/hwmon/amc6821.c                            | 130 +++++++++++++++++++--
+ 2 files changed, 127 insertions(+), 9 deletions(-)
+---
+base-commit: b43674a549ed17319cb08ede9e0909ff6198ea70
+change-id: 20250602-b4-amc6821-cooling-device-support-c03b0a899357
 
-No that would be way worse.
-
+Best regards,
 -- 
-Lee Jones [李琼斯]
+João Paulo Gonçalves <joao.goncalves@toradex.com>
+
