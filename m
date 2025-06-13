@@ -1,165 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AC3222593
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Jun 2025 21:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B8C13C9D4;
+	Fri, 13 Jun 2025 01:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749765066; cv=none; b=E2szkeV3ZDbDPs9YiIN7xno6P8NsCCQNMEyTgw1+Hcxg9m/WFQRy0ZawhRzEj58rDO2nUOdOPonBoihAghz8r5Z8cyVXNl8gG6ZVmQqj2gNHNGgPFfzoA17bhAKjaQ1Xt9oG9urTMccZKeVY2E2W83n0Az6N+UIMhUa0lbaihHs=
+	t=1749779711; cv=none; b=A0guletBgi5stjs8Goz+l/NeEMcFHH2fQf1WcUbSfPYs2iqeUL0fJDbv+Yj0//60B3smOfL+vLwJ8JLVkrcUlfV6/+qZCVh1YCq5yUD0CSFRNe/LcB5T5hksG6Gee2iU1G1bGlkuNLXKlvuQNILHCTV9mE6vzjq+UopInIrWJMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749765066; c=relaxed/simple;
-	bh=o1i4bVFJ7wEf7U3IHVKYRCzHejMjS6JF1x684oPE4J4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NO3e/EhELkNyGaPF1upWAlpDDm+KJLjvSDpHJdx1oDP5C3B8gbqd3efuXxLRLEQdv4jU92rJzDODTAzYfLdZUwSN52hQR0wwPqmEKK1WmTm7+Jke1/qxiPlWfiAN9w3Qc7VEaH2dWBwLLMGK3z60YQXDv84DGL6UcJc51jMgC2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=meEEfkh5; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1749779711; c=relaxed/simple;
+	bh=rCdKrK6gJ/e8YxnkxVovavsWLwaBZejD5B7IvnTP7CU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZzSpJQrQEIksb2KuqkcFpdcGaQ8fYC3JcjARSX9Kx9uZgAtSQGInPYe61Bpfx0ZH+/0gI9YO2kaFF7KyP19LeDFscoAs2C7uD9veGSIh/XFEUXRVW2sDv8vpEmHdcCivGFSQRAavsZIZAP37Ejj2hAobnMl4aK1wjE6qPsiKt5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LkuHUGsn; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="meEEfkh5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749765065; x=1781301065;
-  h=date:from:to:cc:subject:message-id;
-  bh=o1i4bVFJ7wEf7U3IHVKYRCzHejMjS6JF1x684oPE4J4=;
-  b=meEEfkh5DMtG4maHJVTTuXAQGQdjE+iymfX1SMAkfYJPJPcTqNWmGxKZ
-   EL80uV5x36RW+g8UcOdH9UuN27PtrrMows5LdgQc1K71xyr0Zu40Ny0tD
-   pDIoAPdAa2GUCL8UUd7e0sry6G9g76s81HjVNpHLOzDVAlbthqBUPd8tm
-   i1/RtoN2AEJ9Vo/bkli7hmADmInqKmqc16uWLqziwAXnB45JLk8OkrMnt
-   jIrKCX5YiB0czNAxQcabs3G3eone6Nl3kqyZSUHGfsEaslB+x69adoHMB
-   Z7k9hsKEZMYAGIp1YKuvH4204ajOYy6I58e/SCHT4gYrSCyiSoMOXhjXg
-   g==;
-X-CSE-ConnectionGUID: WSgSXpA9TCKqKIw/HM8svQ==
-X-CSE-MsgGUID: Wei/0Y8kRBitpMq2Cfwqdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="63318040"
-X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
-   d="scan'208";a="63318040"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 14:51:04 -0700
-X-CSE-ConnectionGUID: yz5eRJ49QHOLA8OXubrRbw==
-X-CSE-MsgGUID: /mLHwYzyQYGzexUwoQbu/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
-   d="scan'208";a="147628325"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 12 Jun 2025 14:51:04 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uPpp7-000BzO-0Y;
-	Thu, 12 Jun 2025 21:51:01 +0000
-Date: Fri, 13 Jun 2025 05:50:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 78ca360f14d17f2c4dd4f3a1c9381b1c3451f4c8
-Message-ID: <202506130508.AUxbyZsN-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LkuHUGsn"
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e75668006b9so1667178276.3;
+        Thu, 12 Jun 2025 18:55:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749779709; x=1750384509; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=06ajxX2TNlIzX7ObIwY55/RYqge10Y8dd0yMk2LIygM=;
+        b=LkuHUGsnuNNbElpKo5hjZtJ0ywzkBHQl/V+Xu5rHft9zp5lYDtTTRR2tR416zgfUJq
+         AengLFH0aqLj6XMqnHtKtFub1W6eoVztl6XaK9xxieUMC5Jel5d8BsFSGldgzUHlDy0x
+         tgM3EF2mf6nMWEUQYhfWxRV0ZAgu0UH0+8XqhUBoWopdegmwRoigc4kX+Gaity7UGk0Q
+         NI/AuTs4Aq+nTbvE08ExLIWFVDmkTRlRkvI+kWWOK1nBJiT5rtWrH8vOuVUgDvlMGiJ3
+         G9cZtqoQ7DN9zWjIwno5Gzb/0qE48/xPw2lDS7AcEofGG1ZpG5X4EnKcGFxpZ+zoHjdT
+         1IyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749779709; x=1750384509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=06ajxX2TNlIzX7ObIwY55/RYqge10Y8dd0yMk2LIygM=;
+        b=g5TJboYpoBFdTNjdvOlg6D9BEosDZa+kMGk+0weh3m8KBFfjgbRDexrseTSrq/YJuP
+         bVqGzw/Ccm6TnHdrW6jIIlOBL3FEt7fHDTpsT//ZDJxXlnKUx85J5TnsmklFQex9O5Nl
+         ygskgExRlSCPCud6fi1NHX/y27LIba7TShJ0AIWlWz7Zuzx4RfeOmiTaq7bGPXlOY2W5
+         YjIcPSypEAliJF6IDhfe2XDKGQnrHWeLA6kSaNaqzVTYDrPDwsqbNBRbvxO27H9Wkjyq
+         gc+aeLxhYofvyOdK0qrJLCoNFNwsKjbe4CVEkuaj0cPhBEOM5MfE7lW0NKTXLuZXS7T8
+         JOzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQLOmqQKHJ+9EI1kF97L2e5WCYd7inSlAYclvTnk+sYcaIFg75raKhBDaS3weVttoBc4M/6qyFjU7ieSFjsbA=@vger.kernel.org, AJvYcCUmGn23m1MuHcZcufJzQ+GozG5rDttA9VqTNdlGQwx9792ZlqDJ/XbDH+MVmr5eUkOgsJ2pwNgDUZZMEw==@vger.kernel.org, AJvYcCUq2c4nnt7c9h118ZPGgupSlt53cMNlGfnrEbQ8vJD5waTWp7BkwQ76AYFbkTHk2kM8tTMPHE6rPAPAXBE=@vger.kernel.org, AJvYcCVxotwpZxkFfJ52KVR47F6nMPxhgBW2I97fGDlrgyT+b9EhkVVcM+avoLX313ymiqlHkJ57PlQNrT8Z@vger.kernel.org, AJvYcCWULLaczJWmQ0VGuvSrmTURl1L6FpuTNVVfSAex+yHElLO66MuGuo0dr9KvMdmHM2yYuLhHl8uAKcdU@vger.kernel.org, AJvYcCWXICN2lZsX8GemsEGbRPIyXNHHKCH97hoCcB/bXJrrmQOs1V4RzrQ/ZuPpIl346V5ozUTjWMPmshbA@vger.kernel.org, AJvYcCWlRqmos7XvSnA/mXHQP1Bh9THEX4udSl6hcQhlg4GUVEysVYW9vYJQ3AEIdQ7RHJJZyzuS5rCSPYM=@vger.kernel.org, AJvYcCXRsnx3cgt0XLdUFIiTinzCj02kQxIuYwGUfSX5anMwCiYKlh0+77GB0rtTSvOGFxZnyXhaERMRKHH1/MEC@vger.kernel.org, AJvYcCXnmKu9YS2FSD+AJHKS/eBBT/bV4Vl9ia+Jff0x6No2IuFWg6kg/BtuW/38z+P4HwXjtD6brRAE@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBx/nR8qIp4wX7vRxcElysYkZJgIfGL20Ym6mXj1RRSOOF2+wq
+	DjdNfAjE0NMbo7TnQxrlTnSQo634ifChBWbUFUHEq0oGJZVx7gH4/acNotxCw9wDlTD55d1j+nZ
+	vHAENsqcw1+T7slFOGCSyl8alHiZd5+c=
+X-Gm-Gg: ASbGncvDtYIbonx1lW0WFv4PEKsOHMcm1Y15yTx58OooEwhBbCLFLuE3H3qbHX6qtF4
+	WQ6fJCq/pqH4t8UDu32yQc3EQnsnjjCB1oiTqbCJDa2odvKQ4gyvx/Wl82UpQobt5ZgPPD9QuBx
+	cMIhJJZsOP00B3hR3EpBBTikML+9waoDSanTSa+IY8YNoiaoOjJXwqXRrdJgFA4NZ/3UxTt8uRJ
+	a9p
+X-Google-Smtp-Source: AGHT+IEwtTMIgnW9cREhPY1t6TwmH5URxj0k01buMuGSLF64DQ1cKYYmL5ADjjBfdKxhOg26PxHaWRdo1T9o8K3ogLo=
+X-Received: by 2002:a05:6902:2846:b0:e80:cff4:5d1f with SMTP id
+ 3f1490d57ef6-e821c3260admr1744635276.33.1749779708953; Thu, 12 Jun 2025
+ 18:55:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com> <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+ <20250612152313.GP381401@google.com>
+In-Reply-To: <20250612152313.GP381401@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 13 Jun 2025 09:54:56 +0800
+X-Gm-Features: AX0GCFuXplAsq4dFkQn8MRsErKaATzN_Jh0hZNplX5q_WEulmLSOivK-kFfFh9w
+Message-ID: <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 78ca360f14d17f2c4dd4f3a1c9381b1c3451f4c8  hwmon: (ltc4282) avoid repeated register write
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=97=A5 =E9=
+=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:23=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Thu, 12 Jun 2025, Ming Yu wrote:
+>
+> > Dear Lee,
+> >
+> > Thank you for reviewing,
+> >
+> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=97=A5=
+ =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=93=EF=BC=9A
+> > >
+> > ...
+> > > > +static const struct mfd_cell nct6694_devs[] =3D {
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > > > +
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+> > >
+> > > Why have we gone back to this silly numbering scheme?
+> > >
+> > > What happened to using IDA in the child driver?
+> > >
+> >
+> > In a previous version, I tried to maintain a static IDA in each
+> > sub-driver. However, I didn=E2=80=99t consider the case where multiple =
+NCT6694
+> > devices are bound to the same driver =E2=80=94 in that case, the IDs ar=
+e not
+> > fixed and become unusable for my purpose.
+>
+> Not sure I understand.
+>
 
-elapsed time: 1448m
+As far as I know, if I maintain the IDA in the sub-drivers and use
+multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
+NCT6694 device bound to the GPIO driver will receive IDs 0~15.
+However, when a second NCT6694 device is connected to the system, it
+will receive IDs 16~31.
+Because of this behavior, I switched back to using platform_device->id.
 
-configs tested: 88
-configs skipped: 2
+> > I=E2=80=99ve since realized that using pdev->id avoids the need for cel=
+l->id,
+> > so I reverted to the earlier approach.
+> >
+> > That said, do you think it would be a better solution to manage all
+> > the IDAs centrally within the driver? For example:
+> > in nct6694.c
+> > struct nct6694 {
+> >     struct device *dev;
+> >
+> >     struct ida gpio_ida;
+> >     struct ida i2c_ida;
+> >     struct ida can_ida;
+> >     struct ida wdt_ida;
+> > };
+> >
+> > static int nct6694_probe(struct platform_device *pdev)
+> > {
+> >     ida_init(&nct6694->gpio_ida);
+> >     ...
+> > }
+> >
+> > in gpio-nct6694.c
+> > static int nct6694_gpio_probe(struct platform_device *pdev)
+> > {
+> >     id =3D ida_alloc(&nct6694->gpio_ida, GFP_KERNEL);
+> > }
+>
+> No that would be way worse.
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                   randconfig-001-20250612    gcc-8.5.0
-arc                   randconfig-002-20250612    gcc-10.5.0
-arm                               allnoconfig    clang-21
-arm                   randconfig-001-20250612    clang-21
-arm                   randconfig-002-20250612    clang-18
-arm                   randconfig-003-20250612    clang-21
-arm                   randconfig-004-20250612    clang-21
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250612    clang-19
-arm64                 randconfig-002-20250612    clang-17
-arm64                 randconfig-003-20250612    clang-21
-arm64                 randconfig-004-20250612    clang-18
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250612    gcc-11.5.0
-csky                  randconfig-002-20250612    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250612    clang-21
-hexagon               randconfig-002-20250612    clang-21
-i386        buildonly-randconfig-001-20250612    clang-20
-i386        buildonly-randconfig-002-20250612    gcc-12
-i386        buildonly-randconfig-003-20250612    clang-20
-i386        buildonly-randconfig-004-20250612    clang-20
-i386        buildonly-randconfig-005-20250612    clang-20
-i386        buildonly-randconfig-006-20250612    clang-20
-loongarch                        allmodconfig    gcc-15.1.0
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch             randconfig-001-20250612    gcc-13.3.0
-loongarch             randconfig-002-20250612    gcc-12.4.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250612    gcc-14.2.0
-nios2                 randconfig-002-20250612    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                randconfig-001-20250612    gcc-8.5.0
-parisc                randconfig-002-20250612    gcc-10.5.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc               randconfig-001-20250612    clang-21
-powerpc               randconfig-002-20250612    gcc-8.5.0
-powerpc               randconfig-003-20250612    clang-17
-powerpc64             randconfig-001-20250612    gcc-12.4.0
-powerpc64             randconfig-002-20250612    clang-21
-powerpc64             randconfig-003-20250612    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                 randconfig-001-20250612    clang-21
-riscv                 randconfig-002-20250612    clang-21
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                  randconfig-001-20250612    clang-21
-s390                  randconfig-002-20250612    gcc-11.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                    randconfig-001-20250612    gcc-12.4.0
-sh                    randconfig-002-20250612    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250612    gcc-14.3.0
-sparc                 randconfig-002-20250612    gcc-10.3.0
-sparc64               randconfig-001-20250612    gcc-13.3.0
-sparc64               randconfig-002-20250612    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250612    clang-17
-um                    randconfig-002-20250612    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20250612    gcc-12
-x86_64      buildonly-randconfig-002-20250612    clang-20
-x86_64      buildonly-randconfig-003-20250612    gcc-12
-x86_64      buildonly-randconfig-004-20250612    gcc-12
-x86_64      buildonly-randconfig-005-20250612    clang-20
-x86_64      buildonly-randconfig-006-20250612    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250612    gcc-10.5.0
-xtensa                randconfig-002-20250612    gcc-12.4.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Ming
