@@ -1,65 +1,65 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C0442A83;
-	Mon, 16 Jun 2025 22:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5307E1DB92A;
+	Mon, 16 Jun 2025 22:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750112230; cv=none; b=eFxxxUCeP/3ggsdhvEhiFRBGhyYqivhimh6icttDAcS2SMg7XjVVyO0JdxLz9aVDEC50Z4g6QHH4B0fz65sDQK3nm1xGn7awvR9YKOU5svDwGv/ztWL8MJBSUNv0WRiB8/vMrFP4QocAs9PFvcbq0QogsysDAJsOE0Wtw+6FL+w=
+	t=1750112256; cv=none; b=qlvsor/bf+MyQGQxQW/p3fAcYT4GdL/hHo0jkWb9qNvk5trCRMBMsGcye1MAm9j4WVEBYAi81baOvFRU903nQamgdS3MUt8iXUbp2PUq0f9caT28/+7Uge1WO8ctEPNw+nIpiFCCP7iqzgtljoqwei2/Z4/AG6nFwD6ttEytPns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750112230; c=relaxed/simple;
-	bh=ecdtu9IoLAFC6tSfFm4Ul1T4VV4iYp3PqZ1Bd6n427c=;
+	s=arc-20240116; t=1750112256; c=relaxed/simple;
+	bh=Eg7dbGWyyu2ply9sTpPNkidpw4vMgJloLSO8OXtQ3EU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AR9XiyZBBTWkodYP63jd0hBvqX+La9TmViJhBFtUu8SGbM7737ptPXLHPSY9OBSBY5lmLUtAZwHHGDhgd2oVg/hK4s04ool7fwT3PGBDiI6HTAcZ3oNYYYcZAMyjBtRlcQOo63oTqzy7aQkOXecuEP4IKxHlGWvjJLvJn3ihdlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VQDnASwo; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBbsaOpViElVZ0TAoI1aN9s+HqTwwRFqUcuSJv5KiOKL1PZeWF7pShX8AcUZCfiG+H+QwhIcNyPYrMCnuaQInpVpD7wgpJWncyKZvrKsO76jMNpdnaEt8nxoSgJVGbVTJ5Jkfq8qd5flU6AiMGFpHLlg8Xs66iGsVUTuj4OCTew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m+p5pLSR; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VQDnASwo"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b2f603b0f0dso4764504a12.1;
-        Mon, 16 Jun 2025 15:17:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m+p5pLSR"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2350fc2591dso46341385ad.1;
+        Mon, 16 Jun 2025 15:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750112228; x=1750717028; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750112254; x=1750717054; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L5Fh2IblBptlZ3vF3rnRWlEF+hFPfUIR1AemX0HSA00=;
-        b=VQDnASwoUUHt0TzvgpE8JBBjiUDtnxvN9uQ1oecUSjbWtqd+s6TXnpULfrR89drqOb
-         ENJ3NIYGGh5d2gS1jRU4vbfx5AISS1g1LYvcEdR1DWG/44WsIE4ASoYexx0lpZMkt/YN
-         Kxl8tQIwuJN22bV1xO6hKAFiOF0OQ7akfDw0h3D5v5A30RWoT8CC3EBGpYhWM1lqORIm
-         lHn0dlN+9hHt+YDQKYtrhkZRx0/c1HsvNck6mB/p8IpUvdqmGTHF6cYSYnvObvmuynJt
-         NFgxHuLkq86FMwQn5EFMYilnpfI1IzyVSLmpYw3FJA862e/VSRXpv973Irp/f7uKF5UM
-         sfjw==
+        bh=WhvWwZ+CXS9Vy+57dCKjZUbuHrxsNmbe1LsJ5SFrRhM=;
+        b=m+p5pLSR+0ZHTKHZnDxtHlUFbZo0hw4d0lr08Ty1jLN8hoGJj9o6dThgcn/RUOb7ox
+         h2NrjOyQcGrydzwUk09g9mzb6+RxjP1UwvF0PXnfAnlAWmXsYQpeeGFa66OeZ2BrNEow
+         8sxfIb1gsh/cDdgqLTIjR24qApA1u9xEUYLXfpJOMtzvDdyJ+PtRKwVZ7F1yY1Xnoesf
+         xARjjvch8oZfgReX5cbDVHPoDFbZ1vOZ5ByL0y/hijxzmqaeR8aROhtYpt/hKICOpe5y
+         udfQuyST3G32cPtdvYz/jAtQagO6Vc8oNdXx2ZvJkh+8KZQ3Oxd1DF9E3LxHhkYfM8xv
+         QHBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750112228; x=1750717028;
+        d=1e100.net; s=20230601; t=1750112254; x=1750717054;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L5Fh2IblBptlZ3vF3rnRWlEF+hFPfUIR1AemX0HSA00=;
-        b=nXiASCVqHS+2do95ebeBaJ4G2xdGRp1nv5Bucm8IyFriPZP+50vVkjSCBtmsDseXfT
-         UxJSZUvy2D7qfNsVezZruhgqyfimQNKeL6vLYBUMdVqTCfQUWJPJ+YE8F92JPipOOhJm
-         UrhC8kLL6oPuhzeFHuUlMBi1zWlEfDCVJEh45Cq+bwo6l3AFp+eSmw2D5laImpmlSDBq
-         3NBRSfh5dSJNgWD7Uv0gtqtEAFDcL+2OpaqvtXwdK/gKHIwdehCAZID18BQBcXqsfHSy
-         aRLf2QZ/tUe1tsF5Y71tMt+vC8j+amV2XEYv8zFmZlzy/pdeR4q675cbqMOjTdeSypM8
-         r7hw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDrUUOFxsY2Ei/fJjSmAYZ223TZVgwDc9hcH31E7bL8QLazYqXwuU9/zSDHk5YaQYVlmdwkeHbLvjQtw==@vger.kernel.org, AJvYcCWmS30Az18X/22ymzEVHNtd74kngwWv3FVcGnS4EMnBl4VLTAO6EIFRX4qymUau20rlk6ty9/sjmpAHxf/a@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTgat1zrE1T4N388tDGtQCmpAgudtdq8UERyLZsO4dEmjo/57A
-	95erEzYxFqb51bZnDzIIvTDcIiNO2Oc2IlcKHM8YzJ9X3GszwrdgFmwwAw6yPA==
-X-Gm-Gg: ASbGnctfofKj2g3QC8ihbRIZ7IDFq4ZfRUvxmemGpvKgpfdUNQl21dmVMb7zvgXSF3A
-	DRJUbjf2pFQzS/lfeghxdL2aMfGISUn5MTN6Oe32ualURH4DMMouGCgSTP74WR6sAR41OjyQOtL
-	BrSDi9INw9Rous6qfYHQYsygxRtEMcTdmp07CKsdu/x/GDoiJ8EaKCJqysCB52MUebC1zXmiJGi
-	3Nviu/I+zkrHytAZUctD3PKyoIphKwB7KY9vNf3se0JToiCfaFULgsRAIfrhZV868BYZI5zn/zT
-	3xwmdcd3kE1H4ynj3wwALfZn0eICLkI8UgPBJL4wu8vGXQwdaItWnnHzRbGtUFi+EJRoMlo0bLo
-	7+ijrZ+4KEQ==
-X-Google-Smtp-Source: AGHT+IH0R/kwqrtGK7vSfYsjfazrkbGVD0Jb0vrp0a0cSzfE6EUdfWb215kTnNr1aWjA7NvqBBDnog==
-X-Received: by 2002:a17:90b:39c5:b0:312:1ac5:c7c7 with SMTP id 98e67ed59e1d1-313f1ca7855mr17965599a91.2.1750112228057;
-        Mon, 16 Jun 2025 15:17:08 -0700 (PDT)
+        bh=WhvWwZ+CXS9Vy+57dCKjZUbuHrxsNmbe1LsJ5SFrRhM=;
+        b=PasNpv1gJJxbPx888VDInRvLBNgP1bcQPKrJF8Zxwi+i2rghtZ6rSkM1FG7v7dITNR
+         fq5z9CI91rpoFvSIgxfIEJiVJselWjyBgayhbyPdvn1L9sMzCmIvYsJsj8+64KkVuEwb
+         OsZi/tmJmciTk/sTP3yb2XuYS3EIF38MqUwemofdgc4pCfCx89SM83ImvZ5hWc/CtM2N
+         GuPffKeQ+opPfPui/v/Pn10mHUQsklStN391LpvPworu1ShBlg9IJiIkauUmFgTM6f0U
+         DhveDkNKjHdYMN2Gc0QIO1UEVdpES+49p1KV46EylD2phqg0xiO8Cqt8y/9mkMKgqs5Q
+         IM/w==
+X-Forwarded-Encrypted: i=1; AJvYcCXdRM+rQA7cOaO+uy61YVOvc+JrBEjcHXefE/qaUTeV4c4z2TczOt6goYxzglxBeLph9DcKJ6nzMOaByA==@vger.kernel.org, AJvYcCXhQI32WXb1R+yRbj//0p4lZYUKxYjIeiGPX+syIRC2VE+wm2h7eqAETU/SkuGJOnhO0i+D6LJCD6B/QFRk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy07Wetc9gRGpRJrLZ4Zmz1tt/JPA1uX83xnL50y9tIcCepLIMv
+	MzrLD4fIGiHpvv/cMXHVzFvAs8q2riq3qxFYTAG7U9iVZLO7Cxv/+Xq5
+X-Gm-Gg: ASbGncumJ3QEY9MBxy6g+mNxLx1VMIUp9+vwc65j1uo1p+fgOQXt8CU94JsaNCzqMPX
+	W5t6tzU5SSO465pP1SC1tmDz/K1RhzqVrZ1dZmruR4AV7ig/UyXyQfnzMRRrL89Iycma+eZ5olf
+	Wrx2QdsklzK9ZR9jDBW5zNYyg1AiWJJFR4Y6ZBUETEkq33l4LJ8dE960KVTq0Yft9Bd5R06YshE
+	oDWZ0ywgn5w7XJMKFYFpzXei3nfdf8JF8a4dr8AuYaCeahNmORynov87s5ICawj4weN8fiZaC4h
+	+t4V4UGSG0mXOfp9figbbr7Wm0c1H5lbeugGPCsdw2DBpDul8RvvI0Ctuc0gSSQZXGeZ/CW+r6Y
+	=
+X-Google-Smtp-Source: AGHT+IHEzMQYGh+Rxc5+so+AO6P4UVnGiCrhcLAB9kdOjmCCaTuKyssep3cuf68orx+kxzfxw5HgOg==
+X-Received: by 2002:a17:902:cec2:b0:235:e5aa:f51a with SMTP id d9443c01a7336-23691c138bbmr3644555ad.7.1750112254563;
+        Mon, 16 Jun 2025 15:17:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c19d1122sm9229246a91.13.2025.06.16.15.17.07
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1643ebdsm7498669a12.26.2025.06.16.15.17.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jun 2025 15:17:07 -0700 (PDT)
+        Mon, 16 Jun 2025 15:17:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 16 Jun 2025 15:17:06 -0700
+Date: Mon, 16 Jun 2025 15:17:33 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: florin.leotescu@oss.nxp.com
 Cc: Jean Delvare <jdelvare@suse.com>,
@@ -68,11 +68,11 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	viorel.suman@nxp.com, carlos.song@nxp.com, daniel.baluta@nxp.com,
 	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
 	festevam@gmail.com
-Subject: Re: [PATCH 3/4] hwmon: emc2305: Enable PWM polarity and output
- configuration
-Message-ID: <57210f02-ab4b-4bcc-87a6-7a41a239b569@roeck-us.net>
+Subject: Re: [PATCH 4/4] hwmon: emc2305: Set initial PWM minimum value during
+ probe based on thermal state
+Message-ID: <c43f5318-2158-4f7f-b8c7-d4609dbab41a@roeck-us.net>
 References: <20250603113125.3175103-1-florin.leotescu@oss.nxp.com>
- <20250603113125.3175103-4-florin.leotescu@oss.nxp.com>
+ <20250603113125.3175103-5-florin.leotescu@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,13 +81,15 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250603113125.3175103-4-florin.leotescu@oss.nxp.com>
+In-Reply-To: <20250603113125.3175103-5-florin.leotescu@oss.nxp.com>
 
-On Tue, Jun 03, 2025 at 02:31:24PM +0300, florin.leotescu@oss.nxp.com wrote:
+On Tue, Jun 03, 2025 at 02:31:25PM +0300, florin.leotescu@oss.nxp.com wrote:
 > From: Florin Leotescu <florin.leotescu@nxp.com>
 > 
-> Enable configuration of PWM polarity and PWM output config
-> based Device Tree properties.
+> Prevent the PWM value from being set to minimum when thermal zone
+> temperature exceeds any trip point during driver probe. Otherwise, the
+> PWM fan speed will remains at minimum speed and not respond to
+> temperature changes.
 > 
 > Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
 
