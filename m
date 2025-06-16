@@ -1,67 +1,67 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010A8292B3A;
-	Mon, 16 Jun 2025 12:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1889E27380B;
+	Mon, 16 Jun 2025 13:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750078798; cv=none; b=h3A81V4+0VWcZlNEt+N2K4/bhXjHcFTtbj82PiB2Um7U2hfgStY637RkwswrDVetDQmQpwSMw6d2aR0r4TnKPNS6NuEwotiCk8lCQyXsFXihhiECCbsgVPK4cgvmJn6A22IuQiciaOH9OsnuVW6Ae5R91jBZbIxY8YvlnzzA2tc=
+	t=1750078843; cv=none; b=Qb8yWTfUi5CDKaWw0ttlsA6UtkT7Ar/YMr8p/DQ8ilfJqNz/qdtVBmtIKpW5ll3NIEmstb28PgFGMIwAx7TpE5ecrSl9Bd5OD3XqfL129ordw6sxNoV2g9PA7ATICwYBLLzkvpIEquy2f4fL6k4EjXSqWUlN6ZQ24f96zX6OTfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750078798; c=relaxed/simple;
-	bh=azXkGLujEcM8p9tFvJASu5yNWqbKO8jdKB5FTpSa5nU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BkeuHx3ueNAbrI/T5Ziz5BM0royTtGC6JhkeDG18d+WomTDFgZu4WnAFeVWniTEOcQx3T3yMDKrtjOQ/LWoBp/ELrib0tUdxvqzTFkUrFH8mB/Ys/qwbxxusv8zcd7+SqkIpRMLeEPH3pqbr1oxsxUHMoch3I0ht7uI55YUIBWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1IB1hjX; arc=none smtp.client-ip=209.85.216.47
+	s=arc-20240116; t=1750078843; c=relaxed/simple;
+	bh=AbFbpewLJ6OKNgF1h6DDvcr2+11XVpsz/pVZTtRpxjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Dt9I/bs3r8+jshgTzdLhGtvyz/pLKW2n2hIAuukm+y5yyaD/3lRlcLkifNrRPMaLMp7Shmq24xyFTdS7mUz3fg0eLy85jp8pf1ioWeHF5FOlFM/GacRPC2PzteL08upMjnO+A+LUGla0+3QAJWOAMwvN/sPYs3srAXOPuvjEQfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cpHZ9FAf; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1IB1hjX"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-311e46d38ddso3956786a91.0;
-        Mon, 16 Jun 2025 05:59:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cpHZ9FAf"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-408fa4be483so2667519b6e.0;
+        Mon, 16 Jun 2025 06:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750078796; x=1750683596; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1NKZCgqJI+Fhm0RriV4E/Lv8oSm/XQzalPIr9Js8t7c=;
-        b=c1IB1hjXSmQwy7kQwZyU112NzDU1c+mdOP66Fn5Jd2hWkKtIEcWl2o2uF4BCV5oOdx
-         49Ht5X/LXzF+xF9Dib7cWg14xGeoUwcSeYiEImMSg/aZ480K9TP2TLF8CfewicK0zoxD
-         UkMS5/w+8kWsLDMxrtVaXA72xL0RljihsqadWCmH9EJ6zQXs08gFk4NJpsWh9g1/9YS9
-         p4LMHOzdjjGS+EZjSBCCu/N/IAAaSjBglGIipyqLVq42KLUokaHaTjOnxMN0pbm/3hsO
-         15m/OAit3lpAM1FxkLjf/NpDFSIqiaDHagtK52elHOPlh9mH8tzLdzIzCZutWnBgNUYw
-         Gdxw==
+        d=gmail.com; s=20230601; t=1750078840; x=1750683640; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=12AnQWXgbV7Rc7RDNj8IPWL57rXyUy2QtTACQSRQdog=;
+        b=cpHZ9FAfdAuaTEWRQj+LNb+aL0gTRW2zgxtzn8YUHZMV/+EJiHC4D1yleXHUqqeqwP
+         x/6825dn5xFGUgeB2imvuuCNyQd5gmhWIJ+M7HnD8q8rhRPAlNP1ZKiM08XzrCEWQuW5
+         tEbhIjk4Kk7nu7E++P4PLkmmB5Z+VfU0WZShSmrPg4mRfhgEGr0iM74W/J2lbLoQDMN4
+         Bs05tnGgZOmYj/pDMXOsRJbLgl6a5TRdyR49kP10ShSHiR6k+D4lMFh3UOldk8s3fCEo
+         Gs8wcFcEzbSKozeIN1HVcLaBKw6Nzzkh5nlsjpZiqiubMOiDrAwP2r5UsA1ovgLsxYk2
+         KCLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750078796; x=1750683596;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1750078840; x=1750683640;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1NKZCgqJI+Fhm0RriV4E/Lv8oSm/XQzalPIr9Js8t7c=;
-        b=vICsuIfIrFCdPwgmH0PnsOH19XEh8EFeESCzpgiR1Lgm3+5Y8fqZCSgx0B9HShL4Ow
-         kXI3xSEvdQ2R3dq6LQEyKLnIGKxb75ZXst22egDdaOp6imEukeiGlYMkK/XDdqqEB38Q
-         Hw+Nq72vbfj7ICVb1POxfw8V/RX0a6vR0uE+4WSlOy5VLkVJQuBErvjDWYnsvw9mazgb
-         BiPwn2knKRPPY4Gq07t2dlgUQjtAM9L8FC16ZKPzYv8bjXYaa1efa59PW5FAMTQCdhJE
-         8nRzyDJR7rJMkiTeBLiAnNcA0ir7nCe+j+l+vztWM6GkahVlYAzk8e3CsnJzaGCWlnBv
-         D50A==
-X-Forwarded-Encrypted: i=1; AJvYcCXcY5627pAe1mEA/rhzEv9yU1FVzCtQQmZWHRhTSYRZa+G1K/RR5B7Ua1Phlbj0mtt3+d+hjlVYhL9Ww3qS@vger.kernel.org, AJvYcCXjROJ8u7DM40/xZjzojdDmcwrnVo7loaXpLEICSWrxAPL+1wLljMTYq7G4zhvIKufitYyNDap/Pnq/Vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXwOh65GK0xUa5ZR0n9Ofg3a6JSGzARP70jdpqVHhsX52IYTS2
-	TgyXYivRwfc8FybwBBg9z9oWJ5A3ncLn2W5NdFCAZDKA/cuuvG8bfyNMfny2PA==
-X-Gm-Gg: ASbGncs93zNW2ielprdxwj8oQTBwiDSTMxVaapvysdDZSVq2cZcIDCwe5znOzHaWXES
-	O0lQ4/LF9RXQ1MQJTI4sefiORKnpips2/6oU5M3PpEBHzIiiqC66vnaIxu80XMEmoA0YzfTxiUW
-	9aAU+6t7ebtp14/IeJrilakH8cogFeXuWEmGLnipDUedUQ7rMsTbl9OADeKPeeGLU+9vFawQjH7
-	z9DBnFNkdTmTQmhkm8QP1CNni7m8ukOckSly730/fdo9UPwxtsMW9zeFF7xIPSw7o/kGiQaeP5r
-	JFgP/W/S21bixK+CL+7MohrTgKkIT3fK5nqBtyV2NK+C53mnRFF05JP4DLSR4asptS17OPFCU9f
-	6Tk5gTtdHOUIyvXatbI/whHlThlIqPv4otjo=
-X-Google-Smtp-Source: AGHT+IFh1PI8kIXBm+Qvyrboq5xS/gbU+TeRM7OmNfUaUn1DATftPe1r/wy6ZxEMJDWb1rgSypzFvA==
-X-Received: by 2002:a17:90b:4c8d:b0:2ee:d371:3227 with SMTP id 98e67ed59e1d1-313f1d580e2mr16370671a91.17.1750078796214;
-        Mon, 16 Jun 2025 05:59:56 -0700 (PDT)
+        bh=12AnQWXgbV7Rc7RDNj8IPWL57rXyUy2QtTACQSRQdog=;
+        b=ZgBnhEh06/NNnZTS1BONHDpL3royE4mdnF7mQ85+nsB+WUOMMsL40A5RWEABMz1gdE
+         JN2HxIU7i+1hV/xx+FZRBMVwQadYLfsijN/6mZVuYENn5RiO0IOYSOJiB75VGKj0dK+X
+         03wpPqpaQ021T7bE04rzVkpQedm8r4P2ObLMjB9a27mQowNkNi4ugYLh01DaSgj3egWR
+         t2VPBscwQCBnAJ2vPAUeH5JvC6pV/hXzV/9tBsnQkU1G5GcigTeVmg11ZY93ljIb65Zm
+         Hs0AgHqyFqsQAyhOGtgYXWY2UunAYkBaYLOf9aIC5PLA8qr4WU4M2d0olOllKcXRodq7
+         qHTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX9FF6XS5mZTGoOIgTxZ/zWiEdbPJ4Q3TB2SeRghIvHvhqcbln/1mysneHDoomr2+/Qbp0UFKlfIPJy+sS+@vger.kernel.org, AJvYcCXiq5Wcj9c8Q4s0aWlkOXm/JNc/gABUZAp04zd/Ln6zymmy8UQwvbVOz1+5C8ksi8nkHxPaT1r2oG17AA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSc03wdi4rGT4OGIlF1UaaZo7WE3W5iouiaR1BjQj0nSo4NGAH
+	RLqoIpXz03OQsD4D0E0jWAPc9fGZG7ZfhMq4DUMATthGCazJY61Wxh2DvJk5eg==
+X-Gm-Gg: ASbGncuzbgUEAFiVeBgVhqRAuAODMd6AWhIHGIBbi/1BmtN6M3RQpR3mhi+kkKdfo85
+	5SiThIbMemvj6X56Iwwe/cEsBjv1AV9m8nWTgJDYRqY+2nCRZs2+0KixGSv9OHHVO60VNK1jbKr
+	FLnUY595tnsaGb2D/geiOp0YZh+tmfquYRgtp5Bb9AjC04sxk7EN8cBvsg37NLAxGKFGgXks3YC
+	vTGamvNYZgO9TQ8XFbdzcVPHa0Wr32TFt4faM8IXkbBInUp9cUShXAmqDGx+93pAjAGQsyOLDFo
+	8nJ2hmekMp+KVDGevhPjfKxUZRL2DuGX4C5hsnODQJO1SpfH0HzlfSkUWEz4IZOZcEoTfXhdI0x
+	7AXvV+69OjvNixURmP0zXKJsBY7tL9HUf3ro=
+X-Google-Smtp-Source: AGHT+IGnT2gEGzTVK/Rzqk/HJtn2HVuBGfgJdTiCwV7h7ilvANcaWfvD+9AWy3TyVLHHWD8J7V4LZA==
+X-Received: by 2002:a05:6a21:4d81:b0:1f5:769a:a4bf with SMTP id adf61e73a8af0-21fbd588862mr15876834637.36.1750078826374;
+        Mon, 16 Jun 2025 06:00:26 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313c1bca4c7sm8510574a91.3.2025.06.16.05.59.54
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b2fe1680eeasm6797958a12.46.2025.06.16.06.00.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 05:59:55 -0700 (PDT)
+        Mon, 16 Jun 2025 06:00:25 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5f774072-9d85-41d1-acf0-cb95450a16fb@roeck-us.net>
-Date: Mon, 16 Jun 2025 05:59:54 -0700
+Message-ID: <454245c8-ce59-4c87-9d92-4a924f83aa1f@roeck-us.net>
+Date: Mon, 16 Jun 2025 06:00:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,6 +70,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/1] hwmon: (isl28022) Fix current reading calculation
+From: Guenter Roeck <linux@roeck-us.net>
 To: Geert Uytterhoeven <geert@linux-m68k.org>,
  Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
 Cc: patrick@stwcx.xyz, =?UTF-8?Q?Carsten_Spie=C3=9F?=
@@ -78,8 +79,8 @@ Cc: patrick@stwcx.xyz, =?UTF-8?Q?Carsten_Spie=C3=9F?=
 References: <20250519084055.3787-1-yikai.tsai.wiwynn@gmail.com>
  <20250519084055.3787-2-yikai.tsai.wiwynn@gmail.com>
  <CAMuHMdVX0risng0cgUp7uOycv2wUNsZ3SgCX8sq=14j6NXjNBw@mail.gmail.com>
+ <5f774072-9d85-41d1-acf0-cb95450a16fb@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -123,55 +124,60 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAMuHMdVX0risng0cgUp7uOycv2wUNsZ3SgCX8sq=14j6NXjNBw@mail.gmail.com>
+In-Reply-To: <5f774072-9d85-41d1-acf0-cb95450a16fb@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/10/25 05:27, Geert Uytterhoeven wrote:
-> Hi Yikai,
-> 
-> On Mon, 19 May 2025 at 10:48, Yikai Tsai <yikai.tsai.wiwynn@gmail.com> wrote:
->> According to the ISL28022 datasheet, bit15 of the current register is
->> representing -32768. Fix the calculation to properly handle this bit,
->> ensuring correct measurements for negative values.
+On 6/16/25 05:59, Guenter Roeck wrote:
+> On 6/10/25 05:27, Geert Uytterhoeven wrote:
+>> Hi Yikai,
 >>
->> Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
-> 
-> 
->> --- a/drivers/hwmon/isl28022.c
->> +++ b/drivers/hwmon/isl28022.c
->> @@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
->>          struct isl28022_data *data = dev_get_drvdata(dev);
->>          unsigned int regval;
->>          int err;
->> +       u16 sign_bit;
+>> On Mon, 19 May 2025 at 10:48, Yikai Tsai <yikai.tsai.wiwynn@gmail.com> wrote:
+>>> According to the ISL28022 datasheet, bit15 of the current register is
+>>> representing -32768. Fix the calculation to properly handle this bit,
+>>> ensuring correct measurements for negative values.
+>>>
+>>> Signed-off-by: Yikai Tsai <yikai.tsai.wiwynn@gmail.com>
 >>
->>          switch (attr) {
->>          case hwmon_curr_input:
->> @@ -161,8 +162,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
->>                                    ISL28022_REG_CURRENT, &regval);
->>                  if (err < 0)
->>                          return err;
->> -               *val = ((long)regval * 1250L * (long)data->gain) /
->> -                       (long)data->shunt;
->> +               sign_bit = (regval >> 15) & 0x01;
->> +               *val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
->> +                       1250L * (long)data->gain) / (long)data->shunt;
+>>
+>>> --- a/drivers/hwmon/isl28022.c
+>>> +++ b/drivers/hwmon/isl28022.c
+>>> @@ -154,6 +154,7 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
+>>>          struct isl28022_data *data = dev_get_drvdata(dev);
+>>>          unsigned int regval;
+>>>          int err;
+>>> +       u16 sign_bit;
+>>>
+>>>          switch (attr) {
+>>>          case hwmon_curr_input:
+>>> @@ -161,8 +162,9 @@ static int isl28022_read_current(struct device *dev, u32 attr, long *val)
+>>>                                    ISL28022_REG_CURRENT, &regval);
+>>>                  if (err < 0)
+>>>                          return err;
+>>> -               *val = ((long)regval * 1250L * (long)data->gain) /
+>>> -                       (long)data->shunt;
+>>> +               sign_bit = (regval >> 15) & 0x01;
+>>> +               *val = (((long)(((u16)regval) & 0x7FFF) - (sign_bit * 32768)) *
+>>> +                       1250L * (long)data->gain) / (long)data->shunt;
+>>
+>> Isn't this complex operation to convert the 16-bit register value to
+>> a two-complement signed number equivalent to a simple cast?
+>>
+>>      (s16)regval
+>>
+>> isl28022_read_in() has similar code, but as the sign bit is not always
+>> the MSB, it needs two additional shifts:
+>>
+>>      ((s16)(regval << shift)) >> shift
+>>
 > 
-> Isn't this complex operation to convert the 16-bit register value to
-> a two-complement signed number equivalent to a simple cast?
-> 
->      (s16)regval
-> 
-> isl28022_read_in() has similar code, but as the sign bit is not always
-> the MSB, it needs two additional shifts:
-> 
->      ((s16)(regval << shift)) >> shift
-> 
+> Yes, I know. This could all be simplified using sign_extend32(), but I really
+> wanted to be able to apply it. If someone sends me a register map, maybe I can
 
-Yes, I know. This could all be simplified using sign_extend32(), but I really
-wanted to be able to apply it. If someone sends me a register map, maybe I can
-write unit test code and use it to simplify the driver.
+s/map/dump/
 
-Guenter
+> write unit test code and use it to simplify the driver.
+> 
+> Guenter
+> 
 
