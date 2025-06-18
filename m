@@ -1,105 +1,140 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A5727E7EF;
-	Wed, 18 Jun 2025 07:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FDC287511;
+	Wed, 18 Jun 2025 10:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750231733; cv=none; b=UiFNYZ+sDUxQID3htyUeZVCZ45K7Lr7WUEi6aiDgr4kJd6CtfUeX9QV7JxZa27LuCQmZrVmM4zvndMx5yspE92ClgBIGt5M237V4Pp5Er6mwJLEQlnEurn+zLzzosDo4aj4YXlJrAXO0ijekLVk6WChEE+IuQvbL2abaWaTJdq8=
+	t=1750243217; cv=none; b=E4655D7N1lvVZZPSpVYgr49vqorDEuYYHE4dENJt88IaZHzgLTXTFXqBfs37nTDy9KR1OgyiBYwmmtf6/A7bCzDRl83M4ysyqth/HM7Dri1okBjYJq8eVq1GAGLyGDbLJzHZ8BpcMNh1yAClIi+LrnwgMYvm3vN375lgqKQ3cBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750231733; c=relaxed/simple;
-	bh=PRE6FGSN1BjPHjBVI17kEB92rC2rRHP8mT7w0OsphZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hdNnFjmJbnO5lfb29GIPi4BZg2Oo+jo7r+MSYFCVqTMbP59t1itb8MheyOEyFfMdQjcVPC8PsD95wyJsIFKQzERGSwNnNj9UmdSOELLT3bMWSATyvZy0ij5ZWItzkCx6Yu+9kc5QZRCbJkY/Tz2C8Z0HGQE9AFFl+XG8RCIoM6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MiDFZHaT; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750243217; c=relaxed/simple;
+	bh=51wCRu03wox33FTIXViaidWRudb0sMds0JcAe+JfauA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UNu8vURWnBW8zCwYMUxI+rE+eAQ+1MF1KYddFGy8cQ18zqPhFncyG3qCf8XTMOo6x8soqIrF9wgd74TN/IG3fX5K3OliIdA2UdHwKfis1b9yp8tjSPou4Tqm4XLGL5ItiqlhbMhlzX4L/l9rPaRIHkStvAHwL1pho/hNs75XwiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SKYkjvFa; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MiDFZHaT"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2360ff7ac1bso46317725ad.3;
-        Wed, 18 Jun 2025 00:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750231731; x=1750836531; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1MuiMHWsnV5QufWLYV35SMTTVf4gaMpZv1rpKrIrTw=;
-        b=MiDFZHaTcMeQyzbCU46k1mGBVUnbzSKCChbmoqPLO7olV9PTXnxNKBJNhj+NfThChQ
-         HVUeA0xWMvUye4oZqQ3ND68JGr4TEetmHKj3Fi6eWNJbgiDAaUZ/i/AyyMvk3iPoC+B4
-         +B1pF7mcRj8iq25JzCeqe07b6vnMGiqqi1dLDPMoCKCjQW+Kh5whpPXa4kKXcUICYNjr
-         SanJW8Bj1+ohR20XTicsurePKpB3tDoj2Zmc5JVb0LpbROLJqnPAv/kq+2LMqT6VvQjL
-         Q2k2lL9ygOzHTtl0AixMslwlbsw+dgT9y+bsYUv7CKPn/w96QcFELOzRWs0ZlNZk+Spj
-         SPew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750231731; x=1750836531;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X1MuiMHWsnV5QufWLYV35SMTTVf4gaMpZv1rpKrIrTw=;
-        b=o5fpi2TL8HnjPPLta1QdImpyTmU55xG0aR0XRV1lVfqdX8kQ1u2qrUh3zvz6uUnYDi
-         ISh9QcQD6iRBDgZuSmUNU9r38VfxjhWkrlgZxhWLe1D857GGdMjBR2aiqdPSKZma07LO
-         tIf77DjJO5csQ2+MqPI0GwRGd077zB+2tEo4VLsXOCcAEQI4jwcL3xAM537aip2BAH2I
-         mEs+80OKTNQWsDpNmt6MpYL/YO83jfs1DDF4L75LOKvt7Hm63pdxsdB0zFjXEVWgHYcx
-         qGUYEy0s+K5R+AZE8dFimnQUsX4pBXu44Uk5NaWTTX5DyQRb5BY65Xu0acgmxzkWG1QN
-         F4hg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/ABIp5uAwib98Zl81dkX1PCIFnYlHFhz+i+QOgpT/sO4jxv0urSLyNGwgNyc2MrCE5NP/jgcZiImCJWM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5/ODiWljC0Bj3viP17QQ+6UL/jOZO+mhvJz3mJFdvWvevTxwG
-	QN2aBbHC/vFXfG/3vtwMPD1QHO4Yb+7erOn4HHT8D4DoQI8gGzhX6s3XwEYM4i+L4Pwj4g==
-X-Gm-Gg: ASbGncuD/XGebW4TgRAudzcfJt5jkicc5yglQfaDrvF7/mkhEo6yl8tUMT/6CCrB7sJ
-	/DM4ONZuYoep+Bobd+UD+oE/d287zMZ7z6zfCY2xSowECQp6GFyMMZEQBZ/fnIUrF6naiHFErhL
-	FPR6k6dHFOnZ5wN2wGzP/MyHbel+1HVubVFXlg0vQZaXqHW+yJmvToG8X81hJQzBhVB/Y7XGqGv
-	xkGaYx0yxX468/UXMeHvceGV6L5fQVyrmaWyb0L1ugIhFhC8A9785T/agnSYMS4JxpdoYrbPcZy
-	nmtJaFzPR1SBwEkYQQA8Ea2hIyy2WFGPi2U4xF7NeXr8ggTO2fTOPciRTV9wMqDWDwjEpmowYsj
-	q
-X-Google-Smtp-Source: AGHT+IEZqPp646+YAn+PQWp2CWdcGvqah4RLQRfACStnYbm3Uare7jzimo3ZkmAr0nB7Fi9GnVCzew==
-X-Received: by 2002:a17:903:228b:b0:234:a139:11ee with SMTP id d9443c01a7336-2366b144e21mr238950505ad.37.1750231731326;
-        Wed, 18 Jun 2025 00:28:51 -0700 (PDT)
-Received: from archlinux.lan ([2409:8a20:7f41:bed8:eed6:9106:2c6d:6a36])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2365deb87ddsm93173025ad.177.2025.06.18.00.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jun 2025 00:28:50 -0700 (PDT)
-From: dongfengweixiao@gmail.com
-To: jdelvare@suse.com,
-	linux@roeck-us.ne
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Dee.H.Y" <dongfengweixiao@gmail.com>
-Subject: [PATCH] hwmon: (corsair-cpro) Change dependency from HID to HIDRAW
-Date: Wed, 18 Jun 2025 15:28:45 +0800
-Message-ID: <20250618072845.233204-1-dongfengweixiao@gmail.com>
-X-Mailer: git-send-email 2.50.0
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SKYkjvFa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1750243204;
+	bh=51wCRu03wox33FTIXViaidWRudb0sMds0JcAe+JfauA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SKYkjvFabhz5v3eotyH+VR33rDo8Vn6qp1HQO9AA9JrLi0WHj7nvZDXYrgE6LXftK
+	 70KV5PoR5LINvJhOmMhRHxHEUqmMaYG/xizWBNR2bpgRdf862Z2Wi5ekUOCPGeBEbP
+	 BHnSv0SLZTUYqb3DZBCF37EAevVXAwhzLjwp73ko=
+Date: Wed, 18 Jun 2025 12:40:04 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Sung-Chi Li <lschyi@chromium.org>
+Cc: Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: (cros_ec) add PWM control over fans
+Message-ID: <179a21f9-c578-46e9-89dd-1b9e32889015@t-8ch.de>
+References: <20250512-cros_ec_fan-v3-0-a9f2b255f0cd@chromium.org>
+ <20250512-cros_ec_fan-v3-2-a9f2b255f0cd@chromium.org>
+ <ca2c10be-3dc4-45e1-b7fc-f8db29a1b6a0@t-8ch.de>
+ <aFJqLkkdI86V3fM9@google.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aFJqLkkdI86V3fM9@google.com>
 
-From: "Dee.H.Y" <dongfengweixiao@gmail.com>
+On 2025-06-18 15:26:38+0800, Sung-Chi Li wrote:
+> On Mon, May 12, 2025 at 09:30:39AM +0200, Thomas Weißschuh wrote:
+> 
+> Sorry for the late reply, I missed mails for this series.
+> 
+> > On 2025-05-12 15:11:56+0800, Sung-Chi Li via B4 Relay wrote:
+> > > From: Sung-Chi Li <lschyi@chromium.org>
+> > >  static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
+> > >  {
+> > >  	unsigned int offset;
+> > > @@ -73,7 +117,9 @@ static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
+> > >  static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> > >  			      u32 attr, int channel, long *val)
+> > >  {
+> > > +	u8 control_method;
+> > >  	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> > > +	u8 pwm_value;
+> > >  	int ret = -EOPNOTSUPP;
+> > >  	u16 speed;
+> > >  	u8 temp;
+> > 
+> > Ordering again.
+> > 
+> > This should be:
+> > 
+> > struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> > int ret = -EOPNOTSUPP;
+> > u8 control_method;
+> > u8 pwm_value;
+> > u16 speed;
+> > u8 temp;
+> > 
+> > or:
+> > 
+> > struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> > u8 control_method, pwm_value, temp;
+> > int ret = -EOPNOTSUPP;
+> > u16 speed;
+> > 
+> > <snip>
+> > 
+> 
+> Would you mind to share the sorting logic, so I do not bother you with checking
+> these styling issue? Initially, I thought the sorting is based on the variable
+> name, but after seeing your example (which I am appreciated), I am not sure how
+> the sorting works. Is it sorted along with the variable types (
+> "u8 control_method", "u16 speed", etc)? If that is the case, why "u16 speed" is
+> in the middle of the u8 group variables?
 
-This patch updates the dependency of the CORSAIR_CPRO driver in the
-hwmon subsystem. Previously, the driver relied on HID, but now it
-depends on HIDRAW. This change is aligned with the implementation
-in the `ccp_probe()` function, where `HID_CONNECT_HIDRAW` is used,
-indicating that the HID raw interface is required for proper operation.
+Welp, I really should have explained this, instead of assuming it to be
+obvious, sorry. The sorting is based on the length of the line, AKA
+the "reverse christmas tree".
 
-Signed-off-by: Dee.H.Y <dongfengweixiao@gmail.com>
----
- drivers/hwmon/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+While this is not a strict rule, the driver is already using it, so I'd
+like to stick to it. "Bonus points" for preserving preserving
+semantically useful ordering within the line-length based one.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 08a3c863f80a..3f128cacb486 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -475,7 +475,7 @@ config SENSORS_CHIPCAP2
- 
- config SENSORS_CORSAIR_CPRO
- 	tristate "Corsair Commander Pro controller"
--	depends on HID
-+	depends on HIDRAW
- 	help
- 	  If you say yes here you get support for the Corsair Commander Pro
- 	  controller.
--- 
-2.49.0
+> > > +static inline bool is_cros_ec_cmd_fulfilled(struct cros_ec_device *cros_ec,
+> > > +					    u16 cmd, u8 version)
+> > 
+> > "fulfilled" -> "available" or "present"
+> > 
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	ret = cros_ec_get_cmd_versions(cros_ec, cmd);
+> > > +	return ret >= 0 && (ret & EC_VER_MASK(version));
+> > > +}
+> > > +
+> > > +static bool cros_ec_hwmon_probe_fan_control_supported(struct cros_ec_device *cros_ec)
+> > > +{
+> > > +	if (!IS_ENABLED(CONFIG_PM))
+> > > +		return false;
+> > 
+> > Why? This should generally work fine without CONFIG_PM.
+> > Only the suspend/resume callbacks are unnecessary in that case.
+> > 
+> 
+> I treat fan control should include restoring the fan setting after resume, so
+> I think if no CONFIG_PM, the fan control is not complete. I am good with
+> removing this check, and if you have any thoughts after this explanation, please
+> share with me, otherwise I will remove it in the next series.
 
+As far as I understand, with CONFIG_PM=n the kernel won't be able to do
+any suspend/resume. So cros_ec_hwmon won't need to handle the
+suspend/resume case. However even then the regular UAPI for fan duty
+management is useful for users.
+
+
+Thomas
