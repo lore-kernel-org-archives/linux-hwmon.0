@@ -1,204 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729DD2F5302
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Jun 2025 21:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440CD1FFC48
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Jun 2025 07:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750197386; cv=none; b=kiNC430BpsX4GIU/SkmmKiwP9UUKNIPLwOZfsrYdsedMRNpxpTjHSNuvNMD9pYKmHgDz9vfdFjp75q9kXhfIHx5xZ5hvU8cCNikIrm4l4ncZeRvYzFSAXyg2zhkQ1Hvg6nDcYVyEXek6b+FbH8hCRU/39O31d1HBa3tj6qc7ugE=
+	t=1750231604; cv=none; b=DZMCtqDI//gAMx4N+OSyszvMrUPSROUnWzkdPBtjEspG6trL8Og/D17QA/UldMrOy3zUztd0NkEo/6ACeC+5aQDh72jtUiGlypEPzI/ihjdYVrkn9p1m1YJLUJLK/mCDOsRfGXVQGCpWSuEx4L2ETlRmLGRghFjnWSh+pF8ayNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750197386; c=relaxed/simple;
-	bh=/S+CLE+4ECFSCbimD116mqJfOGtOFLoR9WzP4g/qEkM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=IQbiB4rUPm2vPeo0uEnXgW9ycOrn4bU9CFyoQYa6ti+RoUfd2rlecooPvWVAI4yzB0sfcsBw+1M+H+8uor+7PP9wp3AoJT+mR4SfMdApXskrdEMAogqMeqKR6B4qtXu35A11Yq/8qjbB7qwutZRXZvZsdKRwCb+Zm7Wn7zu8h5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O8ypR4NQ; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1750231604; c=relaxed/simple;
+	bh=+KzNV4oOOMx38wmOYSChoYo8E3X2rejrMJIv37ZNqsk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6UJcXERrSbkZ0CsNuX6a77yKFRqFzZhcDwoPf2b1VvvDl3vZEDWU4iIf4ohFA51AA1LGrNqbMstDrbEbgYt1tcEGtz+57FTLWwlbshMB4ZnQE9i0QAk6DaL+6AUic22D/MZeDWFO9Zzoqln8IL6O9TD/BKZoMW77/27/mCh9eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=GDAIoRop; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O8ypR4NQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750197384; x=1781733384;
-  h=date:from:to:cc:subject:message-id;
-  bh=/S+CLE+4ECFSCbimD116mqJfOGtOFLoR9WzP4g/qEkM=;
-  b=O8ypR4NQKiOIEK8MVsJBu7HfxP+DTbNjuBVE43TUkdi4bKGo+iAJDcSB
-   Ea7/jUJaEudZEYog6hPSn0XV881+QoEQ38sbhPmDEQCdzjDz6Xkq6As4G
-   eZSCVNSTeNasWg1TbV5/yPxnBa8tha6pSW9pYjsspf1igQ/Dt14jXBJrr
-   Rfwmsu3FTQ9bhnqb3MuYpmDxAgt+u8M4wNXwInetYZpD8Aoy/GemXH58x
-   Hf7ceIO/I98B5wOBmlActm3WiCYl/UK6CRvGK/379q0QuursWz0NaIkLv
-   a3hKIN9n1favUKX91jkny+FrhJK9tA8SFnrtB2cCltpJ/NZK+kFjiEaLW
-   w==;
-X-CSE-ConnectionGUID: zo4K4PYWTvOBBRSKgPZLyA==
-X-CSE-MsgGUID: 0n1z6z/VSVuf7hqujTuluA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11467"; a="52374304"
-X-IronPort-AV: E=Sophos;i="6.16,244,1744095600"; 
-   d="scan'208";a="52374304"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2025 14:56:24 -0700
-X-CSE-ConnectionGUID: Z7GB0vEnR1W76jAKfhLclQ==
-X-CSE-MsgGUID: f2fwXOMgSqGzYlwUZsWmEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,244,1744095600"; 
-   d="scan'208";a="154326647"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 17 Jun 2025 14:56:23 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uReI0-000JAc-1R;
-	Tue, 17 Jun 2025 21:56:20 +0000
-Date: Wed, 18 Jun 2025 05:56:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- a41a9728941f7406a8035d0f19f45f8f3cf65b03
-Message-ID: <202506180553.KoI43AMW-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GDAIoRop"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-313154270bbso7166777a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Jun 2025 00:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1750231602; x=1750836402; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hM1UhMnYVhQUG4NEkfTsgeOJp+Ekml0puj+o8yaatbQ=;
+        b=GDAIoRopxPuU4liapuSYuXmAxZFhE+u/eQR9Kcpbz64AFGCXJFrYJoH4IWI8mOEw4X
+         0px/HVqYJ3ZgIaGOXm9rkOp5oR3SFArAKvE9IYo4zT4P3I6BwM8FwGw43TmS/PRKtQWA
+         OzE+0jB2KLmI+ZDDNS8Kf5H0mYlXuD5FCq9G4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750231602; x=1750836402;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hM1UhMnYVhQUG4NEkfTsgeOJp+Ekml0puj+o8yaatbQ=;
+        b=WFQfBUOvmhNr6gnVTKLU8rBXfBBhsmgaJkTVEvsQyuniYNcH20/eWZo+dBdkJzAZRj
+         gs08p3eukCcuzYwt8EPS5NOkfzN0lqeFYk/k1Wi289QPRqkqeKymGsEYvt6bz6B1bgLJ
+         2TYrZjqrnK/dF/MB6kOyxslBqfFTZvbKVmkqiJDdvsPINa+pDFw7HhvYJrxlG6nm9IKV
+         LirHdnkyYOew74jyGVsiwdRra7MxlTJeOf5hZFAsrnnLllfh2F1rYVlvMW2h4KFHxIW6
+         CKBb8JonP09A2W9ZK92rkrW4Ff8Wfh8gL2bccuHQLnnXJbub/vYKgqfNocyhoZG7iGqg
+         5n+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVvjSPVHwST3DkkOcM8TGjtRuPEdC+EytyV2Ae4L81qT1803Ko/IYJfXSpuIIlrS/R2etjEQcaUr0JHdQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFiEhu914IdFiwBAbOgVXE1wgRn/XProAMCwcja37erPN048CW
+	Ve/3W+ZWSqcQ6kmdT7z7KCtKKk6QavP5XngkoOrNz2BaAn+f/h5lulhE/hztF/GA6Q==
+X-Gm-Gg: ASbGncuh+Al7YOK8cl7B9kLEYhrGIxDx5FK6UpbZZDHL3fYAemsGFgUAKvpF+2ue545
+	k6+N0PYERX6m8RhT50JuYu2uMH9nN68EMdIdhUXxpS5Lhxz2aSFv7OHrKu4iscPoMdFmf/HIaQK
+	mL1xc/jrWZRSrSanpedHZyVKiFmUz9CZwe8MFePXiqRyEbQ+XhWiqUgh2kJtqhY9cBf3JxAsN9x
+	+67lzCEXQqO4lqTSqFYAr4dTKNE6hxoFYtpSuxVEC/070ywbNaIu/qGutx0FYXGkBK7HmRH7xKP
+	a03nMu5m1vZMR1JXSCn3mcvXrB0C2mQYbXQodQJnzVkyRiujLET/poaP+g0tZHDwsm4=
+X-Google-Smtp-Source: AGHT+IGmlF2R53aG5doFh6Ww/jme75FfKP3jQE6NmFAaZ7BCSPsq9zGRmtfVZXCsvQQaCwhcGykC3g==
+X-Received: by 2002:a17:90b:38c5:b0:311:da03:3437 with SMTP id 98e67ed59e1d1-313f1d05d1bmr23596610a91.27.1750231602456;
+        Wed, 18 Jun 2025 00:26:42 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:50f9:5771:52a9:eef9])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2369ebca745sm13850295ad.100.2025.06.18.00.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 00:26:42 -0700 (PDT)
+Date: Wed, 18 Jun 2025 15:26:38 +0800
+From: Sung-Chi Li <lschyi@chromium.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>, chrome-platform@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: (cros_ec) add PWM control over fans
+Message-ID: <aFJqLkkdI86V3fM9@google.com>
+References: <20250512-cros_ec_fan-v3-0-a9f2b255f0cd@chromium.org>
+ <20250512-cros_ec_fan-v3-2-a9f2b255f0cd@chromium.org>
+ <ca2c10be-3dc4-45e1-b7fc-f8db29a1b6a0@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca2c10be-3dc4-45e1-b7fc-f8db29a1b6a0@t-8ch.de>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: a41a9728941f7406a8035d0f19f45f8f3cf65b03  hwmon: emc2305: Set initial PWM minimum value during probe based on thermal state
+On Mon, May 12, 2025 at 09:30:39AM +0200, Thomas Weißschuh wrote:
 
-elapsed time: 1405m
+Sorry for the late reply, I missed mails for this series.
 
-configs tested: 127
-configs skipped: 6
+> On 2025-05-12 15:11:56+0800, Sung-Chi Li via B4 Relay wrote:
+> > From: Sung-Chi Li <lschyi@chromium.org>
+> >  static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
+> >  {
+> >  	unsigned int offset;
+> > @@ -73,7 +117,9 @@ static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
+> >  static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> >  			      u32 attr, int channel, long *val)
+> >  {
+> > +	u8 control_method;
+> >  	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> > +	u8 pwm_value;
+> >  	int ret = -EOPNOTSUPP;
+> >  	u16 speed;
+> >  	u8 temp;
+> 
+> Ordering again.
+> 
+> This should be:
+> 
+> struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> int ret = -EOPNOTSUPP;
+> u8 control_method;
+> u8 pwm_value;
+> u16 speed;
+> u8 temp;
+> 
+> or:
+> 
+> struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+> u8 control_method, pwm_value, temp;
+> int ret = -EOPNOTSUPP;
+> u16 speed;
+> 
+> <snip>
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Would you mind to share the sorting logic, so I do not bother you with checking
+these styling issue? Initially, I thought the sorting is based on the variable
+name, but after seeing your example (which I am appreciated), I am not sure how
+the sorting works. Is it sorted along with the variable types (
+"u8 control_method", "u16 speed", etc)? If that is the case, why "u16 speed" is
+in the middle of the u8 group variables?
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250617    gcc-11.5.0
-arc                   randconfig-002-20250617    gcc-15.1.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                              allyesconfig    gcc-15.1.0
-arm                         at91_dt_defconfig    clang-21
-arm                          gemini_defconfig    clang-20
-arm                          ixp4xx_defconfig    gcc-15.1.0
-arm                   randconfig-001-20250617    gcc-8.5.0
-arm                   randconfig-002-20250617    clang-21
-arm                   randconfig-003-20250617    clang-21
-arm                   randconfig-004-20250617    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250617    gcc-11.5.0
-arm64                 randconfig-002-20250617    clang-21
-arm64                 randconfig-003-20250617    gcc-8.5.0
-arm64                 randconfig-004-20250617    gcc-12.3.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250617    gcc-13.3.0
-csky                  randconfig-002-20250617    gcc-12.4.0
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250617    clang-21
-hexagon               randconfig-002-20250617    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250617    gcc-12
-i386        buildonly-randconfig-002-20250617    clang-20
-i386        buildonly-randconfig-003-20250617    gcc-12
-i386        buildonly-randconfig-004-20250617    gcc-12
-i386        buildonly-randconfig-005-20250617    gcc-12
-i386        buildonly-randconfig-006-20250617    gcc-12
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    gcc-15.1.0
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch             randconfig-001-20250617    gcc-15.1.0
-loongarch             randconfig-002-20250617    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                          rb532_defconfig    clang-18
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250617    gcc-10.5.0
-nios2                 randconfig-002-20250617    gcc-14.2.0
-openrisc                         alldefconfig    gcc-15.1.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250617    gcc-8.5.0
-parisc                randconfig-002-20250617    gcc-8.5.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-21
-powerpc                        cell_defconfig    gcc-15.1.0
-powerpc                 linkstation_defconfig    clang-20
-powerpc                      mgcoge_defconfig    clang-21
-powerpc                  mpc866_ads_defconfig    clang-21
-powerpc                      pasemi_defconfig    clang-21
-powerpc               randconfig-001-20250617    gcc-8.5.0
-powerpc               randconfig-002-20250617    clang-16
-powerpc               randconfig-003-20250617    gcc-12.4.0
-powerpc64             randconfig-001-20250617    gcc-14.3.0
-powerpc64             randconfig-002-20250617    clang-21
-powerpc64             randconfig-003-20250617    gcc-13.3.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-21
-riscv                 randconfig-001-20250617    clang-21
-riscv                 randconfig-002-20250617    gcc-10.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-21
-s390                  randconfig-001-20250617    clang-21
-s390                  randconfig-002-20250617    clang-20
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                             espt_defconfig    gcc-15.1.0
-sh                    randconfig-001-20250617    gcc-12.4.0
-sh                    randconfig-002-20250617    gcc-14.3.0
-sh                      rts7751r2d1_defconfig    gcc-15.1.0
-sh                           se7619_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20250617    gcc-12.4.0
-sparc                 randconfig-002-20250617    gcc-13.3.0
-sparc64                             defconfig    gcc-15.1.0
-sparc64               randconfig-001-20250617    gcc-15.1.0
-sparc64               randconfig-002-20250617    gcc-9.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250617    gcc-12
-um                    randconfig-002-20250617    clang-21
-um                           x86_64_defconfig    clang-21
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250617    clang-20
-x86_64      buildonly-randconfig-002-20250617    clang-20
-x86_64      buildonly-randconfig-003-20250617    gcc-11
-x86_64      buildonly-randconfig-004-20250617    gcc-12
-x86_64      buildonly-randconfig-005-20250617    gcc-12
-x86_64      buildonly-randconfig-006-20250617    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250617    gcc-10.5.0
-xtensa                randconfig-002-20250617    gcc-12.4.0
+> > +static inline bool is_cros_ec_cmd_fulfilled(struct cros_ec_device *cros_ec,
+> > +					    u16 cmd, u8 version)
+> 
+> "fulfilled" -> "available" or "present"
+> 
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = cros_ec_get_cmd_versions(cros_ec, cmd);
+> > +	return ret >= 0 && (ret & EC_VER_MASK(version));
+> > +}
+> > +
+> > +static bool cros_ec_hwmon_probe_fan_control_supported(struct cros_ec_device *cros_ec)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_PM))
+> > +		return false;
+> 
+> Why? This should generally work fine without CONFIG_PM.
+> Only the suspend/resume callbacks are unnecessary in that case.
+> 
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I treat fan control should include restoring the fan setting after resume, so
+I think if no CONFIG_PM, the fan control is not complete. I am good with
+removing this check, and if you have any thoughts after this explanation, please
+share with me, otherwise I will remove it in the next series.
+
