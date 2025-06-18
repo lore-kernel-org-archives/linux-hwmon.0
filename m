@@ -1,67 +1,67 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74594274FC2;
-	Wed, 18 Jun 2025 12:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CBD2EBB8F;
+	Wed, 18 Jun 2025 15:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750251214; cv=none; b=lUlqKvxIG0LAzLQKemIGR1cB+Qw253rPB4R7gxML5mqygyQepIN8JUxKM4mGijvhneq6pxKU6IWmOvztYcQ7t6WYwW3EQlKdLr79LZDTrSswV/Ex5A+akcze+Hkp5JvahcvYV62O+hIkweI1L4LCKV7Fpd+zx6j3WDb+jQ6rrN0=
+	t=1750261307; cv=none; b=Gu8SI3IIyN2eBSaP+IgeSqMKTzBoD5UFzwArU7DO/6jtEJjLVmllsilDVWBdx+MDAh32TfqI3j7Udc/xu/2TFHQDKpE2tBJ1hJCuBh2k65qdWeYijET2nHo+MV72S7UorfFQoBplAF7lr5hYVYdANjJPxMgSuaT6Td2nC94q5Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750251214; c=relaxed/simple;
-	bh=sacsAAKCzzZLnS5k6vyAPfe6zVW2ePNHSkbl5+yXPEQ=;
+	s=arc-20240116; t=1750261307; c=relaxed/simple;
+	bh=5fODnZj7QS2otvkNr8MgLNJBCJcLgbtpHvEVyhHXnfg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ct4sX9Mql8ME+dGkid6YfnVvKyhpuzdx/skIXDFKs1qlX81Y9oRdEC7lrx5VxnBpwPVYT23K34wVHTi8qiQJ2rSuvXizLTOOsth0RLr4zH1L3b+YlS5MleLFWt4E+wJNVkVxRwVBvSRmJ1nMDdgoaybZJv/u2wUDyNLliomDSqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZKVSj4UD; arc=none smtp.client-ip=209.85.210.179
+	 In-Reply-To:Content-Type; b=sk4OWMVd69zKaFJydmCmJM/1UwvUdW77xkyGGydDWn+pesTs23WLUOfvv/evqLYLrstXPIA51jrDf73bS0DlQzzLRfGxPrOtkZ1+qWzq2WiWsP2rMu+SnvtXrG714jwzfeA2HjlJnAnLAtDHM+uNwDtcKptlECui3KFSZslyz/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AekMSzAA; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZKVSj4UD"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-74801bc6dc5so623329b3a.1;
-        Wed, 18 Jun 2025 05:53:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AekMSzAA"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-748582445cfso4520455b3a.2;
+        Wed, 18 Jun 2025 08:41:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750251212; x=1750856012; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750261305; x=1750866105; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oRWjUaUzjwZIRs1Yr8RHoGlgQsJ2OGgk2bJ45eNBrT4=;
-        b=ZKVSj4UDSOZAAll0fsS0d2oBST9U50SKLrX8PvHZw055e5XT7sAzOSEpl5vRb/Y4eG
-         nnvYdSEwEkpMDLzHFOGiRJPC58B/hNeb0h2ydEWbqxDJakcMeiuw7rqQrFRzH2nYkcPf
-         bklvydVM/OkgqJMrGrnGB8FaZ6zIEOtqnuWls/FtXi7MR41kEFr9EQfxoIfNc/i0Letm
-         O1OWTrbOarcJRa8bfBQpCC9VzJdGRnCJzBt9SEWMQnTPad6XtkURbq4LJP2u+CCva2nX
-         AlK6sqXJCtVtdYIVcnQlXMU7Myzxz+SIN0iKCOhM6ltDc6coC9DbQSi7JXyv/2cy0/Sq
-         LY2A==
+        bh=6L7uwG3VBypmGYHkgMmKs2bnckC2OdTHHl2gTv6nxi8=;
+        b=AekMSzAAVbVbQOSRpTrjWsSk7QxBmrd/8EE6yCdQJknRo5Jvk8qJ/nz9Ui4zK0Rjhh
+         gLksiD9a0s0XtAJqoGfXYVFvfo1TFXXOdOYagUNpQNNFbFkI/REgUb4s6B8+VkPRu8iE
+         ez6t+6sxvsiQefRG5EUJiU5yId0t/z308Q//mC3yRJ/o7EbkFBG9pNRn6HBsmB8Me6fz
+         hZD87bVRR+b6bdGPL9hFTA07CRLKrkJ7+YoH/HjndEmWQk42ZPpNfbbjUXCtOlWhilzU
+         2K61Cv0hf4Oum/V+2Q0uX7mV14EH9Aw8qd8CsRJ/j6e7ucIVbzFl5aVqmatXYS3Htlh1
+         KU9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750251212; x=1750856012;
+        d=1e100.net; s=20230601; t=1750261305; x=1750866105;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oRWjUaUzjwZIRs1Yr8RHoGlgQsJ2OGgk2bJ45eNBrT4=;
-        b=vZCajMVqyjVLZGVZ+qBkeAb0hgxv3jAUnsOaYGfBNpcFGz/aRe65I5Qths1b+FV0v7
-         p6ERP5y/Dj5wZtba1LeQ6XbjJojOEVxkxbBk8mulm94JsDKlVasnB0P4XLve3etX/MO2
-         tFoAx9TdOalARTQEG6ehj97RxaCZfNCUDMkEcfJ4AX2Mfea8RjaJWDW8wrKHtaKKNQVl
-         brjc7BFdZZQ+2JvnQE9MRUmqa6NV43mLtovIU/F7m30n+Oo4VLKwAUeA2vN3JmdWOtcd
-         O+DQXvtiHlWnGM6/r1X8AgF35R1iL/W2rAp/L5fWzr0vk9HcpqlJbxvpStyUI+Dpq15J
-         3KYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGyUQ4b0iHUEPH7Icg7N8AxqlXrAf3eSwSwqXO206xVy4qWOtpyPUx5FLuI9Q/cmpTrW1Y0EUCxpM=@vger.kernel.org, AJvYcCVrwNv5eb7vLypaw664Zf3zl7dWgIAelBwW2DoUH9mZyRhEJL3z8PdokzZvoIEOQgYr9nZ9QB0bHxyFHnL5@vger.kernel.org, AJvYcCXx9/k+dDc/xK5yad6QPdYxvQ2+pUidRO+iWcUnkfmoYfbT9sF91Xy1WUdTv9KM2kXO3PyDl70mI9thWQU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJwt7xDdOvV26tYdhom6Kk1jlhluiZTWr4ed6HNNs8YVBkwW5C
-	XX9MZ0F78UGAUUfDfSMakhkDrUh5JQwWxnAhtqcyWhInbTXF7HK82/gR
-X-Gm-Gg: ASbGncs+E385Mc7fmma0sDiVWWSh2slYA2rEczszzs5mw+aahL2/nb+vkS/9BSzeMyi
-	y3wP6vJwMiHsCU8EyRCpIikjNB4wxm0SMGONdcpXM3mmlMZqUqJ2riMS88to3T0CAFBn6KpCPtO
-	8qVAoDQuxZzY8ZUJofQ9KYXEyzWiFS+GgG9n9JDzpB2FsF+hW1f5iLLWfnFXbhvsTOZ79036bmm
-	OIQBs67KtyKrwqzOeoo4V/Qg62bmoein+fxxr1IO5iB9Bjppw/GsEmixuSSR7jfJCteDDl/qMII
-	Dzrml5CMW/BL2KkYyhYS4J6d0T6gDaV3kDzXF/P7OsgRNiGjnH6K1QiBDKy+aDl0lBAFkIOTB/B
-	IOIySyrisX5oazxMJkX4kmEo6CxaNrJlLbM4=
-X-Google-Smtp-Source: AGHT+IERtSS9P9ZtjKKvs3VvAEIr7hcaMZrpGn27OIO94ymZWevJlHzD/jO84tw7z3Fi0w6Mflbb+Q==
-X-Received: by 2002:a05:6a00:180b:b0:740:6f6:7338 with SMTP id d2e1a72fcca58-748e6ec3dbemr3273988b3a.3.1750251211577;
-        Wed, 18 Jun 2025 05:53:31 -0700 (PDT)
+        bh=6L7uwG3VBypmGYHkgMmKs2bnckC2OdTHHl2gTv6nxi8=;
+        b=qgLIEa5OWgOha4FwhAPT8vFedtvnqb85vwf5Os9n2Sc05s2OkOxmihwFf7fKIXRaSe
+         Mcc+1P2OUCtvsbpfgaaqBfvBQpnb0s4A1ul4h4p1JC5ToDRZsf8l6gNRrbmjZRI4GmiP
+         sCsgma1XNUZbTJbqvWui3VugrtuI/+LlCv7vbmMkOpXG7hoo8ZBM9ez1bJ8SxN/E8VVy
+         wNOMQ6MYoTPHRekhpRUq0H1iCcnF3+BrsBs3fvwBTpWSqFRNJZcLdPHcXRg6dRjMcbfO
+         W3Sd2n7q/tiB7OWiNchvWZ4fsRIWAMrsoPqCNzYOWuiU/kSa5/2+fN/fce6aV4+63SYS
+         ppwA==
+X-Forwarded-Encrypted: i=1; AJvYcCWEOYZlraRzGnIv0j59gwNFqp+35qdmv+/zO5s5bcuU5g5lKYEazfx5Jf+kl3IxP+tnlDCAXwBrKOECIhg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxlkiy4KUjo5PuzrnUP0rcCErNeTu3fYOb8rWghkLZKtIFCRbrU
+	aqo9RH9jFYIVY+BB2/XA/eh2k+wtQ7i1ZHRWsPMvKi7G4JM8TRTCIIEbJ6qwJA==
+X-Gm-Gg: ASbGncsvAO3GUVFPrhpTylHS1kBsvkS6RihjGD2SPt+kKY7BqdZukft7n9Qm6DE7o4H
+	4fRv6jAlJ1UMr+ijxHJKusqbBvkQVocn45pazbXgQMB1NMn1RQ1dPo3sZllm3vYJjcr9ty0FTgB
+	dipFJ1dIvWwx4e0NXkY5OsXG99baeSvI44AJQJE9CivseYpMRcvEI3fsiDAmo7XS2f1lyh+oikO
+	kwP+tMb3xHCbSHOdpIfWZnfJDL5gefQbik+LxaGHyzJwOexlfsm1mhUb9Q22WxVHEQ72xU7C2bm
+	1ZW97VxzYwJ6X1xE6ht+R3Sgp+q2UXCgM1ZIWJg2mirKGu+Ohk5yOOERns4rfWHHSh7eRpXOd5f
+	MR3RPFmV5bqTMc6093AJ48U0n4TuttSpX9CQ=
+X-Google-Smtp-Source: AGHT+IGQyo4UfE08IhfAD4gv3entkgwSbHPGY5LZYuNg5wOXMVChIcNgsKcn+tJv2Ny6fHnEp9wAVw==
+X-Received: by 2002:a05:6a00:3928:b0:742:a111:ee6f with SMTP id d2e1a72fcca58-7489ce3cd70mr19786530b3a.10.1750261305032;
+        Wed, 18 Jun 2025 08:41:45 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7488ffecfc5sm11231863b3a.13.2025.06.18.05.53.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-748ded10691sm3033401b3a.60.2025.06.18.08.41.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 05:53:31 -0700 (PDT)
+        Wed, 18 Jun 2025 08:41:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6cd4eb0f-4b4b-4540-877b-6531023b4a5d@roeck-us.net>
-Date: Wed, 18 Jun 2025 05:53:29 -0700
+Message-ID: <1144cef1-c4af-4fd4-93ae-70a2fcf67f54@roeck-us.net>
+Date: Wed, 18 Jun 2025 08:41:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,16 +69,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] hwmon: (cros_ec) add PWM control over fans
-To: Sung-Chi Li <lschyi@chromium.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250512-cros_ec_fan-v3-0-a9f2b255f0cd@chromium.org>
- <20250512-cros_ec_fan-v3-2-a9f2b255f0cd@chromium.org>
- <ca2c10be-3dc4-45e1-b7fc-f8db29a1b6a0@t-8ch.de> <aFJqLkkdI86V3fM9@google.com>
+Subject: Re: [PATCH] hwmon: (corsair-cpro) Change dependency from HID to
+ HIDRAW
+To: dongfengweixiao@gmail.com, jdelvare@suse.com, linux@roeck-us.ne
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250618072845.233204-1-dongfengweixiao@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,62 +119,53 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aFJqLkkdI86V3fM9@google.com>
+In-Reply-To: <20250618072845.233204-1-dongfengweixiao@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/18/25 00:26, Sung-Chi Li wrote:
-> On Mon, May 12, 2025 at 09:30:39AM +0200, Thomas Weißschuh wrote:
+On 6/18/25 00:28, dongfengweixiao@gmail.com wrote:
+> From: "Dee.H.Y" <dongfengweixiao@gmail.com>
 > 
-> Sorry for the late reply, I missed mails for this series.
-> 
->> On 2025-05-12 15:11:56+0800, Sung-Chi Li via B4 Relay wrote:
->>> From: Sung-Chi Li <lschyi@chromium.org>
->>>   static int cros_ec_hwmon_read_temp(struct cros_ec_device *cros_ec, u8 index, u8 *temp)
->>>   {
->>>   	unsigned int offset;
->>> @@ -73,7 +117,9 @@ static long cros_ec_hwmon_temp_to_millicelsius(u8 temp)
->>>   static int cros_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->>>   			      u32 attr, int channel, long *val)
->>>   {
->>> +	u8 control_method;
->>>   	struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
->>> +	u8 pwm_value;
->>>   	int ret = -EOPNOTSUPP;
->>>   	u16 speed;
->>>   	u8 temp;
->>
->> Ordering again.
->>
->> This should be:
->>
->> struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
->> int ret = -EOPNOTSUPP;
->> u8 control_method;
->> u8 pwm_value;
->> u16 speed;
->> u8 temp;
->>
->> or:
->>
->> struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
->> u8 control_method, pwm_value, temp;
->> int ret = -EOPNOTSUPP;
->> u16 speed;
->>
->> <snip>
->>
-> 
-> Would you mind to share the sorting logic, so I do not bother you with checking
-> these styling issue? Initially, I thought the sorting is based on the variable
-> name, but after seeing your example (which I am appreciated), I am not sure how
-> the sorting works. Is it sorted along with the variable types (
-> "u8 control_method", "u16 speed", etc)? If that is the case, why "u16 speed" is
-> in the middle of the u8 group variables?
-> 
+> This patch updates the dependency of the CORSAIR_CPRO driver in the
+> hwmon subsystem. Previously, the driver relied on HID, but now it
 
+ From Documentation/process/submitting-patches.rst:
 
-It is called "reverse christmas tree". Longer lines first.
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
 
+What is "previously" ? The driver always used HID_CONNECT_HIDRAW.
+
+Either case, I do not think this patch is warranted. CONFIG_HIDRAW
+creates /dev/hidraw for use by applications. This driver does not
+need such an application to work. If you disagree, please provide
+logs showing that the driver does not work with CONFIG_HIDRAW=n.
+
+Thanks,
 Guenter
+
+> depends on HIDRAW. This change is aligned with the implementation
+> in the `ccp_probe()` function, where `HID_CONNECT_HIDRAW` is used,
+> indicating that the HID raw interface is required for proper operation.
+> 
+> Signed-off-by: Dee.H.Y <dongfengweixiao@gmail.com>
+> ---
+>   drivers/hwmon/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 08a3c863f80a..3f128cacb486 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -475,7 +475,7 @@ config SENSORS_CHIPCAP2
+>   
+>   config SENSORS_CORSAIR_CPRO
+>   	tristate "Corsair Commander Pro controller"
+> -	depends on HID
+> +	depends on HIDRAW
+>   	help
+>   	  If you say yes here you get support for the Corsair Commander Pro
+>   	  controller.
 
