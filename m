@@ -1,60 +1,62 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B9922D7AD
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 19:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D919242D7D
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 19:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750361883; cv=none; b=JykQX2qTK2MbI0iqOEfS8k7cDzn4Od68f9i51lKbjz1/ilOqkQAXsNXqOtuA3gV0IalmnKQpEcmRpU0T43xRCGof5kPiNTqGlHMMteMzBo8LdTPwGZL1/MVMQ8IEeNpKgbysGZgdUpZb6oE4I8RU59F91KCuPqxwUzUnBb1aXrQ=
+	t=1750361884; cv=none; b=qJUscj03KU4WTJn1+18IaRUO7IMKBhw4u5/PCKo1mBBDvPNp4GDVG2apOuokERB/FNQAVXvdNR3o4+SfiIh/XfXx4bUyR2DdEq0xLWvlIKDertTV1PUoiwoC05xaDxRH0HPRCs/F5F3AW8/Edl1+sZqYRa4keQT4ZIqkJx0g5D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750361883; c=relaxed/simple;
-	bh=NIFjyyzuaNIdw3YOaVRSCkqGyAMbR5LtcqtqSv0Jb38=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LLz1LxIz4Pz/81yTwo+vOJ8YiTwIQzhvR2WOQYsD5xmj/4SIPeH7s5X4LDV+OVQJcvc2DGrbfOncO2t+WRWDjT2M54cAmYCAifiW7hanoBozTlwkL4ivAtpo5VGF4bTbWz78MTa00uzfmFAo/iJ0H461kmO7HpfPIo0sdqQZDY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=PxIOddVa; arc=none smtp.client-ip=209.85.208.51
+	s=arc-20240116; t=1750361884; c=relaxed/simple;
+	bh=GKZDoxyun/W4D4Ps9+AWIMGftkR3a/WAsAurvdXocC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QKQRtn/rKGwugC8XP2PF00+3y4ntZyZLq6RMqnrkeCYicHlCJxtZamdpduOgIXieGyPXEKRBCSXORZcRUiDqKbJxmIH0DPLi7Jx/JcPLR5XPIpmt0hCdp4PBrqcMdH7YWaFWBHUwVfuy4QBF1SOZoQzj3lpVt0bLBf5s7wJSeyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=zefS3bVp; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="PxIOddVa"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-606ddbda275so2230336a12.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 12:38:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="zefS3bVp"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-607434e1821so1600968a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 12:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750361879; x=1750966679; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEw+XHTgMkkpVsk+76/bQtWmWF827UIFe6sQvlC4/B0=;
-        b=PxIOddVa0QdzZtAJQ8PGI+DgG0o2fWiw1P3iygGZLoGVQeQSyK/aXm9RaCLh//EpJZ
-         QKLQAAMUSbdb7mM4gfr0sNcHFo+wtB450aKwb7epIiAlZTl9baDV15KdK/E+hflSFTbU
-         ctTvkvgk/6kMLPmqjcLBpNjr3D7cOrG0szd9PcaPFY7jCoeYlCwEdZ0U6Nzaz58r2HaN
-         CymUZvEnTkv6odwa9SdTlgC1ua+Q7ajNtyJgtkHArfzCpBuPX0CAo3w8BF/CBeph8Wxt
-         cminZHyoMIDFkZkL/41gMQWywia8GsiXpU0Om117ZM/xxObWElNWUHiaQg3jReNpcA/m
-         ySdw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750361880; x=1750966680; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZaVEbAHW7iY/RUrqsyRdFPDF+vOux5UgaQ4QVWxZ9uk=;
+        b=zefS3bVpcCMPvpRZsv8T0qBCL3ugLIOI3rrnZAQriXuIL4knkrb8R/eRdCkQx0PhVi
+         JzQm8EWgO0/fhUNXHI4pXBrwWP0K7IoLGb6496G0tQje2LCI4VgFr8v4sIFt7vAqZJSJ
+         xvZ3rdmrZn0ODm7fuWTyAvmxZVa7g9Ty+c44GbXM0thU58lDaZLayP2Y9aPd1LrYCojl
+         tnd2Y9g36V+neTHgsFdhHIAQNc9dv/m6wFi9nZajeNR5OjrT419DqWiijzIxSTkqoWSC
+         Kk1rls3itQDnC8JzfA+EKeTLQ4oMW/hKXXb0qDRvxYP+rq9LHW8gFxGgH4zkerilJ9Hc
+         b8ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750361879; x=1750966679;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DEw+XHTgMkkpVsk+76/bQtWmWF827UIFe6sQvlC4/B0=;
-        b=Vom9BvX5MSH/sCyJIcAB0RSwdfxajIoM72YUf4YbRttqnkuS22H2DXuROTFWJmLasu
-         0Cfn+fhd4u5uk+2oLs3zfrAO6Hq+s7K5w4zBN6LTQs0sKL1lEIUyxddUZQF//JNCDgO3
-         +lp/9dsl/amO+yjs8t6rrS7gxDHtmG+qPCCyd53HwMI86iWmhKbNYnqzxdbrc3mCdr9W
-         00hGO8q6Z7kwIpVVOemu4i5s3AezZFW0hYgmenZhQto86FbF0PLY4wY8FT616vosB+la
-         BHp8jiWHxWW4EdDsjaybenXGlIiQckGbwaD5PCewnie9OIFjaOhNboDkn2QpXOZWvDyG
-         S3HA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXIU1mGnpD3H1nMDwgwr0dhXeZGqnuSeQUeVEOQJIwVaiDg2hrSofEyIQunqMkpA3WSvTqDlgLo9sMGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyop7Zx/TxqKkYIXHMAoc0X39N4RGbSR6TVe9PSf+0myBTqfymI
-	jVHLg8/SyR/M79tHS6lrHV5PRlJ7LGfZyun3Ma1gz+xApWPpGmU0AhFYzpkQvJ3ijSI=
-X-Gm-Gg: ASbGncsjsT99YQujIj5NDVVdy1SCk0fqGhpShrnuHmYQQ/9+RsfR1c0f99LgoQjbiu4
-	6uAuEGNDwuns5OrbX8ydVXyJTgNBRE9NoIHmdN2oha6F2euH37ik3phI32CAyUmnkyCL4eLtgOq
-	Xe2aWyeB/df3p+fvduW83/QGzeksKTCQb8WJkblue7tVSfpLe0qpZEwhZqYJUqVE862zDaKBF1o
-	4WvVEa9fL1XqSjlNgZgjmpfatJG7fz/KeCDTOarSJqOsZokdtlZCXxMqtaH2ky3mtPC9zFRWNci
-	GesTIm+AoVhj9QJCc+bFcSt9rO/65YgCFUbAG7q4fo783jJ2+bIFy9/Xp+UxKFSZd90=
-X-Google-Smtp-Source: AGHT+IExty0s/qqPMzZoWioOGaL/D5l3jKw1pRA3K84JdSTooeAoNuus4825RUxWdFOd6p3crKYCdQ==
-X-Received: by 2002:a17:907:9215:b0:ad8:a50c:f6b7 with SMTP id a640c23a62f3a-ae057b6e710mr9182966b.28.1750361878727;
-        Thu, 19 Jun 2025 12:37:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750361880; x=1750966680;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZaVEbAHW7iY/RUrqsyRdFPDF+vOux5UgaQ4QVWxZ9uk=;
+        b=w5U/inveCRlXEqxpIdyknJSTqPNU5x1IvIYbfBBwpv7athy2fva5dGlKisQAJ7bOvs
+         ocLPieFQ92G0oHa3uGBFQR3b5gvK1OtEfg0cBMwGncMjDjFI9dEDzRSiG+mTiJYwuEdi
+         a7TbTFCau9i+Z/4NgIGtBgF2rMIU3c8FtkzFwBWIOzYHgwzvlB6DYh4Y5MRSz4J/UpHn
+         cQYgRXh/Vs9Wz71R9cGNj/3rT4u8zWwR1cEXVL+UHKr2vo6xFz+kg+B0UgAopoBK3+k0
+         NGU8JkyohEXR7RHlvD1FNJYHe1Cg7s4DUHIeAzd2PnbWOxyJDvUxW2zD3GgctvO+REvM
+         kNhA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9heVdCkybxBXVVby83pt9htnLS/w9Y8Ma2/A/W1fpIuKisjnxw/RKUGUbHdE3jwRs5cHgbj8QSH+FYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVtPxBV+jb8vYIsNRs4zNwsZYWstwquL1filncBD9NTz3SpKo8
+	MbGTJZUlEWuDNDKIzvBRCnDwGQj5bWV1ecBIHB0bAcqKELiNppJPLT4jY6oolkyWgBo=
+X-Gm-Gg: ASbGncv1x69vG0qQnUNi9EK4+pVQDqj0HtrkRB0b0DS7t1aYan5qGbzeXUQGzZAbRnw
+	PMUFK15Dthskj68Ev2w6NkvbBhM5J1ft/8ebNc1x/XtrM22Rswl+0gKWtU/CwfyS1PYAl/okdbC
+	TvBYEltfBGFIt8dL/OyvQsGzqXV5lyJ3vZU3kl1ToKoauZ7m7mqOJGAaLZBWmt9XNHb5fPQWYEY
+	MHOzSCCRZeszjYixUl3hXmE+jHbWF/R4tE726Fx8IONDNgtmpbobq1L7+vpAV1sKNBvPeMWqNQ2
+	Q0eeeIZYunqmEJ9H7puG1m0BYjN6pOpEVUai89SjegK/pWnZiikd4XZjUqJ/NCIBp8M=
+X-Google-Smtp-Source: AGHT+IFgv7zs+5tNzhJ+/45mr9xcHdPZuYMSm3sFSJY5FBT30yY7DEIBynYd5jjaVL96Mia5N10NXQ==
+X-Received: by 2002:a05:6402:22c7:b0:607:2469:68bb with SMTP id 4fb4d7f45d1cf-60a1d1a3e3cmr160535a12.33.1750361880403;
+        Thu, 19 Jun 2025 12:38:00 -0700 (PDT)
 Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ae053ecbf2bsm35610166b.46.2025.06.19.12.37.57
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-60a18cba2a6sm336394a12.54.2025.06.19.12.37.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 12:37:58 -0700 (PDT)
+        Thu, 19 Jun 2025 12:38:00 -0700 (PDT)
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
@@ -64,10 +66,12 @@ Cc: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
 	Conor Dooley <conor+dt@kernel.org>,
 	linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: adt7475: Implement support for #pwm-cells = <3>
-Date: Thu, 19 Jun 2025 21:37:44 +0200
-Message-ID: <cover.1750361514.git.u.kleine-koenig@baylibre.com>
+Subject: [PATCH 1/2] hwmon: adt7475: Implement support for #pwm-cells = <3>
+Date: Thu, 19 Jun 2025 21:37:45 +0200
+Message-ID:  <b5cc994cbe74095e39468fd694c721d7c879db78.1750361514.git.u.kleine-koenig@baylibre.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <cover.1750361514.git.u.kleine-koenig@baylibre.com>
+References: <cover.1750361514.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,28 +79,68 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=702; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=NIFjyyzuaNIdw3YOaVRSCkqGyAMbR5LtcqtqSv0Jb38=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoVGcJKmVssP8jB9YqPPmLToOVDCM1PRQGoejec s3avXa2MpaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaFRnCQAKCRCPgPtYfRL+ Tm26B/0XY1eUwzzORX/Jlz40BkiXErdvfjjms6ozU/9Ukyk16S49RMwEwRXw+nRDJF8HgpI4Xb8 EAbYwJXLdw6RlcnhUOfpWd0KuY78Z4RljV5TtLRTEKwpbhY96b/uWsOPMAIiKlBNzB3ToyXCuoI 42kq371B52N6H/qy7tOL/hhm3Lz+CG01/nwK/HEZRcq9qj/feYpnyjn9Z2zpun3FDOMqzEdFetE cDjvXYAGZQc3mpJGgLUB8TkTKqqzdtzPmeuPQS9Q5CzPxdH70yyyVKIg8TpKSLLZx4bYoBkn/6B OIEfZbjMdeLZ+L13zorCyIur9JgoMs09yODY+fs3o6EYL+/l
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1806; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=GKZDoxyun/W4D4Ps9+AWIMGftkR3a/WAsAurvdXocC4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoVGcMm4I8jyxFpy5bMXn2hRwQ2vmgPG5zu8r6s TwpdBC3VAWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaFRnDAAKCRCPgPtYfRL+ TsuiB/9pmfUWm9dqxJTFQtO0u4t3GirVNY3lNVWHPWMfX1+qfar/v0Kc3AcCT4uNaFSZNSJn4bx MfVTFCENKGdau/eXCucvhYifPAbABrgieoqiR4XyQ6GYjsF9xMaagqtiPkW23A7USSzOdx9Uoyx d/SnFljJkisf+eMPLJLmC4ai2fbg/+vCY6hzs5jCV8JMe47CzzeCmUlOCZAMXlRrJ4miI0wLyS7 TENFQQ6OZLEDyAPXV6/yjrSXla7jJYpQcpUPcK0ZVzHgZl6ZccyoZoZsg8SMwQrp+gVkrC48oD+ POEVUEnMda03dtA2tlfIdH/D0EYVq6Kz52PJV6uHePdrssO1
 X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-Hello,
+The adt7475 driver and binding are outliers requiring 4 pwm-cells. The
+typical value is 3, there are a few devices that use a lesser value for
+historical reasons, no other uses a value bigger than 3.
 
-this patch series implements support for #pwm-cells = <3> and updates the
-binding accordingly. 3 cells is the usual PWM binding as was discussed in
-https://lore.kernel.org/linux-hwmon/jmxmxzzfyobuheqe75lj7qcq5rlt625wddb3rlhiernunjdodu@tgxghvfef4tl .
+Implement support for 3 cells to make the adt7475 binding match the
+usual PWM binding.
 
-Best regards
-Uwe
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+ drivers/hwmon/adt7475.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Uwe Kleine-König (2):
-  hwmon: adt7475: Implement support for #pwm-cells = <3>
-  dt-bindings: hwmon: adt7475: Allow and recommend #pwm-cells = <3>
-
- .../devicetree/bindings/hwmon/adt7475.yaml    | 15 ++++++++------
- drivers/hwmon/adt7475.c                       | 20 ++++++++++++++++---
- 2 files changed, 26 insertions(+), 9 deletions(-)
-
-base-commit: 4325743c7e209ae7845293679a4de94b969f2bef
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 5f2541c11fe9..8cefa14e1633 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1704,12 +1704,15 @@ static int adt7475_pwm_properties_parse_reference_args(struct fwnode_handle *fwn
+ 	if (ret)
+ 		return ret;
+ 
+-	if (rargs.nargs != 4) {
++	if (rargs.nargs != 3 && rargs.nargs != 4) {
+ 		fwnode_handle_put(rargs.fwnode);
+ 		return -EINVAL;
+ 	}
+ 
+-	for (i = 0; i < 4; i++)
++	/* Let duty_cycle default to period */
++	args[3] = rargs.args[1];
++
++	for (i = 0; i < rargs.nargs; i++)
+ 		args[i] = rargs.args[i];
+ 
+ 	ret = _adt7475_pwm_properties_parse_args(args, cfg);
+@@ -1724,11 +1727,22 @@ static int adt7475_pwm_properties_parse_args(struct fwnode_handle *fwnode,
+ {
+ 	int ret;
+ 	u32 args[4] = {};
++	size_t n_vals = fwnode_property_count_u32(fwnode, "pwms");
+ 
+-	ret = fwnode_property_read_u32_array(fwnode, "pwms", args, ARRAY_SIZE(args));
++	if (n_vals != 3 && n_vals != 4)
++		return -EOVERFLOW;
++
++	ret = fwnode_property_read_u32_array(fwnode, "pwms", args, n_vals);
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * If there are no item to define the duty_cycle, default it to the
++	 * period.
++	 */
++	if (n_vals == 3)
++		args[3] = args[1];
++
+ 	return _adt7475_pwm_properties_parse_args(args, cfg);
+ }
+ 
 -- 
 2.49.0
 
