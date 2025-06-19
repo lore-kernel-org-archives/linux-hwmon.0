@@ -1,201 +1,308 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D95199947;
-	Thu, 19 Jun 2025 17:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E97623ABA6;
+	Thu, 19 Jun 2025 17:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750353508; cv=none; b=j8tKD0w9ccyD7tzvhuUqsxnOLLdUohQVAZX8S2S2DagkA9OKOtMrxR+BSUt3qiUYYqQMOc75GsXeRlIliq1A9wai/Srsh+HvFCP9FwetazgJUHLs3uI0oj442lNMDj9pf6G58FbRkWqo0rE/D58mLFjn6w8/48bOEuAmlFf9rjc=
+	t=1750354365; cv=none; b=DU5ov+AeSQP+rQCtptlNF3fUzlWC31wyLf4nzIDJrqVTYE8+rvu3TLm92hV4Y4ZofOH+jgUito1rFcTL+L213kvI02Le4VUQ2BU7K/c8pnJX/C6TuPte4SClHdwpmyWXiF4Lx9oRIsxtzjXn9jMpOn6zMH9xJq8zaQVCblNQ/iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750353508; c=relaxed/simple;
-	bh=PIA5rlrJTETm9MmKUtpXUwK8GW5IcdfTW4AP0jWmOZ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UENrePAyZI6ZVYqnCkvxB24wcqm0EFh2JVVTOfPJRX7AjwEDkgSEYmyCrp7wxlynLOafcQ7eLZ99ZlRBC0vsK1eOjf2MhlJOXSeitpr4Ee6WBqNR1ltHvuwXPQWlH4w4oX5e6c+2dK9EmOyhI7pN5bCKFaPd8gNnIvlGQhCycTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TRbqXaAh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750354365; c=relaxed/simple;
+	bh=SbHt/cy98hAoU1ACnUTGCtxFlOFYcLwWiM9zH1/i6HI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qtdzNp2ntZ2IkKAYNPxiHHlguOR5jOtr5LiaePYRuSlwA/NQ+H9oXPCzHgvDNhoV03mmKQ0v2BgVvU/Cydkx1/eGHXz2aCW2eReSWBMjuOBj+ZVDgnBgjElPfUZ5DFffqWKTKdf72ZzKxLqrmpFaMtE3MBFFzgxAnvCpvtTuAg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7OkaGbg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TRbqXaAh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAB1C4CEEA;
-	Thu, 19 Jun 2025 17:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750353507;
-	bh=PIA5rlrJTETm9MmKUtpXUwK8GW5IcdfTW4AP0jWmOZ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TRbqXaAhgJEiXYJRmqDqm6hXI0aJhmoCriyQxvxjcE/gDG5Mi2kK5QfRc88vSLQtK
-	 ySIZo+PrzbTyQcOsTPn0TNgB29F7O7dGreF7wmTvoV6ZSRwlCqaOSNk6bDWXv/VlQi
-	 C27Yw9nk1S+1t2K1xz7ch7hiPbQBEEsUlLJTLa9I=
-Date: Thu, 19 Jun 2025 19:18:24 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Ming Yu <a0282524688@gmail.com>, Lee Jones <lee@kernel.org>,
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <2025061914-sternum-factoid-4269@gregkh>
-References: <20250612152313.GP381401@google.com>
- <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com>
- <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com>
- <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <2025061910-skies-outgoing-89cc@gregkh>
- <644dfd66-ad30-47cb-9ec4-50d9a003433b@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7OkaGbg"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ACC9C4CEF0;
+	Thu, 19 Jun 2025 17:32:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750354365;
+	bh=SbHt/cy98hAoU1ACnUTGCtxFlOFYcLwWiM9zH1/i6HI=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=h7OkaGbgvrxRwye9k3n7OxwKKIvvtmGJpsA1CnGXSDYxEm/8NlwYLzbsSB8quPF3P
+	 AEJ3CyajTgBJq2HNOTKZo5UseDtrh0DrO3tz3BDAyx6C9R50SXmCaoDUj52OApLRdA
+	 GXaRjsx97cFHta6KtBSaVUJ1hE2y4F3dBKWbkNVwgYOXlTAmLif5G7BNErAiAV6M0Z
+	 J5NtBhVUKZ7f31yFEkirfC/3DmLWe+OguBsfT/Ez/MvAoS3wadvD3uEgTPjL9HJU5a
+	 bwthnAzzsXvMa+9MDIJOk/Jbkjr40NvduPQw2NFCuqq+RDueQ8hoMFvZY04RW5Fb3S
+	 k9qW7rLQJQHpg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D14C7115B;
+	Thu, 19 Jun 2025 17:32:45 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Date: Thu, 19 Jun 2025 19:32:42 +0200
+Subject: [PATCH v3] pwm: mc33xs2410: add support for temperature sensors
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <644dfd66-ad30-47cb-9ec4-50d9a003433b@roeck-us.net>
+Message-Id: <20250619-mc33xs2410-hwmon-v3-1-301731e49f8f@liebherr.com>
+X-B4-Tracking: v=1; b=H4sIALlJVGgC/23NTQ7CIBCG4auYWYvhR0LrynsYFxQGIbHFgMGap
+ neXNi6Munwn+Z6ZIGMKmOGwmSBhCTnEoYbYbsB4PVyQBFsbOOWSSqpIb4QYM98zSvyjjwPR0rk
+ WHRpKJdTZLaEL40qezrV9yPeYnuuHwpbrG2P8FyuMMKKt7bRSRjWuPV4Ddh5T2pnYw+IV/mnIP
+ wavRmM51r1CQe2XMc/zC8Ihew73AAAA
+X-Change-ID: 20250507-mc33xs2410-hwmon-a5ff9efec005
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750354364; l=7025;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=chFN37L9O7y4mdyrp4nItchTv0oIed/TseetXA611Fo=;
+ b=kfd6CKMxOJQJScg0EBtmYX8toVsXmo1D9G4NW7PcEXs4LmORqKgSmLWX0Z3y1xq9y83T+EFsN
+ qScsBTvNEhzAiioEv358vVFbMo9p8EmLvKHYCPdMYht4Vss44Ey1lyc
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-On Thu, Jun 19, 2025 at 09:58:04AM -0700, Guenter Roeck wrote:
-> On 6/19/25 09:20, Greg KH wrote:
-> > On Fri, Jun 20, 2025 at 12:03:01AM +0800, Ming Yu wrote:
-> > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午11:28寫道：
-> > > > 
-> > > > On Thu, 19 Jun 2025, Ming Yu wrote:
-> > > > 
-> > > > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
-> > > > > > 
-> > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > 
-> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
-> > > > > > > > 
-> > > > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > > > 
-> > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
-> > > > > > > > > > 
-> > > > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > > > > > > > > 
-> > > > > > > > > > > Dear Lee,
-> > > > > > > > > > > 
-> > > > > > > > > > > Thank you for reviewing,
-> > > > > > > > > > > 
-> > > > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> > > > > > > > > > > > 
-> > > > > > > > > > > ...
-> > > > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > > > > > > > > +
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > > > > > > > > 
-> > > > > > > > > > > > What happened to using IDA in the child driver?
-> > > > > > > > > > > > 
-> > > > > > > > > > > 
-> > > > > > > > > > > In a previous version, I tried to maintain a static IDA in each
-> > > > > > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
-> > > > > > > > > > > devices are bound to the same driver — in that case, the IDs are not
-> > > > > > > > > > > fixed and become unusable for my purpose.
-> > > > > > > > > > 
-> > > > > > > > > > Not sure I understand.
-> > > > > > > > > > 
-> > > > > > > > > 
-> > > > > > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > > > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > > > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > > > > > > > > However, when a second NCT6694 device is connected to the system, it
-> > > > > > > > > will receive IDs 16~31.
-> > > > > > > > > Because of this behavior, I switched back to using platform_device->id.
-> > > > > > > > 
-> > > > > > > > Each of the devices will probe once.
-> > > > > > > > 
-> > > > > > > > The first one will be given 0, the second will be given 1, etc.
-> > > > > > > > 
-> > > > > > > > Why would you give multiple IDs to a single device bound to a driver?
-> > > > > > > > 
-> > > > > > > 
-> > > > > > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
-> > > > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-> > > > > > > is independently addressable, has its own register region, and can
-> > > > > > > operate in isolation. The IDs are used to distinguish between these
-> > > > > > > instances.
-> > > > > > > For example, the GPIO driver will be probed 16 times, allocating 16
-> > > > > > > separate gpio_chip instances to control 8 GPIO lines each.
-> > > > > > > 
-> > > > > > > If another device binds to this driver, it is expected to expose
-> > > > > > > peripherals with the same structure and behavior.
-> > > > > > 
-> > > > > > I still don't see why having a per-device IDA wouldn't render each
-> > > > > > probed device with its own ID.  Just as you have above.
-> > > > > > 
-> > > > > 
-> > > > > For example, when the MFD driver and the I2C sub-driver are loaded,
-> > > > > connecting the first NCT6694 USB device to the system results in 6
-> > > > > nct6694-i2c platform devices being created and bound to the
-> > > > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
-> > > > > 
-> > > > > However, when a second NCT6694 USB device is connected, its
-> > > > > corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
-> > > > > instead of 0 through 5 as I originally expected.
-> > > > > 
-> > > > > If I've misunderstood something, please feel free to correct me. Thank you!
-> > > > 
-> > > > In the code above you register 6 I2C devices.  Each device will be
-> > > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > > should be able to use IDA in .probe() to allocate those same device IDs
-> > > > 0 through 5.
-> > > > 
-> > > > What am I missing here?
-> > > > 
-> > > 
-> > > You're absolutely right in the scenario where a single NCT6694 device
-> > > is present. However, I’m wondering how we should handle the case where
-> > > a second or even third NCT6694 device is bound to the same MFD driver.
-> > > In that situation, the sub-drivers using a static IDA will continue
-> > > allocating increasing IDs, rather than restarting from 0 for each
-> > > device. How should this be handled?
-> > 
-> > What is wrong with increasing ids?  The id value means nothing, they
-> > just have to be unique.
-> > 
-> 
-> Unless they are used in the client driver as index into an array, as in
-> "this is the Nth instance of this device for this chip". There has to be
-> _some_ means to pass N to the client driver.
+From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 
-Ick, that should just be walking the list of child devices instead, as
-obviously no one is hard coding array sizes for devices these days,
-right?  :)
+The MC33XS2410 provides temperature sensors for the central die temperature
+and the four outputs. Additionally a common temperature warning threshold
+can be configured for the outputs. Add hwmon support for the sensors.
 
-Anyway, sure, if you _have_ to have a specific id, then use a specific
-id, but really, it should not matter.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+Changes in v3:
+- Add changes suggested by Uwe Kleine-König.
+  Remove "#if IS_ENABLED(CONFIG_HWMON)" and add
+  "if (IS_REACHABLE(CONFIG_HWMON))" in mc33xs2410_hwmon_probe.
+- Link to v2: https://lore.kernel.org/r/20250515-mc33xs2410-hwmon-v2-1-8d2e78f7e30d@liebherr.com
 
-thanks,
+Changes in v2:
+- Remove helper mc33xs2410_hwmon_read_out_status and report the last
+  latched status.
+- Link to v1: https://lore.kernel.org/r/20250512-mc33xs2410-hwmon-v1-1-addba77c78f9@liebherr.com
+---
+ drivers/pwm/pwm-mc33xs2410.c | 164 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 164 insertions(+)
 
-greg k-h
+diff --git a/drivers/pwm/pwm-mc33xs2410.c b/drivers/pwm/pwm-mc33xs2410.c
+index a1ac3445ccdb4709d92e0075d424a8abc1416eee..6a0a1e50d9584dbca751748143669ee1ebefb7e3 100644
+--- a/drivers/pwm/pwm-mc33xs2410.c
++++ b/drivers/pwm/pwm-mc33xs2410.c
+@@ -21,6 +21,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
++#include <linux/hwmon.h>
+ #include <linux/math64.h>
+ #include <linux/minmax.h>
+ #include <linux/module.h>
+@@ -29,6 +30,8 @@
+ 
+ #include <linux/spi/spi.h>
+ 
++/* ctrl registers */
++
+ #define MC33XS2410_GLB_CTRL			0x00
+ #define MC33XS2410_GLB_CTRL_MODE		GENMASK(7, 6)
+ #define MC33XS2410_GLB_CTRL_MODE_NORMAL		FIELD_PREP(MC33XS2410_GLB_CTRL_MODE, 1)
+@@ -51,6 +54,21 @@
+ 
+ #define MC33XS2410_WDT				0x14
+ 
++#define MC33XS2410_TEMP_WT			0x29
++#define MC33XS2410_TEMP_WT_MASK			GENMASK(7, 0)
++
++/* diag registers */
++
++/* chan in { 1 ... 4 } */
++#define MC33XS2410_OUT_STA(chan)		(0x02 + (chan) - 1)
++#define MC33XS2410_OUT_STA_OTW			BIT(8)
++
++#define MC33XS2410_TS_TEMP_DIE			0x26
++#define MC33XS2410_TS_TEMP_MASK			GENMASK(9, 0)
++
++/* chan in { 1 ... 4 } */
++#define MC33XS2410_TS_TEMP(chan)		(0x2f + (chan) - 1)
++
+ #define MC33XS2410_PWM_MIN_PERIOD		488282
+ /* step in { 0 ... 3 } */
+ #define MC33XS2410_PWM_MAX_PERIOD(step)		(2000000000 >> (2 * (step)))
+@@ -125,6 +143,11 @@ static int mc33xs2410_read_reg_ctrl(struct spi_device *spi, u8 reg, u16 *val)
+ 	return mc33xs2410_read_reg(spi, reg, val, MC33XS2410_FRAME_IN_DATA_RD);
+ }
+ 
++static int mc33xs2410_read_reg_diag(struct spi_device *spi, u8 reg, u16 *val)
++{
++	return mc33xs2410_read_reg(spi, reg, val, 0);
++}
++
+ static int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val)
+ {
+ 	u16 tmp;
+@@ -140,6 +163,143 @@ static int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val
+ 	return mc33xs2410_write_reg(spi, reg, tmp);
+ }
+ 
++static const struct hwmon_channel_info * const mc33xs2410_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_LABEL | HWMON_T_INPUT,
++			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
++			   HWMON_T_ALARM,
++			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
++			   HWMON_T_ALARM,
++			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
++			   HWMON_T_ALARM,
++			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
++			   HWMON_T_ALARM),
++	NULL,
++};
++
++static umode_t mc33xs2410_hwmon_is_visible(const void *data,
++					   enum hwmon_sensor_types type,
++					   u32 attr, int channel)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++	case hwmon_temp_alarm:
++	case hwmon_temp_label:
++		return 0444;
++	case hwmon_temp_max:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++static int mc33xs2410_hwmon_read(struct device *dev,
++				 enum hwmon_sensor_types type,
++				 u32 attr, int channel, long *val)
++{
++	struct spi_device *spi = dev_get_drvdata(dev);
++	u16 reg_val;
++	int ret;
++	u8 reg;
++
++	switch (attr) {
++	case hwmon_temp_input:
++		reg = (channel == 0) ? MC33XS2410_TS_TEMP_DIE :
++				       MC33XS2410_TS_TEMP(channel);
++		ret = mc33xs2410_read_reg_diag(spi, reg, &reg_val);
++		if (ret < 0)
++			return ret;
++
++		/* LSB is 0.25 degree celsius */
++		*val = FIELD_GET(MC33XS2410_TS_TEMP_MASK, reg_val) * 250 - 40000;
++		return 0;
++	case hwmon_temp_alarm:
++		ret = mc33xs2410_read_reg_diag(spi, MC33XS2410_OUT_STA(channel),
++					       &reg_val);
++		if (ret < 0)
++			return ret;
++
++		*val = FIELD_GET(MC33XS2410_OUT_STA_OTW, reg_val);
++		return 0;
++	case hwmon_temp_max:
++		ret = mc33xs2410_read_reg_ctrl(spi, MC33XS2410_TEMP_WT, &reg_val);
++		if (ret < 0)
++			return ret;
++
++		/* LSB is 1 degree celsius */
++		*val = FIELD_GET(MC33XS2410_TEMP_WT_MASK, reg_val) * 1000 - 40000;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int mc33xs2410_hwmon_write(struct device *dev,
++				  enum hwmon_sensor_types type, u32 attr,
++				  int channel, long val)
++{
++	struct spi_device *spi = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_temp_max:
++		val = clamp_val(val, -40000, 215000);
++
++		/* LSB is 1 degree celsius */
++		val = (val / 1000) + 40;
++		return mc33xs2410_modify_reg(spi, MC33XS2410_TEMP_WT,
++					     MC33XS2410_TEMP_WT_MASK, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const char *const mc33xs2410_temp_label[] = {
++	"Central die temperature",
++	"Channel 1 temperature",
++	"Channel 2 temperature",
++	"Channel 3 temperature",
++	"Channel 4 temperature",
++};
++
++static int mc33xs2410_read_string(struct device *dev,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel, const char **str)
++{
++	*str = mc33xs2410_temp_label[channel];
++
++	return 0;
++}
++
++static const struct hwmon_ops mc33xs2410_hwmon_hwmon_ops = {
++	.is_visible = mc33xs2410_hwmon_is_visible,
++	.read = mc33xs2410_hwmon_read,
++	.read_string = mc33xs2410_read_string,
++	.write = mc33xs2410_hwmon_write,
++};
++
++static const struct hwmon_chip_info mc33xs2410_hwmon_chip_info = {
++	.ops = &mc33xs2410_hwmon_hwmon_ops,
++	.info = mc33xs2410_hwmon_info,
++};
++
++static int mc33xs2410_hwmon_probe(struct spi_device *spi)
++{
++	struct device *dev = &spi->dev;
++
++	if (IS_REACHABLE(CONFIG_HWMON)) {
++		struct device *hwmon;
++
++		hwmon = devm_hwmon_device_register_with_info(dev, NULL, spi,
++							     &mc33xs2410_hwmon_chip_info,
++							     NULL);
++		return PTR_ERR_OR_ZERO(hwmon);
++	}
++
++	dev_dbg(dev, "Not registering hwmon sensors\n");
++
++	return 0;
++}
++
+ static u8 mc33xs2410_pwm_get_freq(u64 period)
+ {
+ 	u8 step, count;
+@@ -361,6 +521,10 @@ static int mc33xs2410_probe(struct spi_device *spi)
+ 	if (ret < 0)
+ 		return dev_err_probe(dev, ret, "Failed to add pwm chip\n");
+ 
++	ret = mc33xs2410_hwmon_probe(spi);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "Failed to register hwmon sensors\n");
++
+ 	return 0;
+ }
+ 
+
+---
+base-commit: 446d36aa71b56e8a926e6ff066d83b12130fda59
+change-id: 20250507-mc33xs2410-hwmon-a5ff9efec005
+
+Best regards,
+-- 
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
+
