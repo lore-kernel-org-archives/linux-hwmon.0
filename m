@@ -1,62 +1,62 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D919242D7D
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 19:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD151242D9A
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 19:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750361884; cv=none; b=qJUscj03KU4WTJn1+18IaRUO7IMKBhw4u5/PCKo1mBBDvPNp4GDVG2apOuokERB/FNQAVXvdNR3o4+SfiIh/XfXx4bUyR2DdEq0xLWvlIKDertTV1PUoiwoC05xaDxRH0HPRCs/F5F3AW8/Edl1+sZqYRa4keQT4ZIqkJx0g5D0=
+	t=1750361885; cv=none; b=BHHuS91TpkJwIEKlK+jenZe+p1eVINIvIGp1Acu6pqPWPJ1CZv51g/Fl5PGz4WozBwPMn+D4PY10KDTiQn0/3Uh1qYAi5nW5bBNV0rS1gs0IKIAaxRxzdLaTXzX/nkmdkEHNgmflPEcazlp1BmZ4x3771QQWOfT2JUArYHrlmqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750361884; c=relaxed/simple;
-	bh=GKZDoxyun/W4D4Ps9+AWIMGftkR3a/WAsAurvdXocC4=;
+	s=arc-20240116; t=1750361885; c=relaxed/simple;
+	bh=/4FUKzJGctfh4F0xV6RfSXalAyRIePr7kz+uFmRa8D8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QKQRtn/rKGwugC8XP2PF00+3y4ntZyZLq6RMqnrkeCYicHlCJxtZamdpduOgIXieGyPXEKRBCSXORZcRUiDqKbJxmIH0DPLi7Jx/JcPLR5XPIpmt0hCdp4PBrqcMdH7YWaFWBHUwVfuy4QBF1SOZoQzj3lpVt0bLBf5s7wJSeyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=zefS3bVp; arc=none smtp.client-ip=209.85.208.48
+	 MIME-Version:Content-Type; b=avEo90S8MxAu45UiFU2G/LoXg0zJuW2LS9ZEMJSsIqhT6TefXI9+j+YuhDYQPGt21WHUjMe1Gpg+cTRbMRC0Etojhrm2hb4+E9jA/F+wEe3HolKctDFrdJXYVUAW4lx7P8KeGOM6S8tCFE+nzj925WRQJE5SdDp2SMPf/Hseo74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=FK3j/1R3; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="zefS3bVp"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-607434e1821so1600968a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 12:38:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="FK3j/1R3"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ade5a0442dfso214302666b.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Jun 2025 12:38:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750361880; x=1750966680; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750361882; x=1750966682; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZaVEbAHW7iY/RUrqsyRdFPDF+vOux5UgaQ4QVWxZ9uk=;
-        b=zefS3bVpcCMPvpRZsv8T0qBCL3ugLIOI3rrnZAQriXuIL4knkrb8R/eRdCkQx0PhVi
-         JzQm8EWgO0/fhUNXHI4pXBrwWP0K7IoLGb6496G0tQje2LCI4VgFr8v4sIFt7vAqZJSJ
-         xvZ3rdmrZn0ODm7fuWTyAvmxZVa7g9Ty+c44GbXM0thU58lDaZLayP2Y9aPd1LrYCojl
-         tnd2Y9g36V+neTHgsFdhHIAQNc9dv/m6wFi9nZajeNR5OjrT419DqWiijzIxSTkqoWSC
-         Kk1rls3itQDnC8JzfA+EKeTLQ4oMW/hKXXb0qDRvxYP+rq9LHW8gFxGgH4zkerilJ9Hc
-         b8ZA==
+        bh=WDdReUCNxh7kd/Z4bkc56sI2H6wihwxJvgXXCb9jS7U=;
+        b=FK3j/1R3KZfkr6kRFpHjSoCDijsFtzbeU3NGFwatbPq0nYs++p3S0epYU6zHgvZa2y
+         +KyelKK9s92FlorVYisbytoc9ZLj44vBy7JU3BJMKnzYX3hGr6wPJqUeQIoqZcYaNvFz
+         NdVFQIy4KHxEufjFzQgkI/+76Pj/SqfkJCtv1lq9sfHAJ1AcwgXR8U/K4dEKRC99BKJL
+         apRDhtXoHjL4yWxtPHa+KXEBNhT1MegORYpaGV0Fdlswb5Nv6PwqJSSWtNmwd7AqDXJ/
+         rd06Ucg6X9M7sa8odDw/cFzXjZye5BdrYDjm9pmI6UawQo4WIgDwkvvrF5csTpimEN3Z
+         rqwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750361880; x=1750966680;
+        d=1e100.net; s=20230601; t=1750361882; x=1750966682;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZaVEbAHW7iY/RUrqsyRdFPDF+vOux5UgaQ4QVWxZ9uk=;
-        b=w5U/inveCRlXEqxpIdyknJSTqPNU5x1IvIYbfBBwpv7athy2fva5dGlKisQAJ7bOvs
-         ocLPieFQ92G0oHa3uGBFQR3b5gvK1OtEfg0cBMwGncMjDjFI9dEDzRSiG+mTiJYwuEdi
-         a7TbTFCau9i+Z/4NgIGtBgF2rMIU3c8FtkzFwBWIOzYHgwzvlB6DYh4Y5MRSz4J/UpHn
-         cQYgRXh/Vs9Wz71R9cGNj/3rT4u8zWwR1cEXVL+UHKr2vo6xFz+kg+B0UgAopoBK3+k0
-         NGU8JkyohEXR7RHlvD1FNJYHe1Cg7s4DUHIeAzd2PnbWOxyJDvUxW2zD3GgctvO+REvM
-         kNhA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9heVdCkybxBXVVby83pt9htnLS/w9Y8Ma2/A/W1fpIuKisjnxw/RKUGUbHdE3jwRs5cHgbj8QSH+FYQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVtPxBV+jb8vYIsNRs4zNwsZYWstwquL1filncBD9NTz3SpKo8
-	MbGTJZUlEWuDNDKIzvBRCnDwGQj5bWV1ecBIHB0bAcqKELiNppJPLT4jY6oolkyWgBo=
-X-Gm-Gg: ASbGncv1x69vG0qQnUNi9EK4+pVQDqj0HtrkRB0b0DS7t1aYan5qGbzeXUQGzZAbRnw
-	PMUFK15Dthskj68Ev2w6NkvbBhM5J1ft/8ebNc1x/XtrM22Rswl+0gKWtU/CwfyS1PYAl/okdbC
-	TvBYEltfBGFIt8dL/OyvQsGzqXV5lyJ3vZU3kl1ToKoauZ7m7mqOJGAaLZBWmt9XNHb5fPQWYEY
-	MHOzSCCRZeszjYixUl3hXmE+jHbWF/R4tE726Fx8IONDNgtmpbobq1L7+vpAV1sKNBvPeMWqNQ2
-	Q0eeeIZYunqmEJ9H7puG1m0BYjN6pOpEVUai89SjegK/pWnZiikd4XZjUqJ/NCIBp8M=
-X-Google-Smtp-Source: AGHT+IFgv7zs+5tNzhJ+/45mr9xcHdPZuYMSm3sFSJY5FBT30yY7DEIBynYd5jjaVL96Mia5N10NXQ==
-X-Received: by 2002:a05:6402:22c7:b0:607:2469:68bb with SMTP id 4fb4d7f45d1cf-60a1d1a3e3cmr160535a12.33.1750361880403;
-        Thu, 19 Jun 2025 12:38:00 -0700 (PDT)
+        bh=WDdReUCNxh7kd/Z4bkc56sI2H6wihwxJvgXXCb9jS7U=;
+        b=rZHw4AGMjBBP1FXnAF0ufUnmX6GM97A2Zeg2NuOpYpgKg+wxnPN4Lfv0HVyQOwcXbh
+         3QvsrepM0YXwdvp9lJCiFkt5vmL+1bNCcvmueo7uaAT+szMMk1qTMyNluylMLh9GaEhk
+         b86hhoFSfo2Oy1EhED4d0brU1tkG+l6cTfwGC9RiB9oLqbHnkLDaTHy5JAW+93sJfjPm
+         d5tD9H3V1DKOWYz7DK9xfbwo7ml65/IlyMT0g/BS8anytr//H4TACi4irdHVN5C2+M2r
+         w0PCu+ovqLsVunUYi8jioprSzudzeyPIZ1R6q5AcQf9oLiz7RUXkGvOblx/JhMIEkJvG
+         L//A==
+X-Forwarded-Encrypted: i=1; AJvYcCU+u1hYw3vnFYKVSZzFQnG6/40sHtUeQ05dsSsuc4SYBYCvrare+OxlEM0Oe9qDg3ol7FjL0oGo5+cqGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9R+D/GO5R3y4hWXMwKNpvzyoPHsJUzTWYwD5NO2egk91REOHp
+	qv34dc+fcQIevAthn/2QeRmQzzzSLXZdMjH3EUhpCaUlgrjaiTT545oz2sweO/EZ3Ag=
+X-Gm-Gg: ASbGncs7sGOYWSc1qUsaV7DNljSmnR6hdh5hj6Yvd7z4ucTQPVGa+9JGLhHFz32ZGn2
+	9TbIGaYB03VLCsi1hPOMqxU9+0q+dJIaBwfB1dpES0iDEH4IhWcWvTyFmsW9HW83PAq/wVeHglC
+	OKVMpp8L+9bL5hhGTZMbp3CnRthgn4k7XY2uJc6whm3U2uJcIEe1lkLsyHLfpXKQM5JiJyv22X7
+	eEvogB6FDCR9hulrt4XQgCeGm9d+fkNHnSWwRuvIRWNk6Jzpei0mi7INe6f7RrddW/iqCay25Cg
+	EBe6iyCmRDLwa6WZx55kohxAOejy5iTGSCscefb3cyZWktHdfh9yY3kOfShkMX3+yJw=
+X-Google-Smtp-Source: AGHT+IFNRziKzwyTYykIWbCd8I4m09uDgsNr/FjlRZAov9xS5nfVCYLscsjvNom85tKOHH+EclWA6A==
+X-Received: by 2002:a17:906:9fc6:b0:ade:9b52:4cc0 with SMTP id a640c23a62f3a-ae057973159mr14369066b.26.1750361882019;
+        Thu, 19 Jun 2025 12:38:02 -0700 (PDT)
 Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-60a18cba2a6sm336394a12.54.2025.06.19.12.37.59
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ae0541b719fsm34386766b.128.2025.06.19.12.38.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 12:38:00 -0700 (PDT)
+        Thu, 19 Jun 2025 12:38:01 -0700 (PDT)
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>
@@ -66,9 +66,9 @@ Cc: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
 	Conor Dooley <conor+dt@kernel.org>,
 	linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org
-Subject: [PATCH 1/2] hwmon: adt7475: Implement support for #pwm-cells = <3>
-Date: Thu, 19 Jun 2025 21:37:45 +0200
-Message-ID:  <b5cc994cbe74095e39468fd694c721d7c879db78.1750361514.git.u.kleine-koenig@baylibre.com>
+Subject: [PATCH 2/2] dt-bindings: hwmon: adt7475: Allow and recommend #pwm-cells = <3>
+Date: Thu, 19 Jun 2025 21:37:46 +0200
+Message-ID:  <77895aec937b6217f513d3b12e7945f1707fd906.1750361514.git.u.kleine-koenig@baylibre.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1750361514.git.u.kleine-koenig@baylibre.com>
 References: <cover.1750361514.git.u.kleine-koenig@baylibre.com>
@@ -79,68 +79,63 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1806; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=GKZDoxyun/W4D4Ps9+AWIMGftkR3a/WAsAurvdXocC4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoVGcMm4I8jyxFpy5bMXn2hRwQ2vmgPG5zu8r6s TwpdBC3VAWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaFRnDAAKCRCPgPtYfRL+ TsuiB/9pmfUWm9dqxJTFQtO0u4t3GirVNY3lNVWHPWMfX1+qfar/v0Kc3AcCT4uNaFSZNSJn4bx MfVTFCENKGdau/eXCucvhYifPAbABrgieoqiR4XyQ6GYjsF9xMaagqtiPkW23A7USSzOdx9Uoyx d/SnFljJkisf+eMPLJLmC4ai2fbg/+vCY6hzs5jCV8JMe47CzzeCmUlOCZAMXlRrJ4miI0wLyS7 TENFQQ6OZLEDyAPXV6/yjrSXla7jJYpQcpUPcK0ZVzHgZl6ZccyoZoZsg8SMwQrp+gVkrC48oD+ POEVUEnMda03dtA2tlfIdH/D0EYVq6Kz52PJV6uHePdrssO1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1746; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=/4FUKzJGctfh4F0xV6RfSXalAyRIePr7kz+uFmRa8D8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoVGcOLupelSkrmQjV6M90KjftqVREBMjymX2NE FYbmeD8SOuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaFRnDgAKCRCPgPtYfRL+ TiYpB/4gIq2rQz2gQtCu/oAre9BDqpnQM+7a9sStdUsaCWu9tgn+biAyDMU8ogazmQH/CcPrwmS 55Fxh/lS7BGRga5T0tMxWuM+5pbaNmTY7RN+3ifCVpC9LYoS3Au1fYhzcfyTML8+0toS1bJZoVo i6zC8fnW0Vbw8Z261EIfStmLVu7HF/P4cClUu9U7lQ8fbA9NPwF+2G8cwJ+WkOoSX1wvXfLO7J2 98BsuAaqS2XpN4W6dQGOlAt3kgFIAtG2ykP/xKTvOMGzoVLGN1T3Ns2gqnfSq3L4BskcY8vwf13 9fXlXocxH2Df6xmwCljE+O0Fu8LmE34lDg1pnPcZvEAvwODd
 X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-The adt7475 driver and binding are outliers requiring 4 pwm-cells. The
-typical value is 3, there are a few devices that use a lesser value for
-historical reasons, no other uses a value bigger than 3.
-
-Implement support for 3 cells to make the adt7475 binding match the
-usual PWM binding.
+To make this binding match what is usally used for PWMs, deprecate 4
+cells and allow 3 instead.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 ---
- drivers/hwmon/adt7475.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/hwmon/adt7475.yaml        | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-index 5f2541c11fe9..8cefa14e1633 100644
---- a/drivers/hwmon/adt7475.c
-+++ b/drivers/hwmon/adt7475.c
-@@ -1704,12 +1704,15 @@ static int adt7475_pwm_properties_parse_reference_args(struct fwnode_handle *fwn
- 	if (ret)
- 		return ret;
+diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+index 79e8d62fa3b3..43e9fe225870 100644
+--- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
++++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+@@ -53,7 +53,10 @@ properties:
+       default: 1
  
--	if (rargs.nargs != 4) {
-+	if (rargs.nargs != 3 && rargs.nargs != 4) {
- 		fwnode_handle_put(rargs.fwnode);
- 		return -EINVAL;
- 	}
+   "#pwm-cells":
+-    const: 4
++    oneOf:
++      - const: 3
++      - const: 4
++        deprecated: true
+     description: |
+       Number of cells in a PWM specifier.
+       - 0: The PWM channel
+@@ -68,7 +71,7 @@ properties:
+            - 11363636 (88 Hz)
+            - 44444 (22 kHz)
+       - 2: PWM flags 0 or PWM_POLARITY_INVERTED
+-      - 3: The default PWM duty cycle in nanoseconds
++      - 3: The default PWM duty cycle in nanoseconds, defaults to period.
  
--	for (i = 0; i < 4; i++)
-+	/* Let duty_cycle default to period */
-+	args[3] = rargs.args[1];
-+
-+	for (i = 0; i < rargs.nargs; i++)
- 		args[i] = rargs.args[i];
+ patternProperties:
+   "^adi,bypass-attenuator-in[0-4]$":
+@@ -124,15 +127,15 @@ examples:
+         adi,bypass-attenuator-in1 = <0>;
+         adi,pin10-function = "smbalert#";
+         adi,pin14-function = "tach4";
+-        #pwm-cells = <4>;
++        #pwm-cells = <3>;
  
- 	ret = _adt7475_pwm_properties_parse_args(args, cfg);
-@@ -1724,11 +1727,22 @@ static int adt7475_pwm_properties_parse_args(struct fwnode_handle *fwnode,
- {
- 	int ret;
- 	u32 args[4] = {};
-+	size_t n_vals = fwnode_property_count_u32(fwnode, "pwms");
+-        /* PWMs at 22.5 kHz frequency, 50% duty*/
++        /* PWMs at 22.5 kHz frequency */
+         fan-0 {
+-          pwms = <&pwm 0 44444 0 22222>;
++          pwms = <&pwm 0 44444 0>;
+         };
  
--	ret = fwnode_property_read_u32_array(fwnode, "pwms", args, ARRAY_SIZE(args));
-+	if (n_vals != 3 && n_vals != 4)
-+		return -EOVERFLOW;
-+
-+	ret = fwnode_property_read_u32_array(fwnode, "pwms", args, n_vals);
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * If there are no item to define the duty_cycle, default it to the
-+	 * period.
-+	 */
-+	if (n_vals == 3)
-+		args[3] = args[1];
-+
- 	return _adt7475_pwm_properties_parse_args(args, cfg);
- }
- 
+         fan-1 {
+-          pwms = <&pwm 2 44444 0 22222>;
++          pwms = <&pwm 2 44444 0>;
+         };
+       };
+     };
 -- 
 2.49.0
 
