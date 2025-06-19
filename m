@@ -1,92 +1,123 @@
-Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7373C25F970;
-	Thu, 19 Jun 2025 13:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDD71E260C;
+	Thu, 19 Jun 2025 13:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750340647; cv=none; b=efQAOrdC1HD/Qj5mTipxMY447lx0Fq+K9lRKIZMaRnb7yQFRH9TNebcYCfUGUOIkqkUt/GAKoPIwVvM+VIIo6Pqw48WyueV34P7h6nRCSyrmnb1fbFHMwggR2/Q4PwEFGXP11c1UQJ7SRl6UrOUyu1N9gzVqm7JzBBU9zm285nI=
+	t=1750340822; cv=none; b=AYSitON112TNcs109wFE8qdFHVBvlXGixLZCDy9VciHLjogA1DgaloWc+dXruiuUD3ph1GQ1t3QXONyOzMOs8m8O+2Qz/uG2gBjyE/+4xhAzq1lDP+YWmwBGrz6iMQcD0AB4WOk2yT2lYy+v2ROfFQEyqIRXYNXqUJaTLS76ON0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750340647; c=relaxed/simple;
-	bh=z/u0HFmeNKeBe1bPs3ygL8EGqjlpxKz4bhnkD3Ur7jg=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=jK6Od2/VZ/bj/ufb15mDu4Zl6n+yTRtL/4Izi/ORLZI7WYwS7BMbAKC8UpXWP2KoxTWIv26EQ0qAovqeKfjNl+sDhzAsh+/zwyeagJkymIVvgGhrAvYFrSdIDrd80XL63gbljjEV1CIznR36Yl8bZGZ6kI9BGaXzihc5B2oE7AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=kucIh8Ir; arc=none smtp.client-ip=203.205.221.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1750340822; c=relaxed/simple;
+	bh=fgNmTihct384s14y+9Ei4MWHT4mipfxFZAzSV/DkAcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MF7KKjTsYVY6XDWa5TflNP2qaEcpnEtysaTnENtnpGQbPoO9hItXSCB16yJ2PsEA5F0uk2smIWuLTDsshZbwwtAzgK5SmaupTdi9wgF7IXR6wA9eLbgxBrJqCWa0XwfcY8DWsn0WLRZUoGAi+avbwHzXz4CtIGPpa3yDPUsWFVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dVixNpva; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="kucIh8Ir"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1750340635; bh=j+yemY7T3ZzYFfiK5EhYYUxtRB8Upapi9Jgb0k4z9RY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=kucIh8IrPzQEbzVHe72Q++AOItMezFB4ZBHdovFK4LknmS7RylNtTG8FfdDbf11uy
-	 ICyrCM6rIGVgLl/a8HG7Z2duQ3d2SGC/DDbfcjANwoRP4BPKw7diss3lxqRBZU1Ijv
-	 X7eBwa+KtZ3PczAXYRps7Pd4Jq5imrSfYXHgXnRc=
-Received: from pek-lxu-l1.corp.ad.wrs.com ([111.198.228.63])
-	by newxmesmtplogicsvrszc16-0.qq.com (NewEsmtp) with SMTP
-	id 96C05EBC; Thu, 19 Jun 2025 21:37:44 +0800
-X-QQ-mid: xmsmtpt1750340264tpjkanzun
-Message-ID: <tencent_5F7E6FB82C0D6CF49454E862ED32CFDC780A@qq.com>
-X-QQ-XMAILINFO: OOPJ7pYMv25tBdY0UahIQDJggQZEttqz1YAXKzhowTZOpigoYf5M/Uj0XztRJm
-	 44JmKpn2KOGGrnfyjWckVBKBKBmipt599LdFGvwDM4J3yVyQhZSmRsdGMRntaSVQrmXUjMUe89Rx
-	 q2REz8TugXuEQAtoAFbmww9YMkhgrBEmTwb67gvuShs/O/gybjkhJlqTNCOIe/a1q7E+doGwPC28
-	 qGy+1JTG7NiznNkgUHpKnes0EbGwUKgtIoBxNCirRRfuzw6Qt4ZQaP+BZ0Y5n8/v7tRDfXPnOBmJ
-	 64OXdCq3qpmdpyEVntLGxjgzb54NSna8XnRmuPw3Zkj7k7s7d2EFe7qV5H6CVIwAZPFeDwlM9HCc
-	 TacMovyFUCbBkReBhwLy8ePjS/hAH8tdJ1LoOHu8zEsptLefGOgpL3ReWFO1ql4ZVg4qiURI0MEd
-	 O7zpoHkAOXe4RIRvNXomUD3oYsJvSyhEP/GnvRXDNdfCUahkn8YWaN+X1mAQtgmHCAnXrn+mJmNk
-	 fY+dnEGUJ+b6OxL2LZReujpoXVtzZBMm0Q7T5t7yECFHoTGkD2uxSwc2BJprrEusuEVW2/mWZ7xb
-	 PQ19LMmjrIku44XvQLzufXs12jHSP2LyFhJWCJkKcjnWlfhAVzg8hS59n8CK23/aaHsj0zZsZD6Z
-	 sFmlcd3NZqg3ZzeAoT7eVVbzphxTzE79KVLSJVAu421s+t0dZpyiQ2MB8inQRNuq+H9XxRYNLGUJ
-	 UUmGXlf6rFrWLNsdN0LN8oAvu5GB1Irdz50gSIDH9pYnanpuCYcTrpgIZDVng88BmnZqCHIwMXXR
-	 fuFHOxisuoWoC3ehFr8Ova5+QqSZ/ZcrKIlKFSCU0xQEVErsOYl/X1FR10eALdoZhcPPRQKmKl31
-	 3z5L653/xgMvlbefFIL5Hmb0mqD1+3UXBtSg4RfJX0cDl6uUXMBQ9cnO8IFgAJEsHVXj+mJIkOFf
-	 SMWgmWMnRyJV7HO8MrNe6UywMEhMnx
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+3bbbade4e1a7ab45ca3b@syzkaller.appspotmail.com
-Cc: jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	mail@mariuszachmann.de,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH] hwmon: fill it with 0 when data size is insufficient
-Date: Thu, 19 Jun 2025 21:37:43 +0800
-X-OQ-MSGID: <20250619133742.1768346-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <685392a0.050a0220.216029.0168.GAE@google.com>
-References: <685392a0.050a0220.216029.0168.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dVixNpva"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b31d489a76dso738950a12.1;
+        Thu, 19 Jun 2025 06:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750340820; x=1750945620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAqoB8aZq0mPE2ZUTGg/dSTbdPV6llCzCx6Xv2mrVHM=;
+        b=dVixNpvatoP5xeDZ+Qv6QNYUeF/Vo4N5gCzFRJOVpX3Fp/Or+QkM7xcRp16+GiLBpM
+         Frb+OxWTeb6B2ts6SP9vN0Jq0Ah+lVcyt/Mz2CnW2zKZiMn5SLY0vBx+Y86Tk3+c5nVQ
+         +6tfYTJ20YewSQEqcnq0S9FLJNce/ocuEuMEGNreGaR/PgtYZi9ndxlUXuRiBc7+nbS+
+         2lAeeWbAzVq0u40O0xfaJxVrr8QVgU2rmyoM4z5V3/4qXRSbCQGfImK8GNBS1qngEpl5
+         VNae3OnNypIQhnR1z8g7Qedtd0LNrv/6gv0beiTQBAXSNvBRMqMKE7PGlzzFP7XSVfm+
+         1y0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750340820; x=1750945620;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZAqoB8aZq0mPE2ZUTGg/dSTbdPV6llCzCx6Xv2mrVHM=;
+        b=pahuKXjuPft/xFCzMADgsX52GCIkcAGRaH7WF8BACZRwAyAMqCVXvvpwMRJ3Mf92Gt
+         5ztUy4Wp63P4xWUZc3v31djXUVTxWx0pvjFtYy1bCJmCc48Bbh8qQR974rN96sNYqzS/
+         2UJiRb4/9W+Z4jMXTPffQcaeYYIYAIYsjpZTsZKp3gZLTboEcMiSPzW8EeCsSgEXR6w3
+         5bLxQncbNP0P3RM2ZoGQ13Ulv/sCV6FZWqfrXN8r+ysuMFeTnuin+wBCYIhgM0q/dASa
+         36f/A3YROPiuNtgYQBvjn3Ln5w10KiIEPpQcyHI5AzM97YWpjODdMsdFnElJRX1RKi/V
+         rreg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5nUovcsNOoufFUfiHM0+1hZYtDFlcWpmsbqAaWHlYLG/+4/OG7U1aNxr04CbyDGT1HdCCKYg8p5xgX/I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHWbXKd/mF0Dpp5uokSm44/KAZARRFUg968kwMFfRyX8NDag4z
+	N200buSWJM7Pq2xmauVgG2Ww2hz6Fn2GoCyolimYUfiOvZ5R0b02TAuT64hMMA==
+X-Gm-Gg: ASbGncvAxYVuppSzlsxCpDs3hNYiTxtSwdCEoVSfBmU16PxhtaCmmNkwOA+2ueFEItp
+	EzhineBNfXlky0ECCrkUOnY2RaEK5mfqJzhMMY9axihv1u/P/DbLPQQjbP12IDwYO8gAwV0agDI
+	RishhI23shv0753GcG0LAKx/cu0F+2MNSweqYSb++sMGchcH/dJ+p7qcIzlX/BlX4sJ7N1qbrdK
+	0B3HdR0yUs3Zy8ypNR6Y3qP54NMBhED8qwFGQxdp7ztVlN1NIk4D7FYH8BvvWwNgOw0y6Edujdx
+	Tth8cyGvMB+PoPOid+GcHTk0xvynMNwLBqXDhBbbSm0uVGOEdUhrq9JcbvTSbD4hBFouZs4y4/w
+	=
+X-Google-Smtp-Source: AGHT+IF/9bZMNU27C/sOEoBqN+PjTLw2QdLJblW+32TsO+Y8FQ0wuDDLqqlEKkJYHovd8wW2aV7wUQ==
+X-Received: by 2002:a17:90b:28ce:b0:312:ffdc:42b2 with SMTP id 98e67ed59e1d1-313f1ce1e3bmr28173237a91.23.1750340819891;
+        Thu, 19 Jun 2025 06:46:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3158a3188a3sm2207006a91.36.2025.06.19.06.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 06:46:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.16-rc3
+Date: Thu, 19 Jun 2025 06:46:55 -0700
+Message-ID: <20250619134658.3618113-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When the data size returned by the sensor is less than IN_BUFFER_SIZE,
-it is padded with 0.
+Hi Linus,
 
-Reported-by: syzbot+3bbbade4e1a7ab45ca3b@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=3bbbade4e1a7ab45ca3b
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- drivers/hwmon/corsair-cpro.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please pull hwmon fixes for Linux v6.16-rc3 from signed tag:
 
-diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-index e1a7f7aa7f80..274864e8a8e7 100644
---- a/drivers/hwmon/corsair-cpro.c
-+++ b/drivers/hwmon/corsair-cpro.c
-@@ -157,6 +157,8 @@ static int ccp_raw_event(struct hid_device *hdev, struct hid_report *report, u8
- 	spin_lock(&ccp->wait_input_report_lock);
- 	if (!completion_done(&ccp->wait_input_report)) {
- 		memcpy(ccp->buffer, data, min(IN_BUFFER_SIZE, size));
-+		if (size < IN_BUFFER_SIZE)
-+			memset(ccp->buffer + size, 0, IN_BUFFER_SIZE - size);
- 		complete_all(&ccp->wait_input_report);
- 	}
- 	spin_unlock(&ccp->wait_input_report_lock);
--- 
-2.43.0
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.16-rc3
 
+Thanks,
+Guenter
+------
+
+The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
+
+  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.16-rc3
+
+for you to fetch changes up to c25892b7a1744355e16281cd24a9b59ec15ec974:
+
+  hwmon: (ltc4282) avoid repeated register write (2025-06-16 06:30:58 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.16-rc3
+
+- ltc4282: Avoid repeated register write operation
+
+- occ: Fix unaligned accesses, and rework attribute registration to reduce
+  stack usage
+
+- ftsteutates: Fix TOCTOU race
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      hwmon: (occ) Rework attribute registration for stack usage
+      hwmon: (occ) fix unaligned accesses
+
+Gui-Dong Han (1):
+      hwmon: (ftsteutates) Fix TOCTOU race in fts_read()
+
+Nuno Sá (1):
+      hwmon: (ltc4282) avoid repeated register write
+
+ drivers/hwmon/ftsteutates.c |   9 +-
+ drivers/hwmon/ltc4282.c     |   7 --
+ drivers/hwmon/occ/common.c  | 238 ++++++++++++++++++--------------------------
+ 3 files changed, 103 insertions(+), 151 deletions(-)
