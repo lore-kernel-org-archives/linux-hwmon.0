@@ -1,54 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0BC2A8C1;
-	Fri, 20 Jun 2025 05:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139FE2A8C1;
+	Fri, 20 Jun 2025 05:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750395743; cv=none; b=DyesaGLr/Ez9YIUFBcfeUD85CA2Jd7vFaHdOpoVkfr2J4kkKms3UxfA1GFj3knTbqWtvEd+xBoEP7X+RSsQ3h6x0CDuUYkppc2FzpBCV55jjwy6KbQHcwwe2AzUSTkxFcZH7Whk1ufEupGkT/ek2NnNsR9yBy33HLg/OkaSO0DQ=
+	t=1750395924; cv=none; b=UylnE4RbvEvVAN+sbsvZqzftWwwh1C/dlDsh7u4eOtKBuE2wti850ddDMUqiIjJp8ME16EFaKmK8xZrTOekLsu6SXNnNzTonUFA99CF7R5tmUGtgdk+z00OfumiN4/iGIGUL7KppPpeaV4XUMOGwW6/mn31FK5JR36heY9qZSe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750395743; c=relaxed/simple;
-	bh=D9l67I4gVQ1Zk7K1SD18ucSocCnCM8EvcaI1dWXIpis=;
+	s=arc-20240116; t=1750395924; c=relaxed/simple;
+	bh=1hsaLuMLFKs4ixVELRCpxzWAc3UpUm8RZpYjFW2wa6M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jaW0+kzoOYjVgRZYXmMHg3PNtKOyD0BCTfK8W/axF4fnCXsGESdOZpDehg/RiaFLL7cvPngKe1kCt/6VU0F6exXmYqflRTwVaS3e9o63Nx7k4suvyEYfJngy1Q0VcPi3mJDGqsS+dYKr11qP+8qixXnE5MvS0jfgS3i59bG/c80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ksO9gZ48; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=SVA4UkjwFHWm5tilwM//db+3MYefo8/akKbOp6YhcaMV/oftk8PNpha9h5i04RJyXB7g7BDs4cvLie37ITuT43Q1TDBztv1QzJlfrTFmvdBhSlcJsg/WZj/hfZD1DLjaFUf6aEfiIJcJT+yBqBsvu/OATvBMyUoYgTdHTqdjbqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=P4HP6FtN; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ksO9gZ48"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56176C4CEE3;
-	Fri, 20 Jun 2025 05:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1750395742;
-	bh=D9l67I4gVQ1Zk7K1SD18ucSocCnCM8EvcaI1dWXIpis=;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="P4HP6FtN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1750395921;
+	bh=1hsaLuMLFKs4ixVELRCpxzWAc3UpUm8RZpYjFW2wa6M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ksO9gZ48Ucnptc+udebuWMyQsSgJYaVlDw5nZFSowhmwnScVLR5NgleScED/xgcxF
-	 9Z/IElzQpDNcCyROEv3mvyaJ35Yfrx0vUGNvvt5nup+yMJoTPJkmjf9VJ6+5pQ1EQI
-	 aICfckMyyWxRGjyoquAYOq6Ny7u8KwzfCMQ2hUac=
-Date: Fri, 20 Jun 2025 07:02:19 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org, Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <2025062058-caddie-rendering-3bf1@gregkh>
-References: <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com>
- <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com>
- <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <2025061910-skies-outgoing-89cc@gregkh>
- <644dfd66-ad30-47cb-9ec4-50d9a003433b@roeck-us.net>
- <2025061914-sternum-factoid-4269@gregkh>
- <CAOoeyxUcB1xc_kMBADWoV8RnnFJ+uCYa_kJ7_BdyR8W_WZfsAg@mail.gmail.com>
+	b=P4HP6FtNqiNmx1xhZl1sRPzBrDZMuDxx3HOYl1jY6bx1yh/k+ocPbHyvwUMeEO0+e
+	 JZcQcGEUUAQVjZoEi0kyZSsBVY5T3DMGPzHH1xbxhhPgqr6FIB9etsJPTJT+VG7PGd
+	 G/TdtDx02jcC+nRUmormQwwAv+KovAN3aKj7d9Jw=
+Date: Fri, 20 Jun 2025 07:05:19 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: lschyi@chromium.org
+Cc: Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Sung-Chi Li <lschyi@google.com>
+Subject: Re: [PATCH v4 3/3] hwmon: (cros_ec) register fans into thermal
+ framework cooling devices
+Message-ID: <f0584025-6dbb-44ab-bcaf-19827a45fa37@t-8ch.de>
+References: <20250619-cros_ec_fan-v4-0-ca11548ce449@chromium.org>
+ <20250619-cros_ec_fan-v4-3-ca11548ce449@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -58,176 +45,173 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxUcB1xc_kMBADWoV8RnnFJ+uCYa_kJ7_BdyR8W_WZfsAg@mail.gmail.com>
+In-Reply-To: <20250619-cros_ec_fan-v4-3-ca11548ce449@chromium.org>
 
-On Fri, Jun 20, 2025 at 10:54:44AM +0800, Ming Yu wrote:
-> Dear Guenter and Greg,
+On 2025-06-19 15:42:56+0800, Sung-Chi Li via B4 Relay wrote:
+> From: Sung-Chi Li <lschyi@chromium.org>
 > 
-> Thank you for reviewing,
+> Register fans connected under EC as thermal cooling devices as well, so
+> these fans can then work with the thermal framework.
 > 
-> Greg KH <gregkh@linuxfoundation.org> 於 2025年6月20日 週五 上午1:18寫道：
-> >
-> > On Thu, Jun 19, 2025 at 09:58:04AM -0700, Guenter Roeck wrote:
-> > > On 6/19/25 09:20, Greg KH wrote:
-> > > > On Fri, Jun 20, 2025 at 12:03:01AM +0800, Ming Yu wrote:
-> > > > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午11:28寫道：
-> > > > > >
-> > > > > > On Thu, 19 Jun 2025, Ming Yu wrote:
-> > > > > >
-> > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月19日 週四 下午7:53寫道：
-> > > > > > > >
-> > > > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > > >
-> > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月13日 週五 下午9:11寫道：
-> > > > > > > > > >
-> > > > > > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > > > > >
-> > > > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午11:23寫道：
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > > Dear Lee,
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Thank you for reviewing,
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > ...
-> > > > > > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] = {
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > > > > > > > > > > +
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > What happened to using IDA in the child driver?
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > In a previous version, I tried to maintain a static IDA in each
-> > > > > > > > > > > > > sub-driver. However, I didn’t consider the case where multiple NCT6694
-> > > > > > > > > > > > > devices are bound to the same driver — in that case, the IDs are not
-> > > > > > > > > > > > > fixed and become unusable for my purpose.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Not sure I understand.
-> > > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > > > > > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > > > > > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > > > > > > > > > > However, when a second NCT6694 device is connected to the system, it
-> > > > > > > > > > > will receive IDs 16~31.
-> > > > > > > > > > > Because of this behavior, I switched back to using platform_device->id.
-> > > > > > > > > >
-> > > > > > > > > > Each of the devices will probe once.
-> > > > > > > > > >
-> > > > > > > > > > The first one will be given 0, the second will be given 1, etc.
-> > > > > > > > > >
-> > > > > > > > > > Why would you give multiple IDs to a single device bound to a driver?
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > The device exposes multiple peripherals — 16 GPIO controllers, 6 I2C
-> > > > > > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-> > > > > > > > > is independently addressable, has its own register region, and can
-> > > > > > > > > operate in isolation. The IDs are used to distinguish between these
-> > > > > > > > > instances.
-> > > > > > > > > For example, the GPIO driver will be probed 16 times, allocating 16
-> > > > > > > > > separate gpio_chip instances to control 8 GPIO lines each.
-> > > > > > > > >
-> > > > > > > > > If another device binds to this driver, it is expected to expose
-> > > > > > > > > peripherals with the same structure and behavior.
-> > > > > > > >
-> > > > > > > > I still don't see why having a per-device IDA wouldn't render each
-> > > > > > > > probed device with its own ID.  Just as you have above.
-> > > > > > > >
-> > > > > > >
-> > > > > > > For example, when the MFD driver and the I2C sub-driver are loaded,
-> > > > > > > connecting the first NCT6694 USB device to the system results in 6
-> > > > > > > nct6694-i2c platform devices being created and bound to the
-> > > > > > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the IDA.
-> > > > > > >
-> > > > > > > However, when a second NCT6694 USB device is connected, its
-> > > > > > > corresponding nct6694-i2c platform devices receive IDs 6 through 11 —
-> > > > > > > instead of 0 through 5 as I originally expected.
-> > > > > > >
-> > > > > > > If I've misunderstood something, please feel free to correct me. Thank you!
-> > > > > >
-> > > > > > In the code above you register 6 I2C devices.  Each device will be
-> > > > > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > > > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > > > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > > > > should be able to use IDA in .probe() to allocate those same device IDs
-> > > > > > 0 through 5.
-> > > > > >
-> > > > > > What am I missing here?
-> > > > > >
-> > > > >
-> > > > > You're absolutely right in the scenario where a single NCT6694 device
-> > > > > is present. However, I’m wondering how we should handle the case where
-> > > > > a second or even third NCT6694 device is bound to the same MFD driver.
-> > > > > In that situation, the sub-drivers using a static IDA will continue
-> > > > > allocating increasing IDs, rather than restarting from 0 for each
-> > > > > device. How should this be handled?
-> > > >
-> > > > What is wrong with increasing ids?  The id value means nothing, they
-> > > > just have to be unique.
-> > > >
-> > >
-> > > Unless they are used in the client driver as index into an array, as in
-> > > "this is the Nth instance of this device for this chip". There has to be
-> > > _some_ means to pass N to the client driver.
-> >
-> > Ick, that should just be walking the list of child devices instead, as
-> > obviously no one is hard coding array sizes for devices these days,
-> > right?  :)
-> >
-> > Anyway, sure, if you _have_ to have a specific id, then use a specific
-> > id, but really, it should not matter.
-> >
+> During the driver probing phase, we will also try to register each fan
+> as a thermal cooling device based on previous probe result (whether the
+> there are fans connected on that channel, and whether EC supports fan
+> control). The basic get max state, get current state, and set current
+> state methods are then implemented as well.
 > 
-> I need fixed IDs in order to communicate with the sub-devices
-> correctly. For instance, the I2C driver registers 6 devices, and the
-> userspace interface needs to know which specific I2C controller (e.g.,
-> index 0 ~ 5) to target with custom commands. Using fixed IDs allow the
-> driver to maintain a consistent mapping between device instances and
-> register sets.
+> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+
+Also some tiny nitpicks below, with these fixed:
+
+Acked-by: Thomas Weißschuh <linux@weissschuh.net>
+
+> ---
+>  Documentation/hwmon/cros_ec_hwmon.rst |  2 +
+>  drivers/hwmon/cros_ec_hwmon.c         | 85 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 87 insertions(+)
 > 
-> I'm open to better alternatives, but so far, using fixed
-> platform_device->id has been the most straightforward way to achieve
-> this.
+> diff --git a/Documentation/hwmon/cros_ec_hwmon.rst b/Documentation/hwmon/cros_ec_hwmon.rst
+> index 355557a08c9a54b4c177bafde3743e7dc02218be..6db812708325f7abb6d319af3312b4079e6923c6 100644
+> --- a/Documentation/hwmon/cros_ec_hwmon.rst
+> +++ b/Documentation/hwmon/cros_ec_hwmon.rst
+> @@ -27,3 +27,5 @@ Fan and temperature readings are supported. PWM fan control is also supported if
+>  the EC also supports setting fan PWM values and fan mode. Note that EC will
+>  switch fan control mode back to auto when suspended. This driver will restore
+>  the fan state to what they were before suspended when resumed.
+> +If a fan is controllable, this driver will register that fan as a cooling device
+> +in the thermal framework as well.
+> diff --git a/drivers/hwmon/cros_ec_hwmon.c b/drivers/hwmon/cros_ec_hwmon.c
+> index c0c4ffa6f85419edf5dacd730192e7f1c28e2e5c..572b194e51fb1a05fa5151abb0826d1c8ba2948d 100644
+> --- a/drivers/hwmon/cros_ec_hwmon.c
+> +++ b/drivers/hwmon/cros_ec_hwmon.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+> +#include <linux/thermal.h>
+>  #include <linux/types.h>
+>  #include <linux/units.h>
+>  
+> @@ -31,6 +32,11 @@ struct cros_ec_hwmon_priv {
+>  	u8 manual_fan_pwm[EC_FAN_SPEED_ENTRIES];
+>  };
+>  
+> +struct cros_ec_hwmon_cooling_priv {
+> +	struct cros_ec_hwmon_priv *hwmon_priv;
+> +	u8 index;
+> +};
+> +
+>  static int cros_ec_hwmon_read_fan_speed(struct cros_ec_device *cros_ec, u8 index, u16 *speed)
+>  {
+>  	int ret;
+> @@ -306,6 +312,42 @@ static const struct hwmon_channel_info * const cros_ec_hwmon_info[] = {
+>  	NULL
+>  };
+>  
+> +static int cros_ec_hwmon_cooling_get_max_state(struct thermal_cooling_device *cdev,
+> +					       unsigned long *val)
+> +{
+> +	*val = 255;
+> +	return 0;
+> +}
+> +
+> +static int cros_ec_hwmon_cooling_get_cur_state(struct thermal_cooling_device *cdev,
+> +					       unsigned long *val)
+> +{
+> +	const struct cros_ec_hwmon_cooling_priv *priv = cdev->devdata;
+> +	u8 read_val;
+> +	int ret;
+> +
+> +	ret = cros_ec_hwmon_read_pwm_value(priv->hwmon_priv->cros_ec, priv->index, &read_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = read_val;
+> +	return ret;
 
-The kernel is not responsible for numbering devices in a determinisitic
-way like this, so be very careful.  Userspace can implement whatever
-policy it wants to figure out what device id is what actual device, by
-using tools like udev and the like.  See how it does this today by
-looking at your /dev/disks/ directory on your system at the symlinks.
+return 0;
 
-So good luck with this, but again, it's not the kernel's job to keep
-device numbering static across boots, that is not something we guarantee
-at all.
+> +}
+> +
+> +static int cros_ec_hwmon_cooling_set_cur_state(struct thermal_cooling_device *cdev,
+> +					       unsigned long val)
+> +{
+> +	const struct cros_ec_hwmon_cooling_priv *priv = cdev->devdata;
+> +
+> +	return cros_ec_hwmon_write_pwm_input(priv->hwmon_priv->cros_ec, priv->index, val);
+> +}
+> +
+> +static const struct thermal_cooling_device_ops cros_ec_thermal_cooling_ops = {
+> +	.get_max_state = cros_ec_hwmon_cooling_get_max_state,
+> +	.get_cur_state = cros_ec_hwmon_cooling_get_cur_state,
+> +	.set_cur_state = cros_ec_hwmon_cooling_set_cur_state,
+> +};
+> +
+>  static const struct hwmon_ops cros_ec_hwmon_ops = {
+>  	.read = cros_ec_hwmon_read,
+>  	.read_string = cros_ec_hwmon_read_string,
+> @@ -381,6 +423,48 @@ static bool cros_ec_hwmon_probe_fan_control_supported(struct cros_ec_device *cro
+>  	       is_cros_ec_cmd_available(cros_ec, EC_CMD_THERMAL_AUTO_FAN_CTRL, CROS_EC_HWMON_THERMAL_AUTO_FAN_CTRL_CMD_VERSION);
+>  }
+>  
+> +static void cros_ec_hwmon_register_fan_cooling_devices(struct device *dev,
+> +						       struct cros_ec_hwmon_priv *priv)
+> +{
+> +	struct cros_ec_hwmon_cooling_priv *cpriv;
+> +	struct thermal_cooling_device *cdev;
+> +	char *type;
 
-Perhaps you should not be using mfd for this?  Perhaps something like
-the auxbus would work better?
+const char *type;
 
-thanks,
-
-greg k-h
+> +	size_t i;
+> +
+> +	if (!IS_ENABLED(CONFIG_THERMAL))
+> +		return;
+> +
+> +	if (!priv->fan_control_supported)
+> +		return;
+> +
+> +	for (i = 0; i < EC_FAN_SPEED_ENTRIES; i++) {
+> +		if (!(priv->usable_fans & BIT(i)))
+> +			continue;
+> +
+> +		cpriv = devm_kzalloc(dev, sizeof(*cpriv), GFP_KERNEL);
+> +		if (!cpriv) {
+> +			dev_warn(dev, "no memory for registering fan %zu as a cooling device\n", i);
+> +			continue;
+> +		}
+> +
+> +		type = devm_kasprintf(dev, GFP_KERNEL, "%s-fan%zu", dev_name(dev), i);
+> +		if (!type) {
+> +			dev_warn(dev, "no memory to compose cooling device type for fan %zu\n", i);
+> +			continue;
+> +		}
+> +
+> +		cpriv->hwmon_priv = priv;
+> +		cpriv->index = i;
+> +		cdev = devm_thermal_of_cooling_device_register(dev, NULL, type, cpriv,
+> +							       &cros_ec_thermal_cooling_ops);
+> +		if (IS_ERR(cdev)) {
+> +			dev_warn(dev, "failed to register fan %zu as a cooling device: %pe\n", i,
+> +				 cdev);
+> +			continue;
+> +		}
+> +	}
+> +}
+> +
+>  static int cros_ec_hwmon_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -408,6 +492,7 @@ static int cros_ec_hwmon_probe(struct platform_device *pdev)
+>  	cros_ec_hwmon_probe_temp_sensors(dev, priv, thermal_version);
+>  	cros_ec_hwmon_probe_fans(priv);
+>  	priv->fan_control_supported = cros_ec_hwmon_probe_fan_control_supported(priv->cros_ec);
+> +	cros_ec_hwmon_register_fan_cooling_devices(dev, priv);
+>  
+>  	hwmon_dev = devm_hwmon_device_register_with_info(dev, "cros_ec", priv,
+>  							 &cros_ec_hwmon_chip_info, NULL);
+> 
+> -- 
+> 2.50.0.rc2.701.gf1e915cc24-goog
+> 
+> 
