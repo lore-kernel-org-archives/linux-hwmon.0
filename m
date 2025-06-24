@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE6C2522A2;
-	Tue, 24 Jun 2025 07:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E913B1876;
+	Tue, 24 Jun 2025 07:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750751085; cv=none; b=hRVeTOhF9z4ckJqAJpNrvFNuezapnW9xJBikr/wqjVer5EarLfhCTKLxxEa7YMO2szXm16RcL2+hgaQwvkdNFHgyOyavwDoMYEsB5P0mdoihyzV/Qh+kn+SEMXNKUb73hI/PIcl3MZALdvnhXA08UM3ILWj8OyMvucX7s3ctSsE=
+	t=1750751307; cv=none; b=jzHIXju4IlxCmcBsAVs4QV/rN9fxRgIHba6PcxEguK2YSXopiJDfTXM0LA+Z7X/lDFtsXU0G3QZntPxxJimylzxD2BDYJt8aYXfTKP31HvD75fH9PTMpJqy3xwcvTnZ43LEz/sqnpATfir3jjiocyppPDIWqJMxv5mra3mNjdEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750751085; c=relaxed/simple;
-	bh=xpycSdvK7kcIEZzGrcP5HRQWA/Pk1mSBOBIW+PLSYU4=;
+	s=arc-20240116; t=1750751307; c=relaxed/simple;
+	bh=87IhusWnFHqddKhc+u8V+JDM2N3zSseDLKZaCid1I40=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TMQx8+kOpJYo5J/hopGn5TD8DSUFem9gGpn/o4d29h1CBzs93VKHsWk7zO/I4hovV0+NcJp8m5KrAp2wmxdCLzIB8ojUFnM+eujGz1wyp5X/fGFWxFPz2uiGMaU3KnvD+tFG5a0Xyq/CuPQ7+BMfy6bZk7wnjDcud39BHzXnUYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlkbEQn7; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=maVC0QzgSQ2Ii4p+eyoARxoAqzn4LO4Wwz4Px+C/r0ktRCJfCWii4k8oSMf34dqu7ihRWHP8fGoLfRMUYlud6gpcXFqJzwQlJk2RF7+2r5OCdg0enEJ3SOCEM9DNKBC20mSfqmao21+jzpytljBDjBCMjhxHdSzgo3za+wsYI7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMUDRSnX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlkbEQn7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4570C4CEE3;
-	Tue, 24 Jun 2025 07:44:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMUDRSnX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA07DC4CEEF;
+	Tue, 24 Jun 2025 07:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750751084;
-	bh=xpycSdvK7kcIEZzGrcP5HRQWA/Pk1mSBOBIW+PLSYU4=;
+	s=k20201202; t=1750751306;
+	bh=87IhusWnFHqddKhc+u8V+JDM2N3zSseDLKZaCid1I40=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=YlkbEQn7vpkIK7IsDGTgsR1tim3kikF/aCOZBssQc40Ab7dVVn9hI/K0Kpzxnzd/b
-	 U/Xzli7M2R9k7OjmIiBfh2rYPrbyKkd+kuinVF0q7nRQkCwXTXBqkr+e66BqZBgLG3
-	 hXbdFq77zGUeph+0hKq2pgiCAVvyzBleC34tJo9lRHXee3I4N/7zYV/3NmyFa3lfsj
-	 oj/EawlfqOnR0XXVKEIqlKhk8+2ytiwKUH8iUXoFSl1o8Cwwj6F9OGAu5P4yueYXkX
-	 DDZkXlGlI8/Vqk/y2O6+HH5nCWr7Gtq8qy+gkY9LBYhjA9Y4c/kW1OYZAPWIGNltyn
-	 dXnTL8cYO8rvA==
-Message-ID: <f4f45fbd-2929-491c-8f5e-413b9c481259@kernel.org>
-Date: Tue, 24 Jun 2025 09:44:35 +0200
+	b=NMUDRSnXUpS0q4QJmlAwIads/FCRoiKqHnNK5yRu6FGT5xYQP6Yyy2JTuuvYrjKEF
+	 RTe7bnuTLb/QxEVqPfMPeDrhLqEihckLvvl04TVZX6cCy1T4/IxnCB6vAmDfZB/9n0
+	 LauTe6pP3miPobjsX9ru22b4Ar4ipL9WjEx6PzS6s0oBNpsAj+VAroU8mXeI0ieg/X
+	 zo8VXTdLze62zoSFMpPncIbj8G5Bv7+VLXE/zVaBtMTKn9StAxMiVKpr7Lp3GtsoTt
+	 EeNcsJjhVuz1snW7tVDZpSfyWZc0g1M5APYV8IceaBgdMt3XcMPs+KuNYrC3h+cykC
+	 TkQIIG0jt452g==
+Message-ID: <9bd05709-7702-4b74-85e1-3df25b57c535@kernel.org>
+Date: Tue, 24 Jun 2025 09:48:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,30 +35,29 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: trivial-devices: Add mp2869a/mp29612a
- device entry
+Subject: Re: [PATCH 1/2] hwmon: (pmbus) Add support for MPS multi-phase
+ mp2869a/mp29612a controllers
 To: tzuhao.wtmh@gmail.com, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
  Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Naresh Solanki <naresh.solanki@9elements.com>,
- Fabio Estevam <festevam@gmail.com>, Michal Simek <michal.simek@amd.com>,
- Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, Henry Wu <Henry_Wu@quantatw.com>,
- Grant Peltier <grantpeltier93@gmail.com>,
+ Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
+ Michal Simek <michal.simek@amd.com>, Fabio Estevam <festevam@gmail.com>,
+ Henry Wu <Henry_Wu@quantatw.com>, Grant Peltier <grantpeltier93@gmail.com>,
  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
  Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ Kim Seer Paller <kimseer.paller@analog.com>,
+ Leo Yang <leo.yang.sy0@gmail.com>, Ninad Palsule <ninad@linux.ibm.com>,
+ Alex Vdovydchenko <xzeol@yahoo.com>,
  John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
- Noah Wang <noahwang.wang@outlook.com>, Ninad Palsule <ninad@linux.ibm.com>,
- Jerome Brunet <jbrunet@baylibre.com>, Leo Yang <leo.yang.sy0@gmail.com>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>, Alex Vdovydchenko
- <xzeol@yahoo.com>, Kim Seer Paller <kimseer.paller@analog.com>,
- Nuno Sa <nuno.sa@analog.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, devicetree@vger.kernel.org,
+ Nuno Sa <nuno.sa@analog.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Noah Wang <noahwang.wang@outlook.com>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-doc@vger.kernel.org
 References: <20250624074156.291176-1-Henry_Wu@quantatw.tw>
- <20250624074156.291176-2-Henry_Wu@quantatw.tw>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,44 +103,158 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250624074156.291176-2-Henry_Wu@quantatw.tw>
+In-Reply-To: <20250624074156.291176-1-Henry_Wu@quantatw.tw>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 24/06/2025 09:41, tzuhao.wtmh@gmail.com wrote:
-> From: Henry Wu <Henry_Wu@quantatw.com>
-> 
-> Add trivial-devices binding for mp2869a/mp29612a to enable automatic matching
-> in device tree.
+> +static int
+> +MP2869A_read_byte_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/* Enforce VOUT direct format. */
+> +		return PB_VOUT_MODE_DIRECT;
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +}
+> +
+> +static int
+> +MP2869A_identify_vout_format(struct i2c_client *client,
 
-Drop "enable automatic ...." - this is not what is being done here.
-Instead describe the hardware.
+Use Linux coding style, so lowercase for variables, types and functions.
+Everywhere (except when coding style tells you different, so please read
+it).
 
-Please organize the patch documenting compatible (DT bindings) before
-their user.
-See also:
-https://elixir.bootlin.com/linux/v6.14-rc6/source/Documentation/devicetree/bindings/submitting-patches.rst#L46
+> +			    struct MP2869A_data *data)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < data->info.pages; i++) {
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = i2c_smbus_read_word_data(client, MP2869A_VOUT_MODE);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		switch (ret & MP2869A_VOUT_MODE_MASK) {
+> +		case MP2869A_VOUT_MODE_VID:
+> +			data->vout_format[i] = vid;
+> +			break;
+> +		default:
+> +		return -EINVAL;
+> +		}
+> +		}
 
-> 
-> Signed-off-by: Henry Wu <Henry_Wu@quantatw.com>
+Messed indentation in multiple places.
 
+> +	return 0;
+> +}
+> +
+> +static struct pmbus_driver_info MP2869A_info = {
 
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 27930708ccd5..e9a3a6f2c59e 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -287,8 +287,12 @@ properties:
->            - mps,mp2857
->              # Monolithic Power Systems Inc. multi-phase controller mp2888
->            - mps,mp2888
-> +            # Monolithic Power Systems Inc. multi-phase controller mp2869a
-> +          - mps,mp2869a
+This is const.
 
-69 < 88
+> +	.pages = MP2869A_PAGE_NUM,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = -3,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+> +		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+> +	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT |
+> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP,
+> +	.read_byte_data = MP2869A_read_byte_data,
+> +	.read_word_data = MP2869A_read_word_data,
+> +};
+> +
+> +static int mp2869a_probe(struct i2c_client *client)
+> +{
+> +	struct pmbus_driver_info *info;
+> +	struct MP2869A_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct MP2869A_data),
+
+sizeof(*)
+
+> +		GFP_KERNEL);
+
+Misaligned. Run checkpatch --srtict
+
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->chip_id = (enum chips)(uintptr_t)i2c_get_match_data(client);
+
+These are just wrong or redundant casts. You need only one cast -
+kernel_ulong_t
+
+> +
+> +	memcpy(data->max_phases, mp2869a_max_phases[data->chip_id],
+> +		sizeof(data->max_phases));
+
+Why you cannot just store the pointer?
+
+> +
+> +	memcpy(&data->info, &MP2869A_info, sizeof(*info));
+
+Why you cannot just store the pointer?
+
+> +	info = &data->info;
+> +
+> +
+
+One blank line, not two
+
+> +	/* Identify vout format. */
+> +	ret = MP2869A_identify_vout_format(client, data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* set the device to page 0 */
+> +	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct of_device_id __maybe_unused mp2869a_of_match[] = {
+> +	{ .compatible = "mps,mp2869a", .data = (void *)mp2869a },
+> +	{ .compatible = "mps,mp29612a", .data = (void *)mp29612a},
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, mp2869a_of_match);
+> +
+> +static struct i2c_driver mp2869a_driver = {
+> +	.driver = {
+> +		.name = "mp2869a",
+> +		.of_match_table = mp2869a_of_match,
+> +	},
+> +	.probe = mp2869a_probe,
+> +	.id_table = mp2869a_id,
+> +};
+> +
+> +module_i2c_driver(mp2869a_driver);
+> +
+> +
+
+One blank line, not two. This applies everywhere.
+
+> +MODULE_AUTHOR("Henry Wu <Henry_WU@quantatw.com>");
+> +MODULE_DESCRIPTION("PMBus driver for MPS MP2869A/MP29612A device");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
 
 
 Best regards,
