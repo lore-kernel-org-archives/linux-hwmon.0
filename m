@@ -1,101 +1,192 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BF61E5B6F;
-	Wed, 25 Jun 2025 08:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD441E25ED;
+	Wed, 25 Jun 2025 08:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750838840; cv=none; b=FT0FuTkTWnEd9MofIfwmgef1k/XHTxQILbDx8ppqM1kSDW4T2cw3ZawYBI3M9W5DS+7KXsgnS8h7g1dkKiAWSErhp9Wu9JNvp6tYdoobB7a/oZfVe2SrTo3z/WJHdp7IKiZ+RRG4RYX7CiirsQ0YaXaffQRFttRKRrTb5LZ53w4=
+	t=1750838929; cv=none; b=fM3RbGsSNPvbt4ophm1e6of//RHXAO9WoKeYaOhNigv27ysunF6ivutqgPNwp/GcVxTUqeIX7SY3FsvL6DTL+OZi/1OS3vbglr/kGCtE7zA8/pikDPOKhbNNyZLtnxet5jr8wb0cv1aWVX996zMGdYXWOCb5/rCs27Ree5dmpG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750838840; c=relaxed/simple;
-	bh=TCuSxifzX9CBgsGlRjDPkKP/DAen5me5qQ/q/qMAIZ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fLgovD1CFeRdgQbQNKV40xKHz5tV4SLyoQUk3dfo6TbPqJdWXnzP1YySJ3ofpI0s8SOPZ3GjlsPsxKJQ9heoiieQNmOAGvldO+us8wTvS7S8DeCY52euYDRZ9H+yqcDG1AXRpBrAvz/4UJJHD9vrB7Itp6Zk+0bVZYNedY7w63Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=bz9kPgx6; arc=none smtp.client-ip=220.197.32.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+	s=arc-20240116; t=1750838929; c=relaxed/simple;
+	bh=HmAaA2Cbn5fJ3+qoi+KT7WNEvwt3kqHBs14BB0Pz3bc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MIXpgR4gw6N9v0HOppwCBORskF/ULEVG7Mp6vw0rZHvkreGop5Z3IenNyW1fvFaXRBRTqeYE4V4nBSFdq2xhJJkFOwJphFF4iC7Dv+GjQWJ0mKk+rfRgTjyUg8bXeI286hdxlMxKHH4LScy0HeUGy1L9Iu67wlRT1tQpiHcI1Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtytpBMF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="bz9kPgx6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=0W
-	mHz61pOuc8mNMwx/wFxfFDW8jE3ZKqr9gWGALrOII=; b=bz9kPgx6hlqwRLxJ70
-	RzYkc5Q+fZiT8L1NCmM2anxpqBObpkir3DHfzVWvcCWX0+vPMQBVidKqRGrzMZN8
-	pYA2NR72yEsJq+K3z6N5hEyltSnuO/stcrra+Mc6Tr3sjiDlq82HgtamnoJxTDPU
-	tHPeBgwtUV5vDvV2Su/QTtlLM=
-Received: from mps-HP-EliteBook-840-G3.monolithicpower.com (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgBHvw6erVtoD2t5AQ--.20252S2;
-	Wed, 25 Jun 2025 16:04:49 +0800 (CST)
-From: wenswang@yeah.net
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: Jonathan.Cameron@huawei.com,
-	michal.simek@amd.com,
-	naresh.solanki@9elements.com,
-	festevam@gmail.com,
-	rodrigo.gobbi.7@gmail.com,
-	grantpeltier93@gmail.com,
-	laurent.pinchart@ideasonboard.com,
-	cedricjustine.encarnacion@analog.com,
-	nuno.sa@analog.com,
-	ninad@linux.ibm.com,
-	jbrunet@baylibre.com,
-	kimseer.paller@analog.com,
-	xzeol@yahoo.com,
-	leo.yang.sy0@gmail.com,
-	Mariel.Tinaco@analog.com,
-	johnerasmusmari.geronimo@analog.com,
-	linux@weissschuh.net,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH 3/4] dt-bindings: hwmon: Add MPS mp29502
-Date: Wed, 25 Jun 2025 16:04:25 +0800
-Message-Id: <20250625080425.966014-1-wenswang@yeah.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250625065956.964759-1-wenswang@yeah.net>
-References: <20250625065956.964759-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtytpBMF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D42C4CEEE;
+	Wed, 25 Jun 2025 08:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750838929;
+	bh=HmAaA2Cbn5fJ3+qoi+KT7WNEvwt3kqHBs14BB0Pz3bc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gtytpBMFcb5Gvj9eFabwFEmqlqVOpn2W7bYKYBNKWpm2wh26UB8zlUZIFyTGtz4y5
+	 8ThgkB+NeDDfCrqgCc1Zko0++U0tEN24v8V/Oq3aK3qEAwRjWW68tnIgE5WQb/Od5i
+	 vXT2Y6+lCQBGRJQzv7D46DENCoZJ9l5hQ2PMpvufJMlCxFp59FPxfqyxG/NbkKB0ZI
+	 hKjdlTOUY75osMJ3lD8g8hngvY+t4lKg9KmtXAJTbtS62OT9zQf6nIT1rBxtOuGj2+
+	 lvvuTOcq3WkSfl0hswu/tiTs1jAlglaR9W3f/fABS/PDblqizW9yLSuXSn2BMbnjMP
+	 tgljCBtkt9ETQ==
+Message-ID: <71a6398f-1cda-4d83-992d-328d906ad8af@kernel.org>
+Date: Wed, 25 Jun 2025 10:08:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] hwmon: (pmbus) Add support for MPS multi-phase
+ mp2869a/mp29612a controllers
+To: =?UTF-8?B?5ZCz5qKT6LGq?= <tzuhao.wtmh@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>,
+ Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
+ Michal Simek <michal.simek@amd.com>, Fabio Estevam <festevam@gmail.com>,
+ Henry Wu <Henry_Wu@quantatw.com>, Grant Peltier <grantpeltier93@gmail.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ Kim Seer Paller <kimseer.paller@analog.com>,
+ Leo Yang <leo.yang.sy0@gmail.com>, Ninad Palsule <ninad@linux.ibm.com>,
+ Alex Vdovydchenko <xzeol@yahoo.com>,
+ John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
+ Nuno Sa <nuno.sa@analog.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Noah Wang <noahwang.wang@outlook.com>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20250624074156.291176-1-Henry_Wu@quantatw.tw>
+ <9bd05709-7702-4b74-85e1-3df25b57c535@kernel.org>
+ <CAL3H=v3s6H4ZpnS=EhPrpEiu-9N-xFCkunHuwWW0xnkXbzY9Kg@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <CAL3H=v3s6H4ZpnS=EhPrpEiu-9N-xFCkunHuwWW0xnkXbzY9Kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgBHvw6erVtoD2t5AQ--.20252S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JryrXrWxGr4rZr48JrW8JFb_yoWftrb_uw
-	4xZa1DCrWkJF1fK3Zakr4kAr15Jw17Kr409wn7tF1kXF9agay3KF93t34a9ryxGay7ur15
-	Cwn2grZ3XrnIgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0C387UUUUU==
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiEgp3pGhbdHLEzQAAs3
 
-From: Wensheng Wang <wenswang@yeah.net>
+On 25/06/2025 08:31, 吳梓豪 wrote:
+>>
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static struct pmbus_driver_info MP2869A_info = {
+>>
+>> This is const.
+> Since info will be modified by mp2869a_read_vout at runtime, I chose
+> not to make it constant
 
-Add support for MPS mp29502 controller
+No, this makes it a singleton. I don't see the code in current driver,
+so I don't get whether you meant current code or future. If current:
+where is it modified?
 
-Signed-off-by: Wensheng Wang <wenswang@yeah.net>
----
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+mp2869a_read_vout() has terrible style btw, really not looking like
+Linux coding style. Be sure you carefully follow the style.
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 493e7232f09f..2066696ecff4 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -291,6 +291,8 @@ properties:
-           - mps,mp2888
-             # Monolithic Power Systems Inc. multi-phase controller mp2891
-           - mps,mp2891
-+            # Monolithic Power Systems Inc. multi-phase controller mp29502
-+          - mps,mp29502
-             # Monolithic Power Systems Inc. multi-phase controller mp29608
-           - mps,mp29608
-             # Monolithic Power Systems Inc. multi-phase controller mp29612
--- 
-2.25.1
+>>
+>>> +     .pages = MP2869A_PAGE_NUM,
+>>> +     .format[PSC_VOLTAGE_IN] = linear,
+>>> +     .format[PSC_VOLTAGE_OUT] = direct,
+>>> +     .format[PSC_TEMPERATURE] = linear,
+>>> +     .format[PSC_CURRENT_IN] = linear,
+>>> +     .format[PSC_CURRENT_OUT] = linear,
+>>> +     .format[PSC_POWER] = linear,
+>>> +     .m[PSC_VOLTAGE_OUT] = 1,
+>>> +     .b[PSC_VOLTAGE_OUT] = 0,
+>>> +     .R[PSC_VOLTAGE_OUT] = -3,
+>>> +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+>>> +             PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+>>> +             PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+>>> +             PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+>>> +     .func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT |
+>>> +             PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP,
+>>> +     .read_byte_data = MP2869A_read_byte_data,
+>>> +     .read_word_data = MP2869A_read_word_data,
+>>> +};
+>>> +
+>>> +static int mp2869a_probe(struct i2c_client *client)
+>>> +{
+>>> +     struct pmbus_driver_info *info;
+>>> +     struct MP2869A_data *data;
+>>> +     int ret;
+>>> +
+>>> +     data = devm_kzalloc(&client->dev, sizeof(struct MP2869A_data),
+>>
+>> sizeof(*)
+>>
+>>> +             GFP_KERNEL);
+>>
+>> Misaligned. Run checkpatch --srtict
+>>
+>>> +     if (!data)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     data->chip_id = (enum chips)(uintptr_t)i2c_get_match_data(client);
+>>
+>> These are just wrong or redundant casts. You need only one cast -
+>> kernel_ulong_t
+>>
+>>> +
+>>> +     memcpy(data->max_phases, mp2869a_max_phases[data->chip_id],
+>>> +             sizeof(data->max_phases));
+>>
+>> Why you cannot just store the pointer?
+> As chip_id and max_phase will be constant, it should be acceptable to
+> handle them via pointers in this case.
+>>
+>>> +
+>>> +     memcpy(&data->info, &MP2869A_info, sizeof(*info));
+>>
+>> Why you cannot just store the pointer?
+> Considering that the info can change at runtime, using memcpy is a
+> safer approach
 
+Where do you modify the contents?
+
+
+Best regards,
+Krzysztof
