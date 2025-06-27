@@ -1,424 +1,275 @@
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022083.outbound.protection.outlook.com [52.101.126.83])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB602609DD;
-	Fri, 27 Jun 2025 09:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751015708; cv=fail; b=da22v+a3g+/eRTp5kf7Du6JbG1AXEz4pTL7ZINzBUNZK+bQqASGPnkSdxz+ule0XDGa+8jeQDnjbGFKRp+YbXrfZ+J7ArNBglY3+5qw3nRY8cWd1U81IUbE5Euxe2PYtOc4nq25eGVOpHlxdNtjcBs9Az4iisBw263QNX6V1//8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751015708; c=relaxed/simple;
-	bh=D6bzM9guxZ6w+jn3gP9nKXgKtcvbmud0S21zTKh/8p8=;
-	h=Message-ID:Date:From:Subject:To:Cc:Content-Type:MIME-Version; b=suXo8lqe7o2QMMDzxxiisKqDMLC+cfKyMg5FnaMTRxRG/iSEXbWQNQeG0IEWeygufEnhBR6NmoveHCv7XQBvHcDZSwDye8c7d2t/4t8Cqj4ojM0DQQXPfzIfL1iGuxE5jfUiHOagHByYEe8uGH/WbEDENkK+HDHQcinz7M1p810=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw; spf=pass smtp.mailfrom=portwell.com.tw; dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b=n1PAGIXF; arc=fail smtp.client-ip=52.101.126.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=portwell.com.tw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=portwell.com.tw
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279ED296152;
+	Fri, 27 Jun 2025 10:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751020065; cv=none; b=F8HEMQGZUprGtgV7g5OKrlUQpm3Q5F8+S2mmkfbIqNwSU1RJZJdzHCnQb5Nc78xTx3p9qbSaaAu94bloTm7J2I3fTPTOjOq9OvCNzw11IZgTwOpL+5gY8ULwptLbzs5C6BS1cDfLtRF3g54xeRBiY+Uqb2geDPGU/hJodX6zsMc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751020065; c=relaxed/simple;
+	bh=ilLYuWYgNvRme+vA8UIbLITDjndxSMNX17BRpkXRAyY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DVvStGtIx/keefXHrdPVmvSSQ193K9PfYjQStkLxWPbSktl+Sqsb0kbJ/wLOmy5yJTJVcoit2XIK5TP7wnMzuqfhD/lUvO9+jROgHW52nVffit1r2EzlofmEaEmwuwOfu1OPX8wsBDd1ZR43nm6vXqwEU2iyRiIAssBDg1sqctQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kiXu/qqz; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fetCA905017.onmicrosoft.com header.i=@fetCA905017.onmicrosoft.com header.b="n1PAGIXF"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vIdXvXHLQjf++Av+moSS4OXgUCWnsQNLjIUjA+Mywgy3kwYNqrNQEjwMW96/aSMq+LML4yKYC/Dlzt1IIyZvQGX2cBLck36tCVk6bhHcPyrjuuS/nq2++i5eU4dlMbWKk6DftiCKk76RRuMUt73EU9ACx7zofhm1TR05aTy4oQ6VNafIRfkFmLEsVYRCIVNkoIyUH93SKMjr0mwdcHa4jB5CQ5KBoh/H06VwmDC3cVOM7J/XHTraS78kXFomgT20btQiG8jwZm+oNUzfm0oMk6U5vM4U58MO6teqmT0JPEsy3uV6nEwYs9GlgXoon4ZQfavgFdzXybj72y+7W3QQ/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M2PUOcXK4y8iN8GgWcD/Vnh8WyrrcGR/GYKopOZLrFQ=;
- b=Pag/U+60e2e9xhJv6EDHGWQ3HZ4k5+nMDm7ReUJQkgs+3RjhwEf5NYVitn75XFO+iDfQmwQDysRg5Gya7RzPEr4Ady33QWu+GPLWGTMS627eK1g0twkB2ssZg4cwYp4fyx2YPb4VjB5JHMsSelFPBlVs1TRptgZgaoWeEUX15dMy1XC/NOJLUs5jFdWlRz8WXT7RsP42NyH5ECIc9eqkbwjJpXegF5vU3HrzCGFEL0O5oDQu+ycPfKPUjQDfKkGrLtFAhNPd3ecDcp6K0RdrZVMiyfQSP6kEtNTFfLSEI+GfDAqqTgVA9jgeWgdRGGQj39eaGGWbXrwvDEJvjjrT6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=portwell.com.tw; dmarc=pass action=none
- header.from=portwell.com.tw; dkim=pass header.d=portwell.com.tw; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kiXu/qqz"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-234fcadde3eso29446215ad.0;
+        Fri, 27 Jun 2025 03:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fetCA905017.onmicrosoft.com; s=selector1-fetCA905017-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2PUOcXK4y8iN8GgWcD/Vnh8WyrrcGR/GYKopOZLrFQ=;
- b=n1PAGIXF1u5vsdEX8p5Fo9Yqx7BFkWiyneLJJN5cFymuJxp+O7a47wdAMRvn+389yWS76u1zeILzLaOvcI6g/bSJmmnHuqGou4vayvvZLKnmNR7Zc6UKTTIpqMyN3tmVREWOq3qUDoeezJ/lgeRmnJk1PulYAbGUUWt5c0ZKr2Y7XmOULGi/ohBNg+jaHcjN/suMRCAjndMOaieJ+XuBBaGH3QLj61386QdrxlrtTOFJHVnDZKFTfb4E3qY1bfHfYKrWHh8JEL7/FxyvpoyTDq+ug8j9qdPIQ1in5+XS9MUSQgae7ym7cximde45ZpX/3c9qREmdTM+4FD9yUqZq6A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=portwell.com.tw;
-Received: from KL1PR06MB6395.apcprd06.prod.outlook.com (2603:1096:820:e7::10)
- by SEZPR06MB5898.apcprd06.prod.outlook.com (2603:1096:101:e5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.18; Fri, 27 Jun
- 2025 09:15:03 +0000
-Received: from KL1PR06MB6395.apcprd06.prod.outlook.com
- ([fe80::9235:5570:71b3:224]) by KL1PR06MB6395.apcprd06.prod.outlook.com
- ([fe80::9235:5570:71b3:224%6]) with mapi id 15.20.8880.015; Fri, 27 Jun 2025
- 09:15:03 +0000
-Message-ID: <a35d63e1-424f-48ac-bc97-cdb48929f40d@portwell.com.tw>
-Date: Fri, 27 Jun 2025 17:15:01 +0800
-User-Agent: Mozilla Thunderbird
-From: jesse huang <jesse.huang@portwell.com.tw>
-Subject: [PATCH 2/2] platform/x86: portwell-ec: Add hwmon support for voltage
- and temperature
-To: hansg@kernel.org, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
- linux@roeck-us.net
-Cc: linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TPYP295CA0024.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:a::13) To KL1PR06MB6395.apcprd06.prod.outlook.com
- (2603:1096:820:e7::10)
+        d=gmail.com; s=20230601; t=1751020061; x=1751624861; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ml+sJ3t+hrzE6M4hEh2cclrzvCQA7k6IfhA9JVfhJ04=;
+        b=kiXu/qqzOhcgA8XzYjf9adQah79lq2pPktCs69mGZYvSyJdpKD6yEDPPsxJuLTpTY9
+         Ls6Izr8GAV6qx/HB86kGvBOeHnmmWPQFDvQWmiVeYMwhuDP6gqMW8MCVuxG3DjfNi2Fx
+         rnqw068vIsofKhqupWbQdoENZAe09x+ixJ6QeIdCpkjWVdsLYHWbjeCQCWuYUyp6WA/D
+         Wt8q0sLswC4L8r4ECIntCfmTYrW2RRX8l5l2Dbsv7g4d6DPub6hBFd+xGlDfGxQa1D9+
+         trixTP6GQ86LR3ThjwO2KyZaXah/LBKI8830mInOim9+F/f8asrITDyIWGiFqhJ+euca
+         GLjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751020061; x=1751624861;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ml+sJ3t+hrzE6M4hEh2cclrzvCQA7k6IfhA9JVfhJ04=;
+        b=RK36Nx20C0jmyzW3mNxjtpOTqFjpwUpeqTH3xfKiGIwWYPXAcgMWCqQEH0Kt+enjW/
+         j3+Yb7dfSbOXyBXaonBarZjqpF7ooZZEJCWe1A7CzSQgzxfkkS4nmrri9ORWE4AGpb3e
+         RGX9BMQSOSNGZVVqhCC81hpiyY6OCdD5rT3IQOdsLzeamlPk+QfyETn7Hyusb1JHrM3F
+         eCQXUgbNwxqesFSg+YAEMehEkHZiGf8QEeNheORYJr1COGegXvU473afUM9X0k36RVKQ
+         F/mlZWfj/n2cNn1aBKBH+qu3/0aPbtUXagmsptsmNGnfuLhtGJZ/9gc+T2wkBawnZpO9
+         Rghw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQyen8OXWje+aBOU483e15rwMHDN6Ie3VUF9cbxPKfZRPWUpxahRp65ZvZ2mCSsfdkRYaHm6s/fq3V+cA=@vger.kernel.org, AJvYcCUX3QTY8ZdImbd9PGNmurymTlqPrfE2yw1uWVBnEy2r0rHaNqvJxumEytxxzpNz+KpyTTj84Mq19u7G@vger.kernel.org, AJvYcCUYQdWgZJr8Aske7Z/dP7jbp3WxjESyjnVIAt8RYN4j/HKjaRDIwCb0opjCYBKZiEV4zjHfFW4ttA/y@vger.kernel.org, AJvYcCUvTVf4tCCQ2UxyLmU4aqvMuaM+L6EebHgzJetkCZvwFDdNNW6VabrkonfxCS9NbPQB6HLXatFRDmuo3Csc8ns=@vger.kernel.org, AJvYcCUzbJAW2yOzI5BkxOOVmfuMFqGv9B12Y2nDDaPE2omslrDl1WyyCH1FOeM1jHHCAh78jM6D8jPr3XFx@vger.kernel.org, AJvYcCVes8YvA42J/iS2baVne7dy9Pu5D3mlYJyOCx3C6XIsnrcLGV8P5ym2IizEcRNqmtDexFo3Bgfl5eGsMA==@vger.kernel.org, AJvYcCWAT7pq+Gtw5bHdO5QEvIzBJ4C5upcp114eoBIzyUcq6+6BKXosYFDXYJK49HboU/sYbZ4oassCSwY=@vger.kernel.org, AJvYcCWgwT8GBm4us7CunjU6554MzzyKaryc9Q817j1c9EuhBInUmq3p++Fy+h83RKL63xagbhgofnEP@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2+TF3agbkQ2ezPG+R30GGCMjz+gsQY8kvtsXZSp3x7PGRNSIG
+	kJ1T3EWrqS8pAeXNrdtxscJovqhv7tgiBKIhFUmxDG+rpOgiMURxlPSt
+X-Gm-Gg: ASbGncuq6rzaUo80kNoeP4JG3dqNO/70okmk4NLwjfpI1iLTfGzMicd/ZvanHb9r7mD
+	hL+UlqWpXjmg+0H4+x+ZH1Fh6MWmVP4hnxxUuuitXM7Ib/Y7VwyVmyb4DxiB8QLV8Xh1FfUJ79D
+	nqTS+m2J4i6DB8Hdq83MayOaQ5l6SvVWilZuNJvNK56K1ki/E69rbmbCqMQNWzhs5eS1T1wkAiF
+	/or2eYrLVRGleOUVl2/bz6T6HYpDFhniY1ocljz+h578PECUGaVMOnDAUP+9nMUdBY6+J8Zpl5h
+	wrk0zietrvOGerx1Yh8RL0TkR7s2O5zfYB097qoARXxvo3uVnAnXyX/OZopDTsbCua/7p+mi9Vb
+	Bc2xn+63myPjPf3k3QODvnOfpS1YLAA==
+X-Google-Smtp-Source: AGHT+IEomNjpXipk2KD1fASP51+aM/Dp/3Q0RAuuc8il7L/rL7CjfwVnEnvP0FECYvzH0KBUv2WfhQ==
+X-Received: by 2002:a17:903:2d0:b0:235:f45f:ed55 with SMTP id d9443c01a7336-23ac3bffa49mr41579185ad.1.1751020061308;
+        Fri, 27 Jun 2025 03:27:41 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3bc495sm13845155ad.201.2025.06.27.03.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jun 2025 03:27:40 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	lee@kernel.org,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
+	andi.shyti@kernel.org,
+	mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	jdelvare@suse.com,
+	alexandre.belloni@bootlin.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v13 0/7] Add Nuvoton NCT6694 MFD drivers
+Date: Fri, 27 Jun 2025 18:27:23 +0800
+Message-Id: <20250627102730.71222-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB6395:EE_|SEZPR06MB5898:EE_
-X-MS-Office365-Filtering-Correlation-Id: e712dca2-cdfc-4e23-6b6d-08ddb55b195f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WXFEZHBiNGdHMmJlVjNSYk43aUZEQmZxNklScTI2SUVYMEl4SHBid1hQUjlm?=
- =?utf-8?B?ZmdwT1poSUxwcHRydmtiMzFDa3ZCY2lsbmFaS3dSUmN1ZkZSYTdmSTRmTkVL?=
- =?utf-8?B?Wmo5VGFSRFZMdmtJaFFUMGRvR05YVUQ1MzFrZTQydUdlMDZCSVh1NGdPM3FP?=
- =?utf-8?B?WktPS0lBVGtoQ1l2N1RZcXFvV0FkQ0d5eHFGM0Z6TUx1QkF3Z0YrUDBtS0cz?=
- =?utf-8?B?LzdXRzVtVXNPVWdTbGdqZEp3QmJkbldvMWwzd1h5dEVVNHFSSS9vOElBWEVK?=
- =?utf-8?B?T1F5V3BrRm1PV1NDdHJMUDlNeER4QUloQUNDMTVHOTZjb29WUWcyd0FKalQz?=
- =?utf-8?B?Q1NBTnZWWFFrTU1QRldFYWk3N0Q4YW1XRTBaR204ZFBnRnBYOHZyaHVTOVoz?=
- =?utf-8?B?WTIrNTlZaDJuVFk0QXhtQXlqUnlxT3FEcXJsaVFMZkhaaGc3M3pQU2FwcU5B?=
- =?utf-8?B?aU5jWVZBNmJYMXpMVnFZbjl5dUNjVlZ4NHp0T1hiUmFCSTEwVHhXL251Wmp3?=
- =?utf-8?B?VnN5Z1V4UElTcUpFdjBsQkNRbVArVkJjTVU5Y3RsUlJoYldxcXVXU2p2RTFF?=
- =?utf-8?B?SFpJVmFjZ3dPdHd5K1VleENiMjlOQnJ0UDF5Y0xGSkdWeVRLcU41dVRXZWdJ?=
- =?utf-8?B?WGZSV3IzemRLclpuVDNqellnMUEwZDRFb0twLzgwc2RoN3JhQ0dzS2ZFaGN2?=
- =?utf-8?B?YmlXd05XRzViZDBoZmE0R3g0NkZkOXJ5QjVpeTRNc0FWTE51RnA1M2ltSGVW?=
- =?utf-8?B?YlBGeklXLzRUbXQrb3J2NVJURlJkNVE0a29iQStRTUpYS0NCMlBsSWRmRW1R?=
- =?utf-8?B?aWZxb09VTTN1WVJQSkpEUEhVMnUwUWFGc205SmdsVW1FQm9OQjBWaUVTdlA4?=
- =?utf-8?B?ZGluaG9tdC95YkpyQUZRL2hOMENsK0w2VTBuSmxFSVR6bXE4cXF4MWxZdURz?=
- =?utf-8?B?L083Y1NBVW84RThOalk0NHZNRHpOVE1rVGxVazBBMmZhRExsckcrajdwa0sw?=
- =?utf-8?B?SWEvcFphRUZFQ2YybTJXQ2hoSyszWmk4L3NUcGQrQWQwVXRGWDNpOGpXWDhS?=
- =?utf-8?B?OXRveUpQV0JPMHY0ZmJqb0t5ZjF6ODlYdEVnMEpXVkNCaC9oZlNtQ3k4U2NP?=
- =?utf-8?B?VDNjMG4vY091alRHQlAyK3JtVit2VUU5c01aZmRPeXZzRzdVRXdjc1U4YkFz?=
- =?utf-8?B?ZDJtcnFjWGoxWEw5dzdXQTl0S3BSUk5FQ2duY2h5QXY0S0xGZm9KMlFqcGtP?=
- =?utf-8?B?ZXpVemoreUFlSWx0dFFNdGc4TXROdENSZlJheVR3RWs2Ujk1clZzTVdjaVA3?=
- =?utf-8?B?UlRueDN2SWhtbTJQQ3lzckxOY1JrcnBNbjAwaEowU2tlWUNJYi9td2ozVmNO?=
- =?utf-8?B?RUpITU8veXVVZGMrdkV3RGVjckhXNzNZNXJlQ1Z0VkFsRmVvc29XdHp5bjU3?=
- =?utf-8?B?M2VLU3A1V1NmVE9jVTQzRENyRzE2amxVdmlEbHUwdjc0aWhZTFFrb0treGdp?=
- =?utf-8?B?RWR2Tklsc2VqeHgxL01UOHNjcUlqdDk3T0RsaXlZcDNDaHNDemNTcGE0YUh0?=
- =?utf-8?B?aVVzZlBQanphMGxFNzUxeHVYOU9ybFNSM0RibUgrenVnd0VqU3NpOG5DRTla?=
- =?utf-8?B?S05VYWZtVnRuSjBRSkNVM25EV2pNanVEWEV0RjRrUXlDSmNteWZwM1E2WUpj?=
- =?utf-8?B?NzJFbFg3dE15MnBqMnk0TTU0SHliVHF5MWNFQVNqMlgyN09VUFdSem42T2ZV?=
- =?utf-8?B?c0NyOExiOHVNQWprR3dyaSt3bTBtNkVqS2tsQVpIWWNpNnVPSkdmaGpwbFlz?=
- =?utf-8?B?WXEwUlo1OGwrcUNBdzZSTFE4ZDhyOXdSSDFDQzErL3J4azdVYy9ZL1Ywb1NE?=
- =?utf-8?B?VmQwMXV3WiswSndBZE5Dd2tvTGpNTk96TEhBclpsOTFjajZ4V3pNRnZqempq?=
- =?utf-8?Q?bi6OhwArRGQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6395.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eFMyTmlnMSthMlhoVG11bEdzZGdUU0FSMFljUUIxQ3BQRnZBWWwzYVd1NHBM?=
- =?utf-8?B?RjRLcDJVUVo4aVh3QXRNb2ZRaFlwVUZwMWE4OEZ3SGx5bjhsSjhRclZXNzUr?=
- =?utf-8?B?bHhNNFV0V0ZpUWg5WVgxTmxiekU0RWhQNlhaY2Fhd0lQazZPMHF1a2tpZjBm?=
- =?utf-8?B?Y1g0OVlEQjBvV2RqaFM1d2pMcW1iTGUrV2tNeWFZcGRJWWxLWUxkd1JZeXhX?=
- =?utf-8?B?RFNwMmthaXNlc0xwS0tjWDVSRWp2MEFFNlNSdnFRdnpVVG5YcjEvMEFhN1FF?=
- =?utf-8?B?L2pCcTBXVzIxK2syODRmNkJpdlBVQ1pwTzluNkp2a0h1bUZUdzVFdnIzVW9N?=
- =?utf-8?B?MDZPMVJ6cVpEN1BxbjQ4UVJlYlBJRGNKbW8vVWpHQWtES2lNK01vV25kOXE2?=
- =?utf-8?B?SllyWU5RMjRnTmlET0dnQ3d4azc3VXFGSkRMOEo0YUU0b080bDZmVU0rVktR?=
- =?utf-8?B?WjkxLy84bWVvK1pRSmtVSTlKRVI4aU5kUTZnanZ3OS8zZE03cXc0YXh3T3Y3?=
- =?utf-8?B?ckRJaFE4d2ZmZHczcGNrZDdRaHlIQkFMY1hrRWZyWFpIYXVMK041UzNHMWVL?=
- =?utf-8?B?K2kwZlcvQUtyOURCZmRJTSs3S3A0bzd4ZVVmNVpxRUdSUVQ2NGRoc29aY09v?=
- =?utf-8?B?SWp3NWd2ZmZBL2cwa3pTSlgxQ1YzRmpJbkNJMHBVeTJDR29heFlXMlJnUlhp?=
- =?utf-8?B?LzBYLzMxdVJDVWNCR09ZNTF1cHowUDd3MG0zeFU1dSs1Q2cvUnVtRG1ZZHNV?=
- =?utf-8?B?eXpVUnZGb3hGd29oM2NHUkJVcDR3cHpPajNHWUlwYk02MlhacjFPb1Z1bGFq?=
- =?utf-8?B?YXBYUUxQaU5ueTJVTlpaQjc2cXpRRWxGOHdYSUxtS0J5L2x3cGZYbytEYkNs?=
- =?utf-8?B?aUNTNENGcWErQkVwV0lVd3BFSE5oNXpFZDEwLzYwZXlNRmhKUGRZWEdoc0Q1?=
- =?utf-8?B?bWMvd1JHUTFZbTFZY2t0cm9NTWw4Z3Z3cDVCWWxNKzJWdGxVREJuMmJHQnBr?=
- =?utf-8?B?WWRqcEloTzMrSm9iWkl1SjBERmlZenNoYkpiRWVDMmNBcFhLR09UQjdGK0FY?=
- =?utf-8?B?REdQUUdqckFWMHh4YVJ4MExidG1Nd2IrS2FOTXg1R0pJOXBuV1Z2azl6aTJr?=
- =?utf-8?B?TU5janZXR3V4OHNNbUxkaW93N3ltWWE1SmZ0T29sNTJjWXc2ejF6ZU9jdXdw?=
- =?utf-8?B?TzlWSFZGUVV2Z2Qxb0xBS09QUnd4SXQrM24vNDZqREFOcHNpSG9QWWNPOXda?=
- =?utf-8?B?QS8xQWhaM2xtRUxSSGNneU5qK0p2MGllaXBmTlNORDk5Z0R1QVFNM0dzVy90?=
- =?utf-8?B?RHhYNWN1eEZQeVhOSHhWRWJyS2RWN0cvSkNGclA5cXFIWG1qVFc0NGV1c0NB?=
- =?utf-8?B?YTFZeFQrMG5hL3h0Y3Q1RExucE03cHR4QkJhVk9qdE5TcGs5QnNUMlNjcUh3?=
- =?utf-8?B?aGdwYlZ6Ni9kR1dJc3hlQmJIM1ZFWkxJQ3lzV0F2Sk5MSzlIOThpbFEwVlBi?=
- =?utf-8?B?Z2RJbSs0U0hod3cvVWU3US9yYS9idEVSZ2tYNFM2aW12eE9lUE9GU28wN3Jz?=
- =?utf-8?B?S3lycXNkNm10RTZPbXN6TzNMcFU4UmRMN3Rtb2VheFRiNUxaZUNlYnR5NUFp?=
- =?utf-8?B?ekZtT1VGb255dEFSaWk2RG1ablNIbjQ0OWh4MFZpMG0xaFpTNkhqV3dqT3hL?=
- =?utf-8?B?RG83SGxBWjd6WXd1bmhzN3l4amFsTGhYZElzSFNVRmhmcVJMSW1MaE5kazFm?=
- =?utf-8?B?bGpiM2R6Mjh4Qy9GK2xEL3FvOVBzR0ZVTjlROWlYQmpBTXFiSkhXeFZ3VGQz?=
- =?utf-8?B?amhmTWY3ZnRBZ2dNMEp2WEc5WHFJNWFweGpQZlArSFVnV0d6NjhWWnpYQmcv?=
- =?utf-8?B?TnBtTUVqN1FyN0FFWWVvQ3g5b2tDcUZQUUltWTRKcWlCbEp6ZWlSd2Uxc01i?=
- =?utf-8?B?c1VWWlFJaFlSeGJVajkzSUUxaWJJUzR3eW0zeUlTTlNwa0Q1bjJ6dmR0bHYy?=
- =?utf-8?B?S3NlVWhyd2VqUndCTHpsaDRjb2dTUnR2Nmh0Q2Z5M0dZM2tiRmlDNm5HdVlU?=
- =?utf-8?B?SS9qTTRCbGx3RGkzN0ZnME02cFdFLzFWZUZXQXpGSDlyQytKR1ZJZmkzK3M4?=
- =?utf-8?B?S1h4SjMrbUJsVTZjUnA2M2ZZUHQ2UTNkQXZLTkZaUFhxb3JIUWpjNXF5T1BZ?=
- =?utf-8?B?d2c9PQ==?=
-X-OriginatorOrg: portwell.com.tw
-X-MS-Exchange-CrossTenant-Network-Message-Id: e712dca2-cdfc-4e23-6b6d-08ddb55b195f
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB6395.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2025 09:15:03.0313
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e309f7e-c3ee-443b-8668-97701d998b2c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NTbZRHVM8DQga8MdRX9wSEkmnJw1PAKNoE3V12ZxroMY0p1N9B4Hv4NMEzqmT335ApvOBAr7cl3gyQRveJqs56hVX1G6d0p2ewy8JEwidAU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5898
+Content-Transfer-Encoding: 8bit
 
-Integrates Vcore, VDIMM, 3.3V, 5V, 12V voltage and system temperature
-monitoring into the driver via the hwmon subsystem, enabling
-standardized reporting via tools like lm-sensors.
+From: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
----
- drivers/platform/x86/portwell-ec.c | 188 ++++++++++++++++++++++++++++-
- 1 file changed, 186 insertions(+), 2 deletions(-)
+This patch series introduces support for Nuvoton NCT6694, a peripheral
+expander based on USB interface. It models the chip as an MFD driver
+(1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 
-diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
-index a68522aaa3fa..79597b4b5559 100644
---- a/drivers/platform/x86/portwell-ec.c
-+++ b/drivers/platform/x86/portwell-ec.c
-@@ -33,6 +33,10 @@
- #include <linux/sizes.h>
- #include <linux/string.h>
- #include <linux/watchdog.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/hwmon-vid.h>
-+#include <linux/err.h>
- 
- #define PORTWELL_EC_IOSPACE              0xe300
- #define PORTWELL_EC_IOSPACE_LEN          SZ_256
-@@ -52,16 +56,59 @@
- #define PORTWELL_EC_FW_VENDOR_LENGTH     3
- #define PORTWELL_EC_FW_VENDOR_NAME       "PWG"
- 
-+#define PORTWELL_EC_ADC_MAX              1023
-+
- static bool force;
- module_param(force, bool, 0444);
- MODULE_PARM_DESC(force, "Force loading EC driver without checking DMI boardname");
- 
-+enum pwec_board_id {
-+	PWEC_BOARD_NANO6064,
-+	PWEC_BOARD_ID_MAX
-+};
-+
-+struct pwec_hwmon_data {
-+	const char *label;
-+	u8 lsb_reg;
-+	u8 msb_reg;
-+	u32 scale;
-+};
-+
-+struct pwec_data {
-+	const struct pwec_hwmon_data *hwmon_in_data;
-+	int hwmon_in_num;
-+	const struct pwec_hwmon_data *hwmon_temp_data;
-+	int hwmon_temp_num;
-+};
-+
-+static const struct pwec_hwmon_data pwec_nano_hwmon_in[] = {
-+	{ "Vcore", 0x20, 0x21, 3000 },
-+	{ "VDIMM", 0x32, 0x33, 3000 },
-+	{ "3.3V",  0x22, 0x23, 6000 },
-+	{ "5V",    0x24, 0x25, 9600 },
-+	{ "12V",   0x30, 0x31, 19800 },
-+};
-+
-+static const struct pwec_hwmon_data pwec_nano_hwmon_temp[] = {
-+	{ "System Temperature", 0x02, 0, 0 },
-+};
-+
-+static const struct pwec_data pwec_board_data[] = {
-+	[PWEC_BOARD_NANO6064] = {
-+		.hwmon_in_data = pwec_nano_hwmon_in,
-+		.hwmon_in_num = ARRAY_SIZE(pwec_nano_hwmon_in),
-+		.hwmon_temp_data = pwec_nano_hwmon_temp,
-+		.hwmon_temp_num = ARRAY_SIZE(pwec_nano_hwmon_temp),
-+	},
-+};
-+
- static const struct dmi_system_id pwec_dmi_table[] = {
- 	{
- 		.ident = "NANO-6064 series",
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_NAME, "NANO-6064"),
- 		},
-+		.driver_data = (void *)&pwec_board_data[PWEC_BOARD_NANO6064],
- 	},
- 	{ }
- };
-@@ -79,6 +126,19 @@ static u8 pwec_read(u8 address)
- 	return inb(PORTWELL_EC_IOSPACE + address);
- }
- 
-+static u16 pwec_read16_stable(u8 lsb_reg, u8 msb_reg)
-+{
-+	u8 lsb, msb, old_msb;
-+
-+	do {
-+		old_msb = pwec_read(msb_reg);
-+		lsb = pwec_read(lsb_reg);
-+		msb = pwec_read(msb_reg);
-+	} while (msb != old_msb);
-+
-+	return (msb << 8) | lsb;
-+}
-+
- /* GPIO functions */
- 
- static int pwec_gpio_get(struct gpio_chip *chip, unsigned int offset)
-@@ -204,6 +264,122 @@ static struct watchdog_device ec_wdt_dev = {
- 	.max_timeout = PORTWELL_WDT_EC_MAX_COUNT_SECOND,
- };
- 
-+/* HWMON functions */
-+
-+static umode_t pwec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-+		u32 attr, int channel)
-+{
-+	const struct pwec_data *d = data;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < d->hwmon_temp_num)
-+			return 0444;
-+		break;
-+	case hwmon_in:
-+		if (channel < d->hwmon_in_num)
-+			return 0444;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int pwec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	struct pwec_data *data = dev_get_drvdata(dev);
-+	u16 tmp;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->hwmon_temp_num) {
-+			*val = pwec_read(data->hwmon_temp_data[channel].lsb_reg) * 1000;
-+			return 0;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (channel < data->hwmon_in_num) {
-+			tmp = pwec_read16_stable(data->hwmon_in_data[channel].lsb_reg,
-+						 data->hwmon_in_data[channel].msb_reg);
-+			*val = (data->hwmon_in_data[channel].scale * tmp) / PORTWELL_EC_ADC_MAX;
-+			return 0;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int pwec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-+				  u32 attr, int channel, const char **str)
-+{
-+	struct pwec_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		if (channel < data->hwmon_temp_num) {
-+			*str = data->hwmon_temp_data[channel].label;
-+			return 0;
-+		}
-+		break;
-+	case hwmon_in:
-+		if (channel < data->hwmon_in_num) {
-+			*str = data->hwmon_in_data[channel].label;
-+			return 0;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static const struct hwmon_channel_info *pwec_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_ops pwec_hwmon_ops = {
-+	.is_visible = pwec_hwmon_is_visible,
-+	.read = pwec_hwmon_read,
-+	.read_string = pwec_hwmon_read_string,
-+};
-+
-+static const struct hwmon_chip_info pwec_chip_info = {
-+	.ops = &pwec_hwmon_ops,
-+	.info = pwec_hwmon_info,
-+};
-+
-+static int pwec_hwmon_init(struct device *dev)
-+{
-+	struct pwec_data *data = dev_get_platdata(dev);
-+	void *hwmon;
-+	int ret;
-+
-+	if (!IS_REACHABLE(CONFIG_HWMON))
-+		return 0;
-+
-+	hwmon = devm_hwmon_device_register_with_info(dev, "portwell_ec", data, &pwec_chip_info,
-+						     NULL);
-+	ret = PTR_ERR_OR_ZERO(hwmon);
-+	if (ret)
-+		dev_err(dev, "Failed to register hwmon_dev: %d\n", ret);
-+
-+	return ret;
-+}
-+
- static int pwec_firmware_vendor_check(void)
- {
- 	u8 buf[PORTWELL_EC_FW_VENDOR_LENGTH + 1];
-@@ -242,6 +418,10 @@ static int pwec_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = pwec_hwmon_init(&pdev->dev);
-+	if (ret < 0)
-+		return ret;
-+
- 	return 0;
- }
- 
-@@ -274,11 +454,14 @@ static struct platform_device *pwec_dev;
- 
- static int __init pwec_init(void)
- {
-+	const struct dmi_system_id *match;
- 	int ret;
- 
--	if (!dmi_check_system(pwec_dmi_table)) {
-+	match = dmi_first_match(pwec_dmi_table);
-+	if (!match) {
- 		if (!force)
- 			return -ENODEV;
-+		match = &pwec_dmi_table[0];
- 		pr_warn("force load portwell-ec without DMI check\n");
- 	}
- 
-@@ -286,7 +469,8 @@ static int __init pwec_init(void)
- 	if (ret)
- 		return ret;
- 
--	pwec_dev = platform_device_register_simple("portwell-ec", -1, NULL, 0);
-+	pwec_dev = platform_device_register_data(NULL, "portwell-ec", -1, match->driver_data,
-+						 sizeof(struct pwec_data));
- 	if (IS_ERR(pwec_dev)) {
- 		platform_driver_unregister(&pwec_driver);
- 		return PTR_ERR(pwec_dev);
+The MFD driver implements USB device functionality to issue
+custom-define USB bulk pipe packets for NCT6694. Each child device can
+use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+a command. They can also request interrupt that will be called when the
+USB device receives its interrupt pipe.
+
+The following introduces the custom-define USB transactions:
+	nct6694_read_msg - Send bulk-out pipe to write request packet
+			   Receive bulk-in pipe to read response packet
+			   Receive bulk-in pipe to read data packet
+
+	nct6694_write_msg - Send bulk-out pipe to write request packet
+			    Send bulk-out pipe to write data packet
+			    Receive bulk-in pipe to read response packet
+			    Receive bulk-in pipe to read data packet
+
+Changes since version 12:
+- Implement IDA in MFD driver to handle per-device IDs
+- Use spinlock to replace irq mutex lock
+- Use same email address in the signature
+
+Changes since version 11:
+- Use platform_device's id to replace IDA
+- Modify the irq_domain_add_simple() to irq_domain_create_simple() in
+  nct6694.c
+- Update struct data_bittiming_params related part in nct6694_canfd.c
+- Fix the typo in the header in nct6694-hwmon.c
+
+Changes since version 10:
+- Add change log for each patch
+- Fix mfd_cell to MFD_CELL_NAME() in nct6694.c
+- Implement IDA to allocate id in gpio-nct6694.c, i2c-nct6694.c,
+  nct6694_canfd.c and nct6694_wdt.c
+- Add header <linux/bitfield.h> in nct6694_canfd.c
+- Add support to config tdc in nct6694_canfd.c
+- Add module parameters to configure WDT's timeout and pretimeout value
+  in nct6694_wdt.c
+
+Changes since version 9:
+- Add devm_add_action_or_reset() to dispose irq mapping
+- Add KernelDoc to exported functions in nct6694.c
+
+Changes since version 8:
+- Modify the signed-off-by with my work address
+- Rename all MFD cell names to "nct6694-xxx"
+- Add irq_dispose_mapping() in the error handling path and in the remove
+  function
+- Fix some comments in nct6694.c and in nct6694.h
+- Add module parameters to configure I2C's baudrate in i2c-nct6694.c
+- Rename all function names nct6694_can_xxx to nct6694_canfd_xxx in
+  nct6694_canfd.c
+- Fix nct6694_canfd_handle_state_change() in nct6694_canfd.c
+- Fix nct6694_canfd_start() to configure NBTP and DBTP in nct6694_canfd.c
+- Add can_set_static_ctrlmode() in nct6694_canfd.c
+
+Changes since version 7:
+- Add error handling for devm_mutex_init()
+- Modify the name of the child devices CAN1 and CAN2 to CAN0 and CAN1.
+- Fix multiline comments to net-dev style in nct6694_canfd.c
+
+Changes since version 6:
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+- Fix warnings in nct6694_canfd.c
+- Move the nct6694_can_priv's bec to the end in nct6694_canfd.c
+- Fix warning in nct6694_wdt.c
+- Fix temp_hyst's data type to signed variable in nct6694-hwmon.c
+
+Changes since version 5:
+- Modify the module name and the driver name consistently
+- Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
+- Drop unnecessary macros in nct6694.c
+- Update private data and drop mutex in nct6694_canfd.c
+- Fix nct6694_can_handle_state_change() in nct6694_canfd.c
+
+Changes since version 4:
+- Modify arguments in read/write function to a pointer to cmd_header
+- Modify all callers that call the read/write function
+- Move the nct6694_canfd.c to drivers/net/can/usb/
+- Fix the missing rx offload function in nct6694_canfd.c
+- Fix warngings in nct6694-hwmon.c
+
+Changes since version 3:
+- Modify array buffer to structure for each drivers
+- Fix defines and comments for each drivers
+- Add header <linux/bits.h> and use BIT macro in nct6694.c and
+  gpio-nct6694.c
+- Modify mutex_init() to devm_mutex_init()
+- Add rx-offload helper in nct6694_canfd.c
+- Drop watchdog_init_timeout() in nct6694_wdt.c
+- Modify the division method to DIV_ROUND_CLOSEST() in nct6694-hwmon.c
+- Drop private mutex and use rtc core lock in rtc-nct6694.c
+- Modify device_set_wakeup_capable() to device_init_wakeup() in
+  rtc-nct6694.c
+
+Changes since version 2:
+- Add MODULE_ALIAS() for each child driver
+- Modify gpio line names be a local variable in gpio-nct6694.c
+- Drop unnecessary platform_get_drvdata() in gpio-nct6694.c
+- Rename each command in nct6694_canfd.c
+- Modify each function name consistently in nct6694_canfd.c
+- Modify the pretimeout validation procedure in nct6694_wdt.c
+- Fix warnings in nct6694-hwmon.c
+
+Changes since version 1:
+- Implement IRQ domain to handle IRQ demux in nct6694.c
+- Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API in nct6694.c
+- Add each driver's command structure
+- Fix USB functions in nct6694.c
+- Fix platform driver registration in each child driver
+- Sort each driver's header files alphabetically
+- Drop unnecessary header in gpio-nct6694.c
+- Add gpio line names in gpio-nct6694.c
+- Fix errors and warnings in nct6694_canfd.c
+- Fix TX-flow control in nct6694_canfd.c
+- Fix warnings in nct6694_wdt.c
+- Drop unnecessary logs in nct6694_wdt.c
+- Modify start() function to setup device in nct6694_wdt.c
+- Add voltage sensors functionality in nct6694-hwmon.c
+- Add temperature sensors functionality in nct6694-hwmon.c
+- Fix overwrite error return values in nct6694-hwmon.c
+- Add write value limitation for each write() function in nct6694-hwmon.c
+- Drop unnecessary logs in rtc-nct6694.c
+- Fix overwrite error return values in rtc-nct6694.c
+- Modify to use dev_err_probe API in rtc-nct6694.c
+
+
+Ming Yu (7):
+  mfd: Add core driver for Nuvoton NCT6694
+  gpio: Add Nuvoton NCT6694 GPIO support
+  i2c: Add Nuvoton NCT6694 I2C support
+  can: Add Nuvoton NCT6694 CANFD support
+  watchdog: Add Nuvoton NCT6694 WDT support
+  hwmon: Add Nuvoton NCT6694 HWMON support
+  rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 192 ++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 390 ++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+ include/linux/mfd/nct6694.h         | 102 +++
+ 23 files changed, 3667 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
 -- 
 2.34.1
+
