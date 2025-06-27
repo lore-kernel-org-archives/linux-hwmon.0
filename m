@@ -1,106 +1,102 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5E5202990;
-	Fri, 27 Jun 2025 13:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AB22D662C;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751030955; cv=none; b=eDfQFzdElGY+35cwiZt65n0VwAhrw0SeFXSSguOHKB49N3DYXSO8+0cHtFXRleSjCX+92eFXu7qYEb9Fhd1lyoIOBMPnIs0ByuHavMPHgRkNB3cJvIDOVN4qvNpj5hoykv0cwzEGA4rDVSQX+sYXclDZHTNeU+jsyGd5HEA/HAQ=
+	t=1751036355; cv=none; b=BUn+mQMr8ioCAOOPi+xgC6IQtfP4UaxI0M0UdHFq5tlSbLz3AQrb7umECotBJMyucVlLf6l5Fxl3gguq9d6SfRpJGwgAPft7jZtBu/lkpO1xufkMsxEApUon06t3N1HHpGe6pT9xMXU8vhsiCKhVqzTNnkURutiksLtHX4cqVpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751030955; c=relaxed/simple;
-	bh=Sf3z4Z3YSErVATpkFjcBSQwGR+7B5L6SxIjFmpyGInI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PoLdP02XOXxNI6CvDBRqv3tpwyzwjxjZN3cHR21op8zpu/toqbTfOjoFt+quzlOuiZXjpfigiVl90QHnXnIdFdiEOjoL32xzpBiAW/AV5tRPEG5d3f/SgaO/1GysvyemlXpB8VqvsUkkYiSigrstm+wjfLjLqscS1R2Lv5fNzSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIcRq1qU; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751036355; c=relaxed/simple;
+	bh=tYiLJujWc+iv8z7OkMU3wg41iVItPHvcvfpeKX54doE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=asreawR+3PPEzUhx92Jc4PxoAhvQ9MDo4UyM1iiQTUrW3EbLsQ78uwUyB14W7OvQWywSMKebezw9NPcW8hk9QgXKiQUepjJKvILMzTdzQxm/WcpN5pjmJWptjnkxxa9bB5W7IIGCrOsliyDifyaXxQ4YLxJYCoLR0dETU/f/BQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QLowtbml; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIcRq1qU"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-235a3dd4f0dso15291775ad.0;
-        Fri, 27 Jun 2025 06:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751030953; x=1751635753; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eFMEuYCNEgcY34odUiO9pyd51hCxEH9myx3SJQBjnHY=;
-        b=gIcRq1qUITAyUH99i/OwXY0DADuIdGFXBjvazQSBqsHZcXfTARYoqdgV8bnzbaFNzY
-         GtGqi2zqGmMCqWlyzRVCzuHLdQfPiOJyTi89QBiUyNiIjF+r9n+UfT7Vi3k7W7Hl/3rH
-         j8j/I1pPcf4x8RxZ/4Jk+2dfOaCam12kCtJN9wf04pD5GSyEOJRgCCoSHsmJG7Rr1tpR
-         F13t7UXjX30Q90ReGlDTt0kL/Wz0tQWLjLVNUwz05cpljh5htu2AucuCsRb7Hu3X25GN
-         qDcnU4PFtjFq95xYDANp44f/Tzxcft2X87skyeXOgGIl4/N38av+y8oS6lUPqEaf4PH3
-         cmog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751030953; x=1751635753;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eFMEuYCNEgcY34odUiO9pyd51hCxEH9myx3SJQBjnHY=;
-        b=sL45Gi67l20KEqrYqYPcQ1NJ1KDsdSoXJXVCsfgGSr/wcg7rySdLcMZtOq1jegYgrc
-         c2VaxjcMaZqq8wQatGPxiJmVAR672sZsz/ToG6a9aqQ7yfBJWuEgnKyleImBqcuYnnrZ
-         exK6JlKGjE5RzT04Hj64nJR3jG+ybFwv4C6xanFjwxqvilgbcBFYkJko9KWbpAuoJ6fU
-         VJ96v3sOLu60JieqkVlnCyBXAP4y7i8J7mfpAJRYUT7ICVaodhV6FqpkC5ygpu8rN882
-         +2bLztr0kRFhSatZyC/RtOnIwP/1sVicaCG78hfP3pj4CzGCM4Uz3FWvNmOh9Vp8jcPT
-         KpOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVA1oLLxwlqpnYMUTSLqyKo516THiRjeu6Qp+e2LcHdraGQNEdt5t0NszJQD596oS0eJ62tDNtZ6M1hh/bh8mfKvyVE+Q==@vger.kernel.org, AJvYcCW3v92dHPGp3LYn7V1k+az6KQvdiCRKwF0YPuetIhsKDs9YG2kgKDugwGAemnlsF2Vq9hZRdFuh7sr46doB@vger.kernel.org, AJvYcCXRAfCTzl6H8OlrveuhCPEaC29zTXXgLrxStAbClRsHVc9xnhAprBuV5bE3k6FNrY5E0VQLeL3LWC2feg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLiMwy9JpUUPa4h1Jw7knf4X9ITiRQNh141VfptfOXKNmaYB+o
-	1AN1CWdqQvPhLFoSFwFUcYiwJ2hmXpMuM+Xeq6caEEvZzJ8gYVVgxyii
-X-Gm-Gg: ASbGncvTjnjpL3s4ybQx95srWQzKtJsttR7kUPr1Oo5w/7JwSpZ69jc5Z3ro8VYXOB5
-	4LXKlOOhkZapaNhpFJLvHsFwaByYJHGnerv9OGq2fw70hwSOI1HzBAzl3Go6wTBne4xFxwl8LAd
-	o3lLQwhBLOcQTWRfkj+Y/pNiElWoQsawGhbo0Y63AvPMBzxwq3EQOjoTKoIJR9tqYKDjhwjxNlr
-	0+MbEidWX/xd18owrhVGjOml8iCZRD5GaEMTevD5G+S9aEtRxC4VhFuooGXlyEix+pyiFI4OrjO
-	4w8KY2pU1KovR5zAC87x4jHP0bZeDm2t+2S7BzfzjOmaDCdAmjgYaoiFb6CIJZiySYWUWTwPQ+g
-	=
-X-Google-Smtp-Source: AGHT+IHEMPY8AecElt0T9o3PCNRn2HNCuWgtsMI4KQah9RtnOoLyMfEbIzF+Q+sRuq8j3DbBSWaYxA==
-X-Received: by 2002:a17:902:e5c9:b0:234:9656:7db9 with SMTP id d9443c01a7336-23ac4633b92mr53853725ad.32.1751030952703;
-        Fri, 27 Jun 2025 06:29:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2f0b91sm18025605ad.53.2025.06.27.06.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 06:29:02 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 27 Jun 2025 06:28:58 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: jesse huang <jesse.huang@portwell.com.tw>
-Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
-	linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] platform/x86: portwell-ec: Add hwmon support for
- voltage and temperature
-Message-ID: <a25733d7-535c-44b8-973c-0bc0c99047c3@roeck-us.net>
-References: <a35d63e1-424f-48ac-bc97-cdb48929f40d@portwell.com.tw>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QLowtbml"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BA8D6C4CEF5;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751036354;
+	bh=tYiLJujWc+iv8z7OkMU3wg41iVItPHvcvfpeKX54doE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=QLowtbmlA13dsfEoH/r/fdvTymmQz6l01Spbk0Z+HrR44PrXr/wi06PEFXmsQKSp4
+	 1GaI540/fCzWNiE1SdWpCv2wndS80RDhlRMBF6AEH9svvg9wiOTnyPMOq2EehI2GNj
+	 XnJjbZQfyt/xqHvOe+b7qDAs3fw43cTyxg0ieCVk+wdTM0xA05Sqt72+dNPTO1xllI
+	 fFcEqjufhE1sHJXGIoSo3wLcpSXW2YihOR0gb6n/JteVdVwnaQUCYMETaN4yJY5IJn
+	 TCw283sVO2XwGRPe2/5QPzNY7vwUhGW8gpx2TnnIixWqY0QfbZT6KsJTvA+1Fq5dkR
+	 W+52D7vrouCgA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A62A8C77B7F;
+	Fri, 27 Jun 2025 14:59:14 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Fri, 27 Jun 2025 15:59:11 +0100
+Subject: [PATCH RESEND v7 2/7] clk: clk-axi-clkgen: make sure to include
+ mod_devicetable.h
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a35d63e1-424f-48ac-bc97-cdb48929f40d@portwell.com.tw>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250627-dev-axi-clkgen-limits-v7-2-e4f3b1f76189@analog.com>
+References: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
+In-Reply-To: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+ Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
+ Mike Turquette <mturquette@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751036364; l=711;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=MyQa116l4E9wDyCm1ZTrQoq6qju7oKOtUMHCY6i0bL8=;
+ b=2tz7oTZMPTpdwccq3C4mYynkH8wyt/mU8mG8vfXZ7twDrZ5eUmC35jV6dn9UsBNjjpYAJPddt
+ p3QC9opyrKCAWBUN6nIpLPGp6B8DVFEdO+wvsbebS81sVuXMBUmiNt6
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Fri, Jun 27, 2025 at 05:15:01PM +0800, jesse huang wrote:
-> Integrates Vcore, VDIMM, 3.3V, 5V, 12V voltage and system temperature
-> monitoring into the driver via the hwmon subsystem, enabling
-> standardized reporting via tools like lm-sensors.
-> 
-> Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
-> ---
->  drivers/platform/x86/portwell-ec.c | 188 ++++++++++++++++++++++++++++-
->  1 file changed, 186 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
-> index a68522aaa3fa..79597b4b5559 100644
-> --- a/drivers/platform/x86/portwell-ec.c
-> +++ b/drivers/platform/x86/portwell-ec.c
-> @@ -33,6 +33,10 @@
->  #include <linux/sizes.h>
->  #include <linux/string.h>
->  #include <linux/watchdog.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/hwmon-vid.h>
+From: Nuno Sá <nuno.sa@analog.com>
 
-Two unnecessary include files.
+The mod_devicetable header is the one to be used for struct
+of_device_id.
 
-Guenter
+Reviewed-by: David Lechner <dlechner@baylibre.com>
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+ drivers/clk/clk-axi-clkgen.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
+index 00bf799964c61a3efc042b0f3a9ec3bc8625c9da..2a95f9b220234a1245024a821c50e1eb9c104ac9 100644
+--- a/drivers/clk/clk-axi-clkgen.c
++++ b/drivers/clk/clk-axi-clkgen.c
+@@ -13,6 +13,7 @@
+ #include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/err.h>
+ 
+ #define AXI_CLKGEN_V2_REG_RESET		0x40
+
+-- 
+2.49.0
+
+
