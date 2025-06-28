@@ -1,203 +1,142 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E7E23DE;
-	Sat, 28 Jun 2025 08:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EC139855;
+	Sat, 28 Jun 2025 12:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751100223; cv=none; b=YAJNoLt/HrsGhycD+y40bLwLukZna6nY3H0PTGbLRbsXM+2YyYFmBM/+82JaWCBpZ2gdDKDBulWOSQ6GdOiBJoJ86FGVzA88KQmQUts5Ld8IfzWRz3ZgcwzGd8wzVYtB1J2Q5e6+SPLsCN99fuCZ+/HoZj3Ttt05/p6Vy0aF0V4=
+	t=1751113870; cv=none; b=bXCliI1oLOnJpXU/PJhC4G2rwNmWmuCKGt3x0+PjZF1rgcPMWCyHosUGU6itHztcnAJZQl0IvF2lzgpBLGoMPA2fxvgENDy+c04G3G0DQi1CkCyPBevdiK84efYo02lxdOuR3WSbYJA1MZCReTvJEwsh6f+83gr3yT0QsfJLtho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751100223; c=relaxed/simple;
-	bh=2Yhg2EDAhv8zXnryNZ8+WmoQhMBpv71AIS9tGm4BeX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K/R93k9YWrqcHSwJ3j1pvcxybv8IbUOXemSak1oSQUS/0qmZwmvRHRQ4KeKaLjChkawyY/nTIt6Nn3kV15gAz1WC+UuG8hv/nq958Z7xyDxNcn9ERKkacLl3ioQF0klYeb66PVplJ/TT3weFlPNVoZkBkneoYiA6fX9GOKWABsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L/79V9FJ; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751113870; c=relaxed/simple;
+	bh=GuHOq+CbdP3Dl1cSzwH/wbg08DUJMROIFu5pK37Vl78=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=LWyf+7QTSGLKJ5sqPwz1pz8IAJdtUXAPgX/rmz16xJ/j/MXpO/mSrQq4updLjqcCRsuq5dFJtLixi5Iqh8h/fufc9+t6UWro5mQ5Q+Ex0bzAagT/FV5hPJKUQoaR51BCOSvmll28hf/MTjQnquC6RZ9NSM91Sb8riINEI4Co6jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=VV/HQj/O; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L/79V9FJ"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-af6a315b491so712552a12.1;
-        Sat, 28 Jun 2025 01:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751100222; x=1751705022; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jy7TEL91BqkyjG4VnW5FClmC8uUXfEkPzrAe3TbCioI=;
-        b=L/79V9FJts0XZErMa1yMD1vStzlkTF7VuZPNd1rPVwTJVLZVFOdS5H5ebTN82Bf+Zf
-         IngOLasx5dE3DMbx+j2SL8IeVXCDsB/J+ujzQREe+Y+lVP4I251ZAKhhUf7wQ90Dq6oH
-         CVw1PgUSUg9EiREhhKZnKp7OloDhH11qY30YjvwnfhR9223AAu6aGX1mvJzYQIu6zJol
-         RGTcR+krcn0KTJkuQsDle5hkaszye/jAsl3HrBiZNCNa03CUNHRSfgxBknVAWmbYsq68
-         g6aG5oc/H4dSDIlOQzF1NNh1Wig76ziko4Exs7IIxXZHaGwrDSC4NaaiRPu9iX/UcIdA
-         ofog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751100222; x=1751705022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jy7TEL91BqkyjG4VnW5FClmC8uUXfEkPzrAe3TbCioI=;
-        b=t4CVHUKXs+tpOpBmNa2Cd+RyfEIGX0YqgbbRT/VdWjffGzqVVkqOJxmkmU+ej7uDYY
-         oxiLnXVM5AR5oNB/0n8tVHR++l7ah6zxrvIqTslVfIh0n0C/8Q0leW6yT8Fwz75/vycg
-         qjU1Ckx4jmjK+1rPKx/3WGrsans0FRsNBAKADghzSt9t1BoRuDf8oWa4aTlY8Dhyjdvz
-         0SDxSt1gmgoe8RwxRPDemKVfTvkJKKhVqdEyrJoe18UyQMau+Ix27S/SEC4HBN4Wr/xr
-         SlT6Ux5DpJq4CrXT/2rWEkuiK9zOsMeMmjiklDNQVa6rNoNXZDNr9kIEBQTjweTf9qNU
-         JRbw==
-X-Forwarded-Encrypted: i=1; AJvYcCULdDk5ti+Pr21sUHK2KZX+Nl4dG5hXlFRTJDLjyiQaOuS3kRRyNoMcjemjG1e+R7ccs7fOe6u6GSz4oGI=@vger.kernel.org, AJvYcCUf99Sr3QBkfrvnNGrMUNOaq8ZMAilaGdo2IoKvzWn22DAISAP0ynH1HzPT9SeRI2xi99xjimBdBTbVti6N@vger.kernel.org, AJvYcCWxvfcEOUp5Acg2UcOWzlqmWAM6Dc3j3BQGQmDFpaOKywB9Oap3d6oXffq3rW/6flX6w6RvcfY2HKDX@vger.kernel.org, AJvYcCXyOmjUQiZge299eDrrohR/P/LBR1jo9cEJfABH4/GiFdcEXBVL7D2H24EFwWQsp7vYL93y0qJwWbmd@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW40n99q1VbFAR29r3dp0GeKfKOS8EbJkUMaoY8gkoTjhSzms8
-	iQ52duFJzlUdI+ovVdjEcqZop9Wu7q0AYKTRMaqt2pI6nsIGtRaP/XwP4sFzm1zbGwkSDNcewmK
-	4kx2VN12g7c+2tv5x+UR28a3AGgN1rXk=
-X-Gm-Gg: ASbGncucVS4CEZ5exTApVA/6ukRQ0o8lWadTNoL5/i7PQYBY7A0hnz035ZHlfeBkp4R
-	Oo2fGfqDC8q8xD0YBPyN1KmsFFHlH5sSI/ILJjLJqULIJodlRgpTKBb3S6bdKRUAnxFdHRHyjgP
-	A3GoLE06z0FmaLw2zO6qf35pSo/q60Z1UBPdX1ud2JS48mNnO2hqgRWEFz0nqvBIRjR+f0odUcZ
-	aHPNDIQmZ7/TYsZ
-X-Google-Smtp-Source: AGHT+IFKlwm6XGn++8Zmma+OVlEv79qu+lYvKQsC5hXOU2GGxy5e73OgJCj8yl2gSF2zX4UMeZOGTHopwxX5mwfyyAo=
-X-Received: by 2002:a17:90b:224c:b0:311:f99e:7f4a with SMTP id
- 98e67ed59e1d1-318c926451dmr7337383a91.26.1751100221531; Sat, 28 Jun 2025
- 01:43:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="VV/HQj/O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1751113830; x=1751718630; i=markus.elfring@web.de;
+	bh=9dvPgfxBni1dCb8wk5xV/eYN0Q/Wf+q8ejkIbyh5sxc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=VV/HQj/O/TZI18JKc09uqN9Ka+v9zaAkTRctmxSuu1pIpyPG694I3jG1MNLQA3Nq
+	 E4ipZl1QzgCn8F08XMZALYXxSyY/Htyy+wce5hX8Q16f6A+hDQGSy06hJC3iNako+
+	 J74KrQPxl24vrG2TvRPHXVxrxXqIkp1Xp3IDVfdqpX8AsbgAI8ZEiJhfzQUpaoy8n
+	 IjNUm8pfGQ4FyVAfB/+evf6KoxLwUgWUNh4RC6f9gphEXhjeGhJGOnGZ87iwOEBO3
+	 fnG4H3aNG2wNDM+YPd1KaYjALQKIQQNlUY4uRKivWGMN2rQiRlQUHfwrc51cOdlIk
+	 yBoLKFg6MN6h4tr64g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.176]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MLAVc-1uDHKG1Nj8-00TXkk; Sat, 28
+ Jun 2025 14:30:30 +0200
+Message-ID: <76f34610-6792-4be6-a5d6-622fba7d85da@web.de>
+Date: Sat, 28 Jun 2025 14:30:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250626113351.52873-1-noltari@gmail.com> <20250626113351.52873-3-noltari@gmail.com>
- <20250627213454.GA179652-robh@kernel.org>
-In-Reply-To: <20250627213454.GA179652-robh@kernel.org>
-From: =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date: Sat, 28 Jun 2025 10:43:05 +0200
-X-Gm-Features: Ac12FXyB5spcQT9l77Ao7kgk6V-2QwXerVK2aE6vHymxZPfo25cAnEbofL-HkQQ
-Message-ID: <CAKR-sGf01xtOF9dY9yb2i67PV5FHHe3GGKk7ingjTOOfqWA5FA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add Microchip EMC2101 support
-To: Rob Herring <robh@kernel.org>
-Cc: jdelvare@suse.com, linux@roeck-us.net, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+To: Ming Yu <a0282524688@gmail.com>, linux-can@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ netdev@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, Paolo Abeni <pabeni@redhat.com>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Ming Yu <tmyu0@nuvoton.com>, LKML <linux-kernel@vger.kernel.org>
+References: <20250627102730.71222-2-a0282524688@gmail.com>
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250627102730.71222-2-a0282524688@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GARg2unvR393v0ddrdFf+gCoE5GBk7DkTlawIl6DtqhxD5KbjS4
+ XwhEnClEhPUjptkfwCX0vZRNAJUHgoZkMd7Z1r0rvpp+F8YsxTy0Q4r2IW1f7ahFswzYTl3
+ T/qL292DDL+KBIEbtSr7M895enORtm8y5FMPxW7oc9VLnOsjowYtP32Iiqb8ruCjpGSgnq5
+ V9VNSdLblBEeHmR/+40SA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:rzNGavO/eAM=;eLzsOP7ZRUA9Ll8EVS5QMxBRvGt
+ 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
+ zRhhE+zhiUQ==
 
-Hi Rob,
+=E2=80=A6
+> +++ b/drivers/mfd/nct6694.c
+> @@ -0,0 +1,390 @@
+=E2=80=A6
+> static void nct6694_irq_enable(struct irq_data *data)
+> +{
+=E2=80=A6
+> +	spin_lock_irqsave(&nct6694->irq_lock, flags);
+> +	nct6694->irq_enable |=3D BIT(hwirq);
+> +	spin_unlock_irqrestore(&nct6694->irq_lock, flags);
+> +}
+=E2=80=A6
 
-El vie, 27 jun 2025 a las 23:34, Rob Herring (<robh@kernel.org>) escribi=C3=
-=B3:
->
-> On Thu, Jun 26, 2025 at 01:33:50PM +0200, =C3=81lvaro Fern=C3=A1ndez Roja=
-s wrote:
-> > Introduce yaml schema for Microchip emc2101 pwm fan controller with
-> > temperature monitoring.
-> >
-> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > ---
-> >  .../bindings/hwmon/microchip,emc2101.yaml     | 52 +++++++++++++++++++
-> >  1 file changed, 52 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,e=
-mc2101.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2101.=
-yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc2101.yaml
-> > new file mode 100644
-> > index 000000000000..e73f1f9d43f4
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2101.yaml
-> > @@ -0,0 +1,52 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/microchip,emc2101.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Microchip EMC2101 SMBus compliant PWM fan controller
-> > +
-> > +maintainers:
-> > +  - =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> > +
-> > +description:
-> > +  Microchip EMC2101 pwm controller which supports up to 1 fan, 1 inter=
-nal
-> > +  temperature sensor, 1 external temperature sensor and an 8 entry loo=
-k
-> > +  up table to create a programmable temperature response.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - microchip,emc2101
-> > +      - microchip,emc2101-r
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
->
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
->
-> What are these for? You don't have any child nodes.
+Will development interests grow to apply a statement
+like =E2=80=9Cguard(spinlock_irqsave)(&nct6694->irq_lock);=E2=80=9D?
+https://elixir.bootlin.com/linux/v6.16-rc3/source/include/linux/spinlock.h=
+#L585-L588
 
-EMC2101 can control a single fan, so I guess I should add the following her=
-e:
-
-  '#pwm-cells':
-    const: 2
-    description: |
-      Number of cells in a PWM specifier.
-      - cell 0: The PWM frequency
-      - cell 1: The PWM polarity: 0 or PWM_POLARITY_INVERTED
-
-patternProperties:
-  '^fan@0$':
-    $ref: fan-common.yaml#
-    unevaluatedProperties: false
-    properties:
-      reg:
-        description:
-          The fan number used to determine the associated PWM channel.
-        maxItems: 1
-
-    required:
-      - reg
-
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +
-> > +        fan_controller: fan-controller@4c {
-> > +            compatible =3D "microchip,emc2101";
-> > +            reg =3D <0x4c>;
-> > +
-> > +            #address-cells =3D <1>;
-> > +            #size-cells =3D <0>;
-
-And the following here:
-
-            #pwm-cells =3D <2>;
-
-            fan@0 {
-                reg =3D <0x0>;
-                pwms =3D <&fan_controller 5806 0>;
-                #cooling-cells =3D <2>;
-            };
-
-Would that fix the issue?
-
-> > +        };
-> > +    };
-> > +...
-> > --
-> > 2.39.5
-> >
-
-Best regards,
-=C3=81lvaro.
+Regards,
+Markus
