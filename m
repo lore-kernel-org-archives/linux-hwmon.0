@@ -1,50 +1,53 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D762BB04;
-	Sun, 29 Jun 2025 22:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11634199E9D;
+	Sun, 29 Jun 2025 22:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751234610; cv=none; b=Fj3gupk879zAKYw7yTZ8o4WX7umNj4uUsgvKxjPyueqdmgYd9zHbGssjLP/hSSqtXHsOoyekj6oR26v5uVGQRXvI2BGdauPo/VvdwiceGunwE4wetpETUdfkjy4k7ktvOL9axtyrp38uezKgJCwNGMVE1Z2H0lRMyi47OZoQhvw=
+	t=1751235219; cv=none; b=N7OFES3WPHbADRg7aeFgr+eI7fbhPcnl5WnPUh0rpDbgaYRQO7zvJIgqpfp4WxTjOPupRvBxGb6Fjb5fCKmhOgWzxKaGgs4pgKAVNpgGK0TB2UHTkNVBP/81/UbPJBfPg5UEdTlOZACLnm1Y19WnKb8oGVWvPhGggFgOl5c2zqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751234610; c=relaxed/simple;
-	bh=VYrxT2BNQHjU0MJz0OdEn520vMRwoVhW+g1xOW1znyo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r3aDFjdUY6xK594GXBZaE27KlRQzfhjQq8daI2XGun32JPuAfJO/mwWN97JwjNLmgp2dYmm8yrWGC0WzNh1Jgx6NISvuX6GgR0LT1gbXll8JV5EvblLv/qdvVWWsKPwFkORhPuLKDan2mcjlLp16uksT/vuYoIcqJMAlJLHipCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=YLo2sGII; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=bHU2jcaY; arc=none smtp.client-ip=80.241.56.152
+	s=arc-20240116; t=1751235219; c=relaxed/simple;
+	bh=mhNsrq/FL3GGGBxirI66EyCfOeGnfH0YLll+6hJYwQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pIfEiS/u5lDATKR7tvWGADK+9X70TKD2bXtfh9cvLw5gbrtO2FzKQsGqEOzPIzE24Q/qxUfSIAOe+RTF0iw4ewTnjqIufeKouYyhKcPcRusrOflcvAO285Ma6H5f+gF2NnUZFMjPcEU8QIvO8vpqtwQSJ2aVh64Hk8fPqKcTRZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=NvRHFZAf; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=fTK5rAcc; arc=none smtp.client-ip=80.241.56.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="YLo2sGII";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="bHU2jcaY"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="NvRHFZAf";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="fTK5rAcc"
 Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4bVjwS5RNRz9tSK;
-	Mon, 30 Jun 2025 00:03:20 +0200 (CEST)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4bVjwV4DN8z9syG;
+	Mon, 30 Jun 2025 00:03:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1751234602;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EHRWcFYqtVchRtwkkdbmCtC4/un5G7pRG+gJHdVdxTc=;
+	b=NvRHFZAfoSpPpAhiiqTE11VpVMme/BgartJW0ploezjByKJ/gbLkpfZGB4THqdkfi6D79/
+	LwD+//EhS2AwLYXcmqwDZZ8uitnxhymCuYQ6BleDXy7TFfPBLp+VVhw4MjsxqsEfnILR1L
+	5L2l5r1HsQQI3TOdI9l4omMVmfK2PkQfI9UxQxlP3B1CuqX32lzC5g6nJ9Wc0CxftJ/wNk
+	K4mSmY8YeJ/yV/pqfChXBomB6XCt2q2toGcKNGDjMZYsRNmMiDQEehNH5N1KWR/AJMmKMx
+	oLp2lDFyuXHsy6IB6lE414e4fFs/jKGPSG1aS8RDLWs6UthnCPIZmsHns3utKA==
+From: Marek Vasut <marek.vasut+renesas@mailbox.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
 	t=1751234600;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tLOBASu67jMssiQT5SFkON0glgTsFRDPfajmiWxxwog=;
-	b=YLo2sGIIyIG9Al/YEyGCgmObSwoTXAq+0GnKu2t8O89WF6Q7Zzeq03/5twmZKR93LjZdmT
-	UnksZyK7whTbO6m6NH8OKUBSA3Hm2WEa36hQHL9fAxypgzITdvq7WukK0Mt+ItvYfhG5Df
-	V8KECzDBKDKedJmuAYD/i73/i58qLD9XChT56vHrqe4+4xyLGGR9GW/AhXXQVRVTTgPvYh
-	VCVI6j9KbHTS37cUhGy3NuZd+J6akDVRrOycY/VTAVt6imytrEEw+HR/mE0Oygs5EdWDnx
-	MDioJONaUy2d8DZXhbDvXHGKNUx5tfofTUbS4dPsPHOW89Q8gituhxYswAF+xw==
-From: Marek Vasut <marek.vasut+renesas@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1751234598;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tLOBASu67jMssiQT5SFkON0glgTsFRDPfajmiWxxwog=;
-	b=bHU2jcaYCIJ3si37hgS9IhNk3jzcwDR6e1mp49Oe98Cfs0Swg632JLEgwzixQXH9BDm8JN
-	HB0dluEoG6BRVakMvHS83c2gCpxWIXy71pb9fWXuPuHmwYirvYJsa9zTFlzcnifJl5VkhK
-	T75N6ZX5BQNa5vJdQOx/UwC7MHd+I+j980RTzWPHxGhVy7z9obYAwi7RrokacGt+6dvllE
-	xqQTIE8z4KTtbg1RNaZmX/KmdAkmlN/dT34B2mRFV1rSXvv9Vxc0yXiKnGsII+J1V+NXaQ
-	EVbCg01bvIK3zduFghawK72s2xQTeEjI/2Ti6pUx5YcTLSsO9ylw+782WcGWkw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EHRWcFYqtVchRtwkkdbmCtC4/un5G7pRG+gJHdVdxTc=;
+	b=fTK5rAccx5JbODnYQ4QD1gGVklSxLkH0dQWN4MVIQUuxI1l43lZyI9MDIEf/84HVeZwy6B
+	Cp1IOnzW+QjUj72neRx6bED1cAWz5QCiyUAkiRZERzZCjANC+5H0uL6b707ilvPI+7GnBh
+	9i50a8eGqxIyc9WWEChfGVlMr1/oABXEZ/k3+DNfyV64hLNpZXNADJ3N46yNy/mRvecKuW
+	00p6Fepm/4QvmJT7B4jWUUPx0ER7xi4WLfqcRP4XhQNvVBsGvjZL2F/kEJTre33/Icv1jR
+	HEpNDYNVI0I+C3DwI5+JAMnoPCtgF3rjTIkLT3cOFYD4OMr9Y9ibV2RZbG8c2Q==
 To: linux-hwmon@vger.kernel.org
 Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -54,9 +57,11 @@ Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
 	Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document after shutdown fan settings
-Date: Mon, 30 Jun 2025 00:02:08 +0200
-Message-ID: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
+Subject: [PATCH 2/2] hwmon: (pwm-fan) Implement after shutdown fan settings
+Date: Mon, 30 Jun 2025 00:02:09 +0200
+Message-ID: <20250629220301.935515-2-marek.vasut+renesas@mailbox.org>
+In-Reply-To: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
+References: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -64,15 +69,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: oehwbwereg8x7fbrojyx4srs96aq8pks
-X-MBO-RS-ID: 663836b5dffa5e279f4
-X-Rspamd-Queue-Id: 4bVjwS5RNRz9tSK
+X-MBO-RS-META: rb87y51i17msgp16gxdb9wmgjfs53d3n
+X-MBO-RS-ID: f192539e5e37403a79a
+X-Rspamd-Queue-Id: 4bVjwV4DN8z9syG
 
-Document fan-shutdown-percent property, used to describe fan RPM in percent
-set during shutdown. This is used to keep the fan running at fixed RPM after
+Add fan-shutdown-percent property, used to describe fan RPM in percent set
+during shutdown. This is used to keep the fan running at fixed RPM after
 the kernel shut down, which is useful on hardware that does keep heating
 itself even after the kernel did shut down, for example from some sort of
-management core.
+management core. The current behavior of pwm-fan is to unconditionally
+stop the fan on shutdown, which is not always the safe and correct thing
+to do, so let the hardware description include the expected behavior.
 
 Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
 ---
@@ -85,29 +92,59 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org
 Cc: linux-renesas-soc@vger.kernel.org
 ---
- Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/hwmon/pwm-fan.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-index 8b4ed5ee962f..a84cc3a4cfdc 100644
---- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-@@ -31,6 +31,15 @@ properties:
-       it must be self resetting edge interrupts.
-     maxItems: 1
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index d0fe53451bdf..37269db2de84 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -64,6 +64,7 @@ struct pwm_fan_ctx {
  
-+  fan-shutdown-percent:
-+    description:
-+      Fan RPM in percent set during shutdown. This is used to keep the fan
-+      running at fixed RPM after the kernel shut down, which is useful on
-+      hardware that does keep heating itself even after the kernel did shut
-+      down, for example from some sort of management core.
-+    minimum: 0
-+    maximum: 100
+ 	u64 pwm_duty_cycle_from_stopped;
+ 	u32 pwm_usec_from_stopped;
++	u8 pwm_shutdown;
+ };
+ 
+ /* This handler assumes self resetting edge triggered interrupt. */
+@@ -484,9 +485,14 @@ static void pwm_fan_cleanup(void *__ctx)
+ 	struct pwm_fan_ctx *ctx = __ctx;
+ 
+ 	timer_delete_sync(&ctx->rpm_timer);
+-	/* Switch off everything */
+-	ctx->enable_mode = pwm_disable_reg_disable;
+-	pwm_fan_power_off(ctx, true);
++	if (ctx->pwm_shutdown) {
++		ctx->enable_mode = pwm_enable_reg_enable;
++		__set_pwm(ctx, ctx->pwm_shutdown);
++	} else {
++		/* Switch off everything */
++		ctx->enable_mode = pwm_disable_reg_disable;
++		pwm_fan_power_off(ctx, true);
++	}
+ }
+ 
+ static int pwm_fan_probe(struct platform_device *pdev)
+@@ -498,6 +504,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	int ret;
+ 	const struct hwmon_channel_info **channels;
+ 	u32 initial_pwm, pwm_min_from_stopped = 0;
++	u32 pwm_shutdown_percent = 0;
+ 	u32 *fan_channel_config;
+ 	int channel_count = 1;	/* We always have a PWM channel. */
+ 	int i;
+@@ -648,6 +655,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		channels[1] = &ctx->fan_channel;
+ 	}
+ 
++	ret = device_property_read_u32(dev, "fan-shutdown-percent",
++				       &pwm_shutdown_percent);
++	if (!ret && pwm_shutdown_percent)
++		ctx->pwm_shutdown = (clamp(pwm_shutdown_percent, 0, 100) * 255) / 100;
 +
-   fan-stop-to-start-percent:
-     description:
-       Minimum fan RPM in percent to start when stopped.
+ 	ret = device_property_read_u32(dev, "fan-stop-to-start-percent",
+ 				       &pwm_min_from_stopped);
+ 	if (!ret && pwm_min_from_stopped) {
 -- 
 2.47.2
 
