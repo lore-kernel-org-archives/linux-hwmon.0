@@ -1,67 +1,96 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11634199E9D;
-	Sun, 29 Jun 2025 22:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B66239085;
+	Mon, 30 Jun 2025 11:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751235219; cv=none; b=N7OFES3WPHbADRg7aeFgr+eI7fbhPcnl5WnPUh0rpDbgaYRQO7zvJIgqpfp4WxTjOPupRvBxGb6Fjb5fCKmhOgWzxKaGgs4pgKAVNpgGK0TB2UHTkNVBP/81/UbPJBfPg5UEdTlOZACLnm1Y19WnKb8oGVWvPhGggFgOl5c2zqQ=
+	t=1751282485; cv=none; b=l07TjLo5qM5ZP/glS1+ypw50w+OD4Lo7zoqAoGB16nvQeL87dpfgpZSxOiReGUq1flxzfhV/yPhoul3fXhyKbb2vuNtTw5K+lEPNBhpnbJ3/6t7uIrJ6RbNtdKapIlxWDkrprbbW6z/ShQOYmWlDXtnczTvRv2crn5HNIrNTMH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751235219; c=relaxed/simple;
-	bh=mhNsrq/FL3GGGBxirI66EyCfOeGnfH0YLll+6hJYwQY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pIfEiS/u5lDATKR7tvWGADK+9X70TKD2bXtfh9cvLw5gbrtO2FzKQsGqEOzPIzE24Q/qxUfSIAOe+RTF0iw4ewTnjqIufeKouYyhKcPcRusrOflcvAO285Ma6H5f+gF2NnUZFMjPcEU8QIvO8vpqtwQSJ2aVh64Hk8fPqKcTRZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=NvRHFZAf; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=fTK5rAcc; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1751282485; c=relaxed/simple;
+	bh=kdffZayYqFKsYlrDbShiswllwemSxZXAowgkCZdDwSw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pkn7HhXHwlnGYc0RD9qwtuFzyDDfDhHZpVsi5j58egqjo1KoLzGMfi7oSqrDllHTAD9w9Kim8cSKgyal4+cZ8VbTxfmz3gNnWnfxy/ruuaEgF54cQcNJEIkwrzatntTKEFPczaVSffWj1Dakax5h2uKy1jEAwdWYREHJUYmLsOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kwSnG3I+; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="NvRHFZAf";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="fTK5rAcc"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4bVjwV4DN8z9syG;
-	Mon, 30 Jun 2025 00:03:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1751234602;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EHRWcFYqtVchRtwkkdbmCtC4/un5G7pRG+gJHdVdxTc=;
-	b=NvRHFZAfoSpPpAhiiqTE11VpVMme/BgartJW0ploezjByKJ/gbLkpfZGB4THqdkfi6D79/
-	LwD+//EhS2AwLYXcmqwDZZ8uitnxhymCuYQ6BleDXy7TFfPBLp+VVhw4MjsxqsEfnILR1L
-	5L2l5r1HsQQI3TOdI9l4omMVmfK2PkQfI9UxQxlP3B1CuqX32lzC5g6nJ9Wc0CxftJ/wNk
-	K4mSmY8YeJ/yV/pqfChXBomB6XCt2q2toGcKNGDjMZYsRNmMiDQEehNH5N1KWR/AJMmKMx
-	oLp2lDFyuXHsy6IB6lE414e4fFs/jKGPSG1aS8RDLWs6UthnCPIZmsHns3utKA==
-From: Marek Vasut <marek.vasut+renesas@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1751234600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EHRWcFYqtVchRtwkkdbmCtC4/un5G7pRG+gJHdVdxTc=;
-	b=fTK5rAccx5JbODnYQ4QD1gGVklSxLkH0dQWN4MVIQUuxI1l43lZyI9MDIEf/84HVeZwy6B
-	Cp1IOnzW+QjUj72neRx6bED1cAWz5QCiyUAkiRZERzZCjANC+5H0uL6b707ilvPI+7GnBh
-	9i50a8eGqxIyc9WWEChfGVlMr1/oABXEZ/k3+DNfyV64hLNpZXNADJ3N46yNy/mRvecKuW
-	00p6Fepm/4QvmJT7B4jWUUPx0ER7xi4WLfqcRP4XhQNvVBsGvjZL2F/kEJTre33/Icv1jR
-	HEpNDYNVI0I+C3DwI5+JAMnoPCtgF3rjTIkLT3cOFYD4OMr9Y9ibV2RZbG8c2Q==
-To: linux-hwmon@vger.kernel.org
-Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kwSnG3I+"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3135f3511bcso1452565a91.0;
+        Mon, 30 Jun 2025 04:21:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751282483; x=1751887283; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/sCbwxspVKRy6vW2yV0dQypAUzvcx9awITgSiWZ2zks=;
+        b=kwSnG3I+bvmM0RaUmCW/i10+wsBDtmqbwFMJJ5mm4EDfLc43j0txiiPG3v0jPZD7KK
+         zVwj3Q/O3KWEbFAiB2tVxLSGAhDg28G1OmYwL9SKMJxw8IRiuiSWyKi5X7BDcvqRtjC/
+         4Go/9H39BK4xoScm7CV/wWz+Ar14Y0TiJiA9pzIJNWIBDOSaJ8qEsISbIhhodY9I32tM
+         we0hd71ivA81a/4NVrq0b6ESaDeuBKbJourPeRzStgHbDntUL1VmZddZ5Vm3tLcOQasr
+         diXiBwzxWJbP1vCmShCfrjuur9odo+VfuMAgazO8Q19Gcw4MUfjvsUqml0kcjuy5QcEU
+         BxxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751282483; x=1751887283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/sCbwxspVKRy6vW2yV0dQypAUzvcx9awITgSiWZ2zks=;
+        b=xKJr68ZzduIukXS2eG2+lc5B9eBXhvRN18pqTXTe+mvtF/MJmMZ409KYvswRAj4ATM
+         lhnsyc5SD536X7Hj20qeKS30JXl43cq0NMH6dBk5Q4eAKFYk4meRtBFJreyaapO64MQ9
+         VelbwPGAJR2hKUxqEHaQWKVznifVpYZ75pEGDiD0dt0sqaUFSVoXn1uNVtvcTNeqhrwu
+         +bPyf6/dSuCwX/rHLe2dr7o60/miXFsOHjFFB8smKZZKFVp/3XKSPP6Z4KIexPQvW1bI
+         p9OQFKnrEyJB+ZZXpzlbSsVBDaBQxOQzz4/mld398G7dn5jRhNUq7iBzj0dOobkyPsmz
+         FJDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUjTQWKCRHncPZp//BpnRTe44bKZtzEKRVgSq2sPNQq7vjgJSL+sS0CO1yjtzMOPMmKtVzdlD+K16jBi5c=@vger.kernel.org, AJvYcCX0okx8ROKZoE/UidIcJUmS4P1bZ4ZUrZGx4rcXXPlfoblsnDNQEAZ5aTGU/an5afJce+3sSQHjhaF+@vger.kernel.org, AJvYcCXJDqe29DWorUjQ1eqfQWZeSV6crXOsNHbPiCp3Umw8ujjyDRBRu7ZeFTgFUNN4I6KJK6uGyayf6Ex8qQmP@vger.kernel.org, AJvYcCXaMi/lcS28vKpYESpVLYz1nHWqmASuXWY1GsCDdIA9q4E0Ky9dTvVMEKOAhaeWuCQL7zVKOutWZ44Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwmQQTd79v6x9muxaSB/IEDxieCT1JiBJ/Z2p1MuaOWE/iT+rD
+	1j4kJfcU+H8PQGavw1pdOXNfB8MrozED8QTcQWkIRCk7fF71GOVHn0tJo9njeK9T
+X-Gm-Gg: ASbGnct47exgBQUbYq9RkH6q/0XfHzk6gt3pkKrfAmJycsV5ef42Rnvm117cNDjO/Nd
+	Wn9gTTJGKnafzdS3X8pc2tSXyMyDAOhpzrAAjdmuQb7bhtu+3Kf2SS03kHiz8OkiVUNp29gn76J
+	nIwpOzyCuPw/6YQBklb9dH5Grfs9opkSzxf2qU02DMrmTwvhRx5rsy+hIyMjzeR/JR5odcC3AJk
+	c40ShrmA8EpGL77LzBGb2tc8RcjNAB0kQP9KNPh314OcqpXBRY3NIICRyMr9ONTlV44OrgJ1H7v
+	GVdkz5C4hfS30ALKzT2go11mF9IFvqnZicTvdlFFGSrhoVZhzEB8QveL5vY24jn2cznYrZk487P
+	+CWUSE/yDesglSriEl+vO
+X-Google-Smtp-Source: AGHT+IG8BfcZilt8h79yYyIlvyAUuCS7gEv9t319bokbhoDzSOnLTv8jEE3z2sBoBJi0roKge/ueNA==
+X-Received: by 2002:a17:90b:2688:b0:311:d28a:73ef with SMTP id 98e67ed59e1d1-318c8eeaf48mr19633272a91.10.1751282483423;
+        Mon, 30 Jun 2025 04:21:23 -0700 (PDT)
+Received: from localhost (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f53879bbsm13888676a91.9.2025.06.30.04.21.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 04:21:22 -0700 (PDT)
+From: tzuhao.wtmh@gmail.com
+X-Google-Original-From: Henry_Wu@quantatw.com
+To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Henry Wu <Henry_Wu@quantatw.com>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Ninad Palsule <ninad@linux.ibm.com>,
+	Leo Yang <leo.yang.sy0@gmail.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	Mariel Tinaco <Mariel.Tinaco@analog.com>,
+	Nuno Sa <nuno.sa@analog.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Alex Vdovydchenko <xzeol@yahoo.com>,
 	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 2/2] hwmon: (pwm-fan) Implement after shutdown fan settings
-Date: Mon, 30 Jun 2025 00:02:09 +0200
-Message-ID: <20250629220301.935515-2-marek.vasut+renesas@mailbox.org>
-In-Reply-To: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
-References: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: peteryin.openbmc@gmail.com
+Subject: [PATCH v2 0/2] hwmon: (pmbus) Add support for MPS mp2869a/mp29612a controllers
+Date: Mon, 30 Jun 2025 19:20:49 +0800
+Message-ID: <20250630112120.588246-1-Henry_Wu@quantatw.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,82 +98,39 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: rb87y51i17msgp16gxdb9wmgjfs53d3n
-X-MBO-RS-ID: f192539e5e37403a79a
-X-Rspamd-Queue-Id: 4bVjwV4DN8z9syG
 
-Add fan-shutdown-percent property, used to describe fan RPM in percent set
-during shutdown. This is used to keep the fan running at fixed RPM after
-the kernel shut down, which is useful on hardware that does keep heating
-itself even after the kernel did shut down, for example from some sort of
-management core. The current behavior of pwm-fan is to unconditionally
-stop the fan on shutdown, which is not always the safe and correct thing
-to do, so let the hardware description include the expected behavior.
+From: Henry Wu <Henry_Wu@quantatw.com>
 
-Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Add support for the mp2869a and mp29612a controllers from Monolithic Power
+Systems, Inc. (MPS). These are dual-loop, digital, multi-phase modulation
+controllers.
+
 ---
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org
----
- drivers/hwmon/pwm-fan.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index d0fe53451bdf..37269db2de84 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -64,6 +64,7 @@ struct pwm_fan_ctx {
- 
- 	u64 pwm_duty_cycle_from_stopped;
- 	u32 pwm_usec_from_stopped;
-+	u8 pwm_shutdown;
- };
- 
- /* This handler assumes self resetting edge triggered interrupt. */
-@@ -484,9 +485,14 @@ static void pwm_fan_cleanup(void *__ctx)
- 	struct pwm_fan_ctx *ctx = __ctx;
- 
- 	timer_delete_sync(&ctx->rpm_timer);
--	/* Switch off everything */
--	ctx->enable_mode = pwm_disable_reg_disable;
--	pwm_fan_power_off(ctx, true);
-+	if (ctx->pwm_shutdown) {
-+		ctx->enable_mode = pwm_enable_reg_enable;
-+		__set_pwm(ctx, ctx->pwm_shutdown);
-+	} else {
-+		/* Switch off everything */
-+		ctx->enable_mode = pwm_disable_reg_disable;
-+		pwm_fan_power_off(ctx, true);
-+	}
- }
- 
- static int pwm_fan_probe(struct platform_device *pdev)
-@@ -498,6 +504,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	int ret;
- 	const struct hwmon_channel_info **channels;
- 	u32 initial_pwm, pwm_min_from_stopped = 0;
-+	u32 pwm_shutdown_percent = 0;
- 	u32 *fan_channel_config;
- 	int channel_count = 1;	/* We always have a PWM channel. */
- 	int i;
-@@ -648,6 +655,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		channels[1] = &ctx->fan_channel;
- 	}
- 
-+	ret = device_property_read_u32(dev, "fan-shutdown-percent",
-+				       &pwm_shutdown_percent);
-+	if (!ret && pwm_shutdown_percent)
-+		ctx->pwm_shutdown = (clamp(pwm_shutdown_percent, 0, 100) * 255) / 100;
-+
- 	ret = device_property_read_u32(dev, "fan-stop-to-start-percent",
- 				       &pwm_min_from_stopped);
- 	if (!ret && pwm_min_from_stopped) {
+Changes in v2:
+- Fix coding style issues.
+- Using the pointer to replace the memcpy.
+- Fix wrong device tree entries.
+
+Link to v1: https://lore.kernel.org/lkml/20250624074156.291176-1-Henry_Wu@quantatw.tw/
+
+---
+
+Henry Wu (2):
+  hwmon: (pmbus) Add support for MPS multi-phase mp2869a/mp29612a
+    controllers
+  dt-bindings: trivial-devices: Add mp2869a/mp29612a device entry
+
+ .../devicetree/bindings/trivial-devices.yaml  |   4 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/mp2869a.rst               |  86 +++++
+ drivers/hwmon/pmbus/Kconfig                   |  10 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/mp2869a.c                 | 299 ++++++++++++++++++
+ 6 files changed, 401 insertions(+)
+ create mode 100644 Documentation/hwmon/mp2869a.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2869a.c
+
 -- 
-2.47.2
+2.43.0
 
