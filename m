@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D451B25D546;
-	Mon, 30 Jun 2025 11:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9878024503E;
+	Mon, 30 Jun 2025 11:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751282936; cv=none; b=N0W180nyrH/c3XY7h9HOtXpGFcvR5XHPzAybhIi/rNBjZ/foOqOC0JZxVNSEc+lmB+CdB1K222izTJysng5/ggeM5IDYEjnajB3lN2kIPKnNlFuRA78MPXyOgFlMpGXxfZRpmYu1OmZvdnWQW088SgbQT2CMKVNJ5s749fnf/CE=
+	t=1751282986; cv=none; b=cuxxykBfBZ8WpIkcoGFngEEzAOUao2Z7pZuvH5BOQYvHb16DLawlzstBKJVlHZJyMdRLvfS9p4CV2sxMDvxn62vwpKoRiu/duZttXlhs5wBR1An/Q4eDIw5sJ7kgZ3+A82PvL1F8G07uBwkA+/j77o1ZYH7qxWjxkg9fUvQyaWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751282936; c=relaxed/simple;
-	bh=adC3bt0x2TOMzWtbW7bV1ts0yPrgUhFCsmuOPP7bnAU=;
+	s=arc-20240116; t=1751282986; c=relaxed/simple;
+	bh=GQS73g+kQQFfnuzSElQvWA7zxBV5IX80Vhd9ud7GrkM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O87TFz9AirmHRwkXiRyAB5w9YVAT+I/lQG6PwFFaBt7sM5yB+8aEyNi4QRiuWReeUmDymkPBGOc3HfWifAxs5GW+M5E1pFRSp7/02pH3uj/WkHdRw7M7CB1Sf+Lll9DfZIYRg+z+t7zYdeGSEpiZlWr4auHeeBfK3GPVGJ+LmLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b+W9TpPb; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=uhLUpIymNt39VUgblHulfpZ8+XhLqTjPZ0bySVyablcMIznBtdtEXa3gqQ8hQyrO9UHDh6bZRBJbKA7pURvBvRg4WESf80Q8BvrrYZa+kP+mnFyHHB2j7uCVYC1EVZc2lMCWSTq0uyF4979mVRL2OcCVIUwXkwp0imCFsMY/N7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLZXJ6nD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b+W9TpPb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052E7C4CEF0;
-	Mon, 30 Jun 2025 11:28:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLZXJ6nD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A17C4CEE3;
+	Mon, 30 Jun 2025 11:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751282935;
-	bh=adC3bt0x2TOMzWtbW7bV1ts0yPrgUhFCsmuOPP7bnAU=;
+	s=k20201202; t=1751282986;
+	bh=GQS73g+kQQFfnuzSElQvWA7zxBV5IX80Vhd9ud7GrkM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=b+W9TpPbTN6JTkf34iwN2NrmZEKTn0Za6XQu1JTI0dE9lGTPRd7TMYjYuSBQKsVHX
-	 YAImuvagvnR/txANJX8ADaEbQy9Xxa79g0DGTe+JZN88L3Ux/s+dALCU6puHFUdYrr
-	 MGRE/TTleLzcwIrKpgjWnfV5zoDiPNcBme6FUDahTFGrmK+3uvy9i9MfS+pSqc4RUX
-	 p66+mNDJjgSdK9W2/Azl9zag7fA2uxI/8ygurkX53+/C6rLyfh9pMEUA876LDHqNEd
-	 Glj+XjxogaZ3Q/n1NZyM2fuVkkN16YJYh3fAhjaKIxEmBwW7ajqSpdrwU3SlPt49tJ
-	 hpv8SejTvrKcA==
-Message-ID: <a2c8e8ea-4cd1-43ca-8973-ac7210f821c2@kernel.org>
-Date: Mon, 30 Jun 2025 13:28:40 +0200
+	b=YLZXJ6nDZ9JayDab8G/PNPwADi6xYO9RzvJJnRBfNO+DF5lCoXKd5USp3cZ0MkXNh
+	 n/y+3e7I0t+MD1pq5uG52c8aMNzTFfYJ408aY9gTwrNDqH4w+iV9hhv6ovRCxGC9K+
+	 PQQ+RUKSCORavSMbOuMHSUhQU94s3GDGzf1gBDU+nLh1+MJufOokqctuO3Qcj8MGPY
+	 ZINNVS9cls3jYEn5weUM8FK+5syH2CvkagxO1an3p7SO02XZ78uFN+ioL5TgaxbG9u
+	 PYpb2qz3m+Il0/WHk763g6X1V8KvrjL2K4vF/b6oEW7YKa/QjLD0aRDy7/1tEwh9gQ
+	 d2TNr3TgyhgUA==
+Message-ID: <6e5fcc5a-46f0-4c2c-918e-545d0ce5ccc3@kernel.org>
+Date: Mon, 30 Jun 2025 13:29:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,30 +35,31 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] dt-bindings: trivial-devices: Add mp2869a/mp29612a
- device entry
+Subject: Re: [PATCH v2 0/2] hwmon: (pmbus) Add support for MPS
+ mp2869a/mp29612a controllers
 To: tzuhao.wtmh@gmail.com, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
  Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
- Michal Simek <michal.simek@amd.com>, Fabio Estevam <festevam@gmail.com>,
+ Fabio Estevam <festevam@gmail.com>,
  Naresh Solanki <naresh.solanki@9elements.com>,
- Henry Wu <Henry_Wu@quantatw.com>, Grant Peltier <grantpeltier93@gmail.com>,
+ Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
+ Michal Simek <michal.simek@amd.com>, Henry Wu <Henry_Wu@quantatw.com>,
+ Grant Peltier <grantpeltier93@gmail.com>,
  Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
  Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>, Alex Vdovydchenko
- <xzeol@yahoo.com>,
  John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
- Leo Yang <leo.yang.sy0@gmail.com>, Ninad Palsule <ninad@linux.ibm.com>,
- Jerome Brunet <jbrunet@baylibre.com>,
- Kim Seer Paller <kimseer.paller@analog.com>, Nuno Sa <nuno.sa@analog.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+ Jerome Brunet <jbrunet@baylibre.com>, Ninad Palsule <ninad@linux.ibm.com>,
+ Leo Yang <leo.yang.sy0@gmail.com>,
+ Kim Seer Paller <kimseer.paller@analog.com>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, Nuno Sa <nuno.sa@analog.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Alex Vdovydchenko <xzeol@yahoo.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
 Cc: peteryin.openbmc@gmail.com
 References: <20250630112120.588246-1-Henry_Wu@quantatw.com>
- <20250630112120.588246-3-Henry_Wu@quantatw.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,19 +105,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250630112120.588246-3-Henry_Wu@quantatw.com>
+In-Reply-To: <20250630112120.588246-1-Henry_Wu@quantatw.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 30/06/2025 13:20, tzuhao.wtmh@gmail.com wrote:
 > From: Henry Wu <Henry_Wu@quantatw.com>
 > 
-> Add trivial-devices binding for mp2869a/mp29612a to enable automatic matching
-> in device tree.
+> Add support for the mp2869a and mp29612a controllers from Monolithic Power
+> Systems, Inc. (MPS). These are dual-loop, digital, multi-phase modulation
+> controllers.
+> 
+> ---
+> 
+> Changes in v2:
+> - Fix coding style issues.
 
-Nothing improved. You did not respond to my comments and just sent the same.
+Which ones? How?
 
-No, implement and respond to comments.
+> - Using the pointer to replace the memcpy.
+> - Fix wrong device tree entries.
+
+What exactly? How did you fix it? I see zero changes. Your changelog
+should be specific, not vague.
 
 
 Best regards,
