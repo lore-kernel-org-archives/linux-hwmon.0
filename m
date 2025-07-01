@@ -1,113 +1,133 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2931F428F;
-	Tue,  1 Jul 2025 07:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7094A0C;
+	Tue,  1 Jul 2025 08:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751356005; cv=none; b=kUwdb7UEnV+HON7khcL7GCYrUw5yF6VieQY/5nIP2KxtbldFqSjEHQWvGVifi5DUxCc+cphy5+kX1diezV7i2EMRM61oKye+zeFgR4irD34tpTYDFRQzSlu/bpOpCN4MyWFInPtvYIEMxmabnCMN5oEP/HvB7Ieawd9y+nERqHY=
+	t=1751357087; cv=none; b=belBwsUCOEc+crmo0LuPgGHpI3dBPr2z3UcDOZnO+kudwUuUqYhb8FzyArlP0gZ3RT8GSijhIGlUFK60pNZ75rl7jj33hg0lzCZMaBmKLckP/9rdxvStGbvuh4i2l1sqxtlx2VjNOkVkRFRu2d4yRaz3Kf54eKZ7YJ8NtnU6bps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751356005; c=relaxed/simple;
-	bh=dyCX5o4Dg6QY3l8HSrTsQtDR0kFtbE32Z2wolTki55w=;
+	s=arc-20240116; t=1751357087; c=relaxed/simple;
+	bh=RPEa7KSAWfZxwZp9sKE/4exi6Y+uT0Bn5BIxc1co5aI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dhY0DHDP5AXQWZxjWtAmTs9zsLx161mRmopiljkDvZquuYn9F+6pc5mQ58xxHmsRPpR4SIIyGDyGIb8Ba7pSe2K3IMAEXsDWMiS7EeFVRiwCAlzGWHTkFu1ufXZa9RC7atevst0GbxNy0kGb2T/SqwpxPmu0KzBvYDMeDdXBWrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gaZL+nXz; arc=none smtp.client-ip=209.85.208.51
+	 To:Cc:Content-Type; b=YZsUAznFyVG1gSgSHNCOFPqNvkKdPrMTJk7C+FU60yvdCVIYscvPLTCRSV2o70REZ0EPdOk3+N67FnaAOvlugobmlv75chLsLypvzP5Z/cCONok7BtYTL8UoRRydJ8f2aSwZ3MH+5T+dQum4o3fmdIzT7slrIE4yCeV23lrifks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rf2T0qLV; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gaZL+nXz"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-60c5b8ee2d9so11740375a12.2;
-        Tue, 01 Jul 2025 00:46:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rf2T0qLV"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ae3b37207easo34872966b.2;
+        Tue, 01 Jul 2025 01:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751356002; x=1751960802; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751357083; x=1751961883; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dyCX5o4Dg6QY3l8HSrTsQtDR0kFtbE32Z2wolTki55w=;
-        b=gaZL+nXz9orByOpBzl761kI4sTjRWwSUQSx+x9u3VNMTB6Ek7nLFED3MwvoaN4f5+t
-         lONE7fyDv5iP0pof5+CFjPze5u+xSvizN8omhMTUDoy/GwNfZTuj8LacGEYg2+5LQYO6
-         QuCNagBcEKLM1iVRAjD6vf4jmqQubifOrz+ubG0DVP+6ZXm1eQBMrHQn1fnPvEKrRtZR
-         2N4N+nh/tFKJfWWHvw1FJaLwQGR5Ri2tzroDmBhN6GuIgkMYqgme4SOerGMeDxZ0LRJX
-         W0Ov3yS3KIPtX43HxHKXaZra7ToND8ufiw5zOcl5wVj4AUqnnLTWwInIB8Pw7Ll2YE78
-         KS1w==
+        bh=RPEa7KSAWfZxwZp9sKE/4exi6Y+uT0Bn5BIxc1co5aI=;
+        b=Rf2T0qLV9TABwdBNp7BUayJZ8Mg6sHx2a1auw3LuI5av85TVZePvIi0NtcROP0nKxQ
+         LZBuVYaoiAKC/pHJilsLv5ahgGfVCTwPmh9WhltVlQMDc9Pv4Zb1OkFF2y/K75OcwGln
+         R1IBGwnpwzF6D+3hRhjceYPPYVj16nlgctW32Cyc6XC1ySq7uwroSMo4PwX9LHt8dOs/
+         WuPSMukzihROsUJGmV6T5DykJUxCz2yA4r2OEo33+kyW2NufyKv8hbI0AQwIDr11CdS/
+         tfQh+FZL9amh2hsaWI62ZAOHQBl5I3vWcKaWHgPlm1ah46hE/UsZZMaa9WlxQ+fYOg7o
+         pXTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751356002; x=1751960802;
+        d=1e100.net; s=20230601; t=1751357083; x=1751961883;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dyCX5o4Dg6QY3l8HSrTsQtDR0kFtbE32Z2wolTki55w=;
-        b=PSDR6o0XAzCCLS3WytRZLbZogoykCLW4XGGxMSi8Pwu7Z+LZ168+Rv3FdPVpNKziDD
-         WuarND+ib39WVOmcaqQ0SCM3HQ+26WJ5x9+CX38U/I8BQ8pqzjZbNXymd2I1yDxtwbjM
-         i6aNHVMebzfVVge9+XwCDRf24KLjjNV+L08kDsr9J/1XJTkv8tNWQoKqVTCbAA3VO6Sg
-         8hJu30K6Ow3QARUthAXPKW8rUxqXrm6UQHDPrY8kzBr8LDZHzEvYVocMPGEhhsLbJi+P
-         1layEtBPvudkPZPwmMKo+9ARwPLEdC/guk3r/nNUQcKMsh4qRIO1oiNEG83jshPoLJn8
-         OvIA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8kDOi78hzIKgSECLYp/yd3cexvUOoAQRmNOfLr3CRHlHbCBaSsd2xd/NbhG6L75eeHox/cMnBfrQ1VSEs@vger.kernel.org, AJvYcCUa78MfiN+sdhe5eJsORyXTm60+l73qVZGF0Fp9dSbW0yu3q3JlEd9zyM7SQjRVXzNLN5NaF281biKv@vger.kernel.org, AJvYcCV1CV2ii0QHI7884Jp5Zw5HMyECKWoEo+8rIhOttve+0uESpmr5zmgZYkDBPzPPquOY7vN5mH47Wh4c@vger.kernel.org, AJvYcCVRx+kigcWgO49tHCYauvhIa29rgPp7gDw3lu6CMvYnV8ZkSf0e3NNOaFM3nAqW3q7qK/7h14RE2o4a6ag=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+SL5ESFruaHgvfYWvEyFZcKbgaT3TI1IOdDpvVVXQjXJ9e0D+
-	ufeoZvY2hkjW62UoXEljecp4AyfF7i/knpEjRIXh2zl4dYEpcD3ySHIRS839zjDvnZIEP52Vxy4
-	VpIzUGn0ifKRKSR85fszPfLkTgNtpT2M=
-X-Gm-Gg: ASbGncvtbkCzEGs/VaRh4uq2aiz5zoh3BrSSdNzKOli+r0fmuLuWkJfkXF5OEvpNhDd
-	FSjhb0xn+Ad3AvixJRH/qwW9NmWelwnDpJF7fYyaiAbu90DFmP/dTpyOqKmrL29BcFujMArDAyY
-	45aaJsp/0osQwIYipuuMpR7ieK9gctozHQAYanNq+LSDQR
-X-Google-Smtp-Source: AGHT+IFdn8VEEQHDC8OasRXI0qgEnkqyj5lzRx6CSU9/4hWwZLvVN9kESBAm67CBFRdOqfMNoceln8a+BhI8D9pIt1o=
-X-Received: by 2002:a17:907:7ea2:b0:ade:198c:4b6f with SMTP id
- a640c23a62f3a-ae34fd30a97mr1469575766b.1.1751356001813; Tue, 01 Jul 2025
- 00:46:41 -0700 (PDT)
+        bh=RPEa7KSAWfZxwZp9sKE/4exi6Y+uT0Bn5BIxc1co5aI=;
+        b=cnOcKuMZ9t++EUNusk4TtQt4D7FExeiXrg1uWJbo5sQIrGCLDVf4LhHGdrRb8N9EX4
+         47RTipGiQP9EOZyOfYaAE/LnHcVdxlQDD2cF3OLb101MRUqHpoUvA4tU4qJU1rYj5zqV
+         wo4fXCnMLXReAq+qEfIRoPcBvPi7y/T9kmxvDNckhDdMjcBsjggIAK1w1LKnVZOAIICW
+         Wsooz5dEQYZUWw1drVhJefXt85idjmkSdYOmXdAdr3RyXViMUiI5/17bFzGVQRyVHpCk
+         nas+lS/NNQhSOxCWsk3XVe5TmOOtZ8u6GFnrmjwl8xFtuAvHr61e5mNmtq72LvmeYTYt
+         1yZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUm9foaurbDXf8oSoNmCNW+jz7WVyutg9KnNOQ41Ybxy2T4CO+dCSjUOxwglmMLShaGA5aqYF3rY8rH9oJF@vger.kernel.org, AJvYcCVPZby98fNWl6F3Ll22Y60RZcivJzLNnY8bg2oxMZzzNgdGjwFizfB3AAgO9rAehEFTPZv5a5t+d4m2PTA=@vger.kernel.org, AJvYcCVak0alGylsVoe7bT2MqwcNPLV7NnCKTHtSY3zm5AnxeOsD1diErMf3pxWPsEC68saO9jM6x4wQRroG@vger.kernel.org, AJvYcCXQakYRINDfj+WAgFEb/HpkAQt63IeoLfogn3wUmoWGQM9mvgs5xCaLBnyLlOrsPKpem7D3qjkS+9CV@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGeC7YjO7SMFfPpH24ZeO9e5Ieo59LdmvXuKuphoJIore0YBbh
+	af3fRmmvQ56ox5qpwbD7kZdjgdeF6YSekzDyRvE4kZOBd2XNp+aucddwpLTT3PsEguxYRhdsIYt
+	h2idCuOR20D64VB1c4SVwW5cddJQW3hE=
+X-Gm-Gg: ASbGncvNiSWYOx9UwyOZGWYgBMW0P9eBrhukOQjQtSIaKW8Fq1V9o0rIFZklo5EtBFC
+	AnOfjRyMjo+X5pLEOrHF0lTlm5XO2cN4N9Tx2p1MnDXfB5UqDfORddHayvN7z4BNMjpK5jo9ky1
+	HKRkrfC8Iw68k0mnOQOO+hBqZc0YS4lY0mHh7/YvDm5TbSs5QcggP0A5E=
+X-Google-Smtp-Source: AGHT+IG5PQkgai0r7oYxRYQ+fYVfaXfIEla4taY+SwVVdFU3MDsQv7w8o15epC3kOeEe8kxzDR5ZhBkaJRASnhb/USs=
+X-Received: by 2002:a17:907:268e:b0:ad5:3055:a025 with SMTP id
+ a640c23a62f3a-ae34fd06f98mr1422916066b.6.1751357083109; Tue, 01 Jul 2025
+ 01:04:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250630112120.588246-1-Henry_Wu@quantatw.com>
- <20250630112120.588246-3-Henry_Wu@quantatw.com> <a2c8e8ea-4cd1-43ca-8973-ac7210f821c2@kernel.org>
-In-Reply-To: <a2c8e8ea-4cd1-43ca-8973-ac7210f821c2@kernel.org>
+References: <20250630112120.588246-1-Henry_Wu@quantatw.com> <6e5fcc5a-46f0-4c2c-918e-545d0ce5ccc3@kernel.org>
+In-Reply-To: <6e5fcc5a-46f0-4c2c-918e-545d0ce5ccc3@kernel.org>
 From: Henry Wu <tzuhao.wtmh@gmail.com>
-Date: Tue, 1 Jul 2025 15:46:30 +0800
-X-Gm-Features: Ac12FXwsUlVyBrckRHAx_VI3BD8drXikFezbwgMsDj67FjJjWVGhfyaL4w7fzVs
-Message-ID: <CAL3H=v17_h5b-7bFbnubJwAPOpS1xz7k-c7Mx3Ss9YXa8U+0Xw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: trivial-devices: Add mp2869a/mp29612a
- device entry
+Date: Tue, 1 Jul 2025 16:04:31 +0800
+X-Gm-Features: Ac12FXy6IY2ocpJXDncRGlZ0Bzw21Og-DP3PkqnOZ8uP3gyncQqa5E8NvA07VnY
+Message-ID: <CAL3H=v01Y6XBpkZDZT6qZeqDm4PR6uCaOGKYU=_z00a3ux8HgA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] hwmon: (pmbus) Add support for MPS
+ mp2869a/mp29612a controllers
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
 	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, 
-	Michal Simek <michal.simek@amd.com>, Fabio Estevam <festevam@gmail.com>, 
-	Naresh Solanki <naresh.solanki@9elements.com>, Henry Wu <Henry_Wu@quantatw.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Fabio Estevam <festevam@gmail.com>, 
+	Naresh Solanki <naresh.solanki@9elements.com>, Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, 
+	Michal Simek <michal.simek@amd.com>, Henry Wu <Henry_Wu@quantatw.com>, 
 	Grant Peltier <grantpeltier93@gmail.com>, 
 	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
 	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>, 
-	Mariel Tinaco <Mariel.Tinaco@analog.com>, Alex Vdovydchenko <xzeol@yahoo.com>, 
-	John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>, Leo Yang <leo.yang.sy0@gmail.com>, 
-	Ninad Palsule <ninad@linux.ibm.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Kim Seer Paller <kimseer.paller@analog.com>, Nuno Sa <nuno.sa@analog.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Ninad Palsule <ninad@linux.ibm.com>, Leo Yang <leo.yang.sy0@gmail.com>, 
+	Kim Seer Paller <kimseer.paller@analog.com>, Mariel Tinaco <Mariel.Tinaco@analog.com>, 
+	Nuno Sa <nuno.sa@analog.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Alex Vdovydchenko <xzeol@yahoo.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
 	peteryin.openbmc@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8830=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:28=E5=AF=AB=E9=81=93=EF=BC=
+=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:29=E5=AF=AB=E9=81=93=EF=BC=
 =9A
 >
 > On 30/06/2025 13:20, tzuhao.wtmh@gmail.com wrote:
 > > From: Henry Wu <Henry_Wu@quantatw.com>
 > >
-> > Add trivial-devices binding for mp2869a/mp29612a to enable automatic ma=
-tching
-> > in device tree.
+> > Add support for the mp2869a and mp29612a controllers from Monolithic Po=
+wer
+> > Systems, Inc. (MPS). These are dual-loop, digital, multi-phase modulati=
+on
+> > controllers.
+> >
+> > ---
+> >
+> > Changes in v2:
+> > - Fix coding style issues.
 >
-> Nothing improved. You did not respond to my comments and just sent the sa=
-me.
+> Which ones? How?
+
+I used checkpatch.pl with the "--strict" option and made the following
+adjustments:
+- Removed illegal spaces
+- Converted comments to block style using /** ... */ instead of //
+- Applied lowercase formatting to function names
+Would you like me to list all the changes here, or should I include
+them in the next patch?
+
 >
-> No, implement and respond to comments.
+> > - Using the pointer to replace the memcpy.
+> > - Fix wrong device tree entries.
 >
-I=E2=80=99m sorry, that was my mistake. I will update the description to:
-Add trivial-devices bindings for MP2869A/MP29612A voltage regulator control=
-lers.
+> What exactly? How did you fix it? I see zero changes. Your changelog
+> should be specific, not vague.
+In patch v1, I placed the mp2869a entry in the wrong order in
+trivial-devices.yaml. In patch v2, I reordered it based on the
+numerical order in the device name
 >
 >
 > Best regards,
 > Krzysztof
+
+Best regards,
+Henry Wu
