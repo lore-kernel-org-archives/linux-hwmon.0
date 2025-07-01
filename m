@@ -1,85 +1,59 @@
-Received: from letterbox.kde.org (letterbox.kde.org [46.43.1.242])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CD422DFBA
-	for <linux-hwmon@vger.kernel.org>; Mon, 30 Jun 2025 20:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.43.1.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F3F339A1;
+	Tue,  1 Jul 2025 00:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751315027; cv=none; b=DXY9DtKwnJ2FC+sE4JEOzX+fBHubQu6Dfv+IFv1afMtpLBOsJn+e2yRmtCUAkC0d0zQOjjObpopl7lSgd+nbZtrz/gmgPxwzhWSw+Veqe9qsFSZvnAlKI9VKsBD+vPgEKdb67GlEzc61rtqsQAuQUpRjtCnGYBuX0fR5fF3Aipw=
+	t=1751331527; cv=none; b=SyLuuEUJq1hF97kGedlTSufPNIc72WWkfPgcXUkVFqumtDCwjwKDIOwRm+Yo/RC0oRAKWdymnW2vuaNZrSxKd/a1BJdijDN6IbZ71vMFtOBVxoekvKWs5kPtNYqJTjUpSKnF1qGBf8Y+X1QMdqWEw1tSjuPypopONR/QheclELI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751315027; c=relaxed/simple;
-	bh=mZlEmvD3KPidDOpFpGZ38nUlEn3Xf9GoWcJQF8TUkSY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ihF0gWILwFx1Ihacl2EXoj2v63o5vxUoMgVAXQVBO9uIn4H4E2Ovr47L1L7b7gXG+/o7JZft/5gH1GP5I3z56Hjr8cKdjgEuLhpoaAvzL5NVpoCO+tk07V1ykcBhVhjUxDQcDk8afw3rDBcuHcjM2pbGSrDSFozFfTSIZbuGsVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org; spf=pass smtp.mailfrom=kde.org; dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b=hlTt49JO; arc=none smtp.client-ip=46.43.1.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kde.org
+	s=arc-20240116; t=1751331527; c=relaxed/simple;
+	bh=9oprfdI1sJ+15xAulHIwRy8N2QDKD6U7CpCIKxB4YHQ=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=H3hpoOs0iWwkkBFJpKwd3Mp/Q0zJsdvVBs0GFZlZpiWoLlXRtjBG6CaPvih2540wVuC8x0SLGc6arrgK9lMNIXIZqfAaeApi8Uy8c1o9iELIaPziP81pylEkdwQ+7HLQad8YsjnEW6fhQnQR4KvGe78KXUaSADs1UrboRYiQJLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMZxU7R9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b="hlTt49JO"
-Received: from shaan-pc (unknown [IPv6:2a01:5241:a25:700:aba3:3041:2489:ff88])
-	(Authenticated sender: shantanu)
-	by letterbox.kde.org (Postfix) with ESMTPSA id 518B732E2D2;
-	Mon, 30 Jun 2025 21:15:05 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
-	t=1751314505; bh=QTyEJbVVeyDhSsonU5CqxeWxH9g8tmO4ai5vmBUL+oU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hlTt49JOkMDB3yA7/FLIeqeUUCKngRoJawVNVxlS40JMSp0HitoA7bYQ59VLOek/r
-	 JsGLGu29Sp3vtub0hkQcla99XI7pmuXCGMInl0+Eu9BvFu7tFT9SpXDUz24lJvm1GA
-	 U38EPhPRjQISMG/PLX72gWPdet/LCDfq8YqsJBogJbITVKXyzz3jlhG18WVy39q4/a
-	 PGF7wUzVdWxW4V3oLLPSnYRHqSOxvh/myGMBdfathfN4ESOqCgFWoPXJ29xb1JDdey
-	 SURGVm787dYgrcYGk8YacgwIhkuINUN5mVZPAe7GuXiK2+EuFdW2APMC7U7zCp+6M/
-	 SPEVKNe/f+NCw==
-From: Shantanu Tushar <shantanu@kde.org>
-To: wilken.gottwalt@posteo.net
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	Shantanu Tushar <shantanu@kde.org>
-Subject: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series 2025
-Date: Mon, 30 Jun 2025 22:14:44 +0200
-Message-ID: <20250630201444.210420-1-shantanu@kde.org>
-X-Mailer: git-send-email 2.50.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMZxU7R9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA380C4CEE3;
+	Tue,  1 Jul 2025 00:58:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751331525;
+	bh=9oprfdI1sJ+15xAulHIwRy8N2QDKD6U7CpCIKxB4YHQ=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=tMZxU7R9gOk+G0ojtOyWmYbdMU5k2Js1MA7HZJXzVaxotkMIabWdO07r2g/4ob7sl
+	 XCxij+o9e10E4vPy2qWR+yIdkcomKjZNabTa9s7wGisQ7+R0UNSD2k1Kvzfpx1GFxY
+	 jS0t+qPsrKevD/bAI2sB5Pd/joLuKZxZ3+LdemlEJr8A7b1MJC3eOJvhWBqplY+JXT
+	 B9m0EwJKdrvagWX/nM2V9+6mhVCAAOzIMXKRe7gY7HaJ5bQRrrQV8r3R2PDcBHKRiK
+	 jA0veSn6sxj6u8dt6JQbNvxT3XmQWYFgVU+XvE1MHg7UwF0muq+fAtQt/VgQnecP+V
+	 Jq9/KPQf5tgOw==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250519-dev-axi-clkgen-limits-v6-1-bc4b3b61d1d4@analog.com>
+References: <20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com> <20250519-dev-axi-clkgen-limits-v6-1-bc4b3b61d1d4@analog.com>
+Subject: Re: [PATCH v6 1/7] clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Michael Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>
+To: Nuno =?utf-8?q?S=C3=A1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>, dmaengine@vger.kernel.org, linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, nuno.sa@analog.com
+Date: Mon, 30 Jun 2025 17:58:45 -0700
+Message-ID: <175133152558.4372.13862908191934557493@lazor>
+User-Agent: alot/0.11
 
-Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
-Update the documentation to mention this.
+Quoting Nuno S=C3=A1 via B4 Relay (2025-05-19 08:41:06)
+> From: Nuno S=C3=A1 <nuno.sa@analog.com>
+>=20
+> The fpfd_max frequency should be set to 450 MHz instead of 300 MHz.
+> Well, it actually depends on the platform speed grade but we are being
+> conservative for ultrascale so let's be consistent. In a following
+> change we will set these limits at runtime.
+>=20
+> Fixes: 0e646c52cf0e ("clk: Add axi-clkgen driver")
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> ---
 
-Signed-off-by: Shantanu Tushar <shantanu@kde.org>
----
- Documentation/hwmon/corsair-psu.rst | 2 +-
- drivers/hwmon/corsair-psu.c         | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 7ed794087f84..2e99cfd556a0 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -17,7 +17,7 @@ Supported devices:
- 
-   Corsair HX1000i (Legacy and Series 2023)
- 
--  Corsair HX1200i (Legacy and Series 2023)
-+  Corsair HX1200i (Legacy, Series 2023 and Series 2025)
- 
-   Corsair HX1500i (Legacy and Series 2023)
- 
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index f8f22b8a67cd..6b5c8f200780 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -885,6 +885,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
- 	{ HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
-+	{ HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
- 	{ },
- };
- MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
--- 
-2.50.0
-
+Applied to clk-next
