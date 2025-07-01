@@ -1,136 +1,90 @@
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1716A3596B;
-	Tue,  1 Jul 2025 18:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF3E274643;
+	Tue,  1 Jul 2025 19:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751395566; cv=none; b=fWSnN560gxdKoPf7ZCSI1sPsHwrZX/4TfskjsRPm22jxnv0aOIfUPGAi+jBZSl+WJiAuoykfzXb1D5OqUTIMPuXcdWjMEglM/OvnmKKtDZy2W7n0+UgTVtc0tq4SZC7LmZwSPSA92kQpiDnjvf0RH4X5XNGI3YIZFw0ymnADPZ4=
+	t=1751398432; cv=none; b=SYZQbJjbZzCQup1tJa0uCFssnNyKXA6vA7+kI5ufs5MkcKuVPjuyNUyURntAhc/0Qt68zUv+LSmPmady+pZdBchTifjKIHhTrNH6JbLL/paXky3x5P3WHHJwokjK5OIYijXiy5yq330rBjFEZ03hpjKCaMi7zWVRbaV+hj2wYfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751395566; c=relaxed/simple;
-	bh=Up8UX9H+7ZUNNfLzmgCkSVCiNokRtIVixpAx52BVJbs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Cl6jYQWHzYlONmmZ9eWxWjtPycYTb2RSJ+4Pk9k8KC3TFX0pRZdqOQQUTkIHEDTt2EwYvGPiVPNTO/A4Uy3rCbAdmMkWapfEQJUDbYJGaJaw+a9z7jKXPWDtK/GriZpS2WqOf4wjBDnhy7UG031F+RzlVQ9tvWC8/anilPZMeW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D1Uf3taY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZIvdQSLt; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1751398432; c=relaxed/simple;
+	bh=t76fGweTBymeWH8gKiI3BBohTVwjkyZEfHtPNBMgcrw=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=JrDreACtomwq0fNVpbXUXPkRR8aDGoRBX2krHN2d7KMb/I8iTQthabFwckHApNME9S2cdZAboUtmD7T3ml4oF8++1jhPGSwhTHvajZky0Pv95hQNJvX4qAtBTduUxFqQf7gDqFJv4QBPZ0FIW3ozJNcegq9ceTDkUtZTp2/LcF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eieWzaTT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D1Uf3taY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZIvdQSLt"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 9F1A71D00173;
-	Tue,  1 Jul 2025 14:46:00 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 01 Jul 2025 14:46:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1751395560;
-	 x=1751481960; bh=Xr0RFbgZjw3WqPK6EkRfzHhNY8eU/QZTAElNC/U09to=; b=
-	D1Uf3taYrE5w0UnL6DcoEa7HwVFgpUTDGrzCxPGFaKNHtdGYR1F97wy93u8XIoPt
-	mNJBW4+/DtKHzbMSjEdi0OfGxtfM6RiEjKHPSSzKJ05w68+o5VR6y7twzdTja+3E
-	t5Peml3llHhbh7YF0hIF5wHxz/rodSLiFBspyf8sZSaA9A0VZQdXcslALDiF3q34
-	04gLPJ+vvqcTRgzj8XM8QtpjoQSSMuCmlTjx6CC7J4lkfUe0FRSlJtk3YIXQsW42
-	Kqsit5SxnPbInu8xfuRdLa7Yko8r+eNBK0vGWG/9zCSeto33mhepVMvE5yMtBrXi
-	1Tp5D8Cnbw0H2eQG9XbAXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751395560; x=
-	1751481960; bh=Xr0RFbgZjw3WqPK6EkRfzHhNY8eU/QZTAElNC/U09to=; b=Z
-	IvdQSLt59/Zx0zQNJkNAsZdPsDu+v7Q73LSOfim4Gwgb5tXctxUl5gKidJ7FR1mZ
-	kvrX6bhd2yJyXNOd009Oo4ZnHNOwGZd6acX0u+bkY5PJuVPEnsbXPuw+fWms+OSy
-	0A7kRNSKylEnDErVfCPUo/AJD3yL0IKpWGe9yoGl7ZVq1n/J9DZV4AOSS8Jebarm
-	iLBUWHRxds2ryRm6mwu0ZCL4da0j51OfWCcrEFGsvdR76tSNZLKwoIupfLN2IfJJ
-	4in6JoBQ+6arKYMRdOVQgobACfxrhXnWlAj8xNCyjWtIzR0Dpzco2vFjZ+D+NMQl
-	JbmV/487+Yc+9eNx+2aog==
-X-ME-Sender: <xms:5ixkaGYpeVbjrrhnc5zoVB_3wLv0mONBIlHrLqP41QNaWfz0MK2OLQ>
-    <xme:5ixkaJZgxpK8fWWl29KH40EOX-MmDFZNTKGgViPP2nb0xkDmsE3fHWJyF-Q6o8NOb
-    NSpeAed5qNkH7rOvLk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtoheprhdrmhgrrhgvkhesrghsshgvmhgslhgvrhdrtgiipdhrtghpthhtoh
-    epuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegrnhgurhgvrghs
-    sehgrghishhlvghrrdgtohhmpdhrtghpthhtohepuggvlhhlvghrsehgmhigrdguvgdprh
-    gtphhtthhopehjrghmvghsrdgsohhtthhomhhlvgihsehhrghnshgvnhhprghrthhnvghr
-    shhhihhprdgtohhmpdhrtghpthhtohepiihijhhunhgphhhusehitghlohhuugdrtghomh
-    dprhgtphhtthhopegtrghstggrrhguohesihhgrghlihgrrdgtohhmpdhrtghpthhtohep
-    fihimheslhhinhhugidqfigrthgthhguohhgrdhorhhgpdhrtghpthhtohepghhrvghgkh
-    hhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhg
-X-ME-Proxy: <xmx:5ixkaA885s52W79Hch3_FsaKKkYuCwCxYa_PtrpS2dVsBDEnyOacbQ>
-    <xmx:5ixkaIp4tJa7_5udgLIsoEQ4PLK88TLX9JHpYicsWCb4wecrTXK5xg>
-    <xmx:5ixkaBoTn1Yr9PN6E_LE1tPeZBSEi8D__0SE6eDlzFPQpRZlIcWiqg>
-    <xmx:5ixkaGQaw3X9gLjRwo-XuNrzgtkZ_m8wdzoKYSH_6ISHbW0MT1OvNQ>
-    <xmx:6CxkaG8Fpv1MWbPVQ-pQazPgaQc4udQhnrHm3ZhUP5_gXySaAPmXccaD>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 27BD8700065; Tue,  1 Jul 2025 14:45:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eieWzaTT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672A4C4CEEB;
+	Tue,  1 Jul 2025 19:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751398431;
+	bh=t76fGweTBymeWH8gKiI3BBohTVwjkyZEfHtPNBMgcrw=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=eieWzaTTxtzmX1lHcj02YFdTl1Ak8zaLjG0p9VCfNogRtFLGx8DU+5l81TXxFbeK8
+	 UwEXQtCkB5GFcSrB5x9yQiA6/bLvsgIMHb79s9LYDTPFKeLZiRb3utFqHI6IK4Amt0
+	 +OOuDUWEPPgAChURayvD+7uVBU/ky6pCWa3CCO6/AjhtYGS1nAdPnWfmLoIF8K+Oz+
+	 zhNCOxb+v0YRMHJaMnI8TMdioAeEMA/qaGE1IVp6FpstFaDPjPBWQyRqzymwvlEhUe
+	 9G8EQfTvsNKth+irXMkmvZvM348anwrnARuObJdebgWeGHYTa33UZRsHcDuzTGV+M2
+	 C6L4xJTk1+USw==
+Date: Tue, 01 Jul 2025 14:33:50 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T7fb883a34eda41ad
-Date: Tue, 01 Jul 2025 20:45:27 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Zijun Hu" <zijun_hu@icloud.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jean Delvare" <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>,
- "Rudolf Marek" <r.marek@assembler.cz>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>, "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>
-Cc: "Thadeu Lima de Souza Cascardo" <cascardo@igalia.com>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, "Zijun Hu" <zijun.hu@oss.qualcomm.com>
-Message-Id: <ad90af20-33f4-40e3-b08a-ce34437174db@app.fastmail.com>
-In-Reply-To: <20250701-rfc_miscdev-v2-7-3eb22bf533be@oss.qualcomm.com>
-References: <20250701-rfc_miscdev-v2-0-3eb22bf533be@oss.qualcomm.com>
- <20250701-rfc_miscdev-v2-7-3eb22bf533be@oss.qualcomm.com>
-Subject: Re: [PATCH v2 7/9] char: misc: Allocate 4 more fixed minors for watchdog
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-
-On Tue, Jul 1, 2025, at 17:24, Zijun Hu wrote:
-> From: Zijun Hu <zijun.hu@oss.qualcomm.com>
->
-> There are drivers which needs more fixed minors for watchdog, but
-> watchdog only has one fixed minor currently, it causes hardcoded and
-> unregistered fixed minors are used by these drivers.
->
-> Allocate 4 more fixed minors and apply for these drivers.
-
-Missing signoff?
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ krzk+dt@kernel.org, linux-doc@vger.kernel.org, conor+dt@kernel.org, 
+ linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net, 
+ corbet@lwn.net
+To: =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
+In-Reply-To: <20250701181228.1196102-3-noltari@gmail.com>
+References: <20250701181228.1196102-1-noltari@gmail.com>
+ <20250701181228.1196102-3-noltari@gmail.com>
+Message-Id: <175139843060.2356328.5526096489625404757.robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: hwmon: Add Microchip EMC2101
+ support
 
 
-I don't think this is the right fix here, these drivers implement
-the normal watchdog API, so they should not even call misc_register
-but should instead call watchdog_dev_register().
+On Tue, 01 Jul 2025 20:12:27 +0200, Álvaro Fernández Rojas wrote:
+> Introduce yaml schema for Microchip emc2101 pwm fan controller with
+> temperature monitoring.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> ---
+>  .../bindings/hwmon/microchip,emc2101.yaml     | 79 +++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,emc2101.yaml
+> 
+>  v2: add missing properties.
+> 
 
-Obviously doing this right is a bigger change, so maybe the simpler
-answer is to use dynamic minors instead of the nonstandard ones.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-FWIW, I double-checked to see whether there are any in-tree
-references to these two drivers, and there is one each:
+yamllint warnings/errors:
 
-drivers/i2c/busses/i2c-i801.c:	{ "Hermes", DMI_DEV_TYPE_OTHER, 0x73, "fscher" },
-drivers/i2c/busses/i2c-i801.c:	{ "Hades",  DMI_DEV_TYPE_OTHER, 0x73, "fschds" },
-drivers/i2c/busses/i2c-i801.c:	{ "Syleus", DMI_DEV_TYPE_OTHER, 0x73, "fscsyl" },
-arch/powerpc/boot/dts/fsl/t4240rdb.dts:                         compatible = "winbond,w83793";
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/microchip,emc2101.yaml: patternProperties: '^fan@0$' should not be valid under {'pattern': '^\\^[a-zA-Z0-9,\\-._#@]+\\$$'}
+	hint: Fixed strings belong in 'properties', not 'patternProperties'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
 
-These were added in 2009 and 2016, respectively, so the hardware
-is probably around somewhere but quite hard to find.
+doc reference errors (make refcheckdocs):
 
-    Arnd
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250701181228.1196102-3-noltari@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
