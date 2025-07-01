@@ -1,98 +1,95 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B786273812;
-	Tue,  1 Jul 2025 10:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AA323F41D;
+	Tue,  1 Jul 2025 12:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751364096; cv=none; b=J1NpxzDuA4+4f0DsbgfpyiPsZvqETZYgqDplmSHdolrADUqrByQzt88hVWK5UZWNLffUNB5yW6o5Yey0jj/P+v4gZnUSNeVWVj1pGOgirQbQXG+F75P5n9i1M87l1y9MTZIj8Mk4eXR0WZyEyLrzNWoSXAzOfDr6vZNiH6JFbjw=
+	t=1751371632; cv=none; b=WJ/v0Z0SI/WUQiK0BgEAAGk6U8fex4dT7ziitJY2nbc6vXnL/Dk2GXn7SwAKftKP5PaXh8SZ4WYw6010Saqx/EcgufhJbfEvVkUFVNkwFMZgyNIkXYUm/4nwtAJZJIsVV3rMlPGyxUph00ivxZIxMQkXy+CajeauIy74gWuWi6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751364096; c=relaxed/simple;
-	bh=TMAXeG9Ax4zwoWvP0WGuB15LrX5qREtY31rJ/K8imd8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qVW06mizVulqSN9GSr9JKT4DbTuIW//LVTSbPU6CQ2JksbT5JfBs/qosEvZjz9+LWkvtLuCs9OTjUUYPn/0nZCyZri7ZEeiXQm5gDom0NfLXOVPRzNoVviwUGCcHNMwhIeXSY4hTZgFdcIGmgD+THa3aCcGGczK5AqmuyL43mUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=cdyhgIpp; arc=none smtp.client-ip=220.197.32.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+	s=arc-20240116; t=1751371632; c=relaxed/simple;
+	bh=Geu8ummnogYTxNiBXGM/hmRr8QFOAK2JquaYcXupOng=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nhyoxSxd1V3RcflFILE7a4ZaqJgQ7O3BSS7kYuqMlDovY80XcOahbBCDwKcaF8Ok/J+qHp8SsJAWW8zo2kAkfquRAKDv+YFDTz2BOiyU08dKG/DatWP8M0Yk/cNnnBZHlDcvVtAEAE73OdFvDnjx52U90QcCeMgGVImvQD72opc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s5C0fJNq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="cdyhgIpp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=rQ
-	DgbozZs0wCnVTQUwk8rjb8iJ2wpvBzg/YdEDreAPA=; b=cdyhgIppjytp2U79bK
-	btCeDDPRrMkkM61+7IuJSFAYN8TL9rmTbA/EdeIiUtiQCu91rqs6atcSGmGJS2gM
-	jz7vGkp+iuzWHCNJN8Iu2tLqfb/91QIUQR/4GEfPCAJA06f94KNpmRAeInVMzEuT
-	VcRuczSVfyNH229Tl3mGFwxhM=
-Received: from mps-HP-EliteBook-840-G3.monolithicpower.com (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgDX_zqLsWNoZKLkAQ--.58034S2;
-	Tue, 01 Jul 2025 17:59:40 +0800 (CST)
-From: wenswang@yeah.net
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH v2 1/4] dt-bindings: hwmon: Add MPS mp2869 series
-Date: Tue,  1 Jul 2025 17:59:27 +0800
-Message-Id: <20250701095930.1050234-1-wenswang@yeah.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250701095625.1049917-1-wenswang@yeah.net>
-References: <20250701095625.1049917-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s5C0fJNq"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B826EC4CEEE;
+	Tue,  1 Jul 2025 12:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751371631;
+	bh=Geu8ummnogYTxNiBXGM/hmRr8QFOAK2JquaYcXupOng=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=s5C0fJNqf5bmqBuLxocCSef+Q6uuJ54mztN59ZwbbWfieEsphZRjyOvX2C4QdLlET
+	 CbRqwSLxwU5abtG9mhPwDsYppiH9yrYP2Bl7WCm9qMeHjdbGHCTZfvafw7lfOTRznK
+	 AYeCL93Z11c9MKfzLkgV/+zy8TQUiaGU62Y4Ao4/fO7G1EzIHw4mq1nL7HoMQ8RGbR
+	 7ctrQ35aLQZ+LCmun1cW5At4R0WJQlXXMJm7x6FfNd6osJM+N1lJPS+fj5iAohq07z
+	 uznS6d62y1LB86T9fcNLaQT5bPTpSvLbkCxJy7ifYdePlTQ878fyvpSS/7wFiLy7mT
+	 nAqGI8xnru9ew==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8382C83038;
+	Tue,  1 Jul 2025 12:07:11 +0000 (UTC)
+From: Jack Cheng via B4 Relay <devnull+Cheng.JackHY.inventec.com@kernel.org>
+Subject: [PATCH 0/2] Add support for q50sn12072 and q54sn120a1
+Date: Tue, 01 Jul 2025 12:03:44 +0000
+Message-Id: <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-0-c387baf928cb@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgDX_zqLsWNoZKLkAQ--.58034S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF4kXry7GrW5Kr4kCr1Utrb_yoW8Gw4fpF
-	WkCF4IyF4FgF17Ca12gF1kGF45WrWDAw4kJayqyrnrKr1a9rZ7Ww4a9wn5Xan8Crs3JF4U
-	JrnFy34F9Fyjv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j8jjkUUUUU=
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIQyCJ2hjsYwevAAA3c
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKDOY2gC/x3N0QrCMAyF4VcZuTbQBuesryJelCXT3LS1cSKMv
+ bthlx/8nLOBSVcxuA0bdPmqaS2OeBpgfuXyFFR2AwUawxQiZma0tbXaP7jUju8xWIkUJsJc2Hk
+ +mL1MM6UkF75GBt9rXRb9HV/3x77/AcdVEv97AAAA
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, Jack Cheng <Cheng.JackHY@inventec.com>, 
+ Jack Cheng <cheng.jackhy@inventec.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751371491; l=1128;
+ i=Cheng.JackHY@inventec.com; s=20250701; h=from:subject:message-id;
+ bh=Geu8ummnogYTxNiBXGM/hmRr8QFOAK2JquaYcXupOng=;
+ b=uryVKZGTrJl0If/sn1V3mR3ZOgEEAyr2PZdF64jHTusqTC1aP+Q3VmjWBflNBVsR1eytlVMjq
+ dvOvawbcXykDak5tPpz0L11DV4K4EXlgKXcrGdDdBvRfnryRi6H87K2
+X-Developer-Key: i=Cheng.JackHY@inventec.com; a=ed25519;
+ pk=L+GNI15NJXj7JAu9YqFXp9hL3rwZWbBbjlEeDjPvm68=
+X-Endpoint-Received: by B4 Relay for Cheng.JackHY@inventec.com/20250701
+ with auth_id=449
+X-Original-From: Jack Cheng <Cheng.JackHY@inventec.com>
+Reply-To: Cheng.JackHY@inventec.com
 
-From: Wensheng Wang <wenswang@yeah.net>
+The Q54SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
+module from Delta Power Modules.
 
-Add support for MPS mp2869 series controller
+The Q54SN12072, quarter brick, single output 12V. This product provides up
+to 1200 watts of output power at 38~60V. The Q54SN12072 offers peak
+efficiency up to 98.3%@54Vin.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+The Q54SN120A1, quarter brick, single output 12V. This product provides up
+to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
+efficiency up to 98.1%@54Vin.
+
+Add support for them to q54sj108a2 driver.
+
+Signed-off-by: Jack Cheng <Cheng.JackHY@inventec.com>
 ---
-V1 -> V2:
-    add Rob's Acked-by
+Jack Cheng (2):
+      dt-bindings: trivial: Add q50sn12072 and q54sj108a1 support
+      hwmon: (pmbus/q54sj108a2) Add support for q50sn12072 and q54sn120a1
 
- Documentation/devicetree/bindings/trivial-devices.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../devicetree/bindings/trivial-devices.yaml       |  4 ++
+ drivers/hwmon/pmbus/q54sj108a2.c                   | 51 +++++++++++++++++++++-
+ 2 files changed, 53 insertions(+), 2 deletions(-)
+---
+base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+change-id: 20250701-add-support-for-q50sn12072-and-q54sn120a1-a9c299e6d81d
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 27930708ccd5..493e7232f09f 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -285,10 +285,18 @@ properties:
-           - mps,mp2856
-             # Monolithic Power Systems Inc. multi-phase controller mp2857
-           - mps,mp2857
-+            # Monolithic Power Systems Inc. multi-phase controller mp2869
-+          - mps,mp2869
-             # Monolithic Power Systems Inc. multi-phase controller mp2888
-           - mps,mp2888
-             # Monolithic Power Systems Inc. multi-phase controller mp2891
-           - mps,mp2891
-+            # Monolithic Power Systems Inc. multi-phase controller mp29608
-+          - mps,mp29608
-+            # Monolithic Power Systems Inc. multi-phase controller mp29612
-+          - mps,mp29612
-+            # Monolithic Power Systems Inc. multi-phase controller mp29816
-+          - mps,mp29816
-             # Monolithic Power Systems Inc. multi-phase controller mp2993
-           - mps,mp2993
-             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5920
+Best regards,
 -- 
-2.25.1
+Jack Cheng <Cheng.JackHY@inventec.com>
+
 
