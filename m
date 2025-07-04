@@ -1,103 +1,112 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from letterbox.kde.org (letterbox.kde.org [46.43.1.242])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B8D6D17;
-	Fri,  4 Jul 2025 00:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D021DE4F1
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 06:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.43.1.242
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751588732; cv=none; b=GLTws+bKTx7HwClb+DfpmOn/rFn1iZt23raXbzOp+XmKldVmFErY1MDS24F6rZHOi1jDfPnOdMdcwDFU7nXJyIgmadQqI/zv7cGoI5zPAcyST31aW5IKIphyr8Z543Z67ZzAqbUSLNnyuw8t2gAkuTodMeJMGVzmJKkR0GQAWHg=
+	t=1751610246; cv=none; b=AFnZjDiB8/FTi/YpJ51cX7ZeM0y6HPCTcf9cYMIR9fRzyhx1MKEpabgKfyqHAFl7ziQbjcItAbd7HzaYe6MS4hRpaXM3ShNgk6+P3DVn45gSMTZHzAcyCNHiExuGteIMbAre7OdfndhBngsBmnx1+r+hXPK7xGPKSv8xX3pDtKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751588732; c=relaxed/simple;
-	bh=E8Mos6/LrtQxYCj9mBaLwe6+10wBudiPbO+I5i1hz0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BEftqcVIlMZNZ7Aac2LCKUocq9Hf+Akwe+pBB/o1r97yM99qlRj2RbQYXaH8XNhkZk+wpQVSRqssKXCRXgvyzOVV0AvadZw66Hh/hp3v5bYRK7yANnG7hX8FdzNG0WXJUbgAnEGWO4UOueitpXtolYAmSj+1ThCQkZaEbjpwBsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Shfn/Web; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1751610246; c=relaxed/simple;
+	bh=+nyURpJYMrrtJgXYNwTbHiNhQHb4kswjQYh5laWuZqI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bL1oePK4Yo00fgsqwaskRvb8akMTZ80qnU7tXXQAPbaj1uKMa8Zhpfx4Q7QhfqpV0l9jfFOP12PjwNXfknSt2apk4fKM7KWSXvMcxZhTgmznRF6d73uxDA3CnYdAjyS1D4mfKnn2VHhjaGFBcBRgBe/1AjBxtlc900wv7wwG/tQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org; spf=pass smtp.mailfrom=kde.org; dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b=XsRhYjyx; arc=none smtp.client-ip=46.43.1.242
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kde.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Shfn/Web"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-235e1d710d8so6687995ad.1;
-        Thu, 03 Jul 2025 17:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751588730; x=1752193530; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x7v5gurrbmPldeiskIo+P7BWOKubUph5grmPZfX9X2Y=;
-        b=Shfn/Web4qHHZXhncGQlf1izlxmMoZlRCj8ChoKImo6iO90yOdOMiFPkZjhflXTfwU
-         lnJ+3PZpLMu0XhTdJ9sJT+2dmonpiB4QlkvfbWuxOFoTpIqUgaKpzXnHMrzzVdS7pd/U
-         I6CrJoXxk0zxik5xFdbBbHLC43Qgf5/QrdRSzekO2T/FAIQQl0D78CUB8S+MlaDYb4Cv
-         IDlGvCvY+DgsaN4t1mynh0K0D83iP7ONPi45NIqbqrd+y57M6rh4fActKb3MdexhsCX+
-         rZeSJ/d+0zAdi0SXhus2GaPb9AvZ/16YwhtwZGLIFn2QCP8GjyRX50idCfuNS0Qxpw7I
-         4urw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751588730; x=1752193530;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7v5gurrbmPldeiskIo+P7BWOKubUph5grmPZfX9X2Y=;
-        b=KEl5OHMqqCl7hCXQOurrQP5EUYqC+7Ifvp4PCtph9QZkbXC+a/od/DO74+FzvFmBfY
-         9LxQFwVUCd5cU7eI7JxLr4YmgG6IptSmGTttXwXqHGDsoy3Ma3lOx0RG2KJMN7zhO5ZW
-         Vw/BfuOvnJmFS1olEhp4XsTjIadKCoDQ5aool9+QBurUgxJWMvT8neM4AFR1z/p3Jsv3
-         I75yVSgSsWLMlczRmTr9dDYT6qLs1oB2/w2f7Ur/Nvnc+fYj1bxmvk5T24hbNpsIIHMQ
-         PCl7tI8l9vOJEnekg2VP4Kw1ir82VdJVgK4KnQXsAxLnvM/t4Jj+C6nb59sOQWKbwLzM
-         2R0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWC06hfPSWMPz7tQ35IWQXwrSHqqheVqWpICvUhKyFLe+su8zRR2aw0Dhxk1WIhG/qijNV+bqleZ5ibKiY=@vger.kernel.org, AJvYcCWCbC8ZuLotH6n62/ZKO27P/0wBj9dXqPnTw5i5nwzkz5jOx1hehrm2kAmuZRHmcctlPh0v+Doka320JCBg@vger.kernel.org, AJvYcCWqWVVkpyl+wjsNwjqqVc/ACzHmFQSMTNL2pgXNReoYzOSB9H6frNoFAi0pUKw+1esww61gYyorbZXB@vger.kernel.org, AJvYcCXegzAg9ewlM5OsDiI0QJ2NwA+6Kl+xIQkX/2lbvVgUo4K8dPWfZE41/M+e7EAZyr6z/vILvCR8usZ/@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIGVNXnd4ie7b99QJenTCBKIdrrHWCQYIas0fkwu8KWxNzH2Z1
-	dbeyViFtxiMAwLALcXmDziql6khMeVErPzKLZz1ijKyJ/yEqdzMnYFa/y5zO6w==
-X-Gm-Gg: ASbGncvWjr0BEEbQl88J/y/HTLC2Txd6sP2S8tOvk6JHG4qVjq86rYtvtr/BBPNgGj2
-	RIvGqKoB8MP3gw+PmaSfzc/uGq3LDriaKIlPfnkzmNzp0RcXBPegFdbdyPUTxnu5J9BNe+q6pBS
-	UMB/+Ky1ojLE5nF3qEXPujdYH8s4oAmRukZgfpssGM9m8rBTS0Fwo2gZkhdcv6Qv13hBewhTka/
-	tMN8JSvQMR6xIG6Y6wOgmyDvxhnKKU18FXXEescuH65+3mNKKAog+yhRV/OEP5YA0e9ounvH6tU
-	XVRhwFHc6KtlD+CZ+Hlk2O+LjorCCY3WjQvqD7BnVZb2PUM2to5FD0Ue5UDNqGon2lt6agMUuGk
-	=
-X-Google-Smtp-Source: AGHT+IGRwCEMCfziqd7AZLn6eRdp70jCSXDinw5sNQDRhQHK3Nrsi6Y+7oNCrXgKwrEh8fcVu5HCTg==
-X-Received: by 2002:a17:903:1b4d:b0:23c:7c59:c74e with SMTP id d9443c01a7336-23c85f7b95emr10297305ad.0.1751588730600;
-        Thu, 03 Jul 2025 17:25:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23c845be93esm6423975ad.247.2025.07.03.17.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 17:25:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 3 Jul 2025 17:25:28 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, jdelvare@suse.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	corbet@lwn.net, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH] drivers: hwmon: add EMC2101 driver
-Message-ID: <9df1cc49-34bd-42d4-96dc-ec9b512e0c5f@roeck-us.net>
-References: <20250701181228.1196102-1-noltari@gmail.com>
- <20250701181228.1196102-4-noltari@gmail.com>
- <c893384d-4134-4510-be87-11a2c9ba6cc7@kernel.org>
- <CAKR-sGeSPHu5DiFL2sX=SdET_jzbepo30qguscUjzYkX-Aub0Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b="XsRhYjyx"
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(Authenticated sender: shantanu)
+	by letterbox.kde.org (Postfix) with ESMTPSA id A5F3C330F4E
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 07:23:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
+	t=1751610236; bh=BXMAOeNVc1LXV+jHRKR1qC7YIV2aPfF3vuO5Uavot+s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XsRhYjyxrZvjbuuo/PRL0Zi7qdtV6g1fwpbFgJtRaXnfXiuIeRM/znTfa7D/eMX4I
+	 ONCqkW2c/QlPDiTrBOdsmaiOPsMANFmjwN904CRkdFMAj6yJDID+VwKrR9RWboloAp
+	 0FhMwlcPNpLxH+cA4XE95SwQhYbw4u9B6XHYw1qIrEzyDx4io8ji7e4wF+/XVMXRgu
+	 w0vDXtg6J+c2yh21y5pGvcScAJikPE7F71ocqknk2zTJmaPU6uLrb4dmpFToOhZXvz
+	 oJRwk/WslGD5PTEo6tg9/dPBLuBCZ1nJ0dcRPyoeULf6T1LSU7cisZ5Dv7VInW+4cS
+	 ErwHJne00CzOg==
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d4495753a7so66045085a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 03 Jul 2025 23:23:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWN1M+Lv8pSzgbPIkWN1mGoVc+VpEht1fyRb3Vblt+yWbd1Eywb97+PM+5JFGnzls4Rzeftegs+ffEbmQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy36kW11wIs9Md7yQdkdZNv0+wUi2kLaMUL7eFN8b/inHgwep88
+	nRBZ6AG3j/AAwdpibLRJMlOHJKODDdyFB2TCsi5+VOjp3+avPF5yO25hLMYqpPbgK/FdijdEHzm
+	kaFkwVCoRjd3mOPJ6SWKwnnR9o1Q2dvw=
+X-Google-Smtp-Source: AGHT+IH2vgXwJ1Ou8FZEIJ6Y6jCkw/xYscvw3cZZBqP/WIg/8wQqP3ruCg1wfCvnnEQiXgqPlndnKuv8t2H2qVhEO6o=
+X-Received: by 2002:a05:620a:178e:b0:7d3:f17d:10c8 with SMTP id
+ af79cd13be357-7d5ddc5fa0cmr150887585a.43.1751610235403; Thu, 03 Jul 2025
+ 23:23:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKR-sGeSPHu5DiFL2sX=SdET_jzbepo30qguscUjzYkX-Aub0Q@mail.gmail.com>
+References: <20250630201444.210420-1-shantanu@kde.org> <20250701055337.14e2f5da@posteo.net>
+In-Reply-To: <20250701055337.14e2f5da@posteo.net>
+From: Shantanu Tushar <shantanu@kde.org>
+Date: Fri, 4 Jul 2025 08:23:45 +0200
+X-Gmail-Original-Message-ID: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
+X-Gm-Features: Ac12FXytGteqnRaxHL8LLlHrleUGNb1jJR_X0XbPbU-SOK2eEgBrKfGsUH1C44Y
+Message-ID: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series 2025
+To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 03, 2025 at 09:23:41AM +0200, Álvaro Fernández Rojas wrote:
+Hi Wilken,
+
+Thanks for the review. Unfortunately I only have access to a HXi 1200
+PSU to test. Maybe support for the new HXi 1500 can come later?
+
+Regards,
+Shantanu Tushar
+
+On Tue, 1 Jul 2025 at 05:53, Wilken Gottwalt <wilken.gottwalt@posteo.net> wrote:
+>
+> Yeah, looks fine to me. And it looks like there is also a HXi 1500 Series
+> 2025 now.
+>
+> Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+>
+> On Mon, 30 Jun 2025 22:14:44 +0200
+> Shantanu Tushar <shantanu@kde.org> wrote:
+>
+> > Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
+> > Update the documentation to mention this.
 > >
-> > Add a comment describing what you are protecting here. It looks so far
-> > like you could just use regmap and drop the mutex, but I didn't check
-> > thoroughly.
-> 
-> The EMC2101 datasheet is explicit about the Look Up Table registers
-> (REG_FAN_LUT_TEMP and REG_FAN_LUT_SPEED) being RO if FAN_LUT_DISABLE
-> isn't set, so I believe that we need the mutex even if we switch to
-> regmap.
-> I will add an explanation with that in the next version.
-> Should I still switch the implementation to regmap considering that we
-> need a mutex?
-> 
-What does r/w vs. r/o register access have to do with locking ?
-
-Guenter
+> > Signed-off-by: Shantanu Tushar <shantanu@kde.org>
+> > ---
+> >  Documentation/hwmon/corsair-psu.rst | 2 +-
+> >  drivers/hwmon/corsair-psu.c         | 1 +
+> >  2 files changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> > index 7ed794087f84..2e99cfd556a0 100644
+> > --- a/Documentation/hwmon/corsair-psu.rst
+> > +++ b/Documentation/hwmon/corsair-psu.rst
+> > @@ -17,7 +17,7 @@ Supported devices:
+> >
+> >    Corsair HX1000i (Legacy and Series 2023)
+> >
+> > -  Corsair HX1200i (Legacy and Series 2023)
+> > +  Corsair HX1200i (Legacy, Series 2023 and Series 2025)
+> >
+> >    Corsair HX1500i (Legacy and Series 2023)
+> >
+> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > index f8f22b8a67cd..6b5c8f200780 100644
+> > --- a/drivers/hwmon/corsair-psu.c
+> > +++ b/drivers/hwmon/corsair-psu.c
+> > @@ -885,6 +885,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+> >       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
+> >       { HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
+> >       { HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
+> > +     { HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
+> >       { },
+> >  };
+> >  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+>
