@@ -1,112 +1,122 @@
-Received: from letterbox.kde.org (letterbox.kde.org [46.43.1.242])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D021DE4F1
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 06:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.43.1.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650B229A2
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 06:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751610246; cv=none; b=AFnZjDiB8/FTi/YpJ51cX7ZeM0y6HPCTcf9cYMIR9fRzyhx1MKEpabgKfyqHAFl7ziQbjcItAbd7HzaYe6MS4hRpaXM3ShNgk6+P3DVn45gSMTZHzAcyCNHiExuGteIMbAre7OdfndhBngsBmnx1+r+hXPK7xGPKSv8xX3pDtKk=
+	t=1751611655; cv=none; b=Ga26bX1oQZ66zT81WJKuk7OTqufh1W+fDlUk+yCFgJtwnrrxBSr4oMS4XEhfp94uDMvZTSQjCjojqhxNE6VJLQh9Pqs8J0tnB4ukQPMkwShpvjwvMON9jsNdiocasBkXv8ZNDq9P1Ulv9UIgiuDSRcEwGNDX2RtFcbheb3ezxzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751610246; c=relaxed/simple;
-	bh=+nyURpJYMrrtJgXYNwTbHiNhQHb4kswjQYh5laWuZqI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bL1oePK4Yo00fgsqwaskRvb8akMTZ80qnU7tXXQAPbaj1uKMa8Zhpfx4Q7QhfqpV0l9jfFOP12PjwNXfknSt2apk4fKM7KWSXvMcxZhTgmznRF6d73uxDA3CnYdAjyS1D4mfKnn2VHhjaGFBcBRgBe/1AjBxtlc900wv7wwG/tQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org; spf=pass smtp.mailfrom=kde.org; dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b=XsRhYjyx; arc=none smtp.client-ip=46.43.1.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kde.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kde.org
+	s=arc-20240116; t=1751611655; c=relaxed/simple;
+	bh=3+UD+kPMi4hv04FmdZPQdTX40a7pnz5ukudpwwM8z0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yz7UZbdjdKEhVJIbl150OPKOFdopk2OmwOPK0ujjP+OB8Fnf6uG9k/wI5VrbVbE0Kt8ZaUZsWjOLGiuRq2edwp/b4WDaW+/fUEi7u5pkCHnkZwEpSFDIMm9SYEWnKB5VK8QA4ZrWZAQI322Mup1pLU5y+2B2k90OMAiYQoOqPyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=hkCMGQxa; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kde.org header.i=@kde.org header.b="XsRhYjyx"
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(Authenticated sender: shantanu)
-	by letterbox.kde.org (Postfix) with ESMTPSA id A5F3C330F4E
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 07:23:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kde.org; s=users;
-	t=1751610236; bh=BXMAOeNVc1LXV+jHRKR1qC7YIV2aPfF3vuO5Uavot+s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XsRhYjyxrZvjbuuo/PRL0Zi7qdtV6g1fwpbFgJtRaXnfXiuIeRM/znTfa7D/eMX4I
-	 ONCqkW2c/QlPDiTrBOdsmaiOPsMANFmjwN904CRkdFMAj6yJDID+VwKrR9RWboloAp
-	 0FhMwlcPNpLxH+cA4XE95SwQhYbw4u9B6XHYw1qIrEzyDx4io8ji7e4wF+/XVMXRgu
-	 w0vDXtg6J+c2yh21y5pGvcScAJikPE7F71ocqknk2zTJmaPU6uLrb4dmpFToOhZXvz
-	 oJRwk/WslGD5PTEo6tg9/dPBLuBCZ1nJ0dcRPyoeULf6T1LSU7cisZ5Dv7VInW+4cS
-	 ErwHJne00CzOg==
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d4495753a7so66045085a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 03 Jul 2025 23:23:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWN1M+Lv8pSzgbPIkWN1mGoVc+VpEht1fyRb3Vblt+yWbd1Eywb97+PM+5JFGnzls4Rzeftegs+ffEbmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy36kW11wIs9Md7yQdkdZNv0+wUi2kLaMUL7eFN8b/inHgwep88
-	nRBZ6AG3j/AAwdpibLRJMlOHJKODDdyFB2TCsi5+VOjp3+avPF5yO25hLMYqpPbgK/FdijdEHzm
-	kaFkwVCoRjd3mOPJ6SWKwnnR9o1Q2dvw=
-X-Google-Smtp-Source: AGHT+IH2vgXwJ1Ou8FZEIJ6Y6jCkw/xYscvw3cZZBqP/WIg/8wQqP3ruCg1wfCvnnEQiXgqPlndnKuv8t2H2qVhEO6o=
-X-Received: by 2002:a05:620a:178e:b0:7d3:f17d:10c8 with SMTP id
- af79cd13be357-7d5ddc5fa0cmr150887585a.43.1751610235403; Thu, 03 Jul 2025
- 23:23:55 -0700 (PDT)
+	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="hkCMGQxa"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id A6ADE240028
+	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 08:40:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
+	s=1984.ea087b; t=1751611205;
+	bh=4JOsCC05GT5Z9OUaSdE832KYppoPiqwtQVkDaD87Xo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=hkCMGQxaqH47b/Vx5p3jHT+0354xm7dVs3CAxY8aMgjuTu8LkIVR+sj+x7W+BRC/J
+	 X2hU46dmCBb2SbiGCCVN/WpERakg5LWJi4mScD6MxTTmeW8xsBZtJVX40nA69vvCeo
+	 xLAyWOLVaATN7ZYpNudivhKaBgzbrv90vmgZQgN+99/lzanCchdhBciL2gu0ynadhA
+	 ELWN8wCpW7J19iZelgP6QIxJp/uhuLPnM2Gou/tBfEFbABFd/AqV3Rb1AYQFHrw7Lt
+	 lY7K52lAzLGtYOlbwdmfCBaUlkwQATuroofjP9+cB4eJ3OFHqndBbrsRbQUA5ZwLaj
+	 BsWZFGkzb/UDgZ2ZTj3oIeSyVupJ1JfGdL1umoQtxIp0IrW/8oXp5iAZMXniA/VRnv
+	 zRrhSIoLAoX38Ix3iXSvcILizSQuuMb3jlsF7X+SK75YU6dlw9XWXXOG0DbDG3/LCv
+	 XF+kPTnfT6E4seWFnslOBemb/S939+sIuXrtK+s9X+ZB3+YC5oZ
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4bYPBr58Pvz6v0D;
+	Fri,  4 Jul 2025 08:40:04 +0200 (CEST)
+Date: Fri,  4 Jul 2025 06:40:03 +0000
+From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To: Shantanu Tushar <shantanu@kde.org>
+Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series
+ 2025
+Message-ID: <20250704084003.21256f66@posteo.net>
+In-Reply-To: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
+References: <20250630201444.210420-1-shantanu@kde.org>
+	<20250701055337.14e2f5da@posteo.net>
+	<CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250630201444.210420-1-shantanu@kde.org> <20250701055337.14e2f5da@posteo.net>
-In-Reply-To: <20250701055337.14e2f5da@posteo.net>
-From: Shantanu Tushar <shantanu@kde.org>
-Date: Fri, 4 Jul 2025 08:23:45 +0200
-X-Gmail-Original-Message-ID: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
-X-Gm-Features: Ac12FXytGteqnRaxHL8LLlHrleUGNb1jJR_X0XbPbU-SOK2eEgBrKfGsUH1C44Y
-Message-ID: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series 2025
-To: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Wilken,
+Hi Shantanu,
 
-Thanks for the review. Unfortunately I only have access to a HXi 1200
-PSU to test. Maybe support for the new HXi 1500 can come later?
+don't worry. That was only a comment/mental note for me. Looks like Corsair does
+a lot of refreshs of that hardware. Hmm, but Guenter seems to be a bit slow on
+this one.
 
-Regards,
-Shantanu Tushar
+greetings
 
-On Tue, 1 Jul 2025 at 05:53, Wilken Gottwalt <wilken.gottwalt@posteo.net> wrote:
->
-> Yeah, looks fine to me. And it looks like there is also a HXi 1500 Series
-> 2025 now.
->
-> Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
->
-> On Mon, 30 Jun 2025 22:14:44 +0200
-> Shantanu Tushar <shantanu@kde.org> wrote:
->
-> > Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
-> > Update the documentation to mention this.
+On Fri, 4 Jul 2025 08:23:45 +0200
+Shantanu Tushar <shantanu@kde.org> wrote:
+
+> Hi Wilken,
+> 
+> Thanks for the review. Unfortunately I only have access to a HXi 1200
+> PSU to test. Maybe support for the new HXi 1500 can come later?
+> 
+> Regards,
+> Shantanu Tushar
+> 
+> On Tue, 1 Jul 2025 at 05:53, Wilken Gottwalt <wilken.gottwalt@posteo.net> wrote:
 > >
-> > Signed-off-by: Shantanu Tushar <shantanu@kde.org>
-> > ---
-> >  Documentation/hwmon/corsair-psu.rst | 2 +-
-> >  drivers/hwmon/corsair-psu.c         | 1 +
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
+> > Yeah, looks fine to me. And it looks like there is also a HXi 1500 Series
+> > 2025 now.
 > >
-> > diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> > index 7ed794087f84..2e99cfd556a0 100644
-> > --- a/Documentation/hwmon/corsair-psu.rst
-> > +++ b/Documentation/hwmon/corsair-psu.rst
-> > @@ -17,7 +17,7 @@ Supported devices:
+> > Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 > >
-> >    Corsair HX1000i (Legacy and Series 2023)
+> > On Mon, 30 Jun 2025 22:14:44 +0200
+> > Shantanu Tushar <shantanu@kde.org> wrote:
 > >
-> > -  Corsair HX1200i (Legacy and Series 2023)
-> > +  Corsair HX1200i (Legacy, Series 2023 and Series 2025)
+> > > Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
+> > > Update the documentation to mention this.
+> > >
+> > > Signed-off-by: Shantanu Tushar <shantanu@kde.org>
+> > > ---
+> > >  Documentation/hwmon/corsair-psu.rst | 2 +-
+> > >  drivers/hwmon/corsair-psu.c         | 1 +
+> > >  2 files changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> > > index 7ed794087f84..2e99cfd556a0 100644
+> > > --- a/Documentation/hwmon/corsair-psu.rst
+> > > +++ b/Documentation/hwmon/corsair-psu.rst
+> > > @@ -17,7 +17,7 @@ Supported devices:
+> > >
+> > >    Corsair HX1000i (Legacy and Series 2023)
+> > >
+> > > -  Corsair HX1200i (Legacy and Series 2023)
+> > > +  Corsair HX1200i (Legacy, Series 2023 and Series 2025)
+> > >
+> > >    Corsair HX1500i (Legacy and Series 2023)
+> > >
+> > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > > index f8f22b8a67cd..6b5c8f200780 100644
+> > > --- a/drivers/hwmon/corsair-psu.c
+> > > +++ b/drivers/hwmon/corsair-psu.c
+> > > @@ -885,6 +885,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
+> > >       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
+> > >       { HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
+> > >       { HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
+> > > +     { HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
+> > >       { },
+> > >  };
+> > >  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
 > >
-> >    Corsair HX1500i (Legacy and Series 2023)
-> >
-> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > index f8f22b8a67cd..6b5c8f200780 100644
-> > --- a/drivers/hwmon/corsair-psu.c
-> > +++ b/drivers/hwmon/corsair-psu.c
-> > @@ -885,6 +885,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
-> >       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
-> >       { HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
-> >       { HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
-> > +     { HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
-> >       { },
-> >  };
-> >  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
->
+
