@@ -1,122 +1,118 @@
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650B229A2
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 06:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E25528030C;
+	Fri,  4 Jul 2025 07:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751611655; cv=none; b=Ga26bX1oQZ66zT81WJKuk7OTqufh1W+fDlUk+yCFgJtwnrrxBSr4oMS4XEhfp94uDMvZTSQjCjojqhxNE6VJLQh9Pqs8J0tnB4ukQPMkwShpvjwvMON9jsNdiocasBkXv8ZNDq9P1Ulv9UIgiuDSRcEwGNDX2RtFcbheb3ezxzQ=
+	t=1751614014; cv=none; b=jIgbN185bLEZoJL2dSiiT37BNMvK9KmRSL7tIxPvrDtZY+fB5D7eBiuiUL3N95PHnqFDsSe4cETEgREsgpE6Q0JunY1lCd6UDr6VITYrsQDOiKbpi8C+MpTc7dnxhGT9dFup3l3l1m5KpU8JdMY3Kx9/z7KRRTS/91IJDCu1fkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751611655; c=relaxed/simple;
-	bh=3+UD+kPMi4hv04FmdZPQdTX40a7pnz5ukudpwwM8z0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Yz7UZbdjdKEhVJIbl150OPKOFdopk2OmwOPK0ujjP+OB8Fnf6uG9k/wI5VrbVbE0Kt8ZaUZsWjOLGiuRq2edwp/b4WDaW+/fUEi7u5pkCHnkZwEpSFDIMm9SYEWnKB5VK8QA4ZrWZAQI322Mup1pLU5y+2B2k90OMAiYQoOqPyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=hkCMGQxa; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+	s=arc-20240116; t=1751614014; c=relaxed/simple;
+	bh=t+0bJUNlahtrSxCfD4FMqTrweoAS3ZJ2lbuKDDpRKxI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BZMbaO38raInWmVExhF5Hi9v9D6QlQdvY5os3XQT8pssSeCFd1/oJr7Z/a7U+UoNzljH2mJFcetDBIeB+XT5TRNLENAEXVfzahQiE+8S8NWrV0S79/AC6DDmC88RoDoUyCYLHhUV4/ItPM17AjjtNERaJIuMtkiIFuqloCzL2Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DAFqxvNu; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="hkCMGQxa"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id A6ADE240028
-	for <linux-hwmon@vger.kernel.org>; Fri,  4 Jul 2025 08:40:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
-	s=1984.ea087b; t=1751611205;
-	bh=4JOsCC05GT5Z9OUaSdE832KYppoPiqwtQVkDaD87Xo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:From;
-	b=hkCMGQxaqH47b/Vx5p3jHT+0354xm7dVs3CAxY8aMgjuTu8LkIVR+sj+x7W+BRC/J
-	 X2hU46dmCBb2SbiGCCVN/WpERakg5LWJi4mScD6MxTTmeW8xsBZtJVX40nA69vvCeo
-	 xLAyWOLVaATN7ZYpNudivhKaBgzbrv90vmgZQgN+99/lzanCchdhBciL2gu0ynadhA
-	 ELWN8wCpW7J19iZelgP6QIxJp/uhuLPnM2Gou/tBfEFbABFd/AqV3Rb1AYQFHrw7Lt
-	 lY7K52lAzLGtYOlbwdmfCBaUlkwQATuroofjP9+cB4eJ3OFHqndBbrsRbQUA5ZwLaj
-	 BsWZFGkzb/UDgZ2ZTj3oIeSyVupJ1JfGdL1umoQtxIp0IrW/8oXp5iAZMXniA/VRnv
-	 zRrhSIoLAoX38Ix3iXSvcILizSQuuMb3jlsF7X+SK75YU6dlw9XWXXOG0DbDG3/LCv
-	 XF+kPTnfT6E4seWFnslOBemb/S939+sIuXrtK+s9X+ZB3+YC5oZ
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4bYPBr58Pvz6v0D;
-	Fri,  4 Jul 2025 08:40:04 +0200 (CEST)
-Date: Fri,  4 Jul 2025 06:40:03 +0000
-From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To: Shantanu Tushar <shantanu@kde.org>
-Cc: jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series
- 2025
-Message-ID: <20250704084003.21256f66@posteo.net>
-In-Reply-To: <CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
-References: <20250630201444.210420-1-shantanu@kde.org>
-	<20250701055337.14e2f5da@posteo.net>
-	<CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DAFqxvNu"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3137c20213cso809801a91.3;
+        Fri, 04 Jul 2025 00:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751614012; x=1752218812; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t+0bJUNlahtrSxCfD4FMqTrweoAS3ZJ2lbuKDDpRKxI=;
+        b=DAFqxvNuMuN+79HeVfCejrivK8GukVhaytU8zJFsG46f/wD32RGtWVvFAE0TlzF3Jo
+         tE8/ra2bOXN4GP7RO1P4u9/pfGziXZj/BYnkldeyvDaGxh9T0wmc+bqXVfmegL0UR8b1
+         9Bqp/9YQhNJT72QJWoAqqANHA7cLEhgO3UvWMtZdEpt5sfoV36lGSKUpUpuS/MQF3Wuv
+         eK/29qvT95+jgguy1qcS1joVdC0LD9bImcKHZOEf6BSRAyHKhfm+wItIMSF3rPj+FLfX
+         KAhl5oloAbDjT+i2AMVjZMjkx3bawmZkpQvHo0WeZ5O+OMmRKZ0o8OFQONCsJt3WMqQt
+         NVdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751614012; x=1752218812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t+0bJUNlahtrSxCfD4FMqTrweoAS3ZJ2lbuKDDpRKxI=;
+        b=DVdD325VYQ7VdWEcIrKKZ8q/s+9GqefeqqK9iFu9+rmSbsU8vPEEqTvSF0748kVCH7
+         IvaKg35Kom9I2JQ1zfvJjAdevPO/8u5aHzL0PlrDB0YXtwVVOGtAB+FBdqWVizAJwed9
+         r37CRMdh57Tnca9qckrEoA4f8wcP9MwxlYn6drLob0Pl0KMnQqKVhZcLuXYN659OtQNd
+         GeLKUERvCJeCRqmDSPMRQr905jF1bjCah4bPloTYUWazeLreo1KGJu6SlLV02Ry1aDeb
+         zbG2R/51Gq3Jj5rIkQr/HRvDs2MUzjGKcSzUJwoiWDUkL1VP9wO0lta9nF0LXsU2aME0
+         NHcg==
+X-Forwarded-Encrypted: i=1; AJvYcCUltjyCjWEKhaNjEjZKe0VYQLDqKk2093vhjFjEqqramR2y1dJoJxbmwzbMQ6qEct7wFZjpEk8QzxIO@vger.kernel.org, AJvYcCW0B0iuK0l/BGKS6sOs16XArYcNojPJwGB4WZyAIon1mj9ENS/qVSh++6xQFRrdMvfKH1Vyu/SfTqSN@vger.kernel.org, AJvYcCX4wl4ltWLcd2bxYsA5kK44+BBvgkWZ+Q4SNv/kTy4QbSRrCcsfjSa9m0Zg5DZPyc/aweY/dIV6B8val+wi@vger.kernel.org, AJvYcCXOex70C7/z+NNGl1IuGTygfD8M19EFLV/lhxsttSuf4H8M6HdMko3ExajFRmHxhWCBGhXbM1AWUe15oog=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzB9rvg6SJyACN+z5ZSuqqb4xoBDEyhpvqIfqynDmpD2XT+YLMs
+	3qv+VhCMRa91fFB6N292/H+DwUTi6KrKGsWkYSaKvC/MHKBavXNW3p91q6dNNNfihu3JjYvTgnE
+	Sh31YYWAFka0F5Ddv2qkIVH7a4iRP8Q9Ru8f2
+X-Gm-Gg: ASbGncsr/rcwdatVrpuNDk6OhPE8kw2HyxXHgHsbw7c2MA+d1VovSVpkFU6kOrqtkRz
+	721w5i24bnU5kEfRtrJmPBkHEjS2eSc9HG4auQzYy+3ueNvUbICyorZqt+Gj23hnbqLq+acbbZ0
+	400SYOVCM6ZoYPPgqOMooij1ZDmUpn7Rgl5+5nn5UEGtUIo5eEYcFKi9cuLHBC9YO8sGMAVrL8o
+	ihyjg==
+X-Google-Smtp-Source: AGHT+IFhWPO75So0JsJk5GvG9MEgOBhEkjqe1mwiXh8Je1HsPLlngJc7tGWImUjVOV2FwTcNuKQACDCsf2QsaK9sX5g=
+X-Received: by 2002:a17:90b:57c7:b0:311:ffe8:20e6 with SMTP id
+ 98e67ed59e1d1-31aac432932mr2344759a91.3.1751614012223; Fri, 04 Jul 2025
+ 00:26:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250701181228.1196102-1-noltari@gmail.com> <20250701181228.1196102-4-noltari@gmail.com>
+ <c893384d-4134-4510-be87-11a2c9ba6cc7@kernel.org> <CAKR-sGeSPHu5DiFL2sX=SdET_jzbepo30qguscUjzYkX-Aub0Q@mail.gmail.com>
+ <9df1cc49-34bd-42d4-96dc-ec9b512e0c5f@roeck-us.net>
+In-Reply-To: <9df1cc49-34bd-42d4-96dc-ec9b512e0c5f@roeck-us.net>
+From: =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date: Fri, 4 Jul 2025 09:26:16 +0200
+X-Gm-Features: Ac12FXzX3jVR20bs6VKEPdEkV6NWwrwg2tdBtAlWnbRzNtnDm1U4WYY1z9_R3y0
+Message-ID: <CAKR-sGcLkihNKAQpPR6y3u2aCA6xmTd0mp2Ko15e3QZWrc4Dgg@mail.gmail.com>
+Subject: Re: [PATCH] drivers: hwmon: add EMC2101 driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, corbet@lwn.net, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shantanu,
+Hi Guenter,
 
-don't worry. That was only a comment/mental note for me. Looks like Corsair does
-a lot of refreshs of that hardware. Hmm, but Guenter seems to be a bit slow on
-this one.
-
-greetings
-
-On Fri, 4 Jul 2025 08:23:45 +0200
-Shantanu Tushar <shantanu@kde.org> wrote:
-
-> Hi Wilken,
-> 
-> Thanks for the review. Unfortunately I only have access to a HXi 1200
-> PSU to test. Maybe support for the new HXi 1500 can come later?
-> 
-> Regards,
-> Shantanu Tushar
-> 
-> On Tue, 1 Jul 2025 at 05:53, Wilken Gottwalt <wilken.gottwalt@posteo.net> wrote:
+El vie, 4 jul 2025 a las 2:25, Guenter Roeck (<linux@roeck-us.net>) escribi=
+=C3=B3:
+>
+> On Thu, Jul 03, 2025 at 09:23:41AM +0200, =C3=81lvaro Fern=C3=A1ndez Roja=
+s wrote:
+> > >
+> > > Add a comment describing what you are protecting here. It looks so fa=
+r
+> > > like you could just use regmap and drop the mutex, but I didn't check
+> > > thoroughly.
 > >
-> > Yeah, looks fine to me. And it looks like there is also a HXi 1500 Series
-> > 2025 now.
+> > The EMC2101 datasheet is explicit about the Look Up Table registers
+> > (REG_FAN_LUT_TEMP and REG_FAN_LUT_SPEED) being RO if FAN_LUT_DISABLE
+> > isn't set, so I believe that we need the mutex even if we switch to
+> > regmap.
+> > I will add an explanation with that in the next version.
+> > Should I still switch the implementation to regmap considering that we
+> > need a mutex?
 > >
-> > Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> >
-> > On Mon, 30 Jun 2025 22:14:44 +0200
-> > Shantanu Tushar <shantanu@kde.org> wrote:
-> >
-> > > Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
-> > > Update the documentation to mention this.
-> > >
-> > > Signed-off-by: Shantanu Tushar <shantanu@kde.org>
-> > > ---
-> > >  Documentation/hwmon/corsair-psu.rst | 2 +-
-> > >  drivers/hwmon/corsair-psu.c         | 1 +
-> > >  2 files changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-> > > index 7ed794087f84..2e99cfd556a0 100644
-> > > --- a/Documentation/hwmon/corsair-psu.rst
-> > > +++ b/Documentation/hwmon/corsair-psu.rst
-> > > @@ -17,7 +17,7 @@ Supported devices:
-> > >
-> > >    Corsair HX1000i (Legacy and Series 2023)
-> > >
-> > > -  Corsair HX1200i (Legacy and Series 2023)
-> > > +  Corsair HX1200i (Legacy, Series 2023 and Series 2025)
-> > >
-> > >    Corsair HX1500i (Legacy and Series 2023)
-> > >
-> > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > > index f8f22b8a67cd..6b5c8f200780 100644
-> > > --- a/drivers/hwmon/corsair-psu.c
-> > > +++ b/drivers/hwmon/corsair-psu.c
-> > > @@ -885,6 +885,7 @@ static const struct hid_device_id corsairpsu_idtable[] = {
-> > >       { HID_USB_DEVICE(0x1b1c, 0x1c1e) }, /* Corsair HX1000i Series 2023 */
-> > >       { HID_USB_DEVICE(0x1b1c, 0x1c1f) }, /* Corsair HX1500i Legacy and Series 2023 */
-> > >       { HID_USB_DEVICE(0x1b1c, 0x1c23) }, /* Corsair HX1200i Series 2023 */
-> > > +     { HID_USB_DEVICE(0x1b1c, 0x1c27) }, /* Corsair HX1200i Series 2025 */
-> > >       { },
-> > >  };
-> > >  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
-> >
+> What does r/w vs. r/o register access have to do with locking ?
 
+FAN_LUT_DISABLE bit can be set or cleared when pwm_enable is modified,
+but we need it to be set in order to be able to modify
+REG_FAN_LUT_TEMP and REG_FAN_LUT_SPEED registers.
+If FAN_LUT_DISABLE bit isn't set, any attempt to modify
+REG_FAN_LUT_TEMP and REG_FAN_LUT_SPEED registers won't work because
+they would be RO.
+Therefore, we need a lock to ensure that FAN_LUT_DISABLE is kept while
+modifying those registers.
+Please, take a look at emc2101_pwm_enable_write() and
+__pwm_auto_point_temp_store().
+
+>
+> Guenter
+
+Best regards,
+=C3=81lvaro.
