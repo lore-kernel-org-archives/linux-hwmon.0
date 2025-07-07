@@ -1,79 +1,115 @@
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D979D3A1BA
-	for <linux-hwmon@vger.kernel.org>; Sun,  6 Jul 2025 12:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C5F293C56
+	for <linux-hwmon@vger.kernel.org>; Mon,  7 Jul 2025 10:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751803718; cv=none; b=HfnW1zUoYUKWYk6Ri6xfXxN8sob3n5Y6Ih5ppO9CF3xTpIjT+0zIInuUWQF+yF68m8Jtp0dtE46MBkCU5R00LPZdRhAMIFRJ2kd/V8R5DgWwQ5Irgp0XZHye+mwSVv/HmZqC1mF7VCmiRIsOBk2L+UNaQcNB+Mf52bQtaPLtbAc=
+	t=1751882860; cv=none; b=bYC8bxWZ5HpknmbYaz5KPLsEZx24SGwmCCtR1HG7uQ3UC46XyDIrMuTpO5Y1FS3qp8y4VivLenmrSD9ICvqMbkeF2LXNIB/MHp6pyqD10gGp+WUqVr4BCViE4FRcYwoKwnXhm5sE7br++pN5hEbjJitpo1/EEwJQJdXG/lHHixY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751803718; c=relaxed/simple;
-	bh=WwxK9vvT7sv6H6ia+HfWEIMpbR96EfJ29srJOvyJKGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lyTFZMc8aEA4MvIHxeLeHOk7e5hIhivi3uUXLzYsJWHJbAyjzOiFuhOqrwQdWF5SBF3uziYF/78h0Q3X3f3KkK9ddcrT6/toMTtFceIqJoKLKum6o4Iue5wvpg9CbJDF/Q4loDQxUM4umVm3mkSRyOpXq1q05ZhaBRd6PeP1dI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=CQLZbZ2n; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="CQLZbZ2n"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 40639240103
-	for <linux-hwmon@vger.kernel.org>; Sun,  6 Jul 2025 14:08:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.net;
-	s=1984.ea087b; t=1751803707;
-	bh=Zn02TNCl8ysiE/NE44VnhiT2tVvwiZX6S3B27JdFzZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:From;
-	b=CQLZbZ2nUFYvZEEgG+H/qKirYTnEapPqMiZjV0XOU6uJ9P94tQMtM81eV5PKKDbb6
-	 06+PxKwQCpeWrE8NH4cnUmB70zaUC1R+mG7yhebAdREJ3r5yTUiYNe+/I/F5WzHQlp
-	 7b6NBPhUGTS+XOp8K5O5irc/CrHH2xTqiO3KM5n05yiR+cIt/yvFujky16CeQMBJu6
-	 mB8PqiUBZMe++pDBev9aW9j7mgwD7ULK1CUmKqoLIN5WqGnp1/DD4IpwkQ5XcEa/EJ
-	 4hUHc9Ri2JVdt28Ca0xo/ULi/qL6psZhSHqTgP6hLKrQSZ3EyvZ4Fsn/epnc3sqfnw
-	 +ZDEpIXRk9aby2MTBm6rr+XL7s7TBOQhsYE4K2WG7LjASKkyjMh3ZTcVegUTFBld7r
-	 DCSlLEgw4NjRCKdnNFAlcorzLZMXN/bEd7nsocXFo9prOosWbIDEbfv+BxBlpKVJIq
-	 b8SWyWEyEwC/7Xj8N+hGoz3roCeafxEx2QVDl+7hEPqr4A3rYXP
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4bZmNp32KXz9rxF;
-	Sun,  6 Jul 2025 14:08:26 +0200 (CEST)
-Date: Sun,  6 Jul 2025 12:08:25 +0000
-From: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Shantanu Tushar <shantanu@kde.org>, jdelvare@suse.com,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series
- 2025
-Message-ID: <20250706140825.6c385bb3@posteo.net>
-In-Reply-To: <1c4b6a07-1bd7-411f-b4a4-db202cb21b46@roeck-us.net>
-References: <20250630201444.210420-1-shantanu@kde.org>
-	<20250701055337.14e2f5da@posteo.net>
-	<CABQ4Km_Ot1097OjNvvKNyYhxjqu5cD4JTZ0NoaQv9SOcWyE8=w@mail.gmail.com>
-	<20250704084003.21256f66@posteo.net>
-	<1c4b6a07-1bd7-411f-b4a4-db202cb21b46@roeck-us.net>
+	s=arc-20240116; t=1751882860; c=relaxed/simple;
+	bh=FtQESEScKEGm4ZZCj0RN7mGsIyE/eoEObXJoSKFHpWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pfLmBKgXJ6yXL77yq+PkNTQmTu/8QrIcApHbdrlibyCWkcExqsaUrqOXjS3fnb3cmUxrE/dXSU270ZevSq2GLskykys04JYgpORq8ckWbrD68Rhmt/2f6UG/KEgt9z69dQFfZiLki1blI3og/UYOpG60nvAxm8r4cel5YPa7dMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uYikg-00055p-AG; Mon, 07 Jul 2025 12:07:10 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1uYikc-007EDt-2n;
+	Mon, 07 Jul 2025 12:07:06 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B531439509;
+	Mon, 07 Jul 2025 10:07:06 +0000 (UTC)
+Date: Mon, 7 Jul 2025 12:07:05 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, Lee Jones <lee@kernel.org>, 
+	tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+Message-ID: <20250707-new-psychedelic-termite-a309d3-mkl@pengutronix.de>
+References: <20250627102730.71222-1-a0282524688@gmail.com>
+ <20250627102730.71222-2-a0282524688@gmail.com>
+ <20250702161513.GX10134@google.com>
+ <CAOoeyxXWbjWvOgsSvXb9u2y6yFExq347ceZe96bm9w+GQAp2Rg@mail.gmail.com>
+ <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kr6nkexyn6izj5au"
+Content-Disposition: inline
+In-Reply-To: <0360d2e0-e071-4259-a7c7-23c31e52e563@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Sat, 5 Jul 2025 12:19:05 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
 
-> On Fri, Jul 04, 2025 at 06:40:03AM +0000, Wilken Gottwalt wrote:
-> > Hi Shantanu,
-> > 
-> > don't worry. That was only a comment/mental note for me. Looks like Corsair does
-> > a lot of refreshs of that hardware. Hmm, but Guenter seems to be a bit slow on
-> > this one.
-> > 
-> 
-> Please remember I am _not_ getting paid for this job, and once in a while
-> I need a break.
-> 
-> Guenter
+--kr6nkexyn6izj5au
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v13 1/7] mfd: Add core driver for Nuvoton NCT6694
+MIME-Version: 1.0
 
-Oh sorry, that wasn't meant harsh in any way, I just wondered.
+On 03.07.2025 11:44:27, Vincent Mailhol wrote:
+> On 03/07/2025 =C3=A0 11:39, Ming Yu wrote:
+> > Dear Lee,
+> >=20
+> > Thanks for your feedback and review.
+> > Currently, the status of the sub-device drivers is as follows (A/R/T):
+> >     [v13,1/7] mfd: Add core driver for Nuvoton NCT6694 (- - -)
+> >     [v13,2/7] gpio: Add Nuvoton NCT6694 GPIO support (1 1 -)
+> >     [v13,3/7] i2c: Add Nuvoton NCT6694 I2C support (1 - -)
+> >     [v13,4/7] can: Add Nuvoton NCT6694 CANFD support (- 2 -)
+>=20
+> For the CAN driver, my Reviewed-by can be interpreted as an Acked-by :)
 
-greetings
+Feel free to interpret my my Reviewed-by as an Acked-by, too.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--kr6nkexyn6izj5au
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhrnEYACgkQDHRl3/mQ
+kZz+HAgAo6jP3UtNysl6cnqkkovHfol1pDeGThMia/s6eTksN4DY0u5zqdBI03dN
+dXpm+0P8HVf83Alft8JysqSicG3HxMbdHs8En1RAlkkWYlr/kkL8zfEM06mFYVdL
+6EqNun8pwyIg9PrvRFwslkSTu6zKfqhafW8ouC9+65btTk0MG/AgbUgCLX2fe14v
+5jBv/B8OS97ARLf8pGTDQDqO6vXO2imOkP3Td+Ik61oUgLiQhUxLQVR8RvDKbuEA
++iyqwWyWKsyoiF+0sU+mGLy0ejmuzh+PSvo19hzEE7ic08gZYvB4BA5pxljMiGAR
+1NJdMVxN2BILPjtt1d6e95y9ZqFOiA==
+=dD5C
+-----END PGP SIGNATURE-----
+
+--kr6nkexyn6izj5au--
