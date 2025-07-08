@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D992E1754;
-	Tue,  8 Jul 2025 15:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E22E4260;
+	Tue,  8 Jul 2025 16:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751989861; cv=none; b=I+eSxkSVuX2ZqnAndjcoP9FOg+RxD+KP5lDsNvvcpiCsZ79W7M2Xee4P3MTB5AywuK6LTb8YmfoLabQQ91kfQJ68in+UYIa4v4WoB5K1bBpw2wRAf8qDQtnKfi9rtywKuFIz0L1IGpW0v2V8QYN1qGjQDzJCF0hLXzlUcSwYLc8=
+	t=1751990959; cv=none; b=OYfkEwIYCmTWR+Z5ygpWQE2EB5W/YUp3RHWTk1fFyMR+ABoTUporO+mfvv/QLVBYiynzxV3SmnWzCKRxtgUwCAULpRBThnBFhUw47PihMOxKxnZ4wnalTeCNwAEDh1i23Hkj57KMqUMZiQ9EoNtw7x19bCaz3lLODCHrjuWD9J4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751989861; c=relaxed/simple;
-	bh=ERjmfEJJ+8BiOWJ4NbjXhd98XbBC0ZAG9dCdkIK/JfA=;
+	s=arc-20240116; t=1751990959; c=relaxed/simple;
+	bh=+dHSQ9JmLCMi6wTYdjTsY+jTAGkpsnOeqWcR/GE+OM4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XGZtiHbcD9po1Sxtaua3OwD828yhFN3T6XJ8l37tn7bE6AQQzM8yTqwOwrMlCpJed0meNurPp7NhxZpQ0fflFoqqVjeAKlu98qkxvM1mJA5gNHuTCCEkDixd7IFi7EjITRyXlI0zrtGQ+eOijcMw94Rj5DgScwegYm7XG6SRjsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rXHf9LPd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q4euXsFmKc5WVWw7ltMXiqQ4s2nY5UFnX/4A5C3JSpC++oQaSVHRe6CoHT1bQY5IwjyN+6monYpS2l8ZCNgLjy8njOUKCthNO5QjJ2TdQwIHweRwCFs9//MACiL1IseERSE6RK+JmW7DMbhtryusCu+Zz1P8A+Ri4rbII4vB2eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lw3AElVu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rXHf9LPd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42D4C4CEED;
-	Tue,  8 Jul 2025 15:51:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lw3AElVu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58905C4CEED;
+	Tue,  8 Jul 2025 16:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751989861;
-	bh=ERjmfEJJ+8BiOWJ4NbjXhd98XbBC0ZAG9dCdkIK/JfA=;
+	s=k20201202; t=1751990959;
+	bh=+dHSQ9JmLCMi6wTYdjTsY+jTAGkpsnOeqWcR/GE+OM4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rXHf9LPdX+YQ9xWyO/m0D2xPcjchi02EO05gQ4u2qRaqPjDvEewfmtUA0rTpzoSOJ
-	 tCU17bvbh0cuIY5HYTdWZWZkZHASF2sEipdgj5ROFlhdPkXQkazoGJj9UkctqOnKxP
-	 c30BL7+U6tTr9mBjuF4B4R362DpAPlKggWl0ApgQ++Fe753+dKHOE0j8VwNlJG7lPE
-	 4Zj2GD+OJlDbblL1PhpNhM6o4nCEc+24SMDM0S02Zg0wXKeb7Oz4wskBgUGOWwuHnm
-	 r2wVcBTyxHC3E/xS97bIoY39ORTFkSHICvJQrd92s87fr/7WYzHy6fMJfaQj3Bt2n5
-	 /aeqlvyfreZJw==
-Date: Tue, 8 Jul 2025 10:50:58 -0500
-From: Rob Herring <robh@kernel.org>
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+	b=lw3AElVu96ZxHWjVThIHiVkll4TVzL1PqMoXQLbAuAhrc4cqTc7XC0L7Vwfjq3QrS
+	 6ZnV0QiBVgMUN0ro8hOlA0PnBTyz/6aSsqi0QL4LLRtehw+ju0dryymSYksoCg/4o9
+	 t49p4h2FaY1xl4LCTa5Z+nfkHAQLz9fF12CoDiXsVzo1kAIZuagkWNotM8DHTOMZcX
+	 dhQbffsff+fLrpeVwg6h5b9UvhUA/KTSAXw9X9YCkVMOYpbRQhCk7Idu4CmnZPD2GT
+	 CEMlZtndH+qB8bavDB3Xvdy4VNr+WDysZUrh6pw2El6URQux3yJ76IhuKYTJtryvE6
+	 OjIJMqWrblrMA==
+Date: Tue, 8 Jul 2025 11:09:17 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jack Cheng <Cheng.JackHY@inventec.com>
 Cc: linux-hwmon@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
+	Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document after shutdown
- fan settings
-Message-ID: <20250708155058.GA477029-robh@kernel.org>
-References: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
+	devicetree@vger.kernel.org, Jack Cheng <cheng.jackhy@inventec.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] dt-bindings: trivial: Add q50sn12072 and q54sj108a1
+ support
+Message-ID: <175199095675.509662.6963890763247202312.robh@kernel.org>
+References: <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-0-c387baf928cb@inventec.com>
+ <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-1-c387baf928cb@inventec.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,53 +47,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250629220301.935515-1-marek.vasut+renesas@mailbox.org>
+In-Reply-To: <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-1-c387baf928cb@inventec.com>
 
-On Mon, Jun 30, 2025 at 12:02:08AM +0200, Marek Vasut wrote:
-> Document fan-shutdown-percent property, used to describe fan RPM in percent
-> set during shutdown. This is used to keep the fan running at fixed RPM after
-> the kernel shut down, which is useful on hardware that does keep heating
-> itself even after the kernel did shut down, for example from some sort of
-> management core.
 
-This sounds more like "don't ever let the fan go below this RPM" or 
-"don't ever turn off the fan". IOW, it is more than just shutdown.
-
+On Tue, 01 Jul 2025 12:03:45 +0000, Jack Cheng wrote:
+> From: Jack Cheng <cheng.jackhy@inventec.com>
 > 
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+> Add support for the Delta Electronics q50sn12072 and q54sj108a1
+> 1/4 Brick DC/DC Regulated Power Modules.
+> 
+> Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
 > ---
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> ---
->  Documentation/devicetree/bindings/hwmon/pwm-fan.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> index 8b4ed5ee962f..a84cc3a4cfdc 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pwm-fan.yaml
-> @@ -31,6 +31,15 @@ properties:
->        it must be self resetting edge interrupts.
->      maxItems: 1
->  
-> +  fan-shutdown-percent:
-> +    description:
-> +      Fan RPM in percent set during shutdown. This is used to keep the fan
-> +      running at fixed RPM after the kernel shut down, which is useful on
-> +      hardware that does keep heating itself even after the kernel did shut
-> +      down, for example from some sort of management core.
-> +    minimum: 0
-> +    maximum: 100
-> +
->    fan-stop-to-start-percent:
->      description:
->        Minimum fan RPM in percent to start when stopped.
-> -- 
-> 2.47.2
-> 
+
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
