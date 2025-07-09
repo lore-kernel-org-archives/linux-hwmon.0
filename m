@@ -1,60 +1,60 @@
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6292E1F0E55;
-	Wed,  9 Jul 2025 05:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D59926A0F8;
+	Wed,  9 Jul 2025 05:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752039866; cv=none; b=UeEy7AjSUhD6kB8oqJDPGUMAgOM5vVMHjp/YC6Zvlt9YQtAlCH80HMqt7n7lcCLVyEG29HG2D5OkYKTFj6wHGIsRVtbgkOpy/8lP3HfvdM5Ul1Osr8kC+LyXNP8zywtgs6UC2/wpFq0nPD9olxqjxVJlHHxCAZgBRNBvITD/tjY=
+	t=1752039866; cv=none; b=Ktx4LRNHJ0hm0A3VCwX2sRmXeqVHc/OmxiBJrS+jFyNUp/T2ZHtKKKGuv6bvHwu3dtvwhg/1Wi0nL8ChADc2hzaBsjsTlYVnzD26wbHbAL7enkuauJD/OZV14ve4nVv+nQACLF+sngT5ZEjWe96Af5UJ2qm9fVYiHbMdJjKU0Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752039866; c=relaxed/simple;
-	bh=+en811F95DsLSgBrQ+DNcrAUw2uUB7H4tVLtuoQXBrw=;
+	bh=YsE9zx6xPrmRMjJfSWDPOF4U5F7BsfhxAHXh55Enj2c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=oaty6JNCxzg6wypgl69m/om1zzQr0m0x+vnFx+KFJ/yGmlSFQmMBllNTKKk5ag7oJyan2igBABl4Y0UMlSpiPo+et7yIIKGmBt/znloVbGj+5d/5UZ7csVRTmcbUm7yJ+dDHRVdpMzkKYjgiZ5RegJ/XYaid9bRJIs/wMoVPCso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=pjFXtt3V; arc=none smtp.client-ip=148.163.135.77
+	 In-Reply-To:To:CC; b=jYBAhIWyyOIgrFiuijruvvhVsH4jw9w6tsgJhX4eq82GxVQbwMnKzvvpaQjyockTB0mAAlQunCAIWYi2NfuTIGfQZztU3gc9ZyOZ8nEDiA74J7ctxXF2S6PmHLmaiZ+EStTkYCoYzyqo0FqFUr018nMN/opyQPbvbKMJbrFLYqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=bgsO1DFQ; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="pjFXtt3V"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="bgsO1DFQ"
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5694R55U003688;
-	Wed, 9 Jul 2025 01:43:54 -0400
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5694EJOD003927;
+	Wed, 9 Jul 2025 01:44:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=ShldH
-	MjPVI2DPydp/HVsvbZg60irpEADiuu9P/gbsP0=; b=pjFXtt3VbirD2LCTpOmN9
-	ofkoaCdYQOm0g+nP6fC7kna8VPJVxg3ebg+HmoFUFJful/N5pdmX9XfX2mnWczLg
-	M/6EOaNEW31iBA0zxxK0EBX/XdpyTiI2lP4FXtderMEbDidQ8PV2DrZ7Gu+4oLqp
-	apA6urFm2MnL3lqnTaXkzTJyn1vA2kcMzcW1ZwT3yH+m7GOMf3BsvrGbKHzkKJaf
-	Vxyx4SftixWxlH79zEhf312+0oMrZzYEg4+V6Jdt7sWQM70p2kSSzWZacuIDISIj
-	wHBvj7Ill03t3OE567DVzKn4KCaJd6ed8RHaP7u5Bd0LDpNjOOSRDn4dZlMSV8Uf
-	g==
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=tHZjP
+	9C26fO/MLaULR0SIUzS2i9X04DTIx+cSAH5XMw=; b=bgsO1DFQGGl9gt5vqiqP+
+	c4ioV6xSie22bc2z+rKm36BjUfvq9Dx0p+eF+3x77BkP39+WB9JcYkahGs+DlHS7
+	sDPI6rksXwAdn9b0BJnXrlMHPLE6JuJLyNV7WduQENkdi6uMkqdL4MZXa5Y/OSZM
+	JTHVkUinrA/vd7NYnt0XAHjN/IbBFpwC3VeM/RSeyOBcB03nJGmGw83aS1YB8HuI
+	dUcakGUZ3ZpXgEHohJqKicO9C1ceKAcct74EAKj5ncBKxCuU8C6X6vJ1apmgWKXL
+	fVXNRrhCcIVEUWyuewyu842GJsW8Y0m+myCOMXb8NP1ZXZLjAFkY6y9MLpNd8Avj
+	w==
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 47r7truq31-1
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 47r7truq4c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Jul 2025 01:43:54 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 5695hr7F013736
+	Wed, 09 Jul 2025 01:44:07 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 5695i6Zv013765
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 9 Jul 2025 01:43:53 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+	Wed, 9 Jul 2025 01:44:06 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 9 Jul 2025 01:43:53 -0400
+ 15.2.1748.10; Wed, 9 Jul 2025 01:44:05 -0400
 Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 9 Jul 2025 01:43:53 -0400
+ 15.2.1748.10; Wed, 9 Jul 2025 01:44:05 -0400
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
  (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Wed, 9 Jul 2025 01:43:52 -0400
+ Transport; Wed, 9 Jul 2025 01:44:05 -0400
 Received: from CENCARNA-L02.ad.analog.com (CENCARNA-L02.ad.analog.com [10.117.222.48])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 5695hQ2h024058;
-	Wed, 9 Jul 2025 01:43:45 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 5695hQ2j024058;
+	Wed, 9 Jul 2025 01:43:56 -0400
 From: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Date: Wed, 9 Jul 2025 13:43:25 +0800
-Subject: [PATCH v5 1/3] dt-bindings: hwmon: (pmbus/adp1050): Add adp1051,
- adp1055 and ltp8800
+Date: Wed, 9 Jul 2025 13:43:27 +0800
+Subject: [PATCH v5 3/3] hwmon: (pmbus/adp1050): Add regulator support for
+ ltp8800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-ID: <20250709-adp1051-v5-1-539254692252@analog.com>
+Message-ID: <20250709-adp1051-v5-3-539254692252@analog.com>
 References: <20250709-adp1051-v5-0-539254692252@analog.com>
 In-Reply-To: <20250709-adp1051-v5-0-539254692252@analog.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
@@ -85,35 +85,29 @@ CC: Radu Sabau <radu.sabau@analog.com>,
         <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         Cedric Encarnacion
-	<cedricjustine.encarnacion@analog.com>,
-        Conor Dooley
-	<conor.dooley@microchip.com>
+	<cedricjustine.encarnacion@analog.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752039806; l=2063;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752039806; l=2193;
  i=cedricjustine.encarnacion@analog.com; s=20250707;
- h=from:subject:message-id; bh=+en811F95DsLSgBrQ+DNcrAUw2uUB7H4tVLtuoQXBrw=;
- b=kLqq80Eok8HZRhd8LgV6J19653DC8D/MozNLFoiEjRPhy7TVAEFdOFpQoeFNUxv+mzV89q4BI
- IYWmK6FWBdKAXhpTvCz4kme6NXwHUfwAMg7GP6HJaVLu8HLpCkn+B/Y
+ h=from:subject:message-id; bh=YsE9zx6xPrmRMjJfSWDPOF4U5F7BsfhxAHXh55Enj2c=;
+ b=yMDXnErE9xLtpHhCRAFrftwRYv2RsmQa5QTQXG0QDL9QbxixTEWxFNLYxYxbASj5AqAD7uRSw
+ JXJx/YNEmraDXBhOo5w6o2H5oPElQi4/y7gH1E/VTfx5pzDhPOxLUwF
 X-Developer-Key: i=cedricjustine.encarnacion@analog.com; a=ed25519;
  pk=YAch4cyWjsctl/d3LfcMhkS/GNaUfXHkd658Mw3k5Kg=
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: Ti2khRAnZBDH_ZdnzIs6jMY6U9TXh4BU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA5MDA0OSBTYWx0ZWRfX6ZmUAKSAFeYf
- MLc8Ea7abBMhgyfyoV8sGHofc5rWarKWWvMGhOh3qxL8H5YKfPldYAbdrYxTPKRsPusKFGKo7WN
- mBJdicw1OsCRk5ZhJN8c1AIe6xp53neklB8JmwScxA+MendDaDmc1CNxsOHEwk8ntYRMAHod0Ej
- QjQKa1zHiQR0Oh8NrIZuVxUV42KXbwbeM2c1Tonu8b/EZWWVSCaThn5GQ3A5FAq6m7hj3UV/ljo
- vdwIBYbhy5TQEsuJOwxLryJ2/kAbCj+C5Rw78UgO4A2WUqYBJg19lGJin5HT5l7vh1KuVEvkHye
- iyAELe0W6H2fSt5C2RQ+1ZG6h/6PVNXqg7nOyRqMoUCB5q1ofGw7V9L6rffY6JmDtuNLU+JTKi+
- dy4tbzPV+v4YXsJFCd8G3DM6/EC1SHR4XSq6nqja1aU8x8y4BKbAuS96HPB51mxlEo0t1bSF
-X-Proofpoint-GUID: Ti2khRAnZBDH_ZdnzIs6jMY6U9TXh4BU
-X-Authority-Analysis: v=2.4 cv=S8fZwJsP c=1 sm=1 tr=0 ts=686e019a cx=c_pps
+X-Proofpoint-ORIG-GUID: ecFlmawsVSdyxsb1gTwDtinQAFYFWEbG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA5MDA0OSBTYWx0ZWRfX01ZeeCUS8wlh
+ kBNqmbTEV9fwNN3fSUxFHvH+O0zFb+26ccUt9t79HpdFSSpwvVRF/XJvZ8BBovUavq0zdKhOT51
+ fdvcMIvK1TJs9bfYXJRzpsLX3SBxpUZrb1UkHQY6yukWst9gdqGQWpg/gtUwjQsZGc5BhX+cGzS
+ /vvAqGnvpQYeFooQ2bkZZUkcH2NiE0GXdTv5aJRiLydl4HR1oKjse7pipMz8YNAy9sO1LhNio7p
+ rN0+bNa5N8EC4Dw8+qWjjpIVtTfKJ+5qTq3Ki6eVpe1BqMpf4iTqzVX0qn/iyyrPY4kYW78mYs1
+ Y+AH/eOhi8BuKuiCZxzThmyMagVANWH6Vk4yh6UCMfke7Io0cUzPO6+60rwLBNKBxq9DCRmRu1v
+ /1pujfckY1BKYLxpJRYmdU/wqtAZRLSisbv/xBEGxEvCr+EdHjFH6IzwtemMkqdpCHqcRseg
+X-Proofpoint-GUID: ecFlmawsVSdyxsb1gTwDtinQAFYFWEbG
+X-Authority-Analysis: v=2.4 cv=S8fZwJsP c=1 sm=1 tr=0 ts=686e01a7 cx=c_pps
  a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=gAnH3GRIAAAA:8 a=XYAwZIGsAAAA:8
- a=uQMaZb2Ekduhlv2r4KIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=PwgeYa5mr90A:10 a=-j3HJ--FoLwA:10 a=0pc8XKQv7_MA:10 a=ldT6tfO6ZOEA:10
- a=rpuT49WTWGEA:10 a=pLgm-7I7DJwA:10 a=i2LhTzLHGUUA:10 a=FDgeob9-QqcA:10
- a=Rx2Yj5WbVoQA:10 a=D0ly3Cs6lx4A:10 a=tq-JCwlE-CAA:10 a=5n0-O_bcIHYA:10
- a=E8ToXWR_bxluHZ7gmE-Z:22
+ a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=QyXUC8HyAAAA:8 a=gAnH3GRIAAAA:8
+ a=PZ2ELaWS3HQQyzacMHMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
  definitions=2025-07-09_01,2025-07-08_01,2025-03-28_01
@@ -124,53 +118,64 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
  definitions=main-2507090049
 
-Add support for adp1051, adp1055, and ltp8800.
-    ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
-    ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
-    LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
+Add regulator support for the single-channel LTP8800-1A/-2/-4A
+150A/135A/200A DC/DC µModule Regulator.
 
-Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
-Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml      | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/Kconfig   |  9 +++++++++
+ drivers/hwmon/pmbus/adp1050.c | 10 ++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-index 10c2204bc3df3eaa98881085247ad2ff87f96645..af75300939429975e7151be943e976e265c45f02 100644
---- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-@@ -10,16 +10,27 @@ maintainers:
-   - Radu Sabau <radu.sabau@analog.com>
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 441f984a859dd935e5248793f1bf54204ce2c371..55e492452ce8115419718256de38dda1bd39fd9a 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -67,6 +67,15 @@ config SENSORS_ADP1050
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called adp1050.
  
- description: |
--   The ADP1050 is used to monitor system voltages, currents and temperatures.
-+   The ADP1050 and similar devices are used to monitor system voltages,
-+   currents, power, and temperatures.
++config SENSORS_ADP1050_REGULATOR
++	bool "Regulator support for ADP1050 and compatibles"
++	depends on SENSORS_ADP1050 && REGULATOR
++	help
++	  If you say yes here you get regulator support for Analog Devices
++	  LTP8800-1A, LTP8800-4A, and LTP8800-2. LTP8800 is a family of DC/DC
++	  µModule regulators that can provide microprocessor power from 54V
++	  power distribution architecture.
 +
-    Through the PMBus interface, the ADP1050 targets isolated power supplies
-    and has four individual monitors for input/output voltage, input current
-    and temperature.
-    Datasheet:
-      https://www.analog.com/en/products/adp1050.html
-+     https://www.analog.com/en/products/adp1051.html
-+     https://www.analog.com/en/products/adp1055.html
-+     https://www.analog.com/en/products/ltp8800-1a.html
-+     https://www.analog.com/en/products/ltp8800-2.html
-+     https://www.analog.com/en/products/ltp8800-4a.html
+ config SENSORS_BEL_PFE
+ 	tristate "Bel PFE Compatible Power Supplies"
+ 	help
+diff --git a/drivers/hwmon/pmbus/adp1050.c b/drivers/hwmon/pmbus/adp1050.c
+index 353758a6ffd69e33203e8d1447accf2c75ebecd5..0c23f53a287bee36d9b4873013556493d8964970 100644
+--- a/drivers/hwmon/pmbus/adp1050.c
++++ b/drivers/hwmon/pmbus/adp1050.c
+@@ -11,6 +11,12 @@
  
- properties:
-   compatible:
--    const: adi,adp1050
-+    enum:
-+      - adi,adp1050
-+      - adi,adp1051
-+      - adi,adp1055
-+      - adi,ltp8800
+ #include "pmbus.h"
  
-   reg:
-     maxItems: 1
++#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
++static const struct regulator_desc adp1050_reg_desc[] = {
++	PMBUS_REGULATOR_ONE("vout"),
++};
++#endif /* CONFIG_SENSORS_ADP1050_REGULATOR */
++
+ static struct pmbus_driver_info adp1050_info = {
+ 	.pages = 1,
+ 	.format[PSC_VOLTAGE_IN] = linear,
+@@ -65,6 +71,10 @@ static struct pmbus_driver_info ltp8800_info = {
+ 		| PMBUS_HAVE_STATUS_VOUT
+ 		| PMBUS_HAVE_STATUS_INPUT
+ 		| PMBUS_HAVE_STATUS_TEMP,
++#if IS_ENABLED(CONFIG_SENSORS_ADP1050_REGULATOR)
++	.num_regulators = 1,
++	.reg_desc = adp1050_reg_desc,
++#endif
+ };
+ 
+ static int adp1050_probe(struct i2c_client *client)
 
 -- 
 2.39.5
