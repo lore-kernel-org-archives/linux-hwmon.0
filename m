@@ -1,29 +1,30 @@
 Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507F2284687;
-	Wed,  9 Jul 2025 09:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B174285CA7;
+	Wed,  9 Jul 2025 09:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752053341; cv=none; b=qYPMwbj0KawDYpydonDiHiUoJaMaerPK71PFnkY7zE+RjbpvbMkpcWNuVZmYskKQ4e0ieCbWkAGXJFw43hPRFwlK0yqgZ9QG+G1YCKr1KOycOOCZ66cP1YlPN4KHlU7afwnvNTuRyTQV5Ug7IfXzYteo03+a7R5rPNNfp21Fusk=
+	t=1752053724; cv=none; b=CVsPKpX18/CNQItTOp+s9SBKbleu9XXlfNXSMN0/UfNlgCh7gSXm7rGSVcGbhKjehujdv4gdFC7s2fH2l5QQgecH/ikqwpITN2OZ7ov1kJF4roJAVNpP27RnErD1K1f1U/fyxx9N6wDVkEExcSTYAruFdjOUpb4v1sZIYFxVgr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752053341; c=relaxed/simple;
-	bh=SUUPu1TK3vLUbU4R1qK+dOtOfweVWwDvXy6gG2NmyMU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K+r+SPIbGGa56tUTH3NlEDeIbO95wDF16RNufPP0yid03r26mqiSkByAtX1v7BkRo84SNY5tQ9Dg2YsILTtMcjdJ5q8Z/+c7kewrsbTx8cVR82CwcJn0TpqAwBepYfYpqjfLlKmYrX8YeZ7CnN2FAd9RLYf+WdGPuCR7LTjcuA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=AYln+JiL; arc=none smtp.client-ip=1.95.21.15
+	s=arc-20240116; t=1752053724; c=relaxed/simple;
+	bh=eA81CVyN75G3sso4OnIQ9XaM6hUcquy0KVuHAuIXBJE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ouOhERQqxVQvuoPuJ0VVkzV4xrpHYf104kLB4A9KOxICMqoIpytrf9+N7UECDYHn7lB04sEV+sDVgnp+byDIMNTMg9MFHFMq8lFoktsClcqAkjPwQrPKz/DJibUXX/CML8vH3m3hQ0wt/oUersQtAfWQy1gvucc1Fui+TzdTjNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=Bv8r3BBT; arc=none smtp.client-ip=1.95.21.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="AYln+JiL"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="Bv8r3BBT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ra
-	2XD4FbWuJFaekuy5bOA91tXw3KGrTkuZ3e+KtFUTw=; b=AYln+JiLa31fX4Dehg
-	Hw4rTC7Nydz9C3kAqsfOIpolQgaRfj9qi1t8ClKThDSmzwILT94AWmPyheOmX5Bf
-	KXUuah2Js89g3wadbbHBx7VK8oojA5EA2t2xvpp3m1uTEIL41ZBIiR0zBxGavNyS
-	jhqR81wlnRWL3ZQjP9v44Uzj4=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=fR
+	rPR+uh57B3uZhUrObQwXZZ48AfmPSckjLH4dcOMkc=; b=Bv8r3BBTu+mJyOyuq/
+	wToxX9VCEoJHFRtYNa+g5r0gU60CWpBz/iYsGDhz2h7v1ckky1fKIR7JmNfyuXQv
+	hwBjco8oT4X9kcI5vHAUGzlWyyK3D68WVUk7v+C7eVbhVwvDYxCKuoJwHKKRhNEe
+	a9w5cZSkgZ1KbfM0W385Yuu8w=
 Received: from mps-HP-EliteBook-840-G3.monolithicpower.com (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgDXH7kSNm5orlQbAA--.56013S2;
-	Wed, 09 Jul 2025 17:27:48 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgDXTwakN25osQEcAA--.49192S2;
+	Wed, 09 Jul 2025 17:34:29 +0800 (CST)
 From: wenswang@yeah.net
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -36,10 +37,12 @@ Cc: devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH v3 0/2] hwmon: Add support for MPS mp2869,mp29502 chip
-Date: Wed,  9 Jul 2025 17:27:34 +0800
-Message-Id: <20250709092734.455976-1-wenswang@yeah.net>
+Subject: [PATCH v3 1/2] dt-bindings: hwmon: Add MPS mp2869 series and mp29502
+Date: Wed,  9 Jul 2025 17:34:19 +0800
+Message-Id: <20250709093420.456304-1-wenswang@yeah.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250709092734.455976-1-wenswang@yeah.net>
+References: <20250709092734.455976-1-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,42 +50,54 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:M88vCgDXH7kSNm5orlQbAA--.56013S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jry7CF1DGF4ruFy7GFyfZwb_yoWDJFbEkw
-	sFgFZrAF1UJFs8WFWDCrn5uryUtr4FgFyxJ3ZxtrZ8AFW3Z3ZxWFykX3sFya47CrW7uF13
-	ZayDAws5AF17KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU87l1PUUUUU==
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIBRI7GhuNhTOeAAA3C
+X-CM-TRANSID:Ms8vCgDXTwakN25osQEcAA--.49192S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF17CF1kuF1DWFyDGw4fGrg_yoW8Wr4DpF
+	WkCF4IyF4FqF47Ca129F18GF45WrZrA3ykJ3yqyr17Krya9rZ7ur4a93s5Xa98Crs5WF4U
+	JrnFy34F9Fyjv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j8jjkUUUUU=
+X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiBBeFpGht6-rnVwAAsW
 
 From: Wensheng Wang <wenswang@yeah.net>
 
-Add mp2869,mp29502 driver in hwmon and add dt-bindings for them.
+Add support for MPS mp2869 series and mp29502 controller
 
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+---
 V2 -> V3:
     merge patches for MP29502 and MP2869
 
 V1 -> V2:
     add Rob's Acked-by
 
-Wensheng Wang (2):
-  dt-bindings: hwmon: Add MPS mp2869 series and mp29502
-  hwmon: add MP2869 series and MP29502 driver
+ Documentation/devicetree/bindings/trivial-devices.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
- .../devicetree/bindings/trivial-devices.yaml  |  10 +
- Documentation/hwmon/index.rst                 |   2 +
- Documentation/hwmon/mp2869.rst                | 175 +++++
- Documentation/hwmon/mp29502.rst               |  93 +++
- MAINTAINERS                                   |   9 +
- drivers/hwmon/pmbus/Kconfig                   |  18 +
- drivers/hwmon/pmbus/Makefile                  |   2 +
- drivers/hwmon/pmbus/mp2869.c                  | 711 ++++++++++++++++++
- drivers/hwmon/pmbus/mp29502.c                 | 670 +++++++++++++++++
- 9 files changed, 1690 insertions(+)
- create mode 100644 Documentation/hwmon/mp2869.rst
- create mode 100644 Documentation/hwmon/mp29502.rst
- create mode 100644 drivers/hwmon/pmbus/mp2869.c
- create mode 100644 drivers/hwmon/pmbus/mp29502.c
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 27930708ccd5..2066696ecff4 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -285,10 +285,20 @@ properties:
+           - mps,mp2856
+             # Monolithic Power Systems Inc. multi-phase controller mp2857
+           - mps,mp2857
++            # Monolithic Power Systems Inc. multi-phase controller mp2869
++          - mps,mp2869
+             # Monolithic Power Systems Inc. multi-phase controller mp2888
+           - mps,mp2888
+             # Monolithic Power Systems Inc. multi-phase controller mp2891
+           - mps,mp2891
++            # Monolithic Power Systems Inc. multi-phase controller mp29502
++          - mps,mp29502
++            # Monolithic Power Systems Inc. multi-phase controller mp29608
++          - mps,mp29608
++            # Monolithic Power Systems Inc. multi-phase controller mp29612
++          - mps,mp29612
++            # Monolithic Power Systems Inc. multi-phase controller mp29816
++          - mps,mp29816
+             # Monolithic Power Systems Inc. multi-phase controller mp2993
+           - mps,mp2993
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5920
 -- 
 2.25.1
 
