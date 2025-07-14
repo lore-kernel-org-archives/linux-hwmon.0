@@ -1,104 +1,96 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EC4273D7B;
-	Sat, 12 Jul 2025 13:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A6B2343C2
+	for <linux-hwmon@vger.kernel.org>; Mon, 14 Jul 2025 07:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752326095; cv=none; b=jCDxAm7pwNFHZEVbW86eQ4OGu6QkD0kbr67lO1q6CTCy3YM7HuFobQtoA1CuNbgssHiiyQ0Winy+Gz8HpebNtoHx4Oj0A0B+zbPfyVKaAGgpf2aWScYvzV8RQbVdUs9pIZ7DNAjPQmVw69dk4JQFYj28zs5tzaXXLu5k/NFNfz0=
+	t=1752478657; cv=none; b=IdSHnpWPVFe/KPM9l02I533Nm9zyK4mbUrMW3LF5eQUWnNZU2vLa6VhjlOM6eKFfMWRHvIZk64wkmceN2PjgaaBDSVdv5ZQ1Ni/dzqCeOMyrmzzibEu4TgVGGCkbmr8OCewV+fkB0bdRmbYLXs5HIAC0YOQrtwEZSIJ/Br5sizA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752326095; c=relaxed/simple;
-	bh=5dN2ZHRvnjmzaC8O0OTUDOBXpyAGk7HmJNNUYPuo3ZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=buhpZCf1mKW1J6QY5eGRDpqvoagdYVpzM0RBx+cguLVfEplsxqsp/sfAxI1dvK1B3sqrCiE9AZX9GRGDrquIq2Vq5jywgn8avRse7hRbQcxmwV8UC/hDjHf5QTn4rsTGj2a0Nh/pjhE1MKf4sUO9sNT8PxgDY3VV1kgAz6dVZGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfwBEMkR; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752478657; c=relaxed/simple;
+	bh=3hFbJlqW8cbG988BMDFJ2adocaVdbFf7Ph5WXToeAAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RxNpf4DsxSNSm8NvsyFVjoaDwz3PCqVaMfFsedamyJpBeFMa61WsIUPlIIwneUi07/m73x2rxRoK/5KVQmosY0Y9pT1YtOJrB8tLzP8J8fqzr4i0jQDosRQOffxiarbPYu1APHm3f2vdOt8F+rRyWKtyQhOvlYBKrV5VHF54fsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=YJjIaf8e; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfwBEMkR"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a528243636so1653089f8f.3;
-        Sat, 12 Jul 2025 06:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752326092; x=1752930892; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGUt1yxOvswvTrka10m3yGzs1DAJHeoa3k02CExK/Ss=;
-        b=NfwBEMkRx/cI6i8Kr6qH26KiQ0WfeHAbFmZOakyYN2JwGP6rRTaOCgFNvjyTs3Bu/a
-         MkzowJVa2STreoJ6TMc6K4xLlxaAUMhEeXswZhSLQAIvuVlTwjTfY1ajCi54J/eKuiOT
-         n0Cd0/iMTk92HfcOaP+KcSyc0P+u1yvqKaQGQY9widSp4qiv4p0qZ1hONPltxRDdR486
-         LTcvLokz/yPAc9Edsp+RrUWcTKMdBWoKiWYtPxB9DkgA8jZLu0r3VAD62lwtzPhxWmlH
-         i1L8jsSjtl1QVVAkHzEECf1VJ7+32tgaBj1K2BYiVOgZzMTu8hr5S1Yd0K06QcBNDMnJ
-         7Zzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752326092; x=1752930892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pGUt1yxOvswvTrka10m3yGzs1DAJHeoa3k02CExK/Ss=;
-        b=BpRnrSPRZJ2dpTVfEYRz54it1kKcgOFO0Z8FvCy06Htj/ICSnaY/5P0lDznQKFVA/6
-         4bofDW9LQCHID4FumkmUCGxsnc8ib92OT4tZtJqBB3np4ZcUz8bTJ1nxX3xSAmuKeJ9P
-         pvQIp7jVIZv7awm5r7n3PNrb0FYtwuG35RBhXCjmtBp4pFDw9gGZWNqyNE4cvbAStpMu
-         1ZcOyUeWainHp9jaIm/2dNDWGA7LTktd9JZdNXJwzLsm5B+kv1RmYquDhjS8W8ai/pPn
-         SbS+f99q9v0wA9WKk59LvkTH7Yo0lqRRG/m0TxiAbbiCQGNgFdnlNVAEDdqhJDjBNgxP
-         5ASQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFryRyJSlHUMEhjZhuxL6uC7rOfB21SEBgOF+5le7OSqNtzfgcO5Z2uSG95QKhpkfPfENmFSg55uY3flVR@vger.kernel.org, AJvYcCWLhU0rKOts1DRUF77b3+i1TLg6bgJWVXaaR+522TBES2eD50XF5Bb/LMbffNOJPYrjn2zYb1Ls3mlk9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6ZeCnY8oxfxeJ7eVGEB9xps7V+65aVuQD/SLmJDFadTr4RQXB
-	1hdNJ4/bcDog4VxfxI/B2AuAEHiEVXGNPrIVF8A+pFWJ7GMkjWmSsnQj
-X-Gm-Gg: ASbGnctI/oqG6U7RhQORB7P5AiopUMHwUWpMYk40KnAK+iGBf/eGlek5cHONILeHPWc
-	9ebmAUp6NJysh9z8CsSoFEg7EsUeEECNGz2vQkcD1+wrUgM9DMwILPsFHK2ClRrF8NAdg3f4ykM
-	ecc2HIxtlz8qxAzTIzp+p6x0MBiKd3eLC+MIh+18/h+cTleeuGuGw1hKK4ekeG0jKizq+a/rBaP
-	CgBmuoVibI72MNecWw5eCF1fpXCiw4pxov9Lf5CuOfqOzY1WquCEBbN3oW6rmxJeXWMAkklJH3h
-	7okL2KceVlFaAE09k9AnbZgcBj/q3lSvJVySkai64nV+6eCgCBmOeDnxPVOp7HJBHnUnqloH6yV
-	s0/lZ2KODEKi56zPrpsuxyYRpaNemNmM4+GHXp4DSwlvmCNk=
-X-Google-Smtp-Source: AGHT+IFbc+H8l0qLJKrpFMeU5tqbo7r11l4LglNvrFKAb/BVWebwk1DuSjbYwLjyHDdpjQgidI2xkg==
-X-Received: by 2002:a05:6000:1446:b0:3a5:2465:c0c8 with SMTP id ffacd0b85a97d-3b5f187a4b4mr6435777f8f.7.1752326091897;
-        Sat, 12 Jul 2025 06:14:51 -0700 (PDT)
-Received: from localhost.localdomain ([154.183.63.38])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8dc229asm7304903f8f.35.2025.07.12.06.14.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jul 2025 06:14:51 -0700 (PDT)
-From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
-	linux-kernel-mentees@lists.linux.dev,
-	shuah@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: max31827: use sysfs_emit() in temp1_resolution_show()
-Date: Sat, 12 Jul 2025 16:14:46 +0300
-Message-ID: <20250712131447.326995-1-khaledelnaggarlinux@gmail.com>
-X-Mailer: git-send-email 2.47.2
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="YJjIaf8e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=yy7j
+	unz34iyIyATJXxlEYv9buWS6GzjYVGKjzQjYSQE=; b=YJjIaf8e77CJ+2z2Qguy
+	gZk2oafCVm5xJ7jgQvBWaCA5lVI1fyQat4Me+xivfgdsxA6BoPf4zCInQrECvwDt
+	4nWcpOC6qxOdhkmnreERxxQI2LjTnmA6kXzNUaAuP7eSWdXpYq7cdI7fCVBItzcs
+	U7j/K7xb1eFbBWVG9c5FVCh3pgJm6X1PLL6WzPAWY6k8R4z73kxHUu4pFaAFEh06
+	aDmRdAi0bMAFOxjFAmaXFm7U3AC0oA5l+2OCh+BipEtcgzo3u5IEQcauGHWKiBqE
+	L/o/JbiVFP7FpNvJ9+TYbEab2STkae15wl844IWxjCIvcZlRTuHAXIymxClVaNtY
+	SQ==
+Received: (qmail 2369254 invoked from network); 14 Jul 2025 09:37:33 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2025 09:37:33 +0200
+X-UD-Smtp-Session: l3s3148p1@WW6Tu945AuIgAwDPXxNjAMIr4MhSGEU6
+Date: Mon, 14 Jul 2025 09:37:32 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v13 3/7] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <aHSzvBYwYUpQTAQr@shikoro>
+References: <20250627102730.71222-1-a0282524688@gmail.com>
+ <20250627102730.71222-4-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LKuB8htEp3EqNPw/"
+Content-Disposition: inline
+In-Reply-To: <20250627102730.71222-4-a0282524688@gmail.com>
 
-Replace scnprintf() with sysfs_emit() in temp1_resolution_show(),
-as recommended in Documentation/filesystems/sysfs.rst: show() callbacks
-should use sysfs_emit() or sysfs_emit_at() to format values returned to
-userspace.
 
-Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
----
- drivers/hwmon/max31827.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--LKuB8htEp3EqNPw/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-index 48e8f8ba4d05..c423cabcb28b 100644
---- a/drivers/hwmon/max31827.c
-+++ b/drivers/hwmon/max31827.c
-@@ -445,7 +445,7 @@ static ssize_t temp1_resolution_show(struct device *dev,
 
- 	val = FIELD_GET(MAX31827_CONFIGURATION_RESOLUTION_MASK, val);
+> +		if (msg_temp->len > 64)
+> +			return -EPROTO;
 
--	return scnprintf(buf, PAGE_SIZE, "%u\n", max31827_resolutions[val]);
-+	return sysfs_emit(buf, "%u\n", max31827_resolutions[val]);
- }
+Please populate and use 'struct i2c_adapter_quirks' so the I2C core can
+handle the checks for you. At least max_read_len and max_write_len. But
+please also do check the other flags. Usually, USB adapters have way
+more limitations than the buffer size.
 
- static ssize_t temp1_resolution_store(struct device *dev,
---
-2.47.2
 
+--LKuB8htEp3EqNPw/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmh0s7gACgkQFA3kzBSg
+KbYL/Q//cSewXdBWuo/manXc2oHKH9hQ3DDPQc3spFbfrEbppJuDbMFBquG+aGME
+2VZlV1UjVY4osYpqOY1KkMxysZHuhUcXlHio7eGrq2ROwiwIZc6paaekwv/X83Jz
+cu43ELVOaN+qBFJHqSFFJwD78scsApEXVr2UlMQkVsxfmG+tf7J2RgiP5CNkzZc5
+dp9K8l1qyrpZckzRrWizXlC6R5AatyeJTpJOVCqjYdxXNVH+/wYoBZqm7NF/5WdY
+4LEnr65WhOdcopUiZy89/njHRHtnrcmkddEaiPUiLiDhbPVVC+nU0OtenC41uTx6
+LTLz/pNLHtXFBQOo3Cs/YkVR+dLAbywSeTlgLhaY6/WW17Hkr61m3c3dukh84+Av
+3SIuC/d33D3rVtP5wdEQvGbeJXuAvdVOxsVdiWj8a8TU8+hXQU+v3B2+wRSkFKxS
+JLj8oAcQd2yXcq8FWxmHzQmuVxRyXXTgemm7/WCpoMVVZKWWtaqkb2znCWvJdIaG
+Yi/5EHXgYDjDEwd/ToxFK6vd6sDiPB7jEmFkIOhYADJw4Jak+m4tniHQe2A0zMDE
+zqN9Iw+qhBecQ0GTjDQ/x9l/AwtZlIy+IkfGYlmpw8qcqnoUPGjzri7OXw6DZjra
+QSx2vgqOWESv1vv39NqtIXv2BawdPjuAGqIb0gV4MCacNQTSpK0=
+=vtvN
+-----END PGP SIGNATURE-----
+
+--LKuB8htEp3EqNPw/--
