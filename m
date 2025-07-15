@@ -1,122 +1,124 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D22D63EB
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Jul 2025 13:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85512247DF9;
+	Tue, 15 Jul 2025 15:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752584686; cv=none; b=XZDVTc9PKZueBqg976KquHzmk71E+bLCmoblEdKIp/dnY++5jcAI4UI52KqwnbVj3CkddzbUYsqjlZvjcm8DFkQz9R7xKh5Da5LsW5Nqg1UhNUDbfls3dRq35DcPTyCCWVylONsqEKG3E5fJsE4oHeJAnzn2gZ8Ur0wj0ulYyss=
+	t=1752594134; cv=none; b=VR6SviabzUBZZgxiJTL0sAGAbe9GwnPXdzi7Bgxxx6kgDtp0ML50gkIkYcorinmTevAKrotmxTHcbPOrLMKL6Gbpbmx1qdFynknLWqLlSk+8AiJd4caPAv1HL+Bb1ChNNk1876ERxiiIMKNwTzVjuBYh1dZ16nHEua8NcDLqhPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752584686; c=relaxed/simple;
-	bh=UooHWdbjwok23G1w7lyu5z/xDu2uKm62K3FAoZ+IEmw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r3VzV0EGwyNZ24HebtefWUkA1k8dmMVR3Gu9aLP18A3NOMVzwGrK7H0+brY39mAo/0qsPdAffHEo7t/0LGDlMnil5X4x7D5IeTmhCl66xau/UrXARtuPe1lS1vb1Ngx+VBZe+DIq/4uFZS/3cpN5PNWiIdzHjix99Ba5BvTRGWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <jre@pengutronix.de>)
-	id 1ubfKZ-0001UL-5F; Tue, 15 Jul 2025 15:04:23 +0200
-From: Jonas Rebmann <jre@pengutronix.de>
-Date: Tue, 15 Jul 2025 15:02:41 +0200
-Subject: [PATCH] hwmon: ina238: Report energy in microjoules
+	s=arc-20240116; t=1752594134; c=relaxed/simple;
+	bh=Jp3TuuGMZISVt3scjRGWZV8TmBbV3ZwXzJUvPlSzNpU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M9r9VoZuVFivxYNXGq6GANDGmUb9/Fwz4VkdtgaAigILsG+bPu2mMG156qWyAXeS1HVcpVvgG8/V5x0fBjFFKLRuEPwP3eouMZASlxL5mqNR0ZZ0W675ZVRdXK0bvW4nmRXuwrzAMqlSRaZTElNWX1KkAZd1SfHOx+LZMIpyOZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DnRwDJci; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DnRwDJci"
+Message-ID: <8bb7d291-f94a-4e96-b3ec-93fbe06c8407@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1752594130;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2Lm0K2qK8xC11GFjw87GrG0UT9zm3jP9M0ojmtC5alg=;
+	b=DnRwDJcixhgIJ+WYj2NEwDVVBoXGyPaRSXv3Va9pn2GCI0w9PWzwveXc+Q0qwzRP5Vl0gM
+	2v2T5uYuEccTk/x70zR1ULQv+cH3cUK3HOF5Rj1ZqxJpC5vGLivwPWeAgtMaWyaZsnXZJQ
+	sna7WBlDK+hsZb6gQgmMzx01Jd9XAvo=
+Date: Tue, 15 Jul 2025 11:42:05 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH 2/7] iio: inkern: Add API for reading/writing events
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
+ David Lechner <dlechner@baylibre.com>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+ <20250715012023.2050178-3-sean.anderson@linux.dev>
+ <aHYOuzdQ_jSKA898@smile.fi.intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <aHYOuzdQ_jSKA898@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-hwmon-ina238-microjoules-v1-1-9df678568a41@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAHBRdmgC/x3MTQqAIBBA4avErBswQ4quEi3EmWqiNJR+ILp70
- vJbvPdA4iicoCseiHxKkuAzqrIAN1s/MQplg1baqKYyOF9b8Cje6rrFTVwMSzhWTlhTy2StISY
- FOd8jj3L/63543w9yFH9dagAAAA==
-X-Change-ID: 20250715-hwmon-ina238-microjoules-3d8edaa5ded0
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Wenliang Yan <wenliang202407@163.com>, 
- kernel@pengutronix.de, Jonas Rebmann <jre@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2677; i=jre@pengutronix.de;
- h=from:subject:message-id; bh=UooHWdbjwok23G1w7lyu5z/xDu2uKm62K3FAoZ+IEmw=;
- b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsgoC7ysoPezeNVf/tP389T05H65y87efO/C6xuHmjI77
- /H4btdJ7ShlYRDjYJAVU2SJVZNTEDL2v25WaRcLM4eVCWQIAxenAEzE6Dkjw74ZV1fcK4+7tkrs
- TMi9Wisj9/ZLi0uXTVyUGOZyP9lpuxQjw2PmvDY2/vr5W4RTGrwZZylz8F1PZ9P8VBQesLarK/w
- EMwA=
-X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
- fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
-X-SA-Exim-Mail-From: jre@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-The hwmon sysfs interface specifies that energy values should be
-reported in microjoules. This is also what tools such as lmsensors
-expect, reporting wrong values otherwise.
+On 7/15/25 04:18, Andy Shevchenko wrote:
+> On Mon, Jul 14, 2025 at 09:20:18PM -0400, Sean Anderson wrote:
+>> Add an in-kernel API for reading/writing event properties. Like the
+>> raw-to-processed conversion, with processed-to-raw we only convert the
+>> integer part, introducing some round-off error.
+>> 
+>> A common case is for other drivers to re-expose IIO events as sysfs
+>> properties with a different API. To help out with this, iio_event_mode
+>> returns the appropriate mode. It can also be used to test for existence
+>> if the consumer doesn't care about read/write capability.
+> 
+> ...
+> 
+>> +EXPORT_SYMBOL_GPL(iio_event_mode);
+> 
+> Can we move this to namespace? Otherwise it will be never ending story...
+> Ditto for other new APIs.
 
-Adjust the driver to scale the output accordingly and adjust ina238
-driver documentation.
+Never ending story of what?
 
-Fixes: 6daaf15a1173 ("hwmon: (ina238) Add support for SQ52206")
-Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
----
-This is a fix for a bug introduced into ina238.c recently (6daaf15a1173
-("hwmon: (ina238) Add support for SQ52206")) and merged into
-v6.16-rc1.
+> ...
+> 
+>> +			if (scale64 <= INT_MAX && scale64 >= INT_MIN)
+>> +				raw64 = processed / (int)scale64;
+> 
+> Do you need the casting? (I mean if the compiler is dumb enough to not see this)
 
-Jean, Guenter, can you include this for 6.16, please?
----
- Documentation/hwmon/ina238.rst | 2 +-
- drivers/hwmon/ina238.c         | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+AIUI 64-bit division is not available on 32-bit platforms. The cast
+ensures we get 32-bit division.
 
-diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
-index d1b93cf8627f352612f17953c62efc5ef5596fe5..9a24da4786a43f7493b364b005b2ae9992c3b10d 100644
---- a/Documentation/hwmon/ina238.rst
-+++ b/Documentation/hwmon/ina238.rst
-@@ -65,7 +65,7 @@ Additional sysfs entries for sq52206
- ------------------------------------
- 
- ======================= =======================================================
--energy1_input		Energy measurement (mJ)
-+energy1_input		Energy measurement (uJ)
- 
- power1_input_highest	Peak Power (uW)
- ======================= =======================================================
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index a4a41742786bd19e1c5dab34c7d71973527161a1..9a5fd16a4ec2a6d5a6cd5e8070d0442e1ef0135a 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -97,7 +97,7 @@
-  *  Power (mW) = 0.2 * register value * 20000 / rshunt / 4 * gain
-  *  (Specific for SQ52206)
-  *  Power (mW) = 0.24 * register value * 20000 / rshunt / 4 * gain
-- *  Energy (mJ) = 16 * 0.24 * register value * 20000 / rshunt / 4 * gain
-+ *  Energy (uJ) = 16 * 0.24 * register value * 20000 / rshunt / 4 * gain * 1000
-  */
- #define INA238_CALIBRATION_VALUE	16384
- #define INA238_FIXED_SHUNT		20000
-@@ -500,9 +500,9 @@ static ssize_t energy1_input_show(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	/* result in mJ */
--	energy = div_u64(regval * INA238_FIXED_SHUNT *	data->gain * 16 *
--				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
-+	/* result in uJ */
-+	energy = div_u64(regval * INA238_FIXED_SHUNT *	data->gain * 16 * 10 *
-+				data->config->power_calculate_factor, 4 * data->rshunt);
- 
- 	return sysfs_emit(buf, "%llu\n", energy);
- }
+> ...
+> 
+>> +		case IIO_VAL_INT_PLUS_MICRO:
+>> +			scale64 = scale_val * scale * 1000000LL + scale_val2;
+>> +			raw64 = div64_s64_rem(processed, scale64, &r);
+>> +			raw64 = raw64 * 1000000 +
+>> +				div64_s64(r * 1000000, scale64);
+> 
+> Logically this should be 1000000L, but can we somehow use the constants?
+> Like
+> 
+> 			scale64 = (s64)MICRO * scale_val * scale + scale_val2;
+> 			raw64 = div64_s64_rem(processed, scale64, &r);
+> 			raw64 = raw64 * (s32)MICRO +
+> 				div64_s64(r * (s64)MICRO, scale64);
+> 
 
----
-base-commit: 155a3c003e555a7300d156a5252c004c392ec6b0
-change-id: 20250715-hwmon-ina238-microjoules-3d8edaa5ded0
+This follows iio_convert_raw_to_processed_unlocked but ok...
 
-Best regards,
--- 
-Jonas Rebmann <jre@pengutronix.de>
+>> +			break;
+> 
+> Ditto for other cases?
+> 
+> ...
+> 
+>> +	*raw = clamp(raw64, (s64)INT_MIN, (s64)INT_MAX);
+> 
+> You already have similar approach here...
 
+Well, I can spell it 0x7fffffffLL if you'd like...
+
+>> +	ret = iio_convert_processed_to_raw_unlocked(chan, processed, &raw,
+>> +						    scale);
+>> +	if (ret < 0)
+> 
+> Why ' < 0' ?
+
+Originally I returned IIO_VAL_INT but later decided against it.
+
+--Sean
