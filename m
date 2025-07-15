@@ -1,119 +1,85 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72117202F71
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Jul 2025 20:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6931A76DA
+	for <linux-hwmon@vger.kernel.org>; Tue, 15 Jul 2025 20:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752610104; cv=none; b=ogvKROQnvdV9MD9XaDXfW3HaBBNt0EzohQ8DtvqeCcS+Jttoo9+mNlXbrWB5EJBYMm902PcX7LOQVoWX4hKaFOdTnF2svXlJoavLqBEq2fHZuYsXbT6j9GBIPw8TWuOW57NT9MvaqdNnG+Jjghmgs59p1LRNeztQe4NOAZ2xiko=
+	t=1752612555; cv=none; b=bXEtJNvfLZEZkOwPouROVZPFe/AD4EiP0q6ROXhcWT9BSNz81g+eTDcOn6aMOR91RZdQmM6hg6JgX816mfNtxUKG2DXV57ipyLWJaDumabZChTHGyvWsXtDYSEZhkAQiZkUNHjSFjJArkio3EISzxSOPJ8xCAv2RohrRUYIAIWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752610104; c=relaxed/simple;
-	bh=TFPHAYC2KV+LZgs6UfGifLqRkJfkyNBs/xIs9+BnA4c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SGgiPUlrgipbNZHqWuXcGYq+i5XBDFXTyfu50RiXkpQ2L0McWiidWLdki4mZn+VquQdUzEjVhSz9ZlZ/iwifm4Df+ws15wSQvw1Nf8tQWBl7bsH0BsguZsMAhesRbJrsVuN+yys6mX7sdD1/VY8IeIqMDOYDaTXGVtfbLRRvfIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WNcbD5IY; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WNcbD5IY"
-Message-ID: <52340e28-0ad4-4e67-adee-3c08b1c98b10@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1752610097;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tJEb6T0GNLELePzDF5Y/eNum6e1uiWl2oXlgfzcvKLw=;
-	b=WNcbD5IYRyL4NEn6TGgmNVxwWUmOVOzcNtV/2F3GcH2vzOyCNn1dhXQE8crOwhySKn4Cil
-	j6ebEc2ISiDSJI1cxvpjtGiNQjBRxgCvs4TnvC3VZgX5R10Ec3aapxHkzvaCjS+dnhIIhh
-	2h0YpApYnqogIdTlzpKbPTD9EhfAIlA=
-Date: Tue, 15 Jul 2025 16:08:13 -0400
+	s=arc-20240116; t=1752612555; c=relaxed/simple;
+	bh=szwuk6Vvp2AoqhAb91mYotzkuCuPX6KC/lPfB1lCQgU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jXMqX0r6FNX/Oi+pu9GxRCWt5d8zesCE0jH7WQ6Jp6qe0ivwroxft2W9HmMork/NTD9wDVAaKaAJ9wfqK2SJ7al8kbf3xjjBZQbPAgSbqNqxlmr5Os+Uy9FM/+EZacGtsyvKnnegR8qmxgNBye3PuR3fR9Y7tV9r6cZuoJYKxjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <jre@pengutronix.de>)
+	id 1ubmaI-0008KV-JA; Tue, 15 Jul 2025 22:49:06 +0200
+From: Jonas Rebmann <jre@pengutronix.de>
+Date: Tue, 15 Jul 2025 22:49:02 +0200
+Subject: [PATCH 3/4] dt-bindings: Add INA228 to ina2xx devicetree bindings
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
-To: Guenter Roeck <linux@roeck-us.net>, Jonathan Cameron <jic23@kernel.org>,
- Jean Delvare <jdelvare@suse.com>, linux-iio@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-Cc: Andy Shevchenko <andy@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
- David Lechner <dlechner@baylibre.com>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-8-sean.anderson@linux.dev>
- <759e8070-de3e-41fd-8e81-05e22c32209e@roeck-us.net>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <759e8070-de3e-41fd-8e81-05e22c32209e@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <20250715-ina228-v1-3-3302fae4434b@pengutronix.de>
+References: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
+In-Reply-To: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org, 
+ kernel@pengutronix.de, Jonas Rebmann <jre@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=951; i=jre@pengutronix.de;
+ h=from:subject:message-id; bh=szwuk6Vvp2AoqhAb91mYotzkuCuPX6KC/lPfB1lCQgU=;
+ b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsgo23dgzuHFSZuZ+gytKgrf6q54fdT36qdHbpK3fgYz5
+ HNP5V3Y2VHKwiDGwSArpsgSqyanIGTsf92s0i4WZg4rE8gQBi5OAZjI5euMDK3hXO3zJJ5dub5S
+ ptC0c/O3aQ9f9pT6uPFw7oyvrJ+pl8jIcGJ+PHtCQtf3thbjFtaM3K3L7unEd4vfrtv0sPbpy1u
+ 1nAA=
+X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
+ fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
+X-SA-Exim-Mail-From: jre@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On 7/15/25 15:34, Guenter Roeck wrote:
-> On 7/14/25 18:20, Sean Anderson wrote:
->> Add alarm support based on IIO threshold events. The alarm is cleared on
->> read, but will be set again if the condition is still present. This is
->> detected by disabling and re-enabling the event. The same trick is done
->> when creating the attribute to detect already-triggered events.
->>
->> The alarms are updated by an event listener. To keep the notifier call
->> chain short, we create one listener per iio device, shared across all
->> hwmon devices.
->>
->> To avoid dynamic creation of alarms, alarms for all possible events are
->> allocated at creation. Lookup is done by a linear scan, as I expect
->> events to occur rarely. If performance becomes an issue, a binary search
->> could be done instead (or some kind of hash lookup).
->>
-> 
-> I am very concerned about this. The context suggests that the iio events
-> are just that - events without specific association to hardware or system
-> limits. Hardware monitoring limits are system specific limits, which are not
-> supposed to change at runtime. A high voltage or temperature warning is
-> just that - it is not supposed to trigger a change in the event limit.
-> If anything, it is supposed to trigger some action to bring the observed
-> value back to normal.
+Add the ina228 to ina2xx bindings.
 
-If the system integrator has instantiated this driver, then the associated
-IIO channels correspond to physical values related to the health of the
-system. Other IIO channels should not be attached to the iio-hwmon driver.
+Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
+---
+ Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-For example, in my use case the Xilinx AMS was implemented as an IIO
-device because it's a generic ADC, and several of the channels can
-monitor arbitrary analog voltages. However, many channels are
-permanently connected to the SoC's power rails and to internal
-temperature probes. These channels are best exposed as an hwmon device
-to take advantage of existing userspace tooling (e.g. lm-sensors).
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+index d1fb7b9abda081113ac28ed999d9c28da9d4daf9..fa68b99ef2e292c0b7d618c14819fa2bd64db7b8 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
+@@ -25,6 +25,7 @@ properties:
+       - ti,ina219
+       - ti,ina220
+       - ti,ina226
++      - ti,ina228
+       - ti,ina230
+       - ti,ina231
+       - ti,ina233
+@@ -107,6 +108,7 @@ allOf:
+               - ti,ina219
+               - ti,ina220
+               - ti,ina226
++              - ti,ina228
+               - ti,ina230
+               - ti,ina231
+               - ti,ina237
 
-The above paragraph in the commit message specifically refers to the
-approach taken to handle IIO events for a given device. As we process
-the hwmon's IIO channels, we create alarm attributes for the
-corresponding events. Because we don't know which IIO events we are
-interested in when we create the IIO listener, there are two general
-approaches:
+-- 
+2.39.5
 
-- We could allocate some memory for the alarm and then add it to a list
-  or hash table in the listener. When the listener gets an event it
-  would then search the list or hash table for the appropriate alarm.
-- We can allocate memory for all possible events up front. When we want
-  to create an alarm we look up the appropriate event.
-
-I chose the latter approach because I believe that there are typically
-not too many events on a given IIO device (i.e. dozens) and it makes the
-lookup simpler, since we can just iterate through an array (or do a
-binary search).
-
-> For this series to move forward, there needs to be some guarantee that
-> the limits are used and usable only as intended, and can not be used for
-> random thresholds. The idea of "if a temperature alarm is triggered, do
-> something and change the threshold temperature" is not an acceptable use
-> for hardware monitoring alarms.
-
-What userspace sets the limits to or does in response to an alarm is not
-the kernel's concern. That said, I suspect the most-likely userspace response
-is to log the alarm, possibly to some remote system.
-
---Sean
