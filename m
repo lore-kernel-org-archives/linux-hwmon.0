@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4D822CBEC;
-	Tue, 15 Jul 2025 08:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634CD275851;
+	Tue, 15 Jul 2025 08:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752568899; cv=none; b=dml58p1YPvWZGt9jqNFMKebG+yzV7IXXnTfkoFyCq/Ibz4xoPobNRPYLRFuXmW3d8hlmNHsFJrlbrlW+sP5X/84M8NKiiqXP9ZXjPkNrIRwpDvbla32gKDwvan9FIanz2Ebe37GNPBum3OtRFaRNioHeG4bFThBWkwbm0WfVJxw=
+	t=1752569417; cv=none; b=ngyCGvNzMkYtx5L7gslpgNnr+NicbaTWvlJODYYCuxTR8V3S1uKtAiM/Wa8h03DKdZHQHoWy3dGxkk8Sq7SMwhEAkirJRXQX+i7lNIQGT8r0CCNzC+azz9NneCx92cm67tKVjfYkD1cTUYZWDFLYkph9q2z9FHnOW9yytWGKXy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752568899; c=relaxed/simple;
-	bh=2+vHupeCvDOSe3a9ueRnyyvrWqFflIDyuvTvIJ3aJbY=;
+	s=arc-20240116; t=1752569417; c=relaxed/simple;
+	bh=K0DvSk4svt0sUfo87/h4UlF6aaEVaGHYSOZP6a/6be4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBOkqXOVPkG2rj305j75oTsdhrBC3U+ymoZpwLECYFdVp98CqKuzy4qTwEFgXSlny3iwVU59+LtashJqdr0Y5YtFmRQ4fcSvnOm1HAMf2BTuwBS2RAVnBRL1ND4diaZWxcxXUiP7tFrzFlWM3JHA6EfsYLGBPqCkrGqYn+8Qx/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHFRIPHv; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=lcOROSPrqZaYhm7FK0ZNm88O2q9DN5vXPUpJCOY7k06FGlLdscoUm5flmdiMCW/StzyckPRiChfFqspuL+XJ6qC9smSWrZ/7WtJZp95L5xNMVUJ1n950Cvhf+9yVRhhebBwgFQJKFxcU8HPIDbcETrMWsrw2NHaZbwNHnCrptiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TG+qkn+G; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHFRIPHv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TG+qkn+G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752568897; x=1784104897;
+  t=1752569416; x=1784105416;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2+vHupeCvDOSe3a9ueRnyyvrWqFflIDyuvTvIJ3aJbY=;
-  b=SHFRIPHv926HSyr52fc3LqrdPj7BG4oMyZ106KxjKYzvrtfOvMtppBCc
-   xszcvjDXMJ6aT2Ny0SHgxftDTyklDuQO3i41sMu/2LCP4GEzerQHlDcFP
-   EoGSDej5X2gpOHdEtO7Hk2m2qGrNabrPMI68Nxe4ADHFT+KUXvN94lD7Z
-   7gyXAtuKJOZDyFqyXdx0xsf/niknOzpg4mJdbmY0SRWEGiyeZMdbqBNdo
-   +RLY65TfavwDzERgLFnbOi9D1BOXg/38I7hM+XJL31Qw70iJXBdzIJBQP
-   Twzez1p6RtkUEo7GVXbs2A9KYyrzOcqmOyf+/2RuIv+swb6lzQjW47gm2
-   w==;
-X-CSE-ConnectionGUID: m3o3qyC+Qou//DglImWLCg==
-X-CSE-MsgGUID: QkaccdRaTheuhSWAVoZKUQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="58543905"
+  bh=K0DvSk4svt0sUfo87/h4UlF6aaEVaGHYSOZP6a/6be4=;
+  b=TG+qkn+G0qySdgl4INz//NDOM/6A+IQbaPuIy1EUnJbuFdOj2jOgkjYE
+   V36QhhA/7bqQBJxT7ez0jp0ucGJlcrofAVLxZc7NlINHPus7Eipuq108L
+   YF4aetXGj1ISRpvhV7PEL98JAMhjD4ycLXSLCtsAGtOrlQ+BkYgPhpbfT
+   4MJVld3/OYnYv6nB3DuY3KHjk7yIL5R8cKuH7UQVfgaZLNAWhtxu4ca/E
+   JgRYBOo6U+5TX0TUVTQSmmlvHa55sf03zBG1PJliKbCkNnLfxV04ixj0i
+   Ved7bPtHEw844AQXEOh5PVFRzcAXLpPs4s/kUYtafi9SOxRh0aoNZiwhy
+   Q==;
+X-CSE-ConnectionGUID: HNcibtzpTWCKYujhDzuXDg==
+X-CSE-MsgGUID: ziEj+AYMQ8i40SyNjISXHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11491"; a="65476180"
 X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="58543905"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 01:41:37 -0700
-X-CSE-ConnectionGUID: rKVQKqdeQYOZ6n7Cee0VqA==
-X-CSE-MsgGUID: JUNE1Tt6TVaxnsVMvpQNSA==
+   d="scan'208";a="65476180"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 01:50:15 -0700
+X-CSE-ConnectionGUID: UigDI2sfQDqoyUgBZqUZXA==
+X-CSE-MsgGUID: lzDOLTpsQUuX9UMunoCZaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="157257430"
+   d="scan'208";a="188155520"
 Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 01:41:34 -0700
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 01:50:12 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1ubbEB-0000000FbHQ-0pJ7;
-	Tue, 15 Jul 2025 11:41:31 +0300
-Date: Tue, 15 Jul 2025 11:41:30 +0300
+	id 1ubbMW-0000000FbP9-3zae;
+	Tue, 15 Jul 2025 11:50:08 +0300
+Date: Tue, 15 Jul 2025 11:50:08 +0300
 From: Andy Shevchenko <andriy.shevchenko@intel.com>
 To: Sean Anderson <sean.anderson@linux.dev>
 Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
@@ -55,10 +55,10 @@ Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
 	linux-hwmon@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
 	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
 	linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 6/7] hwmon: iio: Add min/max support
-Message-ID: <aHYUOs25SrUb4BtD@smile.fi.intel.com>
+Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
+Message-ID: <aHYWQOjJEWdLjy7H@smile.fi.intel.com>
 References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-7-sean.anderson@linux.dev>
+ <20250715012023.2050178-8-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -67,74 +67,217 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250715012023.2050178-7-sean.anderson@linux.dev>
+In-Reply-To: <20250715012023.2050178-8-sean.anderson@linux.dev>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Mon, Jul 14, 2025 at 09:20:22PM -0400, Sean Anderson wrote:
-> Add support for minimum/maximum attributes. Like the _input attribute,
-> we just need to call into the IIO API.
+On Mon, Jul 14, 2025 at 09:20:23PM -0400, Sean Anderson wrote:
+> Add alarm support based on IIO threshold events. The alarm is cleared on
+> read, but will be set again if the condition is still present. This is
+> detected by disabling and re-enabling the event. The same trick is done
+> when creating the attribute to detect already-triggered events.
+> 
+> The alarms are updated by an event listener. To keep the notifier call
+> chain short, we create one listener per iio device, shared across all
+> hwmon devices.
+> 
+> To avoid dynamic creation of alarms, alarms for all possible events are
+> allocated at creation. Lookup is done by a linear scan, as I expect
+> events to occur rarely. If performance becomes an issue, a binary search
+> could be done instead (or some kind of hash lookup).
 
 ...
 
-> +static ssize_t iio_hwmon_read_event(struct device *dev,
-> +				    struct device_attribute *attr,
-> +				    char *buf)
+>  #include <linux/hwmon-sysfs.h>
+
++ blank line here..
+
+>  #include <linux/iio/consumer.h>
+> +#include <linux/iio/events.h>
+> +#include <linux/iio/iio.h>
+>  #include <linux/iio/types.h>
+
+...and here?
+
+> +#include <uapi/linux/iio/events.h>
+
+...
+
+> +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener *listener,
+> +				      u64 id)
 > +{
-> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-> +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
-> +	struct iio_channel *chan = &state->channels[sattr->index];
-> +	int ret, result, scale;
+> +	ssize_t i;
 > +
-> +	scale = iio_hwmon_scale(chan);
+> +	for (i = 0; i < listener->num_alarms; i++)
+> +		if (listener->ids[i] == id)
+> +			return i;
 
-> +	if (scale < 0)
+> +	return -1;
 
-This part is definitely missed in the respective description.
-
-> +		return scale;
-> +
-> +	ret = iio_read_event_processed_scale(chan, IIO_EV_TYPE_THRESH,
-> +					     sattr->nr, IIO_EV_INFO_VALUE,
-> +					     &result, scale);
-> +	if (ret < 0)
-
-Why ' < 0' here?
-
-> +		return ret;
-> +
-> +	return sprintf(buf, "%d\n", result);
-
-Mustn't be sysfs_emit() ?
+-ENOENT ?
+This will allow to propagate an error code to the upper layer(s).
 
 > +}
 
 ...
 
-> +	ret = iio_write_event_processed_scale(chan, IIO_EV_TYPE_THRESH,
-> +					      sattr->nr, IIO_EV_INFO_VALUE,
-> +					      val, scale);
-> +	if (ret < 0)
+> +static int iio_hwmon_listener_callback(struct notifier_block *block,
+> +				       unsigned long action, void *data)
+> +{
+> +	struct iio_hwmon_listener *listener =
+> +		container_of(block, struct iio_hwmon_listener, block);
+> +	struct iio_event_data *ev = data;
+> +	ssize_t i;
+> +
+> +	if (action != IIO_NOTIFY_EVENT)
+> +		return NOTIFY_DONE;
+> +
+> +	i = iio_hwmon_lookup_alarm(listener, ev->id);
+> +	if (i >= 0)
+> +		set_bit(i, listener->alarms);
 
-< 0 ?
+Do you need an atomic set?
 
-> +		return ret;
+> +	else
+> +		dev_warn_once(&listener->indio_dev->dev,
+> +			      "unknown event %016llx\n", ev->id);
+> +
+> +	return NOTIFY_DONE;
+> +}
 
 ...
 
-> +static int add_event_attr(struct device *dev, struct iio_hwmon_state *st,
+> +static struct iio_hwmon_listener *iio_hwmon_listener_get(struct iio_dev *indio_dev)
+> +{
+> +	struct iio_hwmon_listener *listener;
+> +	int err = -ENOMEM;
+> +	size_t i, j;
+> +
+> +	guard(mutex)(&iio_hwmon_listener_lock);
+> +	list_for_each_entry(listener, &iio_hwmon_listeners, list) {
+> +		if (listener->indio_dev == indio_dev) {
+> +			if (likely(listener->refcnt != UINT_MAX))
+> +				listener->refcnt++;
+> +			return listener;
+> +		}
+> +	}
+> +
+> +	listener = kzalloc(sizeof(*listener), GFP_KERNEL);
+> +	if (!listener)
+> +		goto err_unlock;
+> +
+> +	listener->refcnt = 1;
+> +	listener->indio_dev = indio_dev;
+> +	listener->block.notifier_call = iio_hwmon_listener_callback;
+> +	for (i = 0; i < indio_dev->num_channels; i++)
+> +		listener->num_alarms += indio_dev->channels[i].num_event_specs;
+> +
+> +	listener->ids = kcalloc(listener->num_alarms, sizeof(*listener->ids),
+> +				GFP_KERNEL);
+> +	listener->alarms = bitmap_zalloc(listener->num_alarms, GFP_KERNEL);
+> +	if (!listener->ids || !listener->alarms)
+> +		goto err_listener;
+> +
+> +	i = 0;
+> +	for (j = 0; j < indio_dev->num_channels; j++) {
+> +		struct iio_chan_spec const *chan = &indio_dev->channels[j];
+> +		size_t k;
+> +
+> +		for (k = 0; k < chan->num_event_specs; k++)
+> +			listener->ids[i++] =
+> +				iio_event_id(chan, chan->event_spec[k].type,
+> +					     chan->event_spec[k].dir);
+> +	}
+> +
+> +	err = iio_event_register(indio_dev, &listener->block);
+> +	if (err)
+> +		goto err_alarms;
+> +
+> +	list_add(&listener->list, &iio_hwmon_listeners);
+
+> +	mutex_unlock(&iio_hwmon_listener_lock);
+
+With guard() ???
+
+> +	return listener;
+> +
+> +err_alarms:
+> +	kfree(listener->alarms);
+> +	kfree(listener->ids);
+> +err_listener:
+> +	kfree(listener);
+> +err_unlock:
+> +	mutex_unlock(&iio_hwmon_listener_lock);
+> +	return ERR_PTR(err);
+
+What about using __free()?
+
+> +}
+
+...
+
+> +static void iio_hwmon_listener_put(void *data)
+> +{
+> +	struct iio_hwmon_listener *listener = data;
+> +
+> +	scoped_guard(mutex, &iio_hwmon_listener_lock) {
+> +		if (unlikely(listener->refcnt == UINT_MAX))
+> +			return;
+> +
+> +		if (--listener->refcnt)
+> +			return;
+
+Can the refcount_t be used with the respective APIs? Or even kref?
+
+> +		list_del(&listener->list);
+> +		iio_event_unregister(listener->indio_dev, &listener->block);
+> +	}
+> +
+> +	kfree(listener->alarms);
+> +	kfree(listener->ids);
+> +	kfree(listener);
+> +}
+
+...
+
+> +static ssize_t iio_hwmon_read_alarm(struct device *dev,
+> +				    struct device_attribute *attr,
+> +				    char *buf)
+> +{
+> +	struct iio_hwmon_alarm_attribute *sattr = to_alarm_attr(attr);
+> +	struct iio_hwmon_state *state = dev_get_drvdata(dev);
+> +	struct iio_channel *chan = &state->channels[sattr->index];
+> +
+> +	if (test_and_clear_bit(sattr->alarm, sattr->listener->alarms)) {
+> +		u64 id = sattr->listener->ids[sattr->alarm];
+> +		enum iio_event_direction dir = IIO_EVENT_CODE_EXTRACT_DIR(id);
+> +
+> +		WARN_ON(iio_hwmon_alarm_toggle(chan, dir));
+
+> +		strcpy(buf, "1\n");
+> +		return 2;
+
+> +	}
+> +
+> +	strcpy(buf, "0\n");
+> +	return 2;
+
+Better to assign the value and
+
+	return sysfs_emit(...);
+
+which will make even easier to recognize that this is supplied to user via
+sysfs.
+
+> +}
+
+...
+
+> +static int add_alarm_attr(struct device *dev, struct iio_hwmon_state *st,
 > +			  int i, enum iio_event_direction dir,
 > +			  const char *fmt, ...)
 
-Same comments as per previous patch adding another attribute API.
-
-...
-
-> +	va_start(ap, fmt);
-> +	a->dev_attr.attr.name = devm_kvasprintf(dev, GFP_KERNEL, fmt, ap);
-> +	va_end(ap);
-
-Can't %pV be used?
+Same comments as per previous patches.
 
 -- 
 With Best Regards,
