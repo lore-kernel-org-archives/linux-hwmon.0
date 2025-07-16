@@ -1,270 +1,107 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8CF1DF269
-	for <linux-hwmon@vger.kernel.org>; Tue, 15 Jul 2025 20:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B53410A1E;
+	Wed, 16 Jul 2025 06:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752612555; cv=none; b=qdOqaVapsdEOtwwp4qgSwgErej7wPr31j8htNfeRg4RORGvTGoirX2VV1c2MnQnCsB62+ZsvuIIbGQXgfk2UXy9hiNJNGMzNBNjy3+LdCQbkIDpgNgiB4C9o33RRwVxam9wchkIVCPXNLb/AZnuWfEa6y7tut6YOINe9YLdo5Os=
+	t=1752647426; cv=none; b=nQ1nFOD14ag3cB3qdrycX2fXjzQ1t4jmnCP4MK2stNNeJn5sbZS2dEBmJZa4+WHvUkS5q9qXe4VpWw3DoKyV11ni+NfCNOt1W/pLuiRR3QiTKV/ZW1w+/EoaslOik8cz2ZoNF/RMQ2R9KdikgbtmLviaLzueP2OkpYoZ3hkDXi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752612555; c=relaxed/simple;
-	bh=qeSiSEChF8vkI7U3jprp57CemwGFZH0pwj0CrxbU60w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lAHzJTW9d1A7SPXt+Oyte/23L0ucljkxFJVvORuPFvNF9bEqmYtQfmnEbwVu/5GsRDtCoKFsDcCeep9JxyuX1Gu0h0YX0SJXz4noZRVxOsVdz3m54tSVmBwntrprlJ9yUhJlU25ZKUFYuVhR/EbfU/a6XxrHJEurJzIDjkA0kFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <jre@pengutronix.de>)
-	id 1ubmaI-0008KV-KY; Tue, 15 Jul 2025 22:49:06 +0200
-From: Jonas Rebmann <jre@pengutronix.de>
-Date: Tue, 15 Jul 2025 22:49:03 +0200
-Subject: [PATCH 4/4] hwmon: ina238: Add support for INA228
+	s=arc-20240116; t=1752647426; c=relaxed/simple;
+	bh=QR8VQxVZz6CuAK2KpWv4MfQ1K6P33JZ5up0UitzdPFo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oE0gquULXpGRCc3Mr7nrc+wOGMREjcmlZNcBgePP2Fxp36B9uwHCTGQ5vONLR0rmc31DvyOB6VclLtlofGsidY3hgf3NqeC4SrL9EDhWeBr7HWv/v2qRub5FHP5us+SVc/D++YbdU5M6eop4dpMaR/8SjYu5t912+AwujRQzgG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iv7JVwW0; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iv7JVwW0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C6EAC4CEF7;
+	Wed, 16 Jul 2025 06:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752647426;
+	bh=QR8VQxVZz6CuAK2KpWv4MfQ1K6P33JZ5up0UitzdPFo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iv7JVwW0vFzarkChOP9ZiSk8XASYHuuo6SjF91RZ9XL0Vy74BO1OYO59W1x8HUT5U
+	 fdrY7bLL8Euv7n5vKeNsHvvCl9i5t1wZLMuQmY7B16k1xO08CLmjeYbMGa8nkwCl80
+	 4qAZGosJY4wg1cB8+Fm7Q+eI2IxAl3W8A1tY93OPNb2d6DnzCUC3FJGXbkdMU3MWOK
+	 Q0tkqe9llPAP3gXRUR+NPyrfnzedVPu1Lehd9hOhjKsgplylfRNwl+1eshrcxsrvhH
+	 za+2U05XW8qjG3WyUzdMtF/WECHOHQEXzQWDL1LO/5C7+MjHpsUkS2Q6wPIulUAX8l
+	 UJMi8RndOT+dw==
+Message-ID: <042f3b31-8899-430e-ae4a-d12dcbf935c3@kernel.org>
+Date: Wed, 16 Jul 2025 08:30:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250715-ina228-v1-4-3302fae4434b@pengutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] dt-bindings: Add INA228 to ina2xx devicetree bindings
+To: Jonas Rebmann <jre@pengutronix.de>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, kernel@pengutronix.de
 References: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
-In-Reply-To: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org, 
- kernel@pengutronix.de, Jonas Rebmann <jre@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7020; i=jre@pengutronix.de;
- h=from:subject:message-id; bh=qeSiSEChF8vkI7U3jprp57CemwGFZH0pwj0CrxbU60w=;
- b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsgo23fwhFXjrqaVHNlptausf8kwHyy9VKmbk3o007v30
- uyV32vXd5SyMIhxMMiKKbLEqskpCBn7XzertIuFmcPKBDKEgYtTACaibszIMMnsXqbGzBjvhEvH
- J+/ImFIerSCWelzKs7/WrGXTFBfxfkaGK+k64j8MNs0UWXmyP0X1bnb82dOu7n0/t+y+9qir+xg
- TEwA=
-X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
- fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
-X-SA-Exim-Mail-From: jre@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+ <20250715-ina228-v1-3-3302fae4434b@pengutronix.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250715-ina228-v1-3-3302fae4434b@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add support for the Texas Instruments INA228 Ultra-Precise
-Power/Energy/Charge Monitor.
+On 15/07/2025 22:49, Jonas Rebmann wrote:
+> Add the ina228 to ina2xx bindings.
+> 
+> Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-The INA228 is very similar to the INA238 but offers four bits of extra
-precision in the temperature, voltage and current measurement fields.
-It also supports energy and charge monitoring, the latter of which is
-not supported through this patch.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-While it seems in the datasheet that some constants such as LSB values
-differ between the 228 and the 238, they differ only for those registers
-where four bits of precision have been added and they differ by a factor
-of 16 (VBUS, VSHUNT, DIETEMP, CURRENT).
-
-Therefore, the INA238 constants are still applicable with regard
-to the bit of the same significance.
-
-Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
----
- drivers/hwmon/ina238.c | 98 +++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 93 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 44f7ce3c1d7b5a91f67d12c1d29e1e560024a04c..f8c74317344a5bbdf933a32b8c7e5aba13beda30 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -107,6 +107,7 @@
- #define INA238_DIE_TEMP_LSB		1250000 /* 125.0000 mC/lsb */
- #define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
- #define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
-+#define INA228_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
- 
- static const struct regmap_config ina238_regmap_config = {
- 	.max_register = INA238_REGISTERS,
-@@ -114,9 +115,10 @@ static const struct regmap_config ina238_regmap_config = {
- 	.val_bits = 16,
- };
- 
--enum ina238_ids { ina238, ina237, sq52206 };
-+enum ina238_ids { ina238, ina237, sq52206, ina228 };
- 
- struct ina238_config {
-+	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
- 	bool has_power_highest;		/* chip detection power peak */
- 	bool has_energy;		/* chip detection energy */
- 	u8 temp_shift;			/* fixed parameters for temp calculate */
-@@ -137,6 +139,7 @@ struct ina238_data {
- 
- static const struct ina238_config ina238_config[] = {
- 	[ina238] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = false,
- 		.has_power_highest = false,
- 		.temp_shift = 4,
-@@ -146,6 +149,7 @@ static const struct ina238_config ina238_config[] = {
- 		.temp_lsb = INA238_DIE_TEMP_LSB,
- 	},
- 	[ina237] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = false,
- 		.has_power_highest = false,
- 		.temp_shift = 4,
-@@ -155,6 +159,7 @@ static const struct ina238_config ina238_config[] = {
- 		.temp_lsb = INA238_DIE_TEMP_LSB,
- 	},
- 	[sq52206] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = true,
- 		.has_power_highest = true,
- 		.temp_shift = 0,
-@@ -163,6 +168,16 @@ static const struct ina238_config ina238_config[] = {
- 		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
- 		.temp_lsb = SQ52206_DIE_TEMP_LSB,
- 	},
-+	[ina228] = {
-+		.has_20bit_voltage_current = true,
-+		.has_energy = true,
-+		.has_power_highest = false,
-+		.temp_shift = 0,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA228_DIE_TEMP_LSB,
-+	},
- };
- 
- static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
-@@ -199,6 +214,56 @@ static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
- 	return 0;
- }
- 
-+static int ina228_read_shunt_voltage(struct device *dev, u32 attr, int channel,
-+				     long *val)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int regval;
-+	int field;
-+	int err;
-+
-+	err = ina238_read_reg24(data->client, INA238_SHUNT_VOLTAGE, &regval);
-+	if (err)
-+		return err;
-+
-+	/* bits 3-0 Reserved, always zero */
-+	field = regval >> 4;
-+
-+	/*
-+	 * gain of 1 -> LSB / 4
-+	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-+	 * precision. ina238 conversion factors can still be applied when
-+	 * dividing by 16.
-+	 */
-+	*val = (field * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4) / 16;
-+	return 0;
-+}
-+
-+static int ina228_read_bus_voltage(struct device *dev, u32 attr, int channel,
-+				   long *val)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int regval;
-+	int field;
-+	int err;
-+
-+	err = ina238_read_reg24(data->client, INA238_BUS_VOLTAGE, &regval);
-+	if (err)
-+		return err;
-+
-+	/* bits 3-0 Reserved, always zero */
-+	field = regval >> 4;
-+
-+	/*
-+	 * gain of 1 -> LSB / 4
-+	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-+	 * precision. ina238 conversion factors can still be applied when
-+	 * dividing by 16.
-+	 */
-+	*val = (field * data->config->bus_voltage_lsb) / 1000 / 16;
-+	return 0;
-+}
-+
- static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 			  long *val)
- {
-@@ -211,6 +276,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 	case 0:
- 		switch (attr) {
- 		case hwmon_in_input:
-+			if (data->config->has_20bit_voltage_current)
-+				return ina228_read_shunt_voltage(dev, attr, channel, val);
- 			reg = INA238_SHUNT_VOLTAGE;
- 			break;
- 		case hwmon_in_max:
-@@ -234,6 +301,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 	case 1:
- 		switch (attr) {
- 		case hwmon_in_input:
-+			if (data->config->has_20bit_voltage_current)
-+				return ina228_read_bus_voltage(dev, attr, channel, val);
- 			reg = INA238_BUS_VOLTAGE;
- 			break;
- 		case hwmon_in_max:
-@@ -341,13 +410,27 @@ static int ina238_read_current(struct device *dev, u32 attr, long *val)
- 
- 	switch (attr) {
- 	case hwmon_curr_input:
--		err = regmap_read(data->regmap, INA238_CURRENT, &regval);
--		if (err < 0)
--			return err;
-+		if (data->config->has_20bit_voltage_current) {
-+			err = ina238_read_reg24(data->client, INA238_CURRENT, &regval);
-+			if (err)
-+				return err;
-+			/* 4 Lowest 4 bits reserved zero */
-+			regval >>= 4;
-+		} else {
-+			err = regmap_read(data->regmap, INA238_CURRENT, &regval);
-+			if (err < 0)
-+				return err;
-+			/* sign-extend */
-+			regval = (s16)regval;
-+		}
- 
- 		/* Signed register, fixed 1mA current lsb. result in mA */
--		*val = div_s64((s16)regval * INA238_FIXED_SHUNT * data->gain,
-+		*val = div_s64(regval * INA238_FIXED_SHUNT * data->gain,
- 			       data->rshunt * 4);
-+
-+		/* Account for 4 bit offset */
-+		if (data->config->has_20bit_voltage_current)
-+			*val /= 16;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -773,6 +856,7 @@ static int ina238_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id ina238_id[] = {
-+	{ "ina228", ina228 },
- 	{ "ina237", ina237 },
- 	{ "ina238", ina238 },
- 	{ "sq52206", sq52206 },
-@@ -781,6 +865,10 @@ static const struct i2c_device_id ina238_id[] = {
- MODULE_DEVICE_TABLE(i2c, ina238_id);
- 
- static const struct of_device_id __maybe_unused ina238_of_match[] = {
-+	{
-+		.compatible = "ti,ina228",
-+		.data = (void *)ina228
-+	},
- 	{
- 		.compatible = "ti,ina237",
- 		.data = (void *)ina237
-
--- 
-2.39.5
-
+Best regards,
+Krzysztof
