@@ -1,67 +1,67 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0939718C31;
-	Wed, 16 Jul 2025 15:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15B11A238C;
+	Wed, 16 Jul 2025 16:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752681146; cv=none; b=QNkC4YlV8MEdykUIK8HfWuQQKFI/KxsY1lLupEsSNZfr5fii7E2IEzVHQWfT44wgNTivK4jwMDUbE3sXxYBvPVQBRDPL/5zISe3gOPwc7ZaiHZyY3UNIqZxje4u5RvRqR+2wee/2Ldlh4aXgandqzRtzUhxpJDJsayA63rd+L58=
+	t=1752681917; cv=none; b=D2VOMuSIpAoqTLLRhfYrOJAmK2tDSzR8DF8sOtdtMabyTVZCW/Jr8QOY9MKZvIPjhqm/SsSeIWJaq7RGcKOMaCgNntqUmtMicuVBcmCwzZkZP8X3VJ3jf7v9vMGyG7dYefveziU0g3QWBmNG/pZZVWq2/hkK29nKY8LvILvBIcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752681146; c=relaxed/simple;
-	bh=OylttVKD8mE7KPJBFkYcv6Rwt2AGyCAk9mSgrHZheW4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VcBB0LeUg1FlhqFt5bp/pUHaB0EMm0NWfrBpQwp6bVIwGq4Yc+YzG5t4+I/Ey95UVafQNaRJd+QZyWKYQGYCzo6VZhuQqaSW3i723OB7YoM0fl3FkwWKYls1SYAwmnZhisPCDKyBXQxKU0JUB+wvk3M7i8s5Pa9Da8LqiuBb+GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bJz4tDpD; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1752681917; c=relaxed/simple;
+	bh=G3lPuCUApuGC7TO34cTcefS+Ne/XTuyO/jotSPqhVf0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=iGkvJtH80Ru63ej+A9cKa5o5B7EfxeMAw1uVWldloerrRADGp7gVGWJBzWKfgKM9R3SM24PbKD0kYrT4nFrjSi+vgbTSS6kGpWwrkRpHMwr+3YV7FkdRe+atiJlc6lxbkgQ5cgDrVXwSwRCKOvLEWHS/D4RPbLkTGofnzIzCTdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e2zLZRiD; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bJz4tDpD"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b3182c6d03bso7802345a12.0;
-        Wed, 16 Jul 2025 08:52:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2zLZRiD"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-235ef62066eso98053365ad.3;
+        Wed, 16 Jul 2025 09:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752681144; x=1753285944; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752681915; x=1753286715; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Ukl7MYBC3ANSBm9jO5Nq81UCjp7PwuTwU9cCInIjQY=;
-        b=bJz4tDpDhlXoM84gsLYzHAI316HUqnqzGRkmhNGJyacCdUUmoFWbaA++bLvutx3iKf
-         yhGQnhg7aLZk3m4MLvhPeKXyc5ii54uoOHMqoQ762j3nplax1vJPt6evF9OmHpfIq7AY
-         ZyhxsQUKN81ynhocl5xGKIW4SfEB27ES+yVzK8Hd6avOi8f8WfDRKjEGLTdzgy6doNvx
-         URwW6ZC0amoudwVwMyG2DYGqz9htK7mO0H9DSr6pvPBI1TPfMXgRVsgojD/CUOGBnapn
-         z5WVnIMEREmjqt2JjwWikGOY1W84eDytGQVyaPFlZxqAW0OoWSwozhBO3NizTAa7wdGd
-         SUfw==
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=UVgMRJ+lsyx/5PbwWdT9sHA9aSAXobVSKmVW6fnzwaE=;
+        b=e2zLZRiD1O1gDZE2OSeDwOjAQMPvETOtWk5k6GFoaoufkXTefruzNa2XRk0U9NTeXf
+         1O4BiskV4U3yIkUzsWfl8wl+RvAKotberJcI7O0ee53FeKjfCb6e9D2le2iI7sj2LqPy
+         J7+HRzVq0kYof8EdBt8BRgzk4RPBCHypJVeXhiXJKX3QTDJSiyel8uNSjVDFXxcshrB/
+         oeB25m0f3yfFWPPTYt5OqEnpb++WNyBEejeIEkl1v0HEGKK7TJtgUR24sQ6/5gNzJaPI
+         bl1IUVkmIo8KeasClM+Cv/YXWi1D09sicSkoyShYK2LzIaJASMrEfqhQuUYxnW2bJcKh
+         2Yhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752681144; x=1753285944;
+        d=1e100.net; s=20230601; t=1752681915; x=1753286715;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1Ukl7MYBC3ANSBm9jO5Nq81UCjp7PwuTwU9cCInIjQY=;
-        b=CDx2882HWqHz/aAvnyuonStXEarxb1qoB8VbcYbzHTLJXc7Hon4ul/+4cJ0dFiHfYJ
-         LuViPGPZqHdBrba2hm/HxXAkTi5oqp6ux9ldsx4Fi7GxuWxz8niNS9xvAFe9ZZME2n2z
-         tvpO7JRfd6J4o6H4lmzOul14It2LK+/iun1SzTpLDjED/yOvRyAfkzBN0LmQb2am0cz5
-         VHRHDu9EvSRmXuVGAF/fWDo0ISNxJ2MOPQdFxWNlh+95xWO2iBMl4ZqtJ9YlCkPExNJn
-         2hKy/UP+1uTKeGf2aPuHL0rq/Fyta+vFWuGwzh1L6oLqHg+1+bSnV8Xb34Dhvmtq3x/C
-         fhag==
-X-Forwarded-Encrypted: i=1; AJvYcCUBf/gIzjDOZoieyv3LU9tpEzgF/T4MQKL7vSJvAknFyGDmauEO7HKBffV7vAaeJUz0CS+CxQHN/Xqi@vger.kernel.org, AJvYcCVt2pfE9k1Gm/22JufROmrW4Ukraf23FWa/IVjy9V7SQsTSjpPXM6Tl0ekjw/YNHDbWc1xuTSwjmiuuGTb0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZoSG30neceCsVDM3vP2VFm1hohIsObvD7mGjbotsLt+rvVUBw
-	mAYJYtxHSzSgNMo7/2SKULA6gz2p1yyiZwn/QkL48bgFGiYjDpXD3UvL
-X-Gm-Gg: ASbGncuGxafxs2GKmf9whpGvYRmnz7bBddPWn4dffC1Sd0/hiO2RUVY/rpEpVZTryiE
-	K0ARQQp+msOI4rxKwfbATRDBMsbxBLY7ZEcnbRRV4aFGfxtpxHENaga0kNWkRopWrul/ZfUQGL5
-	Gwfj1s+UYYu/jVKBg4AOS9lYKqHWsiCN+8sGULbM81wco7FH4eAHuA1AYy/Yv7FzlMQodligJqP
-	fwZMxpfuNGT7AjICZGFV0A3N5NGB4uYIohpYGYZQdrSRAWAV9fXzaLADQtZ02suyEFXy+E5uGtC
-	CHz9UyhZSMskTJ39GgwYEOpFGwKs+J9sIr27TUODmI96iY2UqQhjBRGqjMFCm0kgr5MFJldCdTN
-	rGlj+lM9Sa8S549vQOFWD3Zb7TY1CXZRvSKyj8VjgxtfncOu421sR0aPfCSv0GgzZBCh8ilA=
-X-Google-Smtp-Source: AGHT+IGTic8ujSiqr54AymsdvHDmW5v2mjFxNtDYCrb53c4AgefCHXmbrE0m0SWvFE3f1PRmTa/4gw==
-X-Received: by 2002:a17:90b:580c:b0:313:1a8c:c2c6 with SMTP id 98e67ed59e1d1-31c9e76aa70mr5838168a91.16.1752681144241;
-        Wed, 16 Jul 2025 08:52:24 -0700 (PDT)
+        bh=UVgMRJ+lsyx/5PbwWdT9sHA9aSAXobVSKmVW6fnzwaE=;
+        b=B1yokx8ePrqaJdX/wD5ZnaVUJLyOyopK0oNBragba7BfZvCo0ivAVyNqakWlo4gd30
+         4Z04YnJQpsE83YppXcnrOmXWI9BBspbz7ZYDHv8YrG/JW/uc7gOe8CuU8fujWZObzCSj
+         /fFd8+rhu+VZoDliSJAen6X28TL/J83WxQ2xlfp1Z8L35d/iaplNoHFp4BjRKUc1ERrg
+         NxEKDMZGnC9pN7omjUiluN8M6FY1LwFVOppvveyq+ETnBDgy3nNL0iHKeyyQWfcJfLID
+         rqP30GtrKKhJJh6R13O0MhhJmA/rdeU65cgLKWdlDGHDev5mwDF0LpIYboVx9Y23NEGH
+         zLYA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1cjrY4Ajzb7pCuE9Jb8odLKZgy76YYYTSURWnnteJf0t3qXUgzcXzMfIQq3MSbXnqbEeOYwviNJvC078=@vger.kernel.org, AJvYcCWhkAIzKwztldSGC/o6JqAXZv36VnmcceAeZ3Cv2DHSPW4FdZ+Xz2sM3/CNqdfDc0agvs+gJF1FWgw0@vger.kernel.org, AJvYcCX0MolqF7iYkeJgVoOCVyIxuHaO+dc+cPiL1Emx8NaeRWL75rrfI2RdfVFTtnBLeLpEjvGg/2S5ro9N@vger.kernel.org, AJvYcCXD12rJRHpoZBmGK7YSEuZUPBuuFBw/Ly/tqXTcfrfYxU4UOnFCy7PNVR0glHXr4fwnT9pyaMZCwvcBMY73@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAY1ZrkDtp9fGUU82Jk/EY2SJiYo0gSlsFUgQQ7lN30muQcdOM
+	gbMtHYucszrR/nPdsCaz88q5iYzJuwwLEwLvITR1ROiWPAkyCpiy9rZna0IVqg==
+X-Gm-Gg: ASbGncvL81Kit2AvVvi5PYC2BSj06dce+8Cv9eFBBMxrihxTx20fejxANRxuyIJqURS
+	E1ppJgAq4v3iRulHa/B7hSE2gLcCLiWUxGy0dVHjRzSSGMua2UnU9wdbR0A3QNzk92fKSc/lsvT
+	Xpg0pYZTVjXBx9qI/gRVtQCDMFALDH1x+euk8xsBdN4i0MeX2ARfatrVFZ6DvN9X7xdlt1WsDH+
+	MFN/NlakYcgGHsnNTTmalEXlANmgYRPqB6EEHarb84Hd0yoQsbkbspJGqn+vlYTD786LXdLSGt7
+	Ff2xf9jSFaHobczeykXxP2AMldq1mFT3HGiJsQ9N86m0q3XalOTFc/amTFE1rG/Z9jxOvmdXmNV
+	53YzuWSF6tdbxgKcO8jgyhEL0PMUvf5eCpFxpbfHs76h7Qejn9iJwU3pw2FiX+28BJ0ObdSo=
+X-Google-Smtp-Source: AGHT+IE38TH5BqmUcE1KaBCkXrsa7LbdbYBffiWCQ78LHEVGn4nG6nxZ9B4/8q3QWyrc6uY70QwxIg==
+X-Received: by 2002:a17:902:cf0f:b0:234:c5c1:9b84 with SMTP id d9443c01a7336-23e24f5516emr49931035ad.37.1752681915052;
+        Wed, 16 Jul 2025 09:05:15 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f1fd90csm1620366a91.28.2025.07.16.08.52.23
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4323df7sm127453915ad.134.2025.07.16.09.05.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 08:52:23 -0700 (PDT)
+        Wed, 16 Jul 2025 09:05:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8e6d8c2f-ab9a-495d-8b43-878dbc0451ee@roeck-us.net>
-Date: Wed, 16 Jul 2025 08:52:22 -0700
+Message-ID: <e02cda3e-799f-42bc-8651-108a258b3d85@roeck-us.net>
+Date: Wed, 16 Jul 2025 09:05:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] hwmon: ina238: Fix inconsistent whitespace
-To: Jonas Rebmann <jre@pengutronix.de>, Jean Delvare <jdelvare@suse.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org,
- kernel@pengutronix.de
-References: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
- <20250715-ina228-v1-1-3302fae4434b@pengutronix.de>
+Subject: Re: [PATCH v3 3/3] drivers: hwmon: add EMC2101 driver
+To: =?UTF-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
+ jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ corbet@lwn.net, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20250709164829.3072944-1-noltari@gmail.com>
+ <20250709164829.3072944-4-noltari@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,35 +121,20 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250715-ina228-v1-1-3302fae4434b@pengutronix.de>
+In-Reply-To: <20250709164829.3072944-4-noltari@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/15/25 13:49, Jonas Rebmann wrote:
-> Some purely cosmetic changes in ina238.c:
+On 7/9/25 09:48, Álvaro Fernández Rojas wrote:
+> The Microchip EMC2101 is a SMBus 2.0 fan controller with temperature
+> monitoring.
+> It supports up to 1 fan, 1 internal temperature sensor, 1 external
+> temperature sensor and an 8 entry look up table to create a
+> programmable temperature response.
 > 
->   - When aligning definitions, do so consistently with tab stop of 8.
->   - Use spaces instead of tabs around operators.
->   - Align wrapped lines.
-> 
-> Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
-> ---
->   drivers/hwmon/ina238.c | 30 +++++++++++++++---------------
->   1 file changed, 15 insertions(+), 15 deletions(-)
-...
->   static struct i2c_driver ina238_driver = {
->   	.driver = {
-> -		.name	= "ina238",
-> +		.name = "ina238",
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-This was aligned with ".probe" below. Either leave it alone or change the tabs below as well.
+This looks very much like a clone of LM63. Why does it warrant a new driver ?
 
-Thanks,
 Guenter
-
-
->   		.of_match_table = of_match_ptr(ina238_of_match),
->   	},
->   	.probe		= ina238_probe,
-> 
 
