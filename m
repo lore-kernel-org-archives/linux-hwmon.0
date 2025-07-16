@@ -1,67 +1,67 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B7C4501A;
-	Wed, 16 Jul 2025 20:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDD126FA4B;
+	Wed, 16 Jul 2025 20:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752697856; cv=none; b=BRYz8F4wC8ph4lTxtbe+nczUAlhBbWY0K8bPG870f0KbopysLxM8luFvk5nkHHiOLiGQODFEtreZ9ruQa0LYvU2jZfkqKVgdZIhopzuAD41BMP1tOKCYW/Vur0UWi/+kpkwKhY0H5QSxbTCaZSc+nagBGDoe5/B3/MtBN4oDgxI=
+	t=1752698213; cv=none; b=MJYsafdKq+oW813to/1P2Fn+WZaaamTtjfZKTOC8NjzOaHF3Orbje81UzzuBuYZi2OroCLxFEc4LM6OdTvE3v4aNAYj9XsZ257xc7TBDUeAGMzir5Te6EomB8+JjiXBwGr5FwqcVPyqPBLXdwnwEgj/m6CJJdE1CYcI0h6ryEM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752697856; c=relaxed/simple;
-	bh=W+tj1VjebJyBlbDrUwyTO4k6ZV8Fx/M7ZW+IIVwIEeI=;
+	s=arc-20240116; t=1752698213; c=relaxed/simple;
+	bh=MlMNGYQ8dO20s6aDXbSVRiR+xyHC7RFvXF/g3yeXQIk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZgraYoU0WqEO0uCsg5iP0T4piNMsLWTIhhlmDkNiWqegadzI5OMX8cGPcMTSvWLyp06BYmvK4V86/kxJIT9vWe/iB8Dxue4waGWu2XrNoRIrSNiJkN+x5rrKKv448rtyJ0vRr6MMu82kc+iU58NmnuVXMCCU5V8HkaErXN+IdL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amVHrlQq; arc=none smtp.client-ip=209.85.210.172
+	 In-Reply-To:Content-Type; b=EAQZx5ZKm1HgZ/qD9Jttu38SmI6Pe+ynNLQN69s/J7bYOM1UiWv8NHaPlB+wjzuXM4EDVjzm7pVFbYlj2RukYB4ieFTNB7fPFXKQcwgg95nKRZILhVosWw690U9peKssLO1mPTP2R6aAG05lQX+S+H5PsCdwFmLURSYhEyflURo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LknWfePa; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amVHrlQq"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-748d982e97cso302618b3a.1;
-        Wed, 16 Jul 2025 13:30:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LknWfePa"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-74b50c71b0aso229824b3a.0;
+        Wed, 16 Jul 2025 13:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752697854; x=1753302654; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752698211; x=1753303011; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jToX5vgvYOWNpQ7PhcvwxjAp3iiECWlZTnbgwdsh67M=;
-        b=amVHrlQq01/RHDjHkMha+Cs7NG1vXBEdIw80tdQ9bGaBLSKX3byryTLBpy3A41z0C7
-         u60ybXFRod+tD9/E8u97Jvuc1AXsM7O3pEd/G1G2Lsp28yMNUfJnFzmWdywVKf/Nu/IJ
-         DUNZvdUdK3GV/xdXmRF9CpqRzxjmlYEzWvaVJ7/gs2w9pUQfq2LnjKQQ5P7gPC2wR1pa
-         Xz2Kl9f130jfEv29V3pAAXIJnp9vCn13LBoKDgW0P2qaCPb5FFm4kCavOddIyaToN2Z/
-         N5lXKTCjFNsfSxxTfYiSAm93qPkH7VFkaGcCMPsac+/qA4P9pyDy9os0tHUNb095cwOo
-         4OAA==
+        bh=dGK7tdjJS9+xErtdZGDdl6eWBQ2higLM/1xo+A5Ke+E=;
+        b=LknWfePaNtIRvt1s0FyO5kG/kQt4deEOnFC7YciyfIs7AnZIgeN0FTyQlJSBYQ2+OG
+         AJa82iRen5Mvu+pX9acuKQ/9dYIqR8WoqZYyCyfJRe3PfBKXMmvA/r2BzqR76HEYBTXI
+         RnnG041ahEApPrmMLzt305vSsjwhsn/SJ+13X6kyk4iq1V7OkDWU1qsjsk+dZEeLvtPp
+         /366qannB7q10M8sKt0xEmQUO68+H5bGMVRqgVTmF3iZRDdxVlqyExiOR/UgMO9b6Oja
+         7RS+yDDKYOtj3omysfhMhXPhpWmXfeK2XiOjGoW3AR4WxaDI77FLTFRcZLQer7jy+Pi9
+         Z6Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752697854; x=1753302654;
+        d=1e100.net; s=20230601; t=1752698211; x=1753303011;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jToX5vgvYOWNpQ7PhcvwxjAp3iiECWlZTnbgwdsh67M=;
-        b=pvfg/V9Isld4kmC22PlpjQ20VXjJFilbEiHq5M0EuqIlhVZ8e0fvoTmsLvPavYHs6e
-         OcC+0Yz3cZ3XWy7p87iJbqa4M5Dp5ARQaLrnuuh9ka5UrynaNmzFXeHFGRSuUCFBjdWs
-         bh0YsVH1+IHy7/oYFBZvH+LuiJbgfGPJE46IhvriaSCdOP8zsNr59wclGjdknNqzlnl1
-         grfDMWIP8QQBO3gBwNP3WaUvtn2T2phDN4esYGmC6Gwxzs+HjyoXtA9RxEPZ05NhxU0Z
-         vbtyeRGBQLtMBnHa4ldlALsa4FUkH/XojLdUvvJxpSO6JvulMPoCbzMwSis7psQ4D+f4
-         zjJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGb6ltacql5wvXb6A/38lBd5XOidIy6IKMkUkg1ZhXp2DvPPy+Wq2RF9h2beo6aXeScvA2cGmwvjOFzJUY@vger.kernel.org, AJvYcCWTIxmsVsuByKw8vHiVbp5fh5uBcUWr2FsNQVatkbYszcPuvKiloWm4ZexQV3brgEyv2tCwhw3E2jeg7nY=@vger.kernel.org, AJvYcCWtX07KWi2CNy4dQkhrQJdu8OKzvfg7ncc+2UPjQzrg9Nvr0UH7MNE7ZJOYZrujQQFsRe/LZ20jYCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUWOFBfC4q4U/Qydq7ltaa3KivRwgefwsbgSgvTCBRgXYBA6B3
-	Q67Ln3FNKvhhw7Ue9QI/B9D/bm2Xe/Px4OvuN63kfYFHCeU9+71f0XnlcdsTHQ==
-X-Gm-Gg: ASbGncuLJFllOIifOKlMTvEKZu4FaoUmgZ9Mu9g8wRCDg/XP2H9oyLEVXYo2jctrJqO
-	cvo+QBtCg0qPx4lg5YtAbS6Hu8PaIiFB+J9EQX3M1gqwlUcFJ4fEl3rBqs0i+25oLvB6cyFk9H4
-	NBuAajO8138b7BnLEdAhOq8XdefDGP/zDTv6YlNaVDBUZMi3sNtkT3w6ty3x2Ey6Kjgcaqhy3eU
-	vqjPKCdxtOtDtKEQQ792JGInPK4WYyxX8zJ3ZCHhWHSVeAucFgv5t35FlIN+4YXKptwS1upuYno
-	AcnDA5FVJqkmrxwKEwNE4PaWVezjZpJXlHCZTx/gVqUYz1Scu7zlMkDL3iqoi1BKzpcd8HmnHZg
-	c8r4ceSjuznFI0EQrQX3MhVU7FiQ+YZH6oYF37AEtpSxK2ga6j0I9VSGbbkuaxjZGHfYcZAI=
-X-Google-Smtp-Source: AGHT+IHAttu6gwxIToTJ+F1XiyqkL1tlyMlREf+ZnPiny7r/1mgK6Gn/BYUZnN0LtcXBYnOaReNjgw==
-X-Received: by 2002:a05:6300:619c:b0:232:c9de:4d98 with SMTP id adf61e73a8af0-23811055d11mr6953618637.11.1752697853925;
-        Wed, 16 Jul 2025 13:30:53 -0700 (PDT)
+        bh=dGK7tdjJS9+xErtdZGDdl6eWBQ2higLM/1xo+A5Ke+E=;
+        b=spSA3udKgTWk1kGd/7CcyMOWtC5eEVs05Kkp1x0pqm11PmSC1eUsEvt9YU43K9urwn
+         QMWnfUChJiCJYi7N8l00V7XV/cuNKRAxBcn/x02WOphMrosS6tskr5lzopMK/0+5Sfo1
+         /VJFd+DcF6qP2q7jFrhdbXgBOp/DPzXxqjUTWHi9ZQ5i8oHEwuYwY2EplIT4f5qlzZC0
+         MgNzfEiF/nAA3G+SkVPW/uCnPIIS3Q0eGNBshk/pqidzLq8DFriTqYJiWEE5LdoBAI6l
+         53Te+NwKXnAILhjytW+465mevguU78Lrls4jijlnL9R1H8WzArUNyHclXLN+O3IgzBQq
+         DVmw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/td0NKnA7fNibDc4I4cwJ/WS9YNUkcLdVZ5mfi+gahmj2jQeBQQzMqZFNU3QViGr+EVeZHbOaEgXy@vger.kernel.org, AJvYcCUfgoYRDaz+OMqq+i/UFQlV6aVplASJ3ijcpiws6l/w3SdGydAJjb9F8JDGzEefOE/9I3bS+CUOMfUJfwI=@vger.kernel.org, AJvYcCV+0mK3cCf0uaFs5VM2HgR+z+kMVW8zLo1cPtIOXW6Qv+Ewem0n1bYIE4umMiIOesiHJcZ5iP2dqk0F@vger.kernel.org, AJvYcCXBbZh+Yr4UzPWa7hoplNITk2Egn9ZjWlTTa63Z4tksp5PhYmduDXjXi26TNGApJK8eCsYmgfHE20dKXTn4@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBlaEPKce9ZLQFwZkOhJUMhholmMj6cCLKitQjBB67m+FobBZL
+	Ht3a86ocH5sV/2FoGQf9yVSLaLzhP7TYk/TwRZBcCOwYF7tbhtwwXQw2
+X-Gm-Gg: ASbGncuzF5ByjOpmrwqeCRTTbdEJ+fNtEfb8VpPMk6lWpHlP5AmOAJK3FMctWYN57xq
+	nG2jOHwa5ws4dPL6V8F6RJOyX60Fz2ECC8EJAjOJMT8ItWVEyL0nAMluzDQ3/lFmAZzejGdnMMO
+	IX+0Zl34q8ltrvcyCR4ZtQTygVjJ8tgY/xxPWgrDPYE/ruB3RsHYUZY3iL4619c/fPS98siBmQ3
+	OyUhddk8dB8idirh+sSAPIqwj5cDJy7LT57bkGNCnf4XbUo5v6s2Baf4TQ0mQXLRf/+okXMyTW5
+	G8ZUa0w5Fxw5SMK1FmlC0pmu+NPugw0uKZxzjTQdaTphAr6ZRyvgjGQAZt8BoPh+hDrtrtuQxaU
+	kqZJHeeyBq7p35f2FxKzfy2XP+JoQQYZCcEatpmIzYlY69u3JIzAk90NqwSPl60ulDj40yos=
+X-Google-Smtp-Source: AGHT+IHC2TDtP7ayXT+F/AwOOBUrWElNyGsML+/uuXUSdQ8RGpxEC7Y5K3FXXAP7ltt9S4GgUr6SGA==
+X-Received: by 2002:a05:6a00:2d19:b0:749:14b5:921f with SMTP id d2e1a72fcca58-75724a8ac06mr5687709b3a.18.1752698210983;
+        Wed, 16 Jul 2025 13:36:50 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe52cbcasm14152134a12.4.2025.07.16.13.30.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9dd7134sm15293965b3a.19.2025.07.16.13.36.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 13:30:53 -0700 (PDT)
+        Wed, 16 Jul 2025 13:36:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <039c31c3-af15-46e0-98fb-f3a54fcf73e5@roeck-us.net>
-Date: Wed, 16 Jul 2025 13:30:51 -0700
+Message-ID: <ac652108-68aa-49d1-a448-1c0ee6ca157e@roeck-us.net>
+Date: Wed, 16 Jul 2025 13:36:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +69,30 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: add MP2869 series and MP29502 driver
-To: wenswang@yeah.net, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250709092734.455976-1-wenswang@yeah.net>
- <20250709093420.456304-1-wenswang@yeah.net>
- <20250709093420.456304-2-wenswang@yeah.net>
+Subject: Re: [PATCH v2 1/2] hwmon: (pmbus) Add support for MPS multi-phase
+ mp2869a/mp29612a controllers
+To: tzuhao.wtmh@gmail.com, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>,
+ Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, Fabio Estevam
+ <festevam@gmail.com>, Michal Simek <michal.simek@amd.com>,
+ Henry Wu <Henry_Wu@quantatw.com>, Grant Peltier <grantpeltier93@gmail.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+ Nuno Sa <nuno.sa@analog.com>, Cherrence Sarip <cherrence.sarip@analog.com>,
+ Jerome Brunet <jbrunet@baylibre.com>, Leo Yang <leo.yang.sy0@gmail.com>,
+ John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
+ Kim Seer Paller <kimseer.paller@analog.com>,
+ Alex Vdovydchenko <xzeol@yahoo.com>, Ninad Palsule <ninad@linux.ibm.com>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: peteryin.openbmc@gmail.com
+References: <20250630112120.588246-1-Henry_Wu@quantatw.com>
+ <20250630112120.588246-2-Henry_Wu@quantatw.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,430 +138,202 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250709093420.456304-2-wenswang@yeah.net>
+In-Reply-To: <20250630112120.588246-2-Henry_Wu@quantatw.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/9/25 02:34, wenswang@yeah.net wrote:
-> From: Wensheng Wang <wenswang@yeah.net>
+On 6/30/25 04:20, tzuhao.wtmh@gmail.com wrote:
+> From: Henry Wu <Henry_Wu@quantatw.com>
 > 
-> Add support for MPS VR mp2869 series and mp29502 controller. The
-> driver exposes telemetry and limit value readings and writtings.
+> Add support for the mp2869a and mp29612a controllers from Monolithic Power
+> Systems, Inc. (MPS). These are dual-loop, digital, multi-phase modulation
+> controllers.
 > 
-> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+> Signed-off-by: Henry Wu <Henry_Wu@quantatw.com>
 > ---
-> V2 -> V3:
->      merge patches for MP29502 and MP2869
-> 
-> V1 -> V2:
->      add Rob's Acked-by
-> 
->   Documentation/hwmon/index.rst   |   2 +
->   Documentation/hwmon/mp2869.rst  | 175 ++++++++
->   Documentation/hwmon/mp29502.rst |  93 +++++
->   MAINTAINERS                     |   9 +
->   drivers/hwmon/pmbus/Kconfig     |  18 +
->   drivers/hwmon/pmbus/Makefile    |   2 +
->   drivers/hwmon/pmbus/mp2869.c    | 711 ++++++++++++++++++++++++++++++++
->   drivers/hwmon/pmbus/mp29502.c   | 670 ++++++++++++++++++++++++++++++
->   8 files changed, 1680 insertions(+)
->   create mode 100644 Documentation/hwmon/mp2869.rst
->   create mode 100644 Documentation/hwmon/mp29502.rst
->   create mode 100644 drivers/hwmon/pmbus/mp2869.c
->   create mode 100644 drivers/hwmon/pmbus/mp29502.c
+>   Documentation/hwmon/index.rst   |   1 +
+>   Documentation/hwmon/mp2869a.rst |  86 +++++++++
+>   drivers/hwmon/pmbus/Kconfig     |  10 ++
+>   drivers/hwmon/pmbus/Makefile    |   1 +
+>   drivers/hwmon/pmbus/mp2869a.c   | 299 ++++++++++++++++++++++++++++++++
+>   5 files changed, 397 insertions(+)
+>   create mode 100644 Documentation/hwmon/mp2869a.rst
+>   create mode 100644 drivers/hwmon/pmbus/mp2869a.c
 > 
 > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b45bfb4ebf30..ebc5c92e50b0 100644
+> index b45bfb4ebf30..10bf4bd77f7b 100644
 > --- a/Documentation/hwmon/index.rst
 > +++ b/Documentation/hwmon/index.rst
-> @@ -172,8 +172,10 @@ Hardware Monitoring Kernel Drivers
+> @@ -172,6 +172,7 @@ Hardware Monitoring Kernel Drivers
 >      menf21bmc
 >      mlxreg-fan
 >      mp2856
-> +   mp2869
+> +   mp2869a
 >      mp2888
 >      mp2891
-> +   mp29502
 >      mp2975
->      mp2993
->      mp5023
-> diff --git a/Documentation/hwmon/mp2869.rst b/Documentation/hwmon/mp2869.rst
+> diff --git a/Documentation/hwmon/mp2869a.rst b/Documentation/hwmon/mp2869a.rst
 > new file mode 100644
-> index 000000000000..2d9d65fc86b6
+> index 000000000000..a98ccb3d630d
 > --- /dev/null
-> +++ b/Documentation/hwmon/mp2869.rst
-> @@ -0,0 +1,175 @@
+> +++ b/Documentation/hwmon/mp2869a.rst
+> @@ -0,0 +1,86 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +Kernel driver mp2869
-> +====================
+> +Kernel driver mp2896a
+> +=====================
 > +
 > +Supported chips:
 > +
-> +  * MPS mp2869
+> +  * MPS MP2896A
 > +
-> +    Prefix: 'mp2869'
+> +    Prefix: 'mp2896a'
 > +
-> +  * MPS mp29608
+> +  * MPS MP29612A
 > +
-> +    Prefix: 'mp29608'
-> +
-> +  * MPS mp29612
-> +
-> +    Prefix: 'mp29612'
-> +
-> +  * MPS mp29816
-> +
-> +    Prefix: 'mp29816'
+> +    Prefix: 'mp29612a'
 > +
 > +Author:
 > +
-> +	Wensheng Wang <wenswang@yeah.net>
+> +    Henry Wu <Henry_WU@quantatw.com>
 > +
 > +Description
 > +-----------
 > +
 > +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP2869 Dual Loop Digital Multi-phase Controller.
+> +MP2896A, a digital, multi-phase voltage regulator controller with PMBus interface.
+> +
+> +This device:
+> +
+> +- Supports up to two power rails.
+> +- Supports multiple PMBus pages for telemetry and configuration.
+> +- Supports VOUT readout in **VID format only** (no support for direct format).
+> +- Supports AMD SVI3 VID protocol with 5-mV/LSB resolution (if applicable).
+> +- Uses vendor-specific registers for VOUT scaling and phase configuration.
+> +
+> +Device supports:
+> +
+> +- SVID interface.
+> +- AVSBus interface.
 > +
 > +Device compliant with:
 > +
 > +- PMBus rev 1.3 interface.
 > +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
+> +Sysfs Interface
+> +---------------
 > +
-> +**in1_input**
+> +The driver provides the following sysfs attributes:
 > +
-> +**in1_label**
+> +**Current measurements:**
 > +
-> +**in1_crit**
+> +- Index 1: "iin"
+> +- Indexes 2, 3: "iout"
 > +
-> +**in1_crit_alarm**
+> +**curr[1-3]_alarm**
+> +**curr[1-3]_input**
+> +**curr[1-3]_label**
 > +
-> +**in1_lcrit**
+> +**Voltage measurements:**
 > +
-> +**in1_lcrit_alarm**
+> +- Index 1: "vin"
+> +- Indexes 2, 3: "vout"
 > +
-> +**in1_min**
+> +**in[1-3]_crit**
+> +**in[1-3]_crit_alarm**
+> +**in[1-3]_input**
+> +**in[1-3]_label**
+> +**in[1-3]_lcrit**
+> +**in[1-3]_lcrit_alarm**
 > +
-> +**in1_min_alarm**
+> +**Power measurements:**
 > +
-> +The driver provides the following attributes for output voltage:
+> +- Index 1: "pin"
+> +- Indexes 2, 3: "pout"
 > +
-> +**in2_input**
+> +**power[1-3]_alarm**
+> +**power[1-3]_input**
+> +**power[1-3]_label**
 > +
-> +**in2_label**
+> +**Temperature measurements:**
 > +
-> +**in2_crit**
+> +**temp[1-2]_crit**
+> +**temp[1-2]_crit_alarm**
+> +**temp[1-2]_input**
+> +**temp[1-2]_max**
+> +**temp[1-2]_max_alarm**
 > +
-> +**in2_crit_alarm**
 > +
-> +**in2_lcrit**
-> +
-> +**in2_lcrit_alarm**
-> +
-> +**in3_input**
-> +
-> +**in3_label**
-> +
-> +**in3_crit**
-> +
-> +**in3_crit_alarm**
-> +
-> +**in3_lcrit**
-> +
-> +**in3_lcrit_alarm**
-> +
-> +The driver provides the following attributes for input current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr2_input**
-> +
-> +**curr2_label**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr3_input**
-> +
-> +**curr3_label**
-> +
-> +**curr3_crit**
-> +
-> +**curr3_crit_alarm**
-> +
-> +**curr3_max**
-> +
-> +**curr3_max_alarm**
-> +
-> +**curr4_input**
-> +
-> +**curr4_label**
-> +
-> +**curr4_crit**
-> +
-> +**curr4_crit_alarm**
-> +
-> +**curr4_max**
-> +
-> +**curr4_max_alarm**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +The driver provides the following attributes for output power:
-> +
-> +**power3_input**
-> +
-> +**power3_label**
-> +
-> +**power3_input**
-> +
-> +**power3_label**
-> +
-> +**power3_max**
-> +
-> +**power3_max_alarm**
-> +
-> +**power4_input**
-> +
-> +**power4_label**
-> +
-> +**power4_input**
-> +
-> +**power4_label**
-> +
-> +**power4_max**
-> +
-> +**power4_max_alarm**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_crit**
-> +
-> +**temp1_crit_alarm**
-> +
-> +**temp1_max**
-> +
-> +**temp1_max_alarm**
-> +
-> +**temp2_input**
-> +
-> +**temp2_crit**
-> +
-> +**temp2_crit_alarm**
-> +
-> +**temp2_max**
-> +
-> +**temp2_max_alarm**
-> diff --git a/Documentation/hwmon/mp29502.rst b/Documentation/hwmon/mp29502.rst
-> new file mode 100644
-> index 000000000000..7743056f0aa6
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp29502.rst
-> @@ -0,0 +1,93 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp29502
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS mp29502
-> +
-> +    Prefix: 'mp29502'
-> +
-> +Author:
-> +
-> +	Wensheng Wang <wenswang@yeah.net>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP29502 Digital Multi-phase Controller.
-> +
-> +Device compliant with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_crit**
-> +
-> +**in1_crit_alarm**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +**in2_crit**
-> +
-> +**in2_crit_alarm**
-> +
-> +**in2_lcrit**
-> +
-> +**in2_lcrit_alarm**
-> +
-> +The driver provides the following attributes for input current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr2_input**
-> +
-> +**curr2_label**
-> +
-> +**curr2_crit**
-> +
-> +**curr2_crit_alarm**
-> +
-> +**curr2_max**
-> +
-> +**curr2_max_alarm**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +The driver provides the following attributes for output power:
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_crit**
-> +
-> +**temp1_crit_alarm**
-> +
-> +**temp1_max**
-> +
-> +**temp1_max_alarm**
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 240793fbe64b..b4377f0eb3a1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16839,6 +16839,15 @@ F:	scripts/module*
->   F:	tools/testing/selftests/kmod/
->   F:	tools/testing/selftests/module/
->   
-> +MONOLITHIC POWER SYSTEM MULTI-PHASE CONTROLLER DRIVER
-> +M:	Wensheng Wang <wenswang@yeah.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/mp2869.rst
-> +F:	Documentation/hwmon/mp29502.rst
-> +F:	drivers/hwmon/pmbus/mp2869.c
-> +F:	drivers/hwmon/pmbus/mp29502.c
-> +
->   MONOLITHIC POWER SYSTEM PMIC DRIVER
->   M:	Saravanan Sekar <sravanhome@gmail.com>
->   S:	Maintained
 > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 441f984a859d..d0bdd1b5feb6 100644
+> index 441f984a859d..93b558761cc6 100644
 > --- a/drivers/hwmon/pmbus/Kconfig
 > +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -364,6 +364,15 @@ config SENSORS_MP2856
+> @@ -364,6 +364,16 @@ config SENSORS_MP2856
 >   	  This driver can also be built as a module. If so, the module will
 >   	  be called mp2856.
 >   
-> +config SENSORS_MP2869
-> +	tristate "MPS MP2869"
+> +config SENSORS_MP2869A
+> +	tristate "MP2869A PMBus sensor"
+> +	depends on I2C && PMBUS
 > +	help
-> +	  If you say yes here you get hardware monitoring support for MPS
-> +	  MP2869 Dual Loop Digital Multi-Phase Controller.
+> +	  If you say yes here you get support for the MPS MP2869A MP29612A
+> +	  voltage regulator via the PMBus interface.
 > +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp2869.
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called mp2869a.
 > +
 >   config SENSORS_MP2888
 >   	tristate "MPS MP2888"
 >   	help
-> @@ -382,6 +391,15 @@ config SENSORS_MP2891
->         This driver can also be built as a module. If so, the module will
->         be called mp2891.
->   
-> +config SENSORS_MP29502
-> +	tristate "MPS MP29502"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for MPS
-> +	  MP29502 Dual Loop Digital Multi-Phase Controller.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp29502.
-> +
->   config SENSORS_MP2975
->   	tristate "MPS MP2975"
->   	help
 > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 29cd8a3317d2..4c5ff3f32c5e 100644
+> index 29cd8a3317d2..42087d0dedbc 100644
 > --- a/drivers/hwmon/pmbus/Makefile
 > +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -37,8 +37,10 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+> @@ -37,6 +37,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
 >   obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
 >   obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
 >   obj-$(CONFIG_SENSORS_MP2856)	+= mp2856.o
-> +obj-$(CONFIG_SENSORS_MP2869)	+= mp2869.o
+> +obj-$(CONFIG_SENSORS_MP2869A)   += mp2869a.o
 >   obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
 >   obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
-> +obj-$(CONFIG_SENSORS_MP29502)	+= mp29502.o
 >   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->   obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
->   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-> diff --git a/drivers/hwmon/pmbus/mp2869.c b/drivers/hwmon/pmbus/mp2869.c
+> diff --git a/drivers/hwmon/pmbus/mp2869a.c b/drivers/hwmon/pmbus/mp2869a.c
 > new file mode 100644
-> index 000000000000..af233ffd5230
+> index 000000000000..e61f1380dbc1
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp2869.c
-> @@ -0,0 +1,711 @@
+> +++ b/drivers/hwmon/pmbus/mp2869a.c
+> @@ -0,0 +1,299 @@
 > +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2869)
+> + * Hardware monitoring driver for MP2856A/MP29612A
+> + * Monolithic Power Systems VR Controller
+> + *
+> + * Copyright (C) 2023 Quanta Computer lnc.
 > + */
 > +
-> +#include <linux/bitfield.h>
+> +#include <linux/err.h>
 > +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/of_device.h>
+> +#include <linux/pmbus.h>
 > +#include "pmbus.h"
 > +
-> +#define MFR_READ_PIN_EST	0x94
-> +#define MFR_READ_IIN_EST	0x95
-> +#define MFR_VOUT_SCALE_LOOP	0x29
+> +/* Vendor specific registers. */
+> +#define MP2869A_VOUT_MODE			 0x20
 
-This is a standard register.
+Standard register.
 
-> +#define MFR_SVI3_IOUT_PRT	0x67
-> +#define STATUS_MFR_SPECIFIC	0x80
+> +#define MP2869A_VOUT_MODE_MASK		 GENMASK(7, 5)
+> +#define MP2869A_VOUT_MODE_VID		 (0 << 5)
+> +
+> +#define MP2869A_READ_VOUT			 0x8b
 
-This is a standard register.
+Standard register.
+> +
+> +#define MP2869A_MFR_VOUT_SCALE_LOOP	 0x29
+
+Standard register.
 
 Guenter
+
