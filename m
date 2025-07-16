@@ -1,72 +1,75 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014B0233148
-	for <linux-hwmon@vger.kernel.org>; Wed, 16 Jul 2025 14:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4694D264A60;
+	Wed, 16 Jul 2025 14:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752677157; cv=none; b=Jw/bRtDrJ58gReHBsbKpwg2qRrXscVJ6DGEYKIaZ3a4/EtuoagDM338qemJHkWrXQcBCg+2pjW7V82++ldKP3IQdpwT88xk6t8e1UJ7Z20muR/kqvHga/xinDQVlPj3Hra02h53exgK0/+reD2udHIPnCt8oQu0roDGEGmo7+A4=
+	t=1752677233; cv=none; b=MCHpENGgZ/nVRr1YiFmK7UpUU0KVL15zW5REma9kIxTmW5Qydt13lQ4Y7I/b1n1kj+pVee/NN+uEc5LeOK2OrFcj8LOfLpn41wC2g3vNzURYBEjZIwa+3IFJWJJ9l6usdQ+T3D0i/MVos3jtS4BSpYzFDwzGzUWRtpcdF1+XNsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752677157; c=relaxed/simple;
-	bh=upko07SOK/40JgIZdN1G3fPGjXzHlqhBZ2zetBhT0g0=;
+	s=arc-20240116; t=1752677233; c=relaxed/simple;
+	bh=W5wFt20w1Ni7nqNTkDqi6h+ZIafkAew+bVJTdIx9GKE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cqTyQmFOaZOwOipJQ5JtZS2YHC89QtmQ6d2Ggf5eS9NIWHr9dX4BX5t7oK3BCKBmaWlF1Yvi8jL373O+DHdhN4zc2V5Gmw9c8+VNm4pbxC/1oLwx+ZXm7pJXz6atyFOrjE8egJOuFb5O8IlzZmHHvMm5eZYPs5j7wui02EyIjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BvduHArL; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vil1rsuD2HYaNMTeis4O5uzLAdVkxs+4lnwJf4FKPTaVM5EJ0jWIwkzwqS5ffcRMvtKEXcaroWUcjLAU//NdVlIl/o9w6D6JYg15J/IjUxxyRWOMTZSNhhqO2tfr+q+YG/Iwbn6O5uDtkZ2yydgRPhX/ZjU+hzvl62HYk3ahWR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WvGDidOf; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BvduHArL"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-742c3d06de3so27808b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Jul 2025 07:45:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvGDidOf"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-23aeac7d77aso52566815ad.3;
+        Wed, 16 Jul 2025 07:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752677154; x=1753281954; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752677231; x=1753282031; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EFY5eKf7MgVE/3rH+7vRT4mwBW1CFS7NkwoCr6ajFY4=;
-        b=BvduHArLBygtuQ2eUhzxxPlJfbsl88XB3OwUWkZXFnYb9QkLzFZP0db0oh3dFQJ5eW
-         lj0OFBZLGtlx9DKC4RTV3I1dDZNtGMza4Fkfv9gwZpi4yNnAAHCYUsE7SM/TaajncaIc
-         gbjqJ41HCZlOiDO0V4cKUfyOJAs9mjOlwlmkZmDct0QXaIUW1+TA2By2kFfYE/SGF5Ig
-         VqC80slxtN75MUeVhpLll1GWdZkhlT08S4iGYwf5yfbT6GI87DOVLMVKk5hBTx/nC/oM
-         xwWu/ZfBy9aisxQf8ByOiE7vHEqVQ3HRVOvf0uSHMxmcX5IWq9RQTPVdGURxmirPO8jP
-         rdCw==
+        bh=KyhqH9rBj38O/KLz2od0guZjtxbURMFycDRjSPDgZGk=;
+        b=WvGDidOfE6pDuD2uocPwtHar19Z1DRHsSdI/C3cJYuQ5W8reOZyPx6lHfgXy0doNp3
+         k6xP7tewOLv7KBORxCzKRwfrgQRhREduXj5CRNxQnHauDLsetjmdxkxaAwASeTWtkK/p
+         N4MlHbI1I/PuSFs6Mv8VtsHnv4fj3ycITviBxXLVMyVEFo4eP58w380J2eCxDvzBvWtp
+         EfmoBIK727jWO5tB23yQLxatCZfCuSh1vhseSdy0DtxVx5BM9/kxiPQXcOmCY3IYGHOG
+         +BlY4RgN61nb7mG2Gb/5pbbjCNKErxV4BFj3lfnyRf4kAW0AWdLevmTSgo42yPyAJJRQ
+         hnlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752677154; x=1753281954;
+        d=1e100.net; s=20230601; t=1752677231; x=1753282031;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EFY5eKf7MgVE/3rH+7vRT4mwBW1CFS7NkwoCr6ajFY4=;
-        b=OP/ao9KoGsbOGc53QUgigRL0fyuS+aat67Gp2rJ1oB9OxPZdrzKOasgVMD3x1SeXii
-         QGVr7fSz7XLVIQspSW6F/rIH4/PUQRGOHWLi4jFZrkB0fC3HppEzLo7lkJ1Wp9BOSeL0
-         g67QslC95VXoWUr6RA5tHQu3QtcRaHZdiTsOdmGC5KJQHqf67F66RVXJ4CS643OZcX+k
-         PxJXlhyBaZI2TStavENS7yaeRtEh7nYLTkkQiHTR3Y5ipZedDEqp2ZCO1ORaULuzwYr2
-         SGAdz9N2CkAUWtqfe88KKOgL+y6wfs55TuXfwXWeYoTulxaD5Qg97CPg7yCRyahSzT+/
-         N4mA==
-X-Forwarded-Encrypted: i=1; AJvYcCVg/Fo3KWvak056q1VQMRtVa+Roa4cLOx1J+LcmeulH+EV2NkPd+sYA9c70vaz4QD+t/GCUyjRGhnoIKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YywgQO00PwEjoYiANzgT6cl4/01cRqslDXABmEVNaMzvGe2gsIn
-	fGCdh7soNLUO7C/86C7zhBziUirVKFfWbAeAGgoDmxI7O0o2UNX4DAMK
-X-Gm-Gg: ASbGncuadxPo7vYZC9fRDSTaVh6uUxHCVFggbEr5SqEqx0xybu3LlMa3cMqFb8PN5Vv
-	jjXCeLIkr05RRVsvIt26YEEmi1b47KizUcnceFAbiW9CSGYSTaz8dHjzwKGVkkzYmpc6E83Gv5p
-	QCjIcR2DtxVac2y5BLvZC14g7cfWav3NyMqTu5qhVkHBTAETwYJJ0oPvcMWvDQkmomXyJdd0hqh
-	WqWGAQiknA2mXsqxRz7lVNcc5FCARik4PaGt+c7YUys+M+Tqf1WQTYFGlTi3xfPwgmFh3jA+oLz
-	YRXpjlkMK39DTWBhF/mVZiD2im41o6GhXbgBcxh/ELc82gL7bzLw5sr2kH5PqpH1JB6ukILm4FN
-	4y0VdvXWe5CxgJwJ0umAcJQIeyL6o3lGbGxk=
-X-Google-Smtp-Source: AGHT+IEdR8C3TISVQxOxfgRp4bRphqtWsYGVmpZmEdp8mTH7Xtu7j/cS+ytJUMHupqjH4/5EZYuUPw==
-X-Received: by 2002:a05:6a21:6da3:b0:231:acae:1983 with SMTP id adf61e73a8af0-23810a590a0mr5567620637.3.1752677154298;
-        Wed, 16 Jul 2025 07:45:54 -0700 (PDT)
+        bh=KyhqH9rBj38O/KLz2od0guZjtxbURMFycDRjSPDgZGk=;
+        b=siNZGCU26GlkULmaQUsQUJ5aSxsLbNiTjDBsWr99Fzo+aBdey/rzUHej8ELgdEW5j0
+         3Y6OPoj9zZ8vWXkmPduC+l6ihxd2K+iIe1ELn01RrrklrqTqSh4xmEV7Drmzhp8qQ50e
+         hbJwqSJodVkgXlRzuGCt8ETIeahsMByh2Gff/tnqPWdjW86/YinJebVjJL2oXaQ9RwKP
+         zObcqjLfLCzhwRvBWujJw8s6/zMwOY/BfNQ5FpgtODJ7DDHt65xMgyOFC9IASW9YbK+z
+         mps6H0Ynhee9EKEpNB0uP+RknVDN9emomgh+CG32HHK2zIglsoK+FuQQ9z/L32KFDQ0D
+         KM3w==
+X-Forwarded-Encrypted: i=1; AJvYcCW3grlh7rx/LMVdaAXGdGgK57w2cXcjZKTzEjI/IpPkocsHyCYONAe117SvhH+WptIh2z8NRQnZJ/7ZxX51@vger.kernel.org, AJvYcCWOPQ4bibcObxxhc73RdZVSZ2C8b3hdBQM3/ffhu+dXHAj7pJ+5HQ01Skw/5uS/iGqElH5tT1JZlwegO5Q=@vger.kernel.org, AJvYcCWaGN2cTcu4l1ulTHUQWukorrC8z8fTEyqAj6YU19zna0PpYBD3QXW+zPL5aea2duLPGhNjlqPHbFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7JCmzLX0/w7WeNlMa4OIW2opG7Tv/vfOqrQA6qaICxRL6C1/T
+	HJjvBsSqGUjx2/Cygb9hCgeMyERIsmPnELDbKKVZAhPmbyMtf/sIZJWZ
+X-Gm-Gg: ASbGncvNRQmVnVW4tOvfMA0JeeKzmsIsBUKMpOx1QoPQDik4sMidJbvrc6QGwlGSbR/
+	MXdeFs26B/T3WU6TgqhZWCT9xZxgikWhzvnQgqI83CdXfSN2aXniKOglA+NnkSTdzs18X+1487O
+	VqoHaMiPXfk6OEBxbMTqZIyWbc6W1dN0DmHAgSegCODKrHr1n0bxcObEs+UNHTlS/lTlfNU1i84
+	xRmHrD/wNpb2Ex6MckGCPVFjCAZrOKbxuihiXIDoExwpK+Zj2W/Qi7F00YEVHulOztqSkLnCEMA
+	2Z8XMICdu6CA9leH2WxuKWx23prM/WyVXH06gAh9DqHkBqJX4h03Q4eVNxY9KjKVEwvNHOB6Pn6
+	JhL/k9MVLl45UET2ipYbJNRNZUhvSJDf2Olc=
+X-Google-Smtp-Source: AGHT+IHA1X3jxfx075HPwj1sBxYjx4O5SOe9ENUbuI5e7Oa+FVOPkIJztZZseIzYY/SDPrFNq8FV8A==
+X-Received: by 2002:a17:902:e78b:b0:234:9375:e07c with SMTP id d9443c01a7336-23e24ffdb01mr62197105ad.46.1752677231444;
+        Wed, 16 Jul 2025 07:47:11 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe6c5660sm13828608a12.48.2025.07.16.07.45.53
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de43227c2sm127573725ad.107.2025.07.16.07.47.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 07:45:53 -0700 (PDT)
+        Wed, 16 Jul 2025 07:47:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 16 Jul 2025 07:45:53 -0700
+Date: Wed, 16 Jul 2025 07:47:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Shantanu Tushar <shantanu@kde.org>
-Cc: wilken.gottwalt@posteo.net, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (corsair-psu) add support for HX1200i Series 2025
-Message-ID: <91f5de58-31ed-4ead-aae5-d022b592fd5e@roeck-us.net>
-References: <20250630201444.210420-1-shantanu@kde.org>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Nuno Sa <nuno.sa@analog.com>, Jean Delvare <jdelvare@suse.com>,
+	Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ltc4282: convert from round_rate() to
+ determine_rate()
+Message-ID: <978cd1e3-24eb-41fd-9e24-656a2051f98d@roeck-us.net>
+References: <20250710-hwmon-round-rate-v1-1-64fbe4bf3d05@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,14 +78,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250630201444.210420-1-shantanu@kde.org>
+In-Reply-To: <20250710-hwmon-round-rate-v1-1-64fbe4bf3d05@redhat.com>
 
-On Mon, Jun 30, 2025 at 10:14:44PM +0200, Shantanu Tushar wrote:
-> Add the USB ID of the Corsair HXi Series 2025 HX1200i PSU (CP-9020307).
-> Update the documentation to mention this.
+On Thu, Jul 10, 2025 at 02:10:41PM -0400, Brian Masney wrote:
+> The round_rate() clk ops is deprecated, so migrate this driver from
+> round_rate() to determine_rate() using the Coccinelle semantic patch
+> appended to the "under-the-cut" portion of the patch.
 > 
-> Signed-off-by: Shantanu Tushar <shantanu@kde.org>
-> Reviewed-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 
 Applied.
 
