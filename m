@@ -1,67 +1,67 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15B11A238C;
-	Wed, 16 Jul 2025 16:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8297024A07A;
+	Wed, 16 Jul 2025 19:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752681917; cv=none; b=D2VOMuSIpAoqTLLRhfYrOJAmK2tDSzR8DF8sOtdtMabyTVZCW/Jr8QOY9MKZvIPjhqm/SsSeIWJaq7RGcKOMaCgNntqUmtMicuVBcmCwzZkZP8X3VJ3jf7v9vMGyG7dYefveziU0g3QWBmNG/pZZVWq2/hkK29nKY8LvILvBIcs=
+	t=1752693174; cv=none; b=MZmTqmPVWOzlJgoGCF8jNWiHbHVbIQjSGS5ql1vgXnwa4TDRuUoubbiYD9nmKtbQkFHzmnByyU4TLLFRdiUzaD24nKx40gL8uTH/6OlPxzL+CQVc1AgHqTMi3uDvWE72dZDHQHXsjNesjQfK1ncmo9g+3/HA1oYM9P/4dlsnEPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752681917; c=relaxed/simple;
-	bh=G3lPuCUApuGC7TO34cTcefS+Ne/XTuyO/jotSPqhVf0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=iGkvJtH80Ru63ej+A9cKa5o5B7EfxeMAw1uVWldloerrRADGp7gVGWJBzWKfgKM9R3SM24PbKD0kYrT4nFrjSi+vgbTSS6kGpWwrkRpHMwr+3YV7FkdRe+atiJlc6lxbkgQ5cgDrVXwSwRCKOvLEWHS/D4RPbLkTGofnzIzCTdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e2zLZRiD; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1752693174; c=relaxed/simple;
+	bh=2ehDL48ivmszxrAvnXVIU2R/XJNVWt0laGlvCyDSyFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YXfbPk3e/x3FIKUVFMlo1WIa4WUo/xzDLVa5I3Nfj3OwvhYsg7nptCZEYgUHqHtimuwp2F/iFWIyjTjFZURm0ybij0QVtF4ySryVEdgRjOfaJ3EfvvGEdyvrnmIRy/XtSi1jZ9t3CxfZhjYPb9MLXLFNCaY50JbE3GwNZc2eIn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hAt7IQli; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2zLZRiD"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-235ef62066eso98053365ad.3;
-        Wed, 16 Jul 2025 09:05:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hAt7IQli"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-235ea292956so1573445ad.1;
+        Wed, 16 Jul 2025 12:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752681915; x=1753286715; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752693172; x=1753297972; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UVgMRJ+lsyx/5PbwWdT9sHA9aSAXobVSKmVW6fnzwaE=;
-        b=e2zLZRiD1O1gDZE2OSeDwOjAQMPvETOtWk5k6GFoaoufkXTefruzNa2XRk0U9NTeXf
-         1O4BiskV4U3yIkUzsWfl8wl+RvAKotberJcI7O0ee53FeKjfCb6e9D2le2iI7sj2LqPy
-         J7+HRzVq0kYof8EdBt8BRgzk4RPBCHypJVeXhiXJKX3QTDJSiyel8uNSjVDFXxcshrB/
-         oeB25m0f3yfFWPPTYt5OqEnpb++WNyBEejeIEkl1v0HEGKK7TJtgUR24sQ6/5gNzJaPI
-         bl1IUVkmIo8KeasClM+Cv/YXWi1D09sicSkoyShYK2LzIaJASMrEfqhQuUYxnW2bJcKh
-         2Yhw==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=nO+4D6qUstj9TupJdLpujSDtzD1jBC1X1DNWicmX2CY=;
+        b=hAt7IQli2nhfOOpCHeJmVxjQfJsaF3MX8axmDYFXlzgAuNy278sOkR+tsB8paG10hG
+         5XvPQZVq0JGmqnUhexVS2SkD2rbb3bDNy2bZh8rK+B3NRVugZUxpWxAwo2WUC8lWuWAa
+         5Yf4noZzHwoLyQBdCvhMBMWpz7BdPoqKAMr4lJHB3WyOXeT+mJdQwqdESeCuP2DPKHV6
+         v4QHb9BQSqN3KZGmssiU/jhbjhOW0v58NjogEoOmIRZVldPHQgLYzS+IVD32h0lmwZpx
+         NCCd8aQKLu3Yxoe3u0OTKfzVUJTz2nytgSuT+hTxScdTtYjZ9vbo1ZxoPGYk7q8sUX6z
+         oGuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752681915; x=1753286715;
+        d=1e100.net; s=20230601; t=1752693172; x=1753297972;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UVgMRJ+lsyx/5PbwWdT9sHA9aSAXobVSKmVW6fnzwaE=;
-        b=B1yokx8ePrqaJdX/wD5ZnaVUJLyOyopK0oNBragba7BfZvCo0ivAVyNqakWlo4gd30
-         4Z04YnJQpsE83YppXcnrOmXWI9BBspbz7ZYDHv8YrG/JW/uc7gOe8CuU8fujWZObzCSj
-         /fFd8+rhu+VZoDliSJAen6X28TL/J83WxQ2xlfp1Z8L35d/iaplNoHFp4BjRKUc1ERrg
-         NxEKDMZGnC9pN7omjUiluN8M6FY1LwFVOppvveyq+ETnBDgy3nNL0iHKeyyQWfcJfLID
-         rqP30GtrKKhJJh6R13O0MhhJmA/rdeU65cgLKWdlDGHDev5mwDF0LpIYboVx9Y23NEGH
-         zLYA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1cjrY4Ajzb7pCuE9Jb8odLKZgy76YYYTSURWnnteJf0t3qXUgzcXzMfIQq3MSbXnqbEeOYwviNJvC078=@vger.kernel.org, AJvYcCWhkAIzKwztldSGC/o6JqAXZv36VnmcceAeZ3Cv2DHSPW4FdZ+Xz2sM3/CNqdfDc0agvs+gJF1FWgw0@vger.kernel.org, AJvYcCX0MolqF7iYkeJgVoOCVyIxuHaO+dc+cPiL1Emx8NaeRWL75rrfI2RdfVFTtnBLeLpEjvGg/2S5ro9N@vger.kernel.org, AJvYcCXD12rJRHpoZBmGK7YSEuZUPBuuFBw/Ly/tqXTcfrfYxU4UOnFCy7PNVR0glHXr4fwnT9pyaMZCwvcBMY73@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAY1ZrkDtp9fGUU82Jk/EY2SJiYo0gSlsFUgQQ7lN30muQcdOM
-	gbMtHYucszrR/nPdsCaz88q5iYzJuwwLEwLvITR1ROiWPAkyCpiy9rZna0IVqg==
-X-Gm-Gg: ASbGncvL81Kit2AvVvi5PYC2BSj06dce+8Cv9eFBBMxrihxTx20fejxANRxuyIJqURS
-	E1ppJgAq4v3iRulHa/B7hSE2gLcCLiWUxGy0dVHjRzSSGMua2UnU9wdbR0A3QNzk92fKSc/lsvT
-	Xpg0pYZTVjXBx9qI/gRVtQCDMFALDH1x+euk8xsBdN4i0MeX2ARfatrVFZ6DvN9X7xdlt1WsDH+
-	MFN/NlakYcgGHsnNTTmalEXlANmgYRPqB6EEHarb84Hd0yoQsbkbspJGqn+vlYTD786LXdLSGt7
-	Ff2xf9jSFaHobczeykXxP2AMldq1mFT3HGiJsQ9N86m0q3XalOTFc/amTFE1rG/Z9jxOvmdXmNV
-	53YzuWSF6tdbxgKcO8jgyhEL0PMUvf5eCpFxpbfHs76h7Qejn9iJwU3pw2FiX+28BJ0ObdSo=
-X-Google-Smtp-Source: AGHT+IE38TH5BqmUcE1KaBCkXrsa7LbdbYBffiWCQ78LHEVGn4nG6nxZ9B4/8q3QWyrc6uY70QwxIg==
-X-Received: by 2002:a17:902:cf0f:b0:234:c5c1:9b84 with SMTP id d9443c01a7336-23e24f5516emr49931035ad.37.1752681915052;
-        Wed, 16 Jul 2025 09:05:15 -0700 (PDT)
+        bh=nO+4D6qUstj9TupJdLpujSDtzD1jBC1X1DNWicmX2CY=;
+        b=BTgzV2423prtbbDnu9Ey8i2Oah+hRFmGKxwnk12p6Reazy8gclcVT8ndqsS3OB26Wz
+         wO+g/4tKyRkUhwbZ/bH/xZkAN/ddcyUXE/i6TQQqSbOQeOlaUmDH5FcebrrX1FhzMSNw
+         g9uAWt+Je6h/DXUTx2msbqtHEYfewrl+udPWIKFb4jIIbDGXJksqOKPw+Or6r3hc/Txl
+         Rpw+9MxxQ6rPPWSIXcg3GNGOljkFRjfFxllKcQgBjWMSQLdmmKjtYE4Y0ku/uaV2+Y0u
+         K7AytVPbJnY/SSsZPebUV27whnrKc8VQHX6Tv7A4erLV8kAx+WR7F5nMpKFcpjputkry
+         nKxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVy4oGXNqYXLPac+8c2PI+ddghBQYXcFcfD+dr2gq+PIBHjFHUTEYv7Yb6wAjC4GvQH6M+x7ZY5q0fpiQ==@vger.kernel.org, AJvYcCWNEEhWvpxxSKklIdHAg9xF8vkyGHBNmDndyEmY8T79hHMQ1P7wSK2rVrmlgtYW6lQ8rlfEPdArQf7l71Lc@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0fyOvesOL0rDVn6Wo4QBIvZYLWu16JiUC2vQg2s7m0j/3glm1
+	L+ioCxjMFfJQEqMGYMsidie5d/WNdcIMsVzOy+m7rvTmeQLn2psBtLC0ekHT3Q==
+X-Gm-Gg: ASbGncv4RTnSNB1/JE4FwifTVL5QulRCbo0ZBTeZ2EsPp4Sxp/nvk6okohbS863yjh+
+	W0r6Fsw0IegvvtDC53PMHUw9kUcn4lGBlOiuOk5TY842qKq84E30CE1ZlmoZsAIIytOqCcERbBv
+	qPNJ4rXq7kK9tbOrravjNDkAzIEQgRbTvFL0JH0GURm8A0D8pyc3J+00/rrADpwRmXr3zaP+RYX
+	zqVbJNb7+2sjNsgBX90mX3YTA4FBf1yepyyeSuzwclfXZrMgmlevOu+dM++0xifsyMHEBYIuI3K
+	beJe7tADd2xOZKMMZxMLzc4+sW4Y66e9AnZtetOTnRwEjtxsHSwxvc+nsoV9iZC8F96rgKAuUAb
+	bdwFcNNRzasI3UXJdElSGdEFZ4s1gFVXHzRHq1qikmcStKWR5Vvwpq3JPI4d3zSgZPw6EQeE=
+X-Google-Smtp-Source: AGHT+IGWF3ZUujTOj3bQevHQqqfbitVdO/eANTXysFB2r6VlUMEPD63Amfo08n/+5QNgliORInJJZw==
+X-Received: by 2002:a17:903:94d:b0:234:d679:72f7 with SMTP id d9443c01a7336-23e256d189dmr48696605ad.23.1752693171512;
+        Wed, 16 Jul 2025 12:12:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4323df7sm127453915ad.134.2025.07.16.09.05.13
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4359b6fsm128164545ad.212.2025.07.16.12.12.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 09:05:14 -0700 (PDT)
+        Wed, 16 Jul 2025 12:12:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e02cda3e-799f-42bc-8651-108a258b3d85@roeck-us.net>
-Date: Wed, 16 Jul 2025 09:05:12 -0700
+Message-ID: <5ffdeb33-2e78-4cdd-9b0e-5e7d78d25d73@roeck-us.net>
+Date: Wed, 16 Jul 2025 12:12:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,13 +69,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] drivers: hwmon: add EMC2101 driver
-To: =?UTF-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
- jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- corbet@lwn.net, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250709164829.3072944-1-noltari@gmail.com>
- <20250709164829.3072944-4-noltari@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/q54sj108a2) Add support for q50sn12072
+ and q54sn120a1
+To: Cheng.JackHY@inventec.com, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-0-c387baf928cb@inventec.com>
+ <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-2-c387baf928cb@inventec.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -121,20 +123,121 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250709164829.3072944-4-noltari@gmail.com>
+In-Reply-To: <20250701-add-support-for-q50sn12072-and-q54sn120a1-v1-2-c387baf928cb@inventec.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/9/25 09:48, Álvaro Fernández Rojas wrote:
-> The Microchip EMC2101 is a SMBus 2.0 fan controller with temperature
-> monitoring.
-> It supports up to 1 fan, 1 internal temperature sensor, 1 external
-> temperature sensor and an 8 entry look up table to create a
-> programmable temperature response.
+On 7/1/25 05:03, Jack Cheng via B4 Relay wrote:
+> From: Jack Cheng <cheng.jackhy@inventec.com>
 > 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+> The Q54SN12072 and Q54SN120A1 are high-efficiency, high-density DC-DC power
+> module from Delta Power Modules.
+> 
+> The Q54SN12072, quarter brick, single output 12V. This product provides up
+> to 1200 watts of output power at 38~60V. The Q54SN12072 offers peak
+> efficiency up to 98.3%@54Vin.
+> 
+> The Q54SN120A1, quarter brick, single output 12V. This product provides up
+> to 1300 watts of output power at 40~60V. The Q54SN120A1 offers peak
+> efficiency up to 98.1%@54Vin.
+> 
+> Add support for them to q54sj108a2 driver.
+> 
+> Signed-off-by: Jack Cheng <cheng.jackhy@inventec.com>
+> ---
+>   drivers/hwmon/pmbus/q54sj108a2.c | 51 ++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 49 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
+> index 4d7086d83aa3..34233d955c48 100644
+> --- a/drivers/hwmon/pmbus/q54sj108a2.c
+> +++ b/drivers/hwmon/pmbus/q54sj108a2.c
+> @@ -21,11 +21,14 @@
+>   #define PMBUS_FLASH_KEY_WRITE		0xEC
+>   
+>   enum chips {
+> -	q54sj108a2
+> +	q50sn12072,
+> +	q54sj108a2,
+> +	q54sn120a1
+>   };
+>   
+>   enum {
+> -	Q54SJ108A2_DEBUGFS_OPERATION = 0,
+> +	Q50SN12072_DEBUGFS_VOUT_COMMAND = 0,
+> +	Q54SJ108A2_DEBUGFS_OPERATION,
+>   	Q54SJ108A2_DEBUGFS_CLEARFAULT,
+>   	Q54SJ108A2_DEBUGFS_WRITEPROTECT,
+>   	Q54SJ108A2_DEBUGFS_STOREDEFAULT,
+> @@ -54,6 +57,20 @@ struct q54sj108a2_data {
+>   #define to_psu(x, y) container_of((x), struct q54sj108a2_data, debugfs_entries[(y)])
+>   
+>   static struct pmbus_driver_info q54sj108a2_info[] = {
+> +	[q50sn12072] = {
+> +		.pages = 1,
+> +
+> +		/* Source : Delta Q50SN12072 */
+> +		.format[PSC_TEMPERATURE] = linear,
+> +		.format[PSC_VOLTAGE_IN] = linear,
+> +		.format[PSC_CURRENT_OUT] = linear,
+> +
+> +		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
+> +	},
+>   	[q54sj108a2] = {
+>   		.pages = 1,
+>   
+> @@ -68,6 +85,20 @@ static struct pmbus_driver_info q54sj108a2_info[] = {
+>   		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+>   		PMBUS_HAVE_STATUS_INPUT,
+>   	},
+> +	[q54sn120a1] = {
+> +		.pages = 1,
+> +
+> +		/* Source : Delta Q54SN120A1 */
+> +		.format[PSC_TEMPERATURE] = linear,
+> +		.format[PSC_VOLTAGE_IN] = linear,
+> +		.format[PSC_CURRENT_OUT] = linear,
+> +
+> +		.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
+> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_POUT,
+> +	},
+>   };
+>   
+>   static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
+> @@ -177,6 +208,7 @@ static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *bu
+>   {
+>   	u8 flash_key[4];
+>   	u8 dst_data;
+> +	u16 val;
+>   	ssize_t rc;
+>   	int *idxp = file->private_data;
+>   	int idx = *idxp;
+> @@ -187,6 +219,17 @@ static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *bu
+>   		return rc;
+>   
+>   	switch (idx) {
+> +	case Q50SN12072_DEBUGFS_VOUT_COMMAND:
+> +		rc = kstrtou16_from_user(buf, count, 0, &val);
+> +		if (rc < 0)
+> +			return rc;
+> +
+> +		rc = pmbus_write_word_data(psu->client, 0x00,
+> +					   PMBUS_VOUT_COMMAND, (const u16)val);
+> +		if (rc < 0)
+> +			return rc;
+> +
+> +		break;
 
-This looks very much like a clone of LM63. Why does it warrant a new driver ?
+That change is completely unrelated to the added chip support. On top of that,
+it is dangerous, and the output voltage can be manipulated using regulator
+support if needed. Given that, I do not see the point of this change.
 
 Guenter
 
