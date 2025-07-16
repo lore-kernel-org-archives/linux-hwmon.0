@@ -1,91 +1,105 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969D222D7B6;
-	Wed, 16 Jul 2025 14:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9E326E6EC;
+	Wed, 16 Jul 2025 14:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752677288; cv=none; b=dsCrpL5LFUCThyIwNLd4sFN6IUdTDrrmDacGskpR3VUfOl6o6W394ZBKatMH+75eCGcYwYdH+wtVEyC5WsH+FH781v9DW6H3DxDJ6CMDTR9ueJ+u+C9tQeMqMkVsW1mG5FQ63tNuFCzJIAJtCApkQlV1cdeZwZZO0CpAWpwJf4Q=
+	t=1752677541; cv=none; b=Ng1pojmm9fgqvetxM8fGsG0VILRtl483MEjtt8K3oxk8gOyHfsfCKJjTeZ0qgHI/mw7duOkIK8A+FH8BRBNUwFsnyC++Bmvw5Ov/l8/QFrOY+yQolCZbL0QVsOeJLWUDqeNEh8XhCh0g3pjCIZxNPjsDTq/ZgXMn8HCRHKse1ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752677288; c=relaxed/simple;
-	bh=buYIbE8b+yBnGJkQj4nap90I/0M3cyLAegERBn4DtZ8=;
+	s=arc-20240116; t=1752677541; c=relaxed/simple;
+	bh=00t3f5fFpc0TcNGhJsGnbORylIqmc4eZX3Z3+T+rvaY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kK77K4frvG3ar5hOpHrpto5C8UhDbAJHqTbBHjgDiOVvvLJXbPx/SjuQlDdMlnuY+JmWw3TWWTpi+3DLNENR2OrphydIyiYuM0UN5tIpAKpqeyl8vn1wVsG9t/P5fULPTitRIMuu7GeH4x8x55mPxRHd+fLfVzhqeXfQiCJqILQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2yqOD7L; arc=none smtp.client-ip=209.85.214.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7bbBFBi7TwLEKduLi4dzgy2yaCDXhJFp11bpoScsQyZv2aC5+wN9DhDjoBgbu56+Gll3XymoVy10KOYD08nsyFtmV6xeESoVazbVh8O/z3v+96FDDhfQghJo6JyKS7AlEoGYU9fjJldGqpZjCkfxPq7yTFg68+xwkFLlKjR+WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gH7sqO4v; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2yqOD7L"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2350b1b9129so45866515ad.0;
-        Wed, 16 Jul 2025 07:48:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gH7sqO4v"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b34a6d0c9a3so6681206a12.3;
+        Wed, 16 Jul 2025 07:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752677285; x=1753282085; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RLKg2EVNsiY8pEWCCtBrcomCdD+iwAcVZcaj3AoOsps=;
-        b=c2yqOD7LlAucvyUbRT3WKksB5q3Ud2lK6yvp+64w9dEVf7CWxI0vhCgCZUMN5nqHX3
-         dmruXO3SNeMO6b/FOm8yziVc5e+BEGsw+v766Nb//mQKKo1H2K/JtPRrP5XpeS9t9l5F
-         QHPTCXnVuEhKAV4E6mqVg5poCpTjMwf9Dt5f0/G3f3jL8CpAbyGmkxc7Ais4UxCV59k3
-         XaIkSTQLyF9W44fYFJhZZ7vOunnWkEapLJ6fTMd8mlzUn5wX5SMDhrq2QeEIkhEh7f9Z
-         ZgqZ2K6zUcPlH+S3Qw+Qbp6bjAwno0+Yym+KApnXmmfZghBm+CLMa6/ubMlw9HvFDuA/
-         MhXg==
+        d=gmail.com; s=20230601; t=1752677538; x=1753282338; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SEn/yNAcCZyIEV3FDNWtqBgyQzfyrvjBlDe3jR1D9o0=;
+        b=gH7sqO4v6www1tppka5qVRVdN9sY5yjXqOyRmolxuRKD01qXXt50nf8zIq5HI1MnLD
+         SnYWMROfHcZKYtnsHHW3u9O5BtxohJeJZrNAaRUVf/+IxFpUKQVWWVdbMkOQ69dX2yG3
+         s1+cKNHmY4P70QYK7P81xJVwOf6/RCNyUiPn9j+iwr86yt3XNnrXWp2MCvNz66izEriI
+         cjw7CjAlMHTKfeGrjJxyN2kEAO/LUZ0kNIW7IDjrgA9dDJ0iVGrllLcIkWLkpQetVtYR
+         jhglMZ7IZ9C3lg9+8wiXnYyQDtRMSWWFyEiV+QBOL9Cxn3PDsok3heZhmL1Q7RcaPgjz
+         qAKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752677285; x=1753282085;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RLKg2EVNsiY8pEWCCtBrcomCdD+iwAcVZcaj3AoOsps=;
-        b=I3f8YPAeOOMpJwg9D7Qhe4N2Q+VZ664KDCxYs4W8NCR9zDIbI8/Vvn1vUuMbZjGvbW
-         djT56zlSrDex98X+my2va9iu3jRIJbWS+AMdySm2ccnVm7Rl3CSD/LsEkBVKv40Cwmaz
-         U4aBYzv/WDDWnHS/Znu5y8MdqbSF+F6I4j2SxkxgpFckPbenrQzQno9X72QM2qPY+VFb
-         DDoNPjbUI4QG9geXdHPQvdFEBW3lLSrswosyb7LU/UTv4J96VcutGEaGXJV6l5L/c3ER
-         WsH8GTduIjoNkcHfqMp9KnK7RtFbUE1yhg+cAYGZ5ss74eBNqn5/h3vWjVMWrZqPsqCL
-         /bQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUclXDEu3YqPqWb/vDAHea5i1++vg2FRO5ET5lEVvGDhCvUH5To8nWdp1TLWD3ph9/VuVuNiKCHtk0L0sTo@vger.kernel.org, AJvYcCXhWyZHb+Pj6otcHTZ/ydfRCDQ+B8dfnjUlG21I7OaoxjHxdXP5AvdIs0TeW5Ulsf5Itw6TeqOrWo5RHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyIb+AvIYjSFz5NKGU1nhXsLVCgV1xZa4tf8D1Mpmfy7m6c/On
-	K9sUzouANlaEQkcp3EKb5GO5+dstGPqjm9NdThwbJgnMd2Bc6CppRKwc
-X-Gm-Gg: ASbGnctxLxEZ8RHzkfiPvhAjl5jc78e+yjn/1CgqiHf73ZqChvt4+ftonlzP0y4E8sp
-	zfr/Hl/FmqJczgawrcmREgO3hePTTydR+yA+tTh70QpoTmUD065tLeeEV/NvKM5+FvgPLJ8tN+a
-	OmQKBzHwcI5khSVUkb7yaIAWnyLet+26oHbGLrz6LUl2Y5GvXPrjkrn0bdKrfUtKPX8soeWv8g8
-	eAcf1zJyp6yrwl9JgQl3ipSOfQ+wzRhsatqx+1FQt+0+bd9E9EJ7gL+55aoxTMCAzGUHQi1Rx7p
-	azT8ryWNX6o1rUrdvID3OgH+6eg3FxfMpKexHSRyLiTeHvDrAQHWpIr6oZ9p7LhamTyCuV+thO0
-	I/fPuVbaQuJJ7g69y7W+LNd8rbPtgFI0/2Cw=
-X-Google-Smtp-Source: AGHT+IECtyEgUczaoPOLaIGNwOtcRqgorDLvQjbeRFw9z5fqGFExQtpeppviy6cQ4ZcWp0JL41yi+A==
-X-Received: by 2002:a17:902:d2d0:b0:234:8f5d:e3a4 with SMTP id d9443c01a7336-23e2568542dmr50953805ad.2.1752677284798;
-        Wed, 16 Jul 2025 07:48:04 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752677538; x=1753282338;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SEn/yNAcCZyIEV3FDNWtqBgyQzfyrvjBlDe3jR1D9o0=;
+        b=TEAd7CsuN/AcEdzlGsxi/5mWpSR49Z4spCGIhnblJf1uyYAmJTRtJbuuWu8+u3rq5Y
+         V5gckvR/Z0hysf14zEy2+2Z/Kahshp/J6u4MPq9vIiMSpqGDhlWvKZhVd3VD0cv/HkDT
+         cjhv5Rms05oDxjFxg2x50so2lX0w1q2MxnOLzhzxxbsUUsTryjdJdQsBS6xwI02Y3AHX
+         e/cDDdU4xUhmvenXRTXNophf93eokcwcnkUqCPK3gWuAyh3WhdzksskifW+vnNYC5GbA
+         /KJicdPRzuG4RcfbP+w5MAiXGNobPcZPznzRr9hzDMJybKiN09HrnFa9BmBKQbUG/j1i
+         A+kg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBpwe6qsXc5Yhb0hnyOfSdn/XScA6yBerKU9RiesaaedMJJVitgLsqS3H8X+NgOdYReQVyag45Pas+@vger.kernel.org, AJvYcCVDo3n3E61M9UGxrpM4EyguYOYpFM7Tk61nkHlJvgs5lE6+wUHos9ZGzLtgh6x+4vPtqYBedEcKS2ta@vger.kernel.org, AJvYcCVyTYswlN+FG3nGKpBrtgVmPSiY+RJbbzcUhDNFa6YpI5jyZCGs2P6W9aTMh84u+cmFb3CO6QMzYGLEEN4=@vger.kernel.org, AJvYcCWPbrW2JVJppT4J/78hna1Q4xG+VH1ADv7mzwUyBnnIyEUYHIhR3R1rE02v/v2OUm5/1h4i1KefIUrmpLUz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy76MttVihhGqPnkzCMk4cJshlKV+iqoRj65aGRWIcZqK1apMBY
+	ZcqhIJShkrBeHLHMV3s6V7mVLumuPlhS2Z+Abfi0z7ZwlHIdL7xcYQ4c
+X-Gm-Gg: ASbGncu/FE8AX6wSbqIIxO8mS5QVTOj/4hYqiFwHcBJX/FlALz48eXSMnHVD5WlEYXC
+	l7bqyHB8APfteez2fyNSiZx2n/KpY8Vb4gpoHisOV8g56ZNpWXI6d+AgNChNBDaDby4umVJbI+v
+	mUGSHJQrOdIQMS+cJvRSv+dYvdDXJJRjup3APjoA760Y+nkKes9d8CesXE1/KjDlAFEomUPsZ/B
+	pBZxSgbIy1IOGahnLYqKA824/E+WA4pvN4EY/FJPGLArz8eQi4Tmi5dAiLrRNv/Dd8OUzxy4uM3
+	JSO1FU31lplIILgxILQlvh4VxFuzLdYYvqdtkluvbClJlRVihLAwXb/tPgm2pvCmWlD57aI+LYx
+	l0FVM8YAT1sQocgawd7xfhwf4vC4zZhm53V4=
+X-Google-Smtp-Source: AGHT+IEvTyYKIFNFKtos+Q7xGTJwGDjkxtH9YEdOcir9X6sczH/cSaEvxgJwhnxHV55E/V1jFMVXTQ==
+X-Received: by 2002:a17:90b:5485:b0:311:b0ec:135b with SMTP id 98e67ed59e1d1-31c9f47c799mr4299236a91.24.1752677537737;
+        Wed, 16 Jul 2025 07:52:17 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23de4322b17sm131023205ad.103.2025.07.16.07.48.04
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f1e83d7sm1552211a91.20.2025.07.16.07.52.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 07:48:04 -0700 (PDT)
+        Wed, 16 Jul 2025 07:52:17 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 16 Jul 2025 07:48:03 -0700
+Date: Wed, 16 Jul 2025 07:52:16 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-Cc: jdelvare@suse.com, linux-kernel-mentees@lists.linux.dev,
-	shuah@kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: max31827: use sysfs_emit() in
- temp1_resolution_show()
-Message-ID: <607fadd3-1c7a-4efb-8d31-8117f1ee6e50@roeck-us.net>
-References: <20250712131447.326995-1-khaledelnaggarlinux@gmail.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: (pmbus/adp1050): Add adp1051,
+ adp1055 and ltp8800
+Message-ID: <0d6d9830-ab41-4f21-99aa-2595ebc4c499@roeck-us.net>
+References: <20250709-adp1051-v5-0-539254692252@analog.com>
+ <20250709-adp1051-v5-1-539254692252@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250712131447.326995-1-khaledelnaggarlinux@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250709-adp1051-v5-1-539254692252@analog.com>
 
-On Sat, Jul 12, 2025 at 04:14:46PM +0300, Khaled Elnaggar wrote:
-> Replace scnprintf() with sysfs_emit() in temp1_resolution_show(),
-> as recommended in Documentation/filesystems/sysfs.rst: show() callbacks
-> should use sysfs_emit() or sysfs_emit_at() to format values returned to
-> userspace.
+On Wed, Jul 09, 2025 at 01:43:25PM +0800, Cedric Encarnacion wrote:
+> Add support for adp1051, adp1055, and ltp8800.
+>     ADP1051: 6 PWM for I/O Voltage, I/O Current, Temperature
+>     ADP1055: 6 PWM for I/O Voltage, I/O Current, Power, Temperature
+>     LTP8800-1A/-2/-4A: 150A/135A/200A DC/DC µModule Regulator
 > 
-> Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+> Co-developed-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+> Signed-off-by: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Applied.
 
