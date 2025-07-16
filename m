@@ -1,67 +1,67 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D54427991E;
-	Wed, 16 Jul 2025 15:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0939718C31;
+	Wed, 16 Jul 2025 15:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752681031; cv=none; b=brCmBL5Ndr4ZzdoW7RKpKMvGT9THgMkzCfZKf4CLNZlFl91r5vvFTF0VRUn2vz7Q8JAR3BLO0EC6DvsuMZTaEjrD3vyAvFd25X1xO+uOJ6H2Cxp2WkcSUNisHsJGQtqbR/sZxxk3Q328zrIgu0mPMgKfMqIEXX07glBwUc5mPis=
+	t=1752681146; cv=none; b=QNkC4YlV8MEdykUIK8HfWuQQKFI/KxsY1lLupEsSNZfr5fii7E2IEzVHQWfT44wgNTivK4jwMDUbE3sXxYBvPVQBRDPL/5zISe3gOPwc7ZaiHZyY3UNIqZxje4u5RvRqR+2wee/2Ldlh4aXgandqzRtzUhxpJDJsayA63rd+L58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752681031; c=relaxed/simple;
-	bh=U6liLS73og2VmOX90y6m2VYoStDNyADA3oaHx0uEJcc=;
+	s=arc-20240116; t=1752681146; c=relaxed/simple;
+	bh=OylttVKD8mE7KPJBFkYcv6Rwt2AGyCAk9mSgrHZheW4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oyQ9M7z/Xi01wENc6nfVh6jfvdloDUOVQ3uvmtn9Q3SY5noKbObgIV18shl7TvWe0BS5687n/LhtimHyb7Bp0savY9anxQRpeLU8E7nX73MlvAna0xR1RnJFvFH37B5BXLhNc1mzK6n+RfKVY/eDSE7RKh2OajA/P1sNKMuobis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EkhQ5iRB; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=VcBB0LeUg1FlhqFt5bp/pUHaB0EMm0NWfrBpQwp6bVIwGq4Yc+YzG5t4+I/Ey95UVafQNaRJd+QZyWKYQGYCzo6VZhuQqaSW3i723OB7YoM0fl3FkwWKYls1SYAwmnZhisPCDKyBXQxKU0JUB+wvk3M7i8s5Pa9Da8LqiuBb+GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bJz4tDpD; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EkhQ5iRB"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-235a3dd4f0dso43853685ad.0;
-        Wed, 16 Jul 2025 08:50:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bJz4tDpD"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b3182c6d03bso7802345a12.0;
+        Wed, 16 Jul 2025 08:52:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752681029; x=1753285829; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752681144; x=1753285944; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uy3/sWUVvTpJ8epPV0x+E3QPYf0Bgh6x09Pucl/boaQ=;
-        b=EkhQ5iRBAoOqYQsdMub+LcWibj9D3aK2gwTIaqeuPL/6qIUIabc0enQHU9ro0NacCM
-         dm0yezlenNqiXLw3bqKMjdZtjKI8dUiCg/G/SGCXuHGvUUISTo/HmaooNBGXPvpVGUP6
-         oIASdaTgZc8cFSaJHRW6CxF3e5jcyg5LG/wM50OJ7tN1SJ9agKhDgTaxYb8xYcLx2+rl
-         rRFZOSVx1Q6XKrFDOxZrTpbax1YGLKFMK2THXoDoUxOq+a1dzz1w64D5lJ1KNPw3ECJY
-         SGXlNO/04OVXYfCW+QOssb5TBDj/2cLlJVuW9FHhM20R2Zp/PrtVX0VR9zveSFVdvLYl
-         SWbQ==
+        bh=1Ukl7MYBC3ANSBm9jO5Nq81UCjp7PwuTwU9cCInIjQY=;
+        b=bJz4tDpDhlXoM84gsLYzHAI316HUqnqzGRkmhNGJyacCdUUmoFWbaA++bLvutx3iKf
+         yhGQnhg7aLZk3m4MLvhPeKXyc5ii54uoOHMqoQ762j3nplax1vJPt6evF9OmHpfIq7AY
+         ZyhxsQUKN81ynhocl5xGKIW4SfEB27ES+yVzK8Hd6avOi8f8WfDRKjEGLTdzgy6doNvx
+         URwW6ZC0amoudwVwMyG2DYGqz9htK7mO0H9DSr6pvPBI1TPfMXgRVsgojD/CUOGBnapn
+         z5WVnIMEREmjqt2JjwWikGOY1W84eDytGQVyaPFlZxqAW0OoWSwozhBO3NizTAa7wdGd
+         SUfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752681029; x=1753285829;
+        d=1e100.net; s=20230601; t=1752681144; x=1753285944;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uy3/sWUVvTpJ8epPV0x+E3QPYf0Bgh6x09Pucl/boaQ=;
-        b=ZnicfnGrgJGppIawH3+fIRM5QDNtsHWGaRY000gRrBm2XzyNonBePYKgP6JHiGgdW7
-         y6WVACxTz0q7+JXJEkgutz1NvHb7hvWVWXR7AIAx6C3P6W8+xvPQM8CHzY3OdFVSGn6s
-         TbX6tKkSAs8Dg17Av06P+eu9PQqioOQfX5oR99mzsdU9xvB07hm4P5EdSn/vblIlzy+P
-         hueOQBiLt/K162HTkWAFml8de15+nigxlepnxjuHXx907xpGzdYeCnh8/NT8cWY1lMKW
-         B4BIemtK9/ThbIaR/lA67FOu79z2vmzt073WS+8BocfkLXBZYY3SCA+AzcXodaZnpZkZ
-         Y1jA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+39KLs6FXh4QCIyF3qMHCFBzdvHPllNDTRrI90oFRQKRihoCrI3KEj+xdAuLt9XxwNhIKicOwE6byf81M@vger.kernel.org, AJvYcCWQ4QEmvg4UrxX4c5D+wSLdNSTXuPIkNMQgvGSIAz5DUfVwBJ1LKeR8F8vKU9yYfLXugCEEaREBM/Ej@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEUj+VUd499oM+jMrVE5mW86WTKz2iRDzQ3A2Jg2NcFOzx7X1r
-	aY5Z6JsniheBbCTJp3jPBbbROH616mK+gnsiPTO8dDVbzcpIrEvNVc4do+O8cw==
-X-Gm-Gg: ASbGncsiqi83NH9EXr+Pw1Gks6ZlhvzTljL4vfiGaebQRBD8WhEQ0nUSW4GN1/eSOJV
-	v1SKKAYQ6TQT1QpfZm89nRCJyszR5PSEdZ30Qxd5HW6QGrzYIF7sMs/3RMSMrNB27xtE0up9Vda
-	k0WEfSRe3bxcA4KBF7JbaQSBItSXu4H/ki+lPmiEY9y72X//U1/F9XnAxWw2NpmcpbPu7e99/t8
-	qwSnx2ytIas47vkqP4aV5A7DiFbJ/kCzTWmmPDrkjeU/Sw8VvAwFhpppnx/0tKe8e7yQFN00Tu4
-	W8DuLj/R2UockPtef7J6h9kld+Y+EwKEZN33Umea951uENP7N7lXkJNLNrHNMfGJUuWNTzteTK7
-	I0majPbNheRDLPafpChpIf1OMAOW05nYrL7YgnrKwfm5+eoyTM56p5R3Yo4uz/0NyAdgBr68=
-X-Google-Smtp-Source: AGHT+IFcUmrOLDgbLvGRU5fQ9/WQd24FE/a5JmpOGwqNr2n46alnuNALslorog713SKQAbhyUXzPyw==
-X-Received: by 2002:a17:903:1cf:b0:234:8ec1:4af6 with SMTP id d9443c01a7336-23e24f7d214mr53193115ad.45.1752681028494;
-        Wed, 16 Jul 2025 08:50:28 -0700 (PDT)
+        bh=1Ukl7MYBC3ANSBm9jO5Nq81UCjp7PwuTwU9cCInIjQY=;
+        b=CDx2882HWqHz/aAvnyuonStXEarxb1qoB8VbcYbzHTLJXc7Hon4ul/+4cJ0dFiHfYJ
+         LuViPGPZqHdBrba2hm/HxXAkTi5oqp6ux9ldsx4Fi7GxuWxz8niNS9xvAFe9ZZME2n2z
+         tvpO7JRfd6J4o6H4lmzOul14It2LK+/iun1SzTpLDjED/yOvRyAfkzBN0LmQb2am0cz5
+         VHRHDu9EvSRmXuVGAF/fWDo0ISNxJ2MOPQdFxWNlh+95xWO2iBMl4ZqtJ9YlCkPExNJn
+         2hKy/UP+1uTKeGf2aPuHL0rq/Fyta+vFWuGwzh1L6oLqHg+1+bSnV8Xb34Dhvmtq3x/C
+         fhag==
+X-Forwarded-Encrypted: i=1; AJvYcCUBf/gIzjDOZoieyv3LU9tpEzgF/T4MQKL7vSJvAknFyGDmauEO7HKBffV7vAaeJUz0CS+CxQHN/Xqi@vger.kernel.org, AJvYcCVt2pfE9k1Gm/22JufROmrW4Ukraf23FWa/IVjy9V7SQsTSjpPXM6Tl0ekjw/YNHDbWc1xuTSwjmiuuGTb0@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZoSG30neceCsVDM3vP2VFm1hohIsObvD7mGjbotsLt+rvVUBw
+	mAYJYtxHSzSgNMo7/2SKULA6gz2p1yyiZwn/QkL48bgFGiYjDpXD3UvL
+X-Gm-Gg: ASbGncuGxafxs2GKmf9whpGvYRmnz7bBddPWn4dffC1Sd0/hiO2RUVY/rpEpVZTryiE
+	K0ARQQp+msOI4rxKwfbATRDBMsbxBLY7ZEcnbRRV4aFGfxtpxHENaga0kNWkRopWrul/ZfUQGL5
+	Gwfj1s+UYYu/jVKBg4AOS9lYKqHWsiCN+8sGULbM81wco7FH4eAHuA1AYy/Yv7FzlMQodligJqP
+	fwZMxpfuNGT7AjICZGFV0A3N5NGB4uYIohpYGYZQdrSRAWAV9fXzaLADQtZ02suyEFXy+E5uGtC
+	CHz9UyhZSMskTJ39GgwYEOpFGwKs+J9sIr27TUODmI96iY2UqQhjBRGqjMFCm0kgr5MFJldCdTN
+	rGlj+lM9Sa8S549vQOFWD3Zb7TY1CXZRvSKyj8VjgxtfncOu421sR0aPfCSv0GgzZBCh8ilA=
+X-Google-Smtp-Source: AGHT+IGTic8ujSiqr54AymsdvHDmW5v2mjFxNtDYCrb53c4AgefCHXmbrE0m0SWvFE3f1PRmTa/4gw==
+X-Received: by 2002:a17:90b:580c:b0:313:1a8c:c2c6 with SMTP id 98e67ed59e1d1-31c9e76aa70mr5838168a91.16.1752681144241;
+        Wed, 16 Jul 2025 08:52:24 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f234251sm1709338a91.42.2025.07.16.08.50.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f1fd90csm1620366a91.28.2025.07.16.08.52.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Jul 2025 08:50:27 -0700 (PDT)
+        Wed, 16 Jul 2025 08:52:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cceed588-9699-423e-8a33-33dcad471133@roeck-us.net>
-Date: Wed, 16 Jul 2025 08:50:26 -0700
+Message-ID: <8e6d8c2f-ab9a-495d-8b43-878dbc0451ee@roeck-us.net>
+Date: Wed, 16 Jul 2025 08:52:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] hwmon: ina238: Add support for INA228
+Subject: Re: [PATCH 1/4] hwmon: ina238: Fix inconsistent whitespace
 To: Jonas Rebmann <jre@pengutronix.de>, Jean Delvare <jdelvare@suse.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>
@@ -77,7 +77,7 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org,
  kernel@pengutronix.de
 References: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
- <20250715-ina228-v1-4-3302fae4434b@pengutronix.de>
+ <20250715-ina228-v1-1-3302fae4434b@pengutronix.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,236 +123,35 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250715-ina228-v1-4-3302fae4434b@pengutronix.de>
+In-Reply-To: <20250715-ina228-v1-1-3302fae4434b@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 7/15/25 13:49, Jonas Rebmann wrote:
-> Add support for the Texas Instruments INA228 Ultra-Precise
-> Power/Energy/Charge Monitor.
+> Some purely cosmetic changes in ina238.c:
 > 
-> The INA228 is very similar to the INA238 but offers four bits of extra
-> precision in the temperature, voltage and current measurement fields.
-> It also supports energy and charge monitoring, the latter of which is
-> not supported through this patch.
-> 
-> While it seems in the datasheet that some constants such as LSB values
-> differ between the 228 and the 238, they differ only for those registers
-> where four bits of precision have been added and they differ by a factor
-> of 16 (VBUS, VSHUNT, DIETEMP, CURRENT).
-> 
-> Therefore, the INA238 constants are still applicable with regard
-> to the bit of the same significance.
+>   - When aligning definitions, do so consistently with tab stop of 8.
+>   - Use spaces instead of tabs around operators.
+>   - Align wrapped lines.
 > 
 > Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
 > ---
->   drivers/hwmon/ina238.c | 98 +++++++++++++++++++++++++++++++++++++++++++++++---
->   1 file changed, 93 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-> index 44f7ce3c1d7b5a91f67d12c1d29e1e560024a04c..f8c74317344a5bbdf933a32b8c7e5aba13beda30 100644
-> --- a/drivers/hwmon/ina238.c
-> +++ b/drivers/hwmon/ina238.c
-> @@ -107,6 +107,7 @@
->   #define INA238_DIE_TEMP_LSB		1250000 /* 125.0000 mC/lsb */
->   #define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
->   #define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
-> +#define INA228_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
->   
->   static const struct regmap_config ina238_regmap_config = {
->   	.max_register = INA238_REGISTERS,
-> @@ -114,9 +115,10 @@ static const struct regmap_config ina238_regmap_config = {
->   	.val_bits = 16,
->   };
->   
-> -enum ina238_ids { ina238, ina237, sq52206 };
-> +enum ina238_ids { ina238, ina237, sq52206, ina228 };
->   
->   struct ina238_config {
-> +	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
->   	bool has_power_highest;		/* chip detection power peak */
->   	bool has_energy;		/* chip detection energy */
->   	u8 temp_shift;			/* fixed parameters for temp calculate */
-> @@ -137,6 +139,7 @@ struct ina238_data {
->   
->   static const struct ina238_config ina238_config[] = {
->   	[ina238] = {
-> +		.has_20bit_voltage_current = false,
->   		.has_energy = false,
->   		.has_power_highest = false,
->   		.temp_shift = 4,
-> @@ -146,6 +149,7 @@ static const struct ina238_config ina238_config[] = {
->   		.temp_lsb = INA238_DIE_TEMP_LSB,
+>   drivers/hwmon/ina238.c | 30 +++++++++++++++---------------
+>   1 file changed, 15 insertions(+), 15 deletions(-)
+...
+>   static struct i2c_driver ina238_driver = {
+>   	.driver = {
+> -		.name	= "ina238",
+> +		.name = "ina238",
+
+This was aligned with ".probe" below. Either leave it alone or change the tabs below as well.
+
+Thanks,
+Guenter
+
+
+>   		.of_match_table = of_match_ptr(ina238_of_match),
 >   	},
->   	[ina237] = {
-> +		.has_20bit_voltage_current = false,
->   		.has_energy = false,
->   		.has_power_highest = false,
->   		.temp_shift = 4,
-> @@ -155,6 +159,7 @@ static const struct ina238_config ina238_config[] = {
->   		.temp_lsb = INA238_DIE_TEMP_LSB,
->   	},
->   	[sq52206] = {
-> +		.has_20bit_voltage_current = false,
->   		.has_energy = true,
->   		.has_power_highest = true,
->   		.temp_shift = 0,
-> @@ -163,6 +168,16 @@ static const struct ina238_config ina238_config[] = {
->   		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
->   		.temp_lsb = SQ52206_DIE_TEMP_LSB,
->   	},
-> +	[ina228] = {
-> +		.has_20bit_voltage_current = true,
-> +		.has_energy = true,
-> +		.has_power_highest = false,
-> +		.temp_shift = 0,
-> +		.power_calculate_factor = 20,
-> +		.config_default = INA238_CONFIG_DEFAULT,
-> +		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-> +		.temp_lsb = INA228_DIE_TEMP_LSB,
-> +	},
->   };
->   
->   static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
-> @@ -199,6 +214,56 @@ static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
->   	return 0;
->   }
->   
-> +static int ina228_read_shunt_voltage(struct device *dev, u32 attr, int channel,
-> +				     long *val)
-> +{
-> +	struct ina238_data *data = dev_get_drvdata(dev);
-> +	int regval;
-> +	int field;
-> +	int err;
-> +
-> +	err = ina238_read_reg24(data->client, INA238_SHUNT_VOLTAGE, &regval);
-> +	if (err)
-> +		return err;
-> +
-> +	/* bits 3-0 Reserved, always zero */
-> +	field = regval >> 4;
-> +
-> +	/*
-> +	 * gain of 1 -> LSB / 4
-> +	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-> +	 * precision. ina238 conversion factors can still be applied when
-> +	 * dividing by 16.
-> +	 */
-> +	*val = (field * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4) / 16;
-> +	return 0;
-> +}
-> +
-> +static int ina228_read_bus_voltage(struct device *dev, u32 attr, int channel,
-> +				   long *val)
-> +{
-> +	struct ina238_data *data = dev_get_drvdata(dev);
-> +	int regval;
-> +	int field;
-> +	int err;
-> +
-> +	err = ina238_read_reg24(data->client, INA238_BUS_VOLTAGE, &regval);
-> +	if (err)
-> +		return err;
-> +
-> +	/* bits 3-0 Reserved, always zero */
-> +	field = regval >> 4;
-> +
-> +	/*
-> +	 * gain of 1 -> LSB / 4
-> +	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-> +	 * precision. ina238 conversion factors can still be applied when
-> +	 * dividing by 16.
-> +	 */
-> +	*val = (field * data->config->bus_voltage_lsb) / 1000 / 16;
-> +	return 0;
-> +}
-
-Sign extension missing for both. Yes, I understand, the bus voltage is always positive,
-but the shunt voltage isn't.
-
-> +
->   static int ina238_read_in(struct device *dev, u32 attr, int channel,
->   			  long *val)
->   {
-> @@ -211,6 +276,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
->   	case 0:
->   		switch (attr) {
->   		case hwmon_in_input:
-> +			if (data->config->has_20bit_voltage_current)
-> +				return ina228_read_shunt_voltage(dev, attr, channel, val);
->   			reg = INA238_SHUNT_VOLTAGE;
->   			break;
->   		case hwmon_in_max:
-> @@ -234,6 +301,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
->   	case 1:
->   		switch (attr) {
->   		case hwmon_in_input:
-> +			if (data->config->has_20bit_voltage_current)
-> +				return ina228_read_bus_voltage(dev, attr, channel, val);
->   			reg = INA238_BUS_VOLTAGE;
->   			break;
->   		case hwmon_in_max:
-> @@ -341,13 +410,27 @@ static int ina238_read_current(struct device *dev, u32 attr, long *val)
->   
->   	switch (attr) {
->   	case hwmon_curr_input:
-> -		err = regmap_read(data->regmap, INA238_CURRENT, &regval);
-> -		if (err < 0)
-> -			return err;
-> +		if (data->config->has_20bit_voltage_current) {
-> +			err = ina238_read_reg24(data->client, INA238_CURRENT, &regval);
-> +			if (err)
-> +				return err;
-> +			/* 4 Lowest 4 bits reserved zero */
-> +			regval >>= 4;
-
-It is still a signed register and thus needs sign extension.
-
-> +		} else {
-> +			err = regmap_read(data->regmap, INA238_CURRENT, &regval);
-> +			if (err < 0)
-> +				return err;
-> +			/* sign-extend */
-> +			regval = (s16)regval;
-> +		}
->   
->   		/* Signed register, fixed 1mA current lsb. result in mA */
-> -		*val = div_s64((s16)regval * INA238_FIXED_SHUNT * data->gain,
-> +		*val = div_s64(regval * INA238_FIXED_SHUNT * data->gain,
->   			       data->rshunt * 4);
-
-Reading this again, I suspect that "regval * INA238_FIXED_SHUNT * data->gain"
-is a 32-bit value (it is never extended to 64 bit) which may overflow. That probably
-never happened with the old chips, but regval is now a 20-bit value so overflows
-are more likely than before. The code needs to make sure that the expression
-has a 64-bit result.
-
-> +
-> +		/* Account for 4 bit offset */
-> +		if (data->config->has_20bit_voltage_current)
-> +			*val /= 16;
->   		break;
->   	default:
->   		return -EOPNOTSUPP;
-> @@ -773,6 +856,7 @@ static int ina238_probe(struct i2c_client *client)
->   }
->   
->   static const struct i2c_device_id ina238_id[] = {
-> +	{ "ina228", ina228 },
->   	{ "ina237", ina237 },
->   	{ "ina238", ina238 },
->   	{ "sq52206", sq52206 },
-> @@ -781,6 +865,10 @@ static const struct i2c_device_id ina238_id[] = {
->   MODULE_DEVICE_TABLE(i2c, ina238_id);
->   
->   static const struct of_device_id __maybe_unused ina238_of_match[] = {
-> +	{
-> +		.compatible = "ti,ina228",
-> +		.data = (void *)ina228
-> +	},
->   	{
->   		.compatible = "ti,ina237",
->   		.data = (void *)ina237
+>   	.probe		= ina238_probe,
 > 
 
