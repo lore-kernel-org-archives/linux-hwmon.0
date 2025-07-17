@@ -1,78 +1,70 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22461237180;
-	Thu, 17 Jul 2025 15:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6141E3769
+	for <linux-hwmon@vger.kernel.org>; Thu, 17 Jul 2025 15:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752765879; cv=none; b=rgHfdjSTDyVo1xD7/yF23j9ct6h/pEcWh9CnAD/UDB1+unbsSu4mKhA4yGBklXBqGLPq79ZGWnNEw33Y9suiLpOJt7T8eWyg4n+pAsOSt/B+7qNPyL16MhE+aovH0C/ta2DOLNXcGVkOcKQ32JcWlrcf41gtBaFA5DNfUI+3Tkw=
+	t=1752766091; cv=none; b=UJr8SAf1IQm0nZB4zkXwe3+EVp0T5YHISRkG17mAH7FyBjDabNNcREmlUN37BnCqQLuUHrxxSaVdqVtpnltulIXZG0BRdqBJbfLnCEKViULX4NHzVF0pLaX2T49sSdou2glCBrL3ojQvs/UnihJaxVRU/wNPUwwT6uFaCOkHfsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752765879; c=relaxed/simple;
-	bh=au2v0KQYjlZ54zTmA1NI4ITIh70Ziw88Rb6wV6rH0v4=;
+	s=arc-20240116; t=1752766091; c=relaxed/simple;
+	bh=zBZOYzsIU6/MVRi3wRWnA7bCEs0hv4qA6Yd1pcLHXug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bQ25WaUrwwDQ0F1REI4NWZ7Hov+ts9GAT3NoxSW85dPXA3/Gp+A/p8ERegFZ6l544QqLstPS8+35vdtKoUL6UPgDbt6vykRMZjAndReN7X+ZS9bhVoiVmLqiKGPXa3jt0LtRTf94LoQUyfnZW4qBE70aWE07Z+1LJ1CfKxaMMfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CorH8Smk; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNuS47OcOcQRIUDNjVlsPRpzk56bIWRjP0XYh3uji6FyDprzvPdSC8yP/b8jbl+adbFWo/Gmp2PqiX4Q2kAn3mqD1bss6KWtVhOimYtQxtUeofe+q++D/fGTBd6G7Hx19aM3zfrMiZk8yeKn03hpYcJqQMcRDFPvQnWsQEEudok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWijwaDO; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CorH8Smk"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-74b27c1481bso791408b3a.2;
-        Thu, 17 Jul 2025 08:24:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWijwaDO"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7426c44e014so1200011b3a.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jul 2025 08:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752765876; x=1753370676; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752766089; x=1753370889; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fVsvjOr1OU4TZPjRga2JGbWbncmoSahep9x2yaNsFiA=;
-        b=CorH8SmkW2ZXmZqhwd75o89D36HmmgZQ3V/6yosq9lbtQQLmutGW7UQnCbOSzBtYyR
-         HNrlZ/4DPlnP0MLmvtY4+SeaNhaBiiG6wvpD6lMBoxKg/pkd4DQaqN81+FPpw5uO9jYd
-         jRaKlxDRE/7uOcy8JTLLm3VQwogj8wEiWzpLZ+7heY3KFfkhT+SbEn8WcXLnFtNqXa+u
-         rhGCkWTulhCyOShERv8M8nU0PaGWtY2kQXQ7LrXsl0FnLD+pNaKfxcEsRW+4EBn+YQIb
-         ZbSV2t8ErG2rAl/9TgHeCyCKosx236vnbIhd1pxKE2TqDQdYNeyiC5PY7tunhgZMn5z0
-         4hPQ==
+        bh=OZOhhHFX+eTXaUBbTO9sjS8Dl4W5x9QB8pd2Y680EXg=;
+        b=HWijwaDOfYUKKtTdOItXJXODhdRE762PysqRVbM/WwFJ/2tvotfU3B2ASGNMzujqpj
+         /omI5ZpZmDV8WNMDdI5KWMwXRvF8+19KZH21wtRnzim2U/cD2JIsDuSeAIBtvMx5XCjM
+         s/ZqZMlSlIZgPWJRHCbSxh/v82mq36jnKGeB9L+fBXna/FDZLSEkcILMPMp56FSnPMe7
+         Q1NWBzdz2IeRRy1DBzrNvyUy1JuYCpVLrKTVhXLTiDblPur1LJ1PcIIMZIpftDeOIJg7
+         2gJRXieM6MA4Oq2Zz1saD+rc1knUhlf9l52dsshxXu+IDy/dlgJINd2gzD6i1un/Mjbu
+         PhVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752765876; x=1753370676;
+        d=1e100.net; s=20230601; t=1752766089; x=1753370889;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fVsvjOr1OU4TZPjRga2JGbWbncmoSahep9x2yaNsFiA=;
-        b=JmvSPp/SHljSgJwLXZ7M2VbPMkYHX1vPadonyFqeb8EDN/f0uUlVkTrYFYCm10qHSu
-         vGef/tO+Bux0iPKbdcvRDFLgMxq+SuVfDA5HzPDHgX+DyzyYyVgJvoHhScSc67Vj1olj
-         OJV95/fV8dEE8sghvvkJfaF/x2otjg1bE89AKXe1nsL1C7B3Q9r9pLDEP38QwvLxCZZa
-         gxfyueZT53vMn4VB7e962z3ewr63+3DVnW6qFNDZZ9WFY1LaK1GK9o3iYquxgaAcWjBG
-         26NGtZpZuIlhxhx/DWVtusjtSe6kJRXMg9nBN7m03G6yoIAA98yPz2aXYSGVuwTZV+MC
-         h7qA==
-X-Forwarded-Encrypted: i=1; AJvYcCUA8PAc/n8HrLDJ+rUryxD9zzYfLrPRs7aqQgWIXQj1hmOjJ7hPowgoXZicN7xFjX4nVu11yJmukv92hLNd@vger.kernel.org, AJvYcCUlmHSHFSHsAOE/vI4urOS5IzXhX4ACE6s0SuqT00SkEkT2bVu6MDgy7c4pizXaueLaSHiKqL6yhcKQ@vger.kernel.org, AJvYcCX6mqT2ZR0btyLzvK3aEN6N33vLfrdYOQulT4I3Aj6Xxzjb3yh62BHEJWhPamannfwkkQAVeVM3Jx4tlrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW2JlVStLENRxdnT1zNI/oFCDZvPqdLlFsnjaVle5PDUL2LdY+
-	gHC7ZCzjF9FoA8U6uZrSIcTmeCmxf2Y1t9PTC6J0i1UozYyKx67hGSYl
-X-Gm-Gg: ASbGnctmcO6z77dPxNDspa2lF7XZlxhaRoTS2G6SKhum+PZzNxWhLLfOvlm9uGIm1U0
-	g1Wr3TALhh1+bHJYuMwbKU1KWwZx33kHDsP2VB7BhaVAKP+8ZEJUZe+C6Uenq6rc3u90zD77kpp
-	7ETC/fnQ5kJzPEFXROynP7EGoCy5MjSGvG/ukALOQ4L0UoukB3otD3VkV8M+u1q5JMHDopDo9DS
-	r2xvlTnSh4DiR/fW6Zwgq3D1IgBbk/0HXfivMhcJvQrkMXXMsW6pUKTcoT5VDcKQUFdx+Jcdo/e
-	Ur/yDG3qdCPbPte1xzMikZSCIpTb2qbISA//2IWFPr/S+mDmIv+Zyyr2gNwHkDR+7spBITI60k3
-	e3cm+0XaktI+a+elk1zfhTxAlcsaWOvjkOcgyB3zawV/bKA==
-X-Google-Smtp-Source: AGHT+IFV52z6T3hUTzwzRDFZMDV6BA5c97cR2z7Mqk9ErfUXhPPQfI0WfQBWHeADcagAkM1RnIQ05g==
-X-Received: by 2002:a05:6a00:181e:b0:740:b394:3ebd with SMTP id d2e1a72fcca58-756e819fa98mr11154983b3a.7.1752765876141;
-        Thu, 17 Jul 2025 08:24:36 -0700 (PDT)
+        bh=OZOhhHFX+eTXaUBbTO9sjS8Dl4W5x9QB8pd2Y680EXg=;
+        b=NZDn+RSDY/LuC6Eh39YAs29gaEvUiZMLdrtnHTp0avhxPLPlMhPd8feBEn81tP840r
+         ZnuTOSXtfNYca1PfBOCerQ9XvzCMPHvL183L+iD0bCAOtB9aWa0UnItIL3BOJYkc7mC3
+         ohJkL9gRSTm1ZbSpALIpFNaBwY82J5OMFKe3PCep/PklITawUvsWgY36v8yoxmayFm4p
+         +DUaIcgYDDqct5TurySOiqGUK4SFLGAe97kAPx0qBVU0eDoLc37cqJXZK/bBYeEjNemP
+         q/Ucv54cpoQwZHpLPiXijRs6fpCv1GzYsm5HmUnIjkrLQ8mmvHBqKNJ9NFwsgWMCstf0
+         BKFg==
+X-Gm-Message-State: AOJu0YwQWFFVHWl/hewd2Zg0J32UlMZgnfdOGlRFHqsoKy4/8gqstlxQ
+	Ay9yoRkeNbd1udIYSZzmbZTlr553RDcV3OlvImlGe1aQlk4p3GqUYUVS
+X-Gm-Gg: ASbGnctAU7kFCB7bFPtb0u5pqt2Qemt6pxfqCUxrLJ66lEjRGcooV57ZHIGpoavducv
+	jG8ektBeRbKHdqJUIDizI6BjaPSlyyhfl7pwcG01r041brWxSgmwOmvJwpd70GE4HHA3GDQMAsX
+	VcCfO3LQN68nujqfe/JFEyu5XF7+TWU43Julfip4QYgEan4LS+q0frcGXcpw3uJACe+F3zetpEs
+	AVXBmwPoutFb4faRObf3KI0cPtcJeWjCMEn1xY6rmvJ6oPrZoJ4eR5CL++eIGoId+36H5XVB85g
+	lgL02bLKLro8kkb9PDT6JDF2dsL/LwrvkFJ4UvY0sLwIb6Vr0UMHNSEhErr0l7Ai0ra3157vVfk
+	pIFiifdDX4KhJ4spR6xTq9s/KvwfRimTSrGg=
+X-Google-Smtp-Source: AGHT+IEGbaDJhAc160bNZag/5VMuYEA5P1G0t3fsVNbRtIkm1t/o+tH6Ag5sXE9GuPDy26ZMzoCYOQ==
+X-Received: by 2002:a17:90b:180f:b0:2fe:e9c6:689e with SMTP id 98e67ed59e1d1-31c9e6fb9b9mr11435334a91.8.1752766089426;
+        Thu, 17 Jul 2025 08:28:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74eb9e07649sm16194196b3a.71.2025.07.17.08.24.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31caf7aa70esm1749026a91.6.2025.07.17.08.28.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 08:24:35 -0700 (PDT)
+        Thu, 17 Jul 2025 08:28:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 17 Jul 2025 08:24:34 -0700
+Date: Thu, 17 Jul 2025 08:28:07 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Jonas Rebmann <jre@pengutronix.de>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 2/4] hwmon: ina238: Add label support for voltage inputs
-Message-ID: <c7294130-5836-46c6-8d8b-e5d5a45f3d33@roeck-us.net>
-References: <20250715-ina228-v1-0-3302fae4434b@pengutronix.de>
- <20250715-ina228-v1-2-3302fae4434b@pengutronix.de>
- <eaa183cc-a56f-4a33-bf01-a5279799f395@roeck-us.net>
- <0915032e-617f-4d46-8dc7-6818af751a0e@pengutronix.de>
+To: Torben Nielsen <t8927095@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, Torben Nielsen <torben.nielsen@prevas.dk>
+Subject: Re: [PATCH 1/1] hwmon:pmbus:ucd9000: Fix error in ucd9000_gpio_set
+Message-ID: <0feeb1a5-3140-44e5-8498-6893cb69241d@roeck-us.net>
+References: <20250717103646.4127833-1-torben.nielsen@prevas.dk>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,47 +73,34 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0915032e-617f-4d46-8dc7-6818af751a0e@pengutronix.de>
+In-Reply-To: <20250717103646.4127833-1-torben.nielsen@prevas.dk>
 
-On Thu, Jul 17, 2025 at 09:30:33AM +0200, Jonas Rebmann wrote:
-> Hi Guenter,
+On Thu, Jul 17, 2025 at 12:36:46PM +0200, Torben Nielsen wrote:
+> The GPIO output functionality does not work as intended.
 > 
-> Thanks for the review!
+> The ucd9000_gpio_set function should set UCD9000_GPIO_CONFIG_OUT_VALUE
+> (bit 2) in order to change the output value of the selected GPIO.
+> Instead UCD9000_GPIO_CONFIG_STATUS (bit 3) is set, but this is a
+> read-only value. This patch fixes the mistake and provides the intended
+> functionality of the GPIOs.
 > 
-> On 16/07/2025 17.04, Guenter Roeck wrote:
-> > On 7/15/25 13:49, Jonas Rebmann wrote:
-> > > The INA family of power monitors estimate power consumption based on
-> > > two voltage measurements: across a shunt resistor and across the bus.
-> > > 
-> > > Conveniently label them "Shunt Voltage" and "Bus Voltage".
-> > > 
-> > 
-> > Labels are supposed to show the sensor's association with the system, not
-> > the chip labeling. So this is a no-go. And, yes, apparently I have been too
-> > complacent with people (mis-)using the label attributes. That doesn't make
-> > it better, so don't use it as argument to support this one.
+> See UCD90xxx Sequencer and System Health Controller PMBus Command SLVU352C
+> section 10.43 for reference:
 > 
-> As this chip measures power based on two voltage measurements, the
-> measured voltage inputs must always be associated with the system in
-> that way, that in1 measures the voltage on a bus and in0 over a shunt
-> resistor on that bus.
+> https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/184/slvu352c_5B00_1_5D00_.pdf
 > 
-> Otherwise the Power/Energy/Charge-Measurements will be incorrect.
-> 
-> Do you have a suggestion on how to use the labels correctly or should I
-> just drop the patch for v2?
-> 
-Please drop it.
+> Signed-off-by: Torben Nielsen <torben.nielsen@prevas.dk>
 
+Checkpatch says:
+
+WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
+#107:
+https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/184/slvu352c_5B00_1_5D00_.pdf
+
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Torben Nielsen <t8927095@gmail.com>' != 'Signed-off-by: Torben Nielsen <torben.nielsen@prevas.dk>'
+
+Just drop the link (it can and will change, so it has little if any value),
+and please fix the address mismatch.
+
+Thanks,
 Guenter
-
-> Regards,
-> Jonas
-> 
-> 
-> -- 
-> Pengutronix e.K.                          | Jonas Rebmann               |
-> Steuerwalder Str. 21                      | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                 | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686          | Fax:   +49-5121-206917-9    |
-> 
