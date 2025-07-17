@@ -1,106 +1,231 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6141E3769
-	for <linux-hwmon@vger.kernel.org>; Thu, 17 Jul 2025 15:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1731F790F
+	for <linux-hwmon@vger.kernel.org>; Thu, 17 Jul 2025 16:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752766091; cv=none; b=UJr8SAf1IQm0nZB4zkXwe3+EVp0T5YHISRkG17mAH7FyBjDabNNcREmlUN37BnCqQLuUHrxxSaVdqVtpnltulIXZG0BRdqBJbfLnCEKViULX4NHzVF0pLaX2T49sSdou2glCBrL3ojQvs/UnihJaxVRU/wNPUwwT6uFaCOkHfsA=
+	t=1752768049; cv=none; b=OZBW9drGCKi73q2o8Rwru4vXS0wUPaSWF59PNZQ4EL+AHQiNNkCsJmu8fXLPOM3VTcOc8YZN2nnVUUmPQ8jbTk5em2sT+E26tKlh4IKhF/gG9WdOZCAledkwKATo3r2NfIDSBmL9Df5Le7SMzZISpeLG2zRchMBT5PuXph5Wvm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752766091; c=relaxed/simple;
-	bh=zBZOYzsIU6/MVRi3wRWnA7bCEs0hv4qA6Yd1pcLHXug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LNuS47OcOcQRIUDNjVlsPRpzk56bIWRjP0XYh3uji6FyDprzvPdSC8yP/b8jbl+adbFWo/Gmp2PqiX4Q2kAn3mqD1bss6KWtVhOimYtQxtUeofe+q++D/fGTBd6G7Hx19aM3zfrMiZk8yeKn03hpYcJqQMcRDFPvQnWsQEEudok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HWijwaDO; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752768049; c=relaxed/simple;
+	bh=tdMnZDV0ZUzpuqi/2w8metSuOM7yP30flpfjeQHKPH8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cIuSfKqolGqMfMwehHiy8f0lX8i3aXhg1lw7Iqj2SOxGpX8q+EC/Rm3Nr0/TIiaVzd63CImG54TN4368ei7SclriQENm1SsHWGroam7iMo+l+mYWrTh/HwKHIxzOp8iqYFPeGYSulNNdUaVcQoJWp3wp5V7zC7USmmwxj9eRfb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QRZiaPOP; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HWijwaDO"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7426c44e014so1200011b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Jul 2025 08:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752766089; x=1753370889; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OZOhhHFX+eTXaUBbTO9sjS8Dl4W5x9QB8pd2Y680EXg=;
-        b=HWijwaDOfYUKKtTdOItXJXODhdRE762PysqRVbM/WwFJ/2tvotfU3B2ASGNMzujqpj
-         /omI5ZpZmDV8WNMDdI5KWMwXRvF8+19KZH21wtRnzim2U/cD2JIsDuSeAIBtvMx5XCjM
-         s/ZqZMlSlIZgPWJRHCbSxh/v82mq36jnKGeB9L+fBXna/FDZLSEkcILMPMp56FSnPMe7
-         Q1NWBzdz2IeRRy1DBzrNvyUy1JuYCpVLrKTVhXLTiDblPur1LJ1PcIIMZIpftDeOIJg7
-         2gJRXieM6MA4Oq2Zz1saD+rc1knUhlf9l52dsshxXu+IDy/dlgJINd2gzD6i1un/Mjbu
-         PhVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752766089; x=1753370889;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OZOhhHFX+eTXaUBbTO9sjS8Dl4W5x9QB8pd2Y680EXg=;
-        b=NZDn+RSDY/LuC6Eh39YAs29gaEvUiZMLdrtnHTp0avhxPLPlMhPd8feBEn81tP840r
-         ZnuTOSXtfNYca1PfBOCerQ9XvzCMPHvL183L+iD0bCAOtB9aWa0UnItIL3BOJYkc7mC3
-         ohJkL9gRSTm1ZbSpALIpFNaBwY82J5OMFKe3PCep/PklITawUvsWgY36v8yoxmayFm4p
-         +DUaIcgYDDqct5TurySOiqGUK4SFLGAe97kAPx0qBVU0eDoLc37cqJXZK/bBYeEjNemP
-         q/Ucv54cpoQwZHpLPiXijRs6fpCv1GzYsm5HmUnIjkrLQ8mmvHBqKNJ9NFwsgWMCstf0
-         BKFg==
-X-Gm-Message-State: AOJu0YwQWFFVHWl/hewd2Zg0J32UlMZgnfdOGlRFHqsoKy4/8gqstlxQ
-	Ay9yoRkeNbd1udIYSZzmbZTlr553RDcV3OlvImlGe1aQlk4p3GqUYUVS
-X-Gm-Gg: ASbGnctAU7kFCB7bFPtb0u5pqt2Qemt6pxfqCUxrLJ66lEjRGcooV57ZHIGpoavducv
-	jG8ektBeRbKHdqJUIDizI6BjaPSlyyhfl7pwcG01r041brWxSgmwOmvJwpd70GE4HHA3GDQMAsX
-	VcCfO3LQN68nujqfe/JFEyu5XF7+TWU43Julfip4QYgEan4LS+q0frcGXcpw3uJACe+F3zetpEs
-	AVXBmwPoutFb4faRObf3KI0cPtcJeWjCMEn1xY6rmvJ6oPrZoJ4eR5CL++eIGoId+36H5XVB85g
-	lgL02bLKLro8kkb9PDT6JDF2dsL/LwrvkFJ4UvY0sLwIb6Vr0UMHNSEhErr0l7Ai0ra3157vVfk
-	pIFiifdDX4KhJ4spR6xTq9s/KvwfRimTSrGg=
-X-Google-Smtp-Source: AGHT+IEGbaDJhAc160bNZag/5VMuYEA5P1G0t3fsVNbRtIkm1t/o+tH6Ag5sXE9GuPDy26ZMzoCYOQ==
-X-Received: by 2002:a17:90b:180f:b0:2fe:e9c6:689e with SMTP id 98e67ed59e1d1-31c9e6fb9b9mr11435334a91.8.1752766089426;
-        Thu, 17 Jul 2025 08:28:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31caf7aa70esm1749026a91.6.2025.07.17.08.28.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 08:28:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 17 Jul 2025 08:28:07 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Torben Nielsen <t8927095@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, Torben Nielsen <torben.nielsen@prevas.dk>
-Subject: Re: [PATCH 1/1] hwmon:pmbus:ucd9000: Fix error in ucd9000_gpio_set
-Message-ID: <0feeb1a5-3140-44e5-8498-6893cb69241d@roeck-us.net>
-References: <20250717103646.4127833-1-torben.nielsen@prevas.dk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QRZiaPOP"
+Message-ID: <11735f77-25cc-4220-b7be-e6fda8f72161@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1752768036;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BkfJI7cpXj5VUYoq0tgOuznhgFvkJXnYXizplgvtnLg=;
+	b=QRZiaPOPI2oFCm3y1XvKEslN/kfEtJa+BEIHas8L+A0pjwN9DRbHj6OhPS96Juru/Aob/c
+	FqqqyWYCDSXtfnzcTlgxcN8FPK526PEbhWkT7jBP99EKvs67P4EGDoB//Ot9w/WcKpCwM3
+	FaJh/qPOsWK2Wu5NFYrXKl8c4+Nl3L0=
+Date: Thu, 17 Jul 2025 12:00:13 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717103646.4127833-1-torben.nielsen@prevas.dk>
+Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Cc: Andy Shevchenko <andy@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
+ David Lechner <dlechner@baylibre.com>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+ <20250715012023.2050178-8-sean.anderson@linux.dev>
+ <afc6aa6ad4b633f9d834acf933734985f14c5563.camel@gmail.com>
+ <6455be16-d287-4d5e-9556-e1789d43708c@linux.dev>
+ <9c6f99e022270b1b9c2f178f8f415270f11e59df.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <9c6f99e022270b1b9c2f178f8f415270f11e59df.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jul 17, 2025 at 12:36:46PM +0200, Torben Nielsen wrote:
-> The GPIO output functionality does not work as intended.
+On 7/16/25 02:37, Nuno Sá wrote:
+> On Tue, 2025-07-15 at 13:02 -0400, Sean Anderson wrote:
+>> On 7/15/25 07:28, Nuno Sá wrote:
+>> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:
+>> > > Add alarm support based on IIO threshold events. The alarm is cleared on
+>> > > read, but will be set again if the condition is still present. This is
+>> > > detected by disabling and re-enabling the event. The same trick is done
+>> > > when creating the attribute to detect already-triggered events.
+>> > > 
+>> > > The alarms are updated by an event listener. To keep the notifier call
+>> > > chain short, we create one listener per iio device, shared across all
+>> > > hwmon devices.
+>> > > 
+>> > > To avoid dynamic creation of alarms, alarms for all possible events are
+>> > > allocated at creation. Lookup is done by a linear scan, as I expect
+>> > > events to occur rarely. If performance becomes an issue, a binary search
+>> > > could be done instead (or some kind of hash lookup).
+>> > > 
+>> > > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+>> > > ---
+>> > > 
+>> > >  drivers/hwmon/iio_hwmon.c | 322 +++++++++++++++++++++++++++++++++++++-
+>> > >  1 file changed, 321 insertions(+), 1 deletion(-)
+>> > > 
+>> > > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+>> > > index 3db4d4b30022..c963bc5452ba 100644
+>> > > --- a/drivers/hwmon/iio_hwmon.c
+>> > > +++ b/drivers/hwmon/iio_hwmon.c
+>> > > @@ -8,6 +8,7 @@
+>> > >  #include <linux/slab.h>
+>> > >  #include <linux/mod_devicetable.h>
+>> > >  #include <linux/module.h>
+>> > > +#include <linux/notifier.h>
+>> > >  #include <linux/err.h>
+>> > >  #include <linux/platform_device.h>
+>> > >  #include <linux/property.h>
+>> > > @@ -15,7 +16,192 @@
+>> > >  #include <linux/hwmon.h>
+>> > >  #include <linux/hwmon-sysfs.h>
+>> > >  #include <linux/iio/consumer.h>
+>> > > +#include <linux/iio/events.h>
+>> > > +#include <linux/iio/iio.h>
+>> > >  #include <linux/iio/types.h>
+>> > > +#include <uapi/linux/iio/events.h>
+>> > > +
+>> > > +/* Protects iio_hwmon_listeners and listeners' refcnt */
+>> > > +DEFINE_MUTEX(iio_hwmon_listener_lock);
+>> > > +LIST_HEAD(iio_hwmon_listeners);
+>> > > +
+>> > > +/**
+>> > > + * struct iio_hwmon_listener - Listener for IIO events
+>> > > + * @block: Notifier for events
+>> > > + * @ids: Array of IIO event ids, one per alarm
+>> > > + * @alarms: Bitmap of alarms
+>> > > + * @num_alarms: Length of @ids and @alarms
+>> > > + * @indio_dev: Device we are listening to
+>> > > + * @list: List of all listeners
+>> > > + * @refcnt: Reference count
+>> > > + */
+>> > > +struct iio_hwmon_listener {
+>> > > +	struct notifier_block block;
+>> > > +	u64 *ids;
+>> > > +	unsigned long *alarms;
+>> > > +	size_t num_alarms;
+>> > > +
+>> > > +	struct iio_dev *indio_dev;
+>> > > +	struct list_head list;
+>> > > +	unsigned int refcnt;
+>> > > +};
+>> > > +
+>> > > +/**
+>> > > + * iio_hwmon_lookup_alarm() - Find an alarm by id
+>> > > + * @listener: Event listener
+>> > > + * @id: IIO event id
+>> > > + *
+>> > > + * Return: index of @id in @listener->ids, or -1 if not found
+>> > > + */
+>> > > +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener *listener,
+>> > > +				      u64 id)
+>> > > +{
+>> > > +	ssize_t i;
+>> > > +
+>> > > +	for (i = 0; i < listener->num_alarms; i++)
+>> > > +		if (listener->ids[i] == id)
+>> > > +			return i;
+>> > > +
+>> > > +	return -1;
+>> > > +}
+>> > > +
+>> > > +static int iio_hwmon_listener_callback(struct notifier_block *block,
+>> > > +				       unsigned long action, void *data)
+>> > > +{
+>> > > +	struct iio_hwmon_listener *listener =
+>> > > +		container_of(block, struct iio_hwmon_listener, block);
+>> > > +	struct iio_event_data *ev = data;
+>> > > +	ssize_t i;
+>> > > +
+>> > > +	if (action != IIO_NOTIFY_EVENT)
+>> > > +		return NOTIFY_DONE;
+>> > > +
+>> > > +	i = iio_hwmon_lookup_alarm(listener, ev->id);
+>> > > +	if (i >= 0)
+>> > > +		set_bit(i, listener->alarms);
+>> > > +	else
+>> > > +		dev_warn_once(&listener->indio_dev->dev,
+>> > > +			      "unknown event %016llx\n", ev->id);
+>> > > +
+>> > > +	return NOTIFY_DONE;
+>> > > +}
+>> > > +
+>> > > +/**
+>> > > + * iio_event_id() - Calculate an IIO event id
+>> > > + * @channel: IIO channel for this event
+>> > > + * @type: Event type (theshold, rate-of-change, etc.)
+>> > > + * @dir: Event direction (rising, falling, etc.)
+>> > > + *
+>> > > + * Return: IIO event id corresponding to this event's IIO id
+>> > > + */
+>> > > +static u64 iio_event_id(struct iio_chan_spec const *chan,
+>> > > +			enum iio_event_type type,
+>> > > +			enum iio_event_direction dir)
+>> > > +{
+>> > > +	if (chan->differential)
+>> > > +		return IIO_DIFF_EVENT_CODE(chan->type, chan->channel,
+>> > > +					   chan->channel2, type, dir);
+>> > > +	if (chan->modified)
+>> > > +		return IIO_MOD_EVENT_CODE(chan->type, chan->channel,
+>> > > +					  chan->channel2, type, dir);
+>> > > +	return IIO_UNMOD_EVENT_CODE(chan->type, chan->channel, type, dir);
+>> > > +}
+>> > > +
+>> > > +/**
+>> > > + * iio_hwmon_listener_get() - Get a listener for an IIO device
+>> > > + * @indio_dev: IIO device to listen to
+>> > > + *
+>> > > + * Look up or create a new listener for @indio_dev. The returned listener is
+>> > > + * registered with @indio_dev, but events still need to be manually enabled.
+>> > > + * You must call iio_hwmon_listener_put() when you are done.
+>> > > + *
+>> > > + * Return: Listener for @indio_dev, or an error pointer
+>> > > + */
+>> > > +static struct iio_hwmon_listener *iio_hwmon_listener_get(struct iio_dev
+>> > > *indio_dev)
+>> > > +{
+>> > > +	struct iio_hwmon_listener *listener;
+>> > > +	int err = -ENOMEM;
+>> > > +	size_t i, j;
+>> > > +
+>> > > +	guard(mutex)(&iio_hwmon_listener_lock);
+>> > > +	list_for_each_entry(listener, &iio_hwmon_listeners, list) {
+>> > > +		if (listener->indio_dev == indio_dev) {
+>> > > +			if (likely(listener->refcnt != UINT_MAX))
+>> > > +				listener->refcnt++;
+>> > 
+>> > I dunno for the above to ever happen :).
+>> 
+>> Well, I can remove it if you like.
+>> 
+>> > And as Andy stated, let's just use proper refcount APIs.
+>> 
+>> No point in using atomic ops if they are only accessed under a mutex.
 > 
-> The ucd9000_gpio_set function should set UCD9000_GPIO_CONFIG_OUT_VALUE
-> (bit 2) in order to change the output value of the selected GPIO.
-> Instead UCD9000_GPIO_CONFIG_STATUS (bit 3) is set, but this is a
-> read-only value. This patch fixes the mistake and provides the intended
-> functionality of the GPIOs.
-> 
-> See UCD90xxx Sequencer and System Health Controller PMBus Command SLVU352C
-> section 10.43 for reference:
-> 
-> https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/184/slvu352c_5B00_1_5D00_.pdf
-> 
-> Signed-off-by: Torben Nielsen <torben.nielsen@prevas.dk>
+> Not the point... If there are proper APIs for handling things like this, not sure why
+> not using and then coming up with things like the above? And the same goes to the
+> release path.
 
-Checkpatch says:
+The API is for doing reference counts *atomically*. If you do not need
+atomic reference counting, then it is the *wrong* API. I suggest reading
+the block comment at the beginning of refcnt.h to see the sorts of
+contortions it has to go through because it is an atomic API. Since we
+hold a mutex, we can just increment/decrement. I will remove the
+saturation check to avoid confusion.
 
-WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
-#107:
-https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/184/slvu352c_5B00_1_5D00_.pdf
-
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Torben Nielsen <t8927095@gmail.com>' != 'Signed-off-by: Torben Nielsen <torben.nielsen@prevas.dk>'
-
-Just drop the link (it can and will change, so it has little if any value),
-and please fix the address mismatch.
-
-Thanks,
-Guenter
+--Sean
