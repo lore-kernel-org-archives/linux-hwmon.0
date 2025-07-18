@@ -1,130 +1,162 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay12.grserver.gr (relay12.grserver.gr [88.99.38.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A661DED53
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 16:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084D826ADD;
+	Fri, 18 Jul 2025 16:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.99.38.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752856484; cv=none; b=JAc1GS5jKWXUrhlit5WCymsax91WD/qX6x0bHeZdISimQblQhfsLKepIMl+jUuduD3lmpTlewfCme1fOX61+9uOaojAX34Jxyl8gy7xvLYK5fUkszQhiefWmGEpVCs2PsCYQQbdnbMBlV6U+2rrLwp7RMdsLf29VFyr36I1K2M0=
+	t=1752857194; cv=none; b=kac2KAUMgp7MNdyfJUDOGZqL5v+4A/9S+nqDabiWCE+yuQdSgPht1SGhvyC5B9CW/y0tbh2CxjGddbgG0JDa8aY4T0ToTvm8jhO7WsK6ataYNyxdJkHQAUuzgwcrR1+/Red+oCDhERCTAYC7ymWyPzgO0alN3uffqfyckaPpuf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752856484; c=relaxed/simple;
-	bh=mI/esk/gl5N5GPE4tZVxDBN7NX6rJZxOdzFKWMs4IL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ep9xBF5mW+P7U3ynt7ewWYo6dXgjEdjYX9egRXgJwYDsE2zQdgNd72oSdZ/X0xi3ka0QLLw21WHuFUMmc4Lafg8e6Ekmf8JOluGsk9fsTJ2WsucLBaDTh2wvo4q3OF7c5QtNRHmVjYN0pqNlp69rBzVTTQrrb81eI6zOGhF29dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VxbmWsVf; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1752857194; c=relaxed/simple;
+	bh=Y9/HzNLHHfWUMA2navFffKgWJsVgRHpXB4KSXUWZNro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EvYOj7GU2NUUVqVSTMOdyeb9Ojg7D81+RkbfWMX/syBjzX11Y14vHNmSBMnXoqL4lYU7yAlB4MczrcfnA31rixmhiWNYSAe1aoJ6GNGHtfpeAn4x/LRGMJRB20ze/X7tIRS1nnpHhrP0fKrb8JpaWqjJjN0AiMfdqZ4+BdrViCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=hCq2gHor; arc=none smtp.client-ip=88.99.38.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VxbmWsVf"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-315c1b0623cso2252959a91.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 09:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752856482; x=1753461282; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TkTPQ5ohW9TzuL1lUaLK41kO6k+IQp9Iwjvbv0pjB9k=;
-        b=VxbmWsVfVZpiuBj+ZKb/UL2oBhnv53ov/UCXJYPEjm/ibKlbYNsP0gDThBu15WJb1N
-         /g2tVYU2KOFMowwMkkvrL1grQI/TjNfl5Uwuw88B5d/ddtz9J64fPJVGVfRlWAmy8TmY
-         GbsDXlOoE5YYntR0Te78wrguVXPFeWtOPlbZs1fbu2UXiSnFGbF2UP3kNb1+A4xbSJWW
-         VINm6TURRRfTAOxDQ3q/+DXRaGm05TCwnf68u3RysnxC6IPfyO59wX6I88555nxSQI0p
-         I48UDDQDhaVAsJ8tXLmCW1hhYTsxgrLp6tAu7nM7W8vlP43GV8ZLNUGpI0ngt4i483Th
-         NgkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752856482; x=1753461282;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TkTPQ5ohW9TzuL1lUaLK41kO6k+IQp9Iwjvbv0pjB9k=;
-        b=D/LrRqHzM2cigd9SCORRZo0ACJG/K/7DOu5bUQgX3BILfE4jyMh7gbibIePUWrJJyQ
-         l0aAbE+RGZnZ3WTJvOgzwP1pJbFGgaxbjGWx9H73a+nKWo0uUTQEeB0vx3+Vzi7PBwae
-         ZCopxQIbQMenXqvxUCGUxmnLtImkDyccdJslMukIqw2Sb9mQbwS1QwKCUOeSl/1L9Yem
-         M8xvTIlBUdUTgrnWxbfQWchGQrUlPiGHZustwMoyLKH2s1W71co2eLMWcEbCJHR/04yZ
-         VZWjQLtWxTg52ateH7agLaaACGB26ntGsxAM8+i/L3+/5QiaThoTz7V5B/7zwqe5CrOl
-         Zlfw==
-X-Forwarded-Encrypted: i=1; AJvYcCWehuti1t4qyr8DnDiiSTBU9xLT4Q5re+aLBqz4K9a7hAfXgC3o543evT5axQy+4Dt+ZhxEpPX78BxyDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx47rdWQwT6IlxGYzgYkCq2S5M9Um0WLfwdJI+44L8zepEjzAYu
-	JPCjhgNYE7csaiTHD1TixJ0voY4Q3G+eBoy33PvoReco4AXh3vVoxi9n
-X-Gm-Gg: ASbGncspzxlg1dqCz6FH6oWBpkgqGPQxZZct30fSOJglSSMpxUojk5SHszcyQfmo11J
-	smGyodTMkIN7o4a0Enjm9SIxvQdRRsFQWLAn0ZgK048I+1j4tGWzvC2VrEPaPPIYPM8lM/syifv
-	t8vk4MzfRNi9Tv6JWFNV2IxZVOR7RMzB078Bi/RkeeEspED66k3es5Qlsf/GvUnQTvTqy+MRrgp
-	io0iFUfTNqSddRY78RnCEg8aRa7VxXMq4LMrX6uyltyRCFMNzLkWpkdi3rjvKaHt7HL7AuGTape
-	zEoM/UFwSEwMSeym6gppfhNEALd2OjHhPsmgHa15/tPSrwcy7qSUWs51TUAvl7FzRlEXGB6R/JD
-	YGCFcAn/k7uQOsgqtaMwxWp0/hAI7Z3hLFJdEO62c5NgaWA==
-X-Google-Smtp-Source: AGHT+IHwRyh36PAAO5i/E3AQ5e0frP5l+PLw507BCkVWgL+XY5uMggvU3wm5UECImQnsmJKxEWDMpg==
-X-Received: by 2002:a17:90b:254d:b0:311:ab20:159d with SMTP id 98e67ed59e1d1-31c9f4249b2mr15233627a91.19.1752856481731;
-        Fri, 18 Jul 2025 09:34:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f28807csm5381718a91.26.2025.07.18.09.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jul 2025 09:34:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 18 Jul 2025 09:34:39 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Torben Nielsen <t8927095@gmail.com>
-Cc: bartosz.golaszewski@linaro.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon:pmbus:ucd9000: Fix error in ucd9000_gpio_set
-Message-ID: <4bb4a9fd-17bc-4dc2-a27b-da83248d6e60@roeck-us.net>
-References: <20250718093644.356085-2-t8927095@gmail.com>
+	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="hCq2gHor"
+Received: from relay12 (localhost [127.0.0.1])
+	by relay12.grserver.gr (Proxmox) with ESMTP id 98F9ABE42E;
+	Fri, 18 Jul 2025 19:38:22 +0300 (EEST)
+Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by relay12.grserver.gr (Proxmox) with ESMTPS id 35830BE408;
+	Fri, 18 Jul 2025 19:38:22 +0300 (EEST)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id 5D13E1FDAD2;
+	Fri, 18 Jul 2025 19:38:21 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1752856701;
+	bh=T/KHd8xSTyD2a62npLK0GCGhjwX/ZOXYPvlAwzv4DnI=;
+	h=Received:From:Subject:To;
+	b=hCq2gHorp3QxPG8wzB7MCr6R7F0+9EjtImF1nVTQXMrdTXFdL7/bbi6wt7bmNCFDy
+	 iabIXZCU4XkPIwKiTbuG8hdwz4pCK+LGXXsr3i2/Ls7qHAGN7IXUbjYLs2t4akGPS/
+	 y3hrQJmSzrKwHInaVUra0294+hqYC1UbHuIerkdLP1CCZBn/1cwfjJTV5HZ9ON4sRD
+	 YPYuHB5H0vEmAE3sjoc0V08Ppo6axjk5OBSLZcwF/NIMCCphQpf/xZoifxA53fwtRJ
+	 g/9hG+JSlIubFlmtc/u0O176D3nXeoz+Y1JjFfu9gBZG/BPv3unggq2XVrpSNDmHVq
+	 t5Nd+nZ8OxJNg==
+Authentication-Results: linux3247.grserver.gr;
+        spf=pass (sender IP is 209.85.208.177) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f177.google.com
+Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
+Received: by mail-lj1-f177.google.com with SMTP id
+ 38308e7fff4ca-32b595891d2so17893381fa.2;
+        Fri, 18 Jul 2025 09:38:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW3079P2V2AwKBo3MOg0WYRdCnB/UYR1dxqV79dSHbRvsfEgYU2sD4msgaRhm7/+IC90AIIgomi1vI=@vger.kernel.org,
+ AJvYcCWqJMPaETLOd09cFp8b+4YJdrTNajiSEzs4BywsrBTo73+/GwXAMAEJPVRRXke0bNKmGiuENKzCy0FS3z0=@vger.kernel.org,
+ AJvYcCXfeae9z3Ts3JXqlMtMCVr/dO9LnvzbEOA/ZNWvs+iR+Ltq5nyqvsZy+q5UFohvhxibRclU6+1S7XYIG4+v@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy82tVz2UyZN3w2aUdxvUDY0kKBLvLhWmjMsfVL5Itnd0V+D0Hg
+	QCmAfBIM0Kgf//EwzOBDuCHZ0fuveT2Xr7BxAP9N7UhFGm2xfvxE5NZiG/t8Qo68ma6L7DLW4T7
+	lLSZpMXABsC4WLAf+S1me278vxdd3dYo=
+X-Google-Smtp-Source: 
+ AGHT+IH2EOYwVpYNC/dzFgzHOVWnAxLuBk2IBVmgSEVg2YWME1umiaot9LuowLPm+vix6mRC2tvBW2r1o/qDyjmuZqg=
+X-Received: by 2002:a05:651c:419c:b0:32b:755e:6cd4 with SMTP id
+ 38308e7fff4ca-330a7c5726fmr8906081fa.38.1752856700745; Fri, 18 Jul 2025
+ 09:38:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718093644.356085-2-t8927095@gmail.com>
+References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
+ <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
+ <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
+ <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
+In-Reply-To: <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Fri, 18 Jul 2025 18:38:09 +0200
+X-Gmail-Original-Message-ID: 
+ <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
+X-Gm-Features: Ac12FXy0Tx-o6uIT1821wM3-KJwlgmKE7INI2kkaYx6M9jkGi9kwYvBZc7x-lOg
+Message-ID: 
+ <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
+	Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>,
+	=?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
+	someone5678 <someone5678.dev@gmail.com>,
+ Justin Weiss <justin@justinweiss.com>,
+	command_block <mtf@ik.me>
+Content-Type: text/plain; charset="UTF-8"
+X-PPP-Message-ID: 
+ <175285670187.3291495.16286230662434257056@linux3247.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 1.0.9 at linux3247.grserver.gr
+X-Virus-Status: Clean
 
-On Fri, Jul 18, 2025 at 11:36:45AM +0200, Torben Nielsen wrote:
-> The GPIO output functionality does not work as intended.
-> 
-> The ucd9000_gpio_set function should set UCD9000_GPIO_CONFIG_OUT_VALUE
-> (bit 2) in order to change the output value of the selected GPIO.
-> Instead UCD9000_GPIO_CONFIG_STATUS (bit 3) is set, but this is a
-> read-only value. This patch fixes the mistake and provides the intended
-> functionality of the GPIOs.
-> 
-> See UCD90xxx Sequencer and System Health Controller PMBus Command SLVU352C
-> section 10.43 for reference.
-> 
-> Signed-off-by: Torben Nielsen <t8927095@gmail.com>
+On Thu, 17 Jul 2025 at 04:32, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 3/13/25 13:58, Antheas Kapenekakis wrote:
+> > On Thu, 13 Mar 2025 at 21:10, Cryolitia PukNgae via B4 Relay
+> > <devnull+Cryolitia.gmail.com@kernel.org> wrote:
+> >>
+> >> From: Cryolitia PukNgae <Cryolitia@gmail.com>
+> >>
+> >> Sensors driver for GPD Handhelds that expose fan reading and control via
+> >> hwmon sysfs.
+> >>
+> >> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+> >> devices. This driver implements these functions through x86 port-mapped IO.
+> >>
+> >> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+> >> ---
+> >>   MAINTAINERS             |   6 +
+> >>   drivers/hwmon/Kconfig   |  10 +
+> >>   drivers/hwmon/Makefile  |   1 +
+> >>   drivers/hwmon/gpd-fan.c | 681 ++++++++++++++++++++++++++++++++++++++++++++++++
+> >>   4 files changed, 698 insertions(+)
+> >>
+> >> diff --git a/MAINTAINERS b/MAINTAINERS
+> >> index 0fa7c5728f1e64d031f4a47b6fce1db484ce0fc2..777ba74ccb07ccc0840c3cd34e7b4d98d726f964 100644
+> >> --- a/MAINTAINERS
+> >> +++ b/MAINTAINERS
+> >> @@ -9762,6 +9762,12 @@ F:       drivers/phy/samsung/phy-gs101-ufs.c
+> >>   F:     include/dt-bindings/clock/google,gs101.h
+> >>   K:     [gG]oogle.?[tT]ensor
+> >>
+> >> +GPD FAN DRIVER
+> >> +M:     Cryolitia PukNgae <Cryolitia@gmail.com>
+> >> +L:     linux-hwmon@vger.kernel.org
+> >> +S:     Maintained
+> >> +F:     drivers/hwmon/gpd-fan.c
+> >
+> > A problem we had with oxp sensors is that once OneXPlayer expanded
+> > their EC to include e.g., battery capacity limits, it was no longer
+> > appropriate for it to reside in hwmon. I expect GPD to do the same
+> > sometime in the near future. If that is the case, should we
+> > futureproof the driver by moving it to platform-x86 right away?
+> >
+>
+> My problem with platform drivers, especially with x86 platform drivers,
+> including the OneXPlayer driver, is that the developers responsible for
+> those drivers refrain from implementing the client drivers as auxiliary
+> drivers but instead like to bundle everything into a non-subsystem
+> directory. I have always wondered why that is the case. My best guess
+> is that it is to limit and/or avoid subsystem maintainer oversight.
+> Does that work out for you ?
 
-Applied.
+Particularly for simple ECs such as OneXPlayer and GPD boards I think
+keeping all the addresses in the same file makes sense. E.g., I just
+sent a Fixes for the OneXPlayer G1 AMD variant and it was one commit
+instead of 2 or 3. At least for me it was practical, I did not
+consider having a lesser oversight as a benefit when making that
+choice.
 
-Thanks,
-Guenter
+But I do understand the concern.
 
-> ---
-> Reworded commit message as per suggestion by Guenter Roeck. 
-> 
->  drivers/hwmon/pmbus/ucd9000.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> 
-> base-commit: e2291551827fe5d2d3758c435c191d32b6d1350e
-> 
-> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
-> index 2bc8cccb01fd..52d4000902d5 100644
-> --- a/drivers/hwmon/pmbus/ucd9000.c
-> +++ b/drivers/hwmon/pmbus/ucd9000.c
-> @@ -226,15 +226,15 @@ static int ucd9000_gpio_set(struct gpio_chip *gc, unsigned int offset,
->  	}
->  
->  	if (value) {
-> -		if (ret & UCD9000_GPIO_CONFIG_STATUS)
-> +		if (ret & UCD9000_GPIO_CONFIG_OUT_VALUE)
->  			return 0;
->  
-> -		ret |= UCD9000_GPIO_CONFIG_STATUS;
-> +		ret |= UCD9000_GPIO_CONFIG_OUT_VALUE;
->  	} else {
-> -		if (!(ret & UCD9000_GPIO_CONFIG_STATUS))
-> +		if (!(ret & UCD9000_GPIO_CONFIG_OUT_VALUE))
->  			return 0;
->  
-> -		ret &= ~UCD9000_GPIO_CONFIG_STATUS;
-> +		ret &= ~UCD9000_GPIO_CONFIG_OUT_VALUE;
->  	}
->  
->  	ret |= UCD9000_GPIO_CONFIG_ENABLE;
+Antheas
+
+> Not objecting, I am just curious.
+>
+> Guenter
+>
+>
+
