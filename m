@@ -1,26 +1,26 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92C8F2BD590
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 14:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAF6221287
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 14:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752847986; cv=none; b=Pe3Fee8pWneWXctyLGgOvNMC5C6hID+P7hEIZfnqQ/U1zcvxt3wFIElKs3Pn2OHc3SEVN/3Rup2KIqa/HoqPybq5EBjX7iFVDtsPFtUL64ahY+Wf1SjsJRzdTp3+z2DzliJ38znMN1vLIlsbibj2qNHXMlH76VaJgNIrtfY7guY=
+	t=1752847986; cv=none; b=n0JpUfDJMZiuZWnFumWzjUwxHDcmuxeXjwLtZCbebgEhLmQyTBTnJtPZE48R7hLaiaEWdoffW9gvRVELJ5IUDo9zX3Kop3pA5td6VnWOx+5JqHAKPQVU8j9hplH4ZW45zYTcmyA0fxj4LZZ0yew5fO5+1MYQE2w6jll7LDFX3P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752847986; c=relaxed/simple;
-	bh=m8eeowTFOQ6rASGzd6J4wlcDNzQpxR4Dg/XHN9ePewg=;
+	bh=xj6S3M8xJY8PbtvB49mSf5ejLhiwBMln/kdBPNm/grU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AHldv81FUTC+02Nd5oAa5g4iDsMgZJIBRbLcpHdXir4pkvl3Dk4u26VW94x1BA1J38Y4K/losPRSrjWhAYikp2f8PgLQNMM8f0WBQSiRIrD1QIguRsFjeBIR4cHk/+Miu30TLIJu/v+oqWQ94y23eM/1/omi/QDl0HpLt9pGuQ8=
+	 In-Reply-To:To:Cc; b=KTszuHZ8S1kFLcM6cuASWgY4EWWXAVGVPXxwvZdwAaaLYHGWdA/yIwlrXOdrUKivpg7xDrjG81+KLS+KYOcX0qry76naR1JUXp1hkQ45P5Jkm1Vm6NmUOAMwu8A078U/VsHDS2PtBlH6gXPgdhmhAu4uXcSWZma/EG1EsYZAF0o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <jre@pengutronix.de>)
-	id 1uclpT-00065i-KS; Fri, 18 Jul 2025 16:12:51 +0200
+	id 1uclpT-00065i-No; Fri, 18 Jul 2025 16:12:51 +0200
 From: Jonas Rebmann <jre@pengutronix.de>
-Date: Fri, 18 Jul 2025 16:12:48 +0200
-Subject: [PATCH v2 1/3] hwmon: ina238: Fix inconsistent whitespace
+Date: Fri, 18 Jul 2025 16:12:50 +0200
+Subject: [PATCH v2 3/3] hwmon: ina238: Add support for INA228
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -29,7 +29,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250718-ina228-v2-1-227feb62f709@pengutronix.de>
+Message-Id: <20250718-ina228-v2-3-227feb62f709@pengutronix.de>
 References: <20250718-ina228-v2-0-227feb62f709@pengutronix.de>
 In-Reply-To: <20250718-ina228-v2-0-227feb62f709@pengutronix.de>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
@@ -39,12 +39,12 @@ Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org, 
  kernel@pengutronix.de, Jonas Rebmann <jre@pengutronix.de>
 X-Mailer: b4 0.15-dev-19c33
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5075; i=jre@pengutronix.de;
- h=from:subject:message-id; bh=m8eeowTFOQ6rASGzd6J4wlcDNzQpxR4Dg/XHN9ePewg=;
- b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsioCkt828G4Z3Vxo9s3v2mG+ioLKnY/dp2Qs8CW3do+P
- uEGg9X6jlIWBjEOBlkxRZZYNTkFIWP/62aVdrEwc1iZQIYwcHEKwESO/GVkmFr0d5ndE4dpm9V/
- vvc3d9BYKvdx4fl82catUflHTzJdP83IsOViTOXuMlPe7k6H40vmzihdfsS6w1u3hVu1hHe1YsV
- nRgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7291; i=jre@pengutronix.de;
+ h=from:subject:message-id; bh=xj6S3M8xJY8PbtvB49mSf5ejLhiwBMln/kdBPNm/grU=;
+ b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsioCkviqXp19aZqZ9HjvpbtUxaf05/csmf1/tOcyxKaK
+ za9WBe8rqOUhUGMg0FWTJElVk1OQcjY/7pZpV0szBxWJpAhDFycAjAR1UiGv1IWdmqLzyluUXz5
+ IJZf5Mzl2lXi7pF7mtMWvDB5HTznfizDf09nlow1yztnutt8eLb/UYT0tEWsBo2ruZriFr1fpf7
+ 9FCMA
 X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
  fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
@@ -52,121 +52,233 @@ X-SA-Exim-Mail-From: jre@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Some purely cosmetic changes in ina238.c:
+Add support for the Texas Instruments INA228 Ultra-Precise
+Power/Energy/Charge Monitor.
 
- - When aligning definitions, do so consistently with tab stop of 8.
- - Use spaces instead of tabs around operators.
- - Align wrapped lines.
+The INA228 is very similar to the INA238 but offers four bits of extra
+precision in the temperature, voltage and current measurement fields.
+It also supports energy and charge monitoring, the latter of which is
+not supported through this patch.
+
+While it seems in the datasheet that some constants such as LSB values
+differ between the 228 and the 238, they differ only for those registers
+where four bits of precision have been added and they differ by a factor
+of 16 (VBUS, VSHUNT, DIETEMP, CURRENT).
+
+Therefore, the INA238 constants are still applicable with regard
+to the bit of the same significance.
 
 Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
 ---
- drivers/hwmon/ina238.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/hwmon/ina238.c | 106 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 101 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 9a5fd16a4ec2..5e43bbe8817d 100644
+index 5e43bbe8817d..5a394eeff676 100644
 --- a/drivers/hwmon/ina238.c
 +++ b/drivers/hwmon/ina238.c
-@@ -41,7 +41,7 @@
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2021 Nathan Rossi <nathan.rossi@digi.com>
+  */
  
- #define INA238_CONFIG_ADCRANGE		BIT(4)
- #define SQ52206_CONFIG_ADCRANGE_HIGH	BIT(4)
--#define SQ52206_CONFIG_ADCRANGE_LOW		BIT(3)
-+#define SQ52206_CONFIG_ADCRANGE_LOW	BIT(3)
- 
- #define INA238_DIAG_ALERT_TMPOL		BIT(7)
- #define INA238_DIAG_ALERT_SHNTOL	BIT(6)
-@@ -104,7 +104,7 @@
- 
- #define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
- #define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
--#define INA238_DIE_TEMP_LSB			1250000 /* 125.0000 mC/lsb */
-+#define INA238_DIE_TEMP_LSB		1250000 /* 125.0000 mC/lsb */
++#include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/i2c.h>
+@@ -107,6 +108,7 @@
+ #define INA238_DIE_TEMP_LSB		1250000 /* 125.0000 mC/lsb */
  #define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
  #define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
++#define INA228_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
  
-@@ -118,12 +118,12 @@ enum ina238_ids { ina238, ina237, sq52206 };
- 
- struct ina238_config {
- 	bool has_power_highest;		/* chip detection power peak */
--	bool has_energy;			/* chip detection energy */
--	u8 temp_shift;				/* fixed parameters for temp calculate */
-+	bool has_energy;		/* chip detection energy */
-+	u8 temp_shift;			/* fixed parameters for temp calculate */
- 	u32 power_calculate_factor;	/* fixed parameters for power calculate */
--	u16 config_default;			/* Power-on default state */
-+	u16 config_default;		/* Power-on default state */
- 	int bus_voltage_lsb;		/* use for temperature calculate, uV/lsb */
--	int temp_lsb;				/* use for temperature calculate */
-+	int temp_lsb;			/* use for temperature calculate */
+ static const struct regmap_config ina238_regmap_config = {
+ 	.max_register = INA238_REGISTERS,
+@@ -114,9 +116,10 @@ static const struct regmap_config ina238_regmap_config = {
+ 	.val_bits = 16,
  };
  
- struct ina238_data {
-@@ -271,7 +271,7 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 		if (channel == 0)
- 			/* gain of 1 -> LSB / 4 */
- 			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
--					data->gain / (1000 * 4);
-+				data->gain / (1000 * 4);
- 		else
- 			*val = (regval * data->config->bus_voltage_lsb) / 1000;
- 		break;
-@@ -370,7 +370,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
+-enum ina238_ids { ina238, ina237, sq52206 };
++enum ina238_ids { ina238, ina237, sq52206, ina228 };
  
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT * data->gain *
- 				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
-@@ -381,7 +381,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 			return err;
+ struct ina238_config {
++	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
+ 	bool has_power_highest;		/* chip detection power peak */
+ 	bool has_energy;		/* chip detection energy */
+ 	u8 temp_shift;			/* fixed parameters for temp calculate */
+@@ -137,6 +140,7 @@ struct ina238_data {
  
- 		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT * data->gain *
- 				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
-@@ -395,7 +395,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		 * Truncated 24-bit compare register, lower 8-bits are
- 		 * truncated. Same conversion to/from uW as POWER register.
- 		 */
--		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT *	data->gain *
-+		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT * data->gain *
- 				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
-@@ -448,7 +448,7 @@ static int ina238_read_temp(struct device *dev, u32 attr, long *val)
- 			return err;
- 		/* Signed, result in mC */
- 		*val = div_s64(((s64)((s16)regval) >> data->config->temp_shift) *
--						(s64)data->config->temp_lsb, 10000);
-+			       (s64)data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max:
- 		err = regmap_read(data->regmap, INA238_TEMP_LIMIT, &regval);
-@@ -456,7 +456,7 @@ static int ina238_read_temp(struct device *dev, u32 attr, long *val)
- 			return err;
- 		/* Signed, result in mC */
- 		*val = div_s64(((s64)((s16)regval) >> data->config->temp_shift) *
--						(s64)data->config->temp_lsb, 10000);
-+			       (s64)data->config->temp_lsb, 10000);
- 		break;
- 	case hwmon_temp_max_alarm:
- 		err = regmap_read(data->regmap, INA238_DIAG_ALERT, &regval);
-@@ -501,8 +501,8 @@ static ssize_t energy1_input_show(struct device *dev,
- 		return ret;
+ static const struct ina238_config ina238_config[] = {
+ 	[ina238] = {
++		.has_20bit_voltage_current = false,
+ 		.has_energy = false,
+ 		.has_power_highest = false,
+ 		.temp_shift = 4,
+@@ -146,6 +150,7 @@ static const struct ina238_config ina238_config[] = {
+ 		.temp_lsb = INA238_DIE_TEMP_LSB,
+ 	},
+ 	[ina237] = {
++		.has_20bit_voltage_current = false,
+ 		.has_energy = false,
+ 		.has_power_highest = false,
+ 		.temp_shift = 4,
+@@ -155,6 +160,7 @@ static const struct ina238_config ina238_config[] = {
+ 		.temp_lsb = INA238_DIE_TEMP_LSB,
+ 	},
+ 	[sq52206] = {
++		.has_20bit_voltage_current = false,
+ 		.has_energy = true,
+ 		.has_power_highest = true,
+ 		.temp_shift = 0,
+@@ -163,6 +169,16 @@ static const struct ina238_config ina238_config[] = {
+ 		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
+ 		.temp_lsb = SQ52206_DIE_TEMP_LSB,
+ 	},
++	[ina228] = {
++		.has_20bit_voltage_current = true,
++		.has_energy = true,
++		.has_power_highest = false,
++		.temp_shift = 0,
++		.power_calculate_factor = 20,
++		.config_default = INA238_CONFIG_DEFAULT,
++		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
++		.temp_lsb = INA228_DIE_TEMP_LSB,
++	},
+ };
  
- 	/* result in uJ */
--	energy = div_u64(regval * INA238_FIXED_SHUNT *	data->gain * 16 * 10 *
--				data->config->power_calculate_factor, 4 * data->rshunt);
-+	energy = div_u64(regval * INA238_FIXED_SHUNT * data->gain * 16 * 10 *
-+			 data->config->power_calculate_factor, 4 * data->rshunt);
- 
- 	return sysfs_emit(buf, "%llu\n", energy);
+ static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
+@@ -199,6 +215,65 @@ static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
+ 	return 0;
  }
+ 
++static int ina238_read_field_s20(const struct i2c_client *client, u8 reg, s32 *val)
++{
++	u32 regval;
++	int err;
++
++	err = ina238_read_reg24(client, reg, &regval);
++	if (err)
++		return err;
++
++	/* bits 3-0 Reserved, always zero */
++	regval >>= 4;
++
++	*val = sign_extend32(regval, 19);
++
++	return 0;
++}
++
++static int ina228_read_shunt_voltage(struct device *dev, u32 attr, int channel,
++				     long *val)
++{
++	struct ina238_data *data = dev_get_drvdata(dev);
++	int regval;
++	int err;
++
++	err = ina238_read_field_s20(data->client, INA238_SHUNT_VOLTAGE, &regval);
++	if (err)
++		return err;
++
++	/*
++	 * gain of 1 -> LSB / 4
++	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
++	 * precision. ina238 conversion factors can still be applied when
++	 * dividing by 16.
++	 */
++	*val = (regval * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4) / 16;
++	return 0;
++}
++
++static int ina228_read_bus_voltage(struct device *dev, u32 attr, int channel,
++				   long *val)
++{
++	struct ina238_data *data = dev_get_drvdata(dev);
++	int regval;
++	int err;
++
++	err = ina238_read_field_s20(data->client, INA238_BUS_VOLTAGE, &regval);
++	if (err)
++		return err;
++
++	/*
++	 * gain of 1 -> LSB / 4
++	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
++	 * precision. ina238 conversion factors can still be applied when
++	 * dividing by 16.
++	 */
++	*val = (regval * data->config->bus_voltage_lsb) / 1000 / 16;
++	return 0;
++}
++
+ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 			  long *val)
+ {
+@@ -211,6 +286,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 	case 0:
+ 		switch (attr) {
+ 		case hwmon_in_input:
++			if (data->config->has_20bit_voltage_current)
++				return ina228_read_shunt_voltage(dev, attr, channel, val);
+ 			reg = INA238_SHUNT_VOLTAGE;
+ 			break;
+ 		case hwmon_in_max:
+@@ -234,6 +311,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 	case 1:
+ 		switch (attr) {
+ 		case hwmon_in_input:
++			if (data->config->has_20bit_voltage_current)
++				return ina228_read_bus_voltage(dev, attr, channel, val);
+ 			reg = INA238_BUS_VOLTAGE;
+ 			break;
+ 		case hwmon_in_max:
+@@ -341,13 +420,25 @@ static int ina238_read_current(struct device *dev, u32 attr, long *val)
+ 
+ 	switch (attr) {
+ 	case hwmon_curr_input:
+-		err = regmap_read(data->regmap, INA238_CURRENT, &regval);
+-		if (err < 0)
+-			return err;
++		if (data->config->has_20bit_voltage_current) {
++			err = ina238_read_field_s20(data->client, INA238_CURRENT, &regval);
++			if (err)
++				return err;
++		} else {
++			err = regmap_read(data->regmap, INA238_CURRENT, &regval);
++			if (err < 0)
++				return err;
++			/* sign-extend */
++			regval = (s16)regval;
++		}
+ 
+ 		/* Signed register, fixed 1mA current lsb. result in mA */
+-		*val = div_s64((s16)regval * INA238_FIXED_SHUNT * data->gain,
++		*val = div_s64((s64)regval * INA238_FIXED_SHUNT * data->gain,
+ 			       data->rshunt * 4);
++
++		/* Account for 4 bit offset */
++		if (data->config->has_20bit_voltage_current)
++			*val /= 16;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -750,6 +841,7 @@ static int ina238_probe(struct i2c_client *client)
+ }
+ 
+ static const struct i2c_device_id ina238_id[] = {
++	{ "ina228", ina228 },
+ 	{ "ina237", ina237 },
+ 	{ "ina238", ina238 },
+ 	{ "sq52206", sq52206 },
+@@ -758,6 +850,10 @@ static const struct i2c_device_id ina238_id[] = {
+ MODULE_DEVICE_TABLE(i2c, ina238_id);
+ 
+ static const struct of_device_id __maybe_unused ina238_of_match[] = {
++	{
++		.compatible = "ti,ina228",
++		.data = (void *)ina228
++	},
+ 	{
+ 		.compatible = "ti,ina237",
+ 		.data = (void *)ina237
 
 -- 
 2.50.1.319.g90c0775e97
