@@ -1,285 +1,130 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAF6221287
-	for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 14:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A661DED53
+	for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 16:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752847986; cv=none; b=n0JpUfDJMZiuZWnFumWzjUwxHDcmuxeXjwLtZCbebgEhLmQyTBTnJtPZE48R7hLaiaEWdoffW9gvRVELJ5IUDo9zX3Kop3pA5td6VnWOx+5JqHAKPQVU8j9hplH4ZW45zYTcmyA0fxj4LZZ0yew5fO5+1MYQE2w6jll7LDFX3P0=
+	t=1752856484; cv=none; b=JAc1GS5jKWXUrhlit5WCymsax91WD/qX6x0bHeZdISimQblQhfsLKepIMl+jUuduD3lmpTlewfCme1fOX61+9uOaojAX34Jxyl8gy7xvLYK5fUkszQhiefWmGEpVCs2PsCYQQbdnbMBlV6U+2rrLwp7RMdsLf29VFyr36I1K2M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752847986; c=relaxed/simple;
-	bh=xj6S3M8xJY8PbtvB49mSf5ejLhiwBMln/kdBPNm/grU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KTszuHZ8S1kFLcM6cuASWgY4EWWXAVGVPXxwvZdwAaaLYHGWdA/yIwlrXOdrUKivpg7xDrjG81+KLS+KYOcX0qry76naR1JUXp1hkQ45P5Jkm1Vm6NmUOAMwu8A078U/VsHDS2PtBlH6gXPgdhmhAu4uXcSWZma/EG1EsYZAF0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <jre@pengutronix.de>)
-	id 1uclpT-00065i-No; Fri, 18 Jul 2025 16:12:51 +0200
-From: Jonas Rebmann <jre@pengutronix.de>
-Date: Fri, 18 Jul 2025 16:12:50 +0200
-Subject: [PATCH v2 3/3] hwmon: ina238: Add support for INA228
+	s=arc-20240116; t=1752856484; c=relaxed/simple;
+	bh=mI/esk/gl5N5GPE4tZVxDBN7NX6rJZxOdzFKWMs4IL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ep9xBF5mW+P7U3ynt7ewWYo6dXgjEdjYX9egRXgJwYDsE2zQdgNd72oSdZ/X0xi3ka0QLLw21WHuFUMmc4Lafg8e6Ekmf8JOluGsk9fsTJ2WsucLBaDTh2wvo4q3OF7c5QtNRHmVjYN0pqNlp69rBzVTTQrrb81eI6zOGhF29dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VxbmWsVf; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VxbmWsVf"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-315c1b0623cso2252959a91.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 18 Jul 2025 09:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752856482; x=1753461282; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TkTPQ5ohW9TzuL1lUaLK41kO6k+IQp9Iwjvbv0pjB9k=;
+        b=VxbmWsVfVZpiuBj+ZKb/UL2oBhnv53ov/UCXJYPEjm/ibKlbYNsP0gDThBu15WJb1N
+         /g2tVYU2KOFMowwMkkvrL1grQI/TjNfl5Uwuw88B5d/ddtz9J64fPJVGVfRlWAmy8TmY
+         GbsDXlOoE5YYntR0Te78wrguVXPFeWtOPlbZs1fbu2UXiSnFGbF2UP3kNb1+A4xbSJWW
+         VINm6TURRRfTAOxDQ3q/+DXRaGm05TCwnf68u3RysnxC6IPfyO59wX6I88555nxSQI0p
+         I48UDDQDhaVAsJ8tXLmCW1hhYTsxgrLp6tAu7nM7W8vlP43GV8ZLNUGpI0ngt4i483Th
+         NgkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752856482; x=1753461282;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TkTPQ5ohW9TzuL1lUaLK41kO6k+IQp9Iwjvbv0pjB9k=;
+        b=D/LrRqHzM2cigd9SCORRZo0ACJG/K/7DOu5bUQgX3BILfE4jyMh7gbibIePUWrJJyQ
+         l0aAbE+RGZnZ3WTJvOgzwP1pJbFGgaxbjGWx9H73a+nKWo0uUTQEeB0vx3+Vzi7PBwae
+         ZCopxQIbQMenXqvxUCGUxmnLtImkDyccdJslMukIqw2Sb9mQbwS1QwKCUOeSl/1L9Yem
+         M8xvTIlBUdUTgrnWxbfQWchGQrUlPiGHZustwMoyLKH2s1W71co2eLMWcEbCJHR/04yZ
+         VZWjQLtWxTg52ateH7agLaaACGB26ntGsxAM8+i/L3+/5QiaThoTz7V5B/7zwqe5CrOl
+         Zlfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWehuti1t4qyr8DnDiiSTBU9xLT4Q5re+aLBqz4K9a7hAfXgC3o543evT5axQy+4Dt+ZhxEpPX78BxyDw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx47rdWQwT6IlxGYzgYkCq2S5M9Um0WLfwdJI+44L8zepEjzAYu
+	JPCjhgNYE7csaiTHD1TixJ0voY4Q3G+eBoy33PvoReco4AXh3vVoxi9n
+X-Gm-Gg: ASbGncspzxlg1dqCz6FH6oWBpkgqGPQxZZct30fSOJglSSMpxUojk5SHszcyQfmo11J
+	smGyodTMkIN7o4a0Enjm9SIxvQdRRsFQWLAn0ZgK048I+1j4tGWzvC2VrEPaPPIYPM8lM/syifv
+	t8vk4MzfRNi9Tv6JWFNV2IxZVOR7RMzB078Bi/RkeeEspED66k3es5Qlsf/GvUnQTvTqy+MRrgp
+	io0iFUfTNqSddRY78RnCEg8aRa7VxXMq4LMrX6uyltyRCFMNzLkWpkdi3rjvKaHt7HL7AuGTape
+	zEoM/UFwSEwMSeym6gppfhNEALd2OjHhPsmgHa15/tPSrwcy7qSUWs51TUAvl7FzRlEXGB6R/JD
+	YGCFcAn/k7uQOsgqtaMwxWp0/hAI7Z3hLFJdEO62c5NgaWA==
+X-Google-Smtp-Source: AGHT+IHwRyh36PAAO5i/E3AQ5e0frP5l+PLw507BCkVWgL+XY5uMggvU3wm5UECImQnsmJKxEWDMpg==
+X-Received: by 2002:a17:90b:254d:b0:311:ab20:159d with SMTP id 98e67ed59e1d1-31c9f4249b2mr15233627a91.19.1752856481731;
+        Fri, 18 Jul 2025 09:34:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f28807csm5381718a91.26.2025.07.18.09.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Jul 2025 09:34:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 18 Jul 2025 09:34:39 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Torben Nielsen <t8927095@gmail.com>
+Cc: bartosz.golaszewski@linaro.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon:pmbus:ucd9000: Fix error in ucd9000_gpio_set
+Message-ID: <4bb4a9fd-17bc-4dc2-a27b-da83248d6e60@roeck-us.net>
+References: <20250718093644.356085-2-t8927095@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250718-ina228-v2-3-227feb62f709@pengutronix.de>
-References: <20250718-ina228-v2-0-227feb62f709@pengutronix.de>
-In-Reply-To: <20250718-ina228-v2-0-227feb62f709@pengutronix.de>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org, 
- kernel@pengutronix.de, Jonas Rebmann <jre@pengutronix.de>
-X-Mailer: b4 0.15-dev-19c33
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7291; i=jre@pengutronix.de;
- h=from:subject:message-id; bh=xj6S3M8xJY8PbtvB49mSf5ejLhiwBMln/kdBPNm/grU=;
- b=owGbwMvMwCF2ZcYT3onnbjcwnlZLYsioCkviqXp19aZqZ9HjvpbtUxaf05/csmf1/tOcyxKaK
- za9WBe8rqOUhUGMg0FWTJElVk1OQcjY/7pZpV0szBxWJpAhDFycAjAR1UiGv1IWdmqLzyluUXz5
- IJZf5Mzl2lXi7pF7mtMWvDB5HTznfizDf09nlow1yztnutt8eLb/UYT0tEWsBo2ruZriFr1fpf7
- 9FCMA
-X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
- fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
-X-SA-Exim-Mail-From: jre@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250718093644.356085-2-t8927095@gmail.com>
 
-Add support for the Texas Instruments INA228 Ultra-Precise
-Power/Energy/Charge Monitor.
+On Fri, Jul 18, 2025 at 11:36:45AM +0200, Torben Nielsen wrote:
+> The GPIO output functionality does not work as intended.
+> 
+> The ucd9000_gpio_set function should set UCD9000_GPIO_CONFIG_OUT_VALUE
+> (bit 2) in order to change the output value of the selected GPIO.
+> Instead UCD9000_GPIO_CONFIG_STATUS (bit 3) is set, but this is a
+> read-only value. This patch fixes the mistake and provides the intended
+> functionality of the GPIOs.
+> 
+> See UCD90xxx Sequencer and System Health Controller PMBus Command SLVU352C
+> section 10.43 for reference.
+> 
+> Signed-off-by: Torben Nielsen <t8927095@gmail.com>
 
-The INA228 is very similar to the INA238 but offers four bits of extra
-precision in the temperature, voltage and current measurement fields.
-It also supports energy and charge monitoring, the latter of which is
-not supported through this patch.
+Applied.
 
-While it seems in the datasheet that some constants such as LSB values
-differ between the 228 and the 238, they differ only for those registers
-where four bits of precision have been added and they differ by a factor
-of 16 (VBUS, VSHUNT, DIETEMP, CURRENT).
+Thanks,
+Guenter
 
-Therefore, the INA238 constants are still applicable with regard
-to the bit of the same significance.
-
-Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
----
- drivers/hwmon/ina238.c | 106 ++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 101 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 5e43bbe8817d..5a394eeff676 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2021 Nathan Rossi <nathan.rossi@digi.com>
-  */
- 
-+#include <linux/bitops.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/i2c.h>
-@@ -107,6 +108,7 @@
- #define INA238_DIE_TEMP_LSB		1250000 /* 125.0000 mC/lsb */
- #define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
- #define SQ52206_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
-+#define INA228_DIE_TEMP_LSB		78125 /* 7.8125 mC/lsb */
- 
- static const struct regmap_config ina238_regmap_config = {
- 	.max_register = INA238_REGISTERS,
-@@ -114,9 +116,10 @@ static const struct regmap_config ina238_regmap_config = {
- 	.val_bits = 16,
- };
- 
--enum ina238_ids { ina238, ina237, sq52206 };
-+enum ina238_ids { ina238, ina237, sq52206, ina228 };
- 
- struct ina238_config {
-+	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
- 	bool has_power_highest;		/* chip detection power peak */
- 	bool has_energy;		/* chip detection energy */
- 	u8 temp_shift;			/* fixed parameters for temp calculate */
-@@ -137,6 +140,7 @@ struct ina238_data {
- 
- static const struct ina238_config ina238_config[] = {
- 	[ina238] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = false,
- 		.has_power_highest = false,
- 		.temp_shift = 4,
-@@ -146,6 +150,7 @@ static const struct ina238_config ina238_config[] = {
- 		.temp_lsb = INA238_DIE_TEMP_LSB,
- 	},
- 	[ina237] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = false,
- 		.has_power_highest = false,
- 		.temp_shift = 4,
-@@ -155,6 +160,7 @@ static const struct ina238_config ina238_config[] = {
- 		.temp_lsb = INA238_DIE_TEMP_LSB,
- 	},
- 	[sq52206] = {
-+		.has_20bit_voltage_current = false,
- 		.has_energy = true,
- 		.has_power_highest = true,
- 		.temp_shift = 0,
-@@ -163,6 +169,16 @@ static const struct ina238_config ina238_config[] = {
- 		.bus_voltage_lsb = SQ52206_BUS_VOLTAGE_LSB,
- 		.temp_lsb = SQ52206_DIE_TEMP_LSB,
- 	},
-+	[ina228] = {
-+		.has_20bit_voltage_current = true,
-+		.has_energy = true,
-+		.has_power_highest = false,
-+		.temp_shift = 0,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_lsb = INA228_DIE_TEMP_LSB,
-+	},
- };
- 
- static int ina238_read_reg24(const struct i2c_client *client, u8 reg, u32 *val)
-@@ -199,6 +215,65 @@ static int ina238_read_reg40(const struct i2c_client *client, u8 reg, u64 *val)
- 	return 0;
- }
- 
-+static int ina238_read_field_s20(const struct i2c_client *client, u8 reg, s32 *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = ina238_read_reg24(client, reg, &regval);
-+	if (err)
-+		return err;
-+
-+	/* bits 3-0 Reserved, always zero */
-+	regval >>= 4;
-+
-+	*val = sign_extend32(regval, 19);
-+
-+	return 0;
-+}
-+
-+static int ina228_read_shunt_voltage(struct device *dev, u32 attr, int channel,
-+				     long *val)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int regval;
-+	int err;
-+
-+	err = ina238_read_field_s20(data->client, INA238_SHUNT_VOLTAGE, &regval);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * gain of 1 -> LSB / 4
-+	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-+	 * precision. ina238 conversion factors can still be applied when
-+	 * dividing by 16.
-+	 */
-+	*val = (regval * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4) / 16;
-+	return 0;
-+}
-+
-+static int ina228_read_bus_voltage(struct device *dev, u32 attr, int channel,
-+				   long *val)
-+{
-+	struct ina238_data *data = dev_get_drvdata(dev);
-+	int regval;
-+	int err;
-+
-+	err = ina238_read_field_s20(data->client, INA238_BUS_VOLTAGE, &regval);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * gain of 1 -> LSB / 4
-+	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
-+	 * precision. ina238 conversion factors can still be applied when
-+	 * dividing by 16.
-+	 */
-+	*val = (regval * data->config->bus_voltage_lsb) / 1000 / 16;
-+	return 0;
-+}
-+
- static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 			  long *val)
- {
-@@ -211,6 +286,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 	case 0:
- 		switch (attr) {
- 		case hwmon_in_input:
-+			if (data->config->has_20bit_voltage_current)
-+				return ina228_read_shunt_voltage(dev, attr, channel, val);
- 			reg = INA238_SHUNT_VOLTAGE;
- 			break;
- 		case hwmon_in_max:
-@@ -234,6 +311,8 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
- 	case 1:
- 		switch (attr) {
- 		case hwmon_in_input:
-+			if (data->config->has_20bit_voltage_current)
-+				return ina228_read_bus_voltage(dev, attr, channel, val);
- 			reg = INA238_BUS_VOLTAGE;
- 			break;
- 		case hwmon_in_max:
-@@ -341,13 +420,25 @@ static int ina238_read_current(struct device *dev, u32 attr, long *val)
- 
- 	switch (attr) {
- 	case hwmon_curr_input:
--		err = regmap_read(data->regmap, INA238_CURRENT, &regval);
--		if (err < 0)
--			return err;
-+		if (data->config->has_20bit_voltage_current) {
-+			err = ina238_read_field_s20(data->client, INA238_CURRENT, &regval);
-+			if (err)
-+				return err;
-+		} else {
-+			err = regmap_read(data->regmap, INA238_CURRENT, &regval);
-+			if (err < 0)
-+				return err;
-+			/* sign-extend */
-+			regval = (s16)regval;
-+		}
- 
- 		/* Signed register, fixed 1mA current lsb. result in mA */
--		*val = div_s64((s16)regval * INA238_FIXED_SHUNT * data->gain,
-+		*val = div_s64((s64)regval * INA238_FIXED_SHUNT * data->gain,
- 			       data->rshunt * 4);
-+
-+		/* Account for 4 bit offset */
-+		if (data->config->has_20bit_voltage_current)
-+			*val /= 16;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
-@@ -750,6 +841,7 @@ static int ina238_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id ina238_id[] = {
-+	{ "ina228", ina228 },
- 	{ "ina237", ina237 },
- 	{ "ina238", ina238 },
- 	{ "sq52206", sq52206 },
-@@ -758,6 +850,10 @@ static const struct i2c_device_id ina238_id[] = {
- MODULE_DEVICE_TABLE(i2c, ina238_id);
- 
- static const struct of_device_id __maybe_unused ina238_of_match[] = {
-+	{
-+		.compatible = "ti,ina228",
-+		.data = (void *)ina228
-+	},
- 	{
- 		.compatible = "ti,ina237",
- 		.data = (void *)ina237
-
--- 
-2.50.1.319.g90c0775e97
-
+> ---
+> Reworded commit message as per suggestion by Guenter Roeck. 
+> 
+>  drivers/hwmon/pmbus/ucd9000.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> 
+> base-commit: e2291551827fe5d2d3758c435c191d32b6d1350e
+> 
+> diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> index 2bc8cccb01fd..52d4000902d5 100644
+> --- a/drivers/hwmon/pmbus/ucd9000.c
+> +++ b/drivers/hwmon/pmbus/ucd9000.c
+> @@ -226,15 +226,15 @@ static int ucd9000_gpio_set(struct gpio_chip *gc, unsigned int offset,
+>  	}
+>  
+>  	if (value) {
+> -		if (ret & UCD9000_GPIO_CONFIG_STATUS)
+> +		if (ret & UCD9000_GPIO_CONFIG_OUT_VALUE)
+>  			return 0;
+>  
+> -		ret |= UCD9000_GPIO_CONFIG_STATUS;
+> +		ret |= UCD9000_GPIO_CONFIG_OUT_VALUE;
+>  	} else {
+> -		if (!(ret & UCD9000_GPIO_CONFIG_STATUS))
+> +		if (!(ret & UCD9000_GPIO_CONFIG_OUT_VALUE))
+>  			return 0;
+>  
+> -		ret &= ~UCD9000_GPIO_CONFIG_STATUS;
+> +		ret &= ~UCD9000_GPIO_CONFIG_OUT_VALUE;
+>  	}
+>  
+>  	ret |= UCD9000_GPIO_CONFIG_ENABLE;
