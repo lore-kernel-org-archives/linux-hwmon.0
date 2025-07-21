@@ -1,237 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F98284685;
-	Mon, 21 Jul 2025 07:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C96D288C39
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Jul 2025 12:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753083771; cv=none; b=eiTwGrF2uwrwdgdRk3tJSg0XKgpBjNQUd14CoJhQjGBhhRa/RfQHmchoqyNUMhyrwzP2aegzOwGcAqKFjeLl/n8CUATYvcD9aGhk24HjBreo2s6b/N8/F0U2Q855Ey75WaIfx+ygSx6AhkYzUNc8I2isO1TIAvyboPlA7gMZDeE=
+	t=1753101994; cv=none; b=q8j9a6xg/OxfX8GG7J7MtyjJAaJClObQMlm/6DUVnXkWUc6fkrA43VXA+hCwiU3QoxWW4mF3qTBT3WJex2iVhT0L1mfbkbTSkUawwrHJLsyZ6HbZCFuqHQgwto6IPZJbHznUyAZRcsW3skIIluKmQW11MbWX1BDd8wJfu+WJfLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753083771; c=relaxed/simple;
-	bh=Q4RBacuprSEIc9pez5OZQhXVT32g2ZtOfNSxEYIpOio=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xno+K6+SCHLwvkcq6vC62BmNHz2WkCuF0mO5dQJmagghNLYuwaDKyz0tV308XixzeXHxzTvX/4J9WZObWxHAxBXP5GT+KXMY/3iuX9v/FFu6J32gvdx308aqcjgKZ2/w9xc+a1yowTv8iKMhnGS7HnWSGCpsG09mybvJJ3lqy7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIVJ3VQ8; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1753101994; c=relaxed/simple;
+	bh=6GpCxY9blH1C6mjjOiRo3xUNrKqu1OSwHclHDPURDmE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ccXnQy+J7+RLZsvjEcDkas94EOc0CmDa1I7hrogtQQWeBfCSeFbtzoPL/ySd1MVgD3jbjb1yXjQO+4V2dAAnJ3B4+KYwdVPEGUwb7U63r4UovLARcPrAOch2ii6YHtGt9xpjD5kFFbGh9B15vneB+GvYVf0rsdaeyn/5RFDFKP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O+2zEWVz; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIVJ3VQ8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O+2zEWVz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753083770; x=1784619770;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q4RBacuprSEIc9pez5OZQhXVT32g2ZtOfNSxEYIpOio=;
-  b=GIVJ3VQ8RDUfJzvYVZs6KkV47FlFyjRztWZfSFkwfIczBrPOdYIT50tg
-   QuP+7WcVPwJlQyLRAP8nJnxEsjCPqTT1LMn0/9+sDSlV6yOtrSDa1zDyF
-   rNRFtMW0xCLnWsAlnMvlx/xQb9UxYwDoHRbhUhWQ9s2W7C4uyKn9XET2z
-   H75IFBnskQypK1rHpVRQihme4Mp6ejqFp6jnHby5pPESXt/XG1Cd72fBH
-   vWvUwOmFtwI15/rLE/wntsVLDWh6FvHqJM3iQpxdg9K61vJpjWGuQpfau
-   v3DoCkzlMYYP1o+mAnqRVyKJVHHX43amsURkz4v0lO8f3WJdlrWkhIQyY
+  t=1753101993; x=1784637993;
+  h=date:from:to:cc:subject:message-id;
+  bh=6GpCxY9blH1C6mjjOiRo3xUNrKqu1OSwHclHDPURDmE=;
+  b=O+2zEWVzwg53sMD+uvArcBgHdAhtyPLxzROsEY0RtyjDh3UNH4Pntobf
+   jPxVuzJNAl+7aph32e41Ai2OBMfrrn5wLHi4riy+CWzXDbjBWo2s4AzIB
+   8gwiOf6/aycxX26UVrsih5NFmmejdLaMZYhJ54b6V8McyiXzYMaOBuZd6
+   hMLAzN3s3gKTWpy3mnPjTaYUhXJPN8LhTZJfrnKcHHHo1jdft0t2rusg7
+   /T6INkZbuW/POMG79YuTbjLAoqzl6vLh1I/NImBbURUnmR2D8HXIwCw9q
+   aDhvH3O4Z0JVJzLTOt/IYf5GUZ7UVNLizTdpnfUFbp96BTWslTCqxcxtp
    w==;
-X-CSE-ConnectionGUID: geES7QqTR9ij1zXr7lk8pg==
-X-CSE-MsgGUID: pr3SWbTpQ/yDNKEFeEF4ug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="55444609"
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="55444609"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 00:42:49 -0700
-X-CSE-ConnectionGUID: rc6vbhyTSyqvAelJSe+wOw==
-X-CSE-MsgGUID: Kp+L3q7rRMOBCfw6bfXsqg==
+X-CSE-ConnectionGUID: O4bADfNgQ5ir5OluYzl0hQ==
+X-CSE-MsgGUID: 1re80r9hSOKZfHEMIinm2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="66753709"
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="66753709"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 05:46:26 -0700
+X-CSE-ConnectionGUID: u87dBV+lSRyurdCvSPPHmA==
+X-CSE-MsgGUID: XSmxNXHGT6KalmRzh34sMw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="158885160"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 00:42:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1udlAZ-0000000HHbP-37cp;
-	Mon, 21 Jul 2025 10:42:43 +0300
-Date: Mon, 21 Jul 2025 10:42:43 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
-Message-ID: <aH3vcye29TrG8s2Z@smile.fi.intel.com>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-8-sean.anderson@linux.dev>
- <aHYWQOjJEWdLjy7H@smile.fi.intel.com>
- <3b35b3a7-3f1a-4401-9b60-ba4afda5636e@linux.dev>
- <aHd6NEHcCa6aqJB5@smile.fi.intel.com>
- <e4894ab6-dd75-45d5-a49f-832c64b89eaf@linux.dev>
+X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
+   d="scan'208";a="159257163"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 21 Jul 2025 05:46:25 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1udpuR-000Gnp-0h;
+	Mon, 21 Jul 2025 12:46:23 +0000
+Date: Mon, 21 Jul 2025 20:46:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ a2609b707b58561b9e52f92f3f571d0510201f2f
+Message-ID: <202507212050.7ek1jOxQ-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4894ab6-dd75-45d5-a49f-832c64b89eaf@linux.dev>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Jul 17, 2025 at 12:23:58PM -0400, Sean Anderson wrote:
-> On 7/16/25 06:08, Andy Shevchenko wrote:
-> > On Tue, Jul 15, 2025 at 12:20:24PM -0400, Sean Anderson wrote:
-> >> On 7/15/25 04:50, Andy Shevchenko wrote:
-> >> > On Mon, Jul 14, 2025 at 09:20:23PM -0400, Sean Anderson wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: a2609b707b58561b9e52f92f3f571d0510201f2f  hwmon: ina238: Add support for INA228
 
-...
+elapsed time: 724m
 
-> >> >>  #include <linux/hwmon-sysfs.h>
-> >> > 
-> >> > + blank line here..
-> >> 
-> >> why?
-> > 
-> > To group the subsystem related headers (which are more custom and less generic).
-> > This allows to follow what the subsystems are in use and what APIs / types are
-> > taken.
-> 
-> Then you should send a patch for coding-style.rst.
+configs tested: 141
+configs skipped: 6
 
-Does any of the common sense approach need to be written in the documentation?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> >> >>  #include <linux/iio/consumer.h>
-> >> >> +#include <linux/iio/events.h>
-> >> >> +#include <linux/iio/iio.h>
-> >> >>  #include <linux/iio/types.h>
-> >> > 
-> >> > ...and here?
-> >> 
-> >> OK
-> >> 
-> >> >> +#include <uapi/linux/iio/events.h>
-> > 
-> > As similar here, to visually split uAPI and the rest. This increases
-> > readability and maintenance.
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    clang-22
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                   randconfig-001-20250721    gcc-11.5.0
+arc                   randconfig-002-20250721    gcc-12.5.0
+arm                              allmodconfig    gcc-15.1.0
+arm                               allnoconfig    clang-21
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    gcc-15.1.0
+arm                         assabet_defconfig    clang-18
+arm                   randconfig-001-20250721    clang-21
+arm                   randconfig-002-20250721    gcc-13.4.0
+arm                   randconfig-003-20250721    gcc-15.1.0
+arm                   randconfig-004-20250721    clang-21
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                 randconfig-001-20250721    clang-21
+arm64                 randconfig-002-20250721    clang-20
+arm64                 randconfig-003-20250721    gcc-13.4.0
+arm64                 randconfig-004-20250721    clang-21
+csky                              allnoconfig    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20250721    gcc-15.1.0
+csky                  randconfig-002-20250721    gcc-15.1.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-21
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250721    clang-21
+hexagon               randconfig-002-20250721    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250721    clang-20
+i386        buildonly-randconfig-002-20250721    clang-20
+i386        buildonly-randconfig-003-20250721    gcc-12
+i386        buildonly-randconfig-004-20250721    gcc-12
+i386        buildonly-randconfig-005-20250721    clang-20
+i386        buildonly-randconfig-006-20250721    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-011-20250721    clang-20
+i386                  randconfig-012-20250721    clang-20
+i386                  randconfig-013-20250721    clang-20
+i386                  randconfig-014-20250721    clang-20
+i386                  randconfig-015-20250721    clang-20
+i386                  randconfig-016-20250721    clang-20
+i386                  randconfig-017-20250721    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-21
+loongarch                         allnoconfig    clang-22
+loongarch             randconfig-001-20250721    clang-18
+loongarch             randconfig-002-20250721    gcc-12.5.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+microblaze                       alldefconfig    gcc-15.1.0
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                           ip28_defconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-11.5.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20250721    gcc-8.5.0
+nios2                 randconfig-002-20250721    gcc-9.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250721    gcc-15.1.0
+parisc                randconfig-002-20250721    gcc-15.1.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    clang-22
+powerpc                      cm5200_defconfig    clang-21
+powerpc               randconfig-001-20250721    gcc-12.5.0
+powerpc               randconfig-002-20250721    gcc-10.5.0
+powerpc               randconfig-003-20250721    gcc-11.5.0
+powerpc64             randconfig-001-20250721    clang-21
+powerpc64             randconfig-002-20250721    clang-21
+powerpc64             randconfig-003-20250721    clang-19
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20250721    clang-21
+riscv                 randconfig-002-20250721    gcc-8.5.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20250721    clang-21
+s390                  randconfig-002-20250721    clang-20
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                ecovec24-romimage_defconfig    gcc-15.1.0
+sh                    randconfig-001-20250721    gcc-15.1.0
+sh                    randconfig-002-20250721    gcc-14.3.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250721    gcc-15.1.0
+sparc                 randconfig-002-20250721    gcc-13.4.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20250721    clang-20
+sparc64               randconfig-002-20250721    clang-21
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250721    gcc-12
+um                    randconfig-002-20250721    clang-17
+um                           x86_64_defconfig    clang-22
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250721    clang-20
+x86_64      buildonly-randconfig-002-20250721    gcc-12
+x86_64      buildonly-randconfig-003-20250721    gcc-12
+x86_64      buildonly-randconfig-004-20250721    gcc-12
+x86_64      buildonly-randconfig-005-20250721    clang-20
+x86_64      buildonly-randconfig-006-20250721    gcc-12
+x86_64                              defconfig    gcc-11
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250721    gcc-11.5.0
+xtensa                randconfig-002-20250721    gcc-8.5.0
 
-...
-
-> >> >> +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener *listener,
-> >> >> +				      u64 id)
-> >> >> +{
-> >> >> +	ssize_t i;
-> >> >> +
-> >> >> +	for (i = 0; i < listener->num_alarms; i++)
-> >> >> +		if (listener->ids[i] == id)
-> >> >> +			return i;
-> >> > 
-> >> >> +	return -1;
-> >> > 
-> >> > -ENOENT ?
-> >> > This will allow to propagate an error code to the upper layer(s).
-> >> 
-> >> I suppose. But I think
-> >> 
-> >> alarm = iio_hwmon_lookup_alarm(...);
-> >> if (alarm < 0)
-> >> 	return -ENOENT;
-> >> 
-> >> is clearer than
-> > 
-> > I disagree. This makes it worth as it shadows other possible code(s), if any,
-> > and makes harder to follow as reader has to check the callee implementation.
-> > 
-> > The shadow error codes need a justification.
-> 
-> OK, I will return a bool next time to avoid any misconceptions that the return
-> code means anything other than "found" or "not found"
-
-This makes sense. And IIRC it's even documented.
-
-> >> alarm = iio_hwmon_lookup_alarm(...);
-> >> if (alarm < 0)
-> >> 	return alarm;
-> >> 
-> >> because you don't have to read the definition of iio_hwmon_lookup_alarm
-> >> to determine what the return value is.
-> > 
-> > Exactly my point!
-> 
-> your point is that you want readers to have to read the definition of
-> iio_hwmon_lookup_alarm in order to determine that ENOENT is a possible
-> error from add_alarm_attr? I don't follow.
-
-No, my point is that readers should not care about error code. If it's
-propagated to the upper layer, the upper layer will decide on how to proceed.
-And -ENOENT is de facto standard for "entity not found".
-
-> >> >> +}
-
-...
-
-> >> >> +err_alarms:
-> >> >> +	kfree(listener->alarms);
-> >> >> +	kfree(listener->ids);
-> >> >> +err_listener:
-> >> >> +	kfree(listener);
-> >> >> +err_unlock:
-> >> >> +	mutex_unlock(&iio_hwmon_listener_lock);
-> >> >> +	return ERR_PTR(err);
-> >> > 
-> >> > What about using __free()?
-> >> 
-> >> That works for listener, but not for alarms or ids.
-> > 
-> > Why not?
-
-No answer? Have you checked how cleanup.h suggests to avoid cleaning the memory
-when it's supposed to be used later on?
-
-...
-
-> >> >> +static void iio_hwmon_listener_put(void *data)
-> >> >> +{
-> >> >> +	struct iio_hwmon_listener *listener = data;
-> >> >> +
-> >> >> +	scoped_guard(mutex, &iio_hwmon_listener_lock) {
-> >> >> +		if (unlikely(listener->refcnt == UINT_MAX))
-> >> >> +			return;
-> >> >> +
-> >> >> +		if (--listener->refcnt)
-> >> >> +			return;
-> >> > 
-> >> > Can the refcount_t be used with the respective APIs? Or even kref?
-> >> 
-> >> Why? We do all the manipulation under a mutex, so there is no point in
-> >> atomic access. Instead of the games refcnt_t has to play to try and
-> >> prevent overflow we can just check for it directly.
-> > 
-> > refcount_t provides a facility of overflow/underflow.
-> 
-> refcount_t can't prevent underflow because it's atomic. All it can do is
-> warn after the fact. And of course overflow is handled properly here.
-> But it can't occur in practice unless you specifically load multiple
-> devicetrees at runtime. So we don't need it anyway.
-
-It will warn the user in such cases. Your code won't do it, even if it's not a
-big deal or never happens situation, it's still better to use in-kernel
-standard ways of handling these things.
-
-> > Also it gives better
-> > understanding from the data type to see which value and how does that.
-> 
-> That's why I named the variable "refcnt".
-
-Yes, and that's why I asked about existing interface / API / type to use.
-
-> >> >> +		list_del(&listener->list);
-> >> >> +		iio_event_unregister(listener->indio_dev, &listener->block);
-> >> >> +	}
-> >> >> +
-> >> >> +	kfree(listener->alarms);
-> >> >> +	kfree(listener->ids);
-> >> >> +	kfree(listener);
-> >> >> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
