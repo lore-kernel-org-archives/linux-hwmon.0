@@ -1,357 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155B185C5E;
-	Mon, 21 Jul 2025 13:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D4C2DA77F
+	for <linux-hwmon@vger.kernel.org>; Mon, 21 Jul 2025 14:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753106190; cv=none; b=YcuFkshYtqBNl5IsO7vAlyKHA10ZEGHSdAO+a0pvS90f3CQ8h0bt4nEL2qfbRXnEJ3gtwufTVCHa0yONvHQKGnQhCq8CHJ/mXULIYCdoZINRy1wBFv9cmL8DqESmlPvdbPrJZ5SYPuf6o0HN66vpvTD0AaXJqrjjExn8ZyAONRo=
+	t=1753107871; cv=none; b=VW2gG5WjmgIpOH7heoDaOOQF6AQAXJ6zWDOn4i/Bz+pxkTAALpalCOXk/BTN9kRki6iXtu+tZXNVZK6qe6VFobPBkOkTzB3ojpGHy3jcjjHT3oCq7qKlkjSm1zNbRpUoB6QQqIdncantEu9dR8bPloX5mwHUM8MvvwYbS3yzo7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753106190; c=relaxed/simple;
-	bh=Tg6yEZ174xmr7bLLFzRolZ7GOCNMUsamwdIO6Ei6PRI=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sgmLNSIzfYKtBuEorlnjCEOMnwoQikzOsMSzG19aOnJd4e3OYsvDVCP4yX7c/rO6w7wp2iWshRsNAt5pNViCkkc1y/O4/hCcyWNwhAVo/tAQjoZH95sWFubABP2SAcWwkBFMr4iVgIF3Xj/hb9NeHpdsr3BQh8M2gfoySK4Y8yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jId8xbM1; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1753107871; c=relaxed/simple;
+	bh=5IvYIaS4DdqMJxN/voFaTXOIxs253avQqC5edoCoWsY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NWk9uLlWFOfvCgWTIwLQUJK7vDSpb+jfwfa+xnAydVfASETo5R53UVNUbFefAlCY1UgRn/aowjyHE7I2bVx9UV1jikIUi4o/mvNhJIIFcqT8KOFOxPuVno1PsC0xCHfQn1B9AWh7trcYZ1yypIObvonQuWmOwQYb79M3SWp3TTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A1uYUBhN; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jId8xbM1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753106188; x=1784642188;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Tg6yEZ174xmr7bLLFzRolZ7GOCNMUsamwdIO6Ei6PRI=;
-  b=jId8xbM1kW/+JT10+6sC+++nj9XyHL8gbpl+g2FE866TttyRdCTgTLpF
-   kdDd73NbwvWKEgmuCQZe25TSLi0n3uTh5oG7vgH7aRlYX/HiL8PxLlQQ/
-   E7bBr8QkFkqrfJWBFKSf3dHUxiVqVOo8AZJLX6j3/31bg0qeXZUC4zHre
-   Qj48BePPQwnX2b2O4mpludMkmkEejzlY+hHeS2ZcCkX1Eil/xJ4lV8ob1
-   WnBeqWvSuF9JOsw26+7g7f/yDdNrB7GphtW8JcQvbBY3YXkT5LoVsfUVx
-   E6bXsHr7OHbBXoUsfVXuO8tYjW6vsiqYCM/IQQdfaPUOJk8dYvqR9fMgs
-   A==;
-X-CSE-ConnectionGUID: RE1+bzK/ToK2Hnl/YklFWQ==
-X-CSE-MsgGUID: y8ZM6hnGSiabmqlVBvq1zA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="72888943"
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="72888943"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:56:26 -0700
-X-CSE-ConnectionGUID: qL3X642FTd6YJAR/9f3PpA==
-X-CSE-MsgGUID: B2svoTiXTwa3jxnoakFRMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="159570099"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.225])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:56:23 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 21 Jul 2025 16:56:19 +0300 (EEST)
-To: Yen-Chi Huang <jesse.huang@portwell.com.tw>
-cc: Hans de Goede <hdegoede@redhat.com>, jdelvare@suse.com, linux@roeck-us.net, 
-    wim@linux-watchdog.org, LKML <linux-kernel@vger.kernel.org>, 
-    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    linux-watchdog@vger.kernel.org, jay.chen@canonical.com
-Subject: Re: [PATCH v2 2/2] platform/x86: portwell-ec: Add hwmon support for
- voltage and temperature
-In-Reply-To: <a961ba6f-4c4b-4f60-9804-2736a3d239d8@portwell.com.tw>
-Message-ID: <41ed7342-a465-16ff-8283-29f0faa64d02@linux.intel.com>
-References: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw> <a961ba6f-4c4b-4f60-9804-2736a3d239d8@portwell.com.tw>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A1uYUBhN"
+Message-ID: <1ad78d64-ab6a-41fd-b149-dd52ea08e4e3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753107857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g9gGU4pTSw3F05tEeC1AdaseQTzgozjPnlHOowK/EfE=;
+	b=A1uYUBhNOyQERSiG0SC5BMD8cvKGBFv4jl7OaALhpABNaCOhC27EtMy58yJ6jehBW4/YGX
+	/8amahMyBdTr7Im701GUiFNRq1mM9Mq0h5A638uFdPtV0sWlUwa0ehOak0o8P9b7bHAaff
+	SQ+MDMig2rCQlULM6WabjRvMdeREfpQ=
+Date: Mon, 21 Jul 2025 10:24:13 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
+ David Lechner <dlechner@baylibre.com>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+ <20250715012023.2050178-8-sean.anderson@linux.dev>
+ <aHYWQOjJEWdLjy7H@smile.fi.intel.com>
+ <3b35b3a7-3f1a-4401-9b60-ba4afda5636e@linux.dev>
+ <aHd6NEHcCa6aqJB5@smile.fi.intel.com>
+ <e4894ab6-dd75-45d5-a49f-832c64b89eaf@linux.dev>
+ <aH3vcye29TrG8s2Z@smile.fi.intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <aH3vcye29TrG8s2Z@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 15 Jul 2025, Yen-Chi Huang wrote:
-
-> Integrates Vcore, VDIMM, 3.3V, 5V, 12V voltage and system temperature
-> monitoring into the driver via the hwmon subsystem, enabling
-> standardized reporting via tools like lm-sensors.
+On 7/21/25 03:42, Andy Shevchenko wrote:
+> On Thu, Jul 17, 2025 at 12:23:58PM -0400, Sean Anderson wrote:
+>> On 7/16/25 06:08, Andy Shevchenko wrote:
+>> > On Tue, Jul 15, 2025 at 12:20:24PM -0400, Sean Anderson wrote:
+>> >> On 7/15/25 04:50, Andy Shevchenko wrote:
+>> >> > On Mon, Jul 14, 2025 at 09:20:23PM -0400, Sean Anderson wrote:
 > 
-> Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
-> ---
+> ...
 > 
-> [Re-sending to fix message threading, no content changes since v2.]
-> ---
->  drivers/platform/x86/portwell-ec.c | 178 ++++++++++++++++++++++++++++-
->  1 file changed, 176 insertions(+), 2 deletions(-)
+>> >> >>  #include <linux/hwmon-sysfs.h>
+>> >> > 
+>> >> > + blank line here..
+>> >> 
+>> >> why?
+>> > 
+>> > To group the subsystem related headers (which are more custom and less generic).
+>> > This allows to follow what the subsystems are in use and what APIs / types are
+>> > taken.
+>> 
+>> Then you should send a patch for coding-style.rst.
 > 
-> diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
-> index a68522aaa3fa..ac113aaf8bb0 100644
-> --- a/drivers/platform/x86/portwell-ec.c
-> +++ b/drivers/platform/x86/portwell-ec.c
-> @@ -25,6 +25,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/dmi.h>
->  #include <linux/gpio/driver.h>
-> +#include <linux/hwmon.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
->  #include <linux/ioport.h>
-> @@ -52,16 +53,64 @@
->  #define PORTWELL_EC_FW_VENDOR_LENGTH     3
->  #define PORTWELL_EC_FW_VENDOR_NAME       "PWG"
->  
-> +#define PORTWELL_EC_ADC_MAX              1023
-> +
->  static bool force;
->  module_param(force, bool, 0444);
->  MODULE_PARM_DESC(force, "Force loading EC driver without checking DMI boardname");
->  
-> +struct pwec_hwmon_data {
-> +	const char *label;
-> +	u8 lsb_reg;
-> +	u32 scale;
-> +};
-> +
-> +struct pwec_data {
-> +	const struct pwec_hwmon_data *hwmon_in_data;
-> +	int hwmon_in_num;
-> +	const struct pwec_hwmon_data *hwmon_temp_data;
-> +	int hwmon_temp_num;
-> +	const struct hwmon_channel_info * const *hwmon_info;
-> +};
-> +
-> +static const struct pwec_hwmon_data pwec_nano_hwmon_in[] = {
-> +	{ "Vcore", 0x20, 3000 },
-> +	{ "VDIMM", 0x32, 3000 },
-> +	{ "3.3V",  0x22, 6000 },
-> +	{ "5V",    0x24, 9600 },
-> +	{ "12V",   0x30, 19800 },
-> +};
-> +
-> +static const struct pwec_hwmon_data pwec_nano_hwmon_temp[] = {
-> +	{ "System Temperature", 0x02, 0 },
-> +};
-> +
-> +static const struct hwmon_channel_info *pwec_nano_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct pwec_data pwec_board_data_nano = {
-> +	.hwmon_in_data = pwec_nano_hwmon_in,
-> +	.hwmon_in_num = ARRAY_SIZE(pwec_nano_hwmon_in),
-> +	.hwmon_temp_data = pwec_nano_hwmon_temp,
-> +	.hwmon_temp_num = ARRAY_SIZE(pwec_nano_hwmon_temp),
-> +	.hwmon_info = pwec_nano_hwmon_info
+> Does any of the common sense approach need to be written in the documentation?
 
-Please add comma to any that is not a real terminator so that a future 
-changes won't need to add the comma if more fields get added.
+Yes! My base assumption would be that includes should be alphabetized,
+but that no other ordering or spacing is necessary. Your "common sense"
+is not so common.
 
-> +};
-> +
->  static const struct dmi_system_id pwec_dmi_table[] = {
->  	{
->  		.ident = "NANO-6064 series",
->  		.matches = {
->  			DMI_MATCH(DMI_BOARD_NAME, "NANO-6064"),
->  		},
-> +		.driver_data = (void *)&pwec_board_data_nano,
-
-Casting a pointer to void * is not required.
-
->  	},
->  	{ }
->  };
-> @@ -79,6 +128,19 @@ static u8 pwec_read(u8 address)
->  	return inb(PORTWELL_EC_IOSPACE + address);
->  }
->  
-> +static u16 pwec_read16_stable(u8 lsb_reg)
-> +{
-> +	u8 lsb, msb, old_msb;
-> +
-> +	do {
-> +		old_msb = pwec_read(lsb_reg+1);
-
-Please add spaces around + as per the coding style guidance.
-
-> +		lsb = pwec_read(lsb_reg);
-> +		msb = pwec_read(lsb_reg+1);
-
-Ditto.
-
-> +	} while (msb != old_msb);
-> +
-> +	return (msb << 8) | lsb;
-> +}
-> +
->  /* GPIO functions */
->  
->  static int pwec_gpio_get(struct gpio_chip *chip, unsigned int offset)
-> @@ -204,6 +266,110 @@ static struct watchdog_device ec_wdt_dev = {
->  	.max_timeout = PORTWELL_WDT_EC_MAX_COUNT_SECOND,
->  };
->  
-> +/* HWMON functions */
-> +
-> +static umode_t pwec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-> +		u32 attr, int channel)
-> +{
-> +	const struct pwec_data *d = data;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (channel < d->hwmon_temp_num)
-> +			return 0444;
-> +		break;
-
-I'd suggest you change these to:
-
-		return channel < d->hwmon_temp_num ? 0444 : 0;
-
-> +	case hwmon_in:
-> +		if (channel < d->hwmon_in_num)
-> +			return 0444;
-> +		break;
-> +	default:
-> +		break;
-
-...and this to direct return 0; to simplify the code flow.
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pwec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> +			   u32 attr, int channel, long *val)
-> +{
-> +	struct pwec_data *data = dev_get_drvdata(dev);
-> +	u16 tmp;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (channel < data->hwmon_temp_num) {
-> +			*val = pwec_read(data->hwmon_temp_data[channel].lsb_reg) * 1000;
-
-There might have been some problem in preparing this series as literal 
-1000 is still there despite your cover letter suggesting it was changed?
-
-Please check the other expected changes as well, on a glance they seemed 
-to be in place but it has been a while since I've looked on this patch.
-
-> +			return 0;
-> +		}
-> +		break;
-> +	case hwmon_in:
-> +		if (channel < data->hwmon_in_num) {
-> +			tmp = pwec_read16_stable(data->hwmon_in_data[channel].lsb_reg);
-> +			*val = (data->hwmon_in_data[channel].scale * tmp) / PORTWELL_EC_ADC_MAX;
-> +			return 0;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static int pwec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +				  u32 attr, int channel, const char **str)
-> +{
-> +	struct pwec_data *data = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		if (channel < data->hwmon_temp_num) {
-> +			*str = data->hwmon_temp_data[channel].label;
-> +			return 0;
-> +		}
-> +		break;
-> +	case hwmon_in:
-> +		if (channel < data->hwmon_in_num) {
-> +			*str = data->hwmon_in_data[channel].label;
-> +			return 0;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static const struct hwmon_ops pwec_hwmon_ops = {
-> +	.is_visible = pwec_hwmon_is_visible,
-> +	.read = pwec_hwmon_read,
-> +	.read_string = pwec_hwmon_read_string,
-> +};
-> +
-> +static struct hwmon_chip_info pwec_chip_info = {
-> +	.ops = &pwec_hwmon_ops,
-> +};
-> +
-> +static int pwec_hwmon_init(struct device *dev)
-> +{
-> +	struct pwec_data *data = dev_get_platdata(dev);
-> +	void *hwmon;
-> +	int ret;
-> +
-> +	if (!IS_REACHABLE(CONFIG_HWMON))
-> +		return 0;
-> +
-> +	pwec_chip_info.info = data->hwmon_info;
-> +	hwmon = devm_hwmon_device_register_with_info(dev, "portwell_ec", data, &pwec_chip_info,
-> +						     NULL);
-> +	ret = PTR_ERR_OR_ZERO(hwmon);
-> +	if (ret)
-> +		dev_err(dev, "Failed to register hwmon_dev: %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
->  static int pwec_firmware_vendor_check(void)
->  {
->  	u8 buf[PORTWELL_EC_FW_VENDOR_LENGTH + 1];
-> @@ -242,6 +408,10 @@ static int pwec_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	ret = pwec_hwmon_init(&pdev->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	return 0;
->  }
->  
-> @@ -274,11 +444,14 @@ static struct platform_device *pwec_dev;
->  
->  static int __init pwec_init(void)
->  {
-> +	const struct dmi_system_id *match;
->  	int ret;
->  
-> -	if (!dmi_check_system(pwec_dmi_table)) {
-> +	match = dmi_first_match(pwec_dmi_table);
-> +	if (!match) {
->  		if (!force)
->  			return -ENODEV;
-> +		match = &pwec_dmi_table[0];
->  		pr_warn("force load portwell-ec without DMI check\n");
->  	}
->  
-> @@ -286,7 +459,8 @@ static int __init pwec_init(void)
->  	if (ret)
->  		return ret;
->  
-> -	pwec_dev = platform_device_register_simple("portwell-ec", -1, NULL, 0);
-> +	pwec_dev = platform_device_register_data(NULL, "portwell-ec", -1, match->driver_data,
-> +						 sizeof(struct pwec_data));
->  	if (IS_ERR(pwec_dev)) {
->  		platform_driver_unregister(&pwec_driver);
->  		return PTR_ERR(pwec_dev);
+>> >> >>  #include <linux/iio/consumer.h>
+>> >> >> +#include <linux/iio/events.h>
+>> >> >> +#include <linux/iio/iio.h>
+>> >> >>  #include <linux/iio/types.h>
+>> >> > 
+>> >> > ...and here?
+>> >> 
+>> >> OK
+>> >> 
+>> >> >> +#include <uapi/linux/iio/events.h>
+>> > 
+>> > As similar here, to visually split uAPI and the rest. This increases
+>> > readability and maintenance.
 > 
+> ...
+> 
+>> >> >> +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener *listener,
+>> >> >> +				      u64 id)
+>> >> >> +{
+>> >> >> +	ssize_t i;
+>> >> >> +
+>> >> >> +	for (i = 0; i < listener->num_alarms; i++)
+>> >> >> +		if (listener->ids[i] == id)
+>> >> >> +			return i;
+>> >> > 
+>> >> >> +	return -1;
+>> >> > 
+>> >> > -ENOENT ?
+>> >> > This will allow to propagate an error code to the upper layer(s).
+>> >> 
+>> >> I suppose. But I think
+>> >> 
+>> >> alarm = iio_hwmon_lookup_alarm(...);
+>> >> if (alarm < 0)
+>> >> 	return -ENOENT;
+>> >> 
+>> >> is clearer than
+>> > 
+>> > I disagree. This makes it worth as it shadows other possible code(s), if any,
+>> > and makes harder to follow as reader has to check the callee implementation.
+>> > 
+>> > The shadow error codes need a justification.
+>> 
+>> OK, I will return a bool next time to avoid any misconceptions that the return
+>> code means anything other than "found" or "not found"
+> 
+> This makes sense. And IIRC it's even documented.
+> 
+>> >> alarm = iio_hwmon_lookup_alarm(...);
+>> >> if (alarm < 0)
+>> >> 	return alarm;
+>> >> 
+>> >> because you don't have to read the definition of iio_hwmon_lookup_alarm
+>> >> to determine what the return value is.
+>> > 
+>> > Exactly my point!
+>> 
+>> your point is that you want readers to have to read the definition of
+>> iio_hwmon_lookup_alarm in order to determine that ENOENT is a possible
+>> error from add_alarm_attr? I don't follow.
+> 
+> No, my point is that readers should not care about error code. If it's
+> propagated to the upper layer, the upper layer will decide on how to proceed.
+> And -ENOENT is de facto standard for "entity not found".
+> 
+>> >> >> +}
+> 
+> ...
+> 
+>> >> >> +err_alarms:
+>> >> >> +	kfree(listener->alarms);
+>> >> >> +	kfree(listener->ids);
+>> >> >> +err_listener:
+>> >> >> +	kfree(listener);
+>> >> >> +err_unlock:
+>> >> >> +	mutex_unlock(&iio_hwmon_listener_lock);
+>> >> >> +	return ERR_PTR(err);
+>> >> > 
+>> >> > What about using __free()?
+>> >> 
+>> >> That works for listener, but not for alarms or ids.
+>> > 
+>> > Why not?
+> 
+> No answer? Have you checked how cleanup.h suggests to avoid cleaning the memory
+> when it's supposed to be used later on?
 
--- 
- i.
+Sorry, I missed this the first time. Anyway the reason it doesn't work
+for alarms/ids is that those are members of listener and not separate
+variables. And I think it's more concise this way. Compare the existing
 
+	listener->alarms = bitmap_zalloc(listener->num_alarms, GFP_KERNEL);
+	if (!listener->alarms)
+		goto err_listener;
+
+	/* ... */
+	return listener;
+
+err_alarms:
+	kfree(listener->alarms);
+	/* ... */
+
+vs
+
+	unsigned long __free alarms = NULL;
+
+	alarms = bitmap_zalloc(listener->num_alarms, GFP_KERNEL);
+	if (!alarms)
+		return -ENOMEM;
+	listener->alarms = alarms;
+	
+	/* ... */
+	no_free_ptr(alarms);
+	return listener;
+
+I don't really think there's an advantage.
+
+>> >> >> +static void iio_hwmon_listener_put(void *data)
+>> >> >> +{
+>> >> >> +	struct iio_hwmon_listener *listener = data;
+>> >> >> +
+>> >> >> +	scoped_guard(mutex, &iio_hwmon_listener_lock) {
+>> >> >> +		if (unlikely(listener->refcnt == UINT_MAX))
+>> >> >> +			return;
+>> >> >> +
+>> >> >> +		if (--listener->refcnt)
+>> >> >> +			return;
+>> >> > 
+>> >> > Can the refcount_t be used with the respective APIs? Or even kref?
+>> >> 
+>> >> Why? We do all the manipulation under a mutex, so there is no point in
+>> >> atomic access. Instead of the games refcnt_t has to play to try and
+>> >> prevent overflow we can just check for it directly.
+>> > 
+>> > refcount_t provides a facility of overflow/underflow.
+>> 
+>> refcount_t can't prevent underflow because it's atomic. All it can do is
+>> warn after the fact. And of course overflow is handled properly here.
+>> But it can't occur in practice unless you specifically load multiple
+>> devicetrees at runtime. So we don't need it anyway.
+> 
+> It will warn the user in such cases. Your code won't do it, even if it's not a
+> big deal or never happens situation, it's still better to use in-kernel
+> standard ways of handling these things.
+
+It's not the standard for refcounts protected by a mutex. There are
+literally hundreds of existing examples of this.
+
+--Sean 
