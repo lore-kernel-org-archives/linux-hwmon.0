@@ -1,218 +1,357 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C96D288C39
-	for <linux-hwmon@vger.kernel.org>; Mon, 21 Jul 2025 12:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155B185C5E;
+	Mon, 21 Jul 2025 13:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753101994; cv=none; b=q8j9a6xg/OxfX8GG7J7MtyjJAaJClObQMlm/6DUVnXkWUc6fkrA43VXA+hCwiU3QoxWW4mF3qTBT3WJex2iVhT0L1mfbkbTSkUawwrHJLsyZ6HbZCFuqHQgwto6IPZJbHznUyAZRcsW3skIIluKmQW11MbWX1BDd8wJfu+WJfLQ=
+	t=1753106190; cv=none; b=YcuFkshYtqBNl5IsO7vAlyKHA10ZEGHSdAO+a0pvS90f3CQ8h0bt4nEL2qfbRXnEJ3gtwufTVCHa0yONvHQKGnQhCq8CHJ/mXULIYCdoZINRy1wBFv9cmL8DqESmlPvdbPrJZ5SYPuf6o0HN66vpvTD0AaXJqrjjExn8ZyAONRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753101994; c=relaxed/simple;
-	bh=6GpCxY9blH1C6mjjOiRo3xUNrKqu1OSwHclHDPURDmE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ccXnQy+J7+RLZsvjEcDkas94EOc0CmDa1I7hrogtQQWeBfCSeFbtzoPL/ySd1MVgD3jbjb1yXjQO+4V2dAAnJ3B4+KYwdVPEGUwb7U63r4UovLARcPrAOch2ii6YHtGt9xpjD5kFFbGh9B15vneB+GvYVf0rsdaeyn/5RFDFKP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O+2zEWVz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1753106190; c=relaxed/simple;
+	bh=Tg6yEZ174xmr7bLLFzRolZ7GOCNMUsamwdIO6Ei6PRI=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=sgmLNSIzfYKtBuEorlnjCEOMnwoQikzOsMSzG19aOnJd4e3OYsvDVCP4yX7c/rO6w7wp2iWshRsNAt5pNViCkkc1y/O4/hCcyWNwhAVo/tAQjoZH95sWFubABP2SAcWwkBFMr4iVgIF3Xj/hb9NeHpdsr3BQh8M2gfoySK4Y8yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jId8xbM1; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O+2zEWVz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jId8xbM1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753101993; x=1784637993;
-  h=date:from:to:cc:subject:message-id;
-  bh=6GpCxY9blH1C6mjjOiRo3xUNrKqu1OSwHclHDPURDmE=;
-  b=O+2zEWVzwg53sMD+uvArcBgHdAhtyPLxzROsEY0RtyjDh3UNH4Pntobf
-   jPxVuzJNAl+7aph32e41Ai2OBMfrrn5wLHi4riy+CWzXDbjBWo2s4AzIB
-   8gwiOf6/aycxX26UVrsih5NFmmejdLaMZYhJ54b6V8McyiXzYMaOBuZd6
-   hMLAzN3s3gKTWpy3mnPjTaYUhXJPN8LhTZJfrnKcHHHo1jdft0t2rusg7
-   /T6INkZbuW/POMG79YuTbjLAoqzl6vLh1I/NImBbURUnmR2D8HXIwCw9q
-   aDhvH3O4Z0JVJzLTOt/IYf5GUZ7UVNLizTdpnfUFbp96BTWslTCqxcxtp
-   w==;
-X-CSE-ConnectionGUID: O4bADfNgQ5ir5OluYzl0hQ==
-X-CSE-MsgGUID: 1re80r9hSOKZfHEMIinm2Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="66753709"
+  t=1753106188; x=1784642188;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Tg6yEZ174xmr7bLLFzRolZ7GOCNMUsamwdIO6Ei6PRI=;
+  b=jId8xbM1kW/+JT10+6sC+++nj9XyHL8gbpl+g2FE866TttyRdCTgTLpF
+   kdDd73NbwvWKEgmuCQZe25TSLi0n3uTh5oG7vgH7aRlYX/HiL8PxLlQQ/
+   E7bBr8QkFkqrfJWBFKSf3dHUxiVqVOo8AZJLX6j3/31bg0qeXZUC4zHre
+   Qj48BePPQwnX2b2O4mpludMkmkEejzlY+hHeS2ZcCkX1Eil/xJ4lV8ob1
+   WnBeqWvSuF9JOsw26+7g7f/yDdNrB7GphtW8JcQvbBY3YXkT5LoVsfUVx
+   E6bXsHr7OHbBXoUsfVXuO8tYjW6vsiqYCM/IQQdfaPUOJk8dYvqR9fMgs
+   A==;
+X-CSE-ConnectionGUID: RE1+bzK/ToK2Hnl/YklFWQ==
+X-CSE-MsgGUID: y8ZM6hnGSiabmqlVBvq1zA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11499"; a="72888943"
 X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="66753709"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 05:46:26 -0700
-X-CSE-ConnectionGUID: u87dBV+lSRyurdCvSPPHmA==
-X-CSE-MsgGUID: XSmxNXHGT6KalmRzh34sMw==
+   d="scan'208";a="72888943"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:56:26 -0700
+X-CSE-ConnectionGUID: qL3X642FTd6YJAR/9f3PpA==
+X-CSE-MsgGUID: B2svoTiXTwa3jxnoakFRMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,329,1744095600"; 
-   d="scan'208";a="159257163"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 21 Jul 2025 05:46:25 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1udpuR-000Gnp-0h;
-	Mon, 21 Jul 2025 12:46:23 +0000
-Date: Mon, 21 Jul 2025 20:46:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- a2609b707b58561b9e52f92f3f571d0510201f2f
-Message-ID: <202507212050.7ek1jOxQ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="159570099"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.225])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 06:56:23 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 21 Jul 2025 16:56:19 +0300 (EEST)
+To: Yen-Chi Huang <jesse.huang@portwell.com.tw>
+cc: Hans de Goede <hdegoede@redhat.com>, jdelvare@suse.com, linux@roeck-us.net, 
+    wim@linux-watchdog.org, LKML <linux-kernel@vger.kernel.org>, 
+    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+    linux-watchdog@vger.kernel.org, jay.chen@canonical.com
+Subject: Re: [PATCH v2 2/2] platform/x86: portwell-ec: Add hwmon support for
+ voltage and temperature
+In-Reply-To: <a961ba6f-4c4b-4f60-9804-2736a3d239d8@portwell.com.tw>
+Message-ID: <41ed7342-a465-16ff-8283-29f0faa64d02@linux.intel.com>
+References: <a07d8764-ee23-4d21-a7b5-121cb8a576b9@portwell.com.tw> <a961ba6f-4c4b-4f60-9804-2736a3d239d8@portwell.com.tw>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: a2609b707b58561b9e52f92f3f571d0510201f2f  hwmon: ina238: Add support for INA228
+On Tue, 15 Jul 2025, Yen-Chi Huang wrote:
 
-elapsed time: 724m
+> Integrates Vcore, VDIMM, 3.3V, 5V, 12V voltage and system temperature
+> monitoring into the driver via the hwmon subsystem, enabling
+> standardized reporting via tools like lm-sensors.
+> 
+> Signed-off-by: Yen-Chi Huang <jesse.huang@portwell.com.tw>
+> ---
+> 
+> [Re-sending to fix message threading, no content changes since v2.]
+> ---
+>  drivers/platform/x86/portwell-ec.c | 178 ++++++++++++++++++++++++++++-
+>  1 file changed, 176 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/portwell-ec.c b/drivers/platform/x86/portwell-ec.c
+> index a68522aaa3fa..ac113aaf8bb0 100644
+> --- a/drivers/platform/x86/portwell-ec.c
+> +++ b/drivers/platform/x86/portwell-ec.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/dmi.h>
+>  #include <linux/gpio/driver.h>
+> +#include <linux/hwmon.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+>  #include <linux/ioport.h>
+> @@ -52,16 +53,64 @@
+>  #define PORTWELL_EC_FW_VENDOR_LENGTH     3
+>  #define PORTWELL_EC_FW_VENDOR_NAME       "PWG"
+>  
+> +#define PORTWELL_EC_ADC_MAX              1023
+> +
+>  static bool force;
+>  module_param(force, bool, 0444);
+>  MODULE_PARM_DESC(force, "Force loading EC driver without checking DMI boardname");
+>  
+> +struct pwec_hwmon_data {
+> +	const char *label;
+> +	u8 lsb_reg;
+> +	u32 scale;
+> +};
+> +
+> +struct pwec_data {
+> +	const struct pwec_hwmon_data *hwmon_in_data;
+> +	int hwmon_in_num;
+> +	const struct pwec_hwmon_data *hwmon_temp_data;
+> +	int hwmon_temp_num;
+> +	const struct hwmon_channel_info * const *hwmon_info;
+> +};
+> +
+> +static const struct pwec_hwmon_data pwec_nano_hwmon_in[] = {
+> +	{ "Vcore", 0x20, 3000 },
+> +	{ "VDIMM", 0x32, 3000 },
+> +	{ "3.3V",  0x22, 6000 },
+> +	{ "5V",    0x24, 9600 },
+> +	{ "12V",   0x30, 19800 },
+> +};
+> +
+> +static const struct pwec_hwmon_data pwec_nano_hwmon_temp[] = {
+> +	{ "System Temperature", 0x02, 0 },
+> +};
+> +
+> +static const struct hwmon_channel_info *pwec_nano_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+> +	NULL
+> +};
+> +
+> +static const struct pwec_data pwec_board_data_nano = {
+> +	.hwmon_in_data = pwec_nano_hwmon_in,
+> +	.hwmon_in_num = ARRAY_SIZE(pwec_nano_hwmon_in),
+> +	.hwmon_temp_data = pwec_nano_hwmon_temp,
+> +	.hwmon_temp_num = ARRAY_SIZE(pwec_nano_hwmon_temp),
+> +	.hwmon_info = pwec_nano_hwmon_info
 
-configs tested: 141
-configs skipped: 6
+Please add comma to any that is not a real terminator so that a future 
+changes won't need to add the comma if more fields get added.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> +};
+> +
+>  static const struct dmi_system_id pwec_dmi_table[] = {
+>  	{
+>  		.ident = "NANO-6064 series",
+>  		.matches = {
+>  			DMI_MATCH(DMI_BOARD_NAME, "NANO-6064"),
+>  		},
+> +		.driver_data = (void *)&pwec_board_data_nano,
 
-tested configs:
-alpha                             allnoconfig    clang-22
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    clang-22
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20250721    gcc-11.5.0
-arc                   randconfig-002-20250721    gcc-12.5.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-21
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                         assabet_defconfig    clang-18
-arm                   randconfig-001-20250721    clang-21
-arm                   randconfig-002-20250721    gcc-13.4.0
-arm                   randconfig-003-20250721    gcc-15.1.0
-arm                   randconfig-004-20250721    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    clang-22
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250721    clang-21
-arm64                 randconfig-002-20250721    clang-20
-arm64                 randconfig-003-20250721    gcc-13.4.0
-arm64                 randconfig-004-20250721    clang-21
-csky                              allnoconfig    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20250721    gcc-15.1.0
-csky                  randconfig-002-20250721    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-21
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-21
-hexagon               randconfig-001-20250721    clang-21
-hexagon               randconfig-002-20250721    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250721    clang-20
-i386        buildonly-randconfig-002-20250721    clang-20
-i386        buildonly-randconfig-003-20250721    gcc-12
-i386        buildonly-randconfig-004-20250721    gcc-12
-i386        buildonly-randconfig-005-20250721    clang-20
-i386        buildonly-randconfig-006-20250721    clang-20
-i386                                defconfig    clang-20
-i386                  randconfig-011-20250721    clang-20
-i386                  randconfig-012-20250721    clang-20
-i386                  randconfig-013-20250721    clang-20
-i386                  randconfig-014-20250721    clang-20
-i386                  randconfig-015-20250721    clang-20
-i386                  randconfig-016-20250721    clang-20
-i386                  randconfig-017-20250721    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-21
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250721    clang-18
-loongarch             randconfig-002-20250721    gcc-12.5.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       alldefconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                           ip28_defconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-15.1.0
-nios2                               defconfig    gcc-11.5.0
-nios2                               defconfig    gcc-15.1.0
-nios2                 randconfig-001-20250721    gcc-8.5.0
-nios2                 randconfig-002-20250721    gcc-9.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250721    gcc-15.1.0
-parisc                randconfig-002-20250721    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                      cm5200_defconfig    clang-21
-powerpc               randconfig-001-20250721    gcc-12.5.0
-powerpc               randconfig-002-20250721    gcc-10.5.0
-powerpc               randconfig-003-20250721    gcc-11.5.0
-powerpc64             randconfig-001-20250721    clang-21
-powerpc64             randconfig-002-20250721    clang-21
-powerpc64             randconfig-003-20250721    clang-19
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20250721    clang-21
-riscv                 randconfig-002-20250721    gcc-8.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20250721    clang-21
-s390                  randconfig-002-20250721    clang-20
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                ecovec24-romimage_defconfig    gcc-15.1.0
-sh                    randconfig-001-20250721    gcc-15.1.0
-sh                    randconfig-002-20250721    gcc-14.3.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250721    gcc-15.1.0
-sparc                 randconfig-002-20250721    gcc-13.4.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20250721    clang-20
-sparc64               randconfig-002-20250721    clang-21
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250721    gcc-12
-um                    randconfig-002-20250721    clang-17
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250721    clang-20
-x86_64      buildonly-randconfig-002-20250721    gcc-12
-x86_64      buildonly-randconfig-003-20250721    gcc-12
-x86_64      buildonly-randconfig-004-20250721    gcc-12
-x86_64      buildonly-randconfig-005-20250721    clang-20
-x86_64      buildonly-randconfig-006-20250721    gcc-12
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250721    gcc-11.5.0
-xtensa                randconfig-002-20250721    gcc-8.5.0
+Casting a pointer to void * is not required.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  	},
+>  	{ }
+>  };
+> @@ -79,6 +128,19 @@ static u8 pwec_read(u8 address)
+>  	return inb(PORTWELL_EC_IOSPACE + address);
+>  }
+>  
+> +static u16 pwec_read16_stable(u8 lsb_reg)
+> +{
+> +	u8 lsb, msb, old_msb;
+> +
+> +	do {
+> +		old_msb = pwec_read(lsb_reg+1);
+
+Please add spaces around + as per the coding style guidance.
+
+> +		lsb = pwec_read(lsb_reg);
+> +		msb = pwec_read(lsb_reg+1);
+
+Ditto.
+
+> +	} while (msb != old_msb);
+> +
+> +	return (msb << 8) | lsb;
+> +}
+> +
+>  /* GPIO functions */
+>  
+>  static int pwec_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> @@ -204,6 +266,110 @@ static struct watchdog_device ec_wdt_dev = {
+>  	.max_timeout = PORTWELL_WDT_EC_MAX_COUNT_SECOND,
+>  };
+>  
+> +/* HWMON functions */
+> +
+> +static umode_t pwec_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+> +		u32 attr, int channel)
+> +{
+> +	const struct pwec_data *d = data;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (channel < d->hwmon_temp_num)
+> +			return 0444;
+> +		break;
+
+I'd suggest you change these to:
+
+		return channel < d->hwmon_temp_num ? 0444 : 0;
+
+> +	case hwmon_in:
+> +		if (channel < d->hwmon_in_num)
+> +			return 0444;
+> +		break;
+> +	default:
+> +		break;
+
+...and this to direct return 0; to simplify the code flow.
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pwec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> +			   u32 attr, int channel, long *val)
+> +{
+> +	struct pwec_data *data = dev_get_drvdata(dev);
+> +	u16 tmp;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (channel < data->hwmon_temp_num) {
+> +			*val = pwec_read(data->hwmon_temp_data[channel].lsb_reg) * 1000;
+
+There might have been some problem in preparing this series as literal 
+1000 is still there despite your cover letter suggesting it was changed?
+
+Please check the other expected changes as well, on a glance they seemed 
+to be in place but it has been a while since I've looked on this patch.
+
+> +			return 0;
+> +		}
+> +		break;
+> +	case hwmon_in:
+> +		if (channel < data->hwmon_in_num) {
+> +			tmp = pwec_read16_stable(data->hwmon_in_data[channel].lsb_reg);
+> +			*val = (data->hwmon_in_data[channel].scale * tmp) / PORTWELL_EC_ADC_MAX;
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int pwec_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+> +				  u32 attr, int channel, const char **str)
+> +{
+> +	struct pwec_data *data = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (channel < data->hwmon_temp_num) {
+> +			*str = data->hwmon_temp_data[channel].label;
+> +			return 0;
+> +		}
+> +		break;
+> +	case hwmon_in:
+> +		if (channel < data->hwmon_in_num) {
+> +			*str = data->hwmon_in_data[channel].label;
+> +			return 0;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops pwec_hwmon_ops = {
+> +	.is_visible = pwec_hwmon_is_visible,
+> +	.read = pwec_hwmon_read,
+> +	.read_string = pwec_hwmon_read_string,
+> +};
+> +
+> +static struct hwmon_chip_info pwec_chip_info = {
+> +	.ops = &pwec_hwmon_ops,
+> +};
+> +
+> +static int pwec_hwmon_init(struct device *dev)
+> +{
+> +	struct pwec_data *data = dev_get_platdata(dev);
+> +	void *hwmon;
+> +	int ret;
+> +
+> +	if (!IS_REACHABLE(CONFIG_HWMON))
+> +		return 0;
+> +
+> +	pwec_chip_info.info = data->hwmon_info;
+> +	hwmon = devm_hwmon_device_register_with_info(dev, "portwell_ec", data, &pwec_chip_info,
+> +						     NULL);
+> +	ret = PTR_ERR_OR_ZERO(hwmon);
+> +	if (ret)
+> +		dev_err(dev, "Failed to register hwmon_dev: %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+>  static int pwec_firmware_vendor_check(void)
+>  {
+>  	u8 buf[PORTWELL_EC_FW_VENDOR_LENGTH + 1];
+> @@ -242,6 +408,10 @@ static int pwec_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> +	ret = pwec_hwmon_init(&pdev->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	return 0;
+>  }
+>  
+> @@ -274,11 +444,14 @@ static struct platform_device *pwec_dev;
+>  
+>  static int __init pwec_init(void)
+>  {
+> +	const struct dmi_system_id *match;
+>  	int ret;
+>  
+> -	if (!dmi_check_system(pwec_dmi_table)) {
+> +	match = dmi_first_match(pwec_dmi_table);
+> +	if (!match) {
+>  		if (!force)
+>  			return -ENODEV;
+> +		match = &pwec_dmi_table[0];
+>  		pr_warn("force load portwell-ec without DMI check\n");
+>  	}
+>  
+> @@ -286,7 +459,8 @@ static int __init pwec_init(void)
+>  	if (ret)
+>  		return ret;
+>  
+> -	pwec_dev = platform_device_register_simple("portwell-ec", -1, NULL, 0);
+> +	pwec_dev = platform_device_register_data(NULL, "portwell-ec", -1, match->driver_data,
+> +						 sizeof(struct pwec_data));
+>  	if (IS_ERR(pwec_dev)) {
+>  		platform_driver_unregister(&pwec_driver);
+>  		return PTR_ERR(pwec_dev);
+> 
+
+-- 
+ i.
+
