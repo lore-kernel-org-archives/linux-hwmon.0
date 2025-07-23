@@ -1,102 +1,185 @@
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A842E0924
-	for <linux-hwmon@vger.kernel.org>; Wed, 23 Jul 2025 11:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AD121D5AA;
+	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753270845; cv=none; b=NvgECmOIyA6SRjAhkJP2iGMOeleDH1O4ufO+AonhMdcKNSK4VKl7dzikEhPbrpveCf7kyERvgNDAMQBzzRK/yYrQymIeZ6dwxjCG66BpA1HAsF9+erKm31BzKGqnq2oIf+fUuQDillOpIWRxfbKvdx8rmGt8sg+1k65a9KlADBI=
+	t=1753292106; cv=none; b=fI85n2Gv/rmIdiKutbtSUVUyrxclXQSmc3Vw9d7Wqve4R9DZFfkfaKPOGj2BhjWXbmhhp0EtHjGpYpzP7cnGQcP6uelep9eoX5j9OhdgMMIH8rjiYmHTYnkHXVYiaHVkWvJMRLfSuq6yk61g9d6TZW3J+OEdRaKUf6NljeSa3wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753270845; c=relaxed/simple;
-	bh=vBLeINt+biwJoMtPoVVFU+AyFpkgcapAO9E+5gGvdxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g22ibheL85BhKwTvt29K3MkuqPhgFncl38kfqJQDu5oVEVvx4kq9LtFUrQvwdPE91qTLBatJXAj9Wf87HHKo76KzcHGOqh9bemWx+gZbgUjdzAqgLOGxZAB0GORU5q7ZdUx6/YexC1EnugNNW3RfHsxrp4ZHo8GXN9Ik1kw8ks4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=kC2WPWDa; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+	s=arc-20240116; t=1753292106; c=relaxed/simple;
+	bh=SSXg8ECWTIfwP0u4L4pppiz7mam/bpcy0GKszAlTwNg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=tz2vAWAwMJpRmxcGWCqharcAx5yIf8T2jcgxsXN/zfTz5HXDzXdxODoCInSmGapQ3KMHwXJOmx70hRpbnFHTpYhP2kON81XZuuyKGDG/LaPx8gQsKCkrHni3tZV6phfdGpZvOI0bnBxuk7pN13w+mrKULNGNpZ5P/53UxWVkhck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnSyv37g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="kC2WPWDa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=vBLe
-	INt+biwJoMtPoVVFU+AyFpkgcapAO9E+5gGvdxs=; b=kC2WPWDaokTQoHdXhIqT
-	+4nvQmuF7Q6kQWiGDR97P/l4ZZbVpwRg+0wN6fs/NdCJ75oAC/LWN4hvQWFAahTk
-	kCis8IkWJgij5/2XKql6tjdb4MNCrPlvaX5UZpn5ZAEm+1eZiNS1AfJ4ljCbKqNL
-	zeYFhgmN1vmr/5RjZNhTaBuDDlMUN6JTK1flvRnlVlaC3880HKxMjsZpolFIaZcb
-	8cEX3vDBmv43xJiw4bkHyFbabsUW35++L1rIx8TtDOECt4N1EcHdK2o4VQ7dqLIA
-	KYhmY+PxaV4ok7JfIYGrnzIwgJmF0ODVcGOwnmepXLEp/HL24kp2jjurDETPCYsB
-	QQ==
-Received: (qmail 1683768 invoked from network); 23 Jul 2025 13:40:38 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jul 2025 13:40:38 +0200
-X-UD-Smtp-Session: l3s3148p1@LMKHLZc6ltAujnvr
-Date: Wed, 23 Jul 2025 13:40:38 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v14 3/7] i2c: Add Nuvoton NCT6694 I2C support
-Message-ID: <aIDKNieKis55kyZN@shikoro>
-References: <20250715025626.968466-1-a0282524688@gmail.com>
- <20250715025626.968466-4-a0282524688@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnSyv37g"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0146C4CEF4;
+	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753292106;
+	bh=SSXg8ECWTIfwP0u4L4pppiz7mam/bpcy0GKszAlTwNg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=lnSyv37gO5xEHqB8K/CQpzv8VsCYVOl5A46fWuaQ3DShpB3S9EK1/g5sx1s0AST5L
+	 2DWJbjiG7Mnkgn9YAWwB+twyx3bC6umrddPQEk3hKNo8lPTZRJb5FTcmMW5sDsICxs
+	 w1IWe1LB1i6wEL1t9NFcsZd8iUYuATN/jb0/M49Ru7Wh0YB9cbWnC6fBmv2lygU39N
+	 uUMEYjIV22THLf2tfnwYaCv3JbM9zjittx6WHhngM+Ru1iqsfXaGCpuzI2xUqCE7Dm
+	 Y3iK67ZS06YkkRFr1q/POiUoi4RI9yZ4kV0ywEzSd0oEKor2VeamUIMSnFz54s7ekX
+	 32lxvXm6ID9PA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F335C83F17;
+	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Date: Wed, 23 Jul 2025 19:34:56 +0200
+Subject: [PATCH v5 1/2] pwm: mc33xs2410: add hwmon support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Iem7TgVIXcEduHhw"
-Content-Disposition: inline
-In-Reply-To: <20250715025626.968466-4-a0282524688@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250723-mc33xs2410-hwmon-v5-1-f62aab71cd59@liebherr.com>
+References: <20250723-mc33xs2410-hwmon-v5-0-f62aab71cd59@liebherr.com>
+In-Reply-To: <20250723-mc33xs2410-hwmon-v5-0-f62aab71cd59@liebherr.com>
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
+ Dimitri Fedrau <dima.fedrau@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753292105; l=4016;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=7Ba6D8Nsq70XyxD+K636D3Vr+HrfmANRkuQUcbHIPpM=;
+ b=Yaf9Q27JI8cGgE4AVwyyY7jDYQB6CmIz1eC+D5TC5XcPI8bV5vjVbWPl3DdTS++lMvSe3KSU0
+ Z0zxTv8nh8xDtV1acg6fIdb3PgS+A/SCS+myjLGVawzrc5yxYuySto4
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
+
+From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
+Support for hwmon is provided by a separate driver residing in hwmon
+subsystem which is implemented as auxiliary device. Add handling of this
+device.
+
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+ drivers/pwm/Kconfig          |  1 +
+ drivers/pwm/pwm-mc33xs2410.c | 20 ++++++++++++++++++--
+ include/linux/mc33xs2410.h   | 16 ++++++++++++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+index 3ef1757502ebd92b30584cd10611311a0fbfc03b..64f1c86340fdc7d0ef41bf14be5f6f0623a2bd31 100644
+--- a/drivers/pwm/Kconfig
++++ b/drivers/pwm/Kconfig
+@@ -436,6 +436,7 @@ config PWM_MC33XS2410
+ 	tristate "MC33XS2410 PWM support"
+ 	depends on OF
+ 	depends on SPI
++	select AUXILIARY_BUS
+ 	help
+ 	  NXP MC33XS2410 high-side switch driver. The MC33XS2410 is a four
+ 	  channel high-side switch. The device is operational from 3.0 V
+diff --git a/drivers/pwm/pwm-mc33xs2410.c b/drivers/pwm/pwm-mc33xs2410.c
+index a1ac3445ccdb4709d92e0075d424a8abc1416eee..6d99e3ff7239891d87711d98aa463ac158af70e1 100644
+--- a/drivers/pwm/pwm-mc33xs2410.c
++++ b/drivers/pwm/pwm-mc33xs2410.c
+@@ -17,11 +17,14 @@
+  *   behavior of the output pin that is neither the old nor the new state,
+  *   rather something in between.
+  */
++#define DEFAULT_SYMBOL_NAMESPACE		"PWM_MC33XS2410"
+ 
++#include <linux/auxiliary_bus.h>
+ #include <linux/bitfield.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/math64.h>
++#include <linux/mc33xs2410.h>
+ #include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -120,12 +123,19 @@ static int mc33xs2410_read_reg(struct spi_device *spi, u8 reg, u16 *val, u8 flag
+ 	return mc33xs2410_read_regs(spi, &reg, flag, val, 1);
+ }
+ 
+-static int mc33xs2410_read_reg_ctrl(struct spi_device *spi, u8 reg, u16 *val)
++int mc33xs2410_read_reg_ctrl(struct spi_device *spi, u8 reg, u16 *val)
+ {
+ 	return mc33xs2410_read_reg(spi, reg, val, MC33XS2410_FRAME_IN_DATA_RD);
+ }
++EXPORT_SYMBOL_GPL(mc33xs2410_read_reg_ctrl);
+ 
+-static int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val)
++int mc33xs2410_read_reg_diag(struct spi_device *spi, u8 reg, u16 *val)
++{
++	return mc33xs2410_read_reg(spi, reg, val, 0);
++}
++EXPORT_SYMBOL_GPL(mc33xs2410_read_reg_diag);
++
++int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val)
+ {
+ 	u16 tmp;
+ 	int ret;
+@@ -139,6 +149,7 @@ static int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val
+ 
+ 	return mc33xs2410_write_reg(spi, reg, tmp);
+ }
++EXPORT_SYMBOL_GPL(mc33xs2410_modify_reg);
+ 
+ static u8 mc33xs2410_pwm_get_freq(u64 period)
+ {
+@@ -314,6 +325,7 @@ static int mc33xs2410_reset(struct device *dev)
+ static int mc33xs2410_probe(struct spi_device *spi)
+ {
+ 	struct device *dev = &spi->dev;
++	struct auxiliary_device *adev;
+ 	struct pwm_chip *chip;
+ 	int ret;
+ 
+@@ -361,6 +373,10 @@ static int mc33xs2410_probe(struct spi_device *spi)
+ 	if (ret < 0)
+ 		return dev_err_probe(dev, ret, "Failed to add pwm chip\n");
+ 
++	adev = devm_auxiliary_device_create(dev, "hwmon", NULL);
++	if (!adev)
++		return dev_err_probe(dev, -ENODEV, "Failed to register hwmon device\n");
++
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/mc33xs2410.h b/include/linux/mc33xs2410.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..31c0edf10dd7370a0c3e603947256577d4d40854
+--- /dev/null
++++ b/include/linux/mc33xs2410.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2024 Liebherr-Electronics and Drives GmbH
++ */
++#ifndef _MC33XS2410_H
++#define _MC33XS2410_H
++
++#include <linux/spi/spi.h>
++
++MODULE_IMPORT_NS("PWM_MC33XS2410");
++
++int mc33xs2410_read_reg_ctrl(struct spi_device *spi, u8 reg, u16 *val);
++int mc33xs2410_read_reg_diag(struct spi_device *spi, u8 reg, u16 *val);
++int mc33xs2410_modify_reg(struct spi_device *spi, u8 reg, u8 mask, u8 val);
++
++#endif /* _MC33XS2410_H */
+
+-- 
+2.39.5
 
 
---Iem7TgVIXcEduHhw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jul 15, 2025 at 10:56:22AM +0800, a0282524688@gmail.com wrote:
-> From: Ming Yu <a0282524688@gmail.com>
->=20
-> This driver supports I2C adapter functionality for NCT6694 MFD
-> device based on USB interface.
->=20
-> Each I2C controller uses the default baudrate of 100kHz, which
-> can be overridden via module parameters.
->=20
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---Iem7TgVIXcEduHhw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmiAyjIACgkQFA3kzBSg
-KbZiTA//QkvcMLKXy7oEhoPaRSSzTZUtGps1YigTeY52v1SgTJ/ySNv1fAEE54ei
-gr1ochYm/mhCI4ahDZFZZ2j2ulA34KchA8SQ0Tj20RPyQz9jbgHiNPP6Wsgl4kk4
-z943QFzVoxDlxWoWhnkJbwMMCO683Oq/JPRP3DSgVbLRbVBVXdNgp7mit9zgmZev
-2koMgmj6AePIWn35T2/U7pIS4vVzYVzHqycllQdt+XmA5U/V8b3ozjswOKHNDDZf
-64brf3wbZLM5xDg8gXI6qmceEWYTAfY4i7epDpqZtFclVRcnHl2+guWppdu7TO2F
-OGpaqLudduYZG//U2VX3WycczzhsboQoEiLJb/lfAw+xfI/pjbN7FRlQhtd4e/0t
-0rRJMjckmrmFA4G9Yu+Hd3AA2OcLt0FcW/z3+HXUFLd8HvORVgozd/nF1fyYMlKD
-ySy+iBx9eYxgGGxAw8xiWGFIMIJ8Xc40D2SZ1Rh7ZAZTJvDklJpvB2iHSsU86yMD
-1XRWJO14df/RrKqsfecRa49LXmpbNU5pbHshW4p7IJaeWhjliAa5j9kA77Y/iWDq
-fShNWwC5++edujKlXVdHX+46+fikhZTo374+SrY3mx49zcZcL1UQ/MTgX3vmMfkk
-SyTxZuVMK+Vr5jA7+vjMkCm7G/9thcIsx/sRYG5LXfIKnd/NZMQ=
-=KBkq
------END PGP SIGNATURE-----
-
---Iem7TgVIXcEduHhw--
