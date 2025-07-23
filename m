@@ -1,355 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382CA2222A7;
-	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753292107; cv=none; b=VZGTwq4L/O9y2qfjn18bmHp7KMhu3OjV7WODe9rrRvMAC7/Ay7sKMMplIByP7n8sfdM+ZONX0yotXVjWNFZwZ+82BvrA1QfYEtvyCfxPzO7YPCvchITolig6v+MYXgCdleQBoDRcD1UnsxSEnr8u2YzGy31ivfCILhET9saxB2Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753292107; c=relaxed/simple;
-	bh=hBmYcaNHoIqZydKfbh8wgcy7HWw8qwr/hO73PbZOsWk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TuHf2xJNJTqpYCJofuwA0k4rdMNlQmavBWbya4Xw/P7rzFsZK3AM0fY/2Qx0LuEjMFiZEE3w3hxbc8U2tzQ8i+TWW0QUJnfFEuPsMIRCRFDJyyGqiz2yjry0ymTR1BxQA7xH4cXn7lVu66kYShvkjQahmvG0oIq9NHv+DMB8IuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iw975G9v; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9543220DD42;
+	Wed, 23 Jul 2025 20:27:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753302470; cv=fail; b=Vxx7rXAvB90ndGYkzxpDTJK1IJknK2Mc6JC35GvuE7ca/qi4Y8smS5FYeI9L5mCRsQX+IRaRrdZDBP+AClbtXwBYUnln07zorpcsUhdg8dzF4eKGOpvRFZFgXfPia9HvmtuLxN1bHmW4LBwT61+hqJi2daInER/PMEitjRqF7HM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753302470; c=relaxed/simple;
+	bh=3LqfXsb7tnG0RFeAjxIa6XSXrxNZ3wECv1G5NAYAbSI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=b4+n7D9txfqKFHqunMLIuW1k/5uQDGyIlc67NEo9VW4YMgv59oRZg2FSLIpeCISVTenCxsPR1XZ1sWVsseKJ7Q+rnwIYJj//onQ/J6WSIa2TpCoORBXtPMR/DNHdV9GfbxVUXwFf2JWWxR79kN2kvvzj//lLJe3PsAmE/fW7krk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Pn5jJrKr; arc=fail smtp.client-ip=40.107.94.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iw975G9v"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AF057C4CEF1;
-	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753292106;
-	bh=hBmYcaNHoIqZydKfbh8wgcy7HWw8qwr/hO73PbZOsWk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Iw975G9vP3k4kKCoH2XJDvsdqQM5ltnpznHImCa2KflV/9Stdmcrz675XAjXqBRPg
-	 PE6ORU2bGRr6pXBS/mVUd/wbx8yfIwTOzro7gJmlSRPxjeJRdgDeT3fdvYJrkf1yu+
-	 5c82MJ4WMCfuRNDTRPRZkrIr1Fom/v2IcqNqS5YRG/tzQeuFDSiSeDISiQ/Ga8NiaS
-	 GbdkP/9NHff1B5jgj+zdNG1dJRKBbpIMLQ/vkfxjtGPVfBWLlpDPRL4X08tLDPGulv
-	 qA7dEwvP7NoBYMnf+MTbv2+JBH+W/eD3e9mDWMHUc9+nSKh4+gIWvvwrHFMkBPSgde
-	 MFA5loM+tEWZw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CADBC87FC5;
-	Wed, 23 Jul 2025 17:35:06 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Wed, 23 Jul 2025 19:34:57 +0200
-Subject: [PATCH v5 2/2] hwmon: add support for MC33XS2410 hardware
- monitoring
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Pn5jJrKr"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CeSoSn2uHn5fxlX0zK6jwP7Ri0ymFvZiGsV1mkONJQs8sx9hzl55of0BtQ4m3DCa3pKD5ZE3n81uzXzRelNUBXWGcry0UDshbCpRvlxk0eOIKizAk0CHhXOs4sXw53zAumquU4gkI/cRiOfrsQtlaW5CYhVWTeyk2CYVTWTrD13Lgbn/AUQPpXvcB9ByvTjjudKly5YDk1kdZhj6XjkfPORIHWEwSU0yx+zFszjh8e1s5gR7C6fWsEdveCKGzLkVIx2A2TVJzU5EmEgtUH5oxN+85dPS0F+4tCSSV5dHakfYiw/jrzD1pTD1RAwRUDPp6QQ4R2tkxct2hErA/GGjUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9bkA37Pvz0u0vmU27Io2CFnuTqLizJdgh9WXfH4lKzs=;
+ b=J+EXXSjAe2qmzIhc5h8TmnjYXQbVkaJ8lX3st6vS9OvnbYvs821XGFh7QHfOCnEDMHYcb7LtlQWhJ4+9STnOgOBL+U6fz2fHAKucf96AoJYP2iRebtQ6NyiLAxQjiblepUnb80pBn2VrESHi8RLL17Po0SZTR0TxL3V1a6v+YGmM1qMID9cZAtWO0+1tM2wrKJGdtFFMdNTqd7HFLMKqNsshALzDtAiDsdvYFXk+rciowaHadrvpVn+rgL100yRwn/GpEFAU9MK/et9E9MJ9T5r60qdd+M2xW7TVYIv+AXTzgC0JmKCScclBgqUTxjVv4l31tjIGjCci+srYLK1ZmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9bkA37Pvz0u0vmU27Io2CFnuTqLizJdgh9WXfH4lKzs=;
+ b=Pn5jJrKrN2URwTPhSZrD7xpyPJ1AeXKglvVIFg1JcsMVDpcJ73Gypc8gRhTCaG8HdVYpmKNcALvuXLCE6n0OTwaW2/QYH3sEK242RdhnQ9cRyLoOO/6zyxBWs55MDgyRRY/iPx9Ee1hk2naef1FV1tG2jhFygD7V7odJtye/NHA=
+Received: from BLAPR05CA0042.namprd05.prod.outlook.com (2603:10b6:208:335::22)
+ by DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8964.21; Wed, 23 Jul 2025 20:27:42 +0000
+Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
+ (2603:10b6:208:335:cafe::b) by BLAPR05CA0042.outlook.office365.com
+ (2603:10b6:208:335::22) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.6 via Frontend Transport; Wed,
+ 23 Jul 2025 20:27:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8964.20 via Frontend Transport; Wed, 23 Jul 2025 20:27:42 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 23 Jul 2025 15:27:41 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <linux-hwmon@vger.kernel.org>
+CC: <linux@roeck-us.net>, <jdelvare@suse.com>, <yazen.ghannam@amd.com>,
+	<linux-kernel@vger.kernel.org>, <avadhut.naik@amd.com>
+Subject: [PATCH] hwmon: (k10temp) Add thermal support for AMD Family 1Ah-based models
+Date: Wed, 23 Jul 2025 20:23:38 +0000
+Message-ID: <20250723202735.76440-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250723-mc33xs2410-hwmon-v5-2-f62aab71cd59@liebherr.com>
-References: <20250723-mc33xs2410-hwmon-v5-0-f62aab71cd59@liebherr.com>
-In-Reply-To: <20250723-mc33xs2410-hwmon-v5-0-f62aab71cd59@liebherr.com>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
- Dimitri Fedrau <dima.fedrau@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753292105; l=8847;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=YCCOttXZ9iOZy8OoouzxY5slMvI1RSmNaE/50XP8LQ8=;
- b=q2Q9U7owpZSCdSikq27SLgh4CUvrElB2yDXwFneDlqJUgIi8lt8r6Po+B6eTs3724EZE2U4H+
- hcHPAQZ8FiQBLV2lNat1ufVeWGcO++gm6E9Qv49ENBdWSbu2s0RTIeE
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|DS7PR12MB8252:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ef12c6a-068c-466d-6055-08ddca276058
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?DjiCzzeR5UPNmlObBWCgooagxAP7aI2bqajnHN26Szf6aQGk22n7z49lHmV0?=
+ =?us-ascii?Q?xiVMEF4SWsdh7zz7G9aJNOG2kNFPtunmbYNNey9jLq71gEjrZ6ghmXIM0KYw?=
+ =?us-ascii?Q?KdB8Voq3LnaQu96hViS9zkgG7FSc8y56+jbvhUctkQELZ5M8Mt2nH21mLTsA?=
+ =?us-ascii?Q?CH4sTtEsUwhKBAxkP3Sik3/zczh4/hrzgF7AMunav6e7gwMJfkIuCJ0FxgJ9?=
+ =?us-ascii?Q?TWVd5kR1KWqS5ZmbDic2xB5Ut1x/jHbfJ9z3e8uTkxYHSpOlYLqkY9cqK0gf?=
+ =?us-ascii?Q?MTZxrcWjFuPz7Q+iM3HiX67PuW2LYYZp9kUJLzyAIlOlMYn0DO1dwJYmIQni?=
+ =?us-ascii?Q?1gxqHbsCKhzFQkPLxs0bKHsGIQfx3cZZo5Jnrf5WUwVRJj+J1UBluOPyAExS?=
+ =?us-ascii?Q?3vXVFf3OlEEK1f5Q2tyvF2NIcW/E301Bt29aO5Jd4pBKKRSPS7LyiD4R8uqR?=
+ =?us-ascii?Q?7/OOokvxOU4MXpetskm+c+xmnnE4dH5rIQ0X2y6HUdeHKUS0NM+RE57RAfOF?=
+ =?us-ascii?Q?HdWVx1f7VwzcT3FtAASYFswKV8KARH/EPe9Jg80dARZ3pYy+ZaW8v6GI3kJ7?=
+ =?us-ascii?Q?TEdvY8kAqdI487RSxInkcn8NMqxJdUE5JrXHHqcF9etT30SKCJDCuWArp432?=
+ =?us-ascii?Q?EKIMYPeuFpW+oH7gHPUzLfVhBE/nH7eRkVYLs12m98TlGf5FN6cYD84oZbUl?=
+ =?us-ascii?Q?3L6ZmCu6W4+c0fKEoBoddoHwEfgWMsWZsguuirfzgMU6DjGw8d2VGD1OARd/?=
+ =?us-ascii?Q?tKLot+hCIzkPRMb9f/n3vG95GcKqsMua4StCC6lNEooX3SpssRmGCJCRk1aX?=
+ =?us-ascii?Q?RYKrGWyOgMSYpXnrWHo0xCuT9c5VrosotGXD1SmZlh9g+7pN+/t9Wp8a+Igq?=
+ =?us-ascii?Q?tvxtz3LNH3cxz8Yr2XURNfyiaqz/Mzpr2BfmUObjMXuwRKSYdr9iNb2bB7up?=
+ =?us-ascii?Q?1445FugeMC0ceO1O2yMZNm+yUiXdxnGo7WBKyMwYSNPr0RSwBjZv2YUvQ3/w?=
+ =?us-ascii?Q?EIVncMbCjm4kmLTIdRtSanESwNdaHO3082fh0aqfa2/Ox7uy3hnSOOozVl1E?=
+ =?us-ascii?Q?cHGGd+CHBipcUj7MMkMgLS1E/gzdHBCUYX6S1f2z2usi6iqqRGlfRywZ0u/T?=
+ =?us-ascii?Q?aqydRzSm0QsA2DLAdY6BsDRtWt7Pug4p78z8QIpZEs8YPT/o6qgf50VtsLGz?=
+ =?us-ascii?Q?OGcJMWH/80rFSGK04ws4z3mXTTZH7HtC3g+4mCjjYWDEnq6yj8Yg3L+F8E9C?=
+ =?us-ascii?Q?oWDpFGxlTgC6gwzssmrHuhugdoTJTPKkVmgabOpVPNUohPtripVklqyXMeE2?=
+ =?us-ascii?Q?O8LY8cieQPA4rUWMMiVDsKW9/3k1Weu32qiNs2Vkc1G/zC9ct9o474td/GLw?=
+ =?us-ascii?Q?vpB8eyrRHd/aPfcRplo28EZINrGPED3h1v8JTiJ0DVYAbh3Fv0NqloNowihZ?=
+ =?us-ascii?Q?wFG1yBSmrRJJxWDEG04Vuv8MBgidinWClu1TM7KprGxoaw/FFaU/npzwh/Tb?=
+ =?us-ascii?Q?NUCj7aCxhloOOVOodVdRu8Cge6hYp7yiuwmF?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2025 20:27:42.4981
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ef12c6a-068c-466d-6055-08ddca276058
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000ECDB.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8252
 
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Add thermal info support for newer AMD Family 1Ah-based models.
 
-The device is able to monitor temperature, voltage and current of each of
-the four outputs. Add basic support for monitoring the temperature of the
-four outputs and the die temperature.
-
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
 ---
- Documentation/hwmon/index.rst            |   1 +
- Documentation/hwmon/mc33xs2410_hwmon.rst |  34 ++++++
- drivers/hwmon/Kconfig                    |  10 ++
- drivers/hwmon/Makefile                   |   1 +
- drivers/hwmon/mc33xs2410_hwmon.c         | 178 +++++++++++++++++++++++++++++++
- 5 files changed, 224 insertions(+)
+ drivers/hwmon/k10temp.c | 2 ++
+ include/linux/pci_ids.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b45bfb4ebf30823094fe82726d2237f90be17642..d292a86ac5da902cad02c1965c90f5de530489df 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -167,6 +167,7 @@ Hardware Monitoring Kernel Drivers
-    max77705
-    max8688
-    mc13783-adc
-+   mc33xs2410_hwmon
-    mc34vr500
-    mcp3021
-    menf21bmc
-diff --git a/Documentation/hwmon/mc33xs2410_hwmon.rst b/Documentation/hwmon/mc33xs2410_hwmon.rst
-new file mode 100644
-index 0000000000000000000000000000000000000000..8a2136ef913911851874179620815f4e74e6e5e9
---- /dev/null
-+++ b/Documentation/hwmon/mc33xs2410_hwmon.rst
-@@ -0,0 +1,34 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver mc33xs2410_hwmon
-+==============================
-+
-+Supported devices:
-+
-+  * NXPs MC33XS2410
-+
-+    Datasheet: https://www.nxp.com/docs/en/data-sheet/MC33XS2410.pdf
-+
-+Authors:
-+
-+	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-+
-+Description
-+-----------
-+
-+The MC33XS2410 is a four channel self-protected high-side switch featuring
-+hardware monitoring functions such as temperature, current and voltages for each
-+of the four channels.
-+
-+Sysfs entries
-+-------------
-+
-+======================= ======================================================
-+temp1_label		"Central die temperature"
-+temp1_input		Measured temperature of central die
-+
-+temp[2-5]_label		"Channel [1-4] temperature"
-+temp[2-5]_input		Measured temperature of a single channel
-+temp[2-5]_alarm		Temperature alarm
-+temp[2-5]_max		Maximal temperature
-+======================= ======================================================
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 079620dd42862ef5e026697e9e1b1fcd5b8be298..9d28fcf7cd2a6f9e2f54694a717bd85ff4047b46 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -700,6 +700,16 @@ config SENSORS_MC13783_ADC
-         help
-           Support for the A/D converter on MC13783 and MC13892 PMIC.
- 
-+config SENSORS_MC33XS2410
-+	tristate "MC33XS2410 HWMON support"
-+	depends on PWM_MC33XS2410
-+	help
-+	  If you say yes here you get hardware monitoring support for
-+	  MC33XS2410.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called mc33xs2410_hwmon.
-+
- config SENSORS_FSCHMD
- 	tristate "Fujitsu Siemens Computers sensor chips"
- 	depends on (X86 || COMPILE_TEST) && I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 48e5866c0c9a7677089d1001a9c5ae4adebff5d5..cd8bc4752b4dbf015c6eb46157626f4e8f87dfae 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -165,6 +165,7 @@ obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
- obj-$(CONFIG_MAX31827) += max31827.o
- obj-$(CONFIG_SENSORS_MAX77705) += max77705-hwmon.o
- obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
-+obj-$(CONFIG_SENSORS_MC33XS2410) += mc33xs2410_hwmon.o
- obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
- obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
- obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
-diff --git a/drivers/hwmon/mc33xs2410_hwmon.c b/drivers/hwmon/mc33xs2410_hwmon.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..23eb90e337091724c5562703df7d77a5fae6253b
---- /dev/null
-+++ b/drivers/hwmon/mc33xs2410_hwmon.c
-@@ -0,0 +1,178 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2025 Liebherr-Electronics and Drives GmbH
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/hwmon.h>
-+#include <linux/mc33xs2410.h>
-+#include <linux/module.h>
-+
-+/* ctrl registers */
-+
-+#define MC33XS2410_TEMP_WT			0x29
-+#define MC33XS2410_TEMP_WT_MASK			GENMASK(7, 0)
-+
-+/* diag registers */
-+
-+/* chan in { 1 ... 4 } */
-+#define MC33XS2410_OUT_STA(chan)		(0x02 + (chan) - 1)
-+#define MC33XS2410_OUT_STA_OTW			BIT(8)
-+
-+#define MC33XS2410_TS_TEMP_DIE			0x26
-+#define MC33XS2410_TS_TEMP_MASK			GENMASK(9, 0)
-+
-+/* chan in { 1 ... 4 } */
-+#define MC33XS2410_TS_TEMP(chan)		(0x2f + (chan) - 1)
-+
-+static const struct hwmon_channel_info * const mc33xs2410_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_LABEL | HWMON_T_INPUT,
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_ALARM,
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_ALARM,
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_ALARM,
-+			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_ALARM),
-+	NULL,
-+};
-+
-+static umode_t mc33xs2410_hwmon_is_visible(const void *data,
-+					   enum hwmon_sensor_types type,
-+					   u32 attr, int channel)
-+{
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_alarm:
-+	case hwmon_temp_label:
-+		return 0444;
-+	case hwmon_temp_max:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int mc33xs2410_hwmon_read(struct device *dev,
-+				 enum hwmon_sensor_types type,
-+				 u32 attr, int channel, long *val)
-+{
-+	struct spi_device *spi = dev_get_drvdata(dev);
-+	u16 reg_val;
-+	int ret;
-+	u8 reg;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		reg = (channel == 0) ? MC33XS2410_TS_TEMP_DIE :
-+				       MC33XS2410_TS_TEMP(channel);
-+		ret = mc33xs2410_read_reg_diag(spi, reg, &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* LSB is 0.25 degree celsius */
-+		*val = FIELD_GET(MC33XS2410_TS_TEMP_MASK, reg_val) * 250 - 40000;
-+		return 0;
-+	case hwmon_temp_alarm:
-+		ret = mc33xs2410_read_reg_diag(spi, MC33XS2410_OUT_STA(channel),
-+					       &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = FIELD_GET(MC33XS2410_OUT_STA_OTW, reg_val);
-+		return 0;
-+	case hwmon_temp_max:
-+		ret = mc33xs2410_read_reg_ctrl(spi, MC33XS2410_TEMP_WT, &reg_val);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* LSB is 1 degree celsius */
-+		*val = FIELD_GET(MC33XS2410_TEMP_WT_MASK, reg_val) * 1000 - 40000;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int mc33xs2410_hwmon_write(struct device *dev,
-+				  enum hwmon_sensor_types type, u32 attr,
-+				  int channel, long val)
-+{
-+	struct spi_device *spi = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_max:
-+		val = clamp_val(val, -40000, 215000);
-+
-+		/* LSB is 1 degree celsius */
-+		val = (val / 1000) + 40;
-+		return mc33xs2410_modify_reg(spi, MC33XS2410_TEMP_WT,
-+					     MC33XS2410_TEMP_WT_MASK, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const char *const mc33xs2410_temp_label[] = {
-+	"Central die temperature",
-+	"Channel 1 temperature",
-+	"Channel 2 temperature",
-+	"Channel 3 temperature",
-+	"Channel 4 temperature",
-+};
-+
-+static int mc33xs2410_read_string(struct device *dev,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel, const char **str)
-+{
-+	*str = mc33xs2410_temp_label[channel];
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops mc33xs2410_hwmon_hwmon_ops = {
-+	.is_visible = mc33xs2410_hwmon_is_visible,
-+	.read = mc33xs2410_hwmon_read,
-+	.read_string = mc33xs2410_read_string,
-+	.write = mc33xs2410_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info mc33xs2410_hwmon_chip_info = {
-+	.ops = &mc33xs2410_hwmon_hwmon_ops,
-+	.info = mc33xs2410_hwmon_info,
-+};
-+
-+static int mc33xs2410_hwmon_probe(struct auxiliary_device *adev,
-+				  const struct auxiliary_device_id *id)
-+{
-+	struct device *dev = &adev->dev;
-+	struct spi_device *spi = container_of(dev->parent, struct spi_device, dev);
-+	struct device *hwmon;
-+
-+	hwmon = devm_hwmon_device_register_with_info(dev, NULL, spi,
-+						     &mc33xs2410_hwmon_chip_info,
-+						     NULL);
-+	return PTR_ERR_OR_ZERO(hwmon);
-+}
-+
-+static const struct auxiliary_device_id mc33xs2410_hwmon_ids[] = {
-+	{
-+		.name = "pwm_mc33xs2410.hwmon",
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(auxiliary, mc33xs2410_hwmon_ids);
-+
-+static struct auxiliary_driver mc33xs2410_hwmon_driver = {
-+	.probe = mc33xs2410_hwmon_probe,
-+	.id_table = mc33xs2410_hwmon_ids,
-+};
-+module_auxiliary_driver(mc33xs2410_hwmon_driver);
-+
-+MODULE_DESCRIPTION("NXP MC33XS2410 hwmon driver");
-+MODULE_AUTHOR("Dimitri Fedrau <dimitri.fedrau@liebherr.com>");
-+MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index babf2413d666..7765cd57d746 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -556,7 +556,9 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{}
+ };
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index e2d71b6fdd84..ae87b6c72981 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -583,8 +583,10 @@
+ #define PCI_DEVICE_ID_AMD_19H_M78H_DF_F3 0x12fb
+ #define PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3 0x12c3
+ #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
++#define PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3 0x12cb
+ #define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
+ #define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
++#define PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3 0x127b
+ #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
+ #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
+ #define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
 
+base-commit: a2609b707b58561b9e52f92f3f571d0510201f2f
 -- 
-2.39.5
-
+2.43.0
 
