@@ -1,372 +1,1121 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8FC2EE61D;
-	Fri, 25 Jul 2025 15:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753457402; cv=fail; b=iVfKR3pUE8S9lsYOCWD52bvtfkOm5ATIblrT6LvTNdQ0ONNxdO8mFa9RDrxWA0d9ZAR9WrioRpJlNe0WFY/fnaxNAAwGMjauHQp1lxSraqZ7+uca47n5c2rfRaWe81yBt80UbgErGqpmhxgzvMUDqA3WJITRmd1vO4EbkuQ+XJM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753457402; c=relaxed/simple;
-	bh=DHMi55TnChT1+f7/RPR/PWABxeBM6/HowlaC4JG584w=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Kz0FB5VFSH9v98TvLaj1LhfO3/sIsx4F1BPIA0XnqMhE9zgfpNlUmCKSrQSiREA/+viVXBPiLzr462IWJtsCCXDFYoywybXwgaZFhlsan97lGIsbJW4voufUJHNQWCnlwxlfzmW+yPoM5N6yExk7IUunRAvZZGLacX0Dq/UsrNw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UvqW0i9c; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=g9/NBWrO; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A0D3D994;
+	Fri, 25 Jul 2025 19:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753472683; cv=none; b=qpHBOh0akRsJXUpo1So/G7kxnk8v7CnapIQYptSIfQwRb17ECcmri79qMmHzaPGbj+0ccFGEWIKJuhihSIhgKrcK05Y3q762bHI3ZDKjGTh/ugBNVKbxIElwW16i/4ydnYO8bNu/e3KrxU0YRTtMT2PSOaC2ALmfD2i+qMX6qSk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753472683; c=relaxed/simple;
+	bh=IIs40TVDXzF3SFS5jCMcnUpiHQ+TvMbvfA/vqUCVkpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q8RcmlUt7nADiMBuvMIIUj0B4s8EPxVBRITY19k1l/ZNe5/wQBHNH23q4Q53EnwLm/g8E0roiBGHlO4wymQis+BOSt1htqDudUDw8fclYM9LDeX7Z6J9naI51nRwhrDKgjFKyzWCDL4O8ODnsjE3xFd2ijBtzo6AoFd/tLdOYHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfmlcAJB; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UvqW0i9c";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="g9/NBWrO"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56PEJ2d5032490;
-	Fri, 25 Jul 2025 15:29:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=3wWCFdtPg3fH0TmN7cIhdkWfdzAKppI3vPqAxqFi27k=; b=
-	UvqW0i9czZ6aeZfdnPpQOMsuw9fXIHyOCtGpnXqxEsuWU8BqrzHYUyiRrTwDyuRC
-	jmohQcAXSdqRuvdGKxcaCR2Sq9yjd0wChlZct3Bm4lstBPCPZ2P4bRXzXh1DxAGd
-	/WKtUCxj5IAHSFyV7rJOSSL4NNfmyqWhj5RmG524Mwx3dPssnTC2EJSyBVW9jkzb
-	JJhvSRoVYeNyYP4Zm3c+MzR+zNMsxitbzDckoE0pVG05PcHwMzA2+ax32+H+FWGi
-	xSSoEHpbF3cMnIeuRvQO2XzKrwT0SywJZq3efMaRI+9Gjl0dgYTJg60MK64ws4KU
-	A282wJZbGpZyxh8TUY4dYg==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 483w3wh9ub-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Jul 2025 15:29:39 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56PDp4FJ037690;
-	Fri, 25 Jul 2025 15:29:38 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4801td8e9g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Jul 2025 15:29:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=leoffxxOkHkLX16oav58nlsSi9h4HuIU6sK/CIr5EZzVX3eoAOZN+ds4hQNEqbvW/OCM6MKsL5UnSxiHRirG0bn0SZn0gZ/I/MBO9/o+3OlVHZreheW1RDZDkuRZWYlRkgnSo3o/1bOhq2ddiK3zce35/86ESNyBMIqtDYhoVLRJ1zqltEbgeyaYKrzzmJN5q47YuW0wVp2AHY0ua9E50lCVdu17N+UjzbvFsU7Jq++IY3P44iEJ9PepnSaNgxP1iZeCKYRSdfl3feFTN5IxJh2CmlN+y6/pZFZaqa2/EP3Z7JDuU4vRaLZKOa9jyJ1WbST6tDEjSOHPTRG6sTW0YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3wWCFdtPg3fH0TmN7cIhdkWfdzAKppI3vPqAxqFi27k=;
- b=RX5dsOtRpPqrC0nKQ9eeHDuHlqqHEvi4m+VjpC+j29fs/krbxipIjMAJzH7v3eSlQKUwcjczCGSuki0SKdNJWTnAwv0L6AEIkQxZorQnGDrEhTUBxkVJ0SySmh44sJK0WaHtQllm1eUHEv76ycd3rrJnWgcGFzwKTZJvxecGlitAZOsXzg4Zydg6ImCkqmwVvjPv6IMLVsQ6MYZdcWpz54XcR/g6qKlZU7XQy+wrQehGCbhhjk+yaFROgfbpj8QgO3TNnhgPni4K0ITxD3Cc03F1Vo6MNFD5V81v6iTnTqsOVHmkm3vjAst7TBXWjmD08/zwIUBg4VC2KYwXhDSlSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfmlcAJB"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-748d982e92cso1724970b3a.1;
+        Fri, 25 Jul 2025 12:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3wWCFdtPg3fH0TmN7cIhdkWfdzAKppI3vPqAxqFi27k=;
- b=g9/NBWrOdfxeM3re2zuMuQPrAzvVrk6SQ07aAxE+T+DGyqx056L7idovYaIxPJLsnyhaZP91Z3pazvntD/uwtNOxJpESNDNb8ktC+kvMbwiyfkFKebF7iqfkViywcYwEU1ojHqWMNzu0ZdmHKYkwvbWtHkIjlmYettkWcbE83J0=
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com (2603:10b6:5:3a6::12)
- by PH7PR10MB5721.namprd10.prod.outlook.com (2603:10b6:510:130::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.29; Fri, 25 Jul
- 2025 15:29:32 +0000
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c]) by DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c%5]) with mapi id 15.20.8964.023; Fri, 25 Jul 2025
- 15:29:32 +0000
-Message-ID: <c093effa-a21c-4fef-b3c8-a445a57ba0cc@oracle.com>
-Date: Fri, 25 Jul 2025 20:59:25 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] platform/x86: (ayn-ec) Add Temperature Sensors
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Hans de Goede <hansg@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20250725004533.63537-1-derekjohn.clark@gmail.com>
- <20250725004533.63537-2-derekjohn.clark@gmail.com>
-Content-Language: en-US
-From: ALOK TIWARI <alok.a.tiwari@oracle.com>
-In-Reply-To: <20250725004533.63537-2-derekjohn.clark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0246.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:af::11) To DS7PR10MB5328.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::12)
+        d=gmail.com; s=20230601; t=1753472679; x=1754077479; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mpHBJvt1sSzmNw2Fom7sXrfWjO+q2MjYnz5Aw8ygOYQ=;
+        b=DfmlcAJBTYjmwysgFhRvok9RnrP763+4ZuoVKdugkEer9EO3qtD9K4+8O2NZ/zfbZ4
+         xViLqhoYgKTl2Vj3R9bi4LQ5ycPvD3xNrCRDzvCabHJj5ozewroLKYVfVw1mOxPANfHF
+         7c/QHHqFqhIb3fQsVpYNpwfbYr+5YqRQ+vgTeOKCu2v7fMBk5c/tTw30h2LtQlj1SvO9
+         WtmP5GbmceAr/Ai+mHEFaxOozs941aRT1/9IZGm3emHitnM7c+zeoXn7xF6j78gQWm+h
+         xcBGjag+itxtP46pgpm6H4nNbamtP9hIQytwpp5OH3yqE6D8B2TEpb6mWxXJ668qxGHG
+         O+5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753472679; x=1754077479;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpHBJvt1sSzmNw2Fom7sXrfWjO+q2MjYnz5Aw8ygOYQ=;
+        b=k37HeIQ2RoGdEGv5XLm9bwurZCM0dANLCJQOK+2r2v2RFhiAHjrQLZoIMTjjcOmPln
+         DplO4ei6D/j054k34nzzM3sYX+ZpuUyPBWLgnIIBarwEL1+JM0ynVC6z0+RRVAu4IUOV
+         FVaYg6hlTrkYN0ZQ3P+dfQKztHpfU9ralkK7J4KTmmY5jJX9lI2ue/Vh2motfi0LZB9M
+         hjHK2dxTrUSwcfbA7G8nJDttCQmWw8y0DLlSp9YN+GWgdrQeX9nznR0/MjzWgrXOdwqW
+         KOoT98npYIVFwSU782aeGIS+U6s0MMqTb6O6R8khJQ9h8oGiU/gOSOck7n0tT1ZaT+gR
+         Ev9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU6mOOmmneac9aEVWB3CmKWLdc7+qaTcyJNy9wO+OIKKE5UT8JbLgwHO2NaXp2nnFyipfLYQ0eyI0Xp4U07@vger.kernel.org, AJvYcCUaU4V60VMH0vHNqOKRrDH6G/M1ICKmG77cmhlHQALP79xewQPy+8fUh3/GkPD3wMfZ18yihVgkDRjo@vger.kernel.org, AJvYcCVW2PyfkRCn0dHPB5bYdqo57YufOuOHsDT6riv6ZIuAzRGTrB5kq78ldG1x1lYtTWgtIfCwyRs6QXOrgBY=@vger.kernel.org, AJvYcCWGh4jmGFWP3DsRRQ2g4KVmn6cJpYpAYeDHhUfM0pfzJcuAt9bq833stSV+uzcwb/K6j7Crq/MZKNjp@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0gq728KeEor4tD8ok/KN8gMiuqJlQJgxP9SUn4XW86XTQwH6l
+	yNylw0vgoAJu5a0tfzIbiNk38DrTvcofWymkk3vk7cicgcWNRQUI4aw1
+X-Gm-Gg: ASbGnctuGtDBCKWBZfNQFus94KBqNKxNrLhWdEIaf50qs1gOBpxWz5AMG38248U3aGU
+	jfR8Ag6qshALHU/EvmRhDGSm2h5dv9/doqT9tni7mw8VEVf+QGKivq7FwA82tlqRoDKE7TrpeKu
+	KxjgQxrUvjzQhC3gQ6XD+3N0FtEukzUftoBOM346fvF9IPDw1z6/CyJeCwZbP8VVq++x5Q3amL2
+	C4vmQZR+TPhfRbX3oy/bQSsfPXpJdsMb9kgvFvLcxMzpNVnPaSLG6pt43UEg/ineq2Cifv15IMt
+	t454B+mjk2TxqSv1/REpVJSWRGfEDZekdcfbpjbBTQ646UWV8NkpuBf9CAQzKJqFlQcnYNCzCWg
+	OkvUKqVU76Ey6HzY8TatyPO0nefj0xjiH/rA=
+X-Google-Smtp-Source: AGHT+IFXYlTx9nS9phIVS3ylWC0poKZZgBR2HRmqQEc6iRd3pxH/PTEOSnj188B4B4veUXG/4UGNDA==
+X-Received: by 2002:a05:6a00:1790:b0:74c:3547:7f0c with SMTP id d2e1a72fcca58-7633626d5afmr5102323b3a.3.1753472679062;
+        Fri, 25 Jul 2025 12:44:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7640872a18bsm350251b3a.13.2025.07.25.12.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jul 2025 12:44:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 25 Jul 2025 12:44:37 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: wenswang@yeah.net
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jdelvare@suse.com, corbet@lwn.net, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] hwmon: add MP2869,MP29608,MP29612 and MP29816
+ series driver
+Message-ID: <56672864-c114-4cb2-8fab-707131930e77@roeck-us.net>
+References: <20250724091011.550761-1-wenswang@yeah.net>
+ <20250724091306.551131-1-wenswang@yeah.net>
+ <20250724091306.551131-2-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5328:EE_|PH7PR10MB5721:EE_
-X-MS-Office365-Filtering-Correlation-Id: affbe3b6-72ed-437f-9a00-08ddcb900dd2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K05naGd1TENMeDdpVnZQc0FNR0RKRDkrcEIraHFWT01GUmJLOUlWN0w4SVhY?=
- =?utf-8?B?QkdEYTFreUwzUytjT1cyQmtiRDN3K2pLTmlrRHRubC85MEpGeWF6Yk9BcEtN?=
- =?utf-8?B?bUZMcTRRN2JJdytLWWZiTFZoM1FIZk1Idzhla0pVRUZQL0dsdExPamdlNW5T?=
- =?utf-8?B?UVA4VWZudEJUNHZKY3g2TjdEWDE4b0FMRDlndzBmSzhyWDNhZXpDU2k4M3Ra?=
- =?utf-8?B?QTJsOVptK0ZMRjN1alU0RmJRZHNFS0swM2FMQ2NUQXAvdGgvVDZQM1F2ejZY?=
- =?utf-8?B?eEd6akJGRWViLzNqNTAvUXVtU20wYk9NRG1zUnFyYnNyWDYyVnJEckJZVVlQ?=
- =?utf-8?B?ZEhnazJuVkpUZzNIM3hPVmFKWW95SXlJR0cwc1B3Rm01TjJWbzJFbkhlaElZ?=
- =?utf-8?B?by91OVVVWXhCaDFLNVBGdWowTnFGK3RVK0NOTmh0TC9xeDFvOVcvazBJbnh2?=
- =?utf-8?B?ZTB5SHpBK2Njc1pUMUtJRTBEUFN3NGhKQjlmRWIzOXVhNllydm0yQ1V1Tjlr?=
- =?utf-8?B?SEVGaVpKNVFJSzJUUThILzN3OXNCSml1S2RGWGpKL3FySjkvVkNsVVMzUTV2?=
- =?utf-8?B?alR2OWtqY0xtZGlySmFXcXIrS25OQWlGTjlWQ0NXb2k1QmRQNDg2VmMzb1dj?=
- =?utf-8?B?MDJvZ1R1SW4yWTl4cjRaV3BXSVdZa3BYT0RYR1BlcWJwbkQxaVNvMldNWnF1?=
- =?utf-8?B?bnpiM3luQUN2MmJHVkVid25XL2R1MC91NmxRK21LUFkyMEdvK0FQK1l6NUwv?=
- =?utf-8?B?em92aitJTms5WUxmdFM3VFFmSEFWUk9WVkc2SG1mbFBXYmZsM0g0UDM4UklO?=
- =?utf-8?B?MUVTanJGMXJ6ejA3UldnbWdhK1pYRXZhYUJXZk43TURWaHBVZlRrUVRNNkdY?=
- =?utf-8?B?NytoY2ZKdzhUektXeTd0eUZ6a2tPeStpVTdmNEloM0RFSTZiQ0tYWlpCZFkv?=
- =?utf-8?B?NnJuYVpUZkdJNHdBS0hYMHd2ZWlxbHcvWS9uWlNSQU50bndZVmpuRW0vQTNz?=
- =?utf-8?B?eHlFQ2JVbnR4bDFZVDNsNTZ1U0xuQ01YcE1OT1ozRkM4OSs3amYzMWdORDZx?=
- =?utf-8?B?aWJRUzhEclVSY3NSVHoyUjkxcHZaSlU0ZFlsbVVpSklWKzc2eEUyays1Z3pW?=
- =?utf-8?B?MkJQcEwyaXlMSnFRZVFwVkI1Wm8rMS9OdXlQK1JqLzlUUWc0enFIcEdRS0JC?=
- =?utf-8?B?TGcxS0hZUkFjMkNVVDN4U3NreFJiR3ArS0xEUWhwdnByWVcvZ2dmKzAzOEkx?=
- =?utf-8?B?MC9ydHZ3RzNacVh1RDhScXhLb2VMRXUyT1c0UUU0Tk5laW14TU0yc2JuUm5l?=
- =?utf-8?B?bDBqa1lnajhOMDJhVUtOOENScnFkSXZvdG1SaytWM2JGaVNEODJtMmVBNjAv?=
- =?utf-8?B?cGI0cXZ3NFhSa2ZyRmpldURFeTkvd1JLK3RZQUt6VndiSFVPWk12WnBLdmpF?=
- =?utf-8?B?Zit1RGVuSzNRNEFYSHhYWHpTUWRNdXFVcmRBYkl5RDVpc0JHNzRpYlhDK3J2?=
- =?utf-8?B?dWx3YWpVQ0hmUzRuSmlaS203eXhhbHU4Y0Mzcmg2OWRCbXQwcHE2OHBRZ0xX?=
- =?utf-8?B?M1gxR2ZhdWg2MWsva3FBcnhLRVJPVTFlM3R5WnlWV1lzWkxkVWNkUlpGNjR3?=
- =?utf-8?B?VStWMTVqQTUrOG5hWk8vdEJpTVFGdEs5NVFSd1V1d1hpUGNRZ214ci9obm5S?=
- =?utf-8?B?cWUzeHJrelplVkUzUC8rMkIyMkk4TnMwMGJvemNubHVzVXpuWEpIbFBHOWlh?=
- =?utf-8?B?b3NiL2lNMU1MUGNCRGV4aDEzRFphZ2VDdGZraUdReDZyWEZMNzZOSGQ1cE85?=
- =?utf-8?B?ZUdxYU5BeXpFemJneElERzU5bTVOUGZva2NZSDRPQTlHaUQxMCtKMnVWNFl0?=
- =?utf-8?B?U2dSVk9EdmZPZ0tDVHM1a05CRUx4ZW5SN0Z6d01rbUZvWTB2cHpqbHpZQk00?=
- =?utf-8?Q?n88D6/EdHdw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5328.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aXlnTk5MN3owa2pXRkRpVGgyZFg0M3ZtOW8wUVdzaWJCaXFYNWZYbzRxYVA5?=
- =?utf-8?B?bXBuMjVBMFVXc01tZmZLdWt4Zk1RZ0RtMTM4S0M0bk1ieGxjc1lEYzBHZW1Q?=
- =?utf-8?B?bVVWUnJPT0ZtUVY2bmlhd0RJY2d1bnVWTkxDUXBVK1UrYWVmWkxGanV1c3Uw?=
- =?utf-8?B?SVAvQUpBT0Z3Yk9BMElCb2o3dUlqY28xSnpQY3dPSU8wNGJyRU45eERnekJn?=
- =?utf-8?B?SjVrVUpVcXFRcEwzM24zQXhkdzREWEhuRFpNUVgrbzBGc2RQNGlhK3lEbklV?=
- =?utf-8?B?ajBvcjcwUHFPbDVQaTg3djFJL1dTSkZLUWd5YmRtZk1wWkVCZDdKZWM1UVk1?=
- =?utf-8?B?VjBoQlhqU3JjNzlYTjE0RzNLa1FVeGhLMUlmZ3A1aW9SN0FuSUxWSC9CVm1p?=
- =?utf-8?B?QXJ5dWRPb1pNY2FYNzhoR0RsdEgxdE1jbWF3THJLTTJJdVlrK3RVV0dEMmZ6?=
- =?utf-8?B?VFpOS241OTd5NmZXM1paZm9jYVg2TWlmVUdMYkREcUdnZ3h3TUZxNEZ5a3JB?=
- =?utf-8?B?U0p6Q1FNakMrellJNlpKVUtvREdiMlNmQmNKTmRCUzA4eFgxQWU1Vjd3eVF2?=
- =?utf-8?B?ZnhwOFZtZFk5cmlyYVRxOUJTbkpyNjArWW9zNFhWNWh0eDB6cWNxUkF6M3cz?=
- =?utf-8?B?MTBIckFhSEZBMGZWdUxkUmt6V1ZlS1BVWDJQaHFZM2FHR3lFZjhncXlMaEl3?=
- =?utf-8?B?aGE1c2NrSlJSTmtJRGNyS0k2bHl5MkRvSFR5WW5ENG10Ny9ySEZFVGNSOGRD?=
- =?utf-8?B?ZWJJRDIxQ3gvNlRDWmN1Ukt1eDVYWGovczlhNC9QaXNxeGhCcE0vZ3k0U1dQ?=
- =?utf-8?B?M3dQSW9RSjBwMy9ZZmhTTGlSNVh5dkZmSFhlNFljeTQ1bDlTcHllU3dwSGNi?=
- =?utf-8?B?MHdlMHhaQlJIQlNzZnZMWkZKS216YkhhR3duN1hhZHFGY3V1YlBFRzc1dXVR?=
- =?utf-8?B?Nlk0WnZTS3J3QzVaRWtvTDQ1a1VuTGNBenJpd3NIMktQTVIzdGUxU2IvbzB6?=
- =?utf-8?B?eCtSdUxmTUNQN0QxeTd6WGxwdldVT0lCYWp0RU10Smc4R0MxMHVqVURTZHh4?=
- =?utf-8?B?aWJyR3dFanhHYzJ0ZDVJQUlyS2oySmRIS1luNnNQTE14Zm5Pa2syclBQcGJv?=
- =?utf-8?B?Yyt4QUljUWFWdjlScGRtSFBBeVgvdEEvV3RJbE9EckxUb1pFbms2RDNXalpq?=
- =?utf-8?B?VmQ1cW8rUUV1T1l6YVcrakMzcDE1WWRzVlloZGp1VTBtT202U1VDZXVFWmFy?=
- =?utf-8?B?TkhXWGhld0Z6UDI2cnZ1aTBvengxSnFvM3BmOFY1TjVqTHgxS1NoSFM2eVZ2?=
- =?utf-8?B?dkpZOGFZbWN5ZlNZWkpxYVBYY3RyeENObktMbG4vejFCN1FoWHBGUWxNdlZq?=
- =?utf-8?B?RzdQcXJoWmk1VUJrMXVod1VnV01GOE94U0t4d2ZaQlJra0o5VmRBQXFjcVBr?=
- =?utf-8?B?VytZVnZGY214RSs1cThMaXE2NmdxSXN5MnFUMWpybHp3dDgreEdXSGdhVjh5?=
- =?utf-8?B?WDAwaDN0aURnOXh0L2pKc2JSRWwyYmp4MDh6Uit6NldXc1Q5dDR3NFNJSTVr?=
- =?utf-8?B?ZmV5V2JnQU5RNjgrN1BicHcyV0RKcGdES3Iwd0syR0ZpNVBmbFNNcHlqZW4y?=
- =?utf-8?B?aFBLc2tSOEFlTXJSSG1rcWx0MFZnaVkvMUxhK1A5U1cwSG5xdWNndnRSMG5T?=
- =?utf-8?B?aGp0cWNMRzd1TkhvU2QrVjJsNmJHTHg5eGlrNnM2STN1TE9DN0MzZHRPUWFl?=
- =?utf-8?B?dlRnVVU4WEc0ODU2Y2dSdkdmN3oxZkV1ZnFIa0RJT055SXJ0cTV2L1NLN00w?=
- =?utf-8?B?Y2dEZFpQbVJ2dzV6eWloU3ZaQ0EyeU5nV0l4aG9RcGdSUHYwSHJrd242WEEz?=
- =?utf-8?B?MXU1Z2cyTDA3bUVkRUxyeG5DNzZzNnBxS3FZWXFWTW5GU0lyRGlBWVpWWjV4?=
- =?utf-8?B?QmFsZkZBQnVmdzlsZGVEQ0ttTWNHZkxZekhVT2YrMEZXNUZycysvWGRSVmhi?=
- =?utf-8?B?NDVtbzVhWHN4U2tyOWE4Uk96VDUyUy9WSGNQdlBhZ3lwZWJNamVGMVJwc0hq?=
- =?utf-8?B?UTZIbWRDR1Z5aFVyWHYzSXo2Q0JkTzFuL0EweUNVbXhiWWtFbE1XV1U3czhG?=
- =?utf-8?B?dWlvN3prUmdocFNuMHoxNmxPWlJwaGdVQnNxSEMzZTZkUmhlZ0JreWt2aXRa?=
- =?utf-8?B?dUE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	6ExmQI63hH7IFGW+GTiKN9Lx9TBZGz7zAWa1d64t9Aks2+zkDgVjB1Unk4teA/UirO00fpcvKOM4skgYejUPwDn5IAw48JiNZKPoRDvvqr2vpwB7414/lPQ2ok1jXSdordG5atDG97Ten3Z+Elz1rsC2ylMeB6vMr8dgmSEA0a1gPNFs8Vbri0uIWhI7l+X9pGe5SZZK5Xk24/e5tmUEYj0tmyyvrCd5XnvPPvLb186Sxre88WNR9PlS1JDGoBwSK8bAKSa5f35qUXJCkRMLHmg1o0XnxAJC3bd1oGGqHO7k3sCFwu+T0H6ix+zlavlL7gagHkCEaliHooGZJFZgHSHXCqo2GlK6RVDWvnZsCOLUlnUN6PUVcUFAVtyZ3TQNyOnF/8WArpxG3jgT4s6yU4v6AEJcRQH0LObLAVtWgGkR6Umt1QLQ0GrxxV/xYOktYckplcs7vH41WhW8m9gxt3aMfiQB2B0TlGIAo6hVQlkX1s8tg8Eg/RF+R2crPYpBVNYw5n3pOOxeZoxfRtTQLRu8oW33g2l464LU/3+Af08M6Y7tUVz3qbm2lFTU2/WGN1j9ZGKtA1zFNcsWtZ5SQXfVSdHTtdby8HxDma3M2Yo=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: affbe3b6-72ed-437f-9a00-08ddcb900dd2
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5328.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 15:29:32.6361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fwjyglr/gdrE/9YOugJZ6I4oKYsJlhVdsyFbWryhreKAJn9/l5GPTm1KEXVjxUi1GIGkpf2PQlYoQFjWLXx2IUcidjQMxW/5M14FW3xX2WE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5721
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-25_04,2025-07-24_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 suspectscore=0
- bulkscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2507250133
-X-Proofpoint-ORIG-GUID: GXNlWKptqArYArhtFVArrtSoAuTrUOzu
-X-Proofpoint-GUID: GXNlWKptqArYArhtFVArrtSoAuTrUOzu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzI1MDEzMiBTYWx0ZWRfX9QMiRkCvWrPc
- +jtyasr1qZa+dykv3AQ5QHxD7tyo95K0pJcSStc0cBo48tG6E8MFBQM7LmkskgV8rDasdcoymKP
- 9Qk+p9cifbLjSH/pUOUY7h3RXVaBdVKoeMgFg/LxPFEgSMqgCmPEaKHGCGha3LskrI+NOi9C85R
- epwGv5mhKciLhaAnK992PXhgJgCvKTSG1xCOJd7wuYxqzuwaZu6Im0DhoCEZXe0hmtPa9+dVgXy
- dOQomNogRaNcVnw6hsG3r4wv0fwDW2DFvcshOpnJ/KMZKHUnB55mK2pS2KEItDkXXqVpgAXn2w7
- LGdnWIPOJniIQqzpjwJ4GQI7WQtN2DH0r1vPKj27uYHFMFJj9HCnqytXJ6ywj6IN8ER8Bj76FrA
- cky39bFV9QaizeKvfoXubHxoALucfJY2vUwGIYwwcoS//SbC4cScof7BCdckvvCr5dCeozLw
-X-Authority-Analysis: v=2.4 cv=Jt7xrN4C c=1 sm=1 tr=0 ts=6883a2e3 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10
- a=pGLkceISAAAA:8 a=9LD0AG3-p6ra_FVAFkAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- cc=ntf awl=host:12062
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250724091306.551131-2-wenswang@yeah.net>
 
-
-
-On 7/25/2025 6:15 AM, Derek J. Clark wrote:
-> Adds temperature sensors to the ayn-ec hwmon interface. These read-only
-> values include Battery, Motherboard, Charger IC, vCore, and CPU Core, as
-> well as labels for each entry. The temperature values provided by the EC
-> are whole numbers in degrees Celsius. As hwmon expects millidegrees, we
-> scale the raw value up.
+On Thu, Jul 24, 2025 at 05:13:04PM +0800, wenswang@yeah.net wrote:
+> From: Wensheng Wang <wenswang@yeah.net>
 > 
-> `sensors` output after this patch is applied:
-> aynec-isa-0000
-> Adapter: ISA adapter
-> fan1:        1876 RPM
-> Battery:      +29.0째C
-> Motherboard:  +30.0째C
-> Charger IC:   +30.0째C
-> vCore:        +36.0째C
-> CPU Core:     +48.0째C
+> Add support for MPS VR mp2869/mp2869a,mp29608/mp29608a,mp29612/mp29612a
+> and mp29816/mp29816a/mp29816b/mp29816c controller. This driver exposes
+> telemetry and limit value readings and writtings.
 > 
-> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
 > ---
->   drivers/platform/x86/ayn-ec.c | 89 +++++++++++++++++++++++++++++++++++
->   1 file changed, 89 insertions(+)
+> V3 -> V4:
+>     1. split patches for MP2869,mp29608,mp29612,mp29816,mp29502
+>     2. add description for vender specific registers
 > 
-> diff --git a/drivers/platform/x86/ayn-ec.c b/drivers/platform/x86/ayn-ec.c
-> index 06f232bd10fa..b2054dc2358a 100644
-> --- a/drivers/platform/x86/ayn-ec.c
-> +++ b/drivers/platform/x86/ayn-ec.c
-> @@ -50,8 +50,16 @@
->   #define AYN_SENSOR_PWM_FAN_TEMP_4_REG	0x19
->   #define AYN_SENSOR_PWM_FAN_TEMP_5_REG	0x1B
->   
-> +/* EC Teperature Sensors */
-
-typo Teperature
-
-> +#define AYN_SENSOR_BAT_TEMP_REG		0x04 /* Battery */
-> +#define AYN_SENSOR_CHARGE_TEMP_REG	0x07 /* Charger IC */
-> +#define AYN_SENSOR_MB_TEMP_REG		0x05 /* Motherboard */
-> +#define AYN_SENSOR_PROC_TEMP_REG	0x09 /* CPU Core */
-> +#define AYN_SENSOR_VCORE_TEMP_REG	0x08 /* vCore */
+> V2 -> V3:
+>     merge patches for MP2869,mp29608,mp29612,mp29816,mp29502
+> 
+> V1 -> V2:
+>     add Rob's Acked-by
+> 
+>  Documentation/hwmon/index.rst  |   1 +
+>  Documentation/hwmon/mp2869.rst | 175 ++++++++
+>  MAINTAINERS                    |   7 +
+>  drivers/hwmon/pmbus/Kconfig    |   9 +
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/mp2869.c   | 719 +++++++++++++++++++++++++++++++++
+>  6 files changed, 912 insertions(+)
+>  create mode 100644 Documentation/hwmon/mp2869.rst
+>  create mode 100644 drivers/hwmon/pmbus/mp2869.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index b45bfb4ebf30..7e278aa0aac3 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -172,6 +172,7 @@ Hardware Monitoring Kernel Drivers
+>     menf21bmc
+>     mlxreg-fan
+>     mp2856
+> +   mp2869
+>     mp2888
+>     mp2891
+>     mp2975
+> diff --git a/Documentation/hwmon/mp2869.rst b/Documentation/hwmon/mp2869.rst
+> new file mode 100644
+> index 000000000000..2d9d65fc86b6
+> --- /dev/null
+> +++ b/Documentation/hwmon/mp2869.rst
+> @@ -0,0 +1,175 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
->   /* Handle ACPI lock mechanism */
->   #define ACPI_LOCK_DELAY_MS 500
+> +Kernel driver mp2869
+> +====================
 > +
->   enum ayn_model {
->   	ayn_loki_max = 1,
->   	ayn_loki_minipro,
-> @@ -63,6 +71,20 @@ struct ayn_device {
->   	u32 ayn_lock; /* ACPI EC Lock */
->   } drvdata;
->   
-> +struct thermal_sensor {
-> +	char *name;
-> +	int reg;
-> +};
+> +Supported chips:
 > +
-> +static struct thermal_sensor thermal_sensors[] = {
-> +	{ "Battery", AYN_SENSOR_BAT_TEMP_REG },
-> +	{ "Motherboard", AYN_SENSOR_MB_TEMP_REG },
-> +	{ "Charger IC", AYN_SENSOR_CHARGE_TEMP_REG },
-> +	{ "vCore", AYN_SENSOR_VCORE_TEMP_REG },
-> +	{ "CPU Core", AYN_SENSOR_PROC_TEMP_REG },
-> +	{}
-> +};
+> +  * MPS mp2869
 > +
->   /* Handle ACPI lock mechanism */
->   #define ACPI_LOCK_DELAY_MS 500
->   
-> @@ -503,6 +525,63 @@ static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_temp, pwm_curve, 7);
->   static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_temp, pwm_curve, 8);
->   static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_temp, pwm_curve, 9);
->   
-> +/**
-> + * thermal_sensor_show() - Read a thermal sensor attribute value.
-> + *
-> + * @dev: The attribute's parent device.
-> + * @attr: The attribute to read.
-> + * @buf: Buffer to read to.
-
-@buf: Buffer to write the result into.
-
-> + *
-> + * Return: Number of bytes read, or an error.
+> +    Prefix: 'mp2869'
+> +
+> +  * MPS mp29608
+> +
+> +    Prefix: 'mp29608'
+> +
+> +  * MPS mp29612
+> +
+> +    Prefix: 'mp29612'
+> +
+> +  * MPS mp29816
+> +
+> +    Prefix: 'mp29816'
+> +
+> +Author:
+> +
+> +	Wensheng Wang <wenswang@yeah.net>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
+> +MP2869 Dual Loop Digital Multi-phase Controller.
+> +
+> +Device compliant with:
+> +
+> +- PMBus rev 1.3 interface.
+> +
+> +The driver exports the following attributes via the 'sysfs' files
+> +for input voltage:
+> +
+> +**in1_input**
+> +
+> +**in1_label**
+> +
+> +**in1_crit**
+> +
+> +**in1_crit_alarm**
+> +
+> +**in1_lcrit**
+> +
+> +**in1_lcrit_alarm**
+> +
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +**in2_crit**
+> +
+> +**in2_crit_alarm**
+> +
+> +**in2_lcrit**
+> +
+> +**in2_lcrit_alarm**
+> +
+> +**in3_input**
+> +
+> +**in3_label**
+> +
+> +**in3_crit**
+> +
+> +**in3_crit_alarm**
+> +
+> +**in3_lcrit**
+> +
+> +**in3_lcrit_alarm**
+> +
+> +The driver provides the following attributes for input current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +**curr2_input**
+> +
+> +**curr2_label**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr3_input**
+> +
+> +**curr3_label**
+> +
+> +**curr3_crit**
+> +
+> +**curr3_crit_alarm**
+> +
+> +**curr3_max**
+> +
+> +**curr3_max_alarm**
+> +
+> +**curr4_input**
+> +
+> +**curr4_label**
+> +
+> +**curr4_crit**
+> +
+> +**curr4_crit_alarm**
+> +
+> +**curr4_max**
+> +
+> +**curr4_max_alarm**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> +
+> +**power2_input**
+> +
+> +**power2_label**
+> +
+> +The driver provides the following attributes for output power:
+> +
+> +**power3_input**
+> +
+> +**power3_label**
+> +
+> +**power3_input**
+> +
+> +**power3_label**
+> +
+> +**power3_max**
+> +
+> +**power3_max_alarm**
+> +
+> +**power4_input**
+> +
+> +**power4_label**
+> +
+> +**power4_input**
+> +
+> +**power4_label**
+> +
+> +**power4_max**
+> +
+> +**power4_max_alarm**
+> +
+> +The driver provides the following attributes for temperature:
+> +
+> +**temp1_input**
+> +
+> +**temp1_crit**
+> +
+> +**temp1_crit_alarm**
+> +
+> +**temp1_max**
+> +
+> +**temp1_max_alarm**
+> +
+> +**temp2_input**
+> +
+> +**temp2_crit**
+> +
+> +**temp2_crit_alarm**
+> +
+> +**temp2_max**
+> +
+> +**temp2_max_alarm**
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a8bebd0886df..0234790a4137 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16882,6 +16882,13 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/leds/backlight/mps,mp3309c.yaml
+>  F:	drivers/video/backlight/mp3309c.c
+>  
+> +MPS MP2869 DRIVER
+> +M:	Wensheng Wang <wenswang@yeah.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/mp2869.rst
+> +F:	drivers/hwmon/pmbus/mp2869.c
+> +
+>  MPS MP2891 DRIVER
+>  M:	Noah Wang <noahwang.wang@outlook.com>
+>  L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 441f984a859d..f3bf7b7fb76d 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -364,6 +364,15 @@ config SENSORS_MP2856
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called mp2856.
+>  
+> +config SENSORS_MP2869
+> +	tristate "MPS MP2869"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for MPS
+> +	  MP2869 Dual Loop Digital Multi-Phase Controller.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called mp2869.
+> +
+>  config SENSORS_MP2888
+>  	tristate "MPS MP2888"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 29cd8a3317d2..6177047414ee 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -37,6 +37,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+>  obj-$(CONFIG_SENSORS_MP2856)	+= mp2856.o
+> +obj-$(CONFIG_SENSORS_MP2869)	+= mp2869.o
+>  obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
+>  obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
+>  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+> diff --git a/drivers/hwmon/pmbus/mp2869.c b/drivers/hwmon/pmbus/mp2869.c
+> new file mode 100644
+> index 000000000000..dbc12ed20bad
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/mp2869.c
+> @@ -0,0 +1,719 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2869)
 > + */
-> +static ssize_t thermal_sensor_show(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include "pmbus.h"
+> +
+> +/*
+> + * Vender specific registers, the register MFR_VOUT_SCALE_LOOP(0x29),
+> + * MFR_SVI3_IOUT_PRT(0x67), READ_PIN_EST(0x94)and READ_IIN_EST(0x95)
+> + * redefine the standard PMBUS register. The MFR_VOUT_LOOP_CTRL(0x29)
+> + * is used to identify the vout scale and the MFR_SVI3_IOUT_PRT(0x67)
+> + * is used to identify the iout scale. The READ_PIN_EST(0x94) is used
+> + * to read input power per rail. The MP2891 does not have standard
+> + * READ_IIN register(0x89), the iin telemetry can be obtained through
+> + * the vendor redefined register READ_IIN_EST(0x95).
+> + */
+> +#define MFR_VOUT_SCALE_LOOP	0x29
+
+Please use PMBUS_VOUT_SCALE_LOOP.
+
+> +#define MFR_SVI3_IOUT_PRT	0x67
+> +#define MFR_READ_PIN_EST	0x94
+> +#define MFR_READ_IIN_EST	0x95
+> +#define MFR_TSNS_FLT_SET	0xBB
+> +
+> +#define MP2869_VIN_OV_FAULT_GAIN	4
+> +#define MP2869_READ_VOUT_DIV	1024
+> +#define MP2869_READ_IOUT_DIV	32
+> +#define MP2869_OVUV_LIMIT_SCALE	10
+> +#define MP2869_OVUV_DELTA_SCALE	50
+> +#define MP2869_TEMP_LIMIT_OFFSET	40
+> +#define MP2869_IOUT_LIMIT_UINT	8
+> +#define MP2869_POUT_OP_GAIN	2
+> +
+> +#define MP2869_PAGE_NUM	2
+> +
+> +#define MP2869_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
+> +							PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | \
+> +							PMBUS_HAVE_TEMP | PMBUS_HAVE_PIN | \
+> +							PMBUS_HAVE_IIN | \
+> +							PMBUS_HAVE_STATUS_VOUT | \
+> +							PMBUS_HAVE_STATUS_IOUT | \
+> +							PMBUS_HAVE_STATUS_TEMP | \
+> +							PMBUS_HAVE_STATUS_INPUT)
+> +
+> +#define MP2869_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
+> +							 PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP | \
+> +							 PMBUS_HAVE_PIN | PMBUS_HAVE_IIN | \
+> +							 PMBUS_HAVE_STATUS_VOUT | \
+> +							 PMBUS_HAVE_STATUS_IOUT | \
+> +							 PMBUS_HAVE_STATUS_TEMP | \
+> +							 PMBUS_HAVE_STATUS_INPUT)
+> +
+> +enum chips {mp2869, mp29608, mp29612, mp29816};
+
+Information about those chips is sparse, but it looks like the main
+difference is the number of supported rails. There is no code difference.
+Given that, is it even neccessary to specify more than one model ?
+
+> +
+> +struct mp2869_data {
+> +	struct pmbus_driver_info info;
+> +	bool mfr_thwn_flt_en;
+> +	int vout_scale[MP2869_PAGE_NUM];
+> +	int iout_scale[MP2869_PAGE_NUM];
+> +};
+> +
+> +#define to_mp2869_data(x)	container_of(x, struct mp2869_data, info)
+> +
+> +static u16 mp2869_reg2data_linear11(u16 word)
 > +{
-> +	long ret, val;
-> +	int i;
+> +	s16 exponent;
+> +	s32 mantissa;
+> +	s64 val;
 > +
-> +	i = to_sensor_dev_attr(attr)->index;
+> +	exponent = ((s16)word) >> 11;
+> +	mantissa = ((s16)((word & 0x7ff) << 5)) >> 5;
+> +	val = mantissa;
 > +
-> +	ret = read_from_ec(thermal_sensors[i].reg, 1, &val);
-> +	if (ret)
+> +	if (exponent >= 0)
+> +		val <<= exponent;
+> +	else
+> +		val >>= -exponent;
+> +
+> +	return val;
+> +}
+> +
+> +static int
+> +mp2869_identify_thwn_flt(struct i2c_client *client, struct pmbus_driver_info *info,
+> +			 int page)
+> +{
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +	if (ret < 0)
 > +		return ret;
 > +
-> +	val = val * 1000L;
+> +	ret = i2c_smbus_read_word_data(client, MFR_TSNS_FLT_SET);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	return sysfs_emit(buf, "%ld\n", val);
+> +	if (FIELD_GET(GENMASK(13, 13), ret))
+> +		data->mfr_thwn_flt_en = true;
+> +	else
+> +		data->mfr_thwn_flt_en = false;
+
+Could be simplified to
+	data->mfr_thwn_flt_en = FIELD_GET(GENMASK(13, 13), ret);
+
+> +
+> +	return 0;
 > +}
 > +
-> +/**
-> + * thermal_sensor_label_show() - Read a thermal sensor attribute label.
-> + *
-> + * @dev: The attribute's parent device.
-> + * @attr: The attribute to read.
-> + * @buf: Buffer to read to.
-> + *
-> + * Return: Number of bytes read, or an error.
-> + */
-> +static ssize_t thermal_sensor_label_show(struct device *dev,
-> +					 struct device_attribute *attr,
-> +					 char *buf)
+> +static int
+> +mp2869_identify_vout_scale(struct i2c_client *client, struct pmbus_driver_info *info,
+> +			   int page)
 > +{
-> +	int i;
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
 > +
-> +	i = to_sensor_dev_attr(attr)->index;
-
-int i = to_sensor_dev_attr(attr)->index;
-
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	return sysfs_emit(buf, "%s\n", thermal_sensors[i].name);
+> +	ret = i2c_smbus_read_word_data(client, MFR_VOUT_SCALE_LOOP);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * The output voltage is equal to the READ_VOUT(0x8B) register value multiply
+> +	 * by vout_scale.
+> +	 * Obtain vout scale from the register MFR_VOUT_SCALE_LOOP, bits 12-10
+> +	 * MFR_VOUT_SCALE_LOOP[12:10]:
+> +	 * 000b - 6.25mV/LSB, 001b - 5mV/LSB, 010b - 2.5mV/LSB, 011b - 2mV/LSB
+> +	 * 100b - 1mV/Lsb, 101b - (1/256)mV/LSB, 110b - (1/512)mV/LSB,
+> +	 * 111b - (1/1024)mV/LSB
+> +	 */
+> +	switch (FIELD_GET(GENMASK(12, 10), ret)) {
+> +	case 0:
+> +		data->vout_scale[page] = 6400;
+> +		break;
+> +	case 1:
+> +		data->vout_scale[page] = 5120;
+> +		break;
+> +	case 2:
+> +		data->vout_scale[page] = 2560;
+> +		break;
+> +	case 3:
+> +		data->vout_scale[page] = 2048;
+> +		break;
+> +	case 4:
+> +		data->vout_scale[page] = 1024;
+> +		break;
+> +	case 5:
+> +		data->vout_scale[page] = 4;
+> +		break;
+> +	case 6:
+> +		data->vout_scale[page] = 2;
+> +		break;
+> +	case 7:
+> +		data->vout_scale[page] = 1;
+> +		break;
+> +	default:
+> +		data->vout_scale[page] = 1;
+> +		break;
+
+A static array indexed with FIELD_GET(GENMASK(12, 10), ret) would simplify
+this code substantially.
+
+> +	}
+> +
+> +	return 0;
 > +}
 > +
-> +static SENSOR_DEVICE_ATTR_RO(temp1_input, thermal_sensor, 0);
-> +static SENSOR_DEVICE_ATTR_RO(temp2_input, thermal_sensor, 1);
-> +static SENSOR_DEVICE_ATTR_RO(temp3_input, thermal_sensor, 2);
-> +static SENSOR_DEVICE_ATTR_RO(temp4_input, thermal_sensor, 3);
-> +static SENSOR_DEVICE_ATTR_RO(temp5_input, thermal_sensor, 4);
-> +static SENSOR_DEVICE_ATTR_RO(temp1_label, thermal_sensor_label, 0);
-> +static SENSOR_DEVICE_ATTR_RO(temp2_label, thermal_sensor_label, 1);
-> +static SENSOR_DEVICE_ATTR_RO(temp3_label, thermal_sensor_label, 2);
-> +static SENSOR_DEVICE_ATTR_RO(temp4_label, thermal_sensor_label, 3);
-> +static SENSOR_DEVICE_ATTR_RO(temp5_label, thermal_sensor_label, 4);
+> +static int
+> +mp2869_identify_iout_scale(struct i2c_client *client, struct pmbus_driver_info *info,
+> +			   int page)
+> +{
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
 > +
->   static struct attribute *ayn_sensors_attrs[] = {
->   	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
->   	&sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
-> @@ -514,6 +593,16 @@ static struct attribute *ayn_sensors_attrs[] = {
->   	&sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
->   	&sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
->   	&sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_label.dev_attr.attr,
->   	NULL,
->   };
->   
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = i2c_smbus_read_word_data(client, MFR_SVI3_IOUT_PRT);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * The output current is equal to the READ_IOUT(0x8C) register value
+> +	 * multiply by iout_scale.
+> +	 * Obtain iout_scale from the register MFR_SVI3_IOUT_PRT[2:0].
+> +	 * The value is selected as below:
+> +	 * 000b - 1A/LSB, 001b - (1/32)A/LSB, 010b - (1/16)A/LSB,
+> +	 * 011b - (1/8)A/LSB, 100b - (1/4)A/LSB, 101b - (1/2)A/LSB
+> +	 * 110b - 1A/LSB, 111b - 2A/LSB
+> +	 */
+> +	switch (ret & GENMASK(2, 0)) {
+> +	case 0:
+> +	case 6:
+> +		data->iout_scale[page] = 32;
+> +		break;
+> +	case 1:
+> +		data->iout_scale[page] = 1;
+> +		break;
+> +	case 2:
+> +		data->iout_scale[page] = 2;
+> +		break;
+> +	case 3:
+> +		data->iout_scale[page] = 4;
+> +		break;
+> +	case 4:
+> +		data->iout_scale[page] = 8;
+> +		break;
+> +	case 5:
+> +		data->iout_scale[page] = 16;
+> +		break;
+> +	default:
+> +		data->iout_scale[page] = 64;
+> +		break;
 
-Thanks,
-Alok
+Same here.
 
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mp2869_read_byte_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/*
+> +		 * The calculation of vout in this driver is based on direct format.
+> +		 * As a result, the format of vout is enforced to direct.
+> +		 */
+> +		ret = PB_VOUT_MODE_DIRECT;
+> +		break;
+> +	case PMBUS_STATUS_BYTE:
+> +		/*
+> +		 * If the tsns digital fault is enabled, the TEMPERATURE flag
+> +		 * of PMBUS_STATUS_BYTE should come from STATUS_MFR_SPECIFIC
+> +		 * register bit1.
+> +		 */
+> +		if (data->mfr_thwn_flt_en) {
+> +			ret = pmbus_read_byte_data(client, page, reg);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = (ret & ~GENMASK(2, 2)) |
+> +			   FIELD_PREP(GENMASK(2, 2),
+> +				      FIELD_GET(GENMASK(1, 1),
+> +						pmbus_read_byte_data(client, page,
+> +								     PMBUS_STATUS_MFR_SPECIFIC)));
+> +		} else {
+> +			ret = -ENODATA;
+> +		}
+
+		if (!data->mfr_thwn_flt_en)
+			return -ENODATA;
+		...
+
+> +		break;
+> +	case PMBUS_STATUS_TEMPERATURE:
+> +		/*
+> +		 * If the tsns digital fault is enabled, the OT Fault and OT Warning
+> +		 * flag of PMBUS_STATUS_TEMPERATURE should come from STATUS_MFR_SPECIFIC
+> +		 * register bit1.
+> +		 */
+> +		if (data->mfr_thwn_flt_en) {
+> +			ret = pmbus_read_byte_data(client, page, reg);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = (ret & ~GENMASK(7, 6)) |
+> +			   FIELD_PREP(GENMASK(6, 6),
+> +				      FIELD_GET(GENMASK(1, 1),
+> +						pmbus_read_byte_data(client, page,
+> +								     PMBUS_STATUS_MFR_SPECIFIC))) |
+> +			     FIELD_PREP(GENMASK(7, 7),
+> +					FIELD_GET(GENMASK(1, 1),
+> +						  pmbus_read_byte_data(client, page,
+> +								       PMBUS_STATUS_MFR_SPECIFIC)));
+> +		} else {
+> +			ret = -ENODATA;
+> +		}
+
+Same as above.
+
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int mp2869_read_word_data(struct i2c_client *client, int page, int phase,
+> +				 int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_STATUS_WORD:
+> +		/*
+> +		 * If the tsns digital fault is enabled, the OT Fault flag
+> +		 * of PMBUS_STATUS_WORD should come from STATUS_MFR_SPECIFIC
+> +		 * register bit1.
+> +		 */
+> +		if (data->mfr_thwn_flt_en) {
+> +			ret = pmbus_read_word_data(client, page, phase, reg);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = (ret & ~GENMASK(2, 2)) |
+> +			     FIELD_PREP(GENMASK(2, 2),
+> +					FIELD_GET(GENMASK(1, 1),
+> +						  pmbus_read_byte_data(client, page,
+> +								       PMBUS_STATUS_MFR_SPECIFIC)));
+> +		} else {
+> +			ret = -ENODATA;
+> +		}
+
+Same as above.
+
+> +		break;
+> +	case PMBUS_READ_VIN:
+> +		/*
+> +		 * The MP2869 PMBUS_READ_VIN[10:0] is the vin value, the vin scale is
+> +		 * 31.25mV/LSB. And the vin scale is set to 31.25mV/Lsb(using r/m/b scale)
+> +		 * in MP2869 pmbus_driver_info struct, so the word data bit0-bit10 can be
+> +		 * returned to pmbus core directly.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = FIELD_GET(GENMASK(10, 0), ret);
+> +		break;
+> +	case PMBUS_READ_IIN:
+> +		/*
+> +		 * The MP2869 redefine the standard 0x95 register as iin telemetry
+> +		 * per rail.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, MFR_READ_IIN_EST);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		break;
+> +	case PMBUS_READ_PIN:
+> +		/*
+> +		 * The MP2869 redefine the standard 0x94 register as pin telemetry
+> +		 * per rail. The MP2869 MFR_READ_PIN_EST register is linear11 format,
+> +		 * but the pin scale is set to 1W/Lsb(using r/m/b scale). As a result,
+> +		 * the pin read from MP2869 should be converted to W, then return
+> +		 * the result to pmbus core.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, MFR_READ_PIN_EST);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = mp2869_reg2data_linear11(ret);
+> +		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST((ret &  GENMASK(11, 0)) * data->vout_scale[page],
+> +					MP2869_READ_VOUT_DIV);
+> +		break;
+> +	case PMBUS_READ_IOUT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST((ret & GENMASK(10, 0)) * data->iout_scale[page],
+> +					MP2869_READ_IOUT_DIV);
+> +		break;
+> +	case PMBUS_READ_POUT:
+> +		/*
+> +		 * The MP2869 PMBUS_READ_POUT register is linear11 format, but the pout
+> +		 * scale is set to 1W/Lsb(using r/m/b scale). As a result, the pout read
+> +		 * from MP2869 should be converted to W, then return the result to pmbus
+> +		 * core.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = mp2869_reg2data_linear11(ret);
+> +		break;
+> +	case PMBUS_READ_TEMPERATURE_1:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = FIELD_GET(GENMASK(10, 0), ret);
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (FIELD_GET(GENMASK(12, 9), ret))
+> +			ret = FIELD_GET(GENMASK(8, 0), ret) * MP2869_OVUV_LIMIT_SCALE +
+> +				(FIELD_GET(GENMASK(12, 9), ret) + 1) * MP2869_OVUV_DELTA_SCALE;
+> +		else
+> +			ret = FIELD_GET(GENMASK(8, 0), ret) * MP2869_OVUV_LIMIT_SCALE;
+> +		break;
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (FIELD_GET(GENMASK(12, 9), ret))
+> +			ret = FIELD_GET(GENMASK(8, 0), ret) * MP2869_OVUV_LIMIT_SCALE -
+> +				(FIELD_GET(GENMASK(12, 9), ret) + 1) * MP2869_OVUV_DELTA_SCALE;
+> +		else
+> +			ret = FIELD_GET(GENMASK(8, 0), ret) * MP2869_OVUV_LIMIT_SCALE;
+> +
+> +		ret = ret < 0 ? 0 : ret;
+
+How would ret ever be < 0 here ?
+
+> +		break;
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +		/*
+> +		 * The scale of MP2869 PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT
+> +		 * is 1캜/LSB and they have 40캜 offset.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = (ret & GENMASK(7, 0)) - MP2869_TEMP_LIMIT_OFFSET;
+> +		break;
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = (ret & GENMASK(7, 0)) * MP2869_VIN_OV_FAULT_GAIN;
+> +		break;
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = FIELD_GET(GENMASK(9, 0), ret);
+> +		break;
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST((ret & GENMASK(7, 0)) * data->iout_scale[page] *
+> +						MP2869_IOUT_LIMIT_UINT, MP2869_READ_IOUT_DIV);
+> +		break;
+> +	case PMBUS_POUT_OP_WARN_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = (ret & GENMASK(7, 0)) * MP2869_POUT_OP_GAIN;
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int mp2869_write_word_data(struct i2c_client *client, int page, int reg,
+> +				  u16 word)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2869_data *data = to_mp2869_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		/*
+> +		 * The MP2869 PMBUS_VOUT_UV_FAULT_LIMIT[8:0] is the limit value,
+> +		 * and bit9-bit15 should not be changed.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (FIELD_GET(GENMASK(12, 9), ret))
+> +			ret = pmbus_write_word_data(client, page, reg,
+> +						    (ret & ~GENMASK(8, 0)) |
+> +				FIELD_PREP(GENMASK(8, 0),
+> +					   DIV_ROUND_CLOSEST(word +
+> +						(FIELD_GET(GENMASK(12, 9),
+> +						ret) + 1) *
+> +					MP2869_OVUV_DELTA_SCALE,
+> +					MP2869_OVUV_LIMIT_SCALE)));
+> +		else
+> +			ret = pmbus_write_word_data(client, page, reg,
+> +						    (ret & ~GENMASK(8, 0)) |
+> +					FIELD_PREP(GENMASK(8, 0),
+> +						   DIV_ROUND_CLOSEST(word,
+> +								     MP2869_OVUV_LIMIT_SCALE)));
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +		/*
+> +		 * The MP2869 PMBUS_VOUT_OV_FAULT_LIMIT[8:0] is the limit value,
+> +		 * and bit9-bit15 should not be changed.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (FIELD_GET(GENMASK(12, 9), ret))
+> +			ret = pmbus_write_word_data(client, page, reg,
+> +						    (ret & ~GENMASK(8, 0)) |
+> +				FIELD_PREP(GENMASK(8, 0),
+> +					   DIV_ROUND_CLOSEST(word -
+> +							(FIELD_GET(GENMASK(12, 9),
+> +							ret) + 1) *
+> +						MP2869_OVUV_DELTA_SCALE,
+> +						MP2869_OVUV_LIMIT_SCALE)));
+> +		else
+> +			ret = pmbus_write_word_data(client, page, reg,
+> +						    (ret & ~GENMASK(8, 0)) |
+> +				FIELD_PREP(GENMASK(8, 0),
+> +					   DIV_ROUND_CLOSEST(word,
+> +							     MP2869_OVUV_LIMIT_SCALE)));
+> +		break;
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +		/*
+> +		 * If the tsns digital fault is enabled, the PMBUS_OT_FAULT_LIMIT and
+> +		 * PMBUS_OT_WARN_LIMIT can not be written.
+> +		 */
+> +		if (data->mfr_thwn_flt_en) {
+> +			ret = -EINVAL;
+
+			return -EINVAL;
+
+> +		} else {
+> +			/*
+> +			 * The MP2869 scale of MP2869 PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT
+> +			 * have 40캜 offset. The bit0-bit7 is the limit value, and bit8-bit15
+> +			 * should not be changed.
+> +			 */
+> +			ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = pmbus_write_word_data(client, page, reg,
+> +						    (ret & ~GENMASK(7, 0)) |
+> +						 FIELD_PREP(GENMASK(7, 0),
+> +							    word + MP2869_TEMP_LIMIT_OFFSET));
+> +		}
+> +		break;
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +		/*
+> +		 * The MP2869 PMBUS_VIN_OV_FAULT_LIMIT[7:0] is the limit value, and bit8-bit15
+> +		 * should not be changed. The scale of PMBUS_VIN_OV_FAULT_LIMIT is 125mV/Lsb,
+> +		 * but the vin scale is set to 31.25mV/Lsb(using r/m/b scale), so the word data
+> +		 * should divide by MP2869_VIN_OV_FAULT_GAIN(4)
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    (ret & ~GENMASK(7, 0)) |
+> +					FIELD_PREP(GENMASK(7, 0),
+> +						   DIV_ROUND_CLOSEST(word,
+> +								     MP2869_VIN_OV_FAULT_GAIN)));
+> +		break;
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +		/*
+> +		 * The PMBUS_VIN_UV_LIMIT[9:0] is the limit value, and bit10-bit15 should
+> +		 * not be changed. The scale of PMBUS_VIN_UV_LIMIT is 31.25mV/Lsb, and the
+> +		 * vin scale is set to 31.25mV/Lsb(using r/m/b scale), so the word data can
+> +		 * be written directly.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    (ret & ~GENMASK(9, 0)) |
+> +						FIELD_PREP(GENMASK(9, 0),
+> +							   word));
+> +		break;
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    DIV_ROUND_CLOSEST(word *
+> +									MP2869_READ_IOUT_DIV,
+
+Odd alignment
+
+> +						    MP2869_IOUT_LIMIT_UINT *
+> +							data->iout_scale[page]));
+> +		break;
+> +	case PMBUS_POUT_OP_WARN_LIMIT:
+> +		/*
+> +		 * The POUT_OP_WARN_LIMIT[11:0] is the limit value, and bit12-bit15 should
+> +		 * not be changed. The scale of POUT_OP_WARN_LIMIT is 2W/Lsb.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    (ret & ~GENMASK(11, 0)) |
+> +					FIELD_PREP(GENMASK(11, 0),
+> +						   DIV_ROUND_CLOSEST(word,
+> +								     MP2869_POUT_OP_GAIN)));
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int mp2869_identify(struct i2c_client *client, struct pmbus_driver_info *info)
+> +{
+> +	int ret;
+> +
+> +	/* Identify whether tsns digital fault is enable */
+> +	ret = mp2869_identify_thwn_flt(client, info, 1);
+> +	if (ret < 0)
+> +		return 0;
+> +
+> +	/* Identify vout scale for rail1. */
+> +	ret = mp2869_identify_vout_scale(client, info, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify vout scale for rail2. */
+> +	ret = mp2869_identify_vout_scale(client, info, 1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify iout scale for rail 1. */
+> +	ret = mp2869_identify_iout_scale(client, info, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify iout scale for rail 2. */
+> +	return mp2869_identify_iout_scale(client, info, 1);
+> +}
+> +
+> +static const struct pmbus_driver_info mp2869_info = {
+> +	.pages = MP2869_PAGE_NUM,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +
+> +	.m[PSC_VOLTAGE_IN] = 32,
+> +	.R[PSC_VOLTAGE_IN] = 0,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +
+> +	.m[PSC_CURRENT_OUT] = 1,
+> +	.R[PSC_CURRENT_OUT] = 0,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +
+> +	.m[PSC_POWER] = 1,
+> +	.R[PSC_POWER] = 0,
+> +	.b[PSC_POWER] = 0,
+> +
+> +	.func[0] = MP2869_RAIL1_FUNC,
+> +	.func[1] = MP2869_RAIL2_FUNC,
+> +	.read_word_data = mp2869_read_word_data,
+> +	.write_word_data = mp2869_write_word_data,
+> +	.read_byte_data = mp2869_read_byte_data,
+> +	.identify = mp2869_identify,
+> +};
+> +
+> +static int mp2869_probe(struct i2c_client *client)
+> +{
+> +	struct pmbus_driver_info *info;
+> +	struct mp2869_data *data;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2869_data),
+> +			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&data->info, &mp2869_info, sizeof(*info));
+> +	info = &data->info;
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct i2c_device_id mp2869_id[] = {
+> +	{"mp2869", mp2869},
+> +	{"mp29608", mp29608},
+> +	{"mp29612", mp29612},
+> +	{"mp29816", mp29816},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mp2869_id);
+> +
+> +static const struct of_device_id __maybe_unused mp2869_of_match[] = {
+> +	{.compatible = "mps,mp2869", .data = (void *)mp2869},
+> +	{.compatible = "mps,mp29608", .data = (void *)mp29608},
+> +	{.compatible = "mps,mp29612", .data = (void *)mp29612},
+> +	{.compatible = "mps,mp29816", .data = (void *)mp29816},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2869_of_match);
+> +
+> +static struct i2c_driver mp2869_driver = {
+> +	.driver = {
+> +		.name = "mp2869",
+> +		.of_match_table = mp2869_of_match,
+> +	},
+> +	.probe = mp2869_probe,
+> +	.id_table = mp2869_id,
+> +};
+> +
+> +module_i2c_driver(mp2869_driver);
+> +
+> +MODULE_AUTHOR("Wensheng Wang <wenswang@yeah.net>");
+> +MODULE_DESCRIPTION("PMBus driver for MPS MP2869");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
