@@ -1,219 +1,767 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2053.outbound.protection.outlook.com [40.107.236.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD0D2701D6;
-	Thu, 24 Jul 2025 18:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753382387; cv=fail; b=U572XjCo5bKjLWUFoL98OOOWOU2w55MPD88kUDvgJfP9fyu3Vh8KxUWrlncuj1maCHisdqcj3vZr9ASDsHIXhoCjQSkKYOzbPW2e9zoqBuCs1Nd/1dGgjCEscHmJEhcbHyVNmqbLjq7zGB9EcVZY/PG8A1/iW/rjKKS4rMPU0zI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753382387; c=relaxed/simple;
-	bh=ciMGo+l96eMiWkSA61mJJhYfT3JQ6tEy13lcAhS8NVg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pdujQmw1Ee1/4inQd4D4lfGRq+PP5IhMIDunnbRHCE7rR8U/TkAxYvDDza8U+Yp179H3ZCGP4Bk8XHdUgiu5oe5rMPAE0bd6glHNbaHhnULzotAUCoV7Vo0LS6bYlq5pli6wOuaHJ2j7HVjccDIzW5bPzkOfR/wWkcLcDKHZh0c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Sq4Ac64Y; arc=fail smtp.client-ip=40.107.236.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCF7381C4;
+	Fri, 25 Jul 2025 00:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753404339; cv=none; b=WGDmsBWoLhNI1+r0AR5mHk3Q7BhxpcX8owofj0w+iQ9h+SMY3P9+vxFl5Op4jRM6XXPj/b/5FsYobvT3MkXu8QWy2cScRVxpXPwafAiOU8Q+P+Dkf2BE6orJkExDNyPv7LUVGdeFe/Edg/mGMbVxH8stu37xunlsAx+RvFSAmvs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753404339; c=relaxed/simple;
+	bh=FUw3hrpfRgWEbjEOfJTjGs7KX2Lv9BVFkPaZEa8vsT0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bkhz4TRJOrl5OASpMlkmxhjgULTMSe2vl6fF8JyuzjWBJSFBHl8l8Sm5CB0ZobFkpu5onR4KZ7CcS4EN4U1/DJVAocDt35XSSP9VlgVQ9dCoJtkf3ZhPSBh9g8JVbdDSqUADpEsGq20b42xdi4FMwhsTtth2IaYwi3Qs0l+I0tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FdWzfKiu; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Sq4Ac64Y"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pZ36rb5CrEOUQ4hCG8o3qkZ+dNpaQ3LrVTpx9fAXCI0u/eZBZLZlFwsPNteQExCKG/vLZ2+/hVtOH9j68x70fSihLBju9ZL9QFRbvx+FjwIvLNdguG4YsYqfcgv3Upvh0ubmf+wlxTHTKgTLJvzgXWEvgnLvmUoEpnpg7q3BLSyPhfuBK4xYkQ+Aw3Ttwu/OIdwhaBlPMogDkb3YHa/xAV4YOhCoucqVp6W6bIMr7ZHkuddmk8GE4kS9qxd2rXLi/Z6E1kl4BD75dV2RRBHQDNTizAvPrrQMg6z9gGESS6p2U61uFYl8Tv5RZeD1C1mXZancj8oU5fEDnnPawDPf0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NEC0VemRdq0/N7lx+hZJJTGGMpSOQZlh9yrD2F6iLG8=;
- b=gDw9j7X5H/o8REaKL+vB6ucIEv7fR3OyRu4ZkK5/XOZ8B1kbFpIEyCULVAOGvlSV8uyMJiymTjHtosLm7RYzokBnA2vvcGvi4WqhOjqlA1nK09O53hENpH2IsiDVjmk+NcQ26rxLpOeJFZ2CdlS5O6CZx+rY2SMEUu8EqQmTDZbLPhVdh43JeqV5xSYxXWCd8nIHkuIcCB0fzJWjUenwtnufg6jERp5+oGrxW7J6qy/Z0Dx/eft/WRKV7XUTHzCLTasGKSWdiV7fh2pbEaiheqEktErlxMs9/TdfC0wkI+lEmtWmkKhDR/eUn/JlpDaIIDBZy0x0pfa5NKKkEoN88w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NEC0VemRdq0/N7lx+hZJJTGGMpSOQZlh9yrD2F6iLG8=;
- b=Sq4Ac64YJsva7EAhhbkvJOLx2vdsIP9cwZFM2Q82xMNw+sKLoBeZlQyisWmE5hMi5F/veETOzFezeOAr8TB8M1pWWPUcIdIo1Ri/k6DKuPbp8DSgv9RuFGCqaoW4IMz/5wcoqmt3qbErj85aejCDld3BPeEgP50eN/3KYKAcu9w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com (2603:10b6:610:d7::15)
- by SA3PR12MB7902.namprd12.prod.outlook.com (2603:10b6:806:305::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.23; Thu, 24 Jul
- 2025 18:39:42 +0000
-Received: from CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607]) by CH0PR12MB5388.namprd12.prod.outlook.com
- ([fe80::a363:f18a:cdd1:9607%7]) with mapi id 15.20.8943.029; Thu, 24 Jul 2025
- 18:39:42 +0000
-Message-ID: <a6a3ff44-a755-44aa-a862-89717c80f805@amd.com>
-Date: Thu, 24 Jul 2025 13:39:40 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (k10temp) Add thermal support for AMD Family
- 1Ah-based models
-To: Bjorn Helgaas <helgaas@kernel.org>, Avadhut Naik <avadhut.naik@amd.com>
-Cc: linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
- yazen.ghannam@amd.com, linux-kernel@vger.kernel.org
-References: <20250724154423.GA2939389@bhelgaas>
-Content-Language: en-US
-From: "Naik, Avadhut" <avadnaik@amd.com>
-In-Reply-To: <20250724154423.GA2939389@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA9P223CA0029.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:806:26::34) To CH0PR12MB5388.namprd12.prod.outlook.com
- (2603:10b6:610:d7::15)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FdWzfKiu"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-23dea2e01e4so20301265ad.1;
+        Thu, 24 Jul 2025 17:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753404337; x=1754009137; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kGnAQTjevB/+SXulTHI90f94DUYDZuwyWJaOh0ZlfaE=;
+        b=FdWzfKiu6gUqaKWtHRaaZSXwpKE0U43XdvX9nMUZs01BZJuSkvICVvnWhnCcBzuhEp
+         IuVSRrUh5nITeXIbD22RRa6cEe70xgFM4Vf93F06ekEwodTwIDkwquego1sfwpWbD3tw
+         jFMyZfpqxnCPee5yvC3aypUbcQJgnsccyOOVlJuNNbRsmngklsW4YBMXmp+L4/tfFqd3
+         o+F1gI3I+Xb/WmjzI2BKQBkL3NaTHOLGJD93YqMKVZGwbl+pKCebfos3cuCt/Ww7wVQT
+         HGeM33XB1mLQeqPO5yGwpKrm5zwSoWjaQoahzyyUfCVqnpkS/LSo/QCJKz8Uhk4R2bzG
+         RimA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753404337; x=1754009137;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kGnAQTjevB/+SXulTHI90f94DUYDZuwyWJaOh0ZlfaE=;
+        b=wQTSi1ChS3+TBYbaJDLq+7BFjO7W1NNO6A0zpFKARHIgsPtROASxeKPPTCuChK3yLg
+         G+RfKp/9xen7NW66UYJU0ewmXGCIl32nkEMku0x2N7S5yT9MuCbqOAZXBiDW1znUbcF1
+         obSio0sBEGZBW2e5X+p3enb1u+jtGggTZXbUAmohz4ZZwPZKyaJXqwCCDh4fEvmTj7Ei
+         s6wl9OHyqdcyBkWR6CcCT4E/jPfSTWrrXVD043nDejG5bqp6CCiT2iypFHmMBhpXp+qW
+         gDriFMYyJq+oXJ75hU56egvoGsF1MbSbR3gZhN7cB/OCx3OD2upFytVAqKxVNWX03Ji9
+         AK4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUEnSpgzPyUbqGtvyIP2fzdSoaFOY7ayv1dwCsaVFsdZsi45GQP/tHhsVmwRYdGEJOJ7Whzn9gX4LB/NdqM@vger.kernel.org, AJvYcCVPCNC0F5Xp0JYYDSRq/895KUTh78d4I+UaXUO0mSCzkKnzXqdqY1+bSZPHxV0HlJQhMDnO5ABY5+/VlWTrpGnfUa2wCw==@vger.kernel.org, AJvYcCVXYXryJKQ60kRifo8yYGsHVmT5T6ZSuaoWJzYyguOUlKDeTSAMgn9nB0K1FiqFWRtB5S1RkFlDuDSeuw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSs/mWK6yiReZf+fHbs5Dz1hAOzJSuAU3toeGwiPCIfu/fPiT+
+	1Y9lqEaEZpPHmOx42pPnGnMMFUZJHp3u54T3B+ghMKbzYcC71wsyndQ+
+X-Gm-Gg: ASbGncsdkxxP0aSK4D2LA/jcnEXRe3ShY5HWdX6dTlfpqPhAzKFBBbQZ508WpSsoqri
+	+VO16/aWgC74q+sOzeA97T6Ux/ditbb/rhMm8EdWa9JmGtEeZDfVwDbvysT0RmwNjTyAgzsmqrd
+	yYfxHL/vQ16Pf9LihteOq3Tc6SRykecA6qwl8hma5yfkMYu4weSncke6u4E0IOXPIJXQg6wtAuR
+	qfRkxtaFjr3l1j6RYdiDHxH8SOtOaKvECZRD2JwXtp/JV2F8R0TOHnOArhT2UkoCMhbJxKIkJl4
+	KscyG1XlMCPCfhV+2M7KFXSbMne90WS7ZhXdvDP+VMoUxywZpC/D7O9ZReqdte9bNMkqYEFpnPX
+	i3tQnxtw39LKi0eQ3uts4PtPVnYcrBCa7i+3wXqYYtBz2NsckKN91L4Nz6yacKC8lwhSTZ6SIdI
+	yIUw==
+X-Google-Smtp-Source: AGHT+IG7yzJK9ytnMHqXCTGs73udSMNVLh34D8Kf9RQROdB5bxHxhyGmXetDwCT9w+vzAa6Y0UFDfw==
+X-Received: by 2002:a17:902:f54b:b0:234:9fea:ec5f with SMTP id d9443c01a7336-23fb2fce7bamr83315ad.1.1753404336800;
+        Thu, 24 Jul 2025 17:45:36 -0700 (PDT)
+Received: from bliptop (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23fa4901b99sm24157905ad.188.2025.07.24.17.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 17:45:36 -0700 (PDT)
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+Date: Thu, 24 Jul 2025 17:45:30 -0700
+Message-ID: <20250725004533.63537-1-derekjohn.clark@gmail.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5388:EE_|SA3PR12MB7902:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ac5bc79-55b9-4953-57d6-08ddcae1741b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?QTA4ekhJK09TSlZrak4zZnk0THErYXVZSytlRU1MbVI5Vk5jKzBqZlNNRzhp?=
- =?utf-8?B?ckFIY1F1ZVZtYU1kS0hUZGJ0QWxXT3A1V3NLNkRKSnhSTjl0aW8ybW4vRUI5?=
- =?utf-8?B?MGhNVmtBRDlMOHQ5clRLek1lVGFFblorN2NOQXlNL2FQZURSeGNaL1RGRTNO?=
- =?utf-8?B?dnlMeGt5WnBVMFJxajdqeXdnZ3JEbCtnNk44and0cGJjQ2NpQTd1UWl4N202?=
- =?utf-8?B?bWxiMXNIVEk5MHlLRU9pQi9hK0t0RWxTUEM0dDNWWTJneXR6MjFGMVhRRWdu?=
- =?utf-8?B?ZjNLT3J2OVdPc2FadGt5KzIweGdkd29RTjBCdUU3S1ZTMjZQVlphcXQ4eEdX?=
- =?utf-8?B?K3hOVUNuakx4eWI0b25TalBhc2J2ZkxDUG1lTkhqR25VdzE3Y2hmN2RYdEpS?=
- =?utf-8?B?UlE4bEdsL1BUaXNWVGE1N2k5OWxmMHJpNXNSM2ozMG1ZQjh5NGw4SUM4MGY5?=
- =?utf-8?B?d1ZlWWlWbS8xZGpUNVEvRXJaL0RhdG9LOHR2RmIvZVJkczl5SnFOS29DRzlr?=
- =?utf-8?B?RUJ3NFVlbHI5cEpmaEpHeDFSVUlnSDdJdTd6Nk00dGpnNjBWY09sVG45NFFZ?=
- =?utf-8?B?Uk1IZFAyVmJZT3lZWVdwZE9ydEVOeEh1bGlWZ2wxWDZ0eW5ZUlBDM2UyanZO?=
- =?utf-8?B?TG1YRE1zRllqMUZtVGhYMXdXYlVWMFdZaW9PKzhnMWVrS1hreG5zdC9nZHVp?=
- =?utf-8?B?bnNtUHlzUSs2NnM0MjdiTTBDOU5IRi8rNlErQURQNHdxY25WelZuMCtMeVF6?=
- =?utf-8?B?amx6OCtMNmNZUGlLaXgyNXR6RERwdG1ZUXowWDEwTDZrS2ZkRjNZd3o0R1NI?=
- =?utf-8?B?SjJLbnI3UnpjRTV6R1ZTcGJXM0E1VTN2cjJyaURzMzlLQ0x1TXdwa2RzajBs?=
- =?utf-8?B?K1pIVzNFTXo4OHFDckM5ZmdCVld1eTVqcnZTbktjTXJCVjA4MzZoQ3Q3aVlJ?=
- =?utf-8?B?b3BrU3JwcE85M203TjQ4MytEYkdLM21nZEhvQ3VnMllRNmFZalFLZFpQTEgx?=
- =?utf-8?B?SnV4QlFMNE5CRVEwSXRSRGFFazI1ZjJZbHkyRHYwZ3hWaWcxYjh2dEJPVGh3?=
- =?utf-8?B?eEYvaktEMzJpMVdncGZJVmhyMWpvYXdMRlFTek9TelJITWJYWlF5QUM0RC9h?=
- =?utf-8?B?SzFwN1hkQ2M2WHlQcHFCR3BpN2dGdlhYVFBxUXFnZjliZGlncmtnUzNuMStr?=
- =?utf-8?B?SFdjMG0rMnVyUjM3QlRuQ29HSVVkdDVZTE9LSkVCcWphQW5ob3liTjlML1pH?=
- =?utf-8?B?dUthMFAxNjhUekppdE1JMUR2ZzRlUVVDUmNoa2J6TU1xc09qWHNPRlAvREIz?=
- =?utf-8?B?RUtkTWhSZU5GT3hpUlBnbjF3cUZoZjl3MUZJVmRrSUU1WkRRNEkrQTNnK0tM?=
- =?utf-8?B?TUVlYnRpVmxaTWtFZ3VlUmxJUDUvdkNwKytWMVplWUZzc3JTQ3IzcTFpbmow?=
- =?utf-8?B?LzY1WXNKbFA5SEp3Q0hseXNVSnRzMmpXUnpnQUQySFJOTzNZZ2ZydmJSMFFr?=
- =?utf-8?B?WEY3dlRnNE55Q2dLUHlhSk8xb2R6c01BdzRUSEh2L2JtTE1mczRNbjQyamNJ?=
- =?utf-8?B?bjVlUnhiMDFaUDNzcW1aVVJ4U3ZlNHVCSzUxV01MbE45cithM3NXOGpZcDRa?=
- =?utf-8?B?bHBUbCt2ZGpWbWI0dGplVlloVWNCdk4yUkNHN0tMd0lMT09ocWR5a1NnUStY?=
- =?utf-8?B?NkpIT0wwQ0FZaHJpTFlkRVVpajRLS0NvQ1JjM3Nwa3JQS0tBUCtSWGVyWVBI?=
- =?utf-8?B?K2VpTHRlRXdHb05RcjZZWUFnVG04MUhWdnZIY3ZXbU1JRCtJeUJpcnJRUW5h?=
- =?utf-8?B?Lyt3S09ibDA5VXlZWGFkN05tejVHRzhvYnE3TG9TU3pyUWJBNmRyTi9tMTlM?=
- =?utf-8?B?YXQ1M2pndkRlQnpuMnpWQTVoUmQ4UTRJZmZRdndkbkFBcEFVYStKaUZkVnB4?=
- =?utf-8?Q?xBkor6eKKOU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b2hmVFZydGZjNHhQbnBLQU1EbG5Fc0E3b2xWd3J3RFdRdmNBRTJRZ3ZRQ1VK?=
- =?utf-8?B?T1dpclBNY0RQdHRuZGNGVkZhcXRSNEJ6Y051QUtPclZ1REJmNjdMSy9iNjlq?=
- =?utf-8?B?ZXhTNklLWHB6OFBjR09tcC83OUpmOVJDRUkzbnhKVFd4YWduV3ZLeXo0NVNy?=
- =?utf-8?B?UkZNdkRsTm1ncmFneHRJZi9ZQkhyRlBCUnErUDFlZWVjN0xad1RmMWRaVjRN?=
- =?utf-8?B?ZWdwUHhUU1VvUGhhMjdYRDRQVmUwTzNpcVh0Znl2dWVWOTE4Y3NoR3hnMVpz?=
- =?utf-8?B?NHJFNUZORFJ2UGhnUi84aVJXSHFlb2VPRTd0RDl6Tml1azZPa0x3Y1JFTTUz?=
- =?utf-8?B?NHBIempFd2tWSTB4MUdFSHd4enlWMTV0YWowRVhlaERyY2FIN1NlWVhTZ0l1?=
- =?utf-8?B?MkNPY0ZvUGVFRmt5RUgwTnNneUJBMlQ4aGxYdkxXSlkzL2JGTThLRkRvbEVJ?=
- =?utf-8?B?TVNkem5tUE9QbGowYTFCcjhXbm0zaWhMbTkzcktha3BMTDExZHpSK09yTThO?=
- =?utf-8?B?aGdHeU5GZVowY1Rya0txRjlSbUxHbnUva28vQnJ6RzN2bDBDamFNS1pySnNH?=
- =?utf-8?B?RHJnV0NXQmQvVFNYdUFHS2s5QUk1ZXltaXVsN0NlYWtsWUd5Vk9YeU1rd0M0?=
- =?utf-8?B?elowV1ZPcStpZituRUVyK0FXSFU0YjN4M0RZYlUwYUl0TGlBZDJtMEI5Zlln?=
- =?utf-8?B?cGZaSnkvb1ZYK0NVckM3b1NuRFlpL1lIelpVbHhxZDExSUkxRkp4eVJkR2Fn?=
- =?utf-8?B?YXVSamhyZnU3UWtoK3dIUG5Zckd4ZFJiaE90ZmNRWisxeFRKZ1dBMkhnR2wy?=
- =?utf-8?B?R2dFbU9BNzFmV09IbU15MU5DSitJaEIvM25aVGh6bkRBdHBLOEFqYkx6b21x?=
- =?utf-8?B?ZXVZb2o5TjZkMHBOaGVQcW9NNC9ybi9qU3dQb2VQdzNvbWdDZE42QWVFNFlD?=
- =?utf-8?B?a3g2ZDhEaEVxMjdlSWs5MkNxd1VVaFRMM21pQUVvc2VBZ2RPbVVEMERFbE56?=
- =?utf-8?B?QnZYcjEyZUtMZWdRTmprdGpWdWtlazNESE92VHZsRklHMHlFSE5aKzhHSHJ5?=
- =?utf-8?B?TWdCbVN3UmgyeWVGSitVL1AxMElIMGlZbEpMc1p5WHA5UExKOEJKMklRbmsx?=
- =?utf-8?B?VXh0MlpVL3VORTJBZzhVMmpkcUhyRUsvRUJiQ3UyOHplcU9pZmExdnBHMzBB?=
- =?utf-8?B?S2U5T2hHQU9ReDBCQ1BRakVpdjQ2UkxDUmZHSVhMMnZVbTdJMXEzWkhqT1lS?=
- =?utf-8?B?czU3by9HN1l1M3NrTWdpOXVRYVNnVk9sRGpEMzA0YWNTQkpza3k2RGVTRlcx?=
- =?utf-8?B?enZvS0VuaVZsRkFLZ2YxN3d1NjdxMzc1UHFHZDRGZmJsaWNnbEF0dXdiWEg4?=
- =?utf-8?B?aWZEeDZObmVCRGxhdWxjOElwck03ckJLaFpOVXVOL011WS9LbUtOZ2g2cEsw?=
- =?utf-8?B?YUZQUG5DOXcwQkpQYTRyWWxUOEhBOGhzUzgyZGViQjdzT0svanVJMTNKdFVG?=
- =?utf-8?B?YXlHSmdqQU8wTXMxaERrTGk3OHlJS3NMazVVYzRrOXM2cVA2Z1JpMHZseW1P?=
- =?utf-8?B?Z0lydzkrQy9WaXJaMlRPQlRNem5xNm91a09lWlRNbXd4a0J1eVczMHQ1TFdj?=
- =?utf-8?B?SEZVbFlkdlJZbHhjbEdWM0ZpYS93cGFnZFR3ZzZSOGpnZXNqNWpnRG1NaXlw?=
- =?utf-8?B?eGFXU3R4eFNRcGdDWDQ5b2FycWw3RExQQVBGbnJWUGNEUDl3RUdaVDlOdld0?=
- =?utf-8?B?WHRSN3J2NjR5NGxSYjBUWFB5cmc5Qkk4OEh5bzVOSFRwUG5kRzdsdVQ3Z1FT?=
- =?utf-8?B?NEtCR2hGSjZJYmpQQnhGSTBPV2ZYaXVSVnppOGp2Uzl4NkRLNW1HeWZGQ2lM?=
- =?utf-8?B?Tnl4Y1hmTVRWWTdnRkF2RldYTmFlRERMSnBPcXBja3BQQ1h1YzEyRUJnRzB6?=
- =?utf-8?B?R3VoeG1xem1UNFY5emhrTGVSRllZYzBtTC82M1MydXBtR25pZEhjVk1IbENz?=
- =?utf-8?B?Z2tld002QWNKVHBLMGJjWUw0NjNBNzRJTXl6YlByZElFcGx1bGV3OFhTRlhY?=
- =?utf-8?B?a055d2t4dFAxMExrNjNaL1B0YklzMStMUTV4OTlIcVF3MFo5dmhXQmdicGI2?=
- =?utf-8?Q?p4oW/1AD505G91Xd7tPyXLXaI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ac5bc79-55b9-4953-57d6-08ddcae1741b
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5388.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2025 18:39:42.3221
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 51r6X1yWWbr6a7cKdhXLLAEFvX9eQXHZ22SIoDtIRj7F8hv7SWPTOd+ClVH+Yp3yB78tVcYNCKdLsO4DIIES4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7902
+Content-Transfer-Encoding: 8bit
 
+Adds platform driver for Ayn Loki and Tactoy Zeenix lines of handheld
+devices. This patch implements a hwmon interface for EC provided manual
+PWM fan control and user defined fan curves. A global ACPI lock is used
+when reading or writing from the EC.
 
+There are 4 fan modes implemented in this patch. Modes 0-3 act in
+accordance with the standard hwmon logic where 0 is 100% fan speed, 1 is
+manual control, and 2 is automatic control. As the EC only provides 3
+modes by default, mode 0 is implemented by setting the device to manual
+and then setting fan speed to 100% directly. In mode 1 the PWM duty cycle
+is set in sysfs with values [0-255], which are then scaled to the EC max
+of 128. Mode 4 is an automatic mode where the fan curve is user defined.
+There are 5 total set points and each set point takes a temperature in
+Celsius [0-100] and a PWM duty cycle [0-255]. When the CPU temperature
+reaches a given set point, the corresponding duty cycle is automatically
+set by the EC.
 
-On 7/24/2025 10:44, Bjorn Helgaas wrote:
-> On Wed, Jul 23, 2025 at 08:23:38PM +0000, Avadhut Naik wrote:
->> Add thermal info support for newer AMD Family 1Ah-based models.
->>
->> Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
->> ---
->>  drivers/hwmon/k10temp.c | 2 ++
->>  include/linux/pci_ids.h | 2 ++
->>  2 files changed, 4 insertions(+)
->>
->> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
->> index babf2413d666..7765cd57d746 100644
->> --- a/drivers/hwmon/k10temp.c
->> +++ b/drivers/hwmon/k10temp.c
->> @@ -556,7 +556,9 @@ static const struct pci_device_id k10temp_id_table[] = {
->>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
->>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3) },
->>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3) },
->> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
->>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
->> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
->>  	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->>  	{}
->>  };
->> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
->> index e2d71b6fdd84..ae87b6c72981 100644
->> --- a/include/linux/pci_ids.h
->> +++ b/include/linux/pci_ids.h
->> @@ -583,8 +583,10 @@
->>  #define PCI_DEVICE_ID_AMD_19H_M78H_DF_F3 0x12fb
->>  #define PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3 0x12c3
->>  #define PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3 0x16fb
->> +#define PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3 0x12cb
->>  #define PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3 0x124b
->>  #define PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3 0x12bb
->> +#define PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3 0x127b
-> 
-> Per the comment at top:
-> 
->  *      Do not add new entries to this file unless the definitions
->  *      are shared between multiple drivers.
-> 
-> I would suggest adding these #defines to k10temp.c itself.
-> 
-Okay. Will move these definitions to k10temp.c
+Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+---
+ MAINTAINERS                   |   6 +
+ drivers/platform/x86/Kconfig  |  14 +
+ drivers/platform/x86/Makefile |   3 +
+ drivers/platform/x86/ayn-ec.c | 596 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 619 insertions(+)
+ create mode 100644 drivers/platform/x86/ayn-ec.c
 
->>  #define PCI_DEVICE_ID_AMD_MI200_DF_F3	0x14d3
->>  #define PCI_DEVICE_ID_AMD_MI300_DF_F3	0x152b
->>  #define PCI_DEVICE_ID_AMD_VANGOGH_USB	0x163a
->>
->> base-commit: a2609b707b58561b9e52f92f3f571d0510201f2f
->> -- 
->> 2.43.0
->>
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d61b004005fd..5b816883fe7d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4035,6 +4035,12 @@ W:	https://ez.analog.com/linux-software-drivers
+ F:	Documentation/devicetree/bindings/pwm/adi,axi-pwmgen.yaml
+ F:	drivers/pwm/pwm-axi-pwmgen.c
+ 
++AYN PLATFORM EC DRIVER
++M:	Derek J. Clark <derekjohn.clark@gmail.com>
++L:	platform-driver-x86@vger.kernel.org
++S:	Maintained
++F:	drivers/platform/x86/ayn-ec.c
++
+ AZ6007 DVB DRIVER
+ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ L:	linux-media@vger.kernel.org
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 6d238e120dce..61391be65a7b 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -304,6 +304,20 @@ config ASUS_TF103C_DOCK
+ 	  If you have an Asus TF103C tablet say Y or M here, for a generic x86
+ 	  distro config say M here.
+ 
++config AYN_EC
++	tristate "Ayn x86 devices EC platform control"
++	depends on ACPI
++	depends on HWMON
++	select LEDS_CLASS
++	select LEDS_CLASS_MULTICOLOR
++	help
++	  This is a driver for Ayn and Tactoy x86 handheld devices. It provides
++	  temperature monitoring, manual fan speed control, fan curve control,
++	  and chassis RGB settings.
++
++	  If you have an x86 Ayn or Tactoy handheld device say M here. The module
++	  will be called ayn-platform.
++
+ config MERAKI_MX100
+ 	tristate "Cisco Meraki MX100 Platform Driver"
+ 	depends on GPIOLIB
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index a0c5848513e3..d32504b89365 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -38,6 +38,9 @@ obj-$(CONFIG_ASUS_TF103C_DOCK)	+= asus-tf103c-dock.o
+ obj-$(CONFIG_EEEPC_LAPTOP)	+= eeepc-laptop.o
+ obj-$(CONFIG_EEEPC_WMI)		+= eeepc-wmi.o
+ 
++# Ayn
++obj-$(CONFIG_AYN_EC)	+= ayn-ec.o
++
+ # Cisco/Meraki
+ obj-$(CONFIG_MERAKI_MX100)	+= meraki-mx100.o
+ 
+diff --git a/drivers/platform/x86/ayn-ec.c b/drivers/platform/x86/ayn-ec.c
+new file mode 100644
+index 000000000000..06f232bd10fa
+--- /dev/null
++++ b/drivers/platform/x86/ayn-ec.c
+@@ -0,0 +1,596 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Platform driver for Ayn x86 Handhelds.
++ *
++ * Implements multiple attributes provided by the EC. Fan reading and control,
++ * as well as temperature sensor readings are exposed via hwmon sysfs. EC RGB
++ * control is exposed via an led-class-multicolor interface.
++ *
++ * Fan control is provided via a pwm interface in the range [0-255]. Ayn use
++ * [0-128] as the range in the EC, the written value is scaled to accommodate.
++ * The EC also provides a configurable fan curve with five set points that
++ * associate a temperature in Celcius [0-100] with a fan speed [0-128]. The
++ * auto_point fan speeds are also scaled from the range [0-255]. Temperature
++ * readings are scaled from degrees to millidegrees when read.
++ *
++ * RGB control is provided using 4 registers. One each for the colors red,
++ * green, and blue are [0-255]. There is also a effect register that takes
++ * switches between an EC controlled breathing that cycles through all colors
++ * and fades in/out, and manual, which enables setting a user defined color.
++ *
++ * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
++ */
++
++#include <linux/acpi.h>
++#include <linux/device.h>
++#include <linux/dmi.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/hwmon.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/sysfs.h>
++#include <linux/types.h>
++
++/* Fan reading and PWM */
++#define AYN_SENSOR_PWM_FAN_ENABLE_REG	0x10 /* PWM operating mode */
++#define AYN_SENSOR_PWM_FAN_SET_REG	0x11 /* PWM duty cycle */
++#define AYN_SENSOR_PWM_FAN_SPEED_REG	0x20 /* Fan speed */
++
++/* EC controlled fan curve registers */
++#define AYN_SENSOR_PWM_FAN_SPEED_1_REG	0x12
++#define AYN_SENSOR_PWM_FAN_SPEED_2_REG	0x14
++#define AYN_SENSOR_PWM_FAN_SPEED_3_REG	0x16
++#define AYN_SENSOR_PWM_FAN_SPEED_4_REG	0x18
++#define AYN_SENSOR_PWM_FAN_SPEED_5_REG	0x1A
++#define AYN_SENSOR_PWM_FAN_TEMP_1_REG	0x13
++#define AYN_SENSOR_PWM_FAN_TEMP_2_REG	0x15
++#define AYN_SENSOR_PWM_FAN_TEMP_3_REG	0x17
++#define AYN_SENSOR_PWM_FAN_TEMP_4_REG	0x19
++#define AYN_SENSOR_PWM_FAN_TEMP_5_REG	0x1B
++
++/* Handle ACPI lock mechanism */
++#define ACPI_LOCK_DELAY_MS 500
++enum ayn_model {
++	ayn_loki_max = 1,
++	ayn_loki_minipro,
++	ayn_loki_zero,
++	tactoy_zeenix_lite,
++};
++
++struct ayn_device {
++	u32 ayn_lock; /* ACPI EC Lock */
++} drvdata;
++
++/* Handle ACPI lock mechanism */
++#define ACPI_LOCK_DELAY_MS 500
++
++static bool lock_global_acpi_lock(void)
++{
++	return ACPI_SUCCESS(acpi_acquire_global_lock(ACPI_LOCK_DELAY_MS,
++						     &drvdata.ayn_lock));
++}
++
++static bool unlock_global_acpi_lock(void)
++{
++	return ACPI_SUCCESS(acpi_release_global_lock(drvdata.ayn_lock));
++}
++
++/**
++ * read_from_ec() - Reads a value from the embedded controller.
++ *
++ * @reg: The register to start the read from.
++ * @size: The number of sequential registers the data is contained in.
++ * @val: Pointer to return the data with.
++ *
++ * Return: 0, or an error.
++ */
++static int read_from_ec(u8 reg, int size, long *val)
++{
++	int ret, i;
++	u8 buf;
++
++	if (!lock_global_acpi_lock())
++		return -EBUSY;
++
++	*val = 0;
++	for (i = 0; i < size; i++) {
++		ret = ec_read(reg + i, &buf);
++		if (ret)
++			return ret;
++		*val <<= i * 8;
++		*val += buf;
++	}
++
++	if (!unlock_global_acpi_lock())
++		return -EBUSY;
++
++	return 0;
++}
++
++/**
++ * write_to_ec() - Writes a value to the embedded controller.
++ *
++ * @reg: The register to write to.
++ * @val: Value to write
++ *
++ * Return: 0, or an error.
++ */
++static int write_to_ec(u8 reg, u8 val)
++{
++	int ret;
++
++	if (!lock_global_acpi_lock())
++		return -EBUSY;
++
++	pr_info("Writing EC value %d to register %u\n", val, reg);
++	ret = ec_write(reg, val);
++
++	if (!unlock_global_acpi_lock())
++		return -EBUSY;
++
++	return ret;
++}
++
++/**
++ * ayn_pwm_manual() - Enable manual control of the fan.
++ */
++static int ayn_pwm_manual(void)
++{
++	return write_to_ec(AYN_SENSOR_PWM_FAN_ENABLE_REG, 0x00);
++}
++
++/**
++ * ayn_pwm_full() - Set fan to 100% speed.
++ */
++static int ayn_pwm_full(void)
++{
++	int ret;
++
++	ret = write_to_ec(AYN_SENSOR_PWM_FAN_ENABLE_REG, 0x00);
++	if (ret)
++		return ret;
++
++	return write_to_ec(AYN_SENSOR_PWM_FAN_SET_REG, 128);
++}
++
++/**
++ * ayn_pwm_auto() - Enable automatic EC control of the fan.
++ */
++static int ayn_pwm_auto(void)
++{
++	return write_to_ec(AYN_SENSOR_PWM_FAN_ENABLE_REG, 0x01);
++}
++
++/**
++ * ayn_pwm_auto() - Enable manually setting the fan curve for automatic
++ * EC control of the fan.
++ */
++static int ayn_pwm_user(void)
++{
++	return write_to_ec(AYN_SENSOR_PWM_FAN_ENABLE_REG, 0x02);
++}
++
++/**
++ * ayn_ec_hwmon_is_visible() - Determines RO or RW for hwmon attribute sysfs.
++ *
++ * @drvdata: Unused void pointer to context data.
++ * @type: The hwmon_sensor_types type.
++ * @attr: The attribute to set RO/RW on.
++ * @channel: HWMON subsystem usage flags for the attribute.
++ *
++ * Return: Permission level.
++ */
++static umode_t ayn_ec_hwmon_is_visible(const void *drvdata,
++				       enum hwmon_sensor_types type, u32 attr,
++				       int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		return 0444;
++	case hwmon_pwm:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++/**
++ * ayn_pwm_fan_read() - Read from a hwmon pwm or fan attribute.
++ *
++ * @dev: parent device of the given attribute.
++ * @type: The hwmon_sensor_types type.
++ * @attr: The attribute to read from.
++ * @channel: HWMON subsystem usage flags for the attribute.
++ * @val: Pointer to return the read value from.
++ *
++ * Return: 0, or an error.
++ */
++static int ayn_pwm_fan_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	int ret;
++
++	switch (type) {
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++			return read_from_ec(AYN_SENSOR_PWM_FAN_SPEED_REG, 2,
++					    val);
++		default:
++			break;
++		}
++		break;
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_enable:
++			ret = read_from_ec(AYN_SENSOR_PWM_FAN_ENABLE_REG, 1,
++					   val);
++			if (ret)
++				return ret;
++
++			/* EC uses 0 for manual, 1 for automatic, 2 for user
++			 * fan curve. Reflect hwmon usage instead.
++			 */
++			if (*val == 1) {
++				*val = 2;
++				return 0;
++			}
++
++			if (*val == 2) {
++				*val = 3;
++				return 0;
++			}
++
++			/* Return 0 when fan at max, otherwise 1 for manual. */
++			ret = read_from_ec(AYN_SENSOR_PWM_FAN_SET_REG, 1, val);
++			if (ret)
++				return ret;
++
++			if (*val == 128)
++				*val = 0;
++			else
++				*val = 1;
++
++			return ret;
++		case hwmon_pwm_input:
++			ret = read_from_ec(AYN_SENSOR_PWM_FAN_SET_REG, 1, val);
++			if (ret)
++				return ret;
++
++			*val = *val << 1; /* Max value is 128, scale to 255 */
++
++			return 0;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++	return -EOPNOTSUPP;
++}
++
++/**
++ * ayn_pwm_fan_write() - Write to a hwmon pwm attribute.
++ *
++ * @dev: parent device of the given attribute.
++ * @type: The hwmon_sensor_types type.
++ * @attr: The attribute to write to.
++ * @channel: HWMON subsystem usage flags for the attribute.
++ * @val: Value to write.
++ *
++ * Return: 0, or an error.
++ */
++static int ayn_pwm_fan_write(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long val)
++{
++	switch (type) {
++	case hwmon_pwm:
++		switch (attr) {
++		case hwmon_pwm_enable:
++			switch (val) {
++			case 0:
++				return ayn_pwm_full();
++			case 1:
++				return ayn_pwm_manual();
++			case 2:
++				return ayn_pwm_auto();
++			case 3:
++				return ayn_pwm_user();
++			default:
++				return -EINVAL;
++			}
++		case hwmon_pwm_input:
++			if (val < 0 || val > 255)
++				return -EINVAL;
++
++			val = val >> 1; /* Max value is 128, scale from 255 */
++
++			return write_to_ec(AYN_SENSOR_PWM_FAN_SET_REG, val);
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++	return -EOPNOTSUPP;
++}
++
++static const struct hwmon_channel_info *ayn_ec_sensors[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
++	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
++	NULL,
++};
++
++static const struct hwmon_ops ayn_ec_hwmon_ops = {
++	.is_visible = ayn_ec_hwmon_is_visible,
++	.read = ayn_pwm_fan_read,
++	.write = ayn_pwm_fan_write,
++};
++
++static const struct hwmon_chip_info ayn_ec_chip_info = {
++	.ops = &ayn_ec_hwmon_ops,
++	.info = ayn_ec_sensors,
++};
++
++/**
++ * pwm_curve_store() - Write a fan curve speed or temperature value.
++ *
++ * @dev: The attribute's parent device.
++ * @attr: The attribute to read.
++ * @buf: Input value string from sysfs write.
++ *
++ * Return: Number of bytes read, or an error.
++ */
++static ssize_t pwm_curve_store(struct device *dev,
++			       struct device_attribute *attr, const char *buf,
++			       size_t count)
++{
++	int ret, i, val;
++	u8 reg;
++
++	ret = kstrtoint(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	i = to_sensor_dev_attr(attr)->index;
++	switch (i) {
++	case 0:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_1_REG;
++		break;
++	case 1:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_2_REG;
++		break;
++	case 2:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_3_REG;
++		break;
++	case 3:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_4_REG;
++		break;
++	case 4:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_5_REG;
++		break;
++	case 5:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_1_REG;
++		break;
++	case 6:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_2_REG;
++		break;
++	case 7:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_3_REG;
++		break;
++	case 8:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_4_REG;
++		break;
++	case 9:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_5_REG;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	switch (i) {
++	case 0:
++	case 1:
++	case 2:
++	case 3:
++	case 4:
++		if (val < 0 || val > 255)
++			return -EINVAL;
++		val = val >> 1; /* Max EC value is 128, scale from 255 */
++		break;
++	case 5:
++	case 6:
++	case 7:
++	case 8:
++	case 9:
++		if (val < 0 || val > 100)
++			return -EINVAL;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = write_to_ec(reg, val);
++	if (ret)
++		return ret;
++	return count;
++}
++
++/**
++ * pwm_curve_show() - Read a fan curve speed or temperature value.
++ *
++ * @dev: The attribute's parent device.
++ * @attr: The attribute to read.
++ * @buf: Buffer to read to.
++ *
++ * Return: Number of bytes read, or an error.
++ */
++static ssize_t pwm_curve_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	int i, ret;
++	long val;
++	u8 reg;
++
++	i = to_sensor_dev_attr(attr)->index;
++	switch (i) {
++	case 0:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_1_REG;
++		break;
++	case 1:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_2_REG;
++		break;
++	case 2:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_3_REG;
++		break;
++	case 3:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_4_REG;
++		break;
++	case 4:
++		reg = AYN_SENSOR_PWM_FAN_SPEED_5_REG;
++		break;
++	case 5:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_1_REG;
++		break;
++	case 6:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_2_REG;
++		break;
++	case 7:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_3_REG;
++		break;
++	case 8:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_4_REG;
++		break;
++	case 9:
++		reg = AYN_SENSOR_PWM_FAN_TEMP_5_REG;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = read_from_ec(reg, 1, &val);
++	if (ret)
++		return ret;
++
++	switch (i) {
++	case 0:
++	case 1:
++	case 2:
++	case 3:
++	case 4:
++		val = val << 1; /* Max EC value is 128, scale to 255 */
++		break;
++	default:
++		break;
++	}
++
++	return sysfs_emit(buf, "%ld\n", val);
++}
++
++/* Fan curve attributes */
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point1_pwm, pwm_curve, 0);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point2_pwm, pwm_curve, 1);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_pwm, pwm_curve, 2);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_pwm, pwm_curve, 3);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_pwm, pwm_curve, 4);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point1_temp, pwm_curve, 5);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point2_temp, pwm_curve, 6);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_temp, pwm_curve, 7);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_temp, pwm_curve, 8);
++static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_temp, pwm_curve, 9);
++
++static struct attribute *ayn_sensors_attrs[] = {
++	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point2_temp.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point3_pwm.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point3_temp.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point4_pwm.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
++	&sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
++	NULL,
++};
++
++ATTRIBUTE_GROUPS(ayn_sensors);
++
++static int ayn_ec_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device *hwdev;
++	int ret;
++
++	hwdev = devm_hwmon_device_register_with_info(dev, "aynec", NULL,
++						     &ayn_ec_chip_info,
++						     ayn_sensors_groups);
++	return PTR_ERR_OR_ZERO(hwdev);
++}
++
++static struct platform_driver ayn_ec_driver = {
++	.driver = {
++		.name = "ayn-ec",
++	},
++	.probe = ayn_ec_probe,
++};
++
++static struct platform_device *ayn_ec_device;
++
++static int __init ayn_ec_init(void)
++{
++	ayn_ec_device = platform_create_bundle(&ayn_ec_driver, ayn_ec_probe,
++					       NULL, 0, NULL, 0);
++
++	return PTR_ERR_OR_ZERO(ayn_ec_device);
++}
++
++static void __exit ayn_ec_exit(void)
++{
++	platform_device_unregister(ayn_ec_device);
++	platform_driver_unregister(&ayn_ec_driver);
++}
++
++static const struct dmi_system_id ayn_dmi_table[] = {
++	{
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki Max"),
++		},
++		.driver_data = (void *)ayn_loki_max,
++	},
++	{
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki MiniPro"),
++		},
++		.driver_data = (void *)ayn_loki_minipro,
++	},
++	{
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki Zero"),
++		},
++		.driver_data = (void *)ayn_loki_zero,
++	},
++	{
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Tectoy"),
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Zeenix Lite"),
++		},
++		.driver_data = (void *)tactoy_zeenix_lite,
++	},
++	{},
++};
++
++MODULE_DEVICE_TABLE(dmi, ayn_dmi_table);
++
++module_init(ayn_ec_init);
++module_exit(ayn_ec_exit);
++
++MODULE_AUTHOR("Derek J. Clark <derekjohn.clark@gmail.com>");
++MODULE_DESCRIPTION("Platform driver that handles EC sensors of Ayn x86 devices");
++MODULE_LICENSE("GPL");
 -- 
-Thanks,
-Avadhut Naik
+2.50.0
 
