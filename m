@@ -1,246 +1,130 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4E019309E;
-	Sat, 26 Jul 2025 17:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81835215F7C;
+	Sat, 26 Jul 2025 20:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753552358; cv=none; b=VBOl2vs0fG69WidjAU668rdtKjpvkEBomkEMUwqqT1LTkoMypoavceuz5qchXnldNpmryNyX4ZL1lSCMEW3U6rv6cvz53BAjJT24UAdiwETMi5UPSB/nu8LiYy446SoXhD15dZHvlDlxyObzs3TSkhJpEaQNgQtcenW1HnUccaM=
+	t=1753562448; cv=none; b=Eo41XhCphdmSKHTEk4r/nMTHB9b6NLrGOhy8IpVJLalIGyB4vcWb/7CCSfp83usRGYhEkC3vsrG9o1a40J+kWAlRuN8eX5RXnO9UvcSPNIwgN0ZAA1RPx3BgwErsS1HlvA7TbwlVRYkadxm/w4aJdyg/Jfz1Ad7nYr78tyt10lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753552358; c=relaxed/simple;
-	bh=3h0EjlofY8HYfNEQw/jBRWqXS1/uptaF+c6J8uD8RCM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NZAOnS1ZR/48TFD8uDOP/5InApOT0jjNnflMNm3olYsBzjMI5ZFKB0VRpmU2C7GObR/PoR7Ia/Vn9O8Q/WJ8Defb7ue2bqgSFntWPRzZ1kwsJ0Z+sHPNiw041u6zQugwbOys3qMgNUB+INzAxqMPK+D99IXcLvkxJyZLFj2dSJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/9lRaYj; arc=none smtp.client-ip=209.85.222.175
+	s=arc-20240116; t=1753562448; c=relaxed/simple;
+	bh=4sQvqkSNj9EcALbqeibJH59m7bZxRihaYqqbJNO4wDw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DZfi3fSOQz8DVNDI+jcyUqnCLPu6c09jTAOYx3l1cmxSv7LV2RYYXL02HDgwLTZ6T7ETPE1/vwwDLZx29biFlHHsVTwoQvtKzQdK+sHLau71kDsr3bgFNmL1BETlkMMmHnMulUIoaPiSfvl99G/r2pBJGiSOVSJFLEZ0cRXytmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AC7lL29A; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/9lRaYj"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7d45f5fde50so254543185a.2;
-        Sat, 26 Jul 2025 10:52:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AC7lL29A"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-31eb40b050bso190472a91.0;
+        Sat, 26 Jul 2025 13:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753552355; x=1754157155; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EF86ue5Hkw29221mdMOJQoGw5tdTE2OwLP1FEmhK33s=;
-        b=d/9lRaYjzJW58xT2tMnPBnzE9c3iHKafQNh7CknK19kn7l1V+WwyG3ITvQjn43QiZK
-         oppm8gMIb98rOFmelEhnKQ3t5Q6nynvX9gPkYUjlzU7t7WqR7oiuHDRjZG48MNWBn48y
-         +/4NbYMlmRSvcyD5EisrRZLFWpEU+gk3Zzed/zbJysovRt5imfq4eVKL8+u+oU4C5bSn
-         6FYMnmNwDN6d4AsqXdGbkFl/PJ4FDnG8kZaozCxCUl389+7VZ5kn3f9nog0YuPuwPYdF
-         vQPF1qfPmEFVL3SD2LO68B1XpKnXUgoNG+xiBjhAtn2W1f5l2YZD5SVIvsorkpWMMGjJ
-         kjLg==
+        d=gmail.com; s=20230601; t=1753562446; x=1754167246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1chmdF+mBFRkEW9NI3UNLkfUDe05EZUqqnUY28WTaA=;
+        b=AC7lL29ATOpRyh+vOqLZs9wp7ToGzBYg3PhQkXh54cqAsmWC1SUEBSnTW3z/PLK7Vu
+         ikw4uWuwGGojX95U+MnNUMiZhIjEuzhinc7BO9ZBjqf7p8GNcN5aX445HrhGjT2aKHgb
+         iOLu7r69Q0oiZ1ZUoL4LjoysuIM9Q8EVM1NQdxHAqEV2YMNKZcDVHz5xkjo39Fxcx/em
+         GHf1/1DHgpIh3Ca9fJoBM2a0u71R4wEFYO2tNe91riRpOZL0iTN6vp/MatEak2YPLRk/
+         8AQBZG1RXr+ppckxuth6DXXu44CpKqEuCDHygaS9Fr6POVoiQLFreYwDSwjPqCXWRwPA
+         YB+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753552355; x=1754157155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EF86ue5Hkw29221mdMOJQoGw5tdTE2OwLP1FEmhK33s=;
-        b=OOVUf+BQ1fQ1uyzrZXZhX3lxgzzNwR4CEJVFR68K2+S/7tHtakYga0K7Qj2BkcZxsl
-         IKZxRVUdf5yxYCoyIwAahRR0CRUooySlCLIn15LDI8VWBD95qhfrsdRvJKy6iOdpgd1O
-         B+6ph6M94Id1PxREypXycbrZzM9sKWLqqBz+L4qPKlHgbB0Kqf0xtWCtpUIs2VOWO0cv
-         zZ9Pai+PzjHh8D/z7vhBYyL/1O51HRDYsOFuB4ngA6ykULgkdh8F3NiqEXvuTApjGL8L
-         SKL2t48MVC5T3MB6hEN+w8ew48FiQHd9MtOOF5uzmRdZ+sfqQyP60y7UI7NaQAlmwc3k
-         j7RA==
-X-Forwarded-Encrypted: i=1; AJvYcCUk/FQAtZeIDcUgr+vfJ2lX2teG/loRlJ37wt+UPsmDeJnzGrL7f5BuVzuTQ0ytPMqCLva6tteoWrkAmbkORtwVihTU7g==@vger.kernel.org, AJvYcCVClTZb4ROtXRoX2//vB4Ja2x0STpzUxOgChcMVUocci/JMiikr9sJmL1d9ZoogCm3qRKnk9VNWRGwcbw==@vger.kernel.org, AJvYcCXgcdvSw2QFY0i2dZ0BeWpx/2oecThrWb2EGJ68ny5sjpUMTZf1kGw3wNqA9cebpwX378VbP/QldFprqOMn@vger.kernel.org
-X-Gm-Message-State: AOJu0YwucJp52O0KiFNY6LCaN9ZQAynDrqmq7C8wxqfPqVRXEe6rdEvj
-	mXR9k1tSvjUU5NC6NtENxLf831Tz8/FslrLrdvHPrgi93+zIUKiKWET9PR3gHNcMGLxHGq4Re5c
-	OZFd3JiRZdbdQW/mkxm/CFnGIi6FvLOlIag==
-X-Gm-Gg: ASbGnctmIJOQKoFr3KQDT7HYNmDZEPrumBcjQNCcDu8OSmweKZyTzvtxa5dbg07/ppI
-	do2K1z8RfvKggUx9hQX3oxmIRgpTvygvycNQG1qy+nt9fcjkDsMNfzA07ssH6c44lI9ekYE+9xb
-	m5ilA3pyP8VBm+QiWutv5BWuF6iuTRACEdiLMvKkqtZ3HGZwe/uIbT5jI6T6u84HkuP3vDdSzHe
-	8bGDT5U
-X-Google-Smtp-Source: AGHT+IEX+FjSqwLzXFn0Pw5FAtWAZGSPLfJvD/EorKPgsZpX+0rQMC7uZlkyiFerg+nRNRx1U+tS0MOZ+BPwOess/hQ=
-X-Received: by 2002:a05:6214:27c6:b0:704:f953:eb60 with SMTP id
- 6a1803df08f44-707205f95dcmr69232186d6.47.1753552355233; Sat, 26 Jul 2025
- 10:52:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1753562446; x=1754167246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m1chmdF+mBFRkEW9NI3UNLkfUDe05EZUqqnUY28WTaA=;
+        b=rV96wO8zqfhXoUWXvSOlaxRwU8k78UBYP/3yfnDvtk2m3hPyu1ktfMWKIjbpdnlN+Y
+         +b3VNBTXeBrzM5yJH1k1RjU2ljlMp9+3J+6ylLuX4c14vRR9RP/nZGHiwmBKMVCSTSmq
+         0jUQXcvdy7obMdjq/Fehbx4lSXq5Op/wJLg7FS13BdH7gHTmBMhXfkaWT0OYHixpAByD
+         /p8Md25vR1gD+N9nkUYIRRme6mB1wz9L45e2glnhkzrr+IBvzmud5XzmAzI4fdBnrZfz
+         ygdIZMJNq1etXfDdB91/JbsoAi8fd49c2X4NW7wGmys0h3DT/gLnkMp+M/0pA8k/V/un
+         X9sw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCusarIw2EwL+zaF4CnEK0MXnaWfusqaiSc6/SDIsb1VvgGfDt6XdVwfGv1wR2Dk+FJ/YDtsOV36NLd9B0@vger.kernel.org, AJvYcCXWUJP3zZYpT9Gt872EKlEmfuOcX8I4jW/ifc/dmtHRSTNyQyI0FjwjWEP10EY4mMaFirFttBXHBpnlSX7j+kk4G0/iJA==@vger.kernel.org, AJvYcCXYqQMwLcQmILLs4kXfN6PwQmAgaGS8vE4ZHdeBQhe+diWGedLCZQ31fb6iqMFOAAVxRJHnhQuzC9XLKGw=@vger.kernel.org, AJvYcCXod0HcXvGaL4y1tOiKWvxUmchNPOcyundklO9nhrH0pk6pRuJOskqPW6lUuoix9dH1ly4tCTeVeSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4J/iRoyCxFDzcGoq+ZNL8II8y+aInZfJmDSPY7WQT7CigEae3
+	mIUldN0WzAu7ajNTKLWp7SHyqmGpM0PmoQ+G/XHIegfOQ2ft3iJu0Y8b
+X-Gm-Gg: ASbGncvSB4pZUO2cetO8SAPn7N+tlk3BSqfCPIDKoMq6d/EVXmxrmTFj7cBU4TOBiMb
+	WEP2nWB2aPeMbAr1Dv0XCw2jyQFE5zppBaQYg2d+pkLxWcO0q5PV3rLKfQAwLsMBLDnUeU4xGy3
+	UfTNMdyApC1ysBAm1o8B8WRKeNf8kZEX6wtVkXsk65nyA4JaDlIW3cd9PwxTasyrBbjYW0RCR3N
+	5GLqVArx4ApGBhTrsaV8m96oMcI4aaicuMBvTKXekbB8ayWozkvnBNWbvifkQbKpRomBsOD3tyC
+	qlEeg/RhqmXvjB0KNyFDCn6d3w0LjnHnDrGba2rCWw6+9S+khJ77K8SpFWeM5AmGbCar2CUpziN
+	9IaqIBItJ8eyonZC2Ej9ZT7vCOxvjLSwdO3xwmqH0ysxIjlkkzTAkTeZ4fzVFAKVJf0heeU2sHu
+	rdrw==
+X-Google-Smtp-Source: AGHT+IFDl2rhJ5qgEr5kzeZJjKkrinQy/7xmnewKm+qdH/4/J8yfC7ROGz8jQHx1zm3jOgwIgwD3vA==
+X-Received: by 2002:a17:90b:1c07:b0:313:15fe:4c13 with SMTP id 98e67ed59e1d1-31e779fcf83mr8870021a91.27.1753562446347;
+        Sat, 26 Jul 2025 13:40:46 -0700 (PDT)
+Received: from bliptop (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e8ea37b21sm1905640a91.22.2025.07.26.13.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Jul 2025 13:40:46 -0700 (PDT)
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	David Box <david.e.box@linux.intel.com>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v3 0/4] Add AYN EC Platform Driver
+Date: Sat, 26 Jul 2025 13:40:37 -0700
+Message-ID: <20250726204041.516440-1-derekjohn.clark@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250725004533.63537-1-derekjohn.clark@gmail.com>
- <20250725004533.63537-2-derekjohn.clark@gmail.com> <6f7lr653uffhzenm5fgl5cghrsscvqpcpoxyu6qmq6xzlia3h4@fa4ucvpnqwdg>
-In-Reply-To: <6f7lr653uffhzenm5fgl5cghrsscvqpcpoxyu6qmq6xzlia3h4@fa4ucvpnqwdg>
-From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Sat, 26 Jul 2025 10:52:24 -0700
-X-Gm-Features: Ac12FXyI23C7wB60ML0cfgw41IWuaLL3jJpxRxwqkCM5z-MX_QbwaGq3ZN8Fhys
-Message-ID: <CAFqHKTkDJiqAHeH08L7r9isQ3Vko2Oei48KFt3xpTnhrsktouA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] platform/x86: (ayn-ec) Add Temperature Sensors
-To: David Box <david.e.box@linux.intel.com>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Hans de Goede <hansg@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 26, 2025 at 8:50=E2=80=AFAM David Box <david.e.box@linux.intel.=
-com> wrote:
->
-> On Thu, Jul 24, 2025 at 05:45:31PM -0700, Derek J. Clark wrote:
-> > Adds temperature sensors to the ayn-ec hwmon interface. These read-only
-> > values include Battery, Motherboard, Charger IC, vCore, and CPU Core, a=
-s
-> > well as labels for each entry. The temperature values provided by the E=
-C
-> > are whole numbers in degrees Celsius. As hwmon expects millidegrees, we
-> > scale the raw value up.
-> >
-> > `sensors` output after this patch is applied:
-> > aynec-isa-0000
-> > Adapter: ISA adapter
-> > fan1:        1876 RPM
-> > Battery:      +29.0=C2=B0C
-> > Motherboard:  +30.0=C2=B0C
-> > Charger IC:   +30.0=C2=B0C
-> > vCore:        +36.0=C2=B0C
-> > CPU Core:     +48.0=C2=B0C
-> >
-> > Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> > ---
-> >  drivers/platform/x86/ayn-ec.c | 89 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 89 insertions(+)
-> >
-> > diff --git a/drivers/platform/x86/ayn-ec.c b/drivers/platform/x86/ayn-e=
-c.c
-> > index 06f232bd10fa..b2054dc2358a 100644
-> > --- a/drivers/platform/x86/ayn-ec.c
-> > +++ b/drivers/platform/x86/ayn-ec.c
-> > @@ -50,8 +50,16 @@
-> >  #define AYN_SENSOR_PWM_FAN_TEMP_4_REG        0x19
-> >  #define AYN_SENSOR_PWM_FAN_TEMP_5_REG        0x1B
-> >
-> > +/* EC Teperature Sensors */
-> > +#define AYN_SENSOR_BAT_TEMP_REG              0x04 /* Battery */
-> > +#define AYN_SENSOR_CHARGE_TEMP_REG   0x07 /* Charger IC */
-> > +#define AYN_SENSOR_MB_TEMP_REG               0x05 /* Motherboard */
-> > +#define AYN_SENSOR_PROC_TEMP_REG     0x09 /* CPU Core */
-> > +#define AYN_SENSOR_VCORE_TEMP_REG    0x08 /* vCore */
-> > +
-> >  /* Handle ACPI lock mechanism */
-> >  #define ACPI_LOCK_DELAY_MS 500
-> > +
-> >  enum ayn_model {
-> >       ayn_loki_max =3D 1,
-> >       ayn_loki_minipro,
-> > @@ -63,6 +71,20 @@ struct ayn_device {
-> >       u32 ayn_lock; /* ACPI EC Lock */
-> >  } drvdata;
-> >
-> > +struct thermal_sensor {
-> > +     char *name;
-> > +     int reg;
-> > +};
-> > +
-> > +static struct thermal_sensor thermal_sensors[] =3D {
-> > +     { "Battery", AYN_SENSOR_BAT_TEMP_REG },
-> > +     { "Motherboard", AYN_SENSOR_MB_TEMP_REG },
-> > +     { "Charger IC", AYN_SENSOR_CHARGE_TEMP_REG },
-> > +     { "vCore", AYN_SENSOR_VCORE_TEMP_REG },
-> > +     { "CPU Core", AYN_SENSOR_PROC_TEMP_REG },
-> > +     {}
-> > +};
->
-> Use tabs to align the constants for better readability.
->
-> David
->
+Adds platform driver for AYN Loki and Tectoy Zeenix handheld devices.
+Tectoy devices are rebranded AYN devices with minor modifications to the
+DMI. The device EC has multiple features implemented by this driver,
+including a PWN fan with manual and EC controlled automatic modes as
+well as a user deviced fan curve mode, temperature sensors, and chassis
+RGB control.
 
-Will do, Thanks.
+This driver implements PWN fan and temperature control via a hwmon
+interface, and an RGB chassis interface via a multicolor LED class
+device. I attempted to break the driver up into four logical patches.
+Patch 1 adds PWM fan control via a hwmon interface. Patch 2 expands the
+hwmon interface by adding the temperature sensors. Patch 3 adds the
+chassis RGB interface through the leds subsystem. Patch 4 adds ABI
+documentation for the sysfs entries that aren't provided by the standard
+interfaces, but are needed to fully control the device.
 
-Derek
+Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
+---
+v3:
+- Include suggestions from David Box.
+- Fix Tactoy/Toctoy > Tectoy typos.
+- Change Ayn > AYN.
+- Remove .driver_data in dmi table, add .ident to all DMI entries, and remove ayn_model
+  enum.
+v2:
+https://lore.kernel.org/platform-driver-x86/20250726033841.7474-1-derekjohn.clark@gmail.com/
+v1:
+https://lore.kernel.org/platform-driver-x86/20250725004533.63537-1-derekjohn.clark@gmail.com/
+Derek J. Clark (4):
+  platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+  platform/x86: (ayn-ec) Add Temperature Sensors
+  platform/x86: (ayn-ec) Add RGB Interface
+  platform/x86: (ayn-ec) Add AYN EC Platform Documentation
 
-> > +
-> >  /* Handle ACPI lock mechanism */
-> >  #define ACPI_LOCK_DELAY_MS 500
-> >
-> > @@ -503,6 +525,63 @@ static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_temp=
-, pwm_curve, 7);
-> >  static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_temp, pwm_curve, 8);
-> >  static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_temp, pwm_curve, 9);
-> >
-> > +/**
-> > + * thermal_sensor_show() - Read a thermal sensor attribute value.
-> > + *
-> > + * @dev: The attribute's parent device.
-> > + * @attr: The attribute to read.
-> > + * @buf: Buffer to read to.
-> > + *
-> > + * Return: Number of bytes read, or an error.
-> > + */
-> > +static ssize_t thermal_sensor_show(struct device *dev,
-> > +                                struct device_attribute *attr, char *b=
-uf)
-> > +{
-> > +     long ret, val;
-> > +     int i;
-> > +
-> > +     i =3D to_sensor_dev_attr(attr)->index;
-> > +
-> > +     ret =3D read_from_ec(thermal_sensors[i].reg, 1, &val);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     val =3D val * 1000L;
-> > +
-> > +     return sysfs_emit(buf, "%ld\n", val);
-> > +}
-> > +
-> > +/**
-> > + * thermal_sensor_label_show() - Read a thermal sensor attribute label=
-.
-> > + *
-> > + * @dev: The attribute's parent device.
-> > + * @attr: The attribute to read.
-> > + * @buf: Buffer to read to.
-> > + *
-> > + * Return: Number of bytes read, or an error.
-> > + */
-> > +static ssize_t thermal_sensor_label_show(struct device *dev,
-> > +                                      struct device_attribute *attr,
-> > +                                      char *buf)
-> > +{
-> > +     int i;
-> > +
-> > +     i =3D to_sensor_dev_attr(attr)->index;
-> > +
-> > +     return sysfs_emit(buf, "%s\n", thermal_sensors[i].name);
-> > +}
-> > +
-> > +static SENSOR_DEVICE_ATTR_RO(temp1_input, thermal_sensor, 0);
-> > +static SENSOR_DEVICE_ATTR_RO(temp2_input, thermal_sensor, 1);
-> > +static SENSOR_DEVICE_ATTR_RO(temp3_input, thermal_sensor, 2);
-> > +static SENSOR_DEVICE_ATTR_RO(temp4_input, thermal_sensor, 3);
-> > +static SENSOR_DEVICE_ATTR_RO(temp5_input, thermal_sensor, 4);
-> > +static SENSOR_DEVICE_ATTR_RO(temp1_label, thermal_sensor_label, 0);
-> > +static SENSOR_DEVICE_ATTR_RO(temp2_label, thermal_sensor_label, 1);
-> > +static SENSOR_DEVICE_ATTR_RO(temp3_label, thermal_sensor_label, 2);
-> > +static SENSOR_DEVICE_ATTR_RO(temp4_label, thermal_sensor_label, 3);
-> > +static SENSOR_DEVICE_ATTR_RO(temp5_label, thermal_sensor_label, 4);
-> > +
-> >  static struct attribute *ayn_sensors_attrs[] =3D {
-> >       &sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
-> > @@ -514,6 +593,16 @@ static struct attribute *ayn_sensors_attrs[] =3D {
-> >       &sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
-> > +     &sensor_dev_attr_temp1_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp1_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp2_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp2_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp3_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp3_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp4_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp4_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp5_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp5_label.dev_attr.attr,
-> >       NULL,
-> >  };
-> >
-> > --
-> > 2.50.0
-> >
-> >
+ .../ABI/testing/sysfs-platform-ayn-ec         |  59 ++
+ MAINTAINERS                                   |   7 +
+ drivers/platform/x86/Kconfig                  |  15 +
+ drivers/platform/x86/Makefile                 |   3 +
+ drivers/platform/x86/ayn-ec.c                 | 889 ++++++++++++++++++
+ 5 files changed, 973 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-ayn-ec
+ create mode 100644 drivers/platform/x86/ayn-ec.c
+
+-- 
+2.50.1
+
