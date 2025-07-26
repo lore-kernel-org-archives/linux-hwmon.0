@@ -1,65 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C81747F;
-	Sat, 26 Jul 2025 10:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5969233722;
+	Sat, 26 Jul 2025 11:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753527514; cv=none; b=r3hrgQsaWI59tskIbicPoZWae0mO1K9lKnCBUCdPB8GB+gqGt44x/f3z1jQxpjQ28214Ywn5vGkqg2ZYadYhBKiUCymki3sUKOgRv2Asl5tCnvWNDFyhxbkLCHZY/QkIz9JYw8Duvq4zrJ9t9DpedgD/Dn1jCRn0TXvU6eW/6tA=
+	t=1753530280; cv=none; b=Uh58uJOvyvc+6G8o2eCsLIO+WRvytZyvCMdj88Y59yMJ/+2i6nRsMsWDCD8oXE4f3vbBAEhGY/02mRj4FljRGfscwCvBGp5uNRA7RVkNWJTFHIJ54ehOdK6w+ghZkFiL0aWoYt+TZuNVgH6otUBHIa5U6PXcgnXXLUHE2389CNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753527514; c=relaxed/simple;
-	bh=rnRDlgj8Q/JfjRIbBFhbWoFicS29hIqzTXFKkikkhhU=;
+	s=arc-20240116; t=1753530280; c=relaxed/simple;
+	bh=uyQ3hvel8FiTzLIIOnoyXPtaBzDUCYEs67gUItksXts=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F9AeJsKgsG7GzQhzV/K6qLa0fYh6NpxBXtLLLC2WWBSJcPBvP5EpeSBkJRutIZKzaIwpwQbGrOh+XQ85MoAMUmOlY/CSk4hNLGa5EOdMytMAqNAi0xiey3FkWgTwBKaA93j/dNI0r2Zl9YtmawG++BXu/DfbpGYOURukP00dElI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DVGjUsX7; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hf5Qa0HfGoj0Y7i+BYCSF2fYQUdkNu6GRYk0lAgUUsnfVe2EWkoZ0PjQ4YV8hP2B0igtOVN6PmoOv+yOYAW+BBAirgQzZlOsNlkfkRt4NyVtQr6BikAKrzMZhlfl6nBprbezWUJb8OZ61Vp3Dxzd94ybhuprKK6D+QFjBZyfPro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kBZhEtxS; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DVGjUsX7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kBZhEtxS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753527513; x=1785063513;
+  t=1753530279; x=1785066279;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rnRDlgj8Q/JfjRIbBFhbWoFicS29hIqzTXFKkikkhhU=;
-  b=DVGjUsX7mZr59omUv1Jg5OjSAdgup+7VEhhYI094y3IKvdw9PaD8SdMo
-   Qm7tIeG3golXMWrovnYPS9STc12NGPpLHjfue//IEDpdua4BU1dPqm5ji
-   HR4jIqD/0QvPIBe/rHG3kHbbu4DJe/ML2ji8JNWE5tqKQ1RQPmJnzg0io
-   dEB+bc4TBNGSxFlP2CkvDUN/cQ6GoMfdRjA1OgY/yMbZHahLvSaiNDHG2
-   RuYX+hQMd/T+ppwr0BIbL5ooegR6UxCtp9a1P+ED0I5hrlmDOEwN6RWjH
-   aWfjkxO6ikCbHIOdEzovqOY7ZkAzj9jaPnq5vVYx1KibahwVFxvQOR/7g
-   g==;
-X-CSE-ConnectionGUID: Basx9IldRr6rX8sRhgZ/3A==
-X-CSE-MsgGUID: tCyRBeGcROGhiB6g9dhwRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="67198514"
+  bh=uyQ3hvel8FiTzLIIOnoyXPtaBzDUCYEs67gUItksXts=;
+  b=kBZhEtxSkMRfXaAH+T1el1OOdiud3Weam1imflrU7K5Z0poPWuCY9GU0
+   3UpOWOT+663zQv+H6IKzJLh3LHxXsidbudqS2yaNVrWJf1V/9P9EZA2Ej
+   T5iCHJLkP1QpM82vmDxXMEAzfhNrH2rB24fAtRRJ07USBdaoJAtf5uRX1
+   a3/PS5MYebTNz0PigjBevMq15yNEpKbSYm5UgMtbkxK0YQ0xsGJB8BVlG
+   uV1/d1Ym3zqhMEQTNQ7xVjeraX2sYRfpCf2m32PQjUrDA++syC0iPMXrh
+   +nUbQfGmZ3pzSKexTcYsjh0MLBzD1LtDKdloJtWgV4sOAoiSm2aBLM5yN
+   w==;
+X-CSE-ConnectionGUID: vdB8sn9ZSuGUqA+g4CgAkg==
+X-CSE-MsgGUID: C6PnVaASQx+Y3UL3IptYxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11503"; a="78399363"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="67198514"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 03:58:32 -0700
-X-CSE-ConnectionGUID: uzDiAv0KSySNEF+wjyJ94w==
-X-CSE-MsgGUID: lRf6MdY8Sy66yOhG03aEFw==
+   d="scan'208";a="78399363"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 04:44:38 -0700
+X-CSE-ConnectionGUID: ZRS6btumTZONS6dS3GNfJQ==
+X-CSE-MsgGUID: tO90XUDlTnipKFCUTloRGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="198646569"
+   d="scan'208";a="161854318"
 Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 26 Jul 2025 03:58:29 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 26 Jul 2025 04:44:35 -0700
 Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ufcbi-000Lu3-2d;
-	Sat, 26 Jul 2025 10:58:26 +0000
-Date: Sat, 26 Jul 2025 18:57:32 +0800
+	id 1ufdKK-000LwN-1g;
+	Sat, 26 Jul 2025 11:44:32 +0000
+Date: Sat, 26 Jul 2025 19:43:57 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
 	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Hans de Goede <hansg@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jean Delvare <jdelvare@suse.com>,
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	"Derek J . Clark" <derekjohn.clark@gmail.com>,
 	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
-Message-ID: <202507261841.lk1Z3fqj-lkp@intel.com>
+Message-ID: <202507261959.HASYxpK8-lkp@intel.com>
 References: <20250725004533.63537-1-derekjohn.clark@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -85,96 +86,25 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/platform-x8
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20250725004533.63537-1-derekjohn.clark%40gmail.com
 patch subject: [PATCH 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250726/202507261841.lk1Z3fqj-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250726/202507261841.lk1Z3fqj-lkp@intel.com/reproduce)
+config: i386-kismet-CONFIG_LEDS_CLASS-CONFIG_AYN_EC-0-0 (https://download.01.org/0day-ci/archive/20250726/202507261959.HASYxpK8-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250726/202507261959.HASYxpK8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507261841.lk1Z3fqj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507261959.HASYxpK8-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
-
-   drivers/platform/x86/ayn-ec.c:526:6: warning: unused variable 'ret' [-Wunused-variable]
-     526 |         int ret;
-         |             ^~~
->> drivers/platform/x86/ayn-ec.c:557:35: warning: unused variable 'ayn_dmi_table' [-Wunused-const-variable]
-     557 | static const struct dmi_system_id ayn_dmi_table[] = {
-         |                                   ^~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/ayn_dmi_table +557 drivers/platform/x86/ayn-ec.c
-
-   521	
-   522	static int ayn_ec_probe(struct platform_device *pdev)
-   523	{
-   524		struct device *dev = &pdev->dev;
-   525		struct device *hwdev;
- > 526		int ret;
-   527	
-   528		hwdev = devm_hwmon_device_register_with_info(dev, "aynec", NULL,
-   529							     &ayn_ec_chip_info,
-   530							     ayn_sensors_groups);
-   531		return PTR_ERR_OR_ZERO(hwdev);
-   532	}
-   533	
-   534	static struct platform_driver ayn_ec_driver = {
-   535		.driver = {
-   536			.name = "ayn-ec",
-   537		},
-   538		.probe = ayn_ec_probe,
-   539	};
-   540	
-   541	static struct platform_device *ayn_ec_device;
-   542	
-   543	static int __init ayn_ec_init(void)
-   544	{
-   545		ayn_ec_device = platform_create_bundle(&ayn_ec_driver, ayn_ec_probe,
-   546						       NULL, 0, NULL, 0);
-   547	
-   548		return PTR_ERR_OR_ZERO(ayn_ec_device);
-   549	}
-   550	
-   551	static void __exit ayn_ec_exit(void)
-   552	{
-   553		platform_device_unregister(ayn_ec_device);
-   554		platform_driver_unregister(&ayn_ec_driver);
-   555	}
-   556	
- > 557	static const struct dmi_system_id ayn_dmi_table[] = {
-   558		{
-   559			.matches = {
-   560				DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
-   561				DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki Max"),
-   562			},
-   563			.driver_data = (void *)ayn_loki_max,
-   564		},
-   565		{
-   566			.matches = {
-   567				DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
-   568				DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki MiniPro"),
-   569			},
-   570			.driver_data = (void *)ayn_loki_minipro,
-   571		},
-   572		{
-   573			.matches = {
-   574				DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ayn"),
-   575				DMI_EXACT_MATCH(DMI_BOARD_NAME, "Loki Zero"),
-   576			},
-   577			.driver_data = (void *)ayn_loki_zero,
-   578		},
-   579		{
-   580			.matches = {
-   581				DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Tectoy"),
-   582				DMI_EXACT_MATCH(DMI_BOARD_NAME, "Zeenix Lite"),
-   583			},
-   584			.driver_data = (void *)tactoy_zeenix_lite,
-   585		},
-   586		{},
-   587	};
-   588	
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for LEDS_CLASS when selected by AYN_EC
+   WARNING: unmet direct dependencies detected for LEDS_CLASS
+     Depends on [n]: NEW_LEDS [=n]
+     Selected by [y]:
+     - AYN_EC [=y] && X86_PLATFORM_DEVICES [=y] && ACPI [=y] && HWMON [=y]
+   
+   WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR
+     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=y]
+     Selected by [y]:
+     - AYN_EC [=y] && X86_PLATFORM_DEVICES [=y] && ACPI [=y] && HWMON [=y]
 
 -- 
 0-DAY CI Kernel Test Service
