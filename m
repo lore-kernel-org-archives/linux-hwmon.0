@@ -1,221 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2962527455;
-	Sat, 26 Jul 2025 15:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC08F8635D;
+	Sat, 26 Jul 2025 17:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753545030; cv=none; b=XBr0PTvAaJxGcmJbTp9WGizXtlxA2hxEwy9UVLk083usYfiarXuTMVs457Zd7HWuM9pwgUaAD9ZYA1jrMMRZoZ6WZSDXPXKDvtEoN+huLd8kU+ScGI/smkQU+1dV2wA0VnwMjM8RYowDMarMW+uGqBOm8QIxMEJK4ZeUsRZeIP0=
+	t=1753550471; cv=none; b=RG+YtLgcbojwjfs/1C8Y+km/aTG6Rx/C1qQ+32ixo2hmmLG8bMnHvaNjvxM2Uj0hhQhnejxhpdYf15sqfiUz5bOnTLdJHYusP3j4RXK2JKU/xm81jesPO35tLh2SBFN9kswX2kFOTFIO5AE1MIxoY4PVJMtsBhHNG6/9XksI+40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753545030; c=relaxed/simple;
-	bh=GC92yXfDBul7rG84MOYohuLtA+dRJ3XyMttBO4mFzuo=;
+	s=arc-20240116; t=1753550471; c=relaxed/simple;
+	bh=FYGrziCeFzNuZvhSRlcgFhj9eG/pzlrsTbVj34x+dbA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mplSyzx5IelYJLfVwJyUYwpAlbTXKwnEfMPqc6D1IvVbQnZBqu4AcBA0PN8bSfVNxV7QfDORJ8/WncleBf/CtdiGTMmmOBkX71iWhh75Mwlbp/phVea4Fr1XzSQHzclkQEDYbLuJau+k7uT4nYdIvI98xibojv3pMs3dnaJ2T5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L75oBqSb; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=NpzVHH2ROLkk133O1HMPmmHtfnLCFRE1KyFA14YtIasVZy8oZ4rsX5xA49N/N9P9+3m/P2GsK+lHyIbFZ+CZEFj6oquUn8+1Ueu1nx+gxc3Au1o05YZcn0AxKEcrPKMTIK8GI2pOuW51wgQii72q8BeSZn0ZI7fktepCO+DB508=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m4I15Lb2; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L75oBqSb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m4I15Lb2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753545029; x=1785081029;
+  t=1753550469; x=1785086469;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=GC92yXfDBul7rG84MOYohuLtA+dRJ3XyMttBO4mFzuo=;
-  b=L75oBqSbj0aQ6Ck+Trn8hYP3/YBgUGA+jlSzWPOc46NP1iLO6q1VhREt
-   Q3X6ZZn9Hgxk+iVzcjMlERHJ4wO0qouVsfSG4yntBJz4jDo3nmT/fiOvI
-   CY/niQdpCY89NIPXHoAYscvbzqXJ1/io4lWc+FbkumeGJ//IFfqUJ0dHi
-   za2ouScpmv6WgmUMgopbq3By5BNVB4AJioQlAgZQecgSqcwx8den8hBn1
-   LU1jkhZUmrvsxqkx0gkIHPblNFcTyE8PdLVdbc2hFKaWuwJ9QTL2M5+n0
-   WBIQ0EmnxagU+HsTQfv5ZVUODBXlE/6ZkzB3CBfl9W+5lFQjg5K8t1hSC
-   A==;
-X-CSE-ConnectionGUID: bp1disBLRpa3BGnx45VPuA==
-X-CSE-MsgGUID: bGserau0RjG0e1XvziAgpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="73308938"
+   mime-version:in-reply-to;
+  bh=FYGrziCeFzNuZvhSRlcgFhj9eG/pzlrsTbVj34x+dbA=;
+  b=m4I15Lb2PzOkGq7Fh6j54jdnv8u2OmYQF7OExDDZHth06Zoz6pXfmr3f
+   cuRE3N0gKXoKohnG0HbA0IqWdYwzV7vCcnnCA6unE6elItupnufIwwXn1
+   YRiMIID2H5MYWAuebuhXdbH3L//y2cO+EeoWzmk76REAEgeGwq08EVXbK
+   q6sxUWysvp0UCfvfnuW6leKzAu9tHYq6cEc52b3divuGtapzOkV/GtwhO
+   T/gn7lASCQZlNhkOrxTvhFXOARsLNGlo12WfmTU/M6KwjKEzxPjPbGvUt
+   S4YHoU1tcJI+NtlV4dGrV7oV92KLhtHQiHtKd81S9ZG4iYENWRTdVykAB
+   Q==;
+X-CSE-ConnectionGUID: Y+9QoYeRR52o7jVQA0Su5A==
+X-CSE-MsgGUID: eHaUnqpqREetq5HP4qQ1bA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="55822562"
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="73308938"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 08:50:28 -0700
-X-CSE-ConnectionGUID: 6HG7iPA2TMWgYYFs9ugLhA==
-X-CSE-MsgGUID: BxXPtvo0RS2UDYHQNPqqxA==
+   d="scan'208";a="55822562"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 10:21:08 -0700
+X-CSE-ConnectionGUID: aORf0ttfRyS2t+7wKEuHIQ==
+X-CSE-MsgGUID: y+Pk7nMORK2wa7WBA7tGig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="192502537"
-Received: from smoehrl-linux.amr.corp.intel.com (HELO localhost) ([10.124.220.149])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2025 08:50:25 -0700
-Date: Sat, 26 Jul 2025 08:50:24 -0700
-From: David Box <david.e.box@linux.intel.com>
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Hans de Goede <hansg@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/4] platform/x86: (ayn-ec) Add Temperature Sensors
-Message-ID: <6f7lr653uffhzenm5fgl5cghrsscvqpcpoxyu6qmq6xzlia3h4@fa4ucvpnqwdg>
+   d="scan'208";a="167114307"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 26 Jul 2025 10:21:05 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ufiZz-000M9r-1f;
+	Sat, 26 Jul 2025 17:21:03 +0000
+Date: Sun, 27 Jul 2025 01:21:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+Message-ID: <202507270148.ZrFnYWlb-lkp@intel.com>
 References: <20250725004533.63537-1-derekjohn.clark@gmail.com>
- <20250725004533.63537-2-derekjohn.clark@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250725004533.63537-2-derekjohn.clark@gmail.com>
+In-Reply-To: <20250725004533.63537-1-derekjohn.clark@gmail.com>
 
-On Thu, Jul 24, 2025 at 05:45:31PM -0700, Derek J. Clark wrote:
-> Adds temperature sensors to the ayn-ec hwmon interface. These read-only
-> values include Battery, Motherboard, Charger IC, vCore, and CPU Core, as
-> well as labels for each entry. The temperature values provided by the EC
-> are whole numbers in degrees Celsius. As hwmon expects millidegrees, we
-> scale the raw value up.
-> 
-> `sensors` output after this patch is applied:
-> aynec-isa-0000
-> Adapter: ISA adapter
-> fan1:        1876 RPM
-> Battery:      +29.0°C
-> Motherboard:  +30.0°C
-> Charger IC:   +30.0°C
-> vCore:        +36.0°C
-> CPU Core:     +48.0°C
-> 
-> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> ---
->  drivers/platform/x86/ayn-ec.c | 89 +++++++++++++++++++++++++++++++++++
->  1 file changed, 89 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/ayn-ec.c b/drivers/platform/x86/ayn-ec.c
-> index 06f232bd10fa..b2054dc2358a 100644
-> --- a/drivers/platform/x86/ayn-ec.c
-> +++ b/drivers/platform/x86/ayn-ec.c
-> @@ -50,8 +50,16 @@
->  #define AYN_SENSOR_PWM_FAN_TEMP_4_REG	0x19
->  #define AYN_SENSOR_PWM_FAN_TEMP_5_REG	0x1B
->  
-> +/* EC Teperature Sensors */
-> +#define AYN_SENSOR_BAT_TEMP_REG		0x04 /* Battery */
-> +#define AYN_SENSOR_CHARGE_TEMP_REG	0x07 /* Charger IC */
-> +#define AYN_SENSOR_MB_TEMP_REG		0x05 /* Motherboard */
-> +#define AYN_SENSOR_PROC_TEMP_REG	0x09 /* CPU Core */
-> +#define AYN_SENSOR_VCORE_TEMP_REG	0x08 /* vCore */
-> +
->  /* Handle ACPI lock mechanism */
->  #define ACPI_LOCK_DELAY_MS 500
-> +
->  enum ayn_model {
->  	ayn_loki_max = 1,
->  	ayn_loki_minipro,
-> @@ -63,6 +71,20 @@ struct ayn_device {
->  	u32 ayn_lock; /* ACPI EC Lock */
->  } drvdata;
->  
-> +struct thermal_sensor {
-> +	char *name;
-> +	int reg;
-> +};
-> +
-> +static struct thermal_sensor thermal_sensors[] = {
-> +	{ "Battery", AYN_SENSOR_BAT_TEMP_REG },
-> +	{ "Motherboard", AYN_SENSOR_MB_TEMP_REG },
-> +	{ "Charger IC", AYN_SENSOR_CHARGE_TEMP_REG },
-> +	{ "vCore", AYN_SENSOR_VCORE_TEMP_REG },
-> +	{ "CPU Core", AYN_SENSOR_PROC_TEMP_REG },
-> +	{}
-> +};
+Hi Derek,
 
-Use tabs to align the constants for better readability.
+kernel test robot noticed the following build warnings:
 
-David
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.16-rc7 next-20250725]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +
->  /* Handle ACPI lock mechanism */
->  #define ACPI_LOCK_DELAY_MS 500
->  
-> @@ -503,6 +525,63 @@ static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_temp, pwm_curve, 7);
->  static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_temp, pwm_curve, 8);
->  static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_temp, pwm_curve, 9);
->  
-> +/**
-> + * thermal_sensor_show() - Read a thermal sensor attribute value.
-> + *
-> + * @dev: The attribute's parent device.
-> + * @attr: The attribute to read.
-> + * @buf: Buffer to read to.
-> + *
-> + * Return: Number of bytes read, or an error.
-> + */
-> +static ssize_t thermal_sensor_show(struct device *dev,
-> +				   struct device_attribute *attr, char *buf)
-> +{
-> +	long ret, val;
-> +	int i;
-> +
-> +	i = to_sensor_dev_attr(attr)->index;
-> +
-> +	ret = read_from_ec(thermal_sensors[i].reg, 1, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val = val * 1000L;
-> +
-> +	return sysfs_emit(buf, "%ld\n", val);
-> +}
-> +
-> +/**
-> + * thermal_sensor_label_show() - Read a thermal sensor attribute label.
-> + *
-> + * @dev: The attribute's parent device.
-> + * @attr: The attribute to read.
-> + * @buf: Buffer to read to.
-> + *
-> + * Return: Number of bytes read, or an error.
-> + */
-> +static ssize_t thermal_sensor_label_show(struct device *dev,
-> +					 struct device_attribute *attr,
-> +					 char *buf)
-> +{
-> +	int i;
-> +
-> +	i = to_sensor_dev_attr(attr)->index;
-> +
-> +	return sysfs_emit(buf, "%s\n", thermal_sensors[i].name);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR_RO(temp1_input, thermal_sensor, 0);
-> +static SENSOR_DEVICE_ATTR_RO(temp2_input, thermal_sensor, 1);
-> +static SENSOR_DEVICE_ATTR_RO(temp3_input, thermal_sensor, 2);
-> +static SENSOR_DEVICE_ATTR_RO(temp4_input, thermal_sensor, 3);
-> +static SENSOR_DEVICE_ATTR_RO(temp5_input, thermal_sensor, 4);
-> +static SENSOR_DEVICE_ATTR_RO(temp1_label, thermal_sensor_label, 0);
-> +static SENSOR_DEVICE_ATTR_RO(temp2_label, thermal_sensor_label, 1);
-> +static SENSOR_DEVICE_ATTR_RO(temp3_label, thermal_sensor_label, 2);
-> +static SENSOR_DEVICE_ATTR_RO(temp4_label, thermal_sensor_label, 3);
-> +static SENSOR_DEVICE_ATTR_RO(temp5_label, thermal_sensor_label, 4);
-> +
->  static struct attribute *ayn_sensors_attrs[] = {
->  	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
->  	&sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
-> @@ -514,6 +593,16 @@ static struct attribute *ayn_sensors_attrs[] = {
->  	&sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
->  	&sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
->  	&sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_label.dev_attr.attr,
->  	NULL,
->  };
->  
-> -- 
-> 2.50.0
-> 
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/platform-x86-ayn-ec-Add-Temperature-Sensors/20250725-084850
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250725004533.63537-1-derekjohn.clark%40gmail.com
+patch subject: [PATCH 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+config: i386-kismet-CONFIG_LEDS_TRIGGERS-CONFIG_IWLEGACY-0-0 (https://download.01.org/0day-ci/archive/20250727/202507270148.ZrFnYWlb-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250727/202507270148.ZrFnYWlb-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507270148.ZrFnYWlb-lkp@intel.com/
+
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for LEDS_TRIGGERS when selected by IWLEGACY
+   WARNING: unmet direct dependencies detected for LEDS_CLASS
+     Depends on [n]: NEW_LEDS [=n]
+     Selected by [y]:
+     - AYN_EC [=y] && X86_PLATFORM_DEVICES [=y] && ACPI [=y] && HWMON [=y]
+   
+   WARNING: unmet direct dependencies detected for LEDS_CLASS_MULTICOLOR
+     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=y]
+     Selected by [y]:
+     - AYN_EC [=y] && X86_PLATFORM_DEVICES [=y] && ACPI [=y] && HWMON [=y]
+   
+   WARNING: unmet direct dependencies detected for LEDS_TRIGGERS
+     Depends on [n]: NEW_LEDS [=n] && LEDS_CLASS [=y]
+     Selected by [y]:
+     - MAC80211_LEDS [=y] && NET [=y] && WIRELESS [=y] && MAC80211 [=y] && (LEDS_CLASS [=y]=y [=y] || LEDS_CLASS [=y]=MAC80211 [=y])
+     - IWLEGACY [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y]
+     - IWLWIFI_LEDS [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_INTEL [=y] && IWLWIFI [=y] && (LEDS_CLASS [=y]=y [=y] || LEDS_CLASS [=y]=MAC80211 [=y]) && (IWLMVM [=n] || IWLDVM [=y])
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
