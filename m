@@ -1,41 +1,33 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289C8191;
-	Sun, 27 Jul 2025 00:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A2D1E1C36;
+	Sun, 27 Jul 2025 09:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753574638; cv=none; b=rZZG2BPnDNP5cEnmyu5yiWV7+46lt0lfSUJXNArILhNMwiYboSdY3tRNFsl8wFOmXp7qNvxDk61IbXhFS6SaoaMdzK185jzgfgf9G66mVB3qVjyvqz3/sGDgobX+EZ7HY3voQNRoyWi0K34v7+JwgPAvz7Pf2cyfhT4JJ3KdFE8=
+	t=1753608771; cv=none; b=e0wEayOf8X8bZ3WYag48eNsciJxvRsdHTg9mRB8HP6lg/H06vB0uMdpa8xMUfKDD+s0j3w9NblBQNCum++TIs6ue6l+IcA7yC2epg8IuZ83ntECx1CfhuDKaZ4UiJQ46qdr44sWxxaoRu2DHNHhKHIbaeShvvZvifXvMrfp/QZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753574638; c=relaxed/simple;
-	bh=JfBV3ebkmrEvQe7FZs5FYBx/78x6+EPk8m117ZHbAK4=;
+	s=arc-20240116; t=1753608771; c=relaxed/simple;
+	bh=J6yMR1a/ZOiag4onA7QD1/NBgaJweMIAhXBRnbxDtKk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=We1Ic5cCLWTFbJtkOnxia4XQo5xagOP7O6v+0dP9oLjrFPMs2/m6Wyun8IHHrF1GGo8NYtmkRNJbjtmwylGo6p23VtIrsdfrJQoEUTduhLi8mxWjly/JVbq3y2SBbAZFwAoQvmxLz7pOf3Ev1nTlJCT8fdwl9mNb1dlC3ztd70w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=X9H+HB6t; arc=none smtp.client-ip=212.227.17.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=vF8cvA/DIXGVef6q3j84oAFU/J51hVVo5L+1DeQjTzW1C61kGwcSGVJsJdXMt+TgFPXaCzT9rrWT4FCz2kAY3y85QaCfRShvSoSae66UZprvopoL6zIVdBBGF/OXvHYIcha09ZL9V7MtmoeWdOeegcPMnZNQEc8NxC1HgXHygdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMx+jRK1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="X9H+HB6t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1753574626; x=1754179426; i=w_armin@gmx.de;
-	bh=taYZTqpTXzgGmGxxLaEYOcTPhLZUXki3uQyD82KsFyo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=X9H+HB6tBk7Ho2Am3wX1aDsiivwJHBwbrwMANxJUYLAYPeMhLJKE54bQPDqOmFn7
-	 giDX/v50tBkD/0JcewzvuDvQK65k8Wg2dzCsPdLtkDMzGOSIj7UDhvlmzzHBoSS3E
-	 5hCHiwVWMw9p4IzIxKsY+Dg0OTd8II/Dq0Rkz/2i2j8ALnvG2l/dYkalnoMGsiG9m
-	 3NzPJwbXC7a+DWpecvdD9E5h9Wcg4T4jkrVZciIyJ/IOixG5D+xtwYnJcGSF9x+d7
-	 vobbbFkXMb0onq5C0QrI+XDaHVGKfp7iPa6RpEaFmTRmITi2uy69dOSZK6uPq53zG
-	 EXbm7xg35LEiUKBnyw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([87.177.78.219]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUosT-1v5q9w3Ig5-00YHRK; Sun, 27
- Jul 2025 02:03:46 +0200
-Message-ID: <5e910391-5769-40dc-882d-90f79888c772@gmx.de>
-Date: Sun, 27 Jul 2025 02:03:43 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMx+jRK1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BAAC4CEEB;
+	Sun, 27 Jul 2025 09:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753608771;
+	bh=J6yMR1a/ZOiag4onA7QD1/NBgaJweMIAhXBRnbxDtKk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cMx+jRK14wC/5i8uP15C4L+34asvzIIf0uY58D0+tTIOVEI7nH4192z7KOWzolRUF
+	 crgNUGHGFUkcWfpbkyCUHfKZqi3i3xc90YvYp2uAsN+qvJ7+gKNOIBBzm86OlPz7w3
+	 MoipWCCUmTqWbIkD4oDKBm1mfG/lrmSIrbfMBqLcEjhCeBkaUIXv1o5IBH2WuBL8ei
+	 TzEz+EtDM73JNEPGemv9TGzDA8rqME3X9T5tpAIEyJx1z1HW3jdrWjBHOyRLWotCQr
+	 S7N7ONY78MoQYR3IXANFEcWmXxXze5WXI4lJNaSvNWggV0Mwphrfx7rfse83k5Nu+I
+	 nftf36279/rUA==
+Message-ID: <5ea6a860-8984-4263-942d-d05d7c24b495@kernel.org>
+Date: Sun, 27 Jul 2025 11:32:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,183 +35,69 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] platform/x86: (ayn-ec) Add AYN EC Platform
- Documentation
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Hans de Goede <hansg@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Alok Tiwari <alok.a.tiwari@oracle.com>,
- David Box <david.e.box@linux.intel.com>,
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250726204041.516440-1-derekjohn.clark@gmail.com>
- <20250726204041.516440-5-derekjohn.clark@gmail.com>
+Subject: Re: [PATCH] dt: hwmon/adi,ltc2991.yaml: fix typo in shunt resistor
+ description
+To: Harry Fellowes <harryfellowes1@gmail.com>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: antoniu.miclaus@analog.com, jdelvare@suse.com, linux@roeck-us.net,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+References: <20250726135225.3018-2-harryfellowes1@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20250726204041.516440-5-derekjohn.clark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZMtuH7wNrJVkEC8EAT1uTNaLAW/gHL63nn2tJ4+sf7zjJ16eAAb
- DvRBA3+ZrmB29Qq81soGKQP118PC2AE4RgoxfJn910mUXGH+TPPzi1ndRwx+ha4eEp00VVh
- KyLNUx7Uhtf+6dpKS05r2nkP8rG/GAOFkG0zUyQs9usXmH6GQgDv/z+oN3S1HcQX7jlqdqB
- t1wcpbS0PpyHNMSK7auSg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:VkyFnyOGTAc=;FF8DWxWQOY2ct57OFg4MDW6lz4a
- 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
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250726135225.3018-2-harryfellowes1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Am 26.07.25 um 22:40 schrieb Derek J. Clark:
+On 26/07/2025 15:52, Harry Fellowes wrote:
+> Corrected the misspelled word "curent" to "current" in the description
+> of the shunt-resistor-micro-ohms property. This improves clarity and
+> maintains consistency in documentation.
 
-> Adds ABI documentation for the ayn-ec platform driver
->
-> Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> ---
->   .../ABI/testing/sysfs-platform-ayn-ec         | 59 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 60 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-platform-ayn-ec
->
-> diff --git a/Documentation/ABI/testing/sysfs-platform-ayn-ec b/Documenta=
-tion/ABI/testing/sysfs-platform-ayn-ec
-> new file mode 100644
-> index 000000000000..32cb6f7ca2fc
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-platform-ayn-ec
-> @@ -0,0 +1,59 @@
-> +What:		/sys/class/hwmon/hwmon[0-9]/pwm1_enable
-> +Date:		July 2025
-> +KernelVersion:	6.17
+Please fix multiple typos at once, not one per patch. Are you sure there
+are no other typos in hwmon?
 
-I think that this driver will miss 6.17, better use 6.18 instead. Also you=
- do not have to
-document standard hwmon sysfs attributes. For documenting the special PWM =
-mode i suggest that
-you add some documentation under Documentation/hwmon/.
-
-Additionally please add the new files to the MAINTAINERS entry of the asso=
-ciated driver.
-
-Thanks,
-Armin Wolf
-
-> +Contact:	"Derek J. Clark" <derekjohn.clark@gmail.com>
-> +Description:
-> +		This sets the PWM fan mode of operation. Valid values are [0-3].
-> +    Values [0-2] conform with standard hwmon operating modes. Value 3
-> +    enables user defined fan curve settings.
-> +
-> +    Applies to AYN Loki and Tectoy Zeenix lines of handheld devices.
-> +
-> +What:		/sys/class/hwmon/hwmon[0-9]/pwm1_auto_point[1-5]_pwm
-> +Date:		July 2025
-> +KernelVersion:	6.17
-> +Contact:	"Derek J. Clark" <derekjohn.clark@gmail.com>
-> +Description:
-> +		This sets the PWM fan duty cycle for the given index of the fan curve=
-.
-> +    When the temperature reaches the corresponding pwm1_auto_point[1-5]=
-_temp,
-> +    the EC will automatically increase the fan duty cycle to the given =
-value.
-> +
-> +    Values are [0-255]
-> +
-> +    Applies to AYN Loki and Tectoy Zeenix lines of handheld devices.
-> +
-> +What:		/sys/class/hwmon/hwmon[0-9]/pwm1_auto_point[1-5]_temp
-> +Date:		July 2025
-> +KernelVersion:	6.17
-> +Contact:	"Derek J. Clark" <derekjohn.clark@gmail.com>
-> +Description:
-> +		This sets the activation temperature for the given index of the fan c=
-urve.
-> +    When the temperature reaches the given value, the EC will automatic=
-ally
-> +    increase the fan duty cycle to the corresponding pwm1_auto_point[1-=
-5]_pwm
-> +    value.
-> +
-> +    Values are [0-100]
-> +
-> +    Applies to AYN Loki and Tectoy Zeenix lines of handheld devices.
-> +
-> +What:		/sys/class/leds/ayn:rgb:joystick_rings/effect
-> +Date:		July 2025
-> +KernelVersion:	6.17
-> +Contact:	"Derek J. Clark" <derekjohn.clark@gmail.com>
-> +Description:
-> +		This controls the display effect of the RGB interface.
-> +
-> +    Values are monocolor or breathe.
-> +
-> +    Applies to AYN Loki and Tectoy Zeenix lines of handheld devices.
-> +
-> +What:		/sys/class/leds/ayn:rgb:joystick_rings/effect_index
-> +Date:		July 2025
-> +KernelVersion:	6.17
-> +Contact:	"Derek J. Clark" <derekjohn.clark@gmail.com>
-> +Description:
-> +		This displays the available options for the effect attribute.
-> +
-> +    Values are monocolor or breathe.
-> +
-> +    Applies to AYN Loki and Tectoy Zeenix lines of handheld devices.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5b816883fe7d..199bebbffa0d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4039,6 +4039,7 @@ AYN PLATFORM EC DRIVER
->   M:	Derek J. Clark <derekjohn.clark@gmail.com>
->   L:	platform-driver-x86@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-platform-ayn-ec
->   F:	drivers/platform/x86/ayn-ec.c
->  =20
->   AZ6007 DVB DRIVER
+Best regards,
+Krzysztof
