@@ -1,105 +1,118 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EBB1DAC95;
-	Sun, 27 Jul 2025 14:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C4A7E9;
+	Sun, 27 Jul 2025 15:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753625241; cv=none; b=A4UfQ1QwaYuhBKprvlJBED75OQot7YOsmc3FGUOWkKQvjJTPT+spUB7/CV4I1a+Vo+QU/Ko3OYz854iHO+i4MVD0i/2ULOp0o3v7Q0GCqVcsU68+6p8z8kTgsszBPhUsT2KQnj85IPErBAhULLe7kNf0FwO+Z9gZ6EI8ep3ruso=
+	t=1753631741; cv=none; b=O6lCqIngjzpxcRqXtb9gDvlxadoaFND4SfenyL5P9jcdEMQwQPyoJNQZg7WyMcfBiLg1KBlvvyh9rSHFSQ5yE1bcIRCVRnZye9sayONDNT82xGv2Zgzd05hPDYqXVEIxt0PleyCX10d2ixLW3njDicqcz3UWd1XcIayh/0HfKDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753625241; c=relaxed/simple;
-	bh=0NRnrtvx5Nd0mZa/d0TTBJ+mm3Pv6a451mcqUAxzMRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mMmhDdIH+GY1qK80SicfH5Vwq33H9pHMltLx1TG/us+p13lY+SB64Jd2FXbk3IZ2mJRHU2t7XkaxZ0FzXsfmk6eptgWkijyrS6UT6MAIwtTfmyVJRiT2gs0Hbrb+5du44uHoM2jdSHrKEOIYPDUJjLVwKbtw+yCRXeBOLQGlWwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCUHiezs; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753631741; c=relaxed/simple;
+	bh=4E/KRtZYGRkw/On1zyg435iCeUBt3QLAeXe84TnbRzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zzq1eeNGbjaRVixl1GLA8mp1N4w6gKw+SKj3erVGEp1Tgs69spQICbMuEC/3JXLoNredv0wYUkUv7fnttPal+zM8ANulyeoISI+JUKuiSIJOd4HU1mf4U5419u9B3uk0/TWrcaCIkNgyGrFuscBgn3pyMoTFnTlPNXKNZiQFJaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsQKsuZa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCUHiezs"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34a78bb6e7so2947943a12.3;
-        Sun, 27 Jul 2025 07:07:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753625239; x=1754230039; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ijMatxPTKApiZUPbghgjR/zDx2AP3DuF//yAnK8PVuk=;
-        b=fCUHiezsJo1pfQXXV3CiWQZPJtAFVS2LAzIjjPCAbuv/wXf29hNPm6KWFCHbnDTNGY
-         Y8+Rm2LZp2vZleqX3PUttGb9rdu71Ox7rouV3SxlAK5/Rd0uKhKVmT19bi2xhQjjY6+l
-         ytWAx8x9nF3LM05HGT3z6kWODR3kOqw6XuQFgXKoGfYKUxbv6sKqRREh3I+tTzuIt8pb
-         /nr8u8rw/lCytEERmgwXkSgMcuHdL6rNC9glkux3qolQ9jk/X87zQIoi/SrM1JfR9tj6
-         bACEP22nVzF0Pjd3Sau/HXcocNG2kYsa0BD1gT6+5aRqkSbq/WGz/PXIWwox+5xCm/wk
-         xu/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753625239; x=1754230039;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ijMatxPTKApiZUPbghgjR/zDx2AP3DuF//yAnK8PVuk=;
-        b=wmRpC8WQorttbY8FngFXSyOQnnUidetJM4xvWOaonUMd28sd1siYnNnwjUhWlKh2Qp
-         0XVfY7IDsUjWd11rT5JBpz1NwI5VTo3X5Qrlq/5dlRnhscMKjCZ3Ii8K3xx4JZgjewOa
-         MjjeWG+NltZH4pcT7H9qo9BNzel3PFCEWPixs+B+t8xD6R35Hgr+jqMpyT0PqAPj52mZ
-         i8EK+HbH4616vD82GDwEXJjiEPDfrclWgLCYg8AFzIx1eQbB8+5+Z2PtDKC2h2tiiK/4
-         ohx7QU8/N0MuHcWM9LzN1/O6d7QWZ3VoM44bBNCug+x8Uet/z/5NyaV2B2IwIuq/Uu4d
-         WAEg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0dCVoKhn1I4Vze/YlDMFtZNjuKtskeaWJlCTBAaM0VOPO8SS17SqQaxbT9DmOw0HU9UfWtsZYyrIh@vger.kernel.org, AJvYcCUk9wFYSmrdv5GLHsknpVYIVwxumTDnRx3PUg8m3ZYEPca4rvpoihmb32DKDkuxtiaIX6zU6OC5IAgbUOo=@vger.kernel.org, AJvYcCVm965mZpFp36mWqg154xjDyxSUlKIKvfbu4mmBP+oQpdwWAcac1th7GIAGbmr+RA+Gytak2qe5/QYQJqI2@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHeueZ5syiGuWjveyGm9g8S2e6maTISQRnzfZdlxkzENKTIt6K
-	grROrSkSoh+H+wvOPOq5wrdZ3F6FwV0bR3eOldNGaIQfakLngV9wyijY47EBgQ==
-X-Gm-Gg: ASbGnctVa4omae8VlJBoIeRKJGZithT5U6Nqf6KXEmrRINhvZsi+kFxwHiMCAC4NQUy
-	rwXY49iQ1n0jSBHILwQF7rtE/EmtLuJj/XEG4tvrLXUWMeOeM1VnhKY3U8IAnO4jIvNyo+KZplk
-	hkoSO1z2vm0Pq2Z7XELbS+F2+1nt6TIp5XWAyQoQXwkM/GV1ZYAKyoLHRs53S3/2eASsDP8E/iy
-	cjeU9u5QTkNi5ova3cfHo0ZTImwleuy2phcjsrt6DXZ/nCt0mG7ZqBux1kt9hSyMXaIfSMppSy+
-	kjFO6d9+zUX9xgaBAil91z3zqiNWoIh731O/2hIFeD4fwMdRO3C/+d4h28LusuZrFvOepAI/f3o
-	2/bl1Zwe//LI5JFeQzCqxta2s26S+qopb2lI=
-X-Google-Smtp-Source: AGHT+IEQHs087lj02YqE9M+XbKDd29RwR3fK0vwhvrdjnhXjWGjxDg4OPYYE122c2ldL1inh9RBClg==
-X-Received: by 2002:a17:90b:35cb:b0:313:283e:e881 with SMTP id 98e67ed59e1d1-31e7785efe2mr13853465a91.11.1753625238202;
-        Sun, 27 Jul 2025 07:07:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31ef172abe3sm191490a91.39.2025.07.27.07.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Jul 2025 07:07:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 27 Jul 2025 07:07:15 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Replace bouncing Alexandru Tachici
- emails
-Message-ID: <b0ff5a5d-f397-42a5-83c9-1b0ba8b40dd7@roeck-us.net>
-References: <20250724113735.59148-2-krzysztof.kozlowski@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsQKsuZa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B730C4CEEB;
+	Sun, 27 Jul 2025 15:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753631741;
+	bh=4E/KRtZYGRkw/On1zyg435iCeUBt3QLAeXe84TnbRzM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UsQKsuZaJ3Fid87NzhJinDZGxvZaYIp30vjkpopcFkJXlDO5sqLui6Z5ih5hFEKkO
+	 FRvef05NdoLKNnk1VaLqbvFh/AEv63RLmttMvorGRtJfplsnSkR26oQ5GqKw0+T3FO
+	 r/busCDMVzVmTCO0yZQu7byR0fCxt/zbM9MhQ5PaJ41ZvArGC+K/cRNbLZYafdrJC3
+	 eHNkyssceRIcYlMUnHQ9AdAztspVjDGGlq4R76cmWEu3T0toahadNtwkVsGAey6o0i
+	 4zOLYRbpKDN6/9fiZgS4TPDegYIXSQhs/J2hro/zWCCK/Jp6xH+nCJk65GNlymZ3Ma
+	 g8lkJmfdoRL5g==
+Date: Sun, 27 Jul 2025 16:55:34 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Sean Anderson <sean.anderson@linux.dev>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, Andy Shevchenko
+ <andy@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH 2/7] iio: inkern: Add API for reading/writing events
+Message-ID: <20250727165534.6756b052@jic23-huawei>
+In-Reply-To: <f180b5ac-131f-474a-be5e-70787972a772@linux.dev>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+	<20250715012023.2050178-3-sean.anderson@linux.dev>
+	<aHYOuzdQ_jSKA898@smile.fi.intel.com>
+	<8bb7d291-f94a-4e96-b3ec-93fbe06c8407@linux.dev>
+	<aHdwzFk-688ASRx2@smile.fi.intel.com>
+	<f180b5ac-131f-474a-be5e-70787972a772@linux.dev>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250724113735.59148-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 24, 2025 at 01:37:36PM +0200, Krzysztof Kozlowski wrote:
-> Emails to alexandru.tachici@analog.com bounce permanently:
-> 
->   Remote Server returned '550 5.1.10 RESOLVER.ADR.RecipientNotFound; Recipient not found by SMTP address lookup'
-> 
-> so replace him with Cedric Encarnacion from Analog.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-> 
-> I don't know who from Analog should maintain these devices, so I chosen
-> author from Analog of one of last commits.
-> 
-> Cedric Encarnacion, could you confirm that you are okay (or not) with this?
-> ---
+On Thu, 17 Jul 2025 12:42:13 -0400
+Sean Anderson <sean.anderson@linux.dev> wrote:
 
-Applied. If there is a better maintainer, lets update it again later.
+> On 7/16/25 05:28, Andy Shevchenko wrote:
+> > On Tue, Jul 15, 2025 at 11:42:05AM -0400, Sean Anderson wrote:  
+> >> On 7/15/25 04:18, Andy Shevchenko wrote:  
+> >> > On Mon, Jul 14, 2025 at 09:20:18PM -0400, Sean Anderson wrote:  
+> > 
+> > ...
+> >   
+> >> >> +EXPORT_SYMBOL_GPL(iio_event_mode);  
+> >> > 
+> >> > Can we move this to namespace? Otherwise it will be never ending story...
+> >> > Ditto for other new APIs.  
+> >> 
+> >> Never ending story of what?  
+> > 
+> > Of converting IIO core to use exported namespaces.  
+> 
+> What's the purpose?
 
-Thanks,
-Guenter
+Aim here is in general to reduce the massive exposed ABI by applying some
+namespaces so that only drivers that opt in to specific functionality
+can use particular symbols.
+
+We've used it extensively for groups of related drivers and to some
+libraries and the DMA buffers, but so far not pushed it into the IIO core.
+
+I'd be fine with these new functions all being under IIO_CONSUMER or similar.
+
+Quite a bit of feedback on this set will be of the lines of don't do it
+the way we did it before as now we know better!
+
+ 
+> 
+> >> >> +			if (scale64 <= INT_MAX && scale64 >= INT_MIN)
+> >> >> +				raw64 = processed / (int)scale64;  
+> >> > 
+> >> > Do you need the casting? (I mean if the compiler is dumb enough to not see this)  
+> >> 
+> >> AIUI 64-bit division is not available on 32-bit platforms. The cast
+> >> ensures we get 32-bit division.  
+> > 
+> > I put specifically a remark in the parentheses. So, the Q is if the compiler
+> > doesn't recognize that. Can you confirm that 32-bit compilation without cast
+> > is broken?  
+> 
+> inkern.c:(.text.iio_write_event_processed_scale+0x14c): undefined reference to `__aeabi_ldivmod'
+> 
+> >> >> +	*raw = clamp(raw64, (s64)INT_MIN, (s64)INT_MAX);  
+> >> > 
+> >> > You already have similar approach here...  
+> >> 
+> >> Well, I can spell it 0x7fffffffLL if you'd like...  
+> > 
+> > Nope, I like to have named constants instead of magics, but actually are those
+> > castings needed for the clamp()?  
+> 
+> Apparently not. The checks in __clamp_once are only for matching signedness. And
+> the ints are promoted to s64s when the comparison is made.
+> 
+> --Sean
+
