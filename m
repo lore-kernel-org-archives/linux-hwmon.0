@@ -1,103 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A2D1E1C36;
-	Sun, 27 Jul 2025 09:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EBB1DAC95;
+	Sun, 27 Jul 2025 14:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753608771; cv=none; b=e0wEayOf8X8bZ3WYag48eNsciJxvRsdHTg9mRB8HP6lg/H06vB0uMdpa8xMUfKDD+s0j3w9NblBQNCum++TIs6ue6l+IcA7yC2epg8IuZ83ntECx1CfhuDKaZ4UiJQ46qdr44sWxxaoRu2DHNHhKHIbaeShvvZvifXvMrfp/QZ4=
+	t=1753625241; cv=none; b=A4UfQ1QwaYuhBKprvlJBED75OQot7YOsmc3FGUOWkKQvjJTPT+spUB7/CV4I1a+Vo+QU/Ko3OYz854iHO+i4MVD0i/2ULOp0o3v7Q0GCqVcsU68+6p8z8kTgsszBPhUsT2KQnj85IPErBAhULLe7kNf0FwO+Z9gZ6EI8ep3ruso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753608771; c=relaxed/simple;
-	bh=J6yMR1a/ZOiag4onA7QD1/NBgaJweMIAhXBRnbxDtKk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vF8cvA/DIXGVef6q3j84oAFU/J51hVVo5L+1DeQjTzW1C61kGwcSGVJsJdXMt+TgFPXaCzT9rrWT4FCz2kAY3y85QaCfRShvSoSae66UZprvopoL6zIVdBBGF/OXvHYIcha09ZL9V7MtmoeWdOeegcPMnZNQEc8NxC1HgXHygdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMx+jRK1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753625241; c=relaxed/simple;
+	bh=0NRnrtvx5Nd0mZa/d0TTBJ+mm3Pv6a451mcqUAxzMRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mMmhDdIH+GY1qK80SicfH5Vwq33H9pHMltLx1TG/us+p13lY+SB64Jd2FXbk3IZ2mJRHU2t7XkaxZ0FzXsfmk6eptgWkijyrS6UT6MAIwtTfmyVJRiT2gs0Hbrb+5du44uHoM2jdSHrKEOIYPDUJjLVwKbtw+yCRXeBOLQGlWwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCUHiezs; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMx+jRK1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BAAC4CEEB;
-	Sun, 27 Jul 2025 09:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753608771;
-	bh=J6yMR1a/ZOiag4onA7QD1/NBgaJweMIAhXBRnbxDtKk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cMx+jRK14wC/5i8uP15C4L+34asvzIIf0uY58D0+tTIOVEI7nH4192z7KOWzolRUF
-	 crgNUGHGFUkcWfpbkyCUHfKZqi3i3xc90YvYp2uAsN+qvJ7+gKNOIBBzm86OlPz7w3
-	 MoipWCCUmTqWbIkD4oDKBm1mfG/lrmSIrbfMBqLcEjhCeBkaUIXv1o5IBH2WuBL8ei
-	 TzEz+EtDM73JNEPGemv9TGzDA8rqME3X9T5tpAIEyJx1z1HW3jdrWjBHOyRLWotCQr
-	 S7N7ONY78MoQYR3IXANFEcWmXxXze5WXI4lJNaSvNWggV0Mwphrfx7rfse83k5Nu+I
-	 nftf36279/rUA==
-Message-ID: <5ea6a860-8984-4263-942d-d05d7c24b495@kernel.org>
-Date: Sun, 27 Jul 2025 11:32:46 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCUHiezs"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b34a78bb6e7so2947943a12.3;
+        Sun, 27 Jul 2025 07:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753625239; x=1754230039; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ijMatxPTKApiZUPbghgjR/zDx2AP3DuF//yAnK8PVuk=;
+        b=fCUHiezsJo1pfQXXV3CiWQZPJtAFVS2LAzIjjPCAbuv/wXf29hNPm6KWFCHbnDTNGY
+         Y8+Rm2LZp2vZleqX3PUttGb9rdu71Ox7rouV3SxlAK5/Rd0uKhKVmT19bi2xhQjjY6+l
+         ytWAx8x9nF3LM05HGT3z6kWODR3kOqw6XuQFgXKoGfYKUxbv6sKqRREh3I+tTzuIt8pb
+         /nr8u8rw/lCytEERmgwXkSgMcuHdL6rNC9glkux3qolQ9jk/X87zQIoi/SrM1JfR9tj6
+         bACEP22nVzF0Pjd3Sau/HXcocNG2kYsa0BD1gT6+5aRqkSbq/WGz/PXIWwox+5xCm/wk
+         xu/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753625239; x=1754230039;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ijMatxPTKApiZUPbghgjR/zDx2AP3DuF//yAnK8PVuk=;
+        b=wmRpC8WQorttbY8FngFXSyOQnnUidetJM4xvWOaonUMd28sd1siYnNnwjUhWlKh2Qp
+         0XVfY7IDsUjWd11rT5JBpz1NwI5VTo3X5Qrlq/5dlRnhscMKjCZ3Ii8K3xx4JZgjewOa
+         MjjeWG+NltZH4pcT7H9qo9BNzel3PFCEWPixs+B+t8xD6R35Hgr+jqMpyT0PqAPj52mZ
+         i8EK+HbH4616vD82GDwEXJjiEPDfrclWgLCYg8AFzIx1eQbB8+5+Z2PtDKC2h2tiiK/4
+         ohx7QU8/N0MuHcWM9LzN1/O6d7QWZ3VoM44bBNCug+x8Uet/z/5NyaV2B2IwIuq/Uu4d
+         WAEg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0dCVoKhn1I4Vze/YlDMFtZNjuKtskeaWJlCTBAaM0VOPO8SS17SqQaxbT9DmOw0HU9UfWtsZYyrIh@vger.kernel.org, AJvYcCUk9wFYSmrdv5GLHsknpVYIVwxumTDnRx3PUg8m3ZYEPca4rvpoihmb32DKDkuxtiaIX6zU6OC5IAgbUOo=@vger.kernel.org, AJvYcCVm965mZpFp36mWqg154xjDyxSUlKIKvfbu4mmBP+oQpdwWAcac1th7GIAGbmr+RA+Gytak2qe5/QYQJqI2@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHeueZ5syiGuWjveyGm9g8S2e6maTISQRnzfZdlxkzENKTIt6K
+	grROrSkSoh+H+wvOPOq5wrdZ3F6FwV0bR3eOldNGaIQfakLngV9wyijY47EBgQ==
+X-Gm-Gg: ASbGnctVa4omae8VlJBoIeRKJGZithT5U6Nqf6KXEmrRINhvZsi+kFxwHiMCAC4NQUy
+	rwXY49iQ1n0jSBHILwQF7rtE/EmtLuJj/XEG4tvrLXUWMeOeM1VnhKY3U8IAnO4jIvNyo+KZplk
+	hkoSO1z2vm0Pq2Z7XELbS+F2+1nt6TIp5XWAyQoQXwkM/GV1ZYAKyoLHRs53S3/2eASsDP8E/iy
+	cjeU9u5QTkNi5ova3cfHo0ZTImwleuy2phcjsrt6DXZ/nCt0mG7ZqBux1kt9hSyMXaIfSMppSy+
+	kjFO6d9+zUX9xgaBAil91z3zqiNWoIh731O/2hIFeD4fwMdRO3C/+d4h28LusuZrFvOepAI/f3o
+	2/bl1Zwe//LI5JFeQzCqxta2s26S+qopb2lI=
+X-Google-Smtp-Source: AGHT+IEQHs087lj02YqE9M+XbKDd29RwR3fK0vwhvrdjnhXjWGjxDg4OPYYE122c2ldL1inh9RBClg==
+X-Received: by 2002:a17:90b:35cb:b0:313:283e:e881 with SMTP id 98e67ed59e1d1-31e7785efe2mr13853465a91.11.1753625238202;
+        Sun, 27 Jul 2025 07:07:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31ef172abe3sm191490a91.39.2025.07.27.07.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Jul 2025 07:07:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 27 Jul 2025 07:07:15 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: Replace bouncing Alexandru Tachici
+ emails
+Message-ID: <b0ff5a5d-f397-42a5-83c9-1b0ba8b40dd7@roeck-us.net>
+References: <20250724113735.59148-2-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt: hwmon/adi,ltc2991.yaml: fix typo in shunt resistor
- description
-To: Harry Fellowes <harryfellowes1@gmail.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: antoniu.miclaus@analog.com, jdelvare@suse.com, linux@roeck-us.net,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-References: <20250726135225.3018-2-harryfellowes1@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250726135225.3018-2-harryfellowes1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250724113735.59148-2-krzysztof.kozlowski@linaro.org>
 
-On 26/07/2025 15:52, Harry Fellowes wrote:
-> Corrected the misspelled word "curent" to "current" in the description
-> of the shunt-resistor-micro-ohms property. This improves clarity and
-> maintains consistency in documentation.
+On Thu, Jul 24, 2025 at 01:37:36PM +0200, Krzysztof Kozlowski wrote:
+> Emails to alexandru.tachici@analog.com bounce permanently:
+> 
+>   Remote Server returned '550 5.1.10 RESOLVER.ADR.RecipientNotFound; Recipient not found by SMTP address lookup'
+> 
+> so replace him with Cedric Encarnacion from Analog.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+> 
+> I don't know who from Analog should maintain these devices, so I chosen
+> author from Analog of one of last commits.
+> 
+> Cedric Encarnacion, could you confirm that you are okay (or not) with this?
+> ---
 
-Please fix multiple typos at once, not one per patch. Are you sure there
-are no other typos in hwmon?
+Applied. If there is a better maintainer, lets update it again later.
 
-Best regards,
-Krzysztof
+Thanks,
+Guenter
