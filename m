@@ -1,140 +1,108 @@
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3821C36;
-	Mon, 28 Jul 2025 04:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E417B78F3A;
+	Mon, 28 Jul 2025 04:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753676383; cv=none; b=iR5SKwspVtB5Lmy8xfchFaNrnpNytMRsiTK7R1Al2eo6aXvWpR/NNUUBD5lHcBZW9ksPtZ5SNpgdg/9FFQyaAhXWXBuxRutfr7J8l+ig5nVfVIH8CsDT1MpnUxcCl8y9gNxf3/v8tSE/GMvS45dck/egtOsYrB6/sJd3isSz+Y8=
+	t=1753678478; cv=none; b=mAsX4R10Nero7ILgvmkJEQd3wrRPFESjrEK3Qk58bf3dGDfP/KAqFhvnP+JLm/RYU1jRn56nTmUfbMws/RS5mvdDUY5u498mN2/I0MQK5oueMmPJhzV9RupGA0sXmo0oSY204y3TLFQ/2HBFYmu+RxAJHXLFdyJYRXPhMMzRHO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753676383; c=relaxed/simple;
-	bh=+21c/5kfzRyWQ9mGcHPND0dXCpuIpbvrRxN47140bqg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gYlzPuTdIB8kR5o9OyCheBBPfanJctNZaWI4lXCE9WoDiFjT9K7BlxeuCDCnO2nPcG4fITklF7aUu9AZOhmOt8A8r+MqH/4hBy4d18J8tvm99sSqa/JEsfRj4BOVkHNM+rdYKDi1xv4yIa8p9UlWzKbMrUBejHaV5VL9B/dDAN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8D2461A147C;
-	Mon, 28 Jul 2025 06:19:34 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4F79A1A1480;
-	Mon, 28 Jul 2025 06:19:34 +0200 (CEST)
-Received: from lsv03900.swis.in-blr01.nxp.com (lsv03900.swis.in-blr01.nxp.com [10.12.177.15])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D78B01800079;
-	Mon, 28 Jul 2025 12:19:32 +0800 (+08)
-From: Lakshay Piplani <lakshay.piplani@nxp.com>
-To: linux-kernel@vger.kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	corbet@lwn.net,
-	linux-doc@vger.kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org
-Cc: vikash.bansal@nxp.com,
-	priyanka.jain@nxp.com,
-	shashank.rebbapragada@nxp.com,
-	Lakshay Piplani <lakshay.piplani@nxp.com>
-Subject: [PATCH v2 2/2] hwmon: (lm75) Add NXP P3T1750 support
-Date: Mon, 28 Jul 2025 09:49:13 +0530
-Message-Id: <20250728041913.3754236-2-lakshay.piplani@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
-References: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
+	s=arc-20240116; t=1753678478; c=relaxed/simple;
+	bh=Wh7upnKZdulod8UOOydJPwZLWQtp2GXJyslkrYNgT2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DTL31CBzjLsfLS5ZRXcbo4v4wRD67LocEPmAKIcoAwBQGTuSflHBpTF0XDJfxvZZpl8XE0k02Q8wfUR/y+bPLir65Frx2PRdYIYoUZ5eEwSU0YbHbxL+uO2m6bH+FZtd4WiOyh+HO9tvwjonsz23fUvYhL7GN+B0OsJY/TJcP/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTAWZUyv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTAWZUyv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D974C4CEE7;
+	Mon, 28 Jul 2025 04:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753678475;
+	bh=Wh7upnKZdulod8UOOydJPwZLWQtp2GXJyslkrYNgT2Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nTAWZUyvb2HuBIwhHenp27cXtX0Qlj1Nkihe2X9wYasYh62OsmoPzUFHLDhyCKS4W
+	 E5kv/wSlSQk69mB9Cq0YNgup01OJwz6hswZdfxeSzo/jG8ZgPVTErWYcVtIOd2nU4K
+	 6RN47fVtjTvaZfWlRXtIGN3vyWXn1SQlCw+0e43FnxlOGnujloN0YryUlAwuFrXg9T
+	 EUu4q6Wn3MOOcPni56PH/vUsklXATy0Gxb74T9Ow8zyHm7LBAh7aXEqmCG0IEqNxDn
+	 k0htr4Di2YF0by6KDs+tOMgqi8bdpAYSx0C4tAxSWGTw0hLw+BxqvCrsciHljQr+fG
+	 vx4WgPKAni0lA==
+Message-ID: <9771df86-daad-4178-a461-bba5b7d6be6b@kernel.org>
+Date: Mon, 28 Jul 2025 06:54:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: (lm75) Add binding for NXP
+ P3T1750
+To: Lakshay Piplani <lakshay.piplani@nxp.com>, linux-kernel@vger.kernel.org,
+ jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+ corbet@lwn.net, linux-doc@vger.kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org
+Cc: vikash.bansal@nxp.com, priyanka.jain@nxp.com,
+ shashank.rebbapragada@nxp.com
+References: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add support for lm75 compatible NXP P3T1750
-temperature sensor.
+On 28/07/2025 06:19, Lakshay Piplani wrote:
+> Add "nxp,p3t1750" to the lm75 compatible list.
+> 
+> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+> ---
+> Changes in v2:
+> - Sorted compatible strings alphabetically
+> 
 
-Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
----
-Changes in v2:
-- None. Patch unchanged.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- Documentation/hwmon/lm75.rst |  6 ++++--
- drivers/hwmon/lm75.c         | 13 +++++++++++++
- 2 files changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-index c6a54bbca3c5..84e690824fee 100644
---- a/Documentation/hwmon/lm75.rst
-+++ b/Documentation/hwmon/lm75.rst
-@@ -121,9 +121,9 @@ Supported chips:
- 
-          https://www.ti.com/product/TMP1075
- 
--  * NXP LM75B, P3T1755, PCT2075
-+  * NXP LM75B, P3T1755, PCT2075, 'P3T1750'
- 
--    Prefix: 'lm75b', 'p3t1755', 'pct2075'
-+    Prefix: 'lm75b', 'p3t1755', 'pct2075', 'p3t1750'
- 
-     Addresses scanned: none
- 
-@@ -135,6 +135,8 @@ Supported chips:
- 
-                https://www.nxp.com/docs/en/data-sheet/PCT2075.pdf
- 
-+               https://www.nxp.com/docs/en/data-sheet/P3T1750DP.pdf
-+
-   * AMS OSRAM AS6200
- 
-     Prefix: 'as6200'
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 9b4875e2fd8d..979057f02748 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -40,6 +40,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
- 	max31725,
- 	mcp980x,
- 	p3t1755,
-+	p3t1750,
- 	pct2075,
- 	stds75,
- 	stlm75,
-@@ -229,6 +230,13 @@ static const struct lm75_params device_params[] = {
- 		.num_sample_times = 4,
- 		.sample_times = (unsigned int []){ 28, 55, 110, 220 },
- 	},
-+	[p3t1750] = {
-+		.clr_mask = 1 << 1 | 1 << 7,	/* disable SMBAlert and one-shot */
-+		.default_resolution = 12,
-+		.default_sample_time = 55,
-+		.num_sample_times = 4,
-+		.sample_times = (unsigned int []){ 28, 55, 110, 220 },
-+	},
- 	[pct2075] = {
- 		.default_resolution = 11,
- 		.default_sample_time = MSEC_PER_SEC / 10,
-@@ -806,6 +814,7 @@ static const struct i2c_device_id lm75_i2c_ids[] = {
- 	{ "max31726", max31725, },
- 	{ "mcp980x", mcp980x, },
- 	{ "p3t1755", p3t1755, },
-+	{ "p3t1750", p3t1750, },
- 	{ "pct2075", pct2075, },
- 	{ "stds75", stds75, },
- 	{ "stlm75", stlm75, },
-@@ -920,6 +929,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 		.compatible = "nxp,p3t1755",
- 		.data = (void *)p3t1755
- 	},
-+	{
-+		.compatible = "nxp,p3t1750",
-+		.data = (void *)p3t1750
-+	},
- 	{
- 		.compatible = "nxp,pct2075",
- 		.data = (void *)pct2075
--- 
-2.25.1
-
+Best regards,
+Krzysztof
