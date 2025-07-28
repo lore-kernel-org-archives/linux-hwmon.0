@@ -1,181 +1,120 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56502235057;
-	Mon, 28 Jul 2025 20:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014EA21D3DC;
+	Mon, 28 Jul 2025 21:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753735909; cv=none; b=DVXYuDpTISHtDef54yOidMZkajw7nJ8H30PoIdIXP8YjF0pQPFRq9rXArr1iZ0QO3X6NNqf/+pAbbnX3JpoXqcpYLD4xWyNtQ52qyeV+JiCVhQcIGZG3QNk5lJMgVZgnBGWstfVZWL/w+WQxZoMDeoCeYOmzoABIWs2q/ZueTRw=
+	t=1753738486; cv=none; b=EybjF2JHZqbypixEGBTWHnTzBZQrzDs2psLDCRW5M54EsOgN/fEk22D4sK/XMtKYmHvMkv2H3uJU0L0AvzlxJeFWdxp01uWFIOrXKLqWjF7XGQpIy9c6meoMaQVvFzX8dXlI3Ux6OPpdvd/YAAEoDaDFi0pOW5FTq6xVNCWyglY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753735909; c=relaxed/simple;
-	bh=LbU9QNjIJ9o/RrOlnemX+xU1Ff0wX8+W+xvJQ3POAq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q3pRWQfYgvdqLVILr7wfhMMo5+wP0HfmiD0SrsD/x8qyb8NUvQtKK+kA0a+bwK3rW3dCxj1igzLAIeoatpW3OykTuH0Vh+6UTFxUfXb9xMCnO5WCDb2ZAwuam4tfNSxARPCv6U+x7Mno77KfcmWCaMUmev5YlCScQQeHferrWYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmuBAeIM; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753738486; c=relaxed/simple;
+	bh=09+3cj/H9xhQx1h5p2k3oDYMaYndL8xtT5K4eP4BUYk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzuR5a1p0GNwOk1WBU9UOlnMwpk38Xa6DCVD89o3/NmQo7LWS3MjdD1cOp9VeHS1L4SFDiKuGtHPHx7QkYGiuC9nmGm8MW/+aRzTJHgcmHO4FmDaQv+yAYOWXARGhzx8NkcWJpLvlPWr1Wavj02BBov/EFXAX+lvsn76GSiy0Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SYkmGxe7; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmuBAeIM"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a169bso7759244a12.1;
-        Mon, 28 Jul 2025 13:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753735905; x=1754340705; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=08lRxFVNZckhlMJF1tDmvh9bauDWalm4tpzq6lHddRU=;
-        b=AmuBAeIMLDUx9eq02HQWDl58LV1z8TJBDQGDDpxgyxJ8h0BnZ5UbhGx0R+uEmcI3JB
-         qxVgeaXd4Djiwy1ginDbGkOVT0BGiclX8IW4PUbZDV1BiC+/tMRGji51sbj6En3mv9qq
-         jrza2cV7CHZ7Ens7oKPD22reHGnsdBe9inIS1Zt6rgv2FtsF6z/iloPEMh2C6ltYNndD
-         oWS92U3GoxawS3zAN2oS4drCxpKQep4Td8GppTUwf8fPVzsdODp7KqjHH685J2m/lVLA
-         SwFulHWeHh2EjADPCZV0oBl2Iux8eeOJnGuwZ+Xsvk3X4vho6b4xFCCMpopOJV7I3jbZ
-         Kmiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753735905; x=1754340705;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=08lRxFVNZckhlMJF1tDmvh9bauDWalm4tpzq6lHddRU=;
-        b=ukF3qQLZfLnk00DSgDk/TdtbYbNdfa8iLA8290OmO019XUSC6nhgJ/MfRa63Bkg/Vn
-         aGRfF6X567Tuc3zwtY/lmMYE70wsp0PSH2NfnPBk/imnYoWl2rThZmZv/RbnNYOROTlv
-         mRYXSfB+HfsVijykEPDlUjoDsjRiMdn2RsgnvpUijED0HlgEHKKS5g5JcFS8UK94H0au
-         h3BoyYU0pZf6Dl2MHKZ7OVXNZCHIQAQ2kcfiP6UnwoF+3PDEuWv6GxJeSWGC0WV5uY4i
-         HG5s5gQr0y0tN0mj1q0HFrLB+z9BsphtPU/2QWo0q0Lbp3uQKHdrhLQb7Xk99BP54SXi
-         S9uA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSObcEwysDhrU1CnFEauwt0JoT19+Y1XaHuk3TgYcD3MQsJncZMR8Qbn8iL5mKPxfgHO8j8E0sHIc=@vger.kernel.org, AJvYcCX+pFF3OAkimakjrFDoxV3bYcpEPi6Cj8TOmPITkJwP04tV9iY/wlnmgVSVLscsQd/Q1bzk42u+H4MgmFw=@vger.kernel.org, AJvYcCX0Od46Q03QJ2Zq8I9dp6C7swKiinVqASkWP93h+4i2f7S63lo7VlKFr+C5CjfqQ+E4IJ4+JpvdrNdrP8yn@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLVo+p1xRZq/N60ZYwuWvGQ8uFvulTPlK9v2IPLyNENRRp17DP
-	pvzXvPbBM6uIS9/NsFbK2/lien6aAB1h932xYGQM1kxNE1833fRCSCz0
-X-Gm-Gg: ASbGnct38jJIzFdRCKnIVIZ9LhAECcdiJKrpCPaPOb5GgePCO48rJ8S1p4y+RQuH978
-	eG1WA5OphkiRYAlLhGN/PePEZ6elAAMrcRn4tGMVqf977IYRoUJ18fSnjGb7/HT890mPNo4in5L
-	q9v6HGzyyXxt1qEYfRVcI282ikBozgPvSJz8hDT8pwlo+mPymfGXZ3tgv/OGXdX9mgB91KKPmX4
-	a2CKSKZxO42oZooy3NJ04weOBJfqQyvuMIhKHUieY18sBtHJehdIRut1Y9NA345ILYQdVwyVsdk
-	1Nx0SasQ9vYCAeuwhei5YFBPz9U6KuR33TIdiZMR7ZlLgbkYH03v6JBQXKfwPp1vWFjqYViAh8q
-	VNYIporKbGKC8ay8qdUQ9G9CzRn90DXeAj1JVnDX4clXnClny/MIPUumi6C806aK/+IwHQw6E//
-	ptaroEgmO9bVIWEAwQNbUpvTk=
-X-Google-Smtp-Source: AGHT+IHQ3CHb4jb+VIygIExljfM3JmMajc+rt5xDIR0ZNFFyFiSDaKq+XZKeWIc95ztLMnrVrUJ7WA==
-X-Received: by 2002:a17:907:a0d1:b0:af6:36d0:d28d with SMTP id a640c23a62f3a-af636d0d31fmr1090744566b.22.1753735905358;
-        Mon, 28 Jul 2025 13:51:45 -0700 (PDT)
-Received: from puma.museclub.art (p200300cf9f013400cc194b80e1760d4a.dip0.t-ipconnect.de. [2003:cf:9f01:3400:cc19:4b80:e176:d4a])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af635ad589csm469943066b.118.2025.07.28.13.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 13:51:44 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Nicholas Flintham <nick@flinny.org>,
-	Jean Delvare <jdelvare@suse.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SYkmGxe7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753738485; x=1785274485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=09+3cj/H9xhQx1h5p2k3oDYMaYndL8xtT5K4eP4BUYk=;
+  b=SYkmGxe7N6i3OYlO0qGjCQnmagIqeIbPEtcESHNNF/QiNhbdMnKd5VJA
+   uFYiPA96MKlRZMl1C8zwn1+28jPY+W2wWkg8xLphvrFN4sdVrHAjhKopQ
+   +cKNzv8ptYSTkzlFPtrU663l5HygA/GVH0UbiHNhsFQLPC/BeLWugBabU
+   ayK/b3YYke2emCOyw2oltcTvSnR8Vj21XJf53wWGv6dzzQZbp6uowdgfd
+   HvaFSHOkD3QpBEAwu2bWkMQp1fxKu3YgP2O2pxS072wxyanx0R7EAE4UA
+   7F1WtrXIYGaEIP1fp6jruXsCPddbvWXcKO+Ru9vr4QLF9ZbIYLEggDULg
+   g==;
+X-CSE-ConnectionGUID: 9beFoTmuTeyYjDyk5v229Q==
+X-CSE-MsgGUID: L2ZQwI+bTdOpNMj3UFr9ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="56148105"
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="56148105"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 14:34:45 -0700
+X-CSE-ConnectionGUID: UYXoobVVS/GdHlEUFIp9Jw==
+X-CSE-MsgGUID: 5gsvI4JQRSq1dyoN3+FwYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
+   d="scan'208";a="162391619"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Jul 2025 14:34:42 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ugVUV-0000m7-1i;
+	Mon, 28 Jul 2025 21:34:39 +0000
+Date: Tue, 29 Jul 2025 05:34:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwmon: (asus-ec-sensors) add ROG STRIX Z790E GAMING WIFI II
-Date: Mon, 28 Jul 2025 22:49:10 +0200
-Message-ID: <20250728205133.15487-4-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250728205133.15487-1-eugene.shalygin@gmail.com>
-References: <20250728205133.15487-1-eugene.shalygin@gmail.com>
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	David Box <david.e.box@linux.intel.com>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+Message-ID: <202507290516.RaQHv1WD-lkp@intel.com>
+References: <20250726204041.516440-2-derekjohn.clark@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250726204041.516440-2-derekjohn.clark@gmail.com>
 
-From: Nicholas Flintham <nick@flinny.org>
+Hi Derek,
 
-Adds support for the ROG STRIX Z790E GAMING WIFI II board
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Nicholas Flintham <nick@flinny.org>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 25 ++++++++++++++++++++++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.16 next-20250728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 1e8274dba35f..da9a00111d1c 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -34,6 +34,7 @@ Supported boards:
-  * ROG STRIX Z390-F GAMING
-  * ROG STRIX Z490-F GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-+ * ROG STRIX Z790-E GAMING WIFI II
-  * ROG ZENITH II EXTREME
-  * ROG ZENITH II EXTREME ALPHA
-  * TUF GAMING X670E PLUS
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 0b19d148f65d..b9543eda2522 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -56,6 +56,8 @@ static char *mutex_path_override;
- 
- #define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
- 
-+#define ASUS_HW_ACCESS_MUTEX_SB_PC00_LPCB_SIO1_MUT0 "\\_SB.PC00.LPCB.SIO1.MUT0"
-+
- #define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
- 
- #define MAX_IDENTICAL_BOARD_VARIATIONS	3
-@@ -168,7 +170,8 @@ enum board_family {
- 	family_amd_800_series,
- 	family_intel_300_series,
- 	family_intel_400_series,
--	family_intel_600_series
-+	family_intel_600_series,
-+	family_intel_700_series
- };
- 
- /*
-@@ -323,6 +326,14 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
- 		EC_SENSOR("Water_Block_In", hwmon_temp, 1, 0x01, 0x02),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_700[] = {
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x01, 0x09),
-+	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-+};
-+
- /* Shortcuts for common combinations */
- #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
- 	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
-@@ -568,6 +579,13 @@ static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
- 	.family = family_intel_600_series,
- };
- 
-+static const struct ec_board_info board_info_strix_z790_e_gaming_wifi_ii = {
-+	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+		SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PC00_LPCB_SIO1_MUT0,
-+	.family = family_intel_700_series,
-+};
-+
- static const struct ec_board_info board_info_zenith_ii_extreme = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
- 		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-@@ -660,6 +678,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_z490_f_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
- 					&board_info_strix_z690_a_gaming_wifi_d4),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-E GAMING WIFI II",
-+					&board_info_strix_z790_e_gaming_wifi_ii),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
- 					&board_info_zenith_ii_extreme),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
-@@ -1142,6 +1162,9 @@ static int asus_ec_probe(struct platform_device *pdev)
- 	case family_intel_600_series:
- 		ec_data->sensors_info = sensors_family_intel_600;
- 		break;
-+	case family_intel_700_series:
-+		ec_data->sensors_info = sensors_family_intel_700;
-+		break;
- 	default:
- 		dev_err(dev, "Unknown board family: %d",
- 			ec_data->board_info->family);
+url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/platform-x86-ayn-ec-Add-PWM-Fan-HWMON-Interface/20250727-044332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250726204041.516440-2-derekjohn.clark%40gmail.com
+patch subject: [PATCH v3 1/4] platform/x86: (ayn-ec) Add PWM Fan HWMON Interface
+config: i386-randconfig-061-20250728 (https://download.01.org/0day-ci/archive/20250729/202507290516.RaQHv1WD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507290516.RaQHv1WD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507290516.RaQHv1WD-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/platform/x86/ayn-ec.c:67:5: sparse: sparse: symbol 'ayn_pwm_curve_registers' was not declared. Should it be static?
+
+vim +/ayn_pwm_curve_registers +67 drivers/platform/x86/ayn-ec.c
+
+    66	
+  > 67	int ayn_pwm_curve_registers[10] = {
+    68		AYN_SENSOR_PWM_FAN_SPEED_1_REG,
+    69		AYN_SENSOR_PWM_FAN_SPEED_2_REG,
+    70		AYN_SENSOR_PWM_FAN_SPEED_3_REG,
+    71		AYN_SENSOR_PWM_FAN_SPEED_4_REG,
+    72		AYN_SENSOR_PWM_FAN_SPEED_5_REG,
+    73		AYN_SENSOR_PWM_FAN_TEMP_1_REG,
+    74		AYN_SENSOR_PWM_FAN_TEMP_2_REG,
+    75		AYN_SENSOR_PWM_FAN_TEMP_3_REG,
+    76		AYN_SENSOR_PWM_FAN_TEMP_4_REG,
+    77		AYN_SENSOR_PWM_FAN_TEMP_5_REG,
+    78	};
+    79	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
