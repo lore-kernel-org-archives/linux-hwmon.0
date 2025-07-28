@@ -1,141 +1,143 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8FD41C69;
-	Mon, 28 Jul 2025 22:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C18225784;
+	Mon, 28 Jul 2025 23:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753742681; cv=none; b=ipdbr29aUub+MW+vSofyILHHXME4JRtrGGZXEbrDtbYr/4czZLv0zvmxHMgEqjRrRyftXYrgoY1DDOQgJIMRCDS+MEGhI5ocYq9aDtyOd7PVDW6VdBV0220Ryqx/jQlE/rMf8S3qUk65DybK5HxzugDo9kouC47gjtkaqP+x8n4=
+	t=1753745878; cv=none; b=rWeC58dhlOhkbHltz16usQP0IlYLKuvWLR4+X+ydQ3LTdr+3mktnypx3rQQEQcAcR2spp9lQoydXSrY1nwlms3je/UrbErl3WAyHYcX3yeoJ2oTOtgxxISAsQItDOQrXq+2K4khwp/60ABCkqRGUIY9RT3tL1sEaoGtDZJHEppU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753742681; c=relaxed/simple;
-	bh=Ky/PMGLyUDQZC9gL7CyrG5pqZrnrhZeqsFDICY7TrN4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r++oQnDIaZpN0znJKXP7bmfBzk5C8d+N3Dm0C8qVgU1BmwLCh+6uFTzRLSchajUJf6WcpQpC6ZH8BrZ7XoQWYf3dinx6h2V8WpJdadMDjIEW7zQvJS4PKQLzoeu+DTcmO2p+UvvTMmnmkjJpSwIh72a75T62BnK9KEk6/c6AujI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fzGslW6k; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1753745878; c=relaxed/simple;
+	bh=M9KO/2aYIoLlJKYj0B6g/Dtc60iGI3XL4WVkIVReWRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bKZOqa47KoyYShK0FswXp02f+s6fF828V7P++WuLI5NaaCnW5m0ClQUKK03A/9DC8aLRbhGZSw22b1pohyizqajI3GWdRIYIgq2Z9UQgRuq694lwCIPBciF2t1VUAu+RSau5MBzvVU234y1/DE1zQ8Z1+AJFgZUhuPJMGn5oKDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aKdmePZb; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fzGslW6k"
-Message-ID: <0ccf7735-6a2c-473a-ab67-ae0c5ff9a335@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753742675;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k5/0co1W+cu2shaBxXBw2d5dMLF1j3owv/slrDbSyAk=;
-	b=fzGslW6kZZkYeu4/WJy+c5tm8uXUHreJ17xnA4jnLRtASHmQk+lzNA/LsSevM76wH9Qxii
-	0OL0tyBHi9z04+P2gJ1q0SkKib7Eb2zdOFnQGgoV0u/zf7gkLeW21YjueCgdiSz56o0dTs
-	btnPKWyjyrT6QbnX1FYvmoAG8/Ug1eo=
-Date: Mon, 28 Jul 2025 18:44:30 -0400
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aKdmePZb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1753745876; x=1785281876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M9KO/2aYIoLlJKYj0B6g/Dtc60iGI3XL4WVkIVReWRc=;
+  b=aKdmePZb0W5MwKHrylLZtxm/Q8mJ94vRDX33eOrDCUxemybeDM1h8UT4
+   W/EG84AURDyelAASaygFBMnEGtwIsPEk/J3dVwdfMAJdlrKUrpHqAQ+wN
+   KDNtIClKaqdB81l1ZsvaN14TLvFO1xD3a81gc91GSkBzLkkDuF3zKy2P0
+   WUj43nN2kRcGeycLHUAKJPtPjTFgzvvPw638WGHS9d/xoiK9Qwlc0nDhA
+   ZILfPBJgV8iO0CnIYgaH07ApZPlWv9t6FX1ctMs+snVzDtQwMoQp6XBZ2
+   APLo5NpR//m7ZkOVHJgkjV34f3Y5SLVTIFq1yiQQYOqsaBWuG/62ZcS8x
+   A==;
+X-CSE-ConnectionGUID: 4M+yrrc2RFyunh6SmNEXJw==
+X-CSE-MsgGUID: omhOuLmLSYq37lgeHMGOJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="78557780"
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="78557780"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 16:37:56 -0700
+X-CSE-ConnectionGUID: PC1Oj44zRXy0Y4pJHQBufw==
+X-CSE-MsgGUID: +hKsHsYQR5qcGaeo+xhvlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
+   d="scan'208";a="162113821"
+Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 28 Jul 2025 16:37:52 -0700
+Received: from kbuild by 160750d4a34c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ugXPi-0000pJ-0o;
+	Mon, 28 Jul 2025 23:37:50 +0000
+Date: Tue, 29 Jul 2025 07:36:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	David Box <david.e.box@linux.intel.com>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] platform/x86: (ayn-ec) Add RGB Interface
+Message-ID: <202507290730.7XZMyOM7-lkp@intel.com>
+References: <20250726204041.516440-4-derekjohn.clark@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 3/7] iio: Add in-kernel API for events
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- Andy Shevchenko <andy@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
- David Lechner <dlechner@baylibre.com>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-4-sean.anderson@linux.dev>
- <d8e5c8fbeaee42e9e0708460c47bd68053cd8710.camel@gmail.com>
- <9b187e7f-a116-4aea-a9a6-b9222562868d@linux.dev>
- <20250727172126.35d0a477@jic23-huawei>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <20250727172126.35d0a477@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250726204041.516440-4-derekjohn.clark@gmail.com>
 
-On 7/27/25 12:21, Jonathan Cameron wrote:
-> On Tue, 15 Jul 2025 12:52:19 -0400
-> Sean Anderson <sean.anderson@linux.dev> wrote:
-> 
->> On 7/15/25 07:09, Nuno Sá wrote:
->> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:  
->> >> Add an API to notify consumers about events. Events still need to be
->> >> enabled using the iio_read_event/iio_write_event functions. Of course,
->> >> userspace can also manipulate the enabled events. I don't think this is
->> >> too much of an issue, since userspace can also manipulate the event
->> >> thresholds. But enabling events may cause existing programs to be
->> >> surprised when they get something unexpected. Maybe we should set the
->> >> interface as busy when there are any in-kernel listeners?
->> >>   
->> > 
->> > Sensible question. I'm not that familiar with events but I suspect is not
->> > trivial (if doable) to do a similar approach as with buffers? With buffers, an
->> > inkernal consumer get's it's own buffer object (that goes into a list of active
->> > buffers in the iio device) with all channels enabled and then we demux the
->> > appropriate channels for each consumer.  
->> 
->> For in-kernel consumers I think it's reasonable to expect them to handle
->> events they didn't explicitly enable. I'm not sure about userspace
->> consumers.
-> 
-> This already happens because we don't have a demux equivalent (what we do
-> for buffered data flow) so if a device only has a single enable bit that covers
-> multiple events (annoyingly common for accelerometers for example) then
-> userspace will get events it didn't ask for.   We 'could' fix that,
-> but it's never really been worth the effort.
-> 
-> Events tend to be low data rate so an occasionally extra is rather different
-> to having to have much larger data buffers to handle a range of channels you
-> never asked for.
-> 
-> Lets be careful to document this behaviour as 'may enable extra events'
-> as then if we decide later to do demux type stuff we won't be breaking ABI.
-> No one will mind getting fewer spurious events due to a core improvement.
+Hi Derek,
 
-Where would this get documented?
+kernel test robot noticed the following build warnings:
 
->> 
->> > Independent of the above, we can argue that having both inkernel and userspace
->> > changing thresholds is ok (I mean, there's nothing stopping two userspace apps
->> > doing that) but we should likely be careful with enabling/disabling. If multiple
->> > consumers enable the same event, one of them disabling it should not disable it
->> > for all the consumers, right?  
->> 
->> Right now the HWMON consumer never permanently disable events to avoid this
->> issue. It does toggle the enable to determine if an alarm should stay
->> enabled:
->>              ________
->> condition __/        \________
->>           _____    ____    ___
->> enable         \__/    \__/
->> 
->> event       |     |
->>              __    ____
->> alarm     __/  \__/    \_____
->> 
->> read           1       1    0
->> 
->> I suppose this could also be done by comparing the raw threshold to the
->> channel.
-> 
-> I wonder if we should add the option to do a 'get_exclusive' or similar
-> to block the IIO user interfaces if something critical is using the device.
-> 
-> If we were for instance to use this to block the IOCTL to get the events
-> fd then any built in driver etc will almost certainly load before anyone
-> can call the ioctl so it will fairly cleanly block things.
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.16 next-20250728]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This is how it currently works for userspace. Only one process can create
-the event fd, and everyone else gets -EBUSY.
+url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/platform-x86-ayn-ec-Add-PWM-Fan-HWMON-Interface/20250727-044332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250726204041.516440-4-derekjohn.clark%40gmail.com
+patch subject: [PATCH v3 3/4] platform/x86: (ayn-ec) Add RGB Interface
+config: i386-randconfig-061-20250728 (https://download.01.org/0day-ci/archive/20250729/202507290730.7XZMyOM7-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507290730.7XZMyOM7-lkp@intel.com/reproduce)
 
-Of course, it would be pretty surprising to have an IIO device where
-some channels were used by userspace and others were used by hwmon and
-then have your daemon stop working after you update your kernel because
-now the hwmon driver takes exclusive event access.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507290730.7XZMyOM7-lkp@intel.com/
 
-I originally had kernel users read from the kfifo just like userspace,
-but I was concerned about the above scenario.
+sparse warnings: (new ones prefixed by >>)
+   drivers/platform/x86/ayn-ec.c:87:5: sparse: sparse: symbol 'ayn_pwm_curve_registers' was not declared. Should it be static?
+>> drivers/platform/x86/ayn-ec.c:753:18: sparse: sparse: symbol 'ayn_led_mc_subled_info' was not declared. Should it be static?
+>> drivers/platform/x86/ayn-ec.c:774:24: sparse: sparse: symbol 'ayn_led_mc' was not declared. Should it be static?
 
---Sean
+vim +/ayn_led_mc_subled_info +753 drivers/platform/x86/ayn-ec.c
+
+   752	
+ > 753	struct mc_subled ayn_led_mc_subled_info[] = {
+   754		{
+   755			.color_index = LED_COLOR_ID_RED,
+   756			.brightness = 0,
+   757			.intensity = 0,
+   758			.channel = AYN_LED_MC_RED_REG,
+   759		},
+   760		{
+   761			.color_index = LED_COLOR_ID_GREEN,
+   762			.brightness = 0,
+   763			.intensity = 0,
+   764			.channel = AYN_LED_MC_GREEN_REG,
+   765		},
+   766		{
+   767			.color_index = LED_COLOR_ID_BLUE,
+   768			.brightness = 0,
+   769			.intensity = 0,
+   770			.channel = AYN_LED_MC_BLUE_REG,
+   771		},
+   772	};
+   773	
+ > 774	struct led_classdev_mc ayn_led_mc = {
+   775		.led_cdev = {
+   776			.name = "ayn:rgb:joystick_rings",
+   777			.brightness = 0,
+   778			.max_brightness = 255,
+   779			.brightness_set = ayn_led_mc_brightness_set,
+   780			.brightness_get = ayn_led_mc_brightness_get,
+   781			.color = LED_COLOR_ID_RGB,
+   782		},
+   783		.num_colors = ARRAY_SIZE(ayn_led_mc_subled_info),
+   784		.subled_info = ayn_led_mc_subled_info,
+   785	};
+   786	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
