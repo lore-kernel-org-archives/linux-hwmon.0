@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D59E204C0C;
-	Tue, 29 Jul 2025 06:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE27125392C;
+	Tue, 29 Jul 2025 06:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753770708; cv=none; b=D1Mc/TP90AuB3r2phWQ6W2xBs8zBNZb533NJIAzkKEaddhIUntZ55xmI16npVp2dE8m6k/mJdJ6xv4oQkLK0ujblCXDgKNht5iHtkp0GrohoGLt6q/KTh+G3W5WemTyizPdRU83CtO56vbthh0jIpAgL216lSZdd06pLBcGoTis=
+	t=1753770821; cv=none; b=Zk1GN1jvDElauohV4Z6Iy6+z6eXla/stSR+F6L4hI58gOTOa5ivbEjY7UIvVNG8uI2Ast2j5iYVZthFa3aFWoyyDwJK3OHzS23SZRHSaUHf+0PJYcqS5q4xip8AJeTzyj4muTkuwkVvbuYo8K4FoUyUy2TJCQ5+VQsTihMqFjos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753770708; c=relaxed/simple;
-	bh=xAfwh6wgqze8HrtArGsHCkx82E6hstOtlosrB8BG9f4=;
+	s=arc-20240116; t=1753770821; c=relaxed/simple;
+	bh=WrQ2nB0abIjOpvaWc2St+mpbK4kQYiovaRgN58t+nE8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b5uqcI93Ai9/gKgJTTY01cjZkb1XceLojh74XSZu4TywwKQMbyBvfAKFfGyikwgkTDDnfFEfg+tthq2fcDDitreHpgEJQpybOUFgRrfV8qH1B38474UhY1MpADN8EEFY41G3hm2tZHHfFP4KnnHelVdI/wYBKPEmKQLomdEVtWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkPl4yLP; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=V1RWmFluGMHizFB+FibFnBdfg7qwnv3Mu5yXY515yBOIUcxqGMDsccnSdRRwMOrwjS3OiusS5eQooPaCc7rMjVxNUKuXr7lU+zZSvv2hyO8fqkNFctDjQf+i57Q+3NcerPZiVESMIAdXsWRlshe996nl7yeon4lO6PBi7IFePnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMC7daFE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkPl4yLP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24810C4CEEF;
-	Tue, 29 Jul 2025 06:31:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMC7daFE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E19C4CEEF;
+	Tue, 29 Jul 2025 06:33:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753770708;
-	bh=xAfwh6wgqze8HrtArGsHCkx82E6hstOtlosrB8BG9f4=;
+	s=k20201202; t=1753770821;
+	bh=WrQ2nB0abIjOpvaWc2St+mpbK4kQYiovaRgN58t+nE8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SkPl4yLPw+2X4ckxsOazOSKTMl5VNEaZCyChjoXb7XNvESprG/DJO/YR+OKLw95xj
-	 GlhXDE6sYsSG/kgkubB5fZQReGRCdT6oec1CgXMUgmDtMufWzIN5qRczETGCTPC8OA
-	 X0m6Go7RaeH8MTm/Rer72wdb/FxXGgWRjr7jxJDU3kNWgQmqXHef8FzLqkGbKjYq3B
-	 opwxIK8r624YFy7IZTdFKI99M7Cr3N7poeZ6vATs5LGaI4PZz3dW+AngY7k5gRZoUS
-	 MMM/xVOP2UHepXdew6AAv6aWjKfMNlKtgrI4/AZEygXZX1FbRCKTGsVoHaQSbrCq5Z
-	 JUomL6giH0bGA==
-Message-ID: <c09da948-6e31-454d-acca-99c226c18c61@kernel.org>
-Date: Tue, 29 Jul 2025 08:31:44 +0200
+	b=bMC7daFEPhL8AWb7yVN+Jaa+fkVHbHXsaiF/bWgrKQn7Gbevmm77A30ruqtTdM0Xh
+	 YdfTpvCykEDjAEk+3hlRa+bvgvzTaCfiE8PIqXXE89eUikY90pGKOeNOG+FLlCsDol
+	 QaEloMqQPTLBnfijzPDUyX5bgwF1TcQbC5GHAppCMaQA5hoBMU1k5SfXe7vgs90OWv
+	 oKZHCVn/hx/YQoAMnwrBMZZmYI3NA1xajwb5pYQ9UyrT4bwyq5A+46daiW/qjFUfSu
+	 Bgz3RZEUDsIkSEhDxrgL+K02GQTQhDb3Mqgww1D23GZ2O1mP2FSDwrbYfaM6kPoXdi
+	 XQDEcZH3DPTcQ==
+Message-ID: <67c98aa0-575d-4c04-a4e8-fe0df0d1a3ef@kernel.org>
+Date: Tue, 29 Jul 2025 08:33:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,15 +35,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/5] dt-bindings: misc: Add binding document for SB-RMI
- I3C
+Subject: Re: [PATCH v1 2/5] misc: amd-sbi: Add support for SB-RMI over I3C
 To: Akshay Gupta <akshay.gupta@amd.com>, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 Cc: gregkh@linuxfoundation.org, arnd@arndb.de, linux@roeck-us.net,
  Anand.Umarji@amd.com,
  Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
 References: <20250728061033.1604169-1-akshay.gupta@amd.com>
- <20250728061033.1604169-5-akshay.gupta@amd.com>
+ <20250728061033.1604169-2-akshay.gupta@amd.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -89,98 +88,155 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250728061033.1604169-5-akshay.gupta@amd.com>
+In-Reply-To: <20250728061033.1604169-2-akshay.gupta@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 28/07/2025 08:10, Akshay Gupta wrote:
-> - Document the dt-binding for AMD SB-RMI
-
-Why every commit is a one-item list?
-
+> AMD EPYC platforms with zen5 and later support APML(SB-RMI)
+> connection to the BMC over I3C bus for improved efficiency.
+> Add the same functionality supported by rmi-i2c.c over I3C bus.
 > 
 > Reviewed-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
-
-I don't believe these reviews. Code was obviously buggy, but still reviewed.
-
 > Signed-off-by: Akshay Gupta <akshay.gupta@amd.com>
 > ---
->  .../bindings/misc/amd,sbrmi-i3c.yaml          | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/misc/amd,sbrmi-i3c.yaml
-
-Your previous patches make no sense with this...
-
+>  drivers/misc/amd-sbi/Kconfig   |  15 +++-
+>  drivers/misc/amd-sbi/Makefile  |   2 +
+>  drivers/misc/amd-sbi/rmi-i3c.c | 133 +++++++++++++++++++++++++++++++++
+>  3 files changed, 148 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/misc/amd-sbi/rmi-i3c.c
 > 
-> diff --git a/Documentation/devicetree/bindings/misc/amd,sbrmi-i3c.yaml b/Documentation/devicetree/bindings/misc/amd,sbrmi-i3c.yaml
+> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
+> index 9b1abeb6ab1a..838cf98805d9 100644
+> --- a/drivers/misc/amd-sbi/Kconfig
+> +++ b/drivers/misc/amd-sbi/Kconfig
+> @@ -15,10 +15,21 @@ config AMD_SBRMI_I2C
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called sbrmi-i2c.
+>  
+> +config AMD_SBRMI_I3C
+> +	tristate "AMD side band RMI support over I3C"
+> +	depends on I3C
+> +	select AMD_SBRMI
+> +	select REGMAP_I3C
+> +	help
+> +	  Side band RMI over I3C support for AMD out of band management.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called sbrmi-i3c.
+> +
+>  config AMD_SBRMI_HWMON
+>  	bool "SBRMI hardware monitoring"
+> -	depends on AMD_SBRMI_I2C && HWMON
+> -	depends on !(AMD_SBRMI_I2C=y && HWMON=m)
+> +	depends on (AMD_SBRMI_I2C || AMD_SBRMI_I3C) && HWMON
+> +	depends on !(AMD_SBRMI_I2C=y && HWMON=m) || !(AMD_SBRMI_I3C=y && HWMON=m)
+>  	help
+>  	  This provides support for RMI device hardware monitoring. If enabled,
+>  	  a hardware monitoring device will be created for each socket in
+> diff --git a/drivers/misc/amd-sbi/Makefile b/drivers/misc/amd-sbi/Makefile
+> index 6f3090fb9ff3..e43d4058a0f0 100644
+> --- a/drivers/misc/amd-sbi/Makefile
+> +++ b/drivers/misc/amd-sbi/Makefile
+> @@ -4,3 +4,5 @@ sbrmi_core-y			:= rmi-core.o
+>  obj-$(CONFIG_AMD_SBRMI_HWMON)	+= rmi-hwmon.o
+>  sbrmi-i2c-y			:= rmi-i2c.o
+>  obj-$(CONFIG_AMD_SBRMI_I2C)	+= sbrmi-i2c.o
+> +sbrmi-i3c-y  			:= rmi-i3c.o
+> +obj-$(CONFIG_AMD_SBRMI_I3C)	+= sbrmi-i3c.o
+> diff --git a/drivers/misc/amd-sbi/rmi-i3c.c b/drivers/misc/amd-sbi/rmi-i3c.c
 > new file mode 100644
-> index 000000000000..1d19571c2095
+> index 000000000000..b960743afad1
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/amd,sbrmi-i3c.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/amd,sbrmi-i3c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/misc/amd-sbi/rmi-i3c.c
+> @@ -0,0 +1,133 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * rmi-i3c.c - Side band RMI over I3C support for AMD out
+> + *             of band management
+> + *
+> + * Copyright (C) 2025 Advanced Micro Devices, Inc.
+> + */
 > +
-> +title: >
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/i3c/device.h>
+> +#include <linux/i3c/master.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
 
-From where did you take such syntax of title?
+Where do you use it?
 
-> +  Sideband Remote Management Interface (SB-RMI) compliant
-> +  AMD SoC.
+> +#include <linux/regmap.h>
+> +#include "rmi-core.h"
+
+
+...
+
+> +static int sbrmi_i3c_probe(struct i3c_device *i3cdev)
+> +{
+> +	struct device *dev = &i3cdev->dev;
+> +	struct sbrmi_data *data;
+> +	struct regmap_config sbrmi_i3c_regmap_config = {
+> +		.reg_bits = 8,
+> +		.val_bits = 8,
+> +	};
+> +	int ret;
 > +
-> +maintainers:
-> +  - Akshay Gupta <Akshay.Gupta@amd.com>
+> +	data = devm_kzalloc(dev, sizeof(struct sbrmi_data), GFP_KERNEL);
+
+sizeof(*). Use recent coding style, not some old, downstream code.
+
+> +	if (!data)
+> +		return -ENOMEM;
 > +
-> +description: |
-> +  SB Remote Management Interface (SB-RMI) is an SMBus compatible
-> +  interface that reports AMD SoC's Power (normalized Power) using,
-> +  Mailbox Service Request over I3C interface to BMC.
-> +  The power attributes in hwmon reports power in microwatts.
+> +	mutex_init(&data->lock);
 > +
-> +properties:
-> +  reg:
-> +    - description: |
-> +        Encodes the static I2C address.
-> +      Socket 0: 0x3c
-> +      Socket 1: 0x38
-> +    - description: |
-> +        First half of the Provisioned ID (following the PID
-> +        definition provided by the I3C specification).
-> +        Contains the manufacturer ID left-shifted by 1 (0x224).
-> +    - description: |
-> +        Second half of the Provisioned ID (following the PID
-> +        definition provided by the I3C specification).
-> +        Contains the ORing of the part ID left-shifted by 16,
-> +        the instance ID left-shifted by 12 and extra information (0x00000002).
+> +	data->regmap = devm_regmap_init_i3c(i3cdev, &sbrmi_i3c_regmap_config);
+> +	if (IS_ERR(data->regmap))
+> +		return PTR_ERR(data->regmap);
 > +
+> +	/* Enable alert for SB-RMI sequence */
+> +	ret = sbrmi_enable_alert(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Cache maximum power limit */
+> +	ret = sbrmi_get_max_pwr_limit(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * AMD APML I3C devices support static address
+> +	 */
+> +	if (i3cdev->desc->info.static_addr)
+> +		data->dev_static_addr = i3cdev->desc->info.static_addr;
+> +	else
+> +		data->dev_static_addr = i3cdev->desc->info.dyn_addr;
+> +
+> +	dev_set_drvdata(dev, data);
+> +
+> +	ret = create_hwmon_sensor_device(dev, data);
+> +	if (ret < 0)
+> +		return ret;
+> +	return create_misc_rmi_device(data, dev);
+> +}
+> +
+> +static void sbrmi_i3c_remove(struct i3c_device *i3cdev)
+> +{
+> +	struct sbrmi_data *data = dev_get_drvdata(&i3cdev->dev);
+> +
+> +	misc_deregister(&data->sbrmi_misc_dev);
+> +	/* Assign fops and parent of misc dev to NULL */
+> +	data->sbrmi_misc_dev.fops = NULL;
+> +	data->sbrmi_misc_dev.parent = NULL;
+> +	dev_info(&i3cdev->dev, "Removed sbrmi-i3c driver\n");
 
-And this entire patch is just noop. Makes no difference, makes no impact.
+No, drop. This is useless.
 
-Drop it and write proper bindings with proper description of problem you
-are solving.
 
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
 
 Best regards,
 Krzysztof
