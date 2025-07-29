@@ -1,59 +1,59 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CC641AAC;
-	Tue, 29 Jul 2025 03:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C788217648;
+	Tue, 29 Jul 2025 03:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753758147; cv=none; b=QmY5X+GKtzVFSDRdOV9lvx5YL6m34ESRbrZR07E42V3dxHYjjkIVaUmbhTxyg/j5n+PJrYqmI3MonLXYUnjEY4rUkAh+S/okXew2xnuOrwHNjirP788BVkndANf16L+Jw3/0rYxbvotEmM1f9k9iXegYGiA9TbJ0n4gNsmvT3F0=
+	t=1753759538; cv=none; b=l8mP1UrDOju/UaxBzZ3brYAEdUIiu4jrqt0z8fUa+G/j9oAJSrN2XZamBMo+LQL25oSkHa8O0hRwfoDiQMl+JA8brApuxkNr5NeZ36AfMi5GayFZqVYcydnfjhPoRT5gm5UJwJQfRQolKbw3EKhN7ZlURz+JMjOvTA39mkNOVXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753758147; c=relaxed/simple;
-	bh=OsQNjlXG5/0UkxcrZKePdxVb1VHFUkgy+LIaTlH62r4=;
+	s=arc-20240116; t=1753759538; c=relaxed/simple;
+	bh=OFla0Mlmsh3wjN+tGt5cYV/GIFOp7KH80aIZduegpO0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CEMoRQRKh4LfwQkqBuJWxIdtbBDtqZr0KNkkBE+AOcJcWNkUM3nyKOjJDjxu0dJYh9j0gf2x3H870o6BgmdTvh7PJRzBew+3VQW42HxRqNxf1WTg+fTsoUz0kgipH0VZf0sRqi6vTAeaKSPMmRQoFDAzslWjx58CFkadxdWHIL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMQrPjHi; arc=none smtp.client-ip=209.85.219.51
+	 To:Cc:Content-Type; b=NgfU8ITmgtM06PmWi1HfNnA8B3Cp+anruFwlfpZbjFkEROb5HbtRNy98w8iXWGResKTU07fizgM7j1PtOIzxuzn4pVlM5bG2zvuxb8FCiiTawy2qxR/6UGdi4cb7nbqlZ4Oy55T+uT7xAMIP4m3SolfN1W/UQTnellAE3Y27iKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nEUZkaO7; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMQrPjHi"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-70749d4c5b5so12806856d6.1;
-        Mon, 28 Jul 2025 20:02:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nEUZkaO7"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-70736b2ea12so12065686d6.1;
+        Mon, 28 Jul 2025 20:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753758145; x=1754362945; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753759535; x=1754364335; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RxLZEk8ucHjmDXpW5WET4F80L4SqpMmaK9Cn+SQMPVY=;
-        b=aMQrPjHiQFNjrb9rJ2bXB7+VQhceQaKJ8rD1cd2HL58oiqbv8TrYR3vrp4L5wRcFIY
-         IH4DiSc4d7gMB+Kqcf45xa3riwZoK2cnXWHMd0AgHg9GOMlDysZq4dE4MIhbvZaolxRP
-         Dmjuz7V+IsdGs4QQ+dhfNcPSQRbPgbaGbIQ2L8lvLWKRoIXODiR35MnfExiePyYm+D5w
-         zWCTdhZAQp0sI1wc+16hRjTMkAnmTVWzL60cj/tCXAnIRSzmu9derv9N80xcrTNC8IyR
-         6yDHZ4R3dvu0Zex24GVURGW+D6vNjYnPjwc98lDTaRNTtbJQUmNL3rAuJPXeNhIy4Mq0
-         IJwQ==
+        bh=GbIlBRAqip9v9VzvrBRfzRMelfLWLyATzgaHfrw2TLY=;
+        b=nEUZkaO7N4iAieoZ3gkiINarC8pw7PVnHbRfKLENj4YR9Df6IkIwUyS/Rk3Qv825Dt
+         D3U9iXptdguyNfx9jErQ3WmCAmiZETm1qs27O5iHtJS44jemIX/FLBxlar4O/ZY9jiO/
+         htT0e/xKrTcptYhY3JElEfk9RPHMbd1VO1I84EL0IEiU9rkf1JEgdkfGQoDblzu0hUi5
+         rBQqYyjVeu7qGOkzNpcsSA12ALbJgjfmV6oYeR3WPSTUh7qhy/ZUMZJ6KdWTXOL1amYy
+         +HJsFdwOfUABCJYyFFYZPccdLd1GgHDm/RWax+Ll7Vh7vzMZ67xrYEX41E+JEp/2Ja7f
+         fOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753758145; x=1754362945;
+        d=1e100.net; s=20230601; t=1753759535; x=1754364335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RxLZEk8ucHjmDXpW5WET4F80L4SqpMmaK9Cn+SQMPVY=;
-        b=GuKVa7E+hNyfMPqdjx4Jczacp8oroqYOHYtcNO2C94mqo0nnJO7c4QPMCAu0lsrDCj
-         pnklv24Lb5yOIhdtm1XyasWy4KtjkIT3jr++tGK7WGYrpY5ab4VwJrheofm2qj/DKraw
-         a3SzdJjn24BxMot75aIAMoqSe5IVPEWDfQXORhfrxp4PnGHeEtEUJCz9HzAjK5/WWyml
-         Dx22Mwahl37zci2OX9qvy/a5ln1uKi2siEhlHw+asr09g5nhS5L1Ke4UpnHBMm0tI/wi
-         idCZww0S3JWvsh43TF7wW6j4mGPDA8RfwqXbmkWsxmCwKgNLuvIh10ZzNuWfUeMAcYlT
-         XPag==
-X-Forwarded-Encrypted: i=1; AJvYcCUSQ7lKV/+yaAWuiqSoOsQqkbSdRaFEx780sufpfmanBxUeQl1xI79yAM+Wowj7s6D4vi9jiRv76vA=@vger.kernel.org, AJvYcCVMqXwnR2apZQ5SKQCozXaj4HlIkn6iuRMQcOFF1TNVdRj/2SDrmKn5F0Ml0+kDQtviwwABnfXYRYTc92XvzToXI6X5KQ==@vger.kernel.org, AJvYcCXjE9L6LA9h7b9DpjQk3Ay+swa/JyP5Foi9ob7KEeP7kj16aoeqG0s3FSWslbL+UHPBp4emt46THtNhf4qs@vger.kernel.org, AJvYcCXrf197F7RZ/UEal7AKffRz/zhbyNSvcw3+CuGpqHHTWbLJeluK9OnyrksvxUXHUEXLZPiQzM+MlRDC9ME=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylgI5HiKRR1Ubz6YRjdY3x2Ejr6j+rtwPLk5+PwM3GDhARsry0
-	EmW20Pq6qdwlUJu1lNsCiDpNQLdTq2DbVBzBKk1KPgnvJkoIZ3uua8QtqB1q2L2Hl61dgAZ3oxR
-	gUev1d19UgrNMrW+1SI/EbfNHks5UWDk=
-X-Gm-Gg: ASbGncsI0HUdnVAxebKclpRXCO68krNpqIrSef5t2WeHpClDP8VaRSJ9t44gpH1p7OO
-	DoToU4v/4lMj16Ngifr2R2YHpjR2DR1OwNyC5yW4eRlI78e2+270zwyzFlocwOKEn6RzFrDPxKY
-	jx0poyGBvX8CLgKatK/F3MZ6mLFCYhdMPAM2wgkU5s0O2pc3QVgIPoIwSV65p+oKe1CfhaPw2BA
-	IOIRdHN
-X-Google-Smtp-Source: AGHT+IEZ5i7Ft/9QMigDfDc5lmR9YFBRwOuQYysTzY5Fv2RZ8/M8Gw5DLqfeIOsaJJzgAJZunv/Yi9odXz1qy8iyWE4=
-X-Received: by 2002:ad4:5bc6:0:b0:707:34db:4579 with SMTP id
- 6a1803df08f44-70734db474amr143750296d6.13.1753758144731; Mon, 28 Jul 2025
- 20:02:24 -0700 (PDT)
+        bh=GbIlBRAqip9v9VzvrBRfzRMelfLWLyATzgaHfrw2TLY=;
+        b=vWQ/IvGsZevBTWkafz7yEAyDRbDcQIOR1wqPQDH8kUaAMu9k73AQPDfgsYfjr6OoJP
+         aRimKF8WPn0wGBr9XS9F/90hk+Bjh3Lk3FTRRBhnzcvItR62SNJKXxIzMJYSQWgX986H
+         jkBnj+/upJVJBMOQDBpz0kh2V5kyusdItLb+0Zz9AUAuq7LQNqx5YAZVEf2DxPhbD88D
+         QeVDS0IOxL7vgG7RsVwYpTTYKeZfYNhOwF53btx8XbiWZvu2p3IXKoEKZLtVa2zXy1F8
+         Y/3PhAJv4fYaxpDdTeChFvV7nY+J0jpNR0WdgiUnBJQvuj9jVNeUccHH//LiSHzhSWPT
+         kJ+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUdWR5ta1eg5wvsE/E/cz1DPCG4WkNYYP6z+S8AVf51ikIqhMsU0GlmsyWCA8fPplJtVaMm8QYtvTflFENtUdfvBZ8Gag==@vger.kernel.org, AJvYcCVPms3eBQRCRVZjn5ZhX5lVyzA00licYDf5F88QqDMFSweZa/GORYw36swwmTsJuePmcw7hNmMc0+Y=@vger.kernel.org, AJvYcCWTTU/ziuO2NDEjAC7GHCRP858YSdyFFAk33yOiraGOzjcJ/QyiNSIjtD6YwDG+OIAZKcltDrOkc4llpg==@vger.kernel.org, AJvYcCXYUPITPhKbJZQvpq67JuAIBRiuHtndAYAAG2lno0ydUQQWu6kZGOw/TtAAfZ1ZqNLiWzixVKIYgaqPt18=@vger.kernel.org, AJvYcCXwnzqFafSgd1LaZKViNROuabsiLGCbHZhWA9GIhJTN1jHq2x6qrzdKUhLNxcE8whxJOJ5cvIag0CL/uKxj@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlJ3Exusk07lHmv8GtqZRVck4DIH/ugubFLmmBSzYkDdCc7kiy
+	1U/6kfFUWxyPc+Ke0twp/4iWrJ3n2IpUa9700Jn+yBP00l++cHQ9x+r9pA9DowKD3SUMO3QsOUf
+	ehs4jZJ4L8PENDqdS/Od4brp46Ul70pw=
+X-Gm-Gg: ASbGncvogzeHY6N9aux5X9t+2902g7/uWl4VMJiyOFq6oWI+nAa16vWeYnwSruqfeH2
+	9hyvgBnQFy7B3HQhczrGa/l+t1FxGMOCmLyJRG+DrUVRPsBXJXJ/RUq5fGpU55a4o4fYLeLu5yg
+	i8tAI81erYk4SqXoTyXv3nJ+lzqX6ctwJB0dEGOfW/ybYxyHXCwGvsf8xHzO827a93bIp2JTF0v
+	DdL2B3s
+X-Google-Smtp-Source: AGHT+IF28oeQ5EC3SvmeQ7s1YAG7oH88F359RBBpmvHYa3VzX/vX7Yx4sGBcoGJaQf2PjB2Wy+U/fwyC5xN5sNZpO/E=
+X-Received: by 2002:a05:6214:2a45:b0:704:f94e:b5d8 with SMTP id
+ 6a1803df08f44-707205ec6famr173957776d6.48.1753759534954; Mon, 28 Jul 2025
+ 20:25:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,193 +61,516 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250726204041.516440-1-derekjohn.clark@gmail.com>
- <20250726204041.516440-3-derekjohn.clark@gmail.com> <edc7d119-ee64-489b-ab1d-9577f007e918@gmx.de>
-In-Reply-To: <edc7d119-ee64-489b-ab1d-9577f007e918@gmx.de>
+ <20250726204041.516440-4-derekjohn.clark@gmail.com> <eac46383-c54c-419e-b63e-c2fd003f2b6c@gmx.de>
+In-Reply-To: <eac46383-c54c-419e-b63e-c2fd003f2b6c@gmx.de>
 From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Mon, 28 Jul 2025 20:02:13 -0700
-X-Gm-Features: Ac12FXzf37qvI2c21oO1Bf1Tj5IZWdjVkuM1aw6d5-SoAjyoXUrZ8vjsBSASMAM
-Message-ID: <CAFqHKT==O2qNwojfp_LCBXN4xLGkpaoSit36zv9M-paoCSaD2g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] platform/x86: (ayn-ec) Add Temperature Sensors
+Date: Mon, 28 Jul 2025 20:25:24 -0700
+X-Gm-Features: Ac12FXzRGm2dkGImgF6tRhAvDMmxDasHtizaX7JrYqNNj37mTsJda3JLX7_LgR0
+Message-ID: <CAFqHKT=YRoSsThEbqXLPHR_1M3=zRHw9f758JKm++7TfN8ZWKA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] platform/x86: (ayn-ec) Add RGB Interface
 To: Armin Wolf <W_Armin@gmx.de>
 Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
 	Hans de Goede <hansg@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
 	Alok Tiwari <alok.a.tiwari@oracle.com>, David Box <david.e.box@linux.intel.com>, 
 	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Lee Jones <lee@kernel.org>, pavel@kernel.org, linux-leds@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 26, 2025 at 4:37=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
+On Sat, Jul 26, 2025 at 4:59=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
 >
 > Am 26.07.25 um 22:40 schrieb Derek J. Clark:
 >
-> > Adds temperature sensors to the ayn-ec hwmon interface. These read-only
-> > values include Battery, Motherboard, Charger IC, vCore, and CPU Core, a=
-s
-> > well as labels for each entry. The temperature values provided by the E=
-C
-> > are whole numbers in degrees Celsius. As hwmon expects millidegrees, we
-> > scale the raw value up.
+> > Adds an EC controlled LED Multicolor Class Device for controlling the
+> > RGB rings around the joysticks.
 > >
-> > `sensors` output after this patch is applied:
-> > aynec-isa-0000
-> > Adapter: ISA adapter
-> > fan1:        1876 RPM
-> > Battery:      +29.0=C2=B0C
-> > Motherboard:  +30.0=C2=B0C
-> > Charger IC:   +30.0=C2=B0C
-> > vCore:        +36.0=C2=B0C
-> > CPU Core:     +48.0=C2=B0C
+> > The EC provides a single register for each of the colors red, green, an=
+d
+> > blue, as well as a mode switching register. The EC accepts values
+> > [0-255] for all colors. There are two available effects: breathe, which=
+ is
+> > the default when the device is started, and monocolor. When resuming fr=
+om
+> > sleep the user selected effect will be overwritten by the EC, so the
+> > driver retains the last setting and resets on resume. When setting a
+> > color, each color register is set before a final "write" code is sent t=
+o
+> > the device. The EC may briefly reflect the "write" code when writing, b=
+ut
+> > quickly changes to the "monocolor" value once complete. The driver
+> > interprets both of these values as "monocolor" in _show to simplify the
+> > sysfs exposed to the user.
+> >
+> > Two custom attributes are added to the standard LED parent device:
+> > effect, a RW file descriptor used to set the effect, and effect_index,
+> > which enumerates the available valid options.
 > >
 > > Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
 > > ---
-> >   drivers/platform/x86/ayn-ec.c | 88 ++++++++++++++++++++++++++++++++++=
--
-> >   1 file changed, 86 insertions(+), 2 deletions(-)
+> >   drivers/platform/x86/Kconfig  |   3 +
+> >   drivers/platform/x86/ayn-ec.c | 285 +++++++++++++++++++++++++++++++++=
++
+> >   2 files changed, 288 insertions(+)
 > >
+> > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfi=
+g
+> > index 4819bfcffb6b..85dfb88cca6f 100644
+> > --- a/drivers/platform/x86/Kconfig
+> > +++ b/drivers/platform/x86/Kconfig
+> > @@ -308,6 +308,9 @@ config AYN_EC
+> >       tristate "AYN x86 devices EC platform control"
+> >       depends on ACPI
+> >       depends on HWMON
+> > +     depends on NEW_LEDS
+> > +     select LEDS_CLASS
+> > +     select LEDS_CLASS_MULTICOLOR
+> >       help
+> >         This is a driver for AYN and Tectoy x86 handheld devices. It pr=
+ovides
+> >         temperature monitoring, manual fan speed control, fan curve con=
+trol,
 > > diff --git a/drivers/platform/x86/ayn-ec.c b/drivers/platform/x86/ayn-e=
 c.c
-> > index 8bd3ed1c69eb..466cc33adcb0 100644
+> > index 466cc33adcb0..25f748d7db18 100644
 > > --- a/drivers/platform/x86/ayn-ec.c
 > > +++ b/drivers/platform/x86/ayn-ec.c
-> > @@ -61,6 +61,14 @@
-> >   #define HWMON_PWM_FAN_MODE_AUTO     0x02
-> >   #define HWMON_PWM_FAN_MODE_EC_CURVE 0x03
+> > @@ -28,6 +28,8 @@
+> >   #include <linux/hwmon.h>
+> >   #include <linux/init.h>
+> >   #include <linux/kernel.h>
+> > +#include <linux/led-class-multicolor.h>
+> > +#include <linux/leds.h>
+> >   #include <linux/module.h>
+> >   #include <linux/platform_device.h>
+> >   #include <linux/sysfs.h>
+> > @@ -68,6 +70,16 @@
+> >   #define AYN_SENSOR_PROC_TEMP_REG    0x09 /* CPU Core */
+> >   #define AYN_SENSOR_VCORE_TEMP_REG   0x08 /* vCore */
 > >
-> > +/* EC Temperature Sensors */
-> > +#define AYN_SENSOR_BAT_TEMP_REG              0x04 /* Battery */
-> > +#define AYN_SENSOR_CHARGE_TEMP_REG   0x07 /* Charger IC */
-> > +#define AYN_SENSOR_MB_TEMP_REG               0x05 /* Motherboard */
-> > +#define AYN_SENSOR_PROC_TEMP_REG     0x09 /* CPU Core */
-> > +#define AYN_SENSOR_VCORE_TEMP_REG    0x08 /* vCore */
+> > +/* EC Controlled RGB registers */
+> > +#define AYN_LED_MC_RED_REG   0xB0 /* Range 0x00-0xFF */
+> > +#define AYN_LED_MC_GREEN_REG 0xB1 /* Range 0x00-0xFF */
+> > +#define AYN_LED_MC_BLUE_REG  0xB2 /* Range 0x00-0xFF */
+> > +#define AYN_RGB_EFFECT_REG   0xB3
 > > +
-> > +
->
-> Please avoid multiple blank lines.
->
+> > +/* RGB effect modes */
+> > +#define AYN_RGB_EFFECT_BREATHE               0x00
+> > +#define AYN_RGB_EFFECT_MONOCOLOR     0x55
+> > +#define AYN_RGB_EFFECT_WRITE         0xAA
+> >
 > >   /* Handle ACPI lock mechanism */
 > >   #define ACPI_LOCK_DELAY_MS 500
+> > @@ -86,7 +98,9 @@ int ayn_pwm_curve_registers[10] =3D {
+> >   };
 > >
-> > @@ -81,8 +89,19 @@ struct ayn_device {
+> >   struct ayn_device {
+> > +     struct led_classdev *led_cdev;
 > >       u32 ayn_lock; /* ACPI EC Lock */
+> > +     u8 rgb_effect;
 > >   } drvdata;
 > >
-> > -/* Handle ACPI lock mechanism */
-> > -#define ACPI_LOCK_DELAY_MS 500
-> > +struct thermal_sensor {
-> > +     char *name;
-> > +     int reg;
+> >   struct thermal_sensor {
+> > @@ -103,6 +117,33 @@ static struct thermal_sensor thermal_sensors[] =3D=
+ {
+> >       {}
+> >   };
+> >
+> > +#define DEVICE_ATTR_RW_NAMED(_name, _attrname)               \
+> > +     struct device_attribute dev_attr_##_name =3D {         \
+> > +             .attr =3D { .name =3D _attrname, .mode =3D 0644 }, \
+> > +             .show =3D _name##_show,                        \
+> > +             .store =3D _name##_store,                      \
+> > +     }
+> > +
+> > +#define DEVICE_ATTR_RO_NAMED(_name, _attrname)               \
+> > +     struct device_attribute dev_attr_##_name =3D {         \
+> > +             .attr =3D { .name =3D _attrname, .mode =3D 0444 }, \
+> > +             .show =3D _name##_show,                        \
+> > +     }
+>
+> Please use DEVICE_ATTR_RW()/DEVICE_ATTR_RO() directly.
+>
+> > +
+> > +/* Handle ACPI lock mechanism */
+> > +#define ACPI_LOCK_DELAY_MS 500
+>
+> You already defined ACPI_LOCK_DELAY_MS earlier, please remove.
+>
+> > +
+> > +/* RGB effect values */
+> > +enum RGB_EFFECT_OPTION {
+> > +     BREATHE,
+> > +     MONOCOLOR,
 > > +};
 > > +
-> > +static struct thermal_sensor thermal_sensors[] =3D {
-> > +     { "Battery",            AYN_SENSOR_BAT_TEMP_REG },
-> > +     { "Motherboard",        AYN_SENSOR_MB_TEMP_REG },
-> > +     { "Charger IC",         AYN_SENSOR_CHARGE_TEMP_REG },
-> > +     { "vCore",              AYN_SENSOR_VCORE_TEMP_REG },
-> > +     { "CPU Core",           AYN_SENSOR_PROC_TEMP_REG },
-> > +     {}
+> > +static const char *const RGB_EFFECT_TEXT[] =3D {
+> > +     [BREATHE] =3D "breathe",
+> > +     [MONOCOLOR] =3D "monocolor",
 > > +};
 >
-> Please declare this array as const.
+> No capslock for variables please.
 >
-> >
+> > +
 > >   static bool lock_global_acpi_lock(void)
 > >   {
-> > @@ -428,6 +447,61 @@ static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point3_temp=
-, pwm_curve, 7);
-> >   static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point4_temp, pwm_curve, 8);
-> >   static SENSOR_DEVICE_ATTR_RW(pwm1_auto_point5_temp, pwm_curve, 9);
+> >       return ACPI_SUCCESS(acpi_acquire_global_lock(ACPI_LOCK_DELAY_MS,
+> > @@ -528,10 +569,253 @@ static struct attribute *ayn_sensors_attrs[] =3D=
+ {
+> >
+> >   ATTRIBUTE_GROUPS(ayn_sensors);
 > >
 > > +/**
-> > + * thermal_sensor_show() - Read a thermal sensor attribute value.
-> > + *
-> > + * @dev: The attribute's parent device.
-> > + * @attr: The attribute to read.
-> > + * @buf: Buffer to write the result into.
-> > + *
-> > + * Return: Number of bytes read, or an error.
+> > + * rgb_effect_write() - Set the RGB effect stored in drvdata.rgb_effec=
+t.
 > > + */
-> > +static ssize_t thermal_sensor_show(struct device *dev,
-> > +                                struct device_attribute *attr, char *b=
-uf)
+> > +static int rgb_effect_write(void)
 > > +{
-> > +     long ret, val;
-> > +     int i;
+> > +     return write_to_ec(AYN_RGB_EFFECT_REG, drvdata.rgb_effect);
+> > +};
 > > +
-> > +     i =3D to_sensor_dev_attr(attr)->index;
+> > +/**
+> > + * rgb_effect_read() - Read the RGB effect and store it in drvdata.rgb=
+_effect.
+> > + */
+> > +static int rgb_effect_read(void)
+> > +{
+> > +     int ret;
+> > +     long effect;
 > > +
-> > +     ret =3D read_from_ec(thermal_sensors[i].reg, 1, &val);
+> > +     ret =3D read_from_ec(AYN_RGB_EFFECT_REG, 1, &effect);
 > > +     if (ret)
 > > +             return ret;
 > > +
-> > +     val =3D val * 1000L;
+> > +     switch (effect) {
+> > +     case AYN_RGB_EFFECT_WRITE:
+> > +     case AYN_RGB_EFFECT_MONOCOLOR:
+> > +             drvdata.rgb_effect =3D AYN_RGB_EFFECT_WRITE;
+> > +             break;
+> > +     default:
+> > +             drvdata.rgb_effect =3D AYN_RGB_EFFECT_BREATHE;
 >
-> Please use MILLIDEGREE_PER_DEGREE from linux/units.h here.
+> You will need some locking around rgb_effect.
 >
+> > +     }
 > > +
-> > +     return sysfs_emit(buf, "%ld\n", val);
+> > +     return 0;
 > > +}
 > > +
 > > +/**
-> > + * thermal_sensor_label_show() - Read a thermal sensor attribute label=
-.
+> > + * rgb_effect_store() - Store the given RGB effect and set it.
 > > + *
-> > + * @dev: The attribute's parent device.
+> > + * @dev: parent device of the given attribute.
+> > + * @attr: The attribute to write to.
+> > + * @buf: Input value string from sysfs write.
+> > + * @count: The number of bytes written.
+> > + *
+> > + * Return: The number of bytes written, or an error.
+> > + */
+> > +static ssize_t rgb_effect_store(struct device *dev,
+> > +                             struct device_attribute *attr, const char=
+ *buf,
+> > +                             size_t count)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret =3D sysfs_match_string(RGB_EFFECT_TEXT, buf);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     if (ret)
+> > +             drvdata.rgb_effect =3D AYN_RGB_EFFECT_WRITE;
+> > +     else
+> > +             drvdata.rgb_effect =3D AYN_RGB_EFFECT_BREATHE;
+> > +
+> > +     ret =3D rgb_effect_write();
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     return count;
+> > +};
+> > +
+> > +/**
+> > + * rgb_effect_show() - Read the current RGB effect.
+> > + *
+> > + * @dev: parent device of the given attribute.
 > > + * @attr: The attribute to read.
 > > + * @buf: Buffer to read to.
 > > + *
-> > + * Return: Number of bytes read, or an error.
+> > + * Return: The number of bytes read, or an error.
 > > + */
-> > +static ssize_t thermal_sensor_label_show(struct device *dev,
-> > +                                      struct device_attribute *attr,
-> > +                                      char *buf)
+> > +static ssize_t rgb_effect_show(struct device *dev,
+> > +                            struct device_attribute *attr, char *buf)
 > > +{
-> > +     int i =3D to_sensor_dev_attr(attr)->index;
+> > +     int ret, i;
 > > +
-> > +     return sysfs_emit(buf, "%s\n", thermal_sensors[i].name);
+> > +     ret =3D rgb_effect_read();
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     switch (drvdata.rgb_effect) {
+> > +     case AYN_RGB_EFFECT_WRITE:
+> > +     case AYN_RGB_EFFECT_MONOCOLOR:
+> > +             i =3D MONOCOLOR;
+> > +             break;
+> > +     default:
+> > +             i =3D BREATHE;
+> > +             break;
+> > +     }
+> > +
+> > +     return sysfs_emit(buf, "%s\n", RGB_EFFECT_TEXT[i]);
+> > +};
+> > +
+> > +static DEVICE_ATTR_RW_NAMED(rgb_effect, "effect");
+> > +
+> > +/**
+> > + * rgb_effect_show() - Display the RGB effects available.
+> > + *
+> > + * @dev: parent device of the given attribute.
+> > + * @attr: The attribute to read.
+> > + * @buf: Buffer to read to.
+> > + *
+> > + * Return: The number of bytes read, or an error.
+> > + */
+> > +static ssize_t rgb_effect_index_show(struct device *dev,
+> > +                                  struct device_attribute *attr, char =
+*buf)
+> > +{
+> > +     size_t count =3D 0;
+> > +     unsigned int i;
+> > +
+> > +     for (i =3D 0; i < ARRAY_SIZE(RGB_EFFECT_TEXT); i++)
+> > +             count +=3D sysfs_emit_at(buf, count, "%s ", RGB_EFFECT_TE=
+XT[i]);
+> > +
+> > +     buf[count - 1] =3D '\n';
+> > +
+> > +     return count;
 > > +}
 > > +
-> > +static SENSOR_DEVICE_ATTR_RO(temp1_input, thermal_sensor, 0);
-> > +static SENSOR_DEVICE_ATTR_RO(temp2_input, thermal_sensor, 1);
-> > +static SENSOR_DEVICE_ATTR_RO(temp3_input, thermal_sensor, 2);
-> > +static SENSOR_DEVICE_ATTR_RO(temp4_input, thermal_sensor, 3);
-> > +static SENSOR_DEVICE_ATTR_RO(temp5_input, thermal_sensor, 4);
-> > +static SENSOR_DEVICE_ATTR_RO(temp1_label, thermal_sensor_label, 0);
-> > +static SENSOR_DEVICE_ATTR_RO(temp2_label, thermal_sensor_label, 1);
-> > +static SENSOR_DEVICE_ATTR_RO(temp3_label, thermal_sensor_label, 2);
-> > +static SENSOR_DEVICE_ATTR_RO(temp4_label, thermal_sensor_label, 3);
-> > +static SENSOR_DEVICE_ATTR_RO(temp5_label, thermal_sensor_label, 4);
-> > +
-> >   static struct attribute *ayn_sensors_attrs[] =3D {
-> >       &sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
-> > @@ -439,6 +513,16 @@ static struct attribute *ayn_sensors_attrs[] =3D {
-> >       &sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
-> >       &sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
-> > +     &sensor_dev_attr_temp1_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp1_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp2_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp2_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp3_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp3_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp4_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp4_label.dev_attr.attr,
-> > +     &sensor_dev_attr_temp5_input.dev_attr.attr,
-> > +     &sensor_dev_attr_temp5_label.dev_attr.attr,
+> > +static DEVICE_ATTR_RO_NAMED(rgb_effect_index, "effect_index");
 >
-> Please use the standard hwmon API for exposing those temperature sensors.
->
-> Thanks,
-> Armin Wolf
+> We might need to coordinate this with the LED subsystem maintainer. I CCe=
+d him so that he can
+> voice his opinion about those sysfs attributes. Personally i would move t=
+hose attributes below
+> the platform device.
 >
 
-Hmm, not sure how I missed those, but yeah they are certainly there...
-That will make things more simple for sure.
+The main reason I added them to the LED interface is to make writing
+udev rules more intuitive. Quite a few folks using the DKMS version of
+this driver just want to set a specific color on boot (usually off).
+IMO it makes logical sense that all the settings related to the LEDs
+would be on the LED device. I'll wait for the response from your CC
+before sending a v4.
+
+> > +
+> > +/**
+> > + * ayn_led_mc_brightness_set() - Write the brightness for the RGB LED.
+> > + *
+> > + * @led_cdev: Parent LED device for the led_classdev_mc.
+> > + * @brightness: Brightness value to write [0-255].
+> > + */
+> > +static void ayn_led_mc_brightness_set(struct led_classdev *led_cdev,
+> > +                                   enum led_brightness brightness)
+> > +{
+> > +     struct led_classdev_mc *led_cdev_mc =3D lcdev_to_mccdev(led_cdev)=
+;
+> > +     struct mc_subled s_led;
+> > +     int i, ret, val;
+> > +
+> > +     switch (drvdata.rgb_effect) {
+> > +     case AYN_RGB_EFFECT_WRITE:
+> > +     case AYN_RGB_EFFECT_MONOCOLOR:
+> > +             break;
+> > +     case AYN_RGB_EFFECT_BREATHE:
+> > +             return;
+> > +     }
+>
+> This might confuse uses when they switch back to monocolor mode. I sugges=
+t that
+> you write the RGB values regardless of the currently selected effect.
+>
+
+I'll test if this interferes with breathe mode. I wrote this driver a
+couple years ago as a DKMS module so I don't remember immediately if I
+had to add this mitigation to prevent switching to monocolor if the
+multi_index or brightness was written to. If that does turn out to be
+the case, should I cache the latest write until monocolor is set?
+
+> > +
+> > +     led_cdev->brightness =3D brightness;
+> > +     for (i =3D 0; i < led_cdev_mc->num_colors; i++) {
+> > +             s_led =3D led_cdev_mc->subled_info[i];
+> > +             val =3D brightness * s_led.intensity / led_cdev->max_brig=
+htness;
+>
+> Please check if you can use led_mc_calc_color_components() instead.
+>
+> > +             ret =3D write_to_ec(s_led.channel, val);
+> > +             if (ret) {
+> > +                     dev_err(led_cdev->dev,
+> > +                             "Error setting brightness:  %d\n", ret);
+> > +                     return;
+> > +             }
+> > +     }
+> > +
+> > +     /* Must write mode again to change to set color */
+> > +     write_to_ec(AYN_RGB_EFFECT_REG, AYN_RGB_EFFECT_WRITE);
+> > +};
+> > +
+> > +/**
+> > + * ayn_led_mc_brightness_get() - Get the brightness for the RGB LED.
+> > + *
+> > + * @led_cdev: Parent LED device for the led_classdev_mc.
+> > + *
+> > + * Return: Current brightness.
+> > + */
+> > +static enum led_brightness ayn_led_mc_brightness_get(struct led_classd=
+ev *led_cdev)
+> > +{
+> > +     return led_cdev->brightness;
+> > +};
+>
+> This looks strange, are you sure that you have to provide this callback?
+
+Hmm, maybe not.
+
+> > +
+> > +static struct attribute *ayn_led_mc_attrs[] =3D {
+> > +     &dev_attr_rgb_effect.attr,
+> > +     &dev_attr_rgb_effect_index.attr,
+> > +     NULL,
+> > +};
+> > +
+> > +static struct attribute_group ayn_led_mc_group =3D {
+> > +     .attrs =3D ayn_led_mc_attrs,
+> > +};
+> > +
+> > +struct mc_subled ayn_led_mc_subled_info[] =3D {
+> > +     {
+> > +             .color_index =3D LED_COLOR_ID_RED,
+> > +             .brightness =3D 0,
+> > +             .intensity =3D 0,
+> > +             .channel =3D AYN_LED_MC_RED_REG,
+> > +     },
+> > +     {
+> > +             .color_index =3D LED_COLOR_ID_GREEN,
+> > +             .brightness =3D 0,
+> > +             .intensity =3D 0,
+> > +             .channel =3D AYN_LED_MC_GREEN_REG,
+> > +     },
+> > +     {
+> > +             .color_index =3D LED_COLOR_ID_BLUE,
+> > +             .brightness =3D 0,
+> > +             .intensity =3D 0,
+> > +             .channel =3D AYN_LED_MC_BLUE_REG,
+> > +     },
+> > +};
+>
+> Please initialize the intensity fields with the current RGB register valu=
+es
+> during probe. Also please declare the array as static.
+>
+
+Good idea, thanks.
+
+> > +
+> > +struct led_classdev_mc ayn_led_mc =3D {
+> > +     .led_cdev =3D {
+> > +             .name =3D "ayn:rgb:joystick_rings",
+> > +             .brightness =3D 0,
+>
+> Does the EC support some kind of "RGB off" state? If not then please init=
+ialize the brightness field
+> with 0 if the RGB value during probe is not 0x000000 and 255 otherwise. A=
+lso please declare the LED device
+> as static.
+>
+
+Off is done by setting all color registers to 0. Simple enough to add.
+I'm thinking something like:
+
+if (red || green || blue)
+        led_cdev.brightness =3D 255;
+else
+        led_cdev.brightness =3D 0;
+
+> > +             .max_brightness =3D 255,
+> > +             .brightness_set =3D ayn_led_mc_brightness_set,
+> > +             .brightness_get =3D ayn_led_mc_brightness_get,
+> > +             .color =3D LED_COLOR_ID_RGB,
+> > +     },
+> > +     .num_colors =3D ARRAY_SIZE(ayn_led_mc_subled_info),
+> > +     .subled_info =3D ayn_led_mc_subled_info,
+> > +};
+>
+> Should the LED be disabled during suspend? If yes then please set the LED=
+_CORE_SUSPENDRESUME flag on the LED device.
+>
+
+The EC takes over during suspend and switches back to breathe mode.
+Resume exists to return to user settings.
+
+> > +
+> > +static int ayn_ec_resume(struct platform_device *pdev)
+> > +{
+> > +     struct led_classdev *led_cdev =3D drvdata.led_cdev;
+> > +     int ret;
+> > +
+> > +     ret =3D rgb_effect_write();
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ayn_led_mc_brightness_set(led_cdev, led_cdev->brightness);
+> > +
+> > +     return 0;
+> > +}
+>
+> Using regmap would make this much easier.
+>
+> > +
+> >   static int ayn_ec_probe(struct platform_device *pdev)
+> >   {
+> >       struct device *dev =3D &pdev->dev;
+> >       struct device *hwdev;
+> > +     int ret;
+> > +
+> > +     ret =3D devm_led_classdev_multicolor_register(dev, &ayn_led_mc);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ret =3D devm_device_add_group(ayn_led_mc.led_cdev.dev, &ayn_led_m=
+c_group);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     drvdata.led_cdev =3D &ayn_led_mc.led_cdev;
+> > +     ret =3D rgb_effect_read();
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       hwdev =3D devm_hwmon_device_register_with_info(dev, "aynec", NULL=
+,
+> >                                                    &ayn_ec_chip_info,
+> > @@ -544,6 +828,7 @@ static struct platform_driver ayn_ec_driver =3D {
+> >               .name =3D "ayn-ec",
+> >       },
+> >       .probe =3D ayn_ec_probe,
+> > +     .resume =3D ayn_ec_resume,
+>
+> Please do not use the legacy PM callback, instead use DEFINE_SIMPLE_DEV_P=
+M_OPS() and the driver.pm field.
+>
+
+Okay, I wasn't aware of the newer callbacks. I'll look them up.
 
 Thanks,
 Derek
 
-> >       NULL,
+> Thanks,
+> Armin Wolf
+>
 > >   };
 > >
+> >   static struct platform_device *ayn_ec_device;
