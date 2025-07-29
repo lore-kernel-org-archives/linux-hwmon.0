@@ -1,160 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A130825394A;
-	Tue, 29 Jul 2025 18:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A702571C3
+	for <linux-hwmon@vger.kernel.org>; Tue, 29 Jul 2025 20:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753814252; cv=none; b=cB77IZjEKfrdzrK7GiSygLf3S3YA6OdCS+gZ46ptrjEfXMcn6EzQHBT4b47VadUmxNEjQp2BR75Sy50JmlSAUBgOkN4pZ12jm9TC21gyEkKR2Nb9yx3AR+zjHKl5Mhay2TR9iyyuVC07Nq7Ak0CKXJ9oNj6qcdQb7MReXTizcw8=
+	t=1753819796; cv=none; b=OMU0Yqw3aOSi/vmAPOWNv1ZD/O/5pFq8GrR4n63LVrxe8UQ3m6zGZlvLfqi5IMWPUOZ3oZ76l/jEseIH1fLzbzlciU4yRg16o6+9+1q+y+t4wUre118Ey7qx/hd1bnRUBdCjSCY7XQkOeJWmH5SGVhFkpyV3zeIoyPtSb7Nxg/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753814252; c=relaxed/simple;
-	bh=e/kMLxQK/nFx235KhbR4QiP5CRSJuobxUh+x8nD52uM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xobec+IMHwOJUdLfeRjVzTYrTfVqbNUYr41umPnyLlx4Vqt0WlPs0st7tgVdxQKCL2hhdL9+CP3ICmlY4vKMCWh4HweQ0LpDBY1oyJvbn2/lnZ6RW9iHmm3i0sn7gxD01iANutHg+aSXn0uCUi+Fx/m2e0gIUz0e93oc2dnZnVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QYFEMwMm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753819796; c=relaxed/simple;
+	bh=WLDylOIV5DSMc4Htd6swaNHV52iheLDXvOXUuB1Dke0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xi9O0iqOZ2BPAV1WtAQaBrcqywg7x48z+7B0rjt+kI4QIDTahiLk3ErWb299BVyRnAKs8Vi1LSkEhYmMBk/n54+5L09QEm0LWU3DO/nSKRyAOdADIR+6vdkj0MLzrNnROiMyb3mUYICNaiPV8kEGVTPm1HRcglTuVVtCIMwS51Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uChDz+94; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QYFEMwMm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC5CBC4CEF6;
-	Tue, 29 Jul 2025 18:37:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753814252;
-	bh=e/kMLxQK/nFx235KhbR4QiP5CRSJuobxUh+x8nD52uM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QYFEMwMmqgwFqvyvF5VyDhLbjiSWHkf6C33ICaY7JC8F+y/O9ze39pGGszYuDru8i
-	 ujHr2wQoqKRQju2A2Ms4fEQmX+lwTWdzqjnJvFxQ/02b5fh+/FbEjmvs5Tjn9jtQ2f
-	 GabiVGlUjpokE3pvPZ7NCO5BnPlUlVBXOcWCMd/PPmA00eyCKRZ6GlG3H1OfDkUrqs
-	 9e/elFFYlySjPe1kqCCSPAOXwevgehUzKrifeI9sHHtiqYtaGR8XPcdvP1Jm6u21Sv
-	 M3dmta1hXt9zed7mwxncYBPWdF11/ZHzz7o59lm7bc/3YiwkivVTaAbBhN9nnvgQPL
-	 6y2qnQL8uyyJQ==
-Date: Tue, 29 Jul 2025 19:37:23 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, Andy Shevchenko
- <andy@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 6/7] hwmon: iio: Add min/max support
-Message-ID: <20250729193723.5f0d784e@jic23-huawei>
-In-Reply-To: <099a8ce2-0837-4d79-8e58-8f7af0a0ff7d@linux.dev>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
-	<20250715012023.2050178-7-sean.anderson@linux.dev>
-	<20250727173542.46680071@jic23-huawei>
-	<099a8ce2-0837-4d79-8e58-8f7af0a0ff7d@linux.dev>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uChDz+94"
+Message-ID: <edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753819783;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=f4G9jfzRkCbi/mdO+Af4USWQef/YfKBzN+BkPPWWEt4=;
+	b=uChDz+94+uHWqCtw9dDp1C8OkiF0RiZYFpLz2gaeoz1TgXkBVWUnJLeu1RXKRUMWBNyLCp
+	9LnM4w2SUCCPDoI9e5/7fvCC2if1a8o/m7eOaTG1Ao0KV6eD0m6f1yJXWae3uOyn6b3xZM
+	zQOwq4U1JpVYd1jHlpjwv4F/DsGxYrg=
+Date: Tue, 29 Jul 2025 16:09:20 -0400
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 3/7] iio: Add in-kernel API for events
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Andy Shevchenko <andy@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
+ David Lechner <dlechner@baylibre.com>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+ <20250715012023.2050178-4-sean.anderson@linux.dev>
+ <d8e5c8fbeaee42e9e0708460c47bd68053cd8710.camel@gmail.com>
+ <9b187e7f-a116-4aea-a9a6-b9222562868d@linux.dev>
+ <20250727172126.35d0a477@jic23-huawei>
+ <0ccf7735-6a2c-473a-ab67-ae0c5ff9a335@linux.dev>
+ <20250729193346.39791223@jic23-huawei>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <20250729193346.39791223@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 28 Jul 2025 18:32:43 -0400
-Sean Anderson <sean.anderson@linux.dev> wrote:
+On 7/29/25 14:33, Jonathan Cameron wrote:
+> On Mon, 28 Jul 2025 18:44:30 -0400
+> Sean Anderson <sean.anderson@linux.dev> wrote:
+> 
+>> On 7/27/25 12:21, Jonathan Cameron wrote:
+>> > On Tue, 15 Jul 2025 12:52:19 -0400
+>> > Sean Anderson <sean.anderson@linux.dev> wrote:
+>> >   
+>> >> On 7/15/25 07:09, Nuno Sá wrote:  
+>> >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:    
+>> >> >> Add an API to notify consumers about events. Events still need to be
+>> >> >> enabled using the iio_read_event/iio_write_event functions. Of course,
+>> >> >> userspace can also manipulate the enabled events. I don't think this is
+>> >> >> too much of an issue, since userspace can also manipulate the event
+>> >> >> thresholds. But enabling events may cause existing programs to be
+>> >> >> surprised when they get something unexpected. Maybe we should set the
+>> >> >> interface as busy when there are any in-kernel listeners?
+>> >> >>     
+>> >> > 
+>> >> > Sensible question. I'm not that familiar with events but I suspect is not
+>> >> > trivial (if doable) to do a similar approach as with buffers? With buffers, an
+>> >> > inkernal consumer get's it's own buffer object (that goes into a list of active
+>> >> > buffers in the iio device) with all channels enabled and then we demux the
+>> >> > appropriate channels for each consumer.    
+>> >> 
+>> >> For in-kernel consumers I think it's reasonable to expect them to handle
+>> >> events they didn't explicitly enable. I'm not sure about userspace
+>> >> consumers.  
+>> > 
+>> > This already happens because we don't have a demux equivalent (what we do
+>> > for buffered data flow) so if a device only has a single enable bit that covers
+>> > multiple events (annoyingly common for accelerometers for example) then
+>> > userspace will get events it didn't ask for.   We 'could' fix that,
+>> > but it's never really been worth the effort.
+>> > 
+>> > Events tend to be low data rate so an occasionally extra is rather different
+>> > to having to have much larger data buffers to handle a range of channels you
+>> > never asked for.
+>> > 
+>> > Lets be careful to document this behaviour as 'may enable extra events'
+>> > as then if we decide later to do demux type stuff we won't be breaking ABI.
+>> > No one will mind getting fewer spurious events due to a core improvement.  
+>> 
+>> Where would this get documented?
+> 
+> Starting point will be in the docs for the ABI that asks for any events at all.
+> 
+> Also useful to add some thing to Documentation/IIO though there are lots of
+> other things those docs don't yet cover :(
 
-> On 7/27/25 12:35, Jonathan Cameron wrote:
-> > On Mon, 14 Jul 2025 21:20:22 -0400
-> > Sean Anderson <sean.anderson@linux.dev> wrote:
-> >   
-> >> Add support for minimum/maximum attributes. Like the _input attribute,
-> >> we just need to call into the IIO API.
-> >> 
-> >> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>  
-> > 
-> > Similar comments to previous. I'm not keen on the blend of allocation of
-> > attributes and registration.  If we can break that link I think it will give
-> > cleaner code.
-> >  
-> >>  static int add_device_attr(struct device *dev, struct iio_hwmon_state *st,
-> >>  			   ssize_t (*show)(struct device *dev,
-> >>  					   struct device_attribute *attr,
-> >> @@ -123,6 +171,40 @@ static int add_device_attr(struct device *dev, struct iio_hwmon_state *st,
-> >>  	return 0;
-> >>  }
-> >>  
-> >> +static int add_event_attr(struct device *dev, struct iio_hwmon_state *st,
-> >> +			  int i, enum iio_event_direction dir,
-> >> +			  const char *fmt, ...)
-> >> +{
-> >> +	struct sensor_device_attribute_2 *a;
-> >> +	umode_t mode;
-> >> +	va_list ap;
-> >> +
-> >> +	mode = iio_event_mode(&st->channels[i], IIO_EV_TYPE_THRESH, dir,
-> >> +			      IIO_EV_INFO_VALUE);
-> >> +	if (!mode)
-> >> +		return 0;
-> >> +
-> >> +	a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
-> >> +	if (!a)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	sysfs_attr_init(&a->dev_attr.attr);
-> >> +	va_start(ap, fmt);
-> >> +	a->dev_attr.attr.name = devm_kvasprintf(dev, GFP_KERNEL, fmt, ap);
-> >> +	va_end(ap);
-> >> +	if (!a->dev_attr.attr.name)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	a->dev_attr.show = iio_hwmon_read_event;
-> >> +	a->dev_attr.store = iio_hwmon_write_event;
-> >> +	a->dev_attr.attr.mode = mode;
-> >> +	a->index = i;
-> >> +	a->nr = dir;
-> >> +
-> >> +	st->attrs[st->num_attrs++] = &a->dev_attr.attr;  
-> > similar comment to the previous, though here I think we'd
-> > need to pass in the channel to an iio_hwmon_alloc_event_attr() as ideally we'd
-> > not be messing with st at all in here.  So maybe it doesn't work out.  
-> 
-> Well, I used to have
-> 
-> +               if (iio_read_channel_label(&st->channels[i], buf) >= 0) {
-> +                       st->attrs[attr] = create_attr(dev, iio_hwmon_read_label,
-> +                                                     NULL, 0444, i, 0, 0, 0,
-> +                                                     "%s%d_label", prefix, n);
-> +                       if (!st->attrs[attr++])
-pushing attr off the end is not a good idea even if we know we don't use it
-any more.
-> +                               return -ENOMEM;
-> +               }
-> 
-> but even with a shorter function name, all the parameters are starting
-> to get bunched up on the right side. And if we make it longer as you
-> propose it starts looking like
-Using a local variable
-			struct attribute *att;
+Notably the whole events API :l
 
-			att = create_attr(dev, iio_hwmon_read_lanel,
-					 ...
-			if (!att)
-				return -ENOMEM;
+>> 
+>> >>   
+>> >> > Independent of the above, we can argue that having both inkernel and userspace
+>> >> > changing thresholds is ok (I mean, there's nothing stopping two userspace apps
+>> >> > doing that) but we should likely be careful with enabling/disabling. If multiple
+>> >> > consumers enable the same event, one of them disabling it should not disable it
+>> >> > for all the consumers, right?    
+>> >> 
+>> >> Right now the HWMON consumer never permanently disable events to avoid this
+>> >> issue. It does toggle the enable to determine if an alarm should stay
+>> >> enabled:
+>> >>              ________
+>> >> condition __/        \________
+>> >>           _____    ____    ___
+>> >> enable         \__/    \__/
+>> >> 
+>> >> event       |     |
+>> >>              __    ____
+>> >> alarm     __/  \__/    \_____
+>> >> 
+>> >> read           1       1    0
+>> >> 
+>> >> I suppose this could also be done by comparing the raw threshold to the
+>> >> channel.  
+>> > 
+>> > I wonder if we should add the option to do a 'get_exclusive' or similar
+>> > to block the IIO user interfaces if something critical is using the device.
+>> > 
+>> > If we were for instance to use this to block the IOCTL to get the events
+>> > fd then any built in driver etc will almost certainly load before anyone
+>> > can call the ioctl so it will fairly cleanly block things.  
+>> 
+>> This is how it currently works for userspace. Only one process can create
+>> the event fd, and everyone else gets -EBUSY.
+>> 
+>> Of course, it would be pretty surprising to have an IIO device where
+>> some channels were used by userspace and others were used by hwmon and
+>> then have your daemon stop working after you update your kernel because
+>> now the hwmon driver takes exclusive event access.
+> 
+> True.  I wonder how many boards we don't know about are using the iio-hwmon
+> bridge. We can check the ones in kernel for whether they grab all the
+> channels (which would rule this out).
+>
+> Another things we could do is have an opt in from the IIO driver.
+> That way only 'new' drivers would have this behaviour.  Not nice though.
 
-			st->attrs[attr++] = att;
-helps but still ugly.
-> 
-> 
-> +               if (iio_read_channel_label(&st->channels[i], buf) >= 0) {
-> +                       st->attrs[attr] =
-> +                               iio_hwmon_create_device_attr(dev,
-> +                                                            iio_hwmon_read_label,
-> +                                                            NULL, 0444, i, 0, 0,
-> +                                                            0, "%s%d_label",
-> +                                                            prefix, n);
-> +                       if (!st->attrs[attr++])
-> +                               return -ENOMEM;
-> +               }
-> 
-> which is IMO really terrible-looking.
+I would really like for this to "just work" if at all possible, so an
+opt-out would be preferable. Maybe a hwmon module parameter.
 
-Fair enough. let's leave it as is.
-> 
-> Maybe we should just stick everything in an xarray and linearize it at
-> the end of probe...
-If it looks nicer - feel free!
+But I think we can do better:
 
-J
-> 
-> --Sean
+- Both kernel/userspace can/should handle unexpected events
+  - This includes extra (synthetic) events.
+- Both kernel/userspace mostly just want to enable events
+- Disabling events is not as important because of the previous bullet.
+- But losing events is probably bad so we want to ensure we trigger
+  events at the same places they would have been triggered before.
 
+So maybe we have an implementation where
+
+- Enabling an event disables the backing event before re-enabling it if
+  there are any existing users
+- Disabling an event only disables the backing event if all users are
+  gone
+
+It could look something like
+
+iio_sysfs_event_set(event, val):
+    if val:
+        if !event.user_enable
+            disable(event)
+        enable(event)
+    else if !event.kernel_enables
+        disable(event)
+    event.user_enable = val
+
+iio_inkern_event_set(event, val):
+    if val:
+        if event.kernel_enables++ || event.user_enable
+            disable(event)
+        enable(event)
+    else if !--event.kernel_enables && !event.user_enable:
+        disable(event)
+
+--Sean
+
+>> 
+>> I originally had kernel users read from the kfifo just like userspace,
+>> but I was concerned about the above scenario.
+>> 
+> 
+> yeah, always a problem to retrofit policy.
+> 
+>> --Sean
+>> 
+> 
