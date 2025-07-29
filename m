@@ -1,143 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2089.outbound.protection.outlook.com [40.107.237.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C18225784;
-	Mon, 28 Jul 2025 23:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753745878; cv=none; b=rWeC58dhlOhkbHltz16usQP0IlYLKuvWLR4+X+ydQ3LTdr+3mktnypx3rQQEQcAcR2spp9lQoydXSrY1nwlms3je/UrbErl3WAyHYcX3yeoJ2oTOtgxxISAsQItDOQrXq+2K4khwp/60ABCkqRGUIY9RT3tL1sEaoGtDZJHEppU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753745878; c=relaxed/simple;
-	bh=M9KO/2aYIoLlJKYj0B6g/Dtc60iGI3XL4WVkIVReWRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKZOqa47KoyYShK0FswXp02f+s6fF828V7P++WuLI5NaaCnW5m0ClQUKK03A/9DC8aLRbhGZSw22b1pohyizqajI3GWdRIYIgq2Z9UQgRuq694lwCIPBciF2t1VUAu+RSau5MBzvVU234y1/DE1zQ8Z1+AJFgZUhuPJMGn5oKDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aKdmePZb; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDECFEC4;
+	Tue, 29 Jul 2025 00:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.89
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753748220; cv=fail; b=ti2lQ3OO19P5F/sC943AXBCDMDxPBD6cAjj3uR72rMd3skrdDBYYNJwSPYlIV2BHCPAhDejLSi8rUDhPjny6viHPhzQC6L/H+7TEREyP4ICWG0V+E9UIi/cQxjSS83B6Qd3D/xkR74eHyQ/bhmQNx3QYk3Sg375XeKWpmAEDS9Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753748220; c=relaxed/simple;
+	bh=9MPXrP9mRmPwT9X74vVAgQAU/Cmcr9yHQ5lGRll2jr8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OT4e4HYzZazDxkjwsi93I/JgHBpASLsg1YKeh+FfNCVc2mhs4fS+TdzWTCrExIDfWaeow9X1Y4dxIUfShPPfUhk4gBWfzVRXpoS9PVwEFW2L8MrqlVNLag8RiLHeQtOOSB6ii92jVe9RU3MD84lqRs7sIixSDZyhO6rioPAS4+Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QzOuCsZd; arc=fail smtp.client-ip=40.107.237.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aKdmePZb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753745876; x=1785281876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M9KO/2aYIoLlJKYj0B6g/Dtc60iGI3XL4WVkIVReWRc=;
-  b=aKdmePZb0W5MwKHrylLZtxm/Q8mJ94vRDX33eOrDCUxemybeDM1h8UT4
-   W/EG84AURDyelAASaygFBMnEGtwIsPEk/J3dVwdfMAJdlrKUrpHqAQ+wN
-   KDNtIClKaqdB81l1ZsvaN14TLvFO1xD3a81gc91GSkBzLkkDuF3zKy2P0
-   WUj43nN2kRcGeycLHUAKJPtPjTFgzvvPw638WGHS9d/xoiK9Qwlc0nDhA
-   ZILfPBJgV8iO0CnIYgaH07ApZPlWv9t6FX1ctMs+snVzDtQwMoQp6XBZ2
-   APLo5NpR//m7ZkOVHJgkjV34f3Y5SLVTIFq1yiQQYOqsaBWuG/62ZcS8x
-   A==;
-X-CSE-ConnectionGUID: 4M+yrrc2RFyunh6SmNEXJw==
-X-CSE-MsgGUID: omhOuLmLSYq37lgeHMGOJA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11505"; a="78557780"
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="78557780"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 16:37:56 -0700
-X-CSE-ConnectionGUID: PC1Oj44zRXy0Y4pJHQBufw==
-X-CSE-MsgGUID: +hKsHsYQR5qcGaeo+xhvlw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,348,1744095600"; 
-   d="scan'208";a="162113821"
-Received: from lkp-server01.sh.intel.com (HELO 160750d4a34c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Jul 2025 16:37:52 -0700
-Received: from kbuild by 160750d4a34c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ugXPi-0000pJ-0o;
-	Mon, 28 Jul 2025 23:37:50 +0000
-Date: Tue, 29 Jul 2025 07:36:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Hans de Goede <hansg@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Alok Tiwari <alok.a.tiwari@oracle.com>,
-	David Box <david.e.box@linux.intel.com>,
-	"Derek J . Clark" <derekjohn.clark@gmail.com>,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] platform/x86: (ayn-ec) Add RGB Interface
-Message-ID: <202507290730.7XZMyOM7-lkp@intel.com>
-References: <20250726204041.516440-4-derekjohn.clark@gmail.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QzOuCsZd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ov8RZV1qhcUweUi44FnrIGceTrZ4IkdzB+pY98O6+phnqAdJGaprf/0oaO+LpxAnck9E/7Z6T/QBaGw+1bWEojJaWewf5PCQX3g0W8Vm6qcTZMFqAeQiiMJEtSVzM7pMuQtlMV/RioPqzpz5KgDZ2SBhU7wyH4HhKd9oEqOJMWVMx9Qou7wDiW35zh09yBGs3M9wAZk0k+1UZDqISDyhT5wqKP9XRUpnC5A+pxEajtrF97f2HDE+h7TSMJijO8f2fz7TxqWU5JbBOGKUuwOTeiOSkVHDa74akjcSxbLTnq76oJl+RlXCjIa4RLFUbbQOJXN+ulVHbK9cYAm7dyR2Pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a10CziVtIabPURgOc2T4qFWOtNL9pOHr8LFyLlEtcDo=;
+ b=K+fPPYoQF/PdZ8SLY/zWlV71BbrVbSKuShWabehRUG753dR6HDFuZw5pwwZz5oi+7636bHSxFFSJWutAGQl87mwGm21gpgx0KNvDELcQb2yOYLseP0uzuMSWxiHgl3h910wwaOykGnvPkxXUFSgomGHQNGXVmwltEQaAae2jkxQNFnMyxZ8X+kaA9h3qr6Syc+UkUTk4fRRerNz1pahOH7Lnk6K0iaSLkC/SfMIvO+5KE0luC20x60Np12s3biAb1Gypr9/GQp+CUQAmqOxL0H5PuZwfIJGXbDkQ/M3f4WKjyZ0TvRnRtYscSPKo/G08hbaeK6VcD9DRLkR4ct0Zag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a10CziVtIabPURgOc2T4qFWOtNL9pOHr8LFyLlEtcDo=;
+ b=QzOuCsZd7ZtuI5Ybf5HsKwE9OHK69I7veUXqHlcHbEU8SRAMRR6j+iglGnx3mO9in6Tgxv8wwYT9ICbK4Ngi4VGMAmkaeu4EFUs6bSMZ+GMqZbfhHdjf/kHIJksslgHWdSbA3SYxjFMgdVHTjnaseXncdJJ2pMMhhH5wB1CFWyE=
+Received: from BN7PR06CA0065.namprd06.prod.outlook.com (2603:10b6:408:34::42)
+ by LV3PR12MB9185.namprd12.prod.outlook.com (2603:10b6:408:199::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.27; Tue, 29 Jul
+ 2025 00:16:52 +0000
+Received: from BN1PEPF00004681.namprd03.prod.outlook.com
+ (2603:10b6:408:34:cafe::7e) by BN7PR06CA0065.outlook.office365.com
+ (2603:10b6:408:34::42) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.26 via Frontend Transport; Tue,
+ 29 Jul 2025 00:16:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00004681.mail.protection.outlook.com (10.167.243.87) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8989.10 via Frontend Transport; Tue, 29 Jul 2025 00:16:52 +0000
+Received: from titanite-d354host.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 28 Jul 2025 19:16:50 -0500
+From: Avadhut Naik <avadhut.naik@amd.com>
+To: <linux-hwmon@vger.kernel.org>
+CC: <linux@roeck-us.net>, <jdelvare@suse.com>, <yazen.ghannam@amd.com>,
+	<linux-kernel@vger.kernel.org>, <avadnaik@amd.com>
+Subject: [PATCH v2] hwmon: (k10temp) Add thermal support for AMD Family 1Ah-based models
+Date: Tue, 29 Jul 2025 00:15:43 +0000
+Message-ID: <20250729001644.257645-1-avadhut.naik@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250726204041.516440-4-derekjohn.clark@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004681:EE_|LV3PR12MB9185:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2089807d-79bc-4dcf-781e-08ddce3537ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YlDYGTf/DqiiTz82FLIncqcFw+xTJjd43tLpfixXGWgRBMcaKcUm4UTt9+HM?=
+ =?us-ascii?Q?hNeiJtVif94S3v4XTs1mBjGH+/+PbdRaHb00T0LMQzQ9b+XXyzvgT7/9vZk2?=
+ =?us-ascii?Q?yugXSW+NZQoE3Xy4Nir7j4z23dlHaiuFPMdjsdlcFe9TYfko1FGlb/sorXg9?=
+ =?us-ascii?Q?/uflzKIHeMiLvIPYOfcN2QRlCamhoZhQ6Tpazx1nBOXZLfiOnZqrn5xyz7Yb?=
+ =?us-ascii?Q?WMXNKhuo7/NXLXbQY4SDSR8nfXRT8A256lU4jOnWn5mKfxXtlHOTccHqeDxz?=
+ =?us-ascii?Q?1YR3piAk5TvcPopmmFdQIY7cN8mMzulNnSRxztRpuTo5zetyw8Lys8Pl9YIL?=
+ =?us-ascii?Q?y0XGoDjtrHIxKMGKgKDJafBpDraEA+DuywrvT8uY3lqNfxury02vTSGHuwag?=
+ =?us-ascii?Q?8Fp/0O6knf23qD7JVU1vDoUNMxESGvbjBnAC9INPPCN1YXTXNQQTeqRYuV3K?=
+ =?us-ascii?Q?zbwFXR/4xbM6FDFkYVYA9oKK9eCFa18f5BFc1yWMN3p6YC9ujy5XEfItZUAY?=
+ =?us-ascii?Q?gVVQIvh0fGF2e67orTKXqclYEqWFk0rahLKlhG2Hb/OEn6CJPu3rvPoLLMrp?=
+ =?us-ascii?Q?6e7rQljh9cUN66/tRVg1LOdtu/R2cOVhEHzhIRnbe+boSP3jB0DIhARv8zP4?=
+ =?us-ascii?Q?xxiX6L6nA30JKPGNwKieMLzLhwm6kQNA/y0tzDp49vKTvCVIUGKxpVlPHFKk?=
+ =?us-ascii?Q?j+pL7kv6c9N/xGCqOPj9HStYxo6aIQh20oH5WFGYPgoLKBGrymMrY+YOl5ul?=
+ =?us-ascii?Q?3ebzyR0HeEI6186z+yAPlxUJvnZzqdCwbe84Km/MnVgdyGM2ymZvMSfCTjP8?=
+ =?us-ascii?Q?eLJ+l+T1AKNilyLsLWe3M38ynavaNsZWCjzwJO9CnJYaULndMbxAoECbGlXW?=
+ =?us-ascii?Q?HphW72bOd2xlUt0gR9yt97r54aWqy34UemhJ2ScOTiKM6N+dczJcvLASm+lE?=
+ =?us-ascii?Q?Id8WYeDD9Bdouk2b7PLv6DCJmQ6HWuRtKCvQD+mSUMkpOpwj6uUH4yzyJz/m?=
+ =?us-ascii?Q?1GEtqVLaKLKaUPzaDBF1k2F1i6T8ttUvl6tLgZtrwVp51I0F/cvBlU9KqOV+?=
+ =?us-ascii?Q?eNh6w1PChpb0JopYiWduh4u4N5azSNvreJn82HPNsB8By1wMi0gGoiMgcFub?=
+ =?us-ascii?Q?cuH8cRY/6l6Ef6E0uH1M3xaEAdeRTHC8JrDI+4l4Nnr/22noxCXC1+XCnQXu?=
+ =?us-ascii?Q?PcwrJI1jleXLy4omaUw446MoUD42vMR26McCxTrD1VhEvgj5B1/wBHHNlJYg?=
+ =?us-ascii?Q?R1txYipMMqtV7j9rjC4gmq8fZySOQaWOv2czdNYV0gJ2d16s0Pc3F8ztTsvy?=
+ =?us-ascii?Q?xrhI5Rgtm31jhi52+tdAgBTewqP9oWYYHVt0yV99m+FTfu6dAYMwX7Pzctv+?=
+ =?us-ascii?Q?ZommVU8Q5tVQnRj/k3HAvH+7WbiCdtUvJ/mYQxQ4jn69sZfr+dKOQshnCLbO?=
+ =?us-ascii?Q?px4pv74oe3867lOpf6VQGMXcsMbGUs/RqWp7vms7HYqsnUzHNET/TNHuK/x5?=
+ =?us-ascii?Q?z7ZE1h3m9oHBur+YbyLw/+UN4E7Usku+tyFj?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2025 00:16:52.3070
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2089807d-79bc-4dcf-781e-08ddce3537ef
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004681.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9185
 
-Hi Derek,
+Add thermal info support for newer AMD Family 1Ah-based models.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Avadhut Naik <avadhut.naik@amd.com>
+---
+Changes in v2:
+1. Move PCI IDs definitions from include/linux/pci_ids.h to the k10temp
+driver since they are not shared.
+---
+ drivers/hwmon/k10temp.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.16 next-20250728]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index babf2413d666..2f90a2e9ad49 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -84,6 +84,13 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+  */
+ #define AMD_I3255_STR				"3255"
+ 
++/*
++ * PCI Device IDs for AMD's Family 1Ah-based SOCs.
++ * Defining locally as IDs are not shared.
++ */
++#define PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3	0x12cb
++#define PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3	0x127b
++
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+@@ -556,7 +563,9 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M00H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{}
+ };
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/platform-x86-ayn-ec-Add-PWM-Fan-HWMON-Interface/20250727-044332
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250726204041.516440-4-derekjohn.clark%40gmail.com
-patch subject: [PATCH v3 3/4] platform/x86: (ayn-ec) Add RGB Interface
-config: i386-randconfig-061-20250728 (https://download.01.org/0day-ci/archive/20250729/202507290730.7XZMyOM7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250729/202507290730.7XZMyOM7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507290730.7XZMyOM7-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/platform/x86/ayn-ec.c:87:5: sparse: sparse: symbol 'ayn_pwm_curve_registers' was not declared. Should it be static?
->> drivers/platform/x86/ayn-ec.c:753:18: sparse: sparse: symbol 'ayn_led_mc_subled_info' was not declared. Should it be static?
->> drivers/platform/x86/ayn-ec.c:774:24: sparse: sparse: symbol 'ayn_led_mc' was not declared. Should it be static?
-
-vim +/ayn_led_mc_subled_info +753 drivers/platform/x86/ayn-ec.c
-
-   752	
- > 753	struct mc_subled ayn_led_mc_subled_info[] = {
-   754		{
-   755			.color_index = LED_COLOR_ID_RED,
-   756			.brightness = 0,
-   757			.intensity = 0,
-   758			.channel = AYN_LED_MC_RED_REG,
-   759		},
-   760		{
-   761			.color_index = LED_COLOR_ID_GREEN,
-   762			.brightness = 0,
-   763			.intensity = 0,
-   764			.channel = AYN_LED_MC_GREEN_REG,
-   765		},
-   766		{
-   767			.color_index = LED_COLOR_ID_BLUE,
-   768			.brightness = 0,
-   769			.intensity = 0,
-   770			.channel = AYN_LED_MC_BLUE_REG,
-   771		},
-   772	};
-   773	
- > 774	struct led_classdev_mc ayn_led_mc = {
-   775		.led_cdev = {
-   776			.name = "ayn:rgb:joystick_rings",
-   777			.brightness = 0,
-   778			.max_brightness = 255,
-   779			.brightness_set = ayn_led_mc_brightness_set,
-   780			.brightness_get = ayn_led_mc_brightness_get,
-   781			.color = LED_COLOR_ID_RGB,
-   782		},
-   783		.num_colors = ARRAY_SIZE(ayn_led_mc_subled_info),
-   784		.subled_info = ayn_led_mc_subled_info,
-   785	};
-   786	
-
+base-commit: de1fffd88600c5ee1c095c84b86484cd0329a9e8
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
