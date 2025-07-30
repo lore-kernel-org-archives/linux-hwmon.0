@@ -1,208 +1,175 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A702571C3
-	for <linux-hwmon@vger.kernel.org>; Tue, 29 Jul 2025 20:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C1510E3;
+	Wed, 30 Jul 2025 09:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753819796; cv=none; b=OMU0Yqw3aOSi/vmAPOWNv1ZD/O/5pFq8GrR4n63LVrxe8UQ3m6zGZlvLfqi5IMWPUOZ3oZ76l/jEseIH1fLzbzlciU4yRg16o6+9+1q+y+t4wUre118Ey7qx/hd1bnRUBdCjSCY7XQkOeJWmH5SGVhFkpyV3zeIoyPtSb7Nxg/k=
+	t=1753867524; cv=none; b=ULkkx64ScNnJ+cpWiCrhHrGFtNhTZxJhTfHcQTkmV4TuGXwScobZtCQaxICUq7+G8qqWZGbuD83Xop7k2ZIpqSWcYEOav+r1mw6Q63dKhpC2wStYCSqszM2JPeXbCI4RG/POUle0dNoUxdYaYhT1IT6jwj+URqwLjWIH+lMoFp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753819796; c=relaxed/simple;
-	bh=WLDylOIV5DSMc4Htd6swaNHV52iheLDXvOXUuB1Dke0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xi9O0iqOZ2BPAV1WtAQaBrcqywg7x48z+7B0rjt+kI4QIDTahiLk3ErWb299BVyRnAKs8Vi1LSkEhYmMBk/n54+5L09QEm0LWU3DO/nSKRyAOdADIR+6vdkj0MLzrNnROiMyb3mUYICNaiPV8kEGVTPm1HRcglTuVVtCIMwS51Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uChDz+94; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1753867524; c=relaxed/simple;
+	bh=1MHRdEhKZxS+HzmEBYk4+Y9wIW2b2Cp3Qo/0aeWItA8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=a8A0Lko+zEe2zHK3Y2k4+1Rg9eR1zq6J2BOfsvQr42AfcNE9A4y2X9/h0tVGYvhOGUsKRf52Kf5NiRMzMt2bTWyDVS3OZjE6w7p7IoSzjBJxUZ0u06oyVEo/+XCFRNNOXgQotL+FY5wATzRRrUEDsTon+QvcGeTM5Nxb8tI9rhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=e4sxHj22; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uChDz+94"
-Message-ID: <edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1753819783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=f4G9jfzRkCbi/mdO+Af4USWQef/YfKBzN+BkPPWWEt4=;
-	b=uChDz+94+uHWqCtw9dDp1C8OkiF0RiZYFpLz2gaeoz1TgXkBVWUnJLeu1RXKRUMWBNyLCp
-	9LnM4w2SUCCPDoI9e5/7fvCC2if1a8o/m7eOaTG1Ao0KV6eD0m6f1yJXWae3uOyn6b3xZM
-	zQOwq4U1JpVYd1jHlpjwv4F/DsGxYrg=
-Date: Tue, 29 Jul 2025 16:09:20 -0400
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="e4sxHj22"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1753867493;
+	bh=5TbeNkB8ldYnEXcb1m/XCnlkvWahX+znrHwbJGCTAgI=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To;
+	b=e4sxHj22ssG9WshGpEQw4/82BvBQlHPX2H7STjxx3r1jrON8BKSgiafI3Hmj0/Yv5
+	 hmQgFhbcGVV0PqHM1Uk/JFbaBbVheew75ICke1xkiBsfAFCl2iMNVgpvuC8Jk12bmL
+	 BodaX7yPyeqk4zXHeX0w9Bg4zBxQksdEvUnbhFD4=
+X-QQ-mid: esmtpgz10t1753867490t9a6472fa
+X-QQ-Originating-IP: lQl0MESZLYhgwmh4DSr716DxfUxHtn7Ebgq7yyCQOZc=
+Received: from [198.18.0.1] ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 30 Jul 2025 17:24:31 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 1206265350598173633
+Message-ID: <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
+Date: Wed, 30 Jul 2025 17:24:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 3/7] iio: Add in-kernel API for events
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- Andy Shevchenko <andy@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, linux-kernel@vger.kernel.org,
- David Lechner <dlechner@baylibre.com>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-4-sean.anderson@linux.dev>
- <d8e5c8fbeaee42e9e0708460c47bd68053cd8710.camel@gmail.com>
- <9b187e7f-a116-4aea-a9a6-b9222562868d@linux.dev>
- <20250727172126.35d0a477@jic23-huawei>
- <0ccf7735-6a2c-473a-ab67-ae0c5ff9a335@linux.dev>
- <20250729193346.39791223@jic23-huawei>
+User-Agent: Mozilla Thunderbird
+From: Cryolitia <liziyao@uniontech.com>
+Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
+To: Antheas Kapenekakis <lkml@antheas.dev>, Guenter Roeck <linux@roeck-us.net>
+Cc: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ Celeste Liu <CoelacanthusHex@gmail.com>, Yao Zi <ziyao@disroot.org>,
+ Derek John Clark <derekjohn.clark@gmail.com>,
+ =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
+ someone5678 <someone5678.dev@gmail.com>,
+ Justin Weiss <justin@justinweiss.com>, command_block <mtf@ik.me>
+References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
+ <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
+ <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
+ <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
+ <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <20250729193346.39791223@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: M8e5kblytUZR2/NuQijMYYgSbRTX+/osZL2apFBDKqF1qD11KeQzMDJZ
+	MKJ6iEbl3t5lYh5lHhA3fy8ZcXlQrYg/QLkEYarE6spLY5Xx4L9ZyIH6sfRPGohUX/W3YDK
+	TkIAawT2jwST69e/zbz3lg3no8Ir0MJsqzoYYLV+BxqVzVd5nvNy3+nRY5RrgU6qg8rsYNd
+	ypjw68yzysNWWMIRVVc9vudmL5JtFWAeJ6gs3WLi0UbcplVmQBprKeZcWI+CYIE9sGFQlQc
+	QCcd9di0kFcYJjrTuwi2vOQMS+JfpCeaLni4Djg0StCp+kmfmty+94SaG5D2NMaEZWpa4Hm
+	x4WFL6pqe3o89iqmi4xdvx9Hm25jhtCeCWLICfUDEJE1BFvQDd18bEFGTVTuUpo203oUPft
+	VU4Inu/85MvhYh1cPVsiBCS+aAdTSvq/eRvWicdXf3E7MVCGSGNmHnSed8qmzjLC3+Z3egn
+	aNzcXayNIMLKEbsxVVRlHSBnlMrvutNiAZekTbQlgpWQkCq5rV1k6ET61IFNNlxbrqJ5mLo
+	ai74BR1hSvc3NHUNhYkFwkIlGDc5TEX1FzaAFL25NY2o2GNBJO98etCeOBpIzuQWqQ/wNSs
+	yy8z/Wq5iH2eF6ZIDsi+6qYIco7sSdu3znqpRKcmPkU3UKXvsDdBFOaVRfWxx1HicQ58+Je
+	3kfUVGQ86EEMT5usnNz2+azdWg8J6Rai+Q9TyKPr+EJjPV31HOZ4Xb7KZA2lgmAzE8u5eWq
+	hlK6+4/WtooIeDw2DviXmnu8kZUCIkPoj/rsq1BXW7IiTpKf6XwZ7QbIQEqNsELpGh2GPOh
+	n6BFkvrOP2bjn0uXPqdKiCe2iiIwSPwkQ3ELme16A+9hKTTloEzIPvE44fkHlNepZxGuJ8H
+	GRJ7X6RYRjdJ7kigaqCFzFpAgEU3nNW2ChWcHlTvuda+g02jJSlo04gCWzR87AaHYn6ocND
+	8a4FgaWGto/n7u+jVmNKn4NO4GkdWkvyG8xtNE+6h2fJcj+XedaO+uQebaJG09UTyOD9Jwm
+	gp/XU0JAsR4RIcVaEFz11uMBOIPt0Db+Q8P3xp3Q==
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-RECHKSPAM: 0
 
-On 7/29/25 14:33, Jonathan Cameron wrote:
-> On Mon, 28 Jul 2025 18:44:30 -0400
-> Sean Anderson <sean.anderson@linux.dev> wrote:
+Thank you for raising this valid concern. We've closely monitored GPD's
+development plans and currently see no indication of EC functionality
+expansion beyond thermal sensors in the foreseeable future. Given this
+observation, we believe placing the driver in hwmon remains appropriate
+for now.
+
+That said, we fully respect your maintainer perspective on
+future-proofing. If you feel strongly that platform/x86 would be a safer
+long-term home despite the current scope, we're happy to move the driver
+there immediately. We're committed to finding the most sustainable
+solution for upstream.
+
+------
+Apologies for mistakenly replying to Antheas Kapenekakis instead of the 
+mailing list.
+
+I am Cryolitia <cryolitia@gmail.com> that previously sending the patch. 
+Due to work, I changed my email address. GPG can verify it's the same 
+person: 
+https://keyserver.ubuntu.com/pks/lookup?op=vindex&search=0x84dd0c0130a54df7
+------
+
+在 2025/7/19 00:38, Antheas Kapenekakis 写道:
+> On Thu, 17 Jul 2025 at 04:32, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 3/13/25 13:58, Antheas Kapenekakis wrote:
+>>> On Thu, 13 Mar 2025 at 21:10, Cryolitia PukNgae via B4 Relay
+>>> <devnull+Cryolitia.gmail.com@kernel.org> wrote:
+>>>>
+>>>> From: Cryolitia PukNgae <Cryolitia@gmail.com>
+>>>>
+>>>> Sensors driver for GPD Handhelds that expose fan reading and control via
+>>>> hwmon sysfs.
+>>>>
+>>>> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+>>>> devices. This driver implements these functions through x86 port-mapped IO.
+>>>>
+>>>> Signed-off-by: Cryolitia PukNgae <Cryolitia@gmail.com>
+>>>> ---
+>>>>    MAINTAINERS             |   6 +
+>>>>    drivers/hwmon/Kconfig   |  10 +
+>>>>    drivers/hwmon/Makefile  |   1 +
+>>>>    drivers/hwmon/gpd-fan.c | 681 ++++++++++++++++++++++++++++++++++++++++++++++++
+>>>>    4 files changed, 698 insertions(+)
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 0fa7c5728f1e64d031f4a47b6fce1db484ce0fc2..777ba74ccb07ccc0840c3cd34e7b4d98d726f964 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -9762,6 +9762,12 @@ F:       drivers/phy/samsung/phy-gs101-ufs.c
+>>>>    F:     include/dt-bindings/clock/google,gs101.h
+>>>>    K:     [gG]oogle.?[tT]ensor
+>>>>
+>>>> +GPD FAN DRIVER
+>>>> +M:     Cryolitia PukNgae <Cryolitia@gmail.com>
+>>>> +L:     linux-hwmon@vger.kernel.org
+>>>> +S:     Maintained
+>>>> +F:     drivers/hwmon/gpd-fan.c
+>>>
+>>> A problem we had with oxp sensors is that once OneXPlayer expanded
+>>> their EC to include e.g., battery capacity limits, it was no longer
+>>> appropriate for it to reside in hwmon. I expect GPD to do the same
+>>> sometime in the near future. If that is the case, should we
+>>> futureproof the driver by moving it to platform-x86 right away?
+>>>
+>>
+>> My problem with platform drivers, especially with x86 platform drivers,
+>> including the OneXPlayer driver, is that the developers responsible for
+>> those drivers refrain from implementing the client drivers as auxiliary
+>> drivers but instead like to bundle everything into a non-subsystem
+>> directory. I have always wondered why that is the case. My best guess
+>> is that it is to limit and/or avoid subsystem maintainer oversight.
+>> Does that work out for you ?
 > 
->> On 7/27/25 12:21, Jonathan Cameron wrote:
->> > On Tue, 15 Jul 2025 12:52:19 -0400
->> > Sean Anderson <sean.anderson@linux.dev> wrote:
->> >   
->> >> On 7/15/25 07:09, Nuno Sá wrote:  
->> >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:    
->> >> >> Add an API to notify consumers about events. Events still need to be
->> >> >> enabled using the iio_read_event/iio_write_event functions. Of course,
->> >> >> userspace can also manipulate the enabled events. I don't think this is
->> >> >> too much of an issue, since userspace can also manipulate the event
->> >> >> thresholds. But enabling events may cause existing programs to be
->> >> >> surprised when they get something unexpected. Maybe we should set the
->> >> >> interface as busy when there are any in-kernel listeners?
->> >> >>     
->> >> > 
->> >> > Sensible question. I'm not that familiar with events but I suspect is not
->> >> > trivial (if doable) to do a similar approach as with buffers? With buffers, an
->> >> > inkernal consumer get's it's own buffer object (that goes into a list of active
->> >> > buffers in the iio device) with all channels enabled and then we demux the
->> >> > appropriate channels for each consumer.    
->> >> 
->> >> For in-kernel consumers I think it's reasonable to expect them to handle
->> >> events they didn't explicitly enable. I'm not sure about userspace
->> >> consumers.  
->> > 
->> > This already happens because we don't have a demux equivalent (what we do
->> > for buffered data flow) so if a device only has a single enable bit that covers
->> > multiple events (annoyingly common for accelerometers for example) then
->> > userspace will get events it didn't ask for.   We 'could' fix that,
->> > but it's never really been worth the effort.
->> > 
->> > Events tend to be low data rate so an occasionally extra is rather different
->> > to having to have much larger data buffers to handle a range of channels you
->> > never asked for.
->> > 
->> > Lets be careful to document this behaviour as 'may enable extra events'
->> > as then if we decide later to do demux type stuff we won't be breaking ABI.
->> > No one will mind getting fewer spurious events due to a core improvement.  
->> 
->> Where would this get documented?
+> Particularly for simple ECs such as OneXPlayer and GPD boards I think
+> keeping all the addresses in the same file makes sense. E.g., I just
+> sent a Fixes for the OneXPlayer G1 AMD variant and it was one commit
+> instead of 2 or 3. At least for me it was practical, I did not
+> consider having a lesser oversight as a benefit when making that
+> choice.
 > 
-> Starting point will be in the docs for the ABI that asks for any events at all.
+> But I do understand the concern.
 > 
-> Also useful to add some thing to Documentation/IIO though there are lots of
-> other things those docs don't yet cover :(
-
-Notably the whole events API :l
-
->> 
->> >>   
->> >> > Independent of the above, we can argue that having both inkernel and userspace
->> >> > changing thresholds is ok (I mean, there's nothing stopping two userspace apps
->> >> > doing that) but we should likely be careful with enabling/disabling. If multiple
->> >> > consumers enable the same event, one of them disabling it should not disable it
->> >> > for all the consumers, right?    
->> >> 
->> >> Right now the HWMON consumer never permanently disable events to avoid this
->> >> issue. It does toggle the enable to determine if an alarm should stay
->> >> enabled:
->> >>              ________
->> >> condition __/        \________
->> >>           _____    ____    ___
->> >> enable         \__/    \__/
->> >> 
->> >> event       |     |
->> >>              __    ____
->> >> alarm     __/  \__/    \_____
->> >> 
->> >> read           1       1    0
->> >> 
->> >> I suppose this could also be done by comparing the raw threshold to the
->> >> channel.  
->> > 
->> > I wonder if we should add the option to do a 'get_exclusive' or similar
->> > to block the IIO user interfaces if something critical is using the device.
->> > 
->> > If we were for instance to use this to block the IOCTL to get the events
->> > fd then any built in driver etc will almost certainly load before anyone
->> > can call the ioctl so it will fairly cleanly block things.  
->> 
->> This is how it currently works for userspace. Only one process can create
->> the event fd, and everyone else gets -EBUSY.
->> 
->> Of course, it would be pretty surprising to have an IIO device where
->> some channels were used by userspace and others were used by hwmon and
->> then have your daemon stop working after you update your kernel because
->> now the hwmon driver takes exclusive event access.
+> Antheas
 > 
-> True.  I wonder how many boards we don't know about are using the iio-hwmon
-> bridge. We can check the ones in kernel for whether they grab all the
-> channels (which would rule this out).
->
-> Another things we could do is have an opt in from the IIO driver.
-> That way only 'new' drivers would have this behaviour.  Not nice though.
-
-I would really like for this to "just work" if at all possible, so an
-opt-out would be preferable. Maybe a hwmon module parameter.
-
-But I think we can do better:
-
-- Both kernel/userspace can/should handle unexpected events
-  - This includes extra (synthetic) events.
-- Both kernel/userspace mostly just want to enable events
-- Disabling events is not as important because of the previous bullet.
-- But losing events is probably bad so we want to ensure we trigger
-  events at the same places they would have been triggered before.
-
-So maybe we have an implementation where
-
-- Enabling an event disables the backing event before re-enabling it if
-  there are any existing users
-- Disabling an event only disables the backing event if all users are
-  gone
-
-It could look something like
-
-iio_sysfs_event_set(event, val):
-    if val:
-        if !event.user_enable
-            disable(event)
-        enable(event)
-    else if !event.kernel_enables
-        disable(event)
-    event.user_enable = val
-
-iio_inkern_event_set(event, val):
-    if val:
-        if event.kernel_enables++ || event.user_enable
-            disable(event)
-        enable(event)
-    else if !--event.kernel_enables && !event.user_enable:
-        disable(event)
-
---Sean
-
->> 
->> I originally had kernel users read from the kfifo just like userspace,
->> but I was concerned about the above scenario.
->> 
+>> Not objecting, I am just curious.
+>>
+>> Guenter
+>>
+>>
 > 
-> yeah, always a problem to retrofit policy.
-> 
->> --Sean
->> 
-> 
+
