@@ -1,157 +1,172 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13ECBA2D;
-	Wed, 30 Jul 2025 17:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753896387; cv=none; b=u8gbYMRptgBux6r4Y6QIBq5d3Mmb7NJVwwveO7cdSrWTxLBCVqvZgM0EIBDJS9EiAhR1K1YSZjinkYtoZtEiG/Ep9PW13+Kn5MRqi68IVfxe0YPs0Mk+ArCduv1FyTVNnGur3B0LX8WIXXQjmSt82eIyASPPJcZe4759PUFmSxU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753896387; c=relaxed/simple;
-	bh=SlIdkKe6gfAEdWlgEkQodryuRjTZ3yr1OCuE073ILuk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lu+8fkxdu8sgXcN/HPwpg7CAACvU1lrb16hNBLWVu5SDWiBmZCEH3Auvs6CHBq+M3Mmhe0odbx8QgoPnpSUR815LdZ7dRwm6VogXq5bBdGa/bv8LiUGHlGTAu/BdloFJfGPqzaqOzdKHkS9Ht+WprwNcf321pATd+T2sfpRRcQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mXRrcZEF; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE46C120
+	for <linux-hwmon@vger.kernel.org>; Wed, 30 Jul 2025 20:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753906680; cv=fail; b=N8/qup/A0PuBfDEBXlmyU1MGvXNYMSGFfE2cADKp56XdHI/6G31PMZImlQ3jJ6LWnp2nihcUEVBzuJe4ZHw5IhjSQwBBA5RKrmOm+qElg6sbUTCGfwiEBAMZ9LoX5aH8INmBkuUf+vARG7inRwSPkqdypgqFiL+NrL8t7dUZNsI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753906680; c=relaxed/simple;
+	bh=DzFceSXcLcnzbxyJO67rIGZPMo3Xl51FmLx2byQlwrY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=POV1dhrzEXAaC1KWY21WVqZ2NuBeIBWThhCsEjHQ4daitoXzJr/wz/5UDozYPtmA1S5dFFf+PkdlOKCuCLE9Xs4qou0bIA8BBYBkTr/yp7iHpJukwUHoCQ0VHf3mZVwPPmjnA0V/yg197+yt9c0MA2wqfNnN5MZleXc7uNLtm2Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pW4qr/+5; arc=fail smtp.client-ip=40.107.93.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mXRrcZEF"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-31f255eb191so128586a91.0;
-        Wed, 30 Jul 2025 10:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753896385; x=1754501185; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NrcJ1iSCtN5jVbcm5N0Ai/T3sFFFCqnycMZm8fgafCg=;
-        b=mXRrcZEFJfo+N3IWknP++/tVOClnCmRihwZczL3QilhIlyEneUWvzA7F9elv9fTPRz
-         GkcS6to3U0YrUPDiqXQ/4AvPVhogHaflZ0349cvHhBcUaULAvY6XaXDtYkDFYcQyVuFF
-         YIIpARf6va7p5SRScZDZOHvLvF+uF2OwSlQ/5hlFv6ou8BxUtLw2serSHvSqx96a85Uv
-         WHRwXzOxMdJtcaL73vG9AfMZBtxFKFb2+lwA2+Hgb8KFcJPaJ4Woqep+ZHaEKtRYoSgw
-         OrE6QijqmVZwmV7E1dXJ3+LFDQeIIhC8+BEPsW8Qgbhft0lJ0gFGPNYG7PQ9Jz19+SWG
-         VgeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753896385; x=1754501185;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NrcJ1iSCtN5jVbcm5N0Ai/T3sFFFCqnycMZm8fgafCg=;
-        b=Xr1l5qZDHzs5lrDnBCc04zN4wu/cSyQsunKxXc9S8yHdvWAhvn90AKbMncNx8hXDNc
-         h/Pnv5QljW1XwxPGOwiVt/Zr0rT7JSeyiuVfkrVp/CQPtQ0lYNDLSSfDqjgBCoj5Dx5l
-         rXeLziQqlTLrlhE64377NnxYcnMishRkekh1imItZ8/d19MrKCALJHVwoYi2rVTzI7S8
-         XBhvHB0f7/MDsv1FkRHRssttX5NeOB0tPZd6d+KdgFtrsICFQhL4DawAy1tNTvEy7WH1
-         FUWDxAz9Q9XaewZlfTINjWcJZUOuY1w6j+8LOpt4FHblDX0t8cUbraDlkYWdViLt9SXR
-         oa9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUdjChYYI72+7QniU5e0+aPFWCRdYiL0RPNc8hQrmTOCr5sS1YmZEPIKL00NzGqG6R7LsczKrBhtqA=@vger.kernel.org, AJvYcCVJFKJWvzvuyFCh5c+QflIgPlIfIDWbeIgnLCXziHYXCVeqfQt0CkNdRARYK3vRPQdRO05qp8ypLIkxiZFE@vger.kernel.org, AJvYcCXQL/euMzYvIQHg1lxo/sF29RRY0IePZ7gq8L1x712oRQc+UzyrjCSRTq5juSW2jmdlgINOVRHcWjOWrfw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx4/4/WCWyTrB6h+kxnJxfXx6k1hvT8EO8IpTF/53kueI0JwK3
-	0rG8T17/xs0aofWSPLLnURc2VuQ7vUC40w3WfujDZX06HGoGh7sBRmi8
-X-Gm-Gg: ASbGncvoIF6ICw/KvFVXmVxtRw0WCNjrmADjYyeEsW98xsO02y9LnQ/pc6mKnbOVLWg
-	ED+rPWE6Fd151pajkPYjJozTrczfA+IKJHBEdRMz0f2CFFvz6ilUoXDUOsPFKxrLq4xeku1T1Cw
-	WR+1T+t0GmNOntBPgweZ85aJkxD95PVZ/Di2D+mUZFkEwQLq0crjxbQolcmNAV8QseEfC7nGeYd
-	0Nuot1N26acWYo/bOe+Kyn5cKwCPwnUbZO9YxCTmUDfUkIV3kQDuAdsZdW7NNEWSK41xx1t4k9Q
-	HrEfUavtQ9H8geSwFdeDZduH3EqyBzcbdrjaq0SCz1tMDBKAzLnrSYenaSyhIOqdnLsQgvyTtgP
-	LYyugEP3+SEW+J3ZHgpT2c/uX3dcU+bNOxjEOKjjCGjGx2eHkdcN03Bai5aKInzPXSWGaRwg=
-X-Google-Smtp-Source: AGHT+IEmdrJox+yHP2NWcyP1szaq4jQ/NssfT+LBg27ZIUZGAmZbYTGRkvuIXsiDZnu8PAyJ88K98g==
-X-Received: by 2002:a17:90b:28c4:b0:2ee:d371:3227 with SMTP id 98e67ed59e1d1-31f5de4b9d3mr6551743a91.17.1753896385005;
-        Wed, 30 Jul 2025 10:26:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31f63dda997sm2518311a91.20.2025.07.30.10.26.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 10:26:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d4b6932f-fe95-4502-b7c9-650a61ab565d@roeck-us.net>
-Date: Wed, 30 Jul 2025 10:26:22 -0700
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pW4qr/+5"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DqeFIaE473e6psrZaevCU76/+VGpWLhd2i68RakbSDIjy2RTqz0rdheJOrBKRGcr+44a0d5kzgCXMABd/APtc/Ry1w2+IGiUx40M/IF6ukt5E3uCUe8JtzOTKBy1jca1QcQ8lv3C8s0uAG9eP3suXNtIMnvArZFF1emwW0tDjjvpHozpCN/9bNFlrd2AXqNasgLIAGF5QjZO6LI5epCF+8mYIJzolFug6Ycgi4n1uZwfhP9XWHWAbHZJJzi3WLTQhgmI2vIUG6lM35PtFvwcS0gT0jCZeTyZKCu3pcNKN3gHUmXgh0dPZVevJ9rULuOWD1CphWP1ZvFJ2ytCeQd3/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4+OR67HgD+abBeYo5rXDk6uerA+pR039SciAlxZp4lA=;
+ b=g3HGMLGLuWD8KjF+RW8liCiR4vEMPLUyD8n9iHWnUZGF34Wemw5n5gscFRewOxvlZw7DHVRIpS+er6K30ykWnPIioJjYDoM0PNzGXG8lweuw+RLSbWVuBvsafyw2HIPZVK2UvgQhiGdh/8kSXZf6eenK2fUXAjupy3klbClYrUdu2I0Wg0g/3XhQ0xSkHAmxKbFN5ISM7OtOtm3JFPoyW6lLhZQ2CiPzptBvrR9BMtO4gjHYD+GX5VyKsIJ6Pfdvk2Yja7QCTysL5JMQmhpUoe/Gqp82JuD3/qCOYwSKKZ2gbrctgXL3Ubec/zRp4a1LxM/aRVYA6CjHiZTwaAfdfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4+OR67HgD+abBeYo5rXDk6uerA+pR039SciAlxZp4lA=;
+ b=pW4qr/+5JT4JXx/PLZNLd7skABfqa6UPjhK/cEWZiS16BEIfVE1b8/0pX+HUp0nsMMRWHPNElhgbF4VUve8AbcocdLzTEY7YlRB1icUBUa4hGzAjNt01Ehg+KQiWmypYdBON+pKmvhvfDM1kQXOs91edyr3OEDMOYV8MCrPAvI9CLxrNNyHcZTp/4CuAqmErjCF24M+vNwrEf/DZYMgqbZuXZSUXEG3fGOrCpJh15s/L7PrHBNmOSo+kFn6elSI7Q9TchvcreURfEB/Ot6pY3u2QEehHosMpafxm2XRvlTPWGyYtLpAn3f9HxRqpriq+W4qO2/mpeuUyYqnrUBeJcg==
+Received: from CH0PR13CA0018.namprd13.prod.outlook.com (2603:10b6:610:b1::23)
+ by CH1PPFD8936FA16.namprd12.prod.outlook.com (2603:10b6:61f:fc00::624) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.25; Wed, 30 Jul
+ 2025 20:17:56 +0000
+Received: from CH1PEPF0000AD74.namprd04.prod.outlook.com
+ (2603:10b6:610:b1:cafe::55) by CH0PR13CA0018.outlook.office365.com
+ (2603:10b6:610:b1::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8989.11 via Frontend Transport; Wed,
+ 30 Jul 2025 20:17:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH1PEPF0000AD74.mail.protection.outlook.com (10.167.244.52) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8989.10 via Frontend Transport; Wed, 30 Jul 2025 20:17:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 30 Jul
+ 2025 13:17:37 -0700
+Received: from r-build-bsp-06.mtr.labs.mlnx (10.126.230.35) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 30 Jul 2025 13:17:35 -0700
+From: Vadim Pasternak <vadimp@nvidia.com>
+To: <linux@roeck-us.net>
+CC: <jdelvare@suse.com>, <linux-hwmon@vger.kernel.org>, <idosch@nvidia.com>,
+	<razor@blackwall.org>, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon 1/1] hwmon: mlxreg-fan: Prevent fans from getting stuck at 0 RPM
+Date: Wed, 30 Jul 2025 23:17:15 +0300
+Message-ID: <20250730201715.1111133-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
-To: Cryolitia <liziyao@uniontech.com>, Antheas Kapenekakis <lkml@antheas.dev>
-Cc: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- Celeste Liu <CoelacanthusHex@gmail.com>, Yao Zi <ziyao@disroot.org>,
- Derek John Clark <derekjohn.clark@gmail.com>,
- =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
- someone5678 <someone5678.dev@gmail.com>,
- Justin Weiss <justin@justinweiss.com>, command_block <mtf@ik.me>
-References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
- <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
- <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
- <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
- <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
- <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD74:EE_|CH1PPFD8936FA16:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1492712-2c13-425c-a70e-08ddcfa62ba0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BEp0mli7Ziy/eU0UKrp/7K2XymiJIea2nMEbHFIZI3As1NqruIOEcKdoabTz?=
+ =?us-ascii?Q?drsgw/+Ez3ewjlBnfSrP+BMQK3IRczuW4Jjhymxov+APTK6VAhJOQmKb+1tB?=
+ =?us-ascii?Q?ic+GkWt6ZLlGjjMlXPkIyOU9w74Qc0bMgnro4XRwQuLT0FW3vX2Rr/iWu2Qo?=
+ =?us-ascii?Q?y5DtI9A+28lH1ExhQoMJhTb+l7QvzqFUu5RRx5JX4BDkbfSXXl/EC7z/IqAo?=
+ =?us-ascii?Q?H+PN7dC2/44wN/2YSsWIKm6ilAror6mghCzmRhyyOdfmc5azmevaJbkcC7Ra?=
+ =?us-ascii?Q?v1C21C1+rpAyp0RRGqr1rUZYVtwhACUv36WxFOItM9pONjhJT0Xv0o8SmVqL?=
+ =?us-ascii?Q?v2z6pU5s5Qxrh25MFqsMyuvIQV7a2aJDDjJelqgfE5H2P5ZP9NH9oqcexglT?=
+ =?us-ascii?Q?BlsQcBQ/OPR65H9nffe3bGSmKYZcP8xd7briagPFxKM+X64Qi+ph2WdsxdPX?=
+ =?us-ascii?Q?F10pP5Zm8VdFS9vyQEBjS4NGFBpnVUIQ9kJ0Mza4MaxdFxlu3uqxRwRRyYuZ?=
+ =?us-ascii?Q?3KSpbrR0z6UbMh2siDWsYwVMvJmiU7MrIz7h6kb/U2TFc1rHCDnIrjgZCS7+?=
+ =?us-ascii?Q?KU2fnF/RSpRgE4AICBgBKYgRUpYZL4/PzlW7Q9hgg/EtvU2jaHj1jxnIU/+L?=
+ =?us-ascii?Q?EVPcV4cgKc3H36HJF9nIGHdWSEON+iQbxc8uVwKRcWx70wUZSPiyzrNkK6i2?=
+ =?us-ascii?Q?pWtMhxO6SoYeOAfO3KAye/R2q72HozCde81nGOseA4dmSXorVqfckrFjE2Lk?=
+ =?us-ascii?Q?JKe0rIfa93m8N1MidLqKu+kZdqom3CGXvQEw7KWXsZWUsedHl6rcmd6fMZAa?=
+ =?us-ascii?Q?i3R++tpS0IQAtTz1wmIWKgVeOaSChmZ/DQ2sMKwvVTbbR6osfY5U9hkJw9xP?=
+ =?us-ascii?Q?QHe3tM/WrN6aiGw1D6sc4ujgmZqsuNzqVgEcfGEFFjkhAGTEONC4iE7tHSJb?=
+ =?us-ascii?Q?fU+YAlbC6rwHniHYf43r9YJSPaeQs0p7gQjfTS4y9LbtTOQaMDhh2bd8CE3f?=
+ =?us-ascii?Q?qtu/lmRaoYseGMFnsKmai21KEIxwaJWOxlc5FtA2Im/stGLnebK5ZDnV6nIG?=
+ =?us-ascii?Q?0sov7CwGV0kTT1xuyI23JS/rbwH9rHtz/PgUw8TAYu0R3ytjZA7E6r6kQGhR?=
+ =?us-ascii?Q?yb9QHrQbyFO9TMfBhYWfVLsoc9fLbLA/7AmejuddU+yFohZFLIDgZyELYRoG?=
+ =?us-ascii?Q?sT3/vVSmEJeWR+yApyDkInf7uRPJlflX6IyY1unisHXaQMmltQf+ntPzoC76?=
+ =?us-ascii?Q?OBDVZIR/8TV0b5xqVuy+kVa8Ff8R0KI3ze2PvPT0p6AED8VzDas3366h/++Q?=
+ =?us-ascii?Q?lJfMi/E3k+50GsrBPePWWcBJ+q9wA3g/EhA3nYzwfKhWJ9eITPunG4dfJweu?=
+ =?us-ascii?Q?JujBS/PEq4n1U6qorxr+TZq+ORcXj49OoPPjq1wl9g65GU2aqDhh0cZimqh7?=
+ =?us-ascii?Q?j5jXcFTBJLBSs2xOLpxsp+jcWGgojbWrtL5SSAw2FQ4KmAJAeSFi0QKKnZQv?=
+ =?us-ascii?Q?rOxDV7Y1MLGXKk7K/0kloXNIVD05z/2nSdm/?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2025 20:17:55.8418
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1492712-2c13-425c-a70e-08ddcfa62ba0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD74.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPFD8936FA16
 
-On 7/30/25 02:24, Cryolitia wrote:
-> Thank you for raising this valid concern. We've closely monitored GPD's
-> development plans and currently see no indication of EC functionality
-> expansion beyond thermal sensors in the foreseeable future. Given this
-> observation, we believe placing the driver in hwmon remains appropriate
-> for now.
-> 
-> That said, we fully respect your maintainer perspective on
-> future-proofing. If you feel strongly that platform/x86 would be a safer
-> long-term home despite the current scope, we're happy to move the driver
-> there immediately. We're committed to finding the most sustainable
-> solution for upstream.
-> 
+The fans controlled by the driver can get stuck at 0 RPM if they are
+configured below a 20% duty cycle. The driver tries to avoid this by
+enforcing a minimum duty cycle of 20%, but this is done after the fans
+are registered with the thermal subsystem. This is too late as the
+thermal subsystem can set their current state before the driver is able
+to enforce the minimum duty cycle.
 
-As hwmon maintainer, I feel strongly (since you used the word) that moving
-the driver (or any hwmon driver, for that matter) out of hwmon space would
-be a bad idea, but I won't prevent you from doing it either. It means less
-work for me, after all.
+Fix by setting the minimum duty cycle before registering the fans with
+the thermal subsystem.
 
-Guenter
+Fixes: d7efb2ebc7b3 ("hwmon: (mlxreg-fan) Extend driver to support multiply cooling devices")
+Reported-by: Nikolay Aleksandrov <razor@blackwall.org>
+Tested-by: Nikolay Aleksandrov <razor@blackwall.org>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index 01faf1a8f55a..137a90dd2075 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -581,15 +581,14 @@ static int mlxreg_fan_cooling_config(struct device *dev, struct mlxreg_fan *fan)
+ 		if (!pwm->connected)
+ 			continue;
+ 		pwm->fan = fan;
++		/* Set minimal PWM speed. */
++		pwm->last_hwmon_state = MLXREG_FAN_PWM_DUTY2STATE(MLXREG_FAN_MIN_DUTY);
+ 		pwm->cdev = devm_thermal_of_cooling_device_register(dev, NULL, mlxreg_fan_name[i],
+ 								    pwm, &mlxreg_fan_cooling_ops);
+ 		if (IS_ERR(pwm->cdev)) {
+ 			dev_err(dev, "Failed to register cooling device\n");
+ 			return PTR_ERR(pwm->cdev);
+ 		}
+-
+-		/* Set minimal PWM speed. */
+-		pwm->last_hwmon_state = MLXREG_FAN_PWM_DUTY2STATE(MLXREG_FAN_MIN_DUTY);
+ 	}
+ 
+ 	return 0;
+-- 
+2.34.1
 
