@@ -1,272 +1,165 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63282F4FA;
-	Thu, 31 Jul 2025 10:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5DD1E50E;
+	Thu, 31 Jul 2025 12:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753959126; cv=none; b=YU+HKrQSZpGHU5taGQbGfA1avBhGZ/ByMVE0+794OaQierh8O2ovHEeh/K2s6jBtfjqLqHLNpb2lmrvJOjC+vwkUbU0ghZeStheCLk/q2fpHa3ZdNdVOTKyfNJrLXroZMS/1Lr8RO871jtt2NqrKQwSLeTzzpVe/2IJ3ZXPU7iE=
+	t=1753966439; cv=none; b=gkk4mrwNcL9ccBfRFOPmXHprU9BVI34p0KAetU0z8w0/T/2ay6jDvGT1pKO4rzjmMSVv6EIaVa0Xxf8l+ScCNSFiNnyWA2uoHa5U3PaGrza574uLSLEaqioiEhFcRwFdJyGJ2haGj1AMDhyr1MNXCNXIi0WjA/ejbZgT1OfvMrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753959126; c=relaxed/simple;
-	bh=09eUtxy7BEVelvmPkGEU/1pIx6WqhhrhifwI4fNz/5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I37lqUrRhK+o1KzYIMApHjzbQDn95XLXndHVdVKNOIBsCuIyQDBP4HgjoapHTm145qSSWx4HL2o53BuaOTppDsJlusa6am8DG999Sj+wk9QU5FD7EA0NLNm391e0TM2i9p9nB8qnY1k/3HP/nCrTgbsI9ubaBmvWEK6LtJR4Fd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d8YHkASB; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1753966439; c=relaxed/simple;
+	bh=7aXWAT7rQkXajWXwVRLeSTFpKLGU5JzqwY7ReVGiZHI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nLjFbhwRfgEA6NMKosUiup1roy5u2XvZSvTgnCQ93EneuBM4S1X/OGEMHNKhIERkiESiA33o0hQHkyXZYfh67Y/+y6dAVviqSSzxOlv4rdjPJCBBCJmBLpQL8BFdrHYxPt4XAGkhq5zo2HfetQH6DLVopWpCk9towV4OiVHUpkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/IY73U0; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d8YHkASB"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-76bd041c431so325056b3a.2;
-        Thu, 31 Jul 2025 03:52:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/IY73U0"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7425bd5a83aso751981b3a.0;
+        Thu, 31 Jul 2025 05:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753959123; x=1754563923; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6BNm2GTevFRvXJYfacbCY9tU3bk2KY3Lo3LH5vZNBH4=;
-        b=d8YHkASBecPls/MrQyu9w2eSwyMYebviY2YfjOhTnlApVFCV2ElfFbyupobcbEgUNY
-         Y0zb2YZhFQjIku9JtJAlkpJ3V0kfqZjGvPOOzY+v4Aj+pkbaH9pT5MVQmPK/4PU59ZPU
-         IbdMr49uydy+T1tljIoUS1XnF8v4AbLkVVFk3wKIaRLFvo9t/npA//NaukMvAGfa//zk
-         ZzfeWHORNnp8YrMwcI9jbNYYBAf+kaGRv/1bbk2kOrwNqd55OYy+OJnkQM3rbBFMVywa
-         Gml4d3yioJL7AtH0Qrq61hi8cxWNZWOGvq4SPBOsOxK8VWsW/KecG0/3PzR4of9dwF9T
-         ootA==
+        d=gmail.com; s=20230601; t=1753966437; x=1754571237; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dn5Lwte6H7TyG8Q0qTy73zpbidukaid/l+ZS8OTsom0=;
+        b=E/IY73U0Z2jbLrIjc0MV5A1iCTiQo19R8q7BgMOy2e3csSlxyskxJLbI0QL1kmzLUz
+         13GpfQlBs/5ZjUXJtj8TbuYQS8HPMqaWoehE1bt8doLCN6fk6RgkizHyqAls/td5SdIu
+         +HPZEqNpxN9DdJP89lseAJ6eLdQ98NkPBmAR+lwAM4A254E7wtjhUUBxpBb3d6kD0cN8
+         ok5Y4Q7TOHzG3U0f1t9CJ/w8qME9VG6OCAaidcwxt/GMekHvWo/nsINfSuc3/tsVtzUD
+         QNg5+7mdvQK9T9qph07GU2YGj4k9pqfAM0pv29WGxvJliLdWq4tFhLvxwI0baUNsjV+2
+         9h9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753959123; x=1754563923;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6BNm2GTevFRvXJYfacbCY9tU3bk2KY3Lo3LH5vZNBH4=;
-        b=FXSKIWwwXsZhayZfIGcrzKyHMHhR+MBV53B5BIFeQ0KvX4q1mOwBFP4zGor2oq3h6w
-         KQ1QqcW3eu8cpvYoh38wv8WPKSj5H10SQ9I+mtbxdHKArXladuzkBZv+WIF708tvX2JF
-         HGTvOHC4QXtyW4sC9H5rbfkDebF6sOmzM/TLqy9gdIBIOrzpdG1j7jBiogK+nr9ZZPY1
-         eqsVDrhl1+S3xbiEotCJQc/y55iSatoPIFpBCwjUmDNM1moXk7qkHK1JR0fyPLi3tQW2
-         W9oel1SQ5leP7WCRFf9d2OZa48xxpdjk+GO1bb7O69m0b6Xko96udN5atD96OT+PyDCP
-         e7mg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVqfNi0cmBiUxVs4KAxUMVBEAmKmgciEFMNk5MSK5EpKw5YmxEgu1mzLTOpcuAjA9zPFSGSLz+/Neq@vger.kernel.org, AJvYcCWV3LfCTh95OrxEi2JKoTKpcBNa35A+SvnECdQj3sZd9O6YxT9iMGmmBYbSsiSZbykJidD/pV8MYsR0ZQ==@vger.kernel.org, AJvYcCXApArLqWsWao9rlkZQriODxXiHaE0rJeAcDR/D0wD2MDcCxzDiFzimmGkoemmhO2doIsyFmqEsPbI1H/lQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxdiGm93WaGm5U5dEx33vVBj+3+0HleRwUatkNjbZKeJYI2NFW
-	C3t+aobAcb394Ie4jLkzXO4BUCCc8+Yb68DSdVuYXVdaZVgthuEsSZiN
-X-Gm-Gg: ASbGncvQqsQopd6lmLtna3rGY8+DySv9IxWVZQapV3fxc9m4Z7OqFuDWFZ+JIxoQPyJ
-	OGP3eCjcUOJ26xcbELsSctPae/CMBmuHHi3voBoF8dAy7/ADirFjFBLlh66dW05Ro7O8xiB8BDy
-	bemgOq1fYQrB9pt/bMRDbkfNoAZ9I5YjIu2eaGYnXtNrmIEDk3pG+c/mKMfxHuFXBeqBSlomtvh
-	28mPT+5K2mNnLU7FYZ91VNMN7LgAkUbCpDTJeevQnj5VhaG8uYHAZ5I/HeOlFpuPK6bP9Abqse+
-	xT+xjxSO4CYnosi4ElEDS2shaMPKcsFAkI+KE1JWZNAi1/WkIyU+HMEOu5rpuqsOH39LOUz5DKz
-	zmlzmVHnkWZ6v
-X-Google-Smtp-Source: AGHT+IEpUbFQBDbBzG/lmEXfkVk7OLRqFxEmhc33scO+8gpDjGb2RBZveXq6rfWnEpiuwIUpv5arlg==
-X-Received: by 2002:a05:6a00:ad6:b0:742:3fe0:8289 with SMTP id d2e1a72fcca58-76ab2b566b7mr10264426b3a.20.1753959123515;
-        Thu, 31 Jul 2025 03:52:03 -0700 (PDT)
-Received: from nsa ([45.248.78.239])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bcce89104sm1324539b3a.35.2025.07.31.03.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 03:52:02 -0700 (PDT)
-Date: Thu, 31 Jul 2025 11:52:10 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Jonathan Cameron <jic23@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	Andy Shevchenko <andy@kernel.org>, Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>, 
-	linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
-Message-ID: <pblyblite64vy5ghk77crga5y6f2a6bmngtxu6rlqmq3p7rzxt@srquqhwt43nr>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
- <20250715012023.2050178-8-sean.anderson@linux.dev>
- <afc6aa6ad4b633f9d834acf933734985f14c5563.camel@gmail.com>
- <6455be16-d287-4d5e-9556-e1789d43708c@linux.dev>
- <9c6f99e022270b1b9c2f178f8f415270f11e59df.camel@gmail.com>
- <11735f77-25cc-4220-b7be-e6fda8f72161@linux.dev>
+        d=1e100.net; s=20230601; t=1753966437; x=1754571237;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dn5Lwte6H7TyG8Q0qTy73zpbidukaid/l+ZS8OTsom0=;
+        b=FJZhNSrf2ARG+VjXadwCIvNo35Sp17AQHDsMDnqF2BnD5+SAxZm0LY/8gXTVCKqoTh
+         ZYDqj3M5BHEbHWwWO1C5q+nHwW1LDfVu+i9jqFeJuIsHIFI+3qFG4omKh0NVhzI7sYGe
+         VJyQQ8FUhrzxsxF5Q6QjwGF1ZJ6pXfG4dXMtbakIEvBsrN26pbUIWX84CfdbaSDDL8Qk
+         zzlKskfJsYTBIiOgolX84py61p/zQZ5+/to+rkaaUArNGgH0ByhGDnfwck/Ue7TOQoQI
+         f9sQ5r3VVaOjodPuI1upPEkTjOKUJAkIct0JTLWmMIZmGOUe+2dylQm77dO5kfIH5O1v
+         br9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUSlE+l6iK9sybF6Q5Ua/lMq0ybwYhYTzWMQnGVKXVc2XJJmUgxDCj5FgJTddJYV9d7d2n1ItMjEzVGB+g=@vger.kernel.org, AJvYcCUfplPimcUbtXrHZ4KYSmS7QHEHvNlWYqhEcTQrD7WYKuZ4VdfvJ4WtvlwwUsGyyoqlAUKw+I0EH/s=@vger.kernel.org, AJvYcCXbr0AnEfIOghj2IaZiPdzDcBTvbPSkH5FsH7pDLExhA6WGv8/YjZkseXLvh4zSyB1A38tbddCx+P43xSF0@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqhgbZiyQeymhJmqEMxovzV1ew0uIJxG3XBsUbDqiY38zWfhAN
+	zd7nAlU46P+fjNWoTXH96+rUK0MLwT7zcoy6HplB7gU8mztCeJsKCPCU
+X-Gm-Gg: ASbGncuQXmUovrk+oP/6eOXmHy328nohbZa1XiSGd/FxAQ6AQV9fwdQx/+peEuQhReE
+	vqNhv5q8vbdhBYhfPOhPoehArYSvEx510fAOSMGfrp9jSyJMTqoL1E2uGAArTTZsylr4IN3nded
+	5kk6rOx5crgcL/v8RCz2cFTfn4cVQf90EFOakR7Mlwg42KKMxeorft59IwSzDHT4zCbEATXz/kV
+	Nq4bY/SzSFpWzm6xDfK5pyjofvJvcOAQBYqLAmIIbWqj0Kn3aogmQPAVAzyMT5vcvzq6WiWnDHe
+	AODjhVlhidTQPbe1MkVZoHWhfKvMZZmji+2o1Zk4A8iUohxxV8qxu9sAV4MtO1FctA/u+sHHrdL
+	CpbVW35demQx/LaD7OCsNzTwBPaet/Yv5bU6gZTdW5bW7UPSp1OKZA1W30oWnT33RjZvKkmBAyi
+	MjtyXmjg==
+X-Google-Smtp-Source: AGHT+IG3Y+nl84TkVSnB6RRZ2m3AdecVRsNV4nibojfysudORjk4Lbsi7ormo+11RhbR7TAGUkBu0g==
+X-Received: by 2002:a05:6a00:b88:b0:74e:a9c0:9b5c with SMTP id d2e1a72fcca58-76ab293839fmr11517260b3a.13.1753966436941;
+        Thu, 31 Jul 2025 05:53:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfed320sm1566680b3a.132.2025.07.31.05.53.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Jul 2025 05:53:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <05539224-6207-4dfa-a4e2-99947ec1fc62@roeck-us.net>
+Date: Thu, 31 Jul 2025 05:53:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <11735f77-25cc-4220-b7be-e6fda8f72161@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+ Cryolitia PukNgae <liziyao@uniontech.com>
+Cc: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ Celeste Liu <CoelacanthusHex@gmail.com>, Yao Zi <ziyao@disroot.org>,
+ Derek John Clark <derekjohn.clark@gmail.com>,
+ =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
+ someone5678 <someone5678.dev@gmail.com>,
+ Justin Weiss <justin@justinweiss.com>, command_block <mtf@ik.me>
+References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
+ <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
+ <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
+ <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
+ <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
+ <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
+ <d4b6932f-fe95-4502-b7c9-650a61ab565d@roeck-us.net>
+ <4CFDED845BBB7FFB+10019dea-8229-4681-9beb-5f351eb8faf4@uniontech.com>
+ <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 17, 2025 at 12:00:13PM -0400, Sean Anderson wrote:
-> On 7/16/25 02:37, Nuno Sá wrote:
-> > On Tue, 2025-07-15 at 13:02 -0400, Sean Anderson wrote:
-> >> On 7/15/25 07:28, Nuno Sá wrote:
-> >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:
-> >> > > Add alarm support based on IIO threshold events. The alarm is cleared on
-> >> > > read, but will be set again if the condition is still present. This is
-> >> > > detected by disabling and re-enabling the event. The same trick is done
-> >> > > when creating the attribute to detect already-triggered events.
-> >> > > 
-> >> > > The alarms are updated by an event listener. To keep the notifier call
-> >> > > chain short, we create one listener per iio device, shared across all
-> >> > > hwmon devices.
-> >> > > 
-> >> > > To avoid dynamic creation of alarms, alarms for all possible events are
-> >> > > allocated at creation. Lookup is done by a linear scan, as I expect
-> >> > > events to occur rarely. If performance becomes an issue, a binary search
-> >> > > could be done instead (or some kind of hash lookup).
-> >> > > 
-> >> > > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> >> > > ---
-> >> > > 
-> >> > >  drivers/hwmon/iio_hwmon.c | 322 +++++++++++++++++++++++++++++++++++++-
-> >> > >  1 file changed, 321 insertions(+), 1 deletion(-)
-> >> > > 
-> >> > > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-> >> > > index 3db4d4b30022..c963bc5452ba 100644
-> >> > > --- a/drivers/hwmon/iio_hwmon.c
-> >> > > +++ b/drivers/hwmon/iio_hwmon.c
-> >> > > @@ -8,6 +8,7 @@
-> >> > >  #include <linux/slab.h>
-> >> > >  #include <linux/mod_devicetable.h>
-> >> > >  #include <linux/module.h>
-> >> > > +#include <linux/notifier.h>
-> >> > >  #include <linux/err.h>
-> >> > >  #include <linux/platform_device.h>
-> >> > >  #include <linux/property.h>
-> >> > > @@ -15,7 +16,192 @@
-> >> > >  #include <linux/hwmon.h>
-> >> > >  #include <linux/hwmon-sysfs.h>
-> >> > >  #include <linux/iio/consumer.h>
-> >> > > +#include <linux/iio/events.h>
-> >> > > +#include <linux/iio/iio.h>
-> >> > >  #include <linux/iio/types.h>
-> >> > > +#include <uapi/linux/iio/events.h>
-> >> > > +
-> >> > > +/* Protects iio_hwmon_listeners and listeners' refcnt */
-> >> > > +DEFINE_MUTEX(iio_hwmon_listener_lock);
-> >> > > +LIST_HEAD(iio_hwmon_listeners);
-> >> > > +
-> >> > > +/**
-> >> > > + * struct iio_hwmon_listener - Listener for IIO events
-> >> > > + * @block: Notifier for events
-> >> > > + * @ids: Array of IIO event ids, one per alarm
-> >> > > + * @alarms: Bitmap of alarms
-> >> > > + * @num_alarms: Length of @ids and @alarms
-> >> > > + * @indio_dev: Device we are listening to
-> >> > > + * @list: List of all listeners
-> >> > > + * @refcnt: Reference count
-> >> > > + */
-> >> > > +struct iio_hwmon_listener {
-> >> > > +	struct notifier_block block;
-> >> > > +	u64 *ids;
-> >> > > +	unsigned long *alarms;
-> >> > > +	size_t num_alarms;
-> >> > > +
-> >> > > +	struct iio_dev *indio_dev;
-> >> > > +	struct list_head list;
-> >> > > +	unsigned int refcnt;
-> >> > > +};
-> >> > > +
-> >> > > +/**
-> >> > > + * iio_hwmon_lookup_alarm() - Find an alarm by id
-> >> > > + * @listener: Event listener
-> >> > > + * @id: IIO event id
-> >> > > + *
-> >> > > + * Return: index of @id in @listener->ids, or -1 if not found
-> >> > > + */
-> >> > > +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener *listener,
-> >> > > +				      u64 id)
-> >> > > +{
-> >> > > +	ssize_t i;
-> >> > > +
-> >> > > +	for (i = 0; i < listener->num_alarms; i++)
-> >> > > +		if (listener->ids[i] == id)
-> >> > > +			return i;
-> >> > > +
-> >> > > +	return -1;
-> >> > > +}
-> >> > > +
-> >> > > +static int iio_hwmon_listener_callback(struct notifier_block *block,
-> >> > > +				       unsigned long action, void *data)
-> >> > > +{
-> >> > > +	struct iio_hwmon_listener *listener =
-> >> > > +		container_of(block, struct iio_hwmon_listener, block);
-> >> > > +	struct iio_event_data *ev = data;
-> >> > > +	ssize_t i;
-> >> > > +
-> >> > > +	if (action != IIO_NOTIFY_EVENT)
-> >> > > +		return NOTIFY_DONE;
-> >> > > +
-> >> > > +	i = iio_hwmon_lookup_alarm(listener, ev->id);
-> >> > > +	if (i >= 0)
-> >> > > +		set_bit(i, listener->alarms);
-> >> > > +	else
-> >> > > +		dev_warn_once(&listener->indio_dev->dev,
-> >> > > +			      "unknown event %016llx\n", ev->id);
-> >> > > +
-> >> > > +	return NOTIFY_DONE;
-> >> > > +}
-> >> > > +
-> >> > > +/**
-> >> > > + * iio_event_id() - Calculate an IIO event id
-> >> > > + * @channel: IIO channel for this event
-> >> > > + * @type: Event type (theshold, rate-of-change, etc.)
-> >> > > + * @dir: Event direction (rising, falling, etc.)
-> >> > > + *
-> >> > > + * Return: IIO event id corresponding to this event's IIO id
-> >> > > + */
-> >> > > +static u64 iio_event_id(struct iio_chan_spec const *chan,
-> >> > > +			enum iio_event_type type,
-> >> > > +			enum iio_event_direction dir)
-> >> > > +{
-> >> > > +	if (chan->differential)
-> >> > > +		return IIO_DIFF_EVENT_CODE(chan->type, chan->channel,
-> >> > > +					   chan->channel2, type, dir);
-> >> > > +	if (chan->modified)
-> >> > > +		return IIO_MOD_EVENT_CODE(chan->type, chan->channel,
-> >> > > +					  chan->channel2, type, dir);
-> >> > > +	return IIO_UNMOD_EVENT_CODE(chan->type, chan->channel, type, dir);
-> >> > > +}
-> >> > > +
-> >> > > +/**
-> >> > > + * iio_hwmon_listener_get() - Get a listener for an IIO device
-> >> > > + * @indio_dev: IIO device to listen to
-> >> > > + *
-> >> > > + * Look up or create a new listener for @indio_dev. The returned listener is
-> >> > > + * registered with @indio_dev, but events still need to be manually enabled.
-> >> > > + * You must call iio_hwmon_listener_put() when you are done.
-> >> > > + *
-> >> > > + * Return: Listener for @indio_dev, or an error pointer
-> >> > > + */
-> >> > > +static struct iio_hwmon_listener *iio_hwmon_listener_get(struct iio_dev
-> >> > > *indio_dev)
-> >> > > +{
-> >> > > +	struct iio_hwmon_listener *listener;
-> >> > > +	int err = -ENOMEM;
-> >> > > +	size_t i, j;
-> >> > > +
-> >> > > +	guard(mutex)(&iio_hwmon_listener_lock);
-> >> > > +	list_for_each_entry(listener, &iio_hwmon_listeners, list) {
-> >> > > +		if (listener->indio_dev == indio_dev) {
-> >> > > +			if (likely(listener->refcnt != UINT_MAX))
-> >> > > +				listener->refcnt++;
-> >> > 
-> >> > I dunno for the above to ever happen :).
-> >> 
-> >> Well, I can remove it if you like.
-> >> 
-> >> > And as Andy stated, let's just use proper refcount APIs.
-> >> 
-> >> No point in using atomic ops if they are only accessed under a mutex.
-> > 
-> > Not the point... If there are proper APIs for handling things like this, not sure why
-> > not using and then coming up with things like the above? And the same goes to the
-> > release path.
+On 7/31/25 01:13, Antheas Kapenekakis wrote:
+> On Thu, 31 Jul 2025 at 05:30, Cryolitia PukNgae <liziyao@uniontech.com> wrote:
+>>
+>> Personally, I'd prefer to maintain this small driver in the hwmon
+>> subsystem until we need to write drivers for the same EC with more
+>> diverse subsystem functionality. We can then discuss and learn how to
+>> evolve it. I personally don't think that's going to happen in the near
+>> future.
+>>
+>> So, could we continue reviewing the current patch series? Where are we
+>> stuck?
 > 
-> The API is for doing reference counts *atomically*. If you do not need
-> atomic reference counting, then it is the *wrong* API. I suggest reading
+> Either is fine by me. The move is simply a rename anyway. My reasoning
+> was it will take a bit of back and forth to get approved and charge
+> limiting is a standard feature now on all manufacturers except GPD, so
+> I expect them to add it soon. But since it is a rename, it is not a
+> blocker for reviewing in any case.
+> 
 
-Well, It won't make your code wrong. It's just about re-using what we have already.
-But my main complain was about having your own saturation checks in here.
-I also dislike the release path where you do have to explicitly check for 0 to
-call the cleanup API. That is all handled already. Not to mention that it is a fairly
-common pattern to use these APIs even if you don't really __need__ it's atomicity. 
+It is moving code from one maintainer domain to another. That is like moving
+from one country to another. It is not "just" a rename.
 
-> the block comment at the beginning of refcnt.h to see the sorts of
-> contortions it has to go through because it is an atomic API. Since we
+Guenter
 
-And? It's very well hidden in the API... This is also not a fastpath at
-all so performance is also not a concern AFAICT.
-
-Up to the maintainers anyways but I cannot say I agree with it. So, I
-guess we can agree in disagreeing :)
-
-- Nuno Sá
