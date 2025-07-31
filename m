@@ -1,165 +1,257 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5DD1E50E;
-	Thu, 31 Jul 2025 12:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A4A1E50E;
+	Thu, 31 Jul 2025 12:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753966439; cv=none; b=gkk4mrwNcL9ccBfRFOPmXHprU9BVI34p0KAetU0z8w0/T/2ay6jDvGT1pKO4rzjmMSVv6EIaVa0Xxf8l+ScCNSFiNnyWA2uoHa5U3PaGrza574uLSLEaqioiEhFcRwFdJyGJ2haGj1AMDhyr1MNXCNXIi0WjA/ejbZgT1OfvMrQ=
+	t=1753966773; cv=none; b=GiNpylMWNIILjQECdvUCly9bCFWkTopt3cCHwsmhSWYpG7AHSlRl+PLHzN+CCYpb+D+HYQ/DK5zcBJrBtjL3EdBr6C9fsMIuOki0gPP35Q/DB7skqTlnOR0OngX//FdhyknDB83cyIWao0oXmauO849yoZmlWhhxC6xA8iSEjsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753966439; c=relaxed/simple;
-	bh=7aXWAT7rQkXajWXwVRLeSTFpKLGU5JzqwY7ReVGiZHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nLjFbhwRfgEA6NMKosUiup1roy5u2XvZSvTgnCQ93EneuBM4S1X/OGEMHNKhIERkiESiA33o0hQHkyXZYfh67Y/+y6dAVviqSSzxOlv4rdjPJCBBCJmBLpQL8BFdrHYxPt4XAGkhq5zo2HfetQH6DLVopWpCk9towV4OiVHUpkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/IY73U0; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/IY73U0"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7425bd5a83aso751981b3a.0;
-        Thu, 31 Jul 2025 05:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753966437; x=1754571237; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dn5Lwte6H7TyG8Q0qTy73zpbidukaid/l+ZS8OTsom0=;
-        b=E/IY73U0Z2jbLrIjc0MV5A1iCTiQo19R8q7BgMOy2e3csSlxyskxJLbI0QL1kmzLUz
-         13GpfQlBs/5ZjUXJtj8TbuYQS8HPMqaWoehE1bt8doLCN6fk6RgkizHyqAls/td5SdIu
-         +HPZEqNpxN9DdJP89lseAJ6eLdQ98NkPBmAR+lwAM4A254E7wtjhUUBxpBb3d6kD0cN8
-         ok5Y4Q7TOHzG3U0f1t9CJ/w8qME9VG6OCAaidcwxt/GMekHvWo/nsINfSuc3/tsVtzUD
-         QNg5+7mdvQK9T9qph07GU2YGj4k9pqfAM0pv29WGxvJliLdWq4tFhLvxwI0baUNsjV+2
-         9h9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753966437; x=1754571237;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dn5Lwte6H7TyG8Q0qTy73zpbidukaid/l+ZS8OTsom0=;
-        b=FJZhNSrf2ARG+VjXadwCIvNo35Sp17AQHDsMDnqF2BnD5+SAxZm0LY/8gXTVCKqoTh
-         ZYDqj3M5BHEbHWwWO1C5q+nHwW1LDfVu+i9jqFeJuIsHIFI+3qFG4omKh0NVhzI7sYGe
-         VJyQQ8FUhrzxsxF5Q6QjwGF1ZJ6pXfG4dXMtbakIEvBsrN26pbUIWX84CfdbaSDDL8Qk
-         zzlKskfJsYTBIiOgolX84py61p/zQZ5+/to+rkaaUArNGgH0ByhGDnfwck/Ue7TOQoQI
-         f9sQ5r3VVaOjodPuI1upPEkTjOKUJAkIct0JTLWmMIZmGOUe+2dylQm77dO5kfIH5O1v
-         br9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUSlE+l6iK9sybF6Q5Ua/lMq0ybwYhYTzWMQnGVKXVc2XJJmUgxDCj5FgJTddJYV9d7d2n1ItMjEzVGB+g=@vger.kernel.org, AJvYcCUfplPimcUbtXrHZ4KYSmS7QHEHvNlWYqhEcTQrD7WYKuZ4VdfvJ4WtvlwwUsGyyoqlAUKw+I0EH/s=@vger.kernel.org, AJvYcCXbr0AnEfIOghj2IaZiPdzDcBTvbPSkH5FsH7pDLExhA6WGv8/YjZkseXLvh4zSyB1A38tbddCx+P43xSF0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqhgbZiyQeymhJmqEMxovzV1ew0uIJxG3XBsUbDqiY38zWfhAN
-	zd7nAlU46P+fjNWoTXH96+rUK0MLwT7zcoy6HplB7gU8mztCeJsKCPCU
-X-Gm-Gg: ASbGncuQXmUovrk+oP/6eOXmHy328nohbZa1XiSGd/FxAQ6AQV9fwdQx/+peEuQhReE
-	vqNhv5q8vbdhBYhfPOhPoehArYSvEx510fAOSMGfrp9jSyJMTqoL1E2uGAArTTZsylr4IN3nded
-	5kk6rOx5crgcL/v8RCz2cFTfn4cVQf90EFOakR7Mlwg42KKMxeorft59IwSzDHT4zCbEATXz/kV
-	Nq4bY/SzSFpWzm6xDfK5pyjofvJvcOAQBYqLAmIIbWqj0Kn3aogmQPAVAzyMT5vcvzq6WiWnDHe
-	AODjhVlhidTQPbe1MkVZoHWhfKvMZZmji+2o1Zk4A8iUohxxV8qxu9sAV4MtO1FctA/u+sHHrdL
-	CpbVW35demQx/LaD7OCsNzTwBPaet/Yv5bU6gZTdW5bW7UPSp1OKZA1W30oWnT33RjZvKkmBAyi
-	MjtyXmjg==
-X-Google-Smtp-Source: AGHT+IG3Y+nl84TkVSnB6RRZ2m3AdecVRsNV4nibojfysudORjk4Lbsi7ormo+11RhbR7TAGUkBu0g==
-X-Received: by 2002:a05:6a00:b88:b0:74e:a9c0:9b5c with SMTP id d2e1a72fcca58-76ab293839fmr11517260b3a.13.1753966436941;
-        Thu, 31 Jul 2025 05:53:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfed320sm1566680b3a.132.2025.07.31.05.53.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Jul 2025 05:53:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05539224-6207-4dfa-a4e2-99947ec1fc62@roeck-us.net>
-Date: Thu, 31 Jul 2025 05:53:54 -0700
+	s=arc-20240116; t=1753966773; c=relaxed/simple;
+	bh=XSOS+UZ9IKleq/K0LcM2Wi6Hy3xaj835z9KG/vLfA0s=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M7AxXoqel9Wxw5sT+LVB7AkCHundoUVggWQG4X3FD0reeR6ShzUMjBt55Tf2tBD+j5QR9wGC+EHNHBHdLzWCgVeahpuCApOkQIbrecljIeIwJRrN3rzuEhSrchEkLAoIDlngUgYr/CP2aYK6xvQ+6f1DcRjHq0MPqFxlCgePLLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bt8JG2hN3z6D9Pm;
+	Thu, 31 Jul 2025 20:57:50 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id D74C31400D9;
+	Thu, 31 Jul 2025 20:59:27 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 31 Jul
+ 2025 14:59:27 +0200
+Date: Thu, 31 Jul 2025 13:59:25 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Sean Anderson <sean.anderson@linux.dev>
+CC: Jonathan Cameron <jic23@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?=
+	<noname.nuno@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
+	<linux@roeck-us.net>, <linux-iio@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, Andy Shevchenko <andy@kernel.org>, Nuno
+ =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, <linux-kernel@vger.kernel.org>,
+	David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH 3/7] iio: Add in-kernel API for events
+Message-ID: <20250731135925.00007e5d@huawei.com>
+In-Reply-To: <edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
+References: <20250715012023.2050178-1-sean.anderson@linux.dev>
+	<20250715012023.2050178-4-sean.anderson@linux.dev>
+	<d8e5c8fbeaee42e9e0708460c47bd68053cd8710.camel@gmail.com>
+	<9b187e7f-a116-4aea-a9a6-b9222562868d@linux.dev>
+	<20250727172126.35d0a477@jic23-huawei>
+	<0ccf7735-6a2c-473a-ab67-ae0c5ff9a335@linux.dev>
+	<20250729193346.39791223@jic23-huawei>
+	<edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
-To: Antheas Kapenekakis <lkml@antheas.dev>,
- Cryolitia PukNgae <liziyao@uniontech.com>
-Cc: Cryolitia@gmail.com, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- Celeste Liu <CoelacanthusHex@gmail.com>, Yao Zi <ziyao@disroot.org>,
- Derek John Clark <derekjohn.clark@gmail.com>,
- =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
- someone5678 <someone5678.dev@gmail.com>,
- Justin Weiss <justin@justinweiss.com>, command_block <mtf@ik.me>
-References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
- <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
- <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
- <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
- <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
- <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
- <d4b6932f-fe95-4502-b7c9-650a61ab565d@roeck-us.net>
- <4CFDED845BBB7FFB+10019dea-8229-4681-9beb-5f351eb8faf4@uniontech.com>
- <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 7/31/25 01:13, Antheas Kapenekakis wrote:
-> On Thu, 31 Jul 2025 at 05:30, Cryolitia PukNgae <liziyao@uniontech.com> wrote:
->>
->> Personally, I'd prefer to maintain this small driver in the hwmon
->> subsystem until we need to write drivers for the same EC with more
->> diverse subsystem functionality. We can then discuss and learn how to
->> evolve it. I personally don't think that's going to happen in the near
->> future.
->>
->> So, could we continue reviewing the current patch series? Where are we
->> stuck?
-> 
-> Either is fine by me. The move is simply a rename anyway. My reasoning
-> was it will take a bit of back and forth to get approved and charge
-> limiting is a standard feature now on all manufacturers except GPD, so
-> I expect them to add it soon. But since it is a rename, it is not a
-> blocker for reviewing in any case.
-> 
+On Tue, 29 Jul 2025 16:09:20 -0400
+Sean Anderson <sean.anderson@linux.dev> wrote:
 
-It is moving code from one maintainer domain to another. That is like moving
-from one country to another. It is not "just" a rename.
+> On 7/29/25 14:33, Jonathan Cameron wrote:
+> > On Mon, 28 Jul 2025 18:44:30 -0400
+> > Sean Anderson <sean.anderson@linux.dev> wrote:
+> >  =20
+> >> On 7/27/25 12:21, Jonathan Cameron wrote: =20
+> >> > On Tue, 15 Jul 2025 12:52:19 -0400
+> >> > Sean Anderson <sean.anderson@linux.dev> wrote:
+> >> >    =20
+> >> >> On 7/15/25 07:09, Nuno S=E1 wrote:   =20
+> >> >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:     =20
+> >> >> >> Add an API to notify consumers about events. Events still need t=
+o be
+> >> >> >> enabled using the iio_read_event/iio_write_event functions. Of c=
+ourse,
+> >> >> >> userspace can also manipulate the enabled events. I don't think =
+this is
+> >> >> >> too much of an issue, since userspace can also manipulate the ev=
+ent
+> >> >> >> thresholds. But enabling events may cause existing programs to be
+> >> >> >> surprised when they get something unexpected. Maybe we should se=
+t the
+> >> >> >> interface as busy when there are any in-kernel listeners?
+> >> >> >>      =20
+> >> >> >=20
+> >> >> > Sensible question. I'm not that familiar with events but I suspec=
+t is not
+> >> >> > trivial (if doable) to do a similar approach as with buffers? Wit=
+h buffers, an
+> >> >> > inkernal consumer get's it's own buffer object (that goes into a =
+list of active
+> >> >> > buffers in the iio device) with all channels enabled and then we =
+demux the
+> >> >> > appropriate channels for each consumer.     =20
+> >> >>=20
+> >> >> For in-kernel consumers I think it's reasonable to expect them to h=
+andle
+> >> >> events they didn't explicitly enable. I'm not sure about userspace
+> >> >> consumers.   =20
+> >> >=20
+> >> > This already happens because we don't have a demux equivalent (what =
+we do
+> >> > for buffered data flow) so if a device only has a single enable bit =
+that covers
+> >> > multiple events (annoyingly common for accelerometers for example) t=
+hen
+> >> > userspace will get events it didn't ask for.   We 'could' fix that,
+> >> > but it's never really been worth the effort.
+> >> >=20
+> >> > Events tend to be low data rate so an occasionally extra is rather d=
+ifferent
+> >> > to having to have much larger data buffers to handle a range of chan=
+nels you
+> >> > never asked for.
+> >> >=20
+> >> > Lets be careful to document this behaviour as 'may enable extra even=
+ts'
+> >> > as then if we decide later to do demux type stuff we won't be breaki=
+ng ABI.
+> >> > No one will mind getting fewer spurious events due to a core improve=
+ment.   =20
+> >>=20
+> >> Where would this get documented? =20
+> >=20
+> > Starting point will be in the docs for the ABI that asks for any events=
+ at all.
+> >=20
+> > Also useful to add some thing to Documentation/IIO though there are lot=
+s of
+> > other things those docs don't yet cover :( =20
+>=20
+> Notably the whole events API :l
+>=20
+> >>  =20
+> >> >>    =20
+> >> >> > Independent of the above, we can argue that having both inkernel =
+and userspace
+> >> >> > changing thresholds is ok (I mean, there's nothing stopping two u=
+serspace apps
+> >> >> > doing that) but we should likely be careful with enabling/disabli=
+ng. If multiple
+> >> >> > consumers enable the same event, one of them disabling it should =
+not disable it
+> >> >> > for all the consumers, right?     =20
+> >> >>=20
+> >> >> Right now the HWMON consumer never permanently disable events to av=
+oid this
+> >> >> issue. It does toggle the enable to determine if an alarm should st=
+ay
+> >> >> enabled:
+> >> >>              ________
+> >> >> condition __/        \________
+> >> >>           _____    ____    ___
+> >> >> enable         \__/    \__/
+> >> >>=20
+> >> >> event       |     |
+> >> >>              __    ____
+> >> >> alarm     __/  \__/    \_____
+> >> >>=20
+> >> >> read           1       1    0
+> >> >>=20
+> >> >> I suppose this could also be done by comparing the raw threshold to=
+ the
+> >> >> channel.   =20
+> >> >=20
+> >> > I wonder if we should add the option to do a 'get_exclusive' or simi=
+lar
+> >> > to block the IIO user interfaces if something critical is using the =
+device.
+> >> >=20
+> >> > If we were for instance to use this to block the IOCTL to get the ev=
+ents
+> >> > fd then any built in driver etc will almost certainly load before an=
+yone
+> >> > can call the ioctl so it will fairly cleanly block things.   =20
+> >>=20
+> >> This is how it currently works for userspace. Only one process can cre=
+ate
+> >> the event fd, and everyone else gets -EBUSY.
+> >>=20
+> >> Of course, it would be pretty surprising to have an IIO device where
+> >> some channels were used by userspace and others were used by hwmon and
+> >> then have your daemon stop working after you update your kernel because
+> >> now the hwmon driver takes exclusive event access. =20
+> >=20
+> > True.  I wonder how many boards we don't know about are using the iio-h=
+wmon
+> > bridge. We can check the ones in kernel for whether they grab all the
+> > channels (which would rule this out).
+> >
+> > Another things we could do is have an opt in from the IIO driver.
+> > That way only 'new' drivers would have this behaviour.  Not nice though=
+. =20
+>=20
+> I would really like for this to "just work" if at all possible, so an
+> opt-out would be preferable. Maybe a hwmon module parameter.
+>=20
+> But I think we can do better:
+>=20
+> - Both kernel/userspace can/should handle unexpected events
+>   - This includes extra (synthetic) events.
+> - Both kernel/userspace mostly just want to enable events
+> - Disabling events is not as important because of the previous bullet.
+> - But losing events is probably bad so we want to ensure we trigger
+>   events at the same places they would have been triggered before.
+>=20
+> So maybe we have an implementation where
+>=20
+> - Enabling an event disables the backing event before re-enabling it if
+>   there are any existing users
+> - Disabling an event only disables the backing event if all users are
+>   gone
+>=20
+> It could look something like
+>=20
+> iio_sysfs_event_set(event, val):
+>     if val:
+>         if !event.user_enable
+>             disable(event)
+>         enable(event)
+>     else if !event.kernel_enables
+>         disable(event)
+>     event.user_enable =3D val
+>=20
+> iio_inkern_event_set(event, val):
+>     if val:
+>         if event.kernel_enables++ || event.user_enable
+>             disable(event)
+>         enable(event)
+>     else if !--event.kernel_enables && !event.user_enable:
+>         disable(event)
 
-Guenter
+Something like that should work.  We'll need to be careful
+to gate any push towards userspace on it waiting for something.
+
+Given we only send them when IIO_BUSY_BIT_POS is set on the
+event interface (which happens on requesting the fd) I think
+we may be fine already.
+
+Jonathan
+
+>=20
+> --Sean
+>=20
+> >>=20
+> >> I originally had kernel users read from the kfifo just like userspace,
+> >> but I was concerned about the above scenario.
+> >>  =20
+> >=20
+> > yeah, always a problem to retrofit policy.
+> >  =20
+> >> --Sean
+> >>  =20
+> >  =20
+>=20
+>=20
 
