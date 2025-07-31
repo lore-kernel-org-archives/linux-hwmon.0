@@ -1,257 +1,329 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A4A1E50E;
-	Thu, 31 Jul 2025 12:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D18A94A;
+	Thu, 31 Jul 2025 13:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753966773; cv=none; b=GiNpylMWNIILjQECdvUCly9bCFWkTopt3cCHwsmhSWYpG7AHSlRl+PLHzN+CCYpb+D+HYQ/DK5zcBJrBtjL3EdBr6C9fsMIuOki0gPP35Q/DB7skqTlnOR0OngX//FdhyknDB83cyIWao0oXmauO849yoZmlWhhxC6xA8iSEjsI=
+	t=1753968119; cv=none; b=TVZmX5lbQNGh2u1DVYhrOHAHajymFG/9q969hY3wNizfYr7pDqY24dJ80XZAXvZEbJkkg9btTMbBJcB/V6XcIt38t2ogjBoioEcKZkpgjaiAeXcQt0G2IONhip/HLb2f3Xc/gAL4ct6m7w2epBFKQUKXL5kZlZByprcDvTmWALU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753966773; c=relaxed/simple;
-	bh=XSOS+UZ9IKleq/K0LcM2Wi6Hy3xaj835z9KG/vLfA0s=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M7AxXoqel9Wxw5sT+LVB7AkCHundoUVggWQG4X3FD0reeR6ShzUMjBt55Tf2tBD+j5QR9wGC+EHNHBHdLzWCgVeahpuCApOkQIbrecljIeIwJRrN3rzuEhSrchEkLAoIDlngUgYr/CP2aYK6xvQ+6f1DcRjHq0MPqFxlCgePLLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bt8JG2hN3z6D9Pm;
-	Thu, 31 Jul 2025 20:57:50 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id D74C31400D9;
-	Thu, 31 Jul 2025 20:59:27 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 31 Jul
- 2025 14:59:27 +0200
-Date: Thu, 31 Jul 2025 13:59:25 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Sean Anderson <sean.anderson@linux.dev>
-CC: Jonathan Cameron <jic23@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?=
-	<noname.nuno@gmail.com>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck
-	<linux@roeck-us.net>, <linux-iio@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>, Andy Shevchenko <andy@kernel.org>, Nuno
- =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, <linux-kernel@vger.kernel.org>,
-	David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 3/7] iio: Add in-kernel API for events
-Message-ID: <20250731135925.00007e5d@huawei.com>
-In-Reply-To: <edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
-	<20250715012023.2050178-4-sean.anderson@linux.dev>
-	<d8e5c8fbeaee42e9e0708460c47bd68053cd8710.camel@gmail.com>
-	<9b187e7f-a116-4aea-a9a6-b9222562868d@linux.dev>
-	<20250727172126.35d0a477@jic23-huawei>
-	<0ccf7735-6a2c-473a-ab67-ae0c5ff9a335@linux.dev>
-	<20250729193346.39791223@jic23-huawei>
-	<edb59657-ced2-4557-afe5-07bd83af848e@linux.dev>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1753968119; c=relaxed/simple;
+	bh=YH0p+rkZ7VjVvStuPDpL3zFqBAqaVf3skz1V1O9lyjE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=VHf4e5oow7k+R5n6y0GoInmiI6Y3PCyyJB+ic8qz+bqAYIsW7kOSjNfvCvnVSdKTP+VW+W2CZrODkTOuZUeN8fYIfr2vTfZuQE2dtMDBSFSyjtCqV2Zy4on28xJdHHWEcGyQ/0phZm7JG/2AguTWJ9inhpn3KjDtBQiNLVoFYCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jV6xbSrs; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jV6xbSrs"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-615622ed677so1326331a12.1;
+        Thu, 31 Jul 2025 06:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753968115; x=1754572915; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T2iL71ZYyXv74OhWHxHVP5xy7cfDQlk2h0s8I6sOeIM=;
+        b=jV6xbSrscFQUVqNGvafZAzUmQj1VJvoILUVp+U4SQprnUGZpisWIpuuJyE4D/OlQzj
+         8EZxPtmLlvWWIIrxvO+sLCjYPCjWxfcXQvrZiqTjFhrUb5ZFmrowDe+YMh6iZE8oLQiq
+         C+kb3W5KLw+ScvFyEmnx9vjKkNzqkKBAQpBys1wCE8XvwS2ZqnJqCGEuzXhgtGImBFQK
+         tEOI0+zG9vsO79Ab/jZ3biMUFKdL9Zzcvv9Zn/fm++F6jWhJ41c2GE5a/Zr37H8aHfTC
+         wQpwGWmEwZ176MrIITOpzRN0E13XQbuWETURF7oolOAy6CedhTpiu7356Q/7hU+H4yjz
+         P+og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753968115; x=1754572915;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T2iL71ZYyXv74OhWHxHVP5xy7cfDQlk2h0s8I6sOeIM=;
+        b=I7lWfpHWnDESZNiBozrCIW+i0AfFaJcbzBO06aoTN4wee0oDYq+4K79aQbvm/BFIwy
+         dlb+a/xJsyLSLNo+HSa4BYUODgStwGF+Tkg80EaaEzXvXm4nfks191d1ZRXunqp1m8HS
+         38Kcc1HwL1TuSdwVVBfxruosFx4ze9p+pMDjS2WMkdAxvncXLck4/ETfbawPvSjSwZ21
+         LZQUypxScbasWl/eHGfvmZEClpxzwceP6HJo2JqE+c+qzV8hubni2qgdeZyQ/sSvR4Bq
+         h1o6e2/KWBVd6JRcNsHxIPQYCkzM52BHJTMpPkoIzar7jJuKnieLcKI6yy2pLhfYKW+b
+         SUUQ==
+X-Gm-Message-State: AOJu0Yxs8DQdj+75DEY22WQgqXTUMPtIszcDbYyhGYx6876NODBsNJ8w
+	aAPjW9sAZFLwUz25VXwzh7/abOCzBdhB70yOZkq2zYiJW0UcBCT90+1aLV+HrXnK1YHRT6WmoLl
+	/APYZCfMA934xKDW7cCbhZp7XKedTm2IcjmJZ
+X-Gm-Gg: ASbGncuGakO3JUZq33lk1X0EYMa+y2ufBRifmDMQHeP364e8JXKR9N9jWlWbAdOANNj
+	b30LhQVikLZU8PsbH4Vnzng9cLzCx2/cbiSy6BupwCHW0tNOrpsuvQ126s8FU/Q6/yU8Rw5CtLv
+	Lg1tjAsG+lPBlt6PIbP/pxqrNEj/A5Pi79ojyriHZ677O1JM5wm6L98EOsihkgTfR9VQE67xU1s
+	KK/NZh1
+X-Google-Smtp-Source: AGHT+IHtNL8WVYrFfqbtUHANqnSRQElndtF0p+2h4Iio1L7+oBL1sh9UcwdzozSo9Uv4sfGkrb9fljLssKrI6xi12GE=
+X-Received: by 2002:a05:6402:13c3:b0:615:1563:4462 with SMTP id
+ 4fb4d7f45d1cf-61586edd5f5mr7794890a12.2.1753968114847; Thu, 31 Jul 2025
+ 06:21:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
+From: Artyom Shimko <artyom.shimko@gmail.com>
+Date: Thu, 31 Jul 2025 16:21:34 +0300
+X-Gm-Features: Ac12FXwcs-oOE1f0C2L4wIwwQo0YrN3GALXmrFNwJMxeYbUNE1lodq2Xs4BUF3I
+Message-ID: <CALHJ+Hw_SDkpz6VpfOvD_=Z2RL6+zYSns4cm9CS889v1gmWHxw@mail.gmail.com>
+Subject: [PATCH v1 0/4] hwmon: scmi: Driver improvements and fixes
+To: linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, sudeep.holla@arm.com, 
+	cristian.marussi@arm.com, jdelvare@suse.com, guenter.roeck@linux.com
+Content-Type: multipart/mixed; boundary="0000000000006f0bf7063b3986b6"
+
+--0000000000006f0bf7063b3986b6
+Content-Type: multipart/alternative; boundary="0000000000006f0bf6063b3986b4"
+
+--0000000000006f0bf6063b3986b4
+Content-Type: text/plain; charset="UTF-8"
+
+This patch series introduces several improvements to the SCMI HWMON driver:
+
+1. Better handling of unsupported sensor types with debug logging
+2. Fixes redundant resource management in thermal registration
+3. Enhanced error reporting using dev_err_probe()
+4. Added version tracking and proper contributor attribution
+
+The changes maintain backward compatibility while improving:
+- Debugging capabilities
+- Error reporting clarity
+- Code maintenance
+- Contributor tracking
+
+Artem Shimko (4):
+  hwmon: scmi: Add default case with debug output
+  hwmon: scmi: Remove redundant devm_kfree call
+  hwmon: scmi: Enhance error reporting with dev_err_probe
+  hwmon: scmi: Add driver version and patch author
+
+ drivers/hwmon/scmi-hwmon.c | 50 ++++++++++++++++++++++++++++----------
+ 1 file changed, 37 insertions(+), 13 deletions(-)
+
+-- 
+2.43.0
+
+--0000000000006f0bf6063b3986b4
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Tue, 29 Jul 2025 16:09:20 -0400
-Sean Anderson <sean.anderson@linux.dev> wrote:
+<div dir=3D"ltr">This patch series introduces several improvements to the S=
+CMI HWMON driver:<br><br>1. Better handling of unsupported sensor types wit=
+h debug logging<br>2. Fixes redundant resource management in thermal regist=
+ration<br>3. Enhanced error reporting using dev_err_probe()<br>4. Added ver=
+sion tracking and proper contributor attribution<br><br>The changes maintai=
+n backward compatibility while improving:<br>- Debugging capabilities<br>- =
+Error reporting clarity<br>- Code maintenance<br>- Contributor tracking<br>=
+<br>Artem Shimko (4):<br>=C2=A0 hwmon: scmi: Add default case with debug ou=
+tput<br>=C2=A0 hwmon: scmi: Remove redundant devm_kfree call<br>=C2=A0 hwmo=
+n: scmi: Enhance error reporting with dev_err_probe<br>=C2=A0 hwmon: scmi: =
+Add driver version and patch author<br><br>=C2=A0drivers/hwmon/scmi-hwmon.c=
+ | 50 ++++++++++++++++++++++++++++----------<br>=C2=A01 file changed, 37 in=
+sertions(+), 13 deletions(-)<br><br>-- <br>2.43.0</div>
 
-> On 7/29/25 14:33, Jonathan Cameron wrote:
-> > On Mon, 28 Jul 2025 18:44:30 -0400
-> > Sean Anderson <sean.anderson@linux.dev> wrote:
-> >  =20
-> >> On 7/27/25 12:21, Jonathan Cameron wrote: =20
-> >> > On Tue, 15 Jul 2025 12:52:19 -0400
-> >> > Sean Anderson <sean.anderson@linux.dev> wrote:
-> >> >    =20
-> >> >> On 7/15/25 07:09, Nuno S=E1 wrote:   =20
-> >> >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote:     =20
-> >> >> >> Add an API to notify consumers about events. Events still need t=
-o be
-> >> >> >> enabled using the iio_read_event/iio_write_event functions. Of c=
-ourse,
-> >> >> >> userspace can also manipulate the enabled events. I don't think =
-this is
-> >> >> >> too much of an issue, since userspace can also manipulate the ev=
-ent
-> >> >> >> thresholds. But enabling events may cause existing programs to be
-> >> >> >> surprised when they get something unexpected. Maybe we should se=
-t the
-> >> >> >> interface as busy when there are any in-kernel listeners?
-> >> >> >>      =20
-> >> >> >=20
-> >> >> > Sensible question. I'm not that familiar with events but I suspec=
-t is not
-> >> >> > trivial (if doable) to do a similar approach as with buffers? Wit=
-h buffers, an
-> >> >> > inkernal consumer get's it's own buffer object (that goes into a =
-list of active
-> >> >> > buffers in the iio device) with all channels enabled and then we =
-demux the
-> >> >> > appropriate channels for each consumer.     =20
-> >> >>=20
-> >> >> For in-kernel consumers I think it's reasonable to expect them to h=
-andle
-> >> >> events they didn't explicitly enable. I'm not sure about userspace
-> >> >> consumers.   =20
-> >> >=20
-> >> > This already happens because we don't have a demux equivalent (what =
-we do
-> >> > for buffered data flow) so if a device only has a single enable bit =
-that covers
-> >> > multiple events (annoyingly common for accelerometers for example) t=
-hen
-> >> > userspace will get events it didn't ask for.   We 'could' fix that,
-> >> > but it's never really been worth the effort.
-> >> >=20
-> >> > Events tend to be low data rate so an occasionally extra is rather d=
-ifferent
-> >> > to having to have much larger data buffers to handle a range of chan=
-nels you
-> >> > never asked for.
-> >> >=20
-> >> > Lets be careful to document this behaviour as 'may enable extra even=
-ts'
-> >> > as then if we decide later to do demux type stuff we won't be breaki=
-ng ABI.
-> >> > No one will mind getting fewer spurious events due to a core improve=
-ment.   =20
-> >>=20
-> >> Where would this get documented? =20
-> >=20
-> > Starting point will be in the docs for the ABI that asks for any events=
- at all.
-> >=20
-> > Also useful to add some thing to Documentation/IIO though there are lot=
-s of
-> > other things those docs don't yet cover :( =20
->=20
-> Notably the whole events API :l
->=20
-> >>  =20
-> >> >>    =20
-> >> >> > Independent of the above, we can argue that having both inkernel =
-and userspace
-> >> >> > changing thresholds is ok (I mean, there's nothing stopping two u=
-serspace apps
-> >> >> > doing that) but we should likely be careful with enabling/disabli=
-ng. If multiple
-> >> >> > consumers enable the same event, one of them disabling it should =
-not disable it
-> >> >> > for all the consumers, right?     =20
-> >> >>=20
-> >> >> Right now the HWMON consumer never permanently disable events to av=
-oid this
-> >> >> issue. It does toggle the enable to determine if an alarm should st=
-ay
-> >> >> enabled:
-> >> >>              ________
-> >> >> condition __/        \________
-> >> >>           _____    ____    ___
-> >> >> enable         \__/    \__/
-> >> >>=20
-> >> >> event       |     |
-> >> >>              __    ____
-> >> >> alarm     __/  \__/    \_____
-> >> >>=20
-> >> >> read           1       1    0
-> >> >>=20
-> >> >> I suppose this could also be done by comparing the raw threshold to=
- the
-> >> >> channel.   =20
-> >> >=20
-> >> > I wonder if we should add the option to do a 'get_exclusive' or simi=
-lar
-> >> > to block the IIO user interfaces if something critical is using the =
-device.
-> >> >=20
-> >> > If we were for instance to use this to block the IOCTL to get the ev=
-ents
-> >> > fd then any built in driver etc will almost certainly load before an=
-yone
-> >> > can call the ioctl so it will fairly cleanly block things.   =20
-> >>=20
-> >> This is how it currently works for userspace. Only one process can cre=
-ate
-> >> the event fd, and everyone else gets -EBUSY.
-> >>=20
-> >> Of course, it would be pretty surprising to have an IIO device where
-> >> some channels were used by userspace and others were used by hwmon and
-> >> then have your daemon stop working after you update your kernel because
-> >> now the hwmon driver takes exclusive event access. =20
-> >=20
-> > True.  I wonder how many boards we don't know about are using the iio-h=
-wmon
-> > bridge. We can check the ones in kernel for whether they grab all the
-> > channels (which would rule this out).
-> >
-> > Another things we could do is have an opt in from the IIO driver.
-> > That way only 'new' drivers would have this behaviour.  Not nice though=
-. =20
->=20
-> I would really like for this to "just work" if at all possible, so an
-> opt-out would be preferable. Maybe a hwmon module parameter.
->=20
-> But I think we can do better:
->=20
-> - Both kernel/userspace can/should handle unexpected events
->   - This includes extra (synthetic) events.
-> - Both kernel/userspace mostly just want to enable events
-> - Disabling events is not as important because of the previous bullet.
-> - But losing events is probably bad so we want to ensure we trigger
->   events at the same places they would have been triggered before.
->=20
-> So maybe we have an implementation where
->=20
-> - Enabling an event disables the backing event before re-enabling it if
->   there are any existing users
-> - Disabling an event only disables the backing event if all users are
->   gone
->=20
-> It could look something like
->=20
-> iio_sysfs_event_set(event, val):
->     if val:
->         if !event.user_enable
->             disable(event)
->         enable(event)
->     else if !event.kernel_enables
->         disable(event)
->     event.user_enable =3D val
->=20
-> iio_inkern_event_set(event, val):
->     if val:
->         if event.kernel_enables++ || event.user_enable
->             disable(event)
->         enable(event)
->     else if !--event.kernel_enables && !event.user_enable:
->         disable(event)
+--0000000000006f0bf6063b3986b4--
+--0000000000006f0bf7063b3986b6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-hwmon-scmi-Add-default-case-with-debug-output.patch"
+Content-Disposition: attachment; 
+	filename="0001-hwmon-scmi-Add-default-case-with-debug-output.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mdrf9iuo3>
+X-Attachment-Id: f_mdrf9iuo3
 
-Something like that should work.  We'll need to be careful
-to gate any push towards userspace on it waiting for something.
+RnJvbSAzNGRkZDhjMjExN2MzZmJmYmE5MTcxZjE5MDYzNDE5MTJkMTM1MDYzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29t
+PgpEYXRlOiBUaHUsIDMxIEp1bCAyMDI1IDE2OjA5OjMxICswMzAwClN1YmplY3Q6IFtQQVRDSCB2
+MSAxLzRdIGh3bW9uOiBzY21pOiBBZGQgZGVmYXVsdCBjYXNlIHdpdGggZGVidWcgb3V0cHV0CgpJ
+bXByb3ZlIGhhbmRsaW5nIG9mIHVuc3VwcG9ydGVkIHNlbnNvciB0eXBlczoKLSBBZGQgZGVmYXVs
+dCBjYXNlIGluIHNlbnNvciB0eXBlIHN3aXRjaCBzdGF0ZW1lbnQKLSBMb2cgc2tpcHBlZCBzZW5z
+b3JzIHdpdGggZGVidWcgaW5mb3JtYXRpb24gaW5jbHVkaW5nOgogICogU2Vuc29yIElECiAgKiBT
+ZW5zb3IgdHlwZQogICogU2Vuc29yIG5hbWUgKGlmIGF2YWlsYWJsZSkKLSBVc2UgcmF0ZS1saW1p
+dGVkIGRldl9kYmcgZm9yIHNhZmV0eQoKRGVidWcgb3V0cHV0IGZvcm1hdDoKIlNraXBwaW5nIHVu
+c3VwcG9ydGVkIHNlbnNvciBJRDolZCBUeXBlOiVkICglcykiCgpTaWduZWQtb2ZmLWJ5OiBBcnRl
+bSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29tPgotLS0KIGRyaXZlcnMvaHdtb24vc2Nt
+aS1od21vbi5jIHwgOCArKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKQoK
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jIGIvZHJpdmVycy9od21vbi9z
+Y21pLWh3bW9uLmMKaW5kZXggMzY0MTk5YjMzMmMwLi5hM2I1YjVjMGVjMjUgMTAwNjQ0Ci0tLSBh
+L2RyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jCisrKyBiL2RyaXZlcnMvaHdtb24vc2NtaS1od21v
+bi5jCkBAIC0yNzUsNiArMjc1LDEwIEBAIHN0YXRpYyBpbnQgc2NtaV9od21vbl9wcm9iZShzdHJ1
+Y3Qgc2NtaV9kZXZpY2UgKnNkZXYpCiAJCQlucl9jb3VudFt0eXBlXSsrOwogCQkJYnJlYWs7CiAJ
+CX0KKwkJZGVmYXVsdDoKKwkJCWRldl9kYmcoZGV2LCAiU2tpcHBpbmcgdW5zdXBwb3J0ZWQgc2Vu
+c29yIElEOiVkIFR5cGU6JWQgKCVzKVxuIiwKKwkJCQlpLCBzZW5zb3ItPnR5cGUsIHNlbnNvci0+
+bmFtZSA/IHNlbnNvci0+bmFtZSA6ICJ1bm5hbWVkIik7CisJCQljb250aW51ZTsKIAl9CiAKIAlp
+ZiAobnJfY291bnRbaHdtb25fdGVtcF0pCkBAIC0zMjMsNiArMzI3LDEwIEBAIHN0YXRpYyBpbnQg
+c2NtaV9od21vbl9wcm9iZShzdHJ1Y3Qgc2NtaV9kZXZpY2UgKnNkZXYpCiAJCQlpZHggPSAtLW5y
+X2NvdW50W3R5cGVdOwogCQkJKihzY21pX3NlbnNvcnMtPmluZm9bdHlwZV0gKyBpZHgpID0gc2Vu
+c29yOwogCQkJYnJlYWs7CisJCWRlZmF1bHQ6CisJCQlkZXZfZGJnKGRldiwgIlNraXBwaW5nIHVu
+c3VwcG9ydGVkIHNlbnNvciBJRDolZCBUeXBlOiVkICglcylcbiIsCisJCQkJaSwgc2Vuc29yLT50
+eXBlLCBzZW5zb3ItPm5hbWUgPyBzZW5zb3ItPm5hbWUgOiAidW5uYW1lZCIpOworCQkJY29udGlu
+dWU7CiAJCX0KIAl9CiAKLS0gCjIuNDMuMAoK
+--0000000000006f0bf7063b3986b6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0004-hwmon-scmi-Add-driver-version-and-patch-author.patch"
+Content-Disposition: attachment; 
+	filename="0004-hwmon-scmi-Add-driver-version-and-patch-author.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mdrf9iu90>
+X-Attachment-Id: f_mdrf9iu90
 
-Given we only send them when IIO_BUSY_BIT_POS is set on the
-event interface (which happens on requesting the fd) I think
-we may be fine already.
+RnJvbSBjYmUxNzZmZDYyODA0ODRmY2Y3MGFjMGI3M2MzNzA3NTRkYzZlZWQ4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29t
+PgpEYXRlOiBUaHUsIDMxIEp1bCAyMDI1IDE2OjEwOjE1ICswMzAwClN1YmplY3Q6IFtQQVRDSCB2
+MSA0LzRdIGh3bW9uOiBzY21pOiBBZGQgZHJpdmVyIHZlcnNpb24gYW5kIHBhdGNoIGF1dGhvcgoK
+SW50cm9kdWNlIERSSVZFUl9WRVJTSU9OIG1hY3JvIHRvIHRyYWNrIGRyaXZlciByZXZpc2lvbnMg
+YW5kIGFkZCBteXNlbGYKYXMgY28tYXV0aG9yIHRvIHRoZSBtb2R1bGU6Ci0gRGVmaW5lIERSSVZF
+Ul9WRVJTSU9OICIxLjAiIGZvbGxvd2luZyBzdGFuZGFyZCB2ZXJzaW9uaW5nCi0gQWRkIE1PRFVM
+RV9WRVJTSU9OIGZvciBpbi10cmVlIHZlcnNpb24gdHJhY2tpbmcKLSBJbmNsdWRlIG15IHNpZ25h
+dHVyZSBhcyBtb2R1bGUgY28tYXV0aG9yCgpUaGlzIGhlbHBzIHdpdGg6Ci0gRGVidWdnaW5nIHZl
+cnNpb24tc3BlY2lmaWMgaXNzdWVzCi0gUHJvcGVyIGF0dHJpYnV0aW9uIG9mIGNvbnRyaWJ1dGlv
+bnMKLSBDb21wYXRpYmlsaXR5IGNoZWNrcwoKU2lnbmVkLW9mZi1ieTogQXJ0ZW0gU2hpbWtvIDxh
+cnR5b20uc2hpbWtvQGdtYWlsLmNvbT4KLS0tCiBkcml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYyB8
+IDUgKysrKysKIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9k
+cml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYyBiL2RyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jCmlu
+ZGV4IDA4MTUwMjQxOGRmYS4uNmI0Yjk4OGQ2M2M4IDEwMDY0NAotLS0gYS9kcml2ZXJzL2h3bW9u
+L3NjbWktaHdtb24uYworKysgYi9kcml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYwpAQCAtNCw2ICs0
+LDcgQEAKICAqCiAgKiBDb3B5cmlnaHQgKEMpIDIwMTgtMjAyMSBBUk0gTHRkLgogICogU3VkZWVw
+IEhvbGxhIDxzdWRlZXAuaG9sbGFAYXJtLmNvbT4KKyAqIFBhdGNoZWQgYnkgQXJ0ZW0gU2hpbWtv
+IDxhcnR5b20uc2hpbWtvQGdtYWlsLmNvbT4KICAqLwogCiAjaW5jbHVkZSA8bGludXgvaHdtb24u
+aD4KQEAgLTEzLDYgKzE0LDggQEAKICNpbmNsdWRlIDxsaW51eC9zeXNmcy5oPgogI2luY2x1ZGUg
+PGxpbnV4L3RoZXJtYWwuaD4KIAorI2RlZmluZSBEUklWRVJfVkVSU0lPTiAiMS4wIgorCiBzdGF0
+aWMgY29uc3Qgc3RydWN0IHNjbWlfc2Vuc29yX3Byb3RvX29wcyAqc2Vuc29yX29wczsKIAogc3Ry
+dWN0IHNjbWlfc2Vuc29ycyB7CkBAIC0zODksNSArMzkyLDcgQEAgc3RhdGljIHN0cnVjdCBzY21p
+X2RyaXZlciBzY21pX2h3bW9uX2RydiA9IHsKIG1vZHVsZV9zY21pX2RyaXZlcihzY21pX2h3bW9u
+X2Rydik7CiAKIE1PRFVMRV9BVVRIT1IoIlN1ZGVlcCBIb2xsYSA8c3VkZWVwLmhvbGxhQGFybS5j
+b20+Iik7CitNT0RVTEVfQVVUSE9SKCJBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwu
+Y29tPiIpOwogTU9EVUxFX0RFU0NSSVBUSU9OKCJBUk0gU0NNSSBIV01PTiBpbnRlcmZhY2UgZHJp
+dmVyIik7CiBNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7CitNT0RVTEVfVkVSU0lPTihEUklWRVJf
+VkVSU0lPTik7Ci0tIAoyLjQzLjAKCg==
+--0000000000006f0bf7063b3986b6
+Content-Type: text/x-patch; charset="US-ASCII"; name="0000-cover-letter.patch"
+Content-Disposition: attachment; filename="0000-cover-letter.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mdrf9ius4>
+X-Attachment-Id: f_mdrf9ius4
 
-Jonathan
+RnJvbSBjYmUxNzZmZDYyODA0ODRmY2Y3MGFjMGI3M2MzNzA3NTRkYzZlZWQ4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29t
+PgpEYXRlOiBUaHUsIDMxIEp1bCAyMDI1IDE2OjE0OjQzICswMzAwClN1YmplY3Q6IFtQQVRDSCB2
+MSAwLzRdIGh3bW9uOiBzY21pOiBEcml2ZXIgaW1wcm92ZW1lbnRzIGFuZCBmaXhlcwoKVGhpcyBw
+YXRjaCBzZXJpZXMgaW50cm9kdWNlcyBzZXZlcmFsIGltcHJvdmVtZW50cyB0byB0aGUgU0NNSSBI
+V01PTiBkcml2ZXI6CgoxLiBCZXR0ZXIgaGFuZGxpbmcgb2YgdW5zdXBwb3J0ZWQgc2Vuc29yIHR5
+cGVzIHdpdGggZGVidWcgbG9nZ2luZwoyLiBGaXhlcyByZWR1bmRhbnQgcmVzb3VyY2UgbWFuYWdl
+bWVudCBpbiB0aGVybWFsIHJlZ2lzdHJhdGlvbgozLiBFbmhhbmNlZCBlcnJvciByZXBvcnRpbmcg
+dXNpbmcgZGV2X2Vycl9wcm9iZSgpCjQuIEFkZGVkIHZlcnNpb24gdHJhY2tpbmcgYW5kIHByb3Bl
+ciBjb250cmlidXRvciBhdHRyaWJ1dGlvbgoKVGhlIGNoYW5nZXMgbWFpbnRhaW4gYmFja3dhcmQg
+Y29tcGF0aWJpbGl0eSB3aGlsZSBpbXByb3Zpbmc6Ci0gRGVidWdnaW5nIGNhcGFiaWxpdGllcwot
+IEVycm9yIHJlcG9ydGluZyBjbGFyaXR5Ci0gQ29kZSBtYWludGVuYW5jZQotIENvbnRyaWJ1dG9y
+IHRyYWNraW5nCgpBcnRlbSBTaGlta28gKDQpOgogIGh3bW9uOiBzY21pOiBBZGQgZGVmYXVsdCBj
+YXNlIHdpdGggZGVidWcgb3V0cHV0CiAgaHdtb246IHNjbWk6IFJlbW92ZSByZWR1bmRhbnQgZGV2
+bV9rZnJlZSBjYWxsCiAgaHdtb246IHNjbWk6IEVuaGFuY2UgZXJyb3IgcmVwb3J0aW5nIHdpdGgg
+ZGV2X2Vycl9wcm9iZQogIGh3bW9uOiBzY21pOiBBZGQgZHJpdmVyIHZlcnNpb24gYW5kIHBhdGNo
+IGF1dGhvcgoKIGRyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jIHwgNTAgKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKy0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAzNyBpbnNlcnRpb25zKCsp
+LCAxMyBkZWxldGlvbnMoLSkKCi0tIAoyLjQzLjA=
+--0000000000006f0bf7063b3986b6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0002-hwmon-scmi-Remove-redundant-devm_kfree-call.patch"
+Content-Disposition: attachment; 
+	filename="0002-hwmon-scmi-Remove-redundant-devm_kfree-call.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mdrf9iul2>
+X-Attachment-Id: f_mdrf9iul2
 
->=20
-> --Sean
->=20
-> >>=20
-> >> I originally had kernel users read from the kfifo just like userspace,
-> >> but I was concerned about the above scenario.
-> >>  =20
-> >=20
-> > yeah, always a problem to retrofit policy.
-> >  =20
-> >> --Sean
-> >>  =20
-> >  =20
->=20
->=20
+RnJvbSA4MmQ5OTIxMzQyYWY0Y2E3ZmI4OThiMjE1ZDczNjQyNjk0NTQ5ZmQ5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29t
+PgpEYXRlOiBUaHUsIDMxIEp1bCAyMDI1IDE2OjEwOjAyICswMzAwClN1YmplY3Q6IFtQQVRDSCB2
+MSAyLzRdIGh3bW9uOiBzY21pOiBSZW1vdmUgcmVkdW5kYW50IGRldm1fa2ZyZWUgY2FsbAoKRml4
+IHBvdGVudGlhbCByZXNvdXJjZSBtYW5hZ2VtZW50IGlzc3VlIGJ5OgotIFJlbW92aW5nIHVubmVj
+ZXNzYXJ5IGRldm1fa2ZyZWUoKSBjYWxsIGluIGVycm9yIHBhdGgKLSBSZWx5aW5nIG9uIGRldnJl
+cyBhdXRvbWF0aWMgY2xlYW51cAotIFByZXNlcnZpbmcgYWxsIGVycm9yIGhhbmRsaW5nIGxvZ2lj
+CgpSYXRpb25hbGU6Ci0gTWVtb3J5IHdhcyBhbGxvY2F0ZWQgd2l0aCBkZXZtX2t6YWxsb2MoKQot
+IGRldm1fIHRoZXJtYWwgcmVnaXN0cmF0aW9uIG1hbmFnZXMgaXRzIG93biByZXNvdXJjZXMKLSBE
+b3VibGUtZnJlZSBjb3VsZCBvY2N1ciBkdXJpbmcgcHJvYmUgZmFpbHVyZQoKU2lnbmVkLW9mZi1i
+eTogQXJ0ZW0gU2hpbWtvIDxhcnR5b20uc2hpbWtvQGdtYWlsLmNvbT4KLS0tCiBkcml2ZXJzL2h3
+bW9uL3NjbWktaHdtb24uYyB8IDIgLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jIGIvZHJpdmVycy9od21vbi9z
+Y21pLWh3bW9uLmMKaW5kZXggYTNiNWI1YzBlYzI1Li5kMDMxNzQ5MjJlNjUgMTAwNjQ0Ci0tLSBh
+L2RyaXZlcnMvaHdtb24vc2NtaS1od21vbi5jCisrKyBiL2RyaXZlcnMvaHdtb24vc2NtaS1od21v
+bi5jCkBAIC0yMTEsOCArMjExLDYgQEAgc3RhdGljIGludCBzY21pX3RoZXJtYWxfc2Vuc29yX3Jl
+Z2lzdGVyKHN0cnVjdCBkZXZpY2UgKmRldiwKIAl0emQgPSBkZXZtX3RoZXJtYWxfb2Zfem9uZV9y
+ZWdpc3RlcihkZXYsIHRoX3NlbnNvci0+aW5mby0+aWQsIHRoX3NlbnNvciwKIAkJCQkJICAgICZz
+Y21pX2h3bW9uX3RoZXJtYWxfb3BzKTsKIAlpZiAoSVNfRVJSKHR6ZCkpIHsKLQkJZGV2bV9rZnJl
+ZShkZXYsIHRoX3NlbnNvcik7Ci0KIAkJaWYgKFBUUl9FUlIodHpkKSAhPSAtRU5PREVWKQogCQkJ
+cmV0dXJuIFBUUl9FUlIodHpkKTsKIAotLSAKMi40My4wCgo=
+--0000000000006f0bf7063b3986b6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0003-hwmon-scmi-Enhance-error-reporting-with-dev_err_prob.patch"
+Content-Disposition: attachment; 
+	filename="0003-hwmon-scmi-Enhance-error-reporting-with-dev_err_prob.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mdrf9iuh1>
+X-Attachment-Id: f_mdrf9iuh1
 
+RnJvbSBkZmE0YzI1YmEwZjRjZTg2ZDcwODJmMDc4NDE2YTEwMmE3ZmY5MWExIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBcnRlbSBTaGlta28gPGFydHlvbS5zaGlta29AZ21haWwuY29t
+PgpEYXRlOiBUaHUsIDMxIEp1bCAyMDI1IDE2OjEwOjEwICswMzAwClN1YmplY3Q6IFtQQVRDSCB2
+MSAzLzRdIGh3bW9uOiBzY21pOiBFbmhhbmNlIGVycm9yIHJlcG9ydGluZyB3aXRoCiBkZXZfZXJy
+X3Byb2JlCgpSZXBsYWNlIGVycm9yIHJldHVybnMgd2l0aCBkZXZfZXJyX3Byb2JlKCkgdGhyb3Vn
+aG91dCBkcml2ZXI6Ci0gQWRkIGRlc2NyaXB0aXZlIGVycm9yIG1lc3NhZ2VzIGZvciBhbGwgZmFp
+bHVyZSBjYXNlcwotIEluY2x1ZGUgcmVsZXZhbnQgY29udGV4dCAoc2Vuc29yIElEcywgdHlwZXMg
+ZXRjKQotIFN0YW5kYXJkaXplIGVycm9yIHJlcG9ydGluZyBmb3JtYXQKCkltcHJvdmVkIG1lc3Nh
+Z2VzIGluY2x1ZGU6Ci0gIk5vIHZhbGlkIHNlbnNvciBpbmZvIGZvciBpbmRleCAlZCIKLSAiRmFp
+bGVkIHRvIGFsbG9jYXRlIGNoYW5uZWwgaW5mbyBhcnJheSIKLSAiU0NNSSBwcm90b2NvbCBvcHMg
+bm90IGluaXRpYWxpemVkIgoKU2lnbmVkLW9mZi1ieTogQXJ0ZW0gU2hpbWtvIDxhcnR5b20uc2hp
+bWtvQGdtYWlsLmNvbT4KLS0tCiBkcml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYyB8IDM1ICsrKysr
+KysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMjQgaW5zZXJ0
+aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9zY21p
+LWh3bW9uLmMgYi9kcml2ZXJzL2h3bW9uL3NjbWktaHdtb24uYwppbmRleCBkMDMxNzQ5MjJlNjUu
+LjA4MTUwMjQxOGRmYSAxMDA2NDQKLS0tIGEvZHJpdmVycy9od21vbi9zY21pLWh3bW9uLmMKKysr
+IGIvZHJpdmVycy9od21vbi9zY21pLWh3bW9uLmMKQEAgLTI0MCwyNiArMjQwLDM2IEBAIHN0YXRp
+YyBpbnQgc2NtaV9od21vbl9wcm9iZShzdHJ1Y3Qgc2NtaV9kZXZpY2UgKnNkZXYpCiAJc3RydWN0
+IHNjbWlfcHJvdG9jb2xfaGFuZGxlICpwaDsKIAogCWlmICghaGFuZGxlKQotCQlyZXR1cm4gLUVO
+T0RFVjsKKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCAtRU5PREVWLCAiU0NNSSBkZXZpY2Ug
+aGFuZGxlIGlzIE5VTExcbiIpOwogCiAJc2Vuc29yX29wcyA9IGhhbmRsZS0+ZGV2bV9wcm90b2Nv
+bF9nZXQoc2RldiwgU0NNSV9QUk9UT0NPTF9TRU5TT1IsICZwaCk7Ci0JaWYgKElTX0VSUihzZW5z
+b3Jfb3BzKSkKLQkJcmV0dXJuIFBUUl9FUlIoc2Vuc29yX29wcyk7CisJaWYgKElTX0VSUl9PUl9O
+VUxMKHNlbnNvcl9vcHMpKSB7CisJCWlmIChJU19FUlIoc2Vuc29yX29wcykpCisJCQlyZXR1cm4g
+ZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIoc2Vuc29yX29wcyksCisJCQkJCSAgICAgIlNDTUkg
+c2Vuc29yIHByb3RvY29sIGFjcXVpc2l0aW9uIGZhaWxlZFxuIik7CisJCXJldHVybiBkZXZfZXJy
+X3Byb2JlKGRldiwgLUVQUk9UTywKKwkJCQkgICAgICJTQ01JIHNlbnNvciBwcm90b2NvbCBvcHMg
+c3RydWN0dXJlIHVuZXhwZWN0ZWRseSBOVUxMXG4iKTsKKwl9CisKKwlpZiAoIXNlbnNvcl9vcHMt
+PmluZm9fZ2V0IHx8ICFzZW5zb3Jfb3BzLT5jb3VudF9nZXQpCisJCXJldHVybiBkZXZfZXJyX3By
+b2JlKGRldiwgLUVOT0VOVCwKKwkJCQkgICAgICJTQ01JIHNlbnNvciBwcm90b2NvbCBvcGVyYXRp
+b25zIGFyZSBub3QgaW5pdGlhbGl6ZWRcbiIpOwogCiAJbnJfc2Vuc29ycyA9IHNlbnNvcl9vcHMt
+PmNvdW50X2dldChwaCk7CiAJaWYgKCFucl9zZW5zb3JzKQotCQlyZXR1cm4gLUVJTzsKKwkJcmV0
+dXJuIGRldl9lcnJfcHJvYmUoZGV2LCAtRUlPLCAiTm8gc2Vuc29ycyBmb3VuZFxuIik7CiAKIAlz
+Y21pX3NlbnNvcnMgPSBkZXZtX2t6YWxsb2MoZGV2LCBzaXplb2YoKnNjbWlfc2Vuc29ycyksIEdG
+UF9LRVJORUwpOwogCWlmICghc2NtaV9zZW5zb3JzKQotCQlyZXR1cm4gLUVOT01FTTsKKwkJcmV0
+dXJuIGRldl9lcnJfcHJvYmUoZGV2LCAtRU5PTUVNLCAiRmFpbGVkIHRvIGFsbG9jYXRlIHNjbWlf
+c2Vuc29ycyBzdHJ1Y3R1cmVcbiIpOwogCiAJc2NtaV9zZW5zb3JzLT5waCA9IHBoOwogCiAJZm9y
+IChpID0gMDsgaSA8IG5yX3NlbnNvcnM7IGkrKykgewogCQlzZW5zb3IgPSBzZW5zb3Jfb3BzLT5p
+bmZvX2dldChwaCwgaSk7CiAJCWlmICghc2Vuc29yKQotCQkJcmV0dXJuIC1FSU5WQUw7CisJCQly
+ZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIC1FSU5WQUwsCisJCQkJCSAgICAgIkZhaWxlZCB0byBn
+ZXQgc2Vuc29yIGluZm8gZm9yIHNlbnNvciAlZFxuIiwgaSk7CiAKIAkJc3dpdGNoIChzZW5zb3It
+PnR5cGUpIHsKIAkJY2FzZSBURU1QRVJBVFVSRV9DOgpAQCAtMjg1LDEyICsyOTUsMTIgQEAgc3Rh
+dGljIGludCBzY21pX2h3bW9uX3Byb2JlKHN0cnVjdCBzY21pX2RldmljZSAqc2RldikKIAlzY21p
+X2h3bW9uX2NoYW4gPSBkZXZtX2tjYWxsb2MoZGV2LCBucl90eXBlcywgc2l6ZW9mKCpzY21pX2h3
+bW9uX2NoYW4pLAogCQkJCSAgICAgICBHRlBfS0VSTkVMKTsKIAlpZiAoIXNjbWlfaHdtb25fY2hh
+bikKLQkJcmV0dXJuIC1FTk9NRU07CisJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgLUVOT01F
+TSwgIkZhaWxlZCB0byBhbGxvY2F0ZSBjaGFubmVsIGluZm8gYXJyYXlcbiIpOwogCiAJcHRyX3Nj
+bWlfY2kgPSBkZXZtX2tjYWxsb2MoZGV2LCBucl90eXBlcyArIDEsIHNpemVvZigqcHRyX3NjbWlf
+Y2kpLAogCQkJCSAgIEdGUF9LRVJORUwpOwogCWlmICghcHRyX3NjbWlfY2kpCi0JCXJldHVybiAt
+RU5PTUVNOworCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIC1FTk9NRU0sICJGYWlsZWQgdG8g
+YWxsb2NhdGUgY2hhbm5lbCBpbmZvIHBvaW50ZXJzXG4iKTsKIAogCXNjbWlfY2hpcF9pbmZvLmlu
+Zm8gPSBwdHJfc2NtaV9jaTsKIAljaGlwX2luZm8gPSAmc2NtaV9jaGlwX2luZm87CkBAIC0zMDcs
+NyArMzE3LDggQEAgc3RhdGljIGludCBzY21pX2h3bW9uX3Byb2JlKHN0cnVjdCBzY21pX2Rldmlj
+ZSAqc2RldikKIAkJCWRldm1fa2NhbGxvYyhkZXYsIG5yX2NvdW50W3R5cGVdLAogCQkJCSAgICAg
+c2l6ZW9mKCpzY21pX3NlbnNvcnMtPmluZm8pLCBHRlBfS0VSTkVMKTsKIAkJaWYgKCFzY21pX3Nl
+bnNvcnMtPmluZm9bdHlwZV0pCi0JCQlyZXR1cm4gLUVOT01FTTsKKwkJCXJldHVybiBkZXZfZXJy
+X3Byb2JlKGRldiwgLUVOT01FTSwKKwkJCQkJICAgICAiRmFpbGVkIHRvIGFsbG9jYXRlIHNlbnNv
+ciBpbmZvIGZvciB0eXBlICVkXG4iLCB0eXBlKTsKIAl9CiAKIAlmb3IgKGkgPSBucl9zZW5zb3Jz
+IC0gMTsgaSA+PSAwIDsgaS0tKSB7CkBAIC0zMzYsNyArMzQ3LDcgQEAgc3RhdGljIGludCBzY21p
+X2h3bW9uX3Byb2JlKHN0cnVjdCBzY21pX2RldmljZSAqc2RldikKIAkJCQkJCSAgICAgc2NtaV9z
+ZW5zb3JzLCBjaGlwX2luZm8sCiAJCQkJCQkgICAgIE5VTEwpOwogCWlmIChJU19FUlIoaHdkZXYp
+KQotCQlyZXR1cm4gUFRSX0VSUihod2Rldik7CisJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwg
+UFRSX0VSUihod2RldiksICJGYWlsZWQgdG8gcmVnaXN0ZXIgaHdtb24gZGV2aWNlXG4iKTsKIAog
+CWZvciAoaSA9IDA7IGkgPCBucl9jb3VudF90ZW1wOyBpKyspIHsKIAkJaW50IHJldDsKQEAgLTM1
+Miw3ICszNjMsOSBAQCBzdGF0aWMgaW50IHNjbWlfaHdtb25fcHJvYmUoc3RydWN0IHNjbWlfZGV2
+aWNlICpzZGV2KQogCQlyZXQgPSBzY21pX3RoZXJtYWxfc2Vuc29yX3JlZ2lzdGVyKGRldiwgcGgs
+IHNlbnNvcik7CiAJCWlmIChyZXQpIHsKIAkJCWlmIChyZXQgPT0gLUVOT01FTSkKLQkJCQlyZXR1
+cm4gcmV0OworCQkJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgcmV0LAorCQkJCQkJICAgICAi
+RmFpbGVkIHRvIGFsbG9jYXRlIG1lbW9yeSBmb3IgdGhlcm1hbCB6b25lXG4iKTsKKwogCQkJZGV2
+X3dhcm4oZGV2LAogCQkJCSAiVGhlcm1hbCB6b25lIG1pc2NvbmZpZ3VyZWQgZm9yICVzLiBlcnI9
+JWRcbiIsCiAJCQkJIHNlbnNvci0+bmFtZSwgcmV0KTsKLS0gCjIuNDMuMAoK
+--0000000000006f0bf7063b3986b6--
