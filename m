@@ -1,75 +1,77 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05B828A71B;
-	Thu, 31 Jul 2025 23:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D52942A9D;
+	Thu, 31 Jul 2025 23:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754005615; cv=none; b=bieLevJe446ZjgD4amx2JGMv/fW0pAJD3FRpXaAYDLXpo9+EXqaOWF8VNE9UbuicPE2A8okvJ6oaLjrvw9oF7Le2dhRreFJbbbpLurM+5wh+0adnXWY7+H9F/UmMQ0rY0yA7qCnBlDkdKmFficjrnofFS5SEoXbmBqx7DDcuFqk=
+	t=1754005795; cv=none; b=QuyY7GfekxFv1tEtchMlLSxlEjt0jkAdmKqL2GwXnkSV00Msx5rJUpgLka8LC/v/48JxEh9RJMZTn6QPkiD3i9WChE4T123yE67/MFVK0jNk02S/te7QkaPmil+KwSpKyzVuiwDc+fvxKJVXC8RwFsf/pB7XKWXhXyzqTyYbLxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754005615; c=relaxed/simple;
-	bh=Yug7uksLsunQakB5cIZgmQU/Ii+OZwe3OXkOw4l+/kw=;
+	s=arc-20240116; t=1754005795; c=relaxed/simple;
+	bh=OqxiKHN+tPEleTAaQBmsf91+9WcyYiC4N/xVzrNzxR0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u7a/lbfcvE2UOmqlI7qo7xyJcvgwJsKlekemGuajiz6c0RjVDaL58poa2TjEu5dKcHlnRI//fxjPq2MK2HQnbBRYMkLaiYhM5e3ldixhFE1ZuH1/j+gdYcIKfK9pcCQ4Hbs85ZTg30w7R71MVpIBIzvYzC+owMkmeZAPkQqXmnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MJiudOwO; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0Kt9zz7ISgvsTCJBthmbDR9m4hUwm8d9X2NA6+E4mzY30kcpx8U52czchaQ81EFyQy3gj7APLh+dZtRVHb6kpq/W1lle82AFV7GY/0QfQEo2+AkCMI9KNXiX0TztmCIjMEv2R8W7BjtBNGlwe+nXEyNeyRIFFBGHvH2GSgJEf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O84RgDPj; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MJiudOwO"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2405c0c431cso15870295ad.1;
-        Thu, 31 Jul 2025 16:46:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O84RgDPj"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-748e378ba4fso2087761b3a.1;
+        Thu, 31 Jul 2025 16:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754005613; x=1754610413; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754005793; x=1754610593; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XAK6Csb62EgwNNMrznCzrPFQaMOJ2VvUjGuwNeV6/Sc=;
-        b=MJiudOwOiReowmxLAQi2ySWdskdj4bBLdYd8SDZQmhJ/ml0ZpgTb1JoDJXbsRVloOs
-         WSydcJ6ELE1meed7k565hviCctHlNk5zN0pwyq5jD9aj2P8WNS6rMuj2oPV601rkPj25
-         btO3SctmMlfVKKuAeQAUsFNCXCFTJ5ymj5R8nsjVqTUigySBJ5JSaUhwSgl6beFbLY3F
-         n4KnH8yrHf5UQzFzcqUZSQ/9KwKgj6DyXgwQc6TJn/hnvgo1x2odhUMPRWX32dT+5XcS
-         ksq8LyJS+op0ZQgrLWdbvKt/liYOfjHg7D6dVD59AqE5zho39LS9QbNChh2O0j6N/+hf
-         2I2g==
+        bh=QLKil7DEsp2ET7S+yrQ8UM326ui6L7I1i5+CZitzHdA=;
+        b=O84RgDPjKt/k+xnooPm5r66I/sXSsHKmp2f1xH+NIx1Hb45Yh0V/1miJXRLCrKxWsf
+         0DGQHPmw94rnqBjAuhG3CgsCBYSGLbPP3t7sUtn3IPA8Mdz8EGQI/aHQRmwokZHPyATk
+         qP/Rry016+tvE5hynYA1CqcPwrH/XM/+8ls2taoERSqi30fSybE7fvn4rGlB+wvA5pWq
+         /9TWm7PpEll53LaTnTuO/hCgWoG+0mjeu6O9RV+ljYQZtt2ZYh4f+buHYjdw8DD6CCFL
+         wp5ieqfe/XS9KgwtQhGiNHcQoAW9whqRK70Gts9ydv/vtG+75s8hwvMr0jJmVd88FQiq
+         +UAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754005613; x=1754610413;
+        d=1e100.net; s=20230601; t=1754005793; x=1754610593;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XAK6Csb62EgwNNMrznCzrPFQaMOJ2VvUjGuwNeV6/Sc=;
-        b=A7NNrg0aEWXkJBk/JeT2UBiqI/6F927F1md8oeFpPyV5Z7PhMyWCLpt9w8hGgEZaS5
-         ZJxrJ8v7gW4ivqgR1chutu1txTztpkQoTJtwbTt1ntB600qGL4CbIlLAZqajTg07Eh0K
-         3wcDM5TXsP9M16K4PzZgQc1peUhw+2NpxjikgcE9skw73MMUB3PIurJq5u+LKZZ6RoWP
-         6NCiP9L1e35dZbXzyXq09+kymAYb4ujeMcgo/sniubX4RFUqE+qOnuSE8qM7fFlAbLl/
-         fyOzR5oB18q5QM5EWQawe6Axj1pQtj5UKqXyb6CZkUM+t060f/KTpsaD+TGMb90BZp2E
-         QCnw==
-X-Forwarded-Encrypted: i=1; AJvYcCULDMxME4gYHUvfghozGtZLxkT32n+YJbD/4zud+5znZGkzlwrhvPX8hAvkVeSWtqf2wre8xuGysmw9/BE=@vger.kernel.org, AJvYcCW3YHalOyWiLs1eH4VWkQtqbGkuA38DS9dJjYt1OPqAZyCmeZg1nawpVjFg2oE96WDXeojaZM5MW8dQq0d7@vger.kernel.org, AJvYcCXz8WiUZ7+3LfuOHnUk7GI1EwG1c6m3Z5mLhEV6d4mB8Cop+aZ5wplKTDFgals2YCaj+Speg8tTkqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfO7a877SSRMyy8ADm0F2QY3YCT/cu/ib3cYx7cZcpvZNcl2Aa
-	5UTwoWMaqGfhbfA9LL1sq+Z89BTAyL5GbE2U2L8cL/i2I7CXatFFmA9Y65ZcyA==
-X-Gm-Gg: ASbGncvrooelaenmFtcGlGK9Qo6Tj7m9wh3mHDLFQBzoZerporOnl9O7sv6qsZ8QcAZ
-	DCXmuX4XeOP9S/CLaQDDTTtN92Y7TUSRiFC0GZAqQxBKRfjAojp3cST/+PV9K0f6VI7k4D5wfDU
-	tomywTVdrikVampVLfBD2LGFOmjKlvuEiSPbcyQNBCJ50i1mxWWP4tFPcgAhEFxBQDiFehjsqq8
-	8HJvdxX2Kz4ywL6jVu/Yth3YrLWJpR3bI9Bt3FDBKFsk3W9Xp5vXUmya6e4mJQ8uTEJ7ZCXgd9w
-	/LrXf23XF+SWhwdxsCwzxEPlbEBRbK9doGmbHs2KekOMKxr/Qfgfs9cnzP3tRfizA+1/QdQF0PM
-	ID/7KGf8ygeX5Y8qUG24t63jU6rUoFiWyTraAZNf3eUpRVc7fzFw6Mxt1
-X-Google-Smtp-Source: AGHT+IFP6wJ5294hUeBOxB3kreUTcf6T+yFRz5w6iCmh/9MVhvT7Kt1KP7UKWQOfZp2QkUV97kd5Ow==
-X-Received: by 2002:a17:903:2446:b0:23f:f065:f2be with SMTP id d9443c01a7336-24096b03dd7mr119403925ad.26.1754005612928;
-        Thu, 31 Jul 2025 16:46:52 -0700 (PDT)
+        bh=QLKil7DEsp2ET7S+yrQ8UM326ui6L7I1i5+CZitzHdA=;
+        b=gDCZX6SgWTy0B3Q+aJRlGKbDRiT3ctkJBfE7sCn8nWy/T5ySXs2jRf1is7y+QxBMj/
+         ahLN3b4FJBg5AClZib9aRAPUawVvz5/tBe3ZGnymP6L+JvhxYAxjIkrYmYrF9AGvm1yJ
+         Ut5tBJyYep32O+UaQOLKZTH+dAZVG97Tp1TLetl4uHsozktCnuaBJqijMHUuUg1xibe5
+         lXqEqmKns5S/SNYSAXusGi3aT0vXp1xYWDDEga43wJBWzPPydWGmaDXqBfVpFRzk3W0d
+         kmhbczrgSji+QzsdnmMzKIlSnWiA+vdXLawEgYmhcss+ewf6haq0N1OSpc2HKqO8pWtF
+         ztVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUv82qbYHOnVB3EPlkxL9rpiYxEoQgFt25ZQC5wXEyQ9lfBqJlBBitvQ13MtRQCG/2YVw+dBJAfvIiDQk4=@vger.kernel.org, AJvYcCWMdSYxfYnPhCN/NW0VU2MvcLfxf056oGtEDUgHTv6vgE6asC3uClB7mksqZzcRMxpG7xoiZMQALlj3@vger.kernel.org, AJvYcCWhsglBVlSk9bD6O5lQGqMs7jLRbYazkSTLKBIq1AYaO2LnaRdIDoj2FshLJ1d5B/VLsTSJH9F2NpbZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+A0dRyQm8Bx8G5XNCLVcRfbS+OqtlWdhjK/Z0vqylWkW0Jt1I
+	KZn9n2iPyEqZhRnmAUgo0dltcEY0rJNQshMi4b2griKLjisT0q5aR9yf
+X-Gm-Gg: ASbGncsiAmGJhGTZYqzx7EPbalzaL+O4X9fD/2PyQJq9iHn1ZusvmtP+wknMsYlUVvm
+	pCNolmsq5PL832x/dnPn2vApEAhM0jNgq3smFVHGtW15hCELyirV1Fenf0by5eKSP4ygfnqCCd1
+	oRazmcaKHX5gDrUdZ2S8nkAyInJ+eoFrB+EaaJtkU0zMRVHPPQutnEr+/GO/FkhSrOSh2N7iDUU
+	pCUcYy7dQKeszUl7vICtWgEtNgXcAVdcTPeQNYNYEsjj7+U//QvLRK/8DUws8OMGaM21MQTbUgz
+	3tfj/Y5h7eDmihhZHUVkN83p/I8vqfeIy7hk0mxumxPnhMciY3HnthcBSOerPlZy3N4fS6WnF0x
+	u+keEnDz4zrl2rQX2LzIUbhc7mDrbqYxZ2sA=
+X-Google-Smtp-Source: AGHT+IE4d5bsDKmh70zMAfXbqhD3vaZmPJYeoR0cw+nGJM8l4TwiI6e/crFZ3cMteXs8sbBaCLoMtg==
+X-Received: by 2002:a05:6a00:140f:b0:746:31d1:f7d0 with SMTP id d2e1a72fcca58-76ab112a519mr11176837b3a.9.1754005793522;
+        Thu, 31 Jul 2025 16:49:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8aab185sm27998965ad.164.2025.07.31.16.46.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bcce8fa92sm2626948b3a.45.2025.07.31.16.49.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 16:46:52 -0700 (PDT)
+        Thu, 31 Jul 2025 16:49:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 31 Jul 2025 16:46:51 -0700
+Date: Thu, 31 Jul 2025 16:49:52 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Nicholas Flintham <nick@flinny.org>, Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (asus-ec-sensors) add ROG STRIX Z790E GAMING
- WIFI II
-Message-ID: <9887dcae-2f93-44bb-801e-f2746e9454ad@roeck-us.net>
-References: <20250728205133.15487-1-eugene.shalygin@gmail.com>
- <20250728205133.15487-4-eugene.shalygin@gmail.com>
+To: Lakshay Piplani <lakshay.piplani@nxp.com>
+Cc: linux-kernel@vger.kernel.org, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org,
+	vikash.bansal@nxp.com, priyanka.jain@nxp.com,
+	shashank.rebbapragada@nxp.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: (lm75) Add binding for NXP
+ P3T1750
+Message-ID: <fb2efd5f-732d-473b-8a0a-38cda680fd41@roeck-us.net>
+References: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,15 +80,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250728205133.15487-4-eugene.shalygin@gmail.com>
+In-Reply-To: <20250728041913.3754236-1-lakshay.piplani@nxp.com>
 
-On Mon, Jul 28, 2025 at 10:49:10PM +0200, Eugene Shalygin wrote:
-> From: Nicholas Flintham <nick@flinny.org>
+On Mon, Jul 28, 2025 at 09:49:12AM +0530, Lakshay Piplani wrote:
+> Add "nxp,p3t1750" to the lm75 compatible list.
 > 
-> Adds support for the ROG STRIX Z790E GAMING WIFI II board
-> 
-> Signed-off-by: Nicholas Flintham <nick@flinny.org>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied.
 
