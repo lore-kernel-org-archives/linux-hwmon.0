@@ -1,134 +1,94 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C211F5EA;
-	Fri,  1 Aug 2025 19:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49781A01C6;
+	Fri,  1 Aug 2025 21:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754077834; cv=none; b=ilVWV0WDuPGVz8exSzSfNuonQYKebVta+OD1lQFdp9JBY+uL1idmgsWB+y/WV8p4OdMDS9MY5ubXneUqc5M50hvCY4GIHiopO8+8eI4OSSnPLJIw73xTXNXx0gnpntDOXfmBh25Csl6cXTWtvZuyEWDZabGyXDOZ002lJEaYpls=
+	t=1754082300; cv=none; b=f6jyVEm553HAERUFcALHWyRNg1sj+G/drLqDrYoVrWwBoYGaZ+UdQotoT9vwwXc/yJm+igO3/VD2NfexhtIWbcGJpgvY7U/8LVm5IY12QKBFgqJU6mvDqA2oJzSTRbjl2fDgjUiv7a/9CFJoeRWNkW+JzIqwMBMAhcvTO4IAMhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754077834; c=relaxed/simple;
-	bh=TxwqeLiyxrFmCex1fQNYnnsdY4bbWS538k8UsVmmPzI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cm8YSbuCSooi3KcjoCi54M57Ye69AkR6c8GRe5qnt2/kZghRKCH+VEqOaBsEpgYAyzxkD0KxY0et3WFVUt3kafnvQMA1wFfTLRNvGU/NjRi0uJ93JBlfpJ+NOHp1YWOGCKUKZ3ZUJFsdjH1v860eYz7RFm5NuccYwTLcFof3yfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgT5Tbmk; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1754082300; c=relaxed/simple;
+	bh=TRUqs6xlhglbCyWGVZLqMEQiUXQwndHXQ6HDJSNkuRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tm2dksUT/UDgwVLCVv2NGlvp+LDidhFRVGf37cjI+3iSLXtpJ04C9ZTSsjBlDe16uSGwf5+19WTIJ66VPCvUfhNp1LCFuj0Vng/jyFnBd43wnVqnxlV+mIptdA0UxnEx7FFeQa1WxQucE0G7dcdYLcY2MLHh0jL/fq9STVsrNPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IBt/GmGu; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgT5Tbmk"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ae0c571f137so490386466b.0;
-        Fri, 01 Aug 2025 12:50:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBt/GmGu"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-240b3335c20so14923675ad.3;
+        Fri, 01 Aug 2025 14:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754077831; x=1754682631; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfjnsGeGtjnwVQ/SY06BSOuewn04OC/WC0iFfe0ne20=;
-        b=OgT5TbmkWaXG0LVif5av+zeKsQpWQk95f18g4k76A/U/7J31Gy+C1Jq6xS31EIZkdP
-         aOMuYBrXRDtPJZy7EsghhBgQXa3/Qlo/5V6tN4rD9Yj89dKqd+G72DneR8AOJi+A7exd
-         EcY16FQ3GNF9jZ25CWAe1qPYHwfbQlmDZcxtyKW6Hs8ZPPGI7B10Ecxh8OGbMIRB6Prb
-         qw4qEhih/L2ExZp3g9UadWJAd65i2A7n0qLVxlbITeQWVcxAkU0VdH1Z+1oV/ehEVkhp
-         WWbDr4H6XgfqQP27KE/d738sJYjqtv8NSXMcgnPPwdtbBBEemDGQGdaUOqjW72oW46aj
-         xBrg==
+        d=gmail.com; s=20230601; t=1754082298; x=1754687098; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8e2o2DOmm2yAsxtpRoWoG1Ii2DzD6+fXPkOVUpk/X+U=;
+        b=IBt/GmGuflh75WJdHvmxmII3eJ6apV/KIzOecAPuPy7NCwHgy5jek4gfhClrLrW9Oi
+         2QyKRkr5TmYor/iGFw9Qh51JGArGNr5mc8btyRTWYWaU4tHNeETwmwT8vx3tRDjwzNHw
+         fLJhyZrCXRPp09qPjz+G/LafkWCkCn80HeWXxeGMjpEop/a3MmiTT61juazS3AA6c8Ft
+         TqNGLDX2P7H9M4khUABKz42gyoWGCderMRwIhTF/uKaVv1NEPaK6zGloYNiEyuyY1ASH
+         Sf0+QkFEeVrLDzVnaHemIROK7c4/J6RwpP448pbXHer9OZiPZNRKJM8TEOCBMWVCQJuR
+         thww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754077831; x=1754682631;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bfjnsGeGtjnwVQ/SY06BSOuewn04OC/WC0iFfe0ne20=;
-        b=MuKqyEIHK+pTHUQRLI5GbO3vb92hZhVu1YnFiUZ8mH1X9z1KrJ+SXKSr6kXXYPnIat
-         Salnq0Jbl11EyxaWoASqRS6xsrHeiSEp7nB/hBDQjYCd25y0izVRMyF8jGXcaBpGPfM8
-         W4Cr5rsSPnbED79EnZVjbMnZYIh2izXxivxZvOfYSRI0gsMMKl4yttdpVSvqozYvZ2ei
-         KDGSxOuOzgnG+SG2fZKOTST9KlSITsFq5LGsdGBJQbIp8SisofVvYZzoz9OLZGDLt/dH
-         BztDvYBu1oSNaYPDkQ9Y9qNVng7NVUmQsxjdfykBVUs3BeA39z7j1KET9txyfesb9cfD
-         SW1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUZQ3E2Sz3+DkpP8uKcpFhsvkN0bK9L2JXYdnJrPKw/kAUiEKnQYqquy2V1g34k0swxUUzB2ZR6gRI=@vger.kernel.org, AJvYcCVN0HeS2hpYuFnV4qAbVDzv0ZquuvMJ5H4wrpyROlxL4HXlkEkwDoaAOvW0k+fuLS44RIa4OnY+LX28j4m0@vger.kernel.org, AJvYcCW7vhYzPPn/9cxgcmqDAaiqJkWAKcVGfY4pTI324+sntJfWUUUn9wYgg5sK7TjTnGJyz5nLDTKbIyGAr4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSzAFmjmi6tMoAKHPAFdMM7wrH9mlQHGaSADHNa8VzGw+aDT/4
-	J21C9njD1rDrLOhc9lGidF5WYG0JR/G/o2HMt2EZOjaW76nzFPXtu+fb
-X-Gm-Gg: ASbGnctLB63m68l5OB+76jtS6EFmBBHl8Z/u33Ufpi1Sh9i7JQJsFY2gX370B/EL9mx
-	lsmiVwAfm5xpFqAGnte5suXB9faAkmvB1ZbI2AM0dSs8Ejx+tFjmcDkQaU4XpvCW1lH0eZs5SsN
-	Mf4mVrcLmhLUvgibtlahLxGL6ccfs1i/L2oVu7BAELuYJ3j61u84hyJJUx2VbepVqrh11gr9DDX
-	9uGLXHrqRajCs8SrOoC2MkWQjMFoz6VRx/5SuGTpWNncMKcx5mnczKX7FnNqMp3H5Vq4u8V23JT
-	vKZjuXJBNykOvz9QVvhQNpfmA6M01UuEvLJPgJc233lzkgVqNpkJlylmiVW8I2NmyD1GEUSMeB5
-	Qflm1i4CT3M9eelohpuPcM9rEftN56jgiGrvRcgMDf2rHcwUoigIF41nljqmjtpu4xrseQk6dyD
-	Q4HiejTB22VIgJI+SpibdTSgGb
-X-Google-Smtp-Source: AGHT+IEFbCVP+IOT4HMvDVcw9I91CdbWhFf4pBenc7P1eqGHowAvS2x6fVTXuGhq+dqDEy07KvCXzQ==
-X-Received: by 2002:a17:907:7f05:b0:ad8:9257:573a with SMTP id a640c23a62f3a-af93ffcc3bbmr123416366b.5.1754077830932;
-        Fri, 01 Aug 2025 12:50:30 -0700 (PDT)
-Received: from puma.museclub.art (p200300cf9f013400cc194b80e1760d4a.dip0.t-ipconnect.de. [2003:cf:9f01:3400:cc19:4b80:e176:d4a])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a23fec4sm327375666b.121.2025.08.01.12.50.30
+        d=1e100.net; s=20230601; t=1754082298; x=1754687098;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8e2o2DOmm2yAsxtpRoWoG1Ii2DzD6+fXPkOVUpk/X+U=;
+        b=SfYmayrNtGlQutgs5u2e7fHvLfNSmNA0/0owGhk5kXmWbhAVGpHTRg9Cd8cGSseaeZ
+         vFnonmnD8C9XXjQ4xYGkhdHhOEXZ+BakYfyd6nIIzk6rt71iyGk7eWWN37S70+1q8KKi
+         h9pax76tR1BL53Itd1/5YlUAh07eqUtZYMjsWEKSGvftgJGnHyLQeyP4INO29dwkmE73
+         qrEvMG+qcce95RfMP813mrZGw5xTXkHKokEcA13+Ouv9lVR9TvdJlhy8cVzlWXykVd26
+         /4QFH0Mq/eZBc0uJ15XTy6D0JAg/SLMQHFjOkVfSYvUAr9+enUpwfTfJmUCXO4VHzVOl
+         +yaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvzcxvGOZM+wCAkL2nuXdmtprQiW2xTf8cpWFMMRoYYQtyN2ofpXBLFQYCXE+j0syQwshEIWESrMedvaI=@vger.kernel.org, AJvYcCVjmzTqz2A625Pan4yFhzClvI3mVOJePREfv3ox4eu8TPunCQVKrCDiNoGnhh/RjsoooYpdyUwxGTU=@vger.kernel.org, AJvYcCXJVicd6ltIoNkQjJnMkd6z5BiG56TqCiOFFz/jEbiAKdcZ65jf3iA50GTeKPxx1+ngUQOg7tl+frOi1Mlj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxri2yMj0g7hdHUwMjHBIu+SmePINLLTkSLTmuqeOLjpmuJbIz4
+	O0YTrdf+qmiHlHwyw8QVQNcQpWwRCKvhAyQIJ1nKnorAGjzA+B8iuw96
+X-Gm-Gg: ASbGnctcEhuNB2cyUEJKPG4N2pI0IzTXBR2jFIwy5uMpMY6uMTN846FZUAeHpOzpi1r
+	iCOHVaEz/jV08QTPhmhWdWDwR8ZIN3KMafRYueJk8T/7qqFwLVmMfwTNqQp7FW7sYBPlHND2hDM
+	mKfDmVNFCELN9ApME55QszSDsPMWf1xbTOwZmhDvv4gv3Z0Zgx2Q1Ja7IHQQ71cHkFjk/5vmWVq
+	TzE+nhc53uvEhzgqRc4ZeO5Rlb7Gu/POdASIyQcIRdwVjb0L3ct3Rk888d8PXmssP2ujm213XW0
+	cYq6SIxZXHuJJVp0NowLHNfHPZzlZQyAYjrw0MMv2eW/cyfuajy8C7IGoxhJDUOgDhnb8EuulPk
+	rQNzNcBO2h0ljUdZa2xSGMqXaMmCmhPFstAs=
+X-Google-Smtp-Source: AGHT+IEcmQguvA4OSb6zM+Ox4Lwc+OtLle2Il5C+7tUf33JxrxfEuMHkNj0e/uf56oBX/EbPogiZ9w==
+X-Received: by 2002:a17:902:db04:b0:240:99fa:dd1c with SMTP id d9443c01a7336-24246f1fc4fmr14571295ad.10.1754082297773;
+        Fri, 01 Aug 2025 14:04:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e89a3a6fsm50893175ad.147.2025.08.01.14.04.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 12:50:30 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: =?UTF-8?q?Runar=20Gr=C3=B8n=C3=A5s?= <noizez@me.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+        Fri, 01 Aug 2025 14:04:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 1 Aug 2025 14:04:56 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Runar =?iso-8859-1?B?R3L4buVz?= <noizez@me.com>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add X670E-I GAMING WIFI
-Date: Fri,  1 Aug 2025 21:50:08 +0200
-Message-ID: <20250801195020.11106-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.50.1
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add X670E-I GAMING WIFI
+Message-ID: <2ed06671-fe2d-4008-b185-a1398a515925@roeck-us.net>
+References: <20250801195020.11106-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250801195020.11106-1-eugene.shalygin@gmail.com>
 
-From: Runar GrÃ¸nÃ¥s <noizez@me.com>
+On Fri, Aug 01, 2025 at 09:50:08PM +0200, Eugene Shalygin wrote:
+> From: Runar Grønås <noizez@me.com>
+> 
+> Add support for ROG STRIX X670E-I GAMING WIFI
+> 
+> Signed-off-by: Runar Grønås <noizez@me.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Add support for ROG STRIX X670E-I GAMING WIFI
+Applied.
 
-Signed-off-by: Runar GrÃ¸nÃ¥s <noizez@me.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 9 +++++++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index da9a00111d1c..49f6cac63d19 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -31,6 +31,7 @@ Supported boards:
-  * ROG STRIX X570-E GAMING WIFI II
-  * ROG STRIX X570-F GAMING
-  * ROG STRIX X570-I GAMING
-+ * ROG STRIX X670E-I GAMING WIFI
-  * ROG STRIX Z390-F GAMING
-  * ROG STRIX Z490-F GAMING
-  * ROG STRIX Z690-A GAMING WIFI D4
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index b9543eda2522..33c5fcb0a09e 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -553,6 +553,13 @@ static const struct ec_board_info board_info_strix_x570_i_gaming = {
- 	.family = family_amd_500_series,
- };
- 
-+static const struct ec_board_info board_info_strix_x670e_i_gaming_wifi = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+			SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_strix_z390_f_gaming = {
- 	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -672,6 +679,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_x570_f_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-I GAMING",
- 					&board_info_strix_x570_i_gaming),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X670E-I GAMING WIFI",
-+					&board_info_strix_x670e_i_gaming_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
- 					&board_info_strix_z390_f_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-F GAMING",
--- 
-2.50.1
-
+Thanks,
+Guenter
