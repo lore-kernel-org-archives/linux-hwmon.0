@@ -1,187 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2D52147EF;
-	Fri,  1 Aug 2025 07:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C211F5EA;
+	Fri,  1 Aug 2025 19:50:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754035169; cv=none; b=a7CucPNyMFXanzbUPNEtkpNOHH+W40zLS8B+JNEanJKFECoK/PPtjQ8qzniw/fw71G5ilupqv2fduEDnkRPvSAPBfBPrSkZxVk6sH1vnE3ktOnmnaTfWwdq5dvg6as20XJwX2u6iU135LSUIoUy//UGp+bYGY8ViyOCIxfAYBoI=
+	t=1754077834; cv=none; b=ilVWV0WDuPGVz8exSzSfNuonQYKebVta+OD1lQFdp9JBY+uL1idmgsWB+y/WV8p4OdMDS9MY5ubXneUqc5M50hvCY4GIHiopO8+8eI4OSSnPLJIw73xTXNXx0gnpntDOXfmBh25Csl6cXTWtvZuyEWDZabGyXDOZ002lJEaYpls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754035169; c=relaxed/simple;
-	bh=ZiH2+0ApCDD5Cy6uBvn/D2hA4NFJk84G69zqJgH2K3o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=C9OzxIZcWK/43I2jjYufY345hVepGuvcTBAfMEmYSQhCyDMwZhxIksErBpnf4KoxAsmMDF80DFUcom1PXR+k68VCcrgh4Bxc074g2RLJBG2fwM4IzbIhPfzgi0+CN5Az3IN1dJnovVT0HPG26UDyAKDwm1pv0GnnQa5Hoq+9bCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aX4aT2mt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754077834; c=relaxed/simple;
+	bh=TxwqeLiyxrFmCex1fQNYnnsdY4bbWS538k8UsVmmPzI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cm8YSbuCSooi3KcjoCi54M57Ye69AkR6c8GRe5qnt2/kZghRKCH+VEqOaBsEpgYAyzxkD0KxY0et3WFVUt3kafnvQMA1wFfTLRNvGU/NjRi0uJ93JBlfpJ+NOHp1YWOGCKUKZ3ZUJFsdjH1v860eYz7RFm5NuccYwTLcFof3yfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgT5Tbmk; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aX4aT2mt"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C31D8C4CEF4;
-	Fri,  1 Aug 2025 07:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754035168;
-	bh=ZiH2+0ApCDD5Cy6uBvn/D2hA4NFJk84G69zqJgH2K3o=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=aX4aT2mtxE0pyyqZi088jIgy+EVLGoCYqaODkhz7uMd+jJhBT4QPhk8CLP+U4sjMm
-	 zJexr48d6BwnH/7ESg3OvI/A7lGvMP3/zfEa+sXU8ApxHbTs/6Z0IVwSSICcXnTBLr
-	 eiy5FthSGi5vDCX5Cy60hDz4+pgCaZvs2YV+qSE7iPC0vsvCFECo1snSDGavSOfXfJ
-	 VpHj2GbDcClxjRPKw1bnptegcWNYfRn3YLSvK68g6mDFZh4q0O97lxob9C0DuRBzb7
-	 ox62DS+8t4Yuc5sicHoG7sTMomr53bY9O7vch9CdkYWWxsEz1tYjMvfSEyJFzHWa3v
-	 qHUiro1uOPKjg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B583AC87FDA;
-	Fri,  1 Aug 2025 07:59:28 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Fri, 01 Aug 2025 15:59:21 +0800
-Subject: [PATCH v7 2/2] hwmon: document: add gpd-fan
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgT5Tbmk"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ae0c571f137so490386466b.0;
+        Fri, 01 Aug 2025 12:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754077831; x=1754682631; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfjnsGeGtjnwVQ/SY06BSOuewn04OC/WC0iFfe0ne20=;
+        b=OgT5TbmkWaXG0LVif5av+zeKsQpWQk95f18g4k76A/U/7J31Gy+C1Jq6xS31EIZkdP
+         aOMuYBrXRDtPJZy7EsghhBgQXa3/Qlo/5V6tN4rD9Yj89dKqd+G72DneR8AOJi+A7exd
+         EcY16FQ3GNF9jZ25CWAe1qPYHwfbQlmDZcxtyKW6Hs8ZPPGI7B10Ecxh8OGbMIRB6Prb
+         qw4qEhih/L2ExZp3g9UadWJAd65i2A7n0qLVxlbITeQWVcxAkU0VdH1Z+1oV/ehEVkhp
+         WWbDr4H6XgfqQP27KE/d738sJYjqtv8NSXMcgnPPwdtbBBEemDGQGdaUOqjW72oW46aj
+         xBrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754077831; x=1754682631;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bfjnsGeGtjnwVQ/SY06BSOuewn04OC/WC0iFfe0ne20=;
+        b=MuKqyEIHK+pTHUQRLI5GbO3vb92hZhVu1YnFiUZ8mH1X9z1KrJ+SXKSr6kXXYPnIat
+         Salnq0Jbl11EyxaWoASqRS6xsrHeiSEp7nB/hBDQjYCd25y0izVRMyF8jGXcaBpGPfM8
+         W4Cr5rsSPnbED79EnZVjbMnZYIh2izXxivxZvOfYSRI0gsMMKl4yttdpVSvqozYvZ2ei
+         KDGSxOuOzgnG+SG2fZKOTST9KlSITsFq5LGsdGBJQbIp8SisofVvYZzoz9OLZGDLt/dH
+         BztDvYBu1oSNaYPDkQ9Y9qNVng7NVUmQsxjdfykBVUs3BeA39z7j1KET9txyfesb9cfD
+         SW1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZQ3E2Sz3+DkpP8uKcpFhsvkN0bK9L2JXYdnJrPKw/kAUiEKnQYqquy2V1g34k0swxUUzB2ZR6gRI=@vger.kernel.org, AJvYcCVN0HeS2hpYuFnV4qAbVDzv0ZquuvMJ5H4wrpyROlxL4HXlkEkwDoaAOvW0k+fuLS44RIa4OnY+LX28j4m0@vger.kernel.org, AJvYcCW7vhYzPPn/9cxgcmqDAaiqJkWAKcVGfY4pTI324+sntJfWUUUn9wYgg5sK7TjTnGJyz5nLDTKbIyGAr4k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSzAFmjmi6tMoAKHPAFdMM7wrH9mlQHGaSADHNa8VzGw+aDT/4
+	J21C9njD1rDrLOhc9lGidF5WYG0JR/G/o2HMt2EZOjaW76nzFPXtu+fb
+X-Gm-Gg: ASbGnctLB63m68l5OB+76jtS6EFmBBHl8Z/u33Ufpi1Sh9i7JQJsFY2gX370B/EL9mx
+	lsmiVwAfm5xpFqAGnte5suXB9faAkmvB1ZbI2AM0dSs8Ejx+tFjmcDkQaU4XpvCW1lH0eZs5SsN
+	Mf4mVrcLmhLUvgibtlahLxGL6ccfs1i/L2oVu7BAELuYJ3j61u84hyJJUx2VbepVqrh11gr9DDX
+	9uGLXHrqRajCs8SrOoC2MkWQjMFoz6VRx/5SuGTpWNncMKcx5mnczKX7FnNqMp3H5Vq4u8V23JT
+	vKZjuXJBNykOvz9QVvhQNpfmA6M01UuEvLJPgJc233lzkgVqNpkJlylmiVW8I2NmyD1GEUSMeB5
+	Qflm1i4CT3M9eelohpuPcM9rEftN56jgiGrvRcgMDf2rHcwUoigIF41nljqmjtpu4xrseQk6dyD
+	Q4HiejTB22VIgJI+SpibdTSgGb
+X-Google-Smtp-Source: AGHT+IEFbCVP+IOT4HMvDVcw9I91CdbWhFf4pBenc7P1eqGHowAvS2x6fVTXuGhq+dqDEy07KvCXzQ==
+X-Received: by 2002:a17:907:7f05:b0:ad8:9257:573a with SMTP id a640c23a62f3a-af93ffcc3bbmr123416366b.5.1754077830932;
+        Fri, 01 Aug 2025 12:50:30 -0700 (PDT)
+Received: from puma.museclub.art (p200300cf9f013400cc194b80e1760d4a.dip0.t-ipconnect.de. [2003:cf:9f01:3400:cc19:4b80:e176:d4a])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a23fec4sm327375666b.121.2025.08.01.12.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 12:50:30 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: =?UTF-8?q?Runar=20Gr=C3=B8n=C3=A5s?= <noizez@me.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add X670E-I GAMING WIFI
+Date: Fri,  1 Aug 2025 21:50:08 +0200
+Message-ID: <20250801195020.11106-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250801-gpd_fan-v7-2-548b9d8f57d7@uniontech.com>
-References: <20250801-gpd_fan-v7-0-548b9d8f57d7@uniontech.com>
-In-Reply-To: <20250801-gpd_fan-v7-0-548b9d8f57d7@uniontech.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
- Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>, 
- WangYuli <wangyuli@uniontech.com>, Jun Zhan <zhanjun@uniontech.com>, 
- =?utf-8?q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>, 
- someone5678 <someone5678.dev@gmail.com>, 
- Justin Weiss <justin@justinweiss.com>, 
- Antheas Kapenekakis <lkml@antheas.dev>, command_block <mtf@ik.me>, 
- derjohn <himself@derjohn.de>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754035167; l=3233;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=YeZ2S1Xd3SzI2j73X7MPaeHtszEUNsz3Uuv4BXy3AyA=;
- b=/HfULSeyuj1YoBPbO5SksgzxxgGNRcmuqH9se1nB6oBtbGdX4YbSJClAdd+s3Qd4yuGVabURr
- ggH/4bAvzfFA8HLcClUoeW4VmuFVs8KGRZccTp6LmtEYQsXd6KEPNbp
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+From: Runar Grønås <noizez@me.com>
 
-Add GPD fan driver document
+Add support for ROG STRIX X670E-I GAMING WIFI
 
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+Signed-off-by: Runar Grønås <noizez@me.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
- Documentation/hwmon/gpd-fan.rst | 71 +++++++++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst   |  1 +
- MAINTAINERS                     |  1 +
- 3 files changed, 73 insertions(+)
+ Documentation/hwmon/asus_ec_sensors.rst | 1 +
+ drivers/hwmon/asus-ec-sensors.c         | 9 +++++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
-new file mode 100644
-index 0000000000000000000000000000000000000000..82f064c80aac485348f7c5179a9c4104fd6a4745
---- /dev/null
-+++ b/Documentation/hwmon/gpd-fan.rst
-@@ -0,0 +1,71 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver gpd-fan
-+=========================
-+
-+Author:
-+    - Cryolitia PukNgae <cryolitia@uniontech.com>
-+
-+Description
-+------------
-+
-+Handheld devices from Shenzhen GPD Technology Co., Ltd. provide fan readings and fan control through
-+their embedded controllers.
-+
-+Supported devices
-+-----------------
-+
-+Currently the driver supports the following handhelds:
-+
-+ - GPD Win Mini (7840U)
-+ - GPD Win Mini (8840U)
-+ - GPD Win Mini (HX370)
-+ - GPD Pocket 4
-+ - GPD Duo
-+ - GPD Win Max 2 (6800U)
-+ - GPD Win Max 2 2023 (7840U)
-+ - GPD Win Max 2 2024 (8840U)
-+ - GPD Win Max 2 2025 (HX370)
-+ - GPD Win 4 (6800U)
-+ - GPD Win 4 (7840U)
-+
-+Module parameters
-+-----------------
-+
-+gpd_fan_board
-+  Force specific which module quirk should be used.
-+  Use it like "gpd_fan_board=wm2".
-+
-+   - wm2
-+       - GPD Win 4 (7840U)
-+       - GPD Win Max 2 (6800U)
-+       - GPD Win Max 2 2023 (7840U)
-+       - GPD Win Max 2 2024 (8840U)
-+       - GPD Win Max 2 2025 (HX370)
-+   - win4
-+       - GPD Win 4 (6800U)
-+   - win_mini
-+       - GPD Win Mini (7840U)
-+       - GPD Win Mini (8840U)
-+       - GPD Win Mini (HX370)
-+       - GPD Pocket 4
-+       - GPD Duo
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported:
-+
-+fan1_input
-+  Read Only. Reads current fan RPM.
-+
-+pwm1_enable
-+  Read/Write. Enable manual fan control. Write "0" to disable control and run at
-+  full speed. Write "1" to set to manual, write "2" to let the EC control decide
-+  fan speed. Read this attribute to see current status.
-+
-+pwm1
-+  Read/Write. Read this attribute to see current duty cycle in the range [0-255].
-+  When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
-+  to set fan speed.
-+
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index d292a86ac5da902cad02c1965c90f5de530489df..ce4419f064e1368740387af70af38a85cadd952d 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -82,6 +82,7 @@ Hardware Monitoring Kernel Drivers
-    gigabyte_waterforce
-    gsc-hwmon
-    gl518sm
-+   gpd-fan
-    gxp-fan-ctrl
-    hih6130
-    hp-wmi-sensors
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e81eeb61d49b282a5a2dc701f1c932c3a82d8b85..26da2b93173477716fe3abc525078eebeaed3f45 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10338,6 +10338,7 @@ GPD FAN DRIVER
- M:	Cryolitia PukNgae <cryolitia@uniontech.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/hwmon/gpd-fan.rst
- F:	drivers/hwmon/gpd-fan.c
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index da9a00111d1c..49f6cac63d19 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -31,6 +31,7 @@ Supported boards:
+  * ROG STRIX X570-E GAMING WIFI II
+  * ROG STRIX X570-F GAMING
+  * ROG STRIX X570-I GAMING
++ * ROG STRIX X670E-I GAMING WIFI
+  * ROG STRIX Z390-F GAMING
+  * ROG STRIX Z490-F GAMING
+  * ROG STRIX Z690-A GAMING WIFI D4
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index b9543eda2522..33c5fcb0a09e 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -553,6 +553,13 @@ static const struct ec_board_info board_info_strix_x570_i_gaming = {
+ 	.family = family_amd_500_series,
+ };
  
- GPD POCKET FAN DRIVER
-
++static const struct ec_board_info board_info_strix_x670e_i_gaming_wifi = {
++	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
++			SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
++	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
++	.family = family_amd_600_series,
++};
++
+ static const struct ec_board_info board_info_strix_z390_f_gaming = {
+ 	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -672,6 +679,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_x570_f_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-I GAMING",
+ 					&board_info_strix_x570_i_gaming),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X670E-I GAMING WIFI",
++					&board_info_strix_x670e_i_gaming_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
+ 					&board_info_strix_z390_f_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-F GAMING",
 -- 
 2.50.1
-
 
