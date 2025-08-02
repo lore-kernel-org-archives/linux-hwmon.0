@@ -1,279 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EBF22069A;
-	Sat,  2 Aug 2025 10:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C038022128B;
+	Sat,  2 Aug 2025 13:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754131989; cv=none; b=Xg97mITMgEBCuwCLSwMlPPbeFnRMonGFXh9NjPZt4qQmQHDVUfKjZBxJyY10FBbTxd0DMwyZw1OLN6hzQ38Ms0qY4FfRqHPXSap159SOFh/buNwPp5aSzivKXXAFcH5Yl40SVjuMTin0Z93eVZibk3r+9xJAyOKZLKiEcfaoGzo=
+	t=1754140159; cv=none; b=PjagQIqVCX8ZmAhGGii9DVoQd1KQh8+iHoqkqv7RwlUfMO7KExX19skdrfdfAk6MhSKoJ8vXAi/E/sOGFUhkWkrqsZzLhVQn7N4a1GbFiGhftRu+vD/PArwzSHvdFVR87aY8T5l0UHyBR3ZwWpr4bEBI2xsl7Xv8lkaK95PoYeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754131989; c=relaxed/simple;
-	bh=1F2EMW1AyFMzN8saxljctdIQCLVlSmb/qnoWy+VqL3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pmKmwMgo139iYHgtYkNRa1KYaYdYNEDkYFZ6mRp1iI+pO5Q/kA+1bmAWtdFU1FYK09BPF/BDdZa5SgkSXJ9kEbbOVzhhDLECjc/Hc8xmHScX6W3L/NnLKBd1uMk2GWJp9j3P4G7pit3H9W3mZ4rx8p3+u4/73zf+C5XU+nDa4EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeVj3od/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754140159; c=relaxed/simple;
+	bh=bCB9IfmBe3GszsiUxXN5U8QTeY3yJiR+n3Dm+i6S8r4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QwIe8ZUIsW7WQM+e9wFtQjk0ToQlLgV03/N8COk6cfNWECvhyhnf6w5VNeaSJ76coiOe4YxJ2bJc62NTJlg6YhMiOcNGu3bHcXLC4h0Os2vKJWAU/EMHwI+LM1ZZfrqwPRufS9YjciVO7c6CYBaTG8GrUR9PAjbJJwqZ0XDRXFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZE/v2/Tc; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeVj3od/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E7EC4CEEF;
-	Sat,  2 Aug 2025 10:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754131988;
-	bh=1F2EMW1AyFMzN8saxljctdIQCLVlSmb/qnoWy+VqL3s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LeVj3od/6SkAUN+ymf44pK9yFjHzL69zIDYhOdE5l5gc9LG3/jn6wy59iLXcGEBDk
-	 6RwiII2d5iCn8IY/gHjaXJ/En9NsEwHvTWe4WaC0yLjCxpHTCZWopAvwSGsuU7HKZi
-	 unR1US8MYkjlDDhLNXS0I2d80neoFVcXKvBS8oMbLQCw+V7i9kQqDz2tG+NuwD0ewJ
-	 uAUMKlzhiVC9k5M7LZ4YORe91QFjLG0GbS2KE0bBa00tF0bS8Z+xqENHvU4zXtqV1N
-	 s/zb2ZG6clBWEnFKNTNv5spN96e83w14HkXw6tgRn3DiCvGeH9seDFEKvL/PXuYUjW
-	 3dg/RryDX9R+w==
-Date: Sat, 2 Aug 2025 11:53:00 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
-Cc: Sean Anderson <sean.anderson@linux.dev>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org, Andy Shevchenko
- <andy@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- linux-kernel@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 7/7] hwmon: iio: Add alarm support
-Message-ID: <20250802115300.18a4481d@jic23-huawei>
-In-Reply-To: <pblyblite64vy5ghk77crga5y6f2a6bmngtxu6rlqmq3p7rzxt@srquqhwt43nr>
-References: <20250715012023.2050178-1-sean.anderson@linux.dev>
-	<20250715012023.2050178-8-sean.anderson@linux.dev>
-	<afc6aa6ad4b633f9d834acf933734985f14c5563.camel@gmail.com>
-	<6455be16-d287-4d5e-9556-e1789d43708c@linux.dev>
-	<9c6f99e022270b1b9c2f178f8f415270f11e59df.camel@gmail.com>
-	<11735f77-25cc-4220-b7be-e6fda8f72161@linux.dev>
-	<pblyblite64vy5ghk77crga5y6f2a6bmngtxu6rlqmq3p7rzxt@srquqhwt43nr>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZE/v2/Tc"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-615460d9897so3247825a12.0;
+        Sat, 02 Aug 2025 06:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754140155; x=1754744955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LR6RtVeNg3Q+svUWV406Ui0fVcP9z9XbzX2f5A+PR1E=;
+        b=ZE/v2/TcP801EBrQJjmxaZrotkxZlnmwuAko4k9zYzlnffOLeFI1Un5D4Z6UrIqkMC
+         RFEPS+26QTFDefb9+wxbcHIIDpJdfpoohy3jfU/FuNrZ+MoBAVIXj77p2h7qV1DJIDMZ
+         tneAQ6C1Bsu0PuLdOpaVJOMl8+FsUKojNBoVHgFepYx8TFr8361OAa+Uj1R7bF9xiHv8
+         3HVATBQ62z+lA2ylE+TE+tqPubnIYK+moDUm0kFfB0CC25HVXpCuN+hCzlvYXn3PB8C+
+         fC33O2jUIlVsxQrg8GNND5AZy9Idq/FrJ/2T/1wWRQ2+oJHMkiLIIx7kNofRi4zXA3YT
+         65kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754140155; x=1754744955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LR6RtVeNg3Q+svUWV406Ui0fVcP9z9XbzX2f5A+PR1E=;
+        b=m42ZY0t8jqnCNSBQpzBB8EpzI4i8+E5Sbek7HQyCqGRrvruPJ0rC4TnjbprcfwmTd3
+         B4nNYl7/jw1ewRhRgkq3RGaVhqhwgKgZ3CnXmCCeZpZzxJluYgBZBC0osisbe+pTs3hD
+         llkDCiNTk2DksTQZiUWXPKijaQXMew7z1u218T2TfJnuZhyJBqzZx+AUW3ok1LkG6D1c
+         SjoMD8JmyH/NfyD75a/XK65BxhjJHH8Q/8hC5FucxFGJSWX3lZy4GwHR5v1qSuizO+Gq
+         yTEZGrfrqTTVrE5ESYksqZYgvK23iQCyVo89DnuxV2AS01PPtiSak55a44gjSa3iNeog
+         DYpA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1R6Y+ju0nM3C0iATa+ekPQ0a5fy9RuFiOhqKp3YkDZIv+IdhndzhJBJe3oIz3IBOlCHSg2yWbsxgsk2vl@vger.kernel.org, AJvYcCXJqDEzYY/RFoOIimLLBbBUTWQxxLA0NeoMtgT/WILU+3vPasPzUDIJiFu0vMcjSvSu4H8nUTY1/YAnqd0=@vger.kernel.org, AJvYcCXz1nCRb/oL4CcCs3v0WT2sD/4RCLRXrDtJu1Rld9EmIbAT9lWJ/XUufkHwcLgZzjibLcyhalDQJTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWYwLNWcYoCqZxLuGRSlK0iNrckVz9NDgzpU1Fgl4WWtkr0JQy
+	ctenQ3/lr3ys+5zxetXspVGBhSzrN9p5FWuhOYO7hDsYIZin5pvJ7pxw
+X-Gm-Gg: ASbGncsvEXj5ZhdRkM0JYPCcRx6bD39KDLcNToD5cJifPuc7q+F0mV8XQvGOrgHxY5O
+	Fqaslgtmch4wFfT8jAfmchT3FuIZryy/LLEOGkNgkgDeqMJiCOABMROWCIJTa1TxRf3RqLN0VTc
+	ObgS2y81kgV8ye5e6uVlXpK/gi7D7vvWeVf/k//zstnnoAB6lqorEJl8iAmpuERbhbxqaVF6QGH
+	RWvI6zCPvWUUVwCuEk8+k0Sdx6Z5LOvII/8OAMgFYwFk1U/S+Gp735CM4L/ueh7Gj1+BlgOnIQZ
+	46lf2gWEzs6k0MKDRNoa2l/GZe5q/kZgubJqLDCumUxGqxG5XQNVhWlVr7RjXaWvtJUDXAVinXK
+	0Lw8cc5K6apiQO1m81omOuydaD3GLCjGexPoqVIiRaMkrdhBerXzYUBWJ0AaDI7UDgZ8z7s7QC+
+	mLrahUjU9nVRy0BfGUguCYuwbeYdgsw6s7Tww=
+X-Google-Smtp-Source: AGHT+IHSvulafVSZd46r7ifmQJL70hl/shPH7lVJn2yxde5U7XOVJ2haaLc5eeVbVy5VcRiwE9xbSQ==
+X-Received: by 2002:a05:6402:35c9:b0:615:4728:f14 with SMTP id 4fb4d7f45d1cf-615e6f57dcdmr2467966a12.16.1754140154718;
+        Sat, 02 Aug 2025 06:09:14 -0700 (PDT)
+Received: from puma.museclub.art (p200300cf9f013400cc194b80e1760d4a.dip0.t-ipconnect.de. [2003:cf:9f01:3400:cc19:4b80:e176:d4a])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8fe7a32sm4191858a12.37.2025.08.02.06.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Aug 2025 06:09:14 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Jamie Vickery <j.a.d.mcmillan@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add Z790-I GAMING WIFI
+Date: Sat,  2 Aug 2025 15:09:02 +0200
+Message-ID: <20250802130912.175543-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, 31 Jul 2025 11:52:10 +0100
-Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
+From: Jamie Vickery <j.a.d.mcmillan@gmail.com>
 
-> On Thu, Jul 17, 2025 at 12:00:13PM -0400, Sean Anderson wrote:
-> > On 7/16/25 02:37, Nuno S=C3=A1 wrote: =20
-> > > On Tue, 2025-07-15 at 13:02 -0400, Sean Anderson wrote: =20
-> > >> On 7/15/25 07:28, Nuno S=C3=A1 wrote: =20
-> > >> > On Mon, 2025-07-14 at 21:20 -0400, Sean Anderson wrote: =20
-> > >> > > Add alarm support based on IIO threshold events. The alarm is cl=
-eared on
-> > >> > > read, but will be set again if the condition is still present. T=
-his is
-> > >> > > detected by disabling and re-enabling the event. The same trick =
-is done
-> > >> > > when creating the attribute to detect already-triggered events.
-> > >> > >=20
-> > >> > > The alarms are updated by an event listener. To keep the notifie=
-r call
-> > >> > > chain short, we create one listener per iio device, shared acros=
-s all
-> > >> > > hwmon devices.
-> > >> > >=20
-> > >> > > To avoid dynamic creation of alarms, alarms for all possible eve=
-nts are
-> > >> > > allocated at creation. Lookup is done by a linear scan, as I exp=
-ect
-> > >> > > events to occur rarely. If performance becomes an issue, a binar=
-y search
-> > >> > > could be done instead (or some kind of hash lookup).
-> > >> > >=20
-> > >> > > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> > >> > > ---
-> > >> > >=20
-> > >> > >  drivers/hwmon/iio_hwmon.c | 322 +++++++++++++++++++++++++++++++=
-++++++-
-> > >> > >  1 file changed, 321 insertions(+), 1 deletion(-)
-> > >> > >=20
-> > >> > > diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon=
-.c
-> > >> > > index 3db4d4b30022..c963bc5452ba 100644
-> > >> > > --- a/drivers/hwmon/iio_hwmon.c
-> > >> > > +++ b/drivers/hwmon/iio_hwmon.c
-> > >> > > @@ -8,6 +8,7 @@
-> > >> > >  #include <linux/slab.h>
-> > >> > >  #include <linux/mod_devicetable.h>
-> > >> > >  #include <linux/module.h>
-> > >> > > +#include <linux/notifier.h>
-> > >> > >  #include <linux/err.h>
-> > >> > >  #include <linux/platform_device.h>
-> > >> > >  #include <linux/property.h>
-> > >> > > @@ -15,7 +16,192 @@
-> > >> > >  #include <linux/hwmon.h>
-> > >> > >  #include <linux/hwmon-sysfs.h>
-> > >> > >  #include <linux/iio/consumer.h>
-> > >> > > +#include <linux/iio/events.h>
-> > >> > > +#include <linux/iio/iio.h>
-> > >> > >  #include <linux/iio/types.h>
-> > >> > > +#include <uapi/linux/iio/events.h>
-> > >> > > +
-> > >> > > +/* Protects iio_hwmon_listeners and listeners' refcnt */
-> > >> > > +DEFINE_MUTEX(iio_hwmon_listener_lock);
-> > >> > > +LIST_HEAD(iio_hwmon_listeners);
-> > >> > > +
-> > >> > > +/**
-> > >> > > + * struct iio_hwmon_listener - Listener for IIO events
-> > >> > > + * @block: Notifier for events
-> > >> > > + * @ids: Array of IIO event ids, one per alarm
-> > >> > > + * @alarms: Bitmap of alarms
-> > >> > > + * @num_alarms: Length of @ids and @alarms
-> > >> > > + * @indio_dev: Device we are listening to
-> > >> > > + * @list: List of all listeners
-> > >> > > + * @refcnt: Reference count
-> > >> > > + */
-> > >> > > +struct iio_hwmon_listener {
-> > >> > > +	struct notifier_block block;
-> > >> > > +	u64 *ids;
-> > >> > > +	unsigned long *alarms;
-> > >> > > +	size_t num_alarms;
-> > >> > > +
-> > >> > > +	struct iio_dev *indio_dev;
-> > >> > > +	struct list_head list;
-> > >> > > +	unsigned int refcnt;
-> > >> > > +};
-> > >> > > +
-> > >> > > +/**
-> > >> > > + * iio_hwmon_lookup_alarm() - Find an alarm by id
-> > >> > > + * @listener: Event listener
-> > >> > > + * @id: IIO event id
-> > >> > > + *
-> > >> > > + * Return: index of @id in @listener->ids, or -1 if not found
-> > >> > > + */
-> > >> > > +static ssize_t iio_hwmon_lookup_alarm(struct iio_hwmon_listener=
- *listener,
-> > >> > > +				      u64 id)
-> > >> > > +{
-> > >> > > +	ssize_t i;
-> > >> > > +
-> > >> > > +	for (i =3D 0; i < listener->num_alarms; i++)
-> > >> > > +		if (listener->ids[i] =3D=3D id)
-> > >> > > +			return i;
-> > >> > > +
-> > >> > > +	return -1;
-> > >> > > +}
-> > >> > > +
-> > >> > > +static int iio_hwmon_listener_callback(struct notifier_block *b=
-lock,
-> > >> > > +				       unsigned long action, void *data)
-> > >> > > +{
-> > >> > > +	struct iio_hwmon_listener *listener =3D
-> > >> > > +		container_of(block, struct iio_hwmon_listener, block);
-> > >> > > +	struct iio_event_data *ev =3D data;
-> > >> > > +	ssize_t i;
-> > >> > > +
-> > >> > > +	if (action !=3D IIO_NOTIFY_EVENT)
-> > >> > > +		return NOTIFY_DONE;
-> > >> > > +
-> > >> > > +	i =3D iio_hwmon_lookup_alarm(listener, ev->id);
-> > >> > > +	if (i >=3D 0)
-> > >> > > +		set_bit(i, listener->alarms);
-> > >> > > +	else
-> > >> > > +		dev_warn_once(&listener->indio_dev->dev,
-> > >> > > +			      "unknown event %016llx\n", ev->id);
-> > >> > > +
-> > >> > > +	return NOTIFY_DONE;
-> > >> > > +}
-> > >> > > +
-> > >> > > +/**
-> > >> > > + * iio_event_id() - Calculate an IIO event id
-> > >> > > + * @channel: IIO channel for this event
-> > >> > > + * @type: Event type (theshold, rate-of-change, etc.)
-> > >> > > + * @dir: Event direction (rising, falling, etc.)
-> > >> > > + *
-> > >> > > + * Return: IIO event id corresponding to this event's IIO id
-> > >> > > + */
-> > >> > > +static u64 iio_event_id(struct iio_chan_spec const *chan,
-> > >> > > +			enum iio_event_type type,
-> > >> > > +			enum iio_event_direction dir)
-> > >> > > +{
-> > >> > > +	if (chan->differential)
-> > >> > > +		return IIO_DIFF_EVENT_CODE(chan->type, chan->channel,
-> > >> > > +					   chan->channel2, type, dir);
-> > >> > > +	if (chan->modified)
-> > >> > > +		return IIO_MOD_EVENT_CODE(chan->type, chan->channel,
-> > >> > > +					  chan->channel2, type, dir);
-> > >> > > +	return IIO_UNMOD_EVENT_CODE(chan->type, chan->channel, type, d=
-ir);
-> > >> > > +}
-> > >> > > +
-> > >> > > +/**
-> > >> > > + * iio_hwmon_listener_get() - Get a listener for an IIO device
-> > >> > > + * @indio_dev: IIO device to listen to
-> > >> > > + *
-> > >> > > + * Look up or create a new listener for @indio_dev. The returne=
-d listener is
-> > >> > > + * registered with @indio_dev, but events still need to be manu=
-ally enabled.
-> > >> > > + * You must call iio_hwmon_listener_put() when you are done.
-> > >> > > + *
-> > >> > > + * Return: Listener for @indio_dev, or an error pointer
-> > >> > > + */
-> > >> > > +static struct iio_hwmon_listener *iio_hwmon_listener_get(struct=
- iio_dev
-> > >> > > *indio_dev)
-> > >> > > +{
-> > >> > > +	struct iio_hwmon_listener *listener;
-> > >> > > +	int err =3D -ENOMEM;
-> > >> > > +	size_t i, j;
-> > >> > > +
-> > >> > > +	guard(mutex)(&iio_hwmon_listener_lock);
-> > >> > > +	list_for_each_entry(listener, &iio_hwmon_listeners, list) {
-> > >> > > +		if (listener->indio_dev =3D=3D indio_dev) {
-> > >> > > +			if (likely(listener->refcnt !=3D UINT_MAX))
-> > >> > > +				listener->refcnt++; =20
-> > >> >=20
-> > >> > I dunno for the above to ever happen :). =20
-> > >>=20
-> > >> Well, I can remove it if you like.
-> > >>  =20
-> > >> > And as Andy stated, let's just use proper refcount APIs. =20
-> > >>=20
-> > >> No point in using atomic ops if they are only accessed under a mutex=
-. =20
-> > >=20
-> > > Not the point... If there are proper APIs for handling things like th=
-is, not sure why
-> > > not using and then coming up with things like the above? And the same=
- goes to the
-> > > release path. =20
-> >=20
-> > The API is for doing reference counts *atomically*. If you do not need
-> > atomic reference counting, then it is the *wrong* API. I suggest readin=
-g =20
->=20
-> Well, It won't make your code wrong. It's just about re-using what we hav=
-e already.
-> But my main complain was about having your own saturation checks in here.
-> I also dislike the release path where you do have to explicitly check for=
- 0 to
-> call the cleanup API. That is all handled already. Not to mention that it=
- is a fairly
-> common pattern to use these APIs even if you don't really __need__ it's a=
-tomicity.=20
->=20
-> > the block comment at the beginning of refcnt.h to see the sorts of
-> > contortions it has to go through because it is an atomic API. Since we =
-=20
->=20
-> And? It's very well hidden in the API... This is also not a fastpath at
-> all so performance is also not a concern AFAICT.
->=20
-> Up to the maintainers anyways but I cannot say I agree with it. So, I
-> guess we can agree in disagreeing :)
+Add support for the ROG STRIX Z790-I GAMING WIFI board
 
-I'd prefer using the standard refcount API.  Sure it's not a performant
-choice in all cases, but it wins on basis of familiarity and reduced
-burden to review and maintenance.
+Signed-off-by: Jamie Vickery <j.a.d.mcmillan@gmail.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-Jonathan
-
->=20
-> - Nuno S=C3=A1
->=20
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 49f6cac63d19..bedddb6bf9e1 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -36,6 +36,7 @@ Supported boards:
+  * ROG STRIX Z490-F GAMING
+  * ROG STRIX Z690-A GAMING WIFI D4
+  * ROG STRIX Z790-E GAMING WIFI II
++ * ROG STRIX Z790-I GAMING WIFI
+  * ROG ZENITH II EXTREME
+  * ROG ZENITH II EXTREME ALPHA
+  * TUF GAMING X670E PLUS
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 33c5fcb0a09e..e2f7b8705cb1 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -329,6 +329,8 @@ static const struct ec_sensor_info sensors_family_intel_600[] = {
+ static const struct ec_sensor_info sensors_family_intel_700[] = {
+ 	[ec_sensor_temp_t_sensor] =
+ 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x01, 0x09),
++	[ec_sensor_temp_t_sensor_2] =
++		EC_SENSOR("T_Sensor 2", hwmon_temp, 1, 0x01, 0x05),
+ 	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x33),
+ 	[ec_sensor_fan_cpu_opt] =
+ 		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+@@ -593,6 +595,13 @@ static const struct ec_board_info board_info_strix_z790_e_gaming_wifi_ii = {
+ 	.family = family_intel_700_series,
+ };
+ 
++static const struct ec_board_info board_info_strix_z790_i_gaming_wifi = {
++	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_T_SENSOR_2 |
++		SENSOR_TEMP_VRM,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PC00_LPCB_SIO1_MUT0,
++	.family = family_intel_700_series,
++};
++
+ static const struct ec_board_info board_info_zenith_ii_extreme = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+ 		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+@@ -689,6 +698,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_z690_a_gaming_wifi_d4),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-E GAMING WIFI II",
+ 					&board_info_strix_z790_e_gaming_wifi_ii),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-I GAMING WIFI",
++					&board_info_strix_z790_i_gaming_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+ 					&board_info_zenith_ii_extreme),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
+-- 
+2.50.1
 
