@@ -1,67 +1,67 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0085C2040BF;
-	Mon,  4 Aug 2025 15:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F651DF269;
+	Mon,  4 Aug 2025 20:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754323154; cv=none; b=r2ziU3K2+CxY1BBA4ldTJXfFcJCOqzdvZkD3gO1uss7+Tq2Z23ecEFhsIy8cucFHItvgRTSSxe4MCBPVB20Ukfv5y/TqHTxTFSIhMg70U8nf2a8vkbodGN1jbMyCCKJeCShIxjcOep9gVzhur8t+zyGZ/FohlmHg+3S3tNOZEcw=
+	t=1754337883; cv=none; b=o88mL4hRbqPyrBT91jXmsC/1ecPXKBlWc08N8vuVXIF6WxxCc4roXQZmCuD/7w5QiHAPLt+gxlqH53t2ZaPpjp9vw/5ZCbo18kSyZjB9idagbLKxU4VVDn/asd/cKGSBqMW/AT2s9LzVqdSVEUS+e5PUAK4sCb8ABC2h7SOX6pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754323154; c=relaxed/simple;
-	bh=sd1DyY6a3415VkW6baLPe78I+RH8CXZI1Y8mTPQ+22M=;
+	s=arc-20240116; t=1754337883; c=relaxed/simple;
+	bh=3JnDN78WrfnZWJWtSIV7R9SRd17J/zoR9Ql27uVe750=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qurcWxcjAZTTU0MCoO0rcQ0ia3ndH5unRL0qntsktohfUEmOhLdCSiJ5GdhdwhHmQBgqzTGzA1j5H6Sb0R9jYGG2uH1uR77aAtlGOr/qqezR/hqP/iBvvBsA5ZiKkpF16lS6y5P/jKdPTCGRWa+6MYOVpLC4PuHhktNR86uZcQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DZeOAckk; arc=none smtp.client-ip=209.85.210.170
+	 In-Reply-To:Content-Type; b=DSGw2lun0YZsUX0UPxFSf5PL+yHAGrJ7R5bNOgDSs3lGsg8i2hBGJ23YtgrYaptz0JwUhEIWl0NBJ1B4HMmlJKNWQPSXyuCGrsp8aHKpUqaicKhD5EcGxHGCMQspeDt5woAGoR8fKhA3iO7lxzI1dzLhBVWqNEELx0BZh7zgzCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzHcTOkF; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DZeOAckk"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-76bd6e84eddso4396863b3a.0;
-        Mon, 04 Aug 2025 08:59:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzHcTOkF"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76be6f0557aso3767391b3a.1;
+        Mon, 04 Aug 2025 13:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754323152; x=1754927952; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754337880; x=1754942680; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3D7R9Rrhve+hM9PUIlOpvhIjLJ/daYnHplpqSry3RH0=;
-        b=DZeOAckkqx54sPj2QecnVdkeWOoNT/uf9s0J+j1cL8zdYtRlu4wtvMCT+sjZdM4pBK
-         lENSR1XkY9xXLku3eyAVjva5jgUoyPButjzfhDJ64Ek4uqNcmYE18Jk2nvYXZRlgXlAs
-         /GB729PNT48IgIk7hT6xqQzS9UQGkVfjJW9nz5sYu7Us98HKSCFStu4nnmEnikdcAsiQ
-         nvihj0fxLGYOJfBoq3BMApiuWFqx/Q7fBMJgo+CIqYzfFXdydf93cGr5pGRd4Fsg0tLj
-         B+hEEOQLxf12z+sbtTQ803PVPMtBdKZOk/BcHlZVHUGLqmlGIHAUr/EAs51AsVM0ySFP
-         Enpg==
+        bh=UiNURBeCZRtjyUOF4LcRm0B/3/jOgkj+XXz6sErzrek=;
+        b=RzHcTOkFSC+cY3FA7PyfFBqucXRrnvkI1v4y/Doua/C1JKUfeFem3Yk95aRnn8Pl/0
+         +mGkqTs77yUKKVhMX/BilVuRD3wKX7T4/M9h+3NnT0hKGr0qw7u0l7wNK3W+cE1qAzY2
+         XlERRsjfh7C1XR+qfwYbDGig7m7ATmYZYi/12mMRVyBsQ1Tsv4IpqI0b97yb9cDstsph
+         NFtZLLzek27lTKpjZDgkOHaNCDCjG83MSqRE8/UuSmnGPMAYw6cvv+M5TUO5fZAOVh5n
+         gor/VT4PlW9ruG8Hf3qjAEEypVTxj6FuKy81hWdX+b5ZT5IdZ7h7Kmg+qD2q7kTX5I08
+         XYgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754323152; x=1754927952;
+        d=1e100.net; s=20230601; t=1754337880; x=1754942680;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3D7R9Rrhve+hM9PUIlOpvhIjLJ/daYnHplpqSry3RH0=;
-        b=o1wlqCpCmZ8oYOZDfJ1E47Po6svZdpgVQM9uu8fvjwdKx3DPQRnYOsWezk5VqJXrEL
-         nAyFXKQEw6a81AehbArHTPeMMHUZoe6imFwOiIeR6E2G3JySLOZ8704kyKhmLyTKrnt8
-         wahMmjQZwOsjwNL/8qlCkyAISiWq4xSrW9HkicousGMZeIGbwrOABjPXK+4+hBc2C5bO
-         c9AKprZezYwrz5UTWNl7An0ipCediO2lwPikIcisJGtE1iZMesOqtzJ9B0q3j2LekGH5
-         vXmY3n7n7V+eVC7tmWXAF+/ZEYlDEBBz+c0ywkcDzkf+IdKZILLbjTLmNIw8dSSN62Y2
-         OB8A==
-X-Forwarded-Encrypted: i=1; AJvYcCV2bF1qEyxvfS9rZwdO3y5rlGXQeyHf9LtnPryU57PfnderUv+Pqsm19wWIPXKj9qETQ8Yy0yASDzYQ@vger.kernel.org, AJvYcCWU61isSw0g+mnUKWoGVUQKNAG/kZZ2VIzOAMN6VJ6DJmDvnw/KPy/kjQn01RT8z9NcJSK61VDg+WFkuE57@vger.kernel.org, AJvYcCX8283uotJHtbl2rwHiZuCi1y/iFCvHFk7/q3pwnYEB+LVUezHbgG3QuX0wTNExXBOOtXV8M/O6Pj9XitM=@vger.kernel.org, AJvYcCXp0uoCaVa4O+Zgn5G0hwuL9COGqUjJ9f/HrD4bdkUVgf52s1QihodAaCx25tz2dl3hGSHgmt98qZey@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbOPbX5omS4VptUGJurtTtXDC+dIxgRk2FC8TIVWy2u2OBkKKa
-	LjGFpb1MbdmWlyWCs01apq46WTKUALRMERXPU/luODevGbeMC2iCII5Q
-X-Gm-Gg: ASbGncufoMiLhfi4dKvIEqJhCezPJnMwlLV3XhOz3ejzYJ4dW9WSC7JvlwJCSVBv64T
-	IPIybvOZlq5PPVjrPE7PI0hhB2ctne4eRgmSJrPgYOZfkhI9YeESwHvpzhpXyfDY2fe4FygUsaO
-	2MA2l4ICbiUMA6HH+RYEaX2qJHI7OX/qefS1IGfnOl+txB0ZCQ1myu36dML9sgGta5kBQbER4dI
-	mM8S/Qx/QMkZWAoFwYUNK5xcJALdMIKNaDxSWzFrK9tr2LBKsiyjHVnkBjAHYsk0OFbmRht8xJ/
-	kP0GrPFlqAfQg+cQvoaF7uZiPMEcGzRSkPYJuWOf9EvD5T+mngfCxeHb3u20Cy+4uCsqAKlEf9Z
-	qj+yyGRuCByIg2rqklabpgtjYg6q2w8ydZ6KHlIpWVgN/qErXvkq8N+Xw3SDHLU+sKUPNZ8Y=
-X-Google-Smtp-Source: AGHT+IFIjfh7+B5gIa+W7wBeAos+g9NcG4vkouxm4nYWg0auWlvWAzh5TCtv529Y+kQX/Tuai8CTqw==
-X-Received: by 2002:a05:6a20:b598:b0:23f:fd87:427c with SMTP id adf61e73a8af0-23ffd875051mr8683696637.18.1754323152281;
-        Mon, 04 Aug 2025 08:59:12 -0700 (PDT)
+        bh=UiNURBeCZRtjyUOF4LcRm0B/3/jOgkj+XXz6sErzrek=;
+        b=QOsnSyQ5PFMxgMBbqrbTbrTEp0zZ/Pi0voVqaDxdeWFY13kDjrGaogd2FT5CHHNDd4
+         MS62nZcrDXoz2NW05V2Ls2JI53z4LmGW1KwpySP7dCWyja0GkHtgc+VdWbPwc7cQ0tOS
+         VJYxbFz0xX2cDXOo9Wt98hCPPwAhde0EiCTYnH7T6ZtJwUCmB5GnTtl6f2Cxv7KKeYyg
+         zeSuaBHcSiy7VRufqshgJHweBJ8NxvBcW5glA0GEqDJseKEx8HWW5WCVbHynIJ/tBsdR
+         qVEVuk15rm916UXhn/U+lKIAh7NkL3HjwHk7V53aeUkCQqTSlYBEedt6BM+RU32aOQ6x
+         3BkA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Mvf/6E9hF4nYqIxvQoV/VE6Tznxbx0JnatLxwYaq1XNVX/UKQpuRkaSv1Z0fag8AQYz5fgaQpWMk@vger.kernel.org, AJvYcCVMOVqDbUrQEYrOfdqLrZ0pAIQ5k7welkMZYJhF6w9hM+9CzVKpnIStV1fSAb+Ebpiv/mmkitpCRTMBiuE=@vger.kernel.org, AJvYcCWHQzaP3FzevXYv8qWYe1q9NFkQNwakiL0F7WLHsyLuGLVHqw7+zym28ehmRy5wVSs/+9wlVqM1sUGJ@vger.kernel.org, AJvYcCWM+L3BRebkhVS97Nv2vyw6u+ZwoiXffMxzUfxwbzDB28ycJUS1giEO5JU1dSGo5CS+xPZmPpAWkzPA8PNo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj/UKLXeX7zu74hba1R2Jub5mqVTG0PFglCsjsJHKe2rTh1U3t
+	SLJDIgzTIlXAi3sKZKIOoy3Yx6P6d0QHqnbFQuufEJmN8PdwprvEIuou
+X-Gm-Gg: ASbGncuJ4wCAkynWVirUs1QRBYd+Jq+xIANQMM6RLm7IS8cajYUJe11b10PsrWlrFuN
+	w4ohk0q4Fuxo1hwSVEEhl5DZgbOJn6eoHQeG7+LO8/kD5PHXlMpU2QOZvS1nDJcxXN2m/OXAyVG
+	4Cb71r9oGf38I6Ru07GCwB0rV/m30FV3ELUh5TYdMBneO73Ad2qKNa/EfbQ2Cu/SH5EGcasKi80
+	14lfgAUlf//7uiVyGGJ1eL/aTPw9jNTpktW+/vs1fEWcbb0aLmQsl8fmDICTagm/tlE82NZyQIt
+	I0n35tteUVueo/Sb4SMGjIkPmTh1B9ch8NQNJZDgSp+jpUwoYRtb1SP/ZLj9EKOxTZ3sZqbUnOK
+	MN4eO0zhpATXjnZVVSquZw1uEQH0wTmCj/yxH2PdGs6bzk+f1keGSzuXsVgBngKDjulMXPKM=
+X-Google-Smtp-Source: AGHT+IH//JQtMHwA4N4hGM4nrXBP60Uld/nm+3iZkbP/di+mf6/ZQfZ8q+Q3IC2oGGytuewUCbu/Sw==
+X-Received: by 2002:a05:6a20:a11f:b0:240:75c:6f40 with SMTP id adf61e73a8af0-240075c7f41mr9526027637.14.1754337880107;
+        Mon, 04 Aug 2025 13:04:40 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b422b7ceb3fsm9293138a12.22.2025.08.04.08.59.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bfc270514sm4451375b3a.12.2025.08.04.13.04.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Aug 2025 08:59:11 -0700 (PDT)
+        Mon, 04 Aug 2025 13:04:39 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <48996ed0-8d5f-4bb0-ab66-8be71c0a59e4@roeck-us.net>
-Date: Mon, 4 Aug 2025 08:59:09 -0700
+Message-ID: <65d6635c-dc16-4462-96f7-9b82c49f5673@roeck-us.net>
+Date: Mon, 4 Aug 2025 13:04:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +69,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: adm1275: add sq24905c support
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/adm1275) add sq24905c support
 To: ChiShih Tsai <tomtsai764@gmail.com>, linux-hwmon@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org
 Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, corbet@lwn.net, t630619@gmail.com
 References: <20250804124806.540-1-tomtsai764@gmail.com>
- <20250804124806.540-2-tomtsai764@gmail.com>
+ <20250804124806.540-3-tomtsai764@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,79 +122,192 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250804124806.540-2-tomtsai764@gmail.com>
+In-Reply-To: <20250804124806.540-3-tomtsai764@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/4/25 05:48, ChiShih Tsai wrote:
-> Add support for sq24905c Hot-Swap Controller and Digital Power Monitor.
+> Add support for sq24905c which is similar to adm1275 and other chips
+> of the series.
 > 
 > Signed-off-by: ChiShih Tsai <tomtsai764@gmail.com>
 > ---
->   .../bindings/hwmon/adi,adm1275.yaml           | 20 +++++++++++++++++++
->   1 file changed, 20 insertions(+)
+>   Documentation/hwmon/adm1275.rst | 24 ++++++++++++++++--------
+>   drivers/hwmon/pmbus/Kconfig     |  5 +++--
+>   drivers/hwmon/pmbus/adm1275.c   | 27 +++++++++++++++++++--------
+>   3 files changed, 38 insertions(+), 18 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> index ddb72857c846..6aa300086c84 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -30,6 +30,7 @@ properties:
->         - adi,adm1281
->         - adi,adm1293
->         - adi,adm1294
-> +      - silergy,sq24905c
+> diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
+> index 57bd7a850558..914f009f34e0 100644
+> --- a/Documentation/hwmon/adm1275.rst
+> +++ b/Documentation/hwmon/adm1275.rst
+> @@ -67,6 +67,14 @@ Supported chips:
 >   
->     reg:
->       maxItems: 1
-> @@ -46,6 +47,18 @@ properties:
->       $ref: /schemas/types.yaml#/definitions/uint32
->       enum: [1, 2, 4, 8, 16, 32, 64, 128]
+>       Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1293_1294.pdf
 >   
-> +  silergy,volt-curr-sample-average:
-> +    description: |
-> +      Number of samples to be used to report voltage and current values.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8, 16, 32, 64, 128]
+> +  * Silergy SQ24905C
 > +
-> +  silergy,power-sample-average:
-> +    description: |
-> +      Number of samples to be used to report power values.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8, 16, 32, 64, 128]
+> +    Prefix: 'sq24905c'
 > +
->   allOf:
->     - $ref: hwmon-common.yaml#
->     - if:
-> @@ -96,12 +109,17 @@ allOf:
->                 - adi,adm1281
->                 - adi,adm1293
->                 - adi,adm1294
-> +              - silergy,sq24905c
->       then:
->         properties:
->           adi,volt-curr-sample-average:
->             default: 128
->           adi,power-sample-average:
->             default: 1
-> +        silergy,volt-curr-sample-average:
-> +          default: 128
-> +        silergy,power-sample-average:
-> +          default: 1
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.silergy.com/download/downloadFile?id=5669&type=product&ftype=note
+> +
+>   Author: Guenter Roeck <linux@roeck-us.net>
 >   
+>   
+> @@ -74,14 +82,14 @@ Description
+>   -----------
+>   
+>   This driver supports hardware monitoring for Analog Devices ADM1075, ADM1272,
+> -ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM1294 Hot-Swap
+> -Controller and Digital Power Monitors.
+> +ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, ADM1294, and SQ24905C
+> +Hot-Swap Controller and Digital Power Monitors.
+>   
+> -ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and
+> -ADM1294 are hot-swap controllers that allow a circuit board to be removed from
+> -or inserted into a live backplane. They also feature current and voltage
+> -readback via an integrated 12 bit analog-to-digital converter (ADC), accessed
+> -using a PMBus interface.
+> +ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293,
+> +ADM1294 and SQ24905C are hot-swap controllers that allow a circuit board to be
+> +removed from or inserted into a live backplane. They also feature current and
+> +voltage readback via an integrated 12 bit analog-to-digital converter (ADC),
+> +accessed using a PMBus interface.
+>   
+>   The driver is a client driver to the core PMBus driver. Please see
+>   Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> @@ -160,5 +168,5 @@ temp1_highest		Highest observed temperature.
+>   temp1_reset_history	Write any value to reset history.
+>   
+>   			Temperature attributes are supported on ADM1272,
+> -			ADM1273, ADM1278, and ADM1281.
+> +			ADM1273, ADM1278, ADM1281 and SQ24905C.
+>   ======================= =======================================================
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 55e492452ce8..7485bc6b2e8a 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -51,8 +51,9 @@ config SENSORS_ADM1275
+>   	tristate "Analog Devices ADM1275 and compatibles"
+>   	help
+>   	  If you say yes here you get hardware monitoring support for Analog
+> -	  Devices ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281,
+> -	  ADM1293, and ADM1294 Hot-Swap Controller and Digital Power Monitors.
+> +	  Devices ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278,
+> +	  ADM1281, ADM1293, ADM1294 and SQ24905C Hot-Swap Controller and
+> +	  Digital Power Monitors.
+>   
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called adm1275.
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index 7d175baa5de2..1c032aaac379 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -18,7 +18,8 @@
+>   #include <linux/log2.h>
+>   #include "pmbus.h"
+>   
+> -enum chips { adm1075, adm1272, adm1273, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
+> +enum chips { adm1075, adm1272, adm1273, adm1275, adm1276, adm1278, adm1281,
+> +	 adm1293, adm1294, sq24905c };
+>   
+>   #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
+>   #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
+> @@ -486,6 +487,7 @@ static const struct i2c_device_id adm1275_id[] = {
+>   	{ "adm1281", adm1281 },
+>   	{ "adm1293", adm1293 },
+>   	{ "adm1294", adm1294 },
+> +	{ "MC09C", sq24905c },
 
-I personally don't think this warrants new properties. However, if warranted,
-this needs to be qualified to only apply for the Silergy parts.
+mc09c (lower case). But how did you test this ? This seems to be intended to match
+PMBUS_MFR_MODEL, but it is not the ID suggested in devicetree properties
+(silergy,sq24905c). It seems to me that the match code in the probe function needs
+to be modified to handle situations where PMBUS_MFR_MODEL does not match the
+device id.
 
-Guenter
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(i2c, adm1275_id);
+> @@ -533,8 +535,10 @@ static int adm1275_probe(struct i2c_client *client)
+>   		return ret;
+>   	}
+>   	if (ret != 3 || strncmp(block_buffer, "ADI", 3)) {
+> -		dev_err(&client->dev, "Unsupported Manufacturer ID\n");
+> -		return -ENODEV;
+> +		if (ret != 2 || strncmp(block_buffer, "SY", 2)) {
+> +			dev_err(&client->dev, "Unsupported Manufacturer ID\n");
+> +			return -ENODEV;
+> +		}
 
->   required:
->     - compatible
-> @@ -121,5 +139,7 @@ examples:
->               shunt-resistor-micro-ohms = <500>;
->               adi,volt-curr-sample-average = <128>;
->               adi,power-sample-average = <128>;
-> +            silergy,volt-curr-sample-average = <128>;
-> +            silergy,power-sample-average = <1>;
->           };
->       };
+Combine to a single if statement.
+
+	if ((ret != 3 || strncmp(block_buffer, "ADI", 3)) &&
+	    (ret != 2 || strncmp(block_buffer, "SY", 2))) {
+		dev_err(&client->dev, "Unsupported Manufacturer ID\n");
+		return -ENODEV;
+	}
+
+
+>   	}
+>   
+>   	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+> @@ -558,7 +562,8 @@ static int adm1275_probe(struct i2c_client *client)
+>   
+>   	if (mid->driver_data == adm1272 || mid->driver_data == adm1273 ||
+>   	    mid->driver_data == adm1278 || mid->driver_data == adm1281 ||
+> -	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
+> +	    mid->driver_data == adm1293 || mid->driver_data == adm1294 ||
+> +	    mid->driver_data == sq24905c)
+>   		config_read_fn = i2c_smbus_read_word_data;
+>   	else
+>   		config_read_fn = i2c_smbus_read_byte_data;
+> @@ -708,6 +713,7 @@ static int adm1275_probe(struct i2c_client *client)
+>   		break;
+>   	case adm1278:
+>   	case adm1281:
+> +	case sq24905c:
+
+That suggests compatibility to ADM1278 and ADM1281, not ADM1275.
+That should be mentioned in the description.
+
+>   		data->have_vout = true;
+>   		data->have_pin_max = true;
+>   		data->have_temp_max = true;
+> @@ -786,9 +792,12 @@ static int adm1275_probe(struct i2c_client *client)
+>   		return -ENODEV;
+>   	}
+>   
+> -	if (data->have_power_sampling &&
+> +	if ((data->have_power_sampling &&
+>   	    of_property_read_u32(client->dev.of_node,
+> -				 "adi,power-sample-average", &avg) == 0) {
+> +				 "adi,power-sample-average", &avg) == 0) ||
+> +	    (data->have_power_sampling &&
+> +	    of_property_read_u32(client->dev.of_node,
+> +				 "silergy,power-sample-average", &avg) == 0)) {
+
+Checking for have_power_sampling twice just makes the code unnecessarily complex.
+
+Also, if it is really even acceptable to have two properties for the same
+function, there will need to be a validation to ensure that only the
+"correct" one, based on the chip type, is used.
+
+>   		if (!avg || avg > ADM1275_SAMPLES_AVG_MAX ||
+>   		    BIT(__fls(avg)) != avg) {
+>   			dev_err(&client->dev,
+> @@ -804,8 +813,10 @@ static int adm1275_probe(struct i2c_client *client)
+>   		}
+>   	}
+>   
+> -	if (of_property_read_u32(client->dev.of_node,
+> -				"adi,volt-curr-sample-average", &avg) == 0) {
+> +	if ((of_property_read_u32(client->dev.of_node,
+> +				"adi,volt-curr-sample-average", &avg) == 0) ||
+> +	    (of_property_read_u32(client->dev.of_node,
+> +				"silergy,volt-curr-sample-average", &avg) == 0)) {
+>   		if (!avg || avg > ADM1275_SAMPLES_AVG_MAX ||
+>   		    BIT(__fls(avg)) != avg) {
+>   			dev_err(&client->dev,
 
