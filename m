@@ -1,76 +1,79 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F77244671;
-	Tue,  5 Aug 2025 11:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A6B26B74F;
+	Tue,  5 Aug 2025 12:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754392734; cv=none; b=IGkNC5bvjE1pSm3SBCpTsVYPgHud2ifNcIONkyrOsKWQ3b278iP37Z7g4UEtsEIB3GDmerc0hVcdFb9yvvKGqJfsU2NARhQOOKDBjrYgDJn0h4pgMxczUD7QVsahavHmgnnb2o+RwbR0lTuKnfrFtZJp5m33hADStsNGgs/od18=
+	t=1754397910; cv=none; b=O2+fJzJ8d2E3AXBPUezGUq+6X6Wch8bkty908HxYyNSzMwiV2mIu6DfNCPlqySNov7TITLt+dDP9TQEvkllE+VMx4A4AHl3L7Vc1rxKBF8LhdaHx9DfL7+J3EYcv9Q8jeZ4TyssgOfsbw3czMullAgS8Xyx9LC63fO2LF1b3pzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754392734; c=relaxed/simple;
-	bh=jGSh/LkL0X52CDO3zdkc5x7ncFnzPCmvG4RFuADPvdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IDvsNnBmHyWyfv+A6JDOs9958nPVjgva3V3mldUOcB+uEdJTKYoAicASC6D1fFScZkYDUxy84TOThIDuDL3bkmP9WUFHo5foIbfpOXgrBezn//PwFwkv/kC5E61A57BDeP9ZNwSQhxe3tXrLoyXOkdCS9p62IuHcw6vYIm4saoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FoE5ughg; arc=none smtp.client-ip=209.85.208.179
+	s=arc-20240116; t=1754397910; c=relaxed/simple;
+	bh=QFgU0/CEXFYbjzfNHUQQpLRcHVD1gPo38FsS7g+TlD0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pq4pYivPYyh/1OadTFLgbzWuZ+W6Ut1sD98RZz20Yz5H15NADbKa7XdT3ITaZXP4cNDVahk2Cq6J0uHTTR5r61wqpLZtvv+ohOtWcRwrR3LMWV/VyVZ06etQ3OpPL/I5DLdcfrt3KWwHjAbuQLciam5byHKxekybLj6uAwihoXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Im0fW9FI; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoE5ughg"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3323afe4804so37198621fa.0;
-        Tue, 05 Aug 2025 04:18:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Im0fW9FI"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7682560a2f2so5471730b3a.1;
+        Tue, 05 Aug 2025 05:45:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754392730; x=1754997530; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8yCdqk783l2O4FNUDcUuzsOge6j9py4J7WwVbdxRdP8=;
-        b=FoE5ughgi9v6V5Mhp5+oCEOzA07uK+pWYSvb+1RatGuAPFumuMmlRP9zR189qeO20a
-         GAUKqAohy6sNhefZSzSNllom1pZ9GMISNy9fQsu2HBsHdaOXmIav51vPhPUXMYNVl8lg
-         s4kSo0I52PNNJj2ADZEVhWrRc448jiEcYELVTahlihebYFT40OLy6UyPYNF5yFsLYCiU
-         f33hlxiQbktwX660HYJ8jvHWFuBgKow/HCFQQXqqD+MyOxaio42Uscx9cQzfOA8sMwVP
-         xD08uETxmYzY4qtnuOA2GfyHVsQB/yj3k5mFplU84GJvY2ldEkyWkWeEZ1IUsT7zokzK
-         rFxw==
+        d=gmail.com; s=20230601; t=1754397908; x=1755002708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHU/sFwd+Rac9PdQf2L/PVDjEFciLqd4WbjhsM3H5TI=;
+        b=Im0fW9FIs+IyYkyhdNgR4WYtmrRmYaHanbpro1R01Nf2cpY1KxlHD2ZeY+LZUSAA1/
+         dTNNlhq1oV1f84ZsDNcbLH/6hOcVyuBbd4uH+ANNsxHqDKWU6XeVErgmDjxvS59Cx2eT
+         SLhTtz3LNVe9dHiGWCXOMlaMs0nfNbkQvYyrfJkWvd8040IjYY0t39g7mQ41JKjCC2nM
+         RdelDb+eQ9tsvYqE9KqN1KihqnPt6papXOTK8dz7qWp/AkSlE0m5kCPtUc9UgBmanBU8
+         sw7+dTxLoZvu7t0KIisbePqgfLk+/KwbmJ3XIVzJ1UWTvBlaCxy+Tk4ka2L4Ncnym4rt
+         CwYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754392730; x=1754997530;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8yCdqk783l2O4FNUDcUuzsOge6j9py4J7WwVbdxRdP8=;
-        b=cp83LY0fhYqJwn4SKIASQpfb+k5XUMqrpOcHbRqwgcBG3TGTwPNYmnPkp2uKlEf1tl
-         4bUr4ScvLC5EU4hRboEmPkZ6u/qKJ9wapiqPVH1awhB/H835tYHrYenfvj3Sw/Kk/LxZ
-         OZzkH8D7qCa9kU2kZrkaRjMS4W06ghWx3NYCmYp4CG91Z05727LWU49IgHzUOzD9ogiR
-         9/zJRAB0esX2oX029aGRcVXjeVI9WyNDq7qMdR55POKa41Mjrl1+nq3BsFytdDGhX5uP
-         2UsWshNaqelCpTO+cszouL1sSSgl9Ol0aW2wmCzuwrC73PBCMkp0g1Tt+aKU2WfGzjwo
-         vIeg==
-X-Gm-Message-State: AOJu0YyFlDo1E7szh0HyocnJlJmPqScGNf71LnqBd/sQQG9EtaDbqUTe
-	jZHUSamSOEDuscaKrgAuxK4pE6+BdJFmIQDxZl6M1ljBIAfKTLg2ZZfePHsIFYSIW4GmtA==
-X-Gm-Gg: ASbGnctyE+pJwi9knlzgstTRcC+v84NmrxKb3rRCHcPv2CTGPUvw1aXTWEmzXzz7WBb
-	vYMJAgbClH+RTLJoL/kmx3x2dcWPSy+2KMSywFkJbgIDPx8eOh11xh4K0vvVAGzfv1CB0m1n2Ci
-	oMQgoIy5LeQGsOCbKgu3UYnvwyZGfebaXF/44vdOi+9z6qhR/NYWLXjxZjgg/SrVHHhfqo+e9NM
-	EF8GR3fy5F2/GpvzFB/fgpxwhf5ElSvcLqLi/mVz29/OafA/FT7vb//ky25u4MKWQbuB18UBdON
-	vriE4hcpGnvYzjouFCbCg5aWTRXzHyZejXuQ745Ue9Vcu2KQs/6sIAKgvi72jtVDQ37JFzyEUOB
-	eSoDntS3Cu8X34URJ9pT4T64T
-X-Google-Smtp-Source: AGHT+IEpp1BefhuhwHK1MIo7yV8oheN+yGj7341Ufa/EQ+BfNJT1WPhhIIywRubZ1rjsUROQ6rVqtg==
-X-Received: by 2002:a05:651c:2108:b0:332:362c:c775 with SMTP id 38308e7fff4ca-3325632d466mr31689691fa.0.1754392729954;
-        Tue, 05 Aug 2025 04:18:49 -0700 (PDT)
-Received: from artem-pc.. ([88.201.168.202])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-332382a9054sm19367161fa.28.2025.08.05.04.18.49
+        d=1e100.net; s=20230601; t=1754397908; x=1755002708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHU/sFwd+Rac9PdQf2L/PVDjEFciLqd4WbjhsM3H5TI=;
+        b=CM7+kSpO2ARrSvOMOzyz6M5VE8IgX0RHj/DH5tDw/4uhppGxsLobIw5pjakqHevIhF
+         /VkdfOwI2+TSwAJvNVAwTV0UHViTP4geQopJ9l4SQHos9nJFhkgDY33P1MSEiu4fNvKk
+         hg20bLZbFoy1Ggxk7rrcOtsSY0HuuXExli9OKRp/QDulfrGASK2pSBym/F4u3fm41sep
+         Dmzjq5uUS49wYXtr2pdmmefMFje8tLZPANZs9XquLKMipMTXDvn888b4kJWopIPFBZNQ
+         dCNBlhPad0/THjvmLCKRfVOUeUPIYJHm3V1dA30AcvPXshqimLR1sgq2tFCgHcPCNQ/o
+         7ZSA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2SYFVPetxNKvIsjk3+duQXb7sou/KpUjhFp7e84sfr9knQvSqUC8MNUlAcZC939/AZLjT4BLUbRGp@vger.kernel.org, AJvYcCV6j/Hcv5BnjsHJ80skLFL9XOx7lu7LIoD2d6xO3qzPJG62/c8ESnvAd4zmnxTsmrXBg7DYTUjLOUyV4/DY@vger.kernel.org, AJvYcCXR6bJrcEQ7JnRQrD4AEC9mAwEnhO2WUDp7MDsoz9WLU/MzFsGfNts1+ob02OrBfrlL9/TOa85LMynm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0i1st99UvofGEi2KJqF/YXmLCYtOzC5OfcQgUQt9G+P6ApWbm
+	HFgs00pXxaTfMHFGbbWy6/4PFKJaQNYApHcOosc+6t406t34zMcw7bf987xKUA==
+X-Gm-Gg: ASbGncumjQCV1+jaGce5RldB6aE2LT3fE/p1cjKVEmztRVgzRlrLfwcvI2bJS2Wh2V5
+	OfVo3PvFA52/vLTkHmv47TI7ksRy+Cesf8YCgpY7wnxD+6DYt43HajnD/z93HnqMKW2Qiam/VJj
+	m8O3kPzf6Y8K3e/jYJ8uMbKyDBZNzPNPPXTH3jP8jlE4BxNuFTuWPVvFjh/4f9uA2mM0Ecy0tvI
+	QqZmbTT/VCsqnbtCGsIJuV01Gbf6S2vkNICN0D+H9eaAYpa/nu+JY55jisqrgCMaKcbZ4DikAnB
+	upPnvlwb2XTGzIohLydFahsAULDKhNNd3AOm3k/sO3CH4wYLgUVmPjXnXXc28i3FyZCRRI5FHHB
+	/Sv9e03mefcCJd1zubLZ1c9tcEcgsKO56dejUAdbTtvUo78w0+jNCeFXbS+qgUkL5CyErbqlAAh
+	Fc42m4
+X-Google-Smtp-Source: AGHT+IFZU6t8yN3IMYotfaHWUa+QR1XpcnQYfSCO3gsmE0HXqDAkGWrCCO0kkeAngrfHaDLMujCHFA==
+X-Received: by 2002:a05:6a21:33aa:b0:240:10d2:adf5 with SMTP id adf61e73a8af0-2401e9ffbb7mr5089018637.2.1754397908378;
+        Tue, 05 Aug 2025 05:45:08 -0700 (PDT)
+Received: from CNTWS00427A.itotolink.net (111-242-118-39.dynamic-ip.hinet.net. [111.242.118.39])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bccfcf523sm12959863b3a.90.2025.08.05.05.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Aug 2025 04:18:49 -0700 (PDT)
-From: Artyom Shimko <artyom.shimko@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	jdelvare@suse.com,
-	guenter.roeck@linux.com,
-	Artem Shimko <artyom.shimko@gmail.com>
-Subject: [PATCH v1 3/4] hwmon: scmi: Enhance error reporting with dev_err_probe
-Date: Tue,  5 Aug 2025 14:18:40 +0300
-Message-ID: <20250805111840.6472-4-artyom.shimko@gmail.com>
+        Tue, 05 Aug 2025 05:45:08 -0700 (PDT)
+From: ChiShih Tsai <tomtsai764@gmail.com>
+To: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	t630619@gmail.com,
+	ChiShih Tsai <tomtsai764@gmail.com>
+Subject: [PATCH v2 0/2] Add sq24905c support
+Date: Tue,  5 Aug 2025 20:44:47 +0800
+Message-ID: <20250805124449.15187-1-tomtsai764@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250805111840.6472-1-artyom.shimko@gmail.com>
-References: <20250805111840.6472-1-artyom.shimko@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,115 +82,23 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Artem Shimko <artyom.shimko@gmail.com>
+v2:
+ - Modify devicetree properties ID to silergy,mc09c
+ - Combine to a single if statement for MFR_ID.
+ - Add description, SQ24905C compatibility to the ADM1278
+ - Remove two silergy properties,re-use adi properties
+ - Link to v1: https://lore.kernel.org/linux-hwmon/20250804124806.540-1-tomtsai764@gmail.com/
 
-Replace error returns with dev_err_probe() throughout driver:
-- Add descriptive error messages for all failure cases
-- Include relevant context (sensor IDs, types etc)
-- Standardize error reporting format
+ChiShih Tsai (2):
+  dt-bindings: hwmon: adm1275: add sq24905c support
+  hwmon: (pmbus/adm1275) add sq24905c support
 
-Improved messages include:
-- "No valid sensor info for index %d"
-- "Failed to allocate channel info array"
-- "SCMI protocol ops not initialized"
+ .../bindings/hwmon/adi,adm1275.yaml           |  9 +++++++
+ Documentation/hwmon/adm1275.rst               | 24 ++++++++++++-------
+ drivers/hwmon/pmbus/Kconfig                   |  3 ++-
+ drivers/hwmon/pmbus/adm1275.c                 | 11 ++++++---
+ 4 files changed, 35 insertions(+), 12 deletions(-)
 
-Signed-off-by: Artem Shimko <artyom.shimko@gmail.com>
----
- drivers/hwmon/scmi-hwmon.c | 35 ++++++++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index d03174922e65..081502418dfa 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -240,26 +240,36 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 	struct scmi_protocol_handle *ph;
- 
- 	if (!handle)
--		return -ENODEV;
-+		return dev_err_probe(dev, -ENODEV, "SCMI device handle is NULL\n");
- 
- 	sensor_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_SENSOR, &ph);
--	if (IS_ERR(sensor_ops))
--		return PTR_ERR(sensor_ops);
-+	if (IS_ERR_OR_NULL(sensor_ops)) {
-+		if (IS_ERR(sensor_ops))
-+			return dev_err_probe(dev, PTR_ERR(sensor_ops),
-+					     "SCMI sensor protocol acquisition failed\n");
-+		return dev_err_probe(dev, -EPROTO,
-+				     "SCMI sensor protocol ops structure unexpectedly NULL\n");
-+	}
-+
-+	if (!sensor_ops->info_get || !sensor_ops->count_get)
-+		return dev_err_probe(dev, -ENOENT,
-+				     "SCMI sensor protocol operations are not initialized\n");
- 
- 	nr_sensors = sensor_ops->count_get(ph);
- 	if (!nr_sensors)
--		return -EIO;
-+		return dev_err_probe(dev, -EIO, "No sensors found\n");
- 
- 	scmi_sensors = devm_kzalloc(dev, sizeof(*scmi_sensors), GFP_KERNEL);
- 	if (!scmi_sensors)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate scmi_sensors structure\n");
- 
- 	scmi_sensors->ph = ph;
- 
- 	for (i = 0; i < nr_sensors; i++) {
- 		sensor = sensor_ops->info_get(ph, i);
- 		if (!sensor)
--			return -EINVAL;
-+			return dev_err_probe(dev, -EINVAL,
-+					     "Failed to get sensor info for sensor %d\n", i);
- 
- 		switch (sensor->type) {
- 		case TEMPERATURE_C:
-@@ -285,12 +295,12 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 	scmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*scmi_hwmon_chan),
- 				       GFP_KERNEL);
- 	if (!scmi_hwmon_chan)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate channel info array\n");
- 
- 	ptr_scmi_ci = devm_kcalloc(dev, nr_types + 1, sizeof(*ptr_scmi_ci),
- 				   GFP_KERNEL);
- 	if (!ptr_scmi_ci)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate channel info pointers\n");
- 
- 	scmi_chip_info.info = ptr_scmi_ci;
- 	chip_info = &scmi_chip_info;
-@@ -307,7 +317,8 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 			devm_kcalloc(dev, nr_count[type],
- 				     sizeof(*scmi_sensors->info), GFP_KERNEL);
- 		if (!scmi_sensors->info[type])
--			return -ENOMEM;
-+			return dev_err_probe(dev, -ENOMEM,
-+					     "Failed to allocate sensor info for type %d\n", type);
- 	}
- 
- 	for (i = nr_sensors - 1; i >= 0 ; i--) {
-@@ -336,7 +347,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 						     scmi_sensors, chip_info,
- 						     NULL);
- 	if (IS_ERR(hwdev))
--		return PTR_ERR(hwdev);
-+		return dev_err_probe(dev, PTR_ERR(hwdev), "Failed to register hwmon device\n");
- 
- 	for (i = 0; i < nr_count_temp; i++) {
- 		int ret;
-@@ -352,7 +363,9 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 		ret = scmi_thermal_sensor_register(dev, ph, sensor);
- 		if (ret) {
- 			if (ret == -ENOMEM)
--				return ret;
-+				return dev_err_probe(dev, ret,
-+						     "Failed to allocate memory for thermal zone\n");
-+
- 			dev_warn(dev,
- 				 "Thermal zone misconfigured for %s. err=%d\n",
- 				 sensor->name, ret);
 -- 
 2.43.0
 
