@@ -1,127 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B1D17BA9;
-	Tue,  5 Aug 2025 12:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9EFB23A99F;
+	Tue,  5 Aug 2025 12:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754397994; cv=none; b=COMPImHFzSqNw6AqMz6YR+UlSXcHFsAjC0/KKtF8PHtra4mOP3MCS4sGAKvDu2mQVCocTOWE1SnHNdzfmHsHDBzBnTxzubLzhkv/hr5OltHG0h/+oNoyPuBANahkB7pl/A/D/exKq7kz7r2E1WPKIrhbVKsR5/V/aQwNdma8pbg=
+	t=1754398213; cv=none; b=nAs23FXzPhRCZ60uuYrx8DI3jMlf1zPOcyHqBJdEd2pIemdTBjqXF8KJQFB6GCqDFIdkv9GxTb5Zf9PeBLvBBpKeyHsv7A2z3QUefs8vxczfsGMPuvjD2OJDYtkHHX7x3fOG0yikctoqdGkX7+RCeYV5id6MNSnjNU0f8sH/MeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754397994; c=relaxed/simple;
-	bh=QcCNjtZ8ljDHa+br/x98Jk8fa0gmUzucMn7T55a0Ci8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RmOmVtLptYfxfMzrzOYoolmAkwIGBH4ZtI7ARuR2IrX94NP4r2jESljMFRgLN2/KEClzjh4CLqncBITd2iLEvsIHjdh+T/JiRdYQEfagFtwtIYyaI4yjH8PPwW2ayIfkylxXB3S0RZZ10EztUL//6lqenYG/QSuGbrVunfcNP1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQmrItHN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754398213; c=relaxed/simple;
+	bh=HYFGiGOiSUnfoKjT4F1/vZj2dvxzcu0opq9E9gwXBsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nsZXbCdtRgv+ZXLi5lbsvTdZ7j/r04LwtfaIvb+rjJ+xkWUfU+Exqi4GWSmFvcmPYWehSdwimqXjvsJy9znL8e1b1veazWMLxV0X2ZDLYJ3x2UUdTnxZCl/RL7NCDMbu/brQKELM9nOPUoBDP+2x3S8mdztQK7Hieyf2L0FGm6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fv477/ge; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQmrItHN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBCEC4CEF0;
-	Tue,  5 Aug 2025 12:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754397993;
-	bh=QcCNjtZ8ljDHa+br/x98Jk8fa0gmUzucMn7T55a0Ci8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IQmrItHNA1v8UkW9nESLT9nCGQOKH+yEBrEHODnHFZ6Fepx/NH9PJ2g3orlaRYAX7
-	 K9Bcps4gqRvtEMP11G703j0XNB1n7GMgbTW5tk740hQK+h/P0GFcQjUE/ocmvIRCGR
-	 7fHgxdHqxW2mtBg/pYCmrbjSocb7BXfx8m9gld23KATp3NurJQaj069iQafM32pA/a
-	 l++uQcvSr9MSQvAVdx6VfBuT4IDCYMN5EU971dC/cK3IoVTcq9uCMl2nFuu8yV0Dll
-	 5eo0N9/6n7JCQuC0MpL1KQnXy78HTDvUilMuucSZhyaFjhzkKBcPBAhYhBuilkcF/W
-	 7YncGNL+q+5fw==
-Message-ID: <a0f97029-86f7-4a97-aa67-497ca6615e23@kernel.org>
-Date: Tue, 5 Aug 2025 14:46:28 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fv477/ge"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-604bff84741so9876182a12.2;
+        Tue, 05 Aug 2025 05:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754398210; x=1755003010; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g3tonMv/+aunt6CSmFsfgXxirymh+jqKr1o7hvSONko=;
+        b=Fv477/geeGk5rZCGHSB75LniKNIyL5xalZLi9T3dQPAz+PET+H2HUA5+x1FqW5X5Kd
+         CBA4/pAkoWWg5DiqGDMYTDdeCXF0gqPGP+fvXZF9MrbVeY1VUbMHjdGj5w3qaYYUp3ut
+         hw9B5gCRkDsC7LoKmjPZwczmA1engkUrrhel9c2dWOdq+1xJwYwnATUpHKHChTMWthCc
+         0L8ofxAwQlaIKwEZUSnymr7X3hbeMDI9s/O1dZndgBFBMh5tshjPniePvWaPT4//aW9n
+         hQXdy5TMgcYJaTzFDeHHjKjYc1aNgmAlINuABW6JIUYLUegOvKCekyRuaeCzBguDM2K/
+         H/dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754398210; x=1755003010;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g3tonMv/+aunt6CSmFsfgXxirymh+jqKr1o7hvSONko=;
+        b=VlFE8lIDh6m1gb7mpFMKE36jMHKEeqfUFlh/A2IfArhRxxVi9UlDZi0+0xQtplAWMx
+         tQSXHhBDN+M+7ZmnKu7tD5rU91vaDC2Bsx/J2ShgdocrzQkP0zgOfh9lbGbHpxMZxseM
+         hQno9bSTBT+i0NTbK/hYA7vsfsew6D/gf/NI8gzqZ9ee7eJEmT4GaH1wa2xScHh4x43Q
+         8gy138eBqUW6dh/FcRi73XXki7WaXb0VeqsPzi7c64J8Qeq/K3Pz73iRjxTisTeTCSMc
+         YjgUUgCkjs0wapJxks3FPYh9LCit8EUecqsRJqgiyiLs+kyjqRYcOp1AIPcxbN4JRh0P
+         pF9A==
+X-Forwarded-Encrypted: i=1; AJvYcCW/TcMhVZmJvxDgmhLXOfmi3HtxAfJjvDruR8w+sDPxP5WGLIQoVzu+HhIEnI9pFib83fzJvYEfyLlPxeQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCXcoQZmJsz9bXpk/fZDrZNP++NmnNhv8OuedqrPTnkwwgN+gZ
+	kDk/K+9lDS+2Ve6BmuT4d/KRs8setcp99rvB98zP15obGccVI0X+9fVlLQhbxFMrto6A6w==
+X-Gm-Gg: ASbGncswpCG3z/8a0SSaU4aGYDga13WSWPW5DMmn4nD2BvmvVpgxg74sTNXXxu0ymvG
+	VKrdunk+ZJsAYkZExL5B7zrzvC78kHnFVs4cEAj4cmCUOqZyhZATRDAm+lpOMQemjEzLXBjIojB
+	2wQxlizcBe/Q5pRwfsYkLEz8itCjXLxMsEYO3ZeCCcMMbvCUylyGYW1HFagsQqr02b5kxfIekoO
+	Akga5hxOGy99EFbyHaCddJdtLSPBmXegOZWVP2zPj/Skf8YX397qqZhR/1ffIyh47Jx5S3lGucd
+	pTQv7JW0OmWYXKg0qSL2NjoSAod1jrzAo93MF7Nc7y3f5u4jDbBR+4nf3d6XbU1EbHtBWqkgihm
+	oDPscG+Os43nPvn/1an6io1GJhkHZVKTxP92YHFez
+X-Google-Smtp-Source: AGHT+IHZeWclf40NyfxMIRfLvneUlanWcJxajeQg78a5w2tUuPINLmRS2vN/6U0umi8x6lhDmoQMZg==
+X-Received: by 2002:a05:6402:51ca:b0:615:f76:9408 with SMTP id 4fb4d7f45d1cf-615e718702emr11111442a12.32.1754398209596;
+        Tue, 05 Aug 2025 05:50:09 -0700 (PDT)
+Received: from artem-pc.. ([88.201.168.202])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615cc38aeccsm6811176a12.2.2025.08.05.05.50.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Aug 2025 05:50:07 -0700 (PDT)
+From: "a.shimko" <artyom.shimko@gmail.com>
+To: linux-hwmon@vger.kernel.org
+Cc: "a.shimko" <artyom.shimko@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	sudeep.holla@arm.com,
+	cristian.marussi@arm.com,
+	jdelvare@suse.com,
+	guenter.roeck@linux.com
+Subject: [PATCH v2 0/3] hwmon: scmi: Driver improvements and fixes
+Date: Tue,  5 Aug 2025 15:43:56 +0300
+Message-ID: <20250805125003.12573-1-artyom.shimko@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: adm1275: add sq24905c support
-To: ChiShih Tsai <tomtsai764@gmail.com>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net, t630619@gmail.com
-References: <20250805124449.15187-1-tomtsai764@gmail.com>
- <20250805124449.15187-2-tomtsai764@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250805124449.15187-2-tomtsai764@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/08/2025 14:44, ChiShih Tsai wrote:
-> Add support for sq24905c Hot-Swap Controller and Digital Power Monitor.
-> 
-> Signed-off-by: ChiShih Tsai <tomtsai764@gmail.com>
-> ---
->  Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
+This patch series introduces several improvements to the SCMI HWMON driver:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+1. Better handling of unsupported sensor types with debug logging
+2. Fixes redundant resource management in thermal registration
+3. Enhanced error reporting using dev_err_probe()
 
+The changes maintain backward compatibility while improving:
+- Debugging capabilities
+- Error reporting clarity
+- Code maintenance
 
----
+ChangeLog:
+  v1:
+https://lore.kernel.org/linux-hwmon/20250805111840.6472-1-artyom.shimko@gmail.com/
+  v2:
+    * fix wrong cover letter and patches count in subjects
 
-<form letter>
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
+Artem Shimko (3):
+  hwmon: scmi: Add default case with debug output
+  hwmon: scmi: Remove redundant devm_kfree call
+  hwmon: scmi: Enhance error reporting with dev_err_probe
 
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
-of patchset, under or above your Signed-off-by tag, unless patch changed
-significantly (e.g. new properties added to the DT bindings). Tag is
-"received", when provided in a message replied to you on the mailing
-list. Tools like b4 can help here. However, there's no need to repost
-patches *only* to add the tags. The upstream maintainer will do that for
-tags received on the version they apply.
+ drivers/hwmon/scmi-hwmon.c | 45 +++++++++++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 13 deletions(-)
 
-Full context and explanation:
-https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
-</form letter>
-
-Best regards,
-Krzysztof
+-- 
+2.43.0
