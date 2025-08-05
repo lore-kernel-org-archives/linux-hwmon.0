@@ -1,194 +1,182 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3650527381C;
-	Tue,  5 Aug 2025 12:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5BF2749D5;
+	Tue,  5 Aug 2025 13:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754398220; cv=none; b=BubTIqm/+ml+4HClA6Z+bNwtEWcMdSIAm9utFNjTfjqC75lL79eWWVWj8iArZITNWslh9m+GnbylNInuRESraAwZFTYOD35Wb23L95HMs9RyniK4QI9M6XQmmcEwEGYCckyEpcKl5HwalmuxI6tv5n2+jOiEQeoYT91bE273nrQ=
+	t=1754399413; cv=none; b=nsngcSjPQTd0DqYE4wUhAoHJ7WApR511L3HDekWR0LKB/W59B2z6yp1XOgWAla/e4QsqjF40JV/RbXnGObA3eLinCyTSOK4UeYeOJ2q5QyQIEam7cYvK+rByrosGX1JVX65NiYawGdW3RZufG9C7H7wqLA5zRtqnxiwYD2QniJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754398220; c=relaxed/simple;
-	bh=jGSh/LkL0X52CDO3zdkc5x7ncFnzPCmvG4RFuADPvdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FHgKRX+dDP3u8W0QD4+0y5EtHUMF8lcPDmjl0e4NO+xOf5R4W3quAwZDSgLkNZ9Hnz4qpQzZnWbO+Eod6v6FGhe9UtI+tfxzOMMULThAiYo7b9mXnnrfy7Tw/g+NWZi9/oe8qdZKJx9DFFLuuZcecxS39+jHTw5+k60Mng+Ta/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G0EDpt81; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1754399413; c=relaxed/simple;
+	bh=C1sGPmucJ6JCMs4CoRhIxF97FkfQUOs2Jk2OtQjPTl0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=smMlSePSJHaKKCQ+zX1mS6n6B6Tu4Li60KiXgTE41A3Zu+gUBdiOOmSX0mBxz5Y+8E0Z+9cFS5C17IVmOqn2sGWHlBlMxxVxNyPkA6R/zGzPB1nWi/XI2rfHgrUsR7Pz1jZcz+anDhM2czyieray/6V90tLjajMrw5Qgl3YIIvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AAa7QN4x; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G0EDpt81"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6155e75a9acso8101446a12.0;
-        Tue, 05 Aug 2025 05:50:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AAa7QN4x"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2405c0c431cso56706815ad.1;
+        Tue, 05 Aug 2025 06:10:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754398217; x=1755003017; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8yCdqk783l2O4FNUDcUuzsOge6j9py4J7WwVbdxRdP8=;
-        b=G0EDpt81e3ui4hADtRA+AxAlTPaVonzPKKnDiMWQHvGuO51iPY2EFyxM/z5k05IpGc
-         fUln7roDRLTXEPkQs5v27OPnVcnzfD5snG2jX1d7Bb19Xwq3HOnqQ2npqVszzGIroIlA
-         zx7u9uJ7SfMWz6q0kiotFjeker5iEN9XIjptfPkEnWjWh3tO99QzivLF9lgwvQrXdJkY
-         MoluITrofmn6nhRhLE2xaDiwAvl2NmR1tCmOrdTtnVHBgNEPBEAQafEgCZHa7HrLfMp8
-         4RtjC+/Ks2FDC3SZHQJbS3KpkZ+95FonGAD9OIXZfGEXP//zS9vvr/OaV6AQJ5B5f2ph
-         tT7w==
+        d=gmail.com; s=20230601; t=1754399410; x=1755004210; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Df0Tn7UBjE6/kXxfrPbcGsY9nGyoaEzNiY19+deWC+k=;
+        b=AAa7QN4xwoWUs7pQ03zIo1T62vfGGk1jBYY4PSwCSgzUNJLM0PXI6ir25/0iMse1e6
+         nPvfpU0YYgo6bES3oaDpxvKxrMpv82zVAebzEB9aqKmnywGdD0NeKfTt91amVqJgEO5k
+         /1gLjzZOeyxitKOCu1oYLH+OZvyi3z5O5sLOjNx4Lbt6dstWoHGLC4zmM+GUoPWvezQK
+         7rOyS+28MNSJJdvL4bkvCqnt7wDCIpqxW4UdojEkvfEruKTvv6frpa4ir1mIpo3B0n4j
+         DuLV4hae67zk1uWzBeyhTijFDXrYBIeDQ9kJJAn+mTCkZFe0pmMLov6gBspb1zIPIbjf
+         TUKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754398217; x=1755003017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8yCdqk783l2O4FNUDcUuzsOge6j9py4J7WwVbdxRdP8=;
-        b=UYAGV37kXoEnDdvI7ZhA1ezWt70DzkgCJSdV9Rl+WxRIDEu3FFdRP1UhdWCVHzef94
-         UTMD+Vy4U27gL0a+8JNq3O3YVQp5yZTT6fsPAJVkVKLLEdnMNc9nR8PHyyvUfwZErqgN
-         fARy7C00YtRgfjgfbHTzOQOpAj9plQWJiLuSdz1JL+8QQmWVGAmhxn1qPNh4Dup0nnUg
-         /uQDAw9pAu2UC2dkhcpinrvmYA5puAl9fVY3WkDXnuDZwFh3wY9jTN6F/t9Bn4Jva8S8
-         EUF9/bJB4lRvHSheLl1Eb44rdjQGjXyRUL+TZebV2S7xRwzxabZc5UsO5b7uIJVrAIJZ
-         izVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVex0BfCyvVFR21bQjXcA67QBE9Iz0D2REgKCG4tYs5PclBkIVTVzdu4fOV084aiV+gf1Sjfwp6rQKT2kI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw31mRxmxhlvmNvjr1puADgGg0HWhWhQKH/2+GXiCjDb1/UXtc
-	rRe1YgSjP2JtfntHliV9YwaWNt1O9B8CEWDmP3QQdDmiMPLqOLkiDVAhqYT3fUpnI6fDLw==
-X-Gm-Gg: ASbGncu1eMup7+eh8KbRxqhc3ja70ItmM3dmjzc10E74E8hgmBEqWzOdzyT/IWBRaC4
-	KQBp7mdXZrtFzYqRxK1X+aSHGlp9vLlxvM7KpVuilCZ6dqgjS1USJJ2PK8FYIW/35g5pGeK3rIk
-	QMnH0lpxm0ICBZ+xejcQe8fHvrbe8t8buYazIzqEAl7mU2hWDFJOOtciuvkZvgw9uCBdKUANizC
-	+uXwhl1KjYeBwQloy9hxeqUksjiqypePgvHEf7MIAJwjC780hCmKFP/H3lcCj3zZItYrLd1M3Ca
-	OYOM3z/xuXgM6q8z/RtqoFG8gpkm1mFgBTK48V318K+GGOAQrCrGCLWDNtdp1ODpdThFJxIa5fZ
-	uspyJyvMDpnIIODu2DDwQ0rIL
-X-Google-Smtp-Source: AGHT+IGgVVg8/lqy8zr7O3W94feKtEZYw9quK1epE4thGB2ryISlPd8xGSLMn3qy9LQ2M8exu/AGoQ==
-X-Received: by 2002:a05:6402:270a:b0:615:cc03:e6ae with SMTP id 4fb4d7f45d1cf-615e6eb6a33mr11559383a12.6.1754398217189;
-        Tue, 05 Aug 2025 05:50:17 -0700 (PDT)
-Received: from artem-pc.. ([88.201.168.202])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615cc38aeccsm6811176a12.2.2025.08.05.05.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Aug 2025 05:50:16 -0700 (PDT)
-From: "a.shimko" <artyom.shimko@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: "a.shimko" <artyom.shimko@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	jdelvare@suse.com,
-	guenter.roeck@linux.com
-Subject: [PATCH 3/3] hwmon: scmi: Enhance error reporting with dev_err_probe
-Date: Tue,  5 Aug 2025 15:43:59 +0300
-Message-ID: <20250805125003.12573-4-artyom.shimko@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250805125003.12573-1-artyom.shimko@gmail.com>
-References: <20250805125003.12573-1-artyom.shimko@gmail.com>
+        d=1e100.net; s=20230601; t=1754399410; x=1755004210;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Df0Tn7UBjE6/kXxfrPbcGsY9nGyoaEzNiY19+deWC+k=;
+        b=mlIavspKWUpTYWmAgShDY62dyMTo4vlaFOT3W8y0gFmQw3tl1YchoGIz0XBYYzZalB
+         8EhdY8yjO9A8CxCUW/IodSIcisETDBfhM5aH2dS2DHaKrtRTEsiEQZ58FtpzzNUKKmln
+         d2jHiBQQ+dd8bL9ksC3t9aiY8gkuolxPBuB61a2YcalzEUz49VWWjrtSsqkp/QdPx5M2
+         HwQbdXQTmOm9VH4gF7VbQqCiDWwonToVhs/wQOZ434uPl7kHw8VvibueAiBDZLtWySCQ
+         +H7D+se+l2pesXRRQLJV6JbSryqNbcYGD4XuAvbPBwEIzvgG6h1R6/BXDK7+5VtrKFq7
+         ryAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYSSatAiVcs1WRAJN3oixohsC9ihMzNVMAuIZs286njNv4ENqegODAhTJC0+kIuvnkV/OKyxRmv3ml2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YysF2EKGpT8wwnZYFYco7KNji51SORmg/sGwjjrxC8DcKnnT6Su
+	pzrU4jYjMU7BOtDYTSAy5vZ/ASyUkY8UM3zKTyepodOrRG+lKwui4Si2
+X-Gm-Gg: ASbGnct4qxIaRb2TRv929ONXy3TSocVWsavh/G6LYi2B6Znk23kDAYqkxTpndi0R6cY
+	8vBQypnMmEVw82I7oTE7Gfu90QFl+Uj0GtUla0y0bF5zibEe3CP+OANY4R6Qu55L/Vtb4clvgGF
+	6RQO5N++WTzr/hQkhNLBrr/2yeluUyrVFex9JwvMwwT8WajXU5xa6fiw4fQSWaCzRKoqFjjyW4Q
+	t0DpqLAXUCljwyu2JJFy74/qcbPc6p0yl3nmnsm7IfImrdPcfmv0RNrFLi0ILLDufn+lmFqu66R
+	Wb53zFSwjV1nuMfrowOqFhod8idAtpi/VaEhasJl81pQS/gwvNrZ502PmcW82WAFY2pPN+13Olb
+	QAcUl8NWSCv5nyvKeTUTciTjQsYtYt8QEyQfrqIV/o9I0RkTTGRikTpFqjz6zb84cCGuY1Xo=
+X-Google-Smtp-Source: AGHT+IGDs2cjWA1Z11CbkO1c6XQDe6pA8d0mJl1d10ySLxBxsb+cZTCHN2Iuq4eC5XyyJ/ifW48VXw==
+X-Received: by 2002:a17:902:e751:b0:240:6fd0:25b7 with SMTP id d9443c01a7336-24246ff846amr208366595ad.38.1754399408771;
+        Tue, 05 Aug 2025 06:10:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899a48esm134536415ad.114.2025.08.05.06.10.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Aug 2025 06:10:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e5d568fe-5aa2-4233-aff7-6d4b105e9ab9@roeck-us.net>
+Date: Tue, 5 Aug 2025 06:10:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: scmi: Add default case with debug output
+To: "a.shimko" <artyom.shimko@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+ cristian.marussi@arm.com, jdelvare@suse.com, guenter.roeck@linux.com
+References: <20250805125003.12573-1-artyom.shimko@gmail.com>
+ <20250805125003.12573-2-artyom.shimko@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250805125003.12573-2-artyom.shimko@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Artem Shimko <artyom.shimko@gmail.com>
+On 8/5/25 05:43, a.shimko wrote:
+> From: Artem Shimko <artyom.shimko@gmail.com>
+> 
+> Improve handling of unsupported sensor types:
+> - Add default case in sensor type switch statement
+> - Log skipped sensors with debug information including:
+>    * Sensor ID
+>    * Sensor type
+>    * Sensor name (if available)
+> - Use rate-limited dev_dbg for safety
+> 
 
-Replace error returns with dev_err_probe() throughout driver:
-- Add descriptive error messages for all failure cases
-- Include relevant context (sensor IDs, types etc)
-- Standardize error reporting format
+The code doesn't actually do that, and it would be pointless
+and make the message useless.
 
-Improved messages include:
-- "No valid sensor info for index %d"
-- "Failed to allocate channel info array"
-- "SCMI protocol ops not initialized"
+> Debug output format:
+> "Skipping unsupported sensor ID:%d Type:%d (%s)"
+> 
+> Signed-off-by: Artem Shimko <artyom.shimko@gmail.com>
+> ---
+>   drivers/hwmon/scmi-hwmon.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+> index 364199b332c0..a3b5b5c0ec25 100644
+> --- a/drivers/hwmon/scmi-hwmon.c
+> +++ b/drivers/hwmon/scmi-hwmon.c
+> @@ -275,6 +275,10 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+>   			nr_count[type]++;
+>   			break;
+>   		}
+> +		default:
+> +			dev_dbg(dev, "Skipping unsupported sensor ID:%d Type:%d (%s)\n",
+> +				i, sensor->type, sensor->name ? sensor->name : "unnamed");
+> +			continue;
 
-Signed-off-by: Artem Shimko <artyom.shimko@gmail.com>
----
- drivers/hwmon/scmi-hwmon.c | 35 ++++++++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+			break;
 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index d03174922e65..081502418dfa 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -240,26 +240,36 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 	struct scmi_protocol_handle *ph;
- 
- 	if (!handle)
--		return -ENODEV;
-+		return dev_err_probe(dev, -ENODEV, "SCMI device handle is NULL\n");
- 
- 	sensor_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_SENSOR, &ph);
--	if (IS_ERR(sensor_ops))
--		return PTR_ERR(sensor_ops);
-+	if (IS_ERR_OR_NULL(sensor_ops)) {
-+		if (IS_ERR(sensor_ops))
-+			return dev_err_probe(dev, PTR_ERR(sensor_ops),
-+					     "SCMI sensor protocol acquisition failed\n");
-+		return dev_err_probe(dev, -EPROTO,
-+				     "SCMI sensor protocol ops structure unexpectedly NULL\n");
-+	}
-+
-+	if (!sensor_ops->info_get || !sensor_ops->count_get)
-+		return dev_err_probe(dev, -ENOENT,
-+				     "SCMI sensor protocol operations are not initialized\n");
- 
- 	nr_sensors = sensor_ops->count_get(ph);
- 	if (!nr_sensors)
--		return -EIO;
-+		return dev_err_probe(dev, -EIO, "No sensors found\n");
- 
- 	scmi_sensors = devm_kzalloc(dev, sizeof(*scmi_sensors), GFP_KERNEL);
- 	if (!scmi_sensors)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate scmi_sensors structure\n");
- 
- 	scmi_sensors->ph = ph;
- 
- 	for (i = 0; i < nr_sensors; i++) {
- 		sensor = sensor_ops->info_get(ph, i);
- 		if (!sensor)
--			return -EINVAL;
-+			return dev_err_probe(dev, -EINVAL,
-+					     "Failed to get sensor info for sensor %d\n", i);
- 
- 		switch (sensor->type) {
- 		case TEMPERATURE_C:
-@@ -285,12 +295,12 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 	scmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*scmi_hwmon_chan),
- 				       GFP_KERNEL);
- 	if (!scmi_hwmon_chan)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate channel info array\n");
- 
- 	ptr_scmi_ci = devm_kcalloc(dev, nr_types + 1, sizeof(*ptr_scmi_ci),
- 				   GFP_KERNEL);
- 	if (!ptr_scmi_ci)
--		return -ENOMEM;
-+		return dev_err_probe(dev, -ENOMEM, "Failed to allocate channel info pointers\n");
- 
- 	scmi_chip_info.info = ptr_scmi_ci;
- 	chip_info = &scmi_chip_info;
-@@ -307,7 +317,8 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 			devm_kcalloc(dev, nr_count[type],
- 				     sizeof(*scmi_sensors->info), GFP_KERNEL);
- 		if (!scmi_sensors->info[type])
--			return -ENOMEM;
-+			return dev_err_probe(dev, -ENOMEM,
-+					     "Failed to allocate sensor info for type %d\n", type);
- 	}
- 
- 	for (i = nr_sensors - 1; i >= 0 ; i--) {
-@@ -336,7 +347,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 						     scmi_sensors, chip_info,
- 						     NULL);
- 	if (IS_ERR(hwdev))
--		return PTR_ERR(hwdev);
-+		return dev_err_probe(dev, PTR_ERR(hwdev), "Failed to register hwmon device\n");
- 
- 	for (i = 0; i < nr_count_temp; i++) {
- 		int ret;
-@@ -352,7 +363,9 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
- 		ret = scmi_thermal_sensor_register(dev, ph, sensor);
- 		if (ret) {
- 			if (ret == -ENOMEM)
--				return ret;
-+				return dev_err_probe(dev, ret,
-+						     "Failed to allocate memory for thermal zone\n");
-+
- 			dev_warn(dev,
- 				 "Thermal zone misconfigured for %s. err=%d\n",
- 				 sensor->name, ret);
--- 
-2.43.0
+>   	}
+>   
+>   	if (nr_count[hwmon_temp])
+> @@ -323,6 +327,10 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+>   			idx = --nr_count[type];
+>   			*(scmi_sensors->info[type] + idx) = sensor;
+>   			break;
+> +		default:
+> +			dev_dbg(dev, "Skipping unsupported sensor ID:%d Type:%d (%s)\n",
+> +				i, sensor->type, sensor->name ? sensor->name : "unnamed");
+> +			continue;
+
+			break;
+
+>   		}
+>   	}
+>   
 
