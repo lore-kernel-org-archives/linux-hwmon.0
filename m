@@ -1,78 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760AE21D3F1;
-	Tue,  5 Aug 2025 06:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3CD2566;
+	Tue,  5 Aug 2025 10:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754377112; cv=none; b=QJA064VYajKX/bSZ5v1D49ZARSQjNE3Ngj8YLU/yxWrAkrMsu+zQw+lSCRo64FhHo07oiSI9bupQQG2+D7mUGowhZkYtlerATJW2UhLp7gYzVq/7pArjd1bZfx9Sr/P/Z6HCzO5phao0lg2ym6eoJ9ZsFhK3JW6NL6JA5CN1akA=
+	t=1754389898; cv=none; b=Mhe6ikR2wDW0/vjCQj2UFjGJffBuk+mdE0D67C6sTKjChsjUbShwGUTo2/EVcKYZYl79b5tN4Z4b/U+MMbRCTEmhriSV4ZOqxjsFkc9B2LYAsVXmXhtTFPVB24jbmeIYIe74zUW33uWdEpdk/qYOITqfmSDUTQJiXmh6A3N1fno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754377112; c=relaxed/simple;
-	bh=qksf0vLPcE49IppNKVtMY5OdGFbAJ0657ZFt7447h3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LeFfPFnN285zekCsqzcNzgpqWgaxQF6EBVyLzgGf3VWU5OmeYDlxKjxZ1kS5CvKtM1a4T4oZ3osvJSsE8blRwERSH8spi+b4+r2h9GcTEpEu3Q/6Mwul9eAiahl973ZAWpwpX8dYO/M2m/I5Vx/bJVjGECiRStNWOXSNo9/cLF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=feGSlOI/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754389898; c=relaxed/simple;
+	bh=SZXiJmkDMpnyHVml/lE/tZpUhzlTWvl2AufRZ01q3hY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PAYuQIHd+e2Ih4aTGaUAyYV5uYdiccbJoHnaDjCIkdcKSOBQ4HNGfPloYcMJzEAOpsMareFiRCSY3XWasH7F1pP1xCztHnDWLywAMhKtSsbM3Pa0U/79zUg+sX4PFaP9Aq6l5Pa1yYkv/Rh6kF4T/KnTI9RarE1h964Zz6xl8f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=RV9IzhG+; arc=none smtp.client-ip=220.197.32.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="feGSlOI/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABC6C4CEF6;
-	Tue,  5 Aug 2025 06:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754377110;
-	bh=qksf0vLPcE49IppNKVtMY5OdGFbAJ0657ZFt7447h3U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=feGSlOI/GQMuqpegscRmFmLB5q1QsDZzFTcIrP1W/17yGlrrH+4T/SbNZ3Vb4TXkA
-	 LwgCZsKjRX1y0qIP1qeTdxmURgeNBDGyT44FRqSZRg2spMGnmLJUpxcQoOroK4c5lG
-	 ls1iodlJ2bGik2D+tYnqAcI/8lNaAhYnaj5swXYqG3/VVDf7EBTV8/ryWd0ZVgRpAR
-	 ejedjZuONVyHnG4uKpQaGbJ5AAZ3G/yt79jwCqSxIOc//uaL6RRwYUQE39BlpjFpqD
-	 EN8DLfz8ZCgSDvzxsL8dTjBJ16b3vQuk84xaxkRewjaWqsz8Y7RvqU+UgL4X0yxs1D
-	 lM6S5Oayq+NEw==
-Date: Tue, 5 Aug 2025 08:58:28 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: ChiShih Tsai <tomtsai764@gmail.com>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	corbet@lwn.net, t630619@gmail.com
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: adm1275: add sq24905c support
-Message-ID: <20250805-ruby-earthworm-of-cubism-4d1c8a@kuoka>
-References: <20250804124806.540-1-tomtsai764@gmail.com>
- <20250804124806.540-2-tomtsai764@gmail.com>
- <48996ed0-8d5f-4bb0-ab66-8be71c0a59e4@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="RV9IzhG+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ew
+	X3zpeQCbPJL6bn0vT+8Zrn3/M7RCsOru7l1g5Iunc=; b=RV9IzhG+mR371FwMsI
+	+HWIQzYo1MRRhcNDUF0AqYM/0LXOs+/1WDXHzPLsy1sVxYPu9H/xqM4+OzFDy5ro
+	+G37kwhFkrf8MG1i9YxTxI5O2ydrrtTb5AQ0tEt5GQiRyw6Q9I8NlXjJq1oXTTjA
+	U3U2uyAwRhTDInc3Rdl51O9Q0=
+Received: from mps-HP-EliteBook-840-G3.monolithicpower.com (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgCnDwTm2pFoQFEdAg--.18285S2;
+	Tue, 05 Aug 2025 18:20:23 +0800 (CST)
+From: wenswang@yeah.net
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Wensheng Wang <wenswang@yeah.net>
+Subject: [PATCH v5 1/3] dt-bindings: hwmon: Add MPS mp2869,mp29608,mp29612,mp29816 and mp29502
+Date: Tue,  5 Aug 2025 18:20:18 +0800
+Message-Id: <20250805102020.749850-1-wenswang@yeah.net>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250805101754.749492-1-wenswang@yeah.net>
+References: <20250805101754.749492-1-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <48996ed0-8d5f-4bb0-ab66-8be71c0a59e4@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Ms8vCgCnDwTm2pFoQFEdAg--.18285S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw1rKF4DCw4xury8CFy3urg_yoW8CrWUpF
+	Wkur1IyF4rtr47Ca1I93WkGF45XFsrG3ykJa90yw17Gr1a9rZ29rWa93sYq398CrnayF4U
+	JrsFka409a4jvrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UqiifUUUUU=
+X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIAduE2iR2udMfQAA3v
 
-On Mon, Aug 04, 2025 at 08:59:09AM -0700, Guenter Roeck wrote:
-> >   allOf:
-> >     - $ref: hwmon-common.yaml#
-> >     - if:
-> > @@ -96,12 +109,17 @@ allOf:
-> >                 - adi,adm1281
-> >                 - adi,adm1293
-> >                 - adi,adm1294
-> > +              - silergy,sq24905c
-> >       then:
-> >         properties:
-> >           adi,volt-curr-sample-average:
-> >             default: 128
-> >           adi,power-sample-average:
-> >             default: 1
-> > +        silergy,volt-curr-sample-average:
-> > +          default: 128
-> > +        silergy,power-sample-average:
-> > +          default: 1
-> 
-> I personally don't think this warrants new properties. However, if warranted,
+From: Wensheng Wang <wenswang@yeah.net>
 
-These are the same properties as adi ones, right? Then I agree, re-use
-existing ones.
+Add support for MPS mp2869/mp2869a,mp29608/mp29608a,mp29612/mp29612a,
+mp29816/mp29816a/mp29816b/mp29816c and mp29502 controller.
 
-Best regards,
-Krzysztof
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+---
+V4 -> V5:
+    1. merge dt-bindings
+
+V3 -> V4:
+    1. split patches for MP2869,mp29608,mp29612,mp29816,mp29502
+    2. add description for vender specific registers
+
+V2 -> V3:
+    merge patches for MP2869,mp29608,mp29612,mp29816,mp29502
+
+V1 -> V2:
+    add Rob's Acked-by
+
+ Documentation/devicetree/bindings/trivial-devices.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index f3dd18681aa6..0e6ba6e12a63 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -293,10 +293,20 @@ properties:
+           - mps,mp2856
+             # Monolithic Power Systems Inc. multi-phase controller mp2857
+           - mps,mp2857
++            # Monolithic Power Systems Inc. multi-phase controller mp2869
++          - mps,mp2869
+             # Monolithic Power Systems Inc. multi-phase controller mp2888
+           - mps,mp2888
+             # Monolithic Power Systems Inc. multi-phase controller mp2891
+           - mps,mp2891
++            # Monolithic Power Systems Inc. multi-phase controller mp29502
++          - mps,mp29502
++            # Monolithic Power Systems Inc. multi-phase controller mp29608
++          - mps,mp29608
++            # Monolithic Power Systems Inc. multi-phase controller mp29612
++          - mps,mp29612
++            # Monolithic Power Systems Inc. multi-phase controller mp29816
++          - mps,mp29816
+             # Monolithic Power Systems Inc. multi-phase controller mp2993
+           - mps,mp2993
+             # Monolithic Power Systems Inc. hot-swap protection device
+-- 
+2.25.1
 
