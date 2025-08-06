@@ -1,137 +1,94 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521EE199931;
-	Wed,  6 Aug 2025 03:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C4F3FC7
+	for <linux-hwmon@vger.kernel.org>; Wed,  6 Aug 2025 03:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754450102; cv=none; b=W2+o1jNHSIdnWioJfBp7G6mfRuU7P5SrYJQLnbjoUq5AqGkAOa30Rdu8nykFbBYAkRVZc8owq0acUYIHjZoVGr2IoJ+HkT76hJNpsF9ysKuW2miP/9foXn8EZm2vA3M1sl0nLQQYL9WC2xqUDrZyBgPWrtpzKjf1bERHvyklHUQ=
+	t=1754451707; cv=none; b=NewJB6d3Bd82uIaHtQlinAr9qdxSq9TniRz+vOjSN8mIv3lvkPDMf8v2bUcWdmrc5UkASWmOkN47uLPr+sclJEei+s2tl7dZB1K6PgXe/fag1zCc4NBsl+hXUmNz2vVKLKrsZYPOm8G8tYMDPy65mBIF1mjJUvXT0ASAvdxSiRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754450102; c=relaxed/simple;
-	bh=EbY3vb5nJiuhstH/MUgZ/kdqRmd3CcCHo2dRcTLXkOk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lsbI8JvZz2wTSat3wPrj95ZGe2sEjKl3Q9odFcWH8yM6MC2+sQOQ4EphTNJCRUqw7uEkBAVRVQ52Ps2xv0o/jbunQdn7qse4KWDOK0VhYXDdft6AWugQHHobQgXvRcjNLw3IvL/pqFWJ02DdYRd4CCrBU6nCB/nwY3ZBixcmOAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MfdPMSq1; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754451707; c=relaxed/simple;
+	bh=d75mbpsX8RQ3NybfUutsz/AWNUxpxg7TXiUsHrhVkGg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=aBHCUFwVk/muRjhM18O26oWiU80YrbTs5vkeKow9+9LIqb9C3omfb6QYIPTYvHkwTxZjmleJKAR6mbP/5MMJkbqHCbGJYcG4jUWosAMrnaNGcmb6SCXPzOI98PGfwX6fno4ffvWdri0OV1eLenMBb8m4HayHydPkZEFclmAyefA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=eRBQ6UIP; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MfdPMSq1"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313a001d781so5273015a91.3;
-        Tue, 05 Aug 2025 20:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754450100; x=1755054900; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKlo96Z8h7/Xm6bQzZ0wd+2ryR6dxIsF/X2HceDzkGE=;
-        b=MfdPMSq18dcyT80LT2MkE2WDeghGNbiDYspLYDFGt3yOROX1KqVa+zDye5AU7DERBl
-         hLOfx1R88oE+7TTa9JkWkp3G1wxqfC/3q4KxYF3lrNdAfWD1BdFrKzRc07icqm4xPSyl
-         +bV0MFt3U1VyyPBQEtcD2dS1FY9WWjXYqHbFNYPSNrTZKq7FMTgwlXrCUUAJ0TG2BG80
-         dRpyJE4qpVy/+iXav+DMttmP/pq4VUsWG34PyT6OYElf9yfa4KPE4klG/npR01Tpn0+5
-         Naf4D0XocBGlm7IZqXrY5zu0//V5E29G1SjNZc5o55YH139PjwEDLn0LpCPCx4Kcaajn
-         tFcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754450100; x=1755054900;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FKlo96Z8h7/Xm6bQzZ0wd+2ryR6dxIsF/X2HceDzkGE=;
-        b=PLnpvenVXaTsk8yeFGycum/krnwDWTVNU7Trzb6XX3lbYVwjlTONc2UMZaCOMrRI6w
-         IfQfkPsv0gPr6naUpF3Onf/flW9GZla+hbSzNaqsZ+GZMGGwaPU2IwRX5hGl+d2QOeM7
-         slMlnJLsEf+gQ3/me6Ia8Lnp5Uq8eS3Peb6ZNadPOrs+DzpH1yEHwKddn2uDtZWFy9/z
-         NriSLJzaqIPDANwFTG2jRMrI96WBDOEq1Xju5piw57hpKOzZf6EmvibIkpXn7lZV7TWs
-         LDyD20masvCvOp/8p9RBizOU7HBkgaetOagwzdmtL3+rfF0FcN3P9HIFdz6wDNYlwBCT
-         rDsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFXNLqvrygvXezgP92LSbodROGqXF/RWY7pF3tBPB796bV04Ug9QRk4I9asZVY3NzETAov7Z3MlrGn@vger.kernel.org, AJvYcCVSQRICYAn25w394J40Rj6zZ2GL9DMxefEm/xM3Dfsx5h8+HPgg2vGPhbuzygAZFpp+cIBHWG13ORtJAART@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkKG6plHA6AuuxzPFnKfQxUDR8EdUWDZ9e3Yemuimr8A4Y1q+i
-	Hb2szonABaxb9ftE87qD1551YfVIB2Gu4oor2dwAoefJ1hh15nYLPL64Xphf+Q==
-X-Gm-Gg: ASbGncuzDXOWS19Bh6FWAhP+E8kIui+4ZvYGUh19ZP1xcpXJjxc4CiLOH2+hUYlG2Ye
-	I4WRmiVq1TgTx5l9GQhcXXZNZx+oZimc2fNXdqlRPSnWYEz8zhRAoeBS1c3g5Jk4kWrV1/oRX5V
-	pe3RqTcHG2j8C6OqDTiuNWi+O6sRzxpLerBjGRDKY39GGqYkYi9OBpdx4rYu5wAvQ6Y9NuoLrYt
-	EjI8xDLxVCpx7LypDuhDHiggchFl5XckkhtvmL937eHCXUosMBUJUXifEGwSMzprrLA+VK+ijjG
-	R+9YOIP4qy8hdc6VebqcJ26I33/+lasxuM/0QT5E/RpM42HhCCNz5VAdfvMrWSa/FgE5ZXKqth4
-	8qEyDtIhE+Uzh5922qvdDyAusRiYbaN9gIzwZawdh25otNrlPihKPiBLsKaebnOjbohLINdM=
-X-Google-Smtp-Source: AGHT+IGecgNQRjmTC7HzaMwNFKebma9In7w2RFIWD5TjU4S0tMtUhhqovlxsKk4bF6wyvxohXmLfPQ==
-X-Received: by 2002:a17:90b:1d50:b0:31e:e88b:ee0d with SMTP id 98e67ed59e1d1-32166c2bd3emr1602159a91.9.1754450099438;
-        Tue, 05 Aug 2025 20:14:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-321612950c7sm1443811a91.31.2025.08.05.20.14.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 20:14:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
-Date: Tue, 5 Aug 2025 20:14:57 -0700
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="eRBQ6UIP"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D12C52C00FE;
+	Wed,  6 Aug 2025 15:41:41 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1754451701;
+	bh=d75mbpsX8RQ3NybfUutsz/AWNUxpxg7TXiUsHrhVkGg=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=eRBQ6UIPJTZC0trG+YnrkQZqcnBUVqBCd9+uu4mwGY24ngo2j5yzqYblXz2VLeU1+
+	 265ZrShHK+MoxnQrjkIeEsB4ZUSLRIEwhs2h9ghi7aBvnugwl36onlvp8Lb4M8B6Up
+	 y2mJYrtuLmP8NnZeavHHC0FbVRSBP4qX4FoJDmhhiqSsQJ8gKG6fDzFolV3hMRE1hx
+	 SvN3m5g9jIwlqgOKLDjJ4YI6B5Vv5oBmQNH3Sly6EX0p4cmIXw3WjbTqM5M/cWaX9A
+	 tJQRQHKnuScMkSykYpS3qMvf1TXneLloIrM+GaNfwhvXb7ISh0cwIYLZPWwazba3nL
+	 6Ncwsx4mcgktA==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6892cef50001>; Wed, 06 Aug 2025 15:41:41 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 6 Aug 2025 15:41:41 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Wed, 6 Aug 2025 15:41:41 +1200
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Guenter Roeck <linux@roeck-us.net>, "jdelvare@suse.com"
+	<jdelvare@suse.com>, "robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
+Thread-Topic: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
+Thread-Index: AQHcBmxCTEWvZ5TWkkCoS1XTid0nk7RUKo+AgAAHdwA=
+Date: Wed, 6 Aug 2025 03:41:41 +0000
+Message-ID: <7f621788-372b-4a0b-a126-4c2d1d9a926c@alliedtelesis.co.nz>
+References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+ <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
+ <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
+In-Reply-To: <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <90294AC783469245A47949C90DB2C716@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
- <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=dtt4CEg4 c=1 sm=1 tr=0 ts=6892cef5 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=JIY_GJIoiM6udwNnU9sA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On 8/5/25 17:51, Chris Packham wrote:
-> Add support for the TI INA780 Digital Power Monitor.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-
-Looking at the registers, the chip seems to be almost identical to INA237/238.
-Why a new driver ?
-
-Guenter
-
+SGkgR3VlbnRlciwNCg0KT24gMDYvMDgvMjAyNSAxNToxNCwgR3VlbnRlciBSb2VjayB3cm90ZToN
+Cj4gT24gOC81LzI1IDE3OjUxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gQWRkIHN1cHBvcnQg
+Zm9yIHRoZSBUSSBJTkE3ODAgRGlnaXRhbCBQb3dlciBNb25pdG9yLg0KPj4NCj4+IFNpZ25lZC1v
+ZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4N
+Cj4NCj4gTG9va2luZyBhdCB0aGUgcmVnaXN0ZXJzLCB0aGUgY2hpcCBzZWVtcyB0byBiZSBhbG1v
+c3QgaWRlbnRpY2FsIHRvIA0KPiBJTkEyMzcvMjM4Lg0KPiBXaHkgYSBuZXcgZHJpdmVyID8NCg0K
+WWVzIEknZCBub3RpY2VkIHRoZSBzYW1lIHRoaW5nIGFzIEkgd2VudCBhbG9uZy4gVGhlIElOQTc4
+MCBoYXMgdGhlIA0KZXpzaHVudCB0aGluZyAobm90IHN1cmUgaWYgdGhhdCdzIHRoZSBzYW1lIGFz
+IHRoZSBpbnRlcm5hbCBzaHVudCBvbiB0aGUgDQpJTkEyNjApIHdoaWNoIG1lYW5zIHRoYXQgYSBs
+b3Qgb2YgdGhlIHBsYWNlcyB3aGVyZSB0aGluZ3MgYXJlIGNhbGN1bGF0ZWQgDQpieSB0aGUgc2h1
+bnQgcmVzaXN0b3IgdmFsdWUgYXJlbid0IGFwcGxpY2FibGUgYW5kIHRoZXJlJ3Mgb25lIGxlc3Mg
+DQp2b2x0YWdlIHNlbnNvci4gSSBkaWQgY29uc2lkZXIgYWRkaW5nIGl0IHRvIHRoZSBpbmEyeHgu
+YyBidXQgaXQgc2VlbWVkIA0KZGlmZmVyZW50IGVub3VnaCB0byB0aG9zZSBjaGlwcyB0byB3YXJy
+YW50IGEgc2VwYXJhdGUgZHJpdmVyLg0KDQpJIHRoaW5rIEkgY2FuIGtpbmQgb2Ygc3F1aW50IGFu
+ZCBzZWUgaG93IEkgbWlnaHQgZm9sZCB0aGUgaW5hNzgwIHN1cHBvcnQgDQppbnRvIHRoZSBpbmEy
+MzggZHJpdmVyIGFsdGhvdWdoIHRoYXQgbWF5IG1ha2UgdGhpbmdzIGEgYml0IG1lc3NpZXIuIElm
+IA0KdGhhdCdzIHRoZSBkaXJlY3Rpb24geW91J2QgbGlrZSB0byBoZWFkIEkgY2FuIGdpdmUgaXQg
+YSBnby4NCg==
