@@ -1,111 +1,245 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FBB202F7B;
-	Wed,  6 Aug 2025 06:32:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E033AC1C;
+	Wed,  6 Aug 2025 15:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754461962; cv=none; b=TIL22mSCAVYQLF30UnRIgXiA/pyxHhluopmLDbLqLS8wnVj+fDq2nVSZwWNkhgFzZ65+O7qU1e0iwmQhhSzUKYnk+SjpHspYp/nFxRkts8hSNVck3zia2rwRRElfzVqDNZGQkeUVSjT7StwngdsUoMxIpMwguZemvHZmQGdiKAw=
+	t=1754493140; cv=none; b=LAjIMOcPMO/5K8YEhPIB1xFh+ECl/hIrjWzrUQVLoKXwomrBalqC2S8WofKN96Q6nIgf3jG8HKdoTAnODzHZBOh2BUD4cooZzSqV6iikLfP1KmZV22jP3mACw9zOT4hEkI2fwWFaaqZn36Aqah1hdANKziTV/mFA2RaVq+AuyLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754461962; c=relaxed/simple;
-	bh=jDKC/syZWU1n1ppwCNuDOAfWflzfkOXA/+26B+/ivyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CBQpiIPaS+3jZtEq30dKtFDWj7Hf+RBWcUX6hEQQ5stsSeM8k4WjtDBwChARZ9LAuk4QvA98ZzdDw8sWtjUmuwZiVjQ1ZrsSI+7urnfNYZqiZLdN3FxwUy6IbZQ0p2j7hzl4TX9tqGeNK+UyF+SneU0vH2slbxzBgWcbLJtllR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGLYSOKC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754493140; c=relaxed/simple;
+	bh=lRBTQ2sbJ+Nz/6xVV+Aj8nlYxa+/Em/Tzewzgn5Cdwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LuD70yQ5ARP+RTbd/WCvA3+TYBgFdQCrorvPp/ZyCdVv9h1Sv7yDQpPJS08tzppiCaR7fCtBZUQa1OT/ZHccO6DWb0IHXQ7aTcpuctS4ZBFwqnR54ZjE99pKyq4gbOWMNfb9oNyv8imN0cGZn7HBecBKjIef4+1279+ZZnznyH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NuCx0J6E; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGLYSOKC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B348C4CEE7;
-	Wed,  6 Aug 2025 06:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754461962;
-	bh=jDKC/syZWU1n1ppwCNuDOAfWflzfkOXA/+26B+/ivyc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RGLYSOKCVJNuqWxsi8c+xGOLXG+1rbBoRpeFexn5UhvAPPUtQ3xBggB5xJisGwYVe
-	 4ZJTefHP0xJ2aLCB6WExKz5jWCTka9C/aA7HabFqt+AkYwL7druUkRg4LtAJxuTNSV
-	 StiDbkQDBw1EDATElgCHwpRJcWm9dkHNt9fVNKBDSQMJvb+Y2VMcuYURJGSBVFjw4e
-	 6kH5Jsnnfc/nqCDkEmkZwEJm78QRXs3E4TEFTRokwrD5hm2glVKM2sYKIpFP8SanGp
-	 qITmI1GeiSO/tWydcjC+E9KnJrHWsS0v/3ExvoCi1CP7BoU4csHwojyPkpoo0F4ria
-	 LWDweIR4cH0sg==
-Message-ID: <f2972a86-f58d-4360-b43a-486377b101e1@kernel.org>
-Date: Wed, 6 Aug 2025 08:32:38 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NuCx0J6E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754493137; x=1786029137;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lRBTQ2sbJ+Nz/6xVV+Aj8nlYxa+/Em/Tzewzgn5Cdwc=;
+  b=NuCx0J6E5d9zJlAGYl4Pv8kl6lF+3C77jYYwFe5c4YxuMS7eO+xZR8rm
+   s2Tah43H/SKtQvUj4h1Y2VRJOi4XEIBkF4AuqIaPEWf9FmiVbVhww2APo
+   cnkpLVNpMRL1iZt8x0jBvoz1QdvRoRY1QzWR7OnyJkItmteA3lSJCtugm
+   DT+J8kX0TLuYoK/E7AzYrE117jsTl71soYerDBkd8tPS6wEL73wTHqNQY
+   6j5V/NrlZgpDotFCodzxGamLZ4Me6dhjHUGFjDj2GH212Lz9G/tSPdtqj
+   vPB7nTVusZVTvLV60o7lG/vRkfaFSsYxWflN2lX+qlGSHN1eQurssKwlU
+   A==;
+X-CSE-ConnectionGUID: XtY8mxB3T4ejvbOmAm6k/Q==
+X-CSE-MsgGUID: iixb1WhZSQ+SALm7lN2Gnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11514"; a="67510052"
+X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
+   d="scan'208";a="67510052"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2025 08:12:16 -0700
+X-CSE-ConnectionGUID: GHwkRMBmT5C0VJIjP7MXEg==
+X-CSE-MsgGUID: u7AAnbzWQRqWomDHpkSwAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
+   d="scan'208";a="170172564"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 06 Aug 2025 08:12:14 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ujfoI-0001oM-2l;
+	Wed, 06 Aug 2025 15:12:10 +0000
+Date: Wed, 6 Aug 2025 23:12:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "a.shimko" <artyom.shimko@gmail.com>, linux-hwmon@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, "a.shimko" <artyom.shimko@gmail.com>,
+	linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+	cristian.marussi@arm.com, jdelvare@suse.com,
+	guenter.roeck@linux.com
+Subject: Re: [PATCH 1/3] hwmon: scmi: Add default case with debug output
+Message-ID: <202508062201.bWDZGD03-lkp@intel.com>
+References: <20250805125003.12573-2-artyom.shimko@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina780a: Add INA780 device
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
- linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250805125003.12573-2-artyom.shimko@gmail.com>
 
-On 06/08/2025 02:51, Chris Packham wrote:
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ina780a
-> +      - ti,ina780b
-> +
-> +  reg:
-> +    maxItems: 1
+Hi a.shimko,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.16 next-20250806]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/a-shimko/hwmon-scmi-Add-default-case-with-debug-output/20250806-122638
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250805125003.12573-2-artyom.shimko%40gmail.com
+patch subject: [PATCH 1/3] hwmon: scmi: Add default case with debug output
+config: arc-randconfig-001-20250806 (https://download.01.org/0day-ci/archive/20250806/202508062201.bWDZGD03-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 12.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250806/202508062201.bWDZGD03-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508062201.bWDZGD03-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/hwmon/scmi-hwmon.c: In function 'scmi_hwmon_probe':
+>> drivers/hwmon/scmi-hwmon.c:278:17: error: 'default' label not within a switch statement
+     278 |                 default:
+         |                 ^~~~~~~
 
 
-This looks a bit incomplete. Where is a supply? No shunt resistor
-choice? No other properties from ina2xx apply?
+vim +/default +278 drivers/hwmon/scmi-hwmon.c
 
+   228	
+   229	static int scmi_hwmon_probe(struct scmi_device *sdev)
+   230	{
+   231		int i, idx;
+   232		u16 nr_sensors;
+   233		enum hwmon_sensor_types type;
+   234		struct scmi_sensors *scmi_sensors;
+   235		const struct scmi_sensor_info *sensor;
+   236		int nr_count[hwmon_max] = {0}, nr_types = 0, nr_count_temp = 0;
+   237		const struct hwmon_chip_info *chip_info;
+   238		struct device *hwdev, *dev = &sdev->dev;
+   239		struct hwmon_channel_info *scmi_hwmon_chan;
+   240		const struct hwmon_channel_info **ptr_scmi_ci;
+   241		const struct scmi_handle *handle = sdev->handle;
+   242		struct scmi_protocol_handle *ph;
+   243	
+   244		if (!handle)
+   245			return -ENODEV;
+   246	
+   247		sensor_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_SENSOR, &ph);
+   248		if (IS_ERR(sensor_ops))
+   249			return PTR_ERR(sensor_ops);
+   250	
+   251		nr_sensors = sensor_ops->count_get(ph);
+   252		if (!nr_sensors)
+   253			return -EIO;
+   254	
+   255		scmi_sensors = devm_kzalloc(dev, sizeof(*scmi_sensors), GFP_KERNEL);
+   256		if (!scmi_sensors)
+   257			return -ENOMEM;
+   258	
+   259		scmi_sensors->ph = ph;
+   260	
+   261		for (i = 0; i < nr_sensors; i++) {
+   262			sensor = sensor_ops->info_get(ph, i);
+   263			if (!sensor)
+   264				return -EINVAL;
+   265	
+   266			switch (sensor->type) {
+   267			case TEMPERATURE_C:
+   268			case VOLTAGE:
+   269			case CURRENT:
+   270			case POWER:
+   271			case ENERGY:
+   272				type = scmi_types[sensor->type];
+   273				if (!nr_count[type])
+   274					nr_types++;
+   275				nr_count[type]++;
+   276				break;
+   277			}
+ > 278			default:
+   279				dev_dbg(dev, "Skipping unsupported sensor ID:%d Type:%d (%s)\n",
+   280					i, sensor->type, sensor->name ? sensor->name : "unnamed");
+   281				continue;
+   282		}
+   283	
+   284		if (nr_count[hwmon_temp])
+   285			nr_count_temp = nr_count[hwmon_temp];
+   286	
+   287		scmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*scmi_hwmon_chan),
+   288					       GFP_KERNEL);
+   289		if (!scmi_hwmon_chan)
+   290			return -ENOMEM;
+   291	
+   292		ptr_scmi_ci = devm_kcalloc(dev, nr_types + 1, sizeof(*ptr_scmi_ci),
+   293					   GFP_KERNEL);
+   294		if (!ptr_scmi_ci)
+   295			return -ENOMEM;
+   296	
+   297		scmi_chip_info.info = ptr_scmi_ci;
+   298		chip_info = &scmi_chip_info;
+   299	
+   300		for (type = 0; type < hwmon_max; type++) {
+   301			if (!nr_count[type])
+   302				continue;
+   303	
+   304			scmi_hwmon_add_chan_info(scmi_hwmon_chan, dev, nr_count[type],
+   305						 type, hwmon_attributes[type]);
+   306			*ptr_scmi_ci++ = scmi_hwmon_chan++;
+   307	
+   308			scmi_sensors->info[type] =
+   309				devm_kcalloc(dev, nr_count[type],
+   310					     sizeof(*scmi_sensors->info), GFP_KERNEL);
+   311			if (!scmi_sensors->info[type])
+   312				return -ENOMEM;
+   313		}
+   314	
+   315		for (i = nr_sensors - 1; i >= 0 ; i--) {
+   316			sensor = sensor_ops->info_get(ph, i);
+   317			if (!sensor)
+   318				continue;
+   319	
+   320			switch (sensor->type) {
+   321			case TEMPERATURE_C:
+   322			case VOLTAGE:
+   323			case CURRENT:
+   324			case POWER:
+   325			case ENERGY:
+   326				type = scmi_types[sensor->type];
+   327				idx = --nr_count[type];
+   328				*(scmi_sensors->info[type] + idx) = sensor;
+   329				break;
+   330			default:
+   331				dev_dbg(dev, "Skipping unsupported sensor ID:%d Type:%d (%s)\n",
+   332					i, sensor->type, sensor->name ? sensor->name : "unnamed");
+   333				continue;
+   334			}
+   335		}
+   336	
+   337		hwdev = devm_hwmon_device_register_with_info(dev, "scmi_sensors",
+   338							     scmi_sensors, chip_info,
+   339							     NULL);
+   340		if (IS_ERR(hwdev))
+   341			return PTR_ERR(hwdev);
+   342	
+   343		for (i = 0; i < nr_count_temp; i++) {
+   344			int ret;
+   345	
+   346			sensor = *(scmi_sensors->info[hwmon_temp] + i);
+   347			if (!sensor)
+   348				continue;
+   349	
+   350			/*
+   351			 * Warn on any misconfiguration related to thermal zones but
+   352			 * bail out of probing only on memory errors.
+   353			 */
+   354			ret = scmi_thermal_sensor_register(dev, ph, sensor);
+   355			if (ret) {
+   356				if (ret == -ENOMEM)
+   357					return ret;
+   358				dev_warn(dev,
+   359					 "Thermal zone misconfigured for %s. err=%d\n",
+   360					 sensor->name, ret);
+   361			}
+   362		}
+   363	
+   364		return 0;
+   365	}
+   366	
 
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
