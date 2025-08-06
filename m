@@ -1,67 +1,67 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0182E3718
-	for <linux-hwmon@vger.kernel.org>; Wed,  6 Aug 2025 03:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521EE199931;
+	Wed,  6 Aug 2025 03:15:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754449632; cv=none; b=Q6b3rDUyLXX2ToL8beQ+tcYqbm0Tp7mBiGCYeJcMNCg/Xza0IAudnAlNx0lTujNgLOR2L71geJl0PzayTP3tGyZQ6AE+LNCItGG7yzQFDjmDRM6wsSinQ9nTm8Mv5tAsrbGBHjB+1sti/vGCzzKhnlZhI2NptX+Psp+Wvq6fhwQ=
+	t=1754450102; cv=none; b=W2+o1jNHSIdnWioJfBp7G6mfRuU7P5SrYJQLnbjoUq5AqGkAOa30Rdu8nykFbBYAkRVZc8owq0acUYIHjZoVGr2IoJ+HkT76hJNpsF9ysKuW2miP/9foXn8EZm2vA3M1sl0nLQQYL9WC2xqUDrZyBgPWrtpzKjf1bERHvyklHUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754449632; c=relaxed/simple;
-	bh=O+5LeFqNJGSGEtaC4nO+d20ATneMk6muhPoTPNGhNUU=;
+	s=arc-20240116; t=1754450102; c=relaxed/simple;
+	bh=EbY3vb5nJiuhstH/MUgZ/kdqRmd3CcCHo2dRcTLXkOk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Raf/0ulEIrK1iQM3qpkExg5DEwSIUcOnimITAwSWXD+O5OX2voIkXCrx9p6IKa3tS3nhvpPijUE4y/5yxBAdXFRSnaMZbo0RU9YafHOxcOwanPFiG6GqgWSMFK83onQs4nSMWlIkOWbKNGTjtvnmhfcZlX0L5DZLFSJOnU1gscE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fk50YDcU; arc=none smtp.client-ip=209.85.210.179
+	 In-Reply-To:Content-Type; b=lsbI8JvZz2wTSat3wPrj95ZGe2sEjKl3Q9odFcWH8yM6MC2+sQOQ4EphTNJCRUqw7uEkBAVRVQ52Ps2xv0o/jbunQdn7qse4KWDOK0VhYXDdft6AWugQHHobQgXvRcjNLw3IvL/pqFWJ02DdYRd4CCrBU6nCB/nwY3ZBixcmOAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MfdPMSq1; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fk50YDcU"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76bd2b11f80so5227144b3a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 05 Aug 2025 20:07:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MfdPMSq1"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-313a001d781so5273015a91.3;
+        Tue, 05 Aug 2025 20:15:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754449630; x=1755054430; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754450100; x=1755054900; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lr1FlAv9YIlTYXcepj7UVEG/Y7I/61UK5trMeOxycZw=;
-        b=fk50YDcUBBfCiA8cmqdD2BFLFFRR45nwVqlykbcYJ4T/wELdmiItiMozn1GaFE2VO7
-         GJTWAYhIGnaj+9qVjvwn9pSRDrUxtYBdEwcu0w9K46h8reU/5bXScKHr1OAf9c8Zlack
-         yK3SBzrKJ9qsWFQpfFhP7VEFG9SebOKlWrlCuD4jn5fsYaNDKDjrY1rmUSe4atUCUAst
-         ehBby2I9Jr5CSF21+WB5+zkN6ryCNkREx3UXmb2DO64tTMyt4+0NAws2FC3qnqyJYLMI
-         3QJJNorZc/PplsGNt5FProyZTNcrP2y7CVcZNas+1N4F+iZ4rVDNWxdJD0f4EVjtAE2l
-         8r6g==
+        bh=FKlo96Z8h7/Xm6bQzZ0wd+2ryR6dxIsF/X2HceDzkGE=;
+        b=MfdPMSq18dcyT80LT2MkE2WDeghGNbiDYspLYDFGt3yOROX1KqVa+zDye5AU7DERBl
+         hLOfx1R88oE+7TTa9JkWkp3G1wxqfC/3q4KxYF3lrNdAfWD1BdFrKzRc07icqm4xPSyl
+         +bV0MFt3U1VyyPBQEtcD2dS1FY9WWjXYqHbFNYPSNrTZKq7FMTgwlXrCUUAJ0TG2BG80
+         dRpyJE4qpVy/+iXav+DMttmP/pq4VUsWG34PyT6OYElf9yfa4KPE4klG/npR01Tpn0+5
+         Naf4D0XocBGlm7IZqXrY5zu0//V5E29G1SjNZc5o55YH139PjwEDLn0LpCPCx4Kcaajn
+         tFcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754449630; x=1755054430;
+        d=1e100.net; s=20230601; t=1754450100; x=1755054900;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lr1FlAv9YIlTYXcepj7UVEG/Y7I/61UK5trMeOxycZw=;
-        b=GZXDaD06tUO0rC/EQ8HhhZ6JoF25SUx6F2pyClujQn7s4IxOVBZ4FKYAtI+zhFsJLX
-         uY1Z29j/Qi2roeB/YDK67pMceu8ZE+PvJrkWo5VtNwUEo+RB3e7b9pE3PJlmjgid9JDX
-         KusHXu75oPlqFi/x3MTzQRPISOQ1pRqoAGux+asUDC3f9wD3kNvxUo2jHPzvJBpz9M7c
-         6Ws+JUGUYleHOg+iXexkky7Z7d2UFmpRtlId571JOWsdcoXBTuwiSFkZ8XF/k0DcnCTl
-         mBfvapkhAKupgCFjcEeh25ZwMKiyNn497JI1s5GYdGXMohe/OkmGbl0mQNoB1+H5Lrrl
-         sECg==
-X-Forwarded-Encrypted: i=1; AJvYcCUS3Vfvjyl79XP7BrMI7wTQO41E4siFdm1+j1j2k+gw/zeYt9//DTqTV2uVRuM6bJCVkihDGNBdEELZuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDRAGWOOAyUDGezNNBTaHikW0+RkrIJuuU4T8QoXivwmPvQbvu
-	DhlQfU9KEcOxZ484RLua9Wcszk8R9mXDC7WSxm7hosgVUcsE8AEch8z9
-X-Gm-Gg: ASbGncsXx6i5p+TLWLkWOgKMz1PTdk/BpBRmM8Uvtnp3ZTg90XC/F0xfjWwabGAuKaO
-	IrKIfwtZ+Ka3M4qQGJQzw97zdbh9WA4iD8L2x1lskZ/6S1RRYoSua2IUmGZQ8OfI11N4zWXq+fW
-	bZSyUNpeZMLUDOONbot4OBjgbcdGZiR4k7fiq4YqeoVdedS1M392YLrxCiH2azMeUaJAva3qgRC
-	p9GljHkwi2QuJxO8ndOWIzZ1n5hsC6+vH+Iz8jW3PlxfS6l6hbYB07eIuuzYH2ZRPdr4e4e/1FK
-	OdgPCPFGtDE5vTOFe+/ij53J/iLiCxMguuq1o+RfmHn8q0o+5gl3BPMMToQ1Ha+Z8KKYLg03+eW
-	4HnEV1+vh/hzSGE6cUhVuY0yawZmK/d4/eWxtZLPj/F6OGl2fUXtzQ7GaIA/69Bbn72row64=
-X-Google-Smtp-Source: AGHT+IEZTmuhXZw4OK8cKGeF4OKFzYKEXs1H54jRH0HDoCqk9mpbIcoGmbnUD+zJnHmg1YqEoqG+Nw==
-X-Received: by 2002:a05:6a00:1788:b0:76b:cadf:5dbe with SMTP id d2e1a72fcca58-76c29b27de9mr1656359b3a.0.1754449629586;
-        Tue, 05 Aug 2025 20:07:09 -0700 (PDT)
+        bh=FKlo96Z8h7/Xm6bQzZ0wd+2ryR6dxIsF/X2HceDzkGE=;
+        b=PLnpvenVXaTsk8yeFGycum/krnwDWTVNU7Trzb6XX3lbYVwjlTONc2UMZaCOMrRI6w
+         IfQfkPsv0gPr6naUpF3Onf/flW9GZla+hbSzNaqsZ+GZMGGwaPU2IwRX5hGl+d2QOeM7
+         slMlnJLsEf+gQ3/me6Ia8Lnp5Uq8eS3Peb6ZNadPOrs+DzpH1yEHwKddn2uDtZWFy9/z
+         NriSLJzaqIPDANwFTG2jRMrI96WBDOEq1Xju5piw57hpKOzZf6EmvibIkpXn7lZV7TWs
+         LDyD20masvCvOp/8p9RBizOU7HBkgaetOagwzdmtL3+rfF0FcN3P9HIFdz6wDNYlwBCT
+         rDsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFXNLqvrygvXezgP92LSbodROGqXF/RWY7pF3tBPB796bV04Ug9QRk4I9asZVY3NzETAov7Z3MlrGn@vger.kernel.org, AJvYcCVSQRICYAn25w394J40Rj6zZ2GL9DMxefEm/xM3Dfsx5h8+HPgg2vGPhbuzygAZFpp+cIBHWG13ORtJAART@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkKG6plHA6AuuxzPFnKfQxUDR8EdUWDZ9e3Yemuimr8A4Y1q+i
+	Hb2szonABaxb9ftE87qD1551YfVIB2Gu4oor2dwAoefJ1hh15nYLPL64Xphf+Q==
+X-Gm-Gg: ASbGncuzDXOWS19Bh6FWAhP+E8kIui+4ZvYGUh19ZP1xcpXJjxc4CiLOH2+hUYlG2Ye
+	I4WRmiVq1TgTx5l9GQhcXXZNZx+oZimc2fNXdqlRPSnWYEz8zhRAoeBS1c3g5Jk4kWrV1/oRX5V
+	pe3RqTcHG2j8C6OqDTiuNWi+O6sRzxpLerBjGRDKY39GGqYkYi9OBpdx4rYu5wAvQ6Y9NuoLrYt
+	EjI8xDLxVCpx7LypDuhDHiggchFl5XckkhtvmL937eHCXUosMBUJUXifEGwSMzprrLA+VK+ijjG
+	R+9YOIP4qy8hdc6VebqcJ26I33/+lasxuM/0QT5E/RpM42HhCCNz5VAdfvMrWSa/FgE5ZXKqth4
+	8qEyDtIhE+Uzh5922qvdDyAusRiYbaN9gIzwZawdh25otNrlPihKPiBLsKaebnOjbohLINdM=
+X-Google-Smtp-Source: AGHT+IGecgNQRjmTC7HzaMwNFKebma9In7w2RFIWD5TjU4S0tMtUhhqovlxsKk4bF6wyvxohXmLfPQ==
+X-Received: by 2002:a17:90b:1d50:b0:31e:e88b:ee0d with SMTP id 98e67ed59e1d1-32166c2bd3emr1602159a91.9.1754450099438;
+        Tue, 05 Aug 2025 20:14:59 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76befc445a9sm9168019b3a.109.2025.08.05.20.07.08
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-321612950c7sm1443811a91.31.2025.08.05.20.14.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 20:07:09 -0700 (PDT)
+        Tue, 05 Aug 2025 20:14:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5b378c11-1419-4c78-9c7a-df37ff80afe4@roeck-us.net>
-Date: Tue, 5 Aug 2025 20:07:08 -0700
+Message-ID: <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
+Date: Tue, 5 Aug 2025 20:14:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,20 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Clarification regarding handling of PMBUS_STATUS_WORD in generic
- PMBus driver
-To: "Soloninov, Alexander" <alexander.soloninov@siemens.com>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "titusr@google.com" <titusr@google.com>
-Cc: "Busch, Martin" <martin.busch@siemens.com>,
- "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "jdelvare@suse.com" <jdelvare@suse.com>,
- "Dabek, Florian" <florian.dabek@siemens.com>
-References: <GVXPR10MB817781435A2F2955D0D5A58CF222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
- <GVXPR10MB8177AEDA5EC62CFD7BFAB40DF222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
- <aaa21aa2-70ad-4646-8020-73945e273922@roeck-us.net>
- <GVXPR10MB8177CD027751FAA6EABF7FD3F222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+ <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,25 +121,17 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <GVXPR10MB8177CD027751FAA6EABF7FD3F222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/5/25 14:34, Soloninov, Alexander wrote:
-> Hi Guenter,
+On 8/5/25 17:51, Chris Packham wrote:
+> Add support for the TI INA780 Digital Power Monitor.
 > 
-> Thank you for the clarification and the grep output - you're absolutely right!
-> 
-> I apologize for the confusion in my initial message.
-> I had incorrectly stated that PMBUS_STATUS_WORD wasn't being processed at all by the generic driver.
-> After reviewing the code more carefully following your response, I can clearly see that PMBUS_STATUS_WORD is indeed used extensively throughout the PMBus subsystem - for initialization, internal status monitoring, error handling, and regulator integration.
-> 
-> My actual question should have been about direct hwmon sysfs attribute exposure of the complete STATUS_WORD register (like /sys/class/hwmon/hwmonX/status_word), which the PMBus core correctly doesn't provide since it processes STATUS_WORD internally and breaks it down into individual status sensors as intended.
-> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-The attributes in /sys/class/hwmon/hwmonX/ reflect a standardized chip-independent ABI.
-Chip specific values do not belong there. The raw status register value is reported -
-together with various other raw register values - as debugfs file.
+Looking at the registers, the chip seems to be almost identical to INA237/238.
+Why a new driver ?
 
 Guenter
 
