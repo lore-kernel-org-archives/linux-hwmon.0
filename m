@@ -1,94 +1,111 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C4F3FC7
-	for <linux-hwmon@vger.kernel.org>; Wed,  6 Aug 2025 03:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FBB202F7B;
+	Wed,  6 Aug 2025 06:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754451707; cv=none; b=NewJB6d3Bd82uIaHtQlinAr9qdxSq9TniRz+vOjSN8mIv3lvkPDMf8v2bUcWdmrc5UkASWmOkN47uLPr+sclJEei+s2tl7dZB1K6PgXe/fag1zCc4NBsl+hXUmNz2vVKLKrsZYPOm8G8tYMDPy65mBIF1mjJUvXT0ASAvdxSiRI=
+	t=1754461962; cv=none; b=TIL22mSCAVYQLF30UnRIgXiA/pyxHhluopmLDbLqLS8wnVj+fDq2nVSZwWNkhgFzZ65+O7qU1e0iwmQhhSzUKYnk+SjpHspYp/nFxRkts8hSNVck3zia2rwRRElfzVqDNZGQkeUVSjT7StwngdsUoMxIpMwguZemvHZmQGdiKAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754451707; c=relaxed/simple;
-	bh=d75mbpsX8RQ3NybfUutsz/AWNUxpxg7TXiUsHrhVkGg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=aBHCUFwVk/muRjhM18O26oWiU80YrbTs5vkeKow9+9LIqb9C3omfb6QYIPTYvHkwTxZjmleJKAR6mbP/5MMJkbqHCbGJYcG4jUWosAMrnaNGcmb6SCXPzOI98PGfwX6fno4ffvWdri0OV1eLenMBb8m4HayHydPkZEFclmAyefA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=eRBQ6UIP; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1754461962; c=relaxed/simple;
+	bh=jDKC/syZWU1n1ppwCNuDOAfWflzfkOXA/+26B+/ivyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CBQpiIPaS+3jZtEq30dKtFDWj7Hf+RBWcUX6hEQQ5stsSeM8k4WjtDBwChARZ9LAuk4QvA98ZzdDw8sWtjUmuwZiVjQ1ZrsSI+7urnfNYZqiZLdN3FxwUy6IbZQ0p2j7hzl4TX9tqGeNK+UyF+SneU0vH2slbxzBgWcbLJtllR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGLYSOKC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="eRBQ6UIP"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D12C52C00FE;
-	Wed,  6 Aug 2025 15:41:41 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1754451701;
-	bh=d75mbpsX8RQ3NybfUutsz/AWNUxpxg7TXiUsHrhVkGg=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=eRBQ6UIPJTZC0trG+YnrkQZqcnBUVqBCd9+uu4mwGY24ngo2j5yzqYblXz2VLeU1+
-	 265ZrShHK+MoxnQrjkIeEsB4ZUSLRIEwhs2h9ghi7aBvnugwl36onlvp8Lb4M8B6Up
-	 y2mJYrtuLmP8NnZeavHHC0FbVRSBP4qX4FoJDmhhiqSsQJ8gKG6fDzFolV3hMRE1hx
-	 SvN3m5g9jIwlqgOKLDjJ4YI6B5Vv5oBmQNH3Sly6EX0p4cmIXw3WjbTqM5M/cWaX9A
-	 tJQRQHKnuScMkSykYpS3qMvf1TXneLloIrM+GaNfwhvXb7ISh0cwIYLZPWwazba3nL
-	 6Ncwsx4mcgktA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6892cef50001>; Wed, 06 Aug 2025 15:41:41 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Wed, 6 Aug 2025 15:41:41 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Wed, 6 Aug 2025 15:41:41 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Guenter Roeck <linux@roeck-us.net>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
-Thread-Topic: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
-Thread-Index: AQHcBmxCTEWvZ5TWkkCoS1XTid0nk7RUKo+AgAAHdwA=
-Date: Wed, 6 Aug 2025 03:41:41 +0000
-Message-ID: <7f621788-372b-4a0b-a126-4c2d1d9a926c@alliedtelesis.co.nz>
-References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
- <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
- <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
-In-Reply-To: <fa1b8f0f-23a3-4baa-a424-9b1506a9699c@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <90294AC783469245A47949C90DB2C716@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGLYSOKC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B348C4CEE7;
+	Wed,  6 Aug 2025 06:32:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754461962;
+	bh=jDKC/syZWU1n1ppwCNuDOAfWflzfkOXA/+26B+/ivyc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RGLYSOKCVJNuqWxsi8c+xGOLXG+1rbBoRpeFexn5UhvAPPUtQ3xBggB5xJisGwYVe
+	 4ZJTefHP0xJ2aLCB6WExKz5jWCTka9C/aA7HabFqt+AkYwL7druUkRg4LtAJxuTNSV
+	 StiDbkQDBw1EDATElgCHwpRJcWm9dkHNt9fVNKBDSQMJvb+Y2VMcuYURJGSBVFjw4e
+	 6kH5Jsnnfc/nqCDkEmkZwEJm78QRXs3E4TEFTRokwrD5hm2glVKM2sYKIpFP8SanGp
+	 qITmI1GeiSO/tWydcjC+E9KnJrHWsS0v/3ExvoCi1CP7BoU4csHwojyPkpoo0F4ria
+	 LWDweIR4cH0sg==
+Message-ID: <f2972a86-f58d-4360-b43a-486377b101e1@kernel.org>
+Date: Wed, 6 Aug 2025 08:32:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=dtt4CEg4 c=1 sm=1 tr=0 ts=6892cef5 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=JIY_GJIoiM6udwNnU9sA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina780a: Add INA780 device
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
+ linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGkgR3VlbnRlciwNCg0KT24gMDYvMDgvMjAyNSAxNToxNCwgR3VlbnRlciBSb2VjayB3cm90ZToN
-Cj4gT24gOC81LzI1IDE3OjUxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gQWRkIHN1cHBvcnQg
-Zm9yIHRoZSBUSSBJTkE3ODAgRGlnaXRhbCBQb3dlciBNb25pdG9yLg0KPj4NCj4+IFNpZ25lZC1v
-ZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4N
-Cj4NCj4gTG9va2luZyBhdCB0aGUgcmVnaXN0ZXJzLCB0aGUgY2hpcCBzZWVtcyB0byBiZSBhbG1v
-c3QgaWRlbnRpY2FsIHRvIA0KPiBJTkEyMzcvMjM4Lg0KPiBXaHkgYSBuZXcgZHJpdmVyID8NCg0K
-WWVzIEknZCBub3RpY2VkIHRoZSBzYW1lIHRoaW5nIGFzIEkgd2VudCBhbG9uZy4gVGhlIElOQTc4
-MCBoYXMgdGhlIA0KZXpzaHVudCB0aGluZyAobm90IHN1cmUgaWYgdGhhdCdzIHRoZSBzYW1lIGFz
-IHRoZSBpbnRlcm5hbCBzaHVudCBvbiB0aGUgDQpJTkEyNjApIHdoaWNoIG1lYW5zIHRoYXQgYSBs
-b3Qgb2YgdGhlIHBsYWNlcyB3aGVyZSB0aGluZ3MgYXJlIGNhbGN1bGF0ZWQgDQpieSB0aGUgc2h1
-bnQgcmVzaXN0b3IgdmFsdWUgYXJlbid0IGFwcGxpY2FibGUgYW5kIHRoZXJlJ3Mgb25lIGxlc3Mg
-DQp2b2x0YWdlIHNlbnNvci4gSSBkaWQgY29uc2lkZXIgYWRkaW5nIGl0IHRvIHRoZSBpbmEyeHgu
-YyBidXQgaXQgc2VlbWVkIA0KZGlmZmVyZW50IGVub3VnaCB0byB0aG9zZSBjaGlwcyB0byB3YXJy
-YW50IGEgc2VwYXJhdGUgZHJpdmVyLg0KDQpJIHRoaW5rIEkgY2FuIGtpbmQgb2Ygc3F1aW50IGFu
-ZCBzZWUgaG93IEkgbWlnaHQgZm9sZCB0aGUgaW5hNzgwIHN1cHBvcnQgDQppbnRvIHRoZSBpbmEy
-MzggZHJpdmVyIGFsdGhvdWdoIHRoYXQgbWF5IG1ha2UgdGhpbmdzIGEgYml0IG1lc3NpZXIuIElm
-IA0KdGhhdCdzIHRoZSBkaXJlY3Rpb24geW91J2QgbGlrZSB0byBoZWFkIEkgY2FuIGdpdmUgaXQg
-YSBnby4NCg==
+On 06/08/2025 02:51, Chris Packham wrote:
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ina780a
+> +      - ti,ina780b
+> +
+> +  reg:
+> +    maxItems: 1
+
+
+This looks a bit incomplete. Where is a supply? No shunt resistor
+choice? No other properties from ina2xx apply?
+
+
+
+Best regards,
+Krzysztof
