@@ -1,692 +1,152 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DE054918
-	for <linux-hwmon@vger.kernel.org>; Wed,  6 Aug 2025 00:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0182E3718
+	for <linux-hwmon@vger.kernel.org>; Wed,  6 Aug 2025 03:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754441507; cv=none; b=tA5MpgN4CAOXsCMzagJXZMQGuRElAdHtE2RCSFwyA57czm1NNpJkv3RoX8hrfYT7ACQJSZr3vd2YurtYuAMqMhFLFh1GBDYCPjBzXe/p87nXYGf5qJEvC10K/ZZPO+2DS+t9b8KYCsXeiqiC/3AIDh3eQ1Ds957zp3Al/fZJgoo=
+	t=1754449632; cv=none; b=Q6b3rDUyLXX2ToL8beQ+tcYqbm0Tp7mBiGCYeJcMNCg/Xza0IAudnAlNx0lTujNgLOR2L71geJl0PzayTP3tGyZQ6AE+LNCItGG7yzQFDjmDRM6wsSinQ9nTm8Mv5tAsrbGBHjB+1sti/vGCzzKhnlZhI2NptX+Psp+Wvq6fhwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754441507; c=relaxed/simple;
-	bh=kCjwEMASjmh5kon1lw5PCMXTYrU3mXaUze5/VEljYps=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=flDXku7uWnIb2/AKODLR3W69TD6iqDV8OjzD57pJU1Ej3y9cw+0TMs2Too8mHhQHQADuZGTjGjuhpPu/9Om7bFQm4IpbXhA5fdDpe1RQTkHi26wOt3h7g5iXKU+fYOENnjt/rnOTRKn7pxE6AF2MWqI77oJ7fwPM57EqVXh68Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=uhvgD4lj; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1754449632; c=relaxed/simple;
+	bh=O+5LeFqNJGSGEtaC4nO+d20ATneMk6muhPoTPNGhNUU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Raf/0ulEIrK1iQM3qpkExg5DEwSIUcOnimITAwSWXD+O5OX2voIkXCrx9p6IKa3tS3nhvpPijUE4y/5yxBAdXFRSnaMZbo0RU9YafHOxcOwanPFiG6GqgWSMFK83onQs4nSMWlIkOWbKNGTjtvnmhfcZlX0L5DZLFSJOnU1gscE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fk50YDcU; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="uhvgD4lj"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 288D32C0422;
-	Wed,  6 Aug 2025 12:51:36 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1754441496;
-	bh=HLiSFVtVy+gKGhA+HX6b+4jx8QXzRVLf9y7jIpS+GMY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uhvgD4ljxzwVWS/K+3eiZJV0haiDj9ZROZXFaG4GipLJXKaRNw8HpkRqteIQlde3g
-	 oMtNaZCPtoCWBU/NQoa2ShwnGhcYJQQqZeCI+ysNZ5SyM6gNNy7gcWpy1VZfDyCqel
-	 jvQi2uc89b+VjJDsqbO2JC41p7FqLcRjezD6NKI78t0iMSaJjWnvjHIGHCpgWZLBSN
-	 wyZshD4+ogpvUcn0btM5stZwtO5DbbL6rimj39CmJwtFrSTYWVYC51sEEi4nhgybU/
-	 CslMVDdQady6Idm2bHcVQXfJfQwTU2lmutHgAriyQyqiQtB6TNZkYBKDE2D9he15Yi
-	 EePQ12P6jVN+A==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6892a7170000>; Wed, 06 Aug 2025 12:51:35 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id DD5C913EE2B;
-	Wed,  6 Aug 2025 12:51:35 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id DA7B1280564; Wed,  6 Aug 2025 12:51:35 +1200 (NZST)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: jdelvare@suse.com,
-	linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 2/2] hwmon: (ina780) Add driver for TI INA780
-Date: Wed,  6 Aug 2025 12:51:27 +1200
-Message-ID: <20250806005127.542298-2-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
-References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fk50YDcU"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76bd2b11f80so5227144b3a.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 05 Aug 2025 20:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754449630; x=1755054430; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=lr1FlAv9YIlTYXcepj7UVEG/Y7I/61UK5trMeOxycZw=;
+        b=fk50YDcUBBfCiA8cmqdD2BFLFFRR45nwVqlykbcYJ4T/wELdmiItiMozn1GaFE2VO7
+         GJTWAYhIGnaj+9qVjvwn9pSRDrUxtYBdEwcu0w9K46h8reU/5bXScKHr1OAf9c8Zlack
+         yK3SBzrKJ9qsWFQpfFhP7VEFG9SebOKlWrlCuD4jn5fsYaNDKDjrY1rmUSe4atUCUAst
+         ehBby2I9Jr5CSF21+WB5+zkN6ryCNkREx3UXmb2DO64tTMyt4+0NAws2FC3qnqyJYLMI
+         3QJJNorZc/PplsGNt5FProyZTNcrP2y7CVcZNas+1N4F+iZ4rVDNWxdJD0f4EVjtAE2l
+         8r6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754449630; x=1755054430;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lr1FlAv9YIlTYXcepj7UVEG/Y7I/61UK5trMeOxycZw=;
+        b=GZXDaD06tUO0rC/EQ8HhhZ6JoF25SUx6F2pyClujQn7s4IxOVBZ4FKYAtI+zhFsJLX
+         uY1Z29j/Qi2roeB/YDK67pMceu8ZE+PvJrkWo5VtNwUEo+RB3e7b9pE3PJlmjgid9JDX
+         KusHXu75oPlqFi/x3MTzQRPISOQ1pRqoAGux+asUDC3f9wD3kNvxUo2jHPzvJBpz9M7c
+         6Ws+JUGUYleHOg+iXexkky7Z7d2UFmpRtlId571JOWsdcoXBTuwiSFkZ8XF/k0DcnCTl
+         mBfvapkhAKupgCFjcEeh25ZwMKiyNn497JI1s5GYdGXMohe/OkmGbl0mQNoB1+H5Lrrl
+         sECg==
+X-Forwarded-Encrypted: i=1; AJvYcCUS3Vfvjyl79XP7BrMI7wTQO41E4siFdm1+j1j2k+gw/zeYt9//DTqTV2uVRuM6bJCVkihDGNBdEELZuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDRAGWOOAyUDGezNNBTaHikW0+RkrIJuuU4T8QoXivwmPvQbvu
+	DhlQfU9KEcOxZ484RLua9Wcszk8R9mXDC7WSxm7hosgVUcsE8AEch8z9
+X-Gm-Gg: ASbGncsXx6i5p+TLWLkWOgKMz1PTdk/BpBRmM8Uvtnp3ZTg90XC/F0xfjWwabGAuKaO
+	IrKIfwtZ+Ka3M4qQGJQzw97zdbh9WA4iD8L2x1lskZ/6S1RRYoSua2IUmGZQ8OfI11N4zWXq+fW
+	bZSyUNpeZMLUDOONbot4OBjgbcdGZiR4k7fiq4YqeoVdedS1M392YLrxCiH2azMeUaJAva3qgRC
+	p9GljHkwi2QuJxO8ndOWIzZ1n5hsC6+vH+Iz8jW3PlxfS6l6hbYB07eIuuzYH2ZRPdr4e4e/1FK
+	OdgPCPFGtDE5vTOFe+/ij53J/iLiCxMguuq1o+RfmHn8q0o+5gl3BPMMToQ1Ha+Z8KKYLg03+eW
+	4HnEV1+vh/hzSGE6cUhVuY0yawZmK/d4/eWxtZLPj/F6OGl2fUXtzQ7GaIA/69Bbn72row64=
+X-Google-Smtp-Source: AGHT+IEZTmuhXZw4OK8cKGeF4OKFzYKEXs1H54jRH0HDoCqk9mpbIcoGmbnUD+zJnHmg1YqEoqG+Nw==
+X-Received: by 2002:a05:6a00:1788:b0:76b:cadf:5dbe with SMTP id d2e1a72fcca58-76c29b27de9mr1656359b3a.0.1754449629586;
+        Tue, 05 Aug 2025 20:07:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76befc445a9sm9168019b3a.109.2025.08.05.20.07.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Aug 2025 20:07:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5b378c11-1419-4c78-9c7a-df37ff80afe4@roeck-us.net>
+Date: Tue, 5 Aug 2025 20:07:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=dtt4CEg4 c=1 sm=1 tr=0 ts=6892a717 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=2OwXVqhp2XgA:10 a=sozttTNsAAAA:8 a=rXU1nIjY8bzPZG-gVpIA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+User-Agent: Mozilla Thunderbird
+Subject: Re: Clarification regarding handling of PMBUS_STATUS_WORD in generic
+ PMBus driver
+To: "Soloninov, Alexander" <alexander.soloninov@siemens.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "titusr@google.com" <titusr@google.com>
+Cc: "Busch, Martin" <martin.busch@siemens.com>,
+ "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "jdelvare@suse.com" <jdelvare@suse.com>,
+ "Dabek, Florian" <florian.dabek@siemens.com>
+References: <GVXPR10MB817781435A2F2955D0D5A58CF222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+ <GVXPR10MB8177AEDA5EC62CFD7BFAB40DF222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+ <aaa21aa2-70ad-4646-8020-73945e273922@roeck-us.net>
+ <GVXPR10MB8177CD027751FAA6EABF7FD3F222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <GVXPR10MB8177CD027751FAA6EABF7FD3F222A@GVXPR10MB8177.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add support for the TI INA780 Digital Power Monitor.
+On 8/5/25 14:34, Soloninov, Alexander wrote:
+> Hi Guenter,
+> 
+> Thank you for the clarification and the grep output - you're absolutely right!
+> 
+> I apologize for the confusion in my initial message.
+> I had incorrectly stated that PMBUS_STATUS_WORD wasn't being processed at all by the generic driver.
+> After reviewing the code more carefully following your response, I can clearly see that PMBUS_STATUS_WORD is indeed used extensively throughout the PMBus subsystem - for initialization, internal status monitoring, error handling, and regulator integration.
+> 
+> My actual question should have been about direct hwmon sysfs attribute exposure of the complete STATUS_WORD register (like /sys/class/hwmon/hwmonX/status_word), which the PMBus core correctly doesn't provide since it processes STATUS_WORD internally and breaks it down into individual status sensors as intended.
+> 
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/hwmon/Kconfig  |  11 +
- drivers/hwmon/Makefile |   1 +
- drivers/hwmon/ina780.c | 566 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 578 insertions(+)
- create mode 100644 drivers/hwmon/ina780.c
+The attributes in /sys/class/hwmon/hwmonX/ reflect a standardized chip-independent ABI.
+Chip specific values do not belong there. The raw status register value is reported -
+together with various other raw register values - as debugfs file.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 079620dd4286..d11aebb6a1c1 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2264,6 +2264,17 @@ config SENSORS_INA3221
- 	  This driver can also be built as a module. If so, the module
- 	  will be called ina3221.
-=20
-+config SENSORS_INA780
-+	tristate "Texas Instruments INA780 Power Monitor"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for  the TI INA780 Digital
-+	  Power Monitor.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called ina780.
-+
- config SENSORS_SPD5118
- 	tristate "SPD5118 Compliant Temperature Sensors"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 48e5866c0c9a..e4acef261f14 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -104,6 +104,7 @@ obj-$(CONFIG_SENSORS_INA209)	+=3D ina209.o
- obj-$(CONFIG_SENSORS_INA2XX)	+=3D ina2xx.o
- obj-$(CONFIG_SENSORS_INA238)	+=3D ina238.o
- obj-$(CONFIG_SENSORS_INA3221)	+=3D ina3221.o
-+obj-$(CONFIG_SENSORS_INA780)	+=3D ina780.o
- obj-$(CONFIG_SENSORS_INTEL_M10_BMC_HWMON) +=3D intel-m10-bmc-hwmon.o
- obj-$(CONFIG_SENSORS_ISL28022)	+=3D isl28022.o
- obj-$(CONFIG_SENSORS_IT87)	+=3D it87.o
-diff --git a/drivers/hwmon/ina780.c b/drivers/hwmon/ina780.c
-new file mode 100644
-index 000000000000..b6a31fca400a
---- /dev/null
-+++ b/drivers/hwmon/ina780.c
-@@ -0,0 +1,566 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Driver for the Texas Instruments INA780 Digital Power Monitor
-+ *
-+ * Datasheet:
-+ * https://www.ti.com/lit/gpn/ina780a
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/cleanup.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/math64.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#define INA780_CONFIG		0x0
-+#define INA780_ADC_CONFIG	0x1
-+#define INA780_VBUS		0x5
-+#define INA780_DIETEMP		0x6
-+#define INA780_CURRENT		0x7
-+#define INA780_POWER		0x8
-+#define INA780_ENERGY		0x9
-+#define INA780_CHARGE		0xa
-+#define INA780_DIAG_ALRT	0xb
-+#define INA780_COL		0xc
-+#define INA780_CUL		0xd
-+#define INA780_BOVL		0xe
-+#define INA780_BUVL		0xf
-+#define INA780_TEMP_LIMIT	0x10
-+#define INA780_PWR_LIMIT	0x11
-+#define INA780_MANUFACTURER_ID	0x3e
-+
-+#define INA780_DIAG_ALRT_TMPOL		BIT(7)
-+#define INA780_DIAG_ALRT_CURRENTOL	BIT(6)
-+#define INA780_DIAG_ALRT_CURRENTUL	BIT(5)
-+#define INA780_DIAG_ALRT_BUSOL		BIT(4)
-+#define INA780_DIAG_ALRT_BUSUL		BIT(3)
-+#define INA780_DIAG_ALRT_POL		BIT(2)
-+
-+#define INA780_BUS_VOLTAGE_LSB		3125	/* 3.125 mV/lsb */
-+#define INA780_CURRENT_LSB		2400	/* 2.4 mA/lsb  */
-+#define INA780_TEMP_LSB			125000	/* 125 mC/lsb */
-+#define INA780_ENERGY_LSB		7680	/* 7.68 mJ/lsb */
-+#define INA780_POWER_LSB		480000	/* 480 uW/lsb */
-+#define INA780_PWR_LIMIT_LSB		(256 * INA780_POWER_LSB)  /* 122.88 mW/lsb=
- */
-+
-+#define INA780_ID			0x5449
-+
-+static const struct regmap_config ina780_regmap_config =3D {
-+	.max_register =3D INA780_MANUFACTURER_ID,
-+	.reg_bits =3D 8,
-+	.val_bits =3D 16,
-+};
-+
-+struct ina780_data {
-+	struct mutex lock;
-+	struct i2c_client *client;
-+	struct regmap *regmap;
-+};
-+
-+static int ina780_read_reg24(const struct i2c_client *client, u8 reg, u3=
-2 *val)
-+{
-+	u8 data[3];
-+	int err;
-+
-+	err =3D i2c_smbus_read_i2c_block_data(client, reg, 3, data);
-+	if (err < 0)
-+		return err;
-+	if (err !=3D 3)
-+		return -EIO;
-+	*val =3D (data[0] << 16) | (data[1] << 8) | data[2];
-+
-+	return 0;
-+}
-+
-+static int ina780_read_reg40(struct i2c_client *client, int reg, u64 *va=
-l)
-+{
-+	u8 data[5];
-+	u32 low;
-+	int err;
-+
-+	err =3D i2c_smbus_read_i2c_block_data(client, reg, 5, data);
-+	if (err < 0)
-+		return err;
-+	if (err !=3D 5)
-+		return -EIO;
-+
-+	low =3D (data[1] << 24) | (data[2] << 16) | (data[3] << 8) | data[4];
-+	*val =3D ((long long)data[0] << 32) | low;
-+
-+	return 0;
-+}
-+
-+static int ina780_read_in(struct device *dev, u32 attr, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int reg, mask;
-+	int err;
-+
-+	switch (attr) {
-+	case hwmon_in_input:
-+		reg =3D INA780_VBUS;
-+		break;
-+	case hwmon_in_max:
-+		reg =3D INA780_BOVL;
-+		break;
-+	case hwmon_in_min:
-+		reg =3D INA780_BUVL;
-+		break;
-+	case hwmon_in_max_alarm:
-+		reg =3D INA780_DIAG_ALRT;
-+		mask =3D INA780_DIAG_ALRT_BUSOL;
-+		break;
-+	case hwmon_in_min_alarm:
-+		reg =3D INA780_DIAG_ALRT;
-+		mask =3D INA780_DIAG_ALRT_BUSUL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	switch (attr) {
-+	case hwmon_in_input:
-+	case hwmon_in_max:
-+	case hwmon_in_min:
-+		err =3D regmap_read(data->regmap, reg, &regval);
-+		if (err)
-+			return err;
-+
-+		*val =3D (regval * INA780_BUS_VOLTAGE_LSB) / 1000;
-+		break;
-+	case hwmon_in_max_alarm:
-+	case hwmon_in_min_alarm:
-+		err =3D regmap_read(data->regmap, reg, &regval);
-+		if (err)
-+			return err;
-+		*val =3D !!(regval & mask);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ina780_write_in(struct device *dev, u32 attr, long val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int reg;
-+
-+	switch (attr) {
-+	case hwmon_in_max:
-+		reg =3D INA780_BOVL;
-+		break;
-+	case hwmon_in_min:
-+		reg =3D INA780_BUVL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	val =3D clamp_val(val, 0, 102396);
-+	regval =3D div_u64(val * 1000ULL, INA780_BUS_VOLTAGE_LSB);
-+
-+	return regmap_write(data->regmap, reg, regval);
-+}
-+
-+static int ina780_read_curr(struct device *dev, u32 attr, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int reg, mask;
-+	int err;
-+
-+	switch (attr) {
-+	case hwmon_curr_input:
-+		reg =3D INA780_CURRENT;
-+		break;
-+	case hwmon_curr_max:
-+		reg =3D INA780_COL;
-+		break;
-+	case hwmon_curr_min:
-+		reg =3D INA780_CUL;
-+		break;
-+	case hwmon_curr_max_alarm:
-+		reg =3D INA780_DIAG_ALRT;
-+		mask =3D INA780_DIAG_ALRT_CURRENTOL;
-+		break;
-+	case hwmon_curr_min_alarm:
-+		reg =3D INA780_DIAG_ALRT;
-+		mask =3D INA780_DIAG_ALRT_CURRENTUL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	switch (attr) {
-+	case hwmon_curr_input:
-+	case hwmon_curr_max:
-+	case hwmon_curr_min:
-+		err =3D regmap_read(data->regmap, reg, &regval);
-+		if (err)
-+			return err;
-+		*val =3D div_s64((s16)regval * INA780_CURRENT_LSB, 1000);
-+		break;
-+	case hwmon_curr_max_alarm:
-+	case hwmon_curr_min_alarm:
-+		err =3D regmap_read(data->regmap, reg, &regval);
-+		if (err)
-+			return err;
-+		*val =3D !!(regval & mask);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ina780_write_curr(struct device *dev, u32 attr, long val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int reg;
-+
-+	switch (attr) {
-+	case hwmon_curr_max:
-+		reg =3D INA780_COL;
-+		break;
-+	case hwmon_curr_min:
-+		reg =3D INA780_CUL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	clamp_val(val, -78643, 78640);
-+	regval =3D div_s64(val * 1000ULL, INA780_CURRENT_LSB);
-+
-+	return regmap_write(data->regmap, reg, regval);
-+}
-+
-+static int ina780_read_power(struct device *dev, u32 attr, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	unsigned int regval;
-+	int err;
-+
-+	switch (attr) {
-+	case hwmon_power_input:
-+		err =3D ina780_read_reg24(data->client, INA780_POWER, &regval);
-+		if (err)
-+			return err;
-+		*val =3D div_u64((u64)regval * INA780_POWER_LSB, 1000);
-+		break;
-+	case hwmon_power_max:
-+		err =3D regmap_read(data->regmap, INA780_PWR_LIMIT, &regval);
-+		if (err)
-+			return err;
-+		*val =3D div_u64((u64)regval * INA780_PWR_LIMIT_LSB, 1000);
-+		break;
-+	case hwmon_power_max_alarm:
-+		err =3D regmap_read(data->regmap, INA780_DIAG_ALRT, &regval);
-+		if (err)
-+			return err;
-+		*val =3D !!(regval & INA780_DIAG_ALRT_POL);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ina780_write_power(struct device *dev, u32 attr, long val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	int regval;
-+
-+	switch (attr) {
-+	case hwmon_power_max:
-+		val =3D clamp_val(val, 0, 8052940800);
-+		regval =3D div_u64(val * 1000ULL, INA780_PWR_LIMIT_LSB);
-+		return regmap_write(data->regmap, INA780_PWR_LIMIT, regval);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int ina780_read_temp(struct device *dev, u32 attr, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	int reg, mask;
-+	int regval;
-+	int err;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		reg =3D INA780_DIETEMP;
-+		break;
-+	case hwmon_temp_max:
-+		reg =3D INA780_TEMP_LIMIT;
-+		break;
-+	case hwmon_temp_max_alarm:
-+		reg =3D INA780_DIAG_ALRT;
-+		mask =3D INA780_DIAG_ALRT_TMPOL;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_max:
-+		err =3D regmap_read(data->regmap, reg, &regval);
-+		if (err)
-+			return err;
-+		*val =3D div_s64(((s64)((s16)regval) >> 4) * INA780_TEMP_LSB, 1000);
-+		break;
-+	case hwmon_temp_max_alarm:
-+		err =3D regmap_read(data->regmap, INA780_DIAG_ALRT, &regval);
-+		*val =3D !!(regval & INA780_DIAG_ALRT_TMPOL);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ina780_write_temp(struct device *dev, u32 attr, long val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	int regval;
-+
-+	if (attr !=3D hwmon_temp_max)
-+		return -EOPNOTSUPP;
-+
-+	val =3D clamp_val(val, -40000, 150000);
-+	regval =3D div_s64(val * 1000, INA780_TEMP_LSB) << 4;
-+
-+	return regmap_write(data->regmap, INA780_TEMP_LIMIT, regval);
-+}
-+
-+static int ina780_read_energy(struct device *dev, u32 attr, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+	u64 regval;
-+	int err;
-+
-+	if (attr !=3D hwmon_energy_input)
-+		return -EOPNOTSUPP;
-+
-+	err =3D ina780_read_reg40(data->client, INA780_ENERGY, &regval);
-+	if (err)
-+		return err;
-+
-+	*val =3D div_u64(regval * INA780_ENERGY_LSB, 1000);
-+
-+	return 0;
-+}
-+
-+static int ina780_read(struct device *dev, enum hwmon_sensor_types type,
-+		       u32 attr, int channel, long *val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (type) {
-+	case hwmon_in:
-+		return ina780_read_in(dev, attr, val);
-+	case hwmon_curr:
-+		return ina780_read_curr(dev, attr, val);
-+	case hwmon_power:
-+		return ina780_read_power(dev, attr, val);
-+	case hwmon_temp:
-+		return ina780_read_temp(dev, attr, val);
-+	case hwmon_energy:
-+		return ina780_read_energy(dev, attr, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int ina780_write(struct device *dev, enum hwmon_sensor_types type=
-,
-+			u32 attr, int channel, long val)
-+{
-+	struct ina780_data *data =3D dev_get_drvdata(dev);
-+
-+	guard(mutex)(&data->lock);
-+
-+	switch (type) {
-+	case hwmon_in:
-+		return ina780_write_in(dev, attr, val);
-+	case hwmon_curr:
-+		return ina780_write_curr(dev, attr, val);
-+	case hwmon_power:
-+		return ina780_write_power(dev, attr, val);
-+	case hwmon_temp:
-+		return ina780_write_temp(dev, attr, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static umode_t ina780_is_visible(const void *drvdata,
-+				 enum hwmon_sensor_types type,
-+				 u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_input:
-+		case hwmon_in_max_alarm:
-+		case hwmon_in_min_alarm:
-+			return 0444;
-+		case hwmon_in_max:
-+		case hwmon_in_min:
-+			return 0644;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_curr:
-+		switch (attr) {
-+		case hwmon_curr_input:
-+		case hwmon_curr_max_alarm:
-+		case hwmon_curr_min_alarm:
-+			return 0444;
-+		case hwmon_curr_max:
-+		case hwmon_curr_min:
-+			return 0644;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+		case hwmon_power_max_alarm:
-+			return 0444;
-+		case hwmon_power_max:
-+			return 0644;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_max_alarm:
-+			return 0444;
-+		case hwmon_temp_max:
-+			return 0644;
-+		default:
-+			return 0;
-+		}
-+	case hwmon_energy:
-+		switch (attr) {
-+		case hwmon_energy_input:
-+			return 0444;
-+		default:
-+			return 0;
-+		}
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static const struct hwmon_channel_info * const ina238_info[] =3D {
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT |
-+			   HWMON_I_MAX | HWMON_I_MAX_ALARM |
-+			   HWMON_I_MIN | HWMON_I_MIN_ALARM),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT |
-+			   HWMON_C_MAX | HWMON_C_MAX_ALARM |
-+			   HWMON_C_MIN | HWMON_C_MIN_ALARM),
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_INPUT | HWMON_P_MAX | HWMON_P_MAX_ALARM),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
-+	HWMON_CHANNEL_INFO(energy,
-+			   HWMON_E_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops ina780_hwmon_ops =3D {
-+	.is_visible =3D ina780_is_visible,
-+	.read =3D ina780_read,
-+	.write =3D ina780_write,
-+};
-+
-+static const struct hwmon_chip_info ina780_chip_info =3D {
-+	.ops =3D &ina780_hwmon_ops,
-+	.info =3D ina238_info,
-+};
-+
-+static int ina780_probe(struct i2c_client *client)
-+{
-+	struct device *dev =3D &client->dev;
-+	struct ina780_data *data;
-+	struct device *hwmon_dev;
-+	unsigned int val;
-+	int err;
-+
-+	data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->client =3D client;
-+	data->regmap =3D devm_regmap_init_i2c(client, &ina780_regmap_config);
-+	if (IS_ERR(data->regmap)) {
-+		dev_err(dev, "Failed to allocate register map\n");
-+		return PTR_ERR(data->regmap);
-+	}
-+
-+	err =3D regmap_read(data->regmap, INA780_MANUFACTURER_ID, &val);
-+	if (err) {
-+		dev_err(dev, "Error reading device ID\n");
-+		return err;
-+	}
-+
-+	if (val !=3D INA780_ID)
-+		dev_warn(dev, "Unexpected device ID %04x\n", val);
-+
-+	mutex_init(&data->lock);
-+
-+	hwmon_dev =3D devm_hwmon_device_register_with_info(dev, client->name, d=
-ata,
-+							 &ina780_chip_info,
-+							 NULL);
-+	if (IS_ERR(hwmon_dev))
-+		return PTR_ERR(hwmon_dev);
-+
-+	/* Temp limit register can go to 255 C but actual max is 150 C*/
-+	err =3D ina780_write_temp(hwmon_dev, hwmon_temp_max, 150000);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id ina780_id[] =3D {
-+	{ "ina780a" },
-+	{ "ina780b" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, ina780_id);
-+
-+static const struct of_device_id ina780_of_match[] =3D {
-+	{ .compatible =3D "ti,ina780a" },
-+	{ .compatible =3D "ti,ina780b" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ina780_of_match);
-+
-+static struct i2c_driver ina780_driver =3D {
-+	.driver =3D {
-+		.name =3D "ina780",
-+		.of_match_table =3D ina780_of_match,
-+	},
-+	.probe =3D ina780_probe,
-+	.id_table =3D ina780_id,
-+};
-+
-+module_i2c_driver(ina780_driver);
-+
-+MODULE_AUTHOR("Chris Packham <chris.packham@alliedtelesis.co.nz>");
-+MODULE_DESCRIPTION("INA780 driver");
-+MODULE_LICENSE("GPL");
---=20
-2.50.1
+Guenter
 
