@@ -1,213 +1,142 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC60923717F;
-	Wed,  6 Aug 2025 22:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628A11FC3;
+	Thu,  7 Aug 2025 00:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754519872; cv=none; b=prvjdyKkUl5nXenlbGV5agr5eJWsFfJQ83rBeva5zllOBB6M88DpNhGTUMH42pB2jsSvFcFmyGYnXi/wmCgYU92XXT0AIG9GyBFEa6gBnEhMlnnNxfufUhpS2Nwa7dwQOplC4jAGKhXhjSemiv05DQYnEVs71ADfbY/QI74W6ts=
+	t=1754526134; cv=none; b=pjrafkgNhvYWKx6eK0eZMM3X5nITiN688ZNgRChfxTMq6wMCQdMQnBzJDzxLIiV2SbOuH1AlbZBleEYP3UQ0hjlRQ14BAP7vwECcfQmRQqQ6KKjbDZxjQY1I9kyuSjNcH69wZgTAb/8GH+xTze5kCPqUkUmTzrdPOPMI7UDG8MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754519872; c=relaxed/simple;
-	bh=ur0+FtE7C1sln/WEU2uVKhxyCP/viV94oTeRyrrapFE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uqpkgr38FaGsyfJ+mO96ALVLoy/oMGoPrwTCYtBH3mhzyeqQRonGCAKf1xoFRSglrJgCBcKWJ7CJcclQPpo8Y76+UpYH9AzYigLrcE9R2XxN3mcXza1unNwM0Xr0qrdAEeK+IS+pKD6ZrbtwPjLb98/soiAvoL/puqUzDHcjzdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iw5FpPOk; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1754526134; c=relaxed/simple;
+	bh=wAOZeYueswFbicXkTvMIsToaY6anZ2Vs1jfgPXToE0k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cXUqAbSq18wuDGnmvkpXrtcoHbsnmBn15iAOeT9z/I/EGTa6ybVNXCF0uWCfEjT5vRM+Ouv0whC7irZBuaHS5j76AL+kKI9uo6cDF9ZLS5CCyQY8EgK1ZfAF5YFO82RSbRCjXe1+JSX5ClTTdsRUeAG80UfempdmhYnUMi6nBLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z2YKg7Is; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iw5FpPOk"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b390136ed88so250614a12.2;
-        Wed, 06 Aug 2025 15:37:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2YKg7Is"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2429d9d3755so4184995ad.3;
+        Wed, 06 Aug 2025 17:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754519870; x=1755124670; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gowrAGAtt/8PGy3ltcInMP14/WjUgpF9Gx6AgOeagC0=;
-        b=Iw5FpPOka5QTUybv5E43QSPfaS7IMimUUlem9dgxzw844b1EBqCfed5TCJHxJyI1Aa
-         8iMxFzLac4jn9SGBfVG/2nwyGK7W4V20BE7Plri1oRpyERyUGqC5mZMJ+mM2wgPmiffB
-         Q+zZyENQn1xXhVRwvjCqAsiC/tdQXhIQJaAHkaCiJdVdenY/v1zufkugU4wPgm962c9S
-         b0hty2qh2o3fGVMjQ3kQYSVF/w8f+Dg+Co8lSPXhIvW1fUQ2kpPyChmSTTzXdIOu6Sbd
-         uDJ7G6Zpq8esj6sfNXug8e1YUUGRC1NcY2gKTGEs37PTwfQfEdhM7cSiYhBXQTFTQEpS
-         e/6w==
+        d=gmail.com; s=20230601; t=1754526132; x=1755130932; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CSUnI+MvBosfqM20aTIGl6X2yF9O0ExPRQwtAZECLCo=;
+        b=Z2YKg7Is5rmipRySDrEBXBTnsu7JQtkfsthJt5RHzKRjqlc8c1TaePbFzuFa9Xtrr8
+         DiItup/Y4WGn1qI6PkehmENNfAac2Pm2BFAmGTrGLvZef2us9l4doI9c+gvLqeo7f1Zn
+         /Lb0mZbeODyOqxkqKLfNXYs+APgvnyz8lQFWnDMqAD2HEjLDPqxub7I3hjXqUvmNkhga
+         HC9xg7GHY4PZZTX5SfEP1oWBFs3nySwlWqxnV5dy7mE5nSjqqjIVZwOiKVf1qMuvp/Ai
+         wlSFhoLsg3uxDOCKoAciJsitnPe+VwBAA9D5/W81qEXxlqOoq5Q2tHFIDtYN5am5SZl6
+         SJcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754519870; x=1755124670;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gowrAGAtt/8PGy3ltcInMP14/WjUgpF9Gx6AgOeagC0=;
-        b=ZkDgQZoWFR8CHr0a5WRxNYIjhMARJgPCkJW0s64HTvvRFVtHRP3KeLYkzdxsd2/lL6
-         ZjIFAWLwcs6MBO8TAAu/Mg2qu0Gks6FNbIQsQlL1ddKkboRZ4j9XXXVUc7+xWBQyCoJW
-         5r50eWGaw2EFkINL7+sXRlNJiNuTRgU1+iVCWtxBasM5TLQXE/hA7bNx3G11ggcC4xsK
-         gDQ/H3tA37z2z6E4EWN5nH12rOA/bUQYMtJbBLUB85Ri3tStE2IB21iqX1WJzFvTceeO
-         YMdJuVDS15eCXIZb1xhOydHLHWsFfZokEzZ1RYi2vAyMZd5AIR8IElP43vN8zOU3V/zu
-         oVtA==
-X-Forwarded-Encrypted: i=1; AJvYcCUnOiO1kJzEaQR8TOCwTQrKj+gD++zAf9SAO1cEyKeMiOB2awRw7vf2zxbgFda5KghFcRiBNwIZ3m/n@vger.kernel.org, AJvYcCX4ScEaBVtD1HwnJJRvNhjqQBKiR3jMEkxcToj62TT8MZFrIzKUEroSdcjHnkVLnScOFfGyXdA/B890@vger.kernel.org, AJvYcCXtrFBtIuF85rEKFq3ozILQQhz5ib7ckTZTD4tC5f3dSmXh2MUHEFp9Akr9o8pt8c1BkINi0hQCPOTFfvGR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiF/104NsInwl072V5gKoaoW/U5hZxSXVM/107OJaKuUvnIbEL
-	XHxu0E4G/0iDVEZQGj2U7iclMluj56TUKNf3dHrImt2eVqJKext1gwT3a084pQ==
-X-Gm-Gg: ASbGncsCaPez5RaP7yKiEN14ygugPGoGbr0xteidHCa2mCFYo76nzc5woCP3NBnYh5c
-	HiI9wqJmjtRwNUTqkDen+jEveePIpH75+oisv7f+QY4yl+ss1AEt1ppfHKsTm1bsU88EwkFS2d5
-	Q5lqEFVTqDouOK76K6sJcmBBlWOTJBHx9DcelATrwEVd2O0/uDIpzJurT93yTSwY7zGbCa8aPN/
-	kLTS8SRdKwnMqZIMFQAY6CsQvCTKIz3rbdWpbOWaOgNZGjx5+reuVI7ftnC8TUNG5U/PJWzqcFS
-	3nFBzu0zCGK33j59jPMATrPXOUkoU4WuS/RJEdsXg2eK/CknVOYItowJK9qYSVxocnTEa6AwUaX
-	W3NTsOoOzlZu8TKVWhgPC1K9/fzDkfCDQkjuP8eti5LQoNmY9Gsd7lU/MPdAB6s5YqRwoSVtt3a
-	rUHwaf5KZlepw4FPU=
-X-Google-Smtp-Source: AGHT+IGGXIpRu+MQH1UWjvwqaza58EkYTHdYw+0FEeF28d/J6xAbeGY+wjFULLY4bZu8CragxcxhpA==
-X-Received: by 2002:a17:903:2a83:b0:240:70d4:85d9 with SMTP id d9443c01a7336-2429edeedc7mr62203175ad.0.1754519869742;
-        Wed, 06 Aug 2025 15:37:49 -0700 (PDT)
-Received: from CNTWS00427A.itotolink.net (111-242-118-39.dynamic-ip.hinet.net. [111.242.118.39])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2426dec66desm86776775ad.54.2025.08.06.15.37.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 15:37:49 -0700 (PDT)
-From: ChiShih Tsai <tomtsai764@gmail.com>
-To: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	corbet@lwn.net,
-	t630619@gmail.com,
-	ChiShih Tsai <tomtsai764@gmail.com>
-Subject: [PATCH v3 2/2] hwmon: (pmbus/adm1275) add sq24905c support
-Date: Thu,  7 Aug 2025 06:37:24 +0800
-Message-ID: <20250806223724.1207-3-tomtsai764@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250806223724.1207-1-tomtsai764@gmail.com>
-References: <20250806223724.1207-1-tomtsai764@gmail.com>
+        d=1e100.net; s=20230601; t=1754526132; x=1755130932;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CSUnI+MvBosfqM20aTIGl6X2yF9O0ExPRQwtAZECLCo=;
+        b=ayY7p5OwGcZRZvwhRYqawBA3UY1WbFBVABJQGRom12h0UggikIwm9banhoJh1TN7kw
+         cGC5w9JloHHdPVwAxqNEMqcXNydXe2a79XYL0Rh1si1JWU+m3UH8sJOkJLup4KJjnBH5
+         MugcbKXNiPb9F5nC5uA4PX4W4ziJN24AXNE0d9Lmbzxhewe2BFSUP3DNz7s6ttqBl80f
+         4S4ElEoT7S3KuBLhcamVH0Or/go06lAx1dsMv29q6Ct9a0jjyu2PX2So6x2rBGk4as0u
+         zhCxrelMNJ6RoRNpTAY2mM3IS37WhJt41iO6hU/Vr3lItKqdYKkY97Jszd9hsrom5Wzw
+         bQ0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUUofjzTydQk4dv/W6fiVYYH2463pieJMsvG2DD3OEPgLo/DJWgiVKQ1nnD3IEfxWdQ9TxMFKaCtUmVeEsr@vger.kernel.org, AJvYcCX5m/VnFr7VUeOJEeFOIEcNItiGjNayqRrvffqruCJtzkIH9Nmslk9tVbWaujF3ENG3T2Q7mnMJm+lG@vger.kernel.org, AJvYcCXKDTxq9KSSFKQqgA5iYtt4q2SK1OhGTaHwlhxTmLkbe4M1/g6u7/D8IbS643raR7P1KPBnMdZEtF29@vger.kernel.org, AJvYcCXRgzpU5wC3qRMEvkwG9WivMXLfcTi2BJofgn5PfaSSKxeQ9DZm/Rjxrzplvjq1QCR6gWDZcfoIH3cMRrc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHsOrTCYfBswk4BOBp0k3jdaTN5inhs9clcyhVfOYIrXD1CzZK
+	acS4cyOA9I0/VBiIogLfQO18buXM+9MgaB73PRxnx9ON/CyIvAUvEnMm
+X-Gm-Gg: ASbGnctbpnnXvFJ1+i5YXZRN0vvkKd/6TxLl6hCCGKLUex/ERVXhUeY9YkOpXvOl8R4
+	oIU6bqPhxZUcNbEJeNQ3eWfNqwdF6mkjwWuW/a+sDMvoW9dbhZJmZxPCJXGVzJ5nVPplwFqeoRM
+	TVuKcOhFU9AlUa0KmETmP/z+OsVD2lfIxfA1ERTRkYLcgwbBAib35ynGc/MxP7kiPF3NR/whteY
+	cdjhBBn1LUGGxatI6a225qccOEdKW2O3WbRU1ugxQujDFDlg3BOY9sb3bT21dV5S7NcRP8QtI0i
+	lH8IBfN5pREZ0cQSh7xuuY+eI/fHOC0/djP/3h0T4TNKdAODxTL9+vdqD+JflIzEpA2+d2nT3IZ
+	MvaalAzF91eOpWZTbAdSghE/r38mQt48HIu9reIarrEq4NpRUn3dPw4djAvK/vJdaNF7iP7AFN6
+	PeXzLlbqMP2kbqfFny
+X-Google-Smtp-Source: AGHT+IH9E01uPRaBTxIPHzcEUmMzgIninHjjkuKSzY1MdyEGmzyeMrKL/iHVhkPVdKGJl/5JMxGj4w==
+X-Received: by 2002:a17:903:19eb:b0:235:779:ede5 with SMTP id d9443c01a7336-2429f42f809mr67151905ad.40.1754526131612;
+        Wed, 06 Aug 2025 17:22:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899b5bbsm167593185ad.128.2025.08.06.17.22.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Aug 2025 17:22:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0b7b396a-c53f-4456-ae17-1b5f3c1d6859@roeck-us.net>
+Date: Wed, 6 Aug 2025 17:22:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/2] Add sq24905c support
+To: ChiShih Tsai <tomtsai764@gmail.com>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, corbet@lwn.net, t630619@gmail.com
+References: <20250806223724.1207-1-tomtsai764@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250806223724.1207-1-tomtsai764@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add support for sq24905c which is similar to adm1275 and other chips
-of the series.
+On 8/6/25 15:37, ChiShih Tsai wrote:
+> Add sq24905c support
+> 
+> ---
+> v2 -> v3:
+> - No code changed, included Acked-by tag from v2 review
 
-Signed-off-by: ChiShih Tsai <tomtsai764@gmail.com>
----
- Documentation/hwmon/adm1275.rst | 24 ++++++++++++++++--------
- drivers/hwmon/pmbus/Kconfig     |  3 ++-
- drivers/hwmon/pmbus/adm1275.c   | 11 ++++++++---
- 3 files changed, 26 insertions(+), 12 deletions(-)
+Please refrain from doing that in the future. Patchwork picks up
+any Acked-by: and Reviewed-by: tags, so resending a patch series
+just for that is pointless. All you do is to create noise.
 
-diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
-index 57bd7a850558..cf923f20fa52 100644
---- a/Documentation/hwmon/adm1275.rst
-+++ b/Documentation/hwmon/adm1275.rst
-@@ -67,6 +67,14 @@ Supported chips:
- 
-     Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1293_1294.pdf
- 
-+  * Silergy SQ24905C
-+
-+    Prefix: 'mc09c'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.silergy.com/download/downloadFile?id=5669&type=product&ftype=note
-+
- Author: Guenter Roeck <linux@roeck-us.net>
- 
- 
-@@ -74,14 +82,14 @@ Description
- -----------
- 
- This driver supports hardware monitoring for Analog Devices ADM1075, ADM1272,
--ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and ADM1294 Hot-Swap
--Controller and Digital Power Monitors.
-+ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, ADM1294, and SQ24905C
-+Hot-Swap Controller and Digital Power Monitors.
- 
--ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293, and
--ADM1294 are hot-swap controllers that allow a circuit board to be removed from
--or inserted into a live backplane. They also feature current and voltage
--readback via an integrated 12 bit analog-to-digital converter (ADC), accessed
--using a PMBus interface.
-+ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281, ADM1293,
-+ADM1294 and SQ24905C are hot-swap controllers that allow a circuit board to be
-+removed from or inserted into a live backplane. They also feature current and
-+voltage readback via an integrated 12 bit analog-to-digital converter (ADC),
-+accessed using a PMBus interface.
- 
- The driver is a client driver to the core PMBus driver. Please see
- Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-@@ -160,5 +168,5 @@ temp1_highest		Highest observed temperature.
- temp1_reset_history	Write any value to reset history.
- 
- 			Temperature attributes are supported on ADM1272,
--			ADM1273, ADM1278, and ADM1281.
-+			ADM1273, ADM1278, ADM1281 and SQ24905C.
- ======================= =======================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 55e492452ce8..77add0c6ee53 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -52,7 +52,8 @@ config SENSORS_ADM1275
- 	help
- 	  If you say yes here you get hardware monitoring support for Analog
- 	  Devices ADM1075, ADM1272, ADM1273, ADM1275, ADM1276, ADM1278, ADM1281,
--	  ADM1293, and ADM1294 Hot-Swap Controller and Digital Power Monitors.
-+	  ADM1293, ADM1294 and SQ24905C Hot-Swap Controller and
-+	  Digital Power Monitors.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called adm1275.
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index 7d175baa5de2..bc2a6a07dc3e 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -18,7 +18,8 @@
- #include <linux/log2.h>
- #include "pmbus.h"
- 
--enum chips { adm1075, adm1272, adm1273, adm1275, adm1276, adm1278, adm1281, adm1293, adm1294 };
-+enum chips { adm1075, adm1272, adm1273, adm1275, adm1276, adm1278, adm1281,
-+	 adm1293, adm1294, sq24905c };
- 
- #define ADM1275_MFR_STATUS_IOUT_WARN2	BIT(0)
- #define ADM1293_MFR_STATUS_VAUX_UV_WARN	BIT(5)
-@@ -486,6 +487,7 @@ static const struct i2c_device_id adm1275_id[] = {
- 	{ "adm1281", adm1281 },
- 	{ "adm1293", adm1293 },
- 	{ "adm1294", adm1294 },
-+	{ "mc09c", sq24905c },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, adm1275_id);
-@@ -532,7 +534,8 @@ static int adm1275_probe(struct i2c_client *client)
- 		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
- 		return ret;
- 	}
--	if (ret != 3 || strncmp(block_buffer, "ADI", 3)) {
-+	if ((ret != 3 || strncmp(block_buffer, "ADI", 3)) &&
-+	    (ret != 2 || strncmp(block_buffer, "SY", 2))) {
- 		dev_err(&client->dev, "Unsupported Manufacturer ID\n");
- 		return -ENODEV;
- 	}
-@@ -558,7 +561,8 @@ static int adm1275_probe(struct i2c_client *client)
- 
- 	if (mid->driver_data == adm1272 || mid->driver_data == adm1273 ||
- 	    mid->driver_data == adm1278 || mid->driver_data == adm1281 ||
--	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
-+	    mid->driver_data == adm1293 || mid->driver_data == adm1294 ||
-+	    mid->driver_data == sq24905c)
- 		config_read_fn = i2c_smbus_read_word_data;
- 	else
- 		config_read_fn = i2c_smbus_read_byte_data;
-@@ -708,6 +712,7 @@ static int adm1275_probe(struct i2c_client *client)
- 		break;
- 	case adm1278:
- 	case adm1281:
-+	case sq24905c:
- 		data->have_vout = true;
- 		data->have_pin_max = true;
- 		data->have_temp_max = true;
--- 
-2.43.0
+Thanks,
+Guenter
 
