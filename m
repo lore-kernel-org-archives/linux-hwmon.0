@@ -1,190 +1,88 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA3842AA5;
-	Thu,  7 Aug 2025 10:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769A319D8BC
+	for <linux-hwmon@vger.kernel.org>; Thu,  7 Aug 2025 20:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754562759; cv=none; b=O7rqBCNe41BN88XlunB/Ta8oi/79mqd676RphHaDuXpXQpOHlNXQ/eDrHmpRBpgBmD2l4XJFJNjP9x9K8xL12KmgWwj476cS4JZWzc/zQUBrxFvlKoxHt8bl4WngPaxtYK0cYzqG1Y5us46gpJspUvW22XYfRoXiRkxZHzKJJIc=
+	t=1754599616; cv=none; b=ZkYP8e40Y6YAjvMMbEi7xEm5DshMUnoF4t0KdTluFOFA26/w9h3ehDh2DlYwRuHtwjAQShg8qvbXIBonV6HjJEcxPq9if76K2Dj6eRdAjQROhCFiDKTM0HMHqAoVHm2ltjqnTcFuDyGmpIcBvMvLT+6UuTfngKWeOjZedPXQjfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754562759; c=relaxed/simple;
-	bh=8T4ciwZYIdTlobh2yTQlV72mffUjAvybA1slfR+u/AA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J0LgMjc5eszerQuOKA/+G/egp3tuzlBAkQWOYxy6e43YI5SUnviitYRHJpWCgV8Zx+GFuBY4Sga5WJJReBm1oNGjLbZqZPkKYU1qM8hh8JOrXSvPb+JGohtGLjnDTgfyEnBD9BjMWngpTzHHWrAKknmaCaYfNEydoSZLnwp2Exw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A7nUKLYP; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754599616; c=relaxed/simple;
+	bh=vzQJIxOyvtaSGj/jbVB/03Zj2Ik1zNa5Q8MAcONp1Qs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=QTQ3bC5c+7MPVSxMjT93kZgJp+ptCZZddDvEC/Ol9P0fy3O1srRlnNc20Lw26+87yW2uZoIAckxW2iAv5EQayX94p7IJrsodhlXLf6eYAGTjqbPqaUF8OSM5HN5b9x+4eEmIE5OOvd4TLqbv80iLTFkBZiCFlKx5kiu9Otu3lE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=MPZjXgtF; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7nUKLYP"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-71bce78e14fso8622057b3.1;
-        Thu, 07 Aug 2025 03:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754562757; x=1755167557; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0B8JKmuj7NoKhGZ2Qof2Rmk4iilq75YN49pVYUQ/rPY=;
-        b=A7nUKLYP9wLYtUZ2dYHLflefPO2ZxtDwK998xdqNM1ckqPbqDs4vaFOqDzQTWe/2eC
-         /TDcduIhcFVqOvle9eCObuCIefpkwnPe5rhbu0L7oC/qjfBqU1jOwUie/nM+k0wJbWhf
-         xAfnsH5F7/tyzWVma3Y4vQ55fBvi/mJWPIDK5WTQQCFQZRFgZjdr/G2rd3cMKuRI9ARb
-         vw5LP5HSpL29CDk5QclEtID5ilU/+OaJUs+wEH9eIzQOqvmj77YsjTimrW1kW7ciYkGe
-         ANptq5KiA1WAd1d1cLR3gzYF/YDdbuGoV16KNLY90wa5j+C7tUHlfYxB2kBeMpS8Kkbk
-         1maw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754562757; x=1755167557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0B8JKmuj7NoKhGZ2Qof2Rmk4iilq75YN49pVYUQ/rPY=;
-        b=XPc3Gmqmy98SjOi6Ba9qULbYNtNQDrisAIS8FmVbxUbXzw3SrL+kFTapWZR+3lxufN
-         NjnKySfZ/Aiz4vsyTVDvCd2J4QZf8aiNwya5bvlNc/cW70pr4Et5sqLsS9YBvcvcgSxe
-         sT0SxECarYnPhjpz65uBIAiJL0sINA9X4Nlcf6jhmn9sQtLtUMQBLATCmmFJen0tCHlH
-         h4sZsar/cdhADxxRZZ+ojA9qvxjSA7Jv+viA0pq93Ua+lO10pGiC9jfPMBN7wkeAPi0r
-         bOhRDD2mC5KkjsqDnWcvC27wFbQJwBq/HuV/qFCACoj99J5ihaQR3G9aRUr8w4rkTXmE
-         kdFg==
-X-Forwarded-Encrypted: i=1; AJvYcCXiiiIU7dU+TbCslUbN0xEFEtoWOzbIkBmK0Dc4XRj3ZsW8nub7c3ZvafnbWc+5XoUZ5mpyoTWrh3/8G7o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+tn2NhbXdG2g64OSpo43VTjtojATToDHwG21AJlfx1iqnzIqR
-	YR9nYo3D9dgEi6PhJ+oRtEQ2r+lUvsUpHuI2r8sWfgty6+CMlAlQf5t31OGa0rXK
-X-Gm-Gg: ASbGnctJwFiUV5KdpNob0ehuV1jqQcZyJZsLm//STmslVUpYdRNxLA456JKcwwwggHU
-	z3h8SYbYsi8M3qc1KEpIYTFVwjC681vJM5b2+cUIDqOU7VVhjaB5sW7zJNl56Jh3bCdKVj+A8Xz
-	cdVu6R7Upr4iwvEj1IiYznsm9eztFNDhX3XeT7SetwNyQvPl+rl0HneCKvCqL9VfFlEfuNDPZ9K
-	4dphBnIBgNO1r/xE91z6Y+h+wPiQYCpzLqNsTb6DLcfIvj8Eqq2y5mgMNefsgZ8gZTD6O3fcejt
-	Iv4WUaAAvT9H/+6FpPi/3rkJ2BFd8Z6nbuLwnvsMZn2Nb+C9xRNnKOub+hfoMPAjz287XaRcpZO
-	OtL4uDxwcRtar386h+b5riYlyX//ENsDDMoahZuIzInvL
-X-Google-Smtp-Source: AGHT+IFPufnvFSsR8r6T7GxkS4gEbZwWXr6CP+c/UMnPc/HrB9L8UVLsIPq1jzvkyhEUv+s/coVuwg==
-X-Received: by 2002:a05:690c:9b08:b0:71a:2cb:db1c with SMTP id 00721157ae682-71bcc86886cmr69241197b3.25.1754562757019;
-        Thu, 07 Aug 2025 03:32:37 -0700 (PDT)
-Received: from z-Lenovo-Product.home.local ([137.118.180.123])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71b5a5c8fd9sm44766317b3.61.2025.08.07.03.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Aug 2025 03:32:36 -0700 (PDT)
-From: David Ober <dober6023@gmail.com>
-To: linux-hwmon@vger.kernel.org
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net,
-	dober@lenovo.com,
-	mpearson@lenovo.com,
-	David Ober <dober6023@gmail.com>
-Subject: [PATCH] hwmon:Update EC Chip driver for Lenovo ThinkStation motherboards
-Date: Thu,  7 Aug 2025 06:32:28 -0400
-Message-Id: <20250807103228.10465-1-dober6023@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="MPZjXgtF"
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8B0D22C0380;
+	Fri,  8 Aug 2025 08:46:46 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1754599606;
+	bh=vzQJIxOyvtaSGj/jbVB/03Zj2Ik1zNa5Q8MAcONp1Qs=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=MPZjXgtFIm9qtGhe9ypxvQbhJUUJZQP694nI3hMphrFCME+vBCK6lZRrHPWHQVj7R
+	 unrT1H4Z8A6kei3LXJy2o9hjE0mSv19ntKSO67pr0aXRXm74Jt4zCQvZmglv49oFCZ
+	 jzhP95OXwaKXZsiSkmNHsSXZl/TEXruZ9ilbd+swWo5oUeV4qdFqM/N3hNvju9nAIf
+	 c/eZ2YhhfbW1uwRnb8rZfq1Yn6mIATRitMa1xoXOtBfWGlgVhK5Lr91Op/lRR8hCcN
+	 d8YickZ0aDBskN4pVfVDpia2l9C2V7Llc91DO0t90cfaGiZvFcBfUzT90yCEXKp1zq
+	 kWfrUSvV/Is2w==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B689510b60001>; Fri, 08 Aug 2025 08:46:46 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Fri, 8 Aug 2025 08:46:46 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Fri, 8 Aug 2025 08:46:46 +1200
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Krzysztof Kozlowski <krzk@kernel.org>, "jdelvare@suse.com"
+	<jdelvare@suse.com>, "linux@roeck-us.net" <linux@roeck-us.net>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>
+CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina780a: Add INA780 device
+Thread-Topic: [PATCH 1/2] dt-bindings: hwmon: ti,ina780a: Add INA780 device
+Thread-Index: AQHcBmxCt+SrkQ5FO0yUSehdXPy4o7RUYcsAgAKA+QA=
+Date: Thu, 7 Aug 2025 20:46:46 +0000
+Message-ID: <aa814850-79ee-4c88-87d8-a3d70036ef2d@alliedtelesis.co.nz>
+References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
+ <f2972a86-f58d-4360-b43a-486377b101e1@kernel.org>
+In-Reply-To: <f2972a86-f58d-4360-b43a-486377b101e1@kernel.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5013EBC79F904E43957BD7E299C2A2B4@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=dtt4CEg4 c=1 sm=1 tr=0 ts=689510b6 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=qGlVGA7JKaW9HrnRmssA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-This fixes differences for the P8 system that was initially set to
-the same thermal values as the P7, also adds in the PSU sensor for
-all of the supported systems
-
-Signed-off-by: David Ober <dober@lenovo.com>
-Signed-off-by: David Ober <dober6023@gmail.com>
----
- drivers/hwmon/lenovo-ec-sensors.c | 34 +++++++++++++++++++++++++++----
- 1 file changed, 30 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hwmon/lenovo-ec-sensors.c b/drivers/hwmon/lenovo-ec-sensors.c
-index 143fb79713f7..8681bbf6665b 100644
---- a/drivers/hwmon/lenovo-ec-sensors.c
-+++ b/drivers/hwmon/lenovo-ec-sensors.c
-@@ -66,7 +66,7 @@ enum systems {
- 	LENOVO_P8,
- };
- 
--static int px_temp_map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-+static int px_temp_map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 31, 32};
- 
- static const char * const lenovo_px_ec_temp_label[] = {
- 	"CPU1",
-@@ -84,9 +84,29 @@ static const char * const lenovo_px_ec_temp_label[] = {
- 	"PCI_Z3",
- 	"PCI_Z4",
- 	"AMB",
-+	"PSU1",
-+	"PSU2",
- };
- 
--static int gen_temp_map[] = {0, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-+static int p8_temp_map[] = {0, 1, 2, 8, 9, 13, 14, 15, 16, 17, 19, 20, 33};
-+
-+static const char * const lenovo_p8_ec_temp_label[] = {
-+	"CPU1",
-+	"CPU_DIMM_BANK1",
-+	"CPU_DIMM_BANK2",
-+	"M2_Z2R",
-+	"M2_Z3R",
-+	"DIMM_RIGHT",
-+	"DIMM_LEFT",
-+	"PCI_Z1",
-+	"PCI_Z2",
-+	"PCI_Z3",
-+	"AMB",
-+	"REAR_VR",
-+	"PSU",
-+};
-+
-+static int gen_temp_map[] = {0, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 31};
- 
- static const char * const lenovo_gen_ec_temp_label[] = {
- 	"CPU1",
-@@ -101,6 +121,7 @@ static const char * const lenovo_gen_ec_temp_label[] = {
- 	"PCI_Z3",
- 	"PCI_Z4",
- 	"AMB",
-+	"PSU",
- };
- 
- static int px_fan_map[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-@@ -293,6 +314,8 @@ static const struct hwmon_channel_info *lenovo_ec_hwmon_info_px[] = {
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MAX,
-@@ -327,6 +350,7 @@ static const struct hwmon_channel_info *lenovo_ec_hwmon_info_p8[] = {
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MAX,
-@@ -359,6 +383,7 @@ static const struct hwmon_channel_info *lenovo_ec_hwmon_info_p7[] = {
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MAX,
-@@ -388,6 +413,7 @@ static const struct hwmon_channel_info *lenovo_ec_hwmon_info_p5[] = {
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MAX,
-@@ -545,9 +571,9 @@ static int lenovo_ec_probe(struct platform_device *pdev)
- 		break;
- 	case 3:
- 		ec_data->fan_labels = p8_ec_fan_label;
--		ec_data->temp_labels = lenovo_gen_ec_temp_label;
-+		ec_data->temp_labels = lenovo_p8_ec_temp_label;
- 		ec_data->fan_map = p8_fan_map;
--		ec_data->temp_map = gen_temp_map;
-+		ec_data->temp_map = p8_temp_map;
- 		lenovo_ec_chip_info.info = lenovo_ec_hwmon_info_p8;
- 		break;
- 	default:
--- 
-2.34.1
-
+DQpPbiAwNi8wOC8yMDI1IDE4OjMyLCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPiBPbiAw
+Ni8wOC8yMDI1IDAyOjUxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4gKw0KPj4gK3Byb3BlcnRp
+ZXM6DQo+PiArICBjb21wYXRpYmxlOg0KPj4gKyAgICBlbnVtOg0KPj4gKyAgICAgIC0gdGksaW5h
+NzgwYQ0KPj4gKyAgICAgIC0gdGksaW5hNzgwYg0KPj4gKw0KPj4gKyAgcmVnOg0KPj4gKyAgICBt
+YXhJdGVtczogMQ0KPg0KPiBUaGlzIGxvb2tzIGEgYml0IGluY29tcGxldGUuIFdoZXJlIGlzIGEg
+c3VwcGx5PyBObyBzaHVudCByZXNpc3Rvcg0KPiBjaG9pY2U/IE5vIG90aGVyIHByb3BlcnRpZXMg
+ZnJvbSBpbmEyeHggYXBwbHk/DQpUaGlzIGNoaXAgZG9lc24ndCBuZWVkIGEgc2h1bnQgc28gcHJl
+dHR5IG11Y2ggYWxsIHRoYXQgaXMgcmVxdWlyZWQgaXMgDQpjb21wYXRpYmxlICsgcmVnLiBHdWVu
+dGVyIGRpZCBtZW50aW9uIHJvbGxpbmcgdGhpcyBpbnRvIHRoZSBleGlzdGluZyANCmluYTIzOCBk
+cml2ZXIgKGFuZCBpbmEyeHggYmluZGluZykgc28gSSdtIGxvb2tpbmcgYXQgdGhhdCByaWdodCBu
+b3cuIEknbSANCmFsc28gdGhpbmtpbmcgYWJvdXQgZHJvcHBpbmcgdGhlIEEgdnMgQiBkaXN0aW5j
+dGlvbi4gVGhleSBhcmUgb3JkZXJpbmcgDQpvcHRpb25zIHRoYXQgZG8gaW1wYWN0IHRoZSBhY2N1
+cmFjeSBvZiB0aGUgQURDIGJ1dCBkcml2ZXIgd2lzZSB0aGV5IA0KYmVoYXZlIHRoZSBzYW1lLg==
