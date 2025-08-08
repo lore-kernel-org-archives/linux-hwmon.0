@@ -1,75 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D99286413;
-	Fri,  8 Aug 2025 15:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8311835948
+	for <linux-hwmon@vger.kernel.org>; Fri,  8 Aug 2025 17:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754668331; cv=none; b=GYzDZdjE+YhSYpO/EVj/O/12ha9WYVqmCIxFf6rfgjLhP4Ybc2eOg4aP6mKT3dej1ayIe+pKXhODK9v6lKGltDxLJFM415zj8FOwu9mioUPNuD6LyyjOjkEf/SHsAdb2kFZXD5b3A6cuZSIu39/cVqhIIi3gvJj83ywV9dOl5HU=
+	t=1754673742; cv=none; b=rwVo3u+UWS4clXZ7GrR64esAUEunXWYSAbV/3wRVQ2V7Mu8yM8Ix7JIU/5EPo4Uf41eiiiO3zEDyJvNnLOTJF6v5uLeFHTXtp22/pS6h2yFFribTD+2DTY+O6vLukrPnRO3w5PApYRbvrypkBellW3nhfMk+II9MKqXP+HFeduI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754668331; c=relaxed/simple;
-	bh=Gs6NSTTW9TZES8wQNyVAdg6U2mX0mvlwLxDMZvmhOSM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OOIGvN5wMj0+d+/7UsG36QtD8s9TzV4U74iAOemOqc8cBx5crO8dH8aYQmaR8NMA30cMcLxMUK+SpOlp0amBUqhcLRyQCgRiaAJ98Z9+lPWIQRADeIl4ViZt4yhYcM4lUDk+P+OVYbF5yS+J3W5L5NSQROLUqSehHdslgmyC3wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxcxtoVX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754673742; c=relaxed/simple;
+	bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N7gwQ3l+vSmPSkZBie0WOfOIrCIIedi/0G2Nx6an1e88uI0CNNH4Yqr1zhVYi7Srm8Vxkdt3fo0+Lfm3Smc91pZuHvSRF5WBCUwoT4KurOM/qSIIQf42C7GxXlE8UBODCDTAUephu5za/GzLoItfnCoNxIu/kMz/Wl+R71cSIGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZ4BfGqG; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxcxtoVX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB66C4CEED;
-	Fri,  8 Aug 2025 15:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754668331;
-	bh=Gs6NSTTW9TZES8wQNyVAdg6U2mX0mvlwLxDMZvmhOSM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pxcxtoVXvrsE1YfcZf1YFVIBpgAxVUufizVV3RjSG/AB2Arwhh3Nkwn/vVqHAx1pf
-	 50riRRjAPxxkPTTgkCcpJ9FVfahOTO0BqJuUNh+9zj49+YYNyJfrQjKBhq5amX+jpk
-	 pHJ1Vfq3WL050O0FO6G6IztnHCXAgv/BQLqhc+FXybKaxCtCbYXi2DEoV+Vve7SAhl
-	 BbqpJtIIjVifMgJMcNd7shX1OsToB7tMIJ+crwKAXNwe3i/XF5dpfEVLd5H59rpphw
-	 Z/J67krGV9uvwjc2AdGkQzSizkwSdqMCtRhLLn80ymBOsXEpP8sxSaLXR11YthKgVe
-	 O3j9Bh6kU+vig==
-Date: Fri, 8 Aug 2025 16:52:06 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA780 device
-Message-ID: <20250808-demanding-upscale-821f23db6ea1@spud>
-References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
- <20250808030510.552724-2-chris.packham@alliedtelesis.co.nz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZ4BfGqG"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-615398dc162so3806962a12.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 Aug 2025 10:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754673739; x=1755278539; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
+        b=hZ4BfGqGpB23KPo9/zzeCYlCp2SCtKmldI+HgT8u31dF/NmClgC/f0hI+btTbZU0JD
+         Rr6CYItcGsJi5AMnVRoH5DzladTvizFCQjG0X/gwAurTGUJ20qyo0zN+zRZytmLLEos3
+         Bea/i2A2xSt9yWXtYTgyjWljqRgT3EPWp+yQ/POX+eIKINri6M+ufy1qYTrZfGkx8eSg
+         UGHJGW9cBYkrDqKZJ6w9gFA/N2Q8dASqXgfONd83/Ejpu+ieQZlI14tXO7AbuCo55Quy
+         B77eT0jXuIzvOZ3uw0Q+E03ch96okQxLTwYd8sfGVCLXPXjPPPc1gcHyofIpfjb81HiT
+         ikJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754673739; x=1755278539;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
+        b=YPOt8kUQRghKtWOZIXh+nB6LHGRBOlcKQ0jaSdNc8m0HvC0axLxxRncUFZ12ZZ/xod
+         xdAKyt3KjGYquBdaMdpWf6CyQ8dN8PLXOSv4zHHwluTYY2mQQSvrdDs4Wi/5RDrMLujh
+         tgb1YaWIIUkoKWCyG1jW7YxrFJww9HcUoW75ZW0AWXJILII+cdGKlkHAGI7EQjLPyRVf
+         Hh1O0q5vi/n5ChYlXcAuNJkd64TpdRtyNcQ49rC2U+/G29pClhVWvhhM94IjTkGi9hxK
+         onSkOVQYKvjcloWMlmYP9bcKTDVYZitsxiB0OJdCxKzNfxMfWLUrJVz1tijrkKDKZHp3
+         TPLg==
+X-Gm-Message-State: AOJu0YxlqpR5W/E9WEjtTTV6dibD8pjGePXKgpRH0oKMwhgWTBcyYl+e
+	7bjbmZRRHljoNOahbQkbLmJrYj6riWwFBb46zgcLNdCgb+QR2cAGzHr/KSONqA/O4q3t1HdAJfX
+	jMON1X9XJrR9e+RWAhWAerswYSBymUQ==
+X-Gm-Gg: ASbGncvO2808f5mHIk8qBb7GagwFj5t7AV4Vzk82x8hf6j78vPNFUXPqwPVjT4mvZxT
+	SkQd2dOzyyELfEnOObGCWtSnopHKgvC7kGqH2NIw0HdpVn8q5Cqk3WM/7H+oafKHSoOUCTEKan7
+	rrVZJLqn58fj5P3XGeT3GrBfFxT7NJdVTfcsWLBJOTby9B1UpuEblZtELlemT6BhxF9g0W9rtpH
+	fzdKKo=
+X-Google-Smtp-Source: AGHT+IEjOL5YW/gnmELqwf+cioD5jZap6fO5XAff7trRA/BkumMKc7wdeO6CIAqsmszfeSOe3HqhwNpugSjKPfepTUo=
+X-Received: by 2002:a05:6402:268d:b0:617:4a59:c5da with SMTP id
+ 4fb4d7f45d1cf-617e2e53bbamr2681712a12.23.1754673738630; Fri, 08 Aug 2025
+ 10:22:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2FUh3mvXHkn/E7UG"
-Content-Disposition: inline
-In-Reply-To: <20250808030510.552724-2-chris.packham@alliedtelesis.co.nz>
-
-
---2FUh3mvXHkn/E7UG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250807215037.1891666-1-gfuchedgi@gmail.com> <4b4dba48-d8c2-41ba-a80f-6606d4231a18@kernel.org>
+In-Reply-To: <4b4dba48-d8c2-41ba-a80f-6606d4231a18@kernel.org>
+From: Gregory Fuchedgi <gfuchedgi@gmail.com>
+Date: Fri, 8 Aug 2025 10:21:42 -0700
+X-Gm-Features: Ac12FXzdeCV2ZEQPAUA_v1PO8wN2se-w8AgMA2dNb6LwXT-sFGdpeNEMyuwyvkQ
+Message-ID: <CAAcybuvujtYQ1MjHmrDWrQVBhWQSrZMNa2sr=mrAN1mSa0JP8A@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (tps23861) add class restrictions and semi-auto
+ mode support
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, robert.marko@sartura.hr, 
+	luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 08, 2025 at 03:05:09PM +1200, Chris Packham wrote:
-> Add a compatible string for the INA780 device.
->=20
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Thank you for the recommendations!
+Couple of questions below.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Aug 7, 2025 at 11:03=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+> On 07/08/2025 23:50, Gregory Fuchedgi wrote:
+> You missed at least devicetree list (maybe more), so this won't be
+> tested by automated tooling. Performing review on untested code might be
+> a waste of time.
+This change was tested internally using hw poe testers. Auto and Semi-Auto =
+modes
+were tested with different poe class restrictions. Current cut-offs were te=
+sted
+too. It was tested on an older kernel because of the SoC vendor. The driver=
+ code
+cleanly applied to linux-next though.
 
---2FUh3mvXHkn/E7UG
-Content-Type: application/pgp-signature; name="signature.asc"
+I would appreciate a few pointers regarding upstream testing infra. Could y=
+ou
+expand a bit more on the missing devicetree list and what needs to be chang=
+ed?
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaJYdJgAKCRB4tDGHoIJi
-0u/lAP4i/+m/kGSELzeD1XXcaFUfEL5ww6z9C/xi8We6nrFGKAEA9mdMwHA5+wVt
-Gn5clIZRKg8jJZ1hCIGhRJ6UX020+wM=
-=5HNm
------END PGP SIGNATURE-----
-
---2FUh3mvXHkn/E7UG--
+> Yuo should rather use patternProperties.
+The patch uses port DT node names as hwmon labels for curr and in files. Wo=
+uld
+switching to something like patternProperties: ^port@[0-3]$ and adding opti=
+onal
+label instead be a good idea?
