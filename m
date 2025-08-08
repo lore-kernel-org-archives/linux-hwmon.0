@@ -1,80 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550AB1CBA18;
-	Fri,  8 Aug 2025 07:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D99286413;
+	Fri,  8 Aug 2025 15:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754637376; cv=none; b=EZLGpQEzKDcycVHB3shl7DytJiGTQUiYZj0W0qY90lTqWGiA23qwMUQ26j+hGSOpM27ORsHSUzLV91or38XJc0OKfz9o8ZYrNLn3k3g3eH3hF2FbaFR3Ug6+SWDF6KWFkuDkSkUS85tYCMbziLzIlcJLgVEtc28DIDSl+AtBUNQ=
+	t=1754668331; cv=none; b=GYzDZdjE+YhSYpO/EVj/O/12ha9WYVqmCIxFf6rfgjLhP4Ybc2eOg4aP6mKT3dej1ayIe+pKXhODK9v6lKGltDxLJFM415zj8FOwu9mioUPNuD6LyyjOjkEf/SHsAdb2kFZXD5b3A6cuZSIu39/cVqhIIi3gvJj83ywV9dOl5HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754637376; c=relaxed/simple;
-	bh=lxMiesZ65+2oiwectZttyK6zke/KLfLuNPyKzaZqUWY=;
+	s=arc-20240116; t=1754668331; c=relaxed/simple;
+	bh=Gs6NSTTW9TZES8wQNyVAdg6U2mX0mvlwLxDMZvmhOSM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OagQi8PGEVNLdHpmjToyUl0GafzDTYJVWF6SeyXhjqc47BUaKCtoNJqiNpH3EY2wiIe9HsuBUvYbW97RIutrfhc00FTwCnk7hd0fq3LUQOjsb0WUyibA+QmByrEf5Q1G9TwybjJDUowwHRHxUudM0drJy8OSqZh1zc4iHHCRSNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lprjZq9w; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OOIGvN5wMj0+d+/7UsG36QtD8s9TzV4U74iAOemOqc8cBx5crO8dH8aYQmaR8NMA30cMcLxMUK+SpOlp0amBUqhcLRyQCgRiaAJ98Z9+lPWIQRADeIl4ViZt4yhYcM4lUDk+P+OVYbF5yS+J3W5L5NSQROLUqSehHdslgmyC3wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxcxtoVX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lprjZq9w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7DAC4CEED;
-	Fri,  8 Aug 2025 07:16:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxcxtoVX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB66C4CEED;
+	Fri,  8 Aug 2025 15:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754637375;
-	bh=lxMiesZ65+2oiwectZttyK6zke/KLfLuNPyKzaZqUWY=;
+	s=k20201202; t=1754668331;
+	bh=Gs6NSTTW9TZES8wQNyVAdg6U2mX0mvlwLxDMZvmhOSM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lprjZq9we62oH/qshRmSLjmBGsxNQZwPuBp/ZZAKMMfB+pFF8PXwy/ARW8GZaGXSb
-	 HZRk1JYI/Y6lE2/PadXvN+P6Q4UyrwnTnye7MlutKza8GSfJlCRBr7X8GhG4qDLYIy
-	 8fZauGzq32mxjCsFTNRkB4kc2XkqSbZey2oNwl7QAhp+2L0WeqCspFkXWa0XyfokV6
-	 dMC7y0KfyY6wOpxnkyIo7QpctK9uewqIS8oz6gIcITMxn/2BsBShPfkku0OlFSwtR5
-	 /b8/TlgH4Vs2p0GoGcF6VqEAtylcWUg7Ahn2o2sfSYGPZHoSB+BBYpbP/qIC6Mq0HQ
-	 c011nK78AE3Fg==
-Date: Fri, 8 Aug 2025 09:16:13 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc: "jdelvare@suse.com" <jdelvare@suse.com>, 
-	"linux@roeck-us.net" <linux@roeck-us.net>, "robh@kernel.org" <robh@kernel.org>, 
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: ti,ina780a: Add INA780 device
-Message-ID: <20250808-hypersonic-electric-skua-ceca2e@kuoka>
-References: <20250806005127.542298-1-chris.packham@alliedtelesis.co.nz>
- <f2972a86-f58d-4360-b43a-486377b101e1@kernel.org>
- <aa814850-79ee-4c88-87d8-a3d70036ef2d@alliedtelesis.co.nz>
+	b=pxcxtoVXvrsE1YfcZf1YFVIBpgAxVUufizVV3RjSG/AB2Arwhh3Nkwn/vVqHAx1pf
+	 50riRRjAPxxkPTTgkCcpJ9FVfahOTO0BqJuUNh+9zj49+YYNyJfrQjKBhq5amX+jpk
+	 pHJ1Vfq3WL050O0FO6G6IztnHCXAgv/BQLqhc+FXybKaxCtCbYXi2DEoV+Vve7SAhl
+	 BbqpJtIIjVifMgJMcNd7shX1OsToB7tMIJ+crwKAXNwe3i/XF5dpfEVLd5H59rpphw
+	 Z/J67krGV9uvwjc2AdGkQzSizkwSdqMCtRhLLn80ymBOsXEpP8sxSaLXR11YthKgVe
+	 O3j9Bh6kU+vig==
+Date: Fri, 8 Aug 2025 16:52:06 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: jdelvare@suse.com, linux@roeck-us.net, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: ti,ina2xx: Add INA780 device
+Message-ID: <20250808-demanding-upscale-821f23db6ea1@spud>
+References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
+ <20250808030510.552724-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2FUh3mvXHkn/E7UG"
 Content-Disposition: inline
-In-Reply-To: <aa814850-79ee-4c88-87d8-a3d70036ef2d@alliedtelesis.co.nz>
+In-Reply-To: <20250808030510.552724-2-chris.packham@alliedtelesis.co.nz>
 
-On Thu, Aug 07, 2025 at 08:46:46PM +0000, Chris Packham wrote:
-> 
-> On 06/08/2025 18:32, Krzysztof Kozlowski wrote:
-> > On 06/08/2025 02:51, Chris Packham wrote:
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    enum:
-> >> +      - ti,ina780a
-> >> +      - ti,ina780b
-> >> +
-> >> +  reg:
-> >> +    maxItems: 1
-> >
-> > This looks a bit incomplete. Where is a supply? No shunt resistor
-> > choice? No other properties from ina2xx apply?
-> This chip doesn't need a shunt so pretty much all that is required is 
-> compatible + reg. Guenter did mention rolling this into the existing 
-> ina238 driver (and ina2xx binding) so I'm looking at that right now. I'm 
-> also thinking about dropping the A vs B distinction. They are ordering 
-> options that do impact the accuracy of the ADC but driver wise they 
-> behave the same.
 
-Then I suggest to skip a/b. Usually we do not have compatibles for
-packaging differences or even consumer/industrial thermal choices.
+--2FUh3mvXHkn/E7UG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Fri, Aug 08, 2025 at 03:05:09PM +1200, Chris Packham wrote:
+> Add a compatible string for the INA780 device.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+--2FUh3mvXHkn/E7UG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaJYdJgAKCRB4tDGHoIJi
+0u/lAP4i/+m/kGSELzeD1XXcaFUfEL5ww6z9C/xi8We6nrFGKAEA9mdMwHA5+wVt
+Gn5clIZRKg8jJZ1hCIGhRJ6UX020+wM=
+=5HNm
+-----END PGP SIGNATURE-----
+
+--2FUh3mvXHkn/E7UG--
