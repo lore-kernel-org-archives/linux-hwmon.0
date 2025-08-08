@@ -1,103 +1,85 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8311835948
-	for <linux-hwmon@vger.kernel.org>; Fri,  8 Aug 2025 17:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F3A199385;
+	Fri,  8 Aug 2025 17:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754673742; cv=none; b=rwVo3u+UWS4clXZ7GrR64esAUEunXWYSAbV/3wRVQ2V7Mu8yM8Ix7JIU/5EPo4Uf41eiiiO3zEDyJvNnLOTJF6v5uLeFHTXtp22/pS6h2yFFribTD+2DTY+O6vLukrPnRO3w5PApYRbvrypkBellW3nhfMk+II9MKqXP+HFeduI=
+	t=1754674693; cv=none; b=HRQpSNdg2BwNu5FJ3sqzt2lWs+JneV7fjqmmPNZo2f0fp7upUUJ/Pg/JxqG0aZTNA3on9ujyRtTiWQnPbfaK8Pl+uTJTq/FZ3r6LV91JpRI/uGXSzfnXRnlf7Tai8gcjGdCzYgyGPpN8vmhc7GjTYJQr3ngrVsy1jGfyazduI1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754673742; c=relaxed/simple;
-	bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N7gwQ3l+vSmPSkZBie0WOfOIrCIIedi/0G2Nx6an1e88uI0CNNH4Yqr1zhVYi7Srm8Vxkdt3fo0+Lfm3Smc91pZuHvSRF5WBCUwoT4KurOM/qSIIQf42C7GxXlE8UBODCDTAUephu5za/GzLoItfnCoNxIu/kMz/Wl+R71cSIGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZ4BfGqG; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1754674693; c=relaxed/simple;
+	bh=KCrE/1vxbVTmZFIhx+r1KO8dpf7FoCmwnT1AoeihBWQ=;
+	h=Subject:To:Cc:From:Date:Message-Id; b=L57k0yXaIllIEz9PBcilHnxCsemrMAg6v2CQ3MWcRB5Pr+2FFTmYmfWsZVp3apWlVY15HLCh+MCMEB9wNhX58FBSdXDn2XFlAvRaon5o4v+R4f4isdjuj7ctNND2XbbfrdYUwvbCHbklaleanMtEpn4BecoIMAfRPD5A/uP6JC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NqnHCAKi; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZ4BfGqG"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-615398dc162so3806962a12.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 08 Aug 2025 10:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754673739; x=1755278539; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
-        b=hZ4BfGqGpB23KPo9/zzeCYlCp2SCtKmldI+HgT8u31dF/NmClgC/f0hI+btTbZU0JD
-         Rr6CYItcGsJi5AMnVRoH5DzladTvizFCQjG0X/gwAurTGUJ20qyo0zN+zRZytmLLEos3
-         Bea/i2A2xSt9yWXtYTgyjWljqRgT3EPWp+yQ/POX+eIKINri6M+ufy1qYTrZfGkx8eSg
-         UGHJGW9cBYkrDqKZJ6w9gFA/N2Q8dASqXgfONd83/Ejpu+ieQZlI14tXO7AbuCo55Quy
-         B77eT0jXuIzvOZ3uw0Q+E03ch96okQxLTwYd8sfGVCLXPXjPPPc1gcHyofIpfjb81HiT
-         ikJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754673739; x=1755278539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8envcHHs9JLRDgEmFGs1z3yt+5sACnpaa6PFKxHsCs8=;
-        b=YPOt8kUQRghKtWOZIXh+nB6LHGRBOlcKQ0jaSdNc8m0HvC0axLxxRncUFZ12ZZ/xod
-         xdAKyt3KjGYquBdaMdpWf6CyQ8dN8PLXOSv4zHHwluTYY2mQQSvrdDs4Wi/5RDrMLujh
-         tgb1YaWIIUkoKWCyG1jW7YxrFJww9HcUoW75ZW0AWXJILII+cdGKlkHAGI7EQjLPyRVf
-         Hh1O0q5vi/n5ChYlXcAuNJkd64TpdRtyNcQ49rC2U+/G29pClhVWvhhM94IjTkGi9hxK
-         onSkOVQYKvjcloWMlmYP9bcKTDVYZitsxiB0OJdCxKzNfxMfWLUrJVz1tijrkKDKZHp3
-         TPLg==
-X-Gm-Message-State: AOJu0YxlqpR5W/E9WEjtTTV6dibD8pjGePXKgpRH0oKMwhgWTBcyYl+e
-	7bjbmZRRHljoNOahbQkbLmJrYj6riWwFBb46zgcLNdCgb+QR2cAGzHr/KSONqA/O4q3t1HdAJfX
-	jMON1X9XJrR9e+RWAhWAerswYSBymUQ==
-X-Gm-Gg: ASbGncvO2808f5mHIk8qBb7GagwFj5t7AV4Vzk82x8hf6j78vPNFUXPqwPVjT4mvZxT
-	SkQd2dOzyyELfEnOObGCWtSnopHKgvC7kGqH2NIw0HdpVn8q5Cqk3WM/7H+oafKHSoOUCTEKan7
-	rrVZJLqn58fj5P3XGeT3GrBfFxT7NJdVTfcsWLBJOTby9B1UpuEblZtELlemT6BhxF9g0W9rtpH
-	fzdKKo=
-X-Google-Smtp-Source: AGHT+IEjOL5YW/gnmELqwf+cioD5jZap6fO5XAff7trRA/BkumMKc7wdeO6CIAqsmszfeSOe3HqhwNpugSjKPfepTUo=
-X-Received: by 2002:a05:6402:268d:b0:617:4a59:c5da with SMTP id
- 4fb4d7f45d1cf-617e2e53bbamr2681712a12.23.1754673738630; Fri, 08 Aug 2025
- 10:22:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NqnHCAKi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754674691; x=1786210691;
+  h=subject:to:cc:from:date:message-id;
+  bh=KCrE/1vxbVTmZFIhx+r1KO8dpf7FoCmwnT1AoeihBWQ=;
+  b=NqnHCAKiJE/2gYuvZDDdTF4JbruJZvb2/0DZq80UIVzuWiAptTOkuaRL
+   rbqM16S1E/f/VJixjxJKYhBuribnrAPzHA5TNrgOaHAWoEpo2YhDAaL1t
+   pk7Z5N9Ar9AJQUb88Ge+yf0Y38a8AtQTHcijp+DsQV9jjrchTTu9afrdg
+   ZFbhev174E+pLdRxca4jhgFnSxRJ8YG+KTthgEFkCKb0rOGj7IH4OiZxI
+   s+++UdoMyIDS/XaqR8LQJBv2XhGdYnJ/vE7rAItGU87S4yahX8sm+wPGe
+   NcFOJgAw5jWIQ+9Vte4rESe68RD/gPZghiKGdzqw9XNzLhHekKDZcrV7D
+   A==;
+X-CSE-ConnectionGUID: 4ow6kE+vSCGwEf6+GGlj5Q==
+X-CSE-MsgGUID: 3F1TGJhmRXq4ToYbdmOLog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="67730621"
+X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
+   d="scan'208";a="67730621"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2025 10:38:08 -0700
+X-CSE-ConnectionGUID: dcyHzB4zQ3ui1GGBd+1Ckg==
+X-CSE-MsgGUID: L2v+Bpk9RwKcrXFUygimzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,274,1747724400"; 
+   d="scan'208";a="196357205"
+Received: from davehans-spike.ostc.intel.com (HELO localhost.localdomain) ([10.165.164.11])
+  by orviesa002.jf.intel.com with ESMTP; 08 Aug 2025 10:38:06 -0700
+Subject: [PATCH] MAINTAINERS: Mark coretemp driver as orphaned
+To: linux-kernel@vger.kernel.org
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+From: Dave Hansen <dave.hansen@linux.intel.com>
+Date: Fri, 08 Aug 2025 10:38:07 -0700
+Message-Id: <20250808173807.96D134EA@davehans-spike.ostc.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250807215037.1891666-1-gfuchedgi@gmail.com> <4b4dba48-d8c2-41ba-a80f-6606d4231a18@kernel.org>
-In-Reply-To: <4b4dba48-d8c2-41ba-a80f-6606d4231a18@kernel.org>
-From: Gregory Fuchedgi <gfuchedgi@gmail.com>
-Date: Fri, 8 Aug 2025 10:21:42 -0700
-X-Gm-Features: Ac12FXzdeCV2ZEQPAUA_v1PO8wN2se-w8AgMA2dNb6LwXT-sFGdpeNEMyuwyvkQ
-Message-ID: <CAAcybuvujtYQ1MjHmrDWrQVBhWQSrZMNa2sr=mrAN1mSa0JP8A@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (tps23861) add class restrictions and semi-auto
- mode support
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, robert.marko@sartura.hr, 
-	luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Thank you for the recommendations!
-Couple of questions below.
 
-On Thu, Aug 7, 2025 at 11:03=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
-> On 07/08/2025 23:50, Gregory Fuchedgi wrote:
-> You missed at least devicetree list (maybe more), so this won't be
-> tested by automated tooling. Performing review on untested code might be
-> a waste of time.
-This change was tested internally using hw poe testers. Auto and Semi-Auto =
-modes
-were tested with different poe class restrictions. Current cut-offs were te=
-sted
-too. It was tested on an older kernel because of the SoC vendor. The driver=
- code
-cleanly applied to linux-next though.
+From: Dave Hansen <dave.hansen@linux.intel.com>
 
-I would appreciate a few pointers regarding upstream testing infra. Could y=
-ou
-expand a bit more on the missing devicetree list and what needs to be chang=
-ed?
+This maintainer's email no longer works. Remove it from MAINTAINERS.
+Also mark the driver as Orphaned for now.
 
-> Yuo should rather use patternProperties.
-The patch uses port DT node names as hwmon labels for curr and in files. Wo=
-uld
-switching to something like patternProperties: ^port@[0-3]$ and adding opti=
-onal
-label instead be a good idea?
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+---
+
+ b/MAINTAINERS |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff -puN MAINTAINERS~MAINTAINERS-20250707-2 MAINTAINERS
+--- a/MAINTAINERS~MAINTAINERS-20250707-2	2025-08-08 10:36:09.028985285 -0700
++++ b/MAINTAINERS	2025-08-08 10:36:09.043986599 -0700
+@@ -6281,9 +6281,8 @@ F:	tools/testing/selftests/cgroup/test_k
+ F:	tools/testing/selftests/cgroup/test_memcontrol.c
+ 
+ CORETEMP HARDWARE MONITORING DRIVER
+-M:	Fenghua Yu <fenghua.yu@intel.com>
+ L:	linux-hwmon@vger.kernel.org
+-S:	Maintained
++S:	Orphan
+ F:	Documentation/hwmon/coretemp.rst
+ F:	drivers/hwmon/coretemp.c
+ 
+_
