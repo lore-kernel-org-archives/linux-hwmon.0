@@ -1,67 +1,67 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A075B149C51;
-	Mon, 11 Aug 2025 14:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA50C1F91F6;
+	Mon, 11 Aug 2025 14:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754920990; cv=none; b=jacREwYE4AYFNVQQ0B4i10UbzoJE8ViXTrwhTwaNkpwnntBgv4LL7+gSxdXt/gZqaOXiuAAWDKJr4oWRNorktQ4KxZ9COOGU5PjGw/ZnBzYkZB6pk7nWQJ9j/5JpiEvxBrbwAlXawicg4f10A5YFLUQRJkKs6TfvPpxhECyvjWo=
+	t=1754921075; cv=none; b=J9I1AJi7Ti+7wIHg2Ka2xJVAO1tbO7yn9eMJg4e1zdHncIlyp8ITYKErSPK5RCOfdtXsq/wgMGXHNnRAcyHyH/Xzjd/VjnDwGPH6zDhwe2U7ds8os1lv97lDCUyDyfUi7GbYyAKgWw3I5uxLTRc9dgslMFuIxe0nJM0FwdQR/vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754920990; c=relaxed/simple;
-	bh=VOKuOI0+Bq5dn9PO9KpLJlyxvc2ZdvZgTYp12XumcoY=;
+	s=arc-20240116; t=1754921075; c=relaxed/simple;
+	bh=RmgTHIaDhOguz+w7nmvLbH/WpMkuuGx2b8fcu3B0jaQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GBphY5jo0IW57s8LCzmCj4OOfT3ObLR7wzfO0f2lxtOByFgL5nr3XLG4sCGItXWPIvEtGX9q4/SC20q58aHNLqFgKKJqDLB8bI4i4ZOs6jMe+LwZwph2uT4cbYcRBLyhbIyJftNUf99yjxBG2qKuHOhcibWg9AH5WURpPqHxdWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRRPUhjf; arc=none smtp.client-ip=209.85.215.179
+	 In-Reply-To:Content-Type; b=u0SkYf3ASZycbiapy+TgKkRKITz7Ys8FYCKwrlwzXJY/eTI7sGzuKy89/uT24C6o348gLoyibbgXOS+hRWroevFakRshDJaSyAiRF7IquNno6rM/3znVHitjX/4Xes5WokERsMgK5ul/TwnKFiSL2TJHiaseADTKs2s61JXRSd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P+fsxgiW; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRRPUhjf"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b4233978326so2412939a12.1;
-        Mon, 11 Aug 2025 07:03:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P+fsxgiW"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-24041a39005so27711155ad.2;
+        Mon, 11 Aug 2025 07:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754920988; x=1755525788; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754921073; x=1755525873; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTKwuk+ky1tP6QdSXxJoy9Pjmm3zZoEMRCsmkMtZ3Tg=;
-        b=XRRPUhjfConjGXPn0ZOt5Jx3LiVQwfOeVlwElNrey+ObFSrW/WH1Br1hPUUWaHp7wd
-         q3aq+X750VbJO5Q6FBWD13qquZxFyZL1wE/4KmjlpDJp7zpYSmyp8qOtZmyZrrb4aPCZ
-         p6DAN0M2nLywzPb60ItUKR4P5RA/vzfrFYvQaqopXopMbrZDXhGmK5xKua1gFm8qlt++
-         mnRDSs+AWpXUcb7LDPpVr3ou9zXolm9MeoUEwXzGhAL3+o06ZabFNzR66Uh/L+gg4mOU
-         ob+6FpP51xoOO2wldU969l5yD8sXR4YxemQxwkbStXxEYAGuu1+Ow09KUZJyVYoUIhn1
-         qbxQ==
+        bh=YUTK53YIspNHhHoCh8vVSDbdxt8XCkmaBRBU4QetOB4=;
+        b=P+fsxgiWWykuFCzbpVTDsn9RyCGrBCIbJqpLhPCeR1pnqRyvRqLbgw4wgiO7qbqfw8
+         kEIHJN87ebhY4HyzXIxju4BS4pci5Q2jr+LZN2OBlt63jSl4815RkOTms/Lh4OuLdjc6
+         kVJBO6rJk/B5UNo4ItHvXpneGLkPpu9L3y6zGIxnrFONCe/JRAaAkNUF9es3clCPoVVe
+         TPeepVzXzbn06krpjNpuyfrEt5+cLxR8hU1lf6a2/gp10wQepjhblLPiSWu3Miow9vvj
+         yyJkOKe75IKcCUNGcj4mBveycmTAbLHh+8HRhqL1EA3vLIr3nn3V2awboy/5CpkwDitr
+         3EWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754920988; x=1755525788;
+        d=1e100.net; s=20230601; t=1754921073; x=1755525873;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cTKwuk+ky1tP6QdSXxJoy9Pjmm3zZoEMRCsmkMtZ3Tg=;
-        b=kXDAJYe1DNOiyGejPSlSKN5Jti+iFcqawBfWAoE6Pa2fZjG16qDywptfrtuH+4kDuh
-         NFCE23vDqi+q/TY+KDNmQprYNl189paoLw+ZzNBBgEemoKdLSSlIBTKjql6HaU5ROLuO
-         KjMDTi59qKUJm3LRnmDfCZFgrL3EvpoYeAl3sjzUEXaPyk4KduEu+cOO8JsJ2Nb3oYob
-         v+xF8JePtnHApoIaVFswPnBWPjxBxkIy5Jj6WCwhazSq2IDBOgVCTDr1MDkUUyp55WTp
-         vguWhMHENppwFG5k2CllFiHKvF6jef5uNSghqwYS1D2LdRxiDio2KChY8ytj4x8djZ8/
-         fOmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUw/WRmWNENJA5Tjfpqo7AJ2329g4EqH9rkY6Rr4MN8A3Qv4qjpUWYSMMJJ7+Npe3AX6IWhZcFH3TGYHm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrP4EYb3DjgLQTu6B3WCcqTQJhe2GF4+y4sSNBD3VD2/srWn9E
-	p1jql7ui77TzKNPjQqQaw5s5ocT5c+vUBZMfXUI/T5fEB6YaTbI17btP
-X-Gm-Gg: ASbGnctYsrKDU9zPJpT+5gZcYRYZ7/ZEwBOWmKHxjz3WYQkesck7sFyIJ0bjtLo+xzE
-	mbB87wnVIhnaGZd4jjsmxAeC8NjcbxUQ3W0oR9qlAWNvktYpxUiB1zsKb3wcyQ7gnoOJPkAAzk6
-	AJmM3deY84cMbUPtu6ftVLjfohAOO5uPv4YhEgEkPrY8kd6pYgWC/m47HJFGaN+SxnWdYn5AgHv
-	8m2BzD2tvxWZDKuDFBtmzVXxhm4zKmpTubPaVijG3ko4VKU+WnAjBrpzp59fP3gFtHgNfVwPRpw
-	wKS33DXHVoAAdjO/UK754yJkSmA1rwUPth8FPk6MJjNgciqMYT/FP1XhuO9I01uTRE22bm/1ypw
-	Hw11zT3RYvo2LwCpGiHtJy0mdeJKX5SBvnoDKvvxoIHj2uuAmpmEQw1eBXQ2UxE4EM+N8BlM=
-X-Google-Smtp-Source: AGHT+IFebwNmWsMWA395liEmgOq15RRumiqJ7n7+f9kRMMWhvLIFjBYA+Y0C7sBHfLhwcEUfQdcWbQ==
-X-Received: by 2002:a17:903:15c3:b0:240:770f:72d1 with SMTP id d9443c01a7336-242c2052cacmr203963915ad.24.1754920987673;
-        Mon, 11 Aug 2025 07:03:07 -0700 (PDT)
+        bh=YUTK53YIspNHhHoCh8vVSDbdxt8XCkmaBRBU4QetOB4=;
+        b=CrfneS7pZL7boFqxgjXgFYWYAiqjt2QwWKvtJ4oqeVrKm17WEtcbezmQZBt2K/ORtK
+         VqgdisLf6oYvoOIf/zh21QpsR4Zw4HRU57SF4MJpbSec4qX2ppOHtuyEXKo6G02JTD5L
+         k3XepELQA2vu3SW13q/P/uXeVxdhy++7uqz0q6lzdZSne9I0GhHFezwAjXFi7L5CBPef
+         tI+6qczODEAQT0OFN+y65CKaD2qWdpAoID51Fby5c5G5RJYDpWfe7cVXOT7ddTrD2ys6
+         VTlIzYQtGUS94H1hR0TKxIvf62VkL4rVAI6CstEwaQ0RTWNnvoV/p3RwJwjyOKlU6r/V
+         sa4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXIazbYs+KMFo3B1dbFAJfZi8VT0AW45E2TGOwLu6XaYtwjDYbzwMKf4eTNBq86AfF3pBx4Ui68+237gW0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1galOiuhg9p0vy0cDiD6LwFOhoAaLa5OYz3g0PKNAm/4dE8J3
+	gYAAYPu7WOhWE7oFJmCB0nSRAlbrII7eZAxAWBi8L9imAg5u+mSWygX3
+X-Gm-Gg: ASbGncuZH3qC5uHM2pPOOn/R1NJOkpd/3dnwIlIPBTl2SvAeRFze+ePsw3MswFD46xx
+	HUDYPuINS0lNdb+xxfxsxxYxmf9mrRC1xR24sY77+hoAAfExy7pi1Kt95aNrRyfGA4wPSzao5Tn
+	p01NM3g8EVWuB9f6mNzmvXwim4U9b0zlVyreSNsdlpsw7oTQ8yrstSCfFFSo9g6jNk5ykCdrBrI
+	d5dp6WwKorl+LvBffjzjEwmD/03A0BFR13PZLmpieDxKVD22UHCtEnb0cifbZ8uJ9AQ58dCCfzS
+	3tb+jkLQPL5vxuqIACzW8YaRMMPlcHOd6JZngEzAd3njVXEk+Tncw+Npzs6bIOylEJDOHXqbz1E
+	9BIUPNgJvhkXJpiIHsZ1FJDywVB/3ofNLa1UF6LkigFjkK2qDLCmPCZJ1KdqeoNoT2OrPI4w=
+X-Google-Smtp-Source: AGHT+IHbkYXNAxPAuxg++nImkbnZkg3L+q8zj6FyMyfLfo1rJY0xudYw/DYfXMbWZB2Ek4/URlIJdw==
+X-Received: by 2002:a17:903:3b8c:b0:242:460f:e4a2 with SMTP id d9443c01a7336-242c2004168mr157897575ad.23.1754921072812;
+        Mon, 11 Aug 2025 07:04:32 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e8976cbdsm276252615ad.75.2025.08.11.07.03.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241e899b6casm272694975ad.127.2025.08.11.07.04.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Aug 2025 07:03:07 -0700 (PDT)
+        Mon, 11 Aug 2025 07:04:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b89a62f-adc0-4eef-8e49-638371fbadf0@roeck-us.net>
-Date: Mon, 11 Aug 2025 07:03:05 -0700
+Message-ID: <112dba6a-dc3a-4b6c-b558-e1cc87636dea@roeck-us.net>
+Date: Mon, 11 Aug 2025 07:04:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,14 +69,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] hwmon: sbtsi_temp: AMD CPU extended temperature
+Subject: Re: [PATCH v2 0/1] hwmon: sbtsi_temp: AMD CPU extended temperature
  range support
 To: Chuande Chen <chenchuande@gmail.com>, jdelvare@suse.com
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
  chuachen@cisco.com, groeck7@gmail.com
 References: <20250810084307.41243-1-chenchuande@gmail.com>
  <20250811050752.76030-1-chenchuande@gmail.com>
- <20250811050752.76030-2-chenchuande@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,189 +121,24 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250811050752.76030-2-chenchuande@gmail.com>
+In-Reply-To: <20250811050752.76030-1-chenchuande@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/10/25 22:07, Chuande Chen wrote:
 > From: Chuande Chen <chuachen@cisco.com>
 > 
-Any reason for not sending this from your Cisco e-mail address ?
-
-> Many AMD CPUs can support this feature now.
-> We would get a wrong CPU DIE temp if don't consider this.
-
-temperature.
-
-> In low-temperature environments, the CPU die temperature
-> can drop below zero.
-> So many platform would like to make extended temperature range
-> as their default configuration.
-> Default temperature range (0C to 255.875C) degree celsius.
-> Extended temperature range (-49C to +206.875C) degree celsius.
-
-Celsius. But then "C" and "degree celsius" is redundant and "degree celsius"
-can be dropped.
-
-> Ref Doc: AMD V3000 PPR (Doc ID #56558).
-> 
-
-The document is not available to the public. You will need to find someone
-from AMD to provide an Acked-by: or Reviewed-by: tag to show me that the
-V3000 hardware really uses this bit.
-
-The column limit for patch descriptions is 75 characters. Please use it.
-
-> Signed-off-by: Chuande Chen <chuachen@cisco.com>
-> ---
 > V1 -> V2: addressed review comments, also save READ_ORDER bit into sbtsi_data
-> ---
+> 
+> Chuande Chen (1):
+>    hwmon: sbtsi_temp: AMD CPU extended temperature range support
+> 
 >   drivers/hwmon/sbtsi_temp.c | 46 +++++++++++++++++++++++++++-----------
 >   1 file changed, 33 insertions(+), 13 deletions(-)
 > 
-> diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-> index 3c839f56c..32d6a7162 100644
-> --- a/drivers/hwmon/sbtsi_temp.c
-> +++ b/drivers/hwmon/sbtsi_temp.c
-> @@ -5,6 +5,7 @@
->    *
->    * Copyright (c) 2020, Google Inc.
->    * Copyright (c) 2020, Kun Yi <kunyi@google.com>
-> + * Copyright (c) 2025, Chuande Chen <chuachen@cisco.com>
 
-For adding a few lines of code ? If everyone would do that, the Linux kernel
-code would consist of 50% or more copyright lines. If you insist on this,
-I'll have to try and find official guidelines about if and when it is appropriate
-to add copyrights.
-
-Plus this made me suspicious: How do I know that you are really a Cisco employee
-and not someone who tries to sneak in some code that isn't even supported
-by real hardware ?
-
->    */
->   
->   #include <linux/err.h>
-> @@ -14,6 +15,7 @@
->   #include <linux/module.h>
->   #include <linux/mutex.h>
->   #include <linux/of.h>
-> +#include <linux/bitfield.h>
->   
->   /*
->    * SB-TSI registers only support SMBus byte data access. "_INT" registers are
-> @@ -29,8 +31,23 @@
->   #define SBTSI_REG_TEMP_HIGH_DEC		0x13 /* RW */
->   #define SBTSI_REG_TEMP_LOW_DEC		0x14 /* RW */
->   
-> +/*
-> + * Bit for reporting value with temperature measurement range.
-> + * bit == 0: Use default temperature range (0C to 255.875C).
-> + * bit == 1: Use extended temperature range (-49C to +206.875C).
-> + */
-> +#define SBTSI_CONFIG_EXT_RANGE_SHIFT	2
-> +/*
-> + * ReadOrder bit specifies the reading order of integer and
-> + * decimal part of CPU temp for atomic reads. If bit == 0,
-> + * reading integer part triggers latching of the decimal part,
-> + * so integer part should be read first. If bit == 1, read
-> + * order should be reversed.
-> + */
-
-Too many line splits. Extend lines to 80 characters. Yes, I see this is copied
-from below, but that doesn't mean it can not be adjusted.
-
-
->   #define SBTSI_CONFIG_READ_ORDER_SHIFT	5
->   
-> +#define SBTSI_TEMP_EXT_RANGE_ADJ	49000
-> +
->   #define SBTSI_TEMP_MIN	0
->   #define SBTSI_TEMP_MAX	255875
->   
-> @@ -38,6 +55,8 @@
->   struct sbtsi_data {
->   	struct i2c_client *client;
->   	struct mutex lock;
-> +	bool ext_range_mode;
-> +	bool read_order;
->   };
->   
->   /*
-> @@ -74,23 +93,11 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
->   {
->   	struct sbtsi_data *data = dev_get_drvdata(dev);
->   	s32 temp_int, temp_dec;
-> -	int err;
->   
->   	switch (attr) {
->   	case hwmon_temp_input:
-> -		/*
-> -		 * ReadOrder bit specifies the reading order of integer and
-> -		 * decimal part of CPU temp for atomic reads. If bit == 0,
-> -		 * reading integer part triggers latching of the decimal part,
-> -		 * so integer part should be read first. If bit == 1, read
-> -		 * order should be reversed.
-> -		 */
-> -		err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> -		if (err < 0)
-> -			return err;
-> -
->   		mutex_lock(&data->lock);
-> -		if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
-> +		if (data->read_order) {
->   			temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
->   			temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
->   		} else {
-> @@ -122,6 +129,8 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
->   		return temp_dec;
->   
->   	*val = sbtsi_reg_to_mc(temp_int, temp_dec);
-> +	if (data->ext_range_mode)
-> +		*val -= SBTSI_TEMP_EXT_RANGE_ADJ;
->   
->   	return 0;
->   }
-> @@ -146,6 +155,8 @@ static int sbtsi_write(struct device *dev, enum hwmon_sensor_types type,
->   		return -EINVAL;
->   	}
->   
-> +	if (data->ext_range_mode)
-> +		val += SBTSI_TEMP_EXT_RANGE_ADJ;
->   	val = clamp_val(val, SBTSI_TEMP_MIN, SBTSI_TEMP_MAX);
->   	sbtsi_mc_to_reg(val, &temp_int, &temp_dec);
->   
-> @@ -203,6 +214,7 @@ static int sbtsi_probe(struct i2c_client *client)
->   	struct device *dev = &client->dev;
->   	struct device *hwmon_dev;
->   	struct sbtsi_data *data;
-> +	int err;
->   
->   	data = devm_kzalloc(dev, sizeof(struct sbtsi_data), GFP_KERNEL);
->   	if (!data)
-> @@ -214,6 +226,14 @@ static int sbtsi_probe(struct i2c_client *client)
->   	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data, &sbtsi_chip_info,
->   							 NULL);
->   
-> +	mutex_lock(&data->lock);
-> +	err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> +	mutex_unlock(&data->lock);
-
-Unnecessary lock. First, this is in the probe function, where a lock is not needed
-in the first place. Second, it is a single I2C operation, which does not need
-a lock either case.
-
-On top of that, this needs to be called before the call to
-devm_hwmon_device_register_with_info() because otherwise the first read can
-happen before the bits are set.
+Introductory patches are not needed for individual patches and only add noise.
+Please just send the patch with change log after "---".
 
 Guenter
-
-> +	if (err < 0)
-> +		return err;
-> +	data->ext_range_mode = FIELD_GET(BIT(SBTSI_CONFIG_EXT_RANGE_SHIFT), err);
-> +	data->read_order = FIELD_GET(BIT(SBTSI_CONFIG_READ_ORDER_SHIFT), err);
-> +
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
 
