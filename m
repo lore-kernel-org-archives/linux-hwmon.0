@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5522E2EE8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD7E2E2EF0;
 	Mon, 11 Aug 2025 16:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754928796; cv=none; b=iphJ88kc4hxCDm4zHdW4UeFVwfFbgRIcvbXfmhe4UpjOK3ctTyiGReTQdbnb+P59eaCf2kC1bStopfT4kiL5lU99uXgI/c4SCfj2BkwvLl797yMX1N3mBsxpwKnlIiR3B2X6mIdXgSRJTq6bAwSd6icIOh7uo+n11nCGswAEcjQ=
+	t=1754928796; cv=none; b=mUMyw/EqQ/gZTn+YvoIYaGRlg/1k2J09J4OaU0IFvH1cg4MmAMZmJw0Xt0I1J3yOYdw5JgXG9q2NRkVvaJmuXUw+J6W9Fljqh5pfWzy6BHEXr2F2jv4woJ/npTW3k9+Yqj/8LZ0ZRrKO87E0nR+6aGLgONem2rcJh+GEAsGIsEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754928796; c=relaxed/simple;
-	bh=BngNvQtxxPHzANuXTDA6edjPk7rZAtFM5WdYLG3It70=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dBTzoY5EVN9FrWnC+9waNPzpCP/x1+L/H7/DcopsyIho8YEU8iQH+iE6qpHLtJ97g3VF3TLeJkwVy8bk1v8Xp/2fk460eMdpWcWjVCXehZrPKTdZACwZ14vIHob5XuO9BGsb2UTgR+zTaGVCXwa6ozawESyE85lJJw7/iHSl4jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ioJ2Tcv8; arc=none smtp.client-ip=10.30.226.201
+	bh=OFIAxfCdVqiwI0BnVxFp7HK/cM2fOF129WyqjM+1rZE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MLpm4mdE7zuQXykc/HtQl3O97d3uNmz5M64wk0CMD4hfkT9nIpRWBTYl8TRw0JxeiSXKmvlzoxESLp6rvZHMSpxMueedEkgzR4UN5wDArkh0ldL32XlMfqwctGo9xRjAl3DVoB+xl/qi10X0wgDp0e2lxlRYTz0As9e7cyNBYHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JFWlJLc0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ioJ2Tcv8"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2204DC4CEF4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JFWlJLc0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45D28C4CEF9;
 	Mon, 11 Aug 2025 16:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754928796;
-	bh=BngNvQtxxPHzANuXTDA6edjPk7rZAtFM5WdYLG3It70=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=ioJ2Tcv8wWPTyFSIevlLFL6UcLgrJOsPkqcx90GEbJjcylOHEcTIqgWkXP/wHNuPx
-	 ZDSKYKOUwqpc2rBFQclBqU36v1jyXMfc6o+98W+PnyZt1XusW3qIpn5KnbaSYOgwRC
-	 mLwLbhbHeAxm5XUDR91v+6cNgHHigGE6T0pMXQD7IoCua0iTq7LFPy6fpA8Ipt3BkC
-	 TtIv6k7iSG7X7l4tmmp1awhaScM09CaW63XAy0Yu1zdyLJjX9QyOyQXOaB658w/Tgb
-	 JU7IqM3rl7vONjcQCPKwS+OH1ryswxNc/H5QBk53iy66xpsEAegJdrf0C4TcP/ANIZ
-	 6/CYGVvI5UFBg==
+	bh=OFIAxfCdVqiwI0BnVxFp7HK/cM2fOF129WyqjM+1rZE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=JFWlJLc0rhHglycTVAytmDXIZDciSyTdToUPpiBkG+yv28BdJFm9GGtPJZ9BQQcWG
+	 T8m6DtisdzHDlIz6fSd3CYKbkxzWoTmCDxdwCUhaKyOiv874n5cYZNiTqiK6Vb23Ke
+	 TteEcdAAE5KtvxaX06mEhA4WIW/ekbMkQtxIPYAvm3qJmr1lEwj5UVs2G57TTOLxA/
+	 scigtsegiWiAykiG6sUdevsW2Z3l4H8fXZSNr0X5vU4j+cIdwy202YhJC4IMj5iNxF
+	 efnNx7zXdOVaFGpaAd4igXUXUv4DJ+8gru7vcxqdY60nZRdFZjeGVowqSh3KXX9+Lj
+	 GravrAJayNMrA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 199D8CA0ED1;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35579CA0ED3;
 	Mon, 11 Aug 2025 16:13:16 +0000 (UTC)
 From: Gregory Fuchedgi via B4 Relay <devnull+gfuchedgi.gmail.com@kernel.org>
-Subject: [PATCH v2 0/2] hwmon: (tps23861) add class restrictions and
- semi-auto mode support
-Date: Mon, 11 Aug 2025 09:13:14 -0700
-Message-Id: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
+Date: Mon, 11 Aug 2025 09:13:16 -0700
+Subject: [PATCH v2 2/2] dt-bindings: hwmon: update TI TPS23861 bindings
+ with per-port schema
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -41,11 +41,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJoWmmgC/03NywrDIBBA0V8JrjvBBzG2q/5H6UJ0okKMxbEPC
- Pn3Sldd3s25OyOsCYldhp1VfCVKZeshTwNz0W4BIfneTHI5ccMNxHcuG7QHSWW0AOs9uNUSQUV
- qNbnWAQKjHCrHpTdmYt16VFzS5/e53XsvtWRosaL912cpJq7mUZiz0FqDgLA8XUQf0jVkm9bRl
- cyO4wt5ZQr0tgAAAA==
-X-Change-ID: 20250808-hwmon-tps23861-add-class-restrictions-83ce3c02d885
+Message-Id: <20250811-hwmon-tps23861-add-class-restrictions-v2-2-ebd122ec5e3b@gmail.com>
+References: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
+In-Reply-To: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
 To: Robert Marko <robert.marko@sartura.hr>, 
  Luka Perkov <luka.perkov@sartura.hr>, Jean Delvare <jdelvare@suse.com>, 
  Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
@@ -55,11 +53,11 @@ Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  Gregory Fuchedgi <gfuchedgi@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754928795; l=1529;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754928795; l=3382;
  i=gfuchedgi@gmail.com; s=20250811; h=from:subject:message-id;
- bh=BngNvQtxxPHzANuXTDA6edjPk7rZAtFM5WdYLG3It70=;
- b=A72Hmv6jDYqCbccWDuiRCxTupDmvpCXwUE2eoETQvNLrJQNL5w6+BIGbMk+WNvBkYuVhDX720
- cNF2R9o2EbaD5qiS0viNzdjDD0LmUssBk2/F8wmBY4GRJ1ATYsevy8X
+ bh=xpxZZVQduuI8ZuEwYXxZY5dWL1ZqA8Vhj1NRk9pc398=;
+ b=m5Lxo8KQLpI997ER/UiJ0xI+2VYJHDsJ2jPXs0/xlemcSbFSNwbzrZoWx4dDYFdjq1q4uE6ve
+ l3OImKrhu0KA1/5bHCH47MTf4EbQlfBUO1UkgJQg5uzrlwDRuvQmCqp
 X-Developer-Key: i=gfuchedgi@gmail.com; a=ed25519;
  pk=J3o48+1a2mUIebH8K4S3SPuR5bmamUvjlsf8onoIccA=
 X-Endpoint-Received: by B4 Relay for gfuchedgi@gmail.com/20250811 with
@@ -67,42 +65,125 @@ X-Endpoint-Received: by B4 Relay for gfuchedgi@gmail.com/20250811 with
 X-Original-From: Gregory Fuchedgi <gfuchedgi@gmail.com>
 Reply-To: gfuchedgi@gmail.com
 
-This patch series introduces per-port device tree configuration with poe class
-restrictions. Also adds optional reset/shutdown gpios.
+From: Gregory Fuchedgi <gfuchedgi@gmail.com>
 
-Tested with hw poe tester:
- - Auto mode tested with no per-port DT settings as well as explicit port DT
-   class=4. Tested that no IRQ is required in this case.
- - Semi-Auto mode with class restricted to 0, 1, 2 or 3. IRQ required.
- - Tested current cut-offs in Semi-Auto mode.
- - On/off by default setting tested for both Auto and Semi-Auto modes.
- - Tested fully disabling the ports in DT.
- - Tested with both reset and shutdown gpios defined, as well as with reset
-   only, as well as with neither reset nor shutdown.
-
-V1->V2:
- - code cleanup
- - split bindings into separate patch
- - use patternProperties
- - use labels instead of DT node names
- - add few comments for clarity
+Update schema after per-port poe class restrictions and a few other options
+were implemented.
 
 Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
 ---
-Gregory Fuchedgi (2):
-      hwmon: (tps23861) add class restrictions and semi-auto mode support
-      dt-bindings: hwmon: update TI TPS23861 bindings with per-port schema
+ .../devicetree/bindings/hwmon/ti,tps23861.yaml     | 86 ++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
- .../devicetree/bindings/hwmon/ti,tps23861.yaml     |  86 +++++++
- Documentation/hwmon/tps23861.rst                   |   6 +-
- drivers/hwmon/tps23861.c                           | 249 ++++++++++++++++++++-
- 3 files changed, 335 insertions(+), 6 deletions(-)
----
-base-commit: b1549501188cc9eba732c25b033df7a53ccc341f
-change-id: 20250808-hwmon-tps23861-add-class-restrictions-83ce3c02d885
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+index ee7de53e19184d4c3df7564624532306d885f6e4..578f4dad7eab630b218e9e30b23fc611a760d332 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+@@ -24,12 +24,62 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
+   shunt-resistor-micro-ohms:
+     description: The value of current sense resistor in microohms.
+     default: 255000
+     minimum: 250000
+     maximum: 255000
+ 
++  reset-gpios:
++    description: Optional GPIO for the reset pin.
++    maxItems: 1
++
++  shutdown-gpios:
++    description: |
++      Optional GPIO for the shutdown pin. Used to prevent PoE activity before
++      the driver had a chance to configure the chip.
++    maxItems: 1
++
++  interrupts:
++    description: |
++      The interrupt specifier. Only required if PoE class is restricted to less
++      than class 4 in the device tree.
++    maxItems: 1
++
++patternProperties:
++  "^port@[0-3]$":
++    type: object
++    description: Port specific nodes.
++    unevaluatedProperties: false
++    required:
++      - reg
++
++    properties:
++      reg:
++        description: Port index.
++        items:
++          minimum: 0
++          maximum: 3
++
++      class:
++        description: The maximum power class a port should accept.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 4
++
++      off-by-default:
++        description: Indicates the port is off by default.
++        type: boolean
++
++      label:
++        description: Optional port label
++
+ required:
+   - compatible
+   - reg
+@@ -51,3 +101,39 @@ examples:
+             shunt-resistor-micro-ohms = <255000>;
+         };
+     };
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        tps23861@28 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            compatible = "ti,tps23861";
++            reg = <0x28>;
++            shunt-resistor-micro-ohms = <255000>;
++            reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
++            shutdown-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <14 0>;
++            label = "my_poe_controller";
++            port@0 {
++                    reg = <0>;
++                    class = <2>; // Max PoE class allowed.
++                    off-by-default;
++                    label = "myport";
++            };
++            port@1 {
++                    reg = <1>;
++                    status = "disabled";
++            };
++            port@2 {
++                    reg = <2>;
++                    status = "disabled";
++            };
++            port@3 {
++                    reg = <3>;
++                    status = "disabled";
++            };
++        };
++    };
 
-Best regards,
 -- 
-Gregory Fuchedgi <gfuchedgi@gmail.com>
+2.43.0
 
 
