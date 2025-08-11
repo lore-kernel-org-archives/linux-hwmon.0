@@ -1,65 +1,66 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2080.outbound.protection.outlook.com [40.107.220.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C6A2BE7A3;
-	Mon, 11 Aug 2025 11:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC9021D3E6;
+	Mon, 11 Aug 2025 11:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.80
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754910252; cv=fail; b=u8o0uT+j2m28SF+lsaj0tRqvphDFgHBtWlm2ud5e4qwMDtnXdudmeUlXbOHlZGKumG7xFd9jAVbXigYywN/LsTptrKg33aj8/bvkT4L2s7/nM47RqWTe19dMtv3snytztz7hqjvfvpvXWANeyH0Pg1x0iCNEm2LcsFpuHbrDdF8=
+	t=1754913268; cv=fail; b=UWRHIIBo/nEWZyhTZhOucXxdezJhckdsg3uhEr5vd/wUyl4Zo3XD3dkiLINq1Xt4q95AFrmSiUNnlkw7y0VovmyX1TpnKm/GhX58s2xdvBmZzee5Ht4bTbNLbP3kOhVKTGKN4hXHeaOL9LTtdjh/WNadq6X/hFtXhF+veQE0cww=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754910252; c=relaxed/simple;
-	bh=mzRI3McxAF11SulI4WhY3ucdxyW0OEFAzhPlJxJcFik=;
+	s=arc-20240116; t=1754913268; c=relaxed/simple;
+	bh=t8oQ2Rj7/hR39hXjn4O8Yw/Kh6Z70NudGcqXW9Nfzws=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GyUd8+lyf5M+uMXT3SGnCak4zo/lmSeOhmlTdBDfkatI5y/Ah6CNKFYsMEzwWs+VbaZCZ0S1j8DhLvWIB6wLv/y8zxa2KEGnScnLG+eJp0ItdqpaQlfTWHp4l16M9WqMDvPy4ZU9sQjPvuHZzH15VqGdVRsgLXrYsHKVupPs58M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=g628liCX; arc=fail smtp.client-ip=40.107.223.87
+	 Content-Type:MIME-Version; b=Jj3xtlDcNWENRPpc24bMRxgqh2s80g2jFLXt9RRWQmZZR74qQ+wP4043BiQiSqmxlbYsWNDmhjLGJKLrl358voXcdJ646JmTtydXeHdY2h7p4kQ/BOgKUBzSNLXDzgxWuPswTqtjAdz2H7OAgkGMvxzAd0m9mPCrrI7vgUnTqrg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=hcBM7nK9; arc=fail smtp.client-ip=40.107.220.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="g628liCX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="hcBM7nK9"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c2jijBflZwtcBgsi+waXHalA15HwgYFty/SPud6BLCgR6/IET1/YWFbzKnFnqt3QlyKZjD/bxscUijCMux56ucFsNWdrrX8LgAXiFMzh8QNZHbl7MHDTQYRat5bieZPV60AhlWx87RRphj1NvgXUpqUdDYw+TZnfl5mwuEwx7mLL7tgWA7d5QW+kvw8lMiUfC7i4OQF89URyPL8PdDVCmjGvDNgNIFdr/9K3qe6GB0wCzSlhvv4V5eSuavGAgUVgy1+hX5ngRU4ZvsZ0dncEoPHEUS96omEd5slx0CSEmzumfysVUDXhLcPh6OyfQVXRrxMZxZOKA3+IV45cGdrdLw==
+ b=vRG0bT5CuYJ2Nem3HfOvDUciWbT9GZFoplyBkWHi32dcsHfT2Nw3vv1LbaFlT6dJ8SBtXEVA54wD11LKb/XsnQpcQzd7HkB6qNZL2gJ/SQ4DKXYIQJY5/lzEZ5F3HekZ+nk0jm0fNbo1eSHStMkBafVoY2adPrEAi5TSdmR6qXsbqbmmF7FlkWYk98pIC0Zjz8785TiBdRtM1Mjjq93Ehii9eCUtZLN7DXpHZWShIrhzYvOJ4BC5mUNS5056GoZ9ysnZoDpDsVdiooJS9Fj0tHhqePjSo2m9w5VdlMZHAbS5OXj/7bVG5/c5ADxTnqi9zPk44irO734zSwHpu5O7wA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AdAK6cjuWcTRGlTwQjxbcWFPEXmOw+D5ClRxkUaSXVk=;
- b=GrlNxRBdM2K2P+lfsyvZ+UvloACexgRJ+o4zwyrnOzse7o1pnpmMrzjzCvJCSXr+i87gSiRVkGo1eSHp5smHz0zEGjTU9R2vSu5B/+lKQ/aL6Z5PnT9Uq8BbaTLii50QHOXINqSjrI075WwSTJ0j+prwgbfZs1exoi7lOohX+BgAL5qD0NnIbs7tBccUyrEjgLFkUTM/X9BPLSxu5HmSn/uzRF+Lfc9q09fFXYecbmzHqxMx3wJyCFUkwinhJNIW3q0nkB0YJiDeUI+SpmyBaQlIolE066oZfXu0XTk/c2Gu698/P51yDy01Ppjd/CA1WkhAjGltm1X0xJWX60KpsQ==
+ bh=ciXcSznZRj3Kh66/q/ZfbAuLEV6gLsTlfv4/zzidyQI=;
+ b=cU072L63v+6k/b3MYdmHDMhQm2V0GRzc7RB4vivyzIHBFE1FqKimy13wdb+1XIGmOJ7pBMWJtPPc+7QfPugcH6wZwR49PnZ2zoASlmZjYHspC5rA+71ewSQTyaCmvMaE2BNmiVxr/grGNqF8x1d+xJh3MQm2z8F6ZZuCn7OVobi9m96QxoPrDmZ8a9oPYdiNOEZlgiwXloTCIk5FRWR31AMhGoBCFkvgN22+IC6TXwn4LcNcyJCCLb4tb94qVn8TUpqA8WjIDpNhueSSYrSabmWuIgolllu8M/vV9L5zhI5QR2DMwbe+jVyOg7umCUKQPUqRQ3rT1etAj1hqnQPokg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AdAK6cjuWcTRGlTwQjxbcWFPEXmOw+D5ClRxkUaSXVk=;
- b=g628liCXD97rAo4KG506RrXhj8xNsSSZgDJ0lRZh6fGNQER69AsdrCxzbTaxVrs4NaEL8CrdMsdS7WDm767k2poahxA51aUeshnzcPu/dGRNgv49LHq99lw8gLXc87aeacv7Lck1PvxBa0FFV4/t8mm3P/VA4qTnC53RAC+hnmI=
+ bh=ciXcSznZRj3Kh66/q/ZfbAuLEV6gLsTlfv4/zzidyQI=;
+ b=hcBM7nK9JZZi+DUh1iFS/fGche+ikO3MwVYnKNyY7r6BbFgSC34O359QqVsT4PZ4U6B4UBhhAX8DO+433FDQEdYE0R0KEG6T2i7g2eFLlLkkUAT9GiHQzYVat5X1GkN3R6Z0FWewmnkS/B75ntquG1kB4jeoBERkJZQKmXWsK7U=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from CH3PR12MB8909.namprd12.prod.outlook.com (2603:10b6:610:179::10)
- by PH7PR12MB7914.namprd12.prod.outlook.com (2603:10b6:510:27d::13) with
+ by CH3PR12MB8934.namprd12.prod.outlook.com (2603:10b6:610:17a::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.21; Mon, 11 Aug
- 2025 11:04:01 +0000
+ 2025 11:54:25 +0000
 Received: from CH3PR12MB8909.namprd12.prod.outlook.com
  ([fe80::b55b:2420:83e9:9753]) by CH3PR12MB8909.namprd12.prod.outlook.com
  ([fe80::b55b:2420:83e9:9753%7]) with mapi id 15.20.9009.018; Mon, 11 Aug 2025
- 11:04:01 +0000
-Message-ID: <a03dba0e-1739-41e0-8607-7e4371d6df78@amd.com>
-Date: Mon, 11 Aug 2025 16:33:55 +0530
+ 11:54:25 +0000
+Message-ID: <52fa4c81-9df5-458e-a07c-5d385e6d1631@amd.com>
+Date: Mon, 11 Aug 2025 17:24:18 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/5] misc: amd-sbi: Add support for SB-RMI over I3C
+Subject: Re: [PATCH v1 3/5] dt-bindings: misc: Move amd,sbrmi.yaml from hwmon
+ to misc
 To: Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org
 Cc: gregkh@linuxfoundation.org, arnd@arndb.de, linux@roeck-us.net,
  Anand.Umarji@amd.com,
  Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
 References: <20250728061033.1604169-1-akshay.gupta@amd.com>
- <20250728061033.1604169-2-akshay.gupta@amd.com>
- <67c98aa0-575d-4c04-a4e8-fe0df0d1a3ef@kernel.org>
+ <20250728061033.1604169-3-akshay.gupta@amd.com>
+ <a6103665-466b-421a-8181-5110354bafdf@kernel.org>
 Content-Language: en-US
 From: "Gupta, Akshay" <Akshay.Gupta@amd.com>
-In-Reply-To: <67c98aa0-575d-4c04-a4e8-fe0df0d1a3ef@kernel.org>
+In-Reply-To: <a6103665-466b-421a-8181-5110354bafdf@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN4PR01CA0108.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:266::12) To CH3PR12MB8909.namprd12.prod.outlook.com
+X-ClientProxiedBy: PN2PR01CA0229.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::11) To CH3PR12MB8909.namprd12.prod.outlook.com
  (2603:10b6:610:179::10)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -68,246 +69,150 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8909:EE_|PH7PR12MB7914:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9a48d4f-c4a4-42f6-f379-08ddd8c6c6fb
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8909:EE_|CH3PR12MB8934:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7778cd53-1271-44c2-d29f-08ddd8cdd13a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a3dlM3pXU0dGNGJHTVJJTVN1R1R6aUtKeGlRSStyOFltNUc2WExMOG0rOUhF?=
- =?utf-8?B?NnBaU1hFSEt4cXlTVktaT3QvM0t0dzNkdHNYSmJBWlpWTG1Ec3lpWDhKMGds?=
- =?utf-8?B?SlhUMG5vTFJVUHJBNllSZUh1cVFWMnZxU0NJTFJjMnNRSGRES0lweHhOMW55?=
- =?utf-8?B?aG96V3MwdlJSOU9DczlOVFZHejZFV2dlWlB5T0ovcFBTMDlVQlcrb3lMek9K?=
- =?utf-8?B?TmFXYTJoVDZ6aHJmUnNYeUFPUUd3bHluT1ZzQ2FBZ1FVRm5aL3RSZ0txeWtH?=
- =?utf-8?B?czByMlFkWFBLZVVETllrV3FXUytzUlBtZWlrcGVCNWpSMGd2aTBtTnJlU0FC?=
- =?utf-8?B?YzNudjBtWXVIUS9BSy9UM0VpKy9QdDkraWcxQVQ0U0g3bXAzRVBJejN4dENL?=
- =?utf-8?B?SWlHM0s4RDl1WWhtVE8wQWNOWWV2N1h1dEpnZjBLSUlCOFZPc3AvZ3lZUVFz?=
- =?utf-8?B?cVhnVWcyWUFUN3dmM01oZDBqNHg5Z0VaUHFRYWlvb25DRGhtcUlweVRRajht?=
- =?utf-8?B?ZG9yR0lmdjVnWlIrNEE4RHpERDVNWGVxK2Z5TmJ4bHdSdmxQNkVEc2NEZzR6?=
- =?utf-8?B?N0E3VW8xZDlhMW1OSWU4cU82VnZMamdNQWordEN4Vm5Uc2VEazNIV2U3N2x3?=
- =?utf-8?B?clpUZEhMNUJKdThmbVlkY3Q1bTdBc0hLZk93VlZsaGtXY2ptTVhIYlVPS21K?=
- =?utf-8?B?ZmdkbW1KTkdrVmcxaHZ5VmZnOTV5a3NGWFNTa0JJSFFZWXA0L3c2ZGw0OHhW?=
- =?utf-8?B?NzF3Qk92STZjUUExTzRWT3NCSTMrTHBwNWY2MUZOMVVwdVJlb2VSdTFmVXZG?=
- =?utf-8?B?UDB4SU41S1dRb2Iwd1JSRThhS2pwUFBqcmpvV1hpdmZabFVwd05NeVdtcFNq?=
- =?utf-8?B?SGcxRzd3UXNicEduRXFpMStwdGU1Y1ptMXFkc01nSHpJQ2kxT3E5dEpCOTFt?=
- =?utf-8?B?VHB4ejd0WXlveExyTzdISnJRWjY1QVBnUWNZazlGRTRKdmF2QVhCY0M1Um53?=
- =?utf-8?B?YWJ3TzBWZkhyRWo4YlJXOHorZTZ0WFNyOGRJc3JBN2ZvZ01Yc1V0c0NRQWht?=
- =?utf-8?B?NGpKWFQxRVg2eVN1dU1kc2JST2ZjUXN2MktiVElhOEZSUExzVm9qL0xWRGFI?=
- =?utf-8?B?QjVvU2ZVbDQrWG5WVUgyMEJ3T1JLOGFJb1hkOHNhQmw0WWNKU01Vc0tndHdQ?=
- =?utf-8?B?Z3d5MTNWZTdzRlp5dDdtc1ZFb3U2UkJmZVVmd3V2SE84dmxHZThIZXROYi80?=
- =?utf-8?B?Z2dlUUpWU1lITkdwUWpNdVFaY0FSTWRnRWZ3U2NUK3ZUSWxLWHVBeDNpL1N1?=
- =?utf-8?B?SmI1SlJiNDJsUWVWNmFWbFl1ekVMNXlWWFJWVHR4TStOeW5QN3kwSmt4ZUVJ?=
- =?utf-8?B?UWRhMkJJTWNxMXRNOUI4WXF6bWhyMi9WMlpsY2sxc3NVTGpYam40ZzcvZUFM?=
- =?utf-8?B?VW9MdlVJNW90TnE4TW1uTmhoWThIajYrenFnVHdTQ3JUOHJWWVBnYmFNalVq?=
- =?utf-8?B?UXZzeHpLaEd6Q0h5ZStMelpXRmk1RXFTajZkSk0zUWVqTkliM0V5UlhTd0FH?=
- =?utf-8?B?UDZML0JLV3pPeVdNdEJaSnR6S3VnNStLMXNNOWE3cWhXaEpYditGaWJSdHlr?=
- =?utf-8?B?Zlhnek13Z3JFaW5FWER4K29lb3dEOXM1NmNHZFl4Q1YxVFV2QWtyMVhJbkRD?=
- =?utf-8?B?c0IvYTlyZzdzR090UlJyRjZJT1JrUlVsNlI4M1JZc1NuUS9wd3ZsZ1QrTmFx?=
- =?utf-8?B?RlFtY3hrV0VlMW0vcmxsc2dYeHU5K1A4V0l6S3lRYnVpUnRXeUFFTDhSM0RF?=
- =?utf-8?B?REdIem1EWGg4VVRPTVBhZlZ0RkQ1eDB3Wnp4SVJHeXpqeDhBNXFKTEdTMUpZ?=
- =?utf-8?B?dGM0djJNb1RadXVkaUNrZmpKUlhKRDdZZ0NJYXVZM0xNT1VRNFJvcUUzZ3ZQ?=
- =?utf-8?Q?PFnqEbKWe9k=3D?=
+	=?utf-8?B?aUtKcTRLdjJIdTQzNG92YkVMb0hEdVU5ZjVCVUhmVWhUcUpCaElrcFU3T2or?=
+ =?utf-8?B?WE01ZnRHdlV2RTlSZWlNUnNPTWxCZ1VQK00yT0FIckI1MENBL0RwK2hlOWtt?=
+ =?utf-8?B?aEV3NWhNbTFvMTdGUUJmWWovdk5Dc0R5Ny9lQXhyS253cmhIc3lSV0d6NUQw?=
+ =?utf-8?B?eGtjQ1NFS3VMMW1HZ2hZRzdlR1VGQ052NEpIV0s1c0pmZE5BVkh3VmRWYlY1?=
+ =?utf-8?B?M0Q2NXplV0UzMkFzRC96U0hCa1ZzcGQ3TXdMd1FyN3NWRnNQc2krZGpDbjVO?=
+ =?utf-8?B?M2liNzJPZ3UxeFU2bC81YlFEclNIdE9OblZ1Q1dRd3BnU0daeGF4NEh6bmE3?=
+ =?utf-8?B?elFRa0NDUHhHTE1Sd2dRTDZaZWlYQ3dhb1NnMTc2bnVKWDliMW1wc3E5dEhs?=
+ =?utf-8?B?cjBIOVpJQzBaYWthN29wYWc5eG5CUDNvUWR1V3hWNWhQOWxmblVpZjF3YmxG?=
+ =?utf-8?B?OXhNUnhWRWxjaVZ4blB3SnRSS09DZXRNMTRYbkxQNFpNVlJLbkQwdmJ3eDc4?=
+ =?utf-8?B?OTNQc0JQbXVBOE1NTllzalA0RHRYWU90V3pKbi9ubUxjVUpFdHJQcGVPTHlW?=
+ =?utf-8?B?YW4rYU9SS0MyVkFlV0RXNWc2d0pHTXFzdkVHTG9PMy94TXZNUFlwejI0c0g5?=
+ =?utf-8?B?c250YVd2MWJ5bkVKOHVmOFp6SmdVbnc2ZVpUc2EvMlVMdlA3WWJlYVMyVmZB?=
+ =?utf-8?B?bmlxVFBPRnJsM21saWtpWEpkQWZEN2dlVkhUajZkVm91WGlCaTdGbkJBT1F0?=
+ =?utf-8?B?NHBWeCt6OHgrVXl4M29OcU5ldnNWdmZUVjdkaU9JeS93WWFKUldGdWc4b05t?=
+ =?utf-8?B?bEJsMUVGemNTYzVNbnV3a3I1YzFGaW9weG04aURNUG1OK1ByTHYvQTZMMjZE?=
+ =?utf-8?B?K0doZ2ZCbEdWc2NweXdocndqT3lxUUNqWGxXSnlPcFUwdXZmd3kzL2J3Y083?=
+ =?utf-8?B?NEc0eVBEM1dRdEQ4VHRwMG5vN1hZdnp0TjdxeEZIZlMxb1d5UEpnWWFBSW8w?=
+ =?utf-8?B?eWdGbUpOQ05xdXdxTU1CQUU4TzlVeUhXMTllSjhhTkh3SUlGOGJmUSsycy8v?=
+ =?utf-8?B?elgxYXN4OEp0cUlxUHhzRjl6aHNPbnE3TytHQmcyQ2dsSXY4aVQ2amkvbWRh?=
+ =?utf-8?B?ME95dUNKWTRGM2F2NjBub0JwdEE2c3NNN2lwaW9LMnR2UTBNK2RUSWgyS1FX?=
+ =?utf-8?B?OUt5d1ZrWmpVRVZJK05hS041aTdFS3VmWlFURnFsNS9oUjVlUCtPYmpZVVEw?=
+ =?utf-8?B?eHRCMmlpS2plT0pCdy9MTGRSZ0Q3a3Q2SU15RzZOeFhIUnhnaFZyTFRneTEy?=
+ =?utf-8?B?MFg0My9rWFU0YjJPTTBOTTl6WDMvRm5COE5YWUxvSkhCUzM3cFNjVWZsdzNx?=
+ =?utf-8?B?b0g0VEJ5ckZSU3RMWU5YbjRiM3ZYVk1sajJCOVlWcms4R1d4OHBzUVBXN3py?=
+ =?utf-8?B?UHZpL2pyQlpuOGhteVlTUVoxUTJ4VjlmSktIaWMzb1ZDak55RVYyU21EMmFR?=
+ =?utf-8?B?UGhxOVA3Q0hlTzdoT05KaXRDWjN0RlFRRjdHdXlZVWd4UjgxWjEwYUpXOXBU?=
+ =?utf-8?B?MFU3TWpmUWRCSytMTjcwNFRmQ3FhbWpGRitaRm9Ua3lLNGUvT1ZWWVB3LzZw?=
+ =?utf-8?B?RGxYQ1JHdnk1SnhRUFRRUVFYWUw4MzFJeEQ5bDBmRWxzK1U2TUxNSmZMMmg5?=
+ =?utf-8?B?ejR1OTRZMURNK1VxU01zbXNyTkZaQzJHaDBCMTIvL0h0YzJvOTF2UEVKeHMz?=
+ =?utf-8?B?ZEdBalloTVNVZjRqL0t0MGNLTkpRaWdJOFJ0d2ViUTlTOXR1dFVEb0RPTHlJ?=
+ =?utf-8?B?VFZnK1VZejVmS3ZQWTZFZkFQUGg0cUhHNUhYSHcwbkNxWTF0RmIzQzRndWtj?=
+ =?utf-8?B?RGhka3AzNVA4c1VxWVlONm9LRGRmeVRKRHcwVjhjb3pqSUE9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8909.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8909.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SWVGd1NXMm9kQ1o0bFcrUmlVZ1hUQjNXR3BPYlpJaWZBbzFVaithOVlraE94?=
- =?utf-8?B?b1oweUZ2TEl4T05rU0ZlM3lWa09NUzlrYllzTk01ZW1pb0VqL3Zuc2x1SHJt?=
- =?utf-8?B?NkRqbGlRdkxjK2t1RVpuRlRSLzNPK0VoekdyVnNUQTN4dUJSYndscksrbFkx?=
- =?utf-8?B?T1FhSUp6UVpBL1JuRGxJejJsWEY4ZTcxSi9tSzRDWUtPSWVwVWM4UFN6RHpO?=
- =?utf-8?B?S3RwVG5pREZCbGdpM1hIcVcyUmh6TWxOeXVsNEg0NlFpcmVqMnI5b2dCeXZ3?=
- =?utf-8?B?eWR2SDVhdVAzVUpTSlFHWFdXbzYrYWNEK1RMM0pXUVJRZkJGZ1RhUHp6SURJ?=
- =?utf-8?B?QXNvVFVGeDQrVlcyd3UwL25PKzFYdHpyQnpHYk9PRzR3bDExV2VJSmwxQjZU?=
- =?utf-8?B?alMvaFdMNndVSWR0V0FBcnZNdE9tR2FqZnQ5QTV5QWdqUlRCbW5ZKy9nZmVT?=
- =?utf-8?B?UHhNOEtJQmpTZ0FxQVYzdS9vc0NENDAzUTdlSmw1RFJUM1daemJRcG85SzdO?=
- =?utf-8?B?a2E2NDAyM0cxTHkvMzFNRGRlSzg5VSs3bG13UEFJNVZvenRnWG5SZVBmUzkr?=
- =?utf-8?B?Wm1wOFNzcGxZU1Z4U3lVdVVnWmNxcnM3ODUwUThERVdYQXRTTzcvRFpYZGFD?=
- =?utf-8?B?ZDI2MlRJLzJvTC9pQThZcGNLQlVCcjh1bjl3ZEJ3d015UENPTG4rK3E0SUJi?=
- =?utf-8?B?YWJPcmUyNUJDT29Fd0greW5zdy81dms3bjlNTlBiNGltUjJKcSs5Q28zNXF0?=
- =?utf-8?B?TnRGYUhvY3VDcVFDK2ZjdXgyb09QMDRhRURoNkFNS0twRU5WWXp2U0NKdURn?=
- =?utf-8?B?NXE0RmovM2dwbTMvNlZsQ00vNFhKZ1doZTV3cDM4QS9ESmdSN250M1pkSjY5?=
- =?utf-8?B?dG9FT0VuRUlkajRSbHYvY0pEWnI1OWJldFR3L0FzMlVTTSs4L2ZUa3dpMllN?=
- =?utf-8?B?ajhOUDNpRG1NcUxvck8vSm01bFcrbE9FQWpXS2lPMU4vRlhoZWs4Rm5lblRT?=
- =?utf-8?B?VXg4ZWhKMDNWaEh1L3ljVkUxeHpiN1VIOHZhbEZmUjBGb2pNSTJscXkyZGpx?=
- =?utf-8?B?RHJuT2o4em5jUWtOTFR3dFM5VlJsaWQyWE12b2NnRmpvM0t5eVRtZFhoM0th?=
- =?utf-8?B?ZjJobE5HN0wrcmVvUGVVamRDRnpxaHRmbjVZdm5aY1JkN0xGdnU1N0c1Rlkr?=
- =?utf-8?B?UjI3NDJ6eDZYZkpTM0VTU0dWclVST0Z1U2Nvd1NobjNXV2F5RHpPWEJtR0NR?=
- =?utf-8?B?VXFXSU9aRzhUZ050OXQxU0N1S3ZHVFBtcmJsdXVLYUFadXFyT3VGQU1NWHls?=
- =?utf-8?B?Y0IwQ0RzZm51WXpPSWRhWTNyQWczVUFDaE56OCttbjdGNnlHaWlwMTQvcXhL?=
- =?utf-8?B?Wk5ISHlWbVpuaC82UGlrMUd3K0VYYkRjY1BZZ3p0SkMxSnU3TXZTYkFZUEQx?=
- =?utf-8?B?VmxFcEpDcHkrSisyL1M5R2k2emR5Ky9Ya2xsZEVmTXJDT1VSbXZvaWtGRkRG?=
- =?utf-8?B?aStpY3JVaGRSUk9IQmZhSjl0Y08xOWRvNExjR0wyL05DSTEyTzNYRkhQOGNi?=
- =?utf-8?B?TVlYU2V3NytHcU9kb0d3T3BkcjYzOENmV1B5YzVSeFVXbnpITVZvcXhZMFBi?=
- =?utf-8?B?OFlkbmw3RXhsNERoeDlxOXBxR2lYaDhySUpxRFM4bFJUVXFMcGx5aW5oZG5G?=
- =?utf-8?B?ck5xUjY1bkNLd28zNFJmVTBncnpEYXNSMEt2aFc5STR1eXRKOHRiWEE3UzE5?=
- =?utf-8?B?clVkZ0xKRU1zSHZRdWpyeGVKTHBHY040VUhDZlprbC9jc2pQVGl1SnN1MGVq?=
- =?utf-8?B?U0IwNjVZYkt3L2dabVAvLzQwMWFGQlQvb3k3RmVGT1MvUEpQTWtlQ0ZkUm1s?=
- =?utf-8?B?dUJHcjI5V2UwVVExRS9tOTBTS21EUElSRXhENU9DRnp2ZkVPNTNNVmJpeFI0?=
- =?utf-8?B?MnRZL0I1Z3NkbWFqb1pLZ2JVYTdPSTRtVi92Yk0vVUJqUmZlcjYxUXlTN09S?=
- =?utf-8?B?cHdoTXQxdEZPTXU1UE9SZ3pMZ0FybEJNVmdzbzZucjVsNW92THdjMnUwWU9i?=
- =?utf-8?B?UnhPeGEvRHJpL0hvYVJFbXF4blBEMnB1M0NSNGFhTzNZdGZSYS9jZmI1dDg0?=
- =?utf-8?Q?ECi/ILavXkZrXgGOxazV9SLjW?=
+	=?utf-8?B?cFJRQUJnMEZhbG5HUXJzVVR5NE1WczNhaC9ZNkl4SWErTndtTG5qM01OSHlt?=
+ =?utf-8?B?enVnMzAzdUNtMVZrNW5zL1NsZ3NWaFJ4dENmVzIzQXJlTFF3NTlYNTA1cCtz?=
+ =?utf-8?B?Ly9Mc2IrRWlKTVpoSkticSsxNEhwaDYvOVNZalEyOTBWNjZ0TE1xaXBNSVI5?=
+ =?utf-8?B?VGNQQTI5WUxqYjZjTi8yYkxTR29MVlkyc05sMEs5b2Vyak05V1pRTkV5TUJ5?=
+ =?utf-8?B?S3RhZUdSNDFYS2lUMVR6Q3J3Tmh2NkRBTU1nNVFkZ3BwUmF6QVZTQUV1OUE2?=
+ =?utf-8?B?YkkyNmw1bERzblBVaDhMS3k4bmx2QUhkcUg2dmd2clJGc2NkOEx2SFUwWVJl?=
+ =?utf-8?B?MUI1eE9ybGpaa09yOUpKbG1wdEVaWjFzc2k2TDhmZFM1MGV6N3JXQVlGaW4v?=
+ =?utf-8?B?TjhwMWgxMy9NNDRDbVVERURaV1ovclZvVXFLSy91Q0xQUStJZFk1MTlHRnhq?=
+ =?utf-8?B?RnNrNVozdTMzdzRWM2hKekdGS0V5alNsWW9rY1dDU3RwK09KUnFKSDNQd1cz?=
+ =?utf-8?B?VFZ5eWIrZ2M0OCt2TnJVaFFrR1RTVi9CVkxsNTBHdGVZcnJobzgxZWRZd0hn?=
+ =?utf-8?B?ZDFoQ2wrSVQ0dWZLQ2Nwd1hleUd1TGxZS011QnQ1K1ZKRTdYUmZYRnlCQmRm?=
+ =?utf-8?B?aVUyR25tRE40R3RtMm1DN0VhZFV3ekgxc2RiWVo0eTgva0FKQkNhL0JmYUpO?=
+ =?utf-8?B?bXNUYnVTZElua1pSNkk2anlYNE5HUTlDaUdLV3AxQmovYmREc1N1anBHUkli?=
+ =?utf-8?B?cUpmanpHV2t4c2JzNVpac2xBUXptbkVRT1B5V2pPSm1rT3FySHplWG9VOWJr?=
+ =?utf-8?B?R3JiWVlSaldwTWJDUXFrZktxb0xtZlpaZ2x3VVpNTmp3Q2ZXMWpEbjYrbVhN?=
+ =?utf-8?B?V1FDZE1FbG91VVNXcGNYNHNIdnZGSzBrb3lhM0Q4KzNzcmpVNDBxckxSc0ZC?=
+ =?utf-8?B?ZngwSkRORmRXWmRmYjROdXdNMjB4cXhWUjMyaGtCUmJyNXVJZE9mK0NGVlBM?=
+ =?utf-8?B?MHZ2L1gxY0NGdytTRFN3c0g1bTVYUkMvZjE2V2o3Uk96Um45TkJyNm55S1NX?=
+ =?utf-8?B?cHgvaWVqRXVDYTV4S21aQVNRODY4aFVtcW1LK2JYS1RGSFdrbTU5ZTMwYVlK?=
+ =?utf-8?B?djV2bVdoZHlSWmd3RkJJUXdGalZRMzU3clp4V3h4cXZsbS9WSmdvSGxzWGdL?=
+ =?utf-8?B?N2RvaU5IOVhHYVJITnBlYitiSHBFK0tHbzB4bGF4Ull4NjVta2VnL01qMnc1?=
+ =?utf-8?B?TzBwUW56czBYbHdDK1hMeURkeklvc1dweEsvb01nd3psN1ZVUExFVnU5cTUr?=
+ =?utf-8?B?VG9GQWlHd2dneXVrU2Y5NUZ1Q25NTmtNMy9QQVhwaW02YTl5WGJOTTltQk9j?=
+ =?utf-8?B?NVAwUU1CNjQ1MjQxaEt5ZDZxekpDMC9rc0Rid3FEc01zLzRTc1JKT1NSM0NN?=
+ =?utf-8?B?Uk15Q1FGRCs2SDdyZzdTMjV3L2hoTXNlVW5hUWRTSDRsOWxMM1FaTXErMDlU?=
+ =?utf-8?B?UExhZkFqQzBpb1lkdFd2SmdjbElNajZZYVBEUEJZc0FxUmltdmthalZ1enV4?=
+ =?utf-8?B?VWlyVnVKK0dQK0JtejlScU9iWnpocmZrM3NBMy9mUTRyM3dvQ3NuSStacUVN?=
+ =?utf-8?B?WGd2OGxIK2dFSExUaloyZ2pkYmZMVC9Yd1pMUWZxVHVKK0lpMzNNbEhCK1JI?=
+ =?utf-8?B?RmZoWWNtUE5jOUxJdjJqUXlRSUhIVTdxZFdLSmdnN2NYRk9hTkNqWS9TWTNl?=
+ =?utf-8?B?cHdhUzIyL1lXQ0RiYm5sVTRFSkQ1N1QxSTN5WFNJMHJmaWtDY0xVbWZNS3Zt?=
+ =?utf-8?B?QW1ZNGNKd2VpbXlLYUYxdXEwdnJYNnZPMUdEcWx5YWhTUHVrbGE3dDJuV0pQ?=
+ =?utf-8?B?RmVHRXVZUkYxYlNzK0VmNXVuZjVuckNvTXpmN1AzS0JiRHhJT2NWUVE0WmYr?=
+ =?utf-8?B?TFdkUHR3OHB1dGh3OG4yOTVEWUpiUWh3N0JWSzc1L3ZVM0ZoeVNYbXplK0ls?=
+ =?utf-8?B?bkRwd3dPSTM1aTRzVk9pUHRnVjVBZjlGL0RHWnpiRzZQYlRoRm9SMStINU15?=
+ =?utf-8?B?RzJJSFd4a2pGZDMvYnZtNGN1ZkthRjBuamJySXpxSm1vUDF2b28yRWNLR0dZ?=
+ =?utf-8?Q?9iSFwMWRWqRizCQvGIA3mF6lF?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9a48d4f-c4a4-42f6-f379-08ddd8c6c6fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7778cd53-1271-44c2-d29f-08ddd8cdd13a
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8909.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2025 11:04:01.3270
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2025 11:54:24.9854
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tTQG/4/w36+16MLVUPJn6rCSV5adHxrBrjkzY5jmS9XwCY+re/FN9dTc6/WRIrsE+er2TFdMV8+rJqKilkJu+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7914
+X-MS-Exchange-CrossTenant-UserPrincipalName: uJeWLiWth3Pv3rvtYHJawO6xikuO8inqSyawjRy1UuN2zkRqcPWmteqdbceGodRRs+MUwRhANcY5tc7CPRaxhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8934
 
 
-On 7/29/2025 12:03 PM, Krzysztof Kozlowski wrote:
+On 7/29/2025 11:59 AM, Krzysztof Kozlowski wrote:
 > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
 >
 >
 > On 28/07/2025 08:10, Akshay Gupta wrote:
->> AMD EPYC platforms with zen5 and later support APML(SB-RMI)
->> connection to the BMC over I3C bus for improved efficiency.
->> Add the same functionality supported by rmi-i2c.c over I3C bus.
+>> - AMD SB-RMI patches are moved from drivers/hwmon to
+>>    drivers/misc to support additional functionality.
+>>    Move the related bindings documentation files to misc.
 >>
 >> Reviewed-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+> Really? What was reviewed here exactly? Poor style of commit msg or that
+> rename actually does rename?
+>
 >> Signed-off-by: Akshay Gupta <akshay.gupta@amd.com>
 >> ---
->>   drivers/misc/amd-sbi/Kconfig   |  15 +++-
->>   drivers/misc/amd-sbi/Makefile  |   2 +
->>   drivers/misc/amd-sbi/rmi-i3c.c | 133 +++++++++++++++++++++++++++++++++
->>   3 files changed, 148 insertions(+), 2 deletions(-)
->>   create mode 100644 drivers/misc/amd-sbi/rmi-i3c.c
->>
->> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
->> index 9b1abeb6ab1a..838cf98805d9 100644
->> --- a/drivers/misc/amd-sbi/Kconfig
->> +++ b/drivers/misc/amd-sbi/Kconfig
->> @@ -15,10 +15,21 @@ config AMD_SBRMI_I2C
->>          This driver can also be built as a module. If so, the module will
->>          be called sbrmi-i2c.
->>
->> +config AMD_SBRMI_I3C
->> +     tristate "AMD side band RMI support over I3C"
->> +     depends on I3C
->> +     select AMD_SBRMI
->> +     select REGMAP_I3C
->> +     help
->> +       Side band RMI over I3C support for AMD out of band management.
->> +
->> +       This driver can also be built as a module. If so, the module will
->> +       be called sbrmi-i3c.
->> +
->>   config AMD_SBRMI_HWMON
->>        bool "SBRMI hardware monitoring"
->> -     depends on AMD_SBRMI_I2C && HWMON
->> -     depends on !(AMD_SBRMI_I2C=y && HWMON=m)
->> +     depends on (AMD_SBRMI_I2C || AMD_SBRMI_I3C) && HWMON
->> +     depends on !(AMD_SBRMI_I2C=y && HWMON=m) || !(AMD_SBRMI_I3C=y && HWMON=m)
->>        help
->>          This provides support for RMI device hardware monitoring. If enabled,
->>          a hardware monitoring device will be created for each socket in
->> diff --git a/drivers/misc/amd-sbi/Makefile b/drivers/misc/amd-sbi/Makefile
->> index 6f3090fb9ff3..e43d4058a0f0 100644
->> --- a/drivers/misc/amd-sbi/Makefile
->> +++ b/drivers/misc/amd-sbi/Makefile
->> @@ -4,3 +4,5 @@ sbrmi_core-y                  := rmi-core.o
->>   obj-$(CONFIG_AMD_SBRMI_HWMON)        += rmi-hwmon.o
->>   sbrmi-i2c-y                  := rmi-i2c.o
->>   obj-$(CONFIG_AMD_SBRMI_I2C)  += sbrmi-i2c.o
->> +sbrmi-i3c-y                          := rmi-i3c.o
->> +obj-$(CONFIG_AMD_SBRMI_I3C)  += sbrmi-i3c.o
->> diff --git a/drivers/misc/amd-sbi/rmi-i3c.c b/drivers/misc/amd-sbi/rmi-i3c.c
->> new file mode 100644
->> index 000000000000..b960743afad1
->> --- /dev/null
->> +++ b/drivers/misc/amd-sbi/rmi-i3c.c
->> @@ -0,0 +1,133 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * rmi-i3c.c - Side band RMI over I3C support for AMD out
->> + *             of band management
->> + *
->> + * Copyright (C) 2025 Advanced Micro Devices, Inc.
->> + */
->> +
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/i3c/device.h>
->> +#include <linux/i3c/master.h>
->> +#include <linux/init.h>
->> +#include <linux/module.h>
->> +#include <linux/mutex.h>
->> +#include <linux/of.h>
-> Where do you use it?
-Ack, will remove.
+>>   Documentation/devicetree/bindings/{hwmon => misc}/amd,sbrmi.yaml | 0
+> We don't put bindings into MISC.
+
+We moved the SB-RMI driver from hwmon to misc, and hence moved the 
+binding documentation.
+
+Referred the newly added yaml file, ti,fpc202.yaml through commit in the 
+misc bindings.
+
+If Documentation/devicetree/bindings/misc is not right path, can you 
+please suggest the correct path for bindings for drivers in misc?
+
+thank you.
+
 >
->> +#include <linux/regmap.h>
->> +#include "rmi-core.h"
+> <form letter>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC. It might happen, that command when run on an older
+> kernel, gives you outdated entries. Therefore please be sure you base
+> your patches on recent Linux kernel.
 >
-> ...
+> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+> people, so fix your workflow. Tools might also fail if you work on some
+> ancient tree (don't, instead use mainline) or work on fork of kernel
+> (don't, instead use mainline). Just use b4 and everything should be
+> fine, although remember about `b4 prep --auto-to-cc` if you added new
+> patches to the patchset.
 >
->> +static int sbrmi_i3c_probe(struct i3c_device *i3cdev)
->> +{
->> +     struct device *dev = &i3cdev->dev;
->> +     struct sbrmi_data *data;
->> +     struct regmap_config sbrmi_i3c_regmap_config = {
->> +             .reg_bits = 8,
->> +             .val_bits = 8,
->> +     };
->> +     int ret;
->> +
->> +     data = devm_kzalloc(dev, sizeof(struct sbrmi_data), GFP_KERNEL);
-> sizeof(*). Use recent coding style, not some old, downstream code.
-Ack, will update.
+> You missed at least devicetree list (maybe more), so this won't be
+> tested by automated tooling. Performing review on untested code might be
+> a waste of time.
 >
->> +     if (!data)
->> +             return -ENOMEM;
->> +
->> +     mutex_init(&data->lock);
->> +
->> +     data->regmap = devm_regmap_init_i3c(i3cdev, &sbrmi_i3c_regmap_config);
->> +     if (IS_ERR(data->regmap))
->> +             return PTR_ERR(data->regmap);
->> +
->> +     /* Enable alert for SB-RMI sequence */
->> +     ret = sbrmi_enable_alert(data);
->> +     if (ret < 0)
->> +             return ret;
->> +
->> +     /* Cache maximum power limit */
->> +     ret = sbrmi_get_max_pwr_limit(data);
->> +     if (ret < 0)
->> +             return ret;
->> +
->> +     /*
->> +      * AMD APML I3C devices support static address
->> +      */
->> +     if (i3cdev->desc->info.static_addr)
->> +             data->dev_static_addr = i3cdev->desc->info.static_addr;
->> +     else
->> +             data->dev_static_addr = i3cdev->desc->info.dyn_addr;
->> +
->> +     dev_set_drvdata(dev, data);
->> +
->> +     ret = create_hwmon_sensor_device(dev, data);
->> +     if (ret < 0)
->> +             return ret;
->> +     return create_misc_rmi_device(data, dev);
->> +}
->> +
->> +static void sbrmi_i3c_remove(struct i3c_device *i3cdev)
->> +{
->> +     struct sbrmi_data *data = dev_get_drvdata(&i3cdev->dev);
->> +
->> +     misc_deregister(&data->sbrmi_misc_dev);
->> +     /* Assign fops and parent of misc dev to NULL */
->> +     data->sbrmi_misc_dev.fops = NULL;
->> +     data->sbrmi_misc_dev.parent = NULL;
->> +     dev_info(&i3cdev->dev, "Removed sbrmi-i3c driver\n");
-> No, drop. This is useless.
-Ack, will update.
+> Please kindly resend and include all necessary To/Cc entries.
+> </form letter>
+>
 >
 >
 >
 > Best regards,
 > Krzysztof
+Sorry, will take care of this.
