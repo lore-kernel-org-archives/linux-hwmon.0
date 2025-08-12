@@ -1,38 +1,33 @@
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1907E335C7;
-	Tue, 12 Aug 2025 03:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085EA2D781F;
+	Tue, 12 Aug 2025 07:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754968748; cv=none; b=VPgYt6KC+urWDxIqOL0JA6mYvBxIQ8C9z1kINOprE/mPnG0uspxaCWC1ZNSCA2P4sFtUgzY2oC8RmfrBj2UeJDdfZfV5VJL5SVqmC2/WKYmx8R7HJoTSDkr7f1tJNAJvmbd7bdzBdfRCTwBEke7mFD/dyLDUug+A7T7z8teayaQ=
+	t=1754983232; cv=none; b=b2P1Rt+t8rPnw771SAUd0zOSlQEGprf+HggMtCzrblAvX8WI+XU/2GMTO3vJNJjv4/ePDyfzCErbKkqOvtcAVOvOUwPxUsqGYQFkGBejzKY/uAsN2AtBPp7D4fTdWAvidnMu24fY1dEcwS3/PQChd1MjWIbACFOC2eoBcoL1pn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754968748; c=relaxed/simple;
-	bh=JWr5GnVWnAU4GM/yEBrAkx091IAX+YqdPOB6mV+qwbc=;
+	s=arc-20240116; t=1754983232; c=relaxed/simple;
+	bh=3zXD/+65HbFtTHBlTBULFxIEcPSOGq0V7b8vr8mcreE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VxAjrIuzp3Acs0vF2nZHxTWzYsugsnx4KfE0q6abKL/xMSpEjJAQS9fRHhzsA81B6FRif8bpuSolkdc4kRYeda1+cFhlQKEjvByHRe0rxlRMesFBRZzTcM7/VEDMWGBSnpgSk5+/s0pQ2RnMvmnMD3CxFonkN39GPQVDP07QYTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ZyOOaVkn; arc=none smtp.client-ip=54.204.34.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	 In-Reply-To:Content-Type; b=N+1nRZE1+ym9tDypg94fUTDX9YU4ZuzzuP0ws7htjRlg2YkllVHdhV/aPRMqavOioxt0KWjBaeCb/i5jsnQy6p7ydqXtxjo0tF9w1Rxza/SMuU27LZimv1Xz8VM9e41iJ8wfzcvCgZ1LXoR9KZ9m31Vi8n6BVQR3pwrzy6ZWG5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFA+l0xD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ZyOOaVkn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1754968711;
-	bh=w819vPHCzSjvWIZoGLPIItTx9dfZyFMgI1mbx4HJIQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=ZyOOaVknf6aDeI+yz7yMuiJOvdxjlIvmTI4ci+FTRC0JhGIP0JmhTlnfC373YEISd
-	 xZu8B+sqthPjybV978xLkxN3SpM1W6ab5vHha+HLEgn40P7cpsIt8N0SPrk/Rj21tl
-	 5/uif6N0yWX4GGTPZhSveH8AmpiL9TnsPbRIrFlM=
-X-QQ-mid: zesmtpgz6t1754968709t0043451a
-X-QQ-Originating-IP: h1CUU9sYr1EUHV6mgQSmOBaLIqXPI1sP3mzlfK/dHE8=
-Received: from [198.18.0.1] ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 12 Aug 2025 11:18:27 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 7724009268559505436
-Message-ID: <E8C4F9764DD41E5E+97d54ecc-9519-4ec5-a995-5c9dc45961cd@uniontech.com>
-Date: Tue, 12 Aug 2025 11:18:26 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFA+l0xD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6B0C4CEF0;
+	Tue, 12 Aug 2025 07:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754983231;
+	bh=3zXD/+65HbFtTHBlTBULFxIEcPSOGq0V7b8vr8mcreE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WFA+l0xDczXlJQV0BfNDF6S5Adxp4Jjr1xRUUhYBWgihhjiPxagxSt5sJfBnl5OcD
+	 ehqDYQORdF6Ss/ew4pR38LZX//pWEaqLxzcV+pQLMVLx27jxQr5bP1c53bddIN+3RM
+	 IISVe8bkBRxC5xz+oodaWBu9eLoZwZHupBjMzDcLvQeahd6c7+AAcYOyEt5kJo2wCG
+	 tKY4NnjCKQaQpk9NoGbYM7+E0rQQsxGZbc+ZelO302jsegywG2Sl24Pn/ik6k2c0p5
+	 tZlNFGoXPgAY/bkoExgU3Ml4rQ8wKiI88Ums6TzxCE7ylIlSE4wDlnBVX4jANLJmew
+	 Mbt2KZpcCBSdQ==
+Message-ID: <eab6d2d2-9337-40fe-81c7-95dc1956ce6f@kernel.org>
+Date: Tue, 12 Aug 2025 09:20:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -40,103 +35,230 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] hwmon: add GPD devices sensor driver
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: Guenter Roeck <linux@roeck-us.net>, Cryolitia@gmail.com,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
- Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>,
- =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
- someone5678 <someone5678.dev@gmail.com>,
- Justin Weiss <justin@justinweiss.com>, command_block <mtf@ik.me>
-References: <20250314-gpd_fan-v6-0-1dc992050e42@gmail.com>
- <20250314-gpd_fan-v6-1-1dc992050e42@gmail.com>
- <CAGwozwENLOOS5q1Bs5SEh3FFJAY-=kcVimf5U+tWzy6HaiGd=g@mail.gmail.com>
- <bb57fe1d-fde9-45f8-9f5c-0836a6e557ff@roeck-us.net>
- <CAGwozwGdZ5tzHg7_TF5d_AWVDmypP987XS-x_GWqrSF81PiG2Q@mail.gmail.com>
- <B751D49737DD10DC+00a0ff95-476a-4d0a-9bc6-40e77012a554@uniontech.com>
- <d4b6932f-fe95-4502-b7c9-650a61ab565d@roeck-us.net>
- <4CFDED845BBB7FFB+10019dea-8229-4681-9beb-5f351eb8faf4@uniontech.com>
- <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: update TI TPS23861 bindings
+ with per-port schema
+To: gfuchedgi@gmail.com, Robert Marko <robert.marko@sartura.hr>,
+ Luka Perkov <luka.perkov@sartura.hr>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
+ <20250811-hwmon-tps23861-add-class-restrictions-v2-2-ebd122ec5e3b@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-In-Reply-To: <CAGwozwG13swYjCB6_Wm2h8a2CdHxam+2y=g1m42pynkKqqdDLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: NcfXIs+Ms1qHGA0BJZqOjmZMULX90a9+w1wk9RTX4GN7WgPJxANHbmFC
-	VIAifO0y/LORoGmAi/LRexuGezm2O9VKGZsvABDK0H8hNyX0ozgcRxSUi9GKfz1L4TbIxrv
-	XDE/DtbmjkjMjBeSnSNDq8jV8h2fMtdYgunp61kAmzHYpuSrYmrXqyg8crdDZsL0NuWSodI
-	masAvU+g2/PxqCQgnQYynp8dwaUeY7ZV+CMsN1/KwIKOULvBwkOg7byxIx30nnjzmQ1B5b6
-	APR+r+roe8cGy3kvwDEY5+zsWFQlaJGLZmqRdK6sbqDJYACEzETbgLvR2RwLIPs4iHd57yb
-	oCWir24bhYQC2BSqleon4B7qRtc7oP01E1dyW25sCElJ3cuz/m4A8oP4gP9lvh+beDfWIvw
-	i2E8cgraV4oGnN9yK8jdBKLOraalH2jlyQje5YOJNjUxjsSDAi6NPZ4m1t0VQm7rdzW2j9w
-	1SMlhTL+4L3YVd319e2K20/PKBb2b7Rg8UztP6rIpTPptnQr6cwr24Pc0Jnb2c8nf2dziGz
-	aDL7rs2JDgMAaYBfEJh9elAvzovLNxU9nfD1zmo4tsNZXtS+FCeWj+ZDy0s4pjK1pP1+aze
-	V2w7K8ADKu24luKNC7bXldas+dYjARTK8FyTbBYQIyhTBA0tJkyEw+kmUhVqS9DizSCPM2A
-	mwo4B37kFhFFeGfwN6FrFmxBLBOM4M3vbQSzj21+g4rgYi7N8+5Ty0rouwmyOKbeKIaLDl9
-	GIIYovEHX8bmvuoUXWlyJT8Nb29FgwNXtrPYgDf57HPOk4aJet95whT5Dw/ySyoOJVPT2JN
-	2Q0sPENQNoCuI9kpNkXO7CXPyM1RWaBJaqoi8mFH1DchXwGR2rQZUKqJzuP58Wzw5+tfTFX
-	hujoGFBNlDrINQyrrkm/ae4mfKcHAy9oth0rLTcNVhn93kcr1Evz2+9MaiXYdc+JIKKM6ji
-	fsqEpaQa2+HU7N77zG7Lo90nMxuFPfu6RzsP7jrkvOJTf4wA9u5F3q9HErY4cL9VbDAqbH3
-	sLBzvoog==
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-X-QQ-RECHKSPAM: 0
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250811-hwmon-tps23861-add-class-restrictions-v2-2-ebd122ec5e3b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 31/07/2025 16.13, Antheas Kapenekakis wrote:
-> On Thu, 31 Jul 2025 at 05:30, Cryolitia PukNgae <liziyao@uniontech.com> wrote:
->>
->> Personally, I'd prefer to maintain this small driver in the hwmon
->> subsystem until we need to write drivers for the same EC with more
->> diverse subsystem functionality. We can then discuss and learn how to
->> evolve it. I personally don't think that's going to happen in the near
->> future.
->>
->> So, could we continue reviewing the current patch series? Where are we
->> stuck?
+On 11/08/2025 18:13, Gregory Fuchedgi via B4 Relay wrote:
+> From: Gregory Fuchedgi <gfuchedgi@gmail.com>
 > 
-> Either is fine by me. The move is simply a rename anyway. My reasoning
-> was it will take a bit of back and forth to get approved and charge
-> limiting is a standard feature now on all manufacturers except GPD, so
-> I expect them to add it soon. But since it is a rename, it is not a
-> blocker for reviewing in any case.
-> 
-> If you want more comments I think you should send a new current
-> version so it can be reviewed again. It has been a while since the
-> previous one.
+> Update schema after per-port poe class restrictions and a few other options
+> were implemented.
 
-I have sent the 7th version two weeks ago. I would like to hear your 
-comments if you have a free time to take a look at it. Thx a lot.
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
-> Antheas
 > 
->> 在 2025/7/31 01:26, Guenter Roeck 写道:
->>> On 7/30/25 02:24, Cryolitia wrote:
->>>> Thank you for raising this valid concern. We've closely monitored GPD's
->>>> development plans and currently see no indication of EC functionality
->>>> expansion beyond thermal sensors in the foreseeable future. Given this
->>>> observation, we believe placing the driver in hwmon remains appropriate
->>>> for now.
->>>>
->>>> That said, we fully respect your maintainer perspective on
->>>> future-proofing. If you feel strongly that platform/x86 would be a safer
->>>> long-term home despite the current scope, we're happy to move the driver
->>>> there immediately. We're committed to finding the most sustainable
->>>> solution for upstream.
->>>>
->>>
->>> As hwmon maintainer, I feel strongly (since you used the word) that moving
->>> the driver (or any hwmon driver, for that matter) out of hwmon space would
->>> be a bad idea, but I won't prevent you from doing it either. It means less
->>> work for me, after all.
->>>
->>> Guenter
->>>
+> Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
+> ---
+>  .../devicetree/bindings/hwmon/ti,tps23861.yaml     | 86 ++++++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> index ee7de53e19184d4c3df7564624532306d885f6e4..578f4dad7eab630b218e9e30b23fc611a760d332 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> @@ -24,12 +24,62 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+>    shunt-resistor-micro-ohms:
+>      description: The value of current sense resistor in microohms.
+>      default: 255000
+>      minimum: 250000
+>      maximum: 255000
+>  
+> +  reset-gpios:
+> +    description: Optional GPIO for the reset pin.
+> +    maxItems: 1
+> +
+> +  shutdown-gpios:
+
+powerdown-gpios, see gpio-consumer-common.yaml
+
+> +    description: |
+
+Drop |
+
+> +      Optional GPIO for the shutdown pin. Used to prevent PoE activity before
+> +      the driver had a chance to configure the chip.
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: |
+> +      The interrupt specifier. Only required if PoE class is restricted to less
+
+Drop first sentence, redundant. Interrupts property cannot be anything
+else than interrupt specifier.
+
+> +      than class 4 in the device tree.
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^port@[0-3]$":
+
+This goes to ports property.
+
+
+> +    type: object
+> +    description: Port specific nodes.
+> +    unevaluatedProperties: false
+> +    required:
+> +      - reg
+
+required goes to the end.
+
+> +
+> +    properties:
+> +      reg:
+> +        description: Port index.
+> +        items:
+> +          minimum: 0
+
+Drop minimum.
+
+> +          maximum: 3
+> +
+> +      class:
+> +        description: The maximum power class a port should accept.
+
+What are the values? Where is the property defined - which schema - that
+you do not use vendor prefix?
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+
+Drop minimum.
+
+> +        maximum: 4
+> +
+> +      off-by-default:
+
+Same question - which common schema defines this?
+
+> +        description: Indicates the port is off by default.
+> +        type: boolean
+> +
+> +      label:
+> +        description: Optional port label
+
+Skip all "optional" here and other places. Schema tells it, not free
+form text. Say something useful here or just ": true".
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -51,3 +101,39 @@ examples:
+>              shunt-resistor-micro-ohms = <255000>;
+>          };
+>      };
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        tps23861@28 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+
+Follow closely DTS coding style.
+
+> +            compatible = "ti,tps23861";
+> +            reg = <0x28>;
+> +            shunt-resistor-micro-ohms = <255000>;
+> +            reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+> +            shutdown-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <14 0>;
+
+0 looks like invalid flag. Use proper defines and proper values.
+
+> +            label = "my_poe_controller";
+
+Use useful names or just drop it.
+
+
+> +            port@0 {
+> +                    reg = <0>;
+> +                    class = <2>; // Max PoE class allowed.
+
+
+> +                    off-by-default;
+> +                    label = "myport";
+
+Also not useful.
+
 
 Best regards,
-Cryolitia
-
+Krzysztof
