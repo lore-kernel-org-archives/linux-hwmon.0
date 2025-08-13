@@ -1,33 +1,37 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6292C2D63FD;
-	Wed, 13 Aug 2025 09:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B35212569
+	for <linux-hwmon@vger.kernel.org>; Wed, 13 Aug 2025 09:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755077095; cv=none; b=j7X/kx0ZOWWVqi4S0ZQJIrzIK9Tw8KQVJppJsQB7xIbW1LGS6qa+MhyFyU9S4Ia4bZvO596Q34JIGT5hywY+tUmDSYQay2zBltHO6w93x1Zsl5bHe3vK/qyZxot2r/ynRZY8//bF74QF1tmGY5doOCIB8FGCYngr4en5qkOjtbc=
+	t=1755078784; cv=none; b=GlPzUj3+4J0rB21UhWDHmdDZfDGsAMdlitF4gAezyac5cmMdkaw2z3h2PBDfzVZL5pFiwYM9EjYNdxyVRNosHCuRtwaSeQirpLFkMn8dZCn4UuxB6D2dr2ue9FSHNV1TNavbdMDDRCsVBdBG6doHaWCHZqp1VhXfjK0A4X1xsS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755077095; c=relaxed/simple;
-	bh=dEq2v0ZCpNIs5td2cA6gDe4/GDNQNaqolm18AtqYml8=;
+	s=arc-20240116; t=1755078784; c=relaxed/simple;
+	bh=Rrg+PDeB1og0Ip97n8NMinUcp87go5qnz3BHKDTd/nU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ea7WFpKDItuKMuTX85Y36NkAHwNz3Igwrx70s/pZHwKGHDVS6U3esuAdYvGHPyndaBlmELCfw7aSI2Fv4O/11JzST3Ca7pjHph9CPFEx0NPrj5hmxW05W+rMLBlWookJ0j9/rqRCBeY/EX34zjbQCs/vT89NNioRp+vkWZhLkUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vaz9F8bh; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=V15gTzFKonba6XwhNRXqAjsv1yuo4jeLpaGsA+9uuJdd3T/gNYM5wcbLbYtFCT/QggFWYq/a+sYjeMDynBD4n+F3yIK1YCg+FGZuRx6L5Md0nNg8vl8JtF+wW2xLQH+6sEwt3fwZjUauoynVQpWyREuaty5EuXM1YALrkJAwveE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=sVMeAFx6; arc=none smtp.client-ip=212.77.101.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vaz9F8bh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CF7C4CEEB;
-	Wed, 13 Aug 2025 09:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755077094;
-	bh=dEq2v0ZCpNIs5td2cA6gDe4/GDNQNaqolm18AtqYml8=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=Vaz9F8bh5RZMk0r/cBS8TxN5aZlGsYli30GzvtwzjUhaNKOcTXQuF2Ux/SaxHx5j6
-	 fkpKAvn/ojKoI02sPMchw2KDwX1C7q02hAG+UVIxZVR4iU0iVcZYLquZ6GOorIVFns
-	 yWL1T3uXC3yaVi5+gl52R2V8s490JSg3LxNUUasQuqL3XqfjN4UAivBeK1yUy3m9em
-	 BziXSiEgwwrxnYkK6iU7yJLqDD+isqjvoU2LVICKpIpmtXzZwbFEDKcrs3xzaSh7AJ
-	 FnRvabzooJYISBDHugSTOl4LGqCYuhJbPC+78FRODCrnzX+P0fsVX03+uZ4t/c1XuF
-	 YI/8OgMM5WosA==
-Message-ID: <6f46e420-832a-4c6e-b1e9-d797b0425834@kernel.org>
-Date: Wed, 13 Aug 2025 11:24:50 +0200
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="sVMeAFx6"
+Received: (wp-smtpd smtp.wp.pl 46995 invoked from network); 13 Aug 2025 11:52:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1755078775; bh=AAtYHcTaVyCFpkLjxJA7aO2dq1kno3BoVNBG/qhbPvs=;
+          h=Subject:To:From;
+          b=sVMeAFx69/OgX7TxKXwY6qEp4Goae5lJ90CJwEgIeTOmKh9jX7b4TSqOvejsNA6Pd
+           s+6eSR7O3ILRI3aPpm9WFA5DQtE1+POJv86OfV8JJE7L/VAeQWfJq2djfvBHu3jBEW
+           RpHuhDGI7XKItT+PjT+HWEB3eQHbxX6WGO5YWWE66dGkdb18qB3g7Wi2wGazUdrOzS
+           4tNoILnmwiH4Heo6JQrS8rg/p3QCoJOXUlx8R4DJuEJLDU8wpsfP/9u9HWcaLcpEC1
+           V7sGUkjfysKxEizSgYuyXvmkE3/UKWcdoxGKqe/5MTfpqFXjeo2cSSiVjA0wrj4Zby
+           nqrJ1v33qbauw==
+Received: from 83.24.134.210.ipv4.supernova.orange.pl (HELO [192.168.3.229]) (olek2@wp.pl@[83.24.134.210])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <krzk@kernel.org>; 13 Aug 2025 11:52:55 +0200
+Message-ID: <9d0ebfe1-e92b-45e0-baf1-3d6d2ce4c568@wp.pl>
+Date: Wed, 13 Aug 2025 11:52:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -36,90 +40,74 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] dt-bindings: hwmon: convert lantiq-cputemp to yaml
-To: Aleksander Jan Bajkowski <olek2@wp.pl>, jdelvare@suse.com,
+To: Krzysztof Kozlowski <krzk@kernel.org>, jdelvare@suse.com,
  linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, fe@dev.tdt.de, linux-hwmon@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250813091924.1075488-1-olek2@wp.pl>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <6f46e420-832a-4c6e-b1e9-d797b0425834@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250813091924.1075488-1-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+In-Reply-To: <6f46e420-832a-4c6e-b1e9-d797b0425834@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-WP-MailID: 46fb8cb658e1bebe764a3937a8873c36
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [QfNi]                               
 
-On 13/08/2025 11:19, Aleksander Jan Bajkowski wrote:
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/lantiq,cputemp.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Lantiq cpu temperature sensor
-> +
-> +maintainers:
-> +  - Florian Eckert <fe@dev.tdt.de>
-> +
-> +properties:
-> +  compatible:
-> +    const: lantiq,cputemp
-> +
-> +required:
-> +  - compatible
-> +
+Hi Krzysztof,
 
-I think this reads and writs to some IOMEM space, so you really need
-here 'reg'. That's the problem with such old bindings... binding is
-broken, DTS is half-baked or non-existing, driver has 20 years.
-
-BTW, why converting this old binding? Do you have any interest in
-actually running MIPS?
-
-I assume you did not check Rob's dt-convert branch to avoid
-duplicated... because he did convert EXACTLY this binding. And more from
-Lantiq.
+On 8/13/25 11:24, Krzysztof Kozlowski wrote:
+> On 13/08/2025 11:19, Aleksander Jan Bajkowski wrote:
+>> +---
+>> +$id: http://devicetree.org/schemas/hwmon/lantiq,cputemp.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Lantiq cpu temperature sensor
+>> +
+>> +maintainers:
+>> +  - Florian Eckert <fe@dev.tdt.de>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: lantiq,cputemp
+>> +
+>> +required:
+>> +  - compatible
+>> +
+> I think this reads and writs to some IOMEM space, so you really need
+> here 'reg'. That's the problem with such old bindings... binding is
+> broken, DTS is half-baked or non-existing, driver has 20 years.
 
 
+These devices are not so old. They support multithreading. In the case
+of NAT, they can process up to 700Mbps of traffic.
 
-Best regards,
-Krzysztof
+
+>
+> BTW, why converting this old binding? Do you have any interest in
+> actually running MIPS?
+
+
+I have several devices with Lantiq SoC (xRX100, xRX200 and xRX330).
+They are supported by OpenWRT. These are the only devices with mainline
+Linux that support ADSL2+ and VDSL2. I would like to add the missing dts
+files for the xRX200 and xRX330 families. I have started fixing the errors
+reported by the dtbs_check script.
+
+Downstream dts:
+https://github.com/openwrt/openwrt/blob/main/target/linux/lantiq/files/arch/mips/boot/dts/lantiq/vr9.dtsi#L29
+
+>
+> I assume you did not check Rob's dt-convert branch to avoid
+> duplicated... because he did convert EXACTLY this binding. And more from
+> Lantiq.
+
+
+Thanks, I didn't know that.
+
+>
+>
+>
+> Best regards,
+> Krzysztof
