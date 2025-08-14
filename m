@@ -1,121 +1,105 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD04F1B87F0;
-	Thu, 14 Aug 2025 14:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75DF1DE3DC;
+	Thu, 14 Aug 2025 14:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755180915; cv=none; b=upE+4t7DKE4S9QEBJt8qkzNbQyx64WyY+rCz08I17VVLHKeieP5sS3BfKP8uxaP+GeiNFfFnFzQb4jNZCHcGFjXLCF02Xxk94JcZqK/ff+S/dyKOVWKWpsLAMcGIlSu9m8L3Z/s2KPA1pdMP0yHr9hkqM/RbYiC5it7ZKFc1yLA=
+	t=1755182454; cv=none; b=IqaOI41y7I1qXkQM67D+Ln+OZCUxoCR+xx8DIe17vuDpOWcwl64klksrI/lT7KgdbYjYf0V2US+TGuynWQrf0q4JKGTm2PPZIIchVFZe2X5uftKM6WtcqTuEKuDNWz5WIUbouuAOm1ikFy4qiTsSPQsb63qOC+mQ/bCUY+Xs7DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755180915; c=relaxed/simple;
-	bh=yPVowiQqVM3E/dNnPZ3g8sdf8tynSeuFLgbfdgPO6EQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xz31bshQHUoVHS1AKxVfji15l860k1Kp3v5hQgZHBQ3xylh/1w5/GN06tb2E2hmuBWkrHrzbHFTZRGLGq78ROQ/gAsyFuBH4qumIWVqY7mJPR1daobAFSeDBHiaG6wxO4yQCNqmXwGeIKxlPQETy3fLPHVHbS/Rk37LueOf2M4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lfApQ2B/; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755182454; c=relaxed/simple;
+	bh=PU8UA+I5WgTOlBY9VPUqNqmWYyXfIpJmXJCYLjXok58=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=fUYUO6UNa3LMSwTIO2fwODoRfjeyFX83yiEB+3cL7m/ceRbEEqkdzjiEgHCkbyOSHV/qLHOVvOrThwx51Q+TbwWU6aeNQwHvkR0uylwMntVljdR2eazcO66X3K41ib886fLIZvSLAttWNIEk4j/QK4rEB60BYwjmGQyJ3JCSSqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LAvEDr+U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lfApQ2B/"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45a1b281d25so4132315e9.3;
-        Thu, 14 Aug 2025 07:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755180912; x=1755785712; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nBptkyV5QJodqYn42iZ/F2qxr/d9CoCHpSVW2UDctRE=;
-        b=lfApQ2B/iZfS9o/itgrnIRX4wLkwmK/HRLoLReGdcB5HbtslxHkYYHufJpPEKe69j8
-         LcVFlXKhN/ofHNmf/Ruh8kHm1naGlNpiTiY91l8hdBEVWxu1t/OOvr//SzF2Va8gV2w2
-         ArrkYOz/FhVv1kmcBfkiQgntepKIGB4vn1DvvtbLt7zBk8cg3Ek6cYcHWHkyNRg/trVk
-         k3VnU0iHkTLGvlBSVh96+PYWgjos1Dlnqiw0qfFlRQxGezvDOM3yAq+UDztJHE94eyQ4
-         zFaU4UO2k9V3olmzZ+/GiUAi5clKnvuWQwh7j4s7d6BqeJy1fDWT4+3AtiARA5rwQEVp
-         o/2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755180912; x=1755785712;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBptkyV5QJodqYn42iZ/F2qxr/d9CoCHpSVW2UDctRE=;
-        b=BtX0FYt7pzPzJvJ6T+7ZkdFWi8Rdl1+PGZR8DE9BMWw+Ttj/Ck7nmAtkFackYWpz7f
-         iSjSDMPerv0Wh+aUsEbIihDLvTxl2QlEUDhuLslRXv1zAwzM8u/iEWOwfewxbBnphAZb
-         gWWYsbNSD9ddBOmiU8nSa1CVAff1+RFUhu+IfAH63zLLo6inoVsoNs8JhI0tpo0Mh6JO
-         3I1dVjzkYtshZUCCU7XEC+cpLQzbGaGk+tsO5mWT4fKFQFmdwTAUeMBx2L32BCwGLiVb
-         P9O2LkPir6Q5omBo4cd7p3kg3gztE8XDM5z2pDv5YpAeK2BgwYBflTwQse9+dxBBMzal
-         qyew==
-X-Forwarded-Encrypted: i=1; AJvYcCW1AILwu4kW0ELfkF1fP0P7Tyel42JN11lbTG+/WJcUDnaFRkTHSmEc+8385ehvRnfi/FI67YD3mXwj4D4=@vger.kernel.org, AJvYcCWfQJXyUnD+CaJbf6ucV7ax736Oxuq2J6+5CUfQD7gVXiR6Xovz7O2UOSc0mRB0YSPfZVWBvJcc9T+Z@vger.kernel.org, AJvYcCWgLXd2HcL4V6Ve5IkAyMkDAoyoOpXRUcVrFQvVAi0HfawD4+UFtTYLsv+MCNGbyz/KJBSYcwGiwCmYSbJ2@vger.kernel.org, AJvYcCXVQudboI83YYkUvV7uwnYAj0spi3XxOpEcfMfZhTstWBnVesu1bs22gBuxXWH2AdhSrETwnIDnFk8Q@vger.kernel.org, AJvYcCXg4vjOoxAATwZ4PnkKwoYIRKwPt8+JdMXROG7cQLTzlAHP3XhI+HtKMeOEc5JoVv7ak/imqs6/WA2lgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN9krdOAZkI+Zibk/BOv6C8HBo7OIldbhdi0CJDFtHXqc8ugAn
-	cf8wg8CoAN4aKyYwJm5LGfsqqC14FZV+B1BimpV1XXeAS9szX01DoqLP
-X-Gm-Gg: ASbGncuZ1LSa2vnuuO/XJXGwz+kl6zjNyeSLoZ1X3DpD3ChvwNCMdmGeSxg6tcSKd85
-	D5EDxs98zMZNQReZC7NMhjGuyuzhgZIf2uDzoRCQ5s5AN6UEtARQuiBJJjUKQlhJBvnffrO/ssk
-	LgYbcHJFumV+w3o/En73j8rfvKqD1lgs7tUNGxEkv26GYhIXQtNlY6Xf7ZmNKowO1hDaXvbJEe1
-	ZmkuOEv4jV96NCBScHQcg+r9JuFuEgygscTBeZMrwcZdDOz2XJQZ3XU+zDY75YR7c6QKSU5boDP
-	yEJIMXRQmxZtc0GKtrLjBPq1auUXWCFMKpQnHGr95RKegWQkKLZa7OMPqeyO8TWu7CVyEJJfLxq
-	naNNZJw5/pr0sPanLSV+Nvg==
-X-Google-Smtp-Source: AGHT+IEWzjfR1gbJqCZmJrgJqMinjzSs5IctFqqaunulBjBxcuz13GcRmAcP3E1L6fMs9mb0y6MslQ==
-X-Received: by 2002:a05:600c:1c14:b0:456:285b:db24 with SMTP id 5b1f17b1804b1-45a2017a75emr440855e9.28.1755180911841;
-        Thu, 14 Aug 2025 07:15:11 -0700 (PDT)
-Received: from nsa ([185.128.9.90])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1f7082absm9211735e9.24.2025.08.14.07.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 07:15:11 -0700 (PDT)
-Date: Thu, 14 Aug 2025 15:15:29 +0100
-From: Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: nuno.sa@analog.com, linux-hwmon@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH 0/6] mfd: Add support for the LTC4283 Hot Swap Controller
-Message-ID: <2svr42ee7akwxwj5nizwe4a4hqdk4rslv7ivxraqg3jy6m3mxz@lfpn2nx4jdmm>
-References: <20250814-ltc4283-support-v1-0-88b2cef773f2@analog.com>
- <5713bb5b-3301-46bc-b30a-d2e4c58d1036@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LAvEDr+U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55734C4CEED;
+	Thu, 14 Aug 2025 14:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755182453;
+	bh=PU8UA+I5WgTOlBY9VPUqNqmWYyXfIpJmXJCYLjXok58=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=LAvEDr+U95m00kjZmTrLNp8VuVL+XYtIEG2s0CzSAfyG9ZJ7nIPN34wZGDGtK7k+R
+	 rymKq3ypcPqobxYczNFF7TiI4nzADaGo8befS8+Vnd8uotBkVf5F3gfR/KIsBnzx+s
+	 1or3x87vwQHkyc/eRPjwCZPos+v8Vswv0yBhcf44DBw3YBACU+wnqy9/g3JrwpRd0N
+	 5oK5uXI+oTEjCveSwi2bB8cIOBQVT9eHULzCnyiHcPr70ncbNRSYTe1tu9J/DRHXAR
+	 3AjyaVGKzi7iNQBylr0cTJp3E0/oCD4T5SL4uob8XCHn7uMfIEQz3p/Q6NHUXjGQLJ
+	 2/mXpjoGPZ14Q==
+Date: Thu, 14 Aug 2025 09:40:52 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5713bb5b-3301-46bc-b30a-d2e4c58d1036@roeck-us.net>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Conor Dooley <conor+dt@kernel.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org
+To: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+In-Reply-To: <20250814-ltc4283-support-v1-1-88b2cef773f2@analog.com>
+References: <20250814-ltc4283-support-v1-0-88b2cef773f2@analog.com>
+ <20250814-ltc4283-support-v1-1-88b2cef773f2@analog.com>
+Message-Id: <175518245252.2989785.16386519641633311403.robh@kernel.org>
+Subject: Re: [PATCH 1/6] dt-binbings: mfd: Add bindings for the LTC4283
+ Swap Controller
 
-On Thu, Aug 14, 2025 at 05:54:26AM -0700, Guenter Roeck wrote:
-> On 8/14/25 03:52, Nuno Sá via B4 Relay wrote:
-> > The LTC4283 device features programmable current limit with foldback and
-> > independently adjustable inrush current to optimize the MOSFET safe
-> > operating area (SOA). The SOA timer limits MOSFET temperature rise for
-> > reliable protection against overstresses.
-> > 
-> > An I2C interface and onboard ADC allow monitoring of board current, voltage,
-> > power, energy, and fault status.
-> > 
-> > It also features 8 pins that can be configured as GPIO devices. But since
-> > the main usage for this device is monitoring, the GPIO part is optional
-> > while the HWMON is being made as required.
-> > 
-> > Also to note that the device has some similarities with the already
-> > supported ltc4282 hwmon driver but it is different enough to be in it's own
-> > driver (apart from being added as MFD). The register map is also fairly
-> > different.
-> > 
-> > Last time (for the ltc4282) I tried to add the gpio bits directly in the
-> > hwmon driver but Guenter did not really liked it and so this time I'm doing
-> > it as MFD.
-> > 
-> Nowadays I suggest that people use auxiliary drivers in such situations.
 
-I see. But do you have any issue with it being MFD?
-
-I'm anyways tempted to the auxiliary device idea. The main usage for
-this device is HWMON and I dunno anyone would use it only as a GPIO
-controller. With the auxiliary device we would only need one bindings file
-and slightly better bindings for the pins functionality.
-
-- Nuno Sá
-
+On Thu, 14 Aug 2025 11:52:23 +0100, Nuno Sá wrote:
+> The LTC4283 is a negative voltage hot swap controller that drives an
+> external N-channel MOSFET to allow a board to be safely inserted and
+> removed from a live backplane.
 > 
-> Guenter
+> Main usage is as an Hardware Monitoring device. However, it has up to 8
+> pins that can be configured and used as GPIOs and hence, the device can
+> also be a GPIO controller.
 > 
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> ---
+>  .../devicetree/bindings/mfd/adi,ltc4283.yaml       | 85 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  7 ++
+>  2 files changed, 92 insertions(+)
+> 
+
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,ltc4283.yaml:
+	Error in referenced schema matching $id: http://devicetree.org/schemas/gpio/adi,ltc4283.yaml
+	Tried these paths (check schema $id if path is wrong):
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/adi,ltc4283.yaml
+	/usr/local/lib/python3.13/dist-packages/dtschema/schemas/gpio/adi,ltc4283.yaml
+
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,ltc4283.example.dtb: swap-controller@15 (adi,ltc4283): gpio: {'compatible': ['adi,ltc4283-gpio'], 'gpio-controller': True, '#gpio-cells': 2} should not be valid under {'description': "Can't find referenced schema: http://devicetree.org/schemas/gpio/adi,ltc4283.yaml#"}
+	from schema $id: http://devicetree.org/schemas/mfd/adi,ltc4283.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,ltc4283.example.dtb: swap-controller@15 (adi,ltc4283): hwmon: {'compatible': ['adi,ltc4283-hwmon'], 'adi,rsense-nano-ohms': [500], 'adi,current-limit-sense-microvolt': [[25000]], 'adi,current-limit-foldback-factor': [10], 'adi,cooling-delay-ms': [8190], 'adi,fet-bad-timer-delay-ms': [512]} should not be valid under {'description': "Can't find referenced schema: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#"}
+	from schema $id: http://devicetree.org/schemas/mfd/adi,ltc4283.yaml#
+Documentation/devicetree/bindings/mfd/adi,ltc4283.example.dtb: /example-0/i2c/swap-controller@15/gpio: failed to match any schema with compatible: ['adi,ltc4283-gpio']
+Documentation/devicetree/bindings/mfd/adi,ltc4283.example.dtb: /example-0/i2c/swap-controller@15/hwmon: failed to match any schema with compatible: ['adi,ltc4283-hwmon']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250814-ltc4283-support-v1-1-88b2cef773f2@analog.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
