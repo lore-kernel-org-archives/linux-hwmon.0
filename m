@@ -1,133 +1,230 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91591D6DB5;
-	Tue, 19 Aug 2025 17:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF66A2571DD;
+	Tue, 19 Aug 2025 20:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755625868; cv=none; b=M3Qs1wSY44Drtu2IXaEUw+9mviN2KoLW8qMv4f4uziqs7LdtK2N5+WRVm7xWibyir63UggDdG7sVYar+L1N5vfCL2/rM4r4dhfdp62kluODyQDjbNUq/nu10NJ/QFTQLyTPlZDtxjJfGylDBcAHGysbBnQ0ylaxOR4RBtlM1gp0=
+	t=1755634539; cv=none; b=att0oy7QYWmti8sct7jyahrR9uLjpJeM0VNDDs6WyYfSmRgWptfCA8wO/WiFW28GLO7prwe1bm5OzHeQjLj4uUDkc0TWyXu+dMzTEd6lsdAL9JojVe0H6pBiJWU/A4dyN05lxHfXZ09XUKPdMdO453vReCG0hh/2qYtKDnMPl+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755625868; c=relaxed/simple;
-	bh=f0kmNC7ZkTwG3EKPjuZE4Izi+zvTTxFihBN9XnUr9Rg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eOSqH9o3y33qvtx5oHFUscLzEjmIu9u20XlZPcryM0j1b2SaIwJcGycMPuYE5LRqJWhwqJlCOm4i7IHevMzG/7PgLa1GSoHwUgpz1sb0XaBb+prXRTlrckshHK1TOWa2aZMnVyX+PIToD5b1/qbLq/7MQePSdPZrp/NZT+MamBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTxb3tTD; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1755634539; c=relaxed/simple;
+	bh=nna83j1mZxwOy8dBPS8X0Nj5HOE+xKBlJdVfF3sqAq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=syfyECTh42BTxTemeLB3MF20y18+E61iHXU8r/Y9pVeX5BFVt1jZnGboFmMs3YsQ5mIu7j5xbcOvk7+jz+7AKmqRcEKSND00ACoIXeS/pAxr8nqTi/0XsFHXpycplBEsEgcZmfAEzxoFckPyuVEucBQ1yZ6Zl3r3evjUmq27UKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwZFus6K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTxb3tTD"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-619487c8865so227958a12.1;
-        Tue, 19 Aug 2025 10:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755625865; x=1756230665; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmlcDpKD9YCg6XDWMZQyI3wgJy7zu34Qq/sxftvQ6ww=;
-        b=JTxb3tTDwRsuP0SbOfx06x/Io9okl2s886bhxEQzEgpVY2mRrS60+L9PSLTGxs0uJ+
-         o270Ftq5oIcduejrGDSrxH+fP98wE+XHXIoqQCxPooArtKRUEAZrqu0hdNBiAQPCM33N
-         9XFYGVO8bXoI34A1kniRen6spUxaPpM95tnfN6ASrQSfonQhhzow3CYD6eN/0zDqK3ZI
-         QoTI1n+fLsa3YqJTiXlQ9kSD4nMdEP3ZO4yBcbNqeQKPxMib26GGP1xLcya4mEUKdhcM
-         1vSpRRRF9ndRj0yYsLQwdb+hA1bb9hy1Ed2b6fl36NL1Mao9mZ0ryLL/TyPwLrNSfm+K
-         03sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755625865; x=1756230665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PmlcDpKD9YCg6XDWMZQyI3wgJy7zu34Qq/sxftvQ6ww=;
-        b=tLy54rOTnNl83eIbBNca7rnIFHmNmgmG8Jx5zeGu+pbzKjvqSsqFHPhcklAPwvLs9g
-         Gcgox/KeABlfLwHbgMgpd0Ryi7x4P4/wLJkNEhrxAETG75G7uMLKjEfsVSbqOISKlJYk
-         YWfFJGORfI4rFoA2as6M4G7qFijXLg/j9DmjgGFa1AyAalUlz+Xch0l7MvEzRlpnLQ7y
-         EbDDTXxGNVPPgIjy58hCBkkvy64Pq2V9Cj6DmUaFOGZbO38NkziE1nCf4Z0lm6+u+s6k
-         MudAFgwtSO91q16c+WT5pE46mB6O3j2f+E9FIAhwvywXsGfzgnNHH9ufx1hLKQzzL61f
-         YJ4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUC9lnCVgJCM9pZTKfSQzWLCc5hacaGG/kllD4cBSjDO3NMDBzUZQCryhGPa0pEqnJRXkq29H14EU53@vger.kernel.org, AJvYcCVl5orOJmetLCzOGJR9xid1P8p2L2AtJmki5flkcQvHqWZK2w1sSvSQDz5YQ0bEf8C7KZAnr/xUydJC@vger.kernel.org, AJvYcCWbl7homfAxK9d5bixeMAf2pPOdy/n9Nh/iXXr9SKn9hE4BRmeuhb5K/XuZ6cSz4DVzhkyo0hzwME82QYQ=@vger.kernel.org, AJvYcCXvFJ4jpSlxkeJMmP7gieU0/GAt32/fS9IkW0CoLr6t1hvT+NmKXF/v8pz+0mOpjeZPuhg6XLREAad/D4e4@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPnggERSMc1AUK4wYGoKcBd+wDIqKgkQSdaJmdZytKDIE71YwR
-	iQdwa3yQT1BUF1vcYb72DvpZaG4CXh3eFh7t7ND3B5h9LZIp1dpMIpi0UFz9H/ypY+lhGktuAUQ
-	AXEeNlgvOkC+UIFFNjHOmxf1V3Rl0sQ==
-X-Gm-Gg: ASbGnctJs0QO5SNpt9zZBHAX/uUVfL62u+N2ftv5nWUF0k/naRusSEbxUYOaZfM1FVV
-	POIv3i4wAMzyR0nqhsTFQA7q92zv2EYkGd6elxRYLt/EdECPz9lTYmNc5NPA/tMxchVbsE+wskI
-	e+ghIMibvU2/B9C49RvFa8VCv8a3nC1yz1oJLNtqZkvL6j9Y97uEK0MZu6/yu0EfP1/UZcV1tQQ
-	5nbrrdp
-X-Google-Smtp-Source: AGHT+IGIn7OrCgxggr5EugvTj/Sse9SmV8lSb5a2wGootksUGazgLec5LF39WE585X64DXNcz/QNI34UrA6hniB8i/U=
-X-Received: by 2002:a05:6402:21c6:b0:615:8b65:bfb6 with SMTP id
- 4fb4d7f45d1cf-61a9762bdd9mr200792a12.13.1755625864642; Tue, 19 Aug 2025
- 10:51:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwZFus6K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C672DC4CEF1;
+	Tue, 19 Aug 2025 20:15:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755634537;
+	bh=nna83j1mZxwOy8dBPS8X0Nj5HOE+xKBlJdVfF3sqAq4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pwZFus6KTJbRfXuqSsC1c30b1t7uyfSYH6BAuk/1p2gIUKnpJkbBEljlZjFVOz7x9
+	 HKiT6+Ii/b98fBlAZblp/aZXI+ha8XicMKdAPlqmoYZWcGjYE9qawxbdil4aCtlYuF
+	 /Gd1/9Tlec8kQ9/GfOs+uSAvp5ECxeEoSyri4EMV3SkDsRo+PKEfpS50T243t0FCwu
+	 tOk3+jx9XLZoENG0srqXT35rMgeCmRF0U7cBMnaSoeChBF7ygnKU7aQHlIFWKXPv/R
+	 yHC6OgPBCrKQGc5kpwD4+pohBhLZlZHLz5/ucjSmeGTjEDMeQDHjZsb51McrNMr9XS
+	 VufWGvxv5yWhw==
+Date: Tue, 19 Aug 2025 15:15:37 -0500
+From: Rob Herring <robh@kernel.org>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH 2/8] dt-bindings: hwmon: add Apple System Management
+ Controller hwmon schema
+Message-ID: <20250819201537.GA1223169-robh@kernel.org>
+References: <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
+ <20250819-macsmc-subdevs-v1-2-57df6c3e5f19@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
- <20250811-hwmon-tps23861-add-class-restrictions-v2-2-ebd122ec5e3b@gmail.com>
- <eab6d2d2-9337-40fe-81c7-95dc1956ce6f@kernel.org> <CAAcybusHjAR67N0rumb6M_uG1ct3aa=zv2XkpUjhSSxv0NdzFA@mail.gmail.com>
- <ff167728-a4a7-4f7d-a809-d0e482ab7dd6@kernel.org> <20250818173147.GA1496879-robh@kernel.org>
-In-Reply-To: <20250818173147.GA1496879-robh@kernel.org>
-From: Gregory Fuchedgi <gfuchedgi@gmail.com>
-Date: Tue, 19 Aug 2025 10:50:27 -0700
-X-Gm-Features: Ac12FXyAVHvUPA_M5rmxd1gHCRHGcX9U5-wyguctTXq3hq_2ENu30t339lVgjh8
-Message-ID: <CAAcybuthoac8h1T8dm96eOn9NdSq_aR0_OD7UKcxqrpK-BExrw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: update TI TPS23861 bindings
- with per-port schema
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Robert Marko <robert.marko@sartura.hr>, 
-	Luka Perkov <luka.perkov@sartura.hr>, Jean Delvare <jdelvare@suse.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250819-macsmc-subdevs-v1-2-57df6c3e5f19@gmail.com>
 
-On Sun, Aug 17, 2025 at 09:23:09AM +0200, Krzysztof Kozlowski wrote:
-> On 13/08/2025 05:00, Gregory Fuchedgi wrote:
-> > On Tue, Aug 12, 2025 at 12:20=E2=80=AFAM Krzysztof Kozlowski <krzk@kern=
-el.org> wrote:
-> >>> +  shutdown-gpios:
-> >> powerdown-gpios, see gpio-consumer-common.yaml
-> > It is called shutdown in the datasheet, but seems like neither powerdow=
-n nor
-> > shutdown truly reflects its purpose. This pin doesn't power down the co=
-ntroller
-> > itself. It shuts down the ports while keeping the controller available =
-for
-> > configuration over i2c. Should I call it ti,ports-shutdown-gpios or may=
-be
-> > ti,shutdown-gpios? Any other suggestions?
-> Feels more like enable-gpios.
-Wouldn't that be confusing, since there's no enable pin in the datasheet? A=
-lso
-it doesn't enable/disable the controller itself, but its ports.
-In my mind ti,ports-shutdown-gpios is the most meaningful name for it. That=
- said
-I appreciate the guidance, since I do not know what's the usual way to do t=
-his?
-Happy to go with enable-gpios if that's the convention.
+On Tue, Aug 19, 2025 at 09:47:54PM +1000, James Calligeros wrote:
+> Apple Silicon devices integrate a vast array of sensors, monitoring
+> current, power, temperature, and voltage across almost every part of
+> the system. The sensors themselves are all connected to the System
+> Management Controller (SMC). The SMC firmware exposes the data
+> reported by these sensors via its standard FourCC-based key-value
+> API. The SMC is also responsible for monitoring and controlling any
+> fans connected to the system, exposing them in the same way.
+> 
+> For reasons known only to Apple, each device exposes its sensors with
+> an almost totally unique set of keys. This is true even for devices
+> which share an SoC. An M1 Mac mini, for example, will report its core
+> temperatures on different keys to an M1 MacBook Pro. Worse still, the
+> SMC does not provide a way to enumerate the available keys at runtime,
+> nor do the keys follow any sort of reasonable or consistent naming
+> rules that could be used to deduce their purpose. We must therefore
+> know which keys are present on any given device, and which function
+> they serve, ahead of time.
 
-On Mon, Aug 18, 2025 at 10:31=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
-> > >>> +patternProperties:
-> > >>> +  "^port@[0-3]$":
-> > >> This goes to ports property.
-> > > Do you mean I should add another DT node that groups all ports? such =
-as:
-> > > compatible =3D "ti,tps23861"; ports { port@0 {...} port@1 {...} }
-> > Yes.
-> Except this is not an OF graph. Don't re-use it when it is not that.
-> Maybe 'poe-port@'? Is multiple ports/channels something common on PoE
-> chips? I'd guess so. If so, then come up with something common.
-poe-port@ sounds good to me. When you say come up with something common, do=
-es
-that imply adding it to a new file, like bindings/hwmon/poe-common.yaml? Or=
- just
-using poe-port in this dt without the parent ports node?
+I'm confused because you say this, but then the .dtsi files are common.
 
-> Whether you should have a container node like 'ports' is a separate
-> question. You get exactly 1 address space for any given node. So if you
-> ever might need to address multiple disjoint things, then you probably
-> want a container node.
-I do not want to address anything else in this case, so I'd keep it simple.
-But let me know if I'm missing any important details.
-Appreciate the guidance.
+> 
+> Add a schema so that we can describe the available sensors for a given
+> Apple Silicon device in the Devicetree.
+> 
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+>  .../bindings/hwmon/apple,smc-hwmon.yaml  | 148 +++++++++++++++++++++++++
+>  .../bindings/mfd/apple,smc.yaml          |  45 ++++++++
+>  2 files changed, 193 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3ebc0463be4e1ce54005418feaa87ec7254dab6e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
+> @@ -0,0 +1,148 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/apple,smc-hwmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SMC Hardware Monitoring
+> +
+> +description:
+> +  Apple's System Management Controller (SMC) exposes a vast array of
+> +  hardware monitoring sensors, including temperature probes, current and
+> +  voltage sense, power meters, and fan speeds. It also provides endpoints
+> +  to manually control the speed of each fan individually. Each Apple
+> +  Silicon device exposes a different set of endpoints via SMC keys. This
+> +  is true even when two machines share an SoC. The CPU core temperature
+> +  sensor keys on an M1 Mac mini are different to those on an M1 MacBook
+> +  Pro, for example.
+> +
+> +maintainers:
+> +  - James Calligeros <jcalligeros99@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: apple,smc-hwmon
+> +
+> +  current:
+
+I don't see any need to group these and I would remove the intermediate 
+node. We have an iterator to iterate over a matching node name prefix if 
+that was the reasoning.
+
+> +    description: SMC current sense endpoints
+> +    type: object
+> +    additionalProperties: false
+
+blank line
+
+> +    patternProperties:
+> +      "^current-[A-Za-z0-9]{4}":
+
+Missing a '$' anchor on the end.
+
+> +        type: object
+> +        additionalProperties: false
+
+blank line.
+
+> +        required:
+> +          - apple,key-id
+
+'required' goes after 'properties'. blank lines in between.
+
+> +        properties:
+> +          apple,key-id:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: The SMC FourCC key of the desired current sensor.
+> +              Should match the node's suffix, but doesn't have to.
+
+blank line
+
+> +          label:
+> +            $ref: /schemas/types.yaml#/definitions/string
+
+Already has a type, don't need to re-define it.
+
+> +            description: Human-readable name for the sensor
+
+Instead of duplicating these properties, You can do it once under a 
+'$defs' key and then reference it here.
+
+> +
+> +  fan:
+> +    description: SMC fan control endpoints. A fan is made up of five
+> +      SMC keys - the fan's current speed, its minimum speed, its maximum
+> +      speed, a writeable target speed, and a writeable mode. The SMC will
+> +      automatically manage system fans unless a 1 is written to the fan's
+> +      mode key.
+> +    type: object
+> +    additionalProperties: false
+
+blank line. And so on...
+
+> +    patternProperties:
+> +      "^fan-[A-Za-z0-9]{4}":
+> +        type: object
+> +        additionalProperties: false
+> +        required:
+> +          - apple,key-id
+> +        properties:
+> +          apple,key-id:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: The SMC FourCC key of the desired fan. This is the
+> +              main key, which reports the fan's current speed. Sould match
+
+typo
+
+> +              the node's suffix, but doesn't have to.
+
+Why can't we require that they match? (Other than we can't express that 
+in schema?)
+
+> +          apple,fan-minimum:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: The minimum speed the current fan can run at
+
+This is not the speed, but the identifier key to retrieve the min speed, 
+right? That's not clear. It's a bit odd that everything is a key id, but 
+one property has that in the name and the others don't. I don't have any 
+better suggestion though...
+
+> +          apple,fan-maximum:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: The maximum speed the current fan can run at
+> +          apple,fan-target:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: Writeable endpoint for setting desired fan speed
+> +          apple,fan-mode:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            pattern: "^[A-Za-z0-9]{4}"
+> +            description: Writeable endpoint to enable/disable manual fan
+> +              control
+> +          label:
+> +            $ref: /schemas/types.yaml#/definitions/string
+> +            description: Human-readable name for the sensor
+
+Surely more than apple,key-id is required? How would it be useful with 
+only that? You can know how many fans you have, but have no info or 
+control over them?
+
+Rob
