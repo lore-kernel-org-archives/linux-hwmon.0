@@ -1,107 +1,90 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10836335BDE
-	for <linux-hwmon@vger.kernel.org>; Tue, 19 Aug 2025 12:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B19B202C3A;
+	Tue, 19 Aug 2025 12:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755605586; cv=none; b=UdxObuajueZtP4QtQzBAonC/ZbNgOiBRMvt49KVUg+kBkP4GYGqxJsANeyaZbKquWGUI/icay4Up0pjQ5HoWuoWSC8KZhz32fZPjrAhsJ/kAi9BzUvNHh6J6iKb65b4FBtCxmcB9MteUfv+mJF5RMRxQhQWBd6V48+lq7r6mx2U=
+	t=1755606912; cv=none; b=haIL59rYdtE/Wz301M7nX6ULV1CRstQcceiv8DvVCvzJ8OkKkTOOsRPh5YMrlVQ5j5rX8Pu3Itz2H40zZCiP8y2Yd4IVyuf8jtWJ9Mf9a/R6R9BnDrWXPPUgEOuvi6ITVTPAXGWOwtN+a/IY4jrSo4tzG+/XoJf5Zfsy1XgkNiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755605586; c=relaxed/simple;
-	bh=pT7J7NlbzDj0BcguaBhEfkoD9p8GgWTOtMzLwvbVkTg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ioyRyhRJXCsN+3xYhWIH9LXcS3wTLcNSw7Wlnvu+izXi9nhJuWPMQtKoDXQsrC55OPuRa1cLBmbrIB1EkDDTCwXtDWvj113tz4SwTAReVH3GB7J1/k654PTNKhyjGtdH89DPhe2WJLco4tddUUhY4GG6M4Kfw0Bnod/14214OnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mHCNJYK9; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1755606912; c=relaxed/simple;
+	bh=/B14jPtqrr9C4Z5zVJbaqvRmr2grzAZ6lWE1PNr5tW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iQBQsQqQodIgveApZkkcIsF4qnhgVAbIAudFxgEhQPXa/Z06uAtWWv3SlL2ssk2bkmO3d5GvWoyiT1fYzSgidonyN4b+E4zKcWmAKrW4k0/OXgZ8QXxWJ/wVYcGY48y9dsuSeaUbcnpeTI1VN18yXiIDHxeSFzW6KPZWZbIYLk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPxFOX/I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mHCNJYK9"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-333f92a69d4so39678601fa.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 19 Aug 2025 05:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755605583; x=1756210383; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pT7J7NlbzDj0BcguaBhEfkoD9p8GgWTOtMzLwvbVkTg=;
-        b=mHCNJYK9mo3J7JRL7LLBKUB3sm+8n3Q3l8jiZz0sUCZjmNqgbzNaoPsvT95gz2usZG
-         JIfDa9o6DJFez5SH8sGgAmLxZrczNj5p3AVY8CoYQ7Nkgv7wns6D0Im2lRp4SyrJoEqr
-         /4MxH2lYVm+c7fBP+30ozGd8P+tsXRBG9sp3W99zB34rxxsZFdgVFQtgMmz6t4r9Gd55
-         UjhuykSbX356y2He2eLaZR5aaY5CiChZn3IC09yPMo4DRli8aZ1HFyQGOycCk1Rpshd2
-         GEZsSdsLtvYYEgKoserNhWOwVTjmiuQ7ej0l3Wak0CoXCZIH0irMRX3iHLppmvpcvvLh
-         f78A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755605583; x=1756210383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pT7J7NlbzDj0BcguaBhEfkoD9p8GgWTOtMzLwvbVkTg=;
-        b=fyyMsuzbHXqY5MC83SOjOW+zL1YqMm0H/Lo+QOBAxgld4nPIIZ5jGpVHAxbOz5iYs0
-         vtzNgka3X2+BIe1V5v96Bjg9wrIvmrmtNAwc9hpxvR2ManzwEEOwfazCEnaPMT69HTFm
-         uQx6WQGMIRJgpQwuBrFF4yJTHUsKjyM5kfSDb1ufxTBKarEXJRI9CNOqpQPcC57+BhfM
-         Nh6LsdPM9j8cTTOh8e51qjxMih5PXLkp26NZNT4riD+A0qnxvVYFL3Jo6QhyBt8izJ5R
-         UbcHIwThsJnvPkRwu99Sv55t8w3pl7xtvdEMe4KeMIVdsaB2o5NhmdJK6R3BLK7ElhD1
-         Zl5A==
-X-Gm-Message-State: AOJu0Yw/mMUAzOQjN6FiZp5LBM2rqDmZ467Iy5EeHQcUzjZG/M1keafA
-	A0t6XAognOmka6ajD8xYHlcJBuiOjVfyyj/VfAfj220KU3J212uIwAyelHgoziwgB7D4TYmXUzf
-	DNaTO10bI+lh2ipDCTYYpcox8HR3X/r2iEhmGDI4taw==
-X-Gm-Gg: ASbGnctbLo+xd4TMVev5e38iPeZ0ETJzmfxfyUma3/x1mf2e+V4lUj92tYVs9WNtLx/
-	sVJvIVAgVa7zv896nB7s7k5l8mSlTYPQgxd+sotbdNdBfF/0Y3cLY4G/BrkDjpUocL6C7kRRdxe
-	RPhGFqtNnGAaAA01xYPwBeYtprUwYyjQvMMHKD9g6UbDGlPslOFNYaCQrqajz1dyZfAwxOQErXJ
-	BvqngY=
-X-Google-Smtp-Source: AGHT+IH+aPrIJY+DH1gxYk549l1vaPXfQI5WHK+rOHEK+EYvi2ju0qkAP63ibB4HjpirzJmCyfMVeLvlEsTbS+CROto=
-X-Received: by 2002:a05:651c:3041:b0:32b:a961:803a with SMTP id
- 38308e7fff4ca-335304ce141mr6002291fa.3.1755605583129; Tue, 19 Aug 2025
- 05:13:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPxFOX/I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EA0C4CEF1;
+	Tue, 19 Aug 2025 12:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755606912;
+	bh=/B14jPtqrr9C4Z5zVJbaqvRmr2grzAZ6lWE1PNr5tW4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RPxFOX/IPeSTRYa+D1kZKCAX/YP/a3nREN8GQ9IaGWTLyIpbZ/0Lhyz0eODa8yyO0
+	 wV0tW89wkj5Q/tiwnWG4QVi4oQvn4knYjlS/q8GbVniQNPPp3IkpETlqZIwtI0EEL1
+	 ItmA5O62hhF/33/JIv1Aifyv2BKwXW6C00R8Lify4Wg245jWJBR4OBbK+r1uHx84bZ
+	 bm4H7sbYTuuTaGcI7mF86/4XQuxoYVFzD8mWFa0TQ2mW36JOZuh67BICnlIYrYaTwV
+	 jZMvbYOeU9ghElSeviDg9iDv5pZkMPaoZ5BVISJ4NhMK7dGmhldxIAU8xftjj5z7DV
+	 f6Xli9h23PT8g==
+Date: Tue, 19 Aug 2025 13:35:05 +0100
+From: Lee Jones <lee@kernel.org>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 5/8] input: macsmc-hid: New driver to handle the Apple
+ Mac SMC buttons/lid
+Message-ID: <20250819123505.GC7508@google.com>
+References: <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
+ <20250819-macsmc-subdevs-v1-5-57df6c3e5f19@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250814-ltc4283-support-v1-0-88b2cef773f2@analog.com> <20250814-ltc4283-support-v1-6-88b2cef773f2@analog.com>
-In-Reply-To: <20250814-ltc4283-support-v1-6-88b2cef773f2@analog.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 19 Aug 2025 14:12:51 +0200
-X-Gm-Features: Ac12FXx9DbzpmXtIaYcl4GeGqmQxe243v3rohATjse3LJ-Oaq4DA-z_79QbXSd0
-Message-ID: <CACRpkdax9THwKRZmaAHVcKbnBdi1LxjgvibAFOUVnVQJBhBiwA@mail.gmail.com>
-Subject: Re: [PATCH 6/6] gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
-To: nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250819-macsmc-subdevs-v1-5-57df6c3e5f19@gmail.com>
 
-Hi Nuno,
+On Tue, 19 Aug 2025, James Calligeros wrote:
 
-thanks for your patch!
+> From: Hector Martin <marcan@marcan.st>
+> 
+> This driver implements power button and lid switch support for Apple Mac
+> devices using SMC controllers driven by the macsmc driver.
+> 
+> In addition to basic input support, this also responds to the final
+> shutdown warning (when the power button is held down long enough) by
+> doing an emergency kernel poweroff. This allows the NVMe controller to
+> be cleanly shut down, which prevents data loss for in-cache data.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Co-developed-by: Sven Peter <sven@kernel.org>
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+>  MAINTAINERS                     |   1 +
+>  drivers/input/misc/Kconfig      |  11 ++
+>  drivers/input/misc/Makefile     |   1 +
+>  drivers/input/misc/macsmc-hid.c | 210 +++++++++++++++++++++++++
 
-On Thu, Aug 14, 2025 at 12:52=E2=80=AFPM Nuno S=C3=A1 via B4 Relay
-<devnull+nuno.sa.analog.com@kernel.org> wrote:
+>  drivers/mfd/macsmc.c            |   1 +
 
-> From: Nuno S=C3=A1 <nuno.sa@analog.com>
->
-> The LTC4283 device has up to 8 pins that can be configured as GPIOs.
->
-> Note that PGIO pins are not set as GPIOs by default so if they are
-> configured to be used as GPIOs we need to make sure to initialize them
-> to a sane default. They are set as inputs by default.
->
-> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-(...)
+Separate patch please.
 
-Can you check if you can use gpio-regmap.c helper?
+>  5 files changed, 224 insertions(+)
 
-select GPIO_REGMAP
-
-git grep devm_gpio_regmap_register
-for example drivers using this.
-
-I think it can further cut down the code to very little.
-
-Yours,
-Linus Walleij
+-- 
+Lee Jones [李琼斯]
