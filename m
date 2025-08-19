@@ -1,178 +1,133 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EDA2BE7BB;
-	Tue, 19 Aug 2025 16:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91591D6DB5;
+	Tue, 19 Aug 2025 17:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755619862; cv=none; b=qvVgG3uUSTaWVoqF4CxFYkJ3/FKl6/+tkm7CxQRGjBW6Xrs43yli0cvqgelPu54p5b/wQIydT/fzIra2gkGMjxBjPeySsksZAFWPieExWyGDcIvqbDcuedhbk3hdvDM4412TepoAPIpKIRoh7CV5TarDxXbHRDJINO0zi8z39Rg=
+	t=1755625868; cv=none; b=M3Qs1wSY44Drtu2IXaEUw+9mviN2KoLW8qMv4f4uziqs7LdtK2N5+WRVm7xWibyir63UggDdG7sVYar+L1N5vfCL2/rM4r4dhfdp62kluODyQDjbNUq/nu10NJ/QFTQLyTPlZDtxjJfGylDBcAHGysbBnQ0ylaxOR4RBtlM1gp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755619862; c=relaxed/simple;
-	bh=CqGfthUvazDGvJM0QQ3QsOvZ2cEZy3rEvEPEj5jjdF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p4S6Rs2tWH4HimWzzeJJlVwfaZwSJqVIwyUXpEkDj1lzp4AgzjL+pdzrxi2v8w3R9UvAqHvtlqIV2d850HNajT2kCY0jsK4rl/B5syZLcVoWBEi9nD8fN95wvTZUsEVo/qaD1In5pKznc2WifBPccWVqb99nSO59SDRuJf4hPAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBzY06zM; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1755625868; c=relaxed/simple;
+	bh=f0kmNC7ZkTwG3EKPjuZE4Izi+zvTTxFihBN9XnUr9Rg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eOSqH9o3y33qvtx5oHFUscLzEjmIu9u20XlZPcryM0j1b2SaIwJcGycMPuYE5LRqJWhwqJlCOm4i7IHevMzG/7PgLa1GSoHwUgpz1sb0XaBb+prXRTlrckshHK1TOWa2aZMnVyX+PIToD5b1/qbLq/7MQePSdPZrp/NZT+MamBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTxb3tTD; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBzY06zM"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-76e4fc419a9so3136225b3a.0;
-        Tue, 19 Aug 2025 09:11:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTxb3tTD"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-619487c8865so227958a12.1;
+        Tue, 19 Aug 2025 10:51:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755619860; x=1756224660; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=wy+8e3/s8uRVjBJ5NxneJJqen7m853rG6XspvVnExYQ=;
-        b=hBzY06zMA+Z0RjIE+68JnJHXAx27kQcZAB6d0e0y7/ivyIBiP1MZdzZcG8K/79f8F6
-         cswF5xkPZHwFy3j9WkOEDIPNWVNdnxfkNXwEy3xRWccKIWJ1cqGGIEw3lsNpBqxtZwQ0
-         q9s+TOd6LoQqWOkPX52PNgzLa9zgMpQZ0OA0vkiYltU5YDTrzViBOyUnWfMhVWaGkfqJ
-         WelQg5iTrtiDmydVGMjyF6NjosEh8v50/E4MmwQoEbH7TMr6ofurx7aAuKuKdm972jwV
-         XAwoa/AaO9iOajRuWKUAZs9VnNrL6t8camIa/BBzk+xH/jeBqd23xWUgcBjSydhP7gmN
-         WBnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755619860; x=1756224660;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1755625865; x=1756230665; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wy+8e3/s8uRVjBJ5NxneJJqen7m853rG6XspvVnExYQ=;
-        b=UZPhJzaNJD4D/oGwV8udjFbnkRq7Hc4jXI1Pu95K7ilUhNXD9a3buy2ujEnsk8t5QX
-         905IKqU7n9xPdDNm97WDqI0ocfFxxmQtlQLwbyzIT0HboCmIMZw0n72zugnjGeJJNbPr
-         RWfN0myns929ouRofuwt9Zi0gKO3/xxuScWY+xPghLCzqP8KUa5WyfqJ9SAboAnZkcfw
-         93dHNzKdGuLBBmTZTGFsukirgZZGOaxv3FjT0IID4oPG7bCQmaoEFnfuL+vmCuxYl3AH
-         NpzecagZOI/V3w/B+gFI9qHsQOexwOBPESxD+5QLA9jw0ps4Lqaq7LH6B8LHQcYLX4gT
-         L9bg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYC+vrYhRctFBIKeqN5negKn28Z/O2d/Yoo+lcNGRyTEIKazREudm/gVZGk4x2P+PbakM190unFwliLw==@vger.kernel.org, AJvYcCVffzkn6BE47JiUeslctRg99WP+BXTICtT5m7qW2vNiCg1fF6JIVq4HKSZA5XXIuXoNX4Pr0zE+9L1V@vger.kernel.org, AJvYcCX1Rn11gcbNSSYXwVGtWf0nfQ1PYGkKPy55NtWzu9v53vwRxMTFfjRAbkF21T5LcNl9n1XTXIkTPmnI@vger.kernel.org, AJvYcCXPl3Be1JT+pN5jezwswami4BtXhYwGI808NWMavHxYBq8c93eKg9gbrd12aGFW5j7QKc8Q29OOadYUVLjb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxVPcz7naAS3Qhofirp0LxY9g01NNxg+SOhnlkJjs3qJWfHIqO
-	cxgwdoIcriIiGTQvX/p1P9x9jzQFU5261f8YZ4Ko7IW5QbmkBJny4zmI
-X-Gm-Gg: ASbGncuwwR2dEX2MGvDEpnwATXWgI5ieJ6Vc818Q6QCYSiNlQxNCLWifTQtCFsZKkPK
-	WMLzwMtIVqKBHhjIeTs2JHewGaNq/leAapvZWJTN5HUnJV9OCNqn+koALzy93mk8ZIxe27d3omy
-	iP3Jh1hqMQyfSFYhN540i304ozkm0uOawWg1XXJYVzlr2CqmZYrtft6+97F2U4iAK3L5S43838G
-	83BFG0GlGg6NDZcX2srHUvh5jzDIzxS6Tl2+OdEJZFSarfr6Az97pSfV/YNkeAJFIgkd9kU1eSS
-	byKArY2WzwojkzHLUmN6WEHhvqvRnuMJQ3XVKd6zMyp9BCpyWVrtihLKNQ+guLC+PA1z1ePcfp8
-	AWm/YWrphsmc45lsunsOq3X21CUhyaHVvGUIhm0EIW3UY2cTtTggYv1Q1h9OG7kS9x11A3YA=
-X-Google-Smtp-Source: AGHT+IF4z6T99xulfCUoGk3BATm3lx9gvGpPoi9uymmz3g3yXwfvdvOPtjqVJktf4fwD6912dJ+E/w==
-X-Received: by 2002:a17:902:f606:b0:240:3915:99ba with SMTP id d9443c01a7336-245e02d501emr42394335ad.5.1755619860014;
-        Tue, 19 Aug 2025 09:11:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed51aa14sm998065ad.145.2025.08.19.09.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 09:10:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5f456224-d26f-4cca-a2f2-31418da287c2@roeck-us.net>
-Date: Tue, 19 Aug 2025 09:10:57 -0700
+        bh=PmlcDpKD9YCg6XDWMZQyI3wgJy7zu34Qq/sxftvQ6ww=;
+        b=JTxb3tTDwRsuP0SbOfx06x/Io9okl2s886bhxEQzEgpVY2mRrS60+L9PSLTGxs0uJ+
+         o270Ftq5oIcduejrGDSrxH+fP98wE+XHXIoqQCxPooArtKRUEAZrqu0hdNBiAQPCM33N
+         9XFYGVO8bXoI34A1kniRen6spUxaPpM95tnfN6ASrQSfonQhhzow3CYD6eN/0zDqK3ZI
+         QoTI1n+fLsa3YqJTiXlQ9kSD4nMdEP3ZO4yBcbNqeQKPxMib26GGP1xLcya4mEUKdhcM
+         1vSpRRRF9ndRj0yYsLQwdb+hA1bb9hy1Ed2b6fl36NL1Mao9mZ0ryLL/TyPwLrNSfm+K
+         03sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755625865; x=1756230665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PmlcDpKD9YCg6XDWMZQyI3wgJy7zu34Qq/sxftvQ6ww=;
+        b=tLy54rOTnNl83eIbBNca7rnIFHmNmgmG8Jx5zeGu+pbzKjvqSsqFHPhcklAPwvLs9g
+         Gcgox/KeABlfLwHbgMgpd0Ryi7x4P4/wLJkNEhrxAETG75G7uMLKjEfsVSbqOISKlJYk
+         YWfFJGORfI4rFoA2as6M4G7qFijXLg/j9DmjgGFa1AyAalUlz+Xch0l7MvEzRlpnLQ7y
+         EbDDTXxGNVPPgIjy58hCBkkvy64Pq2V9Cj6DmUaFOGZbO38NkziE1nCf4Z0lm6+u+s6k
+         MudAFgwtSO91q16c+WT5pE46mB6O3j2f+E9FIAhwvywXsGfzgnNHH9ufx1hLKQzzL61f
+         YJ4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUC9lnCVgJCM9pZTKfSQzWLCc5hacaGG/kllD4cBSjDO3NMDBzUZQCryhGPa0pEqnJRXkq29H14EU53@vger.kernel.org, AJvYcCVl5orOJmetLCzOGJR9xid1P8p2L2AtJmki5flkcQvHqWZK2w1sSvSQDz5YQ0bEf8C7KZAnr/xUydJC@vger.kernel.org, AJvYcCWbl7homfAxK9d5bixeMAf2pPOdy/n9Nh/iXXr9SKn9hE4BRmeuhb5K/XuZ6cSz4DVzhkyo0hzwME82QYQ=@vger.kernel.org, AJvYcCXvFJ4jpSlxkeJMmP7gieU0/GAt32/fS9IkW0CoLr6t1hvT+NmKXF/v8pz+0mOpjeZPuhg6XLREAad/D4e4@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPnggERSMc1AUK4wYGoKcBd+wDIqKgkQSdaJmdZytKDIE71YwR
+	iQdwa3yQT1BUF1vcYb72DvpZaG4CXh3eFh7t7ND3B5h9LZIp1dpMIpi0UFz9H/ypY+lhGktuAUQ
+	AXEeNlgvOkC+UIFFNjHOmxf1V3Rl0sQ==
+X-Gm-Gg: ASbGnctJs0QO5SNpt9zZBHAX/uUVfL62u+N2ftv5nWUF0k/naRusSEbxUYOaZfM1FVV
+	POIv3i4wAMzyR0nqhsTFQA7q92zv2EYkGd6elxRYLt/EdECPz9lTYmNc5NPA/tMxchVbsE+wskI
+	e+ghIMibvU2/B9C49RvFa8VCv8a3nC1yz1oJLNtqZkvL6j9Y97uEK0MZu6/yu0EfP1/UZcV1tQQ
+	5nbrrdp
+X-Google-Smtp-Source: AGHT+IGIn7OrCgxggr5EugvTj/Sse9SmV8lSb5a2wGootksUGazgLec5LF39WE585X64DXNcz/QNI34UrA6hniB8i/U=
+X-Received: by 2002:a05:6402:21c6:b0:615:8b65:bfb6 with SMTP id
+ 4fb4d7f45d1cf-61a9762bdd9mr200792a12.13.1755625864642; Tue, 19 Aug 2025
+ 10:51:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] mfd: Add support for the LTC4283 Hot Swap Controller
-To: Linus Walleij <linus.walleij@linaro.org>, nuno.sa@analog.com,
- Jonathan Cameron <jic23@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Bartosz Golaszewski <brgl@bgdev.pl>
-References: <20250814-ltc4283-support-v1-0-88b2cef773f2@analog.com>
- <CACRpkdYWNgU8PxVaxDe3F6Cbb15J5cgEV1-kgDooOHdBoXXs3g@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CACRpkdYWNgU8PxVaxDe3F6Cbb15J5cgEV1-kgDooOHdBoXXs3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250811-hwmon-tps23861-add-class-restrictions-v2-0-ebd122ec5e3b@gmail.com>
+ <20250811-hwmon-tps23861-add-class-restrictions-v2-2-ebd122ec5e3b@gmail.com>
+ <eab6d2d2-9337-40fe-81c7-95dc1956ce6f@kernel.org> <CAAcybusHjAR67N0rumb6M_uG1ct3aa=zv2XkpUjhSSxv0NdzFA@mail.gmail.com>
+ <ff167728-a4a7-4f7d-a809-d0e482ab7dd6@kernel.org> <20250818173147.GA1496879-robh@kernel.org>
+In-Reply-To: <20250818173147.GA1496879-robh@kernel.org>
+From: Gregory Fuchedgi <gfuchedgi@gmail.com>
+Date: Tue, 19 Aug 2025 10:50:27 -0700
+X-Gm-Features: Ac12FXyAVHvUPA_M5rmxd1gHCRHGcX9U5-wyguctTXq3hq_2ENu30t339lVgjh8
+Message-ID: <CAAcybuthoac8h1T8dm96eOn9NdSq_aR0_OD7UKcxqrpK-BExrw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: update TI TPS23861 bindings
+ with per-port schema
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Robert Marko <robert.marko@sartura.hr>, 
+	Luka Perkov <luka.perkov@sartura.hr>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/19/25 05:36, Linus Walleij wrote:
-> On Thu, Aug 14, 2025 at 12:52 PM Nuno Sá via B4 Relay
-> <devnull+nuno.sa.analog.com@kernel.org> wrote:
-> 
->> The LTC4283 device features programmable current limit with foldback and
->> independently adjustable inrush current to optimize the MOSFET safe
->> operating area (SOA). The SOA timer limits MOSFET temperature rise for
->> reliable protection against overstresses.
->>
->> An I2C interface and onboard ADC allow monitoring of board current, voltage,
->> power, energy, and fault status.
->>
->> It also features 8 pins that can be configured as GPIO devices. But since
->> the main usage for this device is monitoring, the GPIO part is optional
->> while the HWMON is being made as required.
-> 
-> This main device just screams Industrial I/O, IIO.
-> 
+On Sun, Aug 17, 2025 at 09:23:09AM +0200, Krzysztof Kozlowski wrote:
+> On 13/08/2025 05:00, Gregory Fuchedgi wrote:
+> > On Tue, Aug 12, 2025 at 12:20=E2=80=AFAM Krzysztof Kozlowski <krzk@kern=
+el.org> wrote:
+> >>> +  shutdown-gpios:
+> >> powerdown-gpios, see gpio-consumer-common.yaml
+> > It is called shutdown in the datasheet, but seems like neither powerdow=
+n nor
+> > shutdown truly reflects its purpose. This pin doesn't power down the co=
+ntroller
+> > itself. It shuts down the ports while keeping the controller available =
+for
+> > configuration over i2c. Should I call it ti,ports-shutdown-gpios or may=
+be
+> > ti,shutdown-gpios? Any other suggestions?
+> Feels more like enable-gpios.
+Wouldn't that be confusing, since there's no enable pin in the datasheet? A=
+lso
+it doesn't enable/disable the controller itself, but its ports.
+In my mind ti,ports-shutdown-gpios is the most meaningful name for it. That=
+ said
+I appreciate the guidance, since I do not know what's the usual way to do t=
+his?
+Happy to go with enable-gpios if that's the convention.
 
-Really ? I would have assumed that the sensors on a chip like this are supposed
-to be used for hardware monitoring, and that IIO is supposed to be used in cases
-where the data itself is the relevant information. What exactly makes a hot swap
-controller screaming IIO ? Am I missing something here ?
+On Mon, Aug 18, 2025 at 10:31=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
+e:
+> > >>> +patternProperties:
+> > >>> +  "^port@[0-3]$":
+> > >> This goes to ports property.
+> > > Do you mean I should add another DT node that groups all ports? such =
+as:
+> > > compatible =3D "ti,tps23861"; ports { port@0 {...} port@1 {...} }
+> > Yes.
+> Except this is not an OF graph. Don't re-use it when it is not that.
+> Maybe 'poe-port@'? Is multiple ports/channels something common on PoE
+> chips? I'd guess so. If so, then come up with something common.
+poe-port@ sounds good to me. When you say come up with something common, do=
+es
+that imply adding it to a new file, like bindings/hwmon/poe-common.yaml? Or=
+ just
+using poe-port in this dt without the parent ports node?
 
-I am not going to argue about this if IIO wants to extend into hardware monitoring,
-I just wonder about the rationale behind it.
-
-Thanks,
-Guenter
-
-> (I think it's fine to use an MFD core and split off GPIO to a
-> separate driver, and I suggest maybe you merge MFD and
-> GPIO ahead of the main driver.)
-> 
-> Jonathan (Cameron) will have the last word on it but IMO this firmly
-> belongs below drivers/iio.
-> 
-> Perhaps not in one of the existing subdirs there but then it is time to
-> be brave and create a new one.
-> 
-> It will take some time and consideration, but I think it would be better
-> for everyone.
-> 
-> Yours,
-> Linus Walleij
-> 
-
+> Whether you should have a container node like 'ports' is a separate
+> question. You get exactly 1 address space for any given node. So if you
+> ever might need to address multiple disjoint things, then you probably
+> want a container node.
+I do not want to address anything else in this case, so I'd keep it simple.
+But let me know if I'm missing any important details.
+Appreciate the guidance.
