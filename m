@@ -1,133 +1,261 @@
-Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
+Received: from relay11.grserver.gr (relay11.grserver.gr [78.46.171.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9D931CA7D;
-	Wed, 20 Aug 2025 13:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F3023909F;
+	Wed, 20 Aug 2025 16:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.171.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755696071; cv=none; b=mgHUx593iT8QXksCfotDvF0qlYPrK/k3u1NBtv+DLAp063VrmtvFdWTTL7izvvZKXK+Kg1JOjW1YHGWne2x2kDsU/rioqgOt1KiQMipJUX2ZUSJwyczY+PDiyD7/1Rl+CmLQh3E5mJ1tpMkgi8Ue3yNUy3XraLtwuf1mhfK8lFk=
+	t=1755706004; cv=none; b=T6q12Sa117jIQ9NVknXQv/X42w3MQx3OSjA6sk+/9JuR/ZdBj6eXtYtv5/fyqlbFiNcQJPMCvJPCHO2yDnPbC9ruA69LxZdNhNo2ECFqTGiBZ0tBKNhcvhB1xsgBXDPCfm3v45YGx4MT+7JH+423TThIIZg6SHNNmuCtJqL+iaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755696071; c=relaxed/simple;
-	bh=XsGOUexS48UBQOOs/YAItiCIMtGhVhIMcpJQIr9hATU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tA06qKSHHOHB35AJM0YCEZ7BIivAlz8gfJyGRiHXXV+1cfdoV9i0NGEH8ucNAlRRsfAcZTcFVB1aNf5pQzSn2M3NjQ3RcTlyv6SxZkYXeLpfKnDedlZ0YFP6hZxmqfbZcapMuw/RRVku8KgA5G9hwwlSph+8hiuFkDnZ7xsRXrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com; spf=pass smtp.mailfrom=debanilchowdhury.com; dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b=ciWRj656; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RqcYhAWr; arc=none smtp.client-ip=202.12.124.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debanilchowdhury.com
+	s=arc-20240116; t=1755706004; c=relaxed/simple;
+	bh=zb2g+r3cJ7UMel+RtIvaiOlpRn9I9h6P+DbCMImmBLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=It+DKqj91KiGyZiuJnWZc0CUGYZf+dudwP5wT6a/KMcsPzrJeJ665DbRdvSjcmlbMc48Awm8L6s/WFXRQXVTc/M+ZjNUd8bnA8pMNd9epvolJ6QC7k0yTrDy/ZvmbPRqnQq7bzLEj/iy+I/WCBksz1Kr4EpDiePSnOGrk9fJFyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=K2SnrFQK; arc=none smtp.client-ip=78.46.171.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b="ciWRj656";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RqcYhAWr"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailflow.stl.internal (Postfix) with ESMTP id 6F91E1300BA1;
-	Wed, 20 Aug 2025 09:21:07 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Wed, 20 Aug 2025 09:21:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	debanilchowdhury.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
-	 t=1755696067; x=1755699667; bh=nEImHcQLvkNTCdFF2RtXX95NV2iRh1V3
-	J2yvcVtfk74=; b=ciWRj656q5wiX4lnyxquvE56D6HFFEZxvfkLf4mPHt+ijgJN
-	Hx8RaXReL73dow2oljr1DsQby7Og6Yu5Ihex8EghsBYpr65qfI76uyZauHgEbq0K
-	1TNUpNHYiYZrxKhdBWrCSm37Ck0kDBgw/qKBT+vwymH7qLz/pYSj5XdCHCbVVY6L
-	0658WvOzIzl31plVzIY1Osi72cKjGfzUeI4w2XynHS/Sj7WnCidV2TIw+629btXK
-	mY7EbRLslbuk/KcsqLx4o/JlV6fXMH98pqS8ysOktZGDtp2vvZTXhqqj5tV8cyhI
-	xgb8JTLPRMmJAGQaTBkSWFDZ44UXm+2Uz0LtlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1755696067; x=1755699667; bh=nEImHcQLvkNTCdFF2RtXX95NV2iR
-	h1V3J2yvcVtfk74=; b=RqcYhAWrQaCdXoeWDP6EJnvareF2jWFHDlGgseqOkBUR
-	HjFoVIoDus2utHLOEtUf+Y7d9Km2K1nsbImjPHL77TLPMRowyOUrojAhyLdslOs2
-	E1QqpUe958HOqVP5441NY9OKQyn3Behma4r5xqrrIC113tZi9Efjypf9DaMkR/sU
-	I7w5s9/Q4aanxllTCju7AzZ08Lq+kaSyLuhBH2WbZlILut/TyFqyKqedYvHkvH41
-	/uVXA5cTeXw9n78kHpgCGAwcC6kvcVLZ2fwfoCsVBGdvMaAxOcDt3lKE1+nwFgUn
-	sb6aNnlrql6lpcimwteeMfc/iRhsw7BAKLWtu0WXeA==
-X-ME-Sender: <xms:wsulaAH0vk_vJo1M2qtDeSPc3igywCTFuzdQ9eo0_fH6CUseFmiPjw>
-    <xme:wsulaB8OwUkVyz8TF0wLXf2vVyFVP0lH79cT83YZ7BB2IbMEjc66NwhNkgFsxxEq3
-    DiGWBwf25OQU8bmiv0>
-X-ME-Received: <xmr:wsulaBmwW7fBcKPzWe3wNvg1aMsJnOVde3f0E58G7UcsVbMUjIH9clMz88awdLXzI6KCc41X>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduheekgeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtre
-    dtjeenucfhrhhomhepkhgvrhhnvghluggvvhesuggvsggrnhhilhgthhhofiguhhhurhih
-    rdgtohhmnecuggftrfgrthhtvghrnhepgefhleetiedthfelhfehtdevgfejtdeigfegte
-    fgfefhieffheekudevgeelkeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomhepkhgvrhhnvghluggvvhesuggvsggrnhhilhgthhhofiguhhhurh
-    ihrdgtohhmpdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtohepshhkhhgrnheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtth
-    hopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrhho
-    vggtkhdquhhsrdhnvghtpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhrtg
-    hpthhtohepnhhinhgrugeslhhinhhugidrihgsmhdrtghomhdprhgtphhtthhopehlihhn
-    uhigqdhhfihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhkvghrnhgvlhdqmhgvnhhtvggvsheslhhishhtshdrlhhinhhugidruggvvhdprhgtph
-    htthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:wsulaMCLF0eZsrnfi0qwk3-W9DxUZ_RiW0cB2oiHJ25xZ7Qvmp3CXg>
-    <xmx:wsulaKVrxn4by8ihI64CdoWc1OaGHn6ki7kQXR_u14tVZgZcwfk12Q>
-    <xmx:wsulaK9Mn1kPljByIwh0tQ7GFKaZ6cc7QjtU35EwPCUD6xjS6Jv_PA>
-    <xmx:wsulaMQdu-0itt_oaNGTUeUyRsl87GQp7GtlDLsM1oPasL02aOtBbw>
-    <xmx:w8ulaEZEjBugC0-U0GT8K1mOIzY4LG9R1SANBC6j34t-nG15ZqfSZRmc>
-Feedback-ID: i77364836:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 20 Aug 2025 09:21:03 -0400 (EDT)
-From: kerneldev@debanilchowdhury.com
-To: skhan@linuxfoundation.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: ninad@linux.ibm.com,
+	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="K2SnrFQK"
+Received: from relay11 (localhost.localdomain [127.0.0.1])
+	by relay11.grserver.gr (Proxmox) with ESMTP id 04241C5C82;
+	Wed, 20 Aug 2025 19:06:34 +0300 (EEST)
+Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by relay11.grserver.gr (Proxmox) with ESMTPS id 7D7E9C5C7D;
+	Wed, 20 Aug 2025 19:06:33 +0300 (EEST)
+Received: from antheas-z13 (unknown [IPv6:2a05:f6c2:511b:0:7200:c86a:8976:4786])
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id A1FD41FD4AC;
+	Wed, 20 Aug 2025 19:06:32 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1755705993;
+	bh=5lPVm50we/HBZRgiKKoeroZQYLufvKOV3QNKU3+SIrs=; h=From:To:Subject;
+	b=K2SnrFQKeQg/ITN0jYvs9AgSJ7Aog2B3TvIujGtIu7kMFf4a+vuReUAfMm0TDqJmd
+	 tbkzIH3sEUEF7n4YmMxiZLSjghc1MReEphsMrpNHQHys/3GDYHZJX8E5b45ALHIYUZ
+	 zzM6sFzdBKFzZnXFepM+8woH0yZviuqYPaLCLbSTqE/JXUXJxI4xds8mUnFDZUlq0t
+	 /U5RPrSZDEdxDWVY1DHiQD047Vt9w/tN+ky6u9Uc4KLb8X9VwhhStV5ywXntyEqleh
+	 D78uWdtQ+QmQP1eZLxDIEeB92DMzY/pbZJDec6wObZXeB2wlS1tIxklixuyvfhl+oi
+	 DIrlYbtE2a5rQ==
+Authentication-Results: linux3247.grserver.gr;
+	spf=pass (sender IP is 2a05:f6c2:511b:0:7200:c86a:8976:4786) smtp.mailfrom=lkml@antheas.dev smtp.helo=antheas-z13
+Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
+From: Antheas Kapenekakis <lkml@antheas.dev>
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Debanil Chowdhury <kerneldev@debanilchowdhury.com>
-Subject: [PATCH] Fix typos in hwmon
-Date: Wed, 20 Aug 2025 18:48:08 +0530
-Message-ID: <20250820132033.11377-1-kerneldev@debanilchowdhury.com>
-X-Mailer: git-send-email 2.49.1
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Derek John Clark <derekjohn.clark@gmail.com>,
+	=?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= <samsagax@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: [PATCH v1 3/5] platform/x86: ayaneo-ec: Add charge control support
+Date: Wed, 20 Aug 2025 18:06:26 +0200
+Message-ID: <20250820160628.99678-4-lkml@antheas.dev>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250820160628.99678-1-lkml@antheas.dev>
+References: <20250820160628.99678-1-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: 
+ <175570599317.2162733.2479809423753195306@linux3247.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
+X-Virus-Status: Clean
 
-From: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+Ayaneo devices support charge inhibition via the EC. This inhibition
+only works while the device is powered on, and resets between restarts.
+However, it is maintained across suspend/resume cycles.
 
-Fixed some typos ("Critial" → "Critical") in hwmon documentation.
+The EC does not support charge threshold control. Instead, userspace
+software on Windows manually toggles charge inhibition depending on
+battery level.
 
-Reported-by: codespell
-Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- Documentation/hwmon/crps.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/platform/x86/Kconfig     |   1 +
+ drivers/platform/x86/ayaneo-ec.c | 111 +++++++++++++++++++++++++++++++
+ 2 files changed, 112 insertions(+)
 
-diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
-index 87380b496..d42ea59d2 100644
---- a/Documentation/hwmon/crps.rst
-+++ b/Documentation/hwmon/crps.rst
-@@ -43,7 +43,7 @@ curr1_label		"iin"
- curr1_input		Measured input current
- curr1_max		Maximum input current
- curr1_max_alarm		Input maximum current high alarm
--curr1_crit		Critial high input current
-+curr1_crit		Critical high input current
- curr1_crit_alarm	Input critical current high alarm
- curr1_rated_max		Maximum rated input current
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index 0a7ca2c78456..c871a722e5ef 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -308,6 +308,7 @@ config AYANEO_EC
+ 	tristate "Ayaneo EC platform control"
+ 	depends on X86
+ 	depends on ACPI_EC
++	depends on ACPI_BATTERY
+ 	depends on HWMON
+ 	help
+ 	  Enables support for the platform EC of Ayaneo devices. This
+diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
+index 8b1902706b81..a4bdc6ae7af7 100644
+--- a/drivers/platform/x86/ayaneo-ec.c
++++ b/drivers/platform/x86/ayaneo-ec.c
+@@ -14,6 +14,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <acpi/battery.h>
  
-@@ -51,7 +51,7 @@ curr2_label		"iout1"
- curr2_input		Measured output current
- curr2_max		Maximum output current
- curr2_max_alarm		Output maximum current high alarm
--curr2_crit		Critial high output current
-+curr2_crit		Critical high output current
- curr2_crit_alarm	Output critical current high alarm
- curr2_rated_max		Maximum rated output current
+ #define AYANEO_PWM_ENABLE_REG	 0x4A
+ #define AYANEO_PWM_REG		 0x4B
+@@ -22,17 +23,27 @@
+ 
+ #define AYANEO_FAN_REG		 0x76
+ 
++#define EC_CHARGE_CONTROL_BEHAVIOURS                         \
++	(BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO) |           \
++	 BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE))
++#define AYANEO_CHARGE_REG		0x1e
++#define AYANEO_CHARGE_VAL_AUTO		0xaa
++#define AYANEO_CHARGE_VAL_INHIBIT	0x55
++
+ struct ayaneo_ec_quirk {
+ 	bool has_fan_control;
++	bool has_charge_control;
+ };
+ 
+ struct ayaneo_ec_platform_data {
+ 	struct platform_device *pdev;
+ 	struct ayaneo_ec_quirk *quirks;
++	struct acpi_battery_hook battery_hook;
+ };
+ 
+ static const struct ayaneo_ec_quirk ayaneo3 = {
+ 	.has_fan_control = true,
++	.has_charge_control = true,
+ };
+ 
+ static const struct dmi_system_id dmi_table[] = {
+@@ -159,11 +170,102 @@ static const struct hwmon_chip_info ayaneo_ec_chip_info = {
+ 	.info = ayaneo_ec_sensors,
+ };
+ 
++static int ayaneo_psy_ext_get_prop(struct power_supply *psy,
++				const struct power_supply_ext *ext,
++				void *data,
++				enum power_supply_property psp,
++				union power_supply_propval *val)
++{
++	int ret;
++	u8 tmp;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		ret = ec_read(AYANEO_CHARGE_REG, &tmp);
++		if (ret)
++			return ret;
++
++		if (tmp == AYANEO_CHARGE_VAL_INHIBIT)
++			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
++		else
++			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ayaneo_psy_ext_set_prop(struct power_supply *psy,
++				const struct power_supply_ext *ext,
++				void *data,
++				enum power_supply_property psp,
++				const union power_supply_propval *val)
++{
++	u8 raw_val;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		switch (val->intval) {
++		case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
++			raw_val = AYANEO_CHARGE_VAL_AUTO;
++			break;
++		case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
++			raw_val = AYANEO_CHARGE_VAL_INHIBIT;
++			break;
++		default:
++			return -EINVAL;
++		}
++		return ec_write(AYANEO_CHARGE_REG, raw_val);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ayaneo_psy_prop_is_writeable(struct power_supply *psy,
++				     const struct power_supply_ext *ext,
++				     void *data,
++				     enum power_supply_property psp)
++{
++	return true;
++}
++
++static const enum power_supply_property ayaneo_psy_ext_props[] = {
++	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
++};
++
++static const struct power_supply_ext ayaneo_psy_ext = {
++	.name			= "ayaneo-charge-control",
++	.properties		= ayaneo_psy_ext_props,
++	.num_properties		= ARRAY_SIZE(ayaneo_psy_ext_props),
++	.charge_behaviours	= EC_CHARGE_CONTROL_BEHAVIOURS,
++	.get_property		= ayaneo_psy_ext_get_prop,
++	.set_property		= ayaneo_psy_ext_set_prop,
++	.property_is_writeable	= ayaneo_psy_prop_is_writeable,
++};
++
++static int ayaneo_add_battery(struct power_supply *battery,
++			   struct acpi_battery_hook *hook)
++{
++	struct ayaneo_ec_platform_data *data =
++		container_of(hook, struct ayaneo_ec_platform_data, battery_hook);
++
++	return power_supply_register_extension(battery, &ayaneo_psy_ext,
++					       &data->pdev->dev, NULL);
++}
++
++static int ayaneo_remove_battery(struct power_supply *battery,
++			      struct acpi_battery_hook *hook)
++{
++	power_supply_unregister_extension(battery, &ayaneo_psy_ext);
++	return 0;
++}
++
+ static int ayaneo_ec_probe(struct platform_device *pdev)
+ {
+ 	const struct dmi_system_id *dmi_entry;
+ 	struct ayaneo_ec_platform_data *data;
+ 	struct device *hwdev;
++	int ret;
+ 
+ 	dmi_entry = dmi_first_match(dmi_table);
+ 	if (!dmi_entry)
+@@ -184,6 +286,15 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
+ 			return PTR_ERR(hwdev);
+ 	}
+ 
++	if (data->quirks->has_charge_control) {
++		data->battery_hook.add_battery = ayaneo_add_battery;
++		data->battery_hook.remove_battery = ayaneo_remove_battery;
++		data->battery_hook.name = "Ayaneo Battery";
++		ret = devm_battery_hook_register(&pdev->dev, &data->battery_hook);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
  
 -- 
-2.49.1
+2.50.1
+
 
