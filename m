@@ -1,102 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289BF258EFF;
-	Thu, 21 Aug 2025 15:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC4F27BF7C;
+	Thu, 21 Aug 2025 16:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755789939; cv=none; b=RevQDLx98HCYOx+zL5K09I9ls3RFd+pYQ9Tmx1ybs+1/qYT5oncieUNBXDPnZ2ktsk384rCzeiP5p7lYAHgdPncL3So/JbTDECOCjO2MjKpCXz4OUgprK+47vrNACaF5qBeHxPwJQCU5V6gXT3SbIPLIjU3uHizIpHEXXydczQw=
+	t=1755792114; cv=none; b=ZTeo27U8mRIq4QiaEhx6BwlF+5An3SjcXt97hJJUSts7wQILz/bVuk4eGm7LJgWz9FNQYBUOOA6antj3FOOsqKd4xCOhAWREemaKvFY2TXbNcm2jgvyna8T5p8SA/J9jXHu1hyFGK3LD2A00AM1CCi0NVfqY1D+RBuf2TmUrMu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755789939; c=relaxed/simple;
-	bh=9kJqLOf6Qe+TXpNf2uvky1bKvhlkOmQpjYLqd2IEmos=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=S9hztsJYByeBoYhw4f051gksZ++O4XKbdGHCIiFFw7wUqhD/IBD3DRQy4Tw3kJkRz0RAvKn7QE1Ofs2ooKCPdQK5t2I4ITwblBQ72SsFQZAmtI4B/HogUMgBMdIxUCKa9GDjGveZXMRRoNP+6QdeqQ2txqgNTBX/vyjkTQ38HGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n8g9HanS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755792114; c=relaxed/simple;
+	bh=Sb2tmvyhA9kl4RDm1IjcNLqVSOU59BKXqAaqUHmoj7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fa5l576KXcSAxwkKm1V071shP0qHtrcRQtcTXBEfFfj0FhaM7JOYwtZIZbXQrwLADDaQcYkAMDkT1JqmjfskfvXRfHoV6CLv/vjABrZkJ8cfbaUXwXydHOTU4lgyFKC26GtjHCl2k/lMzDNBEWbO81qCwmumpLFFIAgAmtaFR54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNDT6cSb; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n8g9HanS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E47C4CEEB;
-	Thu, 21 Aug 2025 15:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755789939;
-	bh=9kJqLOf6Qe+TXpNf2uvky1bKvhlkOmQpjYLqd2IEmos=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=n8g9HanS2lu636ESY7KmSZ/Zei+gIK6ydMzOks0Nf/9xeHezuQwjFM0Ty5bJP+6+R
-	 bvGK3jB4HUtLnTbqfwveFa4ZZxEdi3RR/q+V858X1muPPWBwHDnBR3bwpiKaNM785p
-	 RKFBJqjhDfhEd5yk3d/s1ek51x55nrlL5zMF4g4zxTOF19AoL4aJeoiMiMZJdxOTIA
-	 81oIfKUTxKRQp2SBAsZNAXU8bjZmnuy5L2wvEQjkGFB/3QpUjKERLhqIc9YCNWP0iU
-	 UPmQcCwuQx5U62WvrKig5WfLkPpq4rL1E1u2bvuM4tkbOC2aTOtpUEu1Au0oLoOWn+
-	 sGgym0VGzddZQ==
-Message-ID: <4a95cbf3-b3ae-4b26-8db2-dd5cf14a4c0c@kernel.org>
-Date: Thu, 21 Aug 2025 17:25:32 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNDT6cSb"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e2eb6ce24so1054061b3a.3;
+        Thu, 21 Aug 2025 09:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755792111; x=1756396911; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zzsiqmbfqBkVY+f01p1NV6V6NJGQ87QW0Z5a0oYFHFU=;
+        b=nNDT6cSb0HsTCeGho5RmnuPfCUanyNKgNH2U6DsfKxDNLW0G+sWJtqoCUg4Nuh8oO1
+         TdWNFdh0+IvwWbc+QsThEMBzowXQrhmkubrDIzNctWF+h7ZZ6qOxltN2VCogeujVabzK
+         QbwsGF0qLD5WAkdJtuezFDnTXR0NIoEgC66KCd/DmxBv6OXoFJdXE19xbrgiH8X21zEq
+         RPnaK1gpjc7KcLKzd/MIV4mOv3NvPzMJIfBn80IZlAaSsFmb1g4FAN5bwOFGK9RZ8pxS
+         yHdmBtfhgVGK4IGfcktsQsPoHKpS0BxEtt/XTKPr3BLf3iiEkjWSy8UP6A8WIx+6ux9w
+         YTfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755792111; x=1756396911;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zzsiqmbfqBkVY+f01p1NV6V6NJGQ87QW0Z5a0oYFHFU=;
+        b=eqXv4WwvCMwqBaQJlBMGK1uBuKlS/XDPBc5xp6Y48Y/Fw9KZJxogzW6o9GAyB8Ycj2
+         b/749ZS2Fu0tKfzLe3huNJFJCREky4sh2H1dpSn21RX88rVLc4V2kNx/C5Qn8a5nhTLC
+         KZqKT3TfX16zUXbEvk5ox7MdUYF1MVYXMgahW2J+bJE576HFw1IOz+mA8V4yx0gnxY70
+         778xaoO5fbYkjGDw7Wn8GzWE0uatJWPFjdqGDAQsWrMLeM3/CMAkyPRnGMm1AURaXFe+
+         0deDabRR/XnFamJcUw+xCWZ3fYk932h6c4XqxI8uWxS3Sw5G4vFRVcf7lNWhT1TjNWNh
+         If8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUzzcs9AfuaDOvYrRhiJL4aBr20+m8RZyDddAFGwe7aKGrToBb6z3JISgIUK1FmdtzJMz7Pygema/E=@vger.kernel.org, AJvYcCVG7IIS4hRmwODbq/MCWcV7SVYbTACeqV5vVuSRo7t21WkneSun8xsI9Tl5/L+6c0j5XukZqT/aTCMl3FFT@vger.kernel.org, AJvYcCVaLieDQkL2156GdK4KUgxHIENKYChUzAsVwGeIjbXneenHwVXA5Mg5bVB6Z3AAPVMJV397KUWkW2bgHoo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVHRdG18P4gg7G3FfQhbwBB0n9ZMp9V9MO4H9oF+jzNV4ElgXv
+	SSSIe9M1RfJBpy+2JsuF+YmqwwvOGso0TRwMoLbIxDKX/DN3CQeRKgAH
+X-Gm-Gg: ASbGncv8nYBEWnfB7yo5XfjUJIU6927bDAQWYUT7xKzur1cZqUL7qFmF7ZUOVaQHehB
+	05AKdC9xQxRjNV/N6QrXvAsnMFvOwhazDUJVnQEjCicSB6sCoRi1cIueu6CqQ/WvtZh4HRL9xjy
+	fwFKk2dbDr46G5nOP6nbVrfVXjN87EevV5/AP3C88DaccnVb2+1KBVZoE8CG1oA82GmcEQfT6hO
+	LzJgRQ7QaRsaZRVo4TLgVvxcsj80j6ZiYgbcO610p8fcgunmh/g59lPnLz3veJF3eS6frHCGnBs
+	ytRbBG3VTI7k3M8WZBP/T+y5eRgW4hIptmxN+bwYlU8oDOCyEtDtjDnElE9NmBvwGOyCfSt9tlE
+	0yeFk8DJ/NwSy8PhiYus8kPkTCTyz0ADzFq0GbrxxmuAytTN1uy5E8iFv
+X-Google-Smtp-Source: AGHT+IE6uLjtZA+NsA4etmBGRhXqOtbKJrOEJL92MfF6Uthlu2MOjaGFDFnyQtI4j943jND6fmZtZw==
+X-Received: by 2002:aa7:8888:0:b0:76e:885a:c3ef with SMTP id d2e1a72fcca58-76ea325e544mr3700074b3a.27.1755792111050;
+        Thu, 21 Aug 2025 09:01:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d0d14efsm8849369b3a.2.2025.08.21.09.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Aug 2025 09:01:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 21 Aug 2025 09:01:49 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+Cc: skhan@linuxfoundation.org, jdelvare@suse.com, corbet@lwn.net,
+	linux-kernel-mentees@lists.linux.dev, ninad@linux.ibm.com,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Fix typos in hwmon docs
+Message-ID: <bcfd4b37-599b-4797-b3a3-6c4ae34ebaf7@roeck-us.net>
+References: <20250821125539.58313-1-kerneldev@debanilchowdhury.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sven Peter <sven@kernel.org>
-Subject: Re: [PATCH 2/8] dt-bindings: hwmon: add Apple System Management
- Controller hwmon schema
-To: James Calligeros <jcalligeros99@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
-References: <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
- <20250819-macsmc-subdevs-v1-2-57df6c3e5f19@gmail.com>
- <20250819201537.GA1223169-robh@kernel.org>
- <CAHgNfTw+wetmZzvPgkANpmSD4b6k0785QZLpBVD9FMqNDnq2EQ@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAHgNfTw+wetmZzvPgkANpmSD4b6k0785QZLpBVD9FMqNDnq2EQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250821125539.58313-1-kerneldev@debanilchowdhury.com>
 
-On 20.08.25 01:22, James Calligeros wrote:
-> Hi Rob,
+On Thu, Aug 21, 2025 at 06:20:24PM +0530, Debanil Chowdhury wrote:
+> Fixed some typos ("Critial" → "Critical") in hwmon documentation.
 > 
-> On Wed, Aug 20, 2025 at 6:15 AM Rob Herring <robh@kernel.org> wrote:
->>
+> Reported-by: codespell
+> Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+> ---
+> changed in v2:
+> - In previous patch "From" header did not have my name in it. Fixed
+>   that.
 
-[...]
+The real problem is that the subject does not identify which documentation
+is being fixed. It does not fix problems in "hwmon documentation", it
+fixes a misspelling in the crps driver documentation. And responding to
+this -and having to look at multiple versions of a spelling fix - prevents
+me from reviewing patches which solve _real_ problems.
 
->>> +          apple,fan-maximum:
->>> +            $ref: /schemas/types.yaml#/definitions/string
->>> +            pattern: "^[A-Za-z0-9]{4}"
->>> +            description: The maximum speed the current fan can run at
->>> +          apple,fan-target:
->>> +            $ref: /schemas/types.yaml#/definitions/string
->>> +            pattern: "^[A-Za-z0-9]{4}"
->>> +            description: Writeable endpoint for setting desired fan speed
->>> +          apple,fan-mode:
->>> +            $ref: /schemas/types.yaml#/definitions/string
->>> +            pattern: "^[A-Za-z0-9]{4}"
->>> +            description: Writeable endpoint to enable/disable manual fan
->>> +              control
->>> +          label:
->>> +            $ref: /schemas/types.yaml#/definitions/string
->>> +            description: Human-readable name for the sensor
->>
->> Surely more than apple,key-id is required? How would it be useful with
->> only that? You can know how many fans you have, but have no info or
->> control over them?
 > 
-> The key specified in apple,key-id is the fan's current speed, which is the
-> only key strictly required to enumerate the presence of a fan in the system.
-> All of the other keys are optional information that are only really useful
-> when implementing manual fan control, which is itself optional as the platform
-> really expects the SMC firmware to have control over fan speeds at all times.
-
-
-Can we at least also require the label? Then we have the SMC key and a 
-human readable representation which is already useful.
-
-
-Sven
-
-
+>  Documentation/hwmon/crps.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
+> index 87380b496..d42ea59d2 100644
+> --- a/Documentation/hwmon/crps.rst
+> +++ b/Documentation/hwmon/crps.rst
+> @@ -43,7 +43,7 @@ curr1_label		"iin"
+>  curr1_input		Measured input current
+>  curr1_max		Maximum input current
+>  curr1_max_alarm		Input maximum current high alarm
+> -curr1_crit		Critial high input current
+> +curr1_crit		Critical high input current
+>  curr1_crit_alarm	Input critical current high alarm
+>  curr1_rated_max		Maximum rated input current
+>  
+> @@ -51,7 +51,7 @@ curr2_label		"iout1"
+>  curr2_input		Measured output current
+>  curr2_max		Maximum output current
+>  curr2_max_alarm		Output maximum current high alarm
+> -curr2_crit		Critial high output current
+> +curr2_crit		Critical high output current
+>  curr2_crit_alarm	Output critical current high alarm
+>  curr2_rated_max		Maximum rated output current
+>  
+> -- 
+> 2.49.1
+> 
