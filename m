@@ -1,136 +1,102 @@
-Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B94319844;
-	Thu, 21 Aug 2025 12:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289BF258EFF;
+	Thu, 21 Aug 2025 15:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755780976; cv=none; b=eGIFG+VEzCI1jUHX+KTVhaiwI8n6VeynMzztPXtOUTwuzzqS+JAtqkztRYQ0jP216ycjghOHj3FqUo4kVyv8Mq+gwhntOumwVbAHtcWJN9xSiv9EFED+u6s/cjkUge+V8Yft4QvHFKZyLNyuUid3jX4uSTa4+kT/0Q7OWQrqckY=
+	t=1755789939; cv=none; b=RevQDLx98HCYOx+zL5K09I9ls3RFd+pYQ9Tmx1ybs+1/qYT5oncieUNBXDPnZ2ktsk384rCzeiP5p7lYAHgdPncL3So/JbTDECOCjO2MjKpCXz4OUgprK+47vrNACaF5qBeHxPwJQCU5V6gXT3SbIPLIjU3uHizIpHEXXydczQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755780976; c=relaxed/simple;
-	bh=whkJEqsTOCyePNjD7NYZqFQXAji21QPdY2r46YSe06w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OZhx5drUCeTg1okG/9go1NGHMwA6qbyw+sifCys1ow8ZQ43YO0h8TorPC24s3aNcxwZEjyZkwTbdF19q18Lilu4WD3sUI5p0HpYu2eXaOBcFnVszTl3yCiBdSmi+T3Z4rySDeTtqgHorwbr/ZTxDZ2JvJpCdZ25d9zFM2wGgQ3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com; spf=pass smtp.mailfrom=debanilchowdhury.com; dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b=FqdcS1LB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y9XkwSiW; arc=none smtp.client-ip=202.12.124.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debanilchowdhury.com
+	s=arc-20240116; t=1755789939; c=relaxed/simple;
+	bh=9kJqLOf6Qe+TXpNf2uvky1bKvhlkOmQpjYLqd2IEmos=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=S9hztsJYByeBoYhw4f051gksZ++O4XKbdGHCIiFFw7wUqhD/IBD3DRQy4Tw3kJkRz0RAvKn7QE1Ofs2ooKCPdQK5t2I4ITwblBQ72SsFQZAmtI4B/HogUMgBMdIxUCKa9GDjGveZXMRRoNP+6QdeqQ2txqgNTBX/vyjkTQ38HGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n8g9HanS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b="FqdcS1LB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y9XkwSiW"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 784BA1300595;
-	Thu, 21 Aug 2025 08:56:11 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Thu, 21 Aug 2025 08:56:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	debanilchowdhury.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
-	 t=1755780971; x=1755784571; bh=yBewjbsnFCVygw4nugjy4355G6givRfy
-	7NgyrPli+2A=; b=FqdcS1LB2GklU63pvDvxbGY3hYnvGEPRIB1dXcrlMcld8lsz
-	Y0prwgvAg0AtlWiWblqQM285FIx4ynBMRUsx58RK6k/M8tHuvr4QfuX4Cg1Glzgj
-	X4sRYitrxAB7awuamTDxq4Fo9qDDhE0KfpVlpD3B/aHZGCnmtOENczbVzbcBbpCV
-	ZhRzMeZvSCWwiVJqxWA8kw/Ut6lDmm7FRFNtTSrliB4wqdkIw92xVcE7AcL7fKum
-	tKTL2WvkKqUpTUozONVGOzxm4DZ+R1VRUw51/KvtcdgMrC5nKCvx1TJjEa5OvRjD
-	N7VOr9fGVUOmgwlvjgC+mtl+YT+XXFLteq1nUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1755780971; x=1755784571; bh=yBewjbsnFCVygw4nugjy4355G6gi
-	vRfy7NgyrPli+2A=; b=Y9XkwSiWw2oKIrsGmOYdovQrZP/myCrInJVy/wWNVcoE
-	g1BGRYhToWe65vXU0UMwYZIvvg45ts+v0GayJoCkHsdDjAgDHtyosSGJ/pNH3raL
-	5prr4UGWqL1iuj24YRa3QFReZUXeyM3WwY0HZ04r+j39P9aQfYhmEA5DaUvxl3d3
-	oa4Q1ihYLMO0D+iF1k1yIIXc/2b5CrYF1u+Bf6/lrDwMdnOGKfDSmrXWGaf7WTMd
-	nX8ot8yubYtKnKeTLMkS1s6DSGdLK+B/EFZMPLpmFdlj5NpcW/UwMCRW94c4FUaN
-	Nn1NYEgw9X+G/d7ghYGHotKUUU26qjaRjTjR7TUaTQ==
-X-ME-Sender: <xms:ahenaFT-UyARaEYh9hqMmKXXcfeap6glqh-ApRDcBi6WNUxSJDbl4A>
-    <xme:ahenaHYFAX_l_p3HqPykRK7wRf8UH8ZURF9KzSo3gJYFJEdQiuQMGxp3OiPCNzXCm
-    pgSU0fUMYwfTTiJOrw>
-X-ME-Received: <xmr:ahenaCQqBFLqhdalGjPKx3Hz9hnWrE450AoOOe5wMDZ8jvNB-nMI5qsbj7KtisYEBewLF6nJ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieduvdelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtre
-    dtjeenucfhrhhomhepffgvsggrnhhilhcuvehhohifughhuhhrhicuoehkvghrnhgvlhgu
-    vghvseguvggsrghnihhltghhohifughhuhhrhidrtghomheqnecuggftrfgrthhtvghrnh
-    epuddtfefgffffiefgtddugeefvdeuteefhfeltdeuieejvdeludetveettdetheefnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvg
-    hluggvvhesuggvsggrnhhilhgthhhofiguhhhurhihrdgtohhmpdhnsggprhgtphhtthho
-    pedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepshhkhhgrnheslhhinhhugi
-    hfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehjuggvlhhvrghrvgesshhushgv
-    rdgtohhmpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpth
-    htoheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtoheplhhinhhugidqkhgvrhhn
-    vghlqdhmvghnthgvvghssehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepnh
-    hinhgrugeslhhinhhugidrihgsmhdrtghomhdprhgtphhtthhopehlihhnuhigqdhhfihm
-    ohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqughotg
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgv
-    lhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:ahenaG9knYorJgkQYRgz7YM3p3lyPRV3cqoNG12IkcW2WVDJd2_z6Q>
-    <xmx:ahenaCjoxALiQ0LkmrMCoGmxime9ZmmBJowKr7VgggAgf00oRPz2Tg>
-    <xmx:ahenaHYCnJMsyND4BYWUig_CWYyeOONuPqY9VPKx8vJEq8xdDe_NxQ>
-    <xmx:ahenaH9NGc_jfnMYr0cNHSJU4u0xP9zIJvp2SeDU0pd0idND-FKhpw>
-    <xmx:axenaDWR-9T882OJpeI-NS_0A7OeDipszvLn5FjvJKT-cuJ90gvuDVdd>
-Feedback-ID: i77364836:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Aug 2025 08:56:07 -0400 (EDT)
-From: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
-To: skhan@linuxfoundation.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: linux-kernel-mentees@lists.linux.dev,
-	ninad@linux.ibm.com,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Debanil Chowdhury <kerneldev@debanilchowdhury.com>
-Subject: [PATCH v2] Fix typos in hwmon docs
-Date: Thu, 21 Aug 2025 18:20:24 +0530
-Message-ID: <20250821125539.58313-1-kerneldev@debanilchowdhury.com>
-X-Mailer: git-send-email 2.49.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n8g9HanS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E47C4CEEB;
+	Thu, 21 Aug 2025 15:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755789939;
+	bh=9kJqLOf6Qe+TXpNf2uvky1bKvhlkOmQpjYLqd2IEmos=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=n8g9HanS2lu636ESY7KmSZ/Zei+gIK6ydMzOks0Nf/9xeHezuQwjFM0Ty5bJP+6+R
+	 bvGK3jB4HUtLnTbqfwveFa4ZZxEdi3RR/q+V858X1muPPWBwHDnBR3bwpiKaNM785p
+	 RKFBJqjhDfhEd5yk3d/s1ek51x55nrlL5zMF4g4zxTOF19AoL4aJeoiMiMZJdxOTIA
+	 81oIfKUTxKRQp2SBAsZNAXU8bjZmnuy5L2wvEQjkGFB/3QpUjKERLhqIc9YCNWP0iU
+	 UPmQcCwuQx5U62WvrKig5WfLkPpq4rL1E1u2bvuM4tkbOC2aTOtpUEu1Au0oLoOWn+
+	 sGgym0VGzddZQ==
+Message-ID: <4a95cbf3-b3ae-4b26-8db2-dd5cf14a4c0c@kernel.org>
+Date: Thu, 21 Aug 2025 17:25:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+From: Sven Peter <sven@kernel.org>
+Subject: Re: [PATCH 2/8] dt-bindings: hwmon: add Apple System Management
+ Controller hwmon schema
+To: James Calligeros <jcalligeros99@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
+References: <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
+ <20250819-macsmc-subdevs-v1-2-57df6c3e5f19@gmail.com>
+ <20250819201537.GA1223169-robh@kernel.org>
+ <CAHgNfTw+wetmZzvPgkANpmSD4b6k0785QZLpBVD9FMqNDnq2EQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHgNfTw+wetmZzvPgkANpmSD4b6k0785QZLpBVD9FMqNDnq2EQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Fixed some typos ("Critial" → "Critical") in hwmon documentation.
+On 20.08.25 01:22, James Calligeros wrote:
+> Hi Rob,
+> 
+> On Wed, Aug 20, 2025 at 6:15 AM Rob Herring <robh@kernel.org> wrote:
+>>
 
-Reported-by: codespell
-Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
----
-changed in v2:
-- In previous patch "From" header did not have my name in it. Fixed
-  that.
+[...]
 
- Documentation/hwmon/crps.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>> +          apple,fan-maximum:
+>>> +            $ref: /schemas/types.yaml#/definitions/string
+>>> +            pattern: "^[A-Za-z0-9]{4}"
+>>> +            description: The maximum speed the current fan can run at
+>>> +          apple,fan-target:
+>>> +            $ref: /schemas/types.yaml#/definitions/string
+>>> +            pattern: "^[A-Za-z0-9]{4}"
+>>> +            description: Writeable endpoint for setting desired fan speed
+>>> +          apple,fan-mode:
+>>> +            $ref: /schemas/types.yaml#/definitions/string
+>>> +            pattern: "^[A-Za-z0-9]{4}"
+>>> +            description: Writeable endpoint to enable/disable manual fan
+>>> +              control
+>>> +          label:
+>>> +            $ref: /schemas/types.yaml#/definitions/string
+>>> +            description: Human-readable name for the sensor
+>>
+>> Surely more than apple,key-id is required? How would it be useful with
+>> only that? You can know how many fans you have, but have no info or
+>> control over them?
+> 
+> The key specified in apple,key-id is the fan's current speed, which is the
+> only key strictly required to enumerate the presence of a fan in the system.
+> All of the other keys are optional information that are only really useful
+> when implementing manual fan control, which is itself optional as the platform
+> really expects the SMC firmware to have control over fan speeds at all times.
 
-diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
-index 87380b496..d42ea59d2 100644
---- a/Documentation/hwmon/crps.rst
-+++ b/Documentation/hwmon/crps.rst
-@@ -43,7 +43,7 @@ curr1_label		"iin"
- curr1_input		Measured input current
- curr1_max		Maximum input current
- curr1_max_alarm		Input maximum current high alarm
--curr1_crit		Critial high input current
-+curr1_crit		Critical high input current
- curr1_crit_alarm	Input critical current high alarm
- curr1_rated_max		Maximum rated input current
- 
-@@ -51,7 +51,7 @@ curr2_label		"iout1"
- curr2_input		Measured output current
- curr2_max		Maximum output current
- curr2_max_alarm		Output maximum current high alarm
--curr2_crit		Critial high output current
-+curr2_crit		Critical high output current
- curr2_crit_alarm	Output critical current high alarm
- curr2_rated_max		Maximum rated output current
- 
--- 
-2.49.1
+
+Can we at least also require the label? Then we have the SMC key and a 
+human readable representation which is already useful.
+
+
+Sven
+
 
