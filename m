@@ -1,141 +1,135 @@
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027FF2FFDE0;
-	Fri, 22 Aug 2025 13:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0F27261B;
+	Fri, 22 Aug 2025 15:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755869343; cv=none; b=C7ZWpoH03oinN6vDbT8BCJKiHXTS0oCVNGJY0GFDZ7U4MUCD9jw/symtImQWh6T01IpBLkcj2LYFiujIOTFlOGDJP12xphWX53pj+bvlEg44GQFcSajnAio/QMuYd4NGXTStybfwLkQtZiG4zZqoQhYEucoYdS3/5dSnbntvTlI=
+	t=1755876223; cv=none; b=mNedwDkFiu4R+gLGz3i1uxCUvLZ2Q+8DORixybiK6aVGjdByKrFDNMJcSWnJ/lPM+wT4USLK4R6NsKZJDRvsORV8ljHzfetpV8V2XtAArnUZPCQGo8R29yvPO2ApgcZC45HzC+lld7w1RHZnYljXTDb8aHxYwqtgqugE156uwqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755869343; c=relaxed/simple;
-	bh=ZL8GY7g3uwloV0kELsLuK74wUOOqCTd2WYewZKfdFAY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uqU+A7+wK9UW/bvpiFkBWdvzaSQE0W7j5gEv5b0f3T3V16rSY/yiXBdQRv1qWjP9pMP6K/BXACFcceE0OQMI2hzFRF5vCQ1RIiNwDvYzW4XX96ib6PpBL10wwbncdt2lvCXSlc2yhZTUdUGx76ul+qw9MepKqURefaTq153tYSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com; spf=pass smtp.mailfrom=debanilchowdhury.com; dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b=e2QiEQpm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dgLAXY7V; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debanilchowdhury.com
+	s=arc-20240116; t=1755876223; c=relaxed/simple;
+	bh=dDiTso7F7LNgejI62OYKxYRMhrQZVDgAYSvotoCofXQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I7UpjI7bQMyRzWcI6s3jVwWvLeVG2U2Vd5QV5NrhVTG6wjatvGdVpjDq2mJTzquWVE9cp+hRB1oI5TO/DQGRUpeyOcXODgwsQ0SX9YyxJh0cjbtRerhuZTWlKr4w1JMOKQA1LdQJndnYJC1c84AJxVhACYb1vYG69vyEyg0rX5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=TXKpmGyN; arc=none smtp.client-ip=198.47.23.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b="e2QiEQpm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dgLAXY7V"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id 359101380836;
-	Fri, 22 Aug 2025 09:28:59 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 22 Aug 2025 09:28:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	debanilchowdhury.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
-	 t=1755869339; x=1755872939; bh=wGSgMf6A1+ZzqOwuHh7cUjUzSlzSWwas
-	r3z6cM11JqU=; b=e2QiEQpmtO+zUtuUCCuUIhEh+m8BC0Td/GFbdqqD5kcjSiIn
-	gw83qn8IGVrB3oef45dIgnVsIrO96NIS3Dp9i0rfCickEk6Fo5QSyDmY00l3Ur7I
-	ShHRxRS1h36kW7b7EYVWpYoj+Qgnr3IgueP1jqhcYjbrWXd/GccQ5/Pcf2IA7ZR2
-	GX3nICLjBiae9tocfVc83SeGQVYiy+yy1OvHX+ewet3pIlnmxO3WHA6qBIVikFdb
-	y5aRY6mLTnvFmXep2mxyoHiPmm9mXjBju49iNGUNbTETzFGjaMB9Y03hL7qN6AKO
-	V4u7kNyM4x/oLhZsiX/zzdmvGFJOxDkjDXbduQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1755869339; x=1755872939; bh=wGSgMf6A1+ZzqOwuHh7cUjUzSlzS
-	Wwasr3z6cM11JqU=; b=dgLAXY7Vbay4e4uyY76rDfSbM1NuTe2EzhxswsACNQdZ
-	9iv6+qiXDQ43+CeIVt0eK/ShHUJctC1Miys2UqLzIx56wLZeM/GHmsww4AVW5Ysb
-	KGSUS51wb/7HAD/cl8zk+KQpjk5yIo3vWBnPlIZjXSQOBh5MZZXcV0nhk8UielnB
-	vE9SLw5UNnvC3ddWrr1gWMTvpCM1p8lc0k3hHcZQv+OrBduNmR/q/XqnBT87cm9E
-	16U+bG54xtguonmxwnroKeDD7EX4MzeYh9Wv0LybDvOaLRytWNymHE9dlHuqrYq0
-	9pvnUVDD3ixfUTHBJm5GgohHm44tjPQiEtTtSmFbaA==
-X-ME-Sender: <xms:mnCoaH6ayRa1J5VjV97lTOdc70mpfxI-tzRb5VFXffIMalstXi-P0w>
-    <xme:mnCoaFg_GnzLBSHa-goUBu-nQdAYbeSwK07ZcmkZSGtmnsxgYKpW963ZGgiUP9XbU
-    hbFWNmHA32yfBMqxvc>
-X-ME-Received: <xmr:mnCoaF7bGhjG0YWieZxUljQvarX73Fz0RrhZJENZKJC5Zxlxg2cGvI5ZxBtgIa13cJ5zT6vd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieefkeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtre
-    dtjeenucfhrhhomhepffgvsggrnhhilhcuvehhohifughhuhhrhicuoehkvghrnhgvlhgu
-    vghvseguvggsrghnihhltghhohifughhuhhrhidrtghomheqnecuggftrfgrthhtvghrnh
-    epuddtfefgffffiefgtddugeefvdeuteefhfeltdeuieejvdeludetveettdetheefnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvg
-    hluggvvhesuggvsggrnhhilhgthhhofiguhhhurhihrdgtohhmpdhnsggprhgtphhtthho
-    pedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhinhgrugeslhhinhhugi
-    drihgsmhdrtghomhdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphht
-    thhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrh
-    hovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurght
-    ihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhdqmhgvnhhtvggvsh
-    eslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgv
-    lhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:mnCoaCH2-PIzc-BXzTMsh8eBAabRosNSN8dfDMuwefl2-jnU3iBo4A>
-    <xmx:mnCoaPLcv2LOc3B-3j2uBnHe0do8pRLT4eJ2Fd4ggKjffjEF5S7Ojg>
-    <xmx:mnCoaHi4m799LMv0Y3iukXzpDUNrqwXbRmhrXAWmO-L_NV3AhwgFIQ>
-    <xmx:mnCoaFmYV843PbkrPB52lbNVmZz5rBM9i2r8PdX3SjBVfL62YaJ5qA>
-    <xmx:m3CoaGd2-erDJxWWGrT5hIJdem637aHkTCS0G3p7l4GHby1HeuaAwaHo>
-Feedback-ID: i77364836:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Aug 2025 09:28:55 -0400 (EDT)
-From: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
-To: ninad@linux.ibm.com,
-	corbet@lwn.net
-Cc: jdelvare@suse.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Debanil Chowdhury <kerneldev@debanilchowdhury.com>
-Subject: [PATCH v3] hwmon: crps: Fix typos in crps.rst documentation
-Date: Fri, 22 Aug 2025 18:55:02 +0530
-Message-ID: <20250822132836.5384-1-kerneldev@debanilchowdhury.com>
-X-Mailer: git-send-email 2.49.1
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="TXKpmGyN"
+Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
+	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57MFNDLW754277;
+	Fri, 22 Aug 2025 10:23:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1755876193;
+	bh=VBLghRpDnKN0bEo3TKQupICpm0Ote+xiP5+E9br8q0Y=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=TXKpmGyNM/uEgtR/FgNT1eyTAgohzC8a0+t3WtH1M+Lonyf8qw4QaIwjX1sAcA+0n
+	 DgdLthlfRL+3SOyGBP/GnTDuO05NUOTKNsG7bONu3Tir7cpqZO/eHIROJ5sKCW1GMQ
+	 AWfqUHFzQ1ApqFB6aeZ2J7QhQDCCdYPzMAspzGV0=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57MFNDMG2793766
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 22 Aug 2025 10:23:13 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 22
+ Aug 2025 10:23:13 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Fri, 22 Aug 2025 10:23:13 -0500
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57MFNDV33741978;
+	Fri, 22 Aug 2025 10:23:13 -0500
+Date: Fri, 22 Aug 2025 10:23:13 -0500
+From: Nishanth Menon <nm@ti.com>
+To: Michael Walle <mwalle@kernel.org>
+CC: Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter
+ Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
+        Srinivas Kandagatla
+	<srini@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v1 0/7] Initial Kontron SMARC-sAM67 support
+Message-ID: <20250822152313.vjzjtzik2q5ek5kq@sadly>
+References: <20250822131531.1366437-1-mwalle@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250822131531.1366437-1-mwalle@kernel.org>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Changed a misspelling in crps.rst documentation:
-"Critial" → "Critical".
+On 15:15-20250822, Michael Walle wrote:
+> Now that the PMIC support is there, we can finally, upstream the
+> support for this board. Besides the usual device tree, this
+> patchset contains the support for the on-board house keeping MCU. It
+> make extensive reuse of the drivers for the former SMARC-sAL28
+> board. Besides different hwmon sensors, all the dt binding patches
+> will just add a board specific compatible (in addition to the old
+> sl28 compatible) to make any future board specific quirks possible.
+> 
+> I'm aware that there is a patch [1] which moves the sl28cpld MFD
+> schema to a different directory. Once that patch is merged, I'll
+> repost this series. But I already want to get some early feedback.
+> 
+> [1] https://lore.kernel.org/r/20250822075712.27314-2-krzysztof.kozlowski@linaro.org/
+> 
+> Michael Walle (7):
+>   dt-bindings: arm: ti: Add bindings for Kontron SMARC-sAM67 module
+>   dt-bindings: mfd: sl28cpld: add sa67mcu compatible
+>   dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
+>   dt-bindings: watchdog: add SMARC-sAM67 support
+>   dt-bindings: nvmem: sl28cpld: add sa67mcu compatible
+>   hwmon: sl28cpld: add SMARC-sAM67 support
+>   arm64: dts: ti: Add support for Kontron SMARC-sAM67
 
-Reported-by: codespell
-Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
----
-Changed in v3:
-- Update subject to correctly identify crps driver documentation 
-  (suggested by Guenter Roeck)
+Since this goes through multiple maintainers, may I suggest the
+following strategy?
 
-Changed in v2:
-- In previous patch "From" header did not have my name in it. Fixed
-  that.
+for this window:
+* send dts and board binding changes dropping the nodes that are yet to
+ be upstream
+* send the compatible changes to each of the maintainers
 
-Documentation/hwmon/crps.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Next window:
+* add the nodes based on acceptance of the driver bindings
 
-diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
-index 87380b496..d42ea59d2 100644
---- a/Documentation/hwmon/crps.rst
-+++ b/Documentation/hwmon/crps.rst
-@@ -43,7 +43,7 @@ curr1_label		"iin"
- curr1_input		Measured input current
- curr1_max		Maximum input current
- curr1_max_alarm		Input maximum current high alarm
--curr1_crit		Critial high input current
-+curr1_crit		Critical high input current
- curr1_crit_alarm	Input critical current high alarm
- curr1_rated_max		Maximum rated input current
- 
-@@ -51,7 +51,7 @@ curr2_label		"iout1"
- curr2_input		Measured output current
- curr2_max		Maximum output current
- curr2_max_alarm		Output maximum current high alarm
--curr2_crit		Critial high output current
-+curr2_crit		Critical high output current
- curr2_crit_alarm	Output critical current high alarm
- curr2_rated_max		Maximum rated output current
- 
+This removes multiple maintainers needing to give me immutable tags etc.
+
+What do you think?
+> 
+>  .../devicetree/bindings/arm/ti/k3.yaml        |    1 +
+>  .../hwmon/kontron,sl28cpld-hwmon.yaml         |    1 +
+>  .../bindings/mfd/kontron,sl28cpld.yaml        |    7 +-
+>  .../nvmem/layouts/kontron,sl28-vpd.yaml       |    7 +-
+>  .../watchdog/kontron,sl28cpld-wdt.yaml        |    7 +-
+>  arch/arm64/boot/dts/ti/Makefile               |    6 +
+>  .../dts/ti/k3-am67a-kontron-sa67-base.dts     | 1092 +++++++++++++++++
+>  .../dts/ti/k3-am67a-kontron-sa67-gbe1.dtso    |   19 +
+>  .../ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso  |   24 +
+>  drivers/hwmon/sl28cpld-hwmon.c                |   76 +-
+>  10 files changed, 1234 insertions(+), 6 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
+> 
+> -- 
+> 2.39.5
+> 
+
 -- 
-2.49.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+https://ti.com/opensource
