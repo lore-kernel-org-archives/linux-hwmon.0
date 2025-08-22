@@ -1,41 +1,41 @@
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F1417B402;
-	Fri, 22 Aug 2025 11:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346BB1B4141;
+	Fri, 22 Aug 2025 12:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755863724; cv=none; b=N81ddsTI5EUC6UD8UIbXuB0dgrzTcK0ntR85mN0ptmEyuCv7LofHx5GUBIOdSGz9csMZDdxEle1Gu3ide3ggGVS1afulYlMp10xLbqCIw50HB6S+D/4TDusS8pvcF/X/S4/7fKgHZBXWeM6hx55siGbGCX7sylqxT+0YTDZvrp4=
+	t=1755866178; cv=none; b=pw42hufG+O/EtsPy6axY+Is5EvKAPeog3HnTVoAUtHS9K54742VRNEkrRIt1zJ4p29l6+803bnxOpafYzCF6JrDvm0OMHmnrqxIaJ0E/c7TcA8CZ7VJIpoCtxbJkxJ5XoKzPcAq0jNzg4OsS1urGgbgunkJa91a5h1Y3VwHvCKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755863724; c=relaxed/simple;
-	bh=Lu9IRRvPM24U7OFYy8PR7CG7XhX/qIcxBeZg8JkqQH0=;
+	s=arc-20240116; t=1755866178; c=relaxed/simple;
+	bh=GTN5iYlm2NEQay0j4m/2nggl3gFYu+Zq/0taUpgFTTc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jVLxNv7mO14hNbWMgqIqsND7nNxkdooGJ+hRjAFPlvcAGt49WbstNKeJeLOk0BF29CHhwPZwCBfjZbfvFNGVf1XEu/9edVjZ2aeIlfu5TiZIp8p2Sex8ouXr4TiN1ZmGEHZgQx/gkq5IYbjD+mljCVI+AusaLvmBdKqBEgb2OJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=UA/qEPHK; arc=none smtp.client-ip=212.227.15.15
+	 In-Reply-To:Content-Type; b=EhEJvoYefTdJkA2TrDfyxcWbW0NbjN6CysjNZERRWVpE8+AUQj7Elb0KPMZ/sTzb9BFVIz9e2Mijpovhye/8tr18+voANyO7teF1tlgvtLK660ohYDMU3wOYWBwrukp3uSVDb0uX9sNtQT3T4GAjD3Q2eDlBnfp44gzPl26sE8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=M61PcQbQ; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="UA/qEPHK"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="M61PcQbQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1755863696; x=1756468496; i=w_armin@gmx.de;
-	bh=Lu9IRRvPM24U7OFYy8PR7CG7XhX/qIcxBeZg8JkqQH0=;
+	s=s31663417; t=1755866147; x=1756470947; i=w_armin@gmx.de;
+	bh=J7hewAWeourx/jg/PVIZSpVWmzGcoNnw8uXDRNSjrO0=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=UA/qEPHKG4Vzbc1MymL1koPj+bQe96shtxd6i3V8zkbTp/CzaqF/MjkpI/f5LDFw
-	 71yhL4SaqU0bZvHeI5xf9wN9e629QHjrCP+CwaOmWSY2eYef5izmymDZB0/Q1F5WC
-	 IAXQSPt17NV3ISLNt+wey4GB9pC6i9mR4Tost9tQMjbc3BXtSlZcQpoYdy4fXeXU/
-	 XvDq9ILtzSk5q5rtJyxLFxTFzLcgik7lDb+jFDls8wqQ20EVvPpfKZzq+mUPzOzP1
-	 +h6ktwsytk46TAtFTq2wKGWsoowWM2kqcms/pXm1rdhpQ2SM/7g+PRcWJMGDmlAiw
-	 1Y5XjHE3qtgLx54rgA==
+	b=M61PcQbQduenzU/nZPp573xAyDb06FxYKZTgKzOU/bOa4GMPq6DBrpFptZ9pn5BM
+	 p/kZTwMOQjG/cDJHu0U7HM2sB+Xlo+WLu8DK116E3Own1HO24CC783u3MRmJhohlA
+	 dY16OHYp7dRQrvyImMPWnc+gjzxNJOTDbWY7LnGCPe+txV4XEY6vE/yFPt0gqu+VZ
+	 77QiYzOPVz2cqNJ84ceb1WoCvPiXD+TGxctjMPzcKO9dRPKZtwYWiGCk6mVHaTDFL
+	 3c/ElblZEPBhCUavgynpn2qTxVl6FmH8NAcu6Wi84LC5F02vEWn3xSseX6TVI7zHJ
+	 wEkUS894f9Qjtvt1Yg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [10.189.91.1] ([176.5.63.45]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVeI2-1uzIHD2ne0-00RPlj; Fri, 22
- Aug 2025 13:54:56 +0200
-Message-ID: <b4640a0d-c5db-4d40-a336-97fb16e8d405@gmx.de>
-Date: Fri, 22 Aug 2025 13:54:50 +0200
+Received: from [10.189.91.1] ([176.5.63.45]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1ML9yS-1v7W6r07k2-00LaqK; Fri, 22
+ Aug 2025 14:35:47 +0200
+Message-ID: <44404f92-fd30-400c-9f80-64c5649d9849@gmx.de>
+Date: Fri, 22 Aug 2025 14:35:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,318 +43,306 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1] platform/x86: thinkpad_acpi: Add parameter to
- suppress invalid thermal sensors
-To: marc.burkhardt@protoco.consulting,
- Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: platform-driver-x86@vger.kernel.org,
- ibm-acpi-devel@lists.sourceforge.net,
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
- "Derek J . Clark" <derekjohn.clark@gmail.com>,
+Subject: Re: [PATCH v1 2/5] platform/x86: ayaneo-ec: Add hwmon support
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+ platform-driver-x86@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
  Hans de Goede <hansg@kernel.org>,
  =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20250818204353.857304-1-marc.burkhardt@protoco.consulting>
- <196b8004-3b09-48d4-891a-80eee2efbf3c@app.fastmail.com>
- <ebaa2ff317a21291a086a55b204d2d68@protoco.consulting>
+ Derek John Clark <derekjohn.clark@gmail.com>,
+ =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+References: <20250820160628.99678-1-lkml@antheas.dev>
+ <20250820160628.99678-3-lkml@antheas.dev>
 Content-Language: en-US
 From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <ebaa2ff317a21291a086a55b204d2d68@protoco.consulting>
+In-Reply-To: <20250820160628.99678-3-lkml@antheas.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Pwwky3v9kRlTPArBzPmURB7S+ktX2rkdJ21nf5Gbm/pHP0WXnRf
- nng40nK2vXbCEzfw1oD27sJ53ot3Y2JOYTO/Erwu8mU0MaAOul4pJeTm5SpsiQdaShS6u4Z
- 9+BFay6+Lw8IPShrv8KV2skzRPhoVj3wTnL/tul4nekGFJDKV4PcV6bBrdo2gQBJOjsCRvy
- 7cQPd8W/OIkmpB4bz43bA==
+X-Provags-ID: V03:K1:c7jDHJY+Lv9by1x2l0SUCLZ4APxK3hCKgGNWAk3IrvcGj1woqUq
+ azh6HPLcqY4hCquFO0MyNVizmCM/NgYapoPPE8h+C+JzeXZu5uBtGwZoQ5Hs59fHT0DhkU4
+ oTzIMxG2cjo2BCOSIsBKcdQhFl1mJVZyX/0Oqw8hCPXAc6aadPif/ztt/OWtqW1sSNUpVoT
+ KI4y7gaNCE+Eno1Mrw6yg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:w5P4ET1Ty8E=;Kf6rs4pFpKKPsdRFfryeUxtYtJB
- 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
+UI-OutboundReport: notjunk:1;M01:P0:/2dCdsgYZ5Q=;kEb59JWISmup0lXnFJ82wIyo5lU
+ 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
 
-Am 21.08.25 um 19:32 schrieb Marc Burkhardt:
+Am 20.08.25 um 18:06 schrieb Antheas Kapenekakis:
 
-> Am 2025-08-20 00:03, schrieb Mark Pearson:
+> Add hwmon single fan sensor reads and control for Ayaneo devices.
+> The register and method of access is the same for all devices.
 >
-> Hi Mark,
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>   drivers/platform/x86/Kconfig     |   2 +
+>   drivers/platform/x86/ayaneo-ec.c | 132 +++++++++++++++++++++++++++++++
+>   2 files changed, 134 insertions(+)
 >
-> thanks for replying.
->
->> Hi Marc,
->>
->> On Mon, Aug 18, 2025, at 4:39 PM, Marc Burkhardt wrote:
->>> While moving an existing Icinga installation to a Lenovo P15 20SU I=20
->>> came
->>> across broken JSON output from a "sensors -Aj" command consumed by the
->>> Icinga check_lm_sensors plugin. After fiddling around trying to build =
-a
->>> fix in either lm_sensors or Icinga I found out the error was rooted in
->>> some sysfs file that was created but threw errors while being read.=20
->>> On my
->>> Lenovo ThinkPad the default fallback to 8 temperature sensors creates
->>> sysfs entries like in my case "temp8_input" that fail when read,=20
->>> causing
->>> the issue in user-space.
->>>
->>> This patch adds a module parameter (suppress_sensor) using
->>> module_param_array() to allow users to specify a comma-separated=20
->>> list of
->>> zero-based sensor indices to suppress sysfs file creation (e.g.
->>> suppress_sensor=3D3,7). Instead of a model-specific quirk, this provid=
-es
->>> flexible configuration for any ThinkPad with similar issues and is=20
->>> working
->>> out-of-the-box without additional models being marked for the quirk.=
-=20
->>> The
->>> parameter uses a fixed-size array based on=20
->>> TPACPI_MAX_THERMAL_SENSORS (16)
->>> consistent with the driver=E2=80=99s thermal sensor handling (ie.
->>> ibm_thermal_sensors_struct or sensor_dev_attr_thermal_temp_input).
->>>
->>> Logging via pr_info() reports the number of suppressed sensors at=20
->>> module
->>> initialization, and pr_info() logs each suppressed sensor during sysfs
->>> attribute creation. Invalid sensor indices are logged once via=20
->>> pr_warn()
->>> to avoid repetitive warnings. Tested on a ThinkPad P15 with
->>> suppress_sensor=3D3,7, confirming suppression of temp4_input and=20
->>> temp8_input
->>> with no sysfs errors. Bounds checking for uncommon values is in=20
->>> place or
->>> will be logged.
->>>
->>> The patch applies to the current
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=20
->>> although
->>> it was initially written for a 6.16.0 kernel.
->>>
->>> I look forward to any feedback on the patch and/or handling of=20
->>> submission.
->>> Please CC: for now as I am not (yet) subscribed. Thank you.
->>>
->>> Signed-off-by: Marc Burkhardt <marc.burkhardt@protoco.consulting>
->>> ---
->>> Notes:
->>> I haven't posted on LKML or send a patch for over a decade now so
->>> please forgive any possible mistakes I made regarding current coding
->>> conventions or more generally in submitting this patch. The patch was
->>> running for some time here with faulty sensors removed from sysfs=20
->>> and no
->>> problems otherwise detected and was surely run through checkpatch.pl=
-=20
->>> before
->>> submission. get_maintainer.pl was helpful to find the hopefully right
->>> people for CC:ing but I am otherweise totally unaware of any current
->>> procedures or best-practices when it comes to submitting a patch.
->>>
->>> drivers/platform/x86/lenovo/thinkpad_acpi.c | 35=20
->>> +++++++++++++++++++++++++++++
->>> =C2=A01 file changed, 35 insertions(+)
->>>
->>> diff --git a/drivers/platform/x86/lenovo/thinkpad_acpi.c
->>> b/drivers/platform/x86/lenovo/thinkpad_acpi.c
->>> index cc19fe520ea9..30ff01f87403 100644
->>> --- a/drivers/platform/x86/lenovo/thinkpad_acpi.c
->>> +++ b/drivers/platform/x86/lenovo/thinkpad_acpi.c
->>> @@ -6019,6 +6019,30 @@ struct ibm_thermal_sensors_struct {
->>> =C2=A0=C2=A0=C2=A0=C2=A0 s32 temp[TPACPI_MAX_THERMAL_SENSORS];
->>> =C2=A0};
->>>
->>> +static int suppress_sensor[TPACPI_MAX_THERMAL_SENSORS];
->>> +static unsigned int suppress_sensor_count;
->>> +
->>> +static bool is_sensor_suppressed(int index)
->>> +{
->>> +=C2=A0=C2=A0=C2=A0 unsigned int i;
->>> +=C2=A0=C2=A0=C2=A0 bool logged =3D false;
->>> +
->>> +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < suppress_sensor_count; i++) {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (suppress_sensor[i] =3D=
-=3D index)
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 re=
-turn true;
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!logged &&
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (s=
-uppress_sensor[i] < 0
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 || suppress_sensor[i] >=3D=20
->>> TPACPI_MAX_THERMAL_SENSORS)) {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr=
-_warn("Invalid sensor index %d in suppress_sensor\n",
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 suppress_sensor[i]);
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 lo=
-gged =3D true;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>> +=C2=A0=C2=A0=C2=A0 }
->>> +
->>> +=C2=A0=C2=A0=C2=A0 return false;
->>> +}
->>> +
->>> =C2=A0static const struct tpacpi_quirk thermal_quirk_table[] __initcon=
-st =3D {
->>> =C2=A0=C2=A0=C2=A0=C2=A0 /* Non-standard address for thermal registers=
- on some ThinkPads */
->>> =C2=A0=C2=A0=C2=A0=C2=A0 TPACPI_Q_LNV3('R', '1', 'F', true),=C2=A0=C2=
-=A0=C2=A0 /* L13 Yoga Gen 2 */
->>> @@ -6313,6 +6337,11 @@ static umode_t thermal_attr_is_visible(struct
->>> kobject *kobj,
->>>
->>> =C2=A0=C2=A0=C2=A0=C2=A0 int idx =3D sensor_attr->index;
->>>
->>> +=C2=A0=C2=A0=C2=A0 if (is_sensor_suppressed(idx)) {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_info("Sensor %d suppres=
-sed\n", idx);
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->>> +=C2=A0=C2=A0=C2=A0 }
->>> +
->>> =C2=A0=C2=A0=C2=A0=C2=A0 switch (thermal_read_mode) {
->>> =C2=A0=C2=A0=C2=A0=C2=A0 case TPACPI_THERMAL_NONE:
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->>> @@ -11653,6 +11682,9 @@ static void __init
->>> thinkpad_acpi_init_banner(void)
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 thinkpad_id.model_str,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 (thinkpad_id.nummodel_str) ?
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 thinkpad_id.nummodel_str : "unknown");
->>> +
->>> +=C2=A0=C2=A0=C2=A0 pr_info("Suppressing %d user-supplied sensor(s) vi=
-a parameter
->>> suppress_sensor\n",
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 suppress_sensor_count);
->>> =C2=A0}
->>>
->>> =C2=A0/* Module init, exit, parameters */
->>> @@ -11785,6 +11817,9 @@ MODULE_PARM_DESC(experimental,
->>> =C2=A0module_param_named(debug, dbg_level, uint, 0);
->>> =C2=A0MODULE_PARM_DESC(debug, "Sets debug level bit-mask");
->>>
->>> +module_param_array(suppress_sensor, int, &suppress_sensor_count,=20
->>> 0444);
->>> +MODULE_PARM_DESC(suppress_sensor, "Comma-separated sensor indices to
->>> suppress (e.g., 3,7)");
->>> +
->>> =C2=A0module_param(force_load, bool, 0444);
->>> =C2=A0MODULE_PARM_DESC(force_load,
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Attempts to lo=
-ad the driver even on a mis-identified=20
->>> ThinkPad when
->>> true");
->>
->> The P15 is one of the Linux certified platforms...though it's a bit=20
->> older now.
->>
->> I'd be more interested in figuring out which sensors are returning an=
-=20
->> error and figuring out how we address that. I have access to the FW=20
->> and platform team for questions (though this platform is a bit older=20
->> now, so if we need FW fixes that will be trickier). My gut feeling is=
-=20
->> we shouldn't be creating sysfs entries if the sensors don't exist or=20
->> aren't accessible.
->
-> That is what my patch does - it prevents creating the sysfs entries=20
-> but not based on a check for validity of the sensor in code (as=20
-> probably desired by Ilpo when I understand a previous mail correctly)=20
-> but rather on a user-provided configuration via the new parameter. I=20
-> reply to the other mail as well soon.
->
-Such sensors are meant to be ignored using /etc/sensors3.conf (provided by=
- libsensors) unless the driver itself can
-automatically determine this by asking the platform firmware. I suggest th=
-at you use this mechanism instead of adding
-additional module parameters.
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 6d4a33791cc1..0a7ca2c78456 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -307,6 +307,8 @@ config ASUS_TF103C_DOCK
+>   config AYANEO_EC
+>   	tristate "Ayaneo EC platform control"
+>   	depends on X86
+> +	depends on ACPI_EC
+> +	depends on HWMON
+>   	help
+>   	  Enables support for the platform EC of Ayaneo devices. This
+>   	  includes fan control, fan speed, charge limit, magic
+> diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/aya=
+neo-ec.c
+> index 90b86527ab0d..8b1902706b81 100644
+> --- a/drivers/platform/x86/ayaneo-ec.c
+> +++ b/drivers/platform/x86/ayaneo-ec.c
+> @@ -7,13 +7,23 @@
+>    * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
+>    */
+>  =20
+> +#include <linux/acpi.h>
+>   #include <linux/dmi.h>
+> +#include <linux/hwmon.h>
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+>  =20
+> +#define AYANEO_PWM_ENABLE_REG	 0x4A
+> +#define AYANEO_PWM_REG		 0x4B
+> +#define AYANEO_PWM_MODE_AUTO	 0x00
+> +#define AYANEO_PWM_MODE_MANUAL	 0x01
+> +
+> +#define AYANEO_FAN_REG		 0x76
+> +
+>   struct ayaneo_ec_quirk {
+> +	bool has_fan_control;
+>   };
+>  =20
+>   struct ayaneo_ec_platform_data {
+> @@ -22,6 +32,7 @@ struct ayaneo_ec_platform_data {
+>   };
+>  =20
+>   static const struct ayaneo_ec_quirk ayaneo3 =3D {
+> +	.has_fan_control =3D true,
+>   };
+>  =20
+>   static const struct dmi_system_id dmi_table[] =3D {
+> @@ -35,10 +46,124 @@ static const struct dmi_system_id dmi_table[] =3D {
+>   	{},
+>   };
+>  =20
+> +/* Callbacks for hwmon interface */
+> +static umode_t ayaneo_ec_hwmon_is_visible(const void *drvdata,
+> +				       enum hwmon_sensor_types type, u32 attr,
+> +				       int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return 0444;
+> +	case hwmon_pwm:
+> +		return 0644;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int ayaneo_ec_read(struct device *dev, enum hwmon_sensor_types t=
+ype,
+> +			     u32 attr, int channel, long *val)
+> +{
+> +	u8 tmp;
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			ret =3D ec_read(AYANEO_FAN_REG, &tmp);
+> +			if (ret)
+> +				return ret;
+> +			*val =3D tmp << 8;
+> +			ret =3D ec_read(AYANEO_FAN_REG + 1, &tmp);
+> +			if (ret)
+> +				return ret;
+> +			*val +=3D tmp;
+> +			return 0;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			ret =3D ec_read(AYANEO_PWM_REG, &tmp);
+> +			if (ret)
+> +				return ret;
+> +			*val =3D (255 * tmp) / 100;
+> +			if (*val < 0 || *val > 255)
+> +				return -EINVAL;
+> +			return 0;
+> +		case hwmon_pwm_enable:
+> +			ret =3D ec_read(AYANEO_PWM_ENABLE_REG, &tmp);
+> +			if (ret)
+> +				return ret;
+> +			if (tmp =3D=3D AYANEO_PWM_MODE_MANUAL)
+> +				*val =3D 1;
+> +			else
+> +				*val =3D 2;
+> +			return 0;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int ayaneo_ec_write(struct device *dev, enum hwmon_sensor_types =
+type,
+> +			      u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_enable:
+> +			if (val =3D=3D 1)
+> +				return ec_write(AYANEO_PWM_ENABLE_REG,
+> +						AYANEO_PWM_MODE_MANUAL);
+> +			else if (val =3D=3D 2)
+> +				return ec_write(AYANEO_PWM_ENABLE_REG,
+> +						AYANEO_PWM_MODE_AUTO);
+> +			else
+> +				return -EINVAL;
+
+Consider using a switch statement here.
+
+> +		case hwmon_pwm_input:
+> +			if (val < 0 || val > 255)
+> +				return -EINVAL;
+> +			return ec_write(AYANEO_PWM_REG, (val * 100) / 255);
+
+Better use fixp_linear_interpolate() for that. Also you need to restore th=
+ose registers
+after suspend. I suggest that you use regmap for that.
 
 Thanks,
 Armin Wolf
 
-(I also CCed the hwmon mailing list as libsensors originally came from the=
-re)
-
->>
->> I do have a P15 so can check it out (I'm going to have to blow some=20
->> dust off it). If you've got the details on which sensors need=20
->> suppressing that would be useful. I have seen previously where it's=20
->> trying to access a GPU sensor on a UMA model.
->
-> On my hardware it's sensor temp8_input which is unreadable at all und=20
-> sensor temp4_input that has a constant value of 0, no matter how hot,=20
-> cold or loud the machine is running. I am, however, able to monitor=20
-> GPU temps via nvidia _and_ thinkpad ACPI. The values are mostly equal,=
-=20
-> differ a bit due to internal timing sometimes.
->
->>
->> Mark
->
-> Marc
->
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops ayaneo_ec_hwmon_ops =3D {
+> +	.is_visible =3D ayaneo_ec_hwmon_is_visible,
+> +	.read =3D ayaneo_ec_read,
+> +	.write =3D ayaneo_ec_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *const ayaneo_ec_sensors[] =3D {
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
+> +	NULL,
+> +};
+> +
+> +static const struct hwmon_chip_info ayaneo_ec_chip_info =3D {
+> +	.ops =3D &ayaneo_ec_hwmon_ops,
+> +	.info =3D ayaneo_ec_sensors,
+> +};
+> +
+>   static int ayaneo_ec_probe(struct platform_device *pdev)
+>   {
+>   	const struct dmi_system_id *dmi_entry;
+>   	struct ayaneo_ec_platform_data *data;
+> +	struct device *hwdev;
+>  =20
+>   	dmi_entry =3D dmi_first_match(dmi_table);
+>   	if (!dmi_entry)
+> @@ -52,6 +177,13 @@ static int ayaneo_ec_probe(struct platform_device *p=
+dev)
+>   	data->quirks =3D dmi_entry->driver_data;
+>   	platform_set_drvdata(pdev, data);
+>  =20
+> +	if (data->quirks->has_fan_control) {
+> +		hwdev =3D devm_hwmon_device_register_with_info(
+> +			&pdev->dev, "ayaneo_ec", NULL, &ayaneo_ec_chip_info, NULL);
+> +		if (IS_ERR(hwdev))
+> +			return PTR_ERR(hwdev);
+> +	}
+> +
+>   	return 0;
+>   }
+>  =20
