@@ -1,1273 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2012FFDCA;
-	Fri, 22 Aug 2025 13:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027FF2FFDE0;
+	Fri, 22 Aug 2025 13:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755868572; cv=none; b=W+gq7f/Kj7aI5f36L6T2RdIOqn7atUQs8QU4CA76aJFsvXXOc8gFORM68KYE4IjTHCtbp9yoS0It1NhBto6BJfXQLso1ns2SYugJo5a3mM9EG7OqQyOmN7fCEqkbUl369EgxLS/asDCki5WJR1Xqj46LXC2HnLxVe8awcV0vszI=
+	t=1755869343; cv=none; b=C7ZWpoH03oinN6vDbT8BCJKiHXTS0oCVNGJY0GFDZ7U4MUCD9jw/symtImQWh6T01IpBLkcj2LYFiujIOTFlOGDJP12xphWX53pj+bvlEg44GQFcSajnAio/QMuYd4NGXTStybfwLkQtZiG4zZqoQhYEucoYdS3/5dSnbntvTlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755868572; c=relaxed/simple;
-	bh=JR24Cc5rWgKEKqiEaGWBr5oYXNkRaEkAhtPXkdWCoqc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QUJJVCZdSSenOaGM948smd8b3ZBEr0YeW2hC5xOqsgVBVkRFWP8se75xX9eZgYiA29vbpx0yNyELTEi7AvIPjhPCV/9trq8istuWMU13Ar3pS1Pa5gGHA5OxeDyGbEQW+Qoy7igqCUOUUoER14VxTCEqrtq+pHxlW3YQTzxmahs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ssEmfiqJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1755869343; c=relaxed/simple;
+	bh=ZL8GY7g3uwloV0kELsLuK74wUOOqCTd2WYewZKfdFAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uqU+A7+wK9UW/bvpiFkBWdvzaSQE0W7j5gEv5b0f3T3V16rSY/yiXBdQRv1qWjP9pMP6K/BXACFcceE0OQMI2hzFRF5vCQ1RIiNwDvYzW4XX96ib6PpBL10wwbncdt2lvCXSlc2yhZTUdUGx76ul+qw9MepKqURefaTq153tYSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com; spf=pass smtp.mailfrom=debanilchowdhury.com; dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b=e2QiEQpm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dgLAXY7V; arc=none smtp.client-ip=103.168.172.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debanilchowdhury.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ssEmfiqJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88901C4CEED;
-	Fri, 22 Aug 2025 13:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755868571;
-	bh=JR24Cc5rWgKEKqiEaGWBr5oYXNkRaEkAhtPXkdWCoqc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ssEmfiqJy/wK5Nf9LrJc5/yU4VpKaqxWtPNoiokuW6nYZs9T67jrs/cey5wgxu3D8
-	 t9XRQESdqp7eKSIwLMvRcMDnYZ+tLr/AYGFQ39Z3aI4zalI8kHAr+HT3VoN2Dchb7Y
-	 qnMnvKG5zPGjiPUkYPMDsTTK193bGmQCP4wp8A+6AzzqCq5Akh+/A6O/WEGyScb9SQ
-	 +MUbJ0nvloNKm48tTHNh/8KwoNh+lAuD5Ns/f805BE+PX5w5U8A7jG89CHcdWJmXCH
-	 XS2kx14F5HFIlA7C+oF0Yjw37chScIBxdQHU5mSGlpAR1cuJGRtiTRSFZ2l6ivO/FW
-	 5Xx2V7B9WdcmA==
-From: Michael Walle <mwalle@kernel.org>
-To: Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Lee Jones <lee@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b="e2QiEQpm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dgLAXY7V"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 359101380836;
+	Fri, 22 Aug 2025 09:28:59 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 22 Aug 2025 09:28:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	debanilchowdhury.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
+	 t=1755869339; x=1755872939; bh=wGSgMf6A1+ZzqOwuHh7cUjUzSlzSWwas
+	r3z6cM11JqU=; b=e2QiEQpmtO+zUtuUCCuUIhEh+m8BC0Td/GFbdqqD5kcjSiIn
+	gw83qn8IGVrB3oef45dIgnVsIrO96NIS3Dp9i0rfCickEk6Fo5QSyDmY00l3Ur7I
+	ShHRxRS1h36kW7b7EYVWpYoj+Qgnr3IgueP1jqhcYjbrWXd/GccQ5/Pcf2IA7ZR2
+	GX3nICLjBiae9tocfVc83SeGQVYiy+yy1OvHX+ewet3pIlnmxO3WHA6qBIVikFdb
+	y5aRY6mLTnvFmXep2mxyoHiPmm9mXjBju49iNGUNbTETzFGjaMB9Y03hL7qN6AKO
+	V4u7kNyM4x/oLhZsiX/zzdmvGFJOxDkjDXbduQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1755869339; x=1755872939; bh=wGSgMf6A1+ZzqOwuHh7cUjUzSlzS
+	Wwasr3z6cM11JqU=; b=dgLAXY7Vbay4e4uyY76rDfSbM1NuTe2EzhxswsACNQdZ
+	9iv6+qiXDQ43+CeIVt0eK/ShHUJctC1Miys2UqLzIx56wLZeM/GHmsww4AVW5Ysb
+	KGSUS51wb/7HAD/cl8zk+KQpjk5yIo3vWBnPlIZjXSQOBh5MZZXcV0nhk8UielnB
+	vE9SLw5UNnvC3ddWrr1gWMTvpCM1p8lc0k3hHcZQv+OrBduNmR/q/XqnBT87cm9E
+	16U+bG54xtguonmxwnroKeDD7EX4MzeYh9Wv0LybDvOaLRytWNymHE9dlHuqrYq0
+	9pvnUVDD3ixfUTHBJm5GgohHm44tjPQiEtTtSmFbaA==
+X-ME-Sender: <xms:mnCoaH6ayRa1J5VjV97lTOdc70mpfxI-tzRb5VFXffIMalstXi-P0w>
+    <xme:mnCoaFg_GnzLBSHa-goUBu-nQdAYbeSwK07ZcmkZSGtmnsxgYKpW963ZGgiUP9XbU
+    hbFWNmHA32yfBMqxvc>
+X-ME-Received: <xmr:mnCoaF7bGhjG0YWieZxUljQvarX73Fz0RrhZJENZKJC5Zxlxg2cGvI5ZxBtgIa13cJ5zT6vd>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduieefkeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtre
+    dtjeenucfhrhhomhepffgvsggrnhhilhcuvehhohifughhuhhrhicuoehkvghrnhgvlhgu
+    vghvseguvggsrghnihhltghhohifughhuhhrhidrtghomheqnecuggftrfgrthhtvghrnh
+    epuddtfefgffffiefgtddugeefvdeuteefhfeltdeuieejvdeludetveettdetheefnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvg
+    hluggvvhesuggvsggrnhhilhgthhhofiguhhhurhihrdgtohhmpdhnsggprhgtphhtthho
+    pedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhinhgrugeslhhinhhugi
+    drihgsmhdrtghomhdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphht
+    thhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrh
+    hovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurght
+    ihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhdqmhgvnhhtvggvsh
+    eslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgv
+    lhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:mnCoaCH2-PIzc-BXzTMsh8eBAabRosNSN8dfDMuwefl2-jnU3iBo4A>
+    <xmx:mnCoaPLcv2LOc3B-3j2uBnHe0do8pRLT4eJ2Fd4ggKjffjEF5S7Ojg>
+    <xmx:mnCoaHi4m799LMv0Y3iukXzpDUNrqwXbRmhrXAWmO-L_NV3AhwgFIQ>
+    <xmx:mnCoaFmYV843PbkrPB52lbNVmZz5rBM9i2r8PdX3SjBVfL62YaJ5qA>
+    <xmx:m3CoaGd2-erDJxWWGrT5hIJdem637aHkTCS0G3p7l4GHby1HeuaAwaHo>
+Feedback-ID: i77364836:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Aug 2025 09:28:55 -0400 (EDT)
+From: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+To: ninad@linux.ibm.com,
+	corbet@lwn.net
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v1 7/7] arm64: dts: ti: Add support for Kontron SMARC-sAM67
-Date: Fri, 22 Aug 2025 15:15:31 +0200
-Message-Id: <20250822131531.1366437-8-mwalle@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250822131531.1366437-1-mwalle@kernel.org>
-References: <20250822131531.1366437-1-mwalle@kernel.org>
+	linux-doc@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+Subject: [PATCH v3] hwmon: crps: Fix typos in crps.rst documentation
+Date: Fri, 22 Aug 2025 18:55:02 +0530
+Message-ID: <20250822132836.5384-1-kerneldev@debanilchowdhury.com>
+X-Mailer: git-send-email 2.49.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Kontron SMARC-sAM67 is a SMARC module which features a TI AM67 SoC.
-It supports the following features:
- * Quad-core AM67A94 with 1.4GHz
- * 8 GiB RAM
- * 64 GiB eMMC
- * 4 MiB SPI flash for failsafe booting
- * 4x UART
- * 1x USB 2.0
- * 1x USB 3.2 (or 4x USB3.2 with onboard USB 3.2 hub)
- * 1x RTC
- * 2x GBE
- * 1x QSPI (with 2 chip selects)
- * 1x SPI (with 2 chip selects)
- * 7x I2C
- * 4x CSI (*)
- * 2x LVDS (or one dual-link LVDS)
- * 1x DSI (*)
- * 1x DP (*)
- * onboard microcontroller for boot control, failsafe booting and
-   external watchdog
+Changed a misspelling in crps.rst documentation:
+"Critial" → "Critical".
 
-(*) not yet supported by the kernel
-
-There is a base device tree and overlays which will add optional
-features. At the moment there is one full featured variant of that
-board whose device tree is generated during build by merging all the
-device tree overlays.
-
-Signed-off-by: Michael Walle <mwalle@kernel.org>
+Reported-by: codespell
+Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
 ---
- arch/arm64/boot/dts/ti/Makefile               |    6 +
- .../dts/ti/k3-am67a-kontron-sa67-base.dts     | 1092 +++++++++++++++++
- .../dts/ti/k3-am67a-kontron-sa67-gbe1.dtso    |   19 +
- .../ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso  |   24 +
- 4 files changed, 1141 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
- create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
+Changed in v3:
+- Update subject to correctly identify crps driver documentation 
+  (suggested by Guenter Roeck)
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index aad9177930e6..7047d3421783 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -133,7 +133,13 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721s2-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721s2-evm-pcie1-ep.dtbo
+Changed in v2:
+- In previous patch "From" header did not have my name in it. Fixed
+  that.
+
+Documentation/hwmon/crps.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
+index 87380b496..d42ea59d2 100644
+--- a/Documentation/hwmon/crps.rst
++++ b/Documentation/hwmon/crps.rst
+@@ -43,7 +43,7 @@ curr1_label		"iin"
+ curr1_input		Measured input current
+ curr1_max		Maximum input current
+ curr1_max_alarm		Input maximum current high alarm
+-curr1_crit		Critial high input current
++curr1_crit		Critical high input current
+ curr1_crit_alarm	Input critical current high alarm
+ curr1_rated_max		Maximum rated input current
  
- # Boards with J722s SoC
-+k3-am67a-kontron-sa67-dtbs := k3-am67a-kontron-sa67-base.dtb \
-+	k3-am67a-kontron-sa67-rtc-rv8263.dtbo k3-am67a-kontron-sa67-gbe1.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-am67a-beagley-ai.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am67a-kontron-sa67.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am67a-kontron-sa67-base.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-am67a-kontron-sa67-gbe1.dtbo
-+dtb-$(CONFIG_ARCH_K3) += k3-am67a-kontron-sa67-rtc-rv8263.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-j722s-evm.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j722s-evm-csi2-quad-rpi-cam-imx219.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-j722s-evm-csi2-quad-tevi-ov5640.dtbo
-diff --git a/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
-new file mode 100644
-index 000000000000..961d8661ec97
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
-@@ -0,0 +1,1092 @@
-+// SPDX-License-Identifier: GPL-2.0-only OR MIT
-+/*
-+ * Kontron SMARC-sAM67 module
-+ *
-+ * Copyright (c) 2025 Kontron Europe GmbH
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/phy/phy.h>
-+#include "k3-j722s.dtsi"
-+#include "k3-serdes.h"
-+
-+/ {
-+	compatible = "kontron,sa67", "ti,j722s";
-+	model = "Kontron SMARC-sAM67";
-+
-+	aliases {
-+		serial0 = &mcu_uart0;
-+		serial1 = &main_uart0;
-+		serial2 = &main_uart5;
-+		serial3 = &wkup_uart0;
-+		mmc0 = &sdhci0;
-+		mmc1 = &sdhci1;
-+		rtc0 = &wkup_rtc0;
-+	};
-+
-+	lcd0_backlight: backlight-1 {
-+		compatible = "pwm-backlight";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&lcd0_backlight_pins_default>;
-+		pwms = <&epwm1 0 50000 0>;
-+		brightness-levels = <0 32 64 96 128 160 192 224 255>;
-+		default-brightness-level = <8>;
-+		enable-gpios = <&main_gpio0 29 GPIO_ACTIVE_HIGH>;
-+		status = "disabled";
-+	};
-+
-+	lcd1_backlight: backlight-2 {
-+		compatible = "pwm-backlight";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&lcd1_backlight_pins_default>;
-+		pwms = <&epwm1 1 50000 0>;
-+		brightness-levels = <0 32 64 96 128 160 192 224 255>;
-+		default-brightness-level = <8>;
-+		enable-gpios = <&main_gpio1 18 GPIO_ACTIVE_HIGH>;
-+		status = "disabled";
-+	};
-+
-+	chosen {
-+		stdout-path = "serial1:115200n8";
-+	};
-+
-+	connector-1 {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usb0_connector_pins_default>;
-+		type = "micro";
-+		id-gpios = <&main_gpio0 34 GPIO_ACTIVE_HIGH>;
-+		vbus-supply = <&vcc_usb0_vbus>;
-+
-+		port  {
-+			usb0_connector: endpoint {
-+				remote-endpoint = <&usb0_hc>;
-+			};
-+		};
-+
-+	};
-+
-+	memory@80000000 {
-+		/* Filled in by bootloader */
-+		reg = <0x00000000 0x00000000 0x00000000 0x00000000>,
-+		      <0x00000000 0x00000000 0x00000000 0x00000000>;
-+		device_type = "memory";
-+		bootph-pre-ram;
-+	};
-+
-+	reserved_memory: reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		linux,cma {
-+			compatible = "shared-dma-pool";
-+			reusable;
-+			size = <0x10000000>;
-+			alignment = <0x2000>;
-+			linux,cma-default;
-+		};
-+
-+		secure_tfa_ddr: tfa@9e780000 {
-+			reg = <0x00 0x9e780000 0x00 0x80000>;
-+			no-map;
-+		};
-+
-+		secure_ddr: optee@9e800000 {
-+			reg = <0x00 0x9e800000 0x00 0x01800000>;
-+			no-map;
-+		};
-+
-+		wkup_r5fss0_core0_memory_region: r5f-memory@a0100000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x00 0xa0100000 0x00 0xf00000>;
-+			no-map;
-+		};
-+	};
-+
-+	vin_5p0: regulator-1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_3V0_5V25_IN";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_s5: regulator-2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_3V3_S5";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vin_5p0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		bootph-all;
-+	};
-+
-+	vcc_1p8_s5: regulator-3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_1V8_S5";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vin_5p0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_s0: regulator-4 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_3V3_S0";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3p3_s5>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		enable-active-high;
-+		gpios = <&tps652g1 1 GPIO_ACTIVE_HIGH>;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_sd_s0: regulator-5 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "SDIO_PWR_EN";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_3p3_sd_s0_pins_default>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		gpios = <&main_gpio0 7 GPIO_ACTIVE_HIGH>;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_sd_vio_s0: regulator-6 {
-+		compatible = "regulator-gpio";
-+		regulator-name = "V_3V3_1V8_SD_S0";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_3p3_sd_vio_s0_pins_default>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3p3_s0>;
-+		regulator-boot-on;
-+		enable-gpios = <&main_gpio0 7 GPIO_ACTIVE_HIGH>;
-+		gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
-+		states = <3300000 0x0>,
-+			 <1800000 0x1>;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_cam_s0: regulator-7 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_3V3_CAM_S0";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_3p3_cam_s0_pins_default>;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_3p3_s5>;
-+		enable-active-high;
-+		interrupts-extended = <&main_gpio1 30 IRQ_TYPE_EDGE_FALLING>;
-+		bootph-all;
-+	};
-+
-+	vcc_1p1_s0: regulator-8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_1V1_S0";
-+		regulator-min-microvolt = <1100000>;
-+		regulator-max-microvolt = <1100000>;
-+		vin-supply = <&vcc_1p1_s3>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		enable-active-high;
-+		/* shared with V_0V75_0V85_CORE_S0 */
-+		gpios = <&tps652g1 4 GPIO_ACTIVE_HIGH>;
-+		bootph-all;
-+	};
-+
-+	vcc_0p85_vcore_s0: regulator-9 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "V_0V75_0V85_CORE_S0";
-+		regulator-min-microvolt = <850000>;
-+		regulator-max-microvolt = <850000>;
-+		vin-supply = <&vin_5p0>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		enable-active-high;
-+		gpios = <&tps652g1 4 GPIO_ACTIVE_HIGH>;
-+		bootph-all;
-+	};
-+
-+	vcc_lcd0_panel: regulator-10 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LCD0_VDD_EN";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_lcd0_panel_pins_default>;
-+		enable-active-high;
-+		gpios = <&main_gpio0 30 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	vcc_lcd1_panel: regulator-11 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "LCD1_VDD_EN";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_lcd1_panel_pins_default>;
-+		enable-active-high;
-+		gpios = <&main_gpio1 19 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	vcc_usb0_vbus: regulator-12 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB0_EN_OC#";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc_usb0_vbus_pins_default>;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		enable-active-high;
-+		gpios = <&main_gpio1 50 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&audio_refclk0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&audio_refclk0_pins_default>;
-+	status = "disabled";
-+};
-+
-+&audio_refclk1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&audio_refclk1_pins_default>;
-+	status = "disabled";
-+};
-+
-+&cpsw3g {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cpsw3g_pins_default>, <&rgmii1_pins_default>,
-+		    <&rgmii2_pins_default>;
-+	status = "okay";
-+};
-+
-+&cpsw3g_mdio {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&cpsw3g_mdio_pins_default>;
-+	status = "okay";
-+
-+	phy0: ethernet-phy@0 {
-+		reg = <0>;
-+	};
-+
-+	phy1: ethernet-phy@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+&cpsw_port1 {
-+	phy-connection-type = "rgmii-id";
-+	phy-handle = <&phy0>;
-+	nvmem-cells = <&base_mac_address 0>;
-+	nvmem-cell-names = "mac-address";
-+	status = "okay";
-+};
-+
-+&main_gpio0 {
-+	gpio-line-names =
-+		"", "", "", "", "", "", "", "SOC_SDIO_PWR_EN", "VSD_SEL",
-+		"RESET_OUT#", "I2C_MUX_RST#", "SPI_FLASH_CS#", "QPSI_CS0#",
-+		"QSPI_CS1#", "BOOT_SEL1", "BRDCFG0", "BRDCFG1", "BRDCFG2",
-+		"BRDCFG3", "BRDCFG4", "", "BRDREV0", "BRDREV1", "", "", "", "",
-+		"", "", "LCD0_BKLT_EN", "LCD0_VDD_EN", "GBE_INT#", "DSI0_TE",
-+		"CHARGING#", "USB0_OTG_ID", "PMIC_INT#", "RTC_INT#",
-+		"EDP_BRIDGE_EN", "EDP_BRIDGE_IRQ#", "", "CHARGER_PRSNT#", "",
-+		"", "", "", "BOOT_SEL2#", "CAM2_RST#", "CAM2_PWR#", "",
-+		"CAM3_RST#", "CAM3_PWR#", "GPIO0", "GPIO1", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "", "", "", "", "GPIO10", "GPIO11",
-+		"SLEEP#", "LID#";
-+
-+	bootph-all;
-+	status = "okay";
-+};
-+
-+&main_gpio1 {
-+	gpio-line-names =
-+		"", "", "", "", "", "", "", "GPIO6", "GPIO7", "", "", "", "",
-+		"GPIO8", "GPIO9", "PCIE_A_RST#", "", "BATLOW#", "LCD1_BKLT_EN",
-+		"LCD1_VDD_EN", "", "", "", "", "GPIO2", "GPIO3", "", "",
-+		"GPIO4", "GPIO5", "CAM_S0_FAULT#", "BOOT_SEL0#", "", "", "", "",
-+		"", "", "", "", "", "", "", "", "", "", "", "", "SDIO_CD#", "",
-+		"USB0_DRVVBUS", "USB1_DRVVBUS";
-+
-+	bootph-all;
-+	status = "okay";
-+};
-+
-+/* I2C_LOCAL */
-+&main_i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c0_pins_default>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+	bootph-all;
-+
-+	tps652g1: pmic@44 {
-+		compatible = "ti,tps652g1";
-+		reg = <0x44>;
-+		ti,primary-pmic;
-+		system-power-controller;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names =
-+			"LPM_EN#", "EN_3V3_S0", "POWER_BTN#", "CARRIER_STBY#",
-+			"EN_0V75_0V85_VCORE_S0", "PMIC_WAKEUP";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pmic_irq_pins_default>;
-+		interrupts-extended = <&main_gpio0 35 IRQ_TYPE_EDGE_FALLING>;
-+
-+		buck1-supply = <&vin_5p0>;
-+		buck2-supply = <&vin_5p0>;
-+		buck3-supply = <&vin_5p0>;
-+		buck4-supply = <&vin_5p0>;
-+		ldo1-supply = <&vin_5p0>;
-+		ldo2-supply = <&vin_5p0>;
-+		ldo3-supply = <&vin_5p0>;
-+
-+		bootph-all;
-+
-+		regulators {
-+			vcc_0p85_s0: buck1 {
-+				regulator-name = "V_0V85_S0";
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <850000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p1_s3: buck2 {
-+				regulator-name = "V_1V1_S3";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p8_s0: buck3 {
-+				regulator-name = "V_1V8_S0";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p2_s0: buck4 {
-+				regulator-name = "V_1V2_S0";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p8_vda_pll_s0: ldo1 {
-+				regulator-name = "V_1V8_VDA_PLL_S0";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p8_s3: ldo2 {
-+				regulator-name = "V_1V8_S3";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			vcc_1p8_ret_s5: ldo3 {
-+				regulator-name = "V_1V8_RET_S5";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+		};
-+	};
-+
-+	system-controller@4a {
-+		compatible = "kontron,sa67mcu", "kontron,sl28cpld";
-+		reg = <0x4a>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		watchdog@4 {
-+			compatible = "kontron,sl28cpld-wdt";
-+			reg = <0x4>;
-+			kontron,assert-wdt-timeout-pin;
-+		};
-+
-+		hwmon@8{
-+			compatible = "kontron,sa67mcu-hwmon";
-+			reg = <0x8>;
-+		};
-+	};
-+
-+	rtc: rtc@51 {
-+		compatible = "microcrystal,rv8263";
-+		reg = <0x51>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rtc_pins_default>;
-+		interrupts-extended = <&main_gpio0 36 IRQ_TYPE_EDGE_FALLING>;
-+	};
-+};
-+
-+/* I2C_CAM */
-+&main_i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c2_pins_default>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9546";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&i2c_mux_pins_default>;
-+
-+		vdd-supply = <&vcc_1p8_s0>;
-+		reset-gpios = <&main_gpio0 10 GPIO_ACTIVE_LOW>;
-+
-+		i2c_cam0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c_cam1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c_cam2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c_cam3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+/* I2C_LCD */
-+&main_i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c3_pins_default>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+};
-+
-+&main_pmx0 {
-+	audio_refclk0_pins_default: audio-refclk0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x0c4, PIN_OUTPUT, 5)	/* (W23) VOUT0_DATA3.AUDIO_EXT_REFCLK0 */
-+		>;
-+	};
-+
-+	audio_refclk1_pins_default: audio-refclk1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x0a0, PIN_OUTPUT, 1)	/* (N24) GPMC0_WPn.AUDIO_EXT_REFCLK1 */
-+		>;
-+	};
-+
-+	cpsw3g_mdio_pins_default: cpsw3g-mdio-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x160, PIN_OUTPUT, 0)	/* (AC24) MDIO0_MDC */
-+			J722S_IOPAD(0x15c, PIN_INPUT, 0)	/* (AD25) MDIO0_MDIO */
-+		>;
-+	};
-+
-+	cpsw3g_pins_default: cpsw3g-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1b8, PIN_OUTPUT, 1)	/* (C20) SPI0_CS1.CP_GEMAC_CPTS0_TS_COMP */
-+		>;
-+	};
-+
-+	edp_bridge_pins_default: edp-bridge-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x098, PIN_OUTPUT, 7)	/* (V21) GPMC0_WAIT0.GPIO0_37 */
-+			J722S_IOPAD(0x09c, PIN_INPUT, 7)	/* (W26) GPMC0_WAIT1.GPIO0_38 */
-+		>;
-+	};
-+
-+	i2c_mux_pins_default: i2c-mux-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x028, PIN_OUTPUT, 7)	/* (M27) OSPI0_D7.GPIO0_10 */
-+		>;
-+	};
-+
-+	lcd0_backlight_pins_default: lcd0-backlight-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x074, PIN_OUTPUT, 7)	/* (V22) GPMC0_AD14.GPIO0_29 */
-+			J722S_IOPAD(0x110, PIN_OUTPUT, 4)	/* (G27) MMC2_DAT1.EHRPWM1_A */
-+		>;
-+	};
-+
-+	lcd1_backlight_pins_default: lcd1-backlight-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1c0, PIN_OUTPUT, 7)	/* (E19) SPI0_D0.GPIO1_18 */
-+			J722S_IOPAD(0x114, PIN_OUTPUT, 4)	/* (G26) MMC2_DAT0.EHRPWM1_B */
-+		>;
-+	};
-+
-+	main_i2c0_pins_default: main-i2c0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1e0, PIN_INPUT, 0)	/* (D23) I2C0_SCL */
-+			J722S_IOPAD(0x1e4, PIN_INPUT, 0)	/* (B22) I2C0_SDA */
-+		>;
-+		bootph-all;
-+	};
-+
-+	main_i2c2_pins_default: main-i2c2-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x0b0, PIN_INPUT, 1)	/* (P22) GPMC0_CSn2.I2C2_SCL */
-+			J722S_IOPAD(0x0b4, PIN_INPUT, 1)	/* (P23) GPMC0_CSn3.I2C2_SDA */
-+		>;
-+	};
-+
-+	main_i2c3_pins_default: main-i2c3-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1d0, PIN_INPUT, 2)	/* (E22) UART0_CTSn.I2C3_SCL */
-+			J722S_IOPAD(0x1d4, PIN_INPUT, 2)	/* (B21) UART0_RTSn.I2C3_SDA */
-+		>;
-+	};
-+
-+	main_i2c4_pins_default: main-i2c4-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x0a8, PIN_INPUT, 1)	/* (R27) GPMC0_CSn0.I2C4_SCL */
-+			J722S_IOPAD(0x0ac, PIN_INPUT, 1)	/* (P21) GPMC0_CSn1.I2C4_SDA */
-+		>;
-+	};
-+
-+	main_uart0_pins_default: main-uart0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1c8, PIN_INPUT, 0)	/* (F19) UART0_RXD */
-+			J722S_IOPAD(0x1cc, PIN_OUTPUT, 0)	/* (F20) UART0_TXD */
-+		>;
-+		bootph-all;
-+	};
-+
-+	main_uart5_pins_default: main-uart5-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x108, PIN_INPUT, 3)	/* (J27) MMC2_DAT3.UART5_RXD */
-+			J722S_IOPAD(0x10c, PIN_OUTPUT, 3)	/* (H27) MMC2_DAT2.UART5_TXD */
-+			J722S_IOPAD(0x008, PIN_INPUT, 5)	/* (L22) OSPI0_DQS.UART5_CTSn */
-+			J722S_IOPAD(0x004, PIN_OUTPUT, 5)	/* (L23) OSPI0_LBCLKO.UART5_RTSn */
-+		>;
-+	};
-+
-+	mcasp0_pins_default: mcasp0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1a4, PIN_INPUT, 0)	/* (D25) MCASP0_ACLKX */
-+			J722S_IOPAD(0x1a8, PIN_INPUT, 0)	/* (C26) MCASP0_AFSX */
-+			J722S_IOPAD(0x1a0, PIN_INPUT, 0)	/* (F23) MCASP0_AXR0 */
-+			J722S_IOPAD(0x19c, PIN_OUTPUT, 0)	/* (B25) MCASP0_AXR1 */
-+		>;
-+	};
-+
-+	mcasp2_pins_default: mcasp2-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x070, PIN_INPUT, 3)	/* (V24) GPMC0_AD13.MCASP2_ACLKX */
-+			J722S_IOPAD(0x06c, PIN_INPUT, 3)	/* (V26) GPMC0_AD12.MCASP2_AFSX */
-+			J722S_IOPAD(0x05c, PIN_INPUT, 3)	/* (U27) GPMC0_AD8.MCASP2_AXR0 */
-+			J722S_IOPAD(0x060, PIN_OUTPUT, 3)	/* (U26) GPMC0_AD9.MCASP2_AXR1 */
-+		>;
-+	};
-+
-+	oldi0_pins_default: oldi0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x260, PIN_OUTPUT, 0)	/* (AF23) OLDI0_A0N */
-+			J722S_IOPAD(0x25c, PIN_OUTPUT, 0)	/* (AG24) OLDI0_A0P */
-+			J722S_IOPAD(0x268, PIN_OUTPUT, 0)	/* (AG22) OLDI0_A1N */
-+			J722S_IOPAD(0x264, PIN_OUTPUT, 0)	/* (AG23) OLDI0_A1P */
-+			J722S_IOPAD(0x270, PIN_OUTPUT, 0)	/* (AB20) OLDI0_A2N */
-+			J722S_IOPAD(0x26c, PIN_OUTPUT, 0)	/* (AB21) OLDI0_A2P */
-+			J722S_IOPAD(0x278, PIN_OUTPUT, 0)	/* (AG20) OLDI0_A3N */
-+			J722S_IOPAD(0x274, PIN_OUTPUT, 0)	/* (AG21) OLDI0_A3P */
-+			J722S_IOPAD(0x2a0, PIN_OUTPUT, 0)	/* (AF21) OLDI0_CLK0N */
-+			J722S_IOPAD(0x29c, PIN_OUTPUT, 0)	/* (AE20) OLDI0_CLK0P */
-+		>;
-+	};
-+
-+	oldi1_pins_default: oldi1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x280, PIN_OUTPUT, 0)	/* (AD21) OLDI0_A4N */
-+			J722S_IOPAD(0x27c, PIN_OUTPUT, 0)	/* (AC21) OLDI0_A4P */
-+			J722S_IOPAD(0x288, PIN_OUTPUT, 0)	/* (AF19) OLDI0_A5N */
-+			J722S_IOPAD(0x284, PIN_OUTPUT, 0)	/* (AF18) OLDI0_A5P */
-+			J722S_IOPAD(0x290, PIN_OUTPUT, 0)	/* (AG17) OLDI0_A6N */
-+			J722S_IOPAD(0x28c, PIN_OUTPUT, 0)	/* (AG18) OLDI0_A6P */
-+			J722S_IOPAD(0x298, PIN_OUTPUT, 0)	/* (AB19) OLDI0_A7N */
-+			J722S_IOPAD(0x294, PIN_OUTPUT, 0)	/* (AA20) OLDI0_A7P */
-+			J722S_IOPAD(0x2a8, PIN_OUTPUT, 0)	/* (AD20) OLDI0_CLK1N */
-+			J722S_IOPAD(0x2a4, PIN_OUTPUT, 0)	/* (AE19) OLDI0_CLK1P */
-+		>;
-+	};
-+
-+	ospi0_pins_default: ospi0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x000, PIN_OUTPUT, 0)	/* (L24) OSPI0_CLK */
-+			J722S_IOPAD(0x02c, PIN_OUTPUT, 0)	/* (K26) OSPI0_CSn0 */
-+			J722S_IOPAD(0x030, PIN_OUTPUT, 0)	/* (K23) OSPI0_CSn1 */
-+			J722S_IOPAD(0x034, PIN_OUTPUT, 0)	/* (K22) OSPI0_CSn2 */
-+			J722S_IOPAD(0x00c, PIN_INPUT, 0)	/* (K27) OSPI0_D0 */
-+			J722S_IOPAD(0x010, PIN_INPUT, 0)	/* (L27) OSPI0_D1 */
-+			J722S_IOPAD(0x014, PIN_INPUT, 0)	/* (L26) OSPI0_D2 */
-+			J722S_IOPAD(0x018, PIN_INPUT, 0)	/* (L25) OSPI0_D3 */
-+		>;
-+		bootph-all;
-+	};
-+
-+	pcie0_rc_pins_default: pcie0-rc-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x2ac, PIN_OUTPUT, 0)	/* (F25) PCIE0_CLKREQn */
-+			J722S_IOPAD(0x1b4, PIN_OUTPUT, 7)	/* (B20) SPI0_CS0.GPIO1_15 */
-+		>;
-+	};
-+
-+	pmic_irq_pins_default: pmic-irq-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x090, PIN_INPUT, 7)	/* (P27) GPMC0_BE0n_CLE.GPIO0_35 */
-+		>;
-+	};
-+
-+	rgmii1_pins_default: rgmii1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x14c, PIN_INPUT, 0)	/* (AC25) RGMII1_RD0 */
-+			J722S_IOPAD(0x150, PIN_INPUT, 0)	/* (AD27) RGMII1_RD1 */
-+			J722S_IOPAD(0x154, PIN_INPUT, 0)	/* (AE24) RGMII1_RD2 */
-+			J722S_IOPAD(0x158, PIN_INPUT, 0)	/* (AE26) RGMII1_RD3 */
-+			J722S_IOPAD(0x148, PIN_INPUT, 0)	/* (AE27) RGMII1_RXC */
-+			J722S_IOPAD(0x144, PIN_INPUT, 0)	/* (AD23) RGMII1_RX_CTL */
-+			J722S_IOPAD(0x134, PIN_OUTPUT, 0)	/* (AF27) RGMII1_TD0 */
-+			J722S_IOPAD(0x138, PIN_OUTPUT, 0)	/* (AE23) RGMII1_TD1 */
-+			J722S_IOPAD(0x13c, PIN_OUTPUT, 0)	/* (AG25) RGMII1_TD2 */
-+			J722S_IOPAD(0x140, PIN_OUTPUT, 0)	/* (AF24) RGMII1_TD3 */
-+			J722S_IOPAD(0x130, PIN_OUTPUT, 0)	/* (AG26) RGMII1_TXC */
-+			J722S_IOPAD(0x12c, PIN_OUTPUT, 0)	/* (AF25) RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	rgmii2_pins_default: rgmii2-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x0f8, PIN_INPUT, 2)	/* (AB24) VOUT0_HSYNC.RGMII2_RD0 */
-+			J722S_IOPAD(0x0fc, PIN_INPUT, 2)	/* (AC27) VOUT0_DE.RGMII2_RD1 */
-+			J722S_IOPAD(0x100, PIN_INPUT, 2)	/* (AB23) VOUT0_VSYNC.RGMII2_RD2 */
-+			J722S_IOPAD(0x104, PIN_INPUT, 2)	/* (AC26) VOUT0_PCLK.RGMII2_RD3 */
-+			J722S_IOPAD(0x0f4, PIN_INPUT, 2)	/* (AB27) VOUT0_DATA15.RGMII2_RXC */
-+			J722S_IOPAD(0x0f0, PIN_INPUT, 2)	/* (AB26) VOUT0_DATA14.RGMII2_RX_CTL */
-+			J722S_IOPAD(0x0e0, PIN_OUTPUT, 2)	/* (AA25) VOUT0_DATA10.RGMII2_TD0 */
-+			J722S_IOPAD(0x0e4, PIN_OUTPUT, 2)	/* (AB25) VOUT0_DATA11.RGMII2_TD1 */
-+			J722S_IOPAD(0x0e8, PIN_OUTPUT, 2)	/* (AA23) VOUT0_DATA12.RGMII2_TD2 */
-+			J722S_IOPAD(0x0ec, PIN_OUTPUT, 2)	/* (AA22) VOUT0_DATA13.RGMII2_TD3 */
-+			J722S_IOPAD(0x0dc, PIN_OUTPUT, 2)	/* (AA27) VOUT0_DATA9.RGMII2_TXC */
-+			J722S_IOPAD(0x0d8, PIN_OUTPUT, 2)	/* (AA24) VOUT0_DATA8.RGMII2_TX_CTL */
-+		>;
-+	};
-+
-+	rtc_pins_default: rtc-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x094, PIN_INPUT, 7)	/* (P26) GPMC0_BE1n.GPIO0_36 */
-+		>;
-+	};
-+
-+	sdhci1_pins_default: sdhci1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x23c, PIN_INPUT, 0)	/* (H22) MMC1_CMD */
-+			J722S_IOPAD(0x234, PIN_OUTPUT, 0)	/* (H24) MMC1_CLK */
-+			J722S_IOPAD(0x230, PIN_INPUT, 0)	/* (H23) MMC1_DAT0 */
-+			J722S_IOPAD(0x22c, PIN_INPUT, 0)	/* (H20) MMC1_DAT1 */
-+			J722S_IOPAD(0x228, PIN_INPUT, 0)	/* (J23) MMC1_DAT2 */
-+			J722S_IOPAD(0x224, PIN_INPUT, 0)	/* (H25) MMC1_DAT3 */
-+			J722S_IOPAD(0x240, PIN_INPUT, 0)	/* (B24) MMC1_SDCD */
-+			J722S_IOPAD(0x244, PIN_INPUT, 0)	/* (A24) MMC1_SDWP */
-+		>;
-+		bootph-all;
-+	};
-+
-+	usb0_connector_pins_default: usb0-connector-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x08c, PIN_INPUT_PULLUP, 7)	/* (N23) GPMC0_WEn.GPIO0_34 */
-+		>;
-+	};
-+
-+	usb1_pins_default: usb1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x258, PIN_OUTPUT, 0)	/* (B27) USB1_DRVVBUS */
-+		>;
-+	};
-+
-+	vcc_3p3_sd_s0_pins_default: vcc-3p3-sd-s0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x01c, PIN_OUTPUT, 7)	/* (L21) OSPI0_D4.GPIO0_7 */
-+		>;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_sd_vio_s0_pins_default: vcc-3p3-sd-vio-s0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x020, PIN_OUTPUT, 7)	/* (M26) OSPI0_D5.GPIO0_8 */
-+		>;
-+		bootph-all;
-+	};
-+
-+	vcc_3p3_cam_s0_pins_default: vcc-3p3-cam-s0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1f0, PIN_OUTPUT, 7)	/* (A23) EXT_REFCLK1.GPIO1_30 */
-+		>;
-+	};
-+
-+	vcc_lcd0_panel_pins_default: vcc-lcd0-panel-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x078, PIN_OUTPUT, 7)	/* (V23) GPMC0_AD15.GPIO0_30 */
-+		>;
-+	};
-+
-+	vcc_lcd1_panel_pins_default: vcc-lcd1-panel-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x1c4, PIN_OUTPUT, 7)	/* (E20) SPI0_D1.GPIO1_19 */
-+		>;
-+	};
-+
-+	vcc_usb0_vbus_pins_default: vcc-usb0-vbus-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_IOPAD(0x254, PIN_OUTPUT, 7)	/* (E25) USB0_DRVVBUS.GPIO1_50 */
-+		>;
-+	};
-+};
-+
-+/* SER1 */
-+&main_uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart0_pins_default>;
-+	bootph-all;
-+	status = "okay";
-+};
-+
-+/* SER2 */
-+&main_uart5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart5_pins_default>;
-+	bootph-all;
-+	status = "okay";
-+};
-+
-+/* I2S0 */
-+&mcasp0 {
-+	#sound-dai-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcasp0_pins_default>;
-+	op-mode = <0>; /* I2S */
-+	tdm-slots = <2>;
-+	serial-dir = <2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0>;
-+};
-+
-+/* I2S2 */
-+&mcasp2 {
-+	#sound-dai-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcasp2_pins_default>;
-+	op-mode = <0>; /* I2S */
-+	tdm-slots = <2>;
-+	serial-dir = <2 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0>;
-+};
-+
-+/* CAN0 */
-+&mcu_mcan0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan0_pins_default>;
-+	status = "okay";
-+};
-+
-+/* CAN1 */
-+&mcu_mcan1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan1_pins_default>;
-+	status = "okay";
-+};
-+
-+&mcu_gpio0 {
-+	gpio-line-names =
-+		"", "", "", "", "", "", "", "", "", "", "", /* 10 */ "GPIO12",
-+		"MCU_INT#", "", "", "", "", "", "", "", "", "", "", "GPIO13";
-+};
-+
-+/* I2C_GP */
-+&mcu_i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_i2c0_pins_default>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+
-+	/* SMARC Module EEPROM */
-+	eeprom@50 {
-+		compatible = "atmel,24c32";
-+		reg = <0x50>;
-+		pagesize = <32>;
-+		vcc-supply = <&vcc_1p8_s0>;
-+	};
-+};
-+
-+&mcu_pmx0 {
-+	mcu_i2c0_pins_default: mcu-i2c0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x044, PIN_INPUT, 0)	/* (B13) MCU_I2C0_SCL */
-+			J722S_MCU_IOPAD(0x048, PIN_INPUT, 0)	/* (E11) MCU_I2C0_SDA */
-+		>;
-+	};
-+	mcu_mcan0_pins_default: mcu-mcan0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x038, PIN_INPUT, 0)	/* (D8) MCU_MCAN0_RX */
-+			J722S_MCU_IOPAD(0x034, PIN_OUTPUT, 0)	/* (B2) MCU_MCAN0_TX */
-+		>;
-+	};
-+
-+	mcu_mcan1_pins_default: mcu-mcan1-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x040, PIN_INPUT, 0)	/* (B1) MCU_MCAN1_RX */
-+			J722S_MCU_IOPAD(0x03C, PIN_OUTPUT, 0)	/* (C1) MCU_MCAN1_TX */
-+		>;
-+	};
-+
-+	mcu_uart0_pins_default: mcu-uart0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x014, PIN_INPUT, 0)	/* (B8) MCU_UART0_RXD */
-+			J722S_MCU_IOPAD(0x018, PIN_OUTPUT, 0)	/* (B4) MCU_UART0_TXD */
-+			J722S_MCU_IOPAD(0x01c, PIN_INPUT, 0)	/* (B5) MCU_UART0_CTSn */
-+			J722S_MCU_IOPAD(0x020, PIN_OUTPUT, 0)	/* (C5) MCU_UART0_RTSn */
-+		>;
-+		bootph-all;
-+	};
-+
-+	mcu_spi0_pins_default: mcu-spi0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x008, PIN_OUTPUT, 0)	/* (A9) MCU_SPI0_CLK */
-+			J722S_MCU_IOPAD(0x000, PIN_OUTPUT, 0)	/* (C12) MCU_SPI0_CS0 */
-+			J722S_MCU_IOPAD(0x004, PIN_OUTPUT, 0)	/* (A10) MCU_SPI0_CS1 */
-+			J722S_MCU_IOPAD(0x00c, PIN_INPUT, 0)	/* (B12) MCU_SPI0_D0 */
-+			J722S_MCU_IOPAD(0x010, PIN_OUTPUT, 0)	/* (C11) MCU_SPI0_D1 */
-+		>;
-+	};
-+
-+	wkup_uart0_pins_default: wkup-uart0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x024, PIN_INPUT, 0)	/* (B3) WKUP_UART0_RXD */
-+			J722S_MCU_IOPAD(0x028, PIN_OUTPUT, 0)	/* (C8) WKUP_UART0_TXD */
-+		>;
-+		bootph-all;
-+	};
-+
-+	wkup_i2c0_pins_default: wkup-i2c0-default-pins {
-+		pinctrl-single,pins = <
-+			J722S_MCU_IOPAD(0x04c, PIN_INPUT, 0)	/* (B9) WKUP_I2C0_SCL */
-+			J722S_MCU_IOPAD(0x050, PIN_INPUT, 0)	/* (D11) WKUP_I2C0_SDA */
-+		>;
-+	};
-+};
-+
-+/* SPI0 */
-+&mcu_spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_spi0_pins_default>;
-+	status = "disabled";
-+};
-+
-+/* SER0 */
-+&mcu_uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_uart0_pins_default>;
-+	bootph-all;
-+	status = "okay";
-+};
-+
-+/* QSPI0 */
-+&ospi0 {
-+	pinctrl-0 = <&ospi0_pins_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <104000000>;
-+		spi-rx-bus-width = <2>;
-+		spi-tx-bus-width = <2>;
-+		m25p,fast-read;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <3>;
-+		vcc-supply = <&vcc_1p8_s0>;
-+		bootph-all;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				reg = <0x000000 0x400000>;
-+				label = "failsafe bootloader";
-+				read-only;
-+			};
-+		};
-+
-+		otp-1 {
-+			compatible = "user-otp";
-+
-+			nvmem-layout {
-+				compatible = "kontron,sa67-vpd", "kontron,sl28-vpd";
-+
-+				serial_number: serial-number {
-+				};
-+
-+				base_mac_address: base-mac-address {
-+					#nvmem-cell-cells = <1>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&pcie0_rc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie0_rc_pins_default>;
-+
-+	/*
-+	 * This is low active, but the driver itself is broken and already
-+	 * inverts the logic.
-+	 */
-+	reset-gpios = <&main_gpio1 15 GPIO_ACTIVE_HIGH>;
-+	phys = <&serdes1_pcie>;
-+	phy-names = "pcie-phy";
-+	status = "okay";
-+};
-+
-+&sdhci0 {
-+	disable-wp;
-+	bootph-all;
-+	ti,driver-strength-ohm = <50>;
-+	status = "okay";
-+};
-+
-+/* SDIO */
-+&sdhci1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdhci1_pins_default>;
-+	vmmc-supply = <&vcc_3p3_sd_s0>;
-+	vqmmc-supply = <&vcc_3p3_sd_vio_s0>;
-+	bootph-all;
-+	cd-gpios = <&main_gpio1 48 GPIO_ACTIVE_LOW>;
-+	cd-debounce-delay-ms = <100>;
-+	ti,fails-without-test-cd;
-+	ti,driver-strength-ohm = <50>;
-+	status = "okay";
-+};
-+
-+&serdes_ln_ctrl {
-+	idle-states = <J722S_SERDES0_LANE0_USB>,
-+		      <J722S_SERDES1_LANE0_PCIE0_LANE0>;
-+};
-+
-+&serdes_wiz0 {
-+	status = "okay";
-+};
-+
-+&serdes_wiz1 {
-+	status = "okay";
-+};
-+
-+&serdes0 {
-+	serdes0_usb3: phy@0 {
-+		reg = <0>;
-+		#phy-cells = <0>;
-+		resets = <&serdes_wiz0 1>;
-+		cdns,num-lanes = <1>;
-+		cdns,phy-type = <PHY_TYPE_USB3>;
-+	};
-+};
-+
-+&serdes1 {
-+	serdes1_pcie: phy@0 {
-+		reg = <0>;
-+		#phy-cells = <0>;
-+		resets = <&serdes_wiz1 1>;
-+		cdns,num-lanes = <1>;
-+		cdns,phy-type = <PHY_TYPE_PCIE>;
-+	};
-+};
-+
-+&usb0 {
-+	/* dual role is implemented but not a full featured OTG */
-+	adp-disable;
-+	hnp-disable;
-+	srp-disable;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	role-switch-default-mode = "peripheral";
-+	status = "okay";
-+
-+	port {
-+		usb0_hc: endpoint {
-+			remote-endpoint = <&usb0_connector>;
-+		};
-+	};
-+};
-+
-+&usb1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb1_pins_default>;
-+
-+	dr_mode = "host";
-+	maximum-speed = "super-speed";
-+	phys = <&serdes0_usb3>;
-+	phy-names = "cdns3,usb3-phy";
-+};
-+
-+&usbss0 {
-+	ti,vbus-divider;
-+	status = "okay";
-+};
-+
-+&usbss1 {
-+	ti,vbus-divider;
-+	status = "okay";
-+};
-+
-+/* I2C_PM */
-+&wkup_i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_i2c0_pins_default>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+};
-+
-+/* SER3 */
-+&wkup_uart0 {
-+	/* WKUP UART0 is used by Device Manager firmware */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_uart0_pins_default>;
-+	bootph-all;
-+	status = "reserved";
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
-new file mode 100644
-index 000000000000..4e9eb7998f38
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
-@@ -0,0 +1,19 @@
-+/dts-v1/;
-+/plugin/;
-+
-+&cpsw3g_mdio {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	phy1: ethernet-phy@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+&cpsw_port2 {
-+	phy-connection-type = "rgmii-id";
-+	phy-handle = <&phy1>;
-+	nvmem-cells = <&base_mac_address 1>;
-+	nvmem-cell-names = "mac-address";
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
-new file mode 100644
-index 000000000000..c9aa15269c92
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
-@@ -0,0 +1,24 @@
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+&{/} {
-+	aliases {
-+		rtc0 = "/bus@f0000/i2c@20000000/rtc@51"; /* &rtc */
-+		rtc1 = "/bus@f0000/bus@b00000/rtc@2b1f0000"; /* &wkup_rtc0 */
-+	};
-+};
-+
-+&main_i2c0 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	rtc: rtc@51 {
-+		compatible = "microcrystal,rv8263";
-+		reg = <0x51>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rtc_pins_default>;
-+		interrupts-extended = <&main_gpio0 36 IRQ_TYPE_EDGE_FALLING>;
-+	};
-+};
+@@ -51,7 +51,7 @@ curr2_label		"iout1"
+ curr2_input		Measured output current
+ curr2_max		Maximum output current
+ curr2_max_alarm		Output maximum current high alarm
+-curr2_crit		Critial high output current
++curr2_crit		Critical high output current
+ curr2_crit_alarm	Output critical current high alarm
+ curr2_rated_max		Maximum rated output current
+ 
 -- 
-2.39.5
+2.49.1
 
