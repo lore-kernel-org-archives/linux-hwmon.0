@@ -1,427 +1,130 @@
-Received: from relay10.grserver.gr (relay10.grserver.gr [37.27.248.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EB72C031B;
-	Fri, 22 Aug 2025 21:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.27.248.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EC73218AE;
+	Fri, 22 Aug 2025 21:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755896941; cv=none; b=hiEIVQrhKHb0B0xb1W1aS855TKWgXexOfjiITHU8G7Yj+Y+q43WDHhHeglxiir8piVKknLoavhxtRElGj4JPSitgYKibuFSYo+8oYWGr9lkEhoUxAREtybUXunujeT8v9jRHDMmJpdStru1LVRCLVB+g8jpVjiNXmqIs0xCe7iA=
+	t=1755898060; cv=none; b=D0z6tMl7+xsNEj9P0BpXF7ml2bME7i094geGcq/zqgjWOPZ3v92jQHedB2SSySMjy35UDNY+qZtMc0rXsOaIYAYbq11zCi34Ge7eO1Y3/PQL1ECWYV5yret90BJkjRBJ0nTTjHsqJ+zyXpkzqlUg+3rjjjyqS59OAJp9eLaP2PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755896941; c=relaxed/simple;
-	bh=aj5L2TX2iwz2NiltJHcPmFvBlvtRm7L7Q9nIczpF//U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=egksKfZCxWrm7AG6FQQRkqrF4cxNl2kRLgsPjXXWQj1ByDKKvi7z40s6sIJ/8E3aeQlUYzXKdduRrlxf9L2yAMh/IT8AozICD3WwhoyqOfXw4Zqvd3ct3l4BvBlfbqZ1DA6yFq7JnIjDrergS3HGVeJfs6KHCXhVYL3EG/Yt+o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=DDf155oi; arc=none smtp.client-ip=37.27.248.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1755898060; c=relaxed/simple;
+	bh=nkuC/QN2afmhmsTiI8HvmEF61S+v7E9xYf8SQ5cRt6M=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=mbEy4fZGGzyUTra8D8loK5LBrojJGNRbUx2D+Nvo7vfl7OqjUmb0anO5erIQhmON5rC3p36OgFAVIa8RKfvSRjwPyel8Wd1PZ1bGprQkn2lblaSPh4rL21SD1tfSP1y/ZMOY0ztImyENjmJcz0gAVh2PUKqRCnItMyUR5hrUt2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3/tgXbp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="DDf155oi"
-Received: from relay10 (localhost.localdomain [127.0.0.1])
-	by relay10.grserver.gr (Proxmox) with ESMTP id B5E933EAE6;
-	Sat, 23 Aug 2025 00:08:57 +0300 (EEST)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay10.grserver.gr (Proxmox) with ESMTPS id 912D63EA45;
-	Sat, 23 Aug 2025 00:08:56 +0300 (EEST)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id E53421FF777;
-	Sat, 23 Aug 2025 00:08:55 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1755896936;
-	bh=tXVCoDJ1dJ54wtQS60wSOykNa185qcgeAq3DOhnPMhs=;
-	h=Received:From:Subject:To;
-	b=DDf155oiRfB76iP1UdFhdIY5GftS03gplGMBIuz/wrVNmR3L4ByAKfgvxLkuTOjiX
-	 BXQo9SEZPcC8gqpsu6KsYErlAhsEJffGBEnTOoPk2wT1F8m1TGVj201LlM+I4WxxzY
-	 Y6OFR4W2jGn5PhhVJnnlxKr0eBzJM6MZ6PDN8rWMm+8Vobi3hiFPN2sjgPmujdLyqq
-	 UVRpao8oOehArCQ3TEDsJhU3xwm/rjeMoWH0SNvhwbNPfGJWzWHiWW/BRjgOsc7FTQ
-	 b7WzpOnv6fc/AQvmX/wWZtmZedquGVcQwh+QgIYWYXZIvGCW7Tavwtr0ssXo/JxXLS
-	 blRO3iG1J4ULw==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.208.180) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f180.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f180.google.com with SMTP id
- 38308e7fff4ca-33663076b32so219011fa.0;
-        Fri, 22 Aug 2025 14:08:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCX0MRGW41VexXAxAmYS8mDDye5KAfEJ+OyjAEfPU6WU1/vhmcpKYPj14IjwdNF+KBFHeWt4RKDC+FpHxsTV@vger.kernel.org,
- AJvYcCXAr+EZ/kF0ChU8jV1GPj+nOWo5OIL0TqCRZ702yQpq7fL5I4ZTFi2bXnue8CaFNzcdBBN/1DKFwIwdCA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZWdIaaYrkN3qFJgYdJxDjC2VoT1VGabQHNMjbHBJpmdHXOhXQ
-	TUAod5qwekbDoGa9tKGkDQJtzKV+i9USz81GsfNWKPZQVvqm2gwnaZi/wsXDvWPW8yQfcSck+wV
-	Nf8GZYV4KzhLnSvO8g4ol8nJX4ZGY1IU=
-X-Google-Smtp-Source: 
- AGHT+IF0BJB6744loVNX9J+VwPM1e6/x0rlPnAt+1tlz4WNIs7TXIXJk6wwdyAdLAtLweu9PnvPLhONcJMteVKG5dio=
-X-Received: by 2002:a2e:a9a9:0:b0:32b:4773:7a80 with SMTP id
- 38308e7fff4ca-33650f3e3c5mr13863411fa.25.1755896935419; Fri, 22 Aug 2025
- 14:08:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3/tgXbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00515C4CEED;
+	Fri, 22 Aug 2025 21:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755898058;
+	bh=nkuC/QN2afmhmsTiI8HvmEF61S+v7E9xYf8SQ5cRt6M=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=E3/tgXbpRMu3Jcn/e6bgT7QiCHcfx2wM4TCrsGb/8gZv5JDfPWyxwDMZ5ppT0xNvK
+	 u4djSFIuLPt2BvQoIzHYeGHUMcDffld2eS2waOSvuesBgujMfAVOjT/ccIVv5zNjz/
+	 tC0no6QO9MV1LSH35dzDZfgoMCYbZN1GPZs+M0VJJ2GcUZsCSVJepwXWj2brfUVP0h
+	 PTynPT6mvCVuv0hvUBZzhsJED8Hl6OhWEo7SAPxlSCzSVS+MN/u3M4Hf9DNIfQObEq
+	 GC5L4y733QqJF22tvgJMI6eF8rno+tO9NvO29zcimkkkP2RQvkVcZRoswmmDMJ0fzN
+	 +7VxZ9LFNK17w==
+Date: Fri, 22 Aug 2025 16:27:35 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250820160628.99678-1-lkml@antheas.dev>
- <20250820160628.99678-5-lkml@antheas.dev>
- <aaf9682d-f48f-4d43-b8fe-87a93b353fa7@gmx.de>
-In-Reply-To: <aaf9682d-f48f-4d43-b8fe-87a93b353fa7@gmx.de>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Fri, 22 Aug 2025 23:08:44 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwE8hr=kDFvMdkoq7mkc8nV9xrY-5OQG+CjPg14ok88Zow@mail.gmail.com>
-X-Gm-Features: Ac12FXz09FfCZBkF-EGxQ6-31MMY1qBnsIDBcAzL5UzPEiL3YjYLI0tUrZ0OxJ8
-Message-ID: 
- <CAGwozwE8hr=kDFvMdkoq7mkc8nV9xrY-5OQG+CjPg14ok88Zow@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] platform/x86: ayaneo-ec: Add controller power and
- modules attributes
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <175589693614.2814910.11317773422842162509@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
-X-Virus-Status: Clean
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, Tero Kristo <kristo@kernel.org>, 
+ Jean Delvare <jdelvare@suse.com>, Srinivas Kandagatla <srini@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+ linux-hwmon@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org, 
+ Guenter Roeck <linux@roeck-us.net>
+To: Michael Walle <mwalle@kernel.org>
+In-Reply-To: <20250822131531.1366437-1-mwalle@kernel.org>
+References: <20250822131531.1366437-1-mwalle@kernel.org>
+Message-Id: <175589786195.518444.15005080125108403794.robh@kernel.org>
+Subject: Re: [PATCH v1 0/7] Initial Kontron SMARC-sAM67 support
 
-On Fri, 22 Aug 2025 at 14:41, Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 20.08.25 um 18:06 schrieb Antheas Kapenekakis:
->
-> > The Ayaneo 3 features hot-swappable controller modules. The ejection
-> > and management is done through HID. However, after ejecting the modules,
-> > the controller needs to be power cycled via the EC to re-initialize.
-> >
-> > For this, the EC provides a variable that holds whether the left or
-> > right modules are connected, and a power control register to turn
-> > the controller on or off. After ejecting the modules, the controller
-> > should be turned off. Then, after both modules are reinserted,
-> > the controller may be powered on again to re-initialize.
-> >
-> > This patch introduces two new firmware attributes:
-> >   - `controller_modules`: a read-only attribute that indicates whether
-> >     the left and right modules are connected (none, left, right, both).
-> >   - `controller_power`: a read-write attribute that allows the user
-> >     to turn the controller on or off (with 'on'/'off').
-> >
-> > Therefore, after ejection is complete, userspace can power off the
-> > controller, then wait until both modules have been reinserted
-> > (`controller_modules` will return 'both') to turn on the controller.
->
-> I do not think that those controls should be exposed as firmware attributes,
-> as they are live values not persistent across power cycles. Better use
-> sysfs attributes instead.
 
-Isn't there precedent for this with SPL/SPPT/FPPT? I remember having a
-long form discussion with you about how this interface is appropriate
-for this, which is why I used it here.
+On Fri, 22 Aug 2025 15:15:24 +0200, Michael Walle wrote:
+> Now that the PMIC support is there, we can finally, upstream the
+> support for this board. Besides the usual device tree, this
+> patchset contains the support for the on-board house keeping MCU. It
+> make extensive reuse of the drivers for the former SMARC-sAL28
+> board. Besides different hwmon sensors, all the dt binding patches
+> will just add a board specific compatible (in addition to the old
+> sl28 compatible) to make any future board specific quirks possible.
+> 
+> I'm aware that there is a patch [1] which moves the sl28cpld MFD
+> schema to a different directory. Once that patch is merged, I'll
+> repost this series. But I already want to get some early feedback.
+> 
+> [1] https://lore.kernel.org/r/20250822075712.27314-2-krzysztof.kozlowski@linaro.org/
+> 
+> Michael Walle (7):
+>   dt-bindings: arm: ti: Add bindings for Kontron SMARC-sAM67 module
+>   dt-bindings: mfd: sl28cpld: add sa67mcu compatible
+>   dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
+>   dt-bindings: watchdog: add SMARC-sAM67 support
+>   dt-bindings: nvmem: sl28cpld: add sa67mcu compatible
+>   hwmon: sl28cpld: add SMARC-sAM67 support
+>   arm64: dts: ti: Add support for Kontron SMARC-sAM67
+> 
+>  .../devicetree/bindings/arm/ti/k3.yaml        |    1 +
+>  .../hwmon/kontron,sl28cpld-hwmon.yaml         |    1 +
+>  .../bindings/mfd/kontron,sl28cpld.yaml        |    7 +-
+>  .../nvmem/layouts/kontron,sl28-vpd.yaml       |    7 +-
+>  .../watchdog/kontron,sl28cpld-wdt.yaml        |    7 +-
+>  arch/arm64/boot/dts/ti/Makefile               |    6 +
+>  .../dts/ti/k3-am67a-kontron-sa67-base.dts     | 1092 +++++++++++++++++
+>  .../dts/ti/k3-am67a-kontron-sa67-gbe1.dtso    |   19 +
+>  .../ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso  |   24 +
+>  drivers/hwmon/sl28cpld-hwmon.c                |   76 +-
+>  10 files changed, 1234 insertions(+), 6 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
+> 
+> --
+> 2.39.5
+> 
+> 
+> 
 
-The controller_modules attribute is read only and reports which
-modules are connected, which is somewhat useful. As for power, it can
-likewise be used by users to toggle the controller on and off. Indeed,
-the attribute is not long lasting though.
 
-Best,
-Antheas
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-> Thanks,
-> Armin Wolf
->
-> >
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > ---
-> >   drivers/platform/x86/ayaneo-ec.c | 235 ++++++++++++++++++++++++++++++-
-> >   1 file changed, 234 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-> > index a4bdc6ae7af7..eb7f9ae03b4f 100644
-> > --- a/drivers/platform/x86/ayaneo-ec.c
-> > +++ b/drivers/platform/x86/ayaneo-ec.c
-> > @@ -16,6 +16,10 @@
-> >   #include <linux/platform_device.h>
-> >   #include <acpi/battery.h>
-> >
-> > +#include "firmware_attributes_class.h"
-> > +
-> > +#define DRIVER_NAME "ayaneo-ec"
-> > +
-> >   #define AYANEO_PWM_ENABLE_REG        0x4A
-> >   #define AYANEO_PWM_REG               0x4B
-> >   #define AYANEO_PWM_MODE_AUTO         0x00
-> > @@ -30,20 +34,60 @@
-> >   #define AYANEO_CHARGE_VAL_AUTO              0xaa
-> >   #define AYANEO_CHARGE_VAL_INHIBIT   0x55
-> >
-> > +#define AYANEO_POWER_REG     0x2d
-> > +#define AYANEO_POWER_OFF     0xfe
-> > +#define AYANEO_POWER_ON              0xff
-> > +#define AYANEO_MODULE_REG    0x2f
-> > +#define AYANEO_MODULE_LEFT   BIT(0)
-> > +#define AYANEO_MODULE_RIGHT  BIT(1)
-> > +
-> > +enum ayaneo_fw_attr_id {
-> > +     AYANEO_ATTR_CONTROLLER_MODULES,
-> > +     AYANEO_ATTR_CONTROLLER_POWER,
-> > +};
-> > +
-> > +static const char *const ayaneo_fw_attr_name[] = {
-> > +     [AYANEO_ATTR_CONTROLLER_MODULES] = "controller_modules",
-> > +     [AYANEO_ATTR_CONTROLLER_POWER] = "controller_power",
-> > +};
-> > +
-> > +static const char *const ayaneo_fw_attr_desc[] = {
-> > +     [AYANEO_ATTR_CONTROLLER_MODULES] =
-> > +             "Which controller Magic Modules are connected (none, left, right, both)",
-> > +     [AYANEO_ATTR_CONTROLLER_POWER] = "Controller power state (on, off)",
-> > +};
-> > +
-> > +#define AYANEO_ATTR_ENUM_MAX_ATTRS 7
-> > +#define AYANEO_ATTR_LANGUAGE_CODE "en_US.UTF-8"
-> > +
-> >   struct ayaneo_ec_quirk {
-> >       bool has_fan_control;
-> >       bool has_charge_control;
-> > +     bool has_magic_modules;
-> > +     bool has_controller_power;
-> >   };
-> >
-> >   struct ayaneo_ec_platform_data {
-> >       struct platform_device *pdev;
-> >       struct ayaneo_ec_quirk *quirks;
-> >       struct acpi_battery_hook battery_hook;
-> > +     struct device *fw_attrs_dev;
-> > +     struct kset *fw_attrs_kset;
-> > +};
-> > +
-> > +struct ayaneo_fw_attr {
-> > +     struct ayaneo_ec_platform_data *data;
-> > +     enum ayaneo_fw_attr_id fw_attr_id;
-> > +     struct attribute_group attr_group;
-> > +     struct kobj_attribute display_name;
-> > +     struct kobj_attribute current_value;
-> >   };
-> >
-> >   static const struct ayaneo_ec_quirk ayaneo3 = {
-> >       .has_fan_control = true,
-> >       .has_charge_control = true,
-> > +     .has_magic_modules = true,
-> > +     .has_controller_power = true,
-> >   };
-> >
-> >   static const struct dmi_system_id dmi_table[] = {
-> > @@ -260,6 +304,159 @@ static int ayaneo_remove_battery(struct power_supply *battery,
-> >       return 0;
-> >   }
-> >
-> > +static void ayaneo_kset_unregister(void *data)
-> > +{
-> > +     struct kset *kset = data;
-> > +
-> > +     kset_unregister(kset);
-> > +}
-> > +
-> > +static void ayaneo_fw_attrs_dev_unregister(void *data)
-> > +{
-> > +     struct device *fw_attrs_dev = data;
-> > +
-> > +     device_unregister(fw_attrs_dev);
-> > +}
-> > +
-> > +static ssize_t display_name_language_code_show(struct kobject *kobj,
-> > +                                            struct kobj_attribute *attr,
-> > +                                            char *buf)
-> > +{
-> > +     return sysfs_emit(buf, "%s\n", AYANEO_ATTR_LANGUAGE_CODE);
-> > +}
-> > +
-> > +static struct kobj_attribute fw_attr_display_name_language_code =
-> > +     __ATTR_RO(display_name_language_code);
-> > +
-> > +static ssize_t display_name_show(struct kobject *kobj,
-> > +                              struct kobj_attribute *attr, char *buf)
-> > +{
-> > +     struct ayaneo_fw_attr *fw_attr =
-> > +             container_of(attr, struct ayaneo_fw_attr, display_name);
-> > +
-> > +     return sysfs_emit(buf, "%s\n", ayaneo_fw_attr_desc[fw_attr->fw_attr_id]);
-> > +}
-> > +
-> > +static ssize_t current_value_show(struct kobject *kobj,
-> > +                               struct kobj_attribute *attr, char *buf)
-> > +{
-> > +     struct ayaneo_fw_attr *fw_attr =
-> > +             container_of(attr, struct ayaneo_fw_attr, current_value);
-> > +     bool left, right;
-> > +     char *out;
-> > +     int ret;
-> > +     u8 tmp;
-> > +
-> > +     switch (fw_attr->fw_attr_id) {
-> > +     case AYANEO_ATTR_CONTROLLER_MODULES:
-> > +             ret = ec_read(AYANEO_MODULE_REG, &tmp);
-> > +             if (ret)
-> > +                     return ret;
-> > +             left = !(tmp & AYANEO_MODULE_LEFT);
-> > +             right = !(tmp & AYANEO_MODULE_RIGHT);
-> > +
-> > +             if (left && right)
-> > +                     out = "both";
-> > +             else if (left)
-> > +                     out = "left";
-> > +             else if (right)
-> > +                     out = "right";
-> > +             else
-> > +                     out = "none";
-> > +
-> > +             return sysfs_emit(buf, "%s\n", out);
-> > +     case AYANEO_ATTR_CONTROLLER_POWER:
-> > +             ret = ec_read(AYANEO_POWER_REG, &tmp);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             if (tmp == AYANEO_POWER_OFF)
-> > +                     out = "off";
-> > +             else
-> > +                     out = "on";
-> > +
-> > +             return sysfs_emit(buf, "%s\n", out);
-> > +     }
-> > +     return -EINVAL;
-> > +}
-> > +
-> > +static ssize_t current_value_store(struct kobject *kobj,
-> > +                                struct kobj_attribute *attr, const char *buf,
-> > +                                size_t count)
-> > +{
-> > +     struct ayaneo_fw_attr *fw_attr =
-> > +             container_of(attr, struct ayaneo_fw_attr, current_value);
-> > +     int ret;
-> > +
-> > +     switch (fw_attr->fw_attr_id) {
-> > +     case AYANEO_ATTR_CONTROLLER_POWER:
-> > +             if (sysfs_streq(buf, "on"))
-> > +                     ret = ec_write(AYANEO_POWER_REG, AYANEO_POWER_ON);
-> > +             else if (sysfs_streq(buf, "off"))
-> > +                     ret = ec_write(AYANEO_POWER_REG, AYANEO_POWER_OFF);
-> > +             if (ret)
-> > +                     return ret;
-> > +             return count;
-> > +     case AYANEO_ATTR_CONTROLLER_MODULES:
-> > +             return -EINVAL;
-> > +     }
-> > +     return -EINVAL;
-> > +}
-> > +
-> > +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-> > +                      char *buf)
-> > +{
-> > +     return sysfs_emit(buf, "string\n");
-> > +}
-> > +
-> > +static struct kobj_attribute fw_attr_type_string = {
-> > +     .attr = { .name = "type", .mode = 0444 },
-> > +     .show = type_show,
-> > +};
-> > +
-> > +static int ayaneo_fw_attr_init(struct ayaneo_ec_platform_data *data,
-> > +                            const enum ayaneo_fw_attr_id fw_attr_id,
-> > +                            bool read_only)
-> > +{
-> > +     struct ayaneo_fw_attr *fw_attr;
-> > +     struct attribute **attrs;
-> > +     int idx = 0;
-> > +
-> > +     fw_attr = devm_kzalloc(&data->pdev->dev, sizeof(*fw_attr), GFP_KERNEL);
-> > +     if (!fw_attr)
-> > +             return -ENOMEM;
-> > +
-> > +     attrs = devm_kcalloc(&data->pdev->dev, AYANEO_ATTR_ENUM_MAX_ATTRS + 1,
-> > +                          sizeof(*attrs), GFP_KERNEL);
-> > +     if (!attrs)
-> > +             return -ENOMEM;
-> > +
-> > +     fw_attr->data = data;
-> > +     fw_attr->fw_attr_id = fw_attr_id;
-> > +     fw_attr->attr_group.name = ayaneo_fw_attr_name[fw_attr_id];
-> > +     fw_attr->attr_group.attrs = attrs;
-> > +
-> > +     attrs[idx++] = &fw_attr_type_string.attr;
-> > +     attrs[idx++] = &fw_attr_display_name_language_code.attr;
-> > +
-> > +     sysfs_attr_init(&fw_attr->display_name.attr);
-> > +     fw_attr->display_name.attr.name = "display_name";
-> > +     fw_attr->display_name.attr.mode = 0444;
-> > +     fw_attr->display_name.show = display_name_show;
-> > +     attrs[idx++] = &fw_attr->display_name.attr;
-> > +
-> > +     sysfs_attr_init(&fw_attr->current_value.attr);
-> > +     fw_attr->current_value.attr.name = "current_value";
-> > +     fw_attr->current_value.attr.mode = read_only ? 0444 : 0644;
-> > +     fw_attr->current_value.show = current_value_show;
-> > +     fw_attr->current_value.store = current_value_store;
-> > +     attrs[idx++] = &fw_attr->current_value.attr;
-> > +
-> > +     attrs[idx] = NULL;
-> > +     return sysfs_create_group(&data->fw_attrs_kset->kobj,
-> > +                               &fw_attr->attr_group);
-> > +}
-> > +
-> >   static int ayaneo_ec_probe(struct platform_device *pdev)
-> >   {
-> >       const struct dmi_system_id *dmi_entry;
-> > @@ -295,12 +492,48 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
-> >                       return ret;
-> >       }
-> >
-> > +     if (data->quirks->has_magic_modules || data->quirks->has_controller_power) {
-> > +             data->fw_attrs_dev = device_create(&firmware_attributes_class, NULL,
-> > +                                             MKDEV(0, 0), NULL, "%s",
-> > +                                             DRIVER_NAME);
-> > +             if (IS_ERR(data->fw_attrs_dev))
-> > +                     return PTR_ERR(data->fw_attrs_dev);
-> > +
-> > +             ret = devm_add_action_or_reset(&data->pdev->dev,
-> > +                                     ayaneo_fw_attrs_dev_unregister,
-> > +                                     data->fw_attrs_dev);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             data->fw_attrs_kset = kset_create_and_add("attributes", NULL,
-> > +                                                     &data->fw_attrs_dev->kobj);
-> > +             if (!data->fw_attrs_kset)
-> > +                     return -ENOMEM;
-> > +
-> > +             ret = devm_add_action_or_reset(&data->pdev->dev, ayaneo_kset_unregister,
-> > +                                     data->fw_attrs_kset);
-> > +
-> > +             if (data->quirks->has_magic_modules) {
-> > +                     ret = ayaneo_fw_attr_init(
-> > +                             data, AYANEO_ATTR_CONTROLLER_MODULES, true);
-> > +                     if (ret)
-> > +                             return ret;
-> > +             }
-> > +
-> > +             if (data->quirks->has_controller_power) {
-> > +                     ret = ayaneo_fw_attr_init(
-> > +                             data, AYANEO_ATTR_CONTROLLER_POWER, false);
-> > +                     if (ret)
-> > +                             return ret;
-> > +             }
-> > +     }
-> > +
-> >       return 0;
-> >   }
-> >
-> >   static struct platform_driver ayaneo_platform_driver = {
-> >       .driver = {
-> > -             .name = "ayaneo-ec",
-> > +             .name = DRIVER_NAME,
-> >       },
-> >       .probe = ayaneo_ec_probe,
-> >   };
->
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/next-20250822 (exact match)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/ti/' for 20250822131531.1366437-1-mwalle@kernel.org:
+
+arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dtb: pmic@44 (ti,tps652g1): 'gpio-line-names' does not match any of the regexes: '^buck([1-5]|12|34|123|1234)-supply$', '^ldo[1-4]-supply$', '^pinctrl-[0-9]+$'
+	from schema $id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
+
+
+
+
 
