@@ -1,407 +1,176 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7683E366;
-	Sat, 23 Aug 2025 00:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188A62AD22;
+	Sat, 23 Aug 2025 03:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755907660; cv=none; b=ZhXTacLwqBKPJiYdoIOe/iA8BWcW8PqA+bln6EseSY/Jtl3GOseYPP7aJe9y/6QM9r8ahR8U/gDVpaxrO/jz744B3ZJ4upZEjQ7zHWZ69U8wpqttmfQUbIQeZJLVgmWqpKyELHJclWoonHBLqMBDSZWIP+2TqwtM2O1D4GKtppE=
+	t=1755920010; cv=none; b=Ror+i6VJR/EIW1ep75oE5kVbL81O/khAlMr85CK/dzHqepPW/1zb3h00QMpZ3Rw06Tq8vZWPSVhOEYg3LVYJalscLGwm1E/Lw1CZmcBdVdKjysMdKMVrvdATT8z0Fdgfzvi8TOUoi6tJ3kjLNS4BRLEavxpHimEjfi5fsiKrymI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755907660; c=relaxed/simple;
-	bh=Ov9xVPV8OXYrGrugmIw2QjsowoqngLLrPqeF9yt/Vcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HIzA17ffIMWFk41lOAjQvhVlypUXfaEeilTugfSToK/6zZ4q+y6aik6cspM1k+UK+wWCb6kLTExdzOulIeb6miNdjDhDAtl2RvmqTKXx589f2XnZMik0g0N0GFKdwACFYMYeCKM2pejVtjOtmDZKdd+IHf0DO/w7yjOKWzmp+us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ekO5Bucf; arc=none smtp.client-ip=209.85.219.53
+	s=arc-20240116; t=1755920010; c=relaxed/simple;
+	bh=22aqXHfJ0gDrVnDDeKPXsb5+lMYTML3pkSNh2zWaRXM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Pxrh8eJwty8Vjp0C8wYSJ97xN7x4KhCX/6rUojS0GPoEMqwO+HPnoTLKB2xREJu8kHdXUkYR43wLqj+oyEsdYikZFiYcpTeJGUxiZ0IWOymMIfIPjtMpevdWKg1nVO8lXP0VvTKUITk4UMBwCtfUFeGE+lWkRXMscaZL9ahGMPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+JsdPi5; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ekO5Bucf"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-70d9d415a2dso13049486d6.1;
-        Fri, 22 Aug 2025 17:07:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+JsdPi5"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2449788923eso20624625ad.2;
+        Fri, 22 Aug 2025 20:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755907656; x=1756512456; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1755920008; x=1756524808; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+OxCx2tRXiZPQFg72Kk+L1u7ilKV7tPyGXHW6DWHOdE=;
-        b=ekO5BucfPu6AN+JAgxlAgr2IrOpvwbTm95J8NFV9cru7z5oG+z20P86u9bOun894Td
-         jN5n5Ya+JaKjF81zls1B4SLtXg5R7TW3IxHbrBboglLEQOF0xcXf7RcgnsqchSqqMsHV
-         o0ES7se4Gry9059Z442UIJCdcytXngRMyBWZOx8c6etRmq14y1EM/Z9ahRxZZtarCuUp
-         2Q/R63WvobxbCPKT7ubVQIAoSMj8tTEEsFZJ1gRHKlZPNgwPb7m3GfI5euwS4GjA3wsY
-         yqh62cTlhJAmzdMoHIVeyf7qKzT/T9iSe57i29Sos1InaZeLAqThXwKKEtpeqazW5TWx
-         BZEQ==
+        bh=QqumeEmO4Hx86KLVWkSoquZafUAkAj4dwVn2wF9Dw9U=;
+        b=l+JsdPi5Rp0C1FL57HAypElcmQst8KbItpmXEGjdcIJ5XBgVj8I8QKXd10eCkJXzKg
+         9UAwJftVgUBkZj001CsRBS3RbcatlhMYRfyr1/J19BEitOziykahdCeh7CZtYTLIRMoU
+         /DPkgdhRBLDr713rAG4sR6LdNhaz6TwQAlQkS3za7mFldixeI1DMqNdE2wPiyxKDhTj/
+         AGjCVV13oBHeaijONjtcDxYDRiqmryR4BcGnhcvwqZwXurrWZhZplqqKCMTB6Q99Fx/U
+         k3ADMvr4vtAlbi1wmydJKihl/lTjYZKs34lAmlwr6sq2aP9va7qK+niA21PXgmmKIMS7
+         7Hjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755907656; x=1756512456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1755920008; x=1756524808;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+OxCx2tRXiZPQFg72Kk+L1u7ilKV7tPyGXHW6DWHOdE=;
-        b=sm1vN+dXDM8XOCJ+LSRFehgiRru733FhvWmM/bVXC78rhKQHBTUYvMqf6veKWdOXct
-         6/6wjqWIGuylulXyWfqWQpgV8c/1xriqJ9l0BOANGza8SYKJ0SbSWE75snbXYvtt9HBg
-         gp4gPnm7s1YBDMX8uotOmgEMetdBeNE3ZpGPbkwhhB6Ij54zDCwUpmFu3VBFBX8CBZ9b
-         Gj5Jnao+1xXS1mHQ2mv8KlgH796Ou0SPDaTTH1Gy9mm+y0XMGdBRiX5eaDa12lamMhaT
-         3qPnGfosAbhkZHcmrLBu9r6syZfyASl2PEK2ikpficJEVsqcfnW1vT+a2Su4httSF+d6
-         Bxmg==
-X-Forwarded-Encrypted: i=1; AJvYcCVC64kcZ5iS5qcBgP+iNTAobkdXBQoR81XNybS2L8kOnugNP7CzlcAVKOozEAiIOtJ7xD0/egSnC5mk8J7M@vger.kernel.org, AJvYcCXSFECTsjV7s7TL9+6b++A/f5dz3ET8rxmUejrmn1Mq51CM+P4P0vHifvVd3GK/ihTmUootkSCXAv83Vw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz31/0zlHWD82VAPIlormyXZUSHDSDkgUHOW8lqHVKmlJhhSD1B
-	QYOPTDnRje9PI/DJ64ZxUP3PFKmtWUhqkO09wwjzUfEWwU2mGgyqsvyO3c3w4NEstBQIIQi9mA5
-	EbA9r/7G2QxiFMnNWFu1AVS1j4MeU8Jg=
-X-Gm-Gg: ASbGnct2xMnpl78eUQXKZP/m+VVyKLUbXv2Z9m1CrSld1G4uFmD8jKgNUN0pgRIijqm
-	QK9NXyEadc3UpES+ZYy+AguWT8xCSfuGy2e7dZWRPa8rlBm+mdHqthNTVD/1tbbSBsJzplVBMqI
-	bsNA+e9n2LfDVlSgSHgdeWPIkenF1Q8l4p8qbk/SKuvXHlOc9YHW9OBLqJvdYJtyyBvuAfUi++2
-	JWvfbvl
-X-Google-Smtp-Source: AGHT+IFHQtMXrlE6PM71P8MlI3Plvd0ypXUryL4vH54bxDUAGcxqTrrmn3Yoo0hLpdrBUgATShzTbsRoRI0wLga2RwA=
-X-Received: by 2002:a05:6214:518b:b0:707:533d:eaa6 with SMTP id
- 6a1803df08f44-70d9837ff58mr42639426d6.16.1755907655945; Fri, 22 Aug 2025
- 17:07:35 -0700 (PDT)
+        bh=QqumeEmO4Hx86KLVWkSoquZafUAkAj4dwVn2wF9Dw9U=;
+        b=SFbxcLcfCfkTtGbUE35WTN7F5MHMHUED/d+Ndbd/7FN8wBPaZk3vx3Odbaq/xElW8K
+         8knM3lFYfLcH6kgoZwzEIJeqV3K0AruAMDOdn1mTlRvnjEKqm/UsTtXug44e4kLK2LrT
+         ygQ6SWiwCIBQJUqHVzOkD5ZCVpZ7bM7GVDLe9DqK99EAPT7C6rIyfygz4WtfG9Cv/yot
+         stpVx3RAq1PnF1Fr5gZQT2fvvCf7j5UtO41vssqm6PvAEmTsQqH+ds1MUxetPcO/Px4k
+         HX8ymrFu5mBu/a2c3GlBHfen7S6nWrnR/8E7wlnRNeGcPnk+39dHiJh+CjwH3eTsAN+W
+         ywmA==
+X-Forwarded-Encrypted: i=1; AJvYcCURsvayfvAzP8YtPzytWGP9Ieggatu7+EcQDupuDZWJhBGxBhPFzWufO56v/oDI/66ESTm93OSFFNS5lCo=@vger.kernel.org, AJvYcCUeTzz8F4GdMH79LYpiIS6DE15+7dCa6160ZlrLgVaE7QK/GxOsBWyWgXkehzzKNVAygtG/uVwGPBWf@vger.kernel.org, AJvYcCX3RrOG4niMcd8xwOeaWGaDPNdnOLd7o8VF2+hb6+eNrNsPwxev+rk4JTzpjXaH/JSdQ8yf7KKbhwxSKjA=@vger.kernel.org, AJvYcCX7huaFwNkacbJwgQVn7dcLICc+4lJk8l4IN4qbSD0WIJtetq0HTD8HLLBH85rqkz0xbm2arp7Ud/4MEzeT@vger.kernel.org, AJvYcCXcxKwCY8Cr/NZuBEFpMhIroT1PH/idZRblNDI7y/R1ps6wVXu+KvZ7L7wPTmv4wWIcZabsMqpAQCnk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2wPXpu33eRQzk338e3QCroWbsopKFAmzoEQhTKY6AhLwSptpT
+	kST147h5ERd9Nfep1ZPK7Uz8aX+ysIoLhP01dwz9hqKCcWwn01F7DwIr
+X-Gm-Gg: ASbGncuU5FO5DlHqrAwmYdgynXB4LxbiU7stT5gqDoYHxQFYVS5Os0g6ZrNoijtV5hG
+	5kX6ipFxr0WrRndmkgq2w8OMDSpQkFGLc7V3dybl7Zm0iivHk8OqV3Sa2iJyi89WoMcRjcVdtZj
+	7hPDCYvZSD471HDeJbpsyrWpxJNR8stNurOP+R2Y2C/P+U6xrKGRQtSfCMxYQgkdhy2zZn/fxcQ
+	HBHNsPEV1vyux2Sv3fxAgop04hfMlOCst+PgQHfEhTyfHxA25bolWyXJXKm4s2BScmSlppXjm+3
+	3qQgtf+ottHO0SVFiUmWuhUdc8o2AAa+VN7zocj3ZAg4gStQkn4tabp6RFHtRJrERO3nNAeC9Qa
+	5BoOoyWs06sFp8Lm2nhHeCHHSZNEWzgSJ4mD41vQ0Oubs01PamjEDkkQGwOP4LPofNuqJ9fjwgI
+	Mvh2i8/w9fWeBLE4j0DyOf
+X-Google-Smtp-Source: AGHT+IFNO6qfKHbLRi+OpQWp6841qH14Emm/wJaX729M23KqjGDOidxlZhEBKjGLIE2PeRR5ofMyBw==
+X-Received: by 2002:a17:903:320d:b0:242:a3fc:5917 with SMTP id d9443c01a7336-2462ede290dmr67089965ad.2.1755920008250;
+        Fri, 22 Aug 2025 20:33:28 -0700 (PDT)
+Received: from setsuna.localnet (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2466887fc80sm10166575ad.124.2025.08.22.20.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 20:33:27 -0700 (PDT)
+From: James Calligeros <jcalligeros99@gmail.com>
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-input@vger.kernel.org
+Subject: Re: [PATCH 4/8] hwmon: Add Apple Silicon SMC hwmon driver
+Date: Sat, 23 Aug 2025 13:33:20 +1000
+Message-ID: <5792171.kQq0lBPeGt@setsuna>
+In-Reply-To: <56e1f496-a4c7-46a5-bd74-0412c1fd7207@roeck-us.net>
+References:
+ <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
+ <20250819-macsmc-subdevs-v1-4-57df6c3e5f19@gmail.com>
+ <56e1f496-a4c7-46a5-bd74-0412c1fd7207@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250820160628.99678-1-lkml@antheas.dev> <20250820160628.99678-6-lkml@antheas.dev>
-In-Reply-To: <20250820160628.99678-6-lkml@antheas.dev>
-From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Fri, 22 Aug 2025 17:07:25 -0700
-X-Gm-Features: Ac12FXw7wV8Y4yLwTbKH0Bu5jdmY-MXvLFP8UIQPnqRgimyzWPF6F7kb1MmOqlM
-Message-ID: <CAFqHKTksD_J0M1fTJm3rYa3i=Or2xnz0n2P8b2TkcdvuDfExAA@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] platform/x86: ayaneo-ec: Move Ayaneo devices from
- oxpec to ayaneo-ec
-To: Antheas Kapenekakis <lkml@antheas.dev>
-Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	=?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, Aug 20, 2025 at 9:06=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.d=
-ev> wrote:
->
-> Currently, the oxpec driver contains Ayaneo devices. Move them to the
-> new ayaneo-ec driver, which is dedicated to them.
->
-Hi Antheas,
+Hi Guenter,
 
-Fan control is still functional under the ayaneo_ec driver in hwmon
-with this patch. Tested on my AYANEO 2S.
+On Wednesday, 20 August 2025 2:02:58=E2=80=AFam Australian Eastern Standard=
+ Time Guenter Roeck wrote:
+> On 8/19/25 04:47, James Calligeros wrote:
+> > +/*
+> > + * Many sensors report their data as IEEE-754 floats. No other SMC
+> > function uses + * them.
+> > + */
+> > +static int macsmc_hwmon_read_f32_scaled(struct apple_smc *smc, smc_key
+> > key, +					int *p, int scale)
+> > +{
+> > +	u32 fval;
+> > +	u64 val;
+> > +	int ret, exp;
+> > +
+> > +	ret =3D apple_smc_read_u32(smc, key, &fval);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	val =3D ((u64)((fval & FLT_MANT_MASK) | BIT(23)));
+> > +	exp =3D ((fval >> 23) & 0xff) - FLT_EXP_BIAS - FLT_MANT_BIAS;
+> > +	if (scale < 0) {
+> > +		val <<=3D 32;
+> > +		exp -=3D 32;
+> > +		val /=3D -scale;
+>=20
+> I am quiter sure that this doesn't compile on 32 bit builds.
+>=20
+I don't see why not. We're not doing any 64-bit math on pointers, so we sho=
+uld
+be safe here. Regardless, this driver depends on MFD_MACSMC, which depends =
+on
+ARCH_APPLE, which is an ARM64 platform, so this driver shouldn't be compiled
+during a 32-bit build anyway.
 
-> As this driver supports charge inhibition for Ayaneo, add support for it
-> for the AIR, AIR 1S, AB05-Medoncino, AIR Pro, and Kun, referenced from
-> the out-of-tree ayaneo-platform driver.
->
 
-Works on my AYANEO AIR.
+> > +
+> > +	ret =3D of_property_read_string(fan_node, "apple,key-id", &now);
+> > +	if (ret) {
+> > +		dev_err(dev, "apple,key-id not found in fan node!");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	ret =3D macsmc_hwmon_parse_key(dev, smc, &fan->now, now);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (!of_property_read_string(fan_node, "label", &label))
+> > +		strscpy_pad(fan->label, label, sizeof(fan->label));
+> > +	else
+> > +		strscpy_pad(fan->label, now, sizeof(fan->label));
+> > +
+> > +	fan->attrs =3D HWMON_F_LABEL | HWMON_F_INPUT;
+> > +
+> > +	ret =3D of_property_read_string(fan_node, "apple,fan-minimum", &min);
+> > +	if (ret)
+> > +		dev_warn(dev, "No minimum fan speed key for %s", fan->label);
+> > +	else {
+> > +		if (!macsmc_hwmon_parse_key(dev, smc, &fan->min, min))
+> > +			fan->attrs |=3D HWMON_F_MIN;
+>=20
+> Above the error from macsmc_hwmon_parse_key() results in an abort,
+> here the error is logged in the function and ignored.
+>=20
+> Either it is an error or it isn't. Ignoring errors is not acceptable.
+> Dumping error messages and ignoring the error is even less acceptable.
+>=20
+The only strictly required key for fan speed monitoring is apple,key-id,
+which is why it is the only one that causes an early return when parsing
+it fails. If we don't have keys in the DT for min, max, target and mode,
+then all that means is we can't enable manual fan speed control. I don't
+see how making a failure to read these keys non-blocking is unacceptable
+in this context. If this is about the dev_err print in parse_key, then
+I can just get rid of that and have the parse_key callers do it when it's
+actually a blocking error.
 
-Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Regards,
+James
 
-Cheers,
-Derek
 
-> In addition, update the readmes of oxpec to reflect this change.
->
-> Link: https://github.com/ShadowBlip/ayaneo-platform
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> ---
->  drivers/platform/x86/Kconfig     |   4 +-
->  drivers/platform/x86/ayaneo-ec.c |  66 ++++++++++++++++++
->  drivers/platform/x86/oxpec.c     | 115 +------------------------------
->  3 files changed, 68 insertions(+), 117 deletions(-)
->
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index c871a722e5ef..06b53b0a3818 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1031,9 +1031,7 @@ config OXP_EC
->         help
->                 Enables support for the platform EC of OneXPlayer and AOK=
-ZOE
->                 handheld devices. This includes fan speed, fan controls, =
-and
-> -               disabling the default TDP behavior of the device. Due to =
-legacy
-> -               reasons, this driver also provides hwmon functionality to=
- Ayaneo
-> -               devices and the OrangePi Neo.
-> +               disabling the default TDP behavior of the device.
->
->  source "drivers/platform/x86/tuxedo/Kconfig"
->
-> diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayan=
-eo-ec.c
-> index eb7f9ae03b4f..d70fd0bd620e 100644
-> --- a/drivers/platform/x86/ayaneo-ec.c
-> +++ b/drivers/platform/x86/ayaneo-ec.c
-> @@ -83,6 +83,15 @@ struct ayaneo_fw_attr {
->         struct kobj_attribute current_value;
->  };
->
-> +static const struct ayaneo_ec_quirk quirk_fan =3D {
-> +       .has_fan_control =3D true,
-> +};
-> +
-> +static const struct ayaneo_ec_quirk quirk_charge_limit =3D {
-> +       .has_fan_control =3D true,
-> +       .has_charge_control =3D true,
-> +};
-> +
->  static const struct ayaneo_ec_quirk ayaneo3 =3D {
->         .has_fan_control =3D true,
->         .has_charge_control =3D true,
-> @@ -91,6 +100,63 @@ static const struct ayaneo_ec_quirk ayaneo3 =3D {
->  };
->
->  static const struct dmi_system_id dmi_table[] =3D {
-> +
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_fan,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_fan,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_fan,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_charge_limit,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_charge_limit,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino")=
-,
-> +               },
-> +               .driver_data =3D (void *)&quirk_charge_limit,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_charge_limit,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
-> +               },
-> +               .driver_data =3D (void *)&quirk_charge_limit,
-> +       },
->         {
->                 .matches =3D {
->                         DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-> index eb076bb4099b..2074650f5ba0 100644
-> --- a/drivers/platform/x86/oxpec.c
-> +++ b/drivers/platform/x86/oxpec.c
-> @@ -1,8 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  /*
-> - * Platform driver for OneXPlayer and AOKZOE devices. For the time being=
-,
-> - * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
-> - * hwmon sysfs.
-> + * Platform driver for OneXPlayer and AOKZOE devices.
->   *
->   * Fan control is provided via pwm interface in the range [0-255].
->   * Old AMD boards use [0-100] as range in the EC, the written value is
-> @@ -43,14 +41,6 @@ static bool unlock_global_acpi_lock(void)
->
->  enum oxp_board {
->         aok_zoe_a1 =3D 1,
-> -       aya_neo_2,
-> -       aya_neo_air,
-> -       aya_neo_air_1s,
-> -       aya_neo_air_plus_mendo,
-> -       aya_neo_air_pro,
-> -       aya_neo_flip,
-> -       aya_neo_geek,
-> -       aya_neo_kun,
->         orange_pi_neo,
->         oxp_2,
->         oxp_fly,
-> @@ -124,62 +114,6 @@ static const struct dmi_system_id dmi_table[] =3D {
->                 },
->                 .driver_data =3D (void *)aok_zoe_a1,
->         },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_2,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_air,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_air_1s,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino")=
-,
-> -               },
-> -               .driver_data =3D (void *)aya_neo_air_plus_mendo,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_air_pro,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_flip,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_geek,
-> -       },
-> -       {
-> -               .matches =3D {
-> -                       DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
-> -               },
-> -               .driver_data =3D (void *)aya_neo_kun,
-> -       },
->         {
->                 .matches =3D {
->                         DMI_MATCH(DMI_BOARD_VENDOR, "OrangePi"),
-> @@ -658,13 +592,6 @@ static int oxp_pwm_enable(void)
->         case orange_pi_neo:
->                 return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MO=
-DE_MANUAL);
->         case aok_zoe_a1:
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_2:
->         case oxp_fly:
->         case oxp_mini_amd:
-> @@ -685,14 +612,6 @@ static int oxp_pwm_disable(void)
->         case orange_pi_neo:
->                 return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MO=
-DE_AUTO);
->         case aok_zoe_a1:
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_1s:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_2:
->         case oxp_fly:
->         case oxp_mini_amd:
-> @@ -713,14 +632,6 @@ static int oxp_pwm_read(long *val)
->         case orange_pi_neo:
->                 return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, va=
-l);
->         case aok_zoe_a1:
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_1s:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_2:
->         case oxp_fly:
->         case oxp_mini_amd:
-> @@ -760,14 +671,6 @@ static int oxp_pwm_fan_speed(long *val)
->         case oxp_g1_i:
->                 return read_from_ec(OXP_2_SENSOR_FAN_REG, 2, val);
->         case aok_zoe_a1:
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_1s:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_fly:
->         case oxp_mini_amd:
->         case oxp_mini_amd_a07:
-> @@ -796,14 +699,6 @@ static int oxp_pwm_input_write(long val)
->                 /* scale to range [0-184] */
->                 val =3D (val * 184) / 255;
->                 return write_to_ec(OXP_SENSOR_PWM_REG, val);
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_1s:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_mini_amd:
->         case oxp_mini_amd_a07:
->                 /* scale to range [0-100] */
-> @@ -840,14 +735,6 @@ static int oxp_pwm_input_read(long *val)
->                 /* scale from range [0-184] */
->                 *val =3D (*val * 255) / 184;
->                 break;
-> -       case aya_neo_2:
-> -       case aya_neo_air:
-> -       case aya_neo_air_1s:
-> -       case aya_neo_air_plus_mendo:
-> -       case aya_neo_air_pro:
-> -       case aya_neo_flip:
-> -       case aya_neo_geek:
-> -       case aya_neo_kun:
->         case oxp_mini_amd:
->         case oxp_mini_amd_a07:
->                 ret =3D read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
-> --
-> 2.50.1
->
->
+
+
+
+
