@@ -1,68 +1,66 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E0B1F4E4F;
-	Sat, 23 Aug 2025 05:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8557E235BE2
+	for <linux-hwmon@vger.kernel.org>; Sat, 23 Aug 2025 08:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755926015; cv=none; b=ooTs5sW7FFyx3kpx6ho4fCAdmVCw82t4h9VP5f8xxRXam8htRsWhF4ehQK00VRCaSoBpZckYJaPVbuxIRW7K7sh2HiIYX/KNGyphaUI4LVIGAIyMSa8/o8I9CM6Sb6QXucAhAqNUNHWrLxyeUuXV/MCNI0KdWGlttsJBE1Mf9hw=
+	t=1755939504; cv=none; b=jFZBTcbtgro8F0GYbkcT/MEzIQwD0jUdPjMdGWMG3kI6cadjSXp8+NfTYBrqIGllAK6QAvQWlqLTwuoT4WQzLLq36pl/PxYqFBLJ61YeIkUEvcJQ+DlE37Fzx0kfDbntIntcmvn6txWsd7gcLhIKKBgzXqK9rLamSfTtzUDBUEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755926015; c=relaxed/simple;
-	bh=o4qR+yIO95vU4TXB7yOCTyPmhkgr7m4rU2/iyY06Kuw=;
+	s=arc-20240116; t=1755939504; c=relaxed/simple;
+	bh=PObtwKdfbFpwMmLEdwJTBTTUkfPM03mvQi5/aXjANRM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tbEylAXpEwxjvI+JVmogADyJ4Gu3ZabrfggwvK61fvUcVpRBopQrbqbZqrnAOGPOSWZ2OwDl6DVfQFPMXFlny+bfJfPzIBDXSydWylYB/A+ZdICMybeNRfjD2F+OGqeBSwOCg0Mr4roq15e8pDt3sXNu16JBiK3x52VYJQvLOkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iP7XyyXA; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=QN8wCe0U6WlqLmxCqpO2fQmyOOdjkyEzBjyX7D/mYJVK3iIgZDwcV5jZscVxa40MCTxcrsBHdb6W9pDGPXe+Bw3fBcaChQiZy6QbeUmxi1HvK+eKL9Y3UtOyp1mJoh4vf2sXMwTmAc50gmCa8yUlptnColxfjr2E1kw6XcR7Oxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XWAFgJd9; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iP7XyyXA"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b49cfd967b9so85101a12.3;
-        Fri, 22 Aug 2025 22:13:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XWAFgJd9"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-afcb78d5e13so41044166b.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 23 Aug 2025 01:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755926013; x=1756530813; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oaZcg39YpyHcUdKqFjifUizLNUJLVhGMD8cYB6Cwmg0=;
-        b=iP7XyyXAkA0x9t0Wq3BhpY6TzzGIU1RYWf611oqPQQUWqDgZpkwDdErnoYTA3vZOTw
-         7SkkSq0TfkHq7IQW4jlYuRFceZAaew2/wO6Y5dzuv8H9Wd9S2R181GhFgEWgqnabdXWp
-         7q6pCmpVc5SAAHktnMXG7PNP0wv21oyudtNGOXaFK2XAmXKjQITcoPbPHeo4wER5rQ1a
-         4lJ+/MTRScFmTS5ceSspiW5Gq4IgL128RpL21GP5AzyqCANHTBtHYP3jd5Jlik+APrn9
-         abeqEe7Mqdf6YfC7CHt4OZP7qeBg7WS/CZn5j3HsO9qK2Fpz/FaE4cOQU2g5cyET/8FE
-         wxsQ==
+        d=linaro.org; s=google; t=1755939501; x=1756544301; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePE9Dw20L6SlufcmjpXW4urwfW8Opv/KYmQhGsNogQA=;
+        b=XWAFgJd9pVVuJTkbiZAXV0gvCwONyzmLOjtwMUh10PK5jpWRKnnq6Ho9NmeP6lqcEa
+         FD3yRo0Dx4tOj+pZzlCcY/i7rm231bKyxRwzDakj5HOK9tvnplOuB/GiJXVaHONT5C2s
+         eztVLtQ8CnSaWf03c7VVMmQ5470LyKb+U9d2QyxfeAyUVaMfkjUY42LHz7+cahJRuTyA
+         sZyTnejVtCsgvMFJXCy3myNqoit94m8nKRg0K04p1uexz0+M8kMc7vEZWOcSMAuUDndc
+         Pz7JwmxYS2KWet9MqY8/4ViKIMHgVmAOdNCDqPpXilPRdoZeLqQB2UWHI2EFvNxECjW9
+         4KoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755926013; x=1756530813;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oaZcg39YpyHcUdKqFjifUizLNUJLVhGMD8cYB6Cwmg0=;
-        b=EOenPJairTMmzYj6RfKTFdmo75mr+CP3LQhZ8sV+ntuph/lZk72CNbHN6qlc+r1pP7
-         hGZrJacxiDlGBxAA3RnSYg5TYT3gDdATa7xV7nXPk1u2WB7a4PxMIHSGiWbRsMS6Rdu2
-         5TgUqk/0GAXZcsVcX7Yyxt+rRKy2gWKiwuuLHrUBk6aFLxSlVd+LqulRFtaJKL0PPE6U
-         fNy1UoWeTPRGpRqrd3TK72k8ERgD/URcvE1BQM0/rr4o8y6qj1ZCZejdpPOCxRv5gAqj
-         e2XEjHjVzNMb5mj9gwrMTjDghCltxe/NR6iG7hdhrkeIm1iVX7Gsq5yU8BrrzhNn9wVb
-         vp1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVzGjS4Crm+QY/55H+LrLE7E+3ARjhR6ri+j77U0+qQ3aPh0OaXideG19cbeVTm3YWqHllemZMJvB1sluiA@vger.kernel.org, AJvYcCW+hXTa7ueofyQGm7B6wzEgeQZdBICvQxQsrheM3f8FBPfB80Mhg6B7cifRCXVtQs0ruL9ySJme/lGwPx0=@vger.kernel.org, AJvYcCW24D0rmwPPQMDpdsZGxuNK4WE20M7wgTLVeBPD68qwbjZsD1ADAG74V+shx0O2dGzMWu/Dkubbexu1@vger.kernel.org, AJvYcCWSPG7iKMdftIdtUS891xJ+ERR0viqi6f4ZK5WSjiGi4U3zz+YhGgvMrT9vGnrONSQ/asmT7d4u/4b7cfc=@vger.kernel.org, AJvYcCXQgS0GtlljCxb4r9dNXsxiEgPt+o641iRAK3DTrNqBExACmiqI37QULcBbcbFTAxicuSqb7GNbgxya@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7/bLM0gsxionLs5OheFDWZqPIcShrpOnqs2FBALj3qWc5g1oe
-	sAW7wrhnEPcrOk4D5A8NIbi3hcsMaqFk1T8NKUskYeASqBDaT7nJB/SCvbhYtw==
-X-Gm-Gg: ASbGncsJ5YFJMBo7RLYPpvIVz3aLMsQ+TUa1gODUXUCTjpPwrW4mOjPcd7W2Ugdd5t6
-	rNB7zGj02SjdLpLxOVEqBHKw7wv3BolBMHTFbTMvx9uUwvNadEU4rWSHtXmrAF2kRAlj7rQlpUi
-	CWchBqtkX5S3dmol0YR94PFB4U0GSV4vA+SrflMQcUCMqi7gwbCRcXyNLQ2Y2/HnL/2CQmRQDj7
-	XgewDP6YWEkjeqk5IjwvLrQkDARnl+nrFJM7WXipSdD7mSbEcKMUY31uruyyIoK/OjA9cmydUk2
-	TP06DnbIfC80ZuWUQBXxOAbLqQ3o6Hd7psLesFqn+Rw8bFKQiH7/AC42bfKRnz+V+S9Z1+eUOP7
-	dLoLCE+hBrmBItjlsyi7JmaKMSNGErbHxbyXSsqtgfvAJ+Ou/MTjqr4A76h+gZfF002gG0hADW9
-	ctD5E2dw==
-X-Google-Smtp-Source: AGHT+IGu/5kI4ubQtYHPYeTFeMmZ5BU9w4ewNepAWhcOc56b0ak2Ul5v+eBjgv4TH/lm8sl6SH5vIg==
-X-Received: by 2002:a17:902:cec2:b0:246:163b:3bcf with SMTP id d9443c01a7336-2462efd9a6cmr60223085ad.55.1755926013089;
-        Fri, 22 Aug 2025 22:13:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24668880bfbsm11992445ad.129.2025.08.22.22.13.31
+        d=1e100.net; s=20230601; t=1755939501; x=1756544301;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ePE9Dw20L6SlufcmjpXW4urwfW8Opv/KYmQhGsNogQA=;
+        b=aI4DlQphgSaSZKEplCNfJ0GY5TMxO9ktFfqBVEWQB9ziPlD8JQonCD4JW9WRFB9W/k
+         kkse39gSfd+n2f/YPNkII6/JGULf9MaeD/DO5MbnqJVwD1GT5jIXbHvFxwE/qLikHwdY
+         ePEabyH6r2pLWEUKLmVGfm053b1+7cpDZVILeHpdxPh5ut2jCkNq6tiJqnE9OzKNHaB1
+         3ERIwiTJblAYhOLarRC61LDVeinHjOcdCb+ZTmQmaUWxj6h/oqJ3S8pO4BmAH6Spx3W1
+         SIvRbyBOfdGOfUveusS2eFnG/HY0Eu/N3J2kVyospBV6mAfoMRmJ6u42v06l6RvYc8vG
+         RVsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXc8al8t1dWExuanhNdTOFuDGl9Uutq1bCdM4Ejq7CoF5fByJUIi0QvRl+4v6oE+qaRLnn/mrS5r57VxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAN1epJZUHl7Lxw9aBYzF/jdBxbnB36wiW8WjJDUKfQvUmsoiC
+	nXLvfCg2qMOPFaK+ZzSkJ8RsIuIO3muF/zmIe5VnkKQe/hO1AG/UQSkOWK58LW9X5+s=
+X-Gm-Gg: ASbGncsULSj02+jP7PzOaic37a8vYeexIVkgbJ/o7LvBovL8nBdMV/3D4ogRbj6zkrf
+	zT/f4X9LtpMNK8tno4SA0SkmTf09OYnfEADXl/877OqDG+9Z9u3LDCCNzBfiUtGWN2m/g4YrE9g
+	cvD0cgSE3uTtYPOJMz52WrDGfRWok0HhFzdb+QaIBeiiksNvN6iei0cF3X7qMV9jNuYW6NajK//
+	svX2RI1vRW0AQeoJmKklV0XDxjSG2Y9DswuICFxZCaZPPuXEz7wRepM410tLD4xFR212H4doPp/
+	ARaCooYPJzU+uTcnqRhcmlZj0U5manB/r7YBetzbV0aueNj8lFraypwfF5KI+aQpn/ergpRrLI7
+	uvE1KUTdLaPmtbK8zpDeQqCUM6ZOb6Zrxt/1hS8fkn0c=
+X-Google-Smtp-Source: AGHT+IE5Kj/tNqfuyToKzvzvaC9n0CcN3DlFEwwJPvxFSpgq3gCwweIjYQFV2Y8GFhKp2y+Z1KhycA==
+X-Received: by 2002:a05:6402:42c7:b0:617:d608:86e0 with SMTP id 4fb4d7f45d1cf-61c1b217ddemr2487383a12.0.1755939500828;
+        Sat, 23 Aug 2025 01:58:20 -0700 (PDT)
+Received: from [192.168.1.29] ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61c3119ffdfsm1245064a12.9.2025.08.23.01.58.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Aug 2025 22:13:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <23146b25-5fac-4392-80d2-4090cb2121aa@roeck-us.net>
-Date: Fri, 22 Aug 2025 22:13:30 -0700
+        Sat, 23 Aug 2025 01:58:20 -0700 (PDT)
+Message-ID: <99f27c6c-50d9-4290-9a78-c3461a136798@linaro.org>
+Date: Sat, 23 Aug 2025 10:58:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,158 +68,118 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/8] hwmon: Add Apple Silicon SMC hwmon driver
-To: James Calligeros <jcalligeros99@gmail.com>, Sven Peter <sven@kernel.org>,
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jean Delvare <jdelvare@suse.com>, Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org
-References: <20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com>
- <20250819-macsmc-subdevs-v1-4-57df6c3e5f19@gmail.com>
- <56e1f496-a4c7-46a5-bd74-0412c1fd7207@roeck-us.net>
- <5792171.kQq0lBPeGt@setsuna>
+Subject: Re: [PATCH v2] dt-bindings: mfd: Move embedded controllers to own
+ directory
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Benson Leung <bleung@chromium.org>,
+ Guenter Roeck <groeck@chromium.org>, Tim Harvey <tharvey@gateworks.com>,
+ Michael Walle <mwalle@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Jean Delvare <jdelvare@suse.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Lee Jones <lee@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Cheng-Yi Chiang <cychiang@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>, devicetree@vger.kernel.org,
+ chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ Mathew McBride <matt@traverse.com.au>
+References: <20250822075712.27314-2-krzysztof.kozlowski@linaro.org>
+ <20250822204027.GA319356-robh@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <5792171.kQq0lBPeGt@setsuna>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ 2+47PN9NZAOyb771QoVr8A==
+In-Reply-To: <20250822204027.GA319356-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 8/22/25 20:33, James Calligeros wrote:
-> Hi Guenter,
+On 22/08/2025 22:40, Rob Herring wrote:
+>> ---
+>>  .../bindings/{mfd => embedded-controller}/google,cros-ec.yaml | 2 +-
+>>  .../gateworks-gsc.yaml => embedded-controller/gw,gsc.yaml}    | 2 +-
+>>  .../{mfd => embedded-controller}/kontron,sl28cpld.yaml        | 2 +-
+>>  .../devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml       | 2 +-
+>>  .../devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml     | 2 +-
+>>  .../bindings/interrupt-controller/kontron,sl28cpld-intc.yaml  | 2 +-
+>>  Documentation/devicetree/bindings/pwm/google,cros-ec-pwm.yaml | 2 +-
+>>  .../devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml         | 2 +-
+>>  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml     | 4 ++--
+>>  .../devicetree/bindings/sound/google,cros-ec-codec.yaml       | 2 +-
+>>  .../devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml    | 2 +-
+>>  MAINTAINERS                                                   | 4 ++--
+>>  12 files changed, 14 insertions(+), 14 deletions(-)
+>>  rename Documentation/devicetree/bindings/{mfd => embedded-controller}/google,cros-ec.yaml (99%)
+>>  rename Documentation/devicetree/bindings/{mfd/gateworks-gsc.yaml => embedded-controller/gw,gsc.yaml} (98%)
+>>  rename Documentation/devicetree/bindings/{mfd => embedded-controller}/kontron,sl28cpld.yaml (97%)
 > 
-> On Wednesday, 20 August 2025 2:02:58 am Australian Eastern Standard Time Guenter Roeck wrote:
->> On 8/19/25 04:47, James Calligeros wrote:
->>> +/*
->>> + * Many sensors report their data as IEEE-754 floats. No other SMC
->>> function uses + * them.
->>> + */
->>> +static int macsmc_hwmon_read_f32_scaled(struct apple_smc *smc, smc_key
->>> key, +					int *p, int scale)
->>> +{
->>> +	u32 fval;
->>> +	u64 val;
->>> +	int ret, exp;
->>> +
->>> +	ret = apple_smc_read_u32(smc, key, &fval);
->>> +	if (ret < 0)
->>> +		return ret;
->>> +
->>> +	val = ((u64)((fval & FLT_MANT_MASK) | BIT(23)));
->>> +	exp = ((fval >> 23) & 0xff) - FLT_EXP_BIAS - FLT_MANT_BIAS;
->>> +	if (scale < 0) {
->>> +		val <<= 32;
->>> +		exp -= 32;
->>> +		val /= -scale;
->>
->> I am quiter sure that this doesn't compile on 32 bit builds.
->>
-> I don't see why not. We're not doing any 64-bit math on pointers, so we should
+> Who's the maintainer for the 'embedded-controller' directory? Fine if 
+> me, just need to know.
 
-Odd (and wrong) answer. What do pointers have to do with 64-bit math ? Nothing.
-val is a 64-bit variable, so "val /= -scale" is a 64-bit math operation.
-
-> be safe here. Regardless, this driver depends on MFD_MACSMC, which depends on
-> ARCH_APPLE, which is an ARM64 platform, so this driver shouldn't be compiled
-> during a 32-bit build anyway.
-
-Right answer.
+It does not have corresponding driver subsystem, then I guess you.
+Placing above bindings, whose drivers are  MFD, in the MFD subdirectory
+made it obvious. Now it will be a bit less obvious, but that's the
+drawback of organizing bindings per hardware, not per Linux subsystem.
 
 > 
-> 
->>> +
->>> +	ret = of_property_read_string(fan_node, "apple,key-id", &now);
->>> +	if (ret) {
->>> +		dev_err(dev, "apple,key-id not found in fan node!");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	ret = macsmc_hwmon_parse_key(dev, smc, &fan->now, now);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	if (!of_property_read_string(fan_node, "label", &label))
->>> +		strscpy_pad(fan->label, label, sizeof(fan->label));
->>> +	else
->>> +		strscpy_pad(fan->label, now, sizeof(fan->label));
->>> +
->>> +	fan->attrs = HWMON_F_LABEL | HWMON_F_INPUT;
->>> +
->>> +	ret = of_property_read_string(fan_node, "apple,fan-minimum", &min);
->>> +	if (ret)
->>> +		dev_warn(dev, "No minimum fan speed key for %s", fan->label);
->>> +	else {
->>> +		if (!macsmc_hwmon_parse_key(dev, smc, &fan->min, min))
->>> +			fan->attrs |= HWMON_F_MIN;
->>
->> Above the error from macsmc_hwmon_parse_key() results in an abort,
->> here the error is logged in the function and ignored.
->>
->> Either it is an error or it isn't. Ignoring errors is not acceptable.
->> Dumping error messages and ignoring the error is even less acceptable.
->>
-> The only strictly required key for fan speed monitoring is apple,key-id,
-> which is why it is the only one that causes an early return when parsing
-> it fails. If we don't have keys in the DT for min, max, target and mode,
-> then all that means is we can't enable manual fan speed control. I don't
-> see how making a failure to read these keys non-blocking is unacceptable
-> in this context. If this is about the dev_err print in parse_key, then
-> I can just get rid of that and have the parse_key callers do it when it's
-> actually a blocking error.
+> Other candidates:
+> Documentation/devicetree/bindings/platform/*
+> Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
+> Documentation/devicetree/bindings/misc/ge-achc.yaml ?
 
-dev_err -> it is an error. Don't ignore it. If some of the properties are
-optional, they should be defined as such in the devicetree description,
-there should be neither an error nor a warning message. Plus, the above
-should be explained in a comment so future developers do not wonder and
-don't add error handling.
+Indeed, I'll move these as well.
 
-Guenter
 
+Best regards,
+Krzysztof
