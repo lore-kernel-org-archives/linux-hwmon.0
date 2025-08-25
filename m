@@ -1,89 +1,127 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83BE15530C;
-	Sat, 23 Aug 2025 18:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755972324; cv=pass; b=rQReJJIIjavwgIB8ucqj7H+qPnehgJEnEy/qYM0DMkil3p+/KKoLE8U+tgCyjLitPosaBFCJKxCXhQLWLtRSE2kfmo6wKib+45cAFo6cPPt3vMnkmQt5JuvGzb+xqapDyP8zKnxhf3hKTwocxsW5KCcJjatUc3hxR8vVmVN4Fqk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755972324; c=relaxed/simple;
-	bh=sP8xzC8rQXb6SvLfDNNMbxhKw9axuAu8AKk21SjR00U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o7z+mzcNQgo87byUw7mC6bdHKB0/GHmLXwa45FZRH0gX/QrA8oca1nuGEkIZW4jA91BIMAK0IOn3IofDP5AmoC3GxmQHPnIMcW6ZKiIQWdPWTpmkAYL2shSdkkz3yYTBYNzhHAb+j7EL1B5w85UoaLD6IrbIRGR2j4r6DySS9X0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=kgyTGKO8; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4DB22B8BD;
+	Mon, 25 Aug 2025 07:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756106921; cv=none; b=e18j9AvxVUFfcdFTs8pYH92c5aIyUTYb/T+WlmpjoRj0ne5TMhJ1d84EqOq06+PeP4BOw8oeE/LQKJCG4iX7D1eNKmjpuaMx1yNhDMKM27h7XAalIQJWtJRsA19+eHyV1NDckivpfwW882xNvFyGnJZylaqeGOPm+IWC6OtSmHk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756106921; c=relaxed/simple;
+	bh=OHl2l7fwcSBs2PnP0cy1ul4eRIrzpQHu81WxmlH2tY8=;
+	h=Content-Type:Date:Message-Id:Cc:From:To:Subject:References:
+	 In-Reply-To; b=r9Lzc736EwNJgav1ldvb2tJW1x3BxK8AsD5J/Bn1AJq9UABWBFDWZhFi6UGuOt7TV8jGBbSC5+4Lfr2G3lE86V1+fyKHMNeJ0w03axSvWpK1kxc1b+5GexAbpFEjyDl+tsi3Xq7ifhxwuE7aeWUTaRkLWdB8sdKaWv1ZoBJmSOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hj5sfPcu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="kgyTGKO8"
-ARC-Seal: i=1; a=rsa-sha256; t=1755972294; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=PoRuvPo09ilARmjJXxo6tq05ANZkn73Ovl4x9E3/F4gFpEq0yjajvbFd004NK4eapVUbs94kD+9Zl3V4h+FdSoNDuyVHe2iejFxOUC2spKHV71cB1RDkbWmRK3Wc1XijGZgPWVbtEUscYVc5Ax6XcIj9JqPelD6cqA1UGLXmxWE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755972294; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=qYTSImav2ndxDPekAShgWRsWABmiDWd58aRKAcxdzIY=; 
-	b=FJbuIWlUVUAqND6LVsrJPWHAT6dXeLhT08aQ4BLRA2evgA5R7Fw+4NavDHc0rJg0VCQzezsgSJwZbQRXv4qjWI5FWX+CAHVuFIZ58j84wmLx0puKJ36sCcglrMhp9yBo/kCwvdNhQHbezmYtMZbb8DzsEPEVj1Z3aAS05E4Sg00=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=rong.moe;
-	spf=pass  smtp.mailfrom=i@rong.moe;
-	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755972294;
-	s=zmail; d=rong.moe; i=i@rong.moe;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=qYTSImav2ndxDPekAShgWRsWABmiDWd58aRKAcxdzIY=;
-	b=kgyTGKO8aSerzPiphVksilZkzmZ5w59cKK/x+r5WPtWDabgzkqr1yOkaCHP3kGpn
-	0XKFc41QlPMLTMvpwuMx3/6CxIdsOq4mu61LJaI3FYp1Nab8v38HtZXl2vRnw/ow4wc
-	/IUlsPZZBYx2hNMmvXcXaUn7WKRMSH+jezhbKr34=
-Received: by mx.zohomail.com with SMTPS id 175597229108325.21947672736735;
-	Sat, 23 Aug 2025 11:04:51 -0700 (PDT)
-From: Rong Zhang <i@rong.moe>
-To: Clemens Ladisch <clemens@ladisch.de>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Cc: Rong Zhang <i@rong.moe>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (k10temp) Add device ID for Strix Halo
-Date: Sun, 24 Aug 2025 02:04:41 +0800
-Message-ID: <20250823180443.85512-1-i@rong.moe>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hj5sfPcu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C98EC4CEED;
+	Mon, 25 Aug 2025 07:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756106920;
+	bh=OHl2l7fwcSBs2PnP0cy1ul4eRIrzpQHu81WxmlH2tY8=;
+	h=Date:Cc:From:To:Subject:References:In-Reply-To:From;
+	b=Hj5sfPcu+0GZO8ZMxzNtpk2D3hDwuorOx/VaVXaSdlFYUg25YCacBi2RzIKDjLwc9
+	 OSxoJ3BfdjPKlCKrQQA5vb1iWAEobDoaM4vFbHlTGtIrr4o/C903UnkugX2HW65tej
+	 R1e3GzYuyURQoJdYO0llKI6gxDPC8MHc77Xw+AgADdLcO7Hv/RjckYy+t5u8PBuMpq
+	 GVSeBvBT5ikpD6pNNMSamc0FY9j/vF/UgYhUYISaU+2JejMF7xwI2SBZTGOVtybrlv
+	 BUQwQnMyz9fMU/9kCIjr8MZp3j7BZa1HPKMZ++pvva+t+UuIq3w7YPyj95aiJYicbB
+	 qzzCyqE4DRYXA==
+Content-Type: multipart/signed;
+ boundary=fd4931382990d6306de8142488bafb3cdc9bb19db8a764e4efedf063a500;
+ micalg=pgp-sha384; protocol="application/pgp-signature"
+Date: Mon, 25 Aug 2025 09:28:36 +0200
+Message-Id: <DCBBY4827XAZ.11UHI6NWP7RT0@kernel.org>
+Cc: "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
+ <kristo@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Jean Delvare"
+ <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>, "Lee Jones"
+ <lee@kernel.org>, "Srinivas Kandagatla" <srini@kernel.org>, "Wim Van
+ Sebroeck" <wim@linux-watchdog.org>, <linux-arm-kernel@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Nishanth Menon" <nm@ti.com>
+Subject: Re: [PATCH v1 0/7] Initial Kontron SMARC-sAM67 support
+X-Mailer: aerc 0.16.0
+References: <20250822131531.1366437-1-mwalle@kernel.org>
+ <20250822152313.vjzjtzik2q5ek5kq@sadly>
+In-Reply-To: <20250822152313.vjzjtzik2q5ek5kq@sadly>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-The device ID of Strix Halo Data Fabric Function 3 has been in the tree
-since commit 0e640f0a47d8 ("x86/amd_nb: Add new PCI IDs for AMD family
-0x1a"), but is somehow missing from k10temp_id_table.
+--fd4931382990d6306de8142488bafb3cdc9bb19db8a764e4efedf063a500
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-Add it so that it works out of the box.
+On Fri Aug 22, 2025 at 5:23 PM CEST, Nishanth Menon wrote:
+> On 15:15-20250822, Michael Walle wrote:
+> > Now that the PMIC support is there, we can finally, upstream the
+> > support for this board. Besides the usual device tree, this
+> > patchset contains the support for the on-board house keeping MCU. It
+> > make extensive reuse of the drivers for the former SMARC-sAL28
+> > board. Besides different hwmon sensors, all the dt binding patches
+> > will just add a board specific compatible (in addition to the old
+> > sl28 compatible) to make any future board specific quirks possible.
+> >=20
+> > I'm aware that there is a patch [1] which moves the sl28cpld MFD
+> > schema to a different directory. Once that patch is merged, I'll
+> > repost this series. But I already want to get some early feedback.
+> >=20
+> > [1] https://lore.kernel.org/r/20250822075712.27314-2-krzysztof.kozlowsk=
+i@linaro.org/
+> >=20
+> > Michael Walle (7):
+> >   dt-bindings: arm: ti: Add bindings for Kontron SMARC-sAM67 module
+> >   dt-bindings: mfd: sl28cpld: add sa67mcu compatible
+> >   dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
+> >   dt-bindings: watchdog: add SMARC-sAM67 support
+> >   dt-bindings: nvmem: sl28cpld: add sa67mcu compatible
+> >   hwmon: sl28cpld: add SMARC-sAM67 support
+> >   arm64: dts: ti: Add support for Kontron SMARC-sAM67
+>
+> Since this goes through multiple maintainers, may I suggest the
+> following strategy?
+>
+> for this window:
+> * send dts and board binding changes dropping the nodes that are yet to
+>  be upstream
+> * send the compatible changes to each of the maintainers
+>
+> Next window:
+> * add the nodes based on acceptance of the driver bindings
+>
+> This removes multiple maintainers needing to give me immutable tags etc.
+>
+> What do you think?
 
-Tested on Beelink GTR9 Pro Mini PC.
+Not sure, if this needs an IB anyway or if the DTS can be pulled by
+the corresponding SoC subsys and the DT binding can go through
+another tree in the same cycle. If not, I can certainly split the
+device tree (to my knowledge, it was said that it should be a
+complete description :).
 
-Signed-off-by: Rong Zhang <i@rong.moe>
----
- drivers/hwmon/k10temp.c | 1 +
- 1 file changed, 1 insertion(+)
+I'd expect that Lee is picking up the first 6 patches after they got
+an ACK. Please correct me if I'm wrong, Lee.
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 2f90a2e9ad49..b98d5ec72c4f 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -565,6 +565,7 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M20H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M50H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M60H_DF_F3) },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M70H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_1AH_M90H_DF_F3) },
- 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
- 	{}
+In any case, I'd give this v1 some time to get some feedback on the
+patches.
 
-base-commit: 9703c672af8dd3573c76ce509dfff26bf6c4768d
--- 
-2.50.1
+-michael
 
+--fd4931382990d6306de8142488bafb3cdc9bb19db8a764e4efedf063a500
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaKwQpRIcbXdhbGxlQGtl
+cm5lbC5vcmcACgkQEic87j4CH/hMEAF/Vhvuizfo2QflfI6C2/jHtRw3dLRPlo28
+HIDgT2LP6cbtUavEPx2nq1ESho4HXf7EAYCPD4RX3DAZ96VoKuiMPWtrhByKmEo8
+LvQhb/8169l6w+5b/5Suq4WzzVE4BArZHes=
+=DIAl
+-----END PGP SIGNATURE-----
+
+--fd4931382990d6306de8142488bafb3cdc9bb19db8a764e4efedf063a500--
