@@ -1,138 +1,382 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC90749C;
-	Tue, 26 Aug 2025 12:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A10B31A577;
+	Tue, 26 Aug 2025 18:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756210397; cv=none; b=QN2x3sMv+OQgz2G/AZDC3UiGZVE36hMstzMjsENF1HRQVXK3tycADqsdfw7Qgt1229jzgLC2tgvNz8wQFS029eLRRzOlFwGEyl7A1XsVxj3Yg/35t6yFrlAmsrwT1FSmbpWyjRBvWNM/0zD6oXJM44AVxjWZaQ3PvXY7ZRG1Ny8=
+	t=1756233822; cv=none; b=Vb1CPlpOtevJF5taAdM/S2sIrU+VhwVqdCovwt0WEWtwbnNw4vAYu4CCQYpHBg8j7+yO7edX4To6EY7+y+Zu2LjRZj26V8yDhUUF5IppYHzpyKyCNHaWOLfam9yV/QU+mN7GhOQY1dX3aQ+XHRzGN2sUHLPLNERUykAgzHkMIZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756210397; c=relaxed/simple;
-	bh=ZVQ546FAApz6UcjEvZFka6hskjqm07TCicK6vy3e3Vw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SsA4IbQ8ZYkTQ+d9TWuUM8l3R1bLaCVAwHixiYYbRzO/FguVkcjacQ+66Lhr7sz2XMS18IBhBs6FKHLcRgjIlj6JY2fgqeQrhlnDYeO/Xm8WFTRXtSe4IrYLrCd/1SBL3DBg+3A3AMX3qqS0vl9HCaDJujUexaFmBi9UfBxxoq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OgG+RPgI; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756233822; c=relaxed/simple;
+	bh=qqMP+yLDGB1vt8AMEhU+Uk4amKpA4giXrUNi3KsGGMw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=B96YcHzk68iYLuZf0IqeNApHg7wehp2N4RLrgl7fXszRsjxz32TNinhjBl7LEVE3ZSOy6PvnsUQtoEUStAn09QcFzdEu0wKeuash6f51rR+Te20ZNEdeK3145nBO6CAYBEab9+GHMTavC66AgAMDIy/a8T6xMB6fHZpJ13PtUBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=BdCCf62V; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aHB8GSWX; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgG+RPgI"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-324eb9cc40aso4139091a91.0;
-        Tue, 26 Aug 2025 05:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756210394; x=1756815194; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfdsER7M2F2SOBCmhT/Yv94jMTwqsyZqNQBE2tZGyDs=;
-        b=OgG+RPgIvNrOZEKiD2ep4l+l/0UhFBVD0Irvnyj9cVEio5xAdopfZTj11YGNYB97EU
-         oilYDPGVlNOd6vUqpg3uToOgEm0d5rf0jF4G0MkYDT/HQQqr62RCxh6guUWXKj5k2h/m
-         Ray5EBWdFaXMV0ShJBSvMtZL+k3/k9BWAP1SOe2N83CD7BAmv5KBx1LwM5kOt75vaMOw
-         v9/w7ig6q5FilgUdVsAKhs9iIw3NhZZQczSFIFVrhxMYmAiY20vZqeLLxzd//74jnOjD
-         04gttJB3WPr8qXH0vJNQC46L/YiG5ihvdWAry1lYdjQCvF0SQ0rLLn74M60T5pgHNZ1U
-         Tz7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756210394; x=1756815194;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zfdsER7M2F2SOBCmhT/Yv94jMTwqsyZqNQBE2tZGyDs=;
-        b=LD9y+ObC71/sSJdmX2z+phHmjdWMzikx9koSHMKyCnrvhb0d9tzdYMvAfOvd/ubQg4
-         g2nnA+gb7CIiJ5HCpLobktXyETN6HB0y8VxjO/2IfkdjQoP+VfqdZpWy0dSXw8rpRxz0
-         d4eJYKu1Lwu8ply2bXdv3Nco2cGpxs9Qnds1eKoszTXUMgWk0290usNOFiy6bVn0xGnm
-         3i8HREIutpjthgLEHtyIRK5o292Q59K3M5uVZe7EKg4Hmcj5Lwt11TK2KcFtUCd0uu9B
-         vGhPMc/rT+sm1O3Kek3LCZ6ZJ19pEVeaq4kXfTHUqQ5xXWE2L5F/1AR+6YFAOohBLKQq
-         2YrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWRGl0/lPPgb1ls/rkVQ8U5eAOcYw/4ozsNlqaijVQz9IsreRAyl7ywHxysY6gtuVbux9T2JTUBw48wWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwU5ctEI4PiG6323nk0x73st0twzuig7IsyYFfyN8PZA81MtUt/
-	t+B94dWsRec/6kFX3MtFgW6/s7trARA6wBEsfPSLw9+O7wQXR6w5RvDQ
-X-Gm-Gg: ASbGncsYVklyqa+iKfaZvjLVnFd4IgeDzXEHkja+InE3ZXg0UcHVxGTfcGuA3jP0j9r
-	kWolF/eTEMnfSp7SUCcrI/T9JsNUTxLyMKHKgVqTpXt63MUvVpS8hYS8m7E92sE9bGYG2F2CsM/
-	2USBZNmJ+7mFRC/tJGebsJrDIZiUIR23CgORkQ2cnbVz1J2bjC7aYxIScgCtIAgcx6/lG0Wcqdm
-	CkgsbiLmseeWLdHwnyc1kLdLe+4mq3HbvOkFK/6NyyKlyjnDD5aCcYowhub6iTEPPSZgM5B2ZWd
-	il1k0OleuCzSPXoi+ia/y3ww1+eJSsvYp4qYLp/9/lvr5ZWgLIvWSPEtTrbyGtiV3zweIlMuyPl
-	KiFgB82p4hl/Hj90dBmXtusvYBsCl71wXesc0NbOdQe3OWLWnmzCCUX1m5aWNYyc0l4r3thE=
-X-Google-Smtp-Source: AGHT+IFTVEJIawrDnKEaMUtkbYOc14Q721TqIQN36vvLto2SFWRAEF2Qyx/hQZBWrLW4EiNpse8EaA==
-X-Received: by 2002:a17:90b:350a:b0:325:6598:30d7 with SMTP id 98e67ed59e1d1-3275085dcf5mr1601263a91.16.1756210394342;
-        Tue, 26 Aug 2025 05:13:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-771cd487f90sm5934115b3a.97.2025.08.26.05.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Aug 2025 05:13:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ff8d639d-a9b7-4992-8587-e6b5284c3540@roeck-us.net>
-Date: Tue, 26 Aug 2025 05:13:12 -0700
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="BdCCf62V";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aHB8GSWX"
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 45AAC7A0158;
+	Tue, 26 Aug 2025 14:43:38 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-12.internal (MEProxy); Tue, 26 Aug 2025 14:43:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1756233818;
+	 x=1756320218; bh=+ZHM48sHy6BH1KbNq5pOM5FQr8Uolurz9cVjGfFa6+8=; b=
+	BdCCf62V4LkS1aWHlfsP4kvYyr/cb0DOtjCyvbrJvnr3zR2SnXxsLnDIpSBUQZ+/
+	9pxgJnJAzT9gAq/zKGqK95XFdecpeC2kOo2keGs7likVknKh6D6kUPLdCBqWPUIz
+	B16hBR7UmDol3m3C7O4WtAvjNdqNLlzEopjOjS8GDVvQXGyBoguiuoMZuAtXnyaK
+	0Q8guMqr2rVKwAthv5IToIK4Mf24fH6gE4XG0xjxVRC3xQ0l/YafyHgtGGHiDpYB
+	fSruY438Q90jWHEjH45ovCtcYRVu2bE1BwmC5FuCFMvFMI62GdcBLaJBaBMydD91
+	SGT8CVBkHsarkMbYTrBTpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756233818; x=
+	1756320218; bh=+ZHM48sHy6BH1KbNq5pOM5FQr8Uolurz9cVjGfFa6+8=; b=a
+	HB8GSWXM2lyl7DgyTzTChjxnknoh6SiKHTd40ynrBzF4y5Txb0SGHG8j3IiQ/opc
+	YYyL2ad6jn44DJDuhLVUPvN1Fj2oVuieWNmPYo97VU98RGpF64KgGyqIurSc7C5t
+	xhyVxIKeERc0YcfXY1LZw461N+DjBB/8SEByrTLyfBDM3vkri5xljA2LN0l75R4w
+	/+beZP2oGO6FNNABwYkIFsKn5gKRoY9kHCzcK+jYo5CsNZujx6qVWZyyIY8uCGcF
+	to2bEguNouinjNvDUFyb0Ip1EYRUovzKw2z6siOSHcEH+CVaAjtXrMqUeof0yZJo
+	djSnEPW3qpW8TybV7hLeQ==
+X-ME-Sender: <xms:WACuaNLzsnpTkl9G7nsbsEC2OrfYqoXtTGcMMblNVxf86YbtgpBz8w>
+    <xme:WACuaJKYzi6SFcKilIOKlg5rzqPc3940PIlXy1Uialj1ZBL9XM8JGfZolZuXCIyJ8
+    O5v99T4xRRZq9k6sw4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddujeeitdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedfofgrrhhk
+    ucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtg
+    grqeenucggtffrrghtthgvrhhnpeegvdegueffhfdtleeigfejhffggfeivdejgeelueej
+    uedtudetheejudehtdeitdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggrrhhsohhn
+    qdhlvghnohhvohesshhquhgvsggsrdgtrgdpnhgspghrtghpthhtohepledpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohepuggvrhgvkhhjohhhnhdrtghlrghrkhesghhmrghi
+    lhdrtghomhdprhgtphhtthhopeifpggrrhhmihhnsehgmhigrdguvgdprhgtphhtthhope
+    hhmhhhsehhmhhhrdgvnhhgrdgsrhdprhgtphhtthhopehhrghnshhgsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehilhhpohdrjhgrrhhvihhnvghnsehlihhnuhigrdhinhhtvg
+    hlrdgtohhmpdhrtghpthhtohepihgsmhdqrggtphhiqdguvghvvghlsehlihhsthhsrdhs
+    ohhurhgtvghfohhrghgvrdhnvghtpdhrtghpthhtohepmhgrrhgtrdgsuhhrkhhhrghrug
+    htsehprhhothhotghordgtohhnshhulhhtihhnghdprhgtphhtthhopehlihhnuhigqdhh
+    fihmohhnsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphhlrghtfhhorh
+    hmqdgurhhivhgvrhdqgiekieesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:WACuaAyZUDWXuMiL-oXDg5hO2wRQvSYslAFroYuh0tg8Vo0nU5nPVw>
+    <xmx:WACuaBpboi87eTTzqyHgNwT2XiuSkqsb8WJt9DcLzG62akDE8uqAzw>
+    <xmx:WACuaL02ZHDB-ZrYGaFcg54dY3N-J3DvVpx7E4JGjgkNRsAGjemF9A>
+    <xmx:WACuaJzej8mf1Q-4-TcQcWbRhYZfoP-6OkvsU6hyfsD72c1p4Ryxdw>
+    <xmx:WgCuaFlczN2jt_V-P3Av2niZHbEjvDQ0XPfApb92LIPvymZBhFKFGyZ3>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A2CD02CE007E; Tue, 26 Aug 2025 14:43:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Add support for TI ina700 power monitor
-To: Christian Kahr <christian.kahr@sie.at>, jdelvare@suse.com
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <a8156dd0-ceff-4ad3-8647-a9c47491b599.98d92f9b-fa19-453e-a7dd-7ac376786b24.5ce0c954-cef9-4788-93e6-ea1d0263884f@emailsignatures365.codetwo.com>
- <a8156dd0-ceff-4ad3-8647-a9c47491b599.cccb958b-a4df-41b5-b2de-11045d5a9527.4676e9c5-8881-4585-a715-630663ab4f8b@emailsignatures365.codetwo.com>
- <a8156dd0-ceff-4ad3-8647-a9c47491b599.7b873dd0-16c4-429f-89d5-30f15a3af0d1.660caff0-2d53-4d54-b4b0-b8956c85dd8e@emailsignatures365.codetwo.com>
- <20250826102351.18166-1-christian.kahr@sie.at>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250826102351.18166-1-christian.kahr@sie.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-ThreadId: AqlvLU1YwUxg
+Date: Tue, 26 Aug 2025 14:43:09 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Armin Wolf" <W_Armin@gmx.de>,
+ "Marc Burkhardt" <marc.burkhardt@protoco.consulting>
+Cc: 
+ "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+ ibm-acpi-devel@lists.sourceforge.net,
+ "Henrique de Moraes Holschuh" <hmh@hmh.eng.br>,
+ "Derek J . Clark" <derekjohn.clark@gmail.com>,
+ "Hans de Goede" <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Message-Id: <38204315-49e8-4428-bb8b-81e8f520130d@app.fastmail.com>
+In-Reply-To: <b4640a0d-c5db-4d40-a336-97fb16e8d405@gmx.de>
+References: <20250818204353.857304-1-marc.burkhardt@protoco.consulting>
+ <196b8004-3b09-48d4-891a-80eee2efbf3c@app.fastmail.com>
+ <ebaa2ff317a21291a086a55b204d2d68@protoco.consulting>
+ <b4640a0d-c5db-4d40-a336-97fb16e8d405@gmx.de>
+Subject: Re: [RFC PATCH v1] platform/x86: thinkpad_acpi: Add parameter to suppress
+ invalid thermal sensors
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 8/26/25 03:23, Christian Kahr wrote:
-> This patch adds a new driver for the Texas Instruments INA700 power monitor.
-> Supporting Bus-Voltage, Current, Temperature and Energy.
-> 
-> Signed-off-by: Christian Kahr <christian.kahr@sie.at>
+Hi,
 
-Almost identical to the chips supported by the ina238 driver.
-Please add support for this chip to that driver.
+On Fri, Aug 22, 2025, at 7:54 AM, Armin Wolf wrote:
+> Am 21.08.25 um 19:32 schrieb Marc Burkhardt:
+>
+>> Am 2025-08-20 00:03, schrieb Mark Pearson:
+>>
+>> Hi Mark,
+>>
+>> thanks for replying.
+>>
+>>> Hi Marc,
+>>>
+>>> On Mon, Aug 18, 2025, at 4:39 PM, Marc Burkhardt wrote:
+>>>> While moving an existing Icinga installation to a Lenovo P15 20SU I=20
+>>>> came
+>>>> across broken JSON output from a "sensors -Aj" command consumed by =
+the
+>>>> Icinga check_lm_sensors plugin. After fiddling around trying to bui=
+ld a
+>>>> fix in either lm_sensors or Icinga I found out the error was rooted=
+ in
+>>>> some sysfs file that was created but threw errors while being read.=20
+>>>> On my
+>>>> Lenovo ThinkPad the default fallback to 8 temperature sensors creat=
+es
+>>>> sysfs entries like in my case "temp8_input" that fail when read,=20
+>>>> causing
+>>>> the issue in user-space.
+>>>>
+>>>> This patch adds a module parameter (suppress_sensor) using
+>>>> module_param_array() to allow users to specify a comma-separated=20
+>>>> list of
+>>>> zero-based sensor indices to suppress sysfs file creation (e.g.
+>>>> suppress_sensor=3D3,7). Instead of a model-specific quirk, this pro=
+vides
+>>>> flexible configuration for any ThinkPad with similar issues and is=20
+>>>> working
+>>>> out-of-the-box without additional models being marked for the quirk=
+.=20
+>>>> The
+>>>> parameter uses a fixed-size array based on=20
+>>>> TPACPI_MAX_THERMAL_SENSORS (16)
+>>>> consistent with the driver=E2=80=99s thermal sensor handling (ie.
+>>>> ibm_thermal_sensors_struct or sensor_dev_attr_thermal_temp_input).
+>>>>
+>>>> Logging via pr_info() reports the number of suppressed sensors at=20
+>>>> module
+>>>> initialization, and pr_info() logs each suppressed sensor during sy=
+sfs
+>>>> attribute creation. Invalid sensor indices are logged once via=20
+>>>> pr_warn()
+>>>> to avoid repetitive warnings. Tested on a ThinkPad P15 with
+>>>> suppress_sensor=3D3,7, confirming suppression of temp4_input and=20
+>>>> temp8_input
+>>>> with no sysfs errors. Bounds checking for uncommon values is in=20
+>>>> place or
+>>>> will be logged.
+>>>>
+>>>> The patch applies to the current
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=20
+>>>> although
+>>>> it was initially written for a 6.16.0 kernel.
+>>>>
+>>>> I look forward to any feedback on the patch and/or handling of=20
+>>>> submission.
+>>>> Please CC: for now as I am not (yet) subscribed. Thank you.
+>>>>
+>>>> Signed-off-by: Marc Burkhardt <marc.burkhardt@protoco.consulting>
+>>>> ---
+>>>> Notes:
+>>>> I haven't posted on LKML or send a patch for over a decade now so
+>>>> please forgive any possible mistakes I made regarding current coding
+>>>> conventions or more generally in submitting this patch. The patch w=
+as
+>>>> running for some time here with faulty sensors removed from sysfs=20
+>>>> and no
+>>>> problems otherwise detected and was surely run through checkpatch.p=
+l=20
+>>>> before
+>>>> submission. get_maintainer.pl was helpful to find the hopefully rig=
+ht
+>>>> people for CC:ing but I am otherweise totally unaware of any current
+>>>> procedures or best-practices when it comes to submitting a patch.
+>>>>
+>>>> drivers/platform/x86/lenovo/thinkpad_acpi.c | 35=20
+>>>> +++++++++++++++++++++++++++++
+>>>> =C2=A01 file changed, 35 insertions(+)
+>>>>
+>>>> diff --git a/drivers/platform/x86/lenovo/thinkpad_acpi.c
+>>>> b/drivers/platform/x86/lenovo/thinkpad_acpi.c
+>>>> index cc19fe520ea9..30ff01f87403 100644
+>>>> --- a/drivers/platform/x86/lenovo/thinkpad_acpi.c
+>>>> +++ b/drivers/platform/x86/lenovo/thinkpad_acpi.c
+>>>> @@ -6019,6 +6019,30 @@ struct ibm_thermal_sensors_struct {
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 s32 temp[TPACPI_MAX_THERMAL_SENSORS];
+>>>> =C2=A0};
+>>>>
+>>>> +static int suppress_sensor[TPACPI_MAX_THERMAL_SENSORS];
+>>>> +static unsigned int suppress_sensor_count;
+>>>> +
+>>>> +static bool is_sensor_suppressed(int index)
+>>>> +{
+>>>> +=C2=A0=C2=A0=C2=A0 unsigned int i;
+>>>> +=C2=A0=C2=A0=C2=A0 bool logged =3D false;
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < suppress_sensor_count; i++) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (suppress_sensor[i] =
+=3D=3D index)
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ return true;
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!logged &&
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ (suppress_sensor[i] < 0
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 || suppress_sensor[i] >=3D=20
+>>>> TPACPI_MAX_THERMAL_SENSORS)) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ pr_warn("Invalid sensor index %d in suppress_sensor\n",
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 suppress_sensor[i]);
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ logged =3D true;
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>> +=C2=A0=C2=A0=C2=A0 }
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 return false;
+>>>> +}
+>>>> +
+>>>> =C2=A0static const struct tpacpi_quirk thermal_quirk_table[] __init=
+const =3D {
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 /* Non-standard address for thermal regist=
+ers on some ThinkPads */
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 TPACPI_Q_LNV3('R', '1', 'F', true),=C2=A0=C2=
+=A0=C2=A0 /* L13 Yoga Gen 2 */
+>>>> @@ -6313,6 +6337,11 @@ static umode_t thermal_attr_is_visible(struct
+>>>> kobject *kobj,
+>>>>
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 int idx =3D sensor_attr->index;
+>>>>
+>>>> +=C2=A0=C2=A0=C2=A0 if (is_sensor_suppressed(idx)) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_info("Sensor %d supp=
+ressed\n", idx);
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+>>>> +=C2=A0=C2=A0=C2=A0 }
+>>>> +
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 switch (thermal_read_mode) {
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0 case TPACPI_THERMAL_NONE:
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+>>>> @@ -11653,6 +11682,9 @@ static void __init
+>>>> thinkpad_acpi_init_banner(void)
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 thinkpad_id.model_str,
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 (thinkpad_id.nummodel_str) ?
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 thinkpad_id.nummodel_str : "unknown");
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 pr_info("Suppressing %d user-supplied sensor(s)=
+ via parameter
+>>>> suppress_sensor\n",
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 suppress_sensor_count);
+>>>> =C2=A0}
+>>>>
+>>>> =C2=A0/* Module init, exit, parameters */
+>>>> @@ -11785,6 +11817,9 @@ MODULE_PARM_DESC(experimental,
+>>>> =C2=A0module_param_named(debug, dbg_level, uint, 0);
+>>>> =C2=A0MODULE_PARM_DESC(debug, "Sets debug level bit-mask");
+>>>>
+>>>> +module_param_array(suppress_sensor, int, &suppress_sensor_count,=20
+>>>> 0444);
+>>>> +MODULE_PARM_DESC(suppress_sensor, "Comma-separated sensor indices =
+to
+>>>> suppress (e.g., 3,7)");
+>>>> +
+>>>> =C2=A0module_param(force_load, bool, 0444);
+>>>> =C2=A0MODULE_PARM_DESC(force_load,
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Attempts to=
+ load the driver even on a mis-identified=20
+>>>> ThinkPad when
+>>>> true");
+>>>
+>>> The P15 is one of the Linux certified platforms...though it's a bit=20
+>>> older now.
+>>>
+>>> I'd be more interested in figuring out which sensors are returning a=
+n=20
+>>> error and figuring out how we address that. I have access to the FW=20
+>>> and platform team for questions (though this platform is a bit older=20
+>>> now, so if we need FW fixes that will be trickier). My gut feeling i=
+s=20
+>>> we shouldn't be creating sysfs entries if the sensors don't exist or=20
+>>> aren't accessible.
+>>
+>> That is what my patch does - it prevents creating the sysfs entries=20
+>> but not based on a check for validity of the sensor in code (as=20
+>> probably desired by Ilpo when I understand a previous mail correctly)=20
+>> but rather on a user-provided configuration via the new parameter. I=20
+>> reply to the other mail as well soon.
+>>
+> Such sensors are meant to be ignored using /etc/sensors3.conf (provide=
+d=20
+> by libsensors) unless the driver itself can
+> automatically determine this by asking the platform firmware. I sugges=
+t=20
+> that you use this mechanism instead of adding
+> additional module parameters.
+>
+> Thanks,
+> Armin Wolf
+>
+> (I also CCed the hwmon mailing list as libsensors originally came from=
+ there)
+>
+>>>
+>>> I do have a P15 so can check it out (I'm going to have to blow some=20
+>>> dust off it). If you've got the details on which sensors need=20
+>>> suppressing that would be useful. I have seen previously where it's=20
+>>> trying to access a GPU sensor on a UMA model.
+>>
+>> On my hardware it's sensor temp8_input which is unreadable at all und=20
+>> sensor temp4_input that has a constant value of 0, no matter how hot,=20
+>> cold or loud the machine is running. I am, however, able to monitor=20
+>> GPU temps via nvidia _and_ thinkpad ACPI. The values are mostly equal=
+,=20
+>> differ a bit due to internal timing sometimes.
+>>
+>>>
 
-Guenter
+I tried this on my P15, and I do get an error when the GPU sensor is acc=
+essed as it's not available (no Nvidia card on mine).
 
+A suggestion (based a bit on Armin's suggestions): If the is_visible fun=
+ction is changed so if the sensor returns an error (or not available) th=
+en the sysfs entry isn't displayed.=20
+I think that would prevent errors/access issues from user space - at lea=
+st it worked on my system.
+
+Something like the below (I can send this up as a proper patch if it mak=
+es sense)
+
+diff --git a/drivers/platform/x86/lenovo/thinkpad_acpi.c b/drivers/platf=
+orm/x86/lenovo/thinkpad_acpi.c
+index cc19fe520ea9..075d15df183c 100644
+--- a/drivers/platform/x86/lenovo/thinkpad_acpi.c
++++ b/drivers/platform/x86/lenovo/thinkpad_acpi.c
+@@ -6312,6 +6312,8 @@ static umode_t thermal_attr_is_visible(struct kobj=
+ect *kobj,
+                                        to_sensor_dev_attr(dev_attr);
+=20
+        int idx =3D sensor_attr->index;
++       s32 value;
++       int res;
+=20
+        switch (thermal_read_mode) {
+        case TPACPI_THERMAL_NONE:
+@@ -6334,6 +6336,11 @@ static umode_t thermal_attr_is_visible(struct kob=
+ject *kobj,
+=20
+        }
+=20
++       /* Check if sensor is available */
++       res =3D thermal_get_sensor(idx, &value);
++       if ((res) || (value =3D=3D TPACPI_THERMAL_SENSOR_NA))
++               return 0;
++
+        return attr->mode;
+ }
+
+I think this would generally be useful for removing unwanted sensors wit=
+hout having to do extra steps?
+
+Mark
