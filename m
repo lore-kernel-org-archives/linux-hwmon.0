@@ -1,144 +1,85 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599E28472;
-	Wed, 27 Aug 2025 15:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C467914BFA2
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 Aug 2025 15:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756310214; cv=none; b=OBAtP5cEY0tqgio4LCrK7GOEQ7QRE8MKrElbzdPFSzmrBUCc5ZoeZD3S0LjqeVIU5nZEcF5+vvdsmQurStysr+GkVafSE4tchy6CffcxoQ2BbRvYm0zjDnJ5zAS5MdJCPNqoyywNZWgNQBJq/nz4qp/Ok9Bi4JnHjIUw4Y51mIY=
+	t=1756310337; cv=none; b=T9SNMlClt/gmEKkrNfDbV9pvt7EhNUgbjHVJVU75+4bZhVxXs4pbqALmMudlkyKW7P0nRzah7EFVkgTd1csh5wnJyMCWyXTyXrwos4FBhekWc07XbymMV1PbcUOs13HeA5Shztn07crb6zZaa2ENzCCJ4DDOawcmZdUJDhUbG0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756310214; c=relaxed/simple;
-	bh=vQ5InhBUZjPYKM0014rG1TV8XVuoOTobznhCUp9Lv6A=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Os9ZcMTNoClFoNJMRj/4RvbYKFhQR3IEfVk6CMw5NoOXXZLEJonehRRn0y01wQflQCw7GPkFKJybsLp2NWJ5zMfgSfoPz4MdihhgcjBK7SJdbNdl9+jAEeldJc+OklZpQDRzfKRpmYTyERHyX90Dx65RZAGF8YMnJ8I5ayANGsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMOyKG7K; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1756310337; c=relaxed/simple;
+	bh=LhRlS8+lhi0KXFINgtNqO1Ad6DHHtlA1SrPJoM2aJHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/jr3DLk1k0gLsL0vguleKe+19ykmcl0frQXstwAQ+pxGNwWOzVNXX+MNXTYGwJwI3dzp2JS6U3AKEkB6kgr5wWTHRRlIca63K8eA4qTeQTEt+vnm9N9a4+B/pwPsRMSnirW8MLLeXEznUHiwpbz9a75Xs/C2LOp5tet0QYlXlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4y9yNTk; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMOyKG7K"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-77057266cb8so19897b3a.0;
-        Wed, 27 Aug 2025 08:56:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4y9yNTk"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e6cbb991aso25968b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Aug 2025 08:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756310212; x=1756915012; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=926qV+YPdNGgWINkKfdvhIa27PzILOXKVbb0SqCQWbc=;
-        b=XMOyKG7KKEeaoh8TAzmpe8DhWGlVyOIdHUl4Ahvycd6g5Vqfmg+5X5cN1/8We8RGYz
-         TBGmlrc7ttYsvBwCZmheMUieEOfhc0vWsy3m4vWcmvRx2xPyQkVzZMnOxvPM/5xoDODh
-         pLFwjdMYh3vewuDCwm5FWkJKwlvkJwPOXm5rjEMzDSXEnNgnDch1QmjQVjjjh5fUehQg
-         1GEbtsJsW/nz6+cTiqgqoDY9MjMkEDtfA2xOkszLzer6CFwKO0NY/0JR4KJf+Elxh4Vh
-         UQ89iqadtzagLGKpqAjreUy3nhFZw898abiWx9gsD7T+dzx4aJXBrsgdYdkX86L8QzBI
-         ORcw==
+        d=gmail.com; s=20230601; t=1756310335; x=1756915135; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=caF1aw9rpOK0IBISAyRJtFsgSz01pTAHxrl+5Lawo1k=;
+        b=P4y9yNTkfub0S7B5Aa/tQgxNOutSl/XDcdYmPt92lbIm/vOSqxpz4VL2hNdH4Y9LRP
+         M5nMxQtxIzMIBmSLuKdznd0f4OZ3yEkEd6FMv+hGIB+EK9gfs2UrtOwJoZeTt9DzJSQW
+         1Wsua3R0KHAOd41Lz/qYHxXyXwOo/NG6EBZMfos3WZD/cI9CvZfXaZxMDWjtkYRcVMEd
+         r7+ozHdt1++jZyIekHz7Y9B4Wi6eYYsRUqE3iGfWN0QahmAafnj6Jg4nSlBUOZcNx7Gn
+         6RpTU19ZUtbyEEfR18uHfZfixG+vL4PPTf4XSNZX40Z6AO0kqh2/WDWFK+bLbqB8jOny
+         5JlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756310212; x=1756915012;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=926qV+YPdNGgWINkKfdvhIa27PzILOXKVbb0SqCQWbc=;
-        b=aaaqSA3EXD2M6rPXibsm7AlZGwfcQqjpviJ1pHmhMkd4HOlw3hBmCJWiEu6AAkd6cE
-         Kdt2x2NSz7mw46t595GT2+hc5hM1AP10hfmkvWfJ3DzoxPplm/zuBhsJhN8YDBPTqf7z
-         yTzP0odteJDu0CtJlQyVgDN9zWSJKWbUkWddDQFRYvhifiRDU2NTRSgMjl2tr+Zrpn+J
-         y1mzAWBzspdqH8gJBmDRc/ZkNV/Wy7YqvB9fh62aXPFcG7AwPX3e/hRFtMZQA8oof/Jf
-         5l7BSta/XcovLgAQbJiXG6h8Oq5ODHHBZLDxE5eAkuMTSbkfh6zKpL5/2CQuRtOWsUfN
-         dlbA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXMOKylibYdwej8ADHXA58jHE2dh4SnbBD0ZhJbpI8AR/5T3+MUFW03CngzlKBunhpl87H2wSASV3s+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTTXPjFOM2/CSx1arIbpWFca0DlrvH0MbS8pzSAyXn2Esm10zG
-	RkhVZJKw9OKHcpzWIXcs8a3zWhnDkDZrXJrO/g5HwV4Gt/k25Tr0+QqjXISyVg==
-X-Gm-Gg: ASbGncui7xaQguZ6yLIy4vLVFrZMgQql2dnkIIAIo3tfQXaD5p1YILD2Bam9Rgu7aS8
-	YR74EPQm0VkNFJpFxcpbFF3iCau2O5lMxGT6gbPRcfatfWrZugiPxixmwOuH0aYifG2xZVsbJ/v
-	6VqbWj9+rJVkzzAvCeSVKemrEdmylpXBSXV4/2WF3YRW7QTGvwEa22oP1WpnLTP7646TRrz0wwr
-	/91P5flhLTkAm2hdgXpkfW+j1SWWbzSGgVL818a6EgAEj6vSgjWdaI6x2LzUUjWn8TBEaO2UVmO
-	aw3KR2oW+e1xr5wmNc04MfsPDREz/2yINMdkcaQk9UWi5+NWAxTzdmzV8Ghy6D6f0vJjBJ+NSkt
-	/9y2B9Fe2N8nt5zR8Zm9L/PoDquIViChSbUBD62UxA8aT9uM5xhu+u8kIEV/RrIrSHZ0l/z4=
-X-Google-Smtp-Source: AGHT+IH0nHzuiK8j/ez+UhOHzdz/ndqtHMt/iok9pouE9q+T11jwjZJm2qonQ9jwn64fPlYqguPkbA==
-X-Received: by 2002:a05:6a00:3e0a:b0:770:4c7a:304b with SMTP id d2e1a72fcca58-7704c7a3238mr17531407b3a.19.1756310212456;
-        Wed, 27 Aug 2025 08:56:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7703ffb9d3bsm13449712b3a.23.2025.08.27.08.56.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Aug 2025 08:56:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756310335; x=1756915135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=caF1aw9rpOK0IBISAyRJtFsgSz01pTAHxrl+5Lawo1k=;
+        b=JaY1l66cDbrGLAnzeVI7OrWs/LvGUsoj8Ch5j/K2eR/EJcgMJZdKCCWrfZJfU92VrT
+         KxvaXkUcgM1e81fJmTOJwe9rAiW3DavoAhrF18NgFtbGiC99/bjqrpbvkYGS/X7EbDIq
+         zAPT2WJRYfFrPonZ5FSKYDZg1REtKx9G8pNT5qW7TgRc8VrO/8kTnI9lYo/SjzKCEBGk
+         CKdqk7qHDvxKGr+7Bp5ML3nZhVDjO6ssBlIg2dnztMK22q5BSau16iLJH5i1ZY6SvZIJ
+         PvkdF/OnB7Y70+Rc7zKpeIAznJvaog22mdT+UgpRey8QVrVl4e8ipySjDWmynoCAxt+T
+         ROEw==
+X-Gm-Message-State: AOJu0YwI7+QrR8u2AJHUi2tCmV7LZz32vAjZhd3TJCH7xSQAnIrMlYiw
+	TekbDQ2axyQYJWeXQUBNPv/6pc9XH1U5a59z52UqMBXxgKEaKR8d6d6u
+X-Gm-Gg: ASbGncu9t0S1nlypTzXR8S8OAU0VBRvjawPJ2JmfQCdULpoceDesvqA8SAcNR+2GRoO
+	OHhRvOW5BZR17xV7y/c81cORR3G47jE8+z+S910jB4rlLvCb6X1HDJ1je1Tai/YbeQHtLKc6JJ1
+	GFMAS+GJOHUqZr9ey4l7cwPzuQ01pBIezIkIggQiWeZRuZKqsK9M2mQ1z9nOnlofYYpHbrvp8zM
+	VGD8wOaY2hPAm3eWXEzVz01nkciHtUcOGv5KDcRjByHijaMugYik4A67yLTRH9DTVc8dAFmE5qk
+	ZgU5w3QUI6q+o8/pY24lgK+5bS1J1XH17WGMnMzp6O8BCwL7ONsFhB9QzghUGkS/jp23IJVLv+Z
+	9xLo3VzDu0ZDrbn9bJYtEqs/sHUMMaScd2PE=
+X-Google-Smtp-Source: AGHT+IFpbKQAh/xaiGle9jZIlpjL8R4iC6B1N2AGchxYPB6aIERnLeE+bWmpiNwFtYOciUWpzJHBUQ==
+X-Received: by 2002:a17:903:943:b0:234:c8ec:51b5 with SMTP id d9443c01a7336-2462efab368mr249843955ad.53.1756310334907;
+        Wed, 27 Aug 2025 08:58:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246688645c7sm125345285ad.78.2025.08.27.08.58.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 08:58:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4e6257df-4b7f-4ceb-995c-fe24a6ca6a2b@roeck-us.net>
-Date: Wed, 27 Aug 2025 08:56:50 -0700
+Date: Wed, 27 Aug 2025 08:58:53 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH] hwmon: (sch56xx-common) don't print superfluous errors
+Message-ID: <b1664aa8-e3ef-4f91-82ca-b038a75cd619@roeck-us.net>
+References: <20250813190728.3682-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: Add support for TI ina700 power monitor
-From: Guenter Roeck <linux@roeck-us.net>
-To: Christian Kahr <christian.kahr@sie.at>, jdelvare@suse.com
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <a8156dd0-ceff-4ad3-8647-a9c47491b599.98d92f9b-fa19-453e-a7dd-7ac376786b24.5ce0c954-cef9-4788-93e6-ea1d0263884f@emailsignatures365.codetwo.com>
- <a8156dd0-ceff-4ad3-8647-a9c47491b599.cccb958b-a4df-41b5-b2de-11045d5a9527.4676e9c5-8881-4585-a715-630663ab4f8b@emailsignatures365.codetwo.com>
- <a8156dd0-ceff-4ad3-8647-a9c47491b599.7b873dd0-16c4-429f-89d5-30f15a3af0d1.660caff0-2d53-4d54-b4b0-b8956c85dd8e@emailsignatures365.codetwo.com>
- <20250826102351.18166-1-christian.kahr@sie.at>
- <ff8d639d-a9b7-4992-8587-e6b5284c3540@roeck-us.net>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <ff8d639d-a9b7-4992-8587-e6b5284c3540@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250813190728.3682-2-wsa+renesas@sang-engineering.com>
 
-On 8/26/25 05:13, Guenter Roeck wrote:
-> On 8/26/25 03:23, Christian Kahr wrote:
->> This patch adds a new driver for the Texas Instruments INA700 power monitor.
->> Supporting Bus-Voltage, Current, Temperature and Energy.
->>
->> Signed-off-by: Christian Kahr <christian.kahr@sie.at>
+On Wed, Aug 13, 2025 at 09:07:28PM +0200, Wolfram Sang wrote:
+> The watchdog core will handle error messages already.
 > 
-> Almost identical to the chips supported by the ina238 driver.
-> Please add support for this chip to that driver.
-> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Also, please send me a register dump for the chip so I can add unit test code.
+Applied.
 
-Thanks,
 Guenter
-
