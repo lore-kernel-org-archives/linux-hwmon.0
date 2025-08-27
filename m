@@ -1,75 +1,70 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685BE271444;
-	Wed, 27 Aug 2025 15:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F09273816
+	for <linux-hwmon@vger.kernel.org>; Wed, 27 Aug 2025 15:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756309939; cv=none; b=HcTpepPCmn6GFdC+0Sl2JXQa1tX8syZzBxHa0dkgE8SOokvOXziAmalfgVfFODitY47ttywXXqpyvwlZfHE1xoE5nc6rT26cnKoTN+VWjwhjnqOU+tJV80xk7eesmDtUg8CGMUr3Xg36VSS4Bphyf/D1DhfhEfFCQnNoFfbi8xU=
+	t=1756310020; cv=none; b=C366OZUlwmawgCh8SqBSgFA9CKDhOcNzBJQM2KpP/Dhz5zkt9clSKSRGtJcmh4/puuFjWzvZCDuXG/QHjATz4xvWL+L2SpE0xE+Y0HZFMt7bRBbB5DLn0/rIz4jT73GuaDVGNwoAFTcjrhPC8YpW8h1L3dvTk1B7nQ607MQ2+7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756309939; c=relaxed/simple;
-	bh=mxEDOxEUG8uE0LxS50vZIUnB7mT0gj+7iog+IuhZxpI=;
+	s=arc-20240116; t=1756310020; c=relaxed/simple;
+	bh=Asj4lSLCqDQqnrElN5lhJOs68oNBFwbaHdgSziZh0CE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h8VzRrlEqRhDTeSpBeB4gUWfv1h2cNRFX2S+h+2EyRD0LvnHRJXlnIGecnwzhpv4EUWIHx7aVS8bvJti3d4rkl/SUeS9EfwcnETMS0dDYSyglvW+Vr7Nzc0vdLwh/Yts3lD8iZXV9rUGYPVCaYC/wiuSlM80dQ8R2sb6zaftX2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6IGpQum; arc=none smtp.client-ip=209.85.210.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=loHp5xcd3S17DqGqfSGgVJMZ/rdl1pxDrHm/j6k2OAEk4hUCUzZ8JOTHEsXe4JOUsezr4tYvGEIWeog5SyZWLK+yTnc/YKZNKj+/yIuCYXYGlXR0qOaxs8W2w456LUo/+5dbA0M7pv6aiv/0k3g+b1/qbbTs/wW7QYpoIAr251g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/ZCWtNi; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6IGpQum"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7720c9e2900so43624b3a.0;
-        Wed, 27 Aug 2025 08:52:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/ZCWtNi"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-32326e202e0so3920a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Aug 2025 08:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756309938; x=1756914738; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756310018; x=1756914818; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YMtBi0kWjMCd2K78TZRBVYc30InI1Bze5Nd5aWCJ+8A=;
-        b=I6IGpQumdqjrs5/98L41+d88zj4HfdqH5OxD/g0CXefVNBFveYtCrxM5k93Q9JvBUm
-         7gmP4unUz5FtcUzo1yrZcwvHA33mvATd4ZnaTR0cKCHfPJjwQg8s5KkdgYfRguYcb74E
-         9SfSnQY4I+MuzbrqM9bm8xs/M1wcIx9V6bau1H5OxCv8YDR3oYX/nJwUW5s6/HF4ZnkQ
-         G9Rpy88o+JMfsMPWC1W5V1wNmM3WcA+Rw3FGBeaMaIGduuefYbHYnsXlnEK/1NoMV9yk
-         AgyByVghqn+T4wjPt7iwqaXR6snSchF09beD9oE37DKcddNcjmTD5TOOhtnUjidRbFnD
-         sZ/Q==
+        bh=j0jTEqr2Iwx3tIJIxmH5BMcsAUIkFFFFRmSaJuPTg54=;
+        b=O/ZCWtNi8UdQfXZe3AfDsxnlfKTAK/6O/xp9dMLVvYl2r/KTXxAC+Vifd6RZb0Lhrf
+         GcjAEInzHNZs+sXJLDpFuIqEEvFwrW5POMBOTBmbQv21y9d+swFOlarO237s/iExNebU
+         +iGLSYnA4UthSzRMdUJR549JZgYqgA0WhvfOK/s/+7HJFHPVZP6edJ3ZVpRgv7JxLhmS
+         y6dEtRnwP/TVnHpsfAiCKhN0DnCnb1lRS6u54FI5zxO3D6HGPNJ15gQpLJwwiJVLIXVi
+         aFN59KcN9T+NcADwXL0W+aeRJyXqNT3DokaPU2zAxQCdk3res/tJvpRXULbCKLC8/4VW
+         1F/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756309938; x=1756914738;
+        d=1e100.net; s=20230601; t=1756310018; x=1756914818;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YMtBi0kWjMCd2K78TZRBVYc30InI1Bze5Nd5aWCJ+8A=;
-        b=Cy05jGNRgOzSiasNAcj15/n4BApZCSLUGtUEowa5ggKB4wnkBzvHQkIyx6+3tyBES+
-         oMAhNfNbMHHRFjicVKuQzLpwg41fQNzwR+Hnevx0x1LUWZ/sRUdy7POdPSbEORnpYzrK
-         Atvi5m7UIhGraD6H04YfdP5jz2FHCd/gdR9FcWzvNcr7EjdX0tnFfIhdgTgSOMlWJ+B8
-         SwGQXTrzkMr5XiInmSL1Ni/95DstXhNrTwMPvJztonHmXM/cCId/8fun5omrXHgdte5j
-         jmuoDRqvJvruzqEIAQtbJclk46y1maLdt7xZLjWrLd+F8o9AhYecqz+IvVck1sKkR6DN
-         0RkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+jMLGcQIWwiSrIeVDRCSqur9f22yQ9ff1NrhvnT28wUjhbs4arHcNqsvufqe7TAPPKgooLSdEbl1MytHs@vger.kernel.org, AJvYcCX1EcdypfG4dWn4OzccyPsKAv4OzJhXbVcQKRtgAKaQ40lRYIW6UxZY3TUAYRbNMZReRbuPsV9IMs3q@vger.kernel.org, AJvYcCXWOHtf5iTfHEV84PWw1jyrrvOoa3Se/Nh93TjAaQET0pHmHF5Ye8vpq89qWJpCj38/HroeXFjYFcit@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxHC7NKANb5Yj3UjXZ4DTPQa8GSWCebNQ3dKRQWIUf3mqh6ny5
-	mBN7vX7BHHPF7q3QCiZE/MXEPgDkymYqB75IurtZ6Cxw0H5grxpIq0kVbnVpog==
-X-Gm-Gg: ASbGnctVBGJ5nrRKrW9WkcPbYodQq9VVh6GIghyCrNFm8Ea6wIjYhLi2OthXmCeP7Nf
-	/UiYGNzOmlenpRTJqrOiRWTUhLWyF7FGsR9/L3Qe6mdD1BlDoV3saV2QSajEZ26RVa44QwWBKfn
-	nsMYWSd4rrXDwycVw6WxIoroSm4lRvaY34XkbI54LU3h96W5clEya8qtVdj/QrOVWdcwLsfSU6+
-	CsD6l1f+4xiFafB7gydq+V1xeII+quiY5IQxDkmS3F4UHCxXccLk84NdSRsy6hOV5UPc3XP7rh1
-	wO8tW3C+mubhB36WDXN92ZntsyIlV8SdQBkEJj4qXQehJ89a3rcPCt22D7WFVPL6EQSjllBcJow
-	nTnW0z0TP7QnWU8T6/JH1eXIORYjUyd2hjs+41b1o6n9eJg==
-X-Google-Smtp-Source: AGHT+IEuVbrr4rGYhb348Gb0Qtu4Ekt90MHhjQuQTjw9kt/nWBhIpke2qshPYvLuQ1DpnQjMYzqYzQ==
-X-Received: by 2002:a05:6a20:12c1:b0:23f:f7ae:6e3e with SMTP id adf61e73a8af0-24340b5b1cdmr30863460637.24.1756309937646;
-        Wed, 27 Aug 2025 08:52:17 -0700 (PDT)
+        bh=j0jTEqr2Iwx3tIJIxmH5BMcsAUIkFFFFRmSaJuPTg54=;
+        b=JMwLBvSkMmve1/IyJtPSF0Iy3AzkKSimoamgEVJ3X6M23wnMDEgrS7GdbsJ0tG6A/W
+         CjYAwHFfvla+OZKQ9ECRrIcFi4N4UaT36WBSDlTlnO33n0uQfrkzzFBIDvxYqs8IKVWR
+         B3uBL/iDqTTdOA+h3d1LxaZHNSLjpcoUmprCJsG6gbKddD9QgmelFJfuOJNYEycNfQKg
+         KALzOWsgfGz9SF2irzl12cHhQlRs7gTgNJBSf5pRDGHAtABUpTxSMku+SLtA9XvwRXd9
+         dwXdmNBRB3utKJUuOJcxT3QhCWNtK9lGY+BPbkOYrkn9ZhOhqOiWBElU+o/Efr/tMBux
+         /sQQ==
+X-Gm-Message-State: AOJu0YyhcmburY195kjJNImwk0rm5VurXTaP4aS+Ii+EB3wXpl2+ikmo
+	y9VWSWUB+cOO+fDmUMq8HRNBJou/4UHUGrLJpuxF9EOA1WdyKDIJJWYNaBRdeA==
+X-Gm-Gg: ASbGncswlD1h8QmpUfYdDCbrXeYVlVCED8IyMyWBxcczunX17/xQeG6rHCZTrxQBtew
+	hXd5Da9Evm2CC+gYiI/PNKS0pNol6fON2LmYyKFfhh6kydMWbdsA4emHnnmhnTAd+FlRJyjrAZv
+	0VjjmopX0D2++Z2Oso7zmW7BWifnoEG4z3zLO6M5Jovw1p7aY6N3XU5xz+DUrrDquxTRsAiTK9K
+	Xxkq6SUt74Wa6AzzQ+UMGrYyRDP7fTK7MfTkiv2kqZpug4JJwsNNo7wkwrDy5r+GEEuGp38lSkt
+	yFFVbwB2qpiq3nNVh9ZQqcRtD28Ypg89a7+bll/x83ebNvht23U8H0RBjcdRHYeSXnEj0YZ1hwo
+	DCg50d+nwNnMxm5+OhGd+CObJ8Uv7ym6U+Jg=
+X-Google-Smtp-Source: AGHT+IF9fyiWpOtQ5dyBKAWQmrdB6brBarEwHxL1uesxZGWBIn88kWnGf3PhfiaB09vbE8rO6hLOdg==
+X-Received: by 2002:a17:90b:48ca:b0:321:b7ed:75f2 with SMTP id 98e67ed59e1d1-32517747907mr23697572a91.32.1756310018034;
+        Wed, 27 Aug 2025 08:53:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7720f609cbfsm1049985b3a.13.2025.08.27.08.52.16
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd336dsm2375614a91.18.2025.08.27.08.53.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 08:52:17 -0700 (PDT)
+        Wed, 27 Aug 2025 08:53:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 27 Aug 2025 08:52:16 -0700
+Date: Wed, 27 Aug 2025 08:53:36 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: ChiShih Tsai <tomtsai764@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, corbet@lwn.net, t630619@gmail.com
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/adm1275) add sq24905c support
-Message-ID: <a8c87cc4-257b-41bf-8761-a608a78a3f9e@roeck-us.net>
-References: <20250806223724.1207-1-tomtsai764@gmail.com>
- <20250806223724.1207-3-tomtsai764@gmail.com>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Remove Jean Delvare from maintainers
+Message-ID: <dd035a49-e9fc-4854-a402-c377efe2da7c@roeck-us.net>
+References: <20250827111344.0debba2a@endymion>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,14 +73,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250806223724.1207-3-tomtsai764@gmail.com>
+In-Reply-To: <20250827111344.0debba2a@endymion>
 
-On Thu, Aug 07, 2025 at 06:37:24AM +0800, ChiShih Tsai wrote:
-> Add support for sq24905c which is similar to adm1275 and other chips
-> of the series.
+On Wed, Aug 27, 2025 at 11:13:44AM +0200, Jean Delvare wrote:
+> I haven't been active in maintaining the hwmon subsystem in the last
+> decade, so I think it's about time to admit that I do not have the
+> time for this duty and update the MAINTAINERS file to reflect that.
 > 
-> Signed-off-by: ChiShih Tsai <tomtsai764@gmail.com>
+> I would like to thank Guenter Roeck for taking over and doing an
+> excellent work for so many years.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
 
-Applied.
+Applied, and thanks a lot for your help and guidance for all those years.
 
 Guenter
