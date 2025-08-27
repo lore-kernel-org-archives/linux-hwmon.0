@@ -1,184 +1,92 @@
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581C9278E7E;
-	Wed, 27 Aug 2025 15:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC9B20125F;
+	Wed, 27 Aug 2025 15:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756308373; cv=none; b=r/VVqpBojWgo7r1NlkaQwvvL8jg1MZh2InklSqgMGqMU9XVleTUgOTOl7U2BonrfqLGz+OVVdMNThKvWntYWH2rZ79eNYLIlTbV01ThFAAUqwEdL0Ppu1LiDhOcxHTxgDRP82ReZhebJtFsHmnA/VvTag6QQWC0bZCW18iwMyfI=
+	t=1756309909; cv=none; b=kLJy6p7IAE08JunKodDVpklxhKJ416VE7FGTfJDJXzYxt92AW4mzqMZT0ajo/fhg4GvHkBxRS5OQ7C9nm1E55BiBVnodF/yznqCOfJ8JUkDMbZg7BalUYZxIFBfodrdYo/cdRbZF0xMd6tQ6PyTKqcFG5n13oX03lpnJcTBFJKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756308373; c=relaxed/simple;
-	bh=i6Xvzh4Ujbr0eo99BolTbLSEmEh822Jw+vwhjVxzmbc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NTv1+OFPEypWCrGIipwn88T6qDtMIVtse32F4D/9thoGfWSENRs3tJnaW2n85xL9caNqS9X0zQo39d0VGsjzZsjRFCiRzNTTC7pJ6+2dMZAL6vYwrZH0zpzuqufc0A/W0wqB9QZrl/+s1V7Hwvm0l7bBxqzoh0mwd6rjwjqOz5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=LYi7Pz3K; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+	s=arc-20240116; t=1756309909; c=relaxed/simple;
+	bh=R6ZzJJr7yKN+evH2Yas127pK9B9NPN44NuBz8K/mJn8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctupXUCWAdZ3J1t3TfZGOGQgKqxzOgNEFFrug8FMQHSy3lh3Mi3OmkOF/XXctHxFOGUnlB72GUY8xHMeTLvEiJeWZ0z30UPHOwDiEGXPKZJPrN53XkmDP7azMo7IuGONaED1xqD8Fv6L+y2HlIfLNkEXT0qDxTSbk+2+Q2YkUhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nRjFyk/q; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="LYi7Pz3K"
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57RDVZip1754713;
-	Wed, 27 Aug 2025 08:31:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1756301495;
-	bh=IXQfCpyLup22AZJ23GsDzWhzY4Tz0dBOwxDytru+TlU=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=LYi7Pz3KO3rsoKBGHpGeJgHpgt7cxsR/LBeRXGbUd0cVflYWq9jQ++SJwlSFVMVnQ
-	 8mIzCJ53CUSuLgyVW420CrksB6wINV6pMsHTWQn4GsaH+WtfFl4dF1taX5fukJBtzp
-	 Hg+76XMv05LLoDjyubHceTWEcn1D4Aolw4s0QBJs=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57RDVZ9o2487461
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Wed, 27 Aug 2025 08:31:35 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 27
- Aug 2025 08:31:34 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Wed, 27 Aug 2025 08:31:34 -0500
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57RDVYOw3153773;
-	Wed, 27 Aug 2025 08:31:34 -0500
-Message-ID: <992fcb80-1a54-4d57-a764-d6ba77cb11e9@ti.com>
-Date: Wed, 27 Aug 2025 08:31:33 -0500
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nRjFyk/q"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3252c3b048cso3058a91.2;
+        Wed, 27 Aug 2025 08:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756309906; x=1756914706; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ve8PY8iV/TLSghGkfjENy/kd9wFBUoZljLYgGaTY0Xg=;
+        b=nRjFyk/qWb5FQdgi0PKTyvyg5GU/uCB67dkhe7oWm89wpAk1viqFBu1G9UVivpNACx
+         rOeLl7h5w6V5o1LDHUc5FeszUgjMaOnYIoeOcm028+5MGkRij9uAgJUu6foOmvKl0AKG
+         vX6UhiqryALzCUQxy8oq4s5SVeFNYNidALGSlf5PEUgdJmNVF4GADEqbyWLFUa3GMUkd
+         zSV4I61XkFvr8QSp89g5GrYaHDkhxu9iF7mn0Goa2nFb/NgFZPZ5QcnY9EQLWIziLn2p
+         tiZeL4FssZLKuFN8bvQ171RJ84YpifaQdp0qGgpkMIVZ7gOjKtYfcn/pF9DJnom8BQhu
+         9A/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756309906; x=1756914706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ve8PY8iV/TLSghGkfjENy/kd9wFBUoZljLYgGaTY0Xg=;
+        b=aDvYFiqdO+WUvjVgctu1xwoh7HCxBwBDCFNULEufb0JE8mbkkh+LZewXyafMbmSVSD
+         TWKf80NLwrbP/16a/eLMfeKR7CvEotHlEA40EXtghman8pPjKqE+ntJuRGAbyMNqX348
+         h+SJuE+QXQf7E+oZVvti5VNpIjZSL0oK7OerejVKBgUzxyFGXlnDwx34M/1dtShiO5gS
+         Sx/KteIVstTEq2wnzwJydf0nuG46BDRQ20rPwpNM8QFU2rbQVPnmK0qmwLPTAjFG4XNg
+         dRQ6TYUPmKYxdOsciq3M3GFkSv1zoqGUAve1z1phnUfxqudDahxw0UHDH2hv6uVZ56SI
+         OJDw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4NIsByclC+uqnFC/raKintl7+QFC6AR7gNEhXFm1rmF05F/Y7uF2+1NGs3jzRWwvOteZG4RWEwEUq@vger.kernel.org, AJvYcCVqXZt/C7to9Qm1y4wMhGGHoyvi2JSCt/yiq658HbCbUxhqWz+eqKwmEIotLEU6INgCvJeUbKcQzoWdT4PK@vger.kernel.org, AJvYcCXdcVqL5QVOEJ7a1AjQR3UwAROcjmT6MxpItfCD70VkVZTL5aGgAmlH43I0rG1rbSrF5XLKdNcBoa9j@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOXoxvaeJM6uy8BjdC5KQqLmaFR7RPzA6f8sh87L2zbM5g9t9F
+	RZPzVi0hdC5ckGM7eKiEyoOEQF01RYNQ250Sb5TuKDU99uijzI8jczEj
+X-Gm-Gg: ASbGncuOEAUlFd1w0zP3q+RPmeRsrRRIQFu9A3u8zbYBotcAtM0FBiVKN5pN2m4g4Gf
+	0oDVKHrITwR6ZDFkip7mDrMHIcz76+me02OMunwNDHkeDhgUIZ/OnwbDjcZmfqLkh4Dkskb43uu
+	vXqYoPgR6Ac1hPFK5IdFx5Cc6sg8/Ml+Nc6+fO5CCqzRHRYXI7JJBmYKbcx0o8zL1WbPTLsDCCF
+	LggzmglF2C+t0GlE3E7z6Hux4WUrZYocx2owjgFu2M7lW2gXm2RIaxy4h5Pu8ixxofAUGGlJaPJ
+	evSXkSQnfOs4eeAuZviqhwKRqv1AHhigsPLjpA9qus3u+0E8UMC1golxZb6gK2jMBqeLkjkME9G
+	vdDL83Avkd09x9JqGssKsZbFHJvY/UDIwsT8=
+X-Google-Smtp-Source: AGHT+IFW4KVXufm0nSvkd5IZSTWbRQWJsTgx0kxi5oYz32KT6Vqz78+HzXxdoBks3hAq9RnjJlFOqw==
+X-Received: by 2002:a17:90b:3905:b0:323:7e80:881a with SMTP id 98e67ed59e1d1-32518b82606mr29161556a91.37.1756309905981;
+        Wed, 27 Aug 2025 08:51:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276f592587sm2398767a91.9.2025.08.27.08.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 08:51:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 27 Aug 2025 08:51:44 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: ChiShih Tsai <tomtsai764@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, t630619@gmail.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: adm1275: add sq24905c support
+Message-ID: <c8cf8a47-7355-4624-a42d-c7b1d5abf18f@roeck-us.net>
+References: <20250806223724.1207-1-tomtsai764@gmail.com>
+ <20250806223724.1207-2-tomtsai764@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 7/7] arm64: dts: ti: Add support for Kontron
- SMARC-sAM67
-To: Michael Walle <mwalle@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Vignesh
- Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck
-	<linux@roeck-us.net>, Lee Jones <lee@kernel.org>,
-        Srinivas Kandagatla
-	<srini@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20250822131531.1366437-1-mwalle@kernel.org>
- <20250822131531.1366437-8-mwalle@kernel.org>
-Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20250822131531.1366437-8-mwalle@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250806223724.1207-2-tomtsai764@gmail.com>
 
-On 8/22/25 8:15 AM, Michael Walle wrote:
-> The Kontron SMARC-sAM67 is a SMARC module which features a TI AM67 SoC.
-> It supports the following features:
->   * Quad-core AM67A94 with 1.4GHz
->   * 8 GiB RAM
->   * 64 GiB eMMC
->   * 4 MiB SPI flash for failsafe booting
->   * 4x UART
->   * 1x USB 2.0
->   * 1x USB 3.2 (or 4x USB3.2 with onboard USB 3.2 hub)
->   * 1x RTC
->   * 2x GBE
->   * 1x QSPI (with 2 chip selects)
->   * 1x SPI (with 2 chip selects)
->   * 7x I2C
->   * 4x CSI (*)
->   * 2x LVDS (or one dual-link LVDS)
->   * 1x DSI (*)
->   * 1x DP (*)
->   * onboard microcontroller for boot control, failsafe booting and
->     external watchdog
+On Thu, Aug 07, 2025 at 06:37:23AM +0800, ChiShih Tsai wrote:
+> Add support for sq24905c Hot-Swap Controller and Digital Power Monitor.
 > 
-> (*) not yet supported by the kernel
-> 
-> There is a base device tree and overlays which will add optional
-> features. At the moment there is one full featured variant of that
-> board whose device tree is generated during build by merging all the
-> device tree overlays.
-> 
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
-> ---
->   arch/arm64/boot/dts/ti/Makefile               |    6 +
->   .../dts/ti/k3-am67a-kontron-sa67-base.dts     | 1092 +++++++++++++++++
->   .../dts/ti/k3-am67a-kontron-sa67-gbe1.dtso    |   19 +
->   .../ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso  |   24 +
->   4 files changed, 1141 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-base.dts
->   create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
->   create mode 100644 arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: ChiShih Tsai <tomtsai764@gmail.com>
 
-[...]
+Applied.
 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
-> new file mode 100644
-> index 000000000000..4e9eb7998f38
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-gbe1.dtso
-> @@ -0,0 +1,19 @@
-
-DTSO files should have copyright and license here same as DTS.
-
-Andrew
-
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +&cpsw3g_mdio {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	phy1: ethernet-phy@1 {
-> +		reg = <1>;
-> +	};
-> +};
-> +
-> +&cpsw_port2 {
-> +	phy-connection-type = "rgmii-id";
-> +	phy-handle = <&phy1>;
-> +	nvmem-cells = <&base_mac_address 1>;
-> +	nvmem-cell-names = "mac-address";
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
-> new file mode 100644
-> index 000000000000..c9aa15269c92
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am67a-kontron-sa67-rtc-rv8263.dtso
-> @@ -0,0 +1,24 @@
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +&{/} {
-> +	aliases {
-> +		rtc0 = "/bus@f0000/i2c@20000000/rtc@51"; /* &rtc */
-> +		rtc1 = "/bus@f0000/bus@b00000/rtc@2b1f0000"; /* &wkup_rtc0 */
-> +	};
-> +};
-> +
-> +&main_i2c0 {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
-> +
-> +	rtc: rtc@51 {
-> +		compatible = "microcrystal,rv8263";
-> +		reg = <0x51>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&rtc_pins_default>;
-> +		interrupts-extended = <&main_gpio0 36 IRQ_TYPE_EDGE_FALLING>;
-> +	};
-> +};
-
+Guenter
