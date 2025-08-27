@@ -1,74 +1,74 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF4E21CFE0;
-	Wed, 27 Aug 2025 16:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AAA17C91;
+	Wed, 27 Aug 2025 16:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756310491; cv=none; b=VScb/GE6aY/3Q1FTgZkXDTeAnQWDhhVz8noENOkau+hSa7oaJwmL+9TxlSbThF7Igdig4HzAoY6vPgpRIhUiFeNyDUGpH7rPD3xUX1kAqwwBxpjVXoWn7g4UzGnXisxpU60bphcImVD6MD/DkzWOpmer39plAWi7uPUjIcZ4Ygk=
+	t=1756310699; cv=none; b=eS7U0CIb2+1WTu2QJ5GccEQe+WG9nuxEpol0N9aY4re/XpT0VPUMxmYlORoo0ZtmslwVo52U9RwyTI6c9AkHeiHh16fvDU2Tlf4NAkzY5exGp11ZWV0b/VdZolqs+UlN38knZJ81o1bu0K5unVG7jjDH20TDVm0C5RKp3h5cYjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756310491; c=relaxed/simple;
-	bh=kp/w6AzZyIB9KT5/NsdRisVgPHsORJ2EnEz+/qXk8S4=;
+	s=arc-20240116; t=1756310699; c=relaxed/simple;
+	bh=+W496T3KZweap+ELZ3ZrFcPesJjNCwj4MNGY9V/0gGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ghnjBMqhJtpFnUlfy3twAa0ibKSwV7224zj3NxXg4iufpWGwG2vFdpT7u6vJ2SPBpe04CuAJ1ynRISrJHYsPq4BggcbO2PkIDEVjZDto7Ryu+gtbskj0jQngY0zl85/y5m6LwkOsdpJ7tsEUY+DFYHP/87OcGqx9xBDs7ZoGxOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LgiYrZ7Y; arc=none smtp.client-ip=209.85.215.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=GzMe+mG61/OuQXrkEt15j4RnFmPcX9s5LOT30bXlUN8hmHb4jlDPE1GC9pnPrPPYwNeHCz2bBmg8s5R2jbzcCn20YxEG00kWzZ0J709NhS4nqVeSP+QTapPa2LtPu97+CmqkVhJajdq+ngkS92MMO3Z4eehbVq+VIiYh3ciT8vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LdXySKoj; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LgiYrZ7Y"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b476c67c5easo21651a12.0;
-        Wed, 27 Aug 2025 09:01:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdXySKoj"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-77057266dacso26938b3a.2;
+        Wed, 27 Aug 2025 09:04:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756310489; x=1756915289; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756310697; x=1756915497; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JD7wQoK2zlo2cMxTvwLcG9xLyQPV+uT8cZXA6JqR7rU=;
-        b=LgiYrZ7Y/dZKtYIVgsoxP5gh8HNw4sK85NRxRHOm3iC2jK9WMvEFFItL8IuuVAdkbX
-         0TyGAUDzJoI7KuKe/rUXbtA4kq0JwA+41zqCZXfJO8kkQyWKdaqhhYoz8zKNdk7/QAC4
-         ygPXrbIvpJFlMuc1qzGnB4gK94T/PrLS8pvs4gKd02SA762alb1PGg9uZSRT9ynl/qsO
-         2vQ8KJINztHz+HgkRT+Xh52ifKBbg5AMG8EOG99Ie6CiJ+nE5bl7fhzaq9BomCCTJs/D
-         Qj84SgIoPwwkWOI12Y4638myqVsNV4kG1pkbdCQaco4GYqfOydl3u2/7sM6PAA2WfEzi
-         Gccw==
+        bh=vffvRG13APrqSH7IWKHSJsI3WUIeBFV9tAXYguyYiBw=;
+        b=LdXySKoj5orZeLr9tx5zoqqZjC4SuHUPTzqmsjyFMzQs3Vyq9io/4p68K7cO9uQAcf
+         jEjUp+p4zTQUDo9MuBLxUcJ9uwnbTmrrxd7PaW22VgfF8ZE/mBbO8rTnDsr7hqlqJCen
+         0SkNlY9xsNoH/S/QWZL3IyCBHEwTys20dzCzvX7YciqVdy9RtPN+NFZQo03kmyMQbbuL
+         xpExLLR1u5DIUpbHdfBebGQ3q+1rWRI8Hc2DNvODjF5K7yKSaiO/g3FwW4+xUsmf7Pup
+         PDBbg6w4ndmAYesgtX5dBm3s3z1ZA3pu+sVG7iVd4/2PFGPIb3vP9KxOUBgu+YREV/VQ
+         m5bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756310489; x=1756915289;
+        d=1e100.net; s=20230601; t=1756310697; x=1756915497;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JD7wQoK2zlo2cMxTvwLcG9xLyQPV+uT8cZXA6JqR7rU=;
-        b=NKiBtbaLFLDz+zlw9KFsphUyoJoq+RcwaI82msCgNQb+Dhr3AdLaxoZ83KVX6c7CFf
-         wlsv+Tg7THBiytuMQ7GOXEJu8tUFEdREbR9NWu5gC6b8mXjwv98xZYQQprXwCK2yiG6Y
-         SqHmEPAXyWluJQWj89tsGrCRcwH4pik/+LTtDI9Od3nIMyND/IdxK57Od7PbCwG9geAV
-         +p0mp2HRQCjF11LAbQTZZ8w7ltgWf0atgrsWfd6tSlAhcUWFYAgvFP85g461r78GquxC
-         hZ1YCw4U2YdPeH9/Yau5EbZFcq90AjQtSQv7QczlE3N/9n5ytjn0hE3L4Sr/T871OBHG
-         uAig==
-X-Forwarded-Encrypted: i=1; AJvYcCUbXFzrj8I7CfHojlT/jr7AjU1Zk63vcT5+HA7A2JTBB6FwySZ+aZObdULqEUs4V0sjOgdCMVu/wrsVnjss@vger.kernel.org, AJvYcCXH4hBI72xBaGYWlJPv199JNG/LS3k3vkhBL7Y6kLqJB59H5nYVC54MdzgJpjh7w0dFWWh98BnRBdk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxibHN1gjHFFTLLDtS5K9IZqrj0y+H/vuqXUe3PHJrhswMqiXie
-	8+jsGQoKN8lsy4ZMQV6LeJeN38yLyFkw8nymNIcl9ktuztexUXw0dByk
-X-Gm-Gg: ASbGncu/rEBeeiwQlJQFg4YNqupcXd1KCuIgZFaG4htKAcxiCMi7Wmufs+AAIEq5mwl
-	tleEskm8JZspg3PM8U6MdIB/n6+gvJ3sjMGgq3XAlo48Lq7uEO+9kJhycEWKgda/8cnwKuiLZiM
-	q3ZfOGseEWWupQqPmf0NbT67m+dxbYEuKJw9ZwpZC0l8EVqNoGtD3Jdo0Sx2/ClrJzEm4548AxJ
-	+yuBzp6M2qWjSUPYmJY4MZYptrlr3OxHlfb04CnRHfb6rQhiW/F24jGQcbWBhmVaRLAkxCkskTs
-	dfpeF9K/UI2/wQRC51Lti5okwyyYJ48c4kxAk4dpyfHWF96+SZWpfG3gvWjUCntTJw5wMC9PHUp
-	w1H92lPYZ7k0zsplJnwP9SwU5z+e+gNlwgHs=
-X-Google-Smtp-Source: AGHT+IE7rWI5+tEOr/AaeeGYOfydekqn+lfrFNtG7Y3qUq9lE4YzcR5PcMCX+CFbzUYnk3yLn7I1eQ==
-X-Received: by 2002:a17:903:11c7:b0:246:d5b3:6303 with SMTP id d9443c01a7336-248753a2961mr75900165ad.5.1756310488801;
-        Wed, 27 Aug 2025 09:01:28 -0700 (PDT)
+        bh=vffvRG13APrqSH7IWKHSJsI3WUIeBFV9tAXYguyYiBw=;
+        b=U2QTz5y6yEIeYIGJx+DPWvllfH4EKsueh3jr+VD37sG+g98aI3P9d71k9vehrzh+Ho
+         xFxmu8ghIzfS28idUucigskTJ1Br6u5zdAloGVg+9FsqvXjU79YNBuv8lAtAOjSgFpHh
+         BeRtunb5BpWAd2n9gM3bd4RUSwy5RDC4nLxdG+HZnfYDOG9Y/nVYJTfWkE7mgBfx6bF1
+         fNtdzFyriHYqeymPMnWf60C+94UGq3bUjoVYBI05dxRMjND5k1ttSRPxVXQBZh1pf/AE
+         cIMnccbq89s2ydwLnWVE4oM1+dnD5465SgMqrT+ao6ShigSipVBZas/5ZQNBm7jyM3Lk
+         cWow==
+X-Forwarded-Encrypted: i=1; AJvYcCVFco2BRbkBqzP9M14funYOGn0O1buE65bmoP1k8x6jy+ObPbsy08TGDX1CQDareb2peuZPWuFIwm16TF8=@vger.kernel.org, AJvYcCWYnNKo3O2kuARwQqboPZ/OAtWLvG6EwwF3sNFytHQRV5yd0cFE/d9EcpC/O6xnsuBoEpub7Nco2Egl/4E9@vger.kernel.org, AJvYcCX14w1woFNqcU+Va5iCIHf8XuVGEF38bnfZMjh25qypdkv7o5MX3l46KEGqRZml07aHMEZNhh6v37TN@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuHUMWSk/WUCeO4NHfpIAvCt8qBP4jy+1ODdSNe9IDczDGgcNi
+	pSiPyKBDeLECpl6YesqcL1NpgUon2xkAZPEFmE5ZMh3mSxDf4F/dRODj
+X-Gm-Gg: ASbGncsy/DWOVZqIY2zrraKBJLqIiomkttmRkdAXWfFeQS+6InbQzWRfdkJhQJuxdjF
+	lqr+kLHTBC/uEPRPdZrJJa5FpIo8rP6GgoOXrqPtRtUerQsKhWxou7952NnT0WHhBACgMvC/bRa
+	pJXYWHHDih7T4v5cTPX7xqZGC2ih/wrD/oADePPJam5O6hxoQzfJumiRc/ga5Y8AxiaASzy28a/
+	zEi72kkkelcDs2v+TaWHYdtHkHOrJ/qxobOGeCBQDgKAlHZi+0vrAUKWVHM8kSdB9Cwb2u/Cb6B
+	FT2y0TfP0D3fyowNK7tngH1b1E0cAS7Ig0W/8JHyEeRnAdoWWbPOrQ92fI0ChG5HNe97dkgJlWq
+	qqrfpKzv+tc5hEtknsNkZRxyV9+8/s2LOIQVD1/fdctY6UA==
+X-Google-Smtp-Source: AGHT+IEm2FAHPWEasWg3eew07hdsXjmBVFzXNOQYDSE2MP50r3zjMIG2xigPK+pgfzB43lzHwLMVzw==
+X-Received: by 2002:a05:6a20:12c8:b0:240:2371:d003 with SMTP id adf61e73a8af0-24340cd311cmr30277615637.28.1756310695711;
+        Wed, 27 Aug 2025 09:04:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-248cd627e4csm681955ad.81.2025.08.27.09.01.26
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b49cb8afc11sm11747978a12.17.2025.08.27.09.04.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 09:01:26 -0700 (PDT)
+        Wed, 27 Aug 2025 09:04:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 27 Aug 2025 09:01:25 -0700
+Date: Wed, 27 Aug 2025 09:04:46 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: David Ober <dober6023@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net,
-	dober@lenovo.com, mpearson@lenovo.com
-Subject: Re: [PATCH] hwmon:Update EC Chip driver for Lenovo ThinkStation
- motherboards
-Message-ID: <0cf48905-f7af-4c8e-b141-07b6a351c6f7@roeck-us.net>
-References: <20250807103228.10465-1-dober6023@gmail.com>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: jdelvare@suse.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: (ina238) Add support for INA780
+Message-ID: <4381440d-cd92-40df-bf4b-53ba629abc0c@roeck-us.net>
+References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
+ <20250808030510.552724-3-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,16 +77,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250807103228.10465-1-dober6023@gmail.com>
+In-Reply-To: <20250808030510.552724-3-chris.packham@alliedtelesis.co.nz>
 
-On Thu, Aug 07, 2025 at 06:32:28AM -0400, David Ober wrote:
-> This fixes differences for the P8 system that was initially set to
-> the same thermal values as the P7, also adds in the PSU sensor for
-> all of the supported systems
+Chis,
+
+On Fri, Aug 08, 2025 at 03:05:10PM +1200, Chris Packham wrote:
+> Add support for the TI INA780 Digital Power Monitor. The INA780 uses
+> EZShunt(tm) technology, which means there are fixed LSB conversions for
+> a number of fields rather than needing to be calibrated.
 > 
-> Signed-off-by: David Ober <dober@lenovo.com>
-> Signed-off-by: David Ober <dober6023@gmail.com>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Applied.
+Please send me a register dump for the chip so I can add unit test code
+for its support by the driver.
 
+Thanks,
 Guenter
