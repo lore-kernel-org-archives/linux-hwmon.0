@@ -1,96 +1,144 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E2872627;
-	Wed, 27 Aug 2025 15:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599E28472;
+	Wed, 27 Aug 2025 15:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756310162; cv=none; b=n+p8+CKkFeBHuot6FsZCG5lwTiQF8CdxKPPfp/IoxtLzhdiMprAQ0TVGusSAphQjCn2wc6LyEkUkPkT/uoi1Vc1SuLTbtdec5Hbt4vJmO9+M4eESmrvP5FYY6OuZXagvOXJHXzqQU2/SqlyKt5b51YtF7FgUPa54hiTOORBasHs=
+	t=1756310214; cv=none; b=OBAtP5cEY0tqgio4LCrK7GOEQ7QRE8MKrElbzdPFSzmrBUCc5ZoeZD3S0LjqeVIU5nZEcF5+vvdsmQurStysr+GkVafSE4tchy6CffcxoQ2BbRvYm0zjDnJ5zAS5MdJCPNqoyywNZWgNQBJq/nz4qp/Ok9Bi4JnHjIUw4Y51mIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756310162; c=relaxed/simple;
-	bh=eMau+/4qdfaupues2VnmufWJRxOGgqBlK+GKdo5Eh+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G0T4UGM4YQXPxvn9ERHgiU0YeiuQlLa0HBkVjO6yE+o3sTYCxfEvDv6AxVdOq49w6WRW3Q9Uh3dTQy3+3eqNk1Evcugh8Mqd7tzIlGSo3yA1/HCneb/mo3ULuPv/ro3jFDKeySEji+HJ69rKbVZNn4mQs7/GbS46udLYUo53/OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F4AK4sp8; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1756310214; c=relaxed/simple;
+	bh=vQ5InhBUZjPYKM0014rG1TV8XVuoOTobznhCUp9Lv6A=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Os9ZcMTNoClFoNJMRj/4RvbYKFhQR3IEfVk6CMw5NoOXXZLEJonehRRn0y01wQflQCw7GPkFKJybsLp2NWJ5zMfgSfoPz4MdihhgcjBK7SJdbNdl9+jAEeldJc+OklZpQDRzfKRpmYTyERHyX90Dx65RZAGF8YMnJ8I5ayANGsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMOyKG7K; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F4AK4sp8"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2489acda3bbso6728975ad.1;
-        Wed, 27 Aug 2025 08:56:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMOyKG7K"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-77057266cb8so19897b3a.0;
+        Wed, 27 Aug 2025 08:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756310160; x=1756914960; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6W92C0ACMtLtErOfOyXjVV2cNVqglOy8+2tmeSQ1yhk=;
-        b=F4AK4sp8av5kmSvjeHzqt5cc580g8PFCYiD141luepcx4YBWqZ0hBkeKZ1ja8Tpcw5
-         nVzmoUX8w3ROuHgmYYSlbXxoP1rj1eO43VHG5Q8Ur3FVgCeYV2ISgJBMXMdV0XN0LOty
-         bJQB41DpbBker7xa8FG28ITdqCyQMHWGYxlgjcZ6LfFxkb4hrQ0mzB+iREjEzEeJQt4l
-         k9rCK882dM7AWmcySXOXeo4C6qxS3GUEi/QgfU4T432RuJ1ncwRqRj9CBxse3tjVtVSq
-         bokixzD/d8FrddrD3ONQXEBM4kHIw0GcM8Gluz1S9v+qUsn4dSWoB4BzcA2mJNFNCLna
-         2+9w==
+        d=gmail.com; s=20230601; t=1756310212; x=1756915012; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=926qV+YPdNGgWINkKfdvhIa27PzILOXKVbb0SqCQWbc=;
+        b=XMOyKG7KKEeaoh8TAzmpe8DhWGlVyOIdHUl4Ahvycd6g5Vqfmg+5X5cN1/8We8RGYz
+         TBGmlrc7ttYsvBwCZmheMUieEOfhc0vWsy3m4vWcmvRx2xPyQkVzZMnOxvPM/5xoDODh
+         pLFwjdMYh3vewuDCwm5FWkJKwlvkJwPOXm5rjEMzDSXEnNgnDch1QmjQVjjjh5fUehQg
+         1GEbtsJsW/nz6+cTiqgqoDY9MjMkEDtfA2xOkszLzer6CFwKO0NY/0JR4KJf+Elxh4Vh
+         UQ89iqadtzagLGKpqAjreUy3nhFZw898abiWx9gsD7T+dzx4aJXBrsgdYdkX86L8QzBI
+         ORcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756310160; x=1756914960;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6W92C0ACMtLtErOfOyXjVV2cNVqglOy8+2tmeSQ1yhk=;
-        b=Y21EZ8sjLOjztLJhPETfwrR5jWvj5l3VCUvAEqCG+QKQCDTx11r+7xLSaqmhy2mi2t
-         lRMXEcGI9UnUg2vwBHOnfHxjryHKJivgHUiVCmtzrh0TEBa8/zTrY6ZhfLdTlqnlRV9q
-         mkmkEPUwRLACg7aS+CbHIDlFnNSy3YUY4w53y/7AMiDMs7a3Ir+f6+r9sYFEBgsZE4F5
-         upOcovU6hdPtlRjoWWvatJgcyMseEghuuExDCcnmG58d/9/ePd1CAx1Tcp3ecuHRv0sY
-         Y2vDjJX7j73gzm/z+YtKWDcJP/ouAmBJOmTSRoI2PoJzQmT7cjsKf9KCLUfZUyGnKesN
-         +AUg==
-X-Forwarded-Encrypted: i=1; AJvYcCViakBr/DUBplDX09kYAygQYGd1/7+IXxzajxNo2VZPRjLNWE/crEK4o5vJz77speh4vEaLySxseGb9lw==@vger.kernel.org, AJvYcCX/anwfb3fZpfTDZOEnSF6Y6bMsSatuJWea/xLQvBs+U4gnnhteA5ZaOyVFUWXPrWa3xKYzM3dtttJ8ayFJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYDkLwRcHlAl8/rEQT0jnmbdmu70CYykiDDyrxTWrRq76aFI1E
-	Eguy9NC+ldW/Sl3p0HV0yhO2aoZEzvlyEpSlzUYEAXtX+yl+Qte6OJeF
-X-Gm-Gg: ASbGncucfRpsN7cqe7Zify8Igvo3eyrUdZ+dfi2VkqHM+IkLPishXJnDBN6P+cIWssS
-	9NZ+NxfzVPSE2G3rkCMYaASddX4ZZ+pUNlC8zlAWxwCO9NAkgFBm1Hk9Kp82hExQW0P82ZCYjEK
-	7p4hKQH+EJU4Wn4Ny3nh1VVHr1vFlio/zAq4GitaLd8qXo6aKw5XWlBihm5kJVNHHRcaDtkrmxk
-	ImRqG0mII1pJiYdAFMNTJzIE3ZjZSsBkiunxmZ9ML9U7MKdlAwzdDZ5bS8DY2rcLDLg/cLGfQUh
-	bx1NJcOjKMTU6e99APdtChGvjVyvcp0qFism4+aDtrwV3Pd7EJ7EegQkiQdgkgQoKdHU55BIBmU
-	vFwtbNWIQHGK6sz5xZonAc2ARu/yK5QCVqzuxL94dUmRzUQ==
-X-Google-Smtp-Source: AGHT+IEU49MlNXvhLpAYwIlxunCJd4JoZWN1DqE5aTbE1be8H/nGnxUXlnl1n2y/ZUy5w7dbZyOvhw==
-X-Received: by 2002:a17:903:2406:b0:248:8872:5889 with SMTP id d9443c01a7336-24888725c49mr71756505ad.38.1756310160062;
-        Wed, 27 Aug 2025 08:56:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24879b2a23fsm39546705ad.74.2025.08.27.08.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 08:55:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756310212; x=1756915012;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=926qV+YPdNGgWINkKfdvhIa27PzILOXKVbb0SqCQWbc=;
+        b=aaaqSA3EXD2M6rPXibsm7AlZGwfcQqjpviJ1pHmhMkd4HOlw3hBmCJWiEu6AAkd6cE
+         Kdt2x2NSz7mw46t595GT2+hc5hM1AP10hfmkvWfJ3DzoxPplm/zuBhsJhN8YDBPTqf7z
+         yTzP0odteJDu0CtJlQyVgDN9zWSJKWbUkWddDQFRYvhifiRDU2NTRSgMjl2tr+Zrpn+J
+         y1mzAWBzspdqH8gJBmDRc/ZkNV/Wy7YqvB9fh62aXPFcG7AwPX3e/hRFtMZQA8oof/Jf
+         5l7BSta/XcovLgAQbJiXG6h8Oq5ODHHBZLDxE5eAkuMTSbkfh6zKpL5/2CQuRtOWsUfN
+         dlbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXMOKylibYdwej8ADHXA58jHE2dh4SnbBD0ZhJbpI8AR/5T3+MUFW03CngzlKBunhpl87H2wSASV3s+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTTXPjFOM2/CSx1arIbpWFca0DlrvH0MbS8pzSAyXn2Esm10zG
+	RkhVZJKw9OKHcpzWIXcs8a3zWhnDkDZrXJrO/g5HwV4Gt/k25Tr0+QqjXISyVg==
+X-Gm-Gg: ASbGncui7xaQguZ6yLIy4vLVFrZMgQql2dnkIIAIo3tfQXaD5p1YILD2Bam9Rgu7aS8
+	YR74EPQm0VkNFJpFxcpbFF3iCau2O5lMxGT6gbPRcfatfWrZugiPxixmwOuH0aYifG2xZVsbJ/v
+	6VqbWj9+rJVkzzAvCeSVKemrEdmylpXBSXV4/2WF3YRW7QTGvwEa22oP1WpnLTP7646TRrz0wwr
+	/91P5flhLTkAm2hdgXpkfW+j1SWWbzSGgVL818a6EgAEj6vSgjWdaI6x2LzUUjWn8TBEaO2UVmO
+	aw3KR2oW+e1xr5wmNc04MfsPDREz/2yINMdkcaQk9UWi5+NWAxTzdmzV8Ghy6D6f0vJjBJ+NSkt
+	/9y2B9Fe2N8nt5zR8Zm9L/PoDquIViChSbUBD62UxA8aT9uM5xhu+u8kIEV/RrIrSHZ0l/z4=
+X-Google-Smtp-Source: AGHT+IH0nHzuiK8j/ez+UhOHzdz/ndqtHMt/iok9pouE9q+T11jwjZJm2qonQ9jwn64fPlYqguPkbA==
+X-Received: by 2002:a05:6a00:3e0a:b0:770:4c7a:304b with SMTP id d2e1a72fcca58-7704c7a3238mr17531407b3a.19.1756310212456;
+        Wed, 27 Aug 2025 08:56:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7703ffb9d3bsm13449712b3a.23.2025.08.27.08.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Aug 2025 08:56:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 27 Aug 2025 08:55:58 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Rong Zhang <i@rong.moe>
-Cc: Clemens Ladisch <clemens@ladisch.de>, Jean Delvare <jdelvare@suse.com>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (k10temp) Add device ID for Strix Halo
-Message-ID: <25317a14-3bd9-4ce8-b708-410385217f9a@roeck-us.net>
-References: <20250823180443.85512-1-i@rong.moe>
+Message-ID: <4e6257df-4b7f-4ceb-995c-fe24a6ca6a2b@roeck-us.net>
+Date: Wed, 27 Aug 2025 08:56:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250823180443.85512-1-i@rong.moe>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: Add support for TI ina700 power monitor
+From: Guenter Roeck <linux@roeck-us.net>
+To: Christian Kahr <christian.kahr@sie.at>, jdelvare@suse.com
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <a8156dd0-ceff-4ad3-8647-a9c47491b599.98d92f9b-fa19-453e-a7dd-7ac376786b24.5ce0c954-cef9-4788-93e6-ea1d0263884f@emailsignatures365.codetwo.com>
+ <a8156dd0-ceff-4ad3-8647-a9c47491b599.cccb958b-a4df-41b5-b2de-11045d5a9527.4676e9c5-8881-4585-a715-630663ab4f8b@emailsignatures365.codetwo.com>
+ <a8156dd0-ceff-4ad3-8647-a9c47491b599.7b873dd0-16c4-429f-89d5-30f15a3af0d1.660caff0-2d53-4d54-b4b0-b8956c85dd8e@emailsignatures365.codetwo.com>
+ <20250826102351.18166-1-christian.kahr@sie.at>
+ <ff8d639d-a9b7-4992-8587-e6b5284c3540@roeck-us.net>
+Content-Language: en-US
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <ff8d639d-a9b7-4992-8587-e6b5284c3540@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Aug 24, 2025 at 02:04:41AM +0800, Rong Zhang wrote:
-> The device ID of Strix Halo Data Fabric Function 3 has been in the tree
-> since commit 0e640f0a47d8 ("x86/amd_nb: Add new PCI IDs for AMD family
-> 0x1a"), but is somehow missing from k10temp_id_table.
+On 8/26/25 05:13, Guenter Roeck wrote:
+> On 8/26/25 03:23, Christian Kahr wrote:
+>> This patch adds a new driver for the Texas Instruments INA700 power monitor.
+>> Supporting Bus-Voltage, Current, Temperature and Energy.
+>>
+>> Signed-off-by: Christian Kahr <christian.kahr@sie.at>
 > 
-> Add it so that it works out of the box.
+> Almost identical to the chips supported by the ina238 driver.
+> Please add support for this chip to that driver.
 > 
-> Tested on Beelink GTR9 Pro Mini PC.
-> 
-> Signed-off-by: Rong Zhang <i@rong.moe>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Applied.
+Also, please send me a register dump for the chip so I can add unit test code.
 
+Thanks,
 Guenter
+
