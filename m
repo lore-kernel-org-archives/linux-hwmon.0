@@ -1,122 +1,95 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D194032145D;
-	Wed, 27 Aug 2025 22:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43704438B;
+	Wed, 27 Aug 2025 22:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756332438; cv=none; b=A0pHd1wuqOKMPdZUpFhA7GbN5efgxxQgZdSSJ9XcVoVGVa2G1G5F3GWRvcmSKcrHFFHl/2jApw8cPG1vWOnJVCRqM55gDcuhsEIJbkdWIeB64NaIhE5Ru93bst+rCTR3J2qptjT4uKRyx41avp6eZ8+Wapyq7n4cMyZJPchUjtM=
+	t=1756334437; cv=none; b=BFNHjK2hFCmraE2PT4WRyWId9lcWzxmiRBA+ek8zwEMrYW/CrWFnqH0U3NAdohfkPX7gjGz+3fnlfN53/ygPVQGoHmOEXMtAE7sfTrGRSu85J2pEVCE0DBM5BVKkY3UPHDvSZOEzTyQNofBMYMEtyBchc11lwppQWnQcphI805Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756332438; c=relaxed/simple;
-	bh=vUC4qlsxVvPTVPExTfWGe5A+3iWqGaWbw/x33NuF0r0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ACywZF10O9ymwyQDTznDRxJE49DxblFA0GCRulruwC73m0J3UCxHwi3uth+N5Vly4wZzM0Gc5c9ui1N+Z0O+T7N0whpReIgU0cSwCddt5texc2zVLqeoygloeeetkLyq2Q3rhE5WG/cXECoG3HYkn6hwrOxbP4bLbj/LFetOTmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IMCHxakz; arc=none smtp.client-ip=209.85.222.179
+	s=arc-20240116; t=1756334437; c=relaxed/simple;
+	bh=ZURRfcRYgFsQtv89kZESAEWYeb8gpIk6x9g9l4FgzQI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lR0BuDhDtAGk+S+0AkUZEVDOSumwu1sa/nvt2S7fI1J9TlvW1SWgWVknxDFqBOgz/6/XmJtTbRZ2wcwdVnbJOCgdvL6nTcKlrPnhPtHAz21A2T+h0/O4F6lYz2phJpU8qmyI5YTr4MSpyNX/td4APK1Vzaa991cWKyzXMVCi/ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JkioK8Uv; arc=none smtp.client-ip=209.85.128.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IMCHxakz"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7e9f7c46edbso123373185a.0;
-        Wed, 27 Aug 2025 15:07:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JkioK8Uv"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-71ff2b20039so2745497b3.3;
+        Wed, 27 Aug 2025 15:40:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756332436; x=1756937236; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vUC4qlsxVvPTVPExTfWGe5A+3iWqGaWbw/x33NuF0r0=;
-        b=IMCHxakzn7iSdt1dvuMKQCTtmgFmSl6phVeR2J8CTA3p4hwBjYLX2/ELkZCbT+iMLS
-         3na5j1rxRVVeGfHLclYhDgxGQCeUjyOe32D199F6OAieTJaehxqf0hOaUQUEsRgYMtez
-         2SQ0CvOvU+6kYCbEfXfB7lNqHBBJVLTH+DkxAfy5owUockcYgUqQHYN+BWiY4ohvOzt3
-         eR88lFQiF8wXKsEPnXAGnzK6RpltkQ4pRDRONyrfa9dJoMacHSfK274WZB6ZpODvdhFg
-         3dTdz35u9Nhaei1Ig76ScyGax6SpU7TrCnplmZtMTbEXOHbdp7uA7Oyf+s+FHqWpGpuR
-         5AmQ==
+        d=gmail.com; s=20230601; t=1756334435; x=1756939235; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QXrd8df4wtNv11hw/FqJByLBF9OE616o+lduhmz5nt0=;
+        b=JkioK8Uvwf3Q3P4z74pAPFrQ1aVgAZJQF8j4aq2UapXAkNH4JmSZZA1HJHnCl/0iyr
+         wD5mZ/AuQqZwI3vAeXVyEbynUW23yc0cSxeBWbGBMPA4w437wTHA+V6gJFer2zKJzQwJ
+         ZXnHfD5u1oCxSSjbT6AiAuhb1WF0XMNI1zydYDz7mGx/BsQXwnc9WwZbkp4XtA7CaCCQ
+         yH42T7xowaT3upFwxneAsBGy0Wt7GnH3Z1fAnK4KA/0acYsxjbRFDHURrVPPf1fwZgO3
+         KXWo3UckNbogYwL4uwx2dW/YVxfr7QR/HDpDvFT86usCupNmC1icUncjd9nW7SNrvEQ7
+         Wcdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756332436; x=1756937236;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vUC4qlsxVvPTVPExTfWGe5A+3iWqGaWbw/x33NuF0r0=;
-        b=AVlJRZ5cAhmSYcjsHfRasXplTnBEyKIwvFW+z9CZmEXZalFe52xg8SqeKOFca+3xzc
-         K3xtCzWGxFrIKrAUXt2pHheJ88KesLEaWoGySvmu7f4Qr8jfhOyQdsO+kGyKHMGLkVKu
-         JLIflUiomHqf9b+f5hi8ifFeT3IaZDxjlYEnu3WwccjreIzfjwpYc6a7JlHCnZs76fnP
-         jMb/QSUS2bC0h8Gk5kkcukeZlM75pkOA8ot9iUrMug2Qw8liX6AXEfhTP6wQ+MG7N3zK
-         mLI+G6ubjtC6Nkfv0AjkD9FTBsVnok0pAsUk9oN9TO9FWJfogXA0JyX2ty/cI+psZ1s6
-         Qutw==
-X-Forwarded-Encrypted: i=1; AJvYcCUuIobgwclCajpdQZFiycykzLIW5FI8GcD+15sX0xRfKX28VzomlZai03Yqo63L8+neB0Pmd8mm7pW+qoQ=@vger.kernel.org, AJvYcCV2PuyePRT2VaaONGqj5w6/MuZWyqH/v0tot66tv/M52WlSJlhwsZnQ0+RnimbUtsYL/948Ljwta7Kk@vger.kernel.org, AJvYcCVTHUkuDOmuIWHfwMVlyicfMOI62qTTH/2jkRSxL9hUL06Ki/xCET9iLNUmacyGpkECewH0+h/5tDPD@vger.kernel.org, AJvYcCWyBaBiTJseS26/5HhT/rzQy5GfzDcnV1h+5Tn9EwbolrskKA0VwujQkW5WxyC8WbGq0QN5533f1n5DDqM=@vger.kernel.org, AJvYcCXVpZNG6L28WBV4HIXq8/nJHQ4OKuHB1jbGuhBws/RpvuKI/ioRvHDn51mfFSU319bYxrRGVjk4J3+ieqSk@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDb2+G69+2iCrPVxkbPVoMsblRzJZe2IjboOMy3xh/tq1dbEIk
-	o7kW2L8O0LQrL56voNmDki4fx05hDUYnwq3AWosQG/6WaeCAJG/+ncWjmDEBtT0dgCoxBe56C85
-	YThmAr2Z55UUSO8giQFPNP9wTMma0hF0=
-X-Gm-Gg: ASbGncvhQB8Aqxd8nt/rqdNP3BLap/i0qxe7M7yFOdKZuyH06On/kxP/DB4Wuab9LMb
-	wanuHPZHk1uI0mpuFVZA60EFeVih0uOQvLuOVnknjDXByY83lQY32n83Uet+rPYKCzNcidRlkSk
-	MaSqnqRwEichnCjRRkHhPy4upj8Z3Eq2FMQs9RzrVozN54mluK1dp9tXqhiU6RywO/XQj4e15dS
-	p3eog==
-X-Google-Smtp-Source: AGHT+IFWnq8ORXAI8SSjemzLtCbxSTUPIYIEaJ5tGH8UF3103yXoCHbrBxVEF+Bu2TrfLXMCEXU8uRfcWJlgWZbs5Og=
-X-Received: by 2002:a05:620a:390a:b0:7e8:8086:cb83 with SMTP id
- af79cd13be357-7f58d941ce0mr891896885a.28.1756332435727; Wed, 27 Aug 2025
- 15:07:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756334435; x=1756939235;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXrd8df4wtNv11hw/FqJByLBF9OE616o+lduhmz5nt0=;
+        b=wvvoAgeGyRKEN7ggsZHUAdolEEpAL1xM6tF2jX1IJDqvuOpZnsOsXBpywUc8N58YTR
+         7yLcOBuiJwe2TRl9Ur2aKsRPyryopP4s+ovHxqToJ1YSvCTlRyFYhB0SWR39empVz4dj
+         ajKg7e9rLWbu1RaWjHGJzoSRsi+k/ej2pJUZmRncqsw2CkZsRuVhZuxlBVqDMJI2YjSc
+         HguzZewV+O0OKYAAoBpBgYob33D1Doi7rvTBsvNnEOivBLrerQ5R3YqCoLGtdesmzm6d
+         qdzZa/P2lQ01d8Xvvq/Jv/OM8Kz9EdPNSZFolxGkIZqgSNNmLZaR9Wu3m+1c4stUHnqU
+         7JNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2DiY9ESZ7ClAFXdkygLPU7j5r7Pm1JTd2dYb+6q4zRBLwtR6ew10Zsa0qlXE8b8nToGQ4KEo76n5naf9Y@vger.kernel.org, AJvYcCWsqdLayzej7eAqfII4ZeV95i+kLwfkUQNSfosOcb3Ez3oeSL6vR/WEuFZxKzYw5e3ycmpGZwRqQ1Sc@vger.kernel.org, AJvYcCXA1QXTRchxqipUawCBtqH45z1/mINwLLWZPAAcgfgrOhiTIrvJEJuOBMFrCXnPc51B7v5X/Y2w0D8NeO8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTtyakHiKiHVzZssDRfjD0diKmJY5e2xU2nlkcY9z8b5Z3PNCz
+	KvZIl/tOBNj/VaY9M2I2KxN6viGLS1FVS8jzcP0sV9/2LgJX58RaJL5t
+X-Gm-Gg: ASbGncvg9zQMi6kHS0pBVSes14GpK2r2GPcqPXN9I8xPOKQZoisMgeHj5UgUCXBcHVE
+	u9xfWL6CQO9I1eQZcoLbTPg7zI17IRVnXtUDXUwa8W1J8+K+s+SEdAzWv6CTtNNPylvQfDC4YlE
+	fCfZSVhLpln1kmRZWg097ziVSwbFvBNLXxRjZib993ctxGkxeG/RbrV+gdVA3A/uoDcuqTa3JhP
+	NKvBGl+oE8j6HzrksWIYN5dk27Evxi0cjF0IXYyyDDLAwM7vSS0WYMCdMC9e17Fv8oZanyGjKqQ
+	HRmbM0LVT0xn7SG/r8lqDgKtYkC6t5qTcNxXT9bAniOx3GYp6U6Tl0ZRp+JinB9tBHl8yV5BN8r
+	rXn3wT/A=
+X-Google-Smtp-Source: AGHT+IHRztpk0yVGrsngNCAgBOHNf3fObYToyFfHmQGgO4/sQoO23177TbXsgJRAiCNm4ktg0g8Dcg==
+X-Received: by 2002:a05:690c:fcc:b0:720:b6a:ff2d with SMTP id 00721157ae682-7200b6b83cfmr153596487b3.14.1756334434520;
+        Wed, 27 Aug 2025 15:40:34 -0700 (PDT)
+Received: from raspberrypi ([2600:1700:90:4c80::d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-71ff1703e64sm34287997b3.14.2025.08.27.15.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 15:40:34 -0700 (PDT)
+Date: Wed, 27 Aug 2025 17:40:32 -0500
+From: Grant Peltier <grantpeltier93@gmail.com>
+To: linux@roeck-us.net
+Cc: grant.peltier.jg@renesas.com, robh@kernel.org, conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Add support for RAA228244 and RAA228246
+Message-ID: <cover.1756331945.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com> <cff7c8d0-cdd8-4ba5-864a-936a059624d8@roeck-us.net>
-In-Reply-To: <cff7c8d0-cdd8-4ba5-864a-936a059624d8@roeck-us.net>
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Thu, 28 Aug 2025 08:06:57 +1000
-X-Gm-Features: Ac12FXwItn5RDOOJRHCpy_8GPQsXlU1HYJaUvZiX6yrBr_5ZrTi13wSDfRmUQBk
-Message-ID: <CAHgNfTx32B4p6U8Z+dy02jWdQhW0uR3ytovc5u-3bE8kNk=p4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] mfd: macsmc: add rtc, hwmon and hid subdevices
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Jean Delvare <jdelvare@suse.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org, 
-	Mark Kettenis <kettenis@openbsd.org>, Hector Martin <marcan@marcan.st>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Aug 27, 2025 at 11:47=E2=80=AFPM Guenter Roeck <linux@roeck-us.net>=
- wrote:
-> > ---
-> > Changes in v2:
-> > - Added Rob's R-b tag to RTC DT binding
-> > - Removed redundant nesting from hwmon DT binding
-> > - Dedpulicated property definitions in hwmon DT schema
-> > - Made label a required property for hwmon DT nodes
-> > - Clarified semantics in hwmon DT schema definitions
-> > - Split mfd tree changes into separate commits
-> > - Fixed numerous style errors in hwmon driver
-> > - Addressed Guenter's initial feedback on the hwmon driver
->
-> Don't you think that is a bit useless ? You might as well say "Addressed
-> feedback comments" and be done with the change log.
->
-> Guenter
+The RAA228244 and RAA228246 are both recently released dual-output
+digital multiphase PWM controllers. Datasheets for both devices are not
+publicly available but can be supplied by Renesas upon request and NDA.
 
-I don't think this warrants a v3, so hopefully the amended
-changelog below will suffice.
+Grant Peltier (3):
+  hwmon: (pmbus/isl68137) add support for Renesas RAA228244 and
+    RAA228246
+  docs: hwmon: add RAA228244 and RAA228246 info to isl68137
+    documentation
+  dt-bindings: hwmon: (pmbus/isl68137) add RAA228244 and RAA228246
+    support
 
----
-Changes in v2:
-- Added Rob's R-b tag to RTC DT binding
-- Removed redundant nesting from hwmon DT binding
-- Dedpulicated property definitions in hwmon DT schema
-- Made label a required property for hwmon DT nodes
-- Clarified semantics in hwmon DT schema definitions
-- Split mfd tree changes into separate commits
-- Fixed numerous style errors in hwmon driver
-- Removed log messages sysfs read/write functions in hwmon driver
-- Removed ignored errors from hwmon driver
-- Removed uses of dev_err for non-errors in hwmon driver
-- Made it more obvious that a number of hwmon fan properties are optional
-- Modified hwmon driver to reflect DT schema changes
-- Added compatible property to hwmon node
-- Link to v1: https://lore.kernel.org/r/20250819-macsmc-subdevs-v1-0-57df6c=
-3e5f19@gmail.com
+ .../bindings/hwmon/pmbus/isil,isl68137.yaml   |  2 ++
+ Documentation/hwmon/isl68137.rst              | 20 +++++++++++++++++++
+ drivers/hwmon/pmbus/isl68137.c                |  6 ++++++
+ 3 files changed, 28 insertions(+)
 
-James
+-- 
+2.39.5
+
