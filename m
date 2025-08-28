@@ -1,50 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A617404E;
-	Thu, 28 Aug 2025 21:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBABB7404E;
+	Thu, 28 Aug 2025 21:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756417900; cv=none; b=HmOUyQ/fj0E8y+gdZ99EqX0G8FOu7AIv+0GVsHQfhKzuj6xPG8kLG6P00ILhJ9T9bGyiRedCQH3PU8WDdhwxnkOasMbcAkTLRBVmp+m3/oBqKB14RZa+Nj9PkTGC0uFZQ6Q4NVpztbR4eEcaCwTfBH2KEGfzD7gnQaB7wYAOSBo=
+	t=1756417947; cv=none; b=BUhJB1YbTeDLEkso4+qEACumBjgv6KBeEOeZmIbn9N++Z4ZOMRk4gbY9MHZXCE1E+hKyP6xkHgIfh1lBQ4lzDtl5+zWv4S15LUhkpjHjebSih55GaqTDzDn3Hqnc0B9xN7E7KiP19D/AoYN+sc6G/AT/tgVbfQWsReSDuopeN5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756417900; c=relaxed/simple;
-	bh=NLX7OAIAgGR+a6Q7hXVKic3rbHU7tK60lOqleoxNW1Q=;
+	s=arc-20240116; t=1756417947; c=relaxed/simple;
+	bh=W/WeEMsj0kEsXGjC4MQcZ4o8AZvufxrrmpNw8TSl5+I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SMqItbOmar/bv1JyunVZk/Z0RGy8LAAk6dnd+vz0MTVlv5gw1SFfrE8db891h1toP4tWxEZ0VjLZO6S0AsFLCFOshqrlOUidrTMfIvyas8HVqH6fqK2dL2f52rYZPcWKYgJrQx3Ceg0wwXZ1R/muZE7FXxj46KG9VmjuVkP+TAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejxm+Rgb; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type; b=Vn1B3FiqBN1SSZZKZ8PLvgAdZvMHRlVbEIgd1VMt5xZ8T8l7vgufQRSkYGvOeAF9wrwo5ydVcWIPpuE4wYCwhGC6SWClZITrBKpJWjEiq1lhJC3FiGGcswSJcGDv5hC7D6z4FiEigyxwvhYIf8x03gc7s25YLQyuFh0+f3Vn6z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lygXWnWt; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejxm+Rgb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756417900; x=1787953900;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NLX7OAIAgGR+a6Q7hXVKic3rbHU7tK60lOqleoxNW1Q=;
-  b=ejxm+RgbYZrSbQ7b6tOP9RjGKm0UVt7/on6QtfbNvldWQA+K2beFkomf
-   FhOF5p9ZGEM3qPaYQQP9uID72nlZehOAnuMPqr0YLFULfHl5d/bR8lDbo
-   RajN6WKB09qqwu0u1cNcc4S9WVr8p5wpKWl4yQZArZKAEqKBiWnKJlfX1
-   9EW3TGgasFUTXF/H4DN5shw/2fptuNTl3CFX39zzZsu4Q8ZChQO9rkAKy
-   u7Tab5/hJthRJjacrE1fVqUcC87ucWULEMTTpBvVAkulzb+aJYiQ2F969
-   g6zt4jm/UtQoPoRqNmAxmXnEM/9LCWCAswT51hPj7CEOtFH/afLoPgjo9
-   g==;
-X-CSE-ConnectionGUID: ZNOwHnhJTN+AoWC2d2cwwg==
-X-CSE-MsgGUID: iCynte1IT6uVYrv+Fg61Ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="84104563"
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="84104563"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 14:51:39 -0700
-X-CSE-ConnectionGUID: 13nun5FlQKyBFBd2cVeckQ==
-X-CSE-MsgGUID: HRycRmrARqur1JaNCB3/og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
-   d="scan'208";a="174394844"
-Received: from kcaccard-desk.amr.corp.intel.com (HELO [10.125.109.98]) ([10.125.109.98])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 14:51:38 -0700
-Message-ID: <fa0f4052-22cd-47cc-95ea-ffe1c3a5a52a@intel.com>
-Date: Thu, 28 Aug 2025 14:51:37 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lygXWnWt"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7721b8214d4so1168430b3a.2;
+        Thu, 28 Aug 2025 14:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756417945; x=1757022745; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=dV6XS/YvxNWNl1GO5NrzhWyJOeOG6F4gSdyBueTSGKs=;
+        b=lygXWnWtfrjXkDb5VVutlKX4CSv19uZ9IKEgnNeLBU566WQEXla3RW42MsBlr7HUC0
+         9q9f4WztJDLR7Tm62uGu8E0RUXr1aLu6nImY02jSBAm3YkZ9CpLMbxPuoSbqGB04N3pN
+         7DTaLhEdq4K0cU6tcTCV+GSwFIX1mrPFhGTSdPRHXG+xwhJa05dPEk4mU3wfRfI18kaq
+         b8w1MJWgWbwL2XUmaqVbaa+Q4EH3Nm5Znr21FL5NV/tC2O0G6P646aWV5xXmkAxYVg7y
+         e1g8IgQwsZUk4EbAUESk+cO0nlSTcTYoArPY8Vcn424cn9lENGJPAH8ZXI3lFtzHSTA1
+         qDrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756417945; x=1757022745;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dV6XS/YvxNWNl1GO5NrzhWyJOeOG6F4gSdyBueTSGKs=;
+        b=eNkL9WJd4BpmdXgczJ6m79O7iC9az6B8XkEtkOt+YXNboonhqHZBlwl7U0i7tHwnq2
+         N7ZjcIkJM91ydJI26D9OWd4lVkFdAjuInNegsoa2KMnhbs65DnEEYECnp4Zv2REJtVQf
+         A3/gztz1vlsl+xTnMBiePy+sc+kxTXId3LGxRSFumOT7BLVaxnjLGjGQ+h0zZbP9szqv
+         Tfc+yvW3UArcg6zz6SuCTxjfMtkt2tEIOzB/3I4YIvUfxkmU/+JkXZDPzWPSB2UsPLHf
+         O7dRINilEWCRuK+/qAXdTeSbZH4QMGLWSKSwtl/gM3iuT/fHdlNApWEOdulwLqrDnqB4
+         fAug==
+X-Forwarded-Encrypted: i=1; AJvYcCUPANeVWOnJeYXVBP8w8BLW3QbM4yTiSQO2DgJmp6FCM6JO/El85H40cv/6/4ozs6aIHdN2RSe0BzVB@vger.kernel.org, AJvYcCWE2xvP+/0oPL/b+abgwKSezloM5jV1mQAcpM639zcG9t0EqUtH3nOOhl5YXlmfDAJi11qnn5GnFB2GOR2M@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxz/nmtcLV0H2e2uO0EWrrUMCFNKhVXRBweqUzHYZLRaB1F3124
+	aFseT0mIEFL7zSvzYBjHWhlLS/HlRDDi/44f5Cbd1ush+rs3JL87aaHJ
+X-Gm-Gg: ASbGncusir/EIPtp4idiv51sdU3yEvKDBq+ffb8E5VKPz0e3tptk4Uz3EAqX7//CqBf
+	gId88V4qG1RsW3Aawljt1fRfquLo1iA/xvLmIeYeNug/XXtdwm0dlsXZy6ZpfITXvADSLkGS3ue
+	zUuY5FUhL1KGy6pnWBwoB/u39/0du0DBvAVcZ7BjZ2GhL+wXPoduinFLZGaDs/ZhCxYCNTgLbky
+	o8EWUwwyuEN9E/pUuGaqGJKXiaCZE6VLiXuusLEFLn2SZOQ3HWBghvdb+JP4l9audhKMdx+/zhp
+	dUr6ouyoF3C2AorgqVw6Bq/PIJw0YLDtF+nBIj8Iu7rdGjK5lP38AxiiGfJoETjW9QGRcZYObhI
+	JUWsGgJhd1zv9He+LIHhXRUcUEcE6mCZXfiV5Ly4Swv2kDkWuVpOx5Z1fZJzKPUeXkqAA4eUyMR
+	l/+rFK30kN2JyECDDB
+X-Google-Smtp-Source: AGHT+IFRRH9qkLwCyXNeElRa9Q7EA7zo2ntdVXtntSTpTdWi9B3EdswTYIjnDDrTpTePM/GNXXDTOg==
+X-Received: by 2002:a05:6a20:3d86:b0:243:6f4e:fbab with SMTP id adf61e73a8af0-2436f4efe15mr25221703637.40.1756417945009;
+        Thu, 28 Aug 2025 14:52:25 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32787c455b8sm2706458a91.1.2025.08.28.14.52.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Aug 2025 14:52:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <af0f9569-6d27-415e-b11d-8a66a9d05c78@roeck-us.net>
+Date: Thu, 28 Aug 2025 14:52:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -52,83 +70,112 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (coretemp) Replace x86_model checks with VFM
- ones
-To: Sohil Mehta <sohil.mehta@intel.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, linux-hwmon@vger.kernel.org,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20250828201729.1145420-1-sohil.mehta@intel.com>
- <9f1fbf32-fd37-420c-82bc-a43e6d5ef57a@roeck-us.net>
- <c53dedd1-5c58-4325-8da8-552f109b67c5@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v2 2/2] hwmon: (ina238) Add support for INA780
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+ "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
+ <20250808030510.552724-3-chris.packham@alliedtelesis.co.nz>
+ <6e51d4b9-23fd-401b-afb1-2df943f85c3c@roeck-us.net>
+ <d5725c87-ff96-4a25-995a-d4c3cbcc13a9@alliedtelesis.co.nz>
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <c53dedd1-5c58-4325-8da8-552f109b67c5@intel.com>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <d5725c87-ff96-4a25-995a-d4c3cbcc13a9@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/28/25 14:45, Sohil Mehta wrote:
-> On 8/28/2025 2:42 PM, Guenter Roeck wrote:
-...
-> Dave has provided his signoff on the patch now. Also, he suggested
-> including a Cc: stable.
+On 8/28/25 14:22, Chris Packham wrote:
+> 
+> On 29/08/2025 00:09, Guenter Roeck wrote:
+>> On 8/7/25 20:05, Chris Packham wrote:
+>>> Add support for the TI INA780 Digital Power Monitor. The INA780 uses
+>>> EZShunt(tm) technology, which means there are fixed LSB conversions for
+>>> a number of fields rather than needing to be calibrated.
+>>>
+>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>
+>> Your patch does not apply, and I can't figure out its baseline. Please
+>> reparent on top of the current mainline and resubmit.
+> Sure no problem. The ina238 changes were done on top of my initial
+> ina780 stuff so the sha1 recorded in the patch will be a local sha1 that
+> you don't have. I'll clean things up on top of master without any local
+> junk.
+>>
+>> To simplify review, the patch should be split into preparation patches
+>> (such as adding .has_shunt and .temp_max options), followed by the actual
+>> added chip support.
+> Sure.
+>>
+>> Other (not a complete review):
+>>
+>> I don't see the value of adding INA780_COL and INA780_CUL defines;
+>> those are really the same as the shunt voltage limits. Actually,
+>> the current limits _are_ available for existing chips, only they
+>> are expressed as voltage limits on the shunt voltages.
+> 
+> My main motivation was trying to match the terms used in the INA780
+> datasheet. INA780 uses COL/CUL, INA238 uses SOVL/SUVL. I can kind of
 
-Let's just wait until Guenter sends it upstream. Once it hits Linus's
-tree, you can ask for it to be in stable if we decide it's a good idea.
+Yeah, only those change all the time. Just try to match register names
+(or pin names, for that matter) for the chips supported by the lm90 driver.
+I'd rather just add a note explaining the differences in cases like this one,
+where it isn't entirely obvious.
 
-I asked if it was necessary because I'm not positive it's a good idea.
+> squint and see how they are similar the INA238 is just more complicated
+> because of the external shunt. I did kind of think it must be possible
+> to express the INA780 behaviour with some fixed values but my math
+> skills failed me.
+> 
 
-For instance, if the model numbers in play were all >100 and Intel has
-zero plans to introduce a family 18/19, model >100, then it might not be
-worth it. Or, if the only downside is a single warning on dmesg, it
-might not be worth it.
+That is why I ordered those evaluation boards. Forget the math, just look
+at the registers. Fortunately the TI evaluation boards are not that expensive.
 
-But, if it's going to spew warnings constantly or set your brand new
-machine ablaze, then maybe it's worth backporting.
+Guenter
 
-So, let's actually look at what it would mean in practice to have it hit
-stable@ or not. Just spent 10 minutes looking at it.
