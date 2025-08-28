@@ -1,181 +1,192 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBABB7404E;
-	Thu, 28 Aug 2025 21:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625871EEF9
+	for <linux-hwmon@vger.kernel.org>; Thu, 28 Aug 2025 22:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756417947; cv=none; b=BUhJB1YbTeDLEkso4+qEACumBjgv6KBeEOeZmIbn9N++Z4ZOMRk4gbY9MHZXCE1E+hKyP6xkHgIfh1lBQ4lzDtl5+zWv4S15LUhkpjHjebSih55GaqTDzDn3Hqnc0B9xN7E7KiP19D/AoYN+sc6G/AT/tgVbfQWsReSDuopeN5k=
+	t=1756419161; cv=none; b=L7U4QuNfU1lQ31LXQNai1X0LyL5uOQlxyYlW+LMLBNaSixfb+wijXIhDJVG83nRXOxLh2WN07TkqMUDl5g2YlSgHjZEVMofa4s+5a8ZU5BVyPOhZs40SH42Z/YkoV97bPFpd17wSxhMAPfn2nG3E1OiCpAztnJaxretBiwRAb/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756417947; c=relaxed/simple;
-	bh=W/WeEMsj0kEsXGjC4MQcZ4o8AZvufxrrmpNw8TSl5+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vn1B3FiqBN1SSZZKZ8PLvgAdZvMHRlVbEIgd1VMt5xZ8T8l7vgufQRSkYGvOeAF9wrwo5ydVcWIPpuE4wYCwhGC6SWClZITrBKpJWjEiq1lhJC3FiGGcswSJcGDv5hC7D6z4FiEigyxwvhYIf8x03gc7s25YLQyuFh0+f3Vn6z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lygXWnWt; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756419161; c=relaxed/simple;
+	bh=1NIhAK+w11BGCjslpOtTVWdmmqJ+P6N6h23+i81JK14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8baAQe2dh4TXOir3RH9DWQ3oGs2cH998XgZQ7VBj9xbEawUqc7Y8DorZC24tzR/ZCBklGMtR1d9jJNFuFbe80f0g+fjfd0tKnghv3za3rwco/U6a7TX0hcsAMs97HzvfnJp3oJOMwuWkZMrOnuL5Pu0blzbolpeFTuFPaof8iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TfM05Iot; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lygXWnWt"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7721b8214d4so1168430b3a.2;
-        Thu, 28 Aug 2025 14:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756417945; x=1757022745; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=dV6XS/YvxNWNl1GO5NrzhWyJOeOG6F4gSdyBueTSGKs=;
-        b=lygXWnWtfrjXkDb5VVutlKX4CSv19uZ9IKEgnNeLBU566WQEXla3RW42MsBlr7HUC0
-         9q9f4WztJDLR7Tm62uGu8E0RUXr1aLu6nImY02jSBAm3YkZ9CpLMbxPuoSbqGB04N3pN
-         7DTaLhEdq4K0cU6tcTCV+GSwFIX1mrPFhGTSdPRHXG+xwhJa05dPEk4mU3wfRfI18kaq
-         b8w1MJWgWbwL2XUmaqVbaa+Q4EH3Nm5Znr21FL5NV/tC2O0G6P646aWV5xXmkAxYVg7y
-         e1g8IgQwsZUk4EbAUESk+cO0nlSTcTYoArPY8Vcn424cn9lENGJPAH8ZXI3lFtzHSTA1
-         qDrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756417945; x=1757022745;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dV6XS/YvxNWNl1GO5NrzhWyJOeOG6F4gSdyBueTSGKs=;
-        b=eNkL9WJd4BpmdXgczJ6m79O7iC9az6B8XkEtkOt+YXNboonhqHZBlwl7U0i7tHwnq2
-         N7ZjcIkJM91ydJI26D9OWd4lVkFdAjuInNegsoa2KMnhbs65DnEEYECnp4Zv2REJtVQf
-         A3/gztz1vlsl+xTnMBiePy+sc+kxTXId3LGxRSFumOT7BLVaxnjLGjGQ+h0zZbP9szqv
-         Tfc+yvW3UArcg6zz6SuCTxjfMtkt2tEIOzB/3I4YIvUfxkmU/+JkXZDPzWPSB2UsPLHf
-         O7dRINilEWCRuK+/qAXdTeSbZH4QMGLWSKSwtl/gM3iuT/fHdlNApWEOdulwLqrDnqB4
-         fAug==
-X-Forwarded-Encrypted: i=1; AJvYcCUPANeVWOnJeYXVBP8w8BLW3QbM4yTiSQO2DgJmp6FCM6JO/El85H40cv/6/4ozs6aIHdN2RSe0BzVB@vger.kernel.org, AJvYcCWE2xvP+/0oPL/b+abgwKSezloM5jV1mQAcpM639zcG9t0EqUtH3nOOhl5YXlmfDAJi11qnn5GnFB2GOR2M@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz/nmtcLV0H2e2uO0EWrrUMCFNKhVXRBweqUzHYZLRaB1F3124
-	aFseT0mIEFL7zSvzYBjHWhlLS/HlRDDi/44f5Cbd1ush+rs3JL87aaHJ
-X-Gm-Gg: ASbGncusir/EIPtp4idiv51sdU3yEvKDBq+ffb8E5VKPz0e3tptk4Uz3EAqX7//CqBf
-	gId88V4qG1RsW3Aawljt1fRfquLo1iA/xvLmIeYeNug/XXtdwm0dlsXZy6ZpfITXvADSLkGS3ue
-	zUuY5FUhL1KGy6pnWBwoB/u39/0du0DBvAVcZ7BjZ2GhL+wXPoduinFLZGaDs/ZhCxYCNTgLbky
-	o8EWUwwyuEN9E/pUuGaqGJKXiaCZE6VLiXuusLEFLn2SZOQ3HWBghvdb+JP4l9audhKMdx+/zhp
-	dUr6ouyoF3C2AorgqVw6Bq/PIJw0YLDtF+nBIj8Iu7rdGjK5lP38AxiiGfJoETjW9QGRcZYObhI
-	JUWsGgJhd1zv9He+LIHhXRUcUEcE6mCZXfiV5Ly4Swv2kDkWuVpOx5Z1fZJzKPUeXkqAA4eUyMR
-	l/+rFK30kN2JyECDDB
-X-Google-Smtp-Source: AGHT+IFRRH9qkLwCyXNeElRa9Q7EA7zo2ntdVXtntSTpTdWi9B3EdswTYIjnDDrTpTePM/GNXXDTOg==
-X-Received: by 2002:a05:6a20:3d86:b0:243:6f4e:fbab with SMTP id adf61e73a8af0-2436f4efe15mr25221703637.40.1756417945009;
-        Thu, 28 Aug 2025 14:52:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32787c455b8sm2706458a91.1.2025.08.28.14.52.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Aug 2025 14:52:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <af0f9569-6d27-415e-b11d-8a66a9d05c78@roeck-us.net>
-Date: Thu, 28 Aug 2025 14:52:23 -0700
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TfM05Iot"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 9CDCE4E40BA4;
+	Thu, 28 Aug 2025 22:12:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5248C60303;
+	Thu, 28 Aug 2025 22:12:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AF0B91C2282D4;
+	Fri, 29 Aug 2025 00:12:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1756419154; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=umk9iWJI80083siMMEl+CA2tkGjcz41y3WD2Fn8H0Ic=;
+	b=TfM05Iot5cnVPUd+7CT5hHAFGGdx3Wi+hnTehL7TC1loZXNHtBwRJB1bDydItFHFCUjds4
+	6XdfgO5G5hisGu3ehZz/a0X/jv6btLjl4hQiaoLkfRPtbv0cBka3LnqI4LFCE8J1qGG6P1
+	0v+rZPq6GDA//du7YZ9+PRivJXiUBE99st4zy5u9pClr4rAqfSSZhYZcMknbpXlnLCD38N
+	jf4uNvQVAxaVGp1HHHXmC2oijgL8+ivkSlEzAviwt3odii7Je/6SGLCtBVtCJQcI1vLEoB
+	I9SAK4aG+XE+lvktkk8TNNXTcLEP2LYZXkIcQek3zI+1VYG7tAi7Wo3D6KThxA==
+Date: Fri, 29 Aug 2025 00:12:13 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	Mark Kettenis <kettenis@openbsd.org>,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 00/11] mfd: macsmc: add rtc, hwmon and hid subdevices
+Message-ID: <202508282212139a74f113@mail.local>
+References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] hwmon: (ina238) Add support for INA780
-To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
- "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
- <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
- <20250808030510.552724-3-chris.packham@alliedtelesis.co.nz>
- <6e51d4b9-23fd-401b-afb1-2df943f85c3c@roeck-us.net>
- <d5725c87-ff96-4a25-995a-d4c3cbcc13a9@alliedtelesis.co.nz>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <d5725c87-ff96-4a25-995a-d4c3cbcc13a9@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 8/28/25 14:22, Chris Packham wrote:
+Hello,
+
+On 27/08/2025 21:22:34+1000, James Calligeros wrote:
+> Hi all,
 > 
-> On 29/08/2025 00:09, Guenter Roeck wrote:
->> On 8/7/25 20:05, Chris Packham wrote:
->>> Add support for the TI INA780 Digital Power Monitor. The INA780 uses
->>> EZShunt(tm) technology, which means there are fixed LSB conversions for
->>> a number of fields rather than needing to be calibrated.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>
->> Your patch does not apply, and I can't figure out its baseline. Please
->> reparent on top of the current mainline and resubmit.
-> Sure no problem. The ina238 changes were done on top of my initial
-> ina780 stuff so the sha1 recorded in the patch will be a local sha1 that
-> you don't have. I'll clean things up on top of master without any local
-> junk.
->>
->> To simplify review, the patch should be split into preparation patches
->> (such as adding .has_shunt and .temp_max options), followed by the actual
->> added chip support.
-> Sure.
->>
->> Other (not a complete review):
->>
->> I don't see the value of adding INA780_COL and INA780_CUL defines;
->> those are really the same as the shunt voltage limits. Actually,
->> the current limits _are_ available for existing chips, only they
->> are expressed as voltage limits on the shunt voltages.
-> 
-> My main motivation was trying to match the terms used in the INA780
-> datasheet. INA780 uses COL/CUL, INA238 uses SOVL/SUVL. I can kind of
-
-Yeah, only those change all the time. Just try to match register names
-(or pin names, for that matter) for the chips supported by the lm90 driver.
-I'd rather just add a note explaining the differences in cases like this one,
-where it isn't entirely obvious.
-
-> squint and see how they are similar the INA238 is just more complicated
-> because of the external shunt. I did kind of think it must be possible
-> to express the INA780 behaviour with some fixed values but my math
-> skills failed me.
+> This series adds support for the remaining SMC subdevices. These are the
+> RTC, hwmon, and HID devices. They are being submitted together as the RTC
+> and hwmon drivers both require changes to the SMC DT schema.
 > 
 
-That is why I ordered those evaluation boards. Forget the math, just look
-at the registers. Fortunately the TI evaluation boards are not that expensive.
+How do you expect this to be merged? From what I get, I could just take
+1 and 3 as there doesn't seem to be any actual dependencies on any of
+the other patches and the MFD change doesn't depend on the RTC changes.
 
-Guenter
+> The RTC driver is responsible for getting and setting the system clock,
+> and requires an NVMEM cell. This series replaces Sven's original RTC driver
+> submission [1].
+> 
+> The hwmon function is an interesting one. While each Apple Silicon device
+> exposes pretty similar sets of sensors, these all seem to be paired to
+> different SMC keys in the firmware interface. This is true even when the
+> sensors are on the SoC. For example, an M1 MacBook Pro will use different
+> keys to access the LITTLE core temperature sensors to an M1 Mac mini. This
+> necessitates describing which keys correspond to which sensors for each
+> device individually, and populating the hwmon structs at runtime. We do
+> this with a node in the device tree. This series includes only the keys
+> for sensors which we know to be common to all devices. The SMC is also
+> responsible for monitoring and controlling fan speeds on systems with fans,
+> which we expose via the hwmon driver.
+> 
+> The SMC also handles the hardware power button and lid switch. Power
+> button presses and lid opening/closing are emitted as HID events, so we
+> add a HID subdevice to handle them.
+> 
+> Note that this series is based on a branch with three additional commits
+> applied to add the parent SMC nodes to the relevant Devicetrees. This
+> was done to silence build errors. The series applies cleanly to 6.17-rc1.
+> 
+> Regards,
+> 
+> James
+> 
+> [1] https://lore.kernel.org/asahi/CAEg-Je84XxLWH7vznQmPRfjf6GxWOu75ZetwN7AdseAwfMLLrQ@mail.gmail.com/T/#t
+> 
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+> Changes in v2:
+> - Added Rob's R-b tag to RTC DT binding
+> - Removed redundant nesting from hwmon DT binding
+> - Dedpulicated property definitions in hwmon DT schema
+> - Made label a required property for hwmon DT nodes
+> - Clarified semantics in hwmon DT schema definitions
+> - Split mfd tree changes into separate commits
+> - Fixed numerous style errors in hwmon driver
+> - Addressed Guenter's initial feedback on the hwmon driver
+> - Modified hwmon driver to reflect DT schema changes
+> - Added compatible property to hwmon node
+> - Link to v1: https://lore.kernel.org/r/20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com
+> 
+> ---
+> Hector Martin (2):
+>       rtc: Add new rtc-macsmc driver for Apple Silicon Macs
+>       input: macsmc-hid: New driver to handle the Apple Mac SMC buttons/lid
+> 
+> James Calligeros (7):
+>       dt-bindings: hwmon: Add Apple System Management Controller hwmon schema
+>       mfd: macsmc: Wire up Apple SMC RTC subdevice
+>       hwmon: Add Apple Silicon SMC hwmon driver
+>       mfd: macsmc: Wire up Apple SMC hwmon subdevice
+>       mfd: macsmc: Wire up Apple SMC HID subdevice
+>       arm64: dts: apple: Add common hwmon sensors and fans
+>       arm64: dts: apple: t8103, t600x, t8112: Add common hwmon nodes to devices
+> 
+> Sven Peter (2):
+>       dt-bindings: rtc: Add Apple SMC RTC
+>       arm64: dts: apple: t8103,t600x,t8112: Add SMC RTC node
+> 
+>  .../bindings/hwmon/apple,smc-hwmon.yaml  | 132 ++++
+>  .../bindings/mfd/apple,smc.yaml          |  45 ++
+>  .../bindings/rtc/apple,smc-rtc.yaml      |  35 +
+>  MAINTAINERS                              |   5 +
+>  .../boot/dts/apple/hwmon-common.dtsi     |  37 ++
+>  .../boot/dts/apple/hwmon-fan-dual.dtsi   |  24 +
+>  arch/arm64/boot/dts/apple/hwmon-fan.dtsi |  19 +
+>  .../boot/dts/apple/hwmon-laptop.dtsi     |  35 +
+>  .../boot/dts/apple/hwmon-mac-mini.dtsi   |  17 +
+>  .../arm64/boot/dts/apple/t6001-j375c.dts |   2 +
+>  .../arm64/boot/dts/apple/t6002-j375d.dts |   2 +
+>  .../arm64/boot/dts/apple/t600x-die0.dtsi |   6 +
+>  .../boot/dts/apple/t600x-j314-j316.dtsi  |   4 +
+>  .../arm64/boot/dts/apple/t600x-j375.dtsi |   2 +
+>  arch/arm64/boot/dts/apple/t8103-j274.dts |   2 +
+>  arch/arm64/boot/dts/apple/t8103-j293.dts |   3 +
+>  arch/arm64/boot/dts/apple/t8103-j313.dts |   2 +
+>  arch/arm64/boot/dts/apple/t8103-j456.dts |   2 +
+>  arch/arm64/boot/dts/apple/t8103-j457.dts |   2 +
+>  .../arm64/boot/dts/apple/t8103-jxxx.dtsi |   2 +
+>  arch/arm64/boot/dts/apple/t8103.dtsi     |   6 +
+>  arch/arm64/boot/dts/apple/t8112-j413.dts |   2 +
+>  arch/arm64/boot/dts/apple/t8112-j473.dts |   2 +
+>  arch/arm64/boot/dts/apple/t8112-j493.dts |   3 +
+>  .../arm64/boot/dts/apple/t8112-jxxx.dtsi |   2 +
+>  arch/arm64/boot/dts/apple/t8112.dtsi     |   6 +
+>  drivers/hwmon/Kconfig                    |  12 +
+>  drivers/hwmon/Makefile                   |   1 +
+>  drivers/hwmon/macsmc_hwmon.c             | 848 +++++++++++++++++++++++++
+>  drivers/input/misc/Kconfig               |  11 +
+>  drivers/input/misc/Makefile              |   1 +
+>  drivers/input/misc/macsmc-hid.c          | 209 ++++++
+>  drivers/mfd/macsmc.c                     |   3 +
+>  drivers/rtc/Kconfig                      |  11 +
+>  drivers/rtc/Makefile                     |   1 +
+>  drivers/rtc/rtc-macsmc.c                 | 141 ++++
+>  36 files changed, 1637 insertions(+)
+> ---
+> base-commit: 876d6a70b24869f96ebc8672caf86cb4bae72927
+> change-id: 20250816-macsmc-subdevs-87032c017d0c
+> 
+> Best regards,
+> -- 
+> James Calligeros <jcalligeros99@gmail.com>
+> 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
