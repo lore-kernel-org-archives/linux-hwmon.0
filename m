@@ -1,68 +1,50 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4289E23ABBD;
-	Thu, 28 Aug 2025 21:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A617404E;
+	Thu, 28 Aug 2025 21:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756417660; cv=none; b=sINGm/R4r/h14/L+yCMKUREn9PMHlCYkLSsF/ZeZ4BmCQBpzSP8viOot27zTwoy/tJIrzLMyTJndxV2XNndX7U6QlfWVeH8XQG9ZZGPakO/ejgmbOkxxmFSqwrKGeMjsELUJhpqVDHLv/rdof/azgLC+EtDcskS4hvttZGrhhaM=
+	t=1756417900; cv=none; b=HmOUyQ/fj0E8y+gdZ99EqX0G8FOu7AIv+0GVsHQfhKzuj6xPG8kLG6P00ILhJ9T9bGyiRedCQH3PU8WDdhwxnkOasMbcAkTLRBVmp+m3/oBqKB14RZa+Nj9PkTGC0uFZQ6Q4NVpztbR4eEcaCwTfBH2KEGfzD7gnQaB7wYAOSBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756417660; c=relaxed/simple;
-	bh=XCqEFUPhxIXSY0w2z2gqk7qtqk83mOS4LDd5uHQVOM4=;
+	s=arc-20240116; t=1756417900; c=relaxed/simple;
+	bh=NLX7OAIAgGR+a6Q7hXVKic3rbHU7tK60lOqleoxNW1Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kFwr+OoCTbAanvPyfN/BBx2elWcsygdWgfhSHBoX0DvfkJ85wUnYNMNz043iZId75fXr10zSfZrTz38UyMVBzsHxwcK5pt01Ljbl0E3pZ47S9GvhLYYMtNsFYd+9Ce4fk8CuVNkAKSjx/QPu9ullPcyXS99S0lofhNo7m4Fg+vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yg8Z3r3r; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=SMqItbOmar/bv1JyunVZk/Z0RGy8LAAk6dnd+vz0MTVlv5gw1SFfrE8db891h1toP4tWxEZ0VjLZO6S0AsFLCFOshqrlOUidrTMfIvyas8HVqH6fqK2dL2f52rYZPcWKYgJrQx3Ceg0wwXZ1R/muZE7FXxj46KG9VmjuVkP+TAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejxm+Rgb; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yg8Z3r3r"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24458272c00so15289445ad.3;
-        Thu, 28 Aug 2025 14:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756417658; x=1757022458; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBt0SWN2sGdm0+2GHHL3p8vdTDJCkKDj9ClL86gi+rQ=;
-        b=Yg8Z3r3rYy/ikdPRkvSwrAN/cQZYz3b3qN6Q98kfOUiQY87R8h/2vKpACTcRBptsoX
-         tnN1Ae19A7fksCkWTNnr07o6+auZo1RsVfm0WEdi1TGMsQoyZ+sqxdhx8TQv/46T8YbY
-         5YqbpacFmf+yKunrw83i1XU61mVxGU+tkxLOCsXYSNItneYTxJYENLtFLHhuWOpQf0Wd
-         W4f8iRSGO8VmHhexzLxSDWkxu7o2ZKZIJKwM5QJJPHu29Y9CjEpNBWK1Z2wya8jat3+K
-         g44MenHrRWf6nIpRjoXoI/x2hE+vffxk7hVQVu1BOJ9tN1ElHS89sjgSCsrRnQAhHElW
-         aEgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756417658; x=1757022458;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBt0SWN2sGdm0+2GHHL3p8vdTDJCkKDj9ClL86gi+rQ=;
-        b=NH2Tz/TrUCJ9t7eANrkmy6mK6eT2b3zXWJp67kyG1tr8OWRnVRwD+eXMxSvygNhmE3
-         qFn99ABy4R71xTXAboOiONzZT2jlo3eoHOijMjJmDrMHtSINYexfbX+ZS/6q/4FJSENU
-         QtSu7TziCBgggldsdBIjB2RtHDndgMEW4/P4Feox0S7dDRfoGzIy56pSEEwEfkE18pOY
-         iGWTypUF2GZiRmZrZ6wS/MSbwHSOlr23hLKwpGPlqXA/NDZdOUTC6um/Zv9s07XQWP1s
-         f4prI+EIjB00TCT44v3XG+UjCLz1E7V9A+/8oULM2GgVLZCLv3Fp2nFpymssFmw8OpL8
-         hqkg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8CMM9eSYEkrms7m5DY+M93NC/QIxQdprkuL8w5zBCAeug5Eect590/Exgf8mZ5QgtJ3/F+ghTzhIPQXOD@vger.kernel.org, AJvYcCVyj5RAUbzLiJQwo3gQqB4IETLYKgkYiDqkjEz4/9GoKP64q+1M9nGSaBOXUJV+wfGmuwV0083ZckNWFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJvVZTtsspGotgbJzA/uZxeuw6f0rKw6sJG4xET9b4FT3EC+88
-	2eCVLv+Pt7HIO5d5z2lqJLXRRGJTWjPb7k522JZNRtcn+NRHA87tMM06
-X-Gm-Gg: ASbGnct4hgjeRrJ91RYnrm6kr/O2n0JluwQLjfs/jvfcDfe7a/z/OFyTpBn3DAt93nU
-	pdUupoA6QHntJpxpo09TCk43MGdl3g0wEGwMHDO2lPm7shOY7trqhQcp9Dv1TtcWwk/7btKSLM/
-	7lq3bH7xdd7UUeY0XtvI7z6wc4+Lsfv9+KRAwCP0+e51N3SJ3ws5LXONb1kDJxurWYYs7VxBveN
-	i/68pjorphXeYa/iLGps1rFnVWZlxylOL1LDV4V0QTF1QV3ZQ+HD8lMJP2gJ5rQ/BI26dpHwA/W
-	60ldTIlFpotrcjBYuS1fOOCgrPWfI0/CRTHCgFE3RyqAbM71TNrwbcrShXa3hCeQhO+8qU9U5Am
-	4vHubGBbQa8LcOH821O6wQ49v9qqmCc4Rb1vdbWtxRESq/0VyYF6qkOZvkR1qhFUzj+N0ErlFlh
-	fyIA8uOQ==
-X-Google-Smtp-Source: AGHT+IHzSf6p9dv7Da929XQm6dZ8DcnV0dV5K3I/6LiLov2AmKupbbxLFqnbha4kQouH4eTopKGY0A==
-X-Received: by 2002:a17:903:1a24:b0:246:4d93:78a8 with SMTP id d9443c01a7336-2464d937c89mr370767815ad.6.1756417658512;
-        Thu, 28 Aug 2025 14:47:38 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903703bb0sm5317765ad.2.2025.08.28.14.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Aug 2025 14:47:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c68f0cc1-f84b-4458-bdb4-e017443c2125@roeck-us.net>
-Date: Thu, 28 Aug 2025 14:47:36 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejxm+Rgb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756417900; x=1787953900;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NLX7OAIAgGR+a6Q7hXVKic3rbHU7tK60lOqleoxNW1Q=;
+  b=ejxm+RgbYZrSbQ7b6tOP9RjGKm0UVt7/on6QtfbNvldWQA+K2beFkomf
+   FhOF5p9ZGEM3qPaYQQP9uID72nlZehOAnuMPqr0YLFULfHl5d/bR8lDbo
+   RajN6WKB09qqwu0u1cNcc4S9WVr8p5wpKWl4yQZArZKAEqKBiWnKJlfX1
+   9EW3TGgasFUTXF/H4DN5shw/2fptuNTl3CFX39zzZsu4Q8ZChQO9rkAKy
+   u7Tab5/hJthRJjacrE1fVqUcC87ucWULEMTTpBvVAkulzb+aJYiQ2F969
+   g6zt4jm/UtQoPoRqNmAxmXnEM/9LCWCAswT51hPj7CEOtFH/afLoPgjo9
+   g==;
+X-CSE-ConnectionGUID: ZNOwHnhJTN+AoWC2d2cwwg==
+X-CSE-MsgGUID: iCynte1IT6uVYrv+Fg61Ng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11536"; a="84104563"
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="84104563"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 14:51:39 -0700
+X-CSE-ConnectionGUID: 13nun5FlQKyBFBd2cVeckQ==
+X-CSE-MsgGUID: HRycRmrARqur1JaNCB3/og==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="174394844"
+Received: from kcaccard-desk.amr.corp.intel.com (HELO [10.125.109.98]) ([10.125.109.98])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2025 14:51:38 -0700
+Message-ID: <fa0f4052-22cd-47cc-95ea-ffe1c3a5a52a@intel.com>
+Date: Thu, 28 Aug 2025 14:51:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,92 +54,81 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3] hwmon: (coretemp) Replace x86_model checks with VFM
  ones
-To: Dave Hansen <dave.hansen@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
- Jean Delvare <jdelvare@suse.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- linux-hwmon@vger.kernel.org
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+To: Sohil Mehta <sohil.mehta@intel.com>, Guenter Roeck <linux@roeck-us.net>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, linux-hwmon@vger.kernel.org,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
  Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
  Zhang Rui <rui.zhang@intel.com>, x86@kernel.org, linux-kernel@vger.kernel.org
 References: <20250828201729.1145420-1-sohil.mehta@intel.com>
- <16286fa2-3949-4aca-bc52-4090eb96d305@intel.com>
+ <9f1fbf32-fd37-420c-82bc-a43e6d5ef57a@roeck-us.net>
+ <c53dedd1-5c58-4325-8da8-552f109b67c5@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <16286fa2-3949-4aca-bc52-4090eb96d305@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <c53dedd1-5c58-4325-8da8-552f109b67c5@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/28/25 14:18, Dave Hansen wrote:
-> On 8/28/25 13:17, Sohil Mehta wrote:
->>
->> Add a code comment to reflect that none of the CPUs in Family 5 or
->> Family 15 set X86_FEATURE_DTHERM. The VFM checks do not impact these
->> CPUs since the driver does not load on them.
->>
->> Missing-signoff: Dave Hansen <dave.hansen@linux.intel.com>
->> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> 
-> Thanks for picking this back up from whatever dark hole I left it in! ;)
-> 
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> 
-> I assume the hwmon folks will pick this up. If not, it's certainly
-> x86-ish enough for it to go through tip.
-> 
-Already done, but if you want to take it through some other branch
-let me know and I'll drop it.
+On 8/28/25 14:45, Sohil Mehta wrote:
+> On 8/28/2025 2:42 PM, Guenter Roeck wrote:
+...
+> Dave has provided his signoff on the patch now. Also, he suggested
+> including a Cc: stable.
 
-> Oh, and do we want to cc:stable@ on this? Could this end up biting
-> anybody running an old kernel on the model 18/19 hardware?
+Let's just wait until Guenter sends it upstream. Once it hits Linus's
+tree, you can ask for it to be in stable if we decide it's a good idea.
 
-It doesn't really bite, it will just not instantiate the driver.
-I have no idea if those old kernels would run with the new hardware
-in the first place. You tell me...
+I asked if it was necessary because I'm not positive it's a good idea.
 
-Personally I'd rather wait until someone complains.
+For instance, if the model numbers in play were all >100 and Intel has
+zero plans to introduce a family 18/19, model >100, then it might not be
+worth it. Or, if the only downside is a single warning on dmesg, it
+might not be worth it.
 
-Guenter
+But, if it's going to spew warnings constantly or set your brand new
+machine ablaze, then maybe it's worth backporting.
 
+So, let's actually look at what it would mean in practice to have it hit
+stable@ or not. Just spent 10 minutes looking at it.
