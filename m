@@ -1,110 +1,115 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518801A8F84
-	for <linux-hwmon@vger.kernel.org>; Thu, 28 Aug 2025 21:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B109D233149;
+	Thu, 28 Aug 2025 21:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756416131; cv=none; b=dgcHzo4AbFqvmTxfUJJWxAdSEb8Zgikvaeb5USPXH7Q5AsM7IWvvb5mQJNsQt4ZEuUrKQIrutiFzPojQrp5dlxTZTJ+gRCKrRedVAQ4+ooAJY5FtGt5HVfXvvLs+Nr/DwKq6bLyUYH6bbmCzwCeVKUEi4o5y5Q4YZUFAfYyvBzo=
+	t=1756417360; cv=none; b=sq6LP4Mi/KceWwLCj1vYr+41H9M3oQObaeE01NXCEe20BupYmQU/8OIstGi2+bFLZeYH4m2uh6Nnlio+FqwoBr3gdAU/I05/K3UvAAyGHuT7pn5eKdsuLmGHORdhInFJHRh7+YKzCYiGMmc3pxvWagV36qvB+bBw/ugG5yrB8TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756416131; c=relaxed/simple;
-	bh=P/0XnDjjkYSpBEKxFbX5TnoxJtaTlc7T3bqpxvFmesc=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XLUE/zhb/EJcFbiP8AhjcWViGCb1n56xChlmifTynFJ8Lk34RvsM9d6pCv4aQFSWTffP2Fwx+/KzbO2KXby3cnhKuQwpMNchXFXSh1OjYk0Og1baWpvl+q3U8RrmXgBlXCed/0fpR4YR94bJYgob9biUzVP3pOc0cE7QoKo1IKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=lPlc/fxq; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1756417360; c=relaxed/simple;
+	bh=xjr5vpGJs1J/e7rC+/meiCErZfsT4MdioSkHrPuOXCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CvdyorkTrxAPuBR8LqZUyG6U+3j/BBhiV5C3GSSvJ7pDyx3Bsi8SXtRleZSjz1bge228HREZMm+Rvf/9gUgJ81iQqP6kqnYrZtzvF1DkHpN+4oergZzg1mLiGCIwlIXLZ4yHpAcHaW4PFteE5KWtjEEXpP7vcCyhI0YPHI3eyqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/vkktAM; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="lPlc/fxq"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D12F12C0619;
-	Fri, 29 Aug 2025 09:22:05 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1756416125;
-	bh=P/0XnDjjkYSpBEKxFbX5TnoxJtaTlc7T3bqpxvFmesc=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=lPlc/fxqwI5kw+EK77PvNB5IEb065nQ9/qxocImdA0tiJWCj/GRdLQytA3l7GfWeO
-	 pMHuM8xiSzaZV1wT5UGVB6ZoO7xx5NjSlRMy8UbS6LSwXaOpgGC3lbdjHtO6sJNEHF
-	 8i6nOg02huNpfSzP5LxErF3wHWu3TjD9Bz1c5YHYaz9frU6LMcJBhwOFAQvdur95rF
-	 EAcfB+BpLk8R1+rEbqqcO6Z1kigHy6L4YJCx+IyCvMu5U49RVf/KJbIsxds4Z8Hlf1
-	 aoVvdhv7On6v2AF9yUiyG8cUOpIj2llDWB9xrgo69j3E3i571uZqn1GC0tUt/3Lwc5
-	 qFQcvuEUNaYwQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B68b0c87d0001>; Fri, 29 Aug 2025 09:22:05 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Fri, 29 Aug 2025 09:22:05 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Fri, 29 Aug 2025 09:22:05 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Guenter Roeck <linux@roeck-us.net>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] hwmon: (ina238) Add support for INA780
-Thread-Topic: [PATCH v2 2/2] hwmon: (ina238) Add support for INA780
-Thread-Index: AQHcCBFCT9dgOoAuzUOPUPjlGL2uJ7R3T9IAgACae4A=
-Date: Thu, 28 Aug 2025 21:22:05 +0000
-Message-ID: <d5725c87-ff96-4a25-995a-d4c3cbcc13a9@alliedtelesis.co.nz>
-References: <20250808030510.552724-1-chris.packham@alliedtelesis.co.nz>
- <20250808030510.552724-3-chris.packham@alliedtelesis.co.nz>
- <6e51d4b9-23fd-401b-afb1-2df943f85c3c@roeck-us.net>
-In-Reply-To: <6e51d4b9-23fd-401b-afb1-2df943f85c3c@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F0328DDB173F624693B30BB87058D327@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/vkktAM"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-770593ba164so1247952b3a.3;
+        Thu, 28 Aug 2025 14:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756417358; x=1757022158; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UH9yk2TefOta60JYDpWqpgDhndjOgYlNivFhyfwD81I=;
+        b=S/vkktAMBHQZsU/e1jhtjlvTwOInpCsTLoOoxcCOnRnVVjcJYoKnxEarC39aVLZT/N
+         EQMMe7TOwjwalQErbS2P6tZt/SY/+6Ys0PfeoMdGPj1eZYgnvYKYdPqOyzQOYgy7XWJ6
+         26NDb9smkpDcDFD1UBtK0ykVJeD2TEwQVSkn6Piq6ozkyDr5sBX41BT1UK5uV85FNnfj
+         KcRZpaaqa59ejsm2vn75HzbP+sbEBEPdNFBfdNpu3zo8wNWoy8xMIEeLlyp4wrkEMFbJ
+         uVouSfQg4OxJs83aPgcf7nwQYkKvAptOsNNAqyt++swuMdJW8QlXGmhJhsFueYGtSxL4
+         sYLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756417358; x=1757022158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UH9yk2TefOta60JYDpWqpgDhndjOgYlNivFhyfwD81I=;
+        b=bgbMlDcySsllOKe913COrs5KFG//QUlB1bG4ONf5sS5iUV90+15ZwcnRJxAUvG/+Sn
+         Z4tevBcEBn0goJQE4YT4AFFm2sEQ9GucU0x2xQITSIlKXzJqIm+RyoiTqb1pwVTrr+QO
+         u5m8Qk83pnGbGBpjYJD9uMuf8gLDU6MGBsAxEF1jK/xQGkCxNpjq7KVjMAyS22hrzyoK
+         VYuFvJpX3TKQsbQawLaN2hnjpMsIZyacCKl7QxzWISYxUJ18Z9TrlYgDPu/IMUUMGL+C
+         efr5INkSrcecU0GHz7wkhSCfYmrF54kaMJP87cZL4TwX1yGwtGUAmcCi43cFXXrLu4W5
+         V/iw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTcWRPTPtl5lzz5rNe5ZGBtUaHQ1xnLFdaLdL4Jwf025n0qH+CaIldG6QbvdG2W2bRLxPCEqwcbGKcBA==@vger.kernel.org, AJvYcCWM29rnZuzqhRwrqWVpV39A2uieAkP4ks+kCzx6+9SCFjqEX09gQ4hC0nepEkxRWN+juXOd3JXvft0HqbJk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg7deuYNkiylgLlRY3PA3/e7SWMpDWJDCLUMRjQZrPb0X7VTFz
+	KvdsPtNCpa/0aAQA3OYLVbmFn+W8mYxQY33QUO1nxZYBHrEx3wKCgoz1
+X-Gm-Gg: ASbGnctN2zb/UqNKfNt1eF3XiE1tS6WR+2BpudptlwRhVYEr6edJMYS4nmOjiJWBP5c
+	YDXdiI5WAR+ohS7DJjmdDe7alhbLodU5rgwvVVF3TAyXLn72StrsHEUNZmzByJpEyQ6lxTy5qzk
+	u8nMxbWSRB6FXwEZZG0bFWb0Vbqe3wyG54dSFbtDisYfgAaSQUndmlaYqdfZVJtFQv3Y68E40+R
+	LJbQsFEgAbI7PjXY4THo9KA2VmnMeQjwlZWRl4ROgJfjUw9qREBAv154i1dxX5X9YEB1ynbuMVg
+	AlC0t3NyUsi2YB3LGYd8u/FyfrXm8UrMlcLrMQqtBO1sUazVIgoagqrpmel2dgkIfJ8aLJJA0xc
+	tRiu93giwZCPtVGFvI9+6X4qZxppktIzSoMo=
+X-Google-Smtp-Source: AGHT+IFbmPeOe2DEWj5n1YBIu2SCDkJ5FxtzV5CUXT9pOd/gpNsxXld2ouUQ9eJ48pUXXbLHarUVQw==
+X-Received: by 2002:a05:6a20:3943:b0:243:a4de:d9a with SMTP id adf61e73a8af0-243a4de1259mr8475947637.44.1756417357923;
+        Thu, 28 Aug 2025 14:42:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd48cesm6119880a91.19.2025.08.28.14.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Aug 2025 14:42:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 28 Aug 2025 14:42:36 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, linux-hwmon@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (coretemp) Replace x86_model checks with VFM
+ ones
+Message-ID: <9f1fbf32-fd37-420c-82bc-a43e6d5ef57a@roeck-us.net>
+References: <20250828201729.1145420-1-sohil.mehta@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Yo+sRJYX c=1 sm=1 tr=0 ts=68b0c87d a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=WZTWi1HEeU2toEpxRV0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250828201729.1145420-1-sohil.mehta@intel.com>
 
-DQpPbiAyOS8wOC8yMDI1IDAwOjA5LCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiA4LzcvMjUg
-MjA6MDUsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBBZGQgc3VwcG9ydCBmb3IgdGhlIFRJIElO
-QTc4MCBEaWdpdGFsIFBvd2VyIE1vbml0b3IuIFRoZSBJTkE3ODAgdXNlcw0KPj4gRVpTaHVudCh0
-bSkgdGVjaG5vbG9neSwgd2hpY2ggbWVhbnMgdGhlcmUgYXJlIGZpeGVkIExTQiBjb252ZXJzaW9u
-cyBmb3INCj4+IGEgbnVtYmVyIG9mIGZpZWxkcyByYXRoZXIgdGhhbiBuZWVkaW5nIHRvIGJlIGNh
-bGlicmF0ZWQuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFj
-a2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPg0KPiBZb3VyIHBhdGNoIGRvZXMgbm90IGFwcGx5
-LCBhbmQgSSBjYW4ndCBmaWd1cmUgb3V0IGl0cyBiYXNlbGluZS4gUGxlYXNlDQo+IHJlcGFyZW50
-IG9uIHRvcCBvZiB0aGUgY3VycmVudCBtYWlubGluZSBhbmQgcmVzdWJtaXQuDQpTdXJlIG5vIHBy
-b2JsZW0uIFRoZSBpbmEyMzggY2hhbmdlcyB3ZXJlIGRvbmUgb24gdG9wIG9mIG15IGluaXRpYWwg
-DQppbmE3ODAgc3R1ZmYgc28gdGhlIHNoYTEgcmVjb3JkZWQgaW4gdGhlIHBhdGNoIHdpbGwgYmUg
-YSBsb2NhbCBzaGExIHRoYXQgDQp5b3UgZG9uJ3QgaGF2ZS4gSSdsbCBjbGVhbiB0aGluZ3MgdXAg
-b24gdG9wIG9mIG1hc3RlciB3aXRob3V0IGFueSBsb2NhbCANCmp1bmsuDQo+DQo+IFRvIHNpbXBs
-aWZ5IHJldmlldywgdGhlIHBhdGNoIHNob3VsZCBiZSBzcGxpdCBpbnRvIHByZXBhcmF0aW9uIHBh
-dGNoZXMNCj4gKHN1Y2ggYXMgYWRkaW5nIC5oYXNfc2h1bnQgYW5kIC50ZW1wX21heCBvcHRpb25z
-KSwgZm9sbG93ZWQgYnkgdGhlIGFjdHVhbA0KPiBhZGRlZCBjaGlwIHN1cHBvcnQuDQpTdXJlLg0K
-Pg0KPiBPdGhlciAobm90IGEgY29tcGxldGUgcmV2aWV3KToNCj4NCj4gSSBkb24ndCBzZWUgdGhl
-IHZhbHVlIG9mIGFkZGluZyBJTkE3ODBfQ09MIGFuZCBJTkE3ODBfQ1VMIGRlZmluZXM7DQo+IHRo
-b3NlIGFyZSByZWFsbHkgdGhlIHNhbWUgYXMgdGhlIHNodW50IHZvbHRhZ2UgbGltaXRzLiBBY3R1
-YWxseSwNCj4gdGhlIGN1cnJlbnQgbGltaXRzIF9hcmVfIGF2YWlsYWJsZSBmb3IgZXhpc3Rpbmcg
-Y2hpcHMsIG9ubHkgdGhleQ0KPiBhcmUgZXhwcmVzc2VkIGFzIHZvbHRhZ2UgbGltaXRzIG9uIHRo
-ZSBzaHVudCB2b2x0YWdlcy4NCg0KTXkgbWFpbiBtb3RpdmF0aW9uIHdhcyB0cnlpbmcgdG8gbWF0
-Y2ggdGhlIHRlcm1zIHVzZWQgaW4gdGhlIElOQTc4MCANCmRhdGFzaGVldC4gSU5BNzgwIHVzZXMg
-Q09ML0NVTCwgSU5BMjM4IHVzZXMgU09WTC9TVVZMLiBJIGNhbiBraW5kIG9mIA0Kc3F1aW50IGFu
-ZCBzZWUgaG93IHRoZXkgYXJlIHNpbWlsYXIgdGhlIElOQTIzOCBpcyBqdXN0IG1vcmUgY29tcGxp
-Y2F0ZWQgDQpiZWNhdXNlIG9mIHRoZSBleHRlcm5hbCBzaHVudC4gSSBkaWQga2luZCBvZiB0aGlu
-ayBpdCBtdXN0IGJlIHBvc3NpYmxlIA0KdG8gZXhwcmVzcyB0aGUgSU5BNzgwIGJlaGF2aW91ciB3
-aXRoIHNvbWUgZml4ZWQgdmFsdWVzIGJ1dCBteSBtYXRoIA0Kc2tpbGxzIGZhaWxlZCBtZS4NCg0K
-PiBGb3IgdGhlIGluYV8yeHgNCj4gZHJpdmVyIEkgd2FzIGFibGUgdG8gcmVzb2x2ZSB0aGF0IHF1
-aXRlIGVhc2lseTsgd2Ugc2hvdWxkIGRvIHRoZSBzYW1lDQo+IGZvciB0aGUgaW5hMjM4IGRyaXZl
-ci4gTWF5YmUgSSBoYXZlIGFuIGV2YWx1YXRpb24gYm9hcmQgc29tZXdoZXJlOw0KPiBJJ2xsIG5l
-ZWQgdG8gY2hlY2suDQo+DQo+IFsgU29ycnkgZm9yIGJlaW5nIHNvIGxhdGUgd2l0aCB0aGlzOyBJ
-IGFtIGJlaW5nIHN3YW1wZWQgYXQgd29yayA6LSggXSANCg0KTm8gcHJvYmxlbS4gU2FtZSB0aGlu
-ZyBmb3IgbWUuDQoNCg==
+On Thu, Aug 28, 2025 at 01:17:29PM -0700, Sohil Mehta wrote:
+> From: Dave Hansen <dave.hansen@linux.intel.com>
+> 
+> Intel CPUs have been using Family 6 for a while. The Family-model checks
+> in the coretemp driver implicitly assume Family 6. With the upcoming
+> Family 18 and 19 models, some of these checks fall apart.
+> 
+> While reading the temperature target MSR, cpu_has_tjmax() performs model
+> checks only to determine if a device warning should be printed. Instead
+> of expanding the checks, get rid of the function and print the warning
+> once unconditionally if the MSR read fails. The checks aren't worth
+> preventing a single line warning to dmesg.
+> 
+> Update the rest of the x86_model checks with VFM ones to make them more
+> robust. This automatically covers the upcoming Family 18 and 19 as well
+> as any future extended families.
+> 
+> Add a code comment to reflect that none of the CPUs in Family 5 or
+> Family 15 set X86_FEATURE_DTHERM. The VFM checks do not impact these
+> CPUs since the driver does not load on them.
+> 
+> Missing-signoff: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+
+Checkpatch really doesn't like that:
+
+ERROR: Missing Signed-off-by: line by nominal patch author 'Dave Hansen <dave.hansen@linux.intel.com>'
+
+Never mind, applied anyway.
+
+Guenter
