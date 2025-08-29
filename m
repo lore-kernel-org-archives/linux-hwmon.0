@@ -1,265 +1,270 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5E93375D5;
-	Fri, 29 Aug 2025 16:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EB819D07A
+	for <linux-hwmon@vger.kernel.org>; Fri, 29 Aug 2025 20:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756485659; cv=none; b=o5wEZ9Hjp2rXoXRiBNNwKmbz4kBs4oNffHCH8b9+FKlSpbeQyST2X7IX16wubx6/AtqeUcc2N5vsd7csgD0lz9kf1KlDjzmZ7ENKLFsQ79J5tX9sgYQJgHg7t8zAtf9sQKDXb7YUh5HU6aCu/vT8IpNO/LMsHI6hlD9n6F9EWEQ=
+	t=1756500378; cv=none; b=qbMZ1zJtvNADKwS2lAYqxS/nBo/TfGqHpMz5bPkoCyXrPyuzRJJlIkxfzFXHBVr4gSXO9tc7Vfq4kaqdlA9kLRalI1r+tFKFx3Inr2i5sgNHAsCA+H/Mvpd+d7tdQ5bgmyXYl6AFZw1qbGsSRTCHbVL/n6JWkBbKDwnqh9jRLUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756485659; c=relaxed/simple;
-	bh=RQx3k9ICtqz81FINdTuayS6/7Dq2k0lIJ6C2JyMWlIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxrIPCT8OZXEI7p+Xs0S71HyIftjDwaiB7yMcJKj8K79diTjd2RWISHbwUdZNjBLb0N3iWX0PgWu2X3MvQ3R8QIyriuaCvxMailoy9qYz8TkmRI7DWhGdf+KahyaSSSz7Qg2E3uYdJ+eMxun1/zStF7Osr0IlM2WfE3wVdEYIh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T4xOVhID; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1756500378; c=relaxed/simple;
+	bh=4R49EkwjKHvVYtcoTG0cNna16lXCZR/Mw9BQgFTU3XM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=IGwhhhE5l/Mkjp+arI4nZiQNd/MCm4k0T5DZpcUhz5AV5pCVh9AYi5Y8RPoH6u+LuCTlL1pVAejjSPEOGoK6+EroqrF4g8MIsqYzUTzr0nrfyr+RvHsc4jBWE1skk2ITB9NqYm0BVdyqg/ILkTyl0ypjNJhWhhYLXWPeBxc9aq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YMlaJAq8; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T4xOVhID"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8881DC4CEF0;
-	Fri, 29 Aug 2025 16:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756485658;
-	bh=RQx3k9ICtqz81FINdTuayS6/7Dq2k0lIJ6C2JyMWlIc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T4xOVhIDRV5duZ1GpPtBu0+6fshz/3NrsQrkdmFaUSY8AOpusTD94aeN2gst44zpd
-	 ZhwDpjky2b0/wq9sWQzJkeeVDbSFOsdHfp2C3Y4KVopYG3x5cI4191potu3DGLy7lP
-	 Gm7LhA0RQWOborD5EVfMODfkVxs8N35QzduH/DmnookgDoTj+Dtob1Ml2b67igB4Dt
-	 6BvhQX7LI5LLUnTdr1paCJMFi2ZdLFFJ2+d5RnXfqmK+KYVnZ8Xr1+ODKCPYkIGmtr
-	 stuklWrxlbDep/kyZ4A9Gp5yavNZj6kje2Rr1BxFE9tub+RnlqqLQhw9oNa8vr1FVd
-	 k33l4jW/UYRcg==
-Date: Fri, 29 Aug 2025 11:40:57 -0500
-From: Rob Herring <robh@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: Add Apple System Management
- Controller hwmon schema
-Message-ID: <20250829164057.GA976361-robh@kernel.org>
-References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
- <20250827-macsmc-subdevs-v2-2-ce5e99d54c28@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YMlaJAq8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756500377; x=1788036377;
+  h=date:from:to:cc:subject:message-id;
+  bh=4R49EkwjKHvVYtcoTG0cNna16lXCZR/Mw9BQgFTU3XM=;
+  b=YMlaJAq8AuChpcexaOupB0tw0oZ1Fg0xsLCnNFiqAAQ0jP0hYR/vm9oK
+   fzpgd/MJytTJqFJQTeyz3WMaBRVZMS6V75/ZfNeZpZK6LQaFZSZHdjuoP
+   ln4vKDmHjHqlQ5c9mIfTDbH/hctwtWp6wWVM1WjmfoBhy2Q+Uzxgtdsm7
+   s6MTVSgKddFqRCj5Qb0owjnbETfJmP39fD0Rkk4hGiNsHA9YoY0K8DXsY
+   wiRf7+6lsb3Sg19OHfXXV5Aoq5O9tx4x2p5N47598+uV8IqhCqVMiXefi
+   KpNf92AA21cUnD6+f5bnNabF3ZEUZH8qlKsdbUBuvujDeZRh/FG8mYtWA
+   A==;
+X-CSE-ConnectionGUID: qrwA6fOvSeWhlbGC8TLy4w==
+X-CSE-MsgGUID: imABVksZR+GAqyJPkaGICg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11537"; a="62612347"
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="62612347"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2025 13:46:16 -0700
+X-CSE-ConnectionGUID: MKCoU7XjSSSg4K4ZHM6PWw==
+X-CSE-MsgGUID: Cahuimz/RuW6YNkDVfUI8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,221,1751266800"; 
+   d="scan'208";a="169762605"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 29 Aug 2025 13:46:15 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1us5zA-000Uxr-1z;
+	Fri, 29 Aug 2025 20:46:12 +0000
+Date: Sat, 30 Aug 2025 04:45:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 0874169667a2e0332498d349601d7c7c31d161bf
+Message-ID: <202508300409.mnaRLgRv-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827-macsmc-subdevs-v2-2-ce5e99d54c28@gmail.com>
 
-On Wed, Aug 27, 2025 at 09:22:36PM +1000, James Calligeros wrote:
-> Apple Silicon devices integrate a vast array of sensors, monitoring
-> current, power, temperature, and voltage across almost every part of
-> the system. The sensors themselves are all connected to the System
-> Management Controller (SMC). The SMC firmware exposes the data
-> reported by these sensors via its standard FourCC-based key-value
-> API. The SMC is also responsible for monitoring and controlling any
-> fans connected to the system, exposing them in the same way.
-> 
-> For reasons known only to Apple, each device exposes its sensors with
-> an almost totally unique set of keys. This is true even for devices
-> which share an SoC. An M1 Mac mini, for example, will report its core
-> temperatures on different keys to an M1 MacBook Pro. Worse still, the
-> SMC does not provide a way to enumerate the available keys at runtime,
-> nor do the keys follow any sort of reasonable or consistent naming
-> rules that could be used to deduce their purpose. We must therefore
-> know which keys are present on any given device, and which function
-> they serve, ahead of time.
-> 
-> Add a schema so that we can describe the available sensors for a given
-> Apple Silicon device in the Devicetree.
-> 
-> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
-> ---
->  .../bindings/hwmon/apple,smc-hwmon.yaml  | 132 +++++++++++++++++++++++++
->  .../bindings/mfd/apple,smc.yaml          |  36 +++++++
->  MAINTAINERS                              |   1 +
->  3 files changed, 169 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..08cc4f55f3a41ca8b3b428088f96240266fa42e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
-> @@ -0,0 +1,132 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/apple,smc-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple SMC Hardware Monitoring
-> +
-> +description:
-> +  Apple's System Management Controller (SMC) exposes a vast array of
-> +  hardware monitoring sensors, including temperature probes, current and
-> +  voltage sense, power meters, and fan speeds. It also provides endpoints
-> +  to manually control the speed of each fan individually. Each Apple
-> +  Silicon device exposes a different set of endpoints via SMC keys. This
-> +  is true even when two machines share an SoC. The CPU core temperature
-> +  sensor keys on an M1 Mac mini are different to those on an M1 MacBook
-> +  Pro, for example.
-> +
-> +maintainers:
-> +  - James Calligeros <jcalligeros99@gmail.com>
-> +
-> +definitions:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 0874169667a2e0332498d349601d7c7c31d161bf  hwmon: (coretemp) Replace x86_model checks with VFM ones
 
-$defs
+elapsed time: 1373m
 
-definitions was convention. $defs is in json-schema spec now.
+configs tested: 193
+configs skipped: 4
 
-> +  apple,key-id:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    pattern: "^[A-Za-z0-9]{4}$"
-> +    description: The SMC FourCC key of the desired sensor.
-> +      Must match the node's suffix.
-> +
-> +  label:
-> +    description: Human-readable name for the sensor
-> +
-> +properties:
-> +  compatible:
-> +    const: apple,smc-hwmon
-> +
-> +patternProperties:
-> +  "^current-[A-Za-z0-9]{4}$":
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      apple,key-id:
-> +        $ref: "#/definitions/apple,key-id"
-> +
-> +      label:
-> +        $ref: "#/definitions/label"
-> +
-> +    required:
-> +      - apple,key-id
-> +      - label
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This should be something like this:
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                               allnoconfig    clang-22
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                                 defconfig    clang-19
+arc                         haps_hs_defconfig    gcc-15.1.0
+arc                   randconfig-001-20250829    gcc-12.5.0
+arc                   randconfig-002-20250829    gcc-12.5.0
+arm                              allmodconfig    clang-19
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                         bcm2835_defconfig    clang-18
+arm                                 defconfig    clang-19
+arm                          exynos_defconfig    gcc-15.1.0
+arm                       imx_v4_v5_defconfig    clang-18
+arm                          ixp4xx_defconfig    gcc-15.1.0
+arm                         lpc18xx_defconfig    gcc-15.1.0
+arm                   randconfig-001-20250829    gcc-12.5.0
+arm                   randconfig-002-20250829    gcc-12.5.0
+arm                   randconfig-003-20250829    gcc-12.5.0
+arm                   randconfig-004-20250829    gcc-12.5.0
+arm                        spear6xx_defconfig    clang-18
+arm                         vf610m4_defconfig    clang-18
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    clang-19
+arm64                 randconfig-001-20250829    gcc-12.5.0
+arm64                 randconfig-002-20250829    gcc-12.5.0
+arm64                 randconfig-003-20250829    gcc-12.5.0
+arm64                 randconfig-004-20250829    gcc-12.5.0
+csky                              allnoconfig    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    clang-19
+csky                  randconfig-001-20250829    clang-22
+csky                  randconfig-001-20250829    gcc-9.5.0
+csky                  randconfig-002-20250829    clang-22
+csky                  randconfig-002-20250829    gcc-10.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20250829    clang-22
+hexagon               randconfig-002-20250829    clang-22
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    clang-20
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20250829    clang-20
+i386        buildonly-randconfig-001-20250829    gcc-12
+i386        buildonly-randconfig-002-20250829    clang-20
+i386        buildonly-randconfig-003-20250829    clang-20
+i386        buildonly-randconfig-004-20250829    clang-20
+i386        buildonly-randconfig-005-20250829    clang-20
+i386        buildonly-randconfig-005-20250829    gcc-12
+i386        buildonly-randconfig-006-20250829    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250829    clang-20
+i386                  randconfig-002-20250829    clang-20
+i386                  randconfig-003-20250829    clang-20
+i386                  randconfig-004-20250829    clang-20
+i386                  randconfig-005-20250829    clang-20
+i386                  randconfig-006-20250829    clang-20
+i386                  randconfig-007-20250829    clang-20
+i386                  randconfig-011-20250829    clang-20
+i386                  randconfig-012-20250829    clang-20
+i386                  randconfig-013-20250829    clang-20
+i386                  randconfig-014-20250829    clang-20
+i386                  randconfig-015-20250829    clang-20
+i386                  randconfig-016-20250829    clang-20
+i386                  randconfig-017-20250829    clang-20
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20250829    clang-22
+loongarch             randconfig-002-20250829    clang-22
+m68k                             allmodconfig    clang-19
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                       bvme6000_defconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+microblaze                       allmodconfig    clang-19
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                          rb532_defconfig    clang-18
+nios2                         3c120_defconfig    clang-18
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20250829    clang-22
+nios2                 randconfig-001-20250829    gcc-11.5.0
+nios2                 randconfig-002-20250829    clang-22
+nios2                 randconfig-002-20250829    gcc-11.5.0
+openrisc                          allnoconfig    clang-22
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250829    clang-22
+parisc                randconfig-001-20250829    gcc-14.3.0
+parisc                randconfig-002-20250829    clang-22
+parisc                randconfig-002-20250829    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                          allyesconfig    clang-22
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc                     asp8347_defconfig    gcc-15.1.0
+powerpc                        fsp2_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20250829    clang-22
+powerpc               randconfig-001-20250829    gcc-13.4.0
+powerpc               randconfig-002-20250829    clang-22
+powerpc               randconfig-003-20250829    clang-22
+powerpc               randconfig-003-20250829    gcc-12.5.0
+powerpc64             randconfig-001-20250829    clang-22
+powerpc64             randconfig-002-20250829    clang-22
+powerpc64             randconfig-003-20250829    clang-22
+powerpc64             randconfig-003-20250829    gcc-8.5.0
+riscv                            allmodconfig    clang-22
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-22
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    gcc-15.1.0
+riscv                               defconfig    gcc-12
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-18
+s390                                defconfig    gcc-12
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-12
+sh                 kfr2r09-romimage_defconfig    gcc-15.1.0
+sh                           se7721_defconfig    clang-18
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250829    clang-20
+x86_64      buildonly-randconfig-001-20250829    gcc-11
+x86_64      buildonly-randconfig-002-20250829    clang-20
+x86_64      buildonly-randconfig-002-20250829    gcc-11
+x86_64      buildonly-randconfig-003-20250829    clang-20
+x86_64      buildonly-randconfig-003-20250829    gcc-12
+x86_64      buildonly-randconfig-004-20250829    clang-20
+x86_64      buildonly-randconfig-005-20250829    clang-20
+x86_64      buildonly-randconfig-006-20250829    clang-20
+x86_64                              defconfig    clang-20
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20250829    gcc-12
+x86_64                randconfig-002-20250829    gcc-12
+x86_64                randconfig-003-20250829    gcc-12
+x86_64                randconfig-004-20250829    gcc-12
+x86_64                randconfig-005-20250829    gcc-12
+x86_64                randconfig-006-20250829    gcc-12
+x86_64                randconfig-007-20250829    gcc-12
+x86_64                randconfig-008-20250829    gcc-12
+x86_64                randconfig-071-20250829    clang-20
+x86_64                randconfig-072-20250829    clang-20
+x86_64                randconfig-073-20250829    clang-20
+x86_64                randconfig-074-20250829    clang-20
+x86_64                randconfig-075-20250829    clang-20
+x86_64                randconfig-076-20250829    clang-20
+x86_64                randconfig-077-20250829    clang-20
+x86_64                randconfig-078-20250829    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-12
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-12
+x86_64                           rhel-9.4-ltp    gcc-12
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
 
-"^current-[A-Za-z0-9]{4}$":
-  $ref: "#/$defs/sensor"
-  unevaluatedProperties: false
-
-With the $defs/sensor being:
-
-$defs:
-  sensor:
-    type: object
-    
-    properties:
-      apple,key-id:
-        $ref: /schemas/types.yaml#/definitions/string
-        pattern: "^[A-Za-z0-9]{4}$"
-        description: 
-          The SMC FourCC key of the desired sensor. Must match the 
-          node's suffix.
-
-      label:
-        description: Human-readable name for the sensor
-
-    required:
-      - apple,key-id
-      - label
-
-Though in general, 'label' should never be required being just for human 
-convenience.
-
-> +
-> +  "^fan-[A-Za-z0-9]{4}$":
-> +    type: object
-> +    additionalProperties: false
-
-And this one the same as above, but with the additional fan properties 
-listed here.
-
-> +
-> +    properties:
-> +      apple,key-id:
-> +        $ref: "#/definitions/apple,key-id"
-> +
-> +      apple,fan-minimum:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        pattern: "^[A-Za-z0-9]{4}$"
-> +        description: SMC key containing the fan's minimum speed
-> +
-> +      apple,fan-maximum:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        pattern: "^[A-Za-z0-9]{4}$"
-> +        description: SMC key containing the fan's maximum speed
-> +
-> +      apple,fan-target:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        pattern: "^[A-Za-z0-9]{4}$"
-> +        description: Writeable endpoint for setting desired fan speed
-> +
-> +      apple,fan-mode:
-> +        $ref: /schemas/types.yaml#/definitions/string
-> +        pattern: "^[A-Za-z0-9]{4}$"
-> +        description: Writeable key to enable/disable manual fan control
-> +
-> +      label:
-> +        $ref: "#/definitions/label"
-> +
-> +    required:
-> +      - apple,key-id
-> +      - label
-> +
-> +  "^power-[A-Za-z0-9]{4}$":
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      apple,key-id:
-> +        $ref: "#/definitions/apple,key-id"
-> +
-> +      label:
-> +        $ref: "#/definitions/label"
-> +
-> +    required:
-> +      - apple,key-id
-> +      - label
-> +
-> +  "^temperature-[A-Za-z0-9]{4}$":
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      apple,key-id:
-> +        $ref: "#/definitions/apple,key-id"
-> +
-> +      label:
-> +        $ref: "#/definitions/label"
-> +
-> +    required:
-> +      - apple,key-id
-> +      - label
-> +
-> +  "^voltage-[A-Za-z0-9]{4}$":
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      apple,key-id:
-> +        $ref: "#/definitions/apple,key-id"
-> +
-> +      label:
-> +        $ref: "#/definitions/label"
-> +
-> +    required:
-> +      - apple,key-id
-> +      - label
-> +
-> +additionalProperties: false
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
