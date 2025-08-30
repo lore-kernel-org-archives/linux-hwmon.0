@@ -1,170 +1,206 @@
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012042.outbound.protection.outlook.com [52.101.126.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84043214210;
-	Sat, 30 Aug 2025 09:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756547483; cv=fail; b=eLEXTdjQpmguV15awXY5iz5mhyOJASI+5gytH2pU/0dX4WfjCWUNcOfoFq3NNuyeJNC9iVWSvkL96G3GUnX0uKaxSv4RtNn1a60ly1VejulGi9d9zIOg30oJnnvXq+/HD9t6iRWNsiFkrUDCW95TykawRF91GB8EEcvKegE4plU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756547483; c=relaxed/simple;
-	bh=WkaU86o2zTDssFC5uJhCedEjVtWswOdlj4QboaJyqg8=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=K2uESc/HKztoQUo7UA93IwPXqj2G4YzFPOljJr6+pdPF7T5PBuBQba5j/hfTd3wjLMYPWkxA7mjrqftt2jk8v/x/OBiD8aJ4bcppEStczZuRixWAlXCXLAIz7koBXLW9lXhqgTZPudYCbqXK2o9i1SK3aNVA4Q/jgmibhGmEcBI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=CHB+C8Tu; arc=fail smtp.client-ip=52.101.126.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CBD36124;
+	Sat, 30 Aug 2025 12:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756555301; cv=none; b=hWGIiMgVesjxrVrAzYhrbZPART7fKGuBsUuELZnnY14L6JxYTvYSlt90wtP35XbiUN14GPUn5JU8DffBAtwgW6MpBAZYgrkz/xoGxem2qvZ2GPdqbucvVVSFskQcOEy4xXqkCmXcmRCwkWiS6vlJPDzbjBKjWJKPnjYLQjlq3dI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756555301; c=relaxed/simple;
+	bh=gb9UkeNto1/BNEHgq6njWuFQrrt4ne0giWpt9+P91Lw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hVt2xyuWPUI0wWeHXTlbIGUwVh13MCdB42n9cNXgvbmF7Z0xgtxUjpqTojAf3HiXZT4r+TS0u6wKreXIpFvRjgJT/Has+M1fgVzWyA0HwTxYipmhPxOkvl59SaICqF5zEJVHDb7cytp4TQe2zFBTI8q6Iyxk3Q4Gdg+X458vb1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X80tUGE8; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="CHB+C8Tu"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BH7uTGikHadfI9ULsavgYZ30XqfjX+6aSgNxZxeXYEO5V6ua9W13U0WFlmFynKCHlMsaUG7pOcaLf+AKpfRBi6ZURIp3mEbDtZ7hPHWb3u1i6oIn82V0GyvurckMvAe0sz4erogppUOCM/eEglMkLxQIUyKfox82Xn2XuZXhIKA/7q7VbNU849FeEGGc2U0qmeCi+WCT7MlbaP0vjS+pJqP+9ZLu3v+XYqRJQMbmjMN6VjPy7IRFoP7vJrnsCbpt4x2vhgWRiWEwAalTG5h3epYfOCNrUBJKOt0R6zG5Wj7R/2A4HQR5AlQufa5itrPVkCEQS1/HT0s9IBGo5FBTIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2cESHfxQ9WIt1V0paCUuhcmVGB5Di64Hgz1bd66YxuI=;
- b=kzaj+zpANiVuWMglX0ORkDv7+7xolxMul9owaHLPgqs+NYxDX/SWsmoqqU74y+6u0h+cxpA9MX0deL7IogK+90sN81nG+b9kpKNyR4J1N/EmBvQoVTQAPSJIbQczw7AptrM6SAboWpaCvon5mz2n6mLueLUCIcX9YirAGW2kzbZr0ILXXug3P0uP/FqD9VyB+3Qzwc2CQppH2ncDF1/bHTYYAYGVaI7gMptekrhV734/48z6r04LrXp/4JKrTxCQgyXIzfsdUSWKn0q9OpkqhO3v3We1AiKJQb9KiHAco26EsO2FYMvp5Rg8zUJfZX53CL9XO6ZExTRYl3IdXRxceQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2cESHfxQ9WIt1V0paCUuhcmVGB5Di64Hgz1bd66YxuI=;
- b=CHB+C8Tu5yyReCb5AgjCwLcmUoTU6frP457SzjH6yvK9npa3im+puIkNQt9FYNE7SNJ2S1BM/wUmOTNV2OhViNjOpOokgFwaVG1Pl3dhe6kdjtf9cdB4lQLjPrfKhnrPmPe9aYq/wLiE1Ahf7AEv2Do6WrtYsuO2K11gfMM61vGP22+R5qZNakG/K8u5cOYUyC2ril6QyeVeNm48SyjQyOBzDxGLBO/jvcZJcIU9owV5qyy7MakXr1ae0HOGxPezkI2sDc0J+VewqGIO4/QkP5KwniH9CsDrCwHPmxNatetUW12ByhGT8qFWbi7ziIydM638jAB9J8e8qsVFV6/aPQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- TYZPR06MB6165.apcprd06.prod.outlook.com (2603:1096:400:336::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.21; Sat, 30 Aug
- 2025 09:51:17 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%5]) with mapi id 15.20.9073.021; Sat, 30 Aug 2025
- 09:51:17 +0000
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-To: Guenter Roeck <linux@roeck-us.net>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X80tUGE8"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so410367966b.3;
+        Sat, 30 Aug 2025 05:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756555298; x=1757160098; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qNM9jmJJXyJUITGuqHjYXb/UUEkokqSq0ogj6yONehM=;
+        b=X80tUGE8ml1WOU4u1LMJlvAzw3W+7nQZj/2pJEbguIYMTPb9u6HvYbEhRu0b68458Z
+         U9T5l0ul5fbJ5kZEtdpVRXJWXAJqxeSYz2TfEQiQdTlXGAg04J8BdQsr9MpUMYCONygw
+         Ht0xNa63MbivFwaKySV2MSxRXXZyMjglQr0arLnLTcpJ425kmomsernNrwLLmEI9M040
+         oiNmig6y/n/Mzg1NagurShdDCxaOmlqrXrYgLmjIMzlf5pQrTLA0EfoRQMnM0FZVeSep
+         Odx2z6CvkxDtzUE3K+2tvDYh/hqbv3YOp8jKI6zzYT8dg8XvUufEKyIjqrfS9xQ2mKG0
+         S/TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756555298; x=1757160098;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qNM9jmJJXyJUITGuqHjYXb/UUEkokqSq0ogj6yONehM=;
+        b=UVDn6oSLuEau6/BuRNnyhepRIbYSI6LqmH0zvs8o1cH2ldtTWVZ6TsBlzLnt6Pg56a
+         I8Y0n9SZ4t8gZJnr+keGy0juiTBp599EkA8FpNys9pPT7Nj5dYPjTUFaYOGkdaa2kfoP
+         Z7s0fdFEHX4ullUAfUelvycBlw4wadHZ/02T8OM+ZUVX7HbuRTcr1+NQZlzmyyJUUcAt
+         Exg6rtMvRjTRvMpVsQzcl4u3gqA6IeNJVzB6dWjFoOsZtSeLhUMywZxLLD9tu6f039tE
+         wARkQtGD/SGWrLsMpuZvH9P5icEqrvOSdVrRMSepb/uKkYAJ2mo0vsgUXK8A5j0a5Bnn
+         mPDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRVD244kXLjmrRAMUw5MlKGPfFGuCnt7TUMjXv37f8qn2nCs/LdN/ot0jpVrZ74nI8r0dXfOPwC4lnh90=@vger.kernel.org, AJvYcCWyXtu4Mqs9PdGFPFFJbzs9PcHB39zoaLqTL+82USZL7+qlU0/lu08qf9l+nCoQbqFkgzlsRytI8n8risQ3@vger.kernel.org, AJvYcCXurWlLQuhHorPHLMyVHulEU1rt2mtT5RXidObWravVQNGd56Yyg7l/0Z7XUu7Q8XvVIifV8WSISWw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTRzxg7iBcLxaP1xViddTQWoHfpyA8iw9UBkQV/DZCBvYxGLBZ
+	AqpzG10xYBxzLpV/eWQyESPc0MWK94rDb+KVY6TxpMhapUqJtTB4Q+DbNmYqgAQPylg=
+X-Gm-Gg: ASbGncuJXhMs1BXk3wnXjUlC/HaxzDRNc3XkrZGNCmjSPZhMYuEKWjX8/IoXxdr7e8L
+	fgYy+U5MFt4Qv6VAgXJitWWRhvNUizClr14ag+Q09FaF+7ANxVrSXiLyI8oYnoSZhVVF4IqqRNp
+	RaT/DZ9v6qX/cn8xsHOOg1IZr2UUrVVRsHTasIcCUvAKN8ALMIRwWL9FA92tZK/n/numHNzKkQn
+	fYlzVwj80WB2dwVawIOJgf+YIlMCATilG9o+UyBHblXlVxUArl+wM+cak9cCBaZRsADE1EwJO1Q
+	OfFJn7wanfN4Jo7rMlCt/O1bax0TVyAbB8AQ3MIQzYp0V7lTq7/zif+hPIuYIg0sd+AU3bemp21
+	W8TREToh23Be1RjEGlbEu4pT9kYgefmkrqliiFnnuYvA=
+X-Google-Smtp-Source: AGHT+IEjUNCKwMFmcTC1mCtp+g1NvGYMh8RhRZKd2zGNdC2UZrlX+wiBj0p0U84WvOuYu+ql8obEqw==
+X-Received: by 2002:a17:907:1c85:b0:afe:bd37:5d5f with SMTP id a640c23a62f3a-b01d8a26e70mr146645466b.7.1756555297729;
+        Sat, 30 Aug 2025 05:01:37 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aff0d9b1b53sm299445966b.96.2025.08.30.05.01.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Aug 2025 05:01:37 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Michael Tandy <git@mjt.me.uk>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Qianfeng Rong <rongqianfeng@vivo.com>
-Subject: [PATCH] hwmon: (nct6775) Use int type to store negative error codes
-Date: Sat, 30 Aug 2025 17:51:05 +0800
-Message-Id: <20250830095105.3271-1-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0047.apcprd02.prod.outlook.com
- (2603:1096:4:196::14) To SI2PR06MB5140.apcprd06.prod.outlook.com
- (2603:1096:4:1af::9)
+Subject: [PATCH] (asus-ec-sensors) add Pro WS WRX90E-SAGE SE
+Date: Sat, 30 Aug 2025 14:00:59 +0200
+Message-ID: <20250830120121.738223-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|TYZPR06MB6165:EE_
-X-MS-Office365-Filtering-Correlation-Id: a7c07986-dea2-40f2-0bbd-08dde7aac3cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2XZI7v7Wmj3pRVO6XIM3eeT/tdzPNoDlGR8T3FZNUb31RC/Gz0Ilm2LlCt/X?=
- =?us-ascii?Q?p4ueQbmPRjxZvJvNLioi738F8hWdm++VSeZk6hjipwP4jThPmNJRl5TfRx6+?=
- =?us-ascii?Q?HkGxCwz3i2vn65a5rRNNrfDXsscbnpmfLsVoSYh6xvgtfrCgS3ICbZ6q2fbj?=
- =?us-ascii?Q?c/n1tY7MAuhc5ndjkwj3uRfKgLxh0BVR1YpkCdi7wJjSZJrl6iqhX1BGYkk4?=
- =?us-ascii?Q?ODS2ySEVC9HEZpVcxajfj8nxIKFkLXRHcz9dDJJOHHz9aAMuv7l4s+WGllKP?=
- =?us-ascii?Q?RizP9xuOmMJxRTdFLLjqIMm/nbmay72DYeiA1OxEemh6Mj+6uEeY7koacBm1?=
- =?us-ascii?Q?FR05IKW3FMaVRFKnU1b1YHpordslC5NTQlFAMA3+8Ipjw586cVAIbNvtsQje?=
- =?us-ascii?Q?I2yARgRmRqcdHfhnEkHKWP7SJi11i9Yn/Ldl6ficrbplpnuzB1xLpHtWB2FT?=
- =?us-ascii?Q?9ghOvDNj1gwnXyKVh02zj+mUMvp9UoyuwO9KmNC7dZWurC/glkl1PHrlHH/k?=
- =?us-ascii?Q?icujcmnqjpR9YuLD3tgr4WQL9Wf5xuS/0pGIf1YrXDFIPfUiLF85987hgQxE?=
- =?us-ascii?Q?AxioAsNqRRbuisEtOd+tpCQozMkYjkG4JLZ8uW6pSQN8+ZXuNgLjSNy5dmg7?=
- =?us-ascii?Q?lnK6k8lDkDvdxco0DZM3318txJf7EgFPzALkWAvs6VkIIeU5e6KQmjB2dcJ4?=
- =?us-ascii?Q?Ao+MCTwbAUF80+8oo/mjH9FqmMV99fUC9webbAKxG/i0vDbjnvukXxBmG69U?=
- =?us-ascii?Q?znWK1sR0zDH0vuxDcnMCWtqexBR8XSN06Rr8S8wsl+Ko7xezAzsKm4gVlrk5?=
- =?us-ascii?Q?O3Ndpp4jIBnxd2742RYz2DK0Cqvmybg/HlBgavcsrn/pVYCrQyoR0pJAU35e?=
- =?us-ascii?Q?5LIjy6u5f6RDB6XXkxNvg5Y3cIgU4WFaR6j1XlkiNgbjPRDnRAqb47PpAO9+?=
- =?us-ascii?Q?3Q3WOg/tTeGfSWFqCf/FLhui5TfHMmILHGigcYYv1fC1BloFJLu2JQ7PezF4?=
- =?us-ascii?Q?BsAOMuJpqc15X9IoBjcNbxLeArHF4v7myGdpysS3W2chbRsSc+eOQi88nVtr?=
- =?us-ascii?Q?xEBB2L/JG1z/0wlxXgizotjzAvB1ayZoo5TSmVV1BtRJtFBIPjH6Rs8IF4M5?=
- =?us-ascii?Q?PTX0gmbCZY1FPvFIbEoVQih1kU4UUBjVcjC53P1SM5MBu+phIoc59S/ufLXg?=
- =?us-ascii?Q?+K/nm/4am+urTO+CEK964SMBrTFSECPTsmcNCF7lrry9CdjuXeeABNq9UBLj?=
- =?us-ascii?Q?AAIcp+sKeQqSHsmJ4jGTt3B/uu8j/81rAxlf/l0ca3Quh34ByxAKGYJTdT3B?=
- =?us-ascii?Q?jYA0rxMmiP7KV2hrADyvC3JnSY2JdcC2RJmbNVdkoHlbdOwUqKhqI5zank/H?=
- =?us-ascii?Q?Ru9Wx6xqa8J3pJt9FO9muzViGhzmnW70Z3/Y/kSvuDh4PsmXH01AYA1JBAdL?=
- =?us-ascii?Q?TSl8Y86+VEemKIQ/L0uK9cAv26oSH01Spg/Ii0S+hlVQ/Mrw7ZY6ew=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Lwy32uysPJaUzZW4oRdb31kNiUCrAO0LeDwA4R0+Kzz1SujnWvMIKd2w+e7a?=
- =?us-ascii?Q?DirO63fnfkqz/iLzyRU0iH5a5jRPlVzWRZOeVjdddwqn7m7Wj5H9fUxfxHuS?=
- =?us-ascii?Q?VckcRiYawJ+GW6cy0so++lwqZi47h7R3hwXjWwoRzRZRMrVfVU6ohD+2l/v5?=
- =?us-ascii?Q?wPSlrfh96o4hW7QowSkTB0mk1FJ+XRkwSWjXv/9d/ok8+0i0Ed6MvGvTz7K1?=
- =?us-ascii?Q?dZnNVsfEW9gcovtpUEDRfipE4ktzsLPNiYy21+ncLsj9yHCNen6vKj9wT2km?=
- =?us-ascii?Q?irkfStrPRJYwZmbnC1w+PAAw3oe+HjhvphGJvRdGugd3HvkJ/3jqcWPiqzmb?=
- =?us-ascii?Q?5qkGWFNAgf2xOTRVPRCCmWw00YmUiX2E2PPj4d9I3by1cJ+a1Ek8jxB09tfm?=
- =?us-ascii?Q?n6jz8ZjWaNaDvv8fooTXxVEXKcug0kQ2aPV/QyrFtNgcnjOaPFuX3XvrN3//?=
- =?us-ascii?Q?6Y9giCmy8iM5DlZ1K4lA9CCEqY7HhlSKHF5JG+26EvSQYa6DY6JXfI/+ahif?=
- =?us-ascii?Q?lGwzAWDoaucRGXogW97g5KzWWGEDLpZa4+h8OUU8PPB108ywwmrEE35M7hXy?=
- =?us-ascii?Q?R3MkVgSiVer5bKktqqaaAFGVBmJ28hOirPovD44IxskMC28cncWSqjWm2t7j?=
- =?us-ascii?Q?HetGwPlwNPXjIhwb3/PlAOfvBrx1Vqzes3fJckyBP0fa74+P1/OjNpiWP+EP?=
- =?us-ascii?Q?eq/wCjjHwEKhuYQeMogvFqyUV76V+nR/+T6dqOk0H5aHKxHkDVQ9Ksbaznzi?=
- =?us-ascii?Q?vusILyLWz+RyWmdIF6K7D8Py/hEhFLhe63acL5vyhWYakggzW4KUF3OpmpQA?=
- =?us-ascii?Q?IsnlPZ2Kn0EuvT6qmWVWtAxZNJ8KDtllUkY8fVmj0yHmDOJUSiG0PkBlJvNW?=
- =?us-ascii?Q?2TeOrtvwrJk862YeeI9LGyWPdEBVXF0H/6W8nO2uN6aGsynR5qyGrauFxKLO?=
- =?us-ascii?Q?Cd6FC7N0tPD+MMtX0JEI0PVQewKjHyB5ZzZkqJnXZPYgrSfBjUDutmX2FHjH?=
- =?us-ascii?Q?+WB578KKA4oajyK17pQEvKq+W6WeneP0dC5PCDV3tysEm37zK55IOR2zkiut?=
- =?us-ascii?Q?CWe7KPHXMTi5eIOyixgwo7UreP6n9Fn87YoUFevb0tDrmM5+pUKFYilsh0ZL?=
- =?us-ascii?Q?UU671aKrRcnbhCu/HAfO8hMMA6eusUHVcm87HyB5K2tvl8Nz8CfPZMtHKnHg?=
- =?us-ascii?Q?upcOn5iEA1G5QWwh2wQ0ibXvpQwBUV/noGQ77qtn/lrJrGN3z4XRHtem3Kqo?=
- =?us-ascii?Q?NYT+6GiPKKVVn+I+K4EYX4QiFJYjukBOyOu11+krAzlCGq7S2tjlWbWdpESx?=
- =?us-ascii?Q?VXCpBOo+HghmLw4t6p6LTMlYlp9QD5iDITElRBA5eusVw8K6RS9BAc39FxxO?=
- =?us-ascii?Q?eiags8vcFaMBFPexx2wuU7h2Iph3C8Uqk7dnV8E+V+14bcytpXB3s4chZIu5?=
- =?us-ascii?Q?4ORJ3xnYFkDpoZKz9CMosUaUZTQIdi3iVh/VEbN1JUCDLMGEi0lVYGQjERYb?=
- =?us-ascii?Q?XhVkx+Cm5vH/6wpiv81ai+Zo8qbACdHz0Xm1XOKsbmLoojOCWiFWk/T1PwVW?=
- =?us-ascii?Q?xiQvW3UV+xNMLH51ZK6uPIAh6sdvE2KlP9aIYe2s?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7c07986-dea2-40f2-0bbd-08dde7aac3cd
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2025 09:51:17.4103
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p5f9805z5T4K7rqDnw8cE5v97O1P/tZCLqtEQDq3J4errcBDTbZz8g8YHFRlJsnWsW5WLEShAYKmZb9Qqklpmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6165
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Change the 'ret' variable from u32 to int in nct6775_asuswmi_read() to
-store negative error codes or zero;
+From: Michael Tandy <git@mjt.me.uk>
 
-Storing the negative error codes in unsigned type, doesn't cause an issue
-at runtime but can be confusing. Additionally, assigning negative error
-codes to unsigned type may trigger a GCC warning when the -Wsign-conversion
-flag is enabled.
+Add support for Pro WS WRX90E-SAGE SE
 
-No effect on runtime.
-
-Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+Signed-off-by: Michael Tandy <git@mjt.me.uk>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
- drivers/hwmon/nct6775-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 42 +++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 0a040364b512..407945d2cd6a 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -167,7 +167,8 @@ static inline int nct6775_asuswmi_write(u8 bank, u8 reg, u8 val)
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index bedddb6bf9e1..12c6b5b266bb 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -9,6 +9,7 @@ Supported boards:
+  * PRIME X570-PRO
+  * PRIME X670E-PRO WIFI
+  * Pro WS X570-ACE
++ * Pro WS WRX90E-SAGE SE
+  * ProArt X570-CREATOR WIFI
+  * ProArt X670E-CREATOR WIFI
+  * ProArt X870E-CREATOR WIFI
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 83047c3263d3..09a751b44ee2 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -117,10 +117,18 @@ enum ec_sensors {
+ 	ec_sensor_fan_cpu_opt,
+ 	/* VRM heat sink fan [RPM] */
+ 	ec_sensor_fan_vrm_hs,
++	/* VRM east heat sink fan [RPM] */
++	ec_sensor_fan_vrme_hs,
++	/* VRM west heat sink fan [RPM] */
++	ec_sensor_fan_vrmw_hs,
+ 	/* Chipset fan [RPM] */
+ 	ec_sensor_fan_chipset,
+ 	/* Water flow sensor reading [RPM] */
+ 	ec_sensor_fan_water_flow,
++	/* USB4 fan [RPM] */
++	ec_sensor_fan_usb4,
++	/* M.2 fan [RPM] */
++	ec_sensor_fan_m2,
+ 	/* CPU current [A] */
+ 	ec_sensor_curr_cpu,
+ 	/* "Water_In" temperature sensor reading [℃] */
+@@ -150,8 +158,12 @@ enum ec_sensors {
+ #define SENSOR_IN_CPU_CORE BIT(ec_sensor_in_cpu_core)
+ #define SENSOR_FAN_CPU_OPT BIT(ec_sensor_fan_cpu_opt)
+ #define SENSOR_FAN_VRM_HS BIT(ec_sensor_fan_vrm_hs)
++#define SENSOR_FAN_VRME_HS BIT(ec_sensor_fan_vrme_hs)
++#define SENSOR_FAN_VRMW_HS BIT(ec_sensor_fan_vrmw_hs)
+ #define SENSOR_FAN_CHIPSET BIT(ec_sensor_fan_chipset)
+ #define SENSOR_FAN_WATER_FLOW BIT(ec_sensor_fan_water_flow)
++#define SENSOR_FAN_USB4 BIT(ec_sensor_fan_usb4)
++#define SENSOR_FAN_M2 BIT(ec_sensor_fan_m2)
+ #define SENSOR_CURR_CPU BIT(ec_sensor_curr_cpu)
+ #define SENSOR_TEMP_WATER_IN BIT(ec_sensor_temp_water_in)
+ #define SENSOR_TEMP_WATER_OUT BIT(ec_sensor_temp_water_out)
+@@ -168,6 +180,7 @@ enum board_family {
+ 	family_amd_500_series,
+ 	family_amd_600_series,
+ 	family_amd_800_series,
++	family_amd_wrx_90,
+ 	family_intel_300_series,
+ 	family_intel_400_series,
+ 	family_intel_600_series,
+@@ -278,6 +291,21 @@ static const struct ec_sensor_info sensors_family_amd_800[] = {
+ 		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
+ };
  
- static inline int nct6775_asuswmi_read(u8 bank, u8 reg, u8 *val)
- {
--	u32 ret, tmp = 0;
-+	u32 tmp = 0;
-+	int ret;
++static const struct ec_sensor_info sensors_family_amd_wrx_90[] = {
++	[ec_sensor_temp_cpu_package] =
++		EC_SENSOR("CPU Package", hwmon_temp, 1, 0x00, 0x31),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
++	[ec_sensor_fan_vrmw_hs] =
++		EC_SENSOR("VRMW HS", hwmon_fan, 2, 0x00, 0xb4),
++	[ec_sensor_fan_usb4] = EC_SENSOR("USB4", hwmon_fan, 2, 0x00, 0xb6),
++	[ec_sensor_fan_vrme_hs] =
++		EC_SENSOR("VRME HS", hwmon_fan, 2, 0x00, 0xbc),
++	[ec_sensor_fan_m2] = EC_SENSOR("M.2", hwmon_fan, 2, 0x00, 0xbe),
++	[ec_sensor_temp_t_sensor] =
++		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x01, 0x04),
++};
++
+ static const struct ec_sensor_info sensors_family_intel_300[] = {
+ 	[ec_sensor_temp_chipset] =
+ 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+@@ -421,6 +449,15 @@ static const struct ec_board_info board_info_pro_art_b550_creator = {
+ 	.family = family_amd_500_series,
+ };
  
- 	ret = nct6775_asuswmi_evaluate_method(ASUSWMI_METHODID_RHWM, bank,
- 					      reg, 0, &tmp);
++static const struct ec_board_info board_info_pro_ws_wrx90e_sage_se = {
++	/* Board also has a nct6798 with 7 more fans and temperatures */
++	.sensors = SENSOR_TEMP_CPU_PACKAGE | SENSOR_TEMP_T_SENSOR |
++		SENSOR_FAN_CPU_OPT | SENSOR_FAN_USB4 | SENSOR_FAN_M2 |
++		SENSOR_FAN_VRME_HS | SENSOR_FAN_VRMW_HS,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
++	.family = family_amd_wrx_90,
++};
++
+ static const struct ec_board_info board_info_pro_ws_x570_ace = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
+ 		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CHIPSET |
+@@ -650,6 +687,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_pro_art_x870E_creator_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
+ 					&board_info_pro_art_b550_creator),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS WRX90E-SAGE SE",
++					&board_info_pro_ws_wrx90e_sage_se),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE",
+ 					&board_info_pro_ws_x570_ace),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO",
+@@ -1173,6 +1212,9 @@ static int asus_ec_probe(struct platform_device *pdev)
+ 	case family_amd_800_series:
+ 		ec_data->sensors_info = sensors_family_amd_800;
+ 		break;
++	case family_amd_wrx_90:
++		ec_data->sensors_info = sensors_family_amd_wrx_90;
++		break;
+ 	case family_intel_300_series:
+ 		ec_data->sensors_info = sensors_family_intel_300;
+ 		break;
 -- 
-2.34.1
+2.51.0
 
