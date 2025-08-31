@@ -1,113 +1,190 @@
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7134D1A5B9E
-	for <linux-hwmon@vger.kernel.org>; Sun, 31 Aug 2025 21:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4FAFC0A;
+	Sun, 31 Aug 2025 22:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756674746; cv=none; b=mfzbcZc6xbxb1wCEABN0B4cg/OMr9q/2p4plSiplLItstG0VC8KbV0ZZUOLpNKfGLpWJAD9tVKiLKOP3sHoPN0RLCi09CVhgXhZsZckU1lckZ7e4cueZBPZINLpld/u3tH5X0sH+knzxt9GdXSBSVVfl+FEZvQDZKsdZGamU3HM=
+	t=1756678158; cv=none; b=DlN0YCjdyyNkbDYQaP5ZZB3ZQYDRYsKR14muFkbZJzjwOhes/HttOzcNMekbcTOXmakHxWZSzA4msN83S6/vV+RHGth/dx3l80CoCRyeeAaGhE+uKPepfFfwIDBT/n8MZ8Anl8vChXSy7YbjH0Xu3ec92weWrN9xelgQAJB/0Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756674746; c=relaxed/simple;
-	bh=hsjeccQzs3yXInmCve4deeW50r08v75A9gdB2Qb6xOE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=td+1AsuPUkAcMtuvgL9v0cddudxFLo1cMvR3CPbqGQN1air2xT9jYyFRWW1XoK9P3kwvvcImYflhx6zHesLaKSoXDG/GUabEa1jpRA9I9Tq7dqW5s5yWnTap/SPmNzgpGayQRzaTkmtau/0ubm60xCAiz4PGpfOIrUSBfiBtG+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=w5NPsSo7; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+	s=arc-20240116; t=1756678158; c=relaxed/simple;
+	bh=En/iASB3T25yAwsE1idzWgETjuWt5KBYtNfPHpoIfnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nvbv8pCcyA2bl4+NCSagtedP3P+711husOFkzx9eWbwlgvN+UBwSCrc5R4VZY8K4uFmGD/B4/ftNqmWkBpZ+nQxoi2AG/BhI9X2ncarrdO0twiFFTAa6g9GS+93oLX/k5YUwo7k3eH0sX2bkbkYOIkLR8F0G8p1fFfuEFyxgivg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UdJHe1YL; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="w5NPsSo7"
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A55002C02CC;
-	Mon,  1 Sep 2025 09:12:14 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1756674734;
-	bh=hsjeccQzs3yXInmCve4deeW50r08v75A9gdB2Qb6xOE=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=w5NPsSo7/fakftt3QV1Oh2roKBzoclSZrxOprLMYyOZ7LVM38p16rg9Gljn9Jqs6t
-	 Lcj5JShDu6SnHdQQQMPA9bt0/tGN4xDShQV9pwlNb3jXTelu2etVRij2HcEz+ABtPQ
-	 RxoNqI4BbJUnUn/ZUHLCLrToZf7W0EsUzdgzDe3Ct9uRhDICJUsX7Qea9Y00so5Cov
-	 I+131Y8bM8RxrJDW/1hkeioo9oVbttnCvrS80dhOTWbgdKLtgeSkKQ23Pcv0AeODNr
-	 KstreeUa2otmam1PnyN3uWt4C89Fuow/+jChS9nroV7W1/EENTobvpF1jr7RHtdeop
-	 0drNoZmMbIh/g==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B68b4baae0001>; Mon, 01 Sep 2025 09:12:14 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Mon, 1 Sep 2025 09:12:14 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Mon, 1 Sep 2025 09:12:14 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Guenter Roeck <linux@roeck-us.net>, "jdelvare@suse.com"
-	<jdelvare@suse.com>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
-	"wenliang202407@163.com" <wenliang202407@163.com>, "jre@pengutronix.de"
-	<jre@pengutronix.de>
-CC: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] hwmon: (ina238) Correctly clamp temperature
-Thread-Topic: [PATCH v3 2/4] hwmon: (ina238) Correctly clamp temperature
-Thread-Index: AQHcGJG+9pO9Tm0jk0iEWd5utSH5PrR4m64AgAPhzgA=
-Date: Sun, 31 Aug 2025 21:12:14 +0000
-Message-ID: <d5bace8a-003f-4fb5-b9b6-93f0aa7cda41@alliedtelesis.co.nz>
-References: <20250829030512.1179998-1-chris.packham@alliedtelesis.co.nz>
- <20250829030512.1179998-3-chris.packham@alliedtelesis.co.nz>
- <ba2f563e-4eb3-42be-af05-c01bcef1d5e3@roeck-us.net>
-In-Reply-To: <ba2f563e-4eb3-42be-af05-c01bcef1d5e3@roeck-us.net>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8ADE375A9AC79641ACB05CC78F261258@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UdJHe1YL"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7725fb32e1bso90008b3a.1;
+        Sun, 31 Aug 2025 15:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756678153; x=1757282953; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xt6mRdXHM8mR2e/EPUgOR4OHl60ekYcm4NYUT/jWMT4=;
+        b=UdJHe1YLhUOfgDS0CrzQQOdLrY1ghrOr+kr8y4DyW0osfR3z7PlishdNF9u3nw3ymG
+         ydJ+FktdIElX+nwOZ0hTaf1OF1VAZRCKqJd2VGboifiPnxl/nMIhKJ1kBZTF54ZyBFa4
+         hbv4BK6gz2ZcFarMG7U5sVSHdLHfrJ0HPKaIsXyHkjXrZkXAYduPN78lshD680rxNMUO
+         349ikYM5hxx7REAbrnorub2j072b2IVtTZEXpzY7MNZhC+9hNTGFyPtz7tou15UmrGno
+         LwrZPWrwP93/Dvzy59KwosBcT0a6YCqHd2nIuU9C7Am7I7yQ8Qlb0tCJz0s6dOKpDop1
+         eGSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756678153; x=1757282953;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xt6mRdXHM8mR2e/EPUgOR4OHl60ekYcm4NYUT/jWMT4=;
+        b=LBe4RG86989APNNguN+BcW6wHEllQyzwQIJc8uF70TMKCnPLu2zSoGM/QlN1S6DBjg
+         emQDLpm3bNnl3RGTu2BIt7nJwrE8IJVSk0Nvkj4ACubWfwyUYkC8y9cMiU0+WB+IsBYB
+         BAUgdx5iNPxcJHu2FMOmojU4SdQG973pbMck45v0M41CQm/G3T5e4Bn57FJUOtcPoYjn
+         QwwVEgH/8DJSAzpmWSykbKuExKOi1l5Fv7RYMCGS1lJckvDNHzpHB6V2QnTgC5puf+Bc
+         QBK0COgT2FZgWsMT1nGAIPi1ZxeFon0BdZm1aoDnHr4s3lZ6Ttr1t1K8M2Wa8SNUA7Y1
+         Fc8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUfCkO22GlpEpfpmhwjZKmqOIqc0DhH0Kt4D83HFwTXasCyMVosQ1OKwqJBWcScAQtMfiBmkHFXqUdV@vger.kernel.org, AJvYcCVxqrQds2P7SBC2QhADKi7VQNchcPlsVdK+kEBi1atyaQHJWbf/1jLSnEJCJdXF9i4KlO4b6pm+0bOX2gwD@vger.kernel.org, AJvYcCWG7EF1iIdMmmP6qh4HUBrXHO18sy6cgVG6Kbh/iXkqbikA53BQwQMB9FRf2sAEzcN9Uq7sdaOGbFE9@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdotAmjgU7pzkcTSNa2AA7Lq3UwJ1F03eMRcN8X0+TwXnFesEh
+	qjae2/dkgZbKJMXHbMonIKPjBpPbI1GAyI7MXT2T2fN6K5dOEeKFr5cY
+X-Gm-Gg: ASbGnct6yqpNTYVt1dTlQ7G5J9B+1YKsjrCoeA200neG+hkkDA7e6tJItMLoUdLsbK0
+	U8QuQzsopbcMPiMOsPYxFBg5ZXXj66yKlZmnj6Td6WVepQps8SvNSzyb5nbCCVO9lz5QT/twhdW
+	/gI9IZYhlvmGWaF6VdbuEab1yP67JLzpkhfEkskJlPnkdvxioZpfsH952PzS5sg0lbOkO7PbBpZ
+	hHGjJLeC0L3d6E6tnijvFMjX0fZMmrC7x6Ja4iuwqpxSr68+/wfkHyjp7J4xQY01xo08pAHFQ2l
+	WhZbtFslK8zaoJohs0OTlPVGFYF5HRb/4+qsmbo0d4dSvo+Mu57pqCyfMyD8g9Z4nVWixz8ZoF7
+	MmJQBcHA3iDRwXTKJCRJkJIPORzJzNEyYUtAZNzGi+/Yi2cxox1zBd9YVuBzhFD5hPCW8FF0=
+X-Google-Smtp-Source: AGHT+IH6NxqANI4uDAuH6GEROuVVG4Sa68uoJoxAfkM5xN3bZyMgnY1+47Rc5304R4Y2ZCCfeqOI7A==
+X-Received: by 2002:a05:6a20:42a3:b0:240:409:fa91 with SMTP id adf61e73a8af0-243d6e00cfemr8082881637.18.1756678152919;
+        Sun, 31 Aug 2025 15:09:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327e8d3d635sm8263842a91.1.2025.08.31.15.09.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Aug 2025 15:09:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3196fcbd-2c06-42c6-a597-8332951473dc@roeck-us.net>
+Date: Sun, 31 Aug 2025 15:09:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=Yo+sRJYX c=1 sm=1 tr=0 ts=68b4baae a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=zPeDNGAr0pQFPY5Fct8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] hwmon: (ina238) Correctly clamp temperature
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+ "jdelvare@suse.com" <jdelvare@suse.com>, "robh@kernel.org"
+ <robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>, "corbet@lwn.net"
+ <corbet@lwn.net>, "wenliang202407@163.com" <wenliang202407@163.com>,
+ "jre@pengutronix.de" <jre@pengutronix.de>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20250829030512.1179998-1-chris.packham@alliedtelesis.co.nz>
+ <20250829030512.1179998-3-chris.packham@alliedtelesis.co.nz>
+ <ba2f563e-4eb3-42be-af05-c01bcef1d5e3@roeck-us.net>
+ <d5bace8a-003f-4fb5-b9b6-93f0aa7cda41@alliedtelesis.co.nz>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <d5bace8a-003f-4fb5-b9b6-93f0aa7cda41@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-DQpPbiAyOS8wOC8yNSAyMTo1NSwgR3VlbnRlciBSb2VjayB3cm90ZToNCj4gT24gOC8yOC8yNSAy
-MDowNSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IGluYTIzOF93cml0ZV90ZW1wKCkgd2FzIGF0
-dGVtcHRpbmcgdG8gY2xhbXAgdGhlIHVzZXIgaW5wdXQgYnV0IHdhcw0KPj4gdGhyb3dpbmcgYXdh
-eSB0aGUgcmVzdWx0LiBFbnN1cmUgdGhhdCB3ZSBjbGFtcCB0aGUgdmFsdWUgdG8gdGhlDQo+PiBh
-cHByb3ByaWF0ZSByYW5nZSBiZWZvcmUgaXQgaXMgY29udmVydGVkIGludG8gYSByZWdpc3RlciB2
-YWx1ZS4NCj4+DQo+PiBGaXhlczogMGQ5ZjU5NmIxZmUzICgiaHdtb246IChpbmEyMzgpIE1vZGlm
-eSB0aGUgY2FsY3VsYXRpb24gZm9ybXVsYSANCj4+IHRvIGFkYXB0IHRvIGRpZmZlcmVudCBjaGlw
-cyIpDQo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGll
-ZHRlbGVzaXMuY28ubno+DQo+PiAtLS0NCj4+DQo+PiBOb3RlczoNCj4+IMKgwqDCoMKgIENoYW5n
-ZXMgaW4gdjM6DQo+PiDCoMKgwqDCoCAtIE5ldy4gU3BsaXQgb2ZmIGJ1Z2ZpeCBmcm9tIG1haW4g
-cGF0Y2gNCj4+DQo+PiDCoCBkcml2ZXJzL2h3bW9uL2luYTIzOC5jIHwgMiArLQ0KPj4gwqAgMSBm
-aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvaHdtb24vaW5hMjM4LmMgYi9kcml2ZXJzL2h3bW9uL2luYTIzOC5jDQo+
-PiBpbmRleCA1YTM5NGVlZmY2NzYuLjRkM2RjMDE4ZWFkOSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZl
-cnMvaHdtb24vaW5hMjM4LmMNCj4+ICsrKyBiL2RyaXZlcnMvaHdtb24vaW5hMjM4LmMNCj4+IEBA
-IC01NzIsNyArNTcyLDcgQEAgc3RhdGljIGludCBpbmEyMzhfd3JpdGVfdGVtcChzdHJ1Y3QgZGV2
-aWNlICpkZXYsIA0KPj4gdTMyIGF0dHIsIGxvbmcgdmFsKQ0KPj4gwqDCoMKgwqDCoMKgwqDCoMKg
-IHJldHVybiAtRU9QTk9UU1VQUDsNCj4+IMKgIMKgwqDCoMKgwqAgLyogU2lnbmVkICovDQo+PiAt
-wqDCoMKgIHJlZ3ZhbCA9IGNsYW1wX3ZhbCh2YWwsIC00MDAwMCwgMTI1MDAwKTsNCj4+ICvCoMKg
-wqAgdmFsID0gY2xhbXBfdmFsKHZhbCwgLTQwMDAwLCAxMjUwMDApOw0KPg0KPiBUaGF0IG5lZWRz
-IGFub3RoZXIgY29ycmVjdGlvbjogQXMgaXQgdHVybnMgb3V0LCB0aGUgZGVmYXVsdCByZWdpc3Rl
-ciANCj4gdmFsdWUNCj4gaXMgMHg3ZmYwLCBvciAyNTU4NzUuIFRoYXQgbWVhbnMgd2UgbmVlZCB0
-byBhY2NlcHQgdGhhdCByYW5nZS4gVGhlIA0KPiBzYW1lIGlzDQo+IHByb2JhYmx5IHRydWUgZm9y
-IG5lZ2F0aXZlIHRlbXBlcmF0dXJlcywgYnV0IEknbGwgbmVlZCB0byBzZWUgdGhlIHJlYWwgDQo+
-IGNoaXANCj4gdG8gYmUgc3VyZS4NCj4NCj4gWWVzLCB0aGUgY2hpcHMgb25seSBzdXBwb3J0IGEg
-bGltaXRlZCB0ZW1wZXJhdHVyZSByYW5nZSwgYnV0IHRoYXQgaXMgdGhlDQo+IGxpbWl0IHJlZ2lz
-dGVyLCBub3QgdGhlIHN1cHBvcnRlZCByYW5nZS4gT3RoZXIgY2hpcHMgaGF2ZSBhIHNpbWlsYXIg
-DQo+IHByb2JsZW0uDQo+IEl0IGlzIG9rIHRvIGxpbWl0IHRoZSBpbnB1dCByYW5nZSBpZiB0aGUg
-Y2hpcCBoYXMgYSByZWFzb25hYmxlIGRlZmF1bHQgDQo+IHNldCwNCj4gYnV0IGlmIHRoZSBhY3R1
-YWwgY2hpcCBkZWZhdWx0IGlzIDB4N2ZmMCBvciAyNTUuODc1IGRlZ3JlZXMgQyB3ZSBuZWVkIHRv
-DQo+IHN1cHBvcnQgd3JpdGluZyB0aGF0IHZhbHVlLg0KSSdtIGd1ZXNzaW5nIHRoYXQgbWlnaHQg
-Y2hhbmdlIG15IGludHJvZHVjdGlvbiBvZiB0ZW1wX21heCBpbiB0aGUgbmV4dCANCnBhdGNoLiBJ
-J2xsIHJlLW9yZGVyIG15IHNlcmllcyB0byBwdXQgdGhlIGJ1Z2ZpeCBmaXJzdCB3aXRoIHRoZSBj
-aGFuZ2VzIA0KbWVudGlvbmVkLg0KPg0KPiBHdWVudGVyDQo+
+On 8/31/25 14:12, Chris Packham wrote:
+> 
+> On 29/08/25 21:55, Guenter Roeck wrote:
+>> On 8/28/25 20:05, Chris Packham wrote:
+>>> ina238_write_temp() was attempting to clamp the user input but was
+>>> throwing away the result. Ensure that we clamp the value to the
+>>> appropriate range before it is converted into a register value.
+>>>
+>>> Fixes: 0d9f596b1fe3 ("hwmon: (ina238) Modify the calculation formula
+>>> to adapt to different chips")
+>>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>>> ---
+>>>
+>>> Notes:
+>>>       Changes in v3:
+>>>       - New. Split off bugfix from main patch
+>>>
+>>>    drivers/hwmon/ina238.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
+>>> index 5a394eeff676..4d3dc018ead9 100644
+>>> --- a/drivers/hwmon/ina238.c
+>>> +++ b/drivers/hwmon/ina238.c
+>>> @@ -572,7 +572,7 @@ static int ina238_write_temp(struct device *dev,
+>>> u32 attr, long val)
+>>>            return -EOPNOTSUPP;
+>>>          /* Signed */
+>>> -    regval = clamp_val(val, -40000, 125000);
+>>> +    val = clamp_val(val, -40000, 125000);
+>>
+>> That needs another correction: As it turns out, the default register
+>> value
+>> is 0x7ff0, or 255875. That means we need to accept that range. The
+>> same is
+>> probably true for negative temperatures, but I'll need to see the real
+>> chip
+>> to be sure.
+>>
+>> Yes, the chips only support a limited temperature range, but that is the
+>> limit register, not the supported range. Other chips have a similar
+>> problem.
+>> It is ok to limit the input range if the chip has a reasonable default
+>> set,
+>> but if the actual chip default is 0x7ff0 or 255.875 degrees C we need to
+>> support writing that value.
+> I'm guessing that might change my introduction of temp_max in the next
+> patch. I'll re-order my series to put the bugfix first with the changes
+> mentioned.
+
+Please wait a bit before resending; I have a series almost ready to send out
+with various other changes.
+
+Guenter
+
