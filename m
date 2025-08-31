@@ -1,104 +1,148 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFAB4AEE2;
-	Sat, 30 Aug 2025 13:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5937261D;
+	Sun, 31 Aug 2025 04:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756559554; cv=none; b=JjNjRZW4D+o59m3K1+Hk+DmWca47jnYOvPmxmvfOmHOp++ndPUpfXnRq4JaqLdZdD7ipned5b7mY9ArsK085bLGtry9Q8SoyPQXXm3OPn8fS8htSWZcI5kpZEj2eyCl+YKZOM8/eXH079HCQHCqZTrkV8j95ZkUjOiCc7//1UYI=
+	t=1756616256; cv=none; b=n+d4fINVjze/njidc2uIJfkjzHs54tubOqMbWLeOVJv4+z3EG7LEuX1C77FY1SwIkgk1dkeiBhgIRlhi/JCDry0ThMlhgKGLZ+/twlkfo92Pr3UdtbPkKvCFW9FQoOG+25OkWffZ/pSRN6P7JyMpw8i+1sS1fjmd6L5nNSfLgtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756559554; c=relaxed/simple;
-	bh=lab6EIjVw54xJwa2cl6149zTfXuI2ibiw5gf01BVNHo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ptg/uaspyC88rEhToRnkSBPFcgoYa269IYHanCUeJEM8ooKCbW5FI3c0rA4b3srxHzmrylPYMIWPqmuYxoey7TfTDxeeqzVFfwEkXlBUgBeQvPFpKVtRLInGqacAtFWp4I/LPEi5U8zW4SXsUlilpT1mZmxABIAw/9U6LCxKRc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3xXvWho; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756616256; c=relaxed/simple;
+	bh=ZgdvW6GgvJ1Gj0JKAawiJAVU5WNBvXuwI8BkRynFXcg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fNls5JOwVvILrUwP7C06CyyEqgRA2QilvC8GWKqqLRsjbYtA1bO3sVOWFTfZL7VP9wEu+2fsp4HokCeWcS5YqNA7yMdErcek+NW3nlXEFM/eIlvZgoQ+6vxe2MBS4XwHWVcWM2jR5X232PyFeguHMsVNp3yO63VLnDgk9GUEK5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com; spf=pass smtp.mailfrom=debanilchowdhury.com; dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b=UjewcU/2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=k+Y7ITmh; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debanilchowdhury.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debanilchowdhury.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3xXvWho"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6188b72b7caso3023717a12.2;
-        Sat, 30 Aug 2025 06:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756559550; x=1757164350; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xzsL6g+vj7TZWfmP3zjs8Q7MdwOAFoiTVtkztKEL4YA=;
-        b=X3xXvWhorN3VK7XWb3NmrYYAfU8qtvy/vqc5wtIktgQOpPfGn0uqZBTJcdGE+PJUkL
-         6I8yW/1MvUfZrwdL7ZkGxBOD9o2e3tZx2A3rxpej8P+31Ryot7Ae3ghhzWcKiV2SbQUf
-         z/nYpNJgPe2q+/6o9Tmk/BrWDu9eLCmIIR9QD2iFnYrN+sm/QdLsbs1jU3jTW2O7DJwt
-         ivtSZlkbXjpGSCeWZBXkmF+mQq+n6BhZm9a7GhzHg6zKefaNL4yiZQ0j3OKtX6zoyEFJ
-         BX7Myxwwd4hOpdoyQUM7I4Atf6BoLSy7G2r+PUeqtbtIOTBzj/kkBuO4iOOmVQMZobL3
-         ztaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756559550; x=1757164350;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xzsL6g+vj7TZWfmP3zjs8Q7MdwOAFoiTVtkztKEL4YA=;
-        b=UQztoIS6vEtsoEcY+itqdz7v6t+Rn84unYgXrfQVsVQG37yhVNQIQ46b5DKN12V3UP
-         M2qtrqt96es0nkZvFL+QD4drjUPdfdW1IRceRl/ltWS00wmbiUBbCvueDZMKyodKGAQ9
-         6oClnZm3d0iYYq8Obu2INdCDmwonhkyBXpwGE+9sTIgk7IiMGan1f60fK0uZLLL9Jo0e
-         j2gVC3ptwjYm34qQ9EzvmXxo3m0zMcekR4FaxqGaLzSNEerxqWTPm5MsQu3fJIUCUQLU
-         s6U8vJyldGCljJ/hJsLciSqegIJWjLCksa1hYvU4ZDUYWXvxjjZ88WTQm5q7Pm6MZzNf
-         /nPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUdtZcj8u22pnAkLUaW82quMHB3EuJkmp0PNgc4zyERytbX+QmFAcSlJCKeKUNOrk/ur5S7MRTCBwTtKg==@vger.kernel.org, AJvYcCUlbyKJNPaxZCmrXO8k+uCMzVEhGz2zRitBA2WZ9ic3gI/celPTe7+baL6TMdvXe1gL9BtPtI7p4MCY56Qs@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7dWMhk0E4EnIyteN1FkKHOTDGPFjG0hPU+Utoyla3h4cg8s/s
-	YteZpja+tvy4JoSP3jo0/CvSp2LYthwN/d25jRdXOj86V90m+uGw8QoYNDvU8QMo
-X-Gm-Gg: ASbGnctqjHc9eiPk3Z6b9aPDbCb/b82EkNwVqEn9CuBUuu8Gxb6RQV62/hbVIcEm1K0
-	zHj20KoXz4SZmNYkUnZHbtCaGk2fHn3WRs32MFw/8rGLyaaSxLlvEeynTmeXm8XrCF+4QJiyr5T
-	iT+MjSZu8LTa28iQDGzwi2hQHtvIU96N7N6Ba0zIhG113M4ZfXQ33iN3Uq7wRXs8nMDgZyeabYC
-	u9qn+tY4b4rxEe4X8lrcopLIcNl70gAJIllAku7oUvNMubCN92U3gNwE+IYTpbS9/D2lwNKEYJP
-	C0NbeYtdw6mu+zp4rm4XnXZTW41bYhttawoO4/mwJECiLc1ln126IKQJxyw4uvJreDwwMe+f7G1
-	a2IaM5vpZF/VlcMytvhjz+tMZcOmV/u6bZpTfBvAoxOBLvWzbVNqufg==
-X-Google-Smtp-Source: AGHT+IGsABVpYHsGItw7bTdNKhVYLHlGZ/1BYvQtPDROGwcwrwLKfdkJ6mxQCGE9GoNn2UiATS7XcA==
-X-Received: by 2002:a05:6402:84c:b0:61c:e99d:fdef with SMTP id 4fb4d7f45d1cf-61d26988c6amr1969723a12.2.1756559549993;
-        Sat, 30 Aug 2025 06:12:29 -0700 (PDT)
-Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aff12a6b404sm274461866b.88.2025.08.30.06.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Aug 2025 06:12:29 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Guenter Roeck <linux@roeck-us.net>,
+	dkim=pass (2048-bit key) header.d=debanilchowdhury.com header.i=@debanilchowdhury.com header.b="UjewcU/2";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="k+Y7ITmh"
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailflow.phl.internal (Postfix) with ESMTP id 5323E138027B;
+	Sun, 31 Aug 2025 00:57:32 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Sun, 31 Aug 2025 00:57:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	debanilchowdhury.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm1;
+	 t=1756616252; x=1756619852; bh=EWxmYn7csugiS8y3bY0p8+D1k3LgZQJI
+	gdJXipDGzfY=; b=UjewcU/28O6nJ39u9OMTxzFMuFZEGZQzY8XzurdIQYNmWjsh
+	JRu0hp3xtF/SOan11vtoDZZR658llIDw/ge+0XK/rquqlat4paZIpZzQcR3WpolL
+	0B4O+HkLNBSBCCgQMe/aMwozsyrshk1z6XTteKempvwgk8O8nujWXcEv5lNL9Iw2
+	g7m9UkH6wS6bg2bPpm/p2MYlrtJjNhrHyFqm/B17817pHBRVVdn7Bzz71zkAbAA5
+	nWDbZeaMe2ECYTPYyajbj8mhuZn/7TDf2ZoTiEA4IeUPIJWpwkCy87Qq2DXPcny9
+	Dn6MicmTtfJxmdNgnzJo9Pp0K5FklDwM2rvBxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1756616252; x=1756619852; bh=EWxmYn7csugiS8y3bY0p8+D1k3Lg
+	ZQJIgdJXipDGzfY=; b=k+Y7ITmhp6wWsmVi7PSGvsnQB5q9JnbNLqf5SSqm5zRp
+	OJGjn+4HY4VQvTNBrZ54Zk8sih3VuRsn/V1i/ZxkHhMad2JP2TraYKRPrcHjVJCN
+	NCPiG4ojZv9kJb4Q7c3OSTDPathm24is/isEcQ1IQfCdqPocHQQCR5N2W2kqfRiR
+	WIW+aW7WTUCGLfzIuO9QiQvdwzmo4CR0cV2dLLWEyIXfRYp09Dy+HM7THFgDgGqF
+	VagXAVVPt6R17/Um/b1lvKh3Aj/LuFa0L27NbX4Hz8nhdo0KbW54eFuovnFFxIN8
+	gg9AazPcMP2ITzgPTj4i2qL+2qBgTBQga46cKUEe6g==
+X-ME-Sender: <xms:O9azaCy4mdIlWtz4ZTFXOx649xsNKMJzswt3EKZvqWBc-b3s0dv8pQ>
+    <xme:O9azaG42ya4x4-EGlvdvWybMRbuXfQKaLgwWFb9_vVeYs9_uKYcYlVEqqYOZ1N4qP
+    8lLdd-_QJnz1weLRz0>
+X-ME-Received: <xmr:O9azaLzT37qO9rWtI2r0WKT7WJV0n2QkmarMTXuigeWByFI5N8K3QyHgbOwlnULEtnat5QPTOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeekfeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtre
+    dtjeenucfhrhhomhepffgvsggrnhhilhcuvehhohifughhuhhrhicuoehkvghrnhgvlhgu
+    vghvseguvggsrghnihhltghhohifughhuhhrhidrtghomheqnecuggftrfgrthhtvghrnh
+    epuddtfefgffffiefgtddugeefvdeuteefhfeltdeuieejvdeludetveettdetheefnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvg
+    hluggvvhesuggvsggrnhhilhgthhhofiguhhhurhihrdgtohhmpdhnsggprhgtphhtthho
+    pedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhinhgrugeslhhinhhugi
+    drihgsmhdrtghomhdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphht
+    thhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrh
+    hovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdr
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurg
+    htihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhdqmhgvnhhtvggv
+    sheslhhishhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:O9azaCcqo7LBaUhSiCmPvYtTSKLBEO5KCZZ92LH05pAhZfQVlyQbUQ>
+    <xmx:O9azaIBnfRJc1QZXgv9bgS0VY0PeqP3ne42Kzl-xblr2kxYbZPJLjA>
+    <xmx:O9azaO5Ks7xpMaJhoQ-g8nZY1KCv8iNLBZirMi6KS75Y580IqoHjng>
+    <xmx:O9azaJf4vhezExlJjSNEeyZFt5Nvd9kjd1P2G7jWSqA1ahILQ_5YaA>
+    <xmx:PNazaO3oJCdaKZEDTqHJiA8IszZT1rRyxfqH8U-9wauUXwtGVQTcLeZi>
+Feedback-ID: i77364836:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 31 Aug 2025 00:57:27 -0400 (EDT)
+From: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+To: ninad@linux.ibm.com,
+	corbet@lwn.net
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) refine config description
-Date: Sat, 30 Aug 2025 15:12:15 +0200
-Message-ID: <20250830131224.748481-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	Debanil Chowdhury <kerneldev@debanilchowdhury.com>
+Subject: [PATCH v4] hwmon: crps: Fix typos in crps.rst documentation
+Date: Sun, 31 Aug 2025 04:45:54 +0000
+Message-ID: <20250831045710.6009-1-kerneldev@debanilchowdhury.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Remove outdated mention of the supported mmotherboard families and add a
-hint which sensor readings are available via the module.
+Changed a misspelling in crps.rst documentation:
+"Critial" → "Critical".
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Found using codespell tool.
+
+Signed-off-by: Debanil Chowdhury <kerneldev@debanilchowdhury.com>
 ---
- drivers/hwmon/Kconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Changed in v4:
+- As per guidelines "Reported-by:" should be immediately followed
+  by "Closes:" with a URL to the report. Since this was locally
+  found, there is no URL. Also since this is just a trivial typo
+  fix, I am just dropping the "Reported-by:" tag.
+  
+Changed in v3:
+- Update subject to correctly identify crps driver documentation 
+  (suggested by Guenter Roeck)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 9d28fcf7cd2a..c53c041c32ef 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2673,9 +2673,10 @@ config SENSORS_ASUS_EC
- 	depends on ACPI_EC
- 	help
- 	  If you say yes here you get support for the ACPI embedded controller
--	  hardware monitoring interface found in ASUS motherboards. The driver
--	  currently supports B550/X570 boards, although other ASUS boards might
--	  provide this monitoring interface as well.
-+	  hardware monitoring interface found in some ASUS motherboards. This is
-+	  where such sensors as water flow and temperature, optional fans, and
-+	  additional temperature sensors (T_Sensor, chipset temperatures)
-+	  find themselves.
+Changed in v2:
+- In previous patch "From" header did not have my name in it. Fixed
+  that.
+  
+ Documentation/hwmon/crps.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/hwmon/crps.rst b/Documentation/hwmon/crps.rst
+index 87380b496..d42ea59d2 100644
+--- a/Documentation/hwmon/crps.rst
++++ b/Documentation/hwmon/crps.rst
+@@ -43,7 +43,7 @@ curr1_label		"iin"
+ curr1_input		Measured input current
+ curr1_max		Maximum input current
+ curr1_max_alarm		Input maximum current high alarm
+-curr1_crit		Critial high input current
++curr1_crit		Critical high input current
+ curr1_crit_alarm	Input critical current high alarm
+ curr1_rated_max		Maximum rated input current
  
- 	  This driver can also be built as a module. If so, the module
- 	  will be called asus_ec_sensors.
+@@ -51,7 +51,7 @@ curr2_label		"iout1"
+ curr2_input		Measured output current
+ curr2_max		Maximum output current
+ curr2_max_alarm		Output maximum current high alarm
+-curr2_crit		Critial high output current
++curr2_crit		Critical high output current
+ curr2_crit_alarm	Output critical current high alarm
+ curr2_rated_max		Maximum rated output current
+ 
 -- 
-2.51.0
+2.47.2
 
