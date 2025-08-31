@@ -1,74 +1,75 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED701635;
-	Sun, 31 Aug 2025 22:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBD13D81;
+	Sun, 31 Aug 2025 22:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756679251; cv=none; b=LfD8NDSioGuMgNI6TBDxv6UChS7hjapChVYuf+O+Ww7KzbwkawvIj7WQNi8bH73g143Y5W+LY1kBolIU/xY3SKHXD09qKs6hKsjdzh8IttWi07GxgKPe+eLtylRnIqJ2RUS1becjtSusYbh3l/imFModqkoTyO79lrceQw+gS1c=
+	t=1756679452; cv=none; b=k5Rf9H4WHxoJyYLTL/3xLvfy39p8a7yKhqPx01yEVMauGuYaqSM0XblOSKuTv0xgJ2jkb1SNn075tGsW3SpEq2bBfrKvoxbGLBVA1nDFv6uzNb/5sGagjiMNy3AAmucgAb3GLZY99HN2NzzlZcvzvwbmfrdz+1BL+9syRFaJmb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756679251; c=relaxed/simple;
-	bh=mQ8vzewskgWtFGuGzTinZ3CVE7Jg3JZE9GMI4cZ4EPc=;
+	s=arc-20240116; t=1756679452; c=relaxed/simple;
+	bh=uYgtguB2fQQeiX49JhGe2r+VHod1rlf9qnutQpQhGic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aVirQDLh1236jIIxX2l5tAFPqueewVCyKwEtYTN08+quUDn03xExHkKvmpY/Z8SjKSgMglrCE2ERxTpBSBjtAdQKImitM3ptiMTmIVzVc5xUgaho2vYGpDHBaalyIH942QW+H4DsbPd55SDLaTFjWp3sWgT2qUszaMWk6WqDdpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFonVc5m; arc=none smtp.client-ip=209.85.215.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=q9XwQkX7ZmbYNoxB/ASlc0saI3H/jFX4JzFUzajEEYxe8e/RTP/suOGFtHIltPODo5i+tOMFZXqfgdeFrGBjjAtU3CJpcjQwa7hCtcPbO8fHhztHL/RI6viMPjCWqj5y+bJgU7p5CEAEUdTObZa65FECDkaQo2h7jRsddJQc6D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJxO+FAe; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFonVc5m"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b4d4881897cso1481507a12.0;
-        Sun, 31 Aug 2025 15:27:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJxO+FAe"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-772301f8ae2so1767605b3a.0;
+        Sun, 31 Aug 2025 15:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756679249; x=1757284049; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756679451; x=1757284251; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PtXLEX6fG4OiQ1TFQzxwhWoQmZ1/yTVQFiUuzOIQ3Qs=;
-        b=EFonVc5mjEpt3TlFya1087NNTk6Fx14THgcrNb+ySb33JeCmGrxRKtfRfsF5YLZxqt
-         ImorWuApBdRM+XNGBOnYZ/x6ORsEjJ3Yy17X66kpPTSDAtIQIVbqU4aEv0A9zcOiKWPu
-         sFdmMItKjGvpzMwCxgfz4din/tOfRzCvOUl0lkLTdbFQe1TQrL+UUzQqTRr2GMvlkCLA
-         /WuWfLgHWR4ZsQ+rnfCvn7dAe6vM6G5MBjHZJBF5OwXPiMgErlabT60OHg7NTMwt4+15
-         kmLSZMLqmCSHB7KEq/+V623wZ8yWlecJ3AlJ9Pla2FZbk73690QprV/S/1373YlF7He7
-         jm4A==
+        bh=hOXrf/fO8R6/nAWnGoM+XU2CQnrLVehXGmCOFXbTcEQ=;
+        b=NJxO+FAemiJ3Z6Jf7s/g1QrWlUV86aHX8MT9o4+dnAY9vPNonSIntOjt8Jt6Z0iXgF
+         V5+4BkUemLLM+uobqkr89UmFpdk0NdYyT/dTLCQzD7CdAGpVerq1+lsP53VrKUlGCY51
+         RlPikRTep0sgqFR2mEKmtsRjJspXrWlAknr2IsZ4maHsyPfV6gwdFCyz6FnzVzkEOl0K
+         MMS+bDfFqLImEZA4Cp8awm6slVBrQDkjhL6sQn8m+3LHOBlsz59rX7lEYMuININCGS2y
+         sppyMYb8HFk+be91b3UbJdMGdTog8xcu/Y9/RwKGjj5qYGh+RMgLI0hK+f6HQgNqV79a
+         DIhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756679249; x=1757284049;
+        d=1e100.net; s=20230601; t=1756679451; x=1757284251;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PtXLEX6fG4OiQ1TFQzxwhWoQmZ1/yTVQFiUuzOIQ3Qs=;
-        b=xCo5AmuPIJVJiBRlej+di4+UxsVdVRX1Y0uQzVyuA4oSEx5hjWZKHvQO3LVHJKLVfr
-         makqrWZJplMOIe6m7i6Qy6vTyf+MVNy8DCNKpWNvtfVACxJwo0uTdOtQuFm6miaGqNc7
-         2UEK2LrJ6hmb+qTCMZsAbuQOXYsMy3xbymK2nukAhxkpgABlbGck3ELjju8k81QnQ3+n
-         +A29BJH9k5di0xaQISzox78n51imwge8dFJQvLjCmb3z0fWSmHVDnRAEgC3U0naVPD+C
-         sXLEhtpGa/bYuAsIm4VCRAwlZ1combmj4uhbsIX8I3n3z8+WRAct6veVmHTwU/07/T8b
-         NxWw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6/k0+RwukHr8zylTPvrIZqtFsJ7iYSMF0k4mHgS+Hee0GHbsCrjuqluaYH9SwNSJ7eMC32v33HhW/@vger.kernel.org, AJvYcCXGn17AZUdFSm8POpLLnn05Ci+i9qrnn5AfIPQD83SQUjWNG7WFlmK1jr/ec4P0TMn1mMCfsijA/NRWblPz@vger.kernel.org, AJvYcCXTHw/l7r8YSAvzniLhWBeJeTOw3bUNgc8M35RH48E8qO59FPhRtJZf0glf4MzjUQ/yghS/yFvkT7Z7bps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWOwGWL+/ZFGtLQeuuEg/J3g+UWVEitPrRWaGbx6XCqU8MQBsJ
-	IT1rSdJQfHVvOASMm0vY7B776VsleBKWjqnxNy4iHJS9KwjOMJGa9bBA
-X-Gm-Gg: ASbGncsVKoh99Y/Cbrr0cheNwIY1eVA6g2oADK4sxdJSExEk6vMQDRmG0Pb8bnY3rEN
-	M4c3J2xE/LXMGt+FgHJ0uFUVX5zZpoDhSrZtKtVLEyvm0TbVVmGEJDBetwbUWZ9jpV1zqCXuxNi
-	Qq9p/AOtp6cQyAxi6bPIOcwBV7vjyz6G3GAeA8mLw6OEFKBc8CdN2j6eaBiiVZZ3BFjqd+lnEfk
-	LHtoLnNAE7f5k8o1G4IgXZTQ2OWAs1bqiN+5NaRMOWMe8xLLS2tv0eb9MyyRTcTpEXi4IpEzu6C
-	G0VK8i/UzfGBOUBJ68It4Imo12B4w4DQ0bsgoQOKFqXJLM3YPMKyVtnWcUIv8ewZD/8jr8BDIp3
-	xsesiNcY+rLNCuZwZYWNJ5hkdl7TUZ3ykC4hR2z+FxjtsiQ==
-X-Google-Smtp-Source: AGHT+IETl0ERRnlP551HimgiMw3yad5Af9X79XGzuAKC774a1G3ZuRHfiqQ15C2CMH8IZ5Zfzy3eZw==
-X-Received: by 2002:a17:903:ac8:b0:248:93f4:fe14 with SMTP id d9443c01a7336-24944b1b1f2mr64750755ad.33.1756679249291;
-        Sun, 31 Aug 2025 15:27:29 -0700 (PDT)
+        bh=hOXrf/fO8R6/nAWnGoM+XU2CQnrLVehXGmCOFXbTcEQ=;
+        b=F9OCEJFUU0IxqZ4WihCgy9MsZ/76LKMUTWUYJHyKowABSAIvRNDAnCj65FcBf+Imc6
+         YE06WfzaCWIIFv9ei+UnElogMPqIFwy2sHUmEk0JTJ1K5cxQ4BuXKH1C4ezJHZwfwrHW
+         s3uXil1siwcenL1i91yEfRgWgTGF/rbnXV7f9j1mrIzD+M4kFaGfFkUwraVJhLx/ljYt
+         Mi4QSfff+0KuWe67B1B+BAL2f3VU17i639yZMUqlembKkSdlKPH8v19tvEIBbPhYZ2Bw
+         cGIJclypk8Mc6wZOsFVzpwtFBs0pcYviNpXRxAgng9kH4u5VUR5CZCNFL2AFAE+VbnII
+         Vx3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVBsGjvNcJsFPdLKbdQpDvsbH/pymsJB+cXMLqEU9Gh7YdldujxBPbMDlv3fDK7ZPuZBGv8Q71EG0hS@vger.kernel.org, AJvYcCW2/oR+90acKp6qWPxSJBHcvLmtom6rShPnWZNYV/y4PxJP/G7ndIPqOkwQx9IC/gLjHSDDqAc5aZdVwFNr@vger.kernel.org, AJvYcCWRYs3FX9tOJLfp4ldz/mTFZC/5ZunbDRlcDaOd+Eh+h8I3PxEWLMCJBQ8iMlZn8CY4LkmHpgsDKSMgmn4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcOFljU+odLPYoTViR4Qe5L909hUf69lvVObIu663nKASit+78
+	69IHo26e6OWGoRQ2h4BxQ707TnOf8q6Sd49YIDOaomQyePw4cDv45MyNwhUzxA==
+X-Gm-Gg: ASbGncuF0VJaBMpSVW4UqpTar5oVAn9j9xLrIwA5dJdnaxcolGjbjfkR5fsKy9GJ4D2
+	AdbeHUtvHkD+raZwN72/A4p0n7NuMMjDbo+SGPyqzVYzFW6Jz6VmjLf9rxsfJmq+k9zwZsOJnCP
+	itDP5+tlQOGUFE1AQ6xjPOjHxG4Kh9nKTo9/79kCPbzRFRb1odttw6jnnMhBSvfStAVGInBVDGr
+	gxnvYBE3x/vJW0cCFfpe/FpFfQtLq4gIk6w54QH7GhQr5vBGD/S0Xh33CyJbN0Hm98QICCQfijF
+	Op2UDhpxhaTRCPHxq9XvOZYqcbZ3P2aBQXbUqAN9i8KLANBnkstLeobKwgf+o6GUJL0hC6fKV/2
+	Lqq/m4fAQyJvqxcgWWKYuplxf0eRS8gO+DjisSQCVuyKX2A==
+X-Google-Smtp-Source: AGHT+IEJDTNQJEXM61xqhRbx4uxYssScsK16k7XQZneWcGZfHsTQ0ZHaZyoCOfQGFmuuSXtO3bfTOw==
+X-Received: by 2002:a05:6a00:2d24:b0:772:31e2:b80b with SMTP id d2e1a72fcca58-7723e235106mr7470125b3a.11.1756679450462;
+        Sun, 31 Aug 2025 15:30:50 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903705be3sm86070595ad.18.2025.08.31.15.27.28
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a26ac0esm8518424b3a.2.2025.08.31.15.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Aug 2025 15:27:28 -0700 (PDT)
+        Sun, 31 Aug 2025 15:30:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 31 Aug 2025 15:27:28 -0700
+Date: Sun, 31 Aug 2025 15:30:49 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Flaviu Nistor <flaviu.nistor@gmail.com>
 Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: tmp102: Add label property
-Message-ID: <008fa539-1f35-45b0-a69e-1ea877b96007@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: tmp102: Add support for label
+Message-ID: <b148ff3e-a5b2-4826-9228-73a1cc6caf5c@roeck-us.net>
 References: <20250825180248.1943607-1-flaviu.nistor@gmail.com>
+ <20250825180248.1943607-2-flaviu.nistor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,16 +78,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250825180248.1943607-1-flaviu.nistor@gmail.com>
+In-Reply-To: <20250825180248.1943607-2-flaviu.nistor@gmail.com>
 
-On Mon, Aug 25, 2025 at 09:02:43PM +0300, Flaviu Nistor wrote:
-> Add support for an optional label property similar to other hwmon devices.
-> This allows, in case of boards with multiple TMP102 sensors, to assign
-> distinct names to each instance.
+On Mon, Aug 25, 2025 at 09:02:44PM +0300, Flaviu Nistor wrote:
+> Add support for label sysfs attribute similar to other hwmon devices.
+> This is particularly useful for systems with multiple sensors on the
+> same board, where identifying individual sensors is much easier since
+> labels can be defined via device tree.
 > 
 > Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
-Applied (after making change suggested by Rob).
+CHECK: Alignment should match open parenthesis
++static int tmp102_read_string(struct device *dev, enum hwmon_sensor_types type,
++				u32 attr, int channel, const char **str)
+
+Fixed up and applied.
 
 Guenter
