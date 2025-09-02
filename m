@@ -1,74 +1,88 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8F9202997;
-	Mon,  1 Sep 2025 21:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D94E54652;
+	Tue,  2 Sep 2025 05:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756763817; cv=none; b=etdTVb5cK+Yq6M/GQO9HCBJvIUSB7DyLFfMsKsh4KJFBXbe/N6f0mIJeIVML/CeGPvfoEP7ZGsUrEKaQG2zrwDxz1GQEAgypDCzviO7aKXEy/FYhzyB+OChfX2e1RVKF6ZOXut+pKwZiV0QAKb7f6lmPwUrpcJPz1fHx0nXdxGw=
+	t=1756790238; cv=none; b=nn2wXQeiLkZ+TTT+6/MxZTPz2bXuqJncoqPpKDRnwb/uv1JZuKhVRF8H9LlOklJWhVG7N6ts0j8f0Mub+NBCahTNVFA1fzzMivcB6t275PQfwjMxWpEmKk9TI4GiX81pdaEEfWX/dSElHSrQRw/3tGwNqxhAAb2EYd6X/Z2jNJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756763817; c=relaxed/simple;
-	bh=UdbThDd35XS5kTlBPSANg7bURHeZjITCBnVgTWkAmY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RetZh2v2529L3FHQ6MoMAatXnxxCdGmWODLwxwBjbdY78mZytX9ZMpgiY1OFxtylMku/nk4TTLZ3uHZ889jNJGuEXX/W/pwMjXUq2jplwFZIuI4EBqBv7o0NXXjpcAVRNW7hp/zKs4c41yG20+7dtGCW4wFm8EzwsGRMiJ/SRJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J6DP2eJW; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756790238; c=relaxed/simple;
+	bh=89O6hTTAmvbNc2M6jYvCzqNeq3RFv1ZVzAtWHbVogp0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QfNCV7Zm64V42J6/BrkIWfcYYYqZpV75sMBtDGNKoBj6wJCX3+89LmOzg02jjEHgdJZ21J46Z0PlMloS7v1YduqG2YqEfqHUJGboHLLPU2rMYPqlOw5VuNg4iNXrycSDrNRM6LCNXrfSMsfqgnEaHf17kgpEvIbu7JJ2xdfPLRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ewsting.com; spf=pass smtp.mailfrom=ewsting.com; dkim=pass (2048-bit key) header.d=ewsting.com header.i=@ewsting.com header.b=FYDDvodd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RwSSNWhx; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ewsting.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ewsting.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J6DP2eJW"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-32326e20aadso5186553a91.2;
-        Mon, 01 Sep 2025 14:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756763814; x=1757368614; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rr7ttRRfISL7LXawvmUUwtcVSdkKIkQAp3QFqYkgQGk=;
-        b=J6DP2eJWk0wnnS1oJuSxXRAHqvjGU/2lKpyKkLJ5gu/qlvEup/u7yVqtGP1XidmI8U
-         8ZQDBJoif6rNwPCDmUBiQlj9NaV56CUW7Sp1EijAoQKmFPoTAlonIj9QcoDxlyq6fbzx
-         w3AJQ8SCWUcSu1HH83cN+zT/+ZP7wM411Gj9x+tqeiOhVp8IbAs/BFpyAu02uR5n2uNs
-         SvR+EcBtTz1e7yqtIqmHUI3IhxTdB1AOc4UNS4gksqOllg1tweczPKsjJYEA/aK+dZgH
-         C4r2slxnCtYjUJLLVCkcvFkLdiq4kFtRNrZ/MTZ2LHOxYP6ohAK4n/zX3M5vHJrhie/Q
-         Sxtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756763814; x=1757368614;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rr7ttRRfISL7LXawvmUUwtcVSdkKIkQAp3QFqYkgQGk=;
-        b=S3AdmCUIl3zsox8rcqmOZUaYGzozqvaeaH2R/7XkKgQhYmgcvgqOBhe0sQAbssC7PA
-         O7WENiCaOGyLIUJFdDdQ5SvxRQveJ0vlxDBqlHwnRqnP4PKHTU9llZNu+MAOJhmgXjPk
-         Vbi4GVzGwwRf67eKJ/xVSmBNfLhoYr6Lzt8uNTrp+mXggI9QaeZyolI9keQ2yGKI3gi8
-         OWSxf1oALjpUHTdzWShHarHWXvY4ZsKP4fcHveyE1TwTHF9dvN0FZNl2B6p+nV7oM4ty
-         dHUip3DnBdjmkME8J093vC6FMCpVKHY3rTPrexEut/fdVKHA7LNGicyQwkR0wtp5oPGt
-         Z1ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXIGx7Cs8qeXxJKEWT+mFsXm1nA3Kgm2vwfuPqOHWqfUnWE7jzo4cPanRFD0M1DpVQDeyGKR5tUbFLdvw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvBudxJgAZwiwtRwibABm3cQ2bmwTHbYUk4KIYdKxxVI9LgFc4
-	L/bZSPw6DmkqCumcggrWpB/Nt8SgJ0pK2xYcayihqU2tzlg65wP+ODkZB1LiWA==
-X-Gm-Gg: ASbGnct4pHtay5qeSoZWcmpUp2uwlV8gKKemKEBRTgIDugegAsX+zkU1JS01Aclotvg
-	m+4EYrBmQBe5bJO24wCbYiFg1ozyWqHu5vE0zusy/tt1gchzuPkX1ou314rFEH2BUM7xJhtMDJ/
-	QqGW+ghv5lCjf604AG+wTLG2gdPsHcZxqgRCPSGw29MlsI2MANkicdwR4cUm0Inw7B/7DsLay7g
-	PU/bPOZWBuUa0nXHGppW81v107o/oSM3GV7OmjWcSTR5/lHSrYozGqbBIiy3LGS1zjF+DGj9qKI
-	wGeHof32eaQ/0jiOeB0vQpMIvxIJWmELOXHbJ2lC+4/VPPqXP0CTMItsZWRv0IrK23xiWAk1wiP
-	33fObJcQmAUY48DimN19tX/zInkerhNm/jYSBCyxtk4JBXA==
-X-Google-Smtp-Source: AGHT+IEDxOOqY0dhCtISjArqy+nLDGC/4CdQ8M0o23H8a0H2FAof25d+gFI8pVtBBd6VEoHUH/8uoA==
-X-Received: by 2002:a17:90b:4d81:b0:327:96dd:6294 with SMTP id 98e67ed59e1d1-328156f9a23mr13697686a91.37.1756763814248;
-        Mon, 01 Sep 2025 14:56:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3274188757bsm8912793a91.1.2025.09.01.14.56.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 14:56:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: devicetree@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-hwmon@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=ewsting.com header.i=@ewsting.com header.b="FYDDvodd";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RwSSNWhx"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 6CFCD1D00347;
+	Tue,  2 Sep 2025 01:17:15 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Tue, 02 Sep 2025 01:17:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ewsting.com; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm1; t=1756790235; x=1756876635; bh=woLBz1bUQiCABCptixtOE
+	zP/0CtuUPqRPOJ6sbLTMiE=; b=FYDDvoddTRBdIRqnskXbQrfXeqLwxvYAxLAK7
+	Yk80DMz88gDE56KLJK/SdvOoJGq8YtyThFUxEZtZhBMobiQoZa63pv2qESqGD6Ib
+	ZhGaiHvAw04f8CRHmBf+BSWvXjEjwfKWNbCyXx8AW9aAT0YgiX+GDBfLrUMxG1Xa
+	+LeeST16+IyKrOdNTbBIz9QmLm4brt3E/qYXxzLDXMchIICFN1Q/rxVtWYhLgaB8
+	QgDNyVFsW4HBVbYyckTpsLlSDgTckGarp6TDoWteZmer+M263SqxtL9kBICK15K8
+	gc7NSOowIlXjD/6eACmvtg6xQ40JRUKJR52sKKCO95OboQXTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1756790235; x=1756876635; bh=woLBz1bUQiCABCptixtOEzP/0CtuUPqRPOJ
+	6sbLTMiE=; b=RwSSNWhxEtEpC0OyahKq2X4J2m/FN0L8DJcqE7dawH0aG3IMpxa
+	GNFLC+qlVz5xIznhWinss6DgiVRl2BjdzN4Apo94tV5/k596VrS1rxwX1kIOfxuV
+	y0XViY9Fm16XUR92nCMyXN5DVbAuKB74ALnW4eAYyynOrSgEk79infyg5u2mUrbT
+	3gxydk4pa4WNLycaaWQNUdgTuYO7XHNow0h4rrXJIS9/K51xBnQXOlbccdSKbXqv
+	i6TrVlnTrpXNa9XNPzV6DSV1lSr/CbTFciHMvSgPK7roxbk9D5a3IBqpW177VYN8
+	K84WPhiGXUKoQ5ytwv4fp674k0DELNgRtCw==
+X-ME-Sender: <xms:2n22aOaBdToe8V4eh0s97LcNrnpLUV7dFOU6NZeQDNna2d9_EKK2IA>
+    <xme:2n22aIJDiC2fbvUuPwVQdFAckcVPM1-3e2b4_vywnefc5ti5Ty2ZXYlRf_SJOXt_v
+    cntl7HK-7mGKOGRHXw>
+X-ME-Received: <xmr:2n22aKtqN_oPyxG2rl-WI-4IQiahk1xKc9L7U0HGWaGIhiMniB01fG5iPriiU545kWaSbxb5hNvs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleegudejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegote
+    eftdduqddtudculdduhedmnecujfgurhephffvvefufffkofgggfestdekredtredttden
+    ucfhrhhomhepvfhomhcukfhnghhlvggshicuoehtohhmsegvfihsthhinhhgrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeehkeegteefvefhgfejleeuudefgeejieduveelveffjeej
+    ffekveekieevkeegueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehtohhmsegvfihsthhinhhgrdgtohhmpdhnsggprhgtphhtthhopeekpdhm
+    ohguvgepshhmthhpohhuthdprhgtphhtthhopehtohhmsegvfihsthhinhhgrdgtohhmpd
+    hrtghpthhtohepjhguvghlvhgrrhgvsehsuhhsvgdrtghomhdprhgtphhtthhopehlihhn
+    uhigsehrohgvtghkqdhushdrnhgvthdprhgtphhtthhopegtohhrsggvtheslhifnhdrnh
+    gvthdprhgtphhtthhopegvuhhgvghnvgdrshhhrghlhihgihhnsehgmhgrihhlrdgtohhm
+    pdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:2n22aMXhL3qfJmOgl5gU-QQV4XSuLvBhicL14I0vjH1nuE3XIJNTRg>
+    <xmx:2n22aFjUYhAYfgCuyelkQoSn67M8kTckTE3o5feCuiuJIVY48dHx4w>
+    <xmx:2n22aEqpe1fZ7SArTPEcjxZRF-TSWYLhz_uBMP7K7ZpVJwOsX_KkCw>
+    <xmx:2n22aLFGmafua6Iyxgb-GV-S7cBzgve8NY0wnA4DNRFSQyujisj3MA>
+    <xmx:2322aMd2FNfZP5gZAsTrgecaVTVRi5JJWOT55Ww4-q9jA4R5FYmUKK7s>
+Feedback-ID: ie4e64890:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 2 Sep 2025 01:17:14 -0400 (EDT)
+From: Tom Ingleby <tom@ewsting.com>
+To: tom@ewsting.com
+Cc: Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Christian Kahr <christian.kahr@sie.at>
-Subject: [PATCH] dt-bindings: hwmon: ti,ina2xx: Add INA700
-Date: Mon,  1 Sep 2025 14:56:48 -0700
-Message-ID: <20250901215648.2696843-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	Jonathan Corbet <corbet@lwn.net>,
+	Eugene Shalygin <eugene.shalygin@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX Z690-E GAMING WIFI
+Date: Mon,  1 Sep 2025 22:15:58 -0700
+Message-ID: <20250902051603.35633-1-tom@ewsting.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,52 +91,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a compatible string for INA700. The chip is register compatible with
-INA780 but implements different ADC ranges and thus needs a separate
-compatible entry.
+Add support for the ASUS ROG STRIX Z690-E GAMING WIFI
 
-Cc: Christian Kahr <christian.kahr@sie.at>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Tom Ingleby <tom@ewsting.com>
 ---
- Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/hwmon/asus_ec_sensors.rst | 1 +
+ drivers/hwmon/asus-ec-sensors.c         | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-index 8b491be9c49d..d3cde8936686 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina2xx.yaml
-@@ -32,6 +32,7 @@ properties:
-       - ti,ina237
-       - ti,ina238
-       - ti,ina260
-+      - ti,ina700
-       - ti,ina780
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index de2f2985f06f..e5ff386f2dda 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -32,6 +32,7 @@ Supported boards:
+  * ROG STRIX Z390-F GAMING
+  * ROG STRIX Z490-F GAMING
+  * ROG STRIX Z690-A GAMING WIFI D4
++ * ROG STRIX Z690-E GAMING WIFI
+  * ROG ZENITH II EXTREME
+  * ROG ZENITH II EXTREME ALPHA
+  * TUF GAMING X670E PLUS
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 4ac554731e98..d3ee43e2a333 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -554,6 +554,12 @@ static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
+ 	.family = family_intel_600_series,
+ };
  
-   reg:
-@@ -115,6 +116,7 @@ allOf:
-               - ti,ina237
-               - ti,ina238
-               - ti,ina260
-+              - ti,ina700
-               - ti,ina780
-     then:
-       properties:
-@@ -133,6 +135,7 @@ allOf:
-               - ti,ina230
-               - ti,ina231
-               - ti,ina260
-+              - ti,ina700
-               - ti,ina780
-     then:
-       properties:
-@@ -143,6 +146,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - ti,ina700
-               - ti,ina780
-     then:
-       properties:
++static const struct ec_board_info board_info_strix_z690_e_gaming_wifi = {
++	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
++	.family = family_intel_600_series,
++};
++
+ static const struct ec_board_info board_info_zenith_ii_extreme = {
+ 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
+ 		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
+@@ -642,6 +648,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_z490_f_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
+ 					&board_info_strix_z690_a_gaming_wifi_d4),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-E GAMING WIFI",
++					&board_info_strix_z690_e_gaming_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+ 					&board_info_zenith_ii_extreme),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME ALPHA",
 -- 
-2.45.2
+2.51.0
 
