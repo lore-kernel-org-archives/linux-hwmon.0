@@ -1,73 +1,48 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4FB30AAD0;
-	Wed,  3 Sep 2025 19:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1843EEC0;
+	Wed,  3 Sep 2025 21:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756927420; cv=none; b=ZsZJulL2LyxoRV4PJUTVrXaW65Qbu7wPKZYlakuSgVPQfI1jKqkDSQUEtx6FhJ/B2ND/8IRcEtuHo9ZK/N145lAYQvglj54U6zStv5rpawW5src6ui/Eoqdj45LriQAfqrHuLvhDk9ES7EGBQMyZOJxXCnTi5e1S4utcxT19q1E=
+	t=1756936134; cv=none; b=kfdmrMNoDKVvWFTLHT5+44xOWZBfkQ5Jm2AD6D2Mv5CHeAKpNW3qQIDGDmpYiAmXUlitY05TqmLBR5dYbQqHZqxLWYhC9EzdNzLzrR1gthUjWok0hVCYaE6xFVAvGg8VBMCVqXSWRlDQl7bkFEYdPq1AUaVS5wj7o+6SB9p1fF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756927420; c=relaxed/simple;
-	bh=4JDJTgQ3r53uYyj3HBe4zhubm/4WXNR7BVJpSU9g2CI=;
+	s=arc-20240116; t=1756936134; c=relaxed/simple;
+	bh=99FlZ2W4JrgSZaHdYWVvCc0lO4vikrYMc6uJDPeIhNs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MBM5erbRkvhHgMw63YpD/vBWCXet/e1iETsd606hnjC8vwa3RCUG72XKRZnxAqJKRxiB+fw2PcqHfVAHoopbsJwmYwZn8wHOpHhHcdubDRqlmt2yj7hs8J5OuSaJksLxI28ZKUf/Ii/HG2RrL2IVtZH+mqFOAjwbO+ROH5FGkoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8C3Urxn; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mnw8ESDc9xysK/dl40xISvS8xeEGgfVEySYVjQ+/dOG19l6VvPywPwiowWaJOPsnEEjBYqu8/WmzV3EOY3SMKvLAxK6J2iJ2iTXivvcmV5XVkXwBLmwJy9h5bz51zWFTL0+lEdZTCq+bv1XOCPRZmmY54zsBzlyDy4sP2oJagDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aP10IDRS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8C3Urxn"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2445805aa2eso3170885ad.1;
-        Wed, 03 Sep 2025 12:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756927418; x=1757532218; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Rz5uVzOA7H7auuSeE0duRCSB0VUtJjaNdjd61cz4Do=;
-        b=m8C3UrxnXdT0XH8tex2ossXNvl1E6jsANEJAu/0jLkRb8d+mAOb8R5lbZqAkUrom6z
-         GeKBrSQMjrg98rtcU9bvKpgjpIHtbZxqj00I4+Dl0mdAQUySAwsQKA+TxGrKnSQzDaaE
-         1tvIWjtjvYH9S7Fju3Z/saCuPCy7stsHWxaFDDSiP7AE5zChD9zX1V5QEZrEG9EVLA6X
-         N8GO3jTjkPfLk32zyv0jMsdVzvjsyAO/u6yRIGv3TsCaa+SE89v+f67uhgJ35WocjtWT
-         dFUg/xi0duSGptIH+l287GTNxl6kKXId/Ne6qzuhz8Zq1ZAk1jOf/foBC2R29loUxw0q
-         wEHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756927418; x=1757532218;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Rz5uVzOA7H7auuSeE0duRCSB0VUtJjaNdjd61cz4Do=;
-        b=ZbazGFQXFNmClRCPC392JgHdZ8EonT6JU/lpiBGWk++SO5joSg/pu+r+aMI3im54I5
-         B2JgjXOZTSwgn2PGTHBNZr6BBErLLtV1g3jA9cqTh/7XqS+4SvFPeOG6MbmukLbEudBm
-         kziZk2E2+W0bAyvWPgIjxBju2IySlEaYTo5vvLWZpK9YM8pZBbNl7K1G8yYXwnw2Ou2A
-         EhM30TTvv/n537RGW+VHIW+bNj0OCEvB4nW2QCgngHSCQHiraIyK5xTn6PTxO1QNFOZB
-         y+SuBRQhM3fYVlip/1TgOMJndpA1+Ogm7XpKzOybFQuCFHuQCCAvtCzdD1mfxvgEMOUQ
-         bsaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrJXFkF2msBm1aszD8NuS5/1SzePEXCaC9GK/56/ny8xgd8VeuYS+5gnPoaXKJ+Vo9a0LGPLIvadPWphVv@vger.kernel.org, AJvYcCV3LGLMnRG8Z2YvcIFBJZ/rKk5W3UW5T1kIeJR1yDuFU5BrSkVPhM1nthFHIRm4BSbp+Tv/Vg1LbBQ=@vger.kernel.org, AJvYcCX5I0tK8bkqb9cVfawlysJ2t5hTI1qqgQgod5YRLQ/wRGLsFcRYwShOXML/5sbXs5IsUv5/gmyVkuhPZ70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOz6XmyfCVpW8DwuutSNyy5GrYMJ9kkApsAimGDiwzIN6hkuWC
-	m3EFCSOBfiPFJ0jqm4syC9+XueQKx0NwSE0uYQZ7KaxX1lCZlmKkFDtq
-X-Gm-Gg: ASbGncvzZPapt7p0f/QWD+LXmA7BR8n8JfMgrtIMT0N9hXm6kBynzHmIIriT4i657Zo
-	f22HvbldEjTsutAQB5CqLKRWzfB8+LbI0RA2y567/7y0kIILehomdga+YfDQ/L2o+s/ivTNIqfp
-	TPnrY9UfieNRQHvzfm+lnWLI+Y+gnXp6/3vuYFMy9Uoy9dZ0GLvljsMwf16WvQfcZJefkGYsVwn
-	2Q30HExK9baKEg+g5TuSuZ045ZyvbKPuIk/UPJdum7N2zSpig+0nKq3pOw4IiCelOYNUlBETmRt
-	/xJezJvKEvoVEsVnDHtRUBu/HFXGSFMQvyr6OB45I3SkfmYrXmBpZ6/NLFZzitAi7XL0kALU+a9
-	IDv5Rqsf2FFhH2zD59THsLJM43gATMeW4CiE42pET3j8ddg==
-X-Google-Smtp-Source: AGHT+IGUTqUq93P4mmxYqAbOauXZPiq6DOgxdCVvRL0pOfr0mjA2ttsMFgSWafh2QAEcvC1EsRvFUg==
-X-Received: by 2002:a17:903:32cc:b0:24b:1692:e0bf with SMTP id d9443c01a7336-24b1692e695mr115434545ad.31.1756927417419;
-        Wed, 03 Sep 2025 12:23:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2490375b6d0sm169024895ad.62.2025.09.03.12.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 12:23:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 3 Sep 2025 12:23:35 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc: Jan Philipp =?iso-8859-1?Q?Gro=DF?= <janphilippgross@mailbox.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add PRIME Z270-A
-Message-ID: <848b6d49-e21f-4e75-9bd2-9e251a8d8e09@roeck-us.net>
-References: <20250903191736.14451-1-eugene.shalygin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aP10IDRS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F07C4CEE7;
+	Wed,  3 Sep 2025 21:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756936133;
+	bh=99FlZ2W4JrgSZaHdYWVvCc0lO4vikrYMc6uJDPeIhNs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aP10IDRS1OINVx/CNzUtFmTeJeA51BwvwlV0wfZK9lBBx2uyu7nuaaQbXj9C7pIoP
+	 B1P2mFgXAxs6+vfSepEZC8Aby7WZWsyalbwGKBGon8KC0Kd6xZyDDuayY+ORxdDSgr
+	 W1t+mZ2+6ooPvHjhCV5Ih+rQtBjYZ9cmh6twM4cihlwdwUIXUR8jIr6Jy0VPVjhWS4
+	 TIYwnDAgik2/W+akimwth2cNfT0nhU7l6t30XZfl8uyJ8NhETa1iSNqikNE+JsJBmi
+	 WXESYC7wWevAlGQe/kuf60GD/932tHmYX6Vp9Ct4gz5EcLgr2WfqQLZNN+YTtKmCbN
+	 KMiV+h0mQr/Cg==
+Date: Wed, 3 Sep 2025 16:48:50 -0500
+From: Rob Herring <robh@kernel.org>
+To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v2 1/3] dt-binbings: hwmon: Document the LTC4283 Swap
+ Controller
+Message-ID: <20250903214850.GA2762411-robh@kernel.org>
+References: <20250903-ltc4283-support-v2-0-6bce091510bf@analog.com>
+ <20250903-ltc4283-support-v2-1-6bce091510bf@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,14 +52,252 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250903191736.14451-1-eugene.shalygin@gmail.com>
+In-Reply-To: <20250903-ltc4283-support-v2-1-6bce091510bf@analog.com>
 
-On Wed, Sep 03, 2025 at 09:17:26PM +0200, Eugene Shalygin wrote:
-> Add support for the PRIME Z270-A board.
+On Wed, Sep 03, 2025 at 11:04:59AM +0100, Nuno S· wrote:
+> The LTC4283 is a negative voltage hot swap controller that drives an
+> external N-channel MOSFET to allow a board to be safely inserted and
+> removed from a live backplane.
 > 
-> Tested-by: Jan Philipp Groﬂ <janphilippgross@mailbox.org>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+> Special note for the "adi,vpower-drns-enable" property. It allows to choose
+> between the attenuated MOSFET drain voltage or the attenuated input
+> voltage at the RTNS pin (effectively choosing between input or output
+> power). This is a system level decision not really intended to change at
+> runtime and hence is being added as a Firmware property.
+> 
+> Signed-off-by: Nuno S· <nuno.sa@analog.com>
+> ---
+>  .../devicetree/bindings/hwmon/adi,ltc4283.yaml     | 280 +++++++++++++++++++++
+>  MAINTAINERS                                        |   6 +
+>  2 files changed, 286 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..ec7768467e66f18f06d8a5258b3b115f23ea996d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+> @@ -0,0 +1,280 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,ltc4283.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: LTC4283 Negative Voltage Hot Swap Controller
+> +
+> +maintainers:
+> +  - Nuno S· <nuno.sa@analog.com>
+> +
+> +description: |
+> +  The LTC4283 negative voltage hot swap controller drives an external N-channel
+> +  MOSFET to allow a board to be safely inserted and removed from a live
+> +  backplane.
+> +
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4283.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ltc4283
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  adi,rsense-nano-ohms:
+> +    description: Value of the sense resistor.
+> +
+> +  adi,current-limit-sense-microvolt:
+> +    description:
+> +      The current limit sense voltage of the chip is adjustable between
+> +      15mV and 30mV in 1mV steps. This effectively limits the current
+> +      on the load.
+> +    minimum: 15000
+> +    maximum: 30000
+> +    default: 15000
+> +
+> +  adi,current-limit-foldback-factor:
+> +    description:
+> +      Specifies the foldback factor for the current limit. The current limit
+> +      can be reduced (folded back) to one of four preset levels. The value
+> +      represents the percentage of the current limit sense voltage to use
+> +      during foldback. A value of 100 means no foldback.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [10, 20, 50, 100]
+> +    default: 100
+> +
+> +  adi,cooling-delay-ms:
+> +    description:
+> +      Cooling time to apply after an overcurrent fault, FET bad or
+> +      external fault.
+> +    enum: [512, 1002, 2005, 4100, 8190, 16400, 32800, 65600]
+> +    default: 512
+> +
+> +  adi,fet-bad-timer-delay-ms:
+> +    description:
+> +      FET bad timer delay. After a FET bad status condition is detected,
+> +      this timer is started. If the condition persists for the
+> +      specified time, the FET is turned off and a fault is logged.
+> +    enum: [256, 512, 1002, 2005]
+> +    default: 256
+> +
+> +  adi,power-good-reset-on-fet:
+> +    description:
+> +      If set, resets the power good status when the MOSFET is turned off.
+> +      Otherwise, it resets when a low output voltage is detected.
+> +    type: boolean
+> +
+> +  adi,fet-turn-off-disable:
+> +    description:
+> +      If set, the MOSFET is turned off immediately when a FET fault is detected.
+> +    type: boolean
+> +
+> +  adi,tmr-pull-down-disable:
+> +    description: Disables 2uA pull-down current on the TMR pin.
+> +    type: boolean
+> +
+> +  adi,dvdt-inrush-control-disable:
+> +    description:
+> +      Enables dV/dt inrush control during startup. In dV/dt mode, the inrush
+> +      current is limited by controlling a constant output voltage ramp rate.
+> +      If not set, the inrush control mechanism is active current limiting.
+> +    type: boolean
+> +
+> +  adi,fault-log-enable:
+> +    description:
+> +      If set, enables logging fault registers and ADC data into EEPROM upon a
+> +      fault.
+> +    type: boolean
+> +
+> +  adi,vpower-drns-enable:
+> +    description:
+> +      If set, enables the attenuated MOSFET drain voltage to be monitored. This
+> +      effectively means that the MOSFET power is monitored. If not set, the
+> +      attenuated input voltage (and hence input power) is monitored.
+> +    type: boolean
+> +
+> +  adi,external-fault-fet-off-enable:
+> +    description: Turns MOSFET off following an external fault.
+> +    type: boolean
+> +
+> +  adi,undervoltage-retry-disable:
+> +    description: Do not retry to turn on the MOSFET after an undervoltage fault.
+> +    type: boolean
+> +
+> +  adi,overvoltage-retry-disable:
+> +    description: Do not retry to turn on the MOSFET after an overvoltage fault.
+> +    type: boolean
+> +
+> +  adi,external-fault-retry-enable:
+> +    description: Retry to turn on the MOSFET retry after an external fault.
+> +    type: boolean
+> +
+> +  adi,overcurrent-retries:
+> +    description: Configures auto-retry following an Overcurrent fault.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [latch-off, "1", "7", unlimited]
+> +    default: latch-off
+> +
+> +  adi,fet-bad-retries:
+> +    description:
+> +      Configures auto-retry following a FET bad fault and a consequent MOSFET
+> +      turn off.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [latch-off, "1", "7", unlimited]
+> +    default: latch-off
+> +
+> +  adi,pgio1-func:
+> +    description: Configures the function of the PGIO1 pin.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [inverted_power_good, power_good, gpio]
+> +    default: inverted_power_good
+> +
+> +  adi,pgio2-func:
+> +    description: Configures the function of the PGIO2 pin.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [inverted_power_good, power_good, gpio, active_current_limiting]
+> +    default: inverted_power_good
+> +
+> +  adi,pgio3-func:
+> +    description: Configures the function of the PGIO3 pin.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [inverted_power_good_input, power_good_input, gpio]
+> +    default: inverted_power_good_input
+> +
+> +  adi,pgio4-func:
+> +    description: Configures the function of the PGIO4 pin.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [inverted_external_fault, external_fault, gpio]
+> +    default: inverted_external_fault
+> +
+> +  adi,gpio-on-adio1:
+> +    description: If set, the ADIO1 pin is used as a GPIO.
+> +    type: boolean
+> +
+> +  adi,gpio-on-adio2:
+> +    description: If set, the ADIO2 pin is used as a GPIO.
+> +    type: boolean
+> +
+> +  adi,gpio-on-adio3:
+> +    description: If set, the ADIO3 pin is used as a GPIO.
+> +    type: boolean
+> +
+> +  adi,gpio-on-adio4:
+> +    description: If set, the ADIO4 pin is used as a GPIO.
+> +    type: boolean
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +dependencies:
+> +  adi,gpio-on-adio1:
+> +    - gpio-controller
+> +    - '#gpio-cells'
+> +  adi,gpio-on-adio2:
+> +    - gpio-controller
+> +    - '#gpio-cells'
+> +  adi,gpio-on-adio3:
+> +    - gpio-controller
+> +    - '#gpio-cells'
+> +  adi,gpio-on-adio4:
+> +    - gpio-controller
+> +    - '#gpio-cells'
+> +  adi,external-fault-retry-enable:
+> +    - adi,pgio4-func
+> +  adi,external-fault-fet-off-enable:
+> +    - adi,pgio4-func
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - adi,rsense-nano-ohms
+> +
+> +allOf:
+> +  - if:
+> +      required:
+> +        - adi,pgio1-func
+> +    then:
+> +      if:
+> +        properties:
+> +          adi,pgio1-func:
+> +            const: gpio
+> +      then:
+> +        required:
+> +          - gpio-controller
+> +          - '#gpio-cells'
 
-Applied.
+if:
+  properties:
+    adi,pgio1-func:
+      const: gpio
+  required:
+    - adi,pgio1-func
+then:
+  required:
+    - gpio-controller
+    - '#gpio-cells'
 
-Guenter
+With that and the following ones fixed,
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
