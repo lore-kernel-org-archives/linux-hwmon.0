@@ -1,176 +1,92 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E9E2D374A;
-	Wed,  3 Sep 2025 19:18:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A8D36932C;
+	Wed,  3 Sep 2025 19:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756927091; cv=none; b=PBXdLkCpy7c2hNNsmWOoME7s3ave0Ro+2m//2/A/B2c4Ba+kliU+lQ3S3D/C3pH/hkNKuTKwV05L4/sjBRW4G9AwTSnBGxeqR+pgSxiq9Sq3/tcYyCReWiUtAQjPmpBvnYNy6mCydEItte5Z+KsB61ZZMzcCL+fxfsLD3mBK9OY=
+	t=1756927385; cv=none; b=b9QDt+fhXcTVC4TK1AfyTq4NjSY0NsJzjUa+2WGcGpjRyvQSpGoRPV0Lz11KdAVsgbhHn/p12bOURZGsTEPiOLPvNdzx7G23/RlIEWODz3POL7TCQkgbofdfAlXcAbt+CdrQbop/UsZ7emCdcjXFf34ggLCzOWwnXudImH+58Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756927091; c=relaxed/simple;
-	bh=xV6xUW0ek1YrmfzGK0fIqZX3dLfJdOS48+64L23kSHc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T8KoP4xZ4ulDLCBxfiH4M4/48nj9pVqcSQ7DlcdYpl20rHEn+tiRzRVbbdYuaIBvPIPmggdAuHQ2H+D4tFGiYqvjOFd5LHYmCosefwePCGF9F2G3Q6ctme5EJHrsmBIOe+1vDKFh8UEwzFH6X3SKd39moaxWZzsnD4vzGivKXxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGbUQaCx; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1756927385; c=relaxed/simple;
+	bh=dDZu8UanmT0ZpvuUXQnVzQKPf/1q/pqz/i1RIcgMeuI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DPkfxh08DS/tuDAZTcU7W9q7p9DGi8zjyiOmiNEFeGIgby8lai9DXYfeNR4Weq+CVFQrg9lV8ASU9VwEomVwFCZHHZspgnlO0Bzbm1iGFfxn0coUFMXvwsr5IZ1WuBJYUuJJc6Kivo8C1n8ukFvqoQf0rECCvN61Jvi4cZWla3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnlJyLAQ; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGbUQaCx"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-afec5651966so46541966b.2;
-        Wed, 03 Sep 2025 12:18:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnlJyLAQ"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b4c8bee055cso128841a12.2;
+        Wed, 03 Sep 2025 12:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756927088; x=1757531888; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEW9ENpf9cDlrx7DZwA8LgLuO53fBauEZC+hXrAMCLw=;
-        b=mGbUQaCxS99di+FcoJuQOvf2fdZhYWb/40mkKafOBsSZ6WenDerd68Y2+01T/+3zNG
-         X0BW1k3pT3gXTQN13ceTsYIhBJ/ttewZCnztM8ZVajVu2bEpY4AjmjM1NIEAtdHswRC0
-         7NfGh+AFan0rYmZtyTvrd/cxNwMmoDXe707EWbRF7KyI92wAVzMnX9ZINOy5spzJz39y
-         R9vIx87Zog88e84z+cENemrnsKfOPFrHaSUPksaks+b4jrAjPEFVqHf9l7GaTWM76H8B
-         H2CYq9yEC5mnu4LvHgfYA3bo2tEY1e7lhnq29MUxw6aIfuEafEpGT61T3QjCNKQQotGF
-         V/2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756927088; x=1757531888;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1756927383; x=1757532183; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NEW9ENpf9cDlrx7DZwA8LgLuO53fBauEZC+hXrAMCLw=;
-        b=DEpR8naCNa//kn2Z9DvmqzEEjN2axMhcEjbwHxOfqsx11Kj/N08GJ3hkSH4EENFL8O
-         4zZxhiBd3Ubz5AyuneuibXoQ9ONb3IytM7qz2zfoDJuXf+4BmtqB59CjmQuNH88LDoAu
-         aEhcF11cNR076nMgteaq0lzpJ0CrifCEidZ07Jj6s0uWTDmyqMJEWpFy++DnSabZ8mW6
-         N3ftukZOKaeOWATksSPFiQBsicHp1Bnong04+UZsFUU/DrTqP2dUZjY9uaRGpw5OsxdH
-         yBb2eiS3kNNcrpfVVv7cGXC348mB+yxaO+gx4OXPZkfUNEthgQHHx7e2gIyZLJXoCrRI
-         Tetw==
-X-Forwarded-Encrypted: i=1; AJvYcCVdYEx/yvM3vN88962MQljhQbiV8JQRostHGLIvSXuyhJcOchrP3aMYEJ2N3uC8NoQCyJt64RiYfuOSYW7C@vger.kernel.org, AJvYcCVmliSKD5yJ/BZZiQjStvZ+nqGXhfIlKND0PcpPQ3DVlVg7QFxxtK6OYpymbj0j/HFzREnlzI4u8BboeaM=@vger.kernel.org, AJvYcCVwQ24hVrxDrcIbDMJipfs4voYPItFYGai18cMOc8sKjMU0hVLYGtvhjJETfJLB67gUt3KuY0+UjQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEhbLfe61gBfcH8HDULblgazx7eUI6g8kTTZ9gbVmoxIuUq/kM
-	faou+pN/ZZjkmPjcsYfOa0KBh16bdQDzP8vvYKl/YMYJD18bgQxKH9ng
-X-Gm-Gg: ASbGncvk56GmukXd9mHW44/b91KbbxWz/9LPvbyJERcDr/tZL2aUDFXqtsaSdqf+hAp
-	PkUmeqgM513rm+mJUeO0dmuGKvX9veUEencodm15xnMJDGikRRfhMASX0ZPZ1kQaO1sX5QVC8na
-	pFlJjOGwE/h9NPbJPjvp4C9TtfpEUsiGR/oP/8sh98TN0LvnHjbavQg7YMZXNNsbZvc59NSyZJT
-	8d0fflfRCT2M8hZK0hJ4/HAjmxuyzEp5SSDa82NtBNT6UVcwPvQo0R6hU3sqvtd5Wb3KA2r4E7/
-	mGwdFlwetlN3/+F9yCTe9tiX/8tZRYV4LrHp+qB/Ge09keQ/+dreqOQT87dwnEpMFY5qPg623Hm
-	CoX+rK1AEvF51HDQ0Cl4d+rahgJmpOP8rP446GA7vqSc=
-X-Google-Smtp-Source: AGHT+IGG1P+vjgNwczDz7OVnOVisBAgIx6LfcQ1UgBuGEG4CyxQSAhr+ZiqH6bvF46VroJFgJmB7xw==
-X-Received: by 2002:a17:907:940c:b0:b04:5b47:8bd5 with SMTP id a640c23a62f3a-b045b478ebfmr630304066b.25.1756927087994;
-        Wed, 03 Sep 2025 12:18:07 -0700 (PDT)
-Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b042523ee7bsm887768666b.109.2025.09.03.12.18.07
+        bh=yso2jy4NX4diTneo1tU7VM8UpOKgDZTxHV3gGfywGtU=;
+        b=GnlJyLAQ1Wd8DHfBdHge0Y3sJMEnvKOPN987Ftxltf+51YygA08enQ+W01CidIoe2S
+         cdN1j+aHOsTNO3K6gXTw7Bo0rWZTMWCBRb9Rjq7i8qOndXTSoN0fkLNAwFclafPpFVuP
+         XyWjxmnoXNbihME4S3gi6f43cC4MA1ml9DJ16Y+zzvrqPAYnrHrcgxDmxvpwaK6ByNoY
+         /SaMG3H69cfxWH1LPQ1hhqjJ9MCdDhSfJJSM02+TweUs9jyrVuhKwWMY/dQDZlE6QOXs
+         ckqj1MGaz0e9uLXlSYQIwgfotBJYIim8kTUoUbMuTj2Na3vCinoAQjvdEAEPAhaRrSOo
+         KNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756927383; x=1757532183;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yso2jy4NX4diTneo1tU7VM8UpOKgDZTxHV3gGfywGtU=;
+        b=q4lh0DYTDvfW4q2Xv8u+p70JYXB1ghMsklR8KJg93+XFI/R/vu4cTQwbFuLLXWDi5v
+         krJCW6kcHQjZfP6R5e7ynirLByUKePWJaEu3hqbHfJeNFhTY4rv0rggvR9eJyPPYVnCr
+         gOM44Y+QqCO9wg/FVD+zZyE50T7Ld6L1S+Fw6zo5ENUwLeSbKnyuNmQ3GlV3BEukVWog
+         BFotD6a5IKlNJ05n8LlTcbH34SpvkYpaoYozhY8BqYvUeZ769Uj2io8gmP7Qy7XidsM0
+         LaxICDbPRcMisLv0TM7yh+oxdnLBlJ4JI6Zc9tfrEgZKHLEoX2Ly14bQFz8AIITgF3PA
+         1V2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUY5e3ibLLLUF/BlPb4B+yK4XHgdkhG0gUdDdHuXKwbDkg5KrsN9MrrpeAEBVmsjedXlG8wfXCu5B3CGg==@vger.kernel.org, AJvYcCW7/1yw63pK0R41lCjZi86R43D8JwD5NH7O620oDmvNbGGSK0yixfeRPLBODpO68qG+mOfni9ER/bsTOIYZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw89G//ku+VprsgqWJpTE5njmqmemUbmnZAqGU4ariB1/qQF9z
+	TS1I+/uJ8RYSrPd3281qHHOp4WWWYE9xRe7d27tA7Z1fm8enskyPxYrc
+X-Gm-Gg: ASbGncsAuH+ceid/gvb8iRO3Dl9sUzIbgqif8YzY+KtnZLThfXH0CKm8VlKD4s9dBY0
+	KUig4spMRY0ryVuKLhQjorKxjirrXnS102DkSDvJK+kzcoxYPAnyw2jhlMRXt2OwbmP/kdMb2eQ
+	7+Y+v41DAyGLnt07FQkKPgTFEp6gqwre+p17v9FYsB+76a9JNKYZckua+gTX2PoxQ/KAe72zCRm
+	fuXlyNv0RVtszxDFDKK33iqM1E3D78PwypxXlqes6F9UNf+Gh3rWHomvM+npOGyDQwO4egKne6C
+	vT3fSQvNjB1anD0XGUV6OXVpeWxZTjJ1UwWidijiQXe/g1nDPiUbbxXR3EJVZxuPUANM7Ofs/sD
+	CsJmhmJ9OzynzU/rbBLKcSBqiP7X4rcRheixnbfhbdXB0IQ==
+X-Google-Smtp-Source: AGHT+IHyElFvdFQp03hwlkVvhHei7OEM97lamNEQUicXhwoB+GRPo5jeUlAP98cbWr/l1rLADZBh2g==
+X-Received: by 2002:a17:903:3d07:b0:24c:9306:c30e with SMTP id d9443c01a7336-24c9306c595mr41630895ad.40.1756927383078;
+        Wed, 03 Sep 2025 12:23:03 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32b5f94a2a4sm2872989a91.15.2025.09.03.12.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 12:18:07 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: =?UTF-8?q?Jan=20Philipp=20Gro=C3=9F?= <janphilippgross@mailbox.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+        Wed, 03 Sep 2025 12:23:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 3 Sep 2025 12:23:01 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Michael Tandy <git@mjt.me.uk>, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add PRIME Z270-A
-Date: Wed,  3 Sep 2025 21:17:26 +0200
-Message-ID: <20250903191736.14451-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.51.0
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) sort declarations
+Message-ID: <740c56de-336e-4a7b-97aa-52ca54bb5d58@roeck-us.net>
+References: <20250903184753.5876-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250903184753.5876-1-eugene.shalygin@gmail.com>
 
-Add support for the PRIME Z270-A board.
+On Wed, Sep 03, 2025 at 08:47:36PM +0200, Eugene Shalygin wrote:
+> From: Michael Tandy <git@mjt.me.uk>
+> 
+> Sort all the declarations in the source file. Contributors are asked
+> o insert new entries keeping alphabetical order, but the existing
+> ones were not completely sorted.
+> 
+> Signed-off-by: Michael Tandy <git@mjt.me.uk>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Tested-by: Jan Philipp Groß <janphilippgross@mailbox.org>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/asus_ec_sensors.rst |  1 +
- drivers/hwmon/asus-ec-sensors.c         | 27 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+Applied.
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index e5052159ffa0..baf9eba5957c 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -8,6 +8,7 @@ Supported boards:
-  * PRIME X470-PRO
-  * PRIME X570-PRO
-  * PRIME X670E-PRO WIFI
-+ * PRIME Z270-A
-  * Pro WS X570-ACE
-  * Pro WS WRX90E-SAGE SE
-  * ProArt X570-CREATOR WIFI
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index ecb058e8755b..f580ff2e212f 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -60,6 +60,8 @@ static char *mutex_path_override;
- 
- #define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
- 
-+#define ASUS_HW_ACCESS_MUTEX_SB_PCI0_LPCB_SIO1_MUT0 "\\_SB_.PCI0.LPCB.SIO1.MUT0"
-+
- #define MAX_IDENTICAL_BOARD_VARIATIONS	3
- 
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
-@@ -181,6 +183,7 @@ enum board_family {
- 	family_amd_600_series,
- 	family_amd_800_series,
- 	family_amd_wrx_90,
-+	family_intel_200_series,
- 	family_intel_300_series,
- 	family_intel_400_series,
- 	family_intel_600_series,
-@@ -306,6 +309,18 @@ static const struct ec_sensor_info sensors_family_amd_wrx_90[] = {
- 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x01, 0x04),
- };
- 
-+static const struct ec_sensor_info sensors_family_intel_200[] = {
-+	[ec_sensor_temp_chipset] =
-+		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-+	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-+	[ec_sensor_temp_mb] =
-+		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-+	[ec_sensor_temp_t_sensor] =
-+		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-+	[ec_sensor_fan_cpu_opt] =
-+		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
-+};
-+
- static const struct ec_sensor_info sensors_family_intel_300[] = {
- 	[ec_sensor_temp_chipset] =
- 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-@@ -479,6 +494,13 @@ static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
- 	.family = family_amd_600_series,
- };
- 
-+static const struct ec_board_info board_info_prime_z270_a = {
-+	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_LPCB_SIO1_MUT0,
-+	.family = family_intel_200_series,
-+};
-+
- static const struct ec_board_info board_info_pro_art_b550_creator = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -685,6 +707,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_prime_x570_pro),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X670E-PRO WIFI",
- 					&board_info_prime_x670e_pro_wifi),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME Z270-A",
-+					&board_info_prime_z270_a),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
- 					&board_info_pro_art_b550_creator),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI",
-@@ -1223,6 +1247,9 @@ static int asus_ec_probe(struct platform_device *pdev)
- 	case family_amd_wrx_90:
- 		ec_data->sensors_info = sensors_family_amd_wrx_90;
- 		break;
-+	case family_intel_200_series:
-+		ec_data->sensors_info = sensors_family_intel_200;
-+		break;
- 	case family_intel_300_series:
- 		ec_data->sensors_info = sensors_family_intel_300;
- 		break;
--- 
-2.51.0
-
+Guenter
