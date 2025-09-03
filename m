@@ -1,70 +1,72 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1594F17A2F6;
-	Wed,  3 Sep 2025 18:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E9E2D374A;
+	Wed,  3 Sep 2025 19:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756925292; cv=none; b=uO8lzg81xZyhcFpZEGLZqNdlu+GHcWxxRxNfyuhdpU51z4c9aQ00B2BvmOEZlneVJ5GMkDF2obG7nCncfnTYJr45Y9ZB+18W7l7fBfLYoGpnzTDqoGxj9/t/9ie3fv+ZP8+3JOHB9Ub+tn+qnFemDZI9EcrhaE4arr+CSkGjRzo=
+	t=1756927091; cv=none; b=PBXdLkCpy7c2hNNsmWOoME7s3ave0Ro+2m//2/A/B2c4Ba+kliU+lQ3S3D/C3pH/hkNKuTKwV05L4/sjBRW4G9AwTSnBGxeqR+pgSxiq9Sq3/tcYyCReWiUtAQjPmpBvnYNy6mCydEItte5Z+KsB61ZZMzcCL+fxfsLD3mBK9OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756925292; c=relaxed/simple;
-	bh=XMPVwIUY68ac0ldSTejHDT9vUAHy4cmll0lFIAHwuIA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ln3n9Ch7R/oiEInlSYZZLDi7uSX0eq5O9mvxGU4VlgLCBkBGa4/MeMisqu0yZaJExN0PGu88npkq66dk9AW7sG/5U1YvLMeK3dkrHE6zZBCjlNUJtagqW/33g3Zy0oixExGqzX/W/rDdKUv24dvewBAdG5oCqk5MWfPvdrV2KLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrn2lb3/; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1756927091; c=relaxed/simple;
+	bh=xV6xUW0ek1YrmfzGK0fIqZX3dLfJdOS48+64L23kSHc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T8KoP4xZ4ulDLCBxfiH4M4/48nj9pVqcSQ7DlcdYpl20rHEn+tiRzRVbbdYuaIBvPIPmggdAuHQ2H+D4tFGiYqvjOFd5LHYmCosefwePCGF9F2G3Q6ctme5EJHrsmBIOe+1vDKFh8UEwzFH6X3SKd39moaxWZzsnD4vzGivKXxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGbUQaCx; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrn2lb3/"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-61caf8fc422so222883a12.2;
-        Wed, 03 Sep 2025 11:48:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGbUQaCx"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-afec5651966so46541966b.2;
+        Wed, 03 Sep 2025 12:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756925288; x=1757530088; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756927088; x=1757531888; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnEq9cYri7Yu6Xes2AYp1EmwTJ9D6Qx1Hfho2heu06I=;
-        b=nrn2lb3/kIGRS3x/iR48o/6UD/V4VQfXfKoG5wTPq+uVtO+I9sI/zME9QOwRRjc1TN
-         OAK6HYLAC17CdkuZWPkgXWjpArlDrHdP2/yJiyX0IriXb2oPXI1Hf2bK5Tcg+G/aFB+w
-         lvugeceDNpL5ETSO1HCr9fJ+au2Y0FkE3EwqRQhUjABhb38HRTIdwjaIAmuFnqY+H1VU
-         J16iFGmFsXfMZXF7eEsezuXcEJSPbC1IiGpt2L90WNzZNihzIG0L82Z9IwQhdsHCPjnH
-         DQKKoZd+sD0bZ+qI6BNJaZEi7cpK2wkj0///SNvejGNHh+PPi99zxA/HrzHbcsAW501J
-         Fdrg==
+        bh=NEW9ENpf9cDlrx7DZwA8LgLuO53fBauEZC+hXrAMCLw=;
+        b=mGbUQaCxS99di+FcoJuQOvf2fdZhYWb/40mkKafOBsSZ6WenDerd68Y2+01T/+3zNG
+         X0BW1k3pT3gXTQN13ceTsYIhBJ/ttewZCnztM8ZVajVu2bEpY4AjmjM1NIEAtdHswRC0
+         7NfGh+AFan0rYmZtyTvrd/cxNwMmoDXe707EWbRF7KyI92wAVzMnX9ZINOy5spzJz39y
+         R9vIx87Zog88e84z+cENemrnsKfOPFrHaSUPksaks+b4jrAjPEFVqHf9l7GaTWM76H8B
+         H2CYq9yEC5mnu4LvHgfYA3bo2tEY1e7lhnq29MUxw6aIfuEafEpGT61T3QjCNKQQotGF
+         V/2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756925288; x=1757530088;
+        d=1e100.net; s=20230601; t=1756927088; x=1757531888;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pnEq9cYri7Yu6Xes2AYp1EmwTJ9D6Qx1Hfho2heu06I=;
-        b=pQ85zc05BXsJxyiorg2j31HI9eATJ3Nh6tTB4l9CmC1LS8FfQBYvym3GCylL98pVmb
-         gohTjEToJJcGQpoIijDSNbBZD1/4RC2umI/XWc7hgr2JPEvJZGlhkrcqTeudNe7QF+us
-         FkyARHLxrAyhwaFMd0A4zeg602zCpcS9WBVDfPMz4iRC0TfPFc7wdlB7g4tSDIiebF7a
-         dVotxZAcfnIR9K70zUoWuBINlCwP7/fyglM30vlsbcAEd7BWLZnRVEayP39EvHeoHCz+
-         98o3mLfEg66C/LYT1yskrDwx/sJ4PKluDs1VCz9f4V8OgitxU7GIgDHOUhjWdLTZjtKT
-         JaGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6F/DDlcYi2v+WJb3ividAxqC1UiPuxdxIPrdnxm2UsTpHdY6zG9PJuD2ZL83J0nl8eP0q79klbTI+AWzn@vger.kernel.org, AJvYcCXTICoD/3YLv6bfn7q+3mcSY/ZFrN5TTlWiXlvxFbSOdu5jXEDEYfxcRCKRmSD5seLSRpwSkR9i2NYz5A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCiqJwQniJFlIPUoiOUyN/Xl/RTeK53llfUXUooBzehJSlPJLh
-	yOSsPQ4UhGu6tPn5V5ehARX2veiVYcShOm/Bw2qrchIejNNRvBm3SuaVor33ew==
-X-Gm-Gg: ASbGncvQdYlxdeEITaT+hEAgcKSE2lhAgAvRwfJ5T2QCB+opuWaOJ97ORINe9gS0VZk
-	2n0Gmta2ItK4Nz9O3ROvpbsIddeDRZoEcQa8gx9kVxrUZI9x71sb3bFaPkpvfl2/ehnv/9+LRcB
-	JEw8brvYiD0WOjxRYqV1X5Dn2qW9YnOac0QzLP+x2d5yrOYBftrDxLkI5+hjCYzdbj9gGtv78GM
-	wR1K0IEzTfDll+LC6quV75JNy6hIh8lgkIr8sVA149HOQJuRjclEUi+Ukh9i1/uGE8EylwWVAjf
-	xD/MoB6Ev+WLXRLiH8SRGntVUjPxK6zEjGRToR2VCidew9gWiDk84XPxNsLG2pY9kKpQt6eN1Wo
-	yXw4JRVQzTOvLhlZFjBviXCfRUpLO5evqKgu/2VubcMc=
-X-Google-Smtp-Source: AGHT+IHW1e82FTZpcbEFE0hvW5wWmnYWGg38OrG1PB8/7dTy0kCCNgAjX6+Bm7Tz8VrE5BbF3KipFQ==
-X-Received: by 2002:a05:6402:504b:b0:618:aed3:38a with SMTP id 4fb4d7f45d1cf-61d26ebbf9fmr13588130a12.31.1756925288153;
-        Wed, 03 Sep 2025 11:48:08 -0700 (PDT)
+        bh=NEW9ENpf9cDlrx7DZwA8LgLuO53fBauEZC+hXrAMCLw=;
+        b=DEpR8naCNa//kn2Z9DvmqzEEjN2axMhcEjbwHxOfqsx11Kj/N08GJ3hkSH4EENFL8O
+         4zZxhiBd3Ubz5AyuneuibXoQ9ONb3IytM7qz2zfoDJuXf+4BmtqB59CjmQuNH88LDoAu
+         aEhcF11cNR076nMgteaq0lzpJ0CrifCEidZ07Jj6s0uWTDmyqMJEWpFy++DnSabZ8mW6
+         N3ftukZOKaeOWATksSPFiQBsicHp1Bnong04+UZsFUU/DrTqP2dUZjY9uaRGpw5OsxdH
+         yBb2eiS3kNNcrpfVVv7cGXC348mB+yxaO+gx4OXPZkfUNEthgQHHx7e2gIyZLJXoCrRI
+         Tetw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdYEx/yvM3vN88962MQljhQbiV8JQRostHGLIvSXuyhJcOchrP3aMYEJ2N3uC8NoQCyJt64RiYfuOSYW7C@vger.kernel.org, AJvYcCVmliSKD5yJ/BZZiQjStvZ+nqGXhfIlKND0PcpPQ3DVlVg7QFxxtK6OYpymbj0j/HFzREnlzI4u8BboeaM=@vger.kernel.org, AJvYcCVwQ24hVrxDrcIbDMJipfs4voYPItFYGai18cMOc8sKjMU0hVLYGtvhjJETfJLB67gUt3KuY0+UjQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEhbLfe61gBfcH8HDULblgazx7eUI6g8kTTZ9gbVmoxIuUq/kM
+	faou+pN/ZZjkmPjcsYfOa0KBh16bdQDzP8vvYKl/YMYJD18bgQxKH9ng
+X-Gm-Gg: ASbGncvk56GmukXd9mHW44/b91KbbxWz/9LPvbyJERcDr/tZL2aUDFXqtsaSdqf+hAp
+	PkUmeqgM513rm+mJUeO0dmuGKvX9veUEencodm15xnMJDGikRRfhMASX0ZPZ1kQaO1sX5QVC8na
+	pFlJjOGwE/h9NPbJPjvp4C9TtfpEUsiGR/oP/8sh98TN0LvnHjbavQg7YMZXNNsbZvc59NSyZJT
+	8d0fflfRCT2M8hZK0hJ4/HAjmxuyzEp5SSDa82NtBNT6UVcwPvQo0R6hU3sqvtd5Wb3KA2r4E7/
+	mGwdFlwetlN3/+F9yCTe9tiX/8tZRYV4LrHp+qB/Ge09keQ/+dreqOQT87dwnEpMFY5qPg623Hm
+	CoX+rK1AEvF51HDQ0Cl4d+rahgJmpOP8rP446GA7vqSc=
+X-Google-Smtp-Source: AGHT+IGG1P+vjgNwczDz7OVnOVisBAgIx6LfcQ1UgBuGEG4CyxQSAhr+ZiqH6bvF46VroJFgJmB7xw==
+X-Received: by 2002:a17:907:940c:b0:b04:5b47:8bd5 with SMTP id a640c23a62f3a-b045b478ebfmr630304066b.25.1756927087994;
+        Wed, 03 Sep 2025 12:18:07 -0700 (PDT)
 Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61cfc575b94sm11860457a12.53.2025.09.03.11.48.07
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b042523ee7bsm887768666b.109.2025.09.03.12.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 11:48:07 -0700 (PDT)
+        Wed, 03 Sep 2025 12:18:07 -0700 (PDT)
 From: Eugene Shalygin <eugene.shalygin@gmail.com>
 To: eugene.shalygin@gmail.com
-Cc: Michael Tandy <git@mjt.me.uk>,
+Cc: =?UTF-8?q?Jan=20Philipp=20Gro=C3=9F?= <janphilippgross@mailbox.org>,
 	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) sort declarations
-Date: Wed,  3 Sep 2025 20:47:36 +0200
-Message-ID: <20250903184753.5876-1-eugene.shalygin@gmail.com>
+Subject: [PATCH] hwmon: (asus-ec-sensors) add PRIME Z270-A
+Date: Wed,  3 Sep 2025 21:17:26 +0200
+Message-ID: <20250903191736.14451-1-eugene.shalygin@gmail.com>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -72,271 +74,103 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Michael Tandy <git@mjt.me.uk>
+Add support for the PRIME Z270-A board.
 
-Sort all the declarations in the source file. Contributors are asked
-o insert new entries keeping alphabetical order, but the existing
-ones were not completely sorted.
-
-Signed-off-by: Michael Tandy <git@mjt.me.uk>
+Tested-by: Jan Philipp Groß <janphilippgross@mailbox.org>
 Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
- drivers/hwmon/asus-ec-sensors.c | 170 ++++++++++++++++----------------
- 1 file changed, 85 insertions(+), 85 deletions(-)
+ Documentation/hwmon/asus_ec_sensors.rst |  1 +
+ drivers/hwmon/asus-ec-sensors.c         | 27 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index e5052159ffa0..baf9eba5957c 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -8,6 +8,7 @@ Supported boards:
+  * PRIME X470-PRO
+  * PRIME X570-PRO
+  * PRIME X670E-PRO WIFI
++ * PRIME Z270-A
+  * Pro WS X570-ACE
+  * Pro WS WRX90E-SAGE SE
+  * ProArt X570-CREATOR WIFI
 diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 728e21fddae8..ecb058e8755b 100644
+index ecb058e8755b..f580ff2e212f 100644
 --- a/drivers/hwmon/asus-ec-sensors.c
 +++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -384,6 +384,52 @@ struct ec_board_info {
- 	enum board_family family;
+@@ -60,6 +60,8 @@ static char *mutex_path_override;
+ 
+ #define ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0 "\\_SB_.PCI0.SBRG.SIO1.MUT0"
+ 
++#define ASUS_HW_ACCESS_MUTEX_SB_PCI0_LPCB_SIO1_MUT0 "\\_SB_.PCI0.LPCB.SIO1.MUT0"
++
+ #define MAX_IDENTICAL_BOARD_VARIATIONS	3
+ 
+ /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+@@ -181,6 +183,7 @@ enum board_family {
+ 	family_amd_600_series,
+ 	family_amd_800_series,
+ 	family_amd_wrx_90,
++	family_intel_200_series,
+ 	family_intel_300_series,
+ 	family_intel_400_series,
+ 	family_intel_600_series,
+@@ -306,6 +309,18 @@ static const struct ec_sensor_info sensors_family_amd_wrx_90[] = {
+ 		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x01, 0x04),
  };
  
-+static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
-+	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
-+		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_amd_500_series,
++static const struct ec_sensor_info sensors_family_intel_200[] = {
++	[ec_sensor_temp_chipset] =
++		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
++	[ec_sensor_temp_cpu] = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
++	[ec_sensor_temp_mb] =
++		EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
++	[ec_sensor_temp_t_sensor] =
++		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
++	[ec_sensor_fan_cpu_opt] =
++		EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xbc),
 +};
 +
-+static const struct ec_board_info board_info_crosshair_viii_hero = {
-+	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
-+		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
-+		SENSOR_IN_CPU_CORE,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_amd_500_series,
-+};
-+
-+static const struct ec_board_info board_info_crosshair_viii_impact = {
-+	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
-+		SENSOR_IN_CPU_CORE,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_amd_500_series,
-+};
-+
-+static const struct ec_board_info board_info_crosshair_x670e_gene = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
-+static const struct ec_board_info board_info_crosshair_x670e_hero = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
-+		SENSOR_SET_TEMP_WATER,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_maximus_vi_hero = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR |
-@@ -393,6 +439,22 @@ static const struct ec_board_info board_info_maximus_vi_hero = {
- 	.family = family_intel_300_series,
- };
- 
-+static const struct ec_board_info board_info_maximus_xi_hero = {
-+	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-+		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_intel_300_series,
-+};
-+
-+static const struct ec_board_info board_info_maximus_z690_formula = {
-+	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-+		SENSOR_SET_TEMP_WATER | SENSOR_FAN_WATER_FLOW,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-+	.family = family_intel_600_series,
-+};
-+
- static const struct ec_board_info board_info_prime_x470_pro = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-@@ -417,6 +479,14 @@ static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
+ static const struct ec_sensor_info sensors_family_intel_300[] = {
+ 	[ec_sensor_temp_chipset] =
+ 		EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
+@@ -479,6 +494,13 @@ static const struct ec_board_info board_info_prime_x670e_pro_wifi = {
  	.family = family_amd_600_series,
  };
  
-+static const struct ec_board_info board_info_pro_art_b550_creator = {
++static const struct ec_board_info board_info_prime_z270_a = {
 +	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
-+		SENSOR_TEMP_T_SENSOR |
-+		SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-+	.family = family_amd_500_series,
++		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_LPCB_SIO1_MUT0,
++	.family = family_intel_200_series,
 +};
 +
- static const struct ec_board_info board_info_pro_art_x570_creator_wifi = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_VRM |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_FAN_CPU_OPT |
-@@ -441,14 +511,6 @@ static const struct ec_board_info board_info_pro_art_x870E_creator_wifi = {
- 	.family = family_amd_800_series,
- };
- 
--static const struct ec_board_info board_info_pro_art_b550_creator = {
--	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_FAN_CPU_OPT,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--	.family = family_amd_500_series,
--};
--
- static const struct ec_board_info board_info_pro_ws_wrx90e_sage_se = {
- 	/* Board also has a nct6798 with 7 more fans and temperatures */
- 	.sensors = SENSOR_TEMP_CPU_PACKAGE | SENSOR_TEMP_T_SENSOR |
-@@ -466,68 +528,6 @@ static const struct ec_board_info board_info_pro_ws_x570_ace = {
- 	.family = family_amd_500_series,
- };
- 
--static const struct ec_board_info board_info_crosshair_x670e_hero = {
--	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
--		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
--		SENSOR_SET_TEMP_WATER,
--	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
--	.family = family_amd_600_series,
--};
--
--static const struct ec_board_info board_info_crosshair_x670e_gene = {
--	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
--	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
--	.family = family_amd_600_series,
--};
--
--static const struct ec_board_info board_info_crosshair_viii_dark_hero = {
--	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW |
--		SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--	.family = family_amd_500_series,
--};
--
--static const struct ec_board_info board_info_crosshair_viii_hero = {
--	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--		SENSOR_FAN_WATER_FLOW | SENSOR_CURR_CPU |
--		SENSOR_IN_CPU_CORE,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--	.family = family_amd_500_series,
--};
--
--static const struct ec_board_info board_info_maximus_xi_hero = {
--	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR |
--		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
--		SENSOR_FAN_CPU_OPT | SENSOR_FAN_WATER_FLOW,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--	.family = family_intel_300_series,
--};
--
--static const struct ec_board_info board_info_maximus_z690_formula = {
--	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
--		SENSOR_SET_TEMP_WATER | SENSOR_FAN_WATER_FLOW,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
--	.family = family_intel_600_series,
--};
--
--static const struct ec_board_info board_info_crosshair_viii_impact = {
--	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
--		SENSOR_FAN_CHIPSET | SENSOR_CURR_CPU |
--		SENSOR_IN_CPU_CORE,
--	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--	.family = family_amd_500_series,
--};
--
- static const struct ec_board_info board_info_strix_b550_e_gaming = {
+ static const struct ec_board_info board_info_pro_art_b550_creator = {
  	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
- 		SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
-@@ -645,6 +645,15 @@ static const struct ec_board_info board_info_strix_z790_i_gaming_wifi = {
- 	.family = family_intel_700_series,
- };
- 
-+static const struct ec_board_info board_info_tuf_gaming_x670e_plus = {
-+	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
-+		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
-+		SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT |
-+		SENSOR_FAN_CPU_OPT,
-+	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
-+	.family = family_amd_600_series,
-+};
-+
- static const struct ec_board_info board_info_zenith_ii_extreme = {
- 	.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB | SENSOR_TEMP_T_SENSOR |
- 		SENSOR_TEMP_VRM | SENSOR_SET_TEMP_WATER |
-@@ -657,15 +666,6 @@ static const struct ec_board_info board_info_zenith_ii_extreme = {
- 	.family = family_amd_500_series,
- };
- 
--static const struct ec_board_info board_info_tuf_gaming_x670e_plus = {
--	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
--		SENSOR_TEMP_MB | SENSOR_TEMP_VRM |
--		SENSOR_TEMP_WATER_IN | SENSOR_TEMP_WATER_OUT |
--		SENSOR_FAN_CPU_OPT,
--	.mutex_path = ACPI_GLOBAL_LOCK_PSEUDO_PATH,
--	.family = family_amd_600_series,
--};
--
- #define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, board_info)                      \
- 	{                                                                      \
- 		.matches = {                                                   \
-@@ -685,14 +685,14 @@ static const struct dmi_system_id dmi_table[] = {
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -685,6 +707,8 @@ static const struct dmi_system_id dmi_table[] = {
  					&board_info_prime_x570_pro),
  	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X670E-PRO WIFI",
  					&board_info_prime_x670e_pro_wifi),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
-+					&board_info_pro_art_b550_creator),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME Z270-A",
++					&board_info_prime_z270_a),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
+ 					&board_info_pro_art_b550_creator),
  	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X570-CREATOR WIFI",
- 					&board_info_pro_art_x570_creator_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X670E-CREATOR WIFI",
- 					&board_info_pro_art_x670E_creator_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt X870E-CREATOR WIFI",
- 					&board_info_pro_art_x870E_creator_wifi),
--	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ProArt B550-CREATOR",
--					&board_info_pro_art_b550_creator),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS WRX90E-SAGE SE",
- 					&board_info_pro_ws_wrx90e_sage_se),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE",
-@@ -705,18 +705,18 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_crosshair_viii_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO (WI-FI)",
- 					&board_info_crosshair_viii_hero),
--	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
--					&board_info_crosshair_x670e_hero),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT",
-+					&board_info_crosshair_viii_impact),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E GENE",
- 					&board_info_crosshair_x670e_gene),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR X670E HERO",
-+					&board_info_crosshair_x670e_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO",
- 					&board_info_maximus_xi_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS XI HERO (WI-FI)",
- 					&board_info_maximus_xi_hero),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG MAXIMUS Z690 FORMULA",
- 					&board_info_maximus_z690_formula),
--	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII IMPACT",
--					&board_info_crosshair_viii_impact),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING",
- 					&board_info_strix_b550_e_gaming),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING",
+@@ -1223,6 +1247,9 @@ static int asus_ec_probe(struct platform_device *pdev)
+ 	case family_amd_wrx_90:
+ 		ec_data->sensors_info = sensors_family_amd_wrx_90;
+ 		break;
++	case family_intel_200_series:
++		ec_data->sensors_info = sensors_family_intel_200;
++		break;
+ 	case family_intel_300_series:
+ 		ec_data->sensors_info = sensors_family_intel_300;
+ 		break;
 -- 
 2.51.0
 
