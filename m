@@ -1,151 +1,131 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E75827F183;
-	Thu,  4 Sep 2025 20:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BC22BEFE7;
+	Thu,  4 Sep 2025 21:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757017345; cv=none; b=taVV9eVeZOIEoSbo+ZVJ7rmLHDDv67dnJ2ZxI03YnjuCl5HhusVN3cKOBL6+g0Mn44dsGjDen3/f2i/pVhZ6gqpaSl/4K7+LOKX9y0ysj6aPhF/beD3ijgzsrg8Uv9+1rCdK+nK6UKe7MzJUk844Cnl5byk76nuDjkrpNcdahxY=
+	t=1757021637; cv=none; b=h5g6tobOCM4jPSqWGC851Fa3IS2U//5nXUGZrVi8aybyOvotlsbb1A55JZD8s2vPB10JGEWrbyWwOCjLxrgFFVLyMwmhlVBES6qFpxPnp6rFSlJVTsfR2S7iMIvCwn4SdFBLVoRzY6OSAvEpu8ithb6OivRkgaEjE7tERP9+sJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757017345; c=relaxed/simple;
-	bh=w6Chw6LF/sedA+e1aX3TzkOCNEWHgEGeNJiKHIFlsJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KgQWgoslzkCsOwWByt6aA9RIOmR2A6YW8IOsdtP6Pt6jrZoMgRCHsYTC9DlcXZ9yVCuJVLbmV+ln+clmY71P7y4fsfaKqHefNTBdv3EHW5Poox/Ps1P6toqV9Jkw9nl3lNjkMsqUs7RVnqhOV7dbPB9uyQCZ7RWrm+cKgeWenQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=VCefIifk; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=xf0QWvbr; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1757021637; c=relaxed/simple;
+	bh=p/s/kJpm8SZfihBzXvBjykI1k2rg3DZ0ryhkDZpJKe4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q75Rip2Nq9j9Etpq43NCzvH24+bhN6vYsMAweqcVIL2jq4aFx53vpvfrwtcbX1+RkpqEUBs4jt/PcvJ9Fld9J5xwswE8DlL1k02fgbbYQ/NfJKtbAmkmwIyJ+CioPOd2xqwUXZ+4BGsbX4E5jmhFkYsYgQynBv0d5lHCeHkBOVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fSiUCYcQ; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="VCefIifk";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="xf0QWvbr"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4cHrW04NfWz9tcR;
-	Thu,  4 Sep 2025 22:22:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1757017340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rnbLlgm2n1ZDr06QGenfkPonttS4Jevyk7nGejqyWWY=;
-	b=VCefIifkbkogE/JX7Jt4amyys4lKr5PaCj4U0XtGaNsukbD4y9gTsenWv8daKsN3U8wZNa
-	LRhGJtC53zCNKFY09P9lRf/wAabZbbSpLQpbU+Affax3s5s7ajPUjTvPN7xCAzbwfPCmAL
-	//bh9cwa6ruj1+9P6vQA+nFNAnD4oyTk1dCGY6CNh6xlP3iu4zUQor11xhtj52c09LpjYp
-	V56T/bFPoFzhUWit5+q7pw37JCOp1TwvUrVt9IUemUJltIaK77BO0tvTCIhbQp7KbVAsHN
-	yajK5ub0SFMFXOpPwUKY2lGBS0zOmIstsEB6Mg9ouwzn8bWbrIw/P3S1het1Sw==
-From: Marek Vasut <marek.vasut+renesas@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1757017338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rnbLlgm2n1ZDr06QGenfkPonttS4Jevyk7nGejqyWWY=;
-	b=xf0QWvbrgCfFAE0wyZyyeZX4gvKTYGTeBlbT/Zurbrv4fBd7/ABITbAm/Gazs8ApVYZuoA
-	3aO1LIVKz126klf6LuyyTClvh/UUeiu0fiets5vFDxO398R3utTKMuP3bDKbtwklOQ/qG7
-	69OkoNM/emq4vCceuTeXKtT5y76D9q2ztnG68wxZ5X1lbki/J+fXuxG5AK1dJHXnwz+zpK
-	uz/U45ujBqmJFzmC0WbeOBI/grWoKN/0JWG80WvQAm7CskTmAFQVErC5QYrrobHH3kfGxp
-	NYuP4cM2vvRxg6plKWXJKL0ttEgTuzoNa3aPmKqMXm7VkEBc7V9/kSVz1a13ZQ==
-To: linux-hwmon@vger.kernel.org
-Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
-	Akinobu Mita <akinobu.mita@gmail.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fSiUCYcQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757021636; x=1788557636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p/s/kJpm8SZfihBzXvBjykI1k2rg3DZ0ryhkDZpJKe4=;
+  b=fSiUCYcQqPUoC+0oVVx2LIg01FIa6JOmML/lNH3Y37JdoInrnOq1ppX4
+   azwqJRwY+3A2bWOmU6y6zZMyuuwAyWG4y8IwZHVdycOchxVNxqtxzQ315
+   qk8gNyRuLZgbItuvs6RCsXx+Kc5mioOOMFEsd7W7Em7AKl71JDeh8uNK5
+   v29nYIUkG6Hc5LKPkxUjM/Kp4j5v96rWDWtOUi9C+aX2mTcnWaziEnaqU
+   nUis4RF51OD+pK3LjBLP3HGbI2Zce0KxqU07gPAQbqYuGfGCN1KVwC3IE
+   Jg+d6LzUWLenu7um91D7JLZT+sJzmvoPO0T0rY39CSdtdFJe5B/6Lcpsz
+   A==;
+X-CSE-ConnectionGUID: 70bzBgCgR7uxMRNnQbCuxw==
+X-CSE-MsgGUID: oxHPqsB8S/KDRJenDSpQSA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11543"; a="59522603"
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="59522603"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2025 14:33:55 -0700
+X-CSE-ConnectionGUID: d8h7wvHORNuG1VzVvVYbxw==
+X-CSE-MsgGUID: X2KPy3u+TVekGncrgIKZIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,239,1751266800"; 
+   d="scan'208";a="171891495"
+Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 04 Sep 2025 14:33:49 -0700
+Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uuHa1-0005wZ-1p;
+	Thu, 04 Sep 2025 21:33:25 +0000
+Date: Fri, 5 Sep 2025 05:30:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
+	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
 	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: [RESEND PATCH 2/2] hwmon: (pwm-fan) Implement after shutdown fan settings
-Date: Thu,  4 Sep 2025 22:21:10 +0200
-Message-ID: <20250904202157.170600-2-marek.vasut+renesas@mailbox.org>
-In-Reply-To: <20250904202157.170600-1-marek.vasut+renesas@mailbox.org>
-References: <20250904202157.170600-1-marek.vasut+renesas@mailbox.org>
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v2 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+Message-ID: <202509050501.MXDrcrZA-lkp@intel.com>
+References: <20250903-ltc4283-support-v2-2-6bce091510bf@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: xcdw7da4fwak5w1hp86nujkuo1xujqdu
-X-MBO-RS-ID: e0a82f404da6ba04d45
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250903-ltc4283-support-v2-2-6bce091510bf@analog.com>
 
-Add fan-shutdown-percent property, used to describe fan RPM in percent set
-during shutdown. This is used to keep the fan running at fixed RPM after
-the kernel shut down, which is useful on hardware that does keep heating
-itself even after the kernel did shut down, for example from some sort of
-management core. The current behavior of pwm-fan is to unconditionally
-stop the fan on shutdown, which is not always the safe and correct thing
-to do, so let the hardware description include the expected behavior.
+Hi Nuno,
 
-Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
----
-Cc: Akinobu Mita <akinobu.mita@gmail.com>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org
----
- drivers/hwmon/pwm-fan.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index d0fe53451bdf8..37269db2de84f 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -64,6 +64,7 @@ struct pwm_fan_ctx {
- 
- 	u64 pwm_duty_cycle_from_stopped;
- 	u32 pwm_usec_from_stopped;
-+	u8 pwm_shutdown;
- };
- 
- /* This handler assumes self resetting edge triggered interrupt. */
-@@ -484,9 +485,14 @@ static void pwm_fan_cleanup(void *__ctx)
- 	struct pwm_fan_ctx *ctx = __ctx;
- 
- 	timer_delete_sync(&ctx->rpm_timer);
--	/* Switch off everything */
--	ctx->enable_mode = pwm_disable_reg_disable;
--	pwm_fan_power_off(ctx, true);
-+	if (ctx->pwm_shutdown) {
-+		ctx->enable_mode = pwm_enable_reg_enable;
-+		__set_pwm(ctx, ctx->pwm_shutdown);
-+	} else {
-+		/* Switch off everything */
-+		ctx->enable_mode = pwm_disable_reg_disable;
-+		pwm_fan_power_off(ctx, true);
-+	}
- }
- 
- static int pwm_fan_probe(struct platform_device *pdev)
-@@ -498,6 +504,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	int ret;
- 	const struct hwmon_channel_info **channels;
- 	u32 initial_pwm, pwm_min_from_stopped = 0;
-+	u32 pwm_shutdown_percent = 0;
- 	u32 *fan_channel_config;
- 	int channel_count = 1;	/* We always have a PWM channel. */
- 	int i;
-@@ -648,6 +655,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 		channels[1] = &ctx->fan_channel;
- 	}
- 
-+	ret = device_property_read_u32(dev, "fan-shutdown-percent",
-+				       &pwm_shutdown_percent);
-+	if (!ret && pwm_shutdown_percent)
-+		ctx->pwm_shutdown = (clamp(pwm_shutdown_percent, 0, 100) * 255) / 100;
-+
- 	ret = device_property_read_u32(dev, "fan-stop-to-start-percent",
- 				       &pwm_min_from_stopped);
- 	if (!ret && pwm_min_from_stopped) {
+[auto build test WARNING on 9703c672af8dd3573c76ce509dfff26bf6c4768d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-binbings-hwmon-Document-the-LTC4283-Swap-Controller/20250903-180813
+base:   9703c672af8dd3573c76ce509dfff26bf6c4768d
+patch link:    https://lore.kernel.org/r/20250903-ltc4283-support-v2-2-6bce091510bf%40analog.com
+patch subject: [PATCH v2 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250905/202509050501.MXDrcrZA-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250905/202509050501.MXDrcrZA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509050501.MXDrcrZA-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/ltc4283.c:595:10: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+     595 |         if (tmp == BIT(16))
+         |             ~~~ ^  ~~~~~~~
+   1 warning generated.
+
+
+vim +595 drivers/hwmon/ltc4283.c
+
+   586	
+   587	static int __ltc4283_write_in_history(struct ltc4283_hwmon *st,
+   588					      u32 reg, long lowest, u32 fs)
+   589	{
+   590		__be16 __raw;
+   591		u16 tmp;
+   592		int ret;
+   593	
+   594		tmp = DIV_ROUND_CLOSEST(BIT(16) * lowest, fs);
+ > 595		if (tmp == BIT(16))
+   596			tmp = U16_MAX;
+   597	
+   598		__raw = cpu_to_be16(tmp);
+   599	
+   600		ret = regmap_bulk_write(st->map, reg, &__raw, sizeof(__raw));
+   601		if (ret)
+   602			return ret;
+   603	
+   604		tmp = 0;
+   605		return regmap_bulk_write(st->map, reg + 1,  &tmp, sizeof(tmp));
+   606	}
+   607	
+
 -- 
-2.50.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
