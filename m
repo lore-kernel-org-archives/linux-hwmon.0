@@ -1,209 +1,190 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7657322C355
-	for <linux-hwmon@vger.kernel.org>; Thu,  4 Sep 2025 05:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990B3258EED;
+	Thu,  4 Sep 2025 08:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756963358; cv=none; b=IHHLZueOPfChiAwosboBXJVnI8t0I9Ylhborg2I0aRviPsx1oLYrkxYUcgO9lznfvK+VM6W3RGr6xE2SUZV3Uh5ftZUVh6ZiOGJ0mFyRjFDAP8oPSpw3oH0TWmIhSpoRSv7fFs68mburemvuvAIhqO6bQIhm/RVQaC0a8vLFFP0=
+	t=1756974822; cv=none; b=WW/WBFBWW1GKSdPyZ8Y2OckFwEG0EHvzXBp4uWFFPfCCkg7gnbN9U31kORdw7IAzVMX2SXKBx34edXzoFpHc1a3AIDdnSexZwqe0aB08BMIVF17O05fHMSrJuWm/TY6SkDPmEkz+bwz+D7KfM4iE1kkcLATpP5nDotZOhQd3JYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756963358; c=relaxed/simple;
-	bh=RUbOeHUKx8qtv71JIRH8wWvRXV7sAEdKRcW7lnjCbzU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tGcI0o1t3bcZF4Wph4O1M4HClu9lCN8djckhRiKCdwcioXCaAtnlTIkZObP1pK3aLjvbpZ/QnDw3v/Cpz7GHSLdHX0ZNLZdkeTvW0BFDPulEFfizP1NYA5Fhk+0ci8fB0Iiru4M3R1LczYLpJFn5sKC6NEcWEUrEclxGcdxs2Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j2ECcCAt; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1756974822; c=relaxed/simple;
+	bh=xa1DNZh9ZS1PCU6W7gGSjK02tfE2cD6nLJfB1gnM5PI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=F//xhcGbRSygO1r5b5P+r7go5eVmPgtJEHTyny4vSz8XmCU8/GbEbysQNWtfXfycEPzOaEKwA047TOtDaGcyE0EeDIjAX/Jogsz6gyXSG7B6KYqkG/62L5iA2qfiQugeBcaSdiZtgr4fWK2woDQYxQuPFmstkGLNjxs4Z+wB0yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvcJpCfa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j2ECcCAt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756963356; x=1788499356;
-  h=date:from:to:cc:subject:message-id;
-  bh=RUbOeHUKx8qtv71JIRH8wWvRXV7sAEdKRcW7lnjCbzU=;
-  b=j2ECcCAty9FoofNoa4eGXTZRag/oULnm4zn2Ci7tuRu64S/r8NgIJFRr
-   l3QKtZ5QUjWcyoi8VMVPU01jYt7vP1BAcUFPPgsvFNDmGb6h61zcb+MnA
-   CzJfWOAiWukSb9xkiz62IuS9evN9h6x7V8LZiDF5vZ/929kHRMWtU8k4T
-   0eA5pI29QrRpDhHjHKeWCi+W5z+fw9Ml02XFsJWS30TxkDUEF5x6jTK+/
-   fPXWiDzIy/w1nr9e+4fRMeNt1KA/ipDcMydyILPWDiHNjacX5RrBjAbro
-   /G/7tAW7m8o8DE4ugINZft8Qb0xRKa5/Se5gWWo6koO27SBqxn3otXRlY
-   Q==;
-X-CSE-ConnectionGUID: fb3CCXTHTWOqsIv737vqAg==
-X-CSE-MsgGUID: VszmSVsVQL2L5tYiizDsRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11542"; a="70664439"
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="70664439"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 22:22:35 -0700
-X-CSE-ConnectionGUID: sXG3m6pjRMCFcA5Av1QlRw==
-X-CSE-MsgGUID: nR3jqci5R7yVnjs64piWBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,237,1751266800"; 
-   d="scan'208";a="171080784"
-Received: from lkp-server02.sh.intel.com (HELO 06ba48ef64e9) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 03 Sep 2025 22:22:34 -0700
-Received: from kbuild by 06ba48ef64e9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uu2QZ-0004nT-2l;
-	Thu, 04 Sep 2025 05:22:31 +0000
-Date: Thu, 04 Sep 2025 13:22:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 44df80829d531fc890c71b2c03384d98e485e0ae
-Message-ID: <202509041301.zc741zv6-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvcJpCfa"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A241C4CEF1;
+	Thu,  4 Sep 2025 08:33:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756974822;
+	bh=xa1DNZh9ZS1PCU6W7gGSjK02tfE2cD6nLJfB1gnM5PI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=KvcJpCfaYNNRQilKjRoW3jmSHmV1Hdzliu1dOsOKNFM/kLnu50KyyaeainO4Y30YA
+	 vF36WCYkLTQ28JFaYmdlz/RLZaUGjnlLvXSWskHpIH2Iq58rUxec4DvSulajP1m8ab
+	 DVH/tu5wdQKxfFO4wV/jbTHWXdakAyMa9LrGbRdFhQ5KISjF5wi2lfkvYtgMCTYPXv
+	 /LE/tnBbIXV/ehjdYe1e+OBXbOCqmAUlNFwgirX4xpdRAjTiu7O/sAjJZ2Emb4n1a6
+	 y6D/To8UOpafcZlNRfFe6RPIVsbobMO71liDE2FvZ5FGhUBaZINZa+HhWysnCP97dp
+	 rZLAR/dg8q3+Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E072CA1013;
+	Thu,  4 Sep 2025 08:33:42 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
+Date: Thu, 04 Sep 2025 16:33:42 +0800
+Subject: [PATCH v8 2/2] hwmon: document: add gpd-fan
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250904-gpd_fan-v8-2-0752584f16da@uniontech.com>
+References: <20250904-gpd_fan-v8-0-0752584f16da@uniontech.com>
+In-Reply-To: <20250904-gpd_fan-v8-0-0752584f16da@uniontech.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Cryolitia PukNgae <cryolitia@uniontech.com>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
+ Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>, 
+ Jun Zhan <zhanjun@uniontech.com>, Cheng Nie <niecheng1@uniontech.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756974821; l=3706;
+ i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
+ bh=LpIT/dc1H9CoyCcFgvvZK2Mbndl3sEjj5NTpoDZaSng=;
+ b=TpLbyysrkvlDAZXFVN6a6xnwrd6Zu4nmp7QsMEFNb5HGs1gGOag1kgmrf3SPXcFnEawtpaNMO
+ cQK2ULzM/6GCL1cNYWBcBk+JPbNglTf1Um3479E+i6sDvBYzWxX+TnX
+X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
+ pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
+X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
+ auth_id=474
+X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Reply-To: cryolitia@uniontech.com
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 44df80829d531fc890c71b2c03384d98e485e0ae  hwmon: (asus-ec-sensors) add ROG STRIX Z690-E GAMING WIFI
+From: Cryolitia PukNgae <cryolitia@uniontech.com>
 
-elapsed time: 1386m
+Add GPD fan driver document
 
-configs tested: 132
-configs skipped: 3
+Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+---
+ Documentation/hwmon/gpd-fan.rst | 79 +++++++++++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst   |  1 +
+ MAINTAINERS                     |  1 +
+ 3 files changed, 81 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
+new file mode 100644
+index 0000000000000000000000000000000000000000..a8541049d680beef93c5f7623de77e759242ffac
+--- /dev/null
++++ b/Documentation/hwmon/gpd-fan.rst
+@@ -0,0 +1,79 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver gpd-fan
++=========================
++
++Author:
++    - Cryolitia PukNgae <cryolitia@uniontech.com>
++
++Description
++------------
++
++Handheld devices from Shenzhen GPD Technology Co., Ltd. provide fan readings
++and fan control through their embedded controllers.
++
++Supported devices
++-----------------
++
++Currently the driver supports the following handhelds:
++
++ - GPD Win Mini (7840U)
++ - GPD Win Mini (8840U)
++ - GPD Win Mini (HX370)
++ - GPD Pocket 4
++ - GPD Duo
++ - GPD Win Max 2 (6800U)
++ - GPD Win Max 2 2023 (7840U)
++ - GPD Win Max 2 2024 (8840U)
++ - GPD Win Max 2 2025 (HX370)
++ - GPD Win 4 (6800U)
++ - GPD Win 4 (7840U)
++
++Module parameters
++-----------------
++
++gpd_fan_board
++  Force specific which module quirk should be used.
++  Use it like "gpd_fan_board=wm2".
++
++   - wm2
++       - GPD Win 4 (7840U)
++       - GPD Win Max 2 (6800U)
++       - GPD Win Max 2 2023 (7840U)
++       - GPD Win Max 2 2024 (8840U)
++       - GPD Win Max 2 2025 (HX370)
++   - win4
++       - GPD Win 4 (6800U)
++   - win_mini
++       - GPD Win Mini (7840U)
++       - GPD Win Mini (8840U)
++       - GPD Win Mini (HX370)
++       - GPD Pocket 4
++       - GPD Duo
++
++Sysfs entries
++-------------
++
++The following attributes are supported:
++
++fan1_input
++  Read Only. Reads current fan RPM.
++
++pwm1_enable
++  Read/Write. Enable manual fan control. Write "0" to disable control and run
++  at full speed. Write "1" to set to manual, write "2" to let the EC control
++  decide fan speed. Read this attribute to see current status.
++
++  NB：In consideration of the safety of the device, when setting to manual mode,
++  the pwm speed will be set to the maximum value (255) by default. You can set
++  a different value by writing pwm1 later.
++
++pwm1
++  Read/Write. Read this attribute to see current duty cycle in the range
++  [0-255]. When pwm1_enable is set to "1" (manual) write any value in the
++  range [0-255] to set fan speed.
++
++  NB: Many boards (except listed under wm2 above) don't support reading the
++  current pwm value in auto mode. That will just return 255 as default on
++  those boards, or a previously written value. In manual mode it will always
++  return the real value.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index d292a86ac5da902cad02c1965c90f5de530489df..ce4419f064e1368740387af70af38a85cadd952d 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -82,6 +82,7 @@ Hardware Monitoring Kernel Drivers
+    gigabyte_waterforce
+    gsc-hwmon
+    gl518sm
++   gpd-fan
+    gxp-fan-ctrl
+    hih6130
+    hp-wmi-sensors
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 14a616be5ff08aaeee52436dff54a86c4a81e5fb..0b6ae95c2007f0737bc4a4e1f2bac52f71628f78 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10425,6 +10425,7 @@ GPD FAN DRIVER
+ M:	Cryolitia PukNgae <cryolitia@uniontech.com>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
++F:	Documentation/hwmon/gpd-fan.rst
+ F:	drivers/hwmon/gpd-fan.c
+ 
+ GPD POCKET FAN DRIVER
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                          axs103_defconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20250903    gcc-15.1.0
-arc                   randconfig-002-20250903    gcc-8.5.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                      integrator_defconfig    clang-22
-arm                   randconfig-001-20250903    clang-22
-arm                   randconfig-002-20250903    clang-16
-arm                   randconfig-003-20250903    clang-22
-arm                   randconfig-004-20250903    clang-22
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20250903    gcc-8.5.0
-arm64                 randconfig-002-20250903    gcc-11.5.0
-arm64                 randconfig-003-20250903    clang-22
-arm64                 randconfig-004-20250903    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20250903    gcc-9.5.0
-csky                  randconfig-002-20250903    gcc-15.1.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon                             defconfig    clang-22
-hexagon               randconfig-001-20250903    clang-22
-hexagon               randconfig-002-20250903    clang-18
-i386                             allmodconfig    gcc-13
-i386                              allnoconfig    gcc-13
-i386                             allyesconfig    gcc-13
-i386        buildonly-randconfig-001-20250903    gcc-13
-i386        buildonly-randconfig-002-20250903    gcc-13
-i386        buildonly-randconfig-003-20250903    clang-20
-i386        buildonly-randconfig-004-20250903    clang-20
-i386        buildonly-randconfig-005-20250903    clang-20
-i386        buildonly-randconfig-006-20250903    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20250903    gcc-15.1.0
-loongarch             randconfig-002-20250903    clang-22
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20250903    gcc-10.5.0
-nios2                 randconfig-002-20250903    gcc-10.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20250903    gcc-13.4.0
-parisc                randconfig-002-20250903    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                     akebono_defconfig    clang-22
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc                     ep8248e_defconfig    gcc-15.1.0
-powerpc                      ep88xc_defconfig    gcc-15.1.0
-powerpc                      mgcoge_defconfig    clang-22
-powerpc                    mvme5100_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20250903    gcc-8.5.0
-powerpc               randconfig-002-20250903    gcc-8.5.0
-powerpc               randconfig-003-20250903    gcc-14.3.0
-powerpc64             randconfig-001-20250903    clang-22
-powerpc64             randconfig-002-20250903    clang-22
-powerpc64             randconfig-003-20250903    clang-22
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20250903    gcc-8.5.0
-riscv                 randconfig-002-20250903    gcc-9.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20250903    gcc-8.5.0
-s390                  randconfig-002-20250903    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20250903    gcc-12.5.0
-sh                    randconfig-002-20250903    gcc-10.5.0
-sh                   secureedge5410_defconfig    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20250903    gcc-11.5.0
-sparc                 randconfig-002-20250903    gcc-15.1.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20250903    gcc-8.5.0
-sparc64               randconfig-002-20250903    gcc-11.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-13
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-13
-um                    randconfig-001-20250903    gcc-13
-um                    randconfig-002-20250903    clang-18
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250903    clang-20
-x86_64      buildonly-randconfig-002-20250903    clang-20
-x86_64      buildonly-randconfig-003-20250903    clang-20
-x86_64      buildonly-randconfig-004-20250903    gcc-13
-x86_64      buildonly-randconfig-005-20250903    clang-20
-x86_64      buildonly-randconfig-006-20250903    gcc-13
-x86_64                              defconfig    gcc-11
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20250903    gcc-11.5.0
-xtensa                randconfig-002-20250903    gcc-14.3.0
+-- 
+2.51.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
