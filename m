@@ -1,96 +1,49 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28642D5C6C;
-	Fri,  5 Sep 2025 10:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E0E34DCFE
+	for <linux-hwmon@vger.kernel.org>; Fri,  5 Sep 2025 12:42:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757068956; cv=none; b=NIJvHLJa29szJJ0JnUHMJ5+Fy7W66I8PyFUD7xniygAqvfJ2/pID653DFD3rvFUAXGFzLDfvq5aIvcztupXpWt4FQQ+EILgkVLJ8YWXc4aM8E6xSU/iLE2sRYBJsBwEkbY9b3MuwB0x52uLC1WK872U/BEpmpyN5SK8GJkQulPQ=
+	t=1757076153; cv=none; b=a9qbFeHWcBjJ8+5XiIP3CgQE9n1rkOfdpCdrdSDxjQtN8gGD5Qs6A+5YbzxwJnGl9HfhqUy8Iyv/MhfL1aE5luMO0Wfx5ofoTrRHXvoKzGiGNjCN+jnBkoKdS0ayC7N5Fe7V8tulwyH4InwI1cK5LAxSyk12FhO9AcpKV0/VKkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757068956; c=relaxed/simple;
-	bh=+I+6Ob8PFYzlZ0UQk3wSgdfHmrOiugnSzIZKb8fhQEk=;
+	s=arc-20240116; t=1757076153; c=relaxed/simple;
+	bh=3eNZ5R0Q+6iX5ksEQtNAxndHJVB8qKKSRe4TN6Xjfxk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nH24OTQ5/53JFbLpARH9vl4IsdQWpCgF+/E666Cv7FtI3Gj8Y/B1DIAigK3gvg4/4GnUqOEMHnWNNRxQ8ptVCGUZxIJbVS9TtYgIBUrVyO/3eLGMk4RieILOBel5N8Tq0MiU8EN9/68WleOCdSHpLaJuNpTHMSRL0SsHJLFJAsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJb78JN9; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=j+5giEgrmu37iC09K56eGH1Hd8go8z28Tlvjr3oAEdiwT5mtvXN9xIzPlEhvetfKGSKHFkwDIsjEN+q1sLjlf6H2RulLKiqIXlG0cO6ziqdAya6UOyaStGUJvQU6FD3JD5ZdkAfeRnJaypCfWMvg3aedkCKesby7m/3QPp6q6vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=isbjS2eW; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJb78JN9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C01C4CEF1;
-	Fri,  5 Sep 2025 10:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757068955;
-	bh=+I+6Ob8PFYzlZ0UQk3wSgdfHmrOiugnSzIZKb8fhQEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FJb78JN9Aubn7l+hWFWK2KhL4xncFQiznSU1O+VqVeYoJWONHp4RcAOCsvHduuTfN
-	 +nudQ518QxKtrWwCOfBIzTxEEJAGpU/jUCrDlsuwWXRXBBl2j3vBt1Ltw4szB1n87y
-	 h7x6GKYVobYJ3QTWpsrKBMfGZ15EnA7yYfTpXWUhfEXV1WWfuuJ0vS7hs6fM/OGabb
-	 EOWmFuoLcS3oeA8aB09KPBnxvbJrH5hUgrl3aMa2r81N5UzhAZ8Ke81VM3YcHVbnvU
-	 RJi3JEAJOsT+TM9h+WPDYgQX6anuQ91U155dHwC08dgE3WTQvlLfDX33vEVEuA2/m4
-	 2N9AdUNBEKQBA==
-Date: Fri, 5 Sep 2025 11:42:15 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Xichao Zhao <zhao.xichao@vivo.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Guillaume La Roque <glaroque@baylibre.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Markus Mayer <mmayer@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	zhanghongchen <zhanghongchen@loongson.cn>,
-	Yinbo Zhu <zhuyinbo@loongson.cn>, Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund@ragnatech.se>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Talel Shenhar <talel@amazon.com>,
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	"open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-	"moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
-	"open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>,
-	"open list:THERMAL" <linux-pm@vger.kernel.org>,
-	"open list:THERMAL DRIVER FOR AMLOGIC SOCS" <linux-amlogic@lists.infradead.org>,
-	"moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" <linux-rpi-kernel@lists.infradead.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	"open list:QUALCOMM TSENS THERMAL DRIVER" <linux-arm-msm@vger.kernel.org>,
-	"open list:RENESAS R-CAR THERMAL DRIVERS" <linux-renesas-soc@vger.kernel.org>,
-	"open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
-	"moderated list:ARM/STM32 ARCHITECTURE" <linux-stm32@st-md-mailman.stormreply.com>,
-	"open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-	"open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH 04/12] regulator: max8973: Remove redundant error log
- prints
-Message-ID: <2f060139-7446-4cb1-910d-791918b28f51@sirena.org.uk>
-References: <20250905072423.368123-1-zhao.xichao@vivo.com>
- <20250905072423.368123-5-zhao.xichao@vivo.com>
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="isbjS2eW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=3eNZ
+	5R0Q+6iX5ksEQtNAxndHJVB8qKKSRe4TN6Xjfxk=; b=isbjS2eWM5m1XoXiIMP0
+	QwMKcksYMZ7qGl36WPHsiy0lvNTmbiIzdAPS3omXOfYAow4ObxGiKNqB9TWvouuy
+	YdDVS8uQ0vgmy6P+DraHnM79JEg7QVwPSmSgxui6EbFn3LiJS4ht3zjN2QupyLTY
+	PfY+MEluqiTnajvvenxnnRDhuumrobqMMzMQDr02KSUSF2vz/F0IWRE2rWPuabS0
+	w6Zj3V7sciPCoULmSiqFo7ltgiDhohf8ZsRU29OUCfXe57SsfsDS4TG2Jb2MJsAX
+	sQhOOBqbuocLWpKjM0aBr/v8YZjBHmpQ1EZnni3OKQodj70AU/HxqmOfY/yuGzaD
+	jA==
+Received: (qmail 4051870 invoked from network); 5 Sep 2025 14:42:28 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Sep 2025 14:42:28 +0200
+X-UD-Smtp-Session: l3s3148p1@D6ytKw0+luMgAwDPXxPDAOCjMSL5jkIv
+Date: Fri, 5 Sep 2025 14:42:28 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-hwmon@vger.kernel.org, Akinobu Mita <akinobu.mita@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [RESEND PATCH 2/2] hwmon: (pwm-fan) Implement after shutdown fan
+ settings
+Message-ID: <aLratMZ69w_sF2hO@shikoro>
+References: <20250904202157.170600-1-marek.vasut+renesas@mailbox.org>
+ <20250904202157.170600-2-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -98,35 +51,50 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hSBr52yOin/qCY9V"
+	protocol="application/pgp-signature"; boundary="k1lN0Q6TtU2DiBt3"
 Content-Disposition: inline
-In-Reply-To: <20250905072423.368123-5-zhao.xichao@vivo.com>
-X-Cookie: He who laughs, lasts.
+In-Reply-To: <20250904202157.170600-2-marek.vasut+renesas@mailbox.org>
 
 
---hSBr52yOin/qCY9V
+--k1lN0Q6TtU2DiBt3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 05, 2025 at 03:23:56PM +0800, Xichao Zhao wrote:
-> devm_thermal_of_zone_register() prints error log messages when
-> it fails, so there is no need to print error log messages again.
+On Thu, Sep 04, 2025 at 10:21:10PM +0200, Marek Vasut wrote:
+> Add fan-shutdown-percent property, used to describe fan RPM in percent set
+> during shutdown. This is used to keep the fan running at fixed RPM after
+> the kernel shut down, which is useful on hardware that does keep heating
+> itself even after the kernel did shut down, for example from some sort of
+> management core. The current behavior of pwm-fan is to unconditionally
+> stop the fan on shutdown, which is not always the safe and correct thing
+> to do, so let the hardware description include the expected behavior.
+>=20
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Works for me as promised!
 
---hSBr52yOin/qCY9V
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+--k1lN0Q6TtU2DiBt3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmi6vocACgkQJNaLcl1U
-h9A9Ggf8DfcaSZB9QDgKG3CTzMYN6dA03Qdzw6VmLM9o81xSSlRvqsWSYEm0G86q
-z/jyW0esF1zaS9pQ+ni9mgIUQQvCBr6/d1pY2UJpJd3z1xw2eJUWIgNHIfLsaKDk
-ZIixofNJ8unn3ayIaYKW6fWIhZcoMRY+yXMtvdtUD2vxzMFOerQ1dFKakBEsu9Nj
-JTQTup0slsEXR1tzi/4HBQfftUi+24MUDaRkOnfPfOn1D5gmUaZ6c07B1fGp9dmM
-5c73MTNcN3xonK265AHjzWrgi4sJoXEeqfN7SmvHqspnq6df5zHeKUvFD9Jx+lEw
-n/HlWMMkt3wAlpDVMMsmqqlWaSrGcA==
-=sWAM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmi62rAACgkQFA3kzBSg
+KbanVxAApYP3N9I6ELZ9dYfUAmFeSrA8NGP1sVwTXfakPUYtAJo5w8kXbQ+ch+74
+HFHRq/QbPrOTlzTO5CHHEQCklfL1fb5NfsB1M7vS2KKkRdiWjrcU9SyPHilg7LwW
+baygIPE0T9qKkkKpVUKd5uW3KqXsEn5Oepj3I9LasOc7gAzlSyTE/2cR4qV3A8/8
+5Zi1p9o6d3sZwCqu1ujcEUsViNGTyEmbW+bFwlRedO/DbXN4JsSpteJKxZFd5aG/
+R5SeF6e9lvxvqxFbydEOYOfD4lYxA4J1vxD7LMrciDllF6pUAWren7tGtwvMzRs4
+T3UMJ7W6fdkRH4D3LDHGcYcoxVBSI1RKVNm84oYx8DiCauwbe2vm61Asqr8dN0NK
+2zXaYeUGx86BPAF47ky3ce5l87BYKvX2jo7yy2g8zUex5+wmgx1A38rNohH1uBVh
+LflaRBD1Lg20bGXecB6KhTozFoP2kf0R0OwNwH6UvaCcVG+rZXiLPJGHqpg4rMjy
+Qh7yioBX+jtm019wbmIPlUSpx15b0zX40U5uNVPWx3JOt25CClXREdwOxYt2KIj1
+KBY0G3UM5H5iwRnKpO7oIEyG7+OP+DKbpx+aGhGX3pJ3Jls0pd+FIw9St7UEz5sh
+Q6MgUncUt/7eTHzsPJ6st5x6c+m4GMGvOaUJMsHPPoItSeqIr5w=
+=F1st
 -----END PGP SIGNATURE-----
 
---hSBr52yOin/qCY9V--
+--k1lN0Q6TtU2DiBt3--
