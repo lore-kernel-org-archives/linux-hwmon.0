@@ -1,63 +1,63 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6ABD2C3248;
-	Fri,  5 Sep 2025 20:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483C62D3EFB;
+	Fri,  5 Sep 2025 20:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757104944; cv=none; b=eF3dYp+GAZdQHEbQudjzbwlIpbu1nv98Nk8AUEdOXen9K2wDBh9BvuhaRmrbHip7+KEY8u4PcBU1f3dAwNaKv7xzC/wfcivXdvqblDCB4wEyp36CINJHzOwx+ZHjFzDeoGhyMQWQqfrtYWWJ59hCil3ihG1tyIbIszrPyUphp2M=
+	t=1757104945; cv=none; b=YsikghH4O3JxK4pv6WvGNW+qjjhQFJJaLayH4nzjenP1KpW1UOJqd15O+Rq9M0mCRPKKP3HNK5rl4fb+HrgvVf5ia4xeCUe57dxQOh1UW895fuSN9ccjebG3+MiUKGN/j6W2DIoi54kky/IRhIpePNDu8BTKvNMyBgLCmQaJahY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757104944; c=relaxed/simple;
-	bh=RcBc0a6SelTOZNGzvGQMp6eortanJaJJGSmf7Dr1xJo=;
+	s=arc-20240116; t=1757104945; c=relaxed/simple;
+	bh=QrnL16UJ/1PhUxYAUaIDI/qpJvv5yTbvY2TG4Tv/MQE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j0bzBr1bWUyk9DG2vptRj93ZVMIE5dO5WoomHQN8rFj0lniu9iajlPtgc+hcP8YUjSrHmSaaWQKdOs0rIoRQu/a0A/fsyVUf5k1RMwIk62SAOGCacjym7Bcp/ikQmmFPDlYh1U02bclZYbTkp212rj/3SBNe0M+pBSDyy2rmkao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nl+PpQH0; arc=none smtp.client-ip=209.85.210.178
+	 MIME-Version; b=pcjUVV4lVt7qqkIZdPmGnLg6JEneRMl4ohrr4rFaAMd3Q4CZYSXZkwPOGs9mFKdZB6RhqgkkSXi4vYkpcalYi0dNFivJFmMuZrhaWFkJ9DvTDm+uMnsvMOqtF6nIYPzQ3LB24ta8nlnlmqFZznyUuxbht2s3u+wFGPbrtqE45Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7SsUpkM; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nl+PpQH0"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7724cacc32bso2083260b3a.0;
-        Fri, 05 Sep 2025 13:42:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7SsUpkM"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7722c8d2694so2382975b3a.3;
+        Fri, 05 Sep 2025 13:42:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757104942; x=1757709742; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757104943; x=1757709743; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4d6K1GOLThRL9peUUzkUS6o7cAEeOqDTrSw33MPrVfw=;
-        b=Nl+PpQH0OYccuucnzbW5rNE1KzDDI6zw25ckdZfzn0PXUEqWnSBYTvchClZePukdVo
-         U5c9M7fZ4D4b3XBSWGfVMTbZeWdDXWLZCocEtpR7O+ULwaCGN+Y4LoYrOiL9BvmKc8MS
-         CEy/YrJhx8rJH1owys1cZG0zOe6G0ty8OqQ1d1f7cIKZJ+KIz3glFVlOP89Q7Bnvb4GN
-         94SJh3gV8NiX2QERHXtaFJlqPeMxaZ65y9mqO4Ybwy2/Mtm2peSU9cmU1+nUIV/foVt/
-         SJ5BxhRBS/pZlRRb3uMqbds96b8hXHEctK5FZCQrOqaQCmoEmhNxx8JYBDzf6skn/1WD
-         Qw+g==
+        bh=/N8xbmKFAzQtd27iCj9+DtwKoaknfnMO4YTyVgPa7Oc=;
+        b=j7SsUpkMzkOL4wzV/lGS+nGyiqT4xXwZ+q5BA14I7gDvoH0z6HbDAWQ74xCtIQieX+
+         L9XV1zGkUlsRU6dhwUVcwSCFLdPPT+1ByFEjGYecuBeEEgQz861ht4z02qgRA2hhuPmz
+         z9Jw2petGAi7PegcVfUln8vUTtfV+OmXg5zN9RNDNLp3Lui5nyDQghuQUdDGOpXrYl3T
+         0zmGwL9VqclZnUtrHfOFsdH3MYSFFjAfR2MdzvJR07vdwkFD0fkibujimzplM2YKhuaH
+         y0FNNVKD0XxpEgeQqKXjKPXYGwUL1enGwA+IKWQfNTgcNdBlURX/aky3VDIqPgnsLyWc
+         YCqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757104942; x=1757709742;
+        d=1e100.net; s=20230601; t=1757104943; x=1757709743;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4d6K1GOLThRL9peUUzkUS6o7cAEeOqDTrSw33MPrVfw=;
-        b=lPeUBH5pEJ2VqsWUdgJ3ArDy22zRN84v/uEyZiN0kLYX7cpoCjTZ5scVPLNAKZD1bo
-         Klk6W7PKtZ9kD+pD7HFzpi7uyol9xWVthZ/U/zrNXsN7PAqVEfe9nJ73v/DThRPmzY9E
-         Nw6CsfYAZl1bWs6Rte5R6L1llR5fwv1GcjXelKu31Kgaq7xGh81Vwxq6Fp+oaWfBd/wh
-         PIV7dXAiJSnMncTQX2tcxDKwfr6dde2jwjkWeWCo4WhispDrJuNuKOlqygx+eMXLfKP4
-         Kaxcc6lUJcuLwVJt3K3M0eLgIcRxbZlRRgOhdhGT86EMrJit8uZcChwUEw8+vu9wsiYY
-         a2og==
-X-Forwarded-Encrypted: i=1; AJvYcCUMeTIovWmzIdc0Ez2NYb8BSi9l0MPWQcLR7GXyLfFrSU4PZ2mGbnyEc70qDrKLNT6XupWybmnFOc8U@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq+T/o7owk/0q9LYzoNCDLNEcP7s5+0LfjnYiWuwb7YGEaMC7k
-	QAKBu4oQEChFtM0jbkwl24FYuKNb5U1k0kA6Tx+CBk+oP8Ey+vzvtK45aYc7ovNx
-X-Gm-Gg: ASbGnct9NJM7Mfr8hE0Rye4Wjzy0kW7+wDwsK4gLIyXA0fQDFAYKtLvshbsf3eTvgOf
-	60nvzJJYxtyhKXrCS7seSs0qNhhm8lWr+KwS6pEORGbb37NIvefV7GQf0Bl2eVJsc1qXSbqby6c
-	D6Kk5ElLWx/GH9RTLATwYA+HQlMmr9IxlwdVzRqCYlRmAiH9OBNcs1Biwwo+qBkvnHVzH7Xipds
-	QVD49Qy4je5v2cqm/UPXxVdhN/UzAEO2fViKFTe8AJ31z1Y+75gAXoINU/ZXpDqYxGRqOcdL0cJ
-	fHPRqhzP+8p5tfkOOWRgE/qkyX19D17NKHKc/LfBRwhs5pK9mKyVjHUe6E5bmp1qs7CRmooxuVc
-	Aj4mp5Ec6WAFPJdr4JHbmIuLIjRqOfTAypz4=
-X-Google-Smtp-Source: AGHT+IHNToj+mlhww/WLi3771uVIPWS/iK4QxwdXiphfvFDsIdTPsTIp6Po1U5pbRxAPx8RqWcSRzw==
-X-Received: by 2002:a05:6a00:1ad4:b0:772:871c:1e49 with SMTP id d2e1a72fcca58-7742de6f49bmr99660b3a.29.1757104941980;
-        Fri, 05 Sep 2025 13:42:21 -0700 (PDT)
+        bh=/N8xbmKFAzQtd27iCj9+DtwKoaknfnMO4YTyVgPa7Oc=;
+        b=POxamsQILjSUap2wRDTaml+crxMeIoOIDZ4Q4XTTSwimBlJVTamZLnu8pALy1Pigg4
+         XMUNZ68e28mH11ROTfsjcRtqFaVvYqts56K9UABYwVf50+iHCVlZZjVsRVut4RZ+RALD
+         zPdn+ew/fRzF2gjVa6sWBmk83E53V9QanCXB7O3rM//ktZKAYDS0QnPKb/W/zpah1sql
+         87INBfE5EEtjOg3z56BTPQmtBrA+lUMwJEMqRhrfIl9CHywvMJBTYRzJIUq7KmyEnnY9
+         ujzhgcpCpiOTji1KJt7awwzfArA35lhTcA98OEvcCBz9Fg/aP/WQfGFGNyWTJ4HHhpM9
+         eo5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXDQD1ogbaNlIsndVO6O6XOJYrFgNee7wGGXi6GVu699tCQFlVrO9SnCMI9+LLaXpPWQUBGCWts8JQp@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdpeRlCPjkioHfcfWM2ieB/xS30OL9EoBxfK5Way4IDbixtw9n
+	kSQ9/c+nRYV1OVmmDESnRz9CIyvbx+LBapOq5Ec7OGn1uCtSputwuvtUqrYUC1uW
+X-Gm-Gg: ASbGnctdnKM006XXzbuIHuzAdPqYfDdGFaLz9EJ3ZwcG34pcrVMwl3DfnACHvies6wO
+	O32PSLq+l4AOyNECy6EE+kEj1BPr//Z/NiLruQb+hAMdmGldTNNZImrjcgIB3OIoVPDYqsV0IYV
+	MagEcSbtVs4TroBVI107inp+Skkjhtp8pW4DVpdaU0ys2/6NShEC1/Jy+uuRhTEwkPceJjfDOvo
+	CahNOzvpVf4uilyz82GFsS31Nx9XFlUWsa+R6TaYFYMzTJyed2+MTpWxqXOJXDmW0XgHVYrHR1s
+	55H8s7S6s2l/NF/v67KTxr4BIaKw6K3nBO2/9F1aoUj4U7yRlpclZ69GZ6dhu8ebA+cJTY2Xwc3
+	oY7wBTrehJqB9pkccMUQzg69wePnGf4v6+p0=
+X-Google-Smtp-Source: AGHT+IEwtQuKr2j1j221SyBceermp/s72WlBsjsX02fowMIyXGOgO7l5TCrYpdnFlmxfsoJppcdeZA==
+X-Received: by 2002:a05:6a21:33a4:b0:245:fbee:52ed with SMTP id adf61e73a8af0-2534338b0a6mr256105637.30.1757104943266;
+        Fri, 05 Sep 2025 13:42:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a26abdesm22389279b3a.1.2025.09.05.13.42.21
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4cd092e2aasm20008570a12.21.2025.09.05.13.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 13:42:21 -0700 (PDT)
+        Fri, 05 Sep 2025 13:42:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: Christian Kahr <christian.kahr@sie.at>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 14/17] hwmon: (ina238) Only configure calibration and shunt registers if needed
-Date: Fri,  5 Sep 2025 13:41:56 -0700
-Message-ID: <20250905204159.2618403-15-linux@roeck-us.net>
+Subject: [PATCH 15/17] hwmon: (ina238) Add support for INA780
+Date: Fri,  5 Sep 2025 13:41:57 -0700
+Message-ID: <20250905204159.2618403-16-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250905204159.2618403-1-linux@roeck-us.net>
 References: <20250905204159.2618403-1-linux@roeck-us.net>
@@ -80,137 +80,123 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Prepare for supporting chips with internal shunt resistor by only setting
-calibration and shunt resistor registers if no current LSB is configured.
+INA780 is similar to the other chips in the series, but does not
+support the shunt voltage register. Shunt voltage limit registers
+have been renamed to current limit registers, but are otherwise
+identical.
 
-Do not display a log message during probe if a chip does not have shunt
-and gain registers since those would otherwise display 0, and a message
-just indicating that the driver was loaded would be just noise.
+While the chip does not directly report the shunt voltage, report
+it anyway by calculating its value from the current register.
 
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ina238.c | 82 +++++++++++++++++++++---------------------
- 1 file changed, 42 insertions(+), 40 deletions(-)
+ Documentation/hwmon/ina238.rst | 10 +++++++++-
+ drivers/hwmon/Kconfig          |  6 +++---
+ drivers/hwmon/ina238.c         | 17 ++++++++++++++++-
+ 3 files changed, 28 insertions(+), 5 deletions(-)
 
+diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
+index 3c7db4a47056..722760961821 100644
+--- a/Documentation/hwmon/ina238.rst
++++ b/Documentation/hwmon/ina238.rst
+@@ -32,6 +32,11 @@ Supported chips:
+     Datasheet:
+ 	https://www.ti.com/lit/gpn/ina238
+ 
++  * Texas Instruments INA780
++
++    Datasheet:
++	https://www.ti.com/product/ina780a
++
+   * Silergy SQ52206
+ 
+     Prefix: 'SQ52206'
+@@ -56,6 +61,9 @@ INA237 is a functionally equivalent variant of INA238 with slightly
+ different accuracy. INA228 is another variant of INA238 with higher ADC
+ resolution. This chip also reports the energy.
+ 
++INA780 is a variant of the chip series with built-in shunt resistor.
++It also reports the energy.
++
+ SQ52206 is a mostly compatible chip from Sylergy. It reports the energy
+ as well as the peak power consumption.
+ 
+@@ -88,7 +96,7 @@ curr1_max		Maximum current threshold (mA)
+ curr1_max_alarm		Maximum current alarm
+ 
+ energy1_input		Energy measurement (uJ)
+-				(SQ52206 and INA237 only)
++				(SQ52206, INA237, and INA780 only)
+ 
+ temp1_input		Die temperature measurement (mC)
+ temp1_max		Maximum die temperature threshold (mC)
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 23d51e61d993..b0f440011478 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2256,9 +2256,9 @@ config SENSORS_INA238
+ 	depends on I2C
+ 	select REGMAP_I2C
+ 	help
+-	  If you say yes here you get support for INA228, INA237, INA238, and
+-	  SQ52206 power monitor chips. This driver supports voltage, current,
+-	  power, energy, and temperature measurements as well as alarm
++	  If you say yes here you get support for INA228, INA237, INA238,
++	  INA780, and SQ52206 power monitor chips. This driver supports voltage,
++	  current, power, energy, and temperature measurements as well as alarm
+ 	  configuration.
+ 
+ 	  This driver can also be built as a module. If so, the module
 diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 24e396c69ae2..da5b43184dd1 100644
+index da5b43184dd1..98255619adeb 100644
 --- a/drivers/hwmon/ina238.c
 +++ b/drivers/hwmon/ina238.c
-@@ -745,32 +745,48 @@ static int ina238_probe(struct i2c_client *client)
- 		return PTR_ERR(data->regmap);
- 	}
+@@ -101,7 +101,7 @@ static const struct regmap_config ina238_regmap_config = {
+ 	.val_bits = 16,
+ };
  
--	/* load shunt value */
--	if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0)
--		data->rshunt = INA238_RSHUNT_DEFAULT;
--	if (data->rshunt == 0) {
--		dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
--		return -EINVAL;
--	}
--
--	/* load shunt gain value */
--	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
--		data->gain = 4; /* Default of ADCRANGE = 0 */
--	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
--		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
--		return -EINVAL;
--	}
--
- 	/* Setup CONFIG register */
- 	config = data->config->config_default;
--	if (chip == sq52206) {
--		if (data->gain == 1)
--			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
--		else if (data->gain == 2)
--			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
--	} else if (data->gain == 1) {
--		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
-+	if (data->config->current_lsb) {
-+		data->voltage_lsb[0] = INA238_SHUNT_VOLTAGE_LSB;
-+		data->current_lsb = data->config->current_lsb;
-+	} else {
-+		/* load shunt value */
-+		if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0)
-+			data->rshunt = INA238_RSHUNT_DEFAULT;
-+		if (data->rshunt == 0) {
-+			dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
-+			return -EINVAL;
-+		}
-+
-+		/* load shunt gain value */
-+		if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
-+			data->gain = 4;	/* Default of ADCRANGE = 0 */
-+		if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
-+			dev_err(dev, "invalid shunt gain value %u\n", data->gain);
-+			return -EINVAL;
-+		}
-+
-+		/* Setup SHUNT_CALIBRATION register with fixed value */
-+		ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
-+				   INA238_CALIBRATION_VALUE);
-+		if (ret < 0) {
-+			dev_err(dev, "error configuring the device: %d\n", ret);
-+			return -ENODEV;
-+		}
-+		if (chip == sq52206) {
-+			if (data->gain == 1)		/* ADCRANGE = 10/11 is /1 */
-+				config |= SQ52206_CONFIG_ADCRANGE_HIGH;
-+			else if (data->gain == 2)	/* ADCRANGE = 01 is /2 */
-+				config |= SQ52206_CONFIG_ADCRANGE_LOW;
-+		} else if (data->gain == 1) {		/* ADCRANGE = 1 is /1 */
-+			config |= INA238_CONFIG_ADCRANGE;
-+		}
-+		data->voltage_lsb[0] = INA238_SHUNT_VOLTAGE_LSB * data->gain / 4;
-+		data->current_lsb = DIV_U64_ROUND_CLOSEST(250ULL * INA238_FIXED_SHUNT * data->gain,
-+							  data->rshunt);
- 	}
-+
- 	ret = regmap_write(data->regmap, INA238_CONFIG, config);
- 	if (ret < 0) {
- 		dev_err(dev, "error configuring the device: %d\n", ret);
-@@ -785,14 +801,6 @@ static int ina238_probe(struct i2c_client *client)
- 		return -ENODEV;
- 	}
+-enum ina238_ids { ina228, ina237, ina238, sq52206 };
++enum ina238_ids { ina228, ina237, ina238, ina780, sq52206 };
  
--	/* Setup SHUNT_CALIBRATION register with fixed value */
--	ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
--			   INA238_CALIBRATION_VALUE);
--	if (ret < 0) {
--		dev_err(dev, "error configuring the device: %d\n", ret);
--		return -ENODEV;
--	}
--
- 	/* Setup alert/alarm configuration */
- 	config = INA238_DIAG_ALERT_DEFAULT;
- 	if (device_property_read_bool(dev, "ti,alert-polarity-active-high"))
-@@ -804,15 +812,8 @@ static int ina238_probe(struct i2c_client *client)
- 		return -ENODEV;
- 	}
- 
--	data->voltage_lsb[0] = INA238_SHUNT_VOLTAGE_LSB * data->gain / 4;
- 	data->voltage_lsb[1] = data->config->bus_voltage_lsb;
- 
--	if (data->config->current_lsb)
--		data->current_lsb = data->config->current_lsb;
--	else
--		data->current_lsb = DIV_U64_ROUND_CLOSEST(250ULL * INA238_FIXED_SHUNT * data->gain,
--							  data->rshunt);
--
- 	data->power_lsb = DIV_ROUND_CLOSEST(data->current_lsb *
- 					    data->config->power_calculate_factor,
- 					    100);
-@@ -824,8 +825,9 @@ static int ina238_probe(struct i2c_client *client)
- 	if (IS_ERR(hwmon_dev))
- 		return PTR_ERR(hwmon_dev);
- 
--	dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
--		 client->name, data->rshunt, data->gain);
-+	if (data->rshunt)
-+		dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
-+			 client->name, data->rshunt, data->gain);
- 
- 	return 0;
- }
+ struct ina238_config {
+ 	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
+@@ -155,6 +155,16 @@ static const struct ina238_config ina238_config[] = {
+ 		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
+ 		.temp_resolution = 12,
+ 	},
++	[ina780] = {
++		.has_20bit_voltage_current = false,
++		.has_energy = true,
++		.has_power_highest = false,
++		.power_calculate_factor = 20,
++		.config_default = INA238_CONFIG_DEFAULT,
++		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
++		.temp_resolution = 12,
++		.current_lsb = 2400,
++	},
+ 	[sq52206] = {
+ 		.has_20bit_voltage_current = false,
+ 		.has_energy = true,
+@@ -836,6 +846,7 @@ static const struct i2c_device_id ina238_id[] = {
+ 	{ "ina228", ina228 },
+ 	{ "ina237", ina237 },
+ 	{ "ina238", ina238 },
++	{ "ina780", ina780 },
+ 	{ "sq52206", sq52206 },
+ 	{ }
+ };
+@@ -854,6 +865,10 @@ static const struct of_device_id __maybe_unused ina238_of_match[] = {
+ 		.compatible = "ti,ina238",
+ 		.data = (void *)ina238
+ 	},
++	{
++		.compatible = "ti,ina780",
++		.data = (void *)ina780
++	},
+ 	{
+ 		.compatible = "silergy,sq52206",
+ 		.data = (void *)sq52206
 -- 
 2.45.2
 
