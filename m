@@ -1,68 +1,68 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BAF218EA8;
-	Fri,  5 Sep 2025 14:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5242D77E6;
+	Fri,  5 Sep 2025 14:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757082700; cv=none; b=WPZUQps66j/6hqY8vX5K9pZ4fA+niUC5KI0vV2rO+bQwdoLPZhdu9OHkV4isM4Vzl4Qnb643dlY+To/8TyhdnOI/HTF/Uv2M8Nm1Hu/eS1sBnj55duNz1Ew5kY2z3F4gkhMtd0axacbzC9qMeSN+WgTsxAPuX0E6sIdX3wCR8vM=
+	t=1757082867; cv=none; b=IW3nlayW6jYSGaPA1Wt1u53pALWQdcSq9LVlPiZP5vNj0nPa65YND1WmmquC0QCS6V/UTpjFGSJyEbNFqXnY+VLH2X4eSFjH6MLtTlE5SQHiPwGpundUYkbG5lUBsUBbnm0Kk69Z9q0dsmtPQGjT8r8qyK1gS2mtov80Mr57qxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757082700; c=relaxed/simple;
-	bh=+1nDfrVt0ppud9zgCkTbqp/0YBEdQzK1oYTnBYlqZPQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=WTylSHIvkcUSXtVEjMZA4s0vdvsYLag/KX5H753RNd5e+vxI2W8aKQjKp61Al6tI+OWEhe1hGf6F1TjmS7gHKzFaTbKoeeRy+QmxpChwRayQZgmbzlbLDvfM24Z1/Evhd2W7nOvW3E0XyiH6jDBANejfH3oNaqaFjIFGZyqObdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RUxHXctF; arc=none smtp.client-ip=209.85.216.52
+	s=arc-20240116; t=1757082867; c=relaxed/simple;
+	bh=3vsfFRct25KlREEmsU8jBgqZdaBgVs7QzNQNTr2VZJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kHtPn7abL4+rwIhxja+2VE9SmSON74VRIL0q1YPtW99v8/fpibApgzZj+jAQW5PDLQSxLXCf504TXZiaJALOl09ta9uJ9h3VmQwqxBsPTVndCjx1MWx+C8Pd2xmu0ag7s7H0GjCcFZt1xZqWFm5XKt3iF0tlxuKzL+R12e3DAKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsVuBqLc; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUxHXctF"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-323267b98a4so2044395a91.1;
-        Fri, 05 Sep 2025 07:31:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsVuBqLc"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-24c784130e6so25932125ad.3;
+        Fri, 05 Sep 2025 07:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757082697; x=1757687497; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757082865; x=1757687665; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vIXH9G8eZJ7ix/XNHz4bvSACtWtZGWHKqaN5lng6nE=;
-        b=RUxHXctFV4BspeJlDvAkGloDoG8YrEX3YOsM83EtUOyc7Avizpl4eLVhDaDQlg7gch
-         JyQOajlleaVC8SdwhS2+g0n6k7PPozRlLaMb8rJHUs+wkHbNiJLMhh5D+t05Qes3YAM5
-         2p9ENG7Y7sdwENpNOyeVXuS/3MjWZzYls4LaXI+1mgY+TJGcyb3OV/FOcknmGcZaO348
-         dC/dRTA6HWVeG9qJZ1LlgGqg7S5bPFJPShwb0yAxVE2CIxAhVK+HGm7+h9D02af5HOph
-         3FhEHZrkaXs/NoC+TDHu4l5Lxw87cL+7AOkQRL1m+9Pgc0nsBHEuwk1AHRG7oz/qWObL
-         HW+A==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OoEqh9IVTkOosF1m/shamjcNQUhzlafUdY/KyvB+oqc=;
+        b=CsVuBqLc/Zw4qGDRPR13shEts52NU01AMHRr2NRcrbU6b/DnQmbuWCTRXqXKn0d+UJ
+         m5TrfBn5cgewypX9bwEThtz6Aoj/CTqPNGtraX6l1xDLajW8Gkc7P+/cQCSgC++zThoO
+         uk5nFqt012cLJ7kPJ4Ng56AJ0QRXNga83LyGLg3OX/UvHp7WTpSl6+Le53oBOX+3Oa2n
+         Hv1uZ0HWFRsYTho6MTAT1TkGBNtLzgQ02aNjInRq0ObJpOXR52kDafUoBavFBiiavjhW
+         l31mYLWvxm7mNm1hvtlfn8nigvBXxGPjecKexFzSC0tfF62vjrv3xiLPS4HHpRVBirXl
+         zIXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757082697; x=1757687497;
+        d=1e100.net; s=20230601; t=1757082865; x=1757687665;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3vIXH9G8eZJ7ix/XNHz4bvSACtWtZGWHKqaN5lng6nE=;
-        b=djtzxTIGNvt8LqeCvpO77Hk/CJktGPdrj+U/Z4PEdNx3nY9mDSVR+lB8XvHFBC1R5W
-         opjgoGmMXxBtVp7lPMMkqBDgV7FIQl3EZ2mM3k3njf8jkM1FnEsFn1j6opoIoIfJAQsx
-         ZTL38RDU+EnndUiE1hXEt7njkAtjD9rz2tUUaigLoyPqa6VIX/reBJHelvSzYp8dwro0
-         NXlKTbCocaEqInGbgLgsgopEYaLz108wrhUhKeduOFdsK51nJABjuhte3yLEGp7vdKxn
-         sdkTUR4+LVWbzVeITALT+TCicb15DhB7fsTPLuB005ybKmZVD+RXMhpsmXkEyiUA15R2
-         Q1OQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/xQ10Pxq///tn1Rv36Of1/u5K2K5B59mFX8ck6nb3VXXBG4Vm9XFbmzL7QO4i4R8AAeWjpHSN7n/GNR04z7qkdek=@vger.kernel.org, AJvYcCUsFcQZ3ZKBjV2f6XLwce7ucSyFn+x54qP9CYaFNL4chm2yQDwd/tBC5rl7c+CTwrJRnXnaaHYTkXVc3g==@vger.kernel.org, AJvYcCUz1AmetXsWVMxIJ8YjoAGgugdJs6SJonmiPevfZdDnMO3o2FdcNB37opXxdBPmTQixlIsx6Q7a+Lhu@vger.kernel.org, AJvYcCV0e6jGSi4kuq5FgAbBiylHX1Be8JHVPI6psjMOefP/teOEvgrNrm5kQZ8jNQhMGXvZGqKx/UuRgQbDk9hL@vger.kernel.org, AJvYcCVX+alDi237ppyy3qNOe1pYaMneZXqAE04VkPtd6wWqayElUmudCOafL6FS7B6dUxKQuUXoEYylIrDv75o=@vger.kernel.org, AJvYcCWSkZ+qFRElamlDBuQPVmpRLk+pQiAIUjfLaW83BmfnrlrW2HdwCRFk5T+do7ih3tbJS2KKx1RiEBsL0401jqEAIGA=@vger.kernel.org, AJvYcCWnvlEb3KpBZExtt9YpyMcylNcPEwTP394RYO1AHDrD51qu4jzz/7pwJ/lxl0G0cfydCkjJrLiCkUeFtlk=@vger.kernel.org, AJvYcCXOlf7fkBChQ1GYOzxCrFfLo8nCstJcpmoSk/eXlayFQIUhzrDfeGzClJS9WbkaQ0TXK0UXSL33ekw=@vger.kernel.org, AJvYcCXSYXCmUA8dltWvM/mcdId3oTG72V7rwrkSED3seUt0tqwNSPvvaj7proIt7tU9eYq1wphxl2kcgYvROnwR@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFendnPo+6Pnk9Pn0dBH4PxfTbpZFohw47L7cegPQrQXY0V+1K
-	wvCuG9uiH92zSNz7ZxdwenlSbEqBR54ZwjAfVRWclxhHhY7uyxSSAD2b
-X-Gm-Gg: ASbGncuEsjxata711uswiGAtun4l1XPQZ46yszjWwc0qd6/0AnkMAxtyPoxrJYLnDZF
-	SS930SQSxtfIJrHgLh3JZEVejdSXDn+nymoTVUzw78R7BpMZ4lNwAuJZhkI43agkuAGGfrdOrDS
-	b//S93OiJo3pUL2+VCWwPhGyjxDq2yANub+glXYYvDSffBw9RRLBBtvIapAhiNnmOk9uRb01awv
-	JBJ8Q/t8bzHfJvL+zFIP73tkUh6Lvcu90a8stxgyO+nQRHrdEHHne62QYApMnAvF1cP/W7mDv3N
-	PX5J9v14Y3N8g9Q5nom5m8FYGRfD84HoKJ2tTq3GkBph4Ldvu95ktkG5mqp6LgHYzd2UhbxjBOH
-	oaeAvLLP6a8glaQeBaxVVAAIzHPYik5kQ1ruPh1zB86AJFal0Gp/37k/GUTSZioC4ynVVmVfsGO
-	0YrAGmOw==
-X-Google-Smtp-Source: AGHT+IGsUGu45MQwt+NZPV5mLr8VYLLqfRHTzbjIcd42cuNIOrbj6li3sVxyZFvsqM7RMTuhEoyH4A==
-X-Received: by 2002:a17:90b:4c4b:b0:32b:94a2:b0d6 with SMTP id 98e67ed59e1d1-32b94a2b221mr8959418a91.3.1757082696826;
-        Fri, 05 Sep 2025 07:31:36 -0700 (PDT)
+        bh=OoEqh9IVTkOosF1m/shamjcNQUhzlafUdY/KyvB+oqc=;
+        b=c/afM5JDZjjGOUfFB+bZvUSX/5a1ccDNgbEzZVqngY6c1/KO9zKPwAWrrWAKbFEGtp
+         thJuO5kkRw2i85FtFVbA/fAD4cVBqVL7uzJLxnnultaK23TGBFRgpqHu0d5P7LkgPtzG
+         /u7PtDguZHC156e7raFIj8sQrytYyrozAuNUBbgDvBv2pyq1pcNOYX83dw8tJ4kHoBnx
+         fIfJWTmoSxqY9YgHXr5KcaDBgYkKo5ZB7c2yinzLCQ+fLZ2NrG9wkCf0+Sf3ZhVHthVv
+         YG9cJoj+CQYSVST4PDKQHWddEkDkEemj8T2MBEWYWa+sVH6b2aJw8T1vQUyjt2wojpYZ
+         /ooQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPbfEnlRE2S1XSJHAMDYpx4JaEmp1uk37iXZTlyM4Y/02nABnLaA3Y2xyYvM20/cXeWn1PuENCxnKXTw==@vger.kernel.org, AJvYcCWEP9jkYFEheB+BorBnkXNQFecc4kNP6XkTgURhrWd1tUieuZt9Xx6EF2W/o5EwKpx2rKrK42MuP3zP2mdE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjOlQi/NyM40XySNXeOHvaXwN9wUZTCjgFFv2iAU19lTPXnPqW
+	ENOrqKhEnxSkKrfQf0p7FsmEzWiPJGb++8qledZ/xi2SVv1TjuOo6NQy
+X-Gm-Gg: ASbGncu7eeZHv72V8fbuv5gNv8csSuEDN18ZHjgNxYhpQyFVPBscL8TZ/k7aNtIp8B4
+	F3TBHj7msiLv3/yblzSmmbaVxxf9JB8EV5mgxHfWSGSXFKCp3EaVqg+B1ApHlTfRRmwi8+Xcmj6
+	UrP5QJGAa6m+Dqvel3qyGWpNpkgTi8eMvRHEapcKbCrMhOcfooBqB8l/yrXgTV0aauUby+AJots
+	K4/xf7W3gk5ZI2IbLTULXI9qOwzap37r6Aq1WvFErihPLZjLGg+RRkfsIVgMoFwnlsyJimSXfc+
+	Vz0BLmmYGcS2n1m+FC0gcaTvbJioxXKr0pg6tRc3Fw4jBve1Xx0XbrAdHp3oxWV9LHfkeRbHnEO
+	xJii+JR9skCYhrRXFfLFoBpCEefG5Evv0xhy7cvFbOz7oNQARjpoE+C7BwzxmELsZGyiymZWQNT
+	zux+wSdg==
+X-Google-Smtp-Source: AGHT+IGG5X0IQ83/EqRxZIzsN9RJAqPXXxGFJyViBUR4gwyKve4CrCNmU+x2wSEcEqF5NeQOOTNopA==
+X-Received: by 2002:a17:903:1252:b0:23f:f96f:9de7 with SMTP id d9443c01a7336-24944b62e7amr250599645ad.51.1757082865006;
+        Fri, 05 Sep 2025 07:34:25 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77267a225e6sm12382015b3a.94.2025.09.05.07.31.32
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2490658999fsm211077715ad.112.2025.09.05.07.34.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Sep 2025 07:31:36 -0700 (PDT)
+        Fri, 05 Sep 2025 07:34:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c00a3d00-d5d5-4f2b-8799-d1b8b22f85cb@roeck-us.net>
-Date: Fri, 5 Sep 2025 07:31:31 -0700
+Message-ID: <b8df4ddd-f86b-41db-b420-2656addf2ccd@roeck-us.net>
+Date: Fri, 5 Sep 2025 07:34:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,64 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/12] hwmon: Remove redundant error log prints
-To: Xichao Zhao <zhao.xichao@vivo.com>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Guillaume La Roque
- <glaroque@baylibre.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Markus Mayer <mmayer@broadcom.com>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, zhanghongchen
- <zhanghongchen@loongson.cn>, Yinbo Zhu <zhuyinbo@loongson.cn>,
- Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
- =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
- <alim.akhtar@samsung.com>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, Talel Shenhar <talel@amazon.com>,
- Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
- "moderated list:ARM/Allwinner sunXi SoC support"
- <linux-arm-kernel@lists.infradead.org>,
- "open list:ARM/Allwinner sunXi SoC support" <linux-sunxi@lists.linux.dev>,
- "open list:THERMAL" <linux-pm@vger.kernel.org>,
- "open list:THERMAL DRIVER FOR AMLOGIC SOCS"
- <linux-amlogic@lists.infradead.org>,
- "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE"
- <linux-rpi-kernel@lists.infradead.org>,
- "open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
- "open list:QUALCOMM TSENS THERMAL DRIVER" <linux-arm-msm@vger.kernel.org>,
- "open list:RENESAS R-CAR THERMAL DRIVERS"
- <linux-renesas-soc@vger.kernel.org>,
- "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
- "open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>,
- "moderated list:ARM/STM32 ARCHITECTURE"
- <linux-stm32@st-md-mailman.stormreply.com>,
- "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
- "open list:TI BANDGAP AND THERMAL DRIVER" <linux-omap@vger.kernel.org>
-References: <20250905072423.368123-1-zhao.xichao@vivo.com>
- <20250905072423.368123-3-zhao.xichao@vivo.com>
+Subject: Re: [PATCH v4] platform/x86: portwell-ec: Add hwmon support for
+ voltage and temperature
+To: Yen-Chi Huang <jesse.huang@portwell.com.tw>, hansg@kernel.org,
+ ilpo.jarvinen@linux.intel.com, jdelvare@suse.com
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jay.chen@canonical.com
+References: <a5edf505-9b77-461e-ae8d-510e6ed3f950@portwell.com.tw>
+ <07ff2b26-5518-4ccd-8509-75aab8989d24@roeck-us.net>
+ <bca8aa38-af39-4c8d-b3c8-5d452120dd77@portwell.com.tw>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -173,39 +124,23 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250905072423.368123-3-zhao.xichao@vivo.com>
+In-Reply-To: <bca8aa38-af39-4c8d-b3c8-5d452120dd77@portwell.com.tw>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/5/25 00:23, Xichao Zhao wrote:
-> devm_thermal_of_zone_register() prints error log messages when
-> it fails, so there is no need to print error log messages again.
+On 9/4/25 22:35, Yen-Chi Huang wrote:
+> Hi Guenter,
 > 
-> Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
-> ---
->   drivers/hwmon/hwmon.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> Apologies for the error.
 > 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 1688c210888a..0514e4bc5e71 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -239,8 +239,7 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
->   	if (IS_ERR(tzd)) {
->   		if (PTR_ERR(tzd) != -ENODEV)
->   			return PTR_ERR(tzd);
-> -		dev_info(dev, "temp%d_input not attached to any thermal zone\n",
-> -			 index + 1);
-> +
+> In v4 I mistakenly removed '.is_visible' while simplifying and then
+> incorrectly tested against an older tree.
+> 
+> A corrected '.is_visible' will be restored in v5.
+> 
 
-This series moves the message from an informational message here to an error message
-in the thermal core, even though it is (for hwmon) not an error. I personally
-think this is a bad idea. Can we get another API that lets me suppress that error
-message ?
+I don't know what the function does. If it sets a constant value,
+you could use .visible instead.
 
 Guenter
-
->   		devm_kfree(dev, tdata);
->   		return 0;
->   	}
 
