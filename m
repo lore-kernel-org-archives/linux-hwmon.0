@@ -1,192 +1,97 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE862D3EDF;
-	Fri,  5 Sep 2025 20:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84E826B764;
+	Fri,  5 Sep 2025 21:07:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757104948; cv=none; b=a4oUYAyI75Jkyr5v26VvV7dvuxBjNgD2x3Dp7BeBQjOiQR2f9Kdd0EYOPhUsDW9WsEVpwlA3JHJ5DJu96ziky2S+h/HAlLatsLGmIdz6HJs8hNeOPBnqLkL5aAhvejn9DvUj/25+ByuF///hKF6r81NxVBng7K0PwunZrBm4jxw=
+	t=1757106468; cv=none; b=VigFRnzloMyC4FSanf4tWIKnOnwlxvLSjLCQSCHSyvQS69GYf86HljPjKtKBVrkrr6cd7DDDHXGFPpuP2nhQvQ4739nAjsyrDJ+vql8+sUuRRSGSmyLGzRSykv0tO9mNT2aLVjwGl28o5nn4JL4rt1tpoR+cSi+rbkG38tPXWGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757104948; c=relaxed/simple;
-	bh=+ccPI1PT+4TT38mPD6jAKIoziJaQYf51FNSiIX4owl4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WK3OOO6nMecppUEDVf0BG1ousQb5yPRyq5Zrbi2IIKnHHEDo8P043aLzpW5Y3vzqfUtTN4Bf3GPAVjgFC4OJJ5lk/s1I0Fh5FchTIQ/MlGRhkXImZCYup9wDBJ83ugDiJVtYM8NJtEGQ3S2IjEc3KcS7VGiXmxB0t/0wm2mJtmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZ0uThzF; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1757106468; c=relaxed/simple;
+	bh=3843Vv8j3E5LWD3oStta9RcM6gyBK20cJn58+zi7pbA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WE/KPAaIsQUtL39+r9cODrCS/NfgBiVrt7vSuY3fQBsvHTD6KmS1uCKHMdhQowfXiIV02M1qgvaXz19DoQvFbXafo4WUxhWTykgi7omaGpiTE/TRfXaI0sR/XQM7c5hR/TpIj8Ea6/qN2+SVsm4R2wZluakE1H10GQsdyxNICWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ec9Z9Z+L; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZ0uThzF"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-772301f8ae2so2269235b3a.0;
-        Fri, 05 Sep 2025 13:42:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ec9Z9Z+L"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-24af8cd99ddso33271255ad.0;
+        Fri, 05 Sep 2025 14:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757104946; x=1757709746; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fYeEwJltXrjT+vHPZRV06zSXEVE+RtuJ4VrqontrN58=;
-        b=mZ0uThzF+nwGlNR9Qy+xPB2+/2kFmGjHlhrJaHvxuhf5lTLkumc/3iapIIt5y9QVvC
-         m4KLtqLIvRMzJaZV0GJpg2h3UxDiLNeW0dsCEgZr4Ie3/4JMo6empniYPBJ67M4F3uP1
-         g9f1tiKoNkIx79KiYUhQCfqXhxX2LKEx60sJ9xc6r6Y6rdwX5s58nJSqywwDzx7qu/iR
-         AFxbO6Bfl5MXxxDlzG01ELXg1CbJWiY9QYgM5Y11Sk9Lz1vUN6U2hq8SFyU+x18KBKYk
-         NuLhJNaNsmsZsK9jwBpybo9L/KT3oCrHLfdHnwBF9HfWPuqf+kj6c+Cl7YIzTSu1JQUe
-         EK0g==
+        d=gmail.com; s=20230601; t=1757106466; x=1757711266; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1OraY1KDXG5tLpby1/MhWp3WoQzDbT9BWKJqTltJE2A=;
+        b=Ec9Z9Z+LbuapUdDoYXfnqUM6p0W9JlcMSre+8MnlE1jdagKpb9qpJNFW4FezL63k6h
+         OSpni9nUXMJAw+d0ZhdfDEmpQsBFyRdWzEx650Ajp8HFslSso7YBEtkY1GU+nNan5jHK
+         ZZtsMZ30hDo67QYC/f2oTBk1d0DeajEP/fk/ATJAk4iVKjjQLWi2+wpfehKKIQEefzhw
+         5cEwnhVEcCD39r0oiAPglqxIyMz+dkLBA9w1hKaewrOFZTN1wyrEJ65XIG5CS/6r1IL7
+         zX2gp4fC2H3HCmFOXw2iNQahRd7G37qR1kWIDF/S110fMLgSUwaz43EWcGQSlyB/HMh/
+         jBdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757104946; x=1757709746;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fYeEwJltXrjT+vHPZRV06zSXEVE+RtuJ4VrqontrN58=;
-        b=efANk9GwJvA2eQYwdptNAVWn4OO18N1jQOHm3Em6sL4VZzJBAKrAqqgq8fH/L1Zfqv
-         JFLRGjE9vN7OIY+6r6T3lsZ8/KT8jtZPHkvWkGiPIvSXiCbz6wyBHP6QwlwtkxQ6YeFR
-         PukVVM2mUbXRx6+jO6ZAdvHnUZvo5YFV31ymZ9wVQLJ/gRuAtP427iSpiPc3sCHoEQR/
-         Y0lzy6mQ9Dp7kp2n0kHAujLo1ytrdQFLlGDfsV3U0ThhHeCu/1VggBL8XrHsMmb2tUW2
-         lgUWMcTSnuntbialr27GWFQE/ipQpICBCkjX/reorblPjBtTMk+q9f2MWibY8Q6Pu4/2
-         55GA==
-X-Forwarded-Encrypted: i=1; AJvYcCULoWSGaa+iRiNScivKGcJ7jpYdcJlHGnEF/dXZ/mgUsGdbQGEJXc7BFNcl03ABgWoiQhY9/NSbfESK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIiEbFyl4WT8Shvs8B1K1iLc3v32CtC8Fy1uMuf9xe2y9FiycT
-	+pYYXCMbd8Y5VbtySDX4adFH7Dux4ovkzYEsZptof2tZDoE0gE1Z6UZduD9dvvc1
-X-Gm-Gg: ASbGnctVgE/8Px9AQVjwHcuJTEqHA0SH0OCNu/ONgaCpThpS7e2wICY8p0xRIT7r17J
-	PuBL3ep//3zhX4D49id26gwITTa8+iDvJoYCii/5FZ0/unttkdWQRp3FcBdhjtbE3aZJlhHBCss
-	LWVXk2MmFjBYMVXetV8QtZA0V6SsfKO4/g0N/JOS7YlI69gQ8JfWmspaI86roJRGdmlo2ckaOpY
-	AhuLIR/pjXhB1b4bjnbFQyGLis2KzxmMgWcHBbhUL7Kjzdp7RZWwVhuFKXY+SeepbpUQlN8w25f
-	itgADGJyIb1YaulFyg9MzTN0RzwKC5246eGhMZASOc3U/M/DeJdXbAr+CY/G+5b4ah3Ipnbe3/5
-	7GrsS1OZFx/EQ624HIB3gnjVOFcUrXYa6M8B2xLfItbMezNXlxa1MOfNc
-X-Google-Smtp-Source: AGHT+IGkpPryL9y0zdrS0OeGOyjkz5gIpXWWM7O56+ZiSUllHd45Li/WBpjFwiwFORQfIkoGa2+ufQ==
-X-Received: by 2002:a05:6a20:3d88:b0:24c:2fa1:fdd4 with SMTP id adf61e73a8af0-2533f8c4cf6mr302871637.19.1757104945981;
-        Fri, 05 Sep 2025 13:42:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757106466; x=1757711266;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1OraY1KDXG5tLpby1/MhWp3WoQzDbT9BWKJqTltJE2A=;
+        b=pkucLRK1/rV3LDJW2CbIIqeWlRAtL9jLCIAiuyyEc3cKUl5vfibg8NRhLj95mOiZ0j
+         cnts6j9j/qPkkvQpVjyWtFsRViqT2EcvNyL+r0AiH0ug8DiCnFpm02elY5c4bjHlUIq0
+         aHnJtYBeyhGj6o+kun6Zsu4ivAoaNTtg5QeSbve2ZOBO6+Jo/dR9WRCsGQysYwTekPU6
+         BwHJ80yn9ao8IwJXgM7mIYCxaEEUDRDcDWFxotRqgKBNj+CVycZUIrY11Xnhj7oxtnIA
+         Slg37PFjJnnqfdZDytGkBmE4m2O5E1bqtnkPf/4wsU2576O2BUsV48vpZnvlCie3iu8p
+         FTSg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1zbpT9OB9Dmsb+d+6o6rDxAEFwzUxV/apy6YuNvFwDeLgezk2nwkBhP/sEHgn0x4ITKBKeaPST++6@vger.kernel.org, AJvYcCWjPcmR9IzDouoiyY1DnnSqq0XCzPCQjyXjF8k3qKMh13/QHSFG6WnjAu4ONr5pwAv/QafWGg2ngKw15jmYdY0YDik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFpcmLmsDOa0LAXmfn+KqPM1Vp7JB9sVwynVg8z0kQX68o7eFT
+	hggb0AozE7jHnSLqDEGIl1ta9r4OuWo00Voj7uXDJ7jVJmSxjsYAAPAZ
+X-Gm-Gg: ASbGncsSLVQapmbWIGW2WO18jq6jak1JS81EMKeZW5kH6/DQV7TWCItCkH8a/97CBjh
+	iuJ4aupUwU7EVLYrXHfUiqOyfB1P3oa2nuJUeNPYuJ0TVZF8hhumihDKjejmELU39ysGXeZxiE1
+	0HX2pNPEL8M6MzvAuTi0uTkP3/1f4iO9+WvwXfl0/bEOLcwfqD/34dheLaD7YW/3AuhFggbncY0
+	Zqu2tShYXpwfj+JDD+s0Kj1S4plM/itnrnjGXcAMiZXUPqdVtO6Cwx0o+LbOe5P2y693PtPwGqT
+	5OdLzh6z/aqhhpMPxLqk2KmJGMq9ZJaGC3tYF3/HBCUcI8RL4B48al1AFzixq9QwaKrK1SBRhnN
+	eONMev8YAkIJRnbok0dwTuCJDMm7Jhv89Hxn8UgTdWa8UPA==
+X-Google-Smtp-Source: AGHT+IGS+ZDno32/glJ5EVArsVb5yN5iCNRV9PGoMVaxuwRlAOth3oklD9GFJuwyHCCgQsE7qY0Ysg==
+X-Received: by 2002:a17:903:2b03:b0:234:b743:c7a4 with SMTP id d9443c01a7336-25171cbfd83mr916675ad.38.1757106466161;
+        Fri, 05 Sep 2025 14:07:46 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4fa7484ec5sm7322299a12.49.2025.09.05.13.42.25
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24ccfc56e7esm46452545ad.58.2025.09.05.14.07.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 13:42:25 -0700 (PDT)
+        Fri, 05 Sep 2025 14:07:45 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 5 Sep 2025 14:07:44 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: linux-hwmon@vger.kernel.org
-Cc: Christian Kahr <christian.kahr@sie.at>,
-	devicetree@vger.kernel.org,
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-hwmon@vger.kernel.org, Akinobu Mita <akinobu.mita@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 17/17] hwmon: (ina238) Add support for INA700
-Date: Fri,  5 Sep 2025 13:41:59 -0700
-Message-ID: <20250905204159.2618403-18-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250905204159.2618403-1-linux@roeck-us.net>
-References: <20250905204159.2618403-1-linux@roeck-us.net>
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/2] dt-bindings: hwmon: pwm-fan: Document after
+ shutdown fan settings
+Message-ID: <7c2b7c73-1955-497b-81f3-3b31c1f1f2f7@roeck-us.net>
+References: <20250904202157.170600-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250904202157.170600-1-marek.vasut+renesas@mailbox.org>
 
-INA700 is register compatible to INA780 but has different current, power,
-and energy LSB values.
+On Thu, Sep 04, 2025 at 10:21:09PM +0200, Marek Vasut wrote:
+> Document fan-shutdown-percent property, used to describe fan RPM in percent
+> set during shutdown. This is used to keep the fan running at fixed RPM after
+> the kernel shut down, which is useful on hardware that does keep heating
+> itself even after the kernel did shut down, for example from some sort of
+> management core.
+> 
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-While the chip does not directly report the shunt voltage, report
-it anyway by calculating its value from the current register.
+Applied.
 
-Cc: Christian Kahr <christian.kahr@sie.at>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/ina238.rst |  9 +++++++--
- drivers/hwmon/Kconfig          |  6 +++---
- drivers/hwmon/ina238.c         | 17 ++++++++++++++++-
- 3 files changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/hwmon/ina238.rst b/Documentation/hwmon/ina238.rst
-index 722760961821..43950d1ec551 100644
---- a/Documentation/hwmon/ina238.rst
-+++ b/Documentation/hwmon/ina238.rst
-@@ -32,6 +32,11 @@ Supported chips:
-     Datasheet:
- 	https://www.ti.com/lit/gpn/ina238
- 
-+  * Texas Instruments INA700
-+
-+    Datasheet:
-+	https://www.ti.com/product/ina700
-+
-   * Texas Instruments INA780
- 
-     Datasheet:
-@@ -61,8 +66,8 @@ INA237 is a functionally equivalent variant of INA238 with slightly
- different accuracy. INA228 is another variant of INA238 with higher ADC
- resolution. This chip also reports the energy.
- 
--INA780 is a variant of the chip series with built-in shunt resistor.
--It also reports the energy.
-+INA700 and INA780 are variants of the chip series with built-in shunt resistor.
-+They also report the energy.
- 
- SQ52206 is a mostly compatible chip from Sylergy. It reports the energy
- as well as the peak power consumption.
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index b0f440011478..af3107c9ca4a 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2257,9 +2257,9 @@ config SENSORS_INA238
- 	select REGMAP_I2C
- 	help
- 	  If you say yes here you get support for INA228, INA237, INA238,
--	  INA780, and SQ52206 power monitor chips. This driver supports voltage,
--	  current, power, energy, and temperature measurements as well as alarm
--	  configuration.
-+	  INA700, INA780, and SQ52206 power monitor chips. This driver supports
-+	  voltage, current, power, energy, and temperature measurements as well
-+	  as alarm configuration.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called ina238.
-diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index 98255619adeb..356d19b7675c 100644
---- a/drivers/hwmon/ina238.c
-+++ b/drivers/hwmon/ina238.c
-@@ -101,7 +101,7 @@ static const struct regmap_config ina238_regmap_config = {
- 	.val_bits = 16,
- };
- 
--enum ina238_ids { ina228, ina237, ina238, ina780, sq52206 };
-+enum ina238_ids { ina228, ina237, ina238, ina700, ina780, sq52206 };
- 
- struct ina238_config {
- 	bool has_20bit_voltage_current; /* vshunt, vbus and current are 20-bit fields */
-@@ -155,6 +155,16 @@ static const struct ina238_config ina238_config[] = {
- 		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
- 		.temp_resolution = 12,
- 	},
-+	[ina700] = {
-+		.has_20bit_voltage_current = false,
-+		.has_energy = true,
-+		.has_power_highest = false,
-+		.power_calculate_factor = 20,
-+		.config_default = INA238_CONFIG_DEFAULT,
-+		.bus_voltage_lsb = INA238_BUS_VOLTAGE_LSB,
-+		.temp_resolution = 12,
-+		.current_lsb = 480,
-+	},
- 	[ina780] = {
- 		.has_20bit_voltage_current = false,
- 		.has_energy = true,
-@@ -846,6 +856,7 @@ static const struct i2c_device_id ina238_id[] = {
- 	{ "ina228", ina228 },
- 	{ "ina237", ina237 },
- 	{ "ina238", ina238 },
-+	{ "ina700", ina700 },
- 	{ "ina780", ina780 },
- 	{ "sq52206", sq52206 },
- 	{ }
-@@ -865,6 +876,10 @@ static const struct of_device_id __maybe_unused ina238_of_match[] = {
- 		.compatible = "ti,ina238",
- 		.data = (void *)ina238
- 	},
-+	{
-+		.compatible = "ti,ina700",
-+		.data = (void *)ina700
-+	},
- 	{
- 		.compatible = "ti,ina780",
- 		.data = (void *)ina780
--- 
-2.45.2
-
+Guenter
