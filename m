@@ -1,146 +1,118 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5242D77E6;
-	Fri,  5 Sep 2025 14:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CACD30B530;
+	Fri,  5 Sep 2025 16:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757082867; cv=none; b=IW3nlayW6jYSGaPA1Wt1u53pALWQdcSq9LVlPiZP5vNj0nPa65YND1WmmquC0QCS6V/UTpjFGSJyEbNFqXnY+VLH2X4eSFjH6MLtTlE5SQHiPwGpundUYkbG5lUBsUBbnm0Kk69Z9q0dsmtPQGjT8r8qyK1gS2mtov80Mr57qxE=
+	t=1757091520; cv=none; b=i+D4R2hFAcpajJyvQQe/dqvssFirSlYpVbSPAtLJfvkC0Hx9Yl24/wJJRK8L5xv/TpSv1nfJAzfEtokoOIdMdAT0/JVEVbgnWHtg+c3hASo2q9XRbbfJ0fet4180/YesdI4aW3vj8Bo2YYc4lXgg1xEcYJaSh79+z+UoVCeoOmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757082867; c=relaxed/simple;
-	bh=3vsfFRct25KlREEmsU8jBgqZdaBgVs7QzNQNTr2VZJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kHtPn7abL4+rwIhxja+2VE9SmSON74VRIL0q1YPtW99v8/fpibApgzZj+jAQW5PDLQSxLXCf504TXZiaJALOl09ta9uJ9h3VmQwqxBsPTVndCjx1MWx+C8Pd2xmu0ag7s7H0GjCcFZt1xZqWFm5XKt3iF0tlxuKzL+R12e3DAKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsVuBqLc; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1757091520; c=relaxed/simple;
+	bh=GY5sV0uvjNxCwVURiY/QhPsK0JD0DBaDTBCBclskKx0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hlc42kDiPlmWhnYCQk5rZPqBX6+3T1s6gZxArgJ1v6Qc4BQOxtoPzTqAjE6oPU7NLhqvGjScf9BJjFxU2NRInyHEB4ItY13xlHs7HHHaxqQLXtOIHqjK9XXjW2TqStS2BT7yHz8YhkZ/S7UihGzLuuAqbXCBYdqns8lGFTIETZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kaUa7Y2c; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsVuBqLc"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-24c784130e6so25932125ad.3;
-        Fri, 05 Sep 2025 07:34:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kaUa7Y2c"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b4755f37c3eso1895426a12.3;
+        Fri, 05 Sep 2025 09:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757082865; x=1757687665; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OoEqh9IVTkOosF1m/shamjcNQUhzlafUdY/KyvB+oqc=;
-        b=CsVuBqLc/Zw4qGDRPR13shEts52NU01AMHRr2NRcrbU6b/DnQmbuWCTRXqXKn0d+UJ
-         m5TrfBn5cgewypX9bwEThtz6Aoj/CTqPNGtraX6l1xDLajW8Gkc7P+/cQCSgC++zThoO
-         uk5nFqt012cLJ7kPJ4Ng56AJ0QRXNga83LyGLg3OX/UvHp7WTpSl6+Le53oBOX+3Oa2n
-         Hv1uZ0HWFRsYTho6MTAT1TkGBNtLzgQ02aNjInRq0ObJpOXR52kDafUoBavFBiiavjhW
-         l31mYLWvxm7mNm1hvtlfn8nigvBXxGPjecKexFzSC0tfF62vjrv3xiLPS4HHpRVBirXl
-         zIXg==
+        d=gmail.com; s=20230601; t=1757091518; x=1757696318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=UTV25bJ0QHDx8oC1ADoQRhPgnqFtK+mmG6EkQFqHDco=;
+        b=kaUa7Y2cvV/+Mn+cXNQAqncJUu9zPPea1pecCxSW+YEB6ANS2lF7tcoGJ5wudrl5eO
+         hb35rZ1qTsNvKEgFoDxmXfZKQX2cOOOIR1CqDEbaiIVbLYfa0qA7D7YmHtSqV8NLvlyK
+         2E2YGtRPMwrkvvDBF3CYXerX3yWjW47OKLkC9VgkKxuZ1eWlDjb+zMQ1UeZpwMj+aqk5
+         LffeSqJOLD30hGZnWYXWMf6067C1YKx7f+M9PrLXFBSgtDzEinF9BeXF/ntf1l9NuinW
+         pruhFVm5NVVYrtW5cKC/7Qgtty4BqvruXC+jifXDXhj5YRqFIxA5XfNSW8rV5gyPoGaV
+         K3SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757082865; x=1757687665;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1757091518; x=1757696318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OoEqh9IVTkOosF1m/shamjcNQUhzlafUdY/KyvB+oqc=;
-        b=c/afM5JDZjjGOUfFB+bZvUSX/5a1ccDNgbEzZVqngY6c1/KO9zKPwAWrrWAKbFEGtp
-         thJuO5kkRw2i85FtFVbA/fAD4cVBqVL7uzJLxnnultaK23TGBFRgpqHu0d5P7LkgPtzG
-         /u7PtDguZHC156e7raFIj8sQrytYyrozAuNUBbgDvBv2pyq1pcNOYX83dw8tJ4kHoBnx
-         fIfJWTmoSxqY9YgHXr5KcaDBgYkKo5ZB7c2yinzLCQ+fLZ2NrG9wkCf0+Sf3ZhVHthVv
-         YG9cJoj+CQYSVST4PDKQHWddEkDkEemj8T2MBEWYWa+sVH6b2aJw8T1vQUyjt2wojpYZ
-         /ooQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPbfEnlRE2S1XSJHAMDYpx4JaEmp1uk37iXZTlyM4Y/02nABnLaA3Y2xyYvM20/cXeWn1PuENCxnKXTw==@vger.kernel.org, AJvYcCWEP9jkYFEheB+BorBnkXNQFecc4kNP6XkTgURhrWd1tUieuZt9Xx6EF2W/o5EwKpx2rKrK42MuP3zP2mdE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjOlQi/NyM40XySNXeOHvaXwN9wUZTCjgFFv2iAU19lTPXnPqW
-	ENOrqKhEnxSkKrfQf0p7FsmEzWiPJGb++8qledZ/xi2SVv1TjuOo6NQy
-X-Gm-Gg: ASbGncu7eeZHv72V8fbuv5gNv8csSuEDN18ZHjgNxYhpQyFVPBscL8TZ/k7aNtIp8B4
-	F3TBHj7msiLv3/yblzSmmbaVxxf9JB8EV5mgxHfWSGSXFKCp3EaVqg+B1ApHlTfRRmwi8+Xcmj6
-	UrP5QJGAa6m+Dqvel3qyGWpNpkgTi8eMvRHEapcKbCrMhOcfooBqB8l/yrXgTV0aauUby+AJots
-	K4/xf7W3gk5ZI2IbLTULXI9qOwzap37r6Aq1WvFErihPLZjLGg+RRkfsIVgMoFwnlsyJimSXfc+
-	Vz0BLmmYGcS2n1m+FC0gcaTvbJioxXKr0pg6tRc3Fw4jBve1Xx0XbrAdHp3oxWV9LHfkeRbHnEO
-	xJii+JR9skCYhrRXFfLFoBpCEefG5Evv0xhy7cvFbOz7oNQARjpoE+C7BwzxmELsZGyiymZWQNT
-	zux+wSdg==
-X-Google-Smtp-Source: AGHT+IGG5X0IQ83/EqRxZIzsN9RJAqPXXxGFJyViBUR4gwyKve4CrCNmU+x2wSEcEqF5NeQOOTNopA==
-X-Received: by 2002:a17:903:1252:b0:23f:f96f:9de7 with SMTP id d9443c01a7336-24944b62e7amr250599645ad.51.1757082865006;
-        Fri, 05 Sep 2025 07:34:25 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2490658999fsm211077715ad.112.2025.09.05.07.34.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Sep 2025 07:34:24 -0700 (PDT)
+        bh=UTV25bJ0QHDx8oC1ADoQRhPgnqFtK+mmG6EkQFqHDco=;
+        b=wDBGRb/mJ+KhHVStc/m2GND6DeWa87LO9kvX6KmNvlK9iADrM5veQkbwyVkfN0mBA5
+         ZvuUQtg4aXoWDhqtlgk144XfWtOmdpHqGAC0dArh8tD6vlmCihPIFLtBjuW0R6NcZ/xq
+         NdrIQkOC81zcQUDma9EWzVQH7skLrLWxVAdiJHWEPedbteJCyW2sDjcP4ToaZ1RtpWU9
+         +WKOwRAyJaiU7DBtBwDMl6lQOOofavPT1NZa904FtabgfbG15vz/F22u3hX6pzPt+b5x
+         S4S11cO1hoRY+jlFCuztZNC0K/luIjye78/UhZcCt4yRg6ijcoql/xmoWeJaSS4iintN
+         6USQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfvgyrKPQsmYo6TEdUAvIkdvbe3v1PdXKIgFVQ9TKkVTHzBMONY7NNjCN4L0I2lFqrJccQXQdRMkzyg4I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysreUd5LaIh5JvXzrLaNLISfI7KFIbkPFGqDg0u5XcWRfv/Gxo
+	uuZQW8W+NQf1/359WSfqk8FzX1BgVXSZ2eTLhiTsyyorCPsaP/iyrGm7HndBQBkY
+X-Gm-Gg: ASbGncto6ehL67psqxowd7JCn0cEWivHHd8XfCIvsY62/rm/wZIq4/B0+YJ9Pq+U337
+	DFJJbg9gtOJkEZakJ3ojSdbMM+OaaIcl4i7gD6/e1lZIUHoXUVWleOw1VFYrtd3Oyd8eqf4fwxq
+	WDTkjyK0QXkZcnjRGlFPJ5ECTcNXefbX0PpeTVf7rZeUIeghDDjvEaRkXxRvK+zwmGaR8i4mi97
+	++dABh2vUZf3gYQ1CYa1C5i12ih1ftBXPZd9SpE0hSapkCr8GW44zqkc6S7dUGNPIHNqnTP5Ybg
+	nNP56QCS1HImaDkYR9nBf1xPA9ql7oWWhEpnEU9NW1r3sODr61DzcPr9kYaU5JpvJkg19oOcwYw
+	X+IQ1VTP8zFe82fsd9a0ZtvuCSZ3hzYOjHGjzrLdtYpmlaw==
+X-Google-Smtp-Source: AGHT+IGPP7S+GDY+NHU/RVuoBKdrlkv46QNH1BjxC4oqKJ6toH50fXv7b/F7fCTzF8ljKeVbbF/hdw==
+X-Received: by 2002:a17:90b:380a:b0:32d:3e1a:79e1 with SMTP id 98e67ed59e1d1-32d3e1a7f6bmr199327a91.8.1757091517732;
+        Fri, 05 Sep 2025 09:58:37 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32bd89c530csm827628a91.4.2025.09.05.09.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Sep 2025 09:58:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b8df4ddd-f86b-41db-b420-2656addf2ccd@roeck-us.net>
-Date: Fri, 5 Sep 2025 07:34:23 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.17-rc5
+Date: Fri,  5 Sep 2025 09:58:35 -0700
+Message-ID: <20250905165835.1653373-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] platform/x86: portwell-ec: Add hwmon support for
- voltage and temperature
-To: Yen-Chi Huang <jesse.huang@portwell.com.tw>, hansg@kernel.org,
- ilpo.jarvinen@linux.intel.com, jdelvare@suse.com
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, jay.chen@canonical.com
-References: <a5edf505-9b77-461e-ae8d-510e6ed3f950@portwell.com.tw>
- <07ff2b26-5518-4ccd-8509-75aab8989d24@roeck-us.net>
- <bca8aa38-af39-4c8d-b3c8-5d452120dd77@portwell.com.tw>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <bca8aa38-af39-4c8d-b3c8-5d452120dd77@portwell.com.tw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/4/25 22:35, Yen-Chi Huang wrote:
-> Hi Guenter,
-> 
-> Apologies for the error.
-> 
-> In v4 I mistakenly removed '.is_visible' while simplifying and then
-> incorrectly tested against an older tree.
-> 
-> A corrected '.is_visible' will be restored in v5.
-> 
+Hi Linus,
 
-I don't know what the function does. If it sets a constant value,
-you could use .visible instead.
+Please pull hwmon fixes for Linux v6.17-rc5 from signed tag:
 
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.17-rc5
+
+Thanks,
 Guenter
+------
 
+The following changes since commit 1b237f190eb3d36f52dffe07a40b5eb210280e00:
+
+  Linux 6.17-rc3 (2025-08-24 12:04:12 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.17-rc5
+
+for you to fetch changes up to c2623573178bab32990695fb729e9b69710ed66d:
+
+  hwmon: (ina238) Correctly clamp power limits (2025-09-01 08:03:05 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.17-rc5
+
+- ina238: Various value range fixes when writing limit attributes
+
+- mlxreg-fan: Prevent fans from getting stuck at 0 RPM
+
+----------------------------------------------------------------
+Chris Packham (1):
+      hwmon: (ina238) Correctly clamp temperature
+
+Guenter Roeck (2):
+      hwmon: (ina238) Correctly clamp shunt voltage limit
+      hwmon: (ina238) Correctly clamp power limits
+
+Vadim Pasternak (1):
+      hwmon: mlxreg-fan: Prevent fans from getting stuck at 0 RPM
+
+ drivers/hwmon/ina238.c     | 9 +++++----
+ drivers/hwmon/mlxreg-fan.c | 5 ++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
