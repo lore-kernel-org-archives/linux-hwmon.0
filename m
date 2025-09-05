@@ -1,63 +1,63 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339C52C21CB;
-	Fri,  5 Sep 2025 20:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9F02C3248;
+	Fri,  5 Sep 2025 20:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757104932; cv=none; b=S5IWEEyUs2uoMdgGHmAH89pAIyj75EmzGIRQqyiGIgCZEyxmEuxXb6aJeK7IGTP4jdab3YrCNXhf51+3kjzErwRm2/kCZQKSQai82cZdPBuV5PaQQUwkok7TMm9FWe+Ne+AvxCNBYWfS79tlvMvggJ3XHxuSKQ7Oz3UyCMNR2V0=
+	t=1757104934; cv=none; b=eZRebpR3ZPC9jQXhem4PCwMdwxHTTnow5qKKhcp18a1ffiE/zcE48hNY+mhb3FN3uPz7NSu106buU6cUxoIDCCf5p1Brd54gfvO6ozULhCtLt7K5gg8lvqoZOEiE6cio4RuXGWVQ6LEEWNqFj/pfbdsygZ+BuhK+trSE3weCJJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757104932; c=relaxed/simple;
-	bh=vNMAVBcOQEkLY7FHQtBaOO45nrS0Dp9HdXdB4gRw/Ec=;
+	s=arc-20240116; t=1757104934; c=relaxed/simple;
+	bh=SqMR5kU4bEdUavD9Mf6J9LSpY7eedxAHjB/QV3rFg3U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uji7cpKpzlqhuDKTrdxJiBbgBcOgasiCiHtvI44HfFl5ropZYn2TyMSjHxhM2pnhvIEOAdntoOnDLa/UV3zJZk25mGGO0LlyRT4ZeDlv5CGHbZ+OoSAOm4Ly7l/G5ig5KrHjuL+rnhX3tgz4Wu6W+wLgooSwI1OU1Wk+6lOrv5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TnUqgvkR; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=MOXZu2lxBY3cdI61Wo6jrmYL3leXCXlY77RYRJa7Fi0JfgLHz1Xt4PdA4aF2Yq1X7igYHdE1ks8gBQaJozDcmUBPWkwD7Vc09rVScJBBr2uCCALxksN5XQPYxekluv2WgKMIWUdN+hLMw0RlzFa2sbixK1ro6fE9sKw2ZTgPmxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PkrkuhMb; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TnUqgvkR"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24cdd95c422so12797625ad.0;
-        Fri, 05 Sep 2025 13:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PkrkuhMb"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-32b5d3e1762so2001831a91.3;
+        Fri, 05 Sep 2025 13:42:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757104930; x=1757709730; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757104932; x=1757709732; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FUVx3Z9Dat9ipVoA2NYXPpF/py7T4wRVdUeiFbHJ+Xw=;
-        b=TnUqgvkRDVRk3pSCpRGuYUiRar9BWXGoCQTTQpjzZTIZATMAmXepObn4e7yRi+j+yw
-         65kWW+WhfRWor7XbMY5O767p/mLxYHfzw3f96NYzW5c/CoqiI439cDKhOdrqE1ZwjUsi
-         bOazxnM4NV8OrgzyuOGjCv4qSpw9Yb1PgpTvIuOya5RyAAvRJVkNwZT92abC7J++lzkX
-         p8PmjxkW7WL2SOnEPfK8ZLChL4Px42yUiPoRKx5h9njWwhYqvB4pJTCM9Zi0KMCbbS6o
-         btogaTNSLF72Q8H0M56e3rD9eUTG1msvsgKWS+mq2xdG4qjuOsGMTrIwn9/R9S7IWQzN
-         Z9/A==
+        bh=476Bp6Qsi26SkFYl6GsKeUkbyn9Et1KTUf2ukj/UpKI=;
+        b=PkrkuhMbhAvdw+5VBrgaRq0o/tQu9+0U597MDKWxlUM2xfGBn5ACb5dW6ZMbxNwZPf
+         zzseWy9PVGsqV0CgCh+IbNc9P64cZz2MP1SQejMdPqZNA5lt0yJDpzEjlPswAihnD6uP
+         EdxJFt6bUpJ5HCsslxv3W0fYcLKla3Xp7cFhVGHN8NOtEE0rtpcrKkJkv4B7sHuY3oRf
+         6FfzKwp6vC34O+MydeHTzWBVryLW3BwfQF/fJwQ6ngnCF9rzEog3pfGwWcu/SPXvKM6o
+         lnqt8wi+1R09b4UucCtpJu0QFAKLtZjV3rgC0wJs0fEm3CiPMQ5c99Rf4H+IbD2NN/Op
+         jDCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757104930; x=1757709730;
+        d=1e100.net; s=20230601; t=1757104932; x=1757709732;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=FUVx3Z9Dat9ipVoA2NYXPpF/py7T4wRVdUeiFbHJ+Xw=;
-        b=JNAl2S//9/4fyNVwIoak3YQLfOvMnIn4MyHVUD9TXvRyW72FBTqkeXEZNh7sVbgZ+3
-         JXu+HzUzAHDOVEJagohNH8Xi7zPtOc2YTpOXh8GIoS3gkzcE6gSY8CKPRR+lXu7BveBT
-         25NQfn1E7+A1YoyJmKgVF7XH+owZjWJtBQCRQpicIqlSr1m3vCXTHz9YtQNtJkPzIJNe
-         6tzgk9rwieNcmg3Hfi0JAAp1Ye6qRorI9Rr100rLiQ70vgpmWm/buwQo1AA1np51bGRO
-         RJNXQ/6ia50rtXJlMQPOVqcgNQ/tb57blmOq1H73XcWoGQWlH9+POJi59PGR2OM7cu7h
-         U89A==
-X-Forwarded-Encrypted: i=1; AJvYcCUoGdDWThRgPV+pqcdwK44SFNktzWQsClJDHmz8jt4isd/Y4xOTQOVFVEECi3xBAM5w3qk6PWJ+uRLi@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC8rO9CUWXSTGmIH0xijQfr4fazXXK/MjUZaWSPAwzRLKLYdjX
-	0Op+xPzsi2PZvOh2NtmEtXz3tCqzJcbnX0q1PaVKi6rep2iireOlFl0pTDEq20dK
-X-Gm-Gg: ASbGncvl067+BEo+Pg1jyCOlO9wREOnMEuXml+dCkw3S2tujB75OSeBuTy7z6TjgAI+
-	f+zIVz+SaHPQZd77Wc2nMcpwZXnFOD+MmF1hjbJfuVQTBqKlsM0iT8ZtCWAT2SWi/pPzX3prE6Z
-	gBB+OnfWjJovrRSsK1JlNrsrAq1taHbRqzQZWnLLdNTdx/LhwUYWHVx+pDTbIC/4YFgrflgozVG
-	L9Q8ogahA+mT56CkEglckHNcx5DhqGgEqWW7Ojs9upjj3iCSUIkPCEnbXY1gyuf0kfrvazoWHq4
-	IvOvkDDdxe62EUJ3KNPgmpqrs3yQp4TfISd52XHueviUKK/a5OqbEUxvAvSNe+1bzHT6G0eLFkh
-	xBhIRmGwu6Hq2EOGuU+dB5H2QcYuovntQy6A=
-X-Google-Smtp-Source: AGHT+IHVVkDRfoYr8oPZ0TSeWO875eWQSnKA9pF4riEPL76mbImrouJQjuNhLEaiIZAfh4IsdN9exA==
-X-Received: by 2002:a17:902:d4cc:b0:24e:af92:70c2 with SMTP id d9443c01a7336-2516f240f23mr433875ad.24.1757104930169;
-        Fri, 05 Sep 2025 13:42:10 -0700 (PDT)
+        bh=476Bp6Qsi26SkFYl6GsKeUkbyn9Et1KTUf2ukj/UpKI=;
+        b=oHz0hMmqxjrBekoPPVGYQWYPbGknrc4xTjlyT1RIag8yshXK7rP25Yd+56BCpKpmpB
+         vQ7iY5nYhSEUYYHlf4bD0qS6U3Q111jf5px+35Cg7CbE3Z0FCaP6neiHxWELOqTBEZ10
+         38YRN6XAyPnEg0aIV902il4t6ECFT24xYUDyz/eF3KQa6oBP9fdlRw9dLI/Z4Kc/Zcd6
+         OPqj69qwmgYMXsLtIUSfCe7fawpYO9hRbwQ+JB52l4r2XNDyhV3GPItQREHmAMm26bSw
+         BmDji6YtOSt3HzENduI4jpIRbkyeFY68DvQ9EYfNt5yZ9UdIJh+5Eh9FQzB4/y5lE4eq
+         7aUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIoT1T0G0U88xwiymqRGFhpOIlDWNQv3mNzGPc2psRJCpVMDeeR01SCvf7gnww6BhNMwsFAzVfFpkT@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf1sl/fgyCosyosBWelL4ohUpL4li5aGii4VJtFHDyalxsaUuf
+	+aT0e3UsRohASHhBTfovH77AZOyYfpbbAijfa8l/7vSbYW04oReUQr68/0h6eyW3
+X-Gm-Gg: ASbGncs0D0IhfgYyDEOkhB0ntYrOOrqls3oo4RUo7gmwbwZEVx7Jg8dCily06akewxN
+	tyqOFv775CGGr7eqDISDvNmsdwgwHmr9qSOwdBhz13UbSxqge9TabF/+cfAz0SjzD7XaDg0Jdl3
+	70eU9Ra+Hdtozs3zbvOCIvoQo7hjNEjuhDiOSg0ul59NFqWF7djOks7Y/7MpP3cOdSuIg7QJxwk
+	5EOhS56gurizO4Yh1sSj3LsIx56e7NWlQLuq8zCNMHql33+QqQ2ItsPcWCQve1pZZbUcoXObBsU
+	AurLU+zNewvLo1kj1ZU/eWH17qK3PVQX8iIcqovOaVLv/fhONgg1HUCos55t+dAJqMDBQWF4xzW
+	dEkH/lUO1+8IASjVhdCoEANLSDgm5on/ddw0gWx/Y36kqBA==
+X-Google-Smtp-Source: AGHT+IEDa6tvg1rt6KuF8z3CjhR8LE4zJ2EbWSHFBXC3UM1e+55KkCIof4asvo7T5VYqt1adsQl70A==
+X-Received: by 2002:a17:90b:38c4:b0:328:192:b7a0 with SMTP id 98e67ed59e1d1-32d43f5c4c6mr263586a91.19.1757104931508;
+        Fri, 05 Sep 2025 13:42:11 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-327da8e5ad5sm23934551a91.18.2025.09.05.13.42.09
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-329b3e28a10sm15122281a91.18.2025.09.05.13.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 13:42:09 -0700 (PDT)
+        Fri, 05 Sep 2025 13:42:11 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: Christian Kahr <christian.kahr@sie.at>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 05/17] hwmon: (ina238) Pre-calculate current, power, and energy LSB
-Date: Fri,  5 Sep 2025 13:41:47 -0700
-Message-ID: <20250905204159.2618403-6-linux@roeck-us.net>
+Subject: [PATCH 06/17] hwmon: (ina238) Simplify voltage register accesses
+Date: Fri,  5 Sep 2025 13:41:48 -0700
+Message-ID: <20250905204159.2618403-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250905204159.2618403-1-linux@roeck-us.net>
 References: <20250905204159.2618403-1-linux@roeck-us.net>
@@ -80,149 +80,262 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Current, power, and energy LSB do not change during runtime, so we can
-pre-calculate the respective values. The power LSB can be derived from
-the current LSB using the equation in the datasheets. Similar, the
-energy LSB can be derived from the power LSB.
+Calculate voltage LSB values in the probe function and use throughout
+the code.
 
-Also add support for chips with built-in shunt resistor by providing
-a chip specific configuration parameter for the current LSB. The
-relationship of current -> power -> energy LSB values in those chips
-is the same as in chips with external shunt resistor, so configuration
-parameters for power and energy LSB are not needed.
+Use a single function to read all voltages, independently of the register
+width. Use the pre-calculated LSB values to convert register values to
+voltages and do not rely on runtime chip specific code.
 
 Use ROUND_CLOSEST functions instead of divide operations to reduce
 rounding errors.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ina238.c | 47 ++++++++++++++++++++++++------------------
- 1 file changed, 27 insertions(+), 20 deletions(-)
+ drivers/hwmon/ina238.c | 161 ++++++++++++++---------------------------
+ 1 file changed, 53 insertions(+), 108 deletions(-)
 
 diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
-index e386a0f83fbb..316a7dc720f5 100644
+index 316a7dc720f5..ae27ae2582f2 100644
 --- a/drivers/hwmon/ina238.c
 +++ b/drivers/hwmon/ina238.c
-@@ -118,9 +118,10 @@ struct ina238_config {
+@@ -101,9 +101,11 @@
+ #define INA238_CALIBRATION_VALUE	16384
+ #define INA238_FIXED_SHUNT		20000
+ 
+-#define INA238_SHUNT_VOLTAGE_LSB	5 /* 5 uV/lsb */
+-#define INA238_BUS_VOLTAGE_LSB		3125 /* 3.125 mV/lsb */
+-#define SQ52206_BUS_VOLTAGE_LSB		3750 /* 3.75 mV/lsb */
++#define INA238_SHUNT_VOLTAGE_LSB	5000	/* 5 uV/lsb, in nV */
++#define INA238_BUS_VOLTAGE_LSB		3125000	/* 3.125 mV/lsb, in nV */
++#define SQ52206_BUS_VOLTAGE_LSB		3750000	/* 3.75 mV/lsb, in nV */
++
++#define NUNIT_PER_MUNIT		1000000	/* n[AV] -> m[AV] */
+ 
+ static const struct regmap_config ina238_regmap_config = {
+ 	.max_register = INA238_REGISTERS,
+@@ -118,9 +120,9 @@ struct ina238_config {
  	bool has_power_highest;		/* chip detection power peak */
  	bool has_energy;		/* chip detection energy */
  	u8 temp_resolution;		/* temperature register resolution in bit */
--	u32 power_calculate_factor;	/* fixed parameters for power calculate */
-+	u32 power_calculate_factor;	/* fixed parameter for power calculation, from datasheet */
+-	u32 power_calculate_factor;	/* fixed parameter for power calculation, from datasheet */
  	u16 config_default;		/* Power-on default state */
- 	int bus_voltage_lsb;		/* use for temperature calculate, uV/lsb */
-+	int current_lsb;		/* current LSB, in uA */
+-	int bus_voltage_lsb;		/* use for temperature calculate, uV/lsb */
++	u32 power_calculate_factor;	/* fixed parameter for power calculation, from datasheet */
++	u32 bus_voltage_lsb;		/* bus voltage LSB, in nV */
+ 	int current_lsb;		/* current LSB, in uA */
  };
  
- struct ina238_data {
-@@ -130,6 +131,9 @@ struct ina238_data {
+@@ -131,6 +133,7 @@ struct ina238_data {
  	struct regmap *regmap;
  	u32 rshunt;
  	int gain;
-+	int current_lsb;		/* current LSB, in uA */
-+	int power_lsb;			/* power LSB, in uW */
-+	int energy_lsb;			/* energy LSB, in uJ */
- };
++	u32 voltage_lsb[2];		/* shunt, bus voltage LSB, in nV */
+ 	int current_lsb;		/* current LSB, in uA */
+ 	int power_lsb;			/* power LSB, in uW */
+ 	int energy_lsb;			/* energy LSB, in uJ */
+@@ -226,45 +229,28 @@ static int ina238_read_field_s20(const struct i2c_client *client, u8 reg, s32 *v
+ 	return 0;
+ }
  
- static const struct ina238_config ina238_config[] = {
-@@ -422,9 +426,8 @@ static int ina238_read_current(struct device *dev, u32 attr, long *val)
- 			regval = (s16)regval;
- 		}
+-static int ina228_read_shunt_voltage(struct device *dev, u32 attr, int channel,
+-				     long *val)
++static int ina228_read_voltage(struct ina238_data *data, int channel, long *val)
+ {
+-	struct ina238_data *data = dev_get_drvdata(dev);
+-	int regval;
+-	int err;
++	int reg = channel ? INA238_BUS_VOLTAGE : INA238_SHUNT_VOLTAGE;
++	u32 lsb = data->voltage_lsb[channel];
++	u32 factor = NUNIT_PER_MUNIT;
++	int err, regval;
  
--		/* Signed register, fixed 1mA current lsb. result in mA */
--		*val = div_s64((s64)regval * INA238_FIXED_SHUNT * data->gain,
--			       data->rshunt * 4);
-+		/* Signed register. Result in mA */
-+		*val = DIV_S64_ROUND_CLOSEST((s64)regval * data->current_lsb, 1000);
+-	err = ina238_read_field_s20(data->client, INA238_SHUNT_VOLTAGE, &regval);
+-	if (err)
+-		return err;
++	if (data->config->has_20bit_voltage_current) {
++		err = ina238_read_field_s20(data->client, reg, &regval);
++		if (err)
++			return err;
++		/* Adjust accuracy: LSB in units of 500 pV */
++		lsb /= 8;
++		factor *= 2;
++	} else {
++		err = regmap_read(data->regmap, reg, &regval);
++		if (err)
++			return err;
++		regval = (s16)regval;
++	}
  
- 		/* Account for 4 bit offset */
- 		if (data->config->has_20bit_voltage_current)
-@@ -450,9 +453,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		if (err)
- 			return err;
+-	/*
+-	 * gain of 1 -> LSB / 4
+-	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
+-	 * precision. ina238 conversion factors can still be applied when
+-	 * dividing by 16.
+-	 */
+-	*val = (regval * INA238_SHUNT_VOLTAGE_LSB) * data->gain / (1000 * 4) / 16;
+-	return 0;
+-}
+-
+-static int ina228_read_bus_voltage(struct device *dev, u32 attr, int channel,
+-				   long *val)
+-{
+-	struct ina238_data *data = dev_get_drvdata(dev);
+-	int regval;
+-	int err;
+-
+-	err = ina238_read_field_s20(data->client, INA238_BUS_VOLTAGE, &regval);
+-	if (err)
+-		return err;
+-
+-	/*
+-	 * gain of 1 -> LSB / 4
+-	 * This field has 16 bit on ina238. ina228 adds another 4 bits of
+-	 * precision. ina238 conversion factors can still be applied when
+-	 * dividing by 16.
+-	 */
+-	*val = (regval * data->config->bus_voltage_lsb) / 1000 / 16;
++	*val = DIV_S64_ROUND_CLOSEST((s64)regval * lsb, factor);
+ 	return 0;
+ }
  
--		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT * data->gain *
--				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
-+		power = (long long)regval * data->power_lsb;
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -461,9 +462,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		if (err)
- 			return err;
- 
--		/* Fixed 1mA lsb, scaled by 1000000 to have result in uW */
--		power = div_u64(regval * 1000ULL * INA238_FIXED_SHUNT * data->gain *
--				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
-+		power = (long long)regval * data->power_lsb;
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -476,8 +475,7 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- 		 * Truncated 24-bit compare register, lower 8-bits are
- 		 * truncated. Same conversion to/from uW as POWER register.
- 		 */
--		power = div_u64((regval << 8) * 1000ULL * INA238_FIXED_SHUNT * data->gain *
--				data->config->power_calculate_factor, 4 * 100 * data->rshunt);
-+		power = ((long long)regval << 8) * data->power_lsb;
- 		/* Clamp value to maximum value of long */
- 		*val = clamp_val(power, 0, LONG_MAX);
- 		break;
-@@ -498,7 +496,6 @@ static int ina238_read_power(struct device *dev, u32 attr, long *val)
- static int ina238_write_power_max(struct device *dev, long val)
+@@ -272,18 +258,16 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 			  long *val)
  {
  	struct ina238_data *data = dev_get_drvdata(dev);
--	long regval;
+-	int reg, mask;
++	int reg, mask = 0;
+ 	int regval;
+ 	int err;
  
- 	/*
- 	 * Unsigned postive values. Compared against the 24-bit power register,
-@@ -506,12 +503,11 @@ static int ina238_write_power_max(struct device *dev, long val)
- 	 * register.
- 	 * The first clamp_val() is to establish a baseline to avoid overflows.
- 	 */
--	regval = clamp_val(val, 0, LONG_MAX / 2);
--	regval = div_u64(regval * 4 * 100 * data->rshunt, data->config->power_calculate_factor *
--			1000ULL * INA238_FIXED_SHUNT * data->gain);
--	regval = clamp_val(regval >> 8, 0, U16_MAX);
-+	val = clamp_val(val, 0, LONG_MAX / 2);
-+	val = DIV_ROUND_CLOSEST(val, data->power_lsb);
-+	val = clamp_val(val >> 8, 0, U16_MAX);
++	if (attr == hwmon_in_input)
++		return ina228_read_voltage(data, channel, val);
++
+ 	switch (channel) {
+ 	case 0:
+ 		switch (attr) {
+-		case hwmon_in_input:
+-			if (data->config->has_20bit_voltage_current)
+-				return ina228_read_shunt_voltage(dev, attr, channel, val);
+-			reg = INA238_SHUNT_VOLTAGE;
+-			break;
+ 		case hwmon_in_max:
+ 			reg = INA238_SHUNT_OVER_VOLTAGE;
+ 			break;
+@@ -304,11 +288,6 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 		break;
+ 	case 1:
+ 		switch (attr) {
+-		case hwmon_in_input:
+-			if (data->config->has_20bit_voltage_current)
+-				return ina228_read_bus_voltage(dev, attr, channel, val);
+-			reg = INA238_BUS_VOLTAGE;
+-			break;
+ 		case hwmon_in_max:
+ 			reg = INA238_BUS_OVER_VOLTAGE;
+ 			break;
+@@ -335,72 +314,35 @@ static int ina238_read_in(struct device *dev, u32 attr, int channel,
+ 	if (err < 0)
+ 		return err;
  
--	return regmap_write(data->regmap, INA238_POWER_LIMIT, regval);
-+	return regmap_write(data->regmap, INA238_POWER_LIMIT, val);
+-	switch (attr) {
+-	case hwmon_in_input:
+-	case hwmon_in_max:
+-	case hwmon_in_min:
+-		/* signed register, value in mV */
+-		regval = (s16)regval;
+-		if (channel == 0)
+-			/* gain of 1 -> LSB / 4 */
+-			*val = (regval * INA238_SHUNT_VOLTAGE_LSB) *
+-				data->gain / (1000 * 4);
+-		else
+-			*val = (regval * data->config->bus_voltage_lsb) / 1000;
+-		break;
+-	case hwmon_in_max_alarm:
+-	case hwmon_in_min_alarm:
++	if (mask)
+ 		*val = !!(regval & mask);
+-		break;
+-	}
++	else
++		*val = DIV_S64_ROUND_CLOSEST((s64)(s16)regval * data->voltage_lsb[channel],
++					     NUNIT_PER_MUNIT);
+ 
+ 	return 0;
  }
  
- static int ina238_temp_from_reg(s16 regval, u8 resolution)
-@@ -584,8 +580,7 @@ static ssize_t energy1_input_show(struct device *dev,
- 		return ret;
+-static int ina238_write_in(struct device *dev, u32 attr, int channel,
+-			   long val)
++static int ina238_write_in(struct device *dev, u32 attr, int channel, long val)
+ {
+ 	struct ina238_data *data = dev_get_drvdata(dev);
++	static const int low_limits[2] = {-164, 0};
++	static const int high_limits[2] = {164, 150000};
++	static const u8 low_regs[2] = {INA238_SHUNT_UNDER_VOLTAGE, INA238_BUS_UNDER_VOLTAGE};
++	static const u8 high_regs[2] = {INA238_SHUNT_OVER_VOLTAGE, INA238_BUS_OVER_VOLTAGE};
+ 	int regval;
  
- 	/* result in uJ */
--	energy = div_u64(regval * INA238_FIXED_SHUNT * data->gain * 16 * 10 *
--			 data->config->power_calculate_factor, 4 * data->rshunt);
-+	energy = regval * data->energy_lsb;
+-	if (attr != hwmon_in_max && attr != hwmon_in_min)
+-		return -EOPNOTSUPP;
++	/* Initial clamp to avoid overflows */
++	val = clamp_val(val, low_limits[channel], high_limits[channel]);
++	val = DIV_S64_ROUND_CLOSEST((s64)val * NUNIT_PER_MUNIT, data->voltage_lsb[channel]);
++	/* Final clamp to register limits */
++	regval = clamp_val(val, S16_MIN, S16_MAX) & 0xffff;
  
- 	return sysfs_emit(buf, "%llu\n", energy);
- }
-@@ -817,6 +812,18 @@ static int ina238_probe(struct i2c_client *client)
+-	/* convert decimal to register value */
+-	switch (channel) {
+-	case 0:
+-		/* signed value, clamp to max range +/-163 mV */
+-		regval = clamp_val(val, -163, 163);
+-		regval = (regval * 1000 * 4) /
+-			 (INA238_SHUNT_VOLTAGE_LSB * data->gain);
+-		regval = clamp_val(regval, S16_MIN, S16_MAX) & 0xffff;
+-
+-		switch (attr) {
+-		case hwmon_in_max:
+-			return regmap_write(data->regmap,
+-					    INA238_SHUNT_OVER_VOLTAGE, regval);
+-		case hwmon_in_min:
+-			return regmap_write(data->regmap,
+-					    INA238_SHUNT_UNDER_VOLTAGE, regval);
+-		default:
+-			return -EOPNOTSUPP;
+-		}
+-	case 1:
+-		/* signed value, positive values only. Clamp to max 102.396 V */
+-		regval = clamp_val(val, 0, 102396);
+-		regval = (regval * 1000) / data->config->bus_voltage_lsb;
+-		regval = clamp_val(regval, 0, S16_MAX);
+-
+-		switch (attr) {
+-		case hwmon_in_max:
+-			return regmap_write(data->regmap,
+-					    INA238_BUS_OVER_VOLTAGE, regval);
+-		case hwmon_in_min:
+-			return regmap_write(data->regmap,
+-					    INA238_BUS_UNDER_VOLTAGE, regval);
+-		default:
+-			return -EOPNOTSUPP;
+-		}
++	switch (attr) {
++	case hwmon_in_min:
++		return regmap_write(data->regmap, low_regs[channel], regval);
++	case hwmon_in_max:
++		return regmap_write(data->regmap, high_regs[channel], regval);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -812,6 +754,9 @@ static int ina238_probe(struct i2c_client *client)
  		return -ENODEV;
  	}
  
-+	if (data->config->current_lsb)
-+		data->current_lsb = data->config->current_lsb;
-+	else
-+		data->current_lsb = DIV_U64_ROUND_CLOSEST(250ULL * INA238_FIXED_SHUNT * data->gain,
-+							  data->rshunt);
++	data->voltage_lsb[0] = INA238_SHUNT_VOLTAGE_LSB * data->gain / 4;
++	data->voltage_lsb[1] = data->config->bus_voltage_lsb;
 +
-+	data->power_lsb = DIV_ROUND_CLOSEST(data->current_lsb *
-+					    data->config->power_calculate_factor,
-+					    100);
-+
-+	data->energy_lsb = data->power_lsb * 16;
-+
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
- 							 &ina238_chip_info,
- 							 data->config->has_energy ?
+ 	if (data->config->current_lsb)
+ 		data->current_lsb = data->config->current_lsb;
+ 	else
 -- 
 2.45.2
 
