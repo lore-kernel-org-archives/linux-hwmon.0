@@ -1,68 +1,68 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F46A14A0B5;
-	Sat,  6 Sep 2025 13:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776E81A2389;
+	Sat,  6 Sep 2025 14:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757165287; cv=none; b=gYq96gtwzo8adWiiSFmU8YZSHpoiZ1b4w/U5xCmcZzZD6YcSyLBs88QmCyvu5QrcVpnPGMYpg4JTcxOl6R6kSpP18NLtHKPw1JGt1tPD7U1jZYgw1jfVT3P0gF0Uw+z3CzeRIbRhOmXO6/K4m7BCcKS3IdKhN9v/tzCrHgmMdvY=
+	t=1757167583; cv=none; b=LbP7ONUw892kvE7yEedqUkJWC7UEWddCB2y3GtfymL+rrmHlc0Zx1NR5idhp21znaBphN4st0x4skUAQ/cSOkzHAgvDkw3fw2si/ozeyQxbmP7NYSOtP42FbjEaZhERuElHiyRCXbeFGFckb60qljwrmiArUbT1F0GoXO2csEwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757165287; c=relaxed/simple;
-	bh=tWWgkxzjjDxrHp+7hWZd5QtL3pvHOBVwSvdOHkvH86k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UjEkg8kyW5oN0MS2LEj/DskPI80dopd5n/EDAdgqes5GzOBTIpRmHVJyQb42bevKx9a1VEknW215d5399Sarw/HCV5cIa27Xm6HTiMvPUreHMYKWlkzjbEjpuOFMdk65eS6XYXqQIENwm1OBJfPjwYW6/w69XxqDyqlL0IQCVKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzVqOoIP; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1757167583; c=relaxed/simple;
+	bh=0hmzZXYxNKjIhDz+m1zGKrFgn23Dpx3WLUp+j6lBU5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b2cANXLXHUqMDz6tEd5LFHKIjoVdlECdmicRP6zIYEm17PdoFnAvjcqWUeR23WbvINyifW9zuZgtUqkFA5ExlHwpTlQUSa4aZkR8icKKDqD1jV5EH/NODnWZnlUbO2mo6ga/J1GbmXzwwqZ1Hl/WmH5FeOPPMG8LwGAOZQ0Vfqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8JMyqrM; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzVqOoIP"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-772679eb358so2803936b3a.1;
-        Sat, 06 Sep 2025 06:28:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8JMyqrM"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2445806e03cso39733365ad.1;
+        Sat, 06 Sep 2025 07:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757165284; x=1757770084; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757167581; x=1757772381; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4lhR8DFhserIpo0K3degliX7Gw6DGQOQ2PCb0uNrjOM=;
-        b=kzVqOoIPqiPbfwE6SfiDMqYBsXQroOEGtXVuJHhnz63OM2U1rtN9eaOmckAlvyb7vQ
-         FjuXdmoBLuf18DTXJqAv+kCycVuPJKkpJVLDDpUCiRxFUu/bWnSnxFHpNWwbzm+hjvOa
-         6UtoyfHSgYUGAAAhXmBp/BgSiRlLWV6ZARRg/1nas5FsS1XOTcvUAUBgDWazEzuRQden
-         SBlRjuuab5O2W6LysV7T5lnb3HE2oFpcqSvAV3z9ScQrJ2QPpMHxFmESOtKhFApuAX3f
-         u/lEs+fIiuPxBuz/AxA02iG5TvQBXSGcDf7WDhUxWM3zr7Ndc0wizILjUUcFKO8XOpBK
-         FOBw==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJqmB1Acck+ApY3q4nwCXeXJnDu3kt/0e3WOirNx8ss=;
+        b=N8JMyqrMDu2lR833xIue5m+AQicipbimLUy5g4xxtAbDCLZpgLNTgS7NuE5odBEUJD
+         rCVEfIAyhjoGKGYo4sxFMDIXNv6OIgjkmoelNtNmLbn0aiDNC3OSkeXYnGo4D40iOOgY
+         pRaVhc28sq6C2kX0SjToC9/t7BZFVN53NchKA7ZMxJeliUe7Nzk3kFn78eHyqsgNzCkQ
+         iMKYw2SS6ZK0JlpFMgEOSr0tQdbYzWHrr1t0jKuxT0VA+vWLwcVmhm0cpqerEkpOcXy7
+         mw0uLmQYY0Vp/Vz4Gry3Fkyjkm9ukPi+E5ZD7pS+phzAGE5cWED/DAeUnE4bToOgnQLR
+         28og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757165284; x=1757770084;
+        d=1e100.net; s=20230601; t=1757167581; x=1757772381;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4lhR8DFhserIpo0K3degliX7Gw6DGQOQ2PCb0uNrjOM=;
-        b=CWX2XpKbK4WCeh0+Hu2+XUSwHmFWAqWrDrBGyNCopv53pYnMI+5u5nlba48c8ufCZZ
-         ZSrIwxpRLD4WS7U27lV2cZwkPCj6IRHmb7ei53cQaitdF5XAN4BxrHvPqDeSCFc8nVLk
-         kMuCxsG/OmnAhNFfM8y2PtNkKwl/OmUg5DBQymcDf9ZrZkrX3o4U5evCIkZ25Q+tBSbE
-         lV877jMM0EPrThqlWT9KUgi+36vFaMN6QWJTaQ1sIhApLQMWh3ksFMXbZN9ostjmew6f
-         VJVcMz42RxSiKybmcUJYH7ad/OVIZUs/6vPwSCu/s2FUkGHi0laQ/ppH8L+5VrPnxVcF
-         OgtA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2i00fxA7QUyMXqdvtdUFeZ40nXd7ZEH/gD9MRjr0b0R+qdMALNUF/SqVu2JJQlbO3HNSq+ZNl8x8rCg==@vger.kernel.org, AJvYcCVBY5SyDRhplZw1Bh8pKhXdi0zgt0+V2loLQt1UQXgYno/6b8g12D2Pau18FxIsKVYEfcf4fa0XWmRA6Qz5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNdJiZ8P7HmwwumW83d7Y+MZ7VwdmCFqQ+Mq39N7VUE/N4oYYP
-	4ATWO461/NF6fWeNGcYBWoaYEWtK99EhafwW/X1xa3mI8Refj2F9Kz34
-X-Gm-Gg: ASbGnctj5fhJSQ8joM+NpMnfN07wNQFlXLE2q278zr1GLwhzlSDTrD73tZysc6oJL6w
-	eXzaQS1fU+rPjzaFWVwJVL4NatmwK3e5eXdmXpnfWnPzQAXXRCMhjGnxMXz1Vq75qxS3qZUDhqw
-	NjTwqnEEfYy2jAYx1qPzZ/KiefmhKKpsQlgsQJqThRvhwo36f2oB2QQNITR5MqitD9aGCEXCwun
-	piAZ1iEDi49JB4o0EifF1jNmtuekCQ9aBtPaCWycV6ppUgjQgLF9ojvlEOmoZT2ucTHSTD8Keno
-	TB1yfHdy0Us/WCqBXuGgv1BYfNJzt02NVmuX3s5jQtcEHkRIy+FSGn+s+fOZON0CvSSFkTLWKiy
-	NQBijNwfy/ra3iANLYUx9mkOM2uMd0z6vf1+epIJ5mT3+wh2jvGF10lpOSHJ4ibdfSTRmEr7i2k
-	XaTt+iTg==
-X-Google-Smtp-Source: AGHT+IEDj+uNuXSaEPwNs/atNgjZd8fNN5GdmsrDEoufJ3GtdAkZ59ShPEcwtqAhVfSb524ZVSR1/w==
-X-Received: by 2002:a05:6a20:7d9f:b0:243:c274:1a7f with SMTP id adf61e73a8af0-25344eb94f3mr3378216637.46.1757165284422;
-        Sat, 06 Sep 2025 06:28:04 -0700 (PDT)
+        bh=rJqmB1Acck+ApY3q4nwCXeXJnDu3kt/0e3WOirNx8ss=;
+        b=ZrYw082ZtgVY4kK9broIA2Wqj9AjG6VTaF0bw8BMiWWrPTdzt2OnOVOy6nHEVE8opw
+         XDJNBvNCddn5SbUEv6jEIlbL4L0nK9f2f3FL+Q3O6IP7dfacEbi/2Di+cl5fJnAf1Drb
+         UrNP9RWx1fddfJ7w0RLoZ7nY0VtlquNJUDThEwXegWeuQOpEM/v9sIGlLIiTAmuNr6KF
+         sGnIqQRCEv3B+r5t/bJkOvrqgjYEEylZAdeag+Vvz98p8r+4QuFx84ge6LlwPbH4Qhoc
+         DCa4DLGelLJR/G0bXP8DiQna9JYDHTTwucOY293C598dyL29ug7WqIZuVZvbYMPNW4Mn
+         rCow==
+X-Forwarded-Encrypted: i=1; AJvYcCUNQL9LofsuMtIsKgoATy4uG0LaFafhXk3AiIzkgHWxQPF8RECbiT+U9SoLM3oB78RazThdVTGSmIikF/0=@vger.kernel.org, AJvYcCV1R497L033x3AgUJzQFa/8aBM0FWLeWq5di4EWgxwMl+CV1AZZNEG7ejYMyW1d1aBSn+mPOKgrdGU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVvADWrXIoDSYtGu5xBqF129r0z2SA/aQ/V6BTIo2+XL1JV4Ig
+	XhfUJiNPodjsCbjRbrF3twXTP7uuMmgbC/t08LU+LR5rJuHY1lc0hmUq
+X-Gm-Gg: ASbGncuxrQsF65wSrye48MAIMeOTMVsMvcC4AWy/Qf2hXv0JJol5HDBRgl1Q4Ve5u8J
+	fQ2YxyCj3a3RDYuFNxd9OSkHwcjEYZDmIL+SOR4acpAYGd0Ls21x9rXWHB+6pxUMqJeW/Z3H6I5
+	qBjh3kmXGGD4HtLPmGSq+uqPAVwC30CvPy320/V3GdA0sEPfBhzCaIkSHzdEXj5d4aV3ZtvE0sx
+	Ky2YpevyGUatFhkUvrJU7adluv50dNk9uFu8L10MziTwcJNi+iChejQo4E2GjbLCiNwrYQjbWYp
+	wMYnj/+qky68Vo/w5NnTO5O7uxot6x+qNxHlqFmiXJ3WuKlTGNYwSHjJyN23MNC70lXc50EY5j+
+	jmC4t7dPP3dpGmI6UUiabbYo64hlAkUO+ycG8XhLinDjAKy+4Cs8iftnpAtJMNsJc28mPUrdTDP
+	C5wd6CJw==
+X-Google-Smtp-Source: AGHT+IFLO2aMTzUGaIbcHtiVgPQuMiIUV2cpKCgHWEqJFjdACMtSFQ31JYoq/lo0xxJFF1dBxmgTeg==
+X-Received: by 2002:a17:902:fc44:b0:24b:62ef:9d38 with SMTP id d9443c01a7336-2516e887fd5mr30289215ad.19.1757167580556;
+        Sat, 06 Sep 2025 07:06:20 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-32b555b9d83sm11223268a91.17.2025.09.06.06.28.03
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24e18bf05dcsm39013605ad.147.2025.09.06.07.06.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Sep 2025 06:28:03 -0700 (PDT)
+        Sat, 06 Sep 2025 07:06:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b402929-f637-426f-8d18-634a29b95b42@roeck-us.net>
-Date: Sat, 6 Sep 2025 06:28:02 -0700
+Message-ID: <c6694917-fbfd-432d-ab17-f5f9b7232e7c@roeck-us.net>
+Date: Sat, 6 Sep 2025 07:06:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,10 +70,20 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: sy7636a: add aliases
-To: Andreas Kemnade <andreas@kemnade.info>, jdelvare@suse.com,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250906094308.11129-1-andreas@kemnade.info>
+Subject: Re: [PATCH v8 1/2] hwmon: add GPD devices sensor driver
+To: cryolitia@uniontech.com, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
+ Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>,
+ Jun Zhan <zhanjun@uniontech.com>, Cheng Nie <niecheng1@uniontech.com>,
+ =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
+ someone5678 <someone5678.dev@gmail.com>,
+ Justin Weiss <justin@justinweiss.com>, Antheas Kapenekakis
+ <lkml@antheas.dev>, command_block <mtf@ik.me>, derjohn <himself@derjohn.de>,
+ Crashdummyy <crashdummy1337@proton.me>
+References: <20250904-gpd_fan-v8-0-0752584f16da@uniontech.com>
+ <20250904-gpd_fan-v8-1-0752584f16da@uniontech.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,55 +129,125 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250906094308.11129-1-andreas@kemnade.info>
+In-Reply-To: <20250904-gpd_fan-v8-1-0752584f16da@uniontech.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/6/25 02:43, Andreas Kemnade wrote:
-> Add module aliases via module devicetable to have it autoloaded.
+On 9/4/25 01:33, Cryolitia PukNgae via B4 Relay wrote:
+> From: Cryolitia PukNgae <cryolitia@uniontech.com>
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Sensors driver for GPD Handhelds that expose fan reading and control via
+> hwmon sysfs.
+> 
+> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
+> devices. This driver implements these functions through x86 port-mapped
+> IO.
+> 
+> Tested-by: Marcin Strągowski <marcin@stragowski.com>
+> Tested-by: someone5678 <someone5678.dev@gmail.com>
+> Tested-by: Justin Weiss <justin@justinweiss.com>
+> Tested-by: Antheas Kapenekakis <lkml@antheas.dev>
+> Tested-by: command_block <mtf@ik.me>
+> Tested-by: derjohn <himself@derjohn.de>
+> Tested-by: Crashdummyy <crashdummy1337@proton.me>
+> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
 > ---
->   drivers/hwmon/sy7636a-hwmon.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
+>   MAINTAINERS             |   6 +
+>   drivers/hwmon/Kconfig   |  10 +
+>   drivers/hwmon/Makefile  |   1 +
+>   drivers/hwmon/gpd-fan.c | 786 ++++++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 803 insertions(+)
 > 
-> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-> index ed110884786b4..74ee0e756ffdc 100644
-> --- a/drivers/hwmon/sy7636a-hwmon.c
-> +++ b/drivers/hwmon/sy7636a-hwmon.c
-> @@ -12,6 +12,7 @@
->   #include <linux/hwmon.h>
->   #include <linux/init.h>
->   #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/platform_device.h>
->   #include <linux/regmap.h>
->   #include <linux/regulator/machine.h>
-> @@ -94,11 +95,18 @@ static int sy7636a_sensor_probe(struct platform_device *pdev)
->   	return 0;
->   }
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6dcfbd11efef87927041f5cf58d70633dbb4b18d..14a616be5ff08aaeee52436dff54a86c4a81e5fb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10421,6 +10421,12 @@ F:	drivers/phy/samsung/phy-gs101-ufs.c
+>   F:	include/dt-bindings/clock/google,gs101.h
+>   K:	[gG]oogle.?[tT]ensor
 >   
-> +static const struct platform_device_id sy7636a_sensor_idtable[] = {
-> +	{ "sy7636a-temperature" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(platform, sy7636a_sensor_idtable);
+> +GPD FAN DRIVER
+> +M:	Cryolitia PukNgae <cryolitia@uniontech.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/gpd-fan.c
 > +
->   static struct platform_driver sy7636a_sensor_driver = {
->   	.probe = sy7636a_sensor_probe,
->   	.driver = {
->   		.name = "sy7636a-temperature",
->   	},
-> +	.id_table = sy7636a_sensor_idtable,
->   };
->   module_platform_driver(sy7636a_sensor_driver);
+>   GPD POCKET FAN DRIVER
+>   M:	Hans de Goede <hansg@kernel.org>
+>   L:	platform-driver-x86@vger.kernel.org
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 9d28fcf7cd2a6f9e2f54694a717bd85ff4047b46..a552a5ced64d0fee2c80a5399ce9d1f0dbd7d763 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -769,6 +769,16 @@ config SENSORS_GL520SM
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called gl520sm.
 >   
+> +config SENSORS_GPD
+> +	tristate "GPD handhelds"
+> +	depends on X86
+> +	help
+> +	  If you say yes here you get support for fan readings and
+> +	  control over GPD handheld devices.
+> +
+> +	  Can also be built as a module. In that case it will be
+> +	  called gpd-fan.
+> +
+>   config SENSORS_G760A
+>   	tristate "GMT G760A"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index cd8bc4752b4dbf015c6eb46157626f4e8f87dfae..051981eb8a5089608e9eb351a1d5857805c728c8 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -88,6 +88,7 @@ obj-$(CONFIG_SENSORS_GIGABYTE_WATERFORCE) += gigabyte_waterforce.o
+>   obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
+>   obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
+>   obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
+> +obj-$(CONFIG_SENSORS_GPD)	+= gpd-fan.o
+>   obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
+>   obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
+>   obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..4a9ae049a78524caa0fd608c119eb34c333429ae
+> --- /dev/null
+> +++ b/drivers/hwmon/gpd-fan.c
+> @@ -0,0 +1,786 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +
+> +/* Platform driver for GPD devices that expose fan control via hwmon sysfs.
+> + *
+> + * Fan control is provided via pwm interface in the range [0-255].
+> + * Each model has a different range in the EC, the written value is scaled to
+> + * accommodate for that.
+> + *
+> + * Based on this repo:
+> + * https://github.com/Cryolitia/gpd-fan-driver
+> + *
+> + * Copyright (c) 2024 Cryolitia PukNgae
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/ioport.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define DRIVER_NAME "gpdfan"
+> +#define GPD_PWM_CTR_OFFSET 0x1841
+> +
+> +static char *gpd_fan_board = "";
+> +module_param(gpd_fan_board, charp, 0444);
+> +
+> +// EC read/write locker, protecting single EC access
+> +// Should never access EC at the same time, otherwise system down.
+> +static DEFINE_MUTEX(gpd_fan_atomic_lock);
 
-I would suggest to just add
-
-MODULE_ALIAS("platform:sy7636a-temperature");
-
-instead.
+Why keep this lock ? Each access sequence is now locked in the top
+level read/write function, which should make this lock redundant.
 
 Guenter
 
