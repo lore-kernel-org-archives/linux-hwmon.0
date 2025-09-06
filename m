@@ -1,253 +1,131 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776E81A2389;
-	Sat,  6 Sep 2025 14:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81A8221DB5;
+	Sat,  6 Sep 2025 16:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757167583; cv=none; b=LbP7ONUw892kvE7yEedqUkJWC7UEWddCB2y3GtfymL+rrmHlc0Zx1NR5idhp21znaBphN4st0x4skUAQ/cSOkzHAgvDkw3fw2si/ozeyQxbmP7NYSOtP42FbjEaZhERuElHiyRCXbeFGFckb60qljwrmiArUbT1F0GoXO2csEwE=
+	t=1757175475; cv=none; b=ExdxHuZhQIWGs7aIdEYG1wD5HrddXGgQu+uEqGOTYcZxA/6VvhtNO518yaZGRe7xXYadA/VIPRuenH2r0baRJFdRxGSmUznvLffTz58Ycr0HdNwp8Gttf2zasYr/a7GnAPhuiL8U20xRuAR5+tRbNzVMix17xphcUAf8KtxIn8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757167583; c=relaxed/simple;
-	bh=0hmzZXYxNKjIhDz+m1zGKrFgn23Dpx3WLUp+j6lBU5o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b2cANXLXHUqMDz6tEd5LFHKIjoVdlECdmicRP6zIYEm17PdoFnAvjcqWUeR23WbvINyifW9zuZgtUqkFA5ExlHwpTlQUSa4aZkR8icKKDqD1jV5EH/NODnWZnlUbO2mo6ga/J1GbmXzwwqZ1Hl/WmH5FeOPPMG8LwGAOZQ0Vfqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8JMyqrM; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1757175475; c=relaxed/simple;
+	bh=nMnk5F8OH6/wiRW0/mH/UflH4IDMAJyb8QrYKxIEKPc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YB+LvJH86R6Q9ITXA+tOCg8PdQg8tSPC81cjapejGugHTXseFHgWMYDwTOWqoarUgg6crh21z8qgX7Rxn8omqosgpu5en5R6+MB9liNo9QIdu0WHF8KRHOQ+4wMORfrYT31N1ZFBmZEwBccwOjjLHrnulrBJUko9wGUtp0n+6aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9mx4lZ9; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8JMyqrM"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2445806e03cso39733365ad.1;
-        Sat, 06 Sep 2025 07:06:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9mx4lZ9"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b046fc9f359so586945466b.0;
+        Sat, 06 Sep 2025 09:17:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757167581; x=1757772381; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJqmB1Acck+ApY3q4nwCXeXJnDu3kt/0e3WOirNx8ss=;
-        b=N8JMyqrMDu2lR833xIue5m+AQicipbimLUy5g4xxtAbDCLZpgLNTgS7NuE5odBEUJD
-         rCVEfIAyhjoGKGYo4sxFMDIXNv6OIgjkmoelNtNmLbn0aiDNC3OSkeXYnGo4D40iOOgY
-         pRaVhc28sq6C2kX0SjToC9/t7BZFVN53NchKA7ZMxJeliUe7Nzk3kFn78eHyqsgNzCkQ
-         iMKYw2SS6ZK0JlpFMgEOSr0tQdbYzWHrr1t0jKuxT0VA+vWLwcVmhm0cpqerEkpOcXy7
-         mw0uLmQYY0Vp/Vz4Gry3Fkyjkm9ukPi+E5ZD7pS+phzAGE5cWED/DAeUnE4bToOgnQLR
-         28og==
+        d=gmail.com; s=20230601; t=1757175472; x=1757780272; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PHYzPGzEQyIok4BBwUy01gZVfQJMItWgnzXRkCk+QwE=;
+        b=L9mx4lZ9eIPq56LmqZYa4oY0QN258Zd/whZjlQLH0un0CJOngjmr7X487bftGZ/vce
+         QdiFeCXOj8Z/GjdooeXiCzRbxs9mCEH4VdTez3g5/eSxrodt1nw035q9VMiuK1U0oiwk
+         ghdqjAqf6qqQRl31QAFPMzp4y7o3iLxc/4ZGAVlv1lQDWfLTeaQp5rJLiPXJpwS3XnMY
+         RaXUByP9YUjtS3psKyTa+Uabf7/dlG8IEVzKhWyXnnRBL6IBDQUqs8S9Ke/dThr4H4Xg
+         2lktvnNc8t5+IL0wQVMaBC2Bq0adcUMjFC1DyExnxwvoROSbkHCrM750w8dx6p4wLRZo
+         rtfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757167581; x=1757772381;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJqmB1Acck+ApY3q4nwCXeXJnDu3kt/0e3WOirNx8ss=;
-        b=ZrYw082ZtgVY4kK9broIA2Wqj9AjG6VTaF0bw8BMiWWrPTdzt2OnOVOy6nHEVE8opw
-         XDJNBvNCddn5SbUEv6jEIlbL4L0nK9f2f3FL+Q3O6IP7dfacEbi/2Di+cl5fJnAf1Drb
-         UrNP9RWx1fddfJ7w0RLoZ7nY0VtlquNJUDThEwXegWeuQOpEM/v9sIGlLIiTAmuNr6KF
-         sGnIqQRCEv3B+r5t/bJkOvrqgjYEEylZAdeag+Vvz98p8r+4QuFx84ge6LlwPbH4Qhoc
-         DCa4DLGelLJR/G0bXP8DiQna9JYDHTTwucOY293C598dyL29ug7WqIZuVZvbYMPNW4Mn
-         rCow==
-X-Forwarded-Encrypted: i=1; AJvYcCUNQL9LofsuMtIsKgoATy4uG0LaFafhXk3AiIzkgHWxQPF8RECbiT+U9SoLM3oB78RazThdVTGSmIikF/0=@vger.kernel.org, AJvYcCV1R497L033x3AgUJzQFa/8aBM0FWLeWq5di4EWgxwMl+CV1AZZNEG7ejYMyW1d1aBSn+mPOKgrdGU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVvADWrXIoDSYtGu5xBqF129r0z2SA/aQ/V6BTIo2+XL1JV4Ig
-	XhfUJiNPodjsCbjRbrF3twXTP7uuMmgbC/t08LU+LR5rJuHY1lc0hmUq
-X-Gm-Gg: ASbGncuxrQsF65wSrye48MAIMeOTMVsMvcC4AWy/Qf2hXv0JJol5HDBRgl1Q4Ve5u8J
-	fQ2YxyCj3a3RDYuFNxd9OSkHwcjEYZDmIL+SOR4acpAYGd0Ls21x9rXWHB+6pxUMqJeW/Z3H6I5
-	qBjh3kmXGGD4HtLPmGSq+uqPAVwC30CvPy320/V3GdA0sEPfBhzCaIkSHzdEXj5d4aV3ZtvE0sx
-	Ky2YpevyGUatFhkUvrJU7adluv50dNk9uFu8L10MziTwcJNi+iChejQo4E2GjbLCiNwrYQjbWYp
-	wMYnj/+qky68Vo/w5NnTO5O7uxot6x+qNxHlqFmiXJ3WuKlTGNYwSHjJyN23MNC70lXc50EY5j+
-	jmC4t7dPP3dpGmI6UUiabbYo64hlAkUO+ycG8XhLinDjAKy+4Cs8iftnpAtJMNsJc28mPUrdTDP
-	C5wd6CJw==
-X-Google-Smtp-Source: AGHT+IFLO2aMTzUGaIbcHtiVgPQuMiIUV2cpKCgHWEqJFjdACMtSFQ31JYoq/lo0xxJFF1dBxmgTeg==
-X-Received: by 2002:a17:902:fc44:b0:24b:62ef:9d38 with SMTP id d9443c01a7336-2516e887fd5mr30289215ad.19.1757167580556;
-        Sat, 06 Sep 2025 07:06:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24e18bf05dcsm39013605ad.147.2025.09.06.07.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Sep 2025 07:06:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c6694917-fbfd-432d-ab17-f5f9b7232e7c@roeck-us.net>
-Date: Sat, 6 Sep 2025 07:06:18 -0700
+        d=1e100.net; s=20230601; t=1757175472; x=1757780272;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PHYzPGzEQyIok4BBwUy01gZVfQJMItWgnzXRkCk+QwE=;
+        b=om/W3SjvTZHZv1dGX7mflkkIpLDbvtIl5FZfgdN2odfVDQM4njq3KCQ6cqJGSxft+F
+         rQrwQG9eI0CHfq4VALnGi/VzPD9xIVwpibBDNzhKH0RoYblVwLyaFAQEYO4QBneEXeMi
+         7kUTtQ2HCheRJMyZ1Zt3kvvYP5ZcInhQx8RrWaypYYp8dGOZwgzAvsZPLzw4uXqSUxOQ
+         ozxqTx8VK37NTSMhTO8NEddoy7LYB4Smv9NWUaolgJJV91B8HTjGOXWj3Ty8KrBufA6/
+         V6MisOELSu/vyOR+Z7b3cF97T1HJTer+CHDGxQwf4z21z3OY0CCJxbsQRsmdjY3Es0BA
+         SM8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWZVBJgp+zYEtZpx7/WDz3+aRiebMVqw3UL9t2unIp7BxvrjDIjoOzPCUHJnZ+RN2+PRMUaS65Z5BA=@vger.kernel.org, AJvYcCXlfRVcpkN8l98PYDygCDtWoP98Q7uVv328K1YHe/jgFJ2MbORBlKREc81TbZWPkbF9XRl3FakxptBC5Mw=@vger.kernel.org, AJvYcCXn3cvxxo8Jk+y8pSbhiUbKVkzNhEJk0C8vKweWcz0VYWqqylpN6S5tPNmNKlXR5QGKlzBwedoym7XrhdMI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyg4Bl6J66YcEtnGHyLWlsx7MTOQ+dans9Mqtyp9XJhohOWP2Pb
+	zEsHiCK883SwoafJbODqPLPgRY+c2rHb15zePjoKY0/dyW3tbezbB+yA
+X-Gm-Gg: ASbGncufeU43xOYO0HzyEqPDmHKh9mZbyfjQdakSk2HFrcAVrdF/ueKpYP5xrLDINVs
+	MrluF059NF16vd7Up4iHIvywZa0TkWhTXRRIrIW1PkivqXRs3c0pjvCUIdKgpYw9mF9k0KO03Jz
+	5TVOJ2N9hjU0W79jINk15a7UVcWojpaCzPS6jq0YaocK3Qyd22QU5GqIQcum1k0FYrTKhWu0TNg
+	zvfVqWA9+R1OkgMnXFDfrMo9Gr/XdkOCdENPSjhEkerJ73rI1DaHT1neLbfF/4HJ56tov3OKz5O
+	16qtb7Sde+OtaUEgnFlrGS5HYOlOol9nS5GHfhEdbivNMTS6F7OpjWH0ZdZItFarqBKM96OYNp/
+	GC0bfEBVSWO/4hoMxSEWhD8w1CA5Eo22J3EfUx4cBxLA=
+X-Google-Smtp-Source: AGHT+IF9n8qLsSkF2n1WH2/YbYqIpHuWGkS8V9yMYPfF6CuoWVza+3hNtdPTgvqrDhz6YVsydJHudg==
+X-Received: by 2002:a17:907:9705:b0:b04:5e64:d7ce with SMTP id a640c23a62f3a-b04b1542fdemr228167066b.35.1757175471809;
+        Sat, 06 Sep 2025 09:17:51 -0700 (PDT)
+Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0307435422sm1820465966b.78.2025.09.06.09.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Sep 2025 09:17:51 -0700 (PDT)
+From: Eugene Shalygin <eugene.shalygin@gmail.com>
+To: eugene.shalygin@gmail.com
+Cc: Maciej Zonski <me@zonni.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX X870-I GAMING WIFI
+Date: Sat,  6 Sep 2025 18:17:37 +0200
+Message-ID: <20250906161748.219567-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/2] hwmon: add GPD devices sensor driver
-To: cryolitia@uniontech.com, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
- Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>,
- Jun Zhan <zhanjun@uniontech.com>, Cheng Nie <niecheng1@uniontech.com>,
- =?UTF-8?Q?Marcin_Str=C4=85gowski?= <marcin@stragowski.com>,
- someone5678 <someone5678.dev@gmail.com>,
- Justin Weiss <justin@justinweiss.com>, Antheas Kapenekakis
- <lkml@antheas.dev>, command_block <mtf@ik.me>, derjohn <himself@derjohn.de>,
- Crashdummyy <crashdummy1337@proton.me>
-References: <20250904-gpd_fan-v8-0-0752584f16da@uniontech.com>
- <20250904-gpd_fan-v8-1-0752584f16da@uniontech.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250904-gpd_fan-v8-1-0752584f16da@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/4/25 01:33, Cryolitia PukNgae via B4 Relay wrote:
-> From: Cryolitia PukNgae <cryolitia@uniontech.com>
-> 
-> Sensors driver for GPD Handhelds that expose fan reading and control via
-> hwmon sysfs.
-> 
-> Shenzhen GPD Technology Co., Ltd. manufactures a series of handheld
-> devices. This driver implements these functions through x86 port-mapped
-> IO.
-> 
-> Tested-by: Marcin Strągowski <marcin@stragowski.com>
-> Tested-by: someone5678 <someone5678.dev@gmail.com>
-> Tested-by: Justin Weiss <justin@justinweiss.com>
-> Tested-by: Antheas Kapenekakis <lkml@antheas.dev>
-> Tested-by: command_block <mtf@ik.me>
-> Tested-by: derjohn <himself@derjohn.de>
-> Tested-by: Crashdummyy <crashdummy1337@proton.me>
-> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
-> ---
->   MAINTAINERS             |   6 +
->   drivers/hwmon/Kconfig   |  10 +
->   drivers/hwmon/Makefile  |   1 +
->   drivers/hwmon/gpd-fan.c | 786 ++++++++++++++++++++++++++++++++++++++++++++++++
->   4 files changed, 803 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6dcfbd11efef87927041f5cf58d70633dbb4b18d..14a616be5ff08aaeee52436dff54a86c4a81e5fb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10421,6 +10421,12 @@ F:	drivers/phy/samsung/phy-gs101-ufs.c
->   F:	include/dt-bindings/clock/google,gs101.h
->   K:	[gG]oogle.?[tT]ensor
->   
-> +GPD FAN DRIVER
-> +M:	Cryolitia PukNgae <cryolitia@uniontech.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/hwmon/gpd-fan.c
-> +
->   GPD POCKET FAN DRIVER
->   M:	Hans de Goede <hansg@kernel.org>
->   L:	platform-driver-x86@vger.kernel.org
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 9d28fcf7cd2a6f9e2f54694a717bd85ff4047b46..a552a5ced64d0fee2c80a5399ce9d1f0dbd7d763 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -769,6 +769,16 @@ config SENSORS_GL520SM
->   	  This driver can also be built as a module. If so, the module
->   	  will be called gl520sm.
->   
-> +config SENSORS_GPD
-> +	tristate "GPD handhelds"
-> +	depends on X86
-> +	help
-> +	  If you say yes here you get support for fan readings and
-> +	  control over GPD handheld devices.
-> +
-> +	  Can also be built as a module. In that case it will be
-> +	  called gpd-fan.
-> +
->   config SENSORS_G760A
->   	tristate "GMT G760A"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index cd8bc4752b4dbf015c6eb46157626f4e8f87dfae..051981eb8a5089608e9eb351a1d5857805c728c8 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -88,6 +88,7 @@ obj-$(CONFIG_SENSORS_GIGABYTE_WATERFORCE) += gigabyte_waterforce.o
->   obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
->   obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
->   obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
-> +obj-$(CONFIG_SENSORS_GPD)	+= gpd-fan.o
->   obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
->   obj-$(CONFIG_SENSORS_GXP_FAN_CTRL) += gxp-fan-ctrl.o
->   obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
-> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..4a9ae049a78524caa0fd608c119eb34c333429ae
-> --- /dev/null
-> +++ b/drivers/hwmon/gpd-fan.c
-> @@ -0,0 +1,786 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +/* Platform driver for GPD devices that expose fan control via hwmon sysfs.
-> + *
-> + * Fan control is provided via pwm interface in the range [0-255].
-> + * Each model has a different range in the EC, the written value is scaled to
-> + * accommodate for that.
-> + *
-> + * Based on this repo:
-> + * https://github.com/Cryolitia/gpd-fan-driver
-> + *
-> + * Copyright (c) 2024 Cryolitia PukNgae
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/ioport.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#define DRIVER_NAME "gpdfan"
-> +#define GPD_PWM_CTR_OFFSET 0x1841
-> +
-> +static char *gpd_fan_board = "";
-> +module_param(gpd_fan_board, charp, 0444);
-> +
-> +// EC read/write locker, protecting single EC access
-> +// Should never access EC at the same time, otherwise system down.
-> +static DEFINE_MUTEX(gpd_fan_atomic_lock);
+From: Maciej Zonski <me@zonni.pl>
 
-Why keep this lock ? Each access sequence is now locked in the top
-level read/write function, which should make this lock redundant.
+Add support for ROG STRIX X870-I GAMING WIFI
 
-Guenter
+Signed-off-by: Maciej Zonski <me@zonni.pl>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+---
+ Documentation/hwmon/asus_ec_sensors.rst | 1 +
+ drivers/hwmon/asus-ec-sensors.c         | 9 +++++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index baf9eba5957c..6a9c5f30e016 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -34,6 +34,7 @@ Supported boards:
+  * ROG STRIX X570-F GAMING
+  * ROG STRIX X570-I GAMING
+  * ROG STRIX X670E-I GAMING WIFI
++ * ROG STRIX X870-I GAMING WIFI
+  * ROG STRIX Z390-F GAMING
+  * ROG STRIX Z490-F GAMING
+  * ROG STRIX Z690-A GAMING WIFI D4
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index f580ff2e212f..32d4dd26aa84 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -621,6 +621,13 @@ static const struct ec_board_info board_info_strix_x670e_i_gaming_wifi = {
+ 	.family = family_amd_600_series,
+ };
+ 
++static const struct ec_board_info board_info_strix_x870_i_gaming_wifi = {
++	.sensors = SENSOR_TEMP_CPU | SENSOR_TEMP_CPU_PACKAGE |
++		SENSOR_TEMP_MB | SENSOR_TEMP_VRM,
++	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PCI0_SBRG_SIO1_MUT0,
++	.family = family_amd_800_series,
++};
++
+ static const struct ec_board_info board_info_strix_z390_f_gaming = {
+ 	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
+ 		SENSOR_TEMP_T_SENSOR |
+@@ -759,6 +766,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_strix_x570_i_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X670E-I GAMING WIFI",
+ 					&board_info_strix_x670e_i_gaming_wifi),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X870-I GAMING WIFI",
++					&board_info_strix_x870_i_gaming_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
+ 					&board_info_strix_z390_f_gaming),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z490-F GAMING",
+-- 
+2.51.0
 
