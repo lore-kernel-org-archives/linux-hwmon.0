@@ -1,101 +1,100 @@
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF56A315D45;
-	Sun,  7 Sep 2025 10:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28EF272E7E;
+	Sun,  7 Sep 2025 13:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757240497; cv=none; b=Zo88gcCB62YXKstMml8wFC0NVTwaD7WGRzqLZk5oFUa7jE4Tm8os3VTwNgqEdnbmxxHkxkF0FKxqeWjEIGkCcJin63opmfwvJh2KyxUBItQ4DmXi/teCTliLL+sab/G//1Vqh0Y3v7Bpb2vz3b1TeAoP+gdqD1o9ejrqDVMsiCs=
+	t=1757251098; cv=none; b=SZcMFlpOz3ZPGvKA4YoBwz4PczsIdhwkkEBa7YeLODHAKtWXYrFD0vHPR10CoZwXqb+b99gLnQka4WOE7zb/Q7rzbT6LyGLEk5L7idww1sJtqDLJSqCldrp7CN6CVgWHjEFFxKusjHdj0sXNOAauG+Xig+z0b1iO1m3IQdu7rGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757240497; c=relaxed/simple;
-	bh=1FZw3XLBNxWddQWDGiHb6R2oZ1pRTMmG29b8h/Sjv/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tlkJpEMiXG70/V8RwNNftIvHl6ZAPPRPEP1ofAu8I2uIBGt2ffb+mXxf9Gcazf8c3b1aUxMkoDlIjS2XYaOJMbFDCfwxDRinplNsokLFzJP2gL/4MHkmlKhwU1GOOG93YBndyJ2l0Kpk9CjvBSkStEYWJ9giUyhPgQz8AfeVj08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Kvz20WYb; arc=none smtp.client-ip=80.12.242.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1757251098; c=relaxed/simple;
+	bh=lb0Gamf3L9Htxml+MpLO6L958jGJdocBgqKrw8UmFIo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2GNLPxXFKNHzdKMTaunVBwGu4V5fchwekjISaJorBNlswOEIhgbsrGsoPZpy3oUllI4TCbuMBZONzPsgEK3OvrS1jO8s2m98ZRppq5xfsqc8HK+lv+phP0r3v3ps8ZIm17qgNk5plUXUVhNny6++K8BFceVxKFssQLqb9c1epc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q8MmHjLz; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Kvz20WYb"
-Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
-	by smtp.orange.fr with ESMTPA
-	id vCVUufhb0X5N0vCVUuZLQ2; Sun, 07 Sep 2025 12:20:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1757240424;
-	bh=ao1u0LK62psCTkohZj0LictkGzMcdgdJRvSyY0Eybc0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Kvz20WYbMyXyK/059+yiEhW3kCT/1GphyJw5XRpFbrBEN7Sqyhcl5xc5KPbCOfdQg
-	 Rwz40/+I90trVFPYV0kD0zDMwLbOPDpNAADuAIvaan+f7fO9srhw331SbEjDavvnqx
-	 W13oG7na8Srp4c3Y3OuUZXBw+zHz4v/oOJ4SR8CvXneHy3MNqVD4+WeIXEsPf6hMkB
-	 coVsJ3BS0/a1YkVMzxMCnDE24Qv9CB85kY3azidBSNzlA7gX1OYFfy4zxfTMTU7ANN
-	 647S2qrkE07fZvBsVLaGQWIcCVjdeJeCte95zs/dHdX8+0OygWTtbQaClGHKDG2+bk
-	 WtSwNRK1ZItGQ==
-X-ME-Helo: fedora.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 07 Sep 2025 12:20:24 +0200
-X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q8MmHjLz"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-77238cb3cbbso3770646b3a.0;
+        Sun, 07 Sep 2025 06:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757251096; x=1757855896; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RenAXJccVRZykldVMIQVWlzKvm/7Gyr+4s8HFewX4V4=;
+        b=Q8MmHjLz3dU2VDjaWxVLNU4F0CKoMtwqF6NBiXMtt4SzfA/+VtiZbwGjR+RBLp64VA
+         unJ8hJCUxr8XKBYL33CqyrpL72NqQodcB5x4w1bj1hDTDQZvCec7spnszPS9KB/cOhiF
+         yNyOqcz0o+iLg2i4oXrYx9pAg+gVwODLnhX54dMUvykD9Jenl+Tf+Tatqh+mUFP5yaBY
+         hEoF8XlNEG8yMsDIiluCiG+Z7iO55UFR7oPpst9iCpCeo/ucclVlP2jfIgTF3+QqBkrc
+         yKHUySqaSRAB8jvr5OTESkQlfGDknHm21J3GzWEWJvJq0u2fu5c/6h1IrrQ/KSxqHJpV
+         gFsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757251096; x=1757855896;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RenAXJccVRZykldVMIQVWlzKvm/7Gyr+4s8HFewX4V4=;
+        b=nY9jVKsNNjmLqciaSfVFVeP+twJqK5p38GF1gqFWMbAC1gHjSvaRmi27e2axGQbfsE
+         6ocQpNr4YdPMmSxJUEMNvCILIlUXBrCkWXv702CtHqjgTPCJJXK0IbnJtgjn042Abad5
+         xDDgNEIQqkhVwwWdJJfsmvKWNMOtUeP8iRhu1vDs8qwCIufYAFIYXr+67P9nkkgxKKQF
+         s4n4ZkcfAoyL4fgUPrO8EVmR5osbVC9c4AiXqQhW75q/zt4z274YVSZot1uJ/Pgi3xoK
+         T61pRh2EcJ0DJzKno9z7hIFhmmvn8OHrTfs5QHHDAmJL/CR7o5L1jtdMpqvLuPYpoCSX
+         iAhw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+plfVCEkT5qm0D4zWh9zGK164I5vW+Cq7zleqTorpdTlob+W4vcUFwmZNl9lcrly/YjjGm7D8Bul+7sGUMtg=@vger.kernel.org, AJvYcCUQ32MQVAyfrEgK0u8xkm48Qj8FuCbnTIm1g+thpcoh6ivb4yki4zAtue8ivrY5ZanQo2ulKDgNxqIymIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMiyMdEY8qyux0mo6oN1/boarHE1QNNLsBpjfIrThaei1T2Le6
+	LmqZIA++yy2+xdM2n1DvRGF9di5Wham7JcWcUFBiISGZVoa5GMe5TURB
+X-Gm-Gg: ASbGncvfaQ3mq+S9J83HsFU9G2+e95n9DZbAeX/0bBOr7xa5gkTgIIbahfrzv6dalvT
+	2Fgbd5ujRaW5Q8OmNfZOD4Oak86/F4SFK7FXuHrMWHqO6wSMkXOdx9XPZWrLIgcsNaN0XOP7062
+	ZQmTRQnXa7L9xru3PeRnYv4B6aNjaKDZ4Wt38VXHKiy4QZEa1jkLTtD9xWWBlFGoCYVDJuLQMSF
+	GFnT/fubuXc67FHoQFtBsJP0qAxUCteM/NGoxgDwBhCkNx2AlaohMU0P+xft/V1x4Dq1yz/Bh8x
+	mBpyRI6BhknhWjaQdjJmfw/RCgHSj3Lj9f32hsobDfFIwk+3RxByFlULEOeF6fLYgd8kzYQXbVS
+	4nKcnuJeSyghilGH+V66yapDLZEWTlQE9AG8=
+X-Google-Smtp-Source: AGHT+IGCt9IyOrURHk4JApTs7razMOagmxVWgsLPWYBcPYs/hqlhfeymlRccA6IlJCQkwV8MXj0xwg==
+X-Received: by 2002:a05:6a00:21cd:b0:76e:8cf4:7bc4 with SMTP id d2e1a72fcca58-7742df22ee8mr5064345b3a.26.1757251096055;
+        Sun, 07 Sep 2025 06:18:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a501a94sm27027949b3a.93.2025.09.07.06.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Sep 2025 06:18:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 7 Sep 2025 06:18:14 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (nzxt-smart2) Use devm_mutex_init()
-Date: Sun,  7 Sep 2025 12:20:20 +0200
-Message-ID: <f51fac0871ec7dbe4e28447ee4f774d028a53426.1757240403.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.51.0
+Subject: Re: [PATCH] hwmon: (nzxt-smart2) Use devm_mutex_init()
+Message-ID: <ec09e583-7a07-4ff1-8682-3ef783dd7dee@roeck-us.net>
+References: <f51fac0871ec7dbe4e28447ee4f774d028a53426.1757240403.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f51fac0871ec7dbe4e28447ee4f774d028a53426.1757240403.git.christophe.jaillet@wanadoo.fr>
 
-Use devm_mutex_init() instead of hand-writing it.
+On Sun, Sep 07, 2025 at 12:20:20PM +0200, Christophe JAILLET wrote:
+> Use devm_mutex_init() instead of hand-writing it.
+> 
+> This saves some LoC, improves readability and saves some space in the
+> generated .o file.
+> 
+> Before:
+> ======
+>    text	   data	    bss	    dec	    hex	filename
+>   25878	  11329	    128	  37335	   91d7	drivers/hwmon/nzxt-smart2.o
+> 
+> After:
+> =====
+>    text	   data	    bss	    dec	    hex	filename
+>   25551	  11257	    128	  36936	   9048	drivers/hwmon/nzxt-smart2.o
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-This saves some LoC, improves readability and saves some space in the
-generated .o file.
+Applied.
 
-Before:
-======
-   text	   data	    bss	    dec	    hex	filename
-  25878	  11329	    128	  37335	   91d7	drivers/hwmon/nzxt-smart2.o
-
-After:
-=====
-   text	   data	    bss	    dec	    hex	filename
-  25551	  11257	    128	  36936	   9048	drivers/hwmon/nzxt-smart2.o
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/hwmon/nzxt-smart2.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-index c2d1173f42fe..58ef9fa0184b 100644
---- a/drivers/hwmon/nzxt-smart2.c
-+++ b/drivers/hwmon/nzxt-smart2.c
-@@ -721,11 +721,6 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
- 	return init_device(drvdata, drvdata->update_interval);
- }
- 
--static void mutex_fini(void *lock)
--{
--	mutex_destroy(lock);
--}
--
- static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 				 const struct hid_device_id *id)
- {
-@@ -741,8 +736,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
- 
- 	init_waitqueue_head(&drvdata->wq);
- 
--	mutex_init(&drvdata->mutex);
--	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
-+	ret = devm_mutex_init(&hdev->dev, &drvdata->mutex);
- 	if (ret)
- 		return ret;
- 
--- 
-2.51.0
-
+Guenter
