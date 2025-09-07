@@ -1,296 +1,118 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4684C288CBF
-	for <linux-hwmon@vger.kernel.org>; Sun,  7 Sep 2025 17:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6463812B73;
+	Sun,  7 Sep 2025 22:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757267527; cv=none; b=rCSApptN8m5UErSl8hv6Sgvf/KAPhChv5j5cl6jTV2f2+tJFV8Mm/aD9efF9aQQTCF8NchcZpFDV5OYz11J7pwHlYPPX06bV6hw5+PTnpXo9U8m6GE7kQb6101E0Hw7zx1E4HPhDosNETSiSLps5XH8G4upoxCQWn73M8vw5/5o=
+	t=1757282794; cv=none; b=Mr/myONb7n99p9TlH7yblTsarDFxrsxs4tYH559886qKGQKT2G63frQbKkdpCO9tKQlX4Zt60g2qdVrLhyFB3byZwFDmWTb4saUb8fKbIl6Z+nVPbo47dgLJNufHgZUoPHrzLvT7oGCzYhwDMIxUgydE6J1A5I0h5PkxLDszTk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757267527; c=relaxed/simple;
-	bh=b3umicBARsfHHWKnDulYGFSb8612bCy/jQxcdeSbWCk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ADH3M2CSht8p8YIBZSeLM0ZxpghlbuybjcY1O/za4TuZTxZ8J4LIwoaGTyBq03BOYE1my4aqWJ+oaYl54VGfNIeEyxqvy+GGAerAve2kTjOOu8Ba8xXcTa7Nx3wBfTMRutFdPMVGWFykyITlLP/VynQBl8LxsYRgUcWjcPZys4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmKk6lDR; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1757282794; c=relaxed/simple;
+	bh=qLRdvSJ8uiJiuRtlL7SuX80IfGmKXF9bpTRPiOf5o6Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tqDP0l20VVQs/4AhDByfAV6qoaD/Dj+RjPCgvoirehrQmJBzLUnhovfxREPdM5UtzEQUJfBiU2byqpk9IPNssvs1Vb+okofNAYpnlj8qYqD9m9vlPFdfLh++xpSpKp2Xwr6GtVEuoQUmMaXAHFc5cDykyxm29wEPO+07dCZyAug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mr+VUqJq; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmKk6lDR"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-772843b6057so2894333b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Sep 2025 10:52:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mr+VUqJq"
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-544c620d486so2643288e0c.1;
+        Sun, 07 Sep 2025 15:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757267524; x=1757872324; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmNYshIeesd7gCuaUGxyg9lNgxN4kuH0KdZWg+0kbsg=;
-        b=AmKk6lDRk1h6j1t3PMMGaT2YKmoBvXtdsb2h3XsJHFUED1bg6vPrRxgnYGOYoe+25q
-         rLHPTZzs61I7jPSobeWKijbw6bonSrE52jOCVRCUTrVS9tvHmTVfY6eoEdPizPzha2n7
-         6MMPwqTtLQXgxxavEfDzIo8n7+L4EPNoek7Yoy8wb3bjcF9oUQmswA+QQofGOlDqm6SL
-         xqmaGzeLczndyPS9BUxzY4xHIQzAilFSzNJ7RoB+2LsPKiJBPGFuofhz2CiNolyHeL2E
-         9Cz+g3PfqVFH8GJnoSp+c9Ek1JD1yjYdDQM3YZX0bL28NzdtlzPyGSl+WB763cE++rqe
-         blBA==
+        d=gmail.com; s=20230601; t=1757282792; x=1757887592; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8hptlqdp9b1MF6OhlNmp++9M2/f9tUuxlq06VT9Ialk=;
+        b=Mr+VUqJqeYtyNmwoHIDvcgFpW+Dtwb6+TEjyONRyO9AB2O8s4IWz2drPmhRm0LzPjD
+         KDqXhu56ICtdX8aoenWgVgjs/YlFDBIqQEGscBElAIjsr+kACJgUzZHlVA+DlBjuK0HX
+         JMlOs5e0ZVRCxOovhEm6pSt51G4E2irfgYROo4dtg+53WzFCqdaOrt4D5eFu9hXC6C8h
+         41CzD+Ok2dpR3RETbWqHdl4SaOW/8gGs+KCEB+6L3xWnyTkTR6b5fZG40XIqUmcj5Zzb
+         LJSLTjSuUmBEKeaX8gJPsUqDe1ODdxxl+4woSlFQDeTga+qc2omc0oR9ilSDY8Gk7APK
+         dctA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757267524; x=1757872324;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OmNYshIeesd7gCuaUGxyg9lNgxN4kuH0KdZWg+0kbsg=;
-        b=Wnl6oq8R4W6VVjmHajdVDX5GBNscugk6IIVAtkixDJHS8YPULldUl75QTXYLGPZwSH
-         llWCjyuWEMcjPqNWeGTge0l6lblUAvAzHdD1qfD/j+iciA7adtFKdtDQTx2PkrhdT2FX
-         qHdmcCBbsDDFkjRLZs1+lH9A2i6T56aw5MFc8Hqs1ZPzH96Pg2KJhQuueTIIONWjToQo
-         T8GG8UrpeOyLgTqtqSO9h9NY7Tyg+RqWlUY0pDC7lmudzmE24eOWabJhiawXJM7u4F4V
-         cgBbiD1Uf5yxSoPEgDKoNZtO5DHE1oRrCJTnV0nFJNvE4t4opFMyccMqX362IozIi8r6
-         eJbw==
-X-Gm-Message-State: AOJu0YzQXorOraBQ5vQ/AGuY9d6oADMClcETybQ3dIQVpOvtECCQQJw9
-	vOAC++qVJvVwH73lATzScCmSiE5xrMghhRqvKQoeQb2OC6W9/dHIIqB5MO3iJ8VZ
-X-Gm-Gg: ASbGncvzkL1fbZUKgkahAIVGj2Wx9aqC9JIJ8DUeB+BastUvOO9FgquuX9f/5PgchYB
-	1HpLjB/ap43pOs482DFadytzKMjTPMZIdK+rP5XTk4dtfHZvlRN+rukFV+6GYm/PnA9c9WRlfsK
-	2uHtn/2JIYx1eLkX6BPyBKHQQN558bxY9fXHj1Jm55BvXoVMmnVI1SQFqc5bwtNQMBhy3BqRxFh
-	x+zD76zK1+GAnSATetIybR/LP/n8t4ZaewqTjf1vuME01qPpBDZWnr9rffgUd7RRvoaTDQD1fpO
-	Mz3bCDCYW7naYoTsL5QxiX48mX4A48uMicHrhvKx0nIR/8crjfBG3tIMO3XxeaKwN2XnSBN8mmY
-	eDTmYsjY4UaF9TAgzrhFHUQj1q4gm2rGmCl8sKiSLm7Bmvg==
-X-Google-Smtp-Source: AGHT+IG49dKDF5qRbZdlPO7SFT96gnzkJ2T9hDEjXwd1KqHyUuTa3uAGKdbrPqxyvswZurhyIWMyjw==
-X-Received: by 2002:a05:6a20:3d05:b0:244:d3d0:962a with SMTP id adf61e73a8af0-2533d2260b9mr7210171637.22.1757267524078;
-        Sun, 07 Sep 2025 10:52:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd6232sm34235146a91.16.2025.09.07.10.52.03
+        d=1e100.net; s=20230601; t=1757282792; x=1757887592;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8hptlqdp9b1MF6OhlNmp++9M2/f9tUuxlq06VT9Ialk=;
+        b=ru8XL2JPIsv/46FrEinV7NN1Vtv1dm6Tm8/jToxivLZ/D39ByqJ5qwWvOs1MyP853h
+         nM3oA65MSZsT2UEspyWMGOu56cyc9el/Z++5HbA23p46u9EUG5UQ8vYfiL82vicXdUtD
+         2o/m//1tBv4lDnWdrcXyOjQ6vOspALx5f6PFRi6aw9eF2qUnjrbTInUq49Xjf06gFKPO
+         W18lhS4UBGywiP5Lcy/Wo16fzxcJrqA6Y9Z0SPPp9faZoB4UC0kz2PDK+UoC9ishxtW4
+         fVrDo9icSbFxS5uwb7FjIC4w1+1OpYle0OLurYZMnn3lSbXOu75sisAWuYtthBQJsnQn
+         7FAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNxCLL1jdlYKNZz8O/jlZ+2zadLWmLf9GkXCEud6fCS6/5jB4b8zIWJflQ2iEOEvK6zIN7qWdxiWFA@vger.kernel.org, AJvYcCVeRJCnogpHervqQKOAJLhL85VjgMJ2/3n1Lp8pf3XrJoBBo54jN6vov/dDb1BA+lhM36NUkXa9Jgd9Fn8M@vger.kernel.org, AJvYcCVqmBELnAyPZmsD78men2u29VCsaVt3QDwkMUdycD6SxGZn39+EVoGDyB4GvhpcsNIHBwcVipMBizCQnjA=@vger.kernel.org, AJvYcCXQdYkEKsbuB3FHT3gWDrIHij6OMjv8Gk60aAB+FS8yCBvQPVWBauJZQO89TsdyVVsiwereokjYHbkB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTFI0OpNUUFoEsQBcrsM8XWChzwL80AA2Gv86gtHguUFkhyIcp
+	eDE+JNa2ryuFq9GfZvHlACBO55KJ12m4yHgvft1dDzx3ocaYPknXBZbx
+X-Gm-Gg: ASbGncskA6mganw00tYYvanJmZxD4GWjiIw6Q12yBShd8TQMDgYSauK8mSq90dJZpcm
+	mUED6HXA8wEXPYarKopzy8x5tqVk7EgpoSGggeFuQq13Ohqw+wcE4XsObIr7ZB+Y2kI9bI811Yh
+	8zHRkkVGnP/bhri6/9EfMGedTuBod6Xgu97yf9G6GjewYp0sFCm2YPFpPAuBZunXZvMAKlR59Gv
+	uB2RlshBOx1+LHnE/E9t2ZLuukOMbmsTRhOQXrYCy5P4SB+ZfByizmPmAoBtgkDy22duBo/1s8+
+	zFjJ9OMdc8tp77uWIrLwTqAZPkEL0vyNp9Nd7S63mc/3luxj9zUtT/AeaywJs6CypWfEopdyVRZ
+	JceglvDwWqAiTyi1SClWUP5tCFxu6NLk7r78=
+X-Google-Smtp-Source: AGHT+IGcJZFqldRo/H0GE7Xbe/Q8EGo7qLaMA8REEiKVuXE2jwTFe1RKcaZ9VGUgfV3crPZme9vCHg==
+X-Received: by 2002:a05:6122:7c9:b0:544:79bd:f937 with SMTP id 71dfb90a1353d-5473d2900e3mr1469599e0c.15.1757282792173;
+        Sun, 07 Sep 2025 15:06:32 -0700 (PDT)
+Received: from [192.168.100.70] ([2800:bf0:82:3d2:875c:6c76:e06b:3095])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5449ed5a91esm10397004e0c.20.2025.09.07.15.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 10:52:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: Serialize accesses in hwmon core
-Date: Sun,  7 Sep 2025 10:52:01 -0700
-Message-ID: <20250907175201.442742-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+        Sun, 07 Sep 2025 15:06:31 -0700 (PDT)
+From: Kurt Borja <kuurtb@gmail.com>
+Subject: [PATCH 0/3] hwmon: (sht21) Add devicetree support
+Date: Sun, 07 Sep 2025 17:06:14 -0500
+Message-Id: <20250907-sht2x-v1-0-fd56843b1b43@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANYBvmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDSwNz3eKMEqMKXcskSzNDI9NEg+Q0UyWg2oKi1LTMCrA50bG1tQBvN+V
+ eVwAAAA==
+X-Change-ID: 20250907-sht2x-9b96125a0cf5
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: stable@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Kurt Borja <kuurtb@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=814; i=kuurtb@gmail.com;
+ h=from:subject:message-id; bh=qLRdvSJ8uiJiuRtlL7SuX80IfGmKXF9bpTRPiOf5o6Q=;
+ b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7GB+s//Pk+dcDezN8rpcY+xac1Dtee4P1mOq+8BW2l
+ /NXMC3o7yhlYRDjYpAVU2RpT1j07VFU3lu/A6H3YeawMoEMYeDiFICJTF3JyLDm9eKjASw/4+2k
+ jHkE4hfPLNtX8djFSjltmnt6YLVC405GhsZaNY3T9rMljOblf54xoVzWNn9u8U5zBtP5zelZLoL
+ n+QA=
+X-Developer-Key: i=kuurtb@gmail.com; a=openpgp;
+ fpr=54D3BE170AEF777983C3C63B57E3B6585920A69A
 
-Implement locking in the hardware monitoring core for drivers using
-the _with_info() API functions.
+Hi all,
 
-Most hardware monitoring drivers need to support locking to protect
-against parallel accesses from userspace. With older API functions, such
-locking had to be implemented in the driver code since sysfs attributes
-were created by the driver. However, the _with_info() API creates sysfs
-attributes in the hardware monitoring core. This makes it easy to move
-the locking primitives into that code. This has the benefit of simplifying
-driver code while at the same time reducing the risk of incomplete of bad
-locking implementations in hardware monitoring drivers.
+The sht21 driver actually supports all i2c sht2x chips so add support
+for those names and additionally add DT support.
 
-While this means that all accesses are forced to be synchronized, this
-has little if any practical impact since accesses are expected to be low
-frequency and are typically synchronized from userspace anyway since
-only a single process is accessing the data. On top of that, many drivers
-use regmap, which also has its own locking scheme and already serializes
-accesses.
+Tested for sht20 and verified against the datasheet for sht25.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Thanks!
+
+Signed-off-by: Kurt Borja <kuurtb@gmail.com>
 ---
- Documentation/hwmon/hwmon-kernel-api.rst | 10 ++++++
- drivers/hwmon/hwmon.c                    | 42 ++++++++++++++++++++----
- include/linux/hwmon.h                    |  3 ++
- 3 files changed, 48 insertions(+), 7 deletions(-)
+Kurt Borja (3):
+      hwmon: (sht21) Add support for all sht2x chips
+      hwmon: (sht21) Add devicetree support
+      dt-bindings: trivial-devices: Add sht2x sensors
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index e47fc757e63e..de74bdb4f5fc 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -42,6 +42,9 @@ register/unregister functions::
- 
-   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- 
-+  void hwmon_lock(struct device *dev);
-+  void hwmon_unlock(struct device *dev);
-+
- hwmon_device_register_with_info registers a hardware monitoring device.
- It creates the standard sysfs attributes in the hardware monitoring core,
- letting the driver focus on reading from and writing to the chip instead
-@@ -79,6 +82,13 @@ devm_hwmon_sanitize_name is the resource managed version of
- hwmon_sanitize_name; the memory will be freed automatically on device
- removal.
- 
-+When using [devm_]hwmon_device_register_with_info() to register the
-+ardware monitoring device, accesses using the associated access functions
-+are serialised by the hardware monitoring core. If a driver needs locking
-+for other functions such as interrupt handlers or for attributes which are
-+fully implemented in the driver, hwmon_lock() and hwmon_unlock() can be used
-+to ensure that those functions are serialized.
-+
- Using devm_hwmon_device_register_with_info()
- --------------------------------------------
- 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 1688c210888a..6d7c657aaa51 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -19,6 +19,7 @@
- #include <linux/kstrtox.h>
- #include <linux/list.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
- #include <linux/pci.h>
- #include <linux/property.h>
- #include <linux/slab.h>
-@@ -36,6 +37,7 @@ struct hwmon_device {
- 	const char *label;
- 	struct device dev;
- 	const struct hwmon_chip_info *chip;
-+	struct mutex lock;
- 	struct list_head tzdata;
- 	struct attribute_group group;
- 	const struct attribute_group **groups;
-@@ -165,6 +167,8 @@ static int hwmon_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- 	int ret;
- 	long t;
- 
-+	guard(mutex)(&hwdev->lock);
-+
- 	ret = hwdev->chip->ops->read(tdata->dev, hwmon_temp, hwmon_temp_input,
- 				     tdata->index, &t);
- 	if (ret < 0)
-@@ -193,6 +197,8 @@ static int hwmon_thermal_set_trips(struct thermal_zone_device *tz, int low, int
- 	if (!info[i])
- 		return 0;
- 
-+	guard(mutex)(&hwdev->lock);
-+
- 	if (info[i]->config[tdata->index] & HWMON_T_MIN) {
- 		err = chip->ops->write(tdata->dev, hwmon_temp,
- 				       hwmon_temp_min, tdata->index, low);
-@@ -330,8 +336,6 @@ static int hwmon_attr_base(enum hwmon_sensor_types type)
-  * attached to an i2c client device.
-  */
- 
--static DEFINE_MUTEX(hwmon_pec_mutex);
--
- static int hwmon_match_device(struct device *dev, const void *data)
- {
- 	return dev->class == &hwmon_class;
-@@ -362,17 +366,16 @@ static ssize_t pec_store(struct device *dev, struct device_attribute *devattr,
- 	if (!hdev)
- 		return -ENODEV;
- 
--	mutex_lock(&hwmon_pec_mutex);
--
- 	/*
- 	 * If there is no write function, we assume that chip specific
- 	 * handling is not required.
- 	 */
- 	hwdev = to_hwmon_device(hdev);
-+	guard(mutex)(&hwdev->lock);
- 	if (hwdev->chip->ops->write) {
- 		err = hwdev->chip->ops->write(hdev, hwmon_chip, hwmon_chip_pec, 0, val);
- 		if (err && err != -EOPNOTSUPP)
--			goto unlock;
-+			goto put;
- 	}
- 
- 	if (!val)
-@@ -381,8 +384,7 @@ static ssize_t pec_store(struct device *dev, struct device_attribute *devattr,
- 		client->flags |= I2C_CLIENT_PEC;
- 
- 	err = count;
--unlock:
--	mutex_unlock(&hwmon_pec_mutex);
-+put:
- 	put_device(hdev);
- 
- 	return err;
-@@ -426,9 +428,12 @@ static ssize_t hwmon_attr_show(struct device *dev,
- 			       struct device_attribute *devattr, char *buf)
- {
- 	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 	long val;
- 	int ret;
- 
-+	guard(mutex)(&hwdev->lock);
-+
- 	ret = hattr->ops->read(dev, hattr->type, hattr->attr, hattr->index,
- 			       &val);
- 	if (ret < 0)
-@@ -445,10 +450,13 @@ static ssize_t hwmon_attr_show_string(struct device *dev,
- 				      char *buf)
- {
- 	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 	enum hwmon_sensor_types type = hattr->type;
- 	const char *s;
- 	int ret;
- 
-+	guard(mutex)(&hwdev->lock);
-+
- 	ret = hattr->ops->read_string(dev, hattr->type, hattr->attr,
- 				      hattr->index, &s);
- 	if (ret < 0)
-@@ -465,6 +473,7 @@ static ssize_t hwmon_attr_store(struct device *dev,
- 				const char *buf, size_t count)
- {
- 	struct hwmon_device_attribute *hattr = to_hwmon_attr(devattr);
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
- 	long val;
- 	int ret;
- 
-@@ -472,6 +481,8 @@ static ssize_t hwmon_attr_store(struct device *dev,
- 	if (ret < 0)
- 		return ret;
- 
-+	guard(mutex)(&hwdev->lock);
-+
- 	ret = hattr->ops->write(dev, hattr->type, hattr->attr, hattr->index,
- 				val);
- 	if (ret < 0)
-@@ -785,6 +796,22 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
- }
- EXPORT_SYMBOL_GPL(hwmon_notify_event);
- 
-+void hwmon_lock(struct device *dev)
-+{
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
-+
-+	mutex_lock(&hwdev->lock);
-+}
-+EXPORT_SYMBOL_GPL(hwmon_lock);
-+
-+void hwmon_unlock(struct device *dev)
-+{
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
-+
-+	mutex_unlock(&hwdev->lock);
-+}
-+EXPORT_SYMBOL_GPL(hwmon_unlock);
-+
- static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
- {
- 	int i, n;
-@@ -945,6 +972,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 		tdev = tdev->parent;
- 	hdev->of_node = tdev ? tdev->of_node : NULL;
- 	hwdev->chip = chip;
-+	mutex_init(&hwdev->lock);
- 	dev_set_drvdata(hdev, drvdata);
- 	dev_set_name(hdev, HWMON_ID_FORMAT, id);
- 	err = device_register(hdev);
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 3a63dff62d03..8d7a85868d93 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -491,6 +491,9 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
- char *hwmon_sanitize_name(const char *name);
- char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
- 
-+void hwmon_lock(struct device *dev);
-+void hwmon_unlock(struct device *dev);
-+
- /**
-  * hwmon_is_bad_char - Is the char invalid in a hwmon name
-  * @ch: the char to be considered
+ Documentation/devicetree/bindings/trivial-devices.yaml |  1 +
+ Documentation/hwmon/sht21.rst                          | 11 +++++++++++
+ drivers/hwmon/sht21.c                                  | 13 ++++++++++++-
+ 3 files changed, 24 insertions(+), 1 deletion(-)
+---
+base-commit: b236920731dd90c3fba8c227aa0c4dee5351a639
+change-id: 20250907-sht2x-9b96125a0cf5
 -- 
-2.45.2
+ ~ Kurt
 
