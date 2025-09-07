@@ -1,124 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476321E487;
-	Sun,  7 Sep 2025 01:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D43E15B135;
+	Sun,  7 Sep 2025 04:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757209999; cv=none; b=fTiizydaf9xMTjZeTR5Uwkk/jOKGHa0pRoLgElrV/llgQL2J6Vr4a0QU1Pqn/EAbxb0w841PEGs9sH8GmCC7YnUrZXeJ27icFF0oAtR/7vbxhUPPfpiV0FeMKRBDWecMHBEIUy+r2yxOiCIYWePGuWsuCC1+N/RLSqaC0IwAwbE=
+	t=1757219093; cv=none; b=RPNJJ8n1QZvGJM/rOERY8HWAxdc4ZYLB/EwIkxpMlumZbR9Elvyu8ON1suiXFoCFCaIspS5jaavaj+2krwxPZ0AqFfxrZi6vdJG4p1x16iHIHxuiKnMjxcL5hnJ3EXY/kFMT5sASPEhwa8VWYWlLogAFWlaFylnyfRxKojQD+IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757209999; c=relaxed/simple;
-	bh=onua4uGiY8b06S0kaHxtedAho1jMgBQC9N7wPI006h0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZikD6STHLiGM0uJiEMCwk6TtiD/j8fg6XXV5lwGx/TSHK56gU2bvbm9uPaezTC+SoPezRRfmj4kQYWSxIK1eQr7Dqyq/wwKEdQ48ieyK9UiwBWnOqygPpXg2+7uLPL/CKtvBpX1gghSq5EMWbiA9wGru94EBEHv2lgYHXStUE18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mcLdwkvJ; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757219093; c=relaxed/simple;
+	bh=0N3eVpXC/D+64gQoRgXv87xuIkiqUUOVzPZ3VCpIvuY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Al6/+CctuPZirmGgo6VBhub0qgM9oQus590XDdnGE4VxoTQE2omeRdSs+uZ/A6vbyv2xcpjRbTYnfpPAh+rvkZc2r6+uyGAYh+TNiLYXuyxAprqn6VMgeDJ5hgfApKnnCYajvp1Kiog3OUfrMvspk919cjwBsI/D2nFVYGTkXXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DaYVfPm+; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mcLdwkvJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757209997; x=1788745997;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=onua4uGiY8b06S0kaHxtedAho1jMgBQC9N7wPI006h0=;
-  b=mcLdwkvJHhAWD13/xShlualwSIvozY/qtIDi1tOuzdbK2qTQAq/dqzzx
-   SnM+wW6AHh8odeb82a4Z9slqZKAxGw7ZkB/RIyOdLfz6cIL3QN7/byRgZ
-   pIbnhLJCxOFewyfVvDdL3NQu1Wlr3XLzSUNsQLH+DaZC+wn5FwQoDVbN+
-   vDgUujAcv3u0+M8uAlwBkp//rGSNdqB88FNrOsrxWO8UwS8Qq17jGoC+R
-   r0wdeiaZtjZbHwKNcXqkhFlbuhFYiqjR5JKQGE8aD/zABD24KEGpmBCdh
-   vUoE/iAjCNfumZ8PP8OqE4kmaNVe60pKWvWbkmcPenUoq/HvAXArmxL5D
-   g==;
-X-CSE-ConnectionGUID: ydcHArxySAS5z3tcCvs96A==
-X-CSE-MsgGUID: +ZSrmKGXSjq/05gENSSzvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="59578011"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="59578011"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2025 18:53:16 -0700
-X-CSE-ConnectionGUID: Q2ewZRTwQHG7KgS+O9jxHg==
-X-CSE-MsgGUID: rDb0QugRTAqHusgz3nL/jQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="172030905"
-Received: from igk-lkp-server01.igk.intel.com (HELO ca260db0ef79) ([10.91.175.65])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Sep 2025 18:53:15 -0700
-Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uv4af-0004GZ-0n;
-	Sun, 07 Sep 2025 01:53:13 +0000
-Date: Sun, 7 Sep 2025 03:52:33 +0200
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [groeck-staging:hwmon-next 37/37] htmldocs:
- Documentation/hwmon/hwmon-kernel-api.rst:291: WARNING: Inline emphasis
- start-string without end-string. [docutils]
-Message-ID: <202509070312.GIIw6No7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DaYVfPm+"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6188b5ae1e8so4186115a12.0;
+        Sat, 06 Sep 2025 21:24:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757219090; x=1757823890; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0s9c0ZHAHeIpOChkyK+9eSA8/gCyG1mdkJBEoUW9B2w=;
+        b=DaYVfPm+D+/Q+8x43QR0bKiEOiQB47sZM9Ncy0bljmLRpjbw2QocZnJlFDnsxER24/
+         gvKoS0TYqVeT7DlIkc72cN+K2XknaoKEPmnTApHk6xvmgAJ/Aaqbs8aTYSO/vLZ88wc5
+         ttUvDFDHHnnHd2M/U7QJsUtWDhBq3FVhwiR6a4TqE/z5BUxR+F5jt3SGpVW/P9rJwWqc
+         1mXS2p4+wj3wckj62u6lw8a8ymEk05A63ONh6mvH14S6uUXut+qPumKMriZt8/Dff5E2
+         OMLynU7l4v6FQnxFGtyiWGa98NaqfcVkG/h6jUhzFdyMr7wZ83wxFK6ASgef5Jmy7V+V
+         A/yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757219090; x=1757823890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0s9c0ZHAHeIpOChkyK+9eSA8/gCyG1mdkJBEoUW9B2w=;
+        b=XxvXlhAU/RhuyaFQpqdfODTkfidxdgkMamLIJJpqVDHlgX8fXlF/KbtcmzsdPFrAxu
+         ESD0OWKhIG4yszIVJDXsRyA/se7X+RUAAqa6RYI5X/f0G4lnLfVircS3mF1WUZniW8ic
+         S7xTPe1IVpUFicPACDikK0E84OvivNII3zcbSDzxa9E1kboA++i7KIHQj1GaGyH4fNzX
+         Tw1hL7Wh6lIiLfg4wvNFwXbBf8WmMjS7GaT72y1ILb7FVd152loDHzE7UnYOKEi+tWA7
+         g7RzmhmGfqRuQnPqwH8FsDECFG8KmmeFLclXlhPnLdx5VsBlR4A7VPpxPoe4Vg7DYGrD
+         zX+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUSRHLGnNezAPhBfPI9h0QQNcpXo0lusrSc2UZvwZUAhwyot4owLK3NKn3b+w/NfZ96Ln08CZyP2174kTU=@vger.kernel.org, AJvYcCVdRYbDQYaynYB1ygZa9BoqX77rs98BUvmZgUpBsPqqqaBH1XeXBYMFYKGNhmmaYIw53mP8ImBenGPEL2wL@vger.kernel.org, AJvYcCX/jpHHao6o9QbUjXHup8mEmjTRqAeE8/y9Sk68v8g7DjEIkvst1P6A6w49uQMbETBZMWwzLBP99BUA@vger.kernel.org, AJvYcCXiP3LI7iSI0fuCNGTyLMoeJsaiBzl/kifOkS+rIJctlaM082e1Ssfz880be6YZdVUGD9GjjFFSUasz@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOfLZpYRQfNgaKN2MR8bw7Trg6HyYF4Lwx/vTzURC9GTYvIYhl
+	hYI9IEFz2iR3qfZIxhDGc3tkn8lgCLbO37G1xIE19wehVQQI4PiCToq6s29YiJZ+4xoc51MJ+GE
+	ECbnTFWcvVVCyvHx9dkQhA3KRDFmYjg==
+X-Gm-Gg: ASbGnctvulmbS9QWNgUuso1TjffFhrixD/CY9qx/iPoLLYd4wxJ0lBAClcJp3G1Cjjq
+	dpralwlKOsSjBb/vgmT3XKrxj+y9YtXUe24kKELZhfFzgFcEZeQVUJj1T5nNNxO2Sa3gKcXTjAp
+	deTpncLMhuam05yQEkV0Nx0PicfLLxBM59gJObq629438JCgWHATOaT1znVp+ziumSMlbb5tp+H
+	MlDlh6AAjUcM6B86Q==
+X-Google-Smtp-Source: AGHT+IGHfzcKiP9Te6PV3++IHvHUNAnAgu1e+fJM2ndSNvGKC0p8DoYdOnCCeRjEh31MMs7uRSn5elSnp8Bv187xwik=
+X-Received: by 2002:a05:6402:5189:b0:618:afa:70f7 with SMTP id
+ 4fb4d7f45d1cf-623778cd7d6mr3269218a12.12.1757219090367; Sat, 06 Sep 2025
+ 21:24:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250904-hwmon-tps23861-add-class-restrictions-v3-0-b4e33e6d066c@gmail.com>
+ <20250904-hwmon-tps23861-add-class-restrictions-v3-1-b4e33e6d066c@gmail.com>
+ <20250905-deft-porcelain-teal-a3bdbf@kuoka> <CAAcybutsMdXmqrA6kG9L5OTP9ZPyLzYrXTGUGLAkWs5+MH9ifA@mail.gmail.com>
+ <9bd7beeb-0c11-4502-9d45-c85a0744ec82@kernel.org>
+In-Reply-To: <9bd7beeb-0c11-4502-9d45-c85a0744ec82@kernel.org>
+From: Gregory Fuchedgi <gfuchedgi@gmail.com>
+Date: Sat, 6 Sep 2025 21:24:14 -0700
+X-Gm-Features: AS18NWDyPgLCv7A7pvEren2ZJOSldFGXKh0s7fPVFLju_aNfFwxB2N-5d-Af1ro
+Message-ID: <CAAcybusLMg+jCY5esvLgwkyRCu2Ma5Ph2+QFJsuCvTqJu0UssQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: update TI TPS23861 with
+ per-port schema
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Robert Marko <robert.marko@sartura.hr>, Luka Perkov <luka.perkov@sartura.hr>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   3c56a8e682e94ee9ac48c1fb2153becb861c0f7d
-commit: a2d68a9f51c27051c4b84990ffbd2531a6024389 [37/37] hwmon: Introduce 64-bit energy attribute support
-reproduce: (https://download.01.org/0day-ci/archive/20250907/202509070312.GIIw6No7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509070312.GIIw6No7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
-   ERROR: Cannot find file ./include/linux/hid_bpf.h
-   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
-   ERROR: Cannot find file ./include/linux/hid.h
-   WARNING: No kernel-doc for file ./include/linux/hid.h
->> Documentation/hwmon/hwmon-kernel-api.rst:291: WARNING: Inline emphasis start-string without end-string. [docutils]
-   ERROR: Cannot find file ./include/linux/i2c-atr.h
-   WARNING: No kernel-doc for file ./include/linux/i2c-atr.h
-   ERROR: Cannot find file ./include/linux/mutex.h
-   ERROR: Cannot find file ./include/linux/mutex.h
-   WARNING: No kernel-doc for file ./include/linux/mutex.h
-
-
-vim +291 Documentation/hwmon/hwmon-kernel-api.rst
-
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  274  
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  275  	int read_func(struct device *dev, enum hwmon_sensor_types type,
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  276  		      u32 attr, int channel, long *val)
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  277  
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  278  Parameters:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  279  	dev:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  280  		Pointer to the hardware monitoring device.
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  281  	type:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  282  		The sensor type.
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  283  	attr:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  284  		Attribute identifier associated with a specific attribute.
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  285  		For example, the attribute value for HWMON_T_INPUT would be
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  286  		hwmon_temp_input. For complete mappings please see
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  287  		include/linux/hwmon.h.
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  288  	channel:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  289  		The sensor channel number.
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17  290  	val:
-b04f2f7d387b31 Documentation/hwmon/hwmon-kernel-api.txt Mauro Carvalho Chehab 2019-04-17 @291  		Pointer to attribute value.
-a2d68a9f51c270 Documentation/hwmon/hwmon-kernel-api.rst Guenter Roeck         2024-08-28  292  		For hwmon_energy64, 'val' is passed as long * but needs
-a2d68a9f51c270 Documentation/hwmon/hwmon-kernel-api.rst Guenter Roeck         2024-08-28  293  		a typecast to s64 *.
-bf7153fd2c6f70 Documentation/hwmon/hwmon-kernel-api.txt Guenter Roeck         2016-06-23  294  
-
-:::::: The code at line 291 was first introduced by commit
-:::::: b04f2f7d387b3160883c2a1f5e2285483a791e82 docs: hwmon: convert remaining files to ReST format
-
-:::::: TO: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-:::::: CC: Guenter Roeck <linux@roeck-us.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sat, Sep 6, 2025 at 12:19=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+> On 05/09/2025 19:22, Gregory Fuchedgi wrote:
+> > On Fri, Sep 5, 2025 at 1:10=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel=
+.org> wrote:
+> >> On Thu, Sep 04, 2025 at 10:33:44AM -0700, Gregory Fuchedgi wrote:
+> >> What's the meaning of values? There are no other generic properties li=
+ke
+>
+> Where is context here? To which part was I replying / commenting on?
+>
+> You are not making the process easy. I receive a lot of emails and have
+> no clue what this refers to.
+You were asking about meaning of ti,class property values,
+commenting on this piece:
+> +      ti,class:
+> +        description: The maximum power class a port should accept.
