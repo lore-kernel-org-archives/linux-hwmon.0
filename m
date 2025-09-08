@@ -1,95 +1,78 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123EF2F7AA1;
-	Mon,  8 Sep 2025 10:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481FE222568;
+	Mon,  8 Sep 2025 11:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757326450; cv=none; b=EE8yO8CwRvuSzisOW3ysxG9urCl1DYn7t3J1VHHorB5zbPyriZa/OJVkuTnXsjD8LFW6IKu8ABy0pPFYDM2Oa7XF25xhMC4KZS8K6fKU9yxUEFJm6Y3jMw/9yB4d9KC2P5vW+DFUJ/pRkbZe5/UGZC8XM4ExeMGgXjw/p3X2ByI=
+	t=1757329263; cv=none; b=NEne8KQsxnfCwUVUiblNbQT7WIYfUTRw0Fejk7XyQaaHGX6h4HeVDrZIn/UOgnYpPXN80I3ofxSdaCSvaHAAdn0B5wXgQ9vYv/t9t88dK/gqiA9ZSVF8XKxtVnMNnSFz6/nCQtWm25AILiWTTgVAEodk2HCdhsX4w/eaibbEqvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757326450; c=relaxed/simple;
-	bh=0YY7e/32dXEkSSVESMDNbdVPPQSWuCvseI1hr8wtJKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jucyLtSOoR+JX/0J+kgu8HLt/6gKWyYUxKEn5SnDH9NT1Nwt9ErGwuXGecaJCTz0PY0D7x2PlHaiF19N/+lDlLLH/Zv1hX7e0Hsw1k7JJYofVzU8YBvXYfWB7WasXAxY9jrpNk7nCv5jZgoOdLdO1EWRdoMQ6igQFsiHG1Qqfbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ua0Rt0Wm; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757329263; c=relaxed/simple;
+	bh=r6VAaXHvg+3DRXyFI/Ihb5Tt3ZWpo4mQmD8YbbFMhJg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Wd/xiWGAyjGzgc0fK3XNhqBKJEL4sXvMIOZCrJbvG6P7CbB2PhRaMZwgnCElgBDDsDSiUod71+mPyhPV3MZblh219NA3vU2hNsc0n5A3GrM2q5n2+Xo302UTcdn4UoNGCSJJ/gLfF4qO3nveMyvmeccPfT1JLehCYrGT34wlhHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=EztwRgTB; arc=none smtp.client-ip=1.95.21.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ua0Rt0Wm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757326448; x=1788862448;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0YY7e/32dXEkSSVESMDNbdVPPQSWuCvseI1hr8wtJKo=;
-  b=Ua0Rt0WmV57cSU5GAY4MX48JXsPWTsWqRjHzW7naCw3SoO69bUSwtdDE
-   IZGx2gG5VxO7/fX9MCcRiGVypwkK1s2mnlk858b213qTlBgEIg9dpgWD8
-   YukF7QDuctD3Q6ooRJwoiHsaermWe/cxZ9vytWLiEzpnmQS/Gp2X4Ifqs
-   5JZDxxwN+IJAQrMZEoAE+l7Mu+HFNxtL81EJOV8AtCBRQy/vtNJQegTzl
-   s2cyCNiXiBHtiPyy1R1s9oD8n2VDFAB9dHYbwiGEUJUwhA1pHDk/vCPF0
-   8ByWqOB5G/G+BYxRqDDvOgX+xYpgUV6zmEL5LUluLeketxsvdFZAqurPM
-   Q==;
-X-CSE-ConnectionGUID: QcVF/apjROu7LkGOR4Y8oQ==
-X-CSE-MsgGUID: viWpK2pTQI+4BMqIuT0MmQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="85022871"
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="85022871"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 03:14:07 -0700
-X-CSE-ConnectionGUID: BG47S6WQTaOJAiTDvVHChg==
-X-CSE-MsgGUID: vnLjUiq9TZSIfl2hsgn3kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
-   d="scan'208";a="172674010"
-Received: from unknown (HELO ca260db0ef79) ([10.91.175.65])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Sep 2025 03:14:06 -0700
-Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uvYsu-0004T7-03;
-	Mon, 08 Sep 2025 10:14:04 +0000
-Date: Mon, 8 Sep 2025 12:13:58 +0200
-From: kernel test robot <lkp@intel.com>
-To: Wensheng Wang <wenswang@yeah.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>, linux-doc@vger.kernel.org
-Subject: [groeck-staging:hwmon-next 58/59] htmldocs:
- Documentation/hwmon/mp29502.rst:4: WARNING: Title underline too short.
-Message-ID: <202509081238.RD6btbzT-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="EztwRgTB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=x5
+	A546zWvZjZP2uaOIuqp3Ffcz89zAlaBIan1vzIGy4=; b=EztwRgTBJV3A20X4Rn
+	i0J7wlF6XcgPbkpWmZCMdn/1Zvp3/YVUIWbW1HqDRGnCjPNvRNffrf/9OE1f5hvy
+	ZYWzhgOwxHhbzWazNcKi0MTFD+8/75sQTjqyXCUuZcBwtQga1K2UVJGa2uM19j22
+	hc6oKnAsoSQqQMYbItEbfTsYM=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id Mc8vCgDXK4Qzt75o6kUqBA--.30965S2;
+	Mon, 08 Sep 2025 19:00:04 +0800 (CST)
+From: wenswang@yeah.net
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Wensheng Wang <wenswang@yeah.net>
+Subject: [PATCH 0/2] hwmon: Add support for MPS mp2925 and mp2929 chip
+Date: Mon,  8 Sep 2025 18:59:51 +0800
+Message-Id: <20250908105951.1002332-1-wenswang@yeah.net>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Mc8vCgDXK4Qzt75o6kUqBA--.30965S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jry7tr17Kw4UJrWfXw47Jwb_yoWxAwcEkr
+	4IgFZrJr1UJFs3WFWDCr1rXryUGF4YgFyxG3W3trZ8ZrWagrnIqrykZw17J3WUGrW7CF17
+	urW8J393AF17KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbYFAPUUUUU==
+X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIRTEaWi+tzT6bQAA3a
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   c387594bb99b5ae1263c3524034c846ea0c74861
-commit: 86d595f66febd7079e1688e605751d80126119dd [58/59] hwmon: add MP29502 driver
-reproduce: (https://download.01.org/0day-ci/archive/20250908/202509081238.RD6btbzT-lkp@intel.com/reproduce)
+From: Wensheng Wang <wenswang@yeah.net>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509081238.RD6btbzT-lkp@intel.com/
+Add mp2925,mp292 driver in hwmon and add dt-bindings for them.
 
-All warnings (new ones prefixed by >>):
+Wensheng Wang (2):
+  dt-bindings: hwmon: Add MPS mp2925 and mp2929
+  hwmon: add MP2925 and MP2929 driver
 
-   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
-   ERROR: Cannot find file ./include/linux/hid_bpf.h
-   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
-   ERROR: Cannot find file ./include/linux/hid.h
-   WARNING: No kernel-doc for file ./include/linux/hid.h
->> Documentation/hwmon/mp29502.rst:4: WARNING: Title underline too short.
-
-
-vim +4 Documentation/hwmon/mp29502.rst
-
-     2	
-     3	Kernel driver mp29502
-   > 4	====================
-     5	
+ .../devicetree/bindings/trivial-devices.yaml  |   4 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/mp2925.rst                | 151 +++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/mp2925.c                  | 312 ++++++++++++++++++
+ 7 files changed, 485 insertions(+)
+ create mode 100644 Documentation/hwmon/mp2925.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2925.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
