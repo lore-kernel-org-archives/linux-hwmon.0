@@ -1,67 +1,67 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6C130B518;
-	Mon,  8 Sep 2025 13:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531812EFD86;
+	Mon,  8 Sep 2025 13:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757338054; cv=none; b=mlT5jJRJJyj5ihy+JkJ04JFCUAYABMpjdqzqyqfqYCosZr/u7+lyek5TGfLPdYVCVNyeqAqP5ymTEQt7seU/7fh/7Y6kv18fvY/ibplE3H3kT7qkLJJ5ppdT99/PvkoLw/fsIEVtwLwAU64KaJgx9r++ZGV25G3iYhjeYT7Qlhc=
+	t=1757338313; cv=none; b=hOKGwBf5jO9X52tewyX7NAY2rK3ZCG7Ubat/zLhsCJR2v1D65abij2ORYdorunHEtwAvDhxOYkpvNKhkmjtn11VoWLan8MDt0CkL7cYWVMTaMNzaGBqXV3OWiTjfDQr/D7817YMZ0y/7jUl4C20lHxQT+AuRbmbp9i3WxnZE0Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757338054; c=relaxed/simple;
-	bh=EMnZwioFS9ldoQsAg3weXxlkOgMTh8+7cR4xNNezO9U=;
+	s=arc-20240116; t=1757338313; c=relaxed/simple;
+	bh=XFpcrUgCAAnn+5N6WDRSRAoI/KMeWCd6gX4KF7ThquQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JzuRr7w3gHi49slwdEbm5xTrkw7j/S2A5rlbuzTyH/OZ8pJ/q//fgMm9EiV5dkp4cHxyApjI+gYCc0Om3xRw80BL/npKUjxLuwEh8Qkqbxnnctr4CC9+yZ3BcBr753/azM1COHw6MOnQwFT1M/HkmiNPx8SOZX+halzv4eaVois=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=alUja21n; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=Nsl/ZuvLiAPXZbyRRe10ZDYii+HOzZBfK+AsDE3eGdwMujIQs7lRCf8lTtlxR4hC13JJciF0VSFvFQyYwkpnTSS7FC/DbjVvr2g/77+m1KLU5kxSBezdCw7KvD3VCndkHTAZrfhdkVcPnUiyDCAZhWBdlF/H9lqpMhX2Vy3wtjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kLo08wZi; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="alUja21n"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7724cacc32bso3320089b3a.0;
-        Mon, 08 Sep 2025 06:27:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kLo08wZi"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-77264a94031so3045918b3a.2;
+        Mon, 08 Sep 2025 06:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757338051; x=1757942851; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757338311; x=1757943111; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=I0l71D8MFHugq5TyO2rGPUzHlXMYD/GEMQn83W+FG2Y=;
-        b=alUja21n9uO5aDs9yqn9G5ZoWNZxLo/PYfSnfmsEn2N45JSwqx6n31/eoq3M4qpDTN
-         qu9DMl02UXGPm2YhAKS8A8qGdJ2Iwwy/JMvDWdtBCxPjmKS+LlG+ycG2AucV6Carzh5X
-         V87nhIp0jhx9a8gERgApmRNmBl+dX3LgFFUUxIU/fEFYwEm2uT2kywsyrBWYzffsJYOa
-         +TfXkRQCjoNyt6acZG1QrRfEvCWhOacIU+r4b7ubzbZAYXRk8xpNlTKclqJ6OgLqltCy
-         LoGy2sVva9KoqLTu7lsHbxuweZV4LFwDO7iXRdpN6a8fMcBewumWNU0u0RHHGH3zyvD9
-         JsFA==
+        bh=0VRxysBWR4+1ubG2BRwz4IYmQyW3YuwNfLayCI3GgPU=;
+        b=kLo08wZiCUIbYPuAtcNNIJqOGugUVy4xa/hWO1L7nzf3RZDDVf0YVtvuN3yFGIt3Vp
+         leNuWHgsBwHlz/uaRXrWWxyICd5Y6W0uSzjk+RiIhQ2idVSKIC59S8KFGuZPVk+TsJyw
+         5qNdarYlo4xlzjgSUnOYRXbLeGXWE2lXfcO0HRjJhPEoikCBv5D3+ivLMyA17glqQ6gr
+         IuU6gxGRVQImXB8X5fiNxNQmfuxhcUCAi3jwctf1cCkt47jEky9y6J85ZPSqdZxEYrYM
+         Nv8Zg4q8V635SZFKPB8rtvq4gQsfGsmMAPQXiq/sQOGlD0HLZn3pBjc3+oKUiQompWsm
+         v3Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757338051; x=1757942851;
+        d=1e100.net; s=20230601; t=1757338311; x=1757943111;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I0l71D8MFHugq5TyO2rGPUzHlXMYD/GEMQn83W+FG2Y=;
-        b=wieP142cWS16vfWJrhrETI/q5GegXmpMV98RA+1JEFZ3drl9q7A5g59IM/rGv0rdNW
-         kVUIIT8B4aexz7AQo28O2l3kWFUik2uICZzV5Oo7rl3MjKjYB4uc/BaxlFZGxXuZaK9p
-         5CagU1QsQ8qd8NR3+wAgyjbunr13XLO7EYEEIOQgW+hS0w6S7Dc2ecZhi5qmQYZC0rv/
-         MnepShrvG41XkUze7wgsjIaa7Irs4Ay0foVDVEkeOuvW/qqJRJbMhndf3njzFnXa2P03
-         wLNF1KsWHCgPyCmJzThLM3Mb8ysmFVwq/CD2dlTn6Aq0QKANA064S6pQOOJu+46XwZIu
-         bQHg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4W0836hPmQ8aF0sJUWkX++6s8aNoCIMIZB10kR2+riV2jVfPWOGom+fb1JKH7p66kILSmBrVpvPme4YY=@vger.kernel.org, AJvYcCV0YIHf3tBWE8i/rrXbvVctv/CkAb4Lqh+MKbEvzDFgCFhkZT3FgnqpTOHc5Him/fe61VZMLb6SBlBK9b4N@vger.kernel.org, AJvYcCVyE2+9ivf6kqk/lGaUoGfDibu0y5MFWnbK+1An+ERVS+z9Xo/zY6nxtYEPLELFwFzhnhQMh/WqovMb@vger.kernel.org, AJvYcCW3MvCaAYWj1D8V67X1rVqCCaFw+/7sWTQ6mZwYCv7hJXnPG/CN7j/HWESK+Ro8xoBygh/MpFUERBCjKkCdhWQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY/xyWEleXLuOgQUi3wegkKJ2TLfbOfKic3+55QfoxPzcvQiCz
-	UK27nH/kcNIYtCctSiwfNyz25/LZr3pkNZvYyn6+tF58HP1UP+Zfxh/A
-X-Gm-Gg: ASbGncvOI/bNIhjflFUCOv+nRtRpc9is8cgaS6WJq9JvwN8Fotp2QTq87jqq9KTgEoP
-	4VQD6U8YdSn3f7EiEUjDlUqIFolBrp7Dt2Tcs9kiZHt7ufa1M+NraZUXXgJO/QzAW5+PJktIfa+
-	GsAcb/UKssfOSoa81qhQMvBkUfAAhaUBN1/jA7AO9gJ8wFzmKA+rKX3wHAliHuxD4C/zI1StuAT
-	Z6DDejsCQjKNq7/liEra1yAklHMndNzEwTtV5xAulBiuIHDYEUkDlwUypDCIqbKG4WxU2xOiq2+
-	RhInSbAr6MXDo7mkkzNxrJF/fJfsW/MGvNNNXTqs+7BUOAHMJ6oj6jtc+UwAkmXr4YXHalGQ9gN
-	wXkSwJ6Xr6gfFrxN1yYxvhzohHuUbtpMX/5IYhXtDEVvW1BYjN9mycaBXmraNOVDOmnrOgls=
-X-Google-Smtp-Source: AGHT+IG5mHu1wEH4bpvsyLlzH1twN75NRcxvdgvbm4gluUQV37+2bxa2wzMIMNShSDalyUmEmo85uQ==
-X-Received: by 2002:a05:6a20:939d:b0:243:fe1e:2f9e with SMTP id adf61e73a8af0-2533d6029c4mr12013727637.4.1757338051281;
-        Mon, 08 Sep 2025 06:27:31 -0700 (PDT)
+        bh=0VRxysBWR4+1ubG2BRwz4IYmQyW3YuwNfLayCI3GgPU=;
+        b=QV9cbzz3ZZ9maqLs3DNH9aTuOWL73GvW93AHj2k36Yo0AgIo+dCPPhwZkbcf0xHQb7
+         b2N4fuCkNHyLM/rIpwAq64I32dUVWKx0vEnASO49fuAPy9vU55Qw4FXDQYZVN8eMJ7Et
+         JVKGuO+jV+OL8bTf/0h49+huNQPkKnk9gZcDmtRagEDjSQ1cLmdK3tQcjUkqvAsthEmH
+         vJaq2UtHvbmQ2YHUJSew7MvGq1r2GQTHkM0te/CGPXDF2FaY0aqWg+t4zgrd91B6ivFU
+         IxYVmhFJNJZNBe+4ExfxFl8snobFtUiO77+T7YHWY0tMLDbH6kMBcse9XjpLNA1RBH+n
+         AbpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1Q5HGxDywspGjXpX5DE4kkdliPPWULabrXrNWpunvsUJVugN89Wjf0oyAD6e5AV5V4gySPcNKx6Y7@vger.kernel.org, AJvYcCUALjlkMO0edfH/gWXkrml+hJn9L/9P/MehHRQO6cL91+DT5K2llL1/q7y735t1x9XyG3OrbNSj@vger.kernel.org, AJvYcCUVsvHrosBVmK4SOTRIJ+yJ7nRs8TwOjivlu58yjTHgBfLBuS6+RMYLCw41WqfPf9uegKEk4hKnANqOV64d@vger.kernel.org, AJvYcCUs1zExYpAYcwl4pMIRxmB2sujIQRn61EIwn8eA5PnJ1zaW22HsFWDmRdQ+2t02EGOXL4LTbuzQK3jv@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMFx03mf4XlHQGYEWJSqmBx5KdLqXTsPNSMzxBsV2/tBM61OA5
+	mXd9g5H7B/8aJpD8iw6nnPDjq+33WhwaCcwJIuZA6u7bh3r4jsefEMNq
+X-Gm-Gg: ASbGncusenCT5sKQvZ8bkuAEbxf+7VV8pJVdt3xd0O/H56zYsGO3iELCR5FONxw/d+5
+	ADSnpXQ3njKKrP/m8bWi5a9TVzqskAvFANCpRwZOyeYC/BrTiBPhqLLerC7RSv3F93IvKlaXwvh
+	DtAdj/bslC4L0K+REHFCmIYeIFRWqX/UFD6kQChXAogUIdniIhiiDjqJC16n4dADAzyKzl/Kkya
+	YVw3xkO9fRecbG+N7NKzeZZvNIdf+gI96wi0Kq6B5yL0Tz+0L8fy7Wl6+0fynUCow55zHTfEPfX
+	dIzlDhn5YETz3plQFiIJHec+0OBbM8DAWRgObaqX9rhRmQPhKc0O/0UZtLAzY3oybVstQx97QlQ
+	rAEPKjpP4vAH7xwQhiFLgCn8PT9dg8QBC7eXZBZwjIOPDaah9FlAfsKJsd8VZTgETMMt703Y=
+X-Google-Smtp-Source: AGHT+IFHxpOI9zw8ViQQBt2bv0fmbzjwjCKonJOpVHHtbawBcf7zvtU8dcDIKtWbgtSTokjP6MN1Ag==
+X-Received: by 2002:a17:902:ecc6:b0:251:259a:23eb with SMTP id d9443c01a7336-2516da05ddemr114592935ad.20.1757338311400;
+        Mon, 08 Sep 2025 06:31:51 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7722a501a94sm29908945b3a.93.2025.09.08.06.27.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24ced597370sm97949445ad.128.2025.09.08.06.31.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 06:27:30 -0700 (PDT)
+        Mon, 08 Sep 2025 06:31:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b6cf6192-faf5-4e69-aa62-b3cacfa38f4d@roeck-us.net>
-Date: Mon, 8 Sep 2025 06:27:29 -0700
+Message-ID: <c596e196-7e5f-4600-ada1-7c96af8c0a38@roeck-us.net>
+Date: Mon, 8 Sep 2025 06:31:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,20 +69,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 6/7] hwmon: sl28cpld: add SMARC-sAM67 support
-To: Michael Walle <mwalle@kernel.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+Subject: Re: [PATCH v3 2/4] hwmon: (sht21) Add support for SHT20, SHT25 chips
+To: Kurt Borja <kuurtb@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Lee Jones <lee@kernel.org>, Srinivas Kandagatla <srini@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-watchdog@vger.kernel.org
-References: <20250822131531.1366437-1-mwalle@kernel.org>
- <20250822131531.1366437-7-mwalle@kernel.org>
- <83189bf7-6831-4373-a352-2a3a05526e08@roeck-us.net>
- <DCN86WR0CPF1.38V3X1O08VYJG@kernel.org>
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20250907-sht2x-v3-0-bf846bd1534b@gmail.com>
+ <20250907-sht2x-v3-2-bf846bd1534b@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,30 +125,19 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <DCN86WR0CPF1.38V3X1O08VYJG@kernel.org>
+In-Reply-To: <20250907-sht2x-v3-2-bf846bd1534b@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/8/25 00:04, Michael Walle wrote:
-> Hi Guenter,
+On 9/7/25 18:33, Kurt Borja wrote:
+> All sht2x chips share the same communication protocol so add support for
+> them.
 > 
->>>    static const struct of_device_id sl28cpld_hwmon_of_match[] = {
->>> -	{ .compatible = "kontron,sl28cpld-fan" },
->>> +	{ .compatible = "kontron,sl28cpld-fan", .data = &sl28cpld_hwmon_chip_info },
->>> +	{ .compatible = "kontron,sa67mcu-hwmon", .data = &sa67mcu_hwmon_chip_info },
->>
->> Effectively this means that the two chips have completely different functionality.
->> One reports fan speeds, the other reports voltages and current.
->> This should be a separate driver.
-> 
-> Fair enough. I wasn't sure, the reason why I've chosen to add it to
-> the sl28cpld driver was that I don't want to clutter the directory
-> with many small board specific drivers. They all have the simple-mfd
-> parent driver in common. In the end it's up to you of course, so
-> separate driver?
-> 
+> Cc: stable@vger.kernel.org
 
-Yes, please. The parent is irrelevant. Functionality isn't.
-Thanks,
+FWIW, I am going to drop this when applying. I don't add stable tags
+for patches which are not bug fixes. Anyone who wants such patches
+backported can request that separately after the patch is upstream.
+
 Guenter
 
