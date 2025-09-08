@@ -1,75 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E678113B2A4;
-	Mon,  8 Sep 2025 07:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123EF2F7AA1;
+	Mon,  8 Sep 2025 10:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757315910; cv=none; b=UPLu+K7wWObTvNomWW7I28AY8sF1yQdSx3UkNjtxRaJoEb1XrnlSNRJTzdrLbM6lcROZKeNe2rFGKrMzulHMV7vmd7PMOawcg9sQSsqN+l6bKXjT27Kf3SZV8+jWDNH6l97trBnpBgTkUsp7Iffs+xDFOl/Aif9rcq21RDjvYFc=
+	t=1757326450; cv=none; b=EE8yO8CwRvuSzisOW3ysxG9urCl1DYn7t3J1VHHorB5zbPyriZa/OJVkuTnXsjD8LFW6IKu8ABy0pPFYDM2Oa7XF25xhMC4KZS8K6fKU9yxUEFJm6Y3jMw/9yB4d9KC2P5vW+DFUJ/pRkbZe5/UGZC8XM4ExeMGgXjw/p3X2ByI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757315910; c=relaxed/simple;
-	bh=hYOzoWKEBM/BtWQa0qqsbJN76jL06X8FvYZBp7aOrlI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=HdNl+Uo5vcvxkjKy4/lncf7gytJpwLy+pT8NW0rVCu+9CCseClVxhQHlpaeLR/wh0brwYlT4p45/pMr8iVf8DJPIyhu7GgCB+tSeqRuEnRtkAQwCY9a7n7PNXHwK+DdTm1pCw/62nYIwohsnNIuI9aQVjo65yD03/G+DmLzAiU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJevj1Va; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757326450; c=relaxed/simple;
+	bh=0YY7e/32dXEkSSVESMDNbdVPPQSWuCvseI1hr8wtJKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jucyLtSOoR+JX/0J+kgu8HLt/6gKWyYUxKEn5SnDH9NT1Nwt9ErGwuXGecaJCTz0PY0D7x2PlHaiF19N/+lDlLLH/Zv1hX7e0Hsw1k7JJYofVzU8YBvXYfWB7WasXAxY9jrpNk7nCv5jZgoOdLdO1EWRdoMQ6igQFsiHG1Qqfbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ua0Rt0Wm; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJevj1Va"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9F2C4CEF1;
-	Mon,  8 Sep 2025 07:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757315909;
-	bh=hYOzoWKEBM/BtWQa0qqsbJN76jL06X8FvYZBp7aOrlI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=cJevj1VaI+ui3XH0g2sVKi9fAWl4Z+T5RSOgs0UGBP63obJv+6rSGyYFFNQ4NwYRQ
-	 FSuC1zx6Y4nYv8rxTTE6IWq9t7L7+8XX/OYyIqCLbpS9JMtZmYsj436dpRFf1TbCBo
-	 OmZTvJpIcg6UxTTvSISX6lM5K/tSrD+SlZr7NaR+rJiPl1OLtuIpJ6nvYnDvbFvhI3
-	 pl+OtcF7y1p5sVkBvwu9I6YDLKT8CHEc6pGau7RqwZqa09Q2hcUtI8ZUghkJQa+a8L
-	 0HZQUwfwvZMVrxbjkcjEuGVHvFL0Y5IJbzxgecH/ar/ZBFUH6NRA6P5t7+oI2IMkNO
-	 JbNLllH/+z/ZA==
-From: Srinivas Kandagatla <srini@kernel.org>
-To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Michael Walle <mwalle@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-watchdog@vger.kernel.org
-In-Reply-To: <20250822131531.1366437-1-mwalle@kernel.org>
-References: <20250822131531.1366437-1-mwalle@kernel.org>
-Subject: Re: (subset) [PATCH v1 0/7] Initial Kontron SMARC-sAM67 support
-Message-Id: <175731590658.4102.1088493924360430422.b4-ty@kernel.org>
-Date: Mon, 08 Sep 2025 08:18:26 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ua0Rt0Wm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757326448; x=1788862448;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0YY7e/32dXEkSSVESMDNbdVPPQSWuCvseI1hr8wtJKo=;
+  b=Ua0Rt0WmV57cSU5GAY4MX48JXsPWTsWqRjHzW7naCw3SoO69bUSwtdDE
+   IZGx2gG5VxO7/fX9MCcRiGVypwkK1s2mnlk858b213qTlBgEIg9dpgWD8
+   YukF7QDuctD3Q6ooRJwoiHsaermWe/cxZ9vytWLiEzpnmQS/Gp2X4Ifqs
+   5JZDxxwN+IJAQrMZEoAE+l7Mu+HFNxtL81EJOV8AtCBRQy/vtNJQegTzl
+   s2cyCNiXiBHtiPyy1R1s9oD8n2VDFAB9dHYbwiGEUJUwhA1pHDk/vCPF0
+   8ByWqOB5G/G+BYxRqDDvOgX+xYpgUV6zmEL5LUluLeketxsvdFZAqurPM
+   Q==;
+X-CSE-ConnectionGUID: QcVF/apjROu7LkGOR4Y8oQ==
+X-CSE-MsgGUID: viWpK2pTQI+4BMqIuT0MmQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11546"; a="85022871"
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="85022871"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2025 03:14:07 -0700
+X-CSE-ConnectionGUID: BG47S6WQTaOJAiTDvVHChg==
+X-CSE-MsgGUID: vnLjUiq9TZSIfl2hsgn3kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,248,1751266800"; 
+   d="scan'208";a="172674010"
+Received: from unknown (HELO ca260db0ef79) ([10.91.175.65])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Sep 2025 03:14:06 -0700
+Received: from kbuild by ca260db0ef79 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uvYsu-0004T7-03;
+	Mon, 08 Sep 2025 10:14:04 +0000
+Date: Mon, 8 Sep 2025 12:13:58 +0200
+From: kernel test robot <lkp@intel.com>
+To: Wensheng Wang <wenswang@yeah.net>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>, linux-doc@vger.kernel.org
+Subject: [groeck-staging:hwmon-next 58/59] htmldocs:
+ Documentation/hwmon/mp29502.rst:4: WARNING: Title underline too short.
+Message-ID: <202509081238.RD6btbzT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   c387594bb99b5ae1263c3524034c846ea0c74861
+commit: 86d595f66febd7079e1688e605751d80126119dd [58/59] hwmon: add MP29502 driver
+reproduce: (https://download.01.org/0day-ci/archive/20250908/202509081238.RD6btbzT-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509081238.RD6btbzT-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
+   ERROR: Cannot find file ./include/linux/hid_bpf.h
+   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
+   ERROR: Cannot find file ./include/linux/hid.h
+   WARNING: No kernel-doc for file ./include/linux/hid.h
+>> Documentation/hwmon/mp29502.rst:4: WARNING: Title underline too short.
 
 
-On Fri, 22 Aug 2025 15:15:24 +0200, Michael Walle wrote:
-> Now that the PMIC support is there, we can finally, upstream the
-> support for this board. Besides the usual device tree, this
-> patchset contains the support for the on-board house keeping MCU. It
-> make extensive reuse of the drivers for the former SMARC-sAL28
-> board. Besides different hwmon sensors, all the dt binding patches
-> will just add a board specific compatible (in addition to the old
-> sl28 compatible) to make any future board specific quirks possible.
-> 
-> [...]
+vim +4 Documentation/hwmon/mp29502.rst
 
-Applied, thanks!
+     2	
+     3	Kernel driver mp29502
+   > 4	====================
+     5	
 
-[5/7] dt-bindings: nvmem: sl28cpld: add sa67mcu compatible
-      commit: 530c7063f753e18a8c4b793cc9e96e3b529dc81d
-
-Best regards,
 -- 
-Srinivas Kandagatla <srini@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
