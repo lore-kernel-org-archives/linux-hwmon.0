@@ -1,111 +1,113 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB37221264
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Sep 2025 04:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE0B156C40;
+	Mon,  8 Sep 2025 07:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757307131; cv=none; b=mppg4usXbKU8Uur863mJybiDe34/8IJaaENjWL3H6dPAFgAeWaYW5DZ4hTQP2Am4ZHwvaSRq//SOYXH4APyWszKgfBUsEi2SGpRCI//kUjfOcv9loKBXNLB0UQYltGNmF4WiN+vXxAPPg+cofeqI3LyCNtNWtio7WDSQ7HNTuJI=
+	t=1757314969; cv=none; b=W+yr86HdVvgcto1Ea3o9o7LT1uePUHtm1chNQ/mU6kAtUEddM6b5WCIk8Fjz3N5XLnDF3YmlYNHaZyOiaEWiEITVRKiRbaiJUrbJnvgeAdvsqMPl7iWNUHJrrkhxW7BNno0yY5DDpgYkpmXt8aiE6rYKzL+XAudLyRuXnuV3bCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757307131; c=relaxed/simple;
-	bh=vSKC/kmQeqND3A2rQlChRNGe1FptQNXba+tF78DaMzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TXqZFmYXWCOrZ8R9Dj2Lac5qUj+Xe7XZ0/kA4qx5KUd6T0Y71C6Ukwhd8evaVCLLXbfzL+QN9Z+bCvvb7+d5VmMV+cunzhdQ8KRlufJYYLIo7BteF3Y4QlQ86xxTCVs/aIUONKUj//pgld/STmP+AQoLm+JiY2HZId4P3t16CvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvTqu-0006ng-7X; Mon, 08 Sep 2025 06:51:40 +0200
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvTqq-000Bt9-2g;
-	Mon, 08 Sep 2025 06:51:36 +0200
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1uvTqq-00Bi0F-2A;
-	Mon, 08 Sep 2025 06:51:36 +0200
-Date: Mon, 8 Sep 2025 06:51:36 +0200
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: gfuchedgi@gmail.com, Robert Marko <robert.marko@sartura.hr>,
-	Luka Perkov <luka.perkov@sartura.hr>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Kory Maincent <kory.maincent@bootlin.com>,
-	Network Development <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] hwmon: (tps23861) add class restrictions and
- semi-auto mode support
-Message-ID: <aL5g2JtIpupAeoDz@pengutronix.de>
-References: <20250904-hwmon-tps23861-add-class-restrictions-v3-0-b4e33e6d066c@gmail.com>
- <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net>
+	s=arc-20240116; t=1757314969; c=relaxed/simple;
+	bh=tJ3tW3rPouUnWRUNVy/3YiPSCc20vhp++5etn/Azlrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nvjgx7FckpK+uB2cCWClMa3HXOrXx3ZwLL/qwnqYdV1LceB2gOaC7LwJcYAcuBJDVG8ljSgRjGq7axOdGxon6EhXV2U4wV118/lIY1GJfZweliQkBqcGoy6IlFg2FsEEZG6d1ZV0lhufTaGt64hc8OA7X0gm1tJHZ11DiTGNR94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iheKU/Em; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iheKU/Em"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB66C4CEF5;
+	Mon,  8 Sep 2025 07:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757314969;
+	bh=tJ3tW3rPouUnWRUNVy/3YiPSCc20vhp++5etn/Azlrs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iheKU/Em9p3OpQAI2r7Q//GKkgKlNO4dqfwfbgVSPIwB/SORPtUbxA/0dPI7MAA0p
+	 1P/Yst8R+C081lZE5lwfFaB0Apr8QGwDFw4yvZBLM7PkAqe8Pva2E9ylSqLgfzXxQl
+	 xxd0pyo+RbZfsgi7+TTdpNKne5yz+eBiGTVYadrC5yeYPjOU1m8GkWQsyS3UOF7K7r
+	 Jl81o4m7w9HyaGGZgeNTtcQV6jKWcA2ibkbxgZ/hk8w31IAsCFE28da3L9NkpzcviU
+	 zahRf93ET9A5+Ixx0QMmCHiQ+MPyRVKCX3NP2hsR1/BwTPKtKGhKfKJSLhGezVqv/Q
+	 /Dd7nFBOSP6iQ==
+Message-ID: <edc840e1-44ed-4397-8e5f-2f5e468ec030@kernel.org>
+Date: Mon, 8 Sep 2025 09:02:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] dt-bindings: trivial-devices: Add sht2x sensors
+To: Kurt Borja <kuurtb@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20250907-sht2x-v3-0-bf846bd1534b@gmail.com>
+ <20250907-sht2x-v3-4-bf846bd1534b@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250907-sht2x-v3-4-bf846bd1534b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Sep 07, 2025 at 09:06:25AM -0700, Guenter Roeck wrote:
-> +Cc: pse-pd maintainers and netdev mailing list
+On 08/09/2025 03:33, Kurt Borja wrote:
+> Add sensirion,sht2x trivial sensors.
 > 
-> On 9/4/25 10:33, Gregory Fuchedgi via B4 Relay wrote:
-> > This patch series introduces per-port device tree configuration with poe
-> > class restrictions. Also adds optional reset/shutdown gpios.
-> > 
-> > Tested with hw poe tester:
-> >   - Auto mode tested with no per-port DT settings as well as explicit port
-> >     DT ti,class=4. Tested that no IRQ is required in this case.
-> >   - Semi-Auto mode with class restricted to 0, 1, 2 or 3. IRQ required.
-> >   - Tested current cut-offs in Semi-Auto mode.
-> >   - On/off by default setting tested for both Auto and Semi-Auto modes.
-> >   - Tested fully disabling the ports in DT.
-> >   - Tested with both reset and ti,ports-shutdown gpios defined, as well as
-> >     with reset only, as well as with neither reset nor shutdown.
-> > 
-> > Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
-> 
-> This entire series makes me more and more unhappy. It is not the responsibility
-> of the hardware monitoring subsystem to control power. The hardware monitoring
-> subsystem is for monitoring, not for control.
-> 
-> Please consider adding a driver for this chip to the pse-pd subsystem
-> (drivers/net/pse-pd). As it turns out, that subsystem already supports
-> tps23881. This is a similar chip which even has a similar register set.
-> 
-> This driver could then be modified to be an auxiliary driver of that driver.
-> Alternatively, we could drop this driver entirely since the pse-pd subsystem
-> registers the chips it supports as regulator which has its own means to handle
-> telemetry.
-> 
-> Thanks,
-> Guenter
+> Cc: stable@vger.kernel.org
 
-Yes, Guenter is right. This driver belongs to the pse-pd framework.
+No, drop. No bug to fix here.
 
-Best Regards,
-Oleksik
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Please organize the patch documenting compatible (DT bindings) before
+their user.
+See also:
+https://elixir.bootlin.com/linux/v6.14-rc6/source/Documentation/devicetree/bindings/submitting-patches.rst#L46
+> 
+
+
+Best regards,
+Krzysztof
