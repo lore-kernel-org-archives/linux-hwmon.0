@@ -1,189 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24AF1E5B60;
-	Mon,  8 Sep 2025 02:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB37221264
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Sep 2025 04:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757298352; cv=none; b=LcE4f467T+y2IV81lKRoV523MBL94jvlylr6B03a7HOWhx5CyfG29hbcI8NV8FeFwDSHQY3vX3AgfDY3tFsVxjlmCx9lWU1y5+gazn0d+El0Cr1VN2Df9kSTgTut3kAwDUQaPQYe2sVflNcDt940ngkkj2DdjnFkB1TB7+Tp3N4=
+	t=1757307131; cv=none; b=mppg4usXbKU8Uur863mJybiDe34/8IJaaENjWL3H6dPAFgAeWaYW5DZ4hTQP2Am4ZHwvaSRq//SOYXH4APyWszKgfBUsEi2SGpRCI//kUjfOcv9loKBXNLB0UQYltGNmF4WiN+vXxAPPg+cofeqI3LyCNtNWtio7WDSQ7HNTuJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757298352; c=relaxed/simple;
-	bh=tfPgZAPdEI9DpPkO0F1JRnB4BEUZvB2btkMx4MQFueQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NrKW0++OOXMb+SM69HKejmMWMBN4i1trMbSc5nVcT5bPfDNtRYApfMlEMiSWibLe0Yqe2gnqi3ImSyQWK+aOnjcJvWJOX/mNlCKu61RUFyamenIKxAbBOqaJ/UyLciKVWy3fqhQsjuHzSu9k2ToP09cyPs5HdQGxpiVAasTaj7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtBaDUs5; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtBaDUs5"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 65977C4CEF5;
-	Mon,  8 Sep 2025 02:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757298352;
-	bh=tfPgZAPdEI9DpPkO0F1JRnB4BEUZvB2btkMx4MQFueQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=PtBaDUs5Y5bM1pW4GyW3sBrpQXAfpr8QRJm2aaE8297jiN6c+ncERpPWjvXmULuqP
-	 Rd7GoVUh8EBCu1sXY0HhNLOtf/oRFPuitfP0KKAEZWKLL3Ne2ECXsj4gTtfQJfw8/r
-	 TrRJACa1RhJgx0H7Kcn0b2DvBwhMx/HJbCjuaETk1ZYsVNQDBSMOVGzqGF05AumOX9
-	 DssKFVkjfb5K1Sg4YqJ59hBIBzl+ATSvoP5FhebBG42o6lgpmvC1mwmqg6Qhpadv20
-	 2k0kHW2G1Ngmv5720ec2+byyNqpz+rizD8juBIahFFVt8GA+qajKlNtnJREIJh/kAV
-	 CkxfCEK4qrlKQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59544CAC581;
-	Mon,  8 Sep 2025 02:25:52 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Mon, 08 Sep 2025 10:25:45 +0800
-Subject: [PATCH v9 2/2] hwmon: document: add gpd-fan
+	s=arc-20240116; t=1757307131; c=relaxed/simple;
+	bh=vSKC/kmQeqND3A2rQlChRNGe1FptQNXba+tF78DaMzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TXqZFmYXWCOrZ8R9Dj2Lac5qUj+Xe7XZ0/kA4qx5KUd6T0Y71C6Ukwhd8evaVCLLXbfzL+QN9Z+bCvvb7+d5VmMV+cunzhdQ8KRlufJYYLIo7BteF3Y4QlQ86xxTCVs/aIUONKUj//pgld/STmP+AQoLm+JiY2HZId4P3t16CvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTqu-0006ng-7X; Mon, 08 Sep 2025 06:51:40 +0200
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTqq-000Bt9-2g;
+	Mon, 08 Sep 2025 06:51:36 +0200
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1uvTqq-00Bi0F-2A;
+	Mon, 08 Sep 2025 06:51:36 +0200
+Date: Mon, 8 Sep 2025 06:51:36 +0200
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: gfuchedgi@gmail.com, Robert Marko <robert.marko@sartura.hr>,
+	Luka Perkov <luka.perkov@sartura.hr>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	Network Development <netdev@vger.kernel.org>
+Subject: Re: [PATCH v3 0/2] hwmon: (tps23861) add class restrictions and
+ semi-auto mode support
+Message-ID: <aL5g2JtIpupAeoDz@pengutronix.de>
+References: <20250904-hwmon-tps23861-add-class-restrictions-v3-0-b4e33e6d066c@gmail.com>
+ <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250908-gpd_fan-v9-2-7b4506c03953@uniontech.com>
-References: <20250908-gpd_fan-v9-0-7b4506c03953@uniontech.com>
-In-Reply-To: <20250908-gpd_fan-v9-0-7b4506c03953@uniontech.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>, 
- Yao Zi <ziyao@disroot.org>, Derek John Clark <derekjohn.clark@gmail.com>, 
- Jun Zhan <zhanjun@uniontech.com>, Cheng Nie <niecheng1@uniontech.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757298351; l=3651;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=XJBaOZygIlHycO8BeXsmyRPcKndp0Zqqqn5Kg3pQ5T0=;
- b=qBznmcyRfPSdCHkxXtonLTap0YL4ULYMFkQDkYxMLZhjamDoZ9QXBldXz6xHA3arpPvGK1xSX
- Gbsr08fBfS2BszBtqwTCWyNyKAx73VpRpBLWVnACwP8/9RbKK4qHYFs
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+On Sun, Sep 07, 2025 at 09:06:25AM -0700, Guenter Roeck wrote:
+> +Cc: pse-pd maintainers and netdev mailing list
+> 
+> On 9/4/25 10:33, Gregory Fuchedgi via B4 Relay wrote:
+> > This patch series introduces per-port device tree configuration with poe
+> > class restrictions. Also adds optional reset/shutdown gpios.
+> > 
+> > Tested with hw poe tester:
+> >   - Auto mode tested with no per-port DT settings as well as explicit port
+> >     DT ti,class=4. Tested that no IRQ is required in this case.
+> >   - Semi-Auto mode with class restricted to 0, 1, 2 or 3. IRQ required.
+> >   - Tested current cut-offs in Semi-Auto mode.
+> >   - On/off by default setting tested for both Auto and Semi-Auto modes.
+> >   - Tested fully disabling the ports in DT.
+> >   - Tested with both reset and ti,ports-shutdown gpios defined, as well as
+> >     with reset only, as well as with neither reset nor shutdown.
+> > 
+> > Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
+> 
+> This entire series makes me more and more unhappy. It is not the responsibility
+> of the hardware monitoring subsystem to control power. The hardware monitoring
+> subsystem is for monitoring, not for control.
+> 
+> Please consider adding a driver for this chip to the pse-pd subsystem
+> (drivers/net/pse-pd). As it turns out, that subsystem already supports
+> tps23881. This is a similar chip which even has a similar register set.
+> 
+> This driver could then be modified to be an auxiliary driver of that driver.
+> Alternatively, we could drop this driver entirely since the pse-pd subsystem
+> registers the chips it supports as regulator which has its own means to handle
+> telemetry.
+> 
+> Thanks,
+> Guenter
 
-Add GPD fan driver document
+Yes, Guenter is right. This driver belongs to the pse-pd framework.
 
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- Documentation/hwmon/gpd-fan.rst | 78 +++++++++++++++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst   |  1 +
- MAINTAINERS                     |  1 +
- 3 files changed, 80 insertions(+)
-
-diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
-new file mode 100644
-index 0000000000000000000000000000000000000000..0b56b70e6264ddccaa4d84b326841c8f63b43a39
---- /dev/null
-+++ b/Documentation/hwmon/gpd-fan.rst
-@@ -0,0 +1,78 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver gpd-fan
-+=========================
-+
-+Author:
-+    - Cryolitia PukNgae <cryolitia@uniontech.com>
-+
-+Description
-+------------
-+
-+Handheld devices from Shenzhen GPD Technology Co., Ltd. provide fan readings
-+and fan control through their embedded controllers.
-+
-+Supported devices
-+-----------------
-+
-+Currently the driver supports the following handhelds:
-+
-+ - GPD Win Mini (7840U)
-+ - GPD Win Mini (8840U)
-+ - GPD Win Mini (HX370)
-+ - GPD Pocket 4
-+ - GPD Duo
-+ - GPD Win Max 2 (6800U)
-+ - GPD Win Max 2 2023 (7840U)
-+ - GPD Win Max 2 2024 (8840U)
-+ - GPD Win Max 2 2025 (HX370)
-+ - GPD Win 4 (6800U)
-+ - GPD Win 4 (7840U)
-+
-+Module parameters
-+-----------------
-+
-+gpd_fan_board
-+  Force specific which module quirk should be used.
-+  Use it like "gpd_fan_board=wm2".
-+
-+   - wm2
-+       - GPD Win 4 (7840U)
-+       - GPD Win Max 2 (6800U)
-+       - GPD Win Max 2 2023 (7840U)
-+       - GPD Win Max 2 2024 (8840U)
-+       - GPD Win Max 2 2025 (HX370)
-+   - win4
-+       - GPD Win 4 (6800U)
-+   - win_mini
-+       - GPD Win Mini (7840U)
-+       - GPD Win Mini (8840U)
-+       - GPD Win Mini (HX370)
-+       - GPD Pocket 4
-+       - GPD Duo
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported:
-+
-+fan1_input
-+  Read Only. Reads current fan RPM.
-+
-+pwm1_enable
-+  Read/Write. Enable manual fan control. Write "0" to disable control and run
-+  at full speed. Write "1" to set to manual, write "2" to let the EC control
-+  decide fan speed. Read this attribute to see current status.
-+
-+  NB：In consideration of the safety of the device, when setting to manual mode,
-+  the pwm speed will be set to the maximum value (255) by default. You can set
-+  a different value by writing pwm1 later.
-+
-+pwm1
-+  Read/Write. Read this attribute to see current duty cycle in the range
-+  [0-255]. When pwm1_enable is set to "1" (manual) write any value in the
-+  range [0-255] to set fan speed.
-+
-+  NB: Many boards (except listed under wm2 above) don't support reading the
-+  current pwm value in auto mode. That will just return EOPNOTSUPP. In manual
-+  mode it will always return the real value.
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index d292a86ac5da902cad02c1965c90f5de530489df..ce4419f064e1368740387af70af38a85cadd952d 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -82,6 +82,7 @@ Hardware Monitoring Kernel Drivers
-    gigabyte_waterforce
-    gsc-hwmon
-    gl518sm
-+   gpd-fan
-    gxp-fan-ctrl
-    hih6130
-    hp-wmi-sensors
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 14a616be5ff08aaeee52436dff54a86c4a81e5fb..0b6ae95c2007f0737bc4a4e1f2bac52f71628f78 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10425,6 +10425,7 @@ GPD FAN DRIVER
- M:	Cryolitia PukNgae <cryolitia@uniontech.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-+F:	Documentation/hwmon/gpd-fan.rst
- F:	drivers/hwmon/gpd-fan.c
- 
- GPD POCKET FAN DRIVER
-
+Best Regards,
+Oleksik
 -- 
-2.51.0
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
