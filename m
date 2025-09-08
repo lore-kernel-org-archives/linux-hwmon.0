@@ -1,66 +1,65 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2781E47A8;
-	Mon,  8 Sep 2025 01:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC8D2110;
+	Mon,  8 Sep 2025 01:33:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757293787; cv=none; b=KUwUMtLNXLuleFX+3zFq7dIpO5OItf/rZOWw8S7qLc8aB58RWaFalOgLeoyLuElygNEBfoioRXfbt1QQ7GyDaxglIL0owqa4YJgBSQHf/kt6NIDgFGvISw1PdnSioo/D3I953uLGFue61W2V4+eiOmKGBQXMhZm8AajKKQ8Q1V4=
+	t=1757295236; cv=none; b=TdZ/yx3p2nJadPRgRyE6HDAEzXVF7TRalWbxLXV7IiJx2k0n84fdqYG5AeCSRZ1EivkDFLmz7rCu6OhJSs6Xgpvt5HJz7F0IDGf5aHbOXC4CAmu2zXQ+4S0WQwxP6CYqdVgOaotTsC4fPxqtsnnPoF4HcsOyoQDiWCdOtXNQQQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757293787; c=relaxed/simple;
-	bh=2c/B+jVJU+eMT1REUyPuXAvy9saBACnvLnSQGlmXcaM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lH6QgqtgqxhYbYO+GQsCzEQY3ilqKwLBdajrBTsJXAba92jtKj78k30Xk/n/xwm3auIVH6osEBJ9DU0SG1ZInL3aC+te58oyU3JAGVK9tbYik98KTT3H33uN5eF6xFyjML5/TLeiILCtLU/lT3BqGzWO4AA4JfWOF5WVARL6ZBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aiUF0g7N; arc=none smtp.client-ip=209.85.221.179
+	s=arc-20240116; t=1757295236; c=relaxed/simple;
+	bh=YoAO1z36zJJAlvhzCFjfqGcjiMS5PkDaNuF3hZI2ioE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hE0ODKKGYfeIm1LlROUGU37pxkertzDJFhvYqTNuk0a1JdJ8HvtFE0QQx1O+WTkyWSP32VLxYduPWv1xstB74yXZFQZQ6w+e+fUtfTwtdPwmd8Iu+jxPXN2JsQwRlMBLCEinXmlowEXMZmGNKmDknBBOeZwJCRR+Y4/RB2ZS19w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KOPWNdQX; arc=none smtp.client-ip=209.85.222.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aiUF0g7N"
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-544a1485979so1392366e0c.3;
-        Sun, 07 Sep 2025 18:09:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KOPWNdQX"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-89018ec3597so2591721241.0;
+        Sun, 07 Sep 2025 18:33:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757293785; x=1757898585; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1dGtV+MjNh+y4+MbTmaKA4kHO3anKPg6NBgz3rdrNSY=;
-        b=aiUF0g7NfdEiZyYtiJTsxfiS8qgTIIQEWsJr5XxyPtDN8cKPmFH2KMthPeeXWAJKzJ
-         oynqPzFwreTdo+VCMioLlJbck8iJrgHyymrng58F7+OqTj3Yc0ILimAztY448b7HuLpY
-         AaL2/RZhTCHjTM5qoOca5A2ly9J32dlmQYel9F9LRHHghN/w/n8COmbMS+AyGkIlreVj
-         lRjWu2A3caQ+W/WX4vkeK70Y/AUmt/VVSJQn2wWhctcHujo/hhI6xck7htakDa2HF0h3
-         YaRPm67Psz63okwJpPWhw/Bret3ADc8X996vzvTY8VDNoEourtca2VqZLFbJs2Wa+iwv
-         y/qg==
+        d=gmail.com; s=20230601; t=1757295233; x=1757900033; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lyb+xqdQ1ZLHkMXEjseYFTuvjJs5m04tJ0UGSEAV0xU=;
+        b=KOPWNdQX6hNEb494fXfT+TcpYoo94VJgZ/hutZb/kopDb54xRABlApUBa5pgfgMYnj
+         +CqYMI2b3BXpLIox7u2Gy4F41s/yocJf6MimnIkbp44Frv31SClvGqsiuZ1kC0UeU7+C
+         nPgyesYEPaktAuM2wMa4evMEdMpd2tM+E3Nzi7ixeJ/TElCb1sQEECYzhQ3dNuupQMM+
+         YPRVa1wFVLq5E0i5gjIhwJvAGOAEpNyW4snKdcwDqryyavd5hw4R3Wru8iDw+YWdoJrh
+         hqy4UGOMCWn5tMXrGOE42bZucwJXxTeqDUCWeIhV099xvWxLqgoDkakuE5ER+789vs48
+         dXCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757293785; x=1757898585;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1dGtV+MjNh+y4+MbTmaKA4kHO3anKPg6NBgz3rdrNSY=;
-        b=SewBphhqZx/hlckXC+va1QJtY+EFPYAlze6vVF8wbi0Z/SgTKv3e52V/VzlqlhRBVt
-         aKSlunl0gsTpNv5cV8l+Z7qrBhExNX09dJS8tUZiF/APSUAXrGhhFUZrl7ONtRocyZeW
-         HiESjV78JhoMKB/p4n8c+vRglu651Osn/zPLw07bXu6tFyq9jf6bpcV1aCTsuYLUFxLh
-         YZPN+aR8bXNQ02lTfNkEgny5dMGnxheMdd3cqr+qJRY72+FijS8pdak+6lDDzwu2YV0i
-         DpxalZgK8xzVF5iiWY05fPO/nIXjr5YoLwK9Jq0bl6XRN4kx1C21mexde31ARxtGTnCJ
-         VvFA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7yy+rKwzpV4uGDZ1AZYGoUHHSp6BULJDzmoLGgPzEzc2cJMNJq+EymMIkpallHRLsVzDuQvtdw7b3eZU=@vger.kernel.org, AJvYcCWPDtMisf+vBlfX07GW4AAWf3zbUJ6xvloD9yGCMvID1YIaRs1b/AxnzrRnWfPa9AXP9Xl1ZPHq6fxH@vger.kernel.org, AJvYcCXbqG6U6nomVHnBx2ANxfDws0yD49GX3pxHqBv4rt9rdzVr6SPfy1X6CeagUH7uswjBOJ8hu/E6SLGc69WS@vger.kernel.org, AJvYcCXvOhRt+S6uyAa2ON7fMvtz9o0MZmZlAoVBGWrKobEsX5tYhNTL0K5Nuz5JUxEhJ8fl9igiLxgn/quH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw74z7wWM2YXKg8V8CBTJVgKnbtvqf62kjQJRqb5ny/5HFneSTF
-	S+u1NW2JOeP+S8GEB+2Tzu682kQ9kBEH7BTkOtb2vxtmimilwIA+CDTx
-X-Gm-Gg: ASbGncsAtzhSar8kK0XhRrYkUg2qjHsjYZ/M4fBOnAEVvsMt9TyKbvS34JaVWw3CdSN
-	3KXgen+fVYHlLYFWhylR/Juu589xbel8yGwtvOLELoPwnMxvth38+1suDmu7LfrAqzCm34wN/Wx
-	J4bw3obpiNVeCbEfs5YvU04Olgn3Jfm5HOOIt/Bl2DbGmLrDz28t3tuorz+eUU9hu33jrHJO0z9
-	015bNn6hN6im/bc5iKZjaRbYlyVtP3XdxANGNIsjttHCBWaaG62hJEGiwFu9SUVJZBhqdb0rTCE
-	tS4uLpS+4eCUEPMMPikGoZgPnDHepJ3DeQBddfirMJtps0T0Pw9OKlc5w/dyXnz9Q0dRtnEjNJF
-	4/H38cVzozfNiaXtTzS1vw9FTFZYT6UGsO/A=
-X-Google-Smtp-Source: AGHT+IFxMOgapuvhqt+CZj46bK/SH4AqTmugsOy8gdKwQjWvZ3bLFKDNCuj+T5V6aj6SBebN+8/9Rw==
-X-Received: by 2002:a05:6122:2086:b0:538:d227:a364 with SMTP id 71dfb90a1353d-5473a3ae001mr1238269e0c.3.1757293784992;
-        Sun, 07 Sep 2025 18:09:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757295233; x=1757900033;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lyb+xqdQ1ZLHkMXEjseYFTuvjJs5m04tJ0UGSEAV0xU=;
+        b=u48NLombM4HvH7E/gdRe60mS3v0IRXXcH9n61+Sj6IDicu6F7yYVdJJos7p3nQXSjO
+         fM/Nrbp+BjLEmTeTZCqMoy4ptU5n6fTfxaSrrOHxXgNjB/t3Xj/6X7RgU54jAQszOpNz
+         xgwjIse2JBUNUt6+keskX7GXKhDlHzf3iCw3ZfUYpwDbmXcdC7V+6H3eCWSS4U5G5Pjd
+         N8aL98pkR/Ih9HDtbYboGpxpATPFXExxOXY62gMwn285CS7LgPTGUvbRZzOQhE3qFXUF
+         65Xe3l8TxQmKZ6D0YjO7bj1QZhtyGi6IY6paf90iSDMRir2WCSphYBnlOswMmdbtGrV8
+         HtpA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbhAUiOr2ezc8pGKOW2mG6RupGX3/DEvFKMjdBG4KYyxNjCpPRizap3TxCmHNGCN2L1V47eF//96Fl@vger.kernel.org, AJvYcCVmM4UsFAIjoweYOkTJYJOjJXoAXtLK9iw2dMkaf5FZXn3hXbHlGXWfNmiTxdySz58EEgMW4dlB/Nq29Cvh@vger.kernel.org, AJvYcCWKumQUbi+iLibff4v7cvjY+9JIn5QP5++fdBBh80X1YjY54tM86nV+dFRifikO1bw9lpFRHDZX@vger.kernel.org, AJvYcCX7SAiw9irW067h5twEnp6hTQwncjSeCxIVj74IMoUFG7T4TNfEaNI4D8Qql7FhMu4sJ1esR13bWbWC@vger.kernel.org
+X-Gm-Message-State: AOJu0YytIRfraciHlJuESfSPdPWOhkXFo+pvBmdiCpvTS6Na99jwkTfC
+	VL5A45faUiupplxMILVya4W8TPk7mmND0SiR12okfzTSoGwAYBgdJAIo
+X-Gm-Gg: ASbGncu7+pJf5JUutH13lJxLeceQN0TWj9NL5SquECuzVrXdJlGAs89HtddKKKuS3oh
+	VMWdaWHMMU8Hp6VDvLOlvkLGOaNKSLGojYUquy2ab3nW/Jv2GUVAy7IujgWsrb0eU3EYXMniGG4
+	afK5s0FGZJqTeBmGxQVYXThPMyaP524sBCJlPHjl6UCoSzXOPgiJkSjOQMtozdKcUCS47l5NQSl
+	qR3OF+BeN2/UcqsyCzxHSR28+I4MSa4ALEUJKWgqJ2GhM1/LQS/NFGp5PPH8q2agVuuzk7XRbiq
+	gI4KvpDTOVd0aJ2sRjWHWL+Nb5NgnPhRE1fadvIWdAsimzCcdXq7hPJ7cczxAHHhLL72Lelq2PM
+	ID02boUoYdyKWgUfWF0hVzJgVCwbaNR99KGk=
+X-Google-Smtp-Source: AGHT+IHX41sPtEHEp5BJiWmtzND4msRXUjhcBMqFszHIDxYIjOCtoU/g8BeBIWYv/Wd4pq3yNhzyIA==
+X-Received: by 2002:a05:6102:3e04:b0:538:dc93:e3c4 with SMTP id ada2fe7eead31-53d21db6e24mr1986596137.16.1757295233495;
+        Sun, 07 Sep 2025 18:33:53 -0700 (PDT)
 Received: from [192.168.100.70] ([2800:bf0:82:3d2:875c:6c76:e06b:3095])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-544b1933316sm9152572e0c.9.2025.09.07.18.09.43
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-899c47af508sm5857494241.11.2025.09.07.18.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 18:09:44 -0700 (PDT)
+        Sun, 07 Sep 2025 18:33:53 -0700 (PDT)
 From: Kurt Borja <kuurtb@gmail.com>
-Date: Sun, 07 Sep 2025 20:09:13 -0500
-Subject: [PATCH v2 4/4] dt-bindings: trivial-devices: Add sht2x sensors
+Subject: [PATCH v3 0/4] hwmon: (sht21) Add devicetree support
+Date: Sun, 07 Sep 2025 20:33:47 -0500
+Message-Id: <20250907-sht2x-v3-0-bf846bd1534b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,50 +68,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250907-sht2x-v2-4-1c7dc90abf8e@gmail.com>
-References: <20250907-sht2x-v2-0-1c7dc90abf8e@gmail.com>
-In-Reply-To: <20250907-sht2x-v2-0-1c7dc90abf8e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAHsyvmgC/22MQQ6DIBQFr2L+ujSAotJV79F0AQj6kyoGDLEx3
+ r3oqmm6nJc3s0G0AW2EW7FBsAkj+ilDeSnADGrqLcEuM3DKBZW0IXFY+EqkljXjQlHjBOTvHKz
+ D9ew8npkHjIsP7zOb2LH+FhIjlLhO1G1Vaqar8t6PCl9X40c4Con/tXi2mGk6I6nSrrXf1r7vH
+ xZD+LzQAAAA
+X-Change-ID: 20250907-sht2x-9b96125a0cf5
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
  Jonathan Corbet <corbet@lwn.net>, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
-Cc: stable@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Kurt Borja <kuurtb@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Kurt Borja <kuurtb@gmail.com>, stable@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=997; i=kuurtb@gmail.com;
- h=from:subject:message-id; bh=2c/B+jVJU+eMT1REUyPuXAvy9saBACnvLnSQGlmXcaM=;
- b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7dC6wy0w4tf8oW+m8pTKWbULtt5mfrlrvzuTD8H83c
- +GTnl0CHaUsDGJcDLJiiiztCYu+PYrKe+t3IPQ+zBxWJpAhDFycAjCRg6sZGf6Exwecn93pvXJe
- r2WCitrF8+//GWfmKr6UvH2mfsf3u80M/wNCNvxacnB//M0CwbTvhf/uL99X+Gr+9+MZMr0mPq1
- 905gA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1313; i=kuurtb@gmail.com;
+ h=from:subject:message-id; bh=YoAO1z36zJJAlvhzCFjfqGcjiMS5PkDaNuF3hZI2ioE=;
+ b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7jOpvMoWGz7eWXDhBYZkl2/Ymz+iqvMuvnsZv2hJ8+
+ 5NER+mejlIWBjEuBlkxRZb2hEXfHkXlvfU7EHofZg4rE8gQBi5OAZhIDAPD/zxzLy9RFrk2prqC
+ V45b99vOS7RbclhosrFGscSzhPj/CkAVdS2df652lOse9nk8OcvVZvraLnnrNVc/JVdP07+yuJo
+ LAA==
 X-Developer-Key: i=kuurtb@gmail.com; a=openpgp;
  fpr=54D3BE170AEF777983C3C63B57E3B6585920A69A
 
-Add sensirion,sht2x trivial sensors.
+Hi all,
 
-Cc: stable@vger.kernel.org
+The sht21 driver actually supports all i2c sht2x chips so add support
+for those names and additionally add DT support.
+
+Tested for sht20 and verified against the datasheet for sht25.
+
+Thanks!
+
 Signed-off-by: Kurt Borja <kuurtb@gmail.com>
 ---
- Documentation/devicetree/bindings/trivial-devices.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+Changes in v3:
+- Add MODULE_DEVICE_TABLE() (I forgot, sorry for the noise!)
+- Link to v2: https://lore.kernel.org/r/20250907-sht2x-v2-0-1c7dc90abf8e@gmail.com
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index f3dd18681aa6f81255141bdda6daf8e45369a2c2..952244a7105591a0095b1ae57da7cb7345bdfc61 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -362,6 +362,9 @@ properties:
-             # Sensirion low power multi-pixel gas sensor with I2C interface
-           - sensirion,sgpc3
-             # Sensirion temperature & humidity sensor with I2C interface
-+          - sensirion,sht20
-+          - sensirion,sht21
-+          - sensirion,sht25
-           - sensirion,sht4x
-             # Sensortek 3 axis accelerometer
-           - sensortek,stk8312
+Changes in v2:
+- Add a documentation cleanup patch
+- Add entry for each chip instead of sht2x placeholder
+- Update Kconfig too
+- Link to v1: https://lore.kernel.org/r/20250907-sht2x-v1-0-fd56843b1b43@gmail.com
 
+---
+Kurt Borja (4):
+      hwmon: (sht21) Documentation cleanup
+      hwmon: (sht21) Add support for SHT20, SHT25 chips
+      hwmon: (sht21) Add devicetree support
+      dt-bindings: trivial-devices: Add sht2x sensors
+
+ .../devicetree/bindings/trivial-devices.yaml       |  3 +++
+ Documentation/hwmon/sht21.rst                      | 26 +++++++++++++---------
+ drivers/hwmon/Kconfig                              |  4 ++--
+ drivers/hwmon/sht21.c                              | 15 ++++++++++++-
+ 4 files changed, 34 insertions(+), 14 deletions(-)
+---
+base-commit: b236920731dd90c3fba8c227aa0c4dee5351a639
+change-id: 20250907-sht2x-9b96125a0cf5
 -- 
-2.51.0
+ ~ Kurt
 
