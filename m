@@ -1,86 +1,123 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E38F307484;
-	Mon,  8 Sep 2025 11:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3181C3209;
+	Mon,  8 Sep 2025 11:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757329978; cv=none; b=DCCcrlxgLdWqVLIa0Dtt4GGaWcCly2P81Eo4FZN+qrXoy0kfLAR8zj/PJHUsthdjCgsDl80T/6xXuYlzve7A/h1LayOfMg4+5S5kxXFYQaHRyOoQB6zPCKGpBu/+iA/Kv1YsWOHKOzuJYftxFuBNwJaEK4/O+BAQqGBDiqRsV80=
+	t=1757330899; cv=none; b=ZYr/qsnDTaooLB3yBOdCYAfIuJlsn7K5MXcHDghiioR6mq6nT1GUfdl5huWJ8++bHmlTfTqGDpkoURHkJGcuVfpjfMROSCPPVkKYSja7K1uZUqaVly4w0BMov6ynRuXvgs1BGODsgGb8VNXyC0NMwYhgdXOWO83+TWPXJ3s504o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757329978; c=relaxed/simple;
-	bh=GyObD2013ELlQOtRcm+sEKt8v702ngg3XK5L5afXGlA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UK753NnTCaIt+HVs4ynKgZDDUQcBXbZq5Suol2C+zQDHPN2OjDMvPMndZXy8RoTwahu13dikSbD8HiH5A00h0lfNG2UJG7zDxCSl5bWJ9P4v8mkn5P39tkq0j3EvYn7IftQ5dq3BAzxVF4p1856aQBhVsRU1o80/lyeByHS/3Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=pcKFufOs; arc=none smtp.client-ip=1.95.21.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+	s=arc-20240116; t=1757330899; c=relaxed/simple;
+	bh=yn3DFY54dpfRYE23YFj22qSGMrD08cs5ROb/kz6rhzY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=uckPpIl8+bJ+2y58xze3vt6BeizXUKHDxEBedfOtK5JLfV8mw1g3dAipxm6kubTC59AyGaLLNpe/Nx8JTykcEqHTl7fhldRylaS1CBbXlBsCHdvgG1PcDwpDwF+dP9sFb2FqwNgweEs+Nqx1zLIlHr0NWAaqGoYx5HPpkCIUpAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=giC/O0HM; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="pcKFufOs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=F6
-	6K/bZigkKwjesjWoggrsA3HBERGspKO6WE2pLYiEg=; b=pcKFufOs4Fr1OOFoyS
-	SJ19Jp3M39G2r0LmkFpysilh/Z7nXr2hgVWmAOvhC1PrNcemt0MB8vBS5bGNFXma
-	XMntpvz0g4eaxYJLJTw6rJIdHmrn4AGwMNYH5aWJ6BFmZwfNReemZyvws3SwKsL2
-	02mTo1ahE+ohQ2uSEZRQeLJSc=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgDnDyGQt75oaK06BA--.61995S2;
-	Mon, 08 Sep 2025 19:01:37 +0800 (CST)
-From: wenswang@yeah.net
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	jdelvare@suse.com,
-	linux@roeck-us.net,
-	corbet@lwn.net
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH 1/2] dt-bindings: hwmon: Add MPS mp2925 and mp2929
-Date: Mon,  8 Sep 2025 19:01:27 +0800
-Message-Id: <20250908110128.1002655-1-wenswang@yeah.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250908105951.1002332-1-wenswang@yeah.net>
-References: <20250908105951.1002332-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="giC/O0HM"
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-8a756436f44so1278164241.3;
+        Mon, 08 Sep 2025 04:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757330897; x=1757935697; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yn3DFY54dpfRYE23YFj22qSGMrD08cs5ROb/kz6rhzY=;
+        b=giC/O0HMysKBvufK5CSc1LJ+6NmNapZE8EoVLAltBcaXhUiNpCaomxwNpvJCJUrwx5
+         2bCDPMXTsZ9TRd9vswGQ+M5u/N/EwULuBlKawJwMtZQL1+pOYtK+Fxwu16hT8dWTINHp
+         NA4/tPpQgI0hJQ0T9zJ9mMyWS3qGnQWrvQbSBSuJiwcG/ymqbIK+W0YZ3ONXkWhuaFxo
+         +ff6AApafwAb4I33AKvYVFsAoSgh3w/d/FpwnZ7LbTKAVhFnzrb3Agels5ZVH3wjfdoa
+         nk5M8iAlkZWlb16j3k5odEHtfeoUq8BJVQj1wRbXCDi62j7jQa9aV5FDBlvTJOnngwN2
+         1RYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757330897; x=1757935697;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yn3DFY54dpfRYE23YFj22qSGMrD08cs5ROb/kz6rhzY=;
+        b=MM1NdahdGGAOlc+Ah965OqvnLnWcfoK3npQCJJLRfvS4cPTlmvCJfK3cq1i/jWTGO6
+         n6QSxBn+K0QduB0YjYvTQGWadEWOdeQDLkGuKJQSCUVsN+nJgBH2PxL4B6pKdnsJl/0I
+         mlQlUpZD7n4PPUQ1adQiGmxtiinUqoG8iwxEFPuioPRETuq46bLqJ5tt6Nc5DWHxy16K
+         r4JQpIvz4+qR1E04e1iwWDoFft5EaEgx5zbpq030TjMsFTt1nEIOMnKu4hBZogqHsOOs
+         iPXJ2wQgzVHt+BJMSRy4i3+p3iODDxRU4h+8OqwhCRdn+iPfEFclc9/nQUp6FDco1tiu
+         SqEw==
+X-Forwarded-Encrypted: i=1; AJvYcCWZDq5hzT2yEEUKq1HuAvQgi5GToScuzAyWMqsQNlAPfgGs7lpotrHrDPBx/5PkLhu3lEwphbp1qrgh@vger.kernel.org, AJvYcCX27mxCt45E3l3RvA6q4czqQhBt59qtuk6xEG2VJSvg4zycXodfGqucd/lk+gNe8J+Poy4TCY77Klbb@vger.kernel.org, AJvYcCXAc1NfJ4gWlXJk29rXDp5IPwjJm5uOkupPnprkl+yXCyEn5YMwKVrsOqIIO3fYuWD9MXp3TNr0zvLN3179@vger.kernel.org, AJvYcCXqbiOywWEoWfs+jWlQBA1A2Ss7bC/vbN+Ys7f5vyC5I6VgIEiG2vp/clRqfDe0ZnpqjqMiBYpB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yywn4pWBDPj/v+bQESPZGAzWBZJxt+rkjaV5vjPuKUKqR8FqBMa
+	VrhxdEcKOi+9sqOeb6GmqP9s616a5o8VWXQJzOaU4yU8cFEWDfYSRIbA
+X-Gm-Gg: ASbGncuW2VknR10/J2mogSXh9Tpw6RC8UhBTM2TSDZrqw/mBzPX4fZG6KfyeQGwX75g
+	vw626XJdAFvQkso2IHzkDR0utz9n7TGvLCR70oYhvHRz2PoeDihOBTdBj66YaAh3DrKuUa8Ai//
+	dsFvSyGOoMgZqJtj1gUbewnbGfXo3jp0FIU3ySxgpaGhJa+4QDYCqXcaRqgQRchpy8AzFGwngHP
+	vubfLEEmpd2ctaUHeumi7aMlElfVfdrG0yuqbRG4cujuPqneuwB+DVu79GFv84DiM+fx7wiv8Ic
+	i4KplbmBSN7vmzHNmY2/4qP1wd77teloTsMWx6etyJFN5VWRtrsqHvsOY3hlsdjeXWCPrkaqN0P
+	VK/Ms8CIK/8ePdrA=
+X-Google-Smtp-Source: AGHT+IEmxj5SRucLxgsqc+XZK/hD/wEdSRDYn5/LVNzSGWmoBPOWSOPPWS7ZDyNcF+IG54oWcnCxTQ==
+X-Received: by 2002:a05:6102:c8f:b0:521:f809:9969 with SMTP id ada2fe7eead31-53d1c3d62c5mr2376675137.8.1757330896892;
+        Mon, 08 Sep 2025 04:28:16 -0700 (PDT)
+Received: from localhost ([2800:bf0:82:3d2:875c:6c76:e06b:3095])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-52af1915741sm10417808137.10.2025.09.08.04.28.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Sep 2025 04:28:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Ms8vCgDnDyGQt75oaK06BA--.61995S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JryrXrWkGryUWFWfWFy7Awb_yoWDCrc_uw
-	4xZa1DCrs5AF1fKanayr48tr15Ww17K3yj9wn7tF1kXF9IgFWfWF9av34akryxGay7ur15
-	uwnaqrZ3ZFnIgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbeMKJUUUUU==
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiBBrCpGi+pUA5CAAAs6
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 08 Sep 2025 06:28:14 -0500
+Message-Id: <DCNDT81S98GW.2SJOV5C94E43H@gmail.com>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Jean Delvare"
+ <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>
+Cc: <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 4/4] dt-bindings: trivial-devices: Add sht2x sensors
+From: "Kurt Borja" <kuurtb@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <20250907-sht2x-v3-0-bf846bd1534b@gmail.com>
+ <20250907-sht2x-v3-4-bf846bd1534b@gmail.com>
+ <edc840e1-44ed-4397-8e5f-2f5e468ec030@kernel.org>
+In-Reply-To: <edc840e1-44ed-4397-8e5f-2f5e468ec030@kernel.org>
 
-From: Wensheng Wang <wenswang@yeah.net>
+Hi Krzysztof,
 
-Add support for MPS mp2925 and mp2929 controller.
+On Mon Sep 8, 2025 at 2:02 AM -05, Krzysztof Kozlowski wrote:
+> On 08/09/2025 03:33, Kurt Borja wrote:
+>> Add sensirion,sht2x trivial sensors.
+>>=20
+>> Cc: stable@vger.kernel.org
+>
+> No, drop. No bug to fix here.
 
-Signed-off-by: Wensheng Wang <wenswang@yeah.net>
----
- Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+I included it because stable is fine with device IDs [1]. Is this
+avoided with dt-bindings related stuff?
 
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index f3dd18681aa6..eb617a6c50e5 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -297,6 +297,10 @@ properties:
-           - mps,mp2888
-             # Monolithic Power Systems Inc. multi-phase controller mp2891
-           - mps,mp2891
-+            # Monolithic Power Systems Inc. multi-phase controller mp2925
-+          - mps,mp2925
-+            # Monolithic Power Systems Inc. multi-phase controller mp2929
-+          - mps,mp2929
-             # Monolithic Power Systems Inc. multi-phase controller mp2993
-           - mps,mp2993
-             # Monolithic Power Systems Inc. hot-swap protection device
--- 
-2.25.1
+>
+> Please organize the patch documenting compatible (DT bindings) before
+> their user.
+> See also:
+> https://elixir.bootlin.com/linux/v6.14-rc6/source/Documentation/devicetre=
+e/bindings/submitting-patches.rst#L46
+
+I will reorder.
+
+Thanks for the review!
+
+>>=20
+>
+>
+> Best regards,
+> Krzysztof
+
+[1] https://elixir.bootlin.com/linux/v6.17-rc4/source/Documentation/process=
+/stable-kernel-rules.rst#L15
+
+--=20
+ ~ Kurt
 
