@@ -1,65 +1,66 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031FE2D5929;
-	Mon,  8 Sep 2025 15:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F06330DECF;
+	Mon,  8 Sep 2025 15:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757346912; cv=none; b=C8T67xtxt+o1dLnyMzjJR5vU0v0sQp3LbyuyZPmQdJ0Z/Ur648z3dMzGQFBuHEmNaPcgjAFfGUOV7A0x2qGdnvhaZuoQJk0baGQmcBHJg6uQyTNHVTm5y07QDXjnukQQ24LhwixY8KDfLeGF0AfAMvTKz0o5euoVwyrO0RrwJr0=
+	t=1757346914; cv=none; b=gyGzSIA+CZEMa1TgiWrDsRH9IT/19/Mg95652nUbv7F56xee1iSoOBZ7Ek61REWcktXbaN0nXO81fwTaxcv618MS87HdOQZuy66++RNbrz3E6YCFK1lX00wek/7Jj5J87SKb9/is4fpB/FH7vMIbTxkaAu6KrAawZt8rHzI4R7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757346912; c=relaxed/simple;
-	bh=DPok5ZJbW/CmanImBGvSLTbfYtANs1XLx0OzKK/GxOQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Za2StrJFeogPTWSmN6BF1M8FITCC87Yrnb50bOt/A+OVlg65V6Fzo2Qo3jhjsCKf8ZHaWczm7DUII47RxzIvBTg9KjFbQZaofo9fnescW7wh74nlxecjYv1CzCqLFCQl4OZt8ahg++VDN80eBfrmcIugntC9hpsBEtUKfO94xcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h3kvSXYC; arc=none smtp.client-ip=209.85.217.43
+	s=arc-20240116; t=1757346914; c=relaxed/simple;
+	bh=UEw4F4LkD49VKclwQjDUiuUfQ+Jf1njAT51SLNuYO2c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=a7YpGJekepv7xtaySZEkMjKTm5I08nNLEQVxMTo64G+L+CKljlEGANlmOkgv7cKc3mwtLH5ADzbwxZdSAgbcQmyGOAg+Hjl/Lrnf8bcJ00dZLCbsBZAj6e0xuoRctk77LHYnbOD6QMXifsoqybq1iya6I7jM2svffYz6LFDaTSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQoimeW6; arc=none smtp.client-ip=209.85.222.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3kvSXYC"
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-52eb6872bd2so2059591137.3;
-        Mon, 08 Sep 2025 08:55:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQoimeW6"
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-8b96673653cso240704241.0;
+        Mon, 08 Sep 2025 08:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757346910; x=1757951710; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODso1BtjNB08Q2FB6CB8RlQDDaVaGLpJk9SD+YPMh54=;
-        b=h3kvSXYCCMSkiia2WgDwKTLg/iQAQWAwQADouXbOafdnvG1fp5zScKxX0zSNSSftjk
-         Ox7D7W292WsfG8YF7DbuqkllqimGi/Ya9tLcVJlT/xdFENUd3wdRRt12HxVFzIv0GLmk
-         oaa0JxcVdHgU/io6aXSle8QQCJKPVxfyIMBGiPSPgg7+EjzIhLj1srkS8IZUMzQt2Knn
-         PGlqwrYwkTRTSvSYlz647fVv1cCK+Fw1kmLs3zZrCIkJt6XBd+4ZhrSmW08f9xSNSk/2
-         YrTGghCajyCHOrbqhEXKnrxqXeZooL92947Na3KF2Sgc+ed9Trg5x1jmF8q8RVlm9/uN
-         HIeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757346910; x=1757951710;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1757346911; x=1757951711; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ODso1BtjNB08Q2FB6CB8RlQDDaVaGLpJk9SD+YPMh54=;
-        b=ZOzP3ZZplt8+SHneA3IaqqbapB0L62RSCbb85fnlNKcBktbqdnejXob0SLvHjODcCb
-         dX0IjnBOtWT2waLG0J2gq6wnwqOzAGcbfH/cMnhkpg7SaSgTJTLOSA5Gpqdt7pLYHs8B
-         7qqGkvuMfSBJG2TFit6rl6QhCDMq2rWCMdyJny5ff/GdGXs/pRdsWb37+JlLzepTqPNM
-         m8wBC16VvkbBLDtnTmLDFTR1d80WslGHVoshjn0iH1D6nGHmN7B0hZJ81/Ydi1GvQKhe
-         FZp2SKhoTa60NhVV4Wqs1seBLfI126unERHOdbGoAUSMDFnQhXAInlcugk39s/4ZwKA1
-         vXng==
-X-Forwarded-Encrypted: i=1; AJvYcCVgHCnGLcjrwp38PWcbMW9jSDTFtPTJByUfCPSRlULIw32BdG8Otf9G7qkBGBEzCsjJeHK2LGr6lVQKn45I@vger.kernel.org, AJvYcCW27qbrZ9gHl53xee72yi57/lTvcbhzWxzJCu382mxfzINkaAWA/9zh8jAAhqu3tnzPuuE1YWdpGPTE@vger.kernel.org, AJvYcCX5ALAVXt/lStKtI/DbOyOTSi3A9b6ylWhPJX+zU6964ooGZnJnL4NYOl7XqV3QVUOd3uIH0H7hBOWc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yydo9cSh38AzFrEm7PLMDWpMxNL8QRoS7YnTVbY/rP5xHaaiWhA
-	D6/VOTdLG7PiUfWocZZ9o821ZdDSiJ5z8bhdQelWMmnQeQ+AIMBoBNtW+pLgVw==
-X-Gm-Gg: ASbGncviVxtW1C43qJFV/9y3l9WpNYy5LhBP4icAxZZi8ArENwvJwTuBclhUe6ForZu
-	mwlmBV7SfBhS7OcrnKut4cSkqEcxTJc2+Da3wP2Fif+7moUNwj7mJndS4Bois5Rdyc5a+5Az+rl
-	S6GNu3ICHexHf5zVLUiZrS7jYmFN6h5QUIMhj72Af/uOFTwXQ+LfRgbHKBcFzolJGy6BFXj8ZVl
-	Ya/j5g4i3PQOZ/g4h5XxnVuf1iWXG258G8aEm99vKd9WKMYGXlP937a4e1j8ZKVPZXDImrpktK0
-	Q+cqk4CHpRntgNrW/RkM3GVo2w+eN8JqKKG2nisNAZKL58+fpeIR5z5b+8ZG3xW9AAUZJztv0GQ
-	Ec8L3baiiZiO3EAULjSqaCynB
-X-Google-Smtp-Source: AGHT+IF6gbzg1CUm0lHxzPJCEpT8rKKw2V3ILLMKu96jRKW9r0k3fC3W8zcnvnNoI1NH7YhkB7odzw==
-X-Received: by 2002:a05:6102:c51:b0:524:bd1e:bcf2 with SMTP id ada2fe7eead31-53d16b6639emr2188489137.35.1757346909432;
-        Mon, 08 Sep 2025 08:55:09 -0700 (PDT)
+        bh=pIrWIgaPrpXvy15ltxr3y1zTh70BAC5HdpbmwVt7Qmg=;
+        b=ZQoimeW6/kvXdKbjTb02xhSiZEM9zx3lZ8eZPaxj2YuHf2xwmclfvdZm1y+7XLP0on
+         deOjQseezXm8V+fEsqRSQKBABCAgkRNg5qywd098oRyyK/A/SYPGpFSzMfEHv50mk6o2
+         sbSTEgTi9qO5lU+/OteP6G4JYzCAJSzTPr1StycY7oIbjM5el1WbG1Qw/Q9JloZZBkpO
+         oOo7k+ZE9RcUJNWoaBfe3hvCUZs8Rje3Wxw/kEcoepvckhq/pu683iJ55YuGGrxOMmV2
+         JqAowSr7/W+d/52GRkgMxeyJLnKrt8Kn9QWEMsOysV6QN0gk3bkHic27v9ZhU8lkIYgU
+         1yHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757346911; x=1757951711;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pIrWIgaPrpXvy15ltxr3y1zTh70BAC5HdpbmwVt7Qmg=;
+        b=FP4pgG+MbwGxHJa7DAu/FOE4NK0D4cq991LHPhGdKmHqKrNdVPjK8npBqPwrOhDzaV
+         oL3zYM48h/SxM+lkOgVHpxR56h8p+uCOHXBjAdSKpv3VNSG2THVseBju1PIXW7wZosUE
+         2G0yTUqis5x6D0ZYlcfB+q70LwyMCPtDj2AWIpT+NuLnEs5qFWV/uOTUCSS8d079iaom
+         DVoh+y6RXl2Xukfth0mPaiNO2ycwczSklBjokZKrOV7RbWRfmiuP0ISdE6ikxKJgZw5V
+         O0ruY+PYDjv4J2U6O3ezMFp6OO7u6O2PSHd/2MBHjsyghFMLCCUR32/IGRTv5FnqGO+d
+         7MrA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5Bl3URvvhYAWRaKQyL4YAKx7gpRMqxrWhl/wnIitmRXl07yG7av3jlk6f5tgxJsObeOzkcGQNAjCB@vger.kernel.org, AJvYcCWzdkyFRW4xi5p4zPFAdfLWnvXjD5AY5fAL5fi07y7PO/lzPCFxg3pbZjZDJr4MD32gTwemWiV8pUiV/qIZ@vger.kernel.org, AJvYcCX02po3uM/UGvn9DH0GQNmaC3y/LPKLjkgh89DnKE29+n5tDBsFDicJxes0hJDUOUoYsyJbrByNHTk9@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHVf7FuqF9grdeO3YOX0PhBE7M7WWLkdTM5q2unkTR7qh4cB2n
+	VUdLCry/iDI3Vi+slBoswaduTSAf7lXYTOvZvX9zmPhsAB2AqDTvHCHTdOE81g==
+X-Gm-Gg: ASbGncs7lC5m1UZ92eWq1/qAvGhq7QttskSYb7dcqdrMp77Z687OPj07g4IquaGmdlL
+	6HNE1/s+gCmPxX9+NOm2RQ8MJD47dCRQp41nT184L0sr0JVNvlw7/HGd5lNzz6YfpdQiqfeIPU0
+	ZZbo0gk3j1uD4szg6l3yr/1M55rghJ3kgVs26iYoR66pSsgQsikBguoK95hWrznzsrI6M57kT8a
+	e6S4mr7xBWn/8GcSWCwYSnICyvg14oGCcivwZwRTdGeLGhlvHy81B+379r+lOFaABZhxsrsz3up
+	dPZOfhDX3uvwxdK7ffZv7vUfO4PtagFbVS3peUL/+BNZDHDSQjmDJ2ZIixd9tOz3nb8lQGYaDyp
+	Ftb34emsHJtPBsgKpRSJ4VJkh
+X-Google-Smtp-Source: AGHT+IFgPMlHLzn9j7bvzTbf4/KMwdhKHekGVQ5fmekqqoLsh6OqnZg5vInmZkiknnBUhSjlehGFNw==
+X-Received: by 2002:a05:6102:6a92:b0:518:9c6a:2c01 with SMTP id ada2fe7eead31-53d148c0bbemr2139585137.28.1757346911229;
+        Mon, 08 Sep 2025 08:55:11 -0700 (PDT)
 Received: from [192.168.100.70] ([2800:bf0:82:3d2:875c:6c76:e06b:3095])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-89601b67070sm8689299241.20.2025.09.08.08.55.07
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-89601b67070sm8689299241.20.2025.09.08.08.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 08:55:09 -0700 (PDT)
+        Mon, 08 Sep 2025 08:55:10 -0700 (PDT)
 From: Kurt Borja <kuurtb@gmail.com>
-Subject: [PATCH v4 0/4] hwmon: (sht21) Add devicetree support
-Date: Mon, 08 Sep 2025 10:54:48 -0500
-Message-Id: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
+Date: Mon, 08 Sep 2025 10:54:49 -0500
+Subject: [PATCH v4 1/4] hwmon: (sht21) Documentation cleanup
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,11 +69,9 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEj8vmgC/22MywqDMBQFf6Vk3ZQ81XTV/yhd5KmBqiWRYBH/v
- VdXRVzO4cwsKPsUfUb3y4KSLzHHcQAQ1wuynR5aj6MDRowwSRSpce4mNmNlVEWZ1MQGieD7ST7
- Eee88X8BdzNOYvnu20G09FgrFBAcnq0ZwQ43gj7bX8X2zY4+2QmGnFgOL2tpZRbQJjT9a/NTiY
- MFbVMZRyYX5t9Z1/QHpvmv+BgEAAA==
-X-Change-ID: 20250907-sht2x-9b96125a0cf5
+Message-Id: <20250908-sht2x-v4-1-bc15f68af7de@gmail.com>
+References: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
+In-Reply-To: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
  Jonathan Corbet <corbet@lwn.net>, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
@@ -82,56 +81,64 @@ Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
  Kurt Borja <kuurtb@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1464; i=kuurtb@gmail.com;
- h=from:subject:message-id; bh=DPok5ZJbW/CmanImBGvSLTbfYtANs1XLx0OzKK/GxOQ=;
- b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7/gQ+27pw7tfDum+v6Esn88RUPPOR+LdUa/ODee/k1
- M9uOHpMpKOUhUGMi0FWTJGlPWHRt0dReW/9DoTeh5nDygQyhIGLUwAmsmoSI8ObPvk3jgtury1S
- Fhbb5mbsrRSZJtJ+3uDXN9uVbzb0qFsz/A+4adc1YdHu09qPxR6l7Pu85NGqqGes3w+l3oy3nRU
- mVswPAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1311; i=kuurtb@gmail.com;
+ h=from:subject:message-id; bh=UEw4F4LkD49VKclwQjDUiuUfQ+Jf1njAT51SLNuYO2c=;
+ b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7/kSvymtPuy/+vtvEc8+b11vv8Z6TvnBkQefxTQG1+
+ ZVPuyVndZSyMIhxMciKKbK0Jyz69igq763fgdD7MHNYmUCGMHBxCsBEPP4zMmwXXXSZQWzfEnXd
+ HDeFojThJAs7zenPV2ZxHXp4ckv36umMDEfzPX+f5xM46b/IY36K5alFj4vUc37/9+rhdVI4LzL
+ fnxUA
 X-Developer-Key: i=kuurtb@gmail.com; a=openpgp;
  fpr=54D3BE170AEF777983C3C63B57E3B6585920A69A
 
-Hi all,
-
-The sht21 driver actually supports all i2c sht2x chips so add support
-for those names and additionally add DT support.
-
-Tested for sht20 and verified against the datasheet for sht25.
-
-Thanks!
+Drop extra empty lines and organize sysfs entries in a table.
 
 Signed-off-by: Kurt Borja <kuurtb@gmail.com>
 ---
-Changes in v4:
-- Reorder dt-bindings patch
-- Drop stable tags
-- Link to v3: https://lore.kernel.org/r/20250907-sht2x-v3-0-bf846bd1534b@gmail.com
+ Documentation/hwmon/sht21.rst | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-Changes in v3:
-- Add MODULE_DEVICE_TABLE() (I forgot, sorry for the noise!)
-- Link to v2: https://lore.kernel.org/r/20250907-sht2x-v2-0-1c7dc90abf8e@gmail.com
+diff --git a/Documentation/hwmon/sht21.rst b/Documentation/hwmon/sht21.rst
+index 1bccc8e8aac8d3532ec17dcdbc6a172102877085..9f66cd51b45dc4b89ce757d2209445478de046cd 100644
+--- a/Documentation/hwmon/sht21.rst
++++ b/Documentation/hwmon/sht21.rst
+@@ -13,8 +13,6 @@ Supported chips:
+ 
+     https://www.sensirion.com/file/datasheet_sht21
+ 
+-
+-
+   * Sensirion SHT25
+ 
+     Prefix: 'sht25'
+@@ -25,8 +23,6 @@ Supported chips:
+ 
+     https://www.sensirion.com/file/datasheet_sht25
+ 
+-
+-
+ Author:
+ 
+   Urs Fleisch <urs.fleisch@sensirion.com>
+@@ -47,13 +43,11 @@ in the board setup code.
+ sysfs-Interface
+ ---------------
+ 
+-temp1_input
+-	- temperature input
+-
+-humidity1_input
+-	- humidity input
+-eic
+-	- Electronic Identification Code
++=================== ============================================================
++temp1_input         Temperature input
++humidity1_input     Humidity input
++eic                 Electronic Identification Code
++=================== ============================================================
+ 
+ Notes
+ -----
 
-Changes in v2:
-- Add a documentation cleanup patch
-- Add entry for each chip instead of sht2x placeholder
-- Update Kconfig too
-- Link to v1: https://lore.kernel.org/r/20250907-sht2x-v1-0-fd56843b1b43@gmail.com
-
----
-Kurt Borja (4):
-      hwmon: (sht21) Documentation cleanup
-      hwmon: (sht21) Add support for SHT20, SHT25 chips
-      dt-bindings: trivial-devices: Add sht2x sensors
-      hwmon: (sht21) Add devicetree support
-
- .../devicetree/bindings/trivial-devices.yaml       |  3 +++
- Documentation/hwmon/sht21.rst                      | 26 +++++++++++++---------
- drivers/hwmon/Kconfig                              |  4 ++--
- drivers/hwmon/sht21.c                              | 15 ++++++++++++-
- 4 files changed, 34 insertions(+), 14 deletions(-)
----
-base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
-change-id: 20250907-sht2x-9b96125a0cf5
 -- 
- ~ Kurt
+2.51.0
 
