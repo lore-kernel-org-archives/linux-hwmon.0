@@ -1,128 +1,141 @@
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584A530F94C;
-	Mon,  8 Sep 2025 15:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4216730FF13;
+	Mon,  8 Sep 2025 16:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757346921; cv=none; b=FoIZj1q1SIPYHaeS/fUC2nDdndhn2+u//qDfpSTgm0Z5UYBBZobwv/sdp+GOG4KUK433UshcJo7EIoOCwyV4WwYGhuPbtYaeKmTg0AhQJMgauCbz4vzT31RQ7TN4PiHpoSO5Yc8uMrGDQK5Dpgh1o8ECOMNS6OvnKU7YVCs+uJQ=
+	t=1757349638; cv=none; b=eDZjtDJHMTX1qrACrCYbB0ZagjTqzj0mBvvEgqndpklsl5Myehwj8TA9PTFhIeuFQIQTzdDPxZTrqUGRZJPe1VY+vxYlocnawadbszMnrL+xInt8PKzAZlhL61mg3Bk6NrCGFb3swFEKEHCAnmafeSy+QcZTWGRTipXJbQBWwLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757346921; c=relaxed/simple;
-	bh=ZhPPiDNO5yQzArrlGfRKDRUaAE3F5GbV4S+WCBjs9gw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=da4eZ1bZbwmwuCEGJz2YWEr8SpCvIwDSR37O5kDY6/bBiUKNMgrXRdBvGkogVsviBbHxK75I3nP6/110EoyxghRgAxRkvJL0lVaQHD1rxKfALSA5uniWh0onae8s5FeTwwObnWbdhqwbBlxwikIr8gzXSHYqsE33pm3FTQ4HQfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msjHfwGZ; arc=none smtp.client-ip=209.85.222.54
+	s=arc-20240116; t=1757349638; c=relaxed/simple;
+	bh=FHaRlWw47bi/2s/lzA94Hii/QnYjO29WOngiZT7+5t0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O9/5aMViX6RVYHdArDFuFt156n0icH0jPVLoXs/4Z7Pd8qh79qsL61UV8r44sKu36QbM0wjT8TrNs7gzYHYs14FGvW2ekOgGENG27Ptdeo0UC4oY9tvrU/to/R0pd5UPXwQtbn9E9RFZjIfx0CftsdNG5+11VeCGFL3hNHDl1X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TdPiDPHy; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msjHfwGZ"
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-89019079fbeso958754241.2;
-        Mon, 08 Sep 2025 08:55:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TdPiDPHy"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-62105d21297so6683855a12.0;
+        Mon, 08 Sep 2025 09:40:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757346917; x=1757951717; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WAT7IP3Aj8lmfsspplaevmXuWbYqJQOd4MHBix2Zpzc=;
-        b=msjHfwGZ1Mv4xjAYlMuOeRWli1CH4E02pMaWMkP7E8TLLDF5/kVzHAqPeV+tlm/23/
-         td6VwK5822b6cAcU/KAFNa7HATFlY8MM4Q9hetcnsD7c2BTUn8ED4owm6bCjhoc58L85
-         q0BThiZSsC9A6/1UQz680mcY5aHwpOABKU3rhfcK4wTlZ3GjImdeDOUyQ0NM3tDHHZDI
-         e/qC12MzV6JWBlWZWtVtB/6yzHawQtUKujAkTYoewe9bTeE5onngbklPizVKl3OodPXJ
-         KLqvCTnzIpV3Of8PmWDGalRxWtRYDsAsllHnIsoce3yuPKqzDhE286nY3QFq6Eqfn3p6
-         RhRQ==
+        d=gmail.com; s=20230601; t=1757349634; x=1757954434; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4tli/DLcsxmXCGIe+l+WvG/LlQXb+bYfU9YziR7TveI=;
+        b=TdPiDPHy5nfs1oe6k1a6YoEFU7cT/hElG9jKQrhSSrbq+40RES9hk6OYVB1DziXPF9
+         1Ml4Uj9cbNb8+SArQfYew0tJvbmr4UcY72804rfSLrS3Of2KtAhcA62ErssYdbdxvIGM
+         JMtyMzFvc0VznMyc4SxVTPzGKJKWnV1QE2AgYyQteFY9iu+qMUoMfcbRDbXXUwrC+XCT
+         LrWF0+NYpCl3MIT0k4J+C92xwZYJ8DvLQEZAFoDS/36pMdYKmD3jUtRpt64jQlSX1O4Y
+         v3oxhaEbzcKE7o7CkCNkmPD2s24sltWf/stSNcQRvOKoES3R7Az7D8Q/gGjwgpAQOtlf
+         14dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757346917; x=1757951717;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1757349634; x=1757954434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WAT7IP3Aj8lmfsspplaevmXuWbYqJQOd4MHBix2Zpzc=;
-        b=Hqd47v4toLt6wWKRX3Z4drGn0foIr1ZHS5I+IZSqfLL0t38pqj5/3ZwQh5Y9al1Ou0
-         bUWDFVLSmGD6sUz+4oGZxI/lsLhlm3jv8ETE64QKVD0oE6vbLLXtvUYndyokXykdQgtM
-         e3AJevGRrXHsw+XtNRwzV8/iK04nZ3T0w4RGuYhH7HAyidVAvda44OMRBy7DL6ouFMEK
-         GuPHqiouE0RQNhTb6J8eT00YLybQ/pQ/+Upe2XErdK4+6ROB/gr0xpAITwBazq7qCbSm
-         NqaHl8COx8HdLq3olblwfCRwLpw9ekL9C5nxz/e5ewNYSCFwc71wUIOra9hRwPtPQbOP
-         c0pg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeIMNM5FkqslpHiFHdSxBmLkq6TijG017/EdpV+Rcm0gwTiifO2mAJs+bYXQ2DZXkHh2cdp6HjMgro@vger.kernel.org, AJvYcCVrfKYPWYMaMgwDopPzFlAunGCNilsdfVcZkj0gcPtIWqbPCdWekdpkD7iOYBRw5rg0IZoWmbtCuOuxPcNV@vger.kernel.org, AJvYcCWpiQVEj+nJRnYZWMFfQT8ZfQiFTsI7TQPtZnyWcOUWEaUwH5WwwyNXayUDcNhzLg822/8x7G3IrDGX@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuTV1mlMhtsDZriw2A9rPEW8DBfJSoiIk5XZ97skpRuiWc5lIM
-	q2NgS57nTMJWRcbWY4+9YXapIU2Jmrg6sSQxDYWB+jv/XScpNSAZozaEhd1cig==
-X-Gm-Gg: ASbGnctNw3P2uq0Z3ZlflOmWbp3u03D7rg+7zuNrnRLNs12keq7kp98HoKtzgcA7YC8
-	mZ5e9mqwl1FOjEjNIgwgF/OOGPKxiodnjWZ37NWWPQlExFT8TcdP5MEsDQKWPK0CiW3kFcUHTQC
-	0jDTzEfL/G5LDEAlF2945OIVc/OLDS8h7x10VMqY14BzDwM5hLVBZjJKYTvZTjp5lsV06MyQSpE
-	nXjxbiMYb8jhuAlfVWdmzoCF5a8YCfOkm1znltnUs5UPNTPAA1e2NCYWWtpf+fNTPk5fJZSSJzW
-	q7fYhQuCe0tWXWvEkvquOYWrN+eHI0TnDYLJoeQLTSClT5c2dD7brKBdNFhrOf2vNJ31Njhsuef
-	H7RFkzILRHfzse2AGzkFoWEDB
-X-Google-Smtp-Source: AGHT+IEU6/2ktGSN3/hiJSBaiBQfW5iQc95a6us4J8frgTvsq+kCw1hGeGVonnCNT/tQOw+ETZ3BeA==
-X-Received: by 2002:a05:6102:3709:b0:524:51e6:4bf2 with SMTP id ada2fe7eead31-53d0e48f315mr2188733137.15.1757346916767;
-        Mon, 08 Sep 2025 08:55:16 -0700 (PDT)
-Received: from [192.168.100.70] ([2800:bf0:82:3d2:875c:6c76:e06b:3095])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-89601b67070sm8689299241.20.2025.09.08.08.55.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 08:55:16 -0700 (PDT)
-From: Kurt Borja <kuurtb@gmail.com>
-Date: Mon, 08 Sep 2025 10:54:52 -0500
-Subject: [PATCH v4 4/4] hwmon: (sht21) Add devicetree support
+        bh=4tli/DLcsxmXCGIe+l+WvG/LlQXb+bYfU9YziR7TveI=;
+        b=RYzCWwc6O0Bz78JVOi2E9bjGzNeo2aAh1lDV2u6VC1pP1H1OMyox8g6OXR4lhKfh+X
+         PP2gXJOjaXggozEdQLnEMDaxHt4qOzQ41vWQSa5aNalN3wne8vD7IzXqibZ/B5tpWDpc
+         z0BmPI1FF/DtunO+8hI0HrZ//dtXpJXtgi87gMqsLJ9mao6kgqDdDKAdU6zSeCpndCYr
+         twWqisGP+0pZyCDrgDCX1lRtDpGVbBw1J1u/9RqbfxO9Dyz5y4kOmV3yjgEPwHi+R9ww
+         o8sZqEun5PNqVhmc4uwvE1mi3rMnOqzug/Teinb2ztQjxhOZYpGcHJOzOJvFtsXWVdF2
+         b2yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUORLibodpzbmHH3BkGd8w+ck5TOnvq877Nebayl2601hnBiW1ANLnqMRNZUsSpGZ0cGufzMQIvqC+S@vger.kernel.org, AJvYcCVGa+DEfT7UC5ueA5ZsIJqVUHZcr6MZvBJ0VugzXOxZN0YeBjM1M+lPF3sPkD2xmpXUKZgdIj+wjDovM5w=@vger.kernel.org, AJvYcCWHIzc3V3SDqf9anvEDrsKR7o+MCn6xYjTqFPvQGtsRJ2ifD+MC8Zuv51zYvnwfXi0weBNCg/3j8/mOlqtt@vger.kernel.org, AJvYcCWV/r5YjutDuNn6FzsW7DHmd0xIB9XNlcQaBB8vj5JpAEmKm54Kd8B04Uvg6bYLTvAEPcxQwvol@vger.kernel.org, AJvYcCX6BsuwQoPuxWU3V//L6tkK2jCUjUeDeCLoHONmp0aHnYy76vNnSe07AtQAIda40zEDbKspduEegcZL@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyul3cjK52t3Lkse9XqJx7hHHEWet1MF1/ZsAPMd/FvzG1LHS47
+	rTFNxrtOsVgEv55ZFVbLc4qw41ugKtDHEs0Dpbjv0DHg4iL8ylnbjhv70UZiCkIAJx+16n6rEb2
+	/bl5Tl/fjVNzfIERRM1ZL9dgEmUmQx3g2kEQ=
+X-Gm-Gg: ASbGnctdCFeTz7B/1tOfWRFl79oJulEJxjUE015KE36/zAREaBcKyq8nwq+mFdZ4yr7
+	4mgd+NfKFU/xkxDpiazYIe/GPxGXB/GeYJz1JNg47drlJWh2X2LJGsmiCFLFnysmWWqWavnzlCG
+	x2nCvE4+JTjFjndHNEmkmdI87t9Kj4aXurSvCjQ7cCqT/+6lKK5kIfUfISniGOKlpfGiiplbgji
+	DIgoIUJ5LmGTUEJ6Wg=
+X-Google-Smtp-Source: AGHT+IHFdGPvfRdd8A7S2XtWHU05xR82G1l7BaYCFy8bHqp8Uf1KYaTERVRuNwAEl59fhaC3MV2TP8RBsQ7Nq1vspKw=
+X-Received: by 2002:a17:907:3c83:b0:b04:9b10:1977 with SMTP id
+ a640c23a62f3a-b04b16efcd1mr921636366b.57.1757349634326; Mon, 08 Sep 2025
+ 09:40:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250908-sht2x-v4-4-bc15f68af7de@gmail.com>
-References: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
-In-Reply-To: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Kurt Borja <kuurtb@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=977; i=kuurtb@gmail.com;
- h=from:subject:message-id; bh=ZhPPiDNO5yQzArrlGfRKDRUaAE3F5GbV4S+WCBjs9gw=;
- b=owGbwMvMwCUmluBs8WX+lTTG02pJDBn7/kQnTxEpOr/28cJIzx/Wi1Mq+5U+BZ6rurJsrsb2j
- EO30k62dZSyMIhxMciKKbK0Jyz69igq763fgdD7MHNYmUCGMHBxCsBErt9lZGg44nzDuorRWaUz
- 6jmPmb/2ufuPG3//eubcMlXmTbhhwBaG/wFcwluKPe1W133UvGMQ9YPV7++60yHBRmx7p0lvv9P
- 5lBUA
-X-Developer-Key: i=kuurtb@gmail.com; a=openpgp;
- fpr=54D3BE170AEF777983C3C63B57E3B6585920A69A
+References: <20250904-hwmon-tps23861-add-class-restrictions-v3-0-b4e33e6d066c@gmail.com>
+ <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net> <aL5g2JtIpupAeoDz@pengutronix.de>
+In-Reply-To: <aL5g2JtIpupAeoDz@pengutronix.de>
+From: Gregory Fuchedgi <gfuchedgi@gmail.com>
+Date: Mon, 8 Sep 2025 09:39:58 -0700
+X-Gm-Features: Ac12FXzqcbEM0aRhhauxD_6sJMdm_3EFve3NAKfXAQc2Nd47Jib9jboYmOXjeMw
+Message-ID: <CAAcybuvqqKBniV+OtgfCLHJdmZ836FJ3p7ujp3is2B8bxQh4Kw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] hwmon: (tps23861) add class restrictions and
+ semi-auto mode support
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Guenter Roeck <linux@roeck-us.net>
+Cc: Robert Marko <robert.marko@sartura.hr>, Luka Perkov <luka.perkov@sartura.hr>, 
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Kory Maincent <kory.maincent@bootlin.com>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add DT support for sht2x chips.
+On Sun, Sep 7, 2025 at 9:51=E2=80=AFPM Oleksij Rempel <o.rempel@pengutronix=
+.de> wrote:
+>
+> On Sun, Sep 07, 2025 at 09:06:25AM -0700, Guenter Roeck wrote:
+> > +Cc: pse-pd maintainers and netdev mailing list
+> >
+> > On 9/4/25 10:33, Gregory Fuchedgi via B4 Relay wrote:
+> > > This patch series introduces per-port device tree configuration with =
+poe
+> > > class restrictions. Also adds optional reset/shutdown gpios.
+> > >
+> > > Tested with hw poe tester:
+> > >   - Auto mode tested with no per-port DT settings as well as explicit=
+ port
+> > >     DT ti,class=3D4. Tested that no IRQ is required in this case.
+> > >   - Semi-Auto mode with class restricted to 0, 1, 2 or 3. IRQ require=
+d.
+> > >   - Tested current cut-offs in Semi-Auto mode.
+> > >   - On/off by default setting tested for both Auto and Semi-Auto mode=
+s.
+> > >   - Tested fully disabling the ports in DT.
+> > >   - Tested with both reset and ti,ports-shutdown gpios defined, as we=
+ll as
+> > >     with reset only, as well as with neither reset nor shutdown.
+> > >
+> > > Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
+> >
+> > This entire series makes me more and more unhappy. It is not the respon=
+sibility
+> > of the hardware monitoring subsystem to control power. The hardware mon=
+itoring
+> > subsystem is for monitoring, not for control.
+> >
+> > Please consider adding a driver for this chip to the pse-pd subsystem
+> > (drivers/net/pse-pd). As it turns out, that subsystem already supports
+> > tps23881. This is a similar chip which even has a similar register set.
+> >
+> > This driver could then be modified to be an auxiliary driver of that dr=
+iver.
+> > Alternatively, we could drop this driver entirely since the pse-pd subs=
+ystem
+> > registers the chips it supports as regulator which has its own means to=
+ handle
+> > telemetry.
+> Yes, Guenter is right. This driver belongs to the pse-pd framework.
+No disagreement here in principle. However, the current hwmon driver
+already implements power control and exposes it via in*_enable sysfs
+files. I found this a bit odd, but I don't write drivers often.
+My understanding of Guenter's suggestion is that it would require breaking
+this userspace API?
 
-Signed-off-by: Kurt Borja <kuurtb@gmail.com>
----
- drivers/hwmon/sht21.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+From a quick look at the tps23881 datasheet I can see that it is
+similar, however, it is quite different in the context of this patch.
+tps23881 (unlike tps23861) has Port Power Allocation register that can
+limit poe power class. This register can be set prior to
+detection/classification. So the extra complexity of an interrupt
+handler that decides whether to enable the power may not be required.
 
-diff --git a/drivers/hwmon/sht21.c b/drivers/hwmon/sht21.c
-index 97d71e3361e9d7f0512880149ba6479601b2fc0c..627d35070a420ab9e51634bdc5cf5e3de3853326 100644
---- a/drivers/hwmon/sht21.c
-+++ b/drivers/hwmon/sht21.c
-@@ -282,8 +282,19 @@ static const struct i2c_device_id sht21_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, sht21_id);
- 
-+static const struct of_device_id sht21_of_match[] = {
-+	{ .compatible = "sensirion,sht20" },
-+	{ .compatible = "sensirion,sht21" },
-+	{ .compatible = "sensirion,sht25" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, sht21_of_match);
-+
- static struct i2c_driver sht21_driver = {
--	.driver.name = "sht21",
-+	.driver = {
-+		.name = "sht21",
-+		.of_match_table = sht21_of_match,
-+	},
- 	.probe       = sht21_probe,
- 	.id_table    = sht21_id,
- };
-
--- 
-2.51.0
-
+Perhaps it still makes sense to merge these drivers, but I don't have
+time or hardware to do it at the moment.
