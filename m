@@ -1,95 +1,63 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482F827B346;
-	Mon,  8 Sep 2025 19:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECDF4502F;
+	Tue,  9 Sep 2025 07:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757359367; cv=none; b=Lp8fhzlrDNg1vQGiZVbGYf719j7xeP2YOKeJ03r4ZFFZ3mRwvRSTu6rwlfvuA/4mBPRISHy+5hFo9o9rkAqmAuMKfwkUJJ9+e8ptc2KhEAY0FaJA/WbCHXeGEo1I9hS9iQL6N5/AY3m/cLTLripMS2jVLrCpcrMZkSPZ3oqugfw=
+	t=1757401338; cv=none; b=al5k4sHg5psfPKExQPTzP7jDfJ3+E4QcyLkLSliMum/CdyZRSec70KPrvlm0tQ90/pus/z3hCImqYSN/L2tH2Rrmk8acrxCcCjxBoecv39MZpGgWSJoYG1z1Z5iQTMBs/5wY4xbk6p3CTGnkqMO5O5NOf6RO9d1wzmvKmABxxwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757359367; c=relaxed/simple;
-	bh=i+1gUo25QAYIkAtfs1W2WQ2KPPxBtZ8s34Kqlmu5qY0=;
+	s=arc-20240116; t=1757401338; c=relaxed/simple;
+	bh=5QP+87wCopFmi0E8qS5WVGvTBLtWeZR97Fut0wLf0VE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GqW64e78XzvbbqIOHkA2CNev973ddeySSHJtcOtbj0b9D1qalD2OL+/lMQQcHwElOzdaz3/YWC3f7R/ZNaZswuJLkUnZ1x0YIFl5nPCeaTrZu4jLc9O6p7IHskETCRri6CzI0DRF17DAVx/VaYk3vWi/ZJNN/PjGP1SIewzOFCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZG1Rn05; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=UHAmsGNUgp70ntw2Lj4lDy6MwmgaOaNG+3HlPC75W1tMABUd44uVF/5iU46fPhx5NbBde5pi11RJb/s2pU5ySHYLWDor/E2xu1ZQ5oGjAya0h8/1+9pydqBzOFfumIQOfq9th/MaFHQiRt029FgfnhkuuEb7ti22GebD02RgXn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6NXU3u3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZG1Rn05"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-24cbd9d9f09so63724355ad.2;
-        Mon, 08 Sep 2025 12:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757359365; x=1757964165; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KI3ctfrnvQONdgPkMOEdiajuJBRA6f0TmNsZjTS3ges=;
-        b=IZG1Rn05rNvGYX7jDGF3fPxit0MyMidjhjdX9eGYZngPXan7UwXygl3BnB5Z0LNkJ2
-         Ju7XhWppjO6goo5QYAY1u6Ge6G5QUMAF6IhqAsKq7lFgWJ4GSFzO/0CQo4/+78Amd5Ah
-         3wciixa+t9VIiLSI3RVkLfF8FkUuz3IsiXBdLdH+RakQ8IqLokmuOMsWL2sz6uG/5s72
-         5gKw0jRbBBxfW84omMeFGYlPjKB1fsj6YYsk48EQPyBmPpbEuh3TNUgxFuXE6NL2Iyga
-         j5RoZSnek5tVgMy/v5z9+0aX9gVj9gepgAPxGcD3v4oAMIVEYkqCFWnfle12Z9n3GKBP
-         yxuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757359365; x=1757964165;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KI3ctfrnvQONdgPkMOEdiajuJBRA6f0TmNsZjTS3ges=;
-        b=eb/u0d5Sxv/D5ueleJg0XdOE0CFWEZbXaQJ6Jywfaj1m7nOKll/pzLM/ALrR1j2C1s
-         PUVA9d3vR9g4ydagiwlPQajzJylAWXwqeooFbkZPCierbFWs4BLMCwi4eXZiW4P0ylSy
-         eakjlJqtM5auGqbH3nxpm2OIzgCCeCgAInt8/lcMwn0UqMgJ+I+W8F6WXt3PqJGVH3Fp
-         3ZZqXlvlDdDhpSP8v2uoAvP3hozUzIx9YVZj9UMGtP9DwDJBawj4XhyWr5CI26vCofZe
-         tWCOmaE3uYlNiZYQp03+kf3inXVVBkdNRiA598wikhCR9gnRdyEdBHMSJyVJ4KnQcK2M
-         mwYg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5+mnkkiEdNst9r3myd6VqD15v+rAFuvyZRPR18zIPtunlPfPYE0J4xJwK5qSRDGqB9sxDvV4nPiA=@vger.kernel.org, AJvYcCXGl/MmQ+aqvvcRIuKSXJSkKR4WHSwKR5u20u5dgTaXFW/t9JAagngQMW5EUQizKURsaK5iBmzaLkWbFBY=@vger.kernel.org, AJvYcCXaHHzDyRp4LYl7klWoNevaustxwXrlsc+4lGWq7MYI0qZN+Hwm3qnsfMJD9pvWb0SL6aerqxgu6nThZbOB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBe+WtrkA7Jj5qI5BvbGS0tW0N4/mJk6xeAUdQy4cRTX+hKKew
-	ukB6nfwuGDT7BtI7vrg5n/hoTgC0Fp++PDSUdduJIVcd/6Bq6OOP980k
-X-Gm-Gg: ASbGncvsuir8co0usjPlEZLdYtebmVgSXTJ9CvnFdwGbF0kteTJyAMybVa4V6dmMIEP
-	4NUqYP+FPULV8BdXd3zDZH+sJRqxUJw/FsjDAV+953ebVKJyB2e2wS3eEbTs8iRAodPqP+LBHVy
-	mRkXhWRm8fLiu5ycbdfcn9aDdtEX7edmi5Q8EM3NuudR6u1oC+RVD4ut2H0sfTWoUmnYCwwG7Qv
-	tun8NZNOi5ol++rIZP78IAivD2dWvv4M/M4uSQLe5/J5I7oKi2m41qnkIv+N56AIOwVdpl7tCRL
-	FrJttI1rKPeedafO9fi+632TF7WNdgMavLGbEmsJpWuoWd5J1Iz8RjGelzrAkAZTvCLDxCzdVo2
-	7YOo8dHyq+tHzeSWnzTphFsSopt/twmG2mfw=
-X-Google-Smtp-Source: AGHT+IEU8PhPJvzL2pWcwLiCOwam9XZADE3q6DHHuzAzvf84V/Nt+nrocAE4ZERNPUAaKkMr7KT4uQ==
-X-Received: by 2002:a17:902:ce89:b0:251:493c:43e6 with SMTP id d9443c01a7336-2516ef57cd4mr108047555ad.10.1757359365511;
-        Mon, 08 Sep 2025 12:22:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24b1f7492d8sm177011875ad.129.2025.09.08.12.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Sep 2025 12:22:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Sep 2025 12:22:44 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Cryolitia PukNgae <cryolitia@uniontech.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
-	Yao Zi <ziyao@disroot.org>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	Jun Zhan <zhanjun@uniontech.com>,
-	Cheng Nie <niecheng1@uniontech.com>
-Subject: Re: [PATCH v9 2/2] hwmon: document: add gpd-fan
-Message-ID: <ab050d0d-595e-4b8e-8868-684886255c88@roeck-us.net>
-References: <20250908-gpd_fan-v9-0-7b4506c03953@uniontech.com>
- <20250908-gpd_fan-v9-2-7b4506c03953@uniontech.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6NXU3u3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F22C4CEF4;
+	Tue,  9 Sep 2025 07:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757401335;
+	bh=5QP+87wCopFmi0E8qS5WVGvTBLtWeZR97Fut0wLf0VE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=K6NXU3u3bDBoEcCuRhjhzVFkrrFif0wJgPsLshHAPw0LB2HNqMlM35Tk6c6xnJraW
+	 JKmUwh6EAMYpXBfFSQIJFil7fbYpU7oFhDUkQ5H6/YSpSybTyH/epUwpHg5T29XoWL
+	 x2w+D05QCW5QmcDEZnrjXjd18Scb7gtZ1S8QSDz408SQ310qS+icV9LuqGtfFQlyjs
+	 o0zRJNtqri98uOd8cCD2mc+O79cFHeRcHOp8wWTjBTydKJI8aFi4gkoxhjcHjtbRyX
+	 4TgelTKJ7H5vn2aosyGDVIE0QPLmJ9BOvW8z22KI2ZVD3IXyjM3951eoIblsTzVOT2
+	 31m9JvB6wPkTA==
+Date: Tue, 9 Sep 2025 09:02:12 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Kurt Borja <kuurtb@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Jonathan Corbet <corbet@lwn.net>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: trivial-devices: Add sht2x sensors
+Message-ID: <20250909-bulky-mottled-perch-b62334@kuoka>
+References: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
+ <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250908-gpd_fan-v9-2-7b4506c03953@uniontech.com>
+In-Reply-To: <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
 
-On Mon, Sep 08, 2025 at 10:25:45AM +0800, Cryolitia PukNgae wrote:
-> From: Cryolitia PukNgae <cryolitia@uniontech.com>
+On Mon, Sep 08, 2025 at 10:54:51AM -0500, Kurt Borja wrote:
+> Add sensirion,sht2x trivial sensors.
 > 
-> Add GPD fan driver document
-> 
-> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Applied.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Guenter
+Best regards,
+Krzysztof
+
