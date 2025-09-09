@@ -1,63 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BED02E0B42;
-	Tue,  9 Sep 2025 07:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A3C1A262A;
+	Tue,  9 Sep 2025 08:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757402796; cv=none; b=cXSfBHj1oJ54dmLGdoVePq6NGl6sQ0RfXRgcJXaDZAq9nMxF/oR1TAeTVNzOZtDuWNRBcFJHw8mMt44yLwR/wQIUrwJhvm0s8ehm1qrSeo4BnrIpSd8hPQ58M8FINVd56kP23kzWVANC2t2NkPfGPMxeStVpKH220hVvj0RFFHU=
+	t=1757404991; cv=none; b=Qz3tE6shMFhBYNFL9cmn93V5QOKkkwqtFu5QjEztiNaMKC7j9Ib0Dao+HH53V7yg5cuUPYI9ILWbmQqdotjXvfbpdIQoye/YpcarICLq48/cykjtQKc7pqkSqxQ8zVhSdVriy9DAxUL+Dk9eQKBgK9PEX9+QMs6XpzEadBlvZkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757402796; c=relaxed/simple;
-	bh=FMl6MnUPt+s8U0LXr7EhD2Ld5pDpbdU6vJhSdd7wEQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNeX01hgkCl//U2D6YToASdiegxm/urhdTnwS9Z++H5seYwTBk610mg04xkRl4SI6zCofDMJLmLmYeqW1MasnbSQWyhn5/dltovONBQJu/1PTZn0ScLa/ds7etS9cSKcrq9940uABZhWjDZ0quqV75P9d0n6/v27hwNv7HIj/9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vPagon1Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1757404991; c=relaxed/simple;
+	bh=ZLGUpI+Wdo34rg5qSS9psPdxKAfzinKVPb6v9e0+ybc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Vd0OTBmrx/G47VM4PcdSj38LDoIKrHxSSxpLjQMSSP8OVCL1+3yo2Z52wzzf7RVb3bbFKNSJaXqOk/vP0dxxJrGWBW3tx8+Uj/5kmVTW1j9wRqmogEuyfA5g4Ah9qsd+9Eug+NcSmN71NgAu1yoA5ihKIQebAFi3PD3Y9kvOtew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=SNbUNCEc; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vPagon1Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCFFC4CEF4;
-	Tue,  9 Sep 2025 07:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757402796;
-	bh=FMl6MnUPt+s8U0LXr7EhD2Ld5pDpbdU6vJhSdd7wEQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vPagon1YevxSBPrSalRM7pOIlWc5W3EWrnS40R18g96kVaG5lCE0H8Adxz2oHIl6d
-	 kTAQJmaZjMqgwtHfusSPLYwcjLC1v+W28Lya/b+9bDmKflStPzO+ZieQo5sytZQdkk
-	 RSj1uEcjDWEY1Gr18yLMyyhWwIlnP0jmVmQSzL4EgQOnXAf6an47qPqqdyfaDOmIC8
-	 asPPFuKHk7sPDFrfMZFCgUFJRI7FsWg09ymtph33mwM7lPee/yab1Pall69Ys0Z7Kw
-	 YS5MJO12fv7izeLN7jorC5w/+6LZfG3zmnXgVOOff/gpddKdcMMUjYAX5VisOHPvWx
-	 fkNvJg7x7XqwQ==
-Date: Tue, 9 Sep 2025 09:26:33 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: wenswang@yeah.net
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add MPS mp2925 and mp2929
-Message-ID: <20250909-blazing-green-bullfinch-4bd454@kuoka>
-References: <20250908105951.1002332-1-wenswang@yeah.net>
- <20250908110128.1002655-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="SNbUNCEc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=KX17V2NjcwJJ6NiVlViLAU+7MVjS3l7fc1IXv5WS+xY=; b=SNbUNCEcw0MGhSRr27lg4we1lp
+	U12IEUlvN14FdUwWejSyYgbdxAoRRm0d8sQHKL4mosEnCRbbNzYZU1Vhg8o4eg9UEE+5TMiw4xeyo
+	N7HHcWl75nh3Dsqpi1ScI1iVqMbTWwwVjbBt3IFPd223fsDHzSOw8l2Lxumi0MrbijJUWt6L19FOd
+	5MN5avbmav+CjxJIFjtqWhQpRVqgh52o8AeUZK27wJO7aiw0dSshn2IMdnk3TVN5Xnhbc+DJHN21n
+	XQpk8YsTk4FbyxCneL7moCAFQC/sZITH3iHkRwwTOyq0PZCWuvDed+tsLmyZ4sh2cwwf11IR5SJSp
+	4kZumm2Q==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v2] hwmon: sy7636a: add alias
+Date: Tue,  9 Sep 2025 10:02:49 +0200
+Message-Id: <20250909080249.30656-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250908110128.1002655-1-wenswang@yeah.net>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 08, 2025 at 07:01:27PM +0800, wenswang@yeah.net wrote:
-> From: Wensheng Wang <wenswang@yeah.net>
-> 
-> Add support for MPS mp2925 and mp2929 controller.
-> 
-> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+Add module alias to have it autoloaded.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+Changes in v2:
+ use macro instead of device table
 
-Best regards,
-Krzysztof
+ drivers/hwmon/sy7636a-hwmon.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+index ed110884786b4..a12fc0ce70e76 100644
+--- a/drivers/hwmon/sy7636a-hwmon.c
++++ b/drivers/hwmon/sy7636a-hwmon.c
+@@ -104,3 +104,4 @@ module_platform_driver(sy7636a_sensor_driver);
+ 
+ MODULE_DESCRIPTION("SY7636A sensor driver");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:sy7636a-temperature");
+-- 
+2.39.5
 
