@@ -1,103 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE2532253D;
-	Tue,  9 Sep 2025 11:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708E0258CDC;
+	Tue,  9 Sep 2025 12:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757417563; cv=none; b=af6pKhfmp9GEhHtLDjg6hGJ3GF7MRkv8KKULX/BzlgzuYtWPb/r81fIYGxdMTyZDzu7VVWshBKtq6Tn/2CECcNhsAUD8JeQ2dwdteCMO/ABKSde38XAHeJxZMRDd5tGsTT5tIr7mKFQ4PodObADQxEv39XvTKgAEm8IRN8CCuZg=
+	t=1757420757; cv=none; b=D2a2M1k8f1LPTOQeyjOiW5rDzIE7dBl0oNySkAXujS5p/gwm1zxva7Q8Id621LvZ4oP6qynYO5aXupGQR87eDts5k2nOhtoPsT4FJYyV5BAo9KayWBiX7wnhOXC/MatAc57kG+2WFGZgwGNbMrrC7LjHmTaiYfJ7uwhm4hPZkqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757417563; c=relaxed/simple;
-	bh=DskNimhErckgqKJIOEd74jaeB9pesORcOsQFq2LivMo=;
+	s=arc-20240116; t=1757420757; c=relaxed/simple;
+	bh=SNdGNyWh7kfEGKcOhsoNoL3IUtByr8pXyLVobokUrgg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pLM6AspXW/EqEWX3/oas5vJXIjOK/OBfHHI2aLAW64cczKdCuJwIDFn5D48/6lHK3C7oMnz8j7s9qZdi58nggkpqCI6W88Lr/JJyRJo3TOfMgPIXrrTtjsWa7wmiT4YH/DNX+XaLdF6hL8R7vbvEiZ0SHK1DsbVPtXy+nBhd+/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OjZAaN7z; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uiDML45LhYU+f9pf6p7tXbhOVd2VUUOurD43YeCXdx+guHdTlYJ6gPQpfueRYx82yrTYrczRvvV4QDDnx9HN2iG9FFwKywqu4I4LyoaQx39GiYLCRxfsgfsX1EsO5M/dUjTwhCd/TyIqBSc01kk+JxS/B6/YQIlB0K59je+IgtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUEUDF/9; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OjZAaN7z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757417562; x=1788953562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=DskNimhErckgqKJIOEd74jaeB9pesORcOsQFq2LivMo=;
-  b=OjZAaN7z/Rq2G0atAcO+s/RCa8KeogEk+ne3VtHvx4+KuW10Je8rhVRM
-   jhVkzvKFA0wVxMJBUnV7c9ArXXTEJuVItbk6nEd134FZlsVDQj/5k41Wh
-   6tmLG5Yw2xxobgVqiY1STV2tZik1jlR5hMgUkZqRQuVBZ4gBKyMXfP37D
-   BWUFLsoJEvaEW6ja8yebT6n3nLllCb7P+9kNjTxYwdCEUTjYx8zKWJUdQ
-   4bDfkBotHzZGQ0SYLFivN6ywrS0UMq+hsLaKk6tKFj6cyeNE48PF0md/Q
-   Te2/bfeBULfrJDxm3to69ZKOQ6/YgxzdpNJmViVyuz1nDHMI0GrBWSPlg
-   A==;
-X-CSE-ConnectionGUID: UbuHgjFPQmauGo/Mo1kMhQ==
-X-CSE-MsgGUID: L6wm8rxSSRi0sN4KWyZwNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11547"; a="59769635"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="59769635"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 04:32:41 -0700
-X-CSE-ConnectionGUID: 3D8SgYoeQnqGeA79nXWd7w==
-X-CSE-MsgGUID: gsOSROqPRsOWaIXTHWJcbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="172330535"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 04:32:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1uvwaQ-00000001QN2-0Lqh;
-	Tue, 09 Sep 2025 14:32:34 +0300
-Date: Tue, 9 Sep 2025 14:32:33 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUEUDF/9"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24458272c00so62796045ad.3;
+        Tue, 09 Sep 2025 05:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757420755; x=1758025555; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wo5WqI55ESBi7gI3oZgXmx452TCDsTLZ+NeN6clGyvI=;
+        b=UUEUDF/9ptrLpr6mTCyTm6hwzMX94CrGAEIewVonlaoNQy0PTSAv6q4rMqym9HtI5o
+         j4QnZHLdlvRMV9bdHM3jWbZEvnqWbh/N7Dm0SL9PXDWloxGx5LKiqsXT8mYYr2OThRGJ
+         W8OV+pcVy85FuB4WYkzr+fYbP1GBQxnuEIG4GvZNspYvWTMHQOEsbgq4IwvrCtt76N3O
+         ksjlb4g60lj3IV17LZ/4GhxtBAIt4ortP7vnXsI2YZm2GDHHn7olPGZ4JQVkkrV1mEmh
+         CMKJqBVJDB6mA1NzqJS9p6KgT95f3nIjgoZkr/P4lzh45HMwuOZbLVSYEJwMPGCP26Os
+         rwQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757420755; x=1758025555;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wo5WqI55ESBi7gI3oZgXmx452TCDsTLZ+NeN6clGyvI=;
+        b=IN8JxVw76sSiZ1bmcVDVEmS24V/41z37x8EssIamyWLhN7s66NRDc+sOoayttdmAec
+         2E1U27Yht6rH1weGmhY9Gdn19RPNcWo8AQJ3e0KFSKgQtER8kJ8tU2qQKc1JDOiJUOry
+         1dHFFG+E++DOCLUcEXfBvjYOgse/hOuko6/w89W8pHin0bssXMHT5izXzOqIBJENXwF2
+         Jzs1Ng4Q64k3wgh8wVatvI7DH8UP9mKuARQvpNKOcXkb9L962US5BaYMo7ZfH0sizQkV
+         kcs9rwIySCmyC7eag9BmNWre3VEeD79hX5HWK4dFjAvegVVWW/kGNCY9eoBomQdenM3/
+         YXVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfjeN718iyyxoNdtkOwcxOY7KEkwC5swSSb4bbjtgYyhhvtedEzHHjAgrXkDCyReeKTWBonKKbI6kT+aI=@vger.kernel.org, AJvYcCUgryKW+8NldImhUxjrEHm7swqFDHltBtj/UO3EiaF7AYTntkIWbgqnkNaybrf9jY6VlxsJQG60Yh1v@vger.kernel.org, AJvYcCUqLS7NDLPxpU4ExTBerJF2l9KJ745thZmsQAWBpO0hf9Gq6gyrDLaANsBHnvBPyk2xoZQlw6qxQ6RjXpAg@vger.kernel.org, AJvYcCVobqmz8z++qTM3+XW+qufotp3RDUqX0tebdB7glsc1w8bfM3w1cSO3TNNBs1GtLM2NrxZIsGSJMOb9@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyo+vZf4trjj7PhybIQOCgSREDFCwwNUkUqbPIsIbz0jrBgPBXG
+	YpREmPlzL1428uP28oQ79xgGHy/EL4oIRMEDMhgVWUzy2sYEh/23gjFn
+X-Gm-Gg: ASbGncvL0fnBbfU7H4JiAmavNaTB+nX06zlsy54avr8BCGBT+dXqu8zL912bMuylA23
+	Fz6kZopYD2yCGwH/h9rHZ4WoiGyoYivCzkPjR6LxU+M/XOSpJjsxV67JIviBda3X4euD7lazKhG
+	HZCPo81JUdFA/YhJohklX8pxQgHAeCHY1Isyr7DI+UgcKkqFQR9LnkmpEN07Mz28M+2aXRjqJvQ
+	2ruTVF0c+CWWXQQxgEQu2a8aOIk2aZU2xY2MAx9LyUN/8XuoRgXl0Yp7zc2pKUhuSa07Ic9G2vD
+	sk1GC8gOBkqkdbZB90LdIJy3xbJ/+cHZJz1dltaB2Nkp/Iz05Jju3X1L5O99QNsHr2TN/d5ON1L
+	7BZinrFuqA78yJGUk0KIChHcG9ygYSqK2M86zq8+5tOEtLQ==
+X-Google-Smtp-Source: AGHT+IHJs/MEPuIo3jzVF/OWKOd4P8099tRniR/rHouNz9fNcABxouo0ssy0F/yBSff3+LaHG4xFdw==
+X-Received: by 2002:a17:902:ea03:b0:24a:ceea:b96f with SMTP id d9443c01a7336-2516ec6e834mr156519765ad.24.1757420754653;
+        Tue, 09 Sep 2025 05:25:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24cb28e33d7sm155915035ad.89.2025.09.09.05.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 05:25:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 9 Sep 2025 05:25:52 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Kurt Borja <kuurtb@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v2 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
- Swap Controller
-Message-ID: <aMAQUS0wFakYoB0N@smile.fi.intel.com>
-References: <20250903-ltc4283-support-v2-0-6bce091510bf@analog.com>
- <20250903-ltc4283-support-v2-3-6bce091510bf@analog.com>
- <aLgl_9X0_2082SkH@black.igk.intel.com>
- <4123c67509c54e78b5a24d2704e4bb2b0a07d585.camel@gmail.com>
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: trivial-devices: Add sht2x sensors
+Message-ID: <58e111ea-508c-4042-9ae4-d4293871e73f@roeck-us.net>
+References: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
+ <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4123c67509c54e78b5a24d2704e4bb2b0a07d585.camel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
 
-On Tue, Sep 09, 2025 at 11:27:09AM +0100, Nuno Sá wrote:
-> On Wed, 2025-09-03 at 13:26 +0200, Andy Shevchenko wrote:
-> > On Wed, Sep 03, 2025 at 11:05:01AM +0100, Nuno Sá wrote:
-
-...
-
-> > > +/* Non-constant mask variant of FIELD_GET() and FIELD_PREP() */
-> > > +#define field_get(_mask, _reg)	(((_reg) & (_mask)) >> (ffs(_mask) - 1))
-> > > +#define field_prep(_mask, _val)	(((_val) << (ffs(_mask) - 1)) &
-> > > (_mask))
+On Mon, Sep 08, 2025 at 10:54:51AM -0500, Kurt Borja wrote:
+> Add sensirion,sht2x trivial sensors.
 > 
-> Kind of agree and I remember to see some work some time ago regarding this but
-> it seems it did not get anywhere. 
+> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Just include a patch in your series. Let's see if CI and build bots blown from this.
+Applied.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Guenter
