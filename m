@@ -1,43 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECDF4502F;
-	Tue,  9 Sep 2025 07:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BED02E0B42;
+	Tue,  9 Sep 2025 07:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757401338; cv=none; b=al5k4sHg5psfPKExQPTzP7jDfJ3+E4QcyLkLSliMum/CdyZRSec70KPrvlm0tQ90/pus/z3hCImqYSN/L2tH2Rrmk8acrxCcCjxBoecv39MZpGgWSJoYG1z1Z5iQTMBs/5wY4xbk6p3CTGnkqMO5O5NOf6RO9d1wzmvKmABxxwg=
+	t=1757402796; cv=none; b=cXSfBHj1oJ54dmLGdoVePq6NGl6sQ0RfXRgcJXaDZAq9nMxF/oR1TAeTVNzOZtDuWNRBcFJHw8mMt44yLwR/wQIUrwJhvm0s8ehm1qrSeo4BnrIpSd8hPQ58M8FINVd56kP23kzWVANC2t2NkPfGPMxeStVpKH220hVvj0RFFHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757401338; c=relaxed/simple;
-	bh=5QP+87wCopFmi0E8qS5WVGvTBLtWeZR97Fut0wLf0VE=;
+	s=arc-20240116; t=1757402796; c=relaxed/simple;
+	bh=FMl6MnUPt+s8U0LXr7EhD2Ld5pDpbdU6vJhSdd7wEQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UHAmsGNUgp70ntw2Lj4lDy6MwmgaOaNG+3HlPC75W1tMABUd44uVF/5iU46fPhx5NbBde5pi11RJb/s2pU5ySHYLWDor/E2xu1ZQ5oGjAya0h8/1+9pydqBzOFfumIQOfq9th/MaFHQiRt029FgfnhkuuEb7ti22GebD02RgXn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6NXU3u3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=pNeX01hgkCl//U2D6YToASdiegxm/urhdTnwS9Z++H5seYwTBk610mg04xkRl4SI6zCofDMJLmLmYeqW1MasnbSQWyhn5/dltovONBQJu/1PTZn0ScLa/ds7etS9cSKcrq9940uABZhWjDZ0quqV75P9d0n6/v27hwNv7HIj/9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vPagon1Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6NXU3u3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F22C4CEF4;
-	Tue,  9 Sep 2025 07:02:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vPagon1Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCFFC4CEF4;
+	Tue,  9 Sep 2025 07:26:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757401335;
-	bh=5QP+87wCopFmi0E8qS5WVGvTBLtWeZR97Fut0wLf0VE=;
+	s=k20201202; t=1757402796;
+	bh=FMl6MnUPt+s8U0LXr7EhD2Ld5pDpbdU6vJhSdd7wEQE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K6NXU3u3bDBoEcCuRhjhzVFkrrFif0wJgPsLshHAPw0LB2HNqMlM35Tk6c6xnJraW
-	 JKmUwh6EAMYpXBfFSQIJFil7fbYpU7oFhDUkQ5H6/YSpSybTyH/epUwpHg5T29XoWL
-	 x2w+D05QCW5QmcDEZnrjXjd18Scb7gtZ1S8QSDz408SQ310qS+icV9LuqGtfFQlyjs
-	 o0zRJNtqri98uOd8cCD2mc+O79cFHeRcHOp8wWTjBTydKJI8aFi4gkoxhjcHjtbRyX
-	 4TgelTKJ7H5vn2aosyGDVIE0QPLmJ9BOvW8z22KI2ZVD3IXyjM3951eoIblsTzVOT2
-	 31m9JvB6wPkTA==
-Date: Tue, 9 Sep 2025 09:02:12 +0200
+	b=vPagon1YevxSBPrSalRM7pOIlWc5W3EWrnS40R18g96kVaG5lCE0H8Adxz2oHIl6d
+	 kTAQJmaZjMqgwtHfusSPLYwcjLC1v+W28Lya/b+9bDmKflStPzO+ZieQo5sytZQdkk
+	 RSj1uEcjDWEY1Gr18yLMyyhWwIlnP0jmVmQSzL4EgQOnXAf6an47qPqqdyfaDOmIC8
+	 asPPFuKHk7sPDFrfMZFCgUFJRI7FsWg09ymtph33mwM7lPee/yab1Pall69Ys0Z7Kw
+	 YS5MJO12fv7izeLN7jorC5w/+6LZfG3zmnXgVOOff/gpddKdcMMUjYAX5VisOHPvWx
+	 fkNvJg7x7XqwQ==
+Date: Tue, 9 Sep 2025 09:26:33 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kurt Borja <kuurtb@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Jonathan Corbet <corbet@lwn.net>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: trivial-devices: Add sht2x sensors
-Message-ID: <20250909-bulky-mottled-perch-b62334@kuoka>
-References: <20250908-sht2x-v4-0-bc15f68af7de@gmail.com>
- <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
+To: wenswang@yeah.net
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add MPS mp2925 and mp2929
+Message-ID: <20250909-blazing-green-bullfinch-4bd454@kuoka>
+References: <20250908105951.1002332-1-wenswang@yeah.net>
+ <20250908110128.1002655-1-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -46,15 +44,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250908-sht2x-v4-3-bc15f68af7de@gmail.com>
+In-Reply-To: <20250908110128.1002655-1-wenswang@yeah.net>
 
-On Mon, Sep 08, 2025 at 10:54:51AM -0500, Kurt Borja wrote:
-> Add sensirion,sht2x trivial sensors.
+On Mon, Sep 08, 2025 at 07:01:27PM +0800, wenswang@yeah.net wrote:
+> From: Wensheng Wang <wenswang@yeah.net>
 > 
-> Signed-off-by: Kurt Borja <kuurtb@gmail.com>
+> Add support for MPS mp2925 and mp2929 controller.
+> 
+> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
