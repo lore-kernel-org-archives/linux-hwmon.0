@@ -1,178 +1,175 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6F7253951;
-	Wed, 10 Sep 2025 19:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E51C145A05;
+	Thu, 11 Sep 2025 06:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757531513; cv=none; b=BvLOriiFz5JVM5t7TEogwNaLIYl0uaqRCitS+aYq4Q1gqvFWS+HnI6DZxXv7d9DM6+BM3NPVKc4FH81BVcz0S7OhGRo1pPcu2VxP+PpANKOAmkvh+mS+kDEJbUJV4C8ldT/jjry043ZIfSjwv6Iu4zWZtuCi1Z9IxVEA6koeIro=
+	t=1757573799; cv=none; b=WKZYKqMgC1F7vYxy3HX220+x1wtzqF5uryzUrLoATcC06D3/v2wNunm/Wt9vfkGZq8KNNLB0Zh6/J02wF4OnuwuuM5AWycTVZ30Q/mCONivbRXMkg7Dbsu4CTwANduHQms/7dZQnieLXthijvdg5AdNodC68z7UeSGzyu6+DOlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757531513; c=relaxed/simple;
-	bh=KOANke260Y7N8OFgQD8TZ+R34HpsV2NnLbUCOfILchY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CtsEkyoQyqvYRDeChG2mmGd/UFgR28XyRdg/8A7zasOLd4K2s7JXMGPdzpQnI0HwuicNh1rSMmZy/vDdIv/YZbE1N+JkaxCtV0YO7enVmrpN/YpAwIDHAQZQ9d7zB6i/ZqQ/oO2w9ABN0Q1DU1cWPtgcGo4VKup+aZiXbKVSsAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iE0jFgvA; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757573799; c=relaxed/simple;
+	bh=46arA/lH7SdZSTJ5xBxmcsnCS+WGoy0Kg9jo9NDY2A4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=We/IJ5MKo/X9GWyEPsUXyZzTHBOA43dFsjlPEQAPzCrg3oc+WDwZOm6DzP88spn+cbUqDfO0oVRReZnv0e4G+zJOVPfLhrwYUo08wM/1wF9j8RfhuTdr+/x+yguiB1rNpavH/bZeG/aGtmhnEGUeaHnqvqwx/Lh4x1c48l6ch98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jX6jiQ0H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iE0jFgvA"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b04271cfc3eso943966366b.3;
-        Wed, 10 Sep 2025 12:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757531509; x=1758136309; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uNWe951fEznrVHG6mxzWqLu6O942IWo0SOgA3l0YSpM=;
-        b=iE0jFgvAPYgr1Dtp2r5lf+wA1ge2xT849TWhhkbWgggGJj94USQqJ8GaSKYs/Aspuf
-         L+l7FohEewZrWqDe7JfoJWH20K2Gg9QP6th3ZIBdtE1LzIBfLPJbMHYsK1iNZXJ7wboc
-         /wpHfxC2QzSfpxQl5RfGceE5mlEliGlceQfSZVGLh7VPXDG1XBnVoW5U9pOZj+Zleqt2
-         0qC6eRDkqBPCEm4jgeyJPyn29YmO2EeDLjmm5YZKnJySrNw9koCqq/aurjba25gDo7fg
-         +dXkdzDhmyv1Z0n4mcRTAeU65/OnRVVohuVqd+zBpntkET1sHAxdGvIW2Bi0lAwBQ0Av
-         SIgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757531509; x=1758136309;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uNWe951fEznrVHG6mxzWqLu6O942IWo0SOgA3l0YSpM=;
-        b=mTCXiHdG+Vn2ajEYc+pGe4uCP+AsXYrl5FyWtNT/Ozpwf04pG4M5fOhgaZJCEklDb/
-         Fo/hlCKSL0CoLujNsQ78+fboKGqh9a5V7ma2MJxnmVvEYCXX4RMmumEFpYWIWXaw0xl4
-         RgV6FYAXZqzpVhy56/2RTSRUkko1HL2OcuiRNQetk5MGDuHeZIuOaWD9Eb+/Sy1SKnMM
-         4TFiw+XQJ6n/b49g/VPt/BDwzBXBgjzYvFXe6NxTuONY9ieKYKENwYaHxg5yvCEz7sWA
-         //Eu7zc9BtT256DwOw5VO4untcYxNjJbkNHwHuhe9K4ckrMKZ6hs4+tINb6mRWD4Ebhw
-         IrTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEVUQMPFwOWfQAQ6JsrPa7lx6PB98IgESYoNr8KcpvSmBBc2xHuguLDGPVqmBrGbocDqvsBv1T+gDh@vger.kernel.org, AJvYcCVQ7buJNr++GLFYX8/opHTlU6sXWfzHylfW22vLv5zbXukwU3FdYVUodO2P2A9jK72lyuZcWqAQ5o4ZyWk=@vger.kernel.org, AJvYcCVj+xM+4IbmmZ7BOpKhtzBdW0kIe7lcYCIsTHvgkuh4/cB9kCpknycWH7IrJgHeX5kKQSWr796x3REi@vger.kernel.org, AJvYcCVyWBuMa2FbkIqPOnMI5ow4dW1Q+m4F5quiP+gSh+5HfbwnWb6xl4CbAmvSLW2/b5Q13lis9lOQcvWANS8+@vger.kernel.org, AJvYcCWC5tabUBdFAK1R7/zn+pDXglCFb4ZJFn8SOB2wEWh+wEtAWFLYkE05KmycK9t0DKrQ+XziSQYH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyxe1+iGlDW4+fWmfjLiZhH4B197cEVEuxPRZioERx2xSAcKPH/
-	tdJiBoGnD++IGgKyknHN2NCslDIXy3BX+imFoU+I2lCiE1an9XymW/W8KWHTky9g6rR08IQbNbm
-	MVIRoJ5yq5PDAfzsf+ET38hxepJIJxg==
-X-Gm-Gg: ASbGncujSS0Ogxgar/BhZzuAi9iLweSXGhW4cwkTHn/mxxM7shnCbmFbFjDRoHG+bv5
-	RzQ7bWM+e0Ty6K84WyF8lYaiaTKDxD21uR3i6m+zqwxrtsc4F4Prd6nb7XeTmnL/tLwwrVIgSGy
-	Hrg47LdaOqdGlb/+16OD6Twir8YgV9asW68CtlnQaiYtJ9FbA1j3aw2rEEwexUHCxV8VhzQbfJP
-	66+/wGxqSxfgAc85CU=
-X-Google-Smtp-Source: AGHT+IH5k2YiwT7SeoDVr7cCV501nWg0Xjh6ykKknruZUH8hPd8Ej4pPkLIOwcC4xwCRJE2syaveBnn49jruM399P9Q=
-X-Received: by 2002:a17:907:a48:b0:afe:87bd:da59 with SMTP id
- a640c23a62f3a-b04b1687ddamr1564443466b.42.1757531509134; Wed, 10 Sep 2025
- 12:11:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jX6jiQ0H"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D62AC4CEF1;
+	Thu, 11 Sep 2025 06:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757573798;
+	bh=46arA/lH7SdZSTJ5xBxmcsnCS+WGoy0Kg9jo9NDY2A4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=jX6jiQ0HN9crosjq+Ay5rxGkn13FbfrZIHJnoR4PSkegHvt3xlIn781XZAWGsgdJ7
+	 Fx1ct7OcBLdXcSA+RgSi60bLyoMF7SwqZvRdTDL3t52P8Zt7y70lPhQ8zPhcwYfJ+g
+	 lppWW1kKhQ4Xj5Nm6UqCLrkXwaR5oHIIIxGabamNplbFpxvjgdql/sQ+adA925nBeU
+	 3/qDUB1n/YPGrHuPV6j+NeQ3GvrMDPhnpHz5gmXA4W1xDPOMA7DAXwpVekOU2tBvcb
+	 W9wtZWVL2A4qGXPAUQ5SlzsMY+aG1KmtgFRaE/hvwwzL6vwTmoQxgm5AKnYTFnr/7w
+	 9pqip+AAVlGgw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 818C7CAC587;
+	Thu, 11 Sep 2025 06:56:38 +0000 (UTC)
+From: Sung-Chi Li via B4 Relay <devnull+lschyi.google.com@kernel.org>
+Subject: [PATCH v6 0/3] Export fan control and register fans as cooling
+ devices
+Date: Thu, 11 Sep 2025 06:56:33 +0000
+Message-Id: <20250911-cros_ec_fan-v6-0-a1446cc098af@google.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904-hwmon-tps23861-add-class-restrictions-v3-0-b4e33e6d066c@gmail.com>
- <4e7a2570-41ec-4179-96b2-f8550181afd9@roeck-us.net> <aL5g2JtIpupAeoDz@pengutronix.de>
- <CAAcybuvqqKBniV+OtgfCLHJdmZ836FJ3p7ujp3is2B8bxQh4Kw@mail.gmail.com> <9e4db8d7-c99f-46f3-9ddb-00b0a9261d86@roeck-us.net>
-In-Reply-To: <9e4db8d7-c99f-46f3-9ddb-00b0a9261d86@roeck-us.net>
-From: Gregory Fuchedgi <gfuchedgi@gmail.com>
-Date: Wed, 10 Sep 2025 12:11:10 -0700
-X-Gm-Features: Ac12FXyY2k6-zu3gOyPfWLj0St0alE4zNkLzD-PbTPjdHRpByiOWYilwdbtcq-Q
-Message-ID: <CAAcybusjm00hv+W-pKaNpPedXuWeTu5mo=i6TKnTJgVurO_ryg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] hwmon: (tps23861) add class restrictions and
- semi-auto mode support
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, Robert Marko <robert.marko@sartura.hr>, 
-	Luka Perkov <luka.perkov@sartura.hr>, Jean Delvare <jdelvare@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, Kory Maincent <kory.maincent@bootlin.com>, 
-	Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKJywmgC/23OTW7DIBCG4atErEPF8OOYrHKPqooGGGIWMRG0V
+ qvIdy/OJonl5Yf0vMOdVSqJKjvu7qzQlGrKYxvdfsf8gOOFeAptMymkEVpa7kuuZ/LniCMPqFy
+ n0VsPgjVxKxTT76P2+dX2kOp3Ln+P+ATL63ZnAi449sGSougc4MkPJV/Tz/UjlwtbUpN8ciPkO
+ 5eN62D6vqVRQNzg6oXDiqvluo3SSWOi8GGD6yfvYPV53bhHAKN7T1rbDW5euBTv3DRu7MESAjq
+ nYMXnef4HfgesnaUBAAA=
+X-Change-ID: 20250429-cros_ec_fan-da3b64ac9c10
+To: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
+Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Sung-Chi Li <lschyi@google.com>, Sung-Chi Li <lschyi@chromium.org>, 
+ Tzung-Bi Shih <tzungbi@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757573797; l=4712;
+ i=lschyi@google.com; s=20250911; h=from:subject:message-id;
+ bh=46arA/lH7SdZSTJ5xBxmcsnCS+WGoy0Kg9jo9NDY2A4=;
+ b=B7QcF+Tso7OCahfqv2JRFF3a8wa3lJpkeGcMTa2CXPT29mcddNiEF8QEln6/+eioVfTsNPtU5
+ /IhynE37JxuBq1Y3nYvr727c65S3Jayg1wbuw06lEqXpa0cI/6NnkL3
+X-Developer-Key: i=lschyi@google.com; a=ed25519;
+ pk=fBhhFxZrEyInLLODzeoq06UxQhKVqNjmZ2680pwMBCM=
+X-Endpoint-Received: by B4 Relay for lschyi@google.com/20250911 with
+ auth_id=518
+X-Original-From: Sung-Chi Li <lschyi@google.com>
+Reply-To: lschyi@google.com
 
-On Mon, Sep 8, 2025 at 11:02=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 9/8/25 09:39, Gregory Fuchedgi wrote:
-> > On Sun, Sep 7, 2025 at 9:51=E2=80=AFPM Oleksij Rempel <o.rempel@pengutr=
-onix.de> wrote:
-> >>
-> >> On Sun, Sep 07, 2025 at 09:06:25AM -0700, Guenter Roeck wrote:
-> >>> +Cc: pse-pd maintainers and netdev mailing list
-> >>>
-> >>> On 9/4/25 10:33, Gregory Fuchedgi via B4 Relay wrote:
-> >>>> This patch series introduces per-port device tree configuration with=
- poe
-> >>>> class restrictions. Also adds optional reset/shutdown gpios.
-> >>>>
-> >>>> Tested with hw poe tester:
-> >>>>    - Auto mode tested with no per-port DT settings as well as explic=
-it port
-> >>>>      DT ti,class=3D4. Tested that no IRQ is required in this case.
-> >>>>    - Semi-Auto mode with class restricted to 0, 1, 2 or 3. IRQ requi=
-red.
-> >>>>    - Tested current cut-offs in Semi-Auto mode.
-> >>>>    - On/off by default setting tested for both Auto and Semi-Auto mo=
-des.
-> >>>>    - Tested fully disabling the ports in DT.
-> >>>>    - Tested with both reset and ti,ports-shutdown gpios defined, as =
-well as
-> >>>>      with reset only, as well as with neither reset nor shutdown.
-> >>>>
-> >>>> Signed-off-by: Gregory Fuchedgi <gfuchedgi@gmail.com>
-> >>>
-> >>> This entire series makes me more and more unhappy. It is not the resp=
-onsibility
-> >>> of the hardware monitoring subsystem to control power. The hardware m=
-onitoring
-> >>> subsystem is for monitoring, not for control.
-> >>>
-> >>> Please consider adding a driver for this chip to the pse-pd subsystem
-> >>> (drivers/net/pse-pd). As it turns out, that subsystem already support=
-s
-> >>> tps23881. This is a similar chip which even has a similar register se=
-t.
-> >>>
-> >>> This driver could then be modified to be an auxiliary driver of that =
-driver.
-> >>> Alternatively, we could drop this driver entirely since the pse-pd su=
-bsystem
-> >>> registers the chips it supports as regulator which has its own means =
-to handle
-> >>> telemetry.
-> >> Yes, Guenter is right. This driver belongs to the pse-pd framework.
-> > No disagreement here in principle. However, the current hwmon driver
-> > already implements power control and exposes it via in*_enable sysfs
-> > files. I found this a bit odd, but I don't write drivers often.
-> > My understanding of Guenter's suggestion is that it would require break=
-ing
-> > this userspace API?
-> >
->
-> If the enable attributes enable power to the ports, that code and functio=
-nality
-> is simply wrong. It should only enable (or have enabled) power _monitorin=
-g_.
-> As such, changing that would from my perspective be a bug fix.
+This is a continuation of the previous series "Export the target RPM fan
+control by ChromeOS EC under hwmon"
+(https://lore.kernel.org/lkml/20250313-extend_ec_hwmon_fan-v1-0-5c566776f2c4@chromium.org/T/#t).
+There is a change from controlling the target fan RPM value to control
+the PWM value, and this version (v6) includes the dropped commit
+"update pwm fan control host commands" for maintainers to apply this
+series easier.
 
-Alright, then. I'll try to find some time in the next few months to port th=
-is
-over to a separate driver in pse-pd. And then remove the in*_enable from hw=
-mon
-one. Even if it's there by mistake, probably shouldn't fix it until there's=
- an
-alternative in place.
+We anticipate to involve fans connected to EC as thermal cooling
+devices, so we can utilize the thermal framework to have further thermal
+control strategies.
 
->
-> And, yes, that slipped my attention when reviewing the original code.
-> Sorry to have to say that, but I am not perfect.
->
-> >  From a quick look at the tps23881 datasheet I can see that it is
-> > similar, however, it is quite different in the context of this patch.
-> > tps23881 (unlike tps23861) has Port Power Allocation register that can
-> > limit poe power class. This register can be set prior to
-> > detection/classification. So the extra complexity of an interrupt
-> > handler that decides whether to enable the power may not be required.
-> >
-> > Perhaps it still makes sense to merge these drivers, but I don't have
-> > time or hardware to do it at the moment.
->
-> I didn't suggest to merge the tps23881 and tps23861 drivers; I just point=
-ed out
-> that they have a similar register set.
->
-> The point here is that a hardware monitoring driver should limit itself
-> to hardware monitoring. Actual control should, for example, be implemente=
-d
-> through the regulator or thermal subsystems.
+This series updates the required EC controls definitions, implements the
+mechanism for controlling fan PWM values, and registers these fans under
+thermal framework as cooling devices.
+
+Adapting comments from the previous series, the driver probes the host
+command capability at beginning to see whether a fan is controllable:
+  - if command `EC_CMD_PWM_GET_FAN_DUTY` is supported (v0, this is a
+    new command).
+  - if command `EC_CMD_THERMAL_AUTO_FAN_CTRL` v2 is supported.
+  - if command `EC_CMD_PWM_SET_FAN_DUTY` v1 is supported.
+
+This combination is selected as this is the minimum requirement for a
+fan to be fully controllable under hwmon framework.
+
+The driver supports changing the fan control mode, and allows to change
+the fan PWM value only if the fan is in manual control mode. The power
+management hook is implemented as well for keeping the fan control
+settings, as EC will automatically restore the control method to auto
+when device is suspended.
+
+Change-Id: Ia7789a1ea13a1708893c1f86b7d7706612d7b59d
+Signed-off-by: Sung-Chi Li <lschyi@google.com>
+---
+Changes in v6:
+- Rebase to newer kernel commit.
+- Fix lines over 100 characters.
+- Remove unnecessary out of memory message.
+- Link to v5: https://lore.kernel.org/r/20250620-cros_ec_fan-v5-0-5979ea1abb31@chromium.org
+
+Changes in v5:
+- Fix line breaks.
+- Directly return 0 when there is no error (rather than return ret
+  variable).
+- Rename CROS to CrOS.
+- Preserve Acked-by and Reviewed-by tags.
+- Link to v4: https://lore.kernel.org/r/20250619-cros_ec_fan-v4-0-ca11548ce449@chromium.org
+
+Changes in v4:
+- Treat fan control is supported without `CONFIG_PM` is enabled.
+- Change logic of registering cooling devices for fan from abandom
+  immediately to log warning logs, then continue with the next fan.
+- Fix error checking logic to use IS_ERR for
+  devm_thermal_of_cooling_device_register.
+- Revise variable declaration ordering with reverse christmas tree.
+- Rename member variable `manual_fan_pwm_values` to `manual_fan_pwm`.
+- Use %pe for printing error pointers, and add newline for logs.
+- Revise comments in suspend and resume hook.
+- Link to v3: https://lore.kernel.org/r/20250512-cros_ec_fan-v3-0-a9f2b255f0cd@chromium.org
+
+Changes in v3:
+- Make required EC command versions macros.
+- Add `CONFIG_THERMAL` guarding for registering as thermal fan cooling
+  devices.
+- Add error handling during registering thermal cooling devices, and
+  immediately abort the registration if any error occurred to align with
+  the thermal sensor registration in hwmon core.
+- Add error handling for EC fan communication during suspend and resume.
+- Add `CONFIG_PM` guarding for checking whether the EC supports a
+  complete fan control in hwmon driver.
+- Sort variables order in declaration.
+- Separate declaration and logic to different sections.
+- Move `cros_ec_thermal_cooling_ops` next right after the operation
+  functions declaration.
+- Improve describing the resume behavior in documentation.
+
+Changes in v2:
+- Change column from 80 to 100 and fix styles.
+- Directly store driver data into platform dev with
+  platform_set_drvdata.
+- Unify the PWM unit (from 0 ~ 255) between hwmon and thermal cooling
+  devices.
+- Only fetch the fan control mode and PWM value when suspending rather
+  than caching values when writing. The suspend hook is thus added.
+- Link to v1: https://lore.kernel.org/r/20250429-cros_ec_fan-v1-0-a8d9e3efbb1a@chromium.org
+
+---
+Sung-Chi Li (3):
+      platform/chrome: update pwm fan control host commands
+      hwmon: (cros_ec) add PWM control over fans
+      hwmon: (cros_ec) register fans into thermal framework cooling devices
+
+ Documentation/hwmon/cros_ec_hwmon.rst          |   7 +-
+ drivers/hwmon/cros_ec_hwmon.c                  | 313 +++++++++++++++++++++++++
+ include/linux/platform_data/cros_ec_commands.h |  29 ++-
+ 3 files changed, 347 insertions(+), 2 deletions(-)
+---
+base-commit: 5f540c4aade9f1d58fb7b9490b4b7d5214ec9746
+change-id: 20250429-cros_ec_fan-da3b64ac9c10
+
+Best regards,
+-- 
+Sung-Chi Li <lschyi@google.com>
+
+
