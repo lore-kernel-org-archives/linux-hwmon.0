@@ -1,73 +1,68 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013031.outbound.protection.outlook.com [40.93.196.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A8822A1C5
-	for <linux-hwmon@vger.kernel.org>; Sun, 14 Sep 2025 08:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757839227; cv=none; b=BcV2XvXNtDZvkHMQa8sRL9McSotp1LKkzM+uA9vL4Ior3yewyAfGVB7O4bzsg9BLkrSYXicPybZduiVJM0SzHxowBjmNkrTTIvLP7DlWFd9hBy1+n1T/fiFngl+AMmC+uj/3KKoS7nrTxZs3OXSkR24XhxOgs+kPNh1UmFgSjRk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757839227; c=relaxed/simple;
-	bh=hvqqhKDwn0KttZ7YI/pFa/dPygt7+4qJkMXYteumt+k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lieSp9Ml3ikjptHb9Xebqp4AaGwBRTg/+Twfcg35ipeTmD1rlA6CPfB0+TqBQppgn1Du34dHn0oXGNzeml1aXhA91xLUuHm1JZF88LmO475Tllw9ize7/9twx1sUxFx9RkV6XvLjc6MyZGX6XhPbkd6vNtwmuNVH8XbkEMUH648=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=At8o9FRl; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF92B1EBFE0;
+	Mon, 15 Sep 2025 10:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757932646; cv=fail; b=DiKWaI38oiP+RiAQbiA6m28Ii7p4DLmHoXztkmMJvLN6IdETncsCkUr7BVDFVSEE452hq6W8fjW+56CRGlrEKLYhkkOpwOSPaCx+6kb/bUFWNVcofIaHWYNK+FBe+ZPdVGQupJrzehQCLJ9wUlsZojz2l2Qsz1copg8S3m4GGhI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757932646; c=relaxed/simple;
+	bh=JQlsl8A6uwG94BwoYZpaui7XdpVa+SECRoF/Rfkz2As=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uiyEQ8jGvnOsSDa+B88VtoQPGy4fLtQtT+PzkZPFf9SFbRbHSIfZ4Z7nUbH4MkR8Nz9x5KMZ3uoDGKEcHiQzRC/cBSm7d3kSLcJ1yRtApqE1EOWEtrDHk8Pc1/tlufpiB5HrjVid1k/Dd5REK9lAhow3MRXdcGUN27zhV3caD4c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LAUYFlg2; arc=fail smtp.client-ip=40.93.196.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="At8o9FRl"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-62f37aebd6bso38269a12.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 14 Sep 2025 01:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757839224; x=1758444024; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t8jAyzV+acKcWO9q4mFH0eEwR5GYgn/NUD1fgTglKnI=;
-        b=At8o9FRl2eAk38KzuOlRAiZ/cRwD8tV1W6ynXM17DfpuMari9+LTOfGeZAH8Ll7RZm
-         QILe7XZ95daOSh6ypaZoYjMNGQYilv4YuLKN9g9gxQlCanSsGhDeks/+MiXvaoAWlEJb
-         nZxnK8vCC2xVKXcdx6IdYdS5SKyAmN12H+f28GEqLpkJRiRIhYYzARP8HuGpT4wANb7L
-         IDKy2SvqfGAvkv7b+Z/GRb8+E9N5Pwin8T0rsWMml4RGqymhYe2GRrcFrJ1WofniLIWh
-         IwL4DQzg1NpMrMkTIJWxQHADCR6lvNLz3wH/UF+q3pnhpShWnVnZBGI4hokEYk+x+3NX
-         JMTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757839224; x=1758444024;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t8jAyzV+acKcWO9q4mFH0eEwR5GYgn/NUD1fgTglKnI=;
-        b=mwijKp3XWJ3u+HIznUOMj48wS/IwSp9AmyHQA5jMtHJEr7M/EqeGX5UnfFFmJfSLQM
-         zsPY6ldW/g8XZwnryGUfatVbJr1DlosIQ7BtP1is5mYAMJRx+0uBonFBz5N8QME272t5
-         ae/CFt56baTm8jTmGOYmtu7TTjFc/SSwUNlFjpYIDM9cRR9R40yItZa3i0xqdOERUOqL
-         oE78Gq9MA6iiwbTXjQmBlnfPtEh1OJ7LXgjb5MRte0TP+3wnmA9WlxI+yMLEftLURGnt
-         QxZahfFfyNN/1swWhk8382HKBZ9U4+00tAD/qh1vcaITFYfPCgZ4Ku3z9NsEckb8QDQ1
-         lt3A==
-X-Forwarded-Encrypted: i=1; AJvYcCXdWFGqQdLuzqyY+AnqkUvT1vKZfYSYSaHxpzNECAfgsb6KdzmTMLDES9xjCQGResqrS2mZGzq/atHsBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmGYRHx/+wewfXAw9QzEgsz5w+0oMh6ypbbPUEe0Mn4F4c8oHh
-	GVkH508A+gFxTfAy4s9Mvergc5VYuLXr9/96Pkq5MZc6ngQooWO4Nr3n
-X-Gm-Gg: ASbGncvOURqOPQ6XKINTViVG6G8jrcFzNWA+zQ3mUErjmR2jKv3sBD3fNBONBh/mNvM
-	HxmU0xSHVkcntpwf8KZJ7f8DjmtogW5UBLOedJoTG1nMJJRqlbOuCChTelmlsWN6aBMu3g7blFx
-	yJXOvaWaBOiWZMPwVBKaG81tU0oBxYIKGuLYWABXB9Y6r3HqzZmx1SuSm2tAtDKFzFRe63joJok
-	hQemomxBCayA3U+mHG8VJMbzpuvKNNoBGpgGgk4YcWxr+ceAGTAeENeyu2PNa0LM3M3MM4U+Fic
-	uGANZrae0w0qPu+0cnLTdXClIlLIcizJsXTdwnwVn83kJPdsyDf2584R6g5nDAyjptR7e9WRBQh
-	xvMfaVXt/rjLGKPW3FJ/uDtbFCW35vhtOiZBASgsNwYmHrVRVL3XwEw==
-X-Google-Smtp-Source: AGHT+IH5BreF0jNdm1JhmaZYhd36b3wPJHK9s5ZiIRSzQP1rPJTWRUoxQcoEakCnqIxdeYIuh1MxAQ==
-X-Received: by 2002:a17:907:9621:b0:b0e:d477:4972 with SMTP id a640c23a62f3a-b0ed4777388mr94391266b.25.1757839223690;
-        Sun, 14 Sep 2025 01:40:23 -0700 (PDT)
-Received: from puma.museclub.art ([2a00:6020:b3ea:9c00:26e7:b56a:5a2d:1d72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b32f21a2sm721370466b.83.2025.09.14.01.40.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Sep 2025 01:40:23 -0700 (PDT)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Mohamad Kamal <mohamad.kamal.85@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add TUF GAMING X670E PLUS WIFI
-Date: Sun, 14 Sep 2025 10:40:10 +0200
-Message-ID: <20250914084019.1108941-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LAUYFlg2"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LahUHwWUGeFHgyJHLuaKsOakBgnce1FGjjXPy+9dRJ8OKOrWh5EJv9WqR8Jc2XVCSE9v0JCPWZpHfjpWhGuBI4PvzZTI7db+w/JQGUFXNdRbZnYrUDUfbuQonH6DIsCRFUUuunsmSfBNoODprHpe5L949fsYZN/yabYt3Fa63cjla3ssvHr7zkrn35q1+YAGGk0vJq+/iK17N0qD14KZWwWo4W3gNMAb/2JVH6a8lwNtdTuPezMGQzcxPSu+7j/M68XVbqGP2Q2QAV3jvzhVMeUO/DUiS17qb2ZedDttYWq8gQXNLZIUs0r8AU6qFMfaHIGUkVqVXKga/FQuwqvN4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lDP94Cm/B5DkpiU2NC0o7Axt63toAaM5K+SeJIaozUY=;
+ b=SnTEaJcw9q2LJdeyaxZSKC89NQiFQFtgge5ItHAfvvo2SI+YLXVgwDnteufwwNTuRt2nXY3ZZT7IbtEY2nUsb2ZEDDL0ufqUaKpPQsqWGOOV/kcVAHtj6nmpCKrWR/ZNYdE62txmjImgR5UbYJNpD6J9nV04fuKkenN9i9gT1x9ignpzdS5+tcEq3U5v/Vue2vAvat7NqSczG6ZCOQcAfbtmggRgwNm3KBqKlDzyFn9UyKvCe8pKeWAMcfRl6IW3oijck709crR6+bLxleB9/idJOQDYMBDK+mPa3d6mWLHfEXdBj+mYeO0MYWchuPNON8Qpzc0sFR1b7gPaUBRviw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lDP94Cm/B5DkpiU2NC0o7Axt63toAaM5K+SeJIaozUY=;
+ b=LAUYFlg2ssPZN8N4yqTPME0CRo0zSBSk8zFOa7aFTUviqYolC7milHyEx/fCQ6xkvJipcANv/pr/d4QIVdp06s1hWWwaCeOXK3oXbAdWOGfjqjDwCJBuiXLU7dNWitFa7zZp9AoN2GPfApWkqBWN/AntrdCr+KPQOknxor6C85c=
+Received: from BY3PR03CA0015.namprd03.prod.outlook.com (2603:10b6:a03:39a::20)
+ by PH8PR12MB6698.namprd12.prod.outlook.com (2603:10b6:510:1cd::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.22; Mon, 15 Sep
+ 2025 10:37:19 +0000
+Received: from SJ1PEPF00001CE9.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::1b) by BY3PR03CA0015.outlook.office365.com
+ (2603:10b6:a03:39a::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9115.21 via Frontend Transport; Mon,
+ 15 Sep 2025 10:37:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SJ1PEPF00001CE9.mail.protection.outlook.com (10.167.242.25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9115.13 via Frontend Transport; Mon, 15 Sep 2025 10:37:19 +0000
+Received: from amd.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 15 Sep
+ 2025 03:37:16 -0700
+From: Akshay Gupta <akshay.gupta@amd.com>
+To: <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+CC: <gregkh@linuxfoundation.org>, <arnd@arndb.de>, <linux@roeck-us.net>,
+	<Anand.Umarji@amd.com>, Akshay Gupta <akshay.gupta@amd.com>, "Naveen Krishna
+ Chatradhi" <naveenkrishna.chatradhi@amd.com>
+Subject: [PATCH v2 1/6] misc: amd-sbi: Add helper function to prepare I3C support
+Date: Mon, 15 Sep 2025 10:36:44 +0000
+Message-ID: <20250915103649.1705078-1-akshay.gupta@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,43 +70,142 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE9:EE_|PH8PR12MB6698:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05db77d7-19e3-4c1e-b230-08ddf443d8b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?+nbV/WxRfCXohdQPjndGvy30OAZt84LUGR4PKmBq5A1kOrJ9T3675Z6ORbyK?=
+ =?us-ascii?Q?qZICicCyocMYg+dgILnvMt3GJQycpXI5b3nAxiiFnH7D/Ghf2LvwsAhpjqz8?=
+ =?us-ascii?Q?eH8YEcgQt63ViO4dSJnGkp7IrlH2V6yjF+EvDKbMQnkXCu+xiEShYCnOpThZ?=
+ =?us-ascii?Q?WvnLStMFtjSVO84xp7W125M9nrSQA6YWfTnfVNQ9Khcg8l+1eNA2niUySwi8?=
+ =?us-ascii?Q?VqT32fqumduiWMdUqqfdN6ogIQjIlvRmBMJdMkYkAqoC0f41oX271vQdnAph?=
+ =?us-ascii?Q?aN/55YuYoRL9B1hsjXgw4F3WT4nS34beHlad721o4nMdcpYmsSmpJE8L0JPT?=
+ =?us-ascii?Q?mpQ/iA8aaWKSCsH6HjAqI0sbW2AHAqcXNw2JNkAm7RCKjAJrjjt42Zctl5HA?=
+ =?us-ascii?Q?2bryyPswklfqb+qggIbh5WlqWxx485lLcj72rugV7DYErH7ttf8/9Qq9QcFK?=
+ =?us-ascii?Q?wAZ3w2yg39fxEcxo0/dmTs1CUAnis4SpHJIWKnrYD19zu2LHMgHgAydGKJvr?=
+ =?us-ascii?Q?kOOov21Y67gYmCSMhLCwujbZIXqh/3bumCVOz3jEbl4urV/JIJd6PRr9eOzY?=
+ =?us-ascii?Q?fZxvhTVw95/VSKdTrmKLGKXE/o5Fcr5OlTQ2MUxQ/HdHiwUrsZ6zRZsmp+7k?=
+ =?us-ascii?Q?yMjDToKTpqwbYfzhWRuZDTOg2bXk1Qzre2wyuMQkbONFLRcJqPHx0dsLxJUA?=
+ =?us-ascii?Q?o4p4Tpz3gYS7Ev3r5QSpgf1KEQ6YPZ5MgWeBWEd2y6QO7RTdhaiDETGw9t4O?=
+ =?us-ascii?Q?XHSmrLC03Lmr7x3ByCf7w7vTCaw0leiFgjM9jhASbZm/nivvairYjrU50G/7?=
+ =?us-ascii?Q?DBSqlXHdfdzIoVR7sZ3nQ7Ppewc8J0qL/1zJD4jPzio9kGciOIZaQh9QzLT6?=
+ =?us-ascii?Q?v6ykQoYGAbLdYGyKr5okfk3rwerVuiwDCvVj25JSu3vyn6YliTzwZKSnAznS?=
+ =?us-ascii?Q?9iAEGUvnhrehJXvvxe3yKnoaHIKVJsaUzinuJ5yzuV8BCViKA77OBF3SD0wz?=
+ =?us-ascii?Q?+/n1tnh//79hXXr0eTrwyx+kSrG8UA1Uf5JFhPhjNZx0XFaF/va14Yj195oz?=
+ =?us-ascii?Q?zzrWU4CqbpEkplacPyIDRHQMOVn8A9EkbEjnYiODacC0r+s1veMgeon5AGDW?=
+ =?us-ascii?Q?vOIInALdtTaelPGAPXQDcjeZU0g6ve2mDuvi1RZ9r0+OZLU4cjHic+QzUeVt?=
+ =?us-ascii?Q?VsGOehq0fKSc6VuZvB7+144KDDlY0LLwvsd63dnaWRlWMEceXQaM7mdxasNy?=
+ =?us-ascii?Q?L/SxxSTTpFOnQEJYdaGKgpEU+T8wj0UdhhyVX41GkcUfvneHZ459Vu1LNfI8?=
+ =?us-ascii?Q?4HtmWiJxgc5UNIsfX510B8ymfMuGpnKkldsoG1mLWJC9jP57CtRjixyj9lzN?=
+ =?us-ascii?Q?l1PPdKS+KfFJMeazUl1rKz+GJmpjeqgf1w7IWtEVuGGABi29ipTNSl2RVnG0?=
+ =?us-ascii?Q?/2+o8obSk31+0/UhRUk4szGfKJv/3folYaGCiLvgOi6pExvE6Lit3rBEdkCd?=
+ =?us-ascii?Q?5npVUrJJaZONW5qJo0QW8RLCCySgLiWfVArd?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2025 10:37:19.0641
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05db77d7-19e3-4c1e-b230-08ddf443d8b1
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CE9.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6698
 
-From: Mohamad Kamal <mohamad.kamal.85@gmail.com>
+New AMD processors support APML connection over I3C.
+Move the code, common for both I2C and I3C to new helper
+function, "sbrmi_common_probe()"
+While at it, renaming the static structure regmap_config "sbrmi_i2c_regmap_config"
+to "sbrmi_regmap_config" to avoid confusion.
 
-Add support for TUF GAMING X670E PLUS WIFI
-
-Signed-off-by: Mohamad Kamal <mohamad.kamal.85@gmail.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Reviewed-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
+Signed-off-by: Akshay Gupta <akshay.gupta@amd.com>
 ---
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 2 ++
- 2 files changed, 3 insertions(+)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 836d41373848..4a99b65338bf 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -45,6 +45,7 @@ Supported boards:
-  * ROG ZENITH II EXTREME
-  * ROG ZENITH II EXTREME ALPHA
-  * TUF GAMING X670E PLUS
-+ * TUF GAMING X670E PLUS WIFI
+Changes from v1:
+- New patch, as per suggestion to use same module for i2c and i3c
+- Patch series is applied over "char-misc-next", commit ID: e2258cfd9b9809002ad52f1f763ff192e612a1fe
+
+ drivers/misc/amd-sbi/rmi-i2c.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/misc/amd-sbi/rmi-i2c.c b/drivers/misc/amd-sbi/rmi-i2c.c
+index f891f5af4bc6..d41457a52376 100644
+--- a/drivers/misc/amd-sbi/rmi-i2c.c
++++ b/drivers/misc/amd-sbi/rmi-i2c.c
+@@ -50,26 +50,18 @@ static int sbrmi_get_max_pwr_limit(struct sbrmi_data *data)
+ 	return ret;
+ }
  
- Authors:
-     - Eugene Shalygin <eugene.shalygin@gmail.com>
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 3f6d89bcc8a2..dff13132847c 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -795,6 +795,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_zenith_ii_extreme),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X670E-PLUS",
- 					&board_info_tuf_gaming_x670e_plus),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("TUF GAMING X670E-PLUS WIFI",
-+					&board_info_tuf_gaming_x670e_plus),
- 	{},
- };
+-static int sbrmi_i2c_probe(struct i2c_client *client)
++static int sbrmi_common_probe(struct device *dev, struct regmap *regmap, uint8_t address)
+ {
+-	struct device *dev = &client->dev;
+ 	struct sbrmi_data *data;
+-	struct regmap_config sbrmi_i2c_regmap_config = {
+-		.reg_bits = 8,
+-		.val_bits = 8,
+-	};
+ 	int ret;
  
+ 	data = devm_kzalloc(dev, sizeof(struct sbrmi_data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
+ 
++	data->regmap = regmap;
+ 	mutex_init(&data->lock);
+ 
+-	data->regmap = devm_regmap_init_i2c(client, &sbrmi_i2c_regmap_config);
+-	if (IS_ERR(data->regmap))
+-		return PTR_ERR(data->regmap);
+-
+ 	/* Enable alert for SB-RMI sequence */
+ 	ret = sbrmi_enable_alert(data);
+ 	if (ret < 0)
+@@ -80,7 +72,8 @@ static int sbrmi_i2c_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	data->dev_static_addr = client->addr;
++	data->dev_static_addr = address;
++
+ 	dev_set_drvdata(dev, data);
+ 
+ 	ret = create_hwmon_sensor_device(dev, data);
+@@ -89,6 +82,23 @@ static int sbrmi_i2c_probe(struct i2c_client *client)
+ 	return create_misc_rmi_device(data, dev);
+ }
+ 
++static struct regmap_config sbrmi_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++};
++
++static int sbrmi_i2c_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	struct regmap *regmap;
++
++	regmap = devm_regmap_init_i2c(client, &sbrmi_regmap_config);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	return sbrmi_common_probe(dev, regmap, client->addr);
++}
++
+ static void sbrmi_i2c_remove(struct i2c_client *client)
+ {
+ 	struct sbrmi_data *data = dev_get_drvdata(&client->dev);
 -- 
-2.51.0
+2.25.1
 
