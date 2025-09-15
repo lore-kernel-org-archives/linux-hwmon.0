@@ -1,99 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103B42E8E1C;
-	Mon, 15 Sep 2025 17:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD210EACE;
+	Mon, 15 Sep 2025 21:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757956736; cv=none; b=Am45rwXArP5lXeOWeYHq6xgrVqtfPU1KhCTJNkWUJtHlOFRGdrjh4DTcQMVA4lxGIrR7XY7zjRadevt15wTaHtKgPBD7/BmZCpH5MIpbJ6M29QQ3Spc0x0axQG4eYuNTd/XXouMzfbRdILKVRQSZ2K+KFGn7Jw048wRW0cMEpSQ=
+	t=1757972063; cv=none; b=DEB2S+PdRv3lkZxpgnPEEiZJBsRICoMwwMkDOHiJUczPNc2rvxnM7OV/H7sTTh0O6cTy27M3i/WiO5QXkT9PsxBZmCm/mYL90GkJMSxG8ire7aLqXcQG4iq6uALfxvJ0zvGIorCvVkd+vkhsoCcGSr1AKQVGChEGAJYh0J6B3Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757956736; c=relaxed/simple;
-	bh=gSJY1FWYfr+n+3wRKmlvxIfxbwGgSPGmGTC0SKRRAZQ=;
+	s=arc-20240116; t=1757972063; c=relaxed/simple;
+	bh=EQ9er1liAcJ0+LgMZjQy4CDVJThm9UrjoRfFH7qfXIo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0lBwAPHaxCyJxaDrhIQYGVc77xHgofH36Vsf9qUI+udM+KJ0+KVZeKPHnHwkl9o8jPK3XKXCfwuWiAkNs/0k/Ml8hDJ9CZF1yvhelrrgyfevlXPimvFjXJDljPzlM406iUJD4dpdFaWWVVVcQD1iBsul6u3cOS31cjOQF407CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgIfl12k; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ae3Tj+Eo/na54DxsNR6gwMNgd1rX+dPupywl2ahOkA/qn9N42KyKGAWYjMsg5mOmRNz0/56qMQcSZYC/tZFNds22FODDojs+ajleV3VCyJ8CTonoj64tCY3eXdUmlquJOdfqi27z/Aiec4rMA4E6s4t7T3zyKvQF58ionsDlCTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=coWvyVeC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgIfl12k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE115C4CEFC;
-	Mon, 15 Sep 2025 17:18:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="coWvyVeC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B327C4CEF1;
+	Mon, 15 Sep 2025 21:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757956735;
-	bh=gSJY1FWYfr+n+3wRKmlvxIfxbwGgSPGmGTC0SKRRAZQ=;
+	s=k20201202; t=1757972062;
+	bh=EQ9er1liAcJ0+LgMZjQy4CDVJThm9UrjoRfFH7qfXIo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dgIfl12kR7C2hIsA/MteF3VIgtA2K7tAmb1CTNo6gOHCKNvwNxCrnJkiLGn76koNd
-	 1VCFrT6TBdbPSluVQ6S3N5RmByJhOl4mSflk6Vfw7w1hybmpyNBI4o3fJJxee7vpM9
-	 9axawq16LDzxBg9KGSVQqwZzbO4swAZz2B7ot6m+4wD4U1ob0Ss4qnxrd9eQcjWxla
-	 rfszSbq6dHwmrIb9m39A4CrJcrJUMrQ3lWDPb0V3Sl1vCg4oXH+wy+vJBPJ77uwoM8
-	 LrNRkszOUXGB6lQrlrQ0yQsUmz1yEeLhkODJvADa33/faBCDI7RkWH1QvYaTKAOfxf
-	 RX4bPls6cucng==
-Date: Mon, 15 Sep 2025 18:18:51 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Flaviu Nistor <flaviu.nistor@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
+	b=coWvyVeCz1LjDVyYAu06PP1m/8FpKwRYQqc8+hGy/A+U9tNUwRQ4jN2a/JppPCaDF
+	 iNBlXJN6If8azp/Oa3mMmC2Slbx20pHDJgNk8lHZhyBndkClSsI8H8NOOAuF4fVH6z
+	 kH4HMrL4ceSFP/bhVgP66HW7evVSh2XXCpa88pD89GQVKabsQInk5339ALT+V3ImV5
+	 hb2BvGTTl7Wh82KVNVJU5GNY6jpFM6SBV6xr7OLMl4oijIUP8pt1XEk5TiYfIRh7lK
+	 MxcjWW08uOuMBPPVMvw7smbSgK69p0+nhjCpQX8y+QC7X20Ltplc5VWJNwp2lSNjSK
+	 xOkdBBD7Us75A==
+Date: Mon, 15 Sep 2025 16:34:21 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Michael Walle <mwalle@kernel.org>
+Cc: linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: tmp102: Add TMP110 and TMP113
- devices
-Message-ID: <20250915-undefined-woozy-15e27ca89a36@spud>
-References: <20250915170819.126668-1-flaviu.nistor@gmail.com>
+	Jean Delvare <jdelvare@suse.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>, Lee Jones <lee@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, Andrew Davis <afd@ti.com>,
+	linux-hwmon@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Nishanth Menon <nm@ti.com>, Srinivas Kandagatla <srini@kernel.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: tps6594: allow gpio-line-names
+Message-ID: <175797205997.3572376.2459188333826155892.robh@kernel.org>
+References: <20250912120745.2295115-1-mwalle@kernel.org>
+ <20250912120745.2295115-3-mwalle@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4lfv4wKgWuiyb2Y3"
-Content-Disposition: inline
-In-Reply-To: <20250915170819.126668-1-flaviu.nistor@gmail.com>
-
-
---4lfv4wKgWuiyb2Y3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250912120745.2295115-3-mwalle@kernel.org>
 
-On Mon, Sep 15, 2025 at 08:08:18PM +0300, Flaviu Nistor wrote:
-> Add a compatible string for TMP110 and TMP113 devices.
->=20
-> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+
+On Fri, 12 Sep 2025 14:07:40 +0200, Michael Walle wrote:
+> Setting the signal names in the device tree was already possible, but
+> it will lead to a warning. Allow the gpio-line-names property to fix
+> that.
+> 
+> Signed-off-by: Michael Walle <mwalle@kernel.org>
 > ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Doc=
-umentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-> index 96b2e4969f78..840b5306a8cf 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
-> @@ -13,6 +13,8 @@ properties:
->    compatible:
->      enum:
->        - ti,tmp102
-> +      - ti,tmp110
-> +      - ti,tmp113
+>  Documentation/devicetree/bindings/mfd/ti,tps6594.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-The driver has no match data and no compatible based decisions added in
-your patch. Why is a fallback to tmp102 not suitable?
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-> =20
->    interrupts:
->      maxItems: 1
-> --=20
-> 2.43.0
->=20
-
---4lfv4wKgWuiyb2Y3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMhKewAKCRB4tDGHoIJi
-0u32APoDoF/gGJ2EOqe9o5dYb7Ni4+mN6txngX/8KwA2O0n85AD/SmBMZr8Ws419
-uouv+W++ZyPLUVQ4cnmTc379sYKt3wU=
-=/+Lo
------END PGP SIGNATURE-----
-
---4lfv4wKgWuiyb2Y3--
