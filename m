@@ -1,121 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08C631D75F;
-	Tue, 16 Sep 2025 13:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BE63081AE;
+	Tue, 16 Sep 2025 14:38:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758030738; cv=none; b=stxiMDyGV3mcs1iO5HH1HVoF5YUB9BYY/58LnNQhZgC9UZKjolY1Pc/gz6YM7UfOheAr72BLervhIdzx3+r+fNrzxRqWp1phTVIPev+9GpLUlkWVSIqK/VFvLvpFeKrTks1a4faY/lFl8txYqDnavu+ZR5XiEi8iM6XE//FXi3s=
+	t=1758033535; cv=none; b=D0Mt/XvXX+2jopZcqBFeFPIbojy87gDczqNeipNMsHT0uar/ovY7Zy2hgwp9dXJTn2VT7w9MWHaNLqaiwCyyagrBWdLXD+hOp2OtRLaLdbx6njpoTf06i6M5tMhNqnZ4pUNEmDdi5/1+3QBAlP/9Zz85L3jxGbjyWoUJBECjZCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758030738; c=relaxed/simple;
-	bh=ai1oXYeVOfINUAOzqKrno3a6vcH5X8osrVp0OAwCDSc=;
+	s=arc-20240116; t=1758033535; c=relaxed/simple;
+	bh=Ph/hIiO+tXjORKxzfu06YoivQsZaFkxYB4pQsUq4gpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pxDGBcxCENTk6pYtgduxY0mqZGcj8dnItGTxINTnbzi2uPT6+Vl9qs9PzqkEkJRzjP9mo7pagDc7Qam8YzpaWBHiK+gN2rsG5EabsMAAxKlnukJq0Kky7Bl32L0WXeB3moCF2x/S94SqicYqsgOTHpghcPKL7NjCSs0tWDabSdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZzwLIuCW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=sf9FxGW+yWha84yJlVqeAhNaPs7M0f6OXTtfKHKvX9DOPNJL+DmRR7S3KKm4belqof8AIQi35NAbL/shV+373M7j72bDqqOi+6VnDt9zJ/TjT4xe1UphDNeIhBLZkqLGPM5V751tn9x+i1j5EmqKse+z3Q9W7ePvRCpM/yherv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+Q8lbQv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZzwLIuCW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57A5C4CEEB;
-	Tue, 16 Sep 2025 13:52:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+Q8lbQv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2FAC4CEEB;
+	Tue, 16 Sep 2025 14:38:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758030737;
-	bh=ai1oXYeVOfINUAOzqKrno3a6vcH5X8osrVp0OAwCDSc=;
+	s=k20201202; t=1758033535;
+	bh=Ph/hIiO+tXjORKxzfu06YoivQsZaFkxYB4pQsUq4gpQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZzwLIuCWYBfCMzOJEHWQkphHl5ZPnPFg8NAZmQ8lAPZZttfShcP0bZNh2WUYEqs6M
-	 IRPZFO3XEoeoRDWeOiu5oq19fx00aJEUe4k3PnO9112I+OynSPISmMf/zTnZBTRt2h
-	 Gp/Y+qmF1t3ytr3zX5ytGKj5xO9oEI5us/dwUpQ9StjHr4UOJse/Lxhw4lXlLcNINd
-	 TpGuu2F9i3RUcYWLuVku/k+eMPtIxwyf0z2Iu5JIyxkMWiL7HIct4EFH17BI/sHe23
-	 qkPACzA1VTcsq7gViuDlsiKDgdEQCepYJGKAlHgVC9b+F8de8s4BRpI+7CyRZE6+JL
-	 Zhdnmhf764OIA==
-Date: Tue, 16 Sep 2025 08:52:16 -0500
-From: Rob Herring <robh@kernel.org>
-To: Troy Mitchell <troy.mitchell@linux.dev>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: Add CTF2301 devicetree bindings
-Message-ID: <20250916135216.GA3674673-robh@kernel.org>
-References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
- <20250916-ctl2301-v1-2-97e7c84f2c47@linux.dev>
+	b=k+Q8lbQvzfiLPscbR5ZPBPkpIbgIzkAK2T0BtjPuBHrfNmtyNZj/YF2ioJPAu+aqT
+	 k0Fj5O2OQ1MMzl3YYquE394xUYf9bbOTEbgwFoppUmMbqRQKQbQmxJ/af6CuOV+Ct2
+	 sKjZxOjK/W5NMn3Z1o+rQ0FB78oookqGpHcoucoZ1FOPU8LXl8KgBkD25Txo9bfdhL
+	 hkwet2ivAS5IRwptEjYJl735BJoSktrlFCsOILzOWHB/GWz+YtSaHdmKkxx24a9q1e
+	 eT0tDZHSOp3d0yvhUYi3GttGy7WSLJgG1HXn8jer+jI+O1V+vV6aGKuYr5nRGCxCUd
+	 SSSsnYJSBNujA==
+Date: Tue, 16 Sep 2025 15:38:47 +0100
+From: Lee Jones <lee@kernel.org>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250916143847.GF3585920@google.com>
+References: <20250912091952.1169369-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250916-ctl2301-v1-2-97e7c84f2c47@linux.dev>
+In-Reply-To: <20250912091952.1169369-1-a0282524688@gmail.com>
 
-On Tue, Sep 16, 2025 at 12:46:45PM +0800, Troy Mitchell wrote:
-> Add dt-binding for the hwmon driver of Sensylink's CTF2301 chip.
-> 
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
-> ---
->  .../bindings/hwmon/sensylink,ctf2301.yaml          | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml b/Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..fe98f5b578320bc1b43ff88f76667990821a88f7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/sensylink,ctf2301.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sensylink CTF2301 system-level thermal management solution chip
-> +
-> +maintainers:
-> +  - Troy Mitchell <troy.mitchell@linux.dev>
-> +
-> +allOf:
-> +  - $ref: hwmon-common.yaml#
-> +
-> +description: |
-> +  The CTF2301B is an I2C/SMBus compatible device featuring:
-> +    - One local temperature sensor with ±0.5∞C accuracy and 0.0625∞C resolution.
-> +    - One remote temperature sensor for external diode-connected transistors, offering ±1∞C accuracy and 0.125∞C resolution (temperature range: -40∞C to +125∞C).
+Enjoy!
 
-Wrap at 80 chars.
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-> +    - An integrated PWM fan controller.
-> +    - A 1-channel fan speed monitor (TACH input) for RPM measurement.
-> +
-> +  Datasheets:
-> +    https://www.sensylink.com/upload/1/net.sensylink.portal/1689557281035.pdf
-> +
-> +properties:
-> +  compatible:
-> +    const:
-> +      - sensylink,ctf2301
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ctf2301@4c {
-> +            compatible = "sensylink,ctf2301";
-> +            reg = <0x4c>;
-> +        };
-> +    };
-> 
-> -- 
-> 2.51.0
-> 
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-gpio-hwmon-i2c-can-rtc-watchdog-v6.18
+
+for you to fetch changes up to d463bb140583609f78f61d48c3dfb6f46c5cb062:
+
+  rtc: Add Nuvoton NCT6694 RTC support (2025-09-16 14:41:58 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, GPIO, HWMON, I2C, CAN, RTC and Watchdog due for the v6.18 merge window
+
+----------------------------------------------------------------
+Ming Yu (7):
+      mfd: Add core driver for Nuvoton NCT6694
+      gpio: Add Nuvoton NCT6694 GPIO support
+      i2c: Add Nuvoton NCT6694 I2C support
+      can: Add Nuvoton NCT6694 CANFD support
+      watchdog: Add Nuvoton NCT6694 WDT support
+      hwmon: Add Nuvoton NCT6694 HWMON support
+      rtc: Add Nuvoton NCT6694 RTC support
+
+ MAINTAINERS                         |  12 +
+ drivers/gpio/Kconfig                |  12 +
+ drivers/gpio/Makefile               |   1 +
+ drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++++++
+ drivers/hwmon/Kconfig               |  10 +
+ drivers/hwmon/Makefile              |   1 +
+ drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/Kconfig          |  10 +
+ drivers/i2c/busses/Makefile         |   1 +
+ drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++++
+ drivers/mfd/Kconfig                 |  15 +
+ drivers/mfd/Makefile                |   2 +
+ drivers/mfd/nct6694.c               | 388 +++++++++++++++
+ drivers/net/can/usb/Kconfig         |  11 +
+ drivers/net/can/usb/Makefile        |   1 +
+ drivers/net/can/usb/nct6694_canfd.c | 832 +++++++++++++++++++++++++++++++
+ drivers/rtc/Kconfig                 |  10 +
+ drivers/rtc/Makefile                |   1 +
+ drivers/rtc/rtc-nct6694.c           | 297 +++++++++++
+ drivers/watchdog/Kconfig            |  11 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/nct6694_wdt.c      | 307 ++++++++++++
+ include/linux/mfd/nct6694.h         | 102 ++++
+ 23 files changed, 3669 insertions(+)
+ create mode 100644 drivers/gpio/gpio-nct6694.c
+ create mode 100644 drivers/hwmon/nct6694-hwmon.c
+ create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+ create mode 100644 drivers/mfd/nct6694.c
+ create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+ create mode 100644 drivers/rtc/rtc-nct6694.c
+ create mode 100644 drivers/watchdog/nct6694_wdt.c
+ create mode 100644 include/linux/mfd/nct6694.h
+
+-- 
+Lee Jones [ÊùéÁêºÊñØ]
