@@ -1,86 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F73529A300;
-	Tue, 16 Sep 2025 09:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEFA29BDAB
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Sep 2025 09:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758016093; cv=none; b=VvZP6vjf+iGpWI+ejRUIX0BcrloKvRMGitlAh+Wf8L21aTY2hSsTuK/RCxSbXQQoThd13AinpB5GthkGrI75kVRSAFKycEknfnYPy7cPmWEXwBkTXlnOkLnWBW6PBTWQJupmwWLkLXwPn4kClbRwJUb5c4xrDuTVp3MJP2yLdy8=
+	t=1758016357; cv=none; b=EWN6WlaSAST2kLzsMYMFFYeqgUDS5U/xguUqz0fYLpyNJhslsJUi73e29eBxgnVlZuekg46ckLcw575ydTfE0NmJRDACrxZxfMuAF3Z7C95v/6qPFCHc2jhfSVkv5Ep69IYHwckjOveambb9l/ajnRZV+xocdmyi0VL17AaF2o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758016093; c=relaxed/simple;
-	bh=B8Cx0qO06RvS/2GHQQmLFNYAHtCYbkUfAK0mE1aVggU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Eozz96udPGs74TL16s3R985TGM2cV+DW9zoeWSFs6VDkJNC0oBYrS7QYRds1faLjvdBZrGdp/IqcswAJ+Gzj2OE42saJJinS5mHYHpozYVmENJrS45ViXmNMB5YvKszVB5WHy5nHUu0zASw+bcTzZR21+f+uFv5S0mPAK63ZC5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WMBLXtcq; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1758016357; c=relaxed/simple;
+	bh=M9V51AxzPBO5PwhtBLVHE9xHOolKyukF4W20dH50Hk0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t0GtYH79cXs5awQHlNDGRboMualDGxKkR4Vo+UyFwe4KyRQ7fjd8xt9RAkUBEw9SyyEZq31dde+mEqPTIHZK8/qRRwlmoQxBODfET1tu6RIL7iiIXapDBawnZ1dN5JGWMqYq0/1Zqhb1G+6tMlltBd3guhXStV1+46kFf49W4nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8b7oQg+; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WMBLXtcq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758016091; x=1789552091;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=B8Cx0qO06RvS/2GHQQmLFNYAHtCYbkUfAK0mE1aVggU=;
-  b=WMBLXtcqiqXypMktjNuYQ1wJI2NIzpUk62u3Wf4K60NbTEhA2vZ1mmSW
-   WLCltr9E8B4iNcbMRRtKJZYS1ffShL2zDbhG8icUPL2SR2g2ZTuQwbNKK
-   bgvfMEu4d3Ue1D5odvqVe53M65BqWaLqNL7jH7odT36eTdBK8PRCzRozA
-   BClk0pmyUIUFp17CP6702C0yVgQrGhAQAVrUJsaB+/RdedzeEAO0fV6uq
-   lppCaTDWRTLWcPYceMsMmt8JxDrSfQT9MMHy/habrbEDNI+HrRZdBCyax
-   7a0FG7TM4ObyznWw1nnZOR63Tzb2NKu2aPkiPOmjHaY5f96bWBYfe3JXf
-   A==;
-X-CSE-ConnectionGUID: 6fFt5eTIRxuNfKYuGEob0w==
-X-CSE-MsgGUID: IgCYqN5YTwa3PSOy+ujDDw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="64110247"
-X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
-   d="scan'208";a="64110247"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 02:48:10 -0700
-X-CSE-ConnectionGUID: 1KO2ZkczRLSS1bDKFitSHw==
-X-CSE-MsgGUID: NApNvrmOT0egzadqPqdR6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
-   d="scan'208";a="174009514"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.195])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 02:48:07 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: jdelvare@suse.com, linux@roeck-us.net, Hans de Goede <hansg@kernel.org>, 
- Yen-Chi Huang <jesse.huang@portwell.com.tw>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-kernel@vger.kernel.org, jay.chen@canonical.com
-In-Reply-To: <0d73c577-1941-44b4-917e-3aed6f1f664a@portwell.com.tw>
-References: <0d73c577-1941-44b4-917e-3aed6f1f664a@portwell.com.tw>
-Subject: Re: [PATCH v5] platform/x86: portwell-ec: Add hwmon support for
- voltage and temperature
-Message-Id: <175801608254.8108.14924373299044862303.b4-ty@linux.intel.com>
-Date: Tue, 16 Sep 2025 12:48:02 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8b7oQg+"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-26685d63201so18155645ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Sep 2025 02:52:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758016355; x=1758621155; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6V/2JKFCs/FeFWLTSODQDr7ffITBUaTSIVuTLike6oc=;
+        b=H8b7oQg+0i+beSJ9kOLlOa+OQQES1ULqg896ntTDjZYEIbCJ2VqItDnVuErZr2pEsz
+         xmPHVK3pc5CZuEURXZcxGLM2sZN0GdLsz+TvpK0YQdcrUKNLSSf793w8qbsA+/WJBqmf
+         L782SVhe9emv8DZENORzOUsyqewCtWb4UHfysgUqEfloC14KHAKx+XTezwqoIrjnpOR7
+         +H3zX8f8OPbpM9dO9wun0L3SQpOSgCI6Lw+WwdP3JQtTqioQKpGxCigq+Q8rs/bEYP0V
+         gsV7IbZBQhJBVQX3cLsRGd6BuewJp/Tz2/TZKeDFa18nvy0BnC8hH0aPWoRCh0WofJL5
+         QBdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758016355; x=1758621155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6V/2JKFCs/FeFWLTSODQDr7ffITBUaTSIVuTLike6oc=;
+        b=BySrK7GOjcVgt6SLogikLbnxBs1PvfZej3p3CbkW7H+gX4Vq7P04+Mdg6zAzaXU98u
+         syuiGLP7ekp8EGLOLqiVxtv7PSbOtW4FvsdeJ3cj26XpJc2jhQTxK/PzkTIdZSJ5emNA
+         oMyqzD3iArLBZiyAIa08joLtxb20m0uViirYDN3ZmzR0ydgItW8sU8AOuh2yFNXqWg9x
+         qvCO8TiETKQ11oCF+bNAvtxmIIPNOm7A6BBu6uLJB3Ia6sNkWxWF+0WSTrgTwSadNAix
+         6hbu8iVmIGXf+d6053oJoqAb0CZRkNDLpgQiIVF3rOQxhaRNToAEGaMSZLBczu1J/sCz
+         s/2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUnGBmx09Lr1Gjaauk6OGUdgMVbcIlnLcwGb1WqS/lLP4OCPqr9OuJoxltgy9cEDkSaBunYhCz0nXvSUA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfaxCNw1gqdm27H/sdg2Qgb36XfNQ8jA5ow4shWZ71S9xerJC7
+	7BZchc9S/xTmYpQ2cT3jMo/hrUbkaTbWYaE6yZl/kgrXcf2CF/oTDgP3
+X-Gm-Gg: ASbGnctfemZjY/VBc197ek2vfEnDUrQh/BjtoZsvgajqx609IVa2b9DzCasGZ0xCt5y
+	Lc8wtwG31oZcmuOqcsNLoY0++hwOzSg61AVycR0Ul4Su/rb0kle6fbGNoXN6M6ME4hF2wvTZg4d
+	iH1CEZ3pLAnPLEgVwF80f9rD9Xops5PGBZbXLPlfwnaHB5juodbsNEQr+m8pnOLXrnOqsGi+aZd
+	z14XnAFbdoKpKeY5nzuULlUQsvF/iVeNYvfeVGFvYHzfTpg4yJZdFN5bJYcXzL9vWyIcaqAOzVW
+	fiPCt8dC0NEnp0u+YX9dsk4GwQsLWHgBN/GMtBVojiZUgBNTNG1oUNg9us54W/rljBUXQV1E7Xg
+	3uwGg0d+0vqTSHZQJ79hEGRVIhQq2MbtTeri4gzN1Mx2gEM4XUzzr9DBqawUkPofULYn6TknDZy
+	sq6hkoY+Idz48ibcQGUfvOqdw=
+X-Google-Smtp-Source: AGHT+IGzMLRxu46ZOAx5UTCfKaKDFqV7qJKe5pWFw2whXOGJeDPlIq5qn0wXezBFeDOYYir7k6rHew==
+X-Received: by 2002:a17:902:d504:b0:267:c8d3:21ca with SMTP id d9443c01a7336-267c8d324eamr34843155ad.44.1758016355232;
+        Tue, 16 Sep 2025 02:52:35 -0700 (PDT)
+Received: from cosmo-ubuntu-2404.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2667b4d380csm53935775ad.71.2025.09.16.02.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Sep 2025 02:52:34 -0700 (PDT)
+From: Cosmo Chou <chou.cosmo@gmail.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	jdelvare@suse.com,
+	linux@roeck-us.net
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	cosmo.chou@quantatw.com,
+	Cosmo Chou <chou.cosmo@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: trivial-devices: add mps,mp5998
+Date: Tue, 16 Sep 2025 17:50:25 +0800
+Message-ID: <20250916095026.800164-1-chou.cosmo@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Sep 2025 11:58:13 +0800, Yen-Chi Huang wrote:
+Add dt-bindings for MPS mp5998 hot-swap controller.
 
-> Integrates voltage and temperature monitoring into the driver via the hwmon
-> subsystem, enabling standardized reporting via tools like lm-sensors.
-> 
-> 
+Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
-
-The list of commits applied:
-[1/1] platform/x86: portwell-ec: Add hwmon support for voltage and temperature
-      commit: 8236b4667aca63afcd29620a48a084f6a0eed162
-
---
- i.
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index f3dd18681aa6..d86b2b72d1af 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -305,6 +305,8 @@ properties:
+           - mps,mp5920
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
+           - mps,mp5990
++            # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5998
++          - mps,mp5998
+             # Monolithic Power Systems Inc. digital step-down converter mp9941
+           - mps,mp9941
+             # Temperature sensor with integrated fan control
+-- 
+2.43.0
 
