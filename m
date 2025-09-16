@@ -1,121 +1,86 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5A22586C7
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Sep 2025 06:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F73529A300;
+	Tue, 16 Sep 2025 09:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758004440; cv=none; b=RSUp0NZHMIroz62mFqUEV90lmcvj2biqG2ujiTWJ3zX1E7vCx8kq4EVHJLE0LRXWvTrYpvW17k0SJ/4hD11C7V6b8sU13+JwxKsfFFFQL4V3RbmiMGctMUtkkSGC6LsU2UeNSN+Jle06c1UkTzOU1oiajtVnYMWTVvqnZO6jiUs=
+	t=1758016093; cv=none; b=VvZP6vjf+iGpWI+ejRUIX0BcrloKvRMGitlAh+Wf8L21aTY2hSsTuK/RCxSbXQQoThd13AinpB5GthkGrI75kVRSAFKycEknfnYPy7cPmWEXwBkTXlnOkLnWBW6PBTWQJupmwWLkLXwPn4kClbRwJUb5c4xrDuTVp3MJP2yLdy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758004440; c=relaxed/simple;
-	bh=fPHSiGAaPFD4xb4FsUoKTayjD83CfWGOCBmUyjIJruY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cIDkP+2/Aqc8yeosjKxoSZd2n5KOMJvpEMLwIvBkiir8GtUSe/rmPgSUJE7WI0aDjoJCymTUArdAHmY/eYQU7Ovv57RLefgpUcuuOz9+bQ36l2zmd/i9/7CCXxOU8KA4qxqv/LpwPOK/5h3+k9jgz8riAn0ZQR8AM0PET1EnDAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EI5cctT7; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758016093; c=relaxed/simple;
+	bh=B8Cx0qO06RvS/2GHQQmLFNYAHtCYbkUfAK0mE1aVggU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Eozz96udPGs74TL16s3R985TGM2cV+DW9zoeWSFs6VDkJNC0oBYrS7QYRds1faLjvdBZrGdp/IqcswAJ+Gzj2OE42saJJinS5mHYHpozYVmENJrS45ViXmNMB5YvKszVB5WHy5nHUu0zASw+bcTzZR21+f+uFv5S0mPAK63ZC5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WMBLXtcq; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EI5cctT7"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b0411b83aafso744914166b.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Sep 2025 23:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758004437; x=1758609237; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bCcdr8/06mPp/Cx9ptQFN9PXtHrK1LIEHxNLD5oVRjE=;
-        b=EI5cctT7CZghMcwUgzKOP2PBUI1pwCeIKp4wlsaU4lA00USPeE3CqLwz87GLhpp9pz
-         rzFswRTsVz1eOlfJlfl21yVV11JXD5Ro4vduPDvpLsPKrrJKWwjSrbGEulqXF3l6zwR/
-         ZudzO37pEWPReIy2ywVbhUvt47q/HuBprrtbJYisLxK8ByMs23/mypxZJnK9Duqxf2f8
-         oIxL3c3Y4hHrYQkgZPttOkEVi+ltN5zBATtOtAgx8nujHtF84p17riIlVXaUJ8klsgnk
-         d+B/X9w0hFWLIuip6WTTPxX0TruKmtIMAfl5gKfryS1KkNYc/wjZktgzXonxK3/4uOam
-         iLkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758004437; x=1758609237;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bCcdr8/06mPp/Cx9ptQFN9PXtHrK1LIEHxNLD5oVRjE=;
-        b=qA5WhK83ZissaSOFbuJ2Wo76zFG8phx+CnNB0+O2LjcveyBHHlmEXsBCXc4u0IDFRy
-         HSRlcnZSJ7EupCF58dqugInnOJMrvLx+o9ImD7QAPw/GrsC8cIlIKhD0VZFiqHChbIXx
-         mjzXc8cqspWQzP+WMWJSX7xDlBrxEuIHketTbxvGhQ2GbrIpgoZTVuWMIqMA+N2xKSFD
-         LQ4Rzjv9vLJjqB+hsUlDpVRJW5SV9pwIbWEgYcWv/Jtn/5nSFMjX7TtpahGy468TxzSj
-         0Nqfvc8gM/wscbZTqQR/tl5X8FdkzSXDofnvGfeCzi5bFLm0q9kxf1zRHhAxaixVDwXw
-         rCDw==
-X-Gm-Message-State: AOJu0YwEPiWPBPyN43NU6iv77yWxHaNrRqKOiIgSKsuE001klcrFBjdK
-	EWpenqlFHe6imWDS02s1dISuL+X/3FNygDdztmTDh+LcPTocHZic0zf2
-X-Gm-Gg: ASbGncuSPbNWTpbDEvOtzCD7Wlw34VM1BCYp3u7oAnBtZOO6QwEOuTXZa03zjoj4jVv
-	NsAGaMFy2WmpfbIaGqFI2ns4pggSO3OaDMiuG8E/BokU6nhQ+yycFnGD27fleHCWNv5r+nPZo1E
-	kCPU6b0uitUuvCSSHM3/KQ2Fc16qPP8/ewdL2nGQruMjL3TuMUtYNycJGUwIy8YYrTNbS2DkkC0
-	KwjNASyB68Lzw94IJPgp8gxYfBRO3veo9jHvqn1spW2lJC/fZYRbMt/Ce5zU4PRzHYYLNwVkwBj
-	oAyrKVMutbnQm4hSG7xcQWiGJ5Cguk8lRk1n/WOilWFUQlKds1IsemGgVMUakGmtDj+yqVC6bJS
-	RculPpblZ+pC3TetrwA7AHbwuqZTtgJvYb+nf19BnzgCLThEdRr56cC0yUK+T1fGLHzuTutuxGx
-	o=
-X-Google-Smtp-Source: AGHT+IF+fZ0EOPhWKNwezb7QtMcy89tdov+B1kADJASBYm5VpHuWXzP2nOsz6AMpKOBcUuOHQ44Aqw==
-X-Received: by 2002:a17:907:7f25:b0:b0d:61a0:9a28 with SMTP id a640c23a62f3a-b0d61a09f4dmr735693266b.6.1758004436883;
-        Mon, 15 Sep 2025 23:33:56 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([93.122.248.212])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07d2870da1sm761043166b.13.2025.09.15.23.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 23:33:56 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: tmp102: Add TMP110 and TMP113 devices
-Date: Tue, 16 Sep 2025 09:33:42 +0300
-Message-ID: <20250916063342.4436-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250915-undefined-woozy-15e27ca89a36@spud>
-References: <20250915-undefined-woozy-15e27ca89a36@spud>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WMBLXtcq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758016091; x=1789552091;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=B8Cx0qO06RvS/2GHQQmLFNYAHtCYbkUfAK0mE1aVggU=;
+  b=WMBLXtcqiqXypMktjNuYQ1wJI2NIzpUk62u3Wf4K60NbTEhA2vZ1mmSW
+   WLCltr9E8B4iNcbMRRtKJZYS1ffShL2zDbhG8icUPL2SR2g2ZTuQwbNKK
+   bgvfMEu4d3Ue1D5odvqVe53M65BqWaLqNL7jH7odT36eTdBK8PRCzRozA
+   BClk0pmyUIUFp17CP6702C0yVgQrGhAQAVrUJsaB+/RdedzeEAO0fV6uq
+   lppCaTDWRTLWcPYceMsMmt8JxDrSfQT9MMHy/habrbEDNI+HrRZdBCyax
+   7a0FG7TM4ObyznWw1nnZOR63Tzb2NKu2aPkiPOmjHaY5f96bWBYfe3JXf
+   A==;
+X-CSE-ConnectionGUID: 6fFt5eTIRxuNfKYuGEob0w==
+X-CSE-MsgGUID: IgCYqN5YTwa3PSOy+ujDDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11554"; a="64110247"
+X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
+   d="scan'208";a="64110247"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 02:48:10 -0700
+X-CSE-ConnectionGUID: 1KO2ZkczRLSS1bDKFitSHw==
+X-CSE-MsgGUID: NApNvrmOT0egzadqPqdR6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
+   d="scan'208";a="174009514"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.195])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 02:48:07 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: jdelvare@suse.com, linux@roeck-us.net, Hans de Goede <hansg@kernel.org>, 
+ Yen-Chi Huang <jesse.huang@portwell.com.tw>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, jay.chen@canonical.com
+In-Reply-To: <0d73c577-1941-44b4-917e-3aed6f1f664a@portwell.com.tw>
+References: <0d73c577-1941-44b4-917e-3aed6f1f664a@portwell.com.tw>
+Subject: Re: [PATCH v5] platform/x86: portwell-ec: Add hwmon support for
+ voltage and temperature
+Message-Id: <175801608254.8108.14924373299044862303.b4-ty@linux.intel.com>
+Date: Tue, 16 Sep 2025 12:48:02 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Mon, Sep 15, 2025 at 18:18:51PM +0100, Conor Dooley wrote:
+On Wed, 10 Sep 2025 11:58:13 +0800, Yen-Chi Huang wrote:
 
->On Mon, Sep 15, 2025 at 08:08:18PM +0300, Flaviu Nistor wrote:
->> Add a compatible string for TMP110 and TMP113 devices.
->>=20
->> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 2 ++
->>  1 file changed, 2 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> index 96b2e4969f78..840b5306a8cf 100644
->> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> @@ -13,6 +13,8 @@ properties:
->>    compatible:
->>      enum:
->>        - ti,tmp102
->> +      - ti,tmp110
->> +      - ti,tmp113
->
->The driver has no match data and no compatible based decisions added in
->your patch. Why is a fallback to tmp102 not suitable?
->
-Thanks for the review, it is now more clear to me. You are right, the
-fallback to tmp102 can be used. My intentions were to be able to make it
-clear in the dts which is the real used sensor on the board but this can
-be achieved via the node name (or label). Also I wanted to be able to
-find via a quick search in the repo, the info that the sensors are
-supported in the kernel, but again, I now realize that updating the
-documentation and kconfig should be enough. 
+> Integrates voltage and temperature monitoring into the driver via the hwmon
+> subsystem, enabling standardized reporting via tools like lm-sensors.
+> 
+> 
 
->> =20
->>    interrupts:
->>      maxItems: 1
->> --=20
->> 2.43.0
->>=20
+
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/1] platform/x86: portwell-ec: Add hwmon support for voltage and temperature
+      commit: 8236b4667aca63afcd29620a48a084f6a0eed162
+
+--
+ i.
+
