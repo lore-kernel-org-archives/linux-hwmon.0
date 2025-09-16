@@ -1,88 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7781D7E26;
-	Tue, 16 Sep 2025 13:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF1F28488D;
+	Tue, 16 Sep 2025 13:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758029116; cv=none; b=VfaYVL09wU5odNlNW8y6YRwrwjY8FtYoKxqVvRbMIK6MmnX0GEkDlbBFUtme/z7iNSHkur0S/L421v0zDaJtz6vzn1gZneZyi2daaGp7JfV+7d+0fF87z1qdsK6DTMqi+54wmU8H8BVyhiKC+M5NLwsF/13Fed96PzLjlrCCu8c=
+	t=1758030198; cv=none; b=AdTbZ7qkURDB88iGoQ/bvJpqLvCo/c/b94Qc9V/nbydTeaQ/1KtK08tfLF4CQDgSzU5BkKrhvvIMAcsYDKw3oOjHCDIzOzsge+GNjQwZF7CBw4eMrJNsymzBM/CXUAuoq1zEqFFMeA+A8XPhgJVBq4bTc3TOUbcjuE7oGHU+t7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758029116; c=relaxed/simple;
-	bh=TnWVqJu7+bSzvUH6klH4pCKIBwlLZnLJ30RdHCvcXpI=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=KzSXga2G0+jeLAv9ILSj86u0xRh0fXOO4xbNsxMomH9VamjMdRwsSNsgAdAZQyMkD5uo92GWkXkB7uwAUXSzmmqXFe8vBytVumzEcd/M+rhWclQiHL6IeZuJnhsTJTyPePOZEfdPCBMPEzkuzHBoZ/3aC9bes3lvywSH/5smZlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lcxw3LjC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758030198; c=relaxed/simple;
+	bh=5EituY1Uhfg/b+Hco4rbTN/vr4sz2d7nMr/Zscfbt9E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nKFtbCnbLp3KjwG9zKtrGliG5xCFPdbAEOfXm8uXNM4PtHMUauqepDJboDpuG3K71bZQJFdwGD7y2Aydlnhfk0Mor8U6PxdNyPEM9/HSttTHFQjcxVRiSQjlldZ96QOCkrDRLglTyaFm+gLLyl6Rk9c/6ZOnjAZPDbwDig5tiRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+qJiOF9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lcxw3LjC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A71FC4CEF0;
-	Tue, 16 Sep 2025 13:25:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+qJiOF9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E5CC4CEEB;
+	Tue, 16 Sep 2025 13:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758029115;
-	bh=TnWVqJu7+bSzvUH6klH4pCKIBwlLZnLJ30RdHCvcXpI=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Lcxw3LjCuB4qNqHjRm2+ofuatX9CR3D1fdfUaY+ANH1VM+E6Jj8u+OoSCrSRO3/J8
-	 IMBUlCTYnlFQ0tZvKbUfUIHDfhCkYIak3x+XiSLbj48RW5ErX1bQjlKLcaOl7xwQ7b
-	 1zFYnysLUWaJarrgwbpxGYZ6EndgDWBzdfWRVtOhYZ03qKv0XuckObDb05F3uc8GEz
-	 DVouY/XqJT3pO2ACpmEYeOn0/ACJwmoQPsh9MswEtAY0WaiAbSFOlf3IQtqy1re8fQ
-	 0XWihOjUttpgpBZTdZtkWrVDwfvv6aU25+REfjk8YF6LtJw3x/dvMGfqu3a08aNbwY
-	 2+fYwKWNApwhQ==
-Date: Tue, 16 Sep 2025 08:25:14 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1758030198;
+	bh=5EituY1Uhfg/b+Hco4rbTN/vr4sz2d7nMr/Zscfbt9E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=s+qJiOF9+BdQ5gUvgRwxoM9iaN9zoWG3JsbraSZGjDeACLcLdzOxPZS+a3yeuyLq8
+	 PDVTPM+BU9OLQQ17t5eIYaXkmg0tRbhUkx2bLrMDJHVhKXt9rGfrm7UECNAX7zL97p
+	 ycZ2xv7Y6mVZ8BGMHk8QiQMlwZ3iXcokVrLHRgUnO8dTGsWqZo1aMJGSfn7LYtql0C
+	 rylaupWONDp3N+bm8MhrppaVAPNlPZAG2ssk0h7I6Oucw+PMjcPc1EpIflopocDFgj
+	 IHEsXszaSUPqT9s7CP1Yl4D45ZWHgnBbf9AcsGMCW0it+i945jmsv2VKqjphTwd4vl
+	 BuMfVLc5FB2LQ==
+From: Lee Jones <lee@kernel.org>
+To: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de, 
+ mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, davem@davemloft.net, 
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+ alexandre.belloni@bootlin.com, a0282524688@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-usb@vger.kernel.org
+In-Reply-To: <20250912091952.1169369-1-a0282524688@gmail.com>
+References: <20250912091952.1169369-1-a0282524688@gmail.com>
+Subject: Re: [PATCH RESEND v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-Id: <175803019322.3799290.6641375066506606941.b4-ty@kernel.org>
+Date: Tue, 16 Sep 2025 14:43:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>
-To: Troy Mitchell <troy.mitchell@linux.dev>
-In-Reply-To: <20250916-ctl2301-v1-2-97e7c84f2c47@linux.dev>
-References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
- <20250916-ctl2301-v1-2-97e7c84f2c47@linux.dev>
-Message-Id: <175802889714.3636283.16878564061648936522.robh@kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: Add CTF2301 devicetree bindings
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-c81fc
 
-
-On Tue, 16 Sep 2025 12:46:45 +0800, Troy Mitchell wrote:
-> Add dt-binding for the hwmon driver of Sensylink's CTF2301 chip.
+On Fri, 12 Sep 2025 17:19:45 +0800, a0282524688@gmail.com wrote:
+> From: Ming Yu <a0282524688@gmail.com>
 > 
-> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
-> ---
->  .../bindings/hwmon/sensylink,ctf2301.yaml          | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
+> This patch series introduces support for Nuvoton NCT6694, a peripheral
+> expander based on USB interface. It models the chip as an MFD driver
+> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 > 
+> [...]
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Applied, thanks!
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml:18:111: [warning] line too long (161 > 110 characters) (line-length)
+[1/7] mfd: Add core driver for Nuvoton NCT6694
+      commit: 51dad33ede63618a6b425c650f3042d85e646dac
+[2/7] gpio: Add Nuvoton NCT6694 GPIO support
+      commit: 611a995e8ae1a52e34abb80ae02800ea100bdf84
+[3/7] i2c: Add Nuvoton NCT6694 I2C support
+      commit: c5cf27dbaeb6e12ea1703ee896dd4b42e92343aa
+[4/7] can: Add Nuvoton NCT6694 CANFD support
+      commit: 8a204684d0ffdf8d39c16d70fc6f1000e831ef27
+[5/7] watchdog: Add Nuvoton NCT6694 WDT support
+      commit: f9d737a7d84ff4c1df4244361e66ddda400678dc
+[6/7] hwmon: Add Nuvoton NCT6694 HWMON support
+      commit: 197e779d29d87961be12eb6429dda472a843830f
+[7/7] rtc: Add Nuvoton NCT6694 RTC support
+      commit: d463bb140583609f78f61d48c3dfb6f46c5cb062
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml: properties:compatible:const: ['sensylink,ctf2301'] is not of type 'integer', 'string'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.yaml: properties:compatible:const: ['sensylink,ctf2301'] is not of type 'string'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-Documentation/devicetree/bindings/hwmon/sensylink,ctf2301.example.dtb: /example-0/i2c/ctf2301@4c: failed to match any schema with compatible: ['sensylink,ctf2301']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250916-ctl2301-v1-2-97e7c84f2c47@linux.dev
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+--
+Lee Jones [李琼斯]
 
