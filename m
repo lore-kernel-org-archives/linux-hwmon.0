@@ -1,99 +1,448 @@
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A79027E054;
-	Tue, 16 Sep 2025 04:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7963023817E
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Sep 2025 05:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757998100; cv=none; b=GZvwpE302Kcs7sWcRG5yMH6wtKQY0P2dgpO5PAPOORbBb5SQPOJCXh571i6lnGgdhILZAYX727BGZsRaZF+WvhFXeLhLVJm+xmz72HkvK5PrvukXM1dHdl7/cCMuTwdd+EQy73v/c+s8y++Fus/cSyr5yY2+LGhXEAANm0E9DwA=
+	t=1757998987; cv=none; b=kjQ8eyUDK+KFm2FgB24njzl8kjBF51/RkOKIbmzUYFgoMGklxOF+paf4qn3Ir95Hlre47eru8SX9toiW6cp7QztQH6WrBuUSxgMZXIjYn8UcfrM94YMJOyQHB3EI5wEsToeFovSJW8Mn12jsFld6PG4x0BL3bz2+LbMpLzOam5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757998100; c=relaxed/simple;
-	bh=AR6U9NTv5fBPqm2mceO3JzfYwF71DRRrN65zglH87xI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sSLBJzfpKBku93e7f8jMmH19MN0SwhU9VsmK3Kddyn/AEO5ECr3B0MRkBZQ/UI0P1GzwHdpUm31y/0LLsiegnWpZ64i8FarTfryssFKEZzIDMOHlwmNxx+/wGeXUD7Dd/lP8KsRNA990CTNLj4pmrmuAUwEBjAb8nZBWhKqQ/4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=linux.spacemit.com; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-X-QQ-mid: zesmtpgz6t1757998024t25be8ec8
-X-QQ-Originating-IP: CRbU/BqZ3ifO5Zk5VW7xeMK7ItiPBn/+hHjhYzxfN2A=
-Received: from = ( [61.145.255.150])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 16 Sep 2025 12:47:03 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13986833674161826152
-X-QQ-CSender: troy.mitchell@linux.spacemit.com
-Sender: troy.mitchell@linux.spacemit.com
+	s=arc-20240116; t=1757998987; c=relaxed/simple;
+	bh=7Ond/6XS/Qp7aJ1U5Qboqmdb13ttXet1eJuaYoicB7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aUReq/36KH/ARfBST4nR1lVV5WQ5aDBDZY6fHUNav+jOFlfycbli0h7llcS4dLmIRxRYAkhZ481R4KFSS74g0L5nQMM4+/BoX8RXkGVyxApV2xmzYOjZy/3Sw8jy//ScqnPVFU3BNLHejaePu8Ssp7Uk4FiV3Xy8xDvTezUUOqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bGhrMo3q; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bGhrMo3q"
+Date: Tue, 16 Sep 2025 13:02:45 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1757998971;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=utxZJdq4SZsBiWUz44H+KI3zwoW+fq5Bdwpbp1UmMaM=;
+	b=bGhrMo3qD7K+HCnofyyIIrfk4PBklpsnn6mhm+nnnomjkuhNbl0aMLhDgOXLuQVZRjbGQh
+	zPuKa+I1UyTPucizOnKO7cvvz1qTlbMNVYeAvHAWXZIgfXv0Cp3NYBQqQf6jHBhIUND63T
+	nwHnPzMNNWdOvrV+MPAxAymAScWdD4M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Troy Mitchell <troy.mitchell@linux.dev>
-Date: Tue, 16 Sep 2025 12:46:44 +0800
-Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: Add Sensylink
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Troy Mitchell <troy.mitchell@linux.dev>
+Subject: Re: [PATCH 3/3] hwmon: (ctf2301) Add support for CTF2301
+Message-ID: <aMjvdWUNF6vXH65_@LT-Guozexi>
+References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
+ <20250916-ctl2301-v1-3-97e7c84f2c47@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250916-ctl2301-v1-1-97e7c84f2c47@linux.dev>
-References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
-In-Reply-To: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.dev>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757998019; l=876;
- i=troy.mitchell@linux.dev; s=20250710; h=from:subject:message-id;
- bh=AR6U9NTv5fBPqm2mceO3JzfYwF71DRRrN65zglH87xI=;
- b=Jim1MZ+S+B9l0ZyWqB1r9SK3Vo+WowQzuqHMzsJxsr/gL4p7keQet/x7XN57H/nKexSTdfZ5c
- nfX7frsj2/cCqJ38mpOJfmja8yfkQD7pYTwL8gGNzU6iM1bSZoiji+c
-X-Developer-Key: i=troy.mitchell@linux.dev; a=ed25519;
- pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: Mtga1ChWHZ+UWVwNG+XqePWTpiT4hdjWWUKbGBy4vUhyA9yl07+mLds8
-	+lJHggJFosKGvPuCk2q/UpnJWc6osjWu6C8kTAWAMuvk/WQAYhCQglLjZPHcwUOrebgbd+I
-	Mci2C67QTwhEyYfEGlpv8qENUTHD4bI9/QCpqcmbverQG+cpACRAFC3Em6N87e/uz8CHpFC
-	JHJPG4e0Fdv67d2t1FEmKBSzMIA5IcUm4219SUcsuEj8AtjvqsHEpc1zLjCnKQ+hMxb1bk1
-	i+kqMFRPzxtYVbWjOYGTm/pTUbzydBvXvtru7+1WbbLWpoRIzl8w1U4L8/CesAeOBvLJex1
-	hmcx2WAOpa8ZzAslujt2+x1jFwcDHSTtxYq3TMVuSLGbnfI2oHv6b8vtu6eHchCuy3xYvxp
-	WtlK6faTZ/it+pLOFk53UT8a2MXediNY9T6povmh3lWRjrUGAFX5x3l8ss+srrSRm5QK8s9
-	/wEQW/4ivpHZaFRIhUb//PivM6qdpimR1mtXXLJaY3AxkmfBldsBecGGA4kCf+c7arNazjk
-	xBd9eHueALxaussLJsJtLwKVRYICDAraG2bIXv7QI++dv8y2bpZS3Qvr8Oznat0bAsr0O4q
-	A6TZNe9dfwFLB6B4xKcnFGpxoGWnJabt8PNORr72Vi/EYsznJxOFsXjL3VMFL83d22eXgcy
-	x03ecRj+xIILGLKUmAGUxRNjKFxmMYPxTGvjoY29EglqeXsSGHGpEc7RPaed0TdNa8iZgGS
-	9hvAXgTJyE0HEp/GrCLwj0kEC/e0ZHaMUIaOezVaAIIRRgaHGIr+hImgu1cU2VVtSYD1xI+
-	WtBdJTG0T4FKX1BC9XC9Vsh5+Pfl3jeY5ZVeqY5BtGwOcbyEwYUSdpluTXuUpP6Z+J3XJRF
-	FPyjML3AIaVs4QvT2uAuvHAagAbhILys8o8Et+yl5wFC7tDSwqPipVXYm9nUav4pyoK17uf
-	MLQbOfvqYSGaHPS1jyhnQZqHVJyeOlqzBQoKmXWZTBqqw8aNUcBIk/xdV9+cQ824XCDhhXn
-	p49C/85bewr92N8jnxoScxmzU5brTaQWECMn53vn9UpbaxubNM3IiDYF93yrg77In8nDikC
-	ul4Lw5kA1EbENq7F+I+AhA=
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250916-ctl2301-v1-3-97e7c84f2c47@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-Link: https://www.sensylink.com/
+On Tue, Sep 16, 2025 at 12:46:46PM +0800, Troy Mitchell wrote:
+> This commit introduces driver for the Sensylink CTF2301
+> system-level thermal management solution chip.
+> 
+> Currently, the driver does NOT support the Auto-Temp mode of the PWM
+> fan controller, which provides closed-loop automatic fan speed control
+> based on temperature.
+> 
+> Now this driver supports:
+>   - Reading local temperature.
+>   - Reading remote temperature.
+>   - Controlling the PWM fan output in Direct-DCY mode (direct duty cycle control).
+>   - Monitoring fan speed via the TACH input (RPM measurement).
+> 
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
+> ---
+>  drivers/hwmon/Kconfig   |  11 ++
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/ctf2301.c | 326 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 338 insertions(+)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 9d28fcf7cd2a6f9e2f54694a717bd85ff4047b46..2120d891e549795c3f3416d08f71916af714f6b6 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -537,6 +537,17 @@ config SENSORS_CROS_EC
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called cros_ec_hwmon.
+>  
+> +config SENSORS_CTF2301
+> +	tristate "Sensylink CTF2301"
+> +	depends on I2C
+> +	select REGMAP
+> +	help
+> +	  If you say yes here you get support for Sensylink CTF2301
+> +	  sensor chip.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called ctf2301.
+> +
+>  config SENSORS_DRIVETEMP
+>  	tristate "Hard disk drives with temperature sensors"
+>  	depends on SCSI && ATA
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index cd8bc4752b4dbf015c6eb46157626f4e8f87dfae..12f2894ce8d5fbfd942409f6c43d78fbdece57b4 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -65,6 +65,7 @@ obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+>  obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
+>  obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
+>  obj-$(CONFIG_SENSORS_CROS_EC)	+= cros_ec_hwmon.o
+> +obj-$(CONFIG_SENSORS_CTF2301)	+= ctf2301.o
+>  obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
+>  obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
+>  obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
+> diff --git a/drivers/hwmon/ctf2301.c b/drivers/hwmon/ctf2301.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..2fea4d195519ea34c1d4bf67456098b225d4d13c
+> --- /dev/null
+> +++ b/drivers/hwmon/ctf2301.c
+> @@ -0,0 +1,326 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Driver for CTF2301 system-level thermal management solution chip
+> + * Datasheet: https://www.sensylink.com/upload/1/net.sensylink.portal/1689557281035.pdf
+> + *
+> + * Copyright (C) 2025 Troy Mitchell <troy.mitchell@linux.dev>
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +#define PWM_PARENT_CLOCK			360000
+> +
+> +#define CTF2301_LOCAL_TEMP_MSB			0x00
+> +#define CTF2301_RMT_TEMP_MSB			0x01
+> +#define CTF2301_ALERT_STATUS			0x02
+> +#define CTF2301_GLOBAL_CFG			0x03
+> +#define CTF2301_RMT_TEMP_LSB			0x10
+> +#define CTF2301_LOCAL_TEMP_LSB			0x15
+> +#define CTF2301_ALERT_MASK			0x16
+> +#define	CTF2301_ENHANCED_CFG			0x45
+> +#define CTF2301_TACH_COUNT_LSB			0x46
+> +#define CTF2301_TACH_COUNT_MSB			0x47
+> +#define CTF2301_PWM_AND_TACH_CFG		0x4a
+> +#define CTF2301_PWM_VALUE			0x4c
+> +#define CTF2301_PWM_FREQ			0x4d
+> +#define CTF2301_RMT_DIODE_TEMP_FILTER		0xbf
+> +
+> +/* remote diode fault alarm */
+> +#define ALERT_STATUS_RDFA			BIT(2)
+> +
+> +/* alert interrupts enable  */
+> +#define GLOBAL_CFG_ALERT_MASK			BIT(7)
+> +/* tach input enable  */
+> +#define GLOBAL_CFG_TACH_SEL			BIT(2)
+> +
+> +/* local high temperature alarm mask */
+> +#define ALERT_MASK_LHAM				BIT(6)
+> +/* remote high temperature alarm mask */
+> +#define ALERT_MASK_RHAM				BIT(4)
+> +/* remote low temperature alarm mask */
+> +#define ALERT_MASK_RLAM				BIT(3)
+> +/* remote t_crit alarm mask */
+> +#define ALERT_MASK_RCAM				BIT(1)
+> +/* tachometer alarm mask */
+> +#define ALERT_MASK_TCHAM			BIT(0)
+> +
+> +#define ALERT_MASK_ALL				(ALERT_MASK_LHAM | ALERT_MASK_RHAM | \
+> +						ALERT_MASK_RLAM | ALERT_MASK_RCAM | \
+> +						ALERT_MASK_TCHAM)
+> +
+> +/* enables signed format for high and t_crit setpoints */
+> +#define ENHANGCED_CFG_USF			BIT(3)
+> +
+> +/* PWM Programming enable */
+> +#define PWM_AND_TACH_CFG_PWPGM			BIT(5)
+> +
+> +#define PWM_DEFAULT_FREQ_CODE			0x17
+> +
+> +
+> +struct ctf2301 {
+> +	struct i2c_client *client;
+> +
+> +	struct regmap *regmap;
+> +
+> +	unsigned int pwm_freq_code;
+> +};
+> +
+> +static int ctf2301_read_temp(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	int regval[2], raw, err, flag = 1, shift = 4, scale = 625;
+> +	struct ctf2301 *ctf2301 = dev_get_drvdata(dev);
+> +	unsigned int reg_msb = CTF2301_LOCAL_TEMP_MSB,
+> +		     reg_lsb = CTF2301_LOCAL_TEMP_LSB;
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		if (channel != 0 && channel != 1)
+> +			return -EOPNOTSUPP;
+> +
+> +		if (channel == 1) {
+> +			err = regmap_read(ctf2301->regmap, CTF2301_ALERT_STATUS, regval);
+> +			if (err)
+> +				return err;
+> +
+> +			if (regval[0] & ALERT_STATUS_RDFA)
+> +				return -ENODEV;
+> +
+> +			shift = 5;
+> +			scale = 1250;
+> +			reg_msb = CTF2301_RMT_TEMP_MSB;
+> +			reg_lsb = CTF2301_RMT_TEMP_LSB;
+> +		}
+> +
+> +		err = regmap_read(ctf2301->regmap, reg_msb, regval);
+> +		if (err)
+> +			return err;
+> +
+> +		err = regmap_read(ctf2301->regmap, reg_lsb, regval + 1);
+> +		if (err)
+> +			return err;
+> +
+> +		dev_err(dev, "local temp: lsb->0x%x, msb->0x%x", regval[1], regval[0]);
+Sry I forget to remove debug info.
+I'll remove them in the next version.
+There are some more below, please ignore.
 
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 77160cd47f54079a39f35b570d69f7c4c2274724..ea4011d64ab9081d212a738839849d5814cf6c98 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1353,6 +1353,8 @@ patternProperties:
-     description: Sensirion AG
-   "^sensortek,.*":
-     description: Sensortek Technology Corporation
-+  "^sensylink,.*":
-+    description: Sensylink Microelectronics Technology Co., Ltd.
-   "^sercomm,.*":
-     description: Sercomm (Suzhou) Corporation
-   "^sff,.*":
-
--- 
-2.51.0
-
+                    - Troy
+> +
+> +		raw = (s16)((regval[0] << 8) | regval[1]);
+> +
+> +		raw >>= shift;
+> +
+> +		*val = raw * scale * flag;
+> +
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ctf2301_read_fan(struct device *dev, u32 attr, long *val)
+> +{
+> +	struct ctf2301 *ctf2301 = dev_get_drvdata(dev);
+> +	int regval[2], err, speed;
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		err = regmap_read(ctf2301->regmap, CTF2301_TACH_COUNT_MSB, regval);
+> +		if (err)
+> +			return err;
+> +
+> +		err = regmap_read(ctf2301->regmap, CTF2301_TACH_COUNT_LSB, regval + 1);
+> +		if (err)
+> +			return err;
+> +
+> +		speed = (regval[0] << 8) | regval[1];
+> +
+> +		*val = (unsigned int)(1 * (5400000 / speed));
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ctf2301_write_pwm(struct device *dev, u32 attr, long val)
+> +{
+> +	struct ctf2301 *ctf2301 = dev_get_drvdata(dev);
+> +	int err, map_val;
+> +
+> +	dev_err(dev, "write pwm: %d", attr);
+> +
+> +	switch (attr) {
+> +	case hwmon_pwm_input:
+> +		map_val = (val * ctf2301->pwm_freq_code * 2) / 255;
+> +		dev_err(dev, "val:%ld, map_val: %d", val, map_val);
+> +		err = regmap_write(ctf2301->regmap, CTF2301_PWM_VALUE, map_val);
+> +		if (err)
+> +			return err;
+> +		break;
+> +	case hwmon_pwm_freq:
+> +		ctf2301->pwm_freq_code = DIV_ROUND_UP(PWM_PARENT_CLOCK, val) / 2;
+> +		dev_err(dev, "pwm_freq_code: %d", ctf2301->pwm_freq_code);
+> +		err = regmap_write(ctf2301->regmap, CTF2301_PWM_FREQ, ctf2301->pwm_freq_code);
+> +		if (err)
+> +			return err;
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t ctf2301_is_visible(const void *drvdata,
+> +				 enum hwmon_sensor_types type,
+> +				 u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +		case hwmon_pwm_freq:
+> +			return 0644;
+> +		default:
+> +			return 0;
+> +		}
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int ctf2301_read(struct device *dev, enum hwmon_sensor_types type,
+> +		       u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return ctf2301_read_temp(dev, attr, channel, val);
+> +	case hwmon_fan:
+> +		return ctf2301_read_fan(dev, attr, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int ctf2301_write(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		return ctf2301_write_pwm(dev, attr, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_channel_info * const ctf2301_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT, HWMON_T_INPUT),
+> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_FREQ),
+> +	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops ctf2301_hwmon_ops = {
+> +	.is_visible = ctf2301_is_visible,
+> +	.read = ctf2301_read,
+> +	.write = ctf2301_write
+> +};
+> +
+> +static const struct hwmon_chip_info ctf2301_chip_info = {
+> +	.ops = &ctf2301_hwmon_ops,
+> +	.info = ctf2301_info,
+> +};
+> +
+> +static const struct regmap_config ctf2301_regmap_config = {
+> +	.max_register = CTF2301_RMT_DIODE_TEMP_FILTER,
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +};
+> +
+> +static int ctf2301_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct ctf2301 *ctf2301;
+> +	int err;
+> +
+> +	ctf2301 = devm_kzalloc(dev, sizeof(*ctf2301), GFP_KERNEL);
+> +	if (!ctf2301)
+> +		return -ENOMEM;
+> +	ctf2301->client = client;
+> +
+> +	ctf2301->regmap = devm_regmap_init_i2c(client, &ctf2301_regmap_config);
+> +	if (IS_ERR(ctf2301->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(ctf2301->regmap),
+> +				     "failed to allocate register map");
+> +
+> +	err = regmap_write(ctf2301->regmap, CTF2301_GLOBAL_CFG,
+> +			   GLOBAL_CFG_ALERT_MASK | GLOBAL_CFG_TACH_SEL);
+> +	if (err)
+> +		return dev_err_probe(dev, err,
+> +				     "failed to write CTF2301_GLOBAL_CFG register");
+> +
+> +	/*err = regmap_write(ctf2301->regmap, CTF2301_ALERT_MASK, ALERT_MASK_ALL);*/
+> +	/*if (err)*/
+> +		/*return dev_err_probe(dev, err,*/
+> +				     /*"failed to write CTF2301_ALERT_MASK");*/
+> +
+> +	err = regmap_write(ctf2301->regmap, CTF2301_ENHANCED_CFG, ENHANGCED_CFG_USF);
+> +	if (err)
+> +		return dev_err_probe(dev, err,
+> +				     "failed to write CTF2301_ENHANCED_CFG");
+> +
+> +	err = regmap_write(ctf2301->regmap, CTF2301_PWM_AND_TACH_CFG, PWM_AND_TACH_CFG_PWPGM);
+> +	if (err)
+> +		return dev_err_probe(dev, err,
+> +				     "failed to write CTF2301_PWM_AND_TACH_CFG");
+> +
+> +	ctf2301->pwm_freq_code = PWM_DEFAULT_FREQ_CODE;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ctf2301,
+> +							 &ctf2301_chip_info,
+> +							 NULL);
+> +	if (IS_ERR(hwmon_dev))
+> +		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
+> +				     "failed to register hwmon device");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ctf2301_of_match[] = {
+> +	{ .compatible = "sensylink,ctf2301", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ctf2301_of_match);
+> +
+> +static struct i2c_driver ctf2301_driver = {
+> +	.driver = {
+> +		.name	= "ctf2301",
+> +		.of_match_table = of_match_ptr(ctf2301_of_match),
+> +	},
+> +	.probe		= ctf2301_probe,
+> +};
+> +module_i2c_driver(ctf2301_driver);
+> +
+> +MODULE_AUTHOR("Troy Mitchell <troy.mitchell@linux.dev>");
+> +MODULE_DESCRIPTION("ctf2301 driver");
+> +MODULE_LICENSE("GPL");
+> 
+> -- 
+> 2.51.0
+> 
