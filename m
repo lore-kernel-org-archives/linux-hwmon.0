@@ -1,69 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD210EACE;
-	Mon, 15 Sep 2025 21:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF94C226D1E;
+	Tue, 16 Sep 2025 04:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757972063; cv=none; b=DEB2S+PdRv3lkZxpgnPEEiZJBsRICoMwwMkDOHiJUczPNc2rvxnM7OV/H7sTTh0O6cTy27M3i/WiO5QXkT9PsxBZmCm/mYL90GkJMSxG8ire7aLqXcQG4iq6uALfxvJ0zvGIorCvVkd+vkhsoCcGSr1AKQVGChEGAJYh0J6B3Bg=
+	t=1757998088; cv=none; b=lvMrJZW8SN6FE3DsbIqWqaKLYfC+In8uyEuCNEzIBt1m3+LvmyAWA8WqOoTWTBdRt3Nsvsyte9nGJznTvyTXTkpBbx6DemeKeOPzbn5YvoVEBNpZkLJDrDmyqK7imIIyIoOrys1RuzpFbruvGu7HT095ibxLyRUlgSfSZwDDGg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757972063; c=relaxed/simple;
-	bh=EQ9er1liAcJ0+LgMZjQy4CDVJThm9UrjoRfFH7qfXIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ae3Tj+Eo/na54DxsNR6gwMNgd1rX+dPupywl2ahOkA/qn9N42KyKGAWYjMsg5mOmRNz0/56qMQcSZYC/tZFNds22FODDojs+ajleV3VCyJ8CTonoj64tCY3eXdUmlquJOdfqi27z/Aiec4rMA4E6s4t7T3zyKvQF58ionsDlCTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=coWvyVeC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="coWvyVeC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B327C4CEF1;
-	Mon, 15 Sep 2025 21:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757972062;
-	bh=EQ9er1liAcJ0+LgMZjQy4CDVJThm9UrjoRfFH7qfXIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=coWvyVeCz1LjDVyYAu06PP1m/8FpKwRYQqc8+hGy/A+U9tNUwRQ4jN2a/JppPCaDF
-	 iNBlXJN6If8azp/Oa3mMmC2Slbx20pHDJgNk8lHZhyBndkClSsI8H8NOOAuF4fVH6z
-	 kH4HMrL4ceSFP/bhVgP66HW7evVSh2XXCpa88pD89GQVKabsQInk5339ALT+V3ImV5
-	 hb2BvGTTl7Wh82KVNVJU5GNY6jpFM6SBV6xr7OLMl4oijIUP8pt1XEk5TiYfIRh7lK
-	 MxcjWW08uOuMBPPVMvw7smbSgK69p0+nhjCpQX8y+QC7X20Ltplc5VWJNwp2lSNjSK
-	 xOkdBBD7Us75A==
-Date: Mon, 15 Sep 2025 16:34:21 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Michael Walle <mwalle@kernel.org>
-Cc: linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>, Lee Jones <lee@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, Andrew Davis <afd@ti.com>,
-	linux-hwmon@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
-	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Nishanth Menon <nm@ti.com>, Srinivas Kandagatla <srini@kernel.org>
-Subject: Re: [PATCH v2 2/7] dt-bindings: mfd: tps6594: allow gpio-line-names
-Message-ID: <175797205997.3572376.2459188333826155892.robh@kernel.org>
-References: <20250912120745.2295115-1-mwalle@kernel.org>
- <20250912120745.2295115-3-mwalle@kernel.org>
+	s=arc-20240116; t=1757998088; c=relaxed/simple;
+	bh=ohSe0LBv/ZfwI0Trhej2IkrpHhNFT2IbP7HTp7GcMag=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gL+SL+/hWlQPxf1WbtvtkobdqIHEMiDNBp1/fD9l0FfAoZDjChNFmHxjRSE8wUVFHjvfeu6nrz2PPUSdPEI245P4XUJkh8oBScoMLLnxdfSHEDgO6VLVid0kAkim7FJOxVpPK/KZXiUif+bMl/Ra+vJiailopSneyVMvmMoxeE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=linux.spacemit.com; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+X-QQ-mid: zesmtpgz9t1757998021tc8a7eeeb
+X-QQ-Originating-IP: MnSHpl6i8tG0ESJoWqhVxNInKQRx7KiX/ErgMayAmkk=
+Received: from = ( [61.145.255.150])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 16 Sep 2025 12:46:59 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11306589696659165830
+X-QQ-CSender: troy.mitchell@linux.spacemit.com
+Sender: troy.mitchell@linux.spacemit.com
+From: Troy Mitchell <troy.mitchell@linux.dev>
+Subject: [PATCH 0/3] hwmon: (ctf2301) Add support for CTF2301
+Date: Tue, 16 Sep 2025 12:46:43 +0800
+Message-Id: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250912120745.2295115-3-mwalle@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALPryGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS0Mz3eSSHCNjA0NdAxNDsyQDc+NkIwsDJaDqgqLUtMwKsEnRsbW1AIh
+ Je8dZAAAA
+X-Change-ID: 20250916-ctl2301-0416b073c280
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hwmon@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.dev>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757998019; l=1578;
+ i=troy.mitchell@linux.dev; s=20250710; h=from:subject:message-id;
+ bh=ohSe0LBv/ZfwI0Trhej2IkrpHhNFT2IbP7HTp7GcMag=;
+ b=fBHh0LsDUpNtptiv0hf0HLwcrk280SqDUvqWa354i4Px7ZudBO/6ecLNe+C80DDt22OtGMGqs
+ wXHWVeLCUN3AcOD5viC5WUAxwV+meSy/WnbQ1NJFZnv/pz7H7DISg6Z
+X-Developer-Key: i=troy.mitchell@linux.dev; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: OLsBWtCIHsg6TeJXuJy3v+1fPZNqJ6QP/qpsmQH6SVHVLBud8vKkXmaC
+	JGjSVCT2Nmye3b6oww+2MiUELXexk4rpf/wFY0FAyrFJO+qAFiLTxRdmlL8rurjpKsqfBJx
+	TeaTPgH9GEKBdQYrZunkT4nJ6fyZnBu41+76A3c7Z5TYaaVBQ7qtGEXFIkjMpE0Rl5c2oQd
+	0UYVz2icgnKzSnq+QGCp3Q4pn/YwHAKMk8GyUqmVDSsAjdbU+K6XKn+Fwj2YALDUz5uXqWi
+	G0StOnp9nMp3FM3lAWy1xy9Xmw5L7a3x/mtT2BBDX+mV+OJJIWLVIRsQP+mK5kiHESY4Ejw
+	ITCd4BoVVtvOg9vz8tRHuoc3qPmXNEgqe05j/3o1KYf1rDk8IhdL3HnnEYON3EuydcuUsgh
+	m23RN3S20f5DWhnB/KrbvmWGllzR8Q6bClBncQZ5eLlNrdjcb4sP582VSCGaF9A91j+VBjw
+	AahqPlZZW93VrbopKFyKsfGhaXkdBAxvi3EW9FFOAaVDroapqC0VCQb2/1Sn/TdABlJGRbS
+	BU2u4YPZYqJZxny+SldsR2qBy4LByK/OE4KWv3k3eA1hqsvK+IlQ1XZNCv3CdcWzqIl/Vzw
+	/FI8h5iMA9vIbr/XifjNXKgHhnGFg3f0Q6iOp/kJw16PvwOcI+rcIh9YX5G0Fv+vYmWVkgh
+	jKBe+XqGXNKW7UhCKck62JnybLS8Y42iFlu35tRFmNjDdU641ubic0pFto3x/Q6xNS6LES9
+	e29wgi2pXRXO0Pth25FK6GbTCvptBMYMCveTIC8EpiKiHCT9qhmjmQAu2UlmcOH100J9Fmi
+	MoF5tJKhXOE/rB5X+ltNqpLeBnMm7iwfqSe5bfpksm+22C7TtkyMjpWkAYiTLU7/lk3sXsD
+	Gum3q0HMR5yGGrScuhh8ojxiqYZNdTmQ1mI/MN5mBm79aUopQKN8j5r3Njd3np9AH+yLGJJ
+	rX5w3tV594p5k/fnwNCluV0+UtcZxjbyirWpIm7L+3UfBQx4eKljpqJznrt3ykIr+bCCK0/
+	JgFYndQ0srARYnaFUaQGelm5raj6e97ffbqnbVkAEr0rYFfs0ZqWZNSUvrJW6tcP0sgi+vF
+	1GBAu6+Yx7xuzWHDQx5+Q0=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
+Sensylink CTF2301 is a system-level thermal management solution chip.
 
-On Fri, 12 Sep 2025 14:07:40 +0200, Michael Walle wrote:
-> Setting the signal names in the device tree was already possible, but
-> it will lead to a warning. Allow the gpio-line-names property to fix
-> that.
-> 
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
-> ---
->  Documentation/devicetree/bindings/mfd/ti,tps6594.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+The CTF2301 is an I2C/SMBus compatible device featuring:
+  - One local temperature sensor with ±0.5°C accuracy and 0.0625°C resolution.
+  - One remote temperature sensor for external diode-connected transistors,
+    offering ±1°C accuracy and 0.125°C resolution (temperature range: -40°C to +125°C).
+  - An integrated PWM fan controller capable of operating in two modes:
+      1. Direct-DCY: Open-loop direct duty cycle control.
+      2. Auto-Temp: Closed-loop automatic fan speed control based on measured temperature.
+  - A 1-channel fan speed monitor (TACH input) for RPM measurement.
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Check CTF2301 datasheet for more details[1]
+
+Link:
+https://www.sensylink.com/upload/1/net.sensylink.portal/1689557281035.pdf[1]
+
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.dev>
+---
+Troy Mitchell (3):
+      dt-bindings: vendor-prefixes: Add Sensylink
+      dt-bindings: Add CTF2301 devicetree bindings
+      hwmon: (ctf2301) Add support for CTF2301
+
+ .../bindings/hwmon/sensylink,ctf2301.yaml          |  49 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ drivers/hwmon/Kconfig                              |  11 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/ctf2301.c                            | 326 +++++++++++++++++++++
+ 5 files changed, 389 insertions(+)
+---
+base-commit: 250a683466384b4d36f98b64f20412f3c26ca69e
+change-id: 20250916-ctl2301-0416b073c280
+
+Best regards,
+-- 
+Troy Mitchell <troy.mitchell@linux.dev>
 
