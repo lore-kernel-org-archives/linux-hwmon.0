@@ -1,46 +1,46 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B0E1E633C;
-	Wed, 17 Sep 2025 18:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485212FFDE6;
+	Wed, 17 Sep 2025 18:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758132655; cv=none; b=NLE6SGzz/i6MK5f06mKO3ZNXqO/Y+p7k9/ai+879HHuv8OGB3EdafiVUUS89Y0+tf1WAIQ1bNE5zbkPyT5LybWCGqz1YhOYwAbnXQ3aqn+5e9PbXhtsfSYNgZPqHK6Xxc1nLz7DRY1NKbrwSMFQ7g12bjBUeQtek+nJ0qxyrusY=
+	t=1758132659; cv=none; b=hyQJZRUGi0c9KBh2OSvzAFQIAH8Y0LlwBbfy1EJedza+y5ZFAdNwLwqBFt1c2b2coOUTbLgPei7TGUeD9ACJI2pzcCW9V58dUEBRtpZmUu5QBrKjH1gZ/aNoaxVwE2PCWTR5TUd7TsiptfrsDw+kJxyKBM5nFTLAdUNryC1JRsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758132655; c=relaxed/simple;
-	bh=ZSq5dJhfF6EG66vTRbYR3fBGCwLmKyzdqYnqF8nNGJw=;
+	s=arc-20240116; t=1758132659; c=relaxed/simple;
+	bh=ukf89Mi5/N4oqhQaxMlLvcNfgpUTQNr3RMAtIiJxJyo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EZmoKCYV8kNEKR6Ta/0LslLc0xVsVqb1VYX9bXgiu47ZfIB4NWE3+XXpZIaIivEsKBASTWcDDHYMWp7eTLgjfy23xDlyaTRCcMG8SWXgHIVs6kntW1T53BWfTzYlTq8Ox7zG2Nto+1Tyq72RRuT2OPdfy1GnVQLjC+koQNCk22g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=S3xTs6Rr; arc=none smtp.client-ip=212.227.15.15
+	 MIME-Version; b=D7ful7n9EAqzvfQjmdrKTr0jeNZLZEmSY+dXEDeiws/nv4mvx6m6poIifp6pXSf1koZlXIH7ba8gybJWz9YSAhwMfGszE4ZCK6m7mm3oOrXl+SydztrFrtlMSu8xGA1f9SnMe1wlUUTTyUPrtpUZ8WQmD5V130s84lrLP3xnQ0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=hdH1WFJy; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="S3xTs6Rr"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="hdH1WFJy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1758132650; x=1758737450; i=w_armin@gmx.de;
-	bh=GdZkJavOAGZ1hj80m4eXs78LWz7Qve+4Q+Mn+pV+to4=;
+	s=s31663417; t=1758132651; x=1758737451; i=w_armin@gmx.de;
+	bh=ZblnzLFdXavPwUeIgLs8kx/36vQLCHDbmWEBd6b3IPU=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=S3xTs6Rr48P0EVNtrR6dgdVPpKzQjAeeOMdUYGGq9dh46PQoy3ckROoerohMyy8o
-	 YVdoIPhlu8ZnJe6yz5zhtwvNg+dufQ6aqsYRlMfIjCG9lelS1QuIGiQ19hP1iaFo9
-	 RszftUpaj3qdnG6ibkqx9qBBWe7C0lbMzH8lqgjkztXrngminiGgvwdpiLwLuYR9Y
-	 qw6yOumE7TgB1HjREhRbPIff/7r2cwYRlgsQm/pm+me/yopE53fid6wYzGoexnTD0
-	 DMy7jkEENb8tH3wiW+P+ob4EA9O/7FXhGxBYKJ/vVGVD7+aLuwCl6hal/F8/ggmI5
-	 oG5RNRQCdawlPELPtQ==
+	b=hdH1WFJyQHYa0U4EumSFpjfvIDm+G5IaTeiCkyVxRmxj4xN5KbC7lIlmPCcmaRlK
+	 X9Hh6UHxke4JlSB2FdIbgB0yJqjIvF3vfoverf/7Nv4itYAHA+/UVsgeum53URiqU
+	 Z5m9gFsVM/Xbaj8NoUQDW2mS/kGm/woGrDiUtkEWs+NX7Xf6+SHUXjXZpw04nnpGw
+	 YH0XdOHytFCpDhLEHTMz9t9lQrOns8MENdkBBF3PvKG8K6/e/EoBKv+GxttPaJZQ7
+	 XN2wfGY49Ydyu0lO2HAtGEl6A/ENO/e7uGqbtDbrZBy/qYqRv+DWZCDPWVG/RV5yA
+	 OuA1fSFCNLpR5zTEAQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-inspiron.fritz.box ([93.202.247.91]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MtwZ4-1u6pxW1NAC-00ypRr; Wed, 17 Sep 2025 20:10:50 +0200
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MLR1V-1uh0G01Wux-00MhJX; Wed, 17 Sep 2025 20:10:51 +0200
 From: Armin Wolf <W_Armin@gmx.de>
 To: pali@kernel.org
 Cc: linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] hwmon: (dell-smm) Move clamping of fan speed out of i8k_set_fan()
-Date: Wed, 17 Sep 2025 20:10:34 +0200
-Message-Id: <20250917181036.10972-3-W_Armin@gmx.de>
+Subject: [PATCH 4/4] hwmon: (dell-smm) Add support for Dell OptiPlex 7040
+Date: Wed, 17 Sep 2025 20:10:36 +0200
+Message-Id: <20250917181036.10972-5-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250917181036.10972-1-W_Armin@gmx.de>
 References: <20250917181036.10972-1-W_Armin@gmx.de>
@@ -51,129 +51,110 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4MsQtjJanRGFTd3OpfJ1iVZNApgTFzb/qXDkZI4EP5f1/4BUFcD
- gtX37rQmhGY42WhwjCaE2GrjmW01kjulhlXqmZ2/rNpiSNWbbOYepWRuXY1ys7ybNNJ4IoL
- 73doCLOE2rZwIFKLgrDrxiOVaBHhQ1iKldY8f/6SUKgGPdwTRu1DImrz7UYqeIj+ZoBFqcz
- bxTspL1B7LGU5bi0JUZlA==
+X-Provags-ID: V03:K1:h6P1rkI8OmOaYFc1CnhvFeFlhhOQpoux1AVNbyGVwTfisgmznjU
+ 3WI3hNS1H8OrYSH7j9ujhCXlC2n7ovLr5ocx5dS0yptQmDNa4fFjXJdrw/oBj84xB18Hfoa
+ T3uxda7RRpimkXe2DHem9r6SsuqCkuOLlQrs5DBU6Q09jCWaje+BtpU4yyIgq7hLJsOCOlU
+ I6tDvgfdJ5EXY6Tp/4Btw==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:54yIksuKttw=;Z/PLQefFgHWR3GhNdb9bWK51+EZ
- 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
- KLixVL5CYB
+UI-OutboundReport: notjunk:1;M01:P0:um7+0C7jEA8=;We5A02L3XjuYNt9INvN2MLE00XQ
+ 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
 
-Currently i8k_set_fan() clamps the fan speed before performing the
-SMM call to ensure that the speed is not negative and not greater than
-i8k_fan_max. This however is mostly unnecessary as the hwmon and
-thermal interfaces alread ensure this. Only the legacy ioctl interface
-does not ensure that the fan speed passed to i8k_set_fan() does meet
-the above criteria.
+The Dell OptiPlex 7040 supports the legacy SMM interface for reading
+sensors and performing fan control. Whitelist this machine so that
+this driver loads automatically.
 
-Move the clamping out of i8k_set_fan() and into the legacy ioctl
-handler to prepare for future changes.
-
+Closes: https://github.com/Wer-Wolf/i8kutils/issues/15
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index 3f61b2d7935e..36576db09706 100644
+index 79befa13b699..cbe1a74a3dee 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -24,6 +24,7 @@
- #include <linux/init.h>
- #include <linux/kconfig.h>
- #include <linux/kernel.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
-@@ -446,7 +447,6 @@ static int i8k_set_fan(const struct dell_smm_data *dat=
-a, u8 fan, int speed)
- 	if (disallow_fan_support)
- 		return -EINVAL;
-=20
--	speed =3D (speed < 0) ? 0 : ((speed > data->i8k_fan_max) ? data->i8k_fan=
-_max : speed);
- 	regs.ebx =3D fan | (speed << 8);
-=20
- 	return dell_smm_call(data->ops, &regs);
-@@ -637,6 +637,8 @@ static long i8k_ioctl(struct file *fp, unsigned int cm=
-d, unsigned long arg)
- 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
- 			return -EFAULT;
-=20
-+		speed =3D clamp_val(speed, 0, data->i8k_fan_max);
-+
- 		mutex_lock(&data->i8k_mutex);
- 		err =3D i8k_set_fan(data, val, speed);
- 		if (err < 0)
+@@ -1330,6 +1330,13 @@ static const struct dmi_system_id i8k_dmi_table[] _=
+_initconst =3D {
+ 			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7050"),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell OptiPlex 7040",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7040"),
++		},
++	},
+ 	{
+ 		.ident =3D "Dell Precision",
+ 		.matches =3D {
 =2D-=20
 2.39.5
 
