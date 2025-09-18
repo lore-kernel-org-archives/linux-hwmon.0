@@ -1,29 +1,30 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.16])
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [1.95.21.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35BB221265;
-	Thu, 18 Sep 2025 08:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D4C2F7AA0;
+	Thu, 18 Sep 2025 08:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=1.95.21.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758182701; cv=none; b=h57X2CYwq41gnAkd28GOxpi58zmn+x7IdjLGjqJJ+GK9oAAisUqxFlXxJDz1iaE8uIHlJ7QDtUOC24FNJYcP0lHXAT8rIHYKDD9RUEItMK5pBbXpl1ggrYaqvSJwpRgHiMEaV1sD2vHc3eN1MwqdOrnkRrOONBdKLDCv5y7m4VI=
+	t=1758182827; cv=none; b=HoZtZCWLJTQIjqLWPv4PoMqxPKht7wnbh3oJFDl/NcNoLXMFhaKaQwYhJMWJFDVnojMTeFP8U/LQ4twbYmxpDqdKfC8wUObpYZyjX1VNrWDshRf+/yVz2BDQ7UHB34LBsBWYSbcjyg1/VDhimdZ0U3scUChYs72sztnqzIUqpss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758182701; c=relaxed/simple;
-	bh=E9qm+Sxn0Q/YmM7Ik3UwApGlTfQ+ELCuukT5Rsf7PJs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HOb9GVktRVceWPKxTfTr5QBQar97fss57zqAcv7DMMUNEb4dgxZHF1IpHhNdagyhbZwO9OnBwa+rCFGQy8jcenLg2Qx2vpH95Rznn7JZXF/vEfz/+13SoOreRCDj3o2dbN1+K5+mKL/ZixgsaXV1yj7uE7UauzCRMc5DQdlus6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=XDnrHYkw; arc=none smtp.client-ip=220.197.32.16
+	s=arc-20240116; t=1758182827; c=relaxed/simple;
+	bh=ClFvh0a6XVFxTs3aTf7ZnAV6BT767LS9PZiwjdEuS+Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=exDrqaXOpJVYN3axERSVwSj7XSSEcjLJF5mUNix1phkZdtd7ca0syZzio60Tc19aiHBhMF7N2SsdSBOpGsP0QlaH6v9Byqrf0koqdyk758+jXOEU2aN7aWuAtfMC5QcBve7ALsvsnpxtupECqsRahmRA1bF9c3LAfuu1eBDZtC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=XiEiyhxX; arc=none smtp.client-ip=1.95.21.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="XDnrHYkw"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="XiEiyhxX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=mj
-	Q3QJ+Fs+nA/I8gfkukX+TgwxN0n2N2A3SiOVEoz44=; b=XDnrHYkwIPBth38kbn
-	ujyBOMIbjr7ninLZ20/Nlc0gZb09CmWR/RMGUVTI2vZPr9WKHyhBwB6/1nernSNJ
-	um9I3ER2LrKTMn0+sYSZ5ziKC4HVpLyrFa9kBkulbiVRl89P91rNsApcxKjO2g+a
-	Eg96YqKXGCaXbEclg9izj7R5Q=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=8d
+	AwrvZ0ngReEO9LbXxo4sA0RRfzQcPeOQ4JXyrALtQ=; b=XiEiyhxX+xfG9vyXT6
+	FpTlDsaGsEqUv7WVZ9OTb16dsE479QaJkEAYy1RVVvsBxZzrokISSPtAD4qm24tW
+	ArQhoXdYo07nP4Te7YFJ2XwWbowXaDwEK8++DB3oajKFNUqbV7WEOtoYFn+fH4i/
+	361sg5afr2XlNxRvfJLGFjMR4=
 Received: from mps-HP-EliteBook-840-G3.monolithicpower.com (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id Ms8vCgCHnwPzvMtoRFLLBA--.60510S2;
-	Thu, 18 Sep 2025 16:04:04 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id Ms8vCgCHJdpuvcton1nLBA--.29488S2;
+	Thu, 18 Sep 2025 16:06:07 +0800 (CST)
 From: wenswang@yeah.net
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -35,11 +36,14 @@ Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH v2 0/2] hwmon: Add support for MPS mp2925 and mp2929 chip
-Date: Thu, 18 Sep 2025 16:03:49 +0800
-Message-Id: <20250918080349.1154140-1-wenswang@yeah.net>
+	Wensheng Wang <wenswang@yeah.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] dt-bindings: hwmon: Add MPS mp2925 and mp2929
+Date: Thu, 18 Sep 2025 16:06:02 +0800
+Message-Id: <20250918080603.1154497-1-wenswang@yeah.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250918080349.1154140-1-wenswang@yeah.net>
+References: <20250918080349.1154140-1-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,36 +51,41 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Ms8vCgCHnwPzvMtoRFLLBA--.60510S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Jry7tr17Kw4UGFWkCr1fXrb_yoW3XFbEkr
-	4Iga9Fvr1UJFs3WayDCr1rXryUGr4YgFy7G3W3tFZ8ZayaqrnxXrykZw17ta4UGrW7CF17
-	uFW8A393AF17KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbYFAPUUUUU==
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiIRR5HmjLvPRY1wAA32
+X-CM-TRANSID:Ms8vCgCHJdpuvcton1nLBA--.29488S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JryrXrW7CFWUZF1UGr4UJwb_yoWkWwc_uw
+	4xZ3WDCr4kAFySkan5AF48Jry5Gw17KrWUu34xtF4kXFnIgrWrCF9aq34a9ryxGay5ur15
+	urnaqrZ3ZrnIgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbeMKJUUUUU==
+X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiCQPMpGjLoSZNMwAAs4
 
 From: Wensheng Wang <wenswang@yeah.net>
 
-Add mp2925,mp292 driver in hwmon and add dt-bindings for them.
+Add support for MPS mp2925 and mp2929 controller.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+---
 V1 -> V2:
-    1. add Krzysztof's Acked-by
-    2. pass 0 for i2c_device_id and of_device_id struct
+    add Krzysztof's Acked-by
 
-Wensheng Wang (2):
-  dt-bindings: hwmon: Add MPS mp2925 and mp2929
-  hwmon: add MP2925 and MP2929 driver
+ Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- .../devicetree/bindings/trivial-devices.yaml  |   4 +
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/mp2925.rst                | 151 +++++++++
- MAINTAINERS                                   |   7 +
- drivers/hwmon/pmbus/Kconfig                   |   9 +
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/mp2925.c                  | 312 ++++++++++++++++++
- 7 files changed, 485 insertions(+)
- create mode 100644 Documentation/hwmon/mp2925.rst
- create mode 100644 drivers/hwmon/pmbus/mp2925.c
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index f3dd18681aa6..eb617a6c50e5 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -297,6 +297,10 @@ properties:
+           - mps,mp2888
+             # Monolithic Power Systems Inc. multi-phase controller mp2891
+           - mps,mp2891
++            # Monolithic Power Systems Inc. multi-phase controller mp2925
++          - mps,mp2925
++            # Monolithic Power Systems Inc. multi-phase controller mp2929
++          - mps,mp2929
+             # Monolithic Power Systems Inc. multi-phase controller mp2993
+           - mps,mp2993
+             # Monolithic Power Systems Inc. hot-swap protection device
 -- 
 2.25.1
 
