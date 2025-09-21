@@ -1,120 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAB225FA0E;
-	Sat, 20 Sep 2025 22:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7F024EF76;
+	Sun, 21 Sep 2025 16:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758406744; cv=none; b=jRDhGLMTVyqeRksYoug1fG83OqV35k0HMEXKzuVMewptMhFuNwR7jy+LvBySUKbvkbVe3l2fVSW4/pGymRERD0lQ8MCUUnmexCXjapoJ1FUT5QB2LGXW1WJZvxKewaf/brpnef8YwnTATsoM7nWDxe7DHIFIKtcNmAVZba/nw8o=
+	t=1758472557; cv=none; b=ling2kmEF2zCR/EoZ3CBU4Al1GEX0t8oCXpvH5gCPZMBS3CmGLdRt9/KXi64YP8lybSkBT6fYTAH78LIbJVFELyoVsF+HYhyAPhgJA+QGR+rvVl2cw760tQWldmbCLBonbrdkNPqqm9gLpkTa5v5vdsJ748jDYHJRhaHkaE5U9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758406744; c=relaxed/simple;
-	bh=PYEiTDY2LygoEjRa/YiGz+dOFnGCROKWezbUQTxc5PM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YycpECHjv9UdxIb3duJQoTjUW6k7Rv4KZduNgfBq9p2xCjHdgITRgmqjlD6y8hXXEwSjq0wTlBPuR5DDB6WuTPjSknRjfzrVyQx0AiymiVrJ4OIeS+DYV93/iEHupGo5nzhqSZU/O3ahD2OBMhHaLp1gl5Wo4rnpadiDB7T6goo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2f5208K; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758472557; c=relaxed/simple;
+	bh=ucOYN8jGRfe0k7mWUO9XrtxY9r0jSIW5uNsTSyoi1Os=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JTEpYmWZyW8pXKyqTYMGgaWXxSj2Ti1OTPtg2eCowabb9YgbLUSw1Z/WxZAwsMrvdiYDYV9PbXd5FfErWoEQf/JnSlTaBedsHGKqD4QHWa+zbkjavqHzg4QDsnMzHpPVrGAmOq9jrZGUxz85HJOL26nbjvfltNTfmWHbVMQL5Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=kWXj+MI0; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2f5208K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12846C4CEEB;
-	Sat, 20 Sep 2025 22:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758406743;
-	bh=PYEiTDY2LygoEjRa/YiGz+dOFnGCROKWezbUQTxc5PM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O2f5208K/ZH542Kfy41JJak/vQG40hn37Cd3qB99tgCWHiwmvND4sMlGYCtBcEwSS
-	 IADU1HA4dM7TtVZNwvZS0LzGNn/AogPuGojYL+1rtVYO9fNoXzpaHvAnT3S+gqjEF7
-	 8BWJMO97jGB/b/sjuwck5dS2a9L5Ax3tu0Lj4THMLHQji5oBH6olIEnO/L9iKjEyTw
-	 ZAMvBjcwFbl1psBQDwuVEzLo0ztcpbGSBG6tFXPnFiAVX5m2I8BwylVgG0GmTHiTG7
-	 G93x/dugBzSJRbcYbC5TbgNiMn82HZQ8TVGVyBM5CHRNGpaMPC/NcE/Y5In5FPy5jf
-	 yguz0YQNNv+fg==
-Date: Sat, 20 Sep 2025 23:18:59 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="kWXj+MI0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=PJAFZPocu44Z5wMzUpWIn0ycbvf7q7I00Yw5JWktijI=; b=kWXj+MI0mTxNo5KCQmDHprlTTL
+	H7GmAZb4diZFQmZHKG5gC2HEd4EcB80ZPZhatcty/bBd/0NM5MGNsxjZ1lD8v42tqyLJcpg2tLSun
+	nBR+/GAlJVbgc5WzjLFhLr4R3dvu7OlNKisvmO6WvzfCvOGXWcG+G/ioeUbQ2hzYBaJbZBt99wX9d
+	V4N0nvkEk3421/44LCMSBNPAqCyAJeXxmGTLmBCxm8MORVEP26gYUyZs5MGJbPgAmxHTtsYR7n1lD
+	z/M9rcwiJ/1j367ldjy0q8wjBGy6TMd9b/RzOUioCVUidlhI2MahaB3qeZ7QudSipWRviumPMT+8N
+	Ss8c1a7Q==;
+Date: Sun, 21 Sep 2025 18:35:36 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Mark Brown <broonie@kernel.org>
 Cc: jdelvare@suse.com, linux@roeck-us.net, lgirdwood@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alistair Francis <alistair@alistair23.me>
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Alistair Francis
+ <alistair@alistair23.me>
 Subject: Re: [PATCH RFC 1/2] hwmon: (sy7636a) fix races during probe of mfd
  subdevices
-Message-ID: <473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
+Message-ID: <20250921183536.5368d634@kemnade.info>
+In-Reply-To: <473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
 References: <20250920114311.291450-1-andreas@kemnade.info>
- <20250920114311.291450-2-andreas@kemnade.info>
- <79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
- <20250920233307.0c425863@kemnade.info>
+	<20250920114311.291450-2-andreas@kemnade.info>
+	<79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
+	<20250920233307.0c425863@kemnade.info>
+	<473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ajcYnS13mjOHFFvE"
-Content-Disposition: inline
-In-Reply-To: <20250920233307.0c425863@kemnade.info>
-X-Cookie: BARBARA STANWYCK makes me nervous!!
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Sat, 20 Sep 2025 23:18:59 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
---ajcYnS13mjOHFFvE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > The wanted regulator is the one defined in sy7636a-regulator.c. So it
+> > is all an issue internal to the sy7636a.  
+> 
+> > Both subdevices are instantiated via drivers/simple-mfd-i2c.c.
+> > I see several other solutions:
+> > a) call device_is_bound() on every other children of dev->parent, if not
+> > bound defer.
+> > b) do not care about the regulator api at all, just check whether
+> >    the corresponding bit is set before reading temperature, return
+> >    -ENODATA if not, some mutex is probably needed.
+> > c) do not care about the regulator api at all, just set the
+> >    corresponding bit (together with some mutex locking and counting).  
+> 
+> I assume this is using the regulator API because someone might use an
+> external regulator in a system design for some reason (better quality,
+> power efficiency or a shared reference between multiple devices I
+> guess?), or because the supply might also be used by external devices?
 
-On Sat, Sep 20, 2025 at 11:33:07PM +0200, Andreas Kemnade wrote:
+So just what is behind enabling the regulator:
+a bit controlling two boost convertes, two ldos behind tham,
+and the name-giving vcom regulator.
+Enabling this bit is also required to have the temperature register
+working, althogh none of the regulators is used for measurenig the 
+temperature.
+All these regulator are designed for powering EPDs. So the
+regulator API is needed. The only question is whether it might be bypassed
+for internal usage (which of course needs some locking, etc.)
 
-> Just for learning, yes, it is an abuse of the _optional for non-optional
-> things, so a dirty hack which should not go in, therefore RFC. But what
-> happens more than having the hwmon device endlessly deferred at worst?
-
-There's also the fact that this API is so frequently abused for bad and
-broken reasons that I regularly audit users and try to fix them, I'd
-rather not see any new users that don't have a really strong reason to
-use it.
-
-> The wanted regulator is the one defined in sy7636a-regulator.c. So it
-> is all an issue internal to the sy7636a.
-
-> Both subdevices are instantiated via drivers/simple-mfd-i2c.c.
-> I see several other solutions:
-> a) call device_is_bound() on every other children of dev->parent, if not
-> bound defer.
-> b) do not care about the regulator api at all, just check whether
->    the corresponding bit is set before reading temperature, return
->    -ENODATA if not, some mutex is probably needed.
-> c) do not care about the regulator api at all, just set the
->    corresponding bit (together with some mutex locking and counting).
-
-I assume this is using the regulator API because someone might use an
-external regulator in a system design for some reason (better quality,
-power efficiency or a shared reference between multiple devices I
-guess?), or because the supply might also be used by external devices?
-
-> d) copy the of_node pointer from the parent, add a regulator phandle prop=
-erty
->    to the node pointing to the regulator in the node itself.
->    That sounds like your idea but is against the current dt binding for
->    this device and afaik it is uncommon to have mfd-internal things wired
->    up this way
->=20
-> e) something clean, simple I miss
-
-The idea is that the relationship between the devices should be
-registered before the devices, that's how the regulator knows to defer.
-We used to have an API for doing this for board files which might fit
-here, but it got removed since nobody wants board files any more.  If
-you're allocating the devices dynamically that's annoying to implement
-though...
-
---ajcYnS13mjOHFFvE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjPKFIACgkQJNaLcl1U
-h9BGQwf+OvNNj/wSlGObv8QCJrJ3kxiM1MiiJ08UTjK+cfC7BpPHljGpWPAzrYGW
-SEMvcGn+Sfxkcdd7E6JJGiWTfjcFTT5uR18pUCn0IVyWLkymHZeY5MaKxH8Sl4Su
-jAnGrpOsi+HP+6JIMUnDhjUOWzDlbuSSQJiuj8OzCK4oFagNo9eu0DLa3b2qKFA+
-NxSSLo1GbLgYwtPKB5uo2D5Cf0/XiiI6aTc8F+iHIqSB+KhZluk4ATKh6AxYceOj
-C1fTKBujeSXOE3/3B4RIA/2JCl/8oLbB4z666C/Cgeyd2VzRcrdVWbzsoa9nslRq
-Hyls0rO9mJjmfxBPUWehHuWw7+wlGQ==
-=Vg24
------END PGP SIGNATURE-----
-
---ajcYnS13mjOHFFvE--
+Regards,
+Andreas
