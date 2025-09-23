@@ -1,129 +1,103 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002bf204.pphosted.com (mx0a-002bf204.pphosted.com [205.220.160.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CBE27876A
-	for <linux-hwmon@vger.kernel.org>; Mon, 22 Sep 2025 22:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622A82AD13;
+	Tue, 23 Sep 2025 09:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.160.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758579718; cv=none; b=iitYGHyCUdtHYRJRTnxcBHOrLiYaFpqldDV7MIi/BGreJFfxcslBRktywqREfYvZupwoSgy48b13+Yb7U31BAl0fSNNCwWbu7lh8I9mBgTWGGmp/BkC5OjyzKk/fctGaHfOnn1Tiwsx9ZViiUQMGclRdiCjZHrVtbgGTdrqOzNc=
+	t=1758619897; cv=none; b=e+puyIv1cZon4hlgkt26ZO3QpUBx9zUgsPUWhszlZ9n6K/9peVMsyjBSwyQw7cBXPMSfV28xHHckqqsZKbDCgWtXhsv27FWqF5GDYixqIh2n5LNJ2QzFuqdJh3yYS98G8u3lFtQX9fhuei8//tHjFERqQb/xaGFC4Lr8hbyQL28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758579718; c=relaxed/simple;
-	bh=5oqT/+EskjT95UQ02iVrfraL+q6+UfPBzDvXMw+0rI4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KxweJZIYVBx2POaxRHuMPN4RPZ+PEI2JVQF0SGPuJ9KuqI7sE/qv9kEvUBSmcTtY9pQW90FQuVN0SDLRsp56ymc40brwl+JIpzEivMXC3YZ6kESArCepG/ZatGQ0SlKJ9JeemQgWazoFuLM2+08CWS+XgbBYJUGbrG4g1/fUVn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YZkVO44L; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1758619897; c=relaxed/simple;
+	bh=SK08o5jMmktq+j12ohAFj5YUuAH+hnUns+Ln37TmV7g=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZGznxoJ9M5oOaNVLq8dw0+qmr/KQefa+qvRslgAiNHR8gt6D8pMbnZCugZxQz0oVcFqUMGhIH8MNEzlF6D252uWsju7TcNbat4LY84rOoztSJGnEccOb2LAPMd/FFGZyBoH5QnTejJGDa4Sc/P7DW0GUGCZlXpOFdn0CrzfNEcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com; spf=pass smtp.mailfrom=monolithicpower.com; dkim=pass (2048-bit key) header.d=monolithicpower.com header.i=@monolithicpower.com header.b=ZsxxleZj; arc=none smtp.client-ip=205.220.160.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=monolithicpower.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YZkVO44L"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-75763558ae1so1694672a34.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Sep 2025 15:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758579715; x=1759184515; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DTLhvXVhX7GssWdco0zg+2qQigdBymvGbS2zk9aZ/b4=;
-        b=YZkVO44LUNY3vxt7kxWyDXeNqzyuR++Rz818D7Si+mbLdRujhscDfTcJzV+TqsPESd
-         2cP7Ix3AvbcWkWPDbnFJ07ZKzmLi/Io5PX+14qJM7gJ/L5EtVqOBF5nrN2gF8urJs9Sw
-         NnRA5Yb4vRvEd0C43wdbp2udt7YSKl7WZ3KzPNx6JViGUOhsKJCIRGLuQJHAHoELtC9l
-         3+5M5tt98zdj/R0mRkSNU+3RHAI4eh2hSs6Ue2ANQiEnxyGkDMjT06If4TnfbtV/hlFy
-         HcvKk6P6HmuA91N9vmGDEtsy6P/TrCK1g1MUPuEVLZrdHmLHslSFPhdcwaCnaFiBWHkg
-         xMPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758579715; x=1759184515;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DTLhvXVhX7GssWdco0zg+2qQigdBymvGbS2zk9aZ/b4=;
-        b=k3quLFkLgvqMubRQQTsT5y8Mt7Wtt8fLn2/ciaBHt6X9YEdWByl4RGz0vzvBkjPHH6
-         lpgx9mqqEGjeRWzi4PESQYYprNjxnpFM9Gh6RF2lecfuRzdIVeYVUfzF9vd3WobCdb+M
-         AjdGcrREO82/hB0cgQ+gB7HOLqld4k2XFiQYkDFNt5IqO4RjHBq14Ng7/O8i0y9JYneT
-         sjKidd8sHZm1e6QY4YUJrt8Fd1MwMljTtYxNTh3lw7wW7MubuLDvHkCekSXf7TgPGVKF
-         QXGaosgrxZ1cTpQP//pdB224OW2U9bM+N2owtvS14JXLaPz+A5mcgxc1ag/JJrK4M9hW
-         7Qbg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNTWtYXLOsloShM1RUEIA7dURuPunHc8a25R/4OGKmL7JaECLk/x3u5UOcWK7kRid2EfMa46G8l7brgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0QT2LkUEOGYuqZM0Ksp4S3g96GKy+YXZji5G2C4Udx6dGH4wm
-	LTouG92tRFCrdHsbw+2wiQld/X+h4R9WWXel4qnFNefzK6V02zQRJn+84fy5dCg7KSo=
-X-Gm-Gg: ASbGncujk+fsDT4xQPdO6Ty74VUyufsWBLU7+1KCozKpq3pL823sWRX476ZvMH/Yk5M
-	auMf1Ba+WTOeAiHVULS5uMYwTQNK7P6C0+oP83pz4pmZ+1d8Z9MeRYmnqcReTuD8aE5cmlKMknA
-	WwVNBxi4OaFQOfq96DatRSGKCRscWiYz9CftlKZxe7t4j7vg5gbUDbvvNZtT7UwZv2JP15pJ8yY
-	QLEdtzQBlFJPIbXjzOZ9F52l+Ygjt0/Cm9LlNOxFiFOWZxouPDeDDoM5KhW9wEVvBB3/HgV+e6U
-	wnPiJCkHzM/IhicCaFgyE33DP+ZTh33xrZsym8utNVnIver3bTZ7CZ0KIDza35rVbiW0w8S3odt
-	buBzDIZ8BfdSzDxY7BCnaup7QMXDyyyVjwznDgTmVWtZcQ8qs/PHX6Z97ag38imulveVw3WpTQ1
-	I4JbCzYRYiAg==
-X-Google-Smtp-Source: AGHT+IHIwhkhaTyaeI4QExDUkUooOZb2rugZFLrr3rg3bIJULREQlPjANVdD95uXqhOHKDLwlVrzPw==
-X-Received: by 2002:a05:6830:3891:b0:78e:fd71:8e02 with SMTP id 46e09a7af769-79157d59395mr176216a34.25.1758579714829;
-        Mon, 22 Sep 2025 15:21:54 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:505f:96cd:1359:fff4? ([2600:8803:e7e4:1d00:505f:96cd:1359:fff4])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-625d881ffd9sm4392310eaf.3.2025.09.22.15.21.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Sep 2025 15:21:54 -0700 (PDT)
-Message-ID: <d1778ced-1660-424c-97eb-72a35152f13f@baylibre.com>
-Date: Mon, 22 Sep 2025 17:21:52 -0500
+	dkim=pass (2048-bit key) header.d=monolithicpower.com header.i=@monolithicpower.com header.b="ZsxxleZj"
+Received: from pps.filterd (m0207524.ppops.net [127.0.0.1])
+	by mx0a-002bf204.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 58N58bjg1331671;
+	Tue, 23 Sep 2025 02:09:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	monolithicpower.com; h=cc:content-transfer-encoding:content-type
+	:date:from:message-id:mime-version:subject:to; s=pps1; bh=5BrRan
+	ophlTOQzk7isMVjv+0gTzaWx6yYsZFutNEAL8=; b=ZsxxleZjVnndc4L5LAke36
+	Cx6srhDcEx8y57x57VVsDC3Zt4xHPP2l7AtYw6qpQ0v3WI1/AbEB8WqnIYT/EjrQ
+	x9UMFjKkX3zRTNTLrOeKQOf7l8wE7F7PGwV2ZySkvydU4Lo28V6NroObHkVtIosw
+	f/jz1PePQ3W492BVOrinuA4U4louFSW+/pQdRRe9G7AkwLjYdI1h7wZC39xpN2kP
+	qRVDyFwom29QLAbwzpRFW6rhbMh8HYnS6o2Put/rinTFYGJUizt/nkREsia6F/uH
+	UT58IU3uIiYUA8qGQYYObVW+B20LqBMiRB3H9mWu+jn2jkHYHGzkWVyz3Dpnq7vQ
+	==
+Received: from webmail.monolithicpower.com (mps-vpn.monolithicpower.com [12.33.0.20] (may be forged))
+	by mx0a-002bf204.pphosted.com (PPS) with ESMTPS id 499qpnhh6q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 23 Sep 2025 02:09:52 -0700 (PDT)
+Received: from CD-MSH04.monolithicpower.com (10.10.70.213) by
+ mps-mslbn03.monolithicpower.com (10.10.10.245) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Tue, 23 Sep 2025 02:09:43 -0700
+Received: from HZ-200L-YUWANG.monolithicpower.com (10.10.86.73) by
+ CD-MSH04.monolithicpower.com (10.10.70.213) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.57; Tue, 23 Sep 2025 17:09:38 +0800
+From: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
+To: <Yuxi.Wang@monolithicpower.com>, <corbet@lwn.net>, <linux@roeck-us.net>,
+        <jdelvare@suse.com>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>
+CC: <wyx137120466@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH 0/2] hwmon: Add support for MPS mp5998 chip
+Date: Tue, 23 Sep 2025 17:09:23 +0800
+Message-ID: <20250923090926.619-1-Yuxi.Wang@monolithicpower.com>
+X-Mailer: git-send-email 2.44.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v7 0/7] clk: clk-axi-clkgen: improvements and some
- fixes
-To: Stephen Boyd <sboyd@kernel.org>,
- =?UTF-8?Q?Nuno_S=C3=A1_via_B4_Relay?=
- <devnull+nuno.sa.analog.com@kernel.org>, dmaengine@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, nuno.sa@analog.com
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
- Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>,
- Xu Yilun <yilun.xu@linux.intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20250627-dev-axi-clkgen-limits-v7-0-e4f3b1f76189@analog.com>
- <175847570323.4354.7019519707280531872@lazor>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <175847570323.4354.7019519707280531872@lazor>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CD-MSLBN02.monolithicpower.com (192.168.86.32) To
+ CD-MSH04.monolithicpower.com (10.10.70.213)
+X-Proofpoint-GUID: ZQdgEHx8RNMO6yTs-B9PunW3UMzSt3j4
+X-Authority-Analysis: v=2.4 cv=S8jZwJsP c=1 sm=1 tr=0 ts=68d263e0 cx=c_pps
+ a=Zb4R73zfuCEKbQz3U9Wi8g==:117 a=Zb4R73zfuCEKbQz3U9Wi8g==:17
+ a=Mn2HaNVs01YA:10 a=yJojWOMRYYMA:10 a=gs3WAU5GOovDNR7Q-woA:9
+X-Proofpoint-ORIG-GUID: ZQdgEHx8RNMO6yTs-B9PunW3UMzSt3j4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIzMDA4NCBTYWx0ZWRfX16krY/DMJZn3
+ MKdet8FyfAgfqlj+LSjv1o/oCrpv4oZlHObH3ML+HRcrRkF17F9VGIqYsezx2srgljxxo6gqges
+ W+DA/YcqHxtglTfTtsQAzSNATIl0TLpW5mj7Ye/OaXqV+IiY7hADEwkfY9ctMCxEdum/lDg6eLq
+ XWz8fQC0L9wFoeNSki/Tn2DvICbsBSnlvJW3tsclO4B2TGUshHmotoc03CB6q0F/dQy1jW0d+b7
+ hAVZPtfSqZ9JXzOQ92LRpDmne0Vb8MFvZ5npppmT/7Q7YvJr8Ea85LWcYMlxQJh6BzWWNIRxvQM
+ oEj37Rdl3g84wzDoWZGP+hNb9yi5x6fipUyGUwdaKncpkt3ZiNW5lX1sQQKAw4=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-23_01,2025-09-22_05,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1011 priorityscore=1501 suspectscore=0 malwarescore=0
+ phishscore=0 spamscore=0 impostorscore=0 adultscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.22.0-2507300000 definitions=firstrun
 
-On 9/21/25 12:28 PM, Stephen Boyd wrote:
-> Quoting Nuno Sá via B4 Relay (2025-06-27 07:59:09)
->> This series starts with a small fix and then a bunch of small
->> improvements. The main change though is to allow detecting of
->> struct axi_clkgen_limits during probe().
->> ---
->> Changes in v7:
->>  - Just include new tags.
->>
->> - Link to v6: https://lore.kernel.org/r/20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com
->> - Link to v5: https://lore.kernel.org/r/20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com
->> - Link to v4: https://lore.kernel.org/r/20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com
->> - Link to v3: https://lore.kernel.org/r/20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com
->> - Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
->> - Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
->>
->> ---
->> Nuno Sá (7):
->>       clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
->>       clk: clk-axi-clkgen: make sure to include mod_devicetable.h
->>       include: linux: move adi-axi-common.h out of fpga
->>       include: adi-axi-common: add new helper macros
->>       clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
->>       clk: clk-axi-clkgen move to min/max()
->>       clk: clk-axi-clkgen: fix coding style issues
-> 
-> What is the merge strategy for this series?
-> 
-FYI, v6 of this series was pick up and merged in v6.17-rc1.
-So I don't think there is anything else to do here.
+Add mp5998 driver in hwmon and add dt-binding for it.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/clk/clk-axi-clkgen.c
+Yuxi Wang (2):
+  dt-bindings: hwmon: Add MPS mp5998
+  hwmon: add mp5998 driver
+
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/mp5998.rst                |  92 ++++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 +
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/mp5998.c                  | 162 ++++++++++++++++++
+ 7 files changed, 274 insertions(+)
+ create mode 100644 Documentation/hwmon/mp5998.rst
+ create mode 100644 drivers/hwmon/pmbus/mp5998.c
+
+-- 
+2.39.2
+
