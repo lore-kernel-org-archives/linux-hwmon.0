@@ -1,83 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE72729E117;
-	Wed, 24 Sep 2025 08:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9FE307AC5
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758703480; cv=none; b=nY5p7C1kRe7tgFJ7wLwzH9oiAvtKDlWZYPSbSe68WKfypWja5/fU3ZI33L88ZizC/3Hzvu9jkDvrQ+6qgO4vZx+qcGWVlkqUa5IpYtzkBNzCCHYDs81cA3daMgAT8zCyVE+Zq2IEsSQNT3CF6Z+TA0PvRd5VrNSdniAZ0SNIQ88=
+	t=1758724605; cv=none; b=rwtyyBsDXh6eFTuXK7hEaoM9sI5gQUsLQK1AXUp69oTN9JHZtpkT3rt3jKGhf5d5BxL89zUmNS7d+kAYEk4hpxav+HFRVoxozNiOQU4FFavyOGHYObtFmvf6rT1B/UwkzIRvqUm5gtMWErUUYQHQJu9gwOvlXOVV1FgQBOAHtrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758703480; c=relaxed/simple;
-	bh=/IYUKHDSnRaRLZ6hlg7KH0TJdWwVnj1XFp0OLs7MsLc=;
+	s=arc-20240116; t=1758724605; c=relaxed/simple;
+	bh=VidlVO50el1H467lJApxsWJXJg6s6uikstqa3zxjdVg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eBjWH2O9t9qbUkVR4DEcwUjT3LLwpyCv6zKhY80CsPUE/DRhfGP+V8ByjOlVRDof5Ug2iMGj6+pgmR7ocvoBvnvEfSskXwK4sFunTSemhIgzPAPuRNDxfxbQgN3sqIxM6ANUwPnn0OwTeICtsP0eiuzf0175EhvbaCv9NyrdRnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2eKIOnZ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KlRjwf6KVaeAEw5wedNBo5DsPd8uSDui2dpxQxUqA5xvOh1A9Ws2reiRvOP/F+KDa1c5JsnioRAWKEUHGncny/xfwte6WDwCvAauWssUHW+Pi8zbZ385SwaEJoyXxymr9Kuoq9mR10TFBhzwveSK2VL0GnteaBRlqgg6raJaJ6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXWTUPow; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2eKIOnZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2FEC4AF0B;
-	Wed, 24 Sep 2025 08:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758703480;
-	bh=/IYUKHDSnRaRLZ6hlg7KH0TJdWwVnj1XFp0OLs7MsLc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j2eKIOnZDiSjRF5hCEhZ44t2eneNf+70um6wWf5AtMNAUgA86TtxSWLC7im7CMeGF
-	 FN9xUGapLb11Lpq2JH+hmkx105snF/nvKfowI+s6qZ5TDG6E1VkU2i8KDCtsPeLoL/
-	 yumxYXTj1iEEuosZgFkZdM9StujqckeNtlIaczSW6bTiUZFnzQMaHpF4lsGVoiaBYf
-	 qFUaUgkDSYDgLOKlIE8B6Gqe3QiKefODU0cmui9Y95NoBTzTNXoxKc9iDXoOJ0SFcD
-	 bUkdSlyUmKdOYliSZcwHkJUWVz670PCLoylffa1Jrk8WPR1PL0lTso5sozhKKxS7KK
-	 oAO961BMRO+lw==
-Date: Wed, 24 Sep 2025 10:44:37 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: jdelvare@suse.com, linux@roeck-us.net, lgirdwood@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alistair Francis <alistair@alistair23.me>
-Subject: Re: [PATCH RFC 1/2] hwmon: (sy7636a) fix races during probe of mfd
- subdevices
-Message-ID: <aNOvddby_hpegvDR@finisterre.sirena.org.uk>
-References: <20250920114311.291450-1-andreas@kemnade.info>
- <20250920114311.291450-2-andreas@kemnade.info>
- <79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
- <20250920233307.0c425863@kemnade.info>
- <473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
- <20250924090023.282ae450@kemnade.info>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXWTUPow"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-27d3540a43fso22042235ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 07:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758724603; x=1759329403; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AxgE/VwqMUnmRpk2sPi0rJ9F4/7o5NXDeAMdW4raKNM=;
+        b=BXWTUPowVR1rYmOJKOswTxz5Idb79j9b3HcjQTtWHPOoT/Nsmr7L1MhKKUTyKHDCmc
+         hY8VkTQswu9ZLT7Ur1tV9ERdtSNyXzMCRjw9QD6B62BqkrshWNIgYihDi2kKpstUhSAu
+         KBS9yGyIpWiuSSAqRGJ6pkKoVJshiwn+0rZ3R/PTSUQF9apW6IXZWzl/Xuzv6H4JuYZn
+         lOWgyEwwn0EDSZvb7+ep8ri0SwmWdlymVX6pOFrFAdG4vUQn/HM2SqD8EgDbtK/Bdo4K
+         KQF0c0Ew2/ujlNOnQNlox5YDrE7D7g+yuKK9mgBgYwkhPT1KL1+Lqo3/4A0vhXzD4c3b
+         S8QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758724603; x=1759329403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AxgE/VwqMUnmRpk2sPi0rJ9F4/7o5NXDeAMdW4raKNM=;
+        b=LdtzE1AgjJs/rgsmFwxv5yU2d+OWd9AvEZQiUo92UTPYeANFhlChSKGEABIE4oFjeS
+         R2sMFoLAOXiYWP0CN7yIkb75532oJhlRZTBal6xeo/hvloJmBqfmlZHAXSFg6Pb68N6p
+         2NBlXlFlalBDo+plcFSEgG87E5+0n8/MnfZpXTmhSAS/KtQwrZQstP2Oo92SfK1NoXoq
+         K/2fOj635lv6LHEC0Y0IZCep1qn6dmTRu7b2zgfEJxNdLviC3gpM+Jy7qWDt2SKz+38z
+         3WLZDW0vbWucXhvNYmV5Ubq9qFknAGtPRY9QjXSI5far0EYAiT4BANpkN8QSKqufyNBw
+         n2GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMiC2CEzYkTvZmjzQGgG+eth9jFwrjbkoZQJKSjgBpskNwEVtGky7eea8ZAMfsQrZYxdgowgL/QPFJJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQeeZhzIcLZxosaeyNjzbIbluAX3tBAYUnG0yYMB8PhvN4HvrV
+	W0U3vfbNCqgs+J1tpplyFbnZwkbYf04b181qwNDEoTelZjCOfzkddvlT
+X-Gm-Gg: ASbGncuHjI0UYTgNqTwG5mI1PkoVTXgA/dy1HtvahXRI7xa19Z2dHgKSkvX6lQiL568
+	mWNAsGdm2xfOTvpaS8ILulFEtlCnk3Q9/X0WTGUR/OPluAlFHFOcOBAeNz2rweI0IPM3IoFbAy9
+	/BrT0LG0xua2c9O18/guUmUgixxAUrotK0BqnkUrv3VmWO2XTiN3NPTBjpgUHY2LFMfkjPcNTD4
+	hDDaM9b8IFmKi38TJi4AEOnmPtF4TSyYU0scvTxRHb3JgblQO4+Tln9riOV97CxQXjN+i4htHcV
+	67CLEUO/7JY1jxeKljAfK/Q4sqSgwGCky2yKHayajfTlIQsP3GaTS3pQmwQG2S2oHIrx7PwVtsL
+	8NeGffWWJc5vKDjKU3DLWyrIf1qNYY9IJWoU=
+X-Google-Smtp-Source: AGHT+IHu6iImWwWebqU0fIT3geKZJI+vQ7lMRP2q7Y6UID/bj52Rxi/gS4qRBD5nGfGbcaTqWRH+Jg==
+X-Received: by 2002:a17:902:e5d0:b0:267:a231:34d0 with SMTP id d9443c01a7336-27cc5623567mr78793925ad.42.1758724603132;
+        Wed, 24 Sep 2025 07:36:43 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980310ff8sm189560205ad.110.2025.09.24.07.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 07:36:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 24 Sep 2025 07:36:41 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Cosmo Chou <chou.cosmo@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jdelvare@suse.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, corbet@lwn.net, cosmo.chou@quantatw.com
+Subject: Re: [PATCH 1/2] dt-bindings: trivial-devices: add mps,mp5998
+Message-ID: <4f57c182-d3d1-4007-80db-915ebbb6fe1f@roeck-us.net>
+References: <20250916095026.800164-1-chou.cosmo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sfoNTn1qNVGNGSEU"
-Content-Disposition: inline
-In-Reply-To: <20250924090023.282ae450@kemnade.info>
-X-Cookie: Filmed before a live audience.
-
-
---sfoNTn1qNVGNGSEU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250916095026.800164-1-chou.cosmo@gmail.com>
 
-On Wed, Sep 24, 2025 at 09:00:23AM +0200, Andreas Kemnade wrote:
+On Tue, Sep 16, 2025 at 05:50:25PM +0800, Cosmo Chou wrote:
+> Add dt-bindings for MPS mp5998 hot-swap controller.
+> 
+> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> max5970-regulator.c has hwmon integrated and no extra device. That would
-> simplify things. Although it does not report temperature. Some
+Applied.
 
-If that's the only reason why it's a MFD I'm fine with doing that.
-
---sfoNTn1qNVGNGSEU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjTr3QACgkQJNaLcl1U
-h9D8Ywf/VGLJ8shWU0lrY2AFMdqiJgo+CY9vQTI9F65PVeWuxMq++AfflE4G60zw
-Uf88JiYfcB/a4lpA17LQo5XviHDQ7Ntb4lIrSPWt4+ebSN6RFrFHNFvsYOlQtU27
-qE2aQrLapX9OKv/A7fBIZ+NxB0Mn5wOgL/90cebQWpJ/bGNV4yatbaFGzvD8iWv9
-5/j1JRpt+GpEDjJgXDCHG2/kVeNbmsn8iH324emzWmLUCVYVEreulH36GAZU2Lme
-vtseGWHOF6n0BZMCng4XwcSod96prknHdwDN7DTwrRJHmeKPZXR64I7xnyMMp7oL
-PcqnG4vlEQ8VoH8n3wDC5mY6dobvNw==
-=X7Xu
------END PGP SIGNATURE-----
-
---sfoNTn1qNVGNGSEU--
+Guenter
