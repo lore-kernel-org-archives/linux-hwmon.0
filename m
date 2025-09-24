@@ -1,65 +1,65 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6998B3128D4
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 15:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566332E9EA7
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 16:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758729599; cv=none; b=XLnGlQysLgw6rVwtCk+6lvporBQCiUhl/LwIzO8/WhNuu2s33eHFxggtms2/1kRJnWSJHPzkUsamaULTs7NBDgouC/bVOYuEWrwAYLWNqJzNmWlHnkY9s9dScHmywYOdQIVTUKoQzAb5+RoXh/HqemFxKJx8k+sdCdBcIOcIgOA=
+	t=1758729633; cv=none; b=hwf/WpwaDCfnc3gzBrmzL/jRlZ+32WsRubNcJWOn9KZ7lCg1eFCYn+63VtEI1fDiZLdZabkBSP2sXz6cPLYGt3k4F5oVMYbDZYj8QzYMvr3A8BLlG9Y7MKW9GVwmGRUvCxAuJUVBSw8npABQKc0VfN6VpwPXMUDzM4I2ppv5b7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758729599; c=relaxed/simple;
-	bh=cPOvD0RWj5XRQ1X63jkqRBqkK//fpnkcUP8Ht39fsXM=;
+	s=arc-20240116; t=1758729633; c=relaxed/simple;
+	bh=vldrG3DCeNRjE0BlLdRWKYuZIHower+u3hHn+TSIV98=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UZZTKWU8NY55Qh25zBy+SFv7xEd47yRfgG3TZN6WJCUEnbALG7MxPdbcrp+4su9XG2umTE/y/GFc0CwjGBJVbqE0zaaqS3FZW3KFsIofBWpb3JZSYiC36CGwvF/YfhkkNdugu+kNiAyhsT4KZ/z7b+U5OI/P1O2YfB5fjXnmto8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I5A5t1l/; arc=none smtp.client-ip=209.85.210.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=q7vZn8xG1Ny0fUXHyTu3K+3qIfV7zPsZVrhimqSzdGH8jrfrhVCsp52WGbGAz60qe5ygWYSVseHRXPlQjC4+oAksjcZ9/z1yO84B2Dep5nge4M8kxTbHLCUjbyXKyqC5qYTc/mkiEblrBfhKtPf/owOowvJ/AmvjWqephp4gTcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nl16a+GB; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I5A5t1l/"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-77c1814ca1dso5399389b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 08:59:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nl16a+GB"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b551350adfaso5752139a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 09:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758729598; x=1759334398; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758729631; x=1759334431; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Axp+Y7n48EcMK3tr2yHFXpOpdW4+znYlp/0VpLugUQ0=;
-        b=I5A5t1l/oeHQ3jm2MrtgudbzVZ3tOzIUVKTDMnspUEvR9XVault9+dDI9CmDDWTBkT
-         DsOWdjtd2JHLSa1jin3mqnb+gkj2cR4om6MMRSpYtpdHG7YpeNvzrGnAaSpYiCAylOch
-         HBW5Gr0g2JcxdEi2p8Rv6xHsSDpS8SLH5T8b0B0+s8Vd74zvzk6SHnCnRKsy1p6uAbSf
-         TFpytHUNyWeU6L8XxvkoagPwbkvfvkEeEK1U/3WRGeIxCXyRFZTyhkayG0lvwwT6jabB
-         W+Ncys1X1TmkLLs2LUbtshCTKwnlgYDCOxARiWNRSztbwArtCqL4nCcuENQhZQ3hbbOV
-         kEfQ==
+        bh=j/eQZQr/FlrHFqBmnzi43q5wN7esytT7U9mYDKA0Bws=;
+        b=Nl16a+GBe5nIxrowTVguBXGovZeuinGypiJQadH8OBO97ToiNLq1OBnChf9Qi90X9v
+         YyZsV/g7ELyU6ykAlJ0haVmY/rJ4nD7dUCKpH0D3fzT52ZwZPgvkRs8OH6v5kAtaGDg3
+         iDvJXZ4zTblSptnt6quD8KRVJ9asjEUohc8PddZtnnM8KPdRYTbf381Et5aeA2m8PgxA
+         b3aleB9ecDxJgDVPFKpIn4AsDced+fuuaIQZ20DtTXViTfhS+oHj9S5xUSCQsUleF7G5
+         Ogrvm+++/htSJMFc+2xm8cz6DrnGXdDJaP+CI9KDiZftgVZi4o13c8WJx2tQ7/I+qTy6
+         x70g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758729598; x=1759334398;
+        d=1e100.net; s=20230601; t=1758729631; x=1759334431;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Axp+Y7n48EcMK3tr2yHFXpOpdW4+znYlp/0VpLugUQ0=;
-        b=p89NHmmqMRXkpLD8iZKvWWeyy7VL2wNwntmA8KDhsIp1vPsdGRrpCnDFngLPqCWw8U
-         TcBMArVeZoHdtYze9uLAI8sbOH9W6KOBonL/wQe03o2JQg2Oh3R0t5MYvq115fTyiTNI
-         Ua/FBUtw9mz0vJFMerz01MxZtNbGR4C3ehjUHvelIS8H/QpLNzQd8QixiJ97N3K+Z0dG
-         JKA4FcldGq+JZsixm8b6dz0e9CjC5I0oDpZX5GTTH9SlQ1+NDD8ykroQTaY+GngevZHL
-         5W6+/gP/5QPBOAI1Y6Ebl1ZEQNoVgyzAib/6In/4OVGn4mv3XVhW8mNRo1FoFXQCrpBQ
-         d4rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWef6PjrXFG3F/ZYa7Slfvp+oh2pOxfQBnldzfoJFBY75PhL2xrTh1DHs3BJ9ASC7QFICbjWxZ1wN1CVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNKuFoRjNPmYzxSXkXhL99kwzgetvKYPfyjGqANoZdJpYugfR+
-	dUJylOEkV41Bbl+mHw4d6U6bEJq36nWvNsAmA3wnCC2Bwg1Q423/UDOy
-X-Gm-Gg: ASbGncvrXL3knP5vblZBlxo+x7FdsI69pMgHGtMlrfvmv4zY+V/SZVOxpy0m1DJkj2/
-	2EOOvet5bD+FT4Oe2kmVi27rVZd40xoRCVbsvFrG25nuHMlMjsXHn3x/iJk7hN4MaKf6UGiybdG
-	X5vF7uhS/WQ8xEYcvqydY2o8FJVjtRjhcsWGh2kxeIFwdQB6eNqMNclRXDsP5Yj/Z8yUcM5HG3F
-	mAVrDdc3HiHtUCEZwdULS2c6keo7I6bJzpEhBvCPF6KEFREt8pcXShaZib+TTTUmMkyt76RC9id
-	de0J8DxoIkfkBJntgyio42vxOWpm+RyWOdWOT2jHj78+JKI7CCISUWIeanJ9KldFqJAssuAiIHx
-	85DQ6jRI1byAHtnHBIKh2FIiNyzntHiXpy38=
-X-Google-Smtp-Source: AGHT+IEaXCmea0lHklJdK2j0b9lkEP9FEm4EgHcCJQjQymM5qCQpNWQ5k2IXyH2sa8ZgsZ0NbBXZyg==
-X-Received: by 2002:a05:6a00:3983:b0:77f:4c3e:c19d with SMTP id d2e1a72fcca58-780fce1f0a6mr534663b3a.12.1758729597476;
-        Wed, 24 Sep 2025 08:59:57 -0700 (PDT)
+        bh=j/eQZQr/FlrHFqBmnzi43q5wN7esytT7U9mYDKA0Bws=;
+        b=tfIy9HJexF6MTR97SdUbWx/cVr6Y2EVjuLKl4ju3Gjw54ZE3GKGJQ1ADE6gyyuIAPm
+         kK4EQUgWxHyKuyzWkHjc7I3R7wxDGVDltaFxfR7mVHexFf4nZtG97ytzFpFVMLCsi2Kw
+         UWJzmbteJ80BpHqVjbC7/C6+xz7V4gM5N+iJ9gdtDvPsnqwcADSJ/w+wT2m43t2zfxRl
+         Z5EBxzxw9fTZ9/S1dlJl1TGrj5F3fl/rRX74Vg7tuoVaPGZ1FAakR3fF1s11n6AmSL+b
+         afPk/zNk3ymeF9873ScwD+hQ7od1XUXcfNDeXKdaIAu6XMoOLys0nQZIDkEBl0a7dNmB
+         jZ5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUHLFUKjwxLMmctW3YmtSPgQEaWKpmTU57eQaVXcFy87k0iHxqhtG0UxDawKtXB6uN0XbexuFQLwIAGjg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSfYbsMvOl1m/RDunWoEBlpfFta7txRQQj6MqLjOafXPBHVQPt
+	wzDvmE64bexjcHwFwG+BjWYozOeDzTz5QHL7iyhGAA9t3RHELfTp447a
+X-Gm-Gg: ASbGncs+du+2ydmSGD8PvbBIFY/XJqh900urkP3AUsXftm5LRT2wsiXa7zo+iAWTuS6
+	4mhOnCL5vrx1zPbKwU/zDAY/IFFhfjJxLt8HDTIpLnfICVKUZ+2/PHz3ZBEKJ82LI0rlu9HksE2
+	hgpUovKWlo3xLKeN51sMdfUnRUzyK0yNkCo/EUZYIpVGe5VboL0Z97Cv4W/j4dwafktJRvfrcFq
+	QFjPQfwB8ubzcf1UDjeKD/EkAxnkVRtsyVmX2zn+o7uyd1yGBBNFjU7aZiun3Lg3r9HslMm2xOP
+	HRG2rB1lQ4XIlsfeMNaxo3XAA6gftK20woehR4xBTecrPCi3AQbr6wQydfXzscPouCSiyuzeO5s
+	cZG6tDmKtrop1myr/ZsEFz1nHbzXH+V8b6DI=
+X-Google-Smtp-Source: AGHT+IHh6nEKuJB+/U1aI4KfR/nSkf414wZmo0pvYnpISYF821fu02/TzRKwO0iL6xcTPglHzJx6Xw==
+X-Received: by 2002:a17:903:1a6f:b0:272:f9c3:31fa with SMTP id d9443c01a7336-27ed49b8e31mr2949535ad.9.1758729629711;
+        Wed, 24 Sep 2025 09:00:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-780fc88c823sm416136b3a.54.2025.09.24.08.59.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980053201sm196264675ad.17.2025.09.24.09.00.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 08:59:57 -0700 (PDT)
+        Wed, 24 Sep 2025 09:00:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 24 Sep 2025 08:59:56 -0700
+Date: Wed, 24 Sep 2025 09:00:28 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Michael Walle <mwalle@kernel.org>
 Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -73,10 +73,11 @@ Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
 	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	linux-watchdog@vger.kernel.org, Andrew Davis <afd@ti.com>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 5/7] dt-bindings: watchdog: add SMARC-sAM67 support
-Message-ID: <93fa6a60-1a12-47b6-b777-0f6f7775d49c@roeck-us.net>
+Subject: Re: [PATCH v2 4/7] dt-bindings: hwmon: sl28cpld: add sa67mcu
+ compatible
+Message-ID: <bffc6119-8623-47a7-aa47-40ffeb6ec09a@roeck-us.net>
 References: <20250912120745.2295115-1-mwalle@kernel.org>
- <20250912120745.2295115-6-mwalle@kernel.org>
+ <20250912120745.2295115-5-mwalle@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,38 +86,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250912120745.2295115-6-mwalle@kernel.org>
+In-Reply-To: <20250912120745.2295115-5-mwalle@kernel.org>
 
-On Fri, Sep 12, 2025 at 02:07:43PM +0200, Michael Walle wrote:
-> The SMARC-sAM67 board has an on-board uC which has the same register
-> interface as the older CPLD implementation on the SMARC-sAL28 board.
-> Although the MCU emulates the same behavior, be prepared for any quirks
-> and add a board specific compatible.
+On Fri, Sep 12, 2025 at 02:07:42PM +0200, Michael Walle wrote:
+> The Kontron SMARC-sAM67 module features an on-board house keeping uC.
+> It is designed to be compatible with the older sl28cpld implementation,
+> but has different sensors, like voltage and temperature monitoring. Add
+> a new compatible for that board.
 > 
 > Signed-off-by: Michael Walle <mwalle@kernel.org>
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Applied.
 
-> ---
->  .../devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml b/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> index 872a8471ef65..0821ba0e84a3 100644
-> --- a/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> @@ -18,7 +18,12 @@ allOf:
->  
->  properties:
->    compatible:
-> -    const: kontron,sl28cpld-wdt
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - kontron,sa67mcu-wdt
-> +          - const: kontron,sl28cpld-wdt
-> +      - const: kontron,sl28cpld-wdt
->  
->    reg:
->      maxItems: 1
+Guenter
