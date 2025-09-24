@@ -1,104 +1,190 @@
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0B928F4;
-	Wed, 24 Sep 2025 20:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A5410FD
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 21:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758746445; cv=none; b=XvVHt9yWUaw9UlcuDNNmcwyAevCyBHnrsU87zrwMyxG1rfS1xTEtI6QTX7E44PKBOFU8tTX/IzKfMI+hxWebqUIDTUn1oIkwDE2a3A5ETAusqjUIX4STP+MIGMewKD7NhDXppI4lgoTgFi5eVkJVeXV9QtI5hYfzrxrr+hf5QW0=
+	t=1758748021; cv=none; b=emgw3/cGvctoeGlKwWFQnH1IUppJn9d9/yBQTDSfm/0SIWxN6wklEnavvpLbQi5Hec1gh0OxmAM9cm3sedAHjGMgSLuvNigbGmS9ztSKbs8zH0U8+Rm5JxnNpNqWm06ocpf2a5kSi4o9EXoXFF4iAGQ144/gsIApa4WRN8HhKlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758746445; c=relaxed/simple;
-	bh=QTIQkpV/ciuM/sLyZDPrsBTzQxcBE89VDpwEWGscX4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W/u5s1H3G4lNMbMhhWRxGtGeCZkpu/yjUX8ZT8WCPkB4GkjTJYjIih8DnHCMcojuRfdhC0uV3kjCl/pbDWqN6n4dFvBXQQRVxwh+hz7Q4lMEhOok7KjlIj8S+cGJfumx3I4ePHOcvdLS1E34U6gCwt5fo5YW6dC0MpXEx87Dbs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=8EouNj5t; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	s=arc-20240116; t=1758748021; c=relaxed/simple;
+	bh=fWTMi3+euibnnqUJrVC9kod8rgCZgxCRr8C9SyyPuNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r4flLxGdBx+UbbZUq4LAtIUmVxerXEy6s6qUQHZHhh96FecA80rWzLa4ri5lUzAP91M+KWYJctgYFU61ftCMlKVGTbJqQfGYaxyDe4971Sgy1j297pOflkPVVwJvGijOndKicEtWtXJaZniGnnTEY1rhlqLsRySIHVzkzic49jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baXsumoO; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="8EouNj5t"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ITB1rCZb/1p8Dc/cYBEMMSkfLogfsT+JzDlWdMz+ne4=; b=8EouNj5t5a/wVV06FrfHRkcTwE
-	3fCUlq29rCQLw3onGQP+cEJYbeShna8XxxtQOCfAEsQHrl+04HQONofxi2851Jf4kpmPpR9ye/aqK
-	xFGE2sExRGKAJJ7us7Y/61S9Tmrqmk21X2e0jRzmwvu8hDgkGgmAN+Blcjhbz1apYQ3en17X+fNwJ
-	Zy1/7zDI5qu6VF9ElRhahDa8edqWa3G8AriQ6WCbWSnmtV+yU4knF5wwLl7mCVK5Uk7WDnYc5SP3Y
-	nY7QSPOSIGDsIu0ZpaLFeGLLEUncYMM5gz4qwJ4Gh/8uxtIFNpw6G+Meg4j7OefoM5Cq6RncsETd+
-	rRHkFUKg==;
-Date: Wed, 24 Sep 2025 22:40:35 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Alistair Francis
- <alistair@alistair23.me>
-Subject: Re: [PATCH 2/2] hwmon: (sy7636a) enable regulator only if needed
-Message-ID: <20250924224035.2b20459a@kemnade.info>
-In-Reply-To: <25ef8eef-a4e6-436b-87cd-c77506b4b215@roeck-us.net>
-References: <20250920114311.291450-1-andreas@kemnade.info>
-	<20250920114311.291450-3-andreas@kemnade.info>
-	<25ef8eef-a4e6-436b-87cd-c77506b4b215@roeck-us.net>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baXsumoO"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b4c29d2ea05so1228867a12.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758748019; x=1759352819; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=JI9xpslBxstQZ9wuc180aMmQ2ZixsujiLXaQMOgp6Xo=;
+        b=baXsumoOifVEVK4BG+rE+w1tW5La+xIy2SkMXQogXO0vOMFN9GYbgGeDdJZY5qLGM1
+         z4jK2hoyRUEiXwbI+BjKqDIa2MKFxz9QVi8WaUzD6W5Sfb65C6h53Ftvh98qMXC5fLha
+         sev0EKNTeKEOAiaL43p2unUDTBUtE2tyTeN0K4aWAfdRlkXsq+xHqt4yA0e8Tv25nwTn
+         unaPGG2xcx2PgSAt3X52Ob2vizkljT26qii7tWNpriHAqWZ5SkqJDHh9Mmv+88IG8P9Q
+         QgajFUgKpSRL0rElm2anJlq5oKXttZjKNUkqdfHk5NoBkOH0p8aKi2bmmAnN0bUSJI/K
+         OFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758748019; x=1759352819;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JI9xpslBxstQZ9wuc180aMmQ2ZixsujiLXaQMOgp6Xo=;
+        b=dmNuDVtT4Ew3g3NzBe2hVG2VCZwEqFALKSjBRP+xTetvU9IIDrZ9JUnksbCY3ROjJ+
+         OT3mJO8OaqPeyWvRtZkzJ+E2IKAiajOXJl5lQmM9wo2d6XbaqcXmq0UlzHKbbEQDJWRr
+         FpCmpprt5z6GluIUOcJT5+/jYTGabDdeEXufnhiIR+rMyOkKOh4GwTPtBkU3VofiYXGy
+         qfgQKN8TQ3WWXhQJy4z7mLliKu63mBJN2iK34QYdbyUD8zmxt/0JZvknN8C2/gcfDlcO
+         J0mzhAEjekFZGEcJ0qmj3aB9MKvFvx4L/3LHkEqoXm/EroGExypNa0pdneaOKSsiQkqT
+         Z/9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWI+BgGIxzN2t+dEzJS44d98gm3QBRIl/Qn9W9aoFGZpsaKlGNf/tuCKL00KFA9gdRbOSBjJvXvgLc8Jw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKdGB1XNxe2eZNI30I4LKUR75dnYMn1CqJXz2m6QD77c+Lc8bL
+	NUZbBwYHPLOMOZKC8ofX+akqnRtOgvof2TR9856PVW6fSsGWQTeTYNb0
+X-Gm-Gg: ASbGncspouJNemAxmJJvFkyulE7PxfS7tQwMHtsQkGWB1IyHp0pRjZpMKpdf5ljgD9B
+	tf4hNxosCsMHYDzRfrH0om/ES8L5p5Fll95Y84LCZsfGp3Nn5w+H19J6M7in+Uid5ep7ue6EQ+Q
+	+VyrcSbKnicszIirOIeiCxm04iW6QfJzbUEHoG9fU8paYxyGmPlpgPh+23rWKHa8a674N1l63on
+	9V9Wz2FZyDtMGT+SN5w33nxFfXuA5dsA8emyUI8Sa+UIrpzU7TSQP8h50g2o9njJgNTWzf9L8r+
+	mfSPn52MNjJEivgQAejDXlKtdBARyhTHKOwRUwUQqqZEHNQMhT9H2XYsPRrAGutIXzn3GEgWPL3
+	Qhapkm50R9H8V78vXhsIRdVz81I1R0k55iznGvaH3GJ8mf9AZHklWgA3YjK0F0HKlZIwds8Y=
+X-Google-Smtp-Source: AGHT+IF/kFqaeulQbMV8VrbB7BPcJZb0NjNLiLcMZzp3ihjMiV71sNegKdVqrcFHijT2LC3hQK5HMQ==
+X-Received: by 2002:a17:902:db03:b0:25c:43f7:7e40 with SMTP id d9443c01a7336-27ed6beb88bmr3081035ad.10.1758748018983;
+        Wed, 24 Sep 2025 14:06:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6aca043sm1680015ad.138.2025.09.24.14.06.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Sep 2025 14:06:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <00685721-8f34-4ad2-9452-5447eafb23b8@roeck-us.net>
+Date: Wed, 24 Sep 2025 14:06:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] hwmon: (sy7636a) enable regulator only if needed
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: jdelvare@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alistair Francis <alistair@alistair23.me>
+References: <20250920114311.291450-1-andreas@kemnade.info>
+ <20250920114311.291450-3-andreas@kemnade.info>
+ <25ef8eef-a4e6-436b-87cd-c77506b4b215@roeck-us.net>
+ <20250924224035.2b20459a@kemnade.info>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250924224035.2b20459a@kemnade.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Wed, 24 Sep 2025 09:06:15 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On Sat, Sep 20, 2025 at 01:43:11PM +0200, Andreas Kemnade wrote:
-> > Avoid having all the regulators in the SY7636A enabled all the time
-> > to significantly reduce current consumption. In pratical scenarios,
-> > the regulators are only needed when a refresh is done on the epaper
-> > display powered by the SY7636A. This is can save around 10mA which
-> > is much for this kind of devices.
-> > Also fixes the asymmetrical single enable call.
-> > 
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > ---
-> >  drivers/hwmon/sy7636a-hwmon.c | 34 ++++++++++++++++++++++++----------
-> >  1 file changed, 24 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
-> > index e83d0e50c735..0fda69bea3b4 100644
-> > --- a/drivers/hwmon/sy7636a-hwmon.c
-> > +++ b/drivers/hwmon/sy7636a-hwmon.c
-> > @@ -18,14 +18,26 @@
-> >  
-> >  #include <linux/mfd/sy7636a.h>
-> >  
-> > +struct sy7636a_hwmon_data {
-> > +	struct regmap *regmap;
-> > +	struct regulator *regulator;
-> > +};
-> > +
-> > +
-> >  static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
-> >  			u32 attr, int channel, long *temp)
-> >  {
-> > -	struct regmap *regmap = dev_get_drvdata(dev);
-> > +	struct sy7636a_hwmon_data *drvdata = dev_get_drvdata(dev);
-> >  	int ret, reg_val;
-> >  
-> > -	ret = regmap_read(regmap,
-> > +	ret = regulator_enable(drvdata->regulator);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = regmap_read(drvdata->regmap,
-> >  			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);  
+On 9/24/25 13:40, Andreas Kemnade wrote:
+> On Wed, 24 Sep 2025 09:06:15 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> Does that really work without delay ? Usually it takes some time for a chip
-> to return useful data after its power supply has been enabled. calls
+>> On Sat, Sep 20, 2025 at 01:43:11PM +0200, Andreas Kemnade wrote:
+>>> Avoid having all the regulators in the SY7636A enabled all the time
+>>> to significantly reduce current consumption. In pratical scenarios,
+>>> the regulators are only needed when a refresh is done on the epaper
+>>> display powered by the SY7636A. This is can save around 10mA which
+>>> is much for this kind of devices.
+>>> Also fixes the asymmetrical single enable call.
+>>>
+>>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+>>> ---
+>>>   drivers/hwmon/sy7636a-hwmon.c | 34 ++++++++++++++++++++++++----------
+>>>   1 file changed, 24 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+>>> index e83d0e50c735..0fda69bea3b4 100644
+>>> --- a/drivers/hwmon/sy7636a-hwmon.c
+>>> +++ b/drivers/hwmon/sy7636a-hwmon.c
+>>> @@ -18,14 +18,26 @@
+>>>   
+>>>   #include <linux/mfd/sy7636a.h>
+>>>   
+>>> +struct sy7636a_hwmon_data {
+>>> +	struct regmap *regmap;
+>>> +	struct regulator *regulator;
+>>> +};
+>>> +
+>>> +
+>>>   static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
+>>>   			u32 attr, int channel, long *temp)
+>>>   {
+>>> -	struct regmap *regmap = dev_get_drvdata(dev);
+>>> +	struct sy7636a_hwmon_data *drvdata = dev_get_drvdata(dev);
+>>>   	int ret, reg_val;
+>>>   
+>>> -	ret = regmap_read(regmap,
+>>> +	ret = regulator_enable(drvdata->regulator);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	ret = regmap_read(drvdata->regmap,
+>>>   			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
+>>
+>> Does that really work without delay ? Usually it takes some time for a chip
+>> to return useful data after its power supply has been enabled. calls
+>>
+> Hmm, enabling the onoff bit behind the regulator is just needed to turn
+> ADC on here. But there is also the power good wait which should usually be enough.
+> Usually... But there is no guarantee. So yes, better wait for one adc aquisition.
 > 
-Hmm, enabling the onoff bit behind the regulator is just needed to turn
-ADC on here. But there is also the power good wait which should usually be enough.
-Usually... But there is no guarantee. So yes, better wait for one adc aquisition.
 
-Regards,
-Andreas
+Would that be the power good timeout (50ms) ? The conversion time on top if that
+is not much, but the power good wait is a long time. That strongly suggests that
+this should be made optional. Not everyone might like the additional delay for
+each temperature reading.
+
+Guenter
+
