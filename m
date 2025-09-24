@@ -1,98 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B36A95E;
-	Wed, 24 Sep 2025 07:48:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE72729E117;
+	Wed, 24 Sep 2025 08:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758700121; cv=none; b=KtzsAeFdATcQVp8D2NxqCvIENVfCML/1NeYmjZLgGV1ZKX00BU10sAI+noi9VeAeq7jPHfDJW62zG3LnvY4tHNpaN1aHsdbrm4LoNjoVohgdAlSXaHGYEuqiHBx02YBcRqKGBglPd0PZsBPxlIiuaKMTeFKiYD/q0C+/L2xYdx0=
+	t=1758703480; cv=none; b=nY5p7C1kRe7tgFJ7wLwzH9oiAvtKDlWZYPSbSe68WKfypWja5/fU3ZI33L88ZizC/3Hzvu9jkDvrQ+6qgO4vZx+qcGWVlkqUa5IpYtzkBNzCCHYDs81cA3daMgAT8zCyVE+Zq2IEsSQNT3CF6Z+TA0PvRd5VrNSdniAZ0SNIQ88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758700121; c=relaxed/simple;
-	bh=4RgNQXDUKmVNhLMTLsj3YfRs+pGxjlg5HCCvZTce2GA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=FNTy8jryTdcs109O47CNLU0Oo/oNQEkAMeaeZRLYqCW0EfHldjWA2bw1cxQfyo2+WouBhmo3hqkLDf7rzhjdIuePHxOFoBHQ9uBu1iyqke5RHHaC93aqSxp3a0ms+ZWJo1AV/jI0zS6uPJagSg0/5zKq7cq9kRh1PXngZfLd/rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCr3NSbc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758703480; c=relaxed/simple;
+	bh=/IYUKHDSnRaRLZ6hlg7KH0TJdWwVnj1XFp0OLs7MsLc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eBjWH2O9t9qbUkVR4DEcwUjT3LLwpyCv6zKhY80CsPUE/DRhfGP+V8ByjOlVRDof5Ug2iMGj6+pgmR7ocvoBvnvEfSskXwK4sFunTSemhIgzPAPuRNDxfxbQgN3sqIxM6ANUwPnn0OwTeICtsP0eiuzf0175EhvbaCv9NyrdRnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2eKIOnZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCr3NSbc"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58C09C4CEE7;
-	Wed, 24 Sep 2025 07:48:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2eKIOnZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2FEC4AF0B;
+	Wed, 24 Sep 2025 08:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758700120;
-	bh=4RgNQXDUKmVNhLMTLsj3YfRs+pGxjlg5HCCvZTce2GA=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=sCr3NSbcSb1uLk7QduudamVD1x5e6TMN0daYJcTTOrRNTXC4T+a67ZMZMgfdSNY5w
-	 lj2KcBdD9lJZJRbf6sA8YjzDJwp9Y7R1tHmzuHeyVZyZn8bkpk3NC1jzIiKzaBJwDk
-	 21rTcF+hngy5MqPhM5RtnmqC9HmJuUDI5u1nfYQxy5M532YpITBm/gUxH0kpZgo/7Q
-	 GdEwIzAxbuVhBpG5pVE/O79mGZw9VAxokxw8oJNkx+parovRGOrom+kTfccZT/IDE9
-	 39CaFCJnUY78WHWDTELu2OhWD6mq++Rdxdudeayuk31nSe5iATAK9UCSToymeyBVr/
-	 sdrX2Zdi5uxRw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EA73CAC5A7;
-	Wed, 24 Sep 2025 07:48:40 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Wed, 24 Sep 2025 15:48:38 +0800
-Subject: [PATCH] hwmon: (gpd-fan) complete Kconfig dependencies
+	s=k20201202; t=1758703480;
+	bh=/IYUKHDSnRaRLZ6hlg7KH0TJdWwVnj1XFp0OLs7MsLc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j2eKIOnZDiSjRF5hCEhZ44t2eneNf+70um6wWf5AtMNAUgA86TtxSWLC7im7CMeGF
+	 FN9xUGapLb11Lpq2JH+hmkx105snF/nvKfowI+s6qZ5TDG6E1VkU2i8KDCtsPeLoL/
+	 yumxYXTj1iEEuosZgFkZdM9StujqckeNtlIaczSW6bTiUZFnzQMaHpF4lsGVoiaBYf
+	 qFUaUgkDSYDgLOKlIE8B6Gqe3QiKefODU0cmui9Y95NoBTzTNXoxKc9iDXoOJ0SFcD
+	 bUkdSlyUmKdOYliSZcwHkJUWVz670PCLoylffa1Jrk8WPR1PL0lTso5sozhKKxS7KK
+	 oAO961BMRO+lw==
+Date: Wed, 24 Sep 2025 10:44:37 +0200
+From: Mark Brown <broonie@kernel.org>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: jdelvare@suse.com, linux@roeck-us.net, lgirdwood@gmail.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH RFC 1/2] hwmon: (sy7636a) fix races during probe of mfd
+ subdevices
+Message-ID: <aNOvddby_hpegvDR@finisterre.sirena.org.uk>
+References: <20250920114311.291450-1-andreas@kemnade.info>
+ <20250920114311.291450-2-andreas@kemnade.info>
+ <79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
+ <20250920233307.0c425863@kemnade.info>
+ <473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
+ <20250924090023.282ae450@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250924-hwmon2-v1-1-fc529865a325@uniontech.com>
-X-B4-Tracking: v=1; b=H4sIAFWi02gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDSyMT3Yzy3Pw8I92U5BSjREuTRHNzAxMloOKCotS0zAqwQdGxtbUA+Of
- MX1gAAAA=
-X-Change-ID: 20250924-hwmon2-dcd2a94a7704
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- zhanjun@uniontech.com, niecheng1@uniontech.com, 
- kernel test robot <lkp@intel.com>, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758700119; l=963;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=k4QkTC6YnHu5jzG67ZnVwUnYYgbwugDDSWlzXKmtp8c=;
- b=GE4DQ6Ez6OxCbnPuQZfoUP/YDOxmTdAdoEtsjcBlReQwni8cVkg1F4QXlpq8qKhLNX2KJ2j8k
- ehsMT3oZuZ7AW4hNM6cefixG+2G7/AALVKyj0GLj1jC3Oael1gIYR/9
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
-
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-
-DMI and HAS_IOPORT is also needed
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202509200214.i2QX7iwD-lkp@intel.com/
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- drivers/hwmon/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index d6769288a76e81f79d2fdf4e6a9943db1466fa54..d61014d7968a4ab77c055a744837b106ae112aa3 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -771,7 +771,7 @@ config SENSORS_GL520SM
- 
- config SENSORS_GPD
- 	tristate "GPD handhelds"
--	depends on X86
-+	depends on X86 && DMI && HAS_IOPORT
- 	help
- 	  If you say yes here you get support for fan readings and
- 	  control over GPD handheld devices.
-
----
-base-commit: 80038a758b7fc0cdb6987532cbbf3f75b13e0826
-change-id: 20250924-hwmon2-dcd2a94a7704
-
-Best regards,
--- 
-Cryolitia PukNgae <cryolitia@uniontech.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sfoNTn1qNVGNGSEU"
+Content-Disposition: inline
+In-Reply-To: <20250924090023.282ae450@kemnade.info>
+X-Cookie: Filmed before a live audience.
 
 
+--sfoNTn1qNVGNGSEU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Sep 24, 2025 at 09:00:23AM +0200, Andreas Kemnade wrote:
+
+> max5970-regulator.c has hwmon integrated and no extra device. That would
+> simplify things. Although it does not report temperature. Some
+
+If that's the only reason why it's a MFD I'm fine with doing that.
+
+--sfoNTn1qNVGNGSEU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjTr3QACgkQJNaLcl1U
+h9D8Ywf/VGLJ8shWU0lrY2AFMdqiJgo+CY9vQTI9F65PVeWuxMq++AfflE4G60zw
+Uf88JiYfcB/a4lpA17LQo5XviHDQ7Ntb4lIrSPWt4+ebSN6RFrFHNFvsYOlQtU27
+qE2aQrLapX9OKv/A7fBIZ+NxB0Mn5wOgL/90cebQWpJ/bGNV4yatbaFGzvD8iWv9
+5/j1JRpt+GpEDjJgXDCHG2/kVeNbmsn8iH324emzWmLUCVYVEreulH36GAZU2Lme
+vtseGWHOF6n0BZMCng4XwcSod96prknHdwDN7DTwrRJHmeKPZXR64I7xnyMMp7oL
+PcqnG4vlEQ8VoH8n3wDC5mY6dobvNw==
+=X7Xu
+-----END PGP SIGNATURE-----
+
+--sfoNTn1qNVGNGSEU--
