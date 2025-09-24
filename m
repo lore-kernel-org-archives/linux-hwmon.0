@@ -1,190 +1,102 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A5410FD
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 21:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7E6DDAB
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 21:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758748021; cv=none; b=emgw3/cGvctoeGlKwWFQnH1IUppJn9d9/yBQTDSfm/0SIWxN6wklEnavvpLbQi5Hec1gh0OxmAM9cm3sedAHjGMgSLuvNigbGmS9ztSKbs8zH0U8+Rm5JxnNpNqWm06ocpf2a5kSi4o9EXoXFF4iAGQ144/gsIApa4WRN8HhKlE=
+	t=1758749444; cv=none; b=NMw6Zxg8Cbtv6MSNqGe5w8z8olBYApqtLS+Mn54pEMLlYhS93iOPd+AQTVlUXJBHeue8nfWoc6NvXD7HJE8SWjjncDWEmPXuMgLmL2CjaO7Z8V2XsYKofLUkOF73OBBhH2ZcobSttFgj5Fso0fEC42s3DnMSmN+IIQxGjAVwhLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758748021; c=relaxed/simple;
-	bh=fWTMi3+euibnnqUJrVC9kod8rgCZgxCRr8C9SyyPuNo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r4flLxGdBx+UbbZUq4LAtIUmVxerXEy6s6qUQHZHhh96FecA80rWzLa4ri5lUzAP91M+KWYJctgYFU61ftCMlKVGTbJqQfGYaxyDe4971Sgy1j297pOflkPVVwJvGijOndKicEtWtXJaZniGnnTEY1rhlqLsRySIHVzkzic49jU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baXsumoO; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1758749444; c=relaxed/simple;
+	bh=r6vJatirenvxNJq5RVo5+xDwbBNx2oZNLAnvjLIizeg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GfSS4AJWcDs2un1f7NQwnGma+0yB/jP1nXFE11QHdZCAJUtUlT5XxUuc90FgR+nGDFTQEQKpRZ1RFNGym504IhscQNF0JjjHHt+TRuNFYu+RjKC0ptAQagHZVDOPTCxY7VxU/jFt/qg4oWDt11ReqkB5aYkJFMdwT7DWKNlgMrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=ZrFvoSuz; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baXsumoO"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b4c29d2ea05so1228867a12.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:06:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="ZrFvoSuz"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-77f2e621ef8so445656b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758748019; x=1759352819; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JI9xpslBxstQZ9wuc180aMmQ2ZixsujiLXaQMOgp6Xo=;
-        b=baXsumoOifVEVK4BG+rE+w1tW5La+xIy2SkMXQogXO0vOMFN9GYbgGeDdJZY5qLGM1
-         z4jK2hoyRUEiXwbI+BjKqDIa2MKFxz9QVi8WaUzD6W5Sfb65C6h53Ftvh98qMXC5fLha
-         sev0EKNTeKEOAiaL43p2unUDTBUtE2tyTeN0K4aWAfdRlkXsq+xHqt4yA0e8Tv25nwTn
-         unaPGG2xcx2PgSAt3X52Ob2vizkljT26qii7tWNpriHAqWZ5SkqJDHh9Mmv+88IG8P9Q
-         QgajFUgKpSRL0rElm2anJlq5oKXttZjKNUkqdfHk5NoBkOH0p8aKi2bmmAnN0bUSJI/K
-         OFyg==
+        d=sartura.hr; s=sartura; t=1758749442; x=1759354242; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uf8e+i1NQmbBzvEMBLlbeFVnrVkfp1K5SVjnFrmkNpk=;
+        b=ZrFvoSuz1IAPwAZp6rzfn63RaVCY1Ax7AxITEUeiwaM7Ga63RcFMnKPzGwEg1enbTA
+         ngwZ9RYeyGYwpAgc68epnqwvUqOdyioJTJ5bGJdh9svyhyi1JLRSY406pPdCya/BXoiv
+         VQJyJO/tMBZY4xZtHShx5lukxwaY8Il3sIHCm1vBiikWiuQxJhQWxdXQNLvtZJCXBtBO
+         bEF0DMP9TE4+U/STOjC2nZ2paXy8ilR5FJ1AzLNm1S3Cevvu9ZmF5lBaxHO9bfOveZEc
+         X5rTZjywkh84l6UwmrCPCEPw/QFQIlStBBQsN+k2J+s9bEm7Y1GQlzoE2o67NFb/B2+L
+         N76Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758748019; x=1759352819;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JI9xpslBxstQZ9wuc180aMmQ2ZixsujiLXaQMOgp6Xo=;
-        b=dmNuDVtT4Ew3g3NzBe2hVG2VCZwEqFALKSjBRP+xTetvU9IIDrZ9JUnksbCY3ROjJ+
-         OT3mJO8OaqPeyWvRtZkzJ+E2IKAiajOXJl5lQmM9wo2d6XbaqcXmq0UlzHKbbEQDJWRr
-         FpCmpprt5z6GluIUOcJT5+/jYTGabDdeEXufnhiIR+rMyOkKOh4GwTPtBkU3VofiYXGy
-         qfgQKN8TQ3WWXhQJy4z7mLliKu63mBJN2iK34QYdbyUD8zmxt/0JZvknN8C2/gcfDlcO
-         J0mzhAEjekFZGEcJ0qmj3aB9MKvFvx4L/3LHkEqoXm/EroGExypNa0pdneaOKSsiQkqT
-         Z/9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWI+BgGIxzN2t+dEzJS44d98gm3QBRIl/Qn9W9aoFGZpsaKlGNf/tuCKL00KFA9gdRbOSBjJvXvgLc8Jw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKdGB1XNxe2eZNI30I4LKUR75dnYMn1CqJXz2m6QD77c+Lc8bL
-	NUZbBwYHPLOMOZKC8ofX+akqnRtOgvof2TR9856PVW6fSsGWQTeTYNb0
-X-Gm-Gg: ASbGncspouJNemAxmJJvFkyulE7PxfS7tQwMHtsQkGWB1IyHp0pRjZpMKpdf5ljgD9B
-	tf4hNxosCsMHYDzRfrH0om/ES8L5p5Fll95Y84LCZsfGp3Nn5w+H19J6M7in+Uid5ep7ue6EQ+Q
-	+VyrcSbKnicszIirOIeiCxm04iW6QfJzbUEHoG9fU8paYxyGmPlpgPh+23rWKHa8a674N1l63on
-	9V9Wz2FZyDtMGT+SN5w33nxFfXuA5dsA8emyUI8Sa+UIrpzU7TSQP8h50g2o9njJgNTWzf9L8r+
-	mfSPn52MNjJEivgQAejDXlKtdBARyhTHKOwRUwUQqqZEHNQMhT9H2XYsPRrAGutIXzn3GEgWPL3
-	Qhapkm50R9H8V78vXhsIRdVz81I1R0k55iznGvaH3GJ8mf9AZHklWgA3YjK0F0HKlZIwds8Y=
-X-Google-Smtp-Source: AGHT+IF/kFqaeulQbMV8VrbB7BPcJZb0NjNLiLcMZzp3ihjMiV71sNegKdVqrcFHijT2LC3hQK5HMQ==
-X-Received: by 2002:a17:902:db03:b0:25c:43f7:7e40 with SMTP id d9443c01a7336-27ed6beb88bmr3081035ad.10.1758748018983;
-        Wed, 24 Sep 2025 14:06:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6aca043sm1680015ad.138.2025.09.24.14.06.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Sep 2025 14:06:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <00685721-8f34-4ad2-9452-5447eafb23b8@roeck-us.net>
-Date: Wed, 24 Sep 2025 14:06:57 -0700
+        d=1e100.net; s=20230601; t=1758749442; x=1759354242;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uf8e+i1NQmbBzvEMBLlbeFVnrVkfp1K5SVjnFrmkNpk=;
+        b=kqXRweq04iU7/A3khZmIJMyxsKlnzRsZZ8oWmIYxEwqwhYJr0ITY5VBP6FueDjgE6L
+         DDLKV0/WS/CTirkuSvzxkpdrKX6wrTZF7v7+df2OYxS8Zw2xC9BLDbFJgUeUrXPsntZh
+         V/jLMWRFsulBh7rvW4OnIJPh86TN1dgCtv0ZjhshJpQ4EP24tLJpf9+mR2WPfThFrehZ
+         6Theen6Zu1YmpWMK4oKVu2tf3RkSCSE/SZeGFVPOCpRsNl/vtmSILP0AWEcVgky1ZFiM
+         lwObkBcIXw0n71vu01Xp2uXxc61Dbf/bQFLLZO4QO35RkN3PmeE/Sd3uB4UZCl56zE2Y
+         LK/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVPMYWjLg6JHP95a0+6ZtLlfGnVIOm8M0db6Cg5cKoITyeB/vTpCl6AJ0EwgLrAOrNsaAdf90yEMuDCxg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL9EkqWOWfEfb0TvYcxQN9dBB0VglfQq2tTUa2rHPkysAgSErI
+	qPVtG4aaDT+kEuLiqNQ+cHlyQsJuUESDzw7nUVCMTPndydRo8ImKU3ny9RMjlcRjyBA=
+X-Gm-Gg: ASbGncsPWXtkBQSsUkDNhE/2ac4nwGpBa2/5sVAEdpxCkBMxwjIVQaofInVFBwXszMo
+	I09XxTskjpjYEH6WC4pXCtVbdD6SxZWXWs5+onlNmst6Q/sfFmdOgiTue0wogaxYyp9eqySwGyG
+	8V+uItoIo85AniMYVBxpNUPmk3AJFqOdrf//e3+PKz8/xkT6n4wkwcxIDv/onE191PYFlBvdzwZ
+	E18Zt1HI/JJsMqqFZ6h1Cn5riaIgJJZ0+/vO+QMDxrHtlGWPl2ASWUaTC6z/0R36dlG8RDwF8P/
+	UrpO1mZN5Gf0l0Mb0WyKGxuBE785EpA6NFYzrBaK3VlmaUKfAT2n0VGn0NiyTY3SZPWWeCu0R8P
+	25HjBpbvek4sDUjzdru/n8Pdx95VV+sQLtw1r3PXmH8g=
+X-Google-Smtp-Source: AGHT+IHDk/mJZU7GjxvepTGSrn5V0zMSz31PMb0YzmQruhmfqOi7Q9v9gnRD+j8qskbbixZ1kv9Pzg==
+X-Received: by 2002:a05:6a20:72a8:b0:2c4:c85a:7dad with SMTP id adf61e73a8af0-2e7d6ca978dmr1157135637.46.1758749442471;
+        Wed, 24 Sep 2025 14:30:42 -0700 (PDT)
+Received: from fedora (d-zg1-232.globalnet.hr. [213.149.36.246])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-78102b29688sm3243b3a.57.2025.09.24.14.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 14:30:41 -0700 (PDT)
+From: Robert Marko <robert.marko@sartura.hr>
+To: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	daniel.machon@microchip.com
+Cc: luka.perkov@sartura.hr,
+	benjamin.ryzman@canonical.com,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH] hwmon: sparx5: make it selectable for ARCH_MICROCHIP
+Date: Wed, 24 Sep 2025 23:30:02 +0200
+Message-ID: <20250924213027.1887516-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: (sy7636a) enable regulator only if needed
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: jdelvare@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Alistair Francis <alistair@alistair23.me>
-References: <20250920114311.291450-1-andreas@kemnade.info>
- <20250920114311.291450-3-andreas@kemnade.info>
- <25ef8eef-a4e6-436b-87cd-c77506b4b215@roeck-us.net>
- <20250924224035.2b20459a@kemnade.info>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20250924224035.2b20459a@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/24/25 13:40, Andreas Kemnade wrote:
-> On Wed, 24 Sep 2025 09:06:15 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On Sat, Sep 20, 2025 at 01:43:11PM +0200, Andreas Kemnade wrote:
->>> Avoid having all the regulators in the SY7636A enabled all the time
->>> to significantly reduce current consumption. In pratical scenarios,
->>> the regulators are only needed when a refresh is done on the epaper
->>> display powered by the SY7636A. This is can save around 10mA which
->>> is much for this kind of devices.
->>> Also fixes the asymmetrical single enable call.
->>>
->>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
->>> ---
->>>   drivers/hwmon/sy7636a-hwmon.c | 34 ++++++++++++++++++++++++----------
->>>   1 file changed, 24 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
->>> index e83d0e50c735..0fda69bea3b4 100644
->>> --- a/drivers/hwmon/sy7636a-hwmon.c
->>> +++ b/drivers/hwmon/sy7636a-hwmon.c
->>> @@ -18,14 +18,26 @@
->>>   
->>>   #include <linux/mfd/sy7636a.h>
->>>   
->>> +struct sy7636a_hwmon_data {
->>> +	struct regmap *regmap;
->>> +	struct regulator *regulator;
->>> +};
->>> +
->>> +
->>>   static int sy7636a_read(struct device *dev, enum hwmon_sensor_types type,
->>>   			u32 attr, int channel, long *temp)
->>>   {
->>> -	struct regmap *regmap = dev_get_drvdata(dev);
->>> +	struct sy7636a_hwmon_data *drvdata = dev_get_drvdata(dev);
->>>   	int ret, reg_val;
->>>   
->>> -	ret = regmap_read(regmap,
->>> +	ret = regulator_enable(drvdata->regulator);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	ret = regmap_read(drvdata->regmap,
->>>   			  SY7636A_REG_TERMISTOR_READOUT, &reg_val);
->>
->> Does that really work without delay ? Usually it takes some time for a chip
->> to return useful data after its power supply has been enabled. calls
->>
-> Hmm, enabling the onoff bit behind the regulator is just needed to turn
-> ADC on here. But there is also the power good wait which should usually be enough.
-> Usually... But there is no guarantee. So yes, better wait for one adc aquisition.
-> 
+LAN969x uses the same sensor and driver, so make it selectable for
+ARCH_MICROCHIP.
 
-Would that be the power good timeout (50ms) ? The conversion time on top if that
-is not much, but the power good wait is a long time. That strongly suggests that
-this should be made optional. Not everyone might like the additional delay for
-each temperature reading.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ drivers/hwmon/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Guenter
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 840d998f850a..ba2b7b2f6c44 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -632,7 +632,7 @@ config SENSORS_I5K_AMB
+ 
+ config SENSORS_SPARX5
+ 	tristate "Sparx5 SoC temperature sensor"
+-	depends on ARCH_SPARX5 || COMPILE_TEST
++	depends on ARCH_MICROCHIP || COMPILE_TEST
+ 	help
+ 	  If you say yes here you get support for temperature monitoring
+ 	  with the Microchip Sparx5 SoC.
+-- 
+2.51.0
 
