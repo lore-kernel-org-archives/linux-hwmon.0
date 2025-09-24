@@ -1,74 +1,75 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F01821D3D2
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:47:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9C817BA6
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758725251; cv=none; b=nJ66fg3AXq7/QU82pyqlXNyOS5zOODO5guy81slKevw8bfcZjSlufWvihinpkwR6VjtOC1el1owUzBkYPx6TVtSAs6wqGlHsZxelE4bN0xua4B/HzgkmJX8eOduWyvM2jByyvJNhb2g2cEuiMNtCno4heYuT0QJJzBc9BNBk2Pg=
+	t=1758725295; cv=none; b=YPcTBm7JPFxx8hQZM7n5uks51cf16+b+OiZwST2wqKPsTokr7NYQKHib1Po2ncf6CoQ/Ow9w6FWT9Eqho+edBbjxvGXi3GEqsjhDF2pmAvZZL9UC89idA2u4Mjdz5aWbRKVoz3A+Uw5MFV+HyypmPLInZLGbAikoHHWlBir+/DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758725251; c=relaxed/simple;
-	bh=AgDrnMXXXJYoDpwAwUvpBn1pSggFOiq/LNM+/BWg5jc=;
+	s=arc-20240116; t=1758725295; c=relaxed/simple;
+	bh=wNl7jQLwEHKQRZX0SAXvXgHbGWSN5OECo77b/O6rRR4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=II4mhQM2xd+8Hh+ugdIDxILZcs+wI6fNGUC4oIk4UJLIwETXUUs0vrjxNu9jAxetHLc3qJHhf4zD62IDf3LJx8nYt7MO/VEnh49Q5V9mpX+Mg5z3ES3BIFf+HPSby9f5FfJi8Gs2qDoc6+pMihQkjczBWLGGmFGEdTa4x6KRuNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvkujbXU; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=CQFoAgWsUtqq42lAUtMb44F4xdgBSAeCXT7FR25/LwPnMLKI+MtakXyLdg+IokGauRbGvZ3tW9cahDqpZDZucReIRQuqzJg8kg95UOV1CRXzllaFsUPIn+NhHZpBgJH0I5LIRnGNoSpOAt08DEBqsSYjKOs0v4U8JkXEtdYiJZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDVhHvc2; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvkujbXU"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7761b83fd01so6614773b3a.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 07:47:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDVhHvc2"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-26983b5411aso49492715ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 07:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758725250; x=1759330050; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758725293; x=1759330093; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JuKXuzOjDOxictCX/voBvqBpBAsKrQMGlOEziz1SDD8=;
-        b=LvkujbXUSLTMAgY9TUy7P7PDXfgPB0X4TiO6u2qxgoKhnQrbz1VygPkM61Oz9olJkw
-         uFfbTd0s8j7Cd69nI+TXslCoZBsFnaWbrHfIOqE3K5XU5JSHcpU1HmrLImPy0Bl+6yzj
-         GyTkUo+Lb8OCO3EsRl8uz+kVwfvCOxFuMw5s1xI/W1hm3IfbEbrvPcZysxHU/aCcOnEc
-         21aTFs2Rm19+ndOaR+qEl0FJ3FzkZ7pfNDA8REnbWElRxVS7hECaxfrabEQGAT57YAvz
-         xDwuufCyZCX7zmHrKLKN6H17AjeqX5jtF82MzJvqy2EF800HODRfRXdkuoV+axOAhJuv
-         Z/hg==
+        bh=gCnQwG7cHEZFPgTmiyysVJ/gsyay5bIs1U65I8G5nbc=;
+        b=bDVhHvc29lIH9XBjR3fW55NSUCb7UL71qB5s0om3Crh2XyJpCyayXwPakpk591Yiua
+         F1w55xvZKZwpPuHSzC5dLjodto558nD1BeQ433LholI0i3fHbVyUuTpXEIiXG4Zd/TTM
+         2aV0Td29kMy0EAW8SUienJM+pCkamJcwiQZrSZmWRHomh1yGQYZ48+d0qLMsfJzi3cvj
+         FDWM7yMj4frM/kJA1GXebNQ1/4SSMdSES9vut2wbORtJ7vKkadCKBicX9OTaHZrkPV0L
+         Bpm6fwwOXJG02AH7wagRlIB7LcNPdiVZ8UNHtZlChWoEoC9TrUP0yHLp9yFAm4w5XqLe
+         4BvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758725250; x=1759330050;
+        d=1e100.net; s=20230601; t=1758725293; x=1759330093;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JuKXuzOjDOxictCX/voBvqBpBAsKrQMGlOEziz1SDD8=;
-        b=I1ONQo1Nr7xQFS61Syq0C1gvw8NdCIbypovqsHbVMTU9S7gPbmrDGcx4RHhZsc7BHk
-         45g5RYIYU/Mk1jzxw0gwz94vsk/06VtkKxlxTI9oYqrA8300Xy3KmpLLItx336T3zEEg
-         ZzofK77BMwovCh2Hay7EGlC0++GuRgo2DggwskaKzDhwcGOTvzGweQh911EQAcIMdi96
-         g6WiGdLXDws4KodnQ9ZySuxAuVzTuW/owIqz52mdjRLuXlzEzm268/mG35IVVYDerGGd
-         GsLMVoXRlxyMUfZHe2gBiQ4RENgE9Ik/3PTVzdKo2yvPGAcVo0fanwqmAWmweW85jIOT
-         v4pA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyaTdDKTTqyHlmelFsg9wi3wWANdFicKgF/uJMOfgWTTSlLDr0kDR+oZOhMetBPN538nOLfTGAH27BSw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxek+27zAJwBhVaDp5pQD8/qN8RSOA4H2ODp6edHCqoYBexQYmT
-	s/0yfV8VsaEHcvYPGzLsPZOu1lEloEa3kbfByT2JWmd5wmDyFq+Cb9JU
-X-Gm-Gg: ASbGncus/5pktqyISEWqo8ZJ9KrbIsw9nZ/jtt7O6c8JD2ICBXdsxXMLWY3FASEioH9
-	L92Ej0RejpqfEgBXvrbgoH4rKJjKhizXuYF4h7FFS/kROmtZXAyhR/Mxh1lLGGycCuEwD5QpTeL
-	YN4pnZiSlOBW53Hb+Mes51NMNjWdX+5FJuW6BAq/RnfEQzb2rt37G9Bkw6waHpOKyzntgqMSORs
-	PLU5ou/vWeC/VsBQei1UC4Iq7Ub/puqjZfYyCt+MJZGR1jVa5KYFSRxKNbD7wL0CEkp5qSXgGi3
-	/de5BeD7kY9d4tX7mTLnRfiBE9DEtIGFdIedcXUXYjFuDbweF1I0JCaPu9OdNoUdAvjZlwV+D9L
-	XsV5il0OpJjFiQrY3q0xWLUf6YklRlSXUf0s=
-X-Google-Smtp-Source: AGHT+IFFBGlyzzgM0DUwXPrRh1qzXutsF069Qhxcx79xZS73ltfaw+2FZsIv8SJjT1C/iB/wc44oeA==
-X-Received: by 2002:a05:6a00:9a5:b0:780:f6db:b1af with SMTP id d2e1a72fcca58-780fcea2fb2mr222078b3a.16.1758725249706;
-        Wed, 24 Sep 2025 07:47:29 -0700 (PDT)
+        bh=gCnQwG7cHEZFPgTmiyysVJ/gsyay5bIs1U65I8G5nbc=;
+        b=L7GqGt2hcUXiftwETzK8d031k9ejPmQY47nJen9tYcJFMj38PgkigaVmbtVVkL3eg5
+         E90fo3+c2xiAwtyk3NSd8nCpsGkVoODvEXSLclVWFFx0NhBJK+AyeLfr+0gYwyA+f9Kx
+         N9R2BAGjK3fJ5LFpr+m7tS/aGdpJZ3KPvhML0JvqY53I1m3I+jR24iWsC51iT24fQUKf
+         HG/eWf8SQzz7BO8YyyJraiy08w7tEvJE35VvfNf4T6nuKaTIDI1lJX4mEE0corJ0HsIq
+         PGpZNff2aXTpl/6rQA3Is2FLpEfM+IaYUl+jTZ9EqL9mLb0u6ivmgApOHsCSePiPM/0I
+         Astg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyceuVRM/EUbUftr51LCiwW4C9ujhRjr20vR9tS4Sm7+P2nD0PsuHuQA5BBdK5FqMg3a/GxvRQMzaKfQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq0eiBSmPcFvlEQw960NfPY9JbSWF+Kv6/pEQTvLMqZB+L7koi
+	RjfadqbIO5b5PnZi6ghP31VvdGZG85BJLyb6oU30vLI9HsveufSzNv4c
+X-Gm-Gg: ASbGncv/fXaj6WaUiyqBcZB319wuG6x2fqF0yDtxGnn/ph2fRogzW1msNURZ89XLSMS
+	v/DODsCE5qpKlfuVc7HcirA3piSfTVD+yTgem+9F/DRW89ObhX16F1SviPuy1Sad/1WGdLRs+oT
+	ZcsT0rm1174eBNBkLf6K0j03rkh9vie3bw0Dv9kvY8uUKQdQeI+GxPd541RjxBhtxNzb3SHxfiY
+	xiAsCCvJyoDPGRVKEsbATGZOaO0NSdD8Hu6ttRsOx/w4wsa6af28mmpaRVGG1//IzpXOdOS6DEP
+	TigCfv26M7QF0oJthsTfV4c+KUSGkHkCJXag3hz9gDNuXfoFuLcupc6BQeS3nJ2eW1+364kCQXm
+	RxYf8mQuFf0bh+tpcGqnGfWa+j+qC97y9zQ8RUfs8Ba/QrQ==
+X-Google-Smtp-Source: AGHT+IF0Wc/aabCHtSWcbcm967HWZ+TJSB9RK+HGHmlKX6l01u9oA0TxcL2DvhecnXy93SqhEsB6PQ==
+X-Received: by 2002:a17:903:4b46:b0:24c:bdf5:d74b with SMTP id d9443c01a7336-27cc27c217dmr79382925ad.19.1758725292956;
+        Wed, 24 Sep 2025 07:48:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77f52c4e905sm5563011b3a.18.2025.09.24.07.47.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2752328629fsm105445555ad.106.2025.09.24.07.48.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 07:47:29 -0700 (PDT)
+        Wed, 24 Sep 2025 07:48:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 24 Sep 2025 07:47:28 -0700
+Date: Wed, 24 Sep 2025 07:48:11 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: pali@kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] hwmon: (dell-smm) Move clamping of fan speed out of
- i8k_set_fan()
-Message-ID: <964da8dd-449f-42bb-90df-5ecf4b2d1e32@roeck-us.net>
-References: <20250917181036.10972-1-W_Armin@gmx.de>
- <20250917181036.10972-3-W_Armin@gmx.de>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Ben Copeland <ben.copeland@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (asus-ec-sensors) add ROG STRIX X870E-E
+ GAMING WIFI
+Message-ID: <e2dac203-2edb-42b3-b75e-f9b119922250@roeck-us.net>
+References: <20250923192935.11339-1-eugene.shalygin@gmail.com>
+ <20250923192935.11339-2-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,20 +78,18 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917181036.10972-3-W_Armin@gmx.de>
+In-Reply-To: <20250923192935.11339-2-eugene.shalygin@gmail.com>
 
-On Wed, Sep 17, 2025 at 08:10:34PM +0200, Armin Wolf wrote:
-> Currently i8k_set_fan() clamps the fan speed before performing the
-> SMM call to ensure that the speed is not negative and not greater than
-> i8k_fan_max. This however is mostly unnecessary as the hwmon and
-> thermal interfaces alread ensure this. Only the legacy ioctl interface
-> does not ensure that the fan speed passed to i8k_set_fan() does meet
-> the above criteria.
+On Tue, Sep 23, 2025 at 09:26:55PM +0200, Eugene Shalygin wrote:
+> From: Ben Copeland <ben.copeland@linaro.org>
 > 
-> Move the clamping out of i8k_set_fan() and into the legacy ioctl
-> handler to prepare for future changes.
+> Add support for ROG STRIX X870E-E GAMING WIFI
 > 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> This board uses the same sensor configuration as the
+> ProArt X870E-CREATOR WIFI motherboard.
+> 
+> Signed-off-by: Ben Copeland <ben.copeland@linaro.org>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
 Applied.
 
