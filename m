@@ -1,103 +1,103 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627741C6FE1
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 19:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F1126D4C6
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 19:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758742292; cv=none; b=ixF/vwaf8ya67VWfmqCADkUB/DhU8SVO/+GHCGhog7qLd8sO764rDV1k72IWNiLtwO3LqRbQ26JNTQTurec1LcH4RUeemZwrdsghvvmU+En6fPFovZZ9uJJTMnNh3egRZrCNDWJMYVGmnI7FF6dzpQpdq4nq/fZSfAc3s+tNPeU=
+	t=1758742751; cv=none; b=O4FHy/7MEZoyTv8C8ulXe3LE0yjmh7YxOmLZ01Murf1mC9SUB4j3RZ3vzur4rDhg7slnW6s+Hr0nWjddgL8WY3DSkfeaPHMhOcn7RDXuLTovdQVTmESRhH4wP44EFFwnTAvtzqH1bRapgz83niqMCSswF5BpTz+GJRmfb4kQNaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758742292; c=relaxed/simple;
-	bh=USTPbmjc7larzUfmJLTr1dEREs8PNqu/Af6hD/JnsLA=;
+	s=arc-20240116; t=1758742751; c=relaxed/simple;
+	bh=JiTWQ1lrz5kJGJn5ym5vS/P6oG5RjRjh2GhRCvL0X4U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JN6PAD+kb2ebjdvcFNIdq+K7FUItrSVNO26CU4/3Se9uhMZ1PsBqYNjmEBKNdRfgn3psqLF1cGcey0HxbxpICsORIhHl2Ztb382kTnrxzG0Xdv+E+9Z4G06IsTZ6tKRetfG8ody7zbK7GWy3DSERpyErnKpi1zxfmU9PmspjvTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A2PxfX+n; arc=none smtp.client-ip=209.85.216.51
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yo73+5lHOtlXGEjSXtCp1/F2ueJxQIzSSxZ1meisXykdGdcdjiSL0Uk9vYQUvN048hSIq5tBEc++9EC15OEQy1pTGt2uuFKndUiAnqyBL7A9KlLHSTOxtqgHReli2Mckz2Gr6fzuaeoRMnyIpAY2me/7MGP9bEdlg3M6Nb9A2fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/hCXfbF; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A2PxfX+n"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3322e63602eso244785a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 12:31:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/hCXfbF"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b523fb676efso188270a12.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 12:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758742291; x=1759347091; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YA3h5oB7JadoxHehwa5NeGVTyzJoF+sGhLuexgW7Bm4=;
-        b=A2PxfX+nk0WkmX1JYbDnYTaWpZAm0+isLhmyD2bi9ChvnRuAfG06O7uI9ewKwmJbup
-         CGwlOuKFnX2dMYU/TAj67X1tLzIZ6GXwDVEXwzBO2lYRV6hWtCnz1piOKoUzRSGgmZ9T
-         m45TQE4R9OtXvy2X04po5uwRnaNKFLiIutFI6Z/cIpz8Te5AQL5q0jsgtKxCQuAlaEgd
-         v5lqkGeFFZmhX+gOEM+cjTfgXq61BwFg/+vXTOqn5NIWF1k+k766b7A+0/RmirV9PJbC
-         m4ClbXjvjtV77RJbYkisp0Pxyu2YDktj1ahgzcRIm1hXroUg7FP9s071xJgtAVtss/lB
-         x1fA==
+        d=gmail.com; s=20230601; t=1758742749; x=1759347549; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DapdYW/8K2njbhPTFHcK+aSt3gtXxOr7Hh6qcpRxAFE=;
+        b=A/hCXfbFn3AYpT46H3TdS8pzhwCIIgQPuYwK32lhe5UIdt2e25A80x+5PCgDLUnWr9
+         wgHduw0Gi1Y0PljaCp2DKUn1UpBeDdk4uE87+P2cL160p5VJJG2SI9Dj+9hHFciTNBkZ
+         6Pua7zlECrgg5c//pxky4Tpf+K4f1Ojm04+fX578RwXqmUkc1FlzwpDkbWLxYavob4MV
+         JEmOAQ0JzfmUJ5E+trpvLz++H0LMdrptlRsaxs1AkGkBIoBwsYwp+9ukJHVluclCqHbn
+         dNvRxqy9Uesw+NuaoPDPe5H6jLMNWLBeIDf8JQPtTJ0twEmqqYTyX4yIEeT2MjAuHlvG
+         3pTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758742291; x=1759347091;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YA3h5oB7JadoxHehwa5NeGVTyzJoF+sGhLuexgW7Bm4=;
-        b=T8kDAjVNU5ncIBNsQZqTtTWBkRDvgFY/3lJwf7BB3NCSkiVTLwQrirq3tgU9zI4B+R
-         Pdw9cAjyjwMMwwCPXylWK+cynQBSMloq9bWnBHzF930/FRUlxJ7jF/Nk7goSOHCeAtRq
-         gU4CmnNC94Swrt7vdoTg5zN3ahRp9MfxorWeNGgf7W3JxZ9qxRHNcny/ZMuNenhuw+4z
-         0fPL/fbYu1qLcUs8J4nHaER5e6YAAX7qUy5yy4YQ2EBL64qC+RrYBINnkooYhwWdQJxr
-         71BLmI5qBL9OKwvKfhY4vR67aW2kUAFWb7pijEykaymikwVFciKe6k0M7ADRvrhd4sC6
-         GhdA==
-X-Forwarded-Encrypted: i=1; AJvYcCXoGoHwMXZUxpCPJ0c7fWVGGkmHR2bc3byk0j+L/Oxt4q+PKkfo2eGsIfGhD4jqxfhhQZ1QGl0rz+nDTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw550erro1h1fJtwlYSKX/tcHlzNPYJyME3HFkj3GlYWL+VzRz/
-	9LkQqXKV8Qwjj8El/8V8KVIS35CvjK/LfpUvi+i8YEIPC2Gu/lX99GM+
-X-Gm-Gg: ASbGnctYaVkKPTJIr0cO55fRnmJv8e0qo/Apo8FpRyxEnqCTWxavBdSHpZQmia/XJkH
-	k+fX5pnG5bNfkEY+M3LilgYfiUcngYQJvLS8g5+UPmtP8VTzS9+Qi11atbbjyObMcIU94tUfsCJ
-	5OAgUFSz7paPSN9pj0Pq1mjSO0pD6ztdS/pKI4yY37BpPJuyaGfR1eKm5te0OL9lxeIU+/fxfwp
-	IYq+m9Y8vRhxseTYmDEo3wiWxB2R0OPMSn25IZn5XaPFEbH2rAj4yHA+V14xRJ2yFnbe6+FBrss
-	vD94mUFg6koD87yG5Co0qjyTZQAdHaSVpYHO7vzQRBnJRuNb6FfpSY3GCX+9jK9JOKH2rmHNycA
-	DTrEs6a66pjj/o2kCXEkTrKWk7A3WIPC4EZU=
-X-Google-Smtp-Source: AGHT+IGf79Ctst2lzMknAqjXUhWGTlNDl/Rp/nJBOnuaOSO/Vxp7PZh8N9WTKkOOb7wF5fRUDXamvA==
-X-Received: by 2002:a17:90b:4acc:b0:32e:38b0:15f4 with SMTP id 98e67ed59e1d1-3342a22bf2emr746435a91.7.1758742290588;
-        Wed, 24 Sep 2025 12:31:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758742749; x=1759347549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DapdYW/8K2njbhPTFHcK+aSt3gtXxOr7Hh6qcpRxAFE=;
+        b=LGD3ThTyPKmcBznDF4tuq/tqhXdixTOJduFb7/3YSexDyqNFXL8iajzAM2lLx3prFf
+         PqeZGT3mHbYVpYcZaBvlYL8dPnqCqJfbuc+zc7YE7YNF4GK4Rp4Nn5BSdfvztjP4ObyA
+         ZY+cfv2ni4OOQzdObRNefQ2RFPIMJupPXkMD/u+MF9lxNbOLff6LBKMVOHT76ZX0IX2R
+         8nNW9sQPuVnauWbc9vX/RoRlGMyFpOh9d7SdFqi5z9lccvNuvRy30eRWRWt+3MNSI0aE
+         YqcA3Q0pXehLDZWusPWU2lkZ7gEeAnfiHP2MV5CDaOvYpkXIAPt7FDZQ+NZSaA8hCyX3
+         Xv/w==
+X-Gm-Message-State: AOJu0Yzm8lsvlX57d8tR4+JWNkkoKhW1MGs6SWgkxPTKc6QkVH+uIOBX
+	GjeJ72x5MnOnTm2Q12Qt81xU3vO90CULeIyF8zeAMF7u3S0WcyUdcg02KoOERiD1
+X-Gm-Gg: ASbGncuSyvwejQCSDSI/rL3K3ShQw+I/eglww9pp0Ljh2+g0I8H5P5B1XJQRJ1W5gMe
+	oZdDwXOb3MyK+JIjIgk+tVTCzPrbqKOIcmxslB3pMLy/lG+XDssYzx35eTCwohK13xpZA6CR4i1
+	BmRhjViR62yoWumXaSPI1FcG5E49PreT5xBJgBiU6nrhck+iSyrFjmuYUEYiDnCYrwxWYT0B4Ob
+	w1egKggwNncDUL8DrRzY7VwEmCJE2sGaJ9MzETUdqcRfMY3BK9/2bm8kfLkQfoQeN+pYelSRZmY
+	B9qZGHHcsXOMlqDr9sHORstHVCZfLKXfXkhpyk45jFPTjOveAk2RSI+yNMMAs+3yRe93EMbl+KY
+	0rkppmAlnKyTovTcROrovaZLcFqMDjXjUORs=
+X-Google-Smtp-Source: AGHT+IHDSToUkQ9pdK+8Vgz93PJidaJ2ziRSXiiYh9IU0U0JvaSs1eKVSZwxqX1hl03W1JBfAsXw/A==
+X-Received: by 2002:a17:902:f68d:b0:276:842a:f9a7 with SMTP id d9443c01a7336-27ed4a5aab7mr9471535ad.57.1758742749199;
+        Wed, 24 Sep 2025 12:39:09 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3341bdd63c1sm3208982a91.26.2025.09.24.12.31.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed689fa3esm317455ad.98.2025.09.24.12.39.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 12:31:30 -0700 (PDT)
+        Wed, 24 Sep 2025 12:39:08 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 24 Sep 2025 12:31:29 -0700
+Date: Wed, 24 Sep 2025 12:39:08 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sung-Chi Li <lschyi@google.com>
-Cc: Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Jonathan Corbet <corbet@lwn.net>, chrome-platform@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, Sung-Chi Li <lschyi@chromium.org>
-Subject: Re: [PATCH v6 3/3] hwmon: (cros_ec) register fans into thermal
- framework cooling devices
-Message-ID: <c2dc1970-386f-4e4f-b1cd-ca849d002aa6@roeck-us.net>
-References: <20250911-cros_ec_fan-v6-0-a1446cc098af@google.com>
- <20250911-cros_ec_fan-v6-3-a1446cc098af@google.com>
+To: Vadim Pasternak <vadimp@nvidia.com>
+Cc: linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH hwmon 1/2] hwmon: (mlxreg-fan) Separate methods of fan
+ setting coming from different subsystems
+Message-ID: <1f4a8aba-3704-49e7-9b51-e2e4d34b343d@roeck-us.net>
+References: <20250113084859.27064-1-vadimp@nvidia.com>
+ <20250113084859.27064-2-vadimp@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250911-cros_ec_fan-v6-3-a1446cc098af@google.com>
+In-Reply-To: <20250113084859.27064-2-vadimp@nvidia.com>
 
-On Thu, Sep 11, 2025 at 06:56:36AM +0000, Sung-Chi Li wrote:
-> From: Sung-Chi Li <lschyi@chromium.org>
+On Mon, Jan 13, 2025 at 10:48:58AM +0200, Vadim Pasternak wrote:
+> Distinct between fan speed setting request coming for hwmon and
+> thermal subsystems.
 > 
-> Register fans connected under EC as thermal cooling devices as well, so
-> these fans can then work with the thermal framework.
+> There are fields 'last_hwmon_state' and 'last_thermal_state' in the
+> structure 'mlxreg_fan_pwm', which respectively store the cooling state
+> set by the 'hwmon' and 'thermal' subsystem.
+> The purpose is to make arbitration of fan speed setting. For example, if
+> fan speed required to be not lower than some limit, such setting is to
+> be performed through 'hwmon' subsystem, thus 'thermal' subsystem will
+> not set fan below this limit.
 > 
-> During the driver probing phase, we will also try to register each fan
-> as a thermal cooling device based on previous probe result (whether the
-> there are fans connected on that channel, and whether EC supports fan
-> control). The basic get max state, get current state, and set current
-> state methods are then implemented as well.
+> Currently, the 'last_thermal_state' is also be updated by 'hwmon' causing
+> cooling state to never be set to a lower value.
 > 
-> Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
-> Acked-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> Eliminate update of 'last_thermal_state', when request is coming from
+> 'hwmon' subsystem.
+> 
+> Fixes: da74944d3a46 ("hwmon: (mlxreg-fan) Use pwm attribute for setting fan speed low limit")
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
 
-Applied.
+Sorry for dropping this. Applied.
 
 Guenter
