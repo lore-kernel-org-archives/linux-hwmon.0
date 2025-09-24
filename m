@@ -1,74 +1,74 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55FC21D3D2
-	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F01821D3D2
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 14:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758725198; cv=none; b=FLjdal5mJTMcKOwyxqMHA/2ksRmkb5OuPQUEm1yERmmbVU7kOy3V9BHjOKhuqAg4Thorwl//QRwERdx+eAEamPGEVuLfgM8183zqEn/UkXiQnRdKeq1szyOdU60Mhg4Ffv26xapZzex5KxRpMTZ1EqDwUf9PT8RUYEa2tCEhHKY=
+	t=1758725251; cv=none; b=nJ66fg3AXq7/QU82pyqlXNyOS5zOODO5guy81slKevw8bfcZjSlufWvihinpkwR6VjtOC1el1owUzBkYPx6TVtSAs6wqGlHsZxelE4bN0xua4B/HzgkmJX8eOduWyvM2jByyvJNhb2g2cEuiMNtCno4heYuT0QJJzBc9BNBk2Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758725198; c=relaxed/simple;
-	bh=/b6rzqpITIsdOkOWf3TX2gnpE429NTbrry3tVkD53A8=;
+	s=arc-20240116; t=1758725251; c=relaxed/simple;
+	bh=AgDrnMXXXJYoDpwAwUvpBn1pSggFOiq/LNM+/BWg5jc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TuWd1Tyt9nLIE71fqg8Jlcn/NpNrhedCVGkN+2MG8VhchWafIenxeecKpm3OLFw3IWRH0zHPEm/nO07XP5ZBwfqf23pcYvnn9LIhiHje5FwIbRpnIkOO3dAyclIAcBaGCvkSHK9ApK95Eh1sZkEfyG6/uNHGAZOBuqPy/fTRVgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MY8XANff; arc=none smtp.client-ip=209.85.215.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=II4mhQM2xd+8Hh+ugdIDxILZcs+wI6fNGUC4oIk4UJLIwETXUUs0vrjxNu9jAxetHLc3qJHhf4zD62IDf3LJx8nYt7MO/VEnh49Q5V9mpX+Mg5z3ES3BIFf+HPSby9f5FfJi8Gs2qDoc6+pMihQkjczBWLGGmFGEdTa4x6KRuNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvkujbXU; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MY8XANff"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b55562f3130so2203333a12.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 07:46:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvkujbXU"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7761b83fd01so6614773b3a.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Sep 2025 07:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758725196; x=1759329996; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758725250; x=1759330050; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a9ouh23wKH8Hov1aS4+sRdnO60nkd+0PEUnBljYhGHw=;
-        b=MY8XANffHXUemkf4q3A8Uz7joHyzO920Nxpf1jIadlT67WOxpBkc/Fg8kfsMt0WwtS
-         FkzQbXdodiDdFqQLvoyBDgbCyPTANQmi5kceyujKTn2BjMduuld6GzGVaxZMSZ9ZgH4M
-         lBp+/dwC1hVd1CB4r1craSQMSIHR63uer6Eo/FcdF7hV/44AaaINF9sXP7VccLzfgt1I
-         e6FmtB+UTtXJ8qg9KYDH0MbamT3gGrx//Hx2Jk1Ze7VYHwv8ZplvwlPe6sHunyzoEKwG
-         0lVmZa2fDnCdE2KUqIrbzfzurm4pjYmtNwUro1nwY4LRgWSuvYCDm9pJa1Z9eXBPyvkn
-         9OmA==
+        bh=JuKXuzOjDOxictCX/voBvqBpBAsKrQMGlOEziz1SDD8=;
+        b=LvkujbXUSLTMAgY9TUy7P7PDXfgPB0X4TiO6u2qxgoKhnQrbz1VygPkM61Oz9olJkw
+         uFfbTd0s8j7Cd69nI+TXslCoZBsFnaWbrHfIOqE3K5XU5JSHcpU1HmrLImPy0Bl+6yzj
+         GyTkUo+Lb8OCO3EsRl8uz+kVwfvCOxFuMw5s1xI/W1hm3IfbEbrvPcZysxHU/aCcOnEc
+         21aTFs2Rm19+ndOaR+qEl0FJ3FzkZ7pfNDA8REnbWElRxVS7hECaxfrabEQGAT57YAvz
+         xDwuufCyZCX7zmHrKLKN6H17AjeqX5jtF82MzJvqy2EF800HODRfRXdkuoV+axOAhJuv
+         Z/hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758725196; x=1759329996;
+        d=1e100.net; s=20230601; t=1758725250; x=1759330050;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a9ouh23wKH8Hov1aS4+sRdnO60nkd+0PEUnBljYhGHw=;
-        b=oPrZchLzjms19zXnWRoOfK02yOkv95bTsPW/6fYQpMHz6OT17z/EJhbACTQ4LXaAn7
-         h6jFI7e66N5NASqbCzgIw5hMXgGxQQ8z6u1rOq98eY88zMDqBPFBE/MGN353XRGj9fOl
-         7sWYJfSTWKBXrx2N7LBogNBPIWrqUPfRl3z2Rm7cM27oxYTvhEsS0Hy/yOjXVjEi8zEz
-         Hjg3mH2HvypVn57dHBeYMij4K9QIfOCyFhZr5pLlUm9123zmDVz9XTVEMSamTAvfDlfz
-         QEzv7QjigexeYK/7p+Nlijsrk47pgjKRY76rJO4GNSJFXBMW7+6Tbsjw98g3rsgW9UQH
-         L/3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVvA9OtT5ZUtH4rYuIbeSuUh3Oxhsj8EmzQtOpzoQOO1wfDS12+QrktvyTF8HTYEiGKMNz69KA/mnlhIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyckbXNuS4MdPxfctmqQDc7JPFCF5Fwv0AgAYpQBHvPMEzH6nyD
-	yFIoiZEWehTrl/AQq48aM5dH3O8UdH3BGS9oeo2RGFHAm4XcozIxwpzR
-X-Gm-Gg: ASbGncsUKkVK6aiJ9sd6hzH96FGvLAdgnVj8p0qf3esItjAtIhSUuWMY8MRPvqWq8z6
-	rguqwOxGMZmdgSw9ympPJMczNmIlFBaTrHjIs3pPpDBZhumAXuhDKiTc1Lh1yYKU6EHEi6wSE//
-	ZmWOXmlaBN0ZJSkDru63FfzEKwin8oNKSRh5OWlsctYyX0REcItX0dQlN0RaFKWt4KaEIRAAxAA
-	OF481sCDQi1WHxRqTcZtsEOzSqdd0WP1+e71M9y3jfI+gfmabqim8cyimFJiipP8sciBSLPjK1d
-	t574VJ+RQkS6K+uoV5MNB6EUzmiUBhVdEMN2+0A5mAjTEcm26O1mo0ojBAaNXys56oQKr9MsUSM
-	mFhuwy2DBEzUOCOE4im8CwHPNQstVRN3E2Kc=
-X-Google-Smtp-Source: AGHT+IHqSoeyuuO2C2WGsp9Xf1TZsjA6w4VP4HE3ZfihkrSmGZv0rK5DAquxViezbQIaAuFaSLgifA==
-X-Received: by 2002:a17:902:e951:b0:25c:76f1:b024 with SMTP id d9443c01a7336-27cc24e015cmr72459785ad.25.1758725196096;
-        Wed, 24 Sep 2025 07:46:36 -0700 (PDT)
+        bh=JuKXuzOjDOxictCX/voBvqBpBAsKrQMGlOEziz1SDD8=;
+        b=I1ONQo1Nr7xQFS61Syq0C1gvw8NdCIbypovqsHbVMTU9S7gPbmrDGcx4RHhZsc7BHk
+         45g5RYIYU/Mk1jzxw0gwz94vsk/06VtkKxlxTI9oYqrA8300Xy3KmpLLItx336T3zEEg
+         ZzofK77BMwovCh2Hay7EGlC0++GuRgo2DggwskaKzDhwcGOTvzGweQh911EQAcIMdi96
+         g6WiGdLXDws4KodnQ9ZySuxAuVzTuW/owIqz52mdjRLuXlzEzm268/mG35IVVYDerGGd
+         GsLMVoXRlxyMUfZHe2gBiQ4RENgE9Ik/3PTVzdKo2yvPGAcVo0fanwqmAWmweW85jIOT
+         v4pA==
+X-Forwarded-Encrypted: i=1; AJvYcCWyaTdDKTTqyHlmelFsg9wi3wWANdFicKgF/uJMOfgWTTSlLDr0kDR+oZOhMetBPN538nOLfTGAH27BSw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxek+27zAJwBhVaDp5pQD8/qN8RSOA4H2ODp6edHCqoYBexQYmT
+	s/0yfV8VsaEHcvYPGzLsPZOu1lEloEa3kbfByT2JWmd5wmDyFq+Cb9JU
+X-Gm-Gg: ASbGncus/5pktqyISEWqo8ZJ9KrbIsw9nZ/jtt7O6c8JD2ICBXdsxXMLWY3FASEioH9
+	L92Ej0RejpqfEgBXvrbgoH4rKJjKhizXuYF4h7FFS/kROmtZXAyhR/Mxh1lLGGycCuEwD5QpTeL
+	YN4pnZiSlOBW53Hb+Mes51NMNjWdX+5FJuW6BAq/RnfEQzb2rt37G9Bkw6waHpOKyzntgqMSORs
+	PLU5ou/vWeC/VsBQei1UC4Iq7Ub/puqjZfYyCt+MJZGR1jVa5KYFSRxKNbD7wL0CEkp5qSXgGi3
+	/de5BeD7kY9d4tX7mTLnRfiBE9DEtIGFdIedcXUXYjFuDbweF1I0JCaPu9OdNoUdAvjZlwV+D9L
+	XsV5il0OpJjFiQrY3q0xWLUf6YklRlSXUf0s=
+X-Google-Smtp-Source: AGHT+IFFBGlyzzgM0DUwXPrRh1qzXutsF069Qhxcx79xZS73ltfaw+2FZsIv8SJjT1C/iB/wc44oeA==
+X-Received: by 2002:a05:6a00:9a5:b0:780:f6db:b1af with SMTP id d2e1a72fcca58-780fcea2fb2mr222078b3a.16.1758725249706;
+        Wed, 24 Sep 2025 07:47:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3341bdd3a0dsm2660014a91.24.2025.09.24.07.46.35
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77f52c4e905sm5563011b3a.18.2025.09.24.07.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 07:46:35 -0700 (PDT)
+        Wed, 24 Sep 2025 07:47:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 24 Sep 2025 07:46:34 -0700
+Date: Wed, 24 Sep 2025 07:47:28 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Armin Wolf <W_Armin@gmx.de>
 Cc: pali@kernel.org, linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] hwmon: (dell-smm) Remove Dell Precision 490 custom
- config data
-Message-ID: <a9a60505-97ef-4f50-9da9-6caccbccbf66@roeck-us.net>
+Subject: Re: [PATCH 2/4] hwmon: (dell-smm) Move clamping of fan speed out of
+ i8k_set_fan()
+Message-ID: <964da8dd-449f-42bb-90df-5ecf4b2d1e32@roeck-us.net>
 References: <20250917181036.10972-1-W_Armin@gmx.de>
- <20250917181036.10972-2-W_Armin@gmx.de>
+ <20250917181036.10972-3-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,19 +77,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917181036.10972-2-W_Armin@gmx.de>
+In-Reply-To: <20250917181036.10972-3-W_Armin@gmx.de>
 
-On Wed, Sep 17, 2025 at 08:10:33PM +0200, Armin Wolf wrote:
-> It turns out the second fan on the Dell Precision 490 does not
-> really support I8K_FAN_TURBO. Setting the fan state to 3 enables
-> automatic fan control, just like on the other two fans.
-> The reason why this was misinterpreted as turbo mode was that
-> the second fan normally spins faster in automatic mode than
-> in the previous fan states. Yet when in state 3, the fan speed
-> reacts to heat exposure, exposing the automatic mode setting.
+On Wed, Sep 17, 2025 at 08:10:34PM +0200, Armin Wolf wrote:
+> Currently i8k_set_fan() clamps the fan speed before performing the
+> SMM call to ensure that the speed is not negative and not greater than
+> i8k_fan_max. This however is mostly unnecessary as the hwmon and
+> thermal interfaces alread ensure this. Only the legacy ioctl interface
+> does not ensure that the fan speed passed to i8k_set_fan() does meet
+> the above criteria.
 > 
-> Link: https://github.com/lm-sensors/lm-sensors/pull/383
+> Move the clamping out of i8k_set_fan() and into the legacy ioctl
+> handler to prepare for future changes.
+> 
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
 Applied.
+
 Guenter
