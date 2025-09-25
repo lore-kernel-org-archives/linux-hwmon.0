@@ -1,76 +1,74 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97792EBBA2
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 15:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E9F1D6187
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 15:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758812879; cv=none; b=mYWiBGtXlhB20gDhLJ8tb1aOs4gUXaNVh8cl2NuaRcQDPcJOZx20gN4foyhe+CdFg5MN8NZJ8T/UTgPMDmJzDadI7WzkKF4RZ0dLmYzuCes3uepriTSX8hf9ks5onImtWvP+YL16EirJA/7JuCrlGQ00WjmB/aaxmmfdaW96Cps=
+	t=1758814417; cv=none; b=bnZLRhgZqc+LLJiZCivU1+/y2zSWmUCbXsMW9B/8e9aEFVB1kc4PFzmTnMQdDZ4fvs0iXyIRNRXp0T2Sc8u9Xr1N7xCq8KZaQ/70w2OD4VVA/DWUW/mcWMIGmwbUI5nvvlw5HLDBJzHa7qaGMSGjHCbOWuShzXS2GR3fJxbOnHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758812879; c=relaxed/simple;
-	bh=PwfgS4qfIfkc+imXtu/sSZXrBqwExZR+rgZwO0IBYGI=;
+	s=arc-20240116; t=1758814417; c=relaxed/simple;
+	bh=y2f0xu7wv3XLv8dKgE4HDyUHFQ5s5JkkjhxH7P7EpY4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hfayII6m+az2yIKUCTB26196ia9qnlglr0OJqWIk+z6vben3LEpVQiNPe1vUEbOw8lrjptraemGzIYOjVRMGVAb7eXUO7ylsla7/gL+xqcOjHufizfc1ZpYCAUMBJrX8drPUtngzikzA6/Wl/hJggHzLHU5Em/aIfXvzOFnashk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOS89OB8; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=iWpLTtEOH72ClulAVnZobdMilVSUe+OwqP9JZsxj1wCgWiA+HN16OX4Crq+wwjL//VqQb7/aKVYhlq5ykiygMOe6SctnwyCTdIax46c5gVMIOQg5pJ0SRm07V3elZqxlhAteVe5Gf8qH+g/Vt3RRAFO0OLCENDMaPckZHA59WX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=doWKcJd1; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOS89OB8"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-77f605f22easo1041746b3a.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 08:07:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="doWKcJd1"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f67ba775aso1398579b3a.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 08:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758812877; x=1759417677; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758814414; x=1759419214; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jE5cIH8mYsDicp+BwKdnhTTJHAMEhvsJen2js1pJiH8=;
-        b=NOS89OB8QhgwX7LkwleAPOmUqR7YMHjWOMKiWPH4Xrg2/5PNpKvgPqvK8fbjkBK2+R
-         3ty/DNv/6qItYt0g5KH2hC7swFJa2orXFscTjT+11NqJfp4tiORGHloMCrhQOpK2TX+g
-         vpTlsfvylAWX8BNr3EbMxCDma37slkMJr6APSAA/N2ud5/g8rvJdauOEe7prdR0H9it2
-         NseZ89Ia3w3M/ElW9RwCAZYToE+6p6pqIUjxDkPjZiJKdzQAU8+QA5Lm+xTlPhSvp7We
-         GG3+tI2YAQ8ZpL8yEFE6cJIY5RriJpIQaUD+oZH3t7wC3MfqtLbLhi6KhXyUoVOmXHqV
-         SR6A==
+        bh=Xf9bl4gXuz6FgQKlCMIiNMUUiPGI8bVvlKEA/vte7D8=;
+        b=doWKcJd1ylcX08xi5HlT4/6sXr+K4/e4N+hSbGQJThcS+IF45Ozpfq0dOUf3joXnC5
+         kMBRSmtJPNglWy5LE902oE0XMsLxYM8Tjagw0zv7mvaJYQMziDy6Y9Jx6kMXejTgp0ex
+         pmsKVMLhZVRqeciZg+alQmKdpstVWBuU9uS+UL+bzaXFVIRVvfZ2C5simUy2l9+U9lWd
+         CzViNLeT6bMpvyNq5FJxQTosU7MbukY3bfJvluMe53eJQasoVd0GwrEO9szwOUiK/QDC
+         qagrP0LcxKkzRaosDBP1VF/aXiObtyI1TFoIbkrXdBjGE5SCRkQg8AQd9VODSRJG+hyo
+         cF6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758812877; x=1759417677;
+        d=1e100.net; s=20230601; t=1758814414; x=1759419214;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jE5cIH8mYsDicp+BwKdnhTTJHAMEhvsJen2js1pJiH8=;
-        b=riP0tBRyEgLi/p2/KP5vsGZVX4vRSEURRSMr2aBwM1DnpFGPVj0RebAmffjaz0prbB
-         4Y3J9/ghlEKomd70CYpFRzOZ23gbtxHsVkBnmoAjFeXaCiQgSODwIxk8EpTd9rGihjic
-         +vEzKdyRdcFQPp+b6PKfKUBbX/gNSx+x2MAueBnaMX39qrlxZL764Qs5TLGCpnWk6Lii
-         JxTLT3HdcEb425HY5AN2HWGGHiT2tdZMmMXU8977t8oHpwWfr49VWItgdbsghCw+jgYr
-         uYWpNTnySS1pP/fgnRzhbArFHNOfnSP1+faTE0fmGuYLzUGlvuX6h+FgK6RS/Z/I6tjP
-         XnJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVnLfIvM8rWkzZUCuWnKIc/L1Dp0/uMFftAp8SXdYIXT9TG9csAtex7hO7h80c5UrWaPYEfk4mJ1F8Vzw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3v6LGRfrCGPYQa8z1MlLZIdJmCFeq34GhSoLz1AQeNEox9iu7
-	7K45edFtNv+s804EZwm6s+5PoOn0MgGE39MGqMgycn5+RH4K2F9/XEZ/
-X-Gm-Gg: ASbGncsmcn8ns6KaIIal2zu01XHOkb0wuhLesl0V9XWl3HlOw+3DB/iU+KzheELnBto
-	4Hc8v5yiCMGDC3l1sCka4hTEijo+Jsktf5zp2mMSMDKCDZ9IS3crkA7TTPhXlOeW8GexUN1hbOU
-	PR0mDxo6uDkrVqyThC3JTdjiRcsJZw63KHGqbemJr/3C7sDTieP+Tufx1w+LrLFkUdrE/XAr8m6
-	Quw+ZntLAY+Xt88/AP+88bccgfwFzr/KjmCJd3nmkO1oj1ivRr7wEnv10Ckz/qus+/tD6CR+u7q
-	lTkvgkReZl+8Vxk9Qw5pPKaNRt9rpircv6ij5VrXdbOTBMmMeZ6sPa5bE8BLY0OlBTbb+yqJKSu
-	WPhk9VT9svog3R9jrraxbq4ufhCl8Al/1uNE=
-X-Google-Smtp-Source: AGHT+IHxwbqMwtSUpRB97Nr0rknalbSvu7cUrpdQGoGrEFmAeq73TNUTzNKC1zhtc24Ag7rMTXMpnw==
-X-Received: by 2002:a05:6a20:9188:b0:2e0:9b1a:6417 with SMTP id adf61e73a8af0-2e7d37fba87mr4692452637.53.1758812876869;
-        Thu, 25 Sep 2025 08:07:56 -0700 (PDT)
+        bh=Xf9bl4gXuz6FgQKlCMIiNMUUiPGI8bVvlKEA/vte7D8=;
+        b=SBFOfKqZDBqzY0jQTk0taa419Rjcw4gS8SdKBOwHGEwa3QYVGkifkD58V8vVJunAEF
+         l2zrvdfNf4tT6cjwl/IiPch7iWAJjv+65zaQcBXwJ8zcstpkUv1uPHnERNqdg7qIjS1B
+         e2WU0o+Ebm9AzH3UdwYiFuqN0Q2G8cfh6Q6e+x2j5S1LsRoKFcArZwspwKOVLukKhdw7
+         77N1q+0EKUgiSnsrf7M0mowA9q9RzUQOd+3R/t+DkIY9ACEWYeUqrEdMkXh6EScE8dD/
+         B8eK2rPRz9gmupvFC9ukwZm5Aj93MsZh++yJwg+D5eIh3FwZz4OB0/o6BbLgHckFyPLP
+         3rGw==
+X-Gm-Message-State: AOJu0Yy0gzlDRVceKySA+Jlz9qvkb+5LkKYpQyRdqZlrB/435sPYzx32
+	iwp54TRZdk1nmJyj346KfGPrlwKxN693jh8Q0hhJOmDXNmYeEuteTELZ
+X-Gm-Gg: ASbGncsScEgISGPu6OPhysDTlGbWaXGsfTeMD6LRx1FfS+DZXRCYzlMra7aqKfobPak
+	GOrX0E6LzkHJw1knVYlcJqEokGFNRS80jZ4IgKhSoKBQcQ9Fxnumo31A2wv2knYSC5+sfWzfnDs
+	/NjvRNMtZn9+jc+Svui+x2RHOy+TrrZvAs46c2IZgrIVeIjgwbvV3jioxEclnOkTNxvFc64JJRW
+	kchZ0P7GcaoUNjSEwyrz3xy2BpHFEZAoJLfMVAHf0aKQh9Z8cBZutAe7ODI94M+k8F/oMYpXikj
+	Hp+46BEtlkvaYua5IurwGUwaoRiVPUnCaJg+1/dlQKvmiG4IPoTpg1xbEoB/jbz4KERxgY/MEN5
+	TGOGvY/QQHgGZKGeaE8wP0H16xRlOmTaUMmY=
+X-Google-Smtp-Source: AGHT+IHueQ5EwcgB7ykT7do2ipeVpALEK/2VdRb/5C0SGUSwtjUhr3wKi5API/uav1K3AF6ZVnpvuw==
+X-Received: by 2002:a05:6a00:3d0f:b0:77f:29e0:c807 with SMTP id d2e1a72fcca58-780fcea2e20mr3963061b3a.16.1758814414297;
+        Thu, 25 Sep 2025 08:33:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c53cb975sm2506233a12.18.2025.09.25.08.07.55
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102c06e67sm2212018b3a.91.2025.09.25.08.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 08:07:56 -0700 (PDT)
+        Thu, 25 Sep 2025 08:33:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 25 Sep 2025 08:07:55 -0700
+Date: Thu, 25 Sep 2025 08:33:32 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: wenswang@yeah.net
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	jdelvare@suse.com, corbet@lwn.net, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: add MP2925 and MP2929 driver
-Message-ID: <ae5ad599-e857-4124-b6a0-61196a763109@roeck-us.net>
-References: <20250918080349.1154140-1-wenswang@yeah.net>
- <20250918080603.1154497-1-wenswang@yeah.net>
- <20250918080603.1154497-2-wenswang@yeah.net>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	daniel.machon@microchip.com, luka.perkov@sartura.hr,
+	benjamin.ryzman@canonical.com
+Subject: Re: [PATCH] hwmon: sparx5: make it selectable for ARCH_MICROCHIP
+Message-ID: <357f9a92-df60-4e6c-9019-40a4adbf0702@roeck-us.net>
+References: <20250924213027.1887516-1-robert.marko@sartura.hr>
+ <f019dcef-afdd-4d18-b28c-b214fa14f1c8@roeck-us.net>
+ <CA+HBbNFe+7XT3bSUEagsXiug-bmh=fBfLAW0d7WR73Di8-ozTA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,57 +78,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250918080603.1154497-2-wenswang@yeah.net>
+In-Reply-To: <CA+HBbNFe+7XT3bSUEagsXiug-bmh=fBfLAW0d7WR73Di8-ozTA@mail.gmail.com>
 
-On Thu, Sep 18, 2025 at 04:06:03PM +0800, wenswang@yeah.net wrote:
-> From: Wensheng Wang <wenswang@yeah.net>
+On Thu, Sep 25, 2025 at 11:15:52AM +0200, Robert Marko wrote:
+> On Thu, Sep 25, 2025 at 12:07 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On 9/24/25 14:30, Robert Marko wrote:
+> > > LAN969x uses the same sensor and driver, so make it selectable for
+> > > ARCH_MICROCHIP.
+> > >
+> > LAN969x _is_ the Ethernet switch driver for Sparx5, so this description does
+> > not really make sense. Same as what ? Itself ?
+> >
+> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > > ---
+> > >   drivers/hwmon/Kconfig | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > index 840d998f850a..ba2b7b2f6c44 100644
+> > > --- a/drivers/hwmon/Kconfig
+> > > +++ b/drivers/hwmon/Kconfig
+> > > @@ -632,7 +632,7 @@ config SENSORS_I5K_AMB
+> > >
+> > >   config SENSORS_SPARX5
+> > >       tristate "Sparx5 SoC temperature sensor"
+> > > -     depends on ARCH_SPARX5 || COMPILE_TEST
+> > > +     depends on ARCH_MICROCHIP || COMPILE_TEST
+> >
+> > ... and silently disable it for ARCH_SPARX5 at the same time ? That is not what
+> > the description says, and is completely unacceptable unless explained.
+> >
+> > >       help
+> > >         If you say yes here you get support for temperature monitoring
+> > >         with the Microchip Sparx5 SoC.
+> >
+> > ... and, on top of all that, still claim to support Sparx5 even that is
+> > no longer the case.
+> >
+> > Ah, I see, this patch depends on patches in linux-next. You might want to say that.
+> > Also, there is context missing: If the sensor is _only_ supported on Sparx5
+> > (which everything but the dependency suggests), it does not make sense to extend
+> > the dependencies. Why make the sensor configurable for _all_ microchip architectures
+> > if it is only supported on Sparx5 ? Maybe there is some other series explaining
+> > this, but this patch is all I got and it does not explain anything. It is only
+> > confusing and does not make sense on its own.
 > 
-> Add support for MPS VR mp2925 and mp2929 controller. This driver exposes
-> telemetry and limit value readings and writtings.
+> Hi Guenter,
+> I should have extended the description a bit.
 > 
-> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+> LAN969x uses the same sensor as SparX-5, and they both select ARCH_MICROCHIP so
+> SparX-5 only configs can still select this driver.
 
-I'll have to drop this series. Reason:
-
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp2925.c
-...
-> +
-> +static int mp2925_write_word_data(struct i2c_client *client, int page, int reg,
-> +				  u16 word)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VIN_OV_FAULT_LIMIT:
-> +	case PMBUS_VIN_OV_WARN_LIMIT:
-> +	case PMBUS_VIN_UV_WARN_LIMIT:
-> +	case PMBUS_VIN_UV_FAULT_LIMIT:
-> +		/*
-> +		 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
-> +		 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
-> +		 * of MP2925 is linear11 format, and the exponent is a
-> +		 * constant value(5'b11100)， so the exponent of word
-> +		 * parameter should be converted to 5'b11100(0x1C).
-> +		 */
-> +		ret = pmbus_write_word_data(client, page, reg,
-> +					    mp2925_linear_exp_transfer(word, 0x1C));
-> +		if (ret < 0)
-> +			return ret;
-> +		break;
-> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
-> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> +		ret = pmbus_write_word_data(client, page, reg,
-> +					    (ret & ~GENMASK(11, 0)) |
-                                             ^^^
-
-As 0-day rightfully reports, ret is not initialized here. Datasheets for both chips
-are not published (actually the chips don't officially exist), so I can not figure out
-the expected behavior myself. FWIW, available datasheets suggest that the bits are unused,
-so if that is not correct please provide evidence that writing anything but 0 into those
-bits is needed.
-
-While at it, please also provide evidence that the chips exist in the first place
-and that this is not a "let's see what he accepts" submission.
+You mean ARCH_LAN969X (in contrast to ARCH_SPARX5 and LAN969X_SWITCH) ?
+That makes sense, but it really needs to be explained in the patch
+description. Also, since ARCH_MICROCHIP does not exist for arm64 in the
+upstream kernel, a note that this depends on other patches in linux-next
+would have been helpful. You may know that, and others may know that, but
+I don't, and digging through that cost me at least an hour of time which
+I don't have.
 
 Guenter
