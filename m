@@ -1,166 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E8F2367A8
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 06:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242AD15DBC1;
+	Thu, 25 Sep 2025 07:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758780236; cv=none; b=urc1G1wTr7PEGNLxReIVefe8WysKjCun5tZ/ts9Dt/fFyFKwLgw7UyfKnYY4szcV+AloajUGmI3hyCr8l8vS+iJIix3dBTVOuJYNuXT3eKMNmVlVNaSHjpbi1IoE39Z2XroIzbCoxBmFS14qCtA40G8UEJ7lK9BMLE+B/97OQaI=
+	t=1758785338; cv=none; b=i+kHHWLJaCFAuCw04A7KGgxrIwMQbvkdlboj5zOPDpJxPUt0gWvKO98hnCtUbhvJVa7YOwhuoCYSpxu03WtnuYvgQTH+v7N+d+mpTNw/QF4C2vvz4Qw6Mu+Rr3mPsrTPclTwRSuO6MczIT038R7m7v3UTq7Xz5vrHec6yGOuOu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758780236; c=relaxed/simple;
-	bh=6eqPjgbHpHt7trPigvZyx6AuNxP0y7NzOUE+tDZddn0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ciW6KaJRzWiOBFFKRhAjEiUDt524zDFQI0mAPnqM0vV9QtZj7fgfzoxBL9DCxo+ZEyo5Y5edPABlgpdkfWmcYPSqMuZfuX3sxrjKUQG/TsSQVf6AEYcZfEXrAm3SUMR4JxT8RoBMSyZ4glOdr01t2IyV6QyOB7bgAYv2FZTRlwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M1AdT0m9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1758785338; c=relaxed/simple;
+	bh=E5H22ljejFV7OF7GmWz23BkhezFyc+iVSQv0Pyu/jqI=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:References:
+	 In-Reply-To; b=ANyVEOW2Z4j3vtEphK96suh6VT5ita4eNhOiAP+Hk2/AuZx3ry1N4zN4yFxw5CelIbQOhSQDl1rV1hCJF7U+ZPSf7934APYOe//XyhaPOKwiG2M3MBao1eS2ew728nGqC6ArXhotU8eq2cxsqhG9OdJDCnMVjD7a+LE3Q9eIxAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qpR4FUbu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M1AdT0m9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758780234; x=1790316234;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6eqPjgbHpHt7trPigvZyx6AuNxP0y7NzOUE+tDZddn0=;
-  b=M1AdT0m9xb2whDafFDxXJD2MasrLnqdEHE+JP6j6B2pQMzIPJld9v1tF
-   szlrojUWHXGFH3/jegVSbyhthd1tt6eUaN4hk9U1xB8/ibB6WeRhHfR0Q
-   K9WXJt3cOhpX7WEC/VKmlwCEUMwmsBOj+pHerjzOX4U7gbvkEUv+/ozsW
-   wbLcfxp4vJVQtsISOMT0WAenvC65jN65sT+ArCsqVsqTV26eJCqPHCWFS
-   ehoZBYTeyFv44d/ih48p8DcTLp82+oLd/jKX94T2jj8jIPK3IBUxy5IB7
-   js5WtcnSwvYBLxuNczVXfEd8sU/1+x1MeBFhRrWf1rGtwEfzpBS55kcqt
-   Q==;
-X-CSE-ConnectionGUID: 7yWddRwmRGK6xOpaLsK9hQ==
-X-CSE-MsgGUID: D2ftysdZQYuo6n5WOV5PZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="63715799"
-X-IronPort-AV: E=Sophos;i="6.18,292,1751266800"; 
-   d="scan'208";a="63715799"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 23:03:54 -0700
-X-CSE-ConnectionGUID: 6oyHcJi5TD2e657Wi9XEag==
-X-CSE-MsgGUID: xJWfe8QbR2u6eWTKDBtqFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="177079069"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 24 Sep 2025 23:03:52 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1f53-0004xX-21;
-	Thu, 25 Sep 2025 06:03:49 +0000
-Date: Thu, 25 Sep 2025 14:03:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wensheng Wang <wenswang@yeah.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 79/87]
- drivers/hwmon/pmbus/mp2925.c:159:11: warning: variable 'ret' is
- uninitialized when used here
-Message-ID: <202509251422.Cnmuh8EH-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qpR4FUbu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375AEC4CEF0;
+	Thu, 25 Sep 2025 07:28:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758785337;
+	bh=E5H22ljejFV7OF7GmWz23BkhezFyc+iVSQv0Pyu/jqI=;
+	h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
+	b=qpR4FUbuRe+vO4qghhExmZIfSTpFhRiJnGnNyZsW967PX6XSYQkAoLyuYENEpquWI
+	 HN7e+8SFMSoArAk9VV5oRKuLSNMMpgdlRvwCNt7S+kQ8ZTGEAtZgoFGmt0BSVopW8A
+	 gfn+i7uCp4wZxpP5u519ZPHZdkwont1gxBSSAA1DVIlK6salhnGcXj2bwmWHVKcf9B
+	 A6xPQmzDsDEVkYWbAiLOpJl8XpETbWlCnq0iI+dom6ZgWljwwCS8mK37QVLWB9JbHZ
+	 4qauHkQ0AYwguWYn0aerkZSGTjlt8AkTutFazB32t0uTpPBfXW40vugdLKAki5ggqH
+	 aZgucfXSNl0IQ==
+Content-Type: multipart/signed;
+ boundary=0afea6db4dd96f53b68f9fad7bcae6c16f16bfb407d755022db670fb382c;
+ micalg=pgp-sha384; protocol="application/pgp-signature"
+Date: Thu, 25 Sep 2025 09:28:53 +0200
+Message-Id: <DD1PD807DBY9.2FY81JFZ6EDAE@kernel.org>
+Subject: Re: [PATCH v2 0/7] Initial Kontron SMARC-sAM67 support
+Cc: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+ <linux-watchdog@vger.kernel.org>, "Andrew Davis" <afd@ti.com>, "Nishanth
+ Menon" <nm@ti.com>, "Vignesh Raghavendra" <vigneshr@ti.com>, "Tero Kristo"
+ <kristo@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
+ <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "Jean Delvare"
+ <jdelvare@suse.com>, "Guenter Roeck" <linux@roeck-us.net>, "Michael Walle"
+ <mwalle@kernel.org>, "Srinivas Kandagatla" <srini@kernel.org>, "Wim Van
+ Sebroeck" <wim@linux-watchdog.org>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Lee Jones" <lee@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.16.0
+References: <20250912120745.2295115-1-mwalle@kernel.org>
+In-Reply-To: <20250912120745.2295115-1-mwalle@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   5f6722c971aa9d5b9736701926c3fdd1928db272
-commit: b3a4efc88601cb5fc97b4ae23c478700a60302da [79/87] hwmon: add MP2925 and MP2929 driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250925/202509251422.Cnmuh8EH-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509251422.Cnmuh8EH-lkp@intel.com/reproduce)
+--0afea6db4dd96f53b68f9fad7bcae6c16f16bfb407d755022db670fb382c
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509251422.Cnmuh8EH-lkp@intel.com/
+Hi Lee,
 
-All warnings (new ones prefixed by >>):
+On Fri Sep 12, 2025 at 2:07 PM CEST, Michael Walle wrote:
+> Now that the PMIC support is there, we can finally, upstream the
+> support for this board. Besides the usual device tree, this
+> patchset contains the support for the on-board house keeping MCU. It
+> make extensive reuse of the drivers for the former SMARC-sAL28
+> board. Besides different hwmon sensors, all the dt binding patches
+> will just add a board specific compatible (in addition to the old
+> sl28 compatible) to make any future board specific quirks possible.
+>
+> I'm aware that there is a patch [1] which moves the sl28cpld MFD
+> schema to a different directory. Once that patch is merged, I'll
+> repost this series. But I already want to get some early feedback.
+>
+> v2:
+>  - dropped patches which were already picked up
+>  - new patch "dt-bindings: mfd: tps6594: allow gpio-line-names"
+>  - separate driver for the hwmon, add missing hwmon documentation,
+>    thanks Guenter
+>  - split the DT as suggested by the SoC maintainers
+>  - add missing copyright and license to the overlays, thanks Andrew
+>
+> Michael Walle (7):
+>   dt-bindings: arm: ti: Add Kontron SMARC-sAM67 module
+>   dt-bindings: mfd: tps6594: allow gpio-line-names
+>   arm64: dts: ti: Add support for Kontron SMARC-sAM67
+>   dt-bindings: hwmon: sl28cpld: add sa67mcu compatible
+>   dt-bindings: watchdog: add SMARC-sAM67 support
+>   hwmon: add SMARC-sAM67 support
+>   arm64: dts: ti: sa67: add on-board management controller node
 
->> drivers/hwmon/pmbus/mp2925.c:159:11: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     159 |                                             (ret & ~GENMASK(11, 0)) |
-         |                                              ^~~
-   drivers/hwmon/pmbus/mp2925.c:137:9: note: initialize the variable 'ret' to silence this warning
-     137 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+Would you take these two patches
+    dt-bindings: mfd: tps6594: allow gpio-line-names
+    dt-bindings: watchdog: add SMARC-sAM67 support
 
+through the MFD tree this cycle? If they make it in, there wouldn't
+be any more dependencies for the next cycle for the actual device
+tree.
 
-vim +/ret +159 drivers/hwmon/pmbus/mp2925.c
+Thanks,
+-michael
 
-   133	
-   134	static int mp2925_write_word_data(struct i2c_client *client, int page, int reg,
-   135					  u16 word)
-   136	{
-   137		int ret;
-   138	
-   139		switch (reg) {
-   140		case PMBUS_VIN_OV_FAULT_LIMIT:
-   141		case PMBUS_VIN_OV_WARN_LIMIT:
-   142		case PMBUS_VIN_UV_WARN_LIMIT:
-   143		case PMBUS_VIN_UV_FAULT_LIMIT:
-   144			/*
-   145			 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
-   146			 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
-   147			 * of MP2925 is linear11 format, and the exponent is a
-   148			 * constant value(5'b11100)， so the exponent of word
-   149			 * parameter should be converted to 5'b11100(0x1C).
-   150			 */
-   151			ret = pmbus_write_word_data(client, page, reg,
-   152						    mp2925_linear_exp_transfer(word, 0x1C));
-   153			if (ret < 0)
-   154				return ret;
-   155			break;
-   156		case PMBUS_VOUT_OV_FAULT_LIMIT:
-   157		case PMBUS_VOUT_UV_FAULT_LIMIT:
-   158			ret = pmbus_write_word_data(client, page, reg,
- > 159						    (ret & ~GENMASK(11, 0)) |
-   160					FIELD_PREP(GENMASK(11, 0),
-   161						   DIV_ROUND_CLOSEST(word * MP2925_VOUT_OVUV_DIV,
-   162								     MP2925_VOUT_OVUV_UINT)));
-   163			break;
-   164		case PMBUS_OT_FAULT_LIMIT:
-   165		case PMBUS_OT_WARN_LIMIT:
-   166			/*
-   167			 * The PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT of
-   168			 * MP2925 is linear11 format, and the exponent is a
-   169			 * constant value(5'b00000), so the exponent of word
-   170			 * parameter should be converted to 5'b00000.
-   171			 */
-   172			ret = pmbus_write_word_data(client, page, reg,
-   173						    mp2925_linear_exp_transfer(word, 0x00));
-   174			if (ret < 0)
-   175				return ret;
-   176			break;
-   177		case PMBUS_IOUT_OC_FAULT_LIMIT:
-   178		case PMBUS_IOUT_OC_WARN_LIMIT:
-   179			/*
-   180			 * The PMBUS_IOUT_OC_FAULT_LIMIT and PMBUS_IOUT_OC_WARN_LIMIT
-   181			 * of MP2925 is linear11 format, and the exponent is a
-   182			 * can not be changed.
-   183			 */
-   184			ret = pmbus_read_word_data(client, page, 0xff, reg);
-   185			if (ret < 0)
-   186				return ret;
-   187	
-   188			ret = pmbus_write_word_data(client, page, reg,
-   189						    mp2925_linear_exp_transfer(word,
-   190									       FIELD_GET(GENMASK(15, 11),
-   191											 ret)));
-   192			break;
-   193		default:
-   194			ret = -EINVAL;
-   195			break;
-   196		}
-   197	
-   198		return ret;
-   199	}
-   200	
+--0afea6db4dd96f53b68f9fad7bcae6c16f16bfb407d755022db670fb382c
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaNTvNRIcbXdhbGxlQGtl
+cm5lbC5vcmcACgkQEic87j4CH/iMSgF/U/Hnym3/BbU5iWgqn4kuJE5mIgjGrqH+
+xebvDaMtckOeHjdqxGIg7wAV1v5PZLsUAYCYJPNo/zXnrrWdXLOY+md/sOocOPZr
+/NGu1VF2dlgbKARDg+JXcIGreW3wYK3JzV0=
+=kccx
+-----END PGP SIGNATURE-----
+
+--0afea6db4dd96f53b68f9fad7bcae6c16f16bfb407d755022db670fb382c--
