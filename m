@@ -1,121 +1,136 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F233C2DC79C
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 14:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97792EBBA2
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 15:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758810860; cv=none; b=JEK4hHzXNpV+r4rxLsq1S5zUuqqxZ1pNKcjqUNQ0CdI1YmQM3MWgvJKwODPpyt0+1Od9mFEbTaCuXlS96hn7auMtZ2GX9ASbOL+t4mHD/FOYuJok8Kl9kUd74JiK88m4F6XjVK+cmjKV8qI3oJ+qve+F/joirOJfUWNCwYGqMrE=
+	t=1758812879; cv=none; b=mYWiBGtXlhB20gDhLJ8tb1aOs4gUXaNVh8cl2NuaRcQDPcJOZx20gN4foyhe+CdFg5MN8NZJ8T/UTgPMDmJzDadI7WzkKF4RZ0dLmYzuCes3uepriTSX8hf9ks5onImtWvP+YL16EirJA/7JuCrlGQ00WjmB/aaxmmfdaW96Cps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758810860; c=relaxed/simple;
-	bh=Bafperz37KGVRRgmYq3qAN2sQBrGyfvc4L8Phv7qEY4=;
+	s=arc-20240116; t=1758812879; c=relaxed/simple;
+	bh=PwfgS4qfIfkc+imXtu/sSZXrBqwExZR+rgZwO0IBYGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GP3uBoo0RCKJuasRNvS+6kN5JRE89En5Rot8xJiF2yB+NIG6G+owKVennRAttF6kB2plQz191O32SNBWFXq6/m6Ri5IuFbBWQB+mJj3Zy6R5KcaIb59TUEJoqxsj64/75f2RQodWCNxQyog/eSGOr3uu/hMh30Q+VF0qiXeB8QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lSPse5+T; arc=none smtp.client-ip=209.85.210.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=hfayII6m+az2yIKUCTB26196ia9qnlglr0OJqWIk+z6vben3LEpVQiNPe1vUEbOw8lrjptraemGzIYOjVRMGVAb7eXUO7ylsla7/gL+xqcOjHufizfc1ZpYCAUMBJrX8drPUtngzikzA6/Wl/hJggHzLHU5Em/aIfXvzOFnashk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NOS89OB8; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lSPse5+T"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-77c1814ca1dso856950b3a.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 07:34:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NOS89OB8"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-77f605f22easo1041746b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 08:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758810858; x=1759415658; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QQHQjEm6KdWL1vc6/aoJqmYvJIjnRA6W3fpAuarwDrE=;
-        b=lSPse5+Tdllu8IB6RKd8mwCho7Jzr2BNMiQtn3ePa2U4wNaexa6er1AmeAek5g939W
-         gyvB7vgWFzf7ZkHBT3x2DX9tveHGALynhCnRPPbi+xUh1kWySYwcbeeYhr5aEUNliHXq
-         NAWc56rFraP/a6aV8yK2igbBU+ZI6q1fQPPyKg3iMdSxRpL0eRmq2Iu/xiERaSRmvDK+
-         UBrvWpOWrUpYAIuCLjRIEfYDq/XQIFKwvUx5tugZqwvnvQdSG+ZM8ayCtIpkmD501oWZ
-         rA+zUD7zyp/BKdxR0JsY+SJkYC3emI5S2BqeuXSDMAxLA2UM2MPHbU6A8nkQZjpzbxIC
-         TMPw==
+        d=gmail.com; s=20230601; t=1758812877; x=1759417677; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jE5cIH8mYsDicp+BwKdnhTTJHAMEhvsJen2js1pJiH8=;
+        b=NOS89OB8QhgwX7LkwleAPOmUqR7YMHjWOMKiWPH4Xrg2/5PNpKvgPqvK8fbjkBK2+R
+         3ty/DNv/6qItYt0g5KH2hC7swFJa2orXFscTjT+11NqJfp4tiORGHloMCrhQOpK2TX+g
+         vpTlsfvylAWX8BNr3EbMxCDma37slkMJr6APSAA/N2ud5/g8rvJdauOEe7prdR0H9it2
+         NseZ89Ia3w3M/ElW9RwCAZYToE+6p6pqIUjxDkPjZiJKdzQAU8+QA5Lm+xTlPhSvp7We
+         GG3+tI2YAQ8ZpL8yEFE6cJIY5RriJpIQaUD+oZH3t7wC3MfqtLbLhi6KhXyUoVOmXHqV
+         SR6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758810858; x=1759415658;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QQHQjEm6KdWL1vc6/aoJqmYvJIjnRA6W3fpAuarwDrE=;
-        b=ti4OWyaRqWbQXq54jO/9iPA4iR7SFt0Rq8ODtVG+I9aj7n+gAX5L8PyGay7uZqnJlp
-         iUbt+Hpqbse/3HqXWaOYmoDOfr8mSGde0vXyx74Jzgurx6WLOO3K5LkaFg5B/AFjEk0e
-         qoiED/iUHIUd/Zcc/sWDI29Py0ldTqJ4cPe+X/+FgAyK4raFU5rQJRvlYqYsCMosWMOn
-         UurcXoJi0+7R5MCCPBU6KvOSfila9JErT5GA/awI+kCR4Nq6slh0ycSkcAcZz1HfEbOX
-         DW/bjzX8GxN4L9ULkNzhNLuH0nAUQAYWw6b1RYhOSikeTR5uuVllG9ofCAmJnb9vo+E7
-         adJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUzPZCcKX71YVjvoxFL/8nbUF/QR/WXoIqwPiwCdQcvxMv8dJvgn6lRf/n/uFwYwofvOd1OH89YXGIGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXdmVNa6G/AlUG0aboUVl2lbJ08HD987Hpf9h/GG5xNjmcIsf2
-	+Kf5QhkNvrqAWCjwCYIdLtFJjQCUbuXXSgfV3qXX3/oiP4xwuXht7nAq
-X-Gm-Gg: ASbGncurA4E8RTTLEbJASTLXA0fBGXCdG6eYexc4QT6Olz7YcScLFxZZN2MEzoLGMgM
-	hfoeCBb6Jmdzy3GZej09U6lAkCLbRe/yni3bNw2VlyaIdkMG/c2ESdZlso+AQbloeNtdV9fVM81
-	nrolYATayQ1KW3In+84I8VZ4io314sTadUGPS6tUAKGsrCwhCFzxseMysPU954snVIWzYD05p+v
-	KVAgbuMPaIUI0TwBfMVmJ7K1dAcAN4p+YoZrh0czYT/b/eyvUPzNn9Fq9fnam9vS6jgalCtTDMK
-	bMiOu57ySoJVGt3dUTZa1jXsVVl9jig89A4Y2bwkdDSS5ggKe3OWLDPdcI5LjhiiMlQBeYqn0bx
-	0vBrthPPJJ/9cLeH5WLpbE3J4gJnhoJcvbfw=
-X-Google-Smtp-Source: AGHT+IHtHAEv8pJFUOuDFi9x9lY6fvRX5HRt2NaxDvCZUSfir5HznJYK8VHavo8T5HJ5S5KcaigutQ==
-X-Received: by 2002:a05:6a00:14ce:b0:776:14f1:493d with SMTP id d2e1a72fcca58-780fcdf4cd9mr4319096b3a.2.1758810858249;
-        Thu, 25 Sep 2025 07:34:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758812877; x=1759417677;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jE5cIH8mYsDicp+BwKdnhTTJHAMEhvsJen2js1pJiH8=;
+        b=riP0tBRyEgLi/p2/KP5vsGZVX4vRSEURRSMr2aBwM1DnpFGPVj0RebAmffjaz0prbB
+         4Y3J9/ghlEKomd70CYpFRzOZ23gbtxHsVkBnmoAjFeXaCiQgSODwIxk8EpTd9rGihjic
+         +vEzKdyRdcFQPp+b6PKfKUBbX/gNSx+x2MAueBnaMX39qrlxZL764Qs5TLGCpnWk6Lii
+         JxTLT3HdcEb425HY5AN2HWGGHiT2tdZMmMXU8977t8oHpwWfr49VWItgdbsghCw+jgYr
+         uYWpNTnySS1pP/fgnRzhbArFHNOfnSP1+faTE0fmGuYLzUGlvuX6h+FgK6RS/Z/I6tjP
+         XnJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnLfIvM8rWkzZUCuWnKIc/L1Dp0/uMFftAp8SXdYIXT9TG9csAtex7hO7h80c5UrWaPYEfk4mJ1F8Vzw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3v6LGRfrCGPYQa8z1MlLZIdJmCFeq34GhSoLz1AQeNEox9iu7
+	7K45edFtNv+s804EZwm6s+5PoOn0MgGE39MGqMgycn5+RH4K2F9/XEZ/
+X-Gm-Gg: ASbGncsmcn8ns6KaIIal2zu01XHOkb0wuhLesl0V9XWl3HlOw+3DB/iU+KzheELnBto
+	4Hc8v5yiCMGDC3l1sCka4hTEijo+Jsktf5zp2mMSMDKCDZ9IS3crkA7TTPhXlOeW8GexUN1hbOU
+	PR0mDxo6uDkrVqyThC3JTdjiRcsJZw63KHGqbemJr/3C7sDTieP+Tufx1w+LrLFkUdrE/XAr8m6
+	Quw+ZntLAY+Xt88/AP+88bccgfwFzr/KjmCJd3nmkO1oj1ivRr7wEnv10Ckz/qus+/tD6CR+u7q
+	lTkvgkReZl+8Vxk9Qw5pPKaNRt9rpircv6ij5VrXdbOTBMmMeZ6sPa5bE8BLY0OlBTbb+yqJKSu
+	WPhk9VT9svog3R9jrraxbq4ufhCl8Al/1uNE=
+X-Google-Smtp-Source: AGHT+IHxwbqMwtSUpRB97Nr0rknalbSvu7cUrpdQGoGrEFmAeq73TNUTzNKC1zhtc24Ag7rMTXMpnw==
+X-Received: by 2002:a05:6a20:9188:b0:2e0:9b1a:6417 with SMTP id adf61e73a8af0-2e7d37fba87mr4692452637.53.1758812876869;
+        Thu, 25 Sep 2025 08:07:56 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7810238e9a9sm2193140b3a.15.2025.09.25.07.34.17
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c53cb975sm2506233a12.18.2025.09.25.08.07.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 07:34:17 -0700 (PDT)
+        Thu, 25 Sep 2025 08:07:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 25 Sep 2025 07:34:16 -0700
+Date: Thu, 25 Sep 2025 08:07:55 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Stanimir Varbanov <svarbanov@suse.de>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Saenz Julienne <nsaenz@kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Jonathan Bell <jonathan@raspberrypi.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 2/4] hwmon: adc: rp1: Add Raspberry Pi's RP1 ADC driver
-Message-ID: <3f1295b0-b637-4fe0-b141-67f086960072@roeck-us.net>
-References: <20250925000416.2408457-1-svarbanov@suse.de>
- <20250925000416.2408457-3-svarbanov@suse.de>
- <d07158fc-678e-4ae4-8943-168146a58fe0@roeck-us.net>
- <e53865df-7566-4790-9214-0af875950742@gmx.net>
+To: wenswang@yeah.net
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	jdelvare@suse.com, corbet@lwn.net, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: add MP2925 and MP2929 driver
+Message-ID: <ae5ad599-e857-4124-b6a0-61196a763109@roeck-us.net>
+References: <20250918080349.1154140-1-wenswang@yeah.net>
+ <20250918080603.1154497-1-wenswang@yeah.net>
+ <20250918080603.1154497-2-wenswang@yeah.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e53865df-7566-4790-9214-0af875950742@gmx.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250918080603.1154497-2-wenswang@yeah.net>
 
-On Thu, Sep 25, 2025 at 07:26:10AM +0200, Stefan Wahren wrote:
-> Hi Guenter,
+On Thu, Sep 18, 2025 at 04:06:03PM +0800, wenswang@yeah.net wrote:
+> From: Wensheng Wang <wenswang@yeah.net>
 > 
-> Am 25.09.25 um 04:42 schrieb Guenter Roeck:
-> > On Thu, Sep 25, 2025 at 03:04:14AM +0300, Stanimir Varbanov wrote:
-> > > A five-input successive-approximation analogue-to-digital converter
-> > > with 12-bit (effective number of 9.5 bits) resolution at 500kSPS.
-> > > The ADC has four external inputs and one internal temperature sensor.
-> > > 
-> > > Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-> > > Signed-off-by: Jonathan Bell <jonathan@raspberrypi.com>
-> > > Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
-> > I just realized that there is already a hwmon driver for
-> > Rasperri Pi - drivers/hwmon/raspberrypi-hwmon.c.
-> > 
-> > Please add this code to that driver.
-> could you please explain the reason for this?
+> Add support for MPS VR mp2925 and mp2929 controller. This driver exposes
+> telemetry and limit value readings and writtings.
 > 
-> Yes, both drivers are for Raspberry Pi boards, but they don't share any code
-> base. The raspberrypi-hwmon uses a mailbox interfaces to get the sensor data
-> and works for the board generation 1 - 4. This driver works completely
-> differently ( MMIO ), doesn't depend on the mailbox interface and applies
-> only for board generation 5. Actually I don't see a benefit of merging them.
-> 
-Ok. Please make sure to add this explanation to the patch description.
+> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
+
+I'll have to drop this series. Reason:
+
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/mp2925.c
+...
+> +
+> +static int mp2925_write_word_data(struct i2c_client *client, int page, int reg,
+> +				  u16 word)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +		/*
+> +		 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
+> +		 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
+> +		 * of MP2925 is linear11 format, and the exponent is a
+> +		 * constant value(5'b11100)， so the exponent of word
+> +		 * parameter should be converted to 5'b11100(0x1C).
+> +		 */
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    mp2925_linear_exp_transfer(word, 0x1C));
+> +		if (ret < 0)
+> +			return ret;
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    (ret & ~GENMASK(11, 0)) |
+                                             ^^^
+
+As 0-day rightfully reports, ret is not initialized here. Datasheets for both chips
+are not published (actually the chips don't officially exist), so I can not figure out
+the expected behavior myself. FWIW, available datasheets suggest that the bits are unused,
+so if that is not correct please provide evidence that writing anything but 0 into those
+bits is needed.
+
+While at it, please also provide evidence that the chips exist in the first place
+and that this is not a "let's see what he accepts" submission.
 
 Guenter
