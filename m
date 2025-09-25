@@ -1,141 +1,165 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010055.outbound.protection.outlook.com [52.101.84.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E9F1D6187
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 15:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758814417; cv=none; b=bnZLRhgZqc+LLJiZCivU1+/y2zSWmUCbXsMW9B/8e9aEFVB1kc4PFzmTnMQdDZ4fvs0iXyIRNRXp0T2Sc8u9Xr1N7xCq8KZaQ/70w2OD4VVA/DWUW/mcWMIGmwbUI5nvvlw5HLDBJzHa7qaGMSGjHCbOWuShzXS2GR3fJxbOnHk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758814417; c=relaxed/simple;
-	bh=y2f0xu7wv3XLv8dKgE4HDyUHFQ5s5JkkjhxH7P7EpY4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWpLTtEOH72ClulAVnZobdMilVSUe+OwqP9JZsxj1wCgWiA+HN16OX4Crq+wwjL//VqQb7/aKVYhlq5ykiygMOe6SctnwyCTdIax46c5gVMIOQg5pJ0SRm07V3elZqxlhAteVe5Gf8qH+g/Vt3RRAFO0OLCENDMaPckZHA59WX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=doWKcJd1; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F2A25A352;
+	Thu, 25 Sep 2025 19:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758828161; cv=fail; b=QZcOVr6WzdT7l60uG7qbgNtx3TrygmWD5k0glGr2NMWpp5sQ/Zjb4GdBV1g6UTgFlJuKAR7AOBNkK/VE0LsIx1BIJcC3jo5GR2lDv7M3DqOJeK/qAOwf4Y5SzhLN3604iU33g8/BUhOplKZRvqzBvqTynzG92zGoZagmlq9SHxA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758828161; c=relaxed/simple;
+	bh=70KSohMAHNcJnVHmSjXdiZX6G9udWcQScUZyJMXxVPM=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=WXlnazGnQUobmR9o+zmDg6SU0fh49gBLKfS8mX1uqY2zRvRyj7AjOtqQkYh48RTCbhlBCpnoEaeMFp1Eg5lSKL3b1lzj7Tsm+wOIkD+Jz+NFQigS1q9VzuqEF4DOF4tpFUVlgOliP+cX+eempckhqEgDrW0aceFkxfjZz2jsuCY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WMEWmP9u; arc=fail smtp.client-ip=52.101.84.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="doWKcJd1"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f67ba775aso1398579b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 08:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758814414; x=1759419214; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xf9bl4gXuz6FgQKlCMIiNMUUiPGI8bVvlKEA/vte7D8=;
-        b=doWKcJd1ylcX08xi5HlT4/6sXr+K4/e4N+hSbGQJThcS+IF45Ozpfq0dOUf3joXnC5
-         kMBRSmtJPNglWy5LE902oE0XMsLxYM8Tjagw0zv7mvaJYQMziDy6Y9Jx6kMXejTgp0ex
-         pmsKVMLhZVRqeciZg+alQmKdpstVWBuU9uS+UL+bzaXFVIRVvfZ2C5simUy2l9+U9lWd
-         CzViNLeT6bMpvyNq5FJxQTosU7MbukY3bfJvluMe53eJQasoVd0GwrEO9szwOUiK/QDC
-         qagrP0LcxKkzRaosDBP1VF/aXiObtyI1TFoIbkrXdBjGE5SCRkQg8AQd9VODSRJG+hyo
-         cF6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758814414; x=1759419214;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xf9bl4gXuz6FgQKlCMIiNMUUiPGI8bVvlKEA/vte7D8=;
-        b=SBFOfKqZDBqzY0jQTk0taa419Rjcw4gS8SdKBOwHGEwa3QYVGkifkD58V8vVJunAEF
-         l2zrvdfNf4tT6cjwl/IiPch7iWAJjv+65zaQcBXwJ8zcstpkUv1uPHnERNqdg7qIjS1B
-         e2WU0o+Ebm9AzH3UdwYiFuqN0Q2G8cfh6Q6e+x2j5S1LsRoKFcArZwspwKOVLukKhdw7
-         77N1q+0EKUgiSnsrf7M0mowA9q9RzUQOd+3R/t+DkIY9ACEWYeUqrEdMkXh6EScE8dD/
-         B8eK2rPRz9gmupvFC9ukwZm5Aj93MsZh++yJwg+D5eIh3FwZz4OB0/o6BbLgHckFyPLP
-         3rGw==
-X-Gm-Message-State: AOJu0Yy0gzlDRVceKySA+Jlz9qvkb+5LkKYpQyRdqZlrB/435sPYzx32
-	iwp54TRZdk1nmJyj346KfGPrlwKxN693jh8Q0hhJOmDXNmYeEuteTELZ
-X-Gm-Gg: ASbGncsScEgISGPu6OPhysDTlGbWaXGsfTeMD6LRx1FfS+DZXRCYzlMra7aqKfobPak
-	GOrX0E6LzkHJw1knVYlcJqEokGFNRS80jZ4IgKhSoKBQcQ9Fxnumo31A2wv2knYSC5+sfWzfnDs
-	/NjvRNMtZn9+jc+Svui+x2RHOy+TrrZvAs46c2IZgrIVeIjgwbvV3jioxEclnOkTNxvFc64JJRW
-	kchZ0P7GcaoUNjSEwyrz3xy2BpHFEZAoJLfMVAHf0aKQh9Z8cBZutAe7ODI94M+k8F/oMYpXikj
-	Hp+46BEtlkvaYua5IurwGUwaoRiVPUnCaJg+1/dlQKvmiG4IPoTpg1xbEoB/jbz4KERxgY/MEN5
-	TGOGvY/QQHgGZKGeaE8wP0H16xRlOmTaUMmY=
-X-Google-Smtp-Source: AGHT+IHueQ5EwcgB7ykT7do2ipeVpALEK/2VdRb/5C0SGUSwtjUhr3wKi5API/uav1K3AF6ZVnpvuw==
-X-Received: by 2002:a05:6a00:3d0f:b0:77f:29e0:c807 with SMTP id d2e1a72fcca58-780fcea2e20mr3963061b3a.16.1758814414297;
-        Thu, 25 Sep 2025 08:33:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102c06e67sm2212018b3a.91.2025.09.25.08.33.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 08:33:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 25 Sep 2025 08:33:32 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	daniel.machon@microchip.com, luka.perkov@sartura.hr,
-	benjamin.ryzman@canonical.com
-Subject: Re: [PATCH] hwmon: sparx5: make it selectable for ARCH_MICROCHIP
-Message-ID: <357f9a92-df60-4e6c-9019-40a4adbf0702@roeck-us.net>
-References: <20250924213027.1887516-1-robert.marko@sartura.hr>
- <f019dcef-afdd-4d18-b28c-b214fa14f1c8@roeck-us.net>
- <CA+HBbNFe+7XT3bSUEagsXiug-bmh=fBfLAW0d7WR73Di8-ozTA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WMEWmP9u"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iOn1Ufu8ptt7jeTBcwruZqsUdZ+RDC+dJhgj39cBGkJO6LLnCkXNs9hVw8Qz3TaoZucVZD+5T50PVj52+15EwxRR1PhufEvVRX29zDTU+ejZ4xH2iP5eLBF22BcNkwe9yHIYMtXi0FYEXh8JOca994R5qVrPW/diSvtZRicNspHg0j75M9qJDwsCHewcunxW00yhw4EWOAorrXDzZhdNaY4rOVBUFyqQSeC4uSNK0H0QzPX7bd4IEUc2h9f+fsXtPJarodsrx3qusj2WTYf+gmFnqJOUhjeUWwRfEDrlGqBHaGw4myKvDi4v4TOfZJimtqfQzNVwnLFVZaf6vYGtAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=heE+9dHYOMr3jVdeAnZx1KXndmvBTfdZmRMEDfaQJU0=;
+ b=N9N/gQGgDi8NHq2WxOwcWl8ZE65PSKSvbDx9EsZDTUJ7VP1DSqWhHcmBoB6GEGObceN8NOBMeuDkm0j6FefkAujNhjFRg0V4IcbAsbhIqFM67Cxt0vT8p+uScj9OuHwKVohZhHVqBP8lD2pIl37fG3fBIFK8PCpIjlPNbZZWaocAZTwslTsaD0FWXXxCAHb5PAklrUnrDal4XpRw2XDyxbI4fm2Yk9zr3nJud6CGUQCsBditUgHhhr0ehWCgL9+Ez+HlG9ij780xUxvAsawW3Hcy9hHx4TmU+VGOZOkorXjP7vdZiU5EhKqr1st3jR1gnFKQaug1Gfg92FL9hDz82Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=heE+9dHYOMr3jVdeAnZx1KXndmvBTfdZmRMEDfaQJU0=;
+ b=WMEWmP9utzJakB1ReiuH1B/nI1szoCJRF1zbU7sBxyN77VyY8i7Khp+lKaNovG9xSyhhiz0lWS3b1yi46svon9ajJ9Vh7dC9MfZ77bKMKvnorEBp1dlWgX5OAgtulBa/KMSzXqzycXymTCcpa/JEK99wVzxatOphtOTymlMniDdXUfJndvdWZsoMApIpu0VK2ChD8OgnMxOy4SlxxF2lBmNc57Kl6lqKaTVXA/pGLXeiMLwXpKIQV+mR3N1Aq4eAJd9Iqn/03st0i49fX6ZZun08DbqoT3pJTa8NhE34VLAJlEwRd+Z0s6aOultEc4v5rJb+tfU11TMzuUZjdjEgnw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
+ by GV1PR04MB10989.eurprd04.prod.outlook.com (2603:10a6:150:200::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Thu, 25 Sep
+ 2025 19:22:36 +0000
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9160.008; Thu, 25 Sep 2025
+ 19:22:36 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	linux-hwmon@vger.kernel.org (open list:HARDWARE MONITORING),
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list)
+Cc: imx@lists.linux.dev
+Subject: [PATCH 1/1] dt-bindings: hwmon: (lm75) allow interrupt for ti,tmp75
+Date: Thu, 25 Sep 2025 15:22:19 -0400
+Message-Id: <20250925192219.303825-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0082.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::27) To PAXSPRMB0053.eurprd04.prod.outlook.com
+ (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+HBbNFe+7XT3bSUEagsXiug-bmh=fBfLAW0d7WR73Di8-ozTA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|GV1PR04MB10989:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2b7a8a9-e0d3-4871-637d-08ddfc68e229
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|52116014|366016|376014|19092799006|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?QSonlgk/zDU9MqHGONTUsqqTebReUdfNTBD06zwV1vZsv7GBzw3htgbBlBmC?=
+ =?us-ascii?Q?ncZ0qxkNuQvc6mi6kxjaP+SvXq+dLrA4MYpFAH1hR2o8gKKLvjwIuV8PVP6V?=
+ =?us-ascii?Q?gsyM8pH3LMBiU1WMeLDVuNKngI7qqKDwXLD0Onzr4p24VjEMhZToVeLgxH+q?=
+ =?us-ascii?Q?kV8l6UCeEVszf2X+ozUrE5wYUiH/TIwo+J2PMbBBVDnL7nnF9V5+hEMiTkA2?=
+ =?us-ascii?Q?fStrsNZcm2qbNCdHQzDkQkjkR1k3ZpPYcFzTeAkk+M3e2dIYIodHK5JQfiXI?=
+ =?us-ascii?Q?VYVhfs7bJgTH6Gk001DtNcwZMVh8SOJUVqB9yUBtuPNy67t3MHm7Qli7Ixn3?=
+ =?us-ascii?Q?ocMC3xyFH1AFInGdlmsQW4QqzzD49QndOguqbBSpUhgdk+sjhDCyUjBWmSPH?=
+ =?us-ascii?Q?AFupebpACc6SGGZFlBTO7BflY8xB26atsYgx25ir4tzTEOCFJw4UpeHK9QZ/?=
+ =?us-ascii?Q?buPJPhYzoIKOvVIkZ6EO4HY6shAfqQpemxFA/Usb4n95lkzY4aD1DW4BV/r9?=
+ =?us-ascii?Q?xD1oOo6g2OgmUcQjXl0T5VMrI95vUkoyGta6rjM/xKEvyQk3gi31jJelv94u?=
+ =?us-ascii?Q?0HQAfrfJU4LPO07ennyJRr7jdtL7jYdXZ5rTtQVYZhSeVplNNrXr569EEOua?=
+ =?us-ascii?Q?qChZGghSvwg0ts+YzD/hBZUBe3M+GVfUdrD/TacW8IvEj6OMNv96AecxAulG?=
+ =?us-ascii?Q?uaMh6b4pIl47x6jahzYImmBlsEcXuDPZ6DKBnsB3Z/ekmNmu2wcJdff2CaqI?=
+ =?us-ascii?Q?jWGQq725GBpdCg70jw7boqqv8ihEx8PunyYwBBTMu9lRK4v3ss5TKGmR5gxL?=
+ =?us-ascii?Q?U43rw1YNDKzCNyKg84sCWiWlcHugAu22ZNLgxHeTBzyxPkYwBGlGwfHVN5BR?=
+ =?us-ascii?Q?Zbh67nwSn2W32mpERBaSrFCfy6fng3lMcdI3A1vToSJRu/WtjDycJtWNthUm?=
+ =?us-ascii?Q?8T8kKq79EVlMyXuuHMiK12Mjwk43d6TxRS48PdDE7lZgmDZP5Ga34jATXcxq?=
+ =?us-ascii?Q?fOORqiMFjhsAHCzCwMHfwxM3gHywb659L9BRiD3XWB8h9XoS6MlUswixm38P?=
+ =?us-ascii?Q?R3obXOEbsiRxPhHHFHzpRshUliy9SRsuTxeBVZaevrmg6g319P521UPBFlzT?=
+ =?us-ascii?Q?bawO1fx+mT50AvVoulbvZ0h78JpOKjgq3qQCLZtEjtqZYZlwlKi5HPaxkeoR?=
+ =?us-ascii?Q?hhaqIJsX0JviGnOoPA1Y/cO7f3wLHyQv24UITRIq3zwn+UF5EiBicA6ySVGf?=
+ =?us-ascii?Q?p04ZNe4PgLsF5fAsq1uxBStbQz6Rk7hCY/iFYEkbnkWDKd5kK2Ff5TdL5g9E?=
+ =?us-ascii?Q?KKQBxTNsyXuTUXUIKAR7lP05njw7yCZbAIMV32VvtsePx83Hlvqbo5avEYcm?=
+ =?us-ascii?Q?TMoljBMUBYtFCcw2kedAvIABrSSEUU/F16Ym7awy6hxodm3tF2fI5nhy3UJz?=
+ =?us-ascii?Q?roc40LMUdTEnBYeQwwZHGslfQh87miHgxwTQoA7s0uokYEJYRKRunw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(366016)(376014)(19092799006)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?GSvGtjh/P2jMmXp8vVSpJSCQqmGqFLSnM5n06/MTp4G9yE22dwFDom8rkWeE?=
+ =?us-ascii?Q?6ejAbeGdPyhvsoZWBNDPb3hUG3aOCh4SvriUPGGyHY8fwGOAmPe0MnMFe/ov?=
+ =?us-ascii?Q?hIOnmtiGrmtH2E47zOOjvRUw92rHxFMYF37UTZJh2ht5kWDMIdImy8TW/RTP?=
+ =?us-ascii?Q?qsQEcK5NK7iaGJO+rl3appeHA9L9eFkp/b0YZwDE0bcpf+q5C26KEsH0RA14?=
+ =?us-ascii?Q?EwI+csEmk3OjJSJCOSUxEWaj0Qwgf6eGAaComNVIPg76D9azGdmlogRDbnW2?=
+ =?us-ascii?Q?s/nnFv63mD4+riy4/1JV3fvCrAdZMIEC9T2xHqhFEg23wTze9foxLv6shhcU?=
+ =?us-ascii?Q?JS8Y7h0PF09SEhdProh89wg93SnZdR3icevBmiUP+JatpjDil8AaJbEJEJ6M?=
+ =?us-ascii?Q?hppLDMPzMrwVWAO/alwYRAamyYSM+mrnIJR/5h2ZkJfZ4KJUL+6Rn1GCT4Sf?=
+ =?us-ascii?Q?LhXxA3xcN3SKgVVcRRNFIuxe3HVpIxaJrcNVj9b18o0e2UGZ45C/iEXcbwhC?=
+ =?us-ascii?Q?+1kV2NQXMh0eai2vsRKw8ffoLnq0RJRR9mVULaItxr3swOJPwM2FOCcMYcoj?=
+ =?us-ascii?Q?QvLm4kBU+Nh4cLd/HKLQ9Gg25DYkh79hKmW9hAHDIzBqt/BJOqnm2SBzoCq/?=
+ =?us-ascii?Q?MsHD1ZTyup5Rnsy6BNwRMX3TJ5gx7dQXcurjHFnlmOFgkXbAXF8VYXUz+yqm?=
+ =?us-ascii?Q?FdSQM5g0JPTyGd2uR0cd4NNzvKEw47sWGO3gmE/o/RFmtJw6hJANpoyjxP32?=
+ =?us-ascii?Q?Hd/BmrP8SXxFBVOS04iKNhmRt+uOEj+aorsQ1Ikg7GUw9ho+xKtvY0+qmDX+?=
+ =?us-ascii?Q?a/fL5hLCbfWK3AyK9pUgVgkwGndQtMnOrMBtZ50tFkr8VWmaFUPcSJ2CL6yQ?=
+ =?us-ascii?Q?v1T5B56+TnengOL5XZRfs+5wGvDQG3srZlN5fHWzgKOaPWBw79V930S1lM2T?=
+ =?us-ascii?Q?JsR1bPkPZaThC7cvpL5g2sVPhH9TaGRM1tsbb7J0gCtyTfk1mLGUdalzn+AD?=
+ =?us-ascii?Q?pYt3uSf9p8YLNG365OW4u+1XFHtstb9TAHpMKEYVKFl3UCYGYqk8OH9R/Vv+?=
+ =?us-ascii?Q?8jT8zuNced4aMmbA6b9xEd/oNUTCsmDJ8zIxw8nR5n6JhcCw+5QXRpKP4dDD?=
+ =?us-ascii?Q?ppTsIM2ge+j1f/g30bkOOTxodpN2AXOc5EZmQW6UopBnd+20I1KHXY4fif7G?=
+ =?us-ascii?Q?Q7ugtIcvz/sjWExPl8vqfln0ryRhkFYnA6vHwlgEUFU1R59mHGsRZIpiILVB?=
+ =?us-ascii?Q?BGPThw3tdlIkXfaYJKGjMkarrL1wkNpD6akLvunBXD4vyd5hsi+qzaUmmbXE?=
+ =?us-ascii?Q?JWwWnfZm85UUoo/7woU2FqlSkw9RPfX0BUtt/6eYgc8STmmTdYKGlp/EqKqn?=
+ =?us-ascii?Q?HktiFbF6D9gAmlPoRzwASd+MINY31kdLkv/7X/YQyCgFCLz2LbnBmvXNyDx1?=
+ =?us-ascii?Q?oDzesvUrVcZbkVJE2OBlXuV3i/KbgKCRpcUcR8LRs91e0FLMLv7jd9WHtbmJ?=
+ =?us-ascii?Q?qL7sk7yNcywqu4mPxUZBJO9XSlho0Ocg8pvDvVLMMl1vnssGKq98OAAse12c?=
+ =?us-ascii?Q?dkaDn2Nh1fd90EmJAXfSfNPOvo9OZoVLLqqYzGsc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2b7a8a9-e0d3-4871-637d-08ddfc68e229
+X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2025 19:22:36.1712
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q0SoZimG4We6SlKDvNB1R4HdqkmOq0PInExOsC3/gPB5mSA/Y/JQhVfJcNtROrueGGO2fR7DXYLlp94xMXrNyA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10989
 
-On Thu, Sep 25, 2025 at 11:15:52AM +0200, Robert Marko wrote:
-> On Thu, Sep 25, 2025 at 12:07 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On 9/24/25 14:30, Robert Marko wrote:
-> > > LAN969x uses the same sensor and driver, so make it selectable for
-> > > ARCH_MICROCHIP.
-> > >
-> > LAN969x _is_ the Ethernet switch driver for Sparx5, so this description does
-> > not really make sense. Same as what ? Itself ?
-> >
-> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > > ---
-> > >   drivers/hwmon/Kconfig | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > > index 840d998f850a..ba2b7b2f6c44 100644
-> > > --- a/drivers/hwmon/Kconfig
-> > > +++ b/drivers/hwmon/Kconfig
-> > > @@ -632,7 +632,7 @@ config SENSORS_I5K_AMB
-> > >
-> > >   config SENSORS_SPARX5
-> > >       tristate "Sparx5 SoC temperature sensor"
-> > > -     depends on ARCH_SPARX5 || COMPILE_TEST
-> > > +     depends on ARCH_MICROCHIP || COMPILE_TEST
-> >
-> > ... and silently disable it for ARCH_SPARX5 at the same time ? That is not what
-> > the description says, and is completely unacceptable unless explained.
-> >
-> > >       help
-> > >         If you say yes here you get support for temperature monitoring
-> > >         with the Microchip Sparx5 SoC.
-> >
-> > ... and, on top of all that, still claim to support Sparx5 even that is
-> > no longer the case.
-> >
-> > Ah, I see, this patch depends on patches in linux-next. You might want to say that.
-> > Also, there is context missing: If the sensor is _only_ supported on Sparx5
-> > (which everything but the dependency suggests), it does not make sense to extend
-> > the dependencies. Why make the sensor configurable for _all_ microchip architectures
-> > if it is only supported on Sparx5 ? Maybe there is some other series explaining
-> > this, but this patch is all I got and it does not explain anything. It is only
-> > confusing and does not make sense on its own.
-> 
-> Hi Guenter,
-> I should have extended the description a bit.
-> 
-> LAN969x uses the same sensor as SparX-5, and they both select ARCH_MICROCHIP so
-> SparX-5 only configs can still select this driver.
+Allow interrupt for ti,tmp75 because chip has open drain ALERT signal.
 
-You mean ARCH_LAN969X (in contrast to ARCH_SPARX5 and LAN969X_SWITCH) ?
-That makes sense, but it really needs to be explained in the patch
-description. Also, since ARCH_MICROCHIP does not exist for arm64 in the
-upstream kernel, a note that this depends on other patches in linux-next
-would have been helpful. You may know that, and others may know that, but
-I don't, and digging through that cost me at least an hour of time which
-I don't have.
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+ Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Guenter
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index ecdd09a032e51..0b9fda81e3ec5 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -70,6 +70,7 @@ allOf:
+                 - ti,tmp100
+                 - ti,tmp101
+                 - ti,tmp112
++                - ti,tmp75
+     then:
+       properties:
+         interrupts: false
+-- 
+2.34.1
+
