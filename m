@@ -1,37 +1,37 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B753C35966
-	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 00:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F0070808
+	for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 00:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758758728; cv=none; b=G5nj+9rY9ZwlCUItCnBEJszM5iHY7kEwZYgMRvDj+u4U/lyu9jPHipza7wjxr28CxrR+IKuXEqGg+2TIe4wuxkfDC92KAtCclrZNh0v1MfbGhG6kTb9CYJuy5Q2WLd8Ilq1VBiuQ1D2otSujhD/gBglcpzrpCDrEAHHJ+pTdRg8=
+	t=1758758729; cv=none; b=l/PIa53WBEMIQgMsECntaJnNfhfzAQUG3oJOng3lbDK4i0u0GgY8ENF0AaNhwLb/4sGln/HR0AOwNq0E8h2Hb7dNxELvtRdFEK7sv5ImzNUWnzDYGnMaSo/IrayXQxvEe+4l6dh0uBuf8C7K4vK8DzC6bOwIWgc3Lv1FltcRA78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758758728; c=relaxed/simple;
-	bh=Yjeo/kxzLvJO2MQlk4TZVIyVLUXf4NIEiJXkBmyt40M=;
+	s=arc-20240116; t=1758758729; c=relaxed/simple;
+	bh=gkjRbBYbeFFfZZgNQHCZf9VD0rEAhTe2UfEcodk1ePc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D6eRJo6sPnKHuF5U1LNBd6NHwCuUraEXuXQx6OKMTOLi9756hadmTUmpbsqUfv8m4G34FqbN5iVU5Ahs7LnFqFMMm3vFcZezvHHaWBXTcm3fYn5ucwRHFrImIzTL3+Df7xPNEfArif988QEGlPBTOwK+cGy5t5vGwN9qgllY+zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=QdHxQ4VmNReO3iGDw7aG6AtnjpqLSmho6ScBmL5Jw6JzJyulzM8z5r+5ROHuUkO4XU02s0/lb4zn7w1LMU5HSVrmJnHJbW9ScRAJpQ6mM52vmlByd9IReSIJAfVaPA+7D3PpkAMG0a39qcliGc3c5Nf4i52EHAuEYTpI02faFTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C24DD3F532;
-	Thu, 25 Sep 2025 00:05:18 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B069E67EA7;
+	Thu, 25 Sep 2025 00:05:20 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
 	none
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B8F7613A6B;
-	Thu, 25 Sep 2025 00:05:17 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C78F01386E;
+	Thu, 25 Sep 2025 00:05:19 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ACrxKj2H1GgdNQAAD6G6ig
-	(envelope-from <svarbanov@suse.de>); Thu, 25 Sep 2025 00:05:17 +0000
+	id WLxdLj+H1GgdNQAAD6G6ig
+	(envelope-from <svarbanov@suse.de>); Thu, 25 Sep 2025 00:05:19 +0000
 From: Stanimir Varbanov <svarbanov@suse.de>
 To: linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: Jean Delvare <jdelvare@suse.com>,
 	Jonathan Bell <jonathan@raspberrypi.com>,
 	Dave Stevenson <dave.stevenson@raspberrypi.com>,
 	Stanimir Varbanov <svarbanov@suse.de>
-Subject: [PATCH 1/4] dt-bindings: Add Raspberry Pi's RP1 ADC
-Date: Thu, 25 Sep 2025 03:04:13 +0300
-Message-ID: <20250925000416.2408457-2-svarbanov@suse.de>
+Subject: [PATCH 3/4] arm64: dts: rp1: Add Raspberry Pi's RP1 ADC DT node
+Date: Thu, 25 Sep 2025 03:04:15 +0300
+Message-ID: <20250925000416.2408457-4-svarbanov@suse.de>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250925000416.2408457-1-svarbanov@suse.de>
 References: <20250925000416.2408457-1-svarbanov@suse.de>
@@ -69,79 +69,44 @@ Content-Transfer-Encoding: 8bit
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
 X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spamd-Result: default: False [-4.00 / 50.00];
 	REPLY(-4.00)[];
 	TAGGED_RCPT(0.00)[dt]
-X-Rspamd-Queue-Id: C24DD3F532
+X-Rspamd-Queue-Id: B069E67EA7
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
 X-Spam-Score: -4.00
 
-Document dt-bindings for Raspberry Pi's RP1 ADC.
+Add Raspberry Pi's RP1 ADC DT controller node.
 
 Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
 ---
- .../bindings/hwmon/raspberrypi,rp1-adc.yaml   | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
+ arch/arm64/boot/dts/broadcom/rp1-common.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
-new file mode 100644
-index 000000000000..5266b253fd2b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/raspberrypi,rp1-adc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/arm64/boot/dts/broadcom/rp1-common.dtsi b/arch/arm64/boot/dts/broadcom/rp1-common.dtsi
+index 6bdc304c5f24..a0b06d7ce9f2 100644
+--- a/arch/arm64/boot/dts/broadcom/rp1-common.dtsi
++++ b/arch/arm64/boot/dts/broadcom/rp1-common.dtsi
+@@ -40,6 +40,13 @@ rp1_gpio: pinctrl@400d0000 {
+ 			     <2 IRQ_TYPE_LEVEL_HIGH>;
+ 	};
+ 
++	rp1_adc: adc@400c8000 {
++		compatible = "raspberrypi,rp1-adc";
++		reg = <0x00 0x400c8000 0x0 0x4000>;
++		clocks = <&rp1_clocks RP1_CLK_ADC>;
++		status = "disabled";
++	};
 +
-+title: Rasberry Pi RP1 ADC device
-+
-+maintainers:
-+  - Stanimir Varbanov <svarbanov@suse.de>
-+
-+description: |
-+  The RP1 ADC is a five input successive-approximation ADC with 12-bit
-+  resolution (ENOB 9.5-bit) at 500kSPS. It has four external inputs
-+  and one internal temperature sensor.
-+
-+properties:
-+  compatible:
-+    const: raspberrypi,rp1-adc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  vref-supply:
-+    description:
-+      Reference voltage regulator 3.3V.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - vref-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    adc@400c8000 {
-+      compatible = "raspberrypi,rp1-adc";
-+      reg = <0x400c8000 0x4000>;
-+      clocks = <&rp1_clocks 30>;
-+      vref-supply = <&rp1_vdd_3v3>;
-+    };
+ 	rp1_eth: ethernet@40100000 {
+ 		compatible = "raspberrypi,rp1-gem";
+ 		reg = <0x00 0x40100000  0x0 0x4000>;
 -- 
 2.47.0
 
