@@ -1,312 +1,299 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D8A1C8621;
-	Fri, 26 Sep 2025 14:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047621D6195
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 15:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758896500; cv=none; b=dSQlxm0RzRZeLsPw4FTHWM4Gbdc4dpnXfsu7crZJYjEPpkna7sAV2Rqx2Lhww3fjPypI9M9sw6bV40n5canAthtZWFuno4v8JxFqQsDLla0g2K7hBCSQDY11X2OeY0b8zxBZbjhttEpwzS6ui/h3fm/xtk5LYO5w4IBZ5162Xys=
+	t=1758902253; cv=none; b=YZWr9lVh1pYmzioKw9927DEgoRPCfARVInbjbq6PFEnV1BNBz6lJlSr6Ghmtc7xwx9CawsLt/3QVX349+gWYebEcVBHnYAfoJFj4C0BvuGk5E2Sc0E1KgZAdf2ajHbdyZO89R7IUE4bUc+Q3/xSCo0hwmFpl0qP7kn3J9RDpwdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758896500; c=relaxed/simple;
-	bh=pAmUReU8KLwvxGZCjecPfjyvszxwf4OdUVpeaF6BQYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rOIUpoq45tS6XUuGZtAdO+wD68wtG1s5pa7zpOIBnBF4HT0s5ED7ocYHqbWIesAmrLb6qN5M4OeRDYdW+04Saag6hpfYnzC6gwZwzL/v6Tk1nyUgk97klGKVwmRapytEfSPQ9B0r/6eW4bIql/aYidvq8vKuTIXc0+HDkQnXjOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bXkRyRCw; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1758902253; c=relaxed/simple;
+	bh=jLg0CxONFqY+BNsI+qmg26F4Al8WZFtfoIRWaZmR9zk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Ct3o14JSVWp3NufGpUMzJUwxQB+oVjXwiAgo9Jv7YPw3XflPr83aITxid94QkBF8xeF+Jx3WTIhmj5nSSmrePQQMmO09SU4R0Tu9HXGZQ9nq7yaNpP42DDoE0K+XKaJNta5ely4WGaD73OijAULtixzii4NseG8mtn6vsTDUZdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANBkJak1; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bXkRyRCw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANBkJak1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758896499; x=1790432499;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pAmUReU8KLwvxGZCjecPfjyvszxwf4OdUVpeaF6BQYo=;
-  b=bXkRyRCwOQ7k/dGhYFxsIhH0yJHHNM0YDB9fj6guPZ95AYLab1n2L8vd
-   aQE3OlRUTJt8pBXk23WZNmHEM1Zn5gprFDXwItGJw+bYEFpDxoO1E76gx
-   pDge4v/dJnD8q3vR3xcp6JNMXy+X3gGvoaIQdZz/RV/Y2iqD/nVxHrsAq
-   kM7+rZg+kSPNIMHNRuHfuU9kazVYp1RLp65YiR8DOnGyR0Y76djX4YskJ
-   3MJVCLIetzyjeOukP5GYfWDOyscpf4mi4D4beIhz6S9k4dvG36MoD0fOS
-   HefML1ajM0eGeJIaau0uTKKEBqaneUJ/Ov+JgDVo+R7MBez8tCNDGTj6J
-   Q==;
-X-CSE-ConnectionGUID: 7dcEJOqCTs6ChSe5LgLg+Q==
-X-CSE-MsgGUID: FondeurUSEuCQcqXlohKxg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11565"; a="60269012"
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="60269012"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 07:21:38 -0700
-X-CSE-ConnectionGUID: WnjxCpZ5RMuUaNGU5axoUQ==
-X-CSE-MsgGUID: v4bRtakgRT+iIpDLkOlt0Q==
+  t=1758902252; x=1790438252;
+  h=date:from:to:cc:subject:message-id;
+  bh=jLg0CxONFqY+BNsI+qmg26F4Al8WZFtfoIRWaZmR9zk=;
+  b=ANBkJak1TCxSe77y4M86K1IX0miTWHIzGrZX/R2Q8kPHeUMB5F7uPcJx
+   sVAXL+EdqPRn88rwalxvPCpB5gBjMzUuDO9bicOGj4it//07vdjLm1w2t
+   O+9AtgrLd0WQeM/UyMHBiIiM7r/oTqWGbo+oMVNZnlD7qUWu67iFruZnB
+   reLEFRy08Ge2nJLYay18MBWLmEjIebdxr+HBJXMKi3TD9zVOMB69D3A0P
+   ggzVgmjm0JvkZyriQyJ8e1MMwrgswoS4p8FoQmZDKGbSJHqhsRDZNJ3Jg
+   uHZ2KNvlAmewOcCz3VRCNY15m69d+5qlMErfTX6HCacI7PpGHKo5ZeWN/
+   g==;
+X-CSE-ConnectionGUID: vmRD8NPPSwCcpTDnosxS8Q==
+X-CSE-MsgGUID: 9kL5paLhSKu95J+Ww3pxGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="61289008"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="61289008"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 08:57:32 -0700
+X-CSE-ConnectionGUID: e1cbQ2PsQwutjeuXdzTs6A==
+X-CSE-MsgGUID: H9HKebYbQum6Dd7o2kI2HQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="176899004"
+   d="scan'208";a="181946682"
 Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 26 Sep 2025 07:21:32 -0700
+  by orviesa004.jf.intel.com with ESMTP; 26 Sep 2025 08:57:30 -0700
 Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1v29Jm-0006IX-35;
-	Fri, 26 Sep 2025 14:21:18 +0000
-Date: Fri, 26 Sep 2025 22:20:04 +0800
+	id 1v2Ap5-0006O3-1M;
+	Fri, 26 Sep 2025 15:57:27 +0000
+Date: Fri, 26 Sep 2025 23:56:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Lin <jefflin994697@gmail.com>, jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cedricjustine.encarnacion@analog.com, ninad@linux.ibm.com,
-	andriy.shevchenko@linux.intel.com,
-	johnerasmusmari.geronimo@analog.com, Mariel.Tinaco@analog.com,
-	jbrunet@baylibre.com, kimseer.paller@analog.com,
-	leo.yang.sy0@gmail.com, nuno.sa@analog.com,
-	chiang.brian@inventec.com, gregkh@linuxfoundation.org,
-	grantpeltier93@gmail.com, william@wkennington.com,
-	krzysztof.kozlowski@linaro.org, tzungbi@kernel.org,
-	thorsten.blum@linux.dev, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jeff Lin <jefflin994697@gmail.com>
-Subject: Re: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in
- isl68137
-Message-ID: <202509262212.QaMSQytw-lkp@intel.com>
-References: <20250926014552.1625950-1-jefflin994697@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 1e11552ee54d10c0b602c76b94db602e2581ce57
+Message-ID: <202509262338.VeEAkbju-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250926014552.1625950-1-jefflin994697@gmail.com>
 
-Hi Jeff,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 1e11552ee54d10c0b602c76b94db602e2581ce57  hwmon: (mlxreg-fan) Add support for new flavour of capability register
 
-kernel test robot noticed the following build warnings:
+elapsed time: 1427m
 
-[auto build test WARNING on v6.17-rc7]
-[also build test WARNING on linus/master next-20250925]
-[cannot apply to groeck-staging/hwmon-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+configs tested: 222
+configs skipped: 5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Lin/drivers-hwmon-pmbus-Add-support-for-raa229141-in-isl68137/20250926-094703
-base:   v6.17-rc7
-patch link:    https://lore.kernel.org/r/20250926014552.1625950-1-jefflin994697%40gmail.com
-patch subject: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in isl68137
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250926/202509262212.QaMSQytw-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262212.QaMSQytw-lkp@intel.com/reproduce)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509262212.QaMSQytw-lkp@intel.com/
+tested configs:
+alpha                             allnoconfig    clang-22
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    clang-19
+arc                              allmodconfig    clang-19
+arc                               allnoconfig    clang-22
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-19
+arc                                 defconfig    clang-19
+arc                   randconfig-001-20250926    gcc-8.5.0
+arc                   randconfig-002-20250926    gcc-8.5.0
+arc                   randconfig-002-20250926    gcc-9.5.0
+arm                              allmodconfig    clang-19
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    clang-19
+arm                         bcm2835_defconfig    gcc-15.1.0
+arm                                 defconfig    clang-19
+arm                          pxa168_defconfig    gcc-15.1.0
+arm                   randconfig-001-20250926    clang-22
+arm                   randconfig-001-20250926    gcc-8.5.0
+arm                   randconfig-002-20250926    clang-17
+arm                   randconfig-002-20250926    gcc-8.5.0
+arm                   randconfig-003-20250926    clang-22
+arm                   randconfig-003-20250926    gcc-8.5.0
+arm                   randconfig-004-20250926    clang-22
+arm                   randconfig-004-20250926    gcc-8.5.0
+arm                         vf610m4_defconfig    gcc-15.1.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    clang-19
+arm64                 randconfig-001-20250926    gcc-8.5.0
+arm64                 randconfig-002-20250926    gcc-12.5.0
+arm64                 randconfig-002-20250926    gcc-8.5.0
+arm64                 randconfig-003-20250926    gcc-8.5.0
+arm64                 randconfig-003-20250926    gcc-9.5.0
+arm64                 randconfig-004-20250926    clang-22
+arm64                 randconfig-004-20250926    gcc-8.5.0
+csky                              allnoconfig    clang-22
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    clang-19
+csky                  randconfig-001-20250926    clang-22
+csky                  randconfig-001-20250926    gcc-15.1.0
+csky                  randconfig-002-20250926    clang-22
+csky                  randconfig-002-20250926    gcc-14.3.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-22
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-22
+hexagon                             defconfig    clang-19
+hexagon               randconfig-001-20250926    clang-22
+hexagon               randconfig-002-20250926    clang-22
+i386                             allmodconfig    clang-20
+i386                              allnoconfig    clang-20
+i386                             allyesconfig    clang-20
+i386        buildonly-randconfig-001-20250926    clang-20
+i386        buildonly-randconfig-002-20250926    clang-20
+i386        buildonly-randconfig-003-20250926    clang-20
+i386        buildonly-randconfig-004-20250926    clang-20
+i386        buildonly-randconfig-005-20250926    clang-20
+i386        buildonly-randconfig-006-20250926    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250926    clang-20
+i386                  randconfig-002-20250926    clang-20
+i386                  randconfig-003-20250926    clang-20
+i386                  randconfig-004-20250926    clang-20
+i386                  randconfig-005-20250926    clang-20
+i386                  randconfig-006-20250926    clang-20
+i386                  randconfig-007-20250926    clang-20
+i386                  randconfig-011-20250926    gcc-12
+i386                  randconfig-012-20250926    gcc-12
+i386                  randconfig-013-20250926    gcc-12
+i386                  randconfig-014-20250926    gcc-12
+i386                  randconfig-015-20250926    gcc-12
+i386                  randconfig-016-20250926    gcc-12
+i386                  randconfig-017-20250926    gcc-12
+loongarch                        allmodconfig    clang-19
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20250926    clang-22
+loongarch             randconfig-001-20250926    gcc-15.1.0
+loongarch             randconfig-002-20250926    clang-22
+m68k                             allmodconfig    clang-19
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-19
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+m68k                        m5307c3_defconfig    gcc-15.1.0
+microblaze                       allmodconfig    clang-19
+microblaze                       allmodconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    clang-19
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                           ip28_defconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-15.1.0
+nios2                               defconfig    gcc-15.1.0
+nios2                 randconfig-001-20250926    clang-22
+nios2                 randconfig-001-20250926    gcc-11.5.0
+nios2                 randconfig-002-20250926    clang-22
+nios2                 randconfig-002-20250926    gcc-8.5.0
+openrisc                          allnoconfig    clang-22
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                         allyesconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-14
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20250926    clang-22
+parisc                randconfig-001-20250926    gcc-10.5.0
+parisc                randconfig-002-20250926    clang-22
+parisc                randconfig-002-20250926    gcc-10.5.0
+parisc64                         alldefconfig    gcc-15.1.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                          allyesconfig    gcc-15.1.0
+powerpc                      pasemi_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20250926    clang-22
+powerpc               randconfig-002-20250926    clang-18
+powerpc               randconfig-002-20250926    clang-22
+powerpc               randconfig-003-20250926    clang-22
+powerpc64             randconfig-001-20250926    clang-22
+powerpc64             randconfig-002-20250926    clang-16
+powerpc64             randconfig-002-20250926    clang-22
+powerpc64             randconfig-003-20250926    clang-22
+powerpc64             randconfig-003-20250926    gcc-15.1.0
+riscv                            allmodconfig    gcc-15.1.0
+riscv                             allnoconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    gcc-15.1.0
+riscv                               defconfig    gcc-14
+riscv                 randconfig-001-20250926    clang-22
+riscv                 randconfig-001-20250926    gcc-15.1.0
+riscv                 randconfig-002-20250926    clang-22
+riscv                 randconfig-002-20250926    gcc-15.1.0
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    gcc-15.1.0
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    gcc-14
+s390                  randconfig-001-20250926    clang-22
+s390                  randconfig-001-20250926    gcc-15.1.0
+s390                  randconfig-002-20250926    gcc-15.1.0
+s390                  randconfig-002-20250926    gcc-8.5.0
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-14
+sh                    randconfig-001-20250926    gcc-12.5.0
+sh                    randconfig-001-20250926    gcc-15.1.0
+sh                    randconfig-002-20250926    gcc-15.1.0
+sparc                            allmodconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20250926    gcc-14.3.0
+sparc                 randconfig-001-20250926    gcc-15.1.0
+sparc                 randconfig-002-20250926    gcc-15.1.0
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20250926    gcc-12.5.0
+sparc64               randconfig-001-20250926    gcc-15.1.0
+sparc64               randconfig-002-20250926    clang-22
+sparc64               randconfig-002-20250926    gcc-15.1.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-14
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20250926    clang-22
+um                    randconfig-001-20250926    gcc-15.1.0
+um                    randconfig-002-20250926    clang-22
+um                    randconfig-002-20250926    gcc-15.1.0
+um                           x86_64_defconfig    gcc-14
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250926    clang-20
+x86_64      buildonly-randconfig-001-20250926    gcc-14
+x86_64      buildonly-randconfig-002-20250926    clang-20
+x86_64      buildonly-randconfig-002-20250926    gcc-14
+x86_64      buildonly-randconfig-003-20250926    gcc-14
+x86_64      buildonly-randconfig-004-20250926    gcc-14
+x86_64      buildonly-randconfig-005-20250926    gcc-14
+x86_64      buildonly-randconfig-006-20250926    gcc-14
+x86_64                              defconfig    clang-20
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20250926    gcc-14
+x86_64                randconfig-002-20250926    gcc-14
+x86_64                randconfig-003-20250926    gcc-14
+x86_64                randconfig-004-20250926    gcc-14
+x86_64                randconfig-005-20250926    gcc-14
+x86_64                randconfig-006-20250926    gcc-14
+x86_64                randconfig-007-20250926    gcc-14
+x86_64                randconfig-008-20250926    gcc-14
+x86_64                randconfig-071-20250926    gcc-14
+x86_64                randconfig-072-20250926    gcc-14
+x86_64                randconfig-073-20250926    gcc-14
+x86_64                randconfig-074-20250926    gcc-14
+x86_64                randconfig-075-20250926    gcc-14
+x86_64                randconfig-076-20250926    gcc-14
+x86_64                randconfig-077-20250926    gcc-14
+x86_64                randconfig-078-20250926    gcc-14
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20250926    gcc-14.3.0
+xtensa                randconfig-001-20250926    gcc-15.1.0
+xtensa                randconfig-002-20250926    gcc-15.1.0
+xtensa                randconfig-002-20250926    gcc-8.5.0
 
-All warnings (new ones prefixed by >>):
-
-   drivers/hwmon/pmbus/isl68137.c:66:1: error: expected identifier
-      66 | +#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-         | ^
-   drivers/hwmon/pmbus/isl68137.c:68:1: error: expected identifier
-      68 | +#endif /* CONFIG_SENSORS_RAA229141 */
-         | ^
->> drivers/hwmon/pmbus/isl68137.c:190:5: warning: no previous prototype for function 'read_isys_route_dma' [-Wmissing-prototypes]
-     190 | int read_isys_route_dma(struct i2c_client *client, const char *addr)
-         |     ^
-   drivers/hwmon/pmbus/isl68137.c:190:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     190 | int read_isys_route_dma(struct i2c_client *client, const char *addr)
-         | ^
-         | static 
-   1 warning and 2 errors generated.
-
-
-vim +/read_isys_route_dma +190 drivers/hwmon/pmbus/isl68137.c
-
-    25	
-    26	enum chips {
-    27		isl68137,
-    28		isl68220,
-    29		isl68221,
-    30		isl68222,
-    31		isl68223,
-    32		isl68224,
-    33		isl68225,
-    34		isl68226,
-    35		isl68227,
-    36		isl68229,
-    37		isl68233,
-    38		isl68239,
-    39		isl69222,
-    40		isl69223,
-    41		isl69224,
-    42		isl69225,
-    43		isl69227,
-    44		isl69228,
-    45		isl69234,
-    46		isl69236,
-    47		isl69239,
-    48		isl69242,
-    49		isl69243,
-    50		isl69247,
-    51		isl69248,
-    52		isl69254,
-    53		isl69255,
-    54		isl69256,
-    55		isl69259,
-    56		isl69260,
-    57		isl69268,
-    58		isl69269,
-    59		isl69298,
-    60		raa228000,
-    61		raa228004,
-    62		raa228006,
-    63		raa228228,
-    64		raa229001,
-    65		raa229004,
-  > 66	+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-    67	+	raa229141,
-    68	+#endif /* CONFIG_SENSORS_RAA229141 */
-    69		raa229621,
-    70	};
-    71	
-    72	enum variants {
-    73		raa_dmpvr1_2rail,
-    74		raa_dmpvr2_1rail,
-    75		raa_dmpvr2_2rail,
-    76		raa_dmpvr2_2rail_nontc,
-    77	#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-    78		raa_dmpvr2_2rail_isys,
-    79	#endif /* CONFIG_SENSORS_RAA229141 */
-    80		raa_dmpvr2_3rail,
-    81		raa_dmpvr2_hv,
-    82	};
-    83	
-    84	struct isl68137_channel {
-    85		u32 vout_voltage_divider[2];
-    86	};
-    87	
-    88	struct isl68137_data {
-    89		struct pmbus_driver_info info;
-    90		struct isl68137_channel channel[MAX_CHANNELS];
-    91	};
-    92	
-    93	#define to_isl68137_data(x)	container_of(x, struct isl68137_data, info)
-    94	
-    95	static const struct i2c_device_id raa_dmpvr_id[];
-    96	
-    97	static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
-    98						     int page,
-    99						     char *buf)
-   100	{
-   101		int val = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-   102	
-   103		return sprintf(buf, "%d\n",
-   104			       (val & ISL68137_VOUT_AVS) == ISL68137_VOUT_AVS ? 1 : 0);
-   105	}
-   106	
-   107	static ssize_t isl68137_avs_enable_store_page(struct i2c_client *client,
-   108						      int page,
-   109						      const char *buf, size_t count)
-   110	{
-   111		int rc, op_val;
-   112		bool result;
-   113	
-   114		rc = kstrtobool(buf, &result);
-   115		if (rc)
-   116			return rc;
-   117	
-   118		op_val = result ? ISL68137_VOUT_AVS : 0;
-   119	
-   120		/*
-   121		 * Writes to VOUT setpoint over AVSBus will persist after the VRM is
-   122		 * switched to PMBus control. Switching back to AVSBus control
-   123		 * restores this persisted setpoint rather than re-initializing to
-   124		 * PMBus VOUT_COMMAND. Writing VOUT_COMMAND first over PMBus before
-   125		 * enabling AVS control is the workaround.
-   126		 */
-   127		if (op_val == ISL68137_VOUT_AVS) {
-   128			rc = pmbus_read_word_data(client, page, 0xff,
-   129						  PMBUS_VOUT_COMMAND);
-   130			if (rc < 0)
-   131				return rc;
-   132	
-   133			rc = pmbus_write_word_data(client, page, PMBUS_VOUT_COMMAND,
-   134						   rc);
-   135			if (rc < 0)
-   136				return rc;
-   137		}
-   138	
-   139		rc = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-   140					    ISL68137_VOUT_AVS, op_val);
-   141	
-   142		return (rc < 0) ? rc : count;
-   143	}
-   144	
-   145	static ssize_t isl68137_avs_enable_show(struct device *dev,
-   146						struct device_attribute *devattr,
-   147						char *buf)
-   148	{
-   149		struct i2c_client *client = to_i2c_client(dev->parent);
-   150		struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-   151	
-   152		return isl68137_avs_enable_show_page(client, attr->index, buf);
-   153	}
-   154	
-   155	static ssize_t isl68137_avs_enable_store(struct device *dev,
-   156					struct device_attribute *devattr,
-   157					const char *buf, size_t count)
-   158	{
-   159		struct i2c_client *client = to_i2c_client(dev->parent);
-   160		struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-   161	
-   162		return isl68137_avs_enable_store_page(client, attr->index, buf, count);
-   163	}
-   164	
-   165	static SENSOR_DEVICE_ATTR_RW(avs0_enable, isl68137_avs_enable, 0);
-   166	static SENSOR_DEVICE_ATTR_RW(avs1_enable, isl68137_avs_enable, 1);
-   167	
-   168	static struct attribute *enable_attrs[] = {
-   169		&sensor_dev_attr_avs0_enable.dev_attr.attr,
-   170		&sensor_dev_attr_avs1_enable.dev_attr.attr,
-   171		NULL,
-   172	};
-   173	
-   174	static const struct attribute_group enable_group = {
-   175		.attrs = enable_attrs,
-   176	};
-   177	
-   178	static const struct attribute_group *isl68137_attribute_groups[] = {
-   179		&enable_group,
-   180		NULL,
-   181	};
-   182	
-   183	#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-   184	#define RAA_READ_DMA_DATA	0xc5
-   185	#define RAA_WRITE_DMA_ADDRESS 0xc7
-   186	
-   187	/* DMA address for input and output */
-   188	static const unsigned char dma_address_in[] = { 0xD3, 0xE0 };
-   189	static const unsigned char dma_address_out[] = { 0x42, 0xEE };
- > 190	int read_isys_route_dma(struct i2c_client *client, const char *addr)
-   191	{
-   192		int ret;
-   193	
-   194		ret = i2c_smbus_write_i2c_block_data(client, RAA_WRITE_DMA_ADDRESS, 2, addr);
-   195		if (ret < 0) {
-   196			dev_err(&client->dev, "Set DMA address failed for address 0x%02x 0x%02x\n",
-   197				addr[0], addr[1]);
-   198			return ret;
-   199		}
-   200		// DIRECT ISYS format 10mA/LSB
-   201		u8 buf[2];
-   202	
-   203		ret = i2c_smbus_read_i2c_block_data(client, RAA_READ_DMA_DATA, 2, buf);
-   204		if (ret < 0)
-   205			return ret;
-   206		u16 value = ((u16)buf[1]<<8) | buf[0];
-   207		return value;
-   208	};
-   209	#endif /* CONFIG_SENSORS_RAA229141 */
-   210	
-
--- 
+--
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
