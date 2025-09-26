@@ -1,72 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880842F5A06;
-	Fri, 26 Sep 2025 13:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BE718C02E
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 13:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758891951; cv=none; b=hHSxQNxC8xull0sxdIAmrjfKMn9nQilJ0F26rykkU/5EprkXhDtM38IFGe3AY4qEDNQJgtDyl6FRuwDh95gKykivP5U7Ik7lCmS4rcdmOXiwqXiYq5Qr2uL2L9QYtfKJZVnQG4v22zprT7Q3fe6doNgLel5BIeMc7T3TckNWAGM=
+	t=1758892876; cv=none; b=EBts72OtFGIrLIgebrCxfaVEvX6qyWsxcP3hVkG4DrCGEvoziIQeafDPlCHZ9BYJoVF1ObIrTakDxtbf+Nai1IHjtuma4NrqH4/gkYWeXkjOo5pbLLPn91fvoTG7u7rWUNYNiPHU/gDeQucd7oiwVNxzqeyWwaSloM1zgZUpmak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758891951; c=relaxed/simple;
-	bh=qBh44PfZwBCTkqxDPQXFYPD+nTO4K+b11wgKqFkNmhs=;
+	s=arc-20240116; t=1758892876; c=relaxed/simple;
+	bh=wgA/KHhjj9nh98Q2K+I0SfkA1dG5Qo6UsV0GJJR0K78=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LdYn4pUhRLCyFzRSMndLpmKHc/5E7fMsvj4vJWK1Wu9Wj3+uyj/dfIFEm5PeRt3my1F8CJka/+oVoEvvINyhnUhuAmhR3T9YTjX3uVlDGeC6tog7S5gQdbEvSUFKPaA41U8egig2U4sNSbMVCYeisrKndvuI2Ry+yu8eEscYGSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lSzzAutt; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHAAF0ItZ+ZGgYWBKPRqtNcuxwOI0K/69U3ktDhGYAREXw0To9u7+gCexge2HCCGg4Vrux2zPdcsR5JZkpch9ffx2TziJLtNadW7KWGiKqpmet0NdrMWeyzxuouwlCPOl2/vN9jRxxQEgm8qwWxqAvgVHzEkWQ0koZ2oh5UjOzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YkUKYeux; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lSzzAutt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758891949; x=1790427949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qBh44PfZwBCTkqxDPQXFYPD+nTO4K+b11wgKqFkNmhs=;
-  b=lSzzAuttcPbphWEGy51Tt1ePqeqVBTLkVYyIAj3MuFHAZ8zlqJUEQWZm
-   UfJKp+yJUE3AXNYlGGOfRj5ZS4G23/enTs9AN/Gxy3J1F+VYJpH/crurq
-   IUsGrYF3sfJPdIMdL9IJJ7XBik0SWbprkR1Vj21Bx5YpivFKaIzcH3qWg
-   d2h0xHU4wEJq7rWUNxh+U0W9ZIp2vadk22POEXUUdtFovOB7kVEfI42jO
-   pamkPfJWo0n1JgGqrbWnIzUPe5sZnbTRf9cRP+8G9K+jur7Zx87MXAV2e
-   Tg/FgUg+iIxBZR6IlgkBkHKbrkXaxoHAI6+PGC9/B3kRHwQ8lGQByLkC5
-   g==;
-X-CSE-ConnectionGUID: uImF6ECZSs+gciKU9fulzA==
-X-CSE-MsgGUID: t39WHydhRomDTzTrvyYJig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="65035944"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="65035944"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2025 06:05:48 -0700
-X-CSE-ConnectionGUID: L1dkTA1aShCPlLcmCW5QSQ==
-X-CSE-MsgGUID: aU7FOwRZR4C47OfGWK0WIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,295,1751266800"; 
-   d="scan'208";a="177209208"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 26 Sep 2025 06:05:42 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v288q-0006F9-13;
-	Fri, 26 Sep 2025 13:05:40 +0000
-Date: Fri, 26 Sep 2025 21:05:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Lin <jefflin994697@gmail.com>, jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cedricjustine.encarnacion@analog.com, ninad@linux.ibm.com,
-	andriy.shevchenko@linux.intel.com,
-	johnerasmusmari.geronimo@analog.com, Mariel.Tinaco@analog.com,
-	jbrunet@baylibre.com, kimseer.paller@analog.com,
-	leo.yang.sy0@gmail.com, nuno.sa@analog.com,
-	chiang.brian@inventec.com, gregkh@linuxfoundation.org,
-	grantpeltier93@gmail.com, peterz@infradead.org,
-	william@wkennington.com, krzysztof.kozlowski@linaro.org,
-	tzungbi@kernel.org, thorsten.blum@linux.dev,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jeff Lin <jefflin994697@gmail.com>
-Subject: Re: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in
- isl68137
-Message-ID: <202509262044.Scx8WTbC-lkp@intel.com>
-References: <20250926014552.1625950-1-jefflin994697@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YkUKYeux"
+Date: Fri, 26 Sep 2025 21:21:00 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1758892871;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kS/CoKpI2O26sCXSiv4EiupTsdzTbhruWHTFDNF/B6E=;
+	b=YkUKYeuxwSed5mqZY3/3VbIDplrQbnU0BQyGpRaweeUYdJumLK8deef1Tp0r7wqplNKpwg
+	Cutjz+xCr/eeEfqtYnAVU6OygFzMkgLSw2KkURh6IgxBFQzc8QxwDYo14K4Ee1jQuCWLnX
+	cPzJoWrUjQ7hovBJ/T49ILEI3dGg4nE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Troy Mitchell <troy.mitchell@linux.dev>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Troy Mitchell <troy.mitchell@linux.dev>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (ctf2301) Add support for CTF2301
+Message-ID: <aNaTPE494MMExSBz@troy-wujie14pro-arch>
+References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
+ <20250916-ctl2301-v1-3-97e7c84f2c47@linux.dev>
+ <53f1d5d2-c871-4823-ab13-8c3dfd86dbfe@roeck-us.net>
+ <aNXtJ0S5SAMsUwnD@kernel.org>
+ <8c6f609e-c086-4b6c-abb5-8d33ec85df47@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,93 +49,67 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250926014552.1625950-1-jefflin994697@gmail.com>
+In-Reply-To: <8c6f609e-c086-4b6c-abb5-8d33ec85df47@roeck-us.net>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Jeff,
+On Thu, Sep 25, 2025 at 08:57:13PM -0700, Guenter Roeck wrote:
+> On 9/25/25 18:32, Troy Mitchell wrote:
+> > Hi Guenter, Thanks for your review.
+> > There are many things to improve in this driver.
+> > 
+> > On Wed, Sep 24, 2025 at 08:43:35AM -0700, Guenter Roeck wrote:
+> > > On Tue, Sep 16, 2025 at 12:46:46PM +0800, Troy Mitchell wrote:
+> > [...]
+> > > > diff --git a/drivers/hwmon/ctf2301.c b/drivers/hwmon/ctf2301.c
+> > [...]
+> > > > +
+> > > > +#define CTF2301_LOCAL_TEMP_MSB			0x00
+> > > 	LM90_REG_LOCAL_TEMP
+> > > > +#define CTF2301_RMT_TEMP_MSB			0x01
+> > > 	LM90_REG_REMOTE_TEMPH
+> > > > +#define CTF2301_ALERT_STATUS			0x02
+> > > 	LM90_REG_STATUS
+> > > > +#define CTF2301_GLOBAL_CFG			0x03
+> > > 	LM90_REG_CONFIG1
+> > > > +#define CTF2301_RMT_TEMP_LSB			0x10
+> > > 	LM90_REG_REMOTE_TEMPL
+> > > > +#define CTF2301_LOCAL_TEMP_LSB			0x15
+> > > 	TMP451_REG_LOCAL_TEMPL
+> > > > +#define CTF2301_ALERT_MASK			0x16
+> > > 	TMP461_REG_CHEN
+> > > 
+> > > So far this looks like a chip based on LM90 or TMP451/TMP461
+> > > with an added fan controller. I can not immediatey determine
+> > > if it would be better to add the pwm/tach support to the lm90
+> > > driver. Given that the chip (based on registers) does support
+> > > limits, which is not implemented here but essential for a chip
+> > > like this, I would very much prefer adding support for it to the
+> > > lm90 driver if possible.
+> > > 
+> > > The public datasheet does not provide register details, making it
+> > > all but impossible to do a real evaluation. Any idea how to get
+> > > a complete datasheet ?
+> > Yeah, more register info at [1].
+> > I've checked the detailed review below,
+> > but I'll hold off on sending v2 until you decide if we really need a new driver.
+> > 
+> > Is this chip more like the LM63, by the way?
+> > 
+> 
+> Good catch. Yes, looks like you are correct. LM63 is an almost perfect match.
+> CTF2301 has a couple of extra registers, mostly local setpoint and temp LSB
+> plus the registers in the 0x3x range. Actually, those registers _are_ defined
+> for LM96163, so that chip is an even closer match.
+Yes, so just to confirm,
+you agree that the development should be done on top of the lm63 driver, right?
 
-kernel test robot noticed the following build errors:
+> 
+> What happens if you just instantiate the lm63 driver, possibly after updating
+> the detect function ?
+I will run the tests the day after tomorrow and provide a log.
 
-[auto build test ERROR on v6.17-rc7]
-[also build test ERROR on linus/master next-20250925]
-[cannot apply to groeck-staging/hwmon-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+                - Troy
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Lin/drivers-hwmon-pmbus-Add-support-for-raa229141-in-isl68137/20250926-094703
-base:   v6.17-rc7
-patch link:    https://lore.kernel.org/r/20250926014552.1625950-1-jefflin994697%40gmail.com
-patch subject: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in isl68137
-config: i386-buildonly-randconfig-002-20250926 (https://download.01.org/0day-ci/archive/20250926/202509262044.Scx8WTbC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250926/202509262044.Scx8WTbC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509262044.Scx8WTbC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/pmbus/isl68137.c:66:1: error: expected identifier
-      66 | +#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-         | ^
-   drivers/hwmon/pmbus/isl68137.c:68:1: error: expected identifier
-      68 | +#endif /* CONFIG_SENSORS_RAA229141 */
-         | ^
-   2 errors generated.
-
-
-vim +66 drivers/hwmon/pmbus/isl68137.c
-
-    25	
-    26	enum chips {
-    27		isl68137,
-    28		isl68220,
-    29		isl68221,
-    30		isl68222,
-    31		isl68223,
-    32		isl68224,
-    33		isl68225,
-    34		isl68226,
-    35		isl68227,
-    36		isl68229,
-    37		isl68233,
-    38		isl68239,
-    39		isl69222,
-    40		isl69223,
-    41		isl69224,
-    42		isl69225,
-    43		isl69227,
-    44		isl69228,
-    45		isl69234,
-    46		isl69236,
-    47		isl69239,
-    48		isl69242,
-    49		isl69243,
-    50		isl69247,
-    51		isl69248,
-    52		isl69254,
-    53		isl69255,
-    54		isl69256,
-    55		isl69259,
-    56		isl69260,
-    57		isl69268,
-    58		isl69269,
-    59		isl69298,
-    60		raa228000,
-    61		raa228004,
-    62		raa228006,
-    63		raa228228,
-    64		raa229001,
-    65		raa229004,
-  > 66	+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-    67	+	raa229141,
-    68	+#endif /* CONFIG_SENSORS_RAA229141 */
-    69		raa229621,
-    70	};
-    71	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Guenter
+> 
