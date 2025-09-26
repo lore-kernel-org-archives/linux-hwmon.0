@@ -1,67 +1,67 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27262652B7
-	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 03:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6218328BA83
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 08:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758859037; cv=none; b=WIIhnhjFL6jR/oFZGFqH29GZ1QTjw+9qi+T90iPMpQLAh/9UKkBDJ2esHunVamPoK0JS80pd/UCinH8LmGO0u4+00mhnDFk0XRGHxjCnp5iedFC6eFtQEKffXJpb6W+4jO4u+sMqwfkWLC6YiYAiJJp5ZtA0/YWbNwxlKkD+uyc=
+	t=1758875266; cv=none; b=ByN1gHm55x/y9jiirNk4kF9lI6VJ/jTCfQofybR6NRqB9K3zHgVI6APrb8qgQ3hpm+aa9gXo0xWrMWdia1+5ml3GJYVYXLFJEcUdSEeXUTW7Itk/Upu/9235D8d7LJduFFCO0pswhWen+ReV/XLSUhs1Q1C3OaQNtZE5VeIl+Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758859037; c=relaxed/simple;
-	bh=c+VRJKjFpfa4LnEwCa9nEjNOAnPet2jbGMgQ0aPQoZg=;
+	s=arc-20240116; t=1758875266; c=relaxed/simple;
+	bh=FJ32/p4g+CxM5aiz56PxjKWyf3TIW+l8HDgnXk6ULco=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EYnFYoujeA3HfzDf/Vnb4I+Fd45TGfUmYzYOkUr94pA2EMoKfnaWQh2zLa9ql6RmMviLrw/guCGNo5Qz7B1br+UaeWdAytJVr1m1Wi2PKbxC16gZPySgAikVrvt1kJqNGtPJof5CXa0XzuQlznpZbW3ihiwDprw0qM8mlAU6XvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hr00NtoG; arc=none smtp.client-ip=209.85.215.176
+	 In-Reply-To:Content-Type; b=anwmJY+niBlzWcsAtSgR6DGZRknRyI+IpYRSRDffaW7VOIGbjfAZlj2eYRuxh4hsbNspaa8ZvRfk7rSmzEl1OoVVdbciAr7coGJmQo8RUZx/jxBEZVlPI0WT0b+VX//RrSXVTi2i7zOmyiqSKuKOBYqVomKvdgrP+rBAakzq3hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ENQwCCYN; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hr00NtoG"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b555ab7fabaso1631241a12.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 20:57:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ENQwCCYN"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-77c1814ca1dso1549917b3a.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 01:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758859035; x=1759463835; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758875263; x=1759480063; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=o85lE6quOalHNNZp8ql9U2dpXW3JKqiKckJUJXKtYFs=;
-        b=Hr00NtoG5lEtmZWdnAuWB+0X3thIf8DJ6KoW2QatOm0ZPIZwl7/S5cMA4x+b37ykhC
-         wxNAkcwtSYQrefoTUVuXM3mNEHinRVjFMQbKrj53qo8ceaRkHt6BmF1+8+rDiGgucoyg
-         yjB7+RxJzW/6cUxhZ7aPlSwhdIlizv3OxZ/1XNNAUOJteF8wHV9wx0QmrsSSb8sbUtuE
-         WTXctN6gQvFUFa/9yjChjwBmE3lgsIr8fbnjSRz2HGh97SSQhGTV7Rb3vXekwhDoARNf
-         YwG+ax/xnym7fhgDjUyvteIyWH9oAivSeSuKh8tghDyoUwnxSbuYHZLzSG2TdDdGGJ9V
-         VMew==
+        bh=3c75WAzk0fFcFdEuaqWRC+mXQtAjTaZTP2dlJBnjvyw=;
+        b=ENQwCCYNZuGCdsWln08O4tGsY7haTvhaSvBmmO7w4mIORjv3onfsPRJpKkjyYXN8Av
+         O/3y1eLgGUXVFZZkdxx0TGD6PDZO8ekjWBkfD0raCFLfdON621d1jz+Br5Ur8K24bImF
+         VSbDoSR036OfOa/Y2aOG7cUSej6ibV5kQinIvUut+x1piOT9dbm7Pl77RYhmIp9alV1g
+         BVKUShTppIEVLQCTDhI6Snk6OCsglgRRXvgi5gSisqL9qz3Ei1qgcQ2nCYfhBbpvcyVv
+         vnf0sLYpQYnYec3wZ20G970mqzmQ5YbezKd/ckRngekNkMaAVe5XCW/AVsonFC76vEKS
+         d0Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758859035; x=1759463835;
+        d=1e100.net; s=20230601; t=1758875263; x=1759480063;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o85lE6quOalHNNZp8ql9U2dpXW3JKqiKckJUJXKtYFs=;
-        b=OO0JQFuQHxJ9tO0vewpClysy3+ciqXuMcJhylWZIC+9d6iDLoIiiHGQXBr8K2Zj1G2
-         LtNYnm9eGHjoX5EMBtfPP/h6/5UDLuRGau69YIhtzpl/Vge05IFA+w0k9FHp4MECXSAf
-         s+OzAuBJxnOHELZx8dUfwune6Ad8yBuw/VHecestU2d9Nz4WvVNKqZxLb7iQTM7VYa4J
-         aBUaYe59qnJJu2j1B3KLGL3pJSgt9r6eens0jc412tP0WD3j85l3prFCay4Vw6/Vt0AS
-         q4NflmWFiIY4Ew1YBdfx2VOhAFj09CXG1cbF9vRDyDLeUrgAyaxEvhqlmYxYGk+WfIs9
-         mPaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWIqwarTFcC8VtU0nN4jnf2Wb0bGvxJ/++bcGw2CtcuS0C3Hv2LwM65tU+UkzyBh+4NL/cKukXvXepALQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaN1yhs2lnYHH1Qc7oqRj3q2+IO+bkiBNjZ2+ailA+bzKWHAlJ
-	pPHx6Od3URrSgVEHjkOzndVNVXx7JsmKcOGYRkd0QDR6sOdacl/iKrzC
-X-Gm-Gg: ASbGncuYONQpMg68V8PVjFy6cLKuU4FgxXQ9RgqqeqTUlilnmU3UdhaFebZiU9vGoFb
-	3AIUm+EcRtuN/Rh8M//yvSeffZXklojPhDlm68VW5t62m44oWnp4u5AirsV2QnqL3whkdDNPzEB
-	ti1TrVV3sLnpq6YSMaYpoqkS1g9ASEjEdpDII13I6gcio1I9nUbpTtzB+ilzrqaE1iaiF1RWXrV
-	VJzoQV4WvhuigQng5VcsU1FcaKIvNtoD0iJ7FLjClhJ1wOlbNA76IG46KiZE+G0BM+ZLwFTmaz8
-	3WIrhvzm8iFSh4SkHDjA4FwiwtbXbd73zoHTAldaoa/VtSR11iKSeUEEEkEjjGH2jFItgUHcrgV
-	vs/gI8suvk61zXAePH4nDZZbLZcNGqgajBLTvIeEANOKS2SePmOx3YuIzUNFOAqOxWusqtJg=
-X-Google-Smtp-Source: AGHT+IEOgjgpJsRpJuyWdP0klqSHe3o37FG3S7qBfBOBvzeQE8xEWH5mtdqtdiTRJIUDIqakWYxoZQ==
-X-Received: by 2002:a05:6a21:3381:b0:262:8bce:33db with SMTP id adf61e73a8af0-2e7d0db08c9mr6959272637.28.1758859034888;
-        Thu, 25 Sep 2025 20:57:14 -0700 (PDT)
+        bh=3c75WAzk0fFcFdEuaqWRC+mXQtAjTaZTP2dlJBnjvyw=;
+        b=besLq9jAbXKCXeAbgXduwwEA85L3MqXgDNO2n6gj5NVwagb9mgce6lucHFievPUcEo
+         7KUofLmFRlJBYiTvjIKLO7/yuxAwro54nmolj9uZr8YUaCoJvjqz6KexnnlIgUBmkh7W
+         /fg6Oh8MkXtcn4xYZMeWpJK8rta7yVFz3gbslF3aDSP/yfs2GpC+f+52zO2+JRvkhnSy
+         nr5kkYYkClsI5IAxSyS1y369nSMW6uk6h9DQB7jh3s/UbmdoZclvfTdS+sb6ExdenCiY
+         nYLmKFh75W8cjRGoflsPGJjaoCV+H/GKmKDDUtcL3rkQbhkWBRUXVEchO7MFOnDKJSPA
+         wiVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVSmuwMqNqeOEdiYNwPkcftBHz5DenyR96mOKDCLdKF6QDoHHaFl13RGX77WE27kEUAojlOCw5FXI5Amg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZC6JJ8ZM2lcz0HqUOmFrRqG6mne4dW2SGdpQCJoy0xc7HGgBu
+	2R1/qL4xyVWcHkSVSFo6bIz+I4Qh6u6rN2lnZPajg0lDnWVCsV+IWVZb
+X-Gm-Gg: ASbGncsxR/UCqEHVjAvMSAPaI9QFc9D/VTp+lSlWncyHiuXka3oEjKZgT2xiIfs6bE2
+	z+fuCyz6A80dYonf/sBMOg0EJnKR/WCBvbanLEbiHdzoAQU/db9TUVyfO2EQ25jrHGL4QwBJwmi
+	/Cs3azMhdQSFJ5fhv6VKMixOJdnvJYXsFWTRdaDD3Qcbnb21S7RxngB5MLk3uoJnJaZz0KyPBrE
+	FrmmJq3lN3FIyOmQr35Fohc/6vaj7Z0vl3Z9ycaQ8E5RRaXM79D3XscDQ2r6RsR7aTFNIi9++sI
+	XcL6Nz1JDAiHHGv+glLlobFtbx3TNbyGjAOjMPk7STqOaqvxUKEpLYvACVtPvgMT8LQoBohXxS5
+	58rCuzomtTfwIau23/oJOD1WjqrIEVM1D0wNNyVGluNZNBCCqKkpghstjSyHT1rNi4d40jp0=
+X-Google-Smtp-Source: AGHT+IFVG/zIzdk+YYb+6Peneg1BzhpGa8nIP/03clP9hKSS2cs92RS7kDIAloGplbjParz2Z0AAUw==
+X-Received: by 2002:a05:6a20:258f:b0:263:b547:d0c3 with SMTP id adf61e73a8af0-2e7ceeee380mr8397622637.36.1758875263508;
+        Fri, 26 Sep 2025 01:27:43 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c52eee5fsm3588966a12.0.2025.09.25.20.57.13
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c53d9160sm4089812a12.22.2025.09.26.01.27.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Sep 2025 20:57:14 -0700 (PDT)
+        Fri, 26 Sep 2025 01:27:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8c6f609e-c086-4b6c-abb5-8d33ec85df47@roeck-us.net>
-Date: Thu, 25 Sep 2025 20:57:13 -0700
+Message-ID: <f35193de-a106-42ec-b318-1501793fcfb9@roeck-us.net>
+Date: Fri, 26 Sep 2025 01:27:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,16 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] hwmon: (ctf2301) Add support for CTF2301
-To: Troy Mitchell <troy.mitchell@linux.dev>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
- <20250916-ctl2301-v1-3-97e7c84f2c47@linux.dev>
- <53f1d5d2-c871-4823-ab13-8c3dfd86dbfe@roeck-us.net>
- <aNXtJ0S5SAMsUwnD@kernel.org>
+Subject: Re: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in
+ isl68137
+To: Jeff Lin <jefflin994697@gmail.com>, jdelvare@suse.com
+Cc: cedricjustine.encarnacion@analog.com, ninad@linux.ibm.com,
+ andriy.shevchenko@linux.intel.com, johnerasmusmari.geronimo@analog.com,
+ Mariel.Tinaco@analog.com, jbrunet@baylibre.com, kimseer.paller@analog.com,
+ leo.yang.sy0@gmail.com, nuno.sa@analog.com, chiang.brian@inventec.com,
+ gregkh@linuxfoundation.org, grantpeltier93@gmail.com, peterz@infradead.org,
+ william@wkennington.com, krzysztof.kozlowski@linaro.org, tzungbi@kernel.org,
+ thorsten.blum@linux.dev, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250926014552.1625950-1-jefflin994697@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,60 +126,49 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aNXtJ0S5SAMsUwnD@kernel.org>
+In-Reply-To: <20250926014552.1625950-1-jefflin994697@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/25/25 18:32, Troy Mitchell wrote:
-> Hi Guenter, Thanks for your review.
-> There are many things to improve in this driver.
+On 9/25/25 18:45, Jeff Lin wrote:
+> In chip RAA229141 there exist ISYS pin which can report the current data
+> for the device connected to this chip through this pin by routed by Direct
+> Memory Access(DMA) command. To read the data in ISYS pin, we have to set
+> the DMA address to 0xC5 and then read the DMA data from 0xC7. And then use
+> the Direct read format with 10mA per LSB to transfer the data in 0xC7.
+> And for ISYS input pin, the DMA address is 0xE0D3 and for ISYS output pin,
+> the DMA address is 0xEE42.
 > 
-> On Wed, Sep 24, 2025 at 08:43:35AM -0700, Guenter Roeck wrote:
->> On Tue, Sep 16, 2025 at 12:46:46PM +0800, Troy Mitchell wrote:
-> [...]
->>> diff --git a/drivers/hwmon/ctf2301.c b/drivers/hwmon/ctf2301.c
-> [...]
->>> +
->>> +#define CTF2301_LOCAL_TEMP_MSB			0x00
->> 	LM90_REG_LOCAL_TEMP
->>> +#define CTF2301_RMT_TEMP_MSB			0x01
->> 	LM90_REG_REMOTE_TEMPH
->>> +#define CTF2301_ALERT_STATUS			0x02
->> 	LM90_REG_STATUS
->>> +#define CTF2301_GLOBAL_CFG			0x03
->> 	LM90_REG_CONFIG1
->>> +#define CTF2301_RMT_TEMP_LSB			0x10
->> 	LM90_REG_REMOTE_TEMPL
->>> +#define CTF2301_LOCAL_TEMP_LSB			0x15
->> 	TMP451_REG_LOCAL_TEMPL
->>> +#define CTF2301_ALERT_MASK			0x16
->> 	TMP461_REG_CHEN
->>
->> So far this looks like a chip based on LM90 or TMP451/TMP461
->> with an added fan controller. I can not immediatey determine
->> if it would be better to add the pwm/tach support to the lm90
->> driver. Given that the chip (based on registers) does support
->> limits, which is not implemented here but essential for a chip
->> like this, I would very much prefer adding support for it to the
->> lm90 driver if possible.
->>
->> The public datasheet does not provide register details, making it
->> all but impossible to do a real evaluation. Any idea how to get
->> a complete datasheet ?
-> Yeah, more register info at [1].
-> I've checked the detailed review below,
-> but I'll hold off on sending v2 until you decide if we really need a new driver.
-> 
-> Is this chip more like the LM63, by the way?
-> 
+> Signed-off-by: Jeff Lin <jefflin994697@gmail.com>
 
-Good catch. Yes, looks like you are correct. LM63 is an almost perfect match.
-CTF2301 has a couple of extra registers, mostly local setpoint and temp LSB
-plus the registers in the 0x3x range. Actually, those registers _are_ defined
-for LM96163, so that chip is an even closer match.
+As submitted this is a no-go, for several reasons.
 
-What happens if you just instantiate the lm63 driver, possibly after updating
-the detect function ?
+The description should describe what is done and why (i.e., here, describe
+the added chip), not implementation details. Those are useful as comments
+in the code, not as patch description.
+
+Introducing a new sensor class is unacceptable. This is a current (I think),
+treat it as such.
+
+Changes in the core together with other changes are unacceptable.
+
+A new virtual command (or commands) would have to be discussed and be generic.
+
+A new Kconfig symbol when adding support for a new chip to an existing driver
+is unacceptable. Besides, the new Kconfig symbol would have no effect if
+the driver supporting the chip is not enabled, so this is not only unacceptable
+but wrong.
+
+Regarding the code itself: Stick with existing coding style. Do not use C++ comments,
+declare variables at the beginning of code blocks.
+
+I would suggest to add support for RAA229141 in one patch, then we can discuss
+what ISYS_{IN,OUT} actually measures, how it differs from IIN/IOUT, if it indeed
+requires new virtual commands and how those command might look like, or if it
+can be handled by mapping a existing commands.
+
+The datasheet for RAA229141 is not public, so be prepared to provide a detailed
+description.
 
 Guenter
 
