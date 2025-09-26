@@ -1,325 +1,183 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA0111185
-	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 01:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27262652B7
+	for <linux-hwmon@vger.kernel.org>; Fri, 26 Sep 2025 03:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758851170; cv=none; b=PSMgDoFNKTOaHsTlx0cimGc0fKsEaplJzYxs4gLkHv7451lcJJZGlRHtmmQKkecSt/z0YEOMivxDWVPVvZZLigJqlloiX28ASAfBgEv5rQklUUcsZIXuraoMcdJoxC59rnyx4O4NCr1iaPvm/EmWd7S2nBLniOLV1SJfHceqNUQ=
+	t=1758859037; cv=none; b=WIIhnhjFL6jR/oFZGFqH29GZ1QTjw+9qi+T90iPMpQLAh/9UKkBDJ2esHunVamPoK0JS80pd/UCinH8LmGO0u4+00mhnDFk0XRGHxjCnp5iedFC6eFtQEKffXJpb6W+4jO4u+sMqwfkWLC6YiYAiJJp5ZtA0/YWbNwxlKkD+uyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758851170; c=relaxed/simple;
-	bh=oNAeB4e5WwyfnDVDE3IxWFF4/RiUNvg4pvky6/QqFVs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qfld8pqqygwKrrNM+rr7/xyRwpCENFuBTXG1MYygdFl4joJYAyfgS4arx2LdBAxmJrSvsuqi4JS36SOAzGbQM6DrL7NPyNb9EA3YrtQ0kddV5iVCtVriXalVQMjPmntWa1llSR/YFenOIKw30i6Nb2JmAjZAh58EDczJvcvhT7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2XtaMyQ; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1758859037; c=relaxed/simple;
+	bh=c+VRJKjFpfa4LnEwCa9nEjNOAnPet2jbGMgQ0aPQoZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EYnFYoujeA3HfzDf/Vnb4I+Fd45TGfUmYzYOkUr94pA2EMoKfnaWQh2zLa9ql6RmMviLrw/guCGNo5Qz7B1br+UaeWdAytJVr1m1Wi2PKbxC16gZPySgAikVrvt1kJqNGtPJof5CXa0XzuQlznpZbW3ihiwDprw0qM8mlAU6XvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hr00NtoG; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2XtaMyQ"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3306d93e562so1734999a91.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 18:46:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hr00NtoG"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b555ab7fabaso1631241a12.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 25 Sep 2025 20:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758851168; x=1759455968; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQXgkcYjTebNS08BAcrTSh92Mf+gdkZJbP9GIonE5ao=;
-        b=D2XtaMyQlsgpQKMI47i5zr2sX4Djhl+7XpPEOP6ZHreXH7dfF0y3KHYehd+mrghYee
-         e6apwOQnLnEP6CyRy18H0s73D92EcpnulU8ghpb1+kr0wAjrPXB63rEHgySFlXbMxk7H
-         1e0Xt1QWfWHOQZbWVXVsk6MtFt0BtsATz5K6IvoUCFAsf3Tk9v/3W2YgO33FWxqP+P7d
-         b1KsLffwrAX7pV0bZe0N7QjfTk/BlZZzP5HxPHsf0zkA3BFj2Bgj67JwpAkRLhJ2XgjV
-         t9pe0gD0hat6d2+qC0nzOBMsTSnkxrD4hc/p1m2BNJqknN4ICi/D55mmoqzjVWGLkfSI
-         5TGA==
+        d=gmail.com; s=20230601; t=1758859035; x=1759463835; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=o85lE6quOalHNNZp8ql9U2dpXW3JKqiKckJUJXKtYFs=;
+        b=Hr00NtoG5lEtmZWdnAuWB+0X3thIf8DJ6KoW2QatOm0ZPIZwl7/S5cMA4x+b37ykhC
+         wxNAkcwtSYQrefoTUVuXM3mNEHinRVjFMQbKrj53qo8ceaRkHt6BmF1+8+rDiGgucoyg
+         yjB7+RxJzW/6cUxhZ7aPlSwhdIlizv3OxZ/1XNNAUOJteF8wHV9wx0QmrsSSb8sbUtuE
+         WTXctN6gQvFUFa/9yjChjwBmE3lgsIr8fbnjSRz2HGh97SSQhGTV7Rb3vXekwhDoARNf
+         YwG+ax/xnym7fhgDjUyvteIyWH9oAivSeSuKh8tghDyoUwnxSbuYHZLzSG2TdDdGGJ9V
+         VMew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758851168; x=1759455968;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gQXgkcYjTebNS08BAcrTSh92Mf+gdkZJbP9GIonE5ao=;
-        b=qd2FFGLEzTZZ7nbGCUD98L5Ol1HDNDNVvJar/mWSoNLmlGRRv79qQIV08lJxPHCOcP
-         A68Xr50Nj5aGgZBRmTHJggDhhReVrHaOZ9YLBRKGUqrW9xeU8O7/vR7jcp4zGg+j7raI
-         VpA5OuVCe7uR2AcQzqEQpVPDu+fPqAPFdhJPBT4NZ58AEOVVy5Yq7D0sKM0NtnVj5XjF
-         g7BsNAvSn3wizyEavy27lKcu6widlp94ZsKKJlSW1h5h+PEy/Zat7ttY9HqZuvj5bCYs
-         1joDpQ199/KSwaEkgL31TppXwl+9F1oPsrv4ZAQ3kQIfAOUzn/EfCTJJ4cU2UBj6KHVV
-         M4iw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9OLfeQjT7fn5nhmLQa98qrbOVECu2/86lw2Btwz33t2Jv8FqvboYnZ+Uk3W1VvjtHJywPeUlbxMiJEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX3OcQYc8v/lGVroh0fLORZrbEQJcQT/4agdo+p+rv99XK/jy0
-	3mdGMB8T7G+QAdop2QebHQoJCM1/FSPEdPwO5cJQV1NBc3cOLa5xEjJi
-X-Gm-Gg: ASbGncuJRL+eeiqNal7GcQeedb9j3dVSPNnyvRqQegwEjkJr3/Zw2vBB7aNAUGFHlLU
-	LAsWwewKf4H3k2IKMVEImNkJqBg4EY/AjgVxENyWKu+Z4mTxogdCziq3grlu6ydX7j96w6VkzUv
-	XU4OQRe+s6rhcyCxRelnXva5l6zZ7fsFORLiiJQLNOI6fqq+FYy0R2tK0k5BdnzFBF8IvqSCY9u
-	MVyEMmMEToIEVHxU5Ln1DFzu/p51Azk2j9BNVmuSbysY5wFu3BSNlji6PNm/1+FFhiydqa7sCDC
-	BCzH5mnrI0ryo5vc1GrtIEvjt4il/vHlJsaR34CNs7+luOPLC0YgOTkh7G9X9X0Wsmnq0zHFQ2U
-	zKGYQgOaVz8HHd3ODY0isd5E6X0BgtbxPz0A5oNRUSXoXnBs1ATc0bLkOU2s1He0qTXC3
-X-Google-Smtp-Source: AGHT+IGVUpxNwK7HMjTCb3KDiJvXwoRUb4l/EP8cEdjREpO8sRfEQNZyXbKGT3vf4rSU0e8P+gLEZQ==
-X-Received: by 2002:a17:90b:4aca:b0:32e:36f4:6fdc with SMTP id 98e67ed59e1d1-3342a22bf5amr5802516a91.4.1758851168371;
-        Thu, 25 Sep 2025 18:46:08 -0700 (PDT)
-Received: from JF.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-335277eb10bsm1116423a91.2.2025.09.25.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 18:46:07 -0700 (PDT)
-From: Jeff Lin <jefflin994697@gmail.com>
-To: jdelvare@suse.com,
-	linux@roeck-us.net
-Cc: cedricjustine.encarnacion@analog.com,
-	ninad@linux.ibm.com,
-	andriy.shevchenko@linux.intel.com,
-	johnerasmusmari.geronimo@analog.com,
-	Mariel.Tinaco@analog.com,
-	jbrunet@baylibre.com,
-	kimseer.paller@analog.com,
-	leo.yang.sy0@gmail.com,
-	nuno.sa@analog.com,
-	chiang.brian@inventec.com,
-	gregkh@linuxfoundation.org,
-	grantpeltier93@gmail.com,
-	peterz@infradead.org,
-	william@wkennington.com,
-	krzysztof.kozlowski@linaro.org,
-	tzungbi@kernel.org,
-	thorsten.blum@linux.dev,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jeff Lin <jefflin994697@gmail.com>
-Subject: [PATCH] drivers/hwmon/pmbus: Add support for raa229141 in isl68137
-Date: Fri, 26 Sep 2025 09:45:52 +0800
-Message-Id: <20250926014552.1625950-1-jefflin994697@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1758859035; x=1759463835;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o85lE6quOalHNNZp8ql9U2dpXW3JKqiKckJUJXKtYFs=;
+        b=OO0JQFuQHxJ9tO0vewpClysy3+ciqXuMcJhylWZIC+9d6iDLoIiiHGQXBr8K2Zj1G2
+         LtNYnm9eGHjoX5EMBtfPP/h6/5UDLuRGau69YIhtzpl/Vge05IFA+w0k9FHp4MECXSAf
+         s+OzAuBJxnOHELZx8dUfwune6Ad8yBuw/VHecestU2d9Nz4WvVNKqZxLb7iQTM7VYa4J
+         aBUaYe59qnJJu2j1B3KLGL3pJSgt9r6eens0jc412tP0WD3j85l3prFCay4Vw6/Vt0AS
+         q4NflmWFiIY4Ew1YBdfx2VOhAFj09CXG1cbF9vRDyDLeUrgAyaxEvhqlmYxYGk+WfIs9
+         mPaA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIqwarTFcC8VtU0nN4jnf2Wb0bGvxJ/++bcGw2CtcuS0C3Hv2LwM65tU+UkzyBh+4NL/cKukXvXepALQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaN1yhs2lnYHH1Qc7oqRj3q2+IO+bkiBNjZ2+ailA+bzKWHAlJ
+	pPHx6Od3URrSgVEHjkOzndVNVXx7JsmKcOGYRkd0QDR6sOdacl/iKrzC
+X-Gm-Gg: ASbGncuYONQpMg68V8PVjFy6cLKuU4FgxXQ9RgqqeqTUlilnmU3UdhaFebZiU9vGoFb
+	3AIUm+EcRtuN/Rh8M//yvSeffZXklojPhDlm68VW5t62m44oWnp4u5AirsV2QnqL3whkdDNPzEB
+	ti1TrVV3sLnpq6YSMaYpoqkS1g9ASEjEdpDII13I6gcio1I9nUbpTtzB+ilzrqaE1iaiF1RWXrV
+	VJzoQV4WvhuigQng5VcsU1FcaKIvNtoD0iJ7FLjClhJ1wOlbNA76IG46KiZE+G0BM+ZLwFTmaz8
+	3WIrhvzm8iFSh4SkHDjA4FwiwtbXbd73zoHTAldaoa/VtSR11iKSeUEEEkEjjGH2jFItgUHcrgV
+	vs/gI8suvk61zXAePH4nDZZbLZcNGqgajBLTvIeEANOKS2SePmOx3YuIzUNFOAqOxWusqtJg=
+X-Google-Smtp-Source: AGHT+IEOgjgpJsRpJuyWdP0klqSHe3o37FG3S7qBfBOBvzeQE8xEWH5mtdqtdiTRJIUDIqakWYxoZQ==
+X-Received: by 2002:a05:6a21:3381:b0:262:8bce:33db with SMTP id adf61e73a8af0-2e7d0db08c9mr6959272637.28.1758859034888;
+        Thu, 25 Sep 2025 20:57:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c52eee5fsm3588966a12.0.2025.09.25.20.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Sep 2025 20:57:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8c6f609e-c086-4b6c-abb5-8d33ec85df47@roeck-us.net>
+Date: Thu, 25 Sep 2025 20:57:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] hwmon: (ctf2301) Add support for CTF2301
+To: Troy Mitchell <troy.mitchell@linux.dev>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250916-ctl2301-v1-0-97e7c84f2c47@linux.dev>
+ <20250916-ctl2301-v1-3-97e7c84f2c47@linux.dev>
+ <53f1d5d2-c871-4823-ab13-8c3dfd86dbfe@roeck-us.net>
+ <aNXtJ0S5SAMsUwnD@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <aNXtJ0S5SAMsUwnD@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In chip RAA229141 there exist ISYS pin which can report the current data
-for the device connected to this chip through this pin by routed by Direct
-Memory Access(DMA) command. To read the data in ISYS pin, we have to set
-the DMA address to 0xC5 and then read the DMA data from 0xC7. And then use
-the Direct read format with 10mA per LSB to transfer the data in 0xC7.
-And for ISYS input pin, the DMA address is 0xE0D3 and for ISYS output pin,
-the DMA address is 0xEE42.
+On 9/25/25 18:32, Troy Mitchell wrote:
+> Hi Guenter, Thanks for your review.
+> There are many things to improve in this driver.
+> 
+> On Wed, Sep 24, 2025 at 08:43:35AM -0700, Guenter Roeck wrote:
+>> On Tue, Sep 16, 2025 at 12:46:46PM +0800, Troy Mitchell wrote:
+> [...]
+>>> diff --git a/drivers/hwmon/ctf2301.c b/drivers/hwmon/ctf2301.c
+> [...]
+>>> +
+>>> +#define CTF2301_LOCAL_TEMP_MSB			0x00
+>> 	LM90_REG_LOCAL_TEMP
+>>> +#define CTF2301_RMT_TEMP_MSB			0x01
+>> 	LM90_REG_REMOTE_TEMPH
+>>> +#define CTF2301_ALERT_STATUS			0x02
+>> 	LM90_REG_STATUS
+>>> +#define CTF2301_GLOBAL_CFG			0x03
+>> 	LM90_REG_CONFIG1
+>>> +#define CTF2301_RMT_TEMP_LSB			0x10
+>> 	LM90_REG_REMOTE_TEMPL
+>>> +#define CTF2301_LOCAL_TEMP_LSB			0x15
+>> 	TMP451_REG_LOCAL_TEMPL
+>>> +#define CTF2301_ALERT_MASK			0x16
+>> 	TMP461_REG_CHEN
+>>
+>> So far this looks like a chip based on LM90 or TMP451/TMP461
+>> with an added fan controller. I can not immediatey determine
+>> if it would be better to add the pwm/tach support to the lm90
+>> driver. Given that the chip (based on registers) does support
+>> limits, which is not implemented here but essential for a chip
+>> like this, I would very much prefer adding support for it to the
+>> lm90 driver if possible.
+>>
+>> The public datasheet does not provide register details, making it
+>> all but impossible to do a real evaluation. Any idea how to get
+>> a complete datasheet ?
+> Yeah, more register info at [1].
+> I've checked the detailed review below,
+> but I'll hold off on sending v2 until you decide if we really need a new driver.
+> 
+> Is this chip more like the LM63, by the way?
+> 
 
-Signed-off-by: Jeff Lin <jefflin994697@gmail.com>
----
- drivers/hwmon/pmbus/Kconfig      | 10 +++++
- drivers/hwmon/pmbus/isl68137.c   | 65 ++++++++++++++++++++++++++++++++
- drivers/hwmon/pmbus/pmbus.h      | 11 ++++++
- drivers/hwmon/pmbus/pmbus_core.c | 20 ++++++++++
- 4 files changed, 106 insertions(+)
+Good catch. Yes, looks like you are correct. LM63 is an almost perfect match.
+CTF2301 has a couple of extra registers, mostly local setpoint and temp LSB
+plus the registers in the 0x3x range. Actually, those registers _are_ defined
+for LM96163, so that chip is an even closer match.
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 55e492452ce8..a14393d41412 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -211,6 +211,16 @@ config SENSORS_ISL68137
- 	  This driver can also be built as a module. If so, the module will
- 	  be called isl68137.
- 
-+config SENSORS_RAA229141
-+	bool "Renesas RAA229141 Supply"
-+	default n
-+	help
-+	  If you say yes here you get the support for Renesas RAA229140 and
-+	  RAA229141.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called raa229141.
-+
- config SENSORS_LM25066
- 	tristate "National Semiconductor LM25066 and compatibles"
- 	help
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index c52c55d2e7f4..04a582ba9416 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -63,6 +63,9 @@ enum chips {
- 	raa228228,
- 	raa229001,
- 	raa229004,
-++#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-++	raa229141,
-++#endif /* CONFIG_SENSORS_RAA229141 */
- 	raa229621,
- };
- 
-@@ -71,6 +74,9 @@ enum variants {
- 	raa_dmpvr2_1rail,
- 	raa_dmpvr2_2rail,
- 	raa_dmpvr2_2rail_nontc,
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	raa_dmpvr2_2rail_isys,
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	raa_dmpvr2_3rail,
- 	raa_dmpvr2_hv,
- };
-@@ -174,6 +180,34 @@ static const struct attribute_group *isl68137_attribute_groups[] = {
- 	NULL,
- };
- 
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+#define RAA_READ_DMA_DATA	0xc5
-+#define RAA_WRITE_DMA_ADDRESS 0xc7
-+
-+/* DMA address for input and output */
-+static const unsigned char dma_address_in[] = { 0xD3, 0xE0 };
-+static const unsigned char dma_address_out[] = { 0x42, 0xEE };
-+int read_isys_route_dma(struct i2c_client *client, const char *addr)
-+{
-+	int ret;
-+
-+	ret = i2c_smbus_write_i2c_block_data(client, RAA_WRITE_DMA_ADDRESS, 2, addr);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "Set DMA address failed for address 0x%02x 0x%02x\n",
-+			addr[0], addr[1]);
-+		return ret;
-+	}
-+	// DIRECT ISYS format 10mA/LSB
-+	u8 buf[2];
-+
-+	ret = i2c_smbus_read_i2c_block_data(client, RAA_READ_DMA_DATA, 2, buf);
-+	if (ret < 0)
-+		return ret;
-+	u16 value = ((u16)buf[1]<<8) | buf[0];
-+	return value;
-+};
-+#endif /* CONFIG_SENSORS_RAA229141 */
-+
- static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 				     int phase, int reg)
- {
-@@ -183,6 +217,14 @@ static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 	u64 temp;
- 
- 	switch (reg) {
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	case PMBUS_VIRT_READ_ISYSIN:
-+		ret = read_isys_route_dma(client, dma_address_in);
-+		break;
-+	case PMBUS_VIRT_READ_ISYSOUT:
-+		ret = read_isys_route_dma(client, dma_address_out);
-+		break;
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	case PMBUS_VIRT_READ_VMON:
- 		ret = pmbus_read_word_data(client, page, phase,
- 					   RAA_DMPVR2_READ_VMON);
-@@ -253,6 +295,12 @@ static struct pmbus_driver_info raa_dmpvr_info = {
- 	.format[PSC_CURRENT_OUT] = direct,
- 	.format[PSC_POWER] = direct,
- 	.format[PSC_TEMPERATURE] = direct,
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	.format[PSC_ISYS] = direct,
-+	.m[PSC_ISYS] = 1,
-+	.b[PSC_ISYS] = 0,
-+	.R[PSC_ISYS] = 2,
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	.m[PSC_VOLTAGE_IN] = 1,
- 	.b[PSC_VOLTAGE_IN] = 0,
- 	.R[PSC_VOLTAGE_IN] = 2,
-@@ -398,6 +446,20 @@ static int isl68137_probe(struct i2c_client *client)
- 		info->read_word_data = raa_dmpvr2_read_word_data;
- 		info->write_word_data = raa_dmpvr2_write_word_data;
- 		break;
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	case raa_dmpvr2_2rail_isys:
-+		info->format[PSC_VOLTAGE_IN] = linear,
-+		info->format[PSC_VOLTAGE_OUT] = linear,
-+		info->format[PSC_CURRENT_IN] = linear;
-+		info->format[PSC_CURRENT_OUT] = linear;
-+		info->format[PSC_POWER] = linear;
-+		info->format[PSC_TEMPERATURE] = linear;
-+		info->func[0] |= PMBUS_HAVE_ISYSIN;
-+		info->func[0] |= PMBUS_HAVE_ISYSOUT;
-+		info->pages = 2;
-+		info->read_word_data = raa_dmpvr2_read_word_data;
-+		break;
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	case raa_dmpvr2_3rail:
- 		info->read_word_data = raa_dmpvr2_read_word_data;
- 		info->write_word_data = raa_dmpvr2_write_word_data;
-@@ -466,6 +528,9 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
- 	{"raa228228", raa_dmpvr2_2rail_nontc},
- 	{"raa229001", raa_dmpvr2_2rail},
- 	{"raa229004", raa_dmpvr2_2rail},
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	{"raa229141", raa_dmpvr2_2rail_isys},
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	{"raa229621", raa_dmpvr2_2rail},
- 	{}
- };
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index d2e9bfb5320f..ec5a4b9286cc 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -236,6 +236,10 @@ enum pmbus_regs {
- 	PMBUS_VIRT_CURR_SAMPLES,
- 	PMBUS_VIRT_POWER_SAMPLES,
- 	PMBUS_VIRT_TEMP_SAMPLES,
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	PMBUS_VIRT_READ_ISYSIN,
-+	PMBUS_VIRT_READ_ISYSOUT,
-+#endif /* CONFIG_SENSORS_RAA229141 */
- };
- 
- /*
-@@ -381,6 +385,9 @@ enum pmbus_sensor_classes {
- 	PSC_TEMPERATURE,
- 	PSC_FAN,
- 	PSC_PWM,
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	PSC_ISYS,
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	PSC_NUM_CLASSES		/* Number of power sensor classes */
- };
- 
-@@ -411,6 +418,10 @@ enum pmbus_sensor_classes {
- #define PMBUS_HAVE_PWM12	BIT(20)
- #define PMBUS_HAVE_PWM34	BIT(21)
- #define PMBUS_HAVE_SAMPLES	BIT(22)
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+#define PMBUS_HAVE_ISYSIN	BIT(23)
-+#define PMBUS_HAVE_ISYSOUT	BIT(24)
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 
- #define PMBUS_PHASE_VIRTUAL	BIT(30)	/* Phases on this page are virtual */
- #define PMBUS_PAGE_VIRTUAL	BIT(31)	/* Page is virtual */
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index be6d05def115..88344c088f6d 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -1929,6 +1929,20 @@ static const struct pmbus_sensor_attr current_attributes[] = {
- 		.gbit = PB_STATUS_IOUT_OC,
- 		.limit = iout_limit_attrs,
- 		.nlimit = ARRAY_SIZE(iout_limit_attrs),
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	}, {
-+		.reg = PMBUS_VIRT_READ_ISYSIN,
-+		.class = PSC_ISYS,
-+		.label = "isysin",
-+		.paged = true,
-+		.func = PMBUS_HAVE_ISYSIN,
-+	}, {
-+		.reg = PMBUS_VIRT_READ_ISYSOUT,
-+		.class = PSC_ISYS,
-+		.label = "isysout",
-+		.paged = true,
-+		.func = PMBUS_HAVE_ISYSOUT,
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	}
- };
- 
-@@ -2501,6 +2515,12 @@ static const struct pmbus_class_attr_map class_attr_map[] = {
- 		.class = PSC_TEMPERATURE,
- 		.attr = temp_attributes,
- 		.nattr = ARRAY_SIZE(temp_attributes),
-+#if IS_ENABLED(CONFIG_SENSORS_RAA229141)
-+	}, {
-+		.class = PSC_ISYS,
-+		.attr = current_attributes,
-+		.nattr = ARRAY_SIZE(current_attributes),
-+#endif /* CONFIG_SENSORS_RAA229141 */
- 	}
- };
- 
--- 
-2.34.1
+What happens if you just instantiate the lm63 driver, possibly after updating
+the detect function ?
+
+Guenter
 
