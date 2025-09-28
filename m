@@ -1,192 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81027125B2;
-	Sat, 27 Sep 2025 18:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F060C153BE9
+	for <linux-hwmon@vger.kernel.org>; Sun, 28 Sep 2025 00:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758998394; cv=none; b=tt5iZ9s0Ko2vzsYLFEG61w3idBOCR0enEr5v3HEeP943pTumRwfB0zan/sY4h9lof8OZB4jBfbWB+juY0ZdqYjErQ5xKAn+bzsj73NZsjDQZz6txPIdwI/KffMkIiOHhBj1aqfs2t4sPX9rvJHDilw3QPEUn2wbsKUTvEJ9oLQw=
+	t=1759020390; cv=none; b=K/zmjnIJOWyINrountYxrlL1+JzIZHRFUtGqGOMicikFDCCHLd4X72rcnQNiF9VnnHUOZDMXvCuZz/ErRYW+E7Z1Zckt5hSJyZbj4CoWUgJEM9nTLEJbbnURT+KsmmUFslbGf5MV4tOWbbKeMspF+crYNSK06+tOcSEKZpw3EPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758998394; c=relaxed/simple;
-	bh=OFYiSOw/Gfgr0DCpc3CpqcVoziWlnm2ezT1witONfFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EF2K/T3DPbEYsXAORq02FbThlb2D2khFXP5BBtjQKJYiVNvD8yKG0ubGDWF1zBfX7tb1XyD/BokqBaHKIewaCyN+VCEhAvypGpwLcTGoQmQN4GFJ8RyW5TWSjaLAde5WT6SNi1hAxk9pzhtlqnjG6cnYWyXq1UBwODfSNASltbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W91OrnwI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759020390; c=relaxed/simple;
+	bh=uFT8DD+GpvmowlrkoMgNzPNeWBkwZV4HRy1OuviWi4M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KH2oxCdxrrM/KRcWiVp6QRKKxzKFrgItk0kBJEizd0AIoSzpgv8o9mPW4ex74h0qltIDCMyoJrgbir8F4XUF6ejPT2mCurdYNuZHmMVcA4kbHVien4hJ+a4U4hRX6Qxq60qkt0OOLT3WaKyhaW/+Y6u9nyQ5Zn7N6JknY24L1Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wat8rZcc; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W91OrnwI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98C3C4CEE7;
-	Sat, 27 Sep 2025 18:39:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758998394;
-	bh=OFYiSOw/Gfgr0DCpc3CpqcVoziWlnm2ezT1witONfFA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=W91OrnwIIQ/6SdcGFCI1/vfL5oABFijapNz4i+zpBW7OPI8KGSbGROpuLDmfPKrB9
-	 2LmfuEJLkMRlsOhrc9smv5rCR/6qmpcGnW0fN52sIAqge+r5+7NhDYGn5dIg/uhdFB
-	 SdrMCUL+clzJUKyJ4K895RXpkSYhelv+AJGKu0Rg3W7oACKGl/YGhJQD4LBVDg1cVV
-	 Okn3bED/O8k1E3ujeAc5furOM1DIhaF8G6uxB0A2es7nSXQsUkf8n1dQ3RFdyJHGZd
-	 FlBBp1qqfLGOLz3VcE2OBB1LLwm4XnYrVmo0SQnbrnHxoTQ9p7SENfF2H88rT7VKdh
-	 0cC5nt/3ihSRA==
-Date: Sat, 27 Sep 2025 19:39:45 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Andreas Kemnade <andreas@kemnade.info>, Mark Brown <broonie@kernel.org>,
- jdelvare@suse.com, lgirdwood@gmail.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alistair Francis <alistair@alistair23.me>,
- "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH RFC 1/2] hwmon: (sy7636a) fix races during probe of mfd
- subdevices
-Message-ID: <20250927193945.787eb1a5@jic23-huawei>
-In-Reply-To: <e6c8f022-ebfc-459c-806b-f75618f65916@roeck-us.net>
-References: <20250920114311.291450-1-andreas@kemnade.info>
-	<20250920114311.291450-2-andreas@kemnade.info>
-	<79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
-	<20250920233307.0c425863@kemnade.info>
-	<473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
-	<20250924090023.282ae450@kemnade.info>
-	<b68d40d9-6ea9-49a9-8a2e-8b899f33340d@roeck-us.net>
-	<20250924195358.16bbd90c@kemnade.info>
-	<e6c8f022-ebfc-459c-806b-f75618f65916@roeck-us.net>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wat8rZcc"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2570bf6058aso48876045ad.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 27 Sep 2025 17:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759020388; x=1759625188; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0SQxdo3RLHRiJ7AnzgCm7ZcELugvg2FhH462RqaNN4=;
+        b=Wat8rZcc9wy9u3iZaa1ZEAhmaw7yud0TBejGdtLK4GCW0Ov3lePDWZfN3h/8+9hx9b
+         nED1BT9BjQ116vlCN//ggNlZ/88yRn6NsEEJazSwAJhy20P+OeHQzo/7s5Uv6eeKSprt
+         apcGYm4J7n8URULQFxHr1ebYPFCUqC2H8uq5XLwih+oRQXpN1uUkgTyUkBV0G05vSio6
+         1e6uQbDGdnie6fvD806sy7O8QOpcpSVSQWju8Wbz+PkBBXYuZRANoqZTmdjSrnDF4+My
+         +jyTrUvhZx9urFkmwgaDpPxYqYiqJEYsv/HW5JQ1MVwbuHn2h92f+gQ4SVM5M8XjAzGd
+         wjKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759020388; x=1759625188;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R0SQxdo3RLHRiJ7AnzgCm7ZcELugvg2FhH462RqaNN4=;
+        b=liuM//zGWFuthEE/k1vHVhQ1UrQXGJyv0vzE0IqSApOvBFUDk+FhPP1RF01Zb0jfzG
+         r35kDgEsEV4XIJfw3f9uk3o9RR3HLK1wIXElW/J4qy2tpnzvnLumyR/OmY/gn+1hQ+ky
+         01BD6ZwgK3g+9nUiVu4r2mCtvwHZnprkO+7pHVVyptE0XNBTNopytiEXk+660FHQsa63
+         YNLmRGy5kkmzrpJRsPHfHH35VXhQxvBtw4RxlE/uaPcWofxYMQ2ngKo4uBpMpSiRBKV2
+         wr1sKyj5NJw9cF2KSWq3PtaZP2POfkJ6R8Sz0UK9IWSdeJekobNTAtKr43qYsc0cW1xi
+         8/Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCXs52l6jk+p+Fqie5m32AzaEaKQ6ueAwLbA3hBY2uJfaj1AAn6kw+FoODEjmXYcY4AN87d2EkhvvyOCjw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsntdftbgByefZXVq9Ni1jJ0OnPlyWFRKuzEBEjpJmuXRkND8i
+	MRLgNCWcYdVwzeFxGaNmpc1md6ewp96BNt0GvChTOoIwTHItO2PqcB/n
+X-Gm-Gg: ASbGnctnyVO8MtVdtcjPhuv/5W+bKF1uyTo+ijnZ4p+yz9xZlgcXfngqztqNy9xppBZ
+	B6UhWLFo+ooDenSlF28VUCh7TeOU41RHWbZkMlzzjxOAbNjzZXM5pAx+QIYLgmaZlfDqCvQpkAk
+	Z2RutTw7nMdgzMdY4CScZg3iT//MxnMF2v6o9G5B4MvB0mPQM8a7AnV1HqtFqNlq9dpnv47Ll6+
+	WnS0iaZUn0CnGdq7ym7RzNntqLV2FMEiZ7acrCrIO2h04OnARgMzeHRHNx6Nd91rsDE7aAsHEME
+	F9Hd+7Mw8hDkAwoZANEgIUm2M8OvNeDMgbC0p5woRnzS9EIm+4VB8xtM44sT3pLY2FoUm6rxXoK
+	0L2S+sTUSElmgu7Xnyo5+7fxM4yU4U8+kJxIghRv8E0hKNiB7p2na/+lXlw3W4KPz+7c92W5gBz
+	KTeI9xsR19jgGuGMTdBwsBcG9zFZkHHMsa
+X-Google-Smtp-Source: AGHT+IHh6vp11a5YTPpS7Cpx/YPQS6tq6OUbtGBtN9cobxgvPjCMMdsgzvmVq+T4sqfObnWyrmGxdQ==
+X-Received: by 2002:a17:902:ef03:b0:27e:ef12:6e94 with SMTP id d9443c01a7336-27eef126f60mr78326435ad.55.1759020388025;
+        Sat, 27 Sep 2025 17:46:28 -0700 (PDT)
+Received: from setsuna.localnet (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6ac27d4sm88980475ad.135.2025.09.27.17.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Sep 2025 17:46:27 -0700 (PDT)
+From: James Calligeros <jcalligeros99@gmail.com>
+To: Janne Grunau <j@jannau.net>, Rob Herring <robh@kernel.org>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
+Subject:
+ Re: [PATCH v2 02/11] dt-bindings: hwmon: Add Apple System Management
+ Controller hwmon schema
+Date: Sun, 28 Sep 2025 10:36:03 +1000
+Message-ID: <2537878.PYKUYFuaPT@setsuna>
+In-Reply-To:
+ <CAL_JsqK-9n3_H6vS80bZuZiSPi9UNuMzHEPFL_EzYTeyNS1cYg@mail.gmail.com>
+References:
+ <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
+ <20250925204925.GA637503@robin.jannau.net>
+ <CAL_JsqK-9n3_H6vS80bZuZiSPi9UNuMzHEPFL_EzYTeyNS1cYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, 24 Sep 2025 12:16:14 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+Hi Rob,
 
-> On 9/24/25 10:53, Andreas Kemnade wrote:
-> > On Wed, 24 Sep 2025 00:17:48 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> >   
-> >> On 9/24/25 00:00, Andreas Kemnade wrote:  
-> >>> On Sat, 20 Sep 2025 23:18:59 +0100
-> >>> Mark Brown <broonie@kernel.org> wrote:
-> >>>      
-> >>>> On Sat, Sep 20, 2025 at 11:33:07PM +0200, Andreas Kemnade wrote:
-> >>>>     
-> >>>>> Just for learning, yes, it is an abuse of the _optional for non-optional
-> >>>>> things, so a dirty hack which should not go in, therefore RFC. But what
-> >>>>> happens more than having the hwmon device endlessly deferred at worst?  
-> >>>>
-> >>>> There's also the fact that this API is so frequently abused for bad and
-> >>>> broken reasons that I regularly audit users and try to fix them, I'd
-> >>>> rather not see any new users that don't have a really strong reason to
-> >>>> use it.
-> >>>>     
-> >>>>> The wanted regulator is the one defined in sy7636a-regulator.c. So it
-> >>>>> is all an issue internal to the sy7636a.  
-> >>>>     
-> >>>>> Both subdevices are instantiated via drivers/simple-mfd-i2c.c.
-> >>>>> I see several other solutions:
-> >>>>> a) call device_is_bound() on every other children of dev->parent, if not
-> >>>>> bound defer.
-> >>>>> b) do not care about the regulator api at all, just check whether
-> >>>>>      the corresponding bit is set before reading temperature, return
-> >>>>>      -ENODATA if not, some mutex is probably needed.
-> >>>>> c) do not care about the regulator api at all, just set the
-> >>>>>      corresponding bit (together with some mutex locking and counting).  
-> >>>>
-> >>>> I assume this is using the regulator API because someone might use an
-> >>>> external regulator in a system design for some reason (better quality,
-> >>>> power efficiency or a shared reference between multiple devices I
-> >>>> guess?), or because the supply might also be used by external devices?
-> >>>>     
-> >>>>> d) copy the of_node pointer from the parent, add a regulator phandle property
-> >>>>>      to the node pointing to the regulator in the node itself.
-> >>>>>      That sounds like your idea but is against the current dt binding for
-> >>>>>      this device and afaik it is uncommon to have mfd-internal things wired
-> >>>>>      up this way
-> >>>>>
-> >>>>> e) something clean, simple I miss  
-> >>>>
-> >>>> The idea is that the relationship between the devices should be
-> >>>> registered before the devices, that's how the regulator knows to defer.
-> >>>> We used to have an API for doing this for board files which might fit
-> >>>> here, but it got removed since nobody wants board files any more.  If
-> >>>> you're allocating the devices dynamically that's annoying to implement
-> >>>> though...  
-> >>>
-> >>> looking a bit around:
-> >>> max5970-regulator.c has hwmon integrated and no extra device. That would
-> >>> simplify things. Although it does not report temperature. Some
-> >>> touchscreens have temperature via hwmon, some others have temperature
-> >>> via iio, directly in one device without mfd. Maybe that is also
-> >>> the better way here?
-> >>>      
-> >>
-> >> Touchscreens reporting temperature via iio is in general the wrong thing to do.
-> >> Touchscreens report the temperature for monitoring reasons, after all.
-> >> But then, sure, if you insist. I am getting tired of arguing.
-> >>  
-> > I apparently did not make clear what my question refers to. It was more about separate
-> > hwmon device + mfd vs. integrating everything into the regulator driver.
-> >   
-> 
-> What I keep failing to understand is why people keep avoiding the potential of
-> implementing auxiliary device drivers, since that would be the perfect solution
-> and match the intended use case for auxiliary devices.
-> 
-> > But since you brought up the topic hwmon vs. iio for temperature. I do not have
-> > a strong opinion here as long as I can somehow live with it. Nothing I want to
-> > fight for. One sensor I use for measuring room temperature is hwmon, another
-> > one is iio. So it is all not that consistent.
-> >   
-> 
-> That doesn't mean what exists is consistent or even makes sense. Some driver support
-> for chips intended for reporting the environment or chip temperature are pushed into iio.
+On Friday, 26 September 2025 7:43:23=E2=80=AFam Australian Eastern Standard=
+ Time Rob=20
+Herring wrote:
+> On Thu, Sep 25, 2025 at 3:49=E2=80=AFPM Janne Grunau <j@jannau.net> wrote:
+> > On Fri, Aug 29, 2025 at 11:40:57AM -0500, Rob Herring wrote:
+> > >=20
+> > > This should be something like this:
+> > >=20
+> > > "^current-[A-Za-z0-9]{4}$":
+> > >   $ref: "#/$defs/sensor"
+> > >   unevaluatedProperties: false
+> > >=20
+> > > With the $defs/sensor being:
+> > >=20
+> > > $defs:
+> > >   sensor:
+> > >     type: object
+> > >    =20
+> > >     properties:
+> > >       apple,key-id:
+> > >         $ref: /schemas/types.yaml#/definitions/string
+> > >         pattern: "^[A-Za-z0-9]{4}$"
+> > >        =20
+> > >         description:
+> > >           The SMC FourCC key of the desired sensor. Must match the
+> > >           node's suffix.
+> > >      =20
+> > >       label:
+> > >         description: Human-readable name for the sensor
+> > >    =20
+> > >     required:
+> > >       - apple,key-id
+> > >       - label
+> > >=20
+> > > Though in general, 'label' should never be required being just for hu=
+man
+> > > convenience.
+> >=20
+> > That does not sound as it would be compatible with skipping nodes in the
+> > driver if the node misses label. The driver could of course fall back
+> > to create a hwmon sensors without labels.
+>=20
+> The driver absolutely should.
 
-There might be some that have slipped through but when it's monitoring specific chip
-as opposed to part of of a SoC ADC where some channels are for monitoring and others
-very much not (e.g. the touchscreen ADC channels), I do direct people to provide
-reasons and +CC hwmon. There are a few odd corner cases where we had a driver for
-a mems device or similar that doesn't fit in hwmon come along and there is a
-variant of that silicon that only has the temp part enabled.
+The original submission (and our downstream version) do this, but I changed
+it for v2 per Sven's feedback [1]. Outside of development/experimentation,
+we will (should) never have a sensor in the Devicetree of uknown utility.
+If we know what a sensor is for, then we should have a label for it.
 
-Without specific part numbers I don't know why it happened here.
+> > I looks to me it would be a
+> > stretch to call the presence of the labels human convenience.
+>=20
+> Then it is an abuse of 'label". "label" is supposed to be literally
+> that. Matching a sticker on a port of a device.
+>=20
+> If you need to associate a sensor with some other piece of h/w, then
+> that should be via a phandle or something.
 
-We get a few drivers every year where I think it's just familiarity with IIO that
-drove the initial submission and for those we push them to submit a hwmon driver instead
-and I +CC the hwmon list on that suggestion.  Guenter frequently eyeballs the driver
-and points that another driver can be trivially modified to support it.
+I don't think doing so is particularly useful for this platform. Few of
+the sensors that we know about are directly related to any one piece of=20
+hardware.
+It's pretty much just the CPU cores and Broadcom module. The rest are things
+like fans, palm rest area temperature sensors, ammeters and voltmeters for=
+=20
+entire
+rails, etc.
 
-Mind you I may well miss some :(
+Even where we can reliably associate a sensor to a piece of hardware,
+(e.g. the WiFi/BT board), doing so does not by itself do anything useful. We
+still need to write a human-readable label for the sensor.
 
+I was trying to avoid yet another vendor property, but would something like
+'apple,sensor-label' work here?
 
-> I have no idea why that is the case. Yes, that results in odd situations like yours,
-> but there is nothing I can do about it. I can only guess that _someone_ is pushing for
-> submitting drivers into IIO instead of hwmon, but that is just a wild guess. You would
-> have to ask the driver authors and/or IIO maintainers for reasons. I am copying the IIO
-> mailing list for feedback.
-> 
-> Also, again, I am tired of arguing, so I typically don't even comment anymore (if I even
-> notice) unless explicitly asked.
-> 
-> > But what is the hwmon equivalent for
-> > devm_fwnode_iio_channel_get_by_name() + iio_read_channel_processed()?
-> >   
-> 
-> Assuming you refer to the exported functions for in-kernel use, so far no one has
-> expressed a need for it. The best solution would probably be a hwmon->iio bridge,
-> or equivalent functions could be implemented and exported.
-> 
-> > I wonder whether I really need a thermal zone. It adds stuff not needed here,
-> > trip points and polling.
-> >   
-> 
-> The driver _registers_ a thermal zone, but that doesn't mean it has to be configured.
-> If one is configured (typically via devicetree), it is obviously needed.
-> 
-> > Documentation/hwmon/sy7636a-hwmon.rst seems to be wrong. It is not
-> > SoC-on-die temperature, but temperature from an external NTC. And
-> > that is typically used to tune the EPD refresh to the temperature.  
-> 
-> Please feel free to submit a patch correcting the documentation.
-> 
-> Guenter
-> 
+> Rob
+
+James
+
+[1]: https://lore.kernel.org/asahi/4a95cbf3-b3ae-4b26-8db2-dd5cf14a4c0c@ker=
+nel.org/
+
 
