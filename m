@@ -1,199 +1,179 @@
-Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7058922F76F;
-	Mon, 29 Sep 2025 18:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.176.194.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD48521FF28
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Sep 2025 21:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759171151; cv=none; b=qnL9wt4gXlFeT2ptRxBkoXNt5ZsJIYvHqYHZ2nug/Ezf6SUIvzrA3hJXFGm/wMN9A8Y+GJs1C+lKwsO2kGOw4/aoNT8HCEMhrqiK89q+dsY/VkKN2MLUgIh+/PCZFjh+4VwZEOVX54P7KrkJf50hwob/mXrP2QfHxbd1SBuarT8=
+	t=1759182656; cv=none; b=UoalFO32DSdMnIuPE8PeEgGCOnbn7NRgI1bvbdAPeS5ga08lcPR6OnIgLC2Yjq/jEqd5Wf0VUftvubTbpPnYTm3cKu0AXnXVyMFHQ475QQx4+VmFCPsTrbz005Wnf9phXOfYCAScPQjv2OUv9VpVnLduuZD+XWmfuiMytGpipiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759171151; c=relaxed/simple;
-	bh=vJ7eD2nV/4N7AIUA9/+6epf2vjH4s0akBoFco89HihE=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gvOP+pN1ec/tRVlFDNDiYi0Rz7pXtQHqK5KboU4WywaQ8rAEI+uMgF9IkWK2kcULHbbT1j6ce4C6LPlPFLrK5WOjQAtPEIHMSYTZ8eZVSAODhT1xGPCUSLA0bDgNgF7NjjJoRUSzt9w0rgh2mJXlVQchL6lLdEuudTnaa1LpPIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=nqZw28ij; arc=none smtp.client-ip=63.176.194.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1759182656; c=relaxed/simple;
+	bh=aNeQuTjYwgA+JwDmrzwog4+pMu474TNFlZeZbMax3kI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P/MGCsEG9++oSW6+A+FCGLWDkFfgHObyisdrIU89BpWKWwmzxf6Z+5bzxwVrNftFD6pqw7ogmet7sUjHnfVyuxJLk5HWGKuHC+XduTkzp/yJIcvHHEh5pdRwQdu7osUwUTioTDRCAa3oAaxMJFYNDrxNqUtFkrA7Hj6UsRyTWFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W5aopZ31; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9gMD49ud; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W5aopZ31; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9gMD49ud; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="nqZw28ij"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1759171149; x=1790707149;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=vJ7eD2nV/4N7AIUA9/+6epf2vjH4s0akBoFco89HihE=;
-  b=nqZw28ijwkrb/pB3DBjusC/TpdcVATjo7BQwbZXC4YwamHadT5WG8QCW
-   ffympzEULPkfZQCMr9EvIqKsHMpQd2nqPrIB6lSUCv14gEfmi3Gas73YW
-   7iQv4+U/Eb37b+qK+xVl+TH4Ioa8ZSmhntyZLrsePmReX8t1DgcfX4p2R
-   7l+L4UzPttMIvL/N429rUWFzYpFgqwfAsdp5aLJr/zT4hqGbA1e3ltZhf
-   tFaueNq62ojOlCToSiZSe9e+aY07I48qtcf/UPAQh/7GiHCNeXcFaMLXm
-   gpgbkN8jc2yYE9GeOXoVO3suffMUCPbX9QQlG0PnThmZOZvsccXcUHnw4
-   w==;
-X-CSE-ConnectionGUID: EC85rEzURZ+CERFt3YJdKA==
-X-CSE-MsgGUID: tnl/cymrQVqCkLCX53HUhQ==
-X-IronPort-AV: E=Sophos;i="6.18,302,1751241600"; 
-   d="scan'208";a="2844874"
-Subject: RE: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros
- available everywhere
-Thread-Topic: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros available
- everywhere
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2025 18:39:02 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.232:4036]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.19.222:2525] with esmtp (Farcaster)
- id a320107e-9e0a-4760-b3dc-26c5d986714d; Mon, 29 Sep 2025 18:39:01 +0000 (UTC)
-X-Farcaster-Flow-ID: a320107e-9e0a-4760-b3dc-26c5d986714d
-Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Mon, 29 Sep 2025 18:39:00 +0000
-Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
- EX19D018EUA004.ant.amazon.com (10.252.50.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Mon, 29 Sep 2025 18:39:00 +0000
-Received: from EX19D018EUA004.ant.amazon.com ([fe80::e53:84f8:3456:a97d]) by
- EX19D018EUA004.ant.amazon.com ([fe80::e53:84f8:3456:a97d%3]) with mapi id
- 15.02.2562.020; Mon, 29 Sep 2025 18:39:00 +0000
-From: "Farber, Eliav" <farbere@amazon.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: "linux@armlinux.org.uk" <linux@armlinux.org.uk>, "richard@nod.at"
-	<richard@nod.at>, "anton.ivanov@cambridgegreys.com"
-	<anton.ivanov@cambridgegreys.com>, "johannes@sipsolutions.net"
-	<johannes@sipsolutions.net>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com"
-	<hpa@zytor.com>, "tony.luck@intel.com" <tony.luck@intel.com>,
-	"qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>, "mchehab@kernel.org"
-	<mchehab@kernel.org>, "james.morse@arm.com" <james.morse@arm.com>,
-	"rric@kernel.org" <rric@kernel.org>, "harry.wentland@amd.com"
-	<harry.wentland@amd.com>, "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-	"Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
-	"alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-	"christian.koenig@amd.com" <christian.koenig@amd.com>, "Xinhui.Pan@amd.com"
-	<Xinhui.Pan@amd.com>, "airlied@gmail.com" <airlied@gmail.com>,
-	"daniel@ffwll.ch" <daniel@ffwll.ch>, "evan.quan@amd.com" <evan.quan@amd.com>,
-	"james.qian.wang@arm.com" <james.qian.wang@arm.com>, "liviu.dudau@arm.com"
-	<liviu.dudau@arm.com>, "mihail.atanassov@arm.com" <mihail.atanassov@arm.com>,
-	"brian.starkey@arm.com" <brian.starkey@arm.com>,
-	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
-	"mripard@kernel.org" <mripard@kernel.org>, "tzimmermann@suse.de"
-	<tzimmermann@suse.de>, "robdclark@gmail.com" <robdclark@gmail.com>,
-	"quic_abhinavk@quicinc.com" <quic_abhinavk@quicinc.com>,
-	"dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-	"sean@poorly.run" <sean@poorly.run>, "jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>, "linus.walleij@linaro.org"
-	<linus.walleij@linaro.org>, "dmitry.torokhov@gmail.com"
-	<dmitry.torokhov@gmail.com>, "maz@kernel.org" <maz@kernel.org>,
-	"wens@csie.org" <wens@csie.org>, "jernej.skrabec@gmail.com"
-	<jernej.skrabec@gmail.com>, "samuel@sholland.org" <samuel@sholland.org>,
-	"agk@redhat.com" <agk@redhat.com>, "snitzer@kernel.org" <snitzer@kernel.org>,
-	"dm-devel@redhat.com" <dm-devel@redhat.com>, "rajur@chelsio.com"
-	<rajur@chelsio.com>, "davem@davemloft.net" <davem@davemloft.net>,
-	"edumazet@google.com" <edumazet@google.com>, "kuba@kernel.org"
-	<kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-	"alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-	"joabreu@synopsys.com" <joabreu@synopsys.com>, "mcoquelin.stm32@gmail.com"
-	<mcoquelin.stm32@gmail.com>, "krzysztof.kozlowski@linaro.org"
-	<krzysztof.kozlowski@linaro.org>, "malattia@linux.it" <malattia@linux.it>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>, "markgross@kernel.org"
-	<markgross@kernel.org>, "artur.paszkiewicz@intel.com"
-	<artur.paszkiewicz@intel.com>, "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-	"fei1.li@intel.com" <fei1.li@intel.com>, "clm@fb.com" <clm@fb.com>,
-	"josef@toxicpanda.com" <josef@toxicpanda.com>, "dsterba@suse.com"
-	<dsterba@suse.com>, "jack@suse.com" <jack@suse.com>, "tytso@mit.edu"
-	<tytso@mit.edu>, "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-	"dushistov@mail.ru" <dushistov@mail.ru>, "luc.vanoostenryck@gmail.com"
-	<luc.vanoostenryck@gmail.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"mhiramat@kernel.org" <mhiramat@kernel.org>, "pmladek@suse.com"
-	<pmladek@suse.com>, "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>, "minchan@kernel.org"
-	<minchan@kernel.org>, "ngupta@vflare.org" <ngupta@vflare.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "pablo@netfilter.org" <pablo@netfilter.org>,
-	"kadlec@netfilter.org" <kadlec@netfilter.org>, "fw@strlen.de" <fw@strlen.de>,
-	"jmaloy@redhat.com" <jmaloy@redhat.com>, "ying.xue@windriver.com"
-	<ying.xue@windriver.com>, "andrii@kernel.org" <andrii@kernel.org>,
-	"mykolal@fb.com" <mykolal@fb.com>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "martin.lau@linux.dev"
-	<martin.lau@linux.dev>, "song@kernel.org" <song@kernel.org>, "yhs@fb.com"
-	<yhs@fb.com>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@google.com" <sdf@google.com>,
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
-	<jolsa@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>, "wad@chromium.org"
-	<wad@chromium.org>, "willy@infradead.org" <willy@infradead.org>,
-	"sashal@kernel.org" <sashal@kernel.org>, "ruanjinjie@huawei.com"
-	<ruanjinjie@huawei.com>, "quic_akhilpo@quicinc.com"
-	<quic_akhilpo@quicinc.com>, "David.Laight@aculab.com"
-	<David.Laight@aculab.com>, "herve.codina@bootlin.com"
-	<herve.codina@bootlin.com>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-um@lists.infradead.org"
-	<linux-um@lists.infradead.org>, "linux-edac@vger.kernel.org"
-	<linux-edac@vger.kernel.org>, "amd-gfx@lists.freedesktop.org"
-	<amd-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>, "freedreno@lists.freedesktop.org"
-	<freedreno@lists.freedesktop.org>, "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>, "linux-input@vger.kernel.org"
-	<linux-input@vger.kernel.org>, "linux-sunxi@lists.linux.dev"
-	<linux-sunxi@lists.linux.dev>, "linux-media@vger.kernel.org"
-	<linux-media@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-stm32@st-md-mailman.stormreply.com"
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>, "netfilter-devel@vger.kernel.org"
-	<netfilter-devel@vger.kernel.org>, "coreteam@netfilter.org"
-	<coreteam@netfilter.org>, "tipc-discussion@lists.sourceforge.net"
-	<tipc-discussion@lists.sourceforge.net>, "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "stable@vger.kernel.org"
-	<stable@vger.kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Thread-Index: AQHcLZHEroQ9W2lH4EW9XJumD1KlZrSqNL0AgABQRkA=
-Date: Mon, 29 Sep 2025 18:39:00 +0000
-Message-ID: <f32d53131d0a4b61a7be4862c7a7f237@amazon.com>
-References: <20250924202320.32333-1-farbere@amazon.com>
- <20250924202320.32333-8-farbere@amazon.com>
- <2025092923-stove-rule-a00f@gregkh>
-In-Reply-To: <2025092923-stove-rule-a00f@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W5aopZ31";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9gMD49ud";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W5aopZ31";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9gMD49ud"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 545B01F7A5;
+	Mon, 29 Sep 2025 21:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1759182643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aNeQuTjYwgA+JwDmrzwog4+pMu474TNFlZeZbMax3kI=;
+	b=W5aopZ31Vxl06oaVewEIZMeTcwaVGF2PxTgTtrVqIOwsmyvJ/jpmWnin69/dUIMDZOvz8l
+	jnEvulkZyZKhqmvOzKeOaBjSAZbYoQeEr96Mqke6P+zFWAZn9thJ2JOHA5eHWsdw+1Ofr0
+	et0TetZYxtOD1P6Msx0XT+pLJysLWBw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1759182643;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aNeQuTjYwgA+JwDmrzwog4+pMu474TNFlZeZbMax3kI=;
+	b=9gMD49ud+rRYM2mHiw7Ty6pJRMEDrNyIdhwyjCTMxHRbaolVB/SW5tiWWCePxPY5MeUK5U
+	Y6yAfAcQYhVuMfCw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=W5aopZ31;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=9gMD49ud
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1759182643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aNeQuTjYwgA+JwDmrzwog4+pMu474TNFlZeZbMax3kI=;
+	b=W5aopZ31Vxl06oaVewEIZMeTcwaVGF2PxTgTtrVqIOwsmyvJ/jpmWnin69/dUIMDZOvz8l
+	jnEvulkZyZKhqmvOzKeOaBjSAZbYoQeEr96Mqke6P+zFWAZn9thJ2JOHA5eHWsdw+1Ofr0
+	et0TetZYxtOD1P6Msx0XT+pLJysLWBw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1759182643;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aNeQuTjYwgA+JwDmrzwog4+pMu474TNFlZeZbMax3kI=;
+	b=9gMD49ud+rRYM2mHiw7Ty6pJRMEDrNyIdhwyjCTMxHRbaolVB/SW5tiWWCePxPY5MeUK5U
+	Y6yAfAcQYhVuMfCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5EF3813A21;
+	Mon, 29 Sep 2025 21:50:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id GUGQFDL/2miRMQAAD6G6ig
+	(envelope-from <svarbanov@suse.de>); Mon, 29 Sep 2025 21:50:42 +0000
+Message-ID: <a5bc2227-5d25-41da-9b5b-ebc2d5fc85c8@suse.de>
+Date: Tue, 30 Sep 2025 00:50:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] hwmon: adc: rp1: Add Raspberry Pi's RP1 ADC driver
+To: Guenter Roeck <linux@roeck-us.net>, Stefan Wahren <wahrenst@gmx.net>
+Cc: Stanimir Varbanov <svarbanov@suse.de>, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-hwmon@vger.kernel.org,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+ Saenz Julienne <nsaenz@kernel.org>,
+ Andrea della Porta <andrea.porta@suse.com>,
+ Phil Elwell <phil@raspberrypi.com>, Jonathan Bell
+ <jonathan@raspberrypi.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20250925000416.2408457-1-svarbanov@suse.de>
+ <20250925000416.2408457-3-svarbanov@suse.de>
+ <d07158fc-678e-4ae4-8943-168146a58fe0@roeck-us.net>
+ <e53865df-7566-4790-9214-0af875950742@gmx.net>
+ <3f1295b0-b637-4fe0-b141-67f086960072@roeck-us.net>
+Content-Language: en-US
+From: Stanimir Varbanov <svarbanov@suse.de>
+In-Reply-To: <3f1295b0-b637-4fe0-b141-67f086960072@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 545B01F7A5
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[roeck-us.net,gmx.net];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmx.net];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	TAGGED_RCPT(0.00)[dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -3.01
 
-On Wed, Sep 24, 2025 at 08:23:08PM +0000, Eliav Farber wrote:
-> From: Linus Torvalds <torvalds@linux-foundation.org>
->
-> [ Upstream commit 1a251f52cfdc417c84411a056bc142cbd77baef4 ]
+Hi,
 
-<snip>
+On 9/25/25 5:34 PM, Guenter Roeck wrote:
+> On Thu, Sep 25, 2025 at 07:26:10AM +0200, Stefan Wahren wrote:
+>> Hi Guenter,
+>>
+>> Am 25.09.25 um 04:42 schrieb Guenter Roeck:
+>>> On Thu, Sep 25, 2025 at 03:04:14AM +0300, Stanimir Varbanov wrote:
+>>>> A five-input successive-approximation analogue-to-digital converter
+>>>> with 12-bit (effective number of 9.5 bits) resolution at 500kSPS.
+>>>> The ADC has four external inputs and one internal temperature sensor.
+>>>>
+>>>> Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+>>>> Signed-off-by: Jonathan Bell <jonathan@raspberrypi.com>
+>>>> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+>>> I just realized that there is already a hwmon driver for
+>>> Rasperri Pi - drivers/hwmon/raspberrypi-hwmon.c.
+>>>
+>>> Please add this code to that driver.
+>> could you please explain the reason for this?
+>>
+>> Yes, both drivers are for Raspberry Pi boards, but they don't share any code
+>> base. The raspberrypi-hwmon uses a mailbox interfaces to get the sensor data
+>> and works for the board generation 1 - 4. This driver works completely
+>> differently ( MMIO ), doesn't depend on the mailbox interface and applies
+>> only for board generation 5. Actually I don't see a benefit of merging them.
 
-As this didn't go into 6.6.y yet, I'll stop here on this series for now.
-Please fix up for newer kernels first and then resend these.
+Thank you Stefan for the explanation.
 
-The fix for 6.6.y was applied also on 6.1.y:
-https://lore.kernel.org/stable/20250929183358.18982-1-farbere@amazon.com/
+>>
+> Ok. Please make sure to add this explanation to the patch description.
 
----
-Regards, Eliav
+Sure, I will extend the description in next version.
+
+~Stan
