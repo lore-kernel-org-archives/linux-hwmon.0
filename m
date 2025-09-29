@@ -1,133 +1,213 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8555A1F5827
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Sep 2025 17:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6B530C0F0;
+	Mon, 29 Sep 2025 17:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.176.194.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759165668; cv=none; b=KOCK3jcS/Uf2/NxbEFHMq0W7gZmEbaf51lBkJhmaIcgXe9+CSey5NlApsnO8yPW3ZY6ZNYqedKQGXcVIYdzqdcMmAXdC/jEvFDTLS3O07kQ/s0yQDRmyfgK+5a0UNpMIA0qp/isBucvjWldICBm5OVcuAp2cau3ehAe/fePN+4A=
+	t=1759166536; cv=none; b=eoX2Y6dCaxvXM0Xa6dhzOEmZQhQoFuz3FrgB484FjApQphFAGM7VsuSHha5Yxyz0DToFnYO4Efe9FI7q6NsD3ytmkpR+8RsNTgapFASDAEl9qr2E8fSwWUj4lc5IVj8RbfX/XWGXSDR3j/zw0MdWTrqftrG9SsSa9cjRJZcpirw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759165668; c=relaxed/simple;
-	bh=GHaH6xHVSsfmMOhc3Q4Uv4imU4pJ//tOMuXYRsOMut8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B23sDNIg/ENXfwIc5WK7AsdUxRuEn2RAu9pPdiHDOxhFvem2VMG4ImP6LTzfDpmeVBsNmrmNTgJkHeyPeXbk2wxRsJiAoXSUTwjuxq2JuPcqcblwAPKaQfv88pi8wV+pspQIv8tL9pgY8iqTr3s5yTZhpILUmEVxeUBK+TPVWTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewfAFgJH; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759166536; c=relaxed/simple;
+	bh=rPvAb70eX+xtNxLsT31tJqXSjUME1o5yfKSfCT5CPok=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=fDvEqNhO31fEMODo+2dv4KYxTaS4Rt/WCVE16Ck7B1KaPagYptjSMtEtKytng8Pku3txV7lCQS6Pp2vVAAIGJw8wcp1hdeSqoJXs+iUciWPlS8jF//IHL0Z7w5sD9QJVY+ovlVEXvZHYxXs9mpHijNc5Uh2DXSH3okp4nQM3uVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=fcXwy0xZ; arc=none smtp.client-ip=63.176.194.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewfAFgJH"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3ee15b5435bso2815874f8f.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Sep 2025 10:07:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="fcXwy0xZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759165665; x=1759770465; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zj9JtujIrCASOTxrqaUt0QRKvTAm0yHb0MuPSQjc/js=;
-        b=ewfAFgJHx40FBB5cQCI13U9paQma0tclOSnUjz4eo7r1yCwJRaNwKOw5H88HdSUKem
-         PVck37GzfTxOlPQd2Eet7e4yJLzIT4OhlDN9CmfWIcFyT4sMtdXA5+N17o3jHrZ5N8ix
-         GYQbgw2kutnIic0UklpUwoQlPUdIxBETC6/f30ksnFpPZ8ZPXGATBpRWJW4WTEG9KApb
-         +CHGDcNsYhiVvuVMW6KZ96BlsEmPHmbsw7Dg+LL8V7cNG8Whqh6z6wd3EKFzGP5drK7c
-         BB+qLJrFR66bzrZjOVuJzJgZZIUFeCtd97IPt7IaMQOSk1lzHn3oU+73yiPqYm1T8dvf
-         uzIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759165665; x=1759770465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zj9JtujIrCASOTxrqaUt0QRKvTAm0yHb0MuPSQjc/js=;
-        b=XLzVrfvXMXfAf9vUQsYpCMADe2wTTt6D2pIxQdIWcn5WV+p2ARDAPlLk29Qsyc/Sr5
-         emwlJkMi4rif5+K9+IqgWRzhHfV3fCTrRiwtk43ERZyFWwNd2BMd7vP/oTc0VpzdS8ZZ
-         ttgSITTCIFaeEXvpbyOlgJzNJa7LkFAumY3sT2cuqOXOw5uEmExSicfk9XqtQyrgBspS
-         TNF9ck8X0g7oE7UodHt5MihBiLdyVpYf+gxrE4oYS2L4yJmXW6s16i/6m2ge//QcOWg9
-         A8tgG5XL4KW0CtqQ8WqU1cvKwvDhbHCt2h2bhYJLiR0yWiowlLbyDWXi6duK7A6Zps8n
-         SIVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCHON2WAtYhFYnAhToMxszhYiw9LKXctslcw09MS99noZiX+Tv1Ni4F8opI2CSB9kQ4kGyKjzFif0OSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxU1JmU6bouYTZTKr2gDUCzjPXyz8ZfP2z78KfqQ3BrTHUceKM0
-	QccjQoSHFXgq8ss0t7YJMeCifS/H0H88Pqww/EvTrwVdsWurSV9RS4do
-X-Gm-Gg: ASbGncvHADb9nXLhkz1mP6UmRAncAnphbwBBtOQEDDQKq7+Jwqyk6uSqB7MHv9uEwPj
-	WBiV8XJ3gXfO1SD6mkYEPcHykqIb6sOswVZ3FVDtv+kDrFj+0M6V56u2bT+bPu5S37nvtnHyekX
-	0dl7SjjAKJZmxxSjGkmt5lMd9tssPk0liR4+4/9TuLOe/3ft4NtUjP17igwq/8e8/1atOdDaTdw
-	n4oxLqanYLKxvzdFs2AOnP5soK15CcdZH9mRKba6q3qb9nZme4JLCgV7aEoByxBggAr3MZedVgG
-	VoGgnbFY4WWb3m6I82mBPJxSdUP9f4Niimbc9iZAVXzbHCqCz63x3M1DztMaahQ9pOWX4huBqRx
-	tikegU1TxBpxHX+X1euzy9c12RotXpIOFEEvP/ElZt62tmrtrloJXeNSqDT9l79ozynwVeZhACw
-	MMi77W
-X-Google-Smtp-Source: AGHT+IE8a0TuB4O+ROJaTBK4jhGL6wAS75qWcIM1U4/kmaIwGYyni0pYeoJGRjfNbkPbKaoBFbyg2Q==
-X-Received: by 2002:a05:6000:2307:b0:408:ffb9:9f62 with SMTP id ffacd0b85a97d-40e47ee07eamr13272578f8f.29.1759165664670;
-        Mon, 29 Sep 2025 10:07:44 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.71.99])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e2ab61eecsm232769755e9.20.2025.09.29.10.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 10:07:43 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Conor Dooley <conor+dt@kernel.org>
-Cc: Rob Herring <robh@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: tmp102: Add TMP110 and TMP113 devices
-Date: Mon, 29 Sep 2025 20:07:30 +0300
-Message-ID: <20250929170730.8285-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250924-grievance-crisply-8c7da95946f1@spud>
-References: <20250924-grievance-crisply-8c7da95946f1@spud>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1759166534; x=1790702534;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version:subject;
+  bh=gKvaxmrs9uqyIGzbajJ1O5Hd1/ndu7xAtdLZV5bBh5k=;
+  b=fcXwy0xZFAjAG5ioqFJQdp7u9bZ9wRmoEjyyVPcJ36wXTbuWjbqRrDi7
+   B49UmJ1lE87OmyPGFnRTh4urVX2YvQ7BXyR0RaXgcG7ZphjDe/kmHXrch
+   8yMJE3K0TKE+hsJqDwrj7oH+nXc34eAmsI7+WFQJIOHItZAhtpdX+ZnQI
+   7CGMQXfX1PkHmzrlfTxQrOs8M8lTX6D3juk6EXZ+fWXR3a/j4oqby4k6T
+   uky/VIhuvQcXk1okeqSY4uphf4dKMuUnlZOkbaJyQUD/TMYbtSr8f2ZPJ
+   6o70OCOZNPv81QXGcsSUwhJTee+FiHKucpAf2Ma6YL9IFbOzwdWM1ewpv
+   w==;
+X-CSE-ConnectionGUID: IafcEd3hQO6oGZOiLnLKqg==
+X-CSE-MsgGUID: Itl7dVAmRv28mSSF4DAfeA==
+X-IronPort-AV: E=Sophos;i="6.18,302,1751241600"; 
+   d="scan'208";a="2841710"
+Subject: RE: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros
+ available everywhere
+Thread-Topic: [PATCH 07/19 v6.1.y] minmax: make generic MIN() and MAX() macros available
+ everywhere
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2025 17:22:02 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:7433]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.19.222:2525] with esmtp (Farcaster)
+ id 39c95fb2-68e2-4279-8b5a-834631637cab; Mon, 29 Sep 2025 17:22:01 +0000 (UTC)
+X-Farcaster-Flow-ID: 39c95fb2-68e2-4279-8b5a-834631637cab
+Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
+ EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Mon, 29 Sep 2025 17:21:59 +0000
+Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
+ EX19D018EUA004.ant.amazon.com (10.252.50.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Mon, 29 Sep 2025 17:21:59 +0000
+Received: from EX19D018EUA004.ant.amazon.com ([fe80::e53:84f8:3456:a97d]) by
+ EX19D018EUA004.ant.amazon.com ([fe80::e53:84f8:3456:a97d%3]) with mapi id
+ 15.02.2562.020; Mon, 29 Sep 2025 17:21:59 +0000
+From: "Farber, Eliav" <farbere@amazon.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: "linux@armlinux.org.uk" <linux@armlinux.org.uk>, "richard@nod.at"
+	<richard@nod.at>, "anton.ivanov@cambridgegreys.com"
+	<anton.ivanov@cambridgegreys.com>, "johannes@sipsolutions.net"
+	<johannes@sipsolutions.net>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
+	<bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com"
+	<hpa@zytor.com>, "tony.luck@intel.com" <tony.luck@intel.com>,
+	"qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>, "mchehab@kernel.org"
+	<mchehab@kernel.org>, "james.morse@arm.com" <james.morse@arm.com>,
+	"rric@kernel.org" <rric@kernel.org>, "harry.wentland@amd.com"
+	<harry.wentland@amd.com>, "sunpeng.li@amd.com" <sunpeng.li@amd.com>,
+	"Rodrigo.Siqueira@amd.com" <Rodrigo.Siqueira@amd.com>,
+	"alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+	"christian.koenig@amd.com" <christian.koenig@amd.com>, "Xinhui.Pan@amd.com"
+	<Xinhui.Pan@amd.com>, "airlied@gmail.com" <airlied@gmail.com>,
+	"daniel@ffwll.ch" <daniel@ffwll.ch>, "evan.quan@amd.com" <evan.quan@amd.com>,
+	"james.qian.wang@arm.com" <james.qian.wang@arm.com>, "liviu.dudau@arm.com"
+	<liviu.dudau@arm.com>, "mihail.atanassov@arm.com" <mihail.atanassov@arm.com>,
+	"brian.starkey@arm.com" <brian.starkey@arm.com>,
+	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
+	"mripard@kernel.org" <mripard@kernel.org>, "tzimmermann@suse.de"
+	<tzimmermann@suse.de>, "robdclark@gmail.com" <robdclark@gmail.com>,
+	"quic_abhinavk@quicinc.com" <quic_abhinavk@quicinc.com>,
+	"dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+	"sean@poorly.run" <sean@poorly.run>, "jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>, "linus.walleij@linaro.org"
+	<linus.walleij@linaro.org>, "dmitry.torokhov@gmail.com"
+	<dmitry.torokhov@gmail.com>, "maz@kernel.org" <maz@kernel.org>,
+	"wens@csie.org" <wens@csie.org>, "jernej.skrabec@gmail.com"
+	<jernej.skrabec@gmail.com>, "samuel@sholland.org" <samuel@sholland.org>,
+	"agk@redhat.com" <agk@redhat.com>, "snitzer@kernel.org" <snitzer@kernel.org>,
+	"dm-devel@redhat.com" <dm-devel@redhat.com>, "rajur@chelsio.com"
+	<rajur@chelsio.com>, "davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>, "kuba@kernel.org"
+	<kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
+	"peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+	"alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+	"joabreu@synopsys.com" <joabreu@synopsys.com>, "mcoquelin.stm32@gmail.com"
+	<mcoquelin.stm32@gmail.com>, "krzysztof.kozlowski@linaro.org"
+	<krzysztof.kozlowski@linaro.org>, "malattia@linux.it" <malattia@linux.it>,
+	"hdegoede@redhat.com" <hdegoede@redhat.com>, "markgross@kernel.org"
+	<markgross@kernel.org>, "artur.paszkiewicz@intel.com"
+	<artur.paszkiewicz@intel.com>, "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+	"fei1.li@intel.com" <fei1.li@intel.com>, "clm@fb.com" <clm@fb.com>,
+	"josef@toxicpanda.com" <josef@toxicpanda.com>, "dsterba@suse.com"
+	<dsterba@suse.com>, "jack@suse.com" <jack@suse.com>, "tytso@mit.edu"
+	<tytso@mit.edu>, "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+	"dushistov@mail.ru" <dushistov@mail.ru>, "luc.vanoostenryck@gmail.com"
+	<luc.vanoostenryck@gmail.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"mhiramat@kernel.org" <mhiramat@kernel.org>, "pmladek@suse.com"
+	<pmladek@suse.com>, "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+	"linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>, "minchan@kernel.org"
+	<minchan@kernel.org>, "ngupta@vflare.org" <ngupta@vflare.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "pablo@netfilter.org" <pablo@netfilter.org>,
+	"kadlec@netfilter.org" <kadlec@netfilter.org>, "fw@strlen.de" <fw@strlen.de>,
+	"jmaloy@redhat.com" <jmaloy@redhat.com>, "ying.xue@windriver.com"
+	<ying.xue@windriver.com>, "andrii@kernel.org" <andrii@kernel.org>,
+	"mykolal@fb.com" <mykolal@fb.com>, "ast@kernel.org" <ast@kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "song@kernel.org" <song@kernel.org>, "yhs@fb.com"
+	<yhs@fb.com>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@google.com" <sdf@google.com>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
+	"keescook@chromium.org" <keescook@chromium.org>, "wad@chromium.org"
+	<wad@chromium.org>, "willy@infradead.org" <willy@infradead.org>,
+	"sashal@kernel.org" <sashal@kernel.org>, "ruanjinjie@huawei.com"
+	<ruanjinjie@huawei.com>, "quic_akhilpo@quicinc.com"
+	<quic_akhilpo@quicinc.com>, "David.Laight@aculab.com"
+	<David.Laight@aculab.com>, "herve.codina@bootlin.com"
+	<herve.codina@bootlin.com>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-um@lists.infradead.org"
+	<linux-um@lists.infradead.org>, "linux-edac@vger.kernel.org"
+	<linux-edac@vger.kernel.org>, "amd-gfx@lists.freedesktop.org"
+	<amd-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>, "freedreno@lists.freedesktop.org"
+	<freedreno@lists.freedesktop.org>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-input@vger.kernel.org"
+	<linux-input@vger.kernel.org>, "linux-sunxi@lists.linux.dev"
+	<linux-sunxi@lists.linux.dev>, "linux-media@vger.kernel.org"
+	<linux-media@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-stm32@st-md-mailman.stormreply.com"
+	<linux-stm32@st-md-mailman.stormreply.com>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "netfilter-devel@vger.kernel.org"
+	<netfilter-devel@vger.kernel.org>, "coreteam@netfilter.org"
+	<coreteam@netfilter.org>, "tipc-discussion@lists.sourceforge.net"
+	<tipc-discussion@lists.sourceforge.net>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Thread-Index: AQHcLZHEroQ9W2lH4EW9XJumD1KlZrSqNL0AgAAM8ACAAAMmgIAAKtlA
+Date: Mon, 29 Sep 2025 17:21:58 +0000
+Message-ID: <e754fed7d53040fb92e1ef9b64c64f6e@amazon.com>
+References: <20250924202320.32333-1-farbere@amazon.com>
+ <20250924202320.32333-8-farbere@amazon.com>
+ <2025092923-stove-rule-a00f@gregkh>
+ <85a995bb59474300aa3d5f973d279a13@amazon.com>
+ <2025092955-module-landfall-ed45@gregkh>
+In-Reply-To: <2025092955-module-landfall-ed45@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 24, 2025 at 19:12:26 +0100, Conor Dooley wrote:
->On Wed, Sep 24, 2025 at 08:55:39AM -0700, Guenter Roeck wrote:
->> On 9/15/25 10:18, Conor Dooley wrote:
->> > On Mon, Sep 15, 2025 at 08:08:18PM +0300, Flaviu Nistor wrote:
->> > > Add a compatible string for TMP110 and TMP113 devices.
->> > > 
->> > > Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
->> > > ---
->> > >   Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml | 2 ++
->> > >   1 file changed, 2 insertions(+)
->> > > 
->> > > diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> > > index 96b2e4969f78..840b5306a8cf 100644
->> > > --- a/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> > > +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp102.yaml
->> > > @@ -13,6 +13,8 @@ properties:
->> > >     compatible:
->> > >       enum:
->> > >         - ti,tmp102
->> > > +      - ti,tmp110
->> > > +      - ti,tmp113
->> > 
->> > The driver has no match data and no compatible based decisions added in
->> > your patch. Why is a fallback to tmp102 not suitable?
->> > 
->> 
->> That should work for tmp110. However, tmp113 does have additional registers, and it
->> might be desirable to report the content of those using debugfs. Fallback for that chip
->> would work for now, but that might have to change later if support for the additional
->> registers is added to the driver.
+> On Mon, Sep 29, 2025 at 02:39:26PM +0000, Farber, Eliav wrote:
+> > > On Wed, Sep 24, 2025 at 08:23:08PM +0000, Eliav Farber wrote:
+> > > > From: Linus Torvalds <torvalds@linux-foundation.org>
+> > > >
+> > > > [ Upstream commit 1a251f52cfdc417c84411a056bc142cbd77baef4 ]
+> > >
+> > > <snip>
+> > >
+> > > As this didn't go into 6.6.y yet, I'll stop here on this series for n=
+ow.
+> > > Please fix up for newer kernels first and then resend these.
+> >
+> > For 6.6.y I backported 15 commits:
+> > https://lore.kernel.org/stable/20250922103241.16213-1-farbere@amazon.co=
+m/T/#t
+> >
+> > Why weren't all of them picked?
 >
->In that case, only the driver would need to change not the binding.
->That's fine though, of course.
->
+> Because one of them broke the build, as I wrote a week ago here:
+>         https://lore.kernel.org/all/2025092209-owl-whisking-03e3@gregkh/
 
-I am a little confused and I would appreciate some advice if I should leave
-the series as it is or send a v2 only for documentation and Kconfig updates,
-droping the binding update?
+Fixed:
+https://lore.kernel.org/stable/20250929171733.20671-1-farbere@amazon.com/T/=
+#t
 
->> 
->> Guenter
->> 
->> > >     interrupts:
->> > >       maxItems: 1
->> > > -- 
->> > > 2.43.0
->> > > 
->> 
+---
+Thanks, Eliav
