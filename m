@@ -1,81 +1,67 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F86E2BD5A7
-	for <linux-hwmon@vger.kernel.org>; Tue, 30 Sep 2025 10:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5112BD5A7
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Sep 2025 10:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759227668; cv=none; b=eaBO5H11OkX5NXwxHgq4urqhRhK+55oVvFctVidJJ3vLbBuuwXgE4eJFyoTr2+SPFA/uwU5AyjXjANBdLW1+uRW++pduXrQRNYGkm8jZszvuRmgrpgfcS6gK29sxXMOzd8g6hvEhcKi5ti7xfKOhlW917Tc01NDZOw6ZQqqVJX0=
+	t=1759228017; cv=none; b=XyMPcckp/iTni7BAINHwOtRhz2qAqNOpjX0zwq3dZWAr0Ys3/J5R5HgV8YjwMY4pciyRITkvRBGcPdVeNgRwOJAhy6TY9gP1Q3sVXFYK9FQ2b35TeBP12C5yzUPvvti6qz4Bs+fh9qk/CvSWpRqGQgo4QD1d0anPeFjcnRHV0S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759227668; c=relaxed/simple;
-	bh=6S0YKabrw4koIFu4B/ZuSjByBya4s0p2igDmnDMGkpI=;
+	s=arc-20240116; t=1759228017; c=relaxed/simple;
+	bh=/pFct7L/3TmKoirc4ay3nHD+g0DEGiC6uEE/GEYyMR0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EdVAPn3QCayzRzIES1GsTVLG0cWKpoURRJJ0P1FnT8UX5KNS7xh3cUm3ZDTm+yqffJw9h48Ahr6uFLORpdSsLz1eKrjh+6RHXwu96Zwp3PIVvkR3EEMuwDbGVIELaBR326dYp4BH3C2jb9VCGEdAIbi2TcFaA92BOiq5FBgrl4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lC1nOXmw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gkTeZUFV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lC1nOXmw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=gkTeZUFV; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	 In-Reply-To:Content-Type; b=bwD1N4UMgoZkyvnpZbDTNzu0W0xacyhGPjFI+N7hm2DpevmzE/YeaKfoaMHBEDtGs7hXyzGIU2Hb8FnN/hYTFyKnYgy0aJYrZTXZmRfKvQD8ynkInbkYKGO3wRa+WBtGiF/0J6nOA2IePX0lnTCz1UuTIz6boPqX6uyr9k3WzRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYW6DrhC; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lC1nOXmw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gkTeZUFV";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lC1nOXmw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="gkTeZUFV"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 125C6336CF;
-	Tue, 30 Sep 2025 10:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1759227661; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2FO5TJu0e3hKi5ooEEyq91mLNTSFD8iqOTnH4/uGmiI=;
-	b=lC1nOXmwgp1Fr1DLnriYWoc4IfBB0y/Vp0R5PvPq1Rwptyjlw78PCwQxFOJQSKCq32GHBT
-	WQoNbevmCL+F96OIMzYL3sNB6QGMgq+LHikU3Gzm0tIlwqCrP2J32yNwu1sZ7XvpuO+wfk
-	Qdrj01zGuMMelSUJSWHTI/xT4OWMNKs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1759227661;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2FO5TJu0e3hKi5ooEEyq91mLNTSFD8iqOTnH4/uGmiI=;
-	b=gkTeZUFV70twndFZVAS8N0ffQ87/o43z5AxtvtJ9CKbeIXB+Bq5SgrVZtz8kxWtP2RWeCc
-	GpzVhEbqissIJTBQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=lC1nOXmw;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=gkTeZUFV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1759227661; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2FO5TJu0e3hKi5ooEEyq91mLNTSFD8iqOTnH4/uGmiI=;
-	b=lC1nOXmwgp1Fr1DLnriYWoc4IfBB0y/Vp0R5PvPq1Rwptyjlw78PCwQxFOJQSKCq32GHBT
-	WQoNbevmCL+F96OIMzYL3sNB6QGMgq+LHikU3Gzm0tIlwqCrP2J32yNwu1sZ7XvpuO+wfk
-	Qdrj01zGuMMelSUJSWHTI/xT4OWMNKs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1759227661;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2FO5TJu0e3hKi5ooEEyq91mLNTSFD8iqOTnH4/uGmiI=;
-	b=gkTeZUFV70twndFZVAS8N0ffQ87/o43z5AxtvtJ9CKbeIXB+Bq5SgrVZtz8kxWtP2RWeCc
-	GpzVhEbqissIJTBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1734213A3F;
-	Tue, 30 Sep 2025 10:21:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kvSsAgyv22iuBwAAD6G6ig
-	(envelope-from <svarbanov@suse.de>); Tue, 30 Sep 2025 10:21:00 +0000
-Message-ID: <88bd67f2-de8c-407b-ba98-08663eee2d7e@suse.de>
-Date: Tue, 30 Sep 2025 13:20:59 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYW6DrhC"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-279e2554c8fso59189445ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Sep 2025 03:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759228014; x=1759832814; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rHYCUF3M3bApeVBfy1czKkXiFP6t0sLs+mu2ZklUCC8=;
+        b=XYW6DrhCeytLRri1gs+0afJgLKEJ4h4TmgIcTbCe/g2iIANH1IXWJV3LQCYSy3UTd3
+         A0UfmLYIb0bUnMSdbkpr52+a75exqiI2LrTVhwvD2fljIAAwoT1tgzrefa/TuH+ueNDE
+         aGssiuH5oKNusPcYKOa47TmK+Wb+Npgp58TGMehl63gjQjS4QDfKcNPFwpxz2xKqoCn3
+         G/DH8ubUIQALfSYe4eyc2BvIsJnFb8sFdUjs+Vw0DkrxuoJqyOluRQJMiHpZfNDcVDe8
+         DHaavLsaHFKYP1KQMj0cMZ64S1emMTAZ3N81QgvbC4JAcoYjMiowEfGmGqmcX1aU0//Y
+         zbRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759228014; x=1759832814;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rHYCUF3M3bApeVBfy1czKkXiFP6t0sLs+mu2ZklUCC8=;
+        b=d6yoBrGhsfRgJmSG6qhezaywWBPfXSDgQa02C5YrHy0IHByTrL+FSZMYAC6dzPKd3O
+         VJXDNBHaEhjwqcA6uXfpz8tFlkwTVHVPMRmkjtJF7lnhF3y3hIrV2iE+ArTF8t2h6mGX
+         Gvjok6K/lNw0pbIuGfUC23wvJXrPhzykuQvocoxufTGTxfn5TrcOfI5NJLgeMxuJNXuw
+         mxGJS3I76nfWZwJxG//Ow00uZAHZhA2YbJktfL+c+S3+foYoCFdDIJqCy68w4NSmP3jI
+         lEnoaG63GEpiQlWPWw1RiqSvOfMSy7IMWuOsf6tRqmARHY2pxfRnK5hn1akDlaoxzDJ3
+         OznA==
+X-Gm-Message-State: AOJu0YyUvjSqY2h1mjhqmeMUi1ySMLrFlwI7Az3vx1HEy6OIlZzuEIus
+	HA+LV0FmWYb1MfZ62y5/SxHnr275WWxaPAFe0AlyXYua97h5KKD8ALmx
+X-Gm-Gg: ASbGnctwi1NAlxB1CpkgQEgxgS8IJAiWHe4pZUUETxH36siduaSUoGF7cLAPEvsDS0o
+	+wG9PL5Y7DerisSxyXhUKS8rsj1gElsFvPKmYwqtKuVJjr5AWjIwEQ8271Ogp+iWAUYe0gSJ5gf
+	+F2imy90mR5PUV7CfedLjBngnMd/kb+9aqlAEJ6baOPL3Y7hYU2d1NvRtIQKyF6SH7Sbvwrs+S7
+	m8xoYWZQkPXK9MSWiqLbD2cL3x5wID5n2tkvh8w1usvHjOsiNWwo1VEL1pm9OC0JIj91+lZL1ip
+	1yoglo5rsZdz37VUG2HlctbDRHfcCxMnBAEiuueHHn6I/WLRTgukdJdd1kY6Srj6E5SRiNDISqx
+	sPCt/HrxVj1XlcHu4fDN47N+RkKtzt7QTRc/WOPMFPGrsU3mzxw+eSi57K1iI1T3sdROSugRWlz
+	0DgSgQvJ1rP//F7alyVUb4R0pf8d5zsw==
+X-Google-Smtp-Source: AGHT+IHyO4juYjcFOs9ygZMd8gLEwThxV9Bz494Qnh1VF+UsR7xWJvDDdlI/i2g2T1XCNCwT25MFWQ==
+X-Received: by 2002:a17:902:d50b:b0:24c:d0b3:3b20 with SMTP id d9443c01a7336-27ed4a7ebb9mr232993795ad.37.1759228014001;
+        Tue, 30 Sep 2025 03:26:54 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b57c55a339dsm13330921a12.40.2025.09.30.03.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Sep 2025 03:26:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c0ebd50a-0e44-4262-ab10-33803b3dbfb7@roeck-us.net>
+Date: Tue, 30 Sep 2025 03:26:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,133 +69,289 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: Add Raspberry Pi's RP1 ADC
-To: Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor@kernel.org>
-Cc: Stanimir Varbanov <svarbanov@suse.de>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rpi-kernel@lists.infradead.org,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, linux-hwmon@vger.kernel.org,
- Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- Stefan Wahren <wahrenst@gmx.net>, Saenz Julienne <nsaenz@kernel.org>,
- Andrea della Porta <andrea.porta@suse.com>,
- Phil Elwell <phil@raspberrypi.com>, Jonathan Bell
- <jonathan@raspberrypi.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20250925000416.2408457-1-svarbanov@suse.de>
- <20250925000416.2408457-2-svarbanov@suse.de>
- <20250925-outlying-causal-015d8ba33c53@spud>
- <89dd04b9-e261-4bdd-83ab-499e46fc9c01@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/max17616): add driver for max17616
+To: Kim Seer Paller <kimseer.paller@analog.com>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20250930-upstream-max17616-v1-0-1525a85f126c@analog.com>
+ <20250930-upstream-max17616-v1-2-1525a85f126c@analog.com>
 Content-Language: en-US
-From: Stanimir Varbanov <svarbanov@suse.de>
-In-Reply-To: <89dd04b9-e261-4bdd-83ab-499e46fc9c01@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20250930-upstream-max17616-v1-2-1525a85f126c@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_CC(0.00)[suse.de,vger.kernel.org,lists.infradead.org,broadcom.com,suse.com,kernel.org,lunn.ch,gmx.net,raspberrypi.com];
-	FREEMAIL_ENVRCPT(0.00)[gmx.net];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	TAGGED_RCPT(0.00)[dt];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,devicetree.org:url,suse.de:mid,suse.de:dkim,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 125C6336CF
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
 
-Hi,
-
-On 9/25/25 11:37 PM, Guenter Roeck wrote:
-> On Thu, Sep 25, 2025 at 08:40:54PM +0100, Conor Dooley wrote:
->> On Thu, Sep 25, 2025 at 03:04:13AM +0300, Stanimir Varbanov wrote:
->>> Document dt-bindings for Raspberry Pi's RP1 ADC.
->>>
->>> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
->>> ---
->>>  .../bindings/hwmon/raspberrypi,rp1-adc.yaml   | 46 +++++++++++++++++++
->>>  1 file changed, 46 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
->>> new file mode 100644
->>> index 000000000000..5266b253fd2b
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.yaml
->>> @@ -0,0 +1,46 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/hwmon/raspberrypi,rp1-adc.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Rasberry Pi RP1 ADC device
->>> +
->>> +maintainers:
->>> +  - Stanimir Varbanov <svarbanov@suse.de>
->>> +
->>> +description: |
->>> +  The RP1 ADC is a five input successive-approximation ADC with 12-bit
->>> +  resolution (ENOB 9.5-bit) at 500kSPS. It has four external inputs
->>> +  and one internal temperature sensor.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: raspberrypi,rp1-adc
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    maxItems: 1
->>> +
->>> +  vref-supply:
->>> +    description:
->>> +      Reference voltage regulator 3.3V.
->>
->> Looks like you're missing the io-channels-cells property that allows
->> this device to be a provider of adc channels to other devices.
->>
-> Only makes sense if the driver is implemented as iio driver.
-> Which would be fine with me, assuming this is a generic ADC.
-> The iio -> hwmon bridge can then be used to instantiate a
-> hwmon device if needed.
+On 9/29/25 22:02, Kim Seer Paller wrote:
+> Add support for MAX17616/MAX17616A current-limiter with
+> overvoltage/surge, undervoltage, reverse polarity, loss of ground
+> protection with PMBus interface. The PMBus interface allows monitoring
+> of input/output voltages, output current and temperature.
 > 
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
 
-According to the RP1 peripheral document the information about ADC is
-limited and I cannot be 100% sure that this is generic ADC, but it looks
-like it is. On RPi5 board the ADC inputs are not configurable, but that
-could change on another board.
+I am a bit concerned about VOUT_UV_FAULT_LIMIT which is completely non-standard.
+Did you check with real hardware that in2_lcrit is not instantiated ?
 
-I personally don't have objections to implement it as IIO driver.
+Thanks,
+Guenter
 
-Phil, are you fine with implementing the driver as IIO?
-
-~Stan
+> ---
+>   Documentation/hwmon/index.rst    |  1 +
+>   Documentation/hwmon/max17616.rst | 62 ++++++++++++++++++++++++++++++++++
+>   MAINTAINERS                      |  2 ++
+>   drivers/hwmon/pmbus/Kconfig      |  9 +++++
+>   drivers/hwmon/pmbus/Makefile     |  1 +
+>   drivers/hwmon/pmbus/max17616.c   | 73 ++++++++++++++++++++++++++++++++++++++++
+>   6 files changed, 148 insertions(+)
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 51a5bdf75b08656ee6499c6b5c50a51fc4d7c210..62c5d10f16ae722dd2e6a4f8953ae24b5f541666 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -151,6 +151,7 @@ Hardware Monitoring Kernel Drivers
+>      max1619
+>      max16601
+>      max1668
+> +   max17616
+>      max197
+>      max20730
+>      max20751
+> diff --git a/Documentation/hwmon/max17616.rst b/Documentation/hwmon/max17616.rst
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..936447159f87a9c6b270b903c46b43a90caddb23
+> --- /dev/null
+> +++ b/Documentation/hwmon/max17616.rst
+> @@ -0,0 +1,62 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver max17616
+> +====================
+> +
+> +Supported chips:
+> +
+> +  * Analog Devices MAX17616/MAX17616A
+> +
+> +    Prefix: 'max17616'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/max17616-max17616a.pdf
+> +
+> +Author:
+> +
+> +  - Kim Seer Paller <kimseer.paller@analog.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver supports hardware monitoring for Analog Devices MAX17616/MAX17616A
+> +Current-Limiter with OV/Surge, UV, Reverse Polarity, Loss of Ground Protection
+> +with PMBus Interface.
+> +
+> +The MAX17616/MAX17616A is a 3V to 80V, 7A current-limiter with overvoltage,
+> +surge, undervoltage, reverse polarity, and loss of ground protection. Through
+> +the PMBus interface, the device can monitor input/output voltages, output current
+> +and temperature.
+> +
+> +The driver is a client driver to the core PMBus driver. Please see
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +This driver does not auto-detect devices. You will have to instantiate
+> +the devices explicitly. Please see Documentation/i2c/instantiating-devices.rst
+> +for details.
+> +
+> +Platform data support
+> +---------------------
+> +
+> +The driver supports standard PMBus driver platform data.
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +================= ========================================
+> +in1_label         "vin"
+> +in1_input         Measured input voltage
+> +in1_alarm	  Input voltage alarm
+> +in2_label	  "vout1"
+> +in2_input	  Measured output voltage
+> +curr1_label	  "iout1"
+> +curr1_input	  Measured output current.
+> +curr1_alarm	  Output current alarm
+> +temp1_input       Measured temperature
+> +temp1_alarm       Chip temperature alarm
+> +================= ========================================
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 89d35faf93c9d2e984b73f5c09d09044ee6eddb2..267ab428260a29c38fa508190bdfa2677bba58c8 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14923,6 +14923,8 @@ L:	linux-hwmon@vger.kernel.org
+>   S:	Supported
+>   W:	https://ez.analog.com/linux-software-drivers
+>   F:	Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
+> +F:	Documentation/hwmon/max17616.rst
+> +F:	drivers/hwmon/pmbus/max17616.c
+>   
+>   MAX2175 SDR TUNER DRIVER
+>   M:	Ramesh Shanmugasundaram <rashanmu@gmail.com>
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index da04ff6df28bd12909c9140662d6b932a150bd97..def5faad8fdf56eb31fe216322ead57ee43a1ac5 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -320,6 +320,15 @@ config SENSORS_MAX16601
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called max16601.
+>   
+> +config SENSORS_MAX17616
+> +	tristate "Analog Devices MAX17616/MAX17616A"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Analog
+> +	  Devices MAX17616/MAX17616A.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called max17616.
+> +
+>   config SENSORS_MAX20730
+>   	tristate "Maxim MAX20710, MAX20730, MAX20734, MAX20743"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 4c5ff3f32c5ecbea069dce8af3e3e8365892b278..9cebe488fdf18b2aa164c0fc2ac7d1d8ffd2b970 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -31,6 +31,7 @@ obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
+>   obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
+>   obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
+>   obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
+> +obj-$(CONFIG_SENSORS_MAX17616)	+= max17616.o
+>   obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
+>   obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
+>   obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+> diff --git a/drivers/hwmon/pmbus/max17616.c b/drivers/hwmon/pmbus/max17616.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1d4a0ddb95bb6e8349932062be0d918f935cd846
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/max17616.c
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Hardware monitoring driver for Analog Devices MAX17616/MAX17616A
+> + *
+> + * Copyright (C) 2025 Analog Devices, Inc.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +
+> +#include "pmbus.h"
+> +
+> +static struct pmbus_driver_info max17616_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.m[PSC_VOLTAGE_IN] = 512,
+> +	.b[PSC_VOLTAGE_IN] = -18,
+> +	.R[PSC_VOLTAGE_IN] = -1,
+> +
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.m[PSC_VOLTAGE_OUT] = 512,
+> +	.b[PSC_VOLTAGE_OUT] = -18,
+> +	.R[PSC_VOLTAGE_OUT] = -1,
+> +
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.m[PSC_CURRENT_OUT] = 5845,
+> +	.b[PSC_CURRENT_OUT] = 80,
+> +	.R[PSC_CURRENT_OUT] = -1,
+> +
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.m[PSC_TEMPERATURE] = 71,
+> +	.b[PSC_TEMPERATURE] = 19653,
+> +	.R[PSC_TEMPERATURE] = -1,
+> +
+> +	.func[0] =  PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> +		    PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_VOUT |
+> +		    PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT |
+> +		    PMBUS_HAVE_STATUS_TEMP,
+> +};
+> +
+> +static int max17616_probe(struct i2c_client *client)
+> +{
+> +	return pmbus_do_probe(client, &max17616_info);
+> +}
+> +
+> +static const struct i2c_device_id max17616_id[] = {
+> +	{ "max17616" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, max17616_id);
+> +
+> +static const struct of_device_id max17616_of_match[] = {
+> +	{ .compatible = "adi,max17616" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, max17616_of_match);
+> +
+> +static struct i2c_driver max17616_driver = {
+> +	.driver = {
+> +		.name = "max17616",
+> +		.of_match_table = max17616_of_match,
+> +	},
+> +	.probe = max17616_probe,
+> +	.id_table = max17616_id,
+> +};
+> +module_i2c_driver(max17616_driver);
+> +
+> +MODULE_AUTHOR("Kim Seer Paller <kimseer.paller@analog.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Analog Devices MAX17616/MAX17616A");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
+> 
 
