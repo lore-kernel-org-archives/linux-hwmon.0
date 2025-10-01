@@ -1,143 +1,63 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2132A303CA8
-	for <linux-hwmon@vger.kernel.org>; Wed,  1 Oct 2025 14:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7272D6621;
+	Wed,  1 Oct 2025 18:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759330586; cv=none; b=Qy6aA7/aboXNzGKEomRDYVjYJW2I6n6Jh52OGzWc2XhTsRZqZBkFj/9UtIo6zQMG9MARvwtHsHsctzJadKF1h40VCM1T7Qmdw/fG4rQpT2bO/0+wb/7GmDdW0ob9z+4WpMrqIT55CSD9DrDHuSzIUmNUn2ufkMF0mf5Vej51uJI=
+	t=1759344163; cv=none; b=JevLoq/3dy3x5Cz8+hVXZMFddnMZVRBhT2jQ19yBlNrTw6JKgmpHvX/uHorp8cEg1zxL21xB3ECfq4lb6qj53WoMaD7CMQCp55HkmEgKtwkiVJwLieSwjKi/lK8M8pU0CNsDetylAsvwT2tHe/6VxbAnqDi5o/3l7e0KQ51Kdkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759330586; c=relaxed/simple;
-	bh=TRyHs9IEHWxtIGR/sLNg5b2MfBrNlCsFmJrDYwg376Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r3ftYs8VylOf6nG3J9NxuSU/68LRcJuhDruVo/cqXDzDhjUix8DhwxBWDtEC5b+PP6TuMO3w3DMEo/f/nwQFJZON32XJb0qJTxh3OVwX6acVJ5PB7ADkTORK6QHk7duHGgxO5fB7Su+SCN9CxzuHbDZT43ihBh6ud7GKhbE1gPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kqtFc5/R; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759344163; c=relaxed/simple;
+	bh=2cHu+4n9UY65ObeKIdblQpiuZzBfWCxejbH1z02Q7iY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=D2aSR8KxWoFsZ2tO9RjZ2+RPl+w3qzaaU39KxIgE/cGrIxswUHYmd96n13gG6XzBwP7meeNNFHD4k+ePBSdns+VT7AGoBMWzKiAAeFb234ZqBuFEQOsyoR6C3133a+QrhU8mlBjsSqXiCm+9g1ZXbWUp8lDL7uTJHaU9uwN0qQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fvi266jj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kqtFc5/R"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7835321bc98so4581489b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Oct 2025 07:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759330584; x=1759935384; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMaRMjae5qhJ6T8LZr9SwTJXOKHeU5QOS0jWZvlSGc0=;
-        b=kqtFc5/RzIf1TYfNGW+xOrXTjfq2CpqDVvTunN6cg5r0OD6y7Yog72C2D1PcEeTTYi
-         Cxzx4xTUSmf6L0u6KWNew8SJpbdaxA3celSkacP1B616zNY0TNpuWJMoS991qw28Wp+p
-         VahG4ARxRiezCOttWKjPRat2YRuJx2ji0CxZDsc5vIMWnou5yyd9rRxLy92y0xIyDojn
-         yDygSIkDVAso1LUxojWk6f3pKoNwRk8cjbCO0Gv2tp8+DMth+GSBjocI/dw00V+66EkE
-         V1WzPoug3PoKRwVL0Cgpd704r8M/e0Qh8P8Zsw18iXpXfdgT8S5lI0H7bfWDn3w7CbKR
-         o1Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759330584; x=1759935384;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vMaRMjae5qhJ6T8LZr9SwTJXOKHeU5QOS0jWZvlSGc0=;
-        b=XMQphPa7asaaIKjZlnDbc5VO3YcI1znngmAPiZEKCay2bO+j6NU7tay275rhp6EHUq
-         NDEG/3Q9RrViuCNrurKPY6Gio/uPhTpWrK7qGzHKxZq0k80Dmd9fy88nQEoguSSMVYG7
-         u1oDGiCTKhjV0x2KArDBDrIZlBooaSXz5cZJdLJZTq9OSk2PM7brcJUeVfVFzFSd0JC1
-         j7+evDM2Ke0us4d3Dqx0Tg40HoNGJDAFJcEJladYiaAdXziSDkizU8h8uUTXGy/hQ2fs
-         B9kMcHDFWFV3rTyEtPfuy6pVA1uv8MvYmA3flWFZf6/CsqQBsNJjo0JVYwtfdWwam79T
-         NVaA==
-X-Forwarded-Encrypted: i=1; AJvYcCXnUI6QhPDCufvxUZNMCkrU4PikfxEUQ603y9sKNpwNl2vxPXRoAOLI8/8geY/n2jFuQPAYIuW9tdpYnQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdYSahFKWf+AAmBHY8WhlnQYpHlJJNLbTKeApRWyQxsyX2X6Uj
-	riKYCWSeYAptQvUU8skNoFP67Gxq88FhXICHs/Mlw0khqUJxL90zu9jH
-X-Gm-Gg: ASbGncs/U7BhWulV2lToAwMcARPM4cdqFQAvKKM4gCAavfbI2nCdlJBm83bNYnok736
-	GiVV1jUVmPWUwfdrQQFIP9Yoz0XO3seV/0/p1Hain8gOtCGKNYk713puH5eEMDk9/nIyYPM9aH5
-	2pJN88Im0tY6laZGmWEho0TytmBq7NpR/XQVu5A2wfXw96LmKzdiTEKaljTRWi1DjO1Mw7GCLbI
-	LtD17d7Qzhv0VIMoFeSwkp8Ri9vYFwvSQQf+alu25rFl90s4ZsyJ07UvIWwFJoNClqF9tmNiQQM
-	Yd0m+55jTJG+2WtO74uvn1Y25baE5Ngz/+yESjne1EJN398/8TGPErZ2xVZdFdZVFL6ipfsg4OW
-	6pS5a3ItNFLxZbpB/pquT2lABQ0oj51b1OaEOe/1MXXvXl44Ffg/ns6WeoYf0evmS5dQwt1OljF
-	lhEiWjIP5iJVqPozdSoZw=
-X-Google-Smtp-Source: AGHT+IHNGQLvotx2qaUZNh8cndj8yxi/+YPCSljuENQkge2S0/2QPiWneDeKuPJFHif4je6sXsDnzA==
-X-Received: by 2002:a17:90b:3511:b0:32e:51dd:46dd with SMTP id 98e67ed59e1d1-339a6e97a92mr5001609a91.16.1759330584328;
-        Wed, 01 Oct 2025 07:56:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3399cd8013dsm2418350a91.4.2025.10.01.07.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Oct 2025 07:56:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b0632c19-1b98-46fe-add8-d2926fd296ea@roeck-us.net>
-Date: Wed, 1 Oct 2025 07:56:20 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fvi266jj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1CD0C4CEF7;
+	Wed,  1 Oct 2025 18:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759344163;
+	bh=2cHu+4n9UY65ObeKIdblQpiuZzBfWCxejbH1z02Q7iY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Fvi266jjy0JqxUHnKcuJVr0BCr6HBNgq9kMtC5GF6e/YMpVKrO+gJuMx1dFHc1+OK
+	 Q7XCuuY3DxvtFEkjSHAwngtHjA7u0dNADYqlLRsMPArjFKI1gUNhcEJGVkxzym/zhw
+	 TtgzF4sxfGXDp7NJ3cNaXtvxN9toEBD+0W9B5L5MuN36IzWriaoGKu6/eg97cNjroM
+	 ++uN41EDX+n8dMuTqVQWypA3KsLIV0N2l9mMJ7GvfvvJmOvr2S+AG6WVWVvkN7BT6Q
+	 TKJdaAB7TP2Rnma+vj4ROFOkx1AYS0KYlDFBLrEBhY/HmaBdFGIcSzQB5ofJN0TJl5
+	 +G+9vLUdw+WyA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE1E539D0C3F;
+	Wed,  1 Oct 2025 18:42:36 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v6.18-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250929005950.447268-1-linux@roeck-us.net>
+References: <20250929005950.447268-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250929005950.447268-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.18-rc1
+X-PR-Tracked-Commit-Id: 76bb6969a8cfc5e00ca142fdad86ffd0a6ed9ecd
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 989253cc46ff3f4973495b58e02c7fcb1ffb713e
+Message-Id: <175934415540.2574344.1308587567840068638.pr-tracker-bot@kernel.org>
+Date: Wed, 01 Oct 2025 18:42:35 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 RESEND 4/7] dt-bindings: hwmon: Move max31785
- compatibles to max31790 document
-To: Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-aspeed@lists.ozlabs.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, andrew@codeconstruct.com.au, joel@jms.id.au,
- chanh@os.amperecomputing.com, jic23@kernel.org, dlechner@baylibre.com,
- nuno.sa@analog.com, andy@kernel.org
-References: <20251001144441.310950-1-eajames@linux.ibm.com>
- <20251001144441.310950-5-eajames@linux.ibm.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251001144441.310950-5-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 10/1/25 07:44, Eddie James wrote:
-> The binding for the max31785 is the same as the max31790, so just add
-> some compatible strings for the max31785 chip.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+The pull request you sent on Sun, 28 Sep 2025 17:59:49 -0700:
 
-I'll pick this and the next patch of the series after the commit window closes.
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.18-rc1
 
-Guenter
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/989253cc46ff3f4973495b58e02c7fcb1ffb713e
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
