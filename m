@@ -1,175 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022AE27A928;
-	Tue, 30 Sep 2025 18:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E7E14EC62;
+	Wed,  1 Oct 2025 00:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759258703; cv=none; b=W6cWAXETRndIL6XEr5Iv1qAqFVga7s8KDypERX8ESZUUzpMqKSpoz+x2UAnYOIAF7s403IBdtnarevUj/7qhSAl0FSkAQcT/1pi1+s9UYe8W5mU2FAFO9mvwTJmanRxokcJea4C9XubL2eDxm6SeblWX9lgTmEjkJOCynxx3gmQ=
+	t=1759279086; cv=none; b=F8gjkWB0xTE0+LFQitKi8ApCiOLXdkudG4OKzW6Y+CHsvtIcJQM50YyAbzFN32z+uzzTn/16Jx4N5Yhhh9QYci0vpP31CpsNBIxfWJ+EvZXYn8i0dE85WPLjywCrquenqH6OWgk92gJCqUCXy5FEf/eki9Y+1qzqGJO05sOTOYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759258703; c=relaxed/simple;
-	bh=ftQwGWLKK1s5Gh7SLQ8fWSKuz7Q2521DX+kCSsNK2TE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RbHDfg1uGfjZmFmD0p88HvcV4bgvjWint8HXcSkArAgXrG9E2HXiYNP7gLm4GJHABtktLmK74T9/mFZIYJuKc2k5b0Zn9BA1taVCVCluf0LXhYcSINVtuBrCqFMg3q9kdZFCH6hqqi41mRj5auCTDyGL1ufTwat0JI+kHy7HjYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLuiSbIW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759279086; c=relaxed/simple;
+	bh=8BLqL/BsxJ26HK4J/to4+4q52U9ucf8JK8/bDWdDw7s=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=Ig2u98Yb8ob5Cd+jQ20HT5bITANz/7yIHMswoBjc1s4bAY1T3sk2+xgcWd06gQizVoI4uRLJEoQ4Mr5Eyv93eqzClGj8KbWBC7GJ8zhGgKXrIO0FrX8ozOywxWGWCZ3/HP7Ib69lg10LyqMcpfE1cCP3wbvhsP1E8ila74cFXw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=GLd7DXSU; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLuiSbIW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5835C4CEF0;
-	Tue, 30 Sep 2025 18:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759258702;
-	bh=ftQwGWLKK1s5Gh7SLQ8fWSKuz7Q2521DX+kCSsNK2TE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PLuiSbIWeUPuyaB2cIR6Hva0pJrqWgWKi2/sn6DMebDOKbo2K/1thjS5iF2U0h2JN
-	 Cez0uXzPvBOcDq6giu0Tg0y+q3Mkr7SQlXJjhBIpgfanco4oaWjrvDZujkaB0AKPGE
-	 GmMIFW2sVuDr+jQgYh1wlbefJovOhuJnogvui0fctqU8cFlJ9hPXw5xkMI2HzB1296
-	 uzTnDYxxhxcNWhe7Idupcodh0a6myEzn3JGZNBLIecr8wSYtPSLX6cyvE7Ei/CxTOW
-	 i/MbbNCYqEs6SpR9DTysteH7ULMELtZgXR2Y+4QzcgQXSha+DIzEKcq4xKGqA6gegg
-	 KG94pAdBE4uag==
-Date: Tue, 30 Sep 2025 19:58:16 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Phil Elwell <phil@raspberrypi.com>
-Cc: Stanimir Varbanov <svarbanov@suse.de>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Saenz Julienne <nsaenz@kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Jonathan Bell <jonathan@raspberrypi.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>
-Subject: Re: [PATCH 1/4] dt-bindings: Add Raspberry Pi's RP1 ADC
-Message-ID: <20250930-overlord-scion-d60cff2ef1f5@spud>
-References: <20250925000416.2408457-1-svarbanov@suse.de>
- <20250925000416.2408457-2-svarbanov@suse.de>
- <20250925-outlying-causal-015d8ba33c53@spud>
- <89dd04b9-e261-4bdd-83ab-499e46fc9c01@roeck-us.net>
- <88bd67f2-de8c-407b-ba98-08663eee2d7e@suse.de>
- <CAMEGJJ0KqPX462iigbMP+fwoyZgZ1J1PqaWt82MrNTW1VMwbpQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="GLd7DXSU"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58UKPKwK026871;
+	Tue, 30 Sep 2025 20:37:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=j/6WPyUEhW9bKT3fK0U1EdP9t/9
+	5jNdHMq+RbpueDEg=; b=GLd7DXSU48Omhl3TcEvFfl190qh5hhscPCuuVmLSQjK
+	O/HD1RC+g68b+tF6EY03udcwyLuBemxnP2DblqKE6JpzENM8672si0n+DcZVBArG
+	7r3yflcF0ipBRw+mkKiCZpD60pFDLzwoa1JLs0JSNBK3pRLn0LgkPUvg5pCTekGc
+	qZcLagl3pU9FvBh7s/apG04Rl+gz+XoaRDdlb6fBpE7TXLsHUSHtuzn4yYW6794v
+	6IoRFZWLiPCST2jYHJpZnmqEVYR+AQCOKo1nDZM9KN10R5tpV29TsGl8KHmh5wIW
+	9C4tctar4Anawxx1PCbEvK29ALQAFqDfRiQNMrk0ajQ==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 49g7sjp6pp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 20:37:51 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 5910bolX029478
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 30 Sep 2025 20:37:50 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 30 Sep 2025 20:37:49 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Tue, 30 Sep 2025 20:37:49 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Tue, 30 Sep 2025 20:37:49 -0400
+Received: from ATORRENO-L02.ad.analog.com (CAV-GBS-L25.ad.analog.com [10.118.9.50] (may be forged))
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 5910bcY1015453;
+	Tue, 30 Sep 2025 20:37:41 -0400
+From: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+Subject: [PATCH 0/2] Update ADPM12160 and Add support for ADPM12200
+Date: Wed, 1 Oct 2025 08:37:06 +0800
+Message-ID: <20251001-hwmon-next-v1-0-f8ca6a648203@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7ME1twZYxASzgwyN"
-Content-Disposition: inline
-In-Reply-To: <CAMEGJJ0KqPX462iigbMP+fwoyZgZ1J1PqaWt82MrNTW1VMwbpQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALJ33GgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDS2MD3Yzy3Pw83bzUihJdo8SkxLRk87RkU2MDJaCGgqLUtMwKsGHRsbW
+ 1AOsgY+5cAAAA
+X-Change-ID: 20250930-hwmon-next-2abafc7fc530
+To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
+CC: <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>,
+        Alexis Czezar Torreno
+	<alexisczezar.torreno@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1759279058; l=1212;
+ i=alexisczezar.torreno@analog.com; s=20250213; h=from:subject:message-id;
+ bh=8BLqL/BsxJ26HK4J/to4+4q52U9ucf8JK8/bDWdDw7s=;
+ b=uEsx28+mp5V0f2Qnp6GsCV+4S6kZA0nXOvqix3srGLV+TheRennc9XgcCN46KF64nWP0Qrm1U
+ Ai3r4RFpH13AFy5jK2NqskhfZNsTVkddJKs3OQ7H/Ex9rNfaQEt7v1R
+X-Developer-Key: i=alexisczezar.torreno@analog.com; a=ed25519;
+ pk=XpXmJnRjnsKdDil6YpOlj9+44S+XYXVFnxvkbmaZ+10=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: yuROg56aUWTZNMUC6ph-fR-g_w68QbUS
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTMwMDAzMyBTYWx0ZWRfXwh37NDp5pJxe
+ vV8JeNI7+UXp+RkJA7imuw/GUQgcSbEBU+ZK6xwE8z/tBvHn5Y+zKIpLi7SwOjiyRYDp5m2KJTA
+ 6i1IBgFAfapokQc4jjFFT68p2VHG10z3VpJB4T5SDzwjXWujTg0jMYJsSGecoNzf/gVcw+S9kqt
+ wEtR6ct6TpVfyz7jlWa6YFB/snXYV5daOzR4KsA9AjbTN2/q9DZeuTyOHFqopKqLfGcb2W+aj0e
+ nudMJLXoJQkyFQze7oCunua28WS2Mw6QZXuFdnnhLHVec2NyYDig7i35mq6u3aVuJqE0Rmblmwp
+ ig8huEq2akEYayvCrt+pmWpdxJVHVnGlfUCq7OzPfhg7IiEFTwJx2DE8XJxb4BmZSZWuQrkKndw
+ 9jd3nVb6YdDRdsrYhL4rkx3ETL0TJg==
+X-Proofpoint-GUID: yuROg56aUWTZNMUC6ph-fR-g_w68QbUS
+X-Authority-Analysis: v=2.4 cv=U/CfzOru c=1 sm=1 tr=0 ts=68dc77df cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=gAnH3GRIAAAA:8
+ a=pX8K7AMcFWmkIJv9s54A:9 a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-30_06,2025-09-29_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 malwarescore=0 bulkscore=0 adultscore=0 spamscore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2509300033
 
+Commit 1 updates ADPM12160 coefficients due to a FW update. The part
+has not officially released and will release with the updated FW. Since
+nothing exist publicly that uses the outdated firmware, this permanent
+fix should be ok. Linking the old patches of ADPM12160 for reference.
+https://lore.kernel.org/lkml/20250320-dev_adpm12160-v1-0-8f7b975eac75@analog.com/
 
---7ME1twZYxASzgwyN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit 2 adds ADPM12200. This is similar to ADPM12160 which is a quarter
+brick DC/DC Power Module that delivers fully regulated 12V. It has a
+continuous power level delivery of 2000W.
 
-On Tue, Sep 30, 2025 at 11:47:58AM +0100, Phil Elwell wrote:
-> Hi Stanimir, Guenter,
->=20
-> On Tue, 30 Sept 2025 at 11:21, Stanimir Varbanov <svarbanov@suse.de> wrot=
-e:
-> >
-> > Hi,
-> >
-> > On 9/25/25 11:37 PM, Guenter Roeck wrote:
-> > > On Thu, Sep 25, 2025 at 08:40:54PM +0100, Conor Dooley wrote:
-> > >> On Thu, Sep 25, 2025 at 03:04:13AM +0300, Stanimir Varbanov wrote:
-> > >>> Document dt-bindings for Raspberry Pi's RP1 ADC.
-> > >>>
-> > >>> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
-> > >>> ---
-> > >>>  .../bindings/hwmon/raspberrypi,rp1-adc.yaml   | 46 +++++++++++++++=
-++++
-> > >>>  1 file changed, 46 insertions(+)
-> > >>>  create mode 100644 Documentation/devicetree/bindings/hwmon/raspber=
-rypi,rp1-adc.yaml
-> > >>>
-> > >>> diff --git a/Documentation/devicetree/bindings/hwmon/raspberrypi,rp=
-1-adc.yaml b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.ya=
-ml
-> > >>> new file mode 100644
-> > >>> index 000000000000..5266b253fd2b
-> > >>> --- /dev/null
-> > >>> +++ b/Documentation/devicetree/bindings/hwmon/raspberrypi,rp1-adc.y=
-aml
-> > >>> @@ -0,0 +1,46 @@
-> > >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > >>> +%YAML 1.2
-> > >>> +---
-> > >>> +$id: http://devicetree.org/schemas/hwmon/raspberrypi,rp1-adc.yaml#
-> > >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > >>> +
-> > >>> +title: Rasberry Pi RP1 ADC device
-> > >>> +
-> > >>> +maintainers:
-> > >>> +  - Stanimir Varbanov <svarbanov@suse.de>
-> > >>> +
-> > >>> +description: |
-> > >>> +  The RP1 ADC is a five input successive-approximation ADC with 12=
--bit
-> > >>> +  resolution (ENOB 9.5-bit) at 500kSPS. It has four external inputs
-> > >>> +  and one internal temperature sensor.
-> > >>> +
-> > >>> +properties:
-> > >>> +  compatible:
-> > >>> +    const: raspberrypi,rp1-adc
-> > >>> +
-> > >>> +  reg:
-> > >>> +    maxItems: 1
-> > >>> +
-> > >>> +  clocks:
-> > >>> +    maxItems: 1
-> > >>> +
-> > >>> +  vref-supply:
-> > >>> +    description:
-> > >>> +      Reference voltage regulator 3.3V.
-> > >>
-> > >> Looks like you're missing the io-channels-cells property that allows
-> > >> this device to be a provider of adc channels to other devices.
-> > >>
-> > > Only makes sense if the driver is implemented as iio driver.
-> > > Which would be fine with me, assuming this is a generic ADC.
-> > > The iio -> hwmon bridge can then be used to instantiate a
-> > > hwmon device if needed.
-> > >
-> >
-> > According to the RP1 peripheral document the information about ADC is
-> > limited and I cannot be 100% sure that this is generic ADC, but it looks
-> > like it is. On RPi5 board the ADC inputs are not configurable, but that
-> > could change on another board.
-> >
-> > I personally don't have objections to implement it as IIO driver.
-> >
-> > Phil, are you fine with implementing the driver as IIO?
->=20
-> The problem with adding unused functionality, apart from the effort
-> involved, is that testing it is harder. Will the IIO driver be
-> inherently better/simpler because some of the hwmon support gets
-> picked up by the generic IIO/HWMON bridge?
->=20
-> Ultimately we'll make whatever changes are considered necessary in
-> order to get this simple driver accepted, but it would be nice to feel
-> there was some real world benefit now for the work, not on Pi 6/7/etc.
+Signed-off-by: Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
+---
+Alexis Czezar Torreno (2):
+      hwmon: (pmbus/max34440): Update adpm12160 coeff due to latest FW
+      hwmon: (pmbus/max34440): add support adpm12200
 
-tbh, I don't care how the driver side of things is done, I would just
-like for the binding documentation to be complete. If there's no usecase
-at all where the device provides io channels, then omit the property.
+ Documentation/hwmon/max34440.rst | 25 +++++++++++++-----
+ drivers/hwmon/pmbus/Kconfig      |  1 +
+ drivers/hwmon/pmbus/max34440.c   | 56 +++++++++++++++++++++++++++++++++-------
+ 3 files changed, 66 insertions(+), 16 deletions(-)
+---
+base-commit: 76bb6969a8cfc5e00ca142fdad86ffd0a6ed9ecd
+change-id: 20250930-hwmon-next-2abafc7fc530
 
---7ME1twZYxASzgwyN
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Alexis Czezar Torreno <alexisczezar.torreno@analog.com>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNwoSAAKCRB4tDGHoIJi
-0sgKAPwPyHVOPL3+vGEY13Q+XNBtSaCSUTqKSTF8wzaH2E54/gD9HS1r/CHIxVmU
-pM/olI54HwZAmhzTQDkVGvN9sY8T8wI=
-=fHEy
------END PGP SIGNATURE-----
-
---7ME1twZYxASzgwyN--
