@@ -1,95 +1,209 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217CF2E040B
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Oct 2025 20:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABC12C0F7F;
+	Thu,  2 Oct 2025 20:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759438511; cv=none; b=k1G/hQrY+zlTrOnlokhtYw8nyIVfvafNiDp17y+vxieWOPUeURemauufLJOsG5fDFdSNdlTHfLJx5SKlKgi8spHLvYmSqCeUjGvV2tzwaJhRkNqDNO/DzOu/AP7vY9DZUKAQZLW/KdDxIKK3PUAHaTgMvio69MsnYfkaSVl2dYQ=
+	t=1759438537; cv=none; b=JeOIB6uwpVtRHKySXjHs5gp8IJwLk4JWmwOFss5WTWuhS6MsH7kRsGuYebDVabvVIlXk/DYhMsKr+8vMblJl8MxGCPmJ6317wc3UiqhoVTVHyqItuEacRsI0p50uSzNpl6FCPcsIzfL6Q8zCX9Q+ii3M2tu5VtMKTVdytCvQf7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759438511; c=relaxed/simple;
-	bh=ve7VSnEXz8SXLkr0Ns3Xtbmzdzf6/gpZI94v8i0XhNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qsxM+jp5vzaBirSdMY7CiseM1k2RewHQSqoK+F0eAvpEdzMof1giy0PzCR835FqVE+wW86Ii+hTb0Z7UjuEVT2eQ8gPeVHrkl6sOVufoiLyUb1AD7wcgD11FPYRxA0rvACFk6/lXg7zH11nPog6qsVPWmGOpdDR6Pg7gwYW3SkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zum4Xn2E; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759438537; c=relaxed/simple;
+	bh=18hVRcjiq6jqKyPc+H8fDwSKZo20vfz8WvHD3u05Y74=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BzuuonbBPDulXocffFmoncaeA0gK+e3PYY+OzYRDTARwNvwncO+dcahFJ/i2olbiCFBOxUBAEKnOm0jDLiDz18VwHAF5evxE0TaJ42YEiGPItW8sZXvPsjPGiRdZE4qIVJhDZbRHfqNjh0EQqvQ9opJVS2sIk0+4SDvMtduYByA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=m0TqMQfE; arc=none smtp.client-ip=3.74.81.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zum4Xn2E"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-28e7cd6dbc0so17995915ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 02 Oct 2025 13:55:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="m0TqMQfE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759438507; x=1760043307; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lIklhV74VxzGNTOE6vXMU3sJY9HtAA/7pD7aRkESOR0=;
-        b=Zum4Xn2E2Tflw56ex9a12QHG7jkwi8KYoQ8qGaYvZ2Dkt6SMK6fh/JwxIZVn3hwnz/
-         656/S9F+MYXBSpsMEVjj3BgNvOZr3Nw80EiJCts7JIe1vn1FoGcxi6q/aTGfXFNeoA6g
-         izHmK5aAckLIzHbTx8Ua65mh8J1m8CbDkm+R1czbAbGgQwYzy4KUIN14u+HWSKarBmX6
-         BiwcHZmTy6BNiaeiIEJwB7Pchw9C13bHaJ4DLPN+4OKhnIB1f5XOKVSjq1vQgkCbbjUA
-         pJELwq2e+S8+JzlPj1jIbcgOWprvh+tO/Mc7DJHgZDMGlzjJdR/e2yQNLEyoXbbmnO66
-         x85g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759438507; x=1760043307;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lIklhV74VxzGNTOE6vXMU3sJY9HtAA/7pD7aRkESOR0=;
-        b=l91CTqkAL28q04VYz7bFhRkJFjT9WAmjHmcGD+u8GWdmU6Kz9zNwk6V/SHXHQBixFv
-         rkUuB1Ff2BLS5JJEdMkmSlBrT4BFl1HhcMriZVReCVzyXXYGnz+CD0VfhuG7CTBq5Qzk
-         8HxI/xGa5xuIkr3s12nlkeYuD8RHRAmlPDius4WnPEbnF9wixWcJ3qEgbaN70g+jtMQd
-         fPnJX7JGhBPafVRAnVTjed+PwWQzIj0I/IBwejcKkq27wVVSWi/2zJganJFChCWia5Kt
-         rv5pHzejT5FIux8jpO4m/4c871KAeNcmX8IAcFcLlkKA9i4Zx9DXLMbSi19akcYKdLl9
-         c36A==
-X-Forwarded-Encrypted: i=1; AJvYcCVI8+OmmXDBpFJc8G4H8D4aSDv4M+GqnY1mYRLiJxxcZL26l4MTGGX48Ih6uGqgh5uq59Pk1yBXQFGUJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK/AHwtMwxlV3XmxR0ufU2M5caf0aawIflyCd8G5vWHgQd+WY8
-	yPkbQcCAJM7is/byAIig/hDGf2odl2evaZs6ymJpfcE2wLyQh3ksQwbQ
-X-Gm-Gg: ASbGnctsGLoMxygXBMyJOM3fX+qcOBjzAiBIjElzMrqBXFq1rr4Jsd0Bt0VO2lPaHr8
-	nXCcS8Xji8xq5qJ+KvPCMmw1e+DyF3mV0a6uzn90luWjiwkDbjPJZwbZZIUAoQfjJ/GkDLrrXJ+
-	NmjtINS82GVC915aR0EmmtsCKwZNVRs6pnNicKYYyEd6tqlgzK3+fbOyS8QwjAuKvPsDDuqshTw
-	M3Uyc4PGsEAAr6ZLxUNNz7G7CuagG1Zj3exOi1yrQ8daKoDNg2pfBUoWzFRwBOv+KyVbe9y/j43
-	BgC5NBSafbqr049+Q5UxtxhpHX7CRn4W4OXc38dynS8vzddOZ3+LxRwSA9gsWYfruiPKqK+oaVa
-	koRRbKr/s0dLFclEYPT3M64ISu+BX5go5/FNSjCXj7CcsBjxH+3OFIOeoPh4=
-X-Google-Smtp-Source: AGHT+IFTD102IbQjDd7ezi5HEPtVTH6TbbeKx+COFeUkw9uJEnFAQC6usbIyZfpGul6EpzbGLgme9w==
-X-Received: by 2002:a17:902:d591:b0:26d:f589:9cd7 with SMTP id d9443c01a7336-28e9a593d26mr7143505ad.15.1759438507464;
-        Thu, 02 Oct 2025 13:55:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1eef42sm29474935ad.133.2025.10.02.13.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 13:55:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 2 Oct 2025 13:55:05 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kim Seer Paller <kimseer.paller@analog.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: add max17616
-Message-ID: <07272da0-6b8c-4283-8094-ff6446ff5762@roeck-us.net>
-References: <20250930-upstream-max17616-v1-0-1525a85f126c@analog.com>
- <20250930-upstream-max17616-v1-1-1525a85f126c@analog.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1759438535; x=1790974535;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FhepguEQ0VZAS3etCeAAj5D/xXUqupnQ1wf0VPifqWY=;
+  b=m0TqMQfEDyk9+svL1VmObc07dBRy8mDEIX28CG+IurJR5iD1f4XVc/Rs
+   2LEO+e74CZHPKd8Tc7/UfqMkNz2K7IyLMj4qOVz+MgsdXvzSsWtnDhoN3
+   sDz2N3f6fSvfEfR3AvA+o7TDRz3rPWhTxuEQGGGAnYS+pUIoCykqgGgF5
+   ppA3pO0iWvE/eI2jwC+WbP2g0ab8PZpWzRwQy9otfXIld7/PnT4aFDyW0
+   vm+S1nTvime4Lh21HilO9KCJ3gWy4IlgoAhMK2KDOzzup636/d5qIcQMU
+   iLmj5fl44Y8GO5MDXRnbMOzFqzIUzvk2b6d+mSNz5yE4IWnZbn0b84nJT
+   w==;
+X-CSE-ConnectionGUID: w758DzLjR0WOdjDX61Rabg==
+X-CSE-MsgGUID: CNMfFqiKTyOeBvKtI+j5Zw==
+X-IronPort-AV: E=Sophos;i="6.18,310,1751241600"; 
+   d="scan'208";a="3028058"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 20:55:22 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:10348]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.3.52:2525] with esmtp (Farcaster)
+ id 5f6d6403-b502-4efe-a0b7-4ea6cb06795c; Thu, 2 Oct 2025 20:55:21 +0000 (UTC)
+X-Farcaster-Flow-ID: 5f6d6403-b502-4efe-a0b7-4ea6cb06795c
+Received: from EX19D018EUA004.ant.amazon.com (10.252.50.85) by
+ EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Thu, 2 Oct 2025 20:55:16 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by EX19D018EUA004.ant.amazon.com (10.252.50.85) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Thu, 2 Oct 2025
+ 20:54:49 +0000
+From: Eliav Farber <farbere@amazon.com>
+To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
+	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
+	<luto@kernel.org>, <peterz@infradead.org>, <tglx@linutronix.de>,
+	<mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>, <hpa@zytor.com>,
+	<tony.luck@intel.com>, <qiuxu.zhuo@intel.com>, <james.morse@arm.com>,
+	<rric@kernel.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+	<maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+	<tzimmermann@suse.de>, <robdclark@gmail.com>, <sean@poorly.run>,
+	<jdelvare@suse.com>, <linux@roeck-us.net>, <linus.walleij@linaro.org>,
+	<dmitry.torokhov@gmail.com>, <maz@kernel.org>, <wens@csie.org>,
+	<jernej.skrabec@gmail.com>, <agk@redhat.com>, <snitzer@redhat.com>,
+	<dm-devel@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<mcoquelin.stm32@gmail.com>, <krzysztof.kozlowski@canonical.com>,
+	<malattia@linux.it>, <hdegoede@redhat.com>, <mgross@linux.intel.com>,
+	<jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+	<sakari.ailus@linux.intel.com>, <clm@fb.com>, <josef@toxicpanda.com>,
+	<dsterba@suse.com>, <jack@suse.com>, <tytso@mit.edu>,
+	<adilger.kernel@dilger.ca>, <dushistov@mail.ru>,
+	<luc.vanoostenryck@gmail.com>, <rostedt@goodmis.org>, <pmladek@suse.com>,
+	<senozhatsky@chromium.org>, <andriy.shevchenko@linux.intel.com>,
+	<linux@rasmusvillemoes.dk>, <minchan@kernel.org>, <ngupta@vflare.org>,
+	<akpm@linux-foundation.org>, <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
+	<pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+	<jmaloy@redhat.com>, <ying.xue@windriver.com>, <shuah@kernel.org>,
+	<willy@infradead.org>, <farbere@amazon.com>, <sashal@kernel.org>,
+	<quic_akhilpo@quicinc.com>, <ruanjinjie@huawei.com>,
+	<David.Laight@ACULAB.COM>, <herve.codina@bootlin.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-um@lists.infradead.org>, <linux-edac@vger.kernel.org>,
+	<amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-input@vger.kernel.org>,
+	<linux-sunxi@lists.linux.dev>, <linux-media@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+	<platform-driver-x86@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+	<linux-staging@lists.linux.dev>, <linux-btrfs@vger.kernel.org>,
+	<linux-ext4@vger.kernel.org>, <linux-sparse@vger.kernel.org>,
+	<linux-mm@kvack.org>, <netfilter-devel@vger.kernel.org>,
+	<coreteam@netfilter.org>, <tipc-discussion@lists.sourceforge.net>,
+	<linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>
+CC: Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>, "Jason A. Donenfeld"
+	<Jason@zx2c4.com>, Jens Axboe <axboe@kernel.dk>, Lorenzo Stoakes
+	<lorenzo.stoakes@oracle.com>, Mateusz Guzik <mjguzik@gmail.com>, "Pedro
+ Falcato" <pedro.falcato@gmail.com>
+Subject: [PATCH 15/19 5.15.y] minmax.h: reduce the #define expansion of min(), max() and clamp()
+Date: Thu, 2 Oct 2025 20:47:29 +0000
+Message-ID: <20251002204733.35652-16-farbere@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251002204733.35652-1-farbere@amazon.com>
+References: <20251002204733.35652-1-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250930-upstream-max17616-v1-1-1525a85f126c@analog.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D038UWB001.ant.amazon.com (10.13.139.148) To
+ EX19D018EUA004.ant.amazon.com (10.252.50.85)
 
-On Tue, Sep 30, 2025 at 01:02:20PM +0800, Kim Seer Paller wrote:
-> Add device tree documentation for MAX17616/MAX17616A current-limiter
-> with overvoltage/surge, undervoltage, reverse polarity, loss of ground
-> protection with PMBus interface.
-> 
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+From: David Laight <David.Laight@ACULAB.COM>
 
-Applied to hwmon-next.
+[ Upstream commit b280bb27a9f7c91ddab730e1ad91a9c18a051f41 ]
 
-Thanks,
-Guenter
+Since the test for signed values being non-negative only relies on
+__builtion_constant_p() (not is_constexpr()) it can use the 'ux' variable
+instead of the caller supplied expression.  This means that the #define
+parameters are only expanded twice.  Once in the code and once quoted in
+the error message.
+
+Link: https://lkml.kernel.org/r/051afc171806425da991908ed8688a98@AcuMS.aculab.com
+Signed-off-by: David Laight <david.laight@aculab.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Pedro Falcato <pedro.falcato@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+---
+ include/linux/minmax.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+index 24e4b372649a..6f7ea669d305 100644
+--- a/include/linux/minmax.h
++++ b/include/linux/minmax.h
+@@ -46,10 +46,10 @@
+  * comparison, and these expressions only need to be careful to not cause
+  * warnings for pointer use.
+  */
+-#define __signed_type_use(x, ux) (2 + __is_nonneg(x, ux))
+-#define __unsigned_type_use(x, ux) (1 + 2 * (sizeof(ux) < 4))
+-#define __sign_use(x, ux) (is_signed_type(typeof(ux)) ? \
+-	__signed_type_use(x, ux) : __unsigned_type_use(x, ux))
++#define __signed_type_use(ux) (2 + __is_nonneg(ux))
++#define __unsigned_type_use(ux) (1 + 2 * (sizeof(ux) < 4))
++#define __sign_use(ux) (is_signed_type(typeof(ux)) ? \
++	__signed_type_use(ux) : __unsigned_type_use(ux))
+ 
+ /*
+  * Check whether a signed value is always non-negative.
+@@ -71,13 +71,13 @@
+ #else
+   #define __signed_type(ux) typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL, 1L))
+ #endif
+-#define __is_nonneg(x, ux) statically_true((__signed_type(ux))(x) >= 0)
++#define __is_nonneg(ux) statically_true((__signed_type(ux))(ux) >= 0)
+ 
+-#define __types_ok(x, y, ux, uy) \
+-	(__sign_use(x, ux) & __sign_use(y, uy))
++#define __types_ok(ux, uy) \
++	(__sign_use(ux) & __sign_use(uy))
+ 
+-#define __types_ok3(x, y, z, ux, uy, uz) \
+-	(__sign_use(x, ux) & __sign_use(y, uy) & __sign_use(z, uz))
++#define __types_ok3(ux, uy, uz) \
++	(__sign_use(ux) & __sign_use(uy) & __sign_use(uz))
+ 
+ #define __cmp_op_min <
+ #define __cmp_op_max >
+@@ -92,7 +92,7 @@
+ 
+ #define __careful_cmp_once(op, x, y, ux, uy) ({		\
+ 	__auto_type ux = (x); __auto_type uy = (y);	\
+-	BUILD_BUG_ON_MSG(!__types_ok(x, y, ux, uy),	\
++	BUILD_BUG_ON_MSG(!__types_ok(ux, uy),		\
+ 		#op"("#x", "#y") signedness error");	\
+ 	__cmp(op, ux, uy); })
+ 
+@@ -109,7 +109,7 @@
+ 	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
+ 			(lo) <= (hi), true),					\
+ 		"clamp() low limit " #lo " greater than high limit " #hi);	\
+-	BUILD_BUG_ON_MSG(!__types_ok3(val, lo, hi, uval, ulo, uhi),		\
++	BUILD_BUG_ON_MSG(!__types_ok3(uval, ulo, uhi),				\
+ 		"clamp("#val", "#lo", "#hi") signedness error");		\
+ 	__clamp(uval, ulo, uhi); })
+ 
+@@ -149,7 +149,7 @@
+ 
+ #define __careful_op3(op, x, y, z, ux, uy, uz) ({			\
+ 	__auto_type ux = (x); __auto_type uy = (y);__auto_type uz = (z);\
+-	BUILD_BUG_ON_MSG(!__types_ok3(x, y, z, ux, uy, uz),		\
++	BUILD_BUG_ON_MSG(!__types_ok3(ux, uy, uz),			\
+ 		#op"3("#x", "#y", "#z") signedness error");		\
+ 	__cmp(op, ux, __cmp(op, uy, uz)); })
+ 
+-- 
+2.47.3
+
