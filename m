@@ -1,78 +1,77 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1A01B4153
-	for <linux-hwmon@vger.kernel.org>; Thu,  2 Oct 2025 21:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178273BB44
+	for <linux-hwmon@vger.kernel.org>; Thu,  2 Oct 2025 21:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759440971; cv=none; b=D7ZpAnhrLv//VdQiaPovED/fLwdvn3lvtmy1MzuE1xjcox+KWA4rrH2Y30bam54qPNkzICKZ6kE0MhFGtFbNy2nL+C50jqromQQvT6cT3iR6/wp29xPJhk9V4NE88P5GTvXuC3//lqleKzVyqnWXNEnWzVv+cYKR9Tp57RXbntY=
+	t=1759441083; cv=none; b=GcyFxFtYD/IeaFJnaG3tll8tai3oY471w89qiLN+DrTx0GrR33nwz2gci5KXUopd9JncEAdEEzcZ/UIIfk8Rrza6hVrC1ltaw8nDQ33RH7uGPUWSvAF127u/ubFYcmUDkcvD9/wNyg4vXhiyWqpvawKEALIXUwKux95ak0RVfVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759440971; c=relaxed/simple;
-	bh=sp7MqWAOc+vFOYpjOgl75lySjdmojqGQ8r2e4EDXL9Y=;
+	s=arc-20240116; t=1759441083; c=relaxed/simple;
+	bh=Wa3MaIt2OTfDMAacePpuDpp+xPuK/PWuzyclDSFj+t0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E82KcU9xkhzrPsqQtBaz6PV59x/r63NjMltCoMamzSlF7aYpN0Blaj7h3IPPYa+iNj4I2czJgOY7jCniskAM2poyBhfr+4xDZb1rnMCb+WXVDiclg8ArihOcOTNHDUedvGLB3e/uNe1bzFdCYuj/MI6tly6f+RsT1KeFry0Auaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDLh9pE5; arc=none smtp.client-ip=209.85.210.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=RUCBsRVbHlIxhIgdpUkpQQ833zcBSFGw96lIg07SejJHgf6B2XKOrrjtsyIlMOJ6zUQoMUrITIlttL030mfWcfaAyOuFOQZ8/LJxjD7Db8lVN+YrKwdSqHueiJnJ9RDb6tCu54O9N6b0W5HHBgYffGGFf/zpLUm9l0gQokAiz9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CqbNY72q; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDLh9pE5"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-77f1f29a551so2105922b3a.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 02 Oct 2025 14:36:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CqbNY72q"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b593def09e3so1113489a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 02 Oct 2025 14:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759440969; x=1760045769; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759441080; x=1760045880; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EVcmxEQDygf7dbtJ7z7prj2fqI+0iw8tFUmQnUGZQm8=;
-        b=LDLh9pE5L1v7i8Qe63FbqO925JUuryIDlUKRerLfEfRkPDH3e7lrZbhnF9f5/x9jIO
-         CWdoXdKTxZ8RuBt8JctqnWp0ZlDkRUg/qyiu4/lYWHBhkWfLVtEkFTe+65QjEE4tc6mM
-         6kNdiTgY7Z6jZ0+i6GODfEyffXYFfvdh/r+PstPF917eeLLjR0slDIbZmNw/Y0mijCru
-         JA0vPgZQxqFkXs5j+mwvTZzrD53kFysM2VbCeZGhqP0OLGAlXJ/4do09O0oo8nHzQ+E5
-         l1Vr8OXlbchFWuHuYyWg2tPsIDtwt8LYAdU4D2FH5yoyIFbBMzud88OlvTant5SCiOj6
-         grRw==
+        bh=3UYjs/DjWtPFJ9SkgiQewKjh9UT4jabvAen7EJXFzrU=;
+        b=CqbNY72qE2w3zNKipvYfu4gbH+WsSVU0jPrnZ7lPyqJ5sEUbMA+S93FfUSPW/wGrgv
+         yHd/PvzWVwexTYq+yTJCcZLyufzOK/3LpjIu3HluIhs9HVn2wLZkleBCIQXsNveaSfhK
+         QV9497y9rCsWmZMK3VBIxytH6DnHYYsMq0BHxDl9PIbRCKbuhBI5VJZAXv8BpYh3n705
+         LzgYyJp6FQWB3xCehIly9OycrMpd5U+68M0jIn8bJeEG+5HP7sgvdipBem1PLxFf97U4
+         LAqCY+mHuUQEoK7dajhok0XHX0882CogkILYiDb6gXlAhkgWeBmqQNcfYGvZv0udvi0t
+         +yCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759440969; x=1760045769;
+        d=1e100.net; s=20230601; t=1759441080; x=1760045880;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EVcmxEQDygf7dbtJ7z7prj2fqI+0iw8tFUmQnUGZQm8=;
-        b=VB5J7fmzwiLqhn17wMgjz/wBSiccSM8vqPnWpw7ndbapudTRSpD+IF5XlmCgWK1NYU
-         ATTNKKKm3ZVcVztYeHwvXGUeQlJLxXr/s3sDNTTeBoOfBPHBc7DhJ62fwe5/eqFBQ/KR
-         Nre/+zaPMevOMke0l8dGu91Xt8ym3caFJu5YqgrNWh53h8MXyQFZ8f4kNvtM+/S1/tg6
-         yRWuFdDzpoPvfoPA8E5WNFdDJTE2zeMt3nhy8fpkPmY8yfVp7K9d5gTHvQP3GrxQpzP0
-         EjYTHVDSsIMVn/dKDLKfGqwOlsYa8I39qPh5QvGMSxU6AwgS2VrU6l2MMVxEjulKEGq5
-         MktQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX3858ITm8Tj65QoWp+0CbMdDU3SfwZ+aCCwvS1EmlmyBbYgHUXtgYooGm+PhvaHFtraQ+bH+ue+isZrw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yww+ZmJuR6EKvLBSaS1X7yJvBFusUBM40s3eD6nnxhNjbk+4TEo
-	e7IxwYYjnfknLIuSHJBNJr828bNqPy4/qVZSOb40V+rkRjPwqRwyesFw
-X-Gm-Gg: ASbGncsZO7uBVeu9QAzf2bBlz5TPx17XZjzfDDLYYuWnwkfrQY5ErZB3XFSxTnflJ93
-	+jtGaVabkYfDxOIDfSKfssod004hh/PUr1GzcLLiiw7T9MVyywkYPwajhRlZI8KWk5CHz1iv7CA
-	Wk+zte6qzHi1peIgupWpKROiF2RqKHgjSL91QV5Vrhcrix1jmw//kV3NixMsxKrKJV5jgyv7YGw
-	Fq2kUE3kWKS5LXFLQaXBWQuS2Va1cpP8tw5OvuKM/x7q626D1fxiQCHGNARRqVoWuGrK34sRoT3
-	L1r9Bv/UjoV+nluCAH1GvzkdtaiRRxV41/xIOP5avfmjk8LVH+lX1Q5BLsANpRUDuWqKvwMIZw5
-	OR7lLsJNFTI8JVrdNtymriKKF67/mxo0z8sxr5P71zBNcm/jeFXIeYo0/Y9E=
-X-Google-Smtp-Source: AGHT+IHue+jlDN4n9W+cwiftgnT/dK0SHQVUWlYe3W8oi5uNcGPOdbvkqxSuoPni8hyXXe4UdBJf7A==
-X-Received: by 2002:a05:6a00:3991:b0:77d:51e5:e5d1 with SMTP id d2e1a72fcca58-78c98cb783fmr1124337b3a.19.1759440969414;
-        Thu, 02 Oct 2025 14:36:09 -0700 (PDT)
+        bh=3UYjs/DjWtPFJ9SkgiQewKjh9UT4jabvAen7EJXFzrU=;
+        b=nz9PnXSyDvIoApnKoounHiiRBz6D7kL6aqG2dihYeQouAlNxBOcZp0+17cK+d4fKmU
+         onot9U2brFaNLjlYcVMUdb5QAGfNJwRXy6/UhXddm/zd1EHYovKxVqNa8CprPEjONp3Y
+         RLTYl65L1zp1pU5NiZfWoo0e49dzbSHR0IFVfvTxw7EG5aP76y0erUR/T0x9udJO79bt
+         k05OrNt+8zaMo5u+nsgo83ZBba6TyVtI7s4qaUqO+POsN1/QM10ZYNfhjzw0MX51ZPDF
+         7eFrzs3BK/hnaQuSqVseEq0utgS2rVvWErxIR7zNzPA9yQy9NdWsyglgOxaZVrY/vA1r
+         /Pgw==
+X-Gm-Message-State: AOJu0YwFu5BG8XsRYTIqMzuGJErFQl3Mqktqy6MW2cdEAsjwl7cR4fog
+	5P9+vdfj0Kn4RxulPvSvZIy4xOGYVaKMkl921/3KBq3QW7NFXfFRY+z6
+X-Gm-Gg: ASbGncuufiBwpRJiepAzKlMs0tb03jmXsRuj+VrQddWcOeddPJlmp6gytBO0Nntu0Ko
+	r8JI6A+lz/5DZ1D1l1egzq/4Hi+gX4vgcQDnUmdyW0Vl4SgVRCpID/b/T5261brpKzTeZC98Azu
+	SlMNm7yy2jsH9ArGxmy3JI42qVJ/sGVyNQ0+Z+8KJNZRk9aPAfdI4gXtFkLkg/ZfLrrCJx0ZvdR
+	a/QWJh1uZjFedYgzUpDEnUGJFmDr7yNOPi2aw+xvwFmExaRwcACnzo6CnGDkyhxeGze46pU4/Ut
+	Vp72PCU7Flby2qzDb2OEyfaNY8wE+KfMOrQyVL/WDjwWMQaFhli21yCwiSDZv2XZeLOlc2j9EDz
+	npaR6WbapWmRJcG7Fy2RUHWDoy7FAtU0vBD207QXJbXznnDBE8t2Fqzw9jJw=
+X-Google-Smtp-Source: AGHT+IGfpeSt72PLiRG8302u7jW0eS5cM/tPuBTjoCfYGBR7WBrL3m9GghHnqqRwzstji5FK0/L81g==
+X-Received: by 2002:a17:903:2ad0:b0:264:70e9:dcb1 with SMTP id d9443c01a7336-28e9a6fdf1bmr8314995ad.56.1759441080436;
+        Thu, 02 Oct 2025 14:38:00 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78b01fb16d9sm2989597b3a.22.2025.10.02.14.36.08
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d122d96sm30394595ad.32.2025.10.02.14.37.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 14:36:08 -0700 (PDT)
+        Thu, 02 Oct 2025 14:37:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 2 Oct 2025 14:36:08 -0700
+Date: Thu, 2 Oct 2025 14:37:57 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Emil Dahl Juhl <juhl.emildahl@gmail.com>
-Subject: Re: [PATCH 1/2] drivers: hwmon: ntc-thermistor: add Murata ncp18wm474
-Message-ID: <a14a92fc-a21d-44b4-a613-e68747edf521@roeck-us.net>
-References: <20251001-ntc-thermistor-ncp18wm474-v1-0-2c64b9b509ff@pengutronix.de>
- <20251001-ntc-thermistor-ncp18wm474-v1-1-2c64b9b509ff@pengutronix.de>
+To: Eddie James <eajames@linux.ibm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, andrew@codeconstruct.com.au, joel@jms.id.au,
+	chanh@os.amperecomputing.com, jic23@kernel.org,
+	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org
+Subject: Re: [PATCH v7 RESEND 4/7] dt-bindings: hwmon: Move max31785
+ compatibles to max31790 document
+Message-ID: <4b617318-f76e-47b0-9744-6a79803a149c@roeck-us.net>
+References: <20251001144441.310950-1-eajames@linux.ibm.com>
+ <20251001144441.310950-5-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,24 +80,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251001-ntc-thermistor-ncp18wm474-v1-1-2c64b9b509ff@pengutronix.de>
+In-Reply-To: <20251001144441.310950-5-eajames@linux.ibm.com>
 
-On Wed, Oct 01, 2025 at 01:45:27PM +0200, Sascha Hauer wrote:
-> From: Emil Dahl Juhl <juhl.emildahl@gmail.com>
+On Wed, Oct 01, 2025 at 09:44:38AM -0500, Eddie James wrote:
+> The binding for the max31785 is the same as the max31790, so just add
+> some compatible strings for the max31785 chip.
 > 
-> Add support for the Murata NCP18WM474 NTC.
-> Compensation table has been constructed by linear interpolation between
-> well defined points[1] on the resistance vs. temperature graph in the
-> datasheet[2]. The readouts of the graph has been done to the best of my
-> abilities, but the compensation table will be subject to inaccuracies
-> nonetheless.
-> 
-> [1] -40, -25, 0, 25, 50, 75, 100, 125 degrees
-> [2] https://www.murata.com/en-eu/api/pdfdownloadapi?cate=&partno=NCP18WM474E03RB
-> 
-> Signed-off-by: Emil Dahl Juhl <juhl.emildahl@gmail.com>
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 Applied to hwmon-next.
 
+Thanks,
 Guenter
