@@ -1,63 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7272D6621;
-	Wed,  1 Oct 2025 18:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E68A148830;
+	Thu,  2 Oct 2025 18:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759344163; cv=none; b=JevLoq/3dy3x5Cz8+hVXZMFddnMZVRBhT2jQ19yBlNrTw6JKgmpHvX/uHorp8cEg1zxL21xB3ECfq4lb6qj53WoMaD7CMQCp55HkmEgKtwkiVJwLieSwjKi/lK8M8pU0CNsDetylAsvwT2tHe/6VxbAnqDi5o/3l7e0KQ51Kdkc=
+	t=1759430082; cv=none; b=LOT3WVvHljsyht7J4YVanW2AAUHJ7IHxsAuwUGFVVP/2aFpOaYgYcY1QvPLvkv1F6TTE7PyIxUrT23v4nhU00y9lW1elJIWBz7YbHfLk4t8riY9CBuNmHuqDMVpQ6ZkXr6MgrnWqSR2t2uy9aaIofqO3lKodGSrXuOQFUjf5XDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759344163; c=relaxed/simple;
-	bh=2cHu+4n9UY65ObeKIdblQpiuZzBfWCxejbH1z02Q7iY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=D2aSR8KxWoFsZ2tO9RjZ2+RPl+w3qzaaU39KxIgE/cGrIxswUHYmd96n13gG6XzBwP7meeNNFHD4k+ePBSdns+VT7AGoBMWzKiAAeFb234ZqBuFEQOsyoR6C3133a+QrhU8mlBjsSqXiCm+9g1ZXbWUp8lDL7uTJHaU9uwN0qQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fvi266jj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759430082; c=relaxed/simple;
+	bh=8QadHtK76xk4ojZ2I8UXgazGkZuKAIYzIorwaRYb/ik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOf/7kO7dggleQfz6a7/CNOfaiF4Tw6uY/4XWJu6R3Rz9RnPFjQYBz/hzsKADflutzkD3ynoF+hRaDJUyO7aXp7SHraqB6IXNVVzoU7HSGgvj7Tqo0TPQgWkBaUbQuG2eqR6d2rAq+8nIjMdOvGnGmGSS1lVgqShflyYAwDuRHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCMIE4Of; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fvi266jj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1CD0C4CEF7;
-	Wed,  1 Oct 2025 18:42:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCMIE4Of"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38791C4CEF4;
+	Thu,  2 Oct 2025 18:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759344163;
-	bh=2cHu+4n9UY65ObeKIdblQpiuZzBfWCxejbH1z02Q7iY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Fvi266jjy0JqxUHnKcuJVr0BCr6HBNgq9kMtC5GF6e/YMpVKrO+gJuMx1dFHc1+OK
-	 Q7XCuuY3DxvtFEkjSHAwngtHjA7u0dNADYqlLRsMPArjFKI1gUNhcEJGVkxzym/zhw
-	 TtgzF4sxfGXDp7NJ3cNaXtvxN9toEBD+0W9B5L5MuN36IzWriaoGKu6/eg97cNjroM
-	 ++uN41EDX+n8dMuTqVQWypA3KsLIV0N2l9mMJ7GvfvvJmOvr2S+AG6WVWVvkN7BT6Q
-	 TKJdaAB7TP2Rnma+vj4ROFOkx1AYS0KYlDFBLrEBhY/HmaBdFGIcSzQB5ofJN0TJl5
-	 +G+9vLUdw+WyA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE1E539D0C3F;
-	Wed,  1 Oct 2025 18:42:36 +0000 (UTC)
-Subject: Re: [GIT PULL] hwmon updates for v6.18-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20250929005950.447268-1-linux@roeck-us.net>
-References: <20250929005950.447268-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20250929005950.447268-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.18-rc1
-X-PR-Tracked-Commit-Id: 76bb6969a8cfc5e00ca142fdad86ffd0a6ed9ecd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 989253cc46ff3f4973495b58e02c7fcb1ffb713e
-Message-Id: <175934415540.2574344.1308587567840068638.pr-tracker-bot@kernel.org>
-Date: Wed, 01 Oct 2025 18:42:35 +0000
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1759430082;
+	bh=8QadHtK76xk4ojZ2I8UXgazGkZuKAIYzIorwaRYb/ik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LCMIE4OfLvMtRR1Bmrrc49b2t+5fGcVe0ZqBlfoudDDHRBVbyLj6lUUbSk1Zo6Glg
+	 YO2E9mFdonMQt9b9DP9X1yuGw2cuLofxarolf+oRBwuTy5L02Yto3SAjGtemg4svcP
+	 LYdtnYjNldDairMa/p/5Pom/PE+DZMO7hXh9qWeseMYllDG51KTfmiFopd9kmxInNP
+	 SuyEAGygk1bcn0OAigI9HazpeXIvymXHdR691hXpiANUp+EdVHEtDzMpa/no+4AJMV
+	 0etEnbA0tNXh25ESaM0v+jZdk1feCvfvUiEbf9+S8UL74c+cnrDAkw9LOJygQwq4th
+	 fWXN0rDew83rA==
+Date: Thu, 2 Oct 2025 19:34:37 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: ntc-thermistor: Add Murata
+ ncp18wm474 NTC
+Message-ID: <20251002-atypical-volley-9f7a43ae0e72@spud>
+References: <20251001-ntc-thermistor-ncp18wm474-v1-0-2c64b9b509ff@pengutronix.de>
+ <20251001-ntc-thermistor-ncp18wm474-v1-2-2c64b9b509ff@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wEeOnHTcu7inyN5w"
+Content-Disposition: inline
+In-Reply-To: <20251001-ntc-thermistor-ncp18wm474-v1-2-2c64b9b509ff@pengutronix.de>
 
-The pull request you sent on Sun, 28 Sep 2025 17:59:49 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.18-rc1
+--wEeOnHTcu7inyN5w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/989253cc46ff3f4973495b58e02c7fcb1ffb713e
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thank you!
+--wEeOnHTcu7inyN5w
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaN7FvQAKCRB4tDGHoIJi
+0j55AP4iY7j5aCsk9Ps+Hqg9dXmjJZHlM3onf3q9fe3TT/ihngEArTFF7yDGQo0J
+V9mpv/2gS9C9UHBX32eWAv7DcN/h7wc=
+=5Mtf
+-----END PGP SIGNATURE-----
+
+--wEeOnHTcu7inyN5w--
