@@ -1,99 +1,139 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B333D4A21
-	for <linux-hwmon@vger.kernel.org>; Mon,  6 Oct 2025 00:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8D4259C83;
+	Mon,  6 Oct 2025 10:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759710044; cv=none; b=ZJGgNyr+GeCdlnNnuYNKmEFRyYrMEfXyvfR72VnBV1QpsGmR3gHncckCpsD1lz4Efii3farhEb8e7YQ+YfukOO7pySIJk8Lr9T9NfgpLQis0p64EbPnknC4PDJV0koULeC5/jPXvVh+4cwjvdv3NF/CYS40AC8gBdHcoF2pO+fE=
+	t=1759747669; cv=none; b=tml4xtVwYWs7mwKu465pxaD9M1wNYmsIhsvhYxtQe8J4IYyauWoIwFyBOajIomUKRi+FbYs4heASeBAJovYd3/4qXOaToPNs2uKLWlmDGAxuudifybv/pb6Jz16G0BR61jbzOUzpKpUlXQcLdtryVBvskiTo1m9DbqRTPnXAq0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759710044; c=relaxed/simple;
-	bh=55VcI99BefU1ClGWEt6w2p1Wq4Ig0V9YUg0p6uKAx48=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t77yqBF/9e1cxl6UdtxnNkR9DzNax6uCztMzYooEISzd30QVecSh9UnUKRA8qaaCu2YIVdl0Y3WsxBrP9q4YoaXtpnMGt6KKNqCLacng++r/CFzzjjsrdmbIjJKgIgR/fbXLgoeU51agNAUgWx97+BPszcVj6nE0ElvOGHDYyf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqJAvEUT; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1759747669; c=relaxed/simple;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=miDG5M6zH2nR+N4KhMGspZyicQXFTmDEh9ybswXjTlXN3HR+mLrxpPwebHxHysiiOqDHjMS/H8EKFHhQdNj4df9F7p4DBzVyfAygw1GCUL1GC9xovSEVk5dzcfGjbrAE8tYY2km5ucrFKZ8EY44tph7O1wcpbAS0IbE7mE7jP10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E597mMN/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqJAvEUT"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-9335a918867so361816539f.2
-        for <linux-hwmon@vger.kernel.org>; Sun, 05 Oct 2025 17:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759710042; x=1760314842; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fu5Ah+MFhPdDtEFol8Eh9/iXvYEpCqqSBweQNTT6OA8=;
-        b=XqJAvEUT/g5Sr67gEw/FxjNODGytThoqANKDNfqaZGfaf08/97xocFsR4xogzPbnwy
-         Fsa/xlGIdD43EBHp+mJB//+4yeD/kqUrMY16+2kKKsAFvDagSfiNLbEE6NaPdEHdJP2k
-         isGloBru7Fx49DwuYZ/1pWAhV16HvmvaLU4v+F8UWZnRYomh1bk37lBi2xmAgl6x6bP0
-         9u+iIq6ZhW/fusSqymF9PFAZkCv97mYzUuhPlbdpc28eakijncnhI7pc+USMHvot2E0V
-         UCD6eGL+Bpf/ybiVfxP2RS+JGr2ZUdhtbbwGvWIrtr1hV7S1w8VDHURY7/k7jCd6QtZC
-         e0fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759710042; x=1760314842;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fu5Ah+MFhPdDtEFol8Eh9/iXvYEpCqqSBweQNTT6OA8=;
-        b=c91ZWhuyGTedGeoik8okQnAsAftzzZeRbWSdPEGJvVaemkH5tW3V0mGwR/EyxMLb7k
-         yKMHh8XfWimw5R7skf3Yv+g234aBvoq+EE3hdOraiG+4aoQ3od/6d+UdTjAB6pEJQ0tY
-         CeOXn9JfpAXUJrhbckChoW1pMKKSwjxM3/GWR/bQbuWSG9EjvRE1VhEbvT8PqtFSfVII
-         OfJHEaBz5k0qeGXP+SRiCSNspAj0Oi8aGYuSQ/Zgug73M2myCnDDG8BBBil2oCD0F4Qf
-         XVusDLlyDK1u02dZmRnsTiNXFX9mf27hGyTnCu9QXUzrQkP/RlXM/hcWeOlj9etdvj6a
-         Noqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyStkvfXhSmZav3h2Etxj74pU6uG6p/QCUZqlhJwTNXsC84ewx3uUndnozwpGPj1JGXOvsBOesUuUa9g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5dJPnOnCIZdXI3UPxRXuf5HzfOKzQ3WwXT6iXoQn+siZSFkvg
-	bDd4mRjWln8NtBiRShXh9IA5P9Fqm3YfyfB6rVd9MA6yOPV/hjTZ3/XOe7IG9lQc
-X-Gm-Gg: ASbGncudL01P9VfMEw7e69Xy1xKS2M9fSW7YUeFMGnGUFIg7eLTrEBq9YaYjWP1W9pm
-	/57am5fFvWkmQBFzf0psVs5HrZNFg1fY1qr1ieXkO+6sbFvpS6WCCy1nvQHW2ZlGVIFo2XE1CqA
-	RHdajmjldAy+NFEjl2WcHn6Xft1qgeg/qwBZ41sGaHLQ1FRBVdtWe/I2ftl20nuXTni4EP3piio
-	8Uo+dr8DrRQoFN6dBOJPAtYh7fYLm40kZUlZkg+k4X5GCJISIXscbfG2Cmjy86cgEYCqebnxm4e
-	Cd5td9urRx044SrX0TqxNrXcQX0+URuqVUN128alX1LXrPsLNlAO8L1AwgV7L9yX/QZ4fMNw4n+
-	RyY1Tg8+dH3A8OUS3IX8n/iFSfkDccOjQeQtXyC3BDDwpH8JMw71oqv+LECKxbVamQOVFX7IAye
-	dyP+ox2bue
-X-Google-Smtp-Source: AGHT+IGff2l9ufL4NeNqwyVNjvL8Pud5v87IH+281X9l0kkYxr5cs/X7Utey6E9qDPWIEsvuhOgHvA==
-X-Received: by 2002:a05:6e02:12e7:b0:426:3ab1:74b9 with SMTP id e9e14a558f8ab-42e7ad9b00amr173366855ab.25.1759710041692;
-        Sun, 05 Oct 2025 17:20:41 -0700 (PDT)
-Received: from gabes-framework.lan ([2607:fb91:3c85:4c0f:1139:4ccc:af91:f49b])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-57b5e9eba46sm4325943173.15.2025.10.05.17.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Oct 2025 17:20:41 -0700 (PDT)
-From: Gabriel Whigham <gabewhigham@gmail.com>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Gabriel Whigham <gabewhigham@gmail.com>
-Subject: [PATCH] =?UTF-8?q?docs:=20hwmon:=20fix=20typo=20in=20sg2042-mcu.r?= =?UTF-8?q?st=20Fix=20a=20spelling=20mistake:=20"supprts"=20=E2=86=92=20"s?= =?UTF-8?q?upports".?=
-Date: Sun,  5 Oct 2025 19:18:08 -0500
-Message-ID: <20251006001808.16962-1-gabewhigham@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E597mMN/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDD7C4CEF5;
+	Mon,  6 Oct 2025 10:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1759747669;
+	bh=FX1Lzu7+bvM9e8qmukvbO1hpPMzmlxgfp1qFo7AK/EQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E597mMN/x7YVkjNX1Bc0G8W7GHt89kk8u2seksXgi5q2H3Gw9DqBry/MoIgd7Hl/f
+	 QcuYuZ/DwxfZxXg04LwRoNwgtiAl8T7SsOstK7UXK8SyqkUmffohAckrwzORjzcTe+
+	 /i/1SV3Pn0pttPu3dXePy8Hlmyjuwx9fL801o6Qw=
+Date: Mon, 6 Oct 2025 12:47:45 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Eliav Farber <farbere@amazon.com>
+Cc: jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+	dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, tony.luck@intel.com, qiuxu.zhuo@intel.com,
+	james.morse@arm.com, rric@kernel.org, airlied@linux.ie,
+	daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, robdclark@gmail.com,
+	sean@poorly.run, jdelvare@suse.com, linux@roeck-us.net,
+	linus.walleij@linaro.org, dmitry.torokhov@gmail.com, maz@kernel.org,
+	wens@csie.org, jernej.skrabec@gmail.com, agk@redhat.com,
+	snitzer@redhat.com, dm-devel@redhat.com, davem@davemloft.net,
+	kuba@kernel.org, mcoquelin.stm32@gmail.com,
+	krzysztof.kozlowski@canonical.com, malattia@linux.it,
+	hdegoede@redhat.com, mgross@linux.intel.com, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, sakari.ailus@linux.intel.com,
+	clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, jack@suse.com,
+	tytso@mit.edu, adilger.kernel@dilger.ca, dushistov@mail.ru,
+	luc.vanoostenryck@gmail.com, rostedt@goodmis.org, pmladek@suse.com,
+	senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
+	linux@rasmusvillemoes.dk, minchan@kernel.org, ngupta@vflare.org,
+	akpm@linux-foundation.org, yoshfuji@linux-ipv6.org,
+	dsahern@kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
+	fw@strlen.de, jmaloy@redhat.com, ying.xue@windriver.com,
+	shuah@kernel.org, willy@infradead.org, sashal@kernel.org,
+	quic_akhilpo@quicinc.com, ruanjinjie@huawei.com,
+	David.Laight@aculab.com, herve.codina@bootlin.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-edac@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-sparse@vger.kernel.org,
+	linux-mm@kvack.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, tipc-discussion@lists.sourceforge.net,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH v2 07/19 5.15.y] minmax: simplify and clarify
+ min_t()/max_t() implementation
+Message-ID: <2025100648-capable-register-101b@gregkh>
+References: <20251003130006.41681-1-farbere@amazon.com>
+ <20251003130006.41681-8-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251003130006.41681-8-farbere@amazon.com>
 
-Signed-off-by: Gabriel Whigham <gabewhigham@gmail.com>
----
- Documentation/hwmon/sg2042-mcu.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Oct 03, 2025 at 12:59:54PM +0000, Eliav Farber wrote:
+> From: Linus Torvalds <torvalds@linux-foundation.org>
+> 
+> [ Upstream commit 017fa3e89187848fd056af757769c9e66ac3e93d ]
+> 
+> This simplifies the min_t() and max_t() macros by no longer making them
+> work in the context of a C constant expression.
+> 
+> That means that you can no longer use them for static initializers or
+> for array sizes in type definitions, but there were only a couple of
+> such uses, and all of them were converted (famous last words) to use
+> MIN_T/MAX_T instead.
+> 
+> Cc: David Laight <David.Laight@aculab.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
 
-diff --git a/Documentation/hwmon/sg2042-mcu.rst b/Documentation/hwmon/sg2042-mcu.rst
-index 077e79841..431ed832d 100644
---- a/Documentation/hwmon/sg2042-mcu.rst
-+++ b/Documentation/hwmon/sg2042-mcu.rst
-@@ -18,7 +18,7 @@ Authors:
- Description
- -----------
- 
--This driver supprts hardware monitoring for onboard MCU with
-+This driver supports hardware monitoring for onboard MCU with
- i2c interface.
- 
- Usage Notes
--- 
-2.43.0
+Eliav, your testing infrastructure needs some work, this patch breaks
+the build on this kernel tree:
 
+In file included from ./include/linux/kernel.h:16,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/wait.h:7,
+                 from ./include/linux/wait_bit.h:8,
+                 from ./include/linux/fs.h:6,
+                 from fs/erofs/internal.h:10,
+                 from fs/erofs/zdata.h:9,
+                 from fs/erofs/zdata.c:6:
+fs/erofs/zdata.c: In function ‘z_erofs_decompress_pcluster’:
+fs/erofs/zdata.h:185:61: error: ISO C90 forbids variable length array ‘pages_onstack’ [-Werror=vla]
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |                                                             ^~~~
+./include/linux/minmax.h:49:23: note: in definition of macro ‘__cmp_once_unique’
+   49 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+      |                       ^
+./include/linux/minmax.h:164:27: note: in expansion of macro ‘__cmp_once’
+  164 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+      |                           ^~~~~~~~~~
+fs/erofs/zdata.h:185:9: note: in expansion of macro ‘min_t’
+  185 |         min_t(unsigned int, THREAD_SIZE / 8 / sizeof(struct page *), 96U)
+      |         ^~~~~
+fs/erofs/zdata.c:847:36: note: in expansion of macro ‘Z_EROFS_VMAP_ONSTACK_PAGES’
+  847 |         struct page *pages_onstack[Z_EROFS_VMAP_ONSTACK_PAGES];
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+
+I'll drop this whole series, please do a bit more testing before sending
+out a new version.
+
+thanks,
+
+greg k-h
