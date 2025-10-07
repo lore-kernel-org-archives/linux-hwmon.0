@@ -1,270 +1,200 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCC72DCF4C
-	for <linux-hwmon@vger.kernel.org>; Tue,  7 Oct 2025 11:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B00E27713;
+	Tue,  7 Oct 2025 15:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759835939; cv=none; b=EHF3pKnd9IcKEkfE275StuenkHygAX+WI0vzq88Ac89VnwtidsyKRw+qGAEVrXG76yxPKWdgamD9RuFk6lBil6zJ8SVw5YIeEaGZuqfbdIiHoF0f0OnY+yI9e41QXFYJ6pYrEo51NrVr0dCxCi7DXAQ+lvyx8cq4B1ZFon1XqXE=
+	t=1759852136; cv=none; b=sRdlNqEjjnEz+4EJkNrxULwzhjSM1qwtjjV4MtyN+ROd6ld6OFaGQna0BuReazJhHvLOy1tjqACsKKttzT8CQ+rtNih1ly7y60CgdwY9C+zN+6Ey5yVlOcJvbmIFCI9muoYsfbm9SIqigFrioQ6dmQqBq5fM0xi0AoPa0O9MyZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759835939; c=relaxed/simple;
-	bh=dMA8ghWVekTunsVu7XOstdzBbwszG1Yq/dFfXRCf/bk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kvYikquy7zY+rTYHEsY/cPxrRUsBOcSiG8N+PA3k+jgP6gemKjo9KDRuEHzchqVDmzg2x7cAn3+8bse/+WCntNfgx9K0tk+Hu1pWRCPE++8VxaU40wdClolprJGpuPFYI2igmHi3NLkZh/e+YW9JdCTcWo++Ik8m9iUXreFxTZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=asc6xbGE; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="asc6xbGE"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b57d93ae3b0so4149179a12.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 07 Oct 2025 04:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759835937; x=1760440737; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dw9cqHmtj+JTcT9542JQD/91O64sVk3+jyfqTVqzQ4Y=;
-        b=asc6xbGEOXI2vrbwGk2VCUH6HD60XmuUffxJQK3ChlrcazaNsDv8fJEyq8osKWgkG7
-         Y5GWBSJq7V4LhpjixQSpvXePbo5o1un6icvPvapWn4VCgYaZQ700ZnNR9YZtBl/+xrWf
-         K7IujnBO4/+vo1+YVcTyaVEMegk4jGpsBf/FDy8iTLzs9DWnIQTCvHrva/ee7tkCdnmJ
-         o0b4Y5+LQYyKx41j6qzI2kgecNf5mQ92Yr+gkJiMOMvugFLFL7dg4R8BhnvoGpY4UKWv
-         +ExdogmbZtuDPw394mC66mwZdVaGPCM66f44I3dh/sULRV9PlwzARIITnUgLPTomi4NU
-         ACEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759835937; x=1760440737;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dw9cqHmtj+JTcT9542JQD/91O64sVk3+jyfqTVqzQ4Y=;
-        b=u5pUH+nPWV2DZA2jWN5xpTaHAIHPwZb5wk6zRDd/UrIKoSFlvOVpIDbw0DF+uVIEbJ
-         /NSiNuBD5QWD7lcX1UqJgYQ8Fr7fXPPYN5q5aPoqe5PA3+LBSqInQ0y2HDPXoc5k/H+d
-         rhHL6SxvRtLLAnYd9bDD4WVuiD6DbQKv30ZnyPAPNOoD4nY6EBGkey7rHoidZevcZm31
-         N95E1HHW00WOdFb0fcfPHeLvEL9j3iAjwqxipP1A+k9X6TBby2f+8RWj4GdVGzMcUgid
-         4nA1/lknKEJFZHKZhedhkyfz7fGo8iDD5aNifUJ0fr7ntk5rejGKn0aEragKtFollK8J
-         pWpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxnsIFpvYEaB2oDvFPIM3/aTyWCwSdKRuLKlT5p5GMiWb2Q/VgGQaPXxRT73sqz8pVUi8MDd2GVZazKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOpEPv8chF6YnRgbOdqAMTyhaELFGVW1FvfSidXx+kr6s+/Y6t
-	mpgdnHVixZ/zgUW9NJKbkG3muSIW5yiBVgAPCw4pvEVEVBwLDYCcc29q
-X-Gm-Gg: ASbGncsTr5BEXFODs91/LKOfcH9GUC96toTx2f1Rnd7I5TXCIrCJ4aFiFaBrmaiB1BH
-	83H5Adaehr2iey3KtPB5r2XAp+U3MUpUTG4dx/04dRRo7tV9IF/+wiMFiftpG9b6IWJN2CGx8/M
-	baMO/GIUrl2+rTbMN09DLWuSnrIsj3hflGEO0ryaL4hsElZ44NjJ+fVo2IOxJerX1qCP5c8TQti
-	LUBQ1MaAxzL6ITBjyOEFHCMrZYq93Xj1I83F16slMt1Aou/EwtgxrjO1G0H6jleDZt0hoWog1/+
-	8pvZZki3srbIjwqNb4QEa1ZbbmxLGlQB1hXLKJ6QNYb1BGCONJ1cBS6noMu878TnVcsRyTMeBih
-	ow/QEN03P1OuVh2TkkAxwvfEs4cIGL1+xfDh+VnHBk8BhQQP9Kb8bYSUna22Lj/wNZC4BjOdwIr
-	KDjYyKqwIwSyu9IbNYHsR3eOXaPV3XQola7RVArEueFw==
-X-Google-Smtp-Source: AGHT+IHC2LNmC/xUFVcWeK3yLywWA7GD9fZRA7+m31c3Vn2k7x7olct3JnOgC1orGXTqxPOFEWB82w==
-X-Received: by 2002:a17:902:ccc8:b0:28e:80bc:46b4 with SMTP id d9443c01a7336-28e9a664f0dmr175025365ad.55.1759835936684;
-        Tue, 07 Oct 2025 04:18:56 -0700 (PDT)
-Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1d31bdsm162509045ad.94.2025.10.07.04.18.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 04:18:56 -0700 (PDT)
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Tue, 07 Oct 2025 21:16:54 +1000
-Subject: [PATCH v3 13/13] arm64: dts: apple: t8103, t60xx, t8112: Add
- common hwmon nodes to devices
+	s=arc-20240116; t=1759852136; c=relaxed/simple;
+	bh=14zGdsZU2iAqyiMq4YrRUm3M/uNB5Pt47SJQCBr51tI=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kaxJY3Eb3y5SXfNRuYvxXIY7aPSYS0XwGIpcr7I/UX6AVOzpzq21vqywrIgPzZ4W37zDkUC0AAF1owKH4ILLoVbaRMO1ZNgdwiNLO7fjyQj9bYFNlZ46fQuS2BEvpOxBuuheSMom45rA71OtVBYdL+wYzerpi2EJeTgzgq/sMdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ch0qJ1ttyz6L4sX;
+	Tue,  7 Oct 2025 23:46:20 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8D8E11402F7;
+	Tue,  7 Oct 2025 23:48:50 +0800 (CST)
+Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 7 Oct
+ 2025 16:48:49 +0100
+Date: Tue, 7 Oct 2025 16:48:48 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Eddie James <eajames@linux.ibm.com>
+CC: <linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-aspeed@lists.ozlabs.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <andrew@codeconstruct.com.au>, <joel@jms.id.au>,
+	<linux@roeck-us.net>, <chanh@os.amperecomputing.com>, <jic23@kernel.org>,
+	<dlechner@baylibre.com>, <nuno.sa@analog.com>, <andy@kernel.org>
+Subject: Re: [PATCH v7 RESEND 3/7] dt-bindings: iio: Add Infineon DPS310
+ sensor documentation
+Message-ID: <20251007164848.00004d96@huawei.com>
+In-Reply-To: <8ab87732-71e1-4101-9aed-14f68c27fea1@linux.ibm.com>
+References: <20251001144441.310950-1-eajames@linux.ibm.com>
+	<20251001144441.310950-4-eajames@linux.ibm.com>
+	<20251003150102.00007dae@huawei.com>
+	<8ab87732-71e1-4101-9aed-14f68c27fea1@linux.ibm.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251007-macsmc-subdevs-v3-13-d7d3bfd7ae02@gmail.com>
-References: <20251007-macsmc-subdevs-v3-0-d7d3bfd7ae02@gmail.com>
-In-Reply-To: <20251007-macsmc-subdevs-v3-0-d7d3bfd7ae02@gmail.com>
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- James Calligeros <jcalligeros99@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6022;
- i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=dMA8ghWVekTunsVu7XOstdzBbwszG1Yq/dFfXRCf/bk=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDBlPvm3jY15w+v9irk9rkrp+zvDZ//DCl5UBk87+iv7aZ
- ZqqumjV+Y5SFgYxLgZZMUWWDU1CHrON2G72i1TuhZnDygQyhIGLUwAmcm0Cwz+bGSzX5RgmqjHo
- y5znt+T57zzd66/K5hWSYuwTrSqWRDsyMrzjnabz55ZC+PGlEjuNczkDOffPrNJIyZ3CKOV6Kfp
- fGy8A
-X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
- fpr=B08212489B3206D98F1479BDD43632D151F77960
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-Add the known, common hwmon-related SMC keys to the DTs for the devices
-they pertain to.
+On Mon, 6 Oct 2025 08:44:55 -0500
+Eddie James <eajames@linux.ibm.com> wrote:
 
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Co-developed-by: Janne Grunau <j@jannau.net>
-Signed-off-by: Janne Grunau <j@jannau.net>
-Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
----
- .../arm64/boot/dts/apple/t6001-j375c.dts | 2 ++
- arch/arm64/boot/dts/apple/t6001.dtsi     | 2 ++
- .../arm64/boot/dts/apple/t6002-j375d.dts | 2 ++
- .../boot/dts/apple/t600x-j314-j316.dtsi  | 3 +++
- arch/arm64/boot/dts/apple/t8103-j274.dts | 2 ++
- arch/arm64/boot/dts/apple/t8103-j293.dts | 3 +++
- arch/arm64/boot/dts/apple/t8103-j313.dts | 2 ++
- arch/arm64/boot/dts/apple/t8103-j456.dts | 2 ++
- arch/arm64/boot/dts/apple/t8103-j457.dts | 2 ++
- arch/arm64/boot/dts/apple/t8103.dtsi     | 1 +
- arch/arm64/boot/dts/apple/t8112-j413.dts | 2 ++
- arch/arm64/boot/dts/apple/t8112-j473.dts | 2 ++
- arch/arm64/boot/dts/apple/t8112-j493.dts | 3 +++
- arch/arm64/boot/dts/apple/t8112.dtsi     | 1 +
- 14 files changed, 29 insertions(+)
+> On 10/3/25 9:01 AM, Jonathan Cameron wrote:
+> > On Wed,  1 Oct 2025 09:44:37 -0500
+> > Eddie James <eajames@linux.ibm.com> wrote:
+> > =20
+> >> The DPS310 is a barometric pressure and temperature sensor with
+> >> an I2C interface. Remove it from trivial-devices.yaml and add its
+> >> own documentation. =20
+> > Hi Eddie,
+> >
+> > Why?  I guess you need the #io-channel-cells which trivial devices
+> > doesn't allow because you have a consumer driver? =20
+>=20
+>=20
+> Correct.
+>=20
+>=20
+> >
+> > Obviously the binding patch shouldn't mention that, but it could call
+> > out that there can be such consumers. =20
+>=20
+>=20
+> OK, I can add that.
+>=20
+>=20
+> >
+> > I'd also expect to see some supplies even if the driver doesn't yet
+> > explicitly handle them. =20
+>=20
+>=20
+> You mean in the example section? Sure. I'll send a patch separately=20
+> since the rest is merged
 
-diff --git a/arch/arm64/boot/dts/apple/t6001-j375c.dts b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-index 2e7c23714d4d..08276114c1d8 100644
---- a/arch/arm64/boot/dts/apple/t6001-j375c.dts
-+++ b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-@@ -24,3 +24,5 @@ &wifi0 {
- &bluetooth0 {
- 	brcm,board-type = "apple,okinawa";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6001.dtsi b/arch/arm64/boot/dts/apple/t6001.dtsi
-index ffbe823b71bc..264df90f07d8 100644
---- a/arch/arm64/boot/dts/apple/t6001.dtsi
-+++ b/arch/arm64/boot/dts/apple/t6001.dtsi
-@@ -66,3 +66,5 @@ p-core-pmu-affinity {
- &gpu {
- 	compatible = "apple,agx-g13c", "apple,agx-g13s";
- };
-+
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6002-j375d.dts b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-index 2b7f80119618..d12c0ae418f7 100644
---- a/arch/arm64/boot/dts/apple/t6002-j375d.dts
-+++ b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-@@ -56,3 +56,5 @@ &bluetooth0 {
- 
- /delete-node/ &ps_disp0_cpu0_die1;
- /delete-node/ &ps_disp0_fe_die1;
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index c0aac59a6fae..127814a9dfa4 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -131,3 +131,6 @@ &fpwm0 {
- };
- 
- #include "spi1-nvram.dtsi"
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j274.dts b/arch/arm64/boot/dts/apple/t8103-j274.dts
-index 1c3e37f86d46..f5b8cc087882 100644
---- a/arch/arm64/boot/dts/apple/t8103-j274.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j274.dts
-@@ -61,3 +61,5 @@ &pcie0_dart_2 {
- &i2c2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-index 5b3c42e9f0e6..abb88391635f 100644
---- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-@@ -119,3 +119,6 @@ dfr_panel_in: endpoint {
- &displaydfr_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-index 97a4344d8dca..491ead016b21 100644
---- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-@@ -41,3 +41,5 @@ &wifi0 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j456.dts b/arch/arm64/boot/dts/apple/t8103-j456.dts
-index 58c8e43789b4..c2ec6fbb633c 100644
---- a/arch/arm64/boot/dts/apple/t8103-j456.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j456.dts
-@@ -75,3 +75,5 @@ &pcie0_dart_1 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j457.dts b/arch/arm64/boot/dts/apple/t8103-j457.dts
-index 7089ccf3ce55..aeaab2482d54 100644
---- a/arch/arm64/boot/dts/apple/t8103-j457.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j457.dts
-@@ -56,3 +56,5 @@ ethernet0: ethernet@0,0 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 78eb931d6fb7..f1820bdc0910 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -1145,3 +1145,4 @@ port02: pci@2,0 {
- };
- 
- #include "t8103-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j413.dts b/arch/arm64/boot/dts/apple/t8112-j413.dts
-index 6f69658623bf..500dcdf2d4b5 100644
---- a/arch/arm64/boot/dts/apple/t8112-j413.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j413.dts
-@@ -78,3 +78,5 @@ &i2c4 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j473.dts b/arch/arm64/boot/dts/apple/t8112-j473.dts
-index 06fe257f08be..11db6a92493f 100644
---- a/arch/arm64/boot/dts/apple/t8112-j473.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j473.dts
-@@ -52,3 +52,5 @@ &pcie1_dart {
- &pcie2_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j493.dts b/arch/arm64/boot/dts/apple/t8112-j493.dts
-index fb8ad7d4c65a..a0da02c00f15 100644
---- a/arch/arm64/boot/dts/apple/t8112-j493.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j493.dts
-@@ -133,3 +133,6 @@ touchbar0: touchbar@0 {
- 		touchscreen-inverted-y;
- 	};
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112.dtsi b/arch/arm64/boot/dts/apple/t8112.dtsi
-index 5a8fa6daa00a..c4d1e5ffaee9 100644
---- a/arch/arm64/boot/dts/apple/t8112.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8112.dtsi
-@@ -1184,3 +1184,4 @@ port03: pci@3,0 {
- };
- 
- #include "t8112-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
+Supplies need listing as actual properties (+ in the example)
+=46rom a binding point of view they are 'required' if the power needs
+to be turned on for the chip to work.  On actual DT files they might
+not be there if a fixed supply is in use and someone didn't other providing
+it. In those cases the regulator code provides a fake regulator to make
+everything work.
 
--- 
-2.51.0
+>=20
+>=20
+> Thanks,
+>=20
+> Eddie
+>=20
+>=20
+> >
+> > Jonathan
+> > =20
+> >> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> >> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> >> ---
+> >>   .../iio/pressure/infineon,dps310.yaml         | 44 +++++++++++++++++=
+++
+> >>   .../devicetree/bindings/trivial-devices.yaml  |  2 -
+> >>   MAINTAINERS                                   |  1 +
+> >>   3 files changed, 45 insertions(+), 2 deletions(-)
+> >>   create mode 100644 Documentation/devicetree/bindings/iio/pressure/in=
+fineon,dps310.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/iio/pressure/infineon,d=
+ps310.yaml b/Documentation/devicetree/bindings/iio/pressure/infineon,dps310=
+.yaml
+> >> new file mode 100644
+> >> index 0000000000000..7c0782e2a821b
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/iio/pressure/infineon,dps310.y=
+aml
+> >> @@ -0,0 +1,44 @@
+> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/iio/pressure/infineon,dps310.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Infineon DPS310 barometric pressure and temperature sensor
+> >> +
+> >> +maintainers:
+> >> +  - Eddie James <eajames@linux.ibm.com>
+> >> +
+> >> +description:
+> >> +  The DPS310 is a barometric pressure and temperature sensor with an =
+I2C
+> >> +  interface.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - infineon,dps310
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  "#io-channel-cells":
+> >> +    const: 0
+> >> +
+> >> +required:
+> >> +  - compatible
+> >> +  - reg
+> >> +
+> >> +additionalProperties: false
+> >> +
+> >> +examples:
+> >> +  - |
+> >> +    i2c {
+> >> +        #address-cells =3D <1>;
+> >> +        #size-cells =3D <0>;
+> >> +
+> >> +        pressure-sensor@76 {
+> >> +          compatible =3D "infineon,dps310";
+> >> +          reg =3D <0x76>;
+> >> +          #io-channel-cells =3D <0>;
+> >> +        };
+> >> +    };
+> >> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/=
+Documentation/devicetree/bindings/trivial-devices.yaml
+> >> index 7609acaa752d5..a72b7fabc7034 100644
+> >> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> >> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> >> @@ -127,8 +127,6 @@ properties:
+> >>             - ibm,cffps2
+> >>               # IBM On-Chip Controller hwmon device
+> >>             - ibm,p8-occ-hwmon
+> >> -            # Infineon barometric pressure and temperature sensor
+> >> -          - infineon,dps310
+> >>               # Infineon IR36021 digital POL buck controller
+> >>             - infineon,ir36021
+> >>               # Infineon IRPS5401 Voltage Regulator (PMIC)
+> >> diff --git a/MAINTAINERS b/MAINTAINERS
+> >> index 0c8281ea4cc64..92b9854a0e07d 100644
+> >> --- a/MAINTAINERS
+> >> +++ b/MAINTAINERS
+> >> @@ -12191,6 +12191,7 @@ INFINEON DPS310 Driver
+> >>   M:	Eddie James <eajames@linux.ibm.com>
+> >>   L:	linux-iio@vger.kernel.org
+> >>   S:	Maintained
+> >> +F:	Documentation/devicetree/bindings/iio/pressure/infineon,dps310.yaml
+> >>   F:	drivers/iio/pressure/dps310.c
+> >>  =20
+> >>   INFINEON PEB2466 ASoC CODEC =20
+> > =20
 
