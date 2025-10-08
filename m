@@ -1,53 +1,53 @@
-Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463202FC890
-	for <linux-hwmon@vger.kernel.org>; Wed,  8 Oct 2025 15:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.77.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA13A2EBDF2
+	for <linux-hwmon@vger.kernel.org>; Wed,  8 Oct 2025 15:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759937707; cv=none; b=JDQMBi6lADmozp0qSuA83qqyK1lU/mKZBGuVO7NAS8Tf7hDyc8038I/azPm0aIpURUWukUshSpbFrSueLDUj7UQXgVzlYOLIQc4x5X3tV+6wRx57W6Z3leCokVRWr+w+uE0iOHCkqm5LW/Z9CExX4n078Z6poVrcrscVYDon7qY=
+	t=1759937715; cv=none; b=iek8EXDUGwoW2ylJchPLKzlnnTKOuGtFk+XiAIlVgBdVo9LEXf7I0cMs9egEESPMFLUK8WagApqMzlAKr9dkmYyoZMeqtVAeho1Kjtu10FP7JtRrGlM0ieHsdHD9E1C5s4BLL8SLX7txOIOnF6eW0wO42RT86aVl7uAfGqC26Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759937707; c=relaxed/simple;
-	bh=bSiDtvnimcgo6Y3knq8+w917eJDspbmoX3a4FcQGX4g=;
+	s=arc-20240116; t=1759937715; c=relaxed/simple;
+	bh=vXDjGFm+HJwZhe9olHv5adnVqsW2PTDgXntaLnfVnnY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a8JDASFlPmR14XGMkmyM2wDPGH4u+sknL5IWO9dPnWo54O7slreB3d7cPPTOsog+JCFRZ9tEjg3oxWAG482ZwSrYdm80VoHi+8hcC14yVztorRPT1Pb5OVZLRpk1gZn13qdz8YmJ/Bj8CIPG66Ird8QvAPA+Dn2PRbqZ5e7y/Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=PIMuKH1p; arc=none smtp.client-ip=44.246.77.92
+	 MIME-Version:Content-Type; b=h6Qx35EZPRxMfPZjEO2M2HOYjAs1Fq3jI4VuzDmg/gEmCbECGqcpSLWuIrGlL4pM7sKaygrcMS9TXRpZ9QZD7ypf+rfej/5rAL+Od6LK/OnUFIddUiAK7Ab3KXSRJIm17RNEqfGdKseYMbEQSroUTq8n+Xo480O2AYABXE3Ylvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=La6LoIYj; arc=none smtp.client-ip=52.26.1.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="PIMuKH1p"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="La6LoIYj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1759937706; x=1791473706;
+  t=1759937713; x=1791473713;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=U4cCFbpHvYq8yWCMIbT6T5sZXi6GGX+iNVIOVWCWFxY=;
-  b=PIMuKH1pWiGjy+/H6wE1K2NGZpWbiqKimkhOkNz3vgj9UHcBzYBXB7HF
-   tuGNc63hNHdPv7PhtwxfojBUr0lfrzZfN+H/eOC6kOfZ1RaFicd+Z6qGx
-   MnnCw/Ge+AcJZmgwVthhldLkofHM0kf2snpx5qWYzBfDt0+IiacNabz2O
-   LQSNb7r6YULB544jrC0KU+cgg2F2T1FP5oLVlFIcWKT/h1AttndqHK54H
-   lLj1EMPakMyZNVdkt+JGMQaGRWNwIOQ15gZ8pGga5G5HTSaBqZk9x9BmI
-   NgWIH57dDywCdHyS+krGcM5iymyXhtPsGg1cjDmVyauLo6ZQiGAg6ZJk7
-   A==;
-X-CSE-ConnectionGUID: COeJJ0ABQS+WEpPLvhNJng==
-X-CSE-MsgGUID: s1w3xhvWQ46Ku2D9l5TWwA==
-X-IronPort-AV: E=Sophos;i="6.19,213,1754956800"; 
-   d="scan'208";a="4534382"
+  bh=eLjmOO9Imra/tK5RPFIsLXDdpmNXUJwWiKD0++d4PGI=;
+  b=La6LoIYjbCqF4HTLzJpLC2MwxX0O9S/3yB/M5TgYScxLgizTjTbqSADu
+   qvjVxqUpKzLb85qcxGTyY1KB2l4fe4TY2S1EYSydTUqzG+btBoBxLSc8b
+   ASGxkooSJBZbf04azS7kOVlIj5omC85DxbUoEBNPgsOUOCjrbWHHML39C
+   yodlWi7kv5iAL17YQHTObjYPSSdvltqVT/uuDC/r6gL/AU/b0lrkqqazJ
+   MUcTwt0FdDl+c3jk+cjbgJ96w5fheK2UCfDhatIqX/RcL+LiZnS3xk7Cj
+   UHnU/K9OloLiqidsmP1G+3md4o+v5XxWRbSG37UlaTLQih+nEa57olBjE
+   Q==;
+X-CSE-ConnectionGUID: 6T+me5XYTSuP5h2y6rZTIw==
+X-CSE-MsgGUID: 15Our8paSM6juUou0NdqMQ==
+X-IronPort-AV: E=Sophos;i="6.18,281,1751241600"; 
+   d="scan'208";a="4530540"
 Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 15:35:05 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:32857]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.215:2525] with esmtp (Farcaster)
- id 0bc2740d-7522-496d-8748-6f48e7a0c1f3; Wed, 8 Oct 2025 15:35:05 +0000 (UTC)
-X-Farcaster-Flow-ID: 0bc2740d-7522-496d-8748-6f48e7a0c1f3
+  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2025 15:35:13 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:26934]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.27.3:2525] with esmtp (Farcaster)
+ id dfb0cb8c-36a9-4c53-baef-b8232467d62a; Wed, 8 Oct 2025 15:35:13 +0000 (UTC)
+X-Farcaster-Flow-ID: dfb0cb8c-36a9-4c53-baef-b8232467d62a
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 8 Oct 2025 15:34:53 +0000
+ Wed, 8 Oct 2025 15:35:07 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
  (172.19.116.181) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Wed, 8 Oct 2025
- 15:34:39 +0000
+ 15:34:53 +0000
 From: Eliav Farber <farbere@amazon.com>
 To: <gregkh@linuxfoundation.org>, <jdike@addtoit.com>, <richard@nod.at>,
 	<anton.ivanov@cambridgegreys.com>, <dave.hansen@linux.intel.com>,
@@ -94,9 +94,9 @@ CC: Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@infradead.org>,
 	<Jason@zx2c4.com>, Jens Axboe <axboe@kernel.dk>, Lorenzo Stoakes
 	<lorenzo.stoakes@oracle.com>, Mateusz Guzik <mjguzik@gmail.com>, "Pedro
  Falcato" <pedro.falcato@gmail.com>
-Subject: [PATCH v3 16/19 5.15.y] minmax.h: use BUILD_BUG_ON_MSG() for the lo < hi test in clamp()
-Date: Wed, 8 Oct 2025 15:29:41 +0000
-Message-ID: <20251008152946.29285-17-farbere@amazon.com>
+Subject: [PATCH v3 17/19 5.15.y] minmax.h: move all the clamp() definitions after the min/max() ones
+Date: Wed, 8 Oct 2025 15:29:42 +0000
+Message-ID: <20251008152946.29285-18-farbere@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251008152946.29285-1-farbere@amazon.com>
 References: <20251008152946.29285-1-farbere@amazon.com>
@@ -113,13 +113,13 @@ X-ClientProxiedBy: EX19D036UWC004.ant.amazon.com (10.13.139.205) To
 
 From: David Laight <David.Laight@ACULAB.COM>
 
-[ Upstream commit a5743f32baec4728711bbc01d6ac2b33d4c67040 ]
+[ Upstream commit c3939872ee4a6b8bdcd0e813c66823b31e6e26f7 ]
 
-Use BUILD_BUG_ON_MSG(statically_true(ulo > uhi), ...) for the sanity check
-of the bounds in clamp().  Gives better error coverage and one less
-expansion of the arguments.
+At some point the definitions for clamp() got added in the middle of the
+ones for min() and max().  Re-order the definitions so they are more
+sensibly grouped.
 
-Link: https://lkml.kernel.org/r/34d53778977747f19cce2abb287bb3e6@AcuMS.aculab.com
+Link: https://lkml.kernel.org/r/8bb285818e4846469121c8abc3dfb6e2@AcuMS.aculab.com
 Signed-off-by: David Laight <david.laight@aculab.com>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Arnd Bergmann <arnd@kernel.org>
@@ -134,23 +134,162 @@ Cc: Pedro Falcato <pedro.falcato@gmail.com>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- include/linux/minmax.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/linux/minmax.h | 109 +++++++++++++++++++----------------------
+ 1 file changed, 51 insertions(+), 58 deletions(-)
 
 diff --git a/include/linux/minmax.h b/include/linux/minmax.h
-index 6f7ea669d305..91aa1b90c1bb 100644
+index 91aa1b90c1bb..75fb7a6ad4c6 100644
 --- a/include/linux/minmax.h
 +++ b/include/linux/minmax.h
-@@ -106,8 +106,7 @@
- 	__auto_type uval = (val);						\
- 	__auto_type ulo = (lo);							\
- 	__auto_type uhi = (hi);							\
--	static_assert(__builtin_choose_expr(__is_constexpr((lo) > (hi)), 	\
--			(lo) <= (hi), true),					\
+@@ -99,22 +99,6 @@
+ #define __careful_cmp(op, x, y) \
+ 	__careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+ 
+-#define __clamp(val, lo, hi)	\
+-	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
+-
+-#define __clamp_once(val, lo, hi, uval, ulo, uhi) ({				\
+-	__auto_type uval = (val);						\
+-	__auto_type ulo = (lo);							\
+-	__auto_type uhi = (hi);							\
+-	BUILD_BUG_ON_MSG(statically_true(ulo > uhi),				\
+-		"clamp() low limit " #lo " greater than high limit " #hi);	\
+-	BUILD_BUG_ON_MSG(!__types_ok3(uval, ulo, uhi),				\
+-		"clamp("#val", "#lo", "#hi") signedness error");		\
+-	__clamp(uval, ulo, uhi); })
+-
+-#define __careful_clamp(val, lo, hi) \
+-	__clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+-
+ /**
+  * min - return minimum of two values of the same or compatible types
+  * @x: first value
+@@ -170,6 +154,22 @@
+ #define max3(x, y, z) \
+ 	__careful_op3(max, x, y, z, __UNIQUE_ID(x_), __UNIQUE_ID(y_), __UNIQUE_ID(z_))
+ 
++/**
++ * min_t - return minimum of two values, using the specified type
++ * @type: data type to use
++ * @x: first value
++ * @y: second value
++ */
++#define min_t(type, x, y) __cmp_once(min, type, x, y)
++
++/**
++ * max_t - return maximum of two values, using the specified type
++ * @type: data type to use
++ * @x: first value
++ * @y: second value
++ */
++#define max_t(type, x, y) __cmp_once(max, type, x, y)
++
+ /**
+  * min_not_zero - return the minimum that is _not_ zero, unless both are zero
+  * @x: value1
+@@ -180,6 +180,22 @@
+ 	typeof(y) __y = (y);			\
+ 	__x == 0 ? __y : ((__y == 0) ? __x : min(__x, __y)); })
+ 
++#define __clamp(val, lo, hi)	\
++	((val) >= (hi) ? (hi) : ((val) <= (lo) ? (lo) : (val)))
++
++#define __clamp_once(val, lo, hi, uval, ulo, uhi) ({				\
++	__auto_type uval = (val);						\
++	__auto_type ulo = (lo);							\
++	__auto_type uhi = (hi);							\
 +	BUILD_BUG_ON_MSG(statically_true(ulo > uhi),				\
- 		"clamp() low limit " #lo " greater than high limit " #hi);	\
- 	BUILD_BUG_ON_MSG(!__types_ok3(uval, ulo, uhi),				\
- 		"clamp("#val", "#lo", "#hi") signedness error");		\
++		"clamp() low limit " #lo " greater than high limit " #hi);	\
++	BUILD_BUG_ON_MSG(!__types_ok3(uval, ulo, uhi),				\
++		"clamp("#val", "#lo", "#hi") signedness error");		\
++	__clamp(uval, ulo, uhi); })
++
++#define __careful_clamp(val, lo, hi) \
++	__clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
++
+ /**
+  * clamp - return a value clamped to a given range with strict typechecking
+  * @val: current value
+@@ -191,28 +207,30 @@
+  */
+ #define clamp(val, lo, hi) __careful_clamp(val, lo, hi)
+ 
+-/*
+- * ..and if you can't take the strict
+- * types, you can specify one yourself.
+- *
+- * Or not use min/max/clamp at all, of course.
+- */
+-
+ /**
+- * min_t - return minimum of two values, using the specified type
+- * @type: data type to use
+- * @x: first value
+- * @y: second value
++ * clamp_t - return a value clamped to a given range using a given type
++ * @type: the type of variable to use
++ * @val: current value
++ * @lo: minimum allowable value
++ * @hi: maximum allowable value
++ *
++ * This macro does no typechecking and uses temporary variables of type
++ * @type to make all the comparisons.
+  */
+-#define min_t(type, x, y) __cmp_once(min, type, x, y)
++#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+ 
+ /**
+- * max_t - return maximum of two values, using the specified type
+- * @type: data type to use
+- * @x: first value
+- * @y: second value
++ * clamp_val - return a value clamped to a given range using val's type
++ * @val: current value
++ * @lo: minimum allowable value
++ * @hi: maximum allowable value
++ *
++ * This macro does no typechecking and uses temporary variables of whatever
++ * type the input argument @val is.  This is useful when @val is an unsigned
++ * type and @lo and @hi are literals that will otherwise be assigned a signed
++ * integer type.
+  */
+-#define max_t(type, x, y) __cmp_once(max, type, x, y)
++#define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+ 
+ /*
+  * Do not check the array parameter using __must_be_array().
+@@ -257,31 +275,6 @@
+  */
+ #define max_array(array, len) __minmax_array(max, array, len)
+ 
+-/**
+- * clamp_t - return a value clamped to a given range using a given type
+- * @type: the type of variable to use
+- * @val: current value
+- * @lo: minimum allowable value
+- * @hi: maximum allowable value
+- *
+- * This macro does no typechecking and uses temporary variables of type
+- * @type to make all the comparisons.
+- */
+-#define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+-
+-/**
+- * clamp_val - return a value clamped to a given range using val's type
+- * @val: current value
+- * @lo: minimum allowable value
+- * @hi: maximum allowable value
+- *
+- * This macro does no typechecking and uses temporary variables of whatever
+- * type the input argument @val is.  This is useful when @val is an unsigned
+- * type and @lo and @hi are literals that will otherwise be assigned a signed
+- * integer type.
+- */
+-#define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+-
+ static inline bool in_range64(u64 val, u64 start, u64 len)
+ {
+ 	return (val - start) < len;
 -- 
 2.47.3
 
