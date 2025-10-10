@@ -1,143 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47E530215B;
-	Fri, 10 Oct 2025 20:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F2F18872A;
+	Fri, 10 Oct 2025 20:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760127988; cv=none; b=LGHRbmRF8Tt25c7s25Gt8n0w6UwU7ZkGAYZccwRT5bKTLdeAVbgiWPvoig7WeMSmLWnrpNitxcwaYcjhbCLrlraWqz/1KTzkD98EpipzaVDFL6FAhMUWb5ZhksYUKzMNc5j3Y9b5og2j6I0Rb104m7DjJr8oVBFRsMimbvFG0x4=
+	t=1760129064; cv=none; b=UhlPa0JB4y6QeRD2wdtSg/ioAnNzYmp6Kp9Ero3EPpA9kuhOFUhYs4FBS3AuiwAb+uB3IZZeA1z4wQnhOMlyOHDxIVPlmMyiMcCJvc60BY2ZCP3EGk0IJOoppiktxgx6s/OU7EW/smCrsN7NyJB/eNWSMwM/uktiqsfww3bvVzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760127988; c=relaxed/simple;
-	bh=AscKgj05BtJh9IDBr3hGSKSH55FRqss4Bu8m5A4Qt98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E6hWGqiYgBk5McO0NGOv/s2U9KO5hyjw2lXz00++A03y6ZQFWXdK7gf0CaaKYmTJKSsjGfm44KWe8aJg34IFKeR5PcMQGA8o41RV5WBE08kJFmuF3RMUu+CIBXpqht6u1Em4yaGoMzjJZCZyb0snIAisWef1fZHkb8G/7qV9uSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W5m/ACAI; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760129064; c=relaxed/simple;
+	bh=AmACX1L3O3Micl1zV5BG913P9u4WWgLhjIGb6Q+xKy0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jbA/QFhw0dT8dx1UH7+jekvo4J9kiOgP0z1XMODuL2WD4gMYK/vEG1NItpZjchzC8kblrJFMcJYo1R9rSk5bnma8wHPPvhcjGlI+Sb8hDj/MVGuVOUX6dL0rJRNZFlWfp9GhMVlp/hdEKKDfu5P77F5xxJi4ah/tTQjNV6IDfQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kQTIiTlN; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W5m/ACAI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760127987; x=1791663987;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AscKgj05BtJh9IDBr3hGSKSH55FRqss4Bu8m5A4Qt98=;
-  b=W5m/ACAIQ4ncsE5THaX4vwN3w8NwhqKl8cTxoV6K/WU1wDUWF07p1bgS
-   HEZSvylzwp9Balhl6U3kgjlHFeJOH3wZ5sdl0SzJq3K3eFYfp3V5DdGJ8
-   WcXgjdjx1Fy9FsvpKT3fKS0I74q5KtuPGV8px7BNYDnIvXkFvroH7A1Qd
-   GGAD2ovM6q25EJfB8uZWwPfwXPnXqAd0V4jwkxnFOqkuIGtr9+LNpos9s
-   ase7EYOBXUoxaaLkVQ3Ij/6g6wYNzDd/c6BSd6RQUzcs3GcQydpainuR2
-   ylxYTzqvmYrRhYWUqbTriQHBnvCNgcq8iv0aDmCd4SZPByTFeH2WYBlfG
-   Q==;
-X-CSE-ConnectionGUID: nxUdditGT4SdL4DPjIVB2Q==
-X-CSE-MsgGUID: UC+4J0GCQLSu0qoeU3WB5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11578"; a="64974407"
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="64974407"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2025 13:26:26 -0700
-X-CSE-ConnectionGUID: Fhe87ZQLTb6TwXu4exd1Hg==
-X-CSE-MsgGUID: kEAcKQVcRpKmqg4V6RHnnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,220,1754982000"; 
-   d="scan'208";a="181010994"
-Received: from lkp-server01.sh.intel.com (HELO 6a630e8620ab) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Oct 2025 13:26:21 -0700
-Received: from kbuild by 6a630e8620ab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v7Jgx-000391-0y;
-	Fri, 10 Oct 2025 20:26:19 +0000
-Date: Sat, 11 Oct 2025 04:25:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Calligeros <jcalligeros99@gmail.com>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: oe-kbuild-all@lists.linux.dev, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 06/13] hwmon: Add Apple Silicon SMC hwmon driver
-Message-ID: <202510110421.ZnJdu1ds-lkp@intel.com>
-References: <20251007-macsmc-subdevs-v3-6-d7d3bfd7ae02@gmail.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kQTIiTlN"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59AFtwFG011662;
+	Fri, 10 Oct 2025 20:44:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=p6FSTZMWwyv3y7/oFJZxNQ8Uo2RFV
+	PeerJcAGhPqIsw=; b=kQTIiTlNPpySb3nfgxBxG41ypOhX8P9Eutrbxx3bzYumM
+	zQi5f9LNXPtWEXcwxe/mhfWK8R3AeXfoqqdYHMXvDv9OBCRzbHZ8LZNSOncJQfGz
+	8A5++C72joWycsRGCI8uWR6ZQ2022zYTTqw+L3AnvWowB071dQckyKwjiOFZF4th
+	c6EKR56GBrpzqm7/Y4aeDn6B4xuz1snQsSHKqo1G7XYYKbi103AVRoqwl9MqLNLW
+	D9quD+cAi5FL+Vlkz5q7ZbG721BF98lxHb7fwDxUdMVPTZDmtSRtkJYVP20Hk+dc
+	kZ26+kjtBhc4+E9U80B0qWSTCODxwUTMHzm8ctToA==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49nv6bcgcg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Oct 2025 20:44:03 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59AKN2Zx036578;
+	Fri, 10 Oct 2025 20:44:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 49nv69emwr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Oct 2025 20:44:02 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59AKdKHg032417;
+	Fri, 10 Oct 2025 20:44:02 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 49nv69emw9-1;
+	Fri, 10 Oct 2025 20:44:02 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: Cryolitia PukNgae <cryolitia@uniontech.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, harshit.m.mogalapalli@oracle.com
+Subject: [PATCH] hwmon: gpd-fan: Fix return value when platform_get_resource() fails
+Date: Fri, 10 Oct 2025 13:43:59 -0700
+Message-ID: <20251010204359.94300-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251007-macsmc-subdevs-v3-6-d7d3bfd7ae02@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-10_05,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2510020000 definitions=main-2510100119
+X-Proofpoint-GUID: LlrRznzQaLGqbnPiz2jNIoAZwetU6Jui
+X-Authority-Analysis: v=2.4 cv=Nb7rFmD4 c=1 sm=1 tr=0 ts=68e97013 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=x6icFKpwvdMA:10 a=yPCof4ZbAAAA:8 a=NidHIJ8EfkdNFoYrZv4A:9
+X-Proofpoint-ORIG-GUID: LlrRznzQaLGqbnPiz2jNIoAZwetU6Jui
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDEyMSBTYWx0ZWRfXziYO6zCPB6NR
+ zOYjpE1totk8dijegC6ZSCPQ6FUVW2Dp0wbq591yabwYjRA2Tgimk4t18Du0z1kLb7KpGfJVFM1
+ UafIOQNWFqbbWHBeYhC9+XepzG0oOcXDA77566cApTrQ2oAjNf5JUO5uS0iqIFJf8or2tMOVdKz
+ AxnDcHJUTJA1jwkGft4k3f/S8INqboSIv6+U1E5sW5jEUt/sNLFY/0mnhRgWPqIehJRMszl93jP
+ gTb8rDAe5ggPK1cwub3jxXlveE7d6TOwx0iNanUGdKa2wh31wUn4kItgu1DjdGuMmbxHCb1hKPX
+ zqftOiabY46yhfBOizpQpQwc5RoNBJ50sGxWPTzNCWgye25i0Uuup+4f9gnN0FPDD4KUPqg14UI
+ lckh63zZ86Greicvm8LzEfYWTwsFSQ==
 
-Hi James,
+When platform_get_resource() fails it returns NULL and not an error
+pointer, accordingly change the error handling.
 
-kernel test robot noticed the following build errors:
+Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+This is based on static analysis with Smatch, only compile tested.
+---
+ drivers/hwmon/gpd-fan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[auto build test ERROR on c746c3b5169831d7fb032a1051d8b45592ae8d78]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/James-Calligeros/dt-bindings-rtc-Add-Apple-SMC-RTC/20251010-092141
-base:   c746c3b5169831d7fb032a1051d8b45592ae8d78
-patch link:    https://lore.kernel.org/r/20251007-macsmc-subdevs-v3-6-d7d3bfd7ae02%40gmail.com
-patch subject: [PATCH v3 06/13] hwmon: Add Apple Silicon SMC hwmon driver
-config: sparc-allmodconfig (https://download.01.org/0day-ci/archive/20251011/202510110421.ZnJdu1ds-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251011/202510110421.ZnJdu1ds-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510110421.ZnJdu1ds-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/hwmon/macsmc-hwmon.c: In function 'macsmc_hwmon_write_f32':
->> drivers/hwmon/macsmc-hwmon.c:246:24: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
-     246 |                 fval = FIELD_PREP(FLT_SIGN_MASK, neg) |
-         |                        ^~~~~~~~~~
-
-
-vim +/FIELD_PREP +246 drivers/hwmon/macsmc-hwmon.c
-
-   225	
-   226	static int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
-   227	{
-   228		u64 val;
-   229		u32 fval = 0;
-   230		int exp = 0, neg;
-   231	
-   232		val = abs(value);
-   233		neg = val != value;
-   234	
-   235		if (val) {
-   236			int msb = __fls(val) - exp;
-   237	
-   238			if (msb > 23) {
-   239				val >>= msb - FLT_MANT_BIAS;
-   240				exp -= msb - FLT_MANT_BIAS;
-   241			} else if (msb < 23) {
-   242				val <<= FLT_MANT_BIAS - msb;
-   243				exp += msb;
-   244			}
-   245	
- > 246			fval = FIELD_PREP(FLT_SIGN_MASK, neg) |
-   247			       FIELD_PREP(FLT_EXP_MASK, exp + FLT_EXP_BIAS) |
-   248			       FIELD_PREP(FLT_MANT_MASK, val);
-   249		}
-   250	
-   251		return apple_smc_write_u32(smc, key, fval);
-   252	}
-   253	
-
+diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+index 644dc3ca9df7..eebe39ef9677 100644
+--- a/drivers/hwmon/gpd-fan.c
++++ b/drivers/hwmon/gpd-fan.c
+@@ -615,8 +615,8 @@ static int gpd_fan_probe(struct platform_device *pdev)
+ 	const struct device *hwdev;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+-	if (IS_ERR(res))
+-		return dev_err_probe(dev, PTR_ERR(res),
++	if (!res)
++		return dev_err_probe(dev, -EINVAL,
+ 				     "Failed to get platform resource\n");
+ 
+ 	region = devm_request_region(dev, res->start,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.3
+
