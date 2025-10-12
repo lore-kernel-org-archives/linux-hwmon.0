@@ -1,94 +1,206 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403F418FC80
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 18:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149391A5BA2
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 21:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760293273; cv=none; b=O784Q/rOfH08zEvAGpjc/Mdms8rZlp1eHpR4gduhTSFaNUlV89aiGeU4liHHts6jLVRaxJTtlpep92ZVSJPkEJYnJ0/ZcxJMSWB8VetgnBOi2yDFDdaQhif+zT//NZ7dH/YG1LUjDjWEe7Dl1FMqPHGoSxPT2X4j+TyI3pBkPv4=
+	t=1760303792; cv=none; b=bufWe7H7PBcc6FEtlrwm3F1+sivrUYclrSzDhGO0BJkHqyXF31NDbg2axgjNrkfI07B2MP3I7D5kthb+OeY4ixnYGEXt4nS9N9fcy4PuCQA1r9aLmMH8b/BET7Nipq18cFATySUNUHsJyvD+VDNUDcHgLHLbvh0QySRTMIQ9Dbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760293273; c=relaxed/simple;
-	bh=VzQQ8lwm0Lk05lofP0JJWoxbz2rX9HlWG3n01ju/+S4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hjTAcA7IVbHiLdjCxG2i6MfwsTvAZ9po8rgLwAhaaF1SYUiQTT1ZyQ5zIsuvtjAxQ2yBUiaO2fASLetAmMYEEK8HFyyNlpd280dof3c/GcHPtXgaU0bW9mPIRvL04Igvf6nQ3vh9M+exmjz+tVZfiLKzFJOXoIabEK+qKWHRQlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MinxL1VP; arc=none smtp.client-ip=209.85.210.177
+	s=arc-20240116; t=1760303792; c=relaxed/simple;
+	bh=Pu+vP0+hdbywp/wLHhJRmSYzQGGNkPc2jQbAM2AHNGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RtNJXhGsFKJiKh2YkRJXtbDeWA1WvLuhB8ahjJeeR0pVE0mdXRB8wissNaHAFyn9hsjy3b18ssywGQLeeaB8XSDVQ19FJPstgOAH4Ot2SG7ayLZTJc1wIX8NmnXo+JPDPYNyS/Cb9Egr9SAcbUrA+TtRuaRuyU+EixHBnpxm9jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZtWrL4mM; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MinxL1VP"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-77f1f29a551so4561278b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 11:21:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZtWrL4mM"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so3332888b3a.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 14:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760293271; x=1760898071; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lc2pFYPu/FDbU7u3HBa68TtCrp3O8IJos6ZWXp+PENk=;
-        b=MinxL1VPOqX1V6yOJcchAFLom5ZcUPItqjGbyfkq2M04v5prr0hN9VaWN4dwCtsTUU
-         kvixi4fxnelwSXyO23Ysv1Stfl8fD9uhdNVjZ+ZXdYnbbioEdNGyvrS2Oj4bBVmOs223
-         d4C3AHL+8YxUx9U3jfWOtPdoJDdFtNrsL2ebQZGDbyMvhn3UZWg8ijLf5CpBNQg0dcRi
-         LP80XEw/N098tTOXW4BhZhiJ/7ghX8zEFK7q2yBqnvGaopach7XVfG6wC2aP7hUkG1Cx
-         l5fgX3YmbPOkPDJFDh4T+/TuuLZ8JDvhJD7GcHEz6ZGwZIXgs/Kb7eO0IppJiPvoTIvT
-         qDgA==
+        d=gmail.com; s=20230601; t=1760303790; x=1760908590; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=8i93oshASGYoq0GdYNvPw1gAZ8dgF08VSo3DwMozm4k=;
+        b=ZtWrL4mMGuvsebeKncj1bqrsbuvXXVIOdP/vJCRpvyCB7Lot3iWlu6xlZrzsSvFsla
+         4U8oc06FCqtxI/TJvJVHdffVAInmoiGNbUSkd3U0IxTtDrgcKIeBioRQtBwqX1KRY/Uj
+         3O2LN+t5/p2vLWvSEJfLdHYSt5c7K84kjJH7kq6SVeRJ7vV/3nryrSsDJkBcTkw0mcQ4
+         biBSETE8b0eyAAF5bGoi7h1iOu0LQEPqetyq9qkJVHCSmcxpcJUdfRnkfUktectNhuDW
+         KbCKg7fxojU+CtDGm2EqJKv3VA00duKDBxYFvMWBD8el6qEhloNW20Wt2hIJR5D62AWy
+         7Ktg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760293271; x=1760898071;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lc2pFYPu/FDbU7u3HBa68TtCrp3O8IJos6ZWXp+PENk=;
-        b=Jz1/KC/NO1T36uKtLc8rq7FtY//NwdMo1oyCWTEOJSrJ77UAVaoiFMZ5yBb18d9RE+
-         PJXVlFyOLyLqkLhMxnl9dXG72hohSR4ZwAbchPdCwm3T34DkJkmSsEFlx/LS8Dt2FegF
-         qHbHijddHV7c3XHp7sh6H8XruAbVPg6xb+uH3DcD2MoHfBRDbdAQFUWdkkUCqu+3JT+1
-         kR/OU3s/8iSxVskGL7fv0g36nkOaoiKGXwNZmUaUyAfyVU0CHYXJPv2DURl5NUSxXUp+
-         AfzV21c7CMeKkJSYwmAGJajELMYXeS5t2ZfscgsITWmJELUQbilTUh+om0RO92DNAiqk
-         RGDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXgSm/5gWPRP4YlzMmTHFFJJOohGb1lgLod8kLLStsFq5WchoNcCNS6EZbLnEZc6M7vF9bRa7tW+0jwKQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEkLfjkcpKssUr+hbAcvH9wtUFla82GWyx9LGCrmrLRAHUUsnx
-	KsM8QzknnU3yMd49/BfJmlFDoyGncU2177c4XM7+BWH2PzlvfZmyonOqktpVZA==
-X-Gm-Gg: ASbGncsBf9uZXtZQlcma0ETQEa6yxBfltaqmyF/vDMehNGmcxEIJx5YgasTQyz/8Ygt
-	LmRzlExScvQRSv/0zAPUYYMblnqIU8r/OTT+AMIloC8JKV57tqA1DYwuYM80ULWkb49WAJzJfZ/
-	jiYcJzGRkUxy+avrdgC2BzubczeCjOqoZ0xB3BufkAq0Epn+cPjU9JzQLKBMFtWaUF67ToktQin
-	U6g5ygNqPVIva7ZI+g7cy+57GfEXjV2Z+zb5WbXPXSuf77h+q50mwlYS2rmfs5AmObs/eP0YGxm
-	EnjDZqQuL2vx5EqcKwx+jAeMUYwa3UMrW/knhTOo6WGbjEzZ32K0CUDyDYVkaSY8N0BGpviukFd
-	eWjqLNqiPiD8LLrOccEFHOCNowYXrlKa1IjPsQEgi0+/aAxDT30MAfJZ/Jf09hvVs
-X-Google-Smtp-Source: AGHT+IHkk2i5DXG4OnAiCP67L8ZhLd7RY2HgyjdnlHmDsHdgBJ/DoJ1fgGFW7r0einETEXYUTTYkzQ==
-X-Received: by 2002:a05:6a00:179a:b0:77f:11bd:749a with SMTP id d2e1a72fcca58-7938723b2acmr18715348b3a.20.1760293271463;
-        Sun, 12 Oct 2025 11:21:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760303790; x=1760908590;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8i93oshASGYoq0GdYNvPw1gAZ8dgF08VSo3DwMozm4k=;
+        b=QTsVhw+PdhIz+W4pSjAE42V3/B1QOgwDMmgd8O32lF/x3JfR58jaHjkPy3D7sUA0xr
+         +NlaxSuGbadDDxEUHB7xFYDtP0It2qdLM/8qjX5C/7BAJWRJ9kRCyPl2Dtd6gCVr7DXI
+         C82QySoX6So8R6pWQBjW1hRB0mtXzzcTlQfFOlY/aMOGpJkMcL9alwl2af2Dr4DmX6PD
+         pAE+i4oAgPH/QxHQzlgCdLZyGkarq+lbLj3FvuPyeeXJR3nZJY/wmHveRutfDX+hUZOk
+         O+cFqrKuPGv5fuY2JQFiGScTMWe/TQ7fmcK6z7JHsGESMFoDBWURNpx4g8owVWOnmOuA
+         IQ1g==
+X-Gm-Message-State: AOJu0Yyu/u+6qAafW6Mcd+F0HhD5snlj0i7m1+Jtfe5p9zBWFe7MKvRo
+	3eW+qdNc/PaeBAnQpYrCi+aHEZaSH5EoHQrQyhHDJLb6nhpRGValU+U3GDAuyw==
+X-Gm-Gg: ASbGnctLic8jwLOZq7gCGJ+qyKEpBrNRhH/buz5C/nC5QPhG5GcC+q0yHp3067muhHa
+	0gpxRhyiYcRjT4F1CUaZplkIn4oi7b2ZCQpzd7QMIPbJZ0BYM0MFobq5ShuCJT4HCSZpLHhPWTi
+	1eKbsbEzqqeE8imiiObskjSj+W85jKm4lkT1OC8WqFzDFPeGY7eFRiB3gt65VZFcsNP0PWIWkDT
+	HSlgbFXtNnlTEBeXB6Ljr3XnL0rsGGPCWot4+eMZmNS3HTEqMqE5f7VQ1tiMtQva+ktwQ/jrQbl
+	MtgHtUUyWUw9O6SoAQtOK6kBsAQBa3uAQRbd11gsLRUyt6vf/GmV2/+tob1qnAFxsIBuCuq0MUA
+	6RNVq3PbPsU1lVa9p21w94gxCQrbL0HTRM6ntI+TyLoQs3x2PG6JcQlna0r+OyB61zRqT0HPwNy
+	Y=
+X-Google-Smtp-Source: AGHT+IFOifiyk6q5FNUiePkXLMFn86dMTEREiW6sU5m5NtzGfy50hS/RH08uuC9vWnFq+NrgFkcnGg==
+X-Received: by 2002:a05:6a21:8985:b0:32d:b925:5766 with SMTP id adf61e73a8af0-32db9258094mr15256139637.23.1760303789947;
+        Sun, 12 Oct 2025 14:16:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d0c349csm9070219b3a.50.2025.10.12.11.21.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992dd854a2sm9256882b3a.76.2025.10.12.14.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Oct 2025 11:21:10 -0700 (PDT)
+        Sun, 12 Oct 2025 14:16:29 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 12 Oct 2025 11:21:10 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Erick Karanja <karanja99erick@gmail.com>
-Cc: grantpeltier93@gmail.com, chiang.brian@inventec.com,
-	gregkh@linuxfoundation.org, peterz@infradead.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pmbus) Fix child node reference leak on early
- return
-Message-ID: <7ed7d257-4744-47a6-a86a-4da8c54e38db@roeck-us.net>
-References: <20251012181249.359401-1-karanja99erick@gmail.com>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/2] hwmon: (ltc2947) Use the energy64 attribute type to report the energy
+Date: Sun, 12 Oct 2025 14:16:24 -0700
+Message-ID: <20251012211625.533791-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251012181249.359401-1-karanja99erick@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Oct 12, 2025 at 09:12:49PM +0300, Erick Karanja wrote:
-> In the case of an  early return, the reference to the
-> child node needs to be release.
-> 
-> Use for_each_child_of_node_scoped to fix the issue.
-> 
-> Fixes: 3996187f80a0e ("hwmon: (pmbus/isl68137) add support for voltage divider on Vout")
-> Signed-off-by: Erick Karanja <karanja99erick@gmail.com>
+Use the energy64 attribute type instead of a locally defined sysfs
+attribute to report the accumulated energy.
 
-Applied.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/ltc2947-core.c | 60 ++++++++++++++++--------------------
+ 1 file changed, 26 insertions(+), 34 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/ltc2947-core.c b/drivers/hwmon/ltc2947-core.c
+index 244839167e51..90f70f732b41 100644
+--- a/drivers/hwmon/ltc2947-core.c
++++ b/drivers/hwmon/ltc2947-core.c
+@@ -9,8 +9,8 @@
+ #include <linux/clk.h>
+ #include <linux/device.h>
+ #include <linux/hwmon.h>
+-#include <linux/hwmon-sysfs.h>
+ #include <linux/module.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+@@ -319,24 +319,6 @@ static int ltc2947_alarm_read(struct ltc2947_data *st, const u8 reg,
+ 	return ret;
+ }
+ 
+-static ssize_t ltc2947_show_value(struct device *dev,
+-				  struct device_attribute *da, char *buf)
+-{
+-	struct ltc2947_data *st = dev_get_drvdata(dev);
+-	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+-	int ret;
+-	s64 val = 0;
+-
+-	ret = ltc2947_val_read(st, attr->index, LTC2947_PAGE0, 6, &val);
+-	if (ret)
+-		return ret;
+-
+-	/* value in microJoule. st->lsb_energy was multiplied by 10E9 */
+-	val = div_s64(val * st->lsb_energy, 1000);
+-
+-	return sprintf(buf, "%lld\n", val);
+-}
+-
+ static int ltc2947_read_temp(struct device *dev, const u32 attr, long *val,
+ 			     const int channel)
+ {
+@@ -588,6 +570,23 @@ static int ltc2947_read_in(struct device *dev, const u32 attr, long *val,
+ 	return 0;
+ }
+ 
++static int ltc2947_read_energy(struct device *dev, s64 *val, const int channel)
++{
++	int reg = channel ? LTC2947_REG_ENERGY2 : LTC2947_REG_ENERGY1;
++	struct ltc2947_data *st = dev_get_drvdata(dev);
++	s64 __val = 0;
++	int ret;
++
++	ret = ltc2947_val_read(st, reg, LTC2947_PAGE0, 6, &__val);
++	if (ret)
++		return ret;
++
++	/* value in microJoule. st->lsb_energy was multiplied by 10E9 */
++	*val = DIV_S64_ROUND_CLOSEST(__val * st->lsb_energy, 1000);
++
++	return 0;
++}
++
+ static int ltc2947_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *val)
+ {
+@@ -600,6 +599,8 @@ static int ltc2947_read(struct device *dev, enum hwmon_sensor_types type,
+ 		return ltc2947_read_power(dev, attr, val);
+ 	case hwmon_temp:
+ 		return ltc2947_read_temp(dev, attr, val, channel);
++	case hwmon_energy64:
++		return ltc2947_read_energy(dev, (s64 *)val, channel);
+ 	default:
+ 		return -ENOTSUPP;
+ 	}
+@@ -897,6 +898,8 @@ static umode_t ltc2947_is_visible(const void *data,
+ 		return ltc2947_power_is_visible(attr);
+ 	case hwmon_temp:
+ 		return ltc2947_temp_is_visible(attr);
++	case hwmon_energy64:
++		return 0444;
+ 	default:
+ 		return 0;
+ 	}
+@@ -929,6 +932,9 @@ static const struct hwmon_channel_info * const ltc2947_info[] = {
+ 			   HWMON_T_LABEL,
+ 			   HWMON_T_MAX_ALARM | HWMON_T_MIN_ALARM | HWMON_T_MAX |
+ 			   HWMON_T_MIN | HWMON_T_LABEL),
++	HWMON_CHANNEL_INFO(energy64,
++			   HWMON_E_INPUT,
++			   HWMON_E_INPUT),
+ 	NULL
+ };
+ 
+@@ -944,19 +950,6 @@ static const struct hwmon_chip_info ltc2947_chip_info = {
+ 	.info = ltc2947_info,
+ };
+ 
+-/* energy attributes are 6bytes wide so we need u64 */
+-static SENSOR_DEVICE_ATTR(energy1_input, 0444, ltc2947_show_value, NULL,
+-			  LTC2947_REG_ENERGY1);
+-static SENSOR_DEVICE_ATTR(energy2_input, 0444, ltc2947_show_value, NULL,
+-			  LTC2947_REG_ENERGY2);
+-
+-static struct attribute *ltc2947_attrs[] = {
+-	&sensor_dev_attr_energy1_input.dev_attr.attr,
+-	&sensor_dev_attr_energy2_input.dev_attr.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(ltc2947);
+-
+ static int ltc2947_setup(struct ltc2947_data *st)
+ {
+ 	int ret;
+@@ -1114,8 +1107,7 @@ int ltc2947_core_probe(struct regmap *map, const char *name)
+ 		return ret;
+ 
+ 	hwmon = devm_hwmon_device_register_with_info(dev, name, st,
+-						     &ltc2947_chip_info,
+-						     ltc2947_groups);
++						     &ltc2947_chip_info, NULL);
+ 	return PTR_ERR_OR_ZERO(hwmon);
+ }
+ EXPORT_SYMBOL_GPL(ltc2947_core_probe);
+-- 
+2.45.2
+
