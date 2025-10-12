@@ -1,65 +1,65 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18E92D94B2
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 17:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903F82F25FC
+	for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 18:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760291971; cv=none; b=qo4tH8hZw8/kZxb9g9zez7xJ6syMd3N5nIc5+r+6T7iautqr72f0uGpzE8Nf32MjFFboFlymMyOCmPxCFxRFzoMprivl2/4zRqpHVWAVG6cTtGOG3WpVI6m59hytoXFyrTaBelQijdiSLvfS7o0vCuKHl9eD8w2irXoMx+y0CQI=
+	t=1760292448; cv=none; b=gJpsmxBdw9ZCLKCFrC9oi00xzgFNpwiOynaaxbU3D8QUS4FH8/cdJ9gQdUceIYTzjKYe1fZqQdY7YrYzBy4wonjaVae1VYJAOwMIYy2qnAWTBmJSNQmKSIi5RvGg77/chJ1iN9V+lPlvB9r3Okymh7N3fJ0faKRX5q8nUbDWFMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760291971; c=relaxed/simple;
-	bh=qWt8KlsS667/DWj7CEknkJJNlszKHGEwCFpf/nti7Ak=;
+	s=arc-20240116; t=1760292448; c=relaxed/simple;
+	bh=VYct5uqgOuBPtnr/agOuQUfGSRixsl50ArqFin74dUw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=neVz0XYIqf2IPbgwOsrl6JTiLf4xevn9d4SRCgRzF3UnMpicHbcyU3OYwNMpxxkJSDG2fO5yl7LuGkpzYpbB3+UL+34LbVq94FNHAOuN4tAK6gDf/SKzFolSYJ/Pm7pZ0ZDaUBeBo48xX6oonOnY+2kCxyjeyEBzu/4dS3FFYa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jsi7X9+I; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=owju9RnOx0+OJZ0niL+7RrCtGLMLyt/tWFbpA1TpI/Zt3TJVQwcJUD3t/napqC4VFtoDWL8vjKe19lncGsEPVn+z1r5WmL8fQehvNv+Fbp2JPDmexwAkU5d/7T2aaKM4iq8PP6eFSLobo26zKctUaxjcKZdMiPgPyLRYRNLhGvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a8oxZITE; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jsi7X9+I"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-27c369f8986so32203395ad.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 10:59:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a8oxZITE"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-33082aed31dso3644913a91.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 11:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760291969; x=1760896769; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760292445; x=1760897245; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pvLTpqWhUMNwfKi2DUzR3zUOBPTWtPFJRGCtsVkQ/g0=;
-        b=jsi7X9+IOyGJnrlnwk/I0epxiqgODnSleiYV2QS8Cy/Zz9py4xvwveWbLY89SEfAv+
-         rmB/3GInpQ35zXpZ0N3NPCTy7crlZ5MTTubVQNpvwzJjV3ItLfXEpR5eVSXgdSTD5eO8
-         w+TIeRfLVuASWRI9ZVw6geQr9Fxzp65I+nnve5zUvwFqptApIdH4Mae3axVhIiTq0HC7
-         RA7Kep648q6x7nMxMcR4xJUShhDi8ZEzAjOiD9L0OP6ENQsKqWFgVfsjkPwyVVUCRvCE
-         TkrM0ILJLE1oAIPA/db2wtSsjkIwjDj7qUrEGghA5GTAnLwkwu7PFIH8zz/klq28QEw1
-         b3ZA==
+        bh=B7i+q+CJzc7d/v15V/dcB6nP6r4+CnOGrYGYF3/B82s=;
+        b=a8oxZITEoFTIaMs3sUEN+J3AuMfdkq1Xix0lsXac39/6eTdfTcI0cNYUbeMCSCoqKq
+         EzRWK36qM29yzLB8SFQYMEYo6HIrMGeKiEjxWQeLMqB3Hf0Z8v9rv6CTVY1IwcjKjh8T
+         ykElsKQUQLclS+i+6dfQ2Hlnozik/ng0EHEoQjeEO3f0ttIBXsnMD72SDD1Uhzr80fgo
+         Hlpyn7+cDN2GWxwS8C6wM1NLl7bCT82yUo41juHk1G1E9Jg47K2Rv2+2iUZKB/zwddAS
+         D4tINvlXNy68bEeTwZWgi+2MhogCQ76h6kBeCDb77wpNSnLnTmI/6bAqAj8MKfJlpRnt
+         Fekw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760291969; x=1760896769;
+        d=1e100.net; s=20230601; t=1760292445; x=1760897245;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pvLTpqWhUMNwfKi2DUzR3zUOBPTWtPFJRGCtsVkQ/g0=;
-        b=VMYdjytz4SUGny/sK+L61ua3lv9xPNys4gXn7MkqVdyOsJ+FYXaJt+2nByoamLkCy0
-         8raBXhzLF1+ocK1n3DMa6zFOrelbNkyOyHVzNDoeNYNilmwuziQJMlbwXxEIf6p9/MKI
-         GE24KfsCqs+v9W2iNw5mGwlvmGSEcD1jFHf5ekdsJZ1mBw2n2IcQBjHLxWGRQaeYBDs0
-         AHCcsHKuA9PYPN7+RlueBGnxL9xNFzjZrXkIkbioZoeCQ/f5GBypSh7XOMaCnBfZVhzx
-         hSvSBI8t8P5Cjudt1I+ecBCxgliybm5MwzeiVB5ZhCa6D2d+Oy0g1xlGUq03VFjiHOfG
-         HJ4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWgxn2CK53ZbKcKenvH7yIyj1bNBcMbaOuS4OV59z5qUWgZNykt6yhEtGstu0DcVc6jdLN/CE41Jix5iQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcCmVm75Z/PWGP4Bbwx2w0Guljp6f+YFFUYfwGrTTQPXmVQyBU
-	ujiSchssX4pWXSWq5+IgL7k5BF1FAQ9FScC6ho7/OLHb+26ZsHaOaeKT
-X-Gm-Gg: ASbGncvK9y4hgH81GOO7hrYslRvGZMSHRvFT1nM0Nd6W6hoyUz7snqqLEFdA8PMLZ6n
-	j6UVPw9n2A13/ahGOC/vMvl868rwSF+/wgqbkfnZ08EujbwQTKtGujPZG0LeDt95FOKp6H9zUZR
-	wpvLmSd1+ToxPpgajasfNO8hi3RyqPajyCgqiTUXvI/9axHhky9H/L9jlUQP8s+ZgTGIzVcBRKT
-	BdB12LDXUb1qWybnAi4rY6GUNtE2Y1SE3Br0Ry24Ml6qudoC7IXTo5n1tZDIV+dj7zrrCW4kHlC
-	fRao6qtZ2DfHbOwj7RrG920nAXN2HqDsUfaF1QlnchtmQ6y0sUxJj4K3Q6yAS6VALGGMfsHPukw
-	0VRBxyAdiPmEYabqwf/F9NwLReY8tF13BafV2uMO17CnGNyKb3hE8QQ==
-X-Google-Smtp-Source: AGHT+IH66mjgwju+uytBphIGoHpFDHA0VnVMlPqCCqqHrYPKBigQsM48Pjhjh2izDM7DkBtwCGDObA==
-X-Received: by 2002:a17:902:f642:b0:270:4964:ad7c with SMTP id d9443c01a7336-29027356555mr258463735ad.2.1760291969153;
-        Sun, 12 Oct 2025 10:59:29 -0700 (PDT)
+        bh=B7i+q+CJzc7d/v15V/dcB6nP6r4+CnOGrYGYF3/B82s=;
+        b=XyvWjaoma/gP2KnLwRgJQmIj+q6BMgs7mm+b1TM1no3kBCy1tu8vgkWSD88+M4l4Q3
+         LTmWnTEcdLc1Vv7rhOwRSipIJcqaUW5sq/h6jlAb10MtoWILBpwODDFcqAsA5krqjIL7
+         EK8EWr9s57016aV8Blwr7TRQoseK5XVvt//IRWxr/BcRXoJY8CP2yhHH5DUWV8aPaR79
+         hTVFHm/1WhfE+cgruVk9J2HXl+WYoMc9TSGJnkxbz1I+sR7fcOfuphJfrZvvwJwcuwJ8
+         /kyDYyvkmr3PJAx6El8hHPU74qud6V+6yFDcPMaOODsn5G2n4VOG/WlnJ7WpFGBHYr1b
+         i+CA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5ctP/s0XeLHd3hQfKc5cliC/NUy6+uRc9es9WCR8cIPxi+bax89Id4G1On/wLAQwVyb/ygAZNUHJ+hw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpEhXsNjgT+v6LRVYUYc+zjb0nNqbRECEZuI58vVUPNCnibKvL
+	ZSBGgDiqG+XDIAyM+/KwL0RSH0un5iI/BvbM9a2JSSktVV3A4GACj/Ni
+X-Gm-Gg: ASbGnctCN/bD5dzwbi+J0pOtUX/3TF9EW9ojWuExw3j4Y/Vc2r+/aoiEw9ig6ILbPbi
+	Djx4byLjVUHavt7OiuvLYHEZXLDm3dy+/OuzvA7Dk6CNAa844DPMqUu/PrKGfnAC9l0q8AsLSn8
+	3JA9pF3jfJ394ZK+VG0X2vI6k+3mTrRGCKsplGwsCYffOoskpdfzGs64YEbxK/YgOCjtRs0/xZe
+	CA1+TxevGdls/wHtFLCOt9/D6MFtgDE+kmS7uH5tmYNvtKV2lRjVLhS2VWoTe7BbiHvu8p4sHlf
+	0TVnX4kqowCpdpZmd5xPRJ5kUCj/9R/F6bRT+GMC+mZNd0gufA3jOEK1juP0jgSrN4oGESCmSwq
+	7dSruoN9cr/AsIiQ4mu3tJsbvQqg21K/rrgNZHmoBh3DdYm0Fp1FYIQ==
+X-Google-Smtp-Source: AGHT+IEGrnByCpct5tS92VZPaK79GTSVnUDzgOIkV+hPgZq4ya1QY0ZSwDjmPxxTVw7TrNKsMHNs3Q==
+X-Received: by 2002:a17:90b:4990:b0:338:3b73:39ce with SMTP id 98e67ed59e1d1-33b5138e3a7mr25400722a91.25.1760292444891;
+        Sun, 12 Oct 2025 11:07:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2905571d68asm45135485ad.2.2025.10.12.10.59.28
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b61a1d386sm9672026a91.5.2025.10.12.11.07.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Oct 2025 10:59:28 -0700 (PDT)
+        Sun, 12 Oct 2025 11:07:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 12 Oct 2025 10:59:28 -0700
+Date: Sun, 12 Oct 2025 11:07:23 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Ranganath V N <vnranganath.20@gmail.com>
 Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
@@ -68,7 +68,7 @@ Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
 	linux-kernel-mentees@lists.linuxfoundation.org
 Subject: Re: [PATCH] hwmon: sht3x: initialize variable 'ret' in
  update_interval_write().
-Message-ID: <7fc29d1b-4c5b-4a0a-b591-dd260eb6acfe@roeck-us.net>
+Message-ID: <e2ae44a3-b3c8-4f90-a180-c619e1854317@roeck-us.net>
 References: <20251012-my_driver_work-v1-1-9e5fe6de51f4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -93,40 +93,16 @@ On Sun, Oct 12, 2025 at 05:13:27PM +0530, Ranganath V N wrote:
 > single shot mode and no configuration change is required.
 > In such cases, it is correct to treat the operation as successful
 > without issuing any i2c transfer.
-> 
-> To address this, initialize 'ret' to 'SHT3X_CMD_LENGTH'. this makes
-> the no-operation path return success while keeping the existing error
-> to all other paths.
-> 
-> This change removes the smatch errors. Tested by compiling.
-> 
-> Signed-off-by: Ranganath V N <vnranganath.20@gmail.com>
 
-Applied.
+Actually, in this case, the code enters
+
+       if (mode == data->mode) {
+                mutex_unlock(&data->data_lock);
+                return 0;
+        }
+
+meaning the problem does not actually exist because 'ret' will be
+initialized if either 'mode' or 'data->mode' is != 0. That means
+the smatch report is a false positive, and this patch is not required.
 
 Guenter
-
-> ---
->  drivers/hwmon/sht3x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> 
-> ---
-> base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
-> change-id: 20251012-my_driver_work-77b22c239e99
-> 
-> Best regards,
-> 
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index 557ad3e7752a..4b52d57eaad8 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -553,7 +553,7 @@ static int update_interval_read(struct device *dev)
->  static int update_interval_write(struct device *dev, int val)
->  {
->  	u8 mode;
-> -	int ret;
-> +	int ret = SHT3X_CMD_LENGTH;
->  	const char *command;
->  	struct sht3x_data *data = dev_get_drvdata(dev);
->  	struct i2c_client *client = data->client;
