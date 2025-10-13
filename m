@@ -1,192 +1,139 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA902264CF
-	for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 21:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BAB41DE4CD;
+	Mon, 13 Oct 2025 05:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760303794; cv=none; b=Ii+cGN26+8Jz+JzHw7nWfJ0dEUfas/Mpl3OepuVYpBbGt0Z9O0npGkYvi2gXHr9es9iOVtiY8Dv/tHoJqbma29lVR9jMzbUx7FY8jy7IedvlophpDaOA4Rgql+Pz+aKbK41QLid0hLCfmKGW9f1H4Iu6KKAp2CgAq8WhymHzQtw=
+	t=1760331710; cv=none; b=TIL0OOLirwN53L8WSvPG+kZKBkJyMKI1d2roA6Vqlkg24BlUSer2UGRJdd6oeeUb0Sbv2UADUBrkBpaUxvrEP37K4lCZx5MzEStso5ChFhbXNPU+PO1lcGTyy8A5Y0w9jqnnG6w5d7fNXPjsouUu2DrnnOhOpN2e9NVVuTssn7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760303794; c=relaxed/simple;
-	bh=JaY03Bn6wvVwa2aqwScz8NbNsbg7Ohu9S8hNbUk97cQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EwTvI7/vEIoCiKQD5W512aD9W0kL/rM3xPGVOJSVyhZk5aj8A6scbv07K6T1mgFKHElD/9VVrUVV7WPE64KUk1bz//w2GbEVN0SMfG2dg9yW9LKv9vvQUQ2ZZMiz2Yb3vxWBE7ORV6TN3ha+YJy4ffGAVPoJt9LkgTtDl67Myxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZA4RQy+; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760331710; c=relaxed/simple;
+	bh=4J5LGrq7OMGx1MNEdiPZF+G6fEqOe0YJph2v5MWv9bk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=dnrXRrSwPTOAmv+ouBXllxd+jW4+D7aNIAMiy0fsEfewJK4Tsx6/683s91Y2Sy8/yW4YzV1DETQmogLlfV/v0pt15+5CFCoL5VbtCGiJVEco+EotJMrUHRjcrFS4qcgwzXrl11fMECLxrXwHO1uMV2pBQrlYpZoALQRGWNtLPx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=umhfsCFb; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZA4RQy+"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77f1f29a551so4634880b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 12 Oct 2025 14:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760303791; x=1760908591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7bTuKC68ffrgAV8+KSmdGXA7zdrg52yQN6pRT//rpug=;
-        b=lZA4RQy+Fm3GEBhjGzZbInHA0KW/KSdUXufxSVyqNCwlL5PC0/uA53qHno4Q/GN9La
-         NFc4qJ+QK3IVujrIgtJNSygcPrsW2D+nkGoo7l7R8dkiRdQYClZqUdUgg3I5rZU/qsd4
-         gjij3iqrDVn9SvI6pz2aujxBY2i3Ggd53wgjvgu8rUOWCCKObowWrdAOkJkule6XaEU7
-         vVrJlKT6uEfoiqyyecTZ7A282kR5Vs+EoAoDbhnWCFXiBPxanXa0QNafVo25F/ftgTYH
-         jeRohwbOz2bUFjl2wWamb6wnURwvdo9aQFH4Mb8yz1QYmR8q5IAP0OSWhv/lZPbsjm4x
-         rvag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760303791; x=1760908591;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7bTuKC68ffrgAV8+KSmdGXA7zdrg52yQN6pRT//rpug=;
-        b=ZWgoHA5XB369A6FA4niLd/1/zLarOdkTTLC6i/cNcq+eod6QWsqBPceEevXqE6+GzV
-         YaqZAs7kwLUmtnu/Us99Av+uuuODb36BrpyO1storQ4EceoBGoecYpb/s+QrfevXnIT+
-         Z/6xrm6wtV+PjmyB02k+rMA7nSRYShFKaCXV6ClozpLEKyVOUE6XVIK/u5+pUj01/jYS
-         hT7s7D1iuphEFFYBIrLzXEBqjC1JOkJ6roIaXDZMQe+wMmdIf3R1QORNzTGyb5wIehHM
-         xdF3SxB9jl58MWJHyB+zBE4x0zALDWonMERL+h3Z68OGmuff3qHHPp6eQhzXwdO7H4Qo
-         TYyA==
-X-Gm-Message-State: AOJu0Yw1olor6JKowgC9JtpNRsdOGHEtOeMj9bnMFoDeXBwsAUlAlLBI
-	i6ZwZFRReZ/OvJeiaio1eI1VmISvNQvYW2hhICWEIJZOxOo2jfdoaG1OQbQSjQ==
-X-Gm-Gg: ASbGncu8f4QuqqhCjcuAcu2xxuXx1TVKPhFcRoC8WRTkwN5tMqnW7VrCLeeBv+eExcw
-	CBwnR696zk8MUahFIVwbXqe0oI+yVb/uY6++MJcYQ6xNxY2lRjDiLfZn9saOwmtHMAjh/2OXALU
-	usZitBKN/q8vrdEEaOMHEC13Cnk+AqZf9F1OjGK/9E6xtTjqlixmAGn4gTcA5Edncv3elsFT22U
-	zefFTrSdwrW5ib9bjib+7zwgOacWWe4f12AQMj0K3cI7va6t2/NXP3MbirU5IYQhDDIQZ3xbaik
-	TAX86Kv52hpTaoQSbqfIaIPbGMo4TMBtS9NsSxSEYgtPlQRdKI5sCGkTsDIODzYmauX4wL6aUXY
-	zRkKv9n1aHzEcjDQPCr83RTaza1pyFRCkekoahg5z0IqjKYps3YVfDIl6h31104fU
-X-Google-Smtp-Source: AGHT+IExdZ5K08sLpVsZOf8ErdaKoSZgrmYk9w/Q2bIazpAA5JTiCOfPK0+ZezhBjzXr+LnhxuJYuA==
-X-Received: by 2002:a05:6a00:179a:b0:77f:11bd:749a with SMTP id d2e1a72fcca58-7938723b2acmr18988824b3a.20.1760303791249;
-        Sun, 12 Oct 2025 14:16:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-799283c1a14sm9416287b3a.0.2025.10.12.14.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Oct 2025 14:16:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/2] hwmon: (ltc4282) Use the energy64 attribute type to report the energy
-Date: Sun, 12 Oct 2025 14:16:25 -0700
-Message-ID: <20251012211625.533791-2-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20251012211625.533791-1-linux@roeck-us.net>
-References: <20251012211625.533791-1-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="umhfsCFb"
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59D1d1As008042;
+	Mon, 13 Oct 2025 01:01:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=5/1+zr3RO0xbMkR5qrMRJrxNkPm
+	FSZTcYUeQ1bsYn8s=; b=umhfsCFbMLhd7vNVGBkD5t1zFyiWjJVi5+JgsyD4XFe
+	EwkSIZ+SyRV2L8Y5PMvqtVCxwsXurIybsZpgZ/uZsSTG7loJygFFMsYI2Aqp7QWn
+	nHBcGx/e3MSYYGo30BYrJZYka4BFl6RtMAv7v88la/Me1cILR/VPYxAlR8UWDBzE
+	OP7OZZ+WU1rZ25qaanH2gJP2Bc/h8XT99Ur/FZao8xwYnkxZugM3yv8Vp4FTOJBY
+	v3TEgtAsuJLMnZE7INxv0dYikOvWgDwt4PPxb+UnNioR4a6eNNJydMpMYZvCi4hG
+	aVBq0x9iRZx7jF87ZSAMyHJQTu7m5lq9FC4/Hm6c5vQ==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 49r5jc4cej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Oct 2025 01:01:20 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 59D51IDt011641
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 13 Oct 2025 01:01:18 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Mon, 13 Oct 2025 01:01:18 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Mon, 13 Oct 2025 01:01:18 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Mon, 13 Oct 2025 01:01:18 -0400
+Received: from analog.ad.analog.com (KPALLER2-L03.ad.analog.com [10.116.18.50])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 59D510BW000974;
+	Mon, 13 Oct 2025 01:01:06 -0400
+From: Kim Seer Paller <kimseer.paller@analog.com>
+Date: Mon, 13 Oct 2025 13:00:47 +0800
+Subject: [PATCH] dt-bindings: hwmon: pmbus/max17616: Add SMBALERT interrupt
+ property
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20251013-upstream-max17616-v1-1-0e15002479c3@analog.com>
+X-B4-Tracking: v=1; b=H4sIAH6H7GgC/x3MQQ5AMBBA0as0s9akg5a4ilgUg1mgaRFJ07trL
+ N/i/wiBPFOATkTw9HDg88jAQsC02WMlyXM2lKrUqLCStwuXJ7vL3b7YGDSyamw9tkq3RDPkznl
+ a+P2f/ZDSB703DKpjAAAA
+X-Change-ID: 20251013-upstream-max17616-37a4b8058eed
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Marcelo Schmitt <marcelo.schmitt@analog.com>,
+        Kim Seer Paller <kimseer.paller@analog.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760331661; l=1101;
+ i=kimseer.paller@analog.com; s=20250213; h=from:subject:message-id;
+ bh=4J5LGrq7OMGx1MNEdiPZF+G6fEqOe0YJph2v5MWv9bk=;
+ b=NZVKdZkRMfjrFAajEqYa9JkhhZsrhhqUmzLjytn1g6w9m9gOMa1QR2nZK/OTvlVggH9wJy8O3
+ 5j/kqZl8NcEB+fdbZruNW8gxeebNqglxVuSLunKl1TXPNAefWj1ou+1
+X-Developer-Key: i=kimseer.paller@analog.com; a=ed25519;
+ pk=SPXIwGLg4GFKUNfuAavY+YhSDsx+Q+NwGLceiKwm8Ac=
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Authority-Analysis: v=2.4 cv=OdqVzxTY c=1 sm=1 tr=0 ts=68ec87a0 cx=c_pps
+ a=3WNzaoukacrqR9RwcOSAdA==:117 a=3WNzaoukacrqR9RwcOSAdA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=gAnH3GRIAAAA:8 a=v_06EXNfVaksHon8OEUA:9
+ a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-ORIG-GUID: HrvflApiNByhf16ABWmA5XhAau0PKsGR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEyMDAyNSBTYWx0ZWRfXzt0BLb12fK1B
+ Hy+aECSdxNq5hnsA228rbDPueJie2/g00NlX9PwXQbjX/i+b1kSWrHJ8nzzPi4Am2XvUEHvweNp
+ WuSs8Y38UyGibfXwbbm+aVMwDu7ijjShCOyYRcYIEI//s8kKEtac7cbdMk6WPANkqetZQVS9Q+x
+ k+jNCpDd4T9PTHY07waGEZwXHIz/EcXfKD8Pworo3uZHMOWJpOxqjwmwzn/yBfPBjGxAxTh88gs
+ q7ifgWjzg5QAMs/v5Rk7+0zaEnrQSHm8+jLa3quvXjltZEXUm1i5V9IhTq/bcrUWMhajYqp/Xpz
+ UF/1NgtCaEcrWTeERr307Jm4i/LqaHvafrg8nyF/x3aSeG34Vu262p1wPAa9xoyHm3uQtzf5riD
+ iyWK+PZWNB6Fg00VboVF9GfgzWENPw==
+X-Proofpoint-GUID: HrvflApiNByhf16ABWmA5XhAau0PKsGR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-13_02,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510120025
 
-Use the energy64 attribute type instead of a locally defined sysfs
-attribute to report the accumulated energy.
+Add interrupt property to document the SMBALERT pin functionality for
+fault condition signal.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Suggested-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
 ---
- drivers/hwmon/ltc4282.c | 44 ++++++++++++-----------------------------
- 1 file changed, 13 insertions(+), 31 deletions(-)
+ Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
-index 1d664a2d7b3c..44102879694a 100644
---- a/drivers/hwmon/ltc4282.c
-+++ b/drivers/hwmon/ltc4282.c
-@@ -12,7 +12,6 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/i2c.h>
- #include <linux/math.h>
- #include <linux/minmax.h>
-@@ -541,7 +540,7 @@ static int ltc4282_read_power_byte(const struct ltc4282_state *st, u32 reg,
- 	return 0;
- }
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
+index 4680d354af0ef706bbd90d2546f5f25149654b6c..fa48af81e083cbc69d17c01862f8f771eacf3332 100644
+--- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
+@@ -26,6 +26,10 @@ properties:
  
--static int ltc4282_read_energy(const struct ltc4282_state *st, u64 *val)
-+static int ltc4282_read_energy(const struct ltc4282_state *st, s64 *val)
- {
- 	u64 temp, energy;
- 	__be64 raw;
-@@ -617,6 +616,12 @@ static int ltc4282_read(struct device *dev, enum hwmon_sensor_types type,
- 			*val = st->energy_en;
- 		}
- 		return 0;
-+	case hwmon_energy64:
-+		scoped_guard(mutex, &st->lock) {
-+			if (st->energy_en)
-+				return ltc4282_read_energy(st, (s64 *)val);
-+		}
-+		return -ENODATA;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -1078,6 +1083,9 @@ static umode_t ltc4282_is_visible(const void *data,
- 	case hwmon_energy:
- 		/* hwmon_energy_enable */
- 		return 0644;
-+	case hwmon_energy64:
-+		/* hwmon_energy_input */
-+		return 0444;
- 	default:
- 		return 0;
- 	}
-@@ -1106,24 +1114,6 @@ static int ltc4282_read_labels(struct device *dev,
- 	}
- }
+   vcc-supply: true
  
--static ssize_t ltc4282_energy_show(struct device *dev,
--				   struct device_attribute *da, char *buf)
--{
--	struct ltc4282_state *st = dev_get_drvdata(dev);
--	u64 energy;
--	int ret;
--
--	guard(mutex)(&st->lock);
--	if (!st->energy_en)
--		return -ENODATA;
--
--	ret = ltc4282_read_energy(st, &energy);
--	if (ret < 0)
--		return ret;
--
--	return sysfs_emit(buf, "%llu\n", energy);
--}
--
- static const struct clk_ops ltc4282_ops = {
- 	.recalc_rate = ltc4282_recalc_rate,
- 	.determine_rate = ltc4282_determine_rate,
-@@ -1588,6 +1578,8 @@ static const struct hwmon_channel_info * const ltc4282_info[] = {
- 			   HWMON_P_RESET_HISTORY | HWMON_P_LABEL),
- 	HWMON_CHANNEL_INFO(energy,
- 			   HWMON_E_ENABLE),
-+	HWMON_CHANNEL_INFO(energy64,
-+			   HWMON_E_INPUT),
- 	NULL
- };
- 
-@@ -1603,15 +1595,6 @@ static const struct hwmon_chip_info ltc4282_chip_info = {
- 	.info = ltc4282_info,
- };
- 
--/* energy attributes are 6bytes wide so we need u64 */
--static SENSOR_DEVICE_ATTR_RO(energy1_input, ltc4282_energy, 0);
--
--static struct attribute *ltc4282_attrs[] = {
--	&sensor_dev_attr_energy1_input.dev_attr.attr,
--	NULL
--};
--ATTRIBUTE_GROUPS(ltc4282);
--
- static int ltc4282_show_fault_log(void *arg, u64 *val, u32 mask)
- {
- 	struct ltc4282_state *st = arg;
-@@ -1718,8 +1701,7 @@ static int ltc4282_probe(struct i2c_client *i2c)
- 
- 	mutex_init(&st->lock);
- 	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4282", st,
--						     &ltc4282_chip_info,
--						     ltc4282_groups);
-+						     &ltc4282_chip_info, NULL);
- 	if (IS_ERR(hwmon))
- 		return PTR_ERR(hwmon);
- 
++  interrupts:
++    description: Fault condition signal provided on SMBALERT pin.
++    maxItems: 1
++
+ required:
+   - compatible
+   - reg
+
+---
+base-commit: 2a364c163c1fa9fe62c2f06e84fb7d2f995e461f
+change-id: 20251013-upstream-max17616-37a4b8058eed
+
+Best regards,
 -- 
-2.45.2
+Kim Seer Paller <kimseer.paller@analog.com>
 
