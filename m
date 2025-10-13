@@ -1,110 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6427E2727FE;
-	Mon, 13 Oct 2025 18:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABC02C21E8;
+	Mon, 13 Oct 2025 21:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760380317; cv=none; b=MU1EgRsLtbfK3wEeGAN1pVpRX5jcMGZ2JtaQEyq6IYqcKj0nEbVYhdTwmon6xgcDn5cTWvtZkEKJbwvLu7Y7Wl+3hF0KuToObqZAFGl9/8yAMOj6YpvJN5a+UfP3ONuMNOb1rRTFWELvnCmuzWU9IIVIRX9mPGzhe6vyZ4WXcyw=
+	t=1760391093; cv=none; b=d4/yj01iMG4B4iaJ2PmPlBphMY1856BgeNTzkMVTpqnXo3nxXKRXrssJF0X6xWGcOHIyg5P7Uo83xKYmTav/eXZssE8CNAuoYRCGAOIAzy8CAQDQTKe80BGgZirSbJ6mybAuyOYwSBCc7eTkHFrZtMo+2+gtuYXSGesj08lc2Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760380317; c=relaxed/simple;
-	bh=KvE45OEOXnKAPc2bpIs5Y2L3V8rbtBIYc4VQXDOlmjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U8totP+UAmQYv6dUfFWOqxAOvDVpevNVBpCvK0PEsrl25YIRDDo6DvUM/oFLI6BBJM4Ybx72R8ojNyvTMio1B4VGtdw1SlGU0uAJuqoYTMWujW08/WPVW63rnvW4/My2N6Y+WAbbyTJ5NjeBZSISMB9pUVQkvuhKYucKrjoVbFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2OxbWx5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760391093; c=relaxed/simple;
+	bh=Ofhm35+PLifvLZq6UdFDigfjt4NVPPfWb+OzISebhBU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CPb2olssCGvMe+CvMfiRnwS/ACUDf4EzeGVcRb19oZhjs2cY9BO/+B+Kq79wcrQvlYOdfNnrQ9jUmOHFzW6FMf/+715dZyDpa8kGOxIZhOzat4bAibzPcChqOSrvglpStgLQD5fItGtELJQckR75Pjr6/eAwpsvMxJ6/VDWML0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jU/XMEGk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2OxbWx5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57767C4CEFE;
-	Mon, 13 Oct 2025 18:31:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jU/XMEGk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E37CC4CEE7;
+	Mon, 13 Oct 2025 21:31:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760380317;
-	bh=KvE45OEOXnKAPc2bpIs5Y2L3V8rbtBIYc4VQXDOlmjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L2OxbWx5eXeHgjfVpQe+LnGcGm9ymp/PbQtnnPXsdszl3qPztnmcJPhu24llZA8uE
-	 Vf3TmL5UBkOZwrXMmGNTFrWrWexFN1Fjmr4IZtCBwcee32+S4vhfUX+Qj7yP0xNndy
-	 92+kMvHk7qszp4r85C1TM1vU8/e6mdtKRj2Ku3pcwjfWaDh44hJtXqfieNRJZCmLjS
-	 mowo4cWVo5oNQ6jeMH7Bfx247b0IOVIJfNe+0MwMcBSUBy22zmf+8xGxg5RASB6AZs
-	 B3eSEJahmfmFDjYPBXpbWen/ZFtWDK1Xg9DhoscnbMnp7ZA0g8qlh+ta/dy36EDDTU
-	 rsGTR60DAr5XQ==
-Date: Mon, 13 Oct 2025 19:31:53 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Kim Seer Paller <kimseer.paller@analog.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	s=k20201202; t=1760391092;
+	bh=Ofhm35+PLifvLZq6UdFDigfjt4NVPPfWb+OzISebhBU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jU/XMEGkQIS4sxrH1/UsHbC512W7H67W7X/hnlNK5k94chiPwAK9n1ko/dVE+fS3x
+	 OMhbgR9IOLS6BVvL7bM3bu5sRlH2SrWlTl7oEcWVa230ziq9yD/TiDZOljqs66O0sF
+	 RzG7S/auqxwdxGeFN7jEQ4l9ie6IkZd3qErD8ejfoKbncTVbOR+uancLsnEzVAnTEE
+	 vpAQfmxQQ6FHafvj3P4qkWze3q6hGQ8x3MicZF+cntPdLf8S738LEhSy/l02oM/uDE
+	 qkfZHJPKtyegTEIKCvthO5ol1wG/R7VOxf3Dz/kjnhlMxdMQO4CVku3jDiqrk2DJ5W
+	 ZhK2OMT9x7CAw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>
-Subject: Re: [PATCH] dt-bindings: hwmon: pmbus/max17616: Add SMBALERT
- interrupt property
-Message-ID: <20251013-dynamic-showcase-3fa511afbffb@spud>
-References: <20251013-upstream-max17616-v1-1-0e15002479c3@analog.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Khuong Dinh <khuong@os.amperecomputing.com>
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwmon: Convert apm,xgene-slimpro-hwmon to DT schema
+Date: Mon, 13 Oct 2025 16:31:26 -0500
+Message-ID: <20251013213127.692373-1-robh@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7jvkY4Y2HxWwgT3/"
-Content-Disposition: inline
-In-Reply-To: <20251013-upstream-max17616-v1-1-0e15002479c3@analog.com>
+Content-Transfer-Encoding: 8bit
 
+Convert APM X-Gene slimpro-hwmon binding to DT schema format. It's a
+straight-forward conversion.
 
---7jvkY4Y2HxWwgT3/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ .../hwmon/apm,xgene-slimpro-hwmon.yaml        | 30 +++++++++++++++++++
+ .../bindings/hwmon/apm-xgene-hwmon.txt        | 14 ---------
+ 2 files changed, 30 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/apm,xgene-slimpro-hwmon.yaml
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
 
-On Mon, Oct 13, 2025 at 01:00:47PM +0800, Kim Seer Paller wrote:
-> Add interrupt property to document the SMBALERT pin functionality for
-> fault condition signal.
->=20
-> Suggested-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+diff --git a/Documentation/devicetree/bindings/hwmon/apm,xgene-slimpro-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/apm,xgene-slimpro-hwmon.yaml
+new file mode 100644
+index 000000000000..58c51626a9ce
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/apm,xgene-slimpro-hwmon.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/apm,xgene-slimpro-hwmon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: APM X-Gene SLIMpro hwmon
++
++maintainers:
++  - Khuong Dinh <khuong@os.amperecomputing.com>
++
++properties:
++  compatible:
++    const: apm,xgene-slimpro-hwmon
++
++  mboxes:
++    maxItems: 1
++
++required:
++  - compatible
++  - mboxes
++
++additionalProperties: false
++
++examples:
++  - |
++    hwmon {
++        compatible = "apm,xgene-slimpro-hwmon";
++        mboxes = <&mailbox 7>;
++    };
+diff --git a/Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt b/Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
+deleted file mode 100644
+index 59b38557f1bb..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/apm-xgene-hwmon.txt
++++ /dev/null
+@@ -1,14 +0,0 @@
+-APM X-Gene hwmon driver
+-
+-APM X-Gene SOC sensors are accessed over the "SLIMpro" mailbox.
+-
+-Required properties :
+- - compatible : should be "apm,xgene-slimpro-hwmon"
+- - mboxes : use the label reference for the mailbox as the first parameter.
+-	    The second parameter is the channel number.
+-
+-Example :
+-	hwmonslimpro {
+-		compatible = "apm,xgene-slimpro-hwmon";
+-		mboxes = <&mailbox 7>;
+-	};
+-- 
+2.51.0
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
-
-> ---
->  Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.y=
-aml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
-> index 4680d354af0ef706bbd90d2546f5f25149654b6c..fa48af81e083cbc69d17c0186=
-2f8f771eacf3332 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,max17616.yaml
-> @@ -26,6 +26,10 @@ properties:
-> =20
->    vcc-supply: true
-> =20
-> +  interrupts:
-> +    description: Fault condition signal provided on SMBALERT pin.
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
->=20
-> ---
-> base-commit: 2a364c163c1fa9fe62c2f06e84fb7d2f995e461f
-> change-id: 20251013-upstream-max17616-37a4b8058eed
->=20
-> Best regards,
-> --=20
-> Kim Seer Paller <kimseer.paller@analog.com>
->=20
-
---7jvkY4Y2HxWwgT3/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaO1FmAAKCRB4tDGHoIJi
-0qJzAQDlMqN5v7FK7BavC+mP+J/+ceqZvsH/+kwmATmZF3F3iAEAusRl3YawFgJn
-uWGIr/a7dEU3AWE6R8ebMqlklt0brg0=
-=cq7C
------END PGP SIGNATURE-----
-
---7jvkY4Y2HxWwgT3/--
