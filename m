@@ -1,69 +1,69 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9821C2FFDF4
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3C52FFDF4
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760455532; cv=none; b=I7yAqh/CUi2sMGTYBJMZiT7ngk0NAwX9r2IIw/696JtzXmd3tQ1hmxTzVMu7Og/xwNZbtkbzlwJAwWEYSY4FAt3ahpkXudNuCbGLp5seFirk1nQ7A0fYn9IsiyUZa4eIw9w+KK3I1bCLKi4VRVCr4ac0MvLz6jXO1fohQPfC7Hk=
+	t=1760455533; cv=none; b=kDP89beevdGFr5FRUI2p18rbuTx6s0toosD4FvoV0duuImD4lVY6wV2ZTU1aRgKQH2LuLa/GS52fcSUqqrXHR6WQc9eJuO23cdqIq97/ObQgpBiLzfVvdBPhMxxMOrGRMfC2+Z1Y17FoKVWANM9oQ7nf+CCbmeKibrdk21tu8KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760455532; c=relaxed/simple;
-	bh=hULZreSVZdWhtXH0eXkF9SeXBllPLvBNQHPYHI6Kl/w=;
+	s=arc-20240116; t=1760455533; c=relaxed/simple;
+	bh=2hvApESaQXTm1ALy3QysZahaZ9l1iKkRn0bkbtH3W0o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tWBzBPZgfC0vldM7ePU4CuLU5P6FDiI/6EedjMS4DY7w6B4o2x/F3DyFsE2K8eiHo6px9ZBtNmdy8S0NEzOle+8GK/nnLxFZeobcZf6buFthpkSa+A+H2SF3coAbauf246rblwrWBIuWsj8t8bxfTouzIakCu5Tgv7KinrXAMZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U2KanDjf; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=YBwJKT8iz0uTMlY6Sr0iGaGoXYc/8cAPIO2wYc2dAziQMf7LrKtaMpGQlv6RKUytcvDAAL7HdnhvLmBCrNjwESeSN7aSuD0Vf1zpeYQIlMGpdfOs05Log0XC2MPBWxhwxeGqhbO6KUIluOMD3Laso/Su+FvCT6B2SYpyAv/lZv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TT450/MK; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2KanDjf"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-33226dc4fc9so4929106a91.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TT450/MK"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-26c209802c0so53785325ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760455530; x=1761060330; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760455531; x=1761060331; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VIf6QpXQI9QrYrpYIf55tb5UoI8otxbV+ilctupX1WY=;
-        b=U2KanDjf/a6b166NbdECrMqDStWI9fAKWDWOHbfDBS+yvbdoThvG8Fiq5R8OljHcog
-         AjQtyLH2Pkt2FURVKGrcnx+beG2eOU3YkSfNuaUcvwqfwLTy0ljEID9b2Mk3JlGQMom+
-         5Dn2+Fsq6NeWZwwWkXRHUx/pigx/pbICJXuS3LOvku2V3W69geKM4UAHC1dFI+IoZ958
-         uTwIa8ScQhbUHoWAI7vFbzYdF4CW42aE+1yflJNwQLyKjpstXEin3Y4nEHuUAOoavlor
-         cHibUsQyc+9nfFsAoznRPcnE0U28vmxhRa2nXQHX84nXUypNy/3tIH7aKF00QX54sb+w
-         bnow==
+        bh=YlVhUHZXUmhmGOhBWjhhUY1ryQdGfuUnSAai6q3UUFo=;
+        b=TT450/MKTyXhap5gd2B+Rfyb+9hvoMUG4n8pOdQ2ouR0FOqdLy9mwZpi5p4XQ65XtA
+         XFc/WUODZazxOsmAEps2MeZdm2mxcxdUUrgRVelOY9GmplaBh/GSbBs6MGehmyoTAdcH
+         g9uyMHpvTewyMrwJnXEHCNCCk/ycpBfQahGVfNTSjKNYoK+ndcX7C46YNLGsS15RkMyC
+         9XppSaegOb3n1WmGv06NdPtJpKJYdF5uuU5kGMDXeawGnpRGUTsFJDpSOkx7ob9vjfbn
+         i8+QLwy/i8uWUFSrXHo7oUCT2J/j+uIkMeqECLrn5xBfJ2VzzqQXy+mSDZWcE/8t4Two
+         D+6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760455530; x=1761060330;
+        d=1e100.net; s=20230601; t=1760455531; x=1761060331;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VIf6QpXQI9QrYrpYIf55tb5UoI8otxbV+ilctupX1WY=;
-        b=QWxJhAZnfx/fXh9srYeYGrvT5bBaVk+ks8jjP/eRGbhcD604lPLCgUynoQzXeKzQsQ
-         Mu1Cr/Kh2/DMdlJscj1rgf1ELn3PHiwkJj0uQwspQ6kQkJVIyaeaZwNDSsgDSKT+xvZp
-         alsbO4ONJaLlDRlRtvSPjF8fuFSVX1ZM545eiN461CQDdJ7U0RkQUal9tC2KwCRRaqUk
-         g7UIqgYaehffIRFzxiYKfOpCdRV+2POZNnZZa5BeCNk9RVdCU6Py0oo5aqWeVGsseVo9
-         VsIUjDlW/k1YTPxiPeLgxZpEhFGk2zYtJwvD4c3cFWjRyhjTA3lHlBlmzJm+JQSENUMW
-         Muhw==
-X-Gm-Message-State: AOJu0YzLApkD8WuDRA4dzS8Lgkpz66cSEMdEGw8NeM7t1xjbqmwPC+Si
-	nljkdW6JMXc/2B9kNhaK19ezbk3BM5PCnQG5f7nbHo5X0j0bSawwc9YZaHuTPw==
-X-Gm-Gg: ASbGncsfjy65XD8xmTzNRFg0MKvr2zFA/J/ua77DlDWNep624uSzfYbgp1r4m8RJl43
-	NkSiu+l/rU6wsWE0ym3bhf/0kmTiBDfbSk7O1+bN+iX6v6z9t2vwfMO6Tap3R4+5PWsGZdV543m
-	pEBc7k6eEOv7KATSvh7WxUE4gOdbC03bMpGIHncHS8APozbcvK+qJuK8suYvGRHP5fcIrPUJA2D
-	mCi6WlXg4Lf/GlaRhY25+WUsgN/VuAeEPUCu09FPJ9nm+fFPIpCxN3tRMV7wr6gAC5G6avke6U5
-	7Uz8tOW76DVDxz77eY9hqua8P27CLemrAg6CZtdcRMxATJAz9TENlLLAjMAg+eTj46XbYfHnisE
-	DWIp6EPUqgH+QN3Xu/zh5Sb5DVpgnF7bo4lUg4WpUDAxtQQw5Crl+yA==
-X-Google-Smtp-Source: AGHT+IHZQA2SImX5CzPefa39dHUxRcvqO89QiV7M8aVHE85z2Lrnq39eo4TuJHArQIiSKz1Dc4Ie/w==
-X-Received: by 2002:a17:90b:3148:b0:327:e59d:2cc2 with SMTP id 98e67ed59e1d1-33b51148bcbmr33563940a91.10.1760455529475;
-        Tue, 14 Oct 2025 08:25:29 -0700 (PDT)
+        bh=YlVhUHZXUmhmGOhBWjhhUY1ryQdGfuUnSAai6q3UUFo=;
+        b=wdZpVoGlcChN2zD/uj3nX5CtOO7WGuHlPPpYz1EW9IWyjUX+TEoVU3rsGk+tj7rwyt
+         qcnDisEfaJ+6UMu2ZP0RwKjCMJTllO2bQ76n1DSCyLByM4Iazwb7Oc+7WwzjVvDGFVNV
+         WOU4rRkU7fjlybushdM4VCLOA0r6eSY1cReUP/OxnGYzK0GqFInbp6mTL2bT0hYTTspN
+         dFEkCowr31Q48e1vo5Btw8752+NqaipodyOWo3z0XfFtNZOgQds58vcBJx1jL+VJnXzx
+         spQJEJDqrc6V55VzTHlb2wf2mVmwToZ+sipY6sSJ7gofDDljgOqPk7zXs1umcKva2nz/
+         iKAQ==
+X-Gm-Message-State: AOJu0Yyb3ijdvEpk+ZTaOtfYGhbX95Pc/b4OBT4PrikLvECrlWBSaQpo
+	+dE2RSBpG276aooLIw4qmF9Y17uhWZCajtNrbUwq5O41AF4gaObaYhveygLgMQ==
+X-Gm-Gg: ASbGnct/BaeyXCbG/ZW/B574G88j7yWqXCx4pGNlmVCCfqt6mVfwjWpBhPsCEidQcgn
+	SJo6qgF86oAXl6s3sh3hEPAWhQDwagykpp3anh02LcCS1gHc8Kn2ULCoeO1A1Xo3VFLbH9etisY
+	TefaTz+GZnRiGykPBdp5FqGMRL7wZOCwBc3Hg8vWCile3i+SYBltPUvueq6CHG0K1ZNKyVrsrIM
+	Vw75ClF+nVOSfiqzIcucpJ8hAb4fazZrNQbfCVihGrUNJE/XLaQH0A5eNgwQTIswdBa14LcabvH
+	iWiT8UOuLQwxgZi9AVabhIMwZ6Xb2WIzQCTra/lVAC+tdLKCjrLR7TK73H/isAMeiAKlsm6RcOC
+	qlXlfFbqyvI6NkRUrwI3dl5W7DSL9krPEKRHbx0s6PyDLTJgjBh9V8g==
+X-Google-Smtp-Source: AGHT+IFXNe/hI86eMMdTnzd66gi34i0YepKAxLlGb7y9VpnZkgkpcmtYaq55UQvNsTfIEkae9TtJrw==
+X-Received: by 2002:a17:902:c94f:b0:271:479d:3ddc with SMTP id d9443c01a7336-290273748efmr364710495ad.15.1760455531251;
+        Tue, 14 Oct 2025 08:25:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b679509b3a9sm12496479a12.4.2025.10.14.08.25.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f070basm168520025ad.77.2025.10.14.08.25.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 08:25:28 -0700 (PDT)
+        Tue, 14 Oct 2025 08:25:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 07/20] hwmon: (tmp401) Rely on subsystem locking
-Date: Tue, 14 Oct 2025 08:25:02 -0700
-Message-ID: <20251014152515.785203-8-linux@roeck-us.net>
+Subject: [PATCH 08/20] hwmon: (tmp108) Drop mutex.h include
+Date: Tue, 14 Oct 2025 08:25:03 -0700
+Message-ID: <20251014152515.785203-9-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251014152515.785203-1-linux@roeck-us.net>
 References: <20251014152515.785203-1-linux@roeck-us.net>
@@ -75,75 +75,26 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Attribute access is now serialized in the hardware monitoring core,
-so locking in the driver code is no longer necessary. Drop it.
+The driver does not perform any locking, so including mutex.h is not
+necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/tmp401.c | 8 --------
- 1 file changed, 8 deletions(-)
+ drivers/hwmon/tmp108.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index 02c5a3bb1071..fbaa34973694 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -24,7 +24,6 @@
+diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
+index a971ff628435..60a237cbedbc 100644
+--- a/drivers/hwmon/tmp108.c
++++ b/drivers/hwmon/tmp108.c
+@@ -10,7 +10,6 @@
  #include <linux/hwmon.h>
- #include <linux/init.h>
+ #include <linux/mod_devicetable.h>
  #include <linux/module.h>
 -#include <linux/mutex.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- 
-@@ -107,7 +106,6 @@ MODULE_DEVICE_TABLE(i2c, tmp401_id);
- struct tmp401_data {
- 	struct i2c_client *client;
- 	struct regmap *regmap;
--	struct mutex update_lock;
- 	enum chips kind;
- 
- 	bool extended_range;
-@@ -357,7 +355,6 @@ static int tmp401_temp_write(struct device *dev, u32 attr, int channel,
- 	unsigned int regval;
- 	int reg, ret, temp;
- 
--	mutex_lock(&data->update_lock);
- 	switch (attr) {
- 	case hwmon_temp_min:
- 	case hwmon_temp_max:
-@@ -386,7 +383,6 @@ static int tmp401_temp_write(struct device *dev, u32 attr, int channel,
- 		ret = -EOPNOTSUPP;
- 		break;
- 	}
--	mutex_unlock(&data->update_lock);
- 	return ret;
- }
- 
-@@ -436,7 +432,6 @@ static int tmp401_chip_write(struct device *dev, u32 attr, int channel, long val
- 	struct regmap *regmap = data->regmap;
- 	int err;
- 
--	mutex_lock(&data->update_lock);
- 	switch (attr) {
- 	case hwmon_chip_update_interval:
- 		err = tmp401_set_convrate(regmap, val);
-@@ -456,8 +451,6 @@ static int tmp401_chip_write(struct device *dev, u32 attr, int channel, long val
- 		err = -EOPNOTSUPP;
- 		break;
- 	}
--	mutex_unlock(&data->update_lock);
--
- 	return err;
- }
- 
-@@ -685,7 +678,6 @@ static int tmp401_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	data->client = client;
--	mutex_init(&data->update_lock);
- 	data->kind = (uintptr_t)i2c_get_match_data(client);
- 
- 	data->regmap = devm_regmap_init(dev, NULL, data, &tmp401_regmap_config);
+ #include <linux/i2c.h>
+ #include <linux/i3c/device.h>
+ #include <linux/init.h>
 -- 
 2.45.2
 
