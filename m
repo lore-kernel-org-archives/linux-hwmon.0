@@ -1,69 +1,69 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B0D2FF65A
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC8F2FFDD7
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760455529; cv=none; b=tfFnqZe1Mz9PRu27csz39o9rpuCl+v5GfRx7jxU3aMTaqVEozS3TvTGZvXultLSGNOqQS/SO3w0R0D6aTYBcG6lXzMtdreuaAMeG7R9lPmOOVq0ay6KGWxUqu7744KrKv6kJF+ugFoEGop8LmYTpd5VqJ6fiQDQSCtj9ZhNFqhc=
+	t=1760455530; cv=none; b=giQtbNWuIp+Lkl/yTslM945MbtjT98nx9Ns+uPzrKgU9fXgGa/yOYgvo2tEG5zFyT1ANElQu0E0PQYlLml9U7D4C54tuZXOySKnV611kYYIlxpQvqrJ9ly9AjBkmAP1g+F3D0/aCqaABq8xojqvLiponAPi5BOiYmr3os429Qbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760455529; c=relaxed/simple;
-	bh=UwLxiXs3hRM2HH97Mt497qbhX0g4Rs2Xwlf9tDQcEdo=;
+	s=arc-20240116; t=1760455530; c=relaxed/simple;
+	bh=1t9gQ/ub5cd2WNNMu32As1gO9jnJa2SyWFQ/bFjjFy8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YmoBSFdtB3r3hF3V2ZJCP2N/5DkSJT/GhYeihlUMu4dl5V+BF7+NabXVDSh+Q8qf7ilbqnuRfM1N80yf7IHF3Qdy5OEGshCWnca7zasbtLOTRoxOU58SGEu/Scg2IncKotFkc6xn6G7vJM57nv0zNgI5N16BT27mE4qzZrCEHUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2FAdAud; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=BfuGWqbJZoYMVHJjyLOO+HgBJWEDPI3rUYfJrxz11Ab82AsXcwDSuDWE30nGHcjDa8q43Isfdu/Jw7FOQaFW0F2zRY8flH2xgRpyoPUkebylWlWW9daiSG6pWU08tZxPjLzPsOMfuJnmUOPIyDvtJgfuitd83DOB4HTVkJ+x7Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wtb+TdFX; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2FAdAud"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-781251eec51so4546521b3a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wtb+TdFX"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-33b8a8aa73bso1334830a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760455527; x=1761060327; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760455528; x=1761060328; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8s9Srofr0p7Xmy6EM4M2PIuqgDb3XS6DzPduVQTnbAM=;
-        b=g2FAdAudQ3fh0XvedigOT6KewcscdWV74RkkAlH2Ovs2hYN2KBfCD+3uduVD76GI8v
-         Ak3eK8LCPVYNHCUcNVSiesfyqnTSd0he9AT+MIS3PBZnx1fV0hIfa4Vhc+N42MEliH03
-         gXpCx5revVXcT885oWYk1crVvi9eXYsfaJCSwxo1g3TWJF+JblZ747c20/OPnfd1jik+
-         lGKLJZG8YGagN+k+NztzqX96Ue3J0MeEFOO2F43pIbuS7TOvhhC7MIE3dhDSh0IzzU1v
-         +VCVKcyBSWiJoZQ1dlZZlK8XFNGxMNLBdWsWu/TfdxyWzKTglG/ziKX0bAU2n9P1HeHj
-         hkoA==
+        bh=B7cdZSw0skGd3/2NIQmPBPf5wzRTeB8zqxrygdKp6P0=;
+        b=Wtb+TdFXSz01PO6a494PxCkUdqvzUfOjbyCicDoftXcqh44gTyHStKt5qNzlLZ36v/
+         Kmf3bsKOYMdH8nB11BeiCLqiVye7HO5cQ9wMPWO4sXqoR2hIMGQtLgj44TcwlLd+SgLI
+         f6URwBKv439rUh8dyqFo7yqKFCbYoIo97sxZn7gHCOUW8RlEULeGCXx16aYtIep6KZIV
+         2z7bPJX4gxvYGRsLMg990Tw6JXFyV2lUxvqegWbFWsI9ar72D3I1AzSpJoq+Mh8OD0bl
+         9LMsa2QiW2kjznCSbh3g8cSWab3AnbcQ1PTzBsnhB9tZc+zUBmzE63f0SpVum6Zddl7X
+         qQCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760455527; x=1761060327;
+        d=1e100.net; s=20230601; t=1760455528; x=1761060328;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=8s9Srofr0p7Xmy6EM4M2PIuqgDb3XS6DzPduVQTnbAM=;
-        b=Q2zruXWZtNubcSSJo1ur/zCB7vowan/7BY1CrF/Vb5P6pXBmq41ZiDTA53QgwGm+KG
-         6ZSQlX/GqiQoWSJUZOD7V9dH9uMfKe3Q+dGFmgpD61bUAk827YPcdout4MNz1bV6afIg
-         EmqzRso9rO68MDAOs05+/5a/LWQT6GTlWkrahLqfhvRkZlELdhYRwn1ICsCvTOw7O2Dp
-         +Sb2V9Df9HInocAnyEGhmbTy9jaZnJ3AvUjQzxBT65vU0KfEIz2oKwtkvL0v/k/+hUaJ
-         yuonvj/IbVYMxTaqDSqkoA445PNDE7XG9MwFct0KyOxUkrrs2aEevfSXBGCn7Dx4GWQ7
-         2naQ==
-X-Gm-Message-State: AOJu0Yx3b9RUK/W/ei6BYKJ4S6Y7SZLn8vgw9PiwKPUEM/jVEBGwCxSp
-	W2UDHqOjZ58LDCYT6wuvyR8mPtCRNc4l7ZKeox9gB70avRpj3KXNwFocjHtJew==
-X-Gm-Gg: ASbGnctf7OTACVUust5JYwm/4Oc6GiXyKeJC1Ley5ce7ZHdDsEapVm90AGjXFhiqHu0
-	mXLNDf80B6DX/36XtgPmQ0sjJ5GPX9asM1A6bcpLyrI2P/46l+5RBHi3qc3DaXuL5Q9tcemYSor
-	vt4zpkG9ge/T1tbRrf5YOf4aZy55AxWzl5OFJ21UYcOlVQW+Z1evOcrQj8aPw/lS3kN6BWcGk2C
-	n4OMUwHTwQ2WYT2vERKntUpUeSrIbEzXpzAKVNb335QTgwI+atMkjI4jMS7tfqK5jYwbH5Bd+Rz
-	891MoFC4um2af7ZAW2oC8KAdr7zMMD1/I6VOk4MzgDgfGlC5sFLt8eL0TJBlb9ooqKu/QAnWn5t
-	V0oKstG4CXa9soWbD44BJHlm0OlAXlYIRBX4KHU87i8IWIvSOpmMtk8A9R/A//ruv
-X-Google-Smtp-Source: AGHT+IG4ZmzlcWXFkwcYiDAwOyeErju6+lf6rJbqjNVqZDQw/4SB5Jr495ij8CIAS9SnFP9Dn5gj6Q==
-X-Received: by 2002:a05:6a20:9389:b0:263:616e:b62a with SMTP id adf61e73a8af0-32da8122b3bmr33901825637.13.1760455526957;
-        Tue, 14 Oct 2025 08:25:26 -0700 (PDT)
+        bh=B7cdZSw0skGd3/2NIQmPBPf5wzRTeB8zqxrygdKp6P0=;
+        b=eyCgIeGy3OOaPCFyM+90uadSgZu/u0r06A7mff+gUe3dodAC+qO0z42vr6XgmjhlU6
+         RVsiOtH02WRmVTcwnkOvmLrfFNOurt3+uaaef1Qnvy+abUKg+WTtpB/ktSu+Wtf+VLFe
+         fhDHVzXU3ZKVkmP3YRHbxLaldOliANcYGQyt76HNY9uOsyXOUhxaoPXLd2Bshv2qtZEF
+         O/p6S+nklg+qiGntkWIJB0RSlFDo0zSg+KOUu788WU1/LnRrKDxMZnlu5op1qsUyWbOo
+         /XjspH2ON0E/HUSKw0lDIa0ACBCRoUhXbzzuVK/ktthyA6vDFz5/gjDV7C4aFW+B9Cou
+         0UZQ==
+X-Gm-Message-State: AOJu0Yw7Gbg5uq0i7lSBNImZycJodnOOXDCjAuzHnQkg9kli+eKoI5k5
+	nOa6AzdPKAAajLv0vY9Dt9VqaSNBFQz3ujZSzopVEr7Vwx9q6QlykNlMg2wguw==
+X-Gm-Gg: ASbGncsQ+RVRJGdR416eiO7h73BGc1juMuzZti4S/fOso+M7rWAIeiIBF2QNLHOzV5T
+	iMf5Rcn31YXYFFvCNm43JQ+CEXeYoBx2CQZgFQC9GFkyMhwqjKb5mGDCfTko/PE9OjgPXE2Bmii
+	GNGbZQznSuKxIvGKuHgdnlSeo0+EmOW2BvJdQnjJTZeUA6nMop7a6M69gsqShrR9bBjX8qYRA4U
+	dkyicrWSoT8lAzpiHTSSclkubEcfJAQ4MbcWyf00YBcbmqrAusxGM+P+9SM/Cq+dJecJHrXJYDj
+	G3lXkIHbNl3MvONXZbrSiel9unnf33tmEquVjfbZWzXcbDNypDh0iGZQsai6wKF0TDQzl6ECque
+	JDUVdh3GhV5xyDuLpO8KkD5ENUUqr9LIHcsRgOSdXNhBaywNoiPNP+w==
+X-Google-Smtp-Source: AGHT+IERrwr4nbVKnKTb4X7oKtAM0zm+6dI9Za5PWCU9VW7/9yNjBi0G7WPCetGuetWUvifKH/Isvw==
+X-Received: by 2002:a17:90b:4a87:b0:330:604a:1009 with SMTP id 98e67ed59e1d1-33b5127aba2mr37372692a91.23.1760455528160;
+        Tue, 14 Oct 2025 08:25:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b67acd88c77sm9387930a12.34.2025.10.14.08.25.26
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b61a3cc0dsm16536247a91.9.2025.10.14.08.25.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 08:25:26 -0700 (PDT)
+        Tue, 14 Oct 2025 08:25:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 05/20] hwmon: (tmp464) Rely on subsystem locking
-Date: Tue, 14 Oct 2025 08:25:00 -0700
-Message-ID: <20251014152515.785203-6-linux@roeck-us.net>
+Subject: [PATCH 06/20] hwmon: (tmp421) Rely on subsystem locking
+Date: Tue, 14 Oct 2025 08:25:01 -0700
+Message-ID: <20251014152515.785203-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251014152515.785203-1-linux@roeck-us.net>
 References: <20251014152515.785203-1-linux@roeck-us.net>
@@ -76,81 +76,84 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Attribute access is now serialized in the hardware monitoring core,
-so locking in the driver is no longer necessary. Drop it.
+so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/tmp464.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ drivers/hwmon/tmp421.c | 21 ++++-----------------
+ 1 file changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/hwmon/tmp464.c b/drivers/hwmon/tmp464.c
-index 0f629c6d7695..98f2576d94c6 100644
---- a/drivers/hwmon/tmp464.c
-+++ b/drivers/hwmon/tmp464.c
-@@ -13,7 +13,6 @@
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/module.h>
+diff --git a/drivers/hwmon/tmp421.c b/drivers/hwmon/tmp421.c
+index 9537727aad9a..2e43ce8408d6 100644
+--- a/drivers/hwmon/tmp421.c
++++ b/drivers/hwmon/tmp421.c
+@@ -19,7 +19,6 @@
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/err.h>
 -#include <linux/mutex.h>
  #include <linux/of.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-@@ -92,7 +91,6 @@ struct tmp464_channel {
+ #include <linux/sysfs.h>
  
- struct tmp464_data {
- 	struct regmap *regmap;
+@@ -99,7 +98,6 @@ struct tmp421_channel {
+ 
+ struct tmp421_data {
+ 	struct i2c_client *client;
 -	struct mutex update_lock;
- 	int channels;
- 	s16 config_orig;
- 	u16 open_reg;
-@@ -172,19 +170,16 @@ static int tmp464_temp_read(struct device *dev, u32 attr, int channel, long *val
- 		 * complete. That means we have to cache the value internally
- 		 * for one measurement cycle and report the cached value.
- 		 */
--		mutex_lock(&data->update_lock);
- 		if (!data->valid || time_after(jiffies, data->last_updated +
- 					       msecs_to_jiffies(data->update_interval))) {
- 			err = regmap_read(regmap, TMP464_REMOTE_OPEN_REG, &regval);
- 			if (err < 0)
--				goto unlock;
-+				break;
- 			data->open_reg = regval;
- 			data->last_updated = jiffies;
- 			data->valid = true;
- 		}
- 		*val = !!(data->open_reg & BIT(channel + 7));
--unlock:
--		mutex_unlock(&data->update_lock);
- 		break;
- 	case hwmon_temp_max_hyst:
- 		regs[0] = TMP464_THERM_LIMIT[channel];
-@@ -345,8 +340,6 @@ static int tmp464_write(struct device *dev, enum hwmon_sensor_types type,
- 	struct tmp464_data *data = dev_get_drvdata(dev);
- 	int err;
+ 	u32 temp_config[MAX_CHANNELS + 1];
+ 	struct hwmon_channel_info temp_info;
+ 	const struct hwmon_channel_info *info[2];
+@@ -130,38 +128,28 @@ static int tmp421_update_device(struct tmp421_data *data)
+ 	int ret = 0;
+ 	int i;
  
 -	mutex_lock(&data->update_lock);
 -
- 	switch (type) {
- 	case hwmon_chip:
- 		err = tmp464_chip_write(data, attr, channel, val);
-@@ -359,8 +352,6 @@ static int tmp464_write(struct device *dev, enum hwmon_sensor_types type,
- 		break;
- 	}
+ 	if (time_after(jiffies, data->last_updated + (HZ / 2)) ||
+ 	    !data->valid) {
++		data->valid = false;
+ 		ret = i2c_smbus_read_byte_data(client, TMP421_CONFIG_REG_1);
+ 		if (ret < 0)
+-			goto exit;
++			return ret;
+ 		data->config = ret;
  
+ 		for (i = 0; i < data->channels; i++) {
+ 			ret = i2c_smbus_read_byte_data(client, TMP421_TEMP_MSB[i]);
+ 			if (ret < 0)
+-				goto exit;
++				return ret;
+ 			data->channel[i].temp = ret << 8;
+ 
+ 			ret = i2c_smbus_read_byte_data(client, TMP421_TEMP_LSB[i]);
+ 			if (ret < 0)
+-				goto exit;
++				return ret;
+ 			data->channel[i].temp |= ret;
+ 		}
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
+ 	}
+-
+-exit:
 -	mutex_unlock(&data->update_lock);
 -
- 	return err;
+-	if (ret < 0) {
+-		data->valid = false;
+-		return ret;
+-	}
+-
+ 	return 0;
  }
  
-@@ -658,8 +649,6 @@ static int tmp464_probe(struct i2c_client *client)
+@@ -442,7 +430,6 @@ static int tmp421_probe(struct i2c_client *client)
  	if (!data)
  		return -ENOMEM;
  
 -	mutex_init(&data->update_lock);
--
- 	data->channels = (int)(unsigned long)i2c_get_match_data(client);
+ 	data->channels = (unsigned long)i2c_get_match_data(client);
+ 	data->client = client;
  
- 	data->regmap = devm_regmap_init_i2c(client, &tmp464_regmap_config);
 -- 
 2.45.2
 
