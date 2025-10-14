@@ -1,92 +1,122 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65512C0F64
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7832BE7BA
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760455126; cv=none; b=jQtJZvr0A8d5GBfHhwzSC/AyBzsFsIxysjcjPiHEHi4OKco6jMRqL3wNpmHnSGPwTRCyPtEYk48j3cAQuilTyo4XncoHxxcCItON51/VDlGCK3Gjml7zBsA7l1hf/xBrudjNF4pC8v2SSLmd/JyRwKkdg48/7Q/7YZDHuG7xjxI=
+	t=1760455522; cv=none; b=aVoURAw/4MGk2eMSvdpqgO54qnDMiJnhlDw26i2KAnyMC7AWZEiP6CcCscFIfHwMrPTJ1IntX4kc0swss6heoWO45XNs7io/YJ8GRqhEX2bMYUWaUxC5OuceEGbJCtDE1Qz3mqH0zZwGdbdE4v5pX2+Z/Ut7zizDAk4Vx4CzGpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760455126; c=relaxed/simple;
-	bh=JC60HEInNluqzF3bnchV7EOp617mC62c6zir/e0gnlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JPmoe2q12vaXS7o6wpQrb3ULAMsOKLuVmMA4KI34ukfu7SfYryemOfUSIi1KP2SipgUGg/1DjKEWIi6bUpucVT4Ll9YM5AVJyl5QUbyLZRNY1mL4TH3k7rPZoEBR9l5kS8Un/ovG/OUhgQijzUuwRppB80lL/uDZWVTn/dhvlTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UwFrN2YG; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1760455522; c=relaxed/simple;
+	bh=i6aTwAwqYhKywS1EfnMBzrcR2RFn6FL2uV3pD+KIHqo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GkJGUAOq9Zg0qkYcfU+7qBAwGH3WPvr84hzhXYn6V5/uKj2pQBa3eyoSJWkFQnM5w8x14nRJPhA13nYJ3fHxuucnsjows9OcJk63hLntKc4GqTb0mt1wJo1WBESK93Qow3T/0CA2vguLZAJMqSeHriHCDzDdycKaRawd0G2WVAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiNJZAxk; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UwFrN2YG"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-271d1305ad7so86802455ad.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:18:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiNJZAxk"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-28832ad6f64so61438225ad.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760455124; x=1761059924; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9RG2muNaSakDWxI94gPRyAVmL2U1gaeN0a3vQP8Zu5U=;
-        b=UwFrN2YGIv3vI5HCIqsNtILexdt139q6LdscQO/XGkyIPzkkZMwu2pie4wRdr9FvQC
-         2OwsmvlgG0/wLVlq4PEdF7/jVE3llgJc56KR9H7D1VyCytivjE9hM4gbSb74YnbH/h2H
-         OUQ6ENszTnII05N6TeEmS+f3N7SQpBkjRIY22r4cjc5rmnUbMZuVG6AGNGn7pX8mMNwE
-         yCMEGRRaIcMpGTwxWVhS8d/thUB1nPjpotGuiZgnr8tXRRq6MuwA7dDl858exBOjM5MC
-         r/zzZjEhhIOTlP2l8LdlAcmwg8YQizEsC8MQtvttoB1uKNol6qsMSvXHdNPjzu9mT0g6
-         2TLg==
+        d=gmail.com; s=20230601; t=1760455520; x=1761060320; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=8zTpdudG6u0PXHixonn+BsFWpQa0mRAPJ+Aq6jcm8YM=;
+        b=HiNJZAxkMlmX9vVNBzMf7kCNkPEZbOnlZEFUFgdSgoofqNFsmAwyPEohrNfAx6iyWB
+         qxsvfDnHNWZNzCXdYBYrjlZB6QU1A2vHwdAfmuDqg64WI8d2FVVmsn2tMfZO3IDbadPK
+         6p+gAKrJKIk+mD0vTstoJEwNu3AmGjtGG8OpIXBUIfZRmgVty32shMwS3GGGZZav1t90
+         nMMwC2AhrB5FIy3QaLGZJti0sgHlUK6IJZyXsylJDoSAwVjvk1IsV5bTKp+5fQopEAId
+         2oEhRtQ4seTiAuRgekKPtV0Tv3131G3NgsCzB7/HmO55+104Kp05gCAqvNgZ6SzfHxj8
+         4CBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760455124; x=1761059924;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9RG2muNaSakDWxI94gPRyAVmL2U1gaeN0a3vQP8Zu5U=;
-        b=tpJ38+GyHqMlEpc8Eiyn+1sz34SPRNtGZlZC4KBBliJ/WV18evu2Kl9iYPcy8Wr0aL
-         WFIsiyGGJQy0RnGmY8nfsZuq33qQaWD/zaNPP3X1A97TndX6hMb6+fZZHgfLQ4iVNkwc
-         PfGkXzHBcCsvQWTUk6W/f05tELVnxHGeM9oG9Dql8SH9rCAXakWBT49oCKu5T0AkCbXw
-         EWwZnDF6z5EqeNG2BGhG2FJ/tYxuGt0zNc1nS8lH6UhDCqXkew4v3Qum0A20uG9nG+j2
-         eWKN6P7r8lbgm/X4qCAdhpPPGmhcEFRTUNm7dzzv8wZ+E7THsBR2S2ztLql9c6tS/Flq
-         blmw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpSqv1BzePV8MjSlxMEYMf7OHwWne5wruDD02bjklKjEqjZtJrXwwauIe0F5sJ2aIncM6IFosvRl4ITQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjBpmK0RM9L3Dah8VkcNUBKaugWLt/EW6IaWY7F+yno1ZXEuOc
-	8rayisDBBPLl5Bwd+fEFd+e9G66SaS/lDkYKHEZbySQ3E1BDV6vcbNA7
-X-Gm-Gg: ASbGncsgY5/YoqUytav0HMXgh5YcHikA0pWIUHGNOnE3FkMvqu5cSGiH6skFUBbKlJ9
-	mpqMvYCpTQzb2X/iZPoGijYZL3fmgxVVlhJmo1AVlVKN/sYwEWSR74nKXeOTNL1i98tPZp5Tr5I
-	J3nDxYdrTYO4eUnuMKihgOqvBn7reqTpMcuW4UvnMtVVEo1ijlUTNT7nP3Ewn6cfa2PBqBKic+C
-	4UoFxuaCvXr9OHyvUwikZVznokEeTZZ7Cqp6yfw7oScOFg9CyqNiBWQM3uZ9+5em5DUhBlJd++q
-	srHt5nJfCJniAXa7gCK+uMg9HM5KH4uuEwD5Y1+slQvnwr/YJudRIY24/hYoWmU3vPLKGWA3SVM
-	THUEdD+N5U99INtJIhadk29BobZKEb9xBnEFv3znjF/2DNJf6nQd7b5GMLjOHVAac
-X-Google-Smtp-Source: AGHT+IHIsEd1SylS40HYfaucznmGO/M9RGsNWRga99P+rm4jbrckX5mvU1P7jlaSDBhOyjB7a0ocng==
-X-Received: by 2002:a17:903:2ac3:b0:281:613:844b with SMTP id d9443c01a7336-29027418ecdmr315810205ad.52.1760455123527;
-        Tue, 14 Oct 2025 08:18:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760455520; x=1761060320;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8zTpdudG6u0PXHixonn+BsFWpQa0mRAPJ+Aq6jcm8YM=;
+        b=N2Zzx3aT9j7x6ay7fwLdIl1hYKhaznUbucv40Znb8siWD1Qwn5BNqK9mdSNyaR60NJ
+         KT7HEoiM4B+jfBockRb8mf0Syo+XFvBry5qS0QoKBq0eFwYpwcT+Gp1oLoRZ6PErP6oe
+         AZrY16NNHL0eN1Q5mjUwHFqW0s/1rt+ahDXj88v/H8+Q090c5oRj1HLtLvdFlMg6PUpJ
+         AwOFpXCz7/3p0/u8D4R71AcAAYAlMnOzPvRdI/BOeqZ26jv0cQvZJHdDMXhGkqkWRH0e
+         j+NHFjhRZhql6Ape8q/H0jyY2EGI0CRD9fDS5FyPj1XAap3JNQ2Qn2y4buLXKWGMxqkp
+         q4aw==
+X-Gm-Message-State: AOJu0YzoeCWCEksHO5riojlW0OKEN+WI59mF3WFugit3fzj4CAI8yhaD
+	pePeyaUt5DVBcrLijSGcVQ5AjkS4YbJ+r9grbRq/dMc+Xv0X1Z+IMN25mclCYw==
+X-Gm-Gg: ASbGncvEPH4/glWM6EmvlupXpMiufZ33y4mVBfLKlFg/gaafq5HNWiLEOxeo++vcuui
+	4XHA4/GKLmF7cJEDHHVTVvU4CyraZt6cY0hzOF1C5TP9hi4zxnb6oylDyNcRAkeFl5gf5tPkLQP
+	xO1xdJ4joWQdZ/d4eoXl7RKZrcajK0UuKXiA+1qN5a+j9OGR1VItEYTW0DwB5FAFe7aWk6ZT1yQ
+	FocVbIvA2r9A3tE5XdrkgGkw00WqvrlTW9EABTI0tA0ai9bDHGUfInDpTLDmB4Se9VLRUIY09GI
+	xK370dNpA5LD/kZnioOn73AvvmlwQS6Br7te9KA3PT0INsbTYtVet/oWvPQUyemQuR0lNqdvOFT
+	tnWtViF0p6Z73qaAfwqng91aAdIdNlhALbc7aX9Lz5Kga1EB0iNuan2KpZP64VxfL
+X-Google-Smtp-Source: AGHT+IHiNtC+pzGfZpBsJFkKNap0dLC1z9urN+KD9uvbt37DCV74hjTfeiUcHerhGfB/KZPTb4OCoQ==
+X-Received: by 2002:a17:902:f64f:b0:28e:a70f:e882 with SMTP id d9443c01a7336-29027215bc9mr321951905ad.11.1760455520063;
+        Tue, 14 Oct 2025 08:25:20 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034e1cc53sm167544325ad.46.2025.10.14.08.18.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034deb2bdsm168362305ad.8.2025.10.14.08.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 08:18:43 -0700 (PDT)
+        Tue, 14 Oct 2025 08:25:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 14 Oct 2025 08:18:41 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Cosmo Chou <chou.cosmo@gmail.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	corbet@lwn.net, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, cosmo.chou@quantatw.com
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus) add driver for MPS MP9945
-Message-ID: <7df1419e-18a1-4656-aba0-2f82914bcfc8@roeck-us.net>
-References: <20251009205458.396368-1-chou.cosmo@gmail.com>
- <20251009205458.396368-2-chou.cosmo@gmail.com>
+To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 00/20] hwmon: Rely on subsystem locking [set 1]
+Date: Tue, 14 Oct 2025 08:24:55 -0700
+Message-ID: <20251014152515.785203-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251009205458.396368-2-chou.cosmo@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 10, 2025 at 04:54:58AM +0800, Cosmo Chou wrote:
-> Add support for mp9945 device from Monolithic Power Systems, Inc.
-> (MPS) vendor. This is a single phase digital step down converter.
-> 
-> Signed-off-by: Cosmo Chou <chou.cosmo@gmail.com>
+Attribute access is now serialized in the hardware monitoring core,
+so locking in the driver code is no longer necessary. Drop it.
 
-Applied.
+This is the first set of patches. More will follow.
 
-Thanks,
-Guenter
+----------------------------------------------------------------
+Guenter Roeck (20):
+      hwmon: (jc42) Rely on subsystem locking
+      hwmon: (lm90) Rely on subsystem locking
+      hwmon: (adm9240) Rely on subsystem locking
+      hwmon: (emc1403) Rely on subsystem locking
+      hwmon: (tmp464) Rely on subsystem locking
+      hwmon: (tmp421) Rely on subsystem locking
+      hwmon: (tmp401) Rely on subsystem locking
+      hwmon: (tmp108) Drop mutex.h include
+      hwmon: (drivetemp) Rely on subsystem locking
+      hwmon: (max6697) Rely on subsystem locking
+      hwmon: (ltc4245) Rely on subsystem locking
+      hwmon: (lm95245) Rely on subsystem locking
+      hwmon: (tmp103) Drop unnecessary include files
+      hwmon: (tmp102) Drop unnecessary include files
+      hwmon: (max6639) Rely on subsystem locking
+      hwmon: (max31827) Rely on subsystem locking
+      hwmon: (nct7904) Rely on subsystem locking
+      hwmon: (nct7363) Drop unnecessary include files
+      hwmon: (max6620) Rely on subsystem locking
+      hwmon: (max31790) Rely on subsystem locking
+
+ drivers/hwmon/adm9240.c   | 17 ++-----------
+ drivers/hwmon/drivetemp.c |  5 ----
+ drivers/hwmon/emc1403.c   | 46 ++++++++--------------------------
+ drivers/hwmon/jc42.c      | 11 ---------
+ drivers/hwmon/lm90.c      | 25 +++----------------
+ drivers/hwmon/lm95245.c   | 16 ++----------
+ drivers/hwmon/ltc4245.c   |  8 ------
+ drivers/hwmon/max31790.c  | 48 +++++++++---------------------------
+ drivers/hwmon/max31827.c  | 60 +++++++++++---------------------------------
+ drivers/hwmon/max6620.c   | 43 +++++++++-----------------------
+ drivers/hwmon/max6639.c   | 23 +++--------------
+ drivers/hwmon/max6697.c   |  9 +------
+ drivers/hwmon/nct7363.c   |  2 --
+ drivers/hwmon/nct7904.c   | 63 ++++++++++++++++++-----------------------------
+ drivers/hwmon/tmp102.c    |  2 --
+ drivers/hwmon/tmp103.c    |  3 ---
+ drivers/hwmon/tmp108.c    |  1 -
+ drivers/hwmon/tmp401.c    |  8 ------
+ drivers/hwmon/tmp421.c    | 21 +++-------------
+ drivers/hwmon/tmp464.c    | 13 +---------
+ 20 files changed, 89 insertions(+), 335 deletions(-)
