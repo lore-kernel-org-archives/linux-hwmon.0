@@ -1,69 +1,69 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F2A2FFF8B
-	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EE22FFFAD
+	for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 15:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760455543; cv=none; b=MWuLIiCMMfE7aeWF7kbMQTQQtdsuPsD4yjCQbPeHeTauw+IMtbi36rIsBndoT5t4kD3Og7BYwbp5YWvAZ4gAaPkvP8lbVjnuiJZZT6HOIMMnd934YFvM1zet+MCPNop4m/D+zN/kDsXI1RfdVbHtd3G/WsIUBwIoeaA/8yE0Fbg=
+	t=1760455545; cv=none; b=O0D/jA+r2FgCimj6B+ZDjle1huTIjf9l9L7Z0AsfF/v3B6ih01H5nVvRs/zYpFZqkf0xJlBZ4P+l9Mt9IBiZfi+oLuz50QbCvrDSOOCKIO8fxlHQ62u4oQbJZ34pEKX7W7vu92yjoegde3TsaZrBTrB2reH+UgmKEaqtO6gzxLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760455543; c=relaxed/simple;
-	bh=VSumxBHK+ieSyKHM6zdSYk+dK+kjBWszE6gpUBpyvh8=;
+	s=arc-20240116; t=1760455545; c=relaxed/simple;
+	bh=oBe8g9Pcl2LqrFimyiy51HO2Ri9V8QTzCmhxG8qZnpw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BdqlbLX39CaokEnQnJ4IlEYRaJMQ3EZwdWYGmmvxJLk1OMFA/PeYmnrYS2nVRK24pQdSUdZ3dVNdxZzZ6XFPypWgNbBZjv/Qy4Rq/oCsn6K02vLbbz9l1Sk88GxL9SQqRR/pgEi9v3nHuYJpHSHANmTLE0/NSdM8eMubZX5dins=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HL7kXDDE; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version; b=N22jHljfo0J3LIUT/Txe2VX+SWKIYp3b9qsU8u/CKJzCB4P9VfonSWwt/sHWdIaKZ7temuF0Dox4Ho+KoDEiZw5zO54L3UC5KcQgnL1aedl1SgFeoEJwVhMsHnasBzJW4KC6DBP6yg0Mnk2Fp0YWClgAxJp4nrAu/a2txrzhZfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RlrhqXBt; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HL7kXDDE"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b4ee87cc81eso4838160a12.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlrhqXBt"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b62ed9c3e79so3491831a12.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Oct 2025 08:25:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760455541; x=1761060341; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760455542; x=1761060342; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XoJmOUcB/Eic6HWEBr7lLzh6KpqhvilJH9hEruSvd8s=;
-        b=HL7kXDDEso/z5dP2XuuDdtdbGfjEZMaI7Ar9NRVzuD66Qauaoa5fn4I6I7SjVkpKoH
-         2r1eKUtsXBgyFiR/4KhFioN+nJBOImxS8f7vfejp+AhgWqpWdn0f6HutYIswSlbMled4
-         /nhwo4zYfCcCksFqdsfraKZ41nqlSCpJAu9LOUC3+Edmd4K6WEs459iR2snjkVj/PXuV
-         NnCF8osZPxgmE+x1VY4HKDGbpEc/ImPld3KzQvan8p/q9fUyncDHddIdAXHwB2gOihVm
-         rzAcf7uklUyzQXySx4InSX8H9ptNc/1dR2Ic0xPpsR/AANRlMFsMp8gQjmsxpodWZlK8
-         Bw1Q==
+        bh=WRexuMiLV0xitvkMLWzKwhYHSGoYUc2I5H3zoI8fI7o=;
+        b=RlrhqXBt9izsIt2RRIw9zbediFhNDhFUtrIMKSsvmwbcOeMj6Pkp2Q5Fgw426Died8
+         9DoWbU3B9vsKM1b+TIG2/qgN6rqtqQMAM4moKKLSRuUcbV9xQPJaAI9zdBhdHbMS8zdj
+         ex7WboDcHnSvnNSQB+GKjw8QkUV2QvsNUyw/cqB3Dj6fXH/oVQzzTIXu/m6Usdq2Qoty
+         iN8M3NY6lTKy8iwBLrsInwQ4mv8B7G6xOusiEMy5lMhoeeW1CyOaHetfCUL/nl8mFvcz
+         ZjZdAL+jm55r4UbhyMSKxRE/o9vsm0w7ED73eOJDW3RexngchOqUNyh+k283j8A7+xUv
+         T95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760455541; x=1761060341;
+        d=1e100.net; s=20230601; t=1760455542; x=1761060342;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=XoJmOUcB/Eic6HWEBr7lLzh6KpqhvilJH9hEruSvd8s=;
-        b=sJM66ahHV9BVSkVAhKGRt2JV3A/TYD6HHpPGLVvY6+uw9myA4K5ZBZQF7507WrptKR
-         qz93WUJ8QttGTmI/knKG9ayBuM+nYBOzW7aeahSMFi+yURGyIcAnZDgbQSzKOtCb83ta
-         FgT5W6xa9RsyAqSCyJd8JdF4MoQ/gN2yMBo9t+clIUownyAATda5XhoY2XPgYRKxQDJr
-         mOOiJhNL8HDRxoc8igV71ApNfz18r+mhdkPNHo9ZWu7j0RoHM9hcYFsYT8XCD6aKbRGY
-         f+sVq3X4b+DS5omy/T60gr25ZZGixHLlqd+eodjS/eDcF9mQaEusqXRXr1lRXWjH/PRE
-         iwYQ==
-X-Gm-Message-State: AOJu0YwEYy/lYnHoPH3ghyvo5GSiu9E+loMf8z/MSFp8qhsiok8XnwG8
-	GxCeNxolB1G5txOsA3EP9Ic0IJ5Xz8gkB4gpG8m3hjQ7vgWLszQwbi+VkwuY7g==
-X-Gm-Gg: ASbGncspWv4BJAg9GCLOyKaI9iN0oZd7+Molm0uG3BwzIscc31kJ8M3AkxkF5ZII0/Z
-	dEgtgfm8PcHt9NWz+QR76Pp3ERzf2cTzfGvq9mQY2IzgowHuxGUmTFHkgpqowkoce7FDqZTPaIA
-	3/+YNCWLhwGC35ljqN7vu4tCo/bTon2NYfvHXZTYyQqzF94VeazILf4y+0cSMTT+/OPxQJ1ECOU
-	YSg6Rg19wVIlOTmgB+hM26FB+za7HG7BeaQXV/IeT6DK6bwGSJMClIc2pUljjWistBNSKsjjC1D
-	V2kWZeTb596rgBGfsrYWEhxWsMOzrlhb50+EaHHZ35HpSdow63UFzyM0pn9od+/Qrb89gxFPKXo
-	EHgSxHGxyfKKQzKCHzkBmp8MY8c+JHucZgaIgP8gkJD92PaFFjfqIx5KXC9LjNaQk
-X-Google-Smtp-Source: AGHT+IErz+/o8uJThifY8leRgGcBynQrqDrIfQzKW31AMuB8j0LkNcYFkjWZi/4lsYaR61g/BxDRow==
-X-Received: by 2002:a17:903:1250:b0:272:2bf1:6a21 with SMTP id d9443c01a7336-290273749c5mr294823915ad.14.1760455541034;
-        Tue, 14 Oct 2025 08:25:41 -0700 (PDT)
+        bh=WRexuMiLV0xitvkMLWzKwhYHSGoYUc2I5H3zoI8fI7o=;
+        b=qk+a0u436XDJAUA3wfzrcZ70V7TttnLV/Wzcf2OG/HnAMNdNS2487OkGyOl2ZS7Dlt
+         HaZE0xfsVQhq9q63pW9Yj+1pRKYGR+dABrjelm1qY3umnWGOabRc2OHkk+HR0WvWx+kT
+         Goz1VfSSHYmMTa9LbmiJoanBXAbDC3ZrCkyrhPd8o2GjiWx7mXid/4d4YppAbGoPdNNP
+         L9R9IBe+F3/T/By+RXDcXtjEtvac0h5mL0rkqplpv8e7rD6z09rkhaHgrkhfw2HkEOZT
+         q9i6VYVir6I6U2GnZ6kC+JZXsC4NtBVIGqc7Rtt/dzuSfu/rz0AnguKdLCFe7yHxO5FV
+         9Z7g==
+X-Gm-Message-State: AOJu0Yz7ErYHDeUrtFCIcNofINskllDzLU+q8FQEKe3brA3+lCrkeisx
+	/Haf1DL8WUpde8gMy2k3Sma2FaWgxbsZgpL5DIHchjlI7FfpAAq0uYN4SdTDXA==
+X-Gm-Gg: ASbGncvbCx4B6FuiXXz0AsTVajL8RR6g06lo+1buHlGIH+0Z3dlb21fI1Z906wNGAFU
+	q/EjBO7Z7p4HhjROb0FyTWgAZLlp3My9/bogtya8LvuxyO10izQOVf3dNV/jcbEbg6gc+l/lSXF
+	l1/P0D8kFnJzbGwsopqOjmvQJI9Tig6+Ijgg7oC6+cniTClDyS5TkblMxjlqv3MyxBfvXFMqBUc
+	TYO527ppZtobp7bBdnyNp3m5McQ21kNMsMd1TTTYS8LNAVR89bL0CcgeVmNrduz712vOCuz9UEr
+	QsPXFMeUvEjOzmKC1m4rRYfSH3xHSVUOQYl91cY/aCXU8AeYNVkAY++cVrBlLK6IpUAW8URCEeF
+	eEL465k9/i6Iix9dJ9PSjHdRmGxCZWRKOH8PGZPKiahSAnwW8eTbaRg==
+X-Google-Smtp-Source: AGHT+IGbEGnbztUBV8zLaqDlC2eCHknrMAzzLjLRKwYtJo2Rb50QH6HyB6XD8Omo76YgEchF0jfAMA==
+X-Received: by 2002:a17:903:9cb:b0:266:702a:616b with SMTP id d9443c01a7336-290273799bdmr305806235ad.18.1760455542291;
+        Tue, 14 Oct 2025 08:25:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f3ab2fsm167461015ad.105.2025.10.14.08.25.40
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034deab27sm168883065ad.9.2025.10.14.08.25.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 08:25:40 -0700 (PDT)
+        Tue, 14 Oct 2025 08:25:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 16/20] hwmon: (max31827) Rely on subsystem locking
-Date: Tue, 14 Oct 2025 08:25:11 -0700
-Message-ID: <20251014152515.785203-17-linux@roeck-us.net>
+Subject: [PATCH 17/20] hwmon: (nct7904) Rely on subsystem locking
+Date: Tue, 14 Oct 2025 08:25:12 -0700
+Message-ID: <20251014152515.785203-18-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251014152515.785203-1-linux@roeck-us.net>
 References: <20251014152515.785203-1-linux@roeck-us.net>
@@ -80,156 +80,132 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max31827.c | 60 ++++++++++------------------------------
- 1 file changed, 14 insertions(+), 46 deletions(-)
+ drivers/hwmon/nct7904.c | 63 ++++++++++++++++-------------------------
+ 1 file changed, 24 insertions(+), 39 deletions(-)
 
-diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
-index a31c7b655da1..9b2e56c040df 100644
---- a/drivers/hwmon/max31827.c
-+++ b/drivers/hwmon/max31827.c
-@@ -10,7 +10,6 @@
- #include <linux/delay.h>
- #include <linux/hwmon.h>
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index f1e6eda949ba..2fa091720c79 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -21,7 +21,6 @@
+ #include <linux/device.h>
+ #include <linux/init.h>
  #include <linux/i2c.h>
 -#include <linux/mutex.h>
- #include <linux/of_device.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-@@ -99,7 +98,6 @@ struct max31827_state {
- 	/*
- 	 * Prevent simultaneous access to the i2c client.
- 	 */
--	struct mutex lock;
- 	struct regmap *regmap;
- 	bool enable;
- 	unsigned int resolution;
-@@ -123,30 +121,23 @@ static int shutdown_write(struct max31827_state *st, unsigned int reg,
- 	 * Before the Temperature Threshold Alarm, Alarm Hysteresis Threshold
- 	 * and Resolution bits from Configuration register are changed over I2C,
- 	 * the part must be in shutdown mode.
--	 *
--	 * Mutex is used to ensure, that some other process doesn't change the
--	 * configuration register.
- 	 */
--	mutex_lock(&st->lock);
--
- 	if (!st->enable) {
- 		if (!mask)
--			ret = regmap_write(st->regmap, reg, val);
--		else
--			ret = regmap_update_bits(st->regmap, reg, mask, val);
--		goto unlock;
-+			return regmap_write(st->regmap, reg, val);
-+		return regmap_update_bits(st->regmap, reg, mask, val);
- 	}
+ #include <linux/hwmon.h>
+ #include <linux/watchdog.h>
  
- 	ret = regmap_read(st->regmap, MAX31827_CONFIGURATION_REG, &cfg);
- 	if (ret)
--		goto unlock;
-+		return ret;
+@@ -128,7 +127,6 @@ static const unsigned short normal_i2c[] = {
+ struct nct7904_data {
+ 	struct i2c_client *client;
+ 	struct watchdog_device wdt;
+-	struct mutex bank_lock;
+ 	int bank_sel;
+ 	u32 fanin_mask;
+ 	u32 vsen_mask;
+@@ -142,24 +140,19 @@ struct nct7904_data {
+ };
  
- 	cnv_rate = MAX31827_CONFIGURATION_CNV_RATE_MASK & cfg;
- 	cfg = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
- 		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
- 	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
- 	if (ret)
--		goto unlock;
-+		return ret;
+ /* Access functions */
+-static int nct7904_bank_lock(struct nct7904_data *data, unsigned int bank)
++static int nct7904_bank_select(struct nct7904_data *data, unsigned int bank)
+ {
+ 	int ret;
  
- 	if (!mask)
- 		ret = regmap_write(st->regmap, reg, val);
-@@ -154,15 +145,11 @@ static int shutdown_write(struct max31827_state *st, unsigned int reg,
- 		ret = regmap_update_bits(st->regmap, reg, mask, val);
- 
- 	if (ret)
--		goto unlock;
-+		return ret;
- 
--	ret = regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
--				 MAX31827_CONFIGURATION_CNV_RATE_MASK,
--				 cnv_rate);
--
--unlock:
--	mutex_unlock(&st->lock);
+-	mutex_lock(&data->bank_lock);
+ 	if (data->bank_sel == bank)
+ 		return 0;
+ 	ret = i2c_smbus_write_byte_data(data->client, BANK_SEL_REG, bank);
+-	if (ret == 0)
+-		data->bank_sel = bank;
+-	else
++	if (ret < 0) {
+ 		data->bank_sel = -1;
 -	return ret;
-+	return regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
-+				  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+				  cnv_rate);
+-}
+-
+-static inline void nct7904_bank_release(struct nct7904_data *data)
+-{
+-	mutex_unlock(&data->bank_lock);
++		return ret;
++	}
++	data->bank_sel = bank;
++	return 0;
  }
  
- static int write_alarm_val(struct max31827_state *st, unsigned int reg,
-@@ -223,23 +210,13 @@ static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+ /* Read 1-byte register. Returns unsigned reg or -ERRNO on error. */
+@@ -169,12 +162,10 @@ static int nct7904_read_reg(struct nct7904_data *data,
+ 	struct i2c_client *client = data->client;
+ 	int ret;
  
- 			break;
- 		case hwmon_temp_input:
--			mutex_lock(&st->lock);
+-	ret = nct7904_bank_lock(data, bank);
+-	if (ret == 0)
+-		ret = i2c_smbus_read_byte_data(client, reg);
 -
- 			if (!st->enable) {
--				/*
--				 * This operation requires mutex protection,
--				 * because the chip configuration should not
--				 * be changed during the conversion process.
--				 */
+-	nct7904_bank_release(data);
+-	return ret;
++	ret = nct7904_bank_select(data, bank);
++	if (ret < 0)
++		return ret;
++	return i2c_smbus_read_byte_data(client, reg);
+ }
+ 
+ /*
+@@ -187,19 +178,16 @@ static int nct7904_read_reg16(struct nct7904_data *data,
+ 	struct i2c_client *client = data->client;
+ 	int ret, hi;
+ 
+-	ret = nct7904_bank_lock(data, bank);
+-	if (ret == 0) {
+-		ret = i2c_smbus_read_byte_data(client, reg);
+-		if (ret >= 0) {
+-			hi = ret;
+-			ret = i2c_smbus_read_byte_data(client, reg + 1);
+-			if (ret >= 0)
+-				ret |= hi << 8;
+-		}
+-	}
 -
- 				ret = regmap_update_bits(st->regmap,
- 							 MAX31827_CONFIGURATION_REG,
- 							 MAX31827_CONFIGURATION_1SHOT_MASK,
- 							 1);
--				if (ret) {
--					mutex_unlock(&st->lock);
-+				if (ret)
- 					return ret;
--				}
- 				msleep(max31827_conv_times[st->resolution]);
- 			}
+-	nct7904_bank_release(data);
+-	return ret;
++	ret = nct7904_bank_select(data, bank);
++	if (ret < 0)
++		return ret;
++	hi = i2c_smbus_read_byte_data(client, reg);
++	if (hi < 0)
++		return hi;
++	ret = i2c_smbus_read_byte_data(client, reg + 1);
++	if (ret < 0)
++		return ret;
++	return ret | (hi << 8);
+ }
  
-@@ -254,8 +231,6 @@ static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+ /* Write 1-byte register. Returns 0 or -ERRNO on error. */
+@@ -209,12 +197,10 @@ static int nct7904_write_reg(struct nct7904_data *data,
+ 	struct i2c_client *client = data->client;
+ 	int ret;
  
- 			ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
- 
--			mutex_unlock(&st->lock);
+-	ret = nct7904_bank_lock(data, bank);
+-	if (ret == 0)
+-		ret = i2c_smbus_write_byte_data(client, reg, val);
 -
- 			if (ret)
- 				break;
+-	nct7904_bank_release(data);
+-	return ret;
++	ret = nct7904_bank_select(data, bank);
++	if (ret < 0)
++		return ret;
++	return i2c_smbus_write_byte_data(client, reg, val);
+ }
  
-@@ -352,7 +327,6 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
- 			if (val >> 1)
- 				return -EINVAL;
- 
--			mutex_lock(&st->lock);
- 			/**
- 			 * The chip should not be enabled while a conversion is
- 			 * performed. Neither should the chip be enabled when
-@@ -361,15 +335,11 @@ static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
- 
- 			st->enable = val;
- 
--			ret = regmap_update_bits(st->regmap,
--						 MAX31827_CONFIGURATION_REG,
--						 MAX31827_CONFIGURATION_1SHOT_MASK |
--						 MAX31827_CONFIGURATION_CNV_RATE_MASK,
--						 MAX31827_DEVICE_ENABLE(val));
--
--			mutex_unlock(&st->lock);
--
--			return ret;
-+			return regmap_update_bits(st->regmap,
-+						  MAX31827_CONFIGURATION_REG,
-+						  MAX31827_CONFIGURATION_1SHOT_MASK |
-+						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
-+						  MAX31827_DEVICE_ENABLE(val));
- 
- 		case hwmon_temp_max:
- 			return write_alarm_val(st, MAX31827_TH_REG, val);
-@@ -623,8 +593,6 @@ static int max31827_probe(struct i2c_client *client)
- 	if (!st)
+ static int nct7904_read_fan(struct device *dev, u32 attr, int channel,
+@@ -1023,7 +1009,6 @@ static int nct7904_probe(struct i2c_client *client)
  		return -ENOMEM;
  
--	mutex_init(&st->lock);
--
- 	st->regmap = devm_regmap_init_i2c(client, &max31827_regmap);
- 	if (IS_ERR(st->regmap))
- 		return dev_err_probe(dev, PTR_ERR(st->regmap),
+ 	data->client = client;
+-	mutex_init(&data->bank_lock);
+ 	data->bank_sel = -1;
+ 
+ 	/* Setup sensor groups. */
 -- 
 2.45.2
 
