@@ -1,50 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5642C235F;
-	Wed, 15 Oct 2025 09:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E03C30ACE0;
+	Wed, 15 Oct 2025 09:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760519134; cv=none; b=ZCflFMVGRRIjqc4/T6jEkNiOb+PCJBYWIl1DJp8T6uEwqH3+mgZmEFBouMhbZvUkEHdKVCcOHcJ5W9OkXgZW0h2bZsQM/ftxJu4ZdbfYBjsZc7ldWYZOoccvhPBa+7jRbprTok09gcAg3+Xc28dyL9L0qXF47AERwD6G5QfWop4=
+	t=1760519294; cv=none; b=FrF6DVbfGXAYGnBYWU8XqnWrbh7if6hhHCtjzkG2hvAe6Is2LD0sKMwTclBh3+iYSYAxR8TK78REF6e3iyjvUpB/qRoGRTePmEBf2FmL1yqR5LtHgCyQSA1HZUH7r9yKexhF5kd874WVJR6xuuwMVsCDXsAyMrHYQm0H+UIKsX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760519134; c=relaxed/simple;
-	bh=ubEEufVnWuSQm0LGTyGQ86YiBsw1/5sOVCuzEyDvrC4=;
+	s=arc-20240116; t=1760519294; c=relaxed/simple;
+	bh=T5nj29Povwbfm14UALVwuvjwaIz/dm+TuXVcMVuZrO4=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=cOZ1MCvpNyK4xYAZudG89cPGvlKIskKCbtS6g2gkVeWyzJYm767JDtwF4Y63PaEUeGqGqR5c7XsnwkDRIpDd/+POiyE8NPUDAFsakJeBi+UpT77GjXSfeMhB88YYMtRUZN/uzCaDROd0+nDjIp05xjRTbAjsKTOMfBGgXJDwLrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z6RQXwVK; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version:Content-Type; b=u/vFl8WUHchVIMlP2m0O5lWuSGhCdDCcRmdzXw995vcXrtGaHoQpPbrx/2T+zfYc2UA8M3X3/m/fSqx5L1PMvtf5zU+VXJCGjJzafJV5TcR2ndwM6hbym/N7T/GnDxuNVbru0D4/8Tn9EFaNngdf9VXc9uelThpnM2mpX/fvYnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HF06BfBR; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6RQXwVK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HF06BfBR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760519132; x=1792055132;
+  t=1760519292; x=1792055292;
   h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ubEEufVnWuSQm0LGTyGQ86YiBsw1/5sOVCuzEyDvrC4=;
-  b=Z6RQXwVKldwNlA/DYXvZFAvrVMaHjGuQ+CoUAjwNdAxICtENh/snC54f
-   dCyP7O9ztv/Yi4e5BxRe/nYLD7edNLlUtW/khuNrgBnfGZzUOdR0VTvHv
-   NC4XWQlmOi0DPNAPAPVijndG2EIdyR3+rF2SO7IJ9uafRj6k0uPIQLjKx
-   Ka+KD/+J6BgZcnk/42Vxve2uZIDRSSfZ2AqM3w67D6wWfnVKdSn34aXR5
-   ZaDEdDzB/zzw7l15oXP3fZDqlJ2aAUXdFL4/d9vhfSJyIvnYOvmxP3MHX
-   bYiTXiUlSdnjZmFlOJiu+h4dtOgc0CI3UlNoTBPkiX3GdusSBkfei0mZX
-   w==;
-X-CSE-ConnectionGUID: CfxyjWHAQmu6ag06XNTQxA==
-X-CSE-MsgGUID: gBNjuT0zTAaVO9isAf6xCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="61896291"
+   references:mime-version:content-id;
+  bh=T5nj29Povwbfm14UALVwuvjwaIz/dm+TuXVcMVuZrO4=;
+  b=HF06BfBRoV/Oqi47iYMlmLzAcFGuiHlVTzMSE3Wn+4zJS+FjavnQ5+/x
+   HlUMP3REZjLT585EXxNzYDbcqwURk7XOQ6TPyXWMBGvsTzyKEcg/2xKUo
+   HnnaTm7OyFOfqxaoi7U8mva4Z+93Wy/tgivk/VOl8vgKxTbscwNi6CqDD
+   Zkw4N/6V/do0ry6Df7rePNOZxckC3j4GlkqtvkK9pJS5Cd6jYO/UdYQrs
+   vj6YzGiAfwpP/mZ8egZDkU2dthYZzxbf2nabgHndqsxRCf3mpReY+itbZ
+   i9Df2sDceL2ZHOY59BOy/yBuW/XbgGKSrURbCuUEvo/vi6BHb7X/MQrBZ
+   Q==;
+X-CSE-ConnectionGUID: v0KwBDwgRvWMTqJ1ObZOdA==
+X-CSE-MsgGUID: Kgp9mvW9R2y3n78UsJZSRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11582"; a="85306799"
 X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
-   d="scan'208";a="61896291"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 02:05:32 -0700
-X-CSE-ConnectionGUID: tXbBDd9ATSSxRn/mlMAx+w==
-X-CSE-MsgGUID: D8iNAAdjTJC2Ig8wSqm/CQ==
+   d="scan'208";a="85306799"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 02:08:12 -0700
+X-CSE-ConnectionGUID: n2WJPEPdS/uZvVUFFdgjFQ==
+X-CSE-MsgGUID: 9m3KTAFXQ3yG2R0VYEZIiw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,230,1754982000"; 
-   d="scan'208";a="181681390"
+   d="scan'208";a="182537630"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.75])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 02:05:28 -0700
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2025 02:08:08 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 15 Oct 2025 12:05:24 +0300 (EEST)
+Date: Wed, 15 Oct 2025 12:08:04 +0300 (EEST)
 To: Antheas Kapenekakis <lkml@antheas.dev>
 cc: platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
     linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
@@ -53,230 +53,208 @@ cc: platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
     Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH v2 4/6] platform/x86: ayaneo-ec: Add controller power
  and modules attributes
-In-Reply-To: <20251015084414.1391595-5-lkml@antheas.dev>
-Message-ID: <9c482e01-88be-af7e-8a73-1e07b8781354@linux.intel.com>
-References: <20251015084414.1391595-1-lkml@antheas.dev> <20251015084414.1391595-5-lkml@antheas.dev>
+In-Reply-To: <9c482e01-88be-af7e-8a73-1e07b8781354@linux.intel.com>
+Message-ID: <83ec8c7c-288f-f5dc-df9c-23094c1a21a0@linux.intel.com>
+References: <20251015084414.1391595-1-lkml@antheas.dev> <20251015084414.1391595-5-lkml@antheas.dev> <9c482e01-88be-af7e-8a73-1e07b8781354@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/mixed; BOUNDARY="8323328-356696253-1760519197=:957"
+Content-ID: <46914f32-1dcc-5bac-c137-8c5d5b95a975@linux.intel.com>
 
-On Wed, 15 Oct 2025, Antheas Kapenekakis wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> The Ayaneo 3 features hot-swappable controller modules. The ejection
-> and management is done through HID. However, after ejecting the modules,
-> the controller needs to be power cycled via the EC to re-initialize.
-> 
-> For this, the EC provides a variable that holds whether the left or
-> right modules are connected, and a power control register to turn
-> the controller on or off. After ejecting the modules, the controller
-> should be turned off. Then, after both modules are reinserted,
-> the controller may be powered on again to re-initialize.
-> 
-> This patch introduces two new sysfs attributes:
->  - `controller_modules`: a read-only attribute that indicates whether
->    the left and right modules are connected (none, left, right, both).
->  - `controller_power`: a read-write attribute that allows the user
->    to turn the controller on or off (with '1'/'0').
-> 
-> Therefore, after ejection is complete, userspace can power off the
-> controller, then wait until both modules have been reinserted
-> (`controller_modules` will return 'both') to turn on the controller.
-> 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> ---
->  .../ABI/testing/sysfs-platform-ayaneo         |  19 ++++
->  MAINTAINERS                                   |   1 +
->  drivers/platform/x86/ayaneo-ec.c              | 100 ++++++++++++++++++
->  3 files changed, 120 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo b/Documentation/ABI/testing/sysfs-platform-ayaneo
-> new file mode 100644
-> index 000000000000..1fa32ba60fd0
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-platform-ayaneo
-> @@ -0,0 +1,19 @@
-> +What:		/sys/devices/platform/<platform>/controller_power
-> +Date:		Oct 2025
-> +KernelVersion:	6.9
-> +Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
-> +Description:
-> +		Current controller power state. Allows turning on and off
-> +		the controller power (e.g. for power savings). Write 1 to
-> +		turn on, 0 to turn off. File is readable and writable.
-> +
-> +What:		/sys/devices/platform/<platform>/controller_modules
-> +Date:		Oct 2025
-> +KernelVersion:	6.9
-> +Contact:	"Antheas Kapenekakis"  <lkml@antheas.dev>
-> +Description:
-> +		Shows which controller modules are currently connected to
-> +		the device. Possible values are "left", "right" and "both".
-> +		File is read-only. The Windows software for this device
-> +		will only set controller power to 1 if both module sides
-> +		are connected (i.e. this file returns "both").
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8c4d0c26ca77..3dfa004555dd 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4191,6 +4191,7 @@ AYANEO PLATFORM EC DRIVER
->  M:	Antheas Kapenekakis <lkml@antheas.dev>
->  L:	platform-driver-x86@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-platform-ayaneo
->  F:	drivers/platform/x86/ayaneo-ec.c
->  
->  AZ6007 DVB DRIVER
-> diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-> index 23c283f5eb61..363b61fc6e12 100644
-> --- a/drivers/platform/x86/ayaneo-ec.c
-> +++ b/drivers/platform/x86/ayaneo-ec.c
-> @@ -30,9 +30,17 @@
->  #define AYANEO_CHARGE_VAL_AUTO		0xaa
->  #define AYANEO_CHARGE_VAL_INHIBIT	0x55
->  
-> +#define AYANEO_POWER_REG	0x2d
-> +#define AYANEO_POWER_OFF	0xfe
-> +#define AYANEO_POWER_ON		0xff
-> +#define AYANEO_MODULE_REG	0x2f
-> +#define AYANEO_MODULE_LEFT	BIT(0)
-> +#define AYANEO_MODULE_RIGHT	BIT(1)
-> +
->  struct ayaneo_ec_quirk {
->  	bool has_fan_control;
->  	bool has_charge_control;
-> +	bool has_magic_modules;
->  };
->  
->  struct ayaneo_ec_platform_data {
-> @@ -44,6 +52,7 @@ struct ayaneo_ec_platform_data {
->  static const struct ayaneo_ec_quirk ayaneo3 = {
->  	.has_fan_control = true,
->  	.has_charge_control = true,
-> +	.has_magic_modules = true,
->  };
->  
->  static const struct dmi_system_id dmi_table[] = {
-> @@ -262,6 +271,96 @@ static int ayaneo_remove_battery(struct power_supply *battery,
->  	return 0;
->  }
->  
-> +static ssize_t controller_power_store(struct device *dev,
-> +			    struct device_attribute *attr, const char *buf,
-> +			    size_t count)
-> +{
-> +	bool value;
-> +	int ret;
-> +
-> +	ret = kstrtobool(buf, &value);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AYANEO_POWER_OFF);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t controller_power_show(struct device *dev,
-> +			   struct device_attribute *attr, char *buf)
-> +{
-> +	int ret;
-> +	u8 val;
-> +
-> +	ret = ec_read(AYANEO_POWER_REG, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return sysfs_emit(buf, "%d\n", val == AYANEO_POWER_ON);
-> +}
-> +
-> +static DEVICE_ATTR_RW(controller_power);
-> +
-> +static ssize_t controller_modules_show(struct device *dev,
-> +				       struct device_attribute *attr, char *buf)
-> +{
-> +	bool left, right;
-> +	char *out;
-> +	int ret;
-> +	u8 val;
-> +
-> +	ret = ec_read(AYANEO_MODULE_REG, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	left = !(val & AYANEO_MODULE_LEFT);
-> +	right = !(val & AYANEO_MODULE_RIGHT);
-> +
-> +	if (left && right)
-> +		out = "both";
-> +	else if (left)
-> +		out = "left";
-> +	else if (right)
-> +		out = "right";
-> +	else
-> +		out = "none";
+--8323328-356696253-1760519197=:957
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <b6490073-06b7-01d5-49c1-ebb25deb7ea3@linux.intel.com>
 
-I suggest using switch/case for this so you don't need the internal 
-booleans at all.
+On Wed, 15 Oct 2025, Ilpo J=E4rvinen wrote:
 
-BTW, I appreciate it very much this series is split per feature, it's so 
-much less daunting to start a review when I know I can actually finish 
-before the next interruption (and having to flush context from my
-mind). :-)
+> On Wed, 15 Oct 2025, Antheas Kapenekakis wrote:
+>=20
+> > The Ayaneo 3 features hot-swappable controller modules. The ejection
+> > and management is done through HID. However, after ejecting the modules=
+,
+> > the controller needs to be power cycled via the EC to re-initialize.
+> >=20
+> > For this, the EC provides a variable that holds whether the left or
+> > right modules are connected, and a power control register to turn
+> > the controller on or off. After ejecting the modules, the controller
+> > should be turned off. Then, after both modules are reinserted,
+> > the controller may be powered on again to re-initialize.
+> >=20
+> > This patch introduces two new sysfs attributes:
+> >  - `controller_modules`: a read-only attribute that indicates whether
+> >    the left and right modules are connected (none, left, right, both).
+> >  - `controller_power`: a read-write attribute that allows the user
+> >    to turn the controller on or off (with '1'/'0').
+> >=20
+> > Therefore, after ejection is complete, userspace can power off the
+> > controller, then wait until both modules have been reinserted
+> > (`controller_modules` will return 'both') to turn on the controller.
+> >=20
+> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > ---
+> >  .../ABI/testing/sysfs-platform-ayaneo         |  19 ++++
+> >  MAINTAINERS                                   |   1 +
+> >  drivers/platform/x86/ayaneo-ec.c              | 100 ++++++++++++++++++
+> >  3 files changed, 120 insertions(+)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo
+> >=20
+> > diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo b/Document=
+ation/ABI/testing/sysfs-platform-ayaneo
+> > new file mode 100644
+> > index 000000000000..1fa32ba60fd0
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-platform-ayaneo
+> > @@ -0,0 +1,19 @@
+> > +What:=09=09/sys/devices/platform/<platform>/controller_power
+> > +Date:=09=09Oct 2025
+> > +KernelVersion:=096.9
+> > +Contact:=09"Antheas Kapenekakis" <lkml@antheas.dev>
+> > +Description:
+> > +=09=09Current controller power state. Allows turning on and off
+> > +=09=09the controller power (e.g. for power savings). Write 1 to
+> > +=09=09turn on, 0 to turn off. File is readable and writable.
+> > +
+> > +What:=09=09/sys/devices/platform/<platform>/controller_modules
+> > +Date:=09=09Oct 2025
+> > +KernelVersion:=096.9
+> > +Contact:=09"Antheas Kapenekakis"  <lkml@antheas.dev>
+> > +Description:
+> > +=09=09Shows which controller modules are currently connected to
+> > +=09=09the device. Possible values are "left", "right" and "both".
+> > +=09=09File is read-only. The Windows software for this device
+> > +=09=09will only set controller power to 1 if both module sides
+> > +=09=09are connected (i.e. this file returns "both").
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 8c4d0c26ca77..3dfa004555dd 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -4191,6 +4191,7 @@ AYANEO PLATFORM EC DRIVER
+> >  M:=09Antheas Kapenekakis <lkml@antheas.dev>
+> >  L:=09platform-driver-x86@vger.kernel.org
+> >  S:=09Maintained
+> > +F:=09Documentation/ABI/testing/sysfs-platform-ayaneo
+> >  F:=09drivers/platform/x86/ayaneo-ec.c
+> > =20
+> >  AZ6007 DVB DRIVER
+> > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ay=
+aneo-ec.c
+> > index 23c283f5eb61..363b61fc6e12 100644
+> > --- a/drivers/platform/x86/ayaneo-ec.c
+> > +++ b/drivers/platform/x86/ayaneo-ec.c
+> > @@ -30,9 +30,17 @@
+> >  #define AYANEO_CHARGE_VAL_AUTO=09=090xaa
+> >  #define AYANEO_CHARGE_VAL_INHIBIT=090x55
+> > =20
+> > +#define AYANEO_POWER_REG=090x2d
+> > +#define AYANEO_POWER_OFF=090xfe
+> > +#define AYANEO_POWER_ON=09=090xff
+> > +#define AYANEO_MODULE_REG=090x2f
+> > +#define AYANEO_MODULE_LEFT=09BIT(0)
+> > +#define AYANEO_MODULE_RIGHT=09BIT(1)
 
--- 
+Also, add include for BIT().
+
+> > +
+> >  struct ayaneo_ec_quirk {
+> >  =09bool has_fan_control;
+> >  =09bool has_charge_control;
+> > +=09bool has_magic_modules;
+> >  };
+> > =20
+> >  struct ayaneo_ec_platform_data {
+> > @@ -44,6 +52,7 @@ struct ayaneo_ec_platform_data {
+> >  static const struct ayaneo_ec_quirk ayaneo3 =3D {
+> >  =09.has_fan_control =3D true,
+> >  =09.has_charge_control =3D true,
+> > +=09.has_magic_modules =3D true,
+> >  };
+> > =20
+> >  static const struct dmi_system_id dmi_table[] =3D {
+> > @@ -262,6 +271,96 @@ static int ayaneo_remove_battery(struct power_supp=
+ly *battery,
+> >  =09return 0;
+> >  }
+> > =20
+> > +static ssize_t controller_power_store(struct device *dev,
+> > +=09=09=09    struct device_attribute *attr, const char *buf,
+> > +=09=09=09    size_t count)
+> > +{
+> > +=09bool value;
+> > +=09int ret;
+> > +
+> > +=09ret =3D kstrtobool(buf, &value);
+> > +=09if (ret)
+> > +=09=09return ret;
+> > +
+> > +=09ret =3D ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AYANEO=
+_POWER_OFF);
+> > +=09if (ret)
+> > +=09=09return ret;
+> > +
+> > +=09return count;
+> > +}
+> > +
+> > +static ssize_t controller_power_show(struct device *dev,
+> > +=09=09=09   struct device_attribute *attr, char *buf)
+> > +{
+> > +=09int ret;
+> > +=09u8 val;
+> > +
+> > +=09ret =3D ec_read(AYANEO_POWER_REG, &val);
+> > +=09if (ret)
+> > +=09=09return ret;
+> > +
+> > +=09return sysfs_emit(buf, "%d\n", val =3D=3D AYANEO_POWER_ON);
+
+Add include.
+
+--=20
  i.
 
-
-> +
-> +	return sysfs_emit(buf, "%s\n", out);
-> +}
-> +
-> +static DEVICE_ATTR_RO(controller_modules);
-> +
-> +static struct attribute *aya_mm_attrs[] = {
-> +	&dev_attr_controller_power.attr,
-> +	&dev_attr_controller_modules.attr,
-> +	NULL
-> +};
-> +
-> +static umode_t aya_mm_is_visible(struct kobject *kobj,
-> +				 struct attribute *attr, int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
-> +
-> +	if (data->quirks->has_magic_modules)
-> +		return attr->mode;
-> +	return 0;
-> +}
-> +
-> +static const struct attribute_group aya_mm_attribute_group = {
-> +	.is_visible = aya_mm_is_visible,
-> +	.attrs = aya_mm_attrs,
-> +};
-> +
-> +static const struct attribute_group *ayaneo_ec_groups[] = {
-> +	&aya_mm_attribute_group,
-> +	NULL
-> +};
-> +
->  static int ayaneo_ec_probe(struct platform_device *pdev)
->  {
->  	const struct dmi_system_id *dmi_entry;
-> @@ -303,6 +402,7 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
->  static struct platform_driver ayaneo_platform_driver = {
->  	.driver = {
->  		.name = "ayaneo-ec",
-> +		.dev_groups = ayaneo_ec_groups,
->  	},
->  	.probe = ayaneo_ec_probe,
->  };
-> 
+> > +}
+> > +
+> > +static DEVICE_ATTR_RW(controller_power);
+> > +
+> > +static ssize_t controller_modules_show(struct device *dev,
+> > +=09=09=09=09       struct device_attribute *attr, char *buf)
+> > +{
+> > +=09bool left, right;
+> > +=09char *out;
+> > +=09int ret;
+> > +=09u8 val;
+> > +
+> > +=09ret =3D ec_read(AYANEO_MODULE_REG, &val);
+> > +=09if (ret)
+> > +=09=09return ret;
+> > +
+> > +=09left =3D !(val & AYANEO_MODULE_LEFT);
+> > +=09right =3D !(val & AYANEO_MODULE_RIGHT);
+> > +
+> > +=09if (left && right)
+> > +=09=09out =3D "both";
+> > +=09else if (left)
+> > +=09=09out =3D "left";
+> > +=09else if (right)
+> > +=09=09out =3D "right";
+> > +=09else
+> > +=09=09out =3D "none";
+>=20
+> I suggest using switch/case for this so you don't need the internal=20
+> booleans at all.
+>=20
+> BTW, I appreciate it very much this series is split per feature, it's so=
+=20
+> much less daunting to start a review when I know I can actually finish=20
+> before the next interruption (and having to flush context from my
+> mind). :-)
+>=20
+>=20
+--8323328-356696253-1760519197=:957--
