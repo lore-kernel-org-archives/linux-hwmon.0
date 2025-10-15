@@ -1,129 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C047D2D46D9;
-	Wed, 15 Oct 2025 14:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B036E26561D
+	for <linux-hwmon@vger.kernel.org>; Wed, 15 Oct 2025 15:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760539907; cv=none; b=bUJYpoLE0bqpc4fpPK1n3dN+1ScHghNnxcJtWUFIW8riZl1oI+mVYSqB41AEQxzHnYeZiwcyJwghaJqb2kydcr5StFQEz8S7CwDkwa0llIcghSd+hRY5MGn1MKKFxk/m1LeuYp/REySwacIy+55m59fS9HSpx3LnNbr/f510+0s=
+	t=1760542654; cv=none; b=KHnN2LEuQn5c+NAx+evS8U9fqxcnT9v+14p1aMvXYJGWaiSEIpfyIGtS+WzBNK+LVUI21fFzI9WRSh2VdYJtQgMMGf4Tz77oBekS3CbxfVVIbVM+dd98X5ZnB7CEdwv4gt4cyJzoje9o/tjs0gjaqBRzApFYP3sD6J/obiUb1Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760539907; c=relaxed/simple;
-	bh=Xofm9tj+wJ3Qu8iS4OZpq/B4hCrDuWOs4+tl4qQIuX8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dJ27BLL5mlnJwP3RkDigtVNI4F/xPy9mQOJ1nUy9kOI8ScF0LEUPzNNiVnDzSBNKpPXIKCRsoczCDK0ZnEVaM8rJB87HsvApnxhUAS49uHobuMZEoZLe+Sj+rzprrg00KLveS7Rcz3wVv6L5X4CVFYt5G7syqtRpjEoow3XG7ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5CXtQ3h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760542654; c=relaxed/simple;
+	bh=aLlRdlh9FDUPd1JAE8xBaQc227ypKkHoxuDPxDr9ql4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iUDZv7sZVovhX+2RucsBtpqRdK4IGEnR6zEASeLIhQ6O57tJzsEsyQhvb9XdhP0RlHPmR0yM6e/XaLi+cxunqTTDkkiGkmqTtc/CInUugMuT5XmNmG5h+t9QeZzM/7p2neq0vDBIZSzjw4lglkc5HpQ0w7RaPeiTpAO28cCLqVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ih5k1QUB; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5CXtQ3h"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 581D8C4CEFB;
-	Wed, 15 Oct 2025 14:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760539907;
-	bh=Xofm9tj+wJ3Qu8iS4OZpq/B4hCrDuWOs4+tl4qQIuX8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=U5CXtQ3hj5g7waYs0kJd0p3gBkcpSs0SD13n40Rmw9VCaKC2mdRwHdDuk4t51dVsb
-	 oAnNqQDZHX+YpB5C5RooIGwK1sYh0yryXHlxD+MRm+5p3Dc827SdRy7QeiIAd8n675
-	 Yivr+NqNYOCB0U9xzJev5QP8efVaRcmkco3kFLcgUZOnIXlJIrT6IKWvpZ7LMNRrIP
-	 KCDfm4JW7O4NSyna1vvcsSdbXACHMjTNetuacxQAg2YW4B9RgRo+aLl0L+YCep4my2
-	 ISzUMgfCWcDqhAkT6BzdZ8prqXglwfVvdhPKN6zRrgO8pekR6Tr1YdqBHSAjSlTKPe
-	 x4cCcuVHwcKGg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B8DACCD194;
-	Wed, 15 Oct 2025 14:51:47 +0000 (UTC)
-From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Wed, 15 Oct 2025 15:52:21 +0100
-Subject: [PATCH 3/3] hwmon: (adt7410): Support adt7422 chip
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ih5k1QUB"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b5515eaefceso5819840a12.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 15 Oct 2025 08:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760542652; x=1761147452; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hn9avPxUFptKtiboarOpoGxvc9w+QcujEJ396q5eQtA=;
+        b=ih5k1QUBkcqYqtgLFsRSYm3xAcltkjkYyVMNP4riod5hCzyKwFgHs3ayC2N4KQL2I7
+         f9z1tj1nZo9u4pX6oaLc4boLXSyhEmk41nXZoFwhV3kwKJql5mEcCjUEyFttpDsynXiE
+         NaEi3XE4DEh1Bn7hDDIyU0CuT2dHG/OPtFLA37YaeLYYz9AdnsS63loP22lczp1zrEnr
+         zuTZFQ4WV4xBrb+zVX1Wekl7M58ohkFRLdUmxfQ/JXOVUB7iMzlE/kSsR4F5Ua/pBeLt
+         A8Nos01jXzbN1i0whfYYcuGk4ohs3lvQB/+QNhhhD+65On/SU6rrs3UXAWHI/xaDAhjw
+         Tn9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760542652; x=1761147452;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hn9avPxUFptKtiboarOpoGxvc9w+QcujEJ396q5eQtA=;
+        b=g3WDTGcrubK1grUNsKs8bN7DPVcUBTWc6rYvqI4YAMzQR5YBSwld1R/iKlLglG1seS
+         Nt8CtF2R3To3ElqOimhV8ozlqnGvK3EEFSpdMalQAq7xoFBsGHn/wAifC/7HJPRbnMSy
+         E0t9fInZMl3BKFHZgmvOyCw94cpTCHA7cBIMS2Zr7vKqx0jWRSoSOK3/4aHyxOrpACM3
+         bGsyMeLQU1Vjsn3G/WAREPvx9cqfjEWogU5le8vUcj6PgWhNTY5tkrRPX2YPMSU7KXU8
+         vhJ77fnUt8+Yyh+VFu8MvZ30Y0JQPe0qvulFJw4rPdbvblEjtLwAyXf0HWU+C82bN53S
+         OGSA==
+X-Gm-Message-State: AOJu0Ywp8CWrvV3gddUmOFYWmCW/1TgUJGeYZS4BjBOEf71rgpnfQaxs
+	ikk3KtQ/H6idYOvYIwwLxIDMGnIuotehIkkz6q7ovIItYFrPut2Iio4I
+X-Gm-Gg: ASbGnctITTc4a4FKZ8kF+FfIungKF1wN7tZ91YgOOwQTZkgb/8To+JPWNfN/qwPsHRe
+	5RU8a/+cVlQbIE/xCVhJj9WCrCpCBhOgDT25vb5J67JFh9kcMxv80TMdYk+dXJ0d7KFmedVRrrS
+	XQLOhV6ZouG7L36SBvBCGoWFFrSdMB5JYgdWen1+umGUy5Qv2wULH88nT6G6A6tbBilxOUBB0Q5
+	t1GaR6MIcWd6YAsl0UsyoIddGnILQ6bVNkhbrQPP0GrwfchQsqvg01tAmxzRdWeq9FB1o6Xrvc2
+	K2RimrDan+xN1io7XNRoLr0qxKghspWbatbcEjuExoP5CwNt5m2tSvXF7Tu9ktASMGxmL36mW7/
+	JiWA+KZPXerglBneqSFr/MeNwE5YkDm6GOb2N0L9Ey6mvAGfY1hwEmytcgOQ=
+X-Google-Smtp-Source: AGHT+IH+yHJj6xUqrD/D2julKj+3TgI0zyx5td0Q6jzoMKQ8APWTNss3bNdH/1RhbmHAbB5CH048bg==
+X-Received: by 2002:a17:903:3c66:b0:282:eea8:764d with SMTP id d9443c01a7336-290273ecb72mr398634825ad.35.1760542651777;
+        Wed, 15 Oct 2025 08:37:31 -0700 (PDT)
+Received: from crl-3.node2.local ([125.63.65.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f87b23sm201655935ad.113.2025.10.15.08.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Oct 2025 08:37:31 -0700 (PDT)
+From: Kriish Sharma <kriish.sharma2006@gmail.com>
+To: kimseer.paller@analog.com,
+	linux@roeck-us.net,
+	corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kriish Sharma <kriish.sharma2006@gmail.com>
+Subject: [PATCH] htmldocs: Documentation/hwmon/max17616.rst:4: WARNING: Title underline too short.
+Date: Wed, 15 Oct 2025 15:35:27 +0000
+Message-Id: <20251015153527.1646111-1-kriish.sharma2006@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251015-dev-add-adt7422-v1-3-7cf72d3253ad@analog.com>
-References: <20251015-dev-add-adt7422-v1-0-7cf72d3253ad@analog.com>
-In-Reply-To: <20251015-dev-add-adt7422-v1-0-7cf72d3253ad@analog.com>
-To: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- Cosmin Tanislav <demonsingur@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760539940; l=2189;
- i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=kRPkAzRSj0YVbwruCoHvC/DO1myQ3X+DgwaNSnHWKAc=;
- b=HGgxTpLGceqpY0VXpBuDmxitaHIc4idapwqTECPU49Nj7R2vD/4fxjRJSBroRvbK8gYezsVOn
- li0H5N8+OvGDzp4S1Wj14Dehk2HDM34S2fxbF4pVtbL/fIQbBhGS58I
-X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
- pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
-X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
- auth_id=100
-X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Reply-To: nuno.sa@analog.com
 
-From: Nuno Sá <nuno.sa@analog.com>
+Fix the following warning encountered when running `make htmldocs`:
 
-Add support for the ADT7422 high accuracy digital temperature sensor. It's
-identical to the other chips supported in the driver so we just need to
-add it to the ID tables.
+  Documentation/hwmon/max17616.rst:4: WARNING: Title underline too short.
 
-Co-developed-by: Cosmin Tanislav <demonsingur@gmail.com>
-Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+The underline below "Kernel driver max17616" was shorter than the title
+text, violating reStructuredText formatting rules. Extended the underline
+to match the title length.
+
+Fixes: 1fdbb3ff1233 ("Add linux-next specific files for 20251015")
+Signed-off-by: Kriish Sharma <kriish.sharma2006@gmail.com>
 ---
- drivers/hwmon/Kconfig   | 6 +++---
- drivers/hwmon/adt7410.c | 2 ++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ Documentation/hwmon/max17616.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 2760feb9f83b..aa783be9b73d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -175,7 +175,7 @@ config SENSORS_ADT7X10
- 	select REGMAP
- 	help
- 	  This module contains common code shared by the ADT7310/ADT7320 and
--	  ADT7410/ADT7420 temperature monitoring chip drivers.
-+	  ADT7410/ADT7420/ADT7422 temperature monitoring chip drivers.
+diff --git a/Documentation/hwmon/max17616.rst b/Documentation/hwmon/max17616.rst
+index 936447159f87..a3dc429048ae 100644
+--- a/Documentation/hwmon/max17616.rst
++++ b/Documentation/hwmon/max17616.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
  
- 	  If built as a module, the module will be called adt7x10.
+ Kernel driver max17616
+-====================
++======================
  
-@@ -191,12 +191,12 @@ config SENSORS_ADT7310
- 	  will be called adt7310.
+ Supported chips:
  
- config SENSORS_ADT7410
--	tristate "Analog Devices ADT7410/ADT7420"
-+	tristate "Analog Devices ADT7410/ADT7420/ADT7422"
- 	depends on I2C
- 	select SENSORS_ADT7X10
- 	help
- 	  If you say yes here you get support for the Analog Devices
--	  ADT7410 and ADT7420 temperature monitoring chips.
-+	  ADT7410, ADT7420 and ADT7422 temperature monitoring chips.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called adt7410.
-diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-index 79952866a4db..73b196a78f3a 100644
---- a/drivers/hwmon/adt7410.c
-+++ b/drivers/hwmon/adt7410.c
-@@ -91,6 +91,7 @@ static int adt7410_i2c_probe(struct i2c_client *client)
- static const struct i2c_device_id adt7410_ids[] = {
- 	{ "adt7410" },
- 	{ "adt7420" },
-+	{ "adt7422" },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, adt7410_ids);
-@@ -98,6 +99,7 @@ MODULE_DEVICE_TABLE(i2c, adt7410_ids);
- static const struct of_device_id adt7410_of_match[] = {
- 	{ .compatible = "adi,adt7410" },
- 	{ .compatible = "adi,adt7420" },
-+	{ .compatible = "adi,adt7422" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, adt7410_of_match);
-
 -- 
-2.51.0
-
+2.34.1
 
