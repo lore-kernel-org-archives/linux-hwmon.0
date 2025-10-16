@@ -1,76 +1,77 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09A52E0928
-	for <linux-hwmon@vger.kernel.org>; Thu, 16 Oct 2025 20:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D8C2DC78D
+	for <linux-hwmon@vger.kernel.org>; Thu, 16 Oct 2025 20:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760647550; cv=none; b=V3/bkpsBEuD/oFwTalx5ixGBWle+Q3lVE9FLn8A/4YWF/TRyuUqRJ1Wojq85HfIeV0laKlmbzuR0yoNd2+GeV+pVDcpiaRFpmJxE3Uf2b7I5cSjfaJ5R7kZ/OkeJp/yDMNepgAa51fSNrGmT5zJI2sqdpZzepPUHBESUrX6fq8c=
+	t=1760647581; cv=none; b=A/lPdA86weF9P1c0QACtnLAqAlMP901+Etj9rID0pkuMhVSHCrGXHVmDPScmPtsFXUT/uCfkUftBmsfDqlkAzQXb78zLMX3dkBVG/jpDUBx7ANaoHonkPyeRSgniUNmle7h67/6K8h3PZaukhftwTLQAiFwV1Os3TBCYEn0JoN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760647550; c=relaxed/simple;
-	bh=vuWYntITigM17Uxos/gnhh7/TGTP6biLwyfnGBAXwc4=;
+	s=arc-20240116; t=1760647581; c=relaxed/simple;
+	bh=0IJQhhsY21kSiG4vUShPsisj42ZivnjaHKFuaETuTtc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lU1iXUxZ62syxeJIRK4KNYHl8YmA3BP+6RtBTDKwJ84mK04WJukJ0pB5ChgkQGgO7qtEGECBUfM1gTH/xprw4r9vbyl8XTRhFevgVkC++10mkDBWUQ246bLgdUVVsDx95ahA4rCdn4PXSdGSGKmyGowrG4ibJzeVXXNOyTELmAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sc3seehl; arc=none smtp.client-ip=209.85.216.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVE3bx9ehCtq5zRAimHkXCPX+tHX2sS+RtDjiTa0OmfADe20AM5+tsEG29FLBgUDdbfk7IHneupAxG0O927xBrrHDnZC66GbglZqso19LNdDqlzonY+ucWRY2PtuMogz4oMwik4KR6RgjbE0HhAKqoc6GklHHLRObqe3Tq+RVTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iVtyg6Qf; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sc3seehl"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-33ba5d8f3bfso1155965a91.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 16 Oct 2025 13:45:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVtyg6Qf"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7835321bc98so1186052b3a.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 16 Oct 2025 13:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760647548; x=1761252348; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760647579; x=1761252379; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KacH2S0aPS0z8R+x32QNIGxVbnPy5l4NrAbTjwCBOnk=;
-        b=Sc3seehlAFFnyih+zDchRbExcYOtRqcambMNU0voht6lTgyeG9F+kEO64hU/MrgsV5
-         Bs+/HstyyEiESwo/e7GJs3LIFnJKq1fuGnxjnUypEIrMqlrl6TQUvlDPAQtyuf8pqcDE
-         X4VmiyEGiAJwdpomhOAdBNE+XCkCwPjTw5I+zMX29bpqILdAES3HOZkYOqWJ/f5E8RLa
-         eOTmmUABkQbvSz7IipsZbZLYeqMPqqY9cBRval1xVmuU0NAVQxPlrlr8BCXu0MsUXVl0
-         8Al02p7CTDJJmd8+7Mo1C0uD3rYhKaL402nkfhwJwW9lWwfJ942EN+sfljvcAnJNW/3f
-         KDTw==
+        bh=V1Ai9+Zzzmk4YgwBbS11BlzZbpFH5SUN3q8VaF2OQnw=;
+        b=iVtyg6Qfl0Bw5vOhFeDrfuWaKFwUmJpIeESeSmvi/d9RJnOpKJ7AOB9k75i1QbImEg
+         JoeZx0C45K2dNhEYnnd0CGFeQAtHPZvvbZ2pOy+qkxSPDKVRfAHA8RAe5zXT60zlyltI
+         /wOZtCJ9jK9CK+PsJwNn+Hg7ioXn9Ho5NqghwhuJMnRC/R+RALkkJvPMclFWqa0AMYep
+         GQ/3v2F6hAJyFnRvqF/LUvVWLrr22tZwzSng/JzqGIdLabiaa6WD4TOjMTQcskQ6UpkQ
+         mZytzFONbgwVQImHDCwb4FHUI4i+Xf9pQs8ZGoP40PnTHbqe0bRqYyAs7omN0515eR/0
+         UmIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760647548; x=1761252348;
+        d=1e100.net; s=20230601; t=1760647579; x=1761252379;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KacH2S0aPS0z8R+x32QNIGxVbnPy5l4NrAbTjwCBOnk=;
-        b=cMG8F946ldBrQImiHw6LHoCLp6PuRj1SbPl2Stmn9xV+ScQAn4AmHam69UeMOMf67g
-         wKKyY1n+CY6B56AXljfXmCfvUM3TAk9pxO1EZfGK9nctRSP2BM42PXPp2ZC1/nmtBoBu
-         B4mEBSJhqYg8dSY4jjx1E/VnBZEGzOY2jM0Ow9sN6XTAoxIbKcs/yJFkM07XtzcDeWWB
-         Ni/sJCwwuoeDc2uYFMJ29TlPJELVU5icIabyEn+ksARlJc+BOFRpMYDRQQLaTY3PB3ua
-         GVl6JIUkIHTP1zXbzmNAyT5iqOvBVB1fkXGX+pT3h7eux2RGRCriRA4CyC1eeW/qquo2
-         3ILA==
-X-Forwarded-Encrypted: i=1; AJvYcCUag9fhyo+QHIVy6RsOBkrcxDyM4d55DYPJ465BKWHEBcejevWmFLKkubAgQUUOUIo2b9VukrjYaGvABw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLwJxDWPjG8U/QUXZXq5cSA8vgtV6WULicF/qyZrqmusxkHwIS
-	wmV2IAPYc+Yj4Vp/5oPBUWSRYfCp9oGNAUFkIIzeLUWDrfVfTJk3CiWB
-X-Gm-Gg: ASbGncsXeNA6zbT+5XtbhPSdqQTuQYohHztFHZgg77RX7D7kQUZcp6QM3SMa6ssFrYV
-	qvnNvToTi7Pj6UmOLS0XRfY2Qer5gMFostQ//NkcCxSBNmDqBkF9o9CIkhXpDR83hYqmqD1DG5B
-	w61+9DCdHCeO+Qzl2AkgviXLcwQnsyr0MKMrG9dBxDEwYE9wsxXFp4rBj11j9q8eLYqkflMEd6b
-	Gs7Zvmg/SzCKyatBKkRiQCK5R5rFnjUtx3lNpbR/RiRKjH1L3f4dLRqIvbfb4YWXUDCMorvSeBa
-	TYq8TLlxT8Lgr7juhvncR8nd0cqqsegiW5gRJ6nLzHcE7G+1hIhrF6IncNTgZ4kXgdny/Jsqr9x
-	4yqX3dLlUA0oQ6PipKYXOnMreW9oaVrb58g91/cAN/p7IdB0rZoOatI5igEK57BA4U64g/O8tTp
-	NljCKP3s6YKL3u
-X-Google-Smtp-Source: AGHT+IHVzP7A1c3K/jJLirP2tUltPrRMNAxAH1YDsuuq4Mu78bpBc8QWu/jyNpybBNXUbtk+WWslYQ==
-X-Received: by 2002:a17:90b:3fcc:b0:33b:cb9c:6f71 with SMTP id 98e67ed59e1d1-33bcf85a9f4mr1194137a91.1.1760647548158;
-        Thu, 16 Oct 2025 13:45:48 -0700 (PDT)
+        bh=V1Ai9+Zzzmk4YgwBbS11BlzZbpFH5SUN3q8VaF2OQnw=;
+        b=RZZkAyH2whif+RdHKXgStC9lD+espJv/Ykk1ztsrhEZjfixYUqiiBdoYbwPK5FoiOa
+         tEqNy+oZ9u1bxE5PO9UU8Ra0H8h1KftGMAhh6vN0tkEjGRV8w9DPGTYIntuWZXpA48eO
+         KuZXlBHLx1yg65DmsYUotBmAxFFSBB6whiu3q6oJtXMkI3w/rUB1J/xUgeR/EYiLLPxk
+         +Y6voKPJYdEC+aK8/4PHe6KMesmV7Os9XNNBNJBvQYhyGfPnSK4UfXlL6ayNmVk1vnYZ
+         O5SsL6sApzjXDUQJIEuWFw6Xu3zxOfeLtj5QWej8t7ano8Y7lchAPtQLf6BJh3wspEoM
+         YV1g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7zFrOu+kM8flRU/m+R4rCKynILgNPEEPzDwO7O7VAzHbiopx+vXSBvay8RJaO2VzICiXTKOmfkzbgQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKn6CoE1h5youk6BoK7H9IsuJk7TAI4ea/dJOQis1H0IhB9WyQ
+	5F8JBOQRSLchVXeWwfgOsucwrru4Kt1I3ZZ5M+ZpNnzviM43yocD8GEf
+X-Gm-Gg: ASbGncsiW/OK0nS8EZ/OI1CjyiqQDP2qDBoXCgBdt+17aRz1rH1BmHQPhTrMiYxlf+y
+	A0xK+eUYbvXfznOIgpRsljp+z5wGUkO1yv1gc0B/UZyV9RAjd5eC+UB6xvgnGvxc6RzeqtwMXvT
+	yxn8QQ5iferADWi3q2gNN6qd/EYS6nfU/yc6U6KL8kxh/AvcEniQUI0PzJ8Vw99eh9owk25eRv+
+	mDWZklo2CA2UDv7ETP5z9Gf0ReE1+TDoOsf/q+1ffb9jM5wvxdC9r6mErwXBGCPcvV57wT/y9xu
+	THlBNGMAdlHXIYhmgXnUM9XXVUkN+pGYViAi/f/zPkhDP3fLt48ffH+6sa2DKxUa7W+on1Ijdky
+	sT4E8cSwLnk8wZaIhR1SQs+WmByK4l8Oss9QPCwRPGAAzbc1S4jIV41Q+y64dbG2lcDUdpGTGGm
+	Ys6j06nsAcGDq8Wi/VX7ycVNrO+wQ9TsR6yQ==
+X-Google-Smtp-Source: AGHT+IE8MMym6AutsMmdioAIvxbR54n6YIfM8R/YQDBc5KW96x9wVJXon8S103zR5uXldC9gv8jYPA==
+X-Received: by 2002:a05:6a20:a108:b0:32b:83af:11ff with SMTP id adf61e73a8af0-334a8515191mr1547559637.2.1760647579360;
+        Thu, 16 Oct 2025 13:46:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bae2739a6sm1616142a91.3.2025.10.16.13.45.47
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d09d6easm23441857b3a.51.2025.10.16.13.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 13:45:47 -0700 (PDT)
+        Thu, 16 Oct 2025 13:46:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 16 Oct 2025 13:45:46 -0700
+Date: Thu, 16 Oct 2025 13:46:18 -0700
 From: Guenter Roeck <linux@roeck-us.net>
 To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
 Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 2/3] hwmon: (adt7410): Add OF match table
-Message-ID: <f05e4643-c80a-4a64-a0c7-19b5ee3f1000@roeck-us.net>
+	Conor Dooley <conor+dt@kernel.org>,
+	Cosmin Tanislav <demonsingur@gmail.com>
+Subject: Re: [PATCH 3/3] hwmon: (adt7410): Support adt7422 chip
+Message-ID: <6a4df82a-d540-4927-8708-759680e15624@roeck-us.net>
 References: <20251015-dev-add-adt7422-v1-0-7cf72d3253ad@analog.com>
- <20251015-dev-add-adt7422-v1-2-7cf72d3253ad@analog.com>
+ <20251015-dev-add-adt7422-v1-3-7cf72d3253ad@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,16 +81,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251015-dev-add-adt7422-v1-2-7cf72d3253ad@analog.com>
+In-Reply-To: <20251015-dev-add-adt7422-v1-3-7cf72d3253ad@analog.com>
 
-On Wed, Oct 15, 2025 at 03:52:20PM +0100, Nuno Sá wrote:
+On Wed, Oct 15, 2025 at 03:52:21PM +0100, Nuno Sá wrote:
 > From: Nuno Sá <nuno.sa@analog.com>
 > 
-> Add a struct of_device_id match table to the driver.
+> Add support for the ADT7422 high accuracy digital temperature sensor. It's
+> identical to the other chips supported in the driver so we just need to
+> add it to the ID tables.
 > 
-> While at it, make sure to properly include mod_devicetable.h which is
-> also needed for struct i2c_device_id.
-> 
+> Co-developed-by: Cosmin Tanislav <demonsingur@gmail.com>
+> Signed-off-by: Cosmin Tanislav <demonsingur@gmail.com>
 > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 
 Applied.
