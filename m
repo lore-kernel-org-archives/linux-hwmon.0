@@ -1,154 +1,191 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B863314A4
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB83934F46B;
+	Fri, 17 Oct 2025 13:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706207; cv=none; b=P0mvSSX3JnO0y1ZDPIIrrUT/rYOnCINAIk3fwMMaEaTex70LpYIiYlNb0bxkhlX78sHXTdL9WS0TY/VBrzKs4+kgcLberQ/us/wu4ZU+kZUNwXkEvrC3f5+0DbTpxVGMHyQJwT0lHWmtF+gvVGXVB0rBOP/o4LRwHCU3g627M5Y=
+	t=1760707283; cv=none; b=l0DiRWROyC2ScmHyeTVAtQ9CvoonrJY9AykH3wAFpWho0KLYluwZbCjfB5m50x6xqg75/iSEJR+h+/ztNLb17RcxMRWo9Zltof8yC1ijvNAxc6vzbHwycGY3DJpKdk9rfTjyCEv4+/+nR5Mhy0zHeMHNQmQYRV4StTIMJmppsPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706207; c=relaxed/simple;
-	bh=Q8Ora9dy/otdqoA+dSCPALpO9zD9iS0SZL0S/2Bbp4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tbp33UhNsePZyK2uHUFAV2EN89/jjg3nzxQguAEI5BHRp02ifVmqV1JJZyf9P0GrPIS3lKQebx6xXF38Q/Br72jOMtPEjcBn4tQ8OQ+aw4bv0Q622avvJL0vsxWowH6MLfCplx5RqGXSznVPiU4IaPPVZS9Q1zpQR4HCWMt9H3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItjJc7j1; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1760707283; c=relaxed/simple;
+	bh=TsK5Tt2ouVurdxip4F9N9xRTQrAAUe+nydbZDh4kkR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jXovPer1XGE9i0oWcEKkKPE9H45oERvcGMttqIX3lysyrlYiLhCgjvj94GlHc9Z9HLMtsocHGpP6+x3pCDjfLMQcfu1CZVYUF/LXetWft0/CdKTRT4Sbl3PM/WYzgNf3YpCSPP8mRcDi1U0sSw3KI4y8BcxTPxbCIwyywRP0Azo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WO0rcs1L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItjJc7j1"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-290dc63fabbso6576845ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706205; x=1761311005; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7d2+IQvWeWA402dN/h4+dAhkQys205EkiicrvQqMh7Y=;
-        b=ItjJc7j1pQ1esTCXiOaEa8IyZ4QgjWq11kREQwRAhe34qCMiPG7P4G4kWGUL92FvIT
-         PHP9TDGfNKGm03Fa0lRfH5HXs7e7OaRajAjsNN0UY8eaVsUtp6xmrU16EN9ghBK4UINR
-         yFR0n/WwkyR8d4dkeXl+4BbS8+DyT45CyNgRuZNzbutW4Wotfu44acg7L8jWGP/V3tLb
-         mp/dld5uuNMrPO13Aku1dOGCl4NRw6AfPsFGhZc/bN+5AbH0CgBCf4jhn/dWDW1ARblH
-         tqTmpZwyaliofxJ6lEvW2pERK6xdeAMIH5amEMmBWlGneSueEsxYYsNpB80jYan/ZnBW
-         0gvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706205; x=1761311005;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7d2+IQvWeWA402dN/h4+dAhkQys205EkiicrvQqMh7Y=;
-        b=bp8neJkNgw2CNYU6pnLjvvaX/fhT9OacEY8qw3KbpC/RnawuSKltGYvpYAI08re9eu
-         u3yj+fLz9xRU5+q3n2XgOps/j+IIuKoX6I27NHnE90WrGbuOiWtwvD9djOmP5H5F0JPe
-         cJTi2xb6lfOQM/qGh3A232PfRIMcCw/z2GEStITH9B6Fll/IZH50nEMqX9nVYgKXcU+k
-         a5WwSVjhx1EMFsV7V+GYfM4QKCHWZNHcO8a3vwzoAnz8xhh+gZqPRC9uKnySvI4+0l4u
-         7iRrKBj4uHI3f9ZXT3AZFDltMu+Y0lsuvjikgrwoDM+Ko9DWg0qXV9benf+Q5sHMtL9d
-         Ba4w==
-X-Gm-Message-State: AOJu0Yx9j4Bkk7HaeHREyCj/t5VSGQ2XiZhnPiR1HJ1cNZOAR3CST50m
-	Dq4IpuxgRcpp6Uux6vukDFmv5yYTJJuSFA4F9cQ6pkYowVazbfgtps3Vr4R1jg==
-X-Gm-Gg: ASbGncu7Rk6B3jlS2+AdjU0263WZf1pphc0tUv8/1+WckId2kWH895K2fwb2vcDXYhT
-	qOYfsrG1uOXVjLWUh0bRXq39Rp6tAyYHbDoHC+RiRMn67UmRaEDhrc7wlmIrk+NdbbCXNwy/ES1
-	uV3rdid79gsh42G8eYb6fTZvJivcAk8EUBFmyrsd3IwyzV1sRpLIiI0p8PomlvKuIlY6s4nYOZb
-	2LQLZdUxpHg1pxBP6HkPTbaSLDCyDzd+/iyeaZfwxzvIDVEXRpAgYmKZ9HOgsl8A87E0jQMZ8RQ
-	LHxfksoTtJCgy1V6RtuNVzSYko9zLZRQ0B6ivs77HKgLTlWuXeFuuJDTRSO4xd5JMfpKgCY9lVL
-	K2Xga6ExJBc/X0XKNXqQ69sulUCQtx24PLufLVm/lIyzVMR/iGvnp80FNIerxpm6elRva8mxopy
-	WIscfSDqJWeNMqxCw6V+EIkL0=
-X-Google-Smtp-Source: AGHT+IGOsiUeqpLONkY2hccEjnK25gV1T6lK/AduhuP4XFCb6L1UjrTjLlW5stT8UYECsVAiYeaokw==
-X-Received: by 2002:a17:903:46d0:b0:26a:b9b4:8342 with SMTP id d9443c01a7336-290c9cf2ca2mr47677165ad.25.1760706204763;
-        Fri, 17 Oct 2025 06:03:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29099aba3fcsm63275515ad.99.2025.10.17.06.03.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:03:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 29/29] hwmon: (corsair-psu) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:02:21 -0700
-Message-ID: <20251017130221.1823453-30-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
-References: <20251017130221.1823453-1-linux@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WO0rcs1L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD3EC4CEE7;
+	Fri, 17 Oct 2025 13:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1760707282;
+	bh=TsK5Tt2ouVurdxip4F9N9xRTQrAAUe+nydbZDh4kkR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WO0rcs1LB08EtrlI4UYOZp3vA2LU4PF6GUqMUMIpmEXqmoXG3Qcm749CWSEMtRx21
+	 yd1cGcnjGwOdTi+mZWhyxu/7KjiFh8ulKGdwL02YJnjsySVFFQu9HMse0CT5qdfDbQ
+	 MZ11xTjtf2Wz3cpg9lhgccKHoyKXK7QAQW5csdhc=
+Date: Fri, 17 Oct 2025 15:21:18 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "Farber, Eliav" <farbere@amazon.com>
+Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+	"jdike@addtoit.com" <jdike@addtoit.com>,
+	"richard@nod.at" <richard@nod.at>,
+	"anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"tony.luck@intel.com" <tony.luck@intel.com>,
+	"qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>,
+	"mchehab@kernel.org" <mchehab@kernel.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"rric@kernel.org" <rric@kernel.org>,
+	"harry.wentland@amd.com" <harry.wentland@amd.com>,
+	"sunpeng.li@amd.com" <sunpeng.li@amd.com>,
+	"alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+	"christian.koenig@amd.com" <christian.koenig@amd.com>,
+	"airlied@linux.ie" <airlied@linux.ie>,
+	"daniel@ffwll.ch" <daniel@ffwll.ch>,
+	"evan.quan@amd.com" <evan.quan@amd.com>,
+	"james.qian.wang@arm.com" <james.qian.wang@arm.com>,
+	"liviu.dudau@arm.com" <liviu.dudau@arm.com>,
+	"mihail.atanassov@arm.com" <mihail.atanassov@arm.com>,
+	"brian.starkey@arm.com" <brian.starkey@arm.com>,
+	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
+	"mripard@kernel.org" <mripard@kernel.org>,
+	"tzimmermann@suse.de" <tzimmermann@suse.de>,
+	"robdclark@gmail.com" <robdclark@gmail.com>,
+	"sean@poorly.run" <sean@poorly.run>,
+	"jdelvare@suse.com" <jdelvare@suse.com>,
+	"linux@roeck-us.net" <linux@roeck-us.net>,
+	"fery@cypress.com" <fery@cypress.com>,
+	"dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+	"agk@redhat.com" <agk@redhat.com>,
+	"snitzer@redhat.com" <snitzer@redhat.com>,
+	"dm-devel@redhat.com" <dm-devel@redhat.com>,
+	"rajur@chelsio.com" <rajur@chelsio.com>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+	"alexandre.torgue@st.com" <alexandre.torgue@st.com>,
+	"joabreu@synopsys.com" <joabreu@synopsys.com>,
+	"mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+	"malattia@linux.it" <malattia@linux.it>,
+	"hdegoede@redhat.com" <hdegoede@redhat.com>,
+	"mgross@linux.intel.com" <mgross@linux.intel.com>,
+	"intel-linux-scu@intel.com" <intel-linux-scu@intel.com>,
+	"artur.paszkiewicz@intel.com" <artur.paszkiewicz@intel.com>,
+	"jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+	"clm@fb.com" <clm@fb.com>,
+	"josef@toxicpanda.com" <josef@toxicpanda.com>,
+	"dsterba@suse.com" <dsterba@suse.com>,
+	"xiang@kernel.org" <xiang@kernel.org>,
+	"chao@kernel.org" <chao@kernel.org>,
+	"jack@suse.com" <jack@suse.com>, "tytso@mit.edu" <tytso@mit.edu>,
+	"adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+	"dushistov@mail.ru" <dushistov@mail.ru>,
+	"luc.vanoostenryck@gmail.com" <luc.vanoostenryck@gmail.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"pmladek@suse.com" <pmladek@suse.com>,
+	"sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
+	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+	"linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+	"minchan@kernel.org" <minchan@kernel.org>,
+	"ngupta@vflare.org" <ngupta@vflare.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
+	"yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+	"pablo@netfilter.org" <pablo@netfilter.org>,
+	"kadlec@netfilter.org" <kadlec@netfilter.org>,
+	"fw@strlen.de" <fw@strlen.de>,
+	"jmaloy@redhat.com" <jmaloy@redhat.com>,
+	"ying.xue@windriver.com" <ying.xue@windriver.com>,
+	"willy@infradead.org" <willy@infradead.org>,
+	"sashal@kernel.org" <sashal@kernel.org>,
+	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>,
+	"David.Laight@aculab.com" <David.Laight@aculab.com>,
+	"herve.codina@bootlin.com" <herve.codina@bootlin.com>,
+	"Jason@zx2c4.com" <Jason@zx2c4.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"kbusch@kernel.org" <kbusch@kernel.org>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"bvanassche@acm.org" <bvanassche@acm.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+	"freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>,
+	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+	"linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
+	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+	"coreteam@netfilter.org" <coreteam@netfilter.org>,
+	"tipc-discussion@lists.sourceforge.net" <tipc-discussion@lists.sourceforge.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Isabella Basso <isabbasso@riseup.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Sander Vanheule <sander@svanheule.net>,
+	Vlastimil Babka <vbabka@suse.cz>, Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH v2 01/27 5.10.y] overflow, tracing: Define the
+ is_signed_type() macro once
+Message-ID: <2025101740-scion-flavoring-3a21@gregkh>
+References: <20251017090519.46992-1-farbere@amazon.com>
+ <20251017090519.46992-2-farbere@amazon.com>
+ <2025101708-obtuse-ellipse-e355@gregkh>
+ <CH0PR18MB54337BD648C23CBE40C1060CC6F6A@CH0PR18MB5433.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CH0PR18MB54337BD648C23CBE40C1060CC6F6A@CH0PR18MB5433.namprd18.prod.outlook.com>
 
-Attribute access is now serialized in the hardware monitoring core,
-so locking in the driver code is no longer necessary. Drop it.
+On Fri, Oct 17, 2025 at 12:16:27PM +0000, Farber, Eliav wrote:
+> > On Fri, Oct 17, 2025 at 09:04:53AM +0000, Eliav Farber wrote:
+> > > From: Bart Van Assche <bvanassche@acm.org>
+> > >
+> > > [ Upstream commit 92d23c6e94157739b997cacce151586a0d07bb8a ]
+> >
+> > This isn't in 5.15.y, why is it needed in 5.10.y?
+> 
+> This is the mainline commit:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/overflow.h?h=v6.18-rc1&id=92d23c6e94157739b997cacce151586a0d07bb8a
+> 
+> The commit hash is 92d23c6e94157739b997cacce151586a0d07bb8a, which is
+> the one I used for the backport.
+> 
+> And here is the corresponding commit in the 5.15.y branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/include/linux/overflow.h?h=v5.15.194&id=ed6e37e30826b12572636c6bbfe6319233690c90
+> However, the commit message there references a different hash:
+> a49a64b5bf195381c09202c524f0f84b5f3e816f.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/npcm750-pwm-fan.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+Ugh, that hash is invalid, I missed that :(
 
-diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-index 802c73def428..c8f5e695fb6d 100644
---- a/drivers/hwmon/npcm750-pwm-fan.c
-+++ b/drivers/hwmon/npcm750-pwm-fan.c
-@@ -4,7 +4,6 @@
- #include <linux/clk.h>
- #include <linux/device.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -198,7 +197,6 @@ struct npcm7xx_pwm_fan_data {
- 	int pwm_modules;
- 	struct clk *pwm_clk;
- 	struct clk *fan_clk;
--	struct mutex pwm_lock[NPCM7XX_PWM_MAX_MODULES];
- 	spinlock_t fan_lock[NPCM7XX_FAN_MAX_MODULE];
- 	int fan_irq[NPCM7XX_FAN_MAX_MODULE];
- 	bool pwm_present[NPCM7XX_PWM_MAX_CHN_NUM];
-@@ -221,7 +219,6 @@ static int npcm7xx_pwm_config_set(struct npcm7xx_pwm_fan_data *data,
- 	/*
- 	 * Config PWM Comparator register for setting duty cycle
- 	 */
--	mutex_lock(&data->pwm_lock[module]);
- 
- 	/* write new CMR value  */
- 	iowrite32(val, NPCM7XX_PWM_REG_CMRx(data->pwm_base, module, pwm_ch));
-@@ -245,7 +242,6 @@ static int npcm7xx_pwm_config_set(struct npcm7xx_pwm_fan_data *data,
- 		env_bit = NPCM7XX_PWM_CTRL_CH3_INV_BIT;
- 		break;
- 	default:
--		mutex_unlock(&data->pwm_lock[module]);
- 		return -ENODEV;
- 	}
- 
-@@ -260,8 +256,6 @@ static int npcm7xx_pwm_config_set(struct npcm7xx_pwm_fan_data *data,
- 	}
- 
- 	iowrite32(tmp_buf, NPCM7XX_PWM_REG_CR(data->pwm_base, module));
--	mutex_unlock(&data->pwm_lock[module]);
--
- 	return 0;
- }
- 
-@@ -932,8 +926,8 @@ static int npcm7xx_pwm_fan_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct device *hwmon;
- 	char name[20];
--	int ret, cnt;
- 	u32 output_freq;
-+	int ret;
- 	u32 i;
- 
- 	np = dev->of_node;
-@@ -985,9 +979,6 @@ static int npcm7xx_pwm_fan_probe(struct platform_device *pdev)
- 	output_freq = npcm7xx_pwm_init(data);
- 	npcm7xx_fan_init(data);
- 
--	for (cnt = 0; cnt < data->pwm_modules; cnt++)
--		mutex_init(&data->pwm_lock[cnt]);
--
- 	for (i = 0; i < NPCM7XX_FAN_MAX_MODULE; i++) {
- 		spin_lock_init(&data->fan_lock[i]);
- 
--- 
-2.45.2
+Thanks for the info, I'll go work on queueing these up.
 
+greg k-h
