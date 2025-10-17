@@ -1,70 +1,70 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3E333031A
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A7933031A
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706188; cv=none; b=GNzT/KcKJKxc3p+L/RDo1PEQ4aG8I2p6mbmompFPTGtNsiBXH5+4+CAz1WXBKvzO+SIMy4Fq29TrTcRphOZ18KhybxpC7Ng6RFdeovcPJ6rSaFARTB+K5a3qtC2V/ZFmhS6Vfyxi4eJHfhGFaJiZYwGvm6F0plR3XTLMvO0KDBE=
+	t=1760706190; cv=none; b=AsuPo4rK3odi9fQKm2m2gkCdg6Drwzn6EVy4aTb0x36jwR2MCGNdtZy3j1kjq3wE6DDRIrPCK2VGi1F0zuJmuNfChIb29zpuzW6/ynB2CikpuqTFNUJzZW9IIMlmghICSeamWgPjdAbno8D1+ES1ERiNZ7r/tifMfiluBCnNyVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706188; c=relaxed/simple;
-	bh=U2O8/q/g/QyNlXNHnUFKVxifBfdumZM1+ixrQHh/xj8=;
+	s=arc-20240116; t=1760706190; c=relaxed/simple;
+	bh=OrpR3rlxs2VTYW0vFM/x0doSgZXzegwGhp68KWLpCNc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TnlwV0oSP4C8GLuviQmNf0PyvDZoh+VFj/Xef7+PHcSZwTtjs0SDzBAZLf3yl0ZUydpgerEBOb0e5C33keo6fAPb8TFKJ7FmNJqA9RWBK0G7h9o+9TdzVekHevdZW8chF7mQUYJybT2raTNQe6sRe/DZ2BP/SRllsxnfqpu0a8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUDolY7h; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=Pg09LV4sh1gE2YVRm8KZr5xqjFmW59cjA8FNYQizB7Lt02DsNFE3ai7in33v6kOAxBCpFUJKj0CxoHMhfOMAAi+6YRurhy1hA2EtH7U9ooC6FiS+9WVSCud6f/9z+nSipow+XbDyOEuma13eKF/cT0RlYWV4Op7s1m7NHD8OXtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfrGGLT7; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUDolY7h"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7835321bc98so1836522b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfrGGLT7"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7835321bc98so1836555b3a.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706186; x=1761310986; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706188; x=1761310988; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WgtYvp8tIqdiLUM0tHatcALpZ+WXPf9Psdjq0FO3MdY=;
-        b=lUDolY7hC/VFkr4K603U/hhxRzwKaLtPcGcHzAvsB3zas9YsquewO6OZcDfATcR+JZ
-         iAD8QPOPZffzDV8352YXZ80w6TwZ+wlWjV0AtQkGqMZ93iybw9fvOxVDQggvyPbSejLz
-         +dFoO9aOueCVbwivms4hCqyPA7DJe8BTqGxuI9vkWdwMrCswLmuWDMMxGWwRimcGmgXP
-         aNXc+Ly05C5OCxMhr75oeWqdboM3WDMVXgnsKZWehlwYq/w9v8uXhKqX79Rlb0otTBBo
-         +uGTfhQnTIHZgY4C8GnOjn056FefruchDe+fKlsOpf74BPHSaZmiceBz/NUo39TyBcBo
-         vBBg==
+        bh=AG+WZwGbwQKWGxl8VYiVKTQqiiVm7JN1K4s+2Hen9D8=;
+        b=dfrGGLT7UrSQjN+9ka9HQCPcUSb78D9g0yBavqcvZD1LTUri/b1jFVW0qJoEf1/BUJ
+         fMkedul2Hii8U964FiZ+rUuilk/yabNa/JjraMTzw6NGarCtPTGb/wTfxO60XGvD7kSo
+         4/iqHoOOW8c+zFCSXBhiaQ+SSX32BAwj9sHsSrPbBDgLCVEwd3hrVQNAp7r+xDUBcoWi
+         wLUHu9k3d6vkh26U3sofHmajg4B8lkxlHy5DNDAZSIFjIQl/Fs8u31mYDthuNpHoMqxs
+         HANd5AFHSqbBTTt7DRD4pQDVo2AvlltZbUT3g3NMhGYT02QftpY+Cv8aOmusfedsOGt/
+         jd/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706186; x=1761310986;
+        d=1e100.net; s=20230601; t=1760706188; x=1761310988;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WgtYvp8tIqdiLUM0tHatcALpZ+WXPf9Psdjq0FO3MdY=;
-        b=HFbjlZwZbvQVly1zUG0yqm1gjN2qDB6DyQ4n90mvDnKt8WkM9TdK4YG8IW/Re3xGSg
-         7loIRfnQLTInE+Ig4j7YHgTiCOy0xM77eX1grqaVQd4EzDHXBWiMW3wejEyse2ZWyv2n
-         L0dtJXl8ZvDqD3R0ltvK0cZkwQEmV1cTHairThQ90DK5xiEzzyXI8+uEM37L0ZpE3r6p
-         A8Nuw1633h95c6gCkBoCziHOnZrWHpfP/TPIdXu0Mv0abXY0+A4zshPD3wnp/XS+DAvd
-         G5FvsH0nhkNrLE3FY+Fi6drsY+7rXHgEso+l3N8xP8EbL5GIaGH8/EYmmfVHSIP8RaRJ
-         PRPA==
-X-Gm-Message-State: AOJu0YzhhBetc7Bv0+FX9RYDgGCO9l3rarnA7DIRYQwmAzT6zBU+4iUX
-	QyTVEMAjJfv+UimSQyDCUbXOOCETkg7FWsE6hS76T2bxx5Pu5Sq5SZwm7sF9FQ==
-X-Gm-Gg: ASbGncvA2Sq95U4p4QzOAtQ+i84Im7J5Lw22BRe4cY6T8tfXflWvrU2sjRxSzEZ75hO
-	L6Q2OF8iysxKezh7zQWJsLcrAooWYHbo19CFFgWLyTr2qXgDMSuQi/TViWWRYNc3EuynMonrHVX
-	aSFqXNWm0QrpZhThwiUDFwmetQ361tFb0JzoD8x+eoL1kIR7swYBm6MCGvBUmy7rZ+9CaKTZ3cN
-	Vc4H9JrHtx9qaka3KqvO+o5nhMIbYWaiXK1kpl7ZHMJi9C1ue9+/MGkkcl/7PwgwhinlXFSsd7N
-	f4T8bWwcPuaG5wFnGdndHmWmBHlx6xmJNXTra7t7XXzo+f5+/8wfFjz3NVTR0lpdnkgWsop8V4f
-	KrE2of9bPbgyaOZQdExNiDLdVhBvq43WCvk/t0IAZiZ5OvDcR/F3wzhbUxOLXG5uCy/T8SA7izs
-	foAYoCxhyio7xXiZxNsQSGIK4=
-X-Google-Smtp-Source: AGHT+IEYeDQbhEjwBisk0UIF/XF1ES+ZLEydXvf6OpXCyEpkVET5ifSJ5T/YdF4AUVR1Qc1cOoJUJw==
-X-Received: by 2002:a05:6a00:4614:b0:78c:984b:7a92 with SMTP id d2e1a72fcca58-7a220a859eemr4861551b3a.12.1760706185660;
-        Fri, 17 Oct 2025 06:03:05 -0700 (PDT)
+        bh=AG+WZwGbwQKWGxl8VYiVKTQqiiVm7JN1K4s+2Hen9D8=;
+        b=wPV6j1dz/GHsbLIMAcYnEADhjLtl3JQffGEb0Bh77SUtmzIfW2bZzx2fxIO9R190UF
+         JA5iXKXfl+mTEjluZ/yVw/MYxx7JExV5ZcL3gFHrnFrXJIJbhnfUUJDG0UJTY1gSp0ny
+         9xQkRhPwkqh0qsJ7MWwnND5IuwW90s8udiQg4smHwPm9tjasrZzdVDMSYg4r6nJ0Ibos
+         Z+pR+BUkh6Jeqqw4Y4BcZtzZeY4r6uAlqO+jVVax97yMSeGdXSn2VVJZ6pDz2Bp3C3Yw
+         u464ew3u5LHeYE/r47zS+QJg7uvees+1otu8Dl0fDPpnqccVq1afk5ZCiCGVfMH9T+sE
+         cSdg==
+X-Gm-Message-State: AOJu0YypFOWqZB1G2/c9MrLfRDDydWCAwYba/LwXFuVQ7OSIaY/BnCgN
+	S9HR8xoN4GHPES+AGboDA9TSsoDaWsAxM2eIWc9GWwvNfthTW/QkOd63mZFH2Q==
+X-Gm-Gg: ASbGncsu7hjHyGfjawJFWSpePVM4dnvvMufHkWCK7aYZeynxD1qU9fIOdhOU7iXXoIM
+	TM7Z0vvkY4ZLp0DIy7ZzOSTo98pbzGQSSZgCOUXW4AtnhRgRYLnInCIZiEhjAAU3jkftBUqwAoA
+	YxNHJpa8c35kqobhhHb4Qz7IxDc+9Ux8MqKF+NY86lK6sgjzY93YYoxkuO6UNIHCCpRcnHZ9BtI
+	BYE95kSOnd+tUCwlME3hICzUAHLV6CJTnGpLXWjw4sJZW6RV19g+gvFpLJFG4z8fhtWbUm0goVm
+	tdZ7QZoCqwKnApBGOXZSWVGcZfNFfxba1LMc4Ad6QFXaoFTymxK+4Ima+IA9LdWfYqcHWdAzWwr
+	XkieLsnWrRvNwUmF+LL15ZSRhy/80/jFKxdZ2MG6tEVkCTn9fK4CyCWkUW6TT3X4oe5bxfvJVR8
+	zhQGVbX3KSLjrI
+X-Google-Smtp-Source: AGHT+IE3sbTvtmbs7O1VamJT739Hh0uwm3s62N3dLSIO0IcZTXP/KNcEjY/Q4Y4x2/D3pZOHbX3BOg==
+X-Received: by 2002:a17:903:1250:b0:290:dd1f:3d60 with SMTP id d9443c01a7336-290dd1f3fc8mr16984285ad.51.1760706187813;
+        Fri, 17 Oct 2025 06:03:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d09ace5sm25881017b3a.53.2025.10.17.06.03.04
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29099aa32c4sm63717975ad.79.2025.10.17.06.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:03:04 -0700 (PDT)
+        Fri, 17 Oct 2025 06:03:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 19/29] hwmon: (adt7x10) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:02:11 -0700
-Message-ID: <20251017130221.1823453-20-linux@roeck-us.net>
+Subject: [PATCH 20/29] hwmon: (sfctemp) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:02:12 -0700
+Message-ID: <20251017130221.1823453-21-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,97 +81,121 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/adt7x10.c | 27 +++++----------------------
- 1 file changed, 5 insertions(+), 22 deletions(-)
+ drivers/hwmon/sfctemp.c | 36 ++++++++----------------------------
+ 1 file changed, 8 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 2d329391ed3f..d003ee3ebf06 100644
---- a/drivers/hwmon/adt7x10.c
-+++ b/drivers/hwmon/adt7x10.c
-@@ -15,7 +15,6 @@
- #include <linux/jiffies.h>
+diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
+index fb1da93383d7..b78b2c099a12 100644
+--- a/drivers/hwmon/sfctemp.c
++++ b/drivers/hwmon/sfctemp.c
+@@ -10,7 +10,6 @@
  #include <linux/hwmon.h>
- #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
 -#include <linux/mutex.h>
- #include <linux/delay.h>
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
-@@ -55,7 +54,6 @@
- /* Each client has this additional data */
- struct adt7x10_data {
- 	struct regmap		*regmap;
--	struct mutex		update_lock;
- 	u8			config;
- 	u8			oldconfig;
- 	bool			valid;		/* true if temperature valid */
-@@ -137,17 +135,13 @@ static int adt7x10_temp_read(struct adt7x10_data *data, int index, long *val)
- 	unsigned int regval;
- 	int ret;
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
+@@ -49,8 +48,6 @@
+ #define SFCTEMP_K1000	81100L
  
--	mutex_lock(&data->update_lock);
- 	if (index == adt7x10_temperature && !data->valid) {
- 		/* wait for valid temperature */
- 		ret = adt7x10_temp_ready(data->regmap);
--		if (ret) {
--			mutex_unlock(&data->update_lock);
-+		if (ret)
- 			return ret;
--		}
- 		data->valid = true;
- 	}
--	mutex_unlock(&data->update_lock);
+ struct sfctemp {
+-	/* serialize access to hardware register and enabled below */
+-	struct mutex lock;
+ 	void __iomem *regs;
+ 	struct clk *clk_sense;
+ 	struct clk *clk_bus;
+@@ -92,15 +89,14 @@ static void sfctemp_stop(struct sfctemp *sfctemp)
  
- 	ret = regmap_read(data->regmap, ADT7X10_REG_TEMP[index], &regval);
+ static int sfctemp_enable(struct sfctemp *sfctemp)
+ {
+-	int ret = 0;
++	int ret;
+ 
+-	mutex_lock(&sfctemp->lock);
+ 	if (sfctemp->enabled)
+-		goto done;
++		return 0;
+ 
+ 	ret = clk_prepare_enable(sfctemp->clk_bus);
  	if (ret)
-@@ -159,13 +153,8 @@ static int adt7x10_temp_read(struct adt7x10_data *data, int index, long *val)
+-		goto err;
++		return ret;
+ 	ret = reset_control_deassert(sfctemp->rst_bus);
+ 	if (ret)
+ 		goto err_disable_bus;
+@@ -115,9 +111,7 @@ static int sfctemp_enable(struct sfctemp *sfctemp)
+ 	sfctemp_power_up(sfctemp);
+ 	sfctemp_run(sfctemp);
+ 	sfctemp->enabled = true;
+-done:
+-	mutex_unlock(&sfctemp->lock);
+-	return ret;
++	return 0;
  
- static int adt7x10_temp_write(struct adt7x10_data *data, int index, long temp)
+ err_disable_sense:
+ 	clk_disable_unprepare(sfctemp->clk_sense);
+@@ -125,16 +119,13 @@ static int sfctemp_enable(struct sfctemp *sfctemp)
+ 	reset_control_assert(sfctemp->rst_bus);
+ err_disable_bus:
+ 	clk_disable_unprepare(sfctemp->clk_bus);
+-err:
+-	mutex_unlock(&sfctemp->lock);
+ 	return ret;
+ }
+ 
+ static int sfctemp_disable(struct sfctemp *sfctemp)
+ {
+-	mutex_lock(&sfctemp->lock);
+ 	if (!sfctemp->enabled)
+-		goto done;
++		return 0;
+ 
+ 	sfctemp_stop(sfctemp);
+ 	sfctemp_power_down(sfctemp);
+@@ -143,8 +134,6 @@ static int sfctemp_disable(struct sfctemp *sfctemp)
+ 	reset_control_assert(sfctemp->rst_bus);
+ 	clk_disable_unprepare(sfctemp->clk_bus);
+ 	sfctemp->enabled = false;
+-done:
+-	mutex_unlock(&sfctemp->lock);
+ 	return 0;
+ }
+ 
+@@ -155,22 +144,14 @@ static void sfctemp_disable_action(void *data)
+ 
+ static int sfctemp_convert(struct sfctemp *sfctemp, long *val)
  {
 -	int ret;
 -
--	mutex_lock(&data->update_lock);
--	ret = regmap_write(data->regmap, ADT7X10_REG_TEMP[index],
--			   ADT7X10_TEMP_TO_REG(temp));
--	mutex_unlock(&data->update_lock);
+-	mutex_lock(&sfctemp->lock);
+-	if (!sfctemp->enabled) {
+-		ret = -ENODATA;
+-		goto out;
+-	}
++	if (!sfctemp->enabled)
++		return -ENODATA;
+ 
+ 	/* calculate temperature in milli Celcius */
+ 	*val = (long)((readl(sfctemp->regs) & SFCTEMP_DOUT_MSK) >> SFCTEMP_DOUT_POS)
+ 		* SFCTEMP_Y1000 / SFCTEMP_Z - SFCTEMP_K1000;
+ 
+-	ret = 0;
+-out:
+-	mutex_unlock(&sfctemp->lock);
 -	return ret;
-+	return regmap_write(data->regmap, ADT7X10_REG_TEMP[index],
-+			    ADT7X10_TEMP_TO_REG(temp));
++	return 0;
  }
  
- static int adt7x10_hyst_read(struct adt7x10_data *data, int index, long *val)
-@@ -197,22 +186,17 @@ static int adt7x10_hyst_write(struct adt7x10_data *data, long hyst)
- 	unsigned int regval;
- 	int limit, ret;
+ static umode_t sfctemp_is_visible(const void *data, enum hwmon_sensor_types type,
+@@ -263,7 +244,6 @@ static int sfctemp_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
--	mutex_lock(&data->update_lock);
--
- 	/* convert absolute hysteresis value to a 4 bit delta value */
- 	ret = regmap_read(data->regmap, ADT7X10_T_ALARM_HIGH, &regval);
- 	if (ret < 0)
--		goto abort;
-+		return ret;
+ 	dev_set_drvdata(dev, sfctemp);
+-	mutex_init(&sfctemp->lock);
  
- 	limit = ADT7X10_REG_TO_TEMP(data, regval);
- 
- 	hyst = clamp_val(hyst, ADT7X10_TEMP_MIN, ADT7X10_TEMP_MAX);
- 	regval = clamp_val(DIV_ROUND_CLOSEST(limit - hyst, 1000), 0,
- 			   ADT7X10_T_HYST_MASK);
--	ret = regmap_write(data->regmap, ADT7X10_T_HYST, regval);
--abort:
--	mutex_unlock(&data->update_lock);
--	return ret;
-+	return regmap_write(data->regmap, ADT7X10_T_HYST, regval);
- }
- 
- static int adt7x10_alarm_read(struct adt7x10_data *data, int index, long *val)
-@@ -344,7 +328,6 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
- 	data->regmap = regmap;
- 
- 	dev_set_drvdata(dev, data);
--	mutex_init(&data->update_lock);
- 
- 	/* configure as specified */
- 	ret = regmap_read(regmap, ADT7X10_CONFIG, &config);
+ 	sfctemp->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(sfctemp->regs))
 -- 
 2.45.2
 
