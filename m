@@ -1,70 +1,70 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0542D9EFE
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 061AB2D9EFE
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706166; cv=none; b=CM/tNb0YQmpgOKMsIavLPGwSFBD33wznuCN2G9lzI/yDf+DO6IFvLwB2HR3/cLxjtojqKmN5SqZeBr41l0r6HFWKPwcYlzfILiohhpkq0paVqx5YraSOWaSXWKbzuTD1g0GtypHEwxrArHO029oEQayRjMuotF0DjXV4r15/8sM=
+	t=1760706168; cv=none; b=ECYEo/afugrPJWtPTHDUlrp8DlErc4qRbkBbCtoFPvssx6pn/hbvOqW1aYTK3VKs0AdyCQ5NMJwJ9Hld0NoQyVmIgjFJYNeAAbbSx5UJPCM2xv0m/OcLTVRNAMjFecO8a96QbzLb6z34/+n9TNdWdNgHKYaOV2Y7GWlEUVdkmpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706166; c=relaxed/simple;
-	bh=O4ZEBZHMbaZZxNZE1zrEOE/IU136OlWaoL/a8WL8NXY=;
+	s=arc-20240116; t=1760706168; c=relaxed/simple;
+	bh=gqWktWIQYQFBvC9Qn4CftIdwVyWrPxG+dpyFSkLr6tk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gij3YzK+Z4S5/iaW5WTUy9gWg4yM0C4L5WIsOIN3do7XbGDYu61slDJnCQ4FiCzEjjWqQ5UaTjnJJvS5AErHj/Nv11VEvcPE+FjGH4eTUxthjBeJxbGG4Spe2lVEb6B2yjSMEnQuCAn1JA8wZg6GvRj4u41/9zK3JXyYdnNNPU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dcm6qwY/; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=sUD6ftE9FhX2Kis+FRfyRLRHCjneNnr4YtTpENnGUZaBc/RiZjhk4/uuKcbveQUQ1Q/wM3unXDHJAhwXBOyWQo44SckdBhabDXaT1LaY6MdzbgimKRSOFp3J3cl+ArzE0Nr62dcN/m5QO+CkUAftFuC9o0OpGTDmyyfZTzdJzFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPMU3Y54; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcm6qwY/"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-33b8a8aa73bso1747073a91.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPMU3Y54"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b556284db11so1599250a12.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706164; x=1761310964; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706166; x=1761310966; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LeqcW731KJVenONbIrarcyM2S3esaQb4ChlqBvu2bUc=;
-        b=dcm6qwY/XahIYJpozgmJYBvIT7wC9juel5y55nrWDlAyzJVtGXplsHtQlgXR/8o8Nr
-         yZNjgzfbqpXrXgo1uR9EY2GboLfkWLr45SjraxyPt1ksVpgiSdrKi6KI9uNkOKGbJnQ2
-         7kjocJ2/Dy5S+f6h/EMdOLnQD3Zm0Q4uExYVlAPXctZSSSk7pwbdEiu9u3oD1ScVUHzQ
-         SQLjt6AxS2jvbURiYc+jKIMsqh32yNZ057qyauEw08NiRLXm9y8nRQo2tJ0mNoSySL/d
-         hnVnWqgtCKakNZ1OJ3jlOCjbiJEgSExV6isa73QQTxLZdmqATvEowWfueTtz9Nj5s4Vm
-         mRsw==
+        bh=GYj3ZN/9jEj85cRHSIlThXmyNR5kIiv1kUV8AP+CgTs=;
+        b=YPMU3Y54gaHuInROF8s4TzGNBWpEYwwJpWxojKutASYzOU3SphxUS+XKuyXI98yTeb
+         Ba0xq2tBDFor6OC+NCS8c0Rf/6UR/3phfaJbObTSrqTMIVAmgv8MO3VAWpSea31WMwv6
+         +UYsWbeTL1b6wDSbNNSpXOsq8dwPVaqPZE1MFaaOVqrTsictjDvG/lfJ3kT2iLh63yuT
+         uYg7TNRdEAFiENrNK5WNtgjspckU5XQ5CpB/BSCh7zj2xA3GhB375htb3AGq7YRHKZ0f
+         L4lY5rZg7xEgLuJ0HJqNv+r9sG2jCVcrOMEjQKIzYZj3FORSpOk/VdilN78UkU+5mDQP
+         mMiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706164; x=1761310964;
+        d=1e100.net; s=20230601; t=1760706166; x=1761310966;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LeqcW731KJVenONbIrarcyM2S3esaQb4ChlqBvu2bUc=;
-        b=dSG5QSMTICb2Jvi7T2593VJr47rtCvousw7MGu2HcsIk/2TOGk94Eyl4gu5wskWb3F
-         WKuj5WIUpBx+11pLUA5AUnkLwzkbcx8PXT18U58XzqPbABGdQIySoASJ5vU6Lrbw5nFd
-         2ISSzWSfFWDEB3MkyabpmgA6Jfw51A9rLSkCeoNNLTcKaBmXkANZbMvxXuSm294bZjQv
-         EoarQihBnsUrH0PA58/qlb7D2jvAEnZ5kCT1/3RgV7RvYpoNY1mml/kGtcAot9sAKyQq
-         RKJibgPUJTEL/1zT8etxFb9lcL3jhp/LeHxHdLSBTbm264aB+jCuxT58P+7PLHk/94WJ
-         e4TA==
-X-Gm-Message-State: AOJu0Yxa5pRkfW3g1zs96pREjZXZsGCK395+aj7LPRQGtzEW1+IWXX9m
-	95P9xuwsF9UFubQVxGwKYbSmnTiBQfcRWkZyJxdV2h02X2cO/bgTqOXjLb29TQ==
-X-Gm-Gg: ASbGncs4Zib0lHajsokj0cnvRFhnuK18KZvtTkvTY6Mm3pUC4yvUi2VBy4FTlq3ecnk
-	H14AQiMJcwKLStcQ++QnUG+FTYpb5xlqtN8xNqV9FmYtIi2mhF8YuBdJVD76HgOeCiIkPcpyiwL
-	eUm9qdBtpBQFQzBgP6SvRwFqdaUKGS0HFVJbPpu21UYvczjvW6IVGktp+I4RLB+CJCF6liQZk4G
-	0loK081+rB7iYOnJcf9fDH/SfhqBSIIRioZcA73FtM60q8VxLcj1OxFKtgqsjuxYlV3hKFuktDj
-	a9KQzu4mkmXlQ1Nf9NjWFTyeuAz4C1tnS8zcNISon2ospiGKZ2e+BYooV2sS64OxVPEF34kmDPg
-	GhEQfSpLPijS33nvxllCh9yabmJkeapX9s8GDN7+OzGxOOiDdBG9THzJCrxbye0gfIzxvQ5d+eU
-	hFNgz62pPtpZBx/h3JaTonQkJ/f3qRBajwMg==
-X-Google-Smtp-Source: AGHT+IFtBPSKpWVhXZBPoYMzQMXEI5urZ07Wl0ajcdv2pNjicebh2C4HWhr1g7Rofx3WI1m6ynLrug==
-X-Received: by 2002:a17:90b:1dc6:b0:339:a4ef:c8b9 with SMTP id 98e67ed59e1d1-33bcf8e61admr4833971a91.17.1760706163653;
-        Fri, 17 Oct 2025 06:02:43 -0700 (PDT)
+        bh=GYj3ZN/9jEj85cRHSIlThXmyNR5kIiv1kUV8AP+CgTs=;
+        b=t798NtAjjEuo4YAYmIVaw31YUQjt5Vk2+NgkMv6rCXJ0H/vGnATTRe/EiPtCyGGBoS
+         xfkpI3jZNRh91xcYLWwBtD/j8V4jBhZPufbjoqc5W8n1Hg6qOwjx6groSdPQ5gmnydKN
+         SXjzf2TSMIsGOz1/SJ+sK03fwwTzxWVFw6SfMjv2tU5HV5GxEckM8yq14xo0FNoKbJrP
+         /zaEYAcNX/YP4eq51BMsk7leDXp23raV7oz/J/ERtbd/YAMKU6FWA0Jk1ftytI7AUVGJ
+         hrUZdOr2Jf/84dOlYjjQ63Q1Jn9MGnvRZLgliRyQp+7kd8KrDXTmSH/g623qFXKfHxHf
+         in6A==
+X-Gm-Message-State: AOJu0Yy5HIQjWDZm/SX36jcSGslCtbmShgMlfU/oItWeocGNDryPL8Nc
+	B1VfPVrQ970jVUbiJ2aqU/0XUapHQ1MNbdI1tcOjmbB6FmqXdIxeQIuDpFMPrg==
+X-Gm-Gg: ASbGncs/NmaGW/yoTRWZAOqfeoTAOGGM1QtN3Jaj+xMfkOW19r3XCosXSzhYhs5c6tD
+	39P4C5zeKio+WE9AxlX2TWXxkX4tx4Kn9z61D1RnbIuEQidY8M5VHBLZExS/yjXpw+y8lXmuLIY
+	jVtrGsUQm2qSWXu9Vo3uqP48aEODiuhwT1qVBUqrOq4ciH4RIoBA5fFYQfg+46+jm3HX0dR3K0e
+	f1MqcsDXLkEfHZd3OzkVrtaG3GxJesHmmX7PeG0iYmNJAFiUkMxZW6Q3a3swXDGs9owxSU2G5KX
+	IEn9Civ2XLXix++yYtWWWxesq+n5sbedrK6CRUewDC41bavsTReF3dVdou6YlTmBfRf/d0V/BPc
+	CJ+4KKHtzkGjN5noueqd0l3BZ8KR6ragD52/A3rkhZh1X2p86oWXFLGRH9Sy4AeNSJDaTpSBhIM
+	dbxG/Ycu3F930pUoTAccsAQQw=
+X-Google-Smtp-Source: AGHT+IEH3C803vuppRt8mtsPtWtZiqpBmRZjzHJaR3HskKY+ETif2ok1mht9yQhsrOaccY3Mhig/Nw==
+X-Received: by 2002:a17:903:1746:b0:269:a4ed:13c9 with SMTP id d9443c01a7336-290caf85146mr41757195ad.30.1760706165691;
+        Fri, 17 Oct 2025 06:02:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bd7b401e5sm2822345a91.20.2025.10.17.06.02.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29099a7d1bbsm63844705ad.65.2025.10.17.06.02.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:02:42 -0700 (PDT)
+        Fri, 17 Oct 2025 06:02:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 07/29] hwmon: (sht4x) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:01:59 -0700
-Message-ID: <20251017130221.1823453-8-linux@roeck-us.net>
+Subject: [PATCH 08/29] hwmon: (ina3221) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:02:00 -0700
+Message-ID: <20251017130221.1823453-9-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,136 +81,105 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/sht4x.c | 40 +++++++++++-----------------------------
- 1 file changed, 11 insertions(+), 29 deletions(-)
+ drivers/hwmon/ina3221.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
-diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-index 6c9b776237c2..5abe1227e109 100644
---- a/drivers/hwmon/sht4x.c
-+++ b/drivers/hwmon/sht4x.c
-@@ -55,7 +55,6 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
- /**
-  * struct sht4x_data - All the data required to operate an SHT4X chip
-  * @client: the i2c client associated with the SHT4X
-- * @lock: a mutex that is used to prevent parallel access to the i2c client
-  * @heating_complete: the time that the last heating finished
-  * @data_pending: true if and only if there are measurements to retrieve after heating
-  * @heater_power: the power at which the heater will be started
-@@ -68,7 +67,6 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
-  */
- struct sht4x_data {
- 	struct i2c_client	*client;
--	struct mutex		lock;	/* atomic read data updates */
- 	unsigned long		heating_complete;	/* in jiffies */
- 	bool			data_pending;
- 	u32			heater_power;	/* in milli-watts */
-@@ -87,7 +85,7 @@ struct sht4x_data {
-  */
- static int sht4x_read_values(struct sht4x_data *data)
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index ce0e3f214f5b..5ecc68dcf169 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -11,7 +11,6 @@
+ #include <linux/hwmon-sysfs.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+@@ -115,7 +114,6 @@ struct ina3221_input {
+  * @regmap: Register map of the device
+  * @fields: Register fields of the device
+  * @inputs: Array of channel input source specific structures
+- * @lock: mutex lock to serialize sysfs attribute accesses
+  * @reg_config: Register value of INA3221_CONFIG
+  * @summation_shunt_resistor: equivalent shunt resistor value for summation
+  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
+@@ -126,7 +124,6 @@ struct ina3221_data {
+ 	struct regmap *regmap;
+ 	struct regmap_field *fields[F_MAX_FIELDS];
+ 	struct ina3221_input inputs[INA3221_NUM_CHANNELS];
+-	struct mutex lock;
+ 	u32 reg_config;
+ 	int summation_shunt_resistor;
+ 	u32 summation_channel_control;
+@@ -530,11 +527,8 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+ static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long *val)
  {
--	int ret = 0;
-+	int ret;
- 	u16 t_ticks, rh_ticks;
- 	unsigned long next_update;
- 	struct i2c_client *client = data->client;
-@@ -96,8 +94,6 @@ static int sht4x_read_values(struct sht4x_data *data)
- 	u8 raw_data[SHT4X_RESPONSE_LENGTH];
- 	unsigned long curr_jiffies;
+-	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
  
--	mutex_lock(&data->lock);
+-	mutex_lock(&ina->lock);
 -
- 	curr_jiffies = jiffies;
- 	if (time_before(curr_jiffies, data->heating_complete))
- 		msleep(jiffies_to_msecs(data->heating_complete - curr_jiffies));
-@@ -110,11 +106,11 @@ static int sht4x_read_values(struct sht4x_data *data)
- 			msecs_to_jiffies(data->update_interval);
- 
- 		if (data->valid && time_before_eq(jiffies, next_update))
--			goto unlock;
-+			return 0;
- 
- 		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
- 		if (ret < 0)
--			goto unlock;
-+			return ret;
- 
- 		usleep_range(SHT4X_MEAS_DELAY_HPM, SHT4X_MEAS_DELAY_HPM + SHT4X_DELAY_EXTRA);
+ 	switch (type) {
+ 	case hwmon_chip:
+ 		ret = ina3221_read_chip(dev, attr, val);
+@@ -550,20 +544,14 @@ static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
+ 		ret = -EOPNOTSUPP;
+ 		break;
  	}
-@@ -123,7 +119,7 @@ static int sht4x_read_values(struct sht4x_data *data)
- 	if (ret != SHT4X_RESPONSE_LENGTH) {
- 		if (ret >= 0)
- 			ret = -ENODATA;
--		goto unlock;
-+		return ret;
- 	}
- 
- 	t_ticks = raw_data[0] << 8 | raw_data[1];
-@@ -132,26 +128,20 @@ static int sht4x_read_values(struct sht4x_data *data)
- 	crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
- 	if (crc != raw_data[2]) {
- 		dev_err(&client->dev, "data integrity check failed\n");
--		ret = -EIO;
--		goto unlock;
-+		return -EIO;
- 	}
- 
- 	crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
- 	if (crc != raw_data[5]) {
- 		dev_err(&client->dev, "data integrity check failed\n");
--		ret = -EIO;
--		goto unlock;
-+		return -EIO;
- 	}
- 
- 	data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
- 	data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
- 	data->last_updated = jiffies;
- 	data->valid = true;
--	ret = 0;
 -
--unlock:
--	mutex_unlock(&data->lock);
--	return ret;
-+	return 0;
+-	mutex_unlock(&ina->lock);
+-
+ 	return ret;
  }
  
- static ssize_t sht4x_interval_write(struct sht4x_data *data, long val)
-@@ -287,22 +277,16 @@ static ssize_t heater_enable_store(struct device *dev,
- 		heating_time_bound = 1100;
- 	}
+ static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
+ 			 u32 attr, int channel, long val)
+ {
+-	struct ina3221_data *ina = dev_get_drvdata(dev);
+ 	int ret;
  
--	mutex_lock(&data->lock);
+-	mutex_lock(&ina->lock);
 -
--	if (time_before(jiffies, data->heating_complete)) {
--		ret = -EBUSY;
--		goto unlock;
--	}
-+	if (time_before(jiffies, data->heating_complete))
-+		return -EBUSY;
- 
- 	ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
- 	if (ret < 0)
--		goto unlock;
-+		return ret;
- 
- 	data->heating_complete = jiffies + msecs_to_jiffies(heating_time_bound);
- 	data->data_pending = true;
--unlock:
--	mutex_unlock(&data->lock);
--	return ret;
-+	return 0;
+ 	switch (type) {
+ 	case hwmon_chip:
+ 		ret = ina3221_write_chip(dev, attr, val);
+@@ -579,9 +567,6 @@ static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
+ 		ret = -EOPNOTSUPP;
+ 		break;
+ 	}
+-
+-	mutex_unlock(&ina->lock);
+-
+ 	return ret;
  }
  
- static ssize_t heater_power_show(struct device *dev,
-@@ -422,8 +406,6 @@ static int sht4x_probe(struct i2c_client *client)
- 	data->heater_time = 1000;
- 	data->heating_complete = jiffies;
+@@ -886,7 +871,6 @@ static int ina3221_probe(struct i2c_client *client)
+ 	}
  
--	mutex_init(&data->lock);
+ 	ina->pm_dev = dev;
+-	mutex_init(&ina->lock);
+ 	dev_set_drvdata(dev, ina);
+ 
+ 	/* Enable PM runtime -- status is suspended by default */
+@@ -925,7 +909,6 @@ static int ina3221_probe(struct i2c_client *client)
+ 	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
+ 	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
+ 		pm_runtime_put_noidle(ina->pm_dev);
+-	mutex_destroy(&ina->lock);
+ 
+ 	return ret;
+ }
+@@ -941,8 +924,6 @@ static void ina3221_remove(struct i2c_client *client)
+ 	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
+ 	for (i = 0; i < INA3221_NUM_CHANNELS; i++)
+ 		pm_runtime_put_noidle(ina->pm_dev);
 -
- 	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
+-	mutex_destroy(&ina->lock);
+ }
  
- 	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
+ static int ina3221_suspend(struct device *dev)
 -- 
 2.45.2
 
