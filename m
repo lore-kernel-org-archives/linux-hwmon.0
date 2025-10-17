@@ -1,70 +1,70 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A068330321
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9787D33031A
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706175; cv=none; b=ZhHE4SeaeCzPuUc8/yVl6wsnfpqnBD7WLaKe/KWhk4LpVkEB6zoF73g5G9jK1LOt5vI3wXMLs0I58UAb0Zypm/afnxx8n4zghH6onHDi2Au/6jijOBLvt0hGbyNxIu+sxwGGGHoZIe3U0F70NulZAFgg4AtuCZzucd6bNzzI0G0=
+	t=1760706178; cv=none; b=fWhyfnurVVGjBLeh0VV4MHTAdK2XMqPsCOdf/fI6dVL5YjyF88k4ZWVA68vSrd2Yj06/ISqLPqBwVk0OmRncv9SGn4EqA7QTRkkmIQACWe0coHrZkt+A69a2c73XSXJwQeCdsEQb6P+qjG8v3XfVjxVKzAqrM+sIQi0udPKBkFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706175; c=relaxed/simple;
-	bh=8Sf8D36ZLaWJrQxwKgGtTbraIQ4mqNJZMpaRAv9+6T4=;
+	s=arc-20240116; t=1760706178; c=relaxed/simple;
+	bh=l76COyJtbwlzqr92ckcHfVUPBKNbj4IVuiwhag1jao8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmgN3V+f6BTuIcsH6WNxZBFV+sCbnQkd6uF8Y99FpSSFYskar1ry5TlEhfdSx5HvLRbqQv4dokuzwzhEPZykFK4Qlt5DtJBJYXQO61HixElfg4h80pHdy1E37bfAPqN9cmrIrgbib/HtEUl3rt5jz3hEMJvNwstjlf6Uu49V6yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FhCnbFW1; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=fmbgK4g9i4gzqBQj9/o66HxdOAZnDr5w9yWVDXKwOR1IAw4Nk/272w9tAej55xNgrfuIPWVDVddfSCAwvN8bOLmK9R5CLS1/PxIVZ4DMzW+j0nZuDbWwYGBtEY965xsG1nNfObR8iuckRTsqjJ9BeZK3k44aHYtTQJnz5Hg56IQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kytulJ/J; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhCnbFW1"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-33c4252c3c5so460374a91.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kytulJ/J"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7835321bc98so1836334b3a.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706173; x=1761310973; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706175; x=1761310975; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2+eetnSJdNq/Jy+XVIRFj+LNmAlWyhcd7FgKjqOeq5c=;
-        b=FhCnbFW1LtFodoK4Irzhil4nfnH7axzWzS4tb+29nCiIw3FXYAY4MDOs+r1BHr1GiD
-         eqQPmaafse2PzxmDqxg8P5I6ZInq7U7vi2AjCXuYc4eDtSmAxQHWKgGbMRGQUUIlQoYf
-         Ge7skOd39/yy40XuFZHietKybH/ZQZ/OVyC3mk6+srFmnEQOAlf1NdV9TXTrg8RjWXHm
-         CPM8ojOQte6y91B86pj4lV8XGLALfOcz4cZ/+2FALXkqjSk+iL95wb1DGocbOlujUNdr
-         ewQaO17x5ynYjj1Uo5B711yOqBZkFvoNTRnhBiXjF8/AgTtx2HGd93RF5l5pOZVViVNT
-         H+Hg==
+        bh=L/3M4r1uVuF01TT9kaJp0vYBZzTZMEuTDO1kBW8/94Y=;
+        b=kytulJ/JIsPHeN62f+o3PTZIze+uWL+kuGeGP7cmLAYmBvBWYLEG0vHIFiusSrifgq
+         eZmHOWpa/gVd8K0R2MIDsCA6/gqgfdt2i3XyXsL/1wsPD7Uk90o7jtknmR98KHpJ4zkn
+         R0kTKDKS+lT5EJK4IguciGr7VfuSM4Yx/60v/yeNlF0BxiSOTylTQnDt7atOVPyopnFd
+         o+bjXv+fQfkL9FrYGFDD5SYaL9813k9ly6hGyUCKYZxlX9oly0yr1WRjOpZl3d2i+WJm
+         LN/9kFq7yjmm+IyHIKoCq6GTgznmeO75y+1ErFiuYIAViQn6AxRN6ltjHoCRbeM7+IKf
+         FwZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706173; x=1761310973;
+        d=1e100.net; s=20230601; t=1760706175; x=1761310975;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2+eetnSJdNq/Jy+XVIRFj+LNmAlWyhcd7FgKjqOeq5c=;
-        b=co41q5n1SJFBDYeWlxSNe0nkh4Th2UHPTOk6abcdc+Ys7oYGZ2XTdLYGQu0/q20Ruz
-         7XPgH7cHvb4NO7CxoraYS9ekFZpI7PLMvB1OWO70ixofKpuHscV9zfbMlZ5OpryyETER
-         1bqatzLIRrkdtPEN6IC/y+88zeMxUhgJqaE61TLpLnaMCt8T6RI2DAPDr/t+ETpHJudo
-         MQPX4YcmsR+7PvLCRL+xXoWum/ydpzAwjfmvTnpvqfqAkUT60DUbG/zWYtPKk79laqI9
-         nTM8RVxYBbwXfgUkPplByzlyHwJgTi9pukqm+vy3JY2eFtACThqEpwrXZRVmqV+dxC13
-         PDZA==
-X-Gm-Message-State: AOJu0YyAo+t1P5zvQaAa90a8TCH8CtDm+fFOMY+/wSnQCLY5zurwasgt
-	gvkP8eaH5INWzEuABCGBD82srcMW37Imk3LZ0kAT12ofK9yMS5r+f8cW+SKn9A==
-X-Gm-Gg: ASbGncut08AHH9W6LekarTgxrMRpoe53/mUDitsEwojweDlQC3SijdsjG9eICerjmBC
-	zETfQhP0HvbTTuOZQrS++iQAPYLax/wlICp1IOSe7aoWsph/7OxOmth0H3Wiy4QYSESOePlxRcU
-	UzkGqgYVq5r2LXepcd2tRU55mOtdLTGLGct3c3xa3qt6K6Acmf0R/yy+PkE5RG0ZI1TdbMNDZ30
-	UMhYXbfZ97qrn7UQy2eFaJ003I4XSuP5S42J8+eahVZ6x8KfXMo2VQkGU/XQLAwfqMiJOTVEmW3
-	dfW6iuLya3nACXZueihNgw/VMTUyRbOraoZwwhE+aSh0WLv2A1JBsdPt9PcrT7vQLHKSP7W/U6/
-	13PHIQdju7ZCPTKii0yImXWhqmsU0WtmLtJnqaP0sNRepc7vwkht32R/12skULs5Yf6Df6fzjIq
-	Twzsgwejf9Ojx3BZfMPO4qsOw=
-X-Google-Smtp-Source: AGHT+IFcczgkOxeor7A1URfI25Qap6o13No4BkgGksfGSUGnQy/xiymwhzjZEFZyZuxnu8flIaDyzw==
-X-Received: by 2002:a17:90b:3f0c:b0:334:e020:2f16 with SMTP id 98e67ed59e1d1-33bcf8800e9mr3972027a91.11.1760706173009;
-        Fri, 17 Oct 2025 06:02:53 -0700 (PDT)
+        bh=L/3M4r1uVuF01TT9kaJp0vYBZzTZMEuTDO1kBW8/94Y=;
+        b=UpSZ5fMWEqDvIeDict/zX697rTVMIyxdDuNUbfbNx3R+iSkvi9yhOlMUj7oGNNYebc
+         cYCAmbpoRYOafnFg1y1vIYNmqD8JAIM8mG8UpaOJZIlKskI7G7+93x8heqhszzF5F9j9
+         8TVSxtLH8VqI0nzxQJMAQZL178z3NLpB+jl3Dqw1lYT+BE8iVBLHURNmLOrODSWjFBxu
+         eY7p7demG++pZjlekI5fVtlu8oQUWSPxYAn/iVeJXOhS3FXT/TA40jPs7soVN8/2kUa7
+         T7pLOjaKNPcg71e69opVi+ETfLRe8A/ecvsetbRBGD+ZmYe9wzVlwUBMDZOgFyaZGYMK
+         WtIw==
+X-Gm-Message-State: AOJu0YykuADB/pLtzBj5epanvBDnjC+bwI8zaRaZwFC9AmMhw9XQbtnx
+	V99Voxzm7xm19vBc5fZfURcvCAQyHITD6tRzJbAcnygfWa+cxq07y1sTbS+RIQ==
+X-Gm-Gg: ASbGncvjYxV9jTf9Q8Oup9mANZCzGy9U/Px1Z5N3PqE6Suc0m2Ppx+QYooYtjk0l1qz
+	6U8w51qeRa4NDS610leiMu7NSFM6FucHTblQwGjO8Apu3h3yS+Zu9xX7Q2DX5HUxFYv0basfAdn
+	s7NA7pP2OGqavknIr21JPlxnl6IItm3DyYH5qhjzdwSvlAjVykoqsl6qtwWnaBYMfcl4ksYA7t7
+	n+wL16YdX9aSGaQsnQ+zUJlr2a34mG88oTFG/HZENppJCLEfPYMrcKxTRqtN1Wb92l96urUdyC3
+	jwE62WBRe/7XqeT0hRSkWR1IzsCMOUmFjAclRc+P6N6zoQA0qCITj1x1NjKt7D3iZqee7Mwu4Ja
+	sMmLNqsS3x0Jllo/PL0wEIifbWE90CS9ZkSHtCqcgmzR0tcY4IUg4KwWMR1frDQm2nFWvibJvU9
+	3taoUp8CyZ4YUEArdVyw69pt4=
+X-Google-Smtp-Source: AGHT+IHkn34rUUFZ8sY89SrKvCrMR1gygn7pAt++E4XmG3a0YOaK4ceZgw4gtygN9OTTKYuoXYQSzQ==
+X-Received: by 2002:a05:6a00:1808:b0:78a:f45f:8740 with SMTP id d2e1a72fcca58-7a220b16a0cmr4491258b3a.19.1760706174649;
+        Fri, 17 Oct 2025 06:02:54 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bcfc12f82sm1269678a91.12.2025.10.17.06.02.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992bc12a8asm25667370b3a.34.2025.10.17.06.02.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:02:52 -0700 (PDT)
+        Fri, 17 Oct 2025 06:02:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 12/29] hwmon: (ftsteutates) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:02:04 -0700
-Message-ID: <20251017130221.1823453-13-linux@roeck-us.net>
+Subject: [PATCH 13/29] hwmon: (ina238) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:02:05 -0700
+Message-ID: <20251017130221.1823453-14-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,222 +81,67 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ftsteutates.c | 84 +++++++++++--------------------------
- 1 file changed, 25 insertions(+), 59 deletions(-)
+ drivers/hwmon/ina238.c | 26 +++++---------------------
+ 1 file changed, 5 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-index 8aeec16a7a90..08dcc6a7fb62 100644
---- a/drivers/hwmon/ftsteutates.c
-+++ b/drivers/hwmon/ftsteutates.c
-@@ -12,7 +12,6 @@
- #include <linux/jiffies.h>
- #include <linux/math.h>
- #include <linux/module.h>
--#include <linux/mutex.h>
- #include <linux/slab.h>
- #include <linux/watchdog.h>
- 
-@@ -62,10 +61,6 @@ enum WATCHDOG_RESOLUTION {
- 
- struct fts_data {
+diff --git a/drivers/hwmon/ina238.c b/drivers/hwmon/ina238.c
+index 356d19b7675c..ff67b03189f7 100644
+--- a/drivers/hwmon/ina238.c
++++ b/drivers/hwmon/ina238.c
+@@ -117,7 +117,6 @@ struct ina238_config {
+ struct ina238_data {
+ 	const struct ina238_config *config;
  	struct i2c_client *client;
--	/* update sensor data lock */
--	struct mutex update_lock;
--	/* read/write register lock */
--	struct mutex access_lock;
- 	unsigned long last_updated; /* in jiffies */
- 	struct watchdog_device wdd;
- 	enum WATCHDOG_RESOLUTION resolution;
-@@ -98,21 +93,15 @@ static int fts_read_byte(struct i2c_client *client, unsigned short reg)
+-	struct mutex config_lock;
+ 	struct regmap *regmap;
+ 	u32 rshunt;
+ 	int gain;
+@@ -607,31 +606,18 @@ static int ina238_read(struct device *dev, enum hwmon_sensor_types type,
+ static int ina238_write(struct device *dev, enum hwmon_sensor_types type,
+ 			u32 attr, int channel, long val)
  {
- 	int ret;
- 	unsigned char page = reg >> 8;
--	struct fts_data *data = dev_get_drvdata(&client->dev);
+-	struct ina238_data *data = dev_get_drvdata(dev);
+-	int err;
 -
--	mutex_lock(&data->access_lock);
- 
- 	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
- 	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
- 	if (ret < 0)
--		goto error;
-+		return ret;
- 
- 	reg &= 0xFF;
- 	ret = i2c_smbus_read_byte_data(client, reg);
- 	dev_dbg(&client->dev, "read - reg: 0x%.02x: val: 0x%.02x\n", reg, ret);
+-	mutex_lock(&data->config_lock);
 -
--error:
--	mutex_unlock(&data->access_lock);
- 	return ret;
- }
- 
-@@ -121,22 +110,16 @@ static int fts_write_byte(struct i2c_client *client, unsigned short reg,
- {
- 	int ret;
- 	unsigned char page = reg >> 8;
--	struct fts_data *data = dev_get_drvdata(&client->dev);
--
--	mutex_lock(&data->access_lock);
- 
- 	dev_dbg(&client->dev, "page select - page: 0x%.02x\n", page);
- 	ret = i2c_smbus_write_byte_data(client, FTS_PAGE_SELECT_REG, page);
- 	if (ret < 0)
--		goto error;
-+		return ret;
- 
- 	reg &= 0xFF;
- 	dev_dbg(&client->dev,
- 		"write - reg: 0x%.02x: val: 0x%.02x\n", reg, value);
- 	ret = i2c_smbus_write_byte_data(client, reg, value);
--
--error:
--	mutex_unlock(&data->access_lock);
- 	return ret;
- }
- 
-@@ -145,44 +128,40 @@ static int fts_write_byte(struct i2c_client *client, unsigned short reg,
- /*****************************************************************************/
- static int fts_update_device(struct fts_data *data)
- {
--	int i;
--	int err = 0;
-+	int i, err;
- 
--	mutex_lock(&data->update_lock);
- 	if (!time_after(jiffies, data->last_updated + 2 * HZ) && data->valid)
--		goto exit;
-+		return 0;
- 
- 	err = fts_read_byte(data->client, FTS_DEVICE_STATUS_REG);
- 	if (err < 0)
--		goto exit;
-+		return err;
- 
- 	data->valid = !!(err & 0x02); /* Data not ready yet */
--	if (unlikely(!data->valid)) {
--		err = -EAGAIN;
--		goto exit;
--	}
-+	if (unlikely(!data->valid))
-+		return -EAGAIN;
- 
- 	err = fts_read_byte(data->client, FTS_FAN_PRESENT_REG);
- 	if (err < 0)
--		goto exit;
-+		return err;
- 	data->fan_present = err;
- 
- 	err = fts_read_byte(data->client, FTS_FAN_EVENT_REG);
- 	if (err < 0)
--		goto exit;
-+		return err;
- 	data->fan_alarm = err;
- 
- 	for (i = 0; i < FTS_NO_FAN_SENSORS; i++) {
- 		if (data->fan_present & BIT(i)) {
- 			err = fts_read_byte(data->client, FTS_REG_FAN_INPUT(i));
- 			if (err < 0)
--				goto exit;
-+				return err;
- 			data->fan_input[i] = err;
- 
- 			err = fts_read_byte(data->client,
- 					    FTS_REG_FAN_SOURCE(i));
- 			if (err < 0)
--				goto exit;
-+				return err;
- 			data->fan_source[i] = err;
- 		} else {
- 			data->fan_input[i] = 0;
-@@ -192,27 +171,24 @@ static int fts_update_device(struct fts_data *data)
- 
- 	err = fts_read_byte(data->client, FTS_SENSOR_EVENT_REG);
- 	if (err < 0)
--		goto exit;
-+		return err;
- 	data->temp_alarm = err;
- 
- 	for (i = 0; i < FTS_NO_TEMP_SENSORS; i++) {
- 		err = fts_read_byte(data->client, FTS_REG_TEMP_INPUT(i));
- 		if (err < 0)
--			goto exit;
-+			return err;
- 		data->temp_input[i] = err;
+ 	switch (type) {
+ 	case hwmon_in:
+-		err = ina238_write_in(dev, attr, channel, val);
+-		break;
++		return ina238_write_in(dev, attr, channel, val);
+ 	case hwmon_curr:
+-		err = ina238_write_curr(dev, attr, val);
+-		break;
++		return ina238_write_curr(dev, attr, val);
+ 	case hwmon_power:
+-		err = ina238_write_power_max(dev, val);
+-		break;
++		return ina238_write_power_max(dev, val);
+ 	case hwmon_temp:
+-		err = ina238_write_temp_max(dev, val);
+-		break;
++		return ina238_write_temp_max(dev, val);
+ 	default:
+-		err = -EOPNOTSUPP;
+-		break;
++		return -EOPNOTSUPP;
  	}
- 
- 	for (i = 0; i < FTS_NO_VOLT_SENSORS; i++) {
- 		err = fts_read_byte(data->client, FTS_REG_VOLT(i));
- 		if (err < 0)
--			goto exit;
-+			return err;
- 		data->volt[i] = err;
- 	}
- 	data->last_updated = jiffies;
--	err = 0;
--exit:
--	mutex_unlock(&data->update_lock);
+-
+-	mutex_unlock(&data->config_lock);
 -	return err;
-+	return 0;
  }
  
- /*****************************************************************************/
-@@ -470,18 +446,14 @@ static int fts_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			if (val)
- 				return -EINVAL;
+ static umode_t ina238_is_visible(const void *drvdata,
+@@ -757,8 +743,6 @@ static int ina238_probe(struct i2c_client *client)
+ 	/* set the device type */
+ 	data->config = &ina238_config[chip];
  
--			mutex_lock(&data->update_lock);
- 			ret = fts_read_byte(data->client, FTS_REG_TEMP_CONTROL(channel));
--			if (ret >= 0)
--				ret = fts_write_byte(data->client, FTS_REG_TEMP_CONTROL(channel),
--						     ret | 0x1);
--			if (ret >= 0)
--				data->valid = false;
+-	mutex_init(&data->config_lock);
 -
--			mutex_unlock(&data->update_lock);
- 			if (ret < 0)
- 				return ret;
--
-+			ret = fts_write_byte(data->client, FTS_REG_TEMP_CONTROL(channel),
-+					     ret | 0x1);
-+			if (ret < 0)
-+				return ret;
-+			data->valid = false;
- 			return 0;
- 		default:
- 			break;
-@@ -493,18 +465,14 @@ static int fts_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 			if (val)
- 				return -EINVAL;
- 
--			mutex_lock(&data->update_lock);
- 			ret = fts_read_byte(data->client, FTS_REG_FAN_CONTROL(channel));
--			if (ret >= 0)
--				ret = fts_write_byte(data->client, FTS_REG_FAN_CONTROL(channel),
--						     ret | 0x1);
--			if (ret >= 0)
--				data->valid = false;
--
--			mutex_unlock(&data->update_lock);
- 			if (ret < 0)
- 				return ret;
--
-+			ret = fts_write_byte(data->client, FTS_REG_FAN_CONTROL(channel),
-+					     ret | 0x1);
-+			if (ret < 0)
-+				return ret;
-+			data->valid = false;
- 			return 0;
- 		default:
- 			break;
-@@ -648,8 +616,6 @@ static int fts_probe(struct i2c_client *client)
- 	if (!data)
- 		return -ENOMEM;
- 
--	mutex_init(&data->update_lock);
--	mutex_init(&data->access_lock);
- 	data->client = client;
- 	dev_set_drvdata(&client->dev, data);
- 
+ 	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+ 	if (IS_ERR(data->regmap)) {
+ 		dev_err(dev, "failed to allocate register map\n");
 -- 
 2.45.2
 
