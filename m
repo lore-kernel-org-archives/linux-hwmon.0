@@ -1,70 +1,70 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D9F331A4D
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB233031A
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706194; cv=none; b=gDW3PpIfyL1S0XchkjI2DTbK/LUhoD8g/oyiRxM5ql1PUBWkg1KmW6Mh9qrKXym5tmZLLeuTY6YuA289i112exCkMrbWuUWDpBd1P2JYfd/TQS4B6HjMoYvIrZUoCDwY/p3OTWowWN7U6WPgQ5I3GVE4ojl+/2qdju3nGHyi7PU=
+	t=1760706196; cv=none; b=bX6kSDGn6jGh2dTdcogP8NWjMsW/pR2ECVANM5nSVQVakYLq/xjRhaR/6gQW16m2vM0bochFNg5bVkOXxiQm1bfBYKq/AQWXuxvMb2s+poU6JuURhbxaDpN26cPKVSkExyvviZdwqcj7KPktuczmgopXQ8FlWuJac3Pyup2mC5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706194; c=relaxed/simple;
-	bh=bFSHDI1CQ/SPO/A4BKptuND+NVGYTDN5r3DOWBMKrYY=;
+	s=arc-20240116; t=1760706196; c=relaxed/simple;
+	bh=n3EW14uaBvwvTzVDchAnA2904QxIanTg6fLE2B7oGhY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W52Phu0Vbxy8QiHHEtE67dVnFHW5EbnC3Xv82OwReAxuxgYLYZhG7Zt0GYQpY4gHZQmdscVRbJMSZPAfvBj8uuEVsA8I/fpEdACLSIsmv7zIXwMNtIUVB5LrKj17pqHJF0E+9AM73e3TQH/1RMjqKLUWWrNAI5uypxDXKg1AZSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KoQpUE7U; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=Y35g3vnEk6BfgKehLk4l5HzuH8WvVZFXjx2eD0yNtEW/yLzpmTZTQB9OCW+RXhrTJfDeqnohpSu0215uEqSOqsJD0NOAHAm4E8SZwtl3QwBYmQCBmnnTMLtzRrXhKzI0sjNPRmJC+/PEDrYHrot7/8hl2arWdomyosaceQeEU7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UAG8q6mi; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KoQpUE7U"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-33067909400so1486857a91.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UAG8q6mi"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7a1603a098eso1303650b3a.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706191; x=1761310991; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706194; x=1761310994; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WfUSHdKkXVL8sQqCLX2LBAnsOyQkR0UEZT73XZwsoYY=;
-        b=KoQpUE7UC2dL7TG75juQXQ/PO7q2V/hHkZzckBZ2zL/kuWPj/5pweDj6pR5Tf73d7f
-         +s0i9q1ut5wg8QrBGNMeqJF+aRxxH/YqX4/BqDM7rM/Sd+ZKczQz3YMzY2XJKALroEG2
-         qWK0sgV1tMbpVFncdY1JF6as2nGYWzBdvGUxSHf1bf5TsxUs1rqyoUunxCu4HXWwUNRl
-         8mZ4en9FR0hrdCbjVYPbM25CIJU4Far6JH8/qEVlPc3zTxbqr37Xgw9vywmnPj0yBvqh
-         xUZ94m37Vf17ZIW/8F4G4/dgYE+ABbH+qN3OP8Qs6Uq0t3ufW1/KF7opI/iHSIKJMDyx
-         eShQ==
+        bh=jVHOURD4J8Wfn5GOqgT4Q3Pfi94wXHyPtIDotUaN2Cs=;
+        b=UAG8q6miSdYFGPbhBb6gaXIL7FuDfCZ0ok9eCZjHf7e4PtLIg2UeausZh0DnjWUgZM
+         26kYHf6PHi6A42MMjj4PaGi1YcskQ73Ai7xNPPjFTcp8X4ogUHacw6bwDBZE/6QExxro
+         xFhN/XI0Y50FqOGHbi6fc0yNkV0WhUS2t5PbrGWfAq+SQ1NX+RWvLtQgv3SRZ9U9/X9i
+         /LMy2xcIqXW5XJTbGYAHXezorDN89De0tiewTP3fTC04pQSosNFofWZ2V1nejbgdobUt
+         Tq6icpAcvT0SkubDv+4RceDpZphKq1GR1+dyxWxp166ndi8qLNlP/uho659MRAniiscQ
+         jbtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706191; x=1761310991;
+        d=1e100.net; s=20230601; t=1760706194; x=1761310994;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WfUSHdKkXVL8sQqCLX2LBAnsOyQkR0UEZT73XZwsoYY=;
-        b=OW4F3G2b/12o7p0MuO8wBVd9Wz2o+vffcKn8Gn56azIG8K70y0D+wD9qPzaQgAB3of
-         LVxD9kky+56QKJe52KQUJIMbudmpGVW3rfBjjngo9ncGn4NVnJqqrHfkPi/5L9jClWwn
-         H0u8yB6bVk4vAhjnLSKzCNrIk0dynZnK2rgiiXOfXeS4I/wiaGgJ2Fu1QVIRrebnbXgH
-         sm+OvMSGPrGx4EZiqJPVQE+LeD9DXgHJfpPIdiTyjKCcHdjzBDliDCNuODQbv/FQSk6v
-         DE1vz8DEee/+UrukniY858sRljffKpPUqx8kgUc+jkDf2wv7TNcnTKuB7JlELJ7mKqS5
-         1nTQ==
-X-Gm-Message-State: AOJu0YzxrkRmJ2/OrxmW52/3uE4bqeYVlB4ss6lH2+jkzuiGFj5R8p5w
-	JiXLLHvD8jI23DPQuP8hL7C8QOPUOGxSZOVh3942iFdmYLnVT/laUnN3Dpz9zg==
-X-Gm-Gg: ASbGnctNcsQKBeQsqmaa1eCsNPCHRzr1/Rj1h7rDbksKhrYM4Zx691skdgYAQrj2/Um
-	h0cwRs3c4swECguK4RmQ2wjC9/AjcQwqDYsOS4P0n7aI6lwlFBqYU1l49mv2PUneoZh7D2hErUc
-	nlqRZ/yMisLQHdxI9MfJFoQD+eZj9s3z9QvgkB5whLArrbfviJC1E9XrnqtTVkvo1DFkYgrlfF8
-	Qkg2N414Dew3cebQ1EaUpx0O9LelysEPjfXaEYB7ifTx41IZWJpAvbT61NIf6zk5FUzt0926jnd
-	/6xKdw0ZGJp9B9AXECegK+lj4eKAUlK2qYx8rOnsgZuIYXbUtaDY6OL1YNg22hlYGGqeoRAL81s
-	XVBt90gI27fR1rP7eNx4jCGoOZPVqJmf8WdSut40UIyvgeghhvUn8QeLpTGpNOYfceHNn6C0+a5
-	Slg036aEvMbK+D2THYA37G+gw=
-X-Google-Smtp-Source: AGHT+IFD15bz9gkCNiDR1x3k+7TQN4c5XEHhMwFiEdjoMk/8Id7fU7bUcbBGZZNSsQvjFqtNcP3PHA==
-X-Received: by 2002:a17:90b:4b0f:b0:33b:6ef4:c904 with SMTP id 98e67ed59e1d1-33bcf8faaf5mr4442428a91.20.1760706191074;
-        Fri, 17 Oct 2025 06:03:11 -0700 (PDT)
+        bh=jVHOURD4J8Wfn5GOqgT4Q3Pfi94wXHyPtIDotUaN2Cs=;
+        b=bsoiFp16eQkTVAKJ7uefdEX1n330ZlgFvyDJQScpw1zgzkpcJRp+ZYCu69RTR/DDPE
+         JpabWRKs5rVzIOd1LM1qxNISQa+t2rfjtGHS95IF3tVpVjtDK6r0UFFudZ22eXvW2U/S
+         agyyhkNkPhnSLV9cvxOAsSHIWKv4HHHmx6MzjuUcV5MnXVu83iccg5hV9GT0UYLIvnvi
+         MMXCPKEbHidOmtIfdkEvp4sJn5MjwN4Lax/AnPe/UHnVNTwxLG9Yjn44/WrB6kB/Uy1p
+         XQB3FoBSmzES041Y3ck1n402gVDo2tohbpokj/gI7JH3LQ4rY9ytvxQX4ScXmdZfmeYs
+         Rj+g==
+X-Gm-Message-State: AOJu0YxAuflRtU9bd0dOCDL08I9kzGkpOdTUaf/1jb/Dv9Uyw4Zosn+z
+	zmbIczCCDGctj46iPsUY0PVB+fSqJospdM/VugbTb8DLmYnOe2lpdFDXb5I8QQ==
+X-Gm-Gg: ASbGncsR//6+wNthXczGXB2zIDz17ujZceXhlMPNKgudFbRVnu9lDtB9mQnQRGbOksk
+	m4K1zTfUIpJf37vnTtVMfrh/HoN9UMKbkADjo/KVrg4j6MxZ6qErmuXYvuc18dGnHeGwmRo+jnt
+	pYh9wITctnLfQzbrUl4cbv/ryn83YZIfmzuUTQEnify6cx8XHkb8aTgj4aLlzTyl284xJ2aU8BM
+	7rVIvWp/SNa+fVjdTbDevLwXl+fglg38n+JEEkhLbfxcXA7EB7MR5qvtMs6byNSDeVbDZytLO5b
+	b2jn/v2K+13R76dI0UiXopLlk1ZbqayN4hcy3AB21E/7OtW9UPEKKIXrDfSHt8vRir3++fQ8thI
+	u96JVK67KoRXisGkbMM0R6Vr/VjvcCXjEy8sQlS9+SJ/gOqC0tnUyuFplDiBwiCM49lXszrSSOk
+	cyrQqyZ5g6RZM4ydCpGD1vPY4=
+X-Google-Smtp-Source: AGHT+IFL1BiqyrdQaWQAyh0JxBwo7Yb7uO7IKRLCEmsMtZPCBC3B2/fNgAMNHfFDstmKJcFTNlob7w==
+X-Received: by 2002:a05:6a00:21c4:b0:780:f6db:b1af with SMTP id d2e1a72fcca58-7a220acb6a1mr4564238b3a.16.1760706193783;
+        Fri, 17 Oct 2025 06:03:13 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bb66bf2a4sm5571044a91.20.2025.10.17.06.03.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d0e275csm25727527b3a.61.2025.10.17.06.03.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:03:10 -0700 (PDT)
+        Fri, 17 Oct 2025 06:03:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 22/29] hwmon: (ltc4282) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:02:14 -0700
-Message-ID: <20251017130221.1823453-23-linux@roeck-us.net>
+Subject: [PATCH 23/29] hwmon: (aquacomputer_d5next) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:02:15 -0700
+Message-ID: <20251017130221.1823453-24-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,165 +81,138 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ltc4282.c | 32 ++++----------------------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+ drivers/hwmon/aquacomputer_d5next.c | 37 +++++------------------------
+ 1 file changed, 6 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
-index 44102879694a..b9cad89f2cd9 100644
---- a/drivers/hwmon/ltc4282.c
-+++ b/drivers/hwmon/ltc4282.c
-@@ -17,7 +17,6 @@
- #include <linux/minmax.h>
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index 0dcb8a3a691d..1ca70e726298 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -20,7 +20,6 @@
+ #include <linux/jiffies.h>
+ #include <linux/ktime.h>
  #include <linux/module.h>
- #include <linux/mod_devicetable.h>
 -#include <linux/mutex.h>
- #include <linux/regmap.h>
- #include <linux/property.h>
- #include <linux/string.h>
-@@ -131,8 +130,6 @@ struct ltc4282_cache {
+ #include <linux/seq_file.h>
+ #include <linux/unaligned.h>
  
- struct ltc4282_state {
- 	struct regmap *map;
--	/* Protect against multiple accesses to the device registers */
--	struct mutex lock;
- 	struct clk_hw clk_hw;
- 	/*
- 	 * Used to cache values for VDD/VSOURCE depending which will be used
-@@ -281,14 +278,12 @@ static int __ltc4282_read_alarm(struct ltc4282_state *st, u32 reg, u32 mask,
- static int ltc4282_read_alarm(struct ltc4282_state *st, u32 reg, u32 mask,
- 			      long *val)
- {
--	guard(mutex)(&st->lock);
- 	return __ltc4282_read_alarm(st, reg, mask, val);
+@@ -551,7 +550,6 @@ struct aqc_data {
+ 	struct hid_device *hdev;
+ 	struct device *hwmon_dev;
+ 	struct dentry *debugfs;
+-	struct mutex mutex;	/* Used for locking access when reading and writing PWM values */
+ 	enum kinds kind;
+ 	const char *name;
+ 
+@@ -662,7 +660,6 @@ static void aqc_delay_ctrl_report(struct aqc_data *priv)
+ 	}
  }
  
- static int ltc4282_vdd_source_read_in(struct ltc4282_state *st, u32 channel,
- 				      long *val)
+-/* Expects the mutex to be locked */
+ static int aqc_get_ctrl_data(struct aqc_data *priv)
  {
--	guard(mutex)(&st->lock);
- 	if (!st->in0_1_cache[channel].en)
- 		return -ENODATA;
+ 	int ret;
+@@ -680,7 +677,6 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
+ 	return ret;
+ }
  
-@@ -300,7 +295,6 @@ static int ltc4282_vdd_source_read_hist(struct ltc4282_state *st, u32 reg,
+-/* Expects the mutex to be locked */
+ static int aqc_send_ctrl_data(struct aqc_data *priv)
+ {
+ 	int ret;
+@@ -721,11 +717,9 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val, int ty
  {
  	int ret;
  
--	guard(mutex)(&st->lock);
- 	if (!st->in0_1_cache[channel].en) {
- 		*val = *cached;
- 		return 0;
-@@ -317,7 +311,6 @@ static int ltc4282_vdd_source_read_hist(struct ltc4282_state *st, u32 reg,
- static int ltc4282_vdd_source_read_lim(struct ltc4282_state *st, u32 reg,
- 				       u32 channel, u32 *cached, long *val)
- {
--	guard(mutex)(&st->lock);
- 	if (!st->in0_1_cache[channel].en)
- 		return ltc4282_read_voltage_byte_cached(st, reg, st->vfs_out,
- 							val, cached);
-@@ -328,7 +321,6 @@ static int ltc4282_vdd_source_read_lim(struct ltc4282_state *st, u32 reg,
- static int ltc4282_vdd_source_read_alm(struct ltc4282_state *st, u32 mask,
- 				       u32 channel, long *val)
- {
--	guard(mutex)(&st->lock);
- 	if (!st->in0_1_cache[channel].en) {
- 		/*
- 		 * Do this otherwise alarms can get confused because we clear
-@@ -412,9 +404,7 @@ static int ltc4282_read_in(struct ltc4282_state *st, u32 attr, long *val,
- 						   channel,
- 						   &st->in0_1_cache[channel].in_min_raw, val);
- 	case hwmon_in_enable:
--		scoped_guard(mutex, &st->lock) {
--			*val = st->in0_1_cache[channel].en;
--		}
-+		*val = st->in0_1_cache[channel].en;
- 		return 0;
- 	case hwmon_in_fault:
- 		/*
-@@ -612,15 +602,11 @@ static int ltc4282_read(struct device *dev, enum hwmon_sensor_types type,
- 	case hwmon_power:
- 		return ltc4282_read_power(st, attr, val);
- 	case hwmon_energy:
--		scoped_guard(mutex, &st->lock) {
--			*val = st->energy_en;
--		}
-+		*val = st->energy_en;
- 		return 0;
- 	case hwmon_energy64:
--		scoped_guard(mutex, &st->lock) {
--			if (st->energy_en)
--				return ltc4282_read_energy(st, (s64 *)val);
--		}
-+		if (st->energy_en)
-+			return ltc4282_read_energy(st, (s64 *)val);
- 		return -ENODATA;
+-	mutex_lock(&priv->mutex);
+-
+ 	ret = aqc_get_ctrl_data(priv);
+ 	if (ret < 0)
+-		goto unlock_and_return;
++		return ret;
+ 
+ 	switch (type) {
+ 	case AQC_BE16:
+@@ -737,9 +731,6 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val, int ty
  	default:
- 		return -EOPNOTSUPP;
-@@ -688,7 +674,6 @@ static int __ltc4282_in_write_history(const struct ltc4282_state *st, u32 reg,
- static int ltc4282_in_write_history(struct ltc4282_state *st, u32 reg,
- 				    long lowest, long highest, u32 fs)
- {
--	guard(mutex)(&st->lock);
- 	return __ltc4282_in_write_history(st, reg, lowest, highest, fs);
+ 		ret = -EINVAL;
+ 	}
+-
+-unlock_and_return:
+-	mutex_unlock(&priv->mutex);
+ 	return ret;
  }
  
-@@ -696,8 +681,6 @@ static int ltc4282_power_reset_hist(struct ltc4282_state *st)
+@@ -747,11 +738,9 @@ static int aqc_set_ctrl_vals(struct aqc_data *priv, int *offsets, long *vals, in
  {
- 	int ret;
+ 	int ret, i;
  
--	guard(mutex)(&st->lock);
+-	mutex_lock(&priv->mutex);
 -
- 	ret = ltc4282_write_power_word(st, LTC4282_POWER_LOWEST,
- 				       st->power_max);
- 	if (ret)
-@@ -803,7 +786,6 @@ static int ltc4282_vdd_source_write_lim(struct ltc4282_state *st, u32 reg,
- {
- 	int ret;
+ 	ret = aqc_get_ctrl_data(priv);
+ 	if (ret < 0)
+-		goto unlock_and_return;
++		return ret;
  
--	guard(mutex)(&st->lock);
- 	if (st->in0_1_cache[channel].en)
- 		ret = ltc4282_write_voltage_byte(st, reg, st->vfs_out, val);
- 	else
-@@ -821,7 +803,6 @@ static int ltc4282_vdd_source_reset_hist(struct ltc4282_state *st, int channel)
- 	if (channel == LTC4282_CHAN_VDD)
- 		lowest = st->vdd;
+ 	for (i = 0; i < len; i++) {
+ 		switch (types[i]) {
+@@ -762,18 +751,11 @@ static int aqc_set_ctrl_vals(struct aqc_data *priv, int *offsets, long *vals, in
+ 			priv->buffer[offsets[i]] = (u8)vals[i];
+ 			break;
+ 		default:
+-			ret = -EINVAL;
++			return -EINVAL;
+ 		}
+ 	}
  
--	guard(mutex)(&st->lock);
- 	if (st->in0_1_cache[channel].en) {
- 		ret = __ltc4282_in_write_history(st, LTC4282_VSOURCE_LOWEST,
- 						 lowest, 0, st->vfs_out);
-@@ -861,7 +842,6 @@ static int ltc4282_vdd_source_enable(struct ltc4282_state *st, int channel,
- 	int ret, other_chan = ~channel & 0x1;
- 	u8 __val = val;
- 
--	guard(mutex)(&st->lock);
- 	if (st->in0_1_cache[channel].en == !!val)
- 		return 0;
- 
-@@ -938,8 +918,6 @@ static int ltc4282_curr_reset_hist(struct ltc4282_state *st)
- {
- 	int ret;
- 
--	guard(mutex)(&st->lock);
+-	if (ret < 0)
+-		goto unlock_and_return;
 -
- 	ret = __ltc4282_in_write_history(st, LTC4282_VSENSE_LOWEST,
- 					 st->vsense_max, 0, 40 * MILLI);
- 	if (ret)
-@@ -974,7 +952,6 @@ static int ltc4282_energy_enable_set(struct ltc4282_state *st, long val)
+-	ret = aqc_send_ctrl_data(priv);
+-
+-unlock_and_return:
+-	mutex_unlock(&priv->mutex);
+-	return ret;
++	return aqc_send_ctrl_data(priv);
+ }
+ 
+ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int type)
+@@ -953,13 +935,11 @@ static int aqc_legacy_read(struct aqc_data *priv)
  {
- 	int ret;
+ 	int ret, i, sensor_value;
  
--	guard(mutex)(&st->lock);
- 	/* setting the bit halts the meter */
- 	ret = regmap_update_bits(st->map, LTC4282_ADC_CTRL,
- 				 LTC4282_METER_HALT_MASK,
-@@ -1699,7 +1676,6 @@ static int ltc4282_probe(struct i2c_client *i2c)
- 	if (ret)
- 		return ret;
+-	mutex_lock(&priv->mutex);
+-
+ 	memset(priv->buffer, 0x00, priv->buffer_size);
+ 	ret = hid_hw_raw_request(priv->hdev, priv->status_report_id, priv->buffer,
+ 				 priv->buffer_size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+ 	if (ret < 0)
+-		goto unlock_and_return;
++		return ret;
  
--	mutex_init(&st->lock);
- 	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4282", st,
- 						     &ltc4282_chip_info, NULL);
- 	if (IS_ERR(hwmon))
+ 	/* Temperature sensor readings */
+ 	for (i = 0; i < priv->num_temp_sensors; i++) {
+@@ -1020,10 +1000,7 @@ static int aqc_legacy_read(struct aqc_data *priv)
+ 	}
+ 
+ 	priv->updated = jiffies;
+-
+-unlock_and_return:
+-	mutex_unlock(&priv->mutex);
+-	return ret;
++	return 0;
+ }
+ 
+ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+@@ -1870,8 +1847,6 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		goto fail_and_close;
+ 	}
+ 
+-	mutex_init(&priv->mutex);
+-
+ 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, priv->name, priv,
+ 							  &aqc_chip_info, NULL);
+ 
 -- 
 2.45.2
 
