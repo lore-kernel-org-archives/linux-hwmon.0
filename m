@@ -1,70 +1,70 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB233031A
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FAC331A52
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706196; cv=none; b=bX6kSDGn6jGh2dTdcogP8NWjMsW/pR2ECVANM5nSVQVakYLq/xjRhaR/6gQW16m2vM0bochFNg5bVkOXxiQm1bfBYKq/AQWXuxvMb2s+poU6JuURhbxaDpN26cPKVSkExyvviZdwqcj7KPktuczmgopXQ8FlWuJac3Pyup2mC5I=
+	t=1760706198; cv=none; b=Ic6sor69pda9dZDjERrG8yDqhek7uOxuilLJXS/LatEHH18qokRF+d+QAN3NmvGtUdreShOxKiReC7qAF62ZaCeYdiX+7N60n1OwHxxAhutu++7GAQkOW5xcxX8alJHybrF9cS6931nEM4fsdzZ77tilRyBzhdN1UykJ+d/70LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706196; c=relaxed/simple;
-	bh=n3EW14uaBvwvTzVDchAnA2904QxIanTg6fLE2B7oGhY=;
+	s=arc-20240116; t=1760706198; c=relaxed/simple;
+	bh=xQJ7vqJlM95z0EvaEnyTit2RvZnp16UUSUD+VcoWZdQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y35g3vnEk6BfgKehLk4l5HzuH8WvVZFXjx2eD0yNtEW/yLzpmTZTQB9OCW+RXhrTJfDeqnohpSu0215uEqSOqsJD0NOAHAm4E8SZwtl3QwBYmQCBmnnTMLtzRrXhKzI0sjNPRmJC+/PEDrYHrot7/8hl2arWdomyosaceQeEU7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UAG8q6mi; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=Vu+GeiWduY6bjVPup1dzPBGgKTdh6vVmbRGJH4QXOtcw09SY+wcWjjZeQShx2PGcDcIbBj33iXTPg3cTgaIsEnwQ8dzUzyk43OLt+gDGeGRpoBk7JOrKIy43M4t6fzKxYJ2N1Na9O0noTVC+FKituKhyrkJZS9zazNMOoMGPAcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lygPoGzY; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UAG8q6mi"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7a1603a098eso1303650b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lygPoGzY"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b62ed9c3e79so1295148a12.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706194; x=1761310994; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706196; x=1761310996; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jVHOURD4J8Wfn5GOqgT4Q3Pfi94wXHyPtIDotUaN2Cs=;
-        b=UAG8q6miSdYFGPbhBb6gaXIL7FuDfCZ0ok9eCZjHf7e4PtLIg2UeausZh0DnjWUgZM
-         26kYHf6PHi6A42MMjj4PaGi1YcskQ73Ai7xNPPjFTcp8X4ogUHacw6bwDBZE/6QExxro
-         xFhN/XI0Y50FqOGHbi6fc0yNkV0WhUS2t5PbrGWfAq+SQ1NX+RWvLtQgv3SRZ9U9/X9i
-         /LMy2xcIqXW5XJTbGYAHXezorDN89De0tiewTP3fTC04pQSosNFofWZ2V1nejbgdobUt
-         Tq6icpAcvT0SkubDv+4RceDpZphKq1GR1+dyxWxp166ndi8qLNlP/uho659MRAniiscQ
-         jbtQ==
+        bh=IRd7vQfoAwgnTa5ItQNq4wFD9foi08taWg1wgfAGB2Q=;
+        b=lygPoGzYj5kDw/lpZGNnM/aSrr0+VrT+Iw1bwBNv6QPWw3dSFZ/W/+481RPa7kEtLN
+         cK0ENydoDcBJ32tqzW2LRCW8+poO/cxrCAhZRnabd3VBRe8RBTwZw0r2Q91Ci96xtvf2
+         ul+Uh2Xc0ButwtGO7PBf+gVwGbDIP6WSve0U6GVHluGpudEcTdu94iMBdQSXEMkF1ktg
+         49FvOZUwTexixbEgXyfBuYhgm4/tAwLO9eNsHvjBsHlPdDSkx8PbSEZi1daAOOkWP17p
+         uokb3VC3jh8Vr0uFlmqx11mXnb9uYnKbeLRH62jEzUCqniySli0oZTGG3bcu4eRljyVf
+         DFlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706194; x=1761310994;
+        d=1e100.net; s=20230601; t=1760706196; x=1761310996;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jVHOURD4J8Wfn5GOqgT4Q3Pfi94wXHyPtIDotUaN2Cs=;
-        b=bsoiFp16eQkTVAKJ7uefdEX1n330ZlgFvyDJQScpw1zgzkpcJRp+ZYCu69RTR/DDPE
-         JpabWRKs5rVzIOd1LM1qxNISQa+t2rfjtGHS95IF3tVpVjtDK6r0UFFudZ22eXvW2U/S
-         agyyhkNkPhnSLV9cvxOAsSHIWKv4HHHmx6MzjuUcV5MnXVu83iccg5hV9GT0UYLIvnvi
-         MMXCPKEbHidOmtIfdkEvp4sJn5MjwN4Lax/AnPe/UHnVNTwxLG9Yjn44/WrB6kB/Uy1p
-         XQB3FoBSmzES041Y3ck1n402gVDo2tohbpokj/gI7JH3LQ4rY9ytvxQX4ScXmdZfmeYs
-         Rj+g==
-X-Gm-Message-State: AOJu0YxAuflRtU9bd0dOCDL08I9kzGkpOdTUaf/1jb/Dv9Uyw4Zosn+z
-	zmbIczCCDGctj46iPsUY0PVB+fSqJospdM/VugbTb8DLmYnOe2lpdFDXb5I8QQ==
-X-Gm-Gg: ASbGncsR//6+wNthXczGXB2zIDz17ujZceXhlMPNKgudFbRVnu9lDtB9mQnQRGbOksk
-	m4K1zTfUIpJf37vnTtVMfrh/HoN9UMKbkADjo/KVrg4j6MxZ6qErmuXYvuc18dGnHeGwmRo+jnt
-	pYh9wITctnLfQzbrUl4cbv/ryn83YZIfmzuUTQEnify6cx8XHkb8aTgj4aLlzTyl284xJ2aU8BM
-	7rVIvWp/SNa+fVjdTbDevLwXl+fglg38n+JEEkhLbfxcXA7EB7MR5qvtMs6byNSDeVbDZytLO5b
-	b2jn/v2K+13R76dI0UiXopLlk1ZbqayN4hcy3AB21E/7OtW9UPEKKIXrDfSHt8vRir3++fQ8thI
-	u96JVK67KoRXisGkbMM0R6Vr/VjvcCXjEy8sQlS9+SJ/gOqC0tnUyuFplDiBwiCM49lXszrSSOk
-	cyrQqyZ5g6RZM4ydCpGD1vPY4=
-X-Google-Smtp-Source: AGHT+IFL1BiqyrdQaWQAyh0JxBwo7Yb7uO7IKRLCEmsMtZPCBC3B2/fNgAMNHfFDstmKJcFTNlob7w==
-X-Received: by 2002:a05:6a00:21c4:b0:780:f6db:b1af with SMTP id d2e1a72fcca58-7a220acb6a1mr4564238b3a.16.1760706193783;
-        Fri, 17 Oct 2025 06:03:13 -0700 (PDT)
+        bh=IRd7vQfoAwgnTa5ItQNq4wFD9foi08taWg1wgfAGB2Q=;
+        b=czwyyE5IlgdryNQaQokcKGfQY8zzJR2O00D+NWJi8KbZT68y6IOHDw5sAR5Xvp7VY/
+         76yzPT75/8/oQomEIQdtX7KmoDrhKbs03fdav2blzyyP24TqlDXBaaxOny8vHBLhtjbS
+         rJtzGvndA2HRXbJQEXA5W51zjuFp2sibk+o+YoE/9FQj69pnel0hSj3RS/rSANd9sGMN
+         sJhI3YLfxXYF8fLrrJfLlQprcWE659a3pHd5TP/czq2lNieOaacuP5XJnC1jQ3mJo/o1
+         s+1bwWuqzl+avJC14iqCRfo/WmpRo+/vwxUyHop/EYgRSf8xPKJrJnOLnGjEzZdQvjiP
+         cEsA==
+X-Gm-Message-State: AOJu0YxRGb+DdVbyt0EHprE0ZAlHYXUJj05FTTPLC2TvNxTSz4gR0BYl
+	XfbeJ6tu2AGYk9g26oF7oKIOtBh2fQCEu9Zz0p44HeI7qYHiywOO5WtJRRdnyQ==
+X-Gm-Gg: ASbGncuWVH4GaJtcr0mQBYkXyhMhlBZqlFiJz7Gcegd9K0W/gGvGldxVssd8mpq6MBl
+	wk8hiAtxGoJNWCzF/S+V4Q0cfyLY/EQxDfw/a6lsz4UX4Fmfc2pJ3caOh6u0sx//+cT7F/sJ+4L
+	fsuyxt5dktM6FujeycZglyy/5xqbVt/ggwUeHxIpYrVW5N7gWUl8WnIJajj2vQqBHHJStckYU0T
+	USQH85cIydC+AiWjhEL1BPwZ7akHMHz0aMyFzYoajKQus+EBbynzDD83/7Wv8tVMmk/X7f/klCc
+	EOzEVvik2+tIeBBzMLwhdqR2M8fprXId9eySEyic6YSyBu2xLmqrXKLHaYgtB134Mj77KmzAGzT
+	Unky/8QuHXpXlmy8WWGSk9MrysBx0N4fgHxTn+KD+p1lWwQfAwOcsOc1Tdlcta8+2UwCL0WtaMM
+	0299JT7lC8SnrgCvjRQYfScrE=
+X-Google-Smtp-Source: AGHT+IH0/lnoano87npodZujFKd21Z//Fg1fcY67z7shiWYfbJTvXAopBnNPgn7yyrjAPmEXTQqVMQ==
+X-Received: by 2002:a17:903:244f:b0:261:e1c0:1c44 with SMTP id d9443c01a7336-290cc2f83a5mr46216235ad.40.1760706195649;
+        Fri, 17 Oct 2025 06:03:15 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992d0e275csm25727527b3a.61.2025.10.17.06.03.12
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2909930a90csm64098075ad.19.2025.10.17.06.03.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:03:12 -0700 (PDT)
+        Fri, 17 Oct 2025 06:03:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 23/29] hwmon: (aquacomputer_d5next) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:02:15 -0700
-Message-ID: <20251017130221.1823453-24-linux@roeck-us.net>
+Subject: [PATCH 24/29] hwmon: (gpd-fan) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:02:16 -0700
+Message-ID: <20251017130221.1823453-25-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,138 +81,124 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/aquacomputer_d5next.c | 37 +++++------------------------
- 1 file changed, 6 insertions(+), 31 deletions(-)
+ drivers/hwmon/gpd-fan.c | 56 ++++++++++-------------------------------
+ 1 file changed, 13 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-index 0dcb8a3a691d..1ca70e726298 100644
---- a/drivers/hwmon/aquacomputer_d5next.c
-+++ b/drivers/hwmon/aquacomputer_d5next.c
-@@ -20,7 +20,6 @@
- #include <linux/jiffies.h>
- #include <linux/ktime.h>
- #include <linux/module.h>
--#include <linux/mutex.h>
- #include <linux/seq_file.h>
- #include <linux/unaligned.h>
+diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+index 644dc3ca9df7..57caae9a23eb 100644
+--- a/drivers/hwmon/gpd-fan.c
++++ b/drivers/hwmon/gpd-fan.c
+@@ -26,9 +26,6 @@
+ static char *gpd_fan_board = "";
+ module_param(gpd_fan_board, charp, 0444);
  
-@@ -551,7 +550,6 @@ struct aqc_data {
- 	struct hid_device *hdev;
- 	struct device *hwmon_dev;
- 	struct dentry *debugfs;
--	struct mutex mutex;	/* Used for locking access when reading and writing PWM values */
- 	enum kinds kind;
- 	const char *name;
- 
-@@ -662,7 +660,6 @@ static void aqc_delay_ctrl_report(struct aqc_data *priv)
- 	}
- }
- 
--/* Expects the mutex to be locked */
- static int aqc_get_ctrl_data(struct aqc_data *priv)
- {
- 	int ret;
-@@ -680,7 +677,6 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
- 	return ret;
- }
- 
--/* Expects the mutex to be locked */
- static int aqc_send_ctrl_data(struct aqc_data *priv)
- {
- 	int ret;
-@@ -721,11 +717,9 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val, int ty
+-// EC read/write locker, protecting a sequence of EC operations
+-static DEFINE_MUTEX(gpd_fan_sequence_lock);
+-
+ enum gpd_board {
+ 	win_mini,
+ 	win4_6800u,
+@@ -507,87 +504,60 @@ static int gpd_fan_hwmon_read(__always_unused struct device *dev,
  {
  	int ret;
  
--	mutex_lock(&priv->mutex);
+-	ret = mutex_lock_interruptible(&gpd_fan_sequence_lock);
+-	if (ret)
+-		return ret;
 -
- 	ret = aqc_get_ctrl_data(priv);
- 	if (ret < 0)
--		goto unlock_and_return;
-+		return ret;
+ 	if (type == hwmon_fan) {
+ 		if (attr == hwmon_fan_input) {
+ 			ret = gpd_read_rpm();
  
- 	switch (type) {
- 	case AQC_BE16:
-@@ -737,9 +731,6 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val, int ty
- 	default:
- 		ret = -EINVAL;
- 	}
--
--unlock_and_return:
--	mutex_unlock(&priv->mutex);
- 	return ret;
- }
+ 			if (ret < 0)
+-				goto OUT;
++				return ret;
  
-@@ -747,11 +738,9 @@ static int aqc_set_ctrl_vals(struct aqc_data *priv, int *offsets, long *vals, in
- {
- 	int ret, i;
+ 			*val = ret;
+-			ret = 0;
+-			goto OUT;
++			return 0;
+ 		}
+ 	} else if (type == hwmon_pwm) {
+ 		switch (attr) {
+ 		case hwmon_pwm_enable:
+ 			*val = gpd_driver_priv.pwm_enable;
+-			ret = 0;
+-			goto OUT;
++			return 0;
+ 		case hwmon_pwm_input:
+ 			ret = gpd_read_pwm();
  
--	mutex_lock(&priv->mutex);
--
- 	ret = aqc_get_ctrl_data(priv);
- 	if (ret < 0)
--		goto unlock_and_return;
-+		return ret;
+ 			if (ret < 0)
+-				goto OUT;
++				return ret;
  
- 	for (i = 0; i < len; i++) {
- 		switch (types[i]) {
-@@ -762,18 +751,11 @@ static int aqc_set_ctrl_vals(struct aqc_data *priv, int *offsets, long *vals, in
- 			priv->buffer[offsets[i]] = (u8)vals[i];
- 			break;
- 		default:
--			ret = -EINVAL;
-+			return -EINVAL;
+ 			*val = ret;
+-			ret = 0;
+-			goto OUT;
++			return 0;
  		}
  	}
  
--	if (ret < 0)
--		goto unlock_and_return;
+-	ret = -EOPNOTSUPP;
 -
--	ret = aqc_send_ctrl_data(priv);
--
--unlock_and_return:
--	mutex_unlock(&priv->mutex);
+-OUT:
+-	mutex_unlock(&gpd_fan_sequence_lock);
 -	return ret;
-+	return aqc_send_ctrl_data(priv);
++	return -EOPNOTSUPP;
  }
  
- static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val, int type)
-@@ -953,13 +935,11 @@ static int aqc_legacy_read(struct aqc_data *priv)
+ static int gpd_fan_hwmon_write(__always_unused struct device *dev,
+ 			       enum hwmon_sensor_types type, u32 attr,
+ 			       __always_unused int channel, long val)
  {
- 	int ret, i, sensor_value;
- 
--	mutex_lock(&priv->mutex);
+-	int ret;
 -
- 	memset(priv->buffer, 0x00, priv->buffer_size);
- 	ret = hid_hw_raw_request(priv->hdev, priv->status_report_id, priv->buffer,
- 				 priv->buffer_size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
- 	if (ret < 0)
--		goto unlock_and_return;
-+		return ret;
+-	ret = mutex_lock_interruptible(&gpd_fan_sequence_lock);
+-	if (ret)
+-		return ret;
+-
+ 	if (type == hwmon_pwm) {
+ 		switch (attr) {
+ 		case hwmon_pwm_enable:
+-			if (!in_range(val, 0, 3)) {
+-				ret = -EINVAL;
+-				goto OUT;
+-			}
++			if (!in_range(val, 0, 3))
++				return -EINVAL;
  
- 	/* Temperature sensor readings */
- 	for (i = 0; i < priv->num_temp_sensors; i++) {
-@@ -1020,10 +1000,7 @@ static int aqc_legacy_read(struct aqc_data *priv)
+ 			gpd_driver_priv.pwm_enable = val;
+ 
+ 			gpd_set_pwm_enable(gpd_driver_priv.pwm_enable);
+-			ret = 0;
+-			goto OUT;
++			return 0;
+ 		case hwmon_pwm_input:
+-			if (!in_range(val, 0, 256)) {
+-				ret = -ERANGE;
+-				goto OUT;
+-			}
++			if (!in_range(val, 0, 256))
++				return -EINVAL;
+ 
+ 			gpd_driver_priv.pwm_value = val;
+ 
+-			ret = gpd_write_pwm(val);
+-			goto OUT;
++			return gpd_write_pwm(val);
+ 		}
  	}
  
- 	priv->updated = jiffies;
+-	ret = -EOPNOTSUPP;
 -
--unlock_and_return:
--	mutex_unlock(&priv->mutex);
+-OUT:
+-	mutex_unlock(&gpd_fan_sequence_lock);
 -	return ret;
-+	return 0;
++	return -EOPNOTSUPP;
  }
  
- static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-@@ -1870,8 +1847,6 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 		goto fail_and_close;
- 	}
- 
--	mutex_init(&priv->mutex);
--
- 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, priv->name, priv,
- 							  &aqc_chip_info, NULL);
- 
+ static const struct hwmon_ops gpd_fan_ops = {
 -- 
 2.45.2
 
