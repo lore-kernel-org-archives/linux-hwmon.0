@@ -1,191 +1,276 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB83934F46B;
-	Fri, 17 Oct 2025 13:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902A0289811
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 14:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760707283; cv=none; b=l0DiRWROyC2ScmHyeTVAtQ9CvoonrJY9AykH3wAFpWho0KLYluwZbCjfB5m50x6xqg75/iSEJR+h+/ztNLb17RcxMRWo9Zltof8yC1ijvNAxc6vzbHwycGY3DJpKdk9rfTjyCEv4+/+nR5Mhy0zHeMHNQmQYRV4StTIMJmppsPM=
+	t=1760710024; cv=none; b=O4p1qpmwcUlIGEeyLi9QxuVsnpylZn+VPofG9notKSR2aCLOM7MM3YEz1AZFUEf0NiKd8ZsqG52N0Xseg449K4GVB1lURxCpLhOSkUbzEJihE0I/RFYbGI8IgYIz12iME7TYmG6t7xYkSfSCEt0FB/vlVeCbExbh+mffIrpzPSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760707283; c=relaxed/simple;
-	bh=TsK5Tt2ouVurdxip4F9N9xRTQrAAUe+nydbZDh4kkR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jXovPer1XGE9i0oWcEKkKPE9H45oERvcGMttqIX3lysyrlYiLhCgjvj94GlHc9Z9HLMtsocHGpP6+x3pCDjfLMQcfu1CZVYUF/LXetWft0/CdKTRT4Sbl3PM/WYzgNf3YpCSPP8mRcDi1U0sSw3KI4y8BcxTPxbCIwyywRP0Azo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WO0rcs1L; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760710024; c=relaxed/simple;
+	bh=9rf9TjJ3N6/wxOZHe1pTMfsXcJDkfy2CUsUQed5+CP0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Oh/BXLSmg6Oi/jYMNz85f5RpcuvGbhjsPnPrVJDwBrauA57tXcRRD/DHQFhxkfeB1kYou5UFeVk2U5R65LcYjjv8tG6u7EGdVbQcUY+ERovHNPkuOe/1bwPCjjh6JycixCpcop27Syn1vvCGCGpZtbwEa9Gj118VEKuoSt/N/Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TfUuFSSF; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WO0rcs1L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD3EC4CEE7;
-	Fri, 17 Oct 2025 13:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1760707282;
-	bh=TsK5Tt2ouVurdxip4F9N9xRTQrAAUe+nydbZDh4kkR4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WO0rcs1LB08EtrlI4UYOZp3vA2LU4PF6GUqMUMIpmEXqmoXG3Qcm749CWSEMtRx21
-	 yd1cGcnjGwOdTi+mZWhyxu/7KjiFh8ulKGdwL02YJnjsySVFFQu9HMse0CT5qdfDbQ
-	 MZ11xTjtf2Wz3cpg9lhgccKHoyKXK7QAQW5csdhc=
-Date: Fri, 17 Oct 2025 15:21:18 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "Farber, Eliav" <farbere@amazon.com>
-Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>,
-	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-	"jdike@addtoit.com" <jdike@addtoit.com>,
-	"richard@nod.at" <richard@nod.at>,
-	"anton.ivanov@cambridgegreys.com" <anton.ivanov@cambridgegreys.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"tony.luck@intel.com" <tony.luck@intel.com>,
-	"qiuxu.zhuo@intel.com" <qiuxu.zhuo@intel.com>,
-	"mchehab@kernel.org" <mchehab@kernel.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"rric@kernel.org" <rric@kernel.org>,
-	"harry.wentland@amd.com" <harry.wentland@amd.com>,
-	"sunpeng.li@amd.com" <sunpeng.li@amd.com>,
-	"alexander.deucher@amd.com" <alexander.deucher@amd.com>,
-	"christian.koenig@amd.com" <christian.koenig@amd.com>,
-	"airlied@linux.ie" <airlied@linux.ie>,
-	"daniel@ffwll.ch" <daniel@ffwll.ch>,
-	"evan.quan@amd.com" <evan.quan@amd.com>,
-	"james.qian.wang@arm.com" <james.qian.wang@arm.com>,
-	"liviu.dudau@arm.com" <liviu.dudau@arm.com>,
-	"mihail.atanassov@arm.com" <mihail.atanassov@arm.com>,
-	"brian.starkey@arm.com" <brian.starkey@arm.com>,
-	"maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
-	"mripard@kernel.org" <mripard@kernel.org>,
-	"tzimmermann@suse.de" <tzimmermann@suse.de>,
-	"robdclark@gmail.com" <robdclark@gmail.com>,
-	"sean@poorly.run" <sean@poorly.run>,
-	"jdelvare@suse.com" <jdelvare@suse.com>,
-	"linux@roeck-us.net" <linux@roeck-us.net>,
-	"fery@cypress.com" <fery@cypress.com>,
-	"dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-	"agk@redhat.com" <agk@redhat.com>,
-	"snitzer@redhat.com" <snitzer@redhat.com>,
-	"dm-devel@redhat.com" <dm-devel@redhat.com>,
-	"rajur@chelsio.com" <rajur@chelsio.com>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	"kuba@kernel.org" <kuba@kernel.org>,
-	"peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-	"alexandre.torgue@st.com" <alexandre.torgue@st.com>,
-	"joabreu@synopsys.com" <joabreu@synopsys.com>,
-	"mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-	"malattia@linux.it" <malattia@linux.it>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"mgross@linux.intel.com" <mgross@linux.intel.com>,
-	"intel-linux-scu@intel.com" <intel-linux-scu@intel.com>,
-	"artur.paszkiewicz@intel.com" <artur.paszkiewicz@intel.com>,
-	"jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-	"clm@fb.com" <clm@fb.com>,
-	"josef@toxicpanda.com" <josef@toxicpanda.com>,
-	"dsterba@suse.com" <dsterba@suse.com>,
-	"xiang@kernel.org" <xiang@kernel.org>,
-	"chao@kernel.org" <chao@kernel.org>,
-	"jack@suse.com" <jack@suse.com>, "tytso@mit.edu" <tytso@mit.edu>,
-	"adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-	"dushistov@mail.ru" <dushistov@mail.ru>,
-	"luc.vanoostenryck@gmail.com" <luc.vanoostenryck@gmail.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"pmladek@suse.com" <pmladek@suse.com>,
-	"sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-	"minchan@kernel.org" <minchan@kernel.org>,
-	"ngupta@vflare.org" <ngupta@vflare.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
-	"yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-	"pablo@netfilter.org" <pablo@netfilter.org>,
-	"kadlec@netfilter.org" <kadlec@netfilter.org>,
-	"fw@strlen.de" <fw@strlen.de>,
-	"jmaloy@redhat.com" <jmaloy@redhat.com>,
-	"ying.xue@windriver.com" <ying.xue@windriver.com>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"sashal@kernel.org" <sashal@kernel.org>,
-	"ruanjinjie@huawei.com" <ruanjinjie@huawei.com>,
-	"David.Laight@aculab.com" <David.Laight@aculab.com>,
-	"herve.codina@bootlin.com" <herve.codina@bootlin.com>,
-	"Jason@zx2c4.com" <Jason@zx2c4.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"kbusch@kernel.org" <kbusch@kernel.org>,
-	"nathan@kernel.org" <nathan@kernel.org>,
-	"bvanassche@acm.org" <bvanassche@acm.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-	"linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-	"amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-	"freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-	"linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-	"linux-erofs@lists.ozlabs.org" <linux-erofs@lists.ozlabs.org>,
-	"linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
-	"coreteam@netfilter.org" <coreteam@netfilter.org>,
-	"tipc-discussion@lists.sourceforge.net" <tipc-discussion@lists.sourceforge.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Isabella Basso <isabbasso@riseup.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Sander Vanheule <sander@svanheule.net>,
-	Vlastimil Babka <vbabka@suse.cz>, Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH v2 01/27 5.10.y] overflow, tracing: Define the
- is_signed_type() macro once
-Message-ID: <2025101740-scion-flavoring-3a21@gregkh>
-References: <20251017090519.46992-1-farbere@amazon.com>
- <20251017090519.46992-2-farbere@amazon.com>
- <2025101708-obtuse-ellipse-e355@gregkh>
- <CH0PR18MB54337BD648C23CBE40C1060CC6F6A@CH0PR18MB5433.namprd18.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TfUuFSSF"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47114a40161so19607715e9.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 07:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760710021; x=1761314821; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MT6/kA1opZCLx91Z67e2PNVsfxox7l1zNGKt5D3VO/U=;
+        b=TfUuFSSFw9Y7oOvH5rsbDCnMQhIYOiH2FfzATzXCdYqdd5gsB/6GxOFUlECphVMPjg
+         w9qTf5YeW9JSXuJXKSY5upQ1VZxkZsaigfEPRux+YNH14jRZzgbG910DulS1vqlffDAt
+         NdLQS2dEcxw6sKJantCgkT+fmDvctdDWZkxD7pqvxgKBEVFeaw81YI8GXDX+8sL6IArA
+         usQ3a5LtGfU6coeSjpsytznqnM/SMoEJFYSvpQBRO2TyESbknTrKOkMCFvSs6UAHExk+
+         AueZZllvtNpFYkjY7mM3iU7Tc1eQOWtcyybrMVCIhpLscMYZWdrX5YLIqSvLdIaABHhx
+         5EPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760710021; x=1761314821;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MT6/kA1opZCLx91Z67e2PNVsfxox7l1zNGKt5D3VO/U=;
+        b=DoIjI9o+SwIaQk56oezywb8tTK86H78M5e90rzGZ66RMlZuL53qv/LClF1zL5S90Kx
+         uvQ2Wwd0YfKDsqRYcDoE+RNpV8nFQiaNrO9dfUypvFJ4z7oH1P1Q/rVF9M7mHdMuXgXW
+         9VUDJRf4i+Z4jxlQZupamyj9gsQCCTuj1tfICGDarC8f5skjxhVN62AKD7H3sn00MR+l
+         JQq7RBe/WkOxDUy5k3k2M9nQVAKzKs3XiQpu/FxlbI1UIRrvs+0bAU/MJRABHAC/PPEF
+         RpNfupuyqLlDyEBhEwPYKb1uoKRMc8YNjjbyg4xn/E1O0KkwLfsneNqq0h5p9shfSxFz
+         1rNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMQj0CQvb/XY+viFLRViJQsixre3TJZ9kg6sjToXuh7QpwErUztZj7Ff40CZR4AnveaZCMB80PwkxuQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMUJflhMNto2MxIcPzGPxq437E3XJIkDEERFVGj9HystkhXAQ2
+	GNATHSj85IiNeElTpczIe9EB54Ua++cr/WN+lop2KHNmaYs3jb6SjAkS
+X-Gm-Gg: ASbGnctbz9bZW2bPP0hmclbuTh13vasYr++yS4wJnMisTCl3WB/BrLH/ECvgkzzB+Nb
+	KCetbc0i/Xm1Dg9w59fZQjY4Kfyfl8Vlo+3wnRmZZ4D0Ipy4L8GrY816n3YJB3xJsdv3oP62eil
+	2Z4AYOwbdGQNQRHKR4Hs7uVY52IVSecF7njDFQNDx7PZVACBgjHwjXfJ9TDqi3Mpu+xR+tUd3Ad
+	X0dHCuw4W9pxtX603hg9jckqC5VBGhZdSXzTON2iLqIbC6Mt/7ScOg7ma4BLVEbVT8hSkla/VUw
+	bivjuS4+DnyU1VD7741RWE2ohf/xjBKXVN924wwcrbv6ck34bd4sYKSGm3FNyzG+YncdLINSVhI
+	RZu34bMiKzJVLG1lRuUsbOgA7zYNnHN9LBfzdVZQuhX9tv8rc2NLR2HmRdFfwFSX079tfL2UXFn
+	PdlWFA11Z52Lv+sgVtAHpikW6li/DqDA==
+X-Google-Smtp-Source: AGHT+IHxImieBLu5OdPyCHX1H0x7uRGt13Ct039AxbmdB0Y6yNswVlYicCVNi1l0iVLLcg4CKY5bOQ==
+X-Received: by 2002:a05:6000:2911:b0:426:da92:d390 with SMTP id ffacd0b85a97d-42704d83ce7mr2905564f8f.10.1760710020657;
+        Fri, 17 Oct 2025 07:07:00 -0700 (PDT)
+Received: from [192.168.1.187] ([161.230.67.253])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426feeb7441sm10354421f8f.43.2025.10.17.07.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 07:07:00 -0700 (PDT)
+Message-ID: <f6d838f46684e510b96f94d8228e34a47b10c5ac.camel@gmail.com>
+Subject: Re: [PATCH 22/29] hwmon: (ltc4282) Rely on subsystem locking
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, Hardware Monitoring
+	 <linux-hwmon@vger.kernel.org>
+Date: Fri, 17 Oct 2025 15:07:33 +0100
+In-Reply-To: <20251017130221.1823453-23-linux@roeck-us.net>
+References: <20251017130221.1823453-1-linux@roeck-us.net>
+	 <20251017130221.1823453-23-linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CH0PR18MB54337BD648C23CBE40C1060CC6F6A@CH0PR18MB5433.namprd18.prod.outlook.com>
 
-On Fri, Oct 17, 2025 at 12:16:27PM +0000, Farber, Eliav wrote:
-> > On Fri, Oct 17, 2025 at 09:04:53AM +0000, Eliav Farber wrote:
-> > > From: Bart Van Assche <bvanassche@acm.org>
-> > >
-> > > [ Upstream commit 92d23c6e94157739b997cacce151586a0d07bb8a ]
-> >
-> > This isn't in 5.15.y, why is it needed in 5.10.y?
-> 
-> This is the mainline commit:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/overflow.h?h=v6.18-rc1&id=92d23c6e94157739b997cacce151586a0d07bb8a
-> 
-> The commit hash is 92d23c6e94157739b997cacce151586a0d07bb8a, which is
-> the one I used for the backport.
-> 
-> And here is the corresponding commit in the 5.15.y branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/include/linux/overflow.h?h=v5.15.194&id=ed6e37e30826b12572636c6bbfe6319233690c90
-> However, the commit message there references a different hash:
-> a49a64b5bf195381c09202c524f0f84b5f3e816f.
+On Fri, 2025-10-17 at 06:02 -0700, Guenter Roeck wrote:
+> Attribute access is now serialized in the hardware monitoring core,
+> so locking in the driver code is no longer necessary. Drop it.
+>=20
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
 
-Ugh, that hash is invalid, I missed that :(
+Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-Thanks for the info, I'll go work on queueing these up.
-
-greg k-h
+> =C2=A0drivers/hwmon/ltc4282.c | 32 ++++----------------------------
+> =C2=A01 file changed, 4 insertions(+), 28 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
+> index 44102879694a..b9cad89f2cd9 100644
+> --- a/drivers/hwmon/ltc4282.c
+> +++ b/drivers/hwmon/ltc4282.c
+> @@ -17,7 +17,6 @@
+> =C2=A0#include <linux/minmax.h>
+> =C2=A0#include <linux/module.h>
+> =C2=A0#include <linux/mod_devicetable.h>
+> -#include <linux/mutex.h>
+> =C2=A0#include <linux/regmap.h>
+> =C2=A0#include <linux/property.h>
+> =C2=A0#include <linux/string.h>
+> @@ -131,8 +130,6 @@ struct ltc4282_cache {
+> =C2=A0
+> =C2=A0struct ltc4282_state {
+> =C2=A0	struct regmap *map;
+> -	/* Protect against multiple accesses to the device registers */
+> -	struct mutex lock;
+> =C2=A0	struct clk_hw clk_hw;
+> =C2=A0	/*
+> =C2=A0	 * Used to cache values for VDD/VSOURCE depending which will be us=
+ed
+> @@ -281,14 +278,12 @@ static int __ltc4282_read_alarm(struct ltc4282_stat=
+e
+> *st, u32 reg, u32 mask,
+> =C2=A0static int ltc4282_read_alarm(struct ltc4282_state *st, u32 reg, u3=
+2 mask,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 long *val)
+> =C2=A0{
+> -	guard(mutex)(&st->lock);
+> =C2=A0	return __ltc4282_read_alarm(st, reg, mask, val);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static int ltc4282_vdd_source_read_in(struct ltc4282_state *st, u32=
+ channel,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 long *val)
+> =C2=A0{
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (!st->in0_1_cache[channel].en)
+> =C2=A0		return -ENODATA;
+> =C2=A0
+> @@ -300,7 +295,6 @@ static int ltc4282_vdd_source_read_hist(struct
+> ltc4282_state *st, u32 reg,
+> =C2=A0{
+> =C2=A0	int ret;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (!st->in0_1_cache[channel].en) {
+> =C2=A0		*val =3D *cached;
+> =C2=A0		return 0;
+> @@ -317,7 +311,6 @@ static int ltc4282_vdd_source_read_hist(struct
+> ltc4282_state *st, u32 reg,
+> =C2=A0static int ltc4282_vdd_source_read_lim(struct ltc4282_state *st, u3=
+2 reg,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 channel, u32 *cached, =
+long *val)
+> =C2=A0{
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (!st->in0_1_cache[channel].en)
+> =C2=A0		return ltc4282_read_voltage_byte_cached(st, reg, st->vfs_out,
+> =C2=A0							val, cached);
+> @@ -328,7 +321,6 @@ static int ltc4282_vdd_source_read_lim(struct
+> ltc4282_state *st, u32 reg,
+> =C2=A0static int ltc4282_vdd_source_read_alm(struct ltc4282_state *st, u3=
+2 mask,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 channel, long *val)
+> =C2=A0{
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (!st->in0_1_cache[channel].en) {
+> =C2=A0		/*
+> =C2=A0		 * Do this otherwise alarms can get confused because we clear
+> @@ -412,9 +404,7 @@ static int ltc4282_read_in(struct ltc4282_state *st, =
+u32
+> attr, long *val,
+> =C2=A0						=C2=A0=C2=A0 channel,
+> =C2=A0						=C2=A0=C2=A0 &st-
+> >in0_1_cache[channel].in_min_raw, val);
+> =C2=A0	case hwmon_in_enable:
+> -		scoped_guard(mutex, &st->lock) {
+> -			*val =3D st->in0_1_cache[channel].en;
+> -		}
+> +		*val =3D st->in0_1_cache[channel].en;
+> =C2=A0		return 0;
+> =C2=A0	case hwmon_in_fault:
+> =C2=A0		/*
+> @@ -612,15 +602,11 @@ static int ltc4282_read(struct device *dev, enum
+> hwmon_sensor_types type,
+> =C2=A0	case hwmon_power:
+> =C2=A0		return ltc4282_read_power(st, attr, val);
+> =C2=A0	case hwmon_energy:
+> -		scoped_guard(mutex, &st->lock) {
+> -			*val =3D st->energy_en;
+> -		}
+> +		*val =3D st->energy_en;
+> =C2=A0		return 0;
+> =C2=A0	case hwmon_energy64:
+> -		scoped_guard(mutex, &st->lock) {
+> -			if (st->energy_en)
+> -				return ltc4282_read_energy(st, (s64 *)val);
+> -		}
+> +		if (st->energy_en)
+> +			return ltc4282_read_energy(st, (s64 *)val);
+> =C2=A0		return -ENODATA;
+> =C2=A0	default:
+> =C2=A0		return -EOPNOTSUPP;
+> @@ -688,7 +674,6 @@ static int __ltc4282_in_write_history(const struct
+> ltc4282_state *st, u32 reg,
+> =C2=A0static int ltc4282_in_write_history(struct ltc4282_state *st, u32 r=
+eg,
+> =C2=A0				=C2=A0=C2=A0=C2=A0 long lowest, long highest, u32 fs)
+> =C2=A0{
+> -	guard(mutex)(&st->lock);
+> =C2=A0	return __ltc4282_in_write_history(st, reg, lowest, highest, fs);
+> =C2=A0}
+> =C2=A0
+> @@ -696,8 +681,6 @@ static int ltc4282_power_reset_hist(struct ltc4282_st=
+ate
+> *st)
+> =C2=A0{
+> =C2=A0	int ret;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> -
+> =C2=A0	ret =3D ltc4282_write_power_word(st, LTC4282_POWER_LOWEST,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 st->power_max);
+> =C2=A0	if (ret)
+> @@ -803,7 +786,6 @@ static int ltc4282_vdd_source_write_lim(struct
+> ltc4282_state *st, u32 reg,
+> =C2=A0{
+> =C2=A0	int ret;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (st->in0_1_cache[channel].en)
+> =C2=A0		ret =3D ltc4282_write_voltage_byte(st, reg, st->vfs_out, val);
+> =C2=A0	else
+> @@ -821,7 +803,6 @@ static int ltc4282_vdd_source_reset_hist(struct
+> ltc4282_state *st, int channel)
+> =C2=A0	if (channel =3D=3D LTC4282_CHAN_VDD)
+> =C2=A0		lowest =3D st->vdd;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (st->in0_1_cache[channel].en) {
+> =C2=A0		ret =3D __ltc4282_in_write_history(st, LTC4282_VSOURCE_LOWEST,
+> =C2=A0						 lowest, 0, st->vfs_out);
+> @@ -861,7 +842,6 @@ static int ltc4282_vdd_source_enable(struct ltc4282_s=
+tate
+> *st, int channel,
+> =C2=A0	int ret, other_chan =3D ~channel & 0x1;
+> =C2=A0	u8 __val =3D val;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> =C2=A0	if (st->in0_1_cache[channel].en =3D=3D !!val)
+> =C2=A0		return 0;
+> =C2=A0
+> @@ -938,8 +918,6 @@ static int ltc4282_curr_reset_hist(struct ltc4282_sta=
+te
+> *st)
+> =C2=A0{
+> =C2=A0	int ret;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> -
+> =C2=A0	ret =3D __ltc4282_in_write_history(st, LTC4282_VSENSE_LOWEST,
+> =C2=A0					 st->vsense_max, 0, 40 * MILLI);
+> =C2=A0	if (ret)
+> @@ -974,7 +952,6 @@ static int ltc4282_energy_enable_set(struct ltc4282_s=
+tate
+> *st, long val)
+> =C2=A0{
+> =C2=A0	int ret;
+> =C2=A0
+> -	guard(mutex)(&st->lock);
+> =C2=A0	/* setting the bit halts the meter */
+> =C2=A0	ret =3D regmap_update_bits(st->map, LTC4282_ADC_CTRL,
+> =C2=A0				 LTC4282_METER_HALT_MASK,
+> @@ -1699,7 +1676,6 @@ static int ltc4282_probe(struct i2c_client *i2c)
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	mutex_init(&st->lock);
+> =C2=A0	hwmon =3D devm_hwmon_device_register_with_info(dev, "ltc4282", st,
+> =C2=A0						=C2=A0=C2=A0=C2=A0=C2=A0 &ltc4282_chip_info,
+> NULL);
+> =C2=A0	if (IS_ERR(hwmon))
