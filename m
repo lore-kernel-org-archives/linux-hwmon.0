@@ -1,70 +1,70 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A712D9EFE
-	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0542D9EFE
+	for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 13:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760706164; cv=none; b=nqQqBVS3Ku9kHntCtXA74N9VJyQ8OMTjza9rVxrmeAwMtnlJiaUwYn+VRtumTzD7+2lohW5tKMBw3ZDVa3M1uUmo+hifPKTnwn6/NtzDLaAxs0LktivrPW6llFI35D2ry4LNTvddAcsjomJ3rlcgRCRbA3Q8bCqriJPbb/STHEk=
+	t=1760706166; cv=none; b=CM/tNb0YQmpgOKMsIavLPGwSFBD33wznuCN2G9lzI/yDf+DO6IFvLwB2HR3/cLxjtojqKmN5SqZeBr41l0r6HFWKPwcYlzfILiohhpkq0paVqx5YraSOWaSXWKbzuTD1g0GtypHEwxrArHO029oEQayRjMuotF0DjXV4r15/8sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760706164; c=relaxed/simple;
-	bh=RFsq3DJo/vYVezwIkO59yN53JmilRwNDhRTpdO+pTSk=;
+	s=arc-20240116; t=1760706166; c=relaxed/simple;
+	bh=O4ZEBZHMbaZZxNZE1zrEOE/IU136OlWaoL/a8WL8NXY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZK3r79cX3KTCSU9OFoHHgc8MJVRifb002SGFXsjCJO7kMwagjutHYpnAd4C73ApUDhM318EqEvXKhJduH7zxVWUxoQ3BOk47fq8shtePnDnjb0fN7iZl0dSdempk647stiL+GdZgs0KttvP4scxSp/mLmUQoZ0q4kiGt6LqEPZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SU0taOV6; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=gij3YzK+Z4S5/iaW5WTUy9gWg4yM0C4L5WIsOIN3do7XbGDYu61slDJnCQ4FiCzEjjWqQ5UaTjnJJvS5AErHj/Nv11VEvcPE+FjGH4eTUxthjBeJxbGG4Spe2lVEb6B2yjSMEnQuCAn1JA8wZg6GvRj4u41/9zK3JXyYdnNNPU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dcm6qwY/; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SU0taOV6"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7a226a0798cso450019b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcm6qwY/"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-33b8a8aa73bso1747073a91.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Oct 2025 06:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760706162; x=1761310962; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760706164; x=1761310964; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2AIBaCDwQN1IZRKCD+zvIdtL4uDTVwptE1Td07xzbZg=;
-        b=SU0taOV6lE7hQ4ymLgXpG2sZWrrcehlQGImuepCNi7dZlotqjuMMbk5j61hojO8+43
-         DNaLZx7O+HX7KUwKcBH5DFvKSzddMCQ9thgQJ/9RAI/3djPOMlCo4vxUHTutXKjk/T6j
-         Z+sjSz9SmDDIR2diiAL7v7wmZAR4Vxcuzt8gn0fts9L2AD9lgaeyy3ouf6QfGvy6+r+8
-         UaQis2PfnQ3xQOrX29+sgV91lnQ3fkwEGSQg0uoqW20kbzI5an+HzERHLtGDa533Z0sU
-         yueyaWtgONSDxnRpt4VQS0ac5KMLBzJQ0Dsn9jWDc8tQcq1DLzdzLH8HacxoZ3KOciE0
-         wFZQ==
+        bh=LeqcW731KJVenONbIrarcyM2S3esaQb4ChlqBvu2bUc=;
+        b=dcm6qwY/XahIYJpozgmJYBvIT7wC9juel5y55nrWDlAyzJVtGXplsHtQlgXR/8o8Nr
+         yZNjgzfbqpXrXgo1uR9EY2GboLfkWLr45SjraxyPt1ksVpgiSdrKi6KI9uNkOKGbJnQ2
+         7kjocJ2/Dy5S+f6h/EMdOLnQD3Zm0Q4uExYVlAPXctZSSSk7pwbdEiu9u3oD1ScVUHzQ
+         SQLjt6AxS2jvbURiYc+jKIMsqh32yNZ057qyauEw08NiRLXm9y8nRQo2tJ0mNoSySL/d
+         hnVnWqgtCKakNZ1OJ3jlOCjbiJEgSExV6isa73QQTxLZdmqATvEowWfueTtz9Nj5s4Vm
+         mRsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760706162; x=1761310962;
+        d=1e100.net; s=20230601; t=1760706164; x=1761310964;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2AIBaCDwQN1IZRKCD+zvIdtL4uDTVwptE1Td07xzbZg=;
-        b=KBsIEY3sazREd0cJTUM+lsRjccuhFYaa8CLzePh+Fwyw5DIGM/Ef5lN/4Rj48inoMK
-         g3H8I6oUSC4OOpR+v1V41EGzQcBDDYEM/GkWQNgIkjUiVvR21rkz/OSiEHcbeDzP7nry
-         EjRxIMjUdNHSdF0AYtejNgA4K3tkvLroWw0N49jhZDIq3DLc5+buSuMUr452hapG0Vzt
-         w/K0s2Mh9M2DjEKVD7D/BAXj4Xgm3d7nqTLcXKDyAZtpPyVI2ejD4lrVU+JA3adaZGBr
-         Y/HNco5E2q83CtwtmsRABUYu6GyLR9fUZL6YhnPLKy22prPFXGtr4+qOmVRyk36xnjrp
-         aD3Q==
-X-Gm-Message-State: AOJu0Yz8bsQA7rP+GDx0SQlomRKOc40CPs0A5skoeWkVz9/u8QI5KjHy
-	3yflCRV3ImXV8wCLYX8IwSKuHWHO2w4xOsNzK4NAR4jjUfN2HOcGJaenn2idAg==
-X-Gm-Gg: ASbGncu4t++dLbnVS91HdxV6FbA/KaBpNBhqAKc5IlL5VWL1hlDlu71f9ZeaGg6YsKI
-	pqIrx0dWMkp3xFiorYiO2DyCbeP9xksKaVOLiWub1hNSjRzuviuWSpvsylabf4bs/n8uGuIta+d
-	aSZbOyqNO3rIeJ/3t06jsiW/GQKHewcPdl5nF9ClAsutihItNDYgwS9f0VONugU8n3GbbHUpgC0
-	tk8xQNNr8zcHHFcvhKE4edFDHDCy3Vgv8yU5TFzFTw6T+AsS6xHo33/PQxkzrMrhsNEQidR9QKQ
-	wsdehkA4WYZsdnyydzd6fYDuKi4l5KmXZAuv18E5TXgSKxhNiv/1Ih8xl/4GEpG5s49T7ZwipRj
-	KhLj7NaL4HGZ02pkDGA3ljlUSxxyR2L/XR6UU9Dltkp7fkfGnVu7LAnClA+CcCw0FTdi5vrpmLI
-	r/3tmlMV5yNMgp
-X-Google-Smtp-Source: AGHT+IFFiVxb3FQDVJirYJk8cjuxpwJB/QZLz5l80+FdA8GJ5omGdk5ncsiGpcCjK/j3ztj4hJdBHQ==
-X-Received: by 2002:a05:6a20:7286:b0:262:c083:bb47 with SMTP id adf61e73a8af0-334a85473b3mr4866619637.14.1760706161611;
-        Fri, 17 Oct 2025 06:02:41 -0700 (PDT)
+        bh=LeqcW731KJVenONbIrarcyM2S3esaQb4ChlqBvu2bUc=;
+        b=dSG5QSMTICb2Jvi7T2593VJr47rtCvousw7MGu2HcsIk/2TOGk94Eyl4gu5wskWb3F
+         WKuj5WIUpBx+11pLUA5AUnkLwzkbcx8PXT18U58XzqPbABGdQIySoASJ5vU6Lrbw5nFd
+         2ISSzWSfFWDEB3MkyabpmgA6Jfw51A9rLSkCeoNNLTcKaBmXkANZbMvxXuSm294bZjQv
+         EoarQihBnsUrH0PA58/qlb7D2jvAEnZ5kCT1/3RgV7RvYpoNY1mml/kGtcAot9sAKyQq
+         RKJibgPUJTEL/1zT8etxFb9lcL3jhp/LeHxHdLSBTbm264aB+jCuxT58P+7PLHk/94WJ
+         e4TA==
+X-Gm-Message-State: AOJu0Yxa5pRkfW3g1zs96pREjZXZsGCK395+aj7LPRQGtzEW1+IWXX9m
+	95P9xuwsF9UFubQVxGwKYbSmnTiBQfcRWkZyJxdV2h02X2cO/bgTqOXjLb29TQ==
+X-Gm-Gg: ASbGncs4Zib0lHajsokj0cnvRFhnuK18KZvtTkvTY6Mm3pUC4yvUi2VBy4FTlq3ecnk
+	H14AQiMJcwKLStcQ++QnUG+FTYpb5xlqtN8xNqV9FmYtIi2mhF8YuBdJVD76HgOeCiIkPcpyiwL
+	eUm9qdBtpBQFQzBgP6SvRwFqdaUKGS0HFVJbPpu21UYvczjvW6IVGktp+I4RLB+CJCF6liQZk4G
+	0loK081+rB7iYOnJcf9fDH/SfhqBSIIRioZcA73FtM60q8VxLcj1OxFKtgqsjuxYlV3hKFuktDj
+	a9KQzu4mkmXlQ1Nf9NjWFTyeuAz4C1tnS8zcNISon2ospiGKZ2e+BYooV2sS64OxVPEF34kmDPg
+	GhEQfSpLPijS33nvxllCh9yabmJkeapX9s8GDN7+OzGxOOiDdBG9THzJCrxbye0gfIzxvQ5d+eU
+	hFNgz62pPtpZBx/h3JaTonQkJ/f3qRBajwMg==
+X-Google-Smtp-Source: AGHT+IFtBPSKpWVhXZBPoYMzQMXEI5urZ07Wl0ajcdv2pNjicebh2C4HWhr1g7Rofx3WI1m6ynLrug==
+X-Received: by 2002:a17:90b:1dc6:b0:339:a4ef:c8b9 with SMTP id 98e67ed59e1d1-33bcf8e61admr4833971a91.17.1760706163653;
+        Fri, 17 Oct 2025 06:02:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bd7b53b68sm2860036a91.21.2025.10.17.06.02.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bd7b401e5sm2822345a91.20.2025.10.17.06.02.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 06:02:40 -0700 (PDT)
+        Fri, 17 Oct 2025 06:02:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 06/29] hwmon: (ina2xx) Rely on subsystem locking
-Date: Fri, 17 Oct 2025 06:01:58 -0700
-Message-ID: <20251017130221.1823453-7-linux@roeck-us.net>
+Subject: [PATCH 07/29] hwmon: (sht4x) Rely on subsystem locking
+Date: Fri, 17 Oct 2025 06:01:59 -0700
+Message-ID: <20251017130221.1823453-8-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251017130221.1823453-1-linux@roeck-us.net>
 References: <20251017130221.1823453-1-linux@roeck-us.net>
@@ -81,96 +81,136 @@ so locking in the driver code is no longer necessary. Drop it.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/ina2xx.c | 28 ++++++++++------------------
- 1 file changed, 10 insertions(+), 18 deletions(-)
+ drivers/hwmon/sht4x.c | 40 +++++++++++-----------------------------
+ 1 file changed, 11 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index bc3c1f7314b3..69ac0468dee4 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -156,7 +156,6 @@ struct ina2xx_data {
- 	long rshunt;
- 	long current_lsb_uA;
- 	long power_lsb_uW;
--	struct mutex config_lock;
- 	struct regmap *regmap;
- 	struct i2c_client *client;
- };
-@@ -390,22 +389,19 @@ static int ina226_alert_limit_read(struct ina2xx_data *data, u32 mask, int reg,
- 	int regval;
- 	int ret;
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+index 6c9b776237c2..5abe1227e109 100644
+--- a/drivers/hwmon/sht4x.c
++++ b/drivers/hwmon/sht4x.c
+@@ -55,7 +55,6 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
+ /**
+  * struct sht4x_data - All the data required to operate an SHT4X chip
+  * @client: the i2c client associated with the SHT4X
+- * @lock: a mutex that is used to prevent parallel access to the i2c client
+  * @heating_complete: the time that the last heating finished
+  * @data_pending: true if and only if there are measurements to retrieve after heating
+  * @heater_power: the power at which the heater will be started
+@@ -68,7 +67,6 @@ DECLARE_CRC8_TABLE(sht4x_crc8_table);
+  */
+ struct sht4x_data {
+ 	struct i2c_client	*client;
+-	struct mutex		lock;	/* atomic read data updates */
+ 	unsigned long		heating_complete;	/* in jiffies */
+ 	bool			data_pending;
+ 	u32			heater_power;	/* in milli-watts */
+@@ -87,7 +85,7 @@ struct sht4x_data {
+  */
+ static int sht4x_read_values(struct sht4x_data *data)
+ {
+-	int ret = 0;
++	int ret;
+ 	u16 t_ticks, rh_ticks;
+ 	unsigned long next_update;
+ 	struct i2c_client *client = data->client;
+@@ -96,8 +94,6 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 	u8 raw_data[SHT4X_RESPONSE_LENGTH];
+ 	unsigned long curr_jiffies;
  
--	mutex_lock(&data->config_lock);
- 	ret = regmap_read(regmap, INA226_MASK_ENABLE, &regval);
- 	if (ret)
--		goto abort;
-+		return ret;
+-	mutex_lock(&data->lock);
+-
+ 	curr_jiffies = jiffies;
+ 	if (time_before(curr_jiffies, data->heating_complete))
+ 		msleep(jiffies_to_msecs(data->heating_complete - curr_jiffies));
+@@ -110,11 +106,11 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 			msecs_to_jiffies(data->update_interval);
  
- 	if (regval & mask) {
- 		ret = regmap_read(regmap, INA226_ALERT_LIMIT, &regval);
- 		if (ret)
--			goto abort;
+ 		if (data->valid && time_before_eq(jiffies, next_update))
+-			goto unlock;
++			return 0;
+ 
+ 		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
+ 		if (ret < 0)
+-			goto unlock;
 +			return ret;
- 		*val = ina2xx_get_value(data, reg, regval);
- 	} else {
- 		*val = 0;
+ 
+ 		usleep_range(SHT4X_MEAS_DELAY_HPM, SHT4X_MEAS_DELAY_HPM + SHT4X_DELAY_EXTRA);
  	}
--abort:
--	mutex_unlock(&data->config_lock);
+@@ -123,7 +119,7 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 	if (ret != SHT4X_RESPONSE_LENGTH) {
+ 		if (ret >= 0)
+ 			ret = -ENODATA;
+-		goto unlock;
++		return ret;
+ 	}
+ 
+ 	t_ticks = raw_data[0] << 8 | raw_data[1];
+@@ -132,26 +128,20 @@ static int sht4x_read_values(struct sht4x_data *data)
+ 	crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
+ 	if (crc != raw_data[2]) {
+ 		dev_err(&client->dev, "data integrity check failed\n");
+-		ret = -EIO;
+-		goto unlock;
++		return -EIO;
+ 	}
+ 
+ 	crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
+ 	if (crc != raw_data[5]) {
+ 		dev_err(&client->dev, "data integrity check failed\n");
+-		ret = -EIO;
+-		goto unlock;
++		return -EIO;
+ 	}
+ 
+ 	data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
+ 	data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
+ 	data->last_updated = jiffies;
+ 	data->valid = true;
+-	ret = 0;
+-
+-unlock:
+-	mutex_unlock(&data->lock);
 -	return ret;
 +	return 0;
  }
  
- static int ina226_alert_limit_write(struct ina2xx_data *data, u32 mask, int reg, long val)
-@@ -421,23 +417,20 @@ static int ina226_alert_limit_write(struct ina2xx_data *data, u32 mask, int reg,
- 	 * due to register write sequence. Then, only enable the alert
- 	 * if the value is non-zero.
- 	 */
--	mutex_lock(&data->config_lock);
- 	ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
- 				 INA226_ALERT_CONFIG_MASK, 0);
+ static ssize_t sht4x_interval_write(struct sht4x_data *data, long val)
+@@ -287,22 +277,16 @@ static ssize_t heater_enable_store(struct device *dev,
+ 		heating_time_bound = 1100;
+ 	}
+ 
+-	mutex_lock(&data->lock);
+-
+-	if (time_before(jiffies, data->heating_complete)) {
+-		ret = -EBUSY;
+-		goto unlock;
+-	}
++	if (time_before(jiffies, data->heating_complete))
++		return -EBUSY;
+ 
+ 	ret = i2c_master_send(data->client, &cmd, SHT4X_CMD_LEN);
  	if (ret < 0)
--		goto abort;
+-		goto unlock;
 +		return ret;
  
- 	ret = regmap_write(regmap, INA226_ALERT_LIMIT,
- 			   ina226_alert_to_reg(data, reg, val));
- 	if (ret < 0)
--		goto abort;
-+		return ret;
- 
- 	if (val)
--		ret = regmap_update_bits(regmap, INA226_MASK_ENABLE,
--					 INA226_ALERT_CONFIG_MASK, mask);
--abort:
--	mutex_unlock(&data->config_lock);
+ 	data->heating_complete = jiffies + msecs_to_jiffies(heating_time_bound);
+ 	data->data_pending = true;
+-unlock:
+-	mutex_unlock(&data->lock);
 -	return ret;
-+		return regmap_update_bits(regmap, INA226_MASK_ENABLE,
-+					  INA226_ALERT_CONFIG_MASK, mask);
 +	return 0;
  }
  
- static int ina2xx_chip_read(struct device *dev, u32 attr, long *val)
-@@ -859,9 +852,9 @@ static ssize_t shunt_resistor_store(struct device *dev,
- 	if (status < 0)
- 		return status;
+ static ssize_t heater_power_show(struct device *dev,
+@@ -422,8 +406,6 @@ static int sht4x_probe(struct i2c_client *client)
+ 	data->heater_time = 1000;
+ 	data->heating_complete = jiffies;
  
--	mutex_lock(&data->config_lock);
-+	hwmon_lock(dev);
- 	status = ina2xx_set_shunt(data, val);
--	mutex_unlock(&data->config_lock);
-+	hwmon_unlock(dev);
- 	if (status < 0)
- 		return status;
- 	return count;
-@@ -951,7 +944,6 @@ static int ina2xx_probe(struct i2c_client *client)
- 	data->client = client;
- 	data->config = &ina2xx_config[chip];
- 	data->chip = chip;
--	mutex_init(&data->config_lock);
+-	mutex_init(&data->lock);
+-
+ 	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
  
- 	data->regmap = devm_regmap_init_i2c(client, &ina2xx_regmap_config);
- 	if (IS_ERR(data->regmap)) {
+ 	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
 -- 
 2.45.2
 
