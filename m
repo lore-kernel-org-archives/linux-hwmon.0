@@ -1,205 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436511096F
-	for <linux-hwmon@vger.kernel.org>; Sun, 19 Oct 2025 08:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CDC42050;
+	Sun, 19 Oct 2025 10:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760861913; cv=none; b=hhcV5aSB9IPl4gDWIPT3iENZPeQ4ud2KbvuAcJIbROt1Ce917RcLZuP0EmpBzFlGaEw/lym56mnxeFg4QLBFNagT3CLPE6LPMDcgn/5yqBeYFYXf+dTdbaYggJKUvDogAIsH7qTuSkJKSFkCsTRsyvln5xOTHOjvTpfedy7Dm8o=
+	t=1760869914; cv=none; b=gflEFubhoozyauDpWj5ZfbjfG6hDgkagRAS+ZQ1vMjZ5HIjFO9JbAuVDYhsMtp0lY/JLKv7cLQVYiFjSHTHJLWSsZ8oOoEDbmFcTZ+yiDsNLfWfPSfTawczUMJEWZ+1FUWx8mCt9I4Gx/t5gzlk8W0KbaWFDDYRXRDgU36NUKFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760861913; c=relaxed/simple;
-	bh=CkKfMzvkEyvKMHzNwULvOaEof1VvDqUa5OWRMdSm9jo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PJaTyKZrU93ZwDreISApmXFGi7n3O0KYBSvVGSlVGNlbSw5UyPJpGcZQiZXhY6mb7I36J667bjTWFTQ5fmF4iWvTOEjuwJ0oZGNREhQgbXxoqk1+j3BZnDVsGhKYi5q17b1m10zPI9tHVl1/fWoEhg7eQ9M0ibVLCu3uW1io7oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aDGZ3Ls5; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760869914; c=relaxed/simple;
+	bh=LyPEy4ugtfxqZrSZMV/k9dsM19/kGVJqW5tGmrcvErU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SosExk4xD+pG9+tZrhW3Kmz0wOMBkyfPonyGYC/DHh1XylEaw/dSWlaL4JBk1m/tMtvolbz2dtsD1QHkSftFu09az+ugCBxNVjuKbwbYdOKm3+UUS3maLnV8spHmIjhz1tiuZFNpX0DjLUQxzCwFkeLIpatEun2rbsFBzDZinH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8iRxkLn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aDGZ3Ls5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760861912; x=1792397912;
-  h=date:from:to:cc:subject:message-id;
-  bh=CkKfMzvkEyvKMHzNwULvOaEof1VvDqUa5OWRMdSm9jo=;
-  b=aDGZ3Ls5YoqrEgHJNjbtC4LC32ezyvPPbH/Yk21DbBlkGCVLTXjTHH/I
-   X4gRYftJvocZMlxtroBN4sOAFxznyMYDkPYlEpm9aowcCW9UzQtmJ8GGp
-   xWH9fuzwEQODqogzytwkyXAabxczdwa0cdNGVfzNYgtpp+QyZUP264lQy
-   JcYI9QUoPKgPMXkZeuZbId+OIdYBWZAx3aV5m5v/osN/o9D9ayWgkX7S6
-   ZCrGCcAM0TCCQ6/MRbEZhPy8AdfAS5XErSZnxsIJ6+cwxUmvCSY5BhZck
-   ZxU8CYzgyCSyNalrvrATfofMgPeHtB1FlPCVVBh05/AQ7X8hMxj6Jnopy
-   g==;
-X-CSE-ConnectionGUID: 1Wcg/oMERUaE5fjyvpbPLw==
-X-CSE-MsgGUID: iEVbFb90TcahysXCvnkFbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74454615"
-X-IronPort-AV: E=Sophos;i="6.19,240,1754982000"; 
-   d="scan'208";a="74454615"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2025 01:18:32 -0700
-X-CSE-ConnectionGUID: s6509NHcTwuoQCpyF9Wp1A==
-X-CSE-MsgGUID: 2T5eS5+/RkOMVOLO1AOr+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,240,1754982000"; 
-   d="scan'208";a="182793465"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 19 Oct 2025 01:18:29 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vAOcD-0008wr-34;
-	Sun, 19 Oct 2025 08:18:17 +0000
-Date: Sun, 19 Oct 2025 16:17:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
- 65bc97a5e49ea4174ba7e89afdada3e30e6e39c0
-Message-ID: <202510191618.TJuPTJCY-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8iRxkLn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FF2C4CEE7;
+	Sun, 19 Oct 2025 10:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760869913;
+	bh=LyPEy4ugtfxqZrSZMV/k9dsM19/kGVJqW5tGmrcvErU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=e8iRxkLnoXwMqbFe1gxSQDTtQ/zD5Uab+Re6Wx2SXnz5THkSQrZuvpsaed9tQtC44
+	 ebPvGFY5oGq2eviqYbHT84DADw+4lrEETDMvxUoYW9mCv7OvWM5Sogn2u714tR859d
+	 6OBc9/b+pFzIsP3+8+Ts4+F66rVNToHRAYkBNkRodRW3CZZgN/5QNnc7J0haRNxtDY
+	 /xD65oTuDfn+iSagikrCEs65pB2VijyCnBccGUajGrjkGEkrofPLVowlTb14XptjOP
+	 TAMF2NyFwzjyybp5n5X2dFlx1S5lscYKpVDB/5XcEy6iqXuR/vr05ohBbipUTgEJPK
+	 pHBuugGf0H3AQ==
+Date: Sun, 19 Oct 2025 11:31:46 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Ariana Lazar <ariana.lazar@microchip.com>
+Cc: David Lechner <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, "Andy Shevchenko" <andy@kernel.org>, Rob Herring
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 0/2] Adding support for Microchip PAC1711
+Message-ID: <20251019113146.74c3f236@jic23-huawei>
+In-Reply-To: <20251015-pac1711-v1-0-976949e36367@microchip.com>
+References: <20251015-pac1711-v1-0-976949e36367@microchip.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 65bc97a5e49ea4174ba7e89afdada3e30e6e39c0  Update maxim-ic.com links to analog.com
+On Wed, 15 Oct 2025 13:12:14 +0300
+Ariana Lazar <ariana.lazar@microchip.com> wrote:
 
-elapsed time: 1058m
+> The PAC1711 product is a single-channel power monitor with accumulator.
+> The device uses 12-bit resolution for voltage and current measurements and
+> 24 bits power calculations. The accumulator register (56-bit) could
+> accumulate power (energy), current (Coulomb counter) or voltage.
+> 
+> PAC1711 measures up to 42V Full-Scale Range.
 
-configs tested: 128
-configs skipped: 3
+Hi Ariana,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+For devices like this where the datasheet explicitly calls out usecases in
+power monitoring e.g. for "Portable and Embedded Computing" (amongst other
+things) there is always a question to answer wrt to whether the correct
+place to support them in Linux is in hwmon or IIO. Note that, whilst this
+has long been an informal policy I've become more strict on this after some
+concerns were raised in the last cycle - the presence of similar devices
+in IIO isn't necessarily a sign that was the right choice, but it is worth
+looking at the history of those divers as it may provide more insight into
+why they are in IIO.
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-arc                              alldefconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    gcc-15.1.0
-arc                   randconfig-001-20251018    gcc-12.5.0
-arc                   randconfig-002-20251018    gcc-8.5.0
-arc                           tb10x_defconfig    gcc-15.1.0
-arm                              allmodconfig    gcc-15.1.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                         axm55xx_defconfig    clang-22
-arm                          exynos_defconfig    clang-22
-arm                        multi_v7_defconfig    gcc-15.1.0
-arm                       omap2plus_defconfig    gcc-15.1.0
-arm                   randconfig-001-20251018    clang-19
-arm                   randconfig-002-20251018    clang-20
-arm                   randconfig-003-20251018    clang-22
-arm                   randconfig-004-20251018    gcc-15.1.0
-arm                         vf610m4_defconfig    gcc-15.1.0
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20251018    gcc-8.5.0
-arm64                 randconfig-002-20251018    clang-22
-arm64                 randconfig-003-20251018    gcc-13.4.0
-arm64                 randconfig-004-20251018    gcc-11.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20251018    gcc-9.5.0
-csky                  randconfig-002-20251018    gcc-9.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                           allnoconfig    clang-22
-hexagon                          allyesconfig    clang-22
-hexagon               randconfig-001-20251018    clang-22
-hexagon               randconfig-002-20251018    clang-22
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20251018    gcc-14
-i386        buildonly-randconfig-002-20251018    gcc-14
-i386        buildonly-randconfig-003-20251018    clang-20
-i386        buildonly-randconfig-004-20251018    gcc-14
-i386        buildonly-randconfig-005-20251018    clang-20
-i386        buildonly-randconfig-006-20251018    clang-20
-i386                                defconfig    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20251018    clang-22
-loongarch             randconfig-002-20251018    gcc-13.4.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-microblaze                       allmodconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251018    gcc-11.5.0
-nios2                 randconfig-002-20251018    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                         allyesconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251018    gcc-10.5.0
-parisc                randconfig-002-20251018    gcc-14.3.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                          allyesconfig    clang-22
-powerpc               randconfig-001-20251018    clang-22
-powerpc               randconfig-002-20251018    clang-22
-powerpc               randconfig-003-20251018    gcc-14.3.0
-powerpc64             randconfig-001-20251018    gcc-10.5.0
-powerpc64             randconfig-002-20251018    gcc-12.5.0
-powerpc64             randconfig-003-20251018    clang-22
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20251019    clang-19
-riscv                 randconfig-002-20251019    gcc-11.5.0
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20251019    gcc-8.5.0
-s390                  randconfig-002-20251019    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20251019    gcc-15.1.0
-sh                    randconfig-002-20251019    gcc-15.1.0
-sparc                            allmodconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251019    gcc-11.5.0
-sparc                 randconfig-002-20251019    gcc-13.4.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251019    gcc-8.5.0
-sparc64               randconfig-002-20251019    gcc-14.3.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251019    gcc-13
-um                    randconfig-002-20251019    clang-22
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251018    gcc-14
-x86_64      buildonly-randconfig-002-20251018    gcc-14
-x86_64      buildonly-randconfig-003-20251018    gcc-14
-x86_64      buildonly-randconfig-004-20251018    gcc-14
-x86_64      buildonly-randconfig-005-20251018    gcc-14
-x86_64      buildonly-randconfig-006-20251018    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                          iss_defconfig    gcc-15.1.0
-xtensa                randconfig-001-20251019    gcc-14.3.0
-xtensa                randconfig-002-20251019    gcc-8.5.0
+To address that we ask that:
+1) Drivers for this sort of potentially borderline device are +CC to hwmon
+   list and maintainers
+2) A justification for IIO making more sense is included. That can be
+   based on what cannot be supported in hwmon (high speed capture being
+   a typical item - that doesn't seem to apply here as it's only 200 sample/sec)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Anyhow, I've +CC relevant folk so if you can reply with that info here then
+that would be great.
+
+Thanks,
+
+Jonathan
+
+> 
+> Signed-off-by: Ariana Lazar <ariana.lazar@microchip.com>
+> ---
+> Ariana Lazar (2):
+>       dt-bindings: iio: adc: adding support for PAC1711
+>       iio: adc: adding support for PAC1711
+> 
+>  .../ABI/testing/sysfs-bus-iio-adc-pac1711          |   57 +
+>  .../bindings/iio/adc/microchip,pac1711.yaml        |  195 +++
+>  MAINTAINERS                                        |    8 +
+>  drivers/iio/adc/Kconfig                            |   10 +
+>  drivers/iio/adc/Makefile                           |    1 +
+>  drivers/iio/adc/pac1711.c                          | 1448 ++++++++++++++++++++
+>  6 files changed, 1719 insertions(+)
+> ---
+> base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+> change-id: 20250901-pac1711-d3bacda400fd
+> 
+> Best regards,
+
