@@ -1,57 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453C1199FB0
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 05:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0382F8BE8
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 08:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761024024; cv=none; b=Zj7bSzE1xn+yT89paTSjloV2cKEfUAbPBKYC9P/MYgf1+juCgSzPWk3Nl48ZtUP9o2BF3NA6qAeb74DdMUFOoHVuHlGkuCEr/tRfO27wv23+ZIaYICIsvZMF5O7RQ653SP91ZkgYN/u/W18JLQJxuzrZErCD9N8xywF/mOQNFuY=
+	t=1761034346; cv=none; b=EZq4SLagEnO6CeEVk31lntRG2uO9qnr21Qzbu85KixLHtqjK2aRN5vr+6Eh4aKdQJqSIPXc+QTcxkoJfGuhL3fe5MZqWG7xlah+aL5rgYHjtiQRvGDD86/cyGhXs/83ceKcSjkUJvrRX7gJMVxVP/mfVZGKKevHR2GzDf7Ssaks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761024024; c=relaxed/simple;
-	bh=OD+1+o6DeUnM3tPv65ZN9sFzwENKkbEa+AYmHvH2pgU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oGk93QElbtrg81lfJCFjff87cYCiM9/pq+s6f3ogBI28VFPX9dAz6Csze/bwJSDQCe3JMFAkhzfKfLgzaea04u7bPeQiZC4CXS89xpfYEfKfmRh+NUGL54BzI7Yz4tU50PzU7afICcbrepWH81bSW1pR9Bt8vTAwjFDyAbi1mmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fe+VzBCn; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1761034346; c=relaxed/simple;
+	bh=PvFFdiA2Za1HWL6amtvwhME1TWQ98IZwIRqYTLVmtlE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=pSPzIHHbhmg5eMYz/clO2Orw1NT1cK0poBH8SIyfwgHGZ1L/XSWQ4G+5LK9mPwx6Lrd8EwqkSCMc9IW+qKAAJabuK715THP7SqWqkHItKImkeA0SZ08EpR/zKKzRGYFJWEt7EqvDyVJlcVsWWX5UfOiE8RC1DV51aBAupA7d8OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X8+ql0Z3; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fe+VzBCn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8+ql0Z3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761024022; x=1792560022;
+  t=1761034345; x=1792570345;
   h=date:from:to:cc:subject:message-id;
-  bh=OD+1+o6DeUnM3tPv65ZN9sFzwENKkbEa+AYmHvH2pgU=;
-  b=fe+VzBCnDuEms8y9rTaCCmVfnrTj4mSbFsrmjJzL2t+P7vkRYANtrvaX
-   b7o9p5+CX2O8PfILHOKnlQvdBNZyMPxunHwp0afqyWMpztiwcU2k0ScnW
-   orSqraa6Z3DuqNfy5jkaUzTSVFnJNK863gxI5IqdxB5JNEDhjcjqS11bW
-   i0POlwl5sb+aQVI8o7YFgVwSt3nPIYqlDDVkMPoDVrucXsSYKTAuxMYK4
-   OI77d8/u7DwSuwRGB2ORHTJA+xBElrWLJbVjunDeGrS7UXN+huxKOwRvw
-   3M4Nk7LNeXudWb7F/nXz2qaOIT917JujmlljD3o0GnxPp7dGd+27owQLE
+  bh=PvFFdiA2Za1HWL6amtvwhME1TWQ98IZwIRqYTLVmtlE=;
+  b=X8+ql0Z3yiEZAfvF4vWJMi0jj/yprACrmss1wUQ9yvPmeUA9FVCuEl0M
+   wCTS5mbkHt55is+MUcDGtucFEkeiHk584Kz7LzYeIanOOrTE/V3C0i/P+
+   O0stWE3VPI5CLpm7Egpbtal/qpI40jAlXnMKnUCMKU6qhWXj6twIXP7Y3
+   bpEa2XgRYSPiBFG80HAB6Zqb5Nq6BQiqM92JHaSRvK2Bl2sydoMsjhnS+
+   jY+yXta+vm0SD4/D+vjoOzrWgU6/N8Y6axPWP9U54LolIkuecpfVNGRY8
+   hhBpwbAgXy79JGEMI0OrJ71rOp5lLR3M5k1nqbY9PFS0kPWmlf0N9q27t
    Q==;
-X-CSE-ConnectionGUID: Jy+BAkBaQgO/zCWP0mGaaw==
-X-CSE-MsgGUID: hpDSaRPJRNiJXoRLpFzx3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62176081"
+X-CSE-ConnectionGUID: HHwfVMW8S7WWbCzLB6K1AQ==
+X-CSE-MsgGUID: fzW+MwT3T+em1qknUSwGfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63252975"
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="62176081"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2025 22:20:21 -0700
-X-CSE-ConnectionGUID: GoISn2YzTLGWQGX1LvbRiA==
-X-CSE-MsgGUID: V5GjjoV/TEufkrZKNBZOvA==
+   d="scan'208";a="63252975"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 01:12:19 -0700
+X-CSE-ConnectionGUID: u2x0wyTiSJekb+DGBCt4fQ==
+X-CSE-MsgGUID: AbZku7wnSr+gDsstFEh0nA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="187768903"
+   d="scan'208";a="184308808"
 Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 20 Oct 2025 22:20:20 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 21 Oct 2025 01:12:17 -0700
 Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vB4nC-000AVN-09;
-	Tue, 21 Oct 2025 05:20:18 +0000
-Date: Tue, 21 Oct 2025 13:20:08 +0800
+	id 1vB7Sh-000Ae7-2J;
+	Tue, 21 Oct 2025 08:11:29 +0000
+Date: Tue, 21 Oct 2025 16:08:09 +0800
 From: kernel test robot <lkp@intel.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:testing] BUILD SUCCESS
- 7b6ac49004ce16ac5753e7770b97209da2e5cff9
-Message-ID: <202510211302.FLeqICbY-lkp@intel.com>
+Subject: [groeck-staging:hwmon-staging] BUILD SUCCESS
+ 3991e3d59fa9f33c574f2695bab7b8e79876443f
+Message-ID: <202510211603.d8ScXJYq-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -59,13 +59,13 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
-branch HEAD: 7b6ac49004ce16ac5753e7770b97209da2e5cff9  Merge branch 'fixes-v6.18' into testing
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-staging
+branch HEAD: 3991e3d59fa9f33c574f2695bab7b8e79876443f  Merge branch 'hwmon-lock' into hwmon-staging
 
-elapsed time: 883m
+elapsed time: 1051m
 
-configs tested: 242
-configs skipped: 5
+configs tested: 243
+configs skipped: 4
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -227,6 +227,7 @@ riscv                 randconfig-001-20251020    gcc-13.4.0
 riscv                 randconfig-001-20251021    gcc-8.5.0
 riscv                 randconfig-002-20251020    clang-22
 riscv                 randconfig-002-20251021    gcc-8.5.0
+s390                             allmodconfig    clang-18
 s390                             allmodconfig    gcc-15.1.0
 s390                              allnoconfig    clang-22
 s390                             allyesconfig    gcc-15.1.0
