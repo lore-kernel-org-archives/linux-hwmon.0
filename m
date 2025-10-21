@@ -1,143 +1,141 @@
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9774127FD71;
-	Tue, 21 Oct 2025 21:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01807350A02
+	for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 23:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761082526; cv=none; b=eL89Dr4EkaFAkL1BbC0XNCrzn363i1sz1pP0t0OZIJjGvo8KghsXrGKs4NqlD4LNnRsNDyy1wEADEpmuKXvGlk/r7k0xJy7TOH5u8Q4DdjaeK8QF2xzXWBjD0Ylc1dbERNOh3CwU2Iim+MsRAj6uCBYGbl9iNbfTne73Z1jmG0g=
+	t=1761088580; cv=none; b=VzdRTpnRvtvNUzgtqlVS0iXL5Z+4OAMPHvC7s2N4SaLdHrAxeNS39TZYDHAie0UcBLtOkoqSFJgvRGSIM9QKsz1bQLZn8Zbh/ONym2Dn6/TA/CVTtvjLP7msoeLoA97YQwn2tlOLj3TNovufmoMzlIRCEO/HkimW4gFHKmx+y00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761082526; c=relaxed/simple;
-	bh=YOmO0aTYC7u74cdNwBX4yqTPJteWYgGn+TnC9SPFm5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JIJO2DYjUyeYA/LzfFd5dzOcij03UIPftgx1RSBBzSOYwWGTioNA5rVvRYLKT9kpyCU3yp20r3JnFtzVYhDG3gZKD6I2bHKhQ1LuYiuO3rDap+bFGbEWNTZ9yDBAg6daQ8ETVeVBXIT/uMyEXWas3tGNH1wkxWia4cxIoUf92sI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=LDDwlNL/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=trU68A4Y; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+	s=arc-20240116; t=1761088580; c=relaxed/simple;
+	bh=MkrCXOKD8Uo8t+/oSxngnI6HGdowLk7sk5mgxdJXK2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=JIw/YLvPPm4i1bPuztYKHFtoxxPbFK3sJNDvDln2EMfFnj1bIWRXUGRYkvmUKBawQIBcDfF5T6jRxekYQxGrpojwGLHsVYXbtO0lWfTP4j4r0MJYn8F+JlgL0WRybBAfr8M1PtpP8eYySRBxvWhxVsiApdcXhJCWnyiRmuQP+8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft4MRMs1; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="LDDwlNL/";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="trU68A4Y"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id C07911400152;
-	Tue, 21 Oct 2025 17:35:23 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Tue, 21 Oct 2025 17:35:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1761082523; x=1761168923; bh=SSmc773k1o
-	hUjKBtXPg8Ooubnfa2H2zZUHk2E3oNqks=; b=LDDwlNL/Civ8KvUV+4wSIqn9Fp
-	dC6gnUKVTULSO8HojwWFrG0YZyvJvkw047KbdqBA7pfC00sxISkseQmGwM8ejAOE
-	99UrKxGX2dVr3c3gC+DjTGIx7gUjwczI48oyUPRmuP6bFpRZS4oWtedTLRd6IALo
-	1NhTCrbJvbY4KxFA0AJWSHCdhJHb1JW1Vm64AgpwnRzV6gpxaH1eLNqkyUmFz3N0
-	f8GCTKCEaLeOLmz1SEjBIrPUGjcg2MUHuMOPyRBv+S335R3kR441Ij5gQhh+aTvZ
-	9kSHQTNM8/8s8x5ZMPB3nmz5rpEKs9sh7GU+H9oXK2lB7VTeFTthCfJeHJ3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1761082523; x=1761168923; bh=SSmc773k1ohUjKBtXPg8Ooubnfa2H2zZUHk
-	2E3oNqks=; b=trU68A4YzeRx8nSBoXV7wr6rGsygStp9hhqPoTrWvrwH7020yWy
-	LbwZZQTk1JTQFfsyu7YxbX8GIQDPk4hF8h/qLr8e1zhJpVDaCn0gd+jvvHc/St8U
-	PfTGJ7mUgGZQ5LLORJQiWSHFwv97yTDg8ML1SY5Ehe4Z8JJyFs5kp8VGijgdW12w
-	H+q6zOyeZWpERBinzuxMlrx4mvf/1P20p36MaDEI1FyWT+5HWJGykX2U17KDxH63
-	iuZk4CH7K6ZGiBXNSbr/Te3xOiAL2H0nqorV6bVY4LYcmqrCVlBbeh3pTiWs087G
-	fIURyiYh/cVImYO19CBb9EWzpskuQ3u70GA==
-X-ME-Sender: <xms:mvz3aH6CC7ccxitepgQOV4dRf5ycIb3MyGp5fup00yTr9aRmZcxk8w>
-    <xme:mvz3aNR3WqFDe4caBONWo_J67I3zv6_Kgwz3EemEAqUyQhrxbPcQqCmnF4S39S-wp
-    PzKQ_6NQAcYn3zqdXJ_tGN-swiq389HUvU72M0EfweI5HMXfgcT9pc>
-X-ME-Received: <xmr:mvz3aPmKV8lSi3JXACietOeMwXek-wkDaW7hS6ij3kVUWd7Fu3q5gI9k3nMzzl27h7VZ18xiElJUB3-Q2apck-1pizG1VUQUTK2WKBWCyrun-YkCsA1vAkLbbQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugedujeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
-    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
-    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
-    drnhgvthdpnhgspghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopegumhhithhrhidrthhorhhokhhhohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    epjhgtrghllhhighgvrhhoshelleesghhmrghilhdrtghomhdprhgtphhtthhopehsvhgv
-    nheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlhihsshgrsehrohhsvghniiifvg
-    highdrihhopdhrtghpthhtohepnhgvrghlsehgohhmphgrrdguvghvpdhrtghpthhtohep
-    lhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pegtohhnohhrodgutheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:mvz3aEKTfwowrvGhnvf4-EXiYQ8vvIQIVEZ1iWF8JuUJEl7pOxPTwQ>
-    <xmx:mvz3aKQDpq6pdomkmnXR8DESBXdjiu6JkQoLsyLelbx_7tE1yw2-gg>
-    <xmx:mvz3aKSM4MHm3ClKfeaqTHWz-nMYXtQafAIa1bNW_e28Sx97dtMPEg>
-    <xmx:mvz3aEzXTHBa5YFFaUthIK9hhDlQyKhib1n9PXB56vtmvPVKipSSUA>
-    <xmx:m_z3aIN6XjMCVaeHimR80BQvfCuR37CLmoygwdxALuTo15O-_yFWnP9x>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Oct 2025 17:35:21 -0400 (EDT)
-Date: Tue, 21 Oct 2025 23:35:20 +0200
-From: Janne Grunau <j@jannau.net>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: James Calligeros <jcalligeros99@gmail.com>,
-	Sven Peter <sven@kernel.org>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 07/11] input: macsmc-hid: New driver to handle the
- Apple Mac SMC buttons/lid
-Message-ID: <20251021213520.GA2546203@robin.jannau.net>
-References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
- <20250827-macsmc-subdevs-v2-7-ce5e99d54c28@gmail.com>
- <qffp7kadq3xojla5k6f5pr37irgytqfsqvabr6ydvulxnkcgnn@bv5mrraxrhhe>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft4MRMs1"
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-373a1ab2081so65927351fa.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 16:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761088577; x=1761693377; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R3iS90oGUh2sChEA1Qdr/sH9FOKItDj8EpmJAd2/xNI=;
+        b=Ft4MRMs1CRt/VtZB7365S+5OjFQ3X19yt34APhWDzMNH0J+8X8dGyOJrZCXu15+h5y
+         wcaCWKC8CrSSC2MSDmLpn1GBZSskH6QUCsjNeuLA76d3jxSXj/nRYrD08XKERpeh69tt
+         2A+fheMaFzkS1BqQDBGpSXi2U8yRSzh0dioUm6N1mpPj6oMpC6U8ltBMMsFA1Jx2PUYU
+         qoo1B7vEs/T/13Whpkgxi04mDs0C75Mu+qczMN5zZyeospktm5lCGxjyBeI67mKS2hQo
+         3hKgGPv6pAX+bJht5qptzFz4DSqz3UnpP2WTsseirQEiSn/jVL7krnWWZ07XYtD5KmhS
+         cfOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761088577; x=1761693377;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R3iS90oGUh2sChEA1Qdr/sH9FOKItDj8EpmJAd2/xNI=;
+        b=bfl/kat2mGfewU8Tfdniv7aBAHVu9U+jHXX/D+pzmoSiEjTaNzTjWUcl/3jydOcd/1
+         DcBgBUVjbt0mvKT74FnVthH3FC301vUUr2574io6eeEi3+ZdDcQDrr84bsShW5EHsRS/
+         kD+EcfoFiH1gOlPPrT7b5ga2/Z+jOypJI9dEhIXoBM/m15ZOfgRSZUWcDyDpbiUcS4Ia
+         HOh4ZCEZzc3VBNp8RJqB2atNt7qar1q8WSnA3d+noim5ZiB+hqWGSioaOIcj3EomWe2j
+         57cNYKGZyI7DeHW4K48V9XAjjzq6w5Suwenw0UBL1Pma6scy2UB2OesQtyCP8lxg/LDM
+         x2rA==
+X-Forwarded-Encrypted: i=1; AJvYcCWI3StbitWsipV+BSgyhNtGS2/GbCyn7YQxjm9/NwANrxqxVkimF66r0nmRy3P4SuvOTfDjQNwdzJpB1A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw91xI7k9UDvo0e42iWwUmx6OwpLMrSQD56IIkLLtHmdBGQB3s2
+	8hn72ECavG5Lqcip1JDvTPzxRqJmkyeJxTT3VBG9z0fjixdcFtWvfE6E
+X-Gm-Gg: ASbGncuuPysPnB5DDp/T3S/Y1JRp5i1qp/UTiUOm6NRCxW6HR4bBKV2gFbPjW2UA6s0
+	W5r2FMUv1W0bMTHCuZIdHb6FW8felnTXJTLJvv+LDUF+rrstqGOlwPTIfoJnLoacu+hZ2gQ+PnV
+	Km0xN+bACMTMSVQs8kOO56DrcPgNyqSeIy1N7x5ycuotkPiJPugHWNdGtkulzeCWihSEdlQ1BXA
+	PLBL7eCOiqdTbgJfRayl8NN1/yEz9TWMzyxsVhqjksHLkuFVZDnSPDkNrJdyvZRDKu/Yy5Xbjxm
+	CbQ3H0Mm2U4+E9PbSQVlebRfr6y64wzjQcMsSl9CPq6qccXbfyrGNM3sXWVG0GI5sDMS51pUfFS
+	qVHK3OylUiCLV8T/acwlFHwtogCEo+KyWXvGKXSjVKP42l3MoKEMp8XqJQRqK0OD3L30K3dHdam
+	wB43zRydU7a6x02mICCfzpSZXxkU0=
+X-Google-Smtp-Source: AGHT+IFXQQCdVjndGUlAQt55SyUCqt01O1JPB+Zj0At2Wm92ggmQB/7qIpSekj8luvKqPDpYm3P0Fw==
+X-Received: by 2002:a2e:a813:0:b0:372:8f0d:b0bc with SMTP id 38308e7fff4ca-37797833eabmr54004851fa.9.1761088576811;
+        Tue, 21 Oct 2025 16:16:16 -0700 (PDT)
+Received: from foxbook (bey128.neoplus.adsl.tpnet.pl. [83.28.36.128])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-377a9664a97sm32800741fa.50.2025.10.21.16.16.14
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 21 Oct 2025 16:16:16 -0700 (PDT)
+Date: Wed, 22 Oct 2025 01:16:10 +0200
+From: Michal Pecio <michal.pecio@gmail.com>
+To: yazen.ghannam@amd.com
+Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+ linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux@roeck-us.net, mario.limonciello@amd.com,
+ naveenkrishna.chatradhi@amd.com, platform-driver-x86@vger.kernel.org,
+ suma.hegde@amd.com, tony.luck@intel.com, x86@kernel.org
+Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
+ count
+Message-ID: <20251022011610.60d0ba6e.michal.pecio@gmail.com>
+In-Reply-To: <20250107222847.3300430-7-yazen.ghannam@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <qffp7kadq3xojla5k6f5pr37irgytqfsqvabr6ydvulxnkcgnn@bv5mrraxrhhe>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 29, 2025 at 11:11:22AM +0000, Dmitry Torokhov wrote:
-> Hi James,
+> Currently, the total AMD node count is determined by searching and
+> counting CPU/node devices using PCI IDs.
 > 
-> On Wed, Aug 27, 2025 at 09:22:41PM +1000, James Calligeros wrote:
-> > +static void macsmc_hid_event_button(struct macsmc_hid *smchid, unsigned long event)
-> > +{
-> > +	u8 button = (event >> 8) & 0xff;
-> > +	u8 state = !!(event & 0xff);
-> > +
-> > +	switch (button) {
-> > +	case BTN_POWER:
-> > +	case BTN_TOUCHID:
-> > +		if (smchid->wakeup_mode) {
-> > +			if (state)
-> > +				pm_wakeup_hard_event(smchid->dev);
-> > +		} else {
-> > +			input_report_key(smchid->input, KEY_POWER, state);
-> > +			input_sync(smchid->input);
-> > +		}
+> However, AMD node information is already available through topology
+> CPUID/MSRs. The recent topology rework has made this info easier to
+> access.
 > 
-> I believe you should be using pm_wakeup_event() in all cases so that
-> pressing power would interrupt suspend even if resume() handler has not
-> been run yet.
+> Replace the node counting code with a simple product of topology info.
+> 
+> Every node/northbridge is expected to have a 'misc' device. Clear
+> everything out if a 'misc' device isn't found on a node.
 
-pm_wakeup_event() does not wake from s2idle. pm_wakeup_dev_event()'s
-`hard` parameter is explicitily documented to wake from s2idle. So using
-pm_wakeup_dev_event and use `smchid->wakeup_mode && state` as hard
-parameter seems the correct thing to do.
+Hi,
 
-> Also I do not think suppressing KEY_POWER is needed.
-> Userspace should be smart and decide whether to shutdown the system or
-> not when receiving KEY_POWER depending on the overall system state.
+I have a weird/buggy AM3 machine (Asus M4A88TD-M EVO, Phenom 965) where
+the kernel believes there are two packages and this assumption fails.
 
-Not all user space. Using the power button to wake from s2idle while
-showing agetty's login prompt on a tty results in an immediate shutdown.
+[    0.072051] CPU topo: Max. logical packages:   2
+[    0.072052] CPU topo: Max. logical dies:       2
+[    0.072052] CPU topo: Max. dies per package:   1
+[    0.072057] CPU topo: Max. threads per core:   1
+[    0.072058] CPU topo: Num. cores per package:     4
+[    0.072059] CPU topo: Num. threads per package:   4
 
-Janne
+It's currently on v6.12 series and working OK, but I remember trying
+v6.15 at one point and finding that EDAC and GART IOMMU were broken
+because the NB driver failed to initialize. This fixed it:
+
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -496,8 +496,8 @@ void __init topology_init_possible_cpus(void)
+        total_cpus = allowed;
+        set_nr_cpu_ids(allowed);
+ 
+-       cnta = domain_weight(TOPO_PKG_DOMAIN);
+-       cntb = domain_weight(TOPO_DIE_DOMAIN);
++       cnta = 1;
++       cntb = 1;
+        __max_logical_packages = cnta;
+        __max_dies_per_package = 1U << (get_count_order(cntb) - get_count_order(cnta));
+
+It was a few weeks ago and the machine is currently back on v6.12,
+but I'm almost sure I tracked it down to this exact code:
+
+> +	amd_northbridges.num = amd_num_nodes();
+> [...]
+> +		/*
+> +		 * Each Northbridge must have a 'misc' device.
+> +		 * If not, then uninitialize everything.
+> +		 */
+> +		if (!node_to_amd_nb(i)->misc) {
+> +			amd_northbridges.num = 0;
+> +			kfree(nb);
+> +			return -ENODEV;
+> +		}
+
+Thanks,
+Michal
