@@ -1,214 +1,164 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012010.outbound.protection.outlook.com [52.101.48.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC66B26ED20;
-	Wed, 22 Oct 2025 13:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761140358; cv=fail; b=Bj84GoqmgJAjy6I/wR7R5BIYXSdl55uloxqjSLiBwiNrFFkFzfhDzDbQq6ztFSl9uSJtckLX+XC4X1dJXaDSV9RT1qLWBoEhyLCrmXilVthNIjOLjnHh/AMl6oT6+yl4v+TzZKVUfL7gcYwuX8phwwbDNe0+dsqelNgX3VWLJzg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761140358; c=relaxed/simple;
-	bh=nfeV+DhwnuBBgTXzCX0LirUDMm6PjcJBAY4RhXgSg4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=LOLMxa01SCwlXQL+HS1NyFWWsTu6bX5HvS4nMyfrcwnmXQ738ILTqbBIR5oOBKIe21Ggg3AbXArLglqIixSzSaPfgC49Rq2JLecitQd4lJa5WZZD6pnBiqRHLQkD+eVOsImRblGNNffno2/Ihc0jjx0GwkjXw0HyzTDsABXIJw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=e0pWYrJu; arc=fail smtp.client-ip=52.101.48.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4A32FD1BE
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Oct 2025 14:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761142049; cv=none; b=Zyz92cef0OksugCFMsMzHobHNqcq8htXdR8LQ3k3t/nojpzE7Rfau4IulV4Or23LM2EMeWMOLdrD/Z2GLHIrn6Ud6ilbWhmXQSeEPYQg+QCUVvJswOugFONaFQbgzvbSSsstiN6K5/HrZMaKPr9vKQhf/QSTEuf4Q/VHfPKmwtc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761142049; c=relaxed/simple;
+	bh=1C17DoVvYolAyaHXd5cbIQWFprwLNpCGAH9O/IeMJS8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kAhd9OkeTRVyxNq2O2NgglHLhExezt7tpCoDkboE06xktJUOXJJCppGSxspJp77xqeVtcQ9YKO3XYKjzx8KbCH0AuwtvKU1+Gxcdp3+jYgSWY8t8jTmXz07FfLsycIXCEVIzwXObhfi3uiiktcz/4Zo739Jb5Bal8HlStI53Qp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gt/6aead; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="e0pWYrJu"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NvXuj3le0fvDv4nwEVO12iIqlZ8sU9GRClh1rmN5PpC0gWa5LdzRVLmfc0UDwywtmvqalWgoxthNyCIicWyR9TMT3pXFd4C+KiCX/fUWdjMNOqSLG6khl6p+kEYcnHhBmCWsHR2hAyZdVVFyptzVFxnNP2HupTnsGvWgeBha7GkfqIjsHN5Ial87BFovtmTKvBXi3/Ph9n4UaZqOzWmsuSRmiX9ZsJHfaWgOZ7eOFkoQbNnbDYG0+U3ovDZ9v0CbVasPKGqIB1m+X8QSlA4wr4KdUVwdMqmFDbdE/FXfbGL+EbUTShZVaYj9+CbdhHUXgw8A6LiSF58I5sstqfJeuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FJa3wa9z8rTqKSsNl08SAuDKm1qa14pT2e5cDLUR9SQ=;
- b=WUSeSLe4hUpqhVUHZL+Wl2LrZaW8b75bGWFhpzfWyxm3Fw/ZyXl1wUxaorVk9iPqdtjqTx2mvGAhwHbKHSX76lpDfhxNofAlZoCnXsJYWWsTk7yqzytjahvxz7EucTChe+7WDpP/udPBz6a0yROFyCk2DH+uJhTaEEt5Ozz+GUoxEGotwPJ85n++1LJExRaY74678wCxwwtE2wutx+7va53ZXOZrDMqnoMuqMyY9c066Qw8kOoTkVypCLHRusAWw5XVau4oh43Hq6ZMNlSGOqXd8Z3M2gDvPlyfZgQaiaDMyMXEs+F+9kWqvFdR2OW9UM7nT5pAPizbNzOwA4pNs6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FJa3wa9z8rTqKSsNl08SAuDKm1qa14pT2e5cDLUR9SQ=;
- b=e0pWYrJu6sZNzOohkm516PaQjvb90Stx5Gv48SHIKcUhz7jkygkZ7hPAZOcJ1vqHsM0p2FrqVOS19gMB/Cu3tAATCo6dKeP2Hp/gCLMJcYbCuIlWvQeHSdf4uSapAY77DXC11FCPm21j7ZIsY/f9dXppPdcebMNuUNmdIt+StfQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- PH7PR12MB5736.namprd12.prod.outlook.com (2603:10b6:510:1e3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Wed, 22 Oct
- 2025 13:39:12 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%6]) with mapi id 15.20.9228.016; Wed, 22 Oct 2025
- 13:39:12 +0000
-Date: Wed, 22 Oct 2025 09:39:01 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
-	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux@roeck-us.net, mario.limonciello@amd.com,
-	naveenkrishna.chatradhi@amd.com,
-	platform-driver-x86@vger.kernel.org, suma.hegde@amd.com,
-	tony.luck@intel.com, x86@kernel.org
-Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
- count
-Message-ID: <20251022133901.GB7243@yaz-khff2.amd.com>
-References: <20250107222847.3300430-7-yazen.ghannam@amd.com>
- <20251022011610.60d0ba6e.michal.pecio@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022011610.60d0ba6e.michal.pecio@gmail.com>
-X-ClientProxiedBy: BN9PR03CA0438.namprd03.prod.outlook.com
- (2603:10b6:408:113::23) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gt/6aead"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-33badfbbc48so8370798a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 22 Oct 2025 07:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761142047; x=1761746847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=WHJCfnJWMLGX7Es1g+WBJ01c0gatEOnm7L9ZExylw/U=;
+        b=Gt/6aead8T6TBSSoY4JGYWRj8InXcxtLX59iYl8emLbVHqsmbeUgDVRvrFVyRdHo7U
+         5U5oFLosAwDuWAsc9W0I1rxlsoGjcR8FMK5Ipe5ZNUVfNHJkjaPLznz6Mj/zryzMlpch
+         hlr9A+JG0szVPcuPK3tWJy8qT+icGnZ9c2YEvWZAzkpiiC/tnnYD/6laAvGQGM4QM4um
+         L+q7e3TSjASyfLXE+VziWFTEzFMc8Hy277fDo0/HuoPgFgnlhKDi8CRhvFp0qibY5wsO
+         EgddAXXnhAQY0hjvkWrSCODvgYiRfiDowyFvOun/zoJKlPxQywZenHg5/tO5W8EUPYN/
+         rkYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761142047; x=1761746847;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WHJCfnJWMLGX7Es1g+WBJ01c0gatEOnm7L9ZExylw/U=;
+        b=V683z4D7Cs5DdkmyPY1UCI1kFk8vCetYwow22a0wU8a4TBIFWlIHOGBRAQ3GUR/9Jd
+         R6j98o49XQsMz3Yq1ejqpB8PqxwTy4WhpB9acKbMQNKshVJxwOkDy5tmWv6KAIul0we5
+         05HNeRSUS3G3jZtK26iHNlBklwTzLrFE+fZAG1hMnIP/cQfEDO2AXKCMj9ANoO2FV7YO
+         WeIl6BeNbN5ZtMIIWIrlobX+eTztMsf3AmoIK2FKLyakkdOQ5tA9dg824amY2ckwFvJO
+         R0gpelgw95HG33QVP94kxY56LecVJkGfLgjgnwyubN1DJ2hC8B+imBwPJIbKdC+nKel9
+         +bZg==
+X-Gm-Message-State: AOJu0Yzh4qXxdZhQh0CECmATd3aVVAMFBYJQfNX2eIi+e4AoQs1XQ4VD
+	4SvltxELc5PryT6QrZZfK1bx7vVVEmWPRQGeRfIvxU0llTqc//Otxx1w
+X-Gm-Gg: ASbGnctEyOssN3s5gpM0k3H/NdrKbbSf6ISuXf3X21kJbr/sfD/ZCFpKjJ62jZLY/T5
+	sgv3er5HBCVXEWJ9qJWtbHeYb5/2zr0q7pHA3x83AcUPb7sz3wRmFd9XN2CXOGSXCmZvhsc05KJ
+	TqrzSrvDMGGLzaDmrfzsCGoiemLX2hqci+r2GHSjPYlfWFLIZYc6Ok7NagVb8gf5AmVsPQmBLMG
+	nsKNrowE+4nIAaqiBRfDVG0wC3VVr5LIstks5ovtjzakLxGLGtIxcL8QuErsMiB8qD8OvX078Ro
+	Ix+9S6Kp4jXaCLa/ycSc9UA3oHYGs+E7plBvLZWJGvEIuKKAuRZVLW40E1kqvhY0kp5fsZ8TFe5
+	R9e2nqNrFgwQV/JaaXQkIJLq2FD4YObMVWwGCmoGpNTC3FTo8jpDI0BeMpGgWHoX2L+sXqYzCei
+	ZP7W2MZEGrMVROgFdkk4YptCmlls0+F9mPMA2s7Gg0bl3abnkf4uF3te+N6jc=
+X-Google-Smtp-Source: AGHT+IFeOO2m/QK88KsQxbIIIGJpiMOj19Lffr0deFbuerlgZNfeec+YsiTpPWgAdx2hr78z9hvKTA==
+X-Received: by 2002:a17:90b:2fd0:b0:335:28e3:81cd with SMTP id 98e67ed59e1d1-33bcf8fa1b5mr24895951a91.18.1761142047333;
+        Wed, 22 Oct 2025 07:07:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e2247a7f1sm2722930a91.14.2025.10.22.07.07.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Oct 2025 07:07:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3a4e8cb8-2543-484b-80ab-15eb3490f29b@roeck-us.net>
+Date: Wed, 22 Oct 2025 07:07:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|PH7PR12MB5736:EE_
-X-MS-Office365-Filtering-Correlation-Id: b20e576a-d9ee-44bd-cd1c-08de11706280
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?h64Vz0kjR4SfNY5EoeQ49s3jymIdJF0sJcmeyuiIqgO1OO1ZE7bmA3lLQWFU?=
- =?us-ascii?Q?hto6VqwiejHtBkMhI7UEWwMt4sv1rJsRVKeo6eTsSZXMn46tjJrBnaA50jiQ?=
- =?us-ascii?Q?AQ+HhvKCtPI3RgUa1XdpZoS2q7kJ0GoAL14JCly5RojVx8F8ZRCC/D08Ztp8?=
- =?us-ascii?Q?duGUlgfB0ilJdjlw8EG/MHzfQdD60YnxF4U3Rhw9b0dvWNzUzPGnEdrEEyZE?=
- =?us-ascii?Q?97PXHmqknAXGKyoQ923cwelY171kfyDSFaYAXDR3hTiZA2wP8cJxIdLEibRe?=
- =?us-ascii?Q?CaDnm29Fk32NPNuz76hGr1QJ5smK3LuO4I5pcQncqT4yk4Lfh8BMh5BFbuLq?=
- =?us-ascii?Q?fj/ZvFM+Fn1vEMedTbSAp+r6+FCsAZIeEmFA52CA3s3LT7aEmgBmSdBX9mhh?=
- =?us-ascii?Q?6x0nLHprJ0CdFmdqQs4Le81g++qvqt7/uXlT2DxBfdwYYhmIuDPfw7uXeN9s?=
- =?us-ascii?Q?Z9Dv9OVO5OMPUrIlBacm4t1aDLgoditLaT0pIh58wNONaGorAKAUC/AOVHM4?=
- =?us-ascii?Q?+IZMUJj4TK8XLj/FmvA+or5XYbTcjmkq81XO0izwyc4dSN3ET/XtnMw4sxAM?=
- =?us-ascii?Q?SW9mdLFdk1FELodKukc/VTxtLj+gARswF2wzYN+T4TLy9ovCKdaI5HR+gQt6?=
- =?us-ascii?Q?oRqdjCvv9a5WDZRTwOIbKeSxslOfvH3zNfjp0f70ZJE2GLriyAsQqlpor4LS?=
- =?us-ascii?Q?28Zkryy4N6lOoBXi5e4Wrvc6mkmA+pA6hMkTBGwg1paFXO8mYDxzIj78WUGF?=
- =?us-ascii?Q?KBePeM+tViogLid9LVwlU0VnKh3YiBTOGCMLma0AneWTIo1Eg+MLUTzYhlEr?=
- =?us-ascii?Q?X8eWwxJApbY2idFA0KX+qeKpdmG0RI7Wj3W3XqouSL5Aee4A2xi1s6Qw7iS/?=
- =?us-ascii?Q?gTMD0gs2djQ6cLWrmKiqh/xU6sL/jMl0djSCof7ZXU2sSfiAnc/XAPGpvemV?=
- =?us-ascii?Q?1ekocJBdbFLOq5XEo7AJiKy6KSOfzQVlmlfdx1xNX1Q4Ov47qbYAO0+6JqJg?=
- =?us-ascii?Q?Zh5zR3zgoxDezN6h0Fb0MpvDO0AjZzOwqHKU46SKifvUO7OH5PDIr4Ebu2k6?=
- =?us-ascii?Q?EHPSm/vDa+svAFn8hSmKcrsadPooz6nkTKO+z6z/chaaxHeU6v2ONgk+6c4y?=
- =?us-ascii?Q?JFPFQrF8vxsWTi6I8OnJRV/lkOwP/E9mNXaGNMQ05k5nnzogTNbKAs+fzg7C?=
- =?us-ascii?Q?Z0Sws23NgACSnZrQ034itMST1Oy3ROKGwwnyGalrbKNv0fIGkVsZwAjzLF3O?=
- =?us-ascii?Q?KZg6bMsKZ50t4mVUDbFB3LQK8GeL32SY/6S0KGK++b6uLW8/hV/wWNjr33WR?=
- =?us-ascii?Q?j3r2/OEyZgELNUtAR7WIjNmv92qI3sJk+uNq6QAv43wK2HePL9IvDbwi1deq?=
- =?us-ascii?Q?U1FNXvobKgwwmjT+MIziNfx31TY4P79lj1sFdTNod6k+KiyDkwBSTJOXV66o?=
- =?us-ascii?Q?t57851Sf32B0XfohYram319HQDb4z986?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jjZLS0rre15vE9oxCri8wK1JqBL/bnCzJ4TtNH6MVrc9/80/84ENvWMV3WO9?=
- =?us-ascii?Q?hrejBz54vGW0ZnAAGnko5dxbOuWb4S5Li0VRRc4UFAvRCFuT4nq9CrcoRN9S?=
- =?us-ascii?Q?xUvIwSGVodkkSfzCYdRtQKAE5HNhQOb+dC/uxWqWVhSJmikw8dh+PrLPG1J5?=
- =?us-ascii?Q?rnCUf+tjgdCItXJwh+mspMhYTbR6wHpQIouBowHZtjJ/IBZgBYNOy+A2dVYM?=
- =?us-ascii?Q?J2lbdskUP0ReBYrFnrq/zfDw47G/zo0h42YWCYmws8SdYVnsE5Ap7GBs7EXo?=
- =?us-ascii?Q?SLZjVilrjAMNqGpRWAD3oCUcIb5P+RZGIZGSbdf/A+TDaWI5Ipf85HnSw0sG?=
- =?us-ascii?Q?XyM6gxCUc5FHwSJL2b1umnm7H5ygWPnrneLyE4zE2N8Kow8dH4nRPC20qGJT?=
- =?us-ascii?Q?HunwOF/SBedmUc7rs6m/0JnWICGgsMApWMBNfa90G+ZdUTfF0psSTJ/zqYL7?=
- =?us-ascii?Q?fY1s9u4MohIbiTIzKZzPj3OrBGvqdFhVkcgqWLblv++r5g2eTPPOeO9rKVyi?=
- =?us-ascii?Q?gsLAkYYuus3gZ0TZrU7s2+M+ZvOmTPTHSpVTVSLssEoPSLnZrggrvUpAAa+6?=
- =?us-ascii?Q?/SAv8qj+8Vnrj/JQIJycs989O8mdd62dqvBEgQLYXyyGJGvt/vHjyVDQ5mVE?=
- =?us-ascii?Q?bkn4o3W2P595Dh8eXO9JqzqnRYocQo2bPJR8+y4UoiZ5xGFjRcHmmWPL81sX?=
- =?us-ascii?Q?rDIzeJpHskG3TmcZpqE+jDuvOGbFl+OqbV6WZhhw09IJdF9UqgP0ODG0UL3s?=
- =?us-ascii?Q?3PiIahxGdg4VWnI9NHkARCtjuEDkV2xH21Y6eTlwdyMka0H+dM9nRnXx8twm?=
- =?us-ascii?Q?Zmc7Jq62Zkg5yoCI49ATFlo6N6Vd9y6/TsmY5Xd/MRZwGJvShL4/wSH3Il8j?=
- =?us-ascii?Q?UCc5dl750KsPmhqDCM+NPWyUg7oL/TM17ziqIFRWvbrf8mXN16flIXtJkSGI?=
- =?us-ascii?Q?n9dVMgrHgnpnWsxem3uJ5rYP2ibI2l+6+qUhBm29buKZ+fiqP3fwlWox1mTw?=
- =?us-ascii?Q?bw9bDnpBdqDPpNdRlYM3SXTVGAm6NSo7yKP1Voxat5fAadTUXONfmxeZgZra?=
- =?us-ascii?Q?JkmDoLVc4GV1cjRo0YqFx4wtrgKOdb4MpxbkcmfKaBlzsqP9qcoFYT85gofD?=
- =?us-ascii?Q?odT4uYmem20nooZrEJVUkr5lxYVcXtL4cSGcP28oqjiUa20FIF6vRjmgzQgI?=
- =?us-ascii?Q?fh0itGBHbM6OoB5LuS5zWmQVFAygRMaEAZvPxs6cmGGobnJqR8zu/kgc18Yu?=
- =?us-ascii?Q?AKnh9YdNsHMzbbiW1u5R0VBU8efHq5nBBat2bq+pGpM+pA0lJkqPLDtBD/99?=
- =?us-ascii?Q?Fp9Ii4ulu6EeX2rGXtp9iriXW2FZvwmhSyzDOXqIwl6AlvPy5NiE4zSkWIqF?=
- =?us-ascii?Q?o7mE1eTsqrRlntnq/4KYjJrudkISzQ0gaPhIcuK5t9WLhYlCOFe8HvkUmhis?=
- =?us-ascii?Q?SIvfuXgVqwa1rqeuzFf1dODPNLnnFY15DHXahSWxNBLkQXG9wKMALjVpNHER?=
- =?us-ascii?Q?iWHJCFqS6udWJo+wZnDoAYgWyYOhv5p+2/l62T2ddfQKcq3lcUZLuUqTTomQ?=
- =?us-ascii?Q?MSbiDyw/JKwRhLq/Wc/jW0J51ta6dT2cjyKYTb0r?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b20e576a-d9ee-44bd-cd1c-08de11706280
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2025 13:39:12.3104
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U4J+e9fpYdyKEpbR78s5Tje5MeK7mrebcN+3glzvLNsX1TGq6O5EX/E/He86JNZIPNkWzR10vpMhPEgtoXWhxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5736
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] hwmon: Add TSC1641 I2C power monitor driver
+To: Igor Reznichenko <igor@reznichenko.net>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, david.hunter.linux@gmail.com
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20251022044708.314287-1-igor@reznichenko.net>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251022044708.314287-1-igor@reznichenko.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 22, 2025 at 01:16:10AM +0200, Michal Pecio wrote:
-> > Currently, the total AMD node count is determined by searching and
-> > counting CPU/node devices using PCI IDs.
-> > 
-> > However, AMD node information is already available through topology
-> > CPUID/MSRs. The recent topology rework has made this info easier to
-> > access.
-> > 
-> > Replace the node counting code with a simple product of topology info.
-> > 
-> > Every node/northbridge is expected to have a 'misc' device. Clear
-> > everything out if a 'misc' device isn't found on a node.
+On 10/21/25 21:47, Igor Reznichenko wrote:
+> This patch series adds support for the ST Microelectronics TSC1641
+> I2C power monitor. The TSC1641 provides bus voltage, current, power,
+> and temperature measurements via the hwmon subsystem. The driver
+> supports optional ALERT pin polarity configuration and exposes the
+> shunt resistor value and raw shunt voltage via sysfs.
 > 
-> Hi,
+> Tested on Raspberry Pi 3B+ with a TSC1641 evaluation board.
 > 
-> I have a weird/buggy AM3 machine (Asus M4A88TD-M EVO, Phenom 965) where
-> the kernel believes there are two packages and this assumption fails.
-> 
-> [    0.072051] CPU topo: Max. logical packages:   2
-> [    0.072052] CPU topo: Max. logical dies:       2
-> [    0.072052] CPU topo: Max. dies per package:   1
-> [    0.072057] CPU topo: Max. threads per core:   1
-> [    0.072058] CPU topo: Num. cores per package:     4
-> [    0.072059] CPU topo: Num. threads per package:   4
-> 
-> It's currently on v6.12 series and working OK, but I remember trying
-> v6.15 at one point and finding that EDAC and GART IOMMU were broken
-> because the NB driver failed to initialize. This fixed it:
-> 
-> --- a/arch/x86/kernel/cpu/topology.c
-> +++ b/arch/x86/kernel/cpu/topology.c
-> @@ -496,8 +496,8 @@ void __init topology_init_possible_cpus(void)
->         total_cpus = allowed;
->         set_nr_cpu_ids(allowed);
->  
-> -       cnta = domain_weight(TOPO_PKG_DOMAIN);
-> -       cntb = domain_weight(TOPO_DIE_DOMAIN);
-> +       cnta = 1;
-> +       cntb = 1;
->         __max_logical_packages = cnta;
->         __max_dies_per_package = 1U << (get_count_order(cntb) - get_count_order(cnta));
-> 
-> It was a few weeks ago and the machine is currently back on v6.12,
-> but I'm almost sure I tracked it down to this exact code:
-> 
-> > +	amd_northbridges.num = amd_num_nodes();
-> > [...]
-> > +		/*
-> > +		 * Each Northbridge must have a 'misc' device.
-> > +		 * If not, then uninitialize everything.
-> > +		 */
-> > +		if (!node_to_amd_nb(i)->misc) {
-> > +			amd_northbridges.num = 0;
-> > +			kfree(nb);
-> > +			return -ENODEV;
-> > +		}
-> 
+> Igor Reznichenko (5):
+>    drivers/hwmon: Add TSC1641 I2C power monitor driver
+>    drivers/hwmon: Add Kconfig entry for TSC1641
+>    drivers/hwmon: Add TSC1641 module to Makefile
+>    Documentation/hwmon: Add TSC1641 driver documentation
 
-Hi Michal,
+Please squash all of the above into a single patch.
 
-Thanks for reporting this.
+>    Documentation/devicetree/bindings/hwmon: Add TSC1641 binding
 
-Can you please share the full output from dmesg and lspci?
-
-Also, can you please share the raw CPUID output (cpuid -r)?
+This patch should come first.
 
 Thanks,
-Yazen
+Guenter
+
+> 
+>   .../devicetree/bindings/hwmon/st,tsc1641.yaml |  54 ++
+>   Documentation/hwmon/index.rst                 |   1 +
+>   Documentation/hwmon/tsc1641.rst               |  73 ++
+>   drivers/hwmon/Kconfig                         |  12 +
+>   drivers/hwmon/Makefile                        |   1 +
+>   drivers/hwmon/tsc1641.c                       | 801 ++++++++++++++++++
+>   6 files changed, 942 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
+>   create mode 100644 Documentation/hwmon/tsc1641.rst
+>   create mode 100644 drivers/hwmon/tsc1641.c
+> 
+
