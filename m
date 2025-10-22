@@ -1,141 +1,111 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01807350A02
-	for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 23:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F4F2D739C
+	for <linux-hwmon@vger.kernel.org>; Wed, 22 Oct 2025 04:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761088580; cv=none; b=VzdRTpnRvtvNUzgtqlVS0iXL5Z+4OAMPHvC7s2N4SaLdHrAxeNS39TZYDHAie0UcBLtOkoqSFJgvRGSIM9QKsz1bQLZn8Zbh/ONym2Dn6/TA/CVTtvjLP7msoeLoA97YQwn2tlOLj3TNovufmoMzlIRCEO/HkimW4gFHKmx+y00=
+	t=1761108432; cv=none; b=QIYxajipyXoNsdcw3Qv5fZMeM31WgktWP3vMwZaZ/1zwEnP19jfMIN7/Gq2FSYqzIvjcWpncwiMfLERZQCTuPCKhwXrJ083eORoQH55ShSV4X2pfkfQXQ1iAKUMZcCp1QkeufeRQtsUG2y0nsXYKYpIWr9VdlMfF9tLEu2R/lF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761088580; c=relaxed/simple;
-	bh=MkrCXOKD8Uo8t+/oSxngnI6HGdowLk7sk5mgxdJXK2M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=JIw/YLvPPm4i1bPuztYKHFtoxxPbFK3sJNDvDln2EMfFnj1bIWRXUGRYkvmUKBawQIBcDfF5T6jRxekYQxGrpojwGLHsVYXbtO0lWfTP4j4r0MJYn8F+JlgL0WRybBAfr8M1PtpP8eYySRBxvWhxVsiApdcXhJCWnyiRmuQP+8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft4MRMs1; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761108432; c=relaxed/simple;
+	bh=DWS7b0OXi35GUhqaHArR2mIysKoute9ykjs7q/LnTyM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hUqjJW1J18K1mJTDFCoaVNR0eHXyAE/17FWCKAAiUqa33TdKIk2agObvLhFZEmjyIbyFhVpc6sTIW1LlhaiYWF3FJSU03kr0Ao5OXqPciEH4wN3nGVxl0UC1rz8i+TNvQtIn5EOQuZJwfG/m6pOVWQXsfaCmeNbT7R9lSoKy8xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=G7JBiS9L; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft4MRMs1"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-373a1ab2081so65927351fa.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 16:16:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="G7JBiS9L"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b55517e74e3so6520731a12.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Oct 2025 21:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761088577; x=1761693377; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3iS90oGUh2sChEA1Qdr/sH9FOKItDj8EpmJAd2/xNI=;
-        b=Ft4MRMs1CRt/VtZB7365S+5OjFQ3X19yt34APhWDzMNH0J+8X8dGyOJrZCXu15+h5y
-         wcaCWKC8CrSSC2MSDmLpn1GBZSskH6QUCsjNeuLA76d3jxSXj/nRYrD08XKERpeh69tt
-         2A+fheMaFzkS1BqQDBGpSXi2U8yRSzh0dioUm6N1mpPj6oMpC6U8ltBMMsFA1Jx2PUYU
-         qoo1B7vEs/T/13Whpkgxi04mDs0C75Mu+qczMN5zZyeospktm5lCGxjyBeI67mKS2hQo
-         3hKgGPv6pAX+bJht5qptzFz4DSqz3UnpP2WTsseirQEiSn/jVL7krnWWZ07XYtD5KmhS
-         cfOA==
+        d=reznichenko.net; s=google; t=1761108430; x=1761713230; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OBuTemYA/SGUaF+DBF41ycHM+zeDM425yx/z5PlZWVc=;
+        b=G7JBiS9L+3GrHf4wseXIOFIEvK+EEblLVdX4IdLaVMl0KvPb+gWbsg5C2sdCX9cS4J
+         MUOlVR8FexBqW2BMo8wMzqCSP/4GKhYw9ryofYizqLgk8oeJGKBTSDLNtJgSkYl9dmEv
+         GZQZzmhp3v/AzLb+g8Vt/CdQBxf8mt4zgqByQNOLsIi3C9WOrL5Ig2MKrPGmeZ5xiYhk
+         6z2IDXfqpBcxAQqCtUKpCVFMjehAfpMJhqzpTLr+J2oxyl+GlDsbHEhLQfwoV79mVJQd
+         tG239J3aCJOCs6sYiNfDFINEEMsYQcLJ0ZkDKyTYm4T8wMHdZiyGWQzmW6aV04+OiU9C
+         JHtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761088577; x=1761693377;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R3iS90oGUh2sChEA1Qdr/sH9FOKItDj8EpmJAd2/xNI=;
-        b=bfl/kat2mGfewU8Tfdniv7aBAHVu9U+jHXX/D+pzmoSiEjTaNzTjWUcl/3jydOcd/1
-         DcBgBUVjbt0mvKT74FnVthH3FC301vUUr2574io6eeEi3+ZdDcQDrr84bsShW5EHsRS/
-         kD+EcfoFiH1gOlPPrT7b5ga2/Z+jOypJI9dEhIXoBM/m15ZOfgRSZUWcDyDpbiUcS4Ia
-         HOh4ZCEZzc3VBNp8RJqB2atNt7qar1q8WSnA3d+noim5ZiB+hqWGSioaOIcj3EomWe2j
-         57cNYKGZyI7DeHW4K48V9XAjjzq6w5Suwenw0UBL1Pma6scy2UB2OesQtyCP8lxg/LDM
-         x2rA==
-X-Forwarded-Encrypted: i=1; AJvYcCWI3StbitWsipV+BSgyhNtGS2/GbCyn7YQxjm9/NwANrxqxVkimF66r0nmRy3P4SuvOTfDjQNwdzJpB1A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw91xI7k9UDvo0e42iWwUmx6OwpLMrSQD56IIkLLtHmdBGQB3s2
-	8hn72ECavG5Lqcip1JDvTPzxRqJmkyeJxTT3VBG9z0fjixdcFtWvfE6E
-X-Gm-Gg: ASbGncuuPysPnB5DDp/T3S/Y1JRp5i1qp/UTiUOm6NRCxW6HR4bBKV2gFbPjW2UA6s0
-	W5r2FMUv1W0bMTHCuZIdHb6FW8felnTXJTLJvv+LDUF+rrstqGOlwPTIfoJnLoacu+hZ2gQ+PnV
-	Km0xN+bACMTMSVQs8kOO56DrcPgNyqSeIy1N7x5ycuotkPiJPugHWNdGtkulzeCWihSEdlQ1BXA
-	PLBL7eCOiqdTbgJfRayl8NN1/yEz9TWMzyxsVhqjksHLkuFVZDnSPDkNrJdyvZRDKu/Yy5Xbjxm
-	CbQ3H0Mm2U4+E9PbSQVlebRfr6y64wzjQcMsSl9CPq6qccXbfyrGNM3sXWVG0GI5sDMS51pUfFS
-	qVHK3OylUiCLV8T/acwlFHwtogCEo+KyWXvGKXSjVKP42l3MoKEMp8XqJQRqK0OD3L30K3dHdam
-	wB43zRydU7a6x02mICCfzpSZXxkU0=
-X-Google-Smtp-Source: AGHT+IFXQQCdVjndGUlAQt55SyUCqt01O1JPB+Zj0At2Wm92ggmQB/7qIpSekj8luvKqPDpYm3P0Fw==
-X-Received: by 2002:a2e:a813:0:b0:372:8f0d:b0bc with SMTP id 38308e7fff4ca-37797833eabmr54004851fa.9.1761088576811;
-        Tue, 21 Oct 2025 16:16:16 -0700 (PDT)
-Received: from foxbook (bey128.neoplus.adsl.tpnet.pl. [83.28.36.128])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-377a9664a97sm32800741fa.50.2025.10.21.16.16.14
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 21 Oct 2025 16:16:16 -0700 (PDT)
-Date: Wed, 22 Oct 2025 01:16:10 +0200
-From: Michal Pecio <michal.pecio@gmail.com>
-To: yazen.ghannam@amd.com
-Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
- ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
- linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
- linux@roeck-us.net, mario.limonciello@amd.com,
- naveenkrishna.chatradhi@amd.com, platform-driver-x86@vger.kernel.org,
- suma.hegde@amd.com, tony.luck@intel.com, x86@kernel.org
-Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
- count
-Message-ID: <20251022011610.60d0ba6e.michal.pecio@gmail.com>
-In-Reply-To: <20250107222847.3300430-7-yazen.ghannam@amd.com>
+        d=1e100.net; s=20230601; t=1761108430; x=1761713230;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OBuTemYA/SGUaF+DBF41ycHM+zeDM425yx/z5PlZWVc=;
+        b=mOB8jQcHjn1fL8xpQfy2uEcGR1qYroEq7dkDRbIYmUwUdY6qTefkeqv9Pu/cv1hsC6
+         FO/Kg1alEiZO4GWUV721/lbKNrNxARmTXLCjq/TbtYuax2CkO9gKXZ4ZgsHI/v6gArPT
+         7Y3dKTGoY73j4OqMWWynuCwaXW2Buq700QxrbVUGU96cgnc+z2/39TAXmO3MSG2lk8aT
+         ICy0YYDoRgr4Ck4cx9rWRaI3qw6Y/dDnwwadypl/9MJ1taZFVEewCLii7OQj+hKEjZkJ
+         BEqRSWAMjVeiJjSbwfJF1itimIZWGw+p04gcYL0pyzd59GsHDORGYq1QLqgiUcb7HjUj
+         dtuQ==
+X-Gm-Message-State: AOJu0Yy913mb8ok58XbYlGPSLY3hyRvp993WAYUzGHt0F/RHP4APq3vz
+	ITVVlaCJgKND6UzOTxFmx9dA4KSIJK1plVT3MbEx+pEhoNGjyJbM+TmybYVmiS6GCOc=
+X-Gm-Gg: ASbGncu0LLRUqbgD7xbUeCrbOEIXJzEeqNbVDvx1J/4PNOU8c7qgwKa2oM5WVXwwFQG
+	eWA93eiYhapVSIj5VgKluV6AIf3pcO1rJkxszOeU9cth0IXkHsRvJBVQwdpUgA51xIRSxRDPe72
+	NpjiqWU3bH204esg0S+PKSUjp7XkZ0BghWCWXOz3LtiurxsPi0Gj6yct1v/3CTJGpeQtD1ujNSG
+	KJyA6HuL+AnZvSADnBYvnpfLxJE2uyqtZ4RAOpPLNwCSNoNpYXBH7xlES4xyHRxJJKqKAJfB+aV
+	2oYAfdNxLd5V4OQytwzXmUEmlH10ad89PF8L1hk6x38wuMSlsSkVLBt6vtbawDY9ePS+bAH2orl
+	GqXde49H6KKDKT+Dfr5l2FWdF+5ymIGIFQtXGwyVhSdICCtOiebqwIPeBfDuIqC0zwnRsz+gc0+
+	+0UcTZElgMyYO1QEo=
+X-Google-Smtp-Source: AGHT+IHMzyYghXKArrXF4a3abFsvEWo0yK9xR3k3Ts3BFNdVJw1LghdAf673yg3EmO+eQ2pXjMB9AQ==
+X-Received: by 2002:a17:902:ce8d:b0:272:a900:c42e with SMTP id d9443c01a7336-290caf850b1mr243342655ad.35.1761108429966;
+        Tue, 21 Oct 2025 21:47:09 -0700 (PDT)
+Received: from z440.. ([2601:1c0:4502:2d00:8004:e310:f3d:dd0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e223dd9d6sm1257413a91.7.2025.10.21.21.47.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 21:47:09 -0700 (PDT)
+From: Igor Reznichenko <igor@reznichenko.net>
+To: linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH 0/5] hwmon: Add TSC1641 I2C power monitor driver
+Date: Tue, 21 Oct 2025 21:47:03 -0700
+Message-ID: <20251022044708.314287-1-igor@reznichenko.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-> Currently, the total AMD node count is determined by searching and
-> counting CPU/node devices using PCI IDs.
-> 
-> However, AMD node information is already available through topology
-> CPUID/MSRs. The recent topology rework has made this info easier to
-> access.
-> 
-> Replace the node counting code with a simple product of topology info.
-> 
-> Every node/northbridge is expected to have a 'misc' device. Clear
-> everything out if a 'misc' device isn't found on a node.
+This patch series adds support for the ST Microelectronics TSC1641
+I2C power monitor. The TSC1641 provides bus voltage, current, power, 
+and temperature measurements via the hwmon subsystem. The driver 
+supports optional ALERT pin polarity configuration and exposes the
+shunt resistor value and raw shunt voltage via sysfs.
 
-Hi,
+Tested on Raspberry Pi 3B+ with a TSC1641 evaluation board.
 
-I have a weird/buggy AM3 machine (Asus M4A88TD-M EVO, Phenom 965) where
-the kernel believes there are two packages and this assumption fails.
+Igor Reznichenko (5):
+  drivers/hwmon: Add TSC1641 I2C power monitor driver
+  drivers/hwmon: Add Kconfig entry for TSC1641
+  drivers/hwmon: Add TSC1641 module to Makefile
+  Documentation/hwmon: Add TSC1641 driver documentation
+  Documentation/devicetree/bindings/hwmon: Add TSC1641 binding
 
-[    0.072051] CPU topo: Max. logical packages:   2
-[    0.072052] CPU topo: Max. logical dies:       2
-[    0.072052] CPU topo: Max. dies per package:   1
-[    0.072057] CPU topo: Max. threads per core:   1
-[    0.072058] CPU topo: Num. cores per package:     4
-[    0.072059] CPU topo: Num. threads per package:   4
+ .../devicetree/bindings/hwmon/st,tsc1641.yaml |  54 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/tsc1641.rst               |  73 ++
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tsc1641.c                       | 801 ++++++++++++++++++
+ 6 files changed, 942 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
+ create mode 100644 Documentation/hwmon/tsc1641.rst
+ create mode 100644 drivers/hwmon/tsc1641.c
 
-It's currently on v6.12 series and working OK, but I remember trying
-v6.15 at one point and finding that EDAC and GART IOMMU were broken
-because the NB driver failed to initialize. This fixed it:
+-- 
+2.43.0
 
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -496,8 +496,8 @@ void __init topology_init_possible_cpus(void)
-        total_cpus = allowed;
-        set_nr_cpu_ids(allowed);
- 
--       cnta = domain_weight(TOPO_PKG_DOMAIN);
--       cntb = domain_weight(TOPO_DIE_DOMAIN);
-+       cnta = 1;
-+       cntb = 1;
-        __max_logical_packages = cnta;
-        __max_dies_per_package = 1U << (get_count_order(cntb) - get_count_order(cnta));
-
-It was a few weeks ago and the machine is currently back on v6.12,
-but I'm almost sure I tracked it down to this exact code:
-
-> +	amd_northbridges.num = amd_num_nodes();
-> [...]
-> +		/*
-> +		 * Each Northbridge must have a 'misc' device.
-> +		 * If not, then uninitialize everything.
-> +		 */
-> +		if (!node_to_amd_nb(i)->misc) {
-> +			amd_northbridges.num = 0;
-> +			kfree(nb);
-> +			return -ENODEV;
-> +		}
-
-Thanks,
-Michal
