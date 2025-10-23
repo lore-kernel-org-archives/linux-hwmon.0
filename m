@@ -1,249 +1,140 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B602EC098
-	for <linux-hwmon@vger.kernel.org>; Wed, 22 Oct 2025 19:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4496C2DCF5B
+	for <linux-hwmon@vger.kernel.org>; Thu, 23 Oct 2025 07:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761159619; cv=none; b=J9HR8Ru2pBbPj656LJ3QbtubF2HRKfg3I0alsOD5eIcq8UMYhykGCXYiQxpjPb5apHMDEa+D/t2WnWU5dBlxdhzzJB/l6QzVf4VyBZ0057dBPPiiySmREL+E448/fAcq9BAzj1lg4D6vg/Tq3QKuxVC+PongCU08nQHXzcUrWwU=
+	t=1761205857; cv=none; b=Pm5XjFqtUs2jLkiSonKDaidnOz7cndy6y1aAGjyhsn8rspRW1XKQVOmArW2d9UCBvO5L5PpR6VMCUtWVmhOGtKfE1dhgEB0k6CgEY7r8wAD0b15VEyaOEPefThguzLNLjaNcOdwL8jQtbqneVrzRqSe4dSJ2Th64EWm1MQ/lhfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761159619; c=relaxed/simple;
-	bh=LpUaV8z0D3O4lOyXJTHjgC5xGrpDllWIXYVOgbSku4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XVuX+NaNpJge7xL7yPZW/akxjV1q841H9LAazOwZ74L9435PM6i5X0kuKWCguE4IjjKotX+okfiZDexg1nAApIFth3vFEwfr8QnFBK3qOwNduglSKsUBVWORjlhG/qiSyJUyn6k+qiyIVHYMFUB6Pt2MwRcEzAaTl4S22A/uULc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JelAEa7Z; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761205857; c=relaxed/simple;
+	bh=1hywAO6OmglGEJDv4dlqj7DVBEZf4btWfqp6klm/+u0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jefVouPEbonqJ1ah0l4IrMFQlWqhDy4zlNP/yFEc37XPh3YGADQ6KurnkKV1LEhqq8+7Y22hTwy6c5PYe2SIeEDJeA5Du2wbh8/aWzJp7RSQUSKTri1i9qeXo6HJ05lW32B5WKuMGcdN5yQHdyXZSKVlQjbkwgkfejDL2n3aUq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=DdadXaCA; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JelAEa7Z"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-28e7cd6dbc0so90981145ad.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 22 Oct 2025 12:00:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="DdadXaCA"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-33f9aec69b6so727224a91.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Oct 2025 00:50:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761159617; x=1761764417; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dFzdfoqya5Ggmh6WNFeMHz2ogjyeullW1tSjweAvnu0=;
-        b=JelAEa7ZJ5bE2zZfPYjMB9z9BDYdy5ONSsuvv2FbRfNAEtHcCenLGZh+o4fCqiYuHL
-         vlwYtPjQKlQi99bUb9LuWoYOdTS/d4Nx1WXLtHN4C0+4zUzW1ZrNn4iS4ZDP8PHoGQFH
-         BYQmDBV86OFu2GIm6IlruAtMQg1xS4Oa96GtPfKGv+xFj32a+yBtQt3UF7VlcFTiDBPN
-         81ua4fr8AyW+zAy++F5BH4VjCYo+AX3naiVuZ3Ny1HvdI+6adF3DtGbtDFNVHTGHotI0
-         5NEI40xhd5XE0UXSyEBtwLlv6WllkC+GZHRepNMlCkgzYFE6ZDzROOkbkxhUMhcDvkig
-         JhxA==
+        d=reznichenko.net; s=google; t=1761205854; x=1761810654; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ckf+WA/vGci5TKMGOHLvpH1kq+z/6nk6A9B9djwZ1Vk=;
+        b=DdadXaCAsxeuRsSpN+Sdnn37yPc/OkFEl63jtTq/z8UFhC8nMrDu66q7IGiP/acqFV
+         yANWLN1mFfSLl64lqnzKWdnVpSkTIcvKWSKhuiE2HIyaorhgIPuRz7Hjd+vzbjT9fqZM
+         n15WKP7SOO/BoWlphq9F/IE/x+S1tZlnyQ3Zt1vtoBxo6nOfvoTs7k4dO7hrJeII6E9I
+         6wzEFkoRCV0JA9LIfkLH5fyj4kOIBIgLQZXr12cOdRjIwJrUvyUpwHq86VJQE+czGytL
+         TXY6aLh9GDUO9THRDwGPgcylt5FfsPu9apzDEhzanJS/goOHGiO8sBft1bwWUwOifoXX
+         4O0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761159617; x=1761764417;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFzdfoqya5Ggmh6WNFeMHz2ogjyeullW1tSjweAvnu0=;
-        b=IhE62DUofC8jUZFf3igrlFvbpGTtlSnVjuFefHmGEnNCoBWg+EZYH6/Za6lMI1OPLS
-         oOE+XjWglM8uvKVABos91cOaYkJxtoIMhbaxlw9ss+euN6ICimUteh77SNbFpkXgDlsW
-         /HYuXi4VRQllbADUfTpzKUG+CuqvpoCuMfgYOr08E5eptPUVXsnLVcS8uVb552VSJaGw
-         J8LxmMRSGw4SKVVwJvxrzs4u7iIf5LEnj4GZMmNQ20IwUUq3wT/Ks7PDIHJ3K4lhVRSh
-         FDgrwb0+6McmHvrjiiIJzO+XlA1a+44/AUY2KPPKcMF8tcVIZwragmQUFcAG3UokChT1
-         xRMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXr72HJVnqklRAxvXVp/cPLciO/Z1JDa/C9MpvWDFj6jDm/5SvfKW3nyavjB9BUrP1/0vxocuGLki8OlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw17rxphz5J4hLTeD6j1fdGAed9QyMn0zXoxsTD+yY5SnoSImq9
-	w51OIlVQgwWL135xBBT8ylAPlndIYV5ZKYFfCs5JfORVzwVGAe0a+n6UCCrGTw==
-X-Gm-Gg: ASbGncuOs37zK5UQzAFw4Sqqpp3d+QUdtjUHBeC7fY+NrQDOvYFU9F4Z7xszsB8/Hmw
-	yz8VRmospeyqjxtS4Z/oyuSTCYjBeGBJW5QorUuncvn/PGe0RyQ6EQCDrlKubnnjCqUh/TzBNNQ
-	iLU6jxDdy4eYAOVIQt6Bzzhf+VfUnm2KM9eWe2/+8N+aznU6xSBrhDi9wTFWlQGZNmB2ExHtJH4
-	NTxhqdWY2GGxy/Nv73GQTfsL2l4h3WoZ2VAdmhjHcSykxl/IsFQygO9uyHTpPONqBQfP4F8Pgh4
-	nO6N1tPkYLxfQLIwc5/cu1KDDokw+kog+++/D25mZR59g6yZf8AG2JjE4eLLFn8OQsdV07WMHuC
-	So61AM3GBfLyilFmawFqgghQCvMN9Q7mkv/tVlvrl2+/Edal3wEzOWGIt+2t6GV/Pq+XSkr4m/y
-	YXVGjrOtIrK1Fc
-X-Google-Smtp-Source: AGHT+IHcqzpOH5zo5LUcgVV0/Ftev63QOy6p43ZgLKbB4SPMBtDcXqiSUsTvlWWnn+nn/U8BdHObJQ==
-X-Received: by 2002:a17:903:1a70:b0:267:9c2f:4655 with SMTP id d9443c01a7336-290cbb49970mr303808925ad.41.1761159616399;
-        Wed, 22 Oct 2025 12:00:16 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-292471d5874sm145915295ad.54.2025.10.22.12.00.15
+        d=1e100.net; s=20230601; t=1761205854; x=1761810654;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ckf+WA/vGci5TKMGOHLvpH1kq+z/6nk6A9B9djwZ1Vk=;
+        b=jB/+nN9H1+1/+jhB22PLAONKMmJA2jbMPg1yi6BRkNBw4xoy/L9jl/b99tU2G/mfIf
+         /WoKUTBn+xKKR3GVmKHBhzLmF38u/KiFVat1nCeHwKAEGfC5nfFj4TwrCBVnJNYaHbw6
+         tVF+CudXHPs62+lHIR0j24mC6uMfMuf6kfQwepbu6WyRLZdlrrUv5RCK1N84Ju/53sv5
+         o+fdnTKsU+n8buxQMycIJUjZWQXv/x7BDsc4twzaLB6KvPb74aTnpOiFi2YSctycZTRl
+         lEyNbdAjbTU5O6K7hoMW+O+amB9gnuHJ9NlANCNll5I30c/4E3HQ78bAfwYtbVNf9OQy
+         EUCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbVbqhIswYnds/6rj7BX7xEbCFf70+22xjLopZJ3zll77BoAIM9Ilhb0x8MjXAcbDCwfYnzd6RK2jF9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnDB9yWrGMzdNMdoKS1P5Yr3dr2VUtE5IxLSXCxzczll6KCZqT
+	5UKVb4USCN0VvosA7xoMJUl7G0ZTrS8ova9w+N70gRSgh7laqjx58x1PCjNkfkAmcq8=
+X-Gm-Gg: ASbGncv0DD7paJRBqf/6bnzfGwjSVQUkEstcgy8cyWjwnXfU9B7ALhO2s4VCsPVmiSw
+	OkLQXDKBr1tERzlrwAGGR2JoGFTTtH/XTdjR69e0ml2RAnuOzIj6aex6/GP26MOsIPLgp7rRPMI
+	R8yXr61aELRe9jHkrCq9uMdNwXAgKhEZoUU2aobdAoGaKsdSk/c+f/NJQVZmgvRRRgDGZSqEouN
+	KbrwWqrwBVgvOeogs0zy770sEHTiJ5DcDhrgb1hYVO+xOayPw7GV27tMKnaCUHjEHLE+sMsnIQS
+	cPBkNd4X6SK+MQqXvVEaV2RguASLTIn6R5VVUxJRIbmpOjVPg1cKWw4pzhenAU7vdWD1Pabse/6
+	KyV+JIGEs5pm+5AV1i63EP1wSbMbwP3DaJ2enDzJy0mfXLAunRMJtYyvfwiplnLhUrr4F2dB3On
+	9+q/CJEIWY00ucJ+ek2g==
+X-Google-Smtp-Source: AGHT+IGxBmhQYX3R+zPm2DZoyJZbHJDy6/9CVQ6y+y0VxQf1BMG2L8qFAVrrjtQYPgaGrb29h3irDw==
+X-Received: by 2002:a17:90b:44:b0:32b:623d:ee91 with SMTP id 98e67ed59e1d1-33bcf8fd82dmr28272717a91.27.1761205854513;
+        Thu, 23 Oct 2025 00:50:54 -0700 (PDT)
+Received: from z440.. ([2601:1c0:4502:2d00:2035:6c3d:cc34:bc90])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33dfb1dbddbsm3809280a91.0.2025.10.23.00.50.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 12:00:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 22 Oct 2025 12:00:14 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc: Biancaa Ramesh <biancaa2210329@ssn.edu.in>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] hwmon: migrate i8k procfs interface to sysfs
-Message-ID: <c4605534-e715-4d39-9361-6e95bc03ba30@roeck-us.net>
-References: <20251022183746.66481-1-biancaa2210329@ssn.edu.in>
- <20251022184518.53tqi33jgustwvf5@pali>
+        Thu, 23 Oct 2025 00:50:53 -0700 (PDT)
+From: Igor Reznichenko <igor@reznichenko.net>
+To: linux@roeck-us.net
+Cc: conor+dt@kernel.org,
+	corbet@lwn.net,
+	david.hunter.linux@gmail.com,
+	devicetree@vger.kernel.org,
+	igor@reznichenko.net,
+	krzk+dt@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH 1/5] drivers/hwmon: Add TSC1641 I2C power monitor driver
+Date: Thu, 23 Oct 2025 00:50:50 -0700
+Message-ID: <20251023075050.254998-1-igor@reznichenko.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <be691214-bac6-43d4-be62-daa57c833fe7@roeck-us.net>
+References: <be691214-bac6-43d4-be62-daa57c833fe7@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251022184518.53tqi33jgustwvf5@pali>
 
-On Wed, Oct 22, 2025 at 08:45:18PM +0200, Pali Rohár wrote:
-> Sorry, but I do not understand this patch. dell-smm-hwmon driver is
-> already using the sysfs interface provided by hwmon subsystem.
-> 
-It is also weirdly incomplete, and it claims to be "confidential and
-intended for the named recipient(s) only". Git says it is corrupted,
-and it doesn't look like a real patch.
+Guenter,
+Thanks for the detailed feedback. I will address it.
 
-> > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > @@ -XXX,40 +XXX,80 @@
-> > -// Remove procfs interface
+> Please send a register dump.
 
-I'll take the patch author by their word:
+Here's register dump after init during run: 
 
-" If you have received this email in error please delete it and
-  notify the sender immediately.
-"
+tsc1641 1-0040: 0x00: 0x003f
+tsc1641 1-0040: 0x01: 0x0253
+tsc1641 1-0040: 0x02: 0x0dc0
+tsc1641 1-0040: 0x03: 0x0053
+tsc1641 1-0040: 0x04: 0x0250
+tsc1641 1-0040: 0x05: 0x0033
+tsc1641 1-0040: 0x06: 0x0000
+tsc1641 1-0040: 0x07: 0x0000
+tsc1641 1-0040: 0x08: 0x01f4
+tsc1641 1-0040: 0x09: 0x0000
+tsc1641 1-0040: 0x0a: 0x0000
+tsc1641 1-0040: 0x0b: 0x0000
+tsc1641 1-0040: 0x0c: 0x0000
+tsc1641 1-0040: 0x0d: 0x0000
+tsc1641 1-0040: 0x0e: 0x0000
+tsc1641 1-0040: 0xfe: 0x0006
+tsc1641 1-0040: 0xff: 0x1000
 
-To the author: Please consider yourself notified, and I will delete the
-patch as directed.
+> > +
+> > +	/*
+> > +	 * Disable alert mask first, then write the value and enable alert mask
+> Why ? 
 
-Guenter
+The idea was to prevent potential previous alert from propagating when changing 
+the value, plus to only enable alert when crit/lcrit value is non-zero. 
+But given your response below this is not the right thing to do.
 
-> On Thursday 23 October 2025 00:07:46 Biancaa Ramesh wrote:
-> > The i8k driver currently exposes Dell laptop hardware monitoring
-> > information via a deprecated /proc/i8k interface.
-> > 
-> > This patch removes the procfs file creation and replaces it with
-> > standard sysfs attributes under the hwmon subsystem.
-> > 
-> > - Removes i8k procfs registration and operations.
-> > - Creates sysfs attributes for temperature, fan speeds, and power status.
-> > - Registers these attributes via devm_hwmon_device_register_with_groups().
-> > - Cleans up legacy procfs code for a cleaner, modern, and supported interface.
-> > 
-> > This migration aligns with Linux kernel best practices to phase out
-> > deprecated and legacy procfs files in favor of a structured sysfs approach.
-> > 
-> > Signed-off-by: Biancaa Ramesh <biancaa2210329@ssn.edu.in>
-> > ---
-> >  drivers/hwmon/dell-smm-hwmon.c | 100 ++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 100 insertions(+), 40 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > index oldhash..newhash 100644
-> > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > @@ -XXX,40 +XXX,80 @@
-> > -// Remove procfs interface
-> > -static int i8k_proc_show(struct seq_file *seq, void *offset)
-> > -{
-> > -    struct dell_smm_data *data = seq->private;
-> > -    // ...
-> > -}
-> > -
-> > -static const struct proc_ops i8k_proc_ops = {
-> > -    .proc_open = i8k_open_fs,
-> > -    .proc_read = seq_read,
-> > -    .proc_lseek = seq_lseek,
-> > -    .proc_release = single_release,
-> > -    .proc_ioctl = i8k_ioctl,
-> > -};
-> > -
-> > -static void i8k_exit_procfs(void *param)
-> > -{
-> > -    remove_proc_entry("i8k", NULL);
-> > -}
-> > -
-> > -static void __init i8k_init_procfs(struct device *dev)
-> > -{
-> > -    struct dell_smm_data *data = dev_get_drvdata(dev);
-> > -    // ...
-> > -    if (proc_create_data("i8k", 0, NULL, &i8k_proc_ops, data))
-> > -        devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
-> > -}
-> > +// Define sysfs attributes for temps and fans
-> > +static ssize_t temp1_input_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > +{
-> > +    struct dell_smm_data *data = dev_get_drvdata(dev);
-> > +    int temp = i8k_get_temp(data, 0);
-> > +    if (temp < 0)
-> > +        return temp;
-> > +    return sprintf(buf, "%d\n", temp * 1000);
-> > +}
-> > +
-> > +static DEVICE_ATTR_RO(temp1_input);
-> > +
-> > +static ssize_t fan1_input_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > +{
-> > +    struct dell_smm_data *data = dev_get_drvdata(dev);
-> > +    int speed = i8k_get_fan_speed(data, 0);
-> > +    if (speed < 0)
-> > +        return speed;
-> > +    return sprintf(buf, "%d\n", speed);
-> > +}
-> > +
-> > +static DEVICE_ATTR_RO(fan1_input);
-> > +
-> > +static struct attribute *dell_smm_attrs[] = {
-> > +    &dev_attr_temp1_input.attr,
-> > +    &dev_attr_fan1_input.attr,
-> > +    NULL,
-> > +};
-> > +
-> > +static const struct attribute_group dell_smm_group = {
-> > +    .attrs = dell_smm_attrs,
-> > +};
-> > +
-> > +static const struct attribute_group *dell_smm_groups[] = {
-> > +    &dell_smm_group,
-> > +    NULL,
-> > +};
-> > +
-> > +static int dell_smm_init_cdev(struct device *dev)
-> > +{
-> > +    struct dell_smm_data *data = dev_get_drvdata(dev);
-> > +    struct device *hwmon_dev;
-> > +
-> > +    hwmon_dev = devm_hwmon_device_register_with_groups(dev, "dell_smm", data, dell_smm_groups);
-> > +    return PTR_ERR_OR_ZERO(hwmon_dev);
-> > +}
-> > +
-> > +static int __init dell_smm_probe(struct platform_device *pdev)
-> > +{
-> > +    int ret;
-> > +
-> > +    ret = dell_smm_init_data(&pdev->dev, &i8k_smm_ops);
-> > +    if (ret < 0)
-> > +        return ret;
-> > +
-> > +    ret = dell_smm_init_hwmon(&pdev->dev);
-> > +    if (ret)
-> > +        return ret;
-> > +
-> > +    ret = dell_smm_init_cdev(&pdev->dev);
-> > +    if (ret)
-> > +        return ret;
-> > +
-> > +    return 0;
-> > +}
-> > 
-> > -- 
-> > ::DISCLAIMER::
-> > 
-> > ---------------------------------------------------------------------
-> > The 
-> > contents of this e-mail and any attachment(s) are confidential and
-> > intended 
-> > for the named recipient(s) only. Views or opinions, if any,
-> > presented in 
-> > this email are solely those of the author and may not
-> > necessarily reflect 
-> > the views or opinions of SSN Institutions (SSN) or its
-> > affiliates. Any form 
-> > of reproduction, dissemination, copying, disclosure,
-> > modification, 
-> > distribution and / or publication of this message without the
-> > prior written 
-> > consent of authorized representative of SSN is strictly
-> > prohibited. If you 
-> > have received this email in error please delete it and
-> > notify the sender 
-> > immediately.
-> > ---------------------------------------------------------------------
-> > Header of this mail should have a valid DKIM signature for the domain 
-> > ssn.edu.in <http://www.ssn.edu.in/>
+> Disabling alerts if the limit is 0 is wrong: The limit can be set
+> to 0 on purpose. Only unmasking the limit if a limit is set is just as wrong.
+> Either limits are enabled and reported, or they are disabled and the attributes
+> must not be generated. Mis-using the ABI to declare "If the limit value is
+> 0, mask the limit. Otherwise set the limit and unmask it" is unacceptable.
+
+Thanks for clarification. So would you recommend then that all alerts should 
+be always on/unmasked for this chip or to add custom sysfs attributes to control 
+them, since it has this capability?
+
+> Either report as standard voltage (in0_input) or drop entirely.
+> The shunt voltage can be calculated from the shunt resisor value and
+> the current. A non-standard attribute to report it does not add value.
+
+I'll drop it since the shunt voltage resolution is 2.5uV and it won't give 
+accurate information to report it in mV.
+
+Thanks, Igor
