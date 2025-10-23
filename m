@@ -1,104 +1,234 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012071.outbound.protection.outlook.com [40.107.209.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FE1292B54
-	for <linux-hwmon@vger.kernel.org>; Thu, 23 Oct 2025 16:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761236357; cv=none; b=HFgeF0j8VjA62GxTIG8X5oTuNCptxPK49jmO9jmL13pIeN2PLbzNl8uuUHgY3ZipU6NswL7uDmWH9+CiI6G9dsLDf0nqBHHghK34zWpuNYQ3pOdxoMACpARSsZrbQM0hP6qmCnZ6X37T8tigP3YmkYS2PO0IRmDQ3qT83woh/xU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761236357; c=relaxed/simple;
-	bh=J9fgQRAtf/jgUHeHMg6pXGR492Zh7Odx8vgo1NDj8Sw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i5qCc7awzTMhDZHw+pZJElhE8j74NXjEGOC1t1huuVp0JUti5x7a/o3foVzFcCgAoyfQfPKI8xxkWHPRFn5pvvrmo8BiMT+AUc/+WRHxvoQepxg9Qds/okfn68Zab5dmn8Qw6ALMnNAxdZKdZ+m2vF1i0AbWvzYnfrgR0zRYiKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vBy0f-0003DE-8X; Thu, 23 Oct 2025 18:17:53 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vBy0Z-0055JC-1Z;
-	Thu, 23 Oct 2025 18:17:47 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vBy0Z-00000000E1b-1FyP;
-	Thu, 23 Oct 2025 18:17:47 +0200
-Message-ID: <660b87b77ac97a186796ce4783acd510741f7c54.camel@pengutronix.de>
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: "Rob Herring (Arm)" <robh@kernel.org>, Krzysztof Kozlowski	
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Stephen Boyd	
- <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter	
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, Andrzej Hajda
- <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,  Vinod Koul
- <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>, Xu Yilun
- <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck
- <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,  Jonathan Cameron
-	 <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, Georgi
- Djakov	 <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Joerg
- Roedel	 <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>, Mauro
- Carvalho Chehab	 <mchehab@kernel.org>, Lee Jones <lee@kernel.org>, Miquel
- Raynal	 <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>,
- Vignesh Raghavendra <vigneshr@ti.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>,  Johannes Berg <johannes@sipsolutions.net>, Krzysztof
- =?UTF-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,  Manivannan
- Sadhasivam	 <mani@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Kishon
- Vijay Abraham I	 <kishon@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=	 <ukleinek@kernel.org>, Mark Brown
- <broonie@kernel.org>, Mathieu Poirier	 <mathieu.poirier@linaro.org>, Olivia
- Mackall <olivia@selenic.com>, Herbert Xu	 <herbert@gondor.apana.org.au>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,  Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
- linux-pm@vger.kernel.org, 	iommu@lists.linux.dev,
- linux-media@vger.kernel.org, 	linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, 	linux-wireless@vger.kernel.org,
- linux-pci@vger.kernel.org, 	linux-phy@lists.infradead.org,
- linux-pwm@vger.kernel.org, 	linux-remoteproc@vger.kernel.org,
- linux-crypto@vger.kernel.org, 	linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org
-Date: Thu, 23 Oct 2025 18:17:47 +0200
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
-References: <20251023143957.2899600-1-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1376126F2A6;
+	Thu, 23 Oct 2025 16:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761236561; cv=fail; b=rXL5swHgZ7xMxu0227gO5k2H8CQ2FivblyVwOGLf7VDuWuRzWKZRCmK0tMu9S1RKyHsbk/EuMePwpe6S2XmhL5hWw+neT1szAzmgMja4khlxS2h5YfXcg/pHaMr2uRBV0A5fat2UL+yMSpA6SvGTUPyM6Homlu0FsM61Eg4VuaM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761236561; c=relaxed/simple;
+	bh=fxZlxvWhYwtMHH6M1XCeKNY5RmeNotokPoTUxux+aeU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Rj1RFRd5yzic7Eqt5t0gHt6fHnaz3npfCZCcGrJyXPjnv/VeKc9r5BqYEaBkAMzE2kBx0C4kFV1dK+zvleRI9HseUNGTM+xZhDJzMo3deeCOMg4o/InETjV/KKuqZZ+ypnHGvH6ZdXL2Qg92NJEz/y8wzXvkgZ4Ni4WmHNBhhxA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Xz8GxiVg; arc=fail smtp.client-ip=40.107.209.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Xz8GxiVg"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HWduZHQoFM+j9q364by/JCtSQb+WsC2UYzLlzFcjEU3wpscRAwNkArvbzvyUrHL82UXc79tR+Hs2YMO65ANKxNceP8pGJkdGEN6PTcXX+dxAhzbUHubSNYIcWhBJbruaFosLOvcJQSoLK8522n6Y/iDT5XYR1yKZT30nFMQ8/Pm+jdm70GCNG/dboapnzmshCHb6LqtRwlgYr8kx2iY0mB8JUWJC5oC5l9befSXmszJiaqxEuwF6Gyg9UpCo72Qh2fYkaGKrXhtMSmKCneeBpu07WpJbsN4F/ISvt/czeu3fTSPl98RhVEB3Uu0T5X6vLD8lpkI9ftf9UYda/exhaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pP9XQYbDDrhVk/avyMuOt9n3Mj9YT5Dzm62BQGnLshU=;
+ b=UQ405w3mCQ6dlKmmYaCD+6OA2J4D6nwSu+2ANpf029FcHD2a5J/suKALVjGteaQ3lUGLMR9XXmg1NSQhIF1NBjtX97Efldb/meDlOniiUUr47TNAk5GyKLtp6YprPkbpCqjgWn0h9IPKW3I3yjZfgl/L3bZa405XQT4sHijH7fIrJvlafxFfWK3z3wOk/wmKnEKBBk9gf0QeOb8t14wWyPVGW9uzjrMz3jyzq7NF4gvrb0gzkdVS8fGjxXeDyzohQ+72rwKy7cfw2jOVryQjUK45sQWMHOc5cV+ifTYI67rq40E5TRX/usNsOIAtA2JCtHA1VLZ17PSuXTL2gyhB/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pP9XQYbDDrhVk/avyMuOt9n3Mj9YT5Dzm62BQGnLshU=;
+ b=Xz8GxiVgTRT59mpYkY3iV8inh52bubbN8osBXDE4pihgcomQD8xcnx6IMRetWBxqSCOEjIm9Qt1G4AD5O87vvK7cS//AclbL9SL10XlnY9X5lRcNK+/C0/a+KhhCCGYXXMGfRcMss3PCTWpfZOp1PHTCmIwIJqaEdhwM1ur8I/0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB7779.namprd12.prod.outlook.com (2603:10b6:8:150::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.12; Thu, 23 Oct
+ 2025 16:22:36 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%7]) with mapi id 15.20.9253.011; Thu, 23 Oct 2025
+ 16:22:36 +0000
+Message-ID: <5764e711-4c3f-4476-9ecb-1f7643e3b60d@amd.com>
+Date: Thu, 23 Oct 2025 11:22:29 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 06/12] x86/amd_nb: Use topology info to get AMD node
+ count
+To: Yazen Ghannam <yazen.ghannam@amd.com>,
+ Michal Pecio <michal.pecio@gmail.com>
+Cc: Shyam-sundar.S-k@amd.com, bhelgaas@google.com, hdegoede@redhat.com,
+ ilpo.jarvinen@linux.intel.com, jdelvare@suse.com,
+ linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux@roeck-us.net,
+ naveenkrishna.chatradhi@amd.com, platform-driver-x86@vger.kernel.org,
+ suma.hegde@amd.com, tony.luck@intel.com, x86@kernel.org
+References: <20250107222847.3300430-7-yazen.ghannam@amd.com>
+ <20251022011610.60d0ba6e.michal.pecio@gmail.com>
+ <20251022133901.GB7243@yaz-khff2.amd.com>
+ <20251022173831.671843f4.michal.pecio@gmail.com>
+ <20251022160904.GA174761@yaz-khff2.amd.com>
+ <20251022181856.0e3cfc92.michal.pecio@gmail.com>
+ <20251023135935.GA619807@yaz-khff2.amd.com>
+ <20251023170107.0cc70bad.michal.pecio@gmail.com>
+ <20251023160906.GA730672@yaz-khff2.amd.com>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20251023160906.GA730672@yaz-khff2.amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR05CA0007.namprd05.prod.outlook.com
+ (2603:10b6:805:de::20) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB7779:EE_
+X-MS-Office365-Filtering-Correlation-Id: 81f17daa-c3eb-4827-2232-08de12506081
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WGJ0SExTNVgxa29Vb1NiSWlwN0tXdWU5cXU0SWFOd2FhVjhjUkZscVNRazUw?=
+ =?utf-8?B?OGdSSE1ybURIcEdqUzNyNE5DcVVqVDFtVkorUnFIUTdwYkFPZEg2Yk1paDQx?=
+ =?utf-8?B?VXJxYkUyTXlTYndZZXVjUk1oK1huelR0a1pFU1NJMmdXYW5SVGRaNUY2MjBw?=
+ =?utf-8?B?SzVzU2pGZlh2SnBlNW9hMCszR0ZsWkVzZVVIakVPMXRYOGUwbUFETWZLUkJR?=
+ =?utf-8?B?Zi8wYy9BZHdjQWRNdTJ5YTJRQ1NwblpRM0ZudFpIRGxiZkhMU2NjVWpwTTgy?=
+ =?utf-8?B?LzlCWXpMaHFFVXRyeXVwcmZoQ1FSWnRMUnN1Ui90R3JIK1BST2JxWVFISXNG?=
+ =?utf-8?B?NlFuN1VRSnJLVExHM2ErV3pwOUtUZzBUYi94dG9UbHh3OXZsT3RlbU9OVFR6?=
+ =?utf-8?B?NUp3dHpwaE9mUDBFTVc0ZTlVUFdFT1JyZFpjZDVMSzg3M29kZFVxR05kNTdG?=
+ =?utf-8?B?bkpFYVp0NVh6RDFtVS9ZNVZvc1pYNDhqT0h0SEVtRUh3QVhHZjNyMkpZUVhy?=
+ =?utf-8?B?eER4TmR4bWV5MmlQLzlNVURpcDNVemUwZVlqc05GWEEwZS9mMzVFd3g1a1lo?=
+ =?utf-8?B?UERUQzhiM3hadWZTYmI1SWRxZ3RRcG8yb3I0WUQ3U2EwUlk4MmlBR0J1SHdU?=
+ =?utf-8?B?aGpXNEtITEZndHB2a2FKKzZVSnVoVlF4REtCVnNoV1NWczgvYWxqSmc3ODFL?=
+ =?utf-8?B?TnJzUGlYS1hQd1d4SXpqVVBDcVlmVlp5ZU1tV0w3ZURvV3JSRU1wRVNWdzFq?=
+ =?utf-8?B?RS8yWDhaa0FsUC8rOGNCK0JXd3dVdmZXeEVYY09DbzRRdE1oY21vQWtDMzVO?=
+ =?utf-8?B?MjlJczFidU9Td0o0K0gyRGlueEZoR3hsZExGbmdOaUthbE1NbkFPWHUxeWQ1?=
+ =?utf-8?B?TENSVXZDVERVVjBIbDRUeUpSMk5oQkxqVnNQcDNPVVlsV1FCVWtwOU5kck1h?=
+ =?utf-8?B?cnM1SjZHd0hTa3RBM005elFURmRIMVBJVjJLNy8zSEh1cFJjKzFtbUJ5TjRZ?=
+ =?utf-8?B?UHVubjczaXpibER3UkVSemNNTHArK0R6RjNPV1ZFem5sWGlRcmtSMUE1RmZ1?=
+ =?utf-8?B?VVZmb2NuRnhiek53NkNhMlhBcTVveHdDM1dYck1iU2VaK25jN051cUcrcE02?=
+ =?utf-8?B?NnFXSnVHeFFJUUpZK0p6aEZ2Wjlib0wxVkhDU1B2bVUzTTdKOHFwOEc3aWwz?=
+ =?utf-8?B?bEltZHRueHVUQXN0RUJ5c2xWdEZ4cDllaTRsNmxseTMvVlUyYVJkYkFKQm5S?=
+ =?utf-8?B?d1dqQjRIazZJUEFvSWVsRFc2SEJQSG5sR2xRbnlOUytjWUcvRlR4L0RpN3Vq?=
+ =?utf-8?B?aUszQU11WnRpc3lpWnRIdUxDRW9QaVVzYmNhWkhkTCtUT3A1SFhYYTQ2aDBS?=
+ =?utf-8?B?bGpCWVhoa1VmeDV1dS9GREJhMDJSMjh2UjJ4MDFrSUZxcFIwdU14S0ZpZDFB?=
+ =?utf-8?B?aGVmNVdHV0g5NWpHQW8xZVI0TjdIZC9xY0NwbkgrRm82UXF0VXA5RVc5NUNu?=
+ =?utf-8?B?SnlGd205bmpEeS9SaHJ5eFUwUWFEanNvVnBvSEFYSUtGSVU0UHlLdDBwZE5R?=
+ =?utf-8?B?YngvRTI3aUJtRGRuZFhCTGpldjRMdkxiRFRzOGlMaFBRdlh6TXo0d2VyTk10?=
+ =?utf-8?B?NVMyRXVTcVNwRkhneDEvNnZqbitKNXZwYnZrR2VaOUhmMGU4dmF2NzBEQ0hs?=
+ =?utf-8?B?OUtMUjREdGFHTE50Qm1TNGJVMlhBSXFiNlNGTGVsSFMyYmk0em5naEFkcGpM?=
+ =?utf-8?B?dGF1N0xMZnFiSkx1cEczbytsNGNzUE9CN3VxcEtGOVFNYS9zN3BOQTJqRDVF?=
+ =?utf-8?B?Q0loMEl0UVViUU9xYlJ5NHBsVFZNTHRyOWRBTWdjTmlVZHFyTnhtaTBCUlVo?=
+ =?utf-8?B?dWVYMzJ2Sk9ZSFB1U1kxNWV0WTJWcjQvWTVqb1pFa0I3b3B3TUp2NjluQU9k?=
+ =?utf-8?Q?qOTVzXLKJhOL3eJ/353evLZApRyqHCE0?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bjJndlN4ZjVhanczdHZXcFZWT0NsRldFYXpBOGMvQTk1UWo5SjJDMm9sQmR6?=
+ =?utf-8?B?YWxCb0pRTHo3bFgzSGZHajJybjVXNFZSbC85dFdlQk51ajdubjllaDdRUndu?=
+ =?utf-8?B?NHNsUHpiWFE3M0VlWVU0TDI1WXJNUEdnR3ZOcURWTFdaTWlyeDRodHVqaVZz?=
+ =?utf-8?B?YUN6MnJpSXZTTkxSMTdTMm1vM3RtMmlLNHg0V1NEcGxCaDRyMU9RKzlJR2da?=
+ =?utf-8?B?M1BtemZlejY5R1IzbE9uZE54OVpkanUwK2pEcURqYnpMWUtQdGlXMkYvOWVY?=
+ =?utf-8?B?K0RYVnJTQWJaOHc5SjQwaUxvVC9sbVFndSt4TU5UcW5Id1VFSWxSbzVkcURY?=
+ =?utf-8?B?cFVuQW5tTkY5R0JINFNneGEzZnQ4QUphd08rVGtyeW1tYllrLzk1QjIyVFMx?=
+ =?utf-8?B?WGNOR0ZxandoQ3RxUUpxR0hRVEk3dlYrV1J5S1lLOVR0TTRGdnR5cHZHUTZR?=
+ =?utf-8?B?WjBhQU9jRnNQMEs4aGRzZXkrSlcweEFkTG96dVJQSmtQZ1ZmdkdRQ2RoQlBG?=
+ =?utf-8?B?c1lrWno0MytXd0JBWjZua3prQ2IyMGtiTUdBWStnazQvMGV0bkgwVGRJWWNR?=
+ =?utf-8?B?TDJHMEJHQ0p1c1BKQURlOEV1MHVUZEQvcktUQUVCeEhBRFFUaGRNTldWaHBU?=
+ =?utf-8?B?eFcxTE5OaVJLbmVvbHRhZ3haTFVhbmx4c2ZERVZPSHgyZXV6NmFoK3lTajFB?=
+ =?utf-8?B?cllKelRrbm5xTDRDSHY1RytBNEZ4WXBNRC93U0R6bWlFVDVMbTlHdGFObVJp?=
+ =?utf-8?B?MzlzdE1INDd1TTFCaGpjSkpTaTNRQ085RGwwZTNQd1R2eldqVGtyQVJNNWxt?=
+ =?utf-8?B?QUJzWGp2c0FqNG1XdVRFTWp6ZzFUOUErYmVtbnJJcDBQYmwyVkthWVdaRW1T?=
+ =?utf-8?B?alVVaDVXQTZTN2RVR25HNTVaU2xIekM1MSsxQWhFci8vUUNNOCt1cms2cFVD?=
+ =?utf-8?B?N0JtbmFxbHg2OTh5VUFmWnh0YlB4Tks5ZUJaMEx3cVFNaE9KKyt0NXBHRlBP?=
+ =?utf-8?B?L1BtWFVKUVVwTFhuMlk0QkJ1MkRYU0w2WTlUWi82dnBwSVNHMWlhQjlza3dw?=
+ =?utf-8?B?SnFiZUNJcE1iVmZrM1V1TXM5bzduMFVZVjZOWHp1ekNKdjFPVTZaOHBOY1B2?=
+ =?utf-8?B?WWFrdUx2KzgwK3V1a2hqU2tJSy9IWFBKQVBZZmpBZ2NaZXhjbW43S0FKSXNN?=
+ =?utf-8?B?TEZxbUlxSVdmR1BaZW9IRmpGVTFlVmRvWDhGZWtIWDd0U2FISjl0K0JlZXA1?=
+ =?utf-8?B?Z09vTHE5WXdWSjRYUmkrUXN5dlhIRmwzaFpjRkZxZ2hWcHVHekdwOFE2UE52?=
+ =?utf-8?B?UTNGK3Q1SmhRUTZ0SHJsRVhhdVN5NjgvdXFCN2dGUk5CM3FxMktJN2VPUkxi?=
+ =?utf-8?B?UGVDK1lTd0RXRURsSVFvVm0wczJ2WXExUXZGT0ZqWG5jZlZ5djdCZTJ1eURG?=
+ =?utf-8?B?OTVUY0JDZ25LemV5TVMra25IQ0ptc3orc0hwdmhISlFUK1EwWC9vUDU0YlpZ?=
+ =?utf-8?B?bUlCRXduYjZQUjh5NXUwa2NMN0R4Z2NBdUZ2bkdaSDFNM1NpNEFJNHoyek5I?=
+ =?utf-8?B?SC81Uy9UWHVCMkYyZGFxNVZKNmtXYU1zakpqUGhpbjFOMGNsU0JxM2JxdHN4?=
+ =?utf-8?B?SHRIeHRhM05HZUR5NmdWbHJMc295aFVzOG4yRWliQ1VQTVBoVE9pbEd3TVE1?=
+ =?utf-8?B?WXlyc0NQZERiejEzYjV4MVRwQjZEYUppdFFGQ1ZtQzVRUUlsbjZqOU82Y0NV?=
+ =?utf-8?B?bEpQcVlBU0QyaWhxOHQybEIzWDR2NStDMURUZml0c1M5T1NvZ0t2QjNVU2V0?=
+ =?utf-8?B?Mld6b1JvYVNXeVpuMWN4NVc4L01IeGpSZVp4VmZzQ0pJemRZbUVKUGU3Zi9B?=
+ =?utf-8?B?Ny82UEZndGkwVWpINUtQRGROZzk0cE0zSllQeWlyODZIUFZqUnZQQ1NBMlF6?=
+ =?utf-8?B?SjZtdzdvelRTVzQwcjNzdUxmSlM5eGgwMHdWVFpaR0RueG5TaWx1TjFjVmZm?=
+ =?utf-8?B?VktyNlZCM21Bcy9VWXpPaXFhN0tEOHpEemtUNkQwQzRHYUJkWkNsQ1FxZWI1?=
+ =?utf-8?B?dTVEckZGVnFuVmorbnNhQ0xMYWVZbXB0dFFSUHpWbHdPUGk3UHI1R1MxVnVQ?=
+ =?utf-8?Q?qzqZWsEXhSSFwo//xqRw8NArh?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81f17daa-c3eb-4827-2232-08de12506081
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2025 16:22:36.0637
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QQMw/mmdwQrdUzCki2osyKUY/iKKv2SROhdlnK11W74sjDIdLWQw9YAmQXv+bu29KjtgrHPqmr7gJsISncErLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7779
 
-On Do, 2025-10-23 at 09:37 -0500, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
->=20
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
-[...]
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
+On 10/23/25 11:09 AM, Yazen Ghannam wrote:
+> On Thu, Oct 23, 2025 at 05:01:07PM +0200, Michal Pecio wrote:
+>> On Thu, 23 Oct 2025 09:59:35 -0400, Yazen Ghannam wrote:
+>>> Thanks Michal.
+>>>
+>>> I don't see anything obviously wrong.
+>>
+>> Which code is responsible for setting up those bitmaps which
+>> are counted by topology_init_possible_cpus()?
+>>
+>> I guess I could add some printks there and reboot.
+>>
+> 
+> The kernel seems to think there are 6 CPUs on your system:
+> 
+> [    0.072059] CPU topo: Allowing 4 present CPUs plus 2 hotplug CPUs
+> 
+> We don't seem them enabled, but they may still get APIC IDs. If so, then
+> the IDs would be beyond the core shift of 2.
+> 
+> APIC IDs b'0 00 -> CPU0 on logical package 0
+> 	 b'0 01 -> CPU1 on logical package 0
+> 	 b'0 10 -> CPU2 on logical package 0
+> 	 b'0 11 -> CPU3 on logical package 0
+> 	 b'1 00 -> CPU0 on logical package 1
+> 	 b'1 01 -> CPU1 on logical package 1
+> 
+> 
+> Please try booting with "possible_cpus=4".
+> 
+> The "number of possible CPUs" comes from the ACPI Multiple APIC
+> Description Table (MADT). This has the signature "APIC".
+> 
+> Can you please provide the disassembly of this table?
+> 
+> You can use the following commands:
+> 1) Dump the ACPI tables to binaries:	"sudo acpidump -b"
+> 2) Disassemble the APIC table:		"iasl -d apic.dat"
+> 
+> Both commands are part of the "acpica-tools" package.
+> 
+> [...]
+>>
+>> BTW, I forgot to mention that I have a second seemingly identical
+>> board with same BIOS running Phenom X6 1090T. It is not affected.
+>> Not sure if this is helpful. I haven't tried swapping CPUs.
+> 
+> Can you please share the dmesg output from that system? And the ACPI
+> table too?
+> 
+> If the BIOS is the same, then I wonder if they hardcoded 6 CPUs in the
+> MADT then mark the extras as "not enabled" on parts with lower cores.
+> 
+> Thanks,
+> Yazen
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+As this is an ancient BIOS this reminds me of some related commits:
 
-regards
-Philipp
+aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+a74fabfbd1b70 ("x86/ACPI/boot: Use FADT version to check support for 
+online capable")
+
+Does reverting that second one help?
