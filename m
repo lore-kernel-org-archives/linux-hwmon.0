@@ -1,133 +1,99 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4863285CB3
-	for <linux-hwmon@vger.kernel.org>; Fri, 24 Oct 2025 14:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F732E1C55;
+	Fri, 24 Oct 2025 14:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761316630; cv=none; b=aYNbflCkutFGghuLtOL+yFXhUICIEWhQIw4tguIveeathS2kyQPQ24etZXC5FemAzXWnYCyjSjJw2Pwp14vXNku09M6eqx04z2W17xinuggW4DB2AdlEcY3/t3I0lPrcR0VMGhEWk3A9YEOCGuro87qElF8UFDEB1kNhmSg3CR8=
+	t=1761317973; cv=none; b=aE5HtBcdPD4ZohYRmj1owoLxSn9yAltCjL5zDOPFFKMZhzhThQi8CLc5RsUOPStvkOii/QLgyxrrs2UgsoExiQng9cuHJs5cMrhpNYqk+/A2PRATjdy0TwLvc9tKFlnljaInD8HcG6dWn1fr3sTjJegZl+8H/zylSJaftCvrKZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761316630; c=relaxed/simple;
-	bh=5bzAQm1vpD7lTerhTYq37aTukVXzrzouyw8pD23L98Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZwGaVB4hfUnf5oRt7czt/qSgjon5hB6k1tkRIIkMdQmhqJ+2MzRbAjqF1n0QjvRV8xtTR7t/ICd8rJcuQOG4gbvqxYLUWREbEXZaj7sE+u7DoCu/NArzOqbafgrW9x29Ff1NWk2C6oGFOUUAfRDW7E30q4xIGOWqgYxnwVwHNUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SGCqHcJT; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761317973; c=relaxed/simple;
+	bh=YlGEYTT5nrHovfloLOOpUQRYN+fXsCYG2LixOaa5378=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rxr7yr+o1I/wnT4Rr+hBymoEhbTryPj+01ueS5mfguJisANNXPG6y/dGx+kszEnGzwHwRiaXCz/kBZNJbtByo9Hc1vIJbJfdzoc8k1oZ6OiSLURQ94hWizKYi2gvLMucQziFiNdx8DbWxPKcyGjAu57oPUXTXTlPQ2Io1qhFhWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/4F9kA1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SGCqHcJT"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7a27ab05a2dso1771425b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 24 Oct 2025 07:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761316627; x=1761921427; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3plulC99H/+7ueocjB6qUXe51ScV5oNChMwjLtEQgQ=;
-        b=SGCqHcJTyYG0CXfKAJ546w7XJZcym7C8Na1ke6Qybwi4UeJ9v4McgfcVa3hqidCPYt
-         ZQ8cA5Dx6/W0Na7cFT77nEMNfYpCQdaWx2sDQMsJp6Pn+RUiBkrfW0uwXydmwGEkXhMq
-         yL9a+tFGEA/JikU2njwiscCc0e/i8tzRtkQO0Qw7Hvb/r+r6PQYXiHTtyAzfu0As1alz
-         PTy5D1XuSTAGg6Yih0VEpUx+L1DLMAPNbnkBgUOymQpthsy3McmWr0teH8qrgEiPHleR
-         jBZ3KEpsQ1SzLacaVZOqeTFjd1f7Me12a13ulQoHJxOb/CtvAhoCTDdfK5yn7mlt/xOP
-         XkXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761316627; x=1761921427;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z3plulC99H/+7ueocjB6qUXe51ScV5oNChMwjLtEQgQ=;
-        b=kPeKJn6AopptpSPMbt3vvyupC+uC2mF3n/xFD4NdgxsiLmVHnw0KhA6Ma7e0rt91LF
-         +aHDKDupSz4w/mxPJEGWwuLgTADHfi5a1pG2Gj25flR8hJQrSV6mA5x32nACVMZJXwgW
-         ynaozSPjLsXSljM0Q8c7CMKNDB/+LM+X+IAxlXudutxQ68wixEUIuU5cPtdVJZfGJT/L
-         B99FZapMsw+zyV8P60c/Ksto5DBqbhwIkR8WFxfARnkiJLmDUYZV3CN5E8JzoW0LL1N9
-         LTKR90rWEow3/1gxKIxo0apTATHz8EAPJxLHxz50NxD+UzqEWU77xoUbODZVnq8JD/eG
-         WNGw==
-X-Gm-Message-State: AOJu0YyYwBaFM4MOCGMDHjECRnPb+Vu6YZMSk4wy+/9LMhSolllCRgr1
-	KtwFi3B+q1idervoXuX5XRFgCImlGfCf0HAJrNkchcQGXB1jiQSqA/Uk
-X-Gm-Gg: ASbGncunjdgAqqlbkBwJx19EH0EBmKZOJ8CQj0A++YUTkGEsX4q7fFQzFEURpCDD17w
-	pnOaUaEd7+0kyamgrPAbOGMhZl+FfN1hjwYJYE/+loT6yJqGHfNXXpoBn02YqauyvyPa66aOraH
-	elmmcKr2v3s6In/ywUn6Qm0avqedLYLhk2IHblaXu0qwhyrfHcT+CcTfwXd1pPPUzySIJ6TIWTS
-	HVqjHssaCZdjMR6zE4FAua9cEB2iJqxYq5kt5oxpEBxjI4StVkrydCsGB/bXdJewjlAmgO1sB1R
-	xxO+U4su4/xqsrP+U3SGzuXFGnuEyx/JW95eJKUKC+QFueWprrkIjPgJE7ZwMzIfbn1Hs1NXQY6
-	mIttxp3BUTAXiqjWd/UlYDtPyIsLJJPM/Ab6X7k2/gzXQPUrPWJcmGBOw7YN4GLQ+Xm21L1izId
-	gLJvbnvjHiIeGcJf9LK+bSgunbqI7Gan3PxA==
-X-Google-Smtp-Source: AGHT+IEAG9dCd057H6ZgsQJv28clY3E4+KDoFKMP468zgwqODZ4ztBCcpbGHu5MvdqVczkpUggcgHQ==
-X-Received: by 2002:a05:6a00:1ace:b0:781:9a6:116a with SMTP id d2e1a72fcca58-7a2208f0777mr28482023b3a.9.1761316626603;
-        Fri, 24 Oct 2025 07:37:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a274b8a0edsm6091469b3a.35.2025.10.24.07.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 07:37:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v6.18-rc3
-Date: Fri, 24 Oct 2025 07:37:04 -0700
-Message-ID: <20251024143704.1144808-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/4F9kA1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6A2C4CEF1;
+	Fri, 24 Oct 2025 14:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761317972;
+	bh=YlGEYTT5nrHovfloLOOpUQRYN+fXsCYG2LixOaa5378=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=I/4F9kA1e7P2p4l5Kvey8Q2WS1TGvL+gAQgqglnM7cmRBIbBVx1y0KF3FxqlHN3hw
+	 DgUerun10okT687v2FNFL1mveKVGAuMBci/DNS7IeNQx4dHxCN0LMvEmYDSzUSJTwu
+	 gUY+8uEjZe4tu24kb84PL0W6wXuKbAvKH4nxG++v9LyeMh0H4C3ueJByez8hbGKbS6
+	 xqXi3KAU0karokUs3nlG9tBvMchWD6lkMGi3JAGU/AYT1rog8Vem1Xs7Tu1xe8NjIV
+	 loFh9k/M45Xg8oOhyvuELi7rogTRTE+/JFOTfxl9M529IWpSCrO4/yVB5ofkwHPO1f
+	 K+WsCVS+PAmZQ==
+Message-ID: <d87ac82b-0ca9-417d-a239-c68cfdfa4c78@kernel.org>
+Date: Fri, 24 Oct 2025 17:59:06 +0300
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>,
+ Xu Yilun <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Guenter Roeck <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Joerg Roedel <joro@8bytes.org>,
+ Jassi Brar <jassisinghbrar@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20251023143957.2899600-1-robh@kernel.org>
+From: Georgi Djakov <djakov@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Linus,
+On 10/23/25 5:37 PM, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+[..]>   .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+Acked-by: Georgi Djakov <djakov@kernel.org>
 
-Please pull hwmon fixes for Linux v6.18-rc3 from signed tag:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.18-rc3
-
-Thanks,
-Guenter
-------
-
-The following changes since commit 211ddde0823f1442e4ad052a2f30f050145ccada:
-
-  Linux 6.18-rc2 (2025-10-19 15:19:16 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.18-rc3
-
-for you to fetch changes up to 8dcc66ad379ec0642fb281c45ccfd7d2d366e53f:
-
-  hwmon: (sht3x) Fix error handling (2025-10-19 18:56:14 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v6.18-rc3
-
-* cgbc-hwmon: Add missing NULL check after devm_kzalloc
-
-* gpd-fan: Fix error handling
-
-* pmbus/isl68137: Fix child node reference leak
-
-* pmbus/max34440: Update adpm12160 coefficients to match latest FW
-
-* sht3x: Fix error handling
-
-----------------------------------------------------------------
-Alexis Czezar Torreno (1):
-      hwmon: (pmbus/max34440) Update adpm12160 coeff due to latest FW
-
-Erick Karanja (1):
-      hwmon: (pmbus/isl68137) Fix child node reference leak on early return
-
-Guenter Roeck (1):
-      hwmon: (sht3x) Fix error handling
-
-Harshit Mogalapalli (2):
-      hwmon: (gpd-fan) Fix return value when platform_get_resource() fails
-      hwmon: (gpd-fan) Fix error handling in gpd_fan_probe()
-
-Li Qiang (1):
-      hwmon: (cgbc-hwmon) Add missing NULL check after devm_kzalloc()
-
- drivers/hwmon/cgbc-hwmon.c     |  3 +++
- drivers/hwmon/gpd-fan.c        | 10 +++++-----
- drivers/hwmon/pmbus/isl68137.c |  3 +--
- drivers/hwmon/pmbus/max34440.c | 12 ++++++------
- drivers/hwmon/sht3x.c          | 27 +++++++++++++++++----------
- 5 files changed, 32 insertions(+), 23 deletions(-)
