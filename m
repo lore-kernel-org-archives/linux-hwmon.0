@@ -1,41 +1,41 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CDD2FF14A;
-	Sun, 26 Oct 2025 22:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944401BC5C;
+	Sun, 26 Oct 2025 22:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761518711; cv=none; b=qljeg/HMpgPgNinfIiIKOdFM15bK/ciN1v40pH5AYbzplmwUC1xKorLmi60hWwEb7WAw2uHmLBLKPe9Qr5J6VLnwnuHNCJ8+422aEbLnU2g9kY86on1jz1s6OhcwgOCwuJRFxylLfB1Ep4n6R5Iqk+VwtYjIWtA4uQW4mJzOZps=
+	t=1761518999; cv=none; b=hCCcjG70EvML7ei52FOMQKVsoWHjO/U/0ZxSqY/qCMPyKasYHd5Gsn7DcisA+FTPadywdxjB+/2fxqZy8oebCF2SiGdb22lZz+i8q7rCR7TXlEDINULG+yJrd2XhXb8io3w0REDrUS4bxXrL2i77I+LjtVHNcEHCgIfLk/v9AHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761518711; c=relaxed/simple;
-	bh=zaxV4JRRz/qn3O+6LLn9hdqTNFkO3h5a3GYhFgF1feU=;
+	s=arc-20240116; t=1761518999; c=relaxed/simple;
+	bh=Cc4df0JjIO6+tnwwuyIYnFiRL2z4izoA0MZNKQ8hkOQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XgmwDFl4POSmUIzc4vDW2TwlXvyXbuXf1aqF6ixT2G512TBYPA5cMuXbcd1Bk0Oi9VI82ji6DSf8lSqUmJiVJHv5Oj+puuZKw/ntTrrPvRGsNHWophBjA+r9KuIF1mYOsgVOdDcFaaofkJ1kUB0LJsa9d99VSv8QvpuakKAifXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=FoIGKjdi; arc=none smtp.client-ip=212.227.17.22
+	 In-Reply-To:Content-Type; b=CasBYZWUx+WJ018mgs6YB7nqb7L3JV1ptNQQK/LN7/onxs0/AxpqWK3byoZCV3lxSOxTAH9lYqvZYcKUEK4GN9nEjw45wFIPusVwkyh9Coy3asQ9/3/k6W4snrTfEcQqPRMed3hiqJdUx6SpgbQHCAOHF2LngGis++6Hxoj1F3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=ZDHVJXcb; arc=none smtp.client-ip=212.227.17.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="FoIGKjdi"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="ZDHVJXcb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1761518705; x=1762123505; i=w_armin@gmx.de;
-	bh=zkcgsk6sxZUElntgbbuwqEbnGX1osSWN9RIU1b4ZSaQ=;
+	s=s31663417; t=1761518987; x=1762123787; i=w_armin@gmx.de;
+	bh=GDn9s7baFendtkmgnn14F/wdoN29Rbr+Rfjd5IqSGU8=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=FoIGKjdiGig2BcSh5PiWARw8hzGXZy3NY3uRKcpb8ekzh7soaiZLq+9KKOi3r5CX
-	 YeercGIC/voK/a8HG0sggrI1WpkQcyUZujWsOTSHfTVHYvGQTpoeLB3WgQ8hvj3ja
-	 2FXt3LPlkVARORKI/2PRVuQtebInPWoKW79ia7HJsZmkFPQ8mMAKFyHph9QOZPQCI
-	 SZfN/HIC/vTdXLL/RauCJysIAAwK3WFdSiQtvSNBWq8b2f/TfjnN7KkTuC3gZgVuu
-	 teWzBsr39PiGwnQR8fgW5zdl19+p9lhacB9FYWOevov7RE2zo7ZXX4usmQOhK1k/S
-	 TrPOuS/jKye2mcwumQ==
+	b=ZDHVJXcbBsuSGSbJ5GV6Jruzf8UCcJGj+ORfPSxU6Je77xvY5GYtw4bXd4narUvC
+	 LhoazZ28RIwbSpyycVY/Ge9749TTVZiSMp823VB/blU9+cZDxTbghyBrgs7k8Dhe8
+	 +ytRBL3CPuoJ9C8+yfOwiiQkEQ6AtR2sXevlSCkBOujfq8XIpelR0vYzv20Q5RH12
+	 1pRwrx2oVLPEYQsyLxjwh2LipKyL8KLAigQI/MbgrI3W7Ry+V2FRB67KdSGVRzQzS
+	 elsns3E4tOiyj23eIiGQotMrlaP8y8ilT0uM/csIU0maBxQwieu2eDYAB64CxMxhS
+	 yK2iRbDjDco2kjFAzw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrhUK-1uPUqT1fTI-00mv2h; Sun, 26
- Oct 2025 23:45:05 +0100
-Message-ID: <1fb87443-f1fa-45d1-ae87-3ec2be6ce3ce@gmx.de>
-Date: Sun, 26 Oct 2025 23:45:03 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7sHy-1v8DsX0B3i-006Oi8; Sun, 26
+ Oct 2025 23:49:47 +0100
+Message-ID: <63f0221d-4436-4d1e-a933-8b12f392cac6@gmx.de>
+Date: Sun, 26 Oct 2025 23:49:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,8 +43,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] platform/x86: ayaneo-ec: Move Ayaneo devices from
- oxpec to ayaneo-ec
+Subject: Re: [PATCH v2 6/6] platform/x86: ayaneo-ec: Add suspend hook
 To: Antheas Kapenekakis <lkml@antheas.dev>,
  platform-driver-x86@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -54,391 +53,187 @@ Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
  =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
  Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
 References: <20251015084414.1391595-1-lkml@antheas.dev>
- <20251015084414.1391595-6-lkml@antheas.dev>
+ <20251015084414.1391595-7-lkml@antheas.dev>
 Content-Language: en-US
 From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20251015084414.1391595-6-lkml@antheas.dev>
+In-Reply-To: <20251015084414.1391595-7-lkml@antheas.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:BVcnPDZ6SGGdj+lZ4d38ZSA+P16MxEp5X16FffDoX7pzgy1i+lz
- juWvMTuwsDe6Bn536VEI2P2UP896KuW6TePMCNHfHWtz3qe9y7ytLc/LjceZEyrfMuMXpxo
- +w82ay0UK98G/ovPIftATBJmAagPIN37QQw0RIK2SjZVTdwjmKsOd3nSMiHYVPYyFL0VUtl
- kzFJyKs6Qrlmc34wvm1Bg==
+X-Provags-ID: V03:K1:gcKzcIEb+PthSasSIUnOzPTXRG2+7MY0m8fG3V4qukWQZuV/oFJ
+ 5u5nQ2PDM3jkn52mQybM9gWbURyvRSoqPOiUWj3H+v+UV6b998fplCwIQna/YmfH/eFC7KS
+ Bj4OgrMt2ltYV+g1pMU3boR9FUww5E+dSQYzs/1W1Rr4IxVnmCNUK2dWqA7ef4Ffhu86iHR
+ a+G5P9gktTCRqHcf1/G2w==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:9XRIPaopFbI=;qNdRa9lsC8fFIuMpiuqqgbOoaEJ
- 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
+UI-OutboundReport: notjunk:1;M01:P0:wp7F/RXudSo=;fyE6CdDXYW4hDYRgL8djVhouj3P
+ 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
+ UoMQt0Yze2K09Tr7HuShE6AS3OxI5g2wT0U=
 
 Am 15.10.25 um 10:44 schrieb Antheas Kapenekakis:
 
-> Currently, the oxpec driver contains Ayaneo devices. Move them to the
-> new ayaneo-ec driver, which is dedicated to them.
+> The Ayaneo EC resets after hibernation, losing the charge control state.
+> Add a small PM hook to restore this state on hibernation resume.
 >
-> As this driver supports charge inhibition for Ayaneo, add support for it
-> for the AIR, AIR 1S, AB05-Medoncino, AIR Pro, and Kun, referenced from
-> the out-of-tree ayaneo-platform driver.
->
-> In addition, update the readmes of oxpec to reflect this change.
+> The fan speed is also lost during hibernation, but since hibernation
+> failures are common with this class of devices, setting a low fan speed
+> when the userspace program controlling the fan will potentially not
+> take over could cause the device to overheat, so it is not restored.
 
-Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+I am still not happy with potentially breaking fancontrol on this device.
+Most users expect fancontrol to continue working after hibernation, so not
+restoring the fan speed configuration seems risky to me. Would it be enoug=
+h
+to warn users about his inside the documentation?
 
 >
-> Link: https://github.com/ShadowBlip/ayaneo-platform
-> Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->   drivers/platform/x86/Kconfig     |   4 +-
->   drivers/platform/x86/ayaneo-ec.c |  65 +++++++++++++++++
->   drivers/platform/x86/oxpec.c     | 115 +------------------------------
->   3 files changed, 67 insertions(+), 117 deletions(-)
+>   drivers/platform/x86/ayaneo-ec.c | 42 ++++++++++++++++++++++++++++++++
+>   1 file changed, 42 insertions(+)
 >
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index f5b2edc6bc67..4d4be1634152 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1043,9 +1043,7 @@ config OXP_EC
->   	help
->   		Enables support for the platform EC of OneXPlayer and AOKZOE
->   		handheld devices. This includes fan speed, fan controls, and
-> -		disabling the default TDP behavior of the device. Due to legacy
-> -		reasons, this driver also provides hwmon functionality to Ayaneo
-> -		devices and the OrangePi Neo.
-> +		disabling the default TDP behavior of the device.
->  =20
->   source "drivers/platform/x86/tuxedo/Kconfig"
->  =20
 > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/aya=
 neo-ec.c
-> index 363b61fc6e12..73e9dd39c703 100644
+> index 73e9dd39c703..8529f6f8dc69 100644
 > --- a/drivers/platform/x86/ayaneo-ec.c
 > +++ b/drivers/platform/x86/ayaneo-ec.c
-> @@ -49,6 +49,15 @@ struct ayaneo_ec_platform_data {
+> @@ -37,6 +37,8 @@
+>   #define AYANEO_MODULE_LEFT	BIT(0)
+>   #define AYANEO_MODULE_RIGHT	BIT(1)
+>  =20
+> +#define AYANEO_CACHE_LEN	1
+> +
+>   struct ayaneo_ec_quirk {
+>   	bool has_fan_control;
+>   	bool has_charge_control;
+> @@ -47,6 +49,8 @@ struct ayaneo_ec_platform_data {
+>   	struct platform_device *pdev;
+>   	struct ayaneo_ec_quirk *quirks;
 >   	struct acpi_battery_hook battery_hook;
+> +
+> +	u8 cache[AYANEO_CACHE_LEN];
 >   };
 >  =20
-> +static const struct ayaneo_ec_quirk quirk_fan =3D {
-> +	.has_fan_control =3D true,
+>   static const struct ayaneo_ec_quirk quirk_fan =3D {
+> @@ -464,10 +468,48 @@ static int ayaneo_ec_probe(struct platform_device =
+*pdev)
+>   	return 0;
+>   }
+>  =20
+> +static int ayaneo_freeze(struct device *dev)
+> +{
+> +	struct platform_device *pdev =3D to_platform_device(dev);
+> +	struct ayaneo_ec_platform_data *data =3D platform_get_drvdata(pdev);
+> +	int ret, i =3D 0;
+> +
+> +	if (data->quirks->has_charge_control) {
+> +		ret =3D ec_read(AYANEO_CHARGE_REG, &data->cache[i]);
+> +		if (ret)
+> +			return ret;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ayaneo_thaw(struct device *dev)
+> +{
+> +	struct platform_device *pdev =3D to_platform_device(dev);
+> +	struct ayaneo_ec_platform_data *data =3D platform_get_drvdata(pdev);
+> +	int ret, i =3D 0;
+> +
+> +	if (data->quirks->has_charge_control) {
+> +		ret =3D ec_write(AYANEO_CHARGE_REG, data->cache[i]);
+> +		if (ret)
+> +			return ret;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops ayaneo_pm_ops =3D {
+> +	.freeze =3D ayaneo_freeze,
+> +	.thaw =3D ayaneo_thaw,
 > +};
 > +
-> +static const struct ayaneo_ec_quirk quirk_charge_limit =3D {
-> +	.has_fan_control =3D true,
-> +	.has_charge_control =3D true,
-> +};
-> +
->   static const struct ayaneo_ec_quirk ayaneo3 =3D {
->   	.has_fan_control =3D true,
->   	.has_charge_control =3D true,
-> @@ -56,6 +65,62 @@ static const struct ayaneo_ec_quirk ayaneo3 =3D {
->   };
->  =20
->   static const struct dmi_system_id dmi_table[] =3D {
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_fan,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_fan,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_fan,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_charge_limit,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_charge_limit,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_charge_limit,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_charge_limit,
-> +	},
-> +	{
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
-> +		},
-> +		.driver_data =3D (void *)&quirk_charge_limit,
-> +	},
->   	{
->   		.matches =3D {
->   			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-> index 54377b282ff8..144a454103b9 100644
-> --- a/drivers/platform/x86/oxpec.c
-> +++ b/drivers/platform/x86/oxpec.c
-> @@ -1,8 +1,6 @@
->   // SPDX-License-Identifier: GPL-2.0+
->   /*
-> - * Platform driver for OneXPlayer and AOKZOE devices. For the time bein=
-g,
-> - * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
-> - * hwmon sysfs.
-> + * Platform driver for OneXPlayer and AOKZOE devices.
->    *
->    * Fan control is provided via pwm interface in the range [0-255].
->    * Old AMD boards use [0-100] as range in the EC, the written value is
-> @@ -43,14 +41,6 @@ static bool unlock_global_acpi_lock(void)
->  =20
->   enum oxp_board {
->   	aok_zoe_a1 =3D 1,
-> -	aya_neo_2,
-> -	aya_neo_air,
-> -	aya_neo_air_1s,
-> -	aya_neo_air_plus_mendo,
-> -	aya_neo_air_pro,
-> -	aya_neo_flip,
-> -	aya_neo_geek,
-> -	aya_neo_kun,
->   	orange_pi_neo,
->   	oxp_2,
->   	oxp_fly,
-> @@ -131,62 +121,6 @@ static const struct dmi_system_id dmi_table[] =3D {
->   		},
->   		.driver_data =3D (void *)oxp_fly,
+>   static struct platform_driver ayaneo_platform_driver =3D {
+>   	.driver =3D {
+>   		.name =3D "ayaneo-ec",
+>   		.dev_groups =3D ayaneo_ec_groups,
+> +		.pm =3D &ayaneo_pm_ops,
+
+Please use pm_sleep_ptr() here.
+
+Thanks,
+Armin Wolf
+
 >   	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_2,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_air,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_air_1s,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_air_plus_mendo,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_air_pro,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_flip,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_geek,
-> -	},
-> -	{
-> -		.matches =3D {
-> -			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-> -			DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
-> -		},
-> -		.driver_data =3D (void *)aya_neo_kun,
-> -	},
->   	{
->   		.matches =3D {
->   			DMI_MATCH(DMI_BOARD_VENDOR, "OrangePi"),
-> @@ -672,13 +606,6 @@ static int oxp_pwm_enable(void)
->   	case orange_pi_neo:
->   		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_MANUAL);
->   	case aok_zoe_a1:
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_2:
->   	case oxp_fly:
->   	case oxp_mini_amd:
-> @@ -699,14 +626,6 @@ static int oxp_pwm_disable(void)
->   	case orange_pi_neo:
->   		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
->   	case aok_zoe_a1:
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_1s:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_2:
->   	case oxp_fly:
->   	case oxp_mini_amd:
-> @@ -727,14 +646,6 @@ static int oxp_pwm_read(long *val)
->   	case orange_pi_neo:
->   		return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
->   	case aok_zoe_a1:
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_1s:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_2:
->   	case oxp_fly:
->   	case oxp_mini_amd:
-> @@ -774,14 +685,6 @@ static int oxp_pwm_fan_speed(long *val)
->   	case oxp_g1_i:
->   		return read_from_ec(OXP_2_SENSOR_FAN_REG, 2, val);
->   	case aok_zoe_a1:
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_1s:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_fly:
->   	case oxp_mini_amd:
->   	case oxp_mini_amd_a07:
-> @@ -810,14 +713,6 @@ static int oxp_pwm_input_write(long val)
->   		/* scale to range [0-184] */
->   		val =3D (val * 184) / 255;
->   		return write_to_ec(OXP_SENSOR_PWM_REG, val);
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_1s:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_mini_amd:
->   	case oxp_mini_amd_a07:
->   		/* scale to range [0-100] */
-> @@ -854,14 +749,6 @@ static int oxp_pwm_input_read(long *val)
->   		/* scale from range [0-184] */
->   		*val =3D (*val * 255) / 184;
->   		break;
-> -	case aya_neo_2:
-> -	case aya_neo_air:
-> -	case aya_neo_air_1s:
-> -	case aya_neo_air_plus_mendo:
-> -	case aya_neo_air_pro:
-> -	case aya_neo_flip:
-> -	case aya_neo_geek:
-> -	case aya_neo_kun:
->   	case oxp_mini_amd:
->   	case oxp_mini_amd_a07:
->   		ret =3D read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+>   	.probe =3D ayaneo_ec_probe,
+>   };
