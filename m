@@ -1,64 +1,64 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1B5255F31
-	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 06:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DAD1CAA7B
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 06:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761461464; cv=none; b=mnXACdqL8tdz5i4lsTwGQ0YR3lcufIXog/hPKJY2piGkN2cmcjK7ug6awK797f4J0dxFaE2L0eSkJOszp6hnJTop0SF63u9mn75mTtWRJ2I9R8OPC/r3T63DF5g4b2l+nEWqMFTP6NAyBKKJFSzeDGoY+fcw/tSimcRKy3NSO4g=
+	t=1761461465; cv=none; b=erfplgrG3f2aCDKv8X4U7/G7Aq7Kvd7Qe2BuPazYrBOzzWXBrXzXzw9J4fz5lud8ARLrPjBk/hZn6q6nBO5MJ4IgcKE3C4SnYbETGZf0LToWv7ZhPfT7EAqzj9lNvV3DckgXDCDDn2wOLtoBv82X4o2x1YqtLRedbRn6wEp7RRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761461464; c=relaxed/simple;
-	bh=91eutbdiqidC/G4kon+Q++aT9/9DTzorL8tQ+hqakE4=;
+	s=arc-20240116; t=1761461465; c=relaxed/simple;
+	bh=e85NXa0sI3f3w+CETu20WN8BTa5YzlfYtevVbUSsSsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lcRO4F5cy6N50yZY95+4/0qwTvLwx6H/lsQdkL6HXt+TjVXgG7DcbvAOTK02NTVgy++qAUtwoQIWhrwDLEE0zZSU9TYCiMRUFtaVROCssih+jtpd8GwM5YCbVZa+zJsSxPYoY3ugvzS+QcH6Pk1ljlxYEWvv7/iu9a00GXlJQEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=NJSGOybT; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=oYbSVBswzFt+lmjehvAiWmSvqrt3fjsL3GGabDG1y8MuOAh8MWSrTPYF8u+GbtwRGV7v9MHK+SxEoND0EUjS4n5Tt4gk5IXLf4Oj5yaSvM17BpMdqsiKY4UOtfYDpElzUXio0vhkQajceHP9SYtsr9C/MHvOszLg2O8pYSQbZb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=Vj2KtX/u; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="NJSGOybT"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-290b48e09a7so43759145ad.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Oct 2025 23:51:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="Vj2KtX/u"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b6cf1a95274so2451430a12.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 25 Oct 2025 23:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=reznichenko.net; s=google; t=1761461461; x=1762066261; darn=vger.kernel.org;
+        d=reznichenko.net; s=google; t=1761461460; x=1762066260; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dz7xWRpvEc8yOS8Ty/nPJaqOcnmga2XcXY7rl8nMBM4=;
-        b=NJSGOybTdhQytV5T5cTzLXX1PHHiP0Xcfd0dExykrGIhpI0ItSrs+5k/8TWCwxQktE
-         FQa/xSjNpde2yqTQ27j9X5GP6pGzT9VE4189t9HkSC4eT9Yrc07UYfPAGZ64LqFV9BzE
-         XENPapCqv1Zd9NsiQDHC11Kd5MZZabpEyHQlN+NA3/izBsTSeLKW6l0XWaGtyIwD7Pa2
-         z5IaCs40xwlMOuhCkqpNzBlZPVJ6mDfVaY30skxr/T+Dl4euV2pYYoFM5g781nDB/hXz
-         QIO51Xiz87uM2nGrowua3tX61YEfEUw3uWCriQx7f5jV1NjMj8PA2v7uTzwVwIGArgZS
-         RB5g==
+        bh=bwm3y2MubzEk+9BE7WJDp/oVxvmkQrQjbNwGQzPi+1s=;
+        b=Vj2KtX/u4thXrq5QECAa6wwlWAFxoOJL4e+8dQANybSDZyxF8tqut2Ll68/tq05ada
+         R25Zz0uZ1+FA7DUHnbtH7iDCanDndbAuOxlJeTl/hXXUSLGDBmeMexJLoJO4Z72zVd1f
+         HlLylcmKUHnESEurYB0enXyXFOZ38SVd+X0VjF8FihCAFbO44BYsUH8XKXOpOiM2pN+m
+         Ej+PrIQrdn/JPnq2NXp8Bk5kYVUqx2S3mQo4YqRK5/GUw+LqZHIX24xk96caMLQPVRMF
+         Ip4ie9D9bK3fz7sxQVEwhATVrwQx8WQgiZH86/1+SoOC2NW1NqX3Nyo4j6LdFJiKG5pU
+         57sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761461461; x=1762066261;
+        d=1e100.net; s=20230601; t=1761461460; x=1762066260;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Dz7xWRpvEc8yOS8Ty/nPJaqOcnmga2XcXY7rl8nMBM4=;
-        b=MWBSmk+SWO3JV5vs2lVGmJsPgTzqc/S9KJDIbGm/sPSirE2hz+/xdmCUy5GXL4vBAy
-         J+kjBleEHCEb1QZ0j5jo8nnQbOtF68r96AG9mNq/FBD8YZu04eYIv5q3oQeox9rpp12r
-         TItuyQkmnSN71tE4hT9xBs5mkoTRBhJmK1Q6HobckhTVj/5a8QWnFYdw16J3q2kqcbyO
-         7tGsnljrPzlQVDuCll/APusiAwwk6SAvvFEDQALNoeojmGe0IJz+nTo7q3I/FJ6Vojyd
-         qsfNRM+aL/6DVCxG6w2B9j2C8li1XXDkJoNfdCMh6qjX28ac3Tl2+/MUOndzb+YcxZGh
-         Ls2A==
-X-Gm-Message-State: AOJu0YzYOt19EMBQ/JmsYQHujYxrp021T8MGdfpMtW28ClQ+AnvlOeAZ
-	fviQX5oP2xNDtRQu1X56cE3IhDwh/evZxqlnb18Vctn/tnX+N+/mrRIU01GfGq8PIDwSD55m/Zt
-	tNECT9WA=
-X-Gm-Gg: ASbGnctrZjFjo8K2IMvSTvrjJJRbKPPHFQUQCEyGJR8UdLk7IFiT0DGMB8JuBdw+VGO
-	kB48Xl0CL3uS79urYtlIIKyRJpZN8dFU66iWH6jRLaZq7vpTudxq4Z34QbQpW+jlWJj2zfOzXi5
-	0ARsxAK8Y4nO6rx60pXhgKc77Z2e3BCp7m9WZqmJuKlyvnhyqmmrKPBXgXlqPjSz3Azk3TOADgS
-	dcStU6JfAlfdLcHDl4zvPNSpeuvwS1ipfhwhFxSu2hy/RYMgbjgVjKRZGpejE75R9Fuwjc/7PN/
-	zmHx5n+ePFMgQQbwLb2ybgCbokGp3yMcTEqFhJSDtmhZszsXutXNcwKgYw3CBjQuhzUDBYkyZ3z
-	i6yj6QM2m9jej9L28tNMWjeMglwErc6wBic2491pnier9LTupJifIqNAZaoOZ7hEDAFGBMp7zGV
-	40ZSLrtdk9Ux7Lfxvv
-X-Google-Smtp-Source: AGHT+IGUfSpO1SH+sIklCLC7sSxmHonNYEFcnwWc8ZIBDaDFBHRdSpDdt7EYFZ3pJ8lJ0K6h8hWNag==
-X-Received: by 2002:a17:902:ec87:b0:24b:24dc:91a7 with SMTP id d9443c01a7336-290cb65c5a6mr393908385ad.45.1761461461459;
-        Sat, 25 Oct 2025 23:51:01 -0700 (PDT)
+        bh=bwm3y2MubzEk+9BE7WJDp/oVxvmkQrQjbNwGQzPi+1s=;
+        b=tJvkfd67EDzEnTDQvJSm0eBsT0NdPZV8a0yPRgqVCEP4XzijmQcrvUxXC5Kegia4N5
+         LuV/0q7TNOhiIzqFX0YLkTa30/W7Nf6SOYJeCe88mSmLIK6TCJ00yu1o8Z9kM5H+Tt+d
+         0PZZoBxUIEhtmzrWuwI3R4BLpm1kc5Zyo+qrDqc7YZcuhp7t58y0q3cyjZTTn90RB546
+         ubXxKMbBa51j2myMqAYDeFpKKMma5DQ9U26IEn2rAoBvflNu+gDDjHrY5VG39Onx5Vmv
+         OwPbXQXLCTxWLP1zD3t+APEQPn2YhkC1m+zckr5wjS1hbRWaUhSRjFf1C8lofnUROzSH
+         LNeg==
+X-Gm-Message-State: AOJu0YyYIbLoQZxpbOpG3QYcsbAKUnMbPHj/hXSwSIdMHaQED0sRHG4x
+	dyT6trcTp53gi4zjjxezAqDpOhBCtX1FcJkJAPs3lOBXh4FOHO/xsq4OhUTLzL3jzK4HEeDKjKU
+	9KiHWups=
+X-Gm-Gg: ASbGncsWfohUQI8SRz0ngueG6ARV4uingQaBXHKzis+wG81wAvLNAMjW9y7w/CuALMS
+	WgJz6rZADeyen6offtqBwwqiirBUtn0GxGFpP92xlkLWJYCoNWOytLOVHvxVwSPmGFdmBqG8Kmn
+	8rCvZTkGaNkOOIa6SHwN06mCSSJK+aLb2gsi0FRNxUE5PwedEroXD7T9fFhD8hGPI1HEW1kBYiN
+	GhlgJZNUAoc5hSdt0I4hE0nYXH94X+yaKkvnongXaYa/myJtZXCbVl6nb0qyXQBTXr55D8VC9du
+	UGmWGVeiJrMWoeni/y3qGbStCR5X52nXXO/MF/yMu45rXnfl5mJ+rEIFRcC/3oyoQCnhVsDQGqn
+	pcHn9km/MFtvrqEcYiS7G5Jzr5S2qWDntgwV1XI3pnJ7PDHridvuXrk+oU4RPZxoyLn9gAGDlQR
+	hZdcmTJw==
+X-Google-Smtp-Source: AGHT+IFk7R96YXUE2AFHweAhNJTfel5qnttPqZd813Q6RU73D4Bpa+BM9FjFwisJbKplCLyC3elWYg==
+X-Received: by 2002:a17:902:db0b:b0:290:b53b:7459 with SMTP id d9443c01a7336-290cb65dc2amr403459295ad.56.1761461460154;
+        Sat, 25 Oct 2025 23:51:00 -0700 (PDT)
 Received: from z440.. ([2601:1c0:4502:2d00:640c:95e5:94c3:cc2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d4288asm43184905ad.84.2025.10.25.23.51.00
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d4288asm43184905ad.84.2025.10.25.23.50.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Oct 2025 23:51:01 -0700 (PDT)
+        Sat, 25 Oct 2025 23:50:59 -0700 (PDT)
 From: Igor Reznichenko <igor@reznichenko.net>
 To: linux-hwmon@vger.kernel.org
 Cc: conor+dt@kernel.org,
@@ -71,13 +71,12 @@ Cc: conor+dt@kernel.org,
 	linux@roeck-us.net,
 	robh@kernel.org,
 	skhan@linuxfoundation.org
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641 power monitor
-Date: Sat, 25 Oct 2025 23:50:56 -0700
-Message-ID: <20251026065057.627276-2-igor@reznichenko.net>
+Subject: [PATCH v2 0/2] hwmon: Add TSC1641 I2C power monitor driver
+Date: Sat, 25 Oct 2025 23:50:55 -0700
+Message-ID: <20251026065057.627276-1-igor@reznichenko.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251026065057.627276-1-igor@reznichenko.net>
+In-Reply-To: <20251022044708.314287-1-igor@reznichenko.net>
 References: <20251022044708.314287-1-igor@reznichenko.net>
- <20251026065057.627276-1-igor@reznichenko.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -86,79 +85,36 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a devicetree binding for the TSC1641 I2C power monitor.
+This patch series adds support for the ST Microelectronics TSC1641
+I2C power monitor. The TSC1641 provides bus voltage, current, power,
+and temperature measurements via the hwmon subsystem. The driver 
+supports optional ALERT pin polarity configuration and exposes the
+shunt resistor value and update interval via sysfs.
 
-Signed-off-by: Igor Reznichenko <igor@reznichenko.net>
----
- .../devicetree/bindings/hwmon/st,tsc1641.yaml | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Tested on Raspberry Pi 3B+ with a TSC1641 evaluation board.
+
+Changes in v2:
+- Fixed devicetree binding name and formatting issues
+- Alert limits are handled in a standard way
+- Clamped alert limit values, constrained valid shunt values
+- Cleaned up includes, fixed various style issues
+- Expanded documentation
+
+Igor Reznichenko (2):
+  dt-bindings: hwmon: Add support for ST TSC1641 power monitor
+  hwmon: Add TSC1641 I2C power monitor driver
+
+ .../devicetree/bindings/hwmon/st,tsc1641.yaml |  59 ++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/tsc1641.rst               |  84 +++
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tsc1641.c                       | 703 ++++++++++++++++++
+ 6 files changed, 860 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
+ create mode 100644 Documentation/hwmon/tsc1641.rst
+ create mode 100644 drivers/hwmon/tsc1641.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml b/Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
-new file mode 100644
-index 000000000000..cfa0e2cca869
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/st,tsc1641.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ST Microelectronics TSC1641 I2C power monitor
-+
-+maintainers:
-+  - Igor Reznichenko <igor@reznichenko.net>
-+
-+description: |
-+  TSC1641 is a 60 V, 16-bit high-precision power monitor with I2C and
-+  MIPI I3C interface
-+
-+  Datasheets:
-+    https://www.st.com/resource/en/datasheet/tsc1641.pdf
-+
-+properties:
-+  compatible:
-+    const: st,tsc1641
-+
-+  reg:
-+    maxItems: 1
-+
-+  shunt-resistor-micro-ohms:
-+    description: Shunt resistor value in micro-ohms. Since device has internal
-+      16-bit RSHUNT register with 10 uOhm LSB, the maximum value is capped at
-+      655.35 mOhm.
-+    minimum: 100
-+    default: 1000
-+    maximum: 655350
-+
-+  st,alert-polarity-active-high:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: Default value is 0 which configures the normal polarity of the
-+      ALERT pin, being active low open-drain. Setting this to 1 configures the
-+      polarity of the ALERT pin to be inverted and active high open-drain.
-+      Specify this property to set the alert polarity to active-high.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        power-sensor@40 {
-+            compatible = "st,tsc1641";
-+            reg = <0x40>;
-+            shunt-resistor-micro-ohms = <1000>;
-+            st,alert-polarity-active-high;
-+        };
-+    };
 -- 
 2.43.0
 
