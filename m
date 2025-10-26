@@ -1,284 +1,122 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93972222AA;
-	Sun, 26 Oct 2025 17:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761499423; cv=pass; b=JRXsNXSr3TF00p8tW8fkm5hWgCmagCG5oTbZHiA+Ilm/XvXus6ML50BtN1Brj+VYuROWVVyV1oSlLhoa7FKXgPYbS61BRqmUmmMr/gT3Yi2FWeGZBge4/P+srKZXgPHwKJfL3oxeBMe5NDXux8awDj7fzb8kHwieoe4QrzImwpI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761499423; c=relaxed/simple;
-	bh=yVq4Ctc6ADSlIZTLIQNvCaRWaWH5Uk3AiU+jfZC7JWE=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=XV2ykvJOUIsI7pvDRHJpprmy0rNMMCqf+PzhMy2RiGkty6SSy43IvBor/drK5PUef8htI/a9rRfac7hHZzWiofyj22qpw7QwwKklABNLHWQK10sRFhPEmKFkRnZ6eKl4iCDZLnTelKXTMeZi/hKGKrjEmjYGxGm9OYHH+6VmLS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=bMup0W5D; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA291DB122
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 18:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761504407; cv=none; b=K/YGjJ0AMa2825xn6M4PR4zAL/cg/QoDt5xkkLhFV1K6ftjh3wWj8pbXcGMD4mzREniC1y/nDTjF6P50l9r3ppm+ncqrivempenDkAOCv409bf0YIwgsMB9htlIDGloVKw9VS1GsC/bZeQqY+Gt7WxbOrc0W8KycrXTgvpSvkj8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761504407; c=relaxed/simple;
+	bh=9JElRUYcelJHNX0v60zr/J8lWtgoWXeCAYKccVAcB3o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=t/s154ArfsP/7P1YOZ8JD/4CdYeTsNAj4gBEQoJ7cPS8yqgiZeJsji8o46IMTPwvYUOnyivMbV4NNenChz4sZohP5rVmKSVqdEdORquLt1Hk62QEgPSbjnzIXPRuuC8QGHun51PWpo9DMnlhOkRuoJ+ql2DRvOcuM5cvVBXZtJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=nfuU5nc0; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="bMup0W5D"
-ARC-Seal: i=1; a=rsa-sha256; t=1761499397; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=h/Pxgl8punt7dlnp7FX8SM3VJorXNECzLK3KhJohVKvXdmgnQ6A2Dlxwddv2PXltIb1bzbefl+D8WeAs5ae8kYqnxiKZ7sn4XvGESm5fONLPt/utOMkV7xlIs/zAjHpb44KRiOtGol3laMgOQpGw044uqBubyXLA8cfUlDPNId0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761499397; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=hu3ydCLg81YQ2jnbLLmrL9+S8ZIjCPHZfnGJMPoxubI=; 
-	b=nc/MitLcX6pOJtfkmZWwngysNAjqz65FPJJgjXPrjNC9ehrCWBuVGlJZf61Xz7nqYAPR1BSVSQrnMii+3fQ+2X08iLCEWeuyvAQ/ZePXS9eO8+OGpAHhIIBhB2Kcav+bZL+2h4f9ky5hqNX5G2br14UUvN+d/b/+ibt1jTsV7WA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=rong.moe;
-	spf=pass  smtp.mailfrom=i@rong.moe;
-	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761499397;
-	s=zmail; d=rong.moe; i=i@rong.moe;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
-	bh=hu3ydCLg81YQ2jnbLLmrL9+S8ZIjCPHZfnGJMPoxubI=;
-	b=bMup0W5D6vcroFWwk9zxY8o8BtUB7TMcu2D6MXuJsQfzKSspiL4P8R79y4Addw/V
-	wO20VP8/OzRheLJ2Tyd8mZBaBVC4JQSyuLudbaAVa7r9CixOCqr5HWekS2VxcoYUdK4
-	PBjRjA9n32x8KLsynfRipVEDfS22SIRlQ/ODfQpU=
-Received: by mx.zohomail.com with SMTPS id 176149939569196.28217356278651;
-	Sun, 26 Oct 2025 10:23:15 -0700 (PDT)
-Message-ID: <e85aa61b4cf3d3dbbe5ce32a7e97a949171d1110.camel@rong.moe>
-Subject: Re: [PATCH 3/6] platform/x86: lenovo-wmi-capdata: Add support for
- Capability Data 00
-From: Rong Zhang <i@rong.moe>
-To: Derek John Clark <derekjohn.clark@gmail.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, Armin Wolf <W_Armin@gmx.de>, 
- Hans de Goede <hansg@kernel.org>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>,  Guenter Roeck <linux@roeck-us.net>,
- platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org
-In-Reply-To: <CAFqHKT=bMLHvkcohaSNSUqxSkeFg_7aZxMVpBSbWqtsOeuT7rg@mail.gmail.com>
-References: <20251019210450.88830-1-i@rong.moe>
-	 <20251019210450.88830-4-i@rong.moe>
-	 <CAFqHKT=bMLHvkcohaSNSUqxSkeFg_7aZxMVpBSbWqtsOeuT7rg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Oct 2025 01:18:07 +0800
+	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="nfuU5nc0"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2698d47e776so31012195ad.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 11:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=reznichenko.net; s=google; t=1761504405; x=1762109205; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kr+uTiTscqC5xNsxJVLhouOq96vCtcj/UADaRDhqzhs=;
+        b=nfuU5nc0POpV4P3j/DGLhWJQXNqr0k1HE9XSR9yoHSEwcBdUbWJrDZYIJNC/Zigl6F
+         vHDtRKR7oa6eXm8LNFt350e4RLDLiyPUquzPNz6Aw1x35N6To1Q8ve58ATIPNEeiBo11
+         ur7nEaXMjxSGzSoYn4diJtavEwxzJPcZVVmszzlpx690+BugfkfxFVkZgxNNGpnNZlZP
+         Mm5mcMN+BY8C0xEeM+VI47tSDq5MCuJIZWbXA01kn/aNtazHm6o4pnG9RfYsx/ARUmMh
+         ysw1c0ZBFcNMlGfNTBSpKL19nfZYqEPPjLcU+HpQ0hrU3LPAQzmZmrFNLRF1ld4A2q4w
+         VUaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761504405; x=1762109205;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kr+uTiTscqC5xNsxJVLhouOq96vCtcj/UADaRDhqzhs=;
+        b=oxhpn3FR8CHQdoLUxJGAFFIBY9VZNdvJgPbw13kMpD3CxpNwOSbup1IG9uhB/aYDk0
+         C9n7ZAB4cPWLu5CuxAQteE1dGaDtrkpbE6Er2xnM1oMv9fJihuAcPFjF0Mh5BO4VQ7FD
+         5w+fLfHnxpYC5U6gqH2gNZ3TAV5KEUnpr26PzInti5VMT6oHuVvuxxwsFFOKQwxlT6ac
+         YT7ys+2bnDV3K6Feo0Mq/SHxW71mqlC8h5akUfOr/oR8L8iTD7c8n7E6R7dSrTHVQb+n
+         qy3U9Flg8bXZZtWQUh5n8sgtcd9OX/7Ti76eKVMGwRcs6BQyEUGFI0AjrveB4WYHDeyR
+         3ugw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3v//Vh5z0KappeCQJyrR2iqEAeyeyhIh4sSOEmC6M7TAmdl8/YSfKodGo1B5D3F3eTDS89jk6LDAQ9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFbEmq52w2Mksb0Bczyrdm6v4KzbQlBPsvXT1+Sweims7MXlT8
+	/Jr3I+4uoo2i3g5Jc/OPGmEd8WcEYOC+fk4E3QZMuSoI9M8iCP0q75HhjAgluQanNcg=
+X-Gm-Gg: ASbGncteTsqvAl5/1WcW/AU6rAQ1Q2g09PNk8KjtspJgeg7n9l4SUToijcknRgL+mEr
+	D93ZlymGop5nm55PPDhK/7Og4rIzgUS+mNyL94BVzy8vTt5vJKb7LMuYfhASIdUoFkTJEA1jZX/
+	WQjG77o7zfda2RxkiASQye1iPkx0gQOd23n8nbLQNeNnsYELle23tnGqubjSxgaNSujEtxWV0Ek
+	W5fMIXILAaGg79CRRUr/g49BCm2ktRmmpiobuILh/T4kjtrCD8BhLMkYMV64BR3Hjsu+Xaza8Zq
+	vIezhBd5dTzRS3cUwpn+ACDBqCy/RK0YtaRauOraySGxc4EMfZFQkRCgjMDQy4So2JX62WKDrzh
+	IFWev00Jq3ZRnSON5LCG9FAhAz1qKsq5Tu6StBUG7rdTG8uDanh5N6GbeAO+96wAIK0EqaBwUjI
+	Sw9KqC38vCUq3aCHug
+X-Google-Smtp-Source: AGHT+IHyb18kbZzmWwrapG89GEeH9zIO5kUERUgBm/20I/UDyDk2AQLJZ+iiUs1VcHb79+gHNkmW7A==
+X-Received: by 2002:a17:902:db05:b0:24e:3cf2:2450 with SMTP id d9443c01a7336-290c9c8a5e6mr441023785ad.2.1761504404962;
+        Sun, 26 Oct 2025 11:46:44 -0700 (PDT)
+Received: from z440.. ([2601:1c0:4502:2d00:a43b:396a:591:2ee9])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33fed7e2851sm2432460a91.6.2025.10.26.11.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Oct 2025 11:46:44 -0700 (PDT)
+From: Igor Reznichenko <igor@reznichenko.net>
+To: krzk@kernel.org
+Cc: conor+dt@kernel.org,
+	corbet@lwn.net,
+	david.hunter.linux@gmail.com,
+	devicetree@vger.kernel.org,
+	igor@reznichenko.net,
+	krzk+dt@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641 power monitor
+Date: Sun, 26 Oct 2025 11:46:41 -0700
+Message-ID: <20251026184641.631641-1-igor@reznichenko.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
+References: <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2-5 
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 
-Hi Derek,
+> Subject: I asked to drop "binding" and not add "support for". "Support
+> for" makes little sense in terms of binding. How binding can support
+> anything? This is the "ST TSC1641 power monitor" not support.
 
-On Sat, 2025-10-25 at 21:55 -0700, Derek John Clark wrote:
-> On Sun, Oct 19, 2025 at 2:05=E2=80=AFPM Rong Zhang <i@rong.moe> wrote:
-> >=20
-> > Add support for LENOVO_CAPABILITY_DATA_00 WMI data block that comes on
-> > "Other Mode" enabled hardware. Provides an interface for querying if a
-> > given attribute is supported by the hardware, as well as its default
-> > value.
-> >=20
-> > Signed-off-by: Rong Zhang <i@rong.moe>
-> > ---
-> >  .../wmi/devices/lenovo-wmi-other.rst          |  8 +++++++
-> >  drivers/platform/x86/lenovo/wmi-capdata.c     | 23 ++++++++++++++++++-
-> >  drivers/platform/x86/lenovo/wmi-capdata.h     |  8 +++++++
-> >  3 files changed, 38 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documenta=
-tion/wmi/devices/lenovo-wmi-other.rst
-> > index d7928b8dfb4b5..adbd7943c6756 100644
-> > --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > @@ -31,6 +31,14 @@ under the following path:
-> >=20
-> >    /sys/class/firmware-attributes/lenovo-wmi-other/attributes/<attribut=
-e>/
-> >=20
-> > +LENOVO_CAPABILITY_DATA_00
-> > +-------------------------
-> > +
-> > +WMI GUID ``362A3AFE-3D96-4665-8530-96DAD5BB300E``
-> > +
-> > +The LENOVO-CAPABILITD_DATA_00 interface provides information on whethe=
-r the
-> > +device supports querying or setting fan speed.
-> > +
->=20
-> There is a lot more data provided by this interface that hasn't been
-> implemented yet. To avoid having to touch this too often I'd prefer if
-> it were formatted similarly to the 01 interface where the opening
-> paragraph is generic for the interface and the specific features that
-> have been implemented in the driver are listed below that. From
-> documentation, the 00 interface seems to deal with enabling or
-> disabling  various hardware features that don't rely on the gamezone
-> thermal mode. I'd also be okay with specifying in the change that 01
-> features do rely on the gamezone thermal mode.
+Krzysztof,
 
-Makes sense. Will reword it in v2. Thanks for the suggestion and
-information.
+Thanks for feedback, will fix this and will create following patch versions
+in new threads.
 
-> >  LENOVO_CAPABILITY_DATA_01
-> >  -------------------------
-> >=20
-> > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/platfo=
-rm/x86/lenovo/wmi-capdata.c
-> > index 14175fe19247e..6927de409b09d 100644
-> > --- a/drivers/platform/x86/lenovo/wmi-capdata.c
-> > +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
-> > @@ -5,6 +5,9 @@
-> >   * Lenovo Capability Data provides information on tunable attributes u=
-sed by
-> >   * the "Other Mode" WMI interface.
-> >   *
-> > + * Capability Data 00 includes if the attribute is supported by the ha=
-rdware,
-> > + * and the default_value. All attributes are independent of thermal mo=
-des.
-> > + *
-> >   * Capability Data 01 includes if the attribute is supported by the ha=
-rdware,
-> >   * and the default_value, max_value, min_value, and step increment. Ea=
-ch
-> >   * attribute has multiple pages, one for each of the thermal modes man=
-aged by
-> > @@ -14,7 +17,7 @@
-> >   *   - Initial implementation (formerly named lenovo-wmi-capdata01)
-> >   *
-> >   * Copyright (C) 2025 Rong Zhang <i@rong.moe>
-> > - *   - Unified implementation
-> > + *   - Unified implementation for Capability Data 00 and 01
-> >   */
->=20
-> This might be a bit verbose considering the changes are all part of
-> the same series.
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  shunt-resistor-micro-ohms:
+>> +    description: Shunt resistor value in micro-ohms. Since device has internal
+>> +      16-bit RSHUNT register with 10 uOhm LSB, the maximum value is capped at
+>> +      655.35 mOhm.
+>> +    minimum: 100
+>> +    default: 1000
+>> +    maximum: 655350
+>> +
+>> +  st,alert-polarity-active-high:
+>
+>Isn't this just interrupt? You need proper interrupts property and then
+>its flag define the type of interrupt.
 
-ACK. Will drop "for ..." in v2.
+This controls a bit written into device register.
+I omitted interrupt property after looking at existing power monitor bindings,
+especially hwmon/ti,ina2xx.yaml. INA226 has very similar bit controlling alert 
+pin polarity and binding doesn't define alert pin as interrupt. Overall, I didn't
+find many power monitor bindings defining alert pins as interrupts.
 
-> Thanks,
-> Derek
-
-Thanks,
-Rong
-
-> >=20
-> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > @@ -36,12 +39,14 @@
-> >=20
-> >  #include "wmi-capdata.h"
-> >=20
-> > +#define LENOVO_CAPABILITY_DATA_00_GUID "362A3AFE-3D96-4665-8530-96DAD5=
-BB300E"
-> >  #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39B3BE=
-018154"
-> >=20
-> >  #define ACPI_AC_CLASS "ac_adapter"
-> >  #define ACPI_AC_NOTIFY_STATUS 0x80
-> >=20
-> >  enum lwmi_cd_type {
-> > +       LENOVO_CAPABILITY_DATA_00,
-> >         LENOVO_CAPABILITY_DATA_01,
-> >  };
-> >=20
-> > @@ -57,6 +62,7 @@ static const struct lwmi_cd_info {
-> >         const char *name;
-> >         enum lwmi_cd_type type;
-> >  } lwmi_cd_table[] =3D {
-> > +       LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_00),
-> >         LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_01),
-> >  };
-> >=20
-> > @@ -72,6 +78,7 @@ struct cd_list {
-> >         u8 count;
-> >=20
-> >         union {
-> > +               DECLARE_FLEX_ARRAY(struct capdata00, cd00);
-> >                 DECLARE_FLEX_ARRAY(struct capdata01, cd01);
-> >         };
-> >  };
-> > @@ -95,6 +102,9 @@ static int lwmi_cd_component_bind(struct device *cd_=
-dev,
-> >         struct lwmi_cd_binder *binder =3D data;
-> >=20
-> >         switch (priv->list->type) {
-> > +       case LENOVO_CAPABILITY_DATA_00:
-> > +               binder->cd00_list =3D priv->list;
-> > +               break;
-> >         case LENOVO_CAPABILITY_DATA_01:
-> >                 binder->cd01_list =3D priv->list;
-> >                 break;
-> > @@ -136,6 +146,9 @@ static const struct component_ops lwmi_cd_component=
-_ops =3D {
-> >                 return -EINVAL;                                        =
-                         \
-> >         }
-> >=20
-> > +DEF_LWMI_CDXX_GET_DATA(cd00, LENOVO_CAPABILITY_DATA_00, struct capdata=
-00);
-> > +EXPORT_SYMBOL_NS_GPL(lwmi_cd00_get_data, "LENOVO_WMI_CD");
-> > +
-> >  DEF_LWMI_CDXX_GET_DATA(cd01, LENOVO_CAPABILITY_DATA_01, struct capdata=
-01);
-> >  EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD");
-> >=20
-> > @@ -154,6 +167,10 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *priv=
-)
-> >         void *p;
-> >=20
-> >         switch (priv->list->type) {
-> > +       case LENOVO_CAPABILITY_DATA_00:
-> > +               p =3D &priv->list->cd00[0];
-> > +               size =3D sizeof(priv->list->cd00[0]);
-> > +               break;
-> >         case LENOVO_CAPABILITY_DATA_01:
-> >                 p =3D &priv->list->cd01[0];
-> >                 size =3D sizeof(priv->list->cd01[0]);
-> > @@ -199,6 +216,9 @@ static int lwmi_cd_alloc(struct lwmi_cd_priv *priv,=
- enum lwmi_cd_type type)
-> >         count =3D wmidev_instance_count(priv->wdev);
-> >=20
-> >         switch (type) {
-> > +       case LENOVO_CAPABILITY_DATA_00:
-> > +               list_size =3D struct_size(list, cd00, count);
-> > +               break;
-> >         case LENOVO_CAPABILITY_DATA_01:
-> >                 list_size =3D struct_size(list, cd01, count);
-> >                 break;
-> > @@ -346,6 +366,7 @@ static void lwmi_cd_remove(struct wmi_device *wdev)
-> >         .context =3D &lwmi_cd_table[_type]
-> >=20
-> >  static const struct wmi_device_id lwmi_cd_id_table[] =3D {
-> > +       { LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_00) },
-> >         { LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_01) },
-> >         {}
-> >  };
-> > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.h b/drivers/platfo=
-rm/x86/lenovo/wmi-capdata.h
-> > index 1e5fce7836cbf..a6f0cb006e745 100644
-> > --- a/drivers/platform/x86/lenovo/wmi-capdata.h
-> > +++ b/drivers/platform/x86/lenovo/wmi-capdata.h
-> > @@ -11,6 +11,12 @@ struct component_match;
-> >  struct device;
-> >  struct cd_list;
-> >=20
-> > +struct capdata00 {
-> > +       u32 id;
-> > +       u32 supported;
-> > +       u32 default_value;
-> > +};
-> > +
-> >  struct capdata01 {
-> >         u32 id;
-> >         u32 supported;
-> > @@ -21,9 +27,11 @@ struct capdata01 {
-> >  };
-> >=20
-> >  struct lwmi_cd_binder {
-> > +       struct cd_list *cd00_list;
-> >         struct cd_list *cd01_list;
-> >  };
-> >=20
-> > +int lwmi_cd00_get_data(struct cd_list *list, u32 attribute_id, struct =
-capdata00 *output);
-> >  int lwmi_cd01_get_data(struct cd_list *list, u32 attribute_id, struct =
-capdata01 *output);
-> >  void lwmi_cd_match_add_all(struct device *master, struct component_mat=
-ch **matchptr);
-> >=20
-> > --
-> > 2.51.0
-> >=20
+Thanks, Igor
