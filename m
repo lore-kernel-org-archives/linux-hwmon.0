@@ -1,816 +1,328 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902361F30A4
-	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 20:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43451BC5C;
+	Sun, 26 Oct 2025 22:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761510002; cv=none; b=j8/L5+UlnQ05e7ZaJM5yhI5xIe9bK7ac4W5TXQNKPUnpPqCZZJdpF09X3+REer9M58XNQsX9nqr0I9kklNLp7u78owS6N68QfOJy3IYOMfg7A+KoNSHeCKrpSqn5Q8FU5sWXjXMKiq9Acpk9vjeuqp/+pC9NHlscOjd8KmALTCM=
+	t=1761517560; cv=none; b=UCreleW1UV3mpoQfwMFhxV1J4McK4oxyvHZh6/jHBOnu7f0kowOjuEskJ4h+XoB7/FnR066St2Ev2mlfKnJ5n8BGezi6GhCgOqbxdUi73YJfhwihMneIZbRcCoqy2SP4Qb/SG7NoluPwz92UVYeLmgzGPuIbKbSCOc2AnkcakxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761510002; c=relaxed/simple;
-	bh=UdVg5bwevzfmUxxds+aM7yktOX6v5J4qUV/nqokGMgU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=d6HqJjPQPmThPQ9W0s7SIfvz60sDQnb0aYt1ZbeeSYuE5ypx4zUIfzx+gri7/O9A9paK50gzMRxt4CfPoML2b3vry2e9hQ70i6AIu7Sdb8rPcNkpBT2YUxvUifjNtqy4oQfT+0ggokdhQmrBDntZ3AMgGYi0wzelp+hT2ovLSDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NxNU71Zk; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761517560; c=relaxed/simple;
+	bh=kEsFoG43ybyNGs1wAOoLL1ShGo+CrlpehI/Ov6ZVI7k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LGdHe58poQCVSceFgrSknegVUXEIVeK4M4NvJ1w0dDk7dUdi3oMkuLarloGBA75AMX8Z/Z63W7HG2C78oVbKGbA3tng6V1Ll0cewBLNlOsvTWRV/rEEz/kUq46kuA6wYTqaFQ53BIc1sKD/UizfCIpSiyxjsOdDYkbWL5LLIrxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=AcOhhjeX; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxNU71Zk"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7a2754a7f6aso4884662b3a.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 13:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761510000; x=1762114800; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+u0kxNNR2IrwhPCJWToOGxwAA455c15jWZGcSEvCSuw=;
-        b=NxNU71ZkOrEoe0q8JfOxay81oSk1cHFaRQXU6RVoubOmCWYNPJjxMKiVkQESZfpx95
-         2vhI1AU3Bmg3qENiutzCCZXU/lSIiFFwEC0qK7JObUCGuL8lapQBv6omL9Gy/uvUl1kE
-         59pJVOhGDtRTSsaKvWWAzJisCZELsTK+bvCEoC3EijwgxpY6s6RUrxveAkP5U4buS987
-         Zzmsf5VHKRLlNDLU1NukezqkLVp+vdCsPHqDIsXyH1PYk7+8YkMml3jBJYp2szJMjnML
-         icXtpA2uuMiDayBsMu51hwO1fr3IRlPFpi8I86v2W7p+5BHkyAWRcgedxfj06Q2N9mmC
-         iSCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761510000; x=1762114800;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+u0kxNNR2IrwhPCJWToOGxwAA455c15jWZGcSEvCSuw=;
-        b=OxbO4R6DoMLaaCK8c70qE9/fV365IpK2aXsqq1Ov5JFdGYic+6PfjEHUReCFU8VwN9
-         9s81fPrxRhF33Whhfsvwmp2wV4F+dXHHgzxpkp/NL+xUlML+H2BSLi5w86uR8J0Devj9
-         fLLu5JHOinwT8M/XeVda91V3ay7H517GH2IM3bAjxK7RnctcdTMKJYbgp0kgnMEbyOpV
-         uQpnkP/VSR8gBNoNNpcuSY5akKVozdANtLK9VjzpOIZYpZ9RsrT+8T2NVa2LeY4J2+ws
-         IQfB0Lz8MbVfjXTkNtq3moXVsRLQH9IUdesFHAxMg5mQ/jx8I05vjKY+SJ3vuL1UgmZE
-         iI2w==
-X-Forwarded-Encrypted: i=1; AJvYcCV2uezzeFMBBn6/ySdmwtoXBmPCyqx3K5Z4d/w+E20QLmm5hruTlRe3AJRLrXSTIGNFQZTGeOCZ9ose8w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9PVgWJNnzrejQczfUOs3xMJT2Big1nptQ/0+hfMWdLnIt1C1J
-	zvr3hnlVPfKI6RXGCVtCTebDE2sKOyEEfYVeeRhHtHpioWiAGhumGFJh
-X-Gm-Gg: ASbGncuCb0+Xm0/3ckY2ijOJiIhqYwwS7skC/IOsiYWbFLTWbXRBdVkQAfPJOXWvnXb
-	uhTMP/HorVHh1uPwZiMBwdT90DNRWr+4mS6lQclwSWWKFBnh9blQhBroRoU9ZApkXJoF1ahpHMX
-	FBYwxTfLWTVba8pxKyCYDKhFPSFLW65bGgYMFQniB3fqZucKusmxJAt755mL6mB5CuWAq9kWOZq
-	tfO9A25l+BshxkxBTwRF8cIcWuM2wLDMHjqh3CUo6y2Y77UZjtsQ2Sx9e7xdTbbSQcYmGWWpDHe
-	yTOCJsYlFEFeMu5fWUy9peUIwcWSUeW1EnVaErLZ6H1Dk0loV+CExw8Jh1ZkDBo3WZ9u3e+gcRJ
-	bHEhNIKqfo5S9mA8TdX2IwfLcOI/olyRGu6CHpzcpSlb72oc39Vd0lhbyawyUmhYIsZKeUnqHX2
-	GhYMMIagKRd56keOzwpO4CLJq2UbWI9YE0xeEysP286kZmW6z8uDyhhKwpbGzjkGNUMqBlLFc1O
-	JcoyFEJqA==
-X-Google-Smtp-Source: AGHT+IHtNVq0PO/FhU/YgWQN7GrulZp3ql2/SxHdPL+cjTjdLcywCo2o4b4goy3zJDtBDDokBLkEXQ==
-X-Received: by 2002:a05:6a00:22c8:b0:7a2:8529:259 with SMTP id d2e1a72fcca58-7a285294df3mr10371477b3a.9.1761509999558;
-        Sun, 26 Oct 2025 13:19:59 -0700 (PDT)
-Received: from ehlo.thunderbird.net (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a41409c703sm5645226b3a.70.2025.10.26.13.19.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Oct 2025 13:19:59 -0700 (PDT)
-Date: Sun, 26 Oct 2025 13:19:57 -0700
-From: "Derek J. Clark" <derekjohn.clark@gmail.com>
-To: Rong Zhang <i@rong.moe>
-CC: Mark Pearson <mpearson-lenovo@squebb.ca>, Armin Wolf <W_Armin@gmx.de>,
- Hans de Goede <hansg@kernel.org>,
- =?ISO-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_4/6=5D_platform/x86=3A_lenovo-?=
- =?US-ASCII?Q?wmi-other=3A_Add_HWMON_for_fan_speed_RPM?=
-User-Agent: Thunderbird for Android
-In-Reply-To: <d498a1ca58eac5689dae68fffc29440ba75a5faf.camel@rong.moe>
-References: <20251019210450.88830-1-i@rong.moe> <20251019210450.88830-5-i@rong.moe> <CAFqHKTkOZUfDb8cGbGnVPCS9wNbOBsiyOk_MkZR-2_Za6ZPMng@mail.gmail.com> <d498a1ca58eac5689dae68fffc29440ba75a5faf.camel@rong.moe>
-Message-ID: <9945A704-7D4B-4ECE-81CD-8D99F30733BF@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="AcOhhjeX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1761517550; x=1762122350; i=w_armin@gmx.de;
+	bh=pxOj0fRHhkSK7bYnw2/jnn84cKJbHG6hzdJpvRGcleY=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=AcOhhjeX4QZRzYbaGrJKQN2ObrjwXsrlC8kvQ+QiYAHmb0UwcW6FYpXmupY2IR4O
+	 AJimFKZQZ+SzpFQT3/HzPwS76tomqzQ4B7//Te4yyRIb131bltSKRev3n7W7zNzcR
+	 4t/BPk/TZBVx6gI3A0rk5K8nclpBbOebeGqpfddaE9yg6D/XumzTZZfYKElXMHD02
+	 Bke7V4SFiexZE4LMYNzVeoPvAaCRoxmTMHYaKN6xjcfQpJQANOn2keus/nAfWr1Rh
+	 OaXK0ZXC2U6XviR0rCixs/2HIe9OJWecX5Ca03s5pPkGoxtiCBcwAcxpr9xbnoZBk
+	 GkqC/UIhyvMWbT9A9A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEV3C-1uxCjs1Any-00HR3C; Sun, 26
+ Oct 2025 23:25:50 +0100
+Message-ID: <552b53b0-f583-4bac-80a5-1f9509bf575f@gmx.de>
+Date: Sun, 26 Oct 2025 23:25:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] platform/x86: ayaneo-ec: Add Ayaneo Embedded
+ Controller platform driver
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+ platform-driver-x86@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Derek John Clark <derekjohn.clark@gmail.com>,
+ =?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+References: <20251015084414.1391595-1-lkml@antheas.dev>
+ <20251015084414.1391595-2-lkml@antheas.dev>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20251015084414.1391595-2-lkml@antheas.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:AX6GAq1PrSXquH0FsUCOLZ7IJFf0D3hF85HMKbbFzfXdJLbjlNu
+ ro16/u5r/BOlngWu6lBIMr/ZRHNe2x1TdHJs733jVp8Ma0Zej9u3LGTL+AQCbIllsFm4nKP
+ TNrAHUk9jeWrFiPxztaVU37XgXTe8MjAt+DZi70gx8sat5ANbm2xogIo203G9D16bovVcpL
+ u0hQaZ+sqGX11vGUS9rIQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:vsQJt6H93kk=;7MdtU0qWX6MzIgkl2qcpe/WaoUn
+ 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
+ vb95RttuYgWcpvJ+602HMfq/4U=
 
-On October 26, 2025 12:42:22 PM PDT, Rong Zhang <i@rong=2Emoe> wrote:
->Hi Derek,
->
->On Sat, 2025-10-25 at 22:23 -0700, Derek John Clark wrote:
->> On Sun, Oct 19, 2025 at 2:05=E2=80=AFPM Rong Zhang <i@rong=2Emoe> wrote=
-:
->> >=20
->> > Register an HWMON device for fan spped RPM according to Capability Da=
-ta
->> > 00 provided by lenovo-wmi-capdata=2E The corresponding HWMON nodes ar=
-e:
->> >=20
->> >  - fanX_enable: enable/disable the fan (tunable)
->> >  - fanX_input: current RPM
->> >  - fanX_target: target RPM (tunable)
->> >=20
->> > Signed-off-by: Rong Zhang <i@rong=2Emoe>
->> > ---
->> >  =2E=2E=2E/wmi/devices/lenovo-wmi-other=2Erst          |   5 +
->> >  drivers/platform/x86/lenovo/Kconfig           |   1 +
->> >  drivers/platform/x86/lenovo/wmi-other=2Ec       | 324 ++++++++++++++=
-+++-
->> >  3 files changed, 317 insertions(+), 13 deletions(-)
->> >=20
->> > diff --git a/Documentation/wmi/devices/lenovo-wmi-other=2Erst b/Docum=
-entation/wmi/devices/lenovo-wmi-other=2Erst
->> > index adbd7943c6756=2E=2Ecb6a9bfe5a79e 100644
->> > --- a/Documentation/wmi/devices/lenovo-wmi-other=2Erst
->> > +++ b/Documentation/wmi/devices/lenovo-wmi-other=2Erst
->> > @@ -31,6 +31,11 @@ under the following path:
->> >=20
->> >    /sys/class/firmware-attributes/lenovo-wmi-other/attributes/<attrib=
-ute>/
->> >=20
->> > +Besides, this driver also exports fan speed RPM to HWMON:
->> > + - fanX_enable: enable/disable the fan (tunable)
->> > + - fanX_input: current RPM
->> > + - fanX_target: target RPM (tunable)
->> > +
->> >  LENOVO_CAPABILITY_DATA_00
->> >  -------------------------
->> >=20
->> > diff --git a/drivers/platform/x86/lenovo/Kconfig b/drivers/platform/x=
-86/lenovo/Kconfig
->> > index fb96a0f908f03=2E=2Ebe9af04511462 100644
->> > --- a/drivers/platform/x86/lenovo/Kconfig
->> > +++ b/drivers/platform/x86/lenovo/Kconfig
->> > @@ -263,6 +263,7 @@ config LENOVO_WMI_GAMEZONE
->> >  config LENOVO_WMI_TUNING
->> >         tristate "Lenovo Other Mode WMI Driver"
->> >         depends on ACPI_WMI
->> > +       select HWMON
->> >         select FW_ATTR_CLASS
->> >         select LENOVO_WMI_DATA
->> >         select LENOVO_WMI_EVENTS
->> > diff --git a/drivers/platform/x86/lenovo/wmi-other=2Ec b/drivers/plat=
-form/x86/lenovo/wmi-other=2Ec
->> > index 20c6ff0be37a1=2E=2Ef8771ed3c6642 100644
->> > --- a/drivers/platform/x86/lenovo/wmi-other=2Ec
->> > +++ b/drivers/platform/x86/lenovo/wmi-other=2Ec
->> > @@ -14,7 +14,15 @@
->> >   * These attributes typically don't fit anywhere else in the sysfs a=
-nd are set
->> >   * in Windows using one of Lenovo's multiple user applications=2E
->> >   *
->> > + * Besides, this driver also exports tunable fan speed RPM to HWMON=
-=2E
->> > + *
->> >   * Copyright (C) 2025 Derek J=2E Clark <derekjohn=2Eclark@gmail=2Eco=
-m>
->> > + *   - fw_attributes
->> > + *   - binding to Capability Data 01
->> > + *
->> > + * Copyright (C) 2025 Rong Zhang <i@rong=2Emoe>
->> > + *   - HWMON
->> > + *   - binding to Capability Data 00
->> >   */
->> >=20
->> >  #include <linux/acpi=2Eh>
->> > @@ -25,6 +33,7 @@
->> >  #include <linux/device=2Eh>
->> >  #include <linux/export=2Eh>
->> >  #include <linux/gfp_types=2Eh>
->> > +#include <linux/hwmon=2Eh>
->> >  #include <linux/idr=2Eh>
->> >  #include <linux/kdev_t=2Eh>
->> >  #include <linux/kobject=2Eh>
->> > @@ -43,12 +52,20 @@
->> >=20
->> >  #define LENOVO_OTHER_MODE_GUID "DC2A8805-3A8C-41BA-A6F7-092E0089CD3B=
-"
->> >=20
->> > +#define LWMI_SUPP_VALID BIT(0)
->> > +#define LWMI_SUPP_MAY_GET (LWMI_SUPP_VALID | BIT(1))
->> > +#define LWMI_SUPP_MAY_SET (LWMI_SUPP_VALID | BIT(2))
->> > +
->> >  #define LWMI_DEVICE_ID_CPU 0x01
->> >=20
->> >  #define LWMI_FEATURE_ID_CPU_SPPT 0x01
->> >  #define LWMI_FEATURE_ID_CPU_SPL 0x02
->> >  #define LWMI_FEATURE_ID_CPU_FPPT 0x03
->> >=20
->> > +#define LWMI_DEVICE_ID_FAN 0x04
->> > +
->> > +#define LWMI_FEATURE_ID_FAN_RPM 0x03
->> > +
->> >  #define LWMI_TYPE_ID_NONE 0x00
->> >=20
->> >  #define LWMI_FEATURE_VALUE_GET 17
->> > @@ -59,7 +76,18 @@
->> >  #define LWMI_ATTR_MODE_ID_MASK GENMASK(15, 8)
->> >  #define LWMI_ATTR_TYPE_ID_MASK GENMASK(7, 0)
->> >=20
->> > +/* Only fan1 and fan2 are present on supported devices=2E */
->> > +#define LWMI_FAN_ID_BASE 1
->> > +#define LWMI_FAN_NR 2
->> > +#define LWMI_FAN_ID(x) ((x) + LWMI_FAN_ID_BASE)
->> > +
->> > +#define LWMI_ATTR_ID_FAN_RPM(x)                                     =
-           \
->> > +       (FIELD_PREP(LWMI_ATTR_DEV_ID_MASK, LWMI_DEVICE_ID_FAN) |     =
-   \
->> > +        FIELD_PREP(LWMI_ATTR_FEAT_ID_MASK, LWMI_FEATURE_ID_FAN_RPM) =
-|  \
->> > +        FIELD_PREP(LWMI_ATTR_TYPE_ID_MASK, LWMI_FAN_ID(x)))
->> > +
->> >  #define LWMI_OM_FW_ATTR_BASE_PATH "lenovo-wmi-other"
->> > +#define LWMI_OM_HWMON_NAME "lenovo_wmi_other"
->> >=20
->> >  static BLOCKING_NOTIFIER_HEAD(om_chain_head);
->> >  static DEFINE_IDA(lwmi_om_ida);
->> > @@ -76,15 +104,256 @@ struct lwmi_om_priv {
->> >         struct component_master_ops *ops;
->> >=20
->> >         /* only valid after capdata bind */
->> > +       struct cd_list *cd00_list;
->> >         struct cd_list *cd01_list;
->> >=20
->> > +       struct device *hwmon_dev;
->> >         struct device *fw_attr_dev;
->> >         struct kset *fw_attr_kset;
->> >         struct notifier_block nb;
->> >         struct wmi_device *wdev;
->> >         int ida_id;
->> > +
->> > +       struct fan_info {
->> > +               u32 supported;
->> > +               long target;
->> > +       } fan_info[LWMI_FAN_NR];
->> >  };
->> >=20
->> > +/* =3D=3D=3D=3D=3D=3D=3D=3D HWMON (component: lenovo-wmi-capdata 00)=
- =3D=3D=3D=3D=3D=3D=3D=3D */
->> > +
->> > +/**
->> > + * lwmi_om_fan_get_set() - Get or set fan RPM value of specified fan
->> > + * @priv: Driver private data structure
->> > + * @channel: Fan channel index (0-based)
->> > + * @val: Pointer to value (input for set, output for get)
->> > + * @set: True to set value, false to get value
->> > + *
->> > + * Communicates with WMI interface to either retrieve current fan RP=
-M
->> > + * or set target fan speed=2E
->> > + *
->> > + * Return: 0 on success, or an error code=2E
->> > + */
->> > +static int lwmi_om_fan_get_set(struct lwmi_om_priv *priv, int channe=
-l, u32 *val, bool set)
->> > +{
->> > +       struct wmi_method_args_32 args;
->> > +       u32 method_id, retval;
->> > +       int err;
->> > +
->> > +       method_id =3D set ? LWMI_FEATURE_VALUE_SET : LWMI_FEATURE_VAL=
-UE_GET;
->> > +       args=2Earg0 =3D LWMI_ATTR_ID_FAN_RPM(channel);
->> > +       args=2Earg1 =3D set ? *val : 0;
->> > +
->> > +       err =3D lwmi_dev_evaluate_int(priv->wdev, 0x0, method_id,
->> > +                                   (unsigned char *)&args, sizeof(ar=
-gs), &retval);
->> > +       if (err)
->> > +               return err;
->> > +
->> > +       if (!set)
->> > +               *val =3D retval;
->> > +       else if (retval !=3D 1)
->> > +               return -EIO;
->> > +
->> > +       return 0;
->> > +}
->> > +
->> > +/**
->> > + * lwmi_om_hwmon_is_visible() - Determine visibility of HWMON attrib=
-utes
->> > + * @drvdata: Driver private data
->> > + * @type: Sensor type
->> > + * @attr: Attribute identifier
->> > + * @channel: Channel index
->> > + *
->> > + * Determines whether a HWMON attribute should be visible in sysfs
->> > + * based on hardware capabilities and current configuration=2E
->> > + *
->> > + * Return: permission mode, or 0 if invisible=2E
->> > + */
->> > +static umode_t lwmi_om_hwmon_is_visible(const void *drvdata, enum hw=
-mon_sensor_types type,
->> > +                                       u32 attr, int channel)
->> > +{
->> > +       struct lwmi_om_priv *priv =3D (struct lwmi_om_priv *)drvdata;
->> > +       bool r =3D false, w =3D false;
->> > +
->> > +       if (type =3D=3D hwmon_fan) {
->> > +               switch (attr) {
->> > +               case hwmon_fan_enable:
->> > +               case hwmon_fan_target:
->> > +                       r =3D w =3D priv->fan_info[channel]=2Esupport=
-ed & LWMI_SUPP_MAY_SET;
->> > +                       break;
->> > +               case hwmon_fan_input:
->> > +                       r =3D priv->fan_info[channel]=2Esupported & L=
-WMI_SUPP_MAY_GET;
->> > +                       break;
->> > +               }
->> > +       }
->> > +
->>=20
->> There is another method in capdata00 that could be useful here
->>=20
->> Fan Test For Diagnostic Software
->> uint32 IDs //0x04050000
->> uint32 Capability //9:by project
->> bit 3: 0: not support LENOVO_FAN_TEST_DATA, 1 support LENOVO_FAN_TEST_D=
-ATA
->> bit 2: 0: not support SetFeatureValue(), 1: support SetFeatureValue()
->> bit 1: 0: not support GetFeatureValue(), 1: support GetFeatureValue()
->> bit 0: 0: not support fan test for diagnostic software, 1: support an
->> test for diagnostic software
->
->The information is useful, thanks for that!
->
->A quick look at the decompiled ASL code of my device's ACPI tables:
->
->   Package (0x03)
->   {
->       0x04050000,
->       0x07,
->       One
->   },
->
->I've confirmed that the corresponding ACPI method didn't modify the
->return value of 0x04050000=2E
->
->0x07 means my device supports this interface, GetFeatureValue() and
->SetFeatureValue(); but does not support LENOVO_FAN_TEST_DATA=2E Is BIT(3)
->only defined in some models (but not on my device)? The data returned
->by LENOVO_FAN_TEST_DATA seems correct and is probably the min/max auto
->points=2E
->
-Bah, of course not=2E I suppose it wouldn't be a Lenovo BIOS if everything=
- was consistent with their spec=2E=2E=2E=20
+Am 15.10.25 um 10:44 schrieb Antheas Kapenekakis:
 
->My device didn't implement {Get,Set}FeatureValue(0x04050000)=2E What will
->it do when it's implemented?
-
-I doubt anything=2E It seems like get/set is generally enabled for most at=
-tributes even if they are stubbed=2E It's probably why I get the attributes=
- are available with v1 even when my device has stubbed methods=2E=20
-
->> I'll discuss below, but it seems like knowing min/max is a good idea
->> before making the sysfs visible=2E
->>=20
->> > +       if (!r)
->> > +               return 0;
->> > +
->> > +       return w ? 0644 : 0444;
->> > +}
->> > +
->> > +/**
->> > + * lwmi_om_hwmon_read() - Read HWMON sensor data
->> > + * @dev: Device pointer
->> > + * @type: Sensor type
->> > + * @attr: Attribute identifier
->> > + * @channel: Channel index
->> > + * @val: Pointer to store value
->> > + *
->> > + * Reads current sensor values from hardware through WMI interface=
-=2E
->> > + *
->> > + * Return: 0 on success, or an error code=2E
->> > + */
->> > +static int lwmi_om_hwmon_read(struct device *dev, enum hwmon_sensor_=
-types type,
->> > +                             u32 attr, int channel, long *val)
->> > +{
->> > +       struct lwmi_om_priv *priv =3D dev_get_drvdata(dev);
->> > +       u32 retval =3D 0;
->> > +       int err;
->> > +
->> > +       if (type =3D=3D hwmon_fan) {
->> > +               switch (attr) {
->> > +               case hwmon_fan_input:
->> > +                       err =3D lwmi_om_fan_get_set(priv, channel, &r=
-etval, false);
->> > +                       if (err)
->> > +                               return err;
->> > +
->> > +                       *val =3D retval;
->> > +                       return 0;
->> > +               case hwmon_fan_enable:
->> > +               case hwmon_fan_target:
->> > +                       /* -ENODATA before first set=2E */
->>=20
->> Why not query the interface in realtime to know the system state? That
->> would avoid this problem=2E
+> Recent Ayaneo devices feature an ACPI mapped Embedded Controller (EC)
+> with standard addresses across models that provides access to fan
+> speed, fan control, battery charge limits, and controller power
+> controls. Introduce a new driver stub that will handle these driver
+> features.
 >
->My implementation follows the approach of corsair-cpro
->(drivers/hwmon/corsair-cpro=2Ec)=2E hwmon_fan_target is about "how much R=
-PM
->*should* the fan reach?", while hwmon_fan_input is about "how much RPM
->does the fan *really* reach?"
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>   MAINTAINERS                      |  6 +++
+>   drivers/platform/x86/Kconfig     | 10 ++++
+>   drivers/platform/x86/Makefile    |  3 ++
+>   drivers/platform/x86/ayaneo-ec.c | 89 ++++++++++++++++++++++++++++++++
+>   4 files changed, 108 insertions(+)
+>   create mode 100644 drivers/platform/x86/ayaneo-ec.c
 >
->Calling SetFeatureValue(0x040300*) sets the former, while calling
->GetFeatureValue(0x040300*) queries the latter=2E IIUC, using
->GetFeatureValue(0x040300*) for hwmon_fan_target violates the
->definition, especially when the fan is in auto mode=2E
->
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 46126ce2f968..8c4d0c26ca77 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4187,6 +4187,12 @@ W:	https://ez.analog.com/linux-software-drivers
+>   F:	Documentation/devicetree/bindings/pwm/adi,axi-pwmgen.yaml
+>   F:	drivers/pwm/pwm-axi-pwmgen.c
+>  =20
+> +AYANEO PLATFORM EC DRIVER
+> +M:	Antheas Kapenekakis <lkml@antheas.dev>
+> +L:	platform-driver-x86@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/platform/x86/ayaneo-ec.c
+> +
+>   AZ6007 DVB DRIVER
+>   M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+>   L:	linux-media@vger.kernel.org
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 46e62feeda3c..ff2678927696 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -316,6 +316,16 @@ config ASUS_TF103C_DOCK
+>   	  If you have an Asus TF103C tablet say Y or M here, for a generic x8=
+6
+>   	  distro config say M here.
+>  =20
+> +config AYANEO_EC
+> +	tristate "Ayaneo EC platform control"
+> +	depends on X86
 
-My interpretation was that we could at least determine enable=2E I'm not s=
-o worried about determining target as that makes sense it wouldn't be anyth=
-ing=2E Based on your below data it seems the documentation is not consisten=
-t with real world data so it might not be possible even for enable, which i=
-s annoying=2E=20
+Hi,
 
-Is the last setting retained on boot, or does it reset after restarting (o=
-r suspend/resume for that matter)? If it's reset, we can probably safely as=
-sume auto mode on init? I'll defer to your judgement here since you have a =
-device in hand=2E
+i think the "depends on X86" part is not necessary, all X86 platform drive=
+rs are
+already only selectable on X86.
 
->> > +                       err =3D (int)priv->fan_info[channel]=2Etarget=
-;
->> > +                       if (err < 0)
->> > +                               return err;
->> > +
->> > +                       if (attr =3D=3D hwmon_fan_enable)
->> > +                               *val =3D priv->fan_info[channel]=2Eta=
-rget !=3D 1;
->> > +                       else
->> > +                               *val =3D priv->fan_info[channel]=2Eta=
-rget;
->> > +                       return 0;
->> > +               }
->> > +       }
->> > +
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +/**
->> > + * lwmi_om_hwmon_write() - Write HWMON sensor data
->> > + * @dev: Device pointer
->> > + * @type: Sensor type
->> > + * @attr: Attribute identifier
->> > + * @channel: Channel index
->> > + * @val: Value to write
->> > + *
->> > + * Writes configuration values to hardware through WMI interface=2E
->> > + *
->> > + * Return: 0 on success, or an error code=2E
->> > + */
->> > +static int lwmi_om_hwmon_write(struct device *dev, enum hwmon_sensor=
-_types type,
->> > +                              u32 attr, int channel, long val)
->> > +{
->> > +       struct lwmi_om_priv *priv =3D dev_get_drvdata(dev);
->> > +       u32 raw;
->> > +       int err;
->> > +
->> > +       if (type =3D=3D hwmon_fan) {
->> > +               switch (attr) {
->> > +               case hwmon_fan_enable:
->> > +               case hwmon_fan_target:
->> > +                       if (attr =3D=3D hwmon_fan_enable) {
->> > +                               if (val =3D=3D 0)
->> > +                                       raw =3D 1; /* stop */
->> > +                               else if (val =3D=3D 1)
->> > +                                       raw =3D 0; /* auto */
->> > +                               else
->> > +                                       return -EINVAL;
->> > +                       } else {
->> > +                               /*
->> > +                                * val > U16_MAX seems safe but meani=
-ngless=2E
->> > +                                */
->> > +                               if (val < 0 || val > U16_MAX)
->>=20
->> I think it might be prudent to only permit these settings if fan speed
->> params can't be known=2E Pragmatically it ensures userspace is aware of
->> the range of the interface=2E Per the documentation it should be "safe"
->> as is, but setting below the min fan speed will return it to "auto"
->> mode and the hwmon will be out of sync=2E Anything above should just be
->> set to the max, if the BIOS is working properly=2E
->
->On my device, the data returned by LENOVO_FAN_TEST_DATA seems to be the
->min/max auto points=2E The fan can spin much slower/faster than the
->min/max RPM=2E Setting below the "real" min RPM stops the fan - setting 0
->is the only way to return it to auto mode=2E
->
-Okay=2E I'm not surprised at this point when real world data contradicts t=
-he spec=2E=20
+> +	help
+> +	  Enables support for the platform EC of Ayaneo devices. This
+> +	  includes fan control, fan speed, charge limit, magic
+> +	  module detection, and controller power control.
+> +
+> +	  If you have an Ayaneo device, say Y or M here.
+> +
+>   config MERAKI_MX100
+>   	tristate "Cisco Meraki MX100 Platform Driver"
+>   	depends on GPIOLIB
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefi=
+le
+> index c7db2a88c11a..274a685eb92d 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -39,6 +39,9 @@ obj-$(CONFIG_ASUS_TF103C_DOCK)	+=3D asus-tf103c-dock.o
+>   obj-$(CONFIG_EEEPC_LAPTOP)	+=3D eeepc-laptop.o
+>   obj-$(CONFIG_EEEPC_WMI)		+=3D eeepc-wmi.o
+>  =20
+> +# Ayaneo
+> +obj-$(CONFIG_AYANEO_EC)		+=3D ayaneo-ec.o
+> +
+>   # Cisco/Meraki
+>   obj-$(CONFIG_MERAKI_MX100)	+=3D meraki-mx100.o
+>  =20
+> diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/aya=
+neo-ec.c
+> new file mode 100644
+> index 000000000000..90b86527ab0d
+> --- /dev/null
+> +++ b/drivers/platform/x86/ayaneo-ec.c
+> @@ -0,0 +1,89 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Platform driver for the Embedded Controller (EC) of Ayaneo devices. =
+Handles
+> + * hwmon (fan speed, fan control), battery charge limits, and magic mod=
+ule
+> + * control (connected modules, controller disconnection).
+> + *
+> + * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
+> + */
+> +
+> +#include <linux/dmi.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +struct ayaneo_ec_quirk {
+> +};
+> +
+> +struct ayaneo_ec_platform_data {
+> +	struct platform_device *pdev;
+> +	struct ayaneo_ec_quirk *quirks;
+> +};
+> +
+> +static const struct ayaneo_ec_quirk ayaneo3 =3D {
+> +};
+> +
+> +static const struct dmi_system_id dmi_table[] =3D {
+> +	{
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AYANEO 3"),
+> +		},
+> +		.driver_data =3D (void *)&ayaneo3,
+> +	},
+> +	{},
+> +};
+
+Missing MODULE_DEVICE_TABLE().
+
+> +
+> +static int ayaneo_ec_probe(struct platform_device *pdev)
+> +{
+> +	const struct dmi_system_id *dmi_entry;
+> +	struct ayaneo_ec_platform_data *data;
+> +
+> +	dmi_entry =3D dmi_first_match(dmi_table);
+> +	if (!dmi_entry)
+> +		return -ENODEV;
+
+Why not doing this inside ayaneo_ec_init() ? This would also allow you
+to mark the DMI table as __initconst. Please also mark ayaneo_ec_probe as
+__init as well.
 
 Thanks,
-Derek
+Armin Wolf
 
->   # grep =2E fan1_*
->   grep: fan1_enable: No data available
->   fan1_input:2200
->   fan1_max:5000
->   fan1_min:2200
->   grep: fan1_target: No data available
->   # echo 800 >fan1_target
->   # cat fan1_input
->   800
->   # echo 700 >fan1_target
->   # cat fan1_input
->   700
->   # echo 10000 >fan1_target
->   # cat fan1_input
->   6500
->   # echo 100 >fan1_target
->   # cat fan1_input
->   0
->   # taskset -c 2 stress-ng -c 1 >/dev/null &
->   [1] 37967
->   # cat fan1_input
->   0
->   # echo 0 >fan1_target
->   # cat fan1_input
->   2200
->   # cat fan1_input
->   2600
->
->> IMO the fan speed data is essential to ensuring the hwmon interface is
->> usable and synced=2E I'd move that patch before this one in the series
->> and make the 0x04050000 method reporting IsSupported required for any
->> of the attributes to be visible, with value checks against the min/max
->> when setting a given fan=2E
->
->I agree that setting the RPM too low/high may results in HWMON being
->out of sync, which is usually not desired=2E Will=C2=A0do these in v2=2E
->
->My extra idea:
->- drop the parameter "ignore_fan_cap"=2E
->- new parameter "expose_all_fans": does not hide fans when missing from
->  LENOVO_FAN_TEST_DATA or when 0x04050000 reports unsupported=2E
->  0x040300* is always checked to hide missing fans=2E
->- new parameter "enforce_fan_rpm_range": defaults to true, checks
->  against the min/max RPM from LENOVO_FAN_TEST_DATA while setting
->  target RPM=2E dev_warn_once() when it exceeds min/max RPM=2E
->
->> > +                                       return -EINVAL;
->> > +                               raw =3D val;
->> > +                       }
->> > +
->> > +                       err =3D lwmi_om_fan_get_set(priv, channel, &r=
-aw, true);
->> > +                       if (err)
->> > +                               return err;
->> > +
->> > +                       priv->fan_info[channel]=2Etarget =3D raw;
->> > +                       return 0;
->> > +               }
->> > +       }
->> > +
->> > +       return -EOPNOTSUPP;
->> > +}
->> > +
->> > +static const struct hwmon_channel_info * const lwmi_om_hwmon_info[] =
-=3D {
->> > +       /* Must match LWMI_FAN_NR=2E */
->> > +       HWMON_CHANNEL_INFO(fan,
->> > +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_T=
-ARGET,
->> > +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_T=
-ARGET),
->> > +       NULL
->> > +};
->> > +
->> > +static const struct hwmon_ops lwmi_om_hwmon_ops =3D {
->> > +       =2Eis_visible =3D lwmi_om_hwmon_is_visible,
->> > +       =2Eread =3D lwmi_om_hwmon_read,
->> > +       =2Ewrite =3D lwmi_om_hwmon_write,
->> > +};
->> > +
->> > +static const struct hwmon_chip_info lwmi_om_hwmon_chip_info =3D {
->> > +       =2Eops =3D &lwmi_om_hwmon_ops,
->> > +       =2Einfo =3D lwmi_om_hwmon_info,
->> > +};
->> > +
->> > +/**
->> > + * lwmi_om_hwmon_add() - Register HWMON device
->> > + * @priv: Driver private data
->> > + *
->> > + * Initializes capability data and registers the HWMON device=2E
->> > + *
->> > + * Return: 0 on success, or an error code=2E
->> > + */
->> > +static int lwmi_om_hwmon_add(struct lwmi_om_priv *priv)
->> > +{
->> > +       struct capdata00 capdata00;
->> > +       int i, err;
->> > +
->> > +       for (i =3D 0; i < LWMI_FAN_NR; i++) {
->>=20
->> There is an assumption here that isn't accurate=2E Each fan ID
->> corresponds to a specific fan functionality=2E 01 is CPU Fan, 02 is GPU
->> Fan, 02 is GPU Power Fan, and 04 is System Fan=2E Not every fan needs t=
-o
->> exist, so an ID table might look like this (example from docs):
->>=20
->> illustrate=EF=BC=9A
->> UINT32 NumOfFans =3D 3;
->> NoteBook:
->> 1: CPU Fan ID
->> 2: GPU Fan ID
->> 3: GPU Power Fan ID
->> 4: System Fan ID
->> UINT32 FanId [1,2,4]
->> UINT32 FanMaxSpeed[5400, 5400, 9000];
->> UINT32 FanMinSpeed[1900, 1900, 2000];
->
->Thanks for the information=2E My device only defines 0x0403000{1,2} in
->LENOVO_CAPABILITY_DATA_00, so I assumed LWMI_FAN_NR =3D=3D 2=2E
->
->> In such a case, "count" would be 3, but the idx should be 4 going to
->> the hardware because the GPU Power Fan isn't present, while the case
->> fan is=2E
->
->LWMI_FAN_NR has nothing to do with the actual "count"=2E It is about "how
->many HWMON fan channels are defined?" It exists because HWMON channels
->are defined statically - we hide defined channels when they are missing
->from LENOVO_CAPABILITY_DATA_00 (and LENOVO_FAN_TEST_DATA, if
->available)=2E
->
->The implementation of lenovo-wmi-other doesn't use NumOfFans either -
->it queries LENOVO_FAN_TEST_DATA using fan ID directly=2E NumOfFans is
->only used when lenovo-wmi-capdata retrieves the data=2E
->
->This implementation has another advantage: the X in fanX_* is always
->the same as the fan ID in
->LENOVO_CAPABILITY_DATA_00/LENOVO_FAN_TEST_DATA even in your example
->where fan 3 is missing - fan3_* is invisible, fan{1,2,4}_* are exposed=2E
->
->Given the information, I will define 4 fan channels in v2=2E
->
->> Thanks,
->> Derek
->
->Thanks,
->Rong
->
->> > +               err =3D lwmi_cd00_get_data(priv->cd00_list, LWMI_ATTR=
-_ID_FAN_RPM(i),
->> > +                                        &capdata00);
->> > +               if (err)
->> > +                       continue;
->> > +
->> > +               priv->fan_info[i] =3D (struct fan_info) {
->> > +                       =2Esupported =3D capdata00=2Esupported,
->> > +                       =2Etarget =3D -ENODATA,
->> > +               };
->> > +       }
->> > +
->> > +       priv->hwmon_dev =3D hwmon_device_register_with_info(&priv->wd=
-ev->dev, LWMI_OM_HWMON_NAME,
->> > +                                                         priv, &lwmi=
-_om_hwmon_chip_info, NULL);
->> > +
->> > +       return PTR_ERR_OR_ZERO(priv->hwmon_dev);
->> > +}
->> > +
->> > +/**
->> > + * lwmi_om_hwmon_remove() - Unregister HWMON device
->> > + * @priv: Driver private data
->> > + *
->> > + * Unregisters the HWMON device and resets all fans to automatic mod=
-e=2E
->> > + * Ensures hardware doesn't remain in manual mode after driver remov=
-al=2E
->> > + */
->> > +static void lwmi_om_hwmon_remove(struct lwmi_om_priv *priv)
->> > +{
->> > +       hwmon_device_unregister(priv->hwmon_dev);
->> > +}
->> > +
->> > +/* =3D=3D=3D=3D=3D=3D=3D=3D fw_attributes (component: lenovo-wmi-cap=
-data 01) =3D=3D=3D=3D=3D=3D=3D=3D */
->> > +
->> >  struct tunable_attr_01 {
->> >         struct capdata01 *capdata;
->> >         struct device *dev;
->> > @@ -564,15 +833,17 @@ static void lwmi_om_fw_attr_remove(struct lwmi_=
-om_priv *priv)
->> >         device_unregister(priv->fw_attr_dev);
->> >  }
->> >=20
->> > +/* =3D=3D=3D=3D=3D=3D=3D=3D Self (master: lenovo-wmi-other) =3D=3D=
-=3D=3D=3D=3D=3D=3D */
->> > +
->> >  /**
->> >   * lwmi_om_master_bind() - Bind all components of the other mode dri=
-ver
->> >   * @dev: The lenovo-wmi-other driver basic device=2E
->> >   *
->> > - * Call component_bind_all to bind the lenovo-wmi-capdata01 driver t=
-o the
->> > - * lenovo-wmi-other master driver=2E On success, assign the capabili=
-ty data 01
->> > - * list pointer to the driver data struct for later access=2E This p=
-ointer
->> > - * is only valid while the capdata01 interface exists=2E Finally, re=
-gister all
->> > - * firmware attribute groups=2E
->> > + * Call component_bind_all to bind the lenovo-wmi-capdata devices to=
- the
->> > + * lenovo-wmi-other master driver=2E On success, assign the capabili=
-ty data
->> > + * list pointers to the driver data struct for later access=2E These=
- pointers
->> > + * are only valid while the capdata interfaces exist=2E Finally, reg=
-ister the
->> > + * HWMON device and all firmware attribute groups=2E
->> >   *
->> >   * Return: 0 on success, or an error code=2E
->> >   */
->> > @@ -586,26 +857,47 @@ static int lwmi_om_master_bind(struct device *d=
-ev)
->> >         if (ret)
->> >                 return ret;
->> >=20
->> > -       priv->cd01_list =3D binder=2Ecd01_list;
->> > -       if (!priv->cd01_list)
->> > +       if (!binder=2Ecd00_list && !binder=2Ecd01_list)
->> >                 return -ENODEV;
->> >=20
->> > -       return lwmi_om_fw_attr_add(priv);
->> > +       priv->cd00_list =3D binder=2Ecd00_list;
->> > +       if (priv->cd00_list) {
->> > +               ret =3D lwmi_om_hwmon_add(priv);
->> > +               if (ret)
->> > +                       return ret;
->> > +       }
->> > +
->> > +       priv->cd01_list =3D binder=2Ecd01_list;
->> > +       if (priv->cd01_list) {
->> > +               ret =3D lwmi_om_fw_attr_add(priv);
->> > +               if (ret) {
->> > +                       if (priv->cd00_list)
->> > +                               lwmi_om_hwmon_remove(priv);
->> > +                       return ret;
->> > +               }
->> > +       }
->> > +
->> > +       return 0;
->> >  }
->> >=20
->> >  /**
->> >   * lwmi_om_master_unbind() - Unbind all components of the other mode=
- driver
->> >   * @dev: The lenovo-wmi-other driver basic device
->> >   *
->> > - * Unregister all capability data attribute groups=2E Then call
->> > - * component_unbind_all to unbind the lenovo-wmi-capdata01 driver fr=
-om the
->> > - * lenovo-wmi-other master driver=2E Finally, free the IDA for this =
-device=2E
->> > + * Unregister the HWMON device and all capability data attribute gro=
-ups=2E Then
->> > + * call component_unbind_all to unbind the lenovo-wmi-capdata driver=
- from the
->> > + * lenovo-wmi-other master driver=2E
->> >   */
->> >  static void lwmi_om_master_unbind(struct device *dev)
->> >  {
->> >         struct lwmi_om_priv *priv =3D dev_get_drvdata(dev);
->> >=20
->> > -       lwmi_om_fw_attr_remove(priv);
->> > +       if (priv->cd00_list)
->> > +               lwmi_om_hwmon_remove(priv);
->> > +
->> > +       if (priv->cd01_list)
->> > +               lwmi_om_fw_attr_remove(priv);
->> > +
->> >         component_unbind_all(dev, NULL);
->> >  }
->> >=20
->> > @@ -624,6 +916,9 @@ static int lwmi_other_probe(struct wmi_device *wd=
-ev, const void *context)
->> >         if (!priv)
->> >                 return -ENOMEM;
->> >=20
->> > +       /* Sentinel for on-demand ida_free()=2E */
->> > +       priv->ida_id =3D -EIDRM;
->> > +
->> >         priv->wdev =3D wdev;
->> >         dev_set_drvdata(&wdev->dev, priv);
->> >=20
->> > @@ -654,7 +949,9 @@ static void lwmi_other_remove(struct wmi_device *=
-wdev)
->> >         struct lwmi_om_priv *priv =3D dev_get_drvdata(&wdev->dev);
->> >=20
->> >         component_master_del(&wdev->dev, &lwmi_om_master_ops);
->> > -       ida_free(&lwmi_om_ida, priv->ida_id);
->> > +
->> > +       if (priv->ida_id >=3D 0)
->> > +               ida_free(&lwmi_om_ida, priv->ida_id);
->> >  }
->> >=20
->> >  static const struct wmi_device_id lwmi_other_id_table[] =3D {
->> > @@ -679,5 +976,6 @@ MODULE_IMPORT_NS("LENOVO_WMI_CD");
->> >  MODULE_IMPORT_NS("LENOVO_WMI_HELPERS");
->> >  MODULE_DEVICE_TABLE(wmi, lwmi_other_id_table);
->> >  MODULE_AUTHOR("Derek J=2E Clark <derekjohn=2Eclark@gmail=2Ecom>");
->> > +MODULE_AUTHOR("Rong Zhang <i@rong=2Emoe>");
->> >  MODULE_DESCRIPTION("Lenovo Other Mode WMI Driver");
->> >  MODULE_LICENSE("GPL");
->> > --
->> > 2=2E51=2E0
->> >=20
-
+> +
+> +	data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->pdev =3D pdev;
+> +	data->quirks =3D dmi_entry->driver_data;
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver ayaneo_platform_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "ayaneo-ec",
+> +	},
+> +	.probe =3D ayaneo_ec_probe,
+> +};
+> +
+> +static struct platform_device *ayaneo_platform_device;
+> +
+> +static int __init ayaneo_ec_init(void)
+> +{
+> +	ayaneo_platform_device =3D
+> +		platform_create_bundle(&ayaneo_platform_driver,
+> +				       ayaneo_ec_probe, NULL, 0, NULL, 0);
+> +
+> +	return PTR_ERR_OR_ZERO(ayaneo_platform_device);
+> +}
+> +
+> +static void __exit ayaneo_ec_exit(void)
+> +{
+> +	platform_device_unregister(ayaneo_platform_device);
+> +	platform_driver_unregister(&ayaneo_platform_driver);
+> +}
+> +
+> +MODULE_DEVICE_TABLE(dmi, dmi_table);
+> +
+> +module_init(ayaneo_ec_init);
+> +module_exit(ayaneo_ec_exit);
+> +
+> +MODULE_AUTHOR("Antheas Kapenekakis <lkml@antheas.dev>");
+> +MODULE_DESCRIPTION("Ayaneo Embedded Controller (EC) platform features")=
+;
+> +MODULE_LICENSE("GPL");
