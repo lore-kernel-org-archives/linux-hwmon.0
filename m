@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0250C1D555;
-	Sun, 26 Oct 2025 19:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFDE76026;
+	Sun, 26 Oct 2025 19:41:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761506128; cv=none; b=eeGQMPEI0r0KwI0sTg4DEMD2bsFAR3luakBvYYMqcKr2kAqLazSsEpTOUn7qvk2CUpC4OplKXuMpazyYKwzq1Tm03iNtR75TGCE7SQZYmN59f8dZFS2L3mXRpmn4V1XfLg/8xJIYljr3RfmC1XQv7dLm069w0UJ3eTj7+8mFjY8=
+	t=1761507666; cv=none; b=RH7zXwIjtTi+DkKgmQk5UWCoKAUb6rmGo4iHUsAENMDDxAiQ5DM3XXHyGULXHLIG1sAke0pCgxr+t7VbEhu0G7hwNbBc7/hzudzUT8bUkdPEGH4p/CfLJ8AIJTQ/Jtu2e5F0W1XN4egT+r9fvr9d/ItGl5W7T43Q0ujmVTFvOu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761506128; c=relaxed/simple;
-	bh=pliB5Ap7K2x1BmXOBTstd+ICLJ6Oz1r01E/QuMU7mNs=;
+	s=arc-20240116; t=1761507666; c=relaxed/simple;
+	bh=lTf4joyzeGXF9zVtIHE2AgWtcJt0N6N9jhyW3FA9Hz4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i09B5qBhOU0QIaFNC/XuVURP35O5HG3hT0pLxj4U2nNpu/a5+oCb3e2B557AjJX7rAaV9DiwO1rpOZq7Cqh0DckMcF2d2mAopvPNhYpmoMP3BNIy4zzlswt/RJKabIVyfBvyT55EJE3HLQsOg1NcHFj1ehs9nygBgwIMPc0TAzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ENuykc5O; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=ZEcN9gKY1dM3a665XhuHADQZb/uJYWfebhNY1itHgXZMOV0GoXI3XiJnEH1G1/DNog6QNDmHuairH/HAWcYf5wuWvBdvBPdPtBA1oqPG0qxMAco6uQ3qyoxwm1x5qEafaM3eeQ1k+1ofDPpwKvJ4Vr+1o4NTTeNDTf6mKKFJGiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uBKvkDzN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ENuykc5O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA154C4CEE7;
-	Sun, 26 Oct 2025 19:15:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uBKvkDzN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D5D3C4CEE7;
+	Sun, 26 Oct 2025 19:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761506127;
-	bh=pliB5Ap7K2x1BmXOBTstd+ICLJ6Oz1r01E/QuMU7mNs=;
+	s=k20201202; t=1761507665;
+	bh=lTf4joyzeGXF9zVtIHE2AgWtcJt0N6N9jhyW3FA9Hz4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ENuykc5OU/grHxEdvSV0wYLbH5rsvd2MSQU0NPH/QqIFTCEWZ13CB9B0y/SMzMPOh
-	 j6mT8mDEyoXOaS0m3oCJJTRRyboxLRJpN+a8et8EnhoSMtsDSQdu+U5LG7yUCi2nP3
-	 WPlPUcyZCqF0nyZY6WV6VVY3Huglb0wIw5+PzpdVAUZWPOoCiHPW/YbJjzJQZ7k3Jz
-	 U6h3Bm7t4dDiOQ1Rp8FOi46jDxyrgJq3eaDIVFzsCwZHICb6tJrJ35FfVy2VqwV2I8
-	 UuruCle0yz4K9LyAhWtDQJOIHqX6s7BM5kLamlLY2jyFf/DWog7HGqSnl8MFHcCdDD
-	 ynEgxqKMv9cMg==
-Message-ID: <d0ebc09a-6122-4a52-823b-7cbb2b05741b@kernel.org>
-Date: Sun, 26 Oct 2025 20:15:22 +0100
+	b=uBKvkDzNuvY1TXO688T7xl66SarjxU3ScQDXy+53XHL1EGzz+NwqKKx/SVtrr7xcq
+	 0aby4mw4MVfsJaWKuWLh6KfixdMr+Y2IRY5jjR3dYyKbzKn4c3KX3qYflx0WnO6xUh
+	 B5K3meeMwpZC1emfEDEJaD4MJcNaRhksUx79793mF7ANoohDZduJVFRACurxZHB0X3
+	 +Te84WLNLCVc+oBKTLalsZfMAijuC2hV9HatsCic5eJqtUtC9jxpnuSZ/dzoy/jwta
+	 YZfukw/vgs5oLGYAGpJpuFsvd8mnePMShFbJJ2sKSggQXH/APov1NyUjxHSfSuSCEU
+	 NHcEx5S4oPnWg==
+Message-ID: <a45ad6b8-b4d5-4e0c-8f1a-3641dddb240d@kernel.org>
+Date: Sun, 26 Oct 2025 20:41:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -37,16 +37,13 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641
  power monitor
-To: Guenter Roeck <linux@roeck-us.net>,
- Igor Reznichenko <igor@reznichenko.net>, linux-hwmon@vger.kernel.org
+To: Igor Reznichenko <igor@reznichenko.net>
 Cc: conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com,
  devicetree@vger.kernel.org, krzk+dt@kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org, skhan@linuxfoundation.org
-References: <20251022044708.314287-1-igor@reznichenko.net>
- <20251026065057.627276-1-igor@reznichenko.net>
- <20251026065057.627276-2-igor@reznichenko.net>
- <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
- <635af2ab-969b-4390-b661-44bf171eda7c@roeck-us.net>
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux@roeck-us.net, robh@kernel.org, skhan@linuxfoundation.org
+References: <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
+ <20251026184641.631641-1-igor@reznichenko.net>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -92,21 +89,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <635af2ab-969b-4390-b661-44bf171eda7c@roeck-us.net>
+In-Reply-To: <20251026184641.631641-1-igor@reznichenko.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/10/2025 18:22, Guenter Roeck wrote:
-> On 10/26/25 09:32, Krzysztof Kozlowski wrote:
->> On 26/10/2025 07:50, Igor Reznichenko wrote:
->>> +properties:
->>> +  compatible:
->>> +    const: st,tsc1641
->>
+On 26/10/2025 19:46, Igor Reznichenko wrote:
 >> Subject: I asked to drop "binding" and not add "support for". "Support
 >> for" makes little sense in terms of binding. How binding can support
 >> anything? This is the "ST TSC1641 power monitor" not support.
->>
+> 
+> Krzysztof,
+> 
+> Thanks for feedback, will fix this and will create following patch versions
+> in new threads.
+> 
 >>> +
 >>> +  reg:
 >>> +    maxItems: 1
@@ -123,21 +119,15 @@ On 26/10/2025 18:22, Guenter Roeck wrote:
 >>
 >> Isn't this just interrupt? You need proper interrupts property and then
 >> its flag define the type of interrupt.
->>
 > 
-> This is a value to write into the chip. It is orthogonal to how the interrupt
-> is reported to the interrupt controller. It may be active low by the chip and
-> inverted, or it may be active high by the chip and inverted. How does one express
-> an additional inverter in the interrupt signal path in a devicetree property ?
-> Can you give an example ?
+> This controls a bit written into device register.
+> I omitted interrupt property after looking at existing power monitor bindings,
+> especially hwmon/ti,ina2xx.yaml. INA226 has very similar bit controlling alert 
+> pin polarity and binding doesn't define alert pin as interrupt. Overall, I didn't
+> find many power monitor bindings defining alert pins as interrupts.
 
 
-If that is the interrupt to the CPU, then it's just like I said - proper
-flag to the interrupts property. There is no need to express inverter
-separately from the interrupts, because that would mean you first
-express interrupts incorrectly and then you add inverter to make it
-correct. Just like people expressing RESET_N GPIO with ACTIVE_HIGH and
-then making reversed set high/low in the driver :/
+On INA2xx that's SMBUS Alert. Is this the case here as well?
 
 Best regards,
 Krzysztof
