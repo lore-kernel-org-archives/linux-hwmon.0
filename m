@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EC2366;
-	Sun, 26 Oct 2025 16:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8773594B;
+	Sun, 26 Oct 2025 16:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761496114; cv=none; b=FYwvTcbzYmoIYIgCEy+KTCuHJHRaxRubL+WamtZCduGyru1C8qltjHiYjwGN3XMSI4v2xCuOZoHu1AmetGLnp6fRH6p2zRpWHZia8UgJkNxEH22KMuQur6gNTECyGb3N506ABvPjmcl4bOWYpNeaKQRYOBne75hCE765p8Qp5D4=
+	t=1761496337; cv=none; b=YRf5UN+KFtAMZp11vf3r+eYt65mNH1oWWBXUvs1uV3E7vPuzSBaPWOCW1UZ2kHPQaxwqDcwgd/h5pB6DBlivmQvmeSHItXA//M0Fx0bHawkZ9r/qfQUHz1O4Noae/DpLQ1EqU38oW4rchvYH+HG5Ji8kyNDen/3N6bOCGKSOHSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761496114; c=relaxed/simple;
-	bh=3yASdCDSpsywc9Wndc68nvTXELQcTh5qtV/szjNu5xE=;
+	s=arc-20240116; t=1761496337; c=relaxed/simple;
+	bh=JwPqo0kFj4hjuqmVfmRYLFi0Q/pzmXymx3QYy5E7Ui4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F9BA0i1l+P3vT5L6us2KdA2D/ulDixfiSMIDGecMbPH0mILy2eOzgoMaBeXBirRwxPHVziLkkVpjrC8YQ16BulTuEWaNgNKfspk+j1bSeJP83RZmVaVPrjkZqvLireJxrK9GQToZ6OGItJzsRk4lACFhRrAsv2MpBEuLWMySmQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fj/5+86/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=BbkRcWglnvXqltLSKl2ZtJUF5f3vQqhozPicdLF0YmKf+Ly3FuolWLWUVuvynyKXnpwe7qZ8lTUszHCe63VpVxsRS9x7yIDijObSXIbw6jSJoIEQee18ULTRhNPjhQUx9k0eFc0t1OYs8E9rH87KzLLAkIrJWeqV5myZ4pIvTkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnQcw+R6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fj/5+86/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F89C4CEE7;
-	Sun, 26 Oct 2025 16:28:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnQcw+R6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 190E7C4CEE7;
+	Sun, 26 Oct 2025 16:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761496114;
-	bh=3yASdCDSpsywc9Wndc68nvTXELQcTh5qtV/szjNu5xE=;
+	s=k20201202; t=1761496336;
+	bh=JwPqo0kFj4hjuqmVfmRYLFi0Q/pzmXymx3QYy5E7Ui4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fj/5+86/gF+aahhzpuotc0v2KoFceFmywlGwFqEDLE8YGsIOJgyIuGvIIealak7sW
-	 ZnGllmQPJHtW5XkUTFiSR+sw5KkNgbQgCN2OFAFanolBwMjLMP0h2O86b6fNV9a26/
-	 8Ztdi/6TpQfv56fGg4pAfrsxS0/qGRNdvGVCqRqeFsOYO/3uKE5nXqUzAz9UY5LUOT
-	 /kxHZXrM177D4yzumVZctdSzcNKpqzrtvbBizx4aKbxJsvP5raHmxkbR9PmTXeW76Q
-	 Zblgh01FaX0BOjmV1SNjcEyHjELS8RazAHcdk6XSwp+HWheCvvlxSzP053NT7g3pTX
-	 lWOLD0lHpb9Ag==
-Message-ID: <37850951-99d0-4235-b7d5-a0caa14b7e4b@kernel.org>
-Date: Sun, 26 Oct 2025 17:28:29 +0100
+	b=qnQcw+R6Y1KcXcBtlU1JjGDmNo5tf5ulfyBcLldOjmI8QBQklJHpax1zC2iMviv2t
+	 z9yaK/bNZ7Bvm7usQuD9Q51WA9HhmWYs5W4R08BkCi/jtz20YTDo1FkY9rQ7XAJ+c2
+	 jrhOShE4QT1aKTLHfdH4ReWzeabI81R+7HviRRXxhyuqbxPIzd/qqFxecu1lqUN5J/
+	 hNLU19ljzF/riI0DFvVexu9RuBq8EwaL3RaMGx42Z+8Fe24mNHSXm7haSE1OXbgS8X
+	 IlJrt+Fj62/jtDI2swRmtw6MFf4h+kktJq/51ppffPnKC2CcsXmDZMonWxjpgpRuUD
+	 h13s3rWF/3FQA==
+Message-ID: <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
+Date: Sun, 26 Oct 2025 17:32:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,7 +35,8 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] hwmon: Add TSC1641 I2C power monitor driver
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641
+ power monitor
 To: Igor Reznichenko <igor@reznichenko.net>, linux-hwmon@vger.kernel.org
 Cc: conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com,
  devicetree@vger.kernel.org, krzk+dt@kernel.org, linux-doc@vger.kernel.org,
@@ -43,6 +44,7 @@ Cc: conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com,
  skhan@linuxfoundation.org
 References: <20251022044708.314287-1-igor@reznichenko.net>
  <20251026065057.627276-1-igor@reznichenko.net>
+ <20251026065057.627276-2-igor@reznichenko.net>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -88,24 +90,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251026065057.627276-1-igor@reznichenko.net>
+In-Reply-To: <20251026065057.627276-2-igor@reznichenko.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/10/2025 07:50, Igor Reznichenko wrote:
-> This patch series adds support for the ST Microelectronics TSC1641
-> I2C power monitor. The TSC1641 provides bus voltage, current, power,
-> and temperature measurements via the hwmon subsystem. The driver 
-> supports optional ALERT pin polarity configuration and exposes the
-> shunt resistor value and update interval via sysfs.
-> 
-> Tested on Raspberry Pi 3B+ with a TSC1641 evaluation board.
+> +properties:
+> +  compatible:
+> +    const: st,tsc1641
 
+Subject: I asked to drop "binding" and not add "support for". "Support
+for" makes little sense in terms of binding. How binding can support
+anything? This is the "ST TSC1641 power monitor" not support.
 
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets. See also:
-https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/submitting-patches.rst#L830
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description: Shunt resistor value in micro-ohms. Since device has internal
+> +      16-bit RSHUNT register with 10 uOhm LSB, the maximum value is capped at
+> +      655.35 mOhm.
+> +    minimum: 100
+> +    default: 1000
+> +    maximum: 655350
+> +
+> +  st,alert-polarity-active-high:
+
+Isn't this just interrupt? You need proper interrupts property and then
+its flag define the type of interrupt.
+
 
 Best regards,
 Krzysztof
