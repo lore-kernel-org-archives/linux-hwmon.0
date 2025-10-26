@@ -1,108 +1,182 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DA135B12C
-	for <linux-hwmon@vger.kernel.org>; Sat, 25 Oct 2025 08:19:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0BE1DB95E
+	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 04:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761380399; cv=none; b=rGg2jxoX7UziOkvIwHzvDYWhHzqyoNYPPzEoqSI3LK0Bu2K+ZxEQ5QI1e5w7I/LVB/z9r0pcgnpdGUwLAR6/p7ElA3Bd3DwrlT4be3NvFnf3qedmvlTF7XWdaoXUekvTmCY+reCUV4vl7iP9eK82KoqfBTjxOeF77v7Q6uMFlRc=
+	t=1761453573; cv=none; b=WvBdQtKmtJFx+udhl6lKW0l8KnB2ccqxPIWDptvCrj6BvTKuHe6si106NG55hXfPQOV9SsHWwXNuUCqqN3zmcLT+ERjvDfZg4NHXyxBJgzi5X0J7xaoynwdBI+DcNabF8+sX4yMowwqzhlK4pPG0TLoU91yKMAIl4nDFXFa88EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761380399; c=relaxed/simple;
-	bh=AzfeVbbRV3eREjYjS3QXyjhA7RuXufKczC6qDZJG4R8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G3JbianevAQFKbrv6mlw3A688H0kbWGrrGOuTwrWryZU0kCab7DyQAt2WvmxZffibQ6Ci0+G0ejEVN8681mM5EIe/o1WMUdMk2pMKKr3DgPLMiozz8bi4wNcrVcpsOjXvJuNiwh3aHvfgVkcX6Wp5Np03bOxzQeS9kHxJjGm1QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8QyQ8lJ; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1761453573; c=relaxed/simple;
+	bh=vy5Ll0U3YbQyrkACgE52PX3IgmUHRgbRz926G0fQUbc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K1cUqYJpFeOLT1OkyFu0BNf3XleJKqrBXPLdd0TEUx+7PqvycGn6y11ful8a73XrHyvZiRbGZTtKNAk0cW/nAo+vG54Q8bVCewgoZrVS/TVVLzAWGOxSX9mcyIY8Aimng0m79sUrtRE07+rDOsYhSMuqlaZwkZma/uX06FzthJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFrEbDiz; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8QyQ8lJ"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-33d896debe5so3357731a91.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 25 Oct 2025 01:19:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFrEbDiz"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4eba67d4b1bso11825831cf.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 25 Oct 2025 21:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761380397; x=1761985197; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W0P1qCP4uZ3AAQgH9R2rp1FNOw4ZXslRjRKDSpwrrHA=;
-        b=M8QyQ8lJBaQ80dl5sSR5pL5bDSaJIMAihZigDv3Nw88lcs1Xfib1c6y99/mZO/So3W
-         EnjohnJsPaiqgSaCGY5A/n+Ckf9NIMWPbnW415BeH6p3lhohoMqgAgepa8hsgmSZDQyq
-         fyyuQ2QytLN22VpW58mm3xXkf2ZYBliLlxHFlDc9+uBpSY4JOmpE/o7MEdmQO+3X69ng
-         CaNMu23dUZrablAwuqNzElo1p/FZNQBWv/9vKuZUwdpZycPY1tnUBW4yZLHJ4OPUfS6i
-         9R4P/FNDM1ynL0B3tiZcZY0yMggQDy9+ra4Pw0n8o9KHSADhSA4IZxsqHLxk/B0X6Xe8
-         xQgw==
+        d=gmail.com; s=20230601; t=1761453571; x=1762058371; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzNBy14nkOw/dB7piX3Hy0f3suS2Ffjp6ed0FqlTWN0=;
+        b=FFrEbDizYcYQXrXTCB40m234l9thWm8De0B984BBu8FOlDoc1N9y378nJivBZ9f+j5
+         7MwFSw6F6oudMjFQY+TXsojLr5kY4Pi2oQjwlnv6R5igxTeCjI9Wp3vvhZOFMbk9LUDR
+         zK9QMvDdjDuk1tXcvedcgoKXh5Yw7qQrBjw2qXYk4hhuYL8VQKGBGFpLQ71BozBvk3e5
+         Bkz4d0lKjRZ+qXhl9xdaAgFFl9sunDVeVMu0a4uuiGS6Mokrupyi6jrkJwQ5lRX3OSHK
+         klL/PgUFwR4MdDdeeumvQeGuIQS+HYLejW2hiuM074zkrRGLBS8Qi9armgbvNiGv/Qv8
+         6xNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761380397; x=1761985197;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0P1qCP4uZ3AAQgH9R2rp1FNOw4ZXslRjRKDSpwrrHA=;
-        b=r+knb7T4EVsl4LJfTn112dXtsZ8qlKBLhuvU/Cy3lzwu4vZlAX4NzXNQSXweekXxgX
-         x9ymHnNZUV6O8VBBTeANwROvVfzMeVpwHIK0Bg5EEMv0JE/BT1EHccYSmCYB22aZ4H/I
-         ZUkMnIxef4t+hXjIxRHlS6ouppa2W6KNMDRGtdSBTpfFgGUimbn1NFhVGOzptBI66C9d
-         iGTMIQb4zLq9q/RaHtsaNpyCKx/KmA1CvQIHaa40U73II2C8J4abknPIU7Gt+dQ4iYX6
-         hxD4QrpBiscCrp0bZoS+V/UzvKFE+ux9ZXQlMctGz9BOfQDZhnRIZK3ORlEdZf1Mh06D
-         AD3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWzSf1mM4M4mFs8vjbt4ThFFOyT4+tvPt5Im+cCh6ep7K2TvBMDhT97F4gPr8e6+R66HOE6pRwu1qPYdw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoJCoU2IdIShPLPwAI5VV+h2VmPIUUGsSOH3o3RsSGjRqBuIQq
-	Ywz9o5+wckIywEDkmid0dPz4tCAwkfIXX0VWWbOlOMV8KlzNWZJ0fgRt
-X-Gm-Gg: ASbGncs/gq36/2njpScnIdEEz8d0ToPvtN87X5xftfRIVRsZ5FsF07QlH2Yxzo1yEXr
-	SLh7S22OamOMeBX/tW7uDtKR1JihDGEi/qyWOj1rfQPgXGRtsgk1fmzjKncFYUYcUlpkL7Dl2XX
-	9+FXV58wR2gWDDmkmB8tukH8b6jv0DTVG09EyDGo8nhwd2pXYx2wyr1azF4OshRCbLS5bAPFQt6
-	yBHVAt19w2kjHk8PRCwJTrlGbBfSFAcJ+go4haBNFpjgX0NN5ujUEILioWJmmImOyoN8mX52Lzm
-	7//Vg4MsVr3fYOniHtgQW2o/VfjXXkUsqAPv0iCm+Ihv0yVlUQV06mHX6V4DksjEqDlhTnfU89N
-	QOb36q1+BNLkgCCibG9z22hMq3yobox0a4W93RbFPdzqO7pZlT+q/1pw/dirkRq7lNuugRw2crk
-	rRlmufM+GjBijRqNeOnRhEdZo=
-X-Google-Smtp-Source: AGHT+IHGTk9mHrG98F2le4aB1w/t0kcsoJBN6xOXR8de0Ny/hqGEZAIH8AH8oW3GDzOVT5iOt4o7jg==
-X-Received: by 2002:a17:90b:530f:b0:330:6c5a:4af4 with SMTP id 98e67ed59e1d1-33fd662e554mr6574117a91.35.1761380396715;
-        Sat, 25 Oct 2025 01:19:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33fed81aa87sm1511375a91.20.2025.10.25.01.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Oct 2025 01:19:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 25 Oct 2025 01:19:54 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gopi Krishna Menon <krishnagopi487@gmail.com>
-Cc: cryolitia@uniontech.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com, khalid@kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: Re: [PATCH] hwmon: (gpd-fan) Fix compilation error in non-ACPI builds
-Message-ID: <6a1e1503-0529-41f6-806d-0ecf0f8e77fe@roeck-us.net>
-References: <20251024202042.752160-1-krishnagopi487@gmail.com>
+        d=1e100.net; s=20230601; t=1761453571; x=1762058371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TzNBy14nkOw/dB7piX3Hy0f3suS2Ffjp6ed0FqlTWN0=;
+        b=Ls0ZMnVyrNsmXPuZmgWUEbs0DKSFziE+CrESiuOEaWwp2i0dsMaUTEzPoJl60T2zYh
+         Vs6TjQtTkFuYxnBxr5XJZDD0tBV/sihOfjogfd7Ro58/rzJ4MwJIIsqGiwDAShh+PEfW
+         UekQh9ZicL/0x5u8RyB8riH81eH/gEXLWvr+MYxy+BqRbtVfBmJmzk0hRbXcqmnF+USl
+         Xw5+zeFC9DHoo1aCDGb65XqNayT7RE1vTDaJcYKJRT8yryvXyMULsITZbT6Ducr0TM5T
+         8ykiaLR1yIJ3IGtv/UUFFoOe9VSXIHw9qHlJrkiYrSwzy828NyQp4bdzD/EQBQ1stV2I
+         xHHg==
+X-Forwarded-Encrypted: i=1; AJvYcCVX+cKUU6jqljCSu1MptKUANjBfPY586HwrwQnzkKmhyRjk0gPlh0pQcxbLn8/JJYcA5X8+zc8nMpgw2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN/hfkl2i+r22FyrzkDDefC2F/+pMnR1naJt8i1oUeQqDuCQCK
+	TiZ8VO9cSPQ7SGFRecUZ0tsPsNfkVx+wR9syS/+sYj63rJi5e2LzxoSq69Kgob26vdtIn0vmxEf
+	eztWtUoJjo3rdIJ9kFUzlovRKthT3vuc=
+X-Gm-Gg: ASbGncuvVxYFmXy0DCW0aEiBbDpEounxnTbqcUTQHuGfBp5DmvP/XB/aIgVwvthkAyZ
+	0yBUcySBAXAnO75OeJi5sjXw+cyXukgKKn406fKueCSg8YKtO2bilzNBxiShpd+AG+o22IL7gnJ
+	yx+6ZFo50Q9cv5j/0vjLgBugnUVlNn1OWPhZU6V4bUid8UE6FJog8pSGsbu/x7GxMECyVm20cgL
+	BNFiOM5J52ijPywkGDNmN5jDBArZbIpudLBTMkI5Ru2ACL25+StNOrIQ1/bunHLBgdrKklB
+X-Google-Smtp-Source: AGHT+IEePRJIChmr7Nbfg/5hSN4J3EvnJhbGxzJiKb29WiBVfr4CZE7zQb1z1WDIkxp0P7UbkfzSOlj646+w1Eg72rA=
+X-Received: by 2002:ac8:5e14:0:b0:4e8:9eec:3a91 with SMTP id
+ d75a77b69052e-4eb940f0b2emr81094931cf.26.1761453570970; Sat, 25 Oct 2025
+ 21:39:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251024202042.752160-1-krishnagopi487@gmail.com>
+References: <20251019210450.88830-1-i@rong.moe>
+In-Reply-To: <20251019210450.88830-1-i@rong.moe>
+From: Derek John Clark <derekjohn.clark@gmail.com>
+Date: Sat, 25 Oct 2025 21:39:20 -0700
+X-Gm-Features: AWmQ_blNweRWEnJyzm71NgB5DybncgYqy6Cjc9ibrZM10MakZmaDOcTATakkos4
+Message-ID: <CAFqHKTkBbtSHfu1bXn8tyjvPSmCOMoWdLyNMv=DRQke679SEPA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] platform/x86: lenovo-wmi-{capdata,other}: Add HWMON
+ for fan speed
+To: Rong Zhang <i@rong.moe>
+Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, Armin Wolf <W_Armin@gmx.de>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 25, 2025 at 01:50:40AM +0530, Gopi Krishna Menon wrote:
-> Building gpd-fan driver without CONFIG_ACPI results in the following
-> build errors:
-> 
-> drivers/hwmon/gpd-fan.c: In function ‘gpd_ecram_read’:
-> drivers/hwmon/gpd-fan.c:228:9: error: implicit declaration of function ‘outb’ [-Werror=implicit-function-declaration]
->   228 |         outb(0x2E, addr_port);
->       |         ^~~~
-> drivers/hwmon/gpd-fan.c:241:16: error: implicit declaration of function ‘inb’ [-Werror=implicit-function-declaration]
->   241 |         *val = inb(data_port);
-> 
-> The definitions for inb() and outb() come from <linux/io.h>
-> (specifically through <asm/io.h>), which is implicitly included via
-> <acpi_io.h>. When CONFIG_ACPI is not set, <acpi_io.h> is not included
-> resulting in <linux/io.h> to be omitted as well.
-> 
-> Since the driver does not depend on ACPI, remove <linux/acpi.h> and add
-> <linux/io.h> directly to fix the compilation errors.
-> 
-> Signed-off-by: Gopi Krishna Menon <krishnagopi487@gmail.com>
+On Sun, Oct 19, 2025 at 2:05=E2=80=AFPM Rong Zhang <i@rong.moe> wrote:
+>
+> Lenovo WMI Other Mode interface also supports querying or setting fan
+> speed RPM. This capability is decribed by LENOVO_CAPABILITY_DATA_00.
+> Besides, LENOVO_FAN_TEST_DATA provides reference data for self-test of
+> cooling fans, including minimum and maximum fan speed RPM.
+>
+> This patchset turns lenovo-wmi-capdata01 into a unified driver (now
+> named lenovo-wmi-capdata) for LENOVO_CAPABILITY_DATA_{00,01} and
+> LENOVO_FAN_TEST_DATA; then adds HWMON support for lenovo-wmi-other:
+>
+>  - fanX_enable: enable/disable the fan (tunable)
+>  - fanX_input: current RPM
+>  - fanX_max: maximum RPM
+>  - fanX_min: minimum RPM
+>  - fanX_target: target RPM (tunable)
+>
+> This implementation doesn't require all capability data to be available,
+> and is capable to expose interfaces accordingly:
+>
+>  - Having LENOVO_CAPABILITY_DATA_00: exposes fanX_{enable,input,target}
+>  - Having LENOVO_CAPABILITY_DATA_01: exposes firmware_attributes
+>  - Having LENOVO_FAN_TEST_DATA: exposes fanX_{max,min}
+>
+> Rong Zhang (6):
+>   platform/x86: Rename lenovo-wmi-capdata01 to lenovo-wmi-capdata
+>   platform/x86: lenovo-wmi-{capdata,other}: Support multiple Capability
+>     Data
+>   platform/x86: lenovo-wmi-capdata: Add support for Capability Data 00
+>   platform/x86: lenovo-wmi-other: Add HWMON for fan speed RPM
+>   platform/x86: lenovo-wmi-capdata: Add support for Fan Test Data
+>   platform/x86: lenovo-wmi-other: Report min/max RPM and hide dummy fans
+>
+>  .../wmi/devices/lenovo-wmi-other.rst          |  32 +
+>  drivers/platform/x86/lenovo/Kconfig           |   5 +-
+>  drivers/platform/x86/lenovo/Makefile          |   2 +-
+>  drivers/platform/x86/lenovo/wmi-capdata.c     | 545 ++++++++++++++++++
+>  drivers/platform/x86/lenovo/wmi-capdata.h     |  46 ++
+>  drivers/platform/x86/lenovo/wmi-capdata01.c   | 302 ----------
+>  drivers/platform/x86/lenovo/wmi-capdata01.h   |  25 -
+>  drivers/platform/x86/lenovo/wmi-other.c       | 422 +++++++++++++-
+>  8 files changed, 1028 insertions(+), 351 deletions(-)
+>  create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.c
+>  create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.h
+>  delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.c
+>  delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.h
+>
+>
+> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+> --
+> 2.51.0
+>
 
-Applied.
+The series' intention looks good overall. The composable methods for
+additional capdata interfaces is a welcome change. I have a few
+comments I'll add for a couple of the patches. My apologies for the
+slow review timeline, I've been on travel and wanted to test the
+changes before submitting a review.
+
+For testing I'm using my Legion Go 2. It apparently doesn't have the
+FAN_TEST_DATA GUID, and the hwmon interface errors on all inputs
+despite being visible. I know for the Legion Go series they use a fan
+table with 10 auto_set points in the Other Method interface tied to
+the platform profile, but the documentation I have says the methods
+you're adding here should be available on all models, so that is a bit
+strange.
+
+dmesg output:
+[    3.995549] lenovo_wmi_cd 362A3AFE-3D96-4665-8530-96DAD5BB300E-13:
+registered LENOVO_CAPABILITY_DATA_00 with 33 items
+[    4.000266] lenovo_wmi_cd 7A8F5407-CB67-4D6E-B547-39B3BE018154-9:
+registered LENOVO_CAPABILITY_DATA_01 with 80 items
+[    4.005603] lenovo_wmi_other
+DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: bound
+362A3AFE-3D96-4665-8530-96DAD5BB300E-13 (ops lwmi_cd_component_ops
+[lenovo_wmi_capdata])
+[    4.005611] lenovo_wmi_other
+DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: bound
+7A8F5407-CB67-4D6E-B547-39B3BE018154-9 (ops lwmi_cd_component_ops
+[lenovo_wmi_capdata])
+[    4.005614] lenovo_wmi_other
+DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: fan capdata unavailable
+
+Testing results:
+(deck@lego2 hwmon5)$ ls
+device  fan1_enable  fan1_input  fan1_target  name  power  subsystem  ueven=
+t
+(deck@lego2 hwmon5)$ cat fan1_enable
+cat: fan1_enable: No data available
+(1)(deck@lego2 hwmon5)$ echo 1 | sudo tee fan1_enable
+[sudo] password for deck:
+1
+tee: fan1_enable: Input/output error
+(1)(deck@lego2 hwmon5)$ echo 0 | sudo tee fan1_enable
+0
+tee: fan1_enable: Input/output error
+(1)(deck@lego2 hwmon5)$ echo 3000 | sudo tee fan1_target
+3000
+tee: fan1_target: Input/output error
+(1)(deck@lego2 hwmon5)$ cat fan1_input
+cat: fan1_input: No such device or address
 
 Thanks,
-Guenter
+Derek
