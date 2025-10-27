@@ -1,114 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF472222AA;
-	Mon, 27 Oct 2025 19:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CFFF2DFA5B;
+	Mon, 27 Oct 2025 20:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761592467; cv=none; b=Xbqdu9U+u2B2vCrxWdxJYPTWcFfHp+baN2jkJE6z0G+p+Uo8K0cmyBkLUtU3NXljjD3uzh939XQm5QQGzoNIHDuPs7xR6arhI3D4ViTN8Kw3BHccTpfSGI8a/R+Qg494TmpQqcJuPJRCjYYmRgs7uX7tKSrnWv4aMKH9+mFCt/o=
+	t=1761595979; cv=none; b=HNNr+cW4JnXmja7wWPM3njBRPiPjEDhfr82lZN3eWqpW5PIgZ6S1yXvEjREskVAHwjn/uWMlM+Wc1hEQbPfK8nzS8250/b4ZAcPfRACeW8zeSzmZc1E1iCVXlBCd2/aLUcy+kura9o4gdCYRBUzzpjZuCr5FFAas+sVJDksD1t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761592467; c=relaxed/simple;
-	bh=+mFuXCj6hoQC6YKCQOaY4omuj6mxwalKrIiJMI6Qj3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mStJvJSp2q+LbqjjkkHcPYg1jzgBBIWmt8ZT2PjVCHOe9UfdPhAqCDi+nRRyvcNS4YaP6ZXv5HJq6SShP7o528s3tu6Zz7QPQ+jJOO79iIgWNZl5SVKHD89aZ00/okB6uwj2LIjeJitW/zCVXZJ4GEOOMRraeNR68jiY1cKyGEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PTiTG9Fh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761595979; c=relaxed/simple;
+	bh=Aw+BybLNrwuSpQ7MDJf/UWP1PG7FAZGChvgePU/sTOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P5DTujSMYNuqAFSSM/JA0ZF66L+lY2PBw21oba7TDzpRm2g4MKRxeXpN+WE1QXLfTGHusjBK0ShXEmKUcYRfdg50arx4T/0DksD2kKI2+Pj7PCeZPv5QraNRqqiF+MmAUmc782cBv/wuSe7VNb6yaj8iXxq7SHoVdIE4x/PRV74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=MqNaE0TN; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PTiTG9Fh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EF3C4CEF1;
-	Mon, 27 Oct 2025 19:14:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761592467;
-	bh=+mFuXCj6hoQC6YKCQOaY4omuj6mxwalKrIiJMI6Qj3M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PTiTG9Fhyi3L5YSY/ADc8MNw+9LqZhDqUp9Ip5W8h2u2J3kbEXrpLCpplNkRZKFzT
-	 kB3I0iqZDqb4IFbqyPcB9Y/AhtrjU4+MGUGqtPv9cV7UNePIexiPn0xwRnSdRORGLx
-	 6Tcqn58ANHquf1ovMzWQCuVFw8FF2ut1OuMfGs0KTEYqrwPpIIRU0uvk92IpIe+bia
-	 uCuR8wUy445syP7xicFsL99k7p44Gc8Lm+hb60nn+meC6n5Efixml9sOr/e8sIRN75
-	 FbVseMcOB6Yw4trRv7TlmbQR6BtjI7vtq3AqnNrhfFREKkOvGARiOqv6sJEIjIdPLm
-	 DxHNlrazY/08Q==
-Date: Mon, 27 Oct 2025 14:14:25 -0500
-From: Rob Herring <robh@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Igor Reznichenko <igor@reznichenko.net>, conor+dt@kernel.org,
-	corbet@lwn.net, david.hunter.linux@gmail.com,
-	devicetree@vger.kernel.org, krzk+dt@kernel.org,
-	linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641
- power monitor
-Message-ID: <20251027191425.GA1403533-robh@kernel.org>
-References: <408c1698-a8ad-4e16-8def-352c2c265f5a@kernel.org>
- <20251026184641.631641-1-igor@reznichenko.net>
- <a45ad6b8-b4d5-4e0c-8f1a-3641dddb240d@kernel.org>
- <e51c3dfa-406b-4dfa-bbb5-c31d1a2e0007@roeck-us.net>
- <112db7fd-3c0e-4c56-a553-5aca12965bdf@kernel.org>
- <0dfcfcde-d207-44af-ae7f-d90d623bac02@roeck-us.net>
- <ea00a07b-d0d6-49a2-a9d6-ef6c1ecf57dd@kernel.org>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="MqNaE0TN"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=l2PjZvXIFPMAjJ5YwND+QOEeX0npuRmwWMZdLM/srTU=; b=MqNaE0TN6zVuqXY3csSAobBvxW
+	laVLaisOBusHIbeCbzrA17uvH+FqF70LpfvTVWMHpBEoxp0CN52E3kNTisbKoVf3n24d7ADUX5Zvl
+	gGbLcBrwKUHjQ3qp8Z9f1xhRlfQgPfQtz+m6OwQb65i57E6xkOcOp+/rGSNzDYg56GVuSHY0c1mX2
+	l3ERuDzPK/+SjKpyPILpTCPfydVMH7rWpDFB1Yk5GaUqAGB3pui+iMbKtflCyJ6f+2oSptOWCn5eH
+	9GgfZDbhLaNHU51Gp27XH3wG82xsKw21FDOrVlWFayJ/QBMCZa0DvSDeMTILj5Ui0P1dA5dO64ek7
+	79Ab1HXg==;
+Date: Mon, 27 Oct 2025 21:12:43 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+ jdelvare@suse.com, lgirdwood@gmail.com, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Alistair Francis <alistair@alistair23.me>,
+ "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH RFC 1/2] hwmon: (sy7636a) fix races during probe of mfd
+ subdevices
+Message-ID: <20251027211243.0bc3d769@kemnade.info>
+In-Reply-To: <20250927193945.787eb1a5@jic23-huawei>
+References: <20250920114311.291450-1-andreas@kemnade.info>
+	<20250920114311.291450-2-andreas@kemnade.info>
+	<79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
+	<20250920233307.0c425863@kemnade.info>
+	<473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
+	<20250924090023.282ae450@kemnade.info>
+	<b68d40d9-6ea9-49a9-8a2e-8b899f33340d@roeck-us.net>
+	<20250924195358.16bbd90c@kemnade.info>
+	<e6c8f022-ebfc-459c-806b-f75618f65916@roeck-us.net>
+	<20250927193945.787eb1a5@jic23-huawei>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea00a07b-d0d6-49a2-a9d6-ef6c1ecf57dd@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 27, 2025 at 07:01:47PM +0100, Krzysztof Kozlowski wrote:
-> On 27/10/2025 17:53, Guenter Roeck wrote:
-> > On 10/27/25 01:40, Krzysztof Kozlowski wrote:
-> >> On 26/10/2025 20:58, Guenter Roeck wrote:
-> >>>>>>> +  reg:
-> >>>>>>> +    maxItems: 1
-> >>>>>>> +
-> >>>>>>> +  shunt-resistor-micro-ohms:
-> >>>>>>> +    description: Shunt resistor value in micro-ohms. Since device has internal
-> >>>>>>> +      16-bit RSHUNT register with 10 uOhm LSB, the maximum value is capped at
-> >>>>>>> +      655.35 mOhm.
-> >>>>>>> +    minimum: 100
-> >>>>>>> +    default: 1000
-> >>>>>>> +    maximum: 655350
-> >>>>>>> +
-> >>>>>>> +  st,alert-polarity-active-high:
-> >>>>>>
-> >>>>>> Isn't this just interrupt? You need proper interrupts property and then
-> >>>>>> its flag define the type of interrupt.
-> >>>>>
-> >>>>> This controls a bit written into device register.
-> >>>>> I omitted interrupt property after looking at existing power monitor bindings,
-> >>>>> especially hwmon/ti,ina2xx.yaml. INA226 has very similar bit controlling alert
-> >>>>> pin polarity and binding doesn't define alert pin as interrupt. Overall, I didn't
-> >>>>> find many power monitor bindings defining alert pins as interrupts.
-> >>>>
-> >>>>
-> >>>> On INA2xx that's SMBUS Alert. Is this the case here as well?
-> >>>>
-> >>>
-> >>> It could be wired to SMBus alert, or it could be wired to a CPU interrupt pin.
-> >>
-> >> So please explain me why CPU interrupt pin, which in every really every
-> >> device called "interrupts", would not be "interrupts" here? How CPU can
-> >> even guess the number of the interrupt in such case, without
-> >> "interrupts" property?
-> >>
+On Sat, 27 Sep 2025 19:39:45 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
+
+> On Wed, 24 Sep 2025 12:16:14 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> > On 9/24/25 10:53, Andreas Kemnade wrote:  
+> > > On Wed, 24 Sep 2025 00:17:48 -0700
+> > > Guenter Roeck <linux@roeck-us.net> wrote:
+> > >     
+> > >> On 9/24/25 00:00, Andreas Kemnade wrote:    
+> > >>> On Sat, 20 Sep 2025 23:18:59 +0100
+> > >>> Mark Brown <broonie@kernel.org> wrote:
+> > >>>        
+> > >>>> On Sat, Sep 20, 2025 at 11:33:07PM +0200, Andreas Kemnade wrote:
+> > >>>>       
+> > >>>>> Just for learning, yes, it is an abuse of the _optional for non-optional
+> > >>>>> things, so a dirty hack which should not go in, therefore RFC. But what
+> > >>>>> happens more than having the hwmon device endlessly deferred at worst?    
+> > >>>>
+> > >>>> There's also the fact that this API is so frequently abused for bad and
+> > >>>> broken reasons that I regularly audit users and try to fix them, I'd
+> > >>>> rather not see any new users that don't have a really strong reason to
+> > >>>> use it.
+> > >>>>       
+> > >>>>> The wanted regulator is the one defined in sy7636a-regulator.c. So it
+> > >>>>> is all an issue internal to the sy7636a.    
+> > >>>>       
+> > >>>>> Both subdevices are instantiated via drivers/simple-mfd-i2c.c.
+> > >>>>> I see several other solutions:
+> > >>>>> a) call device_is_bound() on every other children of dev->parent, if not
+> > >>>>> bound defer.
+> > >>>>> b) do not care about the regulator api at all, just check whether
+> > >>>>>      the corresponding bit is set before reading temperature, return
+> > >>>>>      -ENODATA if not, some mutex is probably needed.
+> > >>>>> c) do not care about the regulator api at all, just set the
+> > >>>>>      corresponding bit (together with some mutex locking and counting).    
+> > >>>>
+> > >>>> I assume this is using the regulator API because someone might use an
+> > >>>> external regulator in a system design for some reason (better quality,
+> > >>>> power efficiency or a shared reference between multiple devices I
+> > >>>> guess?), or because the supply might also be used by external devices?
+> > >>>>       
+> > >>>>> d) copy the of_node pointer from the parent, add a regulator phandle property
+> > >>>>>      to the node pointing to the regulator in the node itself.
+> > >>>>>      That sounds like your idea but is against the current dt binding for
+> > >>>>>      this device and afaik it is uncommon to have mfd-internal things wired
+> > >>>>>      up this way
+> > >>>>>
+> > >>>>> e) something clean, simple I miss    
+> > >>>>
+> > >>>> The idea is that the relationship between the devices should be
+> > >>>> registered before the devices, that's how the regulator knows to defer.
+> > >>>> We used to have an API for doing this for board files which might fit
+> > >>>> here, but it got removed since nobody wants board files any more.  If
+> > >>>> you're allocating the devices dynamically that's annoying to implement
+> > >>>> though...    
+> > >>>
+> > >>> looking a bit around:
+> > >>> max5970-regulator.c has hwmon integrated and no extra device. That would
+> > >>> simplify things. Although it does not report temperature. Some
+> > >>> touchscreens have temperature via hwmon, some others have temperature
+> > >>> via iio, directly in one device without mfd. Maybe that is also
+> > >>> the better way here?
+> > >>>        
+> > >>
+> > >> Touchscreens reporting temperature via iio is in general the wrong thing to do.
+> > >> Touchscreens report the temperature for monitoring reasons, after all.
+> > >> But then, sure, if you insist. I am getting tired of arguing.
+> > >>    
+> > > I apparently did not make clear what my question refers to. It was more about separate
+> > > hwmon device + mfd vs. integrating everything into the regulator driver.
+> > >     
 > > 
-> > I thought we were discussing the need for the st,alert-polarity-active-high
-> > property, sorry.
+> > What I keep failing to understand is why people keep avoiding the potential of
+> > implementing auxiliary device drivers, since that would be the perfect solution
+> > and match the intended use case for auxiliary devices.
+> >   
+> > > But since you brought up the topic hwmon vs. iio for temperature. I do not have
+> > > a strong opinion here as long as I can somehow live with it. Nothing I want to
+> > > fight for. One sensor I use for measuring room temperature is hwmon, another
+> > > one is iio. So it is all not that consistent.
+> > >     
+> > 
+> > That doesn't mean what exists is consistent or even makes sense. Some driver support
+> > for chips intended for reporting the environment or chip temperature are pushed into iio.  
 > 
+> There might be some that have slipped through but when it's monitoring specific chip
+> as opposed to part of of a SoC ADC where some channels are for monitoring and others
+> very much not (e.g. the touchscreen ADC channels), I do direct people to provide
+> reasons and +CC hwmon. There are a few odd corner cases where we had a driver for
+> a mems device or similar that doesn't fit in hwmon come along and there is a
+> variant of that silicon that only has the temp part enabled.
 > 
-> Yes, we kind of do, I am just trying to understand what is expressed
-> here. If this is a CPU interrupt, its flags should mark the proper
-> signal level, including inverter.
+> Without specific part numbers I don't know why it happened here.
 > 
-> If this is something else (or both), then this property might make
-> sense, I just don't know what is this.
+HIH6130 (humidity + temperature via hwmon) vs bme280
+(humidity + temperature + pressure via iio).
 
-If the device's polarity is programmable and there's possibly an 
-inverter, you can't express both with just flags. In that case, flags 
-should be the polarity after the inverter since flags are defined by the 
-interrupt provider. So we'd need something to define the device side. 
-Perhaps wait until someone actually has h/w with an inverter needing 
-this.
+So maybe the very basic thing: What does "monitor" mean in this context?
+Checking the state of the hardware (what temperature) to take
+safety/emergency measures or to tune things to work optimally at the given
+conditions? 
 
-Rob
+But when monitoring is about the health of the system... well in
+a drone e.g. probably everything which can be iio can be considered part of the
+system health and like the temperature, things can be controlled by some actors.
+
+Well as long as I do not need anything specific to one or the other api, I can
+live with things. I am a bit curious about the background.
+
+Regards,
+Andreas
+
