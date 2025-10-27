@@ -1,230 +1,126 @@
-Received: from relay13.grserver.gr (relay13.grserver.gr [178.156.171.147])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699C02F6911
-	for <linux-hwmon@vger.kernel.org>; Sun, 26 Oct 2025 23:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.156.171.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC9418C02E;
+	Mon, 27 Oct 2025 01:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761520657; cv=none; b=SJa5wz8OCwR63fQqCT2VAJ4NJwBwK18f2EdHGp+G+dIaarOqfNwwsyK47Ves0tTVcKw2srKGSabgrlA2qvh1smw7KCidH4frGE7GxaFIkEVxdMk6mzdYAH7pkudmm9Kjd9DV6Cig7xJakGHsvqi8q7bfmx2tvc4jltU4NOsJ80k=
+	t=1761529826; cv=none; b=kuP22l7rSYTek7b3rcovEYjQNtlD53apUojadl4r4UyC01Gg5dCUMB47Pn6GHwNq3xirgID/EJw+iXuYPFzhit8VzdF5tvgfO4LhsNwfhnSoXd80IIzEwbSH6Fl5Lg5YsrK1PpUV68NkHBTc6WRukPH+wqDEeoAwffuhK3X1BzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761520657; c=relaxed/simple;
-	bh=0Eblrr0rQZHjmoM8FhZsrjb4gQPrP3t6Hlax/MDvvM8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VIxT61HOG2jlj6hs2JqPz/vvcj1fcxafy8yfi1EuUZCgSyNN6cZBc2cW1COUxvooUxjsYUSlnsLaSpbUtYFht3JIS7GsCB7BOMw9hebcTAcp95Ok1mgxy9YNuEj1Ix7deDy2LfV/7iXRBhsPHFww8B4w3rgxQrrI9INqEhEgRMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=akD/fzrI; arc=none smtp.client-ip=178.156.171.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1761529826; c=relaxed/simple;
+	bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQAtezO5/4R5PaFcURhdb+93yXLU+udan6DUbahneHDgX/tNmJex+Mke+1RBYEhRPCdTQtpFYVYGW3k9xfSjG6MMT3IG2qPcZH8u8Y5hYyWMc4lpOmj2P73Rc39u6BD9t3mIJRCkwzeaPMTfrHZTzOfKeXirCwGEodO4oyF1bIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFY3HsTq; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="akD/fzrI"
-Received: from relay13 (localhost [127.0.0.1])
-	by relay13.grserver.gr (Proxmox) with ESMTP id 49CBE5E538
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Oct 2025 01:17:32 +0200 (EET)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay13.grserver.gr (Proxmox) with ESMTPS id 19A205E4FC
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Oct 2025 01:17:31 +0200 (EET)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 02F98201878
-	for <linux-hwmon@vger.kernel.org>; Mon, 27 Oct 2025 01:17:29 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1761520650;
-	bh=NLLhv4W6vg+uqkKQKr1d0rnjNBVPg3Q90Yj6Z1QOohs=;
-	h=Received:From:Subject:To;
-	b=akD/fzrIwHx9kPNiT9hJy5xBR//ul2C4Iy9J6vYk4rdSgyZP0DwVueld9ehj75j4j
-	 ZOYqDwrphAt7d0PtFg4Ln54EW8jBSLQVgxqTXnFH+WBlYUNZjG+TB54eDTG3C31p7+
-	 QAG3md9MYPtWBKhV6PeGIkGT3wBYjyI9mR+hlWWDFRQTAFsfOkHtUyDRxt2UTN5bgF
-	 o61b0IEx3LIRe/st4VxxWPolJEzb9p+22icVgYwlRdw/trlq16yBc86FsrQMqQeEgz
-	 +ZteG9prbvzLI9GQCQEj5MKn+UAuUn8z8oKtzpVW1alCTGI5wIpDVWqcfyySwGQ19o
-	 4I4xIpy5HO7aA==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.208.174) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f174.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f174.google.com with SMTP id
- 38308e7fff4ca-378cfbf83f2so44289571fa.1
-        for <linux-hwmon@vger.kernel.org>;
- Sun, 26 Oct 2025 16:17:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUvYvA2atdrqM9vRaJpWSEKhpQeOqZTLWACmHGnqpXWrPoTwRi9UPNPuBIW4hPMcwr4MIAudq5K7y9QTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIUtrMpaRmoTyRQxQYwewzBIsoEtXRky4zvxksn6q8dMAMjmd5
-	XrtXeQMY/efVG4RQLyLam6XMZ3MKsF1bRCtu7h3o8miNtBzKa3aSjRi8B2tLaqzDLBhJ4Lve+cF
-	gi0WDS8i03KuiIiaZhzmXaLFsQMuXv4w=
-X-Google-Smtp-Source: 
- AGHT+IF+hOy1JUlRDSLwAnFSRjjFUusa/46QRrgNSniA7IHw4k4MPNiKsp/8aOC45osMCehRlShRPvXlBfB66NWzQYw=
-X-Received: by 2002:a05:651c:438d:20b0:378:d69f:af51 with SMTP id
- 38308e7fff4ca-378d69fb29fmr30006271fa.23.1761520649446; Sun, 26 Oct 2025
- 16:17:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFY3HsTq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761529825; x=1793065825;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T3pkaI/GJuOsGFoVg5/R4SNriMbvV6bNB454qQaWZQ8=;
+  b=SFY3HsTqY2Ry2NQd3zO0yKdoJsln+nTLaiUb4zzF60W8D3fRq3fTXODw
+   vIBdycM9zJwvlhYvqOcGxcNv44Wqhmf9fou4m9uCosnAOkm6KckOTJUSi
+   nkN927iyFhYV3TRCynZEFAVQPkqrYSO/6TtlB7mDEjtvQ1U9lSgvnIdzd
+   XwnRRWL2OjwRSPQ87xHjhLVEbaRdYK45rUr66pRQNTdKsHayxukAQ/5wc
+   dIM67bUNf8kclm4K6Kwww5CDKvMH3gHlYXHgnPehlNFFU8HvWh+phtlbm
+   QuCapYO8U12dwTIYM86QRSxqOuwZLqOC3cCInr5Mx/LWbufk48meZkVPf
+   w==;
+X-CSE-ConnectionGUID: 6YWLrCLOQ/Gu/IAQzfBJ+Q==
+X-CSE-MsgGUID: UMt8ChPkQUa81pml1bmMLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="75050337"
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="75050337"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2025 18:50:24 -0700
+X-CSE-ConnectionGUID: RqD3PVgcSpO3hdFc8HdBsw==
+X-CSE-MsgGUID: bAZX7S5kQLGkCNKy4yStdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,257,1754982000"; 
+   d="scan'208";a="188967609"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2025 18:50:09 -0700
+Date: Mon, 27 Oct 2025 09:36:28 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Georgi Djakov <djakov@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Joerg Roedel <joro@8bytes.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
+Message-ID: <aP7MnJ8mIlZhT//S@yilunxu-OptiPlex-7050>
+References: <20251023143957.2899600-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015084414.1391595-1-lkml@antheas.dev>
- <20251015084414.1391595-7-lkml@antheas.dev>
- <63f0221d-4436-4d1e-a933-8b12f392cac6@gmx.de>
-In-Reply-To: <63f0221d-4436-4d1e-a933-8b12f392cac6@gmx.de>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 27 Oct 2025 00:17:18 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwHsFEU1nZNe-7HEv86Oi8VTX=qHO-Tz76uRJVeFTUDv5g@mail.gmail.com>
-X-Gm-Features: AWmQ_bkT1BFV1BoAROk7zo1d9f-a5mQkYakihyu3LLTsXKjAjtlTIYIhG0371kA
-Message-ID: 
- <CAGwozwHsFEU1nZNe-7HEv86Oi8VTX=qHO-Tz76uRJVeFTUDv5g@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] platform/x86: ayaneo-ec: Add suspend hook
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <176152065032.2014696.17020597072739432952@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
 
-On Sun, 26 Oct 2025 at 23:50, Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 15.10.25 um 10:44 schrieb Antheas Kapenekakis:
->
-> > The Ayaneo EC resets after hibernation, losing the charge control state.
-> > Add a small PM hook to restore this state on hibernation resume.
-> >
-> > The fan speed is also lost during hibernation, but since hibernation
-> > failures are common with this class of devices, setting a low fan speed
-> > when the userspace program controlling the fan will potentially not
-> > take over could cause the device to overheat, so it is not restored.
->
-> I am still not happy with potentially breaking fancontrol on this device.
-> Most users expect fancontrol to continue working after hibernation, so not
-> restoring the fan speed configuration seems risky to me. Would it be enough
-> to warn users about his inside the documentation?
+On Thu, Oct 23, 2025 at 09:37:56AM -0500, Rob Herring (Arm) wrote:
+> Generally at most 1 blank line is the standard style for DT schema
+> files. Remove the few cases with more than 1 so that the yamllint check
+> for this can be enabled.
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 
-This device features two modes of operation: a factory fan curve
-managed by the EC and a fixed speed set via override of the EC.
+[...]
 
-The factory curve is tuned by the manufacturer to result in safe
-operation in all conditions by monitoring the CPU temperature and is
-not adjustable.
+>  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
 
-The fixed speed, on its own when set manually, is not use-able,
-because this device has a fluctuating temperature based on workload.
-So to meet the varying conditions, its speed would either have to be
-set too high, leading to excess noise, or too low, potentially
-overheating. Therefore, users of this interface control it via a
-userspace program, e.g., hhd, coolercontrol, which allows creating a
-custom fan curve based on measurements of temperature sensors.
-
-When entering hibernation, the userspace program that controls the fan
-speed is frozen, so the fan remains at its previous speed regardless
-of temperature readings and there are no safety checks.
-
-When resuming from hibernation, the EC takes over and monitors the
-temperature, so it is safe until the userspace program is thawed. If
-we introduce a resume hook, we take over from the EC before the
-program is ready, introducing a gap where the device can potentially
-overheat. If anything, the freeze hook should remove the fan speed
-override instead, because suspend-then-hibernate is more of a
-liability for overheating if hibernation hangs.
-
-Other devices feature adjustable EC fan curves (e.g., Lenovo, Asus,
-AYN, MSI). Since the EC monitors the temperature there, it is fine to
-restore the fan curve. Speaking of, I am having quite a few issues
-with MSI Claws, so that series is a bit on the back burner, so I plan
-to push these series first.
-
-I will try to tend to this series in the next days. I wanted to push
-the Asus stuff first though.
-
-
-Antheas
-
-> >
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > ---
-> >   drivers/platform/x86/ayaneo-ec.c | 42 ++++++++++++++++++++++++++++++++
-> >   1 file changed, 42 insertions(+)
-> >
-> > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-> > index 73e9dd39c703..8529f6f8dc69 100644
-> > --- a/drivers/platform/x86/ayaneo-ec.c
-> > +++ b/drivers/platform/x86/ayaneo-ec.c
-> > @@ -37,6 +37,8 @@
-> >   #define AYANEO_MODULE_LEFT  BIT(0)
-> >   #define AYANEO_MODULE_RIGHT BIT(1)
-> >
-> > +#define AYANEO_CACHE_LEN     1
-> > +
-> >   struct ayaneo_ec_quirk {
-> >       bool has_fan_control;
-> >       bool has_charge_control;
-> > @@ -47,6 +49,8 @@ struct ayaneo_ec_platform_data {
-> >       struct platform_device *pdev;
-> >       struct ayaneo_ec_quirk *quirks;
-> >       struct acpi_battery_hook battery_hook;
-> > +
-> > +     u8 cache[AYANEO_CACHE_LEN];
-> >   };
-> >
-> >   static const struct ayaneo_ec_quirk quirk_fan = {
-> > @@ -464,10 +468,48 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
-> >       return 0;
-> >   }
-> >
-> > +static int ayaneo_freeze(struct device *dev)
-> > +{
-> > +     struct platform_device *pdev = to_platform_device(dev);
-> > +     struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
-> > +     int ret, i = 0;
-> > +
-> > +     if (data->quirks->has_charge_control) {
-> > +             ret = ec_read(AYANEO_CHARGE_REG, &data->cache[i]);
-> > +             if (ret)
-> > +                     return ret;
-> > +             i++;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int ayaneo_thaw(struct device *dev)
-> > +{
-> > +     struct platform_device *pdev = to_platform_device(dev);
-> > +     struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
-> > +     int ret, i = 0;
-> > +
-> > +     if (data->quirks->has_charge_control) {
-> > +             ret = ec_write(AYANEO_CHARGE_REG, data->cache[i]);
-> > +             if (ret)
-> > +                     return ret;
-> > +             i++;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct dev_pm_ops ayaneo_pm_ops = {
-> > +     .freeze = ayaneo_freeze,
-> > +     .thaw = ayaneo_thaw,
-> > +};
-> > +
-> >   static struct platform_driver ayaneo_platform_driver = {
-> >       .driver = {
-> >               .name = "ayaneo-ec",
-> >               .dev_groups = ayaneo_ec_groups,
-> > +             .pm = &ayaneo_pm_ops,
->
-> Please use pm_sleep_ptr() here.
->
-> Thanks,
-> Armin Wolf
->
-> >       },
-> >       .probe = ayaneo_ec_probe,
-> >   };
->
-
+Acked-by: Xu Yilun <yilun.xu@intel.com>
