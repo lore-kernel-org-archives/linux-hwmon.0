@@ -1,120 +1,68 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1D22E3B08
-	for <linux-hwmon@vger.kernel.org>; Wed, 29 Oct 2025 22:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6188723F42D;
+	Thu, 30 Oct 2025 04:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761775414; cv=none; b=YKtYeuqIZywSzu7qJ93+idpFzFnolkapZslH/EQ91NkGBPNbQiSiJZ8NAeAdEBtfBkcFxOg/IQjSKG0WGWTzZEwFZlPqwERGuPWZEEn3JkG7UkbFN9ssZcuPpmA6R+0YztNl+8WPu87y64oDeJT3AFLZoPmReQvs+e4KHG5SvK0=
+	t=1761797608; cv=none; b=uM76EXOmG/pJODFmWZVP4IqQc5ZMOnspcR++qZAp2fxEIRPAjthLE/N8qaU2GvaFHrAdD/94Kd7hCvGXyRsf/+L0kniAxcm/ht7remc2RB113HmdaNxss0bhMsZJpGBt1K71VKI/ZhRAeV4miLF6mcBfSV8R0ToNx2BQbdRMwi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761775414; c=relaxed/simple;
-	bh=Rpx+i+g4UDOw+uheC336cz/8fzW0yUsW3KtUgY9A9/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5qIHmcbINTDQN9xsrzO23ue5ljojUm95iK0+JwHcEixef5M/E26o0e2oh/7rE55HEuuibA/A/8d5tLBRm4UqW3Jdh1kDJh8eDpOUX77jSV++IVxPoWxuwE0OcBoUmJQ5S+E1b5T+X63ebfpPldXoBZj9P+F0oSM6qVi8P7O0ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWxji16n; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1761797608; c=relaxed/simple;
+	bh=cJeYb9u6VkHP5W7lpdpCnObrTqkT19FaCQNUI3AOvxM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CdQ1es/FqRiHVXUny6V4ZZBXRvEgnJO+FJ/yw8MxdHD5XHJJhdi6mExT97D5FZEr5/vw2vuHvmhedLZzfc8pHuQqy0KNDaZg16DO3stTTLevTUoXr9H5NPuTeMD6gTGlPH4YSCNmxfJsxfnYHLrj/F1XDvBLbtGfJ2PSe5LV5pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=mbQNOEcM; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWxji16n"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-292fd52d527so3272365ad.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Oct 2025 15:03:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="mbQNOEcM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761775411; x=1762380211; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4Nblfgm5XoVGA2pwggUTGBEWVQZIZxWS8tzQ3rNya1k=;
-        b=BWxji16nJLKjInABvrLXLKUmUE3XuS1E0BNaJ5bmjeGIyBnxSjLDc6MQoRz+9Z+YDX
-         g7pZhhRL+s/VBub26bsKS4eUUb595+susT3Rj8u6paScAqqC6BTvFewfsnh6lMfnivU4
-         +I3b0ql29WFTh/uwApl9Oh/nG9FLsdvHf0mlbyeGfmb9rla+c6zUXV/556oAyKQ4rqte
-         FBfE1Tu1Km3MzpBXnzy4vvaaOivAChYY+/BJxHd8iAWxW0Vkt2PnLqf4pIEG0WHDIq5X
-         zyuFON8aen8D+jrRm/Rxd2SZuSRDH89HRIRSY3Gxq8NvU1prHYzR0Fr7EM9Aewa/LDe+
-         QieQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761775411; x=1762380211;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Nblfgm5XoVGA2pwggUTGBEWVQZIZxWS8tzQ3rNya1k=;
-        b=HoQs4cCv6jpUmPP2nYtoF9cnAyLKfL4Q8dVubwJIVbWd7se7dyOuh32WGlZZbjnP8r
-         te888E5eCp7FSG/txNqTQuzyw1TzYWcWtsoeFYqQ1WczipJ9aAY910fRnDUV9Wsgc4hT
-         1kMmOc0no0EOQ7gjhCyX+QRsbwd8vKr4qCJBQQ9pTlTCM6W4kqDFjg4xSXyHHcxWkgEt
-         FofTHN88V9jmsTw2Mr/j7Nb/i1uc3DO2TW1+U9Xtry43sB5xzfdw1+LaDbeuBJ1M1IfV
-         QK3VnGzNKvGDs8LOt9Pjml/1GX2pH1xH5P7ISnOk/pgJOaEuhV3f1XBEP2mvy7Xsg68i
-         QwcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtHmRAxGVYfs9sjjYisowowMPiB8qtNNn80uTFf8JoDwYAo7oTsqOIHJaJC4tlXRjtjIrUg901+7VCCQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc7/LLpGKWNO1H78Y/OSFqJUQ8C2gAL63E3o6nr8jr/D6SyBuV
-	+X1RXxi7d9xw2LTa3Ki4batqIrgoqRggQG9kz9qLczfk3ZnOaJWfNOBD
-X-Gm-Gg: ASbGncvNAg/0KZHMYHEdn3n3D3/+GU9xTlxqW1sezrsH8CIoOGXGqhPo/OEPs67qYqg
-	rHhBN57ySL+IZv7CL8WxEb7RCj5NO1z2ZWerjQ4d4gGYcq084+Ly5+0eQfldjdV5lZz+YhOcqb9
-	3c1ZxD4Pac3PA5Bqgbuso+8IyeaZJC4qJT7FNfcizFbDQNZLzDwb1ru+Fm5xu8gR224+2kruQxp
-	9eVJ2tSA0+fWwpend2DNkc9PP0SfFx6OSqDdVWVOjaBMR4w9HnEgRKuBcF5mWlasUcAIg9AQMuI
-	HULBMYBxDov4/fADWUeEQxSSwQH5cMrKLKBI/87YKZvtLKAncAN9jXiK069XdBcJHKoRATudMoz
-	wsOeF7qOhY6DDCGgy6HBrdbnuB0Al1wttXaMZe6fPsNNUh69w2EAoNMI9g9Ma7vwwBcucN00R1V
-	cpncAy3HJIWQxv
-X-Google-Smtp-Source: AGHT+IEwsj2J/ftTrnWWbeM7o5Z+AJ9IhB7ABxIMbByBawCiASkXvvXWBg+ahShIu+FUAW/13d84Zg==
-X-Received: by 2002:a17:903:ad0:b0:269:96db:939 with SMTP id d9443c01a7336-294def33bffmr54489445ad.58.1761775411490;
-        Wed, 29 Oct 2025 15:03:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d230basm162597355ad.46.2025.10.29.15.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 15:03:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 29 Oct 2025 15:03:29 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Marius Cristea <marius.cristea@microchip.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: temperature: add support for EMC1812
-Message-ID: <86b94f01-ff93-457e-95cc-4e87009964af@roeck-us.net>
-References: <20251029-hw_mon-emc1812-v1-0-be4fd8af016a@microchip.com>
- <20251029-hw_mon-emc1812-v1-2-be4fd8af016a@microchip.com>
+	d=codeconstruct.com.au; s=2022a; t=1761797602;
+	bh=cJeYb9u6VkHP5W7lpdpCnObrTqkT19FaCQNUI3AOvxM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=mbQNOEcMEYOr6a714d8/0UHWK2Tfp5+09uBZCVyu5LFe4X5BZhiiWRh1UOmoPlzW0
+	 OXKQMr1hdEB2PwpHTjlZ+PrZ26hfEKYeKW2pYF1HvOlCXaMT03zgsbkPa2Q6XBuUE4
+	 o+EfwnZa/zTHjgCCwwWNQFUWf2Fc2JpYSyV3XJKUD0JUWyTwsaYkJ5e+2A0qL9xnb1
+	 y9c8+Wg4soZ9ekdXzUkaJCyUkjq8n8m4nvI8jDfjdwAoEuWQeHk4BwE7K9mECvSZr7
+	 xZHjNOOSt1b3sV10tSLB2pSqZHNhEgr6h65zYc37TpK5f9l5N1q0wu+H8odWhw5+yv
+	 MDNVxrZ/P+DTQ==
+Received: from [192.168.14.220] (unknown [144.6.157.237])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D4C8A79118;
+	Thu, 30 Oct 2025 12:13:20 +0800 (AWST)
+Message-ID: <3b38dd392e06dc7d187c5bb247418bf189180a1e.camel@codeconstruct.com.au>
+Subject: Re: [PATCH 2/4] net: mctp i3c: switch to use i3c_xfer from
+ i3c_priv_xfer
+From: Matt Johnston <matt@codeconstruct.com.au>
+To: Frank Li <Frank.Li@nxp.com>, Guenter Roeck <linux@roeck-us.net>, Jeremy
+ Kerr <jk@codeconstruct.com.au>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Mark Brown
+ <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-i3c@lists.infradead.org
+Date: Thu, 30 Oct 2025 12:13:20 +0800
+In-Reply-To: <20251028-lm75-v1-2-9bf88989c49c@nxp.com>
+References: <20251028-lm75-v1-0-9bf88989c49c@nxp.com>
+	 <20251028-lm75-v1-2-9bf88989c49c@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251029-hw_mon-emc1812-v1-2-be4fd8af016a@microchip.com>
 
-On Wed, Oct 29, 2025 at 05:50:59PM +0200, Marius Cristea wrote:
-> This is the hwmon driver for Microchip EMC1812/13/14/15/33
-> Multichannel Low-Voltage Remote Diode Sensor Family.
-> 
-> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+On Tue, 2025-10-28 at 10:57 -0400, Frank Li wrote:
+> Switch to use i3c_xfer instead of i3c_priv_xfer because framework will
+> update to support HDR mode. i3c_priv_xfer is now an alias of i3c_xfer.
+>=20
+> Replace i3c_device_do_priv_xfers() with i3c_device_do_xfers(..., I3C_SDR)
+> to align with the new API.
+>=20
+> Prepare for removal of i3c_priv_xfer and i3c_device_do_priv_xfers().
 
-One more ...
-
-> +static int emc1812_parse_fw_config(struct emc1812_data *data, struct device *dev)
-> +{
-> +	unsigned int reg_nr = 0;
-> +	int ret;
-> +
-
-I added
-	if (!dev_fwnode(dev)) {
-                data->num_channels = data->chip->phys_channels;
-                data->active_ch_mask = BIT(data->num_channels) - 1;
-                return 0;
-        }
-
-to be able to load the driver and run basic unit tests.
-I expect something similar in the final driver.
-
-Also, here is the unit test result from writing negative values
-into the limit registers:
-
-temp1_crit: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-temp1_min: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-temp1_max: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-temp2_crit: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-temp2_min: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-temp2_max: Suspected underflow: [min=0, read 4294903296, written -2147483648]
-
-Thanks,
-Guenter
+Acked-by: Matt Johnston <matt@codeconstruct.com.au>
