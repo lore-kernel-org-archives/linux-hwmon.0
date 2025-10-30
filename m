@@ -1,68 +1,90 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6188723F42D;
-	Thu, 30 Oct 2025 04:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00330BB9E;
+	Thu, 30 Oct 2025 08:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761797608; cv=none; b=uM76EXOmG/pJODFmWZVP4IqQc5ZMOnspcR++qZAp2fxEIRPAjthLE/N8qaU2GvaFHrAdD/94Kd7hCvGXyRsf/+L0kniAxcm/ht7remc2RB113HmdaNxss0bhMsZJpGBt1K71VKI/ZhRAeV4miLF6mcBfSV8R0ToNx2BQbdRMwi0=
+	t=1761812594; cv=none; b=WJHTS4UAbFxXf36sND3Qx9EZ+FjlEV7bz4gk7zW4VzNXzwQEck0Qap4qePKVXrpV/inqEWuZFSKeR9N1GmK7HwYmctbjnDGuoQE08peQdzlVpxCu0XU+GrXbCuY4ua4TI9Ru3puDOpQGkhbZMVsWzpN6xhKSkdHB9UBA4OjBFZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761797608; c=relaxed/simple;
-	bh=cJeYb9u6VkHP5W7lpdpCnObrTqkT19FaCQNUI3AOvxM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CdQ1es/FqRiHVXUny6V4ZZBXRvEgnJO+FJ/yw8MxdHD5XHJJhdi6mExT97D5FZEr5/vw2vuHvmhedLZzfc8pHuQqy0KNDaZg16DO3stTTLevTUoXr9H5NPuTeMD6gTGlPH4YSCNmxfJsxfnYHLrj/F1XDvBLbtGfJ2PSe5LV5pI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=mbQNOEcM; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1761812594; c=relaxed/simple;
+	bh=cRGe7WHHw1LCeccNstuWW+P/ZSv12NIwuoWjOgarCIk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IXkbb2rKdsOTJn0jEsynMl6LPAl9yZ7b6xTT3ASwnvzWj1l9arEo/5twd/hysLnLQDY8P6aV3d9LmO0yJ1rRzDWsDY0oOuCbEpofKldx1bvKwr0v0K4wXaBDznfaa3xe73TFuvTKZumGn3SbwRnEagDrDkHEadfN0D7ZLBbFoG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7zxrP78; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="mbQNOEcM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1761797602;
-	bh=cJeYb9u6VkHP5W7lpdpCnObrTqkT19FaCQNUI3AOvxM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=mbQNOEcMEYOr6a714d8/0UHWK2Tfp5+09uBZCVyu5LFe4X5BZhiiWRh1UOmoPlzW0
-	 OXKQMr1hdEB2PwpHTjlZ+PrZ26hfEKYeKW2pYF1HvOlCXaMT03zgsbkPa2Q6XBuUE4
-	 o+EfwnZa/zTHjgCCwwWNQFUWf2Fc2JpYSyV3XJKUD0JUWyTwsaYkJ5e+2A0qL9xnb1
-	 y9c8+Wg4soZ9ekdXzUkaJCyUkjq8n8m4nvI8jDfjdwAoEuWQeHk4BwE7K9mECvSZr7
-	 xZHjNOOSt1b3sV10tSLB2pSqZHNhEgr6h65zYc37TpK5f9l5N1q0wu+H8odWhw5+yv
-	 MDNVxrZ/P+DTQ==
-Received: from [192.168.14.220] (unknown [144.6.157.237])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D4C8A79118;
-	Thu, 30 Oct 2025 12:13:20 +0800 (AWST)
-Message-ID: <3b38dd392e06dc7d187c5bb247418bf189180a1e.camel@codeconstruct.com.au>
-Subject: Re: [PATCH 2/4] net: mctp i3c: switch to use i3c_xfer from
- i3c_priv_xfer
-From: Matt Johnston <matt@codeconstruct.com.au>
-To: Frank Li <Frank.Li@nxp.com>, Guenter Roeck <linux@roeck-us.net>, Jeremy
- Kerr <jk@codeconstruct.com.au>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Mark Brown
- <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
- <dakr@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-i3c@lists.infradead.org
-Date: Thu, 30 Oct 2025 12:13:20 +0800
-In-Reply-To: <20251028-lm75-v1-2-9bf88989c49c@nxp.com>
-References: <20251028-lm75-v1-0-9bf88989c49c@nxp.com>
-	 <20251028-lm75-v1-2-9bf88989c49c@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7zxrP78"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98014C4CEF1;
+	Thu, 30 Oct 2025 08:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761812594;
+	bh=cRGe7WHHw1LCeccNstuWW+P/ZSv12NIwuoWjOgarCIk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f7zxrP78KLIn7rJa+lpFRnHDGsei5y5pkM56Ke9U5jrC2ifsXej5C5GllJs8a9tQu
+	 J/ZDekzbyKARQF/w4JRHaKsjFAzcrmPcaD/YOKGsCyUFktU/LqyBTScliEuD2P8DzS
+	 naF/jtNiTJVRaDbLahNkneYi3smJnP/bHSz02jBCCg0V6pVIm04Je5SWBfoSLTOO0k
+	 Qxhmr2+tBtjM4LqPLRSHsS8JpBizv/VMqwiqgEc05WGmgRIMO5MvDqtay/0zgkyIH7
+	 ehD3qGVX1rsaNeoBVrUGCoho3p6ATff8xItvaCzSkHRsSMgQIgwk41l+CqbUMPIuTp
+	 5S4Ok1oBSd1VQ==
+Date: Thu, 30 Oct 2025 09:23:11 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: Convert aspeed,ast2400-pwm-tacho to
+ DT schema
+Message-ID: <20251030-zealous-amiable-gorilla-b64ffc@kuoka>
+References: <20251029185448.2121857-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251029185448.2121857-1-robh@kernel.org>
 
-On Tue, 2025-10-28 at 10:57 -0400, Frank Li wrote:
-> Switch to use i3c_xfer instead of i3c_priv_xfer because framework will
-> update to support HDR mode. i3c_priv_xfer is now an alias of i3c_xfer.
->=20
-> Replace i3c_device_do_priv_xfers() with i3c_device_do_xfers(..., I3C_SDR)
-> to align with the new API.
->=20
-> Prepare for removal of i3c_priv_xfer and i3c_device_do_priv_xfers().
+On Wed, Oct 29, 2025 at 01:54:47PM -0500, Rob Herring (Arm) wrote:
+> Convert the ASpeed fan controller binding to DT schema format.
+> 
+> The '#cooling-cells' value used is 1 rather than 2. '#size-cells' is 0
+> rather 1.
+> 
+> Some users define more that 8 fan nodes where 2 fans share a PWM. The
+> driver seems to let the 2nd fan just overwrite the 1st one. That also
+> creates some addressing errors in the DT (duplicate addresses and wrong
+> unit-addresses).
+> 
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  .../hwmon/aspeed,ast2400-pwm-tacho.yaml       | 105 ++++++++++++++++++
+>  .../bindings/hwmon/aspeed-pwm-tacho.txt       |  73 ------------
+>  2 files changed, 105 insertions(+), 73 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
+> new file mode 100644
+> index 000000000000..018249f97a5d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
+> @@ -0,0 +1,105 @@
 
-Acked-by: Matt Johnston <matt@codeconstruct.com.au>
+Missing SPDX. Few other checkpatch warnings like typos. I guess you will
+see it in the Patchwork, so just writing here that it should not be
+picked up by PWM folks.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/aspeed,ast2400-pwm-tacho.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED AST2400/AST2500 PWM and Fan Tacho controller
+
+Best regards,
+Krzysztof
+
