@@ -1,90 +1,181 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E00330BB9E;
-	Thu, 30 Oct 2025 08:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFE1433A6;
+	Thu, 30 Oct 2025 14:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761812594; cv=none; b=WJHTS4UAbFxXf36sND3Qx9EZ+FjlEV7bz4gk7zW4VzNXzwQEck0Qap4qePKVXrpV/inqEWuZFSKeR9N1GmK7HwYmctbjnDGuoQE08peQdzlVpxCu0XU+GrXbCuY4ua4TI9Ru3puDOpQGkhbZMVsWzpN6xhKSkdHB9UBA4OjBFZ4=
+	t=1761834615; cv=none; b=cZBkPY/LuYcvlM7VT7tawVOjCvmH0YJRxAcz60W7ZrtsyuEV5a151Dq8wmznWkEV2yEIidxV1Jw5M1WJEJq7DhroBv0hiagoYonW9qblZZUDPrrlnBRfjMk0i/zymLoU/82C0EaOFWBtD3s+oi3iiva0EAtcaW0E2PDQea3GC5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761812594; c=relaxed/simple;
-	bh=cRGe7WHHw1LCeccNstuWW+P/ZSv12NIwuoWjOgarCIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IXkbb2rKdsOTJn0jEsynMl6LPAl9yZ7b6xTT3ASwnvzWj1l9arEo/5twd/hysLnLQDY8P6aV3d9LmO0yJ1rRzDWsDY0oOuCbEpofKldx1bvKwr0v0K4wXaBDznfaa3xe73TFuvTKZumGn3SbwRnEagDrDkHEadfN0D7ZLBbFoG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7zxrP78; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761834615; c=relaxed/simple;
+	bh=LtxAZVDWp3qPa2hvmM/6DvgAIPTSv0AZgSDBh3OhXaI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UKBV6EPFKN55yFDfYGgZnbKVsX9R1redJU55HlpkUmNvYO+NknClL5GwxuasM13hHM/cGwTltD8pasxyQ97fC153pcsDldtKKAYHNvNIcHIoq5IX9qIFQwCtTZuXheyHwJbOCQ3J2yEU+TnG/2LFEPICNia7sZGbcWYKicTpNTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKkfnCNM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7zxrP78"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98014C4CEF1;
-	Thu, 30 Oct 2025 08:23:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKkfnCNM"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A14DC4CEF1;
+	Thu, 30 Oct 2025 14:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761812594;
-	bh=cRGe7WHHw1LCeccNstuWW+P/ZSv12NIwuoWjOgarCIk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f7zxrP78KLIn7rJa+lpFRnHDGsei5y5pkM56Ke9U5jrC2ifsXej5C5GllJs8a9tQu
-	 J/ZDekzbyKARQF/w4JRHaKsjFAzcrmPcaD/YOKGsCyUFktU/LqyBTScliEuD2P8DzS
-	 naF/jtNiTJVRaDbLahNkneYi3smJnP/bHSz02jBCCg0V6pVIm04Je5SWBfoSLTOO0k
-	 Qxhmr2+tBtjM4LqPLRSHsS8JpBizv/VMqwiqgEc05WGmgRIMO5MvDqtay/0zgkyIH7
-	 ehD3qGVX1rsaNeoBVrUGCoho3p6ATff8xItvaCzSkHRsSMgQIgwk41l+CqbUMPIuTp
-	 5S4Ok1oBSd1VQ==
-Date: Thu, 30 Oct 2025 09:23:11 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Convert aspeed,ast2400-pwm-tacho to
- DT schema
-Message-ID: <20251030-zealous-amiable-gorilla-b64ffc@kuoka>
-References: <20251029185448.2121857-1-robh@kernel.org>
+	s=k20201202; t=1761834614;
+	bh=LtxAZVDWp3qPa2hvmM/6DvgAIPTSv0AZgSDBh3OhXaI=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=iKkfnCNMpOgNTipLJYjt7YksFBYH/KwJXi+mcl1cDQWxD32ybqv3ED2JevY+JHja7
+	 8t8DcwGSOVF+9wLF8edabMjJTzm33MHzF9Wi/2meUHeMxDjGmNSeTvNNAkwy8btD8X
+	 KMTuTecciQkXb36z/w03xy/zJbl+2wwzLFZlHRmqnwGkt1l7JGKYjBiKJscTjP2e1R
+	 JadvXYhta+w+RJHNe3tHvu+iySXm/dVuMt/rq5MWyqfn/jd4A6FhBqHq4HDWZ6dtWW
+	 vz/oQ2E4mP1ntCKi4nIsg5YuLKmeLemmYLolHVb9ER7+hIlnc43Li6gqRDVaDCOcL5
+	 HdnNDI7JmvZpQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 802A1CCF9E3;
+	Thu, 30 Oct 2025 14:30:14 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
+Date: Thu, 30 Oct 2025 22:30:06 +0800
+Subject: [PATCH] hwmon: (gpd-fan) initialize EC on driver load for Win 4
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251029185448.2121857-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251030-win4-v1-1-c374dcb86985@uniontech.com>
+X-B4-Tracking: v=1; b=H4sIAG12A2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDA2MD3fLMPBNds2RzS/M0c0Njy2RjJaDSgqLUtMwKsDHRsbW1AFWYAzx
+ WAAAA
+X-Change-ID: 20251030-win4-6c797f7139c3
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ niecheng1@uniontech.com, zhanjun@uniontech.com, 
+ kylon <3252255+kylon@users.noreply.github.com>, 
+ Cryolitia PukNgae <cryolitia@uniontech.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761834613; l=3221;
+ i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
+ bh=t9JHAfOJItGPrnrOdS2gWLJmFHa2xGmsXuMmQl261Mc=;
+ b=VJe5rhI5SINpl2JRyT2gfD/kTIfCcZhnjPEjVNBEvAczGJAK/pU/tvII8a51AFt+LFH0z1wcm
+ bLoGxuRsI5LB0OLOsb8G1ZQ3O7RQXL7XEZZzgzFtqera1QEDHc9FF2k
+X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
+ pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
+X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
+ auth_id=474
+X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Reply-To: cryolitia@uniontech.com
 
-On Wed, Oct 29, 2025 at 01:54:47PM -0500, Rob Herring (Arm) wrote:
-> Convert the ASpeed fan controller binding to DT schema format.
-> 
-> The '#cooling-cells' value used is 1 rather than 2. '#size-cells' is 0
-> rather 1.
-> 
-> Some users define more that 8 fan nodes where 2 fans share a PWM. The
-> driver seems to let the 2nd fan just overwrite the 1st one. That also
-> creates some addressing errors in the DT (duplicate addresses and wrong
-> unit-addresses).
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  .../hwmon/aspeed,ast2400-pwm-tacho.yaml       | 105 ++++++++++++++++++
->  .../bindings/hwmon/aspeed-pwm-tacho.txt       |  73 ------------
->  2 files changed, 105 insertions(+), 73 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
-> new file mode 100644
-> index 000000000000..018249f97a5d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
-> @@ -0,0 +1,105 @@
+From: Cryolitia PukNgae <cryolitia@uniontech.com>
 
-Missing SPDX. Few other checkpatch warnings like typos. I guess you will
-see it in the Patchwork, so just writing here that it should not be
-picked up by PWM folks.
+The original implement will re-init the EC when it reports a zero
+value, and it's a workaround for the black box buggy firmware.
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/aspeed,ast2400-pwm-tacho.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ASPEED AST2400/AST2500 PWM and Fan Tacho controller
+Now a contributer test and report that, the bug is that, the firmware
+won't initialize the EC on boot, so the EC ramains in unusable status.
+And it won't need to re-init it during runtime. The original implement
+is not perfect, any write command will be ignored until we first read
+it. Just re-init it unconditionally when the driver load could work.
+
+Fixes: 0ab88e239439 ("hwmon: add GPD devices sensor driver")
+Co-developed-by: kylon <3252255+kylon@users.noreply.github.com>
+Signed-off-by: kylon <3252255+kylon@users.noreply.github.com>
+Link: https://github.com/Cryolitia/gpd-fan-driver/pull/20
+Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+---
+ drivers/hwmon/gpd-fan.c | 52 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 25 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+index 57caae9a23eb..43ec092fc26e 100644
+--- a/drivers/hwmon/gpd-fan.c
++++ b/drivers/hwmon/gpd-fan.c
+@@ -273,31 +273,6 @@ static int gpd_generic_read_rpm(void)
+ 	return (u16)high << 8 | low;
+ }
+ 
+-static void gpd_win4_init_ec(void)
+-{
+-	u8 chip_id, chip_ver;
+-
+-	gpd_ecram_read(0x2000, &chip_id);
+-
+-	if (chip_id == 0x55) {
+-		gpd_ecram_read(0x1060, &chip_ver);
+-		gpd_ecram_write(0x1060, chip_ver | 0x80);
+-	}
+-}
+-
+-static int gpd_win4_read_rpm(void)
+-{
+-	int ret;
+-
+-	ret = gpd_generic_read_rpm();
+-
+-	if (ret == 0)
+-		// Re-init EC when speed is 0
+-		gpd_win4_init_ec();
+-
+-	return ret;
+-}
+-
+ static int gpd_wm2_read_rpm(void)
+ {
+ 	for (u16 pwm_ctr_offset = GPD_PWM_CTR_OFFSET;
+@@ -317,11 +292,10 @@ static int gpd_wm2_read_rpm(void)
+ static int gpd_read_rpm(void)
+ {
+ 	switch (gpd_driver_priv.drvdata->board) {
++	case win4_6800u:
+ 	case win_mini:
+ 	case duo:
+ 		return gpd_generic_read_rpm();
+-	case win4_6800u:
+-		return gpd_win4_read_rpm();
+ 	case win_max_2:
+ 		return gpd_wm2_read_rpm();
+ 	}
+@@ -577,6 +551,28 @@ static struct hwmon_chip_info gpd_fan_chip_info = {
+ 	.info = gpd_fan_hwmon_channel_info
+ };
+ 
++static void gpd_win4_init_ec(void)
++{
++	u8 chip_id, chip_ver;
++
++	gpd_ecram_read(0x2000, &chip_id);
++
++	if (chip_id == 0x55) {
++		gpd_ecram_read(0x1060, &chip_ver);
++		gpd_ecram_write(0x1060, chip_ver | 0x80);
++	}
++}
++
++static void gpd_init_ec(void)
++{
++	// The buggy firmware won't initialize EC properly on boot.
++	// Before its initialization, reading RPM will always return 0,
++	// and writing PWM will have no effect.
++	// Initialize it manually on driver load.
++	if (gpd_driver_priv.drvdata->board == win4_6800u)
++		gpd_win4_init_ec();
++}
++
+ static int gpd_fan_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -604,6 +600,8 @@ static int gpd_fan_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, PTR_ERR(region),
+ 				     "Failed to register hwmon device\n");
+ 
++	gpd_init_ec();
++
+ 	return 0;
+ }
+ 
+
+---
+base-commit: 65bc97a5e49ea4174ba7e89afdada3e30e6e39c0
+change-id: 20251030-win4-6c797f7139c3
 
 Best regards,
-Krzysztof
+-- 
+Cryolitia PukNgae <cryolitia@uniontech.com>
+
 
