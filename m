@@ -1,29 +1,33 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011AC2512DE;
-	Fri, 31 Oct 2025 06:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716CA2868B0;
+	Fri, 31 Oct 2025 07:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761893222; cv=none; b=uq1Zwov0nvuYmHVzV6dQ6ZP2w4DQLp7AmdWrlxh3oJYxZy5MlDJaaOZ6xCRxO/0sxAgZGhmnNjINuZoqQMdfXSEyyaGRPREBIzgHd9MTy9BZRWvttHlZSFkvkndwNSo1gyZj9xb3i0biscgdxo9PyLVoXVlKz1IV2Ru270lAIYA=
+	t=1761897472; cv=none; b=fp4R9RMnVkKLcFOiwxLmjF/Esql3CRDi7QJ+H6PPBX7hty8Wu608yotJahSmEhqLqyBed8+R6DiyonDYW2pUmuKDARGmtw9AuDNZe2fnDM/Y71gPUw5w+9fZWMs5tu0ehbYqHLayA/fqyAMAPW1dzUpyF2IkOvBruY5rPZEPJDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761893222; c=relaxed/simple;
-	bh=JZ4d4kYh8rfhRKOmG05eahnty61ao/DjaXEzL0J39VE=;
+	s=arc-20240116; t=1761897472; c=relaxed/simple;
+	bh=vQ/Dx8epVEdQRAojXTor7jEbqLmdUX/ovNoboeWfrE4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TskgaPVQJsUCUuHXplTXXLo5eukzUN6/Q7Wkl7H7QqPVPsZEkVxtSyvpZ9hLtQbI00b+JikGCQ9r5etgDgA4AVRoE3uzfS/kUMkVb5aXHKnLdOQ1mcVfG/U7REJOiDvSqXLK5YMgJ8zFJwpCYXnQOj1EYgo4xBq+LVuMpAXgCsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com; spf=none smtp.mailfrom=linux.starfivetech.com; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=linux.starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.starfivetech.com
-X-QQ-mid: esmtpgz13t1761893210tf21d82f4
-X-QQ-Originating-IP: R90kadoSj/Lu9jhXDo3EOBK+P2zoChp7ZYtBXxB6TvQ=
-Received: from [192.168.125.98] ( [113.104.140.154])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 31 Oct 2025 14:46:46 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1332421492275545379
-Message-ID: <99841AD0EE6A35D4+4a6afacb-4d1c-4727-9a75-134190350aca@linux.starfivetech.com>
-Date: Fri, 31 Oct 2025 14:46:46 +0800
+	 In-Reply-To:Content-Type; b=OV2pffhg3CB7CyXuFhfi72o87VBbvSs99z6WDffxVb/nXEufPxR/qTy2I8hlmEkFO8DxfHjXL86hikBIBw1JB8zc/v5TocJxK6FoXJDM+J3UU3jCoAbp434IgrhvRpPPyLErMvtlJFhkVpymcLgIigD49SoTOuKTc736hn5SCyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mi6c9o42; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mi6c9o42"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E39C4CEE7;
+	Fri, 31 Oct 2025 07:57:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761897472;
+	bh=vQ/Dx8epVEdQRAojXTor7jEbqLmdUX/ovNoboeWfrE4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Mi6c9o42fJV5xgu+6CdlZZD9gd/QJLQaHdbeevzlap6aJGntUv33GT4cAFx4uYMMD
+	 La6RoxP6mlTTd3/czwwbivw7KibDaDBWjPYNo6mY5YxRvrTaK+Qi+Jbhl8FjhXQfBk
+	 cwB/0NwznQKkU98M5FRLrseRD6m54beuZ13jkFm2OrOOIrCNe13PaU61r4DhbhShQ9
+	 cq4ALwWfQvZEEff4E0bt9WkaBn0w0KIkW8FNJlvd4VnzM66Iu+paKcSTuzVUkreFzX
+	 o40e0ecOwuSHx0J3Dav9TjGlcjYUr1v3eF66Ca/E7i6weYP00kfQrVf339oRG5XeUX
+	 2LoK5kFniJXuw==
+Message-ID: <35d41d46-5bc8-43af-a84d-6b118fff08e0@kernel.org>
+Date: Fri, 31 Oct 2025 08:57:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -31,234 +35,87 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: Remove extra blank lines
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Moritz Fischer <mdf@kernel.org>,
- Xu Yilun <yilun.xu@intel.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Guenter Roeck <linux@roeck-us.net>, Andi Shyti <andi.shyti@kernel.org>,
- Jonathan Cameron <jic23@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Georgi Djakov <djakov@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Joerg Roedel <joro@8bytes.org>, Jassi Brar <jassisinghbrar@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Lee Jones <lee@kernel.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- Manivannan Sadhasivam <mani@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Olivia Mackall <olivia@selenic.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20251023143957.2899600-1-robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add support for ST TSC1641
+ power monitor
+To: Igor Reznichenko <igor@reznichenko.net>, robh@kernel.org,
+ linux@roeck-us.net
+Cc: conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com,
+ devicetree@vger.kernel.org, krzk+dt@kernel.org, linux-doc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ skhan@linuxfoundation.org
+References: <85e83f3e-3509-484b-8cc8-110156d5a2ab@roeck-us.net>
+ <20251031044059.714744-1-igor@reznichenko.net>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Hal Feng <hal.feng@linux.starfivetech.com>
-In-Reply-To: <20251023143957.2899600-1-robh@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251031044059.714744-1-igor@reznichenko.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:linux.starfivetech.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: NqcI9G0mljVPHlZnLQw3xgw2kf/d9aF5s5+EcmMZEbvVRyQ1odkgRlRl
-	+jfT0Sidt0LxlobAov/UuxBi7zRZKcElztA9akkk9Jf1GOBzPvaDZtXD1xMUd81p8kJ6Hyz
-	EN4m3vx2HO1Fwx2f4zwGdxxIIr0yNkbGB9nRsdeno4MwsCzUWVRSm89jzWz4XgU20HkG+Bi
-	EPCLTEsgN0e6YwsD28Vn798fqTi1nH1xPULtv5+oRStTactxEaWhGZ2Ea5jBoUwrZPjNtCl
-	KtfL9Qpnl3gXMqJqPed9mGaRPgLTO2XV2K87xBoIqx3DA51puzSQPjSlObK+/xTi+aMlW+1
-	fDLmbrQzCBVwNaUic9Z8uTC1Bc5gtQH/TLs5kJLqlQtag514tIVBJ04QCs6pYonYaXsn6EG
-	2LkGw7y0X8Tz1HhEDDhPtVPtvJP8M+kzO5W0vWf21JiLG7CaQngncyqWLVa8A9d9txFIZA9
-	mQ/f6LwS2FZ4ICsdNKbWWMurhR3mHY9yTYmGXSyppy1nWpdPr2EO5e3E1qUiNnOYNd5d5jd
-	V8f6CYeN9xuI7DbWGhxoFhTuLoiEUL7CoMogQUNnAMO4plqO2VK0rrkAMIrU083OlyS4Onf
-	SMz/dzDKfGjsc4u1rGGYqfoxA8FZMK93gzdQnr8u4sIunrUJv98dX4cl/riclCVvACp6OtH
-	jda0HrhrC9NhVU2bZ5DXK8oo2xlp0AOtGom3D0Gyy9+hhP8aTeIapuUsEPRRj4wpv8bUJ2I
-	18qWpi3KC9XqEbK70FwErh4xBL/cMBO5VVI5Aw6D6Rk4AFHfvowV70/fTA2jml6v7I2r4t0
-	eiG3Vjo9wCe0n8sghLiMzSE1/U0XvJ2VNLkgbIBi2T2lBzPOGRIkM9glJMylFwKODsCC89V
-	aSwAkvc3R1W62fELjrfWLA3iIocfsjXatYoevXlYA+XazhCRU0XMTyH2HunXOrXP2xWqB9d
-	k9mhj/irc/bGlw7QrR84hCAHmWEp5hG8WgWM=
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-RECHKSPAM: 0
 
-On 10/23/2025 10:37 PM, Rob Herring (Arm) wrote:
-> Generally at most 1 blank line is the standard style for DT schema
-> files. Remove the few cases with more than 1 so that the yamllint check
-> for this can be enabled.
+On 31/10/2025 05:40, Igor Reznichenko wrote:
+>> On 10/28/25 08:17, Igor Reznichenko wrote:
+>>> Understood. The bit in question controls the alert pin polarity on the device side,
+>>> independent of whether the pin is used as interrupt or not. I'll drop the property
+>>> for now and revisit if there's a board that actually uses an inverter or needs to
+>>> program the bit explicitly.
+>>>
+>>
+>> This is kind of unusual. The requirement used to be that devicetree properties
+>> shall be complete. "Only if there is a known use case" is a significant policy
+>> change. Has the policy changed recently ?
+>>
+>> Thanks,
+>> Guenter
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/.yamllint                  | 2 +-
->  Documentation/devicetree/bindings/arm/psci.yaml              | 1 -
->  .../bindings/clock/allwinner,sun4i-a10-gates-clk.yaml        | 1 -
->  .../devicetree/bindings/clock/renesas,cpg-mssr.yaml          | 1 -
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml      | 1 -
->  .../display/allwinner,sun4i-a10-display-frontend.yaml        | 1 -
->  .../devicetree/bindings/display/allwinner,sun6i-a31-drc.yaml | 1 -
->  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml       | 1 -
->  .../devicetree/bindings/display/amlogic,meson-vpu.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/adi,adv7511.yaml      | 1 -
->  .../devicetree/bindings/display/bridge/lvds-codec.yaml       | 1 -
->  .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml | 1 -
->  .../devicetree/bindings/display/ilitek,ili9486.yaml          | 1 -
->  Documentation/devicetree/bindings/display/msm/gpu.yaml       | 1 -
->  .../devicetree/bindings/display/panel/panel-timing.yaml      | 1 -
->  .../devicetree/bindings/display/panel/tpo,tpg110.yaml        | 1 -
->  .../devicetree/bindings/display/rockchip/rockchip,dw-dp.yaml | 1 -
->  .../devicetree/bindings/display/simple-framebuffer.yaml      | 1 -
->  .../devicetree/bindings/dma/snps,dma-spear1340.yaml          | 1 -
->  Documentation/devicetree/bindings/dma/stericsson,dma40.yaml  | 1 -
->  .../devicetree/bindings/dma/stm32/st,stm32-dma.yaml          | 1 -
->  Documentation/devicetree/bindings/edac/apm,xgene-edac.yaml   | 1 -
->  .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml       | 1 -
->  Documentation/devicetree/bindings/fpga/fpga-region.yaml      | 5 -----
->  .../devicetree/bindings/gpio/brcm,xgs-iproc-gpio.yaml        | 1 -
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml          | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,ltc2947.yaml     | 1 -
->  Documentation/devicetree/bindings/hwmon/adi,max31827.yaml    | 1 -
->  Documentation/devicetree/bindings/hwmon/national,lm90.yaml   | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tmp513.yaml       | 1 -
->  Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml     | 1 -
->  Documentation/devicetree/bindings/i2c/i2c-mux-gpmux.yaml     | 1 -
->  .../devicetree/bindings/i2c/realtek,rtl9301-i2c.yaml         | 1 -
->  Documentation/devicetree/bindings/i2c/tsd,mule-i2c-mux.yaml  | 2 --
->  Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ad7949.yaml    | 1 -
->  Documentation/devicetree/bindings/iio/adc/adi,ade9000.yaml   | 1 -
->  .../devicetree/bindings/iio/adc/cosmic,10001-adc.yaml        | 1 -
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 1 -
->  .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml     | 1 -
->  .../devicetree/bindings/iio/afe/voltage-divider.yaml         | 1 -
->  .../devicetree/bindings/iio/frequency/adi,admv4420.yaml      | 1 -
->  .../devicetree/bindings/iio/pressure/murata,zpa2326.yaml     | 1 -
->  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml    | 1 -
->  .../devicetree/bindings/iio/temperature/adi,ltc2983.yaml     | 1 -
->  Documentation/devicetree/bindings/input/ti,drv266x.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 1 -
->  .../bindings/interrupt-controller/aspeed,ast2700-intc.yaml   | 1 -
->  .../bindings/interrupt-controller/fsl,vf610-mscm-ir.yaml     | 1 -
->  .../bindings/interrupt-controller/loongson,liointc.yaml      | 1 -
->  .../bindings/interrupt-controller/mediatek,mtk-cirq.yaml     | 1 -
->  .../bindings/interrupt-controller/mscc,ocelot-icpu-intr.yaml | 1 -
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml        | 4 ----
->  Documentation/devicetree/bindings/mailbox/arm,mhu.yaml       | 1 -
->  Documentation/devicetree/bindings/mailbox/arm,mhuv2.yaml     | 1 -
->  Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml | 1 -
->  Documentation/devicetree/bindings/media/amphion,vpu.yaml     | 1 -
->  Documentation/devicetree/bindings/media/i2c/adi,adv7604.yaml | 2 --
->  .../devicetree/bindings/media/i2c/techwell,tw9900.yaml       | 1 -
->  Documentation/devicetree/bindings/media/nxp,imx8-jpeg.yaml   | 1 -
->  .../devicetree/bindings/media/qcom,sc8280xp-camss.yaml       | 1 -
->  .../bindings/media/samsung,exynos4212-fimc-is.yaml           | 1 -
->  .../devicetree/bindings/media/samsung,s5pv210-jpeg.yaml      | 1 -
->  Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml  | 1 -
->  .../devicetree/bindings/media/video-interface-devices.yaml   | 4 ----
->  .../memory-controllers/qcom,ebi2-peripheral-props.yaml       | 1 -
->  Documentation/devicetree/bindings/mfd/stericsson,ab8500.yaml | 1 -
->  .../devicetree/bindings/mtd/amlogic,meson-nand.yaml          | 1 -
->  .../devicetree/bindings/mtd/marvell,nand-controller.yaml     | 1 -
->  Documentation/devicetree/bindings/mux/mux-controller.yaml    | 1 -
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml   | 2 --
->  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml     | 1 -
->  .../devicetree/bindings/net/brcm,mdio-mux-iproc.yaml         | 1 -
->  .../devicetree/bindings/net/cortina,gemini-ethernet.yaml     | 1 -
->  Documentation/devicetree/bindings/net/fsl,gianfar.yaml       | 2 --
->  .../devicetree/bindings/net/mdio-mux-multiplexer.yaml        | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/net/ti,cpsw-switch.yaml    | 1 -
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml          | 1 -
->  .../devicetree/bindings/pci/altr,pcie-root-port.yaml         | 1 -
->  Documentation/devicetree/bindings/pci/loongson.yaml          | 1 -
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml  | 1 -
->  .../devicetree/bindings/pci/starfive,jh7110-pcie.yaml        | 1 -
->  Documentation/devicetree/bindings/pci/versatile.yaml         | 1 -
->  .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml         | 1 -
->  .../devicetree/bindings/pinctrl/brcm,bcm21664-pinctrl.yaml   | 1 -
->  .../devicetree/bindings/pinctrl/fsl,imx9-pinctrl.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml     | 1 -
->  .../bindings/pinctrl/qcom,sm6115-lpass-lpi-pinctrl.yaml      | 1 -
->  .../devicetree/bindings/pinctrl/qcom,sm6125-tlmm.yaml        | 1 -
->  .../devicetree/bindings/pinctrl/renesas,rza1-ports.yaml      | 3 ---
->  .../devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml | 1 -
->  .../devicetree/bindings/power/supply/mt6360_charger.yaml     | 1 -
->  .../bindings/power/supply/stericsson,ab8500-charger.yaml     | 1 -
->  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml     | 1 -
->  .../bindings/regulator/richtek,rt6245-regulator.yaml         | 1 -
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml      | 2 --
->  Documentation/devicetree/bindings/reset/ti,sci-reset.yaml    | 1 -
->  .../bindings/rng/inside-secure,safexcel-eip76.yaml           | 2 --
->  .../devicetree/bindings/soc/fsl/cpm_qe/fsl,qe-muram.yaml     | 1 -
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml     | 1 -
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml         | 1 -
->  Documentation/devicetree/bindings/soc/rockchip/grf.yaml      | 1 -
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml       | 3 ---
->  Documentation/devicetree/bindings/sound/adi,adau1372.yaml    | 1 -
->  Documentation/devicetree/bindings/sound/adi,adau7118.yaml    | 1 -
->  .../devicetree/bindings/sound/rockchip,i2s-tdm.yaml          | 1 -
->  .../devicetree/bindings/sound/rockchip,rk3328-codec.yaml     | 2 +-
->  Documentation/devicetree/bindings/sound/samsung,tm2.yaml     | 1 -
->  .../devicetree/bindings/sound/ti,tlv320dac3100.yaml          | 1 -
->  Documentation/devicetree/bindings/sound/wlf,wm8903.yaml      | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra-timer.yaml        | 1 -
->  .../devicetree/bindings/timer/nvidia,tegra186-timer.yaml     | 1 -
->  Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml   | 1 -
->  116 files changed, 2 insertions(+), 136 deletions(-)
-> 
+> Rob, following up on Guenter's question above.
+> I'm not sure whether it's better to drop the property as discussed earlier or keep
+> it for binding completeness. 
+> Could you clarify what approach is preferred?
 
-...
-
-> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> index 5f432452c815..33c80626e8ec 100644
-> --- a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
-> @@ -16,7 +16,6 @@ properties:
->    compatible:
->      const: starfive,jh7110-pcie
->  
-> -
->    reg:
->      maxItems: 2
->  
-
-...
-
-> diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> index f3258f2fd3a4..3f14eab01c54 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7100-pinctrl.yaml
-> @@ -32,7 +32,6 @@ description: |
->      | | |     |   |   |          -------
->      UART0     UART1 --
->  
-> -
->    The big MUX in the diagram only has 7 different ways of mapping peripherals
->    on the left to pins on the right. StarFive calls the 7 configurations "signal
->    groups".
-
-Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+Don't you have there possibility of interrupt (not only SMBus Alert)? At
+least this is what I understood from previous talks.
 
 Best regards,
-Hal
+Krzysztof
