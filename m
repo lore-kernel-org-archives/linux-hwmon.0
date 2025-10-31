@@ -1,378 +1,167 @@
-Received: from relay13.grserver.gr (relay13.grserver.gr [178.156.171.147])
+Received: from relay12.grserver.gr (relay12.grserver.gr [88.99.38.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8821E520A;
-	Fri, 31 Oct 2025 16:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.156.171.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A00C2EF67F
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Oct 2025 16:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.99.38.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761928630; cv=none; b=GsmVASFdEBI+hxpC+beqasQ8E4UFErR23zYTb2cn1OspSFVO6sXncy/IN2POCE3pZpT6rSZri3kmbWwrGbiYp9pWXp1ynw8cXyxq/YbjpJGiCof46mpsckyoFNUdiubrVGtDgkv1mbKg7nHHTjWxvy2aBJzoP6ueLoEgW7/srN8=
+	t=1761928724; cv=none; b=gIQVHYHwtnjqh16MSR8y5enoCvivu6fBgFXu1N5WMqYStnB1m6YAU+C3filOWUH02sgzfeUA/A41SMstV7194GB6sV2fbAX64XTfmVvrD2g2COFLoHTFiQ+TxxPZTX3xyNE5aum1Gs+fyQlejsJtNC4mtbZCaIIHcVp+YwGIu1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761928630; c=relaxed/simple;
-	bh=aclceXh3FOFrVf756t7t6HjUEkNBAmtcCInfN1P5BiI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ooCST24qG56W5Y++hvvKZD0ZLV4PT2VkyITi5MqZzhEWJt8X/I5bo40k9sNvjyC73eXgEZUcNx+t+X6soIqR1ORbOAZpYGednCFAyTL46SmT7eXW6wEpR8UvBJIAx4A0ikZSriuAEScL/EPzn4Tikrg+NQ0UNnR+kDUhfrW2+FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=AJo9WbSa; arc=none smtp.client-ip=178.156.171.147
+	s=arc-20240116; t=1761928724; c=relaxed/simple;
+	bh=NNluwfpdsA26+gPsB5/AnOEGDLqICL27K25ESYNJAnA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kps9kOqQw5ccr2hHISHwFMXXTgBakmUQjjAvBaIwBdfSrdPYOcizSWKEdNTn1pAUPsxrIsfDoIHxAxyLa8i4AD6SNwnQvOPW2FsAt/kp8gb3o7IrXPzsZQIHBYcH96+kdGI4Ykx1ilpv7esYikjX4IFzDuxI2tu1yC3BWix3rV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=bSsf0rVq; arc=none smtp.client-ip=88.99.38.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="AJo9WbSa"
-Received: from relay13 (localhost [127.0.0.1])
-	by relay13.grserver.gr (Proxmox) with ESMTP id 9CEBF5E51F;
-	Fri, 31 Oct 2025 18:37:00 +0200 (EET)
+	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="bSsf0rVq"
+Received: from relay12 (localhost [127.0.0.1])
+	by relay12.grserver.gr (Proxmox) with ESMTP id A2374BDD4F
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Oct 2025 18:38:36 +0200 (EET)
 Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by relay13.grserver.gr (Proxmox) with ESMTPS id 612E15E58E;
-	Fri, 31 Oct 2025 18:36:59 +0200 (EET)
-Received: from antheas-z13 (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id ED96F200C57;
-	Fri, 31 Oct 2025 18:36:57 +0200 (EET)
+	by relay12.grserver.gr (Proxmox) with ESMTPS id D4C58BDCD8
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Oct 2025 18:38:35 +0200 (EET)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id B56EA201B27
+	for <linux-hwmon@vger.kernel.org>; Fri, 31 Oct 2025 18:38:34 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1761928618;
-	bh=NoOd8aRPg5p392Veb8G8OrEZBQDVz/Tq1sBEu9fmk0E=; h=From:To:Subject;
-	b=AJo9WbSaHiMn/MwdqAHU/vPeeuAHRVnm+jm4OhwUpnMxVVJ5XdzTlAs8zIQEurrFQ
-	 vxlfuP7l0W2ycP8cRlJ4c0Wt+DevmzCsGLiFxXnzQPiU33bM02piHs1oh8W8NbPwJZ
-	 BVTiC1Idbz1hQtd4HbWTMRhDm4BP9l78sDW7L5cPrxnClugUQ7MUe/yu41jyY+EBY0
-	 leRs71QRcvWqHBC2DsbqJ4+NqD0iYwEsr1bOZHEfV0woPRMZRkYgaE8WFqwWzYCsUO
-	 6AEduL14iwZZdG8+QaiInk+xU3u1VPIEXxUewBVMkXLTtxtisA8LYzMMBuh7sk5iqG
-	 hKE76AqrhLGxw==
+	s=default; t=1761928715;
+	bh=vYurqirQve9/a5aO1JzYrhU8itgV0sUSBiyRfLUlTA4=;
+	h=Received:From:Subject:To;
+	b=bSsf0rVq+B1L0OVwSINAUdej5vp7GEwEc53Da80mMfJeOd/IcYdYBdl1Ixnv9JsE4
+	 WBE46l806EAL2dyNeVXpWoi7yhbM8yTEK1cXHqhTLX1BHZShaoWrmqTY4K7+wCiVat
+	 5IiIZ2Lp8Ovxl4bl/f3SAQzaRA3p1GCTZUOBKivDOYMDpqkG2HaeCrbR84qI1pH83m
+	 WqfAKCAE4zy9sdlT9LWQNEOzfOuHTE7rQ6S128xhp6nb4tNXLY9iHqm5uN4V7IFlpv
+	 AljwT5yLn6dxuSJH8YdQMpfTEczekB6fzwR5e1faFvnjCZE4doUgBlYUKb9pYfzFBV
+	 It2/DUwMx1sMg==
 Authentication-Results: linux3247.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=antheas-z13
+        spf=pass (sender IP is 209.85.208.176) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f176.google.com
 Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Hans de Goede <hansg@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= <samsagax@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Antheas Kapenekakis <lkml@antheas.dev>,
-	Armin Wolf <W_Armin@gmx.de>
-Subject: [PATCH v3 5/6] platform/x86: ayaneo-ec: Move Ayaneo devices from
- oxpec to ayaneo-ec
-Date: Fri, 31 Oct 2025 17:36:50 +0100
-Message-ID: <20251031163651.1465981-6-lkml@antheas.dev>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251031163651.1465981-1-lkml@antheas.dev>
-References: <20251031163651.1465981-1-lkml@antheas.dev>
+Received: by mail-lj1-f176.google.com with SMTP id
+ 38308e7fff4ca-376466f1280so31301861fa.0
+        for <linux-hwmon@vger.kernel.org>;
+ Fri, 31 Oct 2025 09:38:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUw99TupNz0d7ZOzfqbJwpWDumNMFuacu/p3D1idS/J+VH2tPoSuJ6WeTTurEMyrLc8MCaR8zCbw7R6Yw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPUZ6jgxO/z97pWbYHxlUSylaSodYToM3YmAwfEMcxgUaW2P6T
+	xyLVuELN8QxHjeFzXzSk+cnD7h391fo7pfddBBUlcwS6xqlT/I89sHz+tE4cYWLldEWuDG2Y/Y8
+	DzCdq+jKMpDHLZt3bhXeLTWtqKC495hQ=
+X-Google-Smtp-Source: 
+ AGHT+IFfCsCUm1dDa21cbpuFbjCe1k1ojogD+tE28Iv1A5p0JPMdEYf4rV/aPw9ZlxpB7cs3YdzdBVQZxVyb6hRNJro=
+X-Received: by 2002:a05:651c:b2a:b0:36a:6540:3bf7 with SMTP id
+ 38308e7fff4ca-37a18d9b0d2mr16432791fa.18.1761928714107; Fri, 31 Oct 2025
+ 09:38:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251031163651.1465981-1-lkml@antheas.dev>
+In-Reply-To: <20251031163651.1465981-1-lkml@antheas.dev>
+From: Antheas Kapenekakis <lkml@antheas.dev>
+Date: Fri, 31 Oct 2025 17:38:22 +0100
+X-Gmail-Original-Message-ID: 
+ <CAGwozwHk_wrS8zVRb9-QKpY5TrV1pkksxG5uO9-Db36N7RDo6A@mail.gmail.com>
+X-Gm-Features: AWmQ_blnBmAcgxio7jFrhdMKYsqJ1-YkjaR-opcyMQwFHUHh8QiAmlMVUhDRquk
+Message-ID: 
+ <CAGwozwHk_wrS8zVRb9-QKpY5TrV1pkksxG5uO9-Db36N7RDo6A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] platform/x86: ayaneo-ec: Add Ayaneo Embedded
+ Controller platform driver
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Hans de Goede <hansg@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Derek John Clark <derekjohn.clark@gmail.com>,
+	=?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 X-PPP-Message-ID: 
- <176192861853.3949264.12911444964400847176@linux3247.grserver.gr>
+ <176192871538.3955754.3660861245917692698@linux3247.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
 X-Virus-Status: Clean
 
-Currently, the oxpec driver contains Ayaneo devices. Move them to the
-new ayaneo-ec driver, which is dedicated to them.
+On Fri, 31 Oct 2025 at 17:36, Antheas Kapenekakis <lkml@antheas.dev> wrote:
+>
+> This series introduces a platform driver for Ayaneo devices, ayaneo-ec.
+> This driver provides hwmon support, power management, and module management
+> (for the new Ayaneo 3 device). Module management is done through the new
+> firmware attributes sysfs interface.
 
-As this driver supports charge inhibition for Ayaneo, add support for it
-for the AIR, AIR 1S, AB05-Medoncino, AIR Pro, and Kun, referenced from
-the out-of-tree ayaneo-platform driver.
+I resent this as V3 didnt I. Mmmm
 
-In addition, update the readmes of oxpec to reflect this change.
-
-Link: https://github.com/ShadowBlip/ayaneo-platform
-Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
-Reviewed-by: Armin Wolf <W_Armin@gmx.de>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- drivers/platform/x86/Kconfig     |   4 +-
- drivers/platform/x86/ayaneo-ec.c |  65 +++++++++++++++++
- drivers/platform/x86/oxpec.c     | 115 +------------------------------
- 3 files changed, 67 insertions(+), 117 deletions(-)
-
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index a45449ae83f8..b603f8a3bd52 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1042,9 +1042,7 @@ config OXP_EC
- 	help
- 		Enables support for the platform EC of OneXPlayer and AOKZOE
- 		handheld devices. This includes fan speed, fan controls, and
--		disabling the default TDP behavior of the device. Due to legacy
--		reasons, this driver also provides hwmon functionality to Ayaneo
--		devices and the OrangePi Neo.
-+		disabling the default TDP behavior of the device.
- 
- source "drivers/platform/x86/tuxedo/Kconfig"
- 
-diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-index 0652c044ad76..9548e3d22093 100644
---- a/drivers/platform/x86/ayaneo-ec.c
-+++ b/drivers/platform/x86/ayaneo-ec.c
-@@ -53,6 +53,15 @@ struct ayaneo_ec_platform_data {
- 	struct acpi_battery_hook battery_hook;
- };
- 
-+static const struct ayaneo_ec_quirk quirk_fan = {
-+	.has_fan_control = true,
-+};
-+
-+static const struct ayaneo_ec_quirk quirk_charge_limit = {
-+	.has_fan_control = true,
-+	.has_charge_control = true,
-+};
-+
- static const struct ayaneo_ec_quirk quirk_ayaneo3 = {
- 	.has_fan_control = true,
- 	.has_charge_control = true,
-@@ -60,6 +69,62 @@ static const struct ayaneo_ec_quirk quirk_ayaneo3 = {
- };
- 
- static const struct dmi_system_id dmi_table[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
-+		},
-+		.driver_data = (void *)&quirk_fan,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
-+		},
-+		.driver_data = (void *)&quirk_fan,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
-+		},
-+		.driver_data = (void *)&quirk_fan,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-+		},
-+		.driver_data = (void *)&quirk_charge_limit,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
-+		},
-+		.driver_data = (void *)&quirk_charge_limit,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
-+		},
-+		.driver_data = (void *)&quirk_charge_limit,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-+		},
-+		.driver_data = (void *)&quirk_charge_limit,
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
-+		},
-+		.driver_data = (void *)&quirk_charge_limit,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index 54377b282ff8..144a454103b9 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -1,8 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Platform driver for OneXPlayer and AOKZOE devices. For the time being,
-- * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
-- * hwmon sysfs.
-+ * Platform driver for OneXPlayer and AOKZOE devices.
-  *
-  * Fan control is provided via pwm interface in the range [0-255].
-  * Old AMD boards use [0-100] as range in the EC, the written value is
-@@ -43,14 +41,6 @@ static bool unlock_global_acpi_lock(void)
- 
- enum oxp_board {
- 	aok_zoe_a1 = 1,
--	aya_neo_2,
--	aya_neo_air,
--	aya_neo_air_1s,
--	aya_neo_air_plus_mendo,
--	aya_neo_air_pro,
--	aya_neo_flip,
--	aya_neo_geek,
--	aya_neo_kun,
- 	orange_pi_neo,
- 	oxp_2,
- 	oxp_fly,
-@@ -131,62 +121,6 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *)oxp_fly,
- 	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_MATCH(DMI_BOARD_NAME, "AYANEO 2"),
--		},
--		.driver_data = (void *)aya_neo_2,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
--		},
--		.driver_data = (void *)aya_neo_air,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR 1S"),
--		},
--		.driver_data = (void *)aya_neo_air_1s,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AB05-Mendocino"),
--		},
--		.driver_data = (void *)aya_neo_air_plus_mendo,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
--		},
--		.driver_data = (void *)aya_neo_air_pro,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_MATCH(DMI_BOARD_NAME, "FLIP"),
--		},
--		.driver_data = (void *)aya_neo_flip,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_MATCH(DMI_BOARD_NAME, "GEEK"),
--		},
--		.driver_data = (void *)aya_neo_geek,
--	},
--	{
--		.matches = {
--			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
--			DMI_EXACT_MATCH(DMI_BOARD_NAME, "KUN"),
--		},
--		.driver_data = (void *)aya_neo_kun,
--	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "OrangePi"),
-@@ -672,13 +606,6 @@ static int oxp_pwm_enable(void)
- 	case orange_pi_neo:
- 		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_MANUAL);
- 	case aok_zoe_a1:
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_2:
- 	case oxp_fly:
- 	case oxp_mini_amd:
-@@ -699,14 +626,6 @@ static int oxp_pwm_disable(void)
- 	case orange_pi_neo:
- 		return write_to_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, PWM_MODE_AUTO);
- 	case aok_zoe_a1:
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_1s:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_2:
- 	case oxp_fly:
- 	case oxp_mini_amd:
-@@ -727,14 +646,6 @@ static int oxp_pwm_read(long *val)
- 	case orange_pi_neo:
- 		return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
- 	case aok_zoe_a1:
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_1s:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_2:
- 	case oxp_fly:
- 	case oxp_mini_amd:
-@@ -774,14 +685,6 @@ static int oxp_pwm_fan_speed(long *val)
- 	case oxp_g1_i:
- 		return read_from_ec(OXP_2_SENSOR_FAN_REG, 2, val);
- 	case aok_zoe_a1:
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_1s:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_fly:
- 	case oxp_mini_amd:
- 	case oxp_mini_amd_a07:
-@@ -810,14 +713,6 @@ static int oxp_pwm_input_write(long val)
- 		/* scale to range [0-184] */
- 		val = (val * 184) / 255;
- 		return write_to_ec(OXP_SENSOR_PWM_REG, val);
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_1s:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_mini_amd:
- 	case oxp_mini_amd_a07:
- 		/* scale to range [0-100] */
-@@ -854,14 +749,6 @@ static int oxp_pwm_input_read(long *val)
- 		/* scale from range [0-184] */
- 		*val = (*val * 255) / 184;
- 		break;
--	case aya_neo_2:
--	case aya_neo_air:
--	case aya_neo_air_1s:
--	case aya_neo_air_plus_mendo:
--	case aya_neo_air_pro:
--	case aya_neo_flip:
--	case aya_neo_geek:
--	case aya_neo_kun:
- 	case oxp_mini_amd:
- 	case oxp_mini_amd_a07:
- 		ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
--- 
-2.51.1
-
+>
+> Luckily, all Ayaneo devices with an ACPI mapped EC use the same registers.
+> Older devices also use a memory mapped region for RGB[1], but that is
+> replaced by HID in the new Ayaneo 3. Therefore, this allows for a simple
+> driver design that provides robust future support. The memory mapped region
+> can be upstreamed as a different RGB driver in the future or remain
+> out-of-tree[1].
+>
+> This change also allows cleaning up the oxpec driver, by removing Ayaneo
+> devices from it. In parallel, charge limiting is added for these devices.
+>
+> [1] https://github.com/ShadowBlip/ayaneo-platform
+>
+> ---
+>
+> V3: https://lore.kernel.org/all/20251015084414.1391595-1-lkml@antheas.dev/
+> V2: https://lore.kernel.org/all/20251015084414.1391595-1-lkml@antheas.dev/
+> V1: https://lore.kernel.org/all/20250820160628.99678-1-lkml@antheas.dev/
+>
+> Changes since V3:
+>   - Fix various non-functional nits
+>   - On hibernation restore, use restore instead of thaw, switch to bools,
+>     and restore fan pwm mode, but only after the first pwm write after
+>     hibernation. Also, release pwm when entering hibernation.
+>
+> Changes since V2:
+>   - Remove i counter from suspend hook by hardcoding the index
+>     (we already allocate the maximum size for the cache anyway)
+>   - Rename quirks to end in quirks
+>   - Add missing includes to controller sysfs patch, use switch statement
+>
+> Changes since V1:
+>   - Use plain sysfs attrs for magic module attributes
+>   - Combine quirk for power and modules, so attribute tree is simpler
+>   - Use switch statement in hwmon
+>   - Add hibernation hook for charge bypass in last patch
+>     - Restoring fan speed is a liability so it is omitted, see patch notes
+>       Note that for EC managed fan curves, it would be acceptable
+>     - Regmap comment: Using regmap is unprecedented for ACPI mapped ECs
+>       and overkill for one value (> 100 LOC)
+>   - fixp_linear_interpolate() comment: it requires importing an extra header,
+>     is not used for static parameters in other modules, and expands to the
+>     same equation for parameters used, so it is omitted
+>
+> Antheas Kapenekakis (6):
+>   platform/x86: ayaneo-ec: Add Ayaneo Embedded Controller platform
+>     driver
+>   platform/x86: ayaneo-ec: Add hwmon support
+>   platform/x86: ayaneo-ec: Add charge control support
+>   platform/x86: ayaneo-ec: Add controller power and modules attributes
+>   platform/x86: ayaneo-ec: Move Ayaneo devices from oxpec to ayaneo-ec
+>   platform/x86: ayaneo-ec: Add suspend hook
+>
+>  .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 +
+>  MAINTAINERS                                   |   7 +
+>  drivers/platform/x86/Kconfig                  |  16 +-
+>  drivers/platform/x86/Makefile                 |   3 +
+>  drivers/platform/x86/ayaneo-ec.c              | 582 ++++++++++++++++++
+>  drivers/platform/x86/oxpec.c                  | 115 +---
+>  6 files changed, 625 insertions(+), 117 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo-ec
+>  create mode 100644 drivers/platform/x86/ayaneo-ec.c
+>
+>
+> base-commit: 211ddde0823f1442e4ad052a2f30f050145ccada
+> --
+> 2.51.1
+>
+>
 
