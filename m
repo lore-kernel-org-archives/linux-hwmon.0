@@ -1,80 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2962459DC;
-	Tue,  4 Nov 2025 09:52:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D5836B;
+	Tue,  4 Nov 2025 10:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762249920; cv=none; b=QQHbnBGtPhwE7+KCRkmAAzC6ZJE4E7bnxrIpWm9eZM3jU0VXIZSWLDJsErMOoeoY4owcXrgpFqeKHBus8URamJtu92Et9u5t73EmJ/Bn4BGJ5tw5vGD0UBt6jICt0C0IpUnklTlDaEgQvcam3DYdqnzLVBeem7al+tmBAIdJJZM=
+	t=1762252318; cv=none; b=uSjbLFsVcgtSyVn3hiL14rWOfSggGAMhiEBVK6pAGroanh0oyQ6GW5cKCfrAk+rLXMq2mnYGg+pfcIQvwV5zIK7x38vNQp/s74YXGP1xW6ZAqY1AOqfSxfL/Tc9P7ljBN73y6smfQtGIwWyB/IhL6Gc32JVkBswVbkp8Y32IGI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762249920; c=relaxed/simple;
-	bh=wNdYt90uqdaGUlBaeWYDe8FuBkRB5Vqr/izDKZMnQHs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WyZdwrogTqJRIRsN2Tf8G3oGtY4R5Tbl/g5isf+CmZ2dUBMNNtlHNnlGSqMlSVJI18IkZ42MgJQV9NY7ePQ6bBv8LkxiMz1h5WTtZbQdeMhtOwexlJSsUbL6aWppfAs2Wup6zvUqbwxsxJG6Nwn3iBYEIB7aE2vpr92Rq2t5Sd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1Pc2wd2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762252318; c=relaxed/simple;
+	bh=lqrX3VJKmck4F8Oum/ghWQkXbfNnSJQYqQa2Z2DOAIo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=l9NxqZScRoGztW2ugUteXy6CrhGTlsSstLt90sq52cEhk8xyxxXD5jTsk9McuW+PSpJZnxNDjg//Dcmn9pBBI7g/V28951armnve+o6QDUQovq/drGtdQ6cpbLoBb5RFOWkeN2wv6BqDIYG4dl3wBVWIICePhcoJrWM9Grr3qJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwP7nfHK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1Pc2wd2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B942C4CEF7;
-	Tue,  4 Nov 2025 09:51:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwP7nfHK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D0FE6C116B1;
+	Tue,  4 Nov 2025 10:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762249920;
-	bh=wNdYt90uqdaGUlBaeWYDe8FuBkRB5Vqr/izDKZMnQHs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G1Pc2wd2osFgzgrUS8qagrphCwyRBPipdUB2/51al+/n2+P6qyV3V9J1Cr8MlxSPI
-	 7jjaRYCIo0PkIvr/LP+LjHs891ouOQQ9pBf1k0Zj3HPsF5AiuLucDMWBEx5B76ZMqp
-	 phDQ2k64CgAgxZit79KJRN/mACjEfex9RKMN+WVbPqFpULrCW6PFo+mzMu0O3IoOqR
-	 WmWiaCKvH3WoW6kdqsdnnKtgqVKYkAcs4xEWYfBtcnE1eMQWXLNLt/lMZsVfS2zPRe
-	 3kFsmuYOF7ySZS51l3U1gKJffFDrp7UrlgVkmcikM9dy+AnhAVe/GkI4lK/SePYV0e
-	 pzVa2QsShVhOQ==
-Date: Tue, 4 Nov 2025 10:51:57 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Igor Reznichenko <igor@reznichenko.net>
-Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: ST TSC1641 power monitor
-Message-ID: <20251104-ruddy-tuna-of-efficiency-3321d3@kuoka>
-References: <20251104003320.1120514-1-igor@reznichenko.net>
- <20251104003320.1120514-2-igor@reznichenko.net>
+	s=k20201202; t=1762252317;
+	bh=lqrX3VJKmck4F8Oum/ghWQkXbfNnSJQYqQa2Z2DOAIo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=gwP7nfHKEIvvfdZjBaHwLqTF1IRHuvV5Fo+oVClSexefhvZx5Apcn4MqF+Ez/6Poj
+	 7jSdJbr0Myqy0PIo0X3riDc2pcfKdqnwu+VuIJSvRp2WIsK4wBue40wGcsW/WsfzRX
+	 Hqf3eU8Yi/fbToOpFYXTrf3lYDy4d2llvvIFRXmvLI/6pvF5BFw/sjCs1DKXDJtkzi
+	 nxv8/yhYfNhoVWm+DEiom1nDx8X7YyWJSu5hsSZjThub+W85Ezcb5MDk1GUEOVYNiu
+	 EwC554P4liIWh2Dnp9Rk+WXMbGdBavYN8414qZNW3XzdA54R5eEL2lEeM5gjy9dOD+
+	 nXBx+e1BS3htQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C02DBCCFA05;
+	Tue,  4 Nov 2025 10:31:57 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v3 0/3] hwmon: Add support for the LTC4283 Hot Swap
+ Controller
+Date: Tue, 04 Nov 2025 10:32:27 +0000
+Message-Id: <20251104-ltc4283-support-v3-0-4bea496f791d@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251104003320.1120514-2-igor@reznichenko.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADvWCWkC/2XNTQrCMBCG4atI1kaSSX9SV95DXLTjpA3UpiQ1K
+ KV3Ny2ISJfvB/PMzAJ5S4GdDzPzFG2wbkihjgeGXT20xO09NQMBudASeD9hBlrx8BxH5ycOJWr
+ MqKiwaFi6Gj0Z+9rE6y11Z8Pk/Ht7EOW6fq1sZ0XJBde6ASRTlsrApR7q3rUndA+2YhF+QCXUH
+ oAEFA2SqGQuRWP+gGVZPpcyOkfwAAAA
+X-Change-ID: 20250812-ltc4283-support-27c8c4e69c6b
+To: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, "Rob Herring (Arm)" <robh@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762252353; l=2772;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=lqrX3VJKmck4F8Oum/ghWQkXbfNnSJQYqQa2Z2DOAIo=;
+ b=ShNcElYKzU+ApENVMNTC4KT4zE/bT4YDejGBzaFtFiH7nu18fGZ5syvmOBHN0BdZUkcA7jV1c
+ smsJ2KU86ZXCTJgNNIkygRTmt23vRQSU3tlFZeHj7XbawvmRzB0d0Mo
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Mon, Nov 03, 2025 at 04:33:19PM -0800, Igor Reznichenko wrote:
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        power-sensor@40 {
-> +            compatible = "st,tsc1641";
-> +            reg = <0x40>;
-> +            interrupt-parent = <&gpio1>;
-> +            interrupts = <1 IRQ_TYPE_LEVEL_LOW>; /* Polarity board dependent */
-> +            shunt-resistor-micro-ohms = <1000>;
-> +            st,alert-polarity-active-high;
+This is v3 for the LTC4283 how swap controller. Main change is that I'm
+now using the auxiliary bus for adding the GPIO device (done depending
+on FW properties).
 
-That's wrong IMO. Either you use it as SMBus alert or as CPU interrupt.
-If you use as CPU interrupt, then the flag in "interrupts" defines what
-is the level of this interrupt. That flag is a combination of both
-CPU/SoC side and any inverters on the device. And actually you wrote it
-already - "Polarity board dependent" - so why do you:
-1. Provide polarity twice
-2. Provide inconsistent values - alert interrupt is level low, but
-alert interrupt is also active (level) high. So level low or level high?
+Similar to the LTC4282 device, we're clearing some fault logs in the
+reset_history attributes.
 
-Best regards,
-Krzysztof
+Guenter, in [1] you can find some replies for some questions you had in
+v2 that likely you don't remember anymore.
+
+Linus, I did looked into gpio-regmap and even add support for
+init_valid_mask but the register layout is just so different that using
+the gpio-regmap is not feasible. We could maybe use it for ADIO (if we
+used to different gpiochips in the driver) but the drivers is fairly
+small anyways so IMO not worth it.
+
+Also note the driver uses some non constant field_prep/get() that should
+go away as soon as [2] get's merged (hopefully before this).
+
+[1]: https://lore.kernel.org/linux-hwmon/0765a0b89779331c62a3f136ef030f7f2f40ea47.camel@gmail.com/
+[2]: https://lore.kernel.org/linux-iio/cover.1761588465.git.geert+renesas@glider.be/
+
+---
+Changes in v3:
+- Patch 1:
+  * Changed -if conditionals as suggested by Rob;
+  * Fixed typo in commit subject.
+- Patch 2:
+  * Add ltc4283 entry to index.rst;
+  * Remove lock under energy_enable read;
+  * Make use of the new energy64 standard attribute;
+  * Fix always false comparison in __ltc4283_write_in_history();
+  * Add missing reset_history for VIN;
+  * Remove energy label. Not useful.
+- Patch 3:
+  * Add AUXBUS menu entry in gpiolib kconfig as suggested by Linus.
+- Link to v2: https://lore.kernel.org/r/20250903-ltc4283-support-v2-0-6bce091510bf@analog.com
+
+Changes in v2:
+- Link to v1: https://lore.kernel.org/r/20250814-ltc4283-support-v1-0-88b2cef773f2@analog.com
+
+---
+Nuno Sá (3):
+      dt-bindings: hwmon: Document the LTC4283 Swap Controller
+      hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+      gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
+
+ .../devicetree/bindings/hwmon/adi,ltc4283.yaml     |  272 +++
+ Documentation/hwmon/index.rst                      |    1 +
+ Documentation/hwmon/ltc4283.rst                    |  266 +++
+ MAINTAINERS                                        |    9 +
+ drivers/gpio/Kconfig                               |   15 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-ltc4283.c                        |  217 +++
+ drivers/hwmon/Kconfig                              |   12 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/ltc4283.c                            | 1749 ++++++++++++++++++++
+ 10 files changed, 2543 insertions(+)
+---
+base-commit: 65bc97a5e49ea4174ba7e89afdada3e30e6e39c0
+change-id: 20250812-ltc4283-support-27c8c4e69c6b
+--
+
+Thanks!
+- Nuno Sá
+
 
