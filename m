@@ -1,152 +1,80 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A9F306B37;
-	Tue,  4 Nov 2025 08:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2962459DC;
+	Tue,  4 Nov 2025 09:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762245718; cv=none; b=LyJedHzM8quA4CDZBu/I4K4FNBnDCo0Vy+NzvMsA98AMoyHhq11Tbh0G2iTV6qz5rBBOFPWbfz8ESY+kV0aPxbgXLYb6Oq7jF+CSBPIccvouC3MaT4dq/XjMl8MjilmqVqSrfW9f/EO67kOikQuqUJk4LQAEXb7oK7KAGKpKcGk=
+	t=1762249920; cv=none; b=QQHbnBGtPhwE7+KCRkmAAzC6ZJE4E7bnxrIpWm9eZM3jU0VXIZSWLDJsErMOoeoY4owcXrgpFqeKHBus8URamJtu92Et9u5t73EmJ/Bn4BGJ5tw5vGD0UBt6jICt0C0IpUnklTlDaEgQvcam3DYdqnzLVBeem7al+tmBAIdJJZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762245718; c=relaxed/simple;
-	bh=purqrqfkmeNjHQsl8PGKaLr5sce14i7I1X0t6grKmRE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W6+0//4UUgD1jpYooeDEDkzfTa0Ctw/k30rs1UfyS+AxcikTatQZy7liJjDzjCubRvWBeqwKRIUarSF6kwlAIXIg3CPktI6sgY5/5sfCRXJW/QB5I0SMZji7BGIfEZIXiHHCxdHLDN3Po6WYu39dBGntVNviuEewiNBYpQZu4qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=JJndxSo/; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1762249920; c=relaxed/simple;
+	bh=wNdYt90uqdaGUlBaeWYDe8FuBkRB5Vqr/izDKZMnQHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WyZdwrogTqJRIRsN2Tf8G3oGtY4R5Tbl/g5isf+CmZ2dUBMNNtlHNnlGSqMlSVJI18IkZ42MgJQV9NY7ePQ6bBv8LkxiMz1h5WTtZbQdeMhtOwexlJSsUbL6aWppfAs2Wup6zvUqbwxsxJG6Nwn3iBYEIB7aE2vpr92Rq2t5Sd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1Pc2wd2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="JJndxSo/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1762245716; x=1793781716;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=purqrqfkmeNjHQsl8PGKaLr5sce14i7I1X0t6grKmRE=;
-  b=JJndxSo/Jbv9chcr/MWWsqgrFvkje+0i2hTjJHWbHBIX0JWjoyWVJfC6
-   YPurGJYhgiwu8S6vv6Nfqs6CTEmCRdChAhEbbX9fSGSSUdu+fa3eEc1r/
-   sRlnP1iWe+5VbbLZ494p/7FRVONmLm3DVfq3UEFwhaBcnCyvFA8ULqWDn
-   GOe7Te1ZughGtnhtM7oTX3Jr3MdIICo/aJ+0zgT01S02lnm9zASppzNYK
-   hrUY6q0IcD8uFhU2C0Ta9vQZP6Ue5AizARKsFofioVrfmVof8WDKYRJbU
-   G9nj1t8hRDmgxtxpde1sTnfYctqan7ktfsxAiKqbPJZYNioFYUqBWttO9
-   g==;
-X-CSE-ConnectionGUID: UM+sI3xNSuSueVWnZFHkVw==
-X-CSE-MsgGUID: mbc01x2RR+e0T7CjDOussw==
-X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
-   d="asc'?scan'208";a="48018374"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 01:41:55 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Tue, 4 Nov 2025 01:41:24 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58 via Frontend
- Transport; Tue, 4 Nov 2025 01:41:22 -0700
-Date: Tue, 4 Nov 2025 08:39:39 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: <Marius.Cristea@microchip.com>
-CC: <conor@kernel.org>, <corbet@lwn.net>, <linux@roeck-us.net>,
-	<linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<robh@kernel.org>, <linux-kernel@vger.kernel.org>, <krzk+dt@kernel.org>,
-	<linux-doc@vger.kernel.org>, <conor+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: temperature: add support for
- EMC1812
-Message-ID: <20251104-displace-pretense-9efca7fd0796@wendy>
-References: <20251029-hw_mon-emc1812-v1-0-be4fd8af016a@microchip.com>
- <20251029-hw_mon-emc1812-v1-1-be4fd8af016a@microchip.com>
- <20251029-blaspheme-stinking-91b73a8ab778@spud>
- <c844428aa8d57d870b8cb55ce37d6359e3142585.camel@microchip.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1Pc2wd2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B942C4CEF7;
+	Tue,  4 Nov 2025 09:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762249920;
+	bh=wNdYt90uqdaGUlBaeWYDe8FuBkRB5Vqr/izDKZMnQHs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G1Pc2wd2osFgzgrUS8qagrphCwyRBPipdUB2/51al+/n2+P6qyV3V9J1Cr8MlxSPI
+	 7jjaRYCIo0PkIvr/LP+LjHs891ouOQQ9pBf1k0Zj3HPsF5AiuLucDMWBEx5B76ZMqp
+	 phDQ2k64CgAgxZit79KJRN/mACjEfex9RKMN+WVbPqFpULrCW6PFo+mzMu0O3IoOqR
+	 WmWiaCKvH3WoW6kdqsdnnKtgqVKYkAcs4xEWYfBtcnE1eMQWXLNLt/lMZsVfS2zPRe
+	 3kFsmuYOF7ySZS51l3U1gKJffFDrp7UrlgVkmcikM9dy+AnhAVe/GkI4lK/SePYV0e
+	 pzVa2QsShVhOQ==
+Date: Tue, 4 Nov 2025 10:51:57 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Igor Reznichenko <igor@reznichenko.net>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: ST TSC1641 power monitor
+Message-ID: <20251104-ruddy-tuna-of-efficiency-3321d3@kuoka>
+References: <20251104003320.1120514-1-igor@reznichenko.net>
+ <20251104003320.1120514-2-igor@reznichenko.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="/AVkAT3sA6d22eia"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c844428aa8d57d870b8cb55ce37d6359e3142585.camel@microchip.com>
+In-Reply-To: <20251104003320.1120514-2-igor@reznichenko.net>
 
---/AVkAT3sA6d22eia
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 03, 2025 at 04:33:19PM -0800, Igor Reznichenko wrote:
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        power-sensor@40 {
+> +            compatible = "st,tsc1641";
+> +            reg = <0x40>;
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <1 IRQ_TYPE_LEVEL_LOW>; /* Polarity board dependent */
+> +            shunt-resistor-micro-ohms = <1000>;
+> +            st,alert-polarity-active-high;
 
-On Mon, Nov 03, 2025 at 04:35:27PM +0000, Marius.Cristea@microchip.com wrot=
-e:
-> Hi Conor,
->=20
-> On Wed, 2025-10-29 at 18:25 +0000, Conor Dooley wrote:
-> > On Wed, Oct 29, 2025 at 05:50:58PM +0200, Marius Cristea wrote:
-> > > This is the devicetree schema for Microchip EMC1812/13/14/15/33
-> > > Multichannel Low-Voltage Remote Diode Sensor Family.
-> > >=20
-> > > Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
-> > > ---
-> > > =A0.../bindings/hwmon/microchip,emc1812.yaml=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 | 176
-> > > +++++++++++++++++++++
-> > > =A0MAINTAINERS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=A0=A0 6 +
-> > > =A02 files changed, 182 insertions(+)
-> > >=20
-> >=20
->=20
-> ...
-> > You should be able to just move this into interrupts:
-> > =A0 interrupts:
-> > =A0=A0=A0 items:
-> > =A0=A0=A0=A0=A0 - description:
-> > =A0=A0=A0=A0=A0=A0=A0=A0=A0 alert-therm2 asserts when a diode temperatu=
-re exceeds the
-> > ALERT
-> > =A0=A0=A0=A0=A0=A0=A0=A0=A0 threshold.
-> > =A0=A0=A0=A0=A0 - description:
-> > =A0=A0=A0=A0=A0=A0=A0=A0=A0 therm-addr asserts low when the hardware-se=
-t THERM limit
-> > threshold is
-> > =A0=A0=A0=A0=A0=A0=A0=A0=A0 exceeded by one of the temperature sensors.
-> >=20
-> > > +=A0=A0=A0 items:
-> > > +=A0=A0=A0=A0=A0 - const: alert-therm2
-> > > +=A0=A0=A0=A0=A0 - const: therm-addr
-> >=20
-> > Also, should this and interrupts have minItems: 1? Are both actually
-> > required? Can you have therm-addr without alert-therm2?
-> >=20
->=20
-> Right now the driver doesn't support any interrupts, but it may support
-> in future. The "alert-therm2" is a maskable interrupt and the "therm-
-> addr" can't be masked and is "always enabled" into the chip.
->=20
-> I didn't use "minItems: 1" because I wanted to leave to the user the
-> decision if he needs any interrupts into their system
+That's wrong IMO. Either you use it as SMBus alert or as CPU interrupt.
+If you use as CPU interrupt, then the flag in "interrupts" defines what
+is the level of this interrupt. That flag is a combination of both
+CPU/SoC side and any inverters on the device. And actually you wrote it
+already - "Polarity board dependent" - so why do you:
+1. Provide polarity twice
+2. Provide inconsistent values - alert interrupt is level low, but
+alert interrupt is also active (level) high. So level low or level high?
 
-Unfortunately, this doesn't work the way you expected. If you don't set
-minItems: 1, then anyone who wants to use an interrupt must use both.
+Best regards,
+Krzysztof
 
-If someone that would connect therm-addr would always also connect
-alert-therm2, then minItems: 1 is enough to add. If someone might want to
-use therm-addr but not use alter-therm2, then this needs to be changed
-to permit these in any order. You can do that by adding the names as an
-enum, eg
-items:
- - enum: [ foo, bar]
- - bar
-
-
---/AVkAT3sA6d22eia
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQm7xgAKCRB4tDGHoIJi
-0qzwAP9rzTZh+YSsUM1T+ZHciOGT5L48rZNWNccs8J4qtoMlvAEApRwHpACBMctm
-Mk4QHnFon5IRCmT2BU8GZYlnlDRTDQ0=
-=lZcD
------END PGP SIGNATURE-----
-
---/AVkAT3sA6d22eia--
