@@ -1,130 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437682C0F79;
-	Wed,  5 Nov 2025 06:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9168730F550
+	for <linux-hwmon@vger.kernel.org>; Wed,  5 Nov 2025 11:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762325797; cv=none; b=ZwzZe0knKD8fD9FlrYdeT/u84ICiacJrQxByScI1S37Vzk7zfW5rT7wZN+78UqMTxLkp+FkZsUynXQPPA8+3v80dwibSui/G2fFLmdPifvfTk2z3d000aj+rHWOYVAniBoU2e3WEyzJfEYdCJ0kAy68IPiaZG/mvhIi07toe6DQ=
+	t=1762341197; cv=none; b=Msnq25paJe+hrwDI4HavWkcxEIenpjJcQwhiPJ8qF6KYcyyRrAXE1ZdiN5NiLjQ8Wb18yJOLchLDg+MBgSrMdbhorlctOqx5L7BF2J/E5CMMUXs3Bp1uHqILjeFxH/t8kCEeeyYuAa0VRXfO9dtjye7V9WMbG+krgbVmds+xWXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762325797; c=relaxed/simple;
-	bh=hZk/ziKA9dU0hF0yxM7zFs6DpVF8BniboX8o36W3tLs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OUtqTVnpT/CI7BzWywnL3sUjfhhY7Zi4OF5Lherahnao1Oj3dsqUG6UyCgqAPuui0pu5PCxgBA9tcwOpdmmAzljPZAqQaio9I8s+M0OArAesIYUP5Ekbr8E6ob/5cVlOlo0lJJfZ7TI/ZWMnVa9+deaZJ6b36OXjC9F2nF2JPC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OE07bM34; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762341197; c=relaxed/simple;
+	bh=y+ju+eJvK8HzYCUKH5EbHPD0aKHBQeN8wwLP+uV2/K4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E4h1GS4IVvZwklTjJGwdT1M3Jj5jCxb4JeglNsy388vAamUTZWO772ZgnKY1ePC5WSkeK0EntAw+GqApawYwmfstcp/AARDU7wxwZf25gD9AfCp6hP6KZXK/zTdGruQg2MWpGRRTZII5Dz33SGiMDUsvTk7PZg6Q6S/ZKNPtyuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=UUeMFiI2; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OE07bM34"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D8FDC4CEF8;
-	Wed,  5 Nov 2025 06:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762325797;
-	bh=hZk/ziKA9dU0hF0yxM7zFs6DpVF8BniboX8o36W3tLs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OE07bM34DcR3fFxbOAzm2l/14OJRCgYXo82oHK6zqCXNFJekNMNNRicvPnmVYczWo
-	 t6zSK2fUSYb2CRdcoUuJHF51KhwKlhEaA0u4rjV+5TN2/5p6F3p+kIw8CLIqK9+4eL
-	 yq19DGqQLU0hfzaYfVP+XOv21PcfvwgrRtIDIcq6D6s+5F4kiIM0g9rsJZDGj8a9js
-	 y4g9Szq8tIstcpNuaQUX2kY51jSoi8ZuAHehpiSOAiUSSw9PzMhW4K7+2G00Pu2GDX
-	 81DCO3nXWMHB0u7zej/spMLWRBljh4k2vMaKI+Mv8+Xz5h6uFMUvPaTEP2aa/0WOOT
-	 cXf6CHNPmUQwg==
-Message-ID: <7376d6a7-9e12-41ae-85ce-957294f140f6@kernel.org>
-Date: Wed, 5 Nov 2025 07:56:32 +0100
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="UUeMFiI2"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59445ee9738so241258e87.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 05 Nov 2025 03:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1762341194; x=1762945994; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JG51Hq++miK2Fex6Vfp0eKhsrvnsMhGhZv9+TnKZ4f0=;
+        b=UUeMFiI2K5GitHqS5G/wlBFiXfsai5SRWNT+vI2Il+ujcLP3UZL3Ex4OxynSZjquvg
+         bFvotS5qWWENEqHC9U4hWBSUJ9At+oaH1xxmzG6ECxtxkKwTd4ez5B1J4Qbje+a9ena4
+         8AWXrIJLBCb2eOZQsf6EiTiUj9j+9Es6hpi/LbA6ZPylstxcEF1XOHn+QlXvUuoAl0Y5
+         Xc0ofzcJrHRV1a1gusnDvUG3Lz+E7Lu1N8d/NU4JMLOK2TFjG+W3UN0nJru5s3gVTQec
+         usdh5YzGOQ5y6glkWkh6M0RqBNqRjWPAZlTVZiFDKTnHIq736ND1N0IrD7WbNfBRySko
+         VFlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762341194; x=1762945994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JG51Hq++miK2Fex6Vfp0eKhsrvnsMhGhZv9+TnKZ4f0=;
+        b=koDvPPZKyKL7vg1b79/YWjl01ifLFaOaPX0qc0Imi28V069EJcq4JwlGLuzBYMugnK
+         D+UiTnqgiKDHh8Wq6OBEVafAw3VwyBDkeve+7qkXpiimkRxbIeTQIxryKRfJvwwadUJ8
+         d2VSj2kIrSCp9pzI5u79zhIQ9qnNGDh17lxEcSgbxw/JuQQ1mzZrbTqVZTV5VS9meA8i
+         1yd6ibwPAXeKuneJq8LP3YRVsdLwPFGwW3a7jgjG6fhCD0vYDGe7n8i7dtipwcjyWolD
+         fOq2AzVvb9e1HtXENG5JVos5j/w+zDNiblZkWPcC7YlWVXgDeMTNJYZE2nLDJZ4yCY06
+         oFvw==
+X-Gm-Message-State: AOJu0YzfkGkSibnp+7aZB/HaiPVlMNe9mmDXVj8X9hWxNWJJz5Tv0cs6
+	6H/dkkguW1sfPTMKSV6lCMNhneQ0rj/Iu0wwIkqV8DI3ld+AaR88zuUAZ7gPL7jcpIArbNwsQT0
+	dmse2++c3DjJK7fTL24NkW5odBvRoKvuoNxCuxMroCw==
+X-Gm-Gg: ASbGncu8OWxR1VItP/fk0PP2mtAH9tgALXDv1bQ1I9cm7UeKfLKMXh2KIbPaJf4sHPN
+	fY9bqFmLTMfkhXFL+Ji6KSnt/wsDZbKHnGoIriqdZdJpn+p2QkCvB1D4cZ1HGo/sEBO4OH4sY8c
+	nOnbFkAuWJC+0QHPnUpBHW9UdE/UxmtxHpp5/vUc9C71QV+GMSCDM2lC+jJmMy3FgdU84m+6Ge7
+	eVZuxjlLSuaaBI55jlS5eNR46+Xnrg05SLDThbo348Irnkc4oPwOaImXru77U+GJOqUzSJwzblC
+	DFyubBt1XPKzJojv
+X-Google-Smtp-Source: AGHT+IHDSaXviCfITtg/FMcF5Bu77Gbwi/aiVMbNVLeu3JkIbzZIrWvYPYHyWiNt0LQo+iniDeT7EH+k0eJ0DFliQVI=
+X-Received: by 2002:a05:6512:61a1:b0:563:2efc:dea7 with SMTP id
+ 2adb3069b0e04-5943d7c9126mr1005125e87.34.1762341193497; Wed, 05 Nov 2025
+ 03:13:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: ST TSC1641 power monitor
-To: Igor Reznichenko <igor@reznichenko.net>
-Cc: conor+dt@kernel.org, corbet@lwn.net, david.hunter.linux@gmail.com,
- devicetree@vger.kernel.org, krzk+dt@kernel.org, linux-doc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux@roeck-us.net, robh@kernel.org, skhan@linuxfoundation.org
-References: <20251104-ruddy-tuna-of-efficiency-3321d3@kuoka>
- <20251104163048.1130482-1-igor@reznichenko.net>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251104163048.1130482-1-igor@reznichenko.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251104-ltc4283-support-v3-0-4bea496f791d@analog.com> <20251104-ltc4283-support-v3-3-4bea496f791d@analog.com>
+In-Reply-To: <20251104-ltc4283-support-v3-3-4bea496f791d@analog.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 5 Nov 2025 12:13:02 +0100
+X-Gm-Features: AWmQ_bmQd858eXoItm7LwqkIZXbCZS2AkKpBWiMVEPi0lh3UwpYTx2HZMgJHzUk
+Message-ID: <CAMRc=MeWyDOFfUnX8eV9+9tykinB+Hd9duf-v+UOCvcYKt9g9Q@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
+ Swap Controller
+To: nuno.sa@analog.com
+Cc: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/11/2025 17:30, Igor Reznichenko wrote:
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>> +
->>> +    i2c {
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +
->>> +        power-sensor@40 {
->>> +            compatible = "st,tsc1641";
->>> +            reg = <0x40>;
->>> +            interrupt-parent = <&gpio1>;
->>> +            interrupts = <1 IRQ_TYPE_LEVEL_LOW>; /* Polarity board dependent */
->>> +            shunt-resistor-micro-ohms = <1000>;
->>> +            st,alert-polarity-active-high;
->>
->> That's wrong IMO. Either you use it as SMBus alert or as CPU interrupt.
->> If you use as CPU interrupt, then the flag in "interrupts" defines what
->> is the level of this interrupt. That flag is a combination of both
->> CPU/SoC side and any inverters on the device. And actually you wrote it
->> already - "Polarity board dependent" - so why do you:
->> 1. Provide polarity twice
->> 2. Provide inconsistent values - alert interrupt is level low, but
->> alert interrupt is also active (level) high. So level low or level high?
-> 
-> I tried to illustrate both in one example, but I can see how this is confusing.
-> Will it work if I split the interrupt part into separate example?
+On Tue, Nov 4, 2025 at 11:31=E2=80=AFAM Nuno S=C3=A1 via B4 Relay
+<devnull+nuno.sa.analog.com@kernel.org> wrote:
 >
+> From: Nuno S=C3=A1 <nuno.sa@analog.com>
+>
+> The LTC4283 device has up to 8 pins that can be configured as GPIOs.
+>
+> Note that PGIO pins are not set as GPIOs by default so if they are
+> configured to be used as GPIOs we need to make sure to initialize them
+> to a sane default. They are set as inputs by default.
+>
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> ---
+>  MAINTAINERS                 |   2 +
+>  drivers/gpio/Kconfig        |  15 +++
+>  drivers/gpio/Makefile       |   1 +
+>  drivers/gpio/gpio-ltc4283.c | 217 ++++++++++++++++++++++++++++++++++++++=
+++++++
+>  4 files changed, 235 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d02fdf0a0593..76a659408c8c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14757,9 +14757,11 @@ F:     drivers/hwmon/ltc4282.c
+>
+>  LTC4283 HARDWARE MONITOR AND GPIO DRIVER
+>  M:     Nuno S=C3=A1 <nuno.sa@analog.com>
+> +L:     linux-gpio@vger.kernel.org
+>  L:     linux-hwmon@vger.kernel.org
+>  S:     Supported
+>  F:     Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+> +F:     drivers/gpio/gpio-ltc4283.c
+>  F:     drivers/hwmon/ltc4283.c
+>
+>  LTC4286 HARDWARE MONITOR DRIVER
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 7ee3afbc2b05..58610f77a75e 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -1741,6 +1741,21 @@ config GPIO_WM8994
+>
+>  endmenu
+>
+> +menu "AUXBUS GPIO expanders"
+> +       depends on AUXILIARY_BUS
+> +
 
-No need for another example, just drop the interrupts here.
+Please call the section "Auxiliary Bus GPIO drivers"
 
-Best regards,
-Krzysztof
+It's not very clear what "AUXBUS" is.
+
+> +config GPIO_LTC4283
+> +       tristate "Analog Devices LTC4283 GPIO support"
+> +       depends on SENSORS_LTC4283
+> +       help
+> +         If you say yes here you want the GPIO function available in Ana=
+log
+> +         Devices LTC4283 Negative Voltage Hot Swap Controller.
+> +
+> +         This driver can also be built as a module. If so, the module wi=
+ll
+> +         be called gpio-ltc4283.
+> +
+> +endmenu
+> +
+>  menu "PCI GPIO expanders"
+>         depends on PCI
+>
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index ec296fa14bfd..b6550944ed78 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -99,6 +99,7 @@ obj-$(CONFIG_GPIO_LP873X)             +=3D gpio-lp873x.=
+o
+>  obj-$(CONFIG_GPIO_LP87565)             +=3D gpio-lp87565.o
+>  obj-$(CONFIG_GPIO_LPC18XX)             +=3D gpio-lpc18xx.o
+>  obj-$(CONFIG_GPIO_LPC32XX)             +=3D gpio-lpc32xx.o
+> +obj-$(CONFIG_GPIO_LTC4283)             +=3D gpio-ltc4283.o
+>  obj-$(CONFIG_GPIO_MACSMC)              +=3D gpio-macsmc.o
+>  obj-$(CONFIG_GPIO_MADERA)              +=3D gpio-madera.o
+>  obj-$(CONFIG_GPIO_MAX3191X)            +=3D gpio-max3191x.o
+> diff --git a/drivers/gpio/gpio-ltc4283.c b/drivers/gpio/gpio-ltc4283.c
+> new file mode 100644
+> index 000000000000..885af67146a8
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-ltc4283.c
+> @@ -0,0 +1,217 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Analog Devices LTC4283 GPIO driver
+> + *
+> + * Copyright 2025 Analog Devices Inc.
+> + */
+
+Add a newline.
+
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/bitmap.h>
+> +#include <linux/bits.h>
+> +#include <linux/device.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+
+In ASCII '_' sorts before 'u'.
+
+With that fixed:
+
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
