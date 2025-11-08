@@ -1,194 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D014A07;
-	Sat,  8 Nov 2025 14:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6A0158874;
+	Sat,  8 Nov 2025 16:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762613168; cv=none; b=KIqxNeHa+Hi0lLqaOHwot1/slKoKV2VEDLAkfshoVd+Syad1w3gbJ0Fxhfebna6r7sEeAiQjgDmG9bhqDIHtB7haOgnTicik57rvCMqdJuGbSvCAwC5o9Cdzk0TzGFHY+aB7+dF5Dih98IxErmA66LBowGcDmFtrf45cBwQxQ/U=
+	t=1762620773; cv=none; b=Zh01wtKyxlJ5VS5Ggy/x/rBYvVHT2ILRgirQpg+4DdhBF6K1cWyVtK1SH1pyT38IuhRM8exJO8qKG0w29nei/0jZL45Piil8Pul+MRrAZUS1wP3+u/Kr9ntSI41tZr880VtdO0xWdkby/v7YvpMM6M4B1bjTCAHbjK1jT1aCbkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762613168; c=relaxed/simple;
-	bh=4xr81XznMx3JxZ2PiBSb4F7WXSBRzdh4HzfJfDT1/sM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B1BHkhnd3GgZsTnAFsSx55N8ovvSNBuGSZFbB1RXxtuGD2n6hTirHHai8sO6YYjBLW1nvaUpxGeNq2H1ieD0sFgpauUaa77TB8N6UdH9wgauzm0DuhI7oRVbgzfqR/be2WkQxEnjkDLgm7y8lB5aT0fjJwRS45gKXKrsKwuMfE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RA70Cds9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762620773; c=relaxed/simple;
+	bh=ONTa+cHS9I/e+sqfzot1zE/bRY0nqRHXeJIm7rj1qSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fuRgqwibCUD/pUoXfzxBOstUBVdbsQmwnU2fk+3xKjttRKvvt1xXF18idFAjSvpoB2LdTKw1APDNj3BNypbfslhirsh/JJu4mEkUZSh+N7ftegOLaAnYReW52q6DfFtnSUMA2xnX5qm7CVy+613SF+imB8urfIv5UDu37bbeBFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=A/N5y4PY; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RA70Cds9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0831AC116D0;
-	Sat,  8 Nov 2025 14:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762613166;
-	bh=4xr81XznMx3JxZ2PiBSb4F7WXSBRzdh4HzfJfDT1/sM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RA70Cds9k9kY/4VsrrHOMAD7mgqWhN36Dnw86ZcSEVBMRvLKPVE34vuiO7/RXfvxg
-	 ttmAEYGw89v/BY4VWUnClgJHHMFDC7ekDP3ET03RIXjKfqtzGp8KbKGfl78OqXe6qY
-	 6SA8hJImkXv9gkB42PT/r6abGa1doZ1xFvYdanBaTeE7RXjAEIUhoOlk8fymgFZzjS
-	 PVl2IDWWGCHzpJNKFxSMlvCrQrNZluc/QSrLWkRFDmt509wdhy975gQkY+ME00L8sa
-	 ALFsaLxATvB9wcyFXfBaA9s9UIpoMkWQkjthwLUdQSDP86pIIxjQ3rRa3A3iJyFkER
-	 UtVgN9zDj1PjQ==
-Message-ID: <aa330123-e6d9-44ce-b030-b266cba1df9c@kernel.org>
-Date: Sat, 8 Nov 2025 15:46:01 +0100
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="A/N5y4PY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=2pOc/mV98yYfx/itftIN+rSXJdRkRrRhjmWi04usANg=; b=A/N5y4PYErNcOGS55WXfq5Ajsx
+	KQngsaLMh1cvty9+1VzdScBf9EyEbIR+o8Z5JwAbfO1+YiHanli9sCAsShFRkj+MBD76LJFGU9bY8
+	mKt5SlYXm55bVVQ8N4rl3cRuMnKvP9o+5la/4AUGLgeIRqxVSIpauGL1pdZLu9bO4ON05Kr59J3o9
+	pySYo7zXOzivyhYZtErX+PQrKYJmoNYN69QWTO7iVMRycmIepERWamZn6kDc5WbukPw28ptxR6CmB
+	zQrlWhcHC6/0cJTSlYfCdxvm+jTolCOibtvq66R1Tim608x5XPfzxVA8ZY5SAf+y9z6zbb0DKlSEL
+	8f24ghGQ==;
+Date: Sat, 8 Nov 2025 17:52:44 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add Fitipower FP9931/JD9930
+Message-ID: <20251108175244.0b51fac6@kemnade.info>
+In-Reply-To: <aa330123-e6d9-44ce-b030-b266cba1df9c@kernel.org>
+References: <20251107-fp9931-submit-v1-0-aa7b79d9abb6@kemnade.info>
+	<20251107-fp9931-submit-v1-2-aa7b79d9abb6@kemnade.info>
+	<20251108-vagabond-lyrical-hawk-ad3490@kuoka>
+	<20251108152114.53422ea6@kemnade.info>
+	<aa330123-e6d9-44ce-b030-b266cba1df9c@kernel.org>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add Fitipower FP9931/JD9930
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20251107-fp9931-submit-v1-0-aa7b79d9abb6@kemnade.info>
- <20251107-fp9931-submit-v1-2-aa7b79d9abb6@kemnade.info>
- <20251108-vagabond-lyrical-hawk-ad3490@kuoka>
- <20251108152114.53422ea6@kemnade.info>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251108152114.53422ea6@kemnade.info>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 08/11/2025 15:21, Andreas Kemnade wrote:
-> On Sat, 8 Nov 2025 13:17:31 +0100
-> Krzysztof Kozlowski <krzk@kernel.org> wrote:
+On Sat, 8 Nov 2025 15:46:01 +0100
+Krzysztof Kozlowski <krzk@kernel.org> wrote:
+
+> >>> +  fiti,tdly:    
+> >>
+> >> No, look at datasheet. What values are there? ms.
+> >>  
+> > Hmm, no to what? I do not understand your comment.  
 > 
->> On Fri, Nov 07, 2025 at 09:06:45PM +0100, Andreas Kemnade wrote:
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - const: fiti,fp9931
->>> +
->>> +      - items:
->>> +          - const: fiti,jd9930
->>> +          - const: fiti,fp9931
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  '#thermal-sensor-cells':  
->>
->> Why is this a thermal zone sensor? Aren't you mixing temperature
->> reading with soc? For temperature reading you can use hwmon, for
->> example.
->>
-> well, I just took the SY7636A as reference. Is there any document describing
-> the terme "thermal zone sensor". I would define a thermal zone as an area
-> with things influencing each other thermically. These things are
-> sensors, heat sources and sinks. Well, the panel typically does not produce
-> much heat.
-> But I do not insist on having that property here. As far as I understand,
-> the hwmon uses this property as an indication to also create a thermal zone
-> sensor.
-
-That's Linux detail, but anyway you don't need it. This device does not
-look like a part of thermal zones.
-
+> Please use proper units for the field expressed in the property name
+> suffix and possible values (enum).
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
 > 
->>> +    const: 0
->>> +
->>> +  enable-gpios:
->>> +    maxItems: 1
->>> +
->>> +  pg-gpios:
->>> +    maxItems: 1
->>> +
->>> +  ts-en-gpios:  
->>
->> It's called EN_TS, so en-ts-gpios.
->>
-> ok
->>
->>> +    maxItems: 1
->>> +
->>> +  xon-gpios:  
->>
->> That's powerdown-gpios, see gpio-consumer-common.
->>
-> looking a bit around: powerdown-gpios e.g. in the MCP4801
-> describe an *input*, which should be connected to an output of the SoC. 
-> Looking at the datasheet, I see "XON Open Drain N-MOS On-Resistance" so it is
-> an *output* (same as for PG). So it is something different then the
-> powerdown-gpios in e.g. the MCP4801.
-> So it is a signal coming from the JD9930 after EN goes low in the power down
-> sequence.
-
-OK, I just briefly skimmed through datasheet.
-
+> You also need default.
 > 
->>> +    maxItems: 1
->>> +
->>> +  vin-supply:
->>> +    description:
->>> +      Supply for the whole chip. Some vendor kernels and devicetrees
->>> +      declare this as a non-existing GPIO named "pwrall".
->>> +
->>> +  fiti,tdly:  
->>
->> No, look at datasheet. What values are there? ms.
->>
-> Hmm, no to what? I do not understand your comment.
+> > So I guess a bit what might be options to discuss here:
+> > - put raw value for the bitfield here (what is currently done).
+> > - put the ms values here (then I would expect a suffix in the property name)
+> >   We have the mapping 0ms - 0, 1ms - 1, 2ms - 2, 4ms - 3, so it is
+> >   not identical.  
+> I don't know what has to be identical. You want here 0, 1, 2 or 4 ms.
+> BTW, if you speak about driver complexity, getting register value out of
+> above is absolutely trivial, so not a suitable argument.
 
-Please use proper units for the field expressed in the property name
-suffix and possible values (enum).
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+Ok, no problem with doing that trivial conversion in the driver.
 
-You also need default.
+Playing around with dt-binding-check and add enums (and the -ms in a
+second step):
+  fitipower,tdlys:
+    $ref: /schemas/types.yaml#/definitions/uint32-array
+    description:
+      Power up soft start delay settings tDLY1-4 bitfields in the
+      POWERON_DELAY register
+    default: <0 0 0 0>
+    items:
+      - enum:
+          - 0
+          - 1
+          - 2
+          - 4
+      - enum:
+          - 0
+          - 1
+          - 2
+          - 4
+      - enum:
+          - 0
+          - 1
+          - 2
+          - 4
+      - enum:
+          - 0
+          - 1
+          - 2
+          - 4
 
-> So I guess a bit what might be options to discuss here:
-> - put raw value for the bitfield here (what is currently done).
-> - put the ms values here (then I would expect a suffix in the property name)
->   We have the mapping 0ms - 0, 1ms - 1, 2ms - 2, 4ms - 3, so it is
->   not identical.
-I don't know what has to be identical. You want here 0, 1, 2 or 4 ms.
-BTW, if you speak about driver complexity, getting register value out of
-above is absolutely trivial, so not a suitable argument.
 
-Best regards,
-Krzysztof
+dt-binding-check accepts this, including the example. But if I change it to -ms
+as you requested, I get
+
+/home/andi/old-home/andi/kobo/kernel/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml: properties:fitipower,tdly-ms: 'anyOf' conditional failed, one must be fixed:
+	'maxItems' is a required property
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'$ref' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'default' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'items' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	Additional properties are not allowed ('$ref', 'default' were unexpected)
+		hint: Arrays must be described with a combination of minItems/maxItems/items
+	'items' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
+	'<0 0 0 0>' is not of type 'integer'
+	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/home/andi/old-home/andi/kobo/kernel/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml: properties:fitipower,tdly-ms: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/home/andi/old-home/andi/kobo/kernel/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml: properties:fitipower,tdly-ms: 'anyOf' conditional failed, one must be fixed:
+	'maxItems' is a required property
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'$ref' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'default' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'items' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	Additional properties are not allowed ('$ref', 'default' were unexpected)
+		hint: Arrays must be described with a combination of minItems/maxItems/items
+	'items' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
+	'<0 0 0 0>' is not of type 'integer'
+	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/home/andi/old-home/andi/kobo/kernel/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml: properties:fitipower,tdly-ms: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+
+Leaving out the type $ref does not improve things much.
+What is going on here?
+
+Regards,
+Andreas
