@@ -1,198 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2DA1AB6F1;
-	Sat,  8 Nov 2025 12:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A4E1C84DF;
+	Sat,  8 Nov 2025 14:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762604520; cv=none; b=i0ilC89Y+mA+svpqls/P8V4/H6CiYu2+2Phjq++eV7xWghAhl52atNirHsMnbAnIkrfAkaBqu593MMUVzzPGVymtJ9NR+YPTGHXDhRDjVIS0YduIzwAxxgkE+XTtd7wCTEbjXEWkbGvLC7XAEXTugkpl6wzeKxj6VQcCSddc4fI=
+	t=1762611683; cv=none; b=qK0rDH+BK5KCuHSmtuM+/wOcevaaGXlNbccW/vs/miWozU6kNh3/QaGP+CAsVnPWECYVfBcgUaCHwE2elMKAgFDVGcQmkNrQddxUJcv5NvTUrDhX0aen9KhaPcDSh8vPTmOBfCb/PDL6ZINkmZS3UEduEziSEYkKQLQRYimaLxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762604520; c=relaxed/simple;
-	bh=aRkrwHVAt4LiXOdamNP4if92d1A4vzcDb7Oq05C4vrg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OVKVihXTYwJxQFx72U2NjbA9RGHqkBTPDOA9A+cT0nM76wMDFqqmM+OwwbmgWVD1tfbs91o6zaQ/qmH1b6c+/+vihxvrbzFlz2ZXVzDxy5+B36sSZ8nJcHBw/J1ZPrsrjweao9pZGcyTVg5UncqbRxSAXyQh3wiDPjjjIP2rgNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DmHlUETd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762611683; c=relaxed/simple;
+	bh=PXg7E1CyCSktm5smzwdhzbzx/0EVSt3oxzgJwWhcu0o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cT2FfgCA7/go4PI+eDhVC9qo+JWWkYRV+LTO69eg+fIA56hlWfans/F7MpvpNLpNircPugBLwjL/Ob9lk7TyYkkiumjGQxILhv2/K/Kx/RfjOJPt9NPj5cSiijVto9fJDmQISMBygqLymS5PjWBTENmYR7bDfS0jsOjiVP/KGT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=rx+uvZ3B; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DmHlUETd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD0AC4CEF5;
-	Sat,  8 Nov 2025 12:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762604519;
-	bh=aRkrwHVAt4LiXOdamNP4if92d1A4vzcDb7Oq05C4vrg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DmHlUETdAeugNDvV7MQsAk5jdwMTQWy0nQfc6BPOokaU9ARhOljuMIVwReNwqrxNO
-	 l6hJsAgFmznkB8yBqSZWbUiJSVjHD10Cjotd5rdi1sH3x7knpSR8MDIItVF+1r3ceV
-	 pdNGsc3JXn0rjyYF975OE8c/XOU2A2PooORcHXomzVzRRbdw+VOmjD0MDTkhgYSl3D
-	 CCNCwjI8VuYaliVHBDT9sEKwcXn8jSAGOur9ilLuOKk4JfrUMbbJilnpL34hiMh2b2
-	 4kk6EaTVC6m0Gox+OPZskdrgMSmPYB+oIMqtDd51eRZWsDctPyAd5vXV3rgvLpdYuK
-	 pLapu5OD/hRNQ==
-Date: Sat, 8 Nov 2025 13:21:57 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/3] regulator: Add FP9931/JD9930 driver
-Message-ID: <20251108-nebulous-cheetah-of-prowess-964be6@kuoka>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="rx+uvZ3B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=yY/Mw/fA6kA1tDgGp7D6XVfmNBQBiknCOSNWaztlke0=; b=rx+uvZ3BNntqZcdm1nm4mz20cj
+	UXhcEa37E/wxuHfnmWmyQWb0OEKp/jWuHN9B4g5I6vQ/QjnUDKrcS1DdGwNRdsYU6qHQvJhpT5x6h
+	3A44EtJyjwdKZrAQBqZ0PEx8XK4I5I1xsyHpPkYmw8ua9cnVR24+izd4mE3zig8xYv1ABmbc4TZEp
+	KMJlmDgTFTauVo57gMknIYQtfNJxtLd7o+4KXnqEqGBBDXMqM9ekFXrl3oxIWO2wRQQkuz6fgbToN
+	dFJnwNoe5LFgOFs2G4yujvMprvl04Bvjv0S5hsaE3KE5lF8DyvZ1IiTem4b0XL4uc1mDr2xh/tMt0
+	uQLcVUOQ==;
+Date: Sat, 8 Nov 2025 15:21:14 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: regulator: Add Fitipower FP9931/JD9930
+Message-ID: <20251108152114.53422ea6@kemnade.info>
+In-Reply-To: <20251108-vagabond-lyrical-hawk-ad3490@kuoka>
 References: <20251107-fp9931-submit-v1-0-aa7b79d9abb6@kemnade.info>
- <20251107-fp9931-submit-v1-3-aa7b79d9abb6@kemnade.info>
+	<20251107-fp9931-submit-v1-2-aa7b79d9abb6@kemnade.info>
+	<20251108-vagabond-lyrical-hawk-ad3490@kuoka>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251107-fp9931-submit-v1-3-aa7b79d9abb6@kemnade.info>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 07, 2025 at 09:06:46PM +0100, Andreas Kemnade wrote:
-> +
-> +static int fp9931_probe(struct i2c_client *client)
-> +{
-> +	struct fp9931_data *data;
-> +	struct regulator_config config = { };
-> +	struct regulator_dev *rdev;
-> +	int ret = 0;
-> +	int i;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct fp9931_data), GFP_KERNEL);
+On Sat, 8 Nov 2025 13:17:31 +0100
+Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-sizeof(*)
+> On Fri, Nov 07, 2025 at 09:06:45PM +0100, Andreas Kemnade wrote:
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - const: fiti,fp9931
+> > +
+> > +      - items:
+> > +          - const: fiti,jd9930
+> > +          - const: fiti,fp9931
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#thermal-sensor-cells':  
+> 
+> Why is this a thermal zone sensor? Aren't you mixing temperature
+> reading with soc? For temperature reading you can use hwmon, for
+> example.
+> 
+well, I just took the SY7636A as reference. Is there any document describing
+the terme "thermal zone sensor". I would define a thermal zone as an area
+with things influencing each other thermically. These things are
+sensors, heat sources and sinks. Well, the panel typically does not produce
+much heat.
+But I do not insist on having that property here. As far as I understand,
+the hwmon uses this property as an indication to also create a thermal zone
+sensor.
 
-> +	data->regmap = devm_regmap_init_i2c(client, &regmap_config);
-> +	if (IS_ERR(data->regmap))
-> +		return dev_err_probe(&client->dev, PTR_ERR(data->regmap),
-> +				     "failed to allocate regmap!\n");
-> +
-> +	data->vin_reg = devm_regulator_get_optional(&client->dev, "vin");
-> +	if (IS_ERR(data->vin_reg))
-> +		return dev_err_probe(&client->dev, PTR_ERR(data->vin_reg),
-> +				     "failid to get vin regulator\n");
-> +
-> +	data->pgood_gpio = devm_gpiod_get(&client->dev, "pg",
-> +					  GPIOD_IN);
+> > +    const: 0
+> > +
+> > +  enable-gpios:
+> > +    maxItems: 1
+> > +
+> > +  pg-gpios:
+> > +    maxItems: 1
+> > +
+> > +  ts-en-gpios:  
+> 
+> It's called EN_TS, so en-ts-gpios.
+> 
+ok
+> 
+> > +    maxItems: 1
+> > +
+> > +  xon-gpios:  
+> 
+> That's powerdown-gpios, see gpio-consumer-common.
+> 
+looking a bit around: powerdown-gpios e.g. in the MCP4801
+describe an *input*, which should be connected to an output of the SoC. 
+Looking at the datasheet, I see "XON Open Drain N-MOS On-Resistance" so it is
+an *output* (same as for PG). So it is something different then the
+powerdown-gpios in e.g. the MCP4801.
+So it is a signal coming from the JD9930 after EN goes low in the power down
+sequence.
 
-Please wrap at 80, not 60. See Linux coding style.
+> > +    maxItems: 1
+> > +
+> > +  vin-supply:
+> > +    description:
+> > +      Supply for the whole chip. Some vendor kernels and devicetrees
+> > +      declare this as a non-existing GPIO named "pwrall".
+> > +
+> > +  fiti,tdly:  
+> 
+> No, look at datasheet. What values are there? ms.
+> 
+Hmm, no to what? I do not understand your comment.
+So I guess a bit what might be options to discuss here:
+- put raw value for the bitfield here (what is currently done).
+- put the ms values here (then I would expect a suffix in the property name)
+  We have the mapping 0ms - 0, 1ms - 1, 2ms - 2, 4ms - 3, so it is
+  not identical.
 
-> +	if (IS_ERR(data->pgood_gpio))
-> +		return dev_err_probe(&client->dev,
-> +				     PTR_ERR(data->pgood_gpio),
-> +				     "failed to get power good gpio\n");
-> +
-> +	data->pgood_irq = gpiod_to_irq(data->pgood_gpio);
-> +	if (data->pgood_irq < 0)
-> +		return data->pgood_irq;
-> +
-> +	data->en_gpio = devm_gpiod_get(&client->dev, "enable", GPIOD_OUT_LOW);
-> +	if (IS_ERR(data->en_gpio))
-> +		return dev_err_probe(&client->dev,
-> +				     PTR_ERR(data->en_gpio),
-
-No need to break line.
-
-> +				     "failed to get en gpio\n");
-> +
-> +	data->ts_en_gpio = devm_gpiod_get_optional(&client->dev, "ts-en", GPIOD_OUT_LOW);
-> +	if (IS_ERR(data->ts_en_gpio))
-> +		return dev_err_probe(&client->dev,
-> +				     PTR_ERR(data->ts_en_gpio),
-> +				     "failed to get en gpio\n");
-> +
-> +	data->dev = &client->dev;
-> +	i2c_set_clientdata(client, data);
-> +
-> +	init_completion(&data->pgood_completion);
-> +
-> +	ret = devm_request_threaded_irq(&client->dev, data->pgood_irq, NULL,
-> +					pgood_handler,
-> +					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> +					"PGOOD", data);
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "failed to request irq\n");
-> +
-> +	if (IS_ENABLED(CONFIG_PM)) {
-> +		devm_pm_runtime_enable(&client->dev);
-> +		pm_runtime_set_autosuspend_delay(&client->dev, 4000);
-> +		pm_runtime_use_autosuspend(&client->dev);
-> +	} else {
-> +		ret = fp9931_runtime_resume(&client->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		devm_add_action_or_reset(&client->dev, disable_nopm, data);
-> +	}
-> +
-> +	ret = setup_timings(data);
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret, "failed to setup timings\n");
-> +
-> +	config.driver_data = data;
-> +	config.dev = &client->dev;
-> +	config.regmap = data->regmap;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
-> +		rdev = devm_regulator_register(&client->dev,
-> +					       &regulators[i],
-> +					       &config);
-
-Please wrap according to Linux coding style.
-
-> +		if (IS_ERR(rdev))
-> +			return dev_err_probe(&client->dev, PTR_ERR(rdev),
-> +					     "failed to register %s regulator\n",
-> +					     regulators[i].name);
-> +	}
-> +
-> +	if (IS_REACHABLE(CONFIG_HWMON)) {
-> +		struct device *hwmon_dev;
-> +
-> +		hwmon_dev = devm_hwmon_device_register_with_info(&client->dev, "fp9931", data,
-> +								 &fp9931_chip_info, NULL);
-
-So you use hwmon, then why binding said this is a thermal zone sensor?
-
-> +		if (IS_ERR(hwmon_dev))
-> +			dev_err(&client->dev, "failed to register hwmon\n");
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dev_pm_ops fp9931_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(fp9931_runtime_suspend, fp9931_runtime_resume, NULL)
-> +};
-> +
-> +static const struct of_device_id fp9931_dt_ids[] = {
-> +	{
-> +		.compatible = "fiti,fp9931",
-> +	}, {
-> +		.compatible = "fiti,fp9931", /* no night mode */
-
-Drop, it's the same compatible.
-
-> +	}, {
-> +		/* sentinel */
-> +	}
-> +};
-> +MODULE_DEVICE_TABLE(of, fp9931_dt_ids);
-> +
-> +static struct i2c_driver fp9931_i2c_driver = {
-> +	.driver = {
-> +		   .name = "fp9931",
-> +		   .owner = THIS_MODULE,
-
-Please do not send us 12 year old code... Drop and runstandard tools
-(smatch, sparse, cocci) at minimum.
-
-> +		   .of_match_table = fp9931_dt_ids,
-> +		   .pm = (&fp9931_pm_ops),
-
-No need for ()
-
-Best regards,
-Krzysztof
-
+Regards,
+Andreas
