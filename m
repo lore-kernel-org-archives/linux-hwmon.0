@@ -1,143 +1,234 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DED81D7E41;
-	Mon, 10 Nov 2025 11:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF1E314A67;
+	Mon, 10 Nov 2025 12:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762774239; cv=none; b=nYeKISX6buDCfGFjt1a4otoB2S+JNEkGissOh+fUImr6pg9ghgRWMwzz6SW1GuyYM5qB9soJYK81cbVE9o8GGViWRHccYJzGTvIqtbewhlJVHmGAR3Akqqbzzh/jr7CjEI4ULIApsbOPkwMXiAkozTUwIPOiJZnnzP73HDAGbrI=
+	t=1762776683; cv=none; b=Y7Crxr6spt2Il3BZKVDiVItkXxWUGjpjxIh7x1MR2cqHSkfDJ0zPy7+zq3bMvUJEdhLs5ZeAS81wAqyX6m0mWyYlpnn08ipmlMUFmchjLYKgncjUc1ZF6HYSIfOZ1jSaRBdqIppQOJc2K+Ld0aLfgxLeVGl6lQBcu2ud8rcJFL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762774239; c=relaxed/simple;
-	bh=LGfNnwD/weg7hFUalWkhbY8vT84PU5rfjzkafeFhtu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dMvsTYERPXspfKKtr0g5XIij76uvpqgLgUJdc2zCgC3pdyiATO9rslCGXKhQ+Rg50kq8p8A+y0xQVWMbtuOhOxfT8S+/9vF7HVv5R+9yaJaVhpGNAAzmQlK1/0vbwnLPEMTx94JwMTNwzwKNNfmBcAIPqU3MdtEWFpdPt3W5h9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=noVYNl7Q; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762776683; c=relaxed/simple;
+	bh=3wXlbjfXIgU7+GGD6R37TOwSczIqwGNGvvc81bNQiiA=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=owffNzqBq7xQrfk1CuDBieFE35n8Vai4RS0sv2QjxsrxlgPH2WKml49nxsJh1Jd8l49x9clIuufiAl20vBcPFK0b/Lgwz5bVY7FqSnneiRDzLjHk4ZNSkX9VnmbQWjt5c7iKQ/PSPXHGWyQYj3C61OJj8jBx9zActCyB8yhQruk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eYl5bPPt; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="noVYNl7Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eYl5bPPt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762774238; x=1794310238;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LGfNnwD/weg7hFUalWkhbY8vT84PU5rfjzkafeFhtu4=;
-  b=noVYNl7Qwu87W7kf1DbUS7ieSiaL+OxYduzLUrj1Gags2w2tSLljQNM+
-   dDznxz2hMsSdG2aaFNVzgZMfE2KOJWE9Gp+bwd8lqnlXLsEsOeSSn14RY
-   x6eL6pwy8xyg2rlsNhdiZw8JHYocunRpvUM3bhgevvD17bn3hwP4IiVLF
-   2p9cvFvtGOE+JgOBp+e7cU+OiBHOCbi5ncei7pJCEJE/dKEmAm+gfU7Co
-   lco7yP6dg5HWrnAe+d8s3hmuDZs9qA7rns0ryN+lehMz5IfHPXFtDJ1On
-   NL6qN8nyHjz+COtdfr7WcVKAxBbKGEUAD33q/RHKLECp+05Bzw2/xfCbc
+  t=1762776681; x=1794312681;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=3wXlbjfXIgU7+GGD6R37TOwSczIqwGNGvvc81bNQiiA=;
+  b=eYl5bPPtXQ6GnAx38N69nihSqs6NOPBQz7floeAnuXIn2XLGBgjYdVs4
+   fahJ0v0Qh5m5kSwcbK1dv0yIf7k4Ip9OPOnfoxLkSm7FNSMnBRDbT8LSB
+   Jh1u8rQsnLZw2R5E1UqTaaGpr9GL1EN9TZ2OGE0Q6bEi28GqpkFoa5AtD
+   tMhGJkff6FAw706/Y1I/dN7SF6Sy78vqOBFAQZAdj0xMfdowwBSfhoOLK
+   W+BVVKcNVx+BXaYMJN8oo3/7YfoiDlGVvhx3llcPUa/xgB0BTrWPkyKvx
+   E/brUC2L4yL88y3WDLft9QHVmIYTk3WBfJ9ZrH+r5hRhYBrbnojWyO2pe
    Q==;
-X-CSE-ConnectionGUID: apiKMVMlSW28exSob0Ws8A==
-X-CSE-MsgGUID: 1JU15bnUQdq2F2teXXTS1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="64977655"
+X-CSE-ConnectionGUID: eWOdHAecRl6G7nRvR4H34g==
+X-CSE-MsgGUID: foPRafjDRdut2vt9qrvIAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="87455880"
 X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="64977655"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 03:30:38 -0800
-X-CSE-ConnectionGUID: XYTUUqmxSIiAF3qeeyiawg==
-X-CSE-MsgGUID: /VNA7VkEQNCz1fIg1MqD/Q==
+   d="scan'208";a="87455880"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 04:11:21 -0800
+X-CSE-ConnectionGUID: zkZGdcy2TcGTa3haXpMZ7A==
+X-CSE-MsgGUID: syhEAcKARXmlw66wEWnXgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="212047006"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Nov 2025 03:30:34 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vIQ6S-0000LJ-13;
-	Mon, 10 Nov 2025 11:30:32 +0000
-Date: Mon, 10 Nov 2025 19:29:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andreas Kemnade <andreas@kemnade.info>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH 3/3] regulator: Add FP9931/JD9930 driver
-Message-ID: <202511101911.sdETGGNC-lkp@intel.com>
-References: <20251107-fp9931-submit-v1-3-aa7b79d9abb6@kemnade.info>
+   d="scan'208";a="188300237"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.13])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 04:11:16 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 10 Nov 2025 14:11:12 +0200 (EET)
+To: Antheas Kapenekakis <lkml@antheas.dev>
+cc: Armin Wolf <W_Armin@gmx.de>, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org, 
+    Hans de Goede <hansg@kernel.org>, 
+    Derek John Clark <derekjohn.clark@gmail.com>, 
+    =?ISO-8859-15?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>, 
+    Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 6/6] platform/x86: ayaneo-ec: Add suspend hook
+In-Reply-To: <CAGwozwFJKeU-pWzNTkryoUpD63LFuJVSB6=y4C_22+4qat05eA@mail.gmail.com>
+Message-ID: <a99dee5b-8469-c09f-0388-d7e6d6071bdf@linux.intel.com>
+References: <20251031163651.1465981-1-lkml@antheas.dev> <20251031163651.1465981-7-lkml@antheas.dev> <83b004ce-b34e-41a4-b35d-1f24056ac60a@gmx.de> <CAGwozwFJKeU-pWzNTkryoUpD63LFuJVSB6=y4C_22+4qat05eA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251107-fp9931-submit-v1-3-aa7b79d9abb6@kemnade.info>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Andreas,
+On Sun, 2 Nov 2025, Antheas Kapenekakis wrote:
 
-kernel test robot noticed the following build warnings:
+> On Sun, 2 Nov 2025 at 19:35, Armin Wolf <W_Armin@gmx.de> wrote:
+> >
+> > Am 31.10.25 um 17:36 schrieb Antheas Kapenekakis:
+> >
+> > > The Ayaneo EC resets after hibernation, losing the charge control state.
+> > > Add a small PM hook to restore this state on hibernation resume.
+> > >
+> > > The fan speed is also lost during hibernation, but since hibernation
+> > > failures are common with this class of devices, setting a low fan speed
+> > > when the userspace program controlling the fan will potentially not
+> > > take over could cause the device to overheat, so it is not restored.
+> >
+> > Please update the patch description.
+> >
+> > >
+> > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > > ---
+> > >   drivers/platform/x86/ayaneo-ec.c | 73 ++++++++++++++++++++++++++++++++
+> > >   1 file changed, 73 insertions(+)
+> > >
+> > > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
+> > > index 9548e3d22093..e1ad5968d3b4 100644
+> > > --- a/drivers/platform/x86/ayaneo-ec.c
+> > > +++ b/drivers/platform/x86/ayaneo-ec.c
+> > > @@ -41,6 +41,8 @@
+> > >   #define AYANEO_MODULE_LEFT  BIT(0)
+> > >   #define AYANEO_MODULE_RIGHT BIT(1)
+> > >
+> > > +#define AYANEO_CACHE_LEN     1
+> > > +
+> > >   struct ayaneo_ec_quirk {
+> > >       bool has_fan_control;
+> > >       bool has_charge_control;
+> > > @@ -51,6 +53,9 @@ struct ayaneo_ec_platform_data {
+> > >       struct platform_device *pdev;
+> > >       struct ayaneo_ec_quirk *quirks;
+> > >       struct acpi_battery_hook battery_hook;
+> > > +
+> > > +     bool restore_charge_limit;
+> > > +     bool restore_pwm;
+> > >   };
+> > >
+> > >   static const struct ayaneo_ec_quirk quirk_fan = {
+> > > @@ -207,10 +212,14 @@ static int ayaneo_ec_read(struct device *dev, enum hwmon_sensor_types type,
+> > >   static int ayaneo_ec_write(struct device *dev, enum hwmon_sensor_types type,
+> > >                          u32 attr, int channel, long val)
+> > >   {
+> > > +     struct ayaneo_ec_platform_data *data = platform_get_drvdata(
+> > > +             to_platform_device(dev));
+> > > +     int ret;
+> > >       switch (type) {
+> > >       case hwmon_pwm:
+> > >               switch (attr) {
+> > >               case hwmon_pwm_enable:
+> > > +                     data->restore_pwm = false;
+> > >                       switch (val) {
+> > >                       case 1:
+> > >                               return ec_write(AYANEO_PWM_ENABLE_REG,
+> > > @@ -224,6 +233,15 @@ static int ayaneo_ec_write(struct device *dev, enum hwmon_sensor_types type,
+> > >               case hwmon_pwm_input:
+> > >                       if (val < 0 || val > 255)
+> > >                               return -EINVAL;
+> > > +                     if (data->restore_pwm) {
+> > > +                             // Defer restoring PWM control to after
+> > > +                             // userspace resumes successfully
+> > > +                             ret = ec_write(AYANEO_PWM_ENABLE_REG,
+> > > +                                            AYANEO_PWM_MODE_MANUAL);
+> > > +                             if (ret)
+> > > +                                     return ret;
+> > > +                             data->restore_pwm = false;
+> >
+> > I suspect that you need to use a mutex to protect the restore sequence.
+> 
+> This is indeed true. I can respin the last patch with a mutex and fix
+> the description.
+> 
+> If the date on the control modules patch is the only issue, I can skip
+> re-sending the first 5.
 
-[auto build test WARNING on dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa]
+As usual, please send next version of the series once you've addressed the 
+review comments.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Kemnade/dt-bindings-vendor-prefixes-Add-Fitipower/20251108-040835
-base:   dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
-patch link:    https://lore.kernel.org/r/20251107-fp9931-submit-v1-3-aa7b79d9abb6%40kemnade.info
-patch subject: [PATCH 3/3] regulator: Add FP9931/JD9930 driver
-config: mips-randconfig-r134-20251110 (https://download.01.org/0day-ci/archive/20251110/202511101911.sdETGGNC-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d445cba39f4dd3dcda4fa1433eca825cf8fc09)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251110/202511101911.sdETGGNC-lkp@intel.com/reproduce)
+If you want some patches to not delay the first part of the series, send 
+those separately.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511101911.sdETGGNC-lkp@intel.com/
+--
+ i.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/regulator/fp9931.c:402:18: sparse: sparse: Initializer entry defined twice
-   drivers/regulator/fp9931.c:409:18: sparse:   also defined here
-
-vim +402 drivers/regulator/fp9931.c
-
-   398	
-   399	static const struct regulator_desc regulators[] = {
-   400		{
-   401			.name = "V3P3",
- > 402			.of_match = of_match_ptr("V3P3"),
-   403			.id = 0,
-   404			.ops = &fp9931_v3p3ops,
-   405			.type = REGULATOR_VOLTAGE,
-   406			.owner = THIS_MODULE,
-   407			.enable_reg = FP9931_REG_CONTROL_REG1,
-   408			.enable_mask = BIT(1),
-   409			.of_match = of_match_ptr("v3p3"),
-   410			.n_voltages = 1,
-   411			.min_uV = 3300000
-   412		},
-   413		{
-   414			.name = "VPOSNEG",
-   415			.of_match = of_match_ptr("VPOSNEG"),
-   416			.id = 1,
-   417			.ops = &fp9931_vposneg_ops,
-   418			.type = REGULATOR_VOLTAGE,
-   419			.owner = THIS_MODULE,
-   420			.n_voltages = ARRAY_SIZE(VPOSNEG_table),
-   421			.vsel_reg = FP9931_REG_VPOSNEG_SETTING,
-   422			.vsel_mask = 0x3F,
-   423			.volt_table = VPOSNEG_table,
-   424		},
-   425		{
-   426			.name = "VCOM",
-   427			.of_match = of_match_ptr("VCOM"),
-   428			.id = 2,
-   429			.ops = &fp9931_vcom_ops,
-   430			.type = REGULATOR_VOLTAGE,
-   431			.owner = THIS_MODULE,
-   432			.n_voltages = 255,
-   433			.min_uV = 0,
-   434			.uV_step = 5000000 / 255,
-   435			.vsel_reg = FP9931_REG_VCOM_SETTING,
-   436			.vsel_mask = 0xFF
-   437		},
-   438	};
-   439	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> 
+> > Thanks,
+> > Armin Wolf
+> >
+> > > +                     }
+> > >                       return ec_write(AYANEO_PWM_REG, (val * 100) / 255);
+> > >               default:
+> > >                       break;
+> > > @@ -474,10 +492,65 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
+> > >       return 0;
+> > >   }
+> > >
+> > > +static int ayaneo_freeze(struct device *dev)
+> > > +{
+> > > +     struct platform_device *pdev = to_platform_device(dev);
+> > > +     struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
+> > > +     int ret;
+> > > +     u8 tmp;
+> > > +
+> > > +     if (data->quirks->has_charge_control) {
+> > > +             ret = ec_read(AYANEO_CHARGE_REG, &tmp);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +
+> > > +             data->restore_charge_limit = tmp == AYANEO_CHARGE_VAL_INHIBIT;
+> > > +     }
+> > > +
+> > > +     if (data->quirks->has_fan_control) {
+> > > +             ret = ec_read(AYANEO_PWM_ENABLE_REG, &tmp);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +
+> > > +             data->restore_pwm = tmp == AYANEO_PWM_MODE_MANUAL;
+> > > +
+> > > +             // Release the fan when entering hibernation to avoid
+> > > +             // overheating if hibernation fails and hangs
+> > > +             if (data->restore_pwm) {
+> > > +                     ret = ec_write(AYANEO_PWM_ENABLE_REG, AYANEO_PWM_MODE_AUTO);
+> > > +                     if (ret)
+> > > +                             return ret;
+> > > +             }
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int ayaneo_restore(struct device *dev)
+> > > +{
+> > > +     struct platform_device *pdev = to_platform_device(dev);
+> > > +     struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
+> > > +     int ret;
+> > > +
+> > > +     if (data->quirks->has_charge_control && data->restore_charge_limit) {
+> > > +             ret = ec_write(AYANEO_CHARGE_REG, AYANEO_CHARGE_VAL_INHIBIT);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static const struct dev_pm_ops ayaneo_pm_ops = {
+> > > +     .freeze = ayaneo_freeze,
+> > > +     .restore = ayaneo_restore,
+> > > +};
+> > > +
+> > >   static struct platform_driver ayaneo_platform_driver = {
+> > >       .driver = {
+> > >               .name = "ayaneo-ec",
+> > >               .dev_groups = ayaneo_ec_groups,
+> > > +             .pm = &ayaneo_pm_ops,
+> > >       },
+> > >       .probe = ayaneo_ec_probe,
+> > >   };
+> >
+> 
+> 
