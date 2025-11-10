@@ -1,42 +1,42 @@
 Received: from relay11.grserver.gr (relay11.grserver.gr [78.46.171.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C96314D05;
-	Mon, 10 Nov 2025 18:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0C93161A3;
+	Mon, 10 Nov 2025 18:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.171.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762798142; cv=none; b=duXHqyrcH4xFl3ip1YFq9sYqIxnH4MKed6/elu97UZEkiLm6QBzvU2OtRmH0EkZP9STHlAZ/I7plKmNsNCg3EREK4Vs/J8c+WJXI1Kw9GSwD2Ly7XjLsLBIA+tXckOrRKcT2HHqGfsoHnRvQJ5CbEWHUe1wnlXAzOeErVmNck9c=
+	t=1762798143; cv=none; b=Tx5wg5vgncxCkdUcLjVj+unl7o0ayeZVWiE9ElA52hLEzE8QsxJTXVa1WvlQ6aRgh3lWa8yLGLkcck6z5254Si2IIxgcM6E3r3fp9gbreTMtDuXqv4rmEmhXT1x87wGnFHbVRHxP1HG2l5goicBS949LJK2FKGEp4YDUgqKfzaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762798142; c=relaxed/simple;
-	bh=jT2+rAJec85m4Pksligs+QJYHF/0GzOUbBikFjoA2h4=;
+	s=arc-20240116; t=1762798143; c=relaxed/simple;
+	bh=zO8HKTJa5YLhqXw893Ymdi8oQkOKbsC897WeL5ASTBA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RUTOZs5F2C1ez3p5U7dSA1JFxOZful4MNQhZHdGdZg4/7ICr4MI9HG8GYmbKKhLNq5Mp6N8/gCFBRp4OQaFkKF71x/YSGdrQ3/PptlRESf8+o04fow5IxVnbi71KHYH7Rh+sVZjAhfXGOTTj3RsDoJItzSCa0MQo/Uumap49XeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=k0ePDSxe; arc=none smtp.client-ip=78.46.171.57
+	 MIME-Version; b=IMfey58nxKdU4rYFm4iOpWqUeNLzdQutF2QSpTG33MWyjjGVDudQvJej5EqK+A5V6IScBH5+NkJdCEmWw0u5ul96yEu1rqwVthmslJNPxGbMMZ3M8C2VSCpYXzDRCpYU4NmauWB+cI0JnpVv6sEs47hlo507BJBHYyUnFDjAcbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=ViHO/tYb; arc=none smtp.client-ip=78.46.171.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="k0ePDSxe"
+	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="ViHO/tYb"
 Received: from relay11 (localhost.localdomain [127.0.0.1])
-	by relay11.grserver.gr (Proxmox) with ESMTP id BE07CC3014;
-	Mon, 10 Nov 2025 20:08:52 +0200 (EET)
+	by relay11.grserver.gr (Proxmox) with ESMTP id A536FC3000;
+	Mon, 10 Nov 2025 20:08:54 +0200 (EET)
 Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by relay11.grserver.gr (Proxmox) with ESMTPS id 29CC3C2CBB;
-	Mon, 10 Nov 2025 20:08:52 +0200 (EET)
+	by relay11.grserver.gr (Proxmox) with ESMTPS id CC1D5C3015;
+	Mon, 10 Nov 2025 20:08:53 +0200 (EET)
 Received: from antheas-z13 (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 4E155200B90;
-	Mon, 10 Nov 2025 20:08:51 +0200 (EET)
+	by linux3247.grserver.gr (Postfix) with ESMTPSA id EA0881FCFC4;
+	Mon, 10 Nov 2025 20:08:52 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1762798131;
-	bh=UE/BF9u0dcsC8aROs93IpCxBrcSjUBhKEdO3njtxFWI=; h=From:To:Subject;
-	b=k0ePDSxevjT8hWjcBMmjUIkgvhjQo3KOutOlr4mUizIXvy9mXK6kr6u5JPiGCSsH3
-	 +I8UamPP8xyDBeE/fCJkQZZHXi259Z1Y1xHXVxejQITj+fDcSlOtnuZp9utxaTizfS
-	 9r3GmnDiFdwmsrZBgSDsLF6GNFXXNFI7puM+rnM/MzKU2BlVMfePKAHOq4ymlQuqzm
-	 WXfsTV8EBoVc30ZO1uQnChez6dsSStSSFT3IRJjZa/379YCQ23yZRdShKWeGx4UDaE
-	 ELdbsB2oB2SAdjD8dl3oGLvHSavYzR93o8buzwR1MhkZas/bADcMYHEUBYr84M3rLL
-	 vNS77GMogzGJA==
+	s=default; t=1762798133;
+	bh=1s3DNmISMr0wFSFsbV18zzeA4NM6RDsEGpEVBAm3Y4E=; h=From:To:Subject;
+	b=ViHO/tYbNCYxIy7XU/O0g3Lc0d7nUgIMod/iCdpvk5r5xKTEGz0Ttgi0b0gSMLmqM
+	 j6J6wIUZLtAYEB3bLhqKSAAh3tFWYkREtgeFL63n4qXFtdV5ayrY0bnTAKAN+ixUza
+	 ZHItNWYhay8Po8uZAv90lZXM2NTvahov2Aqp06tYdXKbqusVJwdpHv3uwwaB/JeXmO
+	 uVjeuVjAHYgqbdL0oF4Y83axH68D3LMlJirXpFeENxkiYsOB5xpwsAzmT4kzEt5yjQ
+	 g4iS/gZvU+3ovGTc7b3Rj1vvHasTkJd69glMQUr4MKua6v7UAzrC7wYCvrME3db+tO
+	 LKvteKNm0UjSA==
 Authentication-Results: linux3247.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=antheas-z13
 Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
@@ -51,10 +51,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Jean Delvare <jdelvare@suse.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Antheas Kapenekakis <lkml@antheas.dev>,
-	Armin-Wolf <W_Armin@gmx.de>
-Subject: [PATCH v4 2/6] platform/x86: ayaneo-ec: Add hwmon support
-Date: Mon, 10 Nov 2025 19:08:42 +0100
-Message-ID: <20251110180846.1490726-3-lkml@antheas.dev>
+	Armin Wolf <W_Armin@gmx.de>
+Subject: [PATCH v4 4/6] platform/x86: ayaneo-ec: Add controller power and
+ modules attributes
+Date: Mon, 10 Nov 2025 19:08:44 +0100
+Message-ID: <20251110180846.1490726-5-lkml@antheas.dev>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251110180846.1490726-1-lkml@antheas.dev>
 References: <20251110180846.1490726-1-lkml@antheas.dev>
@@ -66,214 +67,232 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <176279813184.3664543.15707535675207559485@linux3247.grserver.gr>
+ <176279813348.3664677.12145099863403819751@linux3247.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
 X-Virus-Status: Clean
 
-Add hwmon single fan sensor reads and control for Ayaneo devices.
-The register and method of access is the same for all devices.
+The Ayaneo 3 features hot-swappable controller modules. The ejection
+and management is done through HID. However, after ejecting the modules,
+the controller needs to be power cycled via the EC to re-initialize.
 
-Reviewed-by: Armin-Wolf <W_Armin@gmx.de>
+For this, the EC provides a variable that holds whether the left or
+right modules are connected, and a power control register to turn
+the controller on or off. After ejecting the modules, the controller
+should be turned off. Then, after both modules are reinserted,
+the controller may be powered on again to re-initialize.
+
+This patch introduces two new sysfs attributes:
+ - `controller_modules`: a read-only attribute that indicates whether
+   the left and right modules are connected (none, left, right, both).
+ - `controller_power`: a read-write attribute that allows the user
+   to turn the controller on or off (with '1'/'0').
+
+Therefore, after ejection is complete, userspace can power off the
+controller, then wait until both modules have been reinserted
+(`controller_modules` will return 'both') to turn on the controller.
+
+Reviewed-by: Armin Wolf <W_Armin@gmx.de>
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/platform/x86/Kconfig     |   2 +
- drivers/platform/x86/ayaneo-ec.c | 136 +++++++++++++++++++++++++++++++
- 2 files changed, 138 insertions(+)
+ .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 ++++
+ MAINTAINERS                                   |   1 +
+ drivers/platform/x86/ayaneo-ec.c              | 106 ++++++++++++++++++
+ 3 files changed, 126 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo-ec
 
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 1a7f8ae793ba..974c174b1a7e 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -318,6 +318,8 @@ config ASUS_TF103C_DOCK
+diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo-ec b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
+new file mode 100644
+index 000000000000..4cffbf5fc7ca
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
+@@ -0,0 +1,19 @@
++What:		/sys/devices/platform/ayaneo-ec/controller_power
++Date:		Nov 2025
++KernelVersion:	6.19
++Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
++Description:
++		Current controller power state. Allows turning on and off
++		the controller power (e.g. for power savings). Write 1 to
++		turn on, 0 to turn off. File is readable and writable.
++
++What:		/sys/devices/platform/ayaneo-ec/controller_modules
++Date:		Nov 2025
++KernelVersion:	6.19
++Contact:	"Antheas Kapenekakis"  <lkml@antheas.dev>
++Description:
++		Shows which controller modules are currently connected to
++		the device. Possible values are "left", "right" and "both".
++		File is read-only. The Windows software for this device
++		will only set controller power to 1 if both module sides
++		are connected (i.e. this file returns "both").
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c5bf7207c45f..f8ab009b6224 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4196,6 +4196,7 @@ AYANEO PLATFORM EC DRIVER
+ M:	Antheas Kapenekakis <lkml@antheas.dev>
+ L:	platform-driver-x86@vger.kernel.org
+ S:	Maintained
++F:	Documentation/ABI/testing/sysfs-platform-ayaneo
+ F:	drivers/platform/x86/ayaneo-ec.c
  
- config AYANEO_EC
- 	tristate "Ayaneo EC platform control"
-+	depends on ACPI_EC
-+	depends on HWMON
- 	help
- 	  Enables support for the platform EC of Ayaneo devices. This
- 	  includes fan control, fan speed, charge limit, magic
+ AZ6007 DVB DRIVER
 diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-index 2fe66c8a89f4..108a23458a4f 100644
+index 697bb053a7d6..0652c044ad76 100644
 --- a/drivers/platform/x86/ayaneo-ec.c
 +++ b/drivers/platform/x86/ayaneo-ec.c
-@@ -7,14 +7,24 @@
-  * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
+@@ -8,6 +8,7 @@
   */
  
-+#include <linux/acpi.h>
+ #include <linux/acpi.h>
++#include <linux/bits.h>
  #include <linux/dmi.h>
  #include <linux/err.h>
-+#include <linux/hwmon.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
+ #include <linux/hwmon.h>
+@@ -16,6 +17,7 @@
  #include <linux/module.h>
  #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
++#include <linux/sysfs.h>
+ #include <acpi/battery.h>
  
-+#define AYANEO_PWM_ENABLE_REG	 0x4A
-+#define AYANEO_PWM_REG		 0x4B
-+#define AYANEO_PWM_MODE_AUTO	 0x00
-+#define AYANEO_PWM_MODE_MANUAL	 0x01
-+
-+#define AYANEO_FAN_REG		 0x76
+ #define AYANEO_PWM_ENABLE_REG	 0x4A
+@@ -32,9 +34,17 @@
+ #define AYANEO_CHARGE_VAL_AUTO		0xaa
+ #define AYANEO_CHARGE_VAL_INHIBIT	0x55
+ 
++#define AYANEO_POWER_REG	0x2d
++#define AYANEO_POWER_OFF	0xfe
++#define AYANEO_POWER_ON		0xff
++#define AYANEO_MODULE_REG	0x2f
++#define AYANEO_MODULE_LEFT	BIT(0)
++#define AYANEO_MODULE_RIGHT	BIT(1)
 +
  struct ayaneo_ec_quirk {
-+	bool has_fan_control;
+ 	bool has_fan_control;
+ 	bool has_charge_control;
++	bool has_magic_modules;
  };
  
  struct ayaneo_ec_platform_data {
-@@ -23,6 +33,7 @@ struct ayaneo_ec_platform_data {
- };
- 
+@@ -46,6 +56,7 @@ struct ayaneo_ec_platform_data {
  static const struct ayaneo_ec_quirk quirk_ayaneo3 = {
-+	.has_fan_control = true,
+ 	.has_fan_control = true,
+ 	.has_charge_control = true,
++	.has_magic_modules = true,
  };
  
  static const struct dmi_system_id dmi_table[] = {
-@@ -36,10 +47,128 @@ static const struct dmi_system_id dmi_table[] = {
- 	{},
- };
+@@ -266,6 +277,100 @@ static int ayaneo_remove_battery(struct power_supply *battery,
+ 	return 0;
+ }
  
-+/* Callbacks for hwmon interface */
-+static umode_t ayaneo_ec_hwmon_is_visible(const void *drvdata,
-+					  enum hwmon_sensor_types type, u32 attr,
-+					  int channel)
++static ssize_t controller_power_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf,
++				      size_t count)
 +{
-+	switch (type) {
-+	case hwmon_fan:
-+		return 0444;
-+	case hwmon_pwm:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int ayaneo_ec_read(struct device *dev, enum hwmon_sensor_types type,
-+			  u32 attr, int channel, long *val)
-+{
-+	u8 tmp;
++	bool value;
 +	int ret;
 +
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			ret = ec_read(AYANEO_FAN_REG, &tmp);
-+			if (ret)
-+				return ret;
-+			*val = tmp << 8;
-+			ret = ec_read(AYANEO_FAN_REG + 1, &tmp);
-+			if (ret)
-+				return ret;
-+			*val += tmp;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			ret = ec_read(AYANEO_PWM_REG, &tmp);
-+			if (ret)
-+				return ret;
-+			if (tmp > 100)
-+				return -EIO;
-+			*val = (255 * tmp) / 100;
-+			return 0;
-+		case hwmon_pwm_enable:
-+			ret = ec_read(AYANEO_PWM_ENABLE_REG, &tmp);
-+			if (ret)
-+				return ret;
-+			if (tmp == AYANEO_PWM_MODE_MANUAL)
-+				*val = 1;
-+			else if (tmp == AYANEO_PWM_MODE_AUTO)
-+				*val = 2;
-+			else
-+				return -EIO;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return -EOPNOTSUPP;
++	ret = kstrtobool(buf, &value);
++	if (ret)
++		return ret;
++
++	ret = ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AYANEO_POWER_OFF);
++	if (ret)
++		return ret;
++
++	return count;
 +}
 +
-+static int ayaneo_ec_write(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long val)
++static ssize_t controller_power_show(struct device *dev,
++				     struct device_attribute *attr,
++				     char *buf)
 +{
-+	switch (type) {
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_enable:
-+			switch (val) {
-+			case 1:
-+				return ec_write(AYANEO_PWM_ENABLE_REG,
-+						AYANEO_PWM_MODE_MANUAL);
-+			case 2:
-+				return ec_write(AYANEO_PWM_ENABLE_REG,
-+						AYANEO_PWM_MODE_AUTO);
-+			default:
-+				return -EINVAL;
-+			}
-+		case hwmon_pwm_input:
-+			if (val < 0 || val > 255)
-+				return -EINVAL;
-+			return ec_write(AYANEO_PWM_REG, (val * 100) / 255);
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return -EOPNOTSUPP;
++	int ret;
++	u8 val;
++
++	ret = ec_read(AYANEO_POWER_REG, &val);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d\n", val == AYANEO_POWER_ON);
 +}
 +
-+static const struct hwmon_ops ayaneo_ec_hwmon_ops = {
-+	.is_visible = ayaneo_ec_hwmon_is_visible,
-+	.read = ayaneo_ec_read,
-+	.write = ayaneo_ec_write,
++static DEVICE_ATTR_RW(controller_power);
++
++static ssize_t controller_modules_show(struct device *dev,
++				       struct device_attribute *attr, char *buf)
++{
++	char *out;
++	int ret;
++	u8 val;
++
++	ret = ec_read(AYANEO_MODULE_REG, &val);
++	if (ret)
++		return ret;
++
++	switch (~val & (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT)) {
++	case AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT:
++		out = "both";
++		break;
++	case AYANEO_MODULE_LEFT:
++		out = "left";
++		break;
++	case AYANEO_MODULE_RIGHT:
++		out = "right";
++		break;
++	default:
++		out = "none";
++		break;
++	}
++
++	return sysfs_emit(buf, "%s\n", out);
++}
++
++static DEVICE_ATTR_RO(controller_modules);
++
++static struct attribute *aya_mm_attrs[] = {
++	&dev_attr_controller_power.attr,
++	&dev_attr_controller_modules.attr,
++	NULL
 +};
 +
-+static const struct hwmon_channel_info *const ayaneo_ec_sensors[] = {
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
-+	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
-+	NULL,
++static umode_t aya_mm_is_visible(struct kobject *kobj,
++				 struct attribute *attr, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct platform_device *pdev = to_platform_device(dev);
++	struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
++
++	if (data->quirks->has_magic_modules)
++		return attr->mode;
++	return 0;
++}
++
++static const struct attribute_group aya_mm_attribute_group = {
++	.is_visible = aya_mm_is_visible,
++	.attrs = aya_mm_attrs,
 +};
 +
-+static const struct hwmon_chip_info ayaneo_ec_chip_info = {
-+	.ops = &ayaneo_ec_hwmon_ops,
-+	.info = ayaneo_ec_sensors,
++static const struct attribute_group *ayaneo_ec_groups[] = {
++	&aya_mm_attribute_group,
++	NULL
 +};
 +
  static int ayaneo_ec_probe(struct platform_device *pdev)
  {
  	const struct dmi_system_id *dmi_entry;
- 	struct ayaneo_ec_platform_data *data;
-+	struct device *hwdev;
- 
- 	dmi_entry = dmi_first_match(dmi_table);
- 	if (!dmi_entry)
-@@ -53,6 +182,13 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
- 	data->quirks = dmi_entry->driver_data;
- 	platform_set_drvdata(pdev, data);
- 
-+	if (data->quirks->has_fan_control) {
-+		hwdev = devm_hwmon_device_register_with_info(&pdev->dev,
-+			"ayaneo_ec", NULL, &ayaneo_ec_chip_info, NULL);
-+		if (IS_ERR(hwdev))
-+			return PTR_ERR(hwdev);
-+	}
-+
- 	return 0;
- }
- 
+@@ -307,6 +412,7 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
+ static struct platform_driver ayaneo_platform_driver = {
+ 	.driver = {
+ 		.name = "ayaneo-ec",
++		.dev_groups = ayaneo_ec_groups,
+ 	},
+ 	.probe = ayaneo_ec_probe,
+ };
 -- 
 2.51.2
 
