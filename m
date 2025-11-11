@@ -1,102 +1,217 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93953225761;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939BA231A30;
 	Tue, 11 Nov 2025 08:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762848413; cv=none; b=I9I1sWOtgdwmxcmwPQo+iE3DELt9sT5DPqJgn66MJeyGKWCTvF+fvELEayXiBgbsKU6qA/qK7pQFePGkqJf9zCiB+UUG85i/dLavKwO3ytH/PAxHGiMk2RfFiX4CcsIqjE7r9FPltAxx3WGJmFFacPOcCbKTh7BR27OksxOU4Ew=
+	t=1762848413; cv=none; b=UfYGCrBB/DaOkSmUBnvIOa6ukHtiXZgvHzQVy+CaIrg0d3zHxwT+P3Cp84MOFaqOAzZVudUONrs/izVgepuLeBypc3nS1gw3Z2soU6+io83FcPVMQKCMfkHS/VMb6Gf5nJn5C3VFCwnElXDwtDmNCpRgJDZxsJsvcISnqveEzdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762848413; c=relaxed/simple;
-	bh=+dx0yAue3k/b+NhkIOWETt6EUxGzeOC9bbDVu5NRtzg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=WyOZhir/pVAnkK8ZMHVlxIVPCxb7yaCf3vO47M77gaUKY3549THCGpW/n0BekmFoPDTUwWW7Y3Dkly3mDMN/eDm6/L1mFnSKwvQZVd6N4Jq6HscSDvdNNz22ichDDeVZcKTL0so2jjKqczCbFRTrgaEgOQIiqfqHF6H9ZuY+Foo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O1O/W8AA; arc=none smtp.client-ip=220.197.31.4
+	bh=2/1cvaRQNmLbWNfXH2IHq3wirvMjh17yqDgS7BCiXhE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=SfMNhxyIPLsjCGQBfutI7ihciqpYReH+iXy6M24UIYz1oEyeQjpuIRccN8ZpKV7XZmIrbgX+A7dkIbW5lQuTThy0ofY2+UTGx7NLKd4nDB+vqFcYrDMjmSN/fZl7xCrKjy1nH/GyrYqwCaFs8nwmUOTM64TjbdBYrqs4mwzEUyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZkM7/ght; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O1O/W8AA"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ZkM7/ght"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=I5TppMaK+ikNiBO
-	g8YvMLHSWasF8jG7nBiJREzuIfZ4=; b=O1O/W8AAda22sTQLo7jG1n1WNBbMb2c
-	TanABFK3Rurg4S122KrUN6gvYgI84moOK1t3w65f9bWgYaFQRsFJBeEU+I0L94XD
-	f0WWfAN/WXVP3enr1uXNndgPYBwNXmR2GLV9LwrQLufBNXcaahhR6TLn6SRD498O
-	hV37Q+wQa2Us=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=jyygY7O70/zK+La
+	2Mnqd8X8wqYmBF5ypQLHKNTfsnys=; b=ZkM7/ghttr2Jkzu89YXMoWvuBREPVSi
+	ok/agrJUxWlUq1vY2LYYllVNLTZuYyfLJkrdwyzipTWJvbqTGq3olwMvUzyTfnFu
+	q3dw8iI37uOXC5LCd3qdmGB8eH87XgCXXo6U2IWYoGIa4e8FJBHxdL0PVfluydAI
+	Wj6+U8Y4OkZU=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wCnq6ln7hJpK0KCDA--.117S3;
-	Tue, 11 Nov 2025 16:06:06 +0800 (CST)
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wCnq6ln7hJpK0KCDA--.117S6;
+	Tue, 11 Nov 2025 16:06:10 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+	Jean Delvare <jdelvare@suse.com>
 Cc: christophe.jaillet@wanadoo.fr,
+	conor+dt@kernel.org,
 	corbet@lwn.net,
 	devicetree@vger.kernel.org,
+	krzk+dt@kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
 	wenliang202407@163.com
-Subject: [PATCH 1/8] dt-binding:ti,ina3221:Add SQ52210
-Date: Tue, 11 Nov 2025 03:05:39 -0500
-Message-Id: <20251111080546.32421-2-wenliang202407@163.com>
+Subject: [PATCH 4/8] hwmon:(ina3221)Pre-calculate current and power LSB
+Date: Tue, 11 Nov 2025 03:05:42 -0500
+Message-Id: <20251111080546.32421-5-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251111080546.32421-1-wenliang202407@163.com>
 References: <20251111080546.32421-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wCnq6ln7hJpK0KCDA--.117S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1ruFWUCryxCry5tFy5Jwb_yoW8GFy7pF
-	WIkr98Ww1Sqw1fX3yIgF4Fkr15Jws7ua12kFnru3yIqF4DGryYqa95Kw1qyry3JrWfXFW7
-	Wa4Igr48Kw1vyr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUvfOrUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiRx0D02kS5gDazAAAsB
+X-CM-TRANSID:_____wCnq6ln7hJpK0KCDA--.117S6
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFy7WFW8ZF4UWr1rZr43Jrb_yoW7Jr45pF
+	4fGFy5ta4jq3WSga9Ikan7GF1rt34xJF47trsrG34IqanrKryq9ayrJa4DtFy5Ary5ZF17
+	X3yDtr4DCan7AaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUFLvNUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiRxoD02kS5gDbPgAAs1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add a compatible string for sq52210, sq52210 is forward compatible
-with INA3221 and add alert register to implement four additional
-alert function.
+The LSB for current and power can be pre-calculated for data read/write
+operations. The current LSB is determined by the calibration value and
+shunt resistor value, with the calibration value fixed within the driver.
+The power LSB can be derived from the current LSB.
+
+Use DIV_ROUND_CLOSEST function to replace division operations and reduce
+rouding errors.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- .../devicetree/bindings/hwmon/ti,ina3221.yaml    | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ drivers/hwmon/ina3221.c | 71 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 68 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-index 5f10f1207d69..0fae82ca3ee1 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-@@ -12,7 +12,9 @@ maintainers:
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index ee9ad022e255..e339860ed3a2 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -69,6 +69,7 @@
  
- properties:
-   compatible:
--    const: ti,ina3221
-+    enum:
-+      - silergy,sq52210
-+      - ti,ina3221
+ #define INA3221_CONFIG_DEFAULT		0x7127
+ #define INA3221_RSHUNT_DEFAULT		10000
++#define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
  
-   reg:
-     maxItems: 1
-@@ -77,6 +79,18 @@ patternProperties:
-           exclude specific channels from the summation control function.
-         type: boolean
+ enum ina3221_fields {
+ 	/* Configuration */
+@@ -134,6 +135,8 @@ struct ina3221_config {
+ 	bool has_alerts;	/* chip supports alerts and limits */
+ 	bool has_current;	/* chip has internal current reg */
+ 	bool has_power;		/* chip has internal power reg */
++	int calibration_value;	/* calculate current_lsb */
++	int power_lsb_factor;
+ };
  
-+      alert-type:
-+        description: |
-+          The SQ52210 features a configurable alert function with four
-+          types: SUL, BOL, BUL, and POL. Each channel can be configured to
-+          select one of these types to enable the alert function. This alert
-+          function can operate concurrently with both Critical and Warning
-+          functions.
+ /**
+@@ -148,6 +151,8 @@ struct ina3221_config {
+  * @summation_shunt_resistor: equivalent shunt resistor value for summation
+  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
+  * @alert_type_select: Used to store the alert trigger type
++ * @current_lsb_uA: The value of one LSB corresponding to the current register
++ * @power_lsb_uW: The value of one LSB corresponding to the power register
+  * @single_shot: running in single-shot operating mode
+  */
+ struct ina3221_data {
+@@ -162,6 +167,8 @@ struct ina3221_data {
+ 	int summation_shunt_resistor;
+ 	u32 summation_channel_control;
+ 	u32 alert_type_select;
++	long current_lsb_uA;
++	long power_lsb_uW;
+ 
+ 	bool single_shot;
+ };
+@@ -176,6 +183,13 @@ static const struct ina3221_config ina3221_config[] = {
+ 		.has_alerts = true,
+ 		.has_current = true,
+ 		.has_power = true,
++		/*
++		 * With this default value configuration,
++		 * the following formula can be obtained:
++		 * Current_LSB = Shunt_LSB / Rshunt
++		 */
++		.calibration_value = 256,
++		.power_lsb_factor = 20,
+ 	},
+ };
+ 
+@@ -729,6 +743,25 @@ static const struct hwmon_chip_info ina3221_chip_info = {
+ };
+ 
+ /* Extra attribute groups */
 +
-+          The configuration must use numerical values 0 through 3,
-+          0 corresponds to SUL, 1 to BOL, 2 to BUL, and 3 to POL.
-+        enum: [ 0, 1, 2, 3 ]
++/*
++ * Calculate the value corresponding to one LSB of the current and
++ * power registers.
++ * formula : Current_LSB = Shunt_LSB / Rshunt
++ *			 Power_LSB = power_lsb_factor * Current_LSB
++ */
++static int ina3221_set_shunt(struct ina3221_data *ina, unsigned long val)
++{
++	if (!val || val > SQ52210_SHUNT_LSB)
++		return -EINVAL;
 +
-     required:
-       - reg
++	ina->current_lsb_uA = DIV_ROUND_CLOSEST(SQ52210_SHUNT_LSB, val);
++	ina->power_lsb_uW = ina->config->power_lsb_factor *
++			    ina->current_lsb_uA;
++
++	return 0;
++}
++
+ static ssize_t ina3221_shunt_show(struct device *dev,
+ 				  struct device_attribute *attr, char *buf)
+ {
+@@ -761,7 +794,17 @@ static ssize_t ina3221_shunt_store(struct device *dev,
  
+ 	/* Update summation_shunt_resistor for summation channel */
+ 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
+-
++	/*
++	 * The current and power registers can only be used when
++	 * all enabled channels have identical shunt resistors
++	 */
++	if (ina->summation_shunt_resistor) {
++		if (ina->config->has_current) {
++			ret = ina3221_set_shunt(ina, val);
++			if (ret < 0)
++				return ret;
++		}
++	}
+ 	return count;
+ }
+ 
+@@ -953,6 +996,16 @@ static int ina3221_probe(struct i2c_client *client)
+ 			ina->summation_channel_control |= BIT(14 - i);
+ 	}
+ 
++	/*
++	 * The current and power registers can only be used when
++	 * all enabled channels have identical shunt resistors
++	 */
++	if (ina->summation_shunt_resistor) {
++		ret = ina3221_set_shunt(ina, ina->summation_shunt_resistor);
++		if (ret < 0)
++			return ret;
++	}
++
+ 	ina->pm_dev = dev;
+ 	dev_set_drvdata(dev, ina);
+ 
+@@ -970,8 +1023,8 @@ static int ina3221_probe(struct i2c_client *client)
+ 	}
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ina,
+-							 &ina3221_chip_info,
+-							 ina3221_groups);
++							&ina3221_chip_info,
++							ina3221_groups);
+ 	if (IS_ERR(hwmon_dev)) {
+ 		dev_err(dev, "Unable to register hwmon device\n");
+ 		ret = PTR_ERR(hwmon_dev);
+@@ -1070,6 +1123,18 @@ static int ina3221_resume(struct device *dev)
+ 			dev_err(dev, "Unable to control summation channel\n");
+ 			return ret;
+ 		}
++		/*
++		 * The calibration register can only be enabled when all
++		 * shunt resistor values are identical.
++		 */
++		if (ina->config->has_current) {
++			ret = regmap_write(ina->regmap, SQ52210_CALIBRATION,
++						ina->config->calibration_value);
++			if (ret) {
++				dev_err(dev, "Unable to set calibration value\n");
++				return ret;
++			}
++		}
+ 	}
+ 
+ 	/* Restore alert config register value to hardware */
 -- 
 2.17.1
 
