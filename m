@@ -1,299 +1,102 @@
-Received: from relay11.grserver.gr (relay11.grserver.gr [78.46.171.57])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0C93161A3;
-	Mon, 10 Nov 2025 18:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.46.171.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1375B20297E;
+	Tue, 11 Nov 2025 08:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762798143; cv=none; b=Tx5wg5vgncxCkdUcLjVj+unl7o0ayeZVWiE9ElA52hLEzE8QsxJTXVa1WvlQ6aRgh3lWa8yLGLkcck6z5254Si2IIxgcM6E3r3fp9gbreTMtDuXqv4rmEmhXT1x87wGnFHbVRHxP1HG2l5goicBS949LJK2FKGEp4YDUgqKfzaU=
+	t=1762848411; cv=none; b=QsZuimPDBUqIhHfpgRhLTXieTz8NZMPR2iV2NY1y1Fjp+tOsCZkzcXIjw/PYTnEdypxZPbeVkHwdR+zJ9fOcIHZAUTgLrEpgIt85nrGlBpLoMQwOKEO/WWac2e2LKXsBdLgYX/UVJslozj46hU34Jele9gBGg3kcDTuQsQl2SX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762798143; c=relaxed/simple;
-	bh=zO8HKTJa5YLhqXw893Ymdi8oQkOKbsC897WeL5ASTBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IMfey58nxKdU4rYFm4iOpWqUeNLzdQutF2QSpTG33MWyjjGVDudQvJej5EqK+A5V6IScBH5+NkJdCEmWw0u5ul96yEu1rqwVthmslJNPxGbMMZ3M8C2VSCpYXzDRCpYU4NmauWB+cI0JnpVv6sEs47hlo507BJBHYyUnFDjAcbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=ViHO/tYb; arc=none smtp.client-ip=78.46.171.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	s=arc-20240116; t=1762848411; c=relaxed/simple;
+	bh=ERDWDlrCR1OFZ3SFli4MLVKe8rnfVOHEyUysk2j8pFQ=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=KuIK/Ynv8Oj73WPkFL1sM8yU9MOJptsZlgZefDJu9PjtB9zMqbPyh2QDT/I16eOoD/+0mqxHzFlZMaEeVw7xGUxEQpVOctJRaJGSprn7l04cgLZX51mV0aWkqpx/S0cnoAJEnKpZ8ocGL3CS/a9Lww0EwF76r5myxQd2MdtwdKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=UdZNw8Dn; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=temperror (0-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="ViHO/tYb"
-Received: from relay11 (localhost.localdomain [127.0.0.1])
-	by relay11.grserver.gr (Proxmox) with ESMTP id A536FC3000;
-	Mon, 10 Nov 2025 20:08:54 +0200 (EET)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay11.grserver.gr (Proxmox) with ESMTPS id CC1D5C3015;
-	Mon, 10 Nov 2025 20:08:53 +0200 (EET)
-Received: from antheas-z13 (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id EA0881FCFC4;
-	Mon, 10 Nov 2025 20:08:52 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1762798133;
-	bh=1s3DNmISMr0wFSFsbV18zzeA4NM6RDsEGpEVBAm3Y4E=; h=From:To:Subject;
-	b=ViHO/tYbNCYxIy7XU/O0g3Lc0d7nUgIMod/iCdpvk5r5xKTEGz0Ttgi0b0gSMLmqM
-	 j6J6wIUZLtAYEB3bLhqKSAAh3tFWYkREtgeFL63n4qXFtdV5ayrY0bnTAKAN+ixUza
-	 ZHItNWYhay8Po8uZAv90lZXM2NTvahov2Aqp06tYdXKbqusVJwdpHv3uwwaB/JeXmO
-	 uVjeuVjAHYgqbdL0oF4Y83axH68D3LMlJirXpFeENxkiYsOB5xpwsAzmT4kzEt5yjQ
-	 g4iS/gZvU+3ovGTc7b3Rj1vvHasTkJd69glMQUr4MKua6v7UAzrC7wYCvrME3db+tO
-	 LKvteKNm0UjSA==
-Authentication-Results: linux3247.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=antheas-z13
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Hans de Goede <hansg@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= <samsagax@gmail.com>,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="UdZNw8Dn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=x5D65oP2rnABI4e
+	/qjWVaN+fcPwB+ZS72UKyNTmB/gU=; b=UdZNw8DnZqLL3Xxgy4CL8PDmEEbGzif
+	z6Bnk04rHTe1RDJVyPZ27PSpbuGBrVyNE4NxiHpvbCTmRFoRjvyxJxkgTAZrFtwU
+	QAHtAqjPav0w5MBvA2TyrPPa1L383MvEI7YqF5wsNGnA4NjXwhzDp6FcyEWk3pjl
+	eSfbLtV734MI=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wCnq6ln7hJpK0KCDA--.117S2;
+	Tue, 11 Nov 2025 16:06:01 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Antheas Kapenekakis <lkml@antheas.dev>,
-	Armin Wolf <W_Armin@gmx.de>
-Subject: [PATCH v4 4/6] platform/x86: ayaneo-ec: Add controller power and
- modules attributes
-Date: Mon, 10 Nov 2025 19:08:44 +0100
-Message-ID: <20251110180846.1490726-5-lkml@antheas.dev>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251110180846.1490726-1-lkml@antheas.dev>
-References: <20251110180846.1490726-1-lkml@antheas.dev>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: christophe.jaillet@wanadoo.fr,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	wenliang202407@163.com
+Subject: [PATCH 0/8] (hwmon):(ina3221) Various improvement and add support for SQ52210
+Date: Tue, 11 Nov 2025 03:05:38 -0500
+Message-Id: <20251111080546.32421-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wCnq6ln7hJpK0KCDA--.117S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1rJrWkJr45Gr4UuFW8Xrb_yoW8Cw4Dpa
+	9ak3s0gw1vqF1xZayakFs7Wry5KFWfZrW2kryUG3yIvr45Gas2gw48Ka4Ut34UAr1xtryD
+	Zay2ywn8uan7CFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JU-VyxUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvwq0iGkS7mpXaAAA3J
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: 
- <176279813348.3664677.12145099863403819751@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
-X-Virus-Status: Clean
 
-The Ayaneo 3 features hot-swappable controller modules. The ejection
-and management is done through HID. However, after ejecting the modules,
-the controller needs to be power cycled via the EC to re-initialize.
+Add support for SQ52210 to the ina3221 driver. The datasheet depends on 
+https://us1.silergy.com/cloud/index/uniqid/6912826d13b9c.html or
+https://www.silergy.com/cloud/index/uniqid/6912826d13b9c.html
+The password is 7IUCLe.
 
-For this, the EC provides a variable that holds whether the left or
-right modules are connected, and a power control register to turn
-the controller on or off. After ejecting the modules, the controller
-should be turned off. Then, after both modules are reinserted,
-the controller may be powered on again to re-initialize.
+- SQ52210 is forward compatible with INA3221 and add alert register to
+  implement four additional alert function.
 
-This patch introduces two new sysfs attributes:
- - `controller_modules`: a read-only attribute that indicates whether
-   the left and right modules are connected (none, left, right, both).
- - `controller_power`: a read-write attribute that allows the user
-   to turn the controller on or off (with '1'/'0').
+- Add support for SQ52210, add current registers, power registers, and
+  registers related to alerts.
 
-Therefore, after ejection is complete, userspace can power off the
-controller, then wait until both modules have been reinserted
-(`controller_modules` will return 'both') to turn on the controller.
+- Add support for alert-type.
 
-Reviewed-by: Armin Wolf <W_Armin@gmx.de>
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 ++++
- MAINTAINERS                                   |   1 +
- drivers/platform/x86/ayaneo-ec.c              | 106 ++++++++++++++++++
- 3 files changed, 126 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo-ec
+- The LSB for current and power can be pre-calculated for data read/write
+  operations. The current LSB is determined by the calibration value and
+  shunt resistor value, with the calibration value fixed within the driver.
+  The power LSB can be derived from the current LSB.
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo-ec b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-new file mode 100644
-index 000000000000..4cffbf5fc7ca
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-@@ -0,0 +1,19 @@
-+What:		/sys/devices/platform/ayaneo-ec/controller_power
-+Date:		Nov 2025
-+KernelVersion:	6.19
-+Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
-+Description:
-+		Current controller power state. Allows turning on and off
-+		the controller power (e.g. for power savings). Write 1 to
-+		turn on, 0 to turn off. File is readable and writable.
-+
-+What:		/sys/devices/platform/ayaneo-ec/controller_modules
-+Date:		Nov 2025
-+KernelVersion:	6.19
-+Contact:	"Antheas Kapenekakis"  <lkml@antheas.dev>
-+Description:
-+		Shows which controller modules are currently connected to
-+		the device. Possible values are "left", "right" and "both".
-+		File is read-only. The Windows software for this device
-+		will only set controller power to 1 if both module sides
-+		are connected (i.e. this file returns "both").
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c5bf7207c45f..f8ab009b6224 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4196,6 +4196,7 @@ AYANEO PLATFORM EC DRIVER
- M:	Antheas Kapenekakis <lkml@antheas.dev>
- L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-platform-ayaneo
- F:	drivers/platform/x86/ayaneo-ec.c
- 
- AZ6007 DVB DRIVER
-diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ayaneo-ec.c
-index 697bb053a7d6..0652c044ad76 100644
---- a/drivers/platform/x86/ayaneo-ec.c
-+++ b/drivers/platform/x86/ayaneo-ec.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/bits.h>
- #include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
-@@ -16,6 +17,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
-+#include <linux/sysfs.h>
- #include <acpi/battery.h>
- 
- #define AYANEO_PWM_ENABLE_REG	 0x4A
-@@ -32,9 +34,17 @@
- #define AYANEO_CHARGE_VAL_AUTO		0xaa
- #define AYANEO_CHARGE_VAL_INHIBIT	0x55
- 
-+#define AYANEO_POWER_REG	0x2d
-+#define AYANEO_POWER_OFF	0xfe
-+#define AYANEO_POWER_ON		0xff
-+#define AYANEO_MODULE_REG	0x2f
-+#define AYANEO_MODULE_LEFT	BIT(0)
-+#define AYANEO_MODULE_RIGHT	BIT(1)
-+
- struct ayaneo_ec_quirk {
- 	bool has_fan_control;
- 	bool has_charge_control;
-+	bool has_magic_modules;
- };
- 
- struct ayaneo_ec_platform_data {
-@@ -46,6 +56,7 @@ struct ayaneo_ec_platform_data {
- static const struct ayaneo_ec_quirk quirk_ayaneo3 = {
- 	.has_fan_control = true,
- 	.has_charge_control = true,
-+	.has_magic_modules = true,
- };
- 
- static const struct dmi_system_id dmi_table[] = {
-@@ -266,6 +277,100 @@ static int ayaneo_remove_battery(struct power_supply *battery,
- 	return 0;
- }
- 
-+static ssize_t controller_power_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf,
-+				      size_t count)
-+{
-+	bool value;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &value);
-+	if (ret)
-+		return ret;
-+
-+	ret = ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AYANEO_POWER_OFF);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t controller_power_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
-+{
-+	int ret;
-+	u8 val;
-+
-+	ret = ec_read(AYANEO_POWER_REG, &val);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d\n", val == AYANEO_POWER_ON);
-+}
-+
-+static DEVICE_ATTR_RW(controller_power);
-+
-+static ssize_t controller_modules_show(struct device *dev,
-+				       struct device_attribute *attr, char *buf)
-+{
-+	char *out;
-+	int ret;
-+	u8 val;
-+
-+	ret = ec_read(AYANEO_MODULE_REG, &val);
-+	if (ret)
-+		return ret;
-+
-+	switch (~val & (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT)) {
-+	case AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT:
-+		out = "both";
-+		break;
-+	case AYANEO_MODULE_LEFT:
-+		out = "left";
-+		break;
-+	case AYANEO_MODULE_RIGHT:
-+		out = "right";
-+		break;
-+	default:
-+		out = "none";
-+		break;
-+	}
-+
-+	return sysfs_emit(buf, "%s\n", out);
-+}
-+
-+static DEVICE_ATTR_RO(controller_modules);
-+
-+static struct attribute *aya_mm_attrs[] = {
-+	&dev_attr_controller_power.attr,
-+	&dev_attr_controller_modules.attr,
-+	NULL
-+};
-+
-+static umode_t aya_mm_is_visible(struct kobject *kobj,
-+				 struct attribute *attr, int n)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct ayaneo_ec_platform_data *data = platform_get_drvdata(pdev);
-+
-+	if (data->quirks->has_magic_modules)
-+		return attr->mode;
-+	return 0;
-+}
-+
-+static const struct attribute_group aya_mm_attribute_group = {
-+	.is_visible = aya_mm_is_visible,
-+	.attrs = aya_mm_attrs,
-+};
-+
-+static const struct attribute_group *ayaneo_ec_groups[] = {
-+	&aya_mm_attribute_group,
-+	NULL
-+};
-+
- static int ayaneo_ec_probe(struct platform_device *pdev)
- {
- 	const struct dmi_system_id *dmi_entry;
-@@ -307,6 +412,7 @@ static int ayaneo_ec_probe(struct platform_device *pdev)
- static struct platform_driver ayaneo_platform_driver = {
- 	.driver = {
- 		.name = "ayaneo-ec",
-+		.dev_groups = ayaneo_ec_groups,
- 	},
- 	.probe = ayaneo_ec_probe,
- };
+- SQ52210 adds current, power, and alert-limit sensors, with read/write
+  functions modified to accommodate these new changes.
+
+- SQ52210 adds power attribute to report power data, and implements
+  read/write functions for this purpose.
+
+- Modify the read/write functions for current attributes.
+  SQ52210 can directly use its internal current registers to compare
+  with alert values for implementing curr_lcrit functionality.
+
+Wenliang Yan (8):
+  dt-binding:ti,ina3221:Add SQ52210
+  hwmon:(ina3221)Add support for SQ52210
+  hwmon:(ina3221)Support alert-type
+  hwmon:(ina3221)Pre-calculate current and power LSB
+  hwmon:(ina3221)Introduce power attribute and other characteristics of
+    other attribute
+  hwmon:(ina3221)Modify read/write functions for 'in' attribute
+  hwmon:(ina3221)Support read/write functions for 'power' attribute
+  hwmon:(ina3221)Support read/write functions for current_lcrict
+    attribute
+
+ .../devicetree/bindings/hwmon/ti,ina3221.yaml |  16 +-
+ Documentation/hwmon/ina3221.rst               |  24 +
+ drivers/hwmon/ina3221.c                       | 516 +++++++++++++++++-
+ 3 files changed, 541 insertions(+), 15 deletions(-)
+
 -- 
-2.51.2
-
+2.17.1
 
