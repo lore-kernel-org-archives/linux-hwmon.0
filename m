@@ -1,482 +1,342 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B05313542
-	for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 11:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F59313E30;
+	Wed, 12 Nov 2025 12:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762946340; cv=none; b=gJqzL2G66zjvgCHYJlumzI6E3YSXHv4JvS4jmqEwexMI5a4/K7ULrXOzQQB4Ap/LKDQOSJ958XFEGpGQgqQBB3sVaBjEcY2RqyppN0y1cauFoDZGHvdQUFjzwer1mrGniwVwT+/Q1o3Xsyu7Rkg1nToTJ2ymymftA7t7hNfV7EQ=
+	t=1762950854; cv=none; b=KA3pfPOkSCW1wg9u+RzUu4Ih9ok7kbeHV1etsfWP1oBCICksE5GgL0zDAX8QOA73P4uhkLrKpIvZkAyFKXynJAV5ZGPo9Bf70obxRzoXlz/BoVzeFGTRAj0NOam1VD1Yr1FZRQAEBT8xLAK2e8VCotPoSPcetssdTLGX3uvQqok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762946340; c=relaxed/simple;
-	bh=DvoNn8piBq3/RMBpQvEHO8ZeX9vzUS0LqSVLvVC6flk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u00YBKWhg7697ZV6MMBuwaY6qElOjn6L1rCKGZcxrqfP1C/i1Sxxscbkw/+cmd/BNPOU9Q09pJRasG58mkLMFmEH+s1k6RBALov34klh3/hhnF5Jw1XfV6pyWfJ6YkeZDj5Y02sCRZDDLgypbmUxaiw4wiEK8WsBNaPi7CIHfHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WjxNzFjP; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762950854; c=relaxed/simple;
+	bh=c3K8qADb3/l4YKVHi3k+tTe3MlylnAC3xFlrhJB3drM=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=NvLZ7gBHudLdgEHM2Y3Nvn3Gy/xvYR7ynp2e3OExtXz0m3Am7K3W6KxlacNBle3uRNw/a03m5j0aCY3Wyi9Q0L/blVGRybVD1KB9Te1TvqFEbVmpXo+fQoeczZN2fzUpEtDe0Z7Cje52xx52bSmZH/1yUjalhHny56Zjv2lVJDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jLqJfT5f; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WjxNzFjP"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2955623e6faso6412095ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 03:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762946337; x=1763551137; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cFAKkFyXyl3xzCijB0MqhcWNwMFSjCzGgD6ecJ/NvoM=;
-        b=WjxNzFjP6tsudCcsKhAd/FJfP4ebqjqRNCbvTb/nYBIN9yRq20wyCttbWJ30FGd2GX
-         VwAm8H187VtmayjK3h2KoDXZ5p0T8oKdrVl9o2tjv0MjxGpUHjcPy8P31zDG3IovSPvK
-         Nm5PZG/RNVNXx5p1INFtqm8q9roGNA5eeFpr3xkaSeHe2ErBe6B8D4dauPYXUOZRjUcm
-         WPweuPUKp8+52gA+5kNryx/9qq2m7b5iDgydeS+jWro6dC7XxK/Tw/ECwZobaRIxjJ5f
-         HH2cmWRMso8ofonjPEF+b+TdoZrwFPuEjPhp6n7jaiAVu9txUDZcbxT5ms4E32HelkKY
-         F48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762946337; x=1763551137;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cFAKkFyXyl3xzCijB0MqhcWNwMFSjCzGgD6ecJ/NvoM=;
-        b=QPXA2qOje4K1GiQ7lql/Fe85VLYRc5BOhK62Ya8MY0Il4m09x1xzMWOJM/+n/KWj6b
-         H0/lOCAXsR6dOqT6VezEAI09lMuYItpZgv9TpctZ/XvPtp8KbNH/GtfTIU4la7YWztGF
-         bpVPZWoOasCqPNpFuAhBLs7C5f6rEc/XzYuLlwovRK91FI0d7RBaurfZX89CWVY3gyce
-         Lx/dgMdlHpyoq28OPRyumVnF6AgSsvpkxpdgTh+KarjU9ajef12XnNg7e55zU1Fk+5QV
-         m2BqvpxalpZIJ72hb5Tchf+md479ylCHGNqCa81pIB4MT3B6lyljs4zNr7Sm4D85f8RU
-         fbKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxHd5jtLgtWXNacgIQ/P9qhG2/VLs8y4taH12q6N00ktirKUe1cxs61jauKa9y1uS6usJWaF32+bNTbA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0M3ZHTRZjFjMg75TtSZbP+nJugVExBdT/viwUmsWbvEAwTmbp
-	YgArxVB9pQDvsvU/zTjgbJuBQE5wbxt5AwR880Zd+TfCOs+pTIHcX7lP
-X-Gm-Gg: ASbGncsBxIDqrepJcLHkX3PSQyqqcFaMTZQ8LmNjU15MH9UZJCvrW3TF9QSe+t14YeU
-	7xVyGydBoy+hjHqlznjE9/P0wowRxdPDI1EoQumxXEQHndMHJeeZq4byiA6pYyynu9WcrN/uwdD
-	C2oldwlRXLGzyXZTRQYy4rTQCq5nkUBqsVzcII/5ZBi6Ojol77fzCzgmH1hlhvlHDJKo+Iz0/rh
-	cPstSY+HNSgX3KmLBhrcZ8SuND66q0TR0thFGluejzU/qk7IdgBhv4KPQddyX9lTQ5/WlBkMmbg
-	PCxTVjDGuuNprxiTxomNW/y4z5WvC28KIKnUXOv6K3DjJYQEJOd2X1F0KB1xp2ufHD/OfB/OBNA
-	7wZZJBIeS7Fm7V8ywQCtzFuWSJI+iYEFlcC2PD7nkb95rr2hgtIRh1l62lTiCZQK0E8ongqJYnL
-	XOXIWv04JpdMvcL0FQ95boG2DYNyCcd2WqCvUSSyAe3YdhqACYB3jlPw/FezRI/0Ah86ffihZyH
-	mhS39K2zEbd/yE6MlAjXwJAkPyK+5imC8wCuhxRMkPZGSfD10pNeGI=
-X-Google-Smtp-Source: AGHT+IGt0RRVbVR/yZsLZrSMrAd0R3g3Iv447XVFWHi+oqmuFnDXiY3rJ/p45tT2A4ZH4cWSR5tTMA==
-X-Received: by 2002:a17:903:2406:b0:298:4f73:d872 with SMTP id d9443c01a7336-2984f73d8d1mr34941415ad.21.1762946337209;
-        Wed, 12 Nov 2025 03:18:57 -0800 (PST)
-Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2984dca0f28sm27386695ad.60.2025.11.12.03.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 03:18:56 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Wed, 12 Nov 2025 21:16:57 +1000
-Subject: [PATCH v5 11/11] arm64: dts: apple: t8103, t8112, t60xx: Add hwmon
- SMC subdevice
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jLqJfT5f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762950852; x=1794486852;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=c3K8qADb3/l4YKVHi3k+tTe3MlylnAC3xFlrhJB3drM=;
+  b=jLqJfT5fb/+REc9LqRja3oes22sIG/vhwpSOZ4gEimKGeGW0mLr76hw6
+   1OapRGNdpe1tLiAjxQ3aSWX/3OAgjwydQN+txwUuDL+iKeiwIdXaWAPLw
+   aLxYV+BujsUiqOW+lBUWMZ74qJxZK2BOvpPhULX6+oDFJzpZwXuyGtx4v
+   l7fiuRocYRQeixyzpD9urJRu9ehSTi+BA3dAMLncy2kSQ+MX/HfZ3m/jS
+   +Lq6SEwjIazWRQHsJk/3d0L4HhXMIcn9isiQE43nyrh3BqEIreXJLknby
+   hkYHegrHLBlInR9ndtAB3yMFCpPjFk74UwUuJq3tyCucRFQ6QVn4w7Lax
+   g==;
+X-CSE-ConnectionGUID: rzMdY8ecSfyFPte4n9L9yg==
+X-CSE-MsgGUID: s4o5U9JLQ5mQsK4C6h6XWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="52571266"
+X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
+   d="scan'208";a="52571266"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:34:12 -0800
+X-CSE-ConnectionGUID: CoPrUFJNSuC0rhksvSeFEw==
+X-CSE-MsgGUID: aSZe2XosSm2hAT4Dk5BfJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
+   d="scan'208";a="189061133"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.16])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:34:08 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 12 Nov 2025 14:34:04 +0200 (EET)
+To: Antheas Kapenekakis <lkml@antheas.dev>
+cc: platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
+    Derek John Clark <derekjohn.clark@gmail.com>, 
+    =?ISO-8859-15?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>, 
+    Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+    Armin Wolf <W_Armin@gmx.de>
+Subject: Re: [PATCH v4 4/6] platform/x86: ayaneo-ec: Add controller power
+ and modules attributes
+In-Reply-To: <CAGwozwE7rSw43tKoStmcmwR3mup5bS0Btk0R3hr0XTwSus4A-w@mail.gmail.com>
+Message-ID: <be9c6811-9960-b8ec-eddc-5b2d645d1c2b@linux.intel.com>
+References: <20251110180846.1490726-1-lkml@antheas.dev> <20251110180846.1490726-5-lkml@antheas.dev> <888ff0d3-c613-b5a7-3b84-37ff3036e0a4@linux.intel.com> <CAGwozwE7rSw43tKoStmcmwR3mup5bS0Btk0R3hr0XTwSus4A-w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-macsmc-subdevs-v5-11-728e4b91fe81@gmail.com>
-References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
-In-Reply-To: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- James Calligeros <jcalligeros99@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12033;
- i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=DvoNn8piBq3/RMBpQvEHO8ZeX9vzUS0LqSVLvVC6flk=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDJkiOcdKW0OuRJzxTNLXypSeaKSjarLpuSGXpk26pWvhp
- e8M76I6JrAwiHExWIopsmxoEvKYbcR2s1+kci/MHFYmkCHSIg0MQMDCwJebmFdqpGOkZ6ptqGdo
- qGOsY8TAxSkAU+2sz/A/IldnXZEPx5S0Y8VyJUHfLa8YaNi5vCp7u/b9hZMzvLOzGb6KtH+fsYp
- xcrbTMe7NMQ1G7Auunq4xT23bt8rq6McFhnwA
-X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
- fpr=B08212489B3206D98F1479BDD43632D151F77960
+Content-Type: multipart/mixed; boundary="8323328-219875036-1762950844=:955"
 
-Apple's System Management Controller integrates numerous sensors
-that can be exposed via hwmon. Add the subdevice, compatible,
-and some common sensors that are exposed on every currently
-supported device as a starting point.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Co-developed-by: Janne Grunau <j@jannau.net>
-Signed-off-by: Janne Grunau <j@jannau.net>
-Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
----
- .../boot/dts/apple/hwmon-common.dtsi     | 33 +++++++++++++++++++++++++
- .../boot/dts/apple/hwmon-fan-dual.dtsi   | 22 +++++++++++++++++
- arch/arm64/boot/dts/apple/hwmon-fan.dtsi | 17 +++++++++++++
- .../boot/dts/apple/hwmon-laptop.dtsi     | 33 +++++++++++++++++++++++++
- .../boot/dts/apple/hwmon-mac-mini.dtsi   | 15 +++++++++++
- .../arm64/boot/dts/apple/t6001-j375c.dts |  2 ++
- arch/arm64/boot/dts/apple/t6001.dtsi     |  2 ++
- .../arm64/boot/dts/apple/t6002-j375d.dts |  2 ++
- .../arm64/boot/dts/apple/t600x-die0.dtsi |  4 +++
- .../boot/dts/apple/t600x-j314-j316.dtsi  |  3 +++
- .../arm64/boot/dts/apple/t602x-die0.dtsi |  4 +++
- arch/arm64/boot/dts/apple/t8103-j274.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j293.dts |  3 +++
- arch/arm64/boot/dts/apple/t8103-j313.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j456.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j457.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103.dtsi     |  5 ++++
- arch/arm64/boot/dts/apple/t8112-j413.dts |  2 ++
- arch/arm64/boot/dts/apple/t8112-j473.dts |  2 ++
- arch/arm64/boot/dts/apple/t8112-j493.dts |  3 +++
- arch/arm64/boot/dts/apple/t8112.dtsi     |  5 ++++
- 21 files changed, 165 insertions(+)
+--8323328-219875036-1762950844=:955
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-diff --git a/arch/arm64/boot/dts/apple/hwmon-common.dtsi b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
-new file mode 100644
-index 000000000000..b87021855fdf
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Hardware monitoring sensors expected to be found on all Apple Silicon devices
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	current-ID0R {
-+		apple,key-id = "ID0R";
-+		label = "AC Input Current";
-+	};
-+	power-PSTR {
-+		apple,key-id = "PSTR";
-+		label = "Total System Power";
-+	};
-+	power-PDTR {
-+		apple,key-id = "PDTR";
-+		label = "AC Input Power";
-+	};
-+	power-PMVR {
-+		apple,key-id = "PMVR";
-+		label = "3.8 V Rail Power";
-+	};
-+	temperature-TH0x {
-+		apple,key-id = "TH0x";
-+		label = "NAND Flash Temperature";
-+	};
-+	voltage-VD0R {
-+		apple,key-id = "VD0R";
-+		label = "AC Input Voltage";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi b/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi
-new file mode 100644
-index 000000000000..3eef0721bcca
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * SMC hwmon fan keys for Apple Silicon desktops/laptops with two fans
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+#include "hwmon-fan.dtsi"
-+
-+&smc_hwmon {
-+	fan-F0Ac {
-+		label = "Fan 1";
-+	};
-+	fan-F1Ac {
-+		apple,key-id = "F1Ac";
-+		label = "Fan 2";
-+		apple,fan-minimum = "F1Mn";
-+		apple,fan-maximum = "F1Mx";
-+		apple,fan-target = "F1Tg";
-+		apple,fan-mode = "F1Md";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-fan.dtsi b/arch/arm64/boot/dts/apple/hwmon-fan.dtsi
-new file mode 100644
-index 000000000000..fba9faf38f4b
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-fan.dtsi
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * hwmon fan keys for Apple Silicon desktops/laptops with a single fan.
-+ *
-+ *  Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	fan-F0Ac {
-+		apple,key-id = "F0Ac";
-+		label = "Fan";
-+		apple,fan-minimum = "F0Mn";
-+		apple,fan-maximum = "F0Mx";
-+		apple,fan-target = "F0Tg";
-+		apple,fan-mode = "F0Md";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi b/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi
-new file mode 100644
-index 000000000000..0c4666282a5c
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Hardware monitoring sensors expected on all Apple Silicon laptops
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	power-PHPC {
-+		apple,key-id = "PHPC";
-+		label = "Heatpipe Power";
-+	};
-+	temperature-TB0T {
-+		apple,key-id = "TB0T";
-+		label = "Battery Hotspot Temperature";
-+	};
-+	temperature-TCHP {
-+		apple,key-id = "TCHP";
-+		label = "Charge Regulator Temperature";
-+	};
-+	temperature-TW0P {
-+		apple,key-id = "TW0P";
-+		label = "WiFi/BT Module Temperature";
-+	};
-+	voltage-SBAV {
-+		apple,key-id = "SBAV";
-+		label = "Battery Voltage";
-+	};
-+	voltage-VD0R {
-+		apple,key-id = "VD0R";
-+		label = "Charger Input Voltage";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi b/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi
-new file mode 100644
-index 000000000000..f32627336ae7
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * hwmon sensors expected on all Mac mini models
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+#include "hwmon-fan.dtsi"
-+
-+&smc_hwmon {
-+	temperature-TW0P {
-+		apple,key-id = "TW0P";
-+		label = "WiFi/BT Module Temperature";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/t6001-j375c.dts b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-index 2e7c23714d4d..08276114c1d8 100644
---- a/arch/arm64/boot/dts/apple/t6001-j375c.dts
-+++ b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-@@ -24,3 +24,5 @@ &wifi0 {
- &bluetooth0 {
- 	brcm,board-type = "apple,okinawa";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6001.dtsi b/arch/arm64/boot/dts/apple/t6001.dtsi
-index ffbe823b71bc..264df90f07d8 100644
---- a/arch/arm64/boot/dts/apple/t6001.dtsi
-+++ b/arch/arm64/boot/dts/apple/t6001.dtsi
-@@ -66,3 +66,5 @@ p-core-pmu-affinity {
- &gpu {
- 	compatible = "apple,agx-g13c", "apple,agx-g13s";
- };
-+
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6002-j375d.dts b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-index 2b7f80119618..d12c0ae418f7 100644
---- a/arch/arm64/boot/dts/apple/t6002-j375d.dts
-+++ b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-@@ -56,3 +56,5 @@ &bluetooth0 {
- 
- /delete-node/ &ps_disp0_cpu0_die1;
- /delete-node/ &ps_disp0_fe_die1;
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index f715b19efd16..e6647c1a9173 100644
---- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -37,6 +37,10 @@ smc_gpio: gpio {
- 			#gpio-cells = <2>;
- 		};
- 
-+		smc_hwmon: hwmon {
-+			compatible = "apple,smc-hwmon";
-+		};
-+
- 		smc_reboot: reboot {
- 			compatible = "apple,smc-reboot";
- 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index c0aac59a6fae..127814a9dfa4 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -131,3 +131,6 @@ &fpwm0 {
- };
- 
- #include "spi1-nvram.dtsi"
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t602x-die0.dtsi b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-index 8622ddea7b44..680c103c1c0f 100644
---- a/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-@@ -114,6 +114,10 @@ smc_gpio: gpio {
- 			#gpio-cells = <2>;
- 		};
- 
-+		smc_hwmon: hwmon {
-+			compatible = "apple,smc-hwmon";
-+		};
-+
- 		smc_reboot: reboot {
- 			compatible = "apple,smc-reboot";
- 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-diff --git a/arch/arm64/boot/dts/apple/t8103-j274.dts b/arch/arm64/boot/dts/apple/t8103-j274.dts
-index 1c3e37f86d46..f5b8cc087882 100644
---- a/arch/arm64/boot/dts/apple/t8103-j274.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j274.dts
-@@ -61,3 +61,5 @@ &pcie0_dart_2 {
- &i2c2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-index 5b3c42e9f0e6..abb88391635f 100644
---- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-@@ -119,3 +119,6 @@ dfr_panel_in: endpoint {
- &displaydfr_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-index 97a4344d8dca..491ead016b21 100644
---- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-@@ -41,3 +41,5 @@ &wifi0 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j456.dts b/arch/arm64/boot/dts/apple/t8103-j456.dts
-index 58c8e43789b4..c2ec6fbb633c 100644
---- a/arch/arm64/boot/dts/apple/t8103-j456.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j456.dts
-@@ -75,3 +75,5 @@ &pcie0_dart_1 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j457.dts b/arch/arm64/boot/dts/apple/t8103-j457.dts
-index 7089ccf3ce55..aeaab2482d54 100644
---- a/arch/arm64/boot/dts/apple/t8103-j457.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j457.dts
-@@ -56,3 +56,5 @@ ethernet0: ethernet@0,0 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 59f2678639cf..f1820bdc0910 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -909,6 +909,10 @@ smc_gpio: gpio {
- 				#gpio-cells = <2>;
- 			};
- 
-+			smc_hwmon: hwmon {
-+				compatible = "apple,smc-hwmon";
-+			};
-+
- 			smc_reboot: reboot {
- 				compatible = "apple,smc-reboot";
- 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-@@ -1141,3 +1145,4 @@ port02: pci@2,0 {
- };
- 
- #include "t8103-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j413.dts b/arch/arm64/boot/dts/apple/t8112-j413.dts
-index 6f69658623bf..500dcdf2d4b5 100644
---- a/arch/arm64/boot/dts/apple/t8112-j413.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j413.dts
-@@ -78,3 +78,5 @@ &i2c4 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j473.dts b/arch/arm64/boot/dts/apple/t8112-j473.dts
-index 06fe257f08be..11db6a92493f 100644
---- a/arch/arm64/boot/dts/apple/t8112-j473.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j473.dts
-@@ -52,3 +52,5 @@ &pcie1_dart {
- &pcie2_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j493.dts b/arch/arm64/boot/dts/apple/t8112-j493.dts
-index fb8ad7d4c65a..a0da02c00f15 100644
---- a/arch/arm64/boot/dts/apple/t8112-j493.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j493.dts
-@@ -133,3 +133,6 @@ touchbar0: touchbar@0 {
- 		touchscreen-inverted-y;
- 	};
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112.dtsi b/arch/arm64/boot/dts/apple/t8112.dtsi
-index 6bc3f58b06f7..c4d1e5ffaee9 100644
---- a/arch/arm64/boot/dts/apple/t8112.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8112.dtsi
-@@ -912,6 +912,10 @@ smc_gpio: gpio {
- 				#gpio-cells = <2>;
- 			};
- 
-+			smc_hwmon: hwmon {
-+				compatible = "apple,smc-hwmon";
-+			};
-+
- 			smc_reboot: reboot {
- 				compatible = "apple,smc-reboot";
- 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-@@ -1180,3 +1184,4 @@ port03: pci@3,0 {
- };
- 
- #include "t8112-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
+On Tue, 11 Nov 2025, Antheas Kapenekakis wrote:
 
--- 
-2.51.2
+> On Tue, 11 Nov 2025 at 14:41, Ilpo J=C3=A4rvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> >
+> > On Mon, 10 Nov 2025, Antheas Kapenekakis wrote:
+> >
+> > > The Ayaneo 3 features hot-swappable controller modules. The ejection
+> > > and management is done through HID. However, after ejecting the modul=
+es,
+> > > the controller needs to be power cycled via the EC to re-initialize.
+> > >
+> > > For this, the EC provides a variable that holds whether the left or
+> > > right modules are connected, and a power control register to turn
+> > > the controller on or off. After ejecting the modules, the controller
+> > > should be turned off. Then, after both modules are reinserted,
+> > > the controller may be powered on again to re-initialize.
+> > >
+> > > This patch introduces two new sysfs attributes:
+> > >  - `controller_modules`: a read-only attribute that indicates whether
+> > >    the left and right modules are connected (none, left, right, both)=
+=2E
+> > >  - `controller_power`: a read-write attribute that allows the user
+> > >    to turn the controller on or off (with '1'/'0').
+> > >
+> > > Therefore, after ejection is complete, userspace can power off the
+> > > controller, then wait until both modules have been reinserted
+> > > (`controller_modules` will return 'both') to turn on the controller.
+> > >
+> > > Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+> > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> > > ---
+> > >  .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 ++++
+> > >  MAINTAINERS                                   |   1 +
+> > >  drivers/platform/x86/ayaneo-ec.c              | 106 ++++++++++++++++=
+++
+> > >  3 files changed, 126 insertions(+)
+> > >  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo-e=
+c
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo-ec b/Doc=
+umentation/ABI/testing/sysfs-platform-ayaneo-ec
+> > > new file mode 100644
+> > > index 000000000000..4cffbf5fc7ca
+> > > --- /dev/null
+> > > +++ b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
+> > > @@ -0,0 +1,19 @@
+> > > +What:                /sys/devices/platform/ayaneo-ec/controller_powe=
+r
+> > > +Date:                Nov 2025
+> > > +KernelVersion:       6.19
+> > > +Contact:     "Antheas Kapenekakis" <lkml@antheas.dev>
+> > > +Description:
+> > > +             Current controller power state. Allows turning on and o=
+ff
+> > > +             the controller power (e.g. for power savings). Write 1 =
+to
+> > > +             turn on, 0 to turn off. File is readable and writable.
+> > > +
+> > > +What:                /sys/devices/platform/ayaneo-ec/controller_modu=
+les
+> > > +Date:                Nov 2025
+> > > +KernelVersion:       6.19
+> > > +Contact:     "Antheas Kapenekakis"  <lkml@antheas.dev>
+> > > +Description:
+> > > +             Shows which controller modules are currently connected =
+to
+> > > +             the device. Possible values are "left", "right" and "bo=
+th".
+> > > +             File is read-only. The Windows software for this device
+> > > +             will only set controller power to 1 if both module side=
+s
+> > > +             are connected (i.e. this file returns "both").
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index c5bf7207c45f..f8ab009b6224 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -4196,6 +4196,7 @@ AYANEO PLATFORM EC DRIVER
+> > >  M:   Antheas Kapenekakis <lkml@antheas.dev>
+> > >  L:   platform-driver-x86@vger.kernel.org
+> > >  S:   Maintained
+> > > +F:   Documentation/ABI/testing/sysfs-platform-ayaneo
+> > >  F:   drivers/platform/x86/ayaneo-ec.c
+> > >
+> > >  AZ6007 DVB DRIVER
+> > > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/=
+ayaneo-ec.c
+> > > index 697bb053a7d6..0652c044ad76 100644
+> > > --- a/drivers/platform/x86/ayaneo-ec.c
+> > > +++ b/drivers/platform/x86/ayaneo-ec.c
+> > > @@ -8,6 +8,7 @@
+> > >   */
+> > >
+> > >  #include <linux/acpi.h>
+> > > +#include <linux/bits.h>
+> > >  #include <linux/dmi.h>
+> > >  #include <linux/err.h>
+> > >  #include <linux/hwmon.h>
+> > > @@ -16,6 +17,7 @@
+> > >  #include <linux/module.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/power_supply.h>
+> > > +#include <linux/sysfs.h>
+> > >  #include <acpi/battery.h>
+> > >
+> > >  #define AYANEO_PWM_ENABLE_REG         0x4A
+> > > @@ -32,9 +34,17 @@
+> > >  #define AYANEO_CHARGE_VAL_AUTO               0xaa
+> > >  #define AYANEO_CHARGE_VAL_INHIBIT    0x55
+> > >
+> > > +#define AYANEO_POWER_REG     0x2d
+> > > +#define AYANEO_POWER_OFF     0xfe
+> > > +#define AYANEO_POWER_ON              0xff
+> > > +#define AYANEO_MODULE_REG    0x2f
+> > > +#define AYANEO_MODULE_LEFT   BIT(0)
+> > > +#define AYANEO_MODULE_RIGHT  BIT(1)
+> > > +
+> > >  struct ayaneo_ec_quirk {
+> > >       bool has_fan_control;
+> > >       bool has_charge_control;
+> > > +     bool has_magic_modules;
+> > >  };
+> > >
+> > >  struct ayaneo_ec_platform_data {
+> > > @@ -46,6 +56,7 @@ struct ayaneo_ec_platform_data {
+> > >  static const struct ayaneo_ec_quirk quirk_ayaneo3 =3D {
+> > >       .has_fan_control =3D true,
+> > >       .has_charge_control =3D true,
+> > > +     .has_magic_modules =3D true,
+> > >  };
+> > >
+> > >  static const struct dmi_system_id dmi_table[] =3D {
+> > > @@ -266,6 +277,100 @@ static int ayaneo_remove_battery(struct power_s=
+upply *battery,
+> > >       return 0;
+> > >  }
+> > >
+> > > +static ssize_t controller_power_store(struct device *dev,
+> > > +                                   struct device_attribute *attr,
+> > > +                                   const char *buf,
+> > > +                                   size_t count)
+> > > +{
+> > > +     bool value;
+> > > +     int ret;
+> > > +
+> > > +     ret =3D kstrtobool(buf, &value);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     ret =3D ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AY=
+ANEO_POWER_OFF);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     return count;
+> > > +}
+> > > +
+> > > +static ssize_t controller_power_show(struct device *dev,
+> > > +                                  struct device_attribute *attr,
+> > > +                                  char *buf)
+> > > +{
+> > > +     int ret;
+> > > +     u8 val;
+> > > +
+> > > +     ret =3D ec_read(AYANEO_POWER_REG, &val);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     return sysfs_emit(buf, "%d\n", val =3D=3D AYANEO_POWER_ON);
+> > > +}
+> > > +
+> > > +static DEVICE_ATTR_RW(controller_power);
+> > > +
+> > > +static ssize_t controller_modules_show(struct device *dev,
+> > > +                                    struct device_attribute *attr, c=
+har *buf)
+> > > +{
+> > > +     char *out;
+> > > +     int ret;
+> > > +     u8 val;
+> > > +
+> > > +     ret =3D ec_read(AYANEO_MODULE_REG, &val);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     switch (~val & (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT)) {
+> >
+> > This too is constructing mask still here which is ugly.
+>=20
+> I can bring back the bools :-)
+>=20
+> I agree but that's what I came up with to remove them
 
+Just Add a define for the mask instead as was requested. There's no need=20
+to make this any harder than that.
+
+--=20
+ i.
+
+> > > +     case AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT:
+> > > +             out =3D "both";
+> > > +             break;
+> > > +     case AYANEO_MODULE_LEFT:
+> > > +             out =3D "left";
+> > > +             break;
+> > > +     case AYANEO_MODULE_RIGHT:
+> > > +             out =3D "right";
+> > > +             break;
+> > > +     default:
+> > > +             out =3D "none";
+> > > +             break;
+> > > +     }
+> > > +
+> > > +     return sysfs_emit(buf, "%s\n", out);
+> > > +}
+> > > +
+> > > +static DEVICE_ATTR_RO(controller_modules);
+> > > +
+> > > +static struct attribute *aya_mm_attrs[] =3D {
+> > > +     &dev_attr_controller_power.attr,
+> > > +     &dev_attr_controller_modules.attr,
+> > > +     NULL
+> > > +};
+> > > +
+> > > +static umode_t aya_mm_is_visible(struct kobject *kobj,
+> > > +                              struct attribute *attr, int n)
+> > > +{
+> > > +     struct device *dev =3D kobj_to_dev(kobj);
+> > > +     struct platform_device *pdev =3D to_platform_device(dev);
+> > > +     struct ayaneo_ec_platform_data *data =3D platform_get_drvdata(p=
+dev);
+> > > +
+> > > +     if (data->quirks->has_magic_modules)
+> > > +             return attr->mode;
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static const struct attribute_group aya_mm_attribute_group =3D {
+> > > +     .is_visible =3D aya_mm_is_visible,
+> > > +     .attrs =3D aya_mm_attrs,
+> > > +};
+> > > +
+> > > +static const struct attribute_group *ayaneo_ec_groups[] =3D {
+> > > +     &aya_mm_attribute_group,
+> > > +     NULL
+> > > +};
+> > > +
+> > >  static int ayaneo_ec_probe(struct platform_device *pdev)
+> > >  {
+> > >       const struct dmi_system_id *dmi_entry;
+> > > @@ -307,6 +412,7 @@ static int ayaneo_ec_probe(struct platform_device=
+ *pdev)
+> > >  static struct platform_driver ayaneo_platform_driver =3D {
+> > >       .driver =3D {
+> > >               .name =3D "ayaneo-ec",
+> > > +             .dev_groups =3D ayaneo_ec_groups,
+> > >       },
+> > >       .probe =3D ayaneo_ec_probe,
+> > >  };
+> > >
+> >
+> > --
+> >  i.
+> >
+> >
+>=20
+
+--8323328-219875036-1762950844=:955--
