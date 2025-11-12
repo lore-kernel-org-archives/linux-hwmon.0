@@ -1,310 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5670932C33C;
-	Wed, 12 Nov 2025 12:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E4C2C21DB
+	for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 20:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762951748; cv=none; b=CSfLhG9quFaEhsAhu78IqvvIenbZVpPmi+y3z+YzX2ggmZ5sGaLJZzeAHRnlK4OwWgGHLGeDVBHOzTR5Kt3mRuBYIMbrAXBo2COH6cq13fv0JCP7veM4tx2IUvoheM1VSDI7fZ4x8DS/1bd5vKQmWuFOjXAVcRslwJswpgzzGTs=
+	t=1762977829; cv=none; b=vAJE4UeAfzUVTN8e+iBx8RxSUIApNFJmPsx8oPIOe1VjD+8TvoSsfseZ63l0Kj3qRetM8zuLdDKryDNnZrCeQ0cVTjh2hLkpBUyTQmo8IU+WkX0CVAUCp7qBHBqY9NtkO8l71dgFaJmoF2VBJoGaJOWX0frZmrVjdoV41l/WbhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762951748; c=relaxed/simple;
-	bh=7Ch1Z7Ossjf7YMHRIa/Qz0DEanlre0LCi2qSNJylKR4=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=B79gfEpEG0gFe0Dub5qxw6OqdCmmT4oo0/kYxYsbQv+DN2lf3YfFzX+rSZnqRzTUlE98nCiferCT1+jrL3k1pisCXejf2anOXJ7Lnd59tqA0Nidk0D2vpglUU+5iaLSO+MbTEJ8zBYwwpO+d+0uuGy/KuutDrgUeh3X87AcpROk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UOSIUQ8K; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1762977829; c=relaxed/simple;
+	bh=f6zi5QMiRBllhcG57RFOS7f2OK8nmNoOL65KvXnrPuE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hwU/zicqh1mCpm2Km4e7t6L/lLKl3E30MvU0gDO4G9PgozGvtwqrqNRls6MofxDTDWPv7MfqbkeeH8SO+yeAn3W4RAuuMpphA+KF+RlZChKFED1zPdRYEj7Y+oRR9ojGpS0slwLgcskqr/k/U1JzCHJsDoKsurNNxpYSh4fSV3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuzkCD29; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UOSIUQ8K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762951746; x=1794487746;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=7Ch1Z7Ossjf7YMHRIa/Qz0DEanlre0LCi2qSNJylKR4=;
-  b=UOSIUQ8KWYHw0nSap3jhhNXUrWvgJl/gpA0ch6lTvQZS3zRD/jqjNUyY
-   qBMZbnauISNkwwZ37s/m8Xv0Z1Z4Ho0Q6tW7UC9oEYB/MAUeIcalNTPCY
-   OYXpvPiNLhd1xUdsFw4AHpoPJwtrOocsM+XHVaLCzu9M/TwNg9SO4bnrg
-   +w6U0C8Zr12gktftSsSGlEvdAk8JvXZL80GvS+jKmjmuObKdNihYuGEFr
-   gF9GS0Pk5xNIX02FbBWonl+0FRWtRlpseAA3YxE/HRK6m3jf7Y0qtz9rJ
-   NJx2Vh4c36rY79LCQtFE/83RTK2XBWykKg07zzt3WTxNdKyzfL5bzGIDq
-   w==;
-X-CSE-ConnectionGUID: LoyGep6rRKubM2wZJcsuCQ==
-X-CSE-MsgGUID: J/oXyj5HRReDEK8dn1q0Yw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="76361677"
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="76361677"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:49:06 -0800
-X-CSE-ConnectionGUID: FKTZW1iRT4qy1WTOKrn7BA==
-X-CSE-MsgGUID: othsPioNQdKjv7KyZdBjYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="194192978"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.16])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:49:01 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 12 Nov 2025 14:48:58 +0200 (EET)
-To: Antheas Kapenekakis <lkml@antheas.dev>
-cc: platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>, 
-    Derek John Clark <derekjohn.clark@gmail.com>, 
-    =?ISO-8859-15?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>, 
-    Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
-    Armin Wolf <W_Armin@gmx.de>
-Subject: Re: [PATCH v4 4/6] platform/x86: ayaneo-ec: Add controller power
- and modules attributes
-In-Reply-To: <CAGwozwGF5x3wWkcz7sDpS=i+n0VPQpcuBr0r4ycH8b0YTLOJ5w@mail.gmail.com>
-Message-ID: <acc13faa-998e-60de-8636-a1c08b9a274d@linux.intel.com>
-References: <20251110180846.1490726-1-lkml@antheas.dev> <20251110180846.1490726-5-lkml@antheas.dev> <888ff0d3-c613-b5a7-3b84-37ff3036e0a4@linux.intel.com> <CAGwozwE7rSw43tKoStmcmwR3mup5bS0Btk0R3hr0XTwSus4A-w@mail.gmail.com> <be9c6811-9960-b8ec-eddc-5b2d645d1c2b@linux.intel.com>
- <CAGwozwGF5x3wWkcz7sDpS=i+n0VPQpcuBr0r4ycH8b0YTLOJ5w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuzkCD29"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34372216275so42124a91.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 12:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762977827; x=1763582627; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=A4/qzGVtpLm7jp4TUuxxd+pG80ZGMpWn7pA9vIqFyPU=;
+        b=UuzkCD29JV2rKGT5UAZIb01QSDihPmh+ivlVeMHJ6v1DOruHNoG4BlBeHmieHxalzw
+         eoJP2XYmf4G6OjhXQjDk6TA8JlQzpjxyYWdEIvOZZUPGeq8t5VsLYYVmzXqznu3Y6JWo
+         1vtpFXxXcPnT8ehpLwPHYWavTpjn9QLzEj2hKk/EMcAWn02GaElJ0Jppl0htUwNyk1t4
+         pptXUEPM/Jn5H72xY/v60tNywpgCcMwYJOpWnPVY2PExkpQUMcPPJnvYj9hWl0iPrTht
+         7D5wgW3HonlTL0ayTJKmXTKQROWFnciOXT79NO7wiRdRAh2lPHID88W63D29/3qjPOSG
+         d2/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762977827; x=1763582627;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A4/qzGVtpLm7jp4TUuxxd+pG80ZGMpWn7pA9vIqFyPU=;
+        b=LO3o2zr4dBi6G946LFfl83ycXFO3eCZ+zmYSpAykzRGIEZh19DJ8+gezCfHttvdtYn
+         77MgXFj+d2Ps7ZY51AVnpt998EmIn4QtPAieD+AiALwFIGQ9M0LtjLxSKmV6t18PxQPt
+         jUi6xKK+kioAGswDqYnkWZBGckXe66O2vgSNpd67+BhUainLmxhoQMDSeTEpWdmL0qB1
+         PEszQ4jpcV69zCW4W5DF/bB1lZ/wEEFsYeipmJ8YxmzFXlAbFy9Ogi3X4reYEMLaIzFs
+         7OHgHaBECOy/hmWGo9/K+T2sdKG+RgglPw5+BjP28Or7tz/9JtUP/p+YT4gBJKsFfVKV
+         kgDg==
+X-Gm-Message-State: AOJu0YwWpeV+TPB2Db9NsA6/wcHTHkHOShNsggH+kd0TSPJGgf3VOWmV
+	8qd/Nv1vrYc+dKXPvGO7V9lkmQpzY3DtpA0wIjtzq03+Y4oTA2aI2f9CkjExtQ==
+X-Gm-Gg: ASbGnctAG0pdl64ZhW3WHDETI9fjsJ+miMiFiWmY0jmCcNrdXP6fhU/KpZAyKOhuCgU
+	BNXwVQgJg/PqfxZZg8LuJ3mZCezGEmxK6CydHCGiCCF2CVU/aabh9/p+KE4wYHjpaS6necXd9BB
+	KVIy4Bx8AnxTxkw6viBC1sMhThttWJgjXwL6JoQ2MS4+wNXX3/ubY2oGKBSNothPfZs/HLaPZ3o
+	2NX1dWXF9Y9vV4KjTuICVnLSFczeGnjJ8Z+U7RmpUtVOhhWPSarnsytAip3didPLEi4gOCqKhYP
+	90Tcoqfh3FNDq0omZQRrn6xY+yW9LqlhzSA+Wvq+XW9RAF1CBOa2azF+1BqKJRUg8fSX4tOEmAJ
+	sxBL/xHR3bsPRUthDBegfN/bauVUpr+XO9Oraj4pem5PEG/V6qM1uWvJqjlWZlIKXq9+Btyu17B
+	aoXamqKEhT6VIfCwwjpsONeDyo34053F6l9TGvb1qL1ZgksEjW
+X-Google-Smtp-Source: AGHT+IFyN9BPR0l1jVahDVmOs4NiwQ7miDwvjcX7fb72hixSWBHi4tA/7ZiP+Kew9BfBtAFIChz0Jg==
+X-Received: by 2002:a17:90b:3ec7:b0:343:6c71:6d31 with SMTP id 98e67ed59e1d1-343dddf012dmr5710573a91.11.1762977826974;
+        Wed, 12 Nov 2025 12:03:46 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343ea600620sm295598a91.0.2025.11.12.12.03.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Nov 2025 12:03:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dfb3f5df-4ca7-4965-bfe9-07fb473f0506@roeck-us.net>
+Date: Wed, 12 Nov 2025 12:03:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1345560233-1762951738=:955"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: (gpd-fan) Fix the compilation error
+To: Cryolitia PukNgae <cryolitia@uniontech.com>, luoqing <l1138897701@163.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ luoqing@kylinos.cn
+References: <20251112015737.948693-1-l1138897701@163.com>
+ <D1B4B203872C7799+d5630d66-0557-49bc-baf5-2abbe50cc625@uniontech.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <D1B4B203872C7799+d5630d66-0557-49bc-baf5-2abbe50cc625@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 11/11/25 19:09, Cryolitia PukNgae wrote:
+> On 12/11/2025 09.57, luoqing wrote:
+>> From: luoqing <luoqing@kylinos.cn>
+>>
+>> drivers/hwmon/gpd-fan.c: in the function 'gpd_ecram_read' :
+>> drivers/hwmon/gpd-fan.c:231:9: Error: implicit declaration function 'outb' [-Werror= implrecental-function-declaration]
+>> 231 |         outb(0x2E, addr_port);
+>> ^~~~
+>> drivers/hwmon/gpd-fan.c:244:16: Error: implicit declaration function 'inb' [-Werror= implrecental-function-declaration]
+>> 244 |         *val = inb(data_port);
+>> ^~~
+>> cc1: All warnings were regarded as errors
+>>
+>> Signed-off-by: luoqing <luoqing@kylinos.cn>
+>> ---
+>>   drivers/hwmon/gpd-fan.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
+>> index 321794807e8d..57d4ee683f0d 100644
+>> --- a/drivers/hwmon/gpd-fan.c
+>> +++ b/drivers/hwmon/gpd-fan.c
+>> @@ -19,6 +19,7 @@
+>>   #include <linux/kernel.h>
+>>   #include <linux/module.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/io.h>
+>>   
+>>   #define DRIVER_NAME "gpdfan"
+>>   #define GPD_PWM_CTR_OFFSET 0x1841
+> 
+> Has it already been fixed in it[1] ?
+> 
+> 1. https://lore.kernel.org/all/20251024202042.752160-1-krishnagopi487@gmail.com/#t
+> 
+Yes, I'll just need to send the pull request.
 
---8323328-1345560233-1762951738=:955
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Guenter
 
-On Wed, 12 Nov 2025, Antheas Kapenekakis wrote:
-
-> On Wed, 12 Nov 2025 at 13:34, Ilpo J=C3=A4rvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > On Tue, 11 Nov 2025, Antheas Kapenekakis wrote:
-> >
-> > > On Tue, 11 Nov 2025 at 14:41, Ilpo J=C3=A4rvinen
-> > > <ilpo.jarvinen@linux.intel.com> wrote:
-> > > >
-> > > > On Mon, 10 Nov 2025, Antheas Kapenekakis wrote:
-> > > >
-> > > > > The Ayaneo 3 features hot-swappable controller modules. The eject=
-ion
-> > > > > and management is done through HID. However, after ejecting the m=
-odules,
-> > > > > the controller needs to be power cycled via the EC to re-initiali=
-ze.
-> > > > >
-> > > > > For this, the EC provides a variable that holds whether the left =
-or
-> > > > > right modules are connected, and a power control register to turn
-> > > > > the controller on or off. After ejecting the modules, the control=
-ler
-> > > > > should be turned off. Then, after both modules are reinserted,
-> > > > > the controller may be powered on again to re-initialize.
-> > > > >
-> > > > > This patch introduces two new sysfs attributes:
-> > > > >  - `controller_modules`: a read-only attribute that indicates whe=
-ther
-> > > > >    the left and right modules are connected (none, left, right, b=
-oth).
-> > > > >  - `controller_power`: a read-write attribute that allows the use=
-r
-> > > > >    to turn the controller on or off (with '1'/'0').
-> > > > >
-> > > > > Therefore, after ejection is complete, userspace can power off th=
-e
-> > > > > controller, then wait until both modules have been reinserted
-> > > > > (`controller_modules` will return 'both') to turn on the controll=
-er.
-> > > > >
-> > > > > Reviewed-by: Armin Wolf <W_Armin@gmx.de>
-> > > > > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > > > > ---
-> > > > >  .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 ++++
-> > > > >  MAINTAINERS                                   |   1 +
-> > > > >  drivers/platform/x86/ayaneo-ec.c              | 106 ++++++++++++=
-++++++
-> > > > >  3 files changed, 126 insertions(+)
-> > > > >  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayan=
-eo-ec
-> > > > >
-> > > > > diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo-ec b=
-/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-> > > > > new file mode 100644
-> > > > > index 000000000000..4cffbf5fc7ca
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-> > > > > @@ -0,0 +1,19 @@
-> > > > > +What:                /sys/devices/platform/ayaneo-ec/controller_=
-power
-> > > > > +Date:                Nov 2025
-> > > > > +KernelVersion:       6.19
-> > > > > +Contact:     "Antheas Kapenekakis" <lkml@antheas.dev>
-> > > > > +Description:
-> > > > > +             Current controller power state. Allows turning on a=
-nd off
-> > > > > +             the controller power (e.g. for power savings). Writ=
-e 1 to
-> > > > > +             turn on, 0 to turn off. File is readable and writab=
-le.
-> > > > > +
-> > > > > +What:                /sys/devices/platform/ayaneo-ec/controller_=
-modules
-> > > > > +Date:                Nov 2025
-> > > > > +KernelVersion:       6.19
-> > > > > +Contact:     "Antheas Kapenekakis"  <lkml@antheas.dev>
-> > > > > +Description:
-> > > > > +             Shows which controller modules are currently connec=
-ted to
-> > > > > +             the device. Possible values are "left", "right" and=
- "both".
-> > > > > +             File is read-only. The Windows software for this de=
-vice
-> > > > > +             will only set controller power to 1 if both module =
-sides
-> > > > > +             are connected (i.e. this file returns "both").
-> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > index c5bf7207c45f..f8ab009b6224 100644
-> > > > > --- a/MAINTAINERS
-> > > > > +++ b/MAINTAINERS
-> > > > > @@ -4196,6 +4196,7 @@ AYANEO PLATFORM EC DRIVER
-> > > > >  M:   Antheas Kapenekakis <lkml@antheas.dev>
-> > > > >  L:   platform-driver-x86@vger.kernel.org
-> > > > >  S:   Maintained
-> > > > > +F:   Documentation/ABI/testing/sysfs-platform-ayaneo
-> > > > >  F:   drivers/platform/x86/ayaneo-ec.c
-> > > > >
-> > > > >  AZ6007 DVB DRIVER
-> > > > > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/=
-x86/ayaneo-ec.c
-> > > > > index 697bb053a7d6..0652c044ad76 100644
-> > > > > --- a/drivers/platform/x86/ayaneo-ec.c
-> > > > > +++ b/drivers/platform/x86/ayaneo-ec.c
-> > > > > @@ -8,6 +8,7 @@
-> > > > >   */
-> > > > >
-> > > > >  #include <linux/acpi.h>
-> > > > > +#include <linux/bits.h>
-> > > > >  #include <linux/dmi.h>
-> > > > >  #include <linux/err.h>
-> > > > >  #include <linux/hwmon.h>
-> > > > > @@ -16,6 +17,7 @@
-> > > > >  #include <linux/module.h>
-> > > > >  #include <linux/platform_device.h>
-> > > > >  #include <linux/power_supply.h>
-> > > > > +#include <linux/sysfs.h>
-> > > > >  #include <acpi/battery.h>
-> > > > >
-> > > > >  #define AYANEO_PWM_ENABLE_REG         0x4A
-> > > > > @@ -32,9 +34,17 @@
-> > > > >  #define AYANEO_CHARGE_VAL_AUTO               0xaa
-> > > > >  #define AYANEO_CHARGE_VAL_INHIBIT    0x55
-> > > > >
-> > > > > +#define AYANEO_POWER_REG     0x2d
-> > > > > +#define AYANEO_POWER_OFF     0xfe
-> > > > > +#define AYANEO_POWER_ON              0xff
-> > > > > +#define AYANEO_MODULE_REG    0x2f
-> > > > > +#define AYANEO_MODULE_LEFT   BIT(0)
-> > > > > +#define AYANEO_MODULE_RIGHT  BIT(1)
-> > > > > +
-> > > > >  struct ayaneo_ec_quirk {
-> > > > >       bool has_fan_control;
-> > > > >       bool has_charge_control;
-> > > > > +     bool has_magic_modules;
-> > > > >  };
-> > > > >
-> > > > >  struct ayaneo_ec_platform_data {
-> > > > > @@ -46,6 +56,7 @@ struct ayaneo_ec_platform_data {
-> > > > >  static const struct ayaneo_ec_quirk quirk_ayaneo3 =3D {
-> > > > >       .has_fan_control =3D true,
-> > > > >       .has_charge_control =3D true,
-> > > > > +     .has_magic_modules =3D true,
-> > > > >  };
-> > > > >
-> > > > >  static const struct dmi_system_id dmi_table[] =3D {
-> > > > > @@ -266,6 +277,100 @@ static int ayaneo_remove_battery(struct pow=
-er_supply *battery,
-> > > > >       return 0;
-> > > > >  }
-> > > > >
-> > > > > +static ssize_t controller_power_store(struct device *dev,
-> > > > > +                                   struct device_attribute *attr=
-,
-> > > > > +                                   const char *buf,
-> > > > > +                                   size_t count)
-> > > > > +{
-> > > > > +     bool value;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret =3D kstrtobool(buf, &value);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     ret =3D ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON =
-: AYANEO_POWER_OFF);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     return count;
-> > > > > +}
-> > > > > +
-> > > > > +static ssize_t controller_power_show(struct device *dev,
-> > > > > +                                  struct device_attribute *attr,
-> > > > > +                                  char *buf)
-> > > > > +{
-> > > > > +     int ret;
-> > > > > +     u8 val;
-> > > > > +
-> > > > > +     ret =3D ec_read(AYANEO_POWER_REG, &val);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     return sysfs_emit(buf, "%d\n", val =3D=3D AYANEO_POWER_ON);
-> > > > > +}
-> > > > > +
-> > > > > +static DEVICE_ATTR_RW(controller_power);
-> > > > > +
-> > > > > +static ssize_t controller_modules_show(struct device *dev,
-> > > > > +                                    struct device_attribute *att=
-r, char *buf)
-> > > > > +{
-> > > > > +     char *out;
-> > > > > +     int ret;
-> > > > > +     u8 val;
-> > > > > +
-> > > > > +     ret =3D ec_read(AYANEO_MODULE_REG, &val);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     switch (~val & (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT)) =
-{
-> > > >
-> > > > This too is constructing mask still here which is ugly.
-> > >
-> > > I can bring back the bools :-)
-> > >
-> > > I agree but that's what I came up with to remove them
-> >
-> > Just Add a define for the mask instead as was requested. There's no nee=
-d
-> > to make this any harder than that.
->=20
-> Should the mask be:
->=20
-> (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT)
->=20
-> or
->=20
-> GENMASK(2,0)ish
-
-This has a wrong bit index.
-
-> I find the latter a bit more error prone since it redefines. I can
-> move forward with the former one later today if there arent any other
-> comments
-
-Either way is fine with me, as long as it's not in the switch itself.
-I think I lean a bit more to the former one.
-
---=20
- i.
-
---8323328-1345560233-1762951738=:955--
