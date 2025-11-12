@@ -1,81 +1,99 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EA815E5C2;
-	Wed, 12 Nov 2025 01:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688C735CBA1;
+	Wed, 12 Nov 2025 02:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762912683; cv=none; b=O0NyPyO3JHZnfwnf6a6PEWx+pGeGSq50yq6xSxjTO+ChM2Vi9Ye1Jkin0Oul+fs5dlvgLaAhNgUhT4+PIhTrHVDDJp/j618IAqMzOufti8koBF4wMH6lTbJw+/z9/0ZEChPioMcXLjIsfetcnN6THtfCjoXJkHmjeTW2fD+4NBM=
+	t=1762913346; cv=none; b=oPyuTV3AM+cZhRdfiEQvjPEHA/4C6LcMBWc5sEmW1XoRAOrjXegUiXcq0YDlPWqfxGVJhs1qzdQgKeh/Q3kVec9if/hm35XWFIOdgMc+s/vZqegMuOygnt7V44KDjrwrgW9HormeBKJEMqf+zUl38WSX0PLUAR524hARDEtCrzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762912683; c=relaxed/simple;
-	bh=QoNG17ZTsvdz0HbmuqGj28dacv/YzlZsnnYAorZS1mQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GPV53hSwdi/ZXMFiU4dsmksPK5FXkdxxvO0M/AAd/gwln/VU/J3AiVPHNzI45k2SgduhZK/pPGIsqnISOiO3QHLUpurZniCjJ7/nkMiwuDTsJAYhZYYbThkMy2SCSWvEJxfJeMG4629pK35qLRxpkkjAFK0sknwPxeUutRLm30k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VXAtPa2a; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1762913346; c=relaxed/simple;
+	bh=c0pRtdfq7/UyLUqHpJItuXxtHKswo3QtIc94dqkHOP8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=tlhJ5i2zzPCV7oHSFoK3PFWYquC7XysEkr6FtepBg5eaTh/65VcwWleXsJHowjZT5sJdm1+De8Psi5jl3jyYBkh1+lC69PgebTbaRiWW74HnbjDQ7KCIuRfVpRqIbMnLZuA/BHuiAsHwFjEErTfFOQIy2+NRj6RR4krpLBjlTQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XQDv60WS; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VXAtPa2a"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XQDv60WS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=b+
-	M7qIMhBgTxamxFWUrUIMov0Az4ujaq+gMVb2rAdz0=; b=VXAtPa2arMXJU/rYk2
-	2sgb/c0u0aJldm8/XwVP7D0FvLQ6SvBg/P4b1drRRv9F/iAZ7hVmdCeoci/9sOgE
-	/x1mLRyol0s7TJr2jvHGZYq1B1N9CU73mJ1Q/6UerT369LDHoyMLXCNignzHc4NS
-	J6yFvkTWDfP4+/jCJNsGCCkLY=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=k+lEIps3Ad061Y0
+	N1VRIN9ZMFcrkNkF438I6q5gvkHI=; b=XQDv60WS1xaWYlQGHxcj4j1KqR5TC22
+	m8a0NnKvG45xg50vBduHA24Cmte5qxD1Tb/YkN37UWWaNJ9+3m0YbZDaaHR2SuLV
+	NTuIyKBbZiAm4SQfVRgudxy8APHD72513ldSwOLgaW9LNbbu6nTr0POQtlo2yL4f
+	hjBQt00e1eRk=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wCX7f6R6RNpFvgsDQ--.1198S2;
-	Wed, 12 Nov 2025 09:57:39 +0800 (CST)
-From: luoqing <l1138897701@163.com>
-To: cryolitia@uniontech.com
-Cc: linux@roeck-us.net,
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wCHe7kL7BNp5ws4DQ--.143S2;
+	Wed, 12 Nov 2025 10:08:13 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: robh@kernel.org
+Cc: christophe.jaillet@wanadoo.fr,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	luoqing@kylinos.cn
-Subject: [PATCH] hwmon: (gpd-fan) Fix the compilation error
-Date: Wed, 12 Nov 2025 09:57:37 +0800
-Message-Id: <20251112015737.948693-1-l1138897701@163.com>
-X-Mailer: git-send-email 2.25.1
+	linux@roeck-us.net,
+	wenliang202407@163.com
+Subject: Re: [PATCH 1/8] dt-binding:ti,ina3221:Add SQ52210
+Date: Tue, 11 Nov 2025 21:08:02 -0500
+Message-Id: <20251112020802.103963-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <176285353822.2206360.4224721052880001451.robh@kernel.org>
+References: <176285353822.2206360.4224721052880001451.robh@kernel.org>
+X-CM-TRANSID:_____wCHe7kL7BNp5ws4DQ--.143S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw18JFW7tr47JF1fCry8Xwb_yoW8Ww4kp3
+	yrCF90vrZ8Wr13JwsxtrZ2kFyYqws3tayIqr1UGF42vF15XFyaq3ySg39Y9F1UKrWfC345
+	Za109w1xK34jyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjTZXrUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvw9dMWkT7A8nigAA3o
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCX7f6R6RNpFvgsDQ--.1198S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFyxKF1kWr18Gr1kWr4fGrg_yoWDWrbEkw
-	nruws7uryUG3W5tF9Y9FZ5u342yw4UWF48Z3Z293s5CrnrZ39xt393A348Aw1UGry5tFyF
-	vw4Dtw48Cry3ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbQ6ptUUUUU==
-X-CM-SenderInfo: jorrjmiyzxliqr6rljoofrz/1tbiSAIERGkT4l+qBgAAsh
 
-From: luoqing <luoqing@kylinos.cn>
+At 2025-11-11 17:32:18, "Rob Herring (Arm)" <robh@kernel.org> wrote:
+>
+>On Tue, 11 Nov 2025 03:05:39 -0500, Wenliang Yan wrote:
+>> Add a compatible string for sq52210, sq52210 is forward compatible
+>> with INA3221 and add alert register to implement four additional
+>> alert function.
+>> 
+>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+>> ---
+>>  .../devicetree/bindings/hwmon/ti,ina3221.yaml    | 16 +++++++++++++++-
+>>  1 file changed, 15 insertions(+), 1 deletion(-)
+>> 
+>
+>My bot found errors running 'make dt_binding_check' on your patch:
+>
+>yamllint warnings/errors:
+>
+>dtschema/dtc warnings/errors:
+>/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml: alert-type: missing type definition
+>
+>doc reference errors (make refcheckdocs):
+>
+>See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251111080546.32421-2-wenliang202407@163.com
+>
+>The base for the series is generally the latest rc1. A different dependency
+>should be noted in *this* patch.
+>
+>If you already ran 'make dt_binding_check' and didn't see the above
+>error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>date:
+>
+>pip3 install dtschema --upgrade
+>
+>Please check and re-submit after running the above command yourself. Note
+>that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+>your schema. However, it must be unset to test all examples with your schema.
 
-drivers/hwmon/gpd-fan.c: in the function 'gpd_ecram_read' :
-drivers/hwmon/gpd-fan.c:231:9: Error: implicit declaration function 'outb' [-Werror= implrecental-function-declaration]
-231 |         outb(0x2E, addr_port);
-^~~~
-drivers/hwmon/gpd-fan.c:244:16: Error: implicit declaration function 'inb' [-Werror= implrecental-function-declaration]
-244 |         *val = inb(data_port);
-^~~
-cc1: All warnings were regarded as errors
+I apologize that my configuration error prevented these issues from being detected during runtime.
+I will update the tools and retest before the next submission.
 
-Signed-off-by: luoqing <luoqing@kylinos.cn>
----
- drivers/hwmon/gpd-fan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-index 321794807e8d..57d4ee683f0d 100644
---- a/drivers/hwmon/gpd-fan.c
-+++ b/drivers/hwmon/gpd-fan.c
-@@ -19,6 +19,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/io.h>
- 
- #define DRIVER_NAME "gpdfan"
- #define GPD_PWM_CTR_OFFSET 0x1841
--- 
-2.25.1
+Thanks,
+Wenlaing Yan
 
