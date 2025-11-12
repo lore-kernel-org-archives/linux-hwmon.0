@@ -1,175 +1,264 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0542C11DB;
-	Wed, 12 Nov 2025 03:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50304309F08
+	for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 11:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762919945; cv=none; b=Yb/HI6hwIqUorqWfzacujX/iN+srqlJU7Nhy4hBultB//ZH3f4m3xTG9QvtPu/N5/7Y0Ov9IPE9eAKX3iLxwqNjoXd4DxRLdEcIfIBmkZxSWO8koJS1ob0tYJFnEAM0bcew8AA30CkNzdYMou5oyr02YyIXJqa+YpmMubtLd/xE=
+	t=1762946257; cv=none; b=XNJW6ZcTzR9rWZjm7yDNEBtc/BrrDimjqdJMi2/BZPA1XeYxP/EJB3zgaSi9ywe4Qb3wUiEvGHgcECaLaKCWxVZHEfrI9JiUNzGHNHYtV7IOMN/k6DA5CsHMGBdJHmGnP7sb6lNvg3IzYUjr6gIHb0U1VCvJ3E/YqpQXPiEdCRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762919945; c=relaxed/simple;
-	bh=+hU18LbqN5Fk06aApVZJ6gtGyvZdRIpdeVXRqSgHe5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pPnAq3na6U/ndPJ3o56Sh2j8668JLKcoaEBzmvqtCwIVcVJ2wGoZ4zTuiCc1sl89quEZOyANDBhdkfM9jkRoyzs9J6SETz/+LO1y+ESkYSfz5XD1I6T9/B7zFaeUVqxaUFRnwp4jJxrwTrk2UgJHwu+pvDIwP+tr3A6uFyIgu78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YiE5vxAD; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1762946257; c=relaxed/simple;
+	bh=P0402Uz3TGlHgNTrUFPCtCcxzRvCHZS96bV6+P1WJZE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jpibwigePt6hS6mHLAFYqRAbx5wvU1NJL9aKHCJCuZZXUT1UxUHbtvGVIwH7C+c6hUJ93OOxxnVRXM9yevR8L+yNpAWyUa7oioM0vz3PbUSJvdAacg4QBpUGppVLiox/ZfK443Jc9cuHvzEOXG765VRTV5V+66bDPNw06KQfsOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JH+yqK/w; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YiE5vxAD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762919943; x=1794455943;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+hU18LbqN5Fk06aApVZJ6gtGyvZdRIpdeVXRqSgHe5o=;
-  b=YiE5vxADYFsKiSO55gINX7f1GsVsJs5I3hFXPtBXXb06rqUw7/9q5WUp
-   lbStk7uAdT3c2oN9EyAm3BAdEvfdr40yw+Pf6zg0NjtUUrJT6muiITMlf
-   q6S2EiXnysUCboVINYRZhb33EOocHyYwHknkmz8nQE/1MCVmp+Tt0hti+
-   0qiRJDrir7P7gZTVj/zozTB9ecqV8gBn9MEYReAeok2tqrXOTcf6u1W6H
-   TxKOwAnlxmeM7nFLwIAnVcR5IXEE+Cy/iGfsoR3XHWGXUaeeLhOCAMoUi
-   Uf9goftUQb0tiIxSLzYG676c30wXyGH3FikdyyFQCRRwYxzzMtpNdgXrt
-   w==;
-X-CSE-ConnectionGUID: frIyX1d7Shi1a7rLshYZrQ==
-X-CSE-MsgGUID: p5opxVYIQwWidTjAi9BEDg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="65013842"
-X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
-   d="scan'208";a="65013842"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 19:59:02 -0800
-X-CSE-ConnectionGUID: WCDQM6SrRzCLiiD4wFTboQ==
-X-CSE-MsgGUID: wIhFiwMnTZqw0/sFviRZrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,298,1754982000"; 
-   d="scan'208";a="189277778"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Nov 2025 19:58:59 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vJ20W-0003o3-2X;
-	Wed, 12 Nov 2025 03:58:56 +0000
-Date: Wed, 12 Nov 2025 11:58:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	christophe.jaillet@wanadoo.fr, conor+dt@kernel.org, corbet@lwn.net,
-	devicetree@vger.kernel.org, krzk+dt@kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	robh@kernel.org, wenliang202407@163.com
-Subject: Re: [PATCH 6/8] hwmon:(ina3221)Modify read/write functions for 'in'
- attribute
-Message-ID: <202511121034.856ivnlW-lkp@intel.com>
-References: <20251111080546.32421-7-wenliang202407@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JH+yqK/w"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2984dfae0acso8795625ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 12 Nov 2025 03:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762946255; x=1763551055; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O7clx8dfZg3jZ+tSq2YUEpFAI0n8/M6CLth3qWizbsA=;
+        b=JH+yqK/wikni6qDLU1ilwS82iVM8RIQ/LjhfvRgSzxgMl+pibmFh0tSdodCYoveiQM
+         NEGr49st7HSShYc1G2omRWfE0+hUfOh50D4U6lfLQmo3ORV45OOrGG4eYBvKLin8q1UU
+         53pFtXvGNbFWw9CfGJzICYw4s7Sr5Q1TdQh1fHpr9p/cRTh1/k5l+wCqcplv/tycUePN
+         MmfUtZ3FXSvuCof3uiBLvLK3/Pje1m+bIrMPDPr+si/gks+H1Oh+D0Lp4BU1U0FMPgHb
+         THwu4XRTpgidoDjRu+yx+Vkg2+Tef1f6utLcn+bhLt2ztXeMFWiquMoISh/zHkKvgeY7
+         LhvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762946255; x=1763551055;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O7clx8dfZg3jZ+tSq2YUEpFAI0n8/M6CLth3qWizbsA=;
+        b=n/VxlGC+cnXnry5bET4ICx44NBkl4cv7CSzTtvkqO3sNqJ00X99Koj7GJ7dmOchYfV
+         U90xMUZZxc+1z/BmznfK3UWy3iAswTAhv/GX6kWe2/+ulmSRwoEpMVAso/7zB177QCdo
+         J8gU1V9vsI8Bnrc/lhsu9kos/CsbM9oypg74cahSzkfKV/KlmcloSD7r6HAIp4HDci97
+         J5bKhlPemNWT0ftnjBslvI+4H2KLBhJ0+Vz93J4wXsHdkVGgjen+P8RKbizJl/9gILOX
+         eqtJqWCq2WmoPuh4RvARvEHM40bKaHfl1f9Tse8Qr2MeA5TGJDyfNOCwnuUq55wf2ky5
+         s+bA==
+X-Forwarded-Encrypted: i=1; AJvYcCXRNXAe8qOOCbyk0ihRE8HSv8/yZ4U2OB+ewcvfLGrBk2XoFmgd1gUaDSEnBtsgpzI9q4SjGn4voEBvmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUPa4q+r3dTyN7IphucIsxI62aHj1rQ9rDtl59xqTCxWPjdi/U
+	rSVCxlDA9TNeKfDTaL1eYFFcO2e9UGeMxhvYCPFM+dY/9wk3kzKI3tCoJCl8DRi9+CE=
+X-Gm-Gg: ASbGncsmqZV5O3FFEcEz0GwLA1c9eoUQJLeSOBHy9J5/1zl/7gN/ARQU3UNiRaJ0E4E
+	Ybyk5BiAZMQMp7gXPjcxF+sWHapBdS4ZA6cU3qmp6Y8RnTofGZS0olTDTJrXrIANjj3bkLsSxl3
+	pdiFtSgHOMv/T7+NAgjnDajN5F7UoSrkLDZPK5/mWg8LI6LrE8SRWvZRuT5FtpP4YwYfMjnlnbS
+	7EJg4aCk/WeFekmZ6RH/cd0AfGHqia2ns3AhaON2tVt/3d69+1DfyN4Ld35mIyLm93AzAh6myE8
+	ubNEJQliFQo4yHsJ11PQk7e5mr1xtBnpA96a53MFBgG/fraxeG/2WgUuGd3UJOLHylOqxznDkFT
+	rejKZhsh/+0XrqjyuovLmJsHzqfNDWG8HrD6mgqHoKhb2a4raHuP1HPHt56TS+0WA/9vSqsQVkW
+	mOTf2lBB+8KyWTGqupgQxWJHVhN7iOqzwB1LysXW3UCAx0avLR3cIGcCUEXe5YNGDZPflYgDjyk
+	MInHO+Y/iC8hnyoUKvgjQfVm9SmI7ah7nzOkGDBzneqjc4xpne3f7I=
+X-Google-Smtp-Source: AGHT+IHVEaLkAKMKOQnX2Yk+k2Hy7v2hitB1DZg/c1k61ch6ePvOS7vJ2UEiP4g6NHx8/2s4uaVz5g==
+X-Received: by 2002:a17:902:f684:b0:26a:8171:dafa with SMTP id d9443c01a7336-2984ed49524mr36554305ad.21.1762946254443;
+        Wed, 12 Nov 2025 03:17:34 -0800 (PST)
+Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2984dca0f28sm27386695ad.60.2025.11.12.03.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 03:17:34 -0800 (PST)
+From: James Calligeros <jcalligeros99@gmail.com>
+Subject: [PATCH v5 00/11] mfd: macsmc: add rtc, hwmon and hid subdevices
+Date: Wed, 12 Nov 2025 21:16:46 +1000
+Message-Id: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251111080546.32421-7-wenliang202407@163.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ5sFGkC/2XMQWrDMBCF4asEraswGlmRlVXuUbqQZ8aJoI6D1
+ YqW4LtXCTQYe/kefP9dZZmSZHXc3dUkJeU0XutwbztFl3g9i05ct0JAB6056CFSHkjn746lZN1
+ 6sEhgPAOpim6T9OnnGXz/qPuS8tc4/T77xTze/1RYp4rRoJ3n/kBWXG/C6TzE9LmncVCPVMEFR
+ 7/hWDmJkxDYNYTtmtsXNwBbbitnz7br2UcBXPNmwdFteFO59Q07CtJFkCWf5/kPEEC78mkBAAA
+ =
+X-Change-ID: 20250816-macsmc-subdevs-87032c017d0c
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ James Calligeros <jcalligeros99@gmail.com>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Mark Kettenis <kettenis@openbsd.org>, Hector Martin <marcan@marcan.st>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7401;
+ i=jcalligeros99@gmail.com; h=from:subject:message-id;
+ bh=P0402Uz3TGlHgNTrUFPCtCcxzRvCHZS96bV6+P1WJZE=;
+ b=owGbwMvMwCV2xczoYuD3ygTG02pJDJkiOcvqqhaZzQtebHiWL3KbwN0ohsKQ0AcxbxY2tMbfr
+ G75FXGoYyILgxgXg6WYIsuGJiGP2UZsN/tFKvfCzGFlAhkiLdLAAAQsDHy5iXmlRjpGeqbahnqG
+ hjrGOkYMXJwCMNV2Vxn+qWvvmalsuUr7mbkmTxgj94QZj97MYlyuOX3zCsdqccceB4b/hVsc/76
+ 5fDv6W223y9wp7bkbgv4utvZdu7Thxdsr29omcwMA
+X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
+ fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-Hi Wenliang,
+Hi all,
 
-kernel test robot noticed the following build warnings:
+This series adds support for the remaining SMC subdevices. These are the
+RTC, hwmon, and HID devices. They are being submitted together as the RTC
+and hwmon drivers both require changes to the SMC DT schema.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.18-rc5 next-20251111]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The RTC driver is responsible for getting and setting the system clock,
+and requires an NVMEM cell. This series replaces Sven's original RTC driver
+submission [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang-Yan/dt-binding-ti-ina3221-Add-SQ52210/20251111-161425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20251111080546.32421-7-wenliang202407%40163.com
-patch subject: [PATCH 6/8] hwmon:(ina3221)Modify read/write functions for 'in' attribute
-config: i386-randconfig-013-20251112 (https://download.01.org/0day-ci/archive/20251112/202511121034.856ivnlW-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251112/202511121034.856ivnlW-lkp@intel.com/reproduce)
+The hwmon function is an interesting one. While each Apple Silicon device
+exposes pretty similar sets of sensors, these all seem to be paired to
+different SMC keys in the firmware interface. This is true even when the
+sensors are on the SoC. For example, an M1 MacBook Pro will use different
+keys to access the LITTLE core temperature sensors to an M1 Mac mini. This
+necessitates describing which keys correspond to which sensors for each
+device individually, and populating the hwmon structs at runtime. We do
+this with a node in the device tree. This series includes only the keys
+for sensors which we know to be common to all devices. The SMC is also
+responsible for monitoring and controlling fan speeds on systems with fans,
+which we expose via the hwmon driver.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511121034.856ivnlW-lkp@intel.com/
+The SMC also handles the hardware power button and lid switch. Power
+button presses and lid opening/closing are emitted as HID events, so we
+add an input subdevice to handle them.
 
-All warnings (new ones prefixed by >>):
+Since there are no real dependencies between the components of this series,
+it should be fine for each subsystem to take the relevant patches through
+their trees. The mfd one-liners should be taken in order to avoid trivial
+conflicts. Per [2], the hwmon driver should be merged along with the preceding
+mfd patch adding the __SMC_KEY macro to avoid build errors.
 
-   drivers/hwmon/ina3221.c:563:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     563 |         [hwmon_in_lcrit] = { BIT(9), BIT(8), BIT(7) },
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/ina3221.c:561:23: note: previous initialization is here
-     561 |         [hwmon_curr_lcrit] = { BIT(15), BIT(14), BIT(13) },
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hwmon/ina3221.c:589:2: warning: variable 'alert_group' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-     589 |         default:
-         |         ^~~~~~~
-   drivers/hwmon/ina3221.c:598:5: note: uninitialized use occurs here
-     598 |                                 alert_group, 0);
-         |                                 ^~~~~~~~~~~
-   drivers/hwmon/ina3221.c:571:17: note: initialize the variable 'alert_group' to silence this warning
-     571 |         u32 alert_group;
-         |                        ^
-         |                         = 0
-   2 warnings generated.
+Regards,
 
+James
 
-vim +/alert_group +589 drivers/hwmon/ina3221.c
+[1] https://lore.kernel.org/asahi/CAEg-Je84XxLWH7vznQmPRfjf6GxWOu75ZetwN7AdseAwfMLLrQ@mail.gmail.com/T/#t
+[2] https://lore.kernel.org/asahi/20251106140050.GQ8064@google.com/
 
-   559	
-   560	static const u32 sq52210_alert_mask[][INA3221_NUM_CHANNELS] = {
-   561		[hwmon_curr_lcrit] = { BIT(15), BIT(14), BIT(13) },
-   562		[hwmon_in_crit] = { BIT(12), BIT(11), BIT(10) },
- > 563		[hwmon_in_lcrit] = { BIT(9), BIT(8), BIT(7) },
-   564		[hwmon_power_crit] = { BIT(6), BIT(5), BIT(4) },
-   565	};
-   566	
-   567	static int sq52210_alert_limit_write(struct ina3221_data *ina, u32 attr, int channel, long val)
-   568	{
-   569		struct regmap *regmap = ina->regmap;
-   570		int ret, limit_reg, item;
-   571		u32 alert_group;
-   572	
-   573		if (val < 0)
-   574			return -EINVAL;
-   575		item = channel % INA3221_NUM_CHANNELS;
-   576		switch (item) {
-   577		case 0:
-   578			alert_group = SQ52210_MASK_ALERT_CHANNEL1;
-   579			limit_reg = SQ52210_ALERT_LIMIT1;
-   580			break;
-   581		case 1:
-   582			alert_group = SQ52210_MASK_ALERT_CHANNEL2;
-   583			limit_reg = SQ52210_ALERT_LIMIT2;
-   584			break;
-   585		case 2:
-   586			alert_group = SQ52210_MASK_ALERT_CHANNEL3;
-   587			limit_reg = SQ52210_ALERT_LIMIT3;
-   588			break;
- > 589		default:
-   590			break;
-   591		}
-   592		/*
-   593		 * Clear all alerts first to avoid accidentally triggering ALERT pin
-   594		 * due to register write sequence. Then, only enable the alert
-   595		 * if the value is non-zero.
-   596		 */
-   597		ret = regmap_update_bits(regmap, SQ52210_ALERT_CONFIG,
-   598					alert_group, 0);
-   599		if (ret < 0)
-   600			return ret;
-   601		ret = regmap_write(regmap, limit_reg,
-   602				sq52210_alert_to_reg(ina, ina3221_curr_reg[attr][item], val));
-   603		if (ret < 0)
-   604			return ret;
-   605	
-   606		if (val)
-   607			return regmap_update_bits(regmap, SQ52210_ALERT_CONFIG,
-   608						alert_group, sq52210_alert_mask[attr][item]);
-   609		return 0;
-   610	}
-   611	
+---
+Changes in v5:
+- Drop inadvertent mfd core includes in rtc and input drivers
+- Link to v4: https://lore.kernel.org/r/20251025-macsmc-subdevs-v4-0-374d5c9eba0e@gmail.com
 
+Changes in v4:
+- Added Rob's R-b to hwmon Devicetree schema
+- Added missing include to hwmon driver
+- Dropped superfluous dev_info() from hwmon probe
+- Added Guenter's A-b to hwmon driver
+- Renamed INPUT_MACSMC_INPUT to INPUT_MACSMC
+- Dropped leftover mention of HID in input driver
+- Reinstated input driver MODULE_ALIAS
+- Trigger a hard wakeup on power button/lid switch when coming out of
+  s2idle
+- Suppress KEY_POWER event on wakeup to prevent an immediate shutdown
+  when waking up
+- Squashed hwmon Devicetree commits into one
+- Link to v3: https://lore.kernel.org/r/20251007-macsmc-subdevs-v3-0-d7d3bfd7ae02@gmail.com
+
+Changes in v3:
+- Renamed macsmc-hid to macsmc-input
+- Switched to pm_wakeup_event in macsmc-input
+- macsmc-input now configures its capabilities before registering the device
+- Renamed macsmc_hwmon to macsmc-hwmon
+- Dropped module aliases in macsmc-input and macsmc_hwmon
+- Introduced new SMC FourCC macro to silence GCC errors
+- Condensed hwmon binding using $defs
+- Made label property optional for hwmon sensors
+- Fixed incorrect hwmon is_visible implementation
+- Dropped 64-bit math from SMC float ops
+- Fixed incorrect use of error numbers in hwmon driver
+- Replaced a number of non-fatal dev_errs with dev_dbgs in hwmon driver
+- Added hwmon driver documentation
+- Added hwmon subdevice directly to the DT SMC node
+- Included "common" hwmon sensors in SoC .dtsi files
+- Fixed typo in hwmon-common.dtsi
+- Added Neal's R-b to series
+- Added required nodes to t602x Devicetrees
+- Link to v2: https://lore.kernel.org/r/20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com
+
+Changes in v2:
+- Added Rob's R-b tag to RTC DT binding
+- Removed redundant nesting from hwmon DT binding
+- Dedpulicated property definitions in hwmon DT schema
+- Made label a required property for hwmon DT nodes
+- Clarified semantics in hwmon DT schema definitions
+- Split mfd tree changes into separate commits
+- Fixed numerous style errors in hwmon driver
+- Removed log messages sysfs read/write functions in hwmon driver
+- Removed ignored errors from hwmon driver
+- Removed uses of dev_err for non-errors in hwmon driver
+- Made it more obvious that a number of hwmon fan properties are optional
+- Modified hwmon driver to reflect DT schema changes
+- Added compatible property to hwmon node
+- Link to v1: https://lore.kernel.org/r/20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com
+
+---
+Hector Martin (2):
+      rtc: Add new rtc-macsmc driver for Apple Silicon Macs
+      input: macsmc-input: New driver to handle the Apple Mac SMC buttons/lid
+
+James Calligeros (7):
+      dt-bindings: hwmon: Add Apple System Management Controller hwmon schema
+      mfd: macsmc: Wire up Apple SMC RTC subdevice
+      mfd: macsmc: Add new __SMC_KEY macro
+      hwmon: Add Apple Silicon SMC hwmon driver
+      mfd: macsmc: Wire up Apple SMC hwmon subdevice
+      mfd: macsmc: Wire up Apple SMC input subdevice
+      arm64: dts: apple: t8103, t8112, t60xx: Add hwmon SMC subdevice
+
+Sven Peter (2):
+      dt-bindings: rtc: Add Apple SMC RTC
+      arm64: dts: apple: t8103,t60xx,t8112: Add SMC RTC node
+
+ .../bindings/hwmon/apple,smc-hwmon.yaml  |  86 +++
+ .../bindings/mfd/apple,smc.yaml          |  45 ++
+ .../bindings/rtc/apple,smc-rtc.yaml      |  35 +
+ Documentation/hwmon/macsmc-hwmon.rst     |  71 +++
+ MAINTAINERS                              |   6 +
+ .../boot/dts/apple/hwmon-common.dtsi     |  33 +
+ .../boot/dts/apple/hwmon-fan-dual.dtsi   |  22 +
+ arch/arm64/boot/dts/apple/hwmon-fan.dtsi |  17 +
+ .../boot/dts/apple/hwmon-laptop.dtsi     |  33 +
+ .../boot/dts/apple/hwmon-mac-mini.dtsi   |  15 +
+ .../arm64/boot/dts/apple/t6001-j375c.dts |   2 +
+ arch/arm64/boot/dts/apple/t6001.dtsi     |   2 +
+ .../arm64/boot/dts/apple/t6002-j375d.dts |   2 +
+ .../arm64/boot/dts/apple/t600x-die0.dtsi |  10 +
+ .../boot/dts/apple/t600x-j314-j316.dtsi  |   3 +
+ .../arm64/boot/dts/apple/t602x-die0.dtsi |  10 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts |   3 +
+ arch/arm64/boot/dts/apple/t8103-j313.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j456.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j457.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi     |  11 +
+ arch/arm64/boot/dts/apple/t8112-j413.dts |   2 +
+ arch/arm64/boot/dts/apple/t8112-j473.dts |   2 +
+ arch/arm64/boot/dts/apple/t8112-j493.dts |   3 +
+ arch/arm64/boot/dts/apple/t8112.dtsi     |  11 +
+ drivers/hwmon/Kconfig                    |  12 +
+ drivers/hwmon/Makefile                   |   1 +
+ drivers/hwmon/macsmc-hwmon.c             | 851 +++++++++++++++++++++++++
+ drivers/input/misc/Kconfig               |  11 +
+ drivers/input/misc/Makefile              |   1 +
+ drivers/input/misc/macsmc-input.c        | 207 ++++++
+ drivers/mfd/macsmc.c                     |   3 +
+ drivers/rtc/Kconfig                      |  11 +
+ drivers/rtc/Makefile                     |   1 +
+ drivers/rtc/rtc-macsmc.c                 | 140 ++++
+ include/linux/mfd/macsmc.h               |   1 +
+ 37 files changed, 1671 insertions(+)
+---
+base-commit: 24172e0d79900908cf5ebf366600616d29c9b417
+change-id: 20250816-macsmc-subdevs-87032c017d0c
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+James Calligeros <jcalligeros99@gmail.com>
+
