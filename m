@@ -1,72 +1,72 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75D227B348
-	for <linux-hwmon@vger.kernel.org>; Thu, 13 Nov 2025 20:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218832ED17C
+	for <linux-hwmon@vger.kernel.org>; Thu, 13 Nov 2025 20:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763065200; cv=none; b=YI0K9sKOvwcaa7ZYCO2N4WIoq2wBPl1uvDg7Ov81zf6k5JQh/YyONaLbrt27kibaierqxyn/yFLK9nCxlDfl7c03dVCf+Wxs7uUQoWIsBaXAKAbAyleBowUYTt1EqJXCndGj8X1NtKoKz6dzq/tO5qO7niudV1MwO+a8Qf7A+oo=
+	t=1763065341; cv=none; b=KyhXondSzrdUv0bI5QAZB2xqFcg9RVfP58XNg9MZLqZuIDHpfdXvDorPKmMQA7dZG56THEDlp4ABaAZAcIi5KsZedbosc286Tzs0RMpm297Vc4fGbrpwwQdwMoHRH2y4Bqe84VE0PUVmFow1B3J99oukmff2fwLG1mAQR4WrBsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763065200; c=relaxed/simple;
-	bh=x6nWMzdrvBHmUio5v0rh4rbd/eNrCyVZJFT3hqa17wY=;
+	s=arc-20240116; t=1763065341; c=relaxed/simple;
+	bh=LJNdvCQShnnDk3B46gOnj8yUHfwC8UWXG4Hr94ZtTLY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDuxI3WFSTImtLcniTxsQ4YOuFlxXsNGit4SvEOZh4/uFYPg+mikYReOU+5KQ23ub7mzlw+SMCqrYuiT7oB+y4XjK04ZW188T6lNVOilg/DssFs1wZUgvPcIC43Lj5s1zDL+eaYCw2jXEErUcQcRjp1/PqZXTrbcdhldtAggzf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdX2sfK+; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=GzPrWm9A0cg8E73TnbQ1tkPyp9hLOZv6wDXO1b3Ub0LlA98QaNvAQswvKZz/BdMki1TrG+1qUDUg4fgNyhyT5IB187/TvOjR0eU/YBgVCqQWW77NoiLJ6dpUGYcXF9zhUyfKM3avrwk4xnNgV765IuUCXO1xfhPs9HAULSPv0bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ys0Bu/WF; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdX2sfK+"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7b0246b27b2so1550494b3a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 13 Nov 2025 12:19:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ys0Bu/WF"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b55517e74e3so1048042a12.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 13 Nov 2025 12:22:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763065198; x=1763669998; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763065339; x=1763670139; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=o5G5tKGG4//arx5En26Yb1xeUnZu+WtJPMBxgLcgOFI=;
-        b=MdX2sfK+7Ammhy2IttsB8CnBkrAE1cW+GWCj7OLxHa7goLBzqZ73QflfqsZ0IFVzWV
-         Cai7p6Y10nGtIFL7amIdclKlccn3oV0jY5MWWr8E2NY2llY4tOLrPPV/J36MnrH4IJtV
-         jllEMoF1c1Bigrsfqd3bmx2tahspY/TZ90JCeyAsqp7bZRn/zCMDc5WLyhE7+yIWFwbR
-         5ilB/mXwrlSW/79xKEK79OQ14cI4S1WSu415+PMCeviCISWpXhxpA1qS7YsBUTeJZRhL
-         3CdckD2lVMPW/Ays0wmM7Pgw9XG+8YVt2mi2XcX3tCaiZGeNr4ttgVgq0zfyhXCGCY6Q
-         Kaqw==
+        bh=NJA/ILUWUCvl6zSBvsuzSDDNlvRFwKS2gcWUIyiF8R8=;
+        b=Ys0Bu/WFYpOgyP6sRSpDi74fNoSg9gifXi5RL9yXdj7o+QML8xGOiyBYJDH66BRBHe
+         emGMdo/qzv8L8azh4GQDa0v+3o4j726SA9riW/EZ2/kf1Ia2VU5kHhJmXm3dRlfIB2zO
+         DhSQg1Zq7IdXEYLJBQldEatgk3T5FAtQtWAUqQFff6rvMRYJkRqrACbVT5zqHkODU7f3
+         VbREc8c89gh3OQCyx6yzHL5kh1nDC7AFhRcfXK75RTRWh1y8a7yhucyXpEeb3qbWbwQ5
+         LSVd2/yXidQ9o1QL3kx68yPp/KZgrGY0XZi3iQppNZjYZDN1/U0QWcajtVi7gF2kM+RD
+         vsaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763065198; x=1763669998;
+        d=1e100.net; s=20230601; t=1763065339; x=1763670139;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=o5G5tKGG4//arx5En26Yb1xeUnZu+WtJPMBxgLcgOFI=;
-        b=ATAk+x0uyQs/WN09jXAFud+eI5YqYsANjylWifXDW1dnspL8dLAdfS2FjU1AFZfyvc
-         3KRPu4k2Hp4MpEIA1NdaaQQdGGK3c4n1iNysoqwVZ/Mc0KoiuV7Yq66tA3i1pJXSdHIh
-         V2JkBTgh00+pNhgpaHXG6S4mMz0gDEZqR7aK3WFnkL21pegh7f8YBTkU3fV+LkvOQ6dF
-         4i4684bZkELvJuUFaPA6a3kEIaZZERSpbXUM/5phypJAP7rrDNJ79gnM5g2t79NGiflV
-         YUY6s0sBW/QeP3OpAPq0dhdcgNHDR5pVywAPLXOgPh7NW2XvTG4aaITOUhA7rpmo1mbd
-         4/Gg==
-X-Gm-Message-State: AOJu0YxbHcN0U91n4rdUzTNweB13tCvxPbwJmyEvKBGIt8G6Hk3DTzJI
-	5IBQOBbIlo0C2ZVUq8lHAHT7xJA7+hQ4/0pXfz4+hRhgDnXb+Hbn/gG7
-X-Gm-Gg: ASbGnctkF1lU4yJ5EVOEVuY09QOsa/zY8mY5LCE+vcdSxJBHeEj1hghPKCIfzlG4A8v
-	I/DP2YeaKDWY0TRIpPq6UrwzWB7VlQPdb2oGB8z6Ur7SspLzltfmb2VNBhUBRrSWKnKNirsyVow
-	MNeVcJEe4owXK3WyiCRwITOPBe0luZcIs14w8GCIR3zRp4tijBByTElJts2aidCxoVeHs9kTG3r
-	rEE8mCMXRpMG9Hq8vBT+/NFZShikiltCYswpyLi/ZDO/m4zxGJ/LOlfq4LsDvJu4VCZBSNLPLGn
-	q7DegAJQqNNiV8rzed2k1q2PW3tyf4NBkNF7KM4DxK7z7Ky1I5cQy/djiyOFXFjBdF3JYWQFAjO
-	XTM5ie23NxXYTPFUwbxmAiIMOea2jz3D4QhOE/HHewACB6oXPVRS4XzvmeEiiRzLg32zGRmC0rT
-	bU8PPRngL8tmD2
-X-Google-Smtp-Source: AGHT+IEBQofpftFJnBlUGit1T27qGz/KI3bgwMOt0dtN8iNTTfn31DkqZYtBF9b4NpJDri8++VpKeQ==
-X-Received: by 2002:a05:7022:925:b0:119:e569:fb99 with SMTP id a92af1059eb24-11b40e80dacmr290107c88.8.1763065197712;
-        Thu, 13 Nov 2025 12:19:57 -0800 (PST)
+        bh=NJA/ILUWUCvl6zSBvsuzSDDNlvRFwKS2gcWUIyiF8R8=;
+        b=PWETctI716eqo7MWdya8aTyDEyRc14s2d2kuzz/4JHlBP8RkhY535xn4jwGHU8+y+R
+         5ljiPmitDBYHtc4q54dCThDAZTbgb/Ef2drUa344oQjOkf2UgT2o8xFkMyt35GVmBwBo
+         obs5nh/91O3n8YUDUwysugTs5dHVtrRiKTSc2n0YagFgFvSHxbOWzFvG6IZbch+uUfqW
+         UG0N155CI7rC9G8UQm+dH29d6Txjn4xuJAJ0Q+d4s/1MlQ+LuGdaZXiTeST2tVIQPItT
+         f+DJtZQZrK3yo7C2/1RhTlYuMUg8CPYSu4DA2X36M92pprnxY6eF8+dQfuZKqmuDSH7x
+         XAwA==
+X-Gm-Message-State: AOJu0YxHaKXRY4AUF3NF3UAXybdfzfS/o1QvV9uLFdcx5Q8fDxT4Iqpb
+	yxx9Po4llNKmx2pQMCoX++Uc7H4SRmBlDoUaIcpEPZ+sFIVGhIrcvkkU8eHekg==
+X-Gm-Gg: ASbGnctcyHUSZSmw2LnyzI7sokCgvWKDiikj3tTLbzG5w9FhNHV/vOTxqJhWSbKOIqV
+	5pJlfUe/sTeQlWvl1W8NzUh0PtvdKR4LlSYgpNrHWQ3+P5j+tDE3qSd8k3DbmtLSqFyjqqGQZiJ
+	wLsugonW8bPHTCjXYrHoXonWFNveHPJtcoqnTD9zlDXoBhDItTWHAPVpSYokOw9C6dJCUFeXnd9
+	uAJ9p9Qav3j89ga68WoA8sELY6isz0QCANbH9UWFBgY5tI+LkIeKM7/pWlq2n08Vr6Pyxh2CXJz
+	+NYV8jwW4MeXPI9WU7nTfu5BdU54Mui149cli0pXRn1WxiHrxH+Cc80GPh0+bQkzferxFbbg13q
+	zAonkU5zm7bSq7yf00IWvGvgJhbjjamjgHPDeHPjxAoUez3GNUIrBU2zgPccTjGFT4Q1QxwZTcp
+	5DsJyNpxghu5uT
+X-Google-Smtp-Source: AGHT+IFychci0+KG1rWwR7slK2G4vSE/GFTrE82NfE6VgqTvYBcIBd/2m7o8JbZMQmhiGUIEcNnNFA==
+X-Received: by 2002:a05:7022:6091:b0:119:e569:f611 with SMTP id a92af1059eb24-11b40faf26emr348985c88.10.1763065339305;
+        Thu, 13 Nov 2025 12:22:19 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11b060885eesm1309598c88.1.2025.11.13.12.19.57
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a49db7a753sm2159257eec.6.2025.11.13.12.22.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 12:19:57 -0800 (PST)
+        Thu, 13 Nov 2025 12:22:18 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 13 Nov 2025 12:19:56 -0800
+Date: Thu, 13 Nov 2025 12:22:18 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Marius Zachmann <mail@mariuszachmann.de>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Read temperature as a signed value.
-Message-ID: <ed973563-1412-4435-8e76-09a9168345c3@roeck-us.net>
+Subject: Re: [PATCH 2/2] Replace magic values with constants
+Message-ID: <38a91f84-25ae-41a6-aa31-b1d3c3897b40@roeck-us.net>
 References: <20251113100024.11103-1-mail@mariuszachmann.de>
- <20251113100024.11103-2-mail@mariuszachmann.de>
+ <20251113100024.11103-3-mail@mariuszachmann.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,42 +75,16 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251113100024.11103-2-mail@mariuszachmann.de>
+In-Reply-To: <20251113100024.11103-3-mail@mariuszachmann.de>
 
-On Thu, Nov 13, 2025 at 11:00:23AM +0100, Marius Zachmann wrote:
-> Convert temperature to s16 to correctly read negative temperatures.
+On Thu, Nov 13, 2025 at 11:00:24AM +0100, Marius Zachmann wrote:
+> Replace two magic values in ccp_device with
+> existing constants.
 > 
 > Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
-> ---
->  drivers/hwmon/corsair-cpro.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-> index b7b911f8359c..6e1c415f3e26 100644
-> --- a/drivers/hwmon/corsair-cpro.c
-> +++ b/drivers/hwmon/corsair-cpro.c
-> @@ -40,7 +40,7 @@
->  #define CTL_GET_TMP		0x11	/*
->  					 * send: byte 1 is channel, rest zero
->  					 * rcv:  returns temp for channel in centi-degree celsius
-> -					 * in bytes 1 and 2
-> +					 * in bytes 1 and 2 as a two's complement value
->  					 * returns 0x11 in byte 0 if no sensor is connected
->  					 */
->  #define CTL_GET_VOLT		0x12	/*
-> @@ -258,7 +258,7 @@ static int ccp_read(struct device *dev, enum hwmon_sensor_types type,
->  			ret = get_data(ccp, CTL_GET_TMP, channel, true);
->  			if (ret < 0)
->  				return ret;
-> -			*val = ret * 10;
-> +			*val = (s16) ret * 10;
 
-checkpatch:
+Applied. Please watch out for the subject line in the future. It should
+start with "hwmon: (corsair-cpro)".
 
-CHECK: No space necessary after a cast
-
-No need to resend, I'll patch that up.
-
-Applied.
-
+Thanks,
 Guenter
