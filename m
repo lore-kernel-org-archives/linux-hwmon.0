@@ -1,45 +1,46 @@
 Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.63.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789152D7384;
-	Thu, 13 Nov 2025 10:06:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564BE2E3AF2;
+	Thu, 13 Nov 2025 10:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.63.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763028379; cv=none; b=N1XOMSun75puyz/hLdugcQVPr6Fb20rkE16pIwYKod6/Xm0aatVuvBMS6y8sXdYtTtquDSkf389gjPIuD3TuHMU03ewBj7gfHMlqVum8xgl/Q/YQIgMDJ6HhBaI544TC/u2ZXdpYeu0TCcA0eZEwr925AeSk6y98Rzbt750qbak=
+	t=1763028389; cv=none; b=nI7EdEwI7C3UKUCfshHDRDXAk9BFpcH+x+xMpcmc7/qzYtd2cW2lCOfVugB4errgLtuNcQEKPPJVhyyD4osAVh9GAWfL/8D4vk4LPX6GT1e6OTkG9EHMFewOaSS1aPHv8fdnJc/kOmQC+qJMFq+iEiZ7I2AgSJ9fJpFbPdD1r5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763028379; c=relaxed/simple;
-	bh=htTjj9w4FPjRO2mbEyBAGDz1LxDChXGHqJvCrvGl7jM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XFwfkmYB3AIjIafefWRiPi6lLyWkc/EyBfOy6TWO2aBiVvTGb5657qMTJ8S1uActrpqMLfXoV1xyxErTr83+UOGnz9RLE/t6PDOngwB7z1eKnqTHKAzTOFMQkDIwEwECBBLBY+EMEyJz9BNKbnInrn6ahXmJvoLUU8LVN+SP1N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de; spf=pass smtp.mailfrom=mariuszachmann.de; dkim=pass (2048-bit key) header.d=mariuszachmann.de header.i=@mariuszachmann.de header.b=TZO8ogWR; arc=none smtp.client-ip=188.68.63.166
+	s=arc-20240116; t=1763028389; c=relaxed/simple;
+	bh=pO8SwLnIvnuTHMLjXxP2KDEK/lQI9uUpXyBuVHnAocE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GNV4e9+B1YKxfzz485jF+mID/FYexQX7ytEDKyCIeJfPUMwenPjE+9KM6HAnvULQU+wx8DPmO87M44KG/nWt57PJwTcxEHD1XrJxi6BzaP22dKxta73oiEQDm20hh9oU5vr5V1UBnTv2frpsME+IGjcTFJJV5df5oFiHuxbqNTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de; spf=pass smtp.mailfrom=mariuszachmann.de; dkim=pass (2048-bit key) header.d=mariuszachmann.de header.i=@mariuszachmann.de header.b=KrgCdqcV; arc=none smtp.client-ip=188.68.63.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mariuszachmann.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mariuszachmann.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mariuszachmann.de header.i=@mariuszachmann.de header.b="TZO8ogWR"
+	dkim=pass (2048-bit key) header.d=mariuszachmann.de header.i=@mariuszachmann.de header.b="KrgCdqcV"
 Received: from mors-relay-8202.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8202.netcup.net (Postfix) with ESMTPS id 4d6bPZ5kMhz47Gj;
-	Thu, 13 Nov 2025 11:00:50 +0100 (CET)
+	by mors-relay-8202.netcup.net (Postfix) with ESMTPS id 4d6bPc1p9wz47Gm;
+	Thu, 13 Nov 2025 11:00:52 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mariuszachmann.de;
-	s=key2; t=1763028050;
-	bh=htTjj9w4FPjRO2mbEyBAGDz1LxDChXGHqJvCrvGl7jM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=TZO8ogWRtYLQzIyu0JVtLrPICzOtdMJAG7NQZkJShneJ8d6cSjyxMA9Iebes7CAUe
-	 RsjL7U7ltzuj10tTsbnfwVMIXzFiMNDvzHAYc8bSMz66qzGA+SejynAUI3Q4x6IP6P
-	 YumbdSncnm9pYAww6WFXvuBvdAonm39l2gUuCw0DC2vHsHh0/i6GUmW1h/tYI+Mqog
-	 j71iEtqwbeBsqEhSrypj4GiRPiAyKjcarZjQCOctdZZ0SaIXuGx8UJuvcXhkkLJ8u8
-	 0SdUNu7a8+TS+TJloTchAmLlEvpxeMn3LhISRXuDoaR2exCvjmlK5C+rfLW8E6e2V+
-	 YrdBSNfWFu59Q==
+	s=key2; t=1763028052;
+	bh=pO8SwLnIvnuTHMLjXxP2KDEK/lQI9uUpXyBuVHnAocE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KrgCdqcVGD+kPBS6mjHEwCdF24cJke1qxZFsZm7a7QmEIou0/aV643tDZ+u2SD+qm
+	 xmHwdwtA64rUyCttZjjmJfvRWwyDcKcWptlNipzBM9IKOqpmWC4z2BGZclrbhtfY3Y
+	 RrKGaGDZc7s1Sn+yeN0jIi3kDH4d+/LGaBJoixSvkGOYQWA89/jLR/ZtyivNo41GVi
+	 fMvnV7/yL22WVcPVGvoLNHcIz/7S5HY/d4E756pHtUeeqcuIjIZHj1ZYzT+OqyJhHQ
+	 9abiV5RP6YlSsYL/X1goZns41GCzekHStwPSk/RtUNwdtEIQ4i639JMvqdv8xQwksU
+	 D/cC0eO0wrWGg==
 Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8202.netcup.net (Postfix) with ESMTPS id 4d6bPZ516wz47GZ;
-	Thu, 13 Nov 2025 11:00:50 +0100 (CET)
+	by mors-relay-8202.netcup.net (Postfix) with ESMTPS id 4d6bPc14mRz47GZ;
+	Thu, 13 Nov 2025 11:00:52 +0100 (CET)
 Received: from mxe9aa.netcup.net (unknown [10.243.12.53])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4d6bPZ2Fflz8sbF;
-	Thu, 13 Nov 2025 11:00:50 +0100 (CET)
+	by policy02-mors.netcup.net (Postfix) with ESMTPS id 4d6bPb6Lf6z8sbC;
+	Thu, 13 Nov 2025 11:00:51 +0100 (CET)
 Received: from marius (dynamic-2a02-3102-8004-0800-b21c-0b06-5865-dcdb.310.pool.telefonica.de [IPv6:2a02:3102:8004:800:b21c:b06:5865:dcdb])
-	by mxe9aa.netcup.net (Postfix) with ESMTPSA id 22F7080083;
-	Thu, 13 Nov 2025 11:00:49 +0100 (CET)
+	by mxe9aa.netcup.net (Postfix) with ESMTPSA id 0E6D48009C;
+	Thu, 13 Nov 2025 11:00:51 +0100 (CET)
 Authentication-Results: mxe9aa;
 	spf=pass (sender IP is 2a02:3102:8004:800:b21c:b06:5865:dcdb) smtp.mailfrom=mail@mariuszachmann.de smtp.helo=marius
 Received-SPF: pass (mxe9aa: connection is authenticated)
@@ -48,11 +49,12 @@ To: linux@roeck-us.net
 Cc: mail@mariuszachmann.de,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] hwmon: corsair-cpro: Read negative temperatures and
- remove magic values
-Date: Thu, 13 Nov 2025 11:00:22 +0100
-Message-ID: <20251113100024.11103-1-mail@mariuszachmann.de>
+Subject: [PATCH 2/2] Replace magic values with constants
+Date: Thu, 13 Nov 2025 11:00:24 +0100
+Message-ID: <20251113100024.11103-3-mail@mariuszachmann.de>
 X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20251113100024.11103-1-mail@mariuszachmann.de>
+References: <20251113100024.11103-1-mail@mariuszachmann.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -60,25 +62,36 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: 
- <176302804953.2250106.10781560279154477715@mxe9aa.netcup.net>
-X-NC-CID: n3sTefDapkdA1UfI8s4BOq4mY0MT2V36YfF797xYJCas6gU0fzc=
+X-PPP-Message-ID: <176302805133.2250130.5825952192716163697@mxe9aa.netcup.net>
+X-NC-CID: EsN6IQ3yOu//ecgIdG13T6L9hBJpmHpB6XDXUTYxr9BSku0tmvk=
 X-Rspamd-Server: rspamd-worker-8404
-X-Rspamd-Queue-Id: 22F7080083
+X-Rspamd-Queue-Id: 0E6D48009C
 
-- The Commander Pro also allows reading negative temperatures.
-  Adds a conversion to read it correctly.
+Replace two magic values in ccp_device with
+existing constants.
 
-- Replace two of the magic values in the ccp_device struct
-  with constants.
+Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+---
+ drivers/hwmon/corsair-cpro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Marius Zachmann (2):
-  Read temperature as a signed value.
-  Replace magic values with constants
-
- drivers/hwmon/corsair-cpro.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+index 6e1c415f3e26..e755353dd461 100644
+--- a/drivers/hwmon/corsair-cpro.c
++++ b/drivers/hwmon/corsair-cpro.c
+@@ -90,10 +90,10 @@ struct ccp_device {
+ 	u8 *cmd_buffer;
+ 	u8 *buffer;
+ 	int buffer_recv_size; /* number of received bytes in buffer */
+-	int target[6];
++	int target[NUM_FANS];
+ 	DECLARE_BITMAP(temp_cnct, NUM_TEMP_SENSORS);
+ 	DECLARE_BITMAP(fan_cnct, NUM_FANS);
+-	char fan_label[6][LABEL_LENGTH];
++	char fan_label[NUM_FANS][LABEL_LENGTH];
+ 	u8 firmware_ver[3];
+ 	u8 bootloader_ver[2];
+ };
 -- 
 2.51.2
 
