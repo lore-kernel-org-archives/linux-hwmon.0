@@ -1,693 +1,125 @@
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13ACF288C96;
-	Fri, 14 Nov 2025 04:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F961EF0B9;
+	Fri, 14 Nov 2025 06:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763094368; cv=none; b=U40/5c+4d5hPEPqV5RTeCpVYU9LLaYDNH7OJiMwoMPfhlMSaleWL21GULu8a/VHqS1ti9B/uDCbmFQQ421IfCcA+IzkTKsKS18QfnjqdpGDZwugIMEVXnAXtCn8wt1wVtWwrkUAvNvzah/CFx6EblxV22BN+EQAFwE966rFjumA=
+	t=1763102715; cv=none; b=JRJjvNLKTLlz7UxBtrcSg/sYVo8ho2TUEaFiEE5stGfPqbr9MhdonTKP6jOQdblbZV5LqbR990H/NNLw6nFIS0gC2xOau/XfGe4G6Bbc7N9F1wSbltEMLKmrgummQxasLFLbiSIYiG0d13UDyzEXArYaFc4m3YXYKu688Jjxm3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763094368; c=relaxed/simple;
-	bh=XASNlsUAFwFUx48/C8pu96IaEIun5G3EzBwKqqoUl3Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hvHnMRh4/e33E4hezYoOAmO1msvXurdy3nKQc27ro+GFMvK+uY8VHADK35I/PWN5ngpBzkpSoK6FGW7y6R8NPQGytjba1eT5vChqFxrlxNDcTtkrfFau97dJkV06wWmWnB87X9+MJqBRBrjhw5RfZoMrPlV2elcbHq3E8YeeWAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=FLPctx9O; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	s=arc-20240116; t=1763102715; c=relaxed/simple;
+	bh=1r3q3oUpTFJTCljbbYXYkDgntLmSg9ISpcZ3JNfGOcQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Uyz6po5okI6S97+rGOUKQYfa6wNvaczsOiVw/CA5XCkYe2bMZ7mb/Ye+Doc2GOjMAwRlEI+hu+kPrXfcLV0T4W8MwGY6u74325P9YV4n0Ke07qG5fOm713lssPIsGYGs/KoyY48cJDKOqgdSMfXZdcmjNObfbpSiQlcWpm1ehSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fGrtQUyy; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="FLPctx9O"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:In-Reply-To:References:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=cv715zj/ybd/4A90QXPKJM+Mx48mcc2pZQQP+skiNXY=; b=FLPctx9OWasOJfE4A5c6SeP4Do
-	MJHtzVCUOKUUZcL4DStRAvdBNqkzhFAvwnTLLNJl//rJS1j/Sozam2lT3b/Rkq97hn/mK5dDK19F5
-	kAD5EccShFPCojd9gLNkOTPrWxlODSJ/a9L+D6+YrfExkrxnJ7yhxcnMMCTmwkqSe/GxuIMUOu7gB
-	926Q0iEX9bK2iVQNOSUtjJ0cSNw7F7GYRyKLis5+LmB88sGeNJxZxrYnm2kVBZeWSXOUOtNFblOLh
-	ywkVezBXeRkEb4xzGbd1f9w1XbXwgcQf+ZthuOKJWm8cmd9+kY9IayXZNdqlrO3zUuDYsq2u+GmAT
-	NKQ6saYw==;
-From: Andreas Kemnade <andreas@kemnade.info>
-Date: Fri, 14 Nov 2025 00:06:43 +0100
-Subject: [PATCH v2 3/3] regulator: Add FP9931/JD9930 driver
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fGrtQUyy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=n9BlnlJCKDmKiXa
+	btgJAS1QyLzEeWowbtkJ8ygX1New=; b=fGrtQUyyVvA1WIOk8Wn5LQmTbezJ5Qm
+	x3e5404nZDJCxPnNJkpvyBadfNIbpKcT3R85SjUl/wsTg+J5Kl/MY1Et97BDvcvJ
+	nFHRDE8enW7Of+eoo2F1GCmJKBxGVcF4gjgcXuCnJcyTt9INQRB68vXkt+/gdbIB
+	VM1CMIty/EJw=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3d0nJzxZp2nKoAA--.94S2;
+	Fri, 14 Nov 2025 14:44:27 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net
+Cc: christophe.jaillet@wanadoo.fr,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	jdelvare@suse.com,
+	krzk+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	wenliang202407@163.com
+Subject: Re: [PATCH 1/8] dt-binding:ti,ina3221:Add SQ52210
+Date: Fri, 14 Nov 2025 01:44:13 -0500
+Message-Id: <20251114064413.6105-1-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <50cb21bc-55e7-4bf3-9d05-0cbe10af46aa@roeck-us.net>
+References: <50cb21bc-55e7-4bf3-9d05-0cbe10af46aa@roeck-us.net>
+X-CM-TRANSID:_____wD3d0nJzxZp2nKoAA--.94S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGFy8Kw4fGw4rAw15Xw1DZFb_yoW5Wr1Upa
+	yIkFWUtF1IgryfJ3yS9F48Cr1rtws7Xr47Gr1DG3yIv3yDAr9IvrZ3Kw1UtFy7XrZ3ZFW2
+	qayjgF15uw4DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjTc_fUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiGQgG02kWy8xt7AAAs9
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-fp9931-submit-v2-3-cd6998932c4c@kemnade.info>
-References: <20251114-fp9931-submit-v2-0-cd6998932c4c@kemnade.info>
-In-Reply-To: <20251114-fp9931-submit-v2-0-cd6998932c4c@kemnade.info>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: b4 0.15-dev-a6db3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17016; i=andreas@kemnade.info;
- h=from:subject:message-id; bh=XASNlsUAFwFUx48/C8pu96IaEIun5G3EzBwKqqoUl3Y=;
- b=owGbwMvMwCUm/rzkS6lq2x3G02pJDJliKWcvGbxaP7PujbLdw6vtpwO2pIZ/d9R1XMNi0Kp5J
- 31NSGN2RykLgxgXg6yYIssvawW3TyrPcoOnRtjDzGFlAhnCwMUpABPxZGNkmPhhTY14LFvpcfY3
- yyIKT3d0OooaRV0Keptz5Uf5qw21uxgZjv7tOZy99WSx6zqLVrdnB6Tb7rCXHDmzv6dtkv5uC98
- gPgA=
-X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
- fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
 
-Add a driver for the FP9931/JD9930 regulator. Implement handling of the PG
-(power good), TS_EN (temperature sensor enable), and EN (enable regulators)
-pins. Implement the pair of symmetric LDOs as a single regulator because
-they share a single voltage set register. For simplicity, just add the
-temperature sensor (depending on external NTC) directly.
 
-Limitations:
-- As these regulators are controlled together with the VCOM regulator via
-  the EN pin, some kind of management must be in place. As the enable op
-  is not called when the regulator is already enabled, simple refcounting
-  seems not to work to avoid clearing EN when one regulator is still
-  enabled. As these regulators are typically used together, this
-  limitation should not hurt hard, just provide the is_enabled op.
-- As the VCOM step is quite odd (5V/255 steps), rounding is needed.
-  Due to some limitations in the regulator core, the max/min voltages in
-  the devicetree must match the idea of the driver how to round things
-  exactly.
-- Night mode is not implemented, so only the FP9931 compatible is needed in
-  the driver, there is no REGULATOR_MODE_NIGHT and no clear definition in
-  the datasheet what it does, also the XON pin which seems to be an input
-  related to that night mode is not used.
+At 2025-11-13 10:03:01, "Guenter Roeck" <linux@roeck-us.net> wrote:
+>On 11/11/25 00:05, Wenliang Yan wrote:
+>> Add a compatible string for sq52210, sq52210 is forward compatible
+>> with INA3221 and add alert register to implement four additional
+>> alert function.
+>> 
+>> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+>> ---
+>>   .../devicetree/bindings/hwmon/ti,ina3221.yaml    | 16 +++++++++++++++-
+>>   1 file changed, 15 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+>> index 5f10f1207d69..0fae82ca3ee1 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+>> @@ -12,7 +12,9 @@ maintainers:
+>>   
+>>   properties:
+>>     compatible:
+>> -    const: ti,ina3221
+>> +    enum:
+>> +      - silergy,sq52210
+>> +      - ti,ina3221
+>>   
+>>     reg:
+>>       maxItems: 1
+>> @@ -77,6 +79,18 @@ patternProperties:
+>>             exclude specific channels from the summation control function.
+>>           type: boolean
+>>   
+>> +      alert-type:
+>> +        description: |
+>> +          The SQ52210 features a configurable alert function with four
+>> +          types: SUL, BOL, BUL, and POL. Each channel can be configured to
+>> +          select one of these types to enable the alert function. This alert
+>> +          function can operate concurrently with both Critical and Warning
+>> +          functions.
+>> +
+>> +          The configuration must use numerical values 0 through 3,
+>> +          0 corresponds to SUL, 1 to BOL, 2 to BUL, and 3 to POL.
+>> +        enum: [ 0, 1, 2, 3 ]
+>> +
+>
+>Per datasheet, each of the alerts can be enabled independently. It is possible
+>to enable SUL, BOL, BUL, and POL on each channel at the same time. This is not
+>possible with the above property since it only permits enabling alerts for one
+>of the alert sources on each channel.
+>
+>Also, I am not sure if it makes sense to have this as devicetree property.
+>It is not really a board property. It might make more sense to tie enabling
+>the alerts automatically if a channel is enabled and a limit is set for a
+>given channel.
+>
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/regulator/Kconfig  |  10 +
- drivers/regulator/Makefile |   1 +
- drivers/regulator/fp9931.c | 564 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 575 insertions(+)
+The "If multiple function are enabled, the Alert Function with the highrst
+signifivant bit position(D15-D4) takes priority and responds to the Alert
+LImit Register" described on page 21 of the datasheet refers to the fact that
+when different trigger sources are enabled simultaneously, only the highest
+priority trigger source takes effect (SUL > BOL > BUL > POL).Therefore,
+essentially only one type of alert can be active per channel.
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index d84f3d054c59..c817a4cc00c8 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -500,6 +500,16 @@ config REGULATOR_ISL6271A
- 	help
- 	  This driver supports ISL6271A voltage regulator chip.
- 
-+config REGULATOR_FP9931
-+	tristate "FitiPower FP9931/JD9930 EPD regulator"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This driver supports the FP9931/JD9930 voltage regulator chip
-+	  which is used to provide power to Electronic Paper Displays
-+	  so it is found in E-Book readers.
-+	  If HWWON is enabled, it also provides temperature measurement.
-+
- config REGULATOR_LM363X
- 	tristate "TI LM363X voltage regulators"
- 	depends on MFD_TI_LMU
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index b3101376029d..98a02c854044 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -59,6 +59,7 @@ obj-$(CONFIG_REGULATOR_HI6421V600) += hi6421v600-regulator.o
- obj-$(CONFIG_REGULATOR_HI655X) += hi655x-regulator.o
- obj-$(CONFIG_REGULATOR_ISL6271A) += isl6271a-regulator.o
- obj-$(CONFIG_REGULATOR_ISL9305) += isl9305.o
-+obj-$(CONFIG_REGULATOR_FP9931) += fp9931.o
- obj-$(CONFIG_REGULATOR_LM363X) += lm363x-regulator.o
- obj-$(CONFIG_REGULATOR_LOCHNAGAR) += lochnagar-regulator.o
- obj-$(CONFIG_REGULATOR_LP3971) += lp3971.o
-diff --git a/drivers/regulator/fp9931.c b/drivers/regulator/fp9931.c
-new file mode 100644
-index 000000000000..7e3df5f2ccb9
---- /dev/null
-+++ b/drivers/regulator/fp9931.c
-@@ -0,0 +1,564 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2025 Andreas Kemnade
-+
-+/* Datasheet: https://www.fitipower.com/dl/file/flXa6hIchVeu0W3K */
-+
-+#include <linux/cleanup.h>
-+#include <linux/completion.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/hwmon.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/property.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regmap.h>
-+
-+#define FP9931_REG_TMST_VALUE 0
-+#define FP9931_REG_VCOM_SETTING 1
-+#define FP9931_REG_VPOSNEG_SETTING 2
-+#define FP9931_REG_PWRON_DELAY 3
-+#define FP9931_REG_CONTROL_REG1 11
-+
-+#define PGOOD_TIMEOUT_MSECS 200
-+
-+struct fp9931_data {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct regulator *vin_reg;
-+	struct gpio_desc *pgood_gpio;
-+	struct gpio_desc *en_gpio;
-+	struct gpio_desc *en_ts_gpio;
-+	struct completion pgood_completion;
-+	int pgood_irq;
-+};
-+
-+static const unsigned int VPOSNEG_table[] = {
-+	7040000,
-+	7040000,
-+	7040000,
-+	7040000,
-+	7040000,
-+	7040000,
-+	7260000,
-+	7490000,
-+	7710000,
-+	7930000,
-+	8150000,
-+	8380000,
-+	8600000,
-+	8820000,
-+	9040000,
-+	9270000,
-+	9490000,
-+	9710000,
-+	9940000,
-+	10160000,
-+	10380000,
-+	10600000,
-+	10830000,
-+	11050000,
-+	11270000,
-+	11490000,
-+	11720000,
-+	11940000,
-+	12160000,
-+	12380000,
-+	12610000,
-+	12830000,
-+	13050000,
-+	13280000,
-+	13500000,
-+	13720000,
-+	13940000,
-+	14170000,
-+	14390000,
-+	14610000,
-+	14830000,
-+	15060000,
-+};
-+
-+static const struct hwmon_channel_info *fp9931_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static int setup_timings(struct fp9931_data *data)
-+{
-+	u32 tdly[4];
-+	u8 tdlys = 0;
-+	int i;
-+	int ret;
-+
-+	ret = device_property_count_u32(data->dev, "fitipower,tdly-ms");
-+	if (ret == -EINVAL) /* property is optional */
-+		return 0;
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret != ARRAY_SIZE(tdly)) {
-+		dev_err(data->dev, "invalid delay specification");
-+		return -EINVAL;
-+	}
-+
-+	ret = device_property_read_u32_array(data->dev, "fitipower,tdly-ms",
-+					     tdly, ARRAY_SIZE(tdly));
-+	if (ret)
-+		return ret;
-+
-+	for (i = ARRAY_SIZE(tdly) - 1; i >= 0; i--) {
-+		if (tdly[i] > 4 || tdly[i] == 3)
-+			return -EINVAL;
-+
-+		if (tdly[i] == 4) /* convert from ms */
-+			tdly[i] = 3;
-+
-+		tdlys <<= 2;
-+		tdlys |= tdly[i];
-+	}
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_write(data->regmap, FP9931_REG_PWRON_DELAY, tdlys);
-+	pm_runtime_put_autosuspend(data->dev);
-+
-+	return ret;
-+}
-+
-+static int fp9931_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long *temp)
-+{
-+	struct fp9931_data *data = dev_get_drvdata(dev);
-+	unsigned int val;
-+	s8 signed_val;
-+	int ret;
-+
-+	if (attr != hwmon_temp_input)
-+		return -EOPNOTSUPP;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_read(data->regmap, FP9931_REG_TMST_VALUE, &val);
-+	if (ret)
-+		return ret;
-+
-+	pm_runtime_put_autosuspend(data->dev);
-+	signed_val = (s8)val;
-+
-+	*temp = signed_val;
-+	*temp = *temp * 1000;
-+
-+	return 0;
-+}
-+
-+static umode_t fp9931_hwmon_is_visible(const void *data,
-+				       enum hwmon_sensor_types type,
-+				       u32 attr, int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	if (attr != hwmon_temp_input)
-+		return 0;
-+
-+	return 0444;
-+}
-+
-+static const struct hwmon_ops fp9931_hwmon_ops = {
-+	.is_visible = fp9931_hwmon_is_visible,
-+	.read = fp9931_hwmon_read,
-+};
-+
-+static const struct hwmon_chip_info fp9931_chip_info = {
-+	.ops = &fp9931_hwmon_ops,
-+	.info = fp9931_info,
-+};
-+
-+static int fp9931_runtime_suspend(struct device *dev)
-+{
-+	int ret = 0;
-+	struct fp9931_data *data = dev_get_drvdata(dev);
-+
-+	if (data->en_ts_gpio)
-+		gpiod_set_value_cansleep(data->en_ts_gpio, 0);
-+
-+	if (data->vin_reg) {
-+		ret = regulator_disable(data->vin_reg);
-+		regcache_mark_dirty(data->regmap);
-+	}
-+
-+	return ret;
-+}
-+
-+static int fp9931_runtime_resume(struct device *dev)
-+{
-+	int ret = 0;
-+	struct fp9931_data *data = dev_get_drvdata(dev);
-+
-+	if (data->vin_reg)
-+		ret = regulator_enable(data->vin_reg);
-+
-+	if (ret)
-+		return ret;
-+
-+	if (data->en_ts_gpio) {
-+		gpiod_set_value_cansleep(data->en_ts_gpio, 1);
-+		/* wait for one ADC conversion to have sane temperature */
-+		usleep_range(10000, 15000);
-+	}
-+
-+	ret = regcache_sync(data->regmap);
-+
-+	return ret;
-+}
-+
-+static bool fp9931_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg == FP9931_REG_TMST_VALUE;
-+}
-+
-+static const struct reg_default fp9931_reg_default = {
-+	.reg = FP9931_REG_VCOM_SETTING,
-+	.def = 0x80,
-+};
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 12,
-+	.cache_type = REGCACHE_FLAT,
-+	.volatile_reg = fp9931_volatile_reg,
-+	.reg_defaults = &fp9931_reg_default,
-+	.num_reg_defaults = 1,
-+};
-+
-+static void disable_nopm(void *d)
-+{
-+	struct fp9931_data *data = d;
-+
-+	fp9931_runtime_suspend(data->dev);
-+}
-+
-+static int fp9931_v3p3_enable(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regulator_enable_regmap(rdev);
-+	if (ret < 0)
-+		pm_runtime_put_autosuspend(data->dev);
-+
-+	return ret;
-+}
-+
-+static int fp9931_v3p3_disable(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	ret = regulator_disable_regmap(rdev);
-+	pm_runtime_put_autosuspend(data->dev);
-+
-+	return ret;
-+}
-+
-+static int fp9931_v3p3_is_enabled(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	if (pm_runtime_status_suspended(data->dev))
-+		return 0;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return 0;
-+
-+	ret = regulator_is_enabled_regmap(rdev);
-+
-+	pm_runtime_put_autosuspend(data->dev);
-+	return ret;
-+}
-+
-+static const struct regulator_ops fp9931_v3p3ops = {
-+	.list_voltage = regulator_list_voltage_linear,
-+	.enable = fp9931_v3p3_enable,
-+	.disable = fp9931_v3p3_disable,
-+	.is_enabled = fp9931_v3p3_is_enabled,
-+};
-+
-+static int fp9931_check_powergood(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+
-+	if (pm_runtime_status_suspended(data->dev))
-+		return 0;
-+
-+	return gpiod_get_value_cansleep(data->pgood_gpio);
-+}
-+
-+static int fp9931_get_voltage_sel(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regulator_get_voltage_sel_regmap(rdev);
-+	pm_runtime_put_autosuspend(data->dev);
-+
-+	return ret;
-+}
-+
-+static int fp9931_set_voltage_sel(struct regulator_dev *rdev, unsigned int selector)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regulator_set_voltage_sel_regmap(rdev, selector);
-+	pm_runtime_put_autosuspend(data->dev);
-+
-+	return ret;
-+}
-+
-+static irqreturn_t pgood_handler(int irq, void *dev_id)
-+{
-+	struct fp9931_data *data = dev_id;
-+
-+	complete(&data->pgood_completion);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int fp9931_set_enable(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(data->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	reinit_completion(&data->pgood_completion);
-+	gpiod_set_value_cansleep(data->en_gpio, 1);
-+	dev_dbg(data->dev, "turning on...");
-+	wait_for_completion_timeout(&data->pgood_completion,
-+				    msecs_to_jiffies(PGOOD_TIMEOUT_MSECS));
-+	dev_dbg(data->dev, "turned on");
-+	if (gpiod_get_value_cansleep(data->pgood_gpio) != 1) {
-+		pm_runtime_put_autosuspend(data->dev);
-+		return -ETIMEDOUT;
-+	}
-+
-+	return 0;
-+}
-+
-+static int fp9931_clear_enable(struct regulator_dev *rdev)
-+{
-+	struct fp9931_data *data = rdev_get_drvdata(rdev);
-+
-+	gpiod_set_value_cansleep(data->en_gpio, 0);
-+	pm_runtime_put_autosuspend(data->dev);
-+	return 0;
-+}
-+
-+static const struct regulator_ops fp9931_vcom_ops = {
-+	.list_voltage = regulator_list_voltage_linear,
-+	.map_voltage = regulator_map_voltage_linear,
-+	.enable = fp9931_set_enable,
-+	.disable = fp9931_clear_enable,
-+	.is_enabled = fp9931_check_powergood,
-+	.set_voltage_sel = fp9931_set_voltage_sel,
-+	.get_voltage_sel = fp9931_get_voltage_sel,
-+};
-+
-+static const struct regulator_ops fp9931_vposneg_ops = {
-+	.list_voltage = regulator_list_voltage_table,
-+	.map_voltage = regulator_map_voltage_ascend,
-+	/* gets enabled by enabling vcom, too */
-+	.is_enabled = fp9931_check_powergood,
-+	.set_voltage_sel = fp9931_set_voltage_sel,
-+	.get_voltage_sel = fp9931_get_voltage_sel,
-+};
-+
-+static const struct regulator_desc regulators[] = {
-+	{
-+		.name = "v3p3",
-+		.of_match = of_match_ptr("v3p3"),
-+		.id = 0,
-+		.ops = &fp9931_v3p3ops,
-+		.type = REGULATOR_VOLTAGE,
-+		.owner = THIS_MODULE,
-+		.enable_reg = FP9931_REG_CONTROL_REG1,
-+		.enable_mask = BIT(1),
-+		.n_voltages = 1,
-+		.min_uV = 3300000
-+	},
-+	{
-+		.name = "vposneg",
-+		.of_match = of_match_ptr("vposneg"),
-+		.id = 1,
-+		.ops = &fp9931_vposneg_ops,
-+		.type = REGULATOR_VOLTAGE,
-+		.owner = THIS_MODULE,
-+		.n_voltages = ARRAY_SIZE(VPOSNEG_table),
-+		.vsel_reg = FP9931_REG_VPOSNEG_SETTING,
-+		.vsel_mask = 0x3F,
-+		.volt_table = VPOSNEG_table,
-+	},
-+	{
-+		.name = "vcom",
-+		.of_match = of_match_ptr("vcom"),
-+		.id = 2,
-+		.ops = &fp9931_vcom_ops,
-+		.type = REGULATOR_VOLTAGE,
-+		.owner = THIS_MODULE,
-+		.n_voltages = 255,
-+		.min_uV = 0,
-+		.uV_step = 5000000 / 255,
-+		.vsel_reg = FP9931_REG_VCOM_SETTING,
-+		.vsel_mask = 0xFF
-+	},
-+};
-+
-+static int fp9931_probe(struct i2c_client *client)
-+{
-+	struct fp9931_data *data;
-+	struct regulator_config config = { };
-+	struct regulator_dev *rdev;
-+	int ret = 0;
-+	int i;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-+	data->regmap = devm_regmap_init_i2c(client, &regmap_config);
-+	if (IS_ERR(data->regmap))
-+		return dev_err_probe(&client->dev, PTR_ERR(data->regmap),
-+				     "failed to allocate regmap!\n");
-+
-+	data->vin_reg = devm_regulator_get_optional(&client->dev, "vin");
-+	if (IS_ERR(data->vin_reg))
-+		return dev_err_probe(&client->dev, PTR_ERR(data->vin_reg),
-+				     "failid to get vin regulator\n");
-+
-+	data->pgood_gpio = devm_gpiod_get(&client->dev, "pg", GPIOD_IN);
-+	if (IS_ERR(data->pgood_gpio))
-+		return dev_err_probe(&client->dev,
-+				     PTR_ERR(data->pgood_gpio),
-+				     "failed to get power good gpio\n");
-+
-+	data->pgood_irq = gpiod_to_irq(data->pgood_gpio);
-+	if (data->pgood_irq < 0)
-+		return data->pgood_irq;
-+
-+	data->en_gpio = devm_gpiod_get(&client->dev, "enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(data->en_gpio))
-+		return dev_err_probe(&client->dev, PTR_ERR(data->en_gpio),
-+				     "failed to get en gpio\n");
-+
-+	data->en_ts_gpio = devm_gpiod_get_optional(&client->dev, "en-ts", GPIOD_OUT_LOW);
-+	if (IS_ERR(data->en_ts_gpio))
-+		return dev_err_probe(&client->dev,
-+				     PTR_ERR(data->en_ts_gpio),
-+				     "failed to get en gpio\n");
-+
-+	data->dev = &client->dev;
-+	i2c_set_clientdata(client, data);
-+
-+	init_completion(&data->pgood_completion);
-+
-+	ret = devm_request_threaded_irq(&client->dev, data->pgood_irq, NULL,
-+					pgood_handler,
-+					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-+					"PGOOD", data);
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret,
-+				     "failed to request irq\n");
-+
-+	if (IS_ENABLED(CONFIG_PM)) {
-+		devm_pm_runtime_enable(&client->dev);
-+		pm_runtime_set_autosuspend_delay(&client->dev, 4000);
-+		pm_runtime_use_autosuspend(&client->dev);
-+	} else {
-+		ret = fp9931_runtime_resume(&client->dev);
-+		if (ret < 0)
-+			return ret;
-+
-+		devm_add_action_or_reset(&client->dev, disable_nopm, data);
-+	}
-+
-+	ret = setup_timings(data);
-+	if (ret)
-+		return dev_err_probe(&client->dev, ret, "failed to setup timings\n");
-+
-+	config.driver_data = data;
-+	config.dev = &client->dev;
-+	config.regmap = data->regmap;
-+
-+	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
-+		rdev = devm_regulator_register(&client->dev, &regulators[i],
-+					       &config);
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(&client->dev, PTR_ERR(rdev),
-+					     "failed to register %s regulator\n",
-+					     regulators[i].name);
-+	}
-+
-+	if (IS_REACHABLE(CONFIG_HWMON)) {
-+		struct device *hwmon_dev;
-+
-+		hwmon_dev = devm_hwmon_device_register_with_info(&client->dev, "fp9931", data,
-+								 &fp9931_chip_info, NULL);
-+		if (IS_ERR(hwmon_dev))
-+			dev_err(&client->dev, "failed to register hwmon\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops fp9931_pm_ops = {
-+	SET_RUNTIME_PM_OPS(fp9931_runtime_suspend, fp9931_runtime_resume, NULL)
-+};
-+
-+static const struct of_device_id fp9931_dt_ids[] = {
-+	{
-+		.compatible = "fitipower,fp9931",
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+MODULE_DEVICE_TABLE(of, fp9931_dt_ids);
-+
-+static struct i2c_driver fp9931_i2c_driver = {
-+	.driver = {
-+		   .name = "fp9931",
-+		   .of_match_table = fp9931_dt_ids,
-+		   .pm = &fp9931_pm_ops,
-+	},
-+	.probe = fp9931_probe,
-+};
-+
-+module_i2c_driver(fp9931_i2c_driver);
-+
-+/* Module information */
-+MODULE_DESCRIPTION("FP9931 regulator driver");
-+MODULE_LICENSE("GPL");
-+
+Indeed, it is unnecessary to configure the alert-type at the board level.
+I will modify this content and conduct testing before the next submission,
+and also remove the alert-type support in Patch 3.
 
--- 
-2.47.3
+Thanks,
+Wenlaing Yan
 
