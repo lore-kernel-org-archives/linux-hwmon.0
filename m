@@ -1,126 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mx13.kaspersky-labs.com (mx13.kaspersky-labs.com [91.103.66.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F3D31A7EA;
-	Fri, 14 Nov 2025 13:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BA932572A;
+	Fri, 14 Nov 2025 15:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.103.66.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763128245; cv=none; b=Lz8fbIaSEIL2xC3QYNiZQxewJsUw+P+dWWitC8FJb9nIVgd+PUV3HwkIGj7vZEtgyNL6inPE5vH0xj7/ls8Ky5wLdwzA/4D51/Ezq6gm+MVCk7jpmxu46XYXw32bKeFBY1B0XxD+9HnxupfA0v+Azo6SCumbBXmYUW3x8AckM/0=
+	t=1763132457; cv=none; b=uED1ksx4OA5d3BXuEBkudCnVO14zVJeNQiXgqp4ShNqsLLpUKEJLCqis8bhh4pA+XLfPxYh4pxQWC2zUB9gyF/tiOm/K/Br+WKt1LFKDKyJEiL0TrpDF+kFPju4/nsrf8kkRMeNnmLl7H1zO+pRxncNHXhWU6X9FrQndH824rRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763128245; c=relaxed/simple;
-	bh=mWNK2hiG9QRE2Ctd7U5PceNP7yOK/OuxC9Ptb2GvFys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AQ757h0MhkpWzoVdyjopixaAWRvvCbsZ1lphRKbEJSTnsQDQMSDn9cZlVuyfnPceG0DnoFFUqwAgC6DBWKM+YvhaCVV6h/L76EfPcSHJSKra/2RSk/xNIpPV0V1/rFp9/28fGpthvc9z/W4R0utNdLl01rtnJJ/hUTmoN9bIrg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ej9wTnEc; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1763132457; c=relaxed/simple;
+	bh=d/G7fOyd+PKA49zh4IDE237eoGff6XzJbRsbsbEy9kY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Hy5FwM9oDVdBcqXFjnh/V0J92+Nl9xTIh/kxrTG1ksHdFzhWA8lk+GLQm5nz/lPgGKttcAcJXoQQ9P5n7YOiZgqzbqVw83McBD4GJvBquIZKIzfsTsxATjz0ZoSq40xkNVnqfyS7TOKhkwwFFjJQiN0CihhZk7CkrrJr4fI51Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com; spf=pass smtp.mailfrom=kaspersky.com; dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b=r7p/YuEq; arc=none smtp.client-ip=91.103.66.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kaspersky.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaspersky.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ej9wTnEc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763128244; x=1794664244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mWNK2hiG9QRE2Ctd7U5PceNP7yOK/OuxC9Ptb2GvFys=;
-  b=ej9wTnEcjnT2wcV0npK7SCX1xd5MS1sZOQU1epV+TL+kwGIzV2ISRKx4
-   9NUb9lH7OWn6m6Q3CZn0HhU3wp+K+QIWqOVJjse1ij8HJXnqc4Vs2OoZS
-   gPchjwL4bGcYQ8STt3N73Fqz/Sn1FpXdEHEjbbOr4FfWmW3M/orbpZT66
-   3aO4V8ojyXwx98gg/9TCMUwx6yZ/GZq38n9T4PRotQ3gT2TftMlLGBfDQ
-   AqZPiXXqCAQIGlomAoHBYwJTvjmqIgQCaLzwAoK4j3B2RNJ68dvdnkOq/
-   Ezt4G99pfHocAr//5lQ7ave2XtyC4qFMDhwrUphZI7Jy+DcQDyDlxEblE
-   A==;
-X-CSE-ConnectionGUID: D0VvAbHvRoOCZaGK9jZbxw==
-X-CSE-MsgGUID: ZcI7+aZfTXmtZDQ9KFOzxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11612"; a="65378436"
-X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
-   d="scan'208";a="65378436"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 05:50:43 -0800
-X-CSE-ConnectionGUID: Cj15Y7jvT0SY+oo11AyNEg==
-X-CSE-MsgGUID: bBeyauZDRmOWEQfgeovpAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,305,1754982000"; 
-   d="scan'208";a="220651214"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Nov 2025 05:50:41 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vJuCE-0006d1-2c;
-	Fri, 14 Nov 2025 13:50:38 +0000
-Date: Fri, 14 Nov 2025 21:50:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rong Zhang <i@rong.moe>, Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Armin Wolf <W_Armin@gmx.de>, Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rong Zhang <i@rong.moe>, Guenter Roeck <linux@roeck-us.net>,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v4 3/7] platform/x86: lenovo-wmi-{capdata,other}: Support
- multiple Capability Data
-Message-ID: <202511142143.WLGlvDdQ-lkp@intel.com>
-References: <20251113191152.96076-4-i@rong.moe>
+	dkim=pass (2048-bit key) header.d=kaspersky.com header.i=@kaspersky.com header.b="r7p/YuEq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kaspersky.com;
+	s=mail202505; t=1763132451;
+	bh=UCcHOAW472GN2iBcXs9PqGlXaA/bRv6Esq7rnOuymxg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=r7p/YuEq3nNJv5TUafSS8N3cBzPwscIwk68IbYB1TyfOTURAA3V24M8r3KAEe/LK+
+	 O1QEkgHXVAYUE4/RIATPKmG81csVgb6sA7k7CwdkHc4bVZaWQHqAdbbShm7XGRbO2c
+	 RLKmM0H9KEB1aF2K6V00s7i2k+w5FS2CmZ5QTTXtRuTBEQY375mzuFmZawxh1V7Kz/
+	 e1KJsUq8XvBE80HwhD6pKzkg5z7EsN5szynLqo2SZ3F+q4IM3VzwqNrmpKZ5IsULTq
+	 oKwnpbUUFY/ftK/WIshyXcwnvud41yQtCDg72iprlb05ZlcVEuYGayrkhOpJOnhW8j
+	 DDpJ2CZ8/isMQ==
+Received: from relay13.kaspersky-labs.com (localhost [127.0.0.1])
+	by relay13.kaspersky-labs.com (Postfix) with ESMTP id 60E3A3E5D2C;
+	Fri, 14 Nov 2025 18:00:51 +0300 (MSK)
+Received: from mail-hq2.kaspersky.com (unknown [91.103.66.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mail-hq2.kaspersky.com", Issuer "Kaspersky MailRelays CA G3" (verified OK))
+	by mailhub13.kaspersky-labs.com (Postfix) with ESMTPS id C15573E3642;
+	Fri, 14 Nov 2025 18:00:50 +0300 (MSK)
+Received: from zhigulin-p.avp.ru (10.16.104.190) by HQMAILSRV2.avp.ru
+ (10.64.57.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Fri, 14 Nov
+ 2025 18:00:50 +0300
+From: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+To: Robert Marko <robert.marko@sartura.hr>
+CC: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>, Luka Perkov
+	<luka.perkov@sartura.hr>, Guenter Roeck <linux@roeck-us.net>,
+	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH] hwmon: tps23861: add regmap_bulk_read() handling in port resistance read
+Date: Fri, 14 Nov 2025 18:00:44 +0300
+Message-ID: <20251114150045.2230687-1-Pavel.Zhigulin@kaspersky.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251113191152.96076-4-i@rong.moe>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HQMAILSRV2.avp.ru (10.64.57.52) To HQMAILSRV2.avp.ru
+ (10.64.57.52)
+X-KSE-ServerInfo: HQMAILSRV2.avp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 11/14/2025 14:44:52
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 198109 [Nov 14 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: Pavel.Zhigulin@kaspersky.com
+X-KSE-AntiSpam-Info: LuaCore: 76 0.3.76
+ 6aad6e32ec76b30ee13ccddeafeaa4d1732eef15
+X-KSE-AntiSpam-Info: {Tracking_cluster_exceptions}
+X-KSE-AntiSpam-Info: {Tracking_real_kaspersky_domains}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;zhigulin-p.avp.ru:7.1.1,5.0.1;kaspersky.com:7.1.1,5.0.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {Tracking_white_helo}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 11/14/2025 14:46:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 11/14/2025 2:08:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-KSMG-AntiPhishing: NotDetected
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.1.8310, bases: 2025/11/14 12:42:00 #27925085
+X-KSMG-AntiVirus-Status: NotDetected, skipped
+X-KSMG-LinksScanning: NotDetected
+X-KSMG-Message-Action: skipped
+X-KSMG-Rule-ID: 52
 
-Hi Rong,
+regmap_bulk_read() was called without checking its return value
+in function tps23861_port_resistance(). If the read failed,
+the code proceeded with an uninitialized register value.
 
-kernel test robot noticed the following build warnings:
+Add return value handling
 
-[auto build test WARNING on 2ccec5944606ee1389abc7ee41986825c6ceb574]
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rong-Zhang/platform-x86-lenovo-wmi-helpers-Convert-returned-buffer-into-u32/20251114-032343
-base:   2ccec5944606ee1389abc7ee41986825c6ceb574
-patch link:    https://lore.kernel.org/r/20251113191152.96076-4-i%40rong.moe
-patch subject: [PATCH v4 3/7] platform/x86: lenovo-wmi-{capdata,other}: Support multiple Capability Data
-config: x86_64-randconfig-011-20251114 (https://download.01.org/0day-ci/archive/20251114/202511142143.WLGlvDdQ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251114/202511142143.WLGlvDdQ-lkp@intel.com/reproduce)
+Fixes: fff7b8ab2255 ("hwmon: add Texas Instruments TPS23861 driver")
+Signed-off-by: Pavel Zhigulin <Pavel.Zhigulin@kaspersky.com>
+---
+ drivers/hwmon/tps23861.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511142143.WLGlvDdQ-lkp@intel.com/
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+index 4cb3960d5170..8873b2e21064 100644
+--- a/drivers/hwmon/tps23861.c
++++ b/drivers/hwmon/tps23861.c
+@@ -457,13 +457,16 @@ static char *port_poe_plus_status_string(uint8_t poe_plus, unsigned int port)
+ static int tps23861_port_resistance(struct tps23861_data *data, int port)
+ {
+ 	unsigned int raw_val;
++	int rc = 0;
+ 	__le16 regval;
 
-All warnings (new ones prefixed by >>):
+-	regmap_bulk_read(data->regmap,
+-			 PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * port,
+-			 &regval,
+-			 2);
++	rc = regmap_bulk_read(data->regmap,
++			      PORT_1_RESISTANCE_LSB + PORT_N_RESISTANCE_LSB_OFFSET * port,
++			      &regval,
++			      2);
 
->> drivers/platform/x86/lenovo/wmi-capdata.c:88:27: warning: cast to smaller integer type 'enum lwmi_cd_type' from 'void *' [-Wvoid-pointer-to-enum-cast]
-      88 |         enum lwmi_cd_type type = (enum lwmi_cd_type)data;
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
++	if (rc < 0)
++		return 0;
+ 	raw_val = le16_to_cpu(regval);
+ 	switch (FIELD_GET(PORT_RESISTANCE_RSN_MASK, raw_val)) {
+ 	case PORT_RESISTANCE_RSN_OTHER:
+--
+2.43.0
 
-
-vim +88 drivers/platform/x86/lenovo/wmi-capdata.c
-
-    78	
-    79	/**
-    80	 * lwmi_cd_match() - Match rule for the master driver.
-    81	 * @dev: Pointer to the capability data parent device.
-    82	 * @data: Type of the capability data (cast to enum lwmi_cd_type).
-    83	 *
-    84	 * Return: int.
-    85	 */
-    86	static int lwmi_cd_match(struct device *dev, void *data)
-    87	{
-  > 88		enum lwmi_cd_type type = (enum lwmi_cd_type)data;
-    89		struct lwmi_cd_priv *priv;
-    90	
-    91		if (dev->driver != &lwmi_cd_driver.driver)
-    92			return false;
-    93	
-    94		priv = dev_get_drvdata(dev);
-    95		return priv->list->type == type;
-    96	}
-    97	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
