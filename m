@@ -1,103 +1,87 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEB015ADB4
-	for <linux-hwmon@vger.kernel.org>; Sat, 15 Nov 2025 07:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748CC20E030
+	for <linux-hwmon@vger.kernel.org>; Sat, 15 Nov 2025 15:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763191899; cv=none; b=sUKM1IPnM3JruRB/dt2dzXGZQf9IA0/rrhdMRgDxZrU8xwpV0IEQWkMEpXWnyZhjBECo3sostRMAFiy9gMQpGaitqzRg/1y4pYjRvWP1Y/a0LiaF3pHPSv7kzTlYfrJH5P5niBYM0UOVto3WPpJNz1IaMC46t7Lqdhz8xXMPm2U=
+	t=1763219712; cv=none; b=WC+6v58aC48liwCVs99GI5478kXnpBGbsW4RCLP//mSQfjCU4RUAS7VrSGp8Y1AuKCwhpOLxfZxCDb+G8y0swdYoJKeI82bos88TaR7VQz1NXWyzmZlGzbcP5qNRrdiX7icaMFiO8DceNbNBTUb0/0VVHjY27UeY1i1T57c2HBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763191899; c=relaxed/simple;
-	bh=YQ3U2AImAkYxHbBMcQLJLvdQgRWwcmUphCSkXRfdTX0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gt7Vcw8FwItX/HMu20BEq26kLmBSJS1rHq2Dts1Hva1TNop7q0+qx7Ud7Td0obmoiv9g+hJXr5yG+VnIHdSPPd9X5qf6q2P5ReRvYtGprrhxwiQPr4JJ1HkJK0ZxILZIte/Fb4dikMf2yKDr9xEL3OWGjX7l6Hu1fifxxM8ILaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=gSQ9VNoP; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
+	s=arc-20240116; t=1763219712; c=relaxed/simple;
+	bh=iC2P/olxuaRhoEOZ5G9GKyvPMIzT+TgbtiZDDLFgqVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AMap8XIJQRx3PkeD92RRxBTh0UCmaurS31u7/uwXr4L9ATDyJhSzxdkEHdPvgDMU/Q2lzCI5cBytDnSCxGCxLUT4zQM46uTBb3wVnugZOiTYLQGoSyg7vksmhr8eqkn2hTLlDUAFWnxo2x2xqYJfytscDA5F9UHtTCawqX6MdRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B39go3bw; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="gSQ9VNoP"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7aae5f2633dso3121921b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 14 Nov 2025 23:31:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B39go3bw"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-bc09b3d3afeso1785883a12.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 15 Nov 2025 07:15:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=reznichenko.net; s=google; t=1763191897; x=1763796697; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwsKfG1u9xzoIIYU5TWHADxjaVWDZ/+j3qMJBFXHuFg=;
-        b=gSQ9VNoPQecHAf1ncQD1j8klf9deOIjkV0eNDSItI11YVEP0iU2WpulHwuLT1RN5JC
-         zlbNI1pMvIlqTWpHYniADRSWUtJ4AC9vkbXpHf5/UIrVpzxkZGdjfotOJCNg/GL8CRlp
-         bUvTRz5kiLd65Vw0tNo6TuN3tsHL1KVe2Cd3TzVngyrGCTbeUMri4ckpJUj/kGxdJBBV
-         Kzc9KR8tfoDoFeBQR23bcNXs0qQ/tLY3+p1jZnDnCVaDmiED9bGgMDaSKQ4lFMYGYZpR
-         YfFEX8v3F+KKxWpQlhEGJZ+9ykmE/EgBunSUSnqznovWcOOuT901zZQ6nRP7xqxc0LiT
-         dkdg==
+        d=gmail.com; s=20230601; t=1763219710; x=1763824510; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NABF3TsnCCexfj65arckaNkOPfPx2E47DSFG3TtkK9Y=;
+        b=B39go3bwM+Mx+ydrlzdiuQ5rJV2f4Ome2qVp/AidwKSiGNCg3FTZbP2jRZ7pPHfAnN
+         5nTti3VzbyjPYDYoO37aAbLpoL6gyzCJvHjlqJsDwbs3ml0NTjlCNr43yKZXzFleKPOe
+         jg7zfsAmvpzOQHf1UbzKcOegbbQ8mmh4vaWxrJDHIAJA4cIXYbG//bR8fO41Ivi8PCyM
+         pViRD29RSDCw/TM/xCYdsLxLEGYjwufS5vMzKul/xM+zGonyUf8Kd5S72hlQwLfxBWh9
+         qoLZcj+QmxD0gPnjzoEYcKAqkLnaTmPNxdyuCZbrynibFvUCAoqdF31YRxDj4TRKq9AB
+         zp+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763191897; x=1763796697;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UwsKfG1u9xzoIIYU5TWHADxjaVWDZ/+j3qMJBFXHuFg=;
-        b=rNf8erPAg/K/Lz8ack+tnhJ/kDpiwkVkRmPyo1J36uI/Fe0R/bW4L/nWz+N+0nwvYY
-         IgIA9MVi5IwyBe+BbV/D7nLmw+tM94rmNgQ8gjxkDKUUIgzwSTTwn3ztP0ySOGMnB02b
-         I/Ctyl7hHT3xImYO2G1Knie8AscAjyamwzYNMXsooXFv9JBYl4BJJh2XOEYuZ78cxdDX
-         iagZyljTt1NnWil9cGCwwo0dTgxN4Uq8icevnzo8d4DxLeFoWWZd1Eftlp5s0PX8E5+y
-         WlLayChZOcalSNtaqVy2/XsTXanUK5E6k3560UK7QVKe3wHisqc175HhX0OcRgLrLCET
-         /4RQ==
-X-Gm-Message-State: AOJu0YxiHhHdx/RXUs8+tN4CF1j5glv61d4qyiEnPtrosfQyOWed2adP
-	yC27K5f7E3NJ1DOtNi0DAJtyqnQ1JpaGKfaDRkrsxc6imNqwCcRS58bTVI32JvRelew=
-X-Gm-Gg: ASbGncsmL3AhsgjzCiWnfMg4/mujkTNN3XFukJDpRHIUZ1/cyOgqol1xYRGzUdSM2XX
-	gwgcQjuI7h1k0qdL3gq/xJkmCKJshiyBPwWm45aiCdfupSrXUDkINri9lyzt226mPXSL7HoQOdh
-	6VoTxBEMR5JvVaqMHMGv2pslynuN1OM6GdsydpzwH03I/WdRbpCss1CSAbLZyG6sLYleM1Rw1BX
-	uNmS6cQAEiEcJ1srd1MeRILzI85fAlowgmE/Ml8Rij9Xb4ue1mjTDb773O1EaDmR7hzvlMZGoXo
-	HXuUPU8aXwXFfNLMHfQufsF8rjYhqaW705J7xIfJ+eyRFygADvsE6/DehuMcVluM+H+mqaPXSri
-	dqM5/h1JSMko5fHCA6MKOdHfIh1F2SwfOu1A8Da/mxiuoAkdhDTkLjkDqvOKpA02cxa5alfUvEO
-	KkA/yDOKBWowG8i4wlLA==
-X-Google-Smtp-Source: AGHT+IHcHb+IGY0TaDgDiTwSLWuhujKAoMG4s1G/gZPLqj39x37ZFlNp0RH2Ktd3ZYtolzcQmhzA1w==
-X-Received: by 2002:a05:6a20:7484:b0:34f:7454:b977 with SMTP id adf61e73a8af0-35ba1d9c6dbmr7586360637.48.1763191897162;
-        Fri, 14 Nov 2025 23:31:37 -0800 (PST)
-Received: from z440.. ([2601:1c0:4502:2d00:e163:4dbb:2ca5:159c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927d1c413sm7169597b3a.69.2025.11.14.23.31.36
+        d=1e100.net; s=20230601; t=1763219710; x=1763824510;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NABF3TsnCCexfj65arckaNkOPfPx2E47DSFG3TtkK9Y=;
+        b=JGtxp4cRSTIk791EW6NRhSARVNQC95REmDzGgtbzS5f8kk3kOcqH2NChwxfHc8eTkE
+         HWTbNClynTBMxa529JR8a+jXBF4ynQoBg8yl4JmBBc5UGrfnFLebj2VjzJqvCPrGzkd5
+         LMgK7QfbBGybWRxqHFC2OBvznheZ7F1dXEd24ZUGamIGkW+4gqT6fVLuQqWf5/ZGFv2g
+         asfToCZhKdxa7+3cH76qDZiHoailIzjdwanPhCMyWmqM3GdgdG+pSMe17DOy1DA5Ax22
+         QJvCnOIN8ogtFspZekWtwP9XGSx4HGPsCzd3Ua2ZPyBQYHC0AR7yfOynIOqQuGh1yz//
+         z04w==
+X-Gm-Message-State: AOJu0YwM+ZuCQ6ygI7ebbuj2qM2nudnZt4UszUJ7WW3/N7+dLLc4K3wO
+	H4mTYxuRjnejFQvTv3Qw1SqhJ1L6eOyw/cFP/8HwG/Opy+/B9a+oTSxX
+X-Gm-Gg: ASbGncsMl+ydgM9r26imucE0ClfZ0WKtkjSIR0q9cI3la2uxhIVEi8kSiuJg/MjN09Y
+	nIl0PnzhEXKUVMdXIqmAHHfH7D9+lzNp9+YxHeEKUVAhjMBAfAahPvUo4C/IQ4JbIB34LJMt5gh
+	opcBEqraN+m8OYh8RUAhsD1ZhCKp2l7LtWmudGqC/9yB33y9OvUaqO2qSjhPK863DP8FFbWTWtp
+	rxO98OTC605rLKrrfjM6v6TwIUFpn4Q+g7gVLwsaVz9tOvLstGoIv3TDYSGYpTxEf9QRjIwLBtO
+	D6fUZ/mI9nkQoEGDsJxlq9uufQf0GX1SFQeCs1fypd0dTmQnzVRRHQvZP9XSvaS6a63xHy3ofo0
+	w+Nn6LvJaabdP/tf/SmeBYeQERVFDPuS1VO/7wzFOLGDAMJQvulyy+4ex+SlGpCKYl7xq5A5XW1
+	j4lMIsmkJRUalSpuuS3Mxg7FXoyQITn1YTdA==
+X-Google-Smtp-Source: AGHT+IHxIDzgSZ/q4oVog+dOzIm9QtKIazWUfBvAcFoMFTbY9l+gvSLR/P1DykK3e0jgbu766g8WSg==
+X-Received: by 2002:a05:7022:7e81:b0:11b:9386:8256 with SMTP id a92af1059eb24-11b938683e9mr631277c88.43.1763219709482;
+        Sat, 15 Nov 2025 07:15:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11b060885eesm23133075c88.1.2025.11.15.07.15.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 23:31:36 -0800 (PST)
-From: Igor Reznichenko <igor@reznichenko.net>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add entry for ST TSC1641 driver
-Date: Fri, 14 Nov 2025 23:31:34 -0800
-Message-ID: <20251115073134.1345535-1-igor@reznichenko.net>
-X-Mailer: git-send-email 2.43.0
+        Sat, 15 Nov 2025 07:15:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 15 Nov 2025 07:15:07 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Igor Reznichenko <igor@reznichenko.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add entry for ST TSC1641 driver
+Message-ID: <2b2c987f-3af7-4f00-912a-5d34b40d81ef@roeck-us.net>
+References: <20251115073134.1345535-1-igor@reznichenko.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251115073134.1345535-1-igor@reznichenko.net>
 
-Add myself as maintainer for the TSC1641 driver
+On Fri, Nov 14, 2025 at 11:31:34PM -0800, Igor Reznichenko wrote:
+> Add myself as maintainer for the TSC1641 driver
+> 
+> Signed-off-by: Igor Reznichenko <igor@reznichenko.net>
 
-Signed-off-by: Igor Reznichenko <igor@reznichenko.net>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Applied.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b25e655f4bb4..dd06cd624617 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24365,6 +24365,14 @@ S:	Maintained
- F:	Documentation/hwmon/stpddc60.rst
- F:	drivers/hwmon/pmbus/stpddc60.c
- 
-+ST TSC1641 DRIVER
-+M:	Igor Reznichenko <igor@reznichenko.net>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
-+F:	Documentation/hwmon/tsc1641.rst
-+F:	drivers/hwmon/tsc1641.c
-+
- ST VD55G1 DRIVER
- M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
- M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
--- 
-2.43.0
-
+Thanks,
+Guenter
