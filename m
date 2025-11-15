@@ -1,188 +1,103 @@
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CAE212564;
-	Sat, 15 Nov 2025 06:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEB015ADB4
+	for <linux-hwmon@vger.kernel.org>; Sat, 15 Nov 2025 07:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763189503; cv=none; b=L9hodomCTB4IyTwBfyMHVyK8kTERIS/qH2M1nHXcAnEb6H/AnWKYeykza6CFPPW1V9fFheZESH45uKqISc2tc1uWzX2KsMx2OX6S73b+QULTgI8pIBDGJ/DZQTS7Hp9UFRZEY0u2GHfPV4P8hDfzZ2NE1lyTBUhQsCnWEuryx00=
+	t=1763191899; cv=none; b=sUKM1IPnM3JruRB/dt2dzXGZQf9IA0/rrhdMRgDxZrU8xwpV0IEQWkMEpXWnyZhjBECo3sostRMAFiy9gMQpGaitqzRg/1y4pYjRvWP1Y/a0LiaF3pHPSv7kzTlYfrJH5P5niBYM0UOVto3WPpJNz1IaMC46t7Lqdhz8xXMPm2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763189503; c=relaxed/simple;
-	bh=Q7JNebQ4U/2zuHXE40sWwu7o80kowIfwZICYwwVMlas=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wjot92vwk+OrjlKBjXR1Q7ikgsV28mJjkbeTsMBU8uWu+BwVNH6nWDKNbIARKwtVyIgTJMFBqVg8Vkfx1aEOpB+3txeM8Gyvx4kAkg51k3C4UfIqK8c5y/mfBpfqwcpPmguAWjuhx1aiTve7cd/p/ZnH5Gx6FHush+Sod949E0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=Yv7Tadu4; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+	s=arc-20240116; t=1763191899; c=relaxed/simple;
+	bh=YQ3U2AImAkYxHbBMcQLJLvdQgRWwcmUphCSkXRfdTX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gt7Vcw8FwItX/HMu20BEq26kLmBSJS1rHq2Dts1Hva1TNop7q0+qx7Ud7Td0obmoiv9g+hJXr5yG+VnIHdSPPd9X5qf6q2P5ReRvYtGprrhxwiQPr4JJ1HkJK0ZxILZIte/Fb4dikMf2yKDr9xEL3OWGjX7l6Hu1fifxxM8ILaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net; spf=none smtp.mailfrom=dpplabs.com; dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b=gSQ9VNoP; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=reznichenko.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dpplabs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="Yv7Tadu4"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:In-Reply-To:References:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lEtM6gPQ+ek7FwxvRJrZY/vlEduvTnNP2Ergo2QpDSU=; b=Yv7Tadu4KG43HrczqwZvxckvdZ
-	tzDzLNDXcnvZfGJG+KTnEC1f2k12kcCS2ZhFsTV40gBN7+05vvR22pQ6Z8Ueh0NIAN1QPAq/mV/pY
-	hO+auksMaDMGCccvrl5uJp5meoCN0cMOJlfsMDgaN03gTGJBINBf9+lC23BVoXjNmdx+YVISULCV+
-	DkRdMhuaXVsPC9Zn2vrNMwmG3d7JVYs0SNqoNXA2ApbzFkkLnWHfV4kiayRuI4vqMNHkdjD6Ot9+l
-	nCE6cXZHB4U9ifpX4xEXcPor3xmg68nDAXzXnsUYalLONPhPbA2fXxi7U4kEQuXC2worEZp+xmo4+
-	e47XlWag==;
-From: Andreas Kemnade <andreas@kemnade.info>
-Date: Sat, 15 Nov 2025 07:50:50 +0100
-Subject: [PATCH v3 2/3] dt-bindings: regulator: Add Fitipower FP9931/JD9930
+	dkim=pass (2048-bit key) header.d=reznichenko.net header.i=@reznichenko.net header.b="gSQ9VNoP"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7aae5f2633dso3121921b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 14 Nov 2025 23:31:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=reznichenko.net; s=google; t=1763191897; x=1763796697; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwsKfG1u9xzoIIYU5TWHADxjaVWDZ/+j3qMJBFXHuFg=;
+        b=gSQ9VNoPQecHAf1ncQD1j8klf9deOIjkV0eNDSItI11YVEP0iU2WpulHwuLT1RN5JC
+         zlbNI1pMvIlqTWpHYniADRSWUtJ4AC9vkbXpHf5/UIrVpzxkZGdjfotOJCNg/GL8CRlp
+         bUvTRz5kiLd65Vw0tNo6TuN3tsHL1KVe2Cd3TzVngyrGCTbeUMri4ckpJUj/kGxdJBBV
+         Kzc9KR8tfoDoFeBQR23bcNXs0qQ/tLY3+p1jZnDnCVaDmiED9bGgMDaSKQ4lFMYGYZpR
+         YfFEX8v3F+KKxWpQlhEGJZ+9ykmE/EgBunSUSnqznovWcOOuT901zZQ6nRP7xqxc0LiT
+         dkdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763191897; x=1763796697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UwsKfG1u9xzoIIYU5TWHADxjaVWDZ/+j3qMJBFXHuFg=;
+        b=rNf8erPAg/K/Lz8ack+tnhJ/kDpiwkVkRmPyo1J36uI/Fe0R/bW4L/nWz+N+0nwvYY
+         IgIA9MVi5IwyBe+BbV/D7nLmw+tM94rmNgQ8gjxkDKUUIgzwSTTwn3ztP0ySOGMnB02b
+         I/Ctyl7hHT3xImYO2G1Knie8AscAjyamwzYNMXsooXFv9JBYl4BJJh2XOEYuZ78cxdDX
+         iagZyljTt1NnWil9cGCwwo0dTgxN4Uq8icevnzo8d4DxLeFoWWZd1Eftlp5s0PX8E5+y
+         WlLayChZOcalSNtaqVy2/XsTXanUK5E6k3560UK7QVKe3wHisqc175HhX0OcRgLrLCET
+         /4RQ==
+X-Gm-Message-State: AOJu0YxiHhHdx/RXUs8+tN4CF1j5glv61d4qyiEnPtrosfQyOWed2adP
+	yC27K5f7E3NJ1DOtNi0DAJtyqnQ1JpaGKfaDRkrsxc6imNqwCcRS58bTVI32JvRelew=
+X-Gm-Gg: ASbGncsmL3AhsgjzCiWnfMg4/mujkTNN3XFukJDpRHIUZ1/cyOgqol1xYRGzUdSM2XX
+	gwgcQjuI7h1k0qdL3gq/xJkmCKJshiyBPwWm45aiCdfupSrXUDkINri9lyzt226mPXSL7HoQOdh
+	6VoTxBEMR5JvVaqMHMGv2pslynuN1OM6GdsydpzwH03I/WdRbpCss1CSAbLZyG6sLYleM1Rw1BX
+	uNmS6cQAEiEcJ1srd1MeRILzI85fAlowgmE/Ml8Rij9Xb4ue1mjTDb773O1EaDmR7hzvlMZGoXo
+	HXuUPU8aXwXFfNLMHfQufsF8rjYhqaW705J7xIfJ+eyRFygADvsE6/DehuMcVluM+H+mqaPXSri
+	dqM5/h1JSMko5fHCA6MKOdHfIh1F2SwfOu1A8Da/mxiuoAkdhDTkLjkDqvOKpA02cxa5alfUvEO
+	KkA/yDOKBWowG8i4wlLA==
+X-Google-Smtp-Source: AGHT+IHcHb+IGY0TaDgDiTwSLWuhujKAoMG4s1G/gZPLqj39x37ZFlNp0RH2Ktd3ZYtolzcQmhzA1w==
+X-Received: by 2002:a05:6a20:7484:b0:34f:7454:b977 with SMTP id adf61e73a8af0-35ba1d9c6dbmr7586360637.48.1763191897162;
+        Fri, 14 Nov 2025 23:31:37 -0800 (PST)
+Received: from z440.. ([2601:1c0:4502:2d00:e163:4dbb:2ca5:159c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927d1c413sm7169597b3a.69.2025.11.14.23.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Nov 2025 23:31:36 -0800 (PST)
+From: Igor Reznichenko <igor@reznichenko.net>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add entry for ST TSC1641 driver
+Date: Fri, 14 Nov 2025 23:31:34 -0800
+Message-ID: <20251115073134.1345535-1-igor@reznichenko.net>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251115-fp9931-submit-v3-2-92f5d0772b68@kemnade.info>
-References: <20251115-fp9931-submit-v3-0-92f5d0772b68@kemnade.info>
-In-Reply-To: <20251115-fp9931-submit-v3-0-92f5d0772b68@kemnade.info>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hwmon@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.15-dev-a6db3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3716; i=andreas@kemnade.info;
- h=from:subject:message-id; bh=Q7JNebQ4U/2zuHXE40sWwu7o80kowIfwZICYwwVMlas=;
- b=owGbwMvMwCUm/rzkS6lq2x3G02pJDJkSSo9t1PgzxXdHa3/0ehujwXDqiPekncq1m5qjDB8p/
- pL4FqfQUcrCIMbFICumyPLLWsHtk8qz3OCpEfYwc1iZQIYwcHEKwERYahgZ9vA2aGUsfppd/qju
- omXhatuJUQGTH+7fUZHzo9nBgkfqKcNvljU1m5q235Kr/Gi04NDbo8wvlWNq167aFfaFbbJEZ08
- EHwA=
-X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
- fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
+Content-Transfer-Encoding: 8bit
 
-Document the FP9931/JD9930. As the FP9931 is a clear subset of the JD9930,
-define it as a fallback compatible. GPIO names are same as in the datasheet
-except for the EN pad which is described as "enable".
+Add myself as maintainer for the TSC1641 driver
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Signed-off-by: Igor Reznichenko <igor@reznichenko.net>
 ---
- .../bindings/regulator/fitipower,fp9931.yaml       | 110 +++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml b/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml
-new file mode 100644
-index 000000000000..c6585e3bacbe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/fitipower,fp9931.yaml
-@@ -0,0 +1,110 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/fitipower,fp9931.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b25e655f4bb4..dd06cd624617 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24365,6 +24365,14 @@ S:	Maintained
+ F:	Documentation/hwmon/stpddc60.rst
+ F:	drivers/hwmon/pmbus/stpddc60.c
+ 
++ST TSC1641 DRIVER
++M:	Igor Reznichenko <igor@reznichenko.net>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/hwmon/st,tsc1641.yaml
++F:	Documentation/hwmon/tsc1641.rst
++F:	drivers/hwmon/tsc1641.c
 +
-+title: FitiPower FP9931/JD9930 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Andreas Kemnade <andreas@kemnade.info>
-+
-+description:
-+  FP9931 is a Power Management IC to provide Power for EPDs with one 3.3V
-+  switch, 2 symmetric LDOs behind 2 DC/DC converters, and one unsymmetric
-+  regulator for a compensation voltage.
-+  JD9930 has in addition some kind of night mode.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: fitipower,fp9931
-+
-+      - items:
-+          - const: fitipower,jd9930
-+          - const: fitipower,fp9931
-+
-+  reg:
-+    maxItems: 1
-+
-+  enable-gpios:
-+    maxItems: 1
-+
-+  pg-gpios:
-+    maxItems: 1
-+
-+  en-ts-gpios:
-+    maxItems: 1
-+
-+  xon-gpios:
-+    maxItems: 1
-+
-+  vin-supply:
-+    description:
-+      Supply for the whole chip. Some vendor kernels and devicetrees
-+      declare this as a non-existing GPIO named "pwrall".
-+
-+  fitipower,tdly-ms:
-+    description:
-+      Power up soft start delay settings tDLY1-4 bitfields in the
-+      POWERON_DELAY register
-+    items:
-+      - enum: [0, 1, 2, 4]
-+      - enum: [0, 1, 2, 4]
-+      - enum: [0, 1, 2, 4]
-+      - enum: [0, 1, 2, 4]
-+
-+  regulators:
-+    type: object
-+    additionalProperties: false
-+    patternProperties:
-+      "^(vcom|vposneg|v3p3)$":
-+        unevaluatedProperties: false
-+        type: object
-+        $ref: /schemas/regulator/regulator.yaml
-+
-+required:
-+  - compatible
-+  - reg
-+  - pg-gpios
-+  - enable-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@18 {
-+            compatible = "fitipower,fp9931";
-+            reg = <0x18>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pinctrl_fp9931_gpio>;
-+            vin-supply = <&epd_pmic_supply>;
-+            pg-gpios = <&gpio2 7 GPIO_ACTIVE_HIGH>;
-+            en-ts-gpios = <&gpio2 9 GPIO_ACTIVE_HIGH>;
-+            enable-gpios = <&gpio2 8 GPIO_ACTIVE_HIGH>;
-+            fitipower,tdly-ms = <2 2 4 4>;
-+
-+            regulators {
-+                vcom {
-+                    regulator-name = "vcom";
-+                    regulator-min-microvolt = <2352840>;
-+                    regulator-max-microvolt = <2352840>;
-+                };
-+
-+                vposneg {
-+                    regulator-name = "vposneg";
-+                    regulator-min-microvolt = <15060000>;
-+                    regulator-max-microvolt = <15060000>;
-+                };
-+
-+                v3p3 {
-+                    regulator-name = "v3p3";
-+                };
-+            };
-+        };
-+    };
-
+ ST VD55G1 DRIVER
+ M:	Benjamin Mugnier <benjamin.mugnier@foss.st.com>
+ M:	Sylvain Petinot <sylvain.petinot@foss.st.com>
 -- 
-2.47.3
+2.43.0
 
