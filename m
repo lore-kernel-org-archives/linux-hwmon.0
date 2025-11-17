@@ -1,82 +1,122 @@
-Received: from exactco.de (exactco.de [176.9.10.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F9D25CC74
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 18:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.10.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06D207A3A
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 19:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763405442; cv=none; b=OSqoeeb5yQgn+1/QJpajEohSkXT2H3Smz5VRHEVu8TYkHqnLVAN/I/azfjzLfnbDYdd7Zwq8nMGJpaEeGMr/TLJgMkl+77Pb/V63AoROoh3I6P2EFdQ058e/ciV5lGGyIwgFU9BiwBoWlTQMWQtX1Gy+BXL63b0wLuMDo9+1aCw=
+	t=1763406054; cv=none; b=aDzyxz5dY8i/258MSxv1bEkEzy0+7YxjqT4Bon1py9ntzDEKyVPO2N6xY0J4LBxzVW0fH7J3Ot+Vwk4p3zwMwwdIA7wggSpvQRRInn3vOSXfWkLJd9tie2HwiX2JcWkrgltADT++fsErjNtlRhPa1myOMcj3lP1eo9FxpN92E5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763405442; c=relaxed/simple;
-	bh=06vof6vHg72BSNVnRJ1E8iaG0YCBtoatgT6/Df8mc3s=;
-	h=Date:Message-Id:To:Cc:Subject:From:Mime-Version:Content-Type; b=ixYY7ltKFBQnDfg5n4UK4/RW7RPqzERTRlk1ouGjuhNLlO4moluwTKsm7TmbK5UguaqiXTvwiw9iYFOa74aGLPkKHY+VH7lD8lDpMdTRuuWNFexu/MCGjUseQYaS2L9Vxxu77oXV42njKolPaA0VNBWOzRXq7ZX0RGrC+NWWVfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exactco.de; spf=pass smtp.mailfrom=exactco.de; dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b=OS1xbvc/; arc=none smtp.client-ip=176.9.10.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exactco.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exactco.de
+	s=arc-20240116; t=1763406054; c=relaxed/simple;
+	bh=9LwQ8cgiBx+GR9gi4Ze2NRYHzMsmpVYF+u+bBwx5cCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TFBSjh8mEy+YV7055T8gGxBuXku7D4cIBHZR1UHMpIRv2du3ZHSGxNg3AtiKIZacUVK2zmN/5jwzjKMaWMqtTydd1ZeK7i8CQKAmebCc5B8+P6MlAn+gbXJyMyv+0i77gx7odKT3GASFNfrTF47TdYEwbsnvtcSQ8KOlHNPILmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bb7vhjgo; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b="OS1xbvc/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de;
-	s=x; h=Content-Transfer-Encoding:Content-Type:Mime-Version:From:Subject:Cc:To
-	:Message-Id:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-	List-Owner:List-Archive; bh=qAt6AO/oZyqHQ1aXJaySQBan6c/hfB99OizkfxTzhCU=; b=O
-	S1xbvc/BafsjI7BN7rJw5U0kiGdt46cDo+qzqbrB/FKoeTlEdfiYsPLTZB6wYVQZco/mxY+b2idRD
-	VpER0fyk0EMRnbOivYn5XX5/hJ8HHhLJD27hfpyoJDt8NCKipNhORTONXvZqNnqcwC/uDBtRu2uJn
-	7RJYaFywCjthwY5O1GU7dMafqxztRyel1RTWwD3vIdy5GkVSulFuZsDCrde/B8MOz+Jps21ktpuj9
-	2Vu94S1rEXv8p1U2aDeIPY13aA51ecY1CGYqORonybdYvqqxmA+NNUXhqo51JKiDNck3sdSSewy5A
-	zwuGvtUUrgg0EJ2SDij8wByXiULcWCFXA==;
-Date: Mon, 17 Nov 2025 19:50:48 +0100 (CET)
-Message-Id: <20251117.195048.691713748773231900.rene@exactco.de>
-To: linux-hwmon@vger.kernel.org
-Cc: Clemens Ladisch <clemens@ladisch.de>, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH V2] hwmon: (k10temp) Add AMD Steam Deck APU ID
-From: =?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactco.de>
-X-Mailer: Mew version 6.10 on Emacs 30.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bb7vhjgo"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-29808a9a96aso48216295ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 11:00:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763406052; x=1764010852; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H0lS2cED24LXASEO8Kaw1E9xKUmdy8WEPj1E8PP+Wtk=;
+        b=Bb7vhjgo8i3MdNxVG4EuzsP0kY56sHhKC0hWXy3SNDE+0Ky7g2//Vfq9gp+Z3YGBG2
+         kEV2VMszuPQ4nQazsSKgdPOTiRGD1zm95jdORpTJBag6XwmEn5c2/HvrxvuQ0/2Y921F
+         UvQBWH0YZMZjhyeFp2YU/N52BH0iW//+scsr+miVtegB+9hZP+42GsqTErMJdr37zFTf
+         YF7gzWQjdjmNsm/SlxP/4ZKN6wnkOMpf8uEmxEjzhHoPjE0GreCvD45hd39nEQskXra/
+         bg/GnRKMnZp3vn2z/u0j8s3BNDcw8sZ4BbHamAFyvnzIlSksGSxQ/4P1O7k3ELztEwXd
+         9h3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763406052; x=1764010852;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=H0lS2cED24LXASEO8Kaw1E9xKUmdy8WEPj1E8PP+Wtk=;
+        b=XpGKfR+VnjYglsRzonYkLIPmRVetPApHn386A35ilN0/4EEMVB95DQcbLc+F7HEMny
+         k4QgoC0YWa8jRRFdHahkyo1Kza/hLCFuZKbk9+EzMsNFmJfQlAvDwQv3Zerr0bczLiU+
+         uGUV/ZUVatqVRRZztgbeTKmdYmmds904PhuhGIt0KWy0YIxkcn+uFZXoNmhqEiqsuoNs
+         +IFd+wesNeRdajzMWF6v33Trtg9SS0u6vuRgWdhODwqvzxkvLDIRzPoPhF9U/Sq96Plu
+         ykVHZxdcCndDv0jN1xMHS/nn9VzYJ4MdwDnEJgWj3KfpPGkfFF+hZzQwBN5bOX2eSNH0
+         nXiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU56CFpE+LONes9+0TUsZh2n+Mg5LjgGzy4PhQTgKefoJgRIpkK1VGErcTcjdPiHOe0DCw7Ot2+fQj0zA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ/xsw2iq9nr+aOddNnLh43p4Zlv4eo5BJdOvyaiXPElp6Mjyx
+	X3J4vJmj387Jkmkp9tdMndRfzvf8MHdji++wSxZYUOCAOlNLnpF3AWjd
+X-Gm-Gg: ASbGnctctWp3V5yZsrOu1j8RGyJP1x17ThZrESXnolWCx3M1IcCUiwRriioGKNwh3Fb
+	/63n4ZjbIvJ5QJsyHV0ZbhDDzpnU8cOOsHSnZnM+14dBEE5m5oxCF0SRHYqo7eGffpgLpcbG7c+
+	XK0SnAakkoF7sPZHl0Tcx3sshwDr91bnwFLUeW94F4Wc6onReiAigWNaSVNKl+cwFCgvg9EZfHP
+	Btv9ybYlNaMSWZAYD/Xvx3aGMjjLfRyDRZzb8sl1nkXwWIayoVa0vCSmcwbHACjv23WwrAlvoSS
+	B+ag7D/oCCgPwc0EInsRH4TsBHOE02crIjuINAY0MX4IQYImg/GW4y2dn4QpoWXdh7z+OD0Com5
+	fvX/hIqV2fnXCwkhK4SsKaHePJd77ooGNg5biQzAnaUy/pQ+5n8lKG4RBJFtttQJ0SXSeqizg7Q
+	D7wJaV2CVsbwjWLvjs0nddMop7RKLt3aCFbkoz8WJBpEYI
+X-Google-Smtp-Source: AGHT+IGDVNZOalPoeGLRx0StV1WyF6OuSXplI/tFFH2YjaxRb6M+ZouwxCgXlyJ+r8uHMpC01NlQdg==
+X-Received: by 2002:a17:903:198d:b0:298:2af7:8d26 with SMTP id d9443c01a7336-2986a76a26dmr169206325ad.54.1763406050080;
+        Mon, 17 Nov 2025 11:00:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2376f6sm146281525ad.21.2025.11.17.11.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Nov 2025 11:00:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 17 Nov 2025 11:00:48 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: James Calligeros <jcalligeros99@gmail.com>
+Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 06/11] hwmon: Add Apple Silicon SMC hwmon driver
+Message-ID: <7a445358-ce9e-4180-99dd-1a771c8ffa98@roeck-us.net>
+References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
+ <20251112-macsmc-subdevs-v5-6-728e4b91fe81@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251112-macsmc-subdevs-v5-6-728e4b91fe81@gmail.com>
 
-Add AMD Custom APU 0405 PCI ID as used in the Valve Steam Deck to
-k10temp.
+On Wed, Nov 12, 2025 at 09:16:52PM +1000, James Calligeros wrote:
+> The System Management Controller on Apple Silicon devices is responsible
+> for integrating and exposing the data reported by the vast array of
+> hardware monitoring sensors present on these devices. It is also
+> responsible for fan control, and allows users to manually set fan
+> speeds if they so desire. Add a hwmon driver to expose current,
+> power, temperature, and voltage monitoring sensors, as well as
+> fan speed monitoring and control via the SMC on Apple Silicon devices.
+> 
+> The SMC firmware has no consistency between devices, even when they
+> share an SoC. The FourCC keys used to access sensors are almost
+> random. An M1 Mac mini will have different FourCCs for its CPU core
+> temperature sensors to an M1 MacBook Pro, for example. For this
+> reason, the valid sensors for a given device are specified in a
+> child of the SMC Devicetree node. The driver uses this information
+> to determine which sensors to make available at runtime.
+> 
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Co-developed-by: Janne Grunau <j@jannau.net>
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 
-Signed-off-by: René Rebe <rene@exactco.de>
+Applied to hwmon-next.
 
----
-v2: define SOC PCI id locally
+Note that I can not apply the devicetree patch (2/11), presumably since it depends
+on the first patch of the series.
 
-Tested for nearly three years on my first gen Steam Deck.
-
-index b98d5ec72c4f..7062d12ff6b6 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -84,6 +84,12 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
-  */
- #define AMD_I3255_STR				"3255"
-
-+/*
-+ * PCI Device IDs for AMD's Family 17h-based SOCs.
-+ * Defining locally as IDs are not shared.
-+ */
-+#define PCI_DEVICE_ID_AMD_17H_M90H_DF_F3	0x1663
-+
- /*
-  * PCI Device IDs for AMD's Family 1Ah-based SOCs.
-  * Defining locally as IDs are not shared.
-@@ -553,6 +559,7 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M40H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M90H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
-
--- 
-  René Rebe, ExactCODE GmbH, Berlin, Germany
-  https://exactco.de | https://t2linux.com | https://rene.rebe.de
+Guenter
