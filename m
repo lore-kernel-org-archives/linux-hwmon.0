@@ -1,28 +1,28 @@
 Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021121.outbound.protection.outlook.com [40.107.130.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C95330B0F;
-	Mon, 17 Nov 2025 12:40:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07833334699;
+	Mon, 17 Nov 2025 12:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.121
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763383221; cv=fail; b=PyX2bCbMalGmcRPOLdRZmPA2J/aV7c6j7WGJcb9X/I+62tRos8W5b9XsWsI5ytL97o88K0uYoOsN/o3dsUjX76mxXsyfUB5OqN2qlE5yRLc9G8ndKK+KUvd33cIN1g/x5uOIeU1aKLW6X4pC4qnmwF1PkUz41i1CYXbsP6qVioM=
+	t=1763383224; cv=fail; b=WQMpZFfHufcCo8mxIqkCmYXTKmSLna2Mrmx8lqNE7j5XqVcX19nnsj0HsDFeeQf2isMawBuwfrrIcIBHIweLj/dxX8c+Xgkavp8RTAKT+OAlbwk0SWgsOGOuqx5amTH0h+v0lHAnsn72akJoNoaOghpi5tbiUemTcj/BjDEGXjU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763383221; c=relaxed/simple;
-	bh=5CSt9JJwN7P/IDGFH68tQgHiJvVnXDMl/RqzRgrXl6c=;
+	s=arc-20240116; t=1763383224; c=relaxed/simple;
+	bh=dNHqwgR1mxDkmdtLqyhpWugXwUBH1ZkNKPCUK669Gdw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YJrt7BCHDMjdbIYAS6BOd7vHVAXm74avhwmL0wth3OSwX5KwEzEPFB5EPlTZRWgdaHUfAZ8z3lOz3+Z6Nl5AXCj2baYopyu4KLVq/5Mrox/HMNUv77icn9FhLdxfmtN5ADic1NINcdUYALKY+x38RpGQfmcD/wS8dRuvrxM1H+M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=becom-group.com; spf=pass smtp.mailfrom=becom-group.com; dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b=pDpzEW85; arc=fail smtp.client-ip=40.107.130.121
+	 Content-Type:MIME-Version; b=gEjppLfPRAX06Y9M79k9JeFKkjuStp6HhyFHTeS9kpT1zMsb1TswfquX6XU7h8xnmRpxAM7CVdMBZYH4rimEttJRl3+YmB1eZH/yV0/XmLX3mn7Z2Jzdjr/j8xqj53U6f+0bfdrxOwbwSuRezv/FhklUuFt7IxuZGaF0tlfr2Uk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=becom-group.com; spf=pass smtp.mailfrom=becom-group.com; dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b=Xdt7Tgg2; arc=fail smtp.client-ip=40.107.130.121
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=becom-group.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=becom-group.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b="pDpzEW85"
+	dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b="Xdt7Tgg2"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LyCn+ob/olcr1gD3DApk6AKvMKsk+FWVLZgadf8JZOuW3hKznOLUGMgA9zcnZWfwhOC/i0l36GgrqbwA1Cytt/s9eSz/wianMvNx/m3i4PLEWFx6YFaPZyWhPnHNlSDkwTA3IrKOg6lyALxqMHTBiT0mvnjafHRQ0nnDAFnx91noviK94YvgwkG1wsdlLoMuXmbz1XQuz/tTdh8o2kxF3Fcz44iGfESdqdMmbrg1ux3tSND240bSVDtTEQYhrubiGNK70/hMHmwHRtBDa3BXfDgnamW5STeeV1NblgeeYOb93x10BDYlLERd8SeVEROlned6OWVovmR4K7/O3PJrEA==
+ b=a5BhOvYvdH081UFfOA7Uw2PMGxjBvorLbU5wKioBoV42AcLgnPFSMZieXar4Lj4yei84GYmR2Y92DzLXlYWFasZyVchRISO+jTuWgDhxuUOzFsV64wsIwyq6ioDDaUYbcQ1sZeDVMDmkYaxSqX35D6QaMR2D/NgnWv0UVJbThr/Z31ZkfTu8fNkJhM4we/rBp89C3b/dV+gTRaoYTzIj8OKgZlXufpAw64cc9ryJ1P1IgiYVzlSBEGyebn0ajAZhQHN649IhU9B9N8QWYCcIJDoDZHd2+eQyaoRwDCQ2XfJiSbcZia0uGjAuSD7nqEyjujPwfzbIEjEB1ot4xKETTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fpvRdtLoTrlUHbqzR6XudHUWHbHhLaQsg5Bb7+PbCAw=;
- b=zPg6vXSVAF38oJWHEY1N7CJDbsstXNurOUycs5geT8rWf6tZrJN2kJYPdzxzDQzQiUiLYuN/JrQGma73n4NxBqnwlYtOxmLKYAv6Idl5nxmffqK7tCQa0bCsmuBXoAMwz4b+nDp9ovRPIaapA754o183QJM3UsizxzsLjUWKnmeXuELvGAEGaikdGctnZmhWX3+hClkIjLaWljX4adVNmxx7qfdBdYI8doRzX5yrbf0i2W7eTxH/sbtSQoNb1CjhWPEVKB57unYtbm/kWtSkcuw9tNNPY5cTigT1wFogj8un2iTciBiSSika7pLCQnaiCeZB8Oo1F3fVWQK4FkFyzQ==
+ bh=1Gq50RglMBRqovAny1f7QLh6DEs5L5CXT4Nu/lBdQhw=;
+ b=jVmKmkLSvBiz5AdT8GfZym5VXTAapX7DnDYwDKw6YM84kxUrbKo+T4qGSR0qoIxWU+l0MNhXVg7afMBVCC4EcGIKIWhRFjsL+3qWllSUb/l1EdftWdvH6E9SjO8Quag0s3aCDBgLe3SF6AtWQJwXHco9c84rKcEdWZ3jPrO0SUygcZV1P+AKFCcePokNmkkYQFRMVjognkY0yvbyEEh5AD3AuqjPuWsGt4T4N0677ZFdmfA8C2QfeCID5YL2pchOG+3S8vm+MoFI68eURUv0jsREb/TzwdRbXVBjBELrCSETi0x+9J+jEdbIi3uENdvMJTEqq58sM1PwUQ5V9RnkwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=becom-group.com; dmarc=pass action=none
  header.from=becom-group.com; dkim=pass header.d=becom-group.com; arc=none
@@ -30,19 +30,19 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=BECOMElectronics.onmicrosoft.com;
  s=selector2-BECOMElectronics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fpvRdtLoTrlUHbqzR6XudHUWHbHhLaQsg5Bb7+PbCAw=;
- b=pDpzEW85ODI77nF+2AC/nmi7PDxa0BFNBs/l5/Ax6R1Ter2EFdKo3SBshf4w6SvP1zJGLVZniQbON9DRlp/rp/rRO6+l+KD9ccKUpZI4JB9g4z26IOgCkgUxNkI/f9BOvjjd9TzPj5Dl6kXkr4jVc13spN0lUGtzqqN4/CAK2L4=
+ bh=1Gq50RglMBRqovAny1f7QLh6DEs5L5CXT4Nu/lBdQhw=;
+ b=Xdt7Tgg2ZUzaltJugY472yYG17CzHYioc85ilnwsRBLWjOLuoOEuMmkn1dsy6b8tVowTY2uc6uEkvAFXzbqViEMXYCj9xFLtJsI19f+3OhpUvqgfolcpNFEEIkbBhZK6/A+UiH/ZUtKXX/pP6Y1evrlU3uFYU8OAEP+nyjJpNsk=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=becom-group.com;
 Received: from PAXPR01MB8613.eurprd01.prod.exchangelabs.com
  (2603:10a6:102:232::12) by DBAPR01MB6664.eurprd01.prod.exchangelabs.com
  (2603:10a6:10:185::8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Mon, 17 Nov
- 2025 12:40:12 +0000
+ 2025 12:40:13 +0000
 Received: from PAXPR01MB8613.eurprd01.prod.exchangelabs.com
  ([fe80::5ca2:88f2:e3ee:8eab]) by PAXPR01MB8613.eurprd01.prod.exchangelabs.com
  ([fe80::5ca2:88f2:e3ee:8eab%5]) with mapi id 15.20.9320.021; Mon, 17 Nov 2025
- 12:40:12 +0000
+ 12:40:13 +0000
 From: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
 To: linux-hwmon@vger.kernel.org
 Cc: robh@kernel.org,
@@ -71,14 +71,14 @@ Cc: robh@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-Subject: [PATCH 1/4] hwmon: Add driver for wsen tids-2521020222501
-Date: Mon, 17 Nov 2025 13:38:03 +0100
-Message-ID: <20251117123809.47488-2-Thomas.Marangoni@becom-group.com>
+Subject: [PATCH 2/4] hwmon: documentation: add tids
+Date: Mon, 17 Nov 2025 13:38:04 +0100
+Message-ID: <20251117123809.47488-3-Thomas.Marangoni@becom-group.com>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251117123809.47488-1-Thomas.Marangoni@becom-group.com>
 References: <20251117123809.47488-1-Thomas.Marangoni@becom-group.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: VI1PR07CA0217.eurprd07.prod.outlook.com
  (2603:10a6:802:58::20) To PAXPR01MB8613.eurprd01.prod.exchangelabs.com
  (2603:10a6:102:232::12)
@@ -90,723 +90,153 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXPR01MB8613:EE_|DBAPR01MB6664:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7594b606-264a-43dc-9fa8-08de25d67347
+X-MS-Office365-Filtering-Correlation-Id: bbccc3c2-b40c-42a2-59d8-08de25d673e0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aFV1NWUzWUl5cVE1K2JLeXdwRlp6ZVN1R2Q5WU52K25wdDlXUy9GamVKRHdj?=
- =?utf-8?B?MVVaQkgvcFdQanhpa0d2QnB1djg3c3NjTk90M0s5SlRsdVczOXVRYnRuWndh?=
- =?utf-8?B?Q3FKWlFEdEtORUdqUjk1RENjMGhVSUhBVXppaUxkU25Da1ZybnAzYjVhY1Z4?=
- =?utf-8?B?aktLUlV4VmRWT0ZvZUZCMTlGa3F4QnhkZSt2R0tNcUpxc2t1WmpZTlhXQUND?=
- =?utf-8?B?YUhaOGZnRHhtZGVtUWRIY05rcXFVRzEwaTJ2a2oxdWdJTUo4QkpON1pQMkYy?=
- =?utf-8?B?dUVMWnkxRzV0STNmTHJ3UHdjNWV4L1ZVUXV4TW9YSzBtVzZuUWNwZzdQalZw?=
- =?utf-8?B?MUdRN2dPQ2xGWi91UWFGL3dTcGc0bi9XRUpBOUlCUXBYczV1TnBNSDZpRFM1?=
- =?utf-8?B?Vm9OdjFsdU92dXAya29tT1ZFcDMwUjk4SFFxVzltNTN3dEpVenM0RFJsc3Fa?=
- =?utf-8?B?ZzVUSnhKVXF1c2dUWTRtaUVyeG5tb09PVXpsTTlDMkFHRWxjT0NQRXFTa3pO?=
- =?utf-8?B?MitLTWRSRXIzYnRrOUJnNTBzVHJuWkdUUmpYT3pGcXIrWUZGWnRsOHlUTDJ6?=
- =?utf-8?B?SWRXRzQwSGVRM2J6V2lNSit5WEp4bHVOUzgvWmFabTMwbkhleGlmdi9VaWJy?=
- =?utf-8?B?NGJLeFlqN2o0Mk1uYmlzVDlwVHYvbHl3ckpCcVZYSkIvNDBYdDZoTjl3c2dR?=
- =?utf-8?B?dVlMbGNxSWlqUHlsOWRBQ0ZaMGtyOVdmekpVUGlMNFdaTzF4QUxIRTlXeHRy?=
- =?utf-8?B?L1RZWnBPcWh2ZjhhVWRQZzBLL2V1bk55WG1iV3RmZUMvbitHai9NbTZJck9w?=
- =?utf-8?B?aHpzSHBiVnZBNWdMd1hiN3kvNlBxazYxM1VzcGNBd1lrc3JPZ2FNWFEwRHFz?=
- =?utf-8?B?V09Vb3RySW81Z3lYcU81NkNRMTFCM1JHbmlkQkdvajl5SmplY2hBSVBLdW9D?=
- =?utf-8?B?SzllL3hJR0JqcU9FZ2ZlNktDOFcwMWp0TUZybVNSUmdHL3dKSFdISVRhMCtZ?=
- =?utf-8?B?bGRaMmY4Q2wxbithNWZpVlpPWkEvMkN6SU1UUW9aK29aTGhIcGk3UE9TU1Ba?=
- =?utf-8?B?SWZRanBNOW5DbGZ4Y2pGdHZtZDE3SEtxUXVLRk9ZWnM5Y2phR1FLZW8yc0RJ?=
- =?utf-8?B?VFB4R3UyOGRnM3VENVkwemkrTU82WFFUdXFiT3hzREFGRllCNmFhSnVCYXlP?=
- =?utf-8?B?SXN6UVk3ZWNxWEZGeHNUeExmSlgwRmJoNFlkV0FvRWRaWUk2ZVdINHYzN1pR?=
- =?utf-8?B?U3Y3bS9LSm5iQUhzSnRjNTZ1OUwyK0FiUmRCT005azRjaXJ6U3ZHeU1lbDlE?=
- =?utf-8?B?QjRTZWVBZ2hzM3VaZ0QweURCUkFWL29JRXZVWGxCUVlwbWRIeG9sSm5EUVNs?=
- =?utf-8?B?YXhnTVZ3OE44Y3kyWXFXM3BjblZBTk1Ea095Vzh0U0VqQllFT1hRaFh5QTdE?=
- =?utf-8?B?ZDlsdE9XcXRMK1VnWWVpSTBFQXA4RVZjQlpYZE9ITFc2YVZwTUV0R1ZUaGc2?=
- =?utf-8?B?YTB2MGNlUXlYSWNwTXFWL2NSQWRaTmRKY2lBc25ZdU03K2RaS1dscnFDOTRi?=
- =?utf-8?B?cytuUCt5R0E5OWZucXlHc2I4cFlidW1yL2FOdytNbFVvYWFUZ3BHUVdYQk9X?=
- =?utf-8?B?a3dvTVNRN2pHeGVlVkFsNTZUZ3JvZ0lqb0p5aFRKdW01UENiOHRRd2Z6YWlp?=
- =?utf-8?B?RVdFQVVQY0JHUWZqNUFLemNGdks0UmdBNlFHR0VXcU1rNThUVDg2RERBRHRm?=
- =?utf-8?B?b3BVV0ZJTDdLZFBZbXIyejNlR0NJdWI2MndGcVFrVWk2MUZ0TGU1OHR3c3c4?=
- =?utf-8?B?M2NobmdvMWVXZ3pYUko4UmlGejNoWGQ3Sk9nTnAzUHlsYm9PNFUzdncvZm16?=
- =?utf-8?B?U21PYkQwWkZCVFI5S3FrbzRabHVnekpkWUE2bHc4OEpDWW9tT2tTK3p1YUpR?=
- =?utf-8?Q?CqvsQPAgGXQdb7RC3Dui+HLeEEXT0Ub8?=
+	=?us-ascii?Q?0bEC82Ua7/uY8iwJmJ/AGUboyXb9Vtvr7yw/Z4idJPmDyMSBdZIjAy2uIF0a?=
+ =?us-ascii?Q?5+8xC6D1ZC922Klkjsg38Xnn2uVyIJ8lgvh52AMRP6ALjcyw/6h8+rERxekB?=
+ =?us-ascii?Q?3rEBkpMZrn3gxquyNOImpWtFSjHQ+wunmHJ8jSp0r+jp0hH0aasXR/I9NwcV?=
+ =?us-ascii?Q?ktkQ7BgPU5eEpFER84PqRrTB8DnyRcK0CHegzLaeTQrX+5cVVMnCUOwfyewp?=
+ =?us-ascii?Q?MfKBtyLmVzJ6CV/lm8rDllGjhfSm19sqPwKMisnmwJzhGqFmh2imujuaoSec?=
+ =?us-ascii?Q?cNxJbzKHnJCYA6bgtEY53bE6WbJx4+YObLt2PH19u1Py25AApiI07k6QMOSd?=
+ =?us-ascii?Q?8p0cz2VuJcPA7lMqz5ZEfFeStLK6lDOlVtnVEWJ/ZN++CGZKmAbx49tm42um?=
+ =?us-ascii?Q?L1T1Fi+uBGqLu5EMBjicMzkyB/PRjPQ4p7QY4BfUKqJPQR3mwWmGYQ5oPdRp?=
+ =?us-ascii?Q?G/V6FlKJ3hrRHpRUojvpdjfNgh9KckqAYtN9+mnmDy1pFg0YBi3/1wYezTFj?=
+ =?us-ascii?Q?CPGPwgNXuYLbDY5ls2LoC25SbguCTG1vTKSilKwlvM7ceIG2Z2Hn6NvMWY2O?=
+ =?us-ascii?Q?ONYPfKpjPPOFswyf1sKz7HVE8CC+QxZSsTuWOXDv9u4MhY+lerfTbeyWlQlC?=
+ =?us-ascii?Q?FcHcbEucdY6xAzAZN2H6tZhZ9rr3tL6Sr7tJ59oO/IZJu3uoquBuUki7MjbU?=
+ =?us-ascii?Q?qS+KEkDX2YNx/T6BOwSR9+ZBnEUMiDJSGvzd1KvzCCO0678ijUYhXyR1YeZ8?=
+ =?us-ascii?Q?ObWX9cWY2CHJjk2+g6F/E3QvfUpUVsIpRSBivlGacXGrs0YtF4OaiQVrI9Uo?=
+ =?us-ascii?Q?sVeDN+uiEXMWZhKwArgpZalKYvEC0gQ+osvCZ/mD2f8tzhrT7ysFPVgDY4w/?=
+ =?us-ascii?Q?+HwfLh3e+ZcCCyNcgiDzwv302iZ6ihfAjkI2wM9cSFb3ZgH9QWAM86cPvCjW?=
+ =?us-ascii?Q?LxAHYYcX5Nv0LJxZ4o5V5+i6y6w0oRMLs+Kdc54karcUDsIDMLtaR58Qh0nk?=
+ =?us-ascii?Q?EOGn/Ut0e6WmGeny9ZjmtoPS/S/uqzQKDl5NO9O9kMb0+KAl2yxK44tHcjXB?=
+ =?us-ascii?Q?kqFTRwDXoBtf5T78NNAJq5I/kV7QglPZ9Ytiz0tTApHi+Yox01gThyKpp3e7?=
+ =?us-ascii?Q?YhgXIc/W+jCix3dzuao8KLcugsVwdIWT1FnYWnvDltUp4RI9NS7Zaj+t5/2t?=
+ =?us-ascii?Q?lRp/QgpOo+CZBhw2ZCVh0FQ0mzn3uZkXCtsradYdEywQoPE5bfKWdPZY0e9V?=
+ =?us-ascii?Q?HzzRI4I6jBWzPq9NjAR1A4LtPralecoHziluEMpSiqqeYkWQFSM929pMWtGi?=
+ =?us-ascii?Q?s0elEmB8r1EduP+jRnyZMw6dEPbWipI13OIwPX35HJ/0VuGQoRGJl8Q8gz4h?=
+ =?us-ascii?Q?hN8UH5FQyy7NNUjStwalVT6aRFbvQ5aN+ymxFi1XzcEydNNZsBXiQd4Nurxu?=
+ =?us-ascii?Q?bZCm7Cw9J+A7CT4rpKQvhZlbjX5heHnD?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR01MB8613.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?LzczRzFsOFo5blN4VEEvVXV0Y1pPMEN2bE1ZVm1ickFWRVF6YkhINDFCVHZC?=
- =?utf-8?B?RmJqZ0sxZ1NFT2djSW1nMHdPd0JHdjNiU0pQSjZuQVc1c3F6Ym15TlhRMVFt?=
- =?utf-8?B?UFp2aVdNcTVCNm1IU3I4VE9Nd29oQXp1cmwvVEtBa2tHYTROME9jV1BoV2tm?=
- =?utf-8?B?Tlc4TWN5MVJCVzNSZGxyU1JIWkRzNlhkQXJabUNBTzlFbzFrK282aVhCN0hs?=
- =?utf-8?B?Szc4c0MzUEVETi9SbGU3dnJja3k0V3BkemREc1NRbnMrMkVuTEMxaW1TaWJ4?=
- =?utf-8?B?L3U1b29QdVQ4MCtoZFp2MUFrcDlDTnUrV282aElUQmZoT2hsUkZOVCs1dk8z?=
- =?utf-8?B?SlBhd3VSaW9hcXdFQTEvVXFaeWFhTzB6cFJEVWxCK0loZEFYbDRLQ3habmM1?=
- =?utf-8?B?OUpiNGUyZDNhbGMzbXNyNllYZ2pMTWtkdTdjUkVPWmZoMUFBRXRNY2hrZGJ6?=
- =?utf-8?B?b0tlZEY2Wlg3aEJLUGdvNXVESWRvQmR4WUNhVmVMWG1DUjdxMmY3WWFnL3FK?=
- =?utf-8?B?TVo4WC9TR0dFRzZiMXc5RXBnS3JvVmxJNWZLSjdRNE40bm5nWnYwWHRHZC9Y?=
- =?utf-8?B?UVZJWnBsMnNVL0t2dGQ0NXF6NTlmdTVmdGlhZ1lOZ05US3pNb0hrSkxrb0RG?=
- =?utf-8?B?T2FWYzNNS0pOb1FLRStMRlhsMllNSm5mQWtyazUvMWFScGE2QmVDQng2WUVY?=
- =?utf-8?B?VmRRNGpDaGtYYm0yd05QVnBRWDNyaDVwaXJFcm1ZdjVnU2FDdHZoWndLRUlC?=
- =?utf-8?B?Qkc5OGdtYk9IK1JxMzVua0FxWlRzQVlHeWZJTytMeWxUWTlpeUVKTXRQRFBT?=
- =?utf-8?B?YldFUW5uZ0xKRUdkcExJTVUzaGN4UkdobitwQTNIa2VmUCs2TWFtZjZHVEVJ?=
- =?utf-8?B?YW1ySGpQaFJDUCtOTzZLUlNtZWYrZ3JmV0RGNm5JSHRIbVZjandpVzBadEM1?=
- =?utf-8?B?aERIbzM4YWVzTVdSaVkvNk1ndHhzL0oxdUFuZVYweEVRR01xdmZ4YWFDRC9E?=
- =?utf-8?B?dnM5MTdtbmtudGdTRVdzN3lGZkJGbSsrbTFzVW9JR3NqZkI4eWVVVGJYSGVm?=
- =?utf-8?B?d2hzODhpMThVVGFqUmNmbWJxOFdldFN6MXRYODNncGY1d3dZdWJQdUhhSlZO?=
- =?utf-8?B?dzcxSXpONEpITm1QZVR1MFduMXNubHY2N0dieFZZUTJramx6WitrR1lRVEMv?=
- =?utf-8?B?WXdwK3FTYVN1S2wySGdRR2dCYUdOdDhLZE1MU2xkeXZlVXdET1RYcENwbXQ3?=
- =?utf-8?B?T1RNZ1hlamdyc1NMZTBtMW1HdXRPUTc3TXNzRDZpWDlJdDJsdnZhYUdNMmtB?=
- =?utf-8?B?d21kWXpKUGoxSnNObnNNRVpCVndaQzJqT1NWSW1lTkFrdlpJTVN0ZXNLdWl4?=
- =?utf-8?B?R0VqeWh6cTZ1TXlWR0wxSkZ1ZU9GUmp6a0paYWFBWGhjcTNJK21HUXNzZUZr?=
- =?utf-8?B?WEl1czlmNmRJVXBWV1k1QTBiaGlINVp2MWpiSXluZlh0RlBHQ1l1VW5jNHor?=
- =?utf-8?B?WHBHVXhHclI3SlZzaGVESTdjdDhJR25aV0RRV1gzWG1ud1A2Y0FxM0RJYnI0?=
- =?utf-8?B?bXhlcGlTalBLSXFtL0ZDakFoK04vdGtDY1JyYUE2MDcwLzMrS1lnQm0yLzM0?=
- =?utf-8?B?ZjhPVWFIZW5zeEJHdkdxTWJPU2hvZEhOcjdRbWxWSXo0V0tibDFvaitwWlV4?=
- =?utf-8?B?NmJ6YnpTYWJzbGJKV1ZUOGI0YkRyN0tudkcrSkIzdCszZ2VpN3FleVBKa0F0?=
- =?utf-8?B?d1Z3ZUNBYWZJRXhrL01oTzBNc25vTHhwcmMweis3cDFhdzR1SGsxWXgvb291?=
- =?utf-8?B?cEFKTGJUZ0JPZDNBZ3dQbUx4SlRvZElOTytuUnA1OXhrd3FvenpSc2VKOU1T?=
- =?utf-8?B?SDEzTXNiNms2L1dldUtYL2ZVaUpCZEFlc1E1ekNJKzR0djJkbU10dXFhbit5?=
- =?utf-8?B?ZGtvTTRWYm9BMXc0NXY5dkVrNWNweFAvNWZId3dvb0d1UEVrdVdpb2pxN1V1?=
- =?utf-8?B?ZVNDYmRMd1MwQzdZb21aQkc1QmlDOVgyUzFGYTZ3K0FuNm12U1JhQVdUWXZV?=
- =?utf-8?B?S2VxMG5uMDNScnhnSk02Y29ISmtJcnlNMnpvTkZYSG1lR2xLS2c3NXBmNERt?=
- =?utf-8?B?czlnT085S3RINjRHcjVRUmVNM2daZVlhM2s5ZEx0ZjJnanRMZ25weEhCS0Fx?=
- =?utf-8?B?bVE9PQ==?=
+	=?us-ascii?Q?hVH5PrKl6frL52uCUx/ktO97to6/HGb64NjmZBT/m8YvAqfzT/JWkURpMEX4?=
+ =?us-ascii?Q?dt3ylcAEfR3C85BWfKv1PGP3nFp0/427pYWftuMVZHBY4+R3djJBpt52G8GI?=
+ =?us-ascii?Q?snAFXvGOHSi++JeFKTqSJspmNcbE1lhZaI8rQHgNky06JnSuF44plY+nmSZZ?=
+ =?us-ascii?Q?eV9m+qvtLFKVPoogm25PpcWt86uvgBrCaxH0EszuyIZ6iDcza4u4AUiS77DH?=
+ =?us-ascii?Q?DSaKMqbVbrRs+/hu191v/eEX0z1Qu3cjLSuXfM1R7TsQoMT+d0kZkHFhkoXe?=
+ =?us-ascii?Q?YxEybpmJhRLzVlnf2b3e152UuF2AzVdy+IKD5AYsS/fkrYpTIZ2UZAcaBi1T?=
+ =?us-ascii?Q?1p+DXO/nVoA+G+XCecVWlW/dWL8egg2qGdZiKWQgfCemLMvHGuOS4T1YehYm?=
+ =?us-ascii?Q?t46E+uwXhrtIiIbwP6J/BlsTBupY1QPuVv9rP3AFu1X0tfhf3yD8jyri+YHs?=
+ =?us-ascii?Q?wWrncuP4SEflr2/adSmgJ8YMK6kFEPUTLzwNaZ4dWXo/jRiRsS1X1THzso+n?=
+ =?us-ascii?Q?YmKI6bs+qoJCO6nRqwVGuaBM6wCbtCUUws/8iG5sYI5Sk8k5kWlTP++0GZB9?=
+ =?us-ascii?Q?FV+QZkQG3pEK4KqiBQ3BfC/88UfexY/78yCrqp4PZ3D6TFJfSOBWyqHfSgok?=
+ =?us-ascii?Q?BcNDAFEWem5jT2AIpQYMI03tFx10R07/HGln/A9oMu5VItNSU8o6CVpla4Iv?=
+ =?us-ascii?Q?PuPB3XgbFiyUD7kJ5e/gmAkPsIyxtXH6L1bomFoRW4OUH7bk3oIsRtwes9N1?=
+ =?us-ascii?Q?RxChb7nCnJkRqVGzgu06Q1mnTsgSc4nHpdbVnVuuHlZpaUQbb9orDAeD0QGF?=
+ =?us-ascii?Q?l/0wtnkVBzBhqNqNb3diDDeFfKCAL437hkQMnYwF9qNVNh2Gmco7yMdHUb2p?=
+ =?us-ascii?Q?y9gaIGYI8jzbDi9I2AqWzmVofNnxsAjK3t9buNAMBJj9BtL+lYhpdixZ6KDU?=
+ =?us-ascii?Q?6Q5vtS2oPjcdMjcH7YrNMcvfmOdKobqWKT/QxWZPcLIUVMm/KRYBggX1EB/m?=
+ =?us-ascii?Q?EpL7HC9VIR1pkb5zIMrkwb4E7HFwhOnEY15fH4/hLGaNQ1tAjLc6Xb56p3Ls?=
+ =?us-ascii?Q?8aLTo6XBAKYvFI5NchJHPbh23MDjCMyzcdRBiY0sK+7ANvPvWbYWrCzmsJ2G?=
+ =?us-ascii?Q?L90er+62uB08y+uaPcKk2TNkTh8wCuNUvbPBT0lXFTNuRB5KKwt1/Va6ZqCa?=
+ =?us-ascii?Q?DEu1xJy/Jt1CsKF9d9cSCN7ukb7Pts4wZqgQPRKJiDIYwKNvsBYJOkEyPqTF?=
+ =?us-ascii?Q?HlXXmNa6izwInTYX23CIfVDNC9Rz3nZrM3FWfNex40MoAfNJKnWjGh92kyIa?=
+ =?us-ascii?Q?bkFFMxr5MET2kSjb5UcA1+AzUSNNTmB0RO17E/zGmYoignZsvUKy1tGMRvQZ?=
+ =?us-ascii?Q?AfoR7A35NWEYPeDYs7qy6a06nieMlgT+42DhjmCWYDwfeP1SsHPBnYBtfzXG?=
+ =?us-ascii?Q?miK/iCcLVPLAmmhEytk0mR6j+REb29j91AcpLYnK7Yrbc58XbTtACw0Nkuun?=
+ =?us-ascii?Q?JiuQy2BLms25CB18xxoqV+4EjzuIFx35452U7cwxxhZ+TVtb65TxLVr1dDAO?=
+ =?us-ascii?Q?tPKx5fcrSVrZPxfsXx06UfNQ7plrCO1PEzWskq4hn7IBScHbDYEq75IFH3Pk?=
+ =?us-ascii?Q?2A=3D=3D?=
 X-OriginatorOrg: becom-group.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7594b606-264a-43dc-9fa8-08de25d67347
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbccc3c2-b40c-42a2-59d8-08de25d673e0
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR01MB8613.eurprd01.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 12:40:12.2508
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2025 12:40:13.2075
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 738f6472-f50a-488c-ab88-c200fd976533
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Toq21byo48mdtzi32vNiW5vCMDiWFnwa5WojD4OxwVsGtXFb58FHxJI+anpQCrb3ZbdrF6QtLWdk2Dd5ktQWiLD57/xCv3uVdkNiUI3rCXU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: AonVxO9ZBbXGJcuCoLmRyGtiBeqmWiuXNdxvvuTHKK9nEDuNf97rxsfifr9fZesg7mDpkzbK05Uey8oND91zT1P28mHLMxQbnVGlFB2SAio=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR01MB6664
 
-This commit adds support for the wsen tids-2521020222501. It is a
-low cost and small-form-factor i2c temperature sensor.
-
-It supports the following features:
-- Continuous temperature reading in four intervals: 5 ms, 10 ms,
-  20 ms and 40 ms.
-- Low temperature alarm
-- High temperature alarm
-
-The driver supports following hwmon features:
-- hwmon_temp_input
-- hwmon_temp_min_alarm
-- hwmon_temp_max_alarm
-- hwmon_temp_min_hyst
-- hwmon_temp_max_hyst
-- hwmon_chip_update_interval
-
-Additional notes:
-- The update interval only supports four fixed values.
-- The alarm is reset on reading.
+Add tids driver documentation
 ---
- drivers/hwmon/Kconfig  |  10 +
- drivers/hwmon/Makefile |   1 +
- drivers/hwmon/tids.c   | 560 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 571 insertions(+)
- create mode 100644 drivers/hwmon/tids.c
+ Documentation/hwmon/tids.rst | 61 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 Documentation/hwmon/tids.rst
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8c852bcac26f..5e578241001f 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2647,6 +2647,16 @@ config SENSORS_WM8350
- 	  This driver can also be built as a module. If so, the module
- 	  will be called wm8350-hwmon.
- 
-+config SENSORS_TIDS
-+	tristate "TIDS"
-+	depends on I2C
-+	help
-+	  If you say yes here you get support for the temperature
-+	  sensor WSEN TIDS from Würth Elektronik.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called tids.
-+
- config SENSORS_ULTRA45
- 	tristate "Sun Ultra45 PIC16F747"
- 	depends on SPARC64
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index a8de5bc69f2a..def052b2bdfa 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -244,6 +244,7 @@ obj-$(CONFIG_SENSORS_W83L785TS)	+= w83l785ts.o
- obj-$(CONFIG_SENSORS_W83L786NG)	+= w83l786ng.o
- obj-$(CONFIG_SENSORS_WM831X)	+= wm831x-hwmon.o
- obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
-+obj-$(CONFIG_SENSORS_TIDS) += tids.o
- obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
- 
- obj-$(CONFIG_SENSORS_OCC)	+= occ/
-diff --git a/drivers/hwmon/tids.c b/drivers/hwmon/tids.c
+diff --git a/Documentation/hwmon/tids.rst b/Documentation/hwmon/tids.rst
 new file mode 100644
-index 000000000000..0176a5e8b574
+index 000000000000..f3fea4e416ea
 --- /dev/null
-+++ b/drivers/hwmon/tids.c
-@@ -0,0 +1,560 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) BECOM Electronics GmbH
-+ *
-+ * wsen_tids_2521020222501.c - Linux hwmon driver for WSEN-TIDS
-+ *                             2521020222501 Temperature sensor
-+ *
-+ * Author: Thomas Marangoni <thomas.marangoni@becom-group.com>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+/*
-+ * TIDS registers
-+ */
-+#define TIDS_CMD_DEVICE_ID	0x01
-+#define TIDS_CMD_T_H_LIMIT	0x02
-+#define TIDS_CMD_T_L_LIMIT	0x03
-+#define TIDS_CMD_CTRL		0x04
-+#define TIDS_CMD_STATUS		0x05
-+#define TIDS_CMD_DATA_T_L	0x06
-+#define TIDS_CMD_DATA_T_H	0x07
-+#define TIDS_CMD_SOFT_REST	0x0C
-+
-+/*
-+ * TIDS device IDs
-+ */
-+#define TIDS_ID_2521020222501 0xa0
-+
-+enum tids_update_interval {
-+	tids_update_interval_40ms = 0,
-+	tids_update_interval_20ms = 1,
-+	tids_update_interval_10ms = 2,
-+	tids_update_interval_5ms = 3,
-+};
-+
-+/* TIDS control register */
-+static const struct reg_field tids_reg_field_ctrl_one_shot =
-+	REG_FIELD(TIDS_CMD_CTRL, 0, 0);
-+static const struct reg_field tids_reg_field_ctrl_freerun =
-+	REG_FIELD(TIDS_CMD_CTRL, 2, 2);
-+static const struct reg_field tids_reg_field_ctrl_if_add_inc =
-+	REG_FIELD(TIDS_CMD_CTRL, 3, 3);
-+static const struct reg_field tids_reg_field_ctrl_avg =
-+	REG_FIELD(TIDS_CMD_CTRL, 4, 5);
-+static const struct reg_field tids_reg_field_ctrl_bdu =
-+	REG_FIELD(TIDS_CMD_CTRL, 6, 6);
-+/* TIDS status register */
-+static const struct reg_field tids_reg_field_status_busy =
-+	REG_FIELD(TIDS_CMD_STATUS, 0, 0);
-+static const struct reg_field tids_reg_field_status_over_thl =
-+	REG_FIELD(TIDS_CMD_STATUS, 1, 1);
-+static const struct reg_field tids_reg_field_status_under_tll =
-+	REG_FIELD(TIDS_CMD_STATUS, 2, 2);
-+/* TIDS reset register */
-+static const struct reg_field tids_reg_field_soft_reset =
-+	REG_FIELD(TIDS_CMD_SOFT_REST, 1, 1);
-+
-+struct tids_data {
-+	struct i2c_client *client;
-+
-+	struct regmap *regmap;
-+
-+	/* regmap field for ctrl register */
-+	struct regmap_field *reg_ctrl_one_shot;
-+	struct regmap_field *reg_ctrl_freerun;
-+	struct regmap_field *reg_ctrl_if_add_inc;
-+	struct regmap_field *reg_ctrl_avg;
-+	struct regmap_field *reg_ctrl_bdu;
-+
-+	/* regmap field for status register */
-+	struct regmap_field *reg_status_busy;
-+	struct regmap_field *reg_status_over_thl;
-+	struct regmap_field *reg_status_under_tll;
-+
-+	/* regmap field for soft reset register*/
-+	struct regmap_field *reg_soft_reset;
-+
-+	int irq;
-+	int temperature;
-+};
-+
-+static ssize_t tids_interval_read(struct device *dev, long *val)
-+{
-+	int ret = 0;
-+	unsigned int avg_value = 0;
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	ret = regmap_field_read(data->reg_ctrl_avg, &avg_value);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (avg_value) {
-+	case tids_update_interval_40ms:
-+		*val = 40;
-+		break;
-+	case tids_update_interval_20ms:
-+		*val = 20;
-+		break;
-+	case tids_update_interval_10ms:
-+		*val = 10;
-+		break;
-+	case tids_update_interval_5ms:
-+		*val = 5;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static ssize_t tids_interval_write(struct device *dev, long val)
-+{
-+	unsigned int avg_value = 0;
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	switch (val) {
-+	case 40:
-+		avg_value = tids_update_interval_40ms;
-+		break;
-+	case 20:
-+		avg_value = tids_update_interval_20ms;
-+		break;
-+	case 10:
-+		avg_value = tids_update_interval_10ms;
-+		break;
-+	case 5:
-+		avg_value = tids_update_interval_5ms;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_field_write(data->reg_ctrl_avg, avg_value);
-+}
-+
-+static int tids_temperature1_read(struct device *dev, long *val)
-+{
-+	int ret;
-+	u8 buf[2] = { 0 };
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	ret = regmap_bulk_read(data->regmap, TIDS_CMD_DATA_T_L, buf, 2);
-+	if (ret < 0)
-+		return ret;
-+
-+	// temperature in °mC
-+	*val = (((s16)(buf[1] << 8) | buf[0])) * 10;
-+
-+	return 0;
-+}
-+
-+static ssize_t tids_temperature_alarm_read(struct device *dev, u32 attr,
-+					   long *val)
-+{
-+	int ret = 0;
-+	unsigned int reg_data = 0;
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	if (attr == hwmon_temp_min_alarm)
-+		ret = regmap_field_read(data->reg_status_under_tll, &reg_data);
-+	else if (attr == hwmon_temp_max_alarm)
-+		ret = regmap_field_read(data->reg_status_over_thl, &reg_data);
-+	else
-+		return -EOPNOTSUPP;
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = reg_data;
-+
-+	return 0;
-+}
-+
-+static int tids_temperature_hyst_read(struct device *dev, u32 attr, long *val)
-+{
-+	int ret;
-+	struct tids_data *data = dev_get_drvdata(dev);
-+	unsigned int reg_data = 0;
-+
-+	if (attr == hwmon_temp_min_hyst)
-+		ret = regmap_read(data->regmap, TIDS_CMD_T_L_LIMIT, &reg_data);
-+	else if (attr == hwmon_temp_max_hyst)
-+		ret = regmap_read(data->regmap, TIDS_CMD_T_H_LIMIT, &reg_data);
-+	else
-+		return -EOPNOTSUPP;
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	// temperature from register conversion in °mC
-+	*val = (((u8)reg_data - 63) * 640);
-+
-+	return 0;
-+}
-+
-+static ssize_t tids_temperature_hyst_write(struct device *dev, u32 attr,
-+					   long val)
-+{
-+	u8 reg_data = 0;
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	// temperature in °mC
-+	if (val < -39680 || val > 122880)
-+		return -EINVAL;
-+
-+	// temperature to register conversion in °mC
-+	reg_data = (u8)((val / 640) + 63);
-+
-+	if (attr == hwmon_temp_min_hyst)
-+		return regmap_write(data->regmap, TIDS_CMD_T_L_LIMIT, reg_data);
-+	else if (attr == hwmon_temp_max_hyst)
-+		return regmap_write(data->regmap, TIDS_CMD_T_H_LIMIT, reg_data);
-+	else
-+		return -EOPNOTSUPP;
-+}
-+
-+static umode_t tids_hwmon_visible(const void *data,
-+				  enum hwmon_sensor_types type, u32 attr,
-+				  int channel)
-+{
-+	umode_t mode = 0;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_min_alarm:
-+		case hwmon_temp_max_alarm:
-+			mode = 0444;
-+			break;
-+		case hwmon_temp_min_hyst:
-+		case hwmon_temp_max_hyst:
-+			mode = 0644;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_chip:
-+		switch (attr) {
-+		case hwmon_chip_update_interval:
-+			mode = 0644;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return mode;
-+}
-+
-+static int tids_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			return tids_temperature1_read(dev, val);
-+		case hwmon_temp_min_alarm:
-+		case hwmon_temp_max_alarm:
-+			return tids_temperature_alarm_read(dev, attr, val);
-+		case hwmon_temp_min_hyst:
-+		case hwmon_temp_max_hyst:
-+			return tids_temperature_hyst_read(dev, attr, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	case hwmon_chip:
-+		switch (attr) {
-+		case hwmon_chip_update_interval:
-+			return tids_interval_read(dev, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int tids_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long val)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_min_hyst:
-+		case hwmon_temp_max_hyst:
-+			return tids_temperature_hyst_write(dev, attr, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	case hwmon_chip:
-+		switch (attr) {
-+		case hwmon_chip_update_interval:
-+			return tids_interval_write(dev, val);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_channel_info *const tids_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MIN_ALARM |
-+					 HWMON_T_MAX_ALARM | HWMON_T_MIN_HYST |
-+					 HWMON_T_MAX_HYST),
-+	NULL
-+};
-+
-+static const struct hwmon_ops tids_ops = {
-+	.is_visible = tids_hwmon_visible,
-+	.read		= tids_hwmon_read,
-+	.write		= tids_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info tids_chip_info = {
-+	.ops	= &tids_ops,
-+	.info	= tids_info,
-+};
-+
-+static bool tids_regmap_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	if (reg >= 0x02 && reg <= 0x04)
-+		return true;
-+
-+	if (reg == 0x0c)
-+		return true;
-+
-+	return false;
-+}
-+
-+static bool tids_regmap_readable_reg(struct device *dev, unsigned int reg)
-+{
-+	if (reg >= 0x01 && reg <= 0x07)
-+		return true;
-+
-+	if (reg == 0x0c)
-+		return true;
-+
-+	return false;
-+}
-+
-+static bool tids_regmap_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	if (reg >= 0x05 && reg <= 0x07)
-+		return true;
-+
-+	if (reg == 0x0c)
-+		return true;
-+
-+	return false;
-+}
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits			= 8,
-+	.val_bits			= 8,
-+	.max_register		= TIDS_CMD_SOFT_REST,
-+	.writeable_reg		= tids_regmap_writeable_reg,
-+	.readable_reg		= tids_regmap_readable_reg,
-+	.volatile_reg		= tids_regmap_volatile_reg,
-+	.use_single_read	= 0,
-+};
-+
-+static int tids_probe_regmap(struct tids_data *data)
-+{
-+	struct device *dev = &data->client->dev;
-+
-+	/* Init regmap */
-+	data->regmap = devm_regmap_init_i2c(data->client, &regmap_config);
-+	if (IS_ERR(data->regmap))
-+		return dev_err_probe(dev, PTR_ERR(data->regmap),
-+				     "regmap initialization failed\n");
-+
-+	/* Allocate regmap_field for ctrl register */
-+	data->reg_ctrl_one_shot = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_ctrl_one_shot);
-+	if (IS_ERR(data->reg_ctrl_one_shot))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_ctrl_one_shot),
-+			"regmap_field reg_ctrl_one_shot initialization failed\n");
-+
-+	data->reg_ctrl_freerun = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_ctrl_freerun);
-+	if (IS_ERR(data->reg_ctrl_freerun))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_ctrl_freerun),
-+			"regmap_field reg_ctrl_freerun initialization failed\n");
-+
-+	data->reg_ctrl_if_add_inc = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_ctrl_if_add_inc);
-+	if (IS_ERR(data->reg_ctrl_if_add_inc))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_ctrl_if_add_inc),
-+			"regmap_field reg_ctrl_if_add_inc initialization failed\n");
-+
-+	data->reg_ctrl_avg = devm_regmap_field_alloc(dev, data->regmap,
-+						     tids_reg_field_ctrl_avg);
-+	if (IS_ERR(data->reg_ctrl_avg))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_ctrl_avg),
-+			"regmap_field reg_ctrl_avg initialization failed\n");
-+
-+	data->reg_ctrl_bdu = devm_regmap_field_alloc(dev, data->regmap,
-+						     tids_reg_field_ctrl_bdu);
-+	if (IS_ERR(data->reg_ctrl_bdu))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_ctrl_bdu),
-+			"regmap_field reg_ctrl_bdu initialization failed\n");
-+
-+	/* Allocate regmap_field for status register */
-+	data->reg_status_busy = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_status_busy);
-+	if (IS_ERR(data->reg_status_busy))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_status_busy),
-+			"regmap_field reg_status_busy initialization failed\n");
-+
-+	data->reg_status_over_thl = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_status_over_thl);
-+	if (IS_ERR(data->reg_status_over_thl))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_status_over_thl),
-+			"regmap_field reg_status_over_thl initialization failed\n");
-+
-+	data->reg_status_under_tll = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_status_under_tll);
-+	if (IS_ERR(data->reg_status_under_tll))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_status_under_tll),
-+			"regmap_field reg_status_under_tll initialization failed\n");
-+
-+	/* Allocate regmap_field for software_reset */
-+	data->reg_soft_reset = devm_regmap_field_alloc(
-+		dev, data->regmap, tids_reg_field_soft_reset);
-+	if (IS_ERR(data->reg_soft_reset))
-+		return dev_err_probe(
-+			dev, PTR_ERR(data->reg_soft_reset),
-+			"regmap_field reg_soft_reset initialization failed\n");
-+
-+	return 0;
-+}
-+
-+static int tids_probe(struct i2c_client *client)
-+{
-+	struct device *device = &client->dev;
-+	struct device *hwmon_dev;
-+	struct tids_data *data;
-+	unsigned int value;
-+	int ret = 0;
-+
-+	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->client = client;
-+
-+	ret = tids_probe_regmap(data);
-+	if (ret != 0)
-+		return ret;
-+
-+	/* Read device id, to check if i2c is working */
-+	ret = regmap_read(data->regmap, TIDS_CMD_DEVICE_ID, &value);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Triggering soft reset */
-+	ret = regmap_field_write(data->reg_soft_reset, 1);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_field_write(data->reg_soft_reset, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Allowing bulk read */
-+	ret = regmap_field_write(data->reg_ctrl_if_add_inc, 1);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Set meassurement interval */
-+	ret = regmap_field_write(data->reg_ctrl_avg, tids_update_interval_40ms);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Set device to free run mode */
-+	ret = regmap_field_write(data->reg_ctrl_freerun, 1);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Don't update temperature register until high and low value are read */
-+	ret = regmap_field_write(data->reg_ctrl_bdu, 1);
-+	if (ret < 0)
-+		return ret;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(
-+		device, device->driver->name, data, &tids_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static int tids_suspend(struct device *dev)
-+{
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	return regmap_field_write(data->reg_ctrl_freerun, 0);
-+}
-+
-+static int tids_resume(struct device *dev)
-+{
-+	struct tids_data *data = dev_get_drvdata(dev);
-+
-+	return regmap_field_write(data->reg_ctrl_freerun, 1);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(tids_dev_pm_ops, tids_resume, tids_suspend);
-+
-+static const struct i2c_device_id tids_id[] = {
-+	{ "tids", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, tids_id);
-+
-+static const struct of_device_id tids_of_match[] = {
-+	{ .compatible = "wsen,tids-2521020222501" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, tids_of_match);
-+
-+static struct i2c_driver tids_driver = {
-+	.class	= I2C_CLASS_HWMON,
-+	.driver = {
-+		.name			= "tids",
-+		.pm				= pm_sleep_ptr(&tids_dev_pm_ops),
-+		.of_match_table = tids_of_match,
-+	},
-+	.probe		= tids_probe,
-+	.id_table	= tids_id,
-+};
-+
-+module_i2c_driver(tids_driver);
-+
-+MODULE_AUTHOR("Thomas Marangoni <Thomas.Marangoni@becom-group.com>");
-+MODULE_DESCRIPTION("WSEN TIDS temperature sensor driver");
-+MODULE_LICENSE("GPL");
++++ b/Documentation/hwmon/tids.rst
+@@ -0,0 +1,61 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver tids
++===================
++
++Supported Chips:
++
++  * WSEN TIDS
++
++    Prefix: 'tids'
++
++    Addresses scanned: None
++
++    Datasheet:
++
++      English: https://www.we-online.com/components/products/manual/Manual-um-wsen-tids-2521020222501%20(rev1.2).pdf
++
++Author: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
++
++
++Description
++-----------
++
++This driver implements support for the WSEN TIDS chip, a temperature
++sensor. Temperature is measured in degree celsius. In sysfs interface,
++all values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++
++Usage Notes
++-----------
++
++The device communicates with the I2C protocol. Sensors can have the I2C
++address 0x38 or 0x3F. See Documentation/i2c/instantiating-devices.rst for methods
++to instantiate the device.
++
++Sysfs entries
++-------------
++
++=============== ============================================
++temp1_input     Measured temperature in millidegrees Celsius
++update_interval The interval for polling the sensor, in
++                milliseconds. Writable. Must be 5, 10, 20
++                or 40.
++temp1_max_hyst  The temperature in millidegrees Celsius, that
++                is triggering the temp1_max_alarm. Writable.
++                The lowest possible value is -39680 and the
++                highest possible value is 122880. Values are
++                saved in steps of 640.
++temp1_min_hyst  The temperature in millidegrees Celsius, that
++                is triggering the temp1_min_alarm. Writable.
++                The lowest possible value is -39680 and the
++                highest possible value is 122880. Values are
++                saved in steps of 640.
++temp1_max_alarm The alarm will be triggered when the level
++                reaches the value specified in
++                temp1_max_hyst. It will reset automatically
++                once it has been read.
++temp1_min_alarm The alarm will be triggered when the level
++                reaches the value specified in
++                temp1_min_hyst. It will reset automatically
++                once it has been read.
++=============== ============================================
 -- 
 2.51.1
 
