@@ -1,375 +1,641 @@
-Received: from relay10.grserver.gr (relay10.grserver.gr [37.27.248.198])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DBC1CD1E4
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 13:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.27.248.198
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763386461; cv=none; b=ZuKssoivs4XTkuchQXFaPlwXN7jBlhI7q+eenJrtZOQymQehO+dOdHk+o5Rlwyg6Np5o2F3HHOxZ3pjtTU2YlGnJQXb1P/ex0sHgRuIzph2Pf2bW+N/tgxAJuZy8nZFm5mF2Mb4WeQYXrxiDDtd8C8yJ1tQPe1pbYDOleiQZFko=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763386461; c=relaxed/simple;
-	bh=1Vjn1a4D7VKA4NiJvBDV2/xLFm4Uve0euCkztkj5iIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kVtS+is/tG5NEJntjPh0eq2/kzPDVt4qPoGaNhojV1x3Az9o8pVQIgQ9oQMqnVygtmHz74tYw7H7w1j6zYXhOTXTqQM2c3pkJOT8jHY9tAZI17vsRkDRSpfx9UA6ZuCVTUhSB1BQ3puhMFM5XksnDxczoGEzlsGlTtKfFFpJy3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=nz2tGCHs; arc=none smtp.client-ip=37.27.248.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91F03176E0
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 15:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763391717; cv=pass; b=CSmro0ybeVPZOEOuyV2N+K+61z5M+fITR81BdnULa/CAZalsVk/f3c+x6+7lgciI7EtkWabVz3sOxdmWEKM82LlpWPVOqtZ2EQ4uefrtkVkQskEwX4zQVVv5b/ztHZNl2VbcilX8oYYvYArsY+WkYfm+d+Ku0FI4jpHDAWp+Xb4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763391717; c=relaxed/simple;
+	bh=p7gftUWEHyFwUaku0vy0VQd6jSo5HSFs3ckuPgHVsxw=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=gcJM0tG9DYW82Itb8QNTOnnr75rZVHQ6N2fzZ79NKcLrCJVtTe/AdJYWXEDlv/LoqXpnNo9dWnLDoyEYha3KgIEN6LapBQdT9TPSx738NjyIWH2WEHv2hHltHtbPTjk3x+J7mkj9LblciCP/AACklOPAzCJx3o9GgBCbT7Pw0XU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=M0QQMceq; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="nz2tGCHs"
-Received: from relay10 (localhost.localdomain [127.0.0.1])
-	by relay10.grserver.gr (Proxmox) with ESMTP id 0C40F42050
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 15:34:11 +0200 (EET)
-Received: from linux3247.grserver.gr (linux3247.grserver.gr [213.158.90.240])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by relay10.grserver.gr (Proxmox) with ESMTPS id C902042001
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 15:34:09 +0200 (EET)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	by linux3247.grserver.gr (Postfix) with ESMTPSA id 1A86620190D
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 15:34:09 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1763386449;
-	bh=PgkQmVnGwRhbinWEfbalW9xEaoez/YXSywLyRgvCsG4=;
-	h=Received:From:Subject:To;
-	b=nz2tGCHsSKpXEBTOcgc6RIFjaMNRhkOaNHMyuI99HvAjHEZfIFhNaVmvo6gDEAv/5
-	 E7vlEyjpTmulu/pxkbiTE6ObHpVHjaCgpOn+yMXElVB338fQobamUiR8fvUtlhfsku
-	 nGlWHI5aXHcJxBCQe7tvQ6Btnx6cJRZp/ZXbJcWwl02/yDdrcIH6cjhirdEKeHWCxC
-	 TehbbHLHsDD2SBTB6Fm9sDBpI05AasGxMbGIj/39sT63bo6FRmkZj+L5XX7tOXfDXH
-	 WpQjv5zxHTRedMB9AsjlKkT5N46ivQRFcW5fSU5w/Y6C/s7Q8BbYZjHOV0VIUHsTli
-	 k93V0oHQHL3Vw==
-Authentication-Results: linux3247.grserver.gr;
-        spf=pass (sender IP is 209.85.208.177) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f177.google.com
-Received-SPF: pass (linux3247.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f177.google.com with SMTP id
- 38308e7fff4ca-37a2dcc52aeso41312251fa.0
-        for <linux-hwmon@vger.kernel.org>;
- Mon, 17 Nov 2025 05:34:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCWtsqPJWJubKRgEHzU0TnySXue36Sdw8GPbFHPGUYZGvV9a251peuFsByCuOCwb5K7a+lv3NqksFjy2XQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCEps+5NLNj4PTFzavT/dyoVitp1bdXhqzM+hWykfmc3+LbPdw
-	3rAS/ht1gYg2sMRhkdrjf8G/nlJl0T3dYxojvGWWkMKUJGzlpoc/xN25WYPIgZFCbEiBuiHlcIb
-	Abq3GozVZuTaEcf+xXuGEdNNX2v7XRXI=
-X-Google-Smtp-Source: 
- AGHT+IE5BHgUPXDDHFJMpYkQt3x+egxp7K3igPrrArNCO44yCQ5XSFkz/StliurHFlN8YoOooYSmCVW0riz72ZsW1wk=
-X-Received: by 2002:a2e:8a87:0:b0:360:c716:2666 with SMTP id
- 38308e7fff4ca-37babd563f4mr29291611fa.30.1763386448519; Mon, 17 Nov 2025
- 05:34:08 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="M0QQMceq"
+ARC-Seal: i=1; a=rsa-sha256; t=1763391673; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nVAXgHwdmDcwHLdwzTuvnrqi2GWBqOwO0M0QpJIQQF/s9auMronJ5CZjycaYt01f2+VBdbhm8NCHHXKtWUrKnodfJE83vVtd/T+BjA3jHFMs7hE7ujFDKigXr8ewNFpuWnO7N7l6hmLp+wsPd4GuMtFfU+TEIvevGYOhvMbRYA8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1763391673; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=jXIwVouwKHUwtIOv9ZSnIafVyjqNkDuRygFifDdBKB0=; 
+	b=PVthdJBxPc9mB1/iNZH8WNqfbIQo/GniYn7Kj2uQ8Bh06Oxzws0SYYY50AvM7irrSg8xCShA+IxuUnZsXAasTNGXYcxCaqg/1/GV74wuztTh1j9lRhIsDMbOmn8W5+/WRj4aOc2b7oda7HNdP31esIz7EElpkCZYXrE9eevdQEA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763391673;
+	s=zmail; d=rong.moe; i=i@rong.moe;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
+	bh=jXIwVouwKHUwtIOv9ZSnIafVyjqNkDuRygFifDdBKB0=;
+	b=M0QQMceqKVXt/nPCVn4jpOQOKcNR2IW5BWlReBfIVICl6eBs0NRjmzT9QYssLTRK
+	kJaqKMoo4r/WTfsAhNx6sTfCFy0Ez8pGaUwYvGNyGS0OkZf6Tru0cSLZpKncS/sM+Wa
+	0a2NfcaCTMAxreBB3qen0/Dv8zNo/m3WGn37HFa8=
+Received: by mx.zohomail.com with SMTPS id 1763391670698829.9164987731707;
+	Mon, 17 Nov 2025 07:01:10 -0800 (PST)
+Message-ID: <ce6d4c5e29448bffb7fd83a56449c364e57832d8.camel@rong.moe>
+Subject: Re: [PATCH v5 6/7] platform/x86: lenovo-wmi-capdata: Wire up Fan
+ Test Data
+From: Rong Zhang <i@rong.moe>
+To: Armin Wolf <W_Armin@gmx.de>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, Hans de Goede
+ <hansg@kernel.org>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=	
+ <ilpo.jarvinen@linux.intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ platform-driver-x86@vger.kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+In-Reply-To: <6910e59e-4ae6-4bd1-a432-70e1db4e94ac@gmx.de>
+References: <20251114175927.52533-1-i@rong.moe>
+		 <20251114175927.52533-7-i@rong.moe>
+		 <6910e59e-4ae6-4bd1-a432-70e1db4e94ac@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 17 Nov 2025 22:56:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251113212221.456875-1-lkml@antheas.dev>
- <20251113212221.456875-5-lkml@antheas.dev>
- <77b944ff-2f84-3326-3901-5942739d3c43@linux.intel.com>
-In-Reply-To: <77b944ff-2f84-3326-3901-5942739d3c43@linux.intel.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 17 Nov 2025 14:33:56 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwGq7RiZdpBsYhKxfrTMMfzGPGML2R6q8ayjpVn_W4j=uQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bm8S2k6MmN4QsAZlRBfhT1xaGS5Jzle-QcsWSiLVqf4TPM1KAIq9GA-QBU
-Message-ID: 
- <CAGwozwGq7RiZdpBsYhKxfrTMMfzGPGML2R6q8ayjpVn_W4j=uQ@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] platform/x86: ayaneo-ec: Add controller power and
- modules attributes
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org, Hans de Goede <hansg@kernel.org>,
-	Derek John Clark <derekjohn.clark@gmail.com>,
-	=?UTF-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Armin Wolf <W_Armin@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <176338644935.1678898.865844165497727008@linux3247.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 1.4.3 at linux3247.grserver.gr
-X-Virus-Status: Clean
+User-Agent: Evolution 3.56.2-7 
+X-ZohoMailClient: External
 
-On Mon, 17 Nov 2025 at 11:30, Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Thu, 13 Nov 2025, Antheas Kapenekakis wrote:
->
-> > The Ayaneo 3 features hot-swappable controller modules. The ejection
-> > and management is done through HID. However, after ejecting the modules=
-,
-> > the controller needs to be power cycled via the EC to re-initialize.
-> >
-> > For this, the EC provides a variable that holds whether the left or
-> > right modules are connected, and a power control register to turn
-> > the controller on or off. After ejecting the modules, the controller
-> > should be turned off. Then, after both modules are reinserted,
-> > the controller may be powered on again to re-initialize.
->
-> If wonder if the ejecting could/should be made to turn it off without nee=
-d
-> for an explicit off command?
+Hi Armin,
 
-Perhaps in the future, this driver leaves the possibility open for it.
-However, that'd require a secondary HID driver to handle the full
-ejection process, with a shared function hook for this driver.
-
-The eject sequence consists of sending a HID config command to start
-the ejection, followed by a secondary config command to turn off the
-ejection bits and then waiting for two ready bits to report that the
-ejection is finished. Then, the controller is turned off. Apart from
-turning off, all of this is done through HID (so HID ready races the
-controller_modules value).
-
-The module status of this driver is only used to check when the
-controller should be turned on again and to provide visual feedback
-about which modules are currently connected while unpowered. When
-powered, there is full status reporting over HID, including which
-specific modules are connected[1].
-
-The end-to-end sequence is currently in userspace[2]. However, the EC
-ports are shielded from userspace so these two specific accesses must
-happen through a kernel driver.
-
-Antheas
-
-[1] https://github.com/hhd-dev/hhd/blob/8d842e547441600b8adc806bfb10ded5718=
-e4fe3/src/hhd/device/ayaneo/base.py#L90-L117
-[2] https://github.com/hhd-dev/hhd/blob/8d842e547441600b8adc806bfb10ded5718=
-e4fe3/src/hhd/device/ayaneo/base.py
-
-> > This patch introduces two new sysfs attributes:
-> >  - `controller_modules`: a read-only attribute that indicates whether
-> >    the left and right modules are connected (none, left, right, both).
-> >  - `controller_power`: a read-write attribute that allows the user
-> >    to turn the controller on or off (with '1'/'0').
-> >
-> > Therefore, after ejection is complete, userspace can power off the
-> > controller, then wait until both modules have been reinserted
-> > (`controller_modules` will return 'both') to turn on the controller.
-> >
-> > Reviewed-by: Armin Wolf <W_Armin@gmx.de>
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+On Mon, 2025-11-17 at 07:33 +0100, Armin Wolf wrote:
+> Am 14.11.25 um 18:59 schrieb Rong Zhang:
+>=20
+> > A capdata00 attribute (0x04050000) describes the presence of Fan Test
+> > Data. Query it, and bind Fan Test Data as a component of capdata00
+> > accordingly. The component master of capdata00 may pass a callback whil=
+e
+> > binding to retrieve fan info from Fan Test Data.
+> >=20
+> > Summarizing this scheme:
+> >=20
+> > 	lenovo-wmi-other <-> capdata00 <-> capdata_fan
+> > 	|- master            |- component
+> > 	                     |- sub-master
+> > 	                                   |- sub-component
+> >=20
+> > The callback will be called once both the master and the sub-component
+> > are bound to the sub-master (component).
+> >=20
+> > This scheme is essential to solve four issues:
+> > - The component framework only supports one aggregation per master
+> > - A binding is only established until all components are found
+> > - The Fan Test Data interface may be missing on some devices
+> > - To get rid of queries for the presense of WMI GUIDs
+> >=20
+> > Signed-off-by: Rong Zhang <i@rong.moe>
 > > ---
-> >  .../ABI/testing/sysfs-platform-ayaneo-ec      |  19 ++++
-> >  MAINTAINERS                                   |   1 +
-> >  drivers/platform/x86/ayaneo-ec.c              | 107 ++++++++++++++++++
-> >  3 files changed, 127 insertions(+)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-platform-ayaneo-ec b/Docum=
-entation/ABI/testing/sysfs-platform-ayaneo-ec
-> > new file mode 100644
-> > index 000000000000..4cffbf5fc7ca
-> > --- /dev/null
-> > +++ b/Documentation/ABI/testing/sysfs-platform-ayaneo-ec
-> > @@ -0,0 +1,19 @@
-> > +What:                /sys/devices/platform/ayaneo-ec/controller_power
-> > +Date:                Nov 2025
-> > +KernelVersion:       6.19
-> > +Contact:     "Antheas Kapenekakis" <lkml@antheas.dev>
-> > +Description:
-> > +             Current controller power state. Allows turning on and off
-> > +             the controller power (e.g. for power savings). Write 1 to
-> > +             turn on, 0 to turn off. File is readable and writable.
+> > Changes in v5:
+> > - Fix missing include (thanks kernel test robot)
+> >=20
+> > Changes in v4:
+> > - New patch in the series (thanks Armin Wolf's inspiration)
+> >    - Get rid of wmi_has_guid() (see also [PATCH v4 3/7])
+> > ---
+> >   drivers/platform/x86/lenovo/wmi-capdata.c | 262 +++++++++++++++++++++=
+-
+> >   drivers/platform/x86/lenovo/wmi-capdata.h |  20 ++
+> >   drivers/platform/x86/lenovo/wmi-other.c   |   5 -
+> >   3 files changed, 280 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/platfo=
+rm/x86/lenovo/wmi-capdata.c
+> > index a40b2ed4bd0a..464374d5823c 100644
+> > --- a/drivers/platform/x86/lenovo/wmi-capdata.c
+> > +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
+> > @@ -27,6 +27,7 @@
+> >   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> >  =20
+> >   #include <linux/acpi.h>
+> > +#include <linux/bitfield.h>
+> >   #include <linux/cleanup.h>
+> >   #include <linux/component.h>
+> >   #include <linux/container_of.h>
+> > @@ -50,10 +51,17 @@
+> >   #define ACPI_AC_CLASS "ac_adapter"
+> >   #define ACPI_AC_NOTIFY_STATUS 0x80
+> >  =20
+> > +#define LWMI_FEATURE_ID_FAN_TEST 0x05
 > > +
-> > +What:                /sys/devices/platform/ayaneo-ec/controller_module=
-s
-> > +Date:                Nov 2025
-> > +KernelVersion:       6.19
-> > +Contact:     "Antheas Kapenekakis"  <lkml@antheas.dev>
-> > +Description:
-> > +             Shows which controller modules are currently connected to
-> > +             the device. Possible values are "left", "right" and "both=
-".
-> > +             File is read-only. The Windows software for this device
-> > +             will only set controller power to 1 if both module sides
-> > +             are connected (i.e. this file returns "both").
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index c5bf7207c45f..f8ab009b6224 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -4196,6 +4196,7 @@ AYANEO PLATFORM EC DRIVER
-> >  M:   Antheas Kapenekakis <lkml@antheas.dev>
-> >  L:   platform-driver-x86@vger.kernel.org
-> >  S:   Maintained
-> > +F:   Documentation/ABI/testing/sysfs-platform-ayaneo
-> >  F:   drivers/platform/x86/ayaneo-ec.c
-> >
-> >  AZ6007 DVB DRIVER
-> > diff --git a/drivers/platform/x86/ayaneo-ec.c b/drivers/platform/x86/ay=
-aneo-ec.c
-> > index 697bb053a7d6..a0747e7ee43a 100644
-> > --- a/drivers/platform/x86/ayaneo-ec.c
-> > +++ b/drivers/platform/x86/ayaneo-ec.c
-> > @@ -8,6 +8,7 @@
-> >   */
-> >
-> >  #include <linux/acpi.h>
-> > +#include <linux/bits.h>
-> >  #include <linux/dmi.h>
-> >  #include <linux/err.h>
-> >  #include <linux/hwmon.h>
-> > @@ -16,6 +17,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/power_supply.h>
-> > +#include <linux/sysfs.h>
-> >  #include <acpi/battery.h>
-> >
-> >  #define AYANEO_PWM_ENABLE_REG         0x4A
-> > @@ -32,9 +34,18 @@
-> >  #define AYANEO_CHARGE_VAL_AUTO               0xaa
-> >  #define AYANEO_CHARGE_VAL_INHIBIT    0x55
-> >
-> > +#define AYANEO_POWER_REG     0x2d
-> > +#define AYANEO_POWER_OFF     0xfe
-> > +#define AYANEO_POWER_ON              0xff
-> > +#define AYANEO_MODULE_REG    0x2f
-> > +#define AYANEO_MODULE_LEFT   BIT(0)
-> > +#define AYANEO_MODULE_RIGHT  BIT(1)
-> > +#define AYANEO_MODULE_MASK   (AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT=
-)
+> > +#define LWMI_ATTR_ID_FAN_TEST							\
+> > +	(FIELD_PREP(LWMI_ATTR_DEV_ID_MASK, LWMI_DEVICE_ID_FAN) |		\
+> > +	 FIELD_PREP(LWMI_ATTR_FEAT_ID_MASK, LWMI_FEATURE_ID_FAN_TEST))
 > > +
-> >  struct ayaneo_ec_quirk {
-> >       bool has_fan_control;
-> >       bool has_charge_control;
-> > +     bool has_magic_modules;
-> >  };
-> >
-> >  struct ayaneo_ec_platform_data {
-> > @@ -46,6 +57,7 @@ struct ayaneo_ec_platform_data {
-> >  static const struct ayaneo_ec_quirk quirk_ayaneo3 =3D {
-> >       .has_fan_control =3D true,
-> >       .has_charge_control =3D true,
-> > +     .has_magic_modules =3D true,
-> >  };
-> >
-> >  static const struct dmi_system_id dmi_table[] =3D {
-> > @@ -266,6 +278,100 @@ static int ayaneo_remove_battery(struct power_sup=
-ply *battery,
-> >       return 0;
-> >  }
-> >
-> > +static ssize_t controller_power_store(struct device *dev,
-> > +                                   struct device_attribute *attr,
-> > +                                   const char *buf,
-> > +                                   size_t count)
+> >   enum lwmi_cd_type {
+> >   	LENOVO_CAPABILITY_DATA_00,
+> >   	LENOVO_CAPABILITY_DATA_01,
+> >   	LENOVO_FAN_TEST_DATA,
+> > +	CD_TYPE_NONE =3D -1,
+> >   };
+> >  =20
+> >   #define LWMI_CD_TABLE_ITEM(_type)		\
+> > @@ -75,6 +83,20 @@ struct lwmi_cd_priv {
+> >   	struct notifier_block acpi_nb; /* ACPI events */
+> >   	struct wmi_device *wdev;
+> >   	struct cd_list *list;
+> > +
+> > +	/*
+> > +	 * A capdata device may be a component master of another capdata devi=
+ce.
+> > +	 * E.g., lenovo-wmi-other <-> capdata00 <-> capdata_fan
+> > +	 *       |- master            |- component
+> > +	 *                            |- sub-master
+> > +	 *                                          |- sub-component
+> > +	 */
+> > +	struct lwmi_cd_sub_master_priv {
+> > +		struct device *master_dev;
+> > +		cd_list_cb_t master_cb;
+> > +		struct cd_list *sub_component_list; /* ERR_PTR(-ENODEV) implies no s=
+ub-component. */
+> > +		bool registered;                    /* Has the sub-master been regis=
+tered? */
+> > +	} *sub_master;
+> >   };
+> >  =20
+> >   struct cd_list {
+> > @@ -125,7 +147,7 @@ void lwmi_cd_match_add_all(struct device *master, s=
+truct component_match **match
+> >   		return;
+> >  =20
+> >   	for (i =3D 0; i < ARRAY_SIZE(lwmi_cd_table); i++) {
+> > -		/* Skip optional interfaces. */
+> > +		/* Skip sub-components. */
+> >   		if (lwmi_cd_table[i].type =3D=3D LENOVO_FAN_TEST_DATA)
+> >   			continue;
+> >  =20
+> > @@ -137,6 +159,56 @@ void lwmi_cd_match_add_all(struct device *master, =
+struct component_match **match
+> >   }
+> >   EXPORT_SYMBOL_NS_GPL(lwmi_cd_match_add_all, "LENOVO_WMI_CD");
+> >  =20
+> > +/**
+> > + * lwmi_cd_call_master_cb() - Call the master callback for the sub-com=
+ponent.
+> > + * @priv: Pointer to the capability data private data.
+> > + *
+> > + * Call the master callback and pass the sub-component list to it if t=
+he
+> > + * dependency chain (master <-> sub-master <-> sub-component) is compl=
+ete.
+> > + */
+> > +static void lwmi_cd_call_master_cb(struct lwmi_cd_priv *priv)
 > > +{
-> > +     bool value;
-> > +     int ret;
+> > +	struct cd_list *sub_component_list =3D priv->sub_master->sub_componen=
+t_list;
 > > +
-> > +     ret =3D kstrtobool(buf, &value);
-> > +     if (ret)
-> > +             return ret;
+> > +	/*
+> > +	 * Call the callback only if the dependency chain is ready:
+> > +	 * - Binding between master and sub-master: fills master_dev and mast=
+er_cb
+> > +	 * - Binding between sub-master and sub-component: fills sub_componen=
+t_list
+> > +	 *
+> > +	 * If a binding has been unbound before the other binding is bound, t=
+he
+> > +	 * corresponding members filled by the former are guaranteed to be cl=
+eared.
+> > +	 *
+> > +	 * This function is only called in bind callbacks, and the component
+> > +	 * framework guarantees bind/unbind callbacks may never execute
+> > +	 * simultaneously, which implies that it's impossible to have a race
+> > +	 * condition.
+> > +	 *
+> > +	 * Hence, this check is sufficient to ensure that the callback is cal=
+led
+> > +	 * at most once and with the correct state, without relying on a spec=
+ific
+> > +	 * sequence of binding establishment.
+> > +	 */
+> > +	if (!sub_component_list ||
+> > +	    !priv->sub_master->master_dev ||
+> > +	    !priv->sub_master->master_cb)
+> > +		return;
 > > +
-> > +     ret =3D ec_write(AYANEO_POWER_REG, value ? AYANEO_POWER_ON : AYAN=
-EO_POWER_OFF);
-> > +     if (ret)
-> > +             return ret;
+> > +	if (PTR_ERR(sub_component_list) =3D=3D -ENODEV)
+> > +		sub_component_list =3D NULL;
+> > +	else if (WARN_ON(IS_ERR(sub_component_list)))
+> > +		return;
 > > +
-> > +     return count;
+> > +	priv->sub_master->master_cb(priv->sub_master->master_dev,
+> > +				    sub_component_list);
+> > +
+> > +	/*
+> > +	 * Prevent "unbind and rebind" sequences from userspace from calling =
+the
+> > +	 * callback twice.
+> > +	 */
+> > +	priv->sub_master->master_cb =3D NULL;
+> > +	priv->sub_master->master_dev =3D NULL;
+> > +	priv->sub_master->sub_component_list =3D NULL;
 > > +}
 > > +
-> > +static ssize_t controller_power_show(struct device *dev,
-> > +                                  struct device_attribute *attr,
-> > +                                  char *buf)
+> >   /**
+> >    * lwmi_cd_component_bind() - Bind component to master device.
+> >    * @cd_dev: Pointer to the lenovo-wmi-capdata driver parent device.
+> > @@ -147,6 +219,8 @@ EXPORT_SYMBOL_NS_GPL(lwmi_cd_match_add_all, "LENOVO=
+_WMI_CD");
+> >    * list. This is used to call lwmi_cd*_get_data to look up attribute =
+data
+> >    * from the lenovo-wmi-other driver.
+> >    *
+> > + * If cd_dev is a sub-master, try to call the master callback.
+> > + *
+> >    * Return: 0
+> >    */
+> >   static int lwmi_cd_component_bind(struct device *cd_dev,
+> > @@ -158,6 +232,11 @@ static int lwmi_cd_component_bind(struct device *c=
+d_dev,
+> >   	switch (priv->list->type) {
+> >   	case LENOVO_CAPABILITY_DATA_00:
+> >   		binder->cd00_list =3D priv->list;
+> > +
+> > +		priv->sub_master->master_dev =3D om_dev;
+> > +		priv->sub_master->master_cb =3D binder->cd_fan_list_cb;
+> > +		lwmi_cd_call_master_cb(priv);
+> > +
+> >   		break;
+> >   	case LENOVO_CAPABILITY_DATA_01:
+> >   		binder->cd01_list =3D priv->list;
+> > @@ -169,8 +248,167 @@ static int lwmi_cd_component_bind(struct device *=
+cd_dev,
+> >   	return 0;
+> >   }
+> >  =20
+> > +/**
+> > + * lwmi_cd_component_unbind() - Unbind component to master device.
+> > + * @cd_dev: Pointer to the lenovo-wmi-capdata driver parent device.
+> > + * @om_dev: Pointer to the lenovo-wmi-other driver parent device.
+> > + * @data: Unused.
+> > + *
+> > + * If cd_dev is a sub-master, clear the collected data from the master=
+ device to
+> > + * prevent the binding establishment between the sub-master and the su=
+b-
+> > + * component (if it's about to happen) from calling the master callbac=
+k.
+> > + */
+> > +static void lwmi_cd_component_unbind(struct device *cd_dev,
+> > +				     struct device *om_dev, void *data)
 > > +{
-> > +     int ret;
-> > +     u8 val;
+> > +	struct lwmi_cd_priv *priv =3D dev_get_drvdata(cd_dev);
 > > +
-> > +     ret =3D ec_read(AYANEO_POWER_REG, &val);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     return sysfs_emit(buf, "%d\n", val =3D=3D AYANEO_POWER_ON);
+> > +	switch (priv->list->type) {
+> > +	case LENOVO_CAPABILITY_DATA_00:
+> > +		priv->sub_master->master_dev =3D NULL;
+> > +		priv->sub_master->master_cb =3D NULL;
+> > +		return;
+> > +	default:
+> > +		return;
+> > +	}
 > > +}
 > > +
-> > +static DEVICE_ATTR_RW(controller_power);
-> > +
-> > +static ssize_t controller_modules_show(struct device *dev,
-> > +                                    struct device_attribute *attr, cha=
-r *buf)
-> > +{
-> > +     char *out;
-> > +     int ret;
-> > +     u8 val;
-> > +
-> > +     ret =3D ec_read(AYANEO_MODULE_REG, &val);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     switch (~val & AYANEO_MODULE_MASK) {
->
-> Thanks for adding the mask.
->
-> Now when reading this again, I also suggest changing variable name from
-> "val" to e.g. "unconnected_modules" as that would make the reason for
-> inversion more obvious.
->
-> > +     case AYANEO_MODULE_LEFT | AYANEO_MODULE_RIGHT:
-> > +             out =3D "both";
-> > +             break;
-> > +     case AYANEO_MODULE_LEFT:
-> > +             out =3D "left";
-> > +             break;
-> > +     case AYANEO_MODULE_RIGHT:
-> > +             out =3D "right";
-> > +             break;
-> > +     default:
-> > +             out =3D "none";
-> > +             break;
-> > +     }
-> > +
-> > +     return sysfs_emit(buf, "%s\n", out);
-> > +}
-> > +
-> > +static DEVICE_ATTR_RO(controller_modules);
-> > +
-> > +static struct attribute *aya_mm_attrs[] =3D {
-> > +     &dev_attr_controller_power.attr,
-> > +     &dev_attr_controller_modules.attr,
-> > +     NULL
+> >   static const struct component_ops lwmi_cd_component_ops =3D {
+> >   	.bind =3D lwmi_cd_component_bind,
+> > +	.unbind =3D lwmi_cd_component_unbind,
 > > +};
 > > +
-> > +static umode_t aya_mm_is_visible(struct kobject *kobj,
-> > +                              struct attribute *attr, int n)
+> > +/**
+> > + * lwmi_cd_sub_master_bind() - Bind sub-component of sub-master device
+> > + * @dev: The sub-master capdata basic device.
+> > + *
+> > + * Call component_bind_all to bind the sub-component device to the sub=
+-master
+> > + * device. On success, collect the pointer to the sub-component list a=
+nd try
+> > + * to call the master callback.
+> > + *
+> > + * Return: 0 on success, or an error code.
+> > + */
+> > +static int lwmi_cd_sub_master_bind(struct device *dev)
 > > +{
-> > +     struct device *dev =3D kobj_to_dev(kobj);
-> > +     struct platform_device *pdev =3D to_platform_device(dev);
-> > +     struct ayaneo_ec_platform_data *data =3D platform_get_drvdata(pde=
-v);
+> > +	struct lwmi_cd_priv *priv =3D dev_get_drvdata(dev);
+> > +	struct cd_list *sub_component_list;
+> > +	int ret;
 > > +
-> > +     if (data->quirks->has_magic_modules)
-> > +             return attr->mode;
-> > +     return 0;
+> > +	ret =3D component_bind_all(dev, &sub_component_list);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	priv->sub_master->sub_component_list =3D sub_component_list;
+> > +	lwmi_cd_call_master_cb(priv);
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +static const struct attribute_group aya_mm_attribute_group =3D {
-> > +     .is_visible =3D aya_mm_is_visible,
-> > +     .attrs =3D aya_mm_attrs,
+> > +/**
+> > + * lwmi_cd_sub_master_unbind() - Unbind sub-component of sub-master de=
+vice
+> > + * @dev: The sub-master capdata basic device
+> > + *
+> > + * Clear the collected pointer to the sub-component list to prevent th=
+e binding
+> > + * establishment between the sub-master and the sub-component (if it's=
+ about to
+> > + * happen) from calling the master callback. Then, call component_unbi=
+nd_all to
+> > + * unbind the sub-component device from the sub-master device.
+> > + */
+> > +static void lwmi_cd_sub_master_unbind(struct device *dev)
+> > +{
+> > +	struct lwmi_cd_priv *priv =3D dev_get_drvdata(dev);
+> > +
+> > +	priv->sub_master->sub_component_list =3D NULL;
+> > +
+> > +	component_unbind_all(dev, NULL);
+> > +}
+> > +
+> > +static const struct component_master_ops lwmi_cd_sub_master_ops =3D {
+> > +	.bind =3D lwmi_cd_sub_master_bind,
+> > +	.unbind =3D lwmi_cd_sub_master_unbind,
 > > +};
 > > +
-> > +static const struct attribute_group *ayaneo_ec_groups[] =3D {
-> > +     &aya_mm_attribute_group,
-> > +     NULL
-> > +};
+> > +/**
+> > + * lwmi_cd_sub_master_add() - Register a sub-master with its sub-compo=
+nent
+> > + * @priv: Pointer to the sub-master capdata device private data.
+> > + * @sub_component_type: Type of the sub-component.
+> > + *
+> > + * Match the sub-component type and register the current capdata devic=
+e as a
+> > + * sub-master. If the given sub-component type is CD_TYPE_NONE, mark t=
+he sub-
+> > + * component as non-existent without registering sub-master.
+> > + *
+> > + * Return: 0 on success, or an error code.
+> > + */
+> > +static int lwmi_cd_sub_master_add(struct lwmi_cd_priv *priv,
+> > +				  enum lwmi_cd_type sub_component_type)
+> > +{
+> > +	struct component_match *master_match =3D NULL;
+> > +	int ret;
 > > +
-> >  static int ayaneo_ec_probe(struct platform_device *pdev)
-> >  {
-> >       const struct dmi_system_id *dmi_entry;
-> > @@ -307,6 +413,7 @@ static int ayaneo_ec_probe(struct platform_device *=
-pdev)
-> >  static struct platform_driver ayaneo_platform_driver =3D {
-> >       .driver =3D {
-> >               .name =3D "ayaneo-ec",
-> > +             .dev_groups =3D ayaneo_ec_groups,
-> >       },
-> >       .probe =3D ayaneo_ec_probe,
-> >  };
-> >
->
-> --
->  i.
->
->
+> > +	priv->sub_master =3D devm_kzalloc(&priv->wdev->dev, sizeof(*priv->sub=
+_master), GFP_KERNEL);
+> > +	if (!priv->sub_master)
+> > +		return -ENOMEM;
+> > +
+> > +	if (sub_component_type =3D=3D CD_TYPE_NONE) {
+> > +		/* The master callback will be called with NULL on bind. */
+> > +		priv->sub_master->sub_component_list =3D ERR_PTR(-ENODEV);
+> > +		priv->sub_master->registered =3D false;
+> > +		return 0;
+> > +	}
+> > +
+> > +	/*
+> > +	 * lwmi_cd_match() needs a pointer to enum lwmi_cd_type, but on-stack
+> > +	 * data cannot be used here. Steal one from lwmi_cd_table.
+> > +	 */
+> > +	component_match_add(&priv->wdev->dev, &master_match, lwmi_cd_match,
+> > +			    (void *)&lwmi_cd_table[sub_component_type].type);
+> > +	if (IS_ERR(master_match))
+> > +		return PTR_ERR(master_match);
+> > +
+> > +	ret =3D component_master_add_with_match(&priv->wdev->dev, &lwmi_cd_su=
+b_master_ops,
+> > +					      master_match);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	priv->sub_master->registered =3D true;
+> > +	return 0;
+> > +}
+> > +
+> > +/**
+> > + * lwmi_cd_sub_master_del() - Unregister a sub-master if it's register=
+ed
+> > + * @priv: Pointer to the sub-master capdata device private data.
+> > + */
+> > +static void lwmi_cd_sub_master_del(struct lwmi_cd_priv *priv)
+> > +{
+> > +	if (priv->sub_master->registered) {
+> > +		component_master_del(&priv->wdev->dev, &lwmi_cd_sub_master_ops);
+> > +		priv->sub_master->registered =3D false;
+> > +	}
+> > +}
+> > +
+> > +/**
+> > + * lwmi_cd_sub_component_bind() - Bind sub-component to sub-master dev=
+ice.
+> > + * @sc_dev: Pointer to the sub-component capdata parent device.
+> > + * @sm_dev: Pointer to the sub-master capdata parent device.
+> > + * @data: Pointer used to return the capability data list pointer.
+> > + *
+> > + * On sub-master's bind, provide a pointer to the local capdata list.
+> > + * This is used by the sub-master to call the master callback.
+> > + *
+> > + * Return: 0
+> > + */
+> > +static int lwmi_cd_sub_component_bind(struct device *sc_dev,
+> > +				      struct device *sm_dev, void *data)
+> > +{
+> > +	struct lwmi_cd_priv *priv =3D dev_get_drvdata(sc_dev);
+> > +	struct cd_list **listp =3D data;
+> > +
+> > +	*listp =3D priv->list;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct component_ops lwmi_cd_sub_component_ops =3D {
+> > +	.bind =3D lwmi_cd_sub_component_bind,
+> >   };
+> >  =20
+> >   /**
+> > @@ -470,9 +708,25 @@ static int lwmi_cd_probe(struct wmi_device *wdev, =
+const void *context)
+> >   		goto out;
+> >  =20
+> >   	switch (info->type) {
+> > -	case LENOVO_CAPABILITY_DATA_00:
+> > +	case LENOVO_CAPABILITY_DATA_00: {
+> > +		enum lwmi_cd_type sub_component_type =3D LENOVO_FAN_TEST_DATA;
+> > +		struct capdata00 capdata00;
+> > +
+> > +		ret =3D lwmi_cd00_get_data(priv->list, LWMI_ATTR_ID_FAN_TEST, &capda=
+ta00);
+> > +		if (ret || !(capdata00.supported & LWMI_SUPP_VALID)) {
+> > +			dev_dbg(&wdev->dev, "capdata00 declares no fan test support\n");
+> > +			sub_component_type =3D CD_TYPE_NONE;
+> > +		}
+> > +
+> > +		/* Sub-master (capdata00) <-> sub-component (capdata_fan) */
+> > +		ret =3D lwmi_cd_sub_master_add(priv, sub_component_type);
+> > +		if (ret)
+> > +			goto out;
+> > +
+> > +		/* Master (lenovo-wmi-other) <-> sub-master (capdata00) */
+> >   		ret =3D component_add(&wdev->dev, &lwmi_cd_component_ops);
+> >   		goto out;
+>=20
+> Why not simply registering the component for the master inside the bind c=
+allback
+> of the submaster?
 
+Calling=C2=A0component_add()[1] in any bind/unbind callbacks causes deadloc=
+k
+because the contexts of bind/unbind callbacks are protected by
+component_mutex while component_add() acquires it again.
+
+That's why I proposed using a work to call component_add() in my
+previous reply[2]. However, even my previous proposal was too fragile
+to adopt. It still causes deadlock if component_mutex is already held
+by the context of unbind callback before the started work acquires it.
+Consider the following execution sequence:
+
+lwmi_cd_sub_master_bind()
+- schedule_work(sub_master_add_as_a_component_work)
+
+(CPU 0) sub_master_add_as_a_component_work
+- started, about to call mutex_lock(&component_mutex)
+  (drivers/base/component.c:745)
+
+(CPU 1) lwmi_cd_sub_master_unbind()
+- cancel_work_sync(sub_master_add_as_a_component_work)
+
+Calling cancel_work_sync() on a started work will never return until
+the work is finished, but the work will soon be blocked by
+mutex_lock(&component_mutex) until the unbind callback is finished.
+
+[1]: As well as component_del(), component_master_add_with_match(),
+     component_master_del(), component_master_is_bound().
+[2]: https://lore.kernel.org/r/4bcdd4a629b2d46bd4988eb347ce944af9943773.cam=
+el@rong.moe/
+
+> If fan test data is present, then you simply register the submaster
+> and register the component inside the bind callback of the submaster. If =
+no fan test
+> data is present, then you skip registration of the submaster and register=
+ the component
+> directly.
+
+The dilemma on component_mutex made me think: instead of working around
+it, why not take advantage of the protection it provides?
+
+This thought inspired me to implement lwmi_cd_call_master_cb() with
+proper synchronization provided by the sub-master/component bind/unbind
+callbacks, which fill or clear priv->sub_master members accordingly. In
+such a scheme, capdata00 can be registered as a master and a component
+in any order[3].
+
+If no fan test data is present, lwmi_cd_sub_master_add(priv,
+CD_TYPE_NONE) will be called, resulting in priv->sub_master being
+allocated without registering capdata00 as a master. Then,
+cd_fan_list_cb is called with NULL once capdata00 binds to lenovo-wmi-
+other (master).
+
+Embarrassingly, I just realized that I forgot to add a failing path for
+component_add(capdata00). I will send out a [PATCH v6] fixing this once
+Derek tests the series. Derek, hope you had a refreshing weekend out of
+town ;)
+
+[3]: The current implementation calls lwmi_cd_sub_master_add() first to
+simplify some code paths (e.g., no need to check priv->sub_master !=3D
+NULL afterward).
+
+> The basic idea however seems fine to me.
+>=20
+> Thanks,
+> Armin Wolf
+
+Thanks,
+Rong
+
+> > +	}
+> >   	case LENOVO_CAPABILITY_DATA_01:
+> >   		priv->acpi_nb.notifier_call =3D lwmi_cd01_notifier_call;
+> >  =20
+> > @@ -488,6 +742,7 @@ static int lwmi_cd_probe(struct wmi_device *wdev, c=
+onst void *context)
+> >   		ret =3D component_add(&wdev->dev, &lwmi_cd_component_ops);
+> >   		goto out;
+> >   	case LENOVO_FAN_TEST_DATA:
+> > +		ret =3D component_add(&wdev->dev, &lwmi_cd_sub_component_ops);
+> >   		goto out;
+> >   	default:
+> >   		return -EINVAL;
+> > @@ -509,10 +764,13 @@ static void lwmi_cd_remove(struct wmi_device *wde=
+v)
+> >  =20
+> >   	switch (priv->list->type) {
+> >   	case LENOVO_CAPABILITY_DATA_00:
+> > +		lwmi_cd_sub_master_del(priv);
+> > +		fallthrough;
+> >   	case LENOVO_CAPABILITY_DATA_01:
+> >   		component_del(&wdev->dev, &lwmi_cd_component_ops);
+> >   		break;
+> >   	case LENOVO_FAN_TEST_DATA:
+> > +		component_del(&wdev->dev, &lwmi_cd_sub_component_ops);
+> >   		break;
+> >   	default:
+> >   		WARN_ON(1);
+> > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.h b/drivers/platfo=
+rm/x86/lenovo/wmi-capdata.h
+> > index 38af4c4e4ef4..59ca3b3e5760 100644
+> > --- a/drivers/platform/x86/lenovo/wmi-capdata.h
+> > +++ b/drivers/platform/x86/lenovo/wmi-capdata.h
+> > @@ -5,8 +5,20 @@
+> >   #ifndef _LENOVO_WMI_CAPDATA_H_
+> >   #define _LENOVO_WMI_CAPDATA_H_
+> >  =20
+> > +#include <linux/bits.h>
+> >   #include <linux/types.h>
+> >  =20
+> > +#define LWMI_SUPP_VALID		BIT(0)
+> > +#define LWMI_SUPP_MAY_GET	(LWMI_SUPP_VALID | BIT(1))
+> > +#define LWMI_SUPP_MAY_SET	(LWMI_SUPP_VALID | BIT(2))
+> > +
+> > +#define LWMI_ATTR_DEV_ID_MASK	GENMASK(31, 24)
+> > +#define LWMI_ATTR_FEAT_ID_MASK	GENMASK(23, 16)
+> > +#define LWMI_ATTR_MODE_ID_MASK	GENMASK(15, 8)
+> > +#define LWMI_ATTR_TYPE_ID_MASK	GENMASK(7, 0)
+> > +
+> > +#define LWMI_DEVICE_ID_FAN	0x04
+> > +
+> >   struct component_match;
+> >   struct device;
+> >   struct cd_list;
+> > @@ -32,9 +44,17 @@ struct capdata_fan {
+> >   	u32 max_rpm;
+> >   };
+> >  =20
+> > +typedef void (*cd_list_cb_t)(struct device *master_dev, struct cd_list=
+ *cd_list);
+> > +
+> >   struct lwmi_cd_binder {
+> >   	struct cd_list *cd00_list;
+> >   	struct cd_list *cd01_list;
+> > +	/*
+> > +	 * May be called during or after the bind callback.
+> > +	 * Will be called with NULL if capdata_fan does not exist.
+> > +	 * The pointer is only valid in the callback; never keep it for later=
+ use!
+> > +	 */
+> > +	cd_list_cb_t cd_fan_list_cb;
+> >   };
+> >  =20
+> >   void lwmi_cd_match_add_all(struct device *master, struct component_ma=
+tch **matchptr);
+> > diff --git a/drivers/platform/x86/lenovo/wmi-other.c b/drivers/platform=
+/x86/lenovo/wmi-other.c
+> > index f2e1e34d58a9..b3adcc2804fa 100644
+> > --- a/drivers/platform/x86/lenovo/wmi-other.c
+> > +++ b/drivers/platform/x86/lenovo/wmi-other.c
+> > @@ -54,11 +54,6 @@
+> >   #define LWMI_FEATURE_VALUE_GET 17
+> >   #define LWMI_FEATURE_VALUE_SET 18
+> >  =20
+> > -#define LWMI_ATTR_DEV_ID_MASK GENMASK(31, 24)
+> > -#define LWMI_ATTR_FEAT_ID_MASK GENMASK(23, 16)
+> > -#define LWMI_ATTR_MODE_ID_MASK GENMASK(15, 8)
+> > -#define LWMI_ATTR_TYPE_ID_MASK GENMASK(7, 0)
+> > -
+> >   #define LWMI_OM_FW_ATTR_BASE_PATH "lenovo-wmi-other"
+> >  =20
+> >   static BLOCKING_NOTIFIER_HEAD(om_chain_head);
