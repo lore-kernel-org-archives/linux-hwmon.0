@@ -1,69 +1,68 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374762C026C
-	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 16:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24A025A655
+	for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 16:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763396867; cv=none; b=DUzbWG+zucrbRFuIh2ykFaLrnDGTLA9gOGfBeC9jPOuIGdqmhxCEJJ2QVfp2p4QdsDwFVKt46RWTi7edR6xIhGkkzYsC5LfDfiGoln0WXkH6v42fB7dcxph8AAVZnaLnvRBlSt11JLW5AutpoSd3POunhd4tXBeETlbpiamC6FQ=
+	t=1763397097; cv=none; b=ljf4e1KHfdneniVK6DklA9VGz9gOir5eQifdEUPf6aOUlKFMyx4sov7ADyHR4/Zvw4b7zbxrFGXixrxRjDclCT/8I9rFxY1TvF0XtOonPljvuzgXU0EIjp/cEe5cb1xRff4ihRmnJrfwp+KdE0KOcov2IHGflV9KBpcRoLtYDOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763396867; c=relaxed/simple;
-	bh=+Tri3+Y75EFKL4gc7BucYZKcTlL+uMjzyQqIuhRwO0w=;
+	s=arc-20240116; t=1763397097; c=relaxed/simple;
+	bh=Znq+/Z8nJmMpZxFT0nLC9bWacA9xI7ZdyEOSDmaPHB8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dx/oodZRrrdJeSnTqbBa4Sp96NDRzJUUgzEoAphF4+G/67G3OLSmU9POFAGqGjt3hlLLQYV/c3OWwn1uy28nCDIlp4G0DHSUNDctI/UnKnQZyUOnUIdiG826d/AH7MNvbvtTlTuIukaoZqjoFj5kBvgg+//xf9XbYu59UQ+CP04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lvHfauPI; arc=none smtp.client-ip=209.85.216.50
+	 In-Reply-To:Content-Type; b=A9KUOVj4xhKeKIYoJY+PysXKYdaVqGy8A4RLw0wQSUfU5M5LjupNA+IBuJtv3Gv2JywZtKF1/7TR6F796Oc2Jjws7CT2Wcsk+TBULLiMmv0/N2tZ/MtAzGuh6W/zWN7gsVsurs6X2gRtGhTYsRXt0gHFkNmreMBtnP5VVzBTCuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N67PNVrv; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lvHfauPI"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-34101107cc8so3986902a91.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 08:27:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N67PNVrv"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7bc0cd6a13aso2590951b3a.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 Nov 2025 08:31:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763396865; x=1764001665; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763397095; x=1764001895; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9bXO5ksyx851MCyyDIbfVy53xQYO9Txx5ddxxITMLs=;
-        b=lvHfauPI14kTvuFK1px0MsWz+5rdDx0ib2X7AKuQnM+5XRw+N08lmFALoGJ5RgZrTm
-         j/Rx6RvXI39lgjso1eEIWNTANm5kPtDzNe4O+gc4d72RK66Ok7cggH83W0qoAE2H5woR
-         EGjY6neoJzNs3jk1Ptv78bUaY7iQM7Q6WJ5kHGjQMc3f4kgbPHDeAqv98xQnUIxt3mXq
-         Ggpe7/hC0YI1rBLKkq/sl2P0hC7aBcQS6MZ534iPCLwEnsCqVJC9ZxcMW3zMbzcplf7M
-         ZZEvh2qnNqlyCJS+PVEZ5xen5wIrNbi3S+8VkD9PzYdFZSftAAGSofyIXkA/S8U1XtQI
-         ygkw==
+        bh=oQb9o9kIvZYvCgg7VsyLSOUu+m0XVkdwUoPP5wNrJvo=;
+        b=N67PNVrv6fZnOszEItCvXdGnoun9/u9HV5YWbEIEHXg3ce+ZQ5DE/9mR3isdChxC6P
+         XNqzhcStzyG4Wsd6XuHCbyqh7L9mCbKhVWvynzGwawwtaFc/UXB4xIq+Uwl4oyW6q+an
+         nKnZI+63Ozme5EngCCPmTDi//06Im2qroaYIUlDksFEISausLlJWe4C69HZzYscc+zsF
+         CU8rJKVD2OHhUcr4bnlKGPY+eOFQZrs+JAP1xnZNrgnJDC4AgNGxb26GpMlgOgcP02Dx
+         WwoKF2GsJRvMaZd9dC3O9MUOY+D7QpDaLYqUq754OUQyb4uJVuJTu+4Xl53GCY23vDkV
+         TfMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763396865; x=1764001665;
+        d=1e100.net; s=20230601; t=1763397095; x=1764001895;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g9bXO5ksyx851MCyyDIbfVy53xQYO9Txx5ddxxITMLs=;
-        b=UqEUlJR6Sto1YhAV8KGIwolJvDxjGDk6ZlGQjNU0dugThj8p+RW/r/JMkLBjjiZ1gn
-         hC1Omb1kemcekZjClJ8EBFtXxSv+4d3hjWCUTHpBmqqqghLP3H1KeBGKCbP+2pYAX3dx
-         h2rePLZsgoagCdf1dHo8ogPWSQ6iMOmFCp9x6gCJNJGfEmQjmV6S9kvFTT7FSFvBTx2I
-         4zH/BqVxta+zp35WAjqIOqtb1tJ019K/cFGfY0dtEVgDSUc3wq5g0HnyjEFXdlsiB2sU
-         ez1J+KdlfGfhft6kl6D8mfG2mNdGpdOMWNaHPz+UsCUeMg953NQUE9J4GYN944sJOjTD
-         XHFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMLcUiUO9Dq8Hl4Pr63GprAhz2QOlCUYWsQzq3muXCqEgjpUDdFXH3Tk5jD6ufz+Ys2yYfj/BWY/POMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFKQhe655nDkEpFWJw5snP2mxk5NzZwUUGjVl6rYF+e+Bvgwbo
-	w9X0RAet0f2tfQIAtKJsKzvs+0ygur4qBnCQl+KWhuGjJMvYJpag4H4P
-X-Gm-Gg: ASbGncvTwMC6di14SpWl17fYX9G9pN3lC7IV5kcRzQUuDa5dqZipI4dtCv4Je3Tmjsf
-	v2QOJmptET4qVmPx+PljUcoUC7+BQn3idP+ecFqLVdiF1vyfBxXg+MYc7/ogr0srAzCwMsws6bu
-	6MQQGoumINelXEdNcmQ80WFheR76ScqXnZ3Jspjxta9E489e/4jrUHepjD7ukx9XCAinXdLghXm
-	e07MMgZiOAEZkSoVNXfsfz9FjWtUgomE9VnM+0mHTws8nRpykD+DDI7JMwpSFlbRgeDm4/+4m2b
-	26J22DfjgSZmu3+r/crE4j3LdAvfxY50GP7gs2obKgFKbxwqUJUib1Rqrx41yqD3xPty2qN5q9I
-	QRCTR8E56wzXR6VL3ck5rD1jAWXgfKAzQ2D7INxfqqpMQTRoSDUHOTaS2G1aij6PNjj69C34/JK
-	EOoSxsZXwwcySa8mo2KPiezIrj+Yt8diDKUOBE6//7IqCZIUCTOoOMa8KJKGndyEBCyJbr/Yqey
-	bXn5Lrb
-X-Google-Smtp-Source: AGHT+IHzLJJ5Y3QBnuwz3zctFFWMcGjBrgknfml8ngA07+MHeXbweTwUzUs3p/Rw21AlWCRbdW2vOw==
-X-Received: by 2002:a17:90b:4a4f:b0:33b:ba55:f5eb with SMTP id 98e67ed59e1d1-343f9d91d06mr12418122a91.1.1763396865313;
-        Mon, 17 Nov 2025 08:27:45 -0800 (PST)
+        bh=oQb9o9kIvZYvCgg7VsyLSOUu+m0XVkdwUoPP5wNrJvo=;
+        b=kIfrjEuE6OO7diROVSgskfv9XZJJV/iHhk0rTYrfirWPESAZJTGRG+Dc5xOwHdLdEc
+         zQP26nTrG4Wjy54Ygx5TTw5RW6EFHWeiITLVoc71MUWdVPhdxN00F+3AoZl6t34oivO7
+         GxK2NL2tTLtqd5Qg7XJ53BB28GW0qTD+sJ+h+tuI3QgS4+UNe72akcsPwdUotELvtRiA
+         6alKkF0m9LUPujEZYQ6LM8aAyzv7lDzuuu0lFqlwHe8p8Udob8oqmHbITQmamnW0AZXS
+         mRrnJ/PogDdcW+z8Os1Jw3gXbQyIV7LaHRn0aMFOGCyqF8mZLEdODHyqPsjsHEQ/EMJw
+         qNFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVY1ZtvLnC1i9Z5X0Vlg7mG8yT13CwuOMCBFZ6Im4/AfzXJCMvRQ4enTWxSns53JcK83sLz8sQIq5EKwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFn+sEvNGnMUjjKt/PGB7Q2wQAxgmv5ESOfwpp5Q7EtgY7dq52
+	1g52MMKWYKyLNy2GuuS7jVxn79EM3YRCzGEbMCbtrhTpR8o5kkW44mXC
+X-Gm-Gg: ASbGncsFEGGdqdie8Iw6uDS9FwxSkdYUKmwyiTvQXZhUXiIKzH0zK9jFJLeuoTUpnNM
+	AEX0ioJ+kCrT+JLiUf56CWGB++5Ka67fNT6Om7STDOaHQSc3VBh3TSPaTfh+YhngsPoiJLF4nO2
+	CokAcsVeD7J8PGUosGOXfP9yX5dQwmfWqPZcGEMfMNxl12bYssr+BLEwvKh9hjMGK4DPMNxKfjm
+	tBqFwD/1PpQ1+e0qKj/4WpZTEOnGmVR2gKweocp0Tx/1oMUlomZfLViFvMA8KFI0+4Jpe9aX1We
+	zUgyYlsBhpRdEfk5MAqRurTike8B1E1+Q5WTuh7FE9AyydlU+7AQhidgEvCyVurNXn0tiPWPNVC
+	9/zOaxwnoAgCHbvarLbuhQ444MFFzg1PL2YwUGdpgfGc10jAPtWJ96E3ngHlncOF16r/4lbDp1a
+	Aa4EP+e+/PIhxAymV+AYxb6nXmQRJRAXg0ome7o84d7NrG1Rn8
+X-Google-Smtp-Source: AGHT+IHpJ4uDX4lpjeUvZTRjQRuO+qDaoDfLEprlbIpsQTNE4U11y2mfk8cVtEQcIR3O0NkkEfOikw==
+X-Received: by 2002:a05:6a20:3d0e:b0:341:2c7b:ed13 with SMTP id adf61e73a8af0-35b9ff89fe5mr14987202637.5.1763397094920;
+        Mon, 17 Nov 2025 08:31:34 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343eacc6c37sm5827402a91.14.2025.11.17.08.27.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927c22b1bsm13550393b3a.66.2025.11.17.08.31.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Nov 2025 08:27:44 -0800 (PST)
+        Mon, 17 Nov 2025 08:31:34 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <89beb0aa-57f5-4baa-b59e-0beaca6f002f@roeck-us.net>
-Date: Mon, 17 Nov 2025 08:27:42 -0800
+Message-ID: <ca5b7d80-895b-4562-a066-48f7d708d488@roeck-us.net>
+Date: Mon, 17 Nov 2025 08:31:32 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -71,7 +70,7 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] dt-bindings: Add tids in bindings and wsen as vendor
+Subject: Re: [PATCH 2/4] hwmon: documentation: add tids
 To: Thomas Marangoni <Thomas.Marangoni@becom-group.com>,
  linux-hwmon@vger.kernel.org
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
@@ -84,7 +83,7 @@ Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org
 References: <20251117123809.47488-1-Thomas.Marangoni@becom-group.com>
- <20251117123809.47488-4-Thomas.Marangoni@becom-group.com>
+ <20251117123809.47488-3-Thomas.Marangoni@becom-group.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,48 +129,95 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251117123809.47488-4-Thomas.Marangoni@becom-group.com>
+In-Reply-To: <20251117123809.47488-3-Thomas.Marangoni@becom-group.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 11/17/25 04:38, Thomas Marangoni wrote:
-> This patch adds the tids driver to the bindings as trivial-devices
-> and adds the WSEN manufacturer to the vendor-prefixes.
-
-This patch should be the first patch in the series.
-
+> Add tids driver documentation
 > ---
->   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->   Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->   2 files changed, 4 insertions(+)
+>   Documentation/hwmon/tids.rst | 61 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 61 insertions(+)
+>   create mode 100644 Documentation/hwmon/tids.rst
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 2eff6f274302..e120767ce119 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -488,6 +488,8 @@ properties:
->             - ti,tsc2003
->               # Winbond/Nuvoton H/W Monitor
->             - winbond,w83793
-> +            # Temperature sensor with i2c interface
-> +          - wsen,tids-2521020222501
+> diff --git a/Documentation/hwmon/tids.rst b/Documentation/hwmon/tids.rst
+> new file mode 100644
+> index 000000000000..f3fea4e416ea
+> --- /dev/null
+> +++ b/Documentation/hwmon/tids.rst
+> @@ -0,0 +1,61 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver tids
+> +===================
+> +
+> +Supported Chips:
+> +
+> +  * WSEN TIDS
+> +
+> +    Prefix: 'tids'
+> +
+> +    Addresses scanned: None
+> +
+> +    Datasheet:
+> +
+> +      English: https://www.we-online.com/components/products/manual/Manual-um-wsen-tids-2521020222501%20(rev1.2).pdf
+> +
+> +Author: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
+> +
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for the WSEN TIDS chip, a temperature
+> +sensor. Temperature is measured in degree celsius. In sysfs interface,
+> +all values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
+> +
+> +Usage Notes
+> +-----------
+> +
+> +The device communicates with the I2C protocol. Sensors can have the I2C
+> +address 0x38 or 0x3F. See Documentation/i2c/instantiating-devices.rst for methods
+> +to instantiate the device.
+> +
+> +Sysfs entries
+> +-------------
+> +
+> +=============== ============================================
+> +temp1_input     Measured temperature in millidegrees Celsius
+> +update_interval The interval for polling the sensor, in
+> +                milliseconds. Writable. Must be 5, 10, 20
+> +                or 40.
 
-I think this should just be "wsen,tids".
+As mentioned in the driver feedback, this should be more generous and say
+something like "Supported values are 5, 10, 20, or 40".
 
->   
->   required:
->     - compatible
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 42d2bc0ce027..2cf753fdf5a7 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -1823,6 +1823,8 @@ patternProperties:
->       description: Wobo
->     "^wolfvision,.*":
->       description: WolfVision GmbH
-> +  "^wsen,.*":
-> +    description: Würth Elektronik eiSos GmbH & Co. KG
->     "^x-powers,.*":
->       description: X-Powers
->     "^xen,.*":
+> +temp1_max_hyst  The temperature in millidegrees Celsius, that
+> +                is triggering the temp1_max_alarm. Writable.
+> +                The lowest possible value is -39680 and the
+
+As above, s/possible/supported/. We don't usually expect users to know
+supported value ranges for update intervals or temperature limits.
+
+> +                highest possible value is 122880. Values are
+> +                saved in steps of 640.
+> +temp1_min_hyst  The temperature in millidegrees Celsius, that
+> +                is triggering the temp1_min_alarm. Writable.
+> +                The lowest possible value is -39680 and the
+> +                highest possible value is 122880. Values are
+> +                saved in steps of 640.
+
+As mentioned in the driver feedback, I think those should be temp1_max
+and temp1_min. I see no evidence that those are hysteresis values,
+and the description here and in the datasheet confirms this.
+
+> +temp1_max_alarm The alarm will be triggered when the level
+> +                reaches the value specified in
+> +                temp1_max_hyst. It will reset automatically
+> +                once it has been read.
+> +temp1_min_alarm The alarm will be triggered when the level
+> +                reaches the value specified in
+> +                temp1_min_hyst. It will reset automatically
+> +                once it has been read.
+> +=============== ============================================
 
