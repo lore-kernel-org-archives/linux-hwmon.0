@@ -1,39 +1,37 @@
 Received: from exactco.de (exactco.de [176.9.10.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43A2305E1F;
-	Mon, 17 Nov 2025 18:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0E730CDA8;
+	Mon, 17 Nov 2025 18:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.10.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763403352; cv=none; b=tsCzwhcnS8kv7z8/UmiLQBkTl//VYd6K+31tHM7RAxVOR8mSG4XEHwhn2+uvTelndWvde6RpJX5VSyB8tNrhaverKu2kBiLMWKXK02+4Q3Fw/uBhQULumqKlAqrgZduD2+lSt5W8VWkw3tVA8h3lbyQ0Qbb6KFPQF9k7gR1dLZU=
+	t=1763404639; cv=none; b=rTaNW6EVeNJ/XqrjhUKT83GRzVkGmPSgf715w5Ko9xw10ju+4rFX4XPUFVehbHd3ZY9eVG9dq2jBnBh21ucVDnKHphYDmOeRvSiFM4CsfQNgKfObqUe6pVR3FR7WWIsbD/KP7C4gTFr7s6voTdgeXUffmHsDxNR6QR2OzOIwDSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763403352; c=relaxed/simple;
-	bh=5/DZAFNeA/39VoIqSb6mI1Slk7+LJGIsTeUe96QFOPU=;
-	h=Date:Message-Id:To:Cc:Subject:From:Mime-Version:Content-Type; b=sO3SO+kYPkHADE8CJHMe13nWaQn18/zT0r2qI2j5qc74VnkLEtReNPEAf2t5dzOqip4GV/QcRi5Ap4xA7pZxwHKSiCLtmPWIsoajNQ46sTL+qwE54tjvr8GTFlpR2KALQ4ZqxtQQ05FW00JIH1/W8DtGgeMPPpb2HCuFa6Om3v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exactco.de; spf=pass smtp.mailfrom=exactco.de; dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b=bN3AM/Kf; arc=none smtp.client-ip=176.9.10.151
+	s=arc-20240116; t=1763404639; c=relaxed/simple;
+	bh=IA9dukPUv7yYp7i2jd6pN6ihgfXp6OJ/Njouogyv70U=;
+	h=Date:Message-Id:To:Cc:Subject:From:Mime-Version:Content-Type; b=TtSasa6NrZXQEDRdWAgv0+GJDfGPmiyc+EeA9D9lCxljagT4msNsV9oKYyFeoXlftyIs0rcuobD75W4DzMyxi0OVf9viVnuINcp5TfwnxhXetgkPMBFofmNxVx6OfC4YA4tLCEVjYNr4zL0OgVK2qIS8wwJ0UvO1qB64KD3dHCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exactco.de; spf=pass smtp.mailfrom=exactco.de; dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b=jOEfwW6I; arc=none smtp.client-ip=176.9.10.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=exactco.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exactco.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b="bN3AM/Kf"
+	dkim=pass (2048-bit key) header.d=exactco.de header.i=@exactco.de header.b="jOEfwW6I"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de;
 	s=x; h=Content-Transfer-Encoding:Content-Type:Mime-Version:From:Subject:Cc:To
 	:Message-Id:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
 	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
 	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-	List-Owner:List-Archive; bh=nF0ic8glzTeKyvSR5XMEftFP5v9oU+nrFq4snqo5j/s=; b=b
-	N3AM/Kf0ok7t5DpX9terPn7QSWUulHDdLa0CXNfJsjiS7jzts5mrA7fE2CKtvD6iPZfSyb5D1le1O
-	knupPpNfbjZrqgi/n/e21OZImSYT/yNKUHbDAg4ppWQAjA+pQQq2xpkRHE6uzYMOk1k6RGaVAVitM
-	yB7CKrpgZX4SOfBujizLjWP9oCP2zSJWAB9JHoyySjiMVhVoDrS4wypfNiKbJWgVR+jKwK9yCOsG4
-	rJSsjwCLoVzEwjhE2u/FVICsz7FBb/xmIOMLJCOkylguPNi4UsCX55iAx5mQ3m0dBymbRWsxg3IL+
-	wOi5TRZWfdRU+7u35VEkum677JUj3J4kA==;
-Date: Mon, 17 Nov 2025 19:15:55 +0100 (CET)
-Message-Id: <20251117.191555.1034668076458804931.rene@exactco.de>
-To: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V2] hwmon: (via-cputemp) Add Via CHA ID
+	List-Owner:List-Archive; bh=TMIpJ+MhqSoo9waohgGN9xZkGLLljhYSQoQl9IhRJyM=; b=j
+	OEfwW6I2vL7Sh2VRIrmmb8Wfq4s38JGHDK/dpyPK0n/MExeXRst6N39hfh7HbOF/SAW64mObe4haM
+	R1eonKQDWZbM3aqYxQyuBLOsM+GV7tVt5ZSb7aKvSrw3MDeUHjCF3oE9jgK8/SkgEdBs7CPnHWiJW
+	WZyFB/pzCRjQ1d1ZJxO+8U1jLUwKiKpCretn2isNArq4slnrnLQ+MrqO12lqrLIdqdXm9vkS2buSR
+	4k6LCegOcLd2ukkxKIZUEqT1GTuPrVCqu0qoz/UqRrwAPFWjks0msAGAzh8niHqiy+UyL9iIL1Xuj
+	XeKJsQ0fLniYhlM6x2wroqo+uCJXW25RQ==;
+Date: Mon, 17 Nov 2025 19:37:25 +0100 (CET)
+Message-Id: <20251117.193725.1655587639439350088.rene@exactco.de>
+To: linux-hwmon@vger.kernel.org, linux-pci@vger.kernel.org
+Cc: Clemens Ladisch <clemens@ladisch.de>, Guenter Roeck
+ <linux@roeck-us.net>, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] hwmon: (k10temp) Add AMD Steam Deck APU ID
 From: =?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactco.de>
 X-Mailer: Mew version 6.10 on Emacs 30.2
 Precedence: bulk
@@ -45,60 +43,38 @@ Mime-Version: 1.0
 Content-Type: Text/Plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
 
-Add Via CHA CPU device ID to via-cputemp to support reading that last
-CPU temperature some of us have, too. While at it, use defines for all
-CPU model checks.
+Add AMD Custom APU 0405 PCI ID as used in the Valve Steam Deck to
+k10temp.
 
 Signed-off-by: René Rebe <rene@exactco.de>
 
 ---
-v2: use defines for CPU model checks
+Tested for nearly three years on my first gen Steam Deck.
 
-diff --git a/arch/x86/include/asm/cpu_device_id.h b/arch/x86/include/asm/cpu_device_id.h
-index 6be777a06944..03b0c6d0760d 100644
---- a/arch/x86/include/asm/cpu_device_id.h
-+++ b/arch/x86/include/asm/cpu_device_id.h
-@@ -52,6 +52,7 @@
- #define X86_CENTAUR_FAM6_C7_A		0xa
- #define X86_CENTAUR_FAM6_C7_D		0xd
- #define X86_CENTAUR_FAM6_NANO		0xf
-+#define X86_CENTAUR_FAM6_CHA		0x47
+index b98d5ec72c4f..1ab64adb63e9 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -553,6 +553,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M40H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M90H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 92ffc4373f6d..d86b203de1df 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -573,6 +573,7 @@
+ #define PCI_DEVICE_ID_AMD_17H_M40H_DF_F3 0x13f3
+ #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
++#define PCI_DEVICE_ID_AMD_17H_M90H_DF_F3 0x1663
+ #define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3 0x1727
+ #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
+ #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
  
- /* x86_cpu_id::flags */
- #define X86_CPU_ID_FLAG_ENTRY_VALID	BIT(0)
-diff --git a/drivers/hwmon/via-cputemp.c b/drivers/hwmon/via-cputemp.c
-index 823bff2871e1..81373f9e7b32 100644
---- a/drivers/hwmon/via-cputemp.c
-+++ b/drivers/hwmon/via-cputemp.c
-@@ -126,15 +126,13 @@ static int via_cputemp_probe(struct platform_device *pdev)
- 		data->msr_temp = 0x1423;
- 	} else {
- 		switch (c->x86_model) {
--		case 0xA:
--			/* C7 A */
--		case 0xD:
--			/* C7 D */
-+		case X86_CENTAUR_FAM6_C7_A:
-+		case X86_CENTAUR_FAM6_C7_D:
- 			data->msr_temp = 0x1169;
- 			data->msr_vid = 0x198;
- 			break;
--		case 0xF:
--			/* Nano */
-+		case X86_CENTAUR_FAM6_NANO:
-+		case X86_CENTAUR_FAM6_CHA:
- 			data->msr_temp = 0x1423;
- 			break;
- 		default:
-@@ -272,6 +270,7 @@ static const struct x86_cpu_id __initconst cputemp_ids[] = {
- 	X86_MATCH_VENDOR_FAM_MODEL(CENTAUR, 6, X86_CENTAUR_FAM6_C7_A,	NULL),
- 	X86_MATCH_VENDOR_FAM_MODEL(CENTAUR, 6, X86_CENTAUR_FAM6_C7_D,	NULL),
- 	X86_MATCH_VENDOR_FAM_MODEL(CENTAUR, 6, X86_CENTAUR_FAM6_NANO,	NULL),
-+	X86_MATCH_VENDOR_FAM_MODEL(CENTAUR, 6, X86_CENTAUR_FAM6_CHA,	NULL),
- 	X86_MATCH_VENDOR_FAM_MODEL(CENTAUR, 7, X86_MODEL_ANY,		NULL),
- 	{}
- };
-
 -- 
   René Rebe, ExactCODE GmbH, Berlin, Germany
   https://exactco.de | https://t2linux.com | https://rene.rebe.de
