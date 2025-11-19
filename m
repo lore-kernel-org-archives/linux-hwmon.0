@@ -1,242 +1,488 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022074.outbound.protection.outlook.com [52.101.66.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A76361DAA;
-	Wed, 19 Nov 2025 12:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763556744; cv=fail; b=OMtSbTI1Sngvh6ahILzRnoMmnlqBHh6OEreC0hhTwIDbehVTEv2KfYGtnVs7WC9yUOaIMQb6aE9Rm21HIcU8D+gP2ZzZy8V9Ex/q5SDLXJtp3OucL7Mhq2byo1E3JxmYRE+vLipyHs9IAf+PZOEhItCckwAwBavcLP5KNcnu+10=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763556744; c=relaxed/simple;
-	bh=w/OuqthzVWP5Q/A9W3TpyU9kCs6ogjuUqiqzzV7YLYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zf/7A2/WPTYyQfFaO9khvrW5acBwmUPDJi8W9KqJPydso8mj2CwkFAS3aFK4p2DpE7g2UHlfkKY7hAevwIVcF0oCVtxMB/EjZTZymKtFBgNamEaRBdGa3iVj6vEaNBCOeZx8XFXkW3bfkK8l0/ga/3hBGgavxEPjBETQxkGF3p4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=becom-group.com; spf=pass smtp.mailfrom=becom-group.com; dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b=Ldm/zqJp; arc=fail smtp.client-ip=52.101.66.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=becom-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=becom-group.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D3D2C1596
+	for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 15:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763564674; cv=none; b=rQFE4Byqw+5Akk/y/Zl2Wsq3QXlzKmXmdxdC5BCLnBD1uxakFVKgkh4fohgscAQBn4cFH9ipFhNPC/XhwnvgKq52G3yhjn0wu7X897sdWLVFd3aNxyTyuAl1Gc0d4mPGrinFghlO/LywBIEW0QtKVoVekj3fhoVx+zmU7u/k740=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763564674; c=relaxed/simple;
+	bh=2pGdmEQ8tcNTxTNUzh0gshNDtu9TrQnkKUxRwS4d/yY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NXDzFfBDGWyDSRLQdYMi40Nead03QaRi9KgrKX6SmCmj99n9hVRNo9giVechYvkYtQ6P7ijTZUkIx0TH79BFrxp7KF0tf7kHezqztLyK+U8sL4+Gsx7DteSn1TyNecOL2KZSLyNpcPMlFkEefD0Ddv9xoRqwu84w1EbCzPphW9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RrleG8O0; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=BECOMElectronics.onmicrosoft.com header.i=@BECOMElectronics.onmicrosoft.com header.b="Ldm/zqJp"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bpKFy9WyzCR0Cmf/7Pgi+MAMuKcyf3Ro1PqgsWbnlnuuVRYoZnyr4BigLIV/pn1J6AwppiBbiPsstYB4n4zr/3O63mJI3WW17T5jkcujAPN0V+s0goMKVR2rBkhQS5orWKk0PvFDPMnEwVj4CShe/iHEfn0snJKyPMdm+2Czfx+YpBxIvxe2DedYk2xAz77SDksP21n5WH5dwsG2qtW+t7twe5Q3+WiJxU0yD0uUzf1N9f+F3gTkxG2FoyhzoyDie4sx4uYBDKTctrElFfretzwxJZBK2dDM8iCnHAMRaJIKJFauHdi694CwAe0lI+ozwtDC9XwD9Z7bUodG9n2y1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bRolUEWtFELlIzqz3HtNuUcBVlu5Z2wy6UvfDsTOTmc=;
- b=gNE1Z8wc6PJQQcFgzafJ0DTjYZYRb3uONC547+W/Ba4GelhEWyfKwwB6M21Lu1Ne9ishgQyT9YfUCdrZCFEqysYEOLo9MtMj4XFnMFtbjkDTzWtxMcxJgTtjUg7QARY7fPw3INQ7tqAmAD7RjynwjBf1Kd5VH+vxf/L+/di7Vt9S8LCIjMov87rYWWT8RVgT5E80o6BsSlV4Wh+pSAQHJu0E/fxDs9IAxW81+PduUdE/daxf0+8aLVfmtl0U/55UnQZYR3CNxLHZzXtimx7ClgDQJrDQngMQ62rSscEQa7upZRNpzyR29UQTjTONOPV5zXIWt2fafXQlJTlC1WAaaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=becom-group.com; dmarc=pass action=none
- header.from=becom-group.com; dkim=pass header.d=becom-group.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrleG8O0"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4779aa4f928so49527675e9.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 07:04:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=BECOMElectronics.onmicrosoft.com;
- s=selector2-BECOMElectronics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bRolUEWtFELlIzqz3HtNuUcBVlu5Z2wy6UvfDsTOTmc=;
- b=Ldm/zqJpPqtVhB4bkhNycbblQB7UGsAdHwLfyHrnEjy5EKdTkX8qVQS1fuxWqGeSxPVtaRlVlQwWHd3o6+JEuCn3KLXRNXhDCRJWcAIoUCbiAXYHMabg6RjybQj5mZ7bCav+9QuTFJ80bTlPB9tpadWMIvilQL+R/gqFKqlbOMQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=becom-group.com;
-Received: from PAXPR01MB8613.eurprd01.prod.exchangelabs.com
- (2603:10a6:102:232::12) by AS5PR01MB12563.eurprd01.prod.exchangelabs.com
- (2603:10a6:20b:753::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.21; Wed, 19 Nov
- 2025 12:52:08 +0000
-Received: from PAXPR01MB8613.eurprd01.prod.exchangelabs.com
- ([fe80::5ca2:88f2:e3ee:8eab]) by PAXPR01MB8613.eurprd01.prod.exchangelabs.com
- ([fe80::5ca2:88f2:e3ee:8eab%5]) with mapi id 15.20.9343.009; Wed, 19 Nov 2025
- 12:52:08 +0000
-From: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-To: linux-hwmon@vger.kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux@roeck-us.net,
-	corbet@lwn.net,
-	Jonathan.Cameron@huawei.com,
-	michal.simek@amd.com,
-	nuno.sa@analog.com,
-	Frank.Li@nxp.com,
-	wenswang@yeah.net,
-	apokusinski01@gmail.com,
-	dixitparmar19@gmail.com,
-	vassilisamir@gmail.com,
-	paweldembicki@gmail.com,
-	heiko@sntech.de,
-	neil.armstrong@linaro.org,
-	kever.yang@rock-chips.com,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	mani@kernel.org,
-	dev@kael-k.io,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-Subject: [PATCH v2 4/4] hwmon: documentation: add tids
-Date: Wed, 19 Nov 2025 13:51:41 +0100
-Message-ID: <20251119125145.2402620-5-Thomas.Marangoni@becom-group.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251119125145.2402620-1-Thomas.Marangoni@becom-group.com>
+        d=gmail.com; s=20230601; t=1763564670; x=1764169470; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hQ+wPKZ5wbbEqM0E6GKph1xRS7ddtp2l6WjQhWQmUPM=;
+        b=RrleG8O0pZ5TDASnX7q1BCnlSPWBzX84/+UkZOMWgeIPcp8H6Iuwh7VZLAoR/WHHCR
+         3MlZbBlLTJGVnQWC21svLw6UPaN8xhETaTvkxQx6fkMz5uapAZoSThkpqoywsmb+H0ZX
+         SJhuggVmG5LSPmvaIGoVkhWokLGyZyC3kaFrlSLSgr9bRZsVDtoFCtQDN1LXAIRQDfVm
+         BMa9gkGEzyKCyc5XW76I6QMoWgmhQ9MihTeBQxVouvfutMH5yZtCWpNK6Cp9SJqdqmYt
+         iK6kL/UEyrBqhsE8LmWXJz1lUANPz8lutjYaFlnhKwe7/gjo53BhtMI767YeqC2qH6K/
+         l6EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763564670; x=1764169470;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hQ+wPKZ5wbbEqM0E6GKph1xRS7ddtp2l6WjQhWQmUPM=;
+        b=sOm9trVibVz10QKcNzEKf7rA9qGS3o/3xreup9pezfQuNYX2APY7KNReNex82L+Pv5
+         2V/X6TVfQav15oeN3MPoBcDR3ilNAWU9Z87oyf1IOL5bitCU5CbSrtWE/J5n0iuU50Tw
+         V08Oty3agbcXD+9x7TMz1DN3n5qRMLUK09765sNkX3mVaBm2JvKrLm3iFTtBOQu9Gtzr
+         YIFbl7xOS4pjMfmAZZk/YwbZoeTvOFzPCbqEeyKu3BKc894vhebcwVAVx1YmDAsMRadk
+         nQ0/Xb1OQqjl/GtS8MlxaIRRYziAkyztcHA9oGyGxTMZNPgb/1uPuWBuyZipl1S887Jr
+         G/ug==
+X-Forwarded-Encrypted: i=1; AJvYcCWnkwmF1Y2TanXiJoU+0mkgs0y4bp3c4wiZl4PAlupG9402ehIlUesFKOUiWWr69/yO6lsame2jkpOzhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdcI7r8JTGv+VqyWghAg/fYnlIXBmhHhwFDvPsMCacGC8Pywt4
+	E4+gCgni3PRW+l8DcbmpvV18d+GOlw+PQCX5LljiwvP6ukz48p7IgxYx
+X-Gm-Gg: ASbGncvf2fnk3RCI7w3ZBBaLDpviI/FtQY7fHn5Ck2Yy2hGnjc+rZ11bP2YNQ9Qt8j+
+	l/oqroXMMTiCnNqSm9P7/n5ES3CbQd9/rCM70VtgYM15fugnFU00jc6wtRcQo7LdkZQjtEfJ/Fj
+	8Gjxiazt+4x4aKQjL8XYYHV8oMYyfcvVNjYPEgGjdITBeHcBqIXV1p8GA3ANGvjBprXrLyS1pIL
+	i8h1j3r45WSr3UM4CK2r2hB62Qxfyk7S+7suJa4XaKwzAO9irK/F6l5uSVjrVfapVn8u680YH7v
+	07BJtior1pCH2wnBGZAQGcn6Bib1Z8zDwV0qge3cpgZD4TXtUDw34zGG90d+U87Z1gk1k31krWu
+	EkHi0C6irAF/SJYOLnnWYrDvQK91WIYNuxx6+YLQ6Jre5CjTCcimxZ774XHXHDp4VU3NTXle2d0
+	0wBP7uHjEpd4p0WX/8Y8LZoQ==
+X-Google-Smtp-Source: AGHT+IFpcIzrmWKVVTz+MWFSEtwWN1zDQI3jZ3sCRHa39duVmKBrF7yzNbx5EJESgwZKIv/zVeRTBQ==
+X-Received: by 2002:a05:600c:3593:b0:477:557b:6917 with SMTP id 5b1f17b1804b1-4778fe4fdecmr210014455e9.18.1763564669506;
+        Wed, 19 Nov 2025 07:04:29 -0800 (PST)
+Received: from [10.5.0.2] ([91.250.240.46])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b106b03bsm54199145e9.9.2025.11.19.07.04.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 07:04:28 -0800 (PST)
+Message-ID: <5758dedd1a0d97ddc522448502ae07b0ede4ea67.camel@gmail.com>
+Subject: Re: [PATCH v2 3/4] hwmon: Add driver for wsen tids
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Thomas Marangoni <Thomas.Marangoni@becom-group.com>, 
+	linux-hwmon@vger.kernel.org
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux@roeck-us.net, 	corbet@lwn.net, Jonathan.Cameron@huawei.com,
+ michal.simek@amd.com, 	nuno.sa@analog.com, Frank.Li@nxp.com,
+ wenswang@yeah.net, apokusinski01@gmail.com, 	dixitparmar19@gmail.com,
+ vassilisamir@gmail.com, paweldembicki@gmail.com, 	heiko@sntech.de,
+ neil.armstrong@linaro.org, kever.yang@rock-chips.com, 
+	prabhakar.mahadev-lad.rj@bp.renesas.com, mani@kernel.org, dev@kael-k.io, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Date: Wed, 19 Nov 2025 15:05:06 +0000
+In-Reply-To: <20251119125145.2402620-4-Thomas.Marangoni@becom-group.com>
 References: <20251119125145.2402620-1-Thomas.Marangoni@becom-group.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1P189CA0017.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:802:2a::30) To PAXPR01MB8613.eurprd01.prod.exchangelabs.com
- (2603:10a6:102:232::12)
+	 <20251119125145.2402620-4-Thomas.Marangoni@becom-group.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR01MB8613:EE_|AS5PR01MB12563:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e6618c9-1743-49f9-8afb-08de276a7347
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uOfWj04/apKNXD67N36ULReeOXSrIvg51KFgE1CkEzIKG3y/flJaWm0dFbBS?=
- =?us-ascii?Q?isBSQf+ZPYgefWXwST1TyTGz44WB8xsftHyFduIz3h745yKpczUlZpeVx6K/?=
- =?us-ascii?Q?B9BWYHYu4zTy4G6jPBdme3eTwtW2rtrANmRbT7UGSTm1DOT86po0igsHHEjO?=
- =?us-ascii?Q?nqcUbx6D4fF/ztQNXSgBegqKcneCVMRH2RKV5gJ3k8KrOaKLRjAJS9HMsAjT?=
- =?us-ascii?Q?xEy5wxukk+ApNPMglT/cWsDU54zcNapdHRe4I/5GtwFwPYsYF5nUrQddZdmP?=
- =?us-ascii?Q?R4sBFQOxjmFxaH9kED73hMwhWiFryi/K02v+z1aKGpKg8PleoCOMNpY9mFCS?=
- =?us-ascii?Q?r4m+RD4oSH3NhQXe9RdpXVpUgOcsxnDoV9u9fs05Mw7geavZCjX3xAHX2u4p?=
- =?us-ascii?Q?A+FO5MtnJh+QeSFrw0MnUHH8kyZ/s5VcTs82iwEjxCJx6i53BFRUZaa60Dou?=
- =?us-ascii?Q?2AP2eYdMRm9tcJVkLsbt9tCd96Jpul8XuZtuLI99hQbRQ9nhabFf+ZWlMTz4?=
- =?us-ascii?Q?JyPsbTXNvxIW8rncNo8sOK3zAojYNjkByjimnblH2387XYByv5jPMYuD2+Ap?=
- =?us-ascii?Q?Ym11fo5nyDgTVHhXzRJL0gBt1fBJ5inzSSUm25bMAL5TD9ilVm2Wvj+90vw/?=
- =?us-ascii?Q?NncYRptGkae0r/BNYsb3WOY58/mJIf1U7KamQu0R4HBtxnsvYP3CNlpV424t?=
- =?us-ascii?Q?1gFWeSXM4VvFjViNqD+TmkaIZMxFmwux5Q7qb7qoZYy8Fg6tq1Vbfgrm0M6l?=
- =?us-ascii?Q?s/Mnrt92Q2yKbqftOvvmHOV8A20oFVed7sWvrZUgOUfD0EI6iNJ3sN4GsK+I?=
- =?us-ascii?Q?aP74UI06mHdbFk5LJtqSm2JY9hESTRFzEO0svC2fuksmhF0UAnp64AID7Pmp?=
- =?us-ascii?Q?ZDvU5AhC2//XvsdW8LrUCXktnplAkYY+X2xmGubQ0kvkXPfSjHYgycm3N8dv?=
- =?us-ascii?Q?+J4C0bjTBXExarAAGVwjwZh0JrgB87QsSb9yQWVOnWrdRglkl+rZvT2n3qqy?=
- =?us-ascii?Q?7/wSdMfVh2dhyyMrLATZuSCSxmvP53Z49nCf+GQ5piGcoc11a7rv7sHh8sZC?=
- =?us-ascii?Q?a8p2rAys71XbU+N0g9gtNtdUB8aJOgnDgXxwiNjeV25EdA8SSPQAPb78aoz+?=
- =?us-ascii?Q?9QzWjL+aSWVC/2YBxmDhPVUkvxmo6qqH5HD39On8cZI/v0Yi75nWcPbexKMT?=
- =?us-ascii?Q?2w8IugRoq2t3YWCfI719fQrFKvyvyemGn9A32/wcj+Sc7mcoqgybEemuiC7V?=
- =?us-ascii?Q?dO+Jw7Hsf7DCG9DUwd35DxMp0SROWZD93UTGGkNzmZaVyX6alpjtfcVG+DdM?=
- =?us-ascii?Q?1djS+KoSl+CktT/m8mHFedrmCqB8KYs8FMzFDmDcSNmu4zrz0YuWJo5HCzvf?=
- =?us-ascii?Q?nS4PZXbkD44oBIugU9d50ZbciczXEvm8I+BQ13HYMW9L9tkoYmvA0DQ0hCXV?=
- =?us-ascii?Q?luyHE5uh64rZ3mwKiFb2X2GR1rmVjowJqxqn/v1UOsccS7zRs3PZCg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR01MB8613.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?n2BTUmtF0IuEBI4jskJh3YUyuHk8g061vjSMYZlYrBQXpcaNSeu2VxQBNpSa?=
- =?us-ascii?Q?lyAFWmB5N8oLGDLHYjHR40p8gZWIBWvJyeQkyQeNnA7yO7cP5crnf9dsFjzS?=
- =?us-ascii?Q?nnWpPy9psYqHUa7TsymprX58lYPFZPCTI4GpI5C+Coyjx8bi5gn51ReQCaEE?=
- =?us-ascii?Q?XpUoBk/7Wxchy0bz7jN+SgUoJe5tWtQ5R6yWCHTaPKhn+WS0tXNm0wVgG+2T?=
- =?us-ascii?Q?xYPr1dOyQVFOiHPRbCoUTRMwWRNQLR+kd7e++HVwkohOoA5gGdSl8QfUxLp1?=
- =?us-ascii?Q?qut5Ha8rtdu8f/BtxVAYJB5HxThpmYPS07bm4uca7NTa2bn33ukDAqhEp+6P?=
- =?us-ascii?Q?s3rZJRNQ8Trw+JEBvYkwK6YcRIS92hzBFSYjlky3ffwTa0PcDn+Vv45M+1NM?=
- =?us-ascii?Q?2J3OQHDnhMm/qrdR6l3EQXJnn3/nXE1UMwknxEsxczs5MPWCxrzkCy7FjcBw?=
- =?us-ascii?Q?hY7xS8MMAvO/iTE460rn5+ybJ7CU0nCTtAPAW1AlaYiarDjDobzV31mqp1V5?=
- =?us-ascii?Q?trmjGbVvU5A8huFKQUK3faevi605m56thyWFeC6ULSFV57NLX68GRFjbJll9?=
- =?us-ascii?Q?EJlq6O+oU9jOxGflZOsTZoEtGBcVEAVDafwSwPjua0wlmcaaQWbi7b+nbcgL?=
- =?us-ascii?Q?Wz3vOk4aqMZhPitrMs0crst+KfSndf7QeCzqjV0ool/buHPhcH6toGJn18Mm?=
- =?us-ascii?Q?+F4pLoDXZoO7EkXYHSgwl7NRhFqYtx7mb8PQQkXcvJ26LezWnXVSm/Mxlgq3?=
- =?us-ascii?Q?zCWknBb8faw9XDUwYfKXIE/HvNSJ0z02gMhnjTkEAKMD583bUqAd6hmFSEIo?=
- =?us-ascii?Q?/V68UGiN6cghQ6tqu24aG/fyYeCAu9yC5jujCeh8VzJR5SAjHexua0jPcS11?=
- =?us-ascii?Q?VlpFyYcSZrOyqO163x359tl4RFvSV8qh0zmAlo9QsOp3k7qTk81mhckQF8i4?=
- =?us-ascii?Q?Mqql4D5iX26L9SGLe1rNibDa+QQ+si7ycDTlWbxhAs6Im1OIVeEVg4G5PYbU?=
- =?us-ascii?Q?dmsR0CwdXOVLnRMB5MyFykDUE9mz3gKDrJvuPTO9LSk+dHiBwToW7UgD+Rgi?=
- =?us-ascii?Q?T84gJ06vjJHP3jMG0C1rlkYtClpMR/fONsv8O1FFP3p5+fYhXQDrnZeZsFtW?=
- =?us-ascii?Q?fMny2/pMlIoScSpBcpCz1JRV2a3sKeKM4Oot9KyDSUhhRTncdQd1hD+g9sjL?=
- =?us-ascii?Q?aVk8cxQdhx1r7wHjQ0qIaMQZSQ1OK7FuG4ZM9naPEnuxG6qXO/rbTvLTPwyp?=
- =?us-ascii?Q?Y3WfQ41DdKh3mlxnUs14npci0gHcp8xdqTQDirEJKOIM0lDXW5VwzrZwwYoE?=
- =?us-ascii?Q?yegayzphU4ZZBupVEQW3pdLcAgCsVBtgdmWIKig3kW/JJo7rhRppMH7M/jXK?=
- =?us-ascii?Q?/jw17nHhF7WrIJL5VFzBbCvEWe2+Rz9pB1tycfBnQoRePpNoQ1a0BI/lkpN2?=
- =?us-ascii?Q?3JEzuTd7FBpUnCRguSukTQJwxM3oepmAr+IFBEokD1Fs4HtiIZapn/EzbMwa?=
- =?us-ascii?Q?394rr5bP1/Ihwp3hTwq/lJwaCFSCluYPv//kL6sCXqSWTMru23uGR6MrYh78?=
- =?us-ascii?Q?bVWSc9MDHkPvYd+73Ss0gzz52xyE7CrRCJv4H2DpXmcCb4HsFSD/2B+SB4C6?=
- =?us-ascii?Q?Vg=3D=3D?=
-X-OriginatorOrg: becom-group.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e6618c9-1743-49f9-8afb-08de276a7347
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR01MB8613.eurprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 12:52:08.7961
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 738f6472-f50a-488c-ab88-c200fd976533
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4f5wzic734lmA8+T+P6k/M0G3kB9/Z+cSKNtBS0nUXxKdenTVUXkfWA04bHCmXreTmyAqX/icQPiwwZ5gFMyWhWpA+IytKiOgZnV8v+wG78=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR01MB12563
 
-Add tids driver documentation
+Hi Thomas,
 
-Signed-off-by: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
----
- Documentation/hwmon/tids.rst | 61 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 Documentation/hwmon/tids.rst
+I'm a bit surprised why you have me on Cc. Since I'm here, let me give some=
+ inputs...
 
-diff --git a/Documentation/hwmon/tids.rst b/Documentation/hwmon/tids.rst
-new file mode 100644
-index 000000000000..254c4a90e6f8
---- /dev/null
-+++ b/Documentation/hwmon/tids.rst
-@@ -0,0 +1,61 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver tids
-+===================
-+
-+Supported Chips:
-+
-+  * WSEN TIDS
-+
-+    Prefix: 'tids'
-+
-+    Addresses scanned: None
-+
-+    Datasheet:
-+
-+      English: https://www.we-online.com/components/products/manual/Manual-um-wsen-tids-2521020222501%20(rev1.2).pdf
-+
-+Author: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-+
-+
-+Description
-+-----------
-+
-+This driver implements support for the WSEN TIDS chip, a temperature
-+sensor. Temperature is measured in degree celsius. In sysfs interface,
-+all values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
-+
-+Usage Notes
-+-----------
-+
-+The device communicates with the I2C protocol. Sensors can have the I2C
-+address 0x38 or 0x3F. See Documentation/i2c/instantiating-devices.rst for methods
-+to instantiate the device.
-+
-+Sysfs entries
-+-------------
-+
-+=============== ============================================
-+temp1_input     Measured temperature in millidegrees Celsius
-+update_interval The interval for polling the sensor, in
-+                milliseconds. Writable. Supported values are
-+                5, 10, 20 or 40.
-+temp1_max       The temperature in millidegrees Celsius, that
-+                is triggering the temp1_max_alarm. Writable.
-+                The lowest supported value is -39680 and the
-+                highest supported value is 122880. Values are
-+                saved in steps of 640.
-+temp1_min       The temperature in millidegrees Celsius, that
-+                is triggering the temp1_min_alarm. Writable.
-+                The lowest supported value is -39680 and the
-+                highest supported value is 122880. Values are
-+                saved in steps of 640.
-+temp1_max_alarm The alarm will be triggered when the level
-+                reaches the value specified in
-+                temp1_max. It will reset automatically
-+                once it has been read.
-+temp1_min_alarm The alarm will be triggered when the level
-+                reaches the value specified in
-+                temp1_min. It will reset automatically
-+                once it has been read.
-+=============== ============================================
--- 
-2.51.1
+On Wed, 2025-11-19 at 13:51 +0100, Thomas Marangoni wrote:
+> Add support for the wsen tids. It is a low cost
+> and small-form-factor i2c temperature sensor.
+>=20
+> It supports the following features:
+> - Continuous temperature reading in four intervals: 5 ms, 10 ms,
+> =C2=A0 20 ms and 40 ms.
+> - Low temperature alarm
+> - High temperature alarm
+>=20
+> The driver supports following hwmon features:
+> - hwmon_temp_input
+> - hwmon_temp_min_alarm
+> - hwmon_temp_max_alarm
+> - hwmon_temp_min
+> - hwmon_temp_max
+> - hwmon_chip_update_interval
+>=20
+> Additional notes:
+> - The update interval only supports four fixed values.
+> - The alarm is reset on reading.
+>=20
+> Signed-off-by: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
+> ---
+> =C2=A0drivers/hwmon/Kconfig=C2=A0 |=C2=A0 10 +
+> =C2=A0drivers/hwmon/Makefile |=C2=A0=C2=A0 1 +
+> =C2=A0drivers/hwmon/tids.c=C2=A0=C2=A0 | 447 ++++++++++++++++++++++++++++=
++++++++++++++
+> =C2=A03 files changed, 458 insertions(+)
+> =C2=A0create mode 100644 drivers/hwmon/tids.c
+>=20
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 157678b821fc..2737350bb661 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2368,6 +2368,16 @@ config SENSORS_THMC50
+> =C2=A0	=C2=A0 This driver can also be built as a module. If so, the modul=
+e
+> =C2=A0	=C2=A0 will be called thmc50.
+> =C2=A0
+> +config SENSORS_TIDS
+> +	tristate "TIDS"
+> +	depends on I2C
+> +	help
+> +	=C2=A0 If you say yes here you get support for the temperature
+> +	=C2=A0 sensor WSEN TIDS from W=C3=BCrth Elektronik.
+> +
+> +	=C2=A0 This driver can also be built as a module. If so, the module
+> +	=C2=A0 will be called tids.
+> +
+> =C2=A0config SENSORS_TMP102
+> =C2=A0	tristate "Texas Instruments TMP102"
+> =C2=A0	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index eade8e3b1bde..4eb77be3df67 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -227,6 +227,7 @@ obj-$(CONFIG_SENSORS_SY7636A)	+=3D sy7636a-hwmon.o
+> =C2=A0obj-$(CONFIG_SENSORS_AMC6821)	+=3D amc6821.o
+> =C2=A0obj-$(CONFIG_SENSORS_TC74)	+=3D tc74.o
+> =C2=A0obj-$(CONFIG_SENSORS_THMC50)	+=3D thmc50.o
+> +obj-$(CONFIG_SENSORS_TIDS)		+=3D tids.o
+> =C2=A0obj-$(CONFIG_SENSORS_TMP102)	+=3D tmp102.o
+> =C2=A0obj-$(CONFIG_SENSORS_TMP103)	+=3D tmp103.o
+> =C2=A0obj-$(CONFIG_SENSORS_TMP108)	+=3D tmp108.o
+> diff --git a/drivers/hwmon/tids.c b/drivers/hwmon/tids.c
+> new file mode 100644
+> index 000000000000..62e778202a5f
+> --- /dev/null
+> +++ b/drivers/hwmon/tids.c
+> @@ -0,0 +1,447 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Copyright (c) BECOM Electronics GmbH
+> + *
+> + * wsen_tids.c - Linux hwmon driver for WSEN-TIDS Temperature sensor
+> + *
+> + * Author: Thomas Marangoni <thomas.marangoni@becom-group.com>
+> + */
+> +
+> +#include <linux/util_macros.h>
+> +#include <linux/regmap.h>
+> +#include <linux/minmax.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/bits.h>
+> +#include <linux/math.h>
+> +#include <linux/i2c.h>
+> +
+> +/*
+> + * TIDS registers
+> + */
+> +#define TIDS_REG_DEVICE_ID	0x01
+> +#define TIDS_REG_T_H_LIMIT	0x02
+> +#define TIDS_REG_T_L_LIMIT	0x03
+> +#define TIDS_REG_CTRL		0x04
+> +#define TIDS_REG_STATUS		0x05
+> +#define TIDS_REG_DATA_T_L	0x06
+> +#define TIDS_REG_DATA_T_H	0x07
+> +#define TIDS_REG_SOFT_REST	0x0C
+> +
+> +#define TIDS_CTRL_ONE_SHOT_MASK		BIT(0)
+> +#define TIDS_CTRL_FREERUN_MASK		BIT(2)
+> +#define TIDS_CTRL_IF_ADD_INC_MASK	BIT(3)
+> +#define TIDS_CTRL_AVG_MASK		GENMASK(5, 4)
+> +#define TIDS_CTRL_AVG_SHIFT		4
+> +#define TIDS_CTRL_BDU_MASK		BIT(6)
+> +
+> +#define TIDS_STATUS_BUSY_MASK		BIT(0)
+> +#define TIDS_STATUS_OVER_THL_MASK	BIT(1)
+> +#define TIDS_STATUS_UNDER_TLL_MASK	BIT(2)
+> +
+> +#define TIDS_SOFT_REST_MASK		BIT(1)
+> +
+> +/*
+> + * TIDS device IDs
+> + */
+> +#define TIDS_ID 0xa0
+> +
+> +struct tids_data {
+> +	struct i2c_client *client;
+> +
+> +	struct regmap *regmap;
+> +
+> +	int irq;
+> +	int temperature;
+> +};
+> +
+> +static u8 update_intervals[] =3D { 40, 20, 10, 5 };
+
+static const?
+
+> +
+> +static ssize_t tids_interval_read(struct device *dev, long *val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	unsigned int avg_value =3D 0;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(data->regmap, TIDS_REG_CTRL, &avg_value);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	avg_value =3D (avg_value & TIDS_CTRL_AVG_MASK) >> TIDS_CTRL_AVG_SHIFT;
+> +
+> +	*val =3D update_intervals[avg_value];
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t tids_interval_write(struct device *dev, long val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	unsigned int avg_value;
+> +
+> +	avg_value =3D find_closest_descending(val, update_intervals,
+> +					=C2=A0=C2=A0=C2=A0 ARRAY_SIZE(update_intervals));
+> +
+> +	return regmap_write_bits(data->regmap, TIDS_REG_CTRL,
+> +				 TIDS_CTRL_AVG_MASK,
+> +				 avg_value << TIDS_CTRL_AVG_SHIFT);
+> +}
+> +
+> +static int tids_temperature1_read(struct device *dev, long *val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	u8 buf[2] =3D { 0 };
+
+Seems like __le16?
+> +	int ret;
+> +
+> +	ret =3D regmap_bulk_read(data->regmap, TIDS_REG_DATA_T_L, buf, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* temperature in =C2=B0mC */
+> +	*val =3D (((s16)(buf[1] << 8) | buf[0])) * 10;
+
+Then __le16_to_cpu()?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t tids_temperature_alarm_read(struct device *dev, u32 attr,
+> +					=C2=A0=C2=A0 long *val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (attr =3D=3D hwmon_temp_min_alarm)
+> +		ret =3D regmap_test_bits(data->regmap, TIDS_REG_STATUS,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TIDS_STATUS_UNDER_TLL_MASK);
+> +	else if (attr =3D=3D hwmon_temp_max_alarm)
+> +		ret =3D regmap_test_bits(data->regmap, TIDS_REG_STATUS,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TIDS_STATUS_OVER_THL_MASK);
+
+Instead of passing attr and have this if() else why not passing the proper =
+mask? Then
+just regmap_read(regmag, reg, ...)?
+
+> +	else
+> +		return -EOPNOTSUPP;
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val =3D ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tids_temperature_minmax_read(struct device *dev, u32 attr, lo=
+ng *val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	unsigned int reg_data =3D 0;
+> +	int ret;
+> +
+> +	if (attr =3D=3D hwmon_temp_min)
+> +		ret =3D regmap_read(data->regmap, TIDS_REG_T_L_LIMIT, &reg_data);
+> +	else if (attr =3D=3D hwmon_temp_max)
+> +		ret =3D regmap_read(data->regmap, TIDS_REG_T_H_LIMIT, &reg_data);
+> +	else
+> +		return -EOPNOTSUPP;
+
+Same as above but with the proper register
+
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* temperature from register conversion in =C2=B0mC */
+> +	*val =3D (((u8)reg_data - 63) * 640);
+
+Why the cast?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t tids_temperature_minmax_write(struct device *dev, u32 att=
+r,
+> +					=C2=A0=C2=A0=C2=A0=C2=A0 long val)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +	u8 reg_data;
+> +
+> +	/* temperature in =C2=B0mC */
+> +	val =3D clamp_val(val, -39680, 122880);
+> +	/* temperature to register conversion in =C2=B0mC */
+> +	reg_data =3D (u8)(DIV_ROUND_CLOSEST(val, 640) + 63);
+> +
+> +	if (attr =3D=3D hwmon_temp_min)
+> +		return regmap_write(data->regmap, TIDS_REG_T_L_LIMIT, reg_data);
+> +	else if (attr =3D=3D hwmon_temp_max)
+> +		return regmap_write(data->regmap, TIDS_REG_T_H_LIMIT, reg_data);
+> +	else
+> +		return -EOPNOTSUPP;
+
+Redundant else if () and else
+
+...
+
+>=20
+> +
+> +static int tids_init(struct tids_data *data)
+> +{
+> +	int ret;
+> +
+> +	/* Triggering soft reset */
+> +	ret =3D regmap_write_bits(data->regmap, TIDS_REG_SOFT_REST,
+> +				TIDS_SOFT_REST_MASK, TIDS_SOFT_REST_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+
+No need for sleep some time? Typically that's defined on the datasheet.
+
+> +	ret =3D regmap_clear_bits(data->regmap, TIDS_REG_SOFT_REST,
+> +				TIDS_SOFT_REST_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Allowing bulk read */
+> +	ret =3D regmap_write_bits(data->regmap, TIDS_REG_CTRL,
+> +				TIDS_CTRL_IF_ADD_INC_MASK,
+> +				TIDS_CTRL_IF_ADD_INC_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Set meassurement interval */
+> +	ret =3D regmap_clear_bits(data->regmap, TIDS_REG_CTRL,
+> +				TIDS_CTRL_AVG_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Set device to free run mode */
+> +	ret =3D regmap_write_bits(data->regmap, TIDS_REG_CTRL,
+> +				TIDS_CTRL_FREERUN_MASK, TIDS_CTRL_FREERUN_MASK);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Don't update temperature register until high and low value are read =
+*/
+> +	ret =3D regmap_write_bits(data->regmap, TIDS_REG_CTRL, TIDS_CTRL_BDU_MA=
+SK,
+> +				TIDS_CTRL_BDU_MASK);
+
+return regmap_write_bits();
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tids_probe(struct i2c_client *client)
+> +{
+> +	struct device *device =3D &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct tids_data *data;
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	data =3D devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->client =3D client;
+> +
+> +	/* Init regmap */
+
+The comment does not add any added value.
+
+> +	data->regmap =3D devm_regmap_init_i2c(data->client, &regmap_config);
+> +	if (IS_ERR(data->regmap))
+> +		return dev_err_probe(device, PTR_ERR(data->regmap),
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 "regmap initialization failed\n");
+> +
+> +	/* Read device id, to check if i2c is working */
+
+Same
+
+> +	ret =3D regmap_read(data->regmap, TIDS_REG_DEVICE_ID, &value);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (value !=3D TIDS_ID)
+> +		return -ENODEV;
+> +
+> +	tids_init(data);
+
+Check for the return value.
+
+> +
+> +	hwmon_dev =3D devm_hwmon_device_register_with_info(device, "tids", data=
+,
+> +							 &tids_chip_info, NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static int tids_suspend(struct device *dev)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +
+> +	return regmap_clear_bits(data->regmap, TIDS_REG_CTRL,
+> +				 TIDS_CTRL_FREERUN_MASK);
+> +}
+> +
+> +static int tids_resume(struct device *dev)
+> +{
+> +	struct tids_data *data =3D dev_get_drvdata(dev);
+> +
+> +	return regmap_write_bits(data->regmap, TIDS_REG_CTRL,
+> +				 TIDS_CTRL_FREERUN_MASK,
+> +				 TIDS_CTRL_FREERUN_MASK);
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(tids_dev_pm_ops, tids_resume, tids_suspe=
+nd);
+> +
+> +static const struct i2c_device_id tids_id[] =3D {
+> +	{ "tids", 0 },
+
+No need for 0
+
+> +	{},
+
+The above is already a terminator so you can drop the comma
+
+- Nuno S=C3=A1
 
