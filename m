@@ -1,220 +1,182 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A307C2D641D
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 04:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547522741AB
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 05:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763612027; cv=none; b=ZxcKgr+cxkeZikyWyGuB0EdeBH8ktlCB9TEJmKPc5jg395O1BSTjKmX0BtFU1r9oMicnh1nLvKkcc+Rvq8Mp/63wBwEp0ykO1CC4YRPBHmEH/FViQ8PPyhdOGZGh4Pp1UgOE9uJ0sZf9zM8hMP0qW6rX5vjnmwJE7kKxEeD5S9g=
+	t=1763618071; cv=none; b=F82hmyrLw+CndmjVxi3VlbclR6KTZ/o/A+3ZMh4UYKbi/VCh5lYWYE6hjGzpUBYHgL/VJ+tCKXT3l13chJ7SR4siYZuWgY61eh2oqBHeQhqoEpERZi55UdwqXp10XXYt3NoL4NofzxtdylhvUuifA+nvFeABDcwKnywtV/uO3ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763612027; c=relaxed/simple;
-	bh=fFTvaxCHkwe3TWNImhqvxkbkcAX5duXv6fsZu8qXEJ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BA5gVy3r7ePA6qbbxEnJaWctIlRA8KEUfb/AayMVW3GV5o9oCseHmoYtDiI1K4N8A+9rdo6CVWe1TpD8p1N/jk9Schp9enRpM/tkOkKZE4RVQR1drNQDp4+L8BCFyvoyfIG1hWMXOL5i8wlYWTLtIWpiOnHjGpulxzPSk9J4/fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KOKaiRLU; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763618071; c=relaxed/simple;
+	bh=+vRDBEyde8LnqOdOXIAkvHYVjR/9zyebWlK2HtAgLSc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ilnsoGOG5dcESDMudsOAHbRWQCx5xD2yCtdjNnVhb6RwCqV+VvdMPA37dUPM9qcTRlTxJP927OfTWkJSdhzJ4P990fbzk7Z7xLhcgT8I//2dsWQesbPGKexs4hWuJjwlIQ++2naZtm55TG9Fr3oYxKORwWbF4ToLNSNee+YayLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NRYUf6ye; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KOKaiRLU"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7aab7623f42so487149b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 20:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763612025; x=1764216825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Pb/ET6Ol1KEYZrGqc/HU9xA8yZrF8vyNBLl5qu1OoU=;
-        b=KOKaiRLUaG8Gw4TInrIlLOszNrX+CRsUKA0s9JBWRW+tflhDkqPI+Mb+NaLvMo+H0B
-         Lr0sO1X7NfzeZLkc7U2Txc/aYWKSuT3GgEFat1MTSiHgBziVknwpqzc3kwtRfw1xlp+q
-         wV8a3Z0K8G5F4rU7zeqhHjcR8sYNupVfmYaZpLE699bpz8B5tpQhWLncVIKHKi3tMZM0
-         DEevjVC86Rg4d7GXIrCWD7OLb6LLTbVpmYergubS83XgLpGE42V6PnCr3hTDCsCZnfo1
-         SRYNOEnxVEKYwP6EdZtKIb+A4s1Yyt0Zs+lULIWbMXjNFpbSkuEAitFJhEul1F6oB/Am
-         pHug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763612025; x=1764216825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Pb/ET6Ol1KEYZrGqc/HU9xA8yZrF8vyNBLl5qu1OoU=;
-        b=ck1WPCC7eNawCfRyShU4P3mqE5sNCeb5VlnhQxOw6LoLVFljoCy7utF47YvUwG48yR
-         4FEsAhiDG/sxRHxHUqeTSZP+542HyB7Z4b8xATXIsluGXKBOE701d4+QpedlBcswBij/
-         2Fl/L9Sx4bAw9kFlcY7h4qWoGsFrBJgYhKcS7X19/u200oSanZAwUwDVoR/umgY+pVgw
-         BjQwASlugE5y/bUul8Jy6x+7wUWe/weFLjdJ6j8cotSI0OYidDlp24Alin2EnBEHA+Q6
-         PywWkF84cfGUqffCumg0f/ocJJFUC1egm/WUWTnU2vqtK0acvleQvI+e/Q6Me+lvG8ok
-         b5+A==
-X-Gm-Message-State: AOJu0Yw3HiMIBHwq+lq95ZYKnkv9D9P3ydIWj3u84Q/9kr6pz0bO2v4n
-	/E/DkBD3jIsVf8hVnkh5o2zR4uk1j1Sh/WySVAw3cvsNTXIBHB+Z7jRM
-X-Gm-Gg: ASbGncsbiI2iVpZLsjqScvxw/EHF0zKI1WvEWbulzELMJ3EDkifSlKs74Z0appa2NL3
-	8MMTks4Eou2v9phWPLOEGzconjahBlqY3X/EhDOjRet/o4TOBMtPpNJFTpRB06e8Jk3uHUJXCQv
-	j8iwN4ob/UxODzNR4dGTOFFBYcAfHXwqlN/DNOycEvDkoR2QYAoaIS59VjEkxAZXbbhb7pthg7/
-	jEE0aBtoH8CKzKkE+G51y2TYaQ6fgnAzu27P/p1gVeR3RQ2LRHwLWVGzayFOWgrGz/8w6Mw4CIi
-	7xfXoatskK3VyMLALG6HMQh+7bB5EgQd/jXg6CKoX3XXCAftJXmbze9PBL/fcnsJw1hzG1zcIZD
-	F65STXfCAbmhneXpoQzWulcFF/YMJCs0og9cpYXAtGVBHODHwE6Og2BURDgwgiGM9Ly8n6/XUO6
-	wHj4LUbmbYDfiBOPJ9ol8deFm5IWZDk1FWdZLuWM+GgaDuZkixt24=
-X-Google-Smtp-Source: AGHT+IEbqJq4oGbb0v90QbD4tSlHOmgRzJICcxZ8RRMzvr4CvJC4X9lCSrnsAdVYzVCR4fl5KksWPg==
-X-Received: by 2002:a05:6a20:5483:b0:34f:28f7:ed79 with SMTP id adf61e73a8af0-3613ca60118mr1794648637.19.1763612024737;
-        Wed, 19 Nov 2025 20:13:44 -0800 (PST)
-Received: from localhost.localdomain ([154.3.39.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd75def6321sm989748a12.6.2025.11.19.20.13.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 20:13:44 -0800 (PST)
-From: Gui-Dong Han <hanguidong02@gmail.com>
-To: juergh@proton.me,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	baijiaju1990@gmail.com,
-	Gui-Dong Han <hanguidong02@gmail.com>
-Subject: [PATCH] hwmon: (vt1211) Convert macros to functions to avoid TOCTOU
-Date: Thu, 20 Nov 2025 12:13:31 +0800
-Message-Id: <20251120041331.1917570-1-hanguidong02@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NRYUf6ye"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763618069; x=1795154069;
+  h=date:from:to:cc:subject:message-id;
+  bh=+vRDBEyde8LnqOdOXIAkvHYVjR/9zyebWlK2HtAgLSc=;
+  b=NRYUf6yewOOsCcGTSZaemAjZUO4sp+bIe52itRzTnKsSfSE9vb91iHua
+   TWAVxGTyqajqmL9dujubaipYuRRk6WM4gV39oWxL1wzy2KP8MFBcYURvY
+   EydcilmqHyw9/i7o9MtlW3RN//lcRbWh0Jopb5qrZOco3VhTNAbVpEdRf
+   fnl08vG6cpnZ/rBzhW50zOnkh0RVHslkS0c5XFxVv3RCUOTmo2U0ynyv3
+   vSWZPd2/gc+vHKAfUWar85zFxW1sBjqOzC5UPwDDRcnOldj3GAZ0/S18N
+   6BHv2eGsndIEGfGVQ2W/1kG7Aci/0BF1IVl56MjWAi/FIB168KGABIM8y
+   g==;
+X-CSE-ConnectionGUID: Nb752xoYRJG+cdDHB7xLAQ==
+X-CSE-MsgGUID: W9N4IvxSQ+qXBNFt499qLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="65711512"
+X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
+   d="scan'208";a="65711512"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 21:54:29 -0800
+X-CSE-ConnectionGUID: lrk3gS8sR9OJ5aBErQVWJg==
+X-CSE-MsgGUID: Gjz8R0WbSlOG0pV0XX7KLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
+   d="scan'208";a="191058219"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 19 Nov 2025 21:54:28 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vLxcf-0003eJ-0s;
+	Thu, 20 Nov 2025 05:54:25 +0000
+Date: Thu, 20 Nov 2025 13:54:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ d56933e74d0d691dcd642876feda0b30f397e2ad
+Message-ID: <202511201356.aSvMp3ii-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The macros IN_FROM_REG, TEMP_FROM_REG, and RPM_FROM_REG evaluate their
-arguments multiple times. These macros are used in lockless show functions
-involving shared driver data, leading to Time-of-Check to Time-of-Use race
-conditions.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: d56933e74d0d691dcd642876feda0b30f397e2ad  hwmon: (k10temp) Add AMD Steam Deck APU ID
 
-For example, RPM_FROM_REG checks if a value is 0 or 255, and then uses it
-in a division. If the value is modified by another thread to 0 after the
-check but before the division, it causes a divide-by-zero error.
+elapsed time: 1564m
 
-Convert these macros to static functions. This guarantees that arguments
-are evaluated only once (pass-by-value), fixing the race conditions.
-Adhere to the principle of minimal changes by only converting the specific
-macros involved in these lockless contexts.
+configs tested: 105
+configs skipped: 3
 
-Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
----
-Based on the discussion in the link, I will submit a series of patches to
-address TOCTOU issues in the hwmon subsystem by converting macros to
-functions or adjusting locking where appropriate.
----
- drivers/hwmon/vt1211.c | 53 ++++++++++++++++++++++++++++--------------
- 1 file changed, 35 insertions(+), 18 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/hwmon/vt1211.c b/drivers/hwmon/vt1211.c
-index 386edea6b69e..1e52cabd6e24 100644
---- a/drivers/hwmon/vt1211.c
-+++ b/drivers/hwmon/vt1211.c
-@@ -142,9 +142,15 @@ struct vt1211_data {
-  * in5 (ix = 5) is special. It's the internal 3.3V so it's scaled in the
-  * driver according to the VT1211 BIOS porting guide
-  */
--#define IN_FROM_REG(ix, reg)	((reg) < 3 ? 0 : (ix) == 5 ? \
--				 (((reg) - 3) * 15882 + 479) / 958 : \
--				 (((reg) - 3) * 10000 + 479) / 958)
-+static int in_from_reg(int ix, int reg)
-+{
-+	if (reg < 3)
-+		return 0;
-+	if (ix == 5)
-+		return ((reg - 3) * 15882 + 479) / 958;
-+	return ((reg - 3) * 10000 + 479) / 958;
-+}
-+
- #define IN_TO_REG(ix, val)	(clamp_val((ix) == 5 ? \
- 				 ((val) * 958 + 7941) / 15882 + 3 : \
- 				 ((val) * 958 + 5000) / 10000 + 3, 0, 255))
-@@ -156,10 +162,15 @@ struct vt1211_data {
-  * temp3-7 are thermistor based so the driver returns the voltage measured at
-  * the pin (range 0V - 2.2V).
-  */
--#define TEMP_FROM_REG(ix, reg)	((ix) == 0 ? (reg) * 1000 : \
--				 (ix) == 1 ? (reg) < 51 ? 0 : \
--				 ((reg) - 51) * 1000 : \
--				 ((253 - (reg)) * 2200 + 105) / 210)
-+static int temp_from_reg(int ix, int reg)
-+{
-+	if (ix == 0)
-+		return reg * 1000;
-+	if (ix == 1)
-+		return reg < 51 ? 0 : (reg - 51) * 1000;
-+	return ((253 - reg) * 2200 + 105) / 210;
-+}
-+
- #define TEMP_TO_REG(ix, val)	clamp_val( \
- 				 ((ix) == 0 ? ((val) + 500) / 1000 : \
- 				  (ix) == 1 ? ((val) + 500) / 1000 + 51 : \
-@@ -167,8 +178,14 @@ struct vt1211_data {
- 
- #define DIV_FROM_REG(reg)	(1 << (reg))
- 
--#define RPM_FROM_REG(reg, div)	(((reg) == 0) || ((reg) == 255) ? 0 : \
--				 1310720 / (reg) / DIV_FROM_REG(div))
-+static int rpm_from_reg(int reg, int div)
-+{
-+	if (reg == 0 || reg == 255)
-+		return 0;
-+
-+	return 1310720 / reg / DIV_FROM_REG(div);
-+}
-+
- #define RPM_TO_REG(val, div)	((val) == 0 ? 255 : \
- 				 clamp_val((1310720 / (val) / \
- 				 DIV_FROM_REG(div)), 1, 254))
-@@ -343,13 +360,13 @@ static ssize_t show_in(struct device *dev, struct device_attribute *attr,
- 
- 	switch (fn) {
- 	case SHOW_IN_INPUT:
--		res = IN_FROM_REG(ix, data->in[ix]);
-+		res = in_from_reg(ix, data->in[ix]);
- 		break;
- 	case SHOW_SET_IN_MIN:
--		res = IN_FROM_REG(ix, data->in_min[ix]);
-+		res = in_from_reg(ix, data->in_min[ix]);
- 		break;
- 	case SHOW_SET_IN_MAX:
--		res = IN_FROM_REG(ix, data->in_max[ix]);
-+		res = in_from_reg(ix, data->in_max[ix]);
- 		break;
- 	case SHOW_IN_ALARM:
- 		res = (data->alarms >> bitalarmin[ix]) & 1;
-@@ -417,13 +434,13 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
- 
- 	switch (fn) {
- 	case SHOW_TEMP_INPUT:
--		res = TEMP_FROM_REG(ix, data->temp[ix]);
-+		res = temp_from_reg(ix, data->temp[ix]);
- 		break;
- 	case SHOW_SET_TEMP_MAX:
--		res = TEMP_FROM_REG(ix, data->temp_max[ix]);
-+		res = temp_from_reg(ix, data->temp_max[ix]);
- 		break;
- 	case SHOW_SET_TEMP_MAX_HYST:
--		res = TEMP_FROM_REG(ix, data->temp_hyst[ix]);
-+		res = temp_from_reg(ix, data->temp_hyst[ix]);
- 		break;
- 	case SHOW_TEMP_ALARM:
- 		res = (data->alarms >> bitalarmtemp[ix]) & 1;
-@@ -493,10 +510,10 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
- 
- 	switch (fn) {
- 	case SHOW_FAN_INPUT:
--		res = RPM_FROM_REG(data->fan[ix], data->fan_div[ix]);
-+		res = rpm_from_reg(data->fan[ix], data->fan_div[ix]);
- 		break;
- 	case SHOW_SET_FAN_MIN:
--		res = RPM_FROM_REG(data->fan_min[ix], data->fan_div[ix]);
-+		res = rpm_from_reg(data->fan_min[ix], data->fan_div[ix]);
- 		break;
- 	case SHOW_SET_FAN_DIV:
- 		res = DIV_FROM_REG(data->fan_div[ix]);
-@@ -751,7 +768,7 @@ static ssize_t show_pwm_auto_point_temp(struct device *dev,
- 	int ix = sensor_attr_2->index;
- 	int ap = sensor_attr_2->nr;
- 
--	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->pwm_ctl[ix] & 7,
-+	return sprintf(buf, "%d\n", temp_from_reg(data->pwm_ctl[ix] & 7,
- 		       data->pwm_auto_temp[ap]));
- }
- 
--- 
-2.43.0
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                   randconfig-001-20251119    gcc-10.5.0
+arc                   randconfig-002-20251119    gcc-8.5.0
+arm                               allnoconfig    clang-22
+arm                      jornada720_defconfig    clang-22
+arm                   randconfig-001-20251119    gcc-8.5.0
+arm                   randconfig-002-20251119    clang-16
+arm                   randconfig-003-20251119    clang-22
+arm                   randconfig-004-20251119    gcc-13.4.0
+arm64                             allnoconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                  randconfig-001-20251120    gcc-15.1.0
+hexagon                           allnoconfig    clang-22
+hexagon               randconfig-001-20251120    clang-22
+hexagon               randconfig-002-20251120    clang-22
+i386                              allnoconfig    gcc-14
+i386        buildonly-randconfig-002-20251120    gcc-14
+i386        buildonly-randconfig-003-20251120    clang-20
+i386        buildonly-randconfig-004-20251120    clang-20
+i386                  randconfig-001-20251120    gcc-14
+i386                  randconfig-002-20251120    gcc-14
+i386                  randconfig-003-20251120    clang-20
+i386                  randconfig-004-20251120    clang-20
+i386                  randconfig-005-20251120    clang-20
+i386                  randconfig-006-20251120    clang-20
+i386                  randconfig-007-20251120    gcc-14
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251120    clang-22
+loongarch             randconfig-002-20251120    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+microblaze                       alldefconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                        bcm47xx_defconfig    clang-18
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251120    gcc-9.5.0
+nios2                 randconfig-002-20251120    gcc-8.5.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251119    gcc-8.5.0
+parisc                randconfig-002-20251119    gcc-8.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                      bamboo_defconfig    clang-22
+powerpc               randconfig-001-20251119    clang-16
+powerpc               randconfig-002-20251119    clang-22
+powerpc                     taishan_defconfig    clang-17
+powerpc64             randconfig-001-20251119    clang-19
+riscv                             allnoconfig    gcc-15.1.0
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20251119    gcc-15.1.0
+riscv                 randconfig-002-20251119    gcc-10.5.0
+s390                              allnoconfig    clang-22
+s390                                defconfig    clang-22
+s390                  randconfig-001-20251119    gcc-8.5.0
+s390                  randconfig-002-20251119    clang-22
+sh                                allnoconfig    gcc-15.1.0
+sh                        apsh4ad0a_defconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20251119    gcc-11.5.0
+sh                    randconfig-002-20251119    gcc-9.5.0
+sh                           sh2007_defconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251120    gcc-8.5.0
+sparc                 randconfig-002-20251120    gcc-8.5.0
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20251120    clang-20
+sparc64               randconfig-002-20251120    clang-22
+um                                allnoconfig    clang-22
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251120    gcc-14
+um                    randconfig-002-20251120    clang-22
+um                           x86_64_defconfig    clang-22
+x86_64                            allnoconfig    clang-20
+x86_64      buildonly-randconfig-001-20251120    clang-20
+x86_64      buildonly-randconfig-002-20251120    clang-20
+x86_64      buildonly-randconfig-003-20251120    clang-20
+x86_64      buildonly-randconfig-004-20251120    clang-20
+x86_64      buildonly-randconfig-005-20251120    gcc-14
+x86_64      buildonly-randconfig-006-20251120    gcc-13
+x86_64                              defconfig    gcc-14
+x86_64                randconfig-001-20251120    gcc-14
+x86_64                randconfig-002-20251120    clang-20
+x86_64                randconfig-003-20251120    clang-20
+x86_64                randconfig-004-20251120    gcc-14
+x86_64                randconfig-005-20251120    gcc-12
+x86_64                randconfig-006-20251120    gcc-14
+x86_64                randconfig-011-20251120    clang-20
+x86_64                randconfig-012-20251120    gcc-13
+x86_64                randconfig-013-20251120    gcc-14
+x86_64                randconfig-014-20251120    gcc-14
+x86_64                randconfig-015-20251120    gcc-14
+x86_64                randconfig-016-20251120    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251120    gcc-15.1.0
+xtensa                randconfig-002-20251120    gcc-8.5.0
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
