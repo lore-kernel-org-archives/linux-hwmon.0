@@ -1,41 +1,67 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBC723D7FF
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 02:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC9D2F25F1
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 02:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763606368; cv=none; b=lsh2Z0JwZgS+0ZVH7d2taRDx0LObOLb1pKz5cICGKPiorbWsgh7qpF+64qmXDbXho0hzkJjgP5PaLp2vnlQ2iej+czdEq3siL2xeRMHgYdYcKOZSloZzkiLhvxjpjAaiVIpczfHk/JXh2OLLKaKReum9do3KEEA4WpW8abn2AC4=
+	t=1763606391; cv=none; b=Srmbw4ti2FFT//plsqCc5kO675uPxwhP7iHJ9SsmD2JXoeAUMCDX7UkG3Xn+9Tex2OGEkoHzUsLa/tZqcqfzzATwH0wNOwlxuoVreX6vMgPpaqePmDQzHXtjuTRHF2mCaGuDopZOsHB3iHiWuEe4x7bxYCcOWxfKq3Uq6slEQ7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763606368; c=relaxed/simple;
-	bh=tSTI2J6PkvHyu30yi/JYan4cOyaRDoUxo8oGBT4+s5g=;
+	s=arc-20240116; t=1763606391; c=relaxed/simple;
+	bh=9agRZXef3BNKDpPZJX5c0Kf5kgozAvoiqsCsrV2EG1I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wa5kEPxSrpnt5qOT5HBhTuyT6uEcwLC/ZRmpnbDxYW48/sJT1ewnx7s+lNPpwKKPkqWsOpIfiYV4QjReO5ZB/IEC4SlHXIWH4xCatGRcqOHts/FLGfNvlX7Qpvh4ngexFGihwh57g5jlc4RKhbPMROUPOMPCh7LnWT2kRV/VaH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=QPN3O6jy; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	 In-Reply-To:Content-Type; b=PazplyuWfaHVVdoh53PvgjYtGdSyFnomPlQQmpt4xx9NoXEfCtvMtPowhUJW9VgWfCDxS782cDM1fnHIehBrU2ku7zFPtLwTStNR6DZuAtEKojdpfY/QMhiE0fWV+QwLYj2acOiW1PyWgmw4udy1l0QLi2yMTFn9UFEO6Tbx+Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kaa1RT7U; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="QPN3O6jy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1763606364; x=1764211164; i=w_armin@gmx.de;
-	bh=t9nQbBuefMx/8p52+Aa82M5kMm0TE6nFLB8vqnlT96w=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=QPN3O6jyKaUqmYbZ2KcsEI4kH2zJ/kFfpHKF74y2xDDclujNKfxSSuSSbwxREdKG
-	 3evuFS215EPyKsguhvOF6A4helvJHpYsy5tlqhZXVGjCu83aYdFpzFfy+fzroPCqv
-	 /NBAgE1SpBZVbIUf31Hp9OTBt0v54uyAVfojff9hOGy8PmloxRQZeatA4Zq0PlWuP
-	 2oQ1kFdpia3Bd7PlOmdjPFsCd7REH1i693MFEUIV8xcvxugJ5i9jQf1Wyt3cWFnoR
-	 N+30Qe7kLcO5DYgbySqlEFhI1jj1/FqA2Smcvyyt0g9dTR9UPIHcOPa6Ko0r8S3UQ
-	 HzEg6HfhK3cHbwy6pg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8ykg-1vFq2931fy-00EhUg; Thu, 20
- Nov 2025 03:39:23 +0100
-Message-ID: <4ff54dba-db20-4d8e-b82a-c0eb2e227179@gmx.de>
-Date: Thu, 20 Nov 2025 03:39:22 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kaa1RT7U"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-bb2447d11ceso228461a12.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 18:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763606389; x=1764211189; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWKUkKLxWaSaEY/Hjt2PKZEcHrL1Aby6f/uFanaU3o4=;
+        b=kaa1RT7UMo6Fu/5XJDOWf/MaUR5wsdL0LdzXt9uDNWwMkFbe7xHPi7GCGYrnnN01vI
+         6MgbDqZeymyWiwBzDPYTQQ8A8oPdLGce1KYr4cJ8C6iOjHo/juPYV0yxM/2qbFJhBra7
+         SAMYM1ET2Cl/UvT8l+XaGEiGYWfVynnIAacnLBzWKT4iFpWCspgtTrkkXIjN4eQbYl5c
+         fTQ4vuLzmhoDe3p2+8gXKti1/jkvNi+8kzt0co8PjrT/jF8I7bPAmEDFQ9yK6Ttjxidv
+         D8kEDM9o0fSUVvNYGb9nrFPwxK60jhY1K+grfaL+mYsXrsnMwh1rV78xqpDO19KvpIjS
+         wc2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763606389; x=1764211189;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hWKUkKLxWaSaEY/Hjt2PKZEcHrL1Aby6f/uFanaU3o4=;
+        b=PS0Z3KwJsxyUVPJd1NTL7Ot1w1zkVXHxsD1UlELRfNNNL3OP9JBzhYlqFVB9VOg/Yy
+         0qBgCvcgWKDZMOdDW1GJvbintJKmsgAuWqXKbxWBrhIFCPBiDjDxeyjgNbtvSwsiieY7
+         gyNMkydxAzCc2F0BJBrvaz9gbCm1VN6CsphZWfZFy1mZFaS3+rUDD88qWBWuZirDilQX
+         YIAA/qubrx6wLMlJ09jqE7IxuiNCs01ytz08PlQF7K1hxNaXFlV5vu8i3L5kjjVXTZen
+         s+JJpM6dceZtSnVpmC+HhwI3IptRHxkXESNIgTfk+LEewPpHc/n3+5tocq2fdzC5I0Fu
+         qotA==
+X-Gm-Message-State: AOJu0Yz2yt4h81FRdfqWsmpFQqkdr7mNYAtQuxmif0DKkbMGvsYWjpCo
+	72GWI/+SNCTmfvIffamYUbO89K33A3yNpdbojbZovaeXSXrROvmHoltpOGi8OQ==
+X-Gm-Gg: ASbGncvYRjvkg7gg930HmKP8J9vY3x0IgXG9G/5f5DLD3LrGTm7BkEtwwM6x68Iz7bm
+	3xKaaJhPzCasr4GBTNspsRaKxDNidBz/RRImA7dxCDc9q8C8IJ3XhMgwhB7b14hfeflc5cCSQgo
+	N1EmFzB4LPdlxL+5YBOtV1ozPVa7P9TlvlEx4osHtl/Zjh8AaKsNhnRArNCdU7mFNGANKhIXSjg
+	kbxhlH4mVBoozdmEhOEfV5dxTl/Q70XfOWm9tKSrHdSbMvoEFK/TW5aYiyo/TOZeyHD3LP9Pryl
+	c8V2gt/j5XW/lyJIw+WmPNKMWtKcbLzSojaPN/6n6dC8sLHTRV/jQoPynsNuT2ScJvSxshtCHbF
+	dMmnCwMTxJ+x996RLqwAjKB4P9C0QlDaSwLbGUq6IkWBiSXuV6gUVtS1MxDdEr6alR77tFgewTC
+	6pyAU3IDmUYGlBtk7zAjjvI8LE3G0NtUhM46m4RObqHv7L7X9vUKc3cKtFFH1ChBi+bIe8HA==
+X-Google-Smtp-Source: AGHT+IFwWzoN6Mmw1vP4jqScGCEna13sJXoWo3Z+/+bq0ITc6FDg5PNbVfvAFpa+verqmQhCwNrQSg==
+X-Received: by 2002:a05:7301:282a:b0:2a4:3592:c5f3 with SMTP id 5a478bee46e88-2a6fcfedf69mr394358eec.4.1763606388755;
+        Wed, 19 Nov 2025 18:39:48 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a6fc4f6671sm5204951eec.3.2025.11.19.18.39.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Nov 2025 18:39:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8bbdfbec-22c0-4c46-b443-3f2b857cece1@roeck-us.net>
+Date: Wed, 19 Nov 2025 18:39:47 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -44,110 +70,79 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: Patch: applesmc.c - update handling
-To: Jared Mauch <jared@puck.nether.net>
-Cc: rydberg@bitmath.org, linux-hwmon@vger.kernel.org
+To: Jared Mauch <jared@puck.nether.net>, rydberg@bitmath.org
+Cc: linux-hwmon@vger.kernel.org
 References: <aR5W2K2Ic06uPgBy@puck.nether.net>
- <c5151e1f-cdf9-4d58-b00b-433f877b2ab3@gmx.de>
- <aR528iQGceJtE0nN@puck.nether.net>
 Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <aR528iQGceJtE0nN@puck.nether.net>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <aR5W2K2Ic06uPgBy@puck.nether.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:dZweofx9LQCPsttkR1XY1DrP7wLI8BKq/mwNLzQ4lEdJ97yzQFX
- c5nPmYBysIUgT3XpRwnnWGCyNFrhnyoe5x7oFw+73tzP4PvO3eIA54zkkdGM06YNNvki9ur
- ccrA/6Mvbr+8xs//hc8QJAYB5KBJeKUDBlu4IAQRZ707duBIMrLdVVjtHmHFbrILksxvC5h
- 5ElLCpnJYaRwLIrz4aGEQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:dtClmGSZjcE=;GUUI8H58f+IQTCTq6G0KihBUpzE
- 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
 
-Am 20.11.25 um 03:03 schrieb Jared Mauch:
+On 11/19/25 15:46, Jared Mauch wrote:
+> Updates code from hwmon_device_register to hwmon_device_register_with_info
+> 
+> Signed-off-by: Jared Mauch <jared@puck.nether.net>
+> 
 
-> 	oops, wrong attachment.
+NACK
 
-- Please do not top post
-- Please resend your patch if you make significant changes to it
-- Please do not send patches as attachments (use git send-email for example)
-- The attached patch still does not use struct hwmon_chip_info
+> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+> index fc6d6a9053ce..984dfbf40233 100644
+> --- a/drivers/hwmon/applesmc.c
+> +++ b/drivers/hwmon/applesmc.c
+> @@ -1362,7 +1362,7 @@ static int __init applesmc_init(void)
+>   	if (ret)
+>   		goto out_light_sysfs;
+>   
+> -	hwmon_dev = hwmon_device_register(&pdev->dev);
+> +	hwmon_dev = hwmon_device_register_with_info(&pdev->dev, "applesmc", NULL, NULL, NULL);
+>   	if (IS_ERR(hwmon_dev)) {
+>   		ret = PTR_ERR(hwmon_dev);
+>   		goto out_light_ledclass;
+> 
+> 
 
-Thanks,
-Armin Wolf
-
-> On Thu, Nov 20, 2025 at 12:54:24AM +0100, Armin Wolf wrote:
->> Am 20.11.25 um 00:46 schrieb Jared Mauch:
->>
->>> Updates code from hwmon_device_register to hwmon_device_register_with_info
->>>
->>> Signed-off-by: Jared Mauch <jared@puck.nether.net>
->>>
