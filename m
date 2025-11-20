@@ -1,29 +1,29 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4585630AD04;
-	Thu, 20 Nov 2025 08:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F5530BF4B;
+	Thu, 20 Nov 2025 08:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763626846; cv=none; b=RfikyHL4U1LW4/5MkeR5hYj2mK6WOhTJgxEAtHEyGYURI0LEPOT028XDD1xCYhbdGBsbUzjPOMnMI+3LyZVT1EXr7fnVc6Ny5qh3SzvEUJM6+FAeY+YNquwffaFqqHFJYRpIAvbgNxVbtnHnEWbyi2yI86f7+hb/KyjukFAfkoc=
+	t=1763626848; cv=none; b=S6fPEW4pEe6jjYDMZ1ZT2gXrtZcubuw0Aeus/gyNxyKSS+BaU0U47Qg/YwxXbVWdgdw+lRX/BDB6jTF9V4NUb2E0ct7PyCTcKMWEdqY0vkDfLxKjnsWFa83qrjO2bmJrJZXSay0dMKT4aS3Xt0q4yFnKJ/g5LOcioYXHSirlD3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763626846; c=relaxed/simple;
-	bh=yyRpSRt2XpliHBt1AW/V4VfYQBqCxqaKqY7JEeIWjjs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=dyOzQBcr2j8vCYZVWMMnEtnIC7LLfHapagVmsOnto1nqmb/qK7WjBsUqUzzBuBc6s3+hO1hsRvFXJaGxGMfX5vMAnl+EB/Ou7mRDTQqHePKS4PBy/Rl0WzIpvLOLIS79SlYa5w8zVpij+jvysknpqluQYh7rajE9QUoXjvAC4Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=L+v8P35Z; arc=none smtp.client-ip=220.197.31.3
+	s=arc-20240116; t=1763626848; c=relaxed/simple;
+	bh=arwpYGJUIjxXuKPgmtuSCwsJh7/64iVLmuFSATrZch4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=u9Fl62o4B4V1SQQI0f76DDJGptYt7BcO83grSQ1MfH5uy10UfMBcS9iX1vutv0LaktXMO+wdBpikTCqzidBDqbLJlfGJGrv0c3KTEayf/EjyEyQ6JiyPRwdhwdRrOsPSlLc+NJofmuiggxmnLvY3HR+GDh0YCcmd/s6lQqdUSnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pw1RIh2t; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="L+v8P35Z"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pw1RIh2t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=IFaa8TjMQuUxKfS
-	ecCtgY0np35W5UehqzhG+E4SNZcU=; b=L+v8P35ZQdGdHHp/zGYZjQ8dJ5ZhYC3
-	SbHhVt0qUaQJts//FVshivW1TZ7ivLcfK/mmX36/LsTXzTgg4gCWPbX9oDbmKk7h
-	edgFpUxsyITc/VwkgEKFM//L7GC0M7zptdEzSL7Wmf3gcEGhMUivu3lDinF+nDki
-	uZggRG33aqjg=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=68YJNMeAAH/pTY6
+	CI+vKV/d3ILppncB+4UrqEUXZkB0=; b=pw1RIh2ty32leTzBoS7cWk5U/7Yjosg
+	w7CNDFZpBd5EjwMhxZEGgq/d9edO9+jOSZu9zMMXU5pBGgVF8L5PQPfCV0T1raVn
+	3VIndwZBvnlfeBR44iDB5WN1M+uaH/S+hMK3kvH0w5CqxqiOWMrWdP8OJ4s/YFXz
+	Ng4T3SSvDRwE=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S4;
-	Thu, 20 Nov 2025 16:20:06 +0800 (CST)
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S6;
+	Thu, 20 Nov 2025 16:20:08 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>
@@ -34,126 +34,99 @@ Cc: Wenliang Yan <wenliang202407@163.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/8] hwmon: (ina3221) Add support for SQ52210
-Date: Thu, 20 Nov 2025 03:19:15 -0500
-Message-Id: <20251120081921.39412-3-wenliang202407@163.com>
+Subject: [PATCH v3 4/8] hwmon: (ina3221) Support alert configuration
+Date: Thu, 20 Nov 2025 03:19:17 -0500
+Message-Id: <20251120081921.39412-5-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251120081921.39412-1-wenliang202407@163.com>
 References: <20251120081921.39412-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXFW8Xr1UJFWDXrW3AF1kXwb_yoW5Zw4rpa
-	n5Aa4rtr45Xr4Ig3yfKFs5tF15tr4xG3yIvrnrK3yIva1DAry0gF1rKw4qyF98ZFyfZF47
-	X34Iy3y8uwnrJr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRbzV8UUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvxbitmkezzbYVAAA3-
+X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S6
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr4ftFy7Wr13ur17Xw47Arb_yoW8KFyfpF
+	43Ka4rtw12qF4Sgws2kan5KFyFy34xWFW7trnrW34FqFsrGryjvrn5GFyDtFyYvFn5ZFyI
+	q3y7tr4jkanFyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjaKZJUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCwBjjt2kezzh3PAAA3H
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-SQ52210 is compatible with INA3221, but also includes current registers,
-power registers, and registers related to alerts.
+Add alert configuration during chip initialization.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/ina3221.c | 34 ++++++++++++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ drivers/hwmon/ina3221.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index 5ecc68dcf169..47ef4fe694ea 100644
+index b5fa984a5a25..5fdcffe4738e 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -34,6 +34,17 @@
- #define INA3221_SHUNT_SUM		0x0d
- #define INA3221_CRIT_SUM		0x0e
- #define INA3221_MASK_ENABLE		0x0f
-+#define SQ52210_ALERT_CONFIG	0x12
-+#define SQ52210_CALIBRATION		0x14
-+#define SQ52210_CURRENT1		0x15
-+#define SQ52210_CURRENT2		0x16
-+#define SQ52210_CURRENT3		0x17
-+#define SQ52210_POWER1			0x18
-+#define SQ52210_POWER2			0x19
-+#define SQ52210_POWER3			0x1A
-+#define SQ52210_ALERT_LIMIT1	0x1B
-+#define SQ52210_ALERT_LIMIT2	0x1C
-+#define SQ52210_ALERT_LIMIT3	0x1D
+@@ -65,6 +65,8 @@
  
- #define INA3221_CONFIG_MODE_MASK	GENMASK(2, 0)
- #define INA3221_CONFIG_MODE_POWERDOWN	0
-@@ -108,8 +119,11 @@ struct ina3221_input {
- 	bool summation_disable;
- };
+ #define INA3221_MASK_ENABLE_SCC_MASK	GENMASK(14, 12)
  
-+enum ina3221_ids { ina3221, sq52210 };
++#define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
 +
- /**
-  * struct ina3221_data - device specific information
-+ * @chip: Chip type identifier
-  * @pm_dev: Device pointer for pm runtime
-  * @regmap: Register map of the device
-  * @fields: Register fields of the device
-@@ -120,6 +134,8 @@ struct ina3221_input {
+ #define INA3221_CONFIG_DEFAULT		0x7127
+ #define INA3221_RSHUNT_DEFAULT		10000
+ #define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
+@@ -123,6 +125,7 @@ struct ina3221_input {
+ enum ina3221_ids { ina3221, sq52210 };
+ 
+ struct ina3221_config {
++	bool has_alerts;	/* chip supports alerts and limits */
+ 	bool has_current;	/* chip has internal current reg */
+ 	bool has_power;		/* chip has internal power reg */
+ 	int calibration_value;	/* calculate current_lsb */
+@@ -140,6 +143,7 @@ struct ina3221_config {
+  * @reg_config: Register value of INA3221_CONFIG
+  * @summation_shunt_resistor: equivalent shunt resistor value for summation
+  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
++ * @alert_type_select: Used to store the alert trigger type
+  * @current_lsb_uA: The value of one LSB corresponding to the current register
+  * @power_lsb_uW: The value of one LSB corresponding to the power register
   * @single_shot: running in single-shot operating mode
-  */
- struct ina3221_data {
-+	enum ina3221_ids chip;
+@@ -155,6 +159,7 @@ struct ina3221_data {
+ 	u32 reg_config;
+ 	int summation_shunt_resistor;
+ 	u32 summation_channel_control;
++	u32 alert_type_select;
+ 	long current_lsb_uA;
+ 	long power_lsb_uW;
+ 
+@@ -163,10 +168,12 @@ struct ina3221_data {
+ 
+ static const struct ina3221_config ina3221_config[] = {
+ 	[ina3221] = {
++		.has_alerts = false,
+ 		.has_current = false,
+ 		.has_power = false,
+ 	},
+ 	[sq52210] = {
++		.has_alerts = true,
+ 		.has_current = true,
+ 		.has_power = true,
+ 		/*
+@@ -1096,6 +1103,17 @@ static int ina3221_resume(struct device *dev)
+ 		}
+ 	}
+ 
++	/* Restore alert config register value to hardware */
++	if (ina->config->has_alerts) {
++		ret = regmap_update_bits(ina->regmap, SQ52210_ALERT_CONFIG,
++					 SQ52210_ALERT_CONFIG_MASK,
++					 ina->alert_type_select);
++		if (ret) {
++			dev_err(dev, "Unable to select alert type\n");
++			return ret;
++		}
++	}
 +
- 	struct device *pm_dev;
- 	struct regmap *regmap;
- 	struct regmap_field *fields[F_MAX_FIELDS];
-@@ -734,6 +750,7 @@ static const struct regmap_range ina3221_yes_ranges[] = {
- 	regmap_reg_range(INA3221_CONFIG, INA3221_BUS3),
- 	regmap_reg_range(INA3221_SHUNT_SUM, INA3221_SHUNT_SUM),
- 	regmap_reg_range(INA3221_MASK_ENABLE, INA3221_MASK_ENABLE),
-+	regmap_reg_range(SQ52210_ALERT_CONFIG, SQ52210_POWER3),
- };
+ 	return 0;
+ }
  
- static const struct regmap_access_table ina3221_volatile_table = {
-@@ -818,13 +835,18 @@ static int ina3221_probe(struct i2c_client *client)
- 	struct device *dev = &client->dev;
- 	struct ina3221_data *ina;
- 	struct device *hwmon_dev;
-+	enum ina3221_ids chip;
- 	char name[32];
- 	int i, ret;
- 
-+	chip = (uintptr_t)i2c_get_match_data(client);
-+
- 	ina = devm_kzalloc(dev, sizeof(*ina), GFP_KERNEL);
- 	if (!ina)
- 		return -ENOMEM;
- 
-+	ina->chip = chip;
-+
- 	ina->regmap = devm_regmap_init_i2c(client, &ina3221_regmap_config);
- 	if (IS_ERR(ina->regmap)) {
- 		dev_err(dev, "Unable to allocate register map\n");
-@@ -996,13 +1018,21 @@ static DEFINE_RUNTIME_DEV_PM_OPS(ina3221_pm, ina3221_suspend, ina3221_resume,
- 				 NULL);
- 
- static const struct of_device_id ina3221_of_match_table[] = {
--	{ .compatible = "ti,ina3221", },
-+	{
-+		.compatible = "silergy,sq52210",
-+		.data = (void *)sq52210
-+	},
-+	{
-+		.compatible = "ti,ina3221",
-+		.data = (void *)ina3221
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, ina3221_of_match_table);
- 
- static const struct i2c_device_id ina3221_ids[] = {
--	{ "ina3221" },
-+	{ "ina3221", ina3221 },
-+	{ "sq52210", sq52210 },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(i2c, ina3221_ids);
 -- 
 2.17.1
 
