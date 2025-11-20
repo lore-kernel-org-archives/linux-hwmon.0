@@ -1,92 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA339221271;
-	Thu, 20 Nov 2025 08:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4585630AD04;
+	Thu, 20 Nov 2025 08:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763625728; cv=none; b=f6Hmntb/Uq2j5SF/C2r9mfm7N50BdMZzi8wN6u1fbhG8rEFemBwp5zgHK/jJU95XUnzBdfoQHJvXvFUIR0nyGYHCPqQOnLEx231mJ6rzlMy0dL4+jX7KK9PqgnzsZXdOj9PSThlsCTJGsj9uKz/pg3DhLZDRsvteediDUnhqym0=
+	t=1763626846; cv=none; b=RfikyHL4U1LW4/5MkeR5hYj2mK6WOhTJgxEAtHEyGYURI0LEPOT028XDD1xCYhbdGBsbUzjPOMnMI+3LyZVT1EXr7fnVc6Ny5qh3SzvEUJM6+FAeY+YNquwffaFqqHFJYRpIAvbgNxVbtnHnEWbyi2yI86f7+hb/KyjukFAfkoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763625728; c=relaxed/simple;
-	bh=mmzn6UC+XT6yk7vSSz8rO7MiIRbmBMxComsmjWtmqgk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b5vdcoKH1kZNPMK7MOjJXQ3jjdg3xU6ET7ZuC7rlsKzXi6WZOZLUsUmOkdG8Kb5wfEQ/uokcIFcaDKU/vtdNa+DwEk2tTuq3UiqAsMZBjZjUgtnyYY6d7r3u3+VfLHSlJ2YkLt8BaQ7bSA8WCzbE7g2Sq3F20BifCkpU2WL1Hmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9tcBmKw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763626846; c=relaxed/simple;
+	bh=yyRpSRt2XpliHBt1AW/V4VfYQBqCxqaKqY7JEeIWjjs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=dyOzQBcr2j8vCYZVWMMnEtnIC7LLfHapagVmsOnto1nqmb/qK7WjBsUqUzzBuBc6s3+hO1hsRvFXJaGxGMfX5vMAnl+EB/Ou7mRDTQqHePKS4PBy/Rl0WzIpvLOLIS79SlYa5w8zVpij+jvysknpqluQYh7rajE9QUoXjvAC4Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=L+v8P35Z; arc=none smtp.client-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9tcBmKw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D13C5C4CEF1;
-	Thu, 20 Nov 2025 08:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763625724;
-	bh=mmzn6UC+XT6yk7vSSz8rO7MiIRbmBMxComsmjWtmqgk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s9tcBmKw0xtxde1vbfu3KXoQuJJ3WllVlxNvksp/DTOano8dJrxkPVs6Kh2TnOwy9
-	 qBPFGbKin+c4hnQBC8+z7gQ2nD57Rp0ze9ZRiHiGYc4I1qSFG4PDYEJ8xjiEMpMq1b
-	 pes05/5SRpfgJ0VXRNxc01vkxR8ohZ9ITvOrbnm08nEPHYofAM7ebTXecT0c3nf5T5
-	 SEVKYOAL61kEi/t/x/1aoNhUVKTHh76wsBwRAKj5GxDYMeYJRDmJRHPpoZz/MHzEKB
-	 6TDS9wKD3hT/yaACF8w5zUdK3TEzwNGyIWjlv98htce4cZKT3XQ2RGGJ+F1X06H5zH
-	 aFEbcKYk9AmAQ==
-Date: Thu, 20 Nov 2025 09:02:02 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, linux@roeck-us.net, corbet@lwn.net, Jonathan.Cameron@huawei.com, 
-	michal.simek@amd.com, nuno.sa@analog.com, Frank.Li@nxp.com, wenswang@yeah.net, 
-	apokusinski01@gmail.com, dixitparmar19@gmail.com, vassilisamir@gmail.com, 
-	paweldembicki@gmail.com, heiko@sntech.de, neil.armstrong@linaro.org, 
-	kever.yang@rock-chips.com, prabhakar.mahadev-lad.rj@bp.renesas.com, mani@kernel.org, 
-	dev@kael-k.io, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: Add trivial-devices for WSEN-tids
- temperature sensor and wsen as vendor-prefix
-Message-ID: <20251120-towering-clam-of-memory-d96a6e@kuoka>
-References: <20251119125145.2402620-1-Thomas.Marangoni@becom-group.com>
- <20251119125145.2402620-2-Thomas.Marangoni@becom-group.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="L+v8P35Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=IFaa8TjMQuUxKfS
+	ecCtgY0np35W5UehqzhG+E4SNZcU=; b=L+v8P35ZQdGdHHp/zGYZjQ8dJ5ZhYC3
+	SbHhVt0qUaQJts//FVshivW1TZ7ivLcfK/mmX36/LsTXzTgg4gCWPbX9oDbmKk7h
+	edgFpUxsyITc/VwkgEKFM//L7GC0M7zptdEzSL7Wmf3gcEGhMUivu3lDinF+nDki
+	uZggRG33aqjg=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S4;
+	Thu, 20 Nov 2025 16:20:06 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
+To: linux@roeck-us.net,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/8] hwmon: (ina3221) Add support for SQ52210
+Date: Thu, 20 Nov 2025 03:19:15 -0500
+Message-Id: <20251120081921.39412-3-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20251120081921.39412-1-wenliang202407@163.com>
+References: <20251120081921.39412-1-wenliang202407@163.com>
+X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXFW8Xr1UJFWDXrW3AF1kXwb_yoW5Zw4rpa
+	n5Aa4rtr45Xr4Ig3yfKFs5tF15tr4xG3yIvrnrK3yIva1DAry0gF1rKw4qyF98ZFyfZF47
+	X34Iy3y8uwnrJr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRbzV8UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvxbitmkezzbYVAAA3-
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251119125145.2402620-2-Thomas.Marangoni@becom-group.com>
 
-On Wed, Nov 19, 2025 at 01:51:38PM +0100, Thomas Marangoni wrote:
-> WSEN-tids only has an i2c interface and an optional interrupt. This
-> should qualify the sensor as trivial device.
->=20
-> WSEN is a subcompany of W=C3=BCrth Electronics specialized on IC sensors.
->=20
-> Signed-off-by: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  2 files changed, 4 insertions(+)
+SQ52210 is compatible with INA3221, but also includes current registers,
+power registers, and registers related to alerts.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+---
+ drivers/hwmon/ina3221.c | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-<form letter>
-This is an automated instruction, just in case, because many review
-tags are being ignored. If you know the process, just skip it entirely
-(please do not feel offended by me posting it here - no bad intentions
-intended, no patronizing, I just want to avoid wasted efforts). If you
-do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions of patchset, under or above your Signed-off-by tag, unless
-patch changed significantly (e.g. new properties added to the DT
-bindings). Tag is "received", when provided in a message replied to you
-on the mailing list. Tools like b4 can help here ('b4 trailers -u ...').
-However, there's no need to repost patches *only* to add the tags. The
-upstream maintainer will do that for tags received on the version they
-apply.
-
-https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitt=
-ing-patches.rst#L591
-</form letter>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 5ecc68dcf169..47ef4fe694ea 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -34,6 +34,17 @@
+ #define INA3221_SHUNT_SUM		0x0d
+ #define INA3221_CRIT_SUM		0x0e
+ #define INA3221_MASK_ENABLE		0x0f
++#define SQ52210_ALERT_CONFIG	0x12
++#define SQ52210_CALIBRATION		0x14
++#define SQ52210_CURRENT1		0x15
++#define SQ52210_CURRENT2		0x16
++#define SQ52210_CURRENT3		0x17
++#define SQ52210_POWER1			0x18
++#define SQ52210_POWER2			0x19
++#define SQ52210_POWER3			0x1A
++#define SQ52210_ALERT_LIMIT1	0x1B
++#define SQ52210_ALERT_LIMIT2	0x1C
++#define SQ52210_ALERT_LIMIT3	0x1D
+ 
+ #define INA3221_CONFIG_MODE_MASK	GENMASK(2, 0)
+ #define INA3221_CONFIG_MODE_POWERDOWN	0
+@@ -108,8 +119,11 @@ struct ina3221_input {
+ 	bool summation_disable;
+ };
+ 
++enum ina3221_ids { ina3221, sq52210 };
++
+ /**
+  * struct ina3221_data - device specific information
++ * @chip: Chip type identifier
+  * @pm_dev: Device pointer for pm runtime
+  * @regmap: Register map of the device
+  * @fields: Register fields of the device
+@@ -120,6 +134,8 @@ struct ina3221_input {
+  * @single_shot: running in single-shot operating mode
+  */
+ struct ina3221_data {
++	enum ina3221_ids chip;
++
+ 	struct device *pm_dev;
+ 	struct regmap *regmap;
+ 	struct regmap_field *fields[F_MAX_FIELDS];
+@@ -734,6 +750,7 @@ static const struct regmap_range ina3221_yes_ranges[] = {
+ 	regmap_reg_range(INA3221_CONFIG, INA3221_BUS3),
+ 	regmap_reg_range(INA3221_SHUNT_SUM, INA3221_SHUNT_SUM),
+ 	regmap_reg_range(INA3221_MASK_ENABLE, INA3221_MASK_ENABLE),
++	regmap_reg_range(SQ52210_ALERT_CONFIG, SQ52210_POWER3),
+ };
+ 
+ static const struct regmap_access_table ina3221_volatile_table = {
+@@ -818,13 +835,18 @@ static int ina3221_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct ina3221_data *ina;
+ 	struct device *hwmon_dev;
++	enum ina3221_ids chip;
+ 	char name[32];
+ 	int i, ret;
+ 
++	chip = (uintptr_t)i2c_get_match_data(client);
++
+ 	ina = devm_kzalloc(dev, sizeof(*ina), GFP_KERNEL);
+ 	if (!ina)
+ 		return -ENOMEM;
+ 
++	ina->chip = chip;
++
+ 	ina->regmap = devm_regmap_init_i2c(client, &ina3221_regmap_config);
+ 	if (IS_ERR(ina->regmap)) {
+ 		dev_err(dev, "Unable to allocate register map\n");
+@@ -996,13 +1018,21 @@ static DEFINE_RUNTIME_DEV_PM_OPS(ina3221_pm, ina3221_suspend, ina3221_resume,
+ 				 NULL);
+ 
+ static const struct of_device_id ina3221_of_match_table[] = {
+-	{ .compatible = "ti,ina3221", },
++	{
++		.compatible = "silergy,sq52210",
++		.data = (void *)sq52210
++	},
++	{
++		.compatible = "ti,ina3221",
++		.data = (void *)ina3221
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, ina3221_of_match_table);
+ 
+ static const struct i2c_device_id ina3221_ids[] = {
+-	{ "ina3221" },
++	{ "ina3221", ina3221 },
++	{ "sq52210", sq52210 },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(i2c, ina3221_ids);
+-- 
+2.17.1
 
