@@ -1,148 +1,220 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC9D2F25F1
-	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 02:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A307C2D641D
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 04:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763606391; cv=none; b=Srmbw4ti2FFT//plsqCc5kO675uPxwhP7iHJ9SsmD2JXoeAUMCDX7UkG3Xn+9Tex2OGEkoHzUsLa/tZqcqfzzATwH0wNOwlxuoVreX6vMgPpaqePmDQzHXtjuTRHF2mCaGuDopZOsHB3iHiWuEe4x7bxYCcOWxfKq3Uq6slEQ7s=
+	t=1763612027; cv=none; b=ZxcKgr+cxkeZikyWyGuB0EdeBH8ktlCB9TEJmKPc5jg395O1BSTjKmX0BtFU1r9oMicnh1nLvKkcc+Rvq8Mp/63wBwEp0ykO1CC4YRPBHmEH/FViQ8PPyhdOGZGh4Pp1UgOE9uJ0sZf9zM8hMP0qW6rX5vjnmwJE7kKxEeD5S9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763606391; c=relaxed/simple;
-	bh=9agRZXef3BNKDpPZJX5c0Kf5kgozAvoiqsCsrV2EG1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PazplyuWfaHVVdoh53PvgjYtGdSyFnomPlQQmpt4xx9NoXEfCtvMtPowhUJW9VgWfCDxS782cDM1fnHIehBrU2ku7zFPtLwTStNR6DZuAtEKojdpfY/QMhiE0fWV+QwLYj2acOiW1PyWgmw4udy1l0QLi2yMTFn9UFEO6Tbx+Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kaa1RT7U; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1763612027; c=relaxed/simple;
+	bh=fFTvaxCHkwe3TWNImhqvxkbkcAX5duXv6fsZu8qXEJ4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BA5gVy3r7ePA6qbbxEnJaWctIlRA8KEUfb/AayMVW3GV5o9oCseHmoYtDiI1K4N8A+9rdo6CVWe1TpD8p1N/jk9Schp9enRpM/tkOkKZE4RVQR1drNQDp4+L8BCFyvoyfIG1hWMXOL5i8wlYWTLtIWpiOnHjGpulxzPSk9J4/fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KOKaiRLU; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kaa1RT7U"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-bb2447d11ceso228461a12.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 18:39:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KOKaiRLU"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7aab7623f42so487149b3a.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 Nov 2025 20:13:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763606389; x=1764211189; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWKUkKLxWaSaEY/Hjt2PKZEcHrL1Aby6f/uFanaU3o4=;
-        b=kaa1RT7UMo6Fu/5XJDOWf/MaUR5wsdL0LdzXt9uDNWwMkFbe7xHPi7GCGYrnnN01vI
-         6MgbDqZeymyWiwBzDPYTQQ8A8oPdLGce1KYr4cJ8C6iOjHo/juPYV0yxM/2qbFJhBra7
-         SAMYM1ET2Cl/UvT8l+XaGEiGYWfVynnIAacnLBzWKT4iFpWCspgtTrkkXIjN4eQbYl5c
-         fTQ4vuLzmhoDe3p2+8gXKti1/jkvNi+8kzt0co8PjrT/jF8I7bPAmEDFQ9yK6Ttjxidv
-         D8kEDM9o0fSUVvNYGb9nrFPwxK60jhY1K+grfaL+mYsXrsnMwh1rV78xqpDO19KvpIjS
-         wc2A==
+        d=gmail.com; s=20230601; t=1763612025; x=1764216825; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Pb/ET6Ol1KEYZrGqc/HU9xA8yZrF8vyNBLl5qu1OoU=;
+        b=KOKaiRLUaG8Gw4TInrIlLOszNrX+CRsUKA0s9JBWRW+tflhDkqPI+Mb+NaLvMo+H0B
+         Lr0sO1X7NfzeZLkc7U2Txc/aYWKSuT3GgEFat1MTSiHgBziVknwpqzc3kwtRfw1xlp+q
+         wV8a3Z0K8G5F4rU7zeqhHjcR8sYNupVfmYaZpLE699bpz8B5tpQhWLncVIKHKi3tMZM0
+         DEevjVC86Rg4d7GXIrCWD7OLb6LLTbVpmYergubS83XgLpGE42V6PnCr3hTDCsCZnfo1
+         SRYNOEnxVEKYwP6EdZtKIb+A4s1Yyt0Zs+lULIWbMXjNFpbSkuEAitFJhEul1F6oB/Am
+         pHug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763606389; x=1764211189;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hWKUkKLxWaSaEY/Hjt2PKZEcHrL1Aby6f/uFanaU3o4=;
-        b=PS0Z3KwJsxyUVPJd1NTL7Ot1w1zkVXHxsD1UlELRfNNNL3OP9JBzhYlqFVB9VOg/Yy
-         0qBgCvcgWKDZMOdDW1GJvbintJKmsgAuWqXKbxWBrhIFCPBiDjDxeyjgNbtvSwsiieY7
-         gyNMkydxAzCc2F0BJBrvaz9gbCm1VN6CsphZWfZFy1mZFaS3+rUDD88qWBWuZirDilQX
-         YIAA/qubrx6wLMlJ09jqE7IxuiNCs01ytz08PlQF7K1hxNaXFlV5vu8i3L5kjjVXTZen
-         s+JJpM6dceZtSnVpmC+HhwI3IptRHxkXESNIgTfk+LEewPpHc/n3+5tocq2fdzC5I0Fu
-         qotA==
-X-Gm-Message-State: AOJu0Yz2yt4h81FRdfqWsmpFQqkdr7mNYAtQuxmif0DKkbMGvsYWjpCo
-	72GWI/+SNCTmfvIffamYUbO89K33A3yNpdbojbZovaeXSXrROvmHoltpOGi8OQ==
-X-Gm-Gg: ASbGncvYRjvkg7gg930HmKP8J9vY3x0IgXG9G/5f5DLD3LrGTm7BkEtwwM6x68Iz7bm
-	3xKaaJhPzCasr4GBTNspsRaKxDNidBz/RRImA7dxCDc9q8C8IJ3XhMgwhB7b14hfeflc5cCSQgo
-	N1EmFzB4LPdlxL+5YBOtV1ozPVa7P9TlvlEx4osHtl/Zjh8AaKsNhnRArNCdU7mFNGANKhIXSjg
-	kbxhlH4mVBoozdmEhOEfV5dxTl/Q70XfOWm9tKSrHdSbMvoEFK/TW5aYiyo/TOZeyHD3LP9Pryl
-	c8V2gt/j5XW/lyJIw+WmPNKMWtKcbLzSojaPN/6n6dC8sLHTRV/jQoPynsNuT2ScJvSxshtCHbF
-	dMmnCwMTxJ+x996RLqwAjKB4P9C0QlDaSwLbGUq6IkWBiSXuV6gUVtS1MxDdEr6alR77tFgewTC
-	6pyAU3IDmUYGlBtk7zAjjvI8LE3G0NtUhM46m4RObqHv7L7X9vUKc3cKtFFH1ChBi+bIe8HA==
-X-Google-Smtp-Source: AGHT+IFwWzoN6Mmw1vP4jqScGCEna13sJXoWo3Z+/+bq0ITc6FDg5PNbVfvAFpa+verqmQhCwNrQSg==
-X-Received: by 2002:a05:7301:282a:b0:2a4:3592:c5f3 with SMTP id 5a478bee46e88-2a6fcfedf69mr394358eec.4.1763606388755;
-        Wed, 19 Nov 2025 18:39:48 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a6fc4f6671sm5204951eec.3.2025.11.19.18.39.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Nov 2025 18:39:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8bbdfbec-22c0-4c46-b443-3f2b857cece1@roeck-us.net>
-Date: Wed, 19 Nov 2025 18:39:47 -0800
+        d=1e100.net; s=20230601; t=1763612025; x=1764216825;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Pb/ET6Ol1KEYZrGqc/HU9xA8yZrF8vyNBLl5qu1OoU=;
+        b=ck1WPCC7eNawCfRyShU4P3mqE5sNCeb5VlnhQxOw6LoLVFljoCy7utF47YvUwG48yR
+         4FEsAhiDG/sxRHxHUqeTSZP+542HyB7Z4b8xATXIsluGXKBOE701d4+QpedlBcswBij/
+         2Fl/L9Sx4bAw9kFlcY7h4qWoGsFrBJgYhKcS7X19/u200oSanZAwUwDVoR/umgY+pVgw
+         BjQwASlugE5y/bUul8Jy6x+7wUWe/weFLjdJ6j8cotSI0OYidDlp24Alin2EnBEHA+Q6
+         PywWkF84cfGUqffCumg0f/ocJJFUC1egm/WUWTnU2vqtK0acvleQvI+e/Q6Me+lvG8ok
+         b5+A==
+X-Gm-Message-State: AOJu0Yw3HiMIBHwq+lq95ZYKnkv9D9P3ydIWj3u84Q/9kr6pz0bO2v4n
+	/E/DkBD3jIsVf8hVnkh5o2zR4uk1j1Sh/WySVAw3cvsNTXIBHB+Z7jRM
+X-Gm-Gg: ASbGncsbiI2iVpZLsjqScvxw/EHF0zKI1WvEWbulzELMJ3EDkifSlKs74Z0appa2NL3
+	8MMTks4Eou2v9phWPLOEGzconjahBlqY3X/EhDOjRet/o4TOBMtPpNJFTpRB06e8Jk3uHUJXCQv
+	j8iwN4ob/UxODzNR4dGTOFFBYcAfHXwqlN/DNOycEvDkoR2QYAoaIS59VjEkxAZXbbhb7pthg7/
+	jEE0aBtoH8CKzKkE+G51y2TYaQ6fgnAzu27P/p1gVeR3RQ2LRHwLWVGzayFOWgrGz/8w6Mw4CIi
+	7xfXoatskK3VyMLALG6HMQh+7bB5EgQd/jXg6CKoX3XXCAftJXmbze9PBL/fcnsJw1hzG1zcIZD
+	F65STXfCAbmhneXpoQzWulcFF/YMJCs0og9cpYXAtGVBHODHwE6Og2BURDgwgiGM9Ly8n6/XUO6
+	wHj4LUbmbYDfiBOPJ9ol8deFm5IWZDk1FWdZLuWM+GgaDuZkixt24=
+X-Google-Smtp-Source: AGHT+IEbqJq4oGbb0v90QbD4tSlHOmgRzJICcxZ8RRMzvr4CvJC4X9lCSrnsAdVYzVCR4fl5KksWPg==
+X-Received: by 2002:a05:6a20:5483:b0:34f:28f7:ed79 with SMTP id adf61e73a8af0-3613ca60118mr1794648637.19.1763612024737;
+        Wed, 19 Nov 2025 20:13:44 -0800 (PST)
+Received: from localhost.localdomain ([154.3.39.171])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd75def6321sm989748a12.6.2025.11.19.20.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 20:13:44 -0800 (PST)
+From: Gui-Dong Han <hanguidong02@gmail.com>
+To: juergh@proton.me,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>
+Subject: [PATCH] hwmon: (vt1211) Convert macros to functions to avoid TOCTOU
+Date: Thu, 20 Nov 2025 12:13:31 +0800
+Message-Id: <20251120041331.1917570-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Patch: applesmc.c - update handling
-To: Jared Mauch <jared@puck.nether.net>, rydberg@bitmath.org
-Cc: linux-hwmon@vger.kernel.org
-References: <aR5W2K2Ic06uPgBy@puck.nether.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aR5W2K2Ic06uPgBy@puck.nether.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/19/25 15:46, Jared Mauch wrote:
-> Updates code from hwmon_device_register to hwmon_device_register_with_info
-> 
-> Signed-off-by: Jared Mauch <jared@puck.nether.net>
-> 
+The macros IN_FROM_REG, TEMP_FROM_REG, and RPM_FROM_REG evaluate their
+arguments multiple times. These macros are used in lockless show functions
+involving shared driver data, leading to Time-of-Check to Time-of-Use race
+conditions.
 
-NACK
+For example, RPM_FROM_REG checks if a value is 0 or 255, and then uses it
+in a division. If the value is modified by another thread to 0 after the
+check but before the division, it causes a divide-by-zero error.
 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index fc6d6a9053ce..984dfbf40233 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-> @@ -1362,7 +1362,7 @@ static int __init applesmc_init(void)
->   	if (ret)
->   		goto out_light_sysfs;
->   
-> -	hwmon_dev = hwmon_device_register(&pdev->dev);
-> +	hwmon_dev = hwmon_device_register_with_info(&pdev->dev, "applesmc", NULL, NULL, NULL);
->   	if (IS_ERR(hwmon_dev)) {
->   		ret = PTR_ERR(hwmon_dev);
->   		goto out_light_ledclass;
-> 
-> 
+Convert these macros to static functions. This guarantees that arguments
+are evaluated only once (pass-by-value), fixing the race conditions.
+Adhere to the principle of minimal changes by only converting the specific
+macros involved in these lockless contexts.
+
+Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+---
+Based on the discussion in the link, I will submit a series of patches to
+address TOCTOU issues in the hwmon subsystem by converting macros to
+functions or adjusting locking where appropriate.
+---
+ drivers/hwmon/vt1211.c | 53 ++++++++++++++++++++++++++++--------------
+ 1 file changed, 35 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/hwmon/vt1211.c b/drivers/hwmon/vt1211.c
+index 386edea6b69e..1e52cabd6e24 100644
+--- a/drivers/hwmon/vt1211.c
++++ b/drivers/hwmon/vt1211.c
+@@ -142,9 +142,15 @@ struct vt1211_data {
+  * in5 (ix = 5) is special. It's the internal 3.3V so it's scaled in the
+  * driver according to the VT1211 BIOS porting guide
+  */
+-#define IN_FROM_REG(ix, reg)	((reg) < 3 ? 0 : (ix) == 5 ? \
+-				 (((reg) - 3) * 15882 + 479) / 958 : \
+-				 (((reg) - 3) * 10000 + 479) / 958)
++static int in_from_reg(int ix, int reg)
++{
++	if (reg < 3)
++		return 0;
++	if (ix == 5)
++		return ((reg - 3) * 15882 + 479) / 958;
++	return ((reg - 3) * 10000 + 479) / 958;
++}
++
+ #define IN_TO_REG(ix, val)	(clamp_val((ix) == 5 ? \
+ 				 ((val) * 958 + 7941) / 15882 + 3 : \
+ 				 ((val) * 958 + 5000) / 10000 + 3, 0, 255))
+@@ -156,10 +162,15 @@ struct vt1211_data {
+  * temp3-7 are thermistor based so the driver returns the voltage measured at
+  * the pin (range 0V - 2.2V).
+  */
+-#define TEMP_FROM_REG(ix, reg)	((ix) == 0 ? (reg) * 1000 : \
+-				 (ix) == 1 ? (reg) < 51 ? 0 : \
+-				 ((reg) - 51) * 1000 : \
+-				 ((253 - (reg)) * 2200 + 105) / 210)
++static int temp_from_reg(int ix, int reg)
++{
++	if (ix == 0)
++		return reg * 1000;
++	if (ix == 1)
++		return reg < 51 ? 0 : (reg - 51) * 1000;
++	return ((253 - reg) * 2200 + 105) / 210;
++}
++
+ #define TEMP_TO_REG(ix, val)	clamp_val( \
+ 				 ((ix) == 0 ? ((val) + 500) / 1000 : \
+ 				  (ix) == 1 ? ((val) + 500) / 1000 + 51 : \
+@@ -167,8 +178,14 @@ struct vt1211_data {
+ 
+ #define DIV_FROM_REG(reg)	(1 << (reg))
+ 
+-#define RPM_FROM_REG(reg, div)	(((reg) == 0) || ((reg) == 255) ? 0 : \
+-				 1310720 / (reg) / DIV_FROM_REG(div))
++static int rpm_from_reg(int reg, int div)
++{
++	if (reg == 0 || reg == 255)
++		return 0;
++
++	return 1310720 / reg / DIV_FROM_REG(div);
++}
++
+ #define RPM_TO_REG(val, div)	((val) == 0 ? 255 : \
+ 				 clamp_val((1310720 / (val) / \
+ 				 DIV_FROM_REG(div)), 1, 254))
+@@ -343,13 +360,13 @@ static ssize_t show_in(struct device *dev, struct device_attribute *attr,
+ 
+ 	switch (fn) {
+ 	case SHOW_IN_INPUT:
+-		res = IN_FROM_REG(ix, data->in[ix]);
++		res = in_from_reg(ix, data->in[ix]);
+ 		break;
+ 	case SHOW_SET_IN_MIN:
+-		res = IN_FROM_REG(ix, data->in_min[ix]);
++		res = in_from_reg(ix, data->in_min[ix]);
+ 		break;
+ 	case SHOW_SET_IN_MAX:
+-		res = IN_FROM_REG(ix, data->in_max[ix]);
++		res = in_from_reg(ix, data->in_max[ix]);
+ 		break;
+ 	case SHOW_IN_ALARM:
+ 		res = (data->alarms >> bitalarmin[ix]) & 1;
+@@ -417,13 +434,13 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr,
+ 
+ 	switch (fn) {
+ 	case SHOW_TEMP_INPUT:
+-		res = TEMP_FROM_REG(ix, data->temp[ix]);
++		res = temp_from_reg(ix, data->temp[ix]);
+ 		break;
+ 	case SHOW_SET_TEMP_MAX:
+-		res = TEMP_FROM_REG(ix, data->temp_max[ix]);
++		res = temp_from_reg(ix, data->temp_max[ix]);
+ 		break;
+ 	case SHOW_SET_TEMP_MAX_HYST:
+-		res = TEMP_FROM_REG(ix, data->temp_hyst[ix]);
++		res = temp_from_reg(ix, data->temp_hyst[ix]);
+ 		break;
+ 	case SHOW_TEMP_ALARM:
+ 		res = (data->alarms >> bitalarmtemp[ix]) & 1;
+@@ -493,10 +510,10 @@ static ssize_t show_fan(struct device *dev, struct device_attribute *attr,
+ 
+ 	switch (fn) {
+ 	case SHOW_FAN_INPUT:
+-		res = RPM_FROM_REG(data->fan[ix], data->fan_div[ix]);
++		res = rpm_from_reg(data->fan[ix], data->fan_div[ix]);
+ 		break;
+ 	case SHOW_SET_FAN_MIN:
+-		res = RPM_FROM_REG(data->fan_min[ix], data->fan_div[ix]);
++		res = rpm_from_reg(data->fan_min[ix], data->fan_div[ix]);
+ 		break;
+ 	case SHOW_SET_FAN_DIV:
+ 		res = DIV_FROM_REG(data->fan_div[ix]);
+@@ -751,7 +768,7 @@ static ssize_t show_pwm_auto_point_temp(struct device *dev,
+ 	int ix = sensor_attr_2->index;
+ 	int ap = sensor_attr_2->nr;
+ 
+-	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->pwm_ctl[ix] & 7,
++	return sprintf(buf, "%d\n", temp_from_reg(data->pwm_ctl[ix] & 7,
+ 		       data->pwm_auto_temp[ap]));
+ }
+ 
+-- 
+2.43.0
 
