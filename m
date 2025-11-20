@@ -1,310 +1,92 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0742F6939;
-	Thu, 20 Nov 2025 07:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA339221271;
+	Thu, 20 Nov 2025 08:02:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763622938; cv=none; b=AwX15P7NyiNt3q5VLKWV44/4WsyjL0HEdwLLCo0CVTHB04VpHSDUv1ol3eI1pCQsjL2Lma3dFEITRLAcNW112yt7TwoGJDljLrqTMfgs0PM5gn/5nK2zu4gCa9/QWdAQJ1XtRclrFlvqN0sEhGrONuQPe2ZL6EHNWoD6f8TF/BI=
+	t=1763625728; cv=none; b=f6Hmntb/Uq2j5SF/C2r9mfm7N50BdMZzi8wN6u1fbhG8rEFemBwp5zgHK/jJU95XUnzBdfoQHJvXvFUIR0nyGYHCPqQOnLEx231mJ6rzlMy0dL4+jX7KK9PqgnzsZXdOj9PSThlsCTJGsj9uKz/pg3DhLZDRsvteediDUnhqym0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763622938; c=relaxed/simple;
-	bh=AsPtnUcX/Ztr257pka/IKN28UEQmtgTxH1Rjq+MdmdI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TZRprdlUQkP05gTLptv0qgTEnVnoylsb9nHgGJeorzzU6JW9gwEkVMvRZFo7xU6Cx/BvMpOGncWfZIeYuw4gW/xLTYrofm5fv+U6r+zPNc6UnZWIgZxEOSWWFHJtyAP9052a4fGoh02DEIaA+kwUICqvnX1z0QOllkq+6uPUqKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ze89Z213; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1763625728; c=relaxed/simple;
+	bh=mmzn6UC+XT6yk7vSSz8rO7MiIRbmBMxComsmjWtmqgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b5vdcoKH1kZNPMK7MOjJXQ3jjdg3xU6ET7ZuC7rlsKzXi6WZOZLUsUmOkdG8Kb5wfEQ/uokcIFcaDKU/vtdNa+DwEk2tTuq3UiqAsMZBjZjUgtnyYY6d7r3u3+VfLHSlJ2YkLt8BaQ7bSA8WCzbE7g2Sq3F20BifCkpU2WL1Hmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9tcBmKw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ze89Z213"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1763622936; x=1795158936;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AsPtnUcX/Ztr257pka/IKN28UEQmtgTxH1Rjq+MdmdI=;
-  b=ze89Z213blRjS6SZloTXLfmt7743j2tjDXhHt2gKlgtT9exFOqXUzFQF
-   f+0U+VkpBeCeFmFcvZwhMXNSr697uODi/SLxNUFQHqwH6AvPcXZca8xxb
-   6p/PvJmnOvDgWG+ZkDcFx0gsOzgD5D92k1RxwVQ95oVaGYkRKjTRk0eu8
-   5u5pP/DWfjXXwamNXL3LoE33HQtLWcEscIr1pkWKOcOp4aOm67H+kYa4k
-   FUVRonpvTRD3LQCSQQWAjHR+TJIscXpntuohmVN7cBdnZctSG1+/Huho2
-   tjb+4w9jkQLdi4fcYZZhitfvdmYTG9dYl48KCvA3J7EI1IqxTFWNGHkK9
-   A==;
-X-CSE-ConnectionGUID: b7CqKYCHTP+tqyFnCAjU2Q==
-X-CSE-MsgGUID: VLTFCyo+QVuYC1q/PA49KA==
-X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
-   d="scan'208";a="55961198"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Nov 2025 00:14:32 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Thu, 20 Nov 2025 00:13:58 -0700
-Received: from vduicu-Virtual-Machine.mshome.net (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 20 Nov 2025 00:13:55 -0700
-From: <victor.duicu@microchip.com>
-To: <linux@roeck-us.net>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <corbet@lwn.net>
-CC: <marius.cristea@microchip.com>, <victor.duicu@microchip.com>,
-	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: add support for MCP998X
-Date: Thu, 20 Nov 2025 09:12:45 +0200
-Message-ID: <20251120071248.3767-2-victor.duicu@microchip.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251120071248.3767-1-victor.duicu@microchip.com>
-References: <20251120071248.3767-1-victor.duicu@microchip.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9tcBmKw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D13C5C4CEF1;
+	Thu, 20 Nov 2025 08:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763625724;
+	bh=mmzn6UC+XT6yk7vSSz8rO7MiIRbmBMxComsmjWtmqgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s9tcBmKw0xtxde1vbfu3KXoQuJJ3WllVlxNvksp/DTOano8dJrxkPVs6Kh2TnOwy9
+	 qBPFGbKin+c4hnQBC8+z7gQ2nD57Rp0ze9ZRiHiGYc4I1qSFG4PDYEJ8xjiEMpMq1b
+	 pes05/5SRpfgJ0VXRNxc01vkxR8ohZ9ITvOrbnm08nEPHYofAM7ebTXecT0c3nf5T5
+	 SEVKYOAL61kEi/t/x/1aoNhUVKTHh76wsBwRAKj5GxDYMeYJRDmJRHPpoZz/MHzEKB
+	 6TDS9wKD3hT/yaACF8w5zUdK3TEzwNGyIWjlv98htce4cZKT3XQ2RGGJ+F1X06H5zH
+	 aFEbcKYk9AmAQ==
+Date: Thu, 20 Nov 2025 09:02:02 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
+Cc: linux-hwmon@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, linux@roeck-us.net, corbet@lwn.net, Jonathan.Cameron@huawei.com, 
+	michal.simek@amd.com, nuno.sa@analog.com, Frank.Li@nxp.com, wenswang@yeah.net, 
+	apokusinski01@gmail.com, dixitparmar19@gmail.com, vassilisamir@gmail.com, 
+	paweldembicki@gmail.com, heiko@sntech.de, neil.armstrong@linaro.org, 
+	kever.yang@rock-chips.com, prabhakar.mahadev-lad.rj@bp.renesas.com, mani@kernel.org, 
+	dev@kael-k.io, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: Add trivial-devices for WSEN-tids
+ temperature sensor and wsen as vendor-prefix
+Message-ID: <20251120-towering-clam-of-memory-d96a6e@kuoka>
+References: <20251119125145.2402620-1-Thomas.Marangoni@becom-group.com>
+ <20251119125145.2402620-2-Thomas.Marangoni@becom-group.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251119125145.2402620-2-Thomas.Marangoni@becom-group.com>
 
-From: Victor Duicu <victor.duicu@microchip.com>
+On Wed, Nov 19, 2025 at 01:51:38PM +0100, Thomas Marangoni wrote:
+> WSEN-tids only has an i2c interface and an optional interrupt. This
+> should qualify the sensor as trivial device.
+>=20
+> WSEN is a subcompany of W=C3=BCrth Electronics specialized on IC sensors.
+>=20
+> Signed-off-by: Thomas Marangoni <Thomas.Marangoni@becom-group.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  2 files changed, 4 insertions(+)
 
-This is the devicetree schema for Microchip MCP998X/33 and
-MCP998XD/33D Multichannel Automotive Temperature Monitor Family.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Victor Duicu <victor.duicu@microchip.com>
----
- .../bindings/hwmon/microchip,mcp9982.yaml     | 205 ++++++++++++++++++
- MAINTAINERS                                   |   6 +
- 2 files changed, 211 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
+<form letter>
+This is an automated instruction, just in case, because many review
+tags are being ignored. If you know the process, just skip it entirely
+(please do not feel offended by me posting it here - no bad intentions
+intended, no patronizing, I just want to avoid wasted efforts). If you
+do not know the process, here is a short explanation:
 
-diff --git a/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml b/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-new file mode 100644
-index 000000000000..05ea3c6a5618
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-@@ -0,0 +1,205 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/microchip,mcp9982.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip MCP998X/33 and MCP998XD/33D Temperature Monitor
-+
-+maintainers:
-+  - Victor Duicu <victor.duicu@microchip.com>
-+
-+description: |
-+  The MCP998X/33 and MCP998XD/33D family is a high-accuracy 2-wire
-+  multichannel automotive temperature monitor.
-+  The datasheet can be found here:
-+    https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/MCP998X-Family-Data-Sheet-DS20006827.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mcp9933
-+      - microchip,mcp9933d
-+      - microchip,mcp9982
-+      - microchip,mcp9982d
-+      - microchip,mcp9983
-+      - microchip,mcp9983d
-+      - microchip,mcp9984
-+      - microchip,mcp9984d
-+      - microchip,mcp9985
-+      - microchip,mcp9985d
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: Signal coming from ALERT/THERM pin.
-+      - description: Signal coming from THERM/ADDR pin.
-+      - description: Signal coming from SYS_SHDN pin.
-+
-+  interrupt-names:
-+    items:
-+      - const: alert-therm
-+      - const: therm-addr
-+      - const: sys-shutdown
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  microchip,enable-anti-parallel:
-+    description:
-+      Enable anti-parallel diode mode operation.
-+      MCP9984/84D/85/85D and MCP9933/33D support reading two external diodes
-+      in anti-parallel connection on the same set of pins.
-+    type: boolean
-+
-+  microchip,parasitic-res-on-channel1-2:
-+    description:
-+      Indicates that the chip and the diodes/transistors are sufficiently far
-+      apart that a parasitic resistance is added to the wires, which can affect
-+      the measurements. Due to the anti-parallel diode connections, channels
-+      1 and 2 are affected together.
-+    type: boolean
-+
-+  microchip,parasitic-res-on-channel3-4:
-+    description:
-+      Indicates that the chip and the diodes/transistors are sufficiently far
-+      apart that a parasitic resistance is added to the wires, which can affect
-+      the measurements. Due to the anti-parallel diode connections, channels
-+      3 and 4 are affected together.
-+    type: boolean
-+
-+  microchip,power-state:
-+    description:
-+      The chip can be set in Run state or Standby state. In Run state the ADC
-+      is converting on all channels at the programmed conversion rate.
-+      In Standby state the host must initiate a conversion cycle by writing
-+      to the One-Shot register.
-+      True value sets Run state.
-+      Chips with "D" in the name can only be set in Run mode.
-+    type: boolean
-+
-+  vdd-supply: true
-+
-+patternProperties:
-+  "^channel@[1-4]$":
-+    description:
-+      Represents the external temperature channels to which
-+      a remote diode is connected.
-+    type: object
-+
-+    properties:
-+      reg:
-+        items:
-+          minItems: 1
-+          maxItems: 4
-+
-+      label:
-+        description: Unique name to identify which channel this is.
-+
-+    required:
-+      - reg
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - vdd-supply
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - microchip,mcp9982d
-+              - microchip,mcp9983d
-+              - microchip,mcp9984d
-+              - microchip,mcp9985d
-+              - microchip,mcp9933d
-+    then:
-+      properties:
-+        interrupts-names:
-+          items:
-+            - const: alert-therm
-+            - const: sys-shutdown
-+      required:
-+        - microchip,power-state
-+    else:
-+      properties:
-+        interrupts-names:
-+          items:
-+            - const: alert-therm
-+            - const: therm-addr
-+        microchip,power-state: true
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            pattern: '^microchip,mcp998(2|3)$'
-+    then:
-+      properties:
-+        microchip,enable-anti-parallel: false
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            pattern: '^microchip,mcp998(2|3)d$'
-+    then:
-+      properties:
-+        microchip,enable-anti-parallel: false
-+      required:
-+        - microchip,parasitic-res-on-channel1-2
-+        - microchip,parasitic-res-on-channel3-4
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            pattern: '^microchip,mcp99(33|8[4-5])d$'
-+    then:
-+      required:
-+        - microchip,parasitic-res-on-channel1-2
-+        - microchip,parasitic-res-on-channel3-4
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        temperature-sensor@4c {
-+            compatible = "microchip,mcp9985";
-+            reg = <0x4c>;
-+
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            microchip,enable-anti-parallel;
-+            microchip,parasitic-res-on-channel1-2;
-+            microchip,parasitic-res-on-channel3-4;
-+
-+            vdd-supply = <&vdd>;
-+
-+            channel@1 {
-+                reg = <1>;
-+                label = "Room Temperature";
-+            };
-+
-+            channel@2 {
-+                reg = <2>;
-+                label = "GPU Temperature";
-+            };
-+        };
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4fda7ce36d74..c0fd4deebed0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16937,6 +16937,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
- F:	drivers/iio/adc/mcp3911.c
- 
-+MICROCHIP MCP9982 TEMPERATURE DRIVER
-+M:	Victor Duicu <victor.duicu@microchip.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-+
- MICROCHIP MMC/SD/SDIO MCI DRIVER
- M:	Aubin Constans <aubin.constans@microchip.com>
- S:	Maintained
--- 
-2.48.1
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions of patchset, under or above your Signed-off-by tag, unless
+patch changed significantly (e.g. new properties added to the DT
+bindings). Tag is "received", when provided in a message replied to you
+on the mailing list. Tools like b4 can help here ('b4 trailers -u ...').
+However, there's no need to repost patches *only* to add the tags. The
+upstream maintainer will do that for tags received on the version they
+apply.
+
+https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitt=
+ing-patches.rst#L591
+</form letter>
+
+Best regards,
+Krzysztof
 
