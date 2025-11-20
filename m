@@ -1,96 +1,216 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E53101B6;
-	Thu, 20 Nov 2025 08:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6C231076A;
+	Thu, 20 Nov 2025 08:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763626852; cv=none; b=JUVfgUFxvwa0ft7R4VCxRCBFgN2ZEmOgY4RZV/9gBlG9JxtrtoA3+9RMGoyePlbYp4UPx49Zt8N4PlGiP7paGdbDwox4f5Jzc41wph7i1vkJ30Joc41c8pPRhC60/6xOptFCoePmAMFOrlDfWH1LsM/bXQUvDrwbhNLn8cWdVwk=
+	t=1763626852; cv=none; b=Pf5Wq2RK4I/VG3xj2bPaRBOcG64GirMkPcDEHixh5G1WVoW3hXNvflKEdhqV7yJPySLpQsRzl9AI9QJtvK/Ibnu76sdxV65zyxw9SnWBwUFSRpU6ZCyQ/kLLG4XNmIzrJkpD06uJ0DBMuRZvXye90a9Us6yiutY//R2jjlCFpCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763626852; c=relaxed/simple;
-	bh=veV9uBc/4+2aXJkyUrwX782yhnEiSwH07lp6tyy/BGE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Evm8MtNfHHYuJLKYCnVVgOJsguRuY7GR1kXJJJfPKQQFzjRqPJ0HdFtO8AAh7/Sqo6FPVPjlDo8O2dymtKD0CuZLtnX2FGlEsb5/mGH8MaSZZerD4lhvquBkdAspogoXRii1NWVcR79n21j6I3IVwJQAYzvQPFWlmPHdzSo2o7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IzTO/17H; arc=none smtp.client-ip=220.197.31.4
+	bh=Yt6QEGgzB1R5QB3eHn5U7YEXBHsyNGmGnjjbrDRrdXc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=X0eV4wBQN6tC6xR/2CwzR11I7JkTBaKYRHWQlmWiMf9sxz7mh2XhO5ufp8oT9INfAvxNdU5+rtigxUVEZrIibwPtRVVOa0L6ZPcCvAF3/+re2leTEtZp7mwt9N47KbQaq3Fgqj8/Xx8S2amq8pmBkerzfwAnMRFjiYwIdcRzyIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ARx5fQTm; arc=none smtp.client-ip=220.197.31.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IzTO/17H"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ARx5fQTm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=f8CQJTckkb9TGfo
-	mcbXlA1LWAw7cih0RzjzYbL9VEVM=; b=IzTO/17HtNaBDqKlH0ejU6Me1+07Fww
-	vcJe1G2ZTuyPs/qCD7aBMIGPeCgiQI2z2JpHfGxSWTNlxGu3VEM3jtfchc1E3pgI
-	V23KPCDmspqBCMYcItHoG4eP8NLBsSrjY+bNuxTJIJeZhb9b0JCSGo1FyIo2LJFE
-	VAtXuJVqvkpY=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=HI0x5J8XjKZQOXQ
+	aqCynmEapKXF4RHfFKrdCxzIQ+q0=; b=ARx5fQTmVj4VIIIv0w2PMdvD3/SeBZV
+	UuQmjTNl61WbQ7cM61Gsb9UhmucSyDKzoE1UA+ztiv4jl7FtwJaY+zHR92rYOMeJ
+	8dfYXLXCtBjgvD4E5HWZvRrtpORmhKAvE2tcuOqLkGiI7d06LoCmqBNa+1zLgHtu
+	kJLdxmj5xpcI=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S3;
-	Thu, 20 Nov 2025 16:20:05 +0800 (CST)
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S7;
+	Thu, 20 Nov 2025 16:20:09 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Wenliang Yan <wenliang202407@163.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Wenliang Yan <wenliang202407@163.com>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/8] dt-bindings: hwmon: ti,ina3221: Add SQ52210
-Date: Thu, 20 Nov 2025 03:19:14 -0500
-Message-Id: <20251120081921.39412-2-wenliang202407@163.com>
+Subject: [PATCH v3 5/8] hwmon: (ina3221) Introduce power attribute and alert characteristics
+Date: Thu, 20 Nov 2025 03:19:18 -0500
+Message-Id: <20251120081921.39412-6-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251120081921.39412-1-wenliang202407@163.com>
 References: <20251120081921.39412-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw4UGFWfuw17KFW8uF45KFg_yoW8GFykpF
-	s3CFyUGr1Sqr1fZ39rKFsY9F15Jrn7ua12kFnrJw4SqF4DG34Fq393Kw1qyFn8ArWfXFWU
-	WFyI9r4Fg3s7Ar7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUgNVkUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbibhEM02kezo8TfQAAs4
+X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S7
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtryfCryfCF48WFW5WF47CFg_yoW7XFW5pa
+	ykX3yfJr18Ar93Zw4xKF4UXFn8t3yxGay7Jr1Ig395J3ZrArnYqr48K3W0qF90kryfZF1F
+	k34IqrWrGr13JrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjBtCwUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/1tbiGREM02kexoL5qQADs3
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add a compatible string for SQ52210, provide brief descriptions for
-both INA3221 and SQ52210, and define the compatibility relationship
-between SQ52210 and INA3221.
-SQ52210 is backward compatible with INA3221.
+SQ52210 has built-in current and power sensors as well as multiple
+alert functions. Add power attributes and different critical
+characteristics in hwmon to report the corresponding data.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- .../devicetree/bindings/hwmon/ti,ina3221.yaml     | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ Documentation/hwmon/ina3221.rst | 24 ++++++++++++++
+ drivers/hwmon/ina3221.c         | 57 ++++++++++++++++++++++++++++++---
+ 2 files changed, 77 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-index 5f10f1207d69..2dd2fd148792 100644
---- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
-@@ -10,9 +10,22 @@ maintainers:
-   - Jean Delvare <jdelvare@suse.com>
-   - Guenter Roeck <linux@roeck-us.net>
+diff --git a/Documentation/hwmon/ina3221.rst b/Documentation/hwmon/ina3221.rst
+index 8c12c54d2c24..224c6cf735ed 100644
+--- a/Documentation/hwmon/ina3221.rst
++++ b/Documentation/hwmon/ina3221.rst
+@@ -13,6 +13,13 @@ Supported chips:
  
-+description: |
-+  The INA3221 is a three-channel, high-side current and bus voltage monitor.
-+
-+  The Silergy SQ52210 is a power monitor that extends the functionality of
-+  the INA3221 by adding additional current registers, power registers, and
-+  alert registers. These features are configured internally by the driver
-+  and require no board-level device tree configuration.
-+
- properties:
-   compatible:
--    const: ti,ina3221
-+    oneOf:
-+      - items:
-+          - const: silergy,sq52210
-+          - const: ti,ina3221
-+      - items:
-+          - const: ti,ina3221
+ 	       https://www.ti.com/
  
-   reg:
-     maxItems: 1
++  * Silergy SQ52210
++
++    Prefix: 'SQ52210'
++
++    Addresses: I2C 0x40 - 0x43
++
++
+ Author: Andrew F. Davis <afd@ti.com>
+ 
+ Description
+@@ -23,6 +30,9 @@ side of up to three D.C. power supplies. The INA3221 monitors both shunt drop
+ and supply voltage, with programmable conversion times and averaging, current
+ and power are calculated host-side from these.
+ 
++The SQ52210 is a mostly compatible chip from Silergy. It incorporates internal
++current and power registers, and provides an extra configurable alert function.
++
+ Sysfs entries
+ -------------
+ 
+@@ -72,3 +82,17 @@ update_interval         Data conversion time in millisecond, following:
+                         Note that setting update_interval to 0ms sets both BC
+                         and SC to 140 us (minimum conversion time).
+ ======================= =======================================================
++
++Additional sysfs entries for sq52210
++-------------------------------------
++
++======================= =======================================================
++in[123]_crit            Critical high bus voltage
++in[123]_crit_alarm      Bus voltage critical high alarm
++in[123]_lcrit           Critical low bus voltage
++in[123]_lcrit_alarm     Bus voltage critical low alarm
++curr[123]_lcrit         Critical low current
++curr[123]_lcrit_alarm   Current critical low alarm
++power[123]_input        Current for channels 1, 2, and 3 respectively
++power[123]_crit         Critical high power
++power[123]_crit_alarm   Power critical high alarm
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 5fdcffe4738e..a66b79831dde 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -645,6 +645,8 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ {
+ 	const struct ina3221_data *ina = drvdata;
+ 	const struct ina3221_input *input = NULL;
++	bool has_alerts = ina->config->has_alerts;
++	bool has_power = ina->config->has_power;
+ 
+ 	switch (type) {
+ 	case hwmon_chip:
+@@ -672,6 +674,16 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 			return 0444;
+ 		case hwmon_in_enable:
+ 			return 0644;
++		case hwmon_in_crit:
++		case hwmon_in_lcrit:
++			if (has_alerts)
++				return 0644;
++			return 0;
++		case hwmon_in_crit_alarm:
++		case hwmon_in_lcrit_alarm:
++			if (has_alerts)
++				return 0444;
++			return 0;
+ 		default:
+ 			return 0;
+ 		}
+@@ -684,6 +696,31 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 		case hwmon_curr_crit:
+ 		case hwmon_curr_max:
+ 			return 0644;
++		case hwmon_curr_lcrit:
++			if (has_alerts)
++				return 0644;
++			return 0;
++		case hwmon_curr_lcrit_alarm:
++			if (has_alerts)
++				return 0444;
++			return 0;
++		default:
++			return 0;
++		}
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++			if (has_power)
++				return 0444;
++			return 0;
++		case hwmon_power_crit_alarm:
++			if (has_alerts)
++				return 0444;
++			return 0;
++		case hwmon_power_crit:
++			if (has_alerts)
++				return 0644;
++			return 0;
+ 		default:
+ 			return 0;
+ 		}
+@@ -694,7 +731,14 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 
+ #define INA3221_HWMON_CURR_CONFIG (HWMON_C_INPUT | \
+ 				   HWMON_C_CRIT | HWMON_C_CRIT_ALARM | \
+-				   HWMON_C_MAX | HWMON_C_MAX_ALARM)
++				   HWMON_C_MAX | HWMON_C_MAX_ALARM | \
++				   HWMON_C_LCRIT | HWMON_C_LCRIT_ALARM)
++#define SQ52210_HWMON_POWER_CONFIG (HWMON_P_INPUT | \
++				   HWMON_P_CRIT | HWMON_P_CRIT_ALARM)
++#define SQ52210_HWMON_BUS_CONFIG (HWMON_I_INPUT | \
++				   HWMON_I_ENABLE | HWMON_I_LABEL | \
++				   HWMON_I_LCRIT_ALARM | HWMON_I_LCRIT |\
++				   HWMON_I_CRIT_ALARM | HWMON_I_CRIT)
+ 
+ static const struct hwmon_channel_info * const ina3221_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+@@ -704,9 +748,9 @@ static const struct hwmon_channel_info * const ina3221_info[] = {
+ 			   /* 0: dummy, skipped in is_visible */
+ 			   HWMON_I_INPUT,
+ 			   /* 1-3: input voltage Channels */
+-			   HWMON_I_INPUT | HWMON_I_ENABLE | HWMON_I_LABEL,
+-			   HWMON_I_INPUT | HWMON_I_ENABLE | HWMON_I_LABEL,
+-			   HWMON_I_INPUT | HWMON_I_ENABLE | HWMON_I_LABEL,
++			   SQ52210_HWMON_BUS_CONFIG,
++			   SQ52210_HWMON_BUS_CONFIG,
++			   SQ52210_HWMON_BUS_CONFIG,
+ 			   /* 4-6: shunt voltage Channels */
+ 			   HWMON_I_INPUT,
+ 			   HWMON_I_INPUT,
+@@ -720,6 +764,11 @@ static const struct hwmon_channel_info * const ina3221_info[] = {
+ 			   INA3221_HWMON_CURR_CONFIG,
+ 			   /* 4: summation of current channels */
+ 			   HWMON_C_INPUT | HWMON_C_CRIT | HWMON_C_CRIT_ALARM),
++	HWMON_CHANNEL_INFO(power,
++			   /* 1-3: power channels*/
++			   SQ52210_HWMON_POWER_CONFIG,
++			   SQ52210_HWMON_POWER_CONFIG,
++			   SQ52210_HWMON_POWER_CONFIG),
+ 	NULL
+ };
+ 
 -- 
 2.17.1
 
