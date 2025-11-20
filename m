@@ -1,215 +1,111 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2424310771;
-	Thu, 20 Nov 2025 08:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B3430F803;
+	Thu, 20 Nov 2025 08:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763626853; cv=none; b=d0T8+D+7f2Bbt8IKXBxjOfrCooSqtXhBY5cMSViBOA/TanQ/gjA9PUuIpfKbFPwL7Ijp3vatqEE3lQceNXv/gvvRVfMhF7dpoxV8eMaKO4R6ehV+M5Y0oNTD8VZ7oNZqGyr84uLPMGB1wSPxfs45jjhVhOOC3yAElctVkFVNHUc=
+	t=1763627184; cv=none; b=nCmfL2kq/vxo84ODl9brPjTgvCgMb88zENl2jPLyBzA/v8yKM02eNmQl4XbNHsb6r7uJHhd3ufMmmvuIyWKdgIQOcuu7gN3NT8IQTy+oU0xa1at4D1Fn7Lak2awgoJGTuhpuJfcVZwyL30es/bYLyzYsR8PcA9aCpAc9W6hi1/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763626853; c=relaxed/simple;
-	bh=lYjURJI/C7CMPXnFlir38vOMNoN22hi9E3n+0ppauSU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=WfFYFnzqaBDF73b2UNIRAqEgjI7BIFRKMNj49HPXqPerhvzkNF9JiQV/+sbBJs7azYrAu2/ax3Ut1bauvLqcVfpzlGb4BIPJq5/zKJs3pARR/Y+8MdvCOO6QzF7J9KRggFMNtFcufOMC2Uv2W1496sa82PH3EvT+jPYf5g1gVkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oGXceGih; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1763627184; c=relaxed/simple;
+	bh=0UjaahDG0m3xax3ARgNeDEntAZL+mPydev+s7WtHty0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WliQzhTUuE24xVKEFMuBCJ41ISbqtV3qzKrCZc5lNQJrmAS7l5HPATN6oflolXDxS4EXs3XvIWztTYQYW4s4Ii6tazYlGKm/lTVGNGJJbqH6vn7D5VsIl6uZy38CZTjp7Yu1RWREI0JA25B7UwTO8Lhv+rpWFrmIJ5WEmx6e/eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V7q090lq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oGXceGih"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=YJcLR15i/Rdlyp5
-	qMquBKHLn/ND7Dul6I3YoAw088Mo=; b=oGXceGihS2v6WjilQrdh81pEEXKFCRg
-	KxmmBirmUldDPpDdDpm9BzoEdkxvT06G8qIph04hWP3SVqJ2PyXxwDzOwM1zXd0Q
-	veCCZ2PaWiLu5OfuULJgIr0zVLKN5KeGOQi+eE9+XtLtZz9c/HNT6hTux5i2Au8g
-	f9gilP7QjLu4=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wA3BPAwzx5p45f2BA--.17S10;
-	Thu, 20 Nov 2025 16:20:14 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/8] hwmon: (ina3221) Modify write/read functions for 'in' and 'curr' attribute
-Date: Thu, 20 Nov 2025 03:19:21 -0500
-Message-Id: <20251120081921.39412-9-wenliang202407@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20251120081921.39412-1-wenliang202407@163.com>
-References: <20251120081921.39412-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wA3BPAwzx5p45f2BA--.17S10
-X-Coremail-Antispam: 1Uf129KBjvJXoWxurW5uFy5GFW7urWftF1DWrg_yoWrKr18p3
-	yUGFWrtrWjq3WSgrs2kF4DWrn8trWxW3y2yr9rK39Yva1UA34qkFyrW3Wq93y5GryfWF4x
-	JayxtFW8ua1Dtr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUWRR_UUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvx7kuGkezz7ZkQAA3z
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V7q090lq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E36C4CEF1;
+	Thu, 20 Nov 2025 08:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763627184;
+	bh=0UjaahDG0m3xax3ARgNeDEntAZL+mPydev+s7WtHty0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V7q090lqNqm0VYJPVvkZKtrDGijErcHck9jJqL4WMKOKVXXvVOqWAuTB01l3bfm9m
+	 rsQgdDKEoFzxbHAdE5mLkERFfKmsYour7KVmWbKcEdc6WDnTxFh3Ivx83Ch+vEkN4R
+	 dx1UsCk1HBVMNiBkdw5lSup0xmjK8P7oBm+qgFHd97Nwva8fLyoyOJjC0hyrfwYaGV
+	 m70cV2pIsE6qfjblRrtbjkFdHU1lnpv526yVU3H3fDE0WkFvu9PNJLQuv/UUHBHQ0f
+	 2nJkYxsAk2pDe4ix6Qa8bYx0kdDzTV9XdffwkonXdJs0tj/IlpkOhPVLQ6JHtSkN2e
+	 H90SiPC5A1fOA==
+Message-ID: <758c729b-4951-498b-bdef-5018377846bb@kernel.org>
+Date: Thu, 20 Nov 2025 09:26:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/8] dt-bindings: hwmon: ti,ina3221: Add SQ52210
+To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
+ Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251120081921.39412-1-wenliang202407@163.com>
+ <20251120081921.39412-2-wenliang202407@163.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251120081921.39412-2-wenliang202407@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Modified the relevant read/write functions for 'in' and 'curr' attributes,
-adding support for crit, lcrit, crit_alarm, and lcrit_alarm features.
+On 20/11/2025 09:19, Wenliang Yan wrote:
+> Add a compatible string for SQ52210, provide brief descriptions for
+> both INA3221 and SQ52210, and define the compatibility relationship
+> between SQ52210 and INA3221.
+> SQ52210 is backward compatible with INA3221.
+> 
+> Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+> ---
+>  .../devicetree/bindings/hwmon/ti,ina3221.yaml     | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
----
- drivers/hwmon/ina3221.c | 96 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 92 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index af6d9ca5ae28..5ffa0f622e25 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -380,6 +380,12 @@ static const u8 ina3221_in_reg[] = {
- 	INA3221_SHUNT_SUM,
- };
- 
-+static const u8 alert_flag[] = {
-+	F_AFF1,
-+	F_AFF2,
-+	F_AFF3,
-+};
-+
- static int ina3221_read_chip(struct device *dev, u32 attr, long *val)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
-@@ -442,6 +448,38 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
- 	case hwmon_in_enable:
- 		*val = ina3221_is_enabled(ina, channel);
- 		return 0;
-+	case hwmon_in_crit:
-+	case hwmon_in_lcrit:
-+		if (!ina3221_is_enabled(ina, channel))
-+			return -ENODATA;
-+
-+		if (channel >= INA3221_NUM_CHANNELS)
-+			return -EOPNOTSUPP;
-+
-+		reg = limit_regs[channel];
-+		ret = ina3221_read_value(ina, reg, &regval);
-+		if (ret)
-+			return ret;
-+		/*
-+		 * Scale of bus voltage (mV): LSB is 8mV
-+		 */
-+		*val = regval * 8;
-+		return 0;
-+	case hwmon_in_crit_alarm:
-+	case hwmon_in_lcrit_alarm:
-+		/* No actual register read if channel is disabled */
-+		if (!ina3221_is_enabled(ina, channel)) {
-+			/* Return 0 for alert flags */
-+			*val = 0;
-+			return 0;
-+		}
-+
-+		reg = alert_flag[channel];
-+		ret = regmap_field_read(ina->fields[reg], &regval);
-+		if (ret)
-+			return ret;
-+		*val = regval;
-+		return 0;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -501,6 +539,25 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- 		/* Return current in mA */
- 		*val = DIV_ROUND_CLOSEST(voltage_nv, resistance_uo);
- 		return 0;
-+	case hwmon_curr_lcrit:
-+		if (!resistance_uo)
-+			return -ENODATA;
-+
-+		if (channel >= INA3221_NUM_CHANNELS)
-+			return -EOPNOTSUPP;
-+
-+		reg = limit_regs[channel];
-+		ret = ina3221_read_value(ina, reg, &regval);
-+		if (ret)
-+			return ret;
-+
-+		/* Return current in mA */
-+		*val = DIV_ROUND_CLOSEST(regval * ina->current_lsb_uA, 1000);
-+		return 0;
-+	case hwmon_curr_lcrit_alarm:
-+		reg = alert_flag[channel];
-+
-+		fallthrough;
- 	case hwmon_curr_crit_alarm:
- 	case hwmon_curr_max_alarm:
- 		/* No actual register read if channel is disabled */
-@@ -698,10 +755,9 @@ static int ina3221_write_chip(struct device *dev, u32 attr, long val)
- 	}
- }
- 
--static int ina3221_write_curr(struct device *dev, u32 attr,
--			      int channel, long val)
-+static int ina3221_write_curr_shunt(struct ina3221_data *ina, u32 attr,
-+				int channel, long val)
- {
--	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	struct ina3221_input *input = ina->inputs;
- 	u8 reg = ina3221_curr_reg[attr][channel];
- 	int resistance_uo, current_ma, voltage_uv;
-@@ -744,6 +800,22 @@ static int ina3221_write_curr(struct device *dev, u32 attr,
- 	return regmap_write(ina->regmap, reg, regval);
- }
- 
-+static int ina3221_write_curr(struct device *dev, u32 attr,
-+			      int channel, long val)
-+{
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_curr_crit:
-+	case hwmon_curr_max:
-+		return ina3221_write_curr_shunt(ina, attr, channel, val);
-+	case hwmon_curr_lcrit:
-+		return sq52210_alert_limit_write(ina, SQ52210_ALERT_SUL, channel, val);
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int ina3221_write_enable(struct device *dev, int channel, bool enable)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
-@@ -792,6 +864,22 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
- 	return ret;
- }
- 
-+static int ina3221_write_in(struct device *dev, u32 attr, int channel, long val)
-+{
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_in_lcrit:
-+		return sq52210_alert_limit_write(ina, SQ52210_ALERT_BUL, channel, val);
-+	case hwmon_in_crit:
-+		return sq52210_alert_limit_write(ina, SQ52210_ALERT_BOL, channel, val);
-+	case hwmon_in_enable:
-+		return ina3221_write_enable(dev, channel, val);
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int ina3221_write_power(struct device *dev, u32 attr, int channel, long val)
- {
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
-@@ -841,7 +929,7 @@ static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
- 		break;
- 	case hwmon_in:
- 		/* 0-align channel ID */
--		ret = ina3221_write_enable(dev, channel - 1, val);
-+		ret = ina3221_write_in(dev, attr, channel - 1, val);
- 		break;
- 	case hwmon_curr:
- 		ret = ina3221_write_curr(dev, attr, channel, val);
--- 
-2.17.1
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
+Best regards,
+Krzysztof
