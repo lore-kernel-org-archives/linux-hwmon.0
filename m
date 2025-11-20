@@ -1,100 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D569934164C;
-	Thu, 20 Nov 2025 13:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0015F345CD0
+	for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 13:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763646458; cv=none; b=HpBL2cyp0bBO0Sk/TmCmMoBRtE9ChJPo3BI+/kf9otLxgoWab+USVQ+CTpOxQi1+/BEyO7E3KXq67SrsHpqwKgjRwvcTpIExF/1C5y5rFWsk6D7uxOJQ4nwaFJVfRXSG4jQVEZh+E3g16tX8+exzlmnXk4HgWxnNXPvItGiIBdA=
+	t=1763647076; cv=none; b=Yrtv1244oeAAnVQxei7MpgZxf2lHmOesoI0IZ9Po6wwzi4fhe+tLvcdakVVNqh2D6m1TMBa8D2POR1dnuyckdOz9IgVBPRE5bZF5OZ1APReKituIJV3KA1qQV0PEKXCK/gil67xI6GT6VrRtSLM1KA8dE7BobZ928Gqwc/Sz1Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763646458; c=relaxed/simple;
-	bh=CJvDRzJ6YFbRHvYRFotqckNLhW7HcjNVMeyVDaTUxIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iKIZPKqUFpmlu/Ws/1rK2HmlJNJZQKZfkLkDaM2LX4esXDcMsZEl3IIZ6EjfExDylUTJcjVDybARRqOIc20XtuFuvMtoRDXLEGXDoJPD+EptviUg7PRTeD0MJ9HpeFo/MfwyUjb5bf1AiBLMAAoKdbR/Z9Kadm/+DR8whIwT96w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kXUsnNhT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1763647076; c=relaxed/simple;
+	bh=gKVMCyHKvCnF2wAZ/yTSWMxep7Hlh1KP6H4L2m0nfrE=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=i6YXQ7vpTCS2JnR/6fMMUxLR8Bj6CzqFuI7Z70MQkzk/WNf6TIxbGetW5Inex4ZizhjMBoXUDsSIY9hUYdXDVs0KWsLoIOqC4esCqp48v7xpOLHkWWEHv3x5AevYH42pr2ox9PNW4nj957QoErQB1wKYPWZ3SJf7/hj21gwy2LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kota.moe; spf=pass smtp.mailfrom=kota.moe; dkim=pass (1024-bit key) header.d=kota.moe header.i=@kota.moe header.b=Rb5bCS2r; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kota.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kota.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kXUsnNhT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B79C4CEF1;
-	Thu, 20 Nov 2025 13:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763646457;
-	bh=CJvDRzJ6YFbRHvYRFotqckNLhW7HcjNVMeyVDaTUxIU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kXUsnNhTC9c9YaZ7AYyCFxRs7XWV+0G1RxEDkF/L+x7qwqxzTpsxsvbxaVc5NWahR
-	 huMD/s+bOqTwgoExzXL5ZQfoxJoFI2FIy+zJbH/o7FY5MZjtHWGse/BnJEK1rKC6mV
-	 LIiHMkFddRichUUmbIrQtGM/hS2SXwYOPRLF2XwFCOyM+li198/4L66MC9bg1kl1w5
-	 cx+RS+vJGmtZShei7zVzbQ0EdlmKzOHS9HZKv8rDTZiUb68cuewCMbqSgSQddRWaTC
-	 IeP/jDdzMzDe5euq4kc8PzFD9uj/IQ8u8qTIjqpM1vxVh7ppoKlgZQE+BgOWXLT8Ju
-	 tS7zCQoeEbIjA==
-Date: Thu, 20 Nov 2025 13:47:29 +0000
-From: Lee Jones <lee@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-doc@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v5 00/11] mfd: macsmc: add rtc, hwmon and hid subdevices
-Message-ID: <20251120134729.GD661940@google.com>
-References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
+	dkim=pass (1024-bit key) header.d=kota.moe header.i=@kota.moe header.b="Rb5bCS2r"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ee0084fd98so6685201cf.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Nov 2025 05:57:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kota.moe; s=google; t=1763647072; x=1764251872; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/6l9Nat8zS9ulnmxqu4kh/l5ORnLVRWAdulFkiSTj6A=;
+        b=Rb5bCS2r0cBYNQE/EXCr16FnjRa78vcm3fBIhFSgO8z9V7Xwg/PNzmv74Zgfl2NjN+
+         4H4qtbKP5pyyo4AIcRU24qLcbCnGFAjfqbOBTBSzkZ+hC9X1JDMvSA9N2+751EW3no9r
+         nBo7O7XZ/sk1l9Xcz2o5wuYrx7+y9nO11kyfI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763647072; x=1764251872;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/6l9Nat8zS9ulnmxqu4kh/l5ORnLVRWAdulFkiSTj6A=;
+        b=Qi7SxPBgm6eEM/mwD/rDkqZcqAlUL1vOFNRlbr8VjIfqXcT9yXMnXdqFscu3RlmpHQ
+         P9r42gyyyA4E/DN80OuolzWHDMwv6W42sgEeGtflTQDRgr5ceezKgVo6kmFlV/1lfw8T
+         FkHtKZGC7JF1qMqmJKPQgGqU9z+7/62h++8X6oxxM/zqMPuUd1JKaDMbqXNH6gQcMBIS
+         vjz5lvNhVVs0JfOt6kX5zFUDbn9ZMwx51F8L9E1QsvctPwIc85ZKmiYp08HeJTYTiUcZ
+         g1TF9e7BC8cKIrhdKHmcwluUF1uSWYi24kvi20JARSBeNCfsdiuygvwPUPdAY2zr8c7K
+         GzZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWr+GhNizlBMOmfIP8G4UAVOaMQ9//kvj3mdm5b/Xh282iBNqtxXhtZbVraA3qSQNnHzcK3SWk4MjGpBA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq91E+wahEMQTO7t4Pm4tsTKbmPC9KhwwGnrRdV78ifAJLbJZd
+	8dGM9RUHjc55KX4sWSlXy1XLTseMwv++9d8kA0Wzu2ISX6Nei08j6enqwFQNHWqYmFPAWYb0ECM
+	lPtMJO/UGzpkRHYsOHi9wX3M/nf4gVZ+BzAgPqjGv3Q==
+X-Gm-Gg: ASbGnctKX3f7T5DIjKPZ7EYd50Wdu6j5bp9bQ7gwTpQPgjJ7iwcuMWkV7gPT1biqxXz
+	SJGWnoSYqkkgsjxDg6wt3vcfFdY1xi5QMF8QU/B9XZ2WeoP+H/fpq4UaLaYBANfGLMZh7L2Xvme
+	fTrqXknNnJAA4+O3dBa+T2I7S3QWvgI2Q5eAYV1JJmtSNklt5N9IjvHaXLgR3cdjVWroBpBTKm7
+	lnk9Gepjk9tVPblaNbFjMarfoW3pnjssTmOUBfkeMusErW6q8lth3v/t7CrmrM9ibDo22atYRbV
+	8IPz2gWI7wZCbR0bj8E687EJmDw=
+X-Google-Smtp-Source: AGHT+IGjjKbJY9jDT3RLIiCpwLBiFli0RBMZPvs1LYrURfbZWDSx81xl0Tehl+9jWE42Z6EWAgm3MixcjMVTiukcQKM=
+X-Received: by 2002:a05:622a:1986:b0:4ed:a7ba:6a4 with SMTP id
+ d75a77b69052e-4ee4946da6dmr39541661cf.22.1763647071626; Thu, 20 Nov 2025
+ 05:57:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
+From: =?UTF-8?B?4oCN5bCP5aSq?= <nospam@kota.moe>
+Date: Fri, 21 Nov 2025 00:57:15 +1100
+X-Gm-Features: AWmQ_bmUN0kFW_7VM4prCWnhF87qcy5NptzMKM45RWtHZ6-A2DGRszeBNxMplF8
+Message-ID: <CACsxjPbcjDPLVfnVncumKVAL16fgBXr4kUGbH4hW+cZiJTe_0w@mail.gmail.com>
+Subject: spd5118 driver occasionally produces erroneous values
+To: Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 12 Nov 2025, James Calligeros wrote:
+Hello, I have just set up spd5118 for my Asus Pro WS TRX50-SAGE WIFI
+motherboard and v-color TRA532G72D834Q RAM
 
-> Hi all,
-> 
-> This series adds support for the remaining SMC subdevices. These are the
-> RTC, hwmon, and HID devices. They are being submitted together as the RTC
-> and hwmon drivers both require changes to the SMC DT schema.
-> 
-> The RTC driver is responsible for getting and setting the system clock,
-> and requires an NVMEM cell. This series replaces Sven's original RTC driver
-> submission [1].
-> 
-> The hwmon function is an interesting one. While each Apple Silicon device
-> exposes pretty similar sets of sensors, these all seem to be paired to
-> different SMC keys in the firmware interface. This is true even when the
-> sensors are on the SoC. For example, an M1 MacBook Pro will use different
-> keys to access the LITTLE core temperature sensors to an M1 Mac mini. This
-> necessitates describing which keys correspond to which sensors for each
-> device individually, and populating the hwmon structs at runtime. We do
-> this with a node in the device tree. This series includes only the keys
-> for sensors which we know to be common to all devices. The SMC is also
-> responsible for monitoring and controlling fan speeds on systems with fans,
-> which we expose via the hwmon driver.
-> 
-> The SMC also handles the hardware power button and lid switch. Power
-> button presses and lid opening/closing are emitted as HID events, so we
-> add an input subdevice to handle them.
-> 
-> Since there are no real dependencies between the components of this series,
-> it should be fine for each subsystem to take the relevant patches through
-> their trees. The mfd one-liners should be taken in order to avoid trivial
-> conflicts. Per [2], the hwmon driver should be merged along with the preceding
-> mfd patch adding the __SMC_KEY macro to avoid build errors.
+However, I've encountered it occasionally producing unrealistic
+temperature values.
+See this graph collected over 10 minutes - note the temperature scale:
+https://files.catbox.moe/yt8uqp.png
 
-Apart from my (perhaps naive) question on patch 5, the other MFD patches
-look okay to me.  Once my question has been answered, I can apply the
-MFD, or at least 3 of them, orthogonally.
+I wonder if this is a known issue with the driver? Or maybe it's some
+quirk with my system?
+It kind of feels like a race condition...
+If I boot Windows and run HWiNFO, it does not exhibit this behaviour
 
--- 
-Lee Jones [李琼斯]
+Note that spd5118 does not automatically attach to the I=C2=B2C devices, so
+I have to manually do it
+
+Some details about the system:
+
+kota@home:/tmp$ sensors spd5118-*
+spd5118-i2c-1-50
+Adapter: Synopsys DesignWare I2C adapter
+DIMM_A1:      +46.2=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +55.0=C2=B0C)
+                       (crit low =3D  +0.0=C2=B0C, crit =3D +85.0=C2=B0C)
+
+spd5118-i2c-0-50
+Adapter: Synopsys DesignWare I2C adapter
+DIMM_E1:      +47.0=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +55.0=C2=B0C)
+                       (crit low =3D  +0.0=C2=B0C, crit =3D +85.0=C2=B0C)
+
+spd5118-i2c-1-52
+Adapter: Synopsys DesignWare I2C adapter
+DIMM_C1:      +47.0=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +55.0=C2=B0C) =
+ ALARM (LCRIT)
+                       (crit low =3D +192.0=C2=B0C, crit =3D +85.0=C2=B0C)
+
+spd5118-i2c-0-52
+Adapter: Synopsys DesignWare I2C adapter
+DIMM_G1:      +48.0=C2=B0C  (low  =3D  +0.0=C2=B0C, high =3D +55.0=C2=B0C)
+                       (crit low =3D +15.2=C2=B0C, crit =3D +85.0=C2=B0C)
+
+kota@home:/tmp$ sudo i2cdetect -l
+i2c-0    i2c           Synopsys DesignWare I2C adapter     I2C adapter
+i2c-1    i2c           Synopsys DesignWare I2C adapter     I2C adapter
+i2c-2    i2c           Synopsys DesignWare I2C adapter     I2C adapter
+i2c-3    i2c           Synopsys DesignWare I2C adapter     I2C adapter
+i2c-4    smbus         SMBus PIIX4 adapter port 0 at 0b00    SMBus adapter
+i2c-5    smbus         SMBus PIIX4 adapter port 2 at 0b00    SMBus adapter
+i2c-6    smbus         SMBus PIIX4 adapter port 1 at 0b20    SMBus adapter
+...
+
+kota@home:/tmp$ ls -l /sys/bus/i2c/devices/
+total 0
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 0-0050 ->
+../../../devices/platform/AMDI0010:01/i2c-0/0-0050
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 0-0052 ->
+../../../devices/platform/AMDI0010:01/i2c-0/0-0052
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 1-0050 ->
+../../../devices/platform/AMDI0010:02/i2c-1/1-0050
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 1-0052 ->
+../../../devices/platform/AMDI0010:02/i2c-1/1-0052
+lrwxrwxrwx 1 root root 0 Nov 21 00:01 i2c-0 ->
+../../../devices/platform/AMDI0010:01/i2c-0
+lrwxrwxrwx 1 root root 0 Nov 21 00:01 i2c-1 ->
+../../../devices/platform/AMDI0010:02/i2c-1
+lrwxrwxrwx 1 root root 0 Nov 21 00:01 i2c-2 ->
+../../../devices/platform/AMDI0010:04/i2c-2
+lrwxrwxrwx 1 root root 0 Nov 21 00:01 i2c-3 ->
+../../../devices/platform/AMDI0010:05/i2c-3
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 i2c-4 ->
+../../../devices/pci0000:00/0000:00:14.0/i2c-4
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 i2c-5 ->
+../../../devices/pci0000:00/0000:00:14.0/i2c-5
+lrwxrwxrwx 1 root root 0 Nov 21 00:02 i2c-6 ->
+../../../devices/pci0000:00/0000:00:14.0/i2c-6
+...
