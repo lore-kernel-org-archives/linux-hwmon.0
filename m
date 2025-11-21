@@ -1,104 +1,108 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CC326E14C
-	for <linux-hwmon@vger.kernel.org>; Fri, 21 Nov 2025 15:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8933B2ECE83;
+	Fri, 21 Nov 2025 17:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763740235; cv=none; b=SG56LWArYjO0iEGzFAD/Ij/43sA6uBXCSUPhuNNQFuXFdqCaD8bxRGPqTNdzaGk86AvhBJng7KtS7pXz4O26sNSddxvPFnQiauJuHMTOdweDsfM+mwkeEpMCmffMwiRhn7uLvQjpDIGtVoJCefOeYTK3fGOVwsO67C4BgqKvPlc=
+	t=1763744460; cv=none; b=G432G1DIkz3lZg9+/pgX9fcXt0FDFyAFAL3WZ+AHLOMmzBqvMArbKxugn5TaimOQ1JJv7IR6g71xVKksZRNtWXMNAgtVj4tH68Ep6ADLjufx5z8UPHAzPRJs2gHVYWuRJOAJdFbLpcfhIsDF1eDbIe4J5L5/daRsy1qxIwpxiFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763740235; c=relaxed/simple;
-	bh=4i3X/OCJXTmh+1M2IfDmIZ75Sl7aUvTCnxuEmAjeoG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a3DMb/s1P6WQRJ0YWIja4fIgkpPlURmK5ar22gjM1FhKZnn/iZc6kcEq3A0ClYgAS9LexfL++AmnnIe+niH8hY3TuoThSxUlDSW8Zq2jkwOGFt0UpAhQqQP5VTRbqo1kicv5zSwQf5zGa1ubzQG46rXsnbpUPGQXVw9IluckjYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jkqbww40; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763744460; c=relaxed/simple;
+	bh=ab9AbPLbjAAxuAFKgcOaTDcpTcosXRGjg6LcalKCHfs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=k1bQQNxS+lyGWs7T4SsJFMkTGPj27PxO2EB/Tmn2LG5/94YpazibUBKmhpUaJDfegLi58od0MqlsMiMiTGF80SBZPl6l4GHEnrbZl2Mzy0e/dDgtFMN9GdTw8pcQ3ADjGaTTbngjNoXcl7fbsMWcGgOh0fEpBovuutILittqulg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTt0k7x/; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkqbww40"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-297f35be2ffso33262385ad.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Nov 2025 07:50:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763740233; x=1764345033; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lW5lXIt/CZeUQ4dXVL5FmacDKUMrztihLOUWLxEXWaI=;
-        b=jkqbww40aPw1tGsc2U3jR/IFpCxmWzJvIgQilZtmSidXPIqM7IQ7l7DCwh4G2Awvjr
-         wLp4/NYYKqKorydB7lQ95+AdGTClKS1zBXJ7Ssr/Hu7ZfSIgAXNcrnzbVIlI3Kw/4mAR
-         k1yZTlgO+Xl2YEwoMa7qlQ0rX2cbvSq09WdpW+2St2Grbsv4KVD5b06lsPEuIYrRxo5u
-         avv8utY53bYSLH9Uhlsb9b16UXp4htecGw9w8L8IoGllnq6zleZBJar5647+lGo6gHC3
-         /WMRM4ZpcceJJI+I0XAmUd/TWSdh0ahAEPgZgB4h9WzXLiQ1eHKFH6muZS2DHkNURzHs
-         Kt0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763740233; x=1764345033;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lW5lXIt/CZeUQ4dXVL5FmacDKUMrztihLOUWLxEXWaI=;
-        b=WKhobVBMhXjLIy1xZITl39qm545kM6wN03DcgMBhlDyZDbSYMvqRWN9rentoF65IZE
-         VGOqAuqdXWxszycMXogkH6Sm0g/WT3Ma0PYAOB3tqzSEwmCTmtw2JOqkTp+kDbVrreqF
-         fWKzAwEA+nXMwQHQM4l00+TLebkIY0nrlP8u5OJWUTZgWyTLQQxNok2depmfDnPXL4RE
-         NiYElM3ms81qPogjQ27AuoL2qDhIs6kKYxuEGbE7OdkqqFF3kEbPKnoBRaeVRdKZkp3P
-         lpFbrMK3ybUCrWy2FHRe8ZXC5sYvTXV5wPLLCdh0RSLg/vGa/irKGU+TMMIdWZjkttJK
-         JHAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVpozFYkdvuUIiIOL52leZC2Sv5ViamLoaK2EostGHDLc0SBcNEgMiHyLpMER6DUQ8EEPiTtSC84rTWKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxl9RY7vjtTfbPRx8he+XqL1mT7PzgYA5KgLYVOWrDo1SnxjlAA
-	jVC4m0lOuZcxYL81Ink8Fa8AfN6e3paBxMfvRIMfbW3+WyVw4ayFnLWV
-X-Gm-Gg: ASbGncsQIC7i/82gHYcS1tHX7CTaj0RFGfn1bgT03F4MAA23w1JowsBRpHugBCp4qMj
-	uJlnnPYed0i8iXnuNscha6qQt3vchTofJzPF+a3WeRVXOtm8HZPoRg2khMx3n6TjfiscTqRHKde
-	GXPVnMZm1dARTu6h+dB8oFjHyYdeVYm/2C6zWrWA5Ec3oCoHDBFR7df9I/yApNScdalnmtQrwq4
-	h/LWlNkFImLFqWu1NqENLlElysx9Ws4uLaV9IjDLr4pH53rWb3CPpiFWCivndc8tgyN/45J30HK
-	q91KOxdqxtR2fRlz7/SYj6D3Yrt0X5AdZlVcjfKjzbxBdESjvxe6NifyDw+SxSXu0InvzjVvA03
-	+d8HBnrb/ETB1T5R8ZW5VQUpqJPk2W1X0JrXkLGosHHK7jfjZ5cx0d1Y8vfCligQUClmopRvmT+
-	ize2wyDzAErGXPDf29UBihsxU=
-X-Google-Smtp-Source: AGHT+IFGAVfMguY3irLBdPFgatYV5J/rG2XF23gXi7wkGig+85rnvjmjfKaMXO2h3mkQxAiIveeiGw==
-X-Received: by 2002:a05:7022:1182:b0:11a:3b88:f756 with SMTP id a92af1059eb24-11c9d7126b6mr514728c88.19.1763740233406;
-        Fri, 21 Nov 2025 07:50:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11c93cd457dsm26918913c88.0.2025.11.21.07.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Nov 2025 07:50:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 21 Nov 2025 07:50:31 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: juergh@proton.me, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
-Subject: Re: [PATCH] hwmon: (vt1211) Convert macros to functions to avoid
- TOCTOU
-Message-ID: <9c9b5eb5-ed5f-4b94-a44d-eec829faf22f@roeck-us.net>
-References: <20251120041331.1917570-1-hanguidong02@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTt0k7x/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763744459; x=1795280459;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=ab9AbPLbjAAxuAFKgcOaTDcpTcosXRGjg6LcalKCHfs=;
+  b=VTt0k7x/OPuJwVM9RRm01Nx7//P66FEzvk3IcPzqmqwPLNvNfbfnXJuv
+   99u2vhO//6LyYaAi62Zo9bx38yp1cxs4KR5MBKx1NdeqUDuWwmuy+Fifq
+   nUFak6Pe10DoN7NnmCOnkp46gNTHsgnJ0KbLcs3VjV7eMQqymRN49yLwO
+   ZSpNxaSWyPEwAFPdAmsXFMSAPgqps/SCyi0lFxyzVgzeoULrNagwQH+Yv
+   FYutVyEFbV1cUFuM/ABwhLEVWJ0Fp3ClPN2wpVqwgBsK457YivSk1wCFM
+   T36DTRL7O7LuzBKezsa+LvQZiqyBto2eopQUgy49W1e1+zY2CgSpnH21K
+   g==;
+X-CSE-ConnectionGUID: Lr0cUOgpRJmQZ6j4U9OB5A==
+X-CSE-MsgGUID: 8ALMYVutT2O/lP4zAGYCog==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="65883541"
+X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
+   d="scan'208";a="65883541"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 09:00:58 -0800
+X-CSE-ConnectionGUID: A3wGcvbTQeuGGBVxvj+j8A==
+X-CSE-MsgGUID: +YcV82j8ToKs5aOvPZse6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
+   d="scan'208";a="192509218"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.50])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 09:00:54 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: platform-driver-x86@vger.kernel.org, 
+ Antheas Kapenekakis <lkml@antheas.dev>
+Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ Hans de Goede <hansg@kernel.org>, 
+ Derek John Clark <derekjohn.clark@gmail.com>, 
+ =?utf-8?q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= <samsagax@gmail.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20251119174505.597218-1-lkml@antheas.dev>
+References: <20251119174505.597218-1-lkml@antheas.dev>
+Subject: Re: [PATCH v6 0/6] platform/x86: ayaneo-ec: Add Ayaneo Embedded
+ Controller platform driver
+Message-Id: <176374444974.14895.7833039607877044343.b4-ty@linux.intel.com>
+Date: Fri, 21 Nov 2025 19:00:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120041331.1917570-1-hanguidong02@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Thu, Nov 20, 2025 at 12:13:31PM +0800, Gui-Dong Han wrote:
-> The macros IN_FROM_REG, TEMP_FROM_REG, and RPM_FROM_REG evaluate their
-> arguments multiple times. These macros are used in lockless show functions
-> involving shared driver data, leading to Time-of-Check to Time-of-Use race
-> conditions.
-> 
-> For example, RPM_FROM_REG checks if a value is 0 or 255, and then uses it
-> in a division. If the value is modified by another thread to 0 after the
-> check but before the division, it causes a divide-by-zero error.
-> 
-> Convert these macros to static functions. This guarantees that arguments
-> are evaluated only once (pass-by-value), fixing the race conditions.
-> Adhere to the principle of minimal changes by only converting the specific
-> macros involved in these lockless contexts.
-> 
-> Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
-> ---
+On Wed, 19 Nov 2025 18:44:59 +0100, Antheas Kapenekakis wrote:
 
-Applied.
+> This series introduces a platform driver for Ayaneo devices, ayaneo-ec.
+> This driver provides hwmon support, power management, and module management
+> (for the new Ayaneo 3 device). Module management is done through the new
+> firmware attributes sysfs interface.
+> 
+> Luckily, all Ayaneo devices with an ACPI mapped EC use the same registers.
+> Older devices also use a memory mapped region for RGB[1], but that is
+> replaced by HID in the new Ayaneo 3. Therefore, this allows for a simple
+> driver design that provides robust future support. The memory mapped region
+> can be upstreamed as a different RGB driver in the future or remain
+> out-of-tree[1].
+> 
+> [...]
 
-Thanks,
-Guenter
+
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/6] platform/x86: ayaneo-ec: Add Ayaneo Embedded Controller platform driver
+      commit: 70a4a815d9b74f17abd1ae46c6cb93b736e02d91
+[2/6] platform/x86: ayaneo-ec: Add hwmon support
+      commit: 536522f0355cffe8478502ffbb041769e2f61bfe
+[3/6] platform/x86: ayaneo-ec: Add charge control support
+      commit: 6d710ec3584227a9c393c478b1cd4a70e74a3c88
+[4/6] platform/x86: ayaneo-ec: Add controller power and modules attributes
+      commit: e921a8b4dea50b9c20f1ee9b2b69cedc00b7570a
+[5/6] platform/x86: ayaneo-ec: Move Ayaneo devices from oxpec to ayaneo-ec
+      commit: 02c15e3ddcc5a50fbdf1e586d94f0372f5b40ed5
+[6/6] platform/x86: ayaneo-ec: Add suspend hook
+      commit: 2643187ccb8628144246ee9d44da5e3ac428f9c3
+
+--
+ i.
+
