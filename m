@@ -1,288 +1,382 @@
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.102])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F7628D8DB;
-	Mon, 24 Nov 2025 16:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.102
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764002647; cv=pass; b=LIvhh7cImkQQ5/bf8RxC68gggmKorMmYcwRaWdGOlTYpgaKFMRXPTIMOnL+8chVnT++P4Hk6GuOGNDMXslz5r9A1MIvzbgjSA9dFYVUL0qQ88EywUj3k+kX74bFFIn9Ajd68qIEml/J0sawUH/7BwZH8sDCzOd3Hu3+OtPQHW18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764002647; c=relaxed/simple;
-	bh=YAUaPVN/LGE+6Tp5hwdCL/oWm3I9gZiHnGqVnZITlYs=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=jm3Wx8Ej+cRfg2PsgVJjPTZq0WrMWWcv/IHA99XkxyacY9l6KRiXgiY2+/6Elun7dRduyhM4dR5m+k1IIq50EO5JyhkRtLG0fa/w0k++6M5WVGteq1GZy0rwcRK51zTVO/XyvEmHHZ6ODLn9UCxMfCo+5jzQxWrBy015SJcVSUk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=FDRRuZGD; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=UpfJCvMr; arc=pass smtp.client-ip=85.215.255.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C333161BF;
+	Mon, 24 Nov 2025 16:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764002716; cv=none; b=CMQTpWJWnExjZS6xVNKA+KCARNID2QJmbulhL6q2gjE9+NShZ867K2QSZ1b8L6s7+cTN4clG0+07+XHSmoEhVLe4a3adr33L0K/ckETW3B2Ovqasp1lalY6Q7UbaM2IoYCvXkHp4hxoMUQWfMXfRJ1Fy3jx9QsLFCSE9NvwTOHg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764002716; c=relaxed/simple;
+	bh=AGg4x8Zqjx/0TN8BMcahAnqR9eCGbFbNwU4/rY56fHE=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=W3vvqjfWOJ2qR7GXcYDp1muuI7hyp+7dehOJdag3lain8q6Soa6NEHEIh6Qy1lJ4b+yWKc0LCRcyYBcdf1MnRip9LPfZcBV7g3Q5qUQBOgVQnrbESG5KabT/+PPmj/reQVJzPQoEC4xqmx8yBdzNq7+zqgAqXMkblrdNwQGnjTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CGzs2DZA; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="FDRRuZGD";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="UpfJCvMr"
-ARC-Seal: i=1; a=rsa-sha256; t=1764001204; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Mi6ffgTzeLDd6by16LVPA9WBGsA3fZVxfsWD+cc37oI6ulg6dD65T95bJgc6HltKK7
-    N4uWDZgtyOZZdYje8gbuVu9T95X4b6tGrirbXguEMFuLjxnmBeIEHwAlx2PfiDgOUf0X
-    Y5unUlSKON44f9TwafsNmg1XK3HCWLwKQQjfA0arXHoDi0VhL9qaRszysZeC26RBdtLK
-    YO6XinkyNSO/eRv4GXglIu2zaNXRdLUGDJVxoPF+Ebn7lEWzAKhSqULCVuldOiLIotTx
-    q8gu653gQC85578icQWFyQi2iHeAZ1lQr+Y9ej1sK6GmFp8zfbiANYXvd+0sRoKehivg
-    eixA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1764001204;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=YAUaPVN/LGE+6Tp5hwdCL/oWm3I9gZiHnGqVnZITlYs=;
-    b=cUCmeEBRlYbwM5vOtKFOqHLCauD/E9W7U80NSRAFCB7CoOMD6R2e9+FINz97vTBUxa
-    EaSR9ryKUBDxRXQpAuCFmDrC0Vlz24ODRPRgx20QLtw0CMv6m9nQcIyaVoFA8Hxfe7Ns
-    oRovNaPokz6MeFJr6evXGsdP1dQAe4qrW7Rhh8UKE+mmCQQTJhJXqs0jPA9JE2TMH1EX
-    +yD6kiySzwCuyWvVMLnxzmucLJJrS/5Vb+Y87JuqTctbDFAEVk5grUxKLv8SBccG9mq+
-    b+y8Oj/N/tdmVhKCQxdC+mP4Lcd2i8XJLq1ejg/w9WMfARWVbl5i+FddPbgbqtCDfNeR
-    mgPQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1764001204;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=YAUaPVN/LGE+6Tp5hwdCL/oWm3I9gZiHnGqVnZITlYs=;
-    b=FDRRuZGDOWIr7PVjsgzCEoc3WjvlYfn5g1ULeDbZRLMYz5CmpY7CZr3cK7UpgYkx0e
-    MJeOyEuhc+s50fia250GETWkb2KyfPR/uu4luJS0hYtGHVYWjj1C0gj4wgXUQbE8ASZY
-    8cbYgmpw+KOk576zSdy2+AnnWs2yoLYgND53GmUAS0eQCYLLfmWBhCTk49aW9cvhkbHv
-    HX6d1mkeNCVs9FwkkOx2Oz+apKUpgSQwGiZb+KHXhrCBW37hjEaBQ2sr0RL/5DH+ejQ7
-    vB8wAa9r1qfbx9RWiahdkadBDaB5zU34WX42srJQJlf0ZoT8+a2k/5Sm1R8szDOOpyRd
-    RIQw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1764001204;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=YAUaPVN/LGE+6Tp5hwdCL/oWm3I9gZiHnGqVnZITlYs=;
-    b=UpfJCvMrspS72WrTrjWL4jgwZQ8Vv8hqUUkLNHFb0/XXkbAeu7OKuXDGtFnCaVbnqc
-    2w8c+jlmQ0tQ0RvKt+AA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeT0Z"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 54.0.0 DYNA|AUTH)
-    with ESMTPSA id Qc14a81AOGJvF96
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Mon, 24 Nov 2025 17:19:57 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CGzs2DZA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764002714; x=1795538714;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=AGg4x8Zqjx/0TN8BMcahAnqR9eCGbFbNwU4/rY56fHE=;
+  b=CGzs2DZArAq4wOrOjsWmKsfBE9zbSfC8WJfN//WsVaaZ99qQpE2hDA7q
+   rPtDXJ4SS1JXnAwPzPqvGUmbI9zSHOMlzDUJY5zWYIxaLu03nLbu0xGv3
+   0jCybSwplhAyj1iyYNdjgj7c7KmGCiZRYJp570okokW28R8FxPfgo5x3X
+   FinMccI7jt+Cl4XbG9trHCDZkVnvwIdsnsxfu080t7+sbyWC7nJYiqbav
+   UoIC1LK3bbz5Scb/raaJPrY2dOyNHiMemt0oybU19/lGGw2jfhoJABQ9R
+   3XA1gdC9AoJdprOjNImIJcRUZkiG05aGOfJCQmfJYhi/BQns5uEVz0YhE
+   A==;
+X-CSE-ConnectionGUID: CT+OSc5ySGeQdBgRcICCIQ==
+X-CSE-MsgGUID: KUVILwZdQtSnax+iDnOkWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="76621087"
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="76621087"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 08:45:12 -0800
+X-CSE-ConnectionGUID: K+cNNQ7QRDOkmCDKCgFOmw==
+X-CSE-MsgGUID: 3Q6aEZYuQwOGp/AFqRm8qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="192468296"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.97])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 08:45:09 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 24 Nov 2025 18:45:05 +0200 (EET)
+To: Rong Zhang <i@rong.moe>
+cc: Mark Pearson <mpearson-lenovo@squebb.ca>, 
+    "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, 
+    Hans de Goede <hansg@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] platform/x86: lenovo-wmi-capdata: Add support
+ for Fan Test Data
+In-Reply-To: <20251122184522.18677-6-i@rong.moe>
+Message-ID: <1efe99d4-95ae-d76c-71f5-0a1f98292dd4@linux.intel.com>
+References: <20251122184522.18677-1-i@rong.moe> <20251122184522.18677-6-i@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.3\))
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <4053840.MHq7AAxBmi@fw-rgant>
-Date: Mon, 24 Nov 2025 17:19:45 +0100
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>,
- =?utf-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org,
- Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>,
- Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>,
- Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>,
- =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>,
- Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>,
- linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org,
- linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org,
- linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
-References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <23111366.EfDdHjke4D@fw-rgant>
- <563331EB-2460-4CF5-87B3-5FE60B18BB70@goldelico.com>
- <4053840.MHq7AAxBmi@fw-rgant>
-To: Romain Gantois <romain.gantois@bootlin.com>
-X-Mailer: Apple Mail (2.3826.700.81.1.3)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-Hi,
+On Sun, 23 Nov 2025, Rong Zhang wrote:
 
-> Am 24.11.2025 um 16:57 schrieb Romain Gantois =
-<romain.gantois@bootlin.com>:
->=20
-> Hi Nikolaus,
->=20
-> On Monday, 24 November 2025 16:35:28 CET H. Nikolaus Schaller wrote:
-> ...
-> > > Sorry, I don't quite understand your remark. To integrate this =
-voltage
-> > > regulator component into the Linux regulator abstraction, I'm =
-providing a
-> > > current limit control function. To provide such a function, the =
-voltage
-> > > level on a pin has to be controlled. AFAIK, the kernel abstraction =
-used
-> > > to set precise voltages on lines is an IO channel.
-> >=20
-> > I was curious to learn about this topic and looked into the data =
-sheet:
-> >=20
-> > =
-https://www.analog.com/media/en/technical-documentation/data-sheets/8054fa=
-.p
-> > df
-> >=20
-> > As far as I see the LTM8054 does not even have a programming =
-interface.
-> > So is it reasonable to provide a dedicated driver at all?
-> >=20
-> > The figure on page 20 seems to suggest that there is an external DAC
-> > which drives the regulator. And the regulator drives for example a =
-fan.
-> >=20
-> > So I would think of a driver for the specific DAC and ignore the =
-specific
-> > LTM chip at all.
-> >=20
->=20
-> In my use case, the LTM8054 feeds a DC output port on which various =
-devices=20
-> may be plugged. Dynamic output current limitation and output voltage =
-level=20
-> control for these devices is a requirement, as well as stepped voltage=20=
+> Add support for LENOVO_FAN_TEST_DATA WMI data block. Provides an
+> interface for querying the min/max fan speed RPM (reference data) of a
+> given fan ID.
+> 
+> This interface is optional. Hence, it does not bind to lenovo-wmi-other
+> and is not registered as a component for the moment. Appropriate binding
+> will be implemented in the subsequent patch.
+> 
+> Signed-off-by: Rong Zhang <i@rong.moe>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> ---
+> Changes in v4:
+> - Rebase on top of changes made to [PATCH v4 3/7]
+> - Do not register it as a component until [PATCH v4 6/7]
+> 
+> Changes in v2:
+> - Reword documentation
+> ---
+>  .../wmi/devices/lenovo-wmi-other.rst          |  17 +++
+>  drivers/platform/x86/lenovo/wmi-capdata.c     | 102 ++++++++++++++++++
+>  drivers/platform/x86/lenovo/wmi-capdata.h     |   7 ++
+>  3 files changed, 126 insertions(+)
+> 
+> diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> index fcad595d49af..821282e07d93 100644
+> --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
+> +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> @@ -62,6 +62,13 @@ The following firmware-attributes are implemented:
+>   - ppt_pl2_sppt: Platform Profile Tracking Slow Package Power Tracking
+>   - ppt_pl3_fppt: Platform Profile Tracking Fast Package Power Tracking
+>  
+> +LENOVO_FAN_TEST_DATA
+> +-------------------------
+> +
+> +WMI GUID ``B642801B-3D21-45DE-90AE-6E86F164FB21``
+> +
+> +The LENOVO_FAN_TEST_DATA interface provides reference data for self-test of
+> +cooling fans.
+>  
+>  WMI interface description
+>  =========================
+> @@ -115,3 +122,13 @@ data using the `bmfdec <https://github.com/pali/bmfdec>`_ utility:
+>      [WmiDataId(3), read, Description("Data Size.")] uint32 DataSize;
+>      [WmiDataId(4), read, Description("Default Value"), WmiSizeIs("DataSize")] uint8 DefaultValue[];
+>    };
+> +
+> +  [WMI, Dynamic, Provider("WmiProv"), Locale("MS\\0x409"), Description("Definition of Fan Test Data"), guid("{B642801B-3D21-45DE-90AE-6E86F164FB21}")]
+> +  class LENOVO_FAN_TEST_DATA {
+> +    [key, read] string InstanceName;
+> +    [read] boolean Active;
+> +    [WmiDataId(1), read, Description("Mode.")] uint32 NumOfFans;
+> +    [WmiDataId(2), read, Description("Fan ID."), WmiSizeIs("NumOfFans")] uint32 FanId[];
+> +    [WmiDataId(3), read, Description("Maximum Fan Speed."), WmiSizeIs("NumOfFans")] uint32 FanMaxSpeed[];
+> +    [WmiDataId(4), read, Description("Minumum Fan Speed."), WmiSizeIs("NumOfFans")] uint32 FanMinSpeed[];
+> +  };
+> diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/platform/x86/lenovo/wmi-capdata.c
+> index 29267c373ab3..e6392357395c 100644
+> --- a/drivers/platform/x86/lenovo/wmi-capdata.c
+> +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
+> @@ -13,6 +13,10 @@
+>   * attribute has multiple pages, one for each of the thermal modes managed by
+>   * the Gamezone interface.
+>   *
+> + * Fan Test Data includes the max/min fan speed RPM for each fan. This is
+> + * reference data for self-test. If the fan is in good condition, it is capable
+> + * to spin faster than max RPM or slower than min RPM.
+> + *
+>   * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
+>   *   - Initial implementation (formerly named lenovo-wmi-capdata01)
+>   *
+> @@ -41,6 +45,7 @@
+>  
+>  #define LENOVO_CAPABILITY_DATA_00_GUID "362A3AFE-3D96-4665-8530-96DAD5BB300E"
+>  #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39B3BE018154"
+> +#define LENOVO_FAN_TEST_DATA_GUID "B642801B-3D21-45DE-90AE-6E86F164FB21"
+>  
+>  #define ACPI_AC_CLASS "ac_adapter"
+>  #define ACPI_AC_NOTIFY_STATUS 0x80
+> @@ -48,6 +53,7 @@
+>  enum lwmi_cd_type {
+>  	LENOVO_CAPABILITY_DATA_00,
+>  	LENOVO_CAPABILITY_DATA_01,
+> +	LENOVO_FAN_TEST_DATA,
+>  };
+>  
+>  #define LWMI_CD_TABLE_ITEM(_type)		\
+> @@ -62,6 +68,7 @@ static const struct lwmi_cd_info {
+>  } lwmi_cd_table[] = {
+>  	LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_00),
+>  	LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_01),
+> +	LWMI_CD_TABLE_ITEM(LENOVO_FAN_TEST_DATA),
+>  };
+>  
+>  struct lwmi_cd_priv {
+> @@ -78,6 +85,7 @@ struct cd_list {
+>  	union {
+>  		DECLARE_FLEX_ARRAY(struct capdata00, cd00);
+>  		DECLARE_FLEX_ARRAY(struct capdata01, cd01);
+> +		DECLARE_FLEX_ARRAY(struct capdata_fan, cd_fan);
+>  	};
+>  };
+>  
+> @@ -117,6 +125,10 @@ void lwmi_cd_match_add_all(struct device *master, struct component_match **match
+>  		return;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(lwmi_cd_table); i++) {
+> +		/* Skip optional interfaces. */
+> +		if (lwmi_cd_table[i].type == LENOVO_FAN_TEST_DATA)
+> +			continue;
+> +
+>  		component_match_add(master, matchptr, lwmi_cd_match,
+>  				    (void *)&lwmi_cd_table[i].type);
+>  		if (IS_ERR(*matchptr))
+> @@ -194,6 +206,9 @@ EXPORT_SYMBOL_NS_GPL(lwmi_cd00_get_data, "LENOVO_WMI_CD");
+>  DEF_LWMI_CDXX_GET_DATA(cd01, LENOVO_CAPABILITY_DATA_01, struct capdata01);
+>  EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD");
+>  
+> +DEF_LWMI_CDXX_GET_DATA(cd_fan, LENOVO_FAN_TEST_DATA, struct capdata_fan);
+> +EXPORT_SYMBOL_NS_GPL(lwmi_cd_fan_get_data, "LENOVO_WMI_CD");
+> +
+>  /**
+>   * lwmi_cd_cache() - Cache all WMI data block information
+>   * @priv: lenovo-wmi-capdata driver data.
+> @@ -217,6 +232,9 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *priv)
+>  		p = &priv->list->cd01[0];
+>  		size = sizeof(priv->list->cd01[0]);
+>  		break;
+> +	case LENOVO_FAN_TEST_DATA:
+> +		/* Done by lwmi_cd_alloc() => lwmi_cd_fan_list_alloc_cache(). */
+> +		return 0;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -239,6 +257,78 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *priv)
+>  	return 0;
+>  }
+>  
+> +/**
+> + * lwmi_cd_fan_list_alloc_cache() - Alloc and cache Fan Test Data list
+> + * @priv: lenovo-wmi-capdata driver data.
+> + * @listptr: Pointer to returned cd_list pointer.
+> + *
+> + * Return: count of fans found, or an error.
+> + */
+> +static int lwmi_cd_fan_list_alloc_cache(struct lwmi_cd_priv *priv, struct cd_list **listptr)
+> +{
+> +	u32 count, *fan_ids, *fan_min_rpms, *fan_max_rpms;
+> +	union acpi_object *ret_obj __free(kfree) = NULL;
 
-> transitions, thus the need for a proper regulator device.
->=20
-> The LTM8054's feedback pin can be driven by a different DAC, which =
-allows for=20
-> dynamic output voltage control. This is a more complex upstreaming =
-topic=20
-> however, so I've left it out of this initial series. There are other =
-component=20
-> functions which fit in squarely into the regulator framework, such as=20=
+Since you're using __free(), please move this to where you assign the 
+value. This is to create a pattern with cleanup helpers. The cleanup 
+order depends on the order the variables are introduced which in some 
+other cases may be significant.
 
-> input current limit control and soft-start. But I understand that the =
-current=20
-> driver might look a bit "bare".
+> +	struct block { u32 nr; u32 data[]; } *block;
 
-So you just want to have some user-space mechanism to control voltage
-and current limits? Can't this be done by directly controlling them =
-through
-the iio API?
+This is the first time I see this style anywhere in the kernel's context, 
+has there been some general discussion about this style somewhere?
 
-Is this for a device that is already in kernel or planned to be =
-supported?
-Or is it "application support" for some SBC?
+At least it seems immediately obvious to me that this style will have a 
+negative impact on documentability due to (too) concise use of space.
 
-Are you looking for a virtual "glue" driver to logically combine several =
-low
-level functions?
+> +	struct cd_list *list;
+> +	size_t size;
+> +	int idx;
+> +
+> +	ret_obj = wmidev_block_query(priv->wdev, 0);
+> +	if (!ret_obj)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * This is usually caused by a dummy ACPI method. Do not return an error
+> +	 * as failing to probe this device will result in master driver being
+> +	 * unbound - this behavior aligns with lwmi_cd_cache().
+> +	 */
+> +	if (ret_obj->type != ACPI_TYPE_BUFFER) {
+> +		count = 0;
+> +		goto alloc;
+> +	}
+> +
+> +	size = ret_obj->buffer.length;
+> +	block = (struct block *)ret_obj->buffer.pointer;
 
->=20
-> > What could be necessary is if you really want to be able to =
-"regulate"
-> > the current going to Vout, some bridge between regulator API and =
-some
-> > IIO DAC.
-> >=20
-> > And enabling/disabling the regulator by some GPIO can be described =
-in
-> > the DT already through a "regulator-fixed".
-> >=20
->=20
-> This is a possibility, but when you bring in all of these other =
-hardware=20
-> functions that I mentionned e.g. output voltage control and stepping, =
-you'll=20
-> end up with several different devices which look unrelated from =
-userspace, but=20
-> actually control the same chip.
+void * can be cast implicitly.
 
-That is quite usual... I have often heard: user space must fix this as =
-kernel
-just provides basic functions in a harmonized way and integration has to
-be tailored to the device anyways :)
+> +
+> +	count = size >= sizeof(*block) ? block->nr : 0;
+> +	if (size < struct_size(block, data, count * 3)) {
+> +		dev_warn(&priv->wdev->dev,
+> +			 "incomplete fan test data block: %zu < %zu, ignoring\n",
+> +			 size, struct_size(block, data, count * 3));
+> +		count = 0;
+> +	}
+> +
+> +	if (count == 0)
+> +		goto alloc;
+> +
+> +	if (count > U8_MAX) {
+> +		dev_warn(&priv->wdev->dev,
+> +			 "too many fans reported: %u > %u, truncating\n",
+> +			 count, U8_MAX);
+> +		count = U8_MAX;
+> +	}
+> +
+> +	fan_ids = &block->data[0];
+> +	fan_max_rpms = &block->data[count];
+> +	fan_min_rpms = &block->data[count * 2];
 
-> Userspace will also have to know about some hardware details to =
-properly=20
-> control the DACs, such as the values of the sense and feedback =
-resistors. In=20
-> my opinion, this bypasses the kernel's abstraction of hardware.
+Please rearrange so you can remove the goto:
 
-I came up with this argument several times in the part and got a lot of =
-contrary :)
+	1. limit count
+	if (count) {
+		...
+	}
 
-What I still wonder: does your hardware warrant an upstream driver for a
-non-programable chip if a different solution (with help of user-space) =
-already
-exist?
 
-Another question: is your scheme generic enough so that it can be =
-expected
-that other devices are using it in the same way?
+> +
+> +alloc:
+> +	list = devm_kzalloc(&priv->wdev->dev, struct_size(list, cd_fan, count), GFP_KERNEL);
+> +	if (!list)
+> +		return -ENOMEM;
+> +
+> +	for (idx = 0; idx < count; idx++) {
+> +		list->cd_fan[idx] = (struct capdata_fan) {
+> +			.id = fan_ids[idx],
+> +			.min_rpm = fan_min_rpms[idx],
+> +			.max_rpm = fan_max_rpms[idx],
+> +		};
+> +	}
+> +
+> +	*listptr = list;
+> +	return count;
+> +}
+> +
+>  /**
+>   * lwmi_cd_alloc() - Allocate a cd_list struct in drvdata
+>   * @priv: lenovo-wmi-capdata driver data.
+> @@ -264,6 +354,12 @@ static int lwmi_cd_alloc(struct lwmi_cd_priv *priv, enum lwmi_cd_type type)
+>  	case LENOVO_CAPABILITY_DATA_01:
+>  		list_size = struct_size(list, cd01, count);
+>  		break;
+> +	case LENOVO_FAN_TEST_DATA:
+> +		count = lwmi_cd_fan_list_alloc_cache(priv, &list);
+> +		if (count < 0)
+> +			return count;
+> +
+> +		goto got_list;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -272,6 +368,7 @@ static int lwmi_cd_alloc(struct lwmi_cd_priv *priv, enum lwmi_cd_type type)
+>  	if (!list)
+>  		return -ENOMEM;
+>  
+> +got_list:
+>  	ret = devm_mutex_init(&priv->wdev->dev, &list->list_mutex);
+>  	if (ret)
+>  		return ret;
+> @@ -390,6 +487,8 @@ static int lwmi_cd_probe(struct wmi_device *wdev, const void *context)
+>  
+>  		ret = component_add(&wdev->dev, &lwmi_cd_component_ops);
+>  		goto out;
+> +	case LENOVO_FAN_TEST_DATA:
+> +		goto out;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -413,6 +512,8 @@ static void lwmi_cd_remove(struct wmi_device *wdev)
+>  	case LENOVO_CAPABILITY_DATA_01:
+>  		component_del(&wdev->dev, &lwmi_cd_component_ops);
+>  		break;
+> +	case LENOVO_FAN_TEST_DATA:
+> +		break;
+>  	default:
+>  		WARN_ON(1);
+>  	}
+> @@ -425,6 +526,7 @@ static void lwmi_cd_remove(struct wmi_device *wdev)
+>  static const struct wmi_device_id lwmi_cd_id_table[] = {
+>  	{ LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_00) },
+>  	{ LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_01) },
+> +	{ LWMI_CD_WDEV_ID(LENOVO_FAN_TEST_DATA) },
+>  	{}
+>  };
+>  
+> diff --git a/drivers/platform/x86/lenovo/wmi-capdata.h b/drivers/platform/x86/lenovo/wmi-capdata.h
+> index a6d006ef458f..38af4c4e4ef4 100644
+> --- a/drivers/platform/x86/lenovo/wmi-capdata.h
+> +++ b/drivers/platform/x86/lenovo/wmi-capdata.h
+> @@ -26,6 +26,12 @@ struct capdata01 {
+>  	u32 max_value;
+>  };
+>  
+> +struct capdata_fan {
+> +	u32 id;
+> +	u32 min_rpm;
+> +	u32 max_rpm;
+> +};
+> +
+>  struct lwmi_cd_binder {
+>  	struct cd_list *cd00_list;
+>  	struct cd_list *cd01_list;
+> @@ -34,5 +40,6 @@ struct lwmi_cd_binder {
+>  void lwmi_cd_match_add_all(struct device *master, struct component_match **matchptr);
+>  int lwmi_cd00_get_data(struct cd_list *list, u32 attribute_id, struct capdata00 *output);
+>  int lwmi_cd01_get_data(struct cd_list *list, u32 attribute_id, struct capdata01 *output);
+> +int lwmi_cd_fan_get_data(struct cd_list *list, u32 attribute_id, struct capdata_fan *output);
+>  
+>  #endif /* !_LENOVO_WMI_CAPDATA_H_ */
+> 
 
-Or could the power controller framework (/sys/class/power_supply) fit =
-better?
-
-There is an API to ask chargers etc. for battery voltage and current =
-limits or
-even write them.
-
-There is also "generic-adc-battery" which allows to hook up with =
-arbitrary
-iio-adcs for measurements - although you need a DAC in your setup. Maybe =
-an
-extension here is a better strategy than a dedicated ltm8054 driver?
-
-BR,
-Nikolaus
+-- 
+ i.
 
