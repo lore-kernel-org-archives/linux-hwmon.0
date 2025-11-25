@@ -1,200 +1,234 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender3-op-o15.zoho.com (sender3-op-o15.zoho.com [136.143.184.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96290329381
-	for <linux-hwmon@vger.kernel.org>; Tue, 25 Nov 2025 16:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764088649; cv=none; b=F4oBHSLsO37RD94P1YDYOWy/AmzY1pbB5ZLv7jFG1MZ27r6vyj9rYxnFT68ATJ2NyOCCreETqcfHVImusoSIfZA1rvDyS2hVXgAeNXKdwNxbs5q2aIYdWdoGNxOhGyEvVZABDSFsQnXpRVCWmNMYAl5xycuTT1dSKWSguGuq3bQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764088649; c=relaxed/simple;
-	bh=TAlmXzkH1KqpnNqrCrXGhz8fQgBzldHSxQYp4L9bbL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r5o9oCpCwGKTsl8V2AGM7phwc2+gdQkWzf84NzCnoMctc6HB+Jvznl40koVLBw1L+/k1nFgb4et+ryaZAqewoIoV9mOHhWfTyUHpfq+6N9euOL3k06G4Ut9z8IR0panN+mP58xpwIYqvQK209FYExpwf8A8ni20ktvF6ZKQYmao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DsPvCFZd; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CEA33B6CB;
+	Tue, 25 Nov 2025 19:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764100233; cv=pass; b=qzEfm3b4FjtKXBYruI0OArS7l8a4wFbRJtOUiTPD5svlgkB+UeLvD3BbhEAUC3aWI8thzWnNzKUelYiD1LkkinkAf8CDSpSkqQ5VaEaSUO6HdBRtoRmmLYx+8fgcR5Yb+L/5k58Ov2cCS6vLnRNAaDXLS9EobzBQyaZuZEnvC5U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764100233; c=relaxed/simple;
+	bh=IZhN2ZIz4O6MSAase4AYJnsZmrJbj62kzSEU7RdVIBg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sZB7441btnmSWnhg2aMM0ZNi6v+WaQAg5zt4y5A/LFV/CXeFtPa/9U0zegpi3dVk15Zo5ImWZBNCUkjgYUek9ip2RpfD7ZPiX+1vyGmNAoJJyzJ0B2ibzoTgolQxVKZn2xISb75jqLw+xlRqCyaR1UA9STSacyz1METpqGXMUW0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=eI/88Ndt; arc=pass smtp.client-ip=136.143.184.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DsPvCFZd"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2981f9ce15cso69039135ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Nov 2025 08:37:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764088647; x=1764693447; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSWJkC14D263EaCk7olh/4x9IvEymCiNm9Dm8xKZmcc=;
-        b=DsPvCFZdv+ulKh8LgL7ahJPF70vGMfe5q5ajFdS3G4SmcOyjjMubEg0TsR4Kads5i1
-         8MY22+xFEm5wi0Kt1753mhPdJkIziFC1ZLhb4IHhg4fSj6wihfxeqiS4McVUSRrbv9mZ
-         6LVsKRhCHrbogEoEaJxTaipcWdUYl0mpKDTqGS6TTfiF7cPaWuC/TsiEtaTh6uUuGJrB
-         hE5wilE1sV1Y1OAlcDYXD9ekmMyaSPSqWqcBGU0SmW3g3erfJPzSgb2a0SJrOdiAECGq
-         HTmbUX7LduKtvM0eNtAq6B/EDD2DyH2gQHC7qtK9D5a9cFKPFpbk+OE/YPRq0N9Ul441
-         HvAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764088647; x=1764693447;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BSWJkC14D263EaCk7olh/4x9IvEymCiNm9Dm8xKZmcc=;
-        b=h++qxTfEgMB7DTnbhoNOu2PHfXANhzo+L2nh8AKjzqyW3Jv/dSriH4VmJURy9BfjC7
-         0K8t2U1jtnGI00W5iMGIOx2kCjZzm0HmmccpilygtjLbSkaegSOB21v6/rJFW+9i2ws0
-         zD3dyItpJGLE8s76kYFM7ZzyoquP0S0PSQmiND9gwZbU1jrB/BZkvQn1sV2PiNskXfNT
-         VRcT+uLylc602GoUiIMY7Nb7fqe62bP250Ms3jyzK5AC/ax2TiL2x/qlZ3gDie8ziVcM
-         XnEappMEkUd8Qe8NHAAAPXgSrIBH63l06eXbXLBXfacJvN5i9FoMh8xF16zpfJho9mpT
-         csJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUbl2YYPtGkDW0+VppgCY73k6iNP91BsvmUBVpewUgq8H/wR2X/HfzBp+8knf2JlLcc4mwcjnjWFqZhw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxfh48crggGHAQolb0SQID6MnlntDs2QEKqJBt9RWd+SHoFZhcT
-	diGGdp6WlGC7SIruj+Jbr6cCLAazAxfQMYDdTTE4I5rthpvHn79Ypp55
-X-Gm-Gg: ASbGncusKQFD3VqmfuS58t91UzrAMOf+73wHTM7qTACjlLJPA4DsuOMYL3khNsLulc+
-	txYFbyYUuTTFtfItxK+du7iX417IAkZOgSjnjM89PTzXN965a9TqPCR0SwZJrYlXzdEgt06O4rx
-	lPtHdyEcUdUfrgiDGaqoUJ5D4t3cwSmQWFUjSQU9whSz8D7gjtCvVj+QO82v822TSHh3WpDSiSI
-	IRRSvljm4326A1Lt0GIxiONnExQJXI9dWdeCZOiZQu4TKJxGQAATGIdsP90HvpxDjHWwwVtWNPD
-	/gq+DeMkyaAxTYTrHnvmZPmEZ+nN+/EkCPlxBkXTjjYk/G2di0F/uo6LsAXQj6gQzio8eCHO7cj
-	hbq8XuqA+LLic0yXJiubL+eEW6E7nK6VP8rBjPJmKyhkIbuFXXjfo5YowGVVsuXnKVSbCRHtoND
-	HZCDIuZa0JSgBEPhyhRKkMXkmJAVEEWzaTDppUC05dwizb
-X-Google-Smtp-Source: AGHT+IFHy57b+hpQflAZiQVaoxIk86czwU51KAJ0ICKXYmkBowPOIfdH8aTLY+SWpNInrUa/0Wei8g==
-X-Received: by 2002:a17:90b:3c01:b0:340:cb39:74cd with SMTP id 98e67ed59e1d1-34733f589e8mr14550720a91.32.1764088646710;
-        Tue, 25 Nov 2025 08:37:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3475ff34831sm1342209a91.5.2025.11.25.08.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 08:37:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9b43da0b-61e1-49bb-acc2-392de3817db7@roeck-us.net>
-Date: Tue, 25 Nov 2025 08:37:20 -0800
+	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="eI/88Ndt"
+ARC-Seal: i=1; a=rsa-sha256; t=1764100209; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=QukrM9gh8oVbZDPhzxi7gIezaPfZrvbS5u5EG+9YovIyj4s8dTfqCTQMP/fqtqw5AtjNlGwsjtoXsK6c/IkzKEx8J8HStsdxYjpB8u/jRwp9n4Ul3iGBec2S9+vNCwjku6/vgDgPQ4AFfGWSn6DsOVUCE6pA0WsfjYvtv/CM9e8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1764100209; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=v8xSnNy33IW35dFG2vjLe4HhY9HW58AxYXqrERa1yAo=; 
+	b=hnTAZRKTXpjbyVEQcIStDKLA4axI8Ms2HPiXis7UHlVW+j/UVmZ0HGnuCI2PxRUvHIU6+UP8OkiM+oyYga/R0yhwWGvItYg3NYU6t3CAzgNFmpjrS40a+A6oibn2IVzg5ICigCbHLhwkYtmHXtdVcFThDaqqTepRR0vidJ+UgxE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764100209;
+	s=zmail; d=rong.moe; i=i@rong.moe;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=v8xSnNy33IW35dFG2vjLe4HhY9HW58AxYXqrERa1yAo=;
+	b=eI/88NdtIAZT6qR4+ep1NCVOn0J4SZ8qYXMJazo3lAHRR+UEiNDBJ1IdAJNs8diX
+	X++JU77zKFN9ZkG7j1VJ28DTaMb1AxWGXOPXI/KPYrG4z0PIkR6s2K/jJ6COJqwhF0p
+	TV4xSOvk+pzeu16Blf0i4OXS/f4La2T0VTFoj3qw=
+Received: by mx.zohomail.com with SMTPS id 1764100205449137.36972572426532;
+	Tue, 25 Nov 2025 11:50:05 -0800 (PST)
+From: Rong Zhang <i@rong.moe>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Rong Zhang <i@rong.moe>,
+	Guenter Roeck <linux@roeck-us.net>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v7 0/7] platform/x86: lenovo-wmi-{capdata,other}: Add HWMON for fan speed
+Date: Wed, 26 Nov 2025 03:49:21 +0800
+Message-ID: <20251125194959.157524-1-i@rong.moe>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-To: "H. Nikolaus Schaller" <hns@goldelico.com>,
- Romain Gantois <romain.gantois@bootlin.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>, Linus Walleij
- <linus.walleij@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <4053840.MHq7AAxBmi@fw-rgant>
- <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
- <3021060.e9J7NaK4W3@fw-rgant>
- <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On 11/25/25 02:25, H. Nikolaus Schaller wrote:
-...
-> Another suggestion: what extending the "regulator-fixed", "regulator-gpio",
-> "regulator-fixed-clock" pattern by some "regulator-gpio-iio-dac-current-limiter"
-> driver to make it independent of your specific chip?
-> 
-The name is terrible ;-), but that is what I would have suggested as well.
-I don't see anything chip specific in this code. If there is a need for
-a regulator driver which uses gpio to enable it and a DAC for current limiting,
-it should be made generic.
+Lenovo WMI Other Mode interface also supports querying or setting fan
+speed RPM. This capability is described by LENOVO_CAPABILITY_DATA_00.
+Besides, LENOVO_FAN_TEST_DATA provides reference data for self-test of
+cooling fans, including minimum and maximum fan speed RPM.
 
-> By the way, are you aware of this feature of the regulator-gpio driver?
-> 
-> https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/regulator/gpio-regulator.c#L97
-> 
-> Just to note: I am neither maintainer nor doing any decisions on this, just asking
-> questions for curiosity and from experience and giving hints for alternative approaches,
-> where I hope they help to find the really best solution.
-> 
-Same here.
+This patchset turns lenovo-wmi-capdata01 into a unified driver (now
+named lenovo-wmi-capdata) for LENOVO_CAPABILITY_DATA_{00,01} and
+LENOVO_FAN_TEST_DATA; then adds HWMON support for lenovo-wmi-other:
 
-Thanks,
-Guenter
+ - fanX_enable: enable/disable the fan (tunable)
+ - fanX_input: current RPM
+ - fanX_max: maximum RPM
+ - fanX_min: minimum RPM
+ - fanX_target: target RPM (tunable)
+
+LENOVO_CAPABILITY_DATA_{00,01} presents on all devices, so
+both binds to lenovo-wmi-other. However, some device does not have
+LENOVO_FAN_TEST_DATA and its presence is described by
+LENOVO_CAPABILITY_DATA_00; hence, the former binds to the latter and a
+callback is used to pass the data to lenovo-wmi-other.
+
+Summarizing this scheme:
+
+        lenovo-wmi-other <-> capdata00 <-> capdata_fan
+        |- master            |- component
+                             |- sub-master
+                                           |- sub-component
+
+The callback will be called once both the master and the sub-component
+are bound to the sub-master (component).
+
+This scheme is essential to solve these issues:
+- The component framework only supports one aggregation per master
+- A binding is only established until all components are found
+- The Fan Test Data interface may be missing on some devices
+- To get rid of queries for the presence of WMI GUIDs
+- The notifier framework cannot cleanly connect capdata_fan to
+  lenovo-wmi-other without introducing assumptions on probing sequence
+
+capdata00 is registered as a component and a sub-master on probe,
+instead of chaining the registrations in one's bind callback. This is
+because calling (un)registration methods of the component framework
+causes deadlock in (un)bind callbacks, i.e., it's impossible to register
+capdata00 as a sub-master/component in its component/sub-master bind
+callback, and vice versa.
+
+The implementation does not rely on a specific binding sequence. This
+has been fuzz-tested using:
+
+	#!/bin/bash
+
+	DRV_DIR=/sys/bus/wmi/drivers/lenovo_wmi_cd
+	CAPDATA_GUIDS=(
+		$(find "$DRV_DIR"/ -name '*-*-*-*-*-*' -printf "%f ")
+	)
+
+	b() { sudo tee "$DRV_DIR"/bind <<<"$1"; }
+	u() { sudo tee "$DRV_DIR"/unbind <<<"$1"; }
+
+	for guid in "${CAPDATA_GUIDS[@]}"; do
+		u "$guid"
+	done
+
+	while read -rsa perm; do
+		for guid in "${perm[@]}"; do
+			b "$guid"
+		done
+		sensors | grep -A3 lenovo_wmi_other || true
+		for guid in "${perm[@]}"; do
+			u "$guid"
+		done
+	done < <(python3 -c "
+	from itertools import permutations
+	ps = permutations('${CAPDATA_GUIDS[*]}'.split())
+	for p in ps: print(' '.join(p))")
+
+	for guid in "${CAPDATA_GUIDS[@]}"; do
+		b "$guid"
+	done
+
+Tested on ThinkBook 14 G7+ ASP.
+
+Changes in v7:
+- Fix missing #include (thanks Ilpo Järvinen)
+- Fix formatting issues (ditto)
+- dev_dbg() instead of dev_info() on probe success (ditto)
+- Rearrange to drop some gotos (ditto)
+- Move the declarations of __free()-managed variables to where they are
+  assigned (ditto)
+- Improve the readability of struct definition and error paths (ditto)
+- Prevent back-and-forth changes (ditto)
+- Fix mistakenly inverted boundary check
+- Emit unaligned access to Fan Test Data's WMI block
+- Properly calculate array index when we truncate Fan Test Data
+- Fix typo
+- Link to v6: https://lore.kernel.org/r/20251122184522.18677-1-i@rong.moe/
+
+Changes in v6:
+- Fix mistaken error paths
+- Link to v5: https://lore.kernel.org/r/20251114175927.52533-1-i@rong.moe/
+
+Changes in v5:
+- Do not cast pointer to non-pointer or vice versa (thanks kernel test
+  robot)
+- Fix missing include (ditto)
+- Link to v4: https://lore.kernel.org/r/20251113191152.96076-1-i@rong.moe/
+
+Changes in v4:
+- Get rid of wmi_has_guid() (thanks Armin Wolf's inspiration)
+  - Add [PATCH v4 6/7], please review & test
+    - Check 0x04050000.supported and bind capdata_fan to capdata00
+  - Rework HWMON registration
+    - Collect fan info from capdata00 and capdata_fan separately
+    - Use a callback to collect fan info from capdata_fan
+    - Trigger HWMON registration only if all fan info is collected
+    - Do not check 0x04050000.supported, implied by the presence of
+      capdata_fan
+- Drop Reviewed-by & Tested-by from [PATCH v4 7/7] due to the changes,
+  please review & test
+- Link to v3: https://lore.kernel.org/r/20251031155349.24693-1-i@rong.moe/
+
+Changes in v3:
+- Fix grammar (thanks Derek J. Clark)
+- Link to v2: https://lore.kernel.org/r/20251030193955.107148-1-i@rong.moe/
+
+Changes in v2:
+- Add a workaround for ACPI methods that return a 4B buffer for u32
+  (thanks Armin Wolf)
+- Fix function documentation (thanks kernel test bot)
+- Reword documentation (thanks Derek J. Clark)
+- Squash min/max reporting patch into the initial HWMON one (ditto)
+- Query 0x04050000 for interface availability (ditto)
+  - New parameter "expose_all_fans" to skip this check
+- Enforce min/max RPM constraint on set (ditto)
+  - New parameter "relax_fan_constraint" to disable this behavior
+  - Drop parameter "ignore_fan_cap", superseded by the next one
+  - New parameter "expose_all_fans" to expose fans w/o such data
+- Assume auto mode on probe (ditto)
+- Do not register HWMON device if no fan can be exposed
+- fanX_target: Return -EBUSY instead of raw target value when fan stops
+- Link to v1: https://lore.kernel.org/r/20251019210450.88830-1-i@rong.moe/
+
+Rong Zhang (7):
+  platform/x86: lenovo-wmi-helpers: Convert returned buffer into u32
+  platform/x86: Rename lenovo-wmi-capdata01 to lenovo-wmi-capdata
+  platform/x86: lenovo-wmi-{capdata,other}: Support multiple Capability
+    Data
+  platform/x86: lenovo-wmi-capdata: Add support for Capability Data 00
+  platform/x86: lenovo-wmi-capdata: Add support for Fan Test Data
+  platform/x86: lenovo-wmi-capdata: Wire up Fan Test Data
+  platform/x86: lenovo-wmi-other: Add HWMON for fan reporting/tuning
+
+ .../wmi/devices/lenovo-wmi-other.rst          |  43 +-
+ drivers/platform/x86/lenovo/Kconfig           |   5 +-
+ drivers/platform/x86/lenovo/Makefile          |   2 +-
+ drivers/platform/x86/lenovo/wmi-capdata.c     | 812 ++++++++++++++++++
+ drivers/platform/x86/lenovo/wmi-capdata.h     |  65 ++
+ drivers/platform/x86/lenovo/wmi-capdata01.c   | 302 -------
+ drivers/platform/x86/lenovo/wmi-capdata01.h   |  25 -
+ drivers/platform/x86/lenovo/wmi-helpers.c     |  21 +-
+ drivers/platform/x86/lenovo/wmi-other.c       | 515 ++++++++++-
+ 9 files changed, 1433 insertions(+), 357 deletions(-)
+ create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.c
+ create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.h
+ delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.c
+ delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.h
+
+
+base-commit: ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
+-- 
+2.51.0
 
