@@ -1,330 +1,158 @@
-Received: from sender3-op-o15.zoho.com (sender3-op-o15.zoho.com [136.143.184.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8DE221710;
-	Wed, 26 Nov 2025 14:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764165789; cv=pass; b=BJOPn58l6N8/6oBxxv2vKPS0csbWnB7LdhU1L5p0m5G9sx4grOn/sJMnOSnOsvNDbTBB+bclOSlNFyKOvPL/JbC53GH9Pzx7g+NMLYOuxF2n2xWH2ymSQexoP2b6rywxhAzk50MGW8ZdqekuVBVYTwlct9SJWKrMgUsV7FWXh94=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764165789; c=relaxed/simple;
-	bh=4blZfVusM3wELTXriUbbH0SG9AdSgnCmiIhEB92rERI=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=afRMnCFFZb4UzedmU0Ru5KhNIUBqlEpOXtMOLiSm8+cbL/pFVsjHjDzfZj7Mwx/rb3EvT3ZN1rjes9v59yrkPmZa5aVKGPazccc9vHGmVEjqeAfUaxrqSnN3K332RF80pQTKYJtaxBPUsoXu3IhSGaXet+qlkYVMEN1nWvdGRM0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=AsjorST8; arc=pass smtp.client-ip=136.143.184.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33231303CA0
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 15:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764171907; cv=none; b=F3bFvmnnVRXaOHdjUbldpM3Eq5lMcP9ByfqPaBUt/A0mBGLz6l1rSi8lrGULsEFiioIQTfD2+towaPkFyB4yoCuYS1cEh7ElSyQg0dLOGWk5MiToEL9WrgAr08luPJp+ATR7f0ZiMiPUeBVU/cSb0nj4lHpYKlmgG9vxkH1Vmmw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764171907; c=relaxed/simple;
+	bh=/Z+r7IB9MjkaVzM9LGSZ+LuTnwiJEaJlODiWc3QOdWU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kksLMrMaoyXwQSK06aHp9J52MXmxTllh1hwCcwFyjQwYoeqU5rFnlY9To4zo6Md1r0GSU20zl/bR+G7knC1degmPJ+O8TrVBLEPNDrQpuaXijJ4rYlRqgmy+ORm/BveLbKo4TUIhb2pX+4Km8NMdIhpEkQTBY448BJ+01oWDe+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ze0NCoZs; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="AsjorST8"
-ARC-Seal: i=1; a=rsa-sha256; t=1764165765; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=LC/vbtRhAYzoN5jMKJ83uA/BQAL7+0Bk/aZyXaCTbypCpvVzMRoW8y62THdZWMYF40Hnuo3O4A7Wr5sFyXbxjbiWL2w746P108CNLQffOOx84bkLC3knBD2psw1oNBC/okGIkAeEYxxr9xJiC1fh89UDAeqhUJ78CrmxZh3knFA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1764165765; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=q6aW2ZULX62iEb9YOXQWzdTmWT0K4a9TcOBf5w1NmwE=; 
-	b=nYHRxwDJslqlpDrNGKxWJwMawKD/vH7vzPEgy+MRlVoZib2Db4Ad2Nm/2emZioQcb8SrVzouKH5Qj3pXv+i69l6GjsPalpusVtRE8xAT/RvMmPmWKRsKThZTVEn+xYHBAE7LLLurnZAa8prSXAknsrL+RMPAXpQDz90xYHnMJ/8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=rong.moe;
-	spf=pass  smtp.mailfrom=i@rong.moe;
-	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764165765;
-	s=zmail; d=rong.moe; i=i@rong.moe;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
-	bh=q6aW2ZULX62iEb9YOXQWzdTmWT0K4a9TcOBf5w1NmwE=;
-	b=AsjorST8IW42UNaEn3Ad0aolrl6qfF+xgaJL2MStRfyXh147xsIBKgceOGkJevQm
-	+5SaEwCPwdzLdzT5S/36X0/g9zCnDIMgvzrNGfM8NdYif24rQTFC/v6t0aYN1VoIBH6
-	5D0ObLNUIs9kcU+oyjjB3ptDv91exnWXHAxzyke8=
-Received: by mx.zohomail.com with SMTPS id 1764165761908120.69087362981679;
-	Wed, 26 Nov 2025 06:02:41 -0800 (PST)
-Message-ID: <50f70b72a1149f4a17a4098a4e820bcde1069561.camel@rong.moe>
-Subject: Re: [PATCH v6 5/7] platform/x86: lenovo-wmi-capdata: Add support
- for Fan Test Data
-From: Rong Zhang <i@rong.moe>
-To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Rong Zhang <i@rong.moe>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
- "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>,
- Hans de Goede <hansg@kernel.org>,  Guenter Roeck <linux@roeck-us.net>,
- platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	linux-hwmon@vger.kernel.org
-In-Reply-To: <79934289-cdb4-385d-8042-e96ec37fdb55@linux.intel.com>
-References: <20251122184522.18677-1-i@rong.moe>
-	  <20251122184522.18677-6-i@rong.moe>
-	  <1efe99d4-95ae-d76c-71f5-0a1f98292dd4@linux.intel.com>
-	 <c13b6614d2ad4a3c4b938cdb04e6ebcc8f5bd95c.camel@rong.moe>
-	 <79934289-cdb4-385d-8042-e96ec37fdb55@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 26 Nov 2025 21:57:05 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ze0NCoZs"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b9f1d0126e6so470021a12.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 07:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764171904; x=1764776704; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFsRGdeN4OA4/dLsV/CJjEiI3afskvMujNE/U+D52Wk=;
+        b=Ze0NCoZswelyD3nQ3msOKOEBE2o7dsKNtGvauqt2NPMKRCjwwlYCx7cAp9TH7G2mUb
+         yiCNv/FelWzXj5eLOWFRXmf6PDq/sRyHKILbxLWtP7mOxcCdjYRYp0W1v3ZsDEs9yh7L
+         c2fuXNFcQFMjzNTl6vfW8SHJIw2jXPzOTZ3Hmgq/Msh4qzMYOiDfWLuzwgDGg6cEdX48
+         10EjU6D+3bL1NOpWNujrPmx1K4EN5bv//FLaUkMflF3I1DItYYfDWWLu1Dc31RycxS7W
+         aFXEV0blW+OpEFEnF9CBu8iGw173fokOdjzh4Y/Y81FwVJuZLA18dDpedgqX/p6hkr3e
+         0Pog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764171904; x=1764776704;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wFsRGdeN4OA4/dLsV/CJjEiI3afskvMujNE/U+D52Wk=;
+        b=NqqpHeir2RPIqewmOHfjRUj3pFHJ0skWSxMqrjLExfoJB1LnKFlG9B7Ih7C80DOpXn
+         UxDmwbqBUICH0GBBExVMjc2dSqDhxxWzR6McrZlUv/mEF2PH8EyZucBPi11vJ8ymgpYo
+         B5vvMsjSdwJC2SJqmbcWrwlrkRid8JR98q/1cCsbApemXvZD1OHsnOnsCSisM554sWFN
+         Tv1hwTC2T3oy50NckzxwATMyNVARN9uHim932Wt4Vc98At397Mndmd/k3LC55XmhE8xn
+         2m7o3SMWeAGeemH5XZ6puGf+8mf2FqfGwQl3/ihuJ75ZuZmavI2+3J76dwMvH21rDIXp
+         yRxA==
+X-Gm-Message-State: AOJu0YyYDu1LkjALLjkbztyjznRP9xVilY4Ke05C1aHeEEBsyU2XUTG6
+	JDTRTjCg2NiqLORATJFS474N0Hz4qYaHscV8aDLtRjQD4D+Xus0pnysM
+X-Gm-Gg: ASbGnctFIlWafvbyPrmuHcOyDbN+2tcD6KHHy75hdaiuoX/XC98FDAvjsLtdCgCOzlC
+	29eWXdoSSygwxSNc1sQ6Ub1izFQwJd3MN1isyRk164qR5XUAe2U7U5r/Q0Jq3UcuaJanaqAlOgj
+	Ya4ul5UunaPX+wyJe8u9bTqb8l51ly2RW/z+3OyHLNXqec2w+0VV+7xltteGcuk4P/eQOV5zbPa
+	bxOFiAr9xH7nhsmvaaZi3vtfA3hDr5hk55XsuciHHk8F4gQXzwLNDRPiiytRhqzXlDf+nkrpstu
+	qLL3finAqqZaQv6KiKVuOZSTWUAfdMhHcPUQvrvTbQSJKvM6KFpR5FOY1ikzx4OSrkvQ7wV91KV
+	luCk0RLm2ZzeDBbAiIWqkIVJuMW9pAPyT1Jvk//o2F+90Km3VBZUBcB/gOmIVwlX88O/uxttpyq
+	gaHGMEmD4HwSHKAMS38JIfJTwpcdOGjk0ZScvrRSfn/H4awzX6TLf7uxS7TO0=
+X-Google-Smtp-Source: AGHT+IGTVuPnrT66Ja9jQsi3WOADYBAzr0Zyovxmir/lzSD4+hF8LcQ6iALLuMqRzjCrLfZl1Nox4g==
+X-Received: by 2002:a17:90a:e7c7:b0:340:6b6f:4bbf with SMTP id 98e67ed59e1d1-347298dacdcmr24201029a91.18.1764171904250;
+        Wed, 26 Nov 2025 07:45:04 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3476a59444csm3031079a91.8.2025.11.26.07.45.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Nov 2025 07:45:03 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d89fad76-999a-4486-ae77-cb2b17c29bc2@roeck-us.net>
+Date: Wed, 26 Nov 2025 07:45:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2-7 
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] hwmon: sy7636a: Fix regulator_enable resource leak on
+ error path
+To: Haotian Zhang <vulab@iscas.ac.cn>,
+ Alistair Francis <alistair@alistair23.me>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251126105445.1810-1-vulab@iscas.ac.cn>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251126105445.1810-1-vulab@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Ilpo,
+On 11/26/25 02:54, Haotian Zhang wrote:
+> In sy7636a_sensor_probe(), regulator_enable() is called but if
+> devm_hwmon_device_register_with_info() fails, the function returns
+> without calling regulator_disable(), leaving the regulator enabled
+> and leaking the reference count.
+> 
+> Add regulator_disable() call in the error path to properly disable
+> the regulator.
+> 
+> Fixes: de34a4053250 ("hwmon: sy7636a: Add temperature driver for sy7636a")
+> Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+> ---
+>   drivers/hwmon/sy7636a-hwmon.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+> index ed110884786b..b8e598a616ad 100644
+> --- a/drivers/hwmon/sy7636a-hwmon.c
+> +++ b/drivers/hwmon/sy7636a-hwmon.c
+> @@ -88,6 +88,7 @@ static int sy7636a_sensor_probe(struct platform_device *pdev)
+>   	if (IS_ERR(hwmon_dev)) {
+>   		err = PTR_ERR(hwmon_dev);
+>   		dev_err(&pdev->dev, "Unable to register hwmon device, returned %d\n", err);
+> +		regulator_disable(regulator);
 
-On Wed, 2025-11-26 at 09:44 +0200, Ilpo J=C3=A4rvinen wrote:
-> On Tue, 25 Nov 2025, Rong Zhang wrote:
-> > On Mon, 2025-11-24 at 18:45 +0200, Ilpo J=C3=A4rvinen wrote:
-> > > On Sun, 23 Nov 2025, Rong Zhang wrote:
-> > >=20
-> > > > Add support for LENOVO_FAN_TEST_DATA WMI data block. Provides an
-> > > > interface for querying the min/max fan speed RPM (reference data) o=
-f a
-> > > > given fan ID.
-> > > >=20
-> > > > This interface is optional. Hence, it does not bind to lenovo-wmi-o=
-ther
-> > > > and is not registered as a component for the moment. Appropriate bi=
-nding
-> > > > will be implemented in the subsequent patch.
-> > > >=20
-> > > > Signed-off-by: Rong Zhang <i@rong.moe>
-> > > > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> > > > Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> > > > ---
-> > > > Changes in v4:
-> > > > - Rebase on top of changes made to [PATCH v4 3/7]
-> > > > - Do not register it as a component until [PATCH v4 6/7]
-> > > >=20
-> > > > Changes in v2:
-> > > > - Reword documentation
-> > > > ---
-> > > >  .../wmi/devices/lenovo-wmi-other.rst          |  17 +++
-> > > >  drivers/platform/x86/lenovo/wmi-capdata.c     | 102 ++++++++++++++=
-++++
-> > > >  drivers/platform/x86/lenovo/wmi-capdata.h     |   7 ++
-> > > >  3 files changed, 126 insertions(+)
-> > > >=20
-> > > > diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Docum=
-entation/wmi/devices/lenovo-wmi-other.rst
-> > > > index fcad595d49af..821282e07d93 100644
-> > > > --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > > > +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > > > @@ -62,6 +62,13 @@ The following firmware-attributes are implemente=
-d:
-> > > >   - ppt_pl2_sppt: Platform Profile Tracking Slow Package Power Trac=
-king
-> > > >   - ppt_pl3_fppt: Platform Profile Tracking Fast Package Power Trac=
-king
-> > > > =20
-> > > > +LENOVO_FAN_TEST_DATA
-> > > > +-------------------------
-> > > > +
-> > > > +WMI GUID ``B642801B-3D21-45DE-90AE-6E86F164FB21``
-> > > > +
-> > > > +The LENOVO_FAN_TEST_DATA interface provides reference data for sel=
-f-test of
-> > > > +cooling fans.
-> > > > =20
-> > > >  WMI interface description
-> > > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> > > > @@ -115,3 +122,13 @@ data using the `bmfdec <https://github.com/pal=
-i/bmfdec>`_ utility:
-> > > >      [WmiDataId(3), read, Description("Data Size.")] uint32 DataSiz=
-e;
-> > > >      [WmiDataId(4), read, Description("Default Value"), WmiSizeIs("=
-DataSize")] uint8 DefaultValue[];
-> > > >    };
-> > > > +
-> > > > +  [WMI, Dynamic, Provider("WmiProv"), Locale("MS\\0x409"), Descrip=
-tion("Definition of Fan Test Data"), guid("{B642801B-3D21-45DE-90AE-6E86F16=
-4FB21}")]
-> > > > +  class LENOVO_FAN_TEST_DATA {
-> > > > +    [key, read] string InstanceName;
-> > > > +    [read] boolean Active;
-> > > > +    [WmiDataId(1), read, Description("Mode.")] uint32 NumOfFans;
-> > > > +    [WmiDataId(2), read, Description("Fan ID."), WmiSizeIs("NumOfF=
-ans")] uint32 FanId[];
-> > > > +    [WmiDataId(3), read, Description("Maximum Fan Speed."), WmiSiz=
-eIs("NumOfFans")] uint32 FanMaxSpeed[];
-> > > > +    [WmiDataId(4), read, Description("Minumum Fan Speed."), WmiSiz=
-eIs("NumOfFans")] uint32 FanMinSpeed[];
-> > > > +  };
-> > > > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/pl=
-atform/x86/lenovo/wmi-capdata.c
-> > > > index 29267c373ab3..e6392357395c 100644
-> > > > --- a/drivers/platform/x86/lenovo/wmi-capdata.c
-> > > > +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
-> > > > @@ -13,6 +13,10 @@
-> > > >   * attribute has multiple pages, one for each of the thermal modes=
- managed by
-> > > >   * the Gamezone interface.
-> > > >   *
-> > > > + * Fan Test Data includes the max/min fan speed RPM for each fan. =
-This is
-> > > > + * reference data for self-test. If the fan is in good condition, =
-it is capable
-> > > > + * to spin faster than max RPM or slower than min RPM.
-> > > > + *
-> > > >   * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
-> > > >   *   - Initial implementation (formerly named lenovo-wmi-capdata01=
-)
-> > > >   *
-> > > > @@ -41,6 +45,7 @@
-> > > > =20
-> > > >  #define LENOVO_CAPABILITY_DATA_00_GUID "362A3AFE-3D96-4665-8530-96=
-DAD5BB300E"
-> > > >  #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39=
-B3BE018154"
-> > > > +#define LENOVO_FAN_TEST_DATA_GUID "B642801B-3D21-45DE-90AE-6E86F16=
-4FB21"
-> > > > =20
-> > > >  #define ACPI_AC_CLASS "ac_adapter"
-> > > >  #define ACPI_AC_NOTIFY_STATUS 0x80
-> > > > @@ -48,6 +53,7 @@
-> > > >  enum lwmi_cd_type {
-> > > >  	LENOVO_CAPABILITY_DATA_00,
-> > > >  	LENOVO_CAPABILITY_DATA_01,
-> > > > +	LENOVO_FAN_TEST_DATA,
-> > > >  };
-> > > > =20
-> > > >  #define LWMI_CD_TABLE_ITEM(_type)		\
-> > > > @@ -62,6 +68,7 @@ static const struct lwmi_cd_info {
-> > > >  } lwmi_cd_table[] =3D {
-> > > >  	LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_00),
-> > > >  	LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_01),
-> > > > +	LWMI_CD_TABLE_ITEM(LENOVO_FAN_TEST_DATA),
-> > > >  };
-> > > > =20
-> > > >  struct lwmi_cd_priv {
-> > > > @@ -78,6 +85,7 @@ struct cd_list {
-> > > >  	union {
-> > > >  		DECLARE_FLEX_ARRAY(struct capdata00, cd00);
-> > > >  		DECLARE_FLEX_ARRAY(struct capdata01, cd01);
-> > > > +		DECLARE_FLEX_ARRAY(struct capdata_fan, cd_fan);
-> > > >  	};
-> > > >  };
-> > > > =20
-> > > > @@ -117,6 +125,10 @@ void lwmi_cd_match_add_all(struct device *mast=
-er, struct component_match **match
-> > > >  		return;
-> > > > =20
-> > > >  	for (i =3D 0; i < ARRAY_SIZE(lwmi_cd_table); i++) {
-> > > > +		/* Skip optional interfaces. */
-> > > > +		if (lwmi_cd_table[i].type =3D=3D LENOVO_FAN_TEST_DATA)
-> > > > +			continue;
-> > > > +
-> > > >  		component_match_add(master, matchptr, lwmi_cd_match,
-> > > >  				    (void *)&lwmi_cd_table[i].type);
-> > > >  		if (IS_ERR(*matchptr))
-> > > > @@ -194,6 +206,9 @@ EXPORT_SYMBOL_NS_GPL(lwmi_cd00_get_data, "LENOV=
-O_WMI_CD");
-> > > >  DEF_LWMI_CDXX_GET_DATA(cd01, LENOVO_CAPABILITY_DATA_01, struct cap=
-data01);
-> > > >  EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD");
-> > > > =20
-> > > > +DEF_LWMI_CDXX_GET_DATA(cd_fan, LENOVO_FAN_TEST_DATA, struct capdat=
-a_fan);
-> > > > +EXPORT_SYMBOL_NS_GPL(lwmi_cd_fan_get_data, "LENOVO_WMI_CD");
-> > > > +
-> > > >  /**
-> > > >   * lwmi_cd_cache() - Cache all WMI data block information
-> > > >   * @priv: lenovo-wmi-capdata driver data.
-> > > > @@ -217,6 +232,9 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *p=
-riv)
-> > > >  		p =3D &priv->list->cd01[0];
-> > > >  		size =3D sizeof(priv->list->cd01[0]);
-> > > >  		break;
-> > > > +	case LENOVO_FAN_TEST_DATA:
-> > > > +		/* Done by lwmi_cd_alloc() =3D> lwmi_cd_fan_list_alloc_cache(). =
-*/
-> > > > +		return 0;
-> > > >  	default:
-> > > >  		return -EINVAL;
-> > > >  	}
-> > > > @@ -239,6 +257,78 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *=
-priv)
-> > > >  	return 0;
-> > > >  }
-> > > > =20
-> > > > +/**
-> > > > + * lwmi_cd_fan_list_alloc_cache() - Alloc and cache Fan Test Data =
-list
-> > > > + * @priv: lenovo-wmi-capdata driver data.
-> > > > + * @listptr: Pointer to returned cd_list pointer.
-> > > > + *
-> > > > + * Return: count of fans found, or an error.
-> > > > + */
-> > > > +static int lwmi_cd_fan_list_alloc_cache(struct lwmi_cd_priv *priv,=
- struct cd_list **listptr)
-> > > > +{
-> > > > +	u32 count, *fan_ids, *fan_min_rpms, *fan_max_rpms;
-> > > > +	union acpi_object *ret_obj __free(kfree) =3D NULL;
-> > >=20
-> > > Since you're using __free(), please move this to where you assign the=
-=20
-> > > value. This is to create a pattern with cleanup helpers. The cleanup=
-=20
-> > > order depends on the order the variables are introduced which in some=
-=20
-> > > other cases may be significant.
-> >=20
-> > Make sense. Will move it to the last declaration lines with its
-> > assignment. Thanks.
-> >=20
-> > > > +	struct block { u32 nr; u32 data[]; } *block;
-> > >=20
-> > > This is the first time I see this style anywhere in the kernel's cont=
-ext,=20
-> > > has there been some general discussion about this style somewhere?
-> > >=20
-> > > At least it seems immediately obvious to me that this style will have=
- a=20
-> > > negative impact on documentability due to (too) concise use of space.
-> >=20
-> > Make sense. Will break it into multiple lines. Thanks.
-> >=20
-> > > > +	struct cd_list *list;
-> > > > +	size_t size;
-> > > > +	int idx;
-> > > > +
-> > > > +	ret_obj =3D wmidev_block_query(priv->wdev, 0);
-> > > > +	if (!ret_obj)
-> > > > +		return -ENODEV;
-> > > > +
-> > > > +	/*
-> > > > +	 * This is usually caused by a dummy ACPI method. Do not return a=
-n error
-> > > > +	 * as failing to probe this device will result in master driver b=
-eing
-> > > > +	 * unbound - this behavior aligns with lwmi_cd_cache().
-> > > > +	 */
-> > > > +	if (ret_obj->type !=3D ACPI_TYPE_BUFFER) {
-> > > > +		count =3D 0;
-> > > > +		goto alloc;
-> > > > +	}
-> > > > +
-> > > > +	size =3D ret_obj->buffer.length;
-> > > > +	block =3D (struct block *)ret_obj->buffer.pointer;
-> > >=20
-> > > void * can be cast implicitly.
-> >=20
-> > `ret_obj->buffer.pointer' is a `u8 *' pointer so the cast is mandatory.
->=20
-> Ah, right. I think I even tried to check it but probably picked up
-> the void *pointer from struct acpi_buffer instead of the correct one.
->=20
-> > Hmmm, this reminds me that `struct block' probably needs a `__packed'
-> > to generate unaligned access to it.
->=20
-> In all u32 struct, I don't think __packed is required. You can use pahole=
-=20
-> tool to check the layout if you want, but I don't think compiler adds=20
-> any gaps with only u32s.
-
-__packed is not used to compact the structure layout here, but to tell
-the compiler to emit[1] unaligned access to the ACPI buffer. See also
-the change to [PATCH v3 1/6] suggested by Armin:
-https://lore.kernel.org/r/a0b6d30b-3cba-4760-81dc-099e8fada7c0@gmx.de/
-
-[1]: If CONFIG_UBSAN_ALIGNMENT=3Dn, the assembly code should be the same
-on x86. Otherwise, __packed effectively suppresses the alignment check
-as unaligned access is expected.
+I would suggest to use devm_regulator_get_enable() instead of devm_regulator_get()
+instead. That also solves the problem that regulator_disable() is not called when
+the driver is removed.
 
 Thanks,
-Rong
+Guenter
+
