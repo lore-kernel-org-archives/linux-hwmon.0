@@ -1,70 +1,71 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6586C3233ED
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 11:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8C9264602
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 11:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764157130; cv=none; b=noHLuAnKKRFIsTfizgUbFCuQ+G1MaRD+2PF7YcnkxC9OQ7GcL0aPg/BH1NqhrebqateA5dbofGuygSVkL/MO75DLj0k5MDPRNMMH1uZd99/OmmovvGcGtiB76TUTV9nqx5rpovJxmdeOdBryl/bTIDJiresbY7YfGagAuJ9fCbY=
+	t=1764157264; cv=none; b=mPtvX1HC8raeLP2GxFjY/QhIvHzyHbDeFWa9gWy4b52sy1kr1lo84VZb4VJot1Ou1qJydOgzpn/UhMrjRjGZckrQVqzxT1EKFjSpcAVJEc1tQ6zv/mRQc8O323diNpaqWnR1CyAYsG1ujcRNFDHwasNSxcUKLVoIRe68p/Rzznw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764157130; c=relaxed/simple;
-	bh=ui/YOsXzrX8cyfCbmF+r8+AOfEjRvMX/07F09KIqgyY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ItWRUs81f8udekpW5xlTVEqYOXZKT/fffxaLLmyDzq3syObc1dUIwb0ibEI0jrgmZH+v8IF1pYawYGYWm6QLF/A7M78OgGwQtTEYfubL4ZA3ymJYd9M8Fr0/wEQFsulyNC+4pKOsdYLh1NIbX+3VjFhCqthsRJV97/v3P8NfPlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FW3pmSRw; arc=none smtp.client-ip=209.85.210.173
+	s=arc-20240116; t=1764157264; c=relaxed/simple;
+	bh=TgrzW04OurC6JFpNdugLPojVTkqtrttQ9ARoSbtk3u4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ShQuRynPaeStIeuifCPUKyq7zQq8PtV9XmMXBuqJSGbGCJCbJjxhIquQlZ/eX8ta0AdSvImiaYJsjaPXMI20GUtrwbwzc6MQri79oh1WXnzwke7O0dJwgBkq/v4Ey7x14XwadhU/hbUhWz7ukMtdpSyYJJRNaDgYNwbBOD7W2+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NreqoY91; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FW3pmSRw"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7b89c1ce9easo7828269b3a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 03:38:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NreqoY91"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-29558061c68so88073315ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 03:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764157123; x=1764761923; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764157262; x=1764762062; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOi2WEBkFdFa7VsGEA+18NFkgGtbS2j7+UJmehxcAHQ=;
-        b=FW3pmSRwNG8AnaCGpOWwGQaVkh/n29s28HOKdGLPkFJO6pr8zj1dEtviEDNDt2c4xE
-         c4tP+wJMEGp5F8MUE0d17cb7USubi6/sTsqHG1s9yR1R2rkjg4/F+dpTwSr2Q3+fgKLU
-         Ki2Y20A19xUtI+eHPkp4Fk7GSUJq2HdRJZebm5iWq2oKe0uZCSRwGm1ipzsCbROLx9oD
-         TIlR4E/3k5zIvaX5l/6loCYQjkRtJs+PwsEAZKExWIHw3HU7jrrtg2OiKeUGssaepUA2
-         Ixhb1XeiV0B+bbLjlUVz5qCQRY+M9BWOBuxJkzA3ePLy1dLep0eH4vflHFWCyaRSR623
-         2xVQ==
+        bh=hHDo2OBspjM/pUXdeybYNxNYiOYioqpiTsRPZh3n3mU=;
+        b=NreqoY91S18kOX359o3JQcoy1YqZsFu4LLXV+AwMLHVOmDoxGgYNV515rWQavk1JFa
+         g1RlYZugabZjMrrbL1c5F1048GNJiqp0W1mbKHv4C0THOn89xGL+qW03po0PYPiUI7fe
+         6MxWosUrtlWzwS5f7O4DVhx+NllImjusDKHgkyfOn4AYrfaZsHkqF6jgGDjXrP59HlpV
+         iEoMMvvJI5zTmC4VmdbrpOFhmJKo88RgwYpWlfKALO1mXehL650yaJ23E8IfNlDGMEvF
+         LE75J8aGgu5ZnUiOFd1X9cki1RXlOH1G9mWXfZJfNaOYLlE/d4Q/c9s/tgdMJeYUdnXl
+         a0Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764157123; x=1764761923;
+        d=1e100.net; s=20230601; t=1764157262; x=1764762062;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZOi2WEBkFdFa7VsGEA+18NFkgGtbS2j7+UJmehxcAHQ=;
-        b=d0TIPeYoZKRm+zgK4fzF4qfst3+3fU8tz1k4mjoBJmVVtfUy3PRIuRUlouOUkxsOqy
-         msNWc+/jtZcXFSrUrggTzxQm9ROnnxEwNfgEhGvh6nBU1rbYttOajgt/ENu4CI+PHTqc
-         74TXYieAJ4oBcOUsrXQ0YmIGRfi/dpDo4IulAC1dviRcDUKYL5pP3cEbaH/J9bIoB4j/
-         lhH7INHAe9plqUtHslhbT5u5vQCg4Rwy/lMPXgxQGIp3MatySQdVioiZ9j9n32nTlg6p
-         O+/riwTsTnx1tfYlgO4kC2LAKPiLw8+RKw8VM5LNld1x/9Hz8vO0CRz7pf1AIZs2xhnO
-         o5Hw==
-X-Gm-Message-State: AOJu0YzRLG62xtNeSsbCKORCLPTaQJi8QFeyGvrn3++I5O+RL4YznQcV
-	zLBkrexx1rbo+dbYx4HRErUInRujdo6lAnWzjHVRfHG92wgMptnL7GEf
-X-Gm-Gg: ASbGncvSGrlxXy/84VmjK7z98Qk2PFIfd6x+5kkbQZvCgeJ1BOwfVQh5wQBw+1LyQUd
-	bKQsy25Uf8GDQ7ybqEbPsZW27omMabxC2/jxvpEvdp7MhOP+fybmICQON1yDxT7vCn7rIw8mNsh
-	Ej98BGSD5BI66bkiSmf306CFvis5AKsAF8LZG1kaSvytGvHCepd1rcYimKIBiVl/zAwDcubEduG
-	VO4DERolWx8YrAAUMV+9qehoOCfhetGC3zpAt+naw/Exp4ExCi9mmacbYbEGqdvjvxayd6kotVK
-	j/RXHnmd9V/xk+1ugpw4bIzEZnRZXdbdlbzSCQJM3g8r81vp1WSrvDaooY069cCsfBl0UndJIk6
-	/WA3rNxDILU63kSTQ2iS99DCRQSdk8MWI1uOfXTp9jVGq8YX3kozxYYTyE8OkmXk6XwyH0j+OR0
-	ukyPVHY//I2OzkH9xiq7+uOOR01mMmx6j8QmN2o21Ky0y0PXDeAG0usWn0OfPQGkIYxT651sUUE
-	Sqz
-X-Google-Smtp-Source: AGHT+IE0lnk3M01cCR0Ii+MTstl2vJZu02+w/siYJjllyFVjijcbmhjnSSUe6jjnZMWKPFf5baUo3w==
-X-Received: by 2002:a05:6a00:a245:b0:7a4:1880:e25e with SMTP id d2e1a72fcca58-7c58e9f97d4mr18303051b3a.30.1764157122869;
-        Wed, 26 Nov 2025 03:38:42 -0800 (PST)
+        bh=hHDo2OBspjM/pUXdeybYNxNYiOYioqpiTsRPZh3n3mU=;
+        b=h53TZpGvc2lvK0ht6dWlA2aE4rLmS0uD7MApSnM7S6SS6zxyy6cdxjsGyBW9sZbdwI
+         SWkaap2Lh5Hb++ymUhwFDWiHb+dqMocJ/5G7oXRaJ1KJAXpJEv//Jg+Ty58BnBiWOD4c
+         q3ekGGM9YB6GwZvzKSo8aBGMhzvK/qub/ONoqfmap2W5EdilAiaz7ET7R26U4ol/nCRT
+         slQqUVumGSKFytl3pZv9rzh08vP44HH0b4U/GS0bfHuKC7D6JQYurYRaJz8Djjv5pMAG
+         WzzBSqZMazkJ175fnMrZdtpBY4I19c9MvPD4Krgjr8pW6RNel7sAMEgowIPR1aqgiQmU
+         gnUg==
+X-Gm-Message-State: AOJu0Yzaxx79/9qRg5DIPTgqNYSHND2XTqHPmEvJd8p5FYpGoQjXn+mk
+	laI5aXRP5okqzR15coRy8cp2B1wfqwMbo2fB4UFTrfzOb7+GUgo1yzseUUBiQ2h8e4o=
+X-Gm-Gg: ASbGncsJ5jNgE/67slfHqzi1NomxoVTNMVjjTdegNoHgSsG0bX5VvxU5E/mMsn4w8nO
+	j/O4Khv3vkQNk1oRGsGKQsDYOAiPeVloRSktWnem7lVBFLIX6ifM9LNpic6LEN2LbqTCGvDCR11
+	+1WGcbYos4aoktdTpIpeZjPSxWOAkHkakjGUW6EzpGCjxco069F42TL8i56GEjyI9Lxhxih7fq8
+	IhGOsIKBPPe9/qBIV9+FqhAEp5euY9WaaRcXFarqNDZSagcg3X+eIwaYKCxyz56pK96m8jp+FIc
+	YmuDPDisiHMTav9c6hcGi/xGesgkuY3oywCqvfezJE6uspRS9uVuSq85x6BEgNQtWc8JrguJsyL
+	f4rvFrXvg+pvTNBmdk8ttoGOQY6kDx5BpNzo3DGE+HblVqR5teyZhBk2h4e10ivFag8abh9KCoj
+	r1TmWM6s1i+uq2DUM5PgkMMDewm6gL6N58nXXFuJXgd2Xn6JgYjMRuuM9QlOT9oZ8Nqvc6JwUIS
+	p2gQVCYgB4c3Mk=
+X-Google-Smtp-Source: AGHT+IHHpPqLQo2V90IQyAzr/hlLRXqNt9ClWiZZ5j/0UklvOI90hooliPxiAW8tTJtFCLH3s1RZrA==
+X-Received: by 2002:a17:902:ccce:b0:297:dd30:8f07 with SMTP id d9443c01a7336-29b6bf806bcmr231164605ad.50.1764157261589;
+        Wed, 26 Nov 2025 03:41:01 -0800 (PST)
 Received: from 2045D.localdomain (128.sub-75-221-107.myvzw.com. [75.221.107.128])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3f155d053sm21237249b3a.62.2025.11.26.03.38.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b13de62sm197304325ad.36.2025.11.26.03.40.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 03:38:42 -0800 (PST)
+        Wed, 26 Nov 2025 03:41:01 -0800 (PST)
 From: Gui-Dong Han <hanguidong02@gmail.com>
-To: linux@roeck-us.net
+To: clabbe.montjoie@gmail.com,
+	linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Gui-Dong Han <hanguidong02@gmail.com>
-Subject: [PATCH] hwmon: (adm1026) Convert macros to functions to avoid TOCTOU
-Date: Wed, 26 Nov 2025 19:38:28 +0800
-Message-ID: <20251126113828.10003-1-hanguidong02@gmail.com>
+Subject: [PATCH] hwmon: (adm1029) Add locking to avoid TOCTOU
+Date: Wed, 26 Nov 2025 19:40:46 +0800
+Message-ID: <20251126114047.10039-1-hanguidong02@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -74,17 +75,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The macro FAN_FROM_REG evaluates its arguments multiple times. When used
-in lockless contexts involving shared driver data, this causes
-Time-of-Check to Time-of-Use (TOCTOU) race conditions.
+The function fan_show checks shared data for zero or invalid values
+before using it as a divisor. These accesses are currently lockless. If
+the data changes to zero between the check and the division, it causes a
+divide-by-zero error.
 
-Convert the macro to a static function. This guarantees that arguments
-are evaluated only once (pass-by-value), preventing the race
-conditions.
-
-Adhere to the principle of minimal changes by only converting macros
-that evaluate arguments multiple times and are used in lockless
-contexts.
+Explicitly acquire the update lock around these checks and calculations
+to ensure the data remains stable, preventing Time-of-Check to
+Time-of-Use (TOCTOU) race conditions.
 
 Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
 Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
@@ -93,50 +91,31 @@ Based on the discussion in the link, I will submit a series of patches to
 address TOCTOU issues in the hwmon subsystem by converting macros to
 functions or adjusting locking where appropriate.
 ---
- drivers/hwmon/adm1026.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/hwmon/adm1029.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/hwmon/adm1026.c b/drivers/hwmon/adm1026.c
-index 80d09b017d3b..c38c932e5d2a 100644
---- a/drivers/hwmon/adm1026.c
-+++ b/drivers/hwmon/adm1026.c
-@@ -197,8 +197,16 @@ static int adm1026_scaling[] = { /* .001 Volts */
- #define FAN_TO_REG(val, div)  ((val) <= 0 ? 0xff : \
- 				clamp_val(1350000 / ((val) * (div)), \
- 					      1, 254))
--#define FAN_FROM_REG(val, div) ((val) == 0 ? -1 : (val) == 0xff ? 0 : \
--				1350000 / ((val) * (div)))
-+
-+static int fan_from_reg(int val, int div)
-+{
-+	if (val == 0)
-+		return -1;
-+	if (val == 0xff)
-+		return 0;
-+	return 1350000 / (val * div);
-+}
-+
- #define DIV_FROM_REG(val) (1 << (val))
- #define DIV_TO_REG(val) ((val) >= 8 ? 3 : (val) >= 4 ? 2 : (val) >= 2 ? 1 : 0)
+diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
+index 761c13092488..71eea8ae51b9 100644
+--- a/drivers/hwmon/adm1029.c
++++ b/drivers/hwmon/adm1029.c
+@@ -171,14 +171,17 @@ fan_show(struct device *dev, struct device_attribute *devattr, char *buf)
+ 	struct adm1029_data *data = adm1029_update_device(dev);
+ 	u16 val;
  
-@@ -656,7 +664,7 @@ static ssize_t fan_show(struct device *dev, struct device_attribute *attr,
- 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
- 	int nr = sensor_attr->index;
- 	struct adm1026_data *data = adm1026_update_device(dev);
--	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan[nr],
-+	return sprintf(buf, "%d\n", fan_from_reg(data->fan[nr],
- 		data->fan_div[nr]));
++	mutex_lock(&data->update_lock);
+ 	if (data->fan[attr->index] == 0 ||
+ 	    (data->fan_div[attr->index] & 0xC0) == 0 ||
+ 	    data->fan[attr->index] == 255) {
++		mutex_unlock(&data->update_lock);
+ 		return sprintf(buf, "0\n");
+ 	}
+ 
+ 	val = 1880 * 120 / DIV_FROM_REG(data->fan_div[attr->index])
+ 	    / data->fan[attr->index];
++	mutex_unlock(&data->update_lock);
+ 	return sprintf(buf, "%d\n", val);
  }
- static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
-@@ -665,7 +673,7 @@ static ssize_t fan_min_show(struct device *dev, struct device_attribute *attr,
- 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
- 	int nr = sensor_attr->index;
- 	struct adm1026_data *data = adm1026_update_device(dev);
--	return sprintf(buf, "%d\n", FAN_FROM_REG(data->fan_min[nr],
-+	return sprintf(buf, "%d\n", fan_from_reg(data->fan_min[nr],
- 		data->fan_div[nr]));
- }
- static ssize_t fan_min_store(struct device *dev,
+ 
 -- 
 2.43.0
 
