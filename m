@@ -1,98 +1,159 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9263131D364
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 17:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8D0331A55
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 17:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764176704; cv=none; b=Pn5jkXjiFYf01BIOeiveCvBh/uq5iZBPLtey/oW75058dDwuzzs1Tnk33ns2HWI5g5HAR1KsJSkqskISOAHXD2Id/96GqgnaWkzDol6kb++KcO0pKdyEF8a3mVlz/9wHXiktW9avpyxgMMH6R6O75gWHdGdWdCz7Eao+2uHjgQ4=
+	t=1764176900; cv=none; b=ECBgQGaYbzxRpIKlP9QIvCc7wkDjsNRYzHU3sNUgxUSXYwPerePA/Ys+4n1D+hnOMkzhJq3iRXBM97ICy6zJoJOFuMoQuDYALXlOqXdNjYkV+7uCqDmY2f5dWVNwCiAqyYbGXw7F1jiOQPA9tgaj72Snu3u1snW4daBuUPEWEbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764176704; c=relaxed/simple;
-	bh=6BrcYEwotbBTIBpyoVs9BumKrnAM9ncrnViqA2gL2Qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lvLglYi2YPLJDt5L+4odQD++3I2JcbxaddO/uAZy/aeQl+ejJC+klJWaUaOeSH1Sh27bL2BuDGfNDY8yPFxitjkxjraTNksMp2Ifi26GUOz5+5KEqCIw4gGzubOpHzHPWEj2JEUr4oTM2mBAXsZXbxdkIO9Bn/7G9s0KV1d0Mkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIn+Zlj4; arc=none smtp.client-ip=74.125.82.54
+	s=arc-20240116; t=1764176900; c=relaxed/simple;
+	bh=xY4XXik+VDjoNTiOxaY4mWM/8wJ3WHfmwRW/bl81YcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XyYs0WGTbK18Av2dbMlSLB2qU235LTp9cnq3Cu4nefnsgeav1T+OMPXM6pT3C/m8T6Ip+9roPPAmK5GdXwXDM1jD9V/gaKAbRM2z39XJkOFoKQ4OraEiCp8XtyBHvwENUiwM/cshoxIgjyBntpWbDpZ3OsipW+7CS9MpWVBBPFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtHDMm2x; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIn+Zlj4"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-11beb0a7bd6so1223920c88.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 09:05:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtHDMm2x"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-29ba9249e9dso28534345ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 09:08:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764176702; x=1764781502; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I/Qzihu5Nx11LiuqzLb4w5zDya9OGA3ToMWpM/oj+tY=;
-        b=IIn+Zlj4Rjqke7D4OMrF0Oc1fgfPAmgPlv8oEMxtGyKd+XC7YjbztFdymL2Qg2dYp/
-         6pY0T708ZzZISHl2F2UbqnygnpBg6imlnnZ/Vn8TKBT1Bts3q2ovdXwB/i8Mgq77exr3
-         thQJv3u2gYgKUU8zFXoARgjfhpwh4Xa1lfIWjDNQpGuRYXnCBbBwl0QJligjxHRopSKE
-         bNGnw4oc6TJD6CsAx5VRe87GJJTpAk1jE+4x3B7qrivEqGwXqA6BaMnCVrKIlWIH/EKy
-         6gKOgL2gwidQ71qdhOsaWIz0zXCBTcTelKCvM5qRMgTl3mvm0UTB6uW1MHCctE3zFE4e
-         fThg==
+        d=gmail.com; s=20230601; t=1764176898; x=1764781698; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=H70tQVp0jdRu6yLi1ZHSywEXJI9fMFla6cCqq4jxfcs=;
+        b=DtHDMm2xPoIJc6kvAT0H2qwExIkwf4mA1TE5VXrzzMydnU1b0OA09jWBUQBYJiTyy8
+         B0XeM5Kil9H4oz8PWpj/Y1FAPR+O0lvRZwPY6dyDs8oyjroTtORsfOBvMtWX219LQxo1
+         JBsinrIrUJKyWgyWMiWyjcNyryHo3E4qUxnjavEPH4buHxj0rN0J0UwuP6DgOeTHeTZM
+         CyLYHQcCKYtfXqmIPQza9UcxSeLG4rZ8xTduWGzXtO6WppuZR4t5rsyymQyU7Ncs4oPR
+         6Bo41e896X8UeYa228D6PjoyJjpBMVip1Z0XTh8qA0VxIQSM53sh7GtVgYjYY/Iqt7tx
+         3FKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764176702; x=1764781502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=I/Qzihu5Nx11LiuqzLb4w5zDya9OGA3ToMWpM/oj+tY=;
-        b=Cn9UwAH41VWkqlGBI6hLs6aljIzNp2Im8sMtYNjFWTDWlIUEBuIBGX8COPlDv0spwj
-         iqPltm4/RPnheq18/fEjHpk1UUBpBtuRmzQX65ZsFlA3pFFiw5DehvNYwbSqM/WS27e2
-         Fu4hXdHxH1M0hmVR9mXGg8xfZ8qQO0RyySyUcEl9ITWWgtWNQFaXDi3NVx1u6mGftJYE
-         bKnUEIk3UjjRqEpZ3UbxDVvnRZHbNmak3sTA5GMuu2gFr/pWxhtYdT4kjz1+Lr9I8YMl
-         GYhw6m+SEn+7+1rsiaRjR6aLhZUk/QRml0W73W/4eihyKHB3Mxiln5nd4sr2nwBkYEl7
-         Cp0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUAtCEHctjQyGKCSGVyPH83QXrMvfSv1gQPEAegDmpqYIzqiQk9BrC9PL2Hdw7NvEr1rh5PtSvGqyphEQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwKWPsmFyH0Az5e4T3zdrqy/SrkPbHe0rW7+qFvSY1HA2QPHo4
-	DzHSdyBRkjz3XzT/Ps9MTPIC8yNSFHlS/74SPeeF9Ilg0CNctO2Y3bhahkcnVQ==
-X-Gm-Gg: ASbGncsZkj+TeQvc26b5MjckSuJp5N76hjRIE+CmEUhUmxVo/lGbCh3IgthbKS8etD5
-	ChnwmS7oRPUVe4rNsbiqns4bh7f6fBkiRk8UbTtaP42iMmv1+ipKVtsvl1hYELL+qBvRKpdl+7/
-	wS1NJQW7hg02Xw0OxmAcGKM967naj3GUOFP0qe9V1iBpuGvJIqgXG/TIM9rswAnSMHko1WZUATo
-	qw+ddPeaXFbKh6CgTBQFzZeNp9xPAEuGKSwNmv4CdkAY1cDCF0PN5ixPvVlo/P5AU/T80Vh4EZX
-	n6e7NyNnNInbjlP+vy3ujaNEc7IF707grtvHpCejfyrORcjo9xiXSNdo6YYjFI8E1JkOc5Cn0Ud
-	cfQyNMDoWWsdwBedNJs5bYCbkyIastAobnQx+tepj+/AIvxmp7XJ4ufuV+aKX4cjEG59Xy3hrVB
-	OTJmQhqWUjiVHM8TRDW+bTA+M1wn3gn4YqIw==
-X-Google-Smtp-Source: AGHT+IFeB46uwWevevODtos0y3iiYHxPnOt+2xhzrgsruQBUUbuFbzYv1KEoqrXKhKyNomSAA6CKIg==
-X-Received: by 2002:a05:7022:ef01:b0:119:e569:f873 with SMTP id a92af1059eb24-11c9caae7c9mr13387855c88.16.1764176701435;
-        Wed, 26 Nov 2025 09:05:01 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11c93db556csm96612852c88.1.2025.11.26.09.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 09:05:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764176898; x=1764781698;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H70tQVp0jdRu6yLi1ZHSywEXJI9fMFla6cCqq4jxfcs=;
+        b=fCWmock+JXboShDfW9/HYuOLSvXg4ikvkZheamzEBPoXNFxQ+wxaH5Tn2nTw2qigXb
+         3U7ktN5hYzP6chCWppWCZkztIy1O3o19X0jj+u2ZqXQxGD/6TIU7V2WqElGWCP+KkOpK
+         0tF+6vMJ5zF3x7TUpFIPEQyFYCb/qCdGO/qsM0oxN8BN38m3iufTyDUt7lPUrKxc5gWZ
+         k+1LRzL1wKVUsEED0l83qbUgMhQ86vmCKjIrbSgBi3wJPHcVz6ummp2B3ozIy0wspcPX
+         VGTkg6wAz5QvVEW2bRAWtnx71aKczgkYeKQLEQ4hasExb70wNGDr+EUiH3Bz2CT+aDGK
+         aKwg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2I6n2n1PZhm35xr8g65M8QWQ0CB2eFYB9LaaCqW6qjLVfdjUvu7C7DTiOnisfWdPyo0pI/I7EgMed7w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVE8Fa/gM8iEDfSRBEPeiRl9dYH09FOGH9M85r0uH6CAzDF9Og
+	TtgkJDToklAz/fgXBlKfnfy5KUw2y6dJrTEqHX7JaixQ1eQ+x+a8sWoi
+X-Gm-Gg: ASbGncubS2T/NIdPkL0vOfsej+yV+hoIIER7i+WWoB/DjtQFnb3EJ6P5crOrgfTUOOC
+	rvsaMGkPdF9gKk/EmovXj7djh6KMP85Tzng4sIl7TxmMXP5qTcMSS3x93gPq3WHnVrIf5gyqR39
+	S64aVG7bClGS2EVPsud2QnA5cqQBvO3rFVKTOgHNBJkuG++7onp4CEUr2vcKFNHjKFGD43KlWO7
+	8sGFDiI0GCPWHtaF20l5JcrUDARuPkS2VAjrlNsnfTCRgTSe4R/ZutXIPIJIgC6m4ZoLzmVpHqU
+	ewFwgqX/xV+h7yNeqBIaW3KYjBjeoygQKnSW5wj4as0NFc2iDYOwweN862cX5TYVNFks81deQZq
+	NxZHIuzrorvtvum+BJMUJflgWDDSv5FQVPQlMRKvj1lDthsQaqtDJrzJu/2rHrlB6vGJ0/5Ucd0
+	vBlM2zPVz7yMXG+msHXIF6//trOoxLjtSsYnL6CKo2k0yv74p9MoKwt03vFBQ=
+X-Google-Smtp-Source: AGHT+IEm/eX5yuwpOzoClbM8zcPawe2/xqTQQviecb25Bk40JcOnKIa/X4pWfDT/0x83wWLQHNhjCg==
+X-Received: by 2002:a17:903:234a:b0:298:55c8:eb8d with SMTP id d9443c01a7336-29b6c575114mr249233285ad.35.1764176897825;
+        Wed, 26 Nov 2025 09:08:17 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b2a155fsm201208015ad.88.2025.11.26.09.08.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Nov 2025 09:08:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 26 Nov 2025 09:05:00 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Juergen Gross <jgross@suse.com>
-Cc: linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/5] hwmon/w83781d: Drop REALLY_SLOW_IO setting
-Message-ID: <1b94c998-2a51-4e27-80a7-7a1906b648cb@roeck-us.net>
-References: <20251126162018.5676-1-jgross@suse.com>
- <20251126162018.5676-4-jgross@suse.com>
+Message-ID: <55bedecf-a4ab-445d-b6b2-c6dcbcd5bd95@roeck-us.net>
+Date: Wed, 26 Nov 2025 09:08:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251126162018.5676-4-jgross@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/5] x86: Cleanups around slow_down_io()
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev, kvm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-block@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.makhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ xen-devel@lists.xenproject.org, Jean Delvare <jdelvare@suse.com>,
+ Denis Efremov <efremov@linux.com>, Jens Axboe <axboe@kernel.dk>
+References: <20251126162018.5676-1-jgross@suse.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251126162018.5676-1-jgross@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 26, 2025 at 05:20:16PM +0100, Juergen Gross wrote:
-> In w83781d_isa_found() there is REALLY_SLOW_IO defined around some port
-> accesses, probably in order to wait between multiple accesses.
+On 11/26/25 08:20, Juergen Gross wrote:
+> While looking at paravirt cleanups I stumbled over slow_down_io() and
+> the related REALLY_SLOW_IO define.
 > 
-> Unfortunately this isn't making any difference compared to not having
-> this define since more than a decade, as REALLY_SLOW_IO needs to be
-> defined while "#include <asm/io.h>" is called to have an effect.
+> Especially REALLY_SLOW_IO is a mess, which is proven by 2 completely
+> wrong use cases.
 > 
-> As there seem not to be any outstanding issues in spite of this having
-> no effect, just drop the "#define" and add a remark to the related
-> comment.
+> Do several cleanups, resulting in a deletion of REALLY_SLOW_IO and the
+> io_delay() paravirt function hook.
 > 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+> Patches 2 and 3 are not changing any functionality, but maybe they
+> should? As the potential bug has been present for more than a decade
+> now, I went with just deleting the useless "#define REALLY_SLOW_IO".
+> The alternative would be to do something similar as in patch 5.
 
-Applied.
+Maybe, but as you point out there has not been a report of a problem
+for a long time (who knows if any of the affected systems still exist).
+We can apply always apply a fix if it turns out that someone does run
+into a problem.
 
 Thanks,
 Guenter
+
