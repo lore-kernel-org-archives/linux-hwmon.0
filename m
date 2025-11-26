@@ -1,289 +1,324 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3F02E370C
-	for <linux-hwmon@vger.kernel.org>; Tue, 25 Nov 2025 21:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBA22BCF5D;
+	Wed, 26 Nov 2025 07:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764107004; cv=none; b=rIR0dKOxBhCx91Y0qshym2tXK6w/QSx99iHJ3gByxNxn0PsofLIbqxKaNU2tcV5E6qyHHlC25fZcHVYaRIfXvvyWR1SSDwV6UczXNgRVKvbmPO8Ny+dlMdNHSk0l9GXBjmKDgXfs9cOC3VQkIcTLQhY5IsgcGcHkEnrKR/7qZEA=
+	t=1764143094; cv=none; b=acgxpO8ORQR4esZSmQIfNKy8JBsUKaQ2gE+rYOBErK1KSL5Vticd0JGhRYuI1ljhXOxNlufjks4y0RXNk34JHy4hpD1xicuLmi+4/eFlGXCi68CMMsyli6YoE9xHMyrD1Dqt1UpcdRTA7DFAdTN6kEoKDwoG/neNzDcSdyKSfME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764107004; c=relaxed/simple;
-	bh=sciRDpXmUUZtWUokSg8Rh0hkoXNsTkk3tG3N5QviszA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IYjd4fhUqclot8qb3cSKqggK9BV6p3lVG2R8vfRR9kJ6T+ZAgP0bRs7tMEDjMJARpc9DgeVQaJKVjmToyA2pJp/ut8SUlN9Cj0IX88ie13KxeQzEMbQw8OJBnh/D9/41UB368VIKWDSpL8vpn0wfgZZ5Lu6Ad1o/2MCV2JS1SRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esFB0EU+; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764143094; c=relaxed/simple;
+	bh=AFpIBoHAAb4e2OfJ84HqeZPO3Dm1xm5/CCdxucyHBpo=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=U02YgLWy5xbC+nVEsoJwdhoD/zJjWCcTwqoLB9WKJ5nmPWC/rQZOBjqS1pY11HmgHHAa+M+1NWC3nM4H3x8tfSS7OYSTjUDo9cI73uCzpf1jN6jswdEqqS2ENZMAcxITBei1ZMJ6pwxSWMjSVsNoYcBRd4daZRKlqANXbPBfl7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lQPOxIaS; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esFB0EU+"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8738c6fdbe8so3511786d6.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 25 Nov 2025 13:43:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764107001; x=1764711801; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NyGmQD86D+80mIXQBGpiMaKQgG5Ylr9/mLSzUxyepqQ=;
-        b=esFB0EU+O+9DKRBFwOzxyWC+S0Noa6/3yAxdV+kPOefUAVuj2ZBDuGfN88HmQXpCw5
-         HUyNomJvKFIul/Q0hYn4s+t8V5t06Uz542qiRNooq1xiiG5uiITCdAedwpnNPRzYmnzb
-         T/VMynSWAtaA5o0e6a0654OtoIeKrlDa3Kxqf8HTdc9PmOzcQVonAAUYu0AYsuwsJVLc
-         8jvxRqqfKRhLJV3LDEaOMnXz8KsGOyCRo1Oq2LI5aNyM9br3pG7o+boKG4RzKaRqQpys
-         hmcD89rlsJynJ7YaECAmtB/K0ymA76XxTWQPNjPkOyzd18sd559nJIMDZiS0ZRAWfJrp
-         IrlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764107001; x=1764711801;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NyGmQD86D+80mIXQBGpiMaKQgG5Ylr9/mLSzUxyepqQ=;
-        b=u2FQoyh7pDS6L8AyhB6VJ6FPZXIM9eFqRt+IbBP8Fvoj8uR/GNdoRkgPSKFg3/nwRk
-         J95JkTB2mPRCbjJ/mPrUCHk1s9JyAbm9xKYKiZFmlhw1fNPlHyicQJ3EagoQIxNstdqJ
-         fGWngrAjLiqg4TBxvopokwJog87nhpRZXyEIgy09jcR7ZURim7aWpUe4JuJXtHCgfTUw
-         hHC36zkkKwUjvdzUQPgeIMoI3WNfpvFwUHYAUFIJxASqJplrh+mrpezitZjcqRdQcTvG
-         B1oia960V+IkUCaC4RihAjX4Krps5zXrlrEU48erYur74gL0uKROC/RQTQDiAzpYLGr7
-         wZTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBJhoKzZ/Nkyf6fuPWcAzRXbVPhyyDtxHYYm9Z0NkWhJXEpDDiw9YnvAvYoj/TMD42v+cJ0mTp6o9feA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzC/Feek53xgPOLbqqdva0M+nl6QnhCxGpp6A7IdHrmjOrasfSI
-	IbD/k6BMY/gjwYtLKfRTZW9mjHQeoeDbeCxuqVloFeL1W6slLITI6Jf6mljEqjTMCjdw+pLijfM
-	5PqFQACIsZeUvvouIUQtoDxisSd52GMc=
-X-Gm-Gg: ASbGncvhL505Ts3W9GCFR+vXmsHDlNg3uglDt3O+dmm5s0m2tgNfMxrxUSSGKt11QIs
-	TojJBw9I4H5ok4J1PJ3WsKwfc0+H3EzgXrNMBefY+SnRGlFqqtSvDKikAfAQB+6zGkjHs8EYCFz
-	S8Z3LoSvtdoVKOTXOL5mof9O+X6NdXrLa7AZRGpLMz+64BecN4rzMQgpUeza0vlo0iJQw/Mlubh
-	JCm7R5DYmtqxNqcEcYo1bQ8XBpV/Lwkri+xv6shySizd4k94Qlgf2z43ujTelSYdiUukQOz
-X-Google-Smtp-Source: AGHT+IFi83VDLD4ujBJX61RJ5WQsTC7bwJ4eF/N+nrBrj/4nbA+cA8DfC3oCnCyxZ61mA1vioMQB4jani18+TtXdgT8=
-X-Received: by 2002:ad4:5be2:0:b0:882:37aa:1451 with SMTP id
- 6a1803df08f44-884700a8feamr297884926d6.8.1764107001203; Tue, 25 Nov 2025
- 13:43:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lQPOxIaS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764143093; x=1795679093;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=AFpIBoHAAb4e2OfJ84HqeZPO3Dm1xm5/CCdxucyHBpo=;
+  b=lQPOxIaSeGlSOdMJEt8XZImBFvDY8z2mt9jD1+l6/nb7nNTAfirURP2Z
+   /DppcyskauMCzlREygaHhi73Ityd/jA5CK/P6nNfdz6J3dXX17DS46j7t
+   IrXjn8+UBgwucgD0NF+6pJS93SJk/7a0+47lJjCVS8JKPnBPnr/8Vhq3r
+   WMPlB+qpwfvHPRs6bniyGCCJUnwZXe1SQ5pyUw2DdcysfPBH3iNKokZ2D
+   jRUHbLEZF28Af5//Q6zxaV34qsnk8wbC9KPlUS1L19kTaLVbA85DqLaPl
+   EC8lQ+Ru9Rr4ay5C1LebZTAN52xI05en2bTV2NKF0YKK/4U+MJqiYI4Rr
+   w==;
+X-CSE-ConnectionGUID: k21oj2/jRH6RYjv7t93+hw==
+X-CSE-MsgGUID: QDxwYIWZRQyUF0EIBgZTvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="65174731"
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="65174731"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 23:44:52 -0800
+X-CSE-ConnectionGUID: ESw8DwbKQHytfETJjP9yXA==
+X-CSE-MsgGUID: SMUwjhIWRBWI1JbMH/oXVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,227,1758610800"; 
+   d="scan'208";a="197187051"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.97])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 23:44:48 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 26 Nov 2025 09:44:45 +0200 (EET)
+To: Rong Zhang <i@rong.moe>
+cc: Mark Pearson <mpearson-lenovo@squebb.ca>, 
+    "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, 
+    Hans de Goede <hansg@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v6 5/7] platform/x86: lenovo-wmi-capdata: Add support
+ for Fan Test Data
+In-Reply-To: <c13b6614d2ad4a3c4b938cdb04e6ebcc8f5bd95c.camel@rong.moe>
+Message-ID: <79934289-cdb4-385d-8042-e96ec37fdb55@linux.intel.com>
+References: <20251122184522.18677-1-i@rong.moe>  <20251122184522.18677-6-i@rong.moe>  <1efe99d4-95ae-d76c-71f5-0a1f98292dd4@linux.intel.com> <c13b6614d2ad4a3c4b938cdb04e6ebcc8f5bd95c.camel@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251125194959.157524-1-i@rong.moe>
-In-Reply-To: <20251125194959.157524-1-i@rong.moe>
-From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Tue, 25 Nov 2025 13:43:10 -0800
-X-Gm-Features: AWmQ_bkGZsGAG4j26JEZj4RyiOxOK8vZpwxj8uProlqeUBTH2oXqJhVEYb9VU5c
-Message-ID: <CAFqHKTkti-cA-9na0wx8bAyn-_ez2+mD_Mh8DGUa46ktkSjZsg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] platform/x86: lenovo-wmi-{capdata,other}: Add
- HWMON for fan speed
-To: Rong Zhang <i@rong.moe>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, Armin Wolf <W_Armin@gmx.de>, 
-	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; BOUNDARY="8323328-1263511143-1764142940=:968"
+Content-ID: <2d2abe91-a351-d32d-1f87-657c07a76576@linux.intel.com>
 
-On Tue, Nov 25, 2025 at 11:50=E2=80=AFAM Rong Zhang <i@rong.moe> wrote:
->
-> Lenovo WMI Other Mode interface also supports querying or setting fan
-> speed RPM. This capability is described by LENOVO_CAPABILITY_DATA_00.
-> Besides, LENOVO_FAN_TEST_DATA provides reference data for self-test of
-> cooling fans, including minimum and maximum fan speed RPM.
->
-> This patchset turns lenovo-wmi-capdata01 into a unified driver (now
-> named lenovo-wmi-capdata) for LENOVO_CAPABILITY_DATA_{00,01} and
-> LENOVO_FAN_TEST_DATA; then adds HWMON support for lenovo-wmi-other:
->
->  - fanX_enable: enable/disable the fan (tunable)
->  - fanX_input: current RPM
->  - fanX_max: maximum RPM
->  - fanX_min: minimum RPM
->  - fanX_target: target RPM (tunable)
->
-> LENOVO_CAPABILITY_DATA_{00,01} presents on all devices, so
-> both binds to lenovo-wmi-other. However, some device does not have
-> LENOVO_FAN_TEST_DATA and its presence is described by
-> LENOVO_CAPABILITY_DATA_00; hence, the former binds to the latter and a
-> callback is used to pass the data to lenovo-wmi-other.
->
-> Summarizing this scheme:
->
->         lenovo-wmi-other <-> capdata00 <-> capdata_fan
->         |- master            |- component
->                              |- sub-master
->                                            |- sub-component
->
-> The callback will be called once both the master and the sub-component
-> are bound to the sub-master (component).
->
-> This scheme is essential to solve these issues:
-> - The component framework only supports one aggregation per master
-> - A binding is only established until all components are found
-> - The Fan Test Data interface may be missing on some devices
-> - To get rid of queries for the presence of WMI GUIDs
-> - The notifier framework cannot cleanly connect capdata_fan to
->   lenovo-wmi-other without introducing assumptions on probing sequence
->
-> capdata00 is registered as a component and a sub-master on probe,
-> instead of chaining the registrations in one's bind callback. This is
-> because calling (un)registration methods of the component framework
-> causes deadlock in (un)bind callbacks, i.e., it's impossible to register
-> capdata00 as a sub-master/component in its component/sub-master bind
-> callback, and vice versa.
->
-> The implementation does not rely on a specific binding sequence. This
-> has been fuzz-tested using:
->
->         #!/bin/bash
->
->         DRV_DIR=3D/sys/bus/wmi/drivers/lenovo_wmi_cd
->         CAPDATA_GUIDS=3D(
->                 $(find "$DRV_DIR"/ -name '*-*-*-*-*-*' -printf "%f ")
->         )
->
->         b() { sudo tee "$DRV_DIR"/bind <<<"$1"; }
->         u() { sudo tee "$DRV_DIR"/unbind <<<"$1"; }
->
->         for guid in "${CAPDATA_GUIDS[@]}"; do
->                 u "$guid"
->         done
->
->         while read -rsa perm; do
->                 for guid in "${perm[@]}"; do
->                         b "$guid"
->                 done
->                 sensors | grep -A3 lenovo_wmi_other || true
->                 for guid in "${perm[@]}"; do
->                         u "$guid"
->                 done
->         done < <(python3 -c "
->         from itertools import permutations
->         ps =3D permutations('${CAPDATA_GUIDS[*]}'.split())
->         for p in ps: print(' '.join(p))")
->
->         for guid in "${CAPDATA_GUIDS[@]}"; do
->                 b "$guid"
->         done
->
-> Tested on ThinkBook 14 G7+ ASP.
->
-> Changes in v7:
-> - Fix missing #include (thanks Ilpo J=C3=A4rvinen)
-> - Fix formatting issues (ditto)
-> - dev_dbg() instead of dev_info() on probe success (ditto)
-> - Rearrange to drop some gotos (ditto)
-> - Move the declarations of __free()-managed variables to where they are
->   assigned (ditto)
-> - Improve the readability of struct definition and error paths (ditto)
-> - Prevent back-and-forth changes (ditto)
-> - Fix mistakenly inverted boundary check
-> - Emit unaligned access to Fan Test Data's WMI block
-> - Properly calculate array index when we truncate Fan Test Data
-> - Fix typo
-> - Link to v6: https://lore.kernel.org/r/20251122184522.18677-1-i@rong.moe=
-/
->
-> Changes in v6:
-> - Fix mistaken error paths
-> - Link to v5: https://lore.kernel.org/r/20251114175927.52533-1-i@rong.moe=
-/
->
-> Changes in v5:
-> - Do not cast pointer to non-pointer or vice versa (thanks kernel test
->   robot)
-> - Fix missing include (ditto)
-> - Link to v4: https://lore.kernel.org/r/20251113191152.96076-1-i@rong.moe=
-/
->
-> Changes in v4:
-> - Get rid of wmi_has_guid() (thanks Armin Wolf's inspiration)
->   - Add [PATCH v4 6/7], please review & test
->     - Check 0x04050000.supported and bind capdata_fan to capdata00
->   - Rework HWMON registration
->     - Collect fan info from capdata00 and capdata_fan separately
->     - Use a callback to collect fan info from capdata_fan
->     - Trigger HWMON registration only if all fan info is collected
->     - Do not check 0x04050000.supported, implied by the presence of
->       capdata_fan
-> - Drop Reviewed-by & Tested-by from [PATCH v4 7/7] due to the changes,
->   please review & test
-> - Link to v3: https://lore.kernel.org/r/20251031155349.24693-1-i@rong.moe=
-/
->
-> Changes in v3:
-> - Fix grammar (thanks Derek J. Clark)
-> - Link to v2: https://lore.kernel.org/r/20251030193955.107148-1-i@rong.mo=
-e/
->
-> Changes in v2:
-> - Add a workaround for ACPI methods that return a 4B buffer for u32
->   (thanks Armin Wolf)
-> - Fix function documentation (thanks kernel test bot)
-> - Reword documentation (thanks Derek J. Clark)
-> - Squash min/max reporting patch into the initial HWMON one (ditto)
-> - Query 0x04050000 for interface availability (ditto)
->   - New parameter "expose_all_fans" to skip this check
-> - Enforce min/max RPM constraint on set (ditto)
->   - New parameter "relax_fan_constraint" to disable this behavior
->   - Drop parameter "ignore_fan_cap", superseded by the next one
->   - New parameter "expose_all_fans" to expose fans w/o such data
-> - Assume auto mode on probe (ditto)
-> - Do not register HWMON device if no fan can be exposed
-> - fanX_target: Return -EBUSY instead of raw target value when fan stops
-> - Link to v1: https://lore.kernel.org/r/20251019210450.88830-1-i@rong.moe=
-/
->
-> Rong Zhang (7):
->   platform/x86: lenovo-wmi-helpers: Convert returned buffer into u32
->   platform/x86: Rename lenovo-wmi-capdata01 to lenovo-wmi-capdata
->   platform/x86: lenovo-wmi-{capdata,other}: Support multiple Capability
->     Data
->   platform/x86: lenovo-wmi-capdata: Add support for Capability Data 00
->   platform/x86: lenovo-wmi-capdata: Add support for Fan Test Data
->   platform/x86: lenovo-wmi-capdata: Wire up Fan Test Data
->   platform/x86: lenovo-wmi-other: Add HWMON for fan reporting/tuning
->
->  .../wmi/devices/lenovo-wmi-other.rst          |  43 +-
->  drivers/platform/x86/lenovo/Kconfig           |   5 +-
->  drivers/platform/x86/lenovo/Makefile          |   2 +-
->  drivers/platform/x86/lenovo/wmi-capdata.c     | 812 ++++++++++++++++++
->  drivers/platform/x86/lenovo/wmi-capdata.h     |  65 ++
->  drivers/platform/x86/lenovo/wmi-capdata01.c   | 302 -------
->  drivers/platform/x86/lenovo/wmi-capdata01.h   |  25 -
->  drivers/platform/x86/lenovo/wmi-helpers.c     |  21 +-
->  drivers/platform/x86/lenovo/wmi-other.c       | 515 ++++++++++-
->  9 files changed, 1433 insertions(+), 357 deletions(-)
->  create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.c
->  create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.h
->  delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.c
->  delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.h
->
->
-> base-commit: ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
-> --
-> 2.51.0
->
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Rong,
+--8323328-1263511143-1764142940=:968
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <6be551c0-a5b2-2715-c458-46f4931ae5c0@linux.intel.com>
 
-Everything seems to be working as expected on unsupported devices.
+On Tue, 25 Nov 2025, Rong Zhang wrote:
+> On Mon, 2025-11-24 at 18:45 +0200, Ilpo J=E4rvinen wrote:
+> > On Sun, 23 Nov 2025, Rong Zhang wrote:
+> >=20
+> > > Add support for LENOVO_FAN_TEST_DATA WMI data block. Provides an
+> > > interface for querying the min/max fan speed RPM (reference data) of =
+a
+> > > given fan ID.
+> > >=20
+> > > This interface is optional. Hence, it does not bind to lenovo-wmi-oth=
+er
+> > > and is not registered as a component for the moment. Appropriate bind=
+ing
+> > > will be implemented in the subsequent patch.
+> > >=20
+> > > Signed-off-by: Rong Zhang <i@rong.moe>
+> > > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> > > Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> > > ---
+> > > Changes in v4:
+> > > - Rebase on top of changes made to [PATCH v4 3/7]
+> > > - Do not register it as a component until [PATCH v4 6/7]
+> > >=20
+> > > Changes in v2:
+> > > - Reword documentation
+> > > ---
+> > >  .../wmi/devices/lenovo-wmi-other.rst          |  17 +++
+> > >  drivers/platform/x86/lenovo/wmi-capdata.c     | 102 ++++++++++++++++=
+++
+> > >  drivers/platform/x86/lenovo/wmi-capdata.h     |   7 ++
+> > >  3 files changed, 126 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documen=
+tation/wmi/devices/lenovo-wmi-other.rst
+> > > index fcad595d49af..821282e07d93 100644
+> > > --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
+> > > +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> > > @@ -62,6 +62,13 @@ The following firmware-attributes are implemented:
+> > >   - ppt_pl2_sppt: Platform Profile Tracking Slow Package Power Tracki=
+ng
+> > >   - ppt_pl3_fppt: Platform Profile Tracking Fast Package Power Tracki=
+ng
+> > > =20
+> > > +LENOVO_FAN_TEST_DATA
+> > > +-------------------------
+> > > +
+> > > +WMI GUID ``B642801B-3D21-45DE-90AE-6E86F164FB21``
+> > > +
+> > > +The LENOVO_FAN_TEST_DATA interface provides reference data for self-=
+test of
+> > > +cooling fans.
+> > > =20
+> > >  WMI interface description
+> > >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> > > @@ -115,3 +122,13 @@ data using the `bmfdec <https://github.com/pali/=
+bmfdec>`_ utility:
+> > >      [WmiDataId(3), read, Description("Data Size.")] uint32 DataSize;
+> > >      [WmiDataId(4), read, Description("Default Value"), WmiSizeIs("Da=
+taSize")] uint8 DefaultValue[];
+> > >    };
+> > > +
+> > > +  [WMI, Dynamic, Provider("WmiProv"), Locale("MS\\0x409"), Descripti=
+on("Definition of Fan Test Data"), guid("{B642801B-3D21-45DE-90AE-6E86F164F=
+B21}")]
+> > > +  class LENOVO_FAN_TEST_DATA {
+> > > +    [key, read] string InstanceName;
+> > > +    [read] boolean Active;
+> > > +    [WmiDataId(1), read, Description("Mode.")] uint32 NumOfFans;
+> > > +    [WmiDataId(2), read, Description("Fan ID."), WmiSizeIs("NumOfFan=
+s")] uint32 FanId[];
+> > > +    [WmiDataId(3), read, Description("Maximum Fan Speed."), WmiSizeI=
+s("NumOfFans")] uint32 FanMaxSpeed[];
+> > > +    [WmiDataId(4), read, Description("Minumum Fan Speed."), WmiSizeI=
+s("NumOfFans")] uint32 FanMinSpeed[];
+> > > +  };
+> > > diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/plat=
+form/x86/lenovo/wmi-capdata.c
+> > > index 29267c373ab3..e6392357395c 100644
+> > > --- a/drivers/platform/x86/lenovo/wmi-capdata.c
+> > > +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
+> > > @@ -13,6 +13,10 @@
+> > >   * attribute has multiple pages, one for each of the thermal modes m=
+anaged by
+> > >   * the Gamezone interface.
+> > >   *
+> > > + * Fan Test Data includes the max/min fan speed RPM for each fan. Th=
+is is
+> > > + * reference data for self-test. If the fan is in good condition, it=
+ is capable
+> > > + * to spin faster than max RPM or slower than min RPM.
+> > > + *
+> > >   * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
+> > >   *   - Initial implementation (formerly named lenovo-wmi-capdata01)
+> > >   *
+> > > @@ -41,6 +45,7 @@
+> > > =20
+> > >  #define LENOVO_CAPABILITY_DATA_00_GUID "362A3AFE-3D96-4665-8530-96DA=
+D5BB300E"
+> > >  #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39B3=
+BE018154"
+> > > +#define LENOVO_FAN_TEST_DATA_GUID "B642801B-3D21-45DE-90AE-6E86F164F=
+B21"
+> > > =20
+> > >  #define ACPI_AC_CLASS "ac_adapter"
+> > >  #define ACPI_AC_NOTIFY_STATUS 0x80
+> > > @@ -48,6 +53,7 @@
+> > >  enum lwmi_cd_type {
+> > >  =09LENOVO_CAPABILITY_DATA_00,
+> > >  =09LENOVO_CAPABILITY_DATA_01,
+> > > +=09LENOVO_FAN_TEST_DATA,
+> > >  };
+> > > =20
+> > >  #define LWMI_CD_TABLE_ITEM(_type)=09=09\
+> > > @@ -62,6 +68,7 @@ static const struct lwmi_cd_info {
+> > >  } lwmi_cd_table[] =3D {
+> > >  =09LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_00),
+> > >  =09LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_01),
+> > > +=09LWMI_CD_TABLE_ITEM(LENOVO_FAN_TEST_DATA),
+> > >  };
+> > > =20
+> > >  struct lwmi_cd_priv {
+> > > @@ -78,6 +85,7 @@ struct cd_list {
+> > >  =09union {
+> > >  =09=09DECLARE_FLEX_ARRAY(struct capdata00, cd00);
+> > >  =09=09DECLARE_FLEX_ARRAY(struct capdata01, cd01);
+> > > +=09=09DECLARE_FLEX_ARRAY(struct capdata_fan, cd_fan);
+> > >  =09};
+> > >  };
+> > > =20
+> > > @@ -117,6 +125,10 @@ void lwmi_cd_match_add_all(struct device *master=
+, struct component_match **match
+> > >  =09=09return;
+> > > =20
+> > >  =09for (i =3D 0; i < ARRAY_SIZE(lwmi_cd_table); i++) {
+> > > +=09=09/* Skip optional interfaces. */
+> > > +=09=09if (lwmi_cd_table[i].type =3D=3D LENOVO_FAN_TEST_DATA)
+> > > +=09=09=09continue;
+> > > +
+> > >  =09=09component_match_add(master, matchptr, lwmi_cd_match,
+> > >  =09=09=09=09    (void *)&lwmi_cd_table[i].type);
+> > >  =09=09if (IS_ERR(*matchptr))
+> > > @@ -194,6 +206,9 @@ EXPORT_SYMBOL_NS_GPL(lwmi_cd00_get_data, "LENOVO_=
+WMI_CD");
+> > >  DEF_LWMI_CDXX_GET_DATA(cd01, LENOVO_CAPABILITY_DATA_01, struct capda=
+ta01);
+> > >  EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD");
+> > > =20
+> > > +DEF_LWMI_CDXX_GET_DATA(cd_fan, LENOVO_FAN_TEST_DATA, struct capdata_=
+fan);
+> > > +EXPORT_SYMBOL_NS_GPL(lwmi_cd_fan_get_data, "LENOVO_WMI_CD");
+> > > +
+> > >  /**
+> > >   * lwmi_cd_cache() - Cache all WMI data block information
+> > >   * @priv: lenovo-wmi-capdata driver data.
+> > > @@ -217,6 +232,9 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *pri=
+v)
+> > >  =09=09p =3D &priv->list->cd01[0];
+> > >  =09=09size =3D sizeof(priv->list->cd01[0]);
+> > >  =09=09break;
+> > > +=09case LENOVO_FAN_TEST_DATA:
+> > > +=09=09/* Done by lwmi_cd_alloc() =3D> lwmi_cd_fan_list_alloc_cache()=
+=2E */
+> > > +=09=09return 0;
+> > >  =09default:
+> > >  =09=09return -EINVAL;
+> > >  =09}
+> > > @@ -239,6 +257,78 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *pr=
+iv)
+> > >  =09return 0;
+> > >  }
+> > > =20
+> > > +/**
+> > > + * lwmi_cd_fan_list_alloc_cache() - Alloc and cache Fan Test Data li=
+st
+> > > + * @priv: lenovo-wmi-capdata driver data.
+> > > + * @listptr: Pointer to returned cd_list pointer.
+> > > + *
+> > > + * Return: count of fans found, or an error.
+> > > + */
+> > > +static int lwmi_cd_fan_list_alloc_cache(struct lwmi_cd_priv *priv, s=
+truct cd_list **listptr)
+> > > +{
+> > > +=09u32 count, *fan_ids, *fan_min_rpms, *fan_max_rpms;
+> > > +=09union acpi_object *ret_obj __free(kfree) =3D NULL;
+> >=20
+> > Since you're using __free(), please move this to where you assign the=
+=20
+> > value. This is to create a pattern with cleanup helpers. The cleanup=20
+> > order depends on the order the variables are introduced which in some=
+=20
+> > other cases may be significant.
+>=20
+> Make sense. Will move it to the last declaration lines with its
+> assignment. Thanks.
+>=20
+> > > +=09struct block { u32 nr; u32 data[]; } *block;
+> >
+> > This is the first time I see this style anywhere in the kernel's contex=
+t,=20
+> > has there been some general discussion about this style somewhere?
+> >=20
+> > At least it seems immediately obvious to me that this style will have a=
+=20
+> > negative impact on documentability due to (too) concise use of space.
+>=20
+> Make sense. Will break it into multiple lines. Thanks.
+>=20
+> > > +=09struct cd_list *list;
+> > > +=09size_t size;
+> > > +=09int idx;
+> > > +
+> > > +=09ret_obj =3D wmidev_block_query(priv->wdev, 0);
+> > > +=09if (!ret_obj)
+> > > +=09=09return -ENODEV;
+> > > +
+> > > +=09/*
+> > > +=09 * This is usually caused by a dummy ACPI method. Do not return a=
+n error
+> > > +=09 * as failing to probe this device will result in master driver b=
+eing
+> > > +=09 * unbound - this behavior aligns with lwmi_cd_cache().
+> > > +=09 */
+> > > +=09if (ret_obj->type !=3D ACPI_TYPE_BUFFER) {
+> > > +=09=09count =3D 0;
+> > > +=09=09goto alloc;
+> > > +=09}
+> > > +
+> > > +=09size =3D ret_obj->buffer.length;
+> > > +=09block =3D (struct block *)ret_obj->buffer.pointer;
+> >=20
+> > void * can be cast implicitly.
+>=20
+> `ret_obj->buffer.pointer' is a `u8 *' pointer so the cast is mandatory.
 
-[    4.398189] lenovo_wmi_other
-DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: bound
-362A3AFE-3D96-4665-8530-96DAD5BB300E-13 (ops lwmi_cd_component_ops
-[lenovo_wmi_capdata])
-[    4.398203] lenovo_wmi_other
-DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: bound
-7A8F5407-CB67-4D6E-B547-39B3BE018154-9 (ops lwmi_cd_component_ops
-[lenovo_wmi_capdata])
-[    4.398208] lenovo_wmi_other
-DC2A8805-3A8C-41BA-A6F7-092E0089CD3B-3: fan reporting/tuning is
-unsupported on this device
+Ah, right. I think I even tried to check it but probably picked up
+the void *pointer from struct acpi_buffer instead of the correct one.
 
-Obviously I can only test so far, but for where it makes sense on the
-series (through to 6/7) where it is missing you can add my tag
-Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Hmmm, this reminds me that `struct block' probably needs a `__packed'
+> to generate unaligned access to it.
 
-And for the entire series where it is missing:
-Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com
+In all u32 struct, I don't think __packed is required. You can use pahole=
+=20
+tool to check the layout if you want, but I don't think compiler adds=20
+any gaps with only u32s.
 
-As an aside, I'll likely need you to test a future patch series I'm
-working on for regressions after this is accepted as I will touch the
-hwmon interface a lot when adding fan curve auto points from the
-cd01/om interfaces.
-
-Thanks,
-- Derek
+--=20
+ i.
+--8323328-1263511143-1764142940=:968--
