@@ -1,99 +1,147 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9B3304BA4
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 15:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7333E30BB96
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 16:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764172228; cv=none; b=MfYg2cMAMA60T7UpJn8aVjs/juuedTp8d0ETVxKGox3wCNosRA/j1NBEZr9C1/8/kgE/6gMYZzE3mU2wPMZd8HVgNTar1BAL1QWj9aETuq+/fUghw8saNWvZ4sBwBtJ4DG6hIS7asd1xG9BVEb82EqURYotaAEs6oWJ03ZIpmTk=
+	t=1764174025; cv=none; b=UHGLabYfaHAy9B3CamPfKc09ITapIMGM1vvTOfQ8KzonmDw9gptpcYU26str5b3Mj3Xf1K12+uI/IQICJ9dD2AEUEMsjNPQ/jfOOrcZx3DnDiLvsfm60CEEpKUG401zYpnhqFg3cge4pPrQ+sJ+0DJTiiQAlYDGZeDr2JKFkL3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764172228; c=relaxed/simple;
-	bh=9ImGhb5VHt1sIj+S8p/sCzuADJWKOAmfx1RdAACn3u0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JuQtQLZd2KtsCODW4h/Qf0H3yQFS/uQ3PABwKlBTlRUt55l4BtSzxm21UxCJfrgNcWqErhZfKMxuUK26b+Q/wvCmRyvpWDTxkaNNtM262GKSqpFDCxSljtiKGbaR8Ng9Grqi8ennU9/WdjKclCo9Raw0roe7qaUEqIYgLWb1B3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTFT6oTM; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764174025; c=relaxed/simple;
+	bh=wXjGUZeMOz1hGLe5c+VRMASjy7GTN2NrGP86qqIgpX8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f7/KgRrYH7hDrMSYtYXN8JR9QQQbrf2gSxWgbx/hKyg/PsQ19h/+4DjxNqXs1o6GciikXGk+clI/29ZOV87oAd++9Zt7r3UE5kHPD2LeI/JqUwStpb104FHgCxde0XpC5j3avfKFQ6aBu65jrqz0Oe4Hz6Uy5NtPahnk9xL24yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=kIa4u0in; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=kIa4u0in; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTFT6oTM"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7b9387df58cso10857720b3a.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 07:50:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764172227; x=1764777027; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GxkPMvTHFLTjPIqR0uHTN/Ir0NTjVcTTJJUdlvMyaCk=;
-        b=NTFT6oTMg4erFs+SLfwYpViopp1vLHuMR1IznbKv4Csw3HPijiJHBgenVJFVeT7+/z
-         TPWk0C+hITTUefGQSpUG1AwnP1istigGkRwuQRjuzlHMp7wUE0Bl6mSa5sWU9Nuw8ESW
-         eFZblZu9rTDomIs/d/EKLEdYVTOtnG1z4pZf7pUpRsHefty8VYd2r9YzOIz6NjNoOBAo
-         8O8yGDgijP/TDQLAulPWkR6R4U7aZ4EEiR0ju6gt51bgyEzJu8+T95IElTu3pEZVZUNY
-         yyeGpp5Q3/tzMxp6Am6/nai1k2I1NDlbJDp1V+NiajBs8+jRNkzN86U2GOweMJSt4RwZ
-         S4Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764172227; x=1764777027;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GxkPMvTHFLTjPIqR0uHTN/Ir0NTjVcTTJJUdlvMyaCk=;
-        b=tgkoYb5VEPKEfEtYEFiHfTFIwvAkkF9MUv1iDlOw8TneEKW3IFmnouhgfz0LCFluof
-         6I6RBrAsnz8TGfQuKK65Bbn5ppc7ApdY1V9Ig6MbI6esCUA2hZVf1X40zuCrOjVyjutz
-         A7yqRh7G8ng0Nr3XdBRZQGfpEP9wkb9DYApH8Oba/P2W9lbolZeyR2DopXpePTCRYJs2
-         OJudq4LMEXg8xkkTfUcHr6F2RjZxY8tIzR5eHSNvKrkcY2nHJ1l1dZdw5tjd045iXPVT
-         DTzkeSlUr5oxnjnv3uPgWTej2Hm6Q4pbfuLJH8A9aZ1EtDPlU3u1LtJxOK9xxjYs0iS6
-         V1KA==
-X-Gm-Message-State: AOJu0YxlzydoQ7Z8D+8tpvLqa7wNobkldmcqTMhX4zEi96bkSq6F+Fe5
-	m6Oiyrp7BjxVE0r9CZUOv73iuhusncIF3Xh1AGqbPd7B1wi7jemI7J1D
-X-Gm-Gg: ASbGncu5YodiERN1KBYSDOBh0HP2AR7SKCA2wFE9ajzTuuZiFi4jTj9Bmxei65ZXQtL
-	QHio5ZzWk0tHmUzvjpES5sE70bjWiYHST6Ft2bXMtvpcAEzmEULMe4lJi3pkTqrapADXjaNOUxW
-	FK7i1TgSJOnbi+TixSwV11J/CehBYF4O0alZUwtCB6g3HS8A5iBTqmFkbfalmpT4l6Ke7VReLDQ
-	kGjkS6M/DMcPv2VvJNcrSv/IICda3txJ5eK+nMVHgdWkqNb17gTFmyXLVSvhaOnhAy3+0ZjwP6V
-	czYaxAB96lXxWxHji6P9x/OiP6LGBfaUNTR9DIFzKXhWD3YhsNUN0a5twP6tD1UW/68fmKd/uTI
-	vWi1qUIAYhxrl/RA3B8wMO6q3jPtz8qL6elIg9X0dNIcn/cq45VEdRsD4HQ+RhCOU5hsEOiJq4o
-	aPqYWYzPVXJd/Ls2Iy7CynkZ8=
-X-Google-Smtp-Source: AGHT+IGDhs/kW4iLt6avNYehelW/X0dOFNyYZ72SfUYKOQgKfv0azL+u8SE4o1oXVfKIgTHwbD9GRg==
-X-Received: by 2002:a05:7022:7e05:b0:119:e56b:c75b with SMTP id a92af1059eb24-11cbba4a4edmr4972752c88.32.1764172226741;
-        Wed, 26 Nov 2025 07:50:26 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11cc631c236sm26594012c88.7.2025.11.26.07.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 07:50:26 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 26 Nov 2025 07:50:25 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adm1026) Convert macros to functions to avoid
- TOCTOU
-Message-ID: <6846be0e-2711-4da6-82ab-6b348c15edc5@roeck-us.net>
-References: <20251126113828.10003-1-hanguidong02@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kIa4u0in";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kIa4u0in"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CFF0022D57;
+	Wed, 26 Nov 2025 16:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1764174020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Edyr3JIcssZPzLUBYOKLIR47asUKGoc/LXSm51c/xFM=;
+	b=kIa4u0inAxEFPkTeqGZCkDZ4D2vt01np+F6+w+3qFtF+GGEHwE9ugJfZ6Z3Yo6AjO61FjP
+	3v9F9272z8Wn2iVrpu9JGA1rtfCfw9Nhmk6iBUbyc1P5Bz5G/72+JtiyzYyEz22PWWq8SE
+	T15t07/DIftfkmL6PisqLwrZhtKDMks=
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1764174020; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Edyr3JIcssZPzLUBYOKLIR47asUKGoc/LXSm51c/xFM=;
+	b=kIa4u0inAxEFPkTeqGZCkDZ4D2vt01np+F6+w+3qFtF+GGEHwE9ugJfZ6Z3Yo6AjO61FjP
+	3v9F9272z8Wn2iVrpu9JGA1rtfCfw9Nhmk6iBUbyc1P5Bz5G/72+JtiyzYyEz22PWWq8SE
+	T15t07/DIftfkmL6PisqLwrZhtKDMks=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3572C3EA63;
+	Wed, 26 Nov 2025 16:20:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 6YWpC8QoJ2lbLQAAD6G6ig
+	(envelope-from <jgross@suse.com>); Wed, 26 Nov 2025 16:20:20 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	virtualization@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-block@vger.kernel.org
+Cc: Juergen Gross <jgross@suse.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	xen-devel@lists.xenproject.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Denis Efremov <efremov@linux.com>,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 0/5] x86: Cleanups around slow_down_io()
+Date: Wed, 26 Nov 2025 17:20:13 +0100
+Message-ID: <20251126162018.5676-1-jgross@suse.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251126113828.10003-1-hanguidong02@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	URIBL_BLOCKED(0.00)[suse.com:mid,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-On Wed, Nov 26, 2025 at 07:38:28PM +0800, Gui-Dong Han wrote:
-> The macro FAN_FROM_REG evaluates its arguments multiple times. When used
-> in lockless contexts involving shared driver data, this causes
-> Time-of-Check to Time-of-Use (TOCTOU) race conditions.
-> 
-> Convert the macro to a static function. This guarantees that arguments
-> are evaluated only once (pass-by-value), preventing the race
-> conditions.
-> 
-> Adhere to the principle of minimal changes by only converting macros
-> that evaluate arguments multiple times and are used in lockless
-> contexts.
-> 
-> Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+While looking at paravirt cleanups I stumbled over slow_down_io() and
+the related REALLY_SLOW_IO define.
 
-Applied.
+Especially REALLY_SLOW_IO is a mess, which is proven by 2 completely
+wrong use cases.
 
-Thanks,
-Guenter
+Do several cleanups, resulting in a deletion of REALLY_SLOW_IO and the
+io_delay() paravirt function hook.
+
+Patches 2 and 3 are not changing any functionality, but maybe they
+should? As the potential bug has been present for more than a decade
+now, I went with just deleting the useless "#define REALLY_SLOW_IO".
+The alternative would be to do something similar as in patch 5.
+
+Juergen Gross (5):
+  x86/paravirt: Replace io_delay() hook with a bool
+  hwmon/lm78: Drop REALLY_SLOW_IO setting
+  hwmon/w83781d: Drop REALLY_SLOW_IO setting
+  block/floppy: Don't use REALLY_SLOW_IO for delays
+  x86/io: Remove REALLY_SLOW_IO handling
+
+ arch/x86/include/asm/floppy.h         | 27 ++++++++++++++++++++++-----
+ arch/x86/include/asm/io.h             | 12 +++++-------
+ arch/x86/include/asm/paravirt.h       | 11 +----------
+ arch/x86/include/asm/paravirt_types.h |  3 +--
+ arch/x86/kernel/cpu/vmware.c          |  2 +-
+ arch/x86/kernel/kvm.c                 |  8 +-------
+ arch/x86/kernel/paravirt.c            |  3 +--
+ arch/x86/xen/enlighten_pv.c           |  6 +-----
+ drivers/block/floppy.c                |  2 --
+ drivers/hwmon/lm78.c                  |  5 +++--
+ drivers/hwmon/w83781d.c               |  5 +++--
+ 11 files changed, 39 insertions(+), 45 deletions(-)
+
+-- 
+2.51.0
+
