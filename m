@@ -1,73 +1,72 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9740130C625
-	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 15:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9B3304BA4
+	for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 15:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764172169; cv=none; b=kcMecs/FduJxomJSV/DYS2ww497WzTEr7LtCgKcd/VIyuEf/2+fXxcjmgUG+UID+baUnEINuV3+Od/my4f+xgXw2b6WMFp2SbzEtv/PW0040opufSAZ2wujp09un9CYrIwln2NdyzLjYWa4utydd2HnPeuLKAfk+HyWessI6JTc=
+	t=1764172228; cv=none; b=MfYg2cMAMA60T7UpJn8aVjs/juuedTp8d0ETVxKGox3wCNosRA/j1NBEZr9C1/8/kgE/6gMYZzE3mU2wPMZd8HVgNTar1BAL1QWj9aETuq+/fUghw8saNWvZ4sBwBtJ4DG6hIS7asd1xG9BVEb82EqURYotaAEs6oWJ03ZIpmTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764172169; c=relaxed/simple;
-	bh=4GVFHLoAHgs9rsX9ZMywLC+qYDsOEUKsWqhZ7te0eBY=;
+	s=arc-20240116; t=1764172228; c=relaxed/simple;
+	bh=9ImGhb5VHt1sIj+S8p/sCzuADJWKOAmfx1RdAACn3u0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gGDbXOTylMBnqepooH4M0ZQrFQ2s83eGbDIdw4oV8DZGKml4KjHc4+i3Ps0bVkTyAqSvwBHtmmNGKqA0CI54pglK+LdBsjzQE/RkAPq0IQ++YTmS4nMJF4IZuVcWsH+70GDfkz0jWM6cP943hT4g8RTuceU4JXcsjzI3xnzeYd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KlN5aqI+; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=JuQtQLZd2KtsCODW4h/Qf0H3yQFS/uQ3PABwKlBTlRUt55l4BtSzxm21UxCJfrgNcWqErhZfKMxuUK26b+Q/wvCmRyvpWDTxkaNNtM262GKSqpFDCxSljtiKGbaR8Ng9Grqi8ennU9/WdjKclCo9Raw0roe7qaUEqIYgLWb1B3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTFT6oTM; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlN5aqI+"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-297d4a56f97so101807495ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 07:49:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTFT6oTM"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7b9387df58cso10857720b3a.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 Nov 2025 07:50:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764172168; x=1764776968; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764172227; x=1764777027; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KTSzEBiWnVkWMLP/Pta1p+lhqPak7D5x7y8I/Sv2GO0=;
-        b=KlN5aqI+OEPyiTyei1ZDeJ2GvV/9SdR11ftFx+Rsd/a8yQzJPj18DtnK0LBCTe4/VA
-         AiAGJcfiEoO20+7tiqHz023USjMIeW526GAPktju5PAS5bhvbJ5UnKoassaSXqvRS3tS
-         wSx+DjtWvWdv0s1ez/rmwpY9yFMuuJyYKSiDuLzl2VnOlWPEYAcBO32t99iJ3D9rZ9nB
-         EEXRCIX0szzsiF9zTQX8dy9HdN/bzhc/evp4Nh9OYNWWnhqzjobJWlik8ch7dCKhDe3A
-         aemUfiALJA+ZOJDelxw0lIG3Oynlnp2tnNmPuPeLtJwmnlnI0+tvSfrDZYGlCONkgyQ+
-         w1UA==
+        bh=GxkPMvTHFLTjPIqR0uHTN/Ir0NTjVcTTJJUdlvMyaCk=;
+        b=NTFT6oTMg4erFs+SLfwYpViopp1vLHuMR1IznbKv4Csw3HPijiJHBgenVJFVeT7+/z
+         TPWk0C+hITTUefGQSpUG1AwnP1istigGkRwuQRjuzlHMp7wUE0Bl6mSa5sWU9Nuw8ESW
+         eFZblZu9rTDomIs/d/EKLEdYVTOtnG1z4pZf7pUpRsHefty8VYd2r9YzOIz6NjNoOBAo
+         8O8yGDgijP/TDQLAulPWkR6R4U7aZ4EEiR0ju6gt51bgyEzJu8+T95IElTu3pEZVZUNY
+         yyeGpp5Q3/tzMxp6Am6/nai1k2I1NDlbJDp1V+NiajBs8+jRNkzN86U2GOweMJSt4RwZ
+         S4Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764172168; x=1764776968;
+        d=1e100.net; s=20230601; t=1764172227; x=1764777027;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=KTSzEBiWnVkWMLP/Pta1p+lhqPak7D5x7y8I/Sv2GO0=;
-        b=i2dY+VjEV1hMwRzin6nqkqu/5XWzTvdiNU0WaRDe+SH1OJ6S4VaF6gkxxZTju+TZDK
-         HZt9dEXdlQKygh87gSCeMvetDIeZphlpqCVgGWjG00KniI9e2rRPTkR/CZ28clRanN6P
-         E/1ngfU9+knDoNmie4dxTqhyZaB7O4oVZF+76YrbHv3qw6pbdg3KcAuOkAHd2UNu+nRa
-         KY5p9QPiNhyAdpHB/skEx/P98J9CVcoxc0ujZgV8/oI9GyV7D22kMoZt/BUP+lPl4J4X
-         QiZ1tqZcXC+CxREdZjg3GPdpZ/DqbkJAPdtz01PbT7cZIDAqy41fLAbI1PsUHnoNEhbY
-         DDvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEeutEzZpg0wYQ2CKv2RsP7PRbvRTMjItviarKpOluTS17oY3Djb66J3Nda8JyifDSLzbSYmLfzi7IlQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8KuX6rz+4J/85B55w+RiCnxDD8MqNU08eJ4iIqmODg9UCIdLp
-	unzTBbY/7JUfQof7RVSKuH9AAiCBK7nHOufGF/z89dFeiKA8x4e7fknP
-X-Gm-Gg: ASbGncu9E7qoNrzqs/gkP9R5uQU9yNHYhH7FlglGHCU5in2pmf3q8s17mZLGmgxf6Iz
-	9Q5mL6OX6ejWnPSFFOufA03AanEJIUEIU/De+rOUpscQlX0J3PATZvfoflw2e7nunqnsIwp0Obr
-	fx6MkN5JXckiIwJ5BQ8N6yU0c6gqrzMiDVInNy3kz2KNrTnu/rxx0osDf3LazXphvJPaIhwZ6/y
-	5wy3CAXH19tHrgoCxXGbwbxcSOZFjgM5bCCfcHszSO5Jf6Taa3gpPJ/KYGxNA77jB5/tnB4VBqp
-	Kn0/2lih6CBpWtUZg8cjGu3iGz2mrZ4FnRyNoxzqsALHtbjlW8onsSWKfb2g3xsM87ZXh1dQ5FA
-	RXWHi/UXZqs8EndTR0yZktaq/dJGCugyXEP1MRvF/DQ2p3Syxo8CjV33Zr0E8i7eaRGj4NVT5gp
-	1bKoHaPMkz7rpU8+tdOS8p39Y=
-X-Google-Smtp-Source: AGHT+IHYFjIDV/z55sW8a45nlG90/yBb3iRhJaKhnR2pDK8ly55VFv/+bdfCYR+J4U5v4jz7A+StaQ==
-X-Received: by 2002:a05:7301:4616:b0:2a4:50ca:9234 with SMTP id 5a478bee46e88-2a719d7d25cmr9779908eec.26.1764172167554;
-        Wed, 26 Nov 2025 07:49:27 -0800 (PST)
+        bh=GxkPMvTHFLTjPIqR0uHTN/Ir0NTjVcTTJJUdlvMyaCk=;
+        b=tgkoYb5VEPKEfEtYEFiHfTFIwvAkkF9MUv1iDlOw8TneEKW3IFmnouhgfz0LCFluof
+         6I6RBrAsnz8TGfQuKK65Bbn5ppc7ApdY1V9Ig6MbI6esCUA2hZVf1X40zuCrOjVyjutz
+         A7yqRh7G8ng0Nr3XdBRZQGfpEP9wkb9DYApH8Oba/P2W9lbolZeyR2DopXpePTCRYJs2
+         OJudq4LMEXg8xkkTfUcHr6F2RjZxY8tIzR5eHSNvKrkcY2nHJ1l1dZdw5tjd045iXPVT
+         DTzkeSlUr5oxnjnv3uPgWTej2Hm6Q4pbfuLJH8A9aZ1EtDPlU3u1LtJxOK9xxjYs0iS6
+         V1KA==
+X-Gm-Message-State: AOJu0YxlzydoQ7Z8D+8tpvLqa7wNobkldmcqTMhX4zEi96bkSq6F+Fe5
+	m6Oiyrp7BjxVE0r9CZUOv73iuhusncIF3Xh1AGqbPd7B1wi7jemI7J1D
+X-Gm-Gg: ASbGncu5YodiERN1KBYSDOBh0HP2AR7SKCA2wFE9ajzTuuZiFi4jTj9Bmxei65ZXQtL
+	QHio5ZzWk0tHmUzvjpES5sE70bjWiYHST6Ft2bXMtvpcAEzmEULMe4lJi3pkTqrapADXjaNOUxW
+	FK7i1TgSJOnbi+TixSwV11J/CehBYF4O0alZUwtCB6g3HS8A5iBTqmFkbfalmpT4l6Ke7VReLDQ
+	kGjkS6M/DMcPv2VvJNcrSv/IICda3txJ5eK+nMVHgdWkqNb17gTFmyXLVSvhaOnhAy3+0ZjwP6V
+	czYaxAB96lXxWxHji6P9x/OiP6LGBfaUNTR9DIFzKXhWD3YhsNUN0a5twP6tD1UW/68fmKd/uTI
+	vWi1qUIAYhxrl/RA3B8wMO6q3jPtz8qL6elIg9X0dNIcn/cq45VEdRsD4HQ+RhCOU5hsEOiJq4o
+	aPqYWYzPVXJd/Ls2Iy7CynkZ8=
+X-Google-Smtp-Source: AGHT+IGDhs/kW4iLt6avNYehelW/X0dOFNyYZ72SfUYKOQgKfv0azL+u8SE4o1oXVfKIgTHwbD9GRg==
+X-Received: by 2002:a05:7022:7e05:b0:119:e56b:c75b with SMTP id a92af1059eb24-11cbba4a4edmr4972752c88.32.1764172226741;
+        Wed, 26 Nov 2025 07:50:26 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a6fc3d0bb6sm104571765eec.2.2025.11.26.07.49.26
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11cc631c236sm26594012c88.7.2025.11.26.07.50.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 07:49:26 -0800 (PST)
+        Wed, 26 Nov 2025 07:50:26 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 26 Nov 2025 07:49:26 -0800
+Date: Wed, 26 Nov 2025 07:50:25 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: clabbe.montjoie@gmail.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (adm1029) Add locking to avoid TOCTOU
-Message-ID: <1783a38c-f4ff-4564-8c76-fc5613707c5f@roeck-us.net>
-References: <20251126114047.10039-1-hanguidong02@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (adm1026) Convert macros to functions to avoid
+ TOCTOU
+Message-ID: <6846be0e-2711-4da6-82ab-6b348c15edc5@roeck-us.net>
+References: <20251126113828.10003-1-hanguidong02@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -76,17 +75,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251126114047.10039-1-hanguidong02@gmail.com>
+In-Reply-To: <20251126113828.10003-1-hanguidong02@gmail.com>
 
-On Wed, Nov 26, 2025 at 07:40:46PM +0800, Gui-Dong Han wrote:
-> The function fan_show checks shared data for zero or invalid values
-> before using it as a divisor. These accesses are currently lockless. If
-> the data changes to zero between the check and the division, it causes a
-> divide-by-zero error.
+On Wed, Nov 26, 2025 at 07:38:28PM +0800, Gui-Dong Han wrote:
+> The macro FAN_FROM_REG evaluates its arguments multiple times. When used
+> in lockless contexts involving shared driver data, this causes
+> Time-of-Check to Time-of-Use (TOCTOU) race conditions.
 > 
-> Explicitly acquire the update lock around these checks and calculations
-> to ensure the data remains stable, preventing Time-of-Check to
-> Time-of-Use (TOCTOU) race conditions.
+> Convert the macro to a static function. This guarantees that arguments
+> are evaluated only once (pass-by-value), preventing the race
+> conditions.
+> 
+> Adhere to the principle of minimal changes by only converting macros
+> that evaluate arguments multiple times and are used in lockless
+> contexts.
 > 
 > Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
 > Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
