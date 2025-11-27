@@ -1,94 +1,137 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5022336EC0
-	for <linux-hwmon@vger.kernel.org>; Thu, 27 Nov 2025 16:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E5F2F0689
+	for <linux-hwmon@vger.kernel.org>; Thu, 27 Nov 2025 18:04:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764259728; cv=none; b=syzyMuXeZ0H8AgtDH+/i6hNHyk9GWEhzv/FAFDD2lacZu9MkOuL+e0+Fsxj7OVJ6yLLGKrALBsZC/wsLtMTCb6nRZHxTJHQC9ZaHHm4ghKHLtOrCmm5Q8YYjmeBwF5I95Xi0DGQTSn9RmBT0W7kP0ImDnPCmWucHTD3ojCRSNqs=
+	t=1764266665; cv=none; b=BGKGC8Y4kBOSRzdMd7/srRgGoJd0Ddz8vfWI8XFPQ7/LZhUfs4FcIm1DF8dQmsx76pAZ0F9Hs0WKV0NG0pL3WS+Mo7KDg8BW3oc8ZDWPKehKrD2+UGTmlt4YRUjDOzmawQnxkhYG/9tpGa8mjfm7okZmKBGOnl6bSr9Co7BeshI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764259728; c=relaxed/simple;
-	bh=ta5nvtkAvSEQ0YgT7d6P/ibBZiqxnWaoK6Psv3QiXqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gMcLSu10b7ulrVQ0zN0GgsAwJXCvXjM9fjGVa/WwjhmRrqeCyboBqdJyFBQFxn+SV9juOLQINH376dg2bWO8uslpYVgLpkgj65ytOJurwOs94THMJOSM4cnWWSvZOJYqrfLezZ4nMYQv9Ocd1GXc4i74Gxa7GKkinGIIHdMCLiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KNdwRw+L; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764266665; c=relaxed/simple;
+	bh=K5tx26RTTMo3SawDbjLpfV2fqCWvz4CkRN6nYdpby8k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sOdJmrvTWLk+KicV+IyD2D+EvcqwmSdAJEzVCfubvsUKgtwimvwEwjpWKoYM+RjOle7tlB6GL3n8J6RfSfhI69jS6dDObga7dIhBJQAQzYXEeVWARO818D1BqhTANvc0welU7UPexsdLpSgpUFQlwIrC2MYmPXhsca8UH+TFeZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BaSVWIwi; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KNdwRw+L"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-bc2abdcfc6fso621621a12.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 27 Nov 2025 08:08:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764259723; x=1764864523; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R8go5ngYUd73cjKuDGIyMFUa6ctvuEnzg99jFKgPO6g=;
-        b=KNdwRw+LMlyITikDE03NnFBTKHvy+xLI3xhIaAY4EhkZ+fZKQYcZYMDZGv2ZgXqcyK
-         RG1LCX3fKrSU7OXfEKIdMUpdH7BD+m+lfinMODZV1emmVxskBJuP5+5G03+IGxD1RVAe
-         jp5cnHjktpDCCqluaTvnvJDJbHuOOkN7/WaDLpSczfmDuEFG7nW+/gQyfrWNXMTQ6Q5S
-         UUWHMC0OvmSVglvrl4oskkARsBvugl3IWt+A/9YiAL4pBnYGtmQsy5jh03fHPSUiEdTx
-         FQ0K+EX2X3GMFYe/N+nvARoomXOItfsEiLdOvyzv/YnquuEORCRmvJSMeHTk/ErFvCMH
-         Pm3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764259723; x=1764864523;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R8go5ngYUd73cjKuDGIyMFUa6ctvuEnzg99jFKgPO6g=;
-        b=cZQ4q0viacaOknFQ+zj4UTC1syzYAWhlxa5TIRt7NJKy/nG33iG47BSQUuMkcO6TRe
-         wZ6XPXxZN0yZGSQo6Jfad27Em2e7i4Aj0EyQICh1cFHsFYvAN7DUrPsXup/DMYWU9Lpi
-         ziEEF48kgl/X1Z5qBNJ0Vzp/z6BYEPO5Z0hSN7BUTQVir/ODQuTRAfgMaAXZCXfuMqwZ
-         5B0RVu3rmtonLjbn5zIu1I6+oOAvOoxlBdgJe7DGV5Z1vFoAHAE1mjHBT3qVb+oUXGzg
-         SdT8MYdvrqpKlvHF+6weh59tQ9kqF4qi2F7vQJpWHYCWj5btoLdCz5mrwKmNpGLrvwFv
-         kALA==
-X-Gm-Message-State: AOJu0Yx3n6RK0ica9Xk3CkQ+yRUWrVOn40gSA2RECxkwaSNmR9w34ENn
-	IEcdInCwEhgbD7e/mmSi5BFeADQpM6sGJd+er+3IoUaWmu7v4JGz4xeD
-X-Gm-Gg: ASbGnctnqFo/v70jrVaAIeKQaXbfsNExN3Yb6o5dO/XOC2H0v9W2oYvabQCfhXMWezy
-	nPYFRLmUzHmGggfGEUgAOlz/LbpXARErEyFf3fC/WFfLyRYITa1PsRuBdBYXGTKAo0qOILG2+fl
-	yipcVhlNEzXi6ujE6SZ8NatGMLMU9yybRG8SqhHByR+HwH+qUTLdzC657wNqjrE9phDtV+uafak
-	RsSdYJhNZjPSg5IUYrGdc3x9aIRzDOtMYCQMZe3XNS1NVODtV0oRfFQjKRFXiWE0ffpAxPRUKbv
-	MYWl4okIrVEZFcp9C0mdgcubJIxJR0WEB7ErOBMwi4J3tin/F9KNfogY8WZPZZs5PUlps+t90Rg
-	uKf3d5ACIeqmQSq9jDdizrpx8ZPpoe+NMcAIbvA1rFTM3+q7MTHJ/d4gXHaxNFOGI37LkcK4PLy
-	Rt6YrhvzOjhwIN5cNKRkq542Y=
-X-Google-Smtp-Source: AGHT+IGNzEBkzLWPObgUvVK78LZO7aewF+H131l8nSXj2T2UBjAmy+ewdhC6bKVn3L6oihLw1wQohg==
-X-Received: by 2002:a05:7301:dd98:b0:2a6:9ea0:6db with SMTP id 5a478bee46e88-2a719fb9759mr10317934eec.28.1764259722530;
-        Thu, 27 Nov 2025 08:08:42 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a965b47caasm7617756eec.6.2025.11.27.08.08.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 08:08:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 27 Nov 2025 08:08:40 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max6697) fix regmap leak on probe failure
-Message-ID: <e837ac90-5d2f-4c58-9d76-d2076ef52f1d@roeck-us.net>
-References: <20251127134351.1585-1-johan@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BaSVWIwi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764266663; x=1795802663;
+  h=date:from:to:cc:subject:message-id;
+  bh=K5tx26RTTMo3SawDbjLpfV2fqCWvz4CkRN6nYdpby8k=;
+  b=BaSVWIwiAtcBE5Jz/ic/OWIZf6/rJZ+J9+gdZOHqcD/YCmIlnKM0Z7gb
+   Lnp7vRyZAmli8ovD+qZQr4ZhNRZ5PpnoiuDlb2z2QQMEYfhNgqn3IPkVm
+   X/XUwhg5gPbfiDaXEqIXDoiLtoovPi2BqWyBdQu2hB2LdNoKgMyA/rIo2
+   J2FFM/j14Pj2U0vLME4QIxuhzdbL0LaUZF9mbKwcyvTlMNxevZ9D4Xi3f
+   wZKeTEGJSVP3ePPOPyoTUGOrNAsJbiq3OurjM+EW1sJPmZDJ9DCUQ5DrD
+   etOwo3PycPTGD6ewNg5M8NBVeys5omW88Yy5OsSm/6wmoYqcsuHMtrbDs
+   g==;
+X-CSE-ConnectionGUID: 4coM9wglR4K7qAPxQyr5Sw==
+X-CSE-MsgGUID: vYdYOkj/Sq+fT950OiZ4DQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66210035"
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="66210035"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 10:04:22 -0800
+X-CSE-ConnectionGUID: aC1taL/ZRI6fPQtu6njcwA==
+X-CSE-MsgGUID: PXvZlXJsS5yx2XC8Cb0rzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="192541334"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Nov 2025 10:04:20 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOgLq-000000005UV-2nld;
+	Thu, 27 Nov 2025 18:04:18 +0000
+Date: Fri, 28 Nov 2025 02:03:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:testing] BUILD SUCCESS
+ 21d0537510583449302e6daa9523910e3c95cef1
+Message-ID: <202511280238.nu05yRld-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251127134351.1585-1-johan@kernel.org>
 
-On Thu, Nov 27, 2025 at 02:43:51PM +0100, Johan Hovold wrote:
-> The i2c regmap allocated during probe is never freed.
-> 
-> Switch to using the device managed allocator so that the regmap is
-> released on probe failures (e.g. probe deferral) and on driver unbind.
-> 
-> Fixes: 3a2a8cc3fe24 ("hwmon: (max6697) Convert to use regmap")
-> Cc: stable@vger.kernel.org	# 6.12
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git testing
+branch HEAD: 21d0537510583449302e6daa9523910e3c95cef1  Merge branch 'fixes-v6.18' into testing
 
-Applied.
+elapsed time: 7289m
 
-Thanks,
-Guenter
+configs tested: 60
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                   allnoconfig    gcc-15.1.0
+alpha                  allyesconfig    gcc-15.1.0
+arc                    allmodconfig    gcc-15.1.0
+arc                     allnoconfig    gcc-15.1.0
+arc                    allyesconfig    gcc-15.1.0
+arc         randconfig-001-20251123    gcc-15.1.0
+arc         randconfig-002-20251123    gcc-12.5.0
+arm                     allnoconfig    clang-22
+arm         randconfig-001-20251123    clang-22
+arm         randconfig-002-20251123    clang-22
+arm         randconfig-003-20251123    gcc-10.5.0
+arm         randconfig-004-20251123    clang-22
+arm64                   allnoconfig    gcc-15.1.0
+csky                   allmodconfig    gcc-15.1.0
+csky                    allnoconfig    gcc-15.1.0
+hexagon                allmodconfig    clang-17
+hexagon                 allnoconfig    clang-22
+hexagon     randconfig-001-20251123    clang-22
+hexagon     randconfig-002-20251123    clang-19
+i386                    allnoconfig    gcc-14
+loongarch              allmodconfig    clang-19
+loongarch               allnoconfig    clang-22
+loongarch   randconfig-001-20251123    gcc-15.1.0
+loongarch   randconfig-002-20251123    clang-18
+m68k                   allmodconfig    gcc-15.1.0
+m68k                    allnoconfig    gcc-15.1.0
+m68k                   allyesconfig    gcc-15.1.0
+microblaze              allnoconfig    gcc-15.1.0
+microblaze             allyesconfig    gcc-15.1.0
+mips                   allmodconfig    gcc-15.1.0
+mips                    allnoconfig    gcc-15.1.0
+mips                   allyesconfig    gcc-15.1.0
+nios2                   allnoconfig    gcc-11.5.0
+nios2       randconfig-001-20251123    gcc-8.5.0
+nios2       randconfig-002-20251123    gcc-11.5.0
+openrisc                allnoconfig    gcc-15.1.0
+parisc                 allmodconfig    gcc-15.1.0
+parisc                  allnoconfig    gcc-15.1.0
+parisc                 allyesconfig    gcc-15.1.0
+powerpc                allmodconfig    gcc-15.1.0
+powerpc                 allnoconfig    gcc-15.1.0
+riscv                   allnoconfig    gcc-15.1.0
+riscv       randconfig-001-20251123    clang-20
+riscv       randconfig-002-20251123    gcc-8.5.0
+s390                   allmodconfig    clang-18
+s390                    allnoconfig    clang-22
+s390                   allyesconfig    gcc-15.1.0
+s390        randconfig-001-20251123    gcc-8.5.0
+s390        randconfig-002-20251123    clang-22
+sh                     allmodconfig    gcc-15.1.0
+sh                      allnoconfig    gcc-15.1.0
+sh                     allyesconfig    gcc-15.1.0
+sh          randconfig-001-20251123    gcc-12.5.0
+sh          randconfig-002-20251123    gcc-14.3.0
+sparc                   allnoconfig    gcc-15.1.0
+um                     allmodconfig    clang-19
+um                      allnoconfig    clang-22
+um                     allyesconfig    gcc-14
+x86_64                  allnoconfig    clang-20
+xtensa                  allnoconfig    gcc-15.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
