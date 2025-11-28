@@ -1,71 +1,70 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC07C327BE6
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 12:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442CF329C77
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 12:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764333531; cv=none; b=GhIuNxADFu/ffHwNRUU7zupH1krH0PsqlNqQ/XPo3V4Ga7511G5gDYnrpv5HOn6ML/qopHqogHk52BJKILwfeD8Dtk9JibvooqRm1h6g4QXiqqm5pVBZZysKjY5B3JTLhB4dGtAN1v9tXoq70TG1K/vLRlGbqW/hGwXql7zewi0=
+	t=1764333846; cv=none; b=LZr4uloeLQwGflerX8YHDhwRyzprLHZS8KULQ/lRZaj4U4QlIzTIysRGdf6uKagO2X4pD1uZ2fsWc9HKZ4A6+UVP+aMUgwMRAlLAb0M/rtqJ4v5dxGGjjI/0EwsuzRo+hS4Rh0JllQJdGkmLVLZXdMFX/lTMYp2nEsGwoKdxtq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764333531; c=relaxed/simple;
-	bh=/oucUdI4s6hMDaFfL69cWC2kmdkZHo8+wo/d7zs3NQI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WJe96xUOuMkom7o9WscA2gQRBTzdEZqdiy4obFtIRZku9QSI+ZUu9u1eatHX36C/awxPnTtxcgx/3CXIo8mbhyjGrRRBFCUqfwTMfjVn+y7qxlzm/yRZd8HAt7Uy85F88A8XSDsA2hfpFQ0OIdDw5ZymdSlNuxJxZkCMlNWhLc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfULMyxG; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1764333846; c=relaxed/simple;
+	bh=+JYkccohJPxtTxgjO0MmVJPCD7JdGHRBlF9twCxotsg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lQIlho1KhXlW+I2cbh4abU/J81DkBRbeJYggQ+3PiBAfegLpQsLXasn9H6z3a4ggrvyMC/XQiAGMkljRjtBCFKKfuQemORvTFq3zNwZUrqRVhIO61cOAgJs7X7KPUtA4E/j7NQqZuMqwekBbG14wvBhKFyunhH7x0zjyTfo3pds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBbTXaSy; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfULMyxG"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-297dc3e299bso17810805ad.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 04:38:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBbTXaSy"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7b9c17dd591so1655673b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 04:44:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764333524; x=1764938324; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764333842; x=1764938642; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gmGE0zgXdosAgPn5zQUUbQPBAhgt9HdrlUFjfdvA8k=;
-        b=OfULMyxGJCjnnRtkfIsLQG3xnIOBARjYNVF2vmJ/q1ZR5CuhY+rhqoTGM0SrFWG7z5
-         n4SOKS8Z6p4e29LGB3pR0yPxitVRVaEjnZdwiFpswd/7LuYo4ccogq+dvKoqDNdAA2Bm
-         Qxok9JQoebCwfposwjpUDdo1t7CxJXhf2MlPFIVDIANmoibbXQC7oUSiaKB25W9PCuPo
-         eVmiO3Pvy2+CVavwsKyUNJuus45PJ3si8ZEIwbgMSdCiQQvb5+3cGGU4h2vLSjfgxc8V
-         evu/kiXj43n2J06QIWog+kxTLapRjbJqyP9XQamqN8r+AEkq968O0c9QlSTDJajd6kgE
-         nn8A==
+        bh=g6/uSvuju5dWyLVdRy0T4vm/UMOcqMe/o27PlacpwM4=;
+        b=hBbTXaSyjlTw8HEFVJn5/plEB0pOXymv8KcvHyRmjQm5ttBE8Nd5X97c3RmR5xSjFO
+         bIitDex5TBZpds2fz2V5/WxVdxidDmYajTa094tT88uWAo8ugq4+DoA9bdYfvBX81Mlb
+         sHt+hj4eSTaSwA0eU6F19uR+McAE/Nr62Tsy6SdRr5mUvEk0kU4ktlaZ0txsWFUXvuij
+         tFQ+iz/vczsejHt36octw7amxakFDXh48ClcPPp8/KTfWoD7cXUDnuT9ava4A86P3adc
+         khX0rAQqviL7t6Lmr+Fj4d4hM/+7L5t5/c0jTs0bsgA4oIMm4qBySRfxzx7lbqzHPKjl
+         470g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764333524; x=1764938324;
+        d=1e100.net; s=20230601; t=1764333842; x=1764938642;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+gmGE0zgXdosAgPn5zQUUbQPBAhgt9HdrlUFjfdvA8k=;
-        b=M3uix5p5xX6DOERlAYFs5mFrWfTeFAgvWDCeK2H8ltTA6K0quFlCbgTxPEntjkha8r
-         GlFvl2MIX6Zb70sHr4rPpNvY9mhmUmgHBOU+JZlgRlW5DS/4zy66tTQiqgaLD4bpHRWv
-         Kwx8LFfhITA3+UJDXpxa2mjNFysYUdkxhqElU3aw3jdcOkpESjcsVoc3DP75MAbDp10P
-         bn+NHGvuGz+9E71w1kD+2TN6FgeFoJrkGJafpaVhsX4hdmzhsrh1+yhC4O8AMumB7TWn
-         vnVeZAdvvPJubpduCC4WyhwJB6GOD1tpFHMGpLMj1TJA7sVc1JULpVVOaeVB0J6X8gPc
-         SFBg==
-X-Gm-Message-State: AOJu0YwPhm4PYB1vT6r9RS4QKoHYFnQoNL8zMygTn3ybFeqwg61OdaGj
-	Qy/XDBlCInaoyyaIBs674s6V6H7J2vwWYhZndjfTscAih9to89GCjG2L
-X-Gm-Gg: ASbGncviREfldxMOwEDqxx0Ae18OyV4OGEXRVBTNC/Bb7J9NLMhki49T9/MWDp6AYfI
-	+d4wjgpRBwFi5AVmeudvqdqK/6Wtw4NWNSrirmlFp/gswCz2jRRPX9kyGipeghrlPbzRcp6zD1g
-	RjfYVGUT+UcP/yly1FiEOBOPYNArJ3qb2feUQNplk0s/TLiTpehfcUpzC81/+jRAj/91q6KDw8k
-	JMUxbAeGRh3JA7WIPQwU4wPDVl/tjRSogqamvc9QwX7DSSWzXODpC4oM+8ErYcsAj3JhiWjUe2F
-	DaPs+pzZgB8QpegPrxqydwPXKRj8nTUr1sK34UHo3oAmlP7s7BQYhyqN79Wix92YqaYgroxhoS8
-	U0O7EfqFNhmuPJnrP/TwacwpXMYtch71N1ZiA0NWYoefn2MH+6f4d+Tk3FsE8uXwcfekPIQunnB
-	JFM3WMg7sdcI+mVf/fGt0o3Zq3xE85BIMtounb7gUxAesDLcD/IGlTuWzJ+w+HVjD5/HyJ
-X-Google-Smtp-Source: AGHT+IFYP75h55aKp41FxpTw5WUWy2Up5lb2YKqkFZzaSewuv7Yc1W4fIprqoqs4MCOOfVoM2+dg6w==
-X-Received: by 2002:a05:7022:2487:b0:119:e56b:98a1 with SMTP id a92af1059eb24-11cb3ecc3f2mr10394654c88.8.1764333524073;
-        Fri, 28 Nov 2025 04:38:44 -0800 (PST)
+        bh=g6/uSvuju5dWyLVdRy0T4vm/UMOcqMe/o27PlacpwM4=;
+        b=CdI8Si1aq489SFhjWbjsRg2gEG9YQ4nwzuvqPb+Qvw3BO2URa0cP/PsGRMXL3+qnCV
+         rrtLumFVe0RiOA4UtmkxB1x2/Mjzf+vVhtFi2ikt1d1GSZzZqxLaykubn2pzr9lHHrTz
+         nzRi4jy+Mw3M0Ns+P3O19/19iB4BZdPdFRV7AoPsY7p1IlFmVP7mrDfWcKapjSOCFSOg
+         CktrFUHwvK3LZdd75q0Hc5vaKWeQDeetFRGXBAnhfgCCloJlJDvPW8vNY26pQL8lo4CP
+         cSl2mldpkRhGd5sdYL6AtpsrgMboeeeqOgKxer3oTn2HvH3bhB0pHC6ZOjWWWQREphvw
+         31Tg==
+X-Gm-Message-State: AOJu0YwMTLiOeaUcJjGxgMcoa3XnngDp57iOEKpgqC8zS1rYPy9eOWZF
+	SpZ0E3S5mgTx9eM5iKLq5aD/75ppFn+161Az4K5xiKX9ALC1MxnUhrs8
+X-Gm-Gg: ASbGncuiy0caDafUWPRtFP5sfyUDrqypHFGFtMhakf+vZ7e3FQVepU2FG8QIFGhJG3Q
+	Fxj39cgezGOny1ZpoCzdYRtl5c3AZ/nvlnCA9aKs8dyjCjY4FPV3JxtIU5DSuye8lGJm2XFiZhc
+	Lu6smuLJeHRQPGOup0tCjl+ORV8MnSmGYB1Wqu0ooUk3jIcpRG4GBJnvzWHZ5vpAKE9NsrN9XY8
+	rDeBgSCRvjQquuzsx0nqrgKZWzpcddY6ip0rp0w6oR60rYSuEq/jED+2r1OhzQ07uJrLwVC1MJv
+	K1uVgMQHwOBzxBA2MaDJ0OATssrx4ycV5hBk5zW+yanuqOS9UZSkBKK3GaU/wG16wYY+H4agaul
+	aZvkrO3y3O+ux0Lhwro+MyyQ3lWeKpfoFR516xGRWrcnFZ7rPOk36n0mZ5+6kQPyPE2kejOU1ua
+	2mKJYlFaMhsxtkQFpqu9e6ePrhD7jj91l0lAQ6bDvSsQfumh+d31h/YlG3izE++YgDvtUN
+X-Google-Smtp-Source: AGHT+IHnVGP8yrJTrTUzWQ3F5T6qXbi4UBMigIZNP3pQOi7ZqlFIIgzezyL6g3DHg4jAEFru+7lPSQ==
+X-Received: by 2002:a05:7022:221f:b0:11d:c22e:a131 with SMTP id a92af1059eb24-11dc22ea170mr6731615c88.3.1764333841703;
+        Fri, 28 Nov 2025 04:44:01 -0800 (PST)
 Received: from 2045L.localdomain (7.sub-75-221-66.myvzw.com. [75.221.66.7])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcae73bedsm18301241c88.0.2025.11.28.04.38.42
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcb057cb0sm20974322c88.9.2025.11.28.04.43.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 04:38:43 -0800 (PST)
+        Fri, 28 Nov 2025 04:44:01 -0800 (PST)
 From: Gui-Dong Han <hanguidong02@gmail.com>
 To: linux@roeck-us.net
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	baijiaju1990@gmail.com,
 	Gui-Dong Han <hanguidong02@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (w83l786ng) Convert macros to functions to avoid TOCTOU
-Date: Fri, 28 Nov 2025 20:38:16 +0800
-Message-ID: <20251128123816.3670-1-hanguidong02@gmail.com>
+Subject: [PATCH] hwmon: (max6620) Add locking to avoid TOCTOU
+Date: Fri, 28 Nov 2025 20:43:51 +0800
+Message-ID: <20251128124351.3778-1-hanguidong02@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -75,21 +74,20 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The macros FAN_FROM_REG and TEMP_FROM_REG evaluate their arguments
-multiple times. When used in lockless contexts involving shared driver
-data, this causes Time-of-Check to Time-of-Use (TOCTOU) race
-conditions.
+The function max6620_read checks shared data (tach and target) for zero
+before passing it to max6620_fan_tach_to_rpm, which uses it as a divisor.
+These accesses are currently lockless. If the data changes to zero
+between the check and the division, it causes a divide-by-zero error.
 
-Convert the macros to static functions. This guarantees that arguments
-are evaluated only once (pass-by-value), preventing the race
-conditions.
+Explicitly acquire the update lock around these checks and calculations
+to ensure the data remains stable, preventing Time-of-Check to
+Time-of-Use (TOCTOU) race conditions.
 
-Adhere to the principle of minimal changes by only converting macros
-that evaluate arguments multiple times and are used in lockless
-contexts.
+This change also aligns the locking behavior with the hwmon_fan_alarm
+case, which already uses the update lock.
 
 Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-Fixes: 85f03bccd6e0 ("hwmon: Add support for Winbond W83L786NG/NR")
+Fixes: e8ac01e5db32 ("hwmon: Add Maxim MAX6620 hardware monitoring driver")
 Cc: stable@vger.kernel.org
 Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
 ---
@@ -97,71 +95,38 @@ Based on the discussion in the link, I will submit a series of patches to
 address TOCTOU issues in the hwmon subsystem by converting macros to
 functions or adjusting locking where appropriate.
 ---
- drivers/hwmon/w83l786ng.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ drivers/hwmon/max6620.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
-index 9b81bd406e05..1d9109ca1585 100644
---- a/drivers/hwmon/w83l786ng.c
-+++ b/drivers/hwmon/w83l786ng.c
-@@ -76,15 +76,25 @@ FAN_TO_REG(long rpm, int div)
- 	return clamp_val((1350000 + rpm * div / 2) / (rpm * div), 1, 254);
- }
- 
--#define FAN_FROM_REG(val, div)	((val) == 0   ? -1 : \
--				((val) == 255 ? 0 : \
--				1350000 / ((val) * (div))))
-+static int fan_from_reg(int val, int div)
-+{
-+	if (val == 0)
-+		return -1;
-+	if (val == 255)
-+		return 0;
-+	return 1350000 / (val * div);
-+}
- 
- /* for temp */
- #define TEMP_TO_REG(val)	(clamp_val(((val) < 0 ? (val) + 0x100 * 1000 \
- 						      : (val)) / 1000, 0, 0xff))
--#define TEMP_FROM_REG(val)	(((val) & 0x80 ? \
--				  (val) - 0x100 : (val)) * 1000)
-+
-+static int temp_from_reg(int val)
-+{
-+	if (val & 0x80)
-+		return (val - 0x100) * 1000;
-+	return val * 1000;
-+}
- 
- /*
-  * The analog voltage inputs have 8mV LSB. Since the sysfs output is
-@@ -280,7 +290,7 @@ static ssize_t show_##reg(struct device *dev, struct device_attribute *attr, \
- 	int nr = to_sensor_dev_attr(attr)->index; \
- 	struct w83l786ng_data *data = w83l786ng_update_device(dev); \
- 	return sprintf(buf, "%d\n", \
--		FAN_FROM_REG(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
-+		fan_from_reg(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
- }
- 
- show_fan_reg(fan);
-@@ -347,7 +357,7 @@ store_fan_div(struct device *dev, struct device_attribute *attr,
- 
- 	/* Save fan_min */
- 	mutex_lock(&data->update_lock);
--	min = FAN_FROM_REG(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
-+	min = fan_from_reg(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
- 
- 	data->fan_div[nr] = DIV_TO_REG(val);
- 
-@@ -409,7 +419,7 @@ show_temp(struct device *dev, struct device_attribute *attr, char *buf)
- 	int nr = sensor_attr->nr;
- 	int index = sensor_attr->index;
- 	struct w83l786ng_data *data = w83l786ng_update_device(dev);
--	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr][index]));
-+	return sprintf(buf, "%d\n", temp_from_reg(data->temp[nr][index]));
- }
- 
- static ssize_t
+diff --git a/drivers/hwmon/max6620.c b/drivers/hwmon/max6620.c
+index 13201fb755c9..0dce2f5cb61b 100644
+--- a/drivers/hwmon/max6620.c
++++ b/drivers/hwmon/max6620.c
+@@ -290,20 +290,24 @@ max6620_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 			*val = max6620_fan_div_from_reg(data->fandyn[channel]);
+ 			break;
+ 		case hwmon_fan_input:
++			mutex_lock(&data->update_lock);
+ 			if (data->tach[channel] == 0) {
+ 				*val = 0;
+ 			} else {
+ 				div = max6620_fan_div_from_reg(data->fandyn[channel]);
+ 				*val = max6620_fan_tach_to_rpm(div, data->tach[channel]);
+ 			}
++			mutex_unlock(&data->update_lock);
+ 			break;
+ 		case hwmon_fan_target:
++			mutex_lock(&data->update_lock);
+ 			if (data->target[channel] == 0) {
+ 				*val = 0;
+ 			} else {
+ 				div = max6620_fan_div_from_reg(data->fandyn[channel]);
+ 				*val = max6620_fan_tach_to_rpm(div, data->target[channel]);
+ 			}
++			mutex_unlock(&data->update_lock);
+ 			break;
+ 		default:
+ 			return -EOPNOTSUPP;
 -- 
 2.43.0
 
