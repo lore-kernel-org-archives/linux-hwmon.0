@@ -1,72 +1,72 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52474242D83
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 16:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A053123C4F4
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 16:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764347693; cv=none; b=UqhgkzFdM+QKsJA6M+H50lMpJJW3lDtMnHwcxWug8hNpoPv0RSsruJ9STeG26vhtDJyfTL7VhSy/JRh9LAIk9/eBAGgwKK33zGuYSNCvnHvl36U2MT3Wwd0bh2cZSn1aUmVpmoQytb69j9EZd7/TJ0eDBYbw/P3xtKx11Q+5b5g=
+	t=1764347803; cv=none; b=T9r24YEv7fgB2crSLXHzzimew+cj+II8nFJuwreMJiy5BBNcB1xjwOBgkOlNrjzo7To9798CnEz7TXMY33NNvQMohbz8rC1gDZpEzs7gALRHSDJL74HmHMujGqdCn/8PPjBieMk5l2QSqD/sj1jPk0ElTnSwVHfmZvZrTiTO2CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764347693; c=relaxed/simple;
-	bh=GXH1cWPdGus4O8oVWZv/sxdK/JlLC1p3HxJzlpZFPDs=;
+	s=arc-20240116; t=1764347803; c=relaxed/simple;
+	bh=kr6XAX3GH731cjzi4VKnV2LtQU3uss0kHe5M8FyBSFU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c7g0qw3XwZnWr7UDxq1rjhAk1sMiAjcJxF8yJIshqPULp+i6muqUAZZ+EHSwbeu0OpLgFblixYSyuiVCK3AErz7dn/qAq6+oI09q1rrMQM78zPGY9W5/JTozGOQBaDdBudD1HJ0sIa78h9xGxbsdzbMpp3LKb5x6MpQVOncXwH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLluKbad; arc=none smtp.client-ip=209.85.214.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ut6fv68C/m1fDXGXbhUFvQ2GyHrINJVWgKY1zLc8D4K8J2rP/8NhqWrFnd2eOE7CQk4n1UweHGx5HpwUH7OG4qn6w5Qv45WF4rjH8Crsn6z5bjr19TKFCqHvXVQwq4gkBxyZJWqnFLCMvYIPRdiD1bJdYwanVqRfn6SYOMW4ric=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S6QZuUNH; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLluKbad"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-297d4a56f97so29777495ad.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 08:34:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6QZuUNH"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7ba55660769so1765547b3a.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 08:36:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764347690; x=1764952490; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764347800; x=1764952600; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PFmk9hlrvzIMQ9F/XPguCU52S/7ZrA0XyoOyhl4nsuw=;
-        b=TLluKbadMCGr88g/x2llq+qT5GyW6r6J8v/tBctvbh1gobzLq1j6QQdyjwJE2BsoNs
-         S6d11YJdxowsdOrmkajG3n4B55JVOIi8cTC1zAQiMa3rPNkDOdvnZ+Fpgz9Gm7KN8giY
-         Q940ozf2f9eIZCuF2mpBS94TNUQLbYihI5dugIPjT7gz/3z8u32bVZZBin5afeTHQs/t
-         9n9dXZzgilE5gFH3Bh07n6xaI9vvK+e58ROjK4vZBRwSP6cRiL2yMMOPF3IgBaqWSY+F
-         iwTMRHpZT4kID7Y3FkVU8HSlZCau4rZDtiwep0ROpNbCtxU1eEO5G5fQ7Y6HXWCnt68o
-         vUgg==
+        bh=jbNHKya0E2lKJwlLyC2FOZsBy0/KISJRow+SYNbETeQ=;
+        b=S6QZuUNH05x8dMVLUFDVVU+AvVTOw9c1G12h9gQdwBB21OTYvyJEbHCOVhKXEb0ZSm
+         QpBLMYsTWHVl2+mFViMdoi70u3A5Gtw7vFCV/8L8SsVx8BK4LJbjl+uXS4HgiiFo0AZX
+         lC5lvFE6BYlK4gtL7w7hF9MdmveX8TpJ26sHP5AseIEhhXrW5vttNBRjNCPs4h4e8Hnv
+         cCdBizhMWQ7hzIs0NHxnDC5Z7BVtLjn7mF+68N8Q4lJp2RLonojFBpKD9wrO0ZfQp1vk
+         jDBZx30tsO5NX3S5XzSeY3+VOkpbbzH2h3EuhsIK1ZteYe61/p6nwfmqVBzoZYAWxEyJ
+         paQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764347690; x=1764952490;
+        d=1e100.net; s=20230601; t=1764347800; x=1764952600;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=PFmk9hlrvzIMQ9F/XPguCU52S/7ZrA0XyoOyhl4nsuw=;
-        b=Rp9LXictzllg0GF7pxvjuByGL2UAsAZRkpZAMEBoGZYptas+HMEtbWlTzd/4ydgJnv
-         7i3LaRq2za+S3ZMRMDgovKHYMIBBX6syny/zUzNNEav/EHSRAZoppNWoJeONZcSH8uWM
-         g0oyG1fKXjqvWuZv1ui/RRsMXVieeN+Z+IcTNMPsBxMz2kNt2ajd69v+1+kwCGPi+pSP
-         5odwcb/8BIbchJCNc7KLDnSe3lDQYS6b3Tg5AHOf3jac7YP5X5jxqIZ8eQ3Cu9UkYCpI
-         Epntu4nRASsFst58diCQMwh0ffhVSklI1EBol9HM1Zhg6BARBE0oBijjAGJa8FQ8g+uK
-         NZBA==
-X-Gm-Message-State: AOJu0YzhQxFaMYjycU4SrXjpPJsE3vcRUejz79bU2+2XQwOSNq2bWeHr
-	mboTDbGkbvABhAG1/+xJO0/f36UY7paVbQdycA5ioHQewzGIet++OWlB
-X-Gm-Gg: ASbGncsrth7BlfPTezdoqmaYexQ73hbzGctusyd1hxXT5oQkd+z9F5O9pHYpaqB7ue9
-	K6SvONu/U24kFV6wewSXVkNlS11xtsVWtLtDJZn3BbuwE5LNR2up/DEMdP9EU8XSzX+zTY3TUfX
-	/9hfjjQ+3HF7eGTzCUZ+pS0InCnfgjoe/WKoCqwxAUyqg8kI9j1MTGtHR1PEOoqWfC+4NcWAq87
-	GA7/gD65GwDDUGEmCrr72jCoBo+Ni/bnV5ZVwIKxz3hRUBNNsgTKXpmRXLckcn7QAPy0UifZhM1
-	DtWH51wg0bbH/ggIj8D/Q3IZ8ghOp2UZJZo5zNsg5XOK9xF8c0mRfLEtJgYW4uzXajrH75Z5tZ+
-	iVm6hn4Ir71tE6kLWLzgrbX1xpa3P4KdbEyCfKugRi0349V7yR20CGmI4KdSW5oUNEgKlrTC3Q6
-	/PLo5qkbgq59pmFMfcREKAxTs=
-X-Google-Smtp-Source: AGHT+IHSE4V0DVDx+1WJxYLX/1UcOOn/zoR6YvJ99VgXvbLfW9lqG/mD60tGkXaEnTc9gRyYW/IiAA==
-X-Received: by 2002:a05:7300:2716:b0:2a4:3594:d545 with SMTP id 5a478bee46e88-2a719d5a9d5mr13034270eec.18.1764347690279;
-        Fri, 28 Nov 2025 08:34:50 -0800 (PST)
+        bh=jbNHKya0E2lKJwlLyC2FOZsBy0/KISJRow+SYNbETeQ=;
+        b=ifU73DfCJelnMefaAmHJbBGrhyF6ZCcvPMW4rNAbKGUXlvqavUdRZBPg8XMeRaSc1/
+         8iMS5z/VvIqH3xiw83LdvC4Tv8CXxarI0WqoZdjOnxQRpMdhqi9sK3giQCa0q9wEPUT6
+         BBKryPekqzoZadl4qE1ptU7V8PzA1Hg7SuVTwCMYskMpfa/JI2YE5X9cgmT+2jCCks3E
+         ZmrvWLpqa0v0ecfuS7JHuJL3WW6SsPJnSL3LoepizLnf8h639/+NksznmKwCPG6HMnc7
+         FG/oN+WhnSGjVIM1EGkgzOAGCE4HEQT/gACsEa6r6ynGUEsv6Lfe2q4H1HXhbCcKkoQD
+         64tg==
+X-Gm-Message-State: AOJu0YweAYUxVt2zJl1WlbLsGMYF0I4g1kUsp1jTFUVx1BTvQVsgiHsd
+	a+RvJXQNG+YzboyyQWC56R9TbUbRgMG+MfFRSzIAsTZrW6uczG9HkW2L
+X-Gm-Gg: ASbGnctXxdUMiucNUQsIOtD7RarH409DFqNuHyONCdD+Y6r9i+RkAq0oD9VRqXj6+8H
+	kGmXE31Wp/9OkwEz3CxxrAk1aacFeecL84A6oTWG3djl4vuCkYFPf6uZ4LsZcJkmbnpK4PPUHiX
+	tPbj6aZv5+FkTJUp5MYE58zau6Kiq/FtHWg3YT74yVmKKSB1HopBCbJykRXH07Nx6nvplrDDa/I
+	vVxn+G+XGa6dCZNSBMIWsfndiufIdE2gvsmWWX/s+BbpFwNSwuRybluled+fZh6+cLu/6Ij/JDM
+	jzuQFC+nz5Ax1OKaZXbmifjraAdLgFDKT1RkNbQA8KYesKVI7axFpdbmD6LSFoE1xYrgwal8ZGF
+	fOevi8+yiAFZeYn8QVAK/NBI1IAr9KIt9/4BHaI3TjKiYIcFlDfNgJoJ1KVyafB3miiW7D7+Aiv
+	EW+0/hT/gIJzEMa81HSBqJVDo=
+X-Google-Smtp-Source: AGHT+IHDO0GdukXZKQcUx5DsNAW5rrV9c26FtcSfU7VQ9695O3cefK8NgHmf3K1rDez2TgCnIGzh3A==
+X-Received: by 2002:a05:7022:671f:b0:119:e56b:91f2 with SMTP id a92af1059eb24-11c9d870411mr18511999c88.35.1764347799759;
+        Fri, 28 Nov 2025 08:36:39 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a9653ca11esm16442454eec.0.2025.11.28.08.34.49
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcb057cb0sm22692911c88.9.2025.11.28.08.36.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 08:34:49 -0800 (PST)
+        Fri, 28 Nov 2025 08:36:39 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 28 Nov 2025 08:34:48 -0800
+Date: Fri, 28 Nov 2025 08:36:38 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Gui-Dong Han <hanguidong02@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max6620) Add locking to avoid TOCTOU
-Message-ID: <f5a0e99d-306a-4367-8283-b5790a74dfcb@roeck-us.net>
-References: <20251128124351.3778-1-hanguidong02@gmail.com>
+Subject: Re: [PATCH] hwmon: (max16065) Use local variable to avoid TOCTOU
+Message-ID: <2fc6a617-3537-4c13-a8cb-1fbb79817319@roeck-us.net>
+References: <20251128124709.3876-1-hanguidong02@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,34 +75,27 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251128124351.3778-1-hanguidong02@gmail.com>
+In-Reply-To: <20251128124709.3876-1-hanguidong02@gmail.com>
 
-On Fri, Nov 28, 2025 at 08:43:51PM +0800, Gui-Dong Han wrote:
-> The function max6620_read checks shared data (tach and target) for zero
-> before passing it to max6620_fan_tach_to_rpm, which uses it as a divisor.
-> These accesses are currently lockless. If the data changes to zero
-> between the check and the division, it causes a divide-by-zero error.
+On Fri, Nov 28, 2025 at 08:47:09PM +0800, Gui-Dong Han wrote:
+> In max16065_current_show, data->curr_sense is read twice: once for the
+> error check and again for the calculation. Since
+> i2c_smbus_read_byte_data returns negative error codes on failure, if the
+> data changes to an error code between the check and the use, ADC_TO_CURR
+> results in an incorrect calculation.
 > 
-> Explicitly acquire the update lock around these checks and calculations
-> to ensure the data remains stable, preventing Time-of-Check to
-> Time-of-Use (TOCTOU) race conditions.
+> Read data->curr_sense into a local variable to ensure consistency. Note
+> that data->curr_gain is constant and safe to access directly.
 > 
-> This change also aligns the locking behavior with the hwmon_fan_alarm
-> case, which already uses the update lock.
+> This aligns max16065_current_show with max16065_input_show, which
+> already uses a local variable for the same reason.
 > 
 > Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-> Fixes: e8ac01e5db32 ("hwmon: Add Maxim MAX6620 hardware monitoring driver")
+> Fixes: f5bae2642e3d ("hwmon: Driver for MAX16065 System Manager and compatibles")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
-> ---
-> Based on the discussion in the link, I will submit a series of patches to
-> address TOCTOU issues in the hwmon subsystem by converting macros to
-> functions or adjusting locking where appropriate.
 
-This patch is not necessary. The driver registers with the hwmon subsystem
-using devm_hwmon_device_register_with_info(). That means the hwmon subsystem
-handles the necessary locking. On top of that, removing the existing driver
-internal locking code is queued for v6.19.
+Applied.
 
 Thanks,
 Guenter
