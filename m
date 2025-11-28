@@ -1,87 +1,92 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10662D94BD
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 20:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618162DC791
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 22:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764360427; cv=none; b=kJwlcV0Z3o5UZI5TiNQPlhhmUpevLhvLrLOLiAArHkBNcVHfHYSsNYJ1GYoA/4uLIOO47hQjrG/Seutfm/R8Ray+x88p5CIIr1x2f77QRjxQBlvvpfKZs1fEUf2OHPR5yGe17NnhVG2J9V5AjiCEaNigkgNpZm+7vm8jUuCX33g=
+	t=1764367907; cv=none; b=P6WSOhYhOcnLHKb0ikcBrxmJtGYQoPcjUmhNRZTMzvL38isg5n82zAAN1H711Y5UpOTvn68BAliFYNPnoty0xEzFtU0U7A4k7ayWor1edaWiU5DJc3XL9DrG1sKXylp6/HqXTacTC1qjD0AyUENgiQJXJ42Wtlqqo23lX5edaMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764360427; c=relaxed/simple;
-	bh=qGNzLEmb2symNIdXq9Iwos9nQfPWO9v6NM0mYWw7o7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fqkTDk//thVx4P57UwEsVjN2A09noQXGksWWnKamoz2LlCtK5JeIo6Zg7TNL1l2OrCu86cwbR1Lx/VN5aHtpbBVilBhRPZw+T3DkXOQwPPIdStTLn7v6iw52IGV95s8FLlxGwG6b+DeGpUbtKI30YjGfXek4bLRotpcLafI16+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=zNpc2ppi; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+	s=arc-20240116; t=1764367907; c=relaxed/simple;
+	bh=fV/POjrihOxiepllmcTh2r+up2AEnY5AcR6Zyo+VyWg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0+VxdA28OUYqXVuflwrh64Rf57NpNImtjRNV5snKqZzQnmaEpFqKOax0nN+Bnqys4CbPvtUmnweznMJII2gRag/p85+Jq6Ed9dAIJ1JgfnuGjMmmwZHtjwulVtodYcYa38z/RGbJr4a9DSRRdhONQh9D5D2e7MwH1l7OEcAPdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EahLKcwn; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="zNpc2ppi"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vP4k4-00H2Cs-Nu; Fri, 28 Nov 2025 21:06:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-	 s=selector1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
-	bh=I7BKHMMwUpeKqB5xaGT84hYRuLD6WsDJzoIupwwd274=; b=zNpc2ppiFbE8HAUSsP3h0mDNR2
-	+xhP5lUEAi0dFJEQP4P3q9uidnbzJ3jAHcw2wBP/eepBZceUoBmQVbYOOQjHenIWpqRsv7Z/G/OD1
-	y6HIaFodhiMBBh9bRwTnlj8jJpavXf4qbG4NCyBaCEFn/z0CqV/OaoG2WKgMdi+OFUIrDXghEAZpE
-	XcVBaeLwSY2NqSo9hIINS43xVYcYsapWPdEr76n5YqkVbUHrPyDCWIsc+FPId6WpdBZGaSPcuJUgF
-	1LMPJrHZEGhT3FCMWDC5I472lwU5JhsUeLEfjuwqt4DSnPB8uG3VVHJ3SzfHXJ81AQnH2qN32PRoy
-	1UsLy19g==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <david.laight@runbox.com>)
-	id 1vP4k3-0005bH-8G; Fri, 28 Nov 2025 21:06:55 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vP4jr-001NQf-1y; Fri, 28 Nov 2025 21:06:43 +0100
-Date: Fri, 28 Nov 2025 20:06:34 +0000
-From: david laight <david.laight@runbox.com>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (max6620) Add locking to avoid TOCTOU
-Message-ID: <20251128200135.26000eed@pumpkin>
-In-Reply-To: <CALbr=LbzgLK7Y-e3TTpusXGZEq4+DJJ=mbVMP=M3gt6XDGNUGA@mail.gmail.com>
-References: <20251128124351.3778-1-hanguidong02@gmail.com>
-	<f5a0e99d-306a-4367-8283-b5790a74dfcb@roeck-us.net>
-	<CALbr=LbzgLK7Y-e3TTpusXGZEq4+DJJ=mbVMP=M3gt6XDGNUGA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EahLKcwn"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2984dfae043so20067645ad.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 14:11:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764367906; x=1764972706; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P8W5fIpcW6K56yXlowZ5Boeq0PbdsTAeZm7nguD8644=;
+        b=EahLKcwnR6OK0aCWXBNI2wYRURP6i+Cie7IV5cAyE4cRMW5Pp01Z+EhtgnpAztHBMg
+         5GB7rcKWfsUJWKc0i8Lhmn4vmAuHSQDt4DcRh9O7/JWLLyRwH20Z3/H9XBYa1MYTMYj8
+         9yxNX8Z06ycj+g+axC87JEWKkiHQ0GdMy/WgOz4V/MiyknLTt+Utit/chn3t/bgoRegG
+         zroSOQtFCQGsxtpSW3Ixuo2vAV1NwyGlc0nGNHr1XZ428myPtuHrVw4ytIhvFlYCZhwA
+         FFYuQCy5JVV0vj57q0+/sEFavg/aVK55AQGFth+foAkBgg3CMGxGwi+lkQyj7SmFBczd
+         kA9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764367906; x=1764972706;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P8W5fIpcW6K56yXlowZ5Boeq0PbdsTAeZm7nguD8644=;
+        b=IFad34vaasPmiv8zLoK6R6yUpCvLDYPjppNJTfzNVYW2os7/xYk8cydB+u1Q2HRMzY
+         oUi/lEmZ19I/WCQp1xysKTsO8nxVBFCHUAFNmeBz2QQgmzfFAJo+PWFChaMeUuWg70mL
+         xtAuTnN9Ow6tbD7kF8he0HwAfFYTfnwtVByyWnfxx0oSt/bAwjQKYuWQMm856tN3OwiS
+         vkvZnFxP6tHH5saQdUehDWk6uNHGqSG1mW2CtjDlvknOWbf5llJWALoqzuqRPXg1g16s
+         9SKu3Opgw9ncHSyVeuL1p3lpsh+ca/RfYqrWNuT4Yfq93e7BgXPN0QeEBXR7XLB0Mt1f
+         9NMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNUufILWcxJgD6DwnNy8huzWrVbCWU4KHLifd5ioDZBDKK2nVLNfbxw98cd5Lag2PQIRrtM2VYp3Ws9w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6FNeovJs1k1Q9i0tehuGRQ26oqPHI7EdQe158mO7/FCZO95wt
+	FlefDd5EnDKVpT9iQFpiMuudgxQIu+K20tnh0TOrrvkw6AfG9gJDponf
+X-Gm-Gg: ASbGncsW0qVMHDobK6Bp2ANTIOja1gVZBaiPjQSXwSYwbeESR23J0yWmgnSbakJypRa
+	W7GpV4wimftttX9I7KRpaUy/vI7ICd87O6X7KcC7zmzBdwktneRy9oBFHdT5RaW0mRgHSZXL7q7
+	+aUw2VfEfjUbo+QFDman2d1vh+iq4RM0EJUjmLbHpWN3PcygboPJXa4sAC8kTUjhtkRkMQR1s6e
+	rtCCTsbreAEM6dZk1+vBcrMhuVT+P6Yj0B1a3VJ42vDHavCeUjg+/NukcFQh9jYkIIJZtwhb3SH
+	c9n97tv8/NJaIN0KdF+7cgJff4Y00GPezMQ9EP9x9qgep50xlpofuGE0lqIELizMaZts9miNN0P
+	cipccX1uLAkMu3RZZIg03bTdkIpizv0jYGsaPDh6ida5BPt+nbCGvzid0IY8ysImXUDzRSOjsQM
+	rKuiAeB9k3Neg1b1mUzfDucxBJ7Zvi4aINTw==
+X-Google-Smtp-Source: AGHT+IHZku7KTRc9YozRT0XigqnM/VcOTV4dVsDEq6CYmcvQp2DXXjYnxuC+4LCiVlg0q2vsOD6XSg==
+X-Received: by 2002:a05:693c:8016:b0:2a4:3593:ddd3 with SMTP id 5a478bee46e88-2a7193c9fd0mr10724282eec.0.1764367905511;
+        Fri, 28 Nov 2025 14:11:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a965b1ceeesm19087909eec.5.2025.11.28.14.11.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Nov 2025 14:11:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 28 Nov 2025 14:11:43 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Gabriel Marcano <gabemarcano@yahoo.com>
+Cc: Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G5 5505 to fan control
+ whitelist
+Message-ID: <db5375b4-cf48-4b3f-8269-8ac437e84766@roeck-us.net>
+References: <20251128191650.6191-1-gabemarcano.ref@yahoo.com>
+ <20251128191650.6191-1-gabemarcano@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251128191650.6191-1-gabemarcano@yahoo.com>
 
-On Sat, 29 Nov 2025 01:59:51 +0800
-Gui-Dong Han <hanguidong02@gmail.com> wrote:
+On Fri, Nov 28, 2025 at 11:16:44AM -0800, Gabriel Marcano wrote:
+> Allow manual PWM control on Dell G5 5505 (and SE).
+> 
+> Signed-off-by: Gabriel Marcano <gabemarcano@yahoo.com>
+> ---
 
-...
-> In our previous discussion, you also suggested adding a note to
-> submitting-patches.rst about "avoiding calculations in macros" to
-> explicitly explain the risk of race conditions. Is this something you
-> would still like to see added? If so, I would be happy to prepare a
-> patch.
+Applied.
 
-The real problem with #defines evaluating their parameters more than
-once is just side effects of the expansion.
-Even if the current users just pass a simple variable, you never
-really know what is going to happen in the future.
-
-There is also a secondary issue of pre-processor output 'bloat'.
-This happens when large #define expansions get nested.
-With the current headers FIELD_PREP(GENMASK(8, 5), val) expands to
-about 18kB [1] (even though it is just (val >> 5) & 15).
-I think one of your #defines get passed one of those - and then expands
-it several times. As well as the massive line, the compiler may well
-generate the code multiple times.
-(CSE will normally stop foo->bar[x] being executed multiple times).
-
-[1] Nothing like the 30MB that triple nested min() generated for a while.
-
-	David
+Thanks,
+Guenter
