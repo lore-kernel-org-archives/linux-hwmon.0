@@ -1,146 +1,167 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625D4306B20
-	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 10:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC07C327BE6
+	for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 12:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764326228; cv=none; b=bFy8PmtiKhbDXMRPdwJQhpVE+XPqWsTxYhx3VlinEvC9Aj2eyEKqIleZNkJ/80wyu3s/kH5gAA9yn+VU6Ol1dCqRW96Vv8vZV7irsP//SawzOBcy+xBel69mTZmE/K5CL00+xG03YDc0Ce4FwQ3O9gdSjCsW0lMuyL8iW9TXXsU=
+	t=1764333531; cv=none; b=GhIuNxADFu/ffHwNRUU7zupH1krH0PsqlNqQ/XPo3V4Ga7511G5gDYnrpv5HOn6ML/qopHqogHk52BJKILwfeD8Dtk9JibvooqRm1h6g4QXiqqm5pVBZZysKjY5B3JTLhB4dGtAN1v9tXoq70TG1K/vLRlGbqW/hGwXql7zewi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764326228; c=relaxed/simple;
-	bh=LsjBUCj2srMne7edzgGW8cbMkZIkCTv5yV9uYfkGBBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oVElaWggcy2TeGU1FUyND++xTmhdnn0Exr7dXUg+2vBES6baCXqeoPsvuHxT4BAWQxzTCHh11q2RNL00yXjX3dcTOyg1w1y4AvCBJUu2gffLAcuIbe6wVH1VP2z/RiYwSHxPHfxwKrNpScLBg6WqMbSNmAk+/snOuTBX1CEjNyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyFJfB5E; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1764333531; c=relaxed/simple;
+	bh=/oucUdI4s6hMDaFfL69cWC2kmdkZHo8+wo/d7zs3NQI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WJe96xUOuMkom7o9WscA2gQRBTzdEZqdiy4obFtIRZku9QSI+ZUu9u1eatHX36C/awxPnTtxcgx/3CXIo8mbhyjGrRRBFCUqfwTMfjVn+y7qxlzm/yRZd8HAt7Uy85F88A8XSDsA2hfpFQ0OIdDw5ZymdSlNuxJxZkCMlNWhLc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfULMyxG; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyFJfB5E"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-29844c68068so20074465ad.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 02:37:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfULMyxG"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-297dc3e299bso17810805ad.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 28 Nov 2025 04:38:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764326226; x=1764931026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L4VICBTALhOgKQ11NcNnDdPOSrcRxYndkOphogjBgx4=;
-        b=TyFJfB5Ep4A7ODMRUKn8tZ7ZKi6TTBW1kh28faa/niAkS6GcO8WPf7G2Y/g2oubik4
-         fzhckhp4qq0IWU5BuOJALxL+nzRPxaWHgo1g9roiJv36iT+0X0zcgfy4kLjj4LdS1Lfd
-         /Zg4DJZisPmw9SZFyC5gUpkdHDVHYlVp+2+5V6+6U1k8P7EfvhrYND5Xr09YDd1O7r8l
-         Mp/4S/Lb8cDe/tJyl7mgZfCnk3kI+lxQFxcsLRG/9PngjLN7x6NQZrojCz4YtrlFc1wy
-         s9yUOjCqBxKzevDIKlwZp6JZL/rHCSdgSNlqpZnvl6jjaotXbp3Wnla1FLhVmXgX7wDu
-         d9Rw==
+        d=gmail.com; s=20230601; t=1764333524; x=1764938324; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gmGE0zgXdosAgPn5zQUUbQPBAhgt9HdrlUFjfdvA8k=;
+        b=OfULMyxGJCjnnRtkfIsLQG3xnIOBARjYNVF2vmJ/q1ZR5CuhY+rhqoTGM0SrFWG7z5
+         n4SOKS8Z6p4e29LGB3pR0yPxitVRVaEjnZdwiFpswd/7LuYo4ccogq+dvKoqDNdAA2Bm
+         Qxok9JQoebCwfposwjpUDdo1t7CxJXhf2MlPFIVDIANmoibbXQC7oUSiaKB25W9PCuPo
+         eVmiO3Pvy2+CVavwsKyUNJuus45PJ3si8ZEIwbgMSdCiQQvb5+3cGGU4h2vLSjfgxc8V
+         evu/kiXj43n2J06QIWog+kxTLapRjbJqyP9XQamqN8r+AEkq968O0c9QlSTDJajd6kgE
+         nn8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764326226; x=1764931026;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L4VICBTALhOgKQ11NcNnDdPOSrcRxYndkOphogjBgx4=;
-        b=Mzx7jJbdvDEqRBK+d2+b7SwN8/Sd5hJ8KbHaEJE3dfNsOonDPUSq0CifQTF+lc+YFK
-         ZZvWG8BTAjyr36xi86V0eHEjc8MgcjbkXfelxPU1p3Yu/bLJdNEAVodCV+yEaJ+wocz7
-         pIBNTPX8xknh9VWvED7j7VlBu1f5CPL55jscdLV7OPoUnvB/1IS4BCd9ZVgt2kT1QSDb
-         v6ixvmTPsSgtkONq9+Fj1RdLEdwm4a54OVHZZ5CQNzgJAxdLQ1Y8uuDEbOjzXFfUO2OS
-         VJLYKs5QkqHtLC5oGe2MCE8tOlk+AieWb3JiIzLpzO2lgr6ApwjHA2yq+GDX1ZqL4/2X
-         YttA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7RGJZoQdRbRU26mn4S5gouQep7i5ZUn8fGjK+ufUD5O/9fUXHmyZNjWbK3vgXDORBQY6cO5bVtsKKmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzo3QqKNLQayaogAVbYp2yNDepEeCXMzWCy2l8LugYSDFkPWL4Q
-	Aqmfq3iTcbJYL5kreFNs22QHy0Jiq5JWI6clomMuFL5ev3iqaSY1zvJg
-X-Gm-Gg: ASbGncusf0FKN9v1vqrcXQXsREqb2rcQRpJPGDESenZV4RtwYL9TxQLs8T1REjstmNy
-	old536MCK31CEyW9s1gMrfZN8ZBxcHCtPbRxr7k4D4GY/I4kT37ImgoAw6+cBJl+8zsvJdz6DbG
-	hx/W0GqdPN+Tyug3O5wcNubPWmcaxkTWAfh3u2ZBSS2VlWcOT06NKVngPQT5IupMRB/twoyAlqt
-	1098ehNF7y8U9eh1aj9OVRgSbEsdDEApXoW57xpZ1dosESi7pZcmd5u01rOUehbrgY3HWk7NYYz
-	MhjZyH3WG20SL/ORVfBnRQ1Dvjfb0ZXiNnhuDodqBHcGIEWvQgi3SfYsi6OphoLzjDOVth+5pTi
-	Y81nGod9/g7k9ZuRP1cxwH1VCOExk8HenX25DZlmYmgbfd4nvj/7LaGH7eIwBbZL2120Cgx+JQK
-	yDlek8J0ax1dnIKmnBj4nj+hw61gePMBVrYnl1zId1XPNP3L6PjXixAC3PZ+m2P0kM27RvyJKht
-	0ckBZ7vpTauHsG3j01Rv2T/OKQg3snstY6KJgIV3yKXvZbPsoSIbjlPQaehTpoM4sNpDBeAN6pu
-	gngQbPax83sVCpXg/rr6SQMcQkfATO2VLr8sbFbQ2MLF05TxKzb0k0c=
-X-Google-Smtp-Source: AGHT+IGMXq1Dh7hKw7TbowlI22iUZ08cEdFKrn/i/FIQAiWpJQ+dGpYRwCov3xkXMTBkJf1Am/GMAQ==
-X-Received: by 2002:a17:903:b84:b0:295:b7a3:30e6 with SMTP id d9443c01a7336-29b6bec45damr309873285ad.18.1764326225590;
-        Fri, 28 Nov 2025 02:37:05 -0800 (PST)
-Received: from setsuna.localnet (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce470347sm41643525ad.41.2025.11.28.02.36.58
+        d=1e100.net; s=20230601; t=1764333524; x=1764938324;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+gmGE0zgXdosAgPn5zQUUbQPBAhgt9HdrlUFjfdvA8k=;
+        b=M3uix5p5xX6DOERlAYFs5mFrWfTeFAgvWDCeK2H8ltTA6K0quFlCbgTxPEntjkha8r
+         GlFvl2MIX6Zb70sHr4rPpNvY9mhmUmgHBOU+JZlgRlW5DS/4zy66tTQiqgaLD4bpHRWv
+         Kwx8LFfhITA3+UJDXpxa2mjNFysYUdkxhqElU3aw3jdcOkpESjcsVoc3DP75MAbDp10P
+         bn+NHGvuGz+9E71w1kD+2TN6FgeFoJrkGJafpaVhsX4hdmzhsrh1+yhC4O8AMumB7TWn
+         vnVeZAdvvPJubpduCC4WyhwJB6GOD1tpFHMGpLMj1TJA7sVc1JULpVVOaeVB0J6X8gPc
+         SFBg==
+X-Gm-Message-State: AOJu0YwPhm4PYB1vT6r9RS4QKoHYFnQoNL8zMygTn3ybFeqwg61OdaGj
+	Qy/XDBlCInaoyyaIBs674s6V6H7J2vwWYhZndjfTscAih9to89GCjG2L
+X-Gm-Gg: ASbGncviREfldxMOwEDqxx0Ae18OyV4OGEXRVBTNC/Bb7J9NLMhki49T9/MWDp6AYfI
+	+d4wjgpRBwFi5AVmeudvqdqK/6Wtw4NWNSrirmlFp/gswCz2jRRPX9kyGipeghrlPbzRcp6zD1g
+	RjfYVGUT+UcP/yly1FiEOBOPYNArJ3qb2feUQNplk0s/TLiTpehfcUpzC81/+jRAj/91q6KDw8k
+	JMUxbAeGRh3JA7WIPQwU4wPDVl/tjRSogqamvc9QwX7DSSWzXODpC4oM+8ErYcsAj3JhiWjUe2F
+	DaPs+pzZgB8QpegPrxqydwPXKRj8nTUr1sK34UHo3oAmlP7s7BQYhyqN79Wix92YqaYgroxhoS8
+	U0O7EfqFNhmuPJnrP/TwacwpXMYtch71N1ZiA0NWYoefn2MH+6f4d+Tk3FsE8uXwcfekPIQunnB
+	JFM3WMg7sdcI+mVf/fGt0o3Zq3xE85BIMtounb7gUxAesDLcD/IGlTuWzJ+w+HVjD5/HyJ
+X-Google-Smtp-Source: AGHT+IFYP75h55aKp41FxpTw5WUWy2Up5lb2YKqkFZzaSewuv7Yc1W4fIprqoqs4MCOOfVoM2+dg6w==
+X-Received: by 2002:a05:7022:2487:b0:119:e56b:98a1 with SMTP id a92af1059eb24-11cb3ecc3f2mr10394654c88.8.1764333524073;
+        Fri, 28 Nov 2025 04:38:44 -0800 (PST)
+Received: from 2045L.localdomain (7.sub-75-221-66.myvzw.com. [75.221.66.7])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcae73bedsm18301241c88.0.2025.11.28.04.38.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 02:37:05 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-To: Lee Jones <lee@kernel.org>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 05/11] mfd: macsmc: Add new __SMC_KEY macro
-Date: Fri, 28 Nov 2025 20:36:56 +1000
-Message-ID: <1938104.tdWV9SEqCh@setsuna>
-In-Reply-To: <20251120134445.GC661940@google.com>
-References:
- <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
- <20251112-macsmc-subdevs-v5-5-728e4b91fe81@gmail.com>
- <20251120134445.GC661940@google.com>
+        Fri, 28 Nov 2025 04:38:43 -0800 (PST)
+From: Gui-Dong Han <hanguidong02@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] hwmon: (w83l786ng) Convert macros to functions to avoid TOCTOU
+Date: Fri, 28 Nov 2025 20:38:16 +0800
+Message-ID: <20251128123816.3670-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thursday, 20 November 2025 11:44:45=E2=80=AFpm Australian Eastern Standa=
-rd Time Lee=20
-Jones wrote:
-> On Wed, 12 Nov 2025, James Calligeros wrote:
-> > When using the _SMC_KEY macro in switch/case statements, GCC 15.2.1 err=
-ors
-> > out with 'case label does not reduce to an integer constant'. Introduce
-> > a new __SMC_KEY macro that can be used instead.
-> >=20
-> > Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
-> > ---
-> >=20
-> >  include/linux/mfd/macsmc.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/include/linux/mfd/macsmc.h b/include/linux/mfd/macsmc.h
-> > index 6b13f01a8592..f6f80c33b5cf 100644
-> > --- a/include/linux/mfd/macsmc.h
-> > +++ b/include/linux/mfd/macsmc.h
-> > @@ -41,6 +41,7 @@ typedef u32 smc_key;
-> >=20
-> >   */
-> > =20
-> >  #define SMC_KEY(s) (smc_key)(_SMC_KEY(#s))
-> >  #define _SMC_KEY(s) (((s)[0] << 24) | ((s)[1] << 16) | ((s)[2] << 8) |
-> >  (s)[3])>=20
-> > +#define __SMC_KEY(a, b, c, d) (((u32)(a) << 24) | ((u32)(b) << 16) |
-> > ((u32)(c) << 8) | ((u32)(d)))
-> Are we expecting users/consumers to be able to tell the difference
-> between SMC_KEY and __SMC_KEY (assuming that _SMC_KEY is just an
-> internal)?
+The macros FAN_FROM_REG and TEMP_FROM_REG evaluate their arguments
+multiple times. When used in lockless contexts involving shared driver
+data, this causes Time-of-Check to Time-of-Use (TOCTOU) race
+conditions.
 
-_SMC_KEY is used in the gpio driver, and I would have used it here too if n=
-ot=20
-for GCC complaining about it. I wouldn't expect anyone to want to use=20
-__SMC_KEY outside of the specific use case this commit addresses given the=
-=20
-suboptimal ergonomics.
+Convert the macros to static functions. This guarantees that arguments
+are evaluated only once (pass-by-value), preventing the race
+conditions.
 
-> I have not tested this and it is just off the top of my head, but does
-> this work:
->=20
-> #define _SMC_KEY(s) __SMC_KEY((s)[0], (s)[1], (s)[2], (s)[3])
+Adhere to the principle of minimal changes by only converting macros
+that evaluate arguments multiple times and are used in lockless
+contexts.
 
-This works fine on a smattering of M1 and M2 series machines. I can submit =
-a=20
-v6 with this and the hwmon driver dropped if need be.
+Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
+Fixes: 85f03bccd6e0 ("hwmon: Add support for Winbond W83L786NG/NR")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+---
+Based on the discussion in the link, I will submit a series of patches to
+address TOCTOU issues in the hwmon subsystem by converting macros to
+functions or adjusting locking where appropriate.
+---
+ drivers/hwmon/w83l786ng.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-Regards,
-James
-
+diff --git a/drivers/hwmon/w83l786ng.c b/drivers/hwmon/w83l786ng.c
+index 9b81bd406e05..1d9109ca1585 100644
+--- a/drivers/hwmon/w83l786ng.c
++++ b/drivers/hwmon/w83l786ng.c
+@@ -76,15 +76,25 @@ FAN_TO_REG(long rpm, int div)
+ 	return clamp_val((1350000 + rpm * div / 2) / (rpm * div), 1, 254);
+ }
+ 
+-#define FAN_FROM_REG(val, div)	((val) == 0   ? -1 : \
+-				((val) == 255 ? 0 : \
+-				1350000 / ((val) * (div))))
++static int fan_from_reg(int val, int div)
++{
++	if (val == 0)
++		return -1;
++	if (val == 255)
++		return 0;
++	return 1350000 / (val * div);
++}
+ 
+ /* for temp */
+ #define TEMP_TO_REG(val)	(clamp_val(((val) < 0 ? (val) + 0x100 * 1000 \
+ 						      : (val)) / 1000, 0, 0xff))
+-#define TEMP_FROM_REG(val)	(((val) & 0x80 ? \
+-				  (val) - 0x100 : (val)) * 1000)
++
++static int temp_from_reg(int val)
++{
++	if (val & 0x80)
++		return (val - 0x100) * 1000;
++	return val * 1000;
++}
+ 
+ /*
+  * The analog voltage inputs have 8mV LSB. Since the sysfs output is
+@@ -280,7 +290,7 @@ static ssize_t show_##reg(struct device *dev, struct device_attribute *attr, \
+ 	int nr = to_sensor_dev_attr(attr)->index; \
+ 	struct w83l786ng_data *data = w83l786ng_update_device(dev); \
+ 	return sprintf(buf, "%d\n", \
+-		FAN_FROM_REG(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
++		fan_from_reg(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
+ }
+ 
+ show_fan_reg(fan);
+@@ -347,7 +357,7 @@ store_fan_div(struct device *dev, struct device_attribute *attr,
+ 
+ 	/* Save fan_min */
+ 	mutex_lock(&data->update_lock);
+-	min = FAN_FROM_REG(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
++	min = fan_from_reg(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
+ 
+ 	data->fan_div[nr] = DIV_TO_REG(val);
+ 
+@@ -409,7 +419,7 @@ show_temp(struct device *dev, struct device_attribute *attr, char *buf)
+ 	int nr = sensor_attr->nr;
+ 	int index = sensor_attr->index;
+ 	struct w83l786ng_data *data = w83l786ng_update_device(dev);
+-	return sprintf(buf, "%d\n", TEMP_FROM_REG(data->temp[nr][index]));
++	return sprintf(buf, "%d\n", temp_from_reg(data->temp[nr][index]));
+ }
+ 
+ static ssize_t
+-- 
+2.43.0
 
