@@ -1,153 +1,92 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6AC3375D3
-	for <linux-hwmon@vger.kernel.org>; Mon,  1 Dec 2025 17:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D307222D780;
+	Mon,  1 Dec 2025 19:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764609362; cv=none; b=GTIOOpqOsurr4Zs324z5LkH6VGdCT+DgMKW1o5gckQJVkpi5yl478SWDGqNGv9HPCOskSgozaax/WyMVPDoKWZC+KphyB0/Yfwsc473VYr4zOyfHWUqLRLsvt+KOd3CqjscfW5aFnSe+yLKoxgMe01gHW0EYGTt+4qwwIr6BtJQ=
+	t=1764616107; cv=none; b=UK7Fi/OziFoyXiWUywxk42BTe2rklqt8ZaQIvluCCqiyHiESPbaDs3FC0hblxjFqNi/5Cfprm7H0+V4bYaRwPneQAWfiCF8ipaB1WMsL4IXQdy9+gmzRsf7s2vZSaurbkXgTVvPF6Rp224kca5N3KX8lxJG2OLr7vFf9jIy07f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764609362; c=relaxed/simple;
-	bh=HH/YjoTJvK+HycLUz2tbwGdJb1nNegFYrobhQ9Ypw8s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IbE/u3EQj/7G6S8VwxvWQQui2Urp90Dwtd+DY294TLB0Bel3OtBP5NpML5GiahBGll+rmgHMjo54ZBROreQuNwdA5D6EPRDz2S13XC+cNkrMjrd19A32dMwu0xsDglIGO/EQJBYvIB5zesS60F/kUko/LKRu4eLyXcAFsmMC48E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Npow+MGS; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1764616107; c=relaxed/simple;
+	bh=6qGX9Os7lze/wnVFGAkH/o0d7iQaTOrifP7WUaadYRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8oUMTHW75uNb0pbIiH8uFOxwnEijAG8oNiO5XViBArmXaTsYKUoocsxoWCMFPV7L08wImNQhAAI+vc2GVWMiVHq/TJKI8tgp7233JCh8mHrvaOY8gZNxXYD00wNqcm8wftmbpL/s2PLgrKb2IKlSLL6jsFTVIj4iDZiYawmIBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/icLxbP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Npow+MGS"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-65791c35134so1977101eaf.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 01 Dec 2025 09:15:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764609357; x=1765214157; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mXBvbePBmN0aGW+rjYL5kzNiYaDe50sZg3kuC1eECMg=;
-        b=Npow+MGScSa9PmoCppCBKLkH/lvjtJcb6awX9aPoo0MtWh2u5ueZl/upHY6tPLROi5
-         EW73g+TiACBOJ+6zy3qphgzGuN5GmxU+PFQrjTy1JxwXANnbrwdp5plkDZDTUHuv0JEr
-         /OhNtkJdZQ2tjwgdau6y7JHlSn3T1eYWvaUdRrCjFeRqk2rWcjfNRY7xp9O58g1TKOs7
-         TENNcDQyxVmuY8UZ9RorIWWD6IcDvaEP5x9IAtzciD9xU7ComNVSJfHGYv2lHYq0m5Mp
-         C373JHEbOJ7pFsoWM7r6gp+mCteyyMrpi4dKE1LEy4ThHi502gBLwkQ2Pjs+1wi4HnJv
-         zC/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764609357; x=1765214157;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mXBvbePBmN0aGW+rjYL5kzNiYaDe50sZg3kuC1eECMg=;
-        b=IwMTaT19QzLDP32aCzjdsoufpzZIwvYzTAw0wDd/v9YbFvLo+EEY+ZeKmRHozKD0RH
-         T3j08ta+YSF/CisKgTaC7c6R3tjgkTx40Llhoc0xLItHg5tVCyNyOEKX2YKhN4rUEm3t
-         Bh3Mzt0yhsigWFwIwHaCqcYfP9lDNbpl+PrPOY6p0Neg8eRwa9mUgwIVYrB6kUB9TZDO
-         Ydp5E00wY31RR3gl+6J1XC1qWQnVyt5YnotqHWdtyeoJx6/Xali3+xWNeFXCGvo/Knvt
-         LK5/y1l9o4F1noYb6G1OAL6iObrNInIyEDFmz4iTv0NJNbNSez+M2QwpeX1DK9l0Fzu2
-         Q+0A==
-X-Forwarded-Encrypted: i=1; AJvYcCWtb/J3bLD8iarm8/RBR3N84KQxP4u4uh91YZydxIFIewEup8x8xf33kSWUmg1hNJ/9VsNVocKDvbIvWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycAWIilIfQgVR0tavDNd3DWFyLt1rAAGCja2AOQGbiAG3kNgoV
-	S4/g5bal4Kc93E0Oc0V87D7gsmJoGZ/MKL+7p0DkwGOI04oTm1u1cd/fftOD4ysVguI=
-X-Gm-Gg: ASbGnctGaT0ycaBZMx7uIfS/0f2x1MrqeZpKlbdTD1Ys3izZ5Qw/OUXKcUlOcQcFycF
-	pB+8AX+fJ+vnwIHkL/T9TNUjb/gwxFHizLyOQVEoUbRwXRhREFOAHGxDHmqycsIzDmplBGBmrJD
-	XfIuqdvW+bIX0kQmTgoQmSBAzCYnTWFHzobIRci6VfZdn3DLncU1cgZmoYDZV3VjF6iBozlCbCW
-	ivZifUxUzckc1tM5xQR9T5/hVCFW/5NSP+VbDSY62Qz5XzhKi7+nF2vBi2qOz3PUt8l6M+nnJ5M
-	UQjJzUTAt8vpgMKKmbagdXYpVU0EmEBVU/jGqI8JjxZW+iUwobN3uAp0yuxfHxTSUz9Wz3N7hjR
-	kR/9rjtNkojM3rVcGyVujCV9E3X9Z8u/ErHRNH5/vDDegAc/037NVrmBrGkMzm+bmCRWQTHLd0z
-	J80/UGStXZjbXQ9xrx6i7DCtyOmT+PuFg5xpp8jEznKpco77wSSx52JaDnug==
-X-Google-Smtp-Source: AGHT+IFhXzu7oIvN//K+0gQ9fSmHlhexzrACWF7hMjJsE/gYpW4bjA3882odDNc+t9DkOzPtuw0t9A==
-X-Received: by 2002:a05:6808:1790:b0:450:65dc:1fce with SMTP id 5614622812f47-4514e5f84ddmr11527679b6e.3.1764609356945;
-        Mon, 01 Dec 2025 09:15:56 -0800 (PST)
-Received: from ?IPV6:2600:8803:e7e4:500:b67b:16c:f7ae:4908? ([2600:8803:e7e4:500:b67b:16c:f7ae:4908])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-453169b2a51sm3922009b6e.4.2025.12.01.09.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 09:15:56 -0800 (PST)
-Message-ID: <78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
-Date: Mon, 1 Dec 2025 11:15:54 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/icLxbP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45963C4CEF1;
+	Mon,  1 Dec 2025 19:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764616107;
+	bh=6qGX9Os7lze/wnVFGAkH/o0d7iQaTOrifP7WUaadYRA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V/icLxbPMp7yHUNBx+yOtoE2WYwDEhAepf+uBqh8bMp+Ks4Zi6muGEr+JUGYBVgsx
+	 gq1kg5FaQ4d8V2R5iU5hCB9hq9Lzxxtp0GndCd+Ey6P0CkPFO0DmBHGSioAJHxsmpA
+	 qoZor6SBZwZfonZxzkOCiHJJisusM3zlaPqkA5vUoa1lMO+Ne5vzD3gN2hTWf8Nqa+
+	 85e/iPjgKA3ek3Yz8FpZk3QfkdfFXBMd56/jaeVimn7P3H4qIUK/YgX2ykgJDldlNy
+	 mf8kWkKtHlJJ7hNqIck7oyKguLwcE1celul14Jnh2Af4pV+lkuAc+yaBfHBS8m7X82
+	 OjkWrnQtcRHiw==
+Received: by pali.im (Postfix)
+	id E2805700; Mon,  1 Dec 2025 20:08:19 +0100 (CET)
+Date: Mon, 1 Dec 2025 20:08:19 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Gabriel Marcano <gabemarcano@yahoo.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G5 5505 to fan control
+ whitelist
+Message-ID: <20251201190819.sum3d3b7tixxkzzj@pali>
+References: <20251128191650.6191-1-gabemarcano.ref@yahoo.com>
+ <20251128191650.6191-1-gabemarcano@yahoo.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] iio: inkern: Use namespaced exports
-To: Romain Gantois <romain.gantois@bootlin.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>,
- Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>, Kevin Tsai
- <ktsai@capellamicro.com>, Linus Walleij <linus.walleij@linaro.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Hans de Goede <hansg@kernel.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com
-References: <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251128191650.6191-1-gabemarcano@yahoo.com>
+User-Agent: NeoMutt/20180716
 
-On 12/1/25 4:59 AM, Romain Gantois wrote:
-> Use namespaced exports for IIO consumer API functions.
+On Friday 28 November 2025 11:16:44 Gabriel Marcano wrote:
+> Allow manual PWM control on Dell G5 5505 (and SE).
 > 
-> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> Signed-off-by: Gabriel Marcano <gabemarcano@yahoo.com>
+
+Acked-by: Pali Rohár <pali@kernel.org>
+
 > ---
-
-...
-
-> diff --git a/drivers/iio/dac/ds4424.c b/drivers/iio/dac/ds4424.c
-> index a8198ba4f98a..33d6692f46fe 100644
-> --- a/drivers/iio/dac/ds4424.c
-> +++ b/drivers/iio/dac/ds4424.c
-> @@ -14,7 +14,6 @@
->  #include <linux/iio/iio.h>
->  #include <linux/iio/driver.h>
->  #include <linux/iio/machine.h>
-> -#include <linux/iio/consumer.h>
-
-Unrelated change?
-
+> I tested this on my Dell G5 5505 SE, although there only seem to be
+> three fan speeds regardless of the actual PWM setting (off, somewhere in
+> the middle, and max).
+> 
+>  drivers/hwmon/dell-smm-hwmon.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index cbe1a74a3dee..683baf361c4c 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1533,6 +1533,15 @@ static const struct i8k_fan_control_data i8k_fan_control_data[] __initconst = {
+>  };
 >  
->  #define DS4422_MAX_DAC_CHANNELS		2
->  #define DS4424_MAX_DAC_CHANNELS		4
-> @@ -321,3 +320,4 @@ MODULE_AUTHOR("Ismail H. Kose <ismail.kose@maximintegrated.com>");
->  MODULE_AUTHOR("Vishal Sood <vishal.sood@maximintegrated.com>");
->  MODULE_AUTHOR("David Jung <david.jung@maximintegrated.com>");
->  MODULE_LICENSE("GPL v2");
-> +MODULE_IMPORT_NS("IIO_CONSUMER");
-Is this actually needed if we don't use anything from consumer.h?
+>  static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
+> +	{
+> +		.ident = "Dell G5 5505",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G5 5505"),
+> +
+> +		},
+> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> +	},
+>  	{
+>  		.ident = "Dell Latitude 5480",
+>  		.matches = {
+> 
+> base-commit: 765e56e41a5af2d456ddda6cbd617b9d3295ab4e
+> -- 
+> 2.52.0
+> 
