@@ -1,127 +1,127 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DCD2E0B5C
-	for <linux-hwmon@vger.kernel.org>; Tue,  2 Dec 2025 19:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0781E8332
+	for <linux-hwmon@vger.kernel.org>; Tue,  2 Dec 2025 23:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764704606; cv=none; b=I8U0y6uXNPGBFV6kEUob14jt/L7eQuVkuLPwXR+Z5riJti8kEwwRG6SuF17Enswied2i2Ch364ilR3lOLgpvPYovabp7siesEU798XBGS89Lzflb0BpaW4duW1+RRbzfCRuGpUUmBkwrbEwQLVyqcO4kGg1WCWx0+i77PruxvLQ=
+	t=1764717341; cv=none; b=XVUH10TKIdFnLuPhlHrlXTAu666Ew40+IA0IceY6Qa05IqaQQAtlie0IdMGA/R6OhU4Ql+dLYawX9WZZddLzr/qtIzovuE9bd0/PbTOsuvrLNqsx9Go/LaviWDqr4Hk1STlMEERqgH6h7VfYVQSsEVPvsbzChz5O1hU+XWKNtZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764704606; c=relaxed/simple;
-	bh=DN6zQC2zJCQpmeFX+9DGfMwRcP40PLDHgKbjMJM1lpA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RvrpcGG2w0z0WnXQ3m72H54pNfDCIzpbmqqlc8bLMA1RoGIB0y3Zx5PH82bNZKnlDDd2QAF7rbEy5dk2BRWoT+MAjdRemUJBJAlSceKMqD5Be/cOP7PcLNfnEh97QkIg0FE2QoRA6hnUudL8LRF7wLK9tKmnoMXaMsB3nGFoeuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmXPZbtL; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1764717341; c=relaxed/simple;
+	bh=Rx64nhyR10Xd4pInukw1CUV7TFV7x+DUojL3NAqd5NM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSHmLLEaQCmttCJENcJDqxSM+7tfFTPV3W3PWHD8MqA9Q55oYTjawnWG5fEO5p/iOcYEP8F4QO+Vwxu5UlkilPHc8Eh5AjOgjsXIbv8BzGNIIFVE/+ba3g6zXrlzoR6pecnXw4YtMbY4ivfgBqLGK+smxXDtuFTMTP5xtBuB0Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=g2ETMRDd; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmXPZbtL"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso67392585e9.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 Dec 2025 11:43:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764704602; x=1765309402; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gDh2DV1vQxhDyXR5drpjXQ/a7fQdfze1z8e43PzP88c=;
-        b=KmXPZbtLvn+o01fwEnKIP+jKG3NeUo4OGlR78wCsdiOSWRHDMSzsREQP/V1u+Bi/j4
-         kuvAhKDp9lqr7Z5JBs1GG8DDKFtcRQ56+9NX+hpaRbB80hlr96r74rdID0NG4dvI5e4t
-         JYs8IrAQj0wIixKYV4x/YQ1VD4B5wn8+3BSbs54KLbg0o3H7nFu+ShOpm5x2bHh5iw7k
-         jhocX8RqXhyQsLq8lQatrwSJb+OxLB92UfTxIZk5+RDNq5ViARTcqg7jdRUsKM9f+yZt
-         n2tUE2nqJHrL6N2Ly7SMiJqOqohxDRed2Y91YmMTVdC+msvpZLW6y3MrTRzO081w+ucM
-         thbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764704602; x=1765309402;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gDh2DV1vQxhDyXR5drpjXQ/a7fQdfze1z8e43PzP88c=;
-        b=kUHI2VN2HdWLQf6EuN7nB08ufCmHwwzTx9wpatdGzCk6mub+ogh9S4Bpf//HcbVCpM
-         qY63bVczh57yP+kXOdytcwuFEmRj1aN+69UwPdIxUR9tlodBymT1sLC/T2BxF6lTjyo3
-         /mvKzUIbYCBAHLOosNdVTzXjN2BPKkm7/I49lQqCGSHX/Wsmi2pzLVNkjE+DVHzsDK0L
-         OLCgucn4TJaqwvZMgoY9UJQHjZeo3GwE1HMdxdTPdrvGW9KkEJpBC5hA5RwLDISbkDX3
-         6l9DA3TCfIAaPJ4WnhQq9r81MfTlWYxdKRr+1TioMBGeYzsUj+OFAh5JTHtyxqgiJdmy
-         7Ujg==
-X-Forwarded-Encrypted: i=1; AJvYcCVsQsCYJ4bUNbJUpx53PtsfoP6iscy5qAQJompql4ppsFgtYs7aeQ6of5w2zlbZl+DQuLi4gWCXbabsgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbN4NKN1WA21JFERXGzQAGdWKRA3nKlFfwZs4B8gCEhQPsuC+G
-	WNg3gWPBqpwWcHeurZbx081NvAPyhMkWZwIGsyUPKBf9OStLhXZdb65C
-X-Gm-Gg: ASbGncun+9rOiy5RmEZm5gnTwkVGi8r1VPS2/tizh+RWx9cxLIiN7xOQjVqN21TOtlN
-	yYxD6JZkvLsbuKImJlL9i3lLcydA2kJEJPZCZZN1QYOP7LOa0EVSGoQXLBBGTC10VjJGYr45gc2
-	uA6Vay+Npey8mFy7VyzRRZKhfiee68j4qsiGvVMFDqQu5FVyoA8gXYRYA1w621eua9hY8/DHVm6
-	SpKQRm53bnelxmRS2W+XcSpv3mK8BHa3QuhDSRQLF1ldOx1h7CHfNnVB7ekvBD2Z7zdh+p94d3d
-	nMizEkfjngH9SBuDaYAxZXsZAhPf5GknlcjV2jG9KgSZh9wmWB0vEXBbXLay5k+P9WqyGIpNL//
-	fRu0oSFUqOaI+8zwCKH2edqgaK0GB8FqdPHOOHKXbnAaIJHnFA7swivWqQUkLD3M1Td6Dwwxr7y
-	LuoxhRfcpe6nX1DGYh05J0XDSeUAEMydvn+FIaEmkRuW3DIlQRRH3T
-X-Google-Smtp-Source: AGHT+IED4z5SQC2uxdBuHUP84XFImOXO0cS+0mtKiuQ7ogoVBzSwQgPWqu6NDEDQeRozD1on7+E9Lg==
-X-Received: by 2002:a05:600c:314f:b0:471:131f:85b7 with SMTP id 5b1f17b1804b1-4792a48199fmr9387045e9.15.1764704602087;
-        Tue, 02 Dec 2025 11:43:22 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792a665e40sm3414595e9.16.2025.12.02.11.43.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 11:43:21 -0800 (PST)
-Date: Tue, 2 Dec 2025 19:43:17 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
-Subject: Re: [PATCH] hwmon: submitting-patches: Explain race conditions
- caused by calculations in macros
-Message-ID: <20251202194317.555d0911@pumpkin>
-In-Reply-To: <20251202175536.12774-1-hanguidong02@gmail.com>
-References: <20251202175536.12774-1-hanguidong02@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="g2ETMRDd"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 182AD4E419E8;
+	Tue,  2 Dec 2025 23:15:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C7F71606D6;
+	Tue,  2 Dec 2025 23:15:35 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0C669103C8BE6;
+	Wed,  3 Dec 2025 00:15:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764717334; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=QVCEtMPxUMzXVw1tyOYFZnZkE2dG16ZIPwRsI86PDIw=;
+	b=g2ETMRDd1PtRSkP2sPHrCCQihw5ErXT3zmAqujO2QXqemb5zcQzwwqP0OB1XOI6Ev1Pi9b
+	t+Du3clnlXw0scsQsz7HylEf7VfZAk7Do79jbMfpt14tYXKRVspzWZYiOX+e/ayF9ff8NZ
+	8ctyciOlNEJCjygCVEoFhzAcMkR60Lnr9+WaqTSp3LUXBZxk3P5gkq1ndW0W7UIKACZbSB
+	THM/j0KyWTTsemu5E8P4AUCLZNhr+8eTUrS+o3bLjmXMVwa0Eo1deR3wIeRhUT1qCOrgiR
+	767CUqLtnWn6lm2mq/ZRDtEntUIhsjQ3vk08dDq4lcV0t2PgK5rieR9whGBO0Q==
+Date: Wed, 3 Dec 2025 00:15:26 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Mark Brown <broonie@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-i3c@lists.infradead.org
+Subject: Re: [PATCH 4/4] i3c: drop i3c_priv_xfer and
+ i3c_device_do_priv_xfers()
+Message-ID: <2025120223152613f1586a@mail.local>
+References: <20251028-lm75-v1-0-9bf88989c49c@nxp.com>
+ <20251028-lm75-v1-4-9bf88989c49c@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251028-lm75-v1-4-9bf88989c49c@nxp.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed,  3 Dec 2025 01:55:36 +0800
-Gui-Dong Han <hanguidong02@gmail.com> wrote:
+Hello Frank,
 
-> The current documentation advises against calculations in macros
-> primarily to avoid code obfuscation. It misses the risk of concurrency
-> issues.
+You'll have to rebase this patch.
+
+On 28/10/2025 10:57:55-0400, Frank Li wrote:
+> Drop i3c_priv_xfer and i3c_device_do_priv_xfers() after all driver switch
+> to use new API.
 > 
-> Add a note explaining that macros evaluating arguments multiple times
-> can lead to race conditions when accessing shared data.
-> 
-> Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->  Documentation/hwmon/submitting-patches.rst | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> This patch need be applied after all other patches applied.
+> ---
+>  include/linux/i3c/device.h | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
 > 
-> diff --git a/Documentation/hwmon/submitting-patches.rst b/Documentation/hwmon/submitting-patches.rst
-> index 6482c4f137dc..7f7095951750 100644
-> --- a/Documentation/hwmon/submitting-patches.rst
-> +++ b/Documentation/hwmon/submitting-patches.rst
-> @@ -82,7 +82,10 @@ increase the chances of your change being accepted.
->  * Avoid calculations in macros and macro-generated functions. While such macros
->    may save a line or so in the source, it obfuscates the code and makes code
->    review more difficult. It may also result in code which is more complicated
-> -  than necessary. Use inline functions or just regular functions instead.
-> +  than necessary. Such macros may also evaluate their arguments multiple times.
-> +  This leads to Time-of-Check to Time-of-Use (TOCTOU) race conditions when
-> +  accessing shared data without locking, for example when calculating values in
-> +  sysfs show functions. Use inline functions or just regular functions instead.
-
-That is only half the story.
-#defines are fine - provided they are written properly.
-The main issue isn't TOCTOU, but just calls like foo(*arg++).
-It is important that side effects of arguments only happen once.
-So it is important that #defines don't evaluate their arguments more than once.
-That is the real issue.
-
-If you are reading shared data without locks there are much bigger problems
-if it really matters that you get a valid value (see READ_ONCE()).
-
-	David
-
+> diff --git a/include/linux/i3c/device.h b/include/linux/i3c/device.h
+> index ae0662d9d77eb3fa0c976de1803e9c2ff9547451..47e6c95d87f9494d48c5b0463544916f26923501 100644
+> --- a/include/linux/i3c/device.h
+> +++ b/include/linux/i3c/device.h
+> @@ -25,7 +25,7 @@
+>   * @I3C_ERROR_M2: M2 error
+>   *
+>   * These are the standard error codes as defined by the I3C specification.
+> - * When -EIO is returned by the i3c_device_do_priv_xfers() or
+> + * When -EIO is returned by the i3c_device_do_i3c_xfers() or
+>   * i3c_device_send_hdr_cmds() one can check the error code in
+>   * &struct_i3c_xfer.err or &struct i3c_hdr_cmd.err to get a better idea of
+>   * what went wrong.
+> @@ -79,9 +79,6 @@ struct i3c_xfer {
+>  	enum i3c_error_code err;
+>  };
 >  
->  * Limit the number of kernel log messages. In general, your driver should not
->    generate an error message just because a runtime operation failed. Report
+> -/* keep back compatible */
+> -#define i3c_priv_xfer i3c_xfer
+> -
+>  /**
+>   * enum i3c_dcr - I3C DCR values
+>   * @I3C_DCR_GENERIC_DEVICE: generic I3C device
+> @@ -311,13 +308,6 @@ static __always_inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
+>  int i3c_device_do_xfers(struct i3c_device *dev, struct i3c_xfer *xfers,
+>  			int nxfers, enum i3c_xfer_mode mode);
+>  
+> -static inline int i3c_device_do_priv_xfers(struct i3c_device *dev,
+> -					   struct i3c_xfer *xfers,
+> -					   int nxfers)
+> -{
+> -	return i3c_device_do_xfers(dev, xfers, nxfers, I3C_SDR);
+> -}
+> -
+>  int i3c_device_do_setdasa(struct i3c_device *dev);
+>  
+>  void i3c_device_get_info(const struct i3c_device *dev, struct i3c_device_info *info);
+> 
+> -- 
+> 2.34.1
+> 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
