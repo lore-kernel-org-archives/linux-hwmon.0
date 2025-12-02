@@ -1,154 +1,127 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A022C3251
-	for <linux-hwmon@vger.kernel.org>; Tue,  2 Dec 2025 18:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DCD2E0B5C
+	for <linux-hwmon@vger.kernel.org>; Tue,  2 Dec 2025 19:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764698494; cv=none; b=W5tqgzGsZPJ06UepOa6uChjeK38uEcZBrpN03zKugsySo4ryb3uUfI0vV0PJaBjwoE0VPiuwOHNGJAwHg2D+XTd4WAPlg8epFPA94/C3qLLvNKl1f90DjJKLAJ7zw6khgrcff72XHmoqS/CFWo9Mt/n+ptg4Hqp+t/JN07HbK64=
+	t=1764704606; cv=none; b=I8U0y6uXNPGBFV6kEUob14jt/L7eQuVkuLPwXR+Z5riJti8kEwwRG6SuF17Enswied2i2Ch364ilR3lOLgpvPYovabp7siesEU798XBGS89Lzflb0BpaW4duW1+RRbzfCRuGpUUmBkwrbEwQLVyqcO4kGg1WCWx0+i77PruxvLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764698494; c=relaxed/simple;
-	bh=F1BYdqfeNttcmB+PT/07KtZha4LYAw0W6s2or81VV2A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XBy1k6rqzShsamwyIgXLbFCMNHmmoRpoiZmn03hxsuQfny89ubZktAF6F28tcyjGLtjhVyNFCjYBsxH7Jha/9f/SAXcBW3Hl9zyM7oaOB15LdvnCvWOr8UZC5laSWffhQkdkJqDuKs4Yzzr/gQ2genKAaRVoghnAkclSHxkxbSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+VJYKqr; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1764704606; c=relaxed/simple;
+	bh=DN6zQC2zJCQpmeFX+9DGfMwRcP40PLDHgKbjMJM1lpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RvrpcGG2w0z0WnXQ3m72H54pNfDCIzpbmqqlc8bLMA1RoGIB0y3Zx5PH82bNZKnlDDd2QAF7rbEy5dk2BRWoT+MAjdRemUJBJAlSceKMqD5Be/cOP7PcLNfnEh97QkIg0FE2QoRA6hnUudL8LRF7wLK9tKmnoMXaMsB3nGFoeuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmXPZbtL; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+VJYKqr"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3410c86070dso4835310a91.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 Dec 2025 10:01:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmXPZbtL"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso67392585e9.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 02 Dec 2025 11:43:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764698492; x=1765303292; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXMEK6nb6BLzAA8eKfAM1xGhDShdGjdUjCMLODpDUpQ=;
-        b=e+VJYKqr5Czato8snJD6WoQvhuLNk9ZYmnLkH8TJN/iVXByvW1/TlZBPIfV3YV6RdU
-         qFkl9o/gPxNwoVd34vC1GfEc0Fm3VcVyapmie84KZaARtwNsSKOTtweQArOwcdQjy0BA
-         66LniapeeMoKYfBg6WPAhPEWYWW0k7A9/MVjerFpiK7Vwmn0zRWT2ZtyIGXjS7PuwGDm
-         imm+rqBWxI5it1aw6uUo8vRallrzxncMLhYdAymnoqIFunVUXV6zpdDAl6h2TowpNO0Y
-         q3yebNV67XaRlz8EWZ/6Q/aq2HH01pb2pN/vpOIXfne6tSIJGiMSiv7gy1UK6PyQV8Iy
-         oJNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764698492; x=1765303292;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1764704602; x=1765309402; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KXMEK6nb6BLzAA8eKfAM1xGhDShdGjdUjCMLODpDUpQ=;
-        b=okrF5aS/nIG81cNdpEpxZv+5hQ1m2AWh5wddgGc7LosqlbPwP/O31gmMBAbbZwvR8k
-         oqRQtgQjKEcBYLfnxUzI0waFSyHajp4mKXZcAdQBDMvULGvR0soqiTY3VlLVN8gObYjt
-         3otXPitCqkEn/OAYUU762V2PynATYSL+P+tHE2ZBnn3In1ZzdVzJJ1yRUboWvBS64h52
-         xvb6YkqVQn2losYlWoiYj+WcPHn06o7Yx+wJqDdqyVxehiCbCbc8msSt0Z7WP4dki8Px
-         yuQbC4HaWZabs2Mt0EkFbL1wbjNhehEh9ODs5p0m8h7eK+/PWMPMCaYH6r7/brXlEiGx
-         oDhw==
-X-Gm-Message-State: AOJu0YwyQ0BJr/59sAdU7nwlU5z70LsJqy9mT+ibyCVwqa65QIKPwMP1
-	xzbuLQPyjzrYIbgOvAZpk0Jdv69vpIKmvjzxgUl0N5EeK/3LZN3Yp9FO
-X-Gm-Gg: ASbGncvXhUG7o/ymNoJKcx/a9iTRVJo81WOmUjZT1jwpJVPb/xkw5K5hbHRFOAmD0vp
-	zRLZc6PSUwz0NcyqNYTDKJD9DvRJYB6Ko6AnXbZzmfymSSUiQqAlsL4EaO5P4HgKr/x3Re1JvKw
-	AWZVuz+tZMKdv4TzU/BHc0J4nhN3phEFRI/dLe3BtXh7bHfxghyYi9nhmJnF7DyHICTrL2S/c8b
-	tRqQJmiZMDbPAVlERnz80CEl89h9ILMFUG6irPi4bDsRSeE+pC9/Y2FsAlu6it/uZr/5n17oZKX
-	ySAX3hAatd8MyDpiiJsPUK10Frvw1Ae8gXiEM/VE67Czo+ngUgtQETv5a396xp5H3Vpt/PZf+z0
-	0S2gMjOGq1c62eoVdPJl476cPOnNeb9tgImx5DTpnGRPaseUWXZHIRGYvTpgd6AlJpSUgfW6Wnx
-	f+j6Ga4haDtV1VdIq5qynXglkeibya84TrbG/GehFcE80WI6czkIVmLkv6KBcUByX4+FJWYvuFT
-	o0lq9XXmWrpudX/YXy2DDUIrwFIGikI8A7YE+cXXG24cdxYClLEZzWBA5Qp
-X-Google-Smtp-Source: AGHT+IEnZ9k6iLEMpgmt2GBlILolxEm6kDtzH7Uz0lXhL4SkSaNalSklDUGz9sCCEUsxCh2UqqswOw==
-X-Received: by 2002:a17:90b:1d49:b0:340:ff7d:c2e with SMTP id 98e67ed59e1d1-349108255femr280047a91.29.1764698491596;
-        Tue, 02 Dec 2025 10:01:31 -0800 (PST)
-Received: from 2045D.localdomain (191.sub-75-229-198.myvzw.com. [75.229.198.191])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3491041244dsm126910a91.2.2025.12.02.10.01.27
+        bh=gDh2DV1vQxhDyXR5drpjXQ/a7fQdfze1z8e43PzP88c=;
+        b=KmXPZbtLvn+o01fwEnKIP+jKG3NeUo4OGlR78wCsdiOSWRHDMSzsREQP/V1u+Bi/j4
+         kuvAhKDp9lqr7Z5JBs1GG8DDKFtcRQ56+9NX+hpaRbB80hlr96r74rdID0NG4dvI5e4t
+         JYs8IrAQj0wIixKYV4x/YQ1VD4B5wn8+3BSbs54KLbg0o3H7nFu+ShOpm5x2bHh5iw7k
+         jhocX8RqXhyQsLq8lQatrwSJb+OxLB92UfTxIZk5+RDNq5ViARTcqg7jdRUsKM9f+yZt
+         n2tUE2nqJHrL6N2Ly7SMiJqOqohxDRed2Y91YmMTVdC+msvpZLW6y3MrTRzO081w+ucM
+         thbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764704602; x=1765309402;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gDh2DV1vQxhDyXR5drpjXQ/a7fQdfze1z8e43PzP88c=;
+        b=kUHI2VN2HdWLQf6EuN7nB08ufCmHwwzTx9wpatdGzCk6mub+ogh9S4Bpf//HcbVCpM
+         qY63bVczh57yP+kXOdytcwuFEmRj1aN+69UwPdIxUR9tlodBymT1sLC/T2BxF6lTjyo3
+         /mvKzUIbYCBAHLOosNdVTzXjN2BPKkm7/I49lQqCGSHX/Wsmi2pzLVNkjE+DVHzsDK0L
+         OLCgucn4TJaqwvZMgoY9UJQHjZeo3GwE1HMdxdTPdrvGW9KkEJpBC5hA5RwLDISbkDX3
+         6l9DA3TCfIAaPJ4WnhQq9r81MfTlWYxdKRr+1TioMBGeYzsUj+OFAh5JTHtyxqgiJdmy
+         7Ujg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsQsCYJ4bUNbJUpx53PtsfoP6iscy5qAQJompql4ppsFgtYs7aeQ6of5w2zlbZl+DQuLi4gWCXbabsgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbN4NKN1WA21JFERXGzQAGdWKRA3nKlFfwZs4B8gCEhQPsuC+G
+	WNg3gWPBqpwWcHeurZbx081NvAPyhMkWZwIGsyUPKBf9OStLhXZdb65C
+X-Gm-Gg: ASbGncun+9rOiy5RmEZm5gnTwkVGi8r1VPS2/tizh+RWx9cxLIiN7xOQjVqN21TOtlN
+	yYxD6JZkvLsbuKImJlL9i3lLcydA2kJEJPZCZZN1QYOP7LOa0EVSGoQXLBBGTC10VjJGYr45gc2
+	uA6Vay+Npey8mFy7VyzRRZKhfiee68j4qsiGvVMFDqQu5FVyoA8gXYRYA1w621eua9hY8/DHVm6
+	SpKQRm53bnelxmRS2W+XcSpv3mK8BHa3QuhDSRQLF1ldOx1h7CHfNnVB7ekvBD2Z7zdh+p94d3d
+	nMizEkfjngH9SBuDaYAxZXsZAhPf5GknlcjV2jG9KgSZh9wmWB0vEXBbXLay5k+P9WqyGIpNL//
+	fRu0oSFUqOaI+8zwCKH2edqgaK0GB8FqdPHOOHKXbnAaIJHnFA7swivWqQUkLD3M1Td6Dwwxr7y
+	LuoxhRfcpe6nX1DGYh05J0XDSeUAEMydvn+FIaEmkRuW3DIlQRRH3T
+X-Google-Smtp-Source: AGHT+IED4z5SQC2uxdBuHUP84XFImOXO0cS+0mtKiuQ7ogoVBzSwQgPWqu6NDEDQeRozD1on7+E9Lg==
+X-Received: by 2002:a05:600c:314f:b0:471:131f:85b7 with SMTP id 5b1f17b1804b1-4792a48199fmr9387045e9.15.1764704602087;
+        Tue, 02 Dec 2025 11:43:22 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792a665e40sm3414595e9.16.2025.12.02.11.43.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 10:01:31 -0800 (PST)
-From: Gui-Dong Han <hanguidong02@gmail.com>
-To: m.hulsman@tudelft.nl,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Gui-Dong Han <hanguidong02@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] hwmon: (w83791d) Convert macros to functions to avoid TOCTOU
-Date: Wed,  3 Dec 2025 02:01:05 +0800
-Message-ID: <20251202180105.12842-1-hanguidong02@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Tue, 02 Dec 2025 11:43:21 -0800 (PST)
+Date: Tue, 2 Dec 2025 19:43:17 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Gui-Dong Han <hanguidong02@gmail.com>
+Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
+Subject: Re: [PATCH] hwmon: submitting-patches: Explain race conditions
+ caused by calculations in macros
+Message-ID: <20251202194317.555d0911@pumpkin>
+In-Reply-To: <20251202175536.12774-1-hanguidong02@gmail.com>
+References: <20251202175536.12774-1-hanguidong02@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The macro FAN_FROM_REG evaluates its arguments multiple times. When used
-in lockless contexts involving shared driver data, this leads to
-Time-of-Check to Time-of-Use (TOCTOU) race conditions, potentially
-causing divide-by-zero errors.
+On Wed,  3 Dec 2025 01:55:36 +0800
+Gui-Dong Han <hanguidong02@gmail.com> wrote:
 
-Convert the macro to a static function. This guarantees that arguments
-are evaluated only once (pass-by-value), preventing the race
-conditions.
+> The current documentation advises against calculations in macros
+> primarily to avoid code obfuscation. It misses the risk of concurrency
+> issues.
+> 
+> Add a note explaining that macros evaluating arguments multiple times
+> can lead to race conditions when accessing shared data.
+> 
+> Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
+> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+> ---
+>  Documentation/hwmon/submitting-patches.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/submitting-patches.rst b/Documentation/hwmon/submitting-patches.rst
+> index 6482c4f137dc..7f7095951750 100644
+> --- a/Documentation/hwmon/submitting-patches.rst
+> +++ b/Documentation/hwmon/submitting-patches.rst
+> @@ -82,7 +82,10 @@ increase the chances of your change being accepted.
+>  * Avoid calculations in macros and macro-generated functions. While such macros
+>    may save a line or so in the source, it obfuscates the code and makes code
+>    review more difficult. It may also result in code which is more complicated
+> -  than necessary. Use inline functions or just regular functions instead.
+> +  than necessary. Such macros may also evaluate their arguments multiple times.
+> +  This leads to Time-of-Check to Time-of-Use (TOCTOU) race conditions when
+> +  accessing shared data without locking, for example when calculating values in
+> +  sysfs show functions. Use inline functions or just regular functions instead.
 
-Additionally, in store_fan_div, move the calculation of the minimum
-limit inside the update lock. This ensures that the read-modify-write
-sequence operates on consistent data.
+That is only half the story.
+#defines are fine - provided they are written properly.
+The main issue isn't TOCTOU, but just calls like foo(*arg++).
+It is important that side effects of arguments only happen once.
+So it is important that #defines don't evaluate their arguments more than once.
+That is the real issue.
 
-Adhere to the principle of minimal changes by only converting macros
-that evaluate arguments multiple times and are used in lockless
-contexts.
+If you are reading shared data without locks there are much bigger problems
+if it really matters that you get a valid value (see READ_ONCE()).
 
-Link: https://lore.kernel.org/all/CALbr=LYJ_ehtp53HXEVkSpYoub+XYSTU8Rg=o1xxMJ8=5z8B-g@mail.gmail.com/
-Fixes: 9873964d6eb2 ("[PATCH] HWMON: w83791d: New hardware monitoring driver for the Winbond W83791D") 
-Cc: stable@vger.kernel.org
-Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
----
-Based on the discussion in the link, I will submit a series of patches to
-address TOCTOU issues in the hwmon subsystem by converting macros to
-functions or adjusting locking where appropriate.
----
- drivers/hwmon/w83791d.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+	David
 
-diff --git a/drivers/hwmon/w83791d.c b/drivers/hwmon/w83791d.c
-index ace854b370a0..996e36951f9d 100644
---- a/drivers/hwmon/w83791d.c
-+++ b/drivers/hwmon/w83791d.c
-@@ -218,9 +218,14 @@ static u8 fan_to_reg(long rpm, int div)
- 	return clamp_val((1350000 + rpm * div / 2) / (rpm * div), 1, 254);
- }
- 
--#define FAN_FROM_REG(val, div)	((val) == 0 ? -1 : \
--				((val) == 255 ? 0 : \
--					1350000 / ((val) * (div))))
-+static int fan_from_reg(int val, int div)
-+{
-+	if (val == 0)
-+		return -1;
-+	if (val == 255)
-+		return 0;
-+	return 1350000 / (val * div);
-+}
- 
- /* for temp1 which is 8-bit resolution, LSB = 1 degree Celsius */
- #define TEMP1_FROM_REG(val)	((val) * 1000)
-@@ -521,7 +526,7 @@ static ssize_t show_##reg(struct device *dev, struct device_attribute *attr, \
- 	struct w83791d_data *data = w83791d_update_device(dev); \
- 	int nr = sensor_attr->index; \
- 	return sprintf(buf, "%d\n", \
--		FAN_FROM_REG(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
-+		fan_from_reg(data->reg[nr], DIV_FROM_REG(data->fan_div[nr]))); \
- }
- 
- show_fan_reg(fan);
-@@ -585,10 +590,10 @@ static ssize_t store_fan_div(struct device *dev, struct device_attribute *attr,
- 	if (err)
- 		return err;
- 
-+	mutex_lock(&data->update_lock);
- 	/* Save fan_min */
--	min = FAN_FROM_REG(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
-+	min = fan_from_reg(data->fan_min[nr], DIV_FROM_REG(data->fan_div[nr]));
- 
--	mutex_lock(&data->update_lock);
- 	data->fan_div[nr] = div_to_reg(nr, val);
- 
- 	switch (nr) {
--- 
-2.43.0
+>  
+>  * Limit the number of kernel log messages. In general, your driver should not
+>    generate an error message just because a runtime operation failed. Report
 
