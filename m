@@ -1,127 +1,110 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0781E8332
-	for <linux-hwmon@vger.kernel.org>; Tue,  2 Dec 2025 23:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D2A3BB48
+	for <linux-hwmon@vger.kernel.org>; Wed,  3 Dec 2025 17:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764717341; cv=none; b=XVUH10TKIdFnLuPhlHrlXTAu666Ew40+IA0IceY6Qa05IqaQQAtlie0IdMGA/R6OhU4Ql+dLYawX9WZZddLzr/qtIzovuE9bd0/PbTOsuvrLNqsx9Go/LaviWDqr4Hk1STlMEERqgH6h7VfYVQSsEVPvsbzChz5O1hU+XWKNtZI=
+	t=1764783066; cv=none; b=UUI62i+sHvb/j2Lgq/c6NR7qQw+UHIhjshbS0neg0u9bRaSZiwg7UO/MXrx5rEmZZRyhBdG2Wz1wg9E9x3O+F/j8aIKs04vbwOPBg730kyWvpWWYqS1RGy+F6ZnlhMjFEuTMNK9+BbkKTHmnc3wh3VM2klkErZ7OM75qNN/M0gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764717341; c=relaxed/simple;
-	bh=Rx64nhyR10Xd4pInukw1CUV7TFV7x+DUojL3NAqd5NM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lSHmLLEaQCmttCJENcJDqxSM+7tfFTPV3W3PWHD8MqA9Q55oYTjawnWG5fEO5p/iOcYEP8F4QO+Vwxu5UlkilPHc8Eh5AjOgjsXIbv8BzGNIIFVE/+ba3g6zXrlzoR6pecnXw4YtMbY4ivfgBqLGK+smxXDtuFTMTP5xtBuB0Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=g2ETMRDd; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1764783066; c=relaxed/simple;
+	bh=X5to5kJ9QCcHakcSKKmToFYntzDovncX5FCHRRR/eSM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Mzg+Fy1TQcdR4XVcKrCBAfS+krxgaXMiQUNgqbvBNkAY6yM8cXrc7nmAHlpB6ZX8DS+mWqfahbVIDXcqbLeYm9dT1/hgMvBGwg6QXD60TCKg3QPqvvWYbc7Rgr8oxUNIUYwZnvH9tkr8xddMnzGw3sAJGoRsVHErwfKn6nwef8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/ovXIf4; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="g2ETMRDd"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 182AD4E419E8;
-	Tue,  2 Dec 2025 23:15:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C7F71606D6;
-	Tue,  2 Dec 2025 23:15:35 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0C669103C8BE6;
-	Wed,  3 Dec 2025 00:15:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764717334; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=QVCEtMPxUMzXVw1tyOYFZnZkE2dG16ZIPwRsI86PDIw=;
-	b=g2ETMRDd1PtRSkP2sPHrCCQihw5ErXT3zmAqujO2QXqemb5zcQzwwqP0OB1XOI6Ev1Pi9b
-	t+Du3clnlXw0scsQsz7HylEf7VfZAk7Do79jbMfpt14tYXKRVspzWZYiOX+e/ayF9ff8NZ
-	8ctyciOlNEJCjygCVEoFhzAcMkR60Lnr9+WaqTSp3LUXBZxk3P5gkq1ndW0W7UIKACZbSB
-	THM/j0KyWTTsemu5E8P4AUCLZNhr+8eTUrS+o3bLjmXMVwa0Eo1deR3wIeRhUT1qCOrgiR
-	767CUqLtnWn6lm2mq/ZRDtEntUIhsjQ3vk08dDq4lcV0t2PgK5rieR9whGBO0Q==
-Date: Wed, 3 Dec 2025 00:15:26 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Jeremy Kerr <jk@codeconstruct.com.au>,
-	Matt Johnston <matt@codeconstruct.com.au>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mark Brown <broonie@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-i3c@lists.infradead.org
-Subject: Re: [PATCH 4/4] i3c: drop i3c_priv_xfer and
- i3c_device_do_priv_xfers()
-Message-ID: <2025120223152613f1586a@mail.local>
-References: <20251028-lm75-v1-0-9bf88989c49c@nxp.com>
- <20251028-lm75-v1-4-9bf88989c49c@nxp.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/ovXIf4"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2984dfae0acso427265ad.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 03 Dec 2025 09:31:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764783062; x=1765387862; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VL2LiGMIjzcKPs2iQRcmiYPq/BCDQfmJT/ipwX2Yjag=;
+        b=Z/ovXIf4rg81ny1SY4HzCTxI09VzAl+wys/yEQ+jUQUH/Gp7sXOALW/HZF3x5ivpdo
+         wQxd/oCkkpe0VT8t8+/b/YDY6R8qIWn5Psb99LdkYlvuC3h1At1ux+ZWLfflioVFdrOP
+         J9OSMx9IFKNARkQxLEhHqoPwmhcKH2drmRXRHi0yitVZ6+eEPyqM9yjbwFNkUcLHRJrj
+         5kNzUMHU8dg8YqTwIGshxLkL3ArhpSlpc3WwchG94iwWXzG4dEOsVE711M3yLge0enjJ
+         7juGJmYJFBwIcWPpuEoic888BQquPIS8ADzs0iAL0JgKigYhI2PN5NChAbPiWbXMin9C
+         h1Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764783062; x=1765387862;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VL2LiGMIjzcKPs2iQRcmiYPq/BCDQfmJT/ipwX2Yjag=;
+        b=lPS8rNYicXqWEXQvTtd9VBrzBiu9mMYkRAmdEkBjxrOK7Ofyf8k2/Tc7EvhJQtXGm8
+         8yutzDBCZlMVWCmGpW7RlUatQQGpKGrhYl9wk+u4Ds3Dge0YfuuAVHmvRJVL6QX9dgmc
+         uehF3SN3eQDFYsABLmu+82VaEWoeVWyB/VUvDjOoWL9rPiGjnvRzU92RYNjkSLguP3X1
+         l7h4w6/W8q1tW7b3fQzqo+roez2hzomPPp/oyM5Ab31smKXfO89FDUtTqbu5W//V4N2C
+         NgfCkA2zaeTEyHjITQyWt8HjjkFtTRpTGnHAhsrl4k64EGALTTJxB3k5qjJ9p69t0biQ
+         Nrvw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3msALyQ06pT1hcIPvx+Y/IaXKVr/8cGzmIGVn2eDfeyfhoQLAm2y59jrWkT19HLoRlD91KOyxlQfpIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7zaeRROwlBhSGVrh8JpEB4NfD4XyhP9zLbfcefjig2PP9JRJx
+	sqKoevJjZ3kqhIV8cmuu72me1rA/SUtUf/ZYry43FeZiURMyv+kd2W7w
+X-Gm-Gg: ASbGncvUJ88qTZ8fhkEHmUxxVsYiCvmOR4fCcC/TmMmYAITwuLK8UJ8UnxVH1nnct9v
+	tFHXwp8Si5Y6L2Ze+5E+ASKyKd7DuVvu1Av8lHM1Zib1HdNouux45YeLVbxxsORZAZd2dAVfjEK
+	gLLQYDvrhHbM8Hfj9qVhiJv+lnO7iWBoKYusy/xdRE8BPDs1rEk5/IYRvXdyZWZcRT1yHIwcvRB
+	PgA+UuNpqYSAjqfqXLF0p035hlcVRt+m9oXvsb1L0gzVAuIMgx93NgNXvUkNO6/CHSG9oGP11yP
+	ftAx5SJ3YBuMwdmMjWJ5rFCf8hIS+gxpDI9AmW5c2VRQewWyC6/xDY0N9KLMCGse24LSQ60qqyn
+	9/nSABof9Bmrrcbb6tOh/coyE3nxeV0A13Qq0LmzgSqUDjjU7dpwgteSoTCoTtWIbqWW/xrnzFr
+	JWxNmou+nLU1zRl7F4wxw=
+X-Google-Smtp-Source: AGHT+IHwfzwNo3WgDLnMeITvwxsyF3Nm4DygMY+CPGD0yFiQOw0cFmDuP3b3Ag4gofjD9EGiOYdB2A==
+X-Received: by 2002:a17:902:d50d:b0:295:8da5:c634 with SMTP id d9443c01a7336-29d9f67d5cdmr81995ad.9.1764783062301;
+        Wed, 03 Dec 2025 09:31:02 -0800 (PST)
+Received: from soham-laptop.. ([103.182.158.110])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce47096csm190177005ad.44.2025.12.03.09.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 09:31:01 -0800 (PST)
+From: Soham Metha <sohammetha01@gmail.com>
+To: linux-kernel-mentees@lists.linuxfoundation.org
+Cc: shuah@kernel.org,
+	skhan@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Soham Metha <sohammetha01@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: hwmon: g762: fix deadlink
+Date: Wed,  3 Dec 2025 23:00:18 +0530
+Message-Id: <20251203173019.46928-1-sohammetha01@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028-lm75-v1-4-9bf88989c49c@nxp.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-Hello Frank,
+The binding file 'g762.txt' has been converted to a YAML schema.
+The current binding is located at:
 
-You'll have to rebase this patch.
+    Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
 
-On 28/10/2025 10:57:55-0400, Frank Li wrote:
-> Drop i3c_priv_xfer and i3c_device_do_priv_xfers() after all driver switch
-> to use new API.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> This patch need be applied after all other patches applied.
-> ---
->  include/linux/i3c/device.h | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/i3c/device.h b/include/linux/i3c/device.h
-> index ae0662d9d77eb3fa0c976de1803e9c2ff9547451..47e6c95d87f9494d48c5b0463544916f26923501 100644
-> --- a/include/linux/i3c/device.h
-> +++ b/include/linux/i3c/device.h
-> @@ -25,7 +25,7 @@
->   * @I3C_ERROR_M2: M2 error
->   *
->   * These are the standard error codes as defined by the I3C specification.
-> - * When -EIO is returned by the i3c_device_do_priv_xfers() or
-> + * When -EIO is returned by the i3c_device_do_i3c_xfers() or
->   * i3c_device_send_hdr_cmds() one can check the error code in
->   * &struct_i3c_xfer.err or &struct i3c_hdr_cmd.err to get a better idea of
->   * what went wrong.
-> @@ -79,9 +79,6 @@ struct i3c_xfer {
->  	enum i3c_error_code err;
->  };
->  
-> -/* keep back compatible */
-> -#define i3c_priv_xfer i3c_xfer
-> -
->  /**
->   * enum i3c_dcr - I3C DCR values
->   * @I3C_DCR_GENERIC_DEVICE: generic I3C device
-> @@ -311,13 +308,6 @@ static __always_inline void i3c_i2c_driver_unregister(struct i3c_driver *i3cdrv,
->  int i3c_device_do_xfers(struct i3c_device *dev, struct i3c_xfer *xfers,
->  			int nxfers, enum i3c_xfer_mode mode);
->  
-> -static inline int i3c_device_do_priv_xfers(struct i3c_device *dev,
-> -					   struct i3c_xfer *xfers,
-> -					   int nxfers)
-> -{
-> -	return i3c_device_do_xfers(dev, xfers, nxfers, I3C_SDR);
-> -}
-> -
->  int i3c_device_do_setdasa(struct i3c_device *dev);
->  
->  void i3c_device_get_info(const struct i3c_device *dev, struct i3c_device_info *info);
-> 
-> -- 
-> 2.34.1
-> 
+This change was made in https://lore.kernel.org/all/20240604164348.542-1-ansuelsmth@gmail.com/
+and merged in 3d8e253724170ae9c8948c36801204fc2aa53682
 
+Signed-off-by: Soham Metha <sohammetha01@gmail.com>
+---
+ Documentation/hwmon/g762.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/g762.rst b/Documentation/hwmon/g762.rst
+index 0371b3365c48..f224552a2d3c 100644
+--- a/Documentation/hwmon/g762.rst
++++ b/Documentation/hwmon/g762.rst
+@@ -17,7 +17,7 @@ done via a userland daemon like fancontrol.
+ Note that those entries do not provide ways to setup the specific
+ hardware characteristics of the system (reference clock, pulses per
+ fan revolution, ...); Those can be modified via devicetree bindings
+-documented in Documentation/devicetree/bindings/hwmon/g762.txt or
++documented in Documentation/devicetree/bindings/hwmon/gmt,g762.yaml or
+ using a specific platform_data structure in board initialization
+ file (see include/linux/platform_data/g762.h).
+ 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
