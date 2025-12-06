@@ -1,76 +1,74 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB66825BEE8
-	for <linux-hwmon@vger.kernel.org>; Sat,  6 Dec 2025 15:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D41A265CBE
+	for <linux-hwmon@vger.kernel.org>; Sat,  6 Dec 2025 15:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765033439; cv=none; b=uKV2Jcegd9UhcJoIrBhQFGgi34SUPNWLlG6y2Ghxi074sjIpuW1oM5nKKJvzm/vn//mB5GUF1I59rbLiBC2XKtwNywHZK69l65vDbgt2kAkd1/EFLD6Ks+QmftxhmEMKeDol2rYE7wAWX8qksaV8q7v4DyI9f7gNsqpx6Vos17c=
+	t=1765033460; cv=none; b=KpN4yBwBg3yCxM819fvYn58K+LbXgvy/8G3HmTCPeVtw2Te6HeZ7cKoZXceN3ZDcq1pzApyuPb2mJcyucJ+jZS8Z+pndELMsHjSEbS29N6Fe6sUdbNdio1ADISLwqh91CixYhlWS+f1fcOV35AjxY1cZG8zz0egEJCs+VqEBJ04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765033439; c=relaxed/simple;
-	bh=fN2Xexoi/B9ctLaAFFwv+iZ85CtawTyBDeizMK5ec0o=;
+	s=arc-20240116; t=1765033460; c=relaxed/simple;
+	bh=UFYV+JftR9lVL9V8knzkL+BQJdY0/Id4+zxN3z/OheY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EMuxwbjybmRxlKUdfBZ+rP8DgGTvan36AT2++65JulShGnbhlVp4XutlnUi66HvJagvOBEe7LP31YkokBJgaJHcoxI35mrVjyDMRY7iZo1JaYqgb2iN5M8Ott75zDfjFbuzDt6D/Fb3KbueEZzk6fCyl/vjs5WcNWx2WtxE63uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TkDo3C2B; arc=none smtp.client-ip=74.125.82.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=WHnJfqmNFPkV81fJZHDDj0t/pgEpwfkddjEnsirXqrWjUwLRWG0FxYdZWftb1VttRIrvf35Fs9R56oJQR130eXNRgw6OXbDkNxpsFXvUN23jPwLtCjgqXqhE+PVfRxRWyX3z/BBvyDHsDZcvBeqBNArRPYnVrFt4dJD1eGZ5Zyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGotrYtz; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TkDo3C2B"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2a45877bd5eso5266264eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 06 Dec 2025 07:03:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGotrYtz"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-bfe52539c40so246086a12.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 06 Dec 2025 07:04:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765033436; x=1765638236; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765033458; x=1765638258; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m+tR6RUcnOhStP3t3KnBwgUkXc4dKjHlIZuatPHOKmc=;
-        b=TkDo3C2BlByiQMydnq8cPWPlaZPem9R/6d2mM1DE/IMsJ+C8QwQTIVVZfWc+97XtQb
-         Zp46JEKP+WiP9p6hZjeEhNU3t0LJksfLRBSVeLJBPydf3Ciflee7eqoVmc8nkuxl7oy7
-         X7Rmz19CO4rBMEQwHk9gTszK/PFaQCjL/iGoCajg1L657alimqp3zhF4xF6KwaCmozMj
-         imqoq6U4YzlFCxj4h5zqBy9EjZDaiRS9JudtNRLH00aKrq49i+xgeH/zBRDLO5OineR/
-         4fqJEm3CqO2lklumWqnSYq5f6VUv9ZMPNcLcKLb4IYVjJOOzJWfISOFSafoJeHvn2Nyk
-         KbzA==
+        bh=SAsG7pY3EGRyZDU3AoHz54nBjkfMPiN97fLKdxXtRJ8=;
+        b=eGotrYtzoiHmpVFg0bXGPdd4YpyetHr5CRZiZmhto9u3ozj1THkVfQFgSWHrriVSpI
+         u0KcGq8b8ve3u5mjLEApfdaa9W6q7jmEnUrI2uTSLS2WeCt+L3hut6uSYqqYzwcyEK5w
+         b3wXTN+tFgpGd8ctUWeMk/Cj/wEvpgLJjna+NV7CnFTc2bwsxR53MJ5H08aXmrD2x4Du
+         h7gKTiyhzTmGJBYcMdKSxKwXYsrw5CARQGJDiRzYWI3jYUa3ZhWzmN/aFGCAoeINIO6N
+         b3hsoFpNqFsmCtkorIfHeQqhAEYU2ezqKCzGICohwb31v6iIAgz76IxizKXuWJ7L16QF
+         AR5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765033436; x=1765638236;
+        d=1e100.net; s=20230601; t=1765033458; x=1765638258;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=m+tR6RUcnOhStP3t3KnBwgUkXc4dKjHlIZuatPHOKmc=;
-        b=E8+86c9lEq0mYVBd/f/D3cQBmN8gWzzOt0HUWvhEwwcycjAMKa08qXtqyF/BZr6D92
-         +9l+f2Y6KTEj3IS7E2MQOdwEln2ldkIZtzKOzg0Hzz47gQ6nhxVPBYPFogLPuD6sH6Ox
-         8lSGbww62WIdkV6i5EAD1tig46+6D1WAizgNd6UBa87T9nheRSEjt0ioKj+sop3601jC
-         PhhZu/iH0XoWZYvLyB23OXJlYbFZqRUJwlcygqMsrzBXBPmhag8O27Sjx0JL3Y3vcVjv
-         Bagme27UM35w0391XlDFmMU1Kuj95ejg9XlisewHViSfHNcsz4yCqbEahv7AbGpMm5OG
-         OBgw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+vHaPnlS5IqZLuwbakup3kPm3MD2fQz9DSqCGUIdTI8r2SgE3xCYGPXd5UqPpAQQu4sbaTbWkLjKHFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBI3slnp9mxpKIOgGnk11/co6QPRVBRk8nteD6WYl0ajWqxuEy
-	OuBgbABnJodO/abxkaNuHvxc7Sanc5Gl9Gb5DuAVcC435teqAWjHccb2
-X-Gm-Gg: ASbGnctheZS/pUKPBy7onZ+J6Y4VkKCgTkd9AlX6cn2iEVMzYCgQJUm3FWetCNOCLbZ
-	gslYoXB7f2HciH8d6c201Oc+gS7CU2Q38crTJWeyRW9vIaoreml0M+s5HWML2KsFhGpujEgFcIx
-	CZMvKDG6wwI2iWBqq+2NGzs3OuzNvsvbE4GBt8jiU9IcaiX9CCYbXpLjwIUcZsuJxVsJ/7FbvAm
-	9siSPCSY/eZiFZ+GubSX7tq6m9Q9RAtqKUX8vA2Gr2zyhVLnYVS3szyDKyxTULmq5p9yG3Fi6WD
-	ei6csiEmExhqzXcfGdrGZkzU4lPKXRlLZOisGCmL6Frl0hw58zh/QXXn72mdZTlEN5okZ96B0aG
-	k3wbvMg4vNzzZtE2acySenxJEPUiDX1M9ojWkQ3xiomakmuJwzlf92FRhOUQIDGR6GjWm4Im7h4
-	9NB7vUORCflScaWetxA7V2q5Q=
-X-Google-Smtp-Source: AGHT+IFzojphrHRVtMjAYXF3z/dTrYB/zZKE8NoGiyXHbs+9+cXXnLG2F0IpmuMealC4iJgXnHs01w==
-X-Received: by 2002:a05:7300:e7ac:b0:2a4:3593:ccc8 with SMTP id 5a478bee46e88-2abc6f0ff38mr1683190eec.15.1765033435525;
-        Sat, 06 Dec 2025 07:03:55 -0800 (PST)
+        bh=SAsG7pY3EGRyZDU3AoHz54nBjkfMPiN97fLKdxXtRJ8=;
+        b=YOCC48O38tYcXnD1Aj+aXrNQHlDexepXTXfTRHn05cxpcDTbIDMrbvOTL5AK24ZWRq
+         4YVAAhilIi4pfx/DozJq+xNUD86g7GanCd9p9K4Myh2DViKbBJJqFRXHMiTQM7f4FuX6
+         vt2p7aTNEUeQLcSiTvqOExM9D3NT0iPb+ZDPZZPeRBN9FLl0zmLqjD1VkRBQwYrVzjJx
+         58eb937mBk3tjztTyM6oe+HrZ/uYWWJAKWpW1wqvFbxZdPYLtOO0d6vp8A6+8R3AammY
+         oMXx7RNs48mmGtA6OiDZ7ZkxfRvqLLGMWIxlFwdIM+CZKwaWh92Qz0d3mPNI1mOGqdar
+         CWlw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDj58go6um1+/CjXbZeW8HJl/6Tp8ou5uF6symKtvPUU8dFjLCw83X63lw0lOPldndoQkfNPCvbPc5Mg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpOrrFEVUi3aWpPVe5dXwSOGQyVm6sT9HWdmPyzZfrTkO9D2jI
+	wAbTihvsQyxdsGOzEAGfEsAeuyjk2ZvobQb9Gi4fsPLluyEemncsR3h2
+X-Gm-Gg: ASbGncvCdJaptUzwZsGXQlEN4lfkVQadreO0p9l4yjxxToD1gJnj+37DtJ/mr4y6SfP
+	ipjwWXUfpvPHArCEZI2OSHUwffFDACWUa+hszJhIL1Y/DDnfSsanGdCxFAAok9C4CexCCpFEobw
+	hQJX+kwtI5L0VpGgIYx4AOs6mEL0hErVKmW3VU7q3xdmIrxTNxO5V4Sa7pF2ZwkE8BIueHNU6VN
+	/StIHpztBf1eG2U0t/KJmmT6JNvFA/n4m3spPg/rdfqnyBC+KjTalzCyxCxpS9t/luWc9e+4T6r
+	/+hI9uIk41Fpy6nBbUFehG0Nmtc9/LS7718FaPsqqW9rPTepT45iUHlPaXi2spnXkTcWDSk+A/X
+	iuaVvGZGfy+scDdqt2GgqLvrMIsVEFhbrqtirVYtIPGuUsfhM0jYe1eWQoQ3sBn09n55Ci/jee7
+	2RK+9umbgmtP5C0j5yrQDKKaM=
+X-Google-Smtp-Source: AGHT+IFBia8WUGewoaSGLOjD9IMzOL/yRg92xHWGVXk1luKlN9GrQ0p/WvzqSJiggGae+AIlYipR0A==
+X-Received: by 2002:a05:7301:9a94:b0:2a4:3593:466b with SMTP id 5a478bee46e88-2abc7113881mr1577588eec.7.1765033457708;
+        Sat, 06 Dec 2025 07:04:17 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2aba88433fesm21958618eec.6.2025.12.06.07.03.54
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2aba87aa5fcsm21183628eec.3.2025.12.06.07.04.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Dec 2025 07:03:54 -0800 (PST)
+        Sat, 06 Dec 2025 07:04:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 6 Dec 2025 07:03:53 -0800
+Date: Sat, 6 Dec 2025 07:04:16 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Soham Metha <sohammetha01@gmail.com>
-Cc: linux-kernel-mentees@lists.linuxfoundation.org, shuah@kernel.org,
-	skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: hwmon: g762: fix dead link to G762
- binding
-Message-ID: <0b01dafa-9d77-4ea6-a10e-05bc67ee2eaf@roeck-us.net>
-References: <20251203181213.51618-1-sohammetha01@gmail.com>
+To: Kathara Sasikumar <katharasasikumar007@gmail.com>
+Cc: corbet@lwn.net, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, shuah@kernel.org,
+	skhan@linuxfoundation.org, david.hunter.linux@gmail.com
+Subject: Re: [PATCH] docs: hwmon: fix link to g762 devicetree binding
+Message-ID: <2ff16215-1657-4c34-9acd-5f5f21609afd@roeck-us.net>
+References: <20251205215835.783273-1-katharasasikumar007@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,35 +77,19 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251203181213.51618-1-sohammetha01@gmail.com>
+In-Reply-To: <20251205215835.783273-1-katharasasikumar007@gmail.com>
 
-On Wed, Dec 03, 2025 at 11:42:13PM +0530, Soham Metha wrote:
-> The old text binding 'g762.txt' was replaced by a DT schema in
-> commit 3d8e253724170ae9c8948c36801204fc2aa53682
-> ("dt-bindings: hwmon: Convert g762 to YAML schema").
+On Fri, Dec 05, 2025 at 09:58:35PM +0000, Kathara Sasikumar wrote:
+> The devicetree binding for g762 was converted to YAML to match vendor
+> prefix conventions. Update the reference accordingly.
 > 
-> Update the reference to point to the new YAML binding:
->     Documentation/devicetree/bindings/hwmon/gmt,g762.yaml
-> 
-> Signed-off-by: Soham Metha <sohammetha01@gmail.com>
+> Signed-off-by: Kathara Sasikumar <katharasasikumar007@gmail.com>
 > ---
-> Changelog:
-> - Use proper commit SHA reference syntax
 
-Really ?
-
-ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit 3d8e25372417 ("dt-bindings: hwmon: g762: Convert to yaml schema")'
-#106:
-commit 3d8e253724170ae9c8948c36801204fc2aa53682
-("dt-bindings: hwmon: Convert g762 to YAML schema").
-
-I am going to apply
-https://patchwork.kernel.org/project/linux-hwmon/patch/20251205215835.783273-1-katharasasikumar007@gmail.com/mbox/
-instead.
+Applied.
 
 Guenter
 
-> 
 >  Documentation/hwmon/g762.rst | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
