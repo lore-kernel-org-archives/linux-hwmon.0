@@ -1,165 +1,142 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AFC1DF73C
-	for <linux-hwmon@vger.kernel.org>; Sat,  6 Dec 2025 18:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DCA16132F;
+	Sun,  7 Dec 2025 14:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765046423; cv=none; b=g9j5gGp+EwS96S1Nko/55b3VSoUFSsXtcMMWDqfB76Ih1kBRTgAuOXkFSbPF+D2UVlV0aa/8YlGAkA387eZ6FBB2cYMXLanCy80WqJr1hRyim71lt4sYXxL4QA7Xk0cKFkYj/hUhE9JKNJgB7XDXFl2ps+EPotg9pfzfL/TuL38=
+	t=1765116074; cv=none; b=G1Q79u0ZNVqScYkzk7jDB/QTdoX8s2g0FbBfWbiTT/xsX4dNdYXgPBJBGUy9oychWtPifJ/6v10goNsgFzBAkNhFLPUlecFnWh3GIBfUiQLkW7PbweoKMvHa/FwAPVSAvfjHJF2T30OnQnz4lSgUw4UWrNBz/aWfqSA4rEwxTf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765046423; c=relaxed/simple;
-	bh=Sfqt3gnjZW7b5ARN30YZx+PJVpaUH8MGktTxrp8s/hY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgLuiOnTSbZbRy/azzm+KPIYq732oAJsjuagT7b0nrVK6+edx8UvUg7bbwuPQB9xOWZL+S5/DCVZYhDsJD9Bm1/hqrBvU6zCu50Sm7vaRLMj+Cqwi1vzmY0OmNpAcgRB5dyanI59GxCjDidYr6Sosb3LBcGxeRTOWUoK57mcolc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YC4Sj/QP; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765116074; c=relaxed/simple;
+	bh=XIPzPHGdu9MVAiWYzmLVkJFzpk/+VDBaaF5v6Z7S21s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ce4FcUxQ1282a91kbMuMJ3xs1MO0Vu5NJ+DKabqD9sgv2tuywNwEutXWhartsJ5TTS8iCWsuYdMEaAyXLkNrftercW7VS9Ng70vfhrLlzE2WPBc87zESMPFC1msWa8D3c7VodcZSSEtsCPwAC/6GYbTm5OY9b+gIQCSPnCHoTG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsCx8mM8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YC4Sj/QP"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-29568d93e87so30731285ad.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 06 Dec 2025 10:40:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765046421; x=1765651221; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ug/ueRrOF0ZJs7tDyCdnAKBzRGfNPmlzAx886ZPB2C4=;
-        b=YC4Sj/QPxc/V+lB1n2LlrFChZrUtCBd/HJAjr+QoR6CZYiR/Evc3kxVGYHAwl5cksD
-         1LNY494WxqRWtU0gxRoLZucklfMZoEYB6iKHHXOKanXqCAYk0qI0lGuyOZY/OB1zLIOh
-         U6ea5trkHdhbLcDymJPxyOD9OoDzd61sBuAGhJvlZay/iUIAiQmOFUrAHbO/CQTyK11L
-         89Bm2XLs1gxSi1cF+6Ho2QJv4KtBcp4BEz5QmzC/o5zY3Ghh5tOFI5HPN/dnUKHtszUM
-         FdHeWcjyhv02MjP7ihHqbhgqFvfvNDLgaPve2hxUiVuwTzOsJ/WBbjT1kC5Fi9qq0swX
-         Dh6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765046421; x=1765651221;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ug/ueRrOF0ZJs7tDyCdnAKBzRGfNPmlzAx886ZPB2C4=;
-        b=j1rnHvYZqfyrjlDqCeXnBSUxK3VFWIpSdstyF6ij8BDqyj5SUCpXEY+C3aadx48Q4k
-         +GAfMWcEvbvdOR6DxRieIjfZY+g1MUNNXASR7yyNHVlMDTFHLJ9jNVbQt+KHH0eOoNNN
-         x4gXQz+FqSWA70iCny7CRCvhwviZFLySmD0/5aOXqizm6jSJGnfVUmgZFXURmfBZ6czE
-         v+h+3dEVUH9ZcgRuYI6Tcoz1VnOlHCRrZtKIQwi4nbX4DarfBN4iYEEQwFgEM+C5oToT
-         EWPe2jtG3xAx6a6AL7ekAOwHIM8ZSaBMnlILXTBLuOkVxfvJRxRYMdxa6e1IOAaKNP3e
-         9sGw==
-X-Forwarded-Encrypted: i=1; AJvYcCULYkHejYh8lXBnEffZtn26bKAXo9MoTY5MQm7oxftVsyp+7py+x4YQW9dCbeQKvht4gFKZ8sv6aJTB3A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsZnzBl7nJd3r41yfQvJkz5AVLF7XRNyeKS1Lu5VqCp6pejHck
-	27PH+wnkPE/cPMo5a+EMHz8ZZDMs9922VqbrZ2s/Lvl7sWBjCV6Df6Cd
-X-Gm-Gg: ASbGncvn2ylhVc2dkwOOQjiYRMA33cV/n5xjuMC3gXHKAKhjyIyk0HBYfb6u4svOfLo
-	rlFlIBhwFbxfN4Badf2s6HlFndLey7MK5G6S3T4PLgxa9qRIO4BtaPTBcvdKHL3m696SV1GMYaG
-	5i1MhXBiNUDZmkTmiPu6J8SwouUkuC4aXMVqmKgK0GBzu4/vSlDZq85jid7AM0xuzguYPWb6TKC
-	y6sSw8LhmW6GsHYPyCm+jlRhpYtUCvwYCHxPX9/Z9wgp2KKMpgjp6eAQfKxqgCzlgdfYeYuyW+l
-	mNw3BPkzL8Tq7zmHE0K9gOtSlimQ4+noQSxbATznccWgPQ4qh9DGBZBeCGRKMAb3HiW6nNET6tE
-	HzXUEljOHsEqFRvXO6zRRL1xBcnh/xZw3WWsNXSAJUdz85VCwZKNx7yPc9wqwfVDwf0FVlSHh6g
-	cIZa4vQ3Hy9XEJWgQ16FwZ09qyBikBrPLUxarlHel3DN850FqVuWg90ugiJKQ=
-X-Google-Smtp-Source: AGHT+IG0Ve/ZRIK9NvEdzLyuOMm4IvDD4j4EDNmnJ/P3NEM2Fxa6VOcXUycTVDAxkmbTSq3/ss9DGQ==
-X-Received: by 2002:a05:7022:221e:b0:11b:9386:a386 with SMTP id a92af1059eb24-11e032ae381mr2517103c88.41.1765046421224;
-        Sat, 06 Dec 2025 10:40:21 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df76ff44asm34322905c88.9.2025.12.06.10.40.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Dec 2025 10:40:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <144d50f7-398c-4b10-bd21-a6d0c6c7b4c8@roeck-us.net>
-Date: Sat, 6 Dec 2025 10:40:19 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsCx8mM8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD22C4CEFB;
+	Sun,  7 Dec 2025 14:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765116073;
+	bh=XIPzPHGdu9MVAiWYzmLVkJFzpk/+VDBaaF5v6Z7S21s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EsCx8mM87A8HyrcrJI3CQaCEoWdzjxwjyxeqqWomtZPKX5oKnNhnVYczlV7yr+api
+	 h1nrsAZDZtwq8anuESeyBIikhqAGux8Sco7E2Rn/vfqVt3PrLc2LEXvN4NSCJv8VNd
+	 QVVaCfRbNh41EPha2La8wU9XYpzaRw5oeg/WKfl2DGoA8/1tRRDfQAYNuQDEo9c9yk
+	 dqBAsLPZNDc43gMPXaP5nnzCsVtGWyKsl2w7so4uosQ6fq9FfMfKiMuPsd2YnYkyMA
+	 RKvB9A/O4JQAg0lFIEGn3i1jJw/CzAX645QjvGuZeOKfDEgbv9poaPspTv29soMaUq
+	 UJU9YlFfffWtg==
+Date: Sun, 7 Dec 2025 14:00:46 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>, Peter Rosin
+ <peda@axentia.se>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Mariel Tinaco
+ <Mariel.Tinaco@analog.com>, Kevin Tsai <ktsai@capellamicro.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>, Eugen Hristev <eugen.hristev@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Hans de
+ Goede <hansg@kernel.org>, Support Opensource
+ <support.opensource@diasemi.com>, Paul Cercueil <paul@crapouillou.net>,
+ Iskren Chernev <me@iskren.info>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Matheus Castello
+ <matheus@castello.eng.br>, Saravanan Sekar <sravanhome@gmail.com>, Matthias
+ Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Casey Connolly
+ <casey.connolly@linaro.org>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Amit
+ Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Sylwester
+ Nawrocki <s.nawrocki@samsung.com>, Olivier Moysan
+ <olivier.moysan@foss.st.com>, Arnaud Pouliquen
+ <arnaud.pouliquen@foss.st.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, David Lechner <dlechner@baylibre.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] iio: inkern: Use namespaced exports
+Message-ID: <20251207140046.56322d6f@jic23-huawei>
+In-Reply-To: <5948030.DvuYhMxLoT@fw-rgant>
+References: <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
+	<78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
+	<5948030.DvuYhMxLoT@fw-rgant>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-To: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>
-References: <20251204-ltc4283-support-v4-0-db0197fd7984@analog.com>
- <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 12/4/25 08:15, Nuno Sá via B4 Relay wrote:
-> From: Nuno Sá <nuno.sa@analog.com>
+On Tue, 02 Dec 2025 08:30:58 +0100
+Romain Gantois <romain.gantois@bootlin.com> wrote:
+
+> On Monday, 1 December 2025 18:15:54 CET David Lechner wrote:
+> > On 12/1/25 4:59 AM, Romain Gantois wrote:  
+> > > Use namespaced exports for IIO consumer API functions.
+> > > 
+> > > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> > > ---  
+> > 
+> > ...
+> >   
+> > > diff --git a/drivers/iio/dac/ds4424.c b/drivers/iio/dac/ds4424.c
+> > > index a8198ba4f98a..33d6692f46fe 100644
+> > > --- a/drivers/iio/dac/ds4424.c
+> > > +++ b/drivers/iio/dac/ds4424.c
+> > > @@ -14,7 +14,6 @@
+> > > 
+> > >  #include <linux/iio/iio.h>
+> > >  #include <linux/iio/driver.h>
+> > >  #include <linux/iio/machine.h>
+> > > 
+> > > -#include <linux/iio/consumer.h>  
+> > 
+> > Unrelated change?  
 > 
-> Support the LTC4283 How Swap Controller. The device features programmable
-> current limit with foldback and independently adjustable inrush current to
-> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
-> temperature rise for reliable protection against overstresses.
+> Indeed, I'll leave that out in v2.
+
+Please spin a precursor patch that makes that change.
+That way we can easily check all files either both include that header
+and have the namespace enabled, or neither.
+
+I might merge this is a slightly funny way that leave it initially
+not meeting that rule so that the precursor isn't in the immutable branch
+for other subsystems but lets keep it logical in the patch set!
+
+Jonathan
+
 > 
-> An I2C interface and onboard ADC allow monitoring of board current,
-> voltage, power, energy, and fault status.
+> > >  #define DS4422_MAX_DAC_CHANNELS		2
+> > >  #define DS4424_MAX_DAC_CHANNELS		4
+> > > 
+> > > @@ -321,3 +320,4 @@ MODULE_AUTHOR("Ismail H. Kose
+> > > <ismail.kose@maximintegrated.com>");> 
+> > >  MODULE_AUTHOR("Vishal Sood <vishal.sood@maximintegrated.com>");
+> > >  MODULE_AUTHOR("David Jung <david.jung@maximintegrated.com>");
+> > >  MODULE_LICENSE("GPL v2");
+> > > 
+> > > +MODULE_IMPORT_NS("IIO_CONSUMER");  
+> > 
+> > Is this actually needed if we don't use anything from consumer.h?  
 > 
-> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-
-I finally found the time to write module test code for the driver.
-
-Some early feedback:
-
-- The driver must work with non-devicetree systems and without device
-   property support. Select defaults where necessary.
-- Attributes marked as readable in the is_visible function must be readable.
-   It is not acceptable to return -EOPNOTSUPP. That applies to all
-   reset_history attributes and maybe to others.
-- regmap is configured for 8 bit accesses, but some registers are 16 bit wide.
-   The energy register is 48 bit wide, I am not sure if it is safe to use
-   regmap_bulk_read() to bypass that. At the very least it seems risky.
-   Is there some regmap documentation that guarantees that a bulk operation
-   is always executed as a real bulk operation, not as sequence of 8-bit
-   operations ? How does this even work to start with on a system with SMBus
-   controller ?
-
-Thanks,
-Guenter
+> No, it's not.
+> 
+> Thanks,
+> 
 
