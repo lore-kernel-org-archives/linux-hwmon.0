@@ -1,503 +1,138 @@
 Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9C922258C
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Dec 2025 07:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991BB266B67
+	for <linux-hwmon@vger.kernel.org>; Mon,  8 Dec 2025 07:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765179548; cv=none; b=n2abzSsaHXEqMjJGSDcAxPtRIwl65e5fOXOMP1/S/fYjFafGKpyLVFdmPihKenQ80oauxGZfRgffuIM7DatJeSnlA4PmG3XIzYkMsBMxjVjKAUTtUoNWmIbxhm1HkL8SoMz42TmzW9ZNXGvsxB1LtMUybkojZnNFdBIw3aVAQMk=
+	t=1765179629; cv=none; b=SY9EdTKjYcN2vqe6Ty2QTc1+7uaPaNVGPbTx0Aeoq4vg33KDwR4mEHJYAMMDmxwMsacGnVwiC83naEsDpwyu26k87MEUPJm+uVtU+I61e5qBY0FT1fGiCLfUYnZ6gjXge18I93i18f7oig1A8qf3UPXxA7QjV86LhRTLvVfI/WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765179548; c=relaxed/simple;
-	bh=zYh00H4ZXzq3PWkS/1ENfQH85iOSx8Rq3hrnOQ0fPwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZLtrnDWjmh1VvolNNHtxZSfBY9LGC4kT2qk9PgBZD/1b3FpLzbLMmGW7UxzVwDK0hTnH096EJMQa6qJY9F1D5Ul1l2wl63lajKKJ7NpLZsUBoJ6WhBTWGZz/DYPFrDxfbhQMjZW8+6lpJsWIY3byq8xcv5Jj/mzhLb8czHwkzhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NGkIc/4J; arc=none smtp.client-ip=209.85.215.174
+	s=arc-20240116; t=1765179629; c=relaxed/simple;
+	bh=CJV2YY/Bxfi/CzjyDJEXLrRI4l2A2dqf7ZBfir1/+aE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bt5Xzf4jbLtgYjjgurkMMq6iUx6pf495cyjnFw4cJ2Xvyf+JSXQ6250G8ExOMvC86YWGwcvZMJ5e1g+/CpYfO3yzdFdcKX1OJitFp5o67I7TKIykeAftTppTftPxNaQsmkYsxzlJ/DB+5Yhjnt5DUbVhrD1Qy4UewJUH+7wSWv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RPIEp48b; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGkIc/4J"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b98983bae8eso3289859a12.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 07 Dec 2025 23:39:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RPIEp48b"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bd1b0e2c1eeso3281940a12.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 07 Dec 2025 23:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765179544; x=1765784344; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yXDnfOTk0bKHOljlc8hqbi3cRVbO+lOwhLyhsOiAOaY=;
-        b=NGkIc/4J86vTLALv+Pxw4zkgJzElfSxY0Q2fdB1HXuqTMRBmwLDzDV1Qr/QdA2s2Eb
-         C+1hij8LgtfV840KYh+15oD7o9Lwp1uOItd45OdNxeyTICPpwY10hdm5DFlRF9C8stmx
-         eKYNInwHrosVRW7JHgu8lzUsEuOpChaLynutWGWHiqueHCFp3HXcbDZeSu4IGsquTv0g
-         jpNz+NmVDvrbqoBLvnkGVi15Rf7uYHiJBnlNkZSc2+Kx7UmDUmyMg90XAYSMtU6MtUHP
-         7b5n9cEEC5R1esaDivElVQIP8kXoc24cRuFipjo9yAfuWSLjBNL/Z3fcw/wvwSVw2TGl
-         JIXw==
+        d=gmail.com; s=20230601; t=1765179627; x=1765784427; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=eKdwd/KR5bnb9wX3N8/V35/o7UnRLEl4Xu9deacC5pc=;
+        b=RPIEp48bqZf7xf57zZff7MKVAUowczuVUDfbgkJPDSppfpKWeGaP5S+MDKjaoIQXwR
+         5JYNqHwm/zz4UiEBHcAZDaGftUpe/QdfuSjkCnAQdETzbYbhkImwqnUlNtAWUaMm8llm
+         WuivCmcV5ColuHy/LVqylK6YSuN/bxTQCtVX00aNhdwq6jy63zHR7yddfr4DydtOjR3q
+         pkFtIGcbPuSN2dqIgb+8kR6rFtIbnxLV/9KpU0fG/PgnAA4g5CG/h+rDg/8Tm7w1MmvO
+         cPo7ETUeuvs3IGUk6SWGd4io2mPuoYjwS8hFb24BSzrqqhM5Ddp01hciCYznHFYTm/8T
+         MhIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765179544; x=1765784344;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yXDnfOTk0bKHOljlc8hqbi3cRVbO+lOwhLyhsOiAOaY=;
-        b=c49QtVZniioAP59PruHECzlxycT3p4QOsqlP/0i0hy/eOr1MlD0f3AiI4WR66d4yA+
-         M21gCeWIiAhJGPicUj0cvZ/npHzRWN22LMBVtyiF1q5uYZkph4WtpOrW3ZS5wGkOeSpX
-         DZtRIx/5RoNH3BnCxnb4C/leMgec1mIE96cNLXt5cUOQw4fCgB8PqKGW+bbqmUlTJID9
-         AAaeAdL2dImMFm32/9DVRm8CJZa3YqZ/STfjS/ZqjTEfpzepGdvigKUDaPYK1e40I7sN
-         +RUhSDoTCSqbAZiU891vq4tWjwpmSU1nDdmwXC5qXcP/e3RRC1mG3GIuctbnvNmosRHB
-         FW2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUMNXoXt81/otR9fiOTzKRjeyjrxURgRg3p9lPOLwY3ttFy/Hu3BjwBs3pHpT7zT3ztDcHn3G+YuvsLdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YylFvMjOC89MMbhOrM1L4QYocZph06rw93fni7jlVwy7a8+IHeC
-	RxllLhSTJanP6ppL8bLAGn4PvMikXp1V5DiP+SlnF4h1LEDMq1Sh8k5G
-X-Gm-Gg: ASbGncunZAigQVU+TrzW4rHpCzfcgwLKolMfmB6HYLLNAPrF8vVMj8gOIDAzUVJJtd+
-	nbbjR8lB09lAk3RPsN3ZbEs8STMvqQJcDau/RYmQ5tAzxjf88sL+Zelyp0JDZxVbGPT7AfiEvll
-	jPBNceVGe4Lkfj4CHcRHThuRnwawqwUHz8e32gLmDzLT48fXmwotJVQlGlVsKuv1OxT5xo50ENm
-	WzN2zQ9v/EF9mopOm3H+bhPmGgiNT3AgDMSzdJ2Ah62QlgYOGF7wCX8hFK1kGYwyHFyV2PEYZcH
-	wC0AqWIazNE7CSmCE4GbcPFlWkwdkfuTmyoQDY0TS2LZioPPjmjM+Zfh91s/epdikg1/qC2zLXF
-	pmY0yy9Vj/91mVLB+ogALKc9ztABcZeiFWF0T8bqJFQYFxyFmIH2O3FknFTMy2TdGgILGpkvppF
-	rKZnd3qf3j9LA7Il6vBDNiyxCG7pY4OKOgTw==
-X-Google-Smtp-Source: AGHT+IFgFOAKUJZOhYYNZpiFMZ8LUUma7b6IZuq74P5uVZsA19ajYX5KWm5sGaeJqtccZPJYMMSSLw==
-X-Received: by 2002:a05:7300:e8a5:b0:2a6:a306:eff5 with SMTP id 5a478bee46e88-2abc70f7acfmr3810082eec.5.1765179544282;
-        Sun, 07 Dec 2025 23:39:04 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7573508sm38310688c88.3.2025.12.07.23.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Dec 2025 23:39:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1765179627; x=1765784427;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eKdwd/KR5bnb9wX3N8/V35/o7UnRLEl4Xu9deacC5pc=;
+        b=G3kO3CWugYbqHPGHQ9C3R3EnXU3Y4xuoO7ZUDc8FIJ4IFwVtMD1WEd3P6CC/riCEOq
+         EUdx6G/UkKFeVGa5Z7Bi9AivVwmlfAtgataMVNZSpDlbhIABcOstp7tRysryaX2keYiv
+         zhWZ+/BA5O3Ssf/+gMTzOaA0YHDRLGSgbxyV6D9ho/IsaPq+rD1HXIzNy7uEvX998bka
+         Aiq51H/1+AMJ28BSXxPYxl6D9mYROeeDrjyzPwpQRAuqQQlLIwynTYrxKfi6ArWezjGP
+         5iy+6O9VptoQngZGpZwwSC5H9RaXLLCGQ/mSIWT+XWK2KbS7rQiNsbvHy7CO9uULJZAU
+         9W4w==
+X-Gm-Message-State: AOJu0YwLpTAwuiU5SvwRNl4s7Zvv8s0fkxorNtRSWJeFz4UVLyzt/bFJ
+	ZuSdwHgOs8CO07g18+WquZA23cy2FK5X8n+jcgZIpDa3OTiMKhFl2I2l
+X-Gm-Gg: ASbGncspF5CBVnbbCaCOxF3BeEjaPABETY/lDpn20u9uiO3/VUi4R1h9rixaQqToc7U
+	7c1wsQB5qR+R4REYzeYR7jLnJu+u5lcYtuYCKkVmy9lH13tSvBMS2SahMDu215XJ58BNnGdsqU0
+	PTwaPOJ/RwcBMflCb25oRVEg9mdLS6LfhuRd6CXuudorG4wvZPWtgFoJe9x1KMip4JbwIbUlBDe
+	9rYtDBBThHLAM2hIwgezvT17svvGYcLPSaiZXkphHjZagkqqK8LTkMrAOdIUYErTOpAMhSLNYGQ
+	jtp4oWBc5ZlW7zgfPFmDJ3To4DoXHqnHrrDBMjXdGbfuIImbNpPdbtS53bT+xKy0LGxYA+CJ+9P
+	ZCmFTmMg3TPIb6nfxyXjWLMCpDcgfTwrMDuoUwgncRhcsRc2vKz7Zs3gi3zGcW7cE/XCzb1kX0O
+	5VVCkd6J2XtOvZPMO9NAJM8ZfHrzGk6tL6S1CyC/d2vn5GLcuItCI12/czZ0A=
+X-Google-Smtp-Source: AGHT+IHyV47dw0/i0DBXUAhZKcF3aDHj1i2N/ZIBxXcFtJsWedaSJNdXnm3NvzD25PXjKusGyRsGtw==
+X-Received: by 2002:a05:7300:3253:b0:2a4:3593:c7d8 with SMTP id 5a478bee46e88-2abc71cf162mr5670627eec.24.1765179626641;
+        Sun, 07 Dec 2025 23:40:26 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2aba87d7b9dsm44916816eec.4.2025.12.07.23.40.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Dec 2025 23:40:25 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 7 Dec 2025 23:39:01 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-Cc: corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, wyx137120466@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: add mp5926 driver
-Message-ID: <5f83f1f7-2ddd-4f4b-9c6f-f69aafcd8693@roeck-us.net>
-References: <20251208071659.1157-1-Yuxi.Wang@monolithicpower.com>
- <20251208071659.1157-3-Yuxi.Wang@monolithicpower.com>
+Message-ID: <934326a2-562a-430a-84cd-7b64f1eb2e25@roeck-us.net>
+Date: Sun, 7 Dec 2025 23:40:23 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251208071659.1157-3-Yuxi.Wang@monolithicpower.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] Documentation: hwmon: g762: update DT binding reference
+To: Shubham Sharma <slopixelz@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251207202712.71787-1-slopixelz@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251207202712.71787-1-slopixelz@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Dec 08, 2025 at 03:16:59PM +0800, Yuxi Wang wrote:
-> Add support for MPS mp5926.
-> Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> ---
->  Documentation/hwmon/index.rst  |   1 +
->  Documentation/hwmon/mp5926.rst |  92 ++++++++++++++++
->  MAINTAINERS                    |   7 ++
->  drivers/hwmon/pmbus/Kconfig    |   9 ++
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/mp5926.c   | 192 +++++++++++++++++++++++++++++++++
->  6 files changed, 302 insertions(+)
->  create mode 100644 Documentation/hwmon/mp5926.rst
->  create mode 100644 drivers/hwmon/pmbus/mp5926.c
+On 12/7/25 12:27, Shubham Sharma wrote:
+> Update the device tree binding reference to show the change
+> from .txt to YAML. Binding was converted in commit
+> 3d8e25372417 ("dt-bindings: hwmon: g762: Convert to yaml schema")
+> and moved to Documentation/devicetree/bindings/hwmon/gmt,g762.yaml.
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 85d7a686883e..6181c3f62177 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -185,6 +185,7 @@ Hardware Monitoring Kernel Drivers
->     mp2993
->     mp5023
->     mp5920
-> +   mp5926
->     mp5990
->     mp9941
->     mp9945
-> diff --git a/Documentation/hwmon/mp5926.rst b/Documentation/hwmon/mp5926.rst
-> new file mode 100644
-> index 000000000000..4b64a7e24ae6
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp5926.rst
-> @@ -0,0 +1,92 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp5926
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS mp5926
-> +
-> +    Prefix: 'mp5926'
-> +
-> +  * Datasheet
-> +    https://www.monolithicpower.com/en/
-> +
-> +Author:
-> +
-> +	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP5926 Hot-Swap Controller.
-> +
-> +Device compliant with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_crit**
-> +
-> +**in1_crit_alarm**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +**in2_lcrit**
-> +
-> +**in2_lcrit_alarm**
-> +
-> +**in2_rated_max**
-> +
-> +**in2_rated_min**
-> +
-> +The driver provides the following attributes for input current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr1_max**
-> +
-> +**curr1_max_alarm**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr2_input**
-> +
-> +**curr2_label**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +The driver provides the following attributes for output power:
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_crit**
-> +
-> +**temp1_crit_alarm**
-> +
-> +**temp1_max**
-> +
-> +**temp1_max_alarm**
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d701a4d5b00e..fea710aab535 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17708,6 +17708,13 @@ S:	Maintained
->  F:	Documentation/hwmon/mp2993.rst
->  F:	drivers/hwmon/pmbus/mp2993.c
->  
-> +MPS MP5926 DRIVER
-> +M:	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/mp5926.rst
-> +F:	drivers/hwmon/pmbus/mp5926.c
-> +
->  MPS MP9941 DRIVER
->  M:	Noah Wang <noahwang.wang@outlook.com>
->  L:	linux-hwmon@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index f3fb94cebf1a..0a6699fa976a 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -472,6 +472,15 @@ config SENSORS_MP5920
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp5920.
->  
-> +config SENSORS_MP5926
-> +	tristate "MPS MP5926"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Monolithic
-> +	  MP5926.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called MP5926.
-> +
->  config SENSORS_MP5990
->  	tristate "MPS MP5990"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 349a89b6d92e..75ec4956ca8d 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -47,6 +47,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
->  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
->  obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
-> +obj-$(CONFIG_SENSORS_MP5926)	+= mp5926.o
->  obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
->  obj-$(CONFIG_SENSORS_MP9941)	+= mp9941.o
->  obj-$(CONFIG_SENSORS_MP9945)	+= mp9945.o
-> diff --git a/drivers/hwmon/pmbus/mp5926.c b/drivers/hwmon/pmbus/mp5926.c
-> new file mode 100644
-> index 000000000000..e86ec1ec0584
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp5926.c
-> @@ -0,0 +1,192 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +//
-> +// mp5926.c  - pmbus driver for mps mp5926
-> +//
-> +// Copyright 2025 Monolithic Power Systems, Inc
-> +//
-> +// Author: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +/*Common Register*/
+> Signed-off-by: Shubham Sharma <slopixelz@gmail.com>
 
-Useless (and, in fact, misleading) comment
+I already have two patches with this change, and one of them is queued
+in the hwmon branch.
 
-> +#define PAGE	0x01
+Guenter
 
-That is not a register, it is used as the number of pages.
-
-> +#define EFUSE_CFG 0xCF
-> +#define I_SCALE_SEL 0xC6
-
-Please align properly with tab after name.
-
-#define<space>NAME<tab>value
-
-> +#define MP5926_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-> +			PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | \
-> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_INPUT | \
-> +			PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_VOUT)
-
-Add empty line
-
-> +static int mp5926_read_word_data(struct i2c_client *client, int page, int phase,
-> +				 int reg)
-> +{
-> +	int ret;
-> +	s16 exponent;
-> +	s32 mantissa;
-> +	s64 val;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VIN...PMBUS_READ_VCAP:
-> +	case PMBUS_READ_IOUT...PMBUS_READ_TEMPERATURE_1:
-> +	case PMBUS_READ_PIN:
-> +	case PMBUS_STATUS_WORD:
-> +		ret = -ENODATA;
-> +	break;
-> +	case PMBUS_READ_VOUT:
-> +	// The Vout format used by the chip is linear11 and not linear16.
-> +	// So we transform the value into the direct format defined by PMBus.
-> +	ret = i2c_smbus_read_word_data(client, EFUSE_CFG);
-> +	if (ret < 0)
-> +		return ret;
-
-Reading the value of EFUSE_CFG again and again is
-unnecessary. Just read it once in the probe function
-and store it in a local data structure.
-
-Also, it is not entirely clear to me why mp5926_read_word_data
-is even needed in direct mode. Please add a comment with an
-explanation.
-
-> +	if (ret & BIT(12)) {
-> +		ret = i2c_smbus_read_word_data(client, PMBUS_READ_VOUT);
-> +		if (ret < 0)
-> +			return ret;
-> +		exponent = ((s16)ret) >> 11;
-> +		mantissa = ((s16)((ret & 0x7ff) << 5)) >> 5;
-> +		val = mantissa * 1000;
-> +		if (exponent >= 0)
-> +			val <<= exponent;
-> +		else
-> +			val >>= -exponent;
-> +		val = div_s64(val * 10 + 313L, 625L);
-> +		return val;
-> +	}
-> +	ret = -ENODATA;
-> +	break;
-
-Alignment is off. Please fix.
-
-> +	default:
-> +		ret = -EINVAL;
-> +	break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int mp5926_read_byte_data(struct i2c_client *client, int page,
-> +				 int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_BYTE:
-> +	case PMBUS_STATUS_VOUT:
-> +	case PMBUS_STATUS_INPUT:
-> +	case PMBUS_STATUS_TEMPERATURE:
-> +	case PMBUS_STATUS_CML:
-> +	case PMBUS_STATUS_MFR_SPECIFIC:
-> +	   ret = -ENODATA;
-> +	break;
-
-Alignment.
-
-> +	default:
-> +		ret = -EINVAL;
-
-Why is this needed ? This warrants an explanation.
-
-> +	break;
-
-Alignment
-
-> +	}
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info mp5926_info_linear = {
-> +	.pages = PAGE,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_POWER] = linear,
-> +
-> +	.m[PSC_VOLTAGE_OUT] = 16,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 0,
-> +
-> +	.read_word_data = mp5926_read_word_data,
-> +	.read_byte_data = mp5926_read_byte_data,
-> +	.func[0] = MP5926_FUNC,
-> +};
-> +
-> +static struct pmbus_driver_info mp5926_info_direct = {
-> +	.pages = PAGE,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_CURRENT_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_POWER] = direct,
-> +
-> +	.m[PSC_VOLTAGE_IN] = 16,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 0,
-> +
-> +	.m[PSC_CURRENT_IN] = 16,
-> +	.b[PSC_CURRENT_IN] = 0,
-> +	.R[PSC_CURRENT_IN] = 0,
-> +
-> +	.m[PSC_VOLTAGE_OUT] = 16,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 0,
-> +
-> +	.m[PSC_TEMPERATURE] = 4,
-> +	.b[PSC_TEMPERATURE] = 0,
-> +	.R[PSC_TEMPERATURE] = 3,
-> +
-> +	.m[PSC_POWER] = 25,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = -2,
-> +
-> +	.read_word_data = mp5926_read_word_data,
-> +	.read_byte_data = mp5926_read_byte_data,
-> +	.func[0] = MP5926_FUNC,
-> +};
-> +
-> +static int mp5926_probe(struct i2c_client *client)
-> +{
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> +				     | I2C_FUNC_SMBUS_BLOCK_DATA))
-> +		return -ENODEV;
-
-That functionality check warrants an explanation. Why check
-if block data read is supported ? It is not used anywhere.
-But then i2c_smbus_read_word_data _is_ called below but its
-support is not checked. That does not really make sense.
-
-> +	ret = i2c_smbus_read_word_data(client, EFUSE_CFG);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret & BIT(12)) {
-> +		ret = pmbus_do_probe(client, &mp5926_info_linear);
-> +	} else {
-> +		ret = i2c_smbus_read_word_data(client, I_SCALE_SEL);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (ret & BIT(6))
-> +			mp5926_info_direct.m[PSC_CURRENT_IN] = 4;
-> +		ret = pmbus_do_probe(client, &mp5926_info_direct);
-
-Use a local variable for the pointer to the info structure,
-and call pmbus_do_probe() only once.
-
-> +	}
-> +	if (!ret)
-> +		dev_info(&client->dev, "%s chip found\n", client->name);
-
-Please drop this noise.
-
-> +	return ret;
-> +}
-> +
-> +static const struct i2c_device_id mp5926_id[] = {
-> +	{ "mp5926", 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mp5926_id);
-> +
-> +static const struct of_device_id mp5926_of_match[] = {
-> +	{ .compatible = "mps,mp5926" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp5926_of_match);
-> +
-> +static struct i2c_driver mp5926_driver = {
-> +	.probe = mp5926_probe,
-> +	.driver = {
-> +		.name = "mp5926",
-> +		.of_match_table = mp5926_of_match,
-> +	},
-> +	.id_table = mp5926_id,
-> +};
-> +
-> +module_i2c_driver(mp5926_driver);
-> +MODULE_AUTHOR("Yuxi Wang <Yuxi.Wang@monolithicpower.com>");
-> +MODULE_DESCRIPTION("MPS MP5926 HWMON driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
