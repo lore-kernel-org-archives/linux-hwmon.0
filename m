@@ -1,120 +1,186 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40D042050
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Dec 2025 06:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA9527BF7C;
+	Tue,  9 Dec 2025 08:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765262276; cv=none; b=Yv2vPjhesDK9VOQKUx2/slwtUM+IZ3RnUqvHOtFx370ZyMzcHB1lnh6n3nmKQdpwOzxXSm+BUF19Jkg5Yn5iSbAyWznnvCIG/zmFiy3bSVeaRk9ad6+0ziwZQPMFMpKb/UnM6jmoR0eknD4rvi8TCgwnyvHVvIypBTg3igP6Tys=
+	t=1765268796; cv=none; b=aSO8ZoKJLTIgvlpFO0iLZmZZUkQRtCyJmnhm2wRl0pWbsO2cwejHzuuR8OGT8pC9KAPQBT+JZU5qTKodfRrZul9jO65pyUAXFQgdGWumARflbjnONa3R7u1WNwcOUcLcnKzhl0z8BFIDMXFFV/2MFvX02mFtL4FltcNDz5In/38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765262276; c=relaxed/simple;
-	bh=PW0O6kLbo5GjDu6tRgsLUugmkutcrOHVUDP7cv3Q4TA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFx08SgRsLkfbgoBVxi+95fjlKsCI60hXesgMQaBqQ5BtpZTrTiLYr3yldtYFTL7PB9F5eNC617BWlgWtEPj5y0uyx8wUnx/o4PQU0katkJBjCENtmwnqIUAJyZ9Lf6sPZ9XnWG3PUcUK5H2YEPE44LUe2EqTVSaIk/mabaP1/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eav+IOVO; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765268796; c=relaxed/simple;
+	bh=MT/qY8MX0ozkYBW0qMvzRIWzDIZmrsZJkEszJ+YNa54=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oL0vbRK65ZQrFm5mSxgw9gyQjxZIBe7GRMNzE2QL6zR0Ic2Qh0xD0OKpMILjxv1wNpTo9ugveOSQADGPbWZrjOknpCOd5U5Y2HohqZTLjRZahyxzTBfMMm7tSN5GJRESDb+mAHZZvS8wW7ndqZSvdnbLW+nbHm3FNCX0OC6ZPgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fHyy3p3R; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eav+IOVO"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so43776645e9.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Dec 2025 22:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765262273; x=1765867073; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1P6N9X8JGizDDdWBTPzV0iu18wjm9mRYXSTP8eAsXQ=;
-        b=eav+IOVOpUjp7vycNYVSqLiEHismkjMoBU/LLBeNVLnG4xl9xib5aH150jpHqFygTb
-         awtGJPCLh8ikQvLjaddG/1yhEjN0sSVTVQS9E2SknZFO6aZJeyBhL6Fs7XJkJ3PCWHWi
-         WnTfcSEW7yj3Sqhf6uI0cYBAViTR8VcZXgXrWXhTubRdnzPe74CYEmuXmOLOggnQer+P
-         nP6Bj4NLKELC+OOxrRJgEvfkCIi6+OuewYLNno07orsqk89sckNM9SS96mC4YKwa2/s/
-         r5g+JEyxnGRCPRqemXqAIcuTbnfURg1WNL+QYuTef1JYFi/IpFdtaWuXcok+EbbYkapl
-         asnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765262273; x=1765867073;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F1P6N9X8JGizDDdWBTPzV0iu18wjm9mRYXSTP8eAsXQ=;
-        b=Xic338tuCdTR2VcG4m54lz4/nksW+nhiPiljH/R7zMzobe/M3VsyhgkOs6j1rWSeTE
-         AMEUPajmJVdLNOeV/3jIwH4mTW7TrjeeZzUgJwpX1JBqZFFopn9fjsR0mKV9taRO8o6y
-         tNUOPQ4/0/dYyhqAGHshxynIIEggbmA4pnuZLTKIyadFHzVgUU7+PfjAPsa4kKt+REKz
-         sO+ufMJzNGgmlvIhHNqhObrrzBo+1sSkNqDczY29GUJx0BI7TSK/zJQtTMmpivgBIuof
-         pa2KZNqHni4BJATc5l5Q6yQk3ew2B4PqRQBIf6u+dxCVTqOmpyt1f0CH2FrN+zNaMsaU
-         Ovsw==
-X-Gm-Message-State: AOJu0YzRqRd6K9INwDGo6FNZqYqsV75DXcYEBk9RJDIXUij6jUH/hUnf
-	XLvw9EMFYZsM4GDQkerAgSQ66AfTfRgzoU1SL+eFfIwzQ3f73fCdZHUL
-X-Gm-Gg: ASbGncunbeI9UwJmVRQgQdffNgIQpTvpJtdAu2JO5MdUDHE88cLnmsjZqqDJ0Y5oLFI
-	3ggHzBmGaDwqjlvFdH6BInTb9GAe+DRtF6rn7fMPhxugz0VtgTZu75rr7amhzPx1iddTHzSpRhm
-	MXTLmbbLm+LzdYa83UyR5f3hBVZCp1NYZbTZ782IHuZbUMcTLiOZhmdPOTQI0maiadcwYXET5tp
-	nMtJ6Vagvf5NoqIiIK1oDr3iQg6wdX0MkMFghbRaYfZIwlb8+r0th8QP+3qMQgfb/wqTSSfmJpO
-	7wOw4NXodwnIgxcOrNkSaltEJV+XtmoHA7UFr15xJs7tIQBQIpHVXbAEgWva1WJyScOPAYp9VxP
-	gZOjBRaIcWJrw9/wbiU7s97QiTek92eyngSAnZDKQrHGT1Y6t+UwTF8AtjqIaa9JkUi0lbqRewI
-	cKvnhpNBqsddDjmI0KZ2cci39WKNAMqY8=
-X-Google-Smtp-Source: AGHT+IFawsKDR5qdLHY0F6q+l+etzMFFRatyM98cUTaG7A41GSePRP93GY/1Zz5bR9wifPSDgcJtNg==
-X-Received: by 2002:a05:600c:4e92:b0:45c:4470:271c with SMTP id 5b1f17b1804b1-47939e1dc67mr92867725e9.18.1765262272982;
-        Mon, 08 Dec 2025 22:37:52 -0800 (PST)
-Received: from happy ([144.31.69.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a7d9d23e1sm9615465e9.4.2025.12.08.22.37.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Dec 2025 22:37:51 -0800 (PST)
-From: Denis Sergeev <denserg.edu@gmail.com>
-To: pali@kernel.org,
-	linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Denis Sergeev <denserg.edu@gmail.com>
-Subject: [PATCH] hwmon: (dell-smm) Limit fan multiplier to avoid overflow
-Date: Tue,  9 Dec 2025 09:37:06 +0300
-Message-ID: <20251209063706.49008-1-denserg.edu@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fHyy3p3R"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 52F5AC180E0;
+	Tue,  9 Dec 2025 08:26:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0BFF760714;
+	Tue,  9 Dec 2025 08:26:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0CD79102F0BF6;
+	Tue,  9 Dec 2025 09:26:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1765268783; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=wcg04tlEy44VWHetyJPa6vtgrSi9hQkJ8Wr3ssO16Z0=;
+	b=fHyy3p3RXDvWm/ScQ573O19lBfA7i99dTtnNMKIgZo6j5P27qUaUjbhNTv08DA8IFMfpHy
+	AgxHwoL/NW76FusS9uDh40xSgmfteD+0AIKiUzKm6X50QBH9u+CGQe/shfCBYk6cYKg2TZ
+	8gN2cTM7D1TIOGI5CBJ9VtNcRcbmeEPaK0KH5amKURGuYmw9NosAHrgGe3H35kv5rwXRKw
+	4FLoSOslR05puLB4/PTfDmvtHxQZ+eNY+xwyZu7eIBJfZyxeM1KAbSzgzSDiYTjCGWaCLA
+	VyDhDTs5Dy0D0lluZeF/pIm4ZgCjPNF9eHgaCtNllGMYqa2jowZM4WLyZc41kQ==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: [PATCH v2 0/2] iio: inkern: Use namespaced exports
+Date: Tue, 09 Dec 2025 09:25:54 +0100
+Message-Id: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABLdN2kC/42NQQ6CMBAAv0J6dk13gRA8+Q/DoZRFNkpLWiQYw
+ t+t+AGPM4eZTUUOwlFdsk0FXiSKdwnolCk7GHdnkC6xIk0lIlUg4kHcg4ODV2RwZuQ4Gcsd8Dr
+ 5MEcosLe6JsrbklXqTIF7WY/HrUk8SJx9eB/LBb/2VyeNf9QXBITOYJ2XfaWpyK+t9/NT3Nn6U
+ TX7vn8Avu6Bn9QAAAA=
+X-Change-ID: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
+To: MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, 
+ Kevin Tsai <ktsai@capellamicro.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Hans de Goede <hansg@kernel.org>, 
+ Support Opensource <support.opensource@diasemi.com>, 
+ Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Matheus Castello <matheus@castello.eng.br>, 
+ Saravanan Sekar <sravanhome@gmail.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Casey Connolly <casey.connolly@linaro.org>, 
+ =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Olivier Moysan <olivier.moysan@foss.st.com>, 
+ Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ Romain Gantois <romain.gantois@bootlin.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-The fan nominal speed returned by SMM is limited to 16 bits, but the
-driver allows the fan multiplier to be set via a module parameter.
+Hello everyone,
 
-Clamp the computed fan multiplier so that fan_nominal_speed *
-i8k_fan_mult always fits into a signed 32-bit integer and refuse to
-initialize the driver if the value is too large.
+This is version two of my series which introduces namespaced exports for
+the IIO consumer API.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Best Regards,
 
-Signed-off-by: Denis Sergeev <denserg.edu@gmail.com>
+Romain
+
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
 ---
- drivers/hwmon/dell-smm-hwmon.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Changes in v2:
+- Separated out ds4424 changes.
+- Improved commit descriptions.
+- Link to v1: https://lore.kernel.org/r/20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index cbe1a74a3dee..f0e8a9bc0d0e 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -76,6 +76,9 @@
- #define DELL_SMM_NO_TEMP	10
- #define DELL_SMM_NO_FANS	4
- 
-+/* limit fan multiplier to avoid overflow */
-+#define DELL_SMM_MAX_FAN_MULT (INT_MAX / U16_MAX)
-+
- struct smm_regs {
- 	unsigned int eax;
- 	unsigned int ebx;
-@@ -1253,6 +1256,12 @@ static int dell_smm_init_data(struct device *dev, const struct dell_smm_ops *ops
- 	data->ops = ops;
- 	/* All options must not be 0 */
- 	data->i8k_fan_mult = fan_mult ? : I8K_FAN_MULT;
-+	if (data->i8k_fan_mult > DELL_SMM_MAX_FAN_MULT) {
-+		dev_err(dev,
-+			"fan multiplier %u is too large (max %u)\n",
-+			data->i8k_fan_mult, DELL_SMM_MAX_FAN_MULT);
-+		return -EINVAL;
-+	}
- 	data->i8k_fan_max = fan_max ? : I8K_FAN_HIGH;
- 	data->i8k_pwm_mult = DIV_ROUND_UP(255, data->i8k_fan_max);
- 
+---
+Romain Gantois (2):
+      iio: dac: ds4424: drop unused include IIO consumer header
+      iio: inkern: Use namespaced exports
+
+ drivers/extcon/extcon-adc-jack.c                |  1 +
+ drivers/hwmon/iio_hwmon.c                       |  1 +
+ drivers/hwmon/ntc_thermistor.c                  |  1 +
+ drivers/iio/adc/envelope-detector.c             |  1 +
+ drivers/iio/afe/iio-rescale.c                   |  1 +
+ drivers/iio/buffer/industrialio-buffer-cb.c     |  1 +
+ drivers/iio/buffer/industrialio-hw-consumer.c   |  1 +
+ drivers/iio/dac/ad8460.c                        |  1 +
+ drivers/iio/dac/dpot-dac.c                      |  1 +
+ drivers/iio/dac/ds4424.c                        |  1 -
+ drivers/iio/inkern.c                            | 54 ++++++++++++-------------
+ drivers/iio/light/cm3605.c                      |  1 +
+ drivers/iio/light/gp2ap002.c                    |  1 +
+ drivers/iio/multiplexer/iio-mux.c               |  1 +
+ drivers/iio/potentiostat/lmp91000.c             |  1 +
+ drivers/input/joystick/adc-joystick.c           |  1 +
+ drivers/input/keyboard/adc-keys.c               |  1 +
+ drivers/input/touchscreen/colibri-vf50-ts.c     |  1 +
+ drivers/input/touchscreen/resistive-adc-touch.c |  1 +
+ drivers/phy/motorola/phy-cpcap-usb.c            |  1 +
+ drivers/power/supply/ab8500_btemp.c             |  1 +
+ drivers/power/supply/ab8500_charger.c           |  1 +
+ drivers/power/supply/ab8500_fg.c                |  1 +
+ drivers/power/supply/axp20x_ac_power.c          |  1 +
+ drivers/power/supply/axp20x_battery.c           |  1 +
+ drivers/power/supply/axp20x_usb_power.c         |  1 +
+ drivers/power/supply/axp288_fuel_gauge.c        |  1 +
+ drivers/power/supply/cpcap-battery.c            |  1 +
+ drivers/power/supply/cpcap-charger.c            |  1 +
+ drivers/power/supply/da9150-charger.c           |  1 +
+ drivers/power/supply/generic-adc-battery.c      |  1 +
+ drivers/power/supply/ingenic-battery.c          |  1 +
+ drivers/power/supply/intel_dc_ti_battery.c      |  1 +
+ drivers/power/supply/lego_ev3_battery.c         |  1 +
+ drivers/power/supply/lp8788-charger.c           |  1 +
+ drivers/power/supply/max17040_battery.c         |  1 +
+ drivers/power/supply/mp2629_charger.c           |  1 +
+ drivers/power/supply/mt6370-charger.c           |  1 +
+ drivers/power/supply/qcom_smbx.c                |  1 +
+ drivers/power/supply/rn5t618_power.c            |  1 +
+ drivers/power/supply/rx51_battery.c             |  1 +
+ drivers/power/supply/sc27xx_fuel_gauge.c        |  1 +
+ drivers/power/supply/twl4030_charger.c          |  1 +
+ drivers/power/supply/twl4030_madc_battery.c     |  1 +
+ drivers/power/supply/twl6030_charger.c          |  1 +
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c        |  1 +
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c     |  1 +
+ drivers/thermal/renesas/rzg3s_thermal.c         |  1 +
+ drivers/thermal/thermal-generic-adc.c           |  1 +
+ sound/soc/codecs/audio-iio-aux.c                |  1 +
+ sound/soc/samsung/aries_wm8994.c                |  1 +
+ sound/soc/samsung/midas_wm1811.c                |  1 +
+ sound/soc/stm/stm32_adfsdm.c                    |  1 +
+ 53 files changed, 78 insertions(+), 28 deletions(-)
+---
+base-commit: 99fece7ab29c9654d7945312b275b527757ac4b3
+change-id: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
+
+Best regards,
 -- 
-2.50.1
+Romain Gantois <romain.gantois@bootlin.com>
 
