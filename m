@@ -1,92 +1,63 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665D32E22BE
-	for <linux-hwmon@vger.kernel.org>; Mon,  8 Dec 2025 22:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BA71FE46D;
+	Tue,  9 Dec 2025 00:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765231759; cv=none; b=AhK9JZHYTZF3sZZBIpfm8llrEqISSZOgwlVt9rOb6wCT95wwU+YRKBlgH2UHwE9Fb2T5vOc0rypma2m7mhG9IR3BB3v+UADp2NYCOls2TzupGqfrYinGDlmXTvSh/HaxpcJNCaFXHyZ7+k6JHlF/3hhqgnlKhzDrG+MyR9ZlvvM=
+	t=1765239322; cv=none; b=lI7aHJ7c5kKxcZoeIVgHdKCdWLF2+2nfhcmMtHbpwFwUNvpA3K6Y1HlJEz8yy/gudbkgIrMfFa5Da12W12NEKskBeu1QrEZy4ljbF4KTEUAkAeJ7uOkXJyB+f7gHjKbIqj46uGvoHAI9LjT2tS1PZ0URzVuW9IlGivF3zrZSDLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765231759; c=relaxed/simple;
-	bh=MbE1bv1r91ojRBbAgd8sSdkFaVll/H4wSmg6gbMWeGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DKYLp6ehqKujpEQjjGx9zbCHk1vNx80zqhEdcTOLWlgCaoizkM2f2lEhJT91ct4YGPnqoCko3dBIU9i6BnSaBSDxBCtzNf/XwylnJeYFVYOR47NLrYpOKnqnP7cUMun66fNaUIDK2zS2y7vxZ7HZy2h8YxPMQv71B/RKYFtRqjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZIFFayhW; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1765239322; c=relaxed/simple;
+	bh=2fWBU0C+h/xPwSd2wzfO+/5y/LW7PrNayVXAQeI5Q4w=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=B5OvTPRZqi+9+pfTXaVgp6NAblPN8IpfWGRu6rZd0rLdHtZk+oXyJTW6ukVhAQJHUVW3LChirdz7H96JKEneSe8RRdtek1wegCB+MUacGnY6N2fhla5r00ToS6VbUaXpllZqRyE8TCa9lDO8DMFAf9mqo0mOerYq7CRqCFsmHAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQ24vrXY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZIFFayhW"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A739B4E41AF2;
-	Mon,  8 Dec 2025 22:09:16 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 78604606DD;
-	Mon,  8 Dec 2025 22:09:16 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 13D07103C8D5C;
-	Mon,  8 Dec 2025 23:09:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765231755; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=txJRuHrrwV2ADW2a0LZ396P8T6DrwxOBcVmxIdFH5mY=;
-	b=ZIFFayhWWluy/Qms43QysyKzVEzgYbV0fvLPjTvuqBXZkXZsh477ayBau29XgKXhEO/9jp
-	nEVCYk0l9aNSPfiD9uDM7jbB3+NJ2uoMpn0IvxIpRa64dDpRe/CdYLNVVPA01tiZio5rjn
-	Hqv5AqlwlWViU+/fM4A9kiylenR3TeEpf3HZUayLznN/o0vtEr8D0wSDnxwgfmBBlrLYzd
-	6n5F7gVHJkqmvik2uMYPuY/rgnIESqxELcep1iZYvDMXwDUIssjWka7VQJLwbX4xMN2iIZ
-	eBpGAyA2siQARTp01ckbQm41jtJfqCuYSopaHjdIvT3sbRk2BVzHp2duiPTBog==
-Date: Mon, 8 Dec 2025 23:09:08 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	James Calligeros <jcalligeros99@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
-	Mark Kettenis <kettenis@openbsd.org>,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: (subset) [PATCH v5 00/11] mfd: macsmc: add rtc, hwmon and hid
- subdevices
-Message-ID: <176523152354.342815.17888940507252789645.b4-ty@bootlin.com>
-References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQ24vrXY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A19C4CEF1;
+	Tue,  9 Dec 2025 00:15:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765239322;
+	bh=2fWBU0C+h/xPwSd2wzfO+/5y/LW7PrNayVXAQeI5Q4w=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=KQ24vrXYXU130ThK2La0ck9haosqmG39X/0kB3QWSInFkCu2kOHt1k8KOPbHC4QsI
+	 jgfMZ7nFwIeB1cMATTRqdlisK8vVkOuW6Bz0Fts8f6lM0jqpqhSPkvyA6TZ8NBvbYV
+	 /2R5AKoV+6NWFl2hl3ePy+57kj832UaMZpdM7F9BGkKKAZ8orLmZjM5XhsrY+5SINx
+	 B1WtNyzoWD315uDKVPIYRmGwTYTdzxB/JKRA6Etb793ZPQ1yix7CJtRSb9yXrKnP/T
+	 bXla+H2z1nUYOBuwX7PONiU0FTCzgMPTg6CAQWP0P/obtFVR11QN8Av8vTX2KOmOfT
+	 4p3LCiyxoxoYg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2DEF3808200;
+	Tue,  9 Dec 2025 00:12:18 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon updates for v6.19 (take 2)
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20251208145655.1868400-1-linux@roeck-us.net>
+References: <20251208145655.1868400-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20251208145655.1868400-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.19-take-2
+X-PR-Tracked-Commit-Id: 08bfcf4ff9d39228150a757803fc02dffce84ab0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b88b2f82fab45521cb32c0b737266d90a66a748f
+Message-Id: <176523913747.3343091.5384030246645486248.pr-tracker-bot@kernel.org>
+Date: Tue, 09 Dec 2025 00:12:17 +0000
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, 12 Nov 2025 21:16:46 +1000, James Calligeros wrote:
-> This series adds support for the remaining SMC subdevices. These are the
-> RTC, hwmon, and HID devices. They are being submitted together as the RTC
-> and hwmon drivers both require changes to the SMC DT schema.
-> 
-> The RTC driver is responsible for getting and setting the system clock,
-> and requires an NVMEM cell. This series replaces Sven's original RTC driver
-> submission [1].
-> 
-> [...]
+The pull request you sent on Mon,  8 Dec 2025 06:56:55 -0800:
 
-Applied, thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.19-take-2
 
-[01/11] dt-bindings: rtc: Add Apple SMC RTC
-        https://git.kernel.org/abelloni/c/07049187e830
-[03/11] rtc: Add new rtc-macsmc driver for Apple Silicon Macs
-        https://git.kernel.org/abelloni/c/49a51df427db
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b88b2f82fab45521cb32c0b737266d90a66a748f
 
-Best regards,
+Thank you!
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
