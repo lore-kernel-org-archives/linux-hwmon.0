@@ -1,67 +1,67 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D5130CD99
-	for <linux-hwmon@vger.kernel.org>; Tue,  9 Dec 2025 21:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4A3265632
+	for <linux-hwmon@vger.kernel.org>; Wed, 10 Dec 2025 03:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765315170; cv=none; b=TzgKPvXVIISxHR6/l+wdOS2NbgY8Yc3Bsp5mtAZGFHd4UwN43ricUpnkQP2Eyy1rhU3O4EshZ0UbxP321Hn1bxzBB362lO/QTwl5P3rHzSKynfPdYikM1G3eY/9OhWjmYt2biPutZZcuRSegVnUOYZhhGIHwG72RBJluaaFO3NY=
+	t=1765336200; cv=none; b=s7358YstRH+xMNk3U72/rSaKnqlCbyJ/iMIQWDP/DXf3fAkRmfC1inlUE+3TNUd32TTs6xic4FMMHrT2uFYW4h+FpqM4P5+NpmQvyvtLuWAkLhhaCeD+dAL+c8ifOXhgU8QZ9hZS6sQKCFx3FFObU451fr+UqYl69hI3S0Gr0E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765315170; c=relaxed/simple;
-	bh=9PJopTTnqLj1ZhQ6CkJPTtVI/sv1SpnklP6dwdtFspU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WXzM51towEiwsKxTc61TXPkIq0fWre7orx37abMNpQHcpb0nloU4dRLAzeN3+wQafDBQ3pG1nDKqnlvGqdoSQAMTJURq43ICLkMJjr707gWn2ZqLHMKwCCu/O/+2HMV2gSs560Bi07pLVnoh64i6afRccVzWEkmdDjV/17cM7UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHRThsUc; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1765336200; c=relaxed/simple;
+	bh=B7aH2XS4PZlfh5XVPoWygQZkq+3MH42NPTAX5DhxH0E=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=oV5mnHfoLCINHF1I9mSGsZHho0nzN4lX1IAl0viJy4jReKddEEKJhBJipNjuQ1whQyD0/gQuQ2ThwkzuYUQEdKdvlA7f+ShejKyom27QLpnwQKjWKX2jaO8+866s42rS44bwNObVdin7tK2bPFcHy2zXjY0y9nqB7tTS+Qc+cGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kNqXwdfA; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHRThsUc"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7aab7623f42so7292829b3a.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 09 Dec 2025 13:19:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kNqXwdfA"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7aa9be9f03aso5638366b3a.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Dec 2025 19:09:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765315165; x=1765919965; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=eXyBZeAqVrNTw0ijziaQzTxeLPEtR+cB7Y85IdQ2xtQ=;
-        b=NHRThsUc7ZBiqBtiTyYelAAxska4ko/bgJHej70iu1YlSTsAFt97YO9jZR7S58X5ml
-         EfhGaiF4pK7BndUBQr26HMxwLSJbNkbUXqjzI+4AE5ljBeoPWfgigmA1OmjBile/Wn4r
-         tCIj46gbPKQSXf9EUTvK0hFMpdSKqBunxBGGiy0TUjEKVb1HptqwUQWvkTYlSP/Cglee
-         EcUZtqb22uUFI8nLJC4h9FwsCOAstfLJO3BGTL0BOo5PVGKNm5mTMiBNNNEYrhglcPVd
-         ttwZp9f8X88dhsB1i/cPXJFAz8P6D0cUyrhXU0YJGJEHwnTH14W8S/HChw6mZzOcK7h3
-         suCQ==
+        d=gmail.com; s=20230601; t=1765336198; x=1765940998; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ianbKooz34rImOXdwQjx9kgMyehj7gRaIoesBFCgQaQ=;
+        b=kNqXwdfAO4qG/hA6UwlV6JErRlgUO3FDSWTWQRjroYeTvd9LOZNxkKHpmitTSUkgt2
+         3qT9K4WEkJvnmCq+Y9vg9Eujho4x3z4NIUgwacZlhiIQ/qQQ+M4XE9iF+xfrTCCBYttA
+         CA+lI1RFL5xpr2JcUyHVN5TPcg5ZtWYPSynooVhZWMU41Nl/2wPSPEI3FaqKt3bwxyCY
+         DivDLmJYTKuczhOMDxKkAn/7UvzQHm4NPPJg5cBYPUxS56glhVKWhc6HgmFB3RqlI40X
+         bVJjUQrbJc9GoFZia28LnQ3wnxa5UuAjd4vWc6PrI6SZPjkHcLVVwty5vSy5wmkocJ+A
+         Vw5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765315165; x=1765919965;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eXyBZeAqVrNTw0ijziaQzTxeLPEtR+cB7Y85IdQ2xtQ=;
-        b=U36jhbD3Mj/hkV9yPBKWkQZq7DjJ3wYYTS3Czr0FGHTC7fKeVo6Z/RpfizyHW7m0cl
-         8+gsOVP865d6vqav5PCNLBHV5Eex2TCXa/51W2uYRsZegCOKAyBbPVP+4U77Z3Xggz0e
-         TEvI8RNAv53rCLrdzjaIJmOYUxH/JH6Kyjky8UANKXx9uryeSJCXnWrnjBAQ1UBb2/tD
-         79HxGmbtzOSZHYhpq51J3KwyNYDHoIp2HdBi3kDsk66+Zz5TTg+Ykj7+j1KVw/MMQvft
-         Lf7hQphLNMO0JqGAFjIRUv/gkaL5Oe+cDKWgj1dwyrxQsGejS20Cq/TRrhUnqZ5EPiIC
-         5qWA==
-X-Gm-Message-State: AOJu0YworxIzMEiggZe9DcqKkjD15m0lBXAxouOpWNY4hTOrBysG1fN4
-	uXdqMCdDAd87LzI/36LfC19Mf3X3hnATN3lcOiaUN6QT6W45XkQ7TU1z
-X-Gm-Gg: ASbGncshER7OaUGhsAUM3hsVG2HlZB+F/eVD+6QH+JgrbLyhnRLSQdQfVFuwkpAVECO
-	jqqLpwbuAmfYfmpXjBe2GEN7iFIFqRoKzA12B3C70Mw7+KIG9z73+6uexCx9XsUz0dv61qGdDhv
-	qHaE8gBdkyFsdL2YEa20oHx+3m3rvNoJaPm2M1nsq/KW017BMNvbw52ovoF2xG7bTT3HWRp7SBM
-	gZeSp0aIBDdpwJ6devgKmD+Kg0s+GszwszRD6L1NksjwswCQHPV9YpQsNoFd0M546EvyTJnfCq7
-	uwpgdO3KJlas415dtpl+QuzPfDYa27Ww5tzTCrWhVR68bVcgche20US/7Wiu1YvBJrk4S85DG0c
-	Y5odmGKrWuEADwZG9sYV7tIVHTtBmV48Ozz1q3hJgtlDqX3KkSpnggR+7UT/yVtwftYTC9DHaxn
-	C852IptWTGmJrQNjXfC8dxD3gVh5bMhArq/Raz3/ri31FOHwkJdvBSE80orY31beSwG5caWQ==
-X-Google-Smtp-Source: AGHT+IEDZcex0PuG2fxdY6TCN5APbUHrJEwXbSXsRu/pv4hoYVWrCKSX27oQ7cN3BNjdf6ax/38coA==
-X-Received: by 2002:a05:7022:419d:b0:11b:8185:abff with SMTP id a92af1059eb24-11f296c8ebamr46638c88.30.1765315164690;
-        Tue, 09 Dec 2025 13:19:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1765336198; x=1765940998;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ianbKooz34rImOXdwQjx9kgMyehj7gRaIoesBFCgQaQ=;
+        b=T0ujK5u3eGlni621YjYldEXI1SQS6AQoualQFpflSP7dJkFuZBPkDsqYJ3Elm6raAb
+         ynUS7Kjg377wjEsOqEFpoKFjCMOf5mgRbZTTEu7XAcS8STy2Grr33Fmr/j0wiZURHnef
+         q7k9gTAZF1b7P/m5N6ovzhCuzRq9ibAcaubWHsGIFjJWzgJl/+WkWFmnwX79vqig2U23
+         lIPc+nw0pbpiRIn4uux9gkN+uH3RDMDyGKXfK9oPscD/tOO1aV11Q+jeUDZk9bIvE4U1
+         /bPV4LSzdiihf2TG8nXuqfMZI5LfwB3lkk7dObqZTS62A5VgEp7cLqO4PxENkPuuYh00
+         hl2Q==
+X-Gm-Message-State: AOJu0Yyl3fqXnXbIf4VLk3/ZcB5npVO9aC/4MM2uZKzrtowWs1Uq92fo
+	IgAP+ViyAkJ9/lFuZXQ9rkYJ+/fAF021Pl2OgTrYKMvDHlDaYC5FAZ6U
+X-Gm-Gg: ASbGncsjyCoXiKYXdJf+Zm3fOQNvvnog3lsOoWZ3d3UkIXCNBySCkUei3p+zdMp4DdA
+	BqeXqcByxPScDz/K3yEEvK95K5ggdLJgxnV4uwhNSpP046j+100LZpiy30bo72WaJITr+ZLnpNM
+	gMk/3Jq12n4cOFh2JSRRRzf4ZRmBtE2UjQbtSbtXK7n+64NzJcz1Az9vCe5Xqn4RGgo9BSrW4mB
+	M+O753oVqLcS4aULahN2kTSyqSs3buLxHbBK5O98QCPTAwra6ETJyidk567VdxElz2DIQ4laq0z
+	L/roZDrHYnn2/o/Xf4OET3J2VijvdUqAGcOZ2EhUYXe4N12jyTis3Wa1giQNKNn3bxS50G3sbBC
+	NZ13QRicLxSv8wjWLnOSzn9mjtyuf+BXUt63a00iAzrVqCa1bwlxWRAJlkVmzOLSz93wHSdKKjV
+	t2xzDOnoQleLJusyvyETAejg7hdJ5CrRJHBzi5Jdn/nurQZq4OaXCWLX/uA24=
+X-Google-Smtp-Source: AGHT+IHykLpwfP6+3LLZJ3743iE3q+tLbmWerWQYn3jraVb76jVa2FrQgMksBu+LhfQZgrjTiE0yAg==
+X-Received: by 2002:a05:7022:69a1:b0:11b:923d:773f with SMTP id a92af1059eb24-11f296467femr842042c88.5.1765336197669;
+        Tue, 09 Dec 2025 19:09:57 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f283d46f1sm2859583c88.16.2025.12.09.13.19.23
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f283d46f1sm5144308c88.16.2025.12.09.19.09.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Dec 2025 13:19:23 -0800 (PST)
+        Tue, 09 Dec 2025 19:09:56 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2683b84f-d7d1-4445-b5d3-bed393de34a0@roeck-us.net>
-Date: Tue, 9 Dec 2025 13:19:22 -0800
+Message-ID: <d11e3cf6-3095-46df-a4f2-442d209675b1@roeck-us.net>
+Date: Tue, 9 Dec 2025 19:09:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,13 +70,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] hwmon: (sht3x) add support for SHT85
+From: Guenter Roeck <linux@roeck-us.net>
 To: Antoni Pokusinski <apokusinski01@gmail.com>, jdelvare@suse.com,
  corbet@lwn.net
 Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20251209175848.5739-1-apokusinski01@gmail.com>
+ <2683b84f-d7d1-4445-b5d3-bed393de34a0@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -120,21 +121,30 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251209175848.5739-1-apokusinski01@gmail.com>
+In-Reply-To: <2683b84f-d7d1-4445-b5d3-bed393de34a0@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/9/25 09:58, Antoni Pokusinski wrote:
-> SHT85 is a temperature and humidity sensor with an interface very
-> similar to SHT3x. However, it does not feature alerts (and therefore
-> limits).
+On 12/9/25 13:19, Guenter Roeck wrote:
+> On 12/9/25 09:58, Antoni Pokusinski wrote:
+>> SHT85 is a temperature and humidity sensor with an interface very
+>> similar to SHT3x. However, it does not feature alerts (and therefore
+>> limits).
+>>
+> 
+> The datasheet does suggest that the chip supports both temperature and
+> humidity tracking alert status, which only makes sense if the chip
+> supports alert limits. It does not support an alert _pin_, but that
+> doesn't mean that it does not support limits. I'll want to see definite
+> confirmation that the chip does not support the limit commands.
 > 
 
-The datasheet does suggest that the chip supports both temperature and
-humidity tracking alert status, which only makes sense if the chip
-supports alert limits. It does not support an alert _pin_, but that
-doesn't mean that it does not support limits. I'll want to see definite
-confirmation that the chip does not support the limit commands.
+Looking closer into the SHT85 datasheet, the sensor chip is actually a SHT35.
+Given that, disabling limit attributes and alarms is neither necessary
+nor acceptable. It isn't even necessary to add "sht85" to the device ID
+table; sht3x works just fine. I don't mind if it is added, but it does
+not need a new chip ID (at least until/unless interrupt support is added
+to the driver).
 
 Thanks,
 Guenter
