@@ -1,80 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF1B2E7BDD
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Dec 2025 23:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F531E2606;
+	Thu, 11 Dec 2025 08:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765410411; cv=none; b=GCopvup0ndbS2ijGt7hz37ydzvHVWqXFuU0ncB+DsTo17wwDWqwHIjUuT+oeNvXTQhqWjy2rEcwmMj4QHOzsKeqTkQSd7fWcEXotSOh0qIlQ2q49AQKKK6eOPUgQbn3U90lbo9WqQHXa2X9E2pTy4LRL4DgforHtENo2ISvLFQE=
+	t=1765442803; cv=none; b=EABYQhJC4dcbIxMsJwqHTEjwc3IMF+pOx+d8dTyb9vz9ogbkIn19ZOUqfyWrqr0U2ATjl0swxIstErmegZrrHtsK7I3Q9F4Vxhy2vTxykSf3wdCLIh9l+l35ZTFQVKc/DX1JsPjYJCrzz1ZFhgTBD1Gvllmm2UTL8xZQbtZeNeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765410411; c=relaxed/simple;
-	bh=omLt6+8G6tr0mAJbf93D0mClPuEzsdO4MIROF0xDArs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ko91q2ZyFt+SsitsbreT2S3MDS4QoH57F/0hlsQCdEHtfhml+prlHe0gt8u00TYUwwBE+zBA8n9mkvmEaFyvrjli0wWNPxYD/NxYFF8DZENZ0CXzSTDkz17KjyzOJhZUXX2JyfC2dERGYyD9Dwp3wjHo0+tl0UksU0ZmCVcv2RY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5SKOzhn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765442803; c=relaxed/simple;
+	bh=JnkTmw4C1Jgs0//VWSnP0/eoZvp3SMN6HA2NVa3qSwE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hHVUEYXSuz6wpR6p4aVXAw4oDX1eu9nBguEdfIGUHE+5DL84p6TxWoBtck1wYyGzbjAKKQwdZUdjn0fYhXXLC/90lTFt2tsH1bpOYAdFtS/eWlDtcL3NU3JrKK6pTy7W1YDt1TOaRchc/Lwi7yNolMev4zqo4RzlQEpSDZH+cBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=Mm0oV692; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5SKOzhn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7DFC19425
-	for <linux-hwmon@vger.kernel.org>; Wed, 10 Dec 2025 23:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765410410;
-	bh=omLt6+8G6tr0mAJbf93D0mClPuEzsdO4MIROF0xDArs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=l5SKOzhn7FPufpCvTEh7bnHSxuWWUXLa0L1cXkn1z/bqnSllxUatm2NZgFoMBOhpX
-	 /kWVJcsvhndP+P+/TpodGzZqOuLl4HSvJNiGjr3GhcuH/0/vMghloLN6KLnaUn+HRI
-	 9+LGtihsrY8FG1T7r5j5fW4151seAx7a11I53sx1BnVthHZjyvJR7RbB2jxe3rZRPJ
-	 GWNlj7Uf/nl90WKfOsxfGAqUUslWhQIWXuyvHQf0njaYhDwamrWg51kfbf96a1rmtY
-	 b4zVtR7Pj5l54l+ez930P20uPB6eX8wsp1e10Q2PdgsPRNGsxwvd+3ffNiuhSMNCEb
-	 mRcRxtk9QOfwQ==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-78a712cfbc0so4604227b3.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Dec 2025 15:46:50 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx/JcsbojBFx0YoKIG3qfdGbQ/7xb1HWIe6ZEjKx8bc+SxQTdum
-	CU91MSfUK9Qc+LO3nPG5IjDdglI+xW/NwWYQG0xIJRYDdMqy5P739bqtqebJ49ql7tUAdF9dcPK
-	cERqcW+EHNI9AucM+lDz9sG7ooHjgxxI=
-X-Google-Smtp-Source: AGHT+IFzTtXvwm11fubh6opQRAYyQCuEtEDhPLIIsr7IqAHtJHKITmK0gOJ3Z6ec3f8WnOvP1jd+8n0TMfcUQl5akoo=
-X-Received: by 2002:a05:690c:7449:b0:787:f0b2:8dbf with SMTP id
- 00721157ae682-78ca645ff63mr37547197b3.66.1765410409801; Wed, 10 Dec 2025
- 15:46:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="Mm0oV692"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1765442796;
+	bh=OktlR9bq9mtEJ084n35uOYN2zYX8CCRfSb1l9l6A6kk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=Mm0oV6927NtwXJE3mZ5NmG0zvn3PLYLkzuH2SuFBs0ZLXJGI6nAlarUCDa4g3xQnK
+	 kt3dxwj0rntoJLRQiItErW2OtnnEgXTXgbd8I9EwVeckhHKjStFY2OKQ72oa0603xf
+	 ysq6gJFwro2BzOitoUv/fcH77fmag4NGvMSMI4/2a3RdTPyWAmSp/MOgleNxfrstqN
+	 mNxmn93DegF3TrrLKt6hYW8isRz367469Xx5DYNwqZacGzZsgGwCDzcJSfy38wgFXH
+	 AF8EwEXPZJ4/XWy/VSfTbcp/Y6TdJg2ExjtCJCuMd5Eo17JeoMIwk6XG9zn79e0urP
+	 sltPCG4O5FxbQ==
+Received: from [127.0.1.1] (fs98a57d9c.tkyc007.ap.nuro.jp [152.165.125.156])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id C64A97D6B0;
+	Thu, 11 Dec 2025 16:46:31 +0800 (AWST)
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+Date: Thu, 11 Dec 2025 17:45:44 +0900
+Subject: [PATCH RFC 02/16] pinctrl: aspeed: g5: Constrain LPC binding
+ revision workaround to AST2500
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251204-ltc4283-support-v4-0-db0197fd7984@analog.com> <20251204-ltc4283-support-v4-3-db0197fd7984@analog.com>
-In-Reply-To: <20251204-ltc4283-support-v4-3-db0197fd7984@analog.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 11 Dec 2025 00:46:38 +0100
-X-Gmail-Original-Message-ID: <CAD++jLnE4apeEn_rJrmPWSPzRgCYGaDsbBfys5c2aEhGFMKMuQ@mail.gmail.com>
-X-Gm-Features: AQt7F2pe1woED57sitXThFq2yIEohqX4fsaZuYJ61m2slCnm2Fr7MBKXKNVJsQA
-Message-ID: <CAD++jLnE4apeEn_rJrmPWSPzRgCYGaDsbBfys5c2aEhGFMKMuQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] gpio: gpio-ltc4283: Add support for the LTC4283
- Swap Controller
-To: nuno.sa@analog.com
-Cc: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Bartosz Golaszewski <brgl@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251211-dev-dt-warnings-all-v1-2-21b18b9ada77@codeconstruct.com.au>
+References: <20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
+In-Reply-To: <20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Linus Walleij <linusw@kernel.org>
+Cc: Joel Stanley <joel@jms.id.au>, linux-hwmon@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+ openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-iio@vger.kernel.org, Andrew Jeffery <andrew@codeconstruct.com.au>
+X-Mailer: b4 0.14.3
 
-On Thu, Dec 4, 2025 at 5:14=E2=80=AFPM Nuno S=C3=A1 via B4 Relay
-<devnull+nuno.sa.analog.com@kernel.org> wrote:
+Discovering a phandle to an AST2400 or AST2600 LPC node indicates an
+error for the purpose of the AST2500 pinctrl driver.
 
-> From: Nuno S=C3=A1 <nuno.sa@analog.com>
->
-> The LTC4283 device has up to 8 pins that can be configured as GPIOs.
->
-> Note that PGIO pins are not set as GPIOs by default so if they are
-> configured to be used as GPIOs we need to make sure to initialize them
-> to a sane default. They are set as inputs by default.
->
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+---
+ drivers/pinctrl/aspeed/pinctrl-aspeed-g5.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed-g5.c b/drivers/pinctrl/aspeed/pinctrl-aspeed-g5.c
+index 792089628362..d4c364d19d64 100644
+--- a/drivers/pinctrl/aspeed/pinctrl-aspeed-g5.c
++++ b/drivers/pinctrl/aspeed/pinctrl-aspeed-g5.c
+@@ -2654,9 +2654,7 @@ static struct regmap *aspeed_g5_acquire_regmap(struct aspeed_pinmux_data *ctx,
+ 		np = of_parse_phandle(ctx->dev->of_node,
+ 					"aspeed,external-nodes", 1);
+ 		if (np) {
+-			if (!of_device_is_compatible(np->parent, "aspeed,ast2400-lpc-v2") &&
+-			    !of_device_is_compatible(np->parent, "aspeed,ast2500-lpc-v2") &&
+-			    !of_device_is_compatible(np->parent, "aspeed,ast2600-lpc-v2"))
++			if (!of_device_is_compatible(np->parent, "aspeed,ast2500-lpc-v2"))
+ 				return ERR_PTR(-ENODEV);
+ 
+ 			map = syscon_node_to_regmap(np->parent);
 
-Yours,
-Linus Walleij
+-- 
+2.47.3
+
