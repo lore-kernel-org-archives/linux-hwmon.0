@@ -1,179 +1,164 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC0B31AA8D
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 17:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96F42D12EF
+	for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 18:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765475821; cv=none; b=h/Z+pO2KcDd4SlY5NuPd/ovOjVyHbfwNe+no5H3f38RU40tPxzfXfLXY+TACDhyqQvTzXgb0jWgUvg7pAJReAYMhPUZ5LtwtaifZzdWHlDdAdG9pdzQYQNg8m1EzAHAs6Gr717PnUgjmBnwAaMosNz1q8xfnEwAjaZvZwhG1Omk=
+	t=1765479541; cv=none; b=aaWYYMHhWF0na38YlGm361stcemRL883Q98IbL6cBdqLnw2er9FPlru59GzqFJS0Yje/kqLfgxi0bn6azZMu54ak/imE0EVnuvWDoyqqGPQBeil7vnw5Xe0+kcC1b1ToD3DuknqLFgwDJZFYU+DvseI1eJJvptWMPxnTGQBA4PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765475821; c=relaxed/simple;
-	bh=r5Gh8BtQw4Fw6SZHXapts29EloHtVbCqPTTFyEp867Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HRlbuWJwQLrENvRdsuJqFl4TXowIiIDlEySHUsCnD9L8kT6J7ol2nsTYb2VaEcY/qKMiD+sIzykvfdrCp9yWGSUyhRJi0ccsN3FMMXgQ05ds1uDnlQHq3LOj7eleaw9BlKgiKFFxHyeUxL3aWFzcdFLY/nWDLmhYcrJxmikJh5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBqdaish; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1765479541; c=relaxed/simple;
+	bh=MsOIIXRZXWInpi+6YrWnzz4Og0s5+tzlQfpch+ids+E=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WI4rpmGl+vmrFC3dDbnpUH7RrQoycpjC0KbKU1h6WmDSXn021gn+ruxTpl7atsAPwPol2LRTGzrRa5EoLd3Nz8PA9Yb5nqmWNbhXvzBrNQSmsMHbEaPhHY/12TrReUZE+T9LQeCuyBvvGFDE1Dq727kP8q5YChY/R3gXrKAIYAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mnSaAxad; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBqdaish"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-298287a26c3so4898975ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 09:56:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mnSaAxad"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42fb0fc5aa4so25964f8f.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 10:58:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765475819; x=1766080619; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=uIdEFMeZvO+edU0KvHNYdR5fL5Tb1DJ+OTZWn9o/+ps=;
-        b=ZBqdaishJkKsWefUqBXJYS5dL9mK3ayfHoIJj7ZO3VlJ5nT3QwQ3L5U5RoQ6zveAdo
-         ot1/VLM1eXqL2FSpuWWlT1zalbvD02rsULPmJBss1ytTFjlGuqiJ1/ZG6b8d8yMrOc0S
-         m7GrSYhA13fjgJ7Vy2K6pJoyUEdqVZYNxU/QwufGJ3sbbGgup0JoGs/g+JPLyxwqqW/U
-         ityDJtybZRb4X68h+cVj52HLn8icP7XhEMJ8eAcFdiVVG6q/VJmts7eenAilJ+UI3CtF
-         tKatkyGHaFlY6nG4Ojjyz4ATdoqViR9LDawQIJ4e7dVHsnjXUKQv/tKU5YGo/WcaZvn0
-         9nCA==
+        d=gmail.com; s=20230601; t=1765479538; x=1766084338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yXm/1fe23tTgVaqZTTxGSrbclEuIKybaqnfjNM/NaT0=;
+        b=mnSaAxadJ0gejGrMkg0tXv9lCMjomHQCZYz4CMWvg2PI+SUheYYpQVggvBSISGOWrJ
+         7s6F8uNuSfd8+NbT4AQUbjxRjVfka4k6RLlhbxq3HAAh9O8hGYimWgb1UAyyuc7wmhlv
+         5EZNn869xyRiSneyRisJg/o2yJaLB4jqh20XtXjrL7v61TORXHf2XRLDWwBL7qshHNbE
+         jzrQentaHA50nsarqtuU6KqSk5PI0hy62Q+5N8H0MZ3cXjcuxixcevwSFRls/jSkktou
+         QVPE84Z+3nf7Vvj52lD+dTX8ZeII7FwuWPSpodiF0Adt2NLu8U/CfR9PmcvtZ4InMelA
+         extg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765475819; x=1766080619;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uIdEFMeZvO+edU0KvHNYdR5fL5Tb1DJ+OTZWn9o/+ps=;
-        b=rPD9GRGZ8vL8CLYSrCka1TYlyFL5sVicPPEtCKWWm20bChmaxkS6MBcxmQLnJSHwqi
-         nvVP1Bs51LRywp+KZT56nDf5ZOwD5lN7jYkYc6QRXd00AS4zqD46szOPO1qE+pNf6luJ
-         epL/uCB9MFL4tLzbtQzRMe4M2yVx5LgdWyTcAJgSnf3KuCA2sBulRvtDlwaS/VTBeCkr
-         UvhGIxDp7pT8vrtX7QTaOY5QjSVFiViS7HTWxeGQ6bDA66c02uY1TlhHKbdr78cACsnS
-         2jYxtBCV9JQCaNH8EqPFlCrON2x3H3yT4BpF6Nzx5vLnW7YUDZN8u97iqyA/W96H4fox
-         F2Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfTkmWmd0saIZg07uDV4ZahN0Id6cuzyLWwBxqBJluAEI43eu2kD2DHvqo3vj68GNE+yW0G6vj8kwrfA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqzhywnqVNQhCIaoWF62U3UOOUA3SeZspeHdgqdyAmMM1LGPYx
-	cILx7RZWIacbk8igbn/o2lB3zvsU6vBkUVPqvr14yBP28rvXaeB5+09E
-X-Gm-Gg: AY/fxX5t7drqzCmFMOzxVKWUTSOoFgTsZYtPC1YQMUht1lAeH48woIJUOJ0dlqVQqqY
-	iAOOyz4LKGHVpyD6Eukas82Bc5hEFHxhgwXz5jSE03Ytl15HgVdXMljjpT1srjwgcXTI72GqZH8
-	Y1Aze42ZV6hSqh0D8rJ7scQDP8jimsaBdTdkUwqoVHS3NmHwYyuniulkPH/vo6nu45+r2PfSnCo
-	THIN+GmM4drCRFGg4ziqfEv1hyLJMdzdzCqYsgzohzA9geCmww0WviWOsKsb5wP6udq884z4SVf
-	vl35oV+++KnleC7OzVeVdVpUj6c/KWOgchxhO5ePWC8GOsWaFzhgWl4k/HyK7aG/TbTK9oCKHsz
-	h3zSw63ckk8Ez4Paqm27gRWJ381G6qMf2GFMlHG+c/TSav4IeMuQeZJFrYTZjB99cKGl6XEakx3
-	qG5keUJ8sds0fkNSHsKXUMP4hRHMIP/xxk/h/5Nbk32QQyn4kwfCg9evhDUHU=
-X-Google-Smtp-Source: AGHT+IFQNogpPMRzOu6d54PgBmI9xY54RYNtpQ6LYKflW4Gkrdm1ZiKCI55gcE3/d1GJBHRREX5iNQ==
-X-Received: by 2002:a17:902:ea05:b0:298:68e:405e with SMTP id d9443c01a7336-29ec27f9101mr80990845ad.59.1765475818731;
-        Thu, 11 Dec 2025 09:56:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29ee9d38ad1sm30521295ad.29.2025.12.11.09.56.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Dec 2025 09:56:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c9cb3a2b-da6b-42a6-87b0-7a2b780f5ad8@roeck-us.net>
-Date: Thu, 11 Dec 2025 09:56:55 -0800
+        d=1e100.net; s=20230601; t=1765479538; x=1766084338;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yXm/1fe23tTgVaqZTTxGSrbclEuIKybaqnfjNM/NaT0=;
+        b=rV73n/jxpVbsIPhpV2Nn/RF04/tprwXCH/nTi4AIzegzmK1fx7v8sMEo3xt9+apnmW
+         I/FVRAFy6oc8MgBiM0pH7cGAtmUeXx4h3K4+3KLFKnMivB1Z/G7pDYgny2MtLG0+v6Qj
+         emeanRdP1/qMWfWmkW5yENQsZB+YOterP2kzMVsqbXv9FN2IX/qhTsjJLVZKYMFcz1Sj
+         58knhIYr42N8TcvSFo6jdfU/fZbaj/SiCt5nubNCr9hXSs4BxqTwzyqMK+b17ppU8rmv
+         apxrb5k82tVHSxs/fETav52m+bNc7yTHpdVNJB6zsXhNPyCizEOGbhMK+BD4SNjWuL5z
+         MIOQ==
+X-Gm-Message-State: AOJu0YxUUe6xLGIv2IKoiCM13OYkyP0px0IecHAbHN2bA3WxTz3kdIts
+	DV8UrIeGfsK9LYofrZBLIUvaoNYOSyKr+WxI39FQO3X+TnSt0/SXJ+DU
+X-Gm-Gg: AY/fxX5IZjGcidlNzIIGoqpJgxN4O801kzx0p/IYfVCL74te/P/aIksA6rVtaR07B12
+	GAXFBRinY7vuX7mAgT6WO+f4Qw0H3w81yvq5UiwM9JDgfPtz2lY8I7FqdIIcVcu8veKvHIQthRF
+	jwxTmLqSzHGtSreXcabSeOkt0qcjmEGKAMV3crjtPMPN8B2Ef9aYoNuSR4o2T8QrKE/O4Tehnav
+	//iQEXFJWculiNYv2Fk1Wf3uJeNP0CYmxj6l4SGXXYDgJhiAwH7Gxueh98Yubtfd9uuirVGqvLr
+	mcjmMotlZ/R/gv9XueNUBkX5X6zjZ/y6CEWMsSRhgd05tGbN0PBI+13//QsHRBGu5k/+AtHuE4A
+	GQEe5QQXFOCLfB/GPVVGn4Q1Wr8kiYNgwsVtVd1fcuhcWrIVv1+g/43g/Pn49gCGz6lynSoan2c
+	J31Mh5JWS8BvcXf9/L6pYTdNXue9EQ
+X-Google-Smtp-Source: AGHT+IG013pfGbuA8PrYyUUTrBZvvlebxD1waVn4TsP9vOtX3ooXAsQ6AFa0OenHcPr1qqKLDtJBaA==
+X-Received: by 2002:a05:6000:1acf:b0:42b:30f9:7998 with SMTP id ffacd0b85a97d-42fa39dbe32mr7690463f8f.27.1765479537785;
+        Thu, 11 Dec 2025 10:58:57 -0800 (PST)
+Received: from localhost.localdomain ([78.208.202.157])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fa8a70394sm7613731f8f.14.2025.12.11.10.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Dec 2025 10:58:57 -0800 (PST)
+From: Antoni Pokusinski <apokusinski01@gmail.com>
+To: jdelvare@suse.com,
+	linux@roeck-us.net,
+	corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Antoni Pokusinski <apokusinski01@gmail.com>
+Subject: [PATCH v2] hwmon: (sht3x) add support for SHT85
+Date: Thu, 11 Dec 2025 19:58:42 +0100
+Message-Id: <20251211185842.66084-1-apokusinski01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-To: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>
-References: <20251204-ltc4283-support-v4-0-db0197fd7984@analog.com>
- <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 12/4/25 08:15, Nuno Sá via B4 Relay wrote:
-> From: Nuno Sá <nuno.sa@analog.com>
-> 
-> Support the LTC4283 How Swap Controller. The device features programmable
-> current limit with foldback and independently adjustable inrush current to
-> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
-> temperature rise for reliable protection against overstresses.
-> 
-> An I2C interface and onboard ADC allow monitoring of board current,
-> voltage, power, energy, and fault status.
-> 
-> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-> ---
-...
-> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
-> new file mode 100644
-> index 000000000000..d79432678b84
-> --- /dev/null
-> +++ b/drivers/hwmon/ltc4283.c
-...
-> +
-> +static int ltc4283_read_voltage_word(const struct ltc4283_hwmon *st,
-> +				     u32 reg, u32 fs, long *val)
-> +{
-> +	__be16 in;
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(st->map, reg, &in, sizeof(in));
+SHT85 is a temperature and humidity sensor with the same interface
+as SHT3x.
 
-I had a look into the regmap code. In its current implementation,
-that will work as long as
-1) regmap is configured to not cache anything
-2) the I2C controller supports I2C_FUNC_SMBUS_I2C_BLOCK
+Signed-off-by: Antoni Pokusinski <apokusinski01@gmail.com>
+---
+Changes since v1:
+* sht3x.c - dropped all changes, added {"sht85", sht3x} to i2c_device_id[]
+* Kconfig - added information about SHT85 support
+* Documentation: changed "Datasheets" -> "Datasheet"
+* Documentation: added information about SHT85 address == 0x44
+---
+ Documentation/hwmon/sht3x.rst | 18 +++++++++++++-----
+ drivers/hwmon/Kconfig         |  4 ++--
+ drivers/hwmon/sht3x.c         |  1 +
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
-I'd personally not want to rely on that and implement driver-internal
-bus code instead to handle the varying register width and to be able
-to utilize regmap caching.
-
-In the absence of that, please add a comment to the regmap configuration
-stating that regmap caching must not be enabled. That comment should
-explain the reason and the dependency on the current regmap implementation.
-Also please add a check to ensure that the I2C controller supports
-I2C_FUNC_SMBUS_I2C_BLOCK into the probe function.
-
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
+index 9585fa7c5a5d..ea1642920295 100644
+--- a/Documentation/hwmon/sht3x.rst
++++ b/Documentation/hwmon/sht3x.rst
+@@ -23,6 +23,14 @@ Supported chips:
+         - https://sensirion.com/media/documents/1DA31AFD/61641F76/Sensirion_Temperature_Sensors_STS3x_Datasheet.pdf
+         - https://sensirion.com/media/documents/292A335C/65537BAF/Sensirion_Datasheet_STS32_STS33.pdf
+ 
++  * Sensirion SHT85
++
++    Prefix: 'sht85'
++
++    Addresses scanned: none
++
++    Datasheet: https://sensirion.com/media/documents/4B40CEF3/640B2346/Sensirion_Humidity_Sensors_SHT85_Datasheet.pdf
++
+ Author:
+ 
+   - David Frey <david.frey@sensirion.com>
+@@ -31,15 +39,15 @@ Author:
+ Description
+ -----------
+ 
+-This driver implements support for the Sensirion SHT3x-DIS and STS3x-DIS
++This driver implements support for the Sensirion SHT3x-DIS, STS3x-DIS and SHT85
+ series of humidity and temperature sensors. Temperature is measured in degrees
+ celsius, relative humidity is expressed as a percentage. In the sysfs interface,
+ all values are scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
+ 
+-The device communicates with the I2C protocol. Sensors can have the I2C
+-addresses 0x44 or 0x45 (0x4a or 0x4b for sts3x), depending on the wiring. See
+-Documentation/i2c/instantiating-devices.rst for methods to instantiate the
+-device.
++The device communicates with the I2C protocol. SHT3x sensors can have the I2C
++addresses 0x44 or 0x45 (0x4a or 0x4b for sts3x), depending on the wiring. SHT85
++address is 0x44 and is fixed. See Documentation/i2c/instantiating-devices.rst for
++methods to instantiate the device.
+ 
+ Even if sht3x sensor supports clock-stretch (blocking mode) and non-stretch
+ (non-blocking mode) in single-shot mode, this driver only supports the latter.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 720e8491ae97..955f6b4208ba 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1931,8 +1931,8 @@ config SENSORS_SHT3x
+ 	depends on I2C
+ 	select CRC8
+ 	help
+-	  If you say yes here you get support for the Sensiron SHT30 and SHT31
+-	  humidity and temperature sensors.
++	  If you say yes here you get support for the Sensiron SHT30, SHT31 and
++	  SHT85 humidity and temperature sensors.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called sht3x.
+diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+index f36c0229328f..08306ccb6d0b 100644
+--- a/drivers/hwmon/sht3x.c
++++ b/drivers/hwmon/sht3x.c
+@@ -933,6 +933,7 @@ static int sht3x_probe(struct i2c_client *client)
+ static const struct i2c_device_id sht3x_ids[] = {
+ 	{"sht3x", sht3x},
+ 	{"sts3x", sts3x},
++	{"sht85", sht3x},
+ 	{}
+ };
+ 
+-- 
+2.25.1
 
