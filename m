@@ -1,160 +1,184 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC6B242D86
-	for <linux-hwmon@vger.kernel.org>; Fri, 12 Dec 2025 16:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B888126BF7
+	for <linux-hwmon@vger.kernel.org>; Fri, 12 Dec 2025 17:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765558511; cv=none; b=kUex7pezSy53rsTiIRtLNjCBTuYp9u9oLypuI/bCyu2SOkafn57XlHW85Sorop9aPPkv8yCksdKIY0UsWGXArvjJDej04hMWLsGXaOz9/CTtLDdKaEskaX0a40lll5Ld/zyfTn/d3x0XR533bgYsIHa5y7/YRFAdhlcenVp8w0I=
+	t=1765559270; cv=none; b=rrb6u8iG+MqZctNmWQiD1SujVXXo/6k0c+gC6B+seIm+PBjLjVgpGZ+svWz46NVj6tu7bWdYM5ZP0++e7t0P9GLYY5dJ4kJDBMFF8BwZZ4j15M3bFCT7Ipl5E/sC+q6nTkpMd736xsS2WvzlQvqZjDzcMBuK6SdIn1hhCIWjKZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765558511; c=relaxed/simple;
-	bh=ZSdEYNBQZmpD2tooK1Re5wdlIsvwhaGcrS9FBRtGE/8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=V7GAfyN/oxQF1/sg70o+prQLcXrTXoaAwJa7LjSWNc07XRC1VRtmoHPCCKsEq2aYoWkScSdKRQc42o+KnmIjKEcCMuK4sZW6vMkd921rvkfhGMProwutbtk+cavc/bX5lgsd80kDpulYKiQr8OjhHDV5kVRpd44flWFG4rssMsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWbX+/F4; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1765559270; c=relaxed/simple;
+	bh=qbeKJQwC68Cx43jiz7HsOLEEM5KkL9T7Xsm1E1YqiHY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Bz23TtS+m4EDWhI598b/2Tpgyh+tKLZuwaFurpXsk38lV+nJgMMLojekncFlljDoa24A9ysX3n1+RMlot45mvlmSVCo2ekrMN1tOviD59CiCL6qan9dvN+hT58ZeyXC9kl9UTvxjdsFpXW/3sbb0ilaqDOv9seHFvSx60Ke2lMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L0/PWGdf; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWbX+/F4"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4775ae77516so16256205e9.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 12 Dec 2025 08:55:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L0/PWGdf"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7b9387df58cso2138110b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 12 Dec 2025 09:07:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765558508; x=1766163308; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZSdEYNBQZmpD2tooK1Re5wdlIsvwhaGcrS9FBRtGE/8=;
-        b=QWbX+/F4E2QZje7nQG4bOnogQiugfBB3gK++Zz/i5pyXvG5DyC0eOnEoGJMZIfQaHZ
-         te4H9jln5PMWu3voqRdhcpXcdGSleQpQHu3TXbxZXRfosHU1REfVTx0o7ejJa0c82W7B
-         ycubrkCIHV9agtbSeMkLfNyJuhv3827WXAIVQ4BTjxmKafkMmc26nxKi3yntI49wwR61
-         3DBPQRT2mBPF6DCRsdg00IGgt65NRgODO36x9Qe2gAncaOrxgrm+XapP+81j8Sl78417
-         bjkfcVSTsq1U6702JkZomm8xz7LLMkDYV3xvUZj3EPPmVmt/Q1/9H8Dq+yPF5K44E9Ml
-         qyZA==
+        d=gmail.com; s=20230601; t=1765559268; x=1766164068; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wrunU8pw6H9zOs0jZGs5wUV7F3gUjI9YKd4K9NSVbtk=;
+        b=L0/PWGdf54uxgIHD34QRWC/eM+KACna8hnb8eV0d+kFHEaOeqq60KT0QxR9TsvfHnM
+         +fg4FMgeKSclb1qMyjf59kJ2jLs58BorhevZ9N7+OYrH2fmFRrWMvTcOCenabzvNmkDr
+         Al0e3ORuuNjcx/vW5b/GAmSVdoWLRhLNlYGq4a0Vdez0btxE+0LZ3n8bJcDZiMVMYQgI
+         5Av4pMtUAYjr2njywZdL1x/hWLGRZtf2no1J9Xi4Rl2iEa+v+JsoORKmGd2GaqMRCCD7
+         E1ZZAeoKYo2EBgCTfyw4dn3THYny4dOepOaXvQOEtmZ0bc6O8J+RP03zP0ohhr6B8FPL
+         ftRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765558508; x=1766163308;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSdEYNBQZmpD2tooK1Re5wdlIsvwhaGcrS9FBRtGE/8=;
-        b=F7CxZiiBggnRi6S09Jh5Zw1L8cSM1m4u6LvDb8SuYpc3tFAe6kEirBAhimJXJB90Nq
-         HDRH/3IvDEeMJK5Rp9L7g/HMz1DUUKetp4Syp18J0Hl9nKf0s022JYWgUvyyPHjbY6cG
-         TDgSN3ZZdVmNFDYk5ZULo8ej96q6izsO5GyB2h8wIOcDsVD0GbldMNhAmD9eqTSBAzIO
-         HNvzQUv1ZQyewLyyUVQBaWPBE3KD8T5GOrblq7K3SWHSLveOW3k48GXdqe2ubYMfZgoF
-         JJ0qbLF8fOnjsQ/7Mao7MuJAtVLZTm6aQvwIs2A152sqIXit1VaPeEB4gMZFcoaOaC9W
-         dwUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIN6AF4ueN685sHDkYE/p/VAvlSziXDq7R9Y88qRUbCoW9CGDPAtsPi5eGpqW5i7hnm1IS7Y2ouFxMIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0Ktpmakpk1qs0c3OoWEsWbESLTgKtNnEWAh6R9kTo8SIdQVz7
-	klIlaXxD3X2AM9oHRTKiVlWhcKSaOSaFTSsgXluBb3+BaP2PN0QKFg3W
-X-Gm-Gg: AY/fxX7s9Un/kWMyGhpBMYPtTM6a2Bry9PKgjitOc5LcbCfuD0243jrGSv9742fqqIS
-	h876KRzzpJfIV2wwVJXDaiYUxwKVHkudcT+4PiMN421xgmvvUk//JTWOybZELSSlSMlSct+9Czy
-	DfNrlhGHRAJh2Qet7MDjPoAp2hTEgoheEojnjeX+qXipPvUeZ2cN9q1Hk8p3TPuIL3Tg9+SlXTL
-	EFgnosU+B58FPIut8cpGbtsccHY0siKDE7iIlicek6Gy27OEj26WLYBwkKqq7h7Pqi77xVwwEaU
-	PxteoZLEhdy+OrVK0tll38y0WPWNB5CyufTKKgIb1gvo41AQE1QO4ZvStA8s3w1x7+w2fyenaOM
-	c6bzmyDFCEDan4BRBB6+XTRvS87SVabA3CbKTlqa/3UG2NzcqnLaFKIvR1ttkDkScwzMYt4MiDw
-	6jbhjrhU0J+93WZ0V6yEs=
-X-Google-Smtp-Source: AGHT+IG2FHJPf4h+6NnUN/J0xatATINNGdkgXy2Mr82izBMwFzE+zbujDdnvd6sCuR4Ij6NDN+G5Bw==
-X-Received: by 2002:a05:6000:2dca:b0:42f:b1c2:c35d with SMTP id ffacd0b85a97d-42fb48e460dmr3260075f8f.50.1765558507843;
-        Fri, 12 Dec 2025 08:55:07 -0800 (PST)
-Received: from [192.168.1.187] ([161.230.67.253])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42fb0fc8d5fsm5630678f8f.2.2025.12.12.08.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Dec 2025 08:55:07 -0800 (PST)
-Message-ID: <f530e0c818048bb3ce5c3505a35c1ef99acdf9f1.camel@gmail.com>
-Subject: Re: [PATCH v4 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, nuno.sa@analog.com, 
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,  Jean Delvare <jdelvare@suse.com>, Jonathan Corbet
- <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,  Bartosz
- Golaszewski	 <brgl@bgdev.pl>
-Date: Fri, 12 Dec 2025 16:55:48 +0000
-In-Reply-To: <ee7b7dcf-7756-4ffc-8a2c-e2cf33aac725@roeck-us.net>
-References: <20251204-ltc4283-support-v4-0-db0197fd7984@analog.com>
-	 <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
-	 <144d50f7-398c-4b10-bd21-a6d0c6c7b4c8@roeck-us.net>
-	 <67209860ae2ff5626b7eaa50f2dd4b496eaa06d3.camel@gmail.com>
-	 <ee7b7dcf-7756-4ffc-8a2c-e2cf33aac725@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+        d=1e100.net; s=20230601; t=1765559268; x=1766164068;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wrunU8pw6H9zOs0jZGs5wUV7F3gUjI9YKd4K9NSVbtk=;
+        b=xFy4yitujF3Xs+nxJp+f6Ie30P9eP7SKNso2QEZOQ7IP/5rmScIrqb/pHEnlANSlJP
+         /3QbDoVa3NmQRzLM9FywacMN0wO6oPhGe7QOR/VjJYmnjQxVbdr9TD8vVx2dkl1DweUf
+         Q5s9dRWInWrVgBWzuKl103XedTKvyosau2CIOmvY1y91uSZaEhzTJhkAoDJCjP88nZB8
+         F6otmoUS5DDgYxDdCymhxpZRhk8ffGtCi9aTviroKdYCrUeNbl6MbgpkFsSm7WeEmnYk
+         l58EivyVPXAD7Y07A4i/klMirVQY13+nr6Rul5ggLUSuxsrJYNuV3Hq0k8LF1tRXKy1g
+         UWQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMji8f4goGxsS1Z3DEMgCEPv9NGrQ1BlPaT1BCepBZj5SLH0/TAd3/ezZFWmUCxfrlcjzNdAij/97lcQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNTRmBIssBAF6xrgvo4MI3Tg8LrA16BlHLIb9bKnMxeuXt+bdh
+	YfdvJXS375BwjL1JYf2DrjPVWvJ+S4GkgfnSUHZVbz55tVI0oI4f8CDF
+X-Gm-Gg: AY/fxX5lD/5cNu5FDKCmkqnNO3Up7fTr8wGclO6/ND5M0zXL1we7XGc+mBtb3/xv+UB
+	bL6Gohz7Zrdy9DV3RkcHDKxUaCZ8sm4winfHKyOw9+ab8eor+2osVLSWVaidhhN+rZpAtGv9qmL
+	wF0aORlto1809HymMKcqVd5SX2IjZeVZo68UDouBhHNUbmh+HNtsoxRWelyN4rVeVAst9YvuaaB
+	neT43VX/6djwO+Rv/WBdSNQIjNLKONzBYw/SPqyNR5y4cGYtqROh4P5j72UCLI5Z36bJuOQd4Wv
+	Re9ylfFyMyEGH4JILUBPSzcL3MCe8BR31jS7LZow3a6LLR0NSmPmE523gN79AQFREPpcXMMoLps
+	zd0B8fZ1aQUI7DYdP8q4GXHLyddklLBRjsJQNXUnZp+R7VvUnNzlAnOanBnmqutHipOGph0AKMO
+	y9/+B5s4XGFefXhWtBY9UrtwMRU4doRnkm/F24cI6zE5sjuppFKZxaZ/AaJzo=
+X-Google-Smtp-Source: AGHT+IG3yAn0mlm+AqUMxbZ1ihflcThVhvuM/S7KwNGkkU+vavgLG8kTAsCB5WkOMeHEHxUmzG4aKA==
+X-Received: by 2002:a05:6a00:ab87:b0:7e8:450c:6190 with SMTP id d2e1a72fcca58-7f6691b3ba9mr2878479b3a.39.1765559267567;
+        Fri, 12 Dec 2025 09:07:47 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c5093d5csm5692338b3a.49.2025.12.12.09.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Dec 2025 09:07:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ca659699-e5f8-436f-bfdb-d0d250d34fca@roeck-us.net>
+Date: Fri, 12 Dec 2025 09:07:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>, nuno.sa@analog.com,
+ linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>
+References: <20251204-ltc4283-support-v4-0-db0197fd7984@analog.com>
+ <20251204-ltc4283-support-v4-2-db0197fd7984@analog.com>
+ <c9cb3a2b-da6b-42a6-87b0-7a2b780f5ad8@roeck-us.net>
+ <56a6c6a1b800090522a61eea5141aa8c986faea1.camel@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <56a6c6a1b800090522a61eea5141aa8c986faea1.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2025-12-12 at 08:46 -0800, Guenter Roeck wrote:
-> On 12/12/25 08:34, Nuno S=C3=A1 wrote:
-> > On Sat, 2025-12-06 at 10:40 -0800, Guenter Roeck wrote:
-> > > On 12/4/25 08:15, Nuno S=C3=A1 via B4 Relay wrote:
-> > > > From: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > > >=20
-> > > > Support the LTC4283 How Swap Controller. The device features progra=
-mmable
-> > > > current limit with foldback and independently adjustable inrush cur=
-rent to
-> > > > optimize the MOSFET safe operating area (SOA). The SOA timer limits=
- MOSFET
-> > > > temperature rise for reliable protection against overstresses.
-> > > >=20
-> > > > An I2C interface and onboard ADC allow monitoring of board current,
-> > > > voltage, power, energy, and fault status.
-> > > >=20
-> > > > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > >=20
-> > > I finally found the time to write module test code for the driver.
-> > >=20
-> >=20
-> > Thanks!
-> >=20
-> > > Some early feedback:
-> > >=20
-> > > - The driver must work with non-devicetree systems and without device
-> > > =C2=A0=C2=A0=C2=A0 property support. Select defaults where necessary.
-> >=20
-> > I'll double check that... But one thing that already comes to mind is r=
-sense? Rsense
->=20
-> Yes.
->=20
-> > is the main design choice for a thing like this. Not sure we can decide=
- on a meaningful
-> > default for it? I believe we have the same situation for ltc4282.c
-> >=20
->=20
-> Agreed, but that doesn't make it better (and I don't have a unit test for=
- that chip).
-> Default would be your call. I usually go for 1 mOhm.
->=20
-> If you have access to it, can you send me a register dump for LTC4282 ?
+On 12/12/25 08:50, Nuno Sá wrote:
+> On Thu, 2025-12-11 at 09:56 -0800, Guenter Roeck wrote:
+>> On 12/4/25 08:15, Nuno Sá via B4 Relay wrote:
+>>> From: Nuno Sá <nuno.sa@analog.com>
+>>>
+>>> Support the LTC4283 How Swap Controller. The device features programmable
+>>> current limit with foldback and independently adjustable inrush current to
+>>> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
+>>> temperature rise for reliable protection against overstresses.
+>>>
+>>> An I2C interface and onboard ADC allow monitoring of board current,
+>>> voltage, power, energy, and fault status.
+>>>
+>>> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+>>> ---
+>> ...
+>>> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
+>>> new file mode 100644
+>>> index 000000000000..d79432678b84
+>>> --- /dev/null
+>>> +++ b/drivers/hwmon/ltc4283.c
+>> ...
+>>> +
+>>> +static int ltc4283_read_voltage_word(const struct ltc4283_hwmon *st,
+>>> +				     u32 reg, u32 fs, long *val)
+>>> +{
+>>> +	__be16 in;
+>>> +	int ret;
+>>> +
+>>> +	ret = regmap_bulk_read(st->map, reg, &in, sizeof(in));
+>>
+>> I had a look into the regmap code. In its current implementation,
+>> that will work as long as
+>> 1) regmap is configured to not cache anything
+>> 2) the I2C controller supports I2C_FUNC_SMBUS_I2C_BLOCK
+>>
+> 
+> Possibly dumb question... what would be the issue about doing multiple
+> regmap reads if we can't do the bulk? That would be my naive approach in
+> the driver if I'm not going to use the bulk API.
+> 
 
-I'm doing home office these days and I'm not sure I brought that chip with =
-me. If I have
-it, I'll do it!
+You mean on the same address ? I don't have the chip to check, but I am quite
+sure that it would return the 1st byte again.
 
->=20
-> > > - Attributes marked as readable in the is_visible function must be re=
-adable.
-> > > =C2=A0=C2=A0=C2=A0 It is not acceptable to return -EOPNOTSUPP. That a=
-pplies to all
-> > > =C2=A0=C2=A0=C2=A0 reset_history attributes and maybe to others.
-> >=20
-> > Hmm that's a mistake. They should be WO and I have the same bug in ltc4=
-282 so I need to
-> > send a patch.
-> >=20
->=20
-> ... which helps explain why I want to be able to run unit tests (which re=
-quires defaults).
->=20
+FWIW, in the lm92 driver I used a regmap_bus to solve pretty much the same
+problem.
 
-Makes sense. But from a dt bindings point of view, I assume we should still=
- keep it as a
-mandatory property?
-
-- Nuno S=C3=A1
+Guenter
 
