@@ -1,155 +1,158 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C982D5C86
-	for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 20:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052702737E3;
+	Fri, 12 Dec 2025 02:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765484873; cv=none; b=ew+QFmuF6FcgFS4WVpeH6s4x1AsSan2mLsgEmO0mMaVGAg6bVrUjdSHo4dt2JQWM7ZdLtGdY+dWXSNuplCVVdEYIBr8wID6dL5qmCwPnpOE3ANkcptu8LIysRK0utPhDxN5I8EP8qdSiCPzRcbRQWmo8l+YytdQoTSaC8UBZvv0=
+	t=1765505353; cv=none; b=pyA5/DemqXrpVi0vdnnNczH63lYQM+u0T95tzjtSShXOGNRoh2XqyFILrx+Z4O6fLLpzU0ePXOrLa0TihnknVNGZfmk5MuP7wmnHs3xZQzxKGyyttPu0/sH/XOD6yAc5/dzd7ZVbIdGVlf/VmclZSxGk7XQL0J89OvJSKtMTGl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765484873; c=relaxed/simple;
-	bh=ltkyJe63XhFW2XPK6AylI7PaYkhEU0IDnxaKPNLsdjk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GzENG7Ztkzt6nAKcLeXZF+BRy6f8w2SLr812IsaFAIWGHgX4GpisIygS7ge6k7V1c5WmIQXNqV80zbPPorN1nJhcMfPM21Dh8u41mpaBgvFDnW3jM5cNsFcAv/1g4sM+ur78AiZWWUblMHrytzdw9Pnm33usQFc3ynZ4uLyQPPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVm0i7z6; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765505353; c=relaxed/simple;
+	bh=ma7GRHnW2rCG8r0VcpM29zdyDjKXGfA3aainbPmyopQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H0yrob2JS9MC/B7D84XavSf0LWTWm2blguhqMuHcpUjtRYQx4e0YWtTdOAQ/BMa2HKkMgU9OG1vdD9t99w5e38rV5c6qW4AdVETqbVHKH9Yz5VrZ2PlpiLWvHaFHLGlA8cps3MYxXl1kiLhU45vD8MUlr4CfqKD/RQ4wLz3voMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N4h37Gzp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVm0i7z6"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so566637b3a.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Dec 2025 12:27:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765484871; x=1766089671; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RFNvjy025P4j3juJp/7mMNUGy36biZNwQLRzE8g0SZM=;
-        b=EVm0i7z6XcTCUONIW/atv1XbAXeduN/UlNnj/lH5+Q8QpeYYXuAShMZ5wKjJoQzIVj
-         AKVhPY6GcvV/oypaRXeWpeji3PmOTvxENr/lt02FnNbAjEJbUVTV8HrY7Vn3hjgqitku
-         L2JGn/IusZapvFqXQataan7FMuCVHpEo3ZcoYkOM9ndZSnmbLmLVLuDPctgcHQC7OAAk
-         JrWuH4rhOYK32M4Lp4LkKJXZdTJ5E68YKgXB4HxTrWHppZVgU6dEMWDiIDXtcwfbJbJJ
-         k4byOrTXBzUilcwg+C+om2wAMBVl9k5he4H1n3rueZLy3N9xKrAwGMD/TKiC6JwO+5Zq
-         Kg8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765484871; x=1766089671;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RFNvjy025P4j3juJp/7mMNUGy36biZNwQLRzE8g0SZM=;
-        b=PVcs4w1Hq2mgqO1/Czj87Q7f3Q8wFms+EExAMm9r7YIBPSni5lVCmUhJweW9FOZJcB
-         VZlziEK3bZBkJZ6YH1umZm2g79isHW7fi4ThS02BV1Ro6KaQQEoWBr42PjLK+o30jq2D
-         vOuI2v3eJQ/mTnlAsYyxV2sRB+ZAY8ioNrqkMP4XtYDYV2nPpW68T6zbN6+lB5q27rN2
-         P3tduESBofggX5FBV/BQH30DZ+0LZBn9keBqRGISpKPdfWtSswVU+oVblu4NUbANOj5H
-         6F5P1tgrKwof7WeY+qR3Rh5BqD82FObj1lCzUVaKt7s4O8QuI/O1LLrqB79E8qDGZf5q
-         +KYw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbZMZG0pZpreYDzYb6AmeErsx2LMZvpCFPHjoWVQgfa9/KDWujAYVL2wyZC/GvSjL2wEXY0FmgwRGinA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCKjinfPLUt9ABJn3pMwQYZKXEtwMbQD9rexr6m7eQ5YhXy2Ct
-	QuWcaqCRV/UfX4C+21sasGCX0egFyPlPOXJES30JBWdgjsM6wqCmDHL3
-X-Gm-Gg: AY/fxX7xKA53EyTgTDpDq27iYsEexaHVHRhVi7Z86qgPgWApJ6rUl4MEJB2cCAgwvbU
-	PTSA40gKVd1+MrwyWbu1uEnRdPvTyqBP6ncc9toqnPx7YCLd170qljGnecZCbvSolam9uRV61IP
-	rCNdEBJAxODNVLei2SC5PD0uEC6E3FEXLIC1+jB8/mblpr0W/gyHo6LGW01mw/j9KqoC/oyzDDM
-	LC8lbvXenH2M1CijOIIbJ4tKXKVcE/B5R+R1pUa/0X7WyyGfl2AcoNfbvVz4awNuSvIf0mFXCXK
-	tQwVl7ERLQ3Gxg2Mf/B7dduKZimnOnkLA5TULGMVrtl1K0eexRuyp7aOqHv2O3C/iyb7Q1LYn7V
-	C+qc29OURFbyU5/VMXn4r9zHIuU9LKGhxKkcCfg3Efb5IjyhTrAgyNO2lCu0o708jq/+4ltw9gg
-	oqcebLwhf3szxLjkyb6U5C40UAQHbsfj8+Rv0YfX2hCHWulgbEceKebvUGSqw=
-X-Google-Smtp-Source: AGHT+IHV4Iszd+K6pE+L70YOIdvHkZVJ03UYXalyKOYspoVp8AFbIBx4gAlLx501zb5azUo1ikN80g==
-X-Received: by 2002:a05:6a21:6d89:b0:244:d3d0:962a with SMTP id adf61e73a8af0-366e0de878dmr8196886637.22.1765484871216;
-        Thu, 11 Dec 2025 12:27:51 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c2ae4e3casm3142680a12.21.2025.12.11.12.27.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Dec 2025 12:27:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f17d93db-f96b-469d-88f0-0878a0fc9fe7@roeck-us.net>
-Date: Thu, 11 Dec 2025 12:27:48 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N4h37Gzp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B927C4CEF7;
+	Fri, 12 Dec 2025 02:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765505352;
+	bh=ma7GRHnW2rCG8r0VcpM29zdyDjKXGfA3aainbPmyopQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=N4h37Gzpml7g1PBRXDRBdB7D8DRTedEmgQ1Rt0ulk/ESx8ZLuiIh/2YcmhdqLNOQ0
+	 GJSphZlN2FfcDO99m1MKZzpvArisztCApZrN9ZRaL+3idPbmCwtdvh2sFM1IgRVA9e
+	 As3iMgbWSAFsHB/gOnLLGdFmDHbWoKlNp/DQXYql529Q/6AKba+yz+0WIHPMC4mmcp
+	 iTTQc9TYkBnyZGRxjmvewATI7dImwDAfh1RauOwGamp43FfKaBDKQIrDF0UP8/Rwr/
+	 84tm3Oj3WZJECZGAAQqV83A87dv5Yp5Wdsax/dkUpbYBguTx3vket7dbJiI0eaO+gT
+	 +O2WFYwi/dnJg==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Pei Xiao <xiaopei01@kylinos.cn>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-6.17] hwmon: (emc2305) fix double put in emc2305_probe_childs_from_dt
+Date: Thu, 11 Dec 2025 21:08:55 -0500
+Message-ID: <20251212020903.4153935-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251212020903.4153935-1-sashal@kernel.org>
+References: <20251212020903.4153935-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 01/16] dt-bindings: hwmon: Convert
- aspeed,ast2400-pwm-tacho to DT schema
-To: Andrew Jeffery <andrew@codeconstruct.com.au>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij <linusw@kernel.org>
-Cc: Joel Stanley <joel@jms.id.au>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
- <20251211-dev-dt-warnings-all-v1-1-21b18b9ada77@codeconstruct.com.au>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251211-dev-dt-warnings-all-v1-1-21b18b9ada77@codeconstruct.com.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 12/11/25 00:45, Andrew Jeffery wrote:
-> From: "Rob Herring (Arm)" <robh@kernel.org>
-> 
-> Convert the ASpeed fan controller binding to DT schema format.
-> 
-> The '#cooling-cells' value used is 1 rather than 2. '#size-cells' is 0
-> rather 1.
-> 
-> Some users define more that 8 fan nodes where 2 fans share a PWM. The
-> driver seems to let the 2nd fan just overwrite the 1st one. That also
-> creates some addressing errors in the DT (duplicate addresses and wrong
-> unit-addresses).
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+From: Pei Xiao <xiaopei01@kylinos.cn>
 
-I am not sure I understand what the plan is here. I am assuming it will be
-applied through a non-hwmon branch.
+[ Upstream commit 541dfb49dcb80c2509e030842de77adfb77820f5 ]
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+./drivers/hwmon/emc2305.c:597:4-15: ERROR: probable double put
+
+Device node iterators put the previous value of the index variable, so an
+explicit put causes a double put.
+
+Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+Link: https://lore.kernel.org/r/tencent_CD373F952BE48697C949E39CB5EB77841D06@qq.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+## Analysis Summary
+
+### What the Bug Is
+This commit fixes a **double reference count decrement (double put)** on
+a device_node structure in the `emc2305_probe_childs_from_dt()`
+function.
+
+**Technical explanation:**
+1. The `for_each_child_of_node()` macro uses `of_get_next_child()`
+   internally for iteration
+2. As confirmed in the kernel documentation, `of_get_next_child()`
+   "**Decrements the refcount of prev**" automatically when advancing to
+   the next child
+3. The buggy code explicitly calls `of_node_put(child)` before
+   `continue`
+4. When the loop continues, `of_get_next_child()` decrements the
+   refcount again → **double put**
+
+**Impact:** Double put causes reference count underflow which can lead
+to:
+- Use-after-free vulnerabilities
+- Memory corruption
+- Kernel crashes/instability
+
+### Stable Tree Criteria Evaluation
+
+| Criteria | Met? | Details |
+|----------|------|---------|
+| Obviously correct | ✅ | Standard DT iterator pattern fix |
+| Fixes real bug | ✅ | Reference counting bug confirmed |
+| Important issue | ✅ | Potential UAF/memory corruption |
+| Small and contained | ✅ | Removes 4 lines in one function |
+| No new features | ✅ | Pure bug fix |
+| Tested | ✅ | Signed-off by hwmon maintainer |
+
+### Risk Assessment
+- **Risk**: Very low - the fix simply removes incorrect `of_node_put()`
+  calls
+- **Scope**: Single function, single driver (emc2305 hwmon)
+- **Backport complexity**: None - straightforward removal of lines
+
+### Version Analysis
+The buggy code was introduced in commit `2ed4db7a1d07b` which first
+appeared in **v6.17-rc1**. This means:
+- Only kernels 6.17+ have this bug
+- Older stable trees (6.12.y, 6.6.y, 6.1.y, etc.) do **NOT** have this
+  code
+
+### Concerns
+- No explicit "Cc: stable@vger.kernel.org" tag
+- No "Fixes:" tag pointing to the introducing commit
+- However, the bug and fix are clearly documented and understood
+
+### Verdict
+This is a legitimate bug fix that corrects an obvious reference counting
+error. The fix is:
+- Trivially correct (well-known DT iterator pattern)
+- Very low risk
+- Fixes a real bug that can cause memory corruption
+
+While the affected code only exists in 6.17+, this is still a valid
+stable backport candidate for the 6.17.y stable branch and should be
+backported to ensure stable users don't hit this reference counting bug.
+
+**YES**
+
+ drivers/hwmon/emc2305.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+index 84cb9b72cb6c2..ceae96c07ac45 100644
+--- a/drivers/hwmon/emc2305.c
++++ b/drivers/hwmon/emc2305.c
+@@ -593,10 +593,8 @@ static int emc2305_probe_childs_from_dt(struct device *dev)
+ 	for_each_child_of_node(dev->of_node, child) {
+ 		if (of_property_present(child, "reg")) {
+ 			ret = emc2305_of_parse_pwm_child(dev, child, data);
+-			if (ret) {
+-				of_node_put(child);
++			if (ret)
+ 				continue;
+-			}
+ 			count++;
+ 		}
+ 	}
+-- 
+2.51.0
 
