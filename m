@@ -1,44 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593F6381C4;
-	Sat, 13 Dec 2025 16:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19761BD9C9;
+	Sat, 13 Dec 2025 17:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765645052; cv=none; b=O9IgQskZCBAtYm6HyYZBf6dXmXRsNny/a+QZ8HVVs2AY0TEQHUS0SnHxrpAaIz29jex2ZwU7OCMuLtporpNXoUqA0w4L2BNIiApyTLcg8Sr5V57azvn4nFAfBl8bC5BCQRReojidf0LElsPr5Q2p3AtWzXBmuJdbh4S+llGAOWo=
+	t=1765645383; cv=none; b=ToI5LOWt2ASPK6GSYUtISqevrcdr65ARzeGctyVrGcoPXFz0NUaoCP5x5pIQhvfiOlWKLmIDGBjRvlkDStumLlhyg6dZyhmhnkAcXJGd7u+K+AWmI0nXGQu3daIQ9WVFeUo9Cx3/mbRU5hDuOfAgKJQ4psTbf6IKys4upes/CKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765645052; c=relaxed/simple;
-	bh=JDR3x0gFMqvNKk8GJNNBhZ8GAtTDToO1ukIK84PNFZc=;
+	s=arc-20240116; t=1765645383; c=relaxed/simple;
+	bh=2UpWYya/vT8/YS5AEgqSuwFPzptYkb/tbVFf+3DX8ss=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Dw/1FVR73G3RVW5lcfsPe/cpAav7K1L2sZXgE0l3VLYWmuvFIiuoBKm/mAqQBt453FFjEuobAEHcHDrGa6ZDxTWsAfF0N2KzYuDmmFaRIixbnNOxuCmMoOZuvlMGT0MvL5KVNPxG21XhW96DE2FSCcEwKIrLKPcKWr23VQupjhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dETTlPF3; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=EyK/duG2Y+FgTwVIgV9jA7qp/hAboGefpeoDmL5I1ZIYRa5XxBoE1jzYWRzReDYymbbYmDCe0lDjZ0W/T7LPNbShXJCCkijLOu7bk63qnNJtt7SLzrdewh7xMOcB65hEWbWePE1lUwmcMSeh0FOHhybgllxA6iTfN8a3k1ijQMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j9C81qHS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dETTlPF3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EEBC4CEF7;
-	Sat, 13 Dec 2025 16:57:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j9C81qHS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E92C4CEF7;
+	Sat, 13 Dec 2025 17:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765645051;
-	bh=JDR3x0gFMqvNKk8GJNNBhZ8GAtTDToO1ukIK84PNFZc=;
+	s=k20201202; t=1765645382;
+	bh=2UpWYya/vT8/YS5AEgqSuwFPzptYkb/tbVFf+3DX8ss=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dETTlPF3HnpkP6wwCE2xZwAALBuxeQRLOQLcmvUI+pvmTx+OGtpVrPzLlJcd81kzf
-	 zTAcV0cnzhaCXajVCP+t5u9+tJ21ZpVjYQsu2pqlwFUR6jzfnbXk8dZSpzI9nGk/GE
-	 n6cZ8iCOIIqwERmwKZPl/5aYl3/b+hB4ta2YKKxFLqrE1ZcVJI2OWPEj1+MJTzC1+0
-	 Im04TFjF1ooC9JT/ItI5+aCPSYGw5+/4rUiX8wJFzjNmdObdqz+oECAUGYL59vAywI
-	 bPP7BHrkU6/fZTkMfQLsWcEmN3GRHjTwzXxSiJApyhFg3Z2ceCa4HW25Hi1aH7HSvK
-	 WbBQ82EBBJPlQ==
-Date: Sat, 13 Dec 2025 16:57:23 +0000
+	b=j9C81qHShiadeRShnsOu1sAf29Rxt5NieumDPmK7zQmI3xoHdWw1NKrGr0EPQq4jn
+	 60gmmv9aHc9huhjELKBVgct9RxV1QGoAkMe7A1KSKQHkpv93BJ+h23kW4kKQVbQtEf
+	 j1mZCrKsROqh1jsYziAVG19CNOo3O5x39YClxl/N5rfPoZ2CWQ8CEhshjpcMPzK6Cn
+	 U4LEXGqvyMDrapV4lmzTWoZy/Qe6Dctfhf7DC9pDS/sBxwnvJ0HzAQ7UxHUxcCHD1c
+	 7juY++qMxRvkAbcpS9P/sah4JrqXek1rn32ULwYeCErCD8dmwbSb7Ql/xDk1c/F807
+	 BxNuWL6hOs+lQ==
+Date: Sat, 13 Dec 2025 17:02:51 +0000
 From: Jonathan Cameron <jic23@kernel.org>
-To: Rasmus Villemoes <ravi@prevas.dk>
-Cc: Peter Rosin <peda@axentia.se>, Guenter Roeck <linux@roeck-us.net>,
- <linux-iio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Subject: Re: lockdep splat involving iio-hwmon and iio-rescale drivers
-Message-ID: <20251213165723.762035e4@jic23-huawei>
-In-Reply-To: <87ms3nu9m7.fsf@prevas.dk>
-References: <87qzt2tnlu.fsf@prevas.dk>
-	<17697c17-753e-46a4-8e57-107dc744f18d@roeck-us.net>
-	<ced7efb0-02eb-f1b0-9033-e546ca302f1d@axentia.se>
-	<307296eb-e5b4-705b-6851-53cecb87a69c@axentia.se>
-	<87ms3nu9m7.fsf@prevas.dk>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>,
+ linux-aspeed@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, Linus
+ Walleij <linusw@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-crypto@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ openbmc@lists.ozlabs.org, linux-iio@vger.kernel.org,
+ linux-mmc@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH RFC 14/16] dt-bindings: iio: adc: Allow interrupts
+ property for AST2600
+Message-ID: <20251213170251.4d3b1690@jic23-huawei>
+In-Reply-To: <176548307744.1801669.10354753289483698774.robh@kernel.org>
+References: <20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
+	<20251211-dev-dt-warnings-all-v1-14-21b18b9ada77@codeconstruct.com.au>
+	<176548307744.1801669.10354753289483698774.robh@kernel.org>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -49,74 +54,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 12 Dec 2025 14:12:48 +0100
-Rasmus Villemoes <ravi@prevas.dk> wrote:
+On Thu, 11 Dec 2025 13:57:57 -0600
+"Rob Herring (Arm)" <robh@kernel.org> wrote:
 
-> On Thu, Dec 11 2025, Peter Rosin <peda@axentia.se> wrote:
+> On Thu, 11 Dec 2025 17:45:56 +0900, Andrew Jeffery wrote:
+> > The device has interrupts allocated according to the datasheet, and
+> > the devicetree already defines the interrupt property. Address existing
+> > warnings by allowing the property.
+> > 
+> > Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> > ---
+> >  Documentation/devicetree/bindings/iio/adc/aspeed,ast2600-adc.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >   
 > 
-> > 2025-12-10 at 23:54, Peter Rosin wrote:  
-> >> Before commit 3092bde731ca ("iio: inkern: move to the cleanup.h
-> >> magic") I think this could have been solved with a number of:
-> >> 
-> >> -	mutex_lock(&iio_dev_opaque->info_exist_lock);
-> >> +	mutex_lock_nested(&iio_dev_opaque->info_exist_lock);  
-> >
-> > Oops, we need something clever for the (missing) subclass
-> > argument to the mutex_lock_nested() calls, which I simply forgot
-> > all about. It should have been:
-> >
-> > +	mutex_lock_nested(&iio_dev_opaque->info_exist_lock, *subclass*);
-> >
-> > I don't know what sane subclasses there are. One thing could be
-> > the recursion depth, but I don't think we want to keep track of that
-> > just for lockdep? Another is to use one lockdep class for every
-> > info_exist_lock, but that can generate a lot of lockdep classes...  
-
-Either option should work but agreed tracking depth when
-we otherwise don't care about it feels excessive.
-We already have classes for the other major internal lock in IIO devices (mlock)
-
-https://elixir.bootlin.com/linux/v6.18.1/source/drivers/iio/industrialio-core.c#L1722
-
-I'm a bit curious we haven't seen many reports of this one. Whilst
-there are relatively few IIO drivers that consume other IIO driver provided
-channels it's also not a particularly new thing.
-
+> Acked-by: Rob Herring (Arm) <robh@kernel.org>
 > 
-> It doesn't seem to me that that info_exist_lock is the proper
-> mechanism for whatever it is it is protecting against.
 > 
-> I'm not even sure it's needed, because if the device could be
-> unregistered while somebody has a reference to it, why is it even
-> allowed to take that lock in the first place (i.e., why is the memory
-> containing the info_exist_lock guaranteed to still be valid)?
 
-It's to protect against racing with setting of iio_dev->info to NULL.
-The iio_dev itself is reference counted so it should always be safe
-to do this lookup. Note that use of info == NULL isn't about accessing
-info alone, but as a general gate on device has gone away (but
-structures are still there until all consumers - in kernel or userspace
-- are done).
+Doesn't seem to be a reason for me not picking this up immediately. Hence
+I've done so.  Currently on the testing branch of iio.git as I'll be rebasing
+on rc1 once available
 
-In theory at least all consumers use proxy functions that check that
-and error out if the thing being consumed has gone away.  Those that
-are sleeping on anything are woken up and return errors.
-
-Sure there are other approaches to providing that protection and
-there was an attempt to do a generic solution a while back. I lost
-track of where that got to.  Might be worth a revisit at some point.
-
-For now though a lockdep class per instance seems the way to go to me.
+Thanks,
 
 Jonathan
-
-
-> 
-> But, since I'm not going to propose just ripping it out, perhaps a
-> better approach would be something like what the gpio subsystem did in
-> d83cee3d2bb1 ("gpio: protect the pointer to gpio_chip in gpio_device
-> with SRCU"), at least superficially it seems to be about a similar
-> problem.
-> 
-> Rasmus
-
