@@ -1,112 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659F8221726;
-	Sat, 13 Dec 2025 15:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593F6381C4;
+	Sat, 13 Dec 2025 16:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765639202; cv=none; b=Jx4n97C8JG6tia9cBwkzD2AWzauK13yBs1UeLvyo6cCKtX5ZjfWsqwiXcvNVXE9Dte7b1o7JoCeyPyh2zWc/qnK+/OHbVO012DJt2U102KvOn/F9phFawiwEj3JsO7XCaXfFNOGBgXYpVPl8vD4fUn1wJwMyRNLHkh1iE1rGaQo=
+	t=1765645052; cv=none; b=O9IgQskZCBAtYm6HyYZBf6dXmXRsNny/a+QZ8HVVs2AY0TEQHUS0SnHxrpAaIz29jex2ZwU7OCMuLtporpNXoUqA0w4L2BNIiApyTLcg8Sr5V57azvn4nFAfBl8bC5BCQRReojidf0LElsPr5Q2p3AtWzXBmuJdbh4S+llGAOWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765639202; c=relaxed/simple;
-	bh=SfRsyNZlXG5eeLM8ItwniBCiImW1HWheHg8vcn/Omxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NaTxkBHxiScdS3wkKzNzqDs77Rz+JyrPwjsZBjBgiHe/uQV8i5zyWGaSoNLBBMgiOjndWkFExQs6vVCGHCgJVlhTyEXxVjp6VwMKdUdgE99mgCCWVjIF0bQMRi+SYX15YPOCMFjhkCwX9SLd3Lr41zpxvoTkJ4xW+H1aVwJYRXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EJFXRYZJ; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765645052; c=relaxed/simple;
+	bh=JDR3x0gFMqvNKk8GJNNBhZ8GAtTDToO1ukIK84PNFZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Dw/1FVR73G3RVW5lcfsPe/cpAav7K1L2sZXgE0l3VLYWmuvFIiuoBKm/mAqQBt453FFjEuobAEHcHDrGa6ZDxTWsAfF0N2KzYuDmmFaRIixbnNOxuCmMoOZuvlMGT0MvL5KVNPxG21XhW96DE2FSCcEwKIrLKPcKWr23VQupjhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dETTlPF3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EJFXRYZJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765639200; x=1797175200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SfRsyNZlXG5eeLM8ItwniBCiImW1HWheHg8vcn/Omxo=;
-  b=EJFXRYZJmEpSyB9vXIZ5ouKMJXCbo4zgOywVXuHXkf8elqdfLzPdPXyx
-   zy5QTOo7Ap+jqEkupX2+OPd4mJlefRwMGY4WLqVxuubBaLhd9RB0h3gGO
-   TntDcMbgb95si37POsSbOr8hs+3U0/SLYKTSaGkPEzrP8t4/VAXem/g8O
-   fujJjjmiIl9NV+q1eDdLrZzIFLujRNzxPo57t4gpqgtuv5UkBST6dT6k2
-   MHrAHvHiR1rwfll6RMQ02FKWijylMDwEGiyheTJF4ySkdCWgi33Y8Vtds
-   xFyEY4BevpKJLIfCoJbh0kFOEXbkzcuGn7MxBhJY5IwnJ1sYsqVPbsdRn
-   g==;
-X-CSE-ConnectionGUID: UbyUTfSIR22KsafAM62eNA==
-X-CSE-MsgGUID: f86AqWXySEyhH6qMZ/AlDw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="67490529"
-X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="67490529"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 07:20:00 -0800
-X-CSE-ConnectionGUID: z0Y2RG6kQ2uPXLwf/ZjKXw==
-X-CSE-MsgGUID: Yp1UjaFaR1KDmEwIYcyCqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
-   d="scan'208";a="197325290"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 13 Dec 2025 07:19:54 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vURPS-000000007nN-3CMB;
-	Sat, 13 Dec 2025 15:19:50 +0000
-Date: Sat, 13 Dec 2025 23:19:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ramiro Oliveira <ramiro.oliveira@advantech.com>,
-	Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Daniel Thompson <danielt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Wenkai Chung <wenkai.chung@advantech.com.tw>,
-	Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>,
-	Hongzhi Wang <hongzhi.wang@advantech.com>,
-	Mikhail Tsukerman <mikhail.tsukerman@advantech.com>,
-	Thomas Kastner <thomas.kastner@advantech.com>,
-	Ramiro Oliveira <ramiro.oliveira@advantech.com>
-Subject: Re: [PATCH 1/8] Add Advantech EIO MFD driver
-Message-ID: <202512132239.HrAPSw6z-lkp@intel.com>
-References: <20251212-upstream-v1-v1-1-d50d40ec8d8a@advantech.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dETTlPF3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EEBC4CEF7;
+	Sat, 13 Dec 2025 16:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765645051;
+	bh=JDR3x0gFMqvNKk8GJNNBhZ8GAtTDToO1ukIK84PNFZc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dETTlPF3HnpkP6wwCE2xZwAALBuxeQRLOQLcmvUI+pvmTx+OGtpVrPzLlJcd81kzf
+	 zTAcV0cnzhaCXajVCP+t5u9+tJ21ZpVjYQsu2pqlwFUR6jzfnbXk8dZSpzI9nGk/GE
+	 n6cZ8iCOIIqwERmwKZPl/5aYl3/b+hB4ta2YKKxFLqrE1ZcVJI2OWPEj1+MJTzC1+0
+	 Im04TFjF1ooC9JT/ItI5+aCPSYGw5+/4rUiX8wJFzjNmdObdqz+oECAUGYL59vAywI
+	 bPP7BHrkU6/fZTkMfQLsWcEmN3GRHjTwzXxSiJApyhFg3Z2ceCa4HW25Hi1aH7HSvK
+	 WbBQ82EBBJPlQ==
+Date: Sat, 13 Dec 2025 16:57:23 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Rasmus Villemoes <ravi@prevas.dk>
+Cc: Peter Rosin <peda@axentia.se>, Guenter Roeck <linux@roeck-us.net>,
+ <linux-iio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+Subject: Re: lockdep splat involving iio-hwmon and iio-rescale drivers
+Message-ID: <20251213165723.762035e4@jic23-huawei>
+In-Reply-To: <87ms3nu9m7.fsf@prevas.dk>
+References: <87qzt2tnlu.fsf@prevas.dk>
+	<17697c17-753e-46a4-8e57-107dc744f18d@roeck-us.net>
+	<ced7efb0-02eb-f1b0-9033-e546ca302f1d@axentia.se>
+	<307296eb-e5b4-705b-6851-53cecb87a69c@axentia.se>
+	<87ms3nu9m7.fsf@prevas.dk>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251212-upstream-v1-v1-1-d50d40ec8d8a@advantech.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Ramiro,
+On Fri, 12 Dec 2025 14:12:48 +0100
+Rasmus Villemoes <ravi@prevas.dk> wrote:
 
-kernel test robot noticed the following build warnings:
+> On Thu, Dec 11 2025, Peter Rosin <peda@axentia.se> wrote:
+> 
+> > 2025-12-10 at 23:54, Peter Rosin wrote:  
+> >> Before commit 3092bde731ca ("iio: inkern: move to the cleanup.h
+> >> magic") I think this could have been solved with a number of:
+> >> 
+> >> -	mutex_lock(&iio_dev_opaque->info_exist_lock);
+> >> +	mutex_lock_nested(&iio_dev_opaque->info_exist_lock);  
+> >
+> > Oops, we need something clever for the (missing) subclass
+> > argument to the mutex_lock_nested() calls, which I simply forgot
+> > all about. It should have been:
+> >
+> > +	mutex_lock_nested(&iio_dev_opaque->info_exist_lock, *subclass*);
+> >
+> > I don't know what sane subclasses there are. One thing could be
+> > the recursion depth, but I don't think we want to keep track of that
+> > just for lockdep? Another is to use one lockdep class for every
+> > info_exist_lock, but that can generate a lot of lockdep classes...  
 
-[auto build test WARNING on d9771d0dbe18dd643760431870a6abf9b0866bb0]
+Either option should work but agreed tracking depth when
+we otherwise don't care about it feels excessive.
+We already have classes for the other major internal lock in IIO devices (mlock)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ramiro-Oliveira/Add-Advantech-EIO-MFD-driver/20251213-004905
-base:   d9771d0dbe18dd643760431870a6abf9b0866bb0
-patch link:    https://lore.kernel.org/r/20251212-upstream-v1-v1-1-d50d40ec8d8a%40advantech.com
-patch subject: [PATCH 1/8] Add Advantech EIO MFD driver
-config: nios2-allmodconfig (https://download.01.org/0day-ci/archive/20251213/202512132239.HrAPSw6z-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251213/202512132239.HrAPSw6z-lkp@intel.com/reproduce)
+https://elixir.bootlin.com/linux/v6.18.1/source/drivers/iio/industrialio-core.c#L1722
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512132239.HrAPSw6z-lkp@intel.com/
+I'm a bit curious we haven't seen many reports of this one. Whilst
+there are relatively few IIO drivers that consume other IIO driver provided
+channels it's also not a particularly new thing.
 
-All warnings (new ones prefixed by >>):
+> 
+> It doesn't seem to me that that info_exist_lock is the proper
+> mechanism for whatever it is it is protecting against.
+> 
+> I'm not even sure it's needed, because if the device could be
+> unregistered while somebody has a reference to it, why is it even
+> allowed to take that lock in the first place (i.e., why is the memory
+> containing the info_exist_lock guaranteed to still be valid)?
 
->> Warning: drivers/mfd/eio_core.c:37 cannot understand function prototype: 'uint timeout = DEFAULT_TIMEOUT;'
+It's to protect against racing with setting of iio_dev->info to NULL.
+The iio_dev itself is reference counted so it should always be safe
+to do this lookup. Note that use of info == NULL isn't about accessing
+info alone, but as a general gate on device has gone away (but
+structures are still there until all consumers - in kernel or userspace
+- are done).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In theory at least all consumers use proxy functions that check that
+and error out if the thing being consumed has gone away.  Those that
+are sleeping on anything are woken up and return errors.
+
+Sure there are other approaches to providing that protection and
+there was an attempt to do a generic solution a while back. I lost
+track of where that got to.  Might be worth a revisit at some point.
+
+For now though a lockdep class per instance seems the way to go to me.
+
+Jonathan
+
+
+> 
+> But, since I'm not going to propose just ripping it out, perhaps a
+> better approach would be something like what the gpio subsystem did in
+> d83cee3d2bb1 ("gpio: protect the pointer to gpio_chip in gpio_device
+> with SRCU"), at least superficially it seems to be about a similar
+> problem.
+> 
+> Rasmus
+
