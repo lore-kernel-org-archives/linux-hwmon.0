@@ -1,95 +1,112 @@
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F204D4502A;
-	Fri, 12 Dec 2025 23:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659F8221726;
+	Sat, 13 Dec 2025 15:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765580767; cv=none; b=DUcxMXiCcPavfWSrkQ5h1f2qPvxHsKFVIYrijYvJ+gpFbXMtCS+93d030/bEvLztPLl3fHf69MYo5oCx/CfzaCAHGsTDI8u71sVFuh32iDo6fhX/QLJkuQFzfb4F+2y85A2dnSVhE0N8/tAYbX4ARgiYl2ylTf5eaAQ6WhBBQrQ=
+	t=1765639202; cv=none; b=Jx4n97C8JG6tia9cBwkzD2AWzauK13yBs1UeLvyo6cCKtX5ZjfWsqwiXcvNVXE9Dte7b1o7JoCeyPyh2zWc/qnK+/OHbVO012DJt2U102KvOn/F9phFawiwEj3JsO7XCaXfFNOGBgXYpVPl8vD4fUn1wJwMyRNLHkh1iE1rGaQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765580767; c=relaxed/simple;
-	bh=DQY0w1fKayo2dm/UmdPeUlums+FVDB79JNxL96B2CsY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TyQI3+YRyZkzLQAbGQfgKOqC8PD+LUYhEXGerGD2uwks7Nj8PX0KlZLfpZzL+cEhE8ElvFAMEzo/cGjNKqBIqDenIrCerYiEnIbyW9nuEdVmOmCmKcI+Qz1gMM1VuPWhm39J2UczxeRBScSPzSx1bfHBzYBh0fKjDVdXQqjtsvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=jiFkvtOO; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1765639202; c=relaxed/simple;
+	bh=SfRsyNZlXG5eeLM8ItwniBCiImW1HWheHg8vcn/Omxo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NaTxkBHxiScdS3wkKzNzqDs77Rz+JyrPwjsZBjBgiHe/uQV8i5zyWGaSoNLBBMgiOjndWkFExQs6vVCGHCgJVlhTyEXxVjp6VwMKdUdgE99mgCCWVjIF0bQMRi+SYX15YPOCMFjhkCwX9SLd3Lr41zpxvoTkJ4xW+H1aVwJYRXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EJFXRYZJ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="jiFkvtOO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1765580756;
-	bh=x5l4phBTQ5s3tak8rbu73PqDDxyijhO9BxipaFMLBH4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=jiFkvtOOi1rI+ninI9Q/X+ONt7F0b8K8Rtwkl/uaSOPD7NAZAPpRNpd7GPDC5TIed
-	 ITcpORYrpcHFtU2o2l+Zy1N+h6ZB2JsFmCrExwlHN4bxLny2EC+BBe262gzuKEILVs
-	 LF2Mv+hq9Y0LnLOLiBRBlK+6VIX27ZX+ch2SPWSBORcBR4lc0a/w6pmqZSFVq2TRoW
-	 2gjww3rFueIk87oOb+83aKxIDBVxL3I/IcpyOx5au3kcJTaXPvpYReuuNqW42GMeVg
-	 kRmwx2MntlwLb9dcRj9Ad6S7kznj+oalmwbE/kszNE91aXFQdGvYYBXt49KwsoKpX7
-	 j0V4K1M6Te7Cg==
-Received: from [172.16.11.106] (fpcf41bac9.tkyc510.ap.nuro.jp [207.65.186.201])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id A6D3C64DF5;
-	Sat, 13 Dec 2025 07:05:50 +0800 (AWST)
-Message-ID: <35ec28a70d360b2139742e9f04ff77e4a907cd2b.camel@codeconstruct.com.au>
-Subject: Re: [PATCH RFC 00/16] Eliminate warnings for AST2500 and AST2600
- EVB devicetrees
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,  Linus Walleij <linusw@kernel.org>, Joel Stanley
- <joel@jms.id.au>, linux-hwmon@vger.kernel.org, 	devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, 	linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, 	openbmc@lists.ozlabs.org,
- linux-gpio@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-iio@vger.kernel.org
-Date: Sat, 13 Dec 2025 08:05:43 +0900
-In-Reply-To: <20251212150631.GA3997751-robh@kernel.org>
-References: 
-	<20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
-	 <20251212150631.GA3997751-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-0+deb13u1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EJFXRYZJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765639200; x=1797175200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SfRsyNZlXG5eeLM8ItwniBCiImW1HWheHg8vcn/Omxo=;
+  b=EJFXRYZJmEpSyB9vXIZ5ouKMJXCbo4zgOywVXuHXkf8elqdfLzPdPXyx
+   zy5QTOo7Ap+jqEkupX2+OPd4mJlefRwMGY4WLqVxuubBaLhd9RB0h3gGO
+   TntDcMbgb95si37POsSbOr8hs+3U0/SLYKTSaGkPEzrP8t4/VAXem/g8O
+   fujJjjmiIl9NV+q1eDdLrZzIFLujRNzxPo57t4gpqgtuv5UkBST6dT6k2
+   MHrAHvHiR1rwfll6RMQ02FKWijylMDwEGiyheTJF4ySkdCWgi33Y8Vtds
+   xFyEY4BevpKJLIfCoJbh0kFOEXbkzcuGn7MxBhJY5IwnJ1sYsqVPbsdRn
+   g==;
+X-CSE-ConnectionGUID: UbyUTfSIR22KsafAM62eNA==
+X-CSE-MsgGUID: f86AqWXySEyhH6qMZ/AlDw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11641"; a="67490529"
+X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
+   d="scan'208";a="67490529"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 07:20:00 -0800
+X-CSE-ConnectionGUID: z0Y2RG6kQ2uPXLwf/ZjKXw==
+X-CSE-MsgGUID: Yp1UjaFaR1KDmEwIYcyCqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,146,1763452800"; 
+   d="scan'208";a="197325290"
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 13 Dec 2025 07:19:54 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vURPS-000000007nN-3CMB;
+	Sat, 13 Dec 2025 15:19:50 +0000
+Date: Sat, 13 Dec 2025 23:19:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ramiro Oliveira <ramiro.oliveira@advantech.com>,
+	Lee Jones <lee@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Daniel Thompson <danielt@kernel.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Wenkai Chung <wenkai.chung@advantech.com.tw>,
+	Francisco Aragon-Trivino <francisco.aragon-trivino@advantech.com>,
+	Hongzhi Wang <hongzhi.wang@advantech.com>,
+	Mikhail Tsukerman <mikhail.tsukerman@advantech.com>,
+	Thomas Kastner <thomas.kastner@advantech.com>,
+	Ramiro Oliveira <ramiro.oliveira@advantech.com>
+Subject: Re: [PATCH 1/8] Add Advantech EIO MFD driver
+Message-ID: <202512132239.HrAPSw6z-lkp@intel.com>
+References: <20251212-upstream-v1-v1-1-d50d40ec8d8a@advantech.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251212-upstream-v1-v1-1-d50d40ec8d8a@advantech.com>
 
-Hi Rob,
+Hi Ramiro,
 
-On Fri, 2025-12-12 at 09:06 -0600, Rob Herring wrote:
->=20
-> Don't you see warnings for at25:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0 89 (atmel,at25): 'size' is a required property
-> =C2=A0=C2=A0=C2=A0=C2=A0 89 (atmel,at25): 'pagesize' is a required proper=
-ty
-> =C2=A0=C2=A0=C2=A0=C2=A0 89 (atmel,at25): 'address-width' is a required p=
-roperty
->=20
-> These are due to using the deprecated (since 2012) at25,byte-len,=20
-> at25,addr-mode, and at25,page-size properties. I think it has been long=
-=20
-> enough you can just replace them with the new ones.
+kernel test robot noticed the following build warnings:
 
-I don't see them, no. The series targets only the aspeed/aspeed-
-ast2{5,6}00-evb.dts files, and neither of them contain at25 nodes. grep
-suggests its only IBM platforms:
+[auto build test WARNING on d9771d0dbe18dd643760431870a6abf9b0866bb0]
 
-   > git grep -l at2 ../arch/arm/boot/dts/aspeed/*.dts*
-   ../arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts
-   ../arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
-   ../arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
-   ../arch/arm/boot/dts/aspeed/ibm-power10-quad.dtsi
-   ../arch/arm/boot/dts/aspeed/ibm-power11-dual.dtsi
-   ../arch/arm/boot/dts/aspeed/ibm-power11-quad.dtsi
-   >
+url:    https://github.com/intel-lab-lkp/linux/commits/Ramiro-Oliveira/Add-Advantech-EIO-MFD-driver/20251213-004905
+base:   d9771d0dbe18dd643760431870a6abf9b0866bb0
+patch link:    https://lore.kernel.org/r/20251212-upstream-v1-v1-1-d50d40ec8d8a%40advantech.com
+patch subject: [PATCH 1/8] Add Advantech EIO MFD driver
+config: nios2-allmodconfig (https://download.01.org/0day-ci/archive/20251213/202512132239.HrAPSw6z-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251213/202512132239.HrAPSw6z-lkp@intel.com/reproduce)
 
-Once I've got the pieces of this series merged I'll encourage platform
-owners to start cleaning up their own devicetrees on the basis that
-there are no longer warnings that aren't their problem.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512132239.HrAPSw6z-lkp@intel.com/
 
-Thanks for your feedback so far!
+All warnings (new ones prefixed by >>):
 
-Andrew
+>> Warning: drivers/mfd/eio_core.c:37 cannot understand function prototype: 'uint timeout = DEFAULT_TIMEOUT;'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
