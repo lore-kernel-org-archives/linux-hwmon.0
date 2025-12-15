@@ -1,483 +1,348 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF7E32B9A4
-	for <linux-hwmon@vger.kernel.org>; Mon, 15 Dec 2025 09:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4C232721E
+	for <linux-hwmon@vger.kernel.org>; Mon, 15 Dec 2025 09:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765791555; cv=none; b=svHch6OW4Y+Tx3rZ9CpS1sa1GnARJrZdMTsRIgWZ/CvjxOt5nro+aOrNez4JLN+uIPVwbuNH7P+g+/Qpj36wHG9iu+lx/BFzWGyQ3GYVE21TklrwewiphtcD6zJAcY075XGjAVpA0KN4IUc0EnEbqB/S/VuE9IVjTMqt+TkeKI8=
+	t=1765791889; cv=none; b=vGTKg40VfNJtYjekMmzoPkZpOvtZSjijIhF8uWVmyOqjlmqLmTMZT3vfgNXP1Mx0HeNFjSTU28DvE8Q95o6GtG6Rnm2+HOTtRQBR/RWL5QiB72z1xt2bhUd7Zn8jzLibGgZfdbk/7sPr1Cyu9VI5ylEfTjRqp2DHnyGgbKig4Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765791555; c=relaxed/simple;
-	bh=I/L7r59w5k2aU/ZQyuS0zNrmK3O5J0tVycY6kgw6r9E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D6UaY2PboxMhYDd+RyNMDKQX1DzF3PvI9wMiASgY0vjwCJksBw/Nia1u/f2tz9MNvcnlH3LruFZ2BZabOwxks06LcPYqvMSe46MiBrgEnAtBQ+GfvuxRchlCdwiOI8VaWxKtgnOaKDjqHLvc4eV/Q7fFioqcbqQb0BOPaMaRv8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h7EjZTY+; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1765791889; c=relaxed/simple;
+	bh=fZ1LcWT4W4exvCC26RZneVym5lHubVxVkYNu6o8dsoA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=HJqB7BP4fzam8EjE0K0VbgYrruTzSsY7g2mlJzkdtPXXeGJ+aBeC5Hzkw+2XvtKUdo0stqmOgxkAHkns3lZVy1c1jWzaD56SRYu4+3nRTdCeLL47anQEl/T2XvK2Q7DITF+OJh0b/s4gUYhxCxkC0RRCV0fPIcLFTreIZHdGOoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B1qmlGxe; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h7EjZTY+"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-29f0f875bc5so42698715ad.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 15 Dec 2025 01:39:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765791550; x=1766396350; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SCqu8r0CbeFTNPLuen2UFB2zkwpTubmnQXzTm3hV0tY=;
-        b=h7EjZTY+jdtlKMdmHqOoSqOmJbs6mWN5IDCXKr4CK0q+XKlQo5QPRgw5rdqnLykBla
-         azT9AW/Wh+AS7gAgzvee8pDYjMzpOcrKU/wOqB6roivJyH4Ml8JcJ0wlkpHEgDfwAfqU
-         GOzIhPyiLJpp6kR56IG83Y71LpG472kceYxVopwFpcdbradkGbBAfVEwkcywZiEOcR0u
-         I9wQ3myVy1mKBIZSeKKMYVbzO+hHLcNDMXzY+pZgyvJUu6gAIeybCG1eTlFYNmHHamib
-         BAcveOmhnQHAdoSbu1hxg8vQfAsniKL88d6fdVg1rfHUif6JccEifraUW2njqAwF1wyx
-         XV/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765791550; x=1766396350;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SCqu8r0CbeFTNPLuen2UFB2zkwpTubmnQXzTm3hV0tY=;
-        b=SHMCQarbEAve++DBnCTcD8aYNcHQ1V2nHPgPXOVycUQF5t68NUTgaVpDEp+mB+w31M
-         5tH7DHbaMAq7KjpYiHKsTWlh1T+iuXcmlvuePrD7/+y1DXHk2g+HXxDMjSUHmW9IRmjJ
-         VKPsqwURYGg5vYcuXe4OdU7sDaT5BbKcOaRh99lQlTjsqMztZvsrwz7f3eDXoZO4Q52g
-         rAN0/o9aI/gFRCecOfveqlmQD5wgbTiT4rVSGBODxW9u7yPx8YpTHVCUlvjsIlvTcBGJ
-         CIMVhhTiiGW5taqooK9uPZYt1lBRZU7qZYPI0zO08KYceGa8xltzMejdb9z9Vmz1TO38
-         DYdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUpBXuCOp9B431GJjKbqHCdL2Y5ueK6kZPCTMsyu7p6HE4qH34pnHlRQYfOkTZwhWwV1Ad90V4stSplmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxbnmnZV2XLzslh5Nx5RS51dfkhCo2M2+D5h7Kqmr3ZM65vd/d
-	Y3jwhi+Nz/EvJZkbuI6BvvFaTdljwNALJwAITLgp8PUF7nC07nNNdGYa06d3xRmu
-X-Gm-Gg: AY/fxX4yDvC6txQWaJsUf80wge4lOu1DUPkhflB51IJ6gylDzyB4N6+irqDGmm805S+
-	ePb6gAVNYcK3SHK8IS8ieUTBckWQzm5PGc93x0ToNOQOKIzk4QKa3NjPJtkPFPbTJGDbeWvCvzK
-	a0+uVFzgipIqg81NeAOyVujnb7lG2yHx/2oCgz6RmWfh//Pla6PSiA0QbI3vpesphaRoWkMvKlq
-	5QwnVG7wEHPw7MpAdKAc4OUBCAXslJmYlAWhZGQ/doqzSnDizOAU6ZendCp9qXWzAgOfHteL0Gk
-	sG7obpJXzb9MNqch+UtT4jcMzZMTY1LSbcxfjTCYE7gxzy2VgPuI36ecWBhh2uZPdw/Q6Bl6bKH
-	w6UEuHxpNSC4HOcPL6yxB/QyyLCcyx2uYGOTlanPx8TZARM28uOWkTVAJeZs72D9uNwIaMEcZOj
-	0zk2FbxtkdS8V92DFddTsjkGExJg21131x64Axn3Syllgyj4+7E2wLeodqNDEknG1MrF/90L9yf
-	JOH3QZQIgL2pvhcQ7zZshytWvmg2WNo5r805/agvjA6q08hSpQr7wN2q54IE8k84n0lKGsH4Nqm
-	+9W/877oEg7zbVlji9G816PoUc9ZrQ3NMiMi+xBtPPUtCEivWE+lfzevnip57A==
-X-Google-Smtp-Source: AGHT+IENGKA6ttYiVSzTZiZopnM0MK0vu/VuTSeOYgYDQUJXX/Vi9BRGghQaxgAgfIzyI5XkyRK2GQ==
-X-Received: by 2002:a17:902:d4cb:b0:2a0:b467:a7cf with SMTP id d9443c01a7336-2a0b467ac9amr53044365ad.0.1765791550341;
-        Mon, 15 Dec 2025 01:39:10 -0800 (PST)
-Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29efd74f5e1sm113017705ad.16.2025.12.15.01.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 01:39:10 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-Date: Mon, 15 Dec 2025 19:37:51 +1000
-Subject: [PATCH v6 7/7] arm64: dts: apple: t8103, t8112, t60xx: Add hwmon
- SMC subdevice
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B1qmlGxe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765791887; x=1797327887;
+  h=date:from:to:cc:subject:message-id;
+  bh=fZ1LcWT4W4exvCC26RZneVym5lHubVxVkYNu6o8dsoA=;
+  b=B1qmlGxeCa/ful9D0/+A5FV83+hyNHBOeKpoQXU9KhbViGpnW15dmgtk
+   DYAMD4FnO60Nb2q2O3oQiaGnk1I3hUfzOoqix116w6fHS06qUsREb3RPT
+   GCPMmZiKEUPN9GrlWeSqNMn5UcY07z8eP6SWWXAahcRgmOUPH5+y3mgJp
+   lR2IoUPBubtWwScP7ZMZPMLeK8NhlGD/WgT6njT9RbnM/wRoF2NEZ1x9Z
+   5iTYG71k36UfD/JOsdeYC1zlpz8EkynLoKIXJbtwjIOTiDkOv638Tsztk
+   IoGJ54W0XI4mlgdP/oYF2SQe/+16YDlLZXf1CzDWP1tigggoCQs0tzRTT
+   Q==;
+X-CSE-ConnectionGUID: dM9vlXytT+ixp7Nkox8CTg==
+X-CSE-MsgGUID: OoGfUUnOS0S5htvliwH1GA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11642"; a="67649848"
+X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
+   d="scan'208";a="67649848"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 01:44:46 -0800
+X-CSE-ConnectionGUID: 2KPiPT+IQveaP0o6MwYhIw==
+X-CSE-MsgGUID: 10sCHrPsTxmKQI2n45tdTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,150,1763452800"; 
+   d="scan'208";a="228752586"
+Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 15 Dec 2025 01:44:45 -0800
+Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vV57i-0000000009t-1e4g;
+	Mon, 15 Dec 2025 09:44:41 +0000
+Date: Mon, 15 Dec 2025 17:43:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ c6bb982894b51c0ebaf94bbeb55ccbd1d4145a22
+Message-ID: <202512151706.IQDM1MJ6-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251215-macsmc-subdevs-v6-7-0518cb5f28ae@gmail.com>
-References: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
-In-Reply-To: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- James Calligeros <jcalligeros99@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12033;
- i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=I/L7r59w5k2aU/ZQyuS0zNrmK3O5J0tVycY6kgw6r9E=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDJn211nKFkfLL7/7Yp7X/pMLu9OjDaYLOExbFq4RsLjAc
- X3d6kn6HRNZGMS4GCzFFFk2NAl5zDZiu9kvUrkXZg4rE8gQaZEGBiBgYeDLTcwrNdIx0jPVNtQz
- NNQx1jFi4OIUgKl2rGD4H+mU6Mf3tIDvzIx0j7U6ayyUzdju7Mne9IGB//mhMwsaDRkZdoa/3iz
- u+lP3I39d/AE5gWLj+ujJXgmr7f2LCxYyt9/jAQA=
-X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
- fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-Apple's System Management Controller integrates numerous sensors
-that can be exposed via hwmon. Add the subdevice, compatible,
-and some common sensors that are exposed on every currently
-supported device as a starting point.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: c6bb982894b51c0ebaf94bbeb55ccbd1d4145a22  hwmon: (sht3x) add support for SHT85
 
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Co-developed-by: Janne Grunau <j@jannau.net>
-Signed-off-by: Janne Grunau <j@jannau.net>
-Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
----
- .../boot/dts/apple/hwmon-common.dtsi     | 33 +++++++++++++++++++++++++
- .../boot/dts/apple/hwmon-fan-dual.dtsi   | 22 +++++++++++++++++
- arch/arm64/boot/dts/apple/hwmon-fan.dtsi | 17 +++++++++++++
- .../boot/dts/apple/hwmon-laptop.dtsi     | 33 +++++++++++++++++++++++++
- .../boot/dts/apple/hwmon-mac-mini.dtsi   | 15 +++++++++++
- .../arm64/boot/dts/apple/t6001-j375c.dts |  2 ++
- arch/arm64/boot/dts/apple/t6001.dtsi     |  2 ++
- .../arm64/boot/dts/apple/t6002-j375d.dts |  2 ++
- .../arm64/boot/dts/apple/t600x-die0.dtsi |  4 +++
- .../boot/dts/apple/t600x-j314-j316.dtsi  |  3 +++
- .../arm64/boot/dts/apple/t602x-die0.dtsi |  4 +++
- arch/arm64/boot/dts/apple/t8103-j274.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j293.dts |  3 +++
- arch/arm64/boot/dts/apple/t8103-j313.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j456.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103-j457.dts |  2 ++
- arch/arm64/boot/dts/apple/t8103.dtsi     |  5 ++++
- arch/arm64/boot/dts/apple/t8112-j413.dts |  2 ++
- arch/arm64/boot/dts/apple/t8112-j473.dts |  2 ++
- arch/arm64/boot/dts/apple/t8112-j493.dts |  3 +++
- arch/arm64/boot/dts/apple/t8112.dtsi     |  5 ++++
- 21 files changed, 165 insertions(+)
+elapsed time: 908m
 
-diff --git a/arch/arm64/boot/dts/apple/hwmon-common.dtsi b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
-new file mode 100644
-index 000000000000..b87021855fdf
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Hardware monitoring sensors expected to be found on all Apple Silicon devices
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	current-ID0R {
-+		apple,key-id = "ID0R";
-+		label = "AC Input Current";
-+	};
-+	power-PSTR {
-+		apple,key-id = "PSTR";
-+		label = "Total System Power";
-+	};
-+	power-PDTR {
-+		apple,key-id = "PDTR";
-+		label = "AC Input Power";
-+	};
-+	power-PMVR {
-+		apple,key-id = "PMVR";
-+		label = "3.8 V Rail Power";
-+	};
-+	temperature-TH0x {
-+		apple,key-id = "TH0x";
-+		label = "NAND Flash Temperature";
-+	};
-+	voltage-VD0R {
-+		apple,key-id = "VD0R";
-+		label = "AC Input Voltage";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi b/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi
-new file mode 100644
-index 000000000000..3eef0721bcca
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-fan-dual.dtsi
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * SMC hwmon fan keys for Apple Silicon desktops/laptops with two fans
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+#include "hwmon-fan.dtsi"
-+
-+&smc_hwmon {
-+	fan-F0Ac {
-+		label = "Fan 1";
-+	};
-+	fan-F1Ac {
-+		apple,key-id = "F1Ac";
-+		label = "Fan 2";
-+		apple,fan-minimum = "F1Mn";
-+		apple,fan-maximum = "F1Mx";
-+		apple,fan-target = "F1Tg";
-+		apple,fan-mode = "F1Md";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-fan.dtsi b/arch/arm64/boot/dts/apple/hwmon-fan.dtsi
-new file mode 100644
-index 000000000000..fba9faf38f4b
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-fan.dtsi
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * hwmon fan keys for Apple Silicon desktops/laptops with a single fan.
-+ *
-+ *  Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	fan-F0Ac {
-+		apple,key-id = "F0Ac";
-+		label = "Fan";
-+		apple,fan-minimum = "F0Mn";
-+		apple,fan-maximum = "F0Mx";
-+		apple,fan-target = "F0Tg";
-+		apple,fan-mode = "F0Md";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi b/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi
-new file mode 100644
-index 000000000000..0c4666282a5c
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-laptop.dtsi
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Hardware monitoring sensors expected on all Apple Silicon laptops
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+&smc_hwmon {
-+	power-PHPC {
-+		apple,key-id = "PHPC";
-+		label = "Heatpipe Power";
-+	};
-+	temperature-TB0T {
-+		apple,key-id = "TB0T";
-+		label = "Battery Hotspot Temperature";
-+	};
-+	temperature-TCHP {
-+		apple,key-id = "TCHP";
-+		label = "Charge Regulator Temperature";
-+	};
-+	temperature-TW0P {
-+		apple,key-id = "TW0P";
-+		label = "WiFi/BT Module Temperature";
-+	};
-+	voltage-SBAV {
-+		apple,key-id = "SBAV";
-+		label = "Battery Voltage";
-+	};
-+	voltage-VD0R {
-+		apple,key-id = "VD0R";
-+		label = "Charger Input Voltage";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi b/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi
-new file mode 100644
-index 000000000000..f32627336ae7
---- /dev/null
-+++ b/arch/arm64/boot/dts/apple/hwmon-mac-mini.dtsi
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * hwmon sensors expected on all Mac mini models
-+ *
-+ * Copyright The Asahi Linux Contributors
-+ */
-+
-+#include "hwmon-fan.dtsi"
-+
-+&smc_hwmon {
-+	temperature-TW0P {
-+		apple,key-id = "TW0P";
-+		label = "WiFi/BT Module Temperature";
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/apple/t6001-j375c.dts b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-index 2e7c23714d4d..08276114c1d8 100644
---- a/arch/arm64/boot/dts/apple/t6001-j375c.dts
-+++ b/arch/arm64/boot/dts/apple/t6001-j375c.dts
-@@ -24,3 +24,5 @@ &wifi0 {
- &bluetooth0 {
- 	brcm,board-type = "apple,okinawa";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6001.dtsi b/arch/arm64/boot/dts/apple/t6001.dtsi
-index ffbe823b71bc..264df90f07d8 100644
---- a/arch/arm64/boot/dts/apple/t6001.dtsi
-+++ b/arch/arm64/boot/dts/apple/t6001.dtsi
-@@ -66,3 +66,5 @@ p-core-pmu-affinity {
- &gpu {
- 	compatible = "apple,agx-g13c", "apple,agx-g13s";
- };
-+
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t6002-j375d.dts b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-index 2b7f80119618..d12c0ae418f7 100644
---- a/arch/arm64/boot/dts/apple/t6002-j375d.dts
-+++ b/arch/arm64/boot/dts/apple/t6002-j375d.dts
-@@ -56,3 +56,5 @@ &bluetooth0 {
- 
- /delete-node/ &ps_disp0_cpu0_die1;
- /delete-node/ &ps_disp0_fe_die1;
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index f715b19efd16..e6647c1a9173 100644
---- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -37,6 +37,10 @@ smc_gpio: gpio {
- 			#gpio-cells = <2>;
- 		};
- 
-+		smc_hwmon: hwmon {
-+			compatible = "apple,smc-hwmon";
-+		};
-+
- 		smc_reboot: reboot {
- 			compatible = "apple,smc-reboot";
- 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-index c0aac59a6fae..127814a9dfa4 100644
---- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-+++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
-@@ -131,3 +131,6 @@ &fpwm0 {
- };
- 
- #include "spi1-nvram.dtsi"
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t602x-die0.dtsi b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-index 8622ddea7b44..680c103c1c0f 100644
---- a/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-+++ b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-@@ -114,6 +114,10 @@ smc_gpio: gpio {
- 			#gpio-cells = <2>;
- 		};
- 
-+		smc_hwmon: hwmon {
-+			compatible = "apple,smc-hwmon";
-+		};
-+
- 		smc_reboot: reboot {
- 			compatible = "apple,smc-reboot";
- 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-diff --git a/arch/arm64/boot/dts/apple/t8103-j274.dts b/arch/arm64/boot/dts/apple/t8103-j274.dts
-index 1c3e37f86d46..f5b8cc087882 100644
---- a/arch/arm64/boot/dts/apple/t8103-j274.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j274.dts
-@@ -61,3 +61,5 @@ &pcie0_dart_2 {
- &i2c2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-index 5b3c42e9f0e6..abb88391635f 100644
---- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-@@ -119,3 +119,6 @@ dfr_panel_in: endpoint {
- &displaydfr_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-index 97a4344d8dca..491ead016b21 100644
---- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-@@ -41,3 +41,5 @@ &wifi0 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j456.dts b/arch/arm64/boot/dts/apple/t8103-j456.dts
-index 58c8e43789b4..c2ec6fbb633c 100644
---- a/arch/arm64/boot/dts/apple/t8103-j456.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j456.dts
-@@ -75,3 +75,5 @@ &pcie0_dart_1 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan-dual.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103-j457.dts b/arch/arm64/boot/dts/apple/t8103-j457.dts
-index 7089ccf3ce55..aeaab2482d54 100644
---- a/arch/arm64/boot/dts/apple/t8103-j457.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j457.dts
-@@ -56,3 +56,5 @@ ethernet0: ethernet@0,0 {
- &pcie0_dart_2 {
- 	status = "okay";
- };
-+
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 59f2678639cf..f1820bdc0910 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -909,6 +909,10 @@ smc_gpio: gpio {
- 				#gpio-cells = <2>;
- 			};
- 
-+			smc_hwmon: hwmon {
-+				compatible = "apple,smc-hwmon";
-+			};
-+
- 			smc_reboot: reboot {
- 				compatible = "apple,smc-reboot";
- 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-@@ -1141,3 +1145,4 @@ port02: pci@2,0 {
- };
- 
- #include "t8103-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j413.dts b/arch/arm64/boot/dts/apple/t8112-j413.dts
-index 6f69658623bf..500dcdf2d4b5 100644
---- a/arch/arm64/boot/dts/apple/t8112-j413.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j413.dts
-@@ -78,3 +78,5 @@ &i2c4 {
- &fpwm1 {
- 	status = "okay";
- };
-+
-+#include "hwmon-laptop.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j473.dts b/arch/arm64/boot/dts/apple/t8112-j473.dts
-index 06fe257f08be..11db6a92493f 100644
---- a/arch/arm64/boot/dts/apple/t8112-j473.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j473.dts
-@@ -52,3 +52,5 @@ &pcie1_dart {
- &pcie2_dart {
- 	status = "okay";
- };
-+
-+#include "hwmon-mac-mini.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112-j493.dts b/arch/arm64/boot/dts/apple/t8112-j493.dts
-index fb8ad7d4c65a..a0da02c00f15 100644
---- a/arch/arm64/boot/dts/apple/t8112-j493.dts
-+++ b/arch/arm64/boot/dts/apple/t8112-j493.dts
-@@ -133,3 +133,6 @@ touchbar0: touchbar@0 {
- 		touchscreen-inverted-y;
- 	};
- };
-+
-+#include "hwmon-laptop.dtsi"
-+#include "hwmon-fan.dtsi"
-diff --git a/arch/arm64/boot/dts/apple/t8112.dtsi b/arch/arm64/boot/dts/apple/t8112.dtsi
-index 6bc3f58b06f7..c4d1e5ffaee9 100644
---- a/arch/arm64/boot/dts/apple/t8112.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8112.dtsi
-@@ -912,6 +912,10 @@ smc_gpio: gpio {
- 				#gpio-cells = <2>;
- 			};
- 
-+			smc_hwmon: hwmon {
-+				compatible = "apple,smc-hwmon";
-+			};
-+
- 			smc_reboot: reboot {
- 				compatible = "apple,smc-reboot";
- 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
-@@ -1180,3 +1184,4 @@ port03: pci@3,0 {
- };
- 
- #include "t8112-pmgr.dtsi"
-+#include "hwmon-common.dtsi"
+configs tested: 271
+configs skipped: 3
 
--- 
-2.52.0
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    clang-16
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-22
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                        nsimosci_defconfig    gcc-15.1.0
+arc                   randconfig-001-20251215    clang-22
+arc                   randconfig-001-20251215    gcc-10.5.0
+arc                   randconfig-002-20251215    clang-22
+arc                   randconfig-002-20251215    gcc-12.5.0
+arm                               allnoconfig    clang-22
+arm                               allnoconfig    gcc-15.1.0
+arm                              allyesconfig    clang-16
+arm                              allyesconfig    gcc-15.1.0
+arm                                 defconfig    clang-22
+arm                                 defconfig    gcc-15.1.0
+arm                           imxrt_defconfig    gcc-15.1.0
+arm                      integrator_defconfig    clang-22
+arm                        mvebu_v5_defconfig    gcc-15.1.0
+arm                           omap1_defconfig    gcc-15.1.0
+arm                   randconfig-001-20251215    clang-22
+arm                   randconfig-002-20251215    clang-22
+arm                   randconfig-003-20251215    clang-22
+arm                   randconfig-004-20251215    clang-22
+arm                   randconfig-004-20251215    gcc-10.5.0
+arm                         s3c6400_defconfig    gcc-15.1.0
+arm                        shmobile_defconfig    gcc-15.1.0
+arm                           tegra_defconfig    gcc-15.1.0
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20251215    clang-22
+arm64                 randconfig-002-20251215    clang-22
+arm64                 randconfig-003-20251215    clang-22
+arm64                 randconfig-004-20251215    clang-22
+arm64                 randconfig-004-20251215    gcc-9.5.0
+csky                             allmodconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20251215    clang-22
+csky                  randconfig-001-20251215    gcc-13.4.0
+csky                  randconfig-002-20251215    clang-22
+csky                  randconfig-002-20251215    gcc-9.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.1.0
+hexagon                           allnoconfig    clang-22
+hexagon                           allnoconfig    gcc-15.1.0
+hexagon                             defconfig    clang-22
+hexagon                             defconfig    gcc-15.1.0
+hexagon               randconfig-001-20251215    clang-16
+hexagon               randconfig-001-20251215    gcc-11.5.0
+hexagon               randconfig-002-20251215    clang-22
+hexagon               randconfig-002-20251215    gcc-11.5.0
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                              allnoconfig    gcc-15.1.0
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251215    clang-20
+i386        buildonly-randconfig-002-20251215    clang-20
+i386        buildonly-randconfig-003-20251215    clang-20
+i386        buildonly-randconfig-003-20251215    gcc-14
+i386        buildonly-randconfig-004-20251215    clang-20
+i386        buildonly-randconfig-005-20251215    clang-20
+i386        buildonly-randconfig-006-20251215    clang-20
+i386        buildonly-randconfig-006-20251215    gcc-14
+i386                                defconfig    clang-20
+i386                                defconfig    gcc-15.1.0
+i386                  randconfig-001-20251215    clang-20
+i386                  randconfig-002-20251215    clang-20
+i386                  randconfig-003-20251215    clang-20
+i386                  randconfig-004-20251215    clang-20
+i386                  randconfig-005-20251215    clang-20
+i386                  randconfig-006-20251215    clang-20
+i386                  randconfig-007-20251215    clang-20
+i386                  randconfig-011-20251215    clang-20
+i386                  randconfig-011-20251215    gcc-14
+i386                  randconfig-012-20251215    gcc-12
+i386                  randconfig-012-20251215    gcc-14
+i386                  randconfig-013-20251215    clang-20
+i386                  randconfig-013-20251215    gcc-14
+i386                  randconfig-014-20251215    gcc-14
+i386                  randconfig-015-20251215    clang-20
+i386                  randconfig-015-20251215    gcc-14
+i386                  randconfig-016-20251215    gcc-14
+i386                  randconfig-017-20251215    clang-20
+i386                  randconfig-017-20251215    gcc-14
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-22
+loongarch                         allnoconfig    clang-22
+loongarch                         allnoconfig    gcc-15.1.0
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251215    gcc-11.5.0
+loongarch             randconfig-001-20251215    gcc-14.3.0
+loongarch             randconfig-002-20251215    clang-18
+loongarch             randconfig-002-20251215    gcc-11.5.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    clang-16
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    clang-19
+m68k                                defconfig    gcc-15.1.0
+m68k                        m5407c3_defconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    clang-19
+microblaze                          defconfig    gcc-15.1.0
+mips                             allmodconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                             allyesconfig    gcc-15.1.0
+mips                       bmips_be_defconfig    gcc-15.1.0
+mips                      bmips_stb_defconfig    gcc-15.1.0
+mips                  cavium_octeon_defconfig    gcc-15.1.0
+mips                           ip22_defconfig    gcc-15.1.0
+nios2                            allmodconfig    clang-22
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    clang-22
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    clang-19
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251215    gcc-11.5.0
+nios2                 randconfig-002-20251215    gcc-11.5.0
+openrisc                         alldefconfig    gcc-15.1.0
+openrisc                         allmodconfig    clang-22
+openrisc                         allmodconfig    gcc-15.1.0
+openrisc                          allnoconfig    clang-22
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    clang-22
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    clang-19
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                generic-32bit_defconfig    gcc-15.1.0
+parisc                randconfig-001-20251215    gcc-12.5.0
+parisc                randconfig-001-20251215    gcc-9.5.0
+parisc                randconfig-002-20251215    gcc-11.5.0
+parisc                randconfig-002-20251215    gcc-9.5.0
+parisc64                            defconfig    clang-19
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    clang-22
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                   motionpro_defconfig    gcc-15.1.0
+powerpc                 mpc832x_rdb_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20251215    gcc-9.5.0
+powerpc               randconfig-002-20251215    clang-22
+powerpc               randconfig-002-20251215    gcc-9.5.0
+powerpc                     tqm8560_defconfig    gcc-15.1.0
+powerpc64             randconfig-001-20251215    gcc-8.5.0
+powerpc64             randconfig-001-20251215    gcc-9.5.0
+powerpc64             randconfig-002-20251215    clang-22
+powerpc64             randconfig-002-20251215    gcc-9.5.0
+riscv                            alldefconfig    gcc-15.1.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                               defconfig    gcc-15.1.0
+riscv                 randconfig-001-20251215    clang-22
+riscv                 randconfig-002-20251215    clang-22
+s390                             allmodconfig    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                                defconfig    gcc-15.1.0
+s390                  randconfig-001-20251215    clang-22
+s390                  randconfig-002-20251215    clang-22
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    clang-22
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    clang-19
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-14
+sh                                  defconfig    gcc-15.1.0
+sh                 kfr2r09-romimage_defconfig    gcc-15.1.0
+sh                    randconfig-001-20251215    clang-22
+sh                    randconfig-001-20251215    gcc-13.4.0
+sh                    randconfig-002-20251215    clang-22
+sh                    randconfig-002-20251215    gcc-15.1.0
+sh                      rts7751r2d1_defconfig    gcc-15.1.0
+sparc                             allnoconfig    clang-22
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251215    gcc-15.1.0
+sparc                 randconfig-002-20251215    gcc-12.5.0
+sparc                 randconfig-002-20251215    gcc-15.1.0
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    clang-20
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20251215    clang-20
+sparc64               randconfig-001-20251215    gcc-15.1.0
+sparc64               randconfig-002-20251215    gcc-13.4.0
+sparc64               randconfig-002-20251215    gcc-15.1.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.1.0
+um                                  defconfig    clang-22
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251215    clang-22
+um                    randconfig-001-20251215    gcc-15.1.0
+um                    randconfig-002-20251215    gcc-14
+um                    randconfig-002-20251215    gcc-15.1.0
+um                           x86_64_defconfig    clang-22
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                            allnoconfig    clang-22
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251215    clang-20
+x86_64      buildonly-randconfig-001-20251215    gcc-14
+x86_64      buildonly-randconfig-002-20251215    clang-20
+x86_64      buildonly-randconfig-003-20251215    clang-20
+x86_64      buildonly-randconfig-004-20251215    clang-20
+x86_64      buildonly-randconfig-005-20251215    clang-20
+x86_64      buildonly-randconfig-006-20251215    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20251215    gcc-14
+x86_64                randconfig-002-20251215    gcc-14
+x86_64                randconfig-003-20251215    gcc-14
+x86_64                randconfig-004-20251215    clang-20
+x86_64                randconfig-004-20251215    gcc-14
+x86_64                randconfig-005-20251215    gcc-14
+x86_64                randconfig-006-20251215    clang-20
+x86_64                randconfig-006-20251215    gcc-14
+x86_64                randconfig-011-20251215    clang-20
+x86_64                randconfig-011-20251215    gcc-14
+x86_64                randconfig-012-20251215    clang-20
+x86_64                randconfig-012-20251215    gcc-14
+x86_64                randconfig-013-20251215    clang-20
+x86_64                randconfig-013-20251215    gcc-14
+x86_64                randconfig-014-20251215    clang-20
+x86_64                randconfig-014-20251215    gcc-14
+x86_64                randconfig-015-20251215    gcc-13
+x86_64                randconfig-015-20251215    gcc-14
+x86_64                randconfig-016-20251215    gcc-14
+x86_64                randconfig-071-20251215    clang-20
+x86_64                randconfig-071-20251215    gcc-14
+x86_64                randconfig-072-20251215    clang-20
+x86_64                randconfig-072-20251215    gcc-14
+x86_64                randconfig-073-20251215    gcc-14
+x86_64                randconfig-074-20251215    gcc-13
+x86_64                randconfig-074-20251215    gcc-14
+x86_64                randconfig-075-20251215    clang-20
+x86_64                randconfig-075-20251215    gcc-14
+x86_64                randconfig-076-20251215    gcc-14
+x86_64                               rhel-9.4    clang-20
+x86_64                           rhel-9.4-bpf    gcc-14
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                         rhel-9.4-kunit    gcc-14
+x86_64                           rhel-9.4-ltp    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    clang-22
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                           allyesconfig    clang-22
+xtensa                randconfig-001-20251215    gcc-15.1.0
+xtensa                randconfig-001-20251215    gcc-8.5.0
+xtensa                randconfig-002-20251215    gcc-15.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
