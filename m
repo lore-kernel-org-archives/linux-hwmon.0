@@ -1,104 +1,122 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E51D2C0F9A;
-	Tue, 16 Dec 2025 15:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32E92D3737;
+	Tue, 16 Dec 2025 15:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765899225; cv=none; b=BMC/RY4TEMRkiVhy0ob4za9S6AZ5qzj/Q71HsdUWzPXKdAcjGa05O15XMVHuHgpurC8S04HfXrg4nY/24LY7w12LNE3G/bqHtYB/w2MZyejYuagzNyFvdpny2ms0oM7ht4lbSdKlPJwQNHENv/K6K7k6sGwUWqmIarVZEEXkAek=
+	t=1765900507; cv=none; b=R7zzo6vz3SY1YGXki1+fsK8v0Kio3tXel1Td53nqpD2jk+W0RqDm8flVRL9N8+v6jW5j5B3StfPbWMFCdUrmNz0eQHXFLzxfSYV26Qvbj3aCowEmOFJwzvIfuDPnfWNx/lPjLdVrWLbF4a/962n/cE/ZbeGATwveOifsdmGZ+x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765899225; c=relaxed/simple;
-	bh=YwoMyqqb7FoPpi5NJyyaera2Ovv71yIWvzL6plb5cBY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=IEWrNCiTaXNiuUXBMO4xeHJcJToQ/UiLyBc1P/WUPfytbI2WSPkyBC6A/aHkPSb+2ofWDJf31yjbQGzWiJRPDyJ/3Kp0SIRIstDoPdSyCpDvekJFU0EwwDTZVYeaYF2dekZfdbZTqmo4hSYWW+qig2iHgeViEZwsGnw9dQy6Njo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iPE0VLcT; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1765900507; c=relaxed/simple;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JnQYZrp2x0OZdMWLvktVyfnHViFljIF0q27YRYy4jYP7zJzXOfWANh4ZO3WwSYT4BtiBPdsn/40biBdXsmAqYeCAmnb1l2cS9xO45/5IZdC9Y9UP8mN0GZnH88P6PHRucLGzHQRWKbfvWH1QZ/4XCSYy8Qg7PydWltFBmV5xPig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnJY5LCi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iPE0VLcT"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5BGFWClL2179001
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 16 Dec 2025 07:32:13 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5BGFWClL2179001
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025112201; t=1765899134;
-	bh=YwoMyqqb7FoPpi5NJyyaera2Ovv71yIWvzL6plb5cBY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=iPE0VLcTgNWTSt5Tet9JM219GeC7iYNuOcfvkIUd5nEKG/cdvOJwPNBuC1E+DFzIi
-	 SHqu/oogV01S+Vdi/eeDP9MVA/VMd+IORcg8rzelWylaDU7RwlyiRxoXkzNUdlA+49
-	 9a2JqdulmrlQrzXpJXZcHiVRWtWWYGm4vTlgsvktLtFFJNi1LESdKBVzyuTMqbcRTd
-	 bM2x846MlS7boYnZ7dfj6rnowELPFA5PBJghox2dJ8Bq8DfbpSSEai1LJie29QbzBq
-	 ekqe/HtqGC1nCUgMXLOxWd2SgknFZP/ynGzpZ0XgkulTqNVUOmsDcdrJ8/SaabjQy9
-	 7VLOQi94US1rA==
-Date: Tue, 16 Dec 2025 07:32:09 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: =?ISO-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>,
-        Ingo Molnar <mingo@kernel.org>
-CC: linux-kernel@vger.kernel.org, x86@kernel.org,
-        virtualization@lists.linux.dev, kvm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-block@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ajay Kaher <ajay.kaher@broadcom.com>,
-        Alexey Makhalov <alexey.makhalov@broadcom.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, Denis Efremov <efremov@linux.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 0/5] x86: Cleanups around slow_down_io()
-User-Agent: K-9 Mail for Android
-In-Reply-To: <b969cff5-be11-4fd3-8356-95185ea5de4c@suse.com>
-References: <20251126162018.5676-1-jgross@suse.com> <aT5vtaefuHwLVsqy@gmail.com> <bff8626d-161e-4470-9cbd-7bbda6852ec3@suse.com> <aUFjRDqbfWMsXvvS@gmail.com> <b969cff5-be11-4fd3-8356-95185ea5de4c@suse.com>
-Message-ID: <14EF14B1-8889-4037-8E7B-C8446299B1E9@zytor.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnJY5LCi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1484C4CEF1;
+	Tue, 16 Dec 2025 15:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765900506;
+	bh=01o5UEZSfkctZGOC5qlwlYDaww6GquCTHK/kGSGT9Qs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KnJY5LCi/daDI436cW11l2Wqr+RJlCMtWNkJk2AtzanmHz93rQJ124FWk4sFUtsA6
+	 iVo4ZZWRFT4V/zqvlbP7Mu/vlS+xtrtlI7SYy3E04iqXohV2Oe4HUDa6isZCRbzxTc
+	 /mvQXq7uA8hGmtra8djoYst0s2tt0EfGlkx6wwR7MTb0KQ4BY4unq4LgWmGXccHlMy
+	 ZHbUYJRJJh3TZgot7Lt2gxaABElqBUyrBX2iIfqM6dvs/N9XGlNoObcZlgTWXH9FO7
+	 9E6+x2wXTqTogPi50AcxgqckAp2FL7Su9wOSPLWvnUCCQAPFKrt8DexSDUaYg5cK1x
+	 HTM+jBrwl41cA==
+Message-ID: <d9665340-5a96-4105-88e9-ec14a715df5a@kernel.org>
+Date: Tue, 16 Dec 2025 16:54:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/19] dt-bindings: arm: AT91: relicense to dual
+ GPL-2.0/BSD-2-Clause
+To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+ UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au,
+ davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net,
+ andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com,
+ sboyd@kernel.org, richardcochran@gmail.com,
+ wsa+renesas@sang-engineering.com, romain.sioen@microchip.com,
+ Ryan.Wanner@microchip.com, lars.povlsen@microchip.com,
+ tudor.ambarus@linaro.org, charan.pedumuru@microchip.com,
+ kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-clk@vger.kernel.org, mwalle@kernel.org
+Cc: luka.perkov@sartura.hr
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-3-robert.marko@sartura.hr>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251215163820.1584926-3-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On December 16, 2025 5:55:54 AM PST, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=
-=2Ecom> wrote:
->On 16=2E12=2E25 14:48, Ingo Molnar wrote:
->>=20
->> * J=C3=BCrgen Gro=C3=9F <jgross@suse=2Ecom> wrote:
->>=20
->>>> CPUs anymore=2E Should it cause any regressions, it's easy to bisect =
-to=2E
->>>> There's been enough changes around all these facilities that the
->>>> original timings are probably way off already, so we've just been
->>>> cargo-cult porting these to newer kernels essentially=2E
->>>=20
->>> Fine with me=2E
->>>=20
->>> Which path to removal of io_delay would you (and others) prefer?
->>>=20
->>> 1=2E Ripping it out immediately=2E
->>=20
->> I'd just rip it out immediately, and see who complains=2E :-)
->
->I figured this might be a little bit too evil=2E :-)
->
->I've just sent V2 defaulting to have no delay, so anyone hit by that
->can still fix it by applying the "io_delay" boot parameter=2E
->
->I'll do the ripping out for kernel 6=2E21 (or whatever it will be called)=
-=2E
->
->
->Juergen
+On 15/12/2025 17:35, Robert Marko wrote:
+> As it is preferred to have bindings dual licensed, lets relicense the AT91
+> bindings from GPL-2.0 only to GPL-2.0/BSD-2 Clause.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-Ok, I'm going to veto ripping it out from the real-mode init code, because=
- I actually know why it is there :) =2E=2E=2E and that code is pre-UEFI leg=
-acy these days anyway=2E
+You need all contributors to ack this...
 
-Other places=2E=2E=2E I don't care :)
+Best regards,
+Krzysztof
