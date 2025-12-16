@@ -1,175 +1,156 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62C1322C63
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0401E343D74
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765876597; cv=none; b=hwJXYwoEbgp8Fx3XWbK6MsXC9tktd2M6Ie25t0jPt3KghY0jWvbYaTx/FKM7CvhbPWYtil5COkojFMzZX21vre9PHMCXAJZgtHPTE+Ju2e4txXAlAhSWPxBfffK6n29icwiTYfM1yPv6OsUsSAyiYEV4VDFJF281sZiQJC0RKWU=
+	t=1765877093; cv=none; b=A21JPXRFIxvv7voe6oWIPrAy4qsbRgwUJh9WcC7GAyZull98m/GJCA3yGzqUS3dbysUvltpEGM9phPQvu576XkZzJIsAx6kEUaOMpEQt3rDXo8NsxbeIL9HbRkfaazSUCBGhAts+mv8HfcyarsnChPH5MzN8/7/BBuRNk1zdxCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765876597; c=relaxed/simple;
-	bh=1io2b+cGCwpQfwdasxnweJ72z/V4NLyKD6KXX3X0ApQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EkzWqwYbou4uV6rvLRprVLzr9iUmNLGrcrSjensWdsJqgLtfbmYzJhCpmOJDbaEW3ZJQGdqFSyLYBCapz50/pzrm1pC0xCC4V9eUkYDovVe8PLRR9HLtLXi0de9d5L9hC+47aVPuJpRNkE8PJbcHCOjqq11ymNrJAHjOhpOIPQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZUeSR+dl; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1765877093; c=relaxed/simple;
+	bh=paEefmxoehvY+YUe+LCWiicYBOi0U2+9xjA+hvX7oaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oeZIcB/jybcVg2UlVkT/T+g1lrZA6DqVF/lMnjQbUxUkTTCXUmeU9UdDDBQEQH+F+ebnAX43ye/wxbAJ44ppkWQOeIjhIua5EJTYPi5AvtEHG7XGKLCtCfQwfGpk/OrsIts5zfDSiFkzvKdYWZ/tkvc1spd03YOElmX/SeB6/MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FNQ4WCxe; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUeSR+dl"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a07fac8aa1so32249035ad.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:16:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FNQ4WCxe"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a081c163b0so31135835ad.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:24:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765876595; x=1766481395; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wUk1kM50n0Uxz+X4Sasil+Qsrm9+azMKZxJy1CXcwvQ=;
-        b=ZUeSR+dlclzbXw4jbzgZ3I7HYN2U0tBuOd3TOZwB2171q+8enMz0vNin9nqU1BS9jY
-         oY00xqnT5iq5Uy5sYTR3K8GmS+JlENhICIHRFe7D3ApTTf9wy4Emp7+X+PF4ifC+FKMS
-         08lZpqrwFAtA8L8trtpDenvQdPeo/AdS1WW7Mddf2zP5k0h1bO/KuQoMZCoCiwLf8j6b
-         1/kX10jIUN90G0Gkv5hDHielupo8lzZtuZBhlsB4Md9ztZlBOUtWgSRUIAA70D7t0c/u
-         ELzV4ahK3sp4n2fFMSdZkTBRs/PC1MqhqJPoWoMfJC+Gum3b9h01cq00j0iSyo2JQor1
-         h42A==
+        d=gmail.com; s=20230601; t=1765877091; x=1766481891; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yGqgIcLPwReeHWayJdPKmw8LO6wwuYchAh2n/4kUlys=;
+        b=FNQ4WCxeXFltg3TI5apYq98kMuhFzjXM/A1vptw/NrdblZrXUei1E4QAgt0fJ7Knd4
+         1jJSx/IZJ8cgUWoSAMTQwZMpopTQrcH4Alk6JJ4AmmMi8f41lJ6dWxjDWBY/fclA0s1I
+         2UpiReiRZXtrSUmdsCXssQ+3UIQui1OPjuK8X1AR3YFc+iCdP87oPi3XnDKMlYk/IVVw
+         pDtC5vNl+mqMgM2H2rbnaCnVr0rQJZqhhCM1wSxwOyl/2w2/IrXc/mElT7WjoqPOt0Ip
+         sS//nbfQBnGVTUC18ev2u0qqcLzJTF+/m9L6/n2LlZYpqeHPANeVUxC+dP7PzNXK6394
+         8cOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765876595; x=1766481395;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wUk1kM50n0Uxz+X4Sasil+Qsrm9+azMKZxJy1CXcwvQ=;
-        b=URuEw1jOopNIlI+pKDe9BjcpiLcxhf8tT/R+fMa0PMxfoLdnKjLXgjzsk2PGiqdICX
-         1xPtO1fRQEcXJj6UZHEmUovl3aEqxSmbOknnU75eEqOx3uNFrFZU6iB+uRsldlqkp6cV
-         byejjOc55wHbX0qMvaD+FkfU/G0oRvp4tVOX/x74AayV9PoBdB1R/xmMEzJ77PesXfad
-         +6wE6HpNGu1V2qpFeLiKxzwUOuyrtZVQsUiCNT1xYnZrRfhx7XqElfbY2ZoLBO2QPmLn
-         qVCsXIwNsxgGTxDbsOitIOa2xyLFH4XDJAgyMxaFHC4VwseIxpsqdgeS/inKqz7sj9BQ
-         nmxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzXgA331LUQeIaH1Y74L0pFrNmAYvKh3WNlxbzjyAZ1BBOjYsuVViVoXXwHE4crqfSekGuWB8xKeo5hA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynT1UYv5X/sGdCf03CQEKiIRfxzbtVYwkymUUvZEopJRbXytNF
-	svFOLBtXPMgttqy+RPvwuRr4uGcl1nH9UbWwVY8MgFnEMXQtGEuO03CS
-X-Gm-Gg: AY/fxX4I55vIsW2+WwduQUXiuS6JESoMFjx6EhkmI0QjDYezlWvXOYrHMF2Qw3jE/qG
-	3Sji5fwNfs5weaqwqpi4wrBrC6wElaM5PQ+jx+M8KdJe/CdYLhLEPryE1+8kzBqwvgH+vBZ94h7
-	x6HnWy/WUaUxqVDEb+8X8K5BRVhJNyzfbUCFBRS8QCxPVCfClNDe8S/U820xMQfL1z7mkLcgPnz
-	pWqTF6+Cs3IllfvxG/yLcZqsDD8fgPoo5xowXkQWJvCFZv9G17ycCR/Kr59vZmFuBE9sJI0v1Cq
-	5/z1Xdkp6A3LxKhsAx2R8B8YV6bm053glj1zOrG5GY2FBVWzEwgfOo1nd4pL/hEGlHFt82FAxl4
-	Cve6pgNL0bSrWEu+28D9M56+cb/N4W9ZEe/cr9L3UJX15OCa81bm0nvkO1BAzP0phY07FmiHSBM
-	J5PW0RQCpzXZDjegqqtG4e1zMWOf9nHkXVrupaPVcCav8psHcqhVzzEhxB9BsJLeLymOvKtNQ=
-X-Google-Smtp-Source: AGHT+IGcvtb7IJ+L808dDmiv7YL9MyFInQQcQQ78RD7Bqy08HKGO1TupLqENXqYdsVnBF5ZbUDBpgg==
-X-Received: by 2002:a17:903:2281:b0:2a0:fe4a:d67c with SMTP id d9443c01a7336-2a0fe5a2192mr62892025ad.10.1765876595089;
-        Tue, 16 Dec 2025 01:16:35 -0800 (PST)
-Received: from JF.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29ee9d50f9fsm156470525ad.44.2025.12.16.01.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 01:16:34 -0800 (PST)
-From: Jeff Lin <jefflin994697@gmail.com>
-To: linux@roeck-us.net
-Cc: jefflin994697@gmail.com,
-	grantpeltier93@gmail.com,
-	karanja99erick@gmail.com,
-	chiang.brian@inventec.com,
-	krzk@kernel.org,
-	william@wkennington.com,
-	tzungbi@kernel.org,
-	thorsten.blum@linux.dev,
-	ninad@linux.ibm.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwmon/pmbus: (isl68137) Add multiple-function pin for raa229141a
-Date: Tue, 16 Dec 2025 17:16:17 +0800
-Message-Id: <20251216091617.2581192-3-jefflin994697@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251216091617.2581192-1-jefflin994697@gmail.com>
-References: <20251216091617.2581192-1-jefflin994697@gmail.com>
+        d=1e100.net; s=20230601; t=1765877091; x=1766481891;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yGqgIcLPwReeHWayJdPKmw8LO6wwuYchAh2n/4kUlys=;
+        b=CDFpAet91DzaAynTmwz/f00roSlIOdGY++b7GSTCLeUVC7p1rtia+xnBmCrf6qlGGO
+         4Xro5TcVjNTSLNuIdIaGs5VkLVmMbT/YdXvWSWJXPoBoDvW9vFxxidGIdj3CgUeJmA2V
+         wsc485Q4u6gO4yxPy+ch5qcLWwBezb6Tgw3b+2nVD7DIzlr0UgTCk/71DCHPIeK8Llah
+         d7aM+CXZINrY81ukTRIJvfnZN8Ju960WMrUdM6b4TJlm3A9FhO33gqkUDKJ1QfJj9Vhk
+         XhWRND3cuYqV3LwBwB6l91qCZpglZzyompFWjHLjJw74CV4+cJAFLhfwZnfu7Ex8dTpH
+         7Gmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWEVf4jC3somfgJQOwIuQO4chB8pssu9hlPXvrIsSXOGtSdKKvxUtzHTT8ucwv1rEUCNQYrVh8cxG1YkA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM8ShEKunSlnhXNdQlD40Sn0AvcBQDr8mZzijLzBHVRjXJpeDt
+	HhlfPkm5KVPYJHxFoSARMk2ae+SWzsAARyP6fnUvwrQ246oLgWvGw77+
+X-Gm-Gg: AY/fxX59L9O0+u2UazXnb/0uO14WYOOZXI88vpz96NISpPJR9djk1sHg657f70IK6ne
+	5sanmWRLL6nh4IDRjxLDMME+fWyX8ze000MUD/cZIDWxJODrt4F1xCpQZvrF39s8Mj5ddX1Plej
+	bAYc9z8l3RJwjDsQ6HJXpKfMZP8AZd+E0sP4mvs5qxZYTGUDt/I/dYSQWfI0Jo51gxWHST0pB32
+	D+5rkefhqeB46GvBIh0r46cxyEmg1voX9wDPren///OB44t5S5xiesnr4IHvPDc6Cc+igKs0xBX
+	7royaCTyCe/PujWE2v7fjJFw9TCYZtEUqOxFCR+0agv0Gv6eXbARb9lkKDMczp2vHQ4b0EXF9g4
+	ccyZgndp+5kUpkXsPyYA6LrGXpj5QKE+tOysTX92IN3V22e8MX7ZT1KMbLDpLGa6hxGI+BLIsRm
+	+uf08lDConxjnXWIlD7tIlDYdThZX/hPtwub9LKiZE9mE4h/Nxi4ZhHsTRAJnH
+X-Google-Smtp-Source: AGHT+IH5c+gL6TTiACTSjzjP26WyiVh7Lt3mCiL+YYiGE0Gu1aeIglmlI+kZT85Ylt/VrHKuzQBeoA==
+X-Received: by 2002:a05:701b:2415:b0:119:e56b:98a4 with SMTP id a92af1059eb24-11f349c583amr8312277c88.11.1765877091172;
+        Tue, 16 Dec 2025 01:24:51 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e2ffac2sm53343179c88.11.2025.12.16.01.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Dec 2025 01:24:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ecc793be-9b5a-4f9a-abd1-5767141d23d8@roeck-us.net>
+Date: Tue, 16 Dec 2025 01:24:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add STEF48H28
+To: Charles Hsu <hsu.yungteng@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20251216083712.260140-1-hsu.yungteng@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251216083712.260140-1-hsu.yungteng@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In addition to supporting PMBus-based current monitoring, the RAA229141A
-also provides two multifunction pins(PIN44,PIN45) that can be used to
-sense the input and output current of nearby devices.
+On 12/16/25 00:37, Charles Hsu wrote:
+> Add device tree bindings for the STEF48H28.
+> 
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> ---
+>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index d0f7dbf15d6f..6a020385a58e 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -417,6 +417,8 @@ properties:
+>               # SparkFun Qwiic Joystick (COM-15168) with i2c interface
+>             - sparkfun,qwiic-joystick
+>               # Sierra Wireless mangOH Green SPI IoT interface
+> +          - st,stef48h28
+> +            # STMicroelectronics Hot-swap controller stef48h28
+>             - swir,mangoh-iotport-spi
+>               # Synaptics I2C touchpad
+>             - synaptics,synaptics_i2c
 
-Readings from these multifunction pins are not reported using the
-standard PMBus direct or linear data formats. Instead, they must be
-retrieved via the Renesas-specific Dicrect Memory Access(DMA)
-command codes and scaled by a factor of 10.
+It is supposed to be comment first, then definition. The above
+splits "# Sierra Wireless mangOH Green SPI IoT interface"
+from its definition, effectively claiming that st,stef48h28
+would be "# Sierra Wireless mangOH Green SPI IoT interface" and
+swir,mangoh-iotport-spi would be "# STMicroelectronics Hot-swap
+controller stef48h28".
 
-Signed-off-by: Jeff Lin <jefflin994697@gmail.com>
----
- drivers/hwmon/pmbus/isl68137.c | 45 ++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 97b61836f53a..e60771614941 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -178,6 +178,33 @@ static const struct attribute_group *isl68137_attribute_groups[] = {
- 	NULL,
- };
- 
-+#define RAA_READ_DMA_DATA 0xc5
-+#define RAA_WRITE_DMA_ADDRESS 0xc7
-+
-+/* DMA address for input current in PIN44 and output current in PIN45 */
-+static const unsigned char dma_address_in[] = { 0xD3, 0xE0 };
-+static const unsigned char dma_address_out[] = { 0x42, 0xEE };
-+static int read_val_route_by_dma(struct i2c_client *client, const char *addr)
-+{
-+	int ret;
-+	/* Set up DMA address */
-+	ret = i2c_smbus_write_i2c_block_data(client, RAA_WRITE_DMA_ADDRESS, 2, addr);
-+
-+	if (ret < 0) {
-+		dev_err(&client->dev,
-+			"Set DMA address failed for address 0x%02x 0x%02x\n", addr[0], addr[1]);
-+		return ret;
-+	}
-+	/* Read DMA data */
-+	u8 buf[2];
-+
-+	ret = i2c_smbus_read_i2c_block_data(client, RAA_READ_DMA_DATA, 2, buf);
-+	if (ret < 0)
-+		return ret;
-+	u16 value = ((u16)buf[1]<<8) | buf[0];
-+	return value;
-+};
-+
- static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 				     int phase, int reg)
- {
-@@ -207,6 +234,12 @@ static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
- 			ret = clamp_val(temp, 0, 0xffff);
- 		}
- 		break;
-+	case PMBUS_VIRT_READ_IIN:
-+		ret = read_val_route_by_dma(client, dma_address_in);
-+		break;
-+	case PMBUS_VIRT_READ_IOUT:
-+		ret = read_val_route_by_dma(client, dma_address_out);
-+		break;
- 	default:
- 		ret = -ENODATA;
- 		break;
-@@ -408,6 +441,18 @@ static int isl68137_probe(struct i2c_client *client)
- 		info->format[PSC_CURRENT_OUT] = linear;
- 		info->format[PSC_POWER] = linear;
- 		info->format[PSC_TEMPERATURE] = linear;
-+		info->format[PSC_VIRT_CURRENT_IN] = direct,
-+		info->format[PSC_VIRT_CURRENT_OUT] = direct,
-+		/* DIRECT read format 10mA/LSB */
-+		info->m[PSC_VIRT_CURRENT_IN] = 1,
-+		info->b[PSC_VIRT_CURRENT_IN] = 0,
-+		info->R[PSC_VIRT_CURRENT_IN] = 2,
-+		/* DIRECT read format 10mA/LSB */
-+		info->m[PSC_VIRT_CURRENT_OUT] = 1,
-+		info->b[PSC_VIRT_CURRENT_OUT] = 0,
-+		info->R[PSC_VIRT_CURRENT_OUT] = 2,
-+		info->func[0] |= PMBUS_HAVE_VIRT_IIN;
-+		info->func[0] |= PMBUS_HAVE_VIRT_IOUT;
- 		info->pages = 2;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
- 		info->write_word_data = raa_dmpvr2_write_word_data;
--- 
-2.34.1
+Guenter
 
