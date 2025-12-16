@@ -1,87 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1C739B6AA;
-	Tue, 16 Dec 2025 12:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89538354AF1;
+	Tue, 16 Dec 2025 13:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765888653; cv=none; b=BIfdhy7U8k52VMNhQ91oTOgvYgN47nsS3FN/FI9EI0CRxXw901cnl/V9FtgAqQ2ZvBas6B2NfClINYYdIuW2VDAQLlBDgwrIb9wuKQ532aRqj282e1zKo3CB6lBZcpMISKkjN9DVL39pvYeOsaPJRVE0y8QfHoqolTpX1jZM6zg=
+	t=1765890711; cv=none; b=JJqjVcrzVs6ePmYLduXmlxXfnRcZNuN0e89qpUznwgkDPFJjFeqn3DZV3e2pdY4I/B+RgMHli6ReqCEZZkb0za/mqCIUgP38fP/PQzSYY7TkWxFRn3XytXs9fllG6I7M+3pEXFGU6q457V8W8/fOATc9Mp1YGcxGL4ropPps7rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765888653; c=relaxed/simple;
-	bh=w1qYW2xmXgVfXXGeFISdHirQ14dBGp+01Z84bmcAoxw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L5tai7oNR1bLeue4Lfm16EVXy4VdHfmWAsvnjF8jnoOthLk1pYs8Gc4mRNUTS3ApU/EY47GnSpql3kGXiABC2wos9wjBcqBnyEY5kpI625ZJz/ywcSrWKq5QtxpZCQWF8tjgR+ODuSZrWRH819VNboxZQJq5c49LNViMqnbMBu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aR3wVGMD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765890711; c=relaxed/simple;
+	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
+	h=From:Date:Content-Type:MIME-Version:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=WjqNvnPVSnnLYiNDt9GKiqMAKsWDOG/gLl3KPDJ8QB7RZCSLCzVw1Z6uGsIVJrJKVreTbmuj7Kx7qRtlcKRDF6le3uEkRXGbxKKR7iHhCIHBTZ7EQqDQ9Jn1go3aD7Zm0KsRDqI/fv5sK2ufufz8docbp0UhoOQH0To2SvwJUOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fFwjwqyl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aR3wVGMD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD50CC4CEF1;
-	Tue, 16 Dec 2025 12:37:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fFwjwqyl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB05BC19423;
+	Tue, 16 Dec 2025 13:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765888652;
-	bh=w1qYW2xmXgVfXXGeFISdHirQ14dBGp+01Z84bmcAoxw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aR3wVGMDzNnIcKBOOE+/MF8FuwhIksnbhTapQBBhtqZTjhlO6x+KDxt4u7wGbRWBR
-	 uIQGNnaOL1iJ6rj+u9ahs7nPsz7TyD8OD5xoRWm556DnhXi6uqhHyv48g19GovYZyf
-	 +m7r7OrR/U5DziC0c02H5N4W7n3tho9s9qFCJoJxtaxgD3zmjAEPlDVhjC2pUX+I3W
-	 TPeor9o3wMi6y0HglB/kEQLUwwqu9oenAfdpokaG5IjzfCfuUPTait/g8wp7lr5UdT
-	 LnPVTqwgHpBylqiT3FYlEG3wede2hrslhhEgkl3t7efJEDN+YTgBP1+GZXhSeukbtM
-	 hKJnAm77V8CXQ==
-From: Sven Peter <sven@kernel.org>
-To: Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	James Calligeros <jcalligeros99@gmail.com>
-Cc: Sven Peter <sven@kernel.org>,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Hector Martin <marcan@marcan.st>
-Subject: Re: (subset) [PATCH v6 0/7] mfd: macsmc: add rtc, hwmon and hid subdevices
-Date: Tue, 16 Dec 2025 13:37:12 +0100
-Message-ID: <176588840252.31586.16326303552542183142.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
-References: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
+	s=k20201202; t=1765890711;
+	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
+	h=From:Date:Cc:To:In-Reply-To:References:Subject:From;
+	b=fFwjwqyl4XciRQVPx8XogJowdRcsdYKb/ioKdv1BlYgi1o+jrg3aT4TAjJOxcokcI
+	 QsSoL7E/aTwp0Xx89fUuxiHPnEWOL+3YP75h9bjRELSdSMWlSEQ92eq4Dd4ceSznxM
+	 FA0++iF6bDiu+t9pjncqus1HTUPK3svYbIJYzU9lKuMSr/WEguQljrDJAZRNzhNg42
+	 v7hCHoWhSvks4wsNhavYOp/zj1CynIbu8P4b+tzQRYE66RX9T0NwB8sBSiXWwnDEBo
+	 MIlWjd8LzSrypRzNesJoMN6k5blOrxuig+/T5bgwizw08Jd3RqQ5mQlMx9Ug7dba8M
+	 js45kMZa3qkiw==
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 16 Dec 2025 07:11:49 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Cc: netdev@vger.kernel.org, linusw@kernel.org, vkoul@kernel.org, 
+ pabeni@redhat.com, jirislaby@kernel.org, lars.povlsen@microchip.com, 
+ linux-arm-kernel@lists.infradead.org, claudiu.beznea@tuxon.dev, 
+ kuba@kernel.org, mturquette@baylibre.com, Steen.Hegelund@microchip.com, 
+ mwalle@kernel.org, tudor.ambarus@linaro.org, devicetree@vger.kernel.org, 
+ UNGLinuxDriver@microchip.com, edumazet@google.com, 
+ linux-clk@vger.kernel.org, andi.shyti@kernel.org, olivia@selenic.com, 
+ conor+dt@kernel.org, luka.perkov@sartura.hr, richard.genoud@bootlin.com, 
+ linux-hwmon@vger.kernel.org, krzk+dt@kernel.org, 
+ wsa+renesas@sang-engineering.com, Ryan.Wanner@microchip.com, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ alexandre.belloni@bootlin.com, lee@kernel.org, linux@roeck-us.net, 
+ davem@davemloft.net, gregkh@linuxfoundation.org, 
+ kavyasree.kotagiri@microchip.com, nicolas.ferre@microchip.com, 
+ andrew+netdev@lunn.ch, romain.sioen@microchip.com, sboyd@kernel.org, 
+ linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, daniel.machon@microchip.com, 
+ dmaengine@vger.kernel.org, richardcochran@gmail.com, 
+ herbert@gondor.apana.org.au, charan.pedumuru@microchip.com, 
+ linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ radu_nicolae.pirea@upb.ro
+To: Robert Marko <robert.marko@sartura.hr>
+In-Reply-To: <20251215163820.1584926-1-robert.marko@sartura.hr>
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+Message-Id: <176589052274.1815136.7513475493879599819.robh@kernel.org>
+Subject: Re: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock
+ bindings
 
-On Mon, 15 Dec 2025 19:37:44 +1000, James Calligeros wrote:
-> This series adds support for the remaining SMC subdevices. These are the
-> RTC, hwmon, and HID devices. They are being submitted together as the RTC
-> and hwmon drivers both require changes to the SMC DT schema.
+
+On Mon, 15 Dec 2025 17:35:18 +0100, Robert Marko wrote:
+> Add the required LAN969x clock bindings.
 > 
-> The RTC driver is responsible for getting and setting the system clock,
-> and requires an NVMEM cell. This series replaces Sven's original RTC driver
-> submission [1].
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+> Changes in v2:
+> * Rename file to microchip,lan9691.h
 > 
-> [...]
+>  include/dt-bindings/clock/microchip,lan9691.h | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/microchip,lan9691.h
+> 
 
-Applied to local tree (apple-soc/dt-6.20), thanks!
 
-[6/7] arm64: dts: apple: t8103,t60xx,t8112: Add SMC RTC node
-      https://github.com/AsahiLinux/linux/commit/faf317d4c705
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Best regards,
--- 
-Sven Peter <sven@kernel.org>
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/next-20251215 (best guess, 14/15 blobs matched)
+ Base: tags/next-20251215 (use --merge-base to override)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/microchip/' for 20251215163820.1584926-1-robert.marko@sartura.hr:
+
+arch/arm64/boot/dts/microchip/sparx5_pcb135_emmc.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
+	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
+arch/arm64/boot/dts/microchip/sparx5_pcb135.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
+	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
+arch/arm64/boot/dts/microchip/sparx5_pcb134.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
+	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
+arch/arm64/boot/dts/microchip/sparx5_pcb134_emmc.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
+	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
+arch/arm64/boot/dts/microchip/sparx5_pcb125.dtb: / (microchip,sparx5-pcb125): compatible: ['microchip,sparx5-pcb125', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb125'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
+	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
+
+
+
+
 
