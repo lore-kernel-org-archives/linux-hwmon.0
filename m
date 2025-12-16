@@ -1,89 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F98346FC6;
-	Tue, 16 Dec 2025 18:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2E83370FF
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 18:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765908381; cv=none; b=GjhQNaNusFXXFwrpzVpQwkNjydDZmtUVfYft473WzBgPmwjL2hfXrWfmxmcBp3wi3XA1qt/F8QO+z/qIjKWFcQgyerd3NOzhIWTQh8O2PLyTBMz6o8Ev/zPUBNKSUqnZ3GB+l9zTN/jZT4izTBuUQ884A4Xo8vFaOji7cIljpKE=
+	t=1765908852; cv=none; b=CHc+9Cqh8CYzTbNsk3eU5I+QTbgptZj0dX7xm6shIG1/2Mgt07YHE6bvphhJ213Yud1kjAtOHaGoK97Hwd1r/SrWDbnJ+Ff/5nlKT8TEOenGH+gdQ8o6yuGUHUzLuUyV4ND9t2RPJHHa9fKf0Gaq0qNtB4HBpzAxFxgWqcFAR44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765908381; c=relaxed/simple;
-	bh=Vk4PbbceALGPz0CzuqlPGpdBVd4ii+3seXY2QzMFCss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e99bfVQwyk7CKRPvDutX4z+fVOMQpKwIcOg6nUfGmPoFKFsh2lzc7mNURCoyFCvAQMXtN2J6rsTrlOJrsI2bjHABorfup6vM5KNxO+A59DXHOsXJzNiTLhOQ6QjdIAisBZX5Lf6D9BWfr17rNgoIDzFRh0dJcJvOinF5l6Gy8nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gg8flxg7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1765908852; c=relaxed/simple;
+	bh=GZaiHl5kPYgwTDmyYNu0ZdCOBaL0hWngpNEIZXR8gMI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KY0HDOJ+Hb11YmGrR5Q5qwHikD30sF6JkwX9vF8d+jekRQpABOBDnGL9sL+E9+cyRjuNu2e61lnXDOXPEo6tq2MTvU4U1tc7ukjK2v2BeF5Vm9Fo4JyKlQz9mj+S3p+ISaF4tq8RMU0msVCRG+Wqd6BpNGqF3OcoIfgrNQ/i20s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayam9lTn; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gg8flxg7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED6FC4CEF1;
-	Tue, 16 Dec 2025 18:06:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765908380;
-	bh=Vk4PbbceALGPz0CzuqlPGpdBVd4ii+3seXY2QzMFCss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gg8flxg7V4q8ARtnZvyjCnU8dbvmE3HGVzVoaIxbgsZkV5pP23vNUM8jqV5MqB69W
-	 VFk6c7k8Ckwv/nDF1Zgpw12RpnDgVolFpe3k9XCHAwQfqV+i+G2uCnVFH4WhrZesAZ
-	 7//KAX0Fq0+/tNibhS3O52jbYKstf35b7KTKCaK7m/UhgY0zHtv1OVCbBNhvt2SEN1
-	 84jeuqOZGfklx/JkhWrWdPswXbshxOAM8/DGuL5Q5BlKwmZ1GswQRsDSw8vOjgeGvC
-	 ytF8ZhMCnSv3C418GMvbQu5MuxBHKC0Mzdbj8q5VQpipEyXRm++zNL/vltF2la3DWE
-	 VfSU5RejHM/7Q==
-Date: Tue, 16 Dec 2025 18:06:09 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com,
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com,
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org,
-	mturquette@baylibre.com, sboyd@kernel.org, richardcochran@gmail.com,
-	wsa+renesas@sang-engineering.com, romain.sioen@microchip.com,
-	Ryan.Wanner@microchip.com, lars.povlsen@microchip.com,
-	tudor.ambarus@linaro.org, charan.pedumuru@microchip.com,
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
-	mwalle@kernel.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH v2 07/19] dt-bindings: serial: atmel,at91-usart: add
- microchip,lan9691-usart
-Message-ID: <20251216-sulfur-growl-ca451d845a5d@spud>
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-7-robert.marko@sartura.hr>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayam9lTn"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42fb2314f52so2355657f8f.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 10:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765908848; x=1766513648; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5DT0l62HH+N5FXjN/JQeeIZgC1m0wiWexHPfvHTn9Ok=;
+        b=ayam9lTntVCC0TMtNMMR6QN5uMbnLWhQAxJdj6foXNPnzALC6WlhC5C7eWvo9fGjnh
+         DP40NN2utRTrB9SB+Tx3++Y8cCHW0rZ1zy7Ud/bx4BvA+z98xApAqhqmPMh5YYtkGyzr
+         IHySb5xjTN4jQ0Z4jTRxhnI9lauSLp8vek2QPLGgCXxYHTJ0RyA+oqZdPlOiU5BfOYsh
+         8/DwoIo2eFoOq3AVrg/cwzvkVL0zBCIOtTwudCMMSI8M4K1WCW3Y80ji15Mmnt1VtcC5
+         CgJ0iKH+qj1cwHqHKVtbHYe88rvHk+X5f1UiPS35wXjmoQvrgFCuCCtdap1xsUXaBU6b
+         mVog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765908848; x=1766513648;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5DT0l62HH+N5FXjN/JQeeIZgC1m0wiWexHPfvHTn9Ok=;
+        b=q1cH7/5Tw46J2mIRrI4hO54/+2Nses6RjvbhVaeNJxY7+whqRR0nOOOhEuPpxkZLQl
+         NnXtZtYPn3pGfioS/Zw3vwrAEoyqkEmvLrg0ITMzQ+6PFMNJzw39I9imXud5bXpTFKKy
+         QOdj4NtbGHduAqXesWT2J2+xlnzrPaKyo+uMgUvc4hd9pJqwyp47gpCRVjea6WX4RZzJ
+         HHUNrgDL5aPvLNnp24lxYnK9W6kGa3i2nZq11mMVeBdHPkoEN4rSgFenytgB5+yAVwV9
+         QIINE38brVsl5uWDXwqaq3TgSC+5LGRq+Z90t3vDe5KPr02ayvLhFKSIQVZl3yNRkdxj
+         h2cw==
+X-Forwarded-Encrypted: i=1; AJvYcCVd07y1LWAgjSNdwSZk+6zVpuQ3+66tiVNVYRicTceTN4HivWkaARO31gJc57Dy65Wk5KuX022WYHeaVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNCAe5IBo8ufKExhjfiCObVQq/T3qp6BWiTeU2Ybvc7cPIMOGP
+	AsGhrgqsLs9rhC6t66hb7Ucpl3v2FBXyUnA9aB8B+0EnzoOFgNRKLJp9
+X-Gm-Gg: AY/fxX4v2BxabZFX7ChBQ6zVLBP/yIJ6vbFGs9MSSeaH2lIwnr6cztsNqH0HG7vzXqr
+	s5284i8wP6qRmmCzIf6fUi2FwfJU3umH4psZV83Tk8rVHQXUBmcQyTgKsVt6NxmH+5dBfsGBJJ7
+	SSUlBJFHt/lVhDrvsciqi5owUzxlbB3dAYd5o/GNfoMf8iY/kFIwJqRy/d4CBCcYO7ztPmYTm4x
+	ii31HcDMhvbDLQdtyqLRu0RAYewKg3rpKPcXKt8X6sDEfbym/JoSSDdvcuWiLQ9KRGk6r/gFx/I
+	e4myFdWBmvf1OX12eTMdRjMTIdzFozgbonhUGSmrqwlBydIAibcgCfT38QGnYaDlSuvcrJ20K4+
+	e6dka/S+gWBuzqDWm1cRXpfBkkM21BneNYW5UhfweMfd7N1tzOfoOPbJ94LuYLUyJ/2PVQ/GHYl
+	hysbJJzHiH8yRFkvUIXshqJxoJjGNCZbFk7SU=
+X-Google-Smtp-Source: AGHT+IHWED2pnU5xquHaZgiCC9dyKadUd7tRo2IOSXPv/gMYvhgnATqPcNxk1VtezoiHIhl73Nc2yA==
+X-Received: by 2002:a05:6000:2dc8:b0:431:864:d4a9 with SMTP id ffacd0b85a97d-4310864d75fmr2595998f8f.8.1765908848147;
+        Tue, 16 Dec 2025 10:14:08 -0800 (PST)
+Received: from dev-linux.homserver.local ([51.154.248.169])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4310adeeedcsm374259f8f.31.2025.12.16.10.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 10:14:07 -0800 (PST)
+From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To: Huang Rui <ray.huang@amd.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Cc: Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] hwmon: (fam15h_power) Use generic power management
+Date: Tue, 16 Dec 2025 18:13:59 +0000
+Message-ID: <20251216181401.598273-1-vaibhavgupta40@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nWQJu7IR7o2M7HAi"
-Content-Disposition: inline
-In-Reply-To: <20251215163820.1584926-7-robert.marko@sartura.hr>
+Content-Transfer-Encoding: 8bit
 
+Switch to the generic PCI power management framework and remove legacy
+.resume() callback. With the generic framework, the
+standard PCI related work like:
+        - pci_save/restore_state()
+        - pci_enable/disable_device()
+        - pci_set_power_state()
+is handled by the PCI core and this driver should implement only
+device specific operations in its respective callback function.
 
---nWQJu7IR7o2M7HAi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+---
+ drivers/hwmon/fam15h_power.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
+diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+index 8ecebea53651..efcbea2d070e 100644
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -372,15 +372,14 @@ static void tweak_runavg_range(struct pci_dev *pdev)
+ 		REG_TDP_RUNNING_AVERAGE, val);
+ }
+ 
+-#ifdef CONFIG_PM
+-static int fam15h_power_resume(struct pci_dev *pdev)
++static int fam15h_power_resume(struct device *dev)
+ {
++	struct pci_dev *pdev = to_pci_dev(dev);
+ 	tweak_runavg_range(pdev);
+ 	return 0;
+ }
+-#else
+-#define fam15h_power_resume NULL
+-#endif
++
++static DEFINE_SIMPLE_DEV_PM_OPS(fam15h_power_ops, NULL, fam15h_power_resume);
+ 
+ static int fam15h_power_init_data(struct pci_dev *f4,
+ 				  struct fam15h_power_data *data)
+@@ -493,7 +492,7 @@ static struct pci_driver fam15h_power_driver = {
+ 	.name = "fam15h_power",
+ 	.id_table = fam15h_power_id_table,
+ 	.probe = fam15h_power_probe,
+-	.resume = fam15h_power_resume,
++	.driver.pm = &fam15h_power_ops,
+ };
+ 
+ module_pci_driver(fam15h_power_driver);
+-- 
+2.51.0
 
---nWQJu7IR7o2M7HAi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaUGfkQAKCRB4tDGHoIJi
-0moRAQCqSaatI61iIIQ9uyMZ6xfS7aRicQkD674VJq8tbj4GEgEAxcYLkTfCetQr
-MhTj9BGTs2f+HLwIcr5hTiAm78BZkAo=
-=MAdl
------END PGP SIGNATURE-----
-
---nWQJu7IR7o2M7HAi--
