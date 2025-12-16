@@ -1,68 +1,68 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829D433A036
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A60233A6FE
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765878364; cv=none; b=NbCvWaNNrjBnozGQo7QtQAWQ+V8T79RckPf9op+hz3NueEQrZ3mHvQ3XW6m8c0SDyoyWBsrKMXlKfjVpIFSX2OJeGIZfeJZLUBsvI2UMw5KLTa4ZBE+4mm37JrYpaMuIUh6H8zqRVK1x9Rih2JNCqaBMQ5JGC+uj0oP5w+q5+Og=
+	t=1765878968; cv=none; b=vA3E1Knv6svK3oabf0MtXhsPI59IvfJteesVkEtXLe0HK5jJ7qX5VqBukTE78/+6W/vX0PPp7AF4hWsH4hEXYL/RvBkmZXCa/3wIxmtADPaO/0obzj6S1nxzE5gO/Bf2giQ/gjfXUpgjEQ1oe05Yqr6ySXJTAHYBBXubVlLyw/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765878364; c=relaxed/simple;
-	bh=EAiYbw4WyMor4FXjwHkuVOsZqKsHvzMU5iwpf/bs4Jg=;
+	s=arc-20240116; t=1765878968; c=relaxed/simple;
+	bh=XJJIHr6Q1JJAgL+vBlV3w1lpSRk1guGZLjwwI2qXOAQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=orqEc670035Xwl4KXsE4DLxkuR+Fj1icM9CdwkGuJ4s9RWwGet9TZwAqGn+I7F+PKqng2XCxwtqPylpHruKeUf277oA0X4aFluWk23SRopKWKvpoUAIKeHGIaYtlKlNVawYoL3ihjZ4dx8dVD3/1ulBLLMCFZ8zqGRG6cUB+R5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9oAdpBY; arc=none smtp.client-ip=209.85.214.171
+	 In-Reply-To:Content-Type; b=f0JFGO1LiVFWHXfpGm+oS50JK3BkzyvbzRU1t9YlkVGc7QWKUlkMvkIQWM04LQpVKlBz+jM4GWMK2NzTQi40BwH5wxy4rxkA7Ju31a7zuznP6+4FOcIH4DvUnh6WjMPnJeDlTFmRl0BREDi1qE5xmJAiPC9JSVPaWE/6pwygE7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K2OZftK4; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9oAdpBY"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a09757004cso33768885ad.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:46:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2OZftK4"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34c71f462d2so2115088a91.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:56:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765878362; x=1766483162; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765878965; x=1766483765; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rAETedq3CiImREQzgcFlRHq/EHpa05ubN3d8W7ARWMs=;
-        b=U9oAdpBYKgqqSsgOKN/0e2AgD5E6/KV4VG6QikSDSiIMQlzHqD6LP7XJdtA2+QFzrP
-         FpymPxRBOI/d2ZpTDUkMzYR8xhO9KJy7Gr4oeY6aIIx+Z5C2S9nZMTmrDErsC89TBG1J
-         hrVe11d3EsxhK3CLaRFdFuPSQO4pdVCDdZPKuXExi5aGd28Ye5Xp00lXkuduWbDLDqu6
-         gTvBLWxwSfYQM6m6QLDtvNrAlMQ7kE1eT6cgo/AQLcth+NsgcvrcfB6haGIHfr1c2Qw2
-         X11CSXLddtCoe8NSSnNMJcxMH/YOtpLn9e2cu0TBsaZbQlfi6aAySnG/ZT683J2sxJYx
-         Xwng==
+        bh=tWAo9yxcAKMS797MIfjEnL+hjPHa9s8SOsUEcC0Lt2g=;
+        b=K2OZftK4rXmJUPk7ML7Kgj3/VkTPnPUQSKFDWRwmyjBbLImABfNcFOKhS5BlGRWi4c
+         52YvFfcBRNH7jjhwQEbdusQ24CBNJK421FlGJPemRUn+gKzwKJ2dniXAt+XwKmbuxZI9
+         QkVXLjj8mJWF6/Vz+xJG9W6JQTRGwZYMilSt+4G7LmvTQ5tT+Pr9XNYiP5rv01uBt1lF
+         zkQ5tJ7LXAA/Kg8AyGIVK7ypLkxcBuaWYmTEgoP5+dMlMKF8YPRkAA/XyMpURgtDwbAx
+         +jpUBsRAFkpk/Qry+gXNAntxjqUFKghgoPvhpXCM2AlA4r8h6i9ZTI4asWKznKXohzRV
+         lemg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765878362; x=1766483162;
+        d=1e100.net; s=20230601; t=1765878965; x=1766483765;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rAETedq3CiImREQzgcFlRHq/EHpa05ubN3d8W7ARWMs=;
-        b=K8yKhUD9JUrW3DQk+exifiCUOPla5qGxblKID95+cEKzbasFbHcIYY6rkvTL86ygPp
-         50ldSzHZqg/4Y6lEaL2/KYsavOylUNxmupHTManf0Nn+5tfqEUk4XMYfH+uoULJCJWl5
-         OdQfQcl2iFbnjGIW0KiJP3jOPLW1kuGlatR+AyT1Z0IoOEUqQUW/IYtl9ibfvKp6hwkH
-         Oy2Sy1zfeajwtc4JQoihY+jSeYytKpS6v6Kj334Kr7j1brHn4KVPhHKu0zd/ware4bVl
-         2LL8odHobBl1IcjHnbfr8nA6wN7dwY+aRtZcwXJqv2S3CcoKGuY+9y3iF0xX3vfJsp3d
-         0Vmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWS6YQnhoy8IRYAG6ibAIaXlgQmSuhK1kejoRzUyvpSmRDvPLCJGIev48yCqZQ/NfJuM9eAbN/fFgoN4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRItWjT6e49+dJD9sGBzkVPlv73T/3a4R3XlO/UK78EHaqQUaZ
-	j51IU+rnyGC1fEwwmWTev8fV5DQ4EmHVthXh3ScUTML5y0umx8hA4O49
-X-Gm-Gg: AY/fxX4Yz8JH1RyTpbDVdsT8nYg53wq0YmYuf9fjvsaOYnMIzlwGFEiphSVI0LoScpo
-	yAJysLk1vHkRBgOg/1NLYVY3irqAnSSN1LYqxU26of+8KqwhoImtUdAEUCmdqK53StlSCYOx/SC
-	TtVEiUlTl1/H8OriX8MsgEZxBGryGaylQOZffa+fKIGzoDq5adX0tMfE1hiXTPdFCWBuIvZXKNZ
-	bRNQroPHgNln27gd4bIHoyp91UfYYDbASJXJ/pIS1Ud3bRd84Ey3blCKeL9kVwSRM4gYTSZitlT
-	4h7mO54SibCtYVmR08GcfTQyhF6KYOtTCr2zfIumq9nVkIOjyugClJRsDDoQsasMplCJMpiNlXR
-	bC/1g3fd6O/GaaFv9vjBu/hdrBKl4yTHa/E7iv1B3088HAJWo3Ji9YHGIuVS+oEx2LHh7kxHe5M
-	m2Qt9VrX2vLtp2PCIgw6KEVyksL6vFJl6anpcMBn+RykSZ9j/XvDAgJO9TNlu45Fzu2/+8hUQ=
-X-Google-Smtp-Source: AGHT+IHHvVDhH7//NYZQZvYd4lFteU36oqFbLz2pEOppKYSpOJFZniQIKmUDEToL173aivtEOcFLbA==
-X-Received: by 2002:a05:7022:f316:b0:11b:9386:a37e with SMTP id a92af1059eb24-11f34c49e5emr9677618c88.45.1765878361666;
-        Tue, 16 Dec 2025 01:46:01 -0800 (PST)
+        bh=tWAo9yxcAKMS797MIfjEnL+hjPHa9s8SOsUEcC0Lt2g=;
+        b=clgRwebuOCLN3dZ4RD85Q97H+Kmb647ZuwrfbZjfQdCvIegEpJQH8H9Zmr9GECJZ64
+         M3BL3fhB6M6rqrvKCTFFoi5N+mNxfwSjXppSMJMp/72ZxCUy3jouyX9XveCPrZslDdSD
+         O1JAiIydD5NkyHO4Fe8nVi4CLZW30kpAD8nzZMIQrbZWCQW0n6ZePLLeDKaSIG+fhvbe
+         IOvqaj3XUzXCR8jVXNLiX5V9za3tUtS55tES97VYJVYBg7KainvSMsX9I4nR5Ia4fPrr
+         gV5smvERn07ZjLXhq0jYbnTEYzXQaharJsuSvZbbIJD4RL5bEuC4RUYQlbDF03QVreC7
+         gqGg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8ftKIo1A9GUe+D8IDLPDCbYh9Rr5FyCr9kvAIF3XAErtMQNEmD3cmpwkY3Fve/D3ogyc73SCDni6kwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeSCSc/SHZmT13bjG8ck6z83jdaVqZzRargmnF1Tjg/mmNY+u5
+	MXwKJh4rEebiJTBPwTGGsPax3OIsFahefCyYwqre2JKFrm57M6nx/tVU
+X-Gm-Gg: AY/fxX4hmOYImVBQLvlkDZZL0Yy8fxxiFh+2ftgUlWx48FQ22E+8ZlNGcx7q4jiX923
+	Nr3+DgREdo84PG0YlrU2Opt8K4lMB2SqsVMEQNa3cHNfyBqDo7QabfcCQlfEX4hZh+jqgBnDlu3
+	zGDF12pSMi6A2c1UiDQPiB8kRucF3Pbk8vL7C3pW14dy0rDenf+fzymmer2gp0Pd+azIKYT0auh
+	dd34G74cpL2rL6sdA3qQONbffjZvjaVJo86dn8Lp98P5rr72EhuwrA1xlz3pqIvVfF3xArnRCT9
+	8OSxKcO/Bj+YueemC8j3uoT+46fRoEjjHMef1H5P4p8x6AMsa1mg0xo4JsBZM7NvLxAEbbOn178
+	jIW1/c3hJS6ovH+V4JTyYQgfB/CB+Rv64FEK3O8VIja7/SUqasfMHwy2S5t/udBBdc8qRKYQQ7H
+	9cd92MPodXTvm9nKoIVjJjNdaAFDELunPAY6xZS+m5seX2e4DUlM/9bQVWrAWL
+X-Google-Smtp-Source: AGHT+IGCCiMGid6OExMc/l5cKtrt3bs+vHOYZLQrQC8t6fnPCDoiLTqZu72DKzZlvN90IPKyX82JvA==
+X-Received: by 2002:a05:7022:1b0c:b0:11b:ceee:a49f with SMTP id a92af1059eb24-11f349a17bdmr9539870c88.8.1765878965104;
+        Tue, 16 Dec 2025 01:56:05 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e30491dsm54392693c88.16.2025.12.16.01.46.00
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f43288340sm17296118c88.6.2025.12.16.01.56.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 01:46:01 -0800 (PST)
+        Tue, 16 Dec 2025 01:56:04 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c8195f04-3492-4cf9-b2b0-6f3a1198ffa2@roeck-us.net>
-Date: Tue, 16 Dec 2025 01:45:59 -0800
+Message-ID: <186a5116-da08-4ec3-a410-4e308fb0cf0b@roeck-us.net>
+Date: Tue, 16 Dec 2025 01:56:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,14 +70,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hwmon: (pmbus) Add support for multiple-function pin
+Subject: Re: [PATCH 2/2] hwmon/pmbus: (isl68137) Add multiple-function pin for
+ raa229141a
 To: Jeff Lin <jefflin994697@gmail.com>
 Cc: grantpeltier93@gmail.com, karanja99erick@gmail.com,
  chiang.brian@inventec.com, krzk@kernel.org, william@wkennington.com,
  tzungbi@kernel.org, thorsten.blum@linux.dev, ninad@linux.ibm.com,
  linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20251216091617.2581192-1-jefflin994697@gmail.com>
- <20251216091617.2581192-2-jefflin994697@gmail.com>
+ <20251216091617.2581192-3-jefflin994697@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,34 +124,104 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251216091617.2581192-2-jefflin994697@gmail.com>
+In-Reply-To: <20251216091617.2581192-3-jefflin994697@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/16/25 01:16, Jeff Lin wrote:
-> Some pmbus chip support the additional multiple-function pin, which can
-> detect and provide the connected device's current reading. The data
-> format of the multiple-function ping must be confirmed with the chip
-> vendor, as it may vary between different chips. However, it is
-> problematic if the data format differs from the original 'iin' and 'iout'
-> and we want to show both the current from multiple-function pin and the
-> original 'iin' and 'iout'.
+> In addition to supporting PMBus-based current monitoring, the RAA229141A
+> also provides two multifunction pins(PIN44,PIN45) that can be used to
+> sense the input and output current of nearby devices.
 > 
-> To solve the problem, add support for additional virtual current input
-> and virtual current output, call it 'viin' and 'viout', respectively.
+> Readings from these multifunction pins are not reported using the
+> standard PMBus direct or linear data formats. Instead, they must be
+> retrieved via the Renesas-specific Dicrect Memory Access(DMA)
+> command codes and scaled by a factor of 10.
 > 
+Is there a public datasheet to explain this ?
 
-Those are just additional current input and output values. That does not
-require additional sensor classes. Just use the chip driver to map the
-readings from the chip format to the format used by the existing iin and
-iout (there is no 'viin" or "viout").
-
-Also, please point to the standard regarding "multiple function pin".
-The term must only be used in the common code or definitions if it has
-a reference in the standard. Otherwise it is just a manufacturer specific
-extension which has no place in common code. The second patch of the series,
-which accesses some very vendor specific functions, strongly suggests that
-this is the case.
+ From what I can see in this code, it does not even remotely look like
+it is part of the PMBus standard. It looks like very vendor specific
+additional current values. Also, multi-function implies that those are,
+as the name says, multi-function pins. There needs to be additional
+information explaining how they are associated to specific functionality
+such as input or output  current. Just declaring that it be so is insufficient.
 
 Guenter
+
+> Signed-off-by: Jeff Lin <jefflin994697@gmail.com>
+> ---
+>   drivers/hwmon/pmbus/isl68137.c | 45 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 45 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+> index 97b61836f53a..e60771614941 100644
+> --- a/drivers/hwmon/pmbus/isl68137.c
+> +++ b/drivers/hwmon/pmbus/isl68137.c
+> @@ -178,6 +178,33 @@ static const struct attribute_group *isl68137_attribute_groups[] = {
+>   	NULL,
+>   };
+>   
+> +#define RAA_READ_DMA_DATA 0xc5
+> +#define RAA_WRITE_DMA_ADDRESS 0xc7
+> +
+> +/* DMA address for input current in PIN44 and output current in PIN45 */
+> +static const unsigned char dma_address_in[] = { 0xD3, 0xE0 };
+> +static const unsigned char dma_address_out[] = { 0x42, 0xEE };
+> +static int read_val_route_by_dma(struct i2c_client *client, const char *addr)
+> +{
+> +	int ret;
+> +	/* Set up DMA address */
+> +	ret = i2c_smbus_write_i2c_block_data(client, RAA_WRITE_DMA_ADDRESS, 2, addr);
+> +
+> +	if (ret < 0) {
+> +		dev_err(&client->dev,
+> +			"Set DMA address failed for address 0x%02x 0x%02x\n", addr[0], addr[1]);
+> +		return ret;
+> +	}
+> +	/* Read DMA data */
+> +	u8 buf[2];
+> +
+> +	ret = i2c_smbus_read_i2c_block_data(client, RAA_READ_DMA_DATA, 2, buf);
+> +	if (ret < 0)
+> +		return ret;
+> +	u16 value = ((u16)buf[1]<<8) | buf[0];
+> +	return value;
+> +};
+> +
+>   static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
+>   				     int phase, int reg)
+>   {
+> @@ -207,6 +234,12 @@ static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
+>   			ret = clamp_val(temp, 0, 0xffff);
+>   		}
+>   		break;
+> +	case PMBUS_VIRT_READ_IIN:
+> +		ret = read_val_route_by_dma(client, dma_address_in);
+> +		break;
+> +	case PMBUS_VIRT_READ_IOUT:
+> +		ret = read_val_route_by_dma(client, dma_address_out);
+> +		break;
+>   	default:
+>   		ret = -ENODATA;
+>   		break;
+> @@ -408,6 +441,18 @@ static int isl68137_probe(struct i2c_client *client)
+>   		info->format[PSC_CURRENT_OUT] = linear;
+>   		info->format[PSC_POWER] = linear;
+>   		info->format[PSC_TEMPERATURE] = linear;
+> +		info->format[PSC_VIRT_CURRENT_IN] = direct,
+> +		info->format[PSC_VIRT_CURRENT_OUT] = direct,
+> +		/* DIRECT read format 10mA/LSB */
+> +		info->m[PSC_VIRT_CURRENT_IN] = 1,
+> +		info->b[PSC_VIRT_CURRENT_IN] = 0,
+> +		info->R[PSC_VIRT_CURRENT_IN] = 2,
+> +		/* DIRECT read format 10mA/LSB */
+> +		info->m[PSC_VIRT_CURRENT_OUT] = 1,
+> +		info->b[PSC_VIRT_CURRENT_OUT] = 0,
+> +		info->R[PSC_VIRT_CURRENT_OUT] = 2,
+> +		info->func[0] |= PMBUS_HAVE_VIRT_IIN;
+> +		info->func[0] |= PMBUS_HAVE_VIRT_IOUT;
+>   		info->pages = 2;
+>   		info->read_word_data = raa_dmpvr2_read_word_data;
+>   		info->write_word_data = raa_dmpvr2_write_word_data;
 
