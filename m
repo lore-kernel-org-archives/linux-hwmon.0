@@ -1,68 +1,68 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0401E343D74
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829D433A036
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 09:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765877093; cv=none; b=A21JPXRFIxvv7voe6oWIPrAy4qsbRgwUJh9WcC7GAyZull98m/GJCA3yGzqUS3dbysUvltpEGM9phPQvu576XkZzJIsAx6kEUaOMpEQt3rDXo8NsxbeIL9HbRkfaazSUCBGhAts+mv8HfcyarsnChPH5MzN8/7/BBuRNk1zdxCM=
+	t=1765878364; cv=none; b=NbCvWaNNrjBnozGQo7QtQAWQ+V8T79RckPf9op+hz3NueEQrZ3mHvQ3XW6m8c0SDyoyWBsrKMXlKfjVpIFSX2OJeGIZfeJZLUBsvI2UMw5KLTa4ZBE+4mm37JrYpaMuIUh6H8zqRVK1x9Rih2JNCqaBMQ5JGC+uj0oP5w+q5+Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765877093; c=relaxed/simple;
-	bh=paEefmxoehvY+YUe+LCWiicYBOi0U2+9xjA+hvX7oaw=;
+	s=arc-20240116; t=1765878364; c=relaxed/simple;
+	bh=EAiYbw4WyMor4FXjwHkuVOsZqKsHvzMU5iwpf/bs4Jg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oeZIcB/jybcVg2UlVkT/T+g1lrZA6DqVF/lMnjQbUxUkTTCXUmeU9UdDDBQEQH+F+ebnAX43ye/wxbAJ44ppkWQOeIjhIua5EJTYPi5AvtEHG7XGKLCtCfQwfGpk/OrsIts5zfDSiFkzvKdYWZ/tkvc1spd03YOElmX/SeB6/MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FNQ4WCxe; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=orqEc670035Xwl4KXsE4DLxkuR+Fj1icM9CdwkGuJ4s9RWwGet9TZwAqGn+I7F+PKqng2XCxwtqPylpHruKeUf277oA0X4aFluWk23SRopKWKvpoUAIKeHGIaYtlKlNVawYoL3ihjZ4dx8dVD3/1ulBLLMCFZ8zqGRG6cUB+R5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9oAdpBY; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FNQ4WCxe"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a081c163b0so31135835ad.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:24:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9oAdpBY"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a09757004cso33768885ad.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 01:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765877091; x=1766481891; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1765878362; x=1766483162; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGqgIcLPwReeHWayJdPKmw8LO6wwuYchAh2n/4kUlys=;
-        b=FNQ4WCxeXFltg3TI5apYq98kMuhFzjXM/A1vptw/NrdblZrXUei1E4QAgt0fJ7Knd4
-         1jJSx/IZJ8cgUWoSAMTQwZMpopTQrcH4Alk6JJ4AmmMi8f41lJ6dWxjDWBY/fclA0s1I
-         2UpiReiRZXtrSUmdsCXssQ+3UIQui1OPjuK8X1AR3YFc+iCdP87oPi3XnDKMlYk/IVVw
-         pDtC5vNl+mqMgM2H2rbnaCnVr0rQJZqhhCM1wSxwOyl/2w2/IrXc/mElT7WjoqPOt0Ip
-         sS//nbfQBnGVTUC18ev2u0qqcLzJTF+/m9L6/n2LlZYpqeHPANeVUxC+dP7PzNXK6394
-         8cOA==
+        bh=rAETedq3CiImREQzgcFlRHq/EHpa05ubN3d8W7ARWMs=;
+        b=U9oAdpBYKgqqSsgOKN/0e2AgD5E6/KV4VG6QikSDSiIMQlzHqD6LP7XJdtA2+QFzrP
+         FpymPxRBOI/d2ZpTDUkMzYR8xhO9KJy7Gr4oeY6aIIx+Z5C2S9nZMTmrDErsC89TBG1J
+         hrVe11d3EsxhK3CLaRFdFuPSQO4pdVCDdZPKuXExi5aGd28Ye5Xp00lXkuduWbDLDqu6
+         gTvBLWxwSfYQM6m6QLDtvNrAlMQ7kE1eT6cgo/AQLcth+NsgcvrcfB6haGIHfr1c2Qw2
+         X11CSXLddtCoe8NSSnNMJcxMH/YOtpLn9e2cu0TBsaZbQlfi6aAySnG/ZT683J2sxJYx
+         Xwng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765877091; x=1766481891;
+        d=1e100.net; s=20230601; t=1765878362; x=1766483162;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yGqgIcLPwReeHWayJdPKmw8LO6wwuYchAh2n/4kUlys=;
-        b=CDFpAet91DzaAynTmwz/f00roSlIOdGY++b7GSTCLeUVC7p1rtia+xnBmCrf6qlGGO
-         4Xro5TcVjNTSLNuIdIaGs5VkLVmMbT/YdXvWSWJXPoBoDvW9vFxxidGIdj3CgUeJmA2V
-         wsc485Q4u6gO4yxPy+ch5qcLWwBezb6Tgw3b+2nVD7DIzlr0UgTCk/71DCHPIeK8Llah
-         d7aM+CXZINrY81ukTRIJvfnZN8Ju960WMrUdM6b4TJlm3A9FhO33gqkUDKJ1QfJj9Vhk
-         XhWRND3cuYqV3LwBwB6l91qCZpglZzyompFWjHLjJw74CV4+cJAFLhfwZnfu7Ex8dTpH
-         7Gmg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEVf4jC3somfgJQOwIuQO4chB8pssu9hlPXvrIsSXOGtSdKKvxUtzHTT8ucwv1rEUCNQYrVh8cxG1YkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM8ShEKunSlnhXNdQlD40Sn0AvcBQDr8mZzijLzBHVRjXJpeDt
-	HhlfPkm5KVPYJHxFoSARMk2ae+SWzsAARyP6fnUvwrQ246oLgWvGw77+
-X-Gm-Gg: AY/fxX59L9O0+u2UazXnb/0uO14WYOOZXI88vpz96NISpPJR9djk1sHg657f70IK6ne
-	5sanmWRLL6nh4IDRjxLDMME+fWyX8ze000MUD/cZIDWxJODrt4F1xCpQZvrF39s8Mj5ddX1Plej
-	bAYc9z8l3RJwjDsQ6HJXpKfMZP8AZd+E0sP4mvs5qxZYTGUDt/I/dYSQWfI0Jo51gxWHST0pB32
-	D+5rkefhqeB46GvBIh0r46cxyEmg1voX9wDPren///OB44t5S5xiesnr4IHvPDc6Cc+igKs0xBX
-	7royaCTyCe/PujWE2v7fjJFw9TCYZtEUqOxFCR+0agv0Gv6eXbARb9lkKDMczp2vHQ4b0EXF9g4
-	ccyZgndp+5kUpkXsPyYA6LrGXpj5QKE+tOysTX92IN3V22e8MX7ZT1KMbLDpLGa6hxGI+BLIsRm
-	+uf08lDConxjnXWIlD7tIlDYdThZX/hPtwub9LKiZE9mE4h/Nxi4ZhHsTRAJnH
-X-Google-Smtp-Source: AGHT+IH5c+gL6TTiACTSjzjP26WyiVh7Lt3mCiL+YYiGE0Gu1aeIglmlI+kZT85Ylt/VrHKuzQBeoA==
-X-Received: by 2002:a05:701b:2415:b0:119:e56b:98a4 with SMTP id a92af1059eb24-11f349c583amr8312277c88.11.1765877091172;
-        Tue, 16 Dec 2025 01:24:51 -0800 (PST)
+        bh=rAETedq3CiImREQzgcFlRHq/EHpa05ubN3d8W7ARWMs=;
+        b=K8yKhUD9JUrW3DQk+exifiCUOPla5qGxblKID95+cEKzbasFbHcIYY6rkvTL86ygPp
+         50ldSzHZqg/4Y6lEaL2/KYsavOylUNxmupHTManf0Nn+5tfqEUk4XMYfH+uoULJCJWl5
+         OdQfQcl2iFbnjGIW0KiJP3jOPLW1kuGlatR+AyT1Z0IoOEUqQUW/IYtl9ibfvKp6hwkH
+         Oy2Sy1zfeajwtc4JQoihY+jSeYytKpS6v6Kj334Kr7j1brHn4KVPhHKu0zd/ware4bVl
+         2LL8odHobBl1IcjHnbfr8nA6wN7dwY+aRtZcwXJqv2S3CcoKGuY+9y3iF0xX3vfJsp3d
+         0Vmg==
+X-Forwarded-Encrypted: i=1; AJvYcCWS6YQnhoy8IRYAG6ibAIaXlgQmSuhK1kejoRzUyvpSmRDvPLCJGIev48yCqZQ/NfJuM9eAbN/fFgoN4Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRItWjT6e49+dJD9sGBzkVPlv73T/3a4R3XlO/UK78EHaqQUaZ
+	j51IU+rnyGC1fEwwmWTev8fV5DQ4EmHVthXh3ScUTML5y0umx8hA4O49
+X-Gm-Gg: AY/fxX4Yz8JH1RyTpbDVdsT8nYg53wq0YmYuf9fjvsaOYnMIzlwGFEiphSVI0LoScpo
+	yAJysLk1vHkRBgOg/1NLYVY3irqAnSSN1LYqxU26of+8KqwhoImtUdAEUCmdqK53StlSCYOx/SC
+	TtVEiUlTl1/H8OriX8MsgEZxBGryGaylQOZffa+fKIGzoDq5adX0tMfE1hiXTPdFCWBuIvZXKNZ
+	bRNQroPHgNln27gd4bIHoyp91UfYYDbASJXJ/pIS1Ud3bRd84Ey3blCKeL9kVwSRM4gYTSZitlT
+	4h7mO54SibCtYVmR08GcfTQyhF6KYOtTCr2zfIumq9nVkIOjyugClJRsDDoQsasMplCJMpiNlXR
+	bC/1g3fd6O/GaaFv9vjBu/hdrBKl4yTHa/E7iv1B3088HAJWo3Ji9YHGIuVS+oEx2LHh7kxHe5M
+	m2Qt9VrX2vLtp2PCIgw6KEVyksL6vFJl6anpcMBn+RykSZ9j/XvDAgJO9TNlu45Fzu2/+8hUQ=
+X-Google-Smtp-Source: AGHT+IHHvVDhH7//NYZQZvYd4lFteU36oqFbLz2pEOppKYSpOJFZniQIKmUDEToL173aivtEOcFLbA==
+X-Received: by 2002:a05:7022:f316:b0:11b:9386:a37e with SMTP id a92af1059eb24-11f34c49e5emr9677618c88.45.1765878361666;
+        Tue, 16 Dec 2025 01:46:01 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e2ffac2sm53343179c88.11.2025.12.16.01.24.50
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e30491dsm54392693c88.16.2025.12.16.01.46.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 01:24:50 -0800 (PST)
+        Tue, 16 Dec 2025 01:46:01 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ecc793be-9b5a-4f9a-abd1-5767141d23d8@roeck-us.net>
-Date: Tue, 16 Dec 2025 01:24:49 -0800
+Message-ID: <c8195f04-3492-4cf9-b2b0-6f3a1198ffa2@roeck-us.net>
+Date: Tue, 16 Dec 2025 01:45:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,10 +70,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add STEF48H28
-To: Charles Hsu <hsu.yungteng@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20251216083712.260140-1-hsu.yungteng@gmail.com>
+Subject: Re: [PATCH 1/2] hwmon: (pmbus) Add support for multiple-function pin
+To: Jeff Lin <jefflin994697@gmail.com>
+Cc: grantpeltier93@gmail.com, karanja99erick@gmail.com,
+ chiang.brian@inventec.com, krzk@kernel.org, william@wkennington.com,
+ tzungbi@kernel.org, thorsten.blum@linux.dev, ninad@linux.ibm.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251216091617.2581192-1-jefflin994697@gmail.com>
+ <20251216091617.2581192-2-jefflin994697@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -119,38 +123,34 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251216083712.260140-1-hsu.yungteng@gmail.com>
+In-Reply-To: <20251216091617.2581192-2-jefflin994697@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/16/25 00:37, Charles Hsu wrote:
-> Add device tree bindings for the STEF48H28.
+On 12/16/25 01:16, Jeff Lin wrote:
+> Some pmbus chip support the additional multiple-function pin, which can
+> detect and provide the connected device's current reading. The data
+> format of the multiple-function ping must be confirmed with the chip
+> vendor, as it may vary between different chips. However, it is
+> problematic if the data format differs from the original 'iin' and 'iout'
+> and we want to show both the current from multiple-function pin and the
+> original 'iin' and 'iout'.
 > 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
-> ---
->   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->   1 file changed, 2 insertions(+)
+> To solve the problem, add support for additional virtual current input
+> and virtual current output, call it 'viin' and 'viout', respectively.
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index d0f7dbf15d6f..6a020385a58e 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -417,6 +417,8 @@ properties:
->               # SparkFun Qwiic Joystick (COM-15168) with i2c interface
->             - sparkfun,qwiic-joystick
->               # Sierra Wireless mangOH Green SPI IoT interface
-> +          - st,stef48h28
-> +            # STMicroelectronics Hot-swap controller stef48h28
->             - swir,mangoh-iotport-spi
->               # Synaptics I2C touchpad
->             - synaptics,synaptics_i2c
 
-It is supposed to be comment first, then definition. The above
-splits "# Sierra Wireless mangOH Green SPI IoT interface"
-from its definition, effectively claiming that st,stef48h28
-would be "# Sierra Wireless mangOH Green SPI IoT interface" and
-swir,mangoh-iotport-spi would be "# STMicroelectronics Hot-swap
-controller stef48h28".
+Those are just additional current input and output values. That does not
+require additional sensor classes. Just use the chip driver to map the
+readings from the chip format to the format used by the existing iin and
+iout (there is no 'viin" or "viout").
+
+Also, please point to the standard regarding "multiple function pin".
+The term must only be used in the common code or definitions if it has
+a reference in the standard. Otherwise it is just a manufacturer specific
+extension which has no place in common code. The second patch of the series,
+which accesses some very vendor specific functions, strongly suggests that
+this is the case.
 
 Guenter
 
