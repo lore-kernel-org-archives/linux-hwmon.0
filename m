@@ -1,154 +1,147 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B17B2D877A
-	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 19:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3952BDC0A
+	for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 19:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765913764; cv=none; b=rKL9R8ISgnX++2QOBIb/re/sNXGCH1MGUULc6r278APmtabqLwnl9Pyi6/TyW5K/I/JfzquNZR+yCstPB4HropR/fCCfgHxl1DPS4H2cxTSnKnobM5LsnHSSmELm1ZBKRPRjzObi1ZNk752GlX5pJpkb9kFG6QIpNkiayQN2II8=
+	t=1765915158; cv=none; b=A6lencsdVEUewIFeKxVVwP1hnVv2e0QxP4m1byQ82g5gfPGGcgz34eGrgDBdAJt2KzvOyRAJ5N3C+tYYcXtrBOl0TPuCkMhcUmXVmrJhhEgvkXdLVYFw97Bcml1Ib7OnKZDkOzEK57YEp7A02M8vL2tkS8UnuPpTIt+eyPinTAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765913764; c=relaxed/simple;
-	bh=DyIKB2hJJPGNfOXTwj8MacflXxSMbpI7LrFqsSt1Jpw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tx78MWdyVI+UIShvRthAcv1GxJGr4DIKc9JuMe5nQhZF1QgSB0MyABGtSD38c43oXdwwmQyprjwcmkEwt+JLnc9lY9wKrbcyO9gpXpgsxI5VYRVZFbySoSGcbUppN/6lqw1Zyu18IC+SnZRet1kpsejJatNYVje7C6SS6xTG7+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=PIdvrWND; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+	s=arc-20240116; t=1765915158; c=relaxed/simple;
+	bh=vz6zEIxg/+wl/MDvP+RvMv0qeimFFpWWQmNPdyV4ahQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oVajPJ09Lk+4aEqHlzV5YVWhzxrYBdi/XGhnHn4PQX4yBXhtnYogV/WT5rFwAd5z4l2Vh/fh+dY2BxrbXrqvKQb4O01/gnOf2ViAxxYcrUcd/sRkBqNFl+IbCSLzpPpOqOuKX0jhdn4Sblz5OTs9TrpFbo+Lt6QcMd/qu2ZMuOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQkHgQ8r; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="PIdvrWND"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b79e7112398so990424966b.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 11:36:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQkHgQ8r"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so55426075e9.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Dec 2025 11:59:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1765913760; x=1766518560; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1765915155; x=1766519955; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DyIKB2hJJPGNfOXTwj8MacflXxSMbpI7LrFqsSt1Jpw=;
-        b=PIdvrWNDDkXLnkqIgGC29aaQhDxS5xxdJwzQ1Gvo0YMV3PEI80xK6mO1gu11OnOZuv
-         3BLETZeImjGoprIOUDGIYMfTiw9+Dg5wruZ7KlEYpOW0qxKg2h8/Zl840vJXydD2Ubyd
-         xTnarw5j30I9lIp8OYc66k7Meoa1IGPl3DxM5IQyWajo+GU68PnkbIDOB8co1xgvUCvH
-         wbYkynT7pDB4z9GALnUaExA6zSk5k+Uw6Qj+BBCGTlGixU8inglD6zNiJSQR8rzuOfdE
-         jIUbfq1xEm/qbPDVHWByqjleRo/qIpJQJIYdbJwHNEooTlBabuq+0gXf6k8BNpA5uKJp
-         3baA==
+        bh=GjniS35+gFl94KgDPsESP+GSizMKZS5/qxbShY9gflU=;
+        b=mQkHgQ8rCUqYWNQeWJT+spqbmbXpQXZBVbGCJeUWSHpIIPcLjCD4WKKtC8gq5X3V1h
+         uPiB7fkh1u26HvOc8vP0tjZDG+gQ1gR9wTMPHbNV4zBRAbei19yhIG0FspKIuG3edPK0
+         72/VM1hTUDRmIWXpjPpznytNY4UqOpmQIzRnuJTNADpvdQnHJgs6SgXGQuJsA6Sgqhxs
+         zXqpHAPK7R5P+tZpGQWEYNg3Sz3YMI1g9UpKuOJMk7yQEFOBsLJQvZaCUvjWGEcJ4Are
+         Fg2kSpbK3lzL89h7g+ICvVPL0tR3UUaUaT1nr57OdgNuQDNj8K+OUu9RuKEqu4L+p/RI
+         XCFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765913760; x=1766518560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1765915155; x=1766519955;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DyIKB2hJJPGNfOXTwj8MacflXxSMbpI7LrFqsSt1Jpw=;
-        b=dDwYWcWRZWdHnEq9z1VtE1RDWtUFhmlXI6YfZifRYHnrnEsbq95Nkkn/EaRaQ1kg9m
-         NXfMekI3jG5OgCY1OJMZHAw4XJulECu1ffwgMuJ+Cm/6x5OhPssO51saE8bBons5ODlu
-         rDgpiKdoz6lKj1DiHAK81tj/11czR9zLuMCUrtw4gle2rdA2LcW1NNhpx7ZzKFgE2Puc
-         hXz5ORbbv/ky8iChkvqQVUU6APf4EqmIPK1h36OCiXJ4J3J+pMiRjhhJ/Zph6xaGzfjr
-         sxbH/3wJW/5vHbMeRee3P5dd1e48uVjNJdzrtpAfaOhduXJcKWCGmQodNxdQYuNTPsqn
-         9eDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWFjVKSbEDLnuYIU8BPKKd6y28YN4QURBIj5Ovs5wB+hzleJlZkn70Q7xuxcUQMwJGJ59il8Lq72QuBDw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjGrfNX9fjXkLkj364tk+eMiLNgbd0RtfEqCBFygEB2FKEZAKC
-	tbyywEWSQ3I9kMu5IhgPQEXupf0e72FVHA10H+bM7NwzbkOLf5BgID3MKgJHVgU0uUpP9+Qt/2H
-	sJNMaU5hpASkhom1Subq0pu9TkbAXc7NIoyxs2Or70g==
-X-Gm-Gg: AY/fxX5whHVuzNdGI7viJcqoByQaQtQbY2S4pTDT0YC0eitTHukjrezWQJ8GCF0wBqU
-	JbiwMcMm7ORerbOSZiNGs5xV4CDMskTjQiJZ6U4qX214eezOGLAbSYbfuB0G6avaeDJo7lCw/PM
-	SPxyFLnGyr9w6d7RRV6dLOvy2kjVyCa2L1HkSVUzs0M4uFLS3gfl7IhZ1VYBbQGj4V+k5ETQ3QL
-	kCOHW9zDwOvqLJnuZhulf89P8M7ZSg1U/i3swLtbgr7yiUmjCUD09E9iGEjlnX1YH2C7hBP
-X-Google-Smtp-Source: AGHT+IHNQYfHhSZB51dtsDipQL9/5fDZcPe/Z6WdB1j+IUPGZTp0qnMPAX1NRpIDGnC0FktvfYyl1BhfRBlJ1lJ36qI=
-X-Received: by 2002:a17:907:cd07:b0:b79:f965:1ce1 with SMTP id
- a640c23a62f3a-b7d238ba3e3mr1542684066b.42.1765913760345; Tue, 16 Dec 2025
- 11:36:00 -0800 (PST)
+        bh=GjniS35+gFl94KgDPsESP+GSizMKZS5/qxbShY9gflU=;
+        b=T6cTIbImR17Q5G+71uXedD03wMsFpRTcaqdNy4mVVj+LKAcT2Qsjtvm6zme7WD8drr
+         8ghH82SgPh7LSVkmKbw6//Rdiewk8rPi+t+VN4XSNDz6pgrTrpKgn49cocK659uka+6v
+         3PT9nnoQLU/OwP6mX1mVXAbihrkYocaowmyHfQnDqYKX1fCEvgS39H9oHeQyyD0Llv0n
+         w+XYxfaFQ00Dho/PBPLnZzNAGiUJXurtoE7bh9zlYVeKeNIaB7C+yq1FdG0Qgx8rqgJB
+         WEQrUjj+hR7/54fo9+5Pflt4fD2Nzv4p2p6iiUYiKpLGo4prVAHgP+KbOtYLn0DujR7R
+         u1aA==
+X-Forwarded-Encrypted: i=1; AJvYcCWx482K8DrmJuVYfTJeu+PpypGVZx16x3fTFs9KlFIPuT9DWXGU0R0zaq6YUBzl2qQ3kS43IeTX8NQ16Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsZNOaiKHlI1kGu0drmFAJwm9W58x1x16/nOMp0Bl1fASHA01O
+	zdMzwRA+ADp8jBUYql877oY5T23Lsw0gnPquMsiBgcmPatRpM56SCsP2
+X-Gm-Gg: AY/fxX6i+eiGPEpyMkzM7x/2VGpS+pU4EjR9HxUHT+f7JQknKsCnuBESsZLVD4gSnAU
+	tTJCBIp2slEyjElVTJed8MTro/7uB48SwjnWN82oUKx5oz9ZzcociPAfqulAohBARgHDyZQ6umR
+	hvonqROsCRUXDtYO6j0IVyV7ZbKVlXxpPfnFrN2b5vosHWGcRbsqjGy++7mzhF+TRN/X0Y1hQJJ
+	H53Y9rrXprcj7wFk833feCf776bTEW95Shad4vIjeUcqfPc8ORiW78xzAZ5A5y+7F/w3jVK9QTz
+	c9MHnlxM4WQ0VzxJSkOdWWPLgx2cRsrrFVcIibV77uJm9bKKs3f0GkMvBzHsO7y93FzkoOdtKml
+	shdm4K+dQvWAn7kbxihOqnOOMh2Faejxeiy6aKPCqFULrmkt1tIo7Ek8sHJimEZHetXpgU78vKL
+	evn5f/XRAYECJSFBKBWsdI1pAt1g0brdVVYwmELjuqb4ySnW3kLI5qORg3caV6J+Y=
+X-Google-Smtp-Source: AGHT+IGkMCP0kONGgG89SYNUeIIN6orwCVUUHEl6uObTm3wydLwUSISgvgOvaVGUZQxtmSBHQ8CSsQ==
+X-Received: by 2002:a05:600c:4595:b0:479:3a87:2092 with SMTP id 5b1f17b1804b1-47a8f9145edmr152180075e9.36.1765915154784;
+        Tue, 16 Dec 2025 11:59:14 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4310ade7c3fsm779077f8f.26.2025.12.16.11.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 11:59:14 -0800 (PST)
+Date: Tue, 16 Dec 2025 19:59:12 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>, Ingo Molnar
+ <mingo@kernel.org>, linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, kvm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-block@vger.kernel.org, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Ajay Kaher
+ <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.makhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Boris
+ Ostrovsky <boris.ostrovsky@oracle.com>, xen-devel@lists.xenproject.org,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Denis
+ Efremov <efremov@linux.com>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 0/5] x86: Cleanups around slow_down_io()
+Message-ID: <20251216195912.0727cc0d@pumpkin>
+In-Reply-To: <14EF14B1-8889-4037-8E7B-C8446299B1E9@zytor.com>
+References: <20251126162018.5676-1-jgross@suse.com>
+	<aT5vtaefuHwLVsqy@gmail.com>
+	<bff8626d-161e-4470-9cbd-7bbda6852ec3@suse.com>
+	<aUFjRDqbfWMsXvvS@gmail.com>
+	<b969cff5-be11-4fd3-8356-95185ea5de4c@suse.com>
+	<14EF14B1-8889-4037-8E7B-C8446299B1E9@zytor.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-4-robert.marko@sartura.hr> <202512161628415e9896d1@mail.local>
- <CA+HBbNFG+xNokn5VY5G6Cgh41NZ=KteRi0D9c0B15xb77mzv8w@mail.gmail.com>
- <202512161726449fe42d71@mail.local> <20251216-underarm-trapped-626f16d856f5@spud>
-In-Reply-To: <20251216-underarm-trapped-626f16d856f5@spud>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 16 Dec 2025 20:35:49 +0100
-X-Gm-Features: AQt7F2ovlD6q1uGr-F_qGhYebApPtJxD_ztM4nzL5Jt_8Qv6aSDXR9OqFn9QCtE
-Message-ID: <CA+HBbNFq=+uWp05YD08EQtaOhrN9FCBAtnOAsOJc4dNfoJRfxA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/19] dt-bindings: arm: move AT91 to generic Microchip binding
-To: Conor Dooley <conor@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev, 
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, herbert@gondor.apana.org.au, 
-	davem@davemloft.net, vkoul@kernel.org, linux@roeck-us.net, 
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
-	olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 16, 2025 at 8:21=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Tue, Dec 16, 2025 at 06:26:44PM +0100, Alexandre Belloni wrote:
-> > On 16/12/2025 17:56:20+0100, Robert Marko wrote:
-> > > On Tue, Dec 16, 2025 at 5:29=E2=80=AFPM Alexandre Belloni
-> > > <alexandre.belloni@bootlin.com> wrote:
-> > > >
-> > > > On 15/12/2025 17:35:21+0100, Robert Marko wrote:
-> > > > > Create a new binding file named microchip.yaml, to which all Micr=
-ochip
-> > > > > based devices will be moved to.
-> > > > >
-> > > > > Start by moving AT91, next will be SparX-5.
-> > > >
-> > > > Both lines of SoCs are designed by different business units and are
-> > > > wildly different and while both business units are currently owned =
-by
-> > > > the same company, there are no guarantees this will stay this way s=
-o I
-> > > > would simply avoid merging both.
-> > >
-> > > Hi Alexandre,
-> > >
-> > > The merge was requested by Conor instead of adding a new binding for =
-LAN969x [1]
-> > >
-> > > [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20251=
-203122313.1287950-2-robert.marko@sartura.hr/
-> > >
+On Tue, 16 Dec 2025 07:32:09 -0800
+"H. Peter Anvin" <hpa@zytor.com> wrote:
+
+> On December 16, 2025 5:55:54 AM PST, "J=C3=BCrgen Gro=C3=9F" <jgross@suse=
+.com> wrote:
+> >On 16.12.25 14:48, Ingo Molnar wrote: =20
+> >>=20
+> >> * J=C3=BCrgen Gro=C3=9F <jgross@suse.com> wrote:
+> >>  =20
+> >>>> CPUs anymore. Should it cause any regressions, it's easy to bisect t=
+o.
+> >>>> There's been enough changes around all these facilities that the
+> >>>> original timings are probably way off already, so we've just been
+> >>>> cargo-cult porting these to newer kernels essentially. =20
+> >>>=20
+> >>> Fine with me.
+> >>>=20
+> >>> Which path to removal of io_delay would you (and others) prefer?
+> >>>=20
+> >>> 1. Ripping it out immediately. =20
+> >>=20
+> >> I'd just rip it out immediately, and see who complains. :-) =20
 > >
-> > I would still keep them separate, SparX-5 is closer to what is
-> > devicetree/bindings/mips/mscc.txt than to any atmel descended SoCs.
->
-> If you don't want the sparx-5 stuff in with the atmel bits, that's fine,
-> but I stand over my comments about this lan969x stuff not getting a file
-> of its own.
-> Probably that means putting it in the atmel file, alongside the lan966x
-> boards that are in there at the moment.
+> >I figured this might be a little bit too evil. :-)
+> >
+> >I've just sent V2 defaulting to have no delay, so anyone hit by that
+> >can still fix it by applying the "io_delay" boot parameter.
+> >
+> >I'll do the ripping out for kernel 6.21 (or whatever it will be called).
+> >
+> >
+> >Juergen =20
+>=20
+> Ok, I'm going to veto ripping it out from the real-mode init code,
+> because I actually know why it is there :) ...
 
-Hi Conor,
-What do you think about renaming the SparX-5 binding and adding LAN969x to =
-that?
-Cause both are from the current Microchip and from the same UNG
-business unit, with
-probably more generations to follow.
+Pray tell.
+One thing I can think of is the delay allows time for a level-sensitive
+IRQ line to de-assert before an ISR exits.
+Or, maybe more obscure, to avoid back to back accesses to some register
+breaking the 'inter-cycle recovery time' for the device.
+That was a good way to 'break' the Zilog SCC and the 8259 interrupt
+controller (eg on any reference board with a '286 cpu).
 
-LAN969x does not really belong in Atmel bindings to me, but I am flexible.
+	David
 
-Regards,
-Robert
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+> and that code is pre-UEFI legacy these days anyway.
+>=20
+> Other places... I don't care :)
+>=20
+
