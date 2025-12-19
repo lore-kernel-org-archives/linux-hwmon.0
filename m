@@ -1,415 +1,115 @@
-Received: from mail.monolithicpower.com (unknown [12.33.0.20])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02B3298CBC;
-	Fri, 19 Dec 2025 05:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=12.33.0.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD79C3570A5
+	for <linux-hwmon@vger.kernel.org>; Fri, 19 Dec 2025 15:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766123740; cv=none; b=P60kaAL3xWUNKqga9jpW6VDsHIVb587o8/H8+CQVNL9AKcwG/Bo8jIM/HXUbnuVGOMsmkIl134GWOWpqMWm9sh05npRxdqCDzVvvTFbOlV3Sg6p1G1EcVGkJXtz/YXyb/jWCIsstjwuKjofEzCGbJForLky0CtUPfINV2yAzwnQ=
+	t=1766159335; cv=none; b=O2RCuBz7Rkf6k+GOpULfFoBXOJNJYXvISv+JgaB6g5sGiLV9Esz9ENomZVtGlG9N3Nh+mQAowSS5diNT2/rdiG3R9tpzM5Vo9NM2dfWJna7KEB8Ae5nRPvjrlA+Ek9pkdNPZsPgcJnyiFV1pufXBjt+DfrJfoXiVmGISJ8FnlIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766123740; c=relaxed/simple;
-	bh=OAXRo/1Fm5mFWIU7leCX2n9G8Q/jp/pEGiD5h22eusU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u5MOz5Qi4pXMaJ5/w5dDIKE4sUDQRO3VMkuNCxYQxZSUfQfV4PnIWgBx3AZn5Q5K2zkHVLnm1cHHE7unGMR40HBS+u9f+DoWagJCerlb71wtI5LmcE4iDXBl2mkE1RRi4Vikr0Ow12n9cfra9k4vrBqM1WcbxALXvq+1xku7ifQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com; spf=pass smtp.mailfrom=monolithicpower.com; arc=none smtp.client-ip=12.33.0.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=monolithicpower.com
-Received: from CD-MSH04.monolithicpower.com (10.10.70.213) by
- mps-mslbn03.monolithicpower.com (10.10.10.245) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Thu, 18 Dec 2025 21:55:31 -0800
-Received: from HZ-200D-C0727.monolithicpower.com (10.53.66.137) by
- CD-MSH04.monolithicpower.com (10.10.70.213) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.57; Fri, 19 Dec 2025 13:55:26 +0800
-From: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-To: <Yuxi.Wang@monolithicpower.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
-	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <wyx137120466@gmail.com>, <linux-hwmon@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>
-Subject: [PATCH v3 2/2] hwmon: add mp5926 driver
-Date: Fri, 19 Dec 2025 13:54:13 +0800
-Message-ID: <20251219055413.1661-3-Yuxi.Wang@monolithicpower.com>
-X-Mailer: git-send-email 2.51.0.windows.1
-In-Reply-To: <20251219055413.1661-1-Yuxi.Wang@monolithicpower.com>
-References: <20251219055413.1661-1-Yuxi.Wang@monolithicpower.com>
+	s=arc-20240116; t=1766159335; c=relaxed/simple;
+	bh=Mvm8QoSjolw65qipKtDiT3F30Pm5K4KTuzgK8sadwvA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GK62t+y6qYB0ZyT4ntrlr0hMjp5744NJwDGFZToCr1ZGY3VHhyIpEqmZevlbRQNS/7pJbgA4t1wDIB8hvq9xMqSzydVycDIjR5GEyZiog9CwseRabbl0ydjZXRZdNtZdmtJV2bIRT8n7np5SKPlaDxtY4X7r2VadmV293arazCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJwNXDiE; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJwNXDiE"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59a10df8027so2385532e87.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Dec 2025 07:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766159332; x=1766764132; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5PXyu1ShwrwP9eLi4zR+BX6SFvZCu4oLpHaCC4ecLrE=;
+        b=FJwNXDiEy9Jt30NLhAT414uEIG8wAQdsQk9+gIDwdHeyp/MqVyDYjyyiCK3bEP5vVp
+         x9LybLlb9IhPpQBrLKNvHel8YMranOMwMon16Y8Ccvlmh33rMJLv+f7cGSLOAA73Chdi
+         5WNrQh0B1wJuwtys7sFZpHrRsvDcMMzW+wADon98I7QZ+RKMw31Ydk24kp2hZf1X8F4Q
+         GAZWa5mWnreywXSNUp55gCDkSEz3ijo4ltqCD+Z/hkFpi1vVkYj1Wwi03f5d3Cn+wTn6
+         CVtXpZTtvkiMA889hB7SnIbeEgYxH2tm+RicAdF/9ufYqnKDakW+0lMYLzmHBSRoR+A4
+         K76g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766159332; x=1766764132;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5PXyu1ShwrwP9eLi4zR+BX6SFvZCu4oLpHaCC4ecLrE=;
+        b=XHKgxALzu77ggLG/O4bX9le1AMtUFOn3zapFHFuzySCWx9VkTO00+JeG6o5NXObxvU
+         cD9cybehNN0wLSsvxDvLXNxadPFczb95V5a+ShGS5ypRrGrUXfBp0lHPMl53VTGzFD01
+         BvjS5qXbFxkwzjm3klM8A1pP+AY49hW4dJ+DHwyZb+gvsGNBi8zZ25WeGmtBsjPDM/Zd
+         z3pc18lCLII1SwrMcblZ5a448RKqiPjNFVr7zmWTd5cFK6Fmh1U9egTYSmSiyLWZwHo3
+         QAjmDO2bHg9o/EIV+nVVMYAPUVQ1VhG3f7cGosj50nz7VVgsIi7erUISrmpiBfsoS6Gn
+         DFVA==
+X-Gm-Message-State: AOJu0YwU5cN4nZnKjBDICJIMaxkip7Gpn2+iQ+eUAaK284D2+p28K9IP
+	pP/mVpXwuq9aaiP5dr9akRZD9PfEZzM7LcfC/K0z3PnDXEzGrsRZgjtI
+X-Gm-Gg: AY/fxX6OR6iwTz/4VR2ulxrHbgq/g7KvU0m4dq+ygtTgXKg+0NZ/RfbnegFIyWTETaC
+	USxuvnOXJSmrdLIAXnrOO7hu25fgfLa7LXUi4Ei9S2Ttthn3qYAc0ZHJ5x/rtEmJLeS8iLHM4uX
+	wng71wgOcr7GHp2pmYzuavaOM11bGC629vwAc+a+NAyQNeMDL8KIDr6VpyVztkevLjJto84YOov
+	R520P3n/rLUQ0GBOGXriW57SGvfWe0kC0PRDAM0vfC/kFkUAyv6m9+Ujq40RyvdS0uBNjraAd2m
+	p6rYuBmMsWFJ35LfJrzc9D7i1hC2/JaXv4CtlCrqjfO6z8/2PUw4RuWo+cpm0YTkud0EKzvjXkh
+	qzJPXiGgHQ+jFjQm9V9fXWnFs2+hHyR9jIbQ2dnr6cVnTOylgUJQXI/dxFd5JpdWVPHzlK+SUTW
+	+P39P5LSW78SZLipsGVTSyiXySX+4UgCvWD5y/Dkmb2K0cI7z36p+gJtQARaSm27d9KN8QzaN/E
+	CR5Zg==
+X-Google-Smtp-Source: AGHT+IF8C55yRNkr5agY5wdwgfnZyX9aDWKgTdrBWJKsDTuW/ZxATAJPbAglEy5tvq/gMa1rIDTBEw==
+X-Received: by 2002:a05:6512:3191:b0:598:8f92:c340 with SMTP id 2adb3069b0e04-59a17d7768amr1172280e87.52.1766159331802;
+        Fri, 19 Dec 2025 07:48:51 -0800 (PST)
+Received: from LT-5CG5341NQ4.nordic.imtech.com (84-253-208-48.bb.dnainternet.fi. [84.253.208.48])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-381224de76csm6356391fa.10.2025.12.19.07.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Dec 2025 07:48:51 -0800 (PST)
+From: Kari Argillander <kari.argillander@gmail.com>
+Subject: [PATCH 0/2] hwmon: Minor errno and sysfs fixes
+Date: Fri, 19 Dec 2025 17:48:13 +0200
+Message-Id: <20251219-hwmon-fixes-v1-0-21b29097ea3b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CD-MSLBN02.monolithicpower.com (192.168.86.32) To
- CD-MSH04.monolithicpower.com (10.10.70.213)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL1zRWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDI0NL3Yzy3Pw83bTMitRi3SSLVCMDUwtjkxQjAyWgjoKiVLAEUEN0bG0
+ tABk6ZvBdAAAA
+X-Change-ID: 20251219-hwmon-fixes-b8e205834d20
+To: Kari Argillander <kari.argillander@gmail.com>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766159330; l=1069;
+ i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
+ bh=Mvm8QoSjolw65qipKtDiT3F30Pm5K4KTuzgK8sadwvA=;
+ b=n8wjFoxE8g/Pmu0rtTy9zsv3WaegxVqf63D314kB6DaphW8runBGtSLkMRnT+YuPRv9so5gH/
+ N2voa6v8TNSBr8/ncYpsrv68d4Rn83pNgfVQ/v2DFWtkhpopYmMDvKk
+X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
+ pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-Add support for mps mp5926.
+This series contains two small hwmon cleanups.
 
-Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
+The first patch fixes an incorrect errno returned by sanitize_name()
+when called with a NULL pointer. Returning ENOMEM in that case is
+misleading. EINVAL better reflects the actual error.
+
+The second patch switches sysfs show callbacks to sysfs_emit(), as
+recommended by Documentation/filesystems/sysfs.rst. While the risk of
+overflow with sprintf() is low in practice, using sysfs_emit() avoids
+the issue entirely and aligns the code with current kernel guidance.
+This also simplifies Rust bindings, where overflows cannot be ignored.
+
+Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/mp5926.rst |  92 ++++++++++++++++
- MAINTAINERS                    |   7 ++
- drivers/hwmon/pmbus/Kconfig    |   9 ++
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/mp5926.c   | 185 +++++++++++++++++++++++++++++++++
- 6 files changed, 295 insertions(+)
- create mode 100644 Documentation/hwmon/mp5926.rst
- create mode 100644 drivers/hwmon/pmbus/mp5926.c
+Kari Argillander (2):
+      hwmon: Fix wrong return errno in *sanitize_name()
+      hwmon: Use sysfs_emit in show function callsbacks
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 85d7a686883e..6181c3f62177 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -185,6 +185,7 @@ Hardware Monitoring Kernel Drivers
-    mp2993
-    mp5023
-    mp5920
-+   mp5926
-    mp5990
-    mp9941
-    mp9945
-diff --git a/Documentation/hwmon/mp5926.rst b/Documentation/hwmon/mp5926.rst
-new file mode 100644
-index 000000000000..4b64a7e24ae6
---- /dev/null
-+++ b/Documentation/hwmon/mp5926.rst
-@@ -0,0 +1,92 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver mp5926
-+====================
-+
-+Supported chips:
-+
-+  * MPS mp5926
-+
-+    Prefix: 'mp5926'
-+
-+  * Datasheet
-+    https://www.monolithicpower.com/en/
-+
-+Author:
-+
-+	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for Monolithic Power Systems, Inc. (MPS)
-+MP5926 Hot-Swap Controller.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_crit**
-+
-+**in1_crit_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_lcrit**
-+
-+**in2_lcrit_alarm**
-+
-+**in2_rated_max**
-+
-+**in2_rated_min**
-+
-+The driver provides the following attributes for input current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_max**
-+
-+**curr1_max_alarm**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr2_input**
-+
-+**curr2_label**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+The driver provides the following attributes for output power:
-+
-+**power2_input**
-+
-+**power2_label**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d701a4d5b00e..fea710aab535 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17708,6 +17708,13 @@ S:	Maintained
- F:	Documentation/hwmon/mp2993.rst
- F:	drivers/hwmon/pmbus/mp2993.c
- 
-+MPS MP5926 DRIVER
-+M:	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/mp5926.rst
-+F:	drivers/hwmon/pmbus/mp5926.c
-+
- MPS MP9941 DRIVER
- M:	Noah Wang <noahwang.wang@outlook.com>
- L:	linux-hwmon@vger.kernel.org
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index f3fb94cebf1a..d0aa460abdc9 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -472,6 +472,15 @@ config SENSORS_MP5920
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mp5920.
- 
-+config SENSORS_MP5926
-+	tristate "MPS MP5926"
-+	help
-+	  If you say yes here you get hardware monitoring support for Monolithic
-+	  MP5926.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mp5926.
-+
- config SENSORS_MP5990
- 	tristate "MPS MP5990"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 349a89b6d92e..75ec4956ca8d 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -47,6 +47,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
-+obj-$(CONFIG_SENSORS_MP5926)	+= mp5926.o
- obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
- obj-$(CONFIG_SENSORS_MP9941)	+= mp9941.o
- obj-$(CONFIG_SENSORS_MP9945)	+= mp9945.o
-diff --git a/drivers/hwmon/pmbus/mp5926.c b/drivers/hwmon/pmbus/mp5926.c
-new file mode 100644
-index 000000000000..234a3e58f7e7
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp5926.c
-@@ -0,0 +1,185 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+//
-+// mp5926.c  - pmbus driver for mps mp5926
-+//
-+// Copyright 2025 Monolithic Power Systems, Inc
-+//
-+// Author: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-+
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+#define PAGE	0x01
-+#define EFUSE_CFG	0xCF
-+#define I_SCALE_SEL	0xC6
-+#define MP5926_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-+			PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | \
-+			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_INPUT | \
-+			PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_VOUT)
-+
-+struct mp5926_data {
-+	struct pmbus_driver_info info;
-+	u8 vout_mode;
-+	u8 vout_linear_exponent;
-+};
-+
-+#define to_mp5926_data(x)  container_of(x, struct mp5926_data, info)
-+
-+static int mp5926_read_byte_data(struct i2c_client *client, int page,
-+				 int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct mp5926_data *data = to_mp5926_data(info);
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VOUT_MODE:
-+		if (data->vout_mode == linear) {
-+			/*
-+			 * The VOUT format used by the chip is linear11,
-+			 * not linear16. Report that VOUT is in linear mode
-+			 * and return exponent value extracted while probing
-+			 * the chip.
-+			 */
-+			return data->vout_linear_exponent;
-+		}
-+		return PB_VOUT_MODE_DIRECT;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static int mp5926_read_word_data(struct i2c_client *client, int page, int phase,
-+				 int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct mp5926_data *data = to_mp5926_data(info);
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_READ_VOUT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+		/*
-+		 * Because the VOUT format used by the chip is linear11 and not
-+		 * linear16, we disregard bits[15:11]. The exponent is reported
-+		 * as part of the VOUT_MODE command.
-+		 */
-+		if (data->vout_mode == linear)
-+			ret = ((s16)((ret & 0x7ff) << 5)) >> 5;
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static struct pmbus_driver_info mp5926_info = {
-+	.pages = PAGE,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_CURRENT_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.format[PSC_POWER] = direct,
-+
-+	.m[PSC_VOLTAGE_IN] = 16,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 0,
-+
-+	.m[PSC_CURRENT_IN] = 16,
-+	.b[PSC_CURRENT_IN] = 0,
-+	.R[PSC_CURRENT_IN] = 0,
-+
-+	.m[PSC_VOLTAGE_OUT] = 16,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+
-+	.m[PSC_TEMPERATURE] = 4,
-+	.b[PSC_TEMPERATURE] = 0,
-+	.R[PSC_TEMPERATURE] = 0,
-+
-+	.m[PSC_POWER] = 25,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = -2,
-+
-+	.read_word_data = mp5926_read_word_data,
-+	.read_byte_data = mp5926_read_byte_data,
-+	.func[0] = MP5926_FUNC,
-+};
-+
-+static int mp5926_probe(struct i2c_client *client)
-+{
-+	struct mp5926_data *data;
-+	struct pmbus_driver_info *info;
-+	int ret;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(struct mp5926_data),
-+			    GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	memcpy(&data->info, &mp5926_info, sizeof(*info));
-+	info = &data->info;
-+	ret = i2c_smbus_read_word_data(client, EFUSE_CFG);
-+	if (ret < 0)
-+		return ret;
-+	if (ret & BIT(12)) {
-+		data->vout_mode = linear;
-+		data->info.format[PSC_VOLTAGE_IN] = linear;
-+		data->info.format[PSC_CURRENT_IN] = linear;
-+		data->info.format[PSC_VOLTAGE_OUT] = linear;
-+		data->info.format[PSC_TEMPERATURE] = linear;
-+		data->info.format[PSC_POWER] = linear;
-+		ret = i2c_smbus_read_word_data(client, PMBUS_READ_VOUT);
-+		if (ret < 0) {
-+			dev_err_probe(&client->dev, ret, "Can't get vout exponent.");
-+			return ret;
-+		}
-+		data->vout_linear_exponent = (u8)((ret >> 11) & 0x1f);
-+	} else {
-+		data->vout_mode = direct;
-+		ret = i2c_smbus_read_word_data(client, I_SCALE_SEL);
-+		if (ret < 0)
-+			return ret;
-+		if (ret & BIT(6))
-+			data->info.m[PSC_CURRENT_IN] = 4;
-+	}
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static const struct i2c_device_id mp5926_id[] = {
-+	{ "mp5926", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, mp5926_id);
-+
-+static const struct of_device_id mp5926_of_match[] = {
-+	{ .compatible = "mps,mp5926" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mp5926_of_match);
-+
-+static struct i2c_driver mp5926_driver = {
-+	.probe = mp5926_probe,
-+	.driver = {
-+			.name = "mp5926",
-+			.of_match_table = mp5926_of_match,
-+		   },
-+	.id_table = mp5926_id,
-+};
-+
-+module_i2c_driver(mp5926_driver);
-+MODULE_AUTHOR("Yuxi Wang <Yuxi.Wang@monolithicpower.com>");
-+MODULE_DESCRIPTION("MPS MP5926 pmbus driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
+ drivers/hwmon/hwmon.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+---
+base-commit: cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
+change-id: 20251219-hwmon-fixes-b8e205834d20
+
+Best regards,
 -- 
-2.39.2
+Kari Argillander <kari.argillander@gmail.com>
 
