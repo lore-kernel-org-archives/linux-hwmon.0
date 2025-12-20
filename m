@@ -1,458 +1,133 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DE119C540
-	for <linux-hwmon@vger.kernel.org>; Fri, 19 Dec 2025 18:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2BB22FE0A
+	for <linux-hwmon@vger.kernel.org>; Sat, 20 Dec 2025 13:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766169595; cv=none; b=ZLKv90L0kCoyEJLj0/ABwusHg+kA0ZttxT/+X13EQZr70RQ0PXbeyN7UvWDdEnesgXeu8/fO4w4DbNEo4n6ZWj8zlFqzPlIkBx+wRKfH72tz8fzT2AfK+wibzjN8CNb2Mps1pffPQ6lgc8E6nkkPejPV3qI57yoGEKsNDJuMFws=
+	t=1766238578; cv=none; b=hzJyi7bDKWkaok6OiGdRBBlC6LrBmh1Wb+e3Sxs3I2keX/ypg+hRzTh7YB8NeE8FLOtKzH30/3JVKTN0GKxVvWn27oaEP1lybSRFZiQTNETP1oCwpPQPRgdJ6LWnd4JveLrYHnrBdC1Yv1b3V6z1MiY4ST2qd5R/4/Oh3x5sgoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766169595; c=relaxed/simple;
-	bh=vmmlyERkT3AjRqpZk/y1yFDkCVu7HL5/z99/+aWZxrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pLFqYOIjIxyOLorN3F0YFn/VKPL8IIJvYV2pCze51havYW8oxq2eYe0K2PPe8Gp10KwJHOfBwAysEPSIravgOu55ARuPnOA1bi5vYqO7txFwqGtTcKrirS1NcdSKRRYkIr5xbNvOfE4ss2wV8v3GQdihGdRZxINz8p5FiaNEYHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwUqHCzp; arc=none smtp.client-ip=209.85.160.182
+	s=arc-20240116; t=1766238578; c=relaxed/simple;
+	bh=uWLsLhl1eX9m7vHHryddR3jD5f1VcRwxODNPwt5Lj4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Elld95BICCxC64yFIbP27g9ItfVC9MpcXa01RW7i8/+1s9zyjbWQrRlegmqqaJwerfWJ26Vby+Jp74mQzsBpSI/6rrStvVSzTHyEZBTh0D+iZalexaLjvNdxZh6xHdZa86O2RbJIvkozk9JCFhcxmIo5THW8hd9F1NdBbe29Nrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXQTFukX; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwUqHCzp"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ed82ee9e57so25464251cf.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Dec 2025 10:39:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXQTFukX"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c1cf2f0523eso1793759a12.3
+        for <linux-hwmon@vger.kernel.org>; Sat, 20 Dec 2025 05:49:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766169592; x=1766774392; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vuCZ+fHIJQF3Nuz7eOBOWcO6aa8yeNtMpL8cd+du1T4=;
-        b=OwUqHCzp5Au5PQPI6ngIPlMMgxEsl2c3THDM/2Jwa2Dsrnz8phtPnQ901GNXrVLPAK
-         v+SGSPBmVfx1ixWF/fqtaqNVx/YZSeFRynnloO3AajP4fJu/4I5mB5qFuNo+4dNExvXT
-         l4V/R+yMwQUPKuQ2JD8kPo/guXqAVORdgdOBZSELEeEYjxck7BANuTGkL7WQzcv4Ib8b
-         V5FEFLsbISYAGnfzhA12arsi7KOGe0QlzIKILElHzc9muDE6LxlPVT0DGHFO5v597qUj
-         2TfKopZWYQI6xf8u6/SBFLYAFxcdBki0J9ecI9XxkE2qy1VdanAyeetM+eXYhyDVkMG3
-         y+SQ==
+        d=gmail.com; s=20230601; t=1766238575; x=1766843375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CA6PlbbJT4tD9CiBeBP//7UuX07vGEOnP/9L2UfXP7s=;
+        b=VXQTFukX+a1o3KufmpIKNONkpvUWSxr/ftt3GeLGYEy7Q4WqlAodjMd/gWANT5stSx
+         TePSPMhGJaRqeECx+fIVXi6bH7/PIqgvMc9/pipKz1IaMj8jJRlchDcAWnEzL6JYlIF3
+         nOgHs7HGwaD+svQ2nUlwNNjAedHRAREVslsuFl/pJPbbbLP1SCVsXyXdSap1hp84SEUn
+         XzmLUlJropj9pMqOr9C0IeXcb7nU1W06t3w7BKdKXIheN3GhM+xdhCrFBdU3yebJa9ah
+         IQdJcTz51DtWrB22A1/E2ftsEzbsix9VxfxD/rsp1RW3sF03EFkKjU2ckDJvi/Wmx6X+
+         Y1mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766169592; x=1766774392;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vuCZ+fHIJQF3Nuz7eOBOWcO6aa8yeNtMpL8cd+du1T4=;
-        b=iBsSL6d80p6L3cXDDDAmU3gozvHSLnO3aMBH+B5lnH/DVroRiGTHJjUrI6zyUk3P1h
-         rN19sW2RQY2rUlvDWx/FHyMomREwje0PLd1RG3PD04hl8CQfk81LPSQQGX5ciZNv5Nm9
-         DWMaSsUGxO+zdcSHLgkHgnsHlVw9oayaTAxRxVKZcS4ggi7zA65zLsx9KJuXqyYrE385
-         Vj4w4UsBRbv8Jxa72rXanFYB80IbUnMo1iWudBRhwQRoSlwONLuXlBtMPiTAfJ9J3QBu
-         gggb3RJnIIYM6Xblw8smCNpwkx/0NVd+rfTzY0BftmRR9QOkAfIhMaoDjZWPQ7yw6q6J
-         h1Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhxfc5SJkRMI7yBUySkTr+0myahwKDZ7kdcMRhiJOIzBSVpf4jG+Rwgo3SrKCFMIdzO30TKZmsgrarqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLgaCcto+0UHIIEBeGpOlbOucMmH5yl9WgD0SbafqGzxpughbv
-	u8Lv5+tbZ9CR9FPU9ApxGW+i+PY93sYOz7ofMCDw3bVocnTEJXvajniI
-X-Gm-Gg: AY/fxX7UeP904Y/1oFbWBFwcWy6uCxaKKYl4bdF9D5XLuTLDSCOSaL/3UWIa5xp4dPB
-	ISIkNheahyjiuoMn6G8CRF/ZCoHP9FXvfnJtQvgW6C4xv0LMGTKVCkS5njnpFAKmNoXHn/tRU0z
-	pIg8y4BtgvwBIARjz3ZScFzR4ZGKVgQX9yeL4ol/EaRzAGt2PHNwQ+rhXcn39W4A4JhPeNOnTvb
-	NxmOrho7qUqQQqTjn/YhI9T5pvXGHiU496iPAdHMSbmYSGyTAqfQx3bZKu1TRMBElMusxX7Yu+0
-	m7yyqQLPTJnGHHsD5Kg1QkG/zyXcAh0Qxt6i1546XTdrbxDlvHVfwJDvIWPkRLxoCyI2XoBHdSi
-	h8c+hfEIPnDAUJyAKZlm4VzxDXlEaK0Bq2NRpcSUQYGLomYWqgJIEplVWc9AeT4m6e1DNyIhI8M
-	j51asRiVoYOArZ3QlY5FsPbV4v
-X-Google-Smtp-Source: AGHT+IHOKSC+KI1Nyc4OKONZJ3szj4wUL6LNTRbQr8apuim/UbhzwDmhASs87IoUPE1cdNRRnYXwYA==
-X-Received: by 2002:a05:7022:248a:b0:11b:9152:b3ad with SMTP id a92af1059eb24-121722dff70mr3707810c88.31.1766163143581;
-        Fri, 19 Dec 2025 08:52:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766238575; x=1766843375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CA6PlbbJT4tD9CiBeBP//7UuX07vGEOnP/9L2UfXP7s=;
+        b=cj/m93cUN9xwK2I/j91shth2uwIJYkcwUEiY0XJ0XpD00pH6ByreiPui7327Lp8d1W
+         u2c4hMrHzbHIjwLX5ZKNc9q7zOXkw8ABNRYfzT3q2IKt4Y34cz7N/rIviAuOVtKLiruj
+         Gfs/x0faaotd2xVNIiT3nvjdr/cDjvbOm42LS5zx68x+5OczgtU9ZsBSLfd0mjQwku+m
+         nbv87Lpd5jd71856O/NfiAlNHTbIgiCH5NFPcsiTMcDnoaT5CYs5ZWC8QifArmKjsfTF
+         574P6BLSghey0Qgh7/j6mEAmjtMzsdULQTT341KpZY6ybo4gk4JTLWn1N78P6BDshUvB
+         IyXw==
+X-Gm-Message-State: AOJu0YyD+Pfh1UU2SkvYty93iGtS0DoQ+o1S7MUmLimw38QZlKIocu6P
+	iXwAry/99kcg+ux1f8RHGOiYhMwz9WhTk1Yp7buSxD6WqsYLTNrn99gZ8fJ3Ug==
+X-Gm-Gg: AY/fxX5klPLB2hdhkdqdHWgt6vEje0O6+CfLJT15j4Ysju4i6rcO0GHS+IeDD/H2CoN
+	g3rpGk4orVkLeZz5ujsZtTvn/qE5CcQQGL+N3NX3YuqIlg6gt0f1Z6m/Q1YwLqZDafn8+HeV/XB
+	Q1jxp7DgJv1MGuGR2GuulxGWTllvOlYdGbbrBJJAoMqiR+kf6cJfGNOALJ4myU2OKrLskL4zeKA
+	U9a/vZ5M7Im82/JVxSGUJZAdJ/ZAu0iUiSyKOBrR0CN30ZRqPyaN9xK7rfl5IMp7B8h6G1C6gaF
+	vwVYUryS0TWOvjmdYSghQr85JbQ6NbioQNoj1S+YG4SfjTijcU5NZTywhbnuunLpkxANUbot0J9
+	2IaGAzWPoHuxdpd36pHKjBTYwFUxZN18b4I6x38ch3THC0K4dgLIB7JUSnx9/gv+IC0qeaO0/Pj
+	Emg8Bx1wErwrnwGdBIYV5WzvSU
+X-Google-Smtp-Source: AGHT+IE2QNDwIQf/FAS1kF+VxWyyxdVtrX6LYtpS7SK9jizTvKrjma73IbmDyfKbvzAgvQUDXe3UXw==
+X-Received: by 2002:a05:7301:7c01:b0:2b0:56fd:4b67 with SMTP id 5a478bee46e88-2b05ebfbfe0mr6020267eec.12.1766238575321;
+        Sat, 20 Dec 2025 05:49:35 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217253c23csm9673327c88.9.2025.12.19.08.52.22
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b05fe5653esm12961086eec.1.2025.12.20.05.49.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 08:52:22 -0800 (PST)
+        Sat, 20 Dec 2025 05:49:34 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 19 Dec 2025 08:52:22 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-Cc: corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, wyx137120466@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] hwmon: add mp5926 driver
-Message-ID: <7fbb2eb5-5257-4461-96d8-264a1ac243a6@roeck-us.net>
-References: <20251219055413.1661-1-Yuxi.Wang@monolithicpower.com>
- <20251219055413.1661-3-Yuxi.Wang@monolithicpower.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.19-rc2
+Date: Sat, 20 Dec 2025 05:49:32 -0800
+Message-ID: <20251220134933.4070599-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219055413.1661-3-Yuxi.Wang@monolithicpower.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 19, 2025 at 01:54:13PM +0800, Yuxi Wang wrote:
-> Add support for mps mp5926.
-> 
-> Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
+Hi Linus,
 
-Applied, with a minor fix. See below.
+Please pull hwmon fixes for Linux v6.19-rc2 from signed tag:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.19-rc2
 
 Thanks,
 Guenter
+------
 
-> ---
->  Documentation/hwmon/index.rst  |   1 +
->  Documentation/hwmon/mp5926.rst |  92 ++++++++++++++++
->  MAINTAINERS                    |   7 ++
->  drivers/hwmon/pmbus/Kconfig    |   9 ++
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/mp5926.c   | 185 +++++++++++++++++++++++++++++++++
->  6 files changed, 295 insertions(+)
->  create mode 100644 Documentation/hwmon/mp5926.rst
->  create mode 100644 drivers/hwmon/pmbus/mp5926.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 85d7a686883e..6181c3f62177 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -185,6 +185,7 @@ Hardware Monitoring Kernel Drivers
->     mp2993
->     mp5023
->     mp5920
-> +   mp5926
->     mp5990
->     mp9941
->     mp9945
-> diff --git a/Documentation/hwmon/mp5926.rst b/Documentation/hwmon/mp5926.rst
-> new file mode 100644
-> index 000000000000..4b64a7e24ae6
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp5926.rst
-> @@ -0,0 +1,92 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp5926
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS mp5926
-> +
-> +    Prefix: 'mp5926'
-> +
-> +  * Datasheet
-> +    https://www.monolithicpower.com/en/
-> +
-> +Author:
-> +
-> +	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +MP5926 Hot-Swap Controller.
-> +
-> +Device compliant with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +The driver exports the following attributes via the 'sysfs' files
-> +for input voltage:
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_crit**
-> +
-> +**in1_crit_alarm**
-> +
-> +The driver provides the following attributes for output voltage:
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +**in2_lcrit**
-> +
-> +**in2_lcrit_alarm**
-> +
-> +**in2_rated_max**
-> +
-> +**in2_rated_min**
-> +
-> +The driver provides the following attributes for input current:
-> +
-> +**curr1_input**
-> +
-> +**curr1_label**
-> +
-> +**curr1_max**
-> +
-> +**curr1_max_alarm**
-> +
-> +The driver provides the following attributes for output current:
-> +
-> +**curr2_input**
-> +
-> +**curr2_label**
-> +
-> +The driver provides the following attributes for input power:
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +The driver provides the following attributes for output power:
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +The driver provides the following attributes for temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_crit**
-> +
-> +**temp1_crit_alarm**
-> +
-> +**temp1_max**
-> +
-> +**temp1_max_alarm**
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d701a4d5b00e..fea710aab535 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17708,6 +17708,13 @@ S:	Maintained
->  F:	Documentation/hwmon/mp2993.rst
->  F:	drivers/hwmon/pmbus/mp2993.c
->  
-> +MPS MP5926 DRIVER
-> +M:	Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/mp5926.rst
-> +F:	drivers/hwmon/pmbus/mp5926.c
-> +
->  MPS MP9941 DRIVER
->  M:	Noah Wang <noahwang.wang@outlook.com>
->  L:	linux-hwmon@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index f3fb94cebf1a..d0aa460abdc9 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -472,6 +472,15 @@ config SENSORS_MP5920
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp5920.
->  
-> +config SENSORS_MP5926
-> +	tristate "MPS MP5926"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Monolithic
-> +	  MP5926.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp5926.
-> +
->  config SENSORS_MP5990
->  	tristate "MPS MP5990"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 349a89b6d92e..75ec4956ca8d 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -47,6 +47,7 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
->  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
->  obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
-> +obj-$(CONFIG_SENSORS_MP5926)	+= mp5926.o
->  obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
->  obj-$(CONFIG_SENSORS_MP9941)	+= mp9941.o
->  obj-$(CONFIG_SENSORS_MP9945)	+= mp9945.o
-> diff --git a/drivers/hwmon/pmbus/mp5926.c b/drivers/hwmon/pmbus/mp5926.c
-> new file mode 100644
-> index 000000000000..234a3e58f7e7
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp5926.c
-> @@ -0,0 +1,185 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +//
-> +// mp5926.c  - pmbus driver for mps mp5926
-> +//
-> +// Copyright 2025 Monolithic Power Systems, Inc
-> +//
-> +// Author: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +#define PAGE	0x01
-> +#define EFUSE_CFG	0xCF
-> +#define I_SCALE_SEL	0xC6
-> +#define MP5926_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
-> +			PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | \
-> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_INPUT | \
-> +			PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_STATUS_VOUT)
-> +
-> +struct mp5926_data {
-> +	struct pmbus_driver_info info;
-> +	u8 vout_mode;
-> +	u8 vout_linear_exponent;
-> +};
-> +
-> +#define to_mp5926_data(x)  container_of(x, struct mp5926_data, info)
-> +
-> +static int mp5926_read_byte_data(struct i2c_client *client, int page,
-> +				 int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct mp5926_data *data = to_mp5926_data(info);
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VOUT_MODE:
-> +		if (data->vout_mode == linear) {
-> +			/*
-> +			 * The VOUT format used by the chip is linear11,
-> +			 * not linear16. Report that VOUT is in linear mode
-> +			 * and return exponent value extracted while probing
-> +			 * the chip.
-> +			 */
-> +			return data->vout_linear_exponent;
-> +		}
-> +		return PB_VOUT_MODE_DIRECT;
-> +	default:
-> +		ret = -ENODATA;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int mp5926_read_word_data(struct i2c_client *client, int page, int phase,
-> +				 int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct mp5926_data *data = to_mp5926_data(info);
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VOUT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		/*
-> +		 * Because the VOUT format used by the chip is linear11 and not
-> +		 * linear16, we disregard bits[15:11]. The exponent is reported
-> +		 * as part of the VOUT_MODE command.
-> +		 */
-> +		if (data->vout_mode == linear)
-> +			ret = ((s16)((ret & 0x7ff) << 5)) >> 5;
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info mp5926_info = {
-> +	.pages = PAGE,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_CURRENT_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_POWER] = direct,
-> +
-> +	.m[PSC_VOLTAGE_IN] = 16,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 0,
-> +
-> +	.m[PSC_CURRENT_IN] = 16,
-> +	.b[PSC_CURRENT_IN] = 0,
-> +	.R[PSC_CURRENT_IN] = 0,
-> +
-> +	.m[PSC_VOLTAGE_OUT] = 16,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 0,
-> +
-> +	.m[PSC_TEMPERATURE] = 4,
-> +	.b[PSC_TEMPERATURE] = 0,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +
-> +	.m[PSC_POWER] = 25,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = -2,
-> +
-> +	.read_word_data = mp5926_read_word_data,
-> +	.read_byte_data = mp5926_read_byte_data,
-> +	.func[0] = MP5926_FUNC,
-> +};
-> +
-> +static int mp5926_probe(struct i2c_client *client)
-> +{
-> +	struct mp5926_data *data;
-> +	struct pmbus_driver_info *info;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mp5926_data),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &mp5926_info, sizeof(*info));
-> +	info = &data->info;
-> +	ret = i2c_smbus_read_word_data(client, EFUSE_CFG);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret & BIT(12)) {
-> +		data->vout_mode = linear;
-> +		data->info.format[PSC_VOLTAGE_IN] = linear;
-> +		data->info.format[PSC_CURRENT_IN] = linear;
-> +		data->info.format[PSC_VOLTAGE_OUT] = linear;
-> +		data->info.format[PSC_TEMPERATURE] = linear;
-> +		data->info.format[PSC_POWER] = linear;
-> +		ret = i2c_smbus_read_word_data(client, PMBUS_READ_VOUT);
-> +		if (ret < 0) {
-> +			dev_err_probe(&client->dev, ret, "Can't get vout exponent.");
-> +			return ret;
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
-			return dev_err_probe(&client->dev, ret, "Can't get vout exponent.");
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
-> +		}
-> +		data->vout_linear_exponent = (u8)((ret >> 11) & 0x1f);
-> +	} else {
-> +		data->vout_mode = direct;
-> +		ret = i2c_smbus_read_word_data(client, I_SCALE_SEL);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (ret & BIT(6))
-> +			data->info.m[PSC_CURRENT_IN] = 4;
-> +	}
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct i2c_device_id mp5926_id[] = {
-> +	{ "mp5926", 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mp5926_id);
-> +
-> +static const struct of_device_id mp5926_of_match[] = {
-> +	{ .compatible = "mps,mp5926" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp5926_of_match);
-> +
-> +static struct i2c_driver mp5926_driver = {
-> +	.probe = mp5926_probe,
-> +	.driver = {
-> +			.name = "mp5926",
-> +			.of_match_table = mp5926_of_match,
-> +		   },
-> +	.id_table = mp5926_id,
-> +};
-> +
-> +module_i2c_driver(mp5926_driver);
-> +MODULE_AUTHOR("Yuxi Wang <Yuxi.Wang@monolithicpower.com>");
-> +MODULE_DESCRIPTION("MPS MP5926 pmbus driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.19-rc2
+
+for you to fetch changes up to b3db91c3bfea69a6c6258fea508f25a59c0feb1a:
+
+  hwmon: (ltc4282): Fix reset_history file permissions (2025-12-19 08:44:22 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v6.19-rc2
+
+- ltc4282: Fix reset_history file permissions
+
+- ds620: Update broken Datasheet URL in driver documentation
+
+- tmp401: Fix overflow caused by default conversion rate value
+
+- ibmpex: Fix use-after-free in high/low store
+
+- dell-smm: Limit fan multiplier to avoid overflow
+
+----------------------------------------------------------------
+Alexey Simakov (1):
+      hwmon: (tmp401) fix overflow caused by default conversion rate value
+
+Denis Sergeev (1):
+      hwmon: (dell-smm) Limit fan multiplier to avoid overflow
+
+Junrui Luo (1):
+      hwmon: (ibmpex) fix use-after-free in high/low store
+
+Nuno Sá (1):
+      hwmon: (ltc4282): Fix reset_history file permissions
+
+Okan Akyuz (1):
+      hwmon: (DS620) Update broken Datasheet URL in driver documentation
+
+ Documentation/hwmon/ds620.rst  | 4 ++--
+ drivers/hwmon/dell-smm-hwmon.c | 9 +++++++++
+ drivers/hwmon/ibmpex.c         | 9 +++++++--
+ drivers/hwmon/ltc4282.c        | 9 ++++++---
+ drivers/hwmon/tmp401.c         | 2 +-
+ 5 files changed, 25 insertions(+), 8 deletions(-)
