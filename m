@@ -1,195 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F751E2606;
-	Mon, 22 Dec 2025 10:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9499A295DB8;
+	Mon, 22 Dec 2025 11:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766400701; cv=none; b=Rj4WqcMuelq4pQcpeiD4ItdeBWH7u/4SqPLAyYlaKxNbw83P6sf7SOQqVQFRj6Oxu/4LKaQHXMvWTNLcwbNuY2Rv4t0UGwrK+slS5pwbPcFRDl/6gFhFdwSRXRBQtojh6ILDXCmYc6THPXaRVx8bEtbke/+Lg4wCXFhQY6eZmwo=
+	t=1766401642; cv=none; b=gJJk269ouL00I//iuwJ7y9xKbgu0g/D8m/kkBxCMHSsP/dJEefbYcZVHlUQEXLHCPHdJHXF6/Y2hklfK+VkXrFv3yi8vouct2Cx1fowU7HIlmMTXVgx0NJUbk/WiTyjsJpksED05agz8YEYc6lUDBd9nKHnq6h2iB1w+mHlV2Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766400701; c=relaxed/simple;
-	bh=ZhODpW1Vef8fiznT5wKMwY5ksVbGZFsaL/oU3wYQppc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CZrkB1zgdR7tfrfaYbpSUIBr0iuVDNcPtIfvyhBkoUXPMWZiMoatl0E5T3Fu0UaeWrruz9zQxqvVSgeeFY29doBxeXwi6miubMD9AqN09GH7iNPQ7PLjXjmei1plSwTvxbuDP2w4EKZZUujuZaFqh+lem8CzSYrgKoJ7NECd9cw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkIqyOq1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766401642; c=relaxed/simple;
+	bh=tcW5l6VrXXlOTEIFgckRUbeTyCmj9GRWXn6I47nzyKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7Gh9Q2L3usUy8tJChdREXa7zNg50q7C1lCDIErFkNiUBJsHQjU4WIRiIq3hGZ31KZqQ6Syr7u8UfHRunFi/niHncuNM303lW0N2u0dc+TZ2ikaTjIalfnhRMUWYDxhP3hduuaPjPwEmZ21JMeBdtClx8FcOK+8oOSICFk3CfbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hrFodArR; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkIqyOq1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24C51C4CEF1;
-	Mon, 22 Dec 2025 10:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766400701;
-	bh=ZhODpW1Vef8fiznT5wKMwY5ksVbGZFsaL/oU3wYQppc=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=KkIqyOq1HwU2ELL9MAdM2TI/oj8TzZRtz4r53Zb8E0Ed2NQBziVYRvz9a4nN66zUH
-	 6fx8dwPeeqDOYXhxHT7lvF7Gb90BjxlQ+8QS7/hU5tY4AsbCN9H8ss/CQCIdmAlI13
-	 +iB5cRh9FYX00PziVPjEdbDAF8bWz7x/JOwfuE3ApRAkrMTABns5rOqKkW0NrFALZH
-	 7c0QhMV69rnDZ++YlPaU0lT80ta0L/sox+5wZ9T3fTJSbzj+1Z1flMmnDKmrOPmEVv
-	 87ZcDeEevEbgDSCqhHP7sWIK04T5imXU6a0ZCVqZgUAjpzvkMNZqx32YzRsxB5mbfX
-	 5a/PvAUveVz0w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 065BDE67482;
-	Mon, 22 Dec 2025 10:51:41 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Mon, 22 Dec 2025 18:51:39 +0800
-Subject: [PATCH] hwmon: (gpd-fan) add support for Micro PC 2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hrFodArR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766401640; x=1797937640;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tcW5l6VrXXlOTEIFgckRUbeTyCmj9GRWXn6I47nzyKo=;
+  b=hrFodArRPaADVaaym4WPSSgeXZQSIgnEFCFTwkOW4b9z+wf0c7t5fnYg
+   ILDQnXJQhot/q8Vz6G2TcvpsTv3XE0q88QomOalaPP9c56RjqV7bVTd23
+   FqqD7uu53zzLurVrXVTmU16CTOvKMdD31NKk5u/HzZhZh8mVbECRyZvsI
+   6jzX84wCfaSgf9tOcFxUePU+J/Bwkh24RRwcsC5lD2k9AJOfGMbk7qVmj
+   fVhYOj3Cl5Hc7nDJPU1GCGqPIXxnPca0f0wEcpLrjR5x+XhrbRA6tZQg/
+   2Xi74GnCfrbZ7BVuJpH8zyKgO5Rj2fY8d6HIx7OeaYIFeSYWGvCr79aDt
+   Q==;
+X-CSE-ConnectionGUID: N0k2N43BT3WiwAgGrf7dCA==
+X-CSE-MsgGUID: ZCVyJi+iTBC6PEKXS518iQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="72104238"
+X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
+   d="scan'208";a="72104238"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 03:07:19 -0800
+X-CSE-ConnectionGUID: zkF2HHeZRzmMTDJvSs5Aaw==
+X-CSE-MsgGUID: 420zfMw8RuKvuXZHShpT3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
+   d="scan'208";a="199254850"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by orviesa009.jf.intel.com with ESMTP; 22 Dec 2025 03:07:18 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vXdkx-000000005RI-0RrC;
+	Mon, 22 Dec 2025 11:07:15 +0000
+Date: Mon, 22 Dec 2025 12:06:51 +0100
+From: kernel test robot <lkp@intel.com>
+To: Charles Hsu <hsu.yungteng@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Charles Hsu <hsu.yungteng@gmail.com>
+Subject: Re: [PATCH 2/2] hwmon: pmbus: add support for STEF48H28
+Message-ID: <202512221250.KCb0UUiG-lkp@intel.com>
+References: <20251216083712.260140-2-hsu.yungteng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251222-mpc2-v1-1-695d8d351cc1@uniontech.com>
-X-B4-Tracking: v=1; b=H4sIALoiSWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDIyMj3dyCZCNdo8QkwyTjJANzM0tjJaDSgqLUtMwKsDHRsbW1AFEuo6Z
- WAAAA
-X-Change-ID: 20251222-mpc2-2ab1b3b07693
-To: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, zhanjun@uniontech.com, 
- niecheng1@uniontech.com, kylon <3252255+kylon@users.noreply.github.com>, 
- Cryolitia PukNgae <cryolitia@uniontech.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766400699; l=3503;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=nv5ngPCWNWl1pWZK/Jsrxlg5PBarThSYyvwaOoZoOns=;
- b=dUI8ap2n210H2jIH6foW8oZ8uJ0m1WIRoV4sc9uvFbUH1MM5LrSnpO+cZQidzg1s43cz3S81w
- S6PVn0xqJK9ALMUa+O+/ZQtVEPiCjcxyI86VlYb1VYxXvRH57QDbs0E
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251216083712.260140-2-hsu.yungteng@gmail.com>
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Hi Charles,
 
-GPD Micro PC 2 is a mobile productivity device with 7-inch screen and
-abundant ports.[1]
+kernel test robot noticed the following build warnings:
 
-Link: https://www.gpd.hk/gpdmicropc2345345345 #1
-Co-developed-by: kylon <3252255+kylon@users.noreply.github.com>
-Signed-off-by: kylon <3252255+kylon@users.noreply.github.com>
-Tested-by: kylon <3252255+kylon@users.noreply.github.com>
-Link: https://github.com/Cryolitia/gpd-fan-driver/pull/23
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- Documentation/hwmon/gpd-fan.rst |  3 +++
- drivers/hwmon/gpd-fan.c         | 27 ++++++++++++++++++++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/Documentation/hwmon/gpd-fan.rst b/Documentation/hwmon/gpd-fan.rst
-index 0b56b70e6264..29527a77fe88 100644
---- a/Documentation/hwmon/gpd-fan.rst
-+++ b/Documentation/hwmon/gpd-fan.rst
-@@ -28,6 +28,7 @@ Currently the driver supports the following handhelds:
-  - GPD Win Max 2 2025 (HX370)
-  - GPD Win 4 (6800U)
-  - GPD Win 4 (7840U)
-+ - GPD Micro PC 2
- 
- Module parameters
- -----------------
-@@ -50,6 +51,8 @@ gpd_fan_board
-        - GPD Win Mini (HX370)
-        - GPD Pocket 4
-        - GPD Duo
-+   - mpc2
-+       - GPD Micro PC 2
- 
- Sysfs entries
- -------------
-diff --git a/drivers/hwmon/gpd-fan.c b/drivers/hwmon/gpd-fan.c
-index 237f496c4862..1729729b135f 100644
---- a/drivers/hwmon/gpd-fan.c
-+++ b/drivers/hwmon/gpd-fan.c
-@@ -31,6 +31,7 @@ enum gpd_board {
- 	win4_6800u,
- 	win_max_2,
- 	duo,
-+	mpc2,
- };
- 
- enum FAN_PWM_ENABLE {
-@@ -106,6 +107,18 @@ static struct gpd_fan_drvdata gpd_wm2_drvdata = {
- 	.pwm_max		= 184,
- };
- 
-+static struct gpd_fan_drvdata gpd_mpc2_drvdata = {
-+	.board_name		= "mpc2",
-+	.board			= mpc2,
-+
-+	.addr_port		= 0x4E,
-+	.data_port		= 0x4F,
-+	.manual_control_enable	= 0x047A,
-+	.rpm_read		= 0x0476,
-+	.pwm_write		= 0x047A,
-+	.pwm_max		= 244,
-+};
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		// GPD Win Mini
-@@ -212,11 +225,19 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = &gpd_win_mini_drvdata,
- 	},
-+	{
-+		// GPD Micro PC 2
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "G1688-08"),
-+		},
-+		.driver_data = &gpd_mpc2_drvdata,
-+	},
- 	{}
- };
- 
- static const struct gpd_fan_drvdata *gpd_module_drvdata[] = {
--	&gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, NULL
-+	&gpd_win_mini_drvdata, &gpd_win4_drvdata, &gpd_wm2_drvdata, &gpd_mpc2_drvdata, NULL
- };
- 
- // Helper functions to handle EC read/write
-@@ -295,6 +316,7 @@ static int gpd_read_rpm(void)
- 	case win4_6800u:
- 	case win_mini:
- 	case duo:
-+	case mpc2:
- 		return gpd_generic_read_rpm();
- 	case win_max_2:
- 		return gpd_wm2_read_rpm();
-@@ -321,6 +343,7 @@ static int gpd_read_pwm(void)
- 	case win_mini:
- 	case duo:
- 	case win4_6800u:
-+	case mpc2:
- 		switch (gpd_driver_priv.pwm_enable) {
- 		case DISABLE:
- 			return 255;
-@@ -376,6 +399,7 @@ static int gpd_write_pwm(u8 val)
- 	case win_mini:
- 	case win4_6800u:
- 	case win_max_2:
-+	case mpc2:
- 		gpd_generic_write_pwm(val);
- 		break;
- 	}
-@@ -443,6 +467,7 @@ static void gpd_set_pwm_enable(enum FAN_PWM_ENABLE enable)
- 	switch (gpd_driver_priv.drvdata->board) {
- 	case win_mini:
- 	case win4_6800u:
-+	case mpc2:
- 		gpd_win_mini_set_pwm_enable(enable);
- 		break;
- 	case duo:
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Hsu/hwmon-pmbus-add-support-for-STEF48H28/20251216-164903
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20251216083712.260140-2-hsu.yungteng%40gmail.com
+patch subject: [PATCH 2/2] hwmon: pmbus: add support for STEF48H28
+reproduce: (https://download.01.org/0day-ci/archive/20251222/202512221250.KCb0UUiG-lkp@intel.com/reproduce)
 
----
-base-commit: c6c80820ac5d845c19c4de2e6054e7c246017044
-change-id: 20251222-mpc2-2ab1b3b07693
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512221250.KCb0UUiG-lkp@intel.com/
 
-Best regards,
+All warnings (new ones prefixed by >>):
+
+   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
+   ERROR: Cannot find file ./include/linux/hid_bpf.h
+   WARNING: No kernel-doc for file ./include/linux/hid_bpf.h
+   ERROR: Cannot find file ./include/linux/hid.h
+   WARNING: No kernel-doc for file ./include/linux/hid.h
+>> Documentation/hwmon/stef48h28.rst:4: WARNING: Title underline too short.
+
+
+vim +4 Documentation/hwmon/stef48h28.rst
+
+     2	
+     3	Kernel driver stef48h28
+   > 4	======================
+     5	
+
 -- 
-Cryolitia PukNgae <cryolitia@uniontech.com>
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
