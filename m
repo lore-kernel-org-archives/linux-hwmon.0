@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A6D29B783;
-	Mon, 22 Dec 2025 12:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FCC283FC5;
+	Mon, 22 Dec 2025 12:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766406967; cv=none; b=eJkYgrDfaZE4afhGC+vT7tP77eh4F3XqhTYDHKTus9fs4Di/ayriiqGVpmzMYK9pb+o0XerhTEJxnXqoXuqUeiOmuGCZuF8suFooWciHU6dcDWEajadhujoY6Y9wOIJGGJwbIsjjmSg2WnI43U0Ge+IXKnQxtbXYwuhi53KFpAk=
+	t=1766407023; cv=none; b=ZYkU32zjPngfMNfNATpfR+ofLqijlw4Ir94V8ouSEAUL4dbD1Tzhkc1h6KDO9VLih6wdbWxZ5Q4Bh9B6XgKUTMFayZdMxLpb+wIXd6Bk8yJKYbVoAj/D8yFURC8j3FK71tgWZGB6zPz5kaAM1CiJ/7NolOAzmIXzdfuIps09UKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766406967; c=relaxed/simple;
-	bh=nIH+NsXa4+h7nGBSaebOmJMrEPvMQfPemgMYnq2c5K4=;
+	s=arc-20240116; t=1766407023; c=relaxed/simple;
+	bh=JizgybxxUWC/2HrnoU2NhswkyZVW++LprQBKnIr4rxY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P27IfqrnUeZyMmscxNB5dW8iCdUF/nD9ypcpHjxDTCmJpsJMjqpLQOki0AWQl9BvQUcwhQWWWiWAqkqmiMyX4cXZD8+/TsepqKELpMLBGHqRPDsOVutTOTUGOtbi0+GR1NgtSYtrz5tYXQmWYPaCC3J89bhFajkNMTsIkL4jIlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qTBzU4Az; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GosN0rVfI046/C9Ki7mb837ETsF9OEjrVoVfTuVoU/07eSx464HMbLl1ciJ1J24QDavdjcnn7AxOppLxDjgm0P7dxVD6r9dvrea/0Re0nlOE/4+TRTa757RHXhog9bIA6wnT3+rRn3W9gR4Jlgf/Fo+RPp1KrGmrJ3VvLA2vXHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uBrCgH0q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qTBzU4Az"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95E5C4AF09;
-	Mon, 22 Dec 2025 12:36:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uBrCgH0q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214E5C4CEF1;
+	Mon, 22 Dec 2025 12:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766406967;
-	bh=nIH+NsXa4+h7nGBSaebOmJMrEPvMQfPemgMYnq2c5K4=;
+	s=k20201202; t=1766407023;
+	bh=JizgybxxUWC/2HrnoU2NhswkyZVW++LprQBKnIr4rxY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qTBzU4AzMXAeQTGZeGkwxZrYYqzUyChWzDSHi9PKwc1tXmZo4wrlxTT9e7id1DfNt
-	 CBWtzTrvEHxs64c2wqoqqyUwCR0FOE1Vu1cAzmMlWRTDD2Nv3vZlnD0qEtoLH6D/At
-	 jIwHCVQbGCdkd/d1xA2TYywwyqbtltETaZR3Z4sTGbqzUW2JPIKUYLxdG53OXFSGt9
-	 etghbKy3BGy4HOSJXL/R2E8izdvX8EeHgVfk6548cBXos7KA2/9eRSUQIrtsOUwAss
-	 yAvpQWiCGh9QTt6p14ajU78tWx+Eoqb6ovhnRWHi6nrfPQmoTHjd0HFdY1jgkXOlFP
-	 1hiytBYlB6nPw==
-Date: Mon, 22 Dec 2025 12:36:02 +0000
+	b=uBrCgH0qZLBqLYpsYyOuU95D2K9qf3eP95kd/XRP6tKebUo8jgOmyMgnwparGoA1V
+	 lWb8jc9OMqNS2loinlJgn8khUiWjBZT4fWEHAux0h9xzuOZ4oaBUDuuQ4M57JtjETR
+	 FDCm4o+N9j3T8OIbzAR4Wn/NYTinOHeX7p+c/A5GieZL4nX8qVASrFw6vA2/Lg0uWg
+	 vWZmzUaMI7t0L6JM9xfrPsdcNLAuBef/tb1OPlccS9UX3x9u8AEcXOifhmnEm1R0L5
+	 NYyzImQEjNa9jHwa5XAl6wOcPk7i7DI1CCAhDj6D3MMmNrUZWvHA5Ayh5mN0WXMh2a
+	 yvDVSFsDUB7zw==
+Date: Mon, 22 Dec 2025 12:36:58 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Andreas Kemnade <andreas@kemnade.info>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
@@ -34,10 +34,10 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 2/2] regulator: Add TPS65185 driver
-Message-ID: <84fdaf7c-4d4b-491f-975c-ebb14350fafd@sirena.org.uk>
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add TI TPS65185
+Message-ID: <f316a771-14f7-4ce9-aa45-c9494e641c1e@sirena.org.uk>
 References: <20251222-tps65185-submit-v1-0-34986b504d5f@kemnade.info>
- <20251222-tps65185-submit-v1-2-34986b504d5f@kemnade.info>
+ <20251222-tps65185-submit-v1-1-34986b504d5f@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -45,95 +45,49 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iQ7ovkCqm/hmlKcA"
+	protocol="application/pgp-signature"; boundary="WRJulVs+j+cHwkrq"
 Content-Disposition: inline
-In-Reply-To: <20251222-tps65185-submit-v1-2-34986b504d5f@kemnade.info>
+In-Reply-To: <20251222-tps65185-submit-v1-1-34986b504d5f@kemnade.info>
 X-Cookie: Be different: conform.
 
 
---iQ7ovkCqm/hmlKcA
+--WRJulVs+j+cHwkrq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Dec 22, 2025 at 01:18:31PM +0100, Andreas Kemnade wrote:
+On Mon, Dec 22, 2025 at 01:18:30PM +0100, Andreas Kemnade wrote:
+> Document the TPS65185. GPIO names are same as in the datasheet except for
+> the PWRUP pad which is described as "enable". That pin is optional because
+> the rising edge corresponds to setting one register bit and falling edge
+> to another register bit.
 
-> Add a driver for the TPS65185 regulator. Implement handling of the various
-> gpio pins. Because the PWRUP (=enable) pin functionality can be achieved
-> by just using two bits instead, just ensure that it is set to a stable
-> value.
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-The reason for having GPIO controlled enables on devices with register
-maps is that it's generally substantially faster to update a GPIO than
-to do I2C I/O.
+> +required:
+> +  - compatible
+> +  - reg
+> +  - pg-gpios
 
-> +static bool tps65185_volatile_reg(struct device *dev, unsigned int reg)
-> +{
-> +	switch (reg) {
-> +	case TPS65185_REG_TMST_VALUE:
-> +	case TPS65185_REG_ENABLE:
+Unless the device can operate without power the supplies should be
+required.
 
-Why is the enable register volatile?  I can't see anything in the
-datasheet that suggests that it should be.
-
-> +static int tps65185_runtime_suspend(struct device *dev)
-> +{
-
-Implementing runtime suspend in a regulator is *very* non-idiomatic and
-is leading to large amounts of open coding throughout the driver.
-What's the story here?  I'm very surprised that this wasn't in the
-changelog.
-
-+       if (data->wakeup_gpio) {
-+               ret = gpiod_set_value_cansleep(data->wakeup_gpio, 0);
-+               if (ret)
-+                       return ret;
-+       }
-
-This would usually be used for system suspend.
-
-+       if (data->vin_reg) {
-+               ret = regulator_disable(data->vin_reg);
-+               if (ret)
-+                       goto reenable_wkup;
-+       }
-
-Can the device really operate without power?
-
-> +static irqreturn_t tps65185_irq_thread(int irq, void *dev_id)
-> +{
-> +	struct tps65185_data *data = dev_id;
-> +	unsigned int int_status_1, int_status_2;
-> +	int ret;
-> +
-> +	/* read both status to have irq cleared */
-> +	regmap_read(data->regmap, TPS65185_REG_INT1, &int_status_1);
-> +
-> +	ret = regmap_read(data->regmap, TPS65185_REG_INT2, &int_status_2);
-> +	if (!ret) {
-> +		if (int_status_2 & BIT(0))
-> +			complete(&data->tmst_completion);
-> +	}
-> +
-> +	dev_dbg(data->dev, "irq status %02x %02x\n", int_status_1, int_status_2);
-> +
-> +	return IRQ_HANDLED;
-> +}
-
-This unconditionally reports an interrupt even if none was detected.
-
---iQ7ovkCqm/hmlKcA
+--WRJulVs+j+cHwkrq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlJOzIACgkQJNaLcl1U
-h9BdWAf/aaJAXtASiig1NF1BNU+vIdzE+WjHcRuV9fbXIdqaPlscqCQQz9OVUTzK
-b/+kwtQefZQKYS6kxJOdIWFBVV978V5gx5GXqqJ+FjZNnwf9/GDqu2AS0InrE93H
-l6LoR3wyrn7mpR/ohN4lnoMsBKNMAB00U7VGIt2r1NYwVBbsa2UCIpON7H50dfiA
-aFwfBYFhYlb9LJsdRxBb+hIwHB/88sBi5v5DNtmbi2p5xXZb8xdQADo5rWpwk/5h
-aPCxTS90+pZN/ewXLj6JiytyjBRlHWvtFpXRDYhma/WbNPcb4icLT+5G+YkomZKO
-rusEDsvtcpLvnWnURo6GEs7a9NYF0A==
-=KpCb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlJO2kACgkQJNaLcl1U
+h9ApnAf+Nqo0yHYwxatVkYtMdcrKFnak4l5lGUWZ8TlakR7I6gVZ5IBE1duUF9sk
+JUIvHFk2KzCaASA09E7xB7ZvLN68w5eSEIu6POaYMmJ+3wRHslxdMn1UtegCkZje
+QjYiS+0rXmCHp5+uCfZwEbjROQvpzPLiqra5+FFRuVyVw3dp+3B9SfeHYIcXAYdx
+oModelxFdoH9XtRLbClfA1XxBMAY9UYlgRl0dwGa7yqi/jKCnsC/ga1vCfel/B3m
+Azq9uNDKEYzVsSDGXorKWCLQMCiBpVR8NDncpY8/NZeMImgkThK/OYHqwpPp4e2J
+MKy6qj2iy/LV03yvsP5J0BvdjEvkYQ==
+=V+Tv
 -----END PGP SIGNATURE-----
 
---iQ7ovkCqm/hmlKcA--
+--WRJulVs+j+cHwkrq--
