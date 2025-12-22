@@ -1,93 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FCC283FC5;
-	Mon, 22 Dec 2025 12:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4835832AAAE;
+	Mon, 22 Dec 2025 13:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766407023; cv=none; b=ZYkU32zjPngfMNfNATpfR+ofLqijlw4Ir94V8ouSEAUL4dbD1Tzhkc1h6KDO9VLih6wdbWxZ5Q4Bh9B6XgKUTMFayZdMxLpb+wIXd6Bk8yJKYbVoAj/D8yFURC8j3FK71tgWZGB6zPz5kaAM1CiJ/7NolOAzmIXzdfuIps09UKY=
+	t=1766411131; cv=none; b=SXNy+oFfgVZKBHCm0iTW5n9qUsLwDEUXBFUsFi41cas5l44L8pM6v7iVirmdpREK6tx56cSfG3wc2vm5F6/gMRLyfIEC3vcrzzt+y6UQK79q0gQJTHcjRU67vahSg/S/4pS1FCibRHhBFcGVaaNZqi7ZnGr9LwwRE/u4O9ng8hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766407023; c=relaxed/simple;
-	bh=JizgybxxUWC/2HrnoU2NhswkyZVW++LprQBKnIr4rxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GosN0rVfI046/C9Ki7mb837ETsF9OEjrVoVfTuVoU/07eSx464HMbLl1ciJ1J24QDavdjcnn7AxOppLxDjgm0P7dxVD6r9dvrea/0Re0nlOE/4+TRTa757RHXhog9bIA6wnT3+rRn3W9gR4Jlgf/Fo+RPp1KrGmrJ3VvLA2vXHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uBrCgH0q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766411131; c=relaxed/simple;
+	bh=K6fMSQKfy7O1SsEMV3ZNGq9J4xccAIk/q6VfsHJB0ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZTjvSnPVM5AmI8KEFvavQivfsjULTYtSH2oxmeQXSdff93Jb3UA55Msr56b5jx6QN17mlZ7TRBNx326nsE/q/BnXrR/XgSo8/LVzCKlFLo3SKCXUmLSl58L4s2SG6wttvMYDeuztxSNdGS1lrqlYb6BKfNO3ApZVDiF4yHWXYYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=Gpbp0JQf; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uBrCgH0q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214E5C4CEF1;
-	Mon, 22 Dec 2025 12:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766407023;
-	bh=JizgybxxUWC/2HrnoU2NhswkyZVW++LprQBKnIr4rxY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uBrCgH0qZLBqLYpsYyOuU95D2K9qf3eP95kd/XRP6tKebUo8jgOmyMgnwparGoA1V
-	 lWb8jc9OMqNS2loinlJgn8khUiWjBZT4fWEHAux0h9xzuOZ4oaBUDuuQ4M57JtjETR
-	 FDCm4o+N9j3T8OIbzAR4Wn/NYTinOHeX7p+c/A5GieZL4nX8qVASrFw6vA2/Lg0uWg
-	 vWZmzUaMI7t0L6JM9xfrPsdcNLAuBef/tb1OPlccS9UX3x9u8AEcXOifhmnEm1R0L5
-	 NYyzImQEjNa9jHwa5XAl6wOcPk7i7DI1CCAhDj6D3MMmNrUZWvHA5Ayh5mN0WXMh2a
-	 yvDVSFsDUB7zw==
-Date: Mon, 22 Dec 2025 12:36:58 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andreas Kemnade <andreas@kemnade.info>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="Gpbp0JQf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=V1GVF8Zwz0WMTnqNWRKGE/8ENEVjUN/l7wfc6+UaUyM=; b=Gpbp0JQf3WKd1kUhrcy61H8ij8
+	kYkM2xeCMnW9xDy54Jb1O1z97v5ZTB4EmPh6p9vLAWLn7He/8nYYQZ0oRCBls+NUjLVhAEKvrheHc
+	PJdp+fhCZ8b61wrD7jSRHrUJkj1tC2X4lnK73U6PSQvFgfLw/bI9D4lObZa4Ujjnjzh8lxEkbn5Nq
+	bNdj3QWZSRfSaorT1b07SlkLWOsRcDnEQm7YBYNyb99gzyk7ZxYiwj28xGwSmFGDjOt/Zq3Ynx9MA
+	jUU/LipUEjNFDH8pO6aa6RkcRlKh2OJAi5enqs3aU3two21WmnvR8Tl4p14TLTg7GWYQYkgngbMiw
+	74Ri5NdA==;
+Date: Mon, 22 Dec 2025 14:45:22 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Mark Brown <broonie@kernel.org>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add TI TPS65185
-Message-ID: <f316a771-14f7-4ce9-aa45-c9494e641c1e@sirena.org.uk>
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/2] regulator: Add TPS65185 driver
+Message-ID: <20251222144522.33d7c734@kemnade.info>
+In-Reply-To: <84fdaf7c-4d4b-491f-975c-ebb14350fafd@sirena.org.uk>
 References: <20251222-tps65185-submit-v1-0-34986b504d5f@kemnade.info>
- <20251222-tps65185-submit-v1-1-34986b504d5f@kemnade.info>
+	<20251222-tps65185-submit-v1-2-34986b504d5f@kemnade.info>
+	<84fdaf7c-4d4b-491f-975c-ebb14350fafd@sirena.org.uk>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WRJulVs+j+cHwkrq"
-Content-Disposition: inline
-In-Reply-To: <20251222-tps65185-submit-v1-1-34986b504d5f@kemnade.info>
-X-Cookie: Be different: conform.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, 22 Dec 2025 12:36:02 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
---WRJulVs+j+cHwkrq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Mon, Dec 22, 2025 at 01:18:31PM +0100, Andreas Kemnade wrote:
+>=20
+> > Add a driver for the TPS65185 regulator. Implement handling of the vari=
+ous
+> > gpio pins. Because the PWRUP (=3Denable) pin functionality can be achie=
+ved
+> > by just using two bits instead, just ensure that it is set to a stable
+> > value. =20
+>=20
+> The reason for having GPIO controlled enables on devices with register
+> maps is that it's generally substantially faster to update a GPIO than
+> to do I2C I/O.
+>=20
+well we are talking about 30ms turning on time here.
 
-On Mon, Dec 22, 2025 at 01:18:30PM +0100, Andreas Kemnade wrote:
-> Document the TPS65185. GPIO names are same as in the datasheet except for
-> the PWRUP pad which is described as "enable". That pin is optional because
-> the rising edge corresponds to setting one register bit and falling edge
-> to another register bit.
+[  130.816647] tps65185 1-0068: turning on...
+[  130.849970] tps65185 1-0068: turned on
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+So if we have 100khz i2c, so, we have around 0.1ms per byte, so
+the read/modify/write sequence should be done in <1ms. So I guess that is
+neglectible and allows the flexibility to not have that pin.
 
-> +required:
-> +  - compatible
-> +  - reg
-> +  - pg-gpios
+> > +static bool tps65185_volatile_reg(struct device *dev, unsigned int reg)
+> > +{
+> > +	switch (reg) {
+> > +	case TPS65185_REG_TMST_VALUE:
+> > +	case TPS65185_REG_ENABLE: =20
+>=20
+> Why is the enable register volatile?  I can't see anything in the
+> datasheet that suggests that it should be.
+>=20
+Bit 7/6 are volatile. They reset automatically after operation done
+Quote: "NOTE: After transition bit is cleared automatically"
 
-Unless the device can operate without power the supplies should be
-required.
+> > +static int tps65185_runtime_suspend(struct device *dev)
+> > +{ =20
+>=20
+> Implementing runtime suspend in a regulator is *very* non-idiomatic and
+> is leading to large amounts of open coding throughout the driver.
+> What's the story here?  I'm very surprised that this wasn't in the
+> changelog.
+>=20
+OK, lets look around in the datasheet. We are apparently dealing
+with 130=C2=B5A here which can be saved. But that should be acceptable to be
+only done on system suspend even if the regulator is off most times.
+So no really strong technical reason here. I am just too used to testing
+power management using runtime suspend.
 
---WRJulVs+j+cHwkrq
-Content-Type: application/pgp-signature; name="signature.asc"
+> +       if (data->wakeup_gpio) {
+> +               ret =3D gpiod_set_value_cansleep(data->wakeup_gpio, 0);
+> +               if (ret)
+> +                       return ret;
+> +       }
+>=20
+> This would usually be used for system suspend.
+>=20
+> +       if (data->vin_reg) {
+> +               ret =3D regulator_disable(data->vin_reg);
+> +               if (ret)
+> +                       goto reenable_wkup;
+> +       }
+>=20
+> Can the device really operate without power?
+>=20
+No, it cannot. So yes, if we require the regulator we have
+simplier code here.
 
------BEGIN PGP SIGNATURE-----
+> > +static irqreturn_t tps65185_irq_thread(int irq, void *dev_id)
+> > +{
+> > +	struct tps65185_data *data =3D dev_id;
+> > +	unsigned int int_status_1, int_status_2;
+> > +	int ret;
+> > +
+> > +	/* read both status to have irq cleared */
+> > +	regmap_read(data->regmap, TPS65185_REG_INT1, &int_status_1);
+> > +
+> > +	ret =3D regmap_read(data->regmap, TPS65185_REG_INT2, &int_status_2);
+> > +	if (!ret) {
+> > +		if (int_status_2 & BIT(0))
+> > +			complete(&data->tmst_completion);
+> > +	}
+> > +
+> > +	dev_dbg(data->dev, "irq status %02x %02x\n", int_status_1, int_status=
+_2);
+> > +
+> > +	return IRQ_HANDLED;
+> > +} =20
+>=20
+> This unconditionally reports an interrupt even if none was detected.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlJO2kACgkQJNaLcl1U
-h9ApnAf+Nqo0yHYwxatVkYtMdcrKFnak4l5lGUWZ8TlakR7I6gVZ5IBE1duUF9sk
-JUIvHFk2KzCaASA09E7xB7ZvLN68w5eSEIu6POaYMmJ+3wRHslxdMn1UtegCkZje
-QjYiS+0rXmCHp5+uCfZwEbjROQvpzPLiqra5+FFRuVyVw3dp+3B9SfeHYIcXAYdx
-oModelxFdoH9XtRLbClfA1XxBMAY9UYlgRl0dwGa7yqi/jKCnsC/ga1vCfel/B3m
-Azq9uNDKEYzVsSDGXorKWCLQMCiBpVR8NDncpY8/NZeMImgkThK/OYHqwpPp4e2J
-MKy6qj2iy/LV03yvsP5J0BvdjEvkYQ==
-=V+Tv
------END PGP SIGNATURE-----
+Hmm, this seems like some common pattern, if some irq occurs,
+check some registers and if something is set, do something about it,
+and then unconditionally return IRQ_HANDLED.
 
---WRJulVs+j+cHwkrq--
+Regards,
+Andreas
