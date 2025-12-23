@@ -1,155 +1,139 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017934F245
-	for <linux-hwmon@vger.kernel.org>; Tue, 23 Dec 2025 15:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1690318151;
+	Tue, 23 Dec 2025 16:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766503777; cv=none; b=YICSS5KXglHyqpNamJ/Yx6eJ+M9Tg02aIoPDF8iPM7oA24Z44IHMDMHAxXuQ3y7gCnspKxiq3+o/WwXFXD10zYyf0BkAv2e3j63COiZhXPVyRVc63yDnSLEJfW4vFFeOMAOAEgYkYBVK5Hlxw1DJfannmPVcbOgAel07UguJm+M=
+	t=1766507079; cv=none; b=S9EaB2CULqY0KQnrsPsFk76Gl8XkxnGBuJYGX/7CinykRYIt7yZhV2FG3fwXLw3Vps0OwZ5FWzjRvUG/Mzbc8YFXVvqY4AkKrWdmrQL9VBKeosFKNu6PKxYQaErC/PfOOwjkJmf1luA1fKCxPpGHG7pJRRH5Vew1s5NVpSJH6+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766503777; c=relaxed/simple;
-	bh=UJ4a8K9wry/JPIeGH5DwpGba6bA4R4gax6qub7x2SY4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aqLHEDi5fwEr1dnpAEYxBNmwQ6MtDjTL3inAU9Pv1U08SJA8iWRLRA0AQnFuZK6jEw1PdbLfU1oXuAKM2kT3nv4/53IxqbHPJmJbXGamr/xsCWFcaYVosAPqUOABe41/VrxOqC//UAB8cwS/trYFDbpZptlWWOrmXGtCVhnov9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=lDOkL1Fy; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+	s=arc-20240116; t=1766507079; c=relaxed/simple;
+	bh=3qVOvSQIWwScePELLmWnd91+x+FO0ghrlMNcQT2LZbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XxrAiWi14x+jbvNinMhC5DAN1MxVH3yBT0xzr6v3VSI+CrMked+1o4XAPgu/nYSzsQzu03T2l6zFXnYUSZwxG0WBy6Fv1b2krScnGCH9MhDyxbY90/eqd7LuCKDPXCT6uCGI10tiGFxqptNuoNw1KRycLl9jQYk6TT6VIyzjlpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxocYG+q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="lDOkL1Fy"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b727f452fffso986226966b.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 23 Dec 2025 07:29:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1766503774; x=1767108574; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cLjISIOInag6cJNCp9GAXmtvydDuwUZOD3O+6EuGMpA=;
-        b=lDOkL1FyHZFJ/9/OvPdkMyYxnkNuTkuKFAJlUBUCP6HN0MqcClWvGh955PsXfCG+TE
-         XTJ9K//mvDtqzzy+8UpL1y6RStVl9cIPSZrvePcdWuCn+ocgGrIKDtG9+54W1w2//ou8
-         OA5XU6YHOGYGLPwmx49l4TBtdurcyXq+U5KGyoNvmaVZMCeozr9d58t7zZ1j+zZEQDsh
-         Kf3pekwyW72hmnLuSoSmitxCpGyWf6IWLHLSubohN8Q1uFEJ0jlLdVAnxp2afKolq/Di
-         Hpo3XANTXWdDsDg7UaN6dPqi5wLfeRPeuisBuru1875FAqqqDaYDIxgxJJ2SJLG7SJGQ
-         +dlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766503774; x=1767108574;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cLjISIOInag6cJNCp9GAXmtvydDuwUZOD3O+6EuGMpA=;
-        b=DgwI169H3mLIHF8k30Rd1KGDzPk0t2pM4iUO+5gAG4evdTzHGzDUgeZPCVpZjV6fbG
-         LjwbJQKCdarwlZ/IvZSlEN89ppc8OYpSJuP8GrViYtU1TdEtA1ND/C0Qort02kR/oLGG
-         QUpYTM8Rk1zi+vB9QqaHeRQx3cn+Z14Z7+/vgWOo5eFdZStTOqy0MvkVyaebl31SJ/gc
-         WHBFulKuKG1DYXyUVaA4Lj57aercWp78wYqLUB4lN04jxSH1IMNVnlIIILE5Kpc2KzcT
-         C4ujGfIqSyAjgnERI2+wl+QBRRsudX/GxOkYhWJQgnGl68/QkFiTTmIqIZD9lo2c6QI0
-         dSAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUsu+w4YtxU5I/QVkunbwl0RqgxD2eBuUP5NvO6hmPOx9KMtr/poYByzwcittj/P3qnF1DGoGiVRSkM+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjBYuJpqlJkGzwqYUu7g1TyEMxcmkQcziVx7DyHoi4tfTFVDNI
-	T2fvK0D4EOGpTJRr3hgtoZDbJk5fDk3jReGoPd2oGDe59WvNNNpFYvXyxW5Mk2QoxOJCCBaxzLN
-	2EJDRWdbT01h8PCZZUS4Dy6dOpc/Ti/1kTRtjIeDIMg==
-X-Gm-Gg: AY/fxX7F/oUxDSKzzARxbc83OFY5aYpiBn+CY5f0Ss27eU5WKW6t27O/Xo9+Y1WWXY5
-	i7fLboQtKK7Xd6hUUHg2CDl6Mf9+2iFki+GwWnztqCj688z6ETj3SNiYioBDht0G0CW4ECHVxCi
-	BawJR0QUMjoYyYLfSUOJnVcB+ydRZWlMsCGiwg0aShWRD5OpSjKoNIu1jpCsAvRaV99hgwRJGip
-	IB2k8NOTO8mDZjaG/3NDV04S6dPIqUOvajmm26P2aKVELdvW9KUWU3rIgpV50jhi93IGjYhF8dn
-	R0AK7oaX6tVurfwnYZbNtSvA4oKSOtN3zM3DwxTlAUVNSuYNzg==
-X-Google-Smtp-Source: AGHT+IE+xxKz9WunQGu5xp3nWvZrKUFIZLNano4iauMvK7wBVyl981tNBySUR5mcD+g4BmTew6KluXuH/rQplznm+8E=
-X-Received: by 2002:a17:906:30d4:b0:b7c:cc8d:14f4 with SMTP id
- a640c23a62f3a-b8020400995mr1538956066b.4.1766503773539; Tue, 23 Dec 2025
- 07:29:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxocYG+q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0240C113D0;
+	Tue, 23 Dec 2025 16:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766507078;
+	bh=3qVOvSQIWwScePELLmWnd91+x+FO0ghrlMNcQT2LZbk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YxocYG+qrFsexKvWp8UnmdmobfpsDyH7P1+YJTEa2MYESPoFxhafpM8gsfi6cIU1R
+	 n9Gfg1fwPKTG1mVszIKw6gD/hi1FUHPlichzp8hHC1c+ODcPI9IBtiK3ysngVX/8kW
+	 6qtUsjPhga/f+L4DCnVAi/486vh+xUTx4zZGQNwJ3DsWuw1m/H07s9A63d0isPWvAn
+	 xfv73Q5cyzS9PAQGwA0vuOAt9j1S+Rh8W8c92InWjFECnByviZpnF8o0xVzvH73G+F
+	 Ou0DXgasgqiym6+NqEvExYrZ1OZI3ZKfz52X4AGZYCiiAOFPgWM25YiaBJBeAweuxD
+	 6BLkrF9xDKKgg==
+Date: Tue, 23 Dec 2025 21:54:34 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Mariel Tinaco <Mariel.Tinaco@analog.com>,
+	Kevin Tsai <ktsai@capellamicro.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Eugen Hristev <eugen.hristev@linaro.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Hans de Goede <hansg@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Iskren Chernev <me@iskren.info>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Matheus Castello <matheus@castello.eng.br>,
+	Saravanan Sekar <sravanhome@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Casey Connolly <casey.connolly@linaro.org>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>
+Subject: Re: [PATCH v2 2/2] iio: inkern: Use namespaced exports
+Message-ID: <aUrCQu-wmQ7gOyD3@vaman>
+References: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
+ <20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-18-robert.marko@sartura.hr> <20251216-endorse-password-ae692dda5a9c@spud>
- <CA+HBbNF-=W7A3Joftsqn+A6s170sqOZ77jpS105s5HPqkskQzA@mail.gmail.com> <20251223-chrome-simile-8cf1e9afe155@spud>
-In-Reply-To: <20251223-chrome-simile-8cf1e9afe155@spud>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 23 Dec 2025 16:29:22 +0100
-X-Gm-Features: AQt7F2rjEyMDZrOpK1oplok3NPPf4ZxKJg97_UNzU27UIMOHDSKt5OOOHzhM_mA
-Message-ID: <CA+HBbNFhVVoaiVJtH-fB3Wmeh6O3C_H=bwz2vBDR2MO4o0qy_w@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A board
-To: Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
 
-On Tue, Dec 23, 2025 at 3:43=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Tue, Dec 23, 2025 at 11:34:55AM +0100, Robert Marko wrote:
-> > On Tue, Dec 16, 2025 at 6:32=E2=80=AFPM Conor Dooley <conor@kernel.org>=
- wrote:
-> > >
-> > > On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
-> > > > Microchip EV23X71A board is an LAN9696 based evaluation board.
-> > > >
-> > > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b=
-/Documentation/devicetree/bindings/arm/microchip.yaml
-> > > > index 910ecc11d5d7..b20441edaac7 100644
-> > > > --- a/Documentation/devicetree/bindings/arm/microchip.yaml
-> > > > +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
-> > > > @@ -239,6 +239,14 @@ properties:
-> > > >            - const: microchip,lan9668
-> > > >            - const: microchip,lan966
-> > > >
-> > > > +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 1=
-0G
-> > > > +          Ethernet development system board.
-> > > > +      - items:
-> > > > +          - enum:
-> > > > +              - microchip,ev23x71a
-> > > > +              - microchip,lan9696
-> > >
-> > > This looks wrong, unless "microchip,lan9696" is a board (which I susp=
-ect
-> > > it isn't).
-> >
-> > Hi,
-> > No, LAN9696 is the exact SoC SKU used on the board.
-> > I will drop it in v3.
->
-> Instead of dropping it, this should become an items list with 3 consts I
-> think.
+On 09-12-25, 09:25, Romain Gantois wrote:
+> Use namespaced exports for IIO consumer API functions.
+> 
+> This will make it easier to manage the IIO export surface. Consumer drivers
+> will only be provided access to a specific set of functions, thereby
+> restricting usage of internal IIO functions by other parts of the kernel.
+> 
+> This change cannot be split into several parts without breaking
+> bisectability, thus all of the affected drivers are modified at once.
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-supply
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> ---
+>  drivers/extcon/extcon-adc-jack.c                |  1 +
+>  drivers/hwmon/iio_hwmon.c                       |  1 +
+>  drivers/hwmon/ntc_thermistor.c                  |  1 +
+>  drivers/iio/adc/envelope-detector.c             |  1 +
+>  drivers/iio/afe/iio-rescale.c                   |  1 +
+>  drivers/iio/buffer/industrialio-buffer-cb.c     |  1 +
+>  drivers/iio/buffer/industrialio-hw-consumer.c   |  1 +
+>  drivers/iio/dac/ad8460.c                        |  1 +
+>  drivers/iio/dac/dpot-dac.c                      |  1 +
+>  drivers/iio/inkern.c                            | 54 ++++++++++++-------------
+>  drivers/iio/light/cm3605.c                      |  1 +
+>  drivers/iio/light/gp2ap002.c                    |  1 +
+>  drivers/iio/multiplexer/iio-mux.c               |  1 +
+>  drivers/iio/potentiostat/lmp91000.c             |  1 +
+>  drivers/input/joystick/adc-joystick.c           |  1 +
+>  drivers/input/keyboard/adc-keys.c               |  1 +
+>  drivers/input/touchscreen/colibri-vf50-ts.c     |  1 +
+>  drivers/input/touchscreen/resistive-adc-touch.c |  1 +
+>  drivers/phy/motorola/phy-cpcap-usb.c            |  1 +
 
-Ok, that lines up with what other boards in the binding do, will do that in=
- v3.
-
-Regards,
-Robert
+Acked-by: Vinod Koul <vkoul@kernel.org>
 
 
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+-- 
+~Vinod
