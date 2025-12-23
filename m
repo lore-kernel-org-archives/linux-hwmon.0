@@ -1,36 +1,39 @@
 Received: from mail.monolithicpower.com (unknown [12.33.0.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B462315D20;
-	Tue, 23 Dec 2025 01:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BAF335567;
+	Tue, 23 Dec 2025 01:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=12.33.0.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766452983; cv=none; b=Sx+Latqjiz0MRhgV5iwFnsCWnlTC58RKWJm4S7CtIOmt++/blFHWaK6HI8jPzMC8i7Nrnv84c976BEbbtKKYJs27FWlz5tRdOJaYHIPTbpys1eizY8VGH53PJwKgp/DkW3/d3qaKwUWLYn/TjTvMT5xidjRNvp2inneaz7pgKYs=
+	t=1766452998; cv=none; b=ujR7MOVtn/up4kjB2B3AI5GIgAE9Sa3/SljfiJ1ZRxk1hyHwsJJrmDXCgD+2KjPKQslZj46Hxh2+joj8OuJ4zV3gvgC862ywiTwErgZQ7Hg3nNnaTmHefb/IyHa+SZ8+6iQA+H18x8AqjJXlAv5AE2Hk+incBoY31Evv7AGD+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766452983; c=relaxed/simple;
-	bh=BPtVeorz4/7evryUVegbkO+/Ksxg6l0yRcLy37KjR4M=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oB4lTEG4IuCYiD2mPvlR4QXeStmtgrMDVcVgFLedap4UzfoWMq85Zz36o3uEGzb+Mk05LpOLbvM+NfpEVXw34SjJSlJcQcrCQCizPlYWleH+fK02vNncTAr5uCxgKFyzdYKJdttxFN35UJ4bYa8hJtOC5XpI6VbOaKQUr+HC1z4=
+	s=arc-20240116; t=1766452998; c=relaxed/simple;
+	bh=qVOb+IBGjBVmmvopDg2bgGKrH2EV9a51KV+WnKwcG4g=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MxEPrk6eVdR8M/4gfdVk1/IoeCfPqrtJtn8PpOD/yxDCjuo8GQA+ZhLzdVBdRMH1PzC6hW8Mrspw4EQRBMsvHc/e9MsRamw8Uofdhz68yJI5XvcJ1zLtNQcZlSuqT8CW7mrnRN3rV/pZdnUZRmoHR7346LFo6BfXrrsRmggvy5s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com; spf=pass smtp.mailfrom=monolithicpower.com; arc=none smtp.client-ip=12.33.0.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=monolithicpower.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=monolithicpower.com
 Received: from CD-MSH04.monolithicpower.com (10.10.70.213) by
- mps-mslbn03.monolithicpower.com (10.10.10.245) with Microsoft SMTP Server
+ MPS-MSH04.monolithicpower.com (10.10.10.206) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Mon, 22 Dec 2025 17:22:53 -0800
+ 15.1.2507.39; Mon, 22 Dec 2025 17:23:15 -0800
 Received: from HZ-200D-C0727.monolithicpower.com (10.53.66.137) by
  CD-MSH04.monolithicpower.com (10.10.70.213) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.57; Tue, 23 Dec 2025 09:22:51 +0800
+ 15.1.2507.57; Tue, 23 Dec 2025 09:23:13 +0800
 From: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
 To: <Yuxi.Wang@monolithicpower.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
 	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
 CC: <wyx137120466@gmail.com>, <linux-hwmon@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<devicetree@vger.kernel.org>
-Subject: [PATCH v4 0/2] hwmon: Add support for MPS mp5926 chip
-Date: Tue, 23 Dec 2025 09:22:29 +0800
-Message-ID: <20251223012231.1701-1-Yuxi.Wang@monolithicpower.com>
+Subject: [PATCH v4 1/2] dt-bindings: hwmon: Add mps mp5926 driver bindings
+Date: Tue, 23 Dec 2025 09:22:30 +0800
+Message-ID: <20251223012231.1701-2-Yuxi.Wang@monolithicpower.com>
 X-Mailer: git-send-email 2.51.0.windows.1
+In-Reply-To: <20251223012231.1701-1-Yuxi.Wang@monolithicpower.com>
+References: <20251223012231.1701-1-Yuxi.Wang@monolithicpower.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -42,40 +45,27 @@ Content-Type: text/plain
 X-ClientProxiedBy: CD-MSLBN02.monolithicpower.com (192.168.86.32) To
  CD-MSH04.monolithicpower.com (10.10.70.213)
 
-Add mp5926 driver in hwmon and add dt-binding for it.
+Add a device tree bindings for mp5926 device.
 
-Change log:
-
-v3 -> v4:
-  - Add return dev_err_probe
-v2 -> v3:
-  - Add Rob's Acked-by.
-  - Removed unnecessary content.
-  - Changed dev_err to dev_err_probe.
-v1 -> v2:
-  - Corrected dt-bindings description.
-  - Corrected Kconfig description.
-  - Removed useless comment and code.
-  - Corrected the alignment.
-v1:
-  - Add mp5926 driver in hwmon and add dt-binding for it.
-
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
 ---
-Yuxi Wang (2):
-  dt-bindings: hwmon: Add mps mp5926 driver bindings
-  hwmon: add mp5926 driver
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../devicetree/bindings/trivial-devices.yaml  |   2 +
- Documentation/hwmon/index.rst                 |   1 +
- Documentation/hwmon/mp5926.rst                |  92 +++++++++
- MAINTAINERS                                   |   7 +
- drivers/hwmon/pmbus/Kconfig                   |   9 +
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/mp5926.c                  | 183 ++++++++++++++++++
- 7 files changed, 295 insertions(+)
- create mode 100644 Documentation/hwmon/mp5926.rst
- create mode 100644 drivers/hwmon/pmbus/mp5926.c
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index d0f7dbf15d6f..df3f74b9dd28 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -319,6 +319,8 @@ properties:
+           - mps,mp5023
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5920
+           - mps,mp5920
++            # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5926
++          - mps,mp5926
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5990
+           - mps,mp5990
+             # Monolithic Power Systems Inc. multi-phase hot-swap controller mp5998
 -- 
 2.39.2
 
