@@ -1,151 +1,124 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5001430BB98
-	for <linux-hwmon@vger.kernel.org>; Tue, 23 Dec 2025 10:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64F1310655;
+	Tue, 23 Dec 2025 12:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766486112; cv=none; b=o7gT8vQ9PBlEExJ2nku6E/QYwQmURYhEkRnA5iN/CYT9Z8TVGy5gfNiHA9/xkxXS78N/tZvQn1uWFZBuIfnwznGS9tCAGHeKwP1qvoTvx2DlPIZLGuV+zTbacwLuBptmnj6XaPE7qTKsYXA12F6wqJdXRO8nqaDdZuLn6eCwQK0=
+	t=1766492472; cv=none; b=P372NSvVnLcER6tSWVOVQsGAitn3tg+1TN6zt2IiOQ1Lqzg7iJgmW+2pn6UyIicptxNFAlq7I8+MQ0bAlTnvB95rHXW60FpL0bcTupX/qhwvDPqU6mQ4Lg+SySBecBztAv78b9oxeqU3oboB5LTg6Lz/wiU/svG238NG9IOd+LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766486112; c=relaxed/simple;
-	bh=nhnhn/ujbA1yivMUlMSXRd1v6Sz4LmmXkvWUytEJhUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IdbGl52mTif7g/LCUZah1w1CgHQKTx04XtczdVnV+WLpJ9K8cwWwu29AzAOqSUx66R1IY9AiziEeUn3EwLdxlXU4C9VoNVSSn6W1IqU3Mb1v+aX9GBrtLYcqo5857XNdIKjCbjl6oEd3N9oLh11RZGPQtzZlfkRuRsKoTYuksUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=GF2uS7wi; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+	s=arc-20240116; t=1766492472; c=relaxed/simple;
+	bh=jhAnj+Jtme12Nuo50V+EmKFGUW7KvEnmq6OcpQAxmfo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pW7wuNBIVNplCvV8XBBBpzPrv8EyGnwcRY8lVMxIr/D6Osv+v+E4LvNGPmvoN3O6q8dj7jxvK3K9jhQoN7kLaecASvbjZOK4Qz0i6Kx4cu+vaYtA9TcgdYfVDv71gssocaIs26nLe0TduJDbmg4dEqLqCnz9pp7AxCofofOc+s0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/YxtDV6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="GF2uS7wi"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b7ffa421f1bso1013743566b.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 23 Dec 2025 02:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1766486106; x=1767090906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=GF2uS7wiRyhBmf1kLR0gIF3Rip3N0z7rurwMgvhBqXkpElhZHM//c4ztfkOfl34VXQ
-         1X14GkorXLzezj84xr2Y/dQLW+EfbQhQVOVhtnuM3M454FOIn2PNXJXS36N8bH/whQBV
-         zY0fHit1GfAmUbUyKlPfmB88R6AoVgxYJryPviR3Xhc9pr/mmX1utNgHaFZ5HiT/+TFT
-         EPfJeiatuCcTI+Wko2Rrfq/cDBpi0ycNUhFAp5hGmFIf/u3Ol72pdr/MxF3qgwek5A2i
-         SlQTW3sCFS0UxINftvR9ief03PbV1fiyjZferC+QgdFvMpknr46FIg9k8YC+cFlkaq8w
-         fJHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766486106; x=1767090906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=C2nNWRftnB3/tY/i4X/P1KDlPo/qNXx0stAzILTlQ0AP4Hu1RHx1CyKV5txwzp794x
-         oJwcPYV8YZjtg1OHfGVpJ9r4296hx5j0vJxEGICLRphjZPT7MIK9y67I5AiKVtMKY260
-         WxBNMdy1vlcZjg+wFiS7j17+YMSIGFbMYcOt8wTkG4hZEMkcWvmPgc0OulaAAfrI2hug
-         MmhmWgqWtChcvKQpNJoljoOxauRvNZbDDQiqlyNRvcj6+9KB0CFU4EanqgXX6eyDybUd
-         jegNgEPQv8nI1S0+1Q/7VoaHnlBxbRj9h6Fiu1kqHhIhobBwF6K4WCrrMfwfdyzFYzz2
-         mO1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVcd2JP2ZijPNHnIU4WXLY+GyjlkrIi1sxpI8ia3rTmlgYRZ6pAupO/VIEnIOX/4JNY/0B4adc5bdwp1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFJwtT9eEfyhyjYkgMjwf/EjAn9AEAgMeZuxuvQHfD/35oI2KR
-	U8MEZUf2/2AoVKpRM4oe4t1bINXFn67ef0KOno0L6/a8scW9vorCitA0qhOymXe5U7sgJFeKr8w
-	Djfrap6WeGoFUOEJ+v26IZkYyxaVvRE9ZUVi0PhTA4g==
-X-Gm-Gg: AY/fxX5ZKxmqBY70W2zwNyFIjrQjq0IVKNlRZDCCqbYMt/ULiqqHRZ2sxqbh96AG0fN
-	wfKcyCgdwVFR0DcP8Q8nxox7h7sn+ReMSnDLfJNMLMmpyvIg75AkZM8wNDFye8gxDB7qHXa7ERD
-	zMGEMMUco/2OID+zsDonue3o2BWVzx5pJSSh/+gNQQgdTHZMHetqjU4FfdGl8loBy6+crtqhmYL
-	6o2Y1XXaaQD97EIBN7wmxIX1QjcU+NKdhYoXkVWuCuOVaBdvwBPn+RWoId9i3oQpj/BJJd4w6R9
-	Z3XWaHUaDn5knXP3umCuMm7402BSE51SH43ECIUon5fl9E6nkQ==
-X-Google-Smtp-Source: AGHT+IEJHssgBNa10sdxlMZ0RfBcXjnBKXrp4KRUpqNBX0cKMLRNtJZXOvlDmXwgBRgg1wr13xel6K2BxjWOkHuOL+E=
-X-Received: by 2002:a17:907:a45:b0:b81:ec7c:31fd with SMTP id
- a640c23a62f3a-b81ec7c321bmr332573366b.13.1766486105902; Tue, 23 Dec 2025
- 02:35:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/YxtDV6"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C41CC116C6;
+	Tue, 23 Dec 2025 12:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766492471;
+	bh=jhAnj+Jtme12Nuo50V+EmKFGUW7KvEnmq6OcpQAxmfo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=s/YxtDV6hlZCPbFetCtck8fvPhc+N2vx7pdgCv7duZkOB5vmqXn9KPD5LVC1ToKGs
+	 CdVUndd82gCUotZ9fDPeBMG8kLkah3OT3iVcJ5eKdjIxU7m+OlAmt+qYoQi7zPfdsF
+	 m8iUusFAX+ZonNyGpkpMUa8u9dnrI6wjkvFS+5e+Dji+0s9W2fXoOralefzw/yrFWu
+	 Cz6Ix4SxvGXUec41NP8MfEB9k4H/dak2AHQzPYcyeaVahD/3teQub+Gtuws4T/G4OI
+	 dO7YCUYAWaDOnEBd21A+zPqJpTAKYL3q1ckESeob3j8M9E9t3qvS7K0F7N2ZhjDd5e
+	 xm4UWfKk+HS5g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69069E6B279;
+	Tue, 23 Dec 2025 12:21:11 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v5 0/3] hwmon: Add support for the LTC4283 Hot Swap
+ Controller
+Date: Tue, 23 Dec 2025 12:21:41 +0000
+Message-Id: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-18-robert.marko@sartura.hr> <20251216-endorse-password-ae692dda5a9c@spud>
-In-Reply-To: <20251216-endorse-password-ae692dda5a9c@spud>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 23 Dec 2025 11:34:55 +0100
-X-Gm-Features: AQt7F2rp1ybXWw2BWzfekoJJeczrMeV1nO2lvHuguNeXKU1awsBcuKjFcFE-_B8
-Message-ID: <CA+HBbNF-=W7A3Joftsqn+A6s170sqOZ77jpS105s5HPqkskQzA@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A board
-To: Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFaJSmkC/23OwY7CIBCA4VcxnMUwAy2wp30Ps4dCByXR0kBtd
+ mP67osmakw9/pPMN3NlhXKkwr42V5ZpjiWmoUaz3TB/7IYD8djXZiiwEQaQnyav0EheLuOY8sR
+ Re+MVtda3jtWtMVOIv3dx/1P7GMuU8t/9wAy36cNSK2sGLrgxDj0FrWXA727oTumw8+nMbtiML
+ 8AKuQawAq3zJCw0IFxYAfIJAIgPH8gKKEedsm3QFvoVoF4AfgJUBXonwOrQa2vUG7Asyz/syFO
+ GcgEAAA==
+X-Change-ID: 20250812-ltc4283-support-27c8c4e69c6b
+To: linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, "Rob Herring (Arm)" <robh@kernel.org>, 
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766492512; l=2262;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=jhAnj+Jtme12Nuo50V+EmKFGUW7KvEnmq6OcpQAxmfo=;
+ b=zPZqYrKNriSltqV6XCFcc4IVOsfWr3FRco8uAuGRhzOTcsL2dHP7em+w2vcxSObft6G786oVJ
+ 25q+BgYyhV4ADNU5WL+NyG2r3rGS33ctPB5Jjt7zvSgCNrwjh/v9SIa
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Tue, Dec 16, 2025 at 6:32=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
-> > Microchip EV23X71A board is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> >  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Doc=
-umentation/devicetree/bindings/arm/microchip.yaml
-> > index 910ecc11d5d7..b20441edaac7 100644
-> > --- a/Documentation/devicetree/bindings/arm/microchip.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
-> > @@ -239,6 +239,14 @@ properties:
-> >            - const: microchip,lan9668
-> >            - const: microchip,lan966
-> >
-> > +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 10G
-> > +          Ethernet development system board.
-> > +      - items:
-> > +          - enum:
-> > +              - microchip,ev23x71a
-> > +              - microchip,lan9696
->
-> This looks wrong, unless "microchip,lan9696" is a board (which I suspect
-> it isn't).
+This is v3 for the LTC4283 how swap controller. Main change is that I'm
+now using the auxiliary bus for adding the GPIO device (done depending
+on FW properties).
 
-Hi,
-No, LAN9696 is the exact SoC SKU used on the board.
-I will drop it in v3.
+Similar to the LTC4282 device, we're clearing some fault logs in the
+reset_history attributes.
 
-Regards
-Robert
->
-> > +          - const: microchip,lan9691
-> > +
-> >        - description: The Sparx5 pcb125 board is a modular board,
-> >            which has both spi-nor and eMMC storage. The modular design
-> >            allows for connection of different network ports.
-> > --
-> > 2.52.0
-> >
+Guenter, in [1] you can find some replies for some questions you had in
+v2 that likely you don't remember anymore. Regarding the regmap story I
+ended up adding a secong regmap for the 16 bit wide registers which
+seems like a clean solution (if I'm not missing nothing).
+
+[1]: https://lore.kernel.org/linux-hwmon/0765a0b89779331c62a3f136ef030f7f2f40ea47.camel@gmail.com/
+[2]: https://lore.kernel.org/linux-iio/cover.1761588465.git.geert+renesas@glider.be/
+
+---
+Changes in v5:
+- Patch 2:
+  * Added a secong regmap for the 16bit wide registers;
+  * Add default value for rsense so that we can probe without FW
+    properties;
+  * Make sure to give the right file permissions to the reset_history
+    attrs.
+- Patch 3:
+  * Make sure to get the right regmap (given that the device now has 2);
+  * Add error handling for getting the regmap.
+- Link to v4: https://lore.kernel.org/r/20251204-ltc4283-support-v4-0-db0197fd7984@analog.com
+
+---
+Nuno Sá (3):
+      dt-bindings: hwmon: Document the LTC4283 Swap Controller
+      hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+      gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
+
+ .../devicetree/bindings/hwmon/adi,ltc4283.yaml     |  272 +++
+ Documentation/hwmon/index.rst                      |    1 +
+ Documentation/hwmon/ltc4283.rst                    |  266 +++
+ MAINTAINERS                                        |    9 +
+ drivers/gpio/Kconfig                               |   15 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-ltc4283.c                        |  218 +++
+ drivers/hwmon/Kconfig                              |   12 +
+ drivers/hwmon/Makefile                             |    1 +
+ drivers/hwmon/ltc4283.c                            | 1766 ++++++++++++++++++++
+ 10 files changed, 2561 insertions(+)
+---
+base-commit: bc04acf4aeca588496124a6cf54bfce3db327039
+change-id: 20250812-ltc4283-support-27c8c4e69c6b
+--
+
+Thanks!
+- Nuno Sá
 
 
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
