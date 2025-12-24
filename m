@@ -1,109 +1,142 @@
-Received: from www3141.sakura.ne.jp (www3141.sakura.ne.jp [49.212.207.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD2532AAD0;
-	Wed, 24 Dec 2025 08:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=49.212.207.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766565728; cv=pass; b=NLQM5lQmz5nilY1ImRCNZX6CVUb7NwQdQHzImcTAbTRze0ftZjzEKd42DKEp7TxqATzDwZrlXyQaLMCCFAHFlccBsDH6hgW/XA/oRbAiIKtxo677jw86probciAiN6zLY1eG111pRT3V1xeOWecs8sU9QZDwEcM0vYRINHx5iF8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766565728; c=relaxed/simple;
-	bh=Fc1+pyr7p5Yn8Bq97RfqaNhYLt8DlQHbaXsTg30+Eeg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FXFENlE9tX5nGXGZNULiY/KwQ4pHPUaYgOI9uYILuvp1bwU/1Jn84Z02nBrpFuLXTIkPAQbROVKfgZXwe5rJk0L4s4O9TRWRmZ/KU63U8617JubVsArKEdE7H9zpr5mfD0O+q4xPFjwHgeBm6BEJqPDBM6SfoV0YszK+eduJn/c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redadmin.org; spf=pass smtp.mailfrom=redadmin.org; dkim=pass (1024-bit key) header.d=redadmin.org header.i=@redadmin.org header.b=dildJhKG; arc=pass smtp.client-ip=49.212.207.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redadmin.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redadmin.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769961B0439
+	for <linux-hwmon@vger.kernel.org>; Wed, 24 Dec 2025 08:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766566231; cv=none; b=CzuepF6OKRMxzZrhgYazVTDMajfhMDIJ0cTYt0jmgtWLfBiqqr3l/V1+vaJiv8Mt43P6JKExcqYIh/x64MhUpFe1XeRJRRmy4EKgBZyx1wCRuwpgmuiYLOpqhILyrNsGfZRGpTx6zbVA5KFRLbtRJTkDhn91ropYzTXSDZPFAlc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766566231; c=relaxed/simple;
+	bh=14Q2KrQgefP7k2CkV/AvXV2dv7qPTPm5udnPs2slKWQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WOMB3LX151fb/ppxcW1nJ4CQ/LYaMHOoqjNijg/NXKY8G6Ou35DuMwqvZyo3pyo7deQe/MgJK0iRbPFdhLXleLoqxFsx2Q7K8F0GymegIJymqvhA5nYgxqdd3Jpi02XsQJ/AeIscQvgANMFInuRC5I9up25jaONru7d6HhKDguA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BhwYUUMY; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redadmin.org header.i=@redadmin.org header.b="dildJhKG"
-Received: from www.redadmin.org (bc043154.ppp.asahi-net.or.jp [222.228.43.154])
-	(authenticated bits=0)
-	by www3141.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 5BO8cq3U007035
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 24 Dec 2025 17:38:52 +0900 (JST)
-	(envelope-from weibu@redadmin.org)
-Received: from localhost (localhost [127.0.0.1])
-	by www.redadmin.org (Postfix) with ESMTP id C4441109D5746;
-	Wed, 24 Dec 2025 17:38:51 +0900 (JST)
-X-Virus-Scanned: amavis at redadmin.org
-Received: from www.redadmin.org ([127.0.0.1])
- by localhost (redadmin.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pOYzVlgpNVHq; Wed, 24 Dec 2025 17:38:47 +0900 (JST)
-Received: by www.redadmin.org (Postfix, from userid 1000)
-	id 8874910A0ECCF; Wed, 24 Dec 2025 17:38:47 +0900 (JST)
-Authentication-Results: www.redadmin.org; arc=none smtp.remote-ip=127.0.0.1
-ARC-Seal: i=1; a=rsa-sha256; d=redadmin.org; s=20231208space; t=1766565527;
-	cv=none; b=gzgMwxS0W8KiSRcwpjGyWYl9uHWSmex6mi7qhb/VcYSN42rLkbn/KW+1zx1FBUlPGm18FXA4GQPrFMQG0HOs0492neUW6GPQ63cIn+sA5WwES3unYsmPtOoxpp322GGw/xSB9AzVcsYqY5sSnSxJm85ylou6ORQx4DgPIkgVAXI=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=redadmin.org; s=20231208space;
-	t=1766565527; c=relaxed/relaxed;
-	bh=55Wdlxhr6LRYHaQsgdonHzFOxbh0VPJ42HcRCsxXoWA=;
-	h=DKIM-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding; b=BCPNHvQwYypZlGR9D9qFIdmE2/FwFiEYOipg55d/jvQL7RBN7kVwfzL3kfcQQCi7YgJIR2F45lFilGgNsh6czrydO3wTLqNOToA0SB4Qs2CzmD5lKXErHWEKVZPsb/qfqz2HfyKdO9070RGFwh4pFzLLToHS5njdaMqyVot5Q+U=
-ARC-Authentication-Results: i=1; www.redadmin.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.redadmin.org 8874910A0ECCF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redadmin.org;
-	s=20231208space; t=1766565527;
-	bh=55Wdlxhr6LRYHaQsgdonHzFOxbh0VPJ42HcRCsxXoWA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dildJhKGDsFhkveq50tYibePfrP+nFZutqRS2kMXGNw6oO3sqREtQiZYTxDUxWqQZ
-	 +RTPh3MrGJiG/cKuKIH6hr8e8xUjYljCw6mqcijSimqa7G0bwdSAC2Xz57S1A4+fZv
-	 sDt/UWSBzUswPLoKJqdBWCB5hVmqQm+yuhonR8Dk=
-From: Akiyoshi Kurita <weibu@redadmin.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@codeconstruct.com.au>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Akiyoshi Kurita <weibu@redadmin.org>
-Subject: [PATCH] docs: dt-bindings: hwmon: aspeed-pwm-tacho: fix typos
-Date: Wed, 24 Dec 2025 17:38:45 +0900
-Message-ID: <20251224083845.2727976-1-weibu@redadmin.org>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BhwYUUMY"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-34c21417781so5711268a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Dec 2025 00:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766566229; x=1767171029; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EqUvLG+FaPCBDIi8nSafdxPiptVy75Ukg1G+12V+F10=;
+        b=BhwYUUMYW3Xa46ALpJDNKFo6VZi2DT851YcABY7RkevD0rDbLgF02Vo3HKEt1LE1lp
+         3D6RR3EZT2ViOckgvPVSIQcBpQLl+/Tq0nXiKii4yNDthyWls1Q2NV5JkAMsFqtxEAG4
+         iKM9+qdm8awnvtbd0wNUn+FKXToq6ls3cJr1XDCx5RzaWtsP09sp6lbBklSRpujkg6NH
+         Eq3LLgOu21oPQ+IHJ9x7rQXXo4Q3k8E6pQ+1+sL5ko7sQ9ZzWIxVwR4oLU+yc18j4fos
+         XHZ4jCNbVjv9rd+83ykD3PLMNsHO44kakjLhywhDK/5NEIimThRFNFqQVMpYDSfPMmeH
+         Hf+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766566229; x=1767171029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EqUvLG+FaPCBDIi8nSafdxPiptVy75Ukg1G+12V+F10=;
+        b=cjPC18inm/u+7qYx3CvbBfxPbq+fvQRJOxo89l9SwoDdTijL2UfiLDGSV9DNnVVA6L
+         JSGJhbfiaYHnWEWCAb9VzdkosdjhRRag6vUu4ChUx2sTZTenScfysl5fp20iFRXsBRz6
+         9nOaxbI8XaQp+YR7gXwTweKveLzjfQNV2+T7MaypX8SBxrX+eE5g1Yu/0fxPsWWFq9N0
+         dezDM2UQT1B3dHlLVAeU7iitcBZTbmtGATvYtGSuFawnCQ2bDsrQKZPQ9n4ii2pV3Onw
+         GofzUEGOeWjTZyeEs0kq+5+Ya2bJI/azju7MXa5jXrCRc4tYOYJbRA6IhuyDqoHou/Wy
+         1IDA==
+X-Gm-Message-State: AOJu0Yx2DNPrUftNSVUsSHeWYkXdBMkP+OTK0XBiV07fGLutPoux7ZtM
+	tou+GHZxxmeQyBoEQ2yqeExI1iefeMtF5jZ5owuobUHTC+0OBY2fJM/0
+X-Gm-Gg: AY/fxX7jF7aTDBPa6PhdC1eZRr9K5HM2IAIbf6B1uqJDQwujt8333pP8kn9BwkT+m63
+	BO6DoNUFDUSiWQSVaphd9SWfG5Qg/ZOE2/BVkM9ChPrfk3kEbo/c694IQraZ0UtOklGnqpg1o6b
+	hFueLdv3gxKzyspe/1kvfAyvds047bQUQE3th/1iWGtEamNZR+AVsl1XtJcF6cdIv5VOKzFc/YF
+	blWrdd1oRGu1h1eSixpP03STMtxfncZrXliyzgjYJtM/uayFH27uaYVLpaPnlpUNmDq2UbrYKfv
+	ynZVNtuVy8vyDjbTrH2b3dDG/lSIiGLYMSSphfN2G+KPl+dauxKx3oZ6WNYjV/bPyN2ewHERAjq
+	YndJmlXjMyGeiqMhVpkAM6BXgcpV6kprbP1rUemmqUjoiHI2Zzw8nknSJcY8zq2z2i4L+80Wjry
+	RtcToG9Iyoc+KDQ58H3Cd6hcJU5hsSbeTM+cOHxL5uM+b1wX8piKXp7F/CmGJGbImJscTpE+HNK
+	9sYT52RYvnHhd6rduC1ax+PrbHzZn8=
+X-Google-Smtp-Source: AGHT+IG32bEqtgGX+aUU+Vghs/FHpYAMoBhmbtVYpF3KZbFDPID9DvkIR8rsUWNz2u9SL+Wd3iWElQ==
+X-Received: by 2002:a17:90b:1f8c:b0:349:2936:7f4 with SMTP id 98e67ed59e1d1-34e921bc5c1mr12117693a91.32.1766566228667;
+        Wed, 24 Dec 2025 00:50:28 -0800 (PST)
+Received: from charles-System-Product-Name.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e9219eb13sm14994055a91.1.2025.12.24.00.50.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Dec 2025 00:50:28 -0800 (PST)
+From: Charles Hsu <hsu.yungteng@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Charles Hsu <hsu.yungteng@gmail.com>
+Subject: [PATCH v4 1/2] dt-bindings: hwmon: add STEF48H28
+Date: Wed, 24 Dec 2025 16:48:20 +0800
+Message-Id: <20251224084821.2092169-1-hsu.yungteng@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Fix "upto" -> "up to" occurrences and add missing "be" in one sentence.
+Add device tree bindings for the hot-swap controller STEF48H28.
 
-Signed-off-by: Akiyoshi Kurita <weibu@redadmin.org>
+Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
 ---
- .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt        | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../bindings/hwmon/pmbus/st,stef48h28.yaml    | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/st,stef48h28.yaml
 
-diff --git a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt b=
-/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-index 8645cd3b867a..d1db4adb2df7 100644
---- a/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-+++ b/Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
-@@ -1,9 +1,9 @@
- ASPEED AST2400/AST2500 PWM and Fan Tacho controller device driver
-=20
--The ASPEED PWM controller can support upto 8 PWM outputs. The ASPEED Fan T=
-acho
--controller can support upto 16 Fan tachometer inputs.
-+The ASPEED PWM controller can support up to 8 PWM outputs. The ASPEED Fan =
-Tacho
-+controller can support up to 16 Fan tachometer inputs.
-=20
--There can be upto 8 fans supported. Each fan can have one PWM output and
-+There can be up to 8 fans supported. Each fan can have one PWM output and
- one/two Fan tach inputs.
-=20
- Required properties for pwm-tacho node:
-@@ -28,7 +28,7 @@ Required properties for pwm-tacho node:
-=20
- fan subnode format:
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--Under fan subnode there can upto 8 child nodes, with each child node
-+Under fan subnode there can be up to 8 child nodes, with each child node
- representing a fan. If there are 8 fans each fan can have one PWM port and
- one/two Fan tach inputs.
- For PWM port can be configured cooling-levels to create cooling device.
---=20
-2.47.3
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/st,stef48h28.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/st,stef48h28.yaml
+new file mode 100644
+index 000000000000..c6a4b02bcd84
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/st,stef48h28.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/st,stef48h28.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics hot-swap controller with PMBus interface
++
++maintainers:
++  - Charles Hsu <hsu.yungteng@gmail.com>
++
++description: |
++  The STEF48H28 is an advanced 30A integrated electronic fuse for
++  the 9-80V DC power lines.
++
++  Datasheet:
++    https://www.st.com/resource/en/data_brief/stef48h28.pdf
++
++properties:
++  compatible:
++    enum:
++      - st,stef48h28
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pmic@11 {
++            compatible = "st,stef48h28";
++            reg = <0x11>;
++        };
++    };
+-- 
+2.34.1
 
