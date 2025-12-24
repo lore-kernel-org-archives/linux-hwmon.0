@@ -1,139 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1690318151;
-	Tue, 23 Dec 2025 16:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E97F3A8F7;
+	Wed, 24 Dec 2025 08:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766507079; cv=none; b=S9EaB2CULqY0KQnrsPsFk76Gl8XkxnGBuJYGX/7CinykRYIt7yZhV2FG3fwXLw3Vps0OwZ5FWzjRvUG/Mzbc8YFXVvqY4AkKrWdmrQL9VBKeosFKNu6PKxYQaErC/PfOOwjkJmf1luA1fKCxPpGHG7pJRRH5Vew1s5NVpSJH6+g=
+	t=1766563963; cv=none; b=hbwa2RBaGvAbyLA2gBa3n3Fmt94VgVvoGv3axbjXvYzWqaW27lQEgZIhF+e0nVnD4jhq/jC0TCphM/JEhLQyZ8qAIDT0vM06tY3681Be4v1oV+2Jdyvl9tS/BUBazFcYMfBvwdcTqdc9td9nuQ9c4EjRqw+B0WxUjgh6a7BKw/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766507079; c=relaxed/simple;
-	bh=3qVOvSQIWwScePELLmWnd91+x+FO0ghrlMNcQT2LZbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XxrAiWi14x+jbvNinMhC5DAN1MxVH3yBT0xzr6v3VSI+CrMked+1o4XAPgu/nYSzsQzu03T2l6zFXnYUSZwxG0WBy6Fv1b2krScnGCH9MhDyxbY90/eqd7LuCKDPXCT6uCGI10tiGFxqptNuoNw1KRycLl9jQYk6TT6VIyzjlpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxocYG+q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766563963; c=relaxed/simple;
+	bh=+2BTcmbft6EbJTSaju/QuY53Eo3hhYNJ88HBrpvNugs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nNcBuH1nM1ekjkVm4u9A/qpcn66+l+rx1w3RVcEQcy0ZjoQZfdANph/tRftOhkwugL5ySQAR9rQfbhUcBuE0n/PeiYGWotGRH2FwfC+dGKqDrn2zL6LsksUYqT1ni1814SpDgZ8LN+AzcNZCm3kwZMXI41yycXafe1G3kdB6w0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=cOB/ydiF; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxocYG+q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0240C113D0;
-	Tue, 23 Dec 2025 16:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766507078;
-	bh=3qVOvSQIWwScePELLmWnd91+x+FO0ghrlMNcQT2LZbk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YxocYG+qrFsexKvWp8UnmdmobfpsDyH7P1+YJTEa2MYESPoFxhafpM8gsfi6cIU1R
-	 n9Gfg1fwPKTG1mVszIKw6gD/hi1FUHPlichzp8hHC1c+ODcPI9IBtiK3ysngVX/8kW
-	 6qtUsjPhga/f+L4DCnVAi/486vh+xUTx4zZGQNwJ3DsWuw1m/H07s9A63d0isPWvAn
-	 xfv73Q5cyzS9PAQGwA0vuOAt9j1S+Rh8W8c92InWjFECnByviZpnF8o0xVzvH73G+F
-	 Ou0DXgasgqiym6+NqEvExYrZ1OZI3ZKfz52X4AGZYCiiAOFPgWM25YiaBJBeAweuxD
-	 6BLkrF9xDKKgg==
-Date: Tue, 23 Dec 2025 21:54:34 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Mariel Tinaco <Mariel.Tinaco@analog.com>,
-	Kevin Tsai <ktsai@capellamicro.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Iskren Chernev <me@iskren.info>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Matheus Castello <matheus@castello.eng.br>,
-	Saravanan Sekar <sravanhome@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Casey Connolly <casey.connolly@linaro.org>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Olivier Moysan <olivier.moysan@foss.st.com>,
-	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: Re: [PATCH v2 2/2] iio: inkern: Use namespaced exports
-Message-ID: <aUrCQu-wmQ7gOyD3@vaman>
-References: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
- <20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="cOB/ydiF"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=qDSmecXBDmz3XTt3DW+peKb6ITN3jz/ST8NVFSTwwWA=; b=cOB/ydiF1ZCWlVHPfEQLC6YW1S
+	KElVEfXZXprvOTYkFFvwz/q9d18dXDhyW9NmZwxozOURUgCjaUjoQIq8x241SJmomCwXngQK7vaaw
+	iXcgoXpfvEynCd2lGvqntyzZ8GcQC6rHVUZEmsfUjHcKZfFP3pxNF1WcrE5fnsZnPG/TkGy7lrY9y
+	His7Q71RpeJh4+4m0Kfgl/R9I/LduMNOJQ4SwgDnNYlwyD81M0bcs8SKa915Pns5VrMm7Swma6K1b
+	4gguHf1yeoQz3hd+gdguHabp0gp1dzH4IccJLbd7AbwK7qK1E+tLDoIMFpw8sqnue0sNWP3BSJ05e
+	c1Di5IYA==;
+Date: Wed, 24 Dec 2025 09:12:35 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 2/2] regulator: Add TPS65185 driver
+Message-ID: <20251224010440.46ad717a@kemnade.info>
+In-Reply-To: <2e850c1c-67ed-44af-94b1-2ccc35e50bb8@sirena.org.uk>
+References: <20251222-tps65185-submit-v1-0-34986b504d5f@kemnade.info>
+	<20251222-tps65185-submit-v1-2-34986b504d5f@kemnade.info>
+	<84fdaf7c-4d4b-491f-975c-ebb14350fafd@sirena.org.uk>
+	<20251222144522.33d7c734@kemnade.info>
+	<2e850c1c-67ed-44af-94b1-2ccc35e50bb8@sirena.org.uk>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251209-iio-inkern-use-namespaced-exports-v2-2-9799a33c4b7f@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 09-12-25, 09:25, Romain Gantois wrote:
-> Use namespaced exports for IIO consumer API functions.
-> 
-> This will make it easier to manage the IIO export surface. Consumer drivers
-> will only be provided access to a specific set of functions, thereby
-> restricting usage of internal IIO functions by other parts of the kernel.
-> 
-> This change cannot be split into several parts without breaking
-> bisectability, thus all of the affected drivers are modified at once.
-> 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-supply
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
-> ---
->  drivers/extcon/extcon-adc-jack.c                |  1 +
->  drivers/hwmon/iio_hwmon.c                       |  1 +
->  drivers/hwmon/ntc_thermistor.c                  |  1 +
->  drivers/iio/adc/envelope-detector.c             |  1 +
->  drivers/iio/afe/iio-rescale.c                   |  1 +
->  drivers/iio/buffer/industrialio-buffer-cb.c     |  1 +
->  drivers/iio/buffer/industrialio-hw-consumer.c   |  1 +
->  drivers/iio/dac/ad8460.c                        |  1 +
->  drivers/iio/dac/dpot-dac.c                      |  1 +
->  drivers/iio/inkern.c                            | 54 ++++++++++++-------------
->  drivers/iio/light/cm3605.c                      |  1 +
->  drivers/iio/light/gp2ap002.c                    |  1 +
->  drivers/iio/multiplexer/iio-mux.c               |  1 +
->  drivers/iio/potentiostat/lmp91000.c             |  1 +
->  drivers/input/joystick/adc-joystick.c           |  1 +
->  drivers/input/keyboard/adc-keys.c               |  1 +
->  drivers/input/touchscreen/colibri-vf50-ts.c     |  1 +
->  drivers/input/touchscreen/resistive-adc-touch.c |  1 +
->  drivers/phy/motorola/phy-cpcap-usb.c            |  1 +
+On Mon, 22 Dec 2025 15:07:28 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
-Acked-by: Vinod Koul <vkoul@kernel.org>
+> On Mon, Dec 22, 2025 at 02:45:22PM +0100, Andreas Kemnade wrote:
+> > Mark Brown <broonie@kernel.org> wrote: =20
+>=20
+> > > The reason for having GPIO controlled enables on devices with register
+> > > maps is that it's generally substantially faster to update a GPIO than
+> > > to do I2C I/O. =20
+>=20
+> > well we are talking about 30ms turning on time here. =20
+>=20
+> > [  130.816647] tps65185 1-0068: turning on...
+> > [  130.849970] tps65185 1-0068: turned on =20
+>=20
+> > So if we have 100khz i2c, so, we have around 0.1ms per byte, so
+> > the read/modify/write sequence should be done in <1ms. So I guess that =
+is
+> > neglectible and allows the flexibility to not have that pin. =20
+>=20
+> Every little helps, and not every I2C controller is a model of
+> efficiency and programmability.  Note that we do have core support for
+> GPIO enables, it's not really any effort to support them.
+>=20
+If the GPIO is wired... There are a half a dozen different implementations
+of this driver in the wild, and I remember one not using a GPIO
+probably for a device without the enable gpio wired up to the SoC.
+So I think the i2c way of enabling things is required at least
+as a fallback option. So we need some if (enable_gpio) somewhere.
 
+> > > > +{   =20
+>=20
+> > > Implementing runtime suspend in a regulator is *very* non-idiomatic a=
+nd
+> > > is leading to large amounts of open coding throughout the driver.
+> > > What's the story here?  I'm very surprised that this wasn't in the
+> > > changelog. =20
+>=20
+> > OK, lets look around in the datasheet. We are apparently dealing
+> > with 130=C2=B5A here which can be saved. But that should be acceptable =
+to be
+> > only done on system suspend even if the regulator is off most times.
+> > So no really strong technical reason here. I am just too used to testing
+> > power management using runtime suspend. =20
+>=20
+> It does feel like something where if we're going to do it we should
+> update the core to take runtime PM references rather than open coding it
+> in a driver that's otherwise able to use the standard helpers.  I do
+> worry about the impact on enable times (you'd have to power up the
+> supply and sync the register cache) but I guess people could disable
+> runtime PM for specific devices if it's an issue, and it'll never apply
+> to primary PMICs anyway.
+>=20
+hmm, we have REGULATOR_MODE_FAST to maybe disable some pm. I have used
+the autosuspend mechanism, so we do not do the time-consuming register cache
+mechanism on every enable. But putting such into regulator core should be
+more sane than having it in drivers.
 
--- 
-~Vinod
+Using standard helpers is in many places at least not so straight forward.
+See the 6- in vposneg vsel.
+
+vcom vsel has 9bits across two registers. So that is also odd.
+vposneg has 2 bits used in a kind of RS flipflop mode for enable
+if the enable pin is not available.
+
+I would agree to remove the pm runtime stuff for now, so we can get the
+basics in, and care about the optimazations later.
+
+Regards,
+Andreas
