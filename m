@@ -1,236 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE3D315D2F;
-	Mon, 29 Dec 2025 13:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AAA24BBE4
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 15:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767014511; cv=none; b=j+SBK36hM7bFJNqIyMyDQ2SC2kI4s9lO9EIqYCd/65R4tuyfErCXva9hHFHSbJwPvILf80Y5pJ+eQhOYlKI+IOHs589e5MafH7KYQSSrcCljTmiPNqoEhmDjCsXqBENNtpO74ElTAfQQD1W/2wjoDGN23QmbbhRAezTcFziQDTI=
+	t=1767022601; cv=none; b=mkYeuHI3ui2HELtwWFF0Nj1V+xUsqyj6EcD8vH0weUjCDnbyMdCQXYZWF6w9O2Zpjj91rBVM4q+CozOMr8jnuT2hQ4DvKBiT5oKeYB4gTkh0XCn7eS9LH8a9HK6ijan5fgsbbRO35Am5OFQ/Xd/FaSCr5rfIGLW43fbFAdT2Uxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767014511; c=relaxed/simple;
-	bh=euF2Rn3J/0a39W7BqXwikQXTo0mHhXBQOHWPcRpRw5Y=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=MvbaQ5Nxz3PIsG2lmt9Fqdb4i2DILtS9aUMmTw8Z731mAE4+KsSzfMdaWRgtRvtgX5Yn7B1xtMANlRVi2n1yzqg7dCAAhplKvH7z2e8h6g9AYHnAWsByd+PSPwAucG2rbBUgvA3sWqnbPKlI5OUaV8uts42R3eF2xTuyjmjq768=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFvWlrSg; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1767022601; c=relaxed/simple;
+	bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qZcl63i7RB0tughQaKbo2drBERf4MwWc2HhRuADqeg+nd2b9/FIyLSCXM5kshsBNsJo6WgKhig/9jIX0Mxjv0s0Hs0G4Ca4RIdeogu/f2RzQLsmAZo08S9KEgchjpFexEs1AwLd4bJ1+jLQUBMlD0PA4p0Os+lPfrAqcpET3S6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=b96dS2lg; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFvWlrSg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767014510; x=1798550510;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=euF2Rn3J/0a39W7BqXwikQXTo0mHhXBQOHWPcRpRw5Y=;
-  b=WFvWlrSgRRcDrkk5+WwGdgunfKNSsjBzt+7Pc8zIDfxAZZd2LHX9k76j
-   n7vKDoMXdOYkzDqJOnJkWb5mysvN5XOzT9C2w3tOUHzx+6D/uRThC6uWs
-   zkeiE/+WiPHFRIvuqIIP6Db3baqkJUqZVxJnCS/bq2WUlIYz+z96CE+TV
-   tNZ53CJDz3iBgNkGkM+REnkSFeeC7anyGD01IErlo4kJEgPGHxmLRZOdf
-   /SqPt84GkIQ0crjEgLoStF3sj/irscv6cJ/slmmgGqDOrre6F94Ln0dp6
-   7nLa4H8NuoyGIhTJcU+tNeEbQ4VhI5hg8Ao36YyNcREWv3uFpRF++I4/+
-   g==;
-X-CSE-ConnectionGUID: BKvslMb2S1S3hXA+HwdUpA==
-X-CSE-MsgGUID: u370U8hMQZmO93fiECyv0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11655"; a="68376802"
-X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
-   d="scan'208";a="68376802"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2025 05:21:49 -0800
-X-CSE-ConnectionGUID: 9clG72k2ScysaNs1SCUz0Q==
-X-CSE-MsgGUID: gSx7fw/JRGmnQ7+oftmZUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
-   d="scan'208";a="200643909"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.30])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2025 05:21:46 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 29 Dec 2025 15:21:42 +0200 (EET)
-To: Krishna Chomal <krishna.chomal108@gmail.com>
-cc: Hans de Goede <hansg@kernel.org>, linux@roeck-us.net, 
-    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] platform/x86: hp-wmi: implement fan keep-alive
-In-Reply-To: <20251225142310.204831-3-krishna.chomal108@gmail.com>
-Message-ID: <7072d96f-455a-5249-2553-6e72e6a00577@linux.intel.com>
-References: <20251225142310.204831-1-krishna.chomal108@gmail.com> <20251225142310.204831-3-krishna.chomal108@gmail.com>
+	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="b96dS2lg"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-37fdb95971eso68130881fa.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 07:36:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1767022597; x=1767627397; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
+        b=b96dS2lgE9Ht5UOqCUgcJrryuN3PBCrnlhaVOU2xN9KuhqW8cK4GzuaG/1YGDsLLpp
+         1OOJYkG79dHbTsW02WRimvd3xXIkpUK/QIY7xOJfY0IeYNMIPtCVoCRrCrWekWIzyVHN
+         dOve2iGCPMs5tiRN3vBA0yyNd+we/xfBMtfUgHGSQ9kYTE+D/g+93oZJHEToG+ctETbO
+         2Z9kxL8D9Nfuguxl5AT0T8/J71mmHIhEzrjuFcaRH/DW+KbOjKkLY7wQ51MjWpGKqEmv
+         cz58tVglgTa22+8vj1C15vYqIXInyhlVVocwHn7mYJK1acLNmYe/MDqsbNfausqfkMQs
+         +diA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767022597; x=1767627397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
+        b=CMdqOFVZZuRpci/6efBJtnQSvsfREYK6sh4PugBOThmsQA2DEDfVoDlSkdWojdrO06
+         mg0Ww5Wn6SbFUsV79XBRGpHzfLWDYkKQi1i0Jauw6+Dgw2jYiG9vJQOOb7OgO8Zydw8V
+         agNos57IQw2lL+qKlyGrP3cy6rr42EAZbn7qxwWboXP/w33oywC6GlXseQh2o6xtf9b0
+         NYWd8xPvTqWK7TBFsrzwx0YC4CqZJ4vY5msEfgJtI1ckBnIFlRYQxouLE3tN5tjujZDE
+         ibgvIi90OHgkXPh2RiROgF0NBuyYLSo5c+cd9R/lzSB7wbOvdTF7GYp1envcmEFfufnh
+         oVng==
+X-Forwarded-Encrypted: i=1; AJvYcCU/ze9FIJHJAVcsBOBJ58p/JL9nS6TxuYJPankOkQlJDbGa7JeNSkGWXVdPB8RH+Ebyu6bdX85xu6heEA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCo9yffL7KqNEpCTiAGVlv8fOLWDWi+uC6alNsJW2dxRl58Qk8
+	XzrPkr1UwYfKJD2loMbgXg5jw+VPwn2QmMZYtB67Ue57EXeQSypQUCaFvsNnc5h/zC5h7UYlsAd
+	QBPePk6BIs/fGPFphz7Eql0NCmJ1+j6p+P/O0gD3M
+X-Gm-Gg: AY/fxX63LJKx7NvbyguB4dnL8kxt5ivncnp4XY0aWbF/DGC418DjbbRstUKwfhezBXb
+	wWMuUGgDVybctUzUX2LC6/r04VIPsixAvx+uEiID1CVODT+DlYB8nyG3nN4c6wYpVrI8fxazEnz
+	/D4W/30IU/WXh1cySSpGSE29losg/2bXw1ZnGIIBcIsDAlZR2hcuevUqfUb9viO3GzmG4+N2v3c
+	pkwwZCt41kFmjet2vxWcumHSIlcSbZWWFNDIzDig1D4rxC7Q6R+h3QAdyA7UgIkOviwvRP4OOVG
+	gQtDoveT
+X-Google-Smtp-Source: AGHT+IFcYDsotAC7ttgZsrTgfqzI/6JkHxjtFpysGszl6lTgKVMQeZ6NcehTu7JgtbsM+YiMnk7AbDJsg5EST92fpBA=
+X-Received: by 2002:a2e:ae08:0:b0:37e:884f:b6ad with SMTP id
+ 38308e7fff4ca-381216725damr80147761fa.23.1767022596740; Mon, 29 Dec 2025
+ 07:36:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20251226203021.27244-1-yahoo@perenite.com> <CAGHj7OJaSvSsr0z43phjs1YvL17xfJWesJFj0iQpdvi8=VXZhA@mail.gmail.com>
+ <cf3a84de-9223-48e2-b6e2-c97e348b4c0b@roeck-us.net>
+In-Reply-To: <cf3a84de-9223-48e2-b6e2-c97e348b4c0b@roeck-us.net>
+From: Benoit Masson <yahoo@perenite.com>
+Date: Mon, 29 Dec 2025 16:36:25 +0100
+X-Gm-Features: AQt7F2r_xcPCZrVlTGTZdymUiFmrf_kFSklsBjlAdqaMEGXm0m30v7iCNk2Il6s
+Message-ID: <CAGHj7OKqUB6GDoFDvqyyzNb07AU4xb+GLfHi3fHnhmY=7BjGHA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: it87: describe per-chip temperature resources
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 25 Dec 2025, Krishna Chomal wrote:
+On Sun, Dec 28, 2025 at 8:33=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+> Then why don't you send it as series with this as patch 0 of the series ?
+> You are saying this would be to make reviews easier, but in reality you
+> are making it more difficult.
+>
 
-> The firmware on some HP laptops automatically reverts the fan speed
-> control to "Auto" mode after a 120 second timeout window.
-> 
-> To ensure that the user-selected fan profile (Max/Manual) persists,
-> implement a keep-alive mechanism that periodically refreshes the fan
-> mode trigger before the timeout occurs.
-> 
-> - Introduce a delayed workqueue to trigger the fan mode refresh every 90
->   seconds, ensuring the system maintains the correct fan mode setting.
-> - Integrate the refresh mechanism into hp_wmi_hwmon_enforce_ctx() to
->   start, update or cancel the keep-alive process based on the current
->   fan mode.
-> 
-> This ensures that the driver stays in sync with the hardware.
-> 
-> Tested on: HP Omen 16-wf1xxx (board ID 8C78)
-> 
-> Signed-off-by: Krishna Chomal <krishna.chomal108@gmail.com>
-> ---
->  drivers/platform/x86/hp/hp-wmi.c | 52 +++++++++++++++++++++++++++++---
->  1 file changed, 48 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> index 9fb956ce809a..fbe012e7a342 100644
-> --- a/drivers/platform/x86/hp/hp-wmi.c
-> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> @@ -31,6 +31,7 @@
->  #include <linux/string.h>
->  #include <linux/dmi.h>
->  #include <linux/fixp-arith.h>
-> +#include <linux/workqueue.h>
->  
->  MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
->  MODULE_DESCRIPTION("HP laptop WMI driver");
-> @@ -365,8 +366,15 @@ struct hp_wmi_hwmon_priv {
->  	u8 gpu_delta;
->  	u8 mode;
->  	u8 pwm;
-> +	struct delayed_work keep_alive_dwork;
->  };
->  
-> +/*
-> + * 90s delay to prevent the firmware from resetting fan mode after fixed
-> + * 120s timeout
-> + */
-> +#define KEEP_ALIVE_DELAY	90
+Hi Guenter,
+Thank you for the feedback - you're absolutely right, and I apologize
+for the confusing submission approach. My previous reply was probably
+too quick and didn't properly address your concerns.
+I want to make sure I handle this correctly going forward. Would you
+prefer that I:
 
-For any time related define, please include its unit in the name so a 
-person reading code can immediately know it.
+- Resubmit everything as a proper patch series (0/N with cover letter
+explaining the overall goals and how each patch adds support
+incrementally), or
+- Is there another approach you'd recommend given the current state?
 
-> +
->  #define RPM_TO_PWM(rpm, ctx) fixp_linear_interpolate(0, 0, \
->  						(ctx)->max_rpm, U8_MAX, \
->  						clamp_val((rpm), \
-> @@ -2073,6 +2081,7 @@ static int __init hp_wmi_bios_setup(struct platform_device *device)
->  static void __exit hp_wmi_bios_remove(struct platform_device *device)
->  {
->  	int i;
-> +	struct hp_wmi_hwmon_priv *ctx;
->  
->  	for (i = 0; i < rfkill2_count; i++) {
->  		rfkill_unregister(rfkill2[i].rfkill);
-> @@ -2091,6 +2100,10 @@ static void __exit hp_wmi_bios_remove(struct platform_device *device)
->  		rfkill_unregister(wwan_rfkill);
->  		rfkill_destroy(wwan_rfkill);
->  	}
-> +
-> +	ctx = platform_get_drvdata(device);
-> +	if (ctx)
-> +		cancel_delayed_work_sync(&ctx->keep_alive_dwork);
->  }
->  
->  static int hp_wmi_resume_handler(struct device *device)
-> @@ -2152,6 +2165,8 @@ static struct platform_driver hp_wmi_driver __refdata = {
->  
->  static int hp_wmi_hwmon_enforce_ctx(struct hp_wmi_hwmon_priv *ctx)
->  {
-> +	int ret;
-> +
->  	if (!ctx)
->  		return -ENODEV;
->  
-> @@ -2159,23 +2174,36 @@ static int hp_wmi_hwmon_enforce_ctx(struct hp_wmi_hwmon_priv *ctx)
->  	case PWM_MODE_MAX:
->  		if (is_victus_s_thermal_profile())
->  			hp_wmi_get_fan_count_userdefine_trigger();
-> -		return hp_wmi_fan_speed_max_set(1);
-> +		ret = hp_wmi_fan_speed_max_set(1);
-> +		break;
->  	case PWM_MODE_MANUAL:
->  		if (!is_victus_s_thermal_profile())
->  			return -EOPNOTSUPP;
-> -		return hp_wmi_fan_speed_set(ctx, PWM_TO_RPM(ctx->pwm, ctx));
-> +		ret = hp_wmi_fan_speed_set(ctx, PWM_TO_RPM(ctx->pwm, ctx));
-> +		break;
->  	case PWM_MODE_AUTO:
->  		if (is_victus_s_thermal_profile()) {
->  			hp_wmi_get_fan_count_userdefine_trigger();
-> -			return hp_wmi_fan_speed_max_reset(ctx);
-> +			ret = hp_wmi_fan_speed_max_reset(ctx);
->  		} else {
-> -			return hp_wmi_fan_speed_max_set(0);
-> +			ret = hp_wmi_fan_speed_max_set(0);
->  		}
-> +		break;
->  	default:
->  		/* shouldn't happen */
->  		return -EINVAL;
->  	}
->  
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Reschedule keep-alive work based on the new state */
-> +	if (ctx->mode == PWM_MODE_MAX || ctx->mode == PWM_MODE_MANUAL)
-> +		schedule_delayed_work(&ctx->keep_alive_dwork,
-> +				      secs_to_jiffies(KEEP_ALIVE_DELAY));
-> +	else
-> +		cancel_delayed_work_sync(&ctx->keep_alive_dwork);
-
-This is now duplicating the switch/case, just add these to the existing 
-cases.
-
-You may want to introduce ret variable already in PATCH 1/2 and add a note 
-there that an upcoming change is going to add keep-alive so the return 
-value has to be stored temporarily.
-
-> +
->  	return 0;
->  }
->  
-> @@ -2321,6 +2349,20 @@ static const struct hwmon_chip_info chip_info = {
->  	.info = info,
->  };
->  
-> +static void hp_wmi_hwmon_keep_alive_handler(struct work_struct *work)
-> +{
-> +	struct delayed_work *dwork;
-> +	struct hp_wmi_hwmon_priv *ctx;
-> +
-> +	dwork = to_delayed_work(work);
-> +	ctx = container_of(dwork, struct hp_wmi_hwmon_priv, keep_alive_dwork);
-> +	/*
-> +	 * Re-apply the current hwmon context settings.
-> +	 * NOTE: hp_wmi_hwmon_enforce_ctx will handle the re-scheduling.
-> +	 */
-> +	hp_wmi_hwmon_enforce_ctx(ctx);
-
-(I only now understand why you named this function like this, and I still 
-don't think it's a good name for it as you've other callers besides this 
-one real "enforcing" case.)
-
-> +}
-> +
->  static int hp_wmi_hwmon_setup_ctx(struct hp_wmi_hwmon_priv *ctx)
->  {
->  	u8 fan_data[128];
-> @@ -2377,6 +2419,8 @@ static int hp_wmi_hwmon_init(void)
->  		return PTR_ERR(hwmon);
->  	}
->  
-> +	INIT_DELAYED_WORK(&ctx->keep_alive_dwork, hp_wmi_hwmon_keep_alive_handler);
-> +	platform_set_drvdata(hp_wmi_platform_dev, ctx);
->  	hp_wmi_hwmon_enforce_ctx(ctx);
->  
->  	return 0;
-> 
-
--- 
- i.
-
+I'm happy to discard the previous 4 patches and start fresh in
+whatever format works best for your review process. The goal is to add
+support for newer IT87xx variants that many Linux users have in their
+systems, and I want to ensure the submission respects both your time
+as maintainer and kernel development practices.
+I appreciate your guidance on the best path forward.
+Best regards,
+Benoit
