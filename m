@@ -1,104 +1,109 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AAA24BBE4
-	for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 15:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D7017A2FB
+	for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 21:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767022601; cv=none; b=mkYeuHI3ui2HELtwWFF0Nj1V+xUsqyj6EcD8vH0weUjCDnbyMdCQXYZWF6w9O2Zpjj91rBVM4q+CozOMr8jnuT2hQ4DvKBiT5oKeYB4gTkh0XCn7eS9LH8a9HK6ijan5fgsbbRO35Am5OFQ/Xd/FaSCr5rfIGLW43fbFAdT2Uxs=
+	t=1767042312; cv=none; b=gMlrr/A0qjcq3fcwtjY2Rak32SJlFJKbXmamdJH+qBdnic8p/ipX/pU/sLqOQrNNH7PHtJ0tTuOnTLuEXfSqQ/TB5LDSYgfghSwMQj0oUI9xlEDg6eIqaHyfFIp3MYmr9ECH2GKeRO/4fkyYthLlMonYK75/PhipFhy6yyvbDeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767022601; c=relaxed/simple;
-	bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qZcl63i7RB0tughQaKbo2drBERf4MwWc2HhRuADqeg+nd2b9/FIyLSCXM5kshsBNsJo6WgKhig/9jIX0Mxjv0s0Hs0G4Ca4RIdeogu/f2RzQLsmAZo08S9KEgchjpFexEs1AwLd4bJ1+jLQUBMlD0PA4p0Os+lPfrAqcpET3S6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=b96dS2lg; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
+	s=arc-20240116; t=1767042312; c=relaxed/simple;
+	bh=9nN6GCiW9qt7GM/1iJFw2vm+gtsFm5SDxDT0h7BmAzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ObZ8rUpMM8qEPnild1yOKc3eiiASi1cSxAxBiqm3zSAbtNjQUEVEFuscU7zJVGhode0idmEu5pxQ8pSA2JrKEPeANB3WrTdWT0EYqGdMFrEOhOqLGnyyaZGeMa9CCf5w0QmaWs5G4ZNNlJn7J8DbgFAGSc55eq1WQj3h8LitIdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D1Bg+L78; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="b96dS2lg"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-37fdb95971eso68130881fa.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 07:36:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D1Bg+L78"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a0d6f647e2so151846205ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 29 Dec 2025 13:05:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1767022597; x=1767627397; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
-        b=b96dS2lgE9Ht5UOqCUgcJrryuN3PBCrnlhaVOU2xN9KuhqW8cK4GzuaG/1YGDsLLpp
-         1OOJYkG79dHbTsW02WRimvd3xXIkpUK/QIY7xOJfY0IeYNMIPtCVoCRrCrWekWIzyVHN
-         dOve2iGCPMs5tiRN3vBA0yyNd+we/xfBMtfUgHGSQ9kYTE+D/g+93oZJHEToG+ctETbO
-         2Z9kxL8D9Nfuguxl5AT0T8/J71mmHIhEzrjuFcaRH/DW+KbOjKkLY7wQ51MjWpGKqEmv
-         cz58tVglgTa22+8vj1C15vYqIXInyhlVVocwHn7mYJK1acLNmYe/MDqsbNfausqfkMQs
-         +diA==
+        d=gmail.com; s=20230601; t=1767042310; x=1767647110; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1wyqnBkAIe6wvEbKA0v5Rnr8yIh02S6Gm0JAY26jKGE=;
+        b=D1Bg+L787GvwOhqolfQbKkTagyNw9v/JBzyX4Q1MLdZ1kfRB8AYEIZKWaWha1MC9F/
+         fUTyNKkT3fPWR82E9WIr9zv3ek/GsX401Vlm0jq1Y9bKM3SVkDrO/RpDXg6Dcn8X+RK8
+         jBLvYsNmgUz0Cmnh2LHsdJdLtqLuNFu+nqMdIv0l+24dRwlcS2TX+gBFWGN9Xfk27ZZB
+         o/MsqSuFSgjQ0AXSoKLoelka3QllXpI5Add7hTl5NelEwxHH2iCIVh2psVSQw893Vvlf
+         azly+4vh+74zRwJboRjY9BLZ5CVNHdpN9fklUs9LxVzvJ8QQEm1peBYaA5NGUxEYqBOL
+         7kjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767022597; x=1767627397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gn0h58h2r64MMoV+4+rwtRF5yJ5NXWwc0mcFQx6x3Pc=;
-        b=CMdqOFVZZuRpci/6efBJtnQSvsfREYK6sh4PugBOThmsQA2DEDfVoDlSkdWojdrO06
-         mg0Ww5Wn6SbFUsV79XBRGpHzfLWDYkKQi1i0Jauw6+Dgw2jYiG9vJQOOb7OgO8Zydw8V
-         agNos57IQw2lL+qKlyGrP3cy6rr42EAZbn7qxwWboXP/w33oywC6GlXseQh2o6xtf9b0
-         NYWd8xPvTqWK7TBFsrzwx0YC4CqZJ4vY5msEfgJtI1ckBnIFlRYQxouLE3tN5tjujZDE
-         ibgvIi90OHgkXPh2RiROgF0NBuyYLSo5c+cd9R/lzSB7wbOvdTF7GYp1envcmEFfufnh
-         oVng==
-X-Forwarded-Encrypted: i=1; AJvYcCU/ze9FIJHJAVcsBOBJ58p/JL9nS6TxuYJPankOkQlJDbGa7JeNSkGWXVdPB8RH+Ebyu6bdX85xu6heEA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCo9yffL7KqNEpCTiAGVlv8fOLWDWi+uC6alNsJW2dxRl58Qk8
-	XzrPkr1UwYfKJD2loMbgXg5jw+VPwn2QmMZYtB67Ue57EXeQSypQUCaFvsNnc5h/zC5h7UYlsAd
-	QBPePk6BIs/fGPFphz7Eql0NCmJ1+j6p+P/O0gD3M
-X-Gm-Gg: AY/fxX63LJKx7NvbyguB4dnL8kxt5ivncnp4XY0aWbF/DGC418DjbbRstUKwfhezBXb
-	wWMuUGgDVybctUzUX2LC6/r04VIPsixAvx+uEiID1CVODT+DlYB8nyG3nN4c6wYpVrI8fxazEnz
-	/D4W/30IU/WXh1cySSpGSE29losg/2bXw1ZnGIIBcIsDAlZR2hcuevUqfUb9viO3GzmG4+N2v3c
-	pkwwZCt41kFmjet2vxWcumHSIlcSbZWWFNDIzDig1D4rxC7Q6R+h3QAdyA7UgIkOviwvRP4OOVG
-	gQtDoveT
-X-Google-Smtp-Source: AGHT+IFcYDsotAC7ttgZsrTgfqzI/6JkHxjtFpysGszl6lTgKVMQeZ6NcehTu7JgtbsM+YiMnk7AbDJsg5EST92fpBA=
-X-Received: by 2002:a2e:ae08:0:b0:37e:884f:b6ad with SMTP id
- 38308e7fff4ca-381216725damr80147761fa.23.1767022596740; Mon, 29 Dec 2025
- 07:36:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767042310; x=1767647110;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1wyqnBkAIe6wvEbKA0v5Rnr8yIh02S6Gm0JAY26jKGE=;
+        b=CGF7s0KQQHx5ZpL2ETF3GQUkWGNstROkKqPNwfFNHkrrs2maaWW0rw2SJ0jN/ax1aL
+         3wewlUu+zHHwsBBFK4dykNw9ZxWdFRgWm4Trah4tSrvQ1lLbThM6xSi+a+FGccP8BAjf
+         v8wMmy6hjiLd8jd0uP0QqztPAXOfBUg/04GRuAPABZGjIIM2C7TX0AzKHiipGoTEfbrz
+         Uqxjn+WGszGxUcBoRXLNNlWggIphb9zmcFr/JBIkykG5Sh4WOTtUTWi+LTInlk+k6qrj
+         nAPJnyPWYsBopMEXiLWMtC1FJc400YaeaC+IkPtyXGHSlHX4SRB4ylXz6HgFJ/BzjyUB
+         0XzQ==
+X-Gm-Message-State: AOJu0YxzhhtQC1KsrptETPIwNBgujmmf1BBcJbkF3IjkL9KDqncGGw1o
+	+rE6AcxjwuHBypmPv6WqAYDlSkZUhj6qHXGymQzalSUf+iGd05IIfzfN
+X-Gm-Gg: AY/fxX4Ew/UAwdzDaVn69e5sxjkhmJ24Bm15hwk9lvMBZSGgCjlYv1LxXlSASHFL/VS
+	e5gjenrsxxBSpZg6cUBXjX/M2j2tBa61ZCDugI6AIxUCaiS4ulXtami1rfRMJKUholZYhCjYzTz
+	HnoxbJuxtU43wDLtp/UFD8kUqX2nW9LOfgYAxKw5+zoAz93gVnUpVN1YkedcAmK++XLa+QSp8VA
+	jij1HnZMddN9lEsq7mBieQ3veiC4/OAWLU/J2dgHmY5SYYYE4wf1gnYF+qZfoY711tifMsL5ERm
+	oA6vvirJ5ftF0wqDex2k1ponpyw7BVf8s7jRPwlr2O9HFe0/WsH+L+di0ACldJ2//BwBJG3jBQ7
+	L9XmH8F/L8wpAsUCwSzRAk6KNySrVuBoIr3XGCIv5mZup0+rSrqgmwCkJBM6qQCwrjC67xJkDbi
+	AdjSIDhX3mudGjbQR1LNUfGcRul8p4XCzupzQ=
+X-Google-Smtp-Source: AGHT+IHRcmWYJ2ZmVGVRweAC85UIeX3VMn3HZKv/o6kcebcf+iSW78gTx+5hOPFMA49Y0d0yJQ4zCw==
+X-Received: by 2002:a05:7022:248a:b0:11b:869f:742a with SMTP id a92af1059eb24-121722a763cmr30452665c88.1.1767042310095;
+        Mon, 29 Dec 2025 13:05:10 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217243bbe3sm125650542c88.0.2025.12.29.13.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Dec 2025 13:05:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 29 Dec 2025 13:05:08 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Charles Hsu <hsu.yungteng@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add STEF48H28
+Message-ID: <e714157a-ce8a-4b1a-9882-ca437d772fec@roeck-us.net>
+References: <20251229103956.120184-1-hsu.yungteng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251226203021.27244-1-yahoo@perenite.com> <CAGHj7OJaSvSsr0z43phjs1YvL17xfJWesJFj0iQpdvi8=VXZhA@mail.gmail.com>
- <cf3a84de-9223-48e2-b6e2-c97e348b4c0b@roeck-us.net>
-In-Reply-To: <cf3a84de-9223-48e2-b6e2-c97e348b4c0b@roeck-us.net>
-From: Benoit Masson <yahoo@perenite.com>
-Date: Mon, 29 Dec 2025 16:36:25 +0100
-X-Gm-Features: AQt7F2r_xcPCZrVlTGTZdymUiFmrf_kFSklsBjlAdqaMEGXm0m30v7iCNk2Il6s
-Message-ID: <CAGHj7OKqUB6GDoFDvqyyzNb07AU4xb+GLfHi3fHnhmY=7BjGHA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: it87: describe per-chip temperature resources
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: jdelvare@suse.com, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251229103956.120184-1-hsu.yungteng@gmail.com>
 
-On Sun, Dec 28, 2025 at 8:33=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
-> Then why don't you send it as series with this as patch 0 of the series ?
-> You are saying this would be to make reviews easier, but in reality you
-> are making it more difficult.
->
+On Mon, Dec 29, 2025 at 06:39:55PM +0800, Charles Hsu wrote:
+> Add device tree bindings for the hot-swap controller STEF48H28.
+> 
+> Changes in v5:
+> - Move the change list into the commit message.
+> 
+> Changes in v4:
+> - Fix an incorrect datasheet URL and update it to the correct reference.
+> 
+> Changes in v3:
+> - Move the STEF48H28 Device Tree binding from
+>   trivial-devices.yaml to pmbus/stef48h28.yaml.
+> 
+> Changes in v2:
+> - Fix the entry in trivial-devices.yaml by correcting the comment
+>   and compatible string ordering.
+> 
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> ---
 
-Hi Guenter,
-Thank you for the feedback - you're absolutely right, and I apologize
-for the confusing submission approach. My previous reply was probably
-too quick and didn't properly address your concerns.
-I want to make sure I handle this correctly going forward. Would you
-prefer that I:
+First there are no change logs, than this ... change log goes here,
+after "---".
 
-- Resubmit everything as a proper patch series (0/N with cover letter
-explaining the overall goals and how each patch adds support
-incrementally), or
-- Is there another approach you'd recommend given the current state?
+Nowadays it seems that 80+ % of my time is taken up with such
+trivialities, distracting from the actual code reviews.
 
-I'm happy to discard the previous 4 patches and start fresh in
-whatever format works best for your review process. The goal is to add
-support for newer IT87xx variants that many Linux users have in their
-systems, and I want to ensure the submission respects both your time
-as maintainer and kernel development practices.
-I appreciate your guidance on the best path forward.
-Best regards,
-Benoit
+I really need to set up AI code reviews to handle that :-(.
+
+Guenter
