@@ -1,120 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99582D837C;
-	Tue, 30 Dec 2025 10:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E7F29BDAE
+	for <linux-hwmon@vger.kernel.org>; Tue, 30 Dec 2025 12:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767091238; cv=none; b=JV+8jrEvLI8uCdEi5F2LkpQVQ3k+V97dMGJ2pOldiM3geYcGOLdVh5HfShy2nVhxMGIYcskVf+aHgKw4NfJKnZLaoc0JfiMfIYjGi8uzjGn3qrDcrKLbLBcB6UQSd0hvZtEb5sm5tOmbv5du4TIR5Gsuy/RPvad33cMdVGAgxnc=
+	t=1767096701; cv=none; b=SUKCG1MqMBKEkIq6n90iVpSnUR+4l4zkI24dPOzGR6WtD5xkeb/Zz8Cl++MrR6za7yF6pG1mSzOzaQZkj1fAdjZkQShYrc1s7eB/LdS6kOBVbKo3yAimqdupM84m7KF4Hj9LcF0GvuU8dPJS7oPAKgrbMntVgPZQobid03M9+o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767091238; c=relaxed/simple;
-	bh=vZicUy+dgI3YDjN1LYPRtKwEFb3q+KqeMeGFuxNKrmg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rnmAgS0+TA4hc1nW2SVV4wM7wkAJysgc62n73eRqXgOM4s+Oqsb3TbOd7+AVBJuXRnZk0CmtiyfA+2Ik/9Vs9cs7zi9W1tCr7mKuNlH+fsKy2hV1RyvB45vKA/zDluBWrGl26iC4GiA1h4J82f9y8M369e5zwPY3V4Pci4P1dJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWTvR8LX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767096701; c=relaxed/simple;
+	bh=bYwPh/r59Kdg8UF2Y8E9sVfS/EBt2eYuOMhRqwL5mYI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gfzj8o3PImMvyE6ukY2ii42sT1dpm/qbHw/o55xd2i3UVDT8XuGMMMsP4HOFRNfQXZMMM3Vo8gFZf48ruV2OUyoON38DF3CwE6dmw2I82dzGr9cp7yg+D8NOURe44yd6TBm1DgjLZisAa0aZhomfBlVJlpM0z6FwL150kurSKyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmUGxT4P; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWTvR8LX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A8AC4CEFB;
-	Tue, 30 Dec 2025 10:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767091238;
-	bh=vZicUy+dgI3YDjN1LYPRtKwEFb3q+KqeMeGFuxNKrmg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BWTvR8LXJmxhiADN7ilxqdB5o/fJGO7glBMYaraSu1pZRpsSwTYYhr/LRAksyqp9R
-	 oCZGcc5hCfdnRURRcs82dLcwqvLi09meiODhWRWWHg2va4YbpDWopV2IEtc0cxRUdm
-	 TXWGx6uDZnGPTttZgJ7cONsHzImDRqKT6RMHUyRzihBsHyMdoStcSuM3j8Py1mqLcy
-	 hwUKcn2v9kN+aK/5pbq65uHFm/lb2lpWUIujxc+GFKT0rO8tPOjJ/4xlO22cOvkuho
-	 18DtmJvG8H308cP6KPq9st7N+fzMXUMnysidS/RTbMaQOOjOA8Upm07UFN62w4QGIX
-	 SP9TlAUMW2POQ==
-Message-ID: <df617237-3b07-47b9-89b1-9b43ed332d03@kernel.org>
-Date: Tue, 30 Dec 2025 11:40:32 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmUGxT4P"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-34b75fba315so10912128a91.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 30 Dec 2025 04:11:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767096698; x=1767701498; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bg2RSLDr50+8D3pVCAL17x6JULMvf+H6c/F/QmhwLYQ=;
+        b=SmUGxT4Pca9PZ1NntO8k1up5zjdFFpxhnSHZIOz2dxkuI+9dOOslznnFw45SSGh5D1
+         7ibKBtR+peOKEeggkvwcIavu6xaCsdgBwgmMv3B5pbwIEZ++8m77HNlpAi7LVmulpcwS
+         sUirO7VahWWGwBvNiUSWoCWx835Ys+utTk5HyR37UNfhpC9zW5jTMyJN9blq/LbZVUWw
+         xukR1kzRqbgjBvkBz16pUk39sp+2hgCwqh8OYGOuK8EXBoLyIFG6JNQFxvfSoXldGj9v
+         Bi8USrehkil2sFbxzLERtf9Ry+qiTxpqvly4wNFHEISdHbs0GPD/+Xb2hyfML4cfCnGD
+         0hRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767096698; x=1767701498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bg2RSLDr50+8D3pVCAL17x6JULMvf+H6c/F/QmhwLYQ=;
+        b=MK8SGtcV7HNsHXAi6lmKHNL9meCXsEMQ7DmgcCBWJBcZSvScxCJYxzStApQrXY+fh9
+         6BnHFqxSrtin9Z2APvUE5bqcvZV4aijVr8NGXNVX4NX34vnop3PwT8F1T7w+J0DijsOm
+         Hom8M1p8hod0wqy4jQ/NBZqW9OSbwRutSuHPNkjalSeop2tL9QmkKsG+u3dItbPV1afO
+         L0z6YU7+5ho4mw5aiXaRdpfDXTaMA4ACsxF2FIcYEMsRSmn60AFWQDkJpxaEc7TB/eQK
+         Ahhw5AdNUsetOTAr7jceVlavKiGZrVrImuz7JRWxTUbHgOoxtP74Zpy71w88TIGwmPRa
+         eWWg==
+X-Gm-Message-State: AOJu0Ywb/T02s1cM0+TfBR8k3NnQH1eotJs4SivKExSMdU/cXut9sba6
+	G/RqoFEBmQPNw5jhGLunmPpV6OLa/4XWwLfqOH89dH3l8lzMNjCrdgmt
+X-Gm-Gg: AY/fxX4NNOFEKLc4bGowvWhozR5LCrep4sl5XPIcRLBrHWCOAyUWyZWIEDUMZn0FRNk
+	Z+EiMTSJO4Vmu2rdVU6p5W5JSAAOfJK60id/y4S382NO95HtspwxPrgvzk6vYCIuJKZbYoXHPeM
+	MAU1ZNTXGrYAPtErUli7d/NrRIo+/M8Rpzf+Xlp3MaK41g3hzCVkbst/cnbDouV/iz97+5xXzpX
+	jNIXBus8XCacQC6b1O2r+YeZPKbOiii+rZY/jSoq1Ks79FlHtpgtz67UxRJZKcMOeDpTYtQlFfx
+	78cyLSyugS9WBjXf6QRtRwL1WFjwnoGtIdKCAK/4rXTWvfvXgm+QV41DePLu2daN4nvV99aGeJ5
+	TzRpDWGOW8L/8ou+E9PlnqIA7ZxqPj/RR0ssLP3cdx6cYzVbxGEciMq1x6S5XDZlOcL87HltyCW
+	AXm83Bs1Ge6InrZLIsTVMKsT1QqZTk7OFX9nA=
+X-Google-Smtp-Source: AGHT+IFsA4ByogfMPMDsyAcE+PWG8R83FWQ4jtwa8BfM2ldpe6mZ5mSKioruKfLYtMyB+/2wt4BrXg==
+X-Received: by 2002:a17:90b:2d81:b0:334:cb89:bde6 with SMTP id 98e67ed59e1d1-34e9212a469mr28339734a91.4.1767096697749;
+        Tue, 30 Dec 2025 04:11:37 -0800 (PST)
+Received: from fedora ([61.74.238.173])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c2e20a646e8sm13383628a12.11.2025.12.30.04.11.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Dec 2025 04:11:37 -0800 (PST)
+From: SeungJu Cheon <suunj1331@gmail.com>
+To: ray.huang@amd.com,
+	linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	SeungJu Cheon <suunj1331@gmail.com>
+Subject: [PATCH] hwmon:fam15h_power Use div64_u64() for 64-bit divisor
+Date: Tue, 30 Dec 2025 21:09:59 +0900
+Message-ID: <20251230120959.199139-1-suunj1331@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: regulator: Document TI TPS65185
-To: Andreas Kemnade <andreas@kemnade.info>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20251227-tps65185-submit-v2-0-1882024b8f33@kemnade.info>
- <20251227-tps65185-submit-v2-1-1882024b8f33@kemnade.info>
- <20251230-rustling-mandrill-of-domination-ddc04b@quoll>
- <20251230104909.3236ce13@kemnade.info>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251230104909.3236ce13@kemnade.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 30/12/2025 10:49, Andreas Kemnade wrote:
-> On Tue, 30 Dec 2025 10:08:57 +0100
-> Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> 
->> On Sat, Dec 27, 2025 at 11:20:36AM +0100, Andreas Kemnade wrote:
->>> Document the TPS65185. GPIO names are same as in the datasheet except for
->>> the PWRUP pad which is described as "enable". That pin is optional because
->>> the rising edge corresponds to setting one register bit and falling edge
->>> to another register bit.  
->>
->> Nothing improved in the subject. Mark asked for proper prefix and you
->> used exactly the same prefix, so the same problem stays.
->>
-> Quoting:
-> The Documentation/ and include/dt-bindings/ portion of the patch should be a separate patch. The preferred subject prefix for binding patches is:
-> "dt-bindings: <binding dir>: ..."
-> 
-> That looks like what I am using.
+tdelta is u64, but do_div() truncates the divisor to 32 bits.
+Use div64_u64() to handle the full 64-bit divisor correctly.
 
-Please read entire paragraph not just half of it.
+Signed-off-by: SeungJu Cheon <suunj1331@gmail.com>
+---
+ drivers/hwmon/fam15h_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+index 8ecebea53651..5e3692606516 100644
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -241,7 +241,7 @@ static ssize_t power1_average_show(struct device *dev,
+ 		}
+ 		tdelta = data->cpu_sw_pwr_ptsc[cu] - prev_ptsc[cu];
+ 		jdelta[cu] *= data->cpu_pwr_sample_ratio * 1000;
+-		do_div(jdelta[cu], tdelta);
++		jdelta[cu] = div64_u64(jdelta[cu], tdelta);
+ 
+ 		/* the unit is microWatt */
+ 		avg_acc += jdelta[cu];
+-- 
+2.52.0
+
