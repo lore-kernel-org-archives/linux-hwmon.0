@@ -1,128 +1,105 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A1BE23A562
-	for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 14:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDB41E0DCB
+	for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 15:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767190711; cv=none; b=nHe2jVKur53LM+auYip3vgkrCHSqvy4FOq1DBuJUUaohxG3uOlqijFRioVo7ROee+GHpf4g2SulItG8RhRn3qteMa+U+jcIWcV7nARy7RSJVuDNgAlV52xslO8Vr32WEdBmosA6+vXiePwg9o25cRZvb2UaGQQO/3uQsZgmdVWI=
+	t=1767196415; cv=none; b=ordQFZM3/W74Cp7lMG4MoEpXjLW9XQMkXiTmTOnVKowvYeAu057LB61n5lMZLddgeCQIPnbjuRdPsDRII7GkoXOKs6d1kmGHrt/TfSwdIB4cfKt80n2wMp4Ztys1EYQo1uRQUwi0pn4zft33GutdUR/YZOTY+ceimBeYi362MgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767190711; c=relaxed/simple;
-	bh=bMo6D2vfzSF/l7vfhuXH46dTpj32l/qEMFUna2eeHSU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DYyJ6h/+78EzUG0JyW3XDW4sbPW/zBeiKfaETlpnVwZTBY8Yk70ivcbBWpPt4ELhsbTC+1RV7Amapza8wACKTYG/KZbYh8CBUBLXVOJwdWgtg/+aMXMj1hCscjpsfGF0ByecWelOXOLkyKpwUwGH/ND194M/qGZ7ZPDKgAjUQEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FvWBpzja; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1767196415; c=relaxed/simple;
+	bh=wVPQqFlS1KNfAjUR7RB25XChNaQHRO1v731gwzrN2JQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OUkAT1PTdddKAmMsHzjGGF6gImt1jYZ2an5VtPc+uO2cFHivjhnUyWa1SHDS7jFMxJ/aJtvZNJd9J0dz+4MtGpdnD+70osGblE9pPGcggIobuoLubZd99pq0Za/lY1yx2qe0dHrkvukDJ3NPQZsA2idvVKjhyqmaSoPd7bWHUNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l1TeWI9p; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FvWBpzja"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7bb710d1d1dso15344357b3a.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 06:18:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l1TeWI9p"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42e2ba54a6fso4715214f8f.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 07:53:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767190709; x=1767795509; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sBqH6S/0RlXFPmX265PUBJNYKV+Ni6YZkY3nzq641q8=;
-        b=FvWBpzjaaMuREMrgwz5iOpdUNtghzhhRo52krY0BFcUpalW81nFKR55WMF3NoMXJYL
-         rAfTIGCI80awM80gq2QnW3Lfcs0WogXWNWgYv0HHqFsJcBF62HaZkiD2jZtA4frnlic7
-         pEaIXsJWWfMdDVdhc3lNn8y3kgJB6HUJUYGmwum6CBpWYptoplaUSg9d0RrixQfzGfOP
-         0kLR7md9Cyz0F7JqnNjR1LuuPfMSFDt2Iv3xkMjTcgsKq4PcZb/p0HNYD0/ERsCdBb+8
-         INN8/i3VytFUzNsN38jsE3fTFgezwW1xpvGx+NI3ERSuHzmSGqV1s/INZF5Dx4Bc55ly
-         WxNQ==
+        d=gmail.com; s=20230601; t=1767196412; x=1767801212; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WKPCW3kq2pGQN393glGn3ykG333/w2J5nOmNIpQR9DM=;
+        b=l1TeWI9pYm4RQMAzKjhI0w1T6Zro7Cs/eTPUJQv3Y+JyosOILqJ9BUvmF7sV1nQGtM
+         IzwHhlshIixWjdPPNH8SWoW/Y8bhgVXxW6nKWXkn63MYKgpuwhKP2kviTV/TqYhAbgzY
+         J/B23BdVAamQ01mTkhtjj1cXgkC+s9ThjvmZM+QwchOqgtd6bpv0PnNDuA8JCIjFjoaN
+         3SzzdHsdeBzWllMhvnMT2w7WUuO50FZUUBD3qNxGOmrTrmXImdb8gaO+iF90PuTY2yM+
+         VuIiQPt/Du1baAYdFVD+zJbs0/+a28du9mbAZMRKPK2cLZW8gJObBfoD9iINbmgDGC52
+         B/LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767190709; x=1767795509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sBqH6S/0RlXFPmX265PUBJNYKV+Ni6YZkY3nzq641q8=;
-        b=malpfLvyAqlWDe5qIyEiJrLwsT0YEqRPdXSzw+HGaWEkhjYdjhzz8UAOWDiNnCtfxs
-         P1yypjaGOI5iARyDp1JYJPtOn6eZxCcm0G2fB/svMts/p9Qdn9fdtz5sL/3Szw41xy3U
-         IcJY2Q7qsmDl/rvZKTFHE+WNLJ+b/LPAjw2ZQNBCIiPmbPSW4MMU4gf4CZgr/a3Csfw7
-         o+DLf8Ho4VQJGGuQplVFWB6IwP/DioIcyVRYBzWCEtD92vLJQQkIkbJLQCWQMyy5+g9Z
-         IxbqXktVQwL/C05MuohEO2SUxdtabyJreeBRs17cjXHe2cjPEVJ6vjNpeq2iiyWXAfWW
-         DSwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCZbTGl/1lehjUwu/mu6OYoVbv3tmRU3OsXa8pKxiFRRpHSnOUChP0QS+QeJyk6g0beiQmv5JQJjPGeg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRoEE72vRtcKlh1lFy0y1o7PSyHNncaP8nDhSwlSwuDH5+An10
-	LUVCzRNqFjafruie1+LJItf1v7KqfmoOvbqrsX9TM7VtXHxmzCVtQwP8
-X-Gm-Gg: AY/fxX6eI3Nw3QddCqrUKP9WxzBDb/ECx8WtA+/DEaeRwu5/jU1PDxABpHbhBT71zTI
-	zgQsdVns6fwYbfN+TYAZwNoI0JS/biwdLgSO0wUHAVDpuQ2Gs2cC3SfkIBNW1KKO5YG2/IUs07f
-	ZOeZvpkkqIYs7vlKW4HJ50jJWmORurzWGIQ0Mqn/5pduG4vi7g9PjHSGMZwtfyHKxn5e4ijfYpf
-	0avCEdflnpAyoamnACozJZ6fk7wFrRTekekdiZTsLFtyvqslTpAsvIbhKkYs5bLrsT7TL3NMsEc
-	rjrlieHi9JKg7OOpbyXTDihvaCKlKqSbzGB/IOZmS2QGGtl7zxJ+mmuAeLWR5UDwXrxfJIZFJCF
-	WdkDLm+x8pRxTY77gsoF2yZf/hs91fzqBSk+f3iUdG7hX1bC/hLoPALU5ptRyQaDp1llUDxgnGH
-	DYD0GehgInvioXf6p/WwA8R+B6uaV8xW8r1Qo=
-X-Google-Smtp-Source: AGHT+IG43HNIT9aj3O42EF/+ZUT5/76kYBY0OEEbZJI6Mta8sGxJLto2coIUWm4QlzOuBgmoPEhtyQ==
-X-Received: by 2002:a05:7022:4284:b0:11b:9386:7ed3 with SMTP id a92af1059eb24-1217230b84amr38554922c88.48.1767190708463;
-        Wed, 31 Dec 2025 06:18:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217253bfe2sm105036159c88.10.2025.12.31.06.18.27
+        d=1e100.net; s=20230601; t=1767196412; x=1767801212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WKPCW3kq2pGQN393glGn3ykG333/w2J5nOmNIpQR9DM=;
+        b=INpnuhBFnqeFa+1dINeU6yzFTIBg3Tqp7+EQBaFAkA/ybc91T46ovH8VW7cugVLAy+
+         zenO8dPjqZGh/aMQunrC6OJPHlBXCQHvt8Z5vGVvx2/vX8HbwAkaaWXw0//QJ+G/eq/L
+         /4NaXxnbU4a+MLbkUMgG6y3fhPlepXtD7XilK4n8Vbtx5bgUGmiC9w+KwoSnaTogwdSo
+         TFxOoqalSUzw0EGN7DHi3O8h/7ZmYdgNhDBKXwX3XxY0+PEivJGWTgjlXc3+LbNTwp8M
+         e2EggDrbeTMkL2YkAkKGfVIbTYzKZLAw6fVsXCOh6XywKz6kGhNw95kL5hJip3RyICVB
+         roww==
+X-Forwarded-Encrypted: i=1; AJvYcCW0O0bfbvEppvldi6MDoInO8W2n0XmuFJzlCs+fKutUWb+kTGqHM3XjsW/zwAX1uLfE1hnua0J4O8WbjQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0mVeVQsNIofMT9dyzSR4i67pldDsSgxji0wDVYIRQsk5/XvLS
+	XW6i7xOCube1Nl95kGmUtQ/TcMFebHhIg6IzRU42K0gKr4MTWP63RAyQzkGFWw==
+X-Gm-Gg: AY/fxX61kFE7N+ifj2XyVn3xiWYxYnk7I43DGFInaS2KysUg4Wdu6L9qdGdiioOaNtk
+	wd70Hd1+O4+exME8xBz69WfN/oM6gRq0IvaDqBEFZg0VceTyjZMyIAaIN/4/pmqk3VJvwKeJ65i
+	mLGB1X9uvk12YtfNMSG3M7Azlg4LOevrYKoXmebJPUIdUdn2HUldGWdqa5RpjNUnJ6dr3nF/qQQ
+	NPlGZ7yqRri0J6sxXWSsXy7Q56frSrXiL7r3fydh8s4iVjl7JF0sLEKskmIzQ3U8TVp4pcsV3ix
+	Urk5wpmrLbC7vNyQA+bMNNC529TIFYOYdLsq+W2Qe0y0rCWK7JyzmPxTm89N7cRiR5JRYLix3hu
+	OcIKQbdrVxURbjwjlCaW+lbFyrpptz9g50XjbTalx8w3NtRFusovK0cxJoBxZAEbW9iDrA7wTXg
+	XXxItG+hFRRIKkE/QkIQaJ5Yc=
+X-Google-Smtp-Source: AGHT+IHF37bruf98WLBqlxj/MZ8UKAdp1zRKcpboq39+FTBtQLAszSI+B0p28QQyKB6nJtVlkJGd6g==
+X-Received: by 2002:a5d:4842:0:b0:432:84ee:186d with SMTP id ffacd0b85a97d-43284ee2de1mr16836665f8f.62.1767196411907;
+        Wed, 31 Dec 2025 07:53:31 -0800 (PST)
+Received: from c101p-debian ([178.137.87.131])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4324eab257asm75530029f8f.38.2025.12.31.07.53.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 06:18:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 31 Dec 2025 06:18:26 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: SeungJu Cheon <suunj1331@gmail.com>, ray.huang@amd.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon:fam15h_power Use div64_u64() for 64-bit divisor
-Message-ID: <695493ae-f8ef-4e25-a194-361436bd7779@roeck-us.net>
-References: <20251230120959.199139-1-suunj1331@gmail.com>
- <20251230232357.00222b64@pumpkin>
+        Wed, 31 Dec 2025 07:53:31 -0800 (PST)
+From: Denis Pauk <pauk.denis@gmail.com>
+To: 
+Cc: pauk.denis@gmail.com,
+	shoes2ga@gmail.com,
+	linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6775) Add ASUS Pro WS WRX90E-SAGE SE
+Date: Wed, 31 Dec 2025 17:53:14 +0200
+Message-ID: <20251231155316.2048-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251230232357.00222b64@pumpkin>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 30, 2025 at 11:23:57PM +0000, David Laight wrote:
-> On Tue, 30 Dec 2025 21:09:59 +0900
-> SeungJu Cheon <suunj1331@gmail.com> wrote:
-> 
-> > tdelta is u64, but do_div() truncates the divisor to 32 bits.
-> > Use div64_u64() to handle the full 64-bit divisor correctly.
-> 
-> Looking at the code I think that tdelta is a time interval and will
-> always fit in 32bits - so the code is probably fine.
-> 
-Agreed.
+Boards Pro WS WRX90E-SAGE SE has got a nct6775 chip, but by default there's
+no use of it because of resource conflict with WMI method.
 
-> Also I can't see anything that requires jdelta[] be an array.
-> Neither can I see the justification for MAX_CUS being 8.
-> 
-Also agree.
+Add the board to the WMI monitoring list.
 
-Guenter
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Tested-by: Marcus <shoes2ga@gmail.com>
+---
+ drivers/hwmon/nct6775-platform.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > 
-> > Signed-off-by: SeungJu Cheon <suunj1331@gmail.com>
-> > ---
-> >  drivers/hwmon/fam15h_power.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
-> > index 8ecebea53651..5e3692606516 100644
-> > --- a/drivers/hwmon/fam15h_power.c
-> > +++ b/drivers/hwmon/fam15h_power.c
-> > @@ -241,7 +241,7 @@ static ssize_t power1_average_show(struct device *dev,
-> >  		}
-> >  		tdelta = data->cpu_sw_pwr_ptsc[cu] - prev_ptsc[cu];
-> >  		jdelta[cu] *= data->cpu_pwr_sample_ratio * 1000;
-> > -		do_div(jdelta[cu], tdelta);
-> > +		jdelta[cu] = div64_u64(jdelta[cu], tdelta);
-> >  
-> >  		/* the unit is microWatt */
-> >  		avg_acc += jdelta[cu];
-> 
-> That could be:
-> 		jdelta *= data->cpu_pwr_sample_ratio * 1000;
-> 		avg_acc += div64_u64(jdelta, tdelta);
-> (or even 1 line...)
-> 
-> 	David
-> 
-> 
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index c3a719aef1ac..555029dfe713 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1357,6 +1357,7 @@ static const char * const asus_msi_boards[] = {
+ 	"Pro WS W680-ACE IPMI",
+ 	"Pro WS W790-ACE",
+ 	"Pro WS W790E-SAGE SE",
++	"Pro WS WRX90E-SAGE SE",
+ 	"ProArt B650-CREATOR",
+ 	"ProArt B660-CREATOR D4",
+ 	"ProArt B760-CREATOR D4",
+-- 
+2.51.0
+
