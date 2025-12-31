@@ -1,105 +1,79 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDB41E0DCB
-	for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 15:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3DD30AACC
+	for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 21:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767196415; cv=none; b=ordQFZM3/W74Cp7lMG4MoEpXjLW9XQMkXiTmTOnVKowvYeAu057LB61n5lMZLddgeCQIPnbjuRdPsDRII7GkoXOKs6d1kmGHrt/TfSwdIB4cfKt80n2wMp4Ztys1EYQo1uRQUwi0pn4zft33GutdUR/YZOTY+ceimBeYi362MgU=
+	t=1767217047; cv=none; b=CICYcFXYp46kA9NwnS3NYtw/OwCeuK8dHbeOzcufX2vDVnbQE0OlDQWY3GB62HZEWW4rLESMsMKOXNfzkHKIwNWYbrb1wwPGDzQeqU+U95isrhlalSULJq6h4uuIMTmb0LX5KjbCL6WeKvalQH1hLT396OsCEM7ytuT0xiIOOM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767196415; c=relaxed/simple;
-	bh=wVPQqFlS1KNfAjUR7RB25XChNaQHRO1v731gwzrN2JQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OUkAT1PTdddKAmMsHzjGGF6gImt1jYZ2an5VtPc+uO2cFHivjhnUyWa1SHDS7jFMxJ/aJtvZNJd9J0dz+4MtGpdnD+70osGblE9pPGcggIobuoLubZd99pq0Za/lY1yx2qe0dHrkvukDJ3NPQZsA2idvVKjhyqmaSoPd7bWHUNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l1TeWI9p; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767217047; c=relaxed/simple;
+	bh=3Rfnf2qhGGwgV00DUgX+jw89Q5Q97DzPe9bYdiAb1ps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QKF5wIFuX5j2Kvw4LiRW/FHRTbGYD+GtUQxbDeq6kPyaS2/J0Y/bJbWho7FBIt3cLKF0R/6l0HvESOjTbRE0yXmwnBEU1grj/BVcy8LYXv+9Nf9CR05XjzCrt33m7q4Fh8a7uKV5eqFSy7vha7he4OtiLbDRVd0PPC8qveyImRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/myJmuv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l1TeWI9p"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42e2ba54a6fso4715214f8f.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 07:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767196412; x=1767801212; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKPCW3kq2pGQN393glGn3ykG333/w2J5nOmNIpQR9DM=;
-        b=l1TeWI9pYm4RQMAzKjhI0w1T6Zro7Cs/eTPUJQv3Y+JyosOILqJ9BUvmF7sV1nQGtM
-         IzwHhlshIixWjdPPNH8SWoW/Y8bhgVXxW6nKWXkn63MYKgpuwhKP2kviTV/TqYhAbgzY
-         J/B23BdVAamQ01mTkhtjj1cXgkC+s9ThjvmZM+QwchOqgtd6bpv0PnNDuA8JCIjFjoaN
-         3SzzdHsdeBzWllMhvnMT2w7WUuO50FZUUBD3qNxGOmrTrmXImdb8gaO+iF90PuTY2yM+
-         VuIiQPt/Du1baAYdFVD+zJbs0/+a28du9mbAZMRKPK2cLZW8gJObBfoD9iINbmgDGC52
-         B/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767196412; x=1767801212;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WKPCW3kq2pGQN393glGn3ykG333/w2J5nOmNIpQR9DM=;
-        b=INpnuhBFnqeFa+1dINeU6yzFTIBg3Tqp7+EQBaFAkA/ybc91T46ovH8VW7cugVLAy+
-         zenO8dPjqZGh/aMQunrC6OJPHlBXCQHvt8Z5vGVvx2/vX8HbwAkaaWXw0//QJ+G/eq/L
-         /4NaXxnbU4a+MLbkUMgG6y3fhPlepXtD7XilK4n8Vbtx5bgUGmiC9w+KwoSnaTogwdSo
-         TFxOoqalSUzw0EGN7DHi3O8h/7ZmYdgNhDBKXwX3XxY0+PEivJGWTgjlXc3+LbNTwp8M
-         e2EggDrbeTMkL2YkAkKGfVIbTYzKZLAw6fVsXCOh6XywKz6kGhNw95kL5hJip3RyICVB
-         roww==
-X-Forwarded-Encrypted: i=1; AJvYcCW0O0bfbvEppvldi6MDoInO8W2n0XmuFJzlCs+fKutUWb+kTGqHM3XjsW/zwAX1uLfE1hnua0J4O8WbjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0mVeVQsNIofMT9dyzSR4i67pldDsSgxji0wDVYIRQsk5/XvLS
-	XW6i7xOCube1Nl95kGmUtQ/TcMFebHhIg6IzRU42K0gKr4MTWP63RAyQzkGFWw==
-X-Gm-Gg: AY/fxX61kFE7N+ifj2XyVn3xiWYxYnk7I43DGFInaS2KysUg4Wdu6L9qdGdiioOaNtk
-	wd70Hd1+O4+exME8xBz69WfN/oM6gRq0IvaDqBEFZg0VceTyjZMyIAaIN/4/pmqk3VJvwKeJ65i
-	mLGB1X9uvk12YtfNMSG3M7Azlg4LOevrYKoXmebJPUIdUdn2HUldGWdqa5RpjNUnJ6dr3nF/qQQ
-	NPlGZ7yqRri0J6sxXWSsXy7Q56frSrXiL7r3fydh8s4iVjl7JF0sLEKskmIzQ3U8TVp4pcsV3ix
-	Urk5wpmrLbC7vNyQA+bMNNC529TIFYOYdLsq+W2Qe0y0rCWK7JyzmPxTm89N7cRiR5JRYLix3hu
-	OcIKQbdrVxURbjwjlCaW+lbFyrpptz9g50XjbTalx8w3NtRFusovK0cxJoBxZAEbW9iDrA7wTXg
-	XXxItG+hFRRIKkE/QkIQaJ5Yc=
-X-Google-Smtp-Source: AGHT+IHF37bruf98WLBqlxj/MZ8UKAdp1zRKcpboq39+FTBtQLAszSI+B0p28QQyKB6nJtVlkJGd6g==
-X-Received: by 2002:a5d:4842:0:b0:432:84ee:186d with SMTP id ffacd0b85a97d-43284ee2de1mr16836665f8f.62.1767196411907;
-        Wed, 31 Dec 2025 07:53:31 -0800 (PST)
-Received: from c101p-debian ([178.137.87.131])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4324eab257asm75530029f8f.38.2025.12.31.07.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 07:53:31 -0800 (PST)
-From: Denis Pauk <pauk.denis@gmail.com>
-To: 
-Cc: pauk.denis@gmail.com,
-	shoes2ga@gmail.com,
-	linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6775) Add ASUS Pro WS WRX90E-SAGE SE
-Date: Wed, 31 Dec 2025 17:53:14 +0200
-Message-ID: <20251231155316.2048-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/myJmuv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CCEC2BC9E
+	for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 21:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767217047;
+	bh=3Rfnf2qhGGwgV00DUgX+jw89Q5Q97DzPe9bYdiAb1ps=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=S/myJmuvkQhoJ8EppRf3vex1oHqN6qlqOFLVY9fq6nDRgajD26aH7kRPXmgv928XN
+	 DF+TI78MG0UkXzZMdQuw/GlDgWSTvvxshjuoWDv9HPqT/ygN9fSm4tM6/4gtAfbWRo
+	 QzgG3od32ACcdrA4U/CqlZorWWrLyM+hVKKc9JprOQAISIoIWyWLrac6n3tEKlvdbz
+	 pn7SDd/cIIVAUBaCaNAtbKkHkMk4EWxb3ubqdSGLJYW7BHJG77tQL9PBBKd5n9kxil
+	 vefx2gkquaNmsHtp/u9YwXN07/1/wFU4m8CwszxqBuN+8dVBrt7VZWgJ48dhsHZj/v
+	 RFgKGQWveyeJQ==
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-64476c85854so9849178d50.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 31 Dec 2025 13:37:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUeSJ5c874vDy9gmrzCMFc3sWacq67XkOp09j6+V2Vjr7ifAYK1W3ZrBt3+YLgLtcAJNQ8oIYATqowDRg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkIIJSfDy2QLpfcvONFfM/zkKsDvvk15/FRKBXpYQnOIdvjT98
+	aOVTR8cKxJ1dAjBreLC840ULEC+2h0gFfU4i2lDmAj7cXSW0QY9OHBoK66wT/xM4PyQmdAmwc0E
+	867rsl23xRZEo5GBNaYAD4gQ1Akmn8mo=
+X-Google-Smtp-Source: AGHT+IHHeH8zJG7rfiI2GFfedkzIC0YK/SbYafxSnkK2MFdRLnSCHEYor5QZDiE7b0zGilhY27fuPDjyGexn5uPgcoQ=
+X-Received: by 2002:a05:690c:3803:b0:78f:984b:4bb5 with SMTP id
+ 00721157ae682-78fb40c5f09mr590051547b3.64.1767217046540; Wed, 31 Dec 2025
+ 13:37:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
+ <20251211-dev-dt-warnings-all-v1-2-21b18b9ada77@codeconstruct.com.au>
+In-Reply-To: <20251211-dev-dt-warnings-all-v1-2-21b18b9ada77@codeconstruct.com.au>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 31 Dec 2025 22:37:15 +0100
+X-Gmail-Original-Message-ID: <CAD++jLmNGrDt3_w=DFnBnjEuz3LN-=uc1o9KHv1j=4gbGPoPQg@mail.gmail.com>
+X-Gm-Features: AQt7F2oNijhkSY2l2xLUahhHBTqPWX5BBKamnMGV8HdX2c29O6a9KTnJl-DXNNE
+Message-ID: <CAD++jLmNGrDt3_w=DFnBnjEuz3LN-=uc1o9KHv1j=4gbGPoPQg@mail.gmail.com>
+Subject: Re: [PATCH RFC 02/16] pinctrl: aspeed: g5: Constrain LPC binding
+ revision workaround to AST2500
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org, 
+	linux-mmc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Boards Pro WS WRX90E-SAGE SE has got a nct6775 chip, but by default there's
-no use of it because of resource conflict with WMI method.
+On Thu, Dec 11, 2025 at 9:46=E2=80=AFAM Andrew Jeffery
+<andrew@codeconstruct.com.au> wrote:
 
-Add the board to the WMI monitoring list.
+> Discovering a phandle to an AST2400 or AST2600 LPC node indicates an
+> error for the purpose of the AST2500 pinctrl driver.
+>
+> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Marcus <shoes2ga@gmail.com>
----
- drivers/hwmon/nct6775-platform.c | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Linus Walleij <linusw@kernel.org>
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index c3a719aef1ac..555029dfe713 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1357,6 +1357,7 @@ static const char * const asus_msi_boards[] = {
- 	"Pro WS W680-ACE IPMI",
- 	"Pro WS W790-ACE",
- 	"Pro WS W790E-SAGE SE",
-+	"Pro WS WRX90E-SAGE SE",
- 	"ProArt B650-CREATOR",
- 	"ProArt B660-CREATOR D4",
- 	"ProArt B760-CREATOR D4",
--- 
-2.51.0
+Also pretty obviously correct, can't I just apply this one?
 
+Yours,
+Linus Walleij
