@@ -1,265 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD7F2110E
-	for <linux-hwmon@vger.kernel.org>; Sat,  3 Jan 2026 12:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFF3163;
+	Sun,  4 Jan 2026 00:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767444532; cv=none; b=JfA0PFbtS5FBPtTHo/k1264hfb6otCFHuKwDKiYmng+EH7U5CFi8Da2LZkzkUudG7xSalitAWNp/NTNpXaFErkHS6TZZLXtqMQipLAPSnEMj8qxsICxFyCBa19xsahMiB4X3U985x+FYMWRHPUr/3o50+AjveotqSGTrWWGvoK4=
+	t=1767485228; cv=none; b=ksvpir4XKRAi0gWBNMKeSSl9xWncUyYedqv6syjUNUqUUQlZYkZ/Dc4wSu8NfZIWAeRPcKXB3kmXpOS4/GxXKDUYuvzWikOL3WK9ni560GAf/dtkhvDB+/juxkrjDm4itLKYLAiCQ3O6117pTizSFZRgUvwgHgpYt9kNK8wY8cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767444532; c=relaxed/simple;
-	bh=Hu6YCUBJ21PXYhBV7GjXhva45C1KsphNBOWSvo8oN6c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nE2sLkwjpn9HxURsEa+tB9R0U+Yti+as6jkxj1Q5EXK747c1Vems9CcUc5ZnVH1IGTaXtPI1ZUdjrGg43Oj9qWAAzdiBU3eb9stb2dD8AsnFQaskfgl5dE7pAqQSuC+BEY/feIyxc9a7YKByHiB6sLTHL3PCoxjirGvsDotBMOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SraKKQdw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767485228; c=relaxed/simple;
+	bh=Xj2RxILGaVDgIiiYbuFvqe3xEIynUCuSPXDtBRdv+So=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=svKRcsN6QSSveHFQ+qyjvz1YwoK1OvY7ktIGSlbJ28M2AwajWm4oxGcjgZp0QHxKJbH4phMRv763scICGkqe2VhpS7ZYWS7hKDGG4FBARTr9ctHYuHZYkPwAEoMvNscq47ng1l1TjSv/kzKPv5LBhWllGsn1Db8ZU3al165TCZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=EMY8Z3ov; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SraKKQdw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A5AC113D0;
-	Sat,  3 Jan 2026 12:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767444531;
-	bh=Hu6YCUBJ21PXYhBV7GjXhva45C1KsphNBOWSvo8oN6c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SraKKQdwEwtxsifmuTt2jKjI37JeBIWVOMUX/OJAKv9CLhb0E4pOZAwnaGVXUIPuc
-	 sWlxwjW9wcBfYEBaI3LFHIeTipGh/lh2lbK7mqaRPXCd54S5w7kZmEMi1NQ2/JNWlU
-	 m+w9JguExstlHPdiHRYjWv16gU+cuAI+rABRWPgBuWCXpK48+uWTvWza/B/2pgFLLr
-	 YjNmmB9ZpFfjnPMAml+POcxtuXEmROiygkqvn2aR1Jhnj5lFCUncUKZalt5mxgn+pQ
-	 BxGrmLjcJYeL67O7LwSbHPIr0JuHplW3vmgoK4zq5snwVYbwZFyDi1tF9/udcDIwoT
-	 39lyjgCOgYLNw==
-Message-ID: <2ee75453-0869-4348-ad92-f7ff71aca75d@kernel.org>
-Date: Sat, 3 Jan 2026 13:48:49 +0100
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="EMY8Z3ov"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1767485222; x=1768090022; i=w_armin@gmx.de;
+	bh=4zON+nFHjzdiTPNLRt4qIASoaKWQlU8HhQnC6Wc+zVE=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=EMY8Z3ovuVTZq/Z0tnu0yWOdgKpvLQLxNXUYNzyBc3d1vXtuFOuK+UgIxsj6AvWW
+	 WMIGXI+U1/ketm2McJ/Rpr4NaV1pN6iWDtZLbVo3Om1mLEDYZUrXn7RA7o5pA8YwR
+	 BhygnntoY31+y2+VeYnjlo//pYo2+oGTFYk2vI/GChjRoFoVH5JZJCfJ3el/zS7Dq
+	 YStsGUtOzlMGID9tRObZJ7u+YjotmiGeB4Y0MG/zvuUbwX9q22tsNw67/4Lul6fxh
+	 kR/Zbvu03Nq/eJH4O3UVHbmsvD8Ibi7sv9t/1YJLMZ38fjBHrX8+7Qzx92iACYcVr
+	 N0Xa7YbTfIPZ08KvWg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from linux.fritz.box ([93.202.247.91]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQe9s-1vHuyW09HK-00LsQ9; Sun, 04
+ Jan 2026 01:07:02 +0100
+From: Armin Wolf <W_Armin@gmx.de>
+To: pali@kernel.org
+Cc: linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add support for Dell OptiPlex 7080
+Date: Sun,  4 Jan 2026 01:06:10 +0100
+Message-ID: <20260104000654.6406-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon:(pmbus/tda38740a) Add driver for Infineon
- TDA38740A/TDA38725A Voltage Regulator
-To: ASHISH YADAV <ashishyadav78@gmail.com>, linux-hwmon@vger.kernel.org
-Cc: linux@roeck-us.net, ASHISH YADAV <Ashish.Yadav@infineon.com>
-References: <20251231105503.77881-1-Ashish.Yadav@infineon.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251231105503.77881-1-Ashish.Yadav@infineon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l1Nh0PktD+pTddm3XKhqVfgU2kLW2RbCAqGbgB9vE3R4kUiZp2k
+ A5Hl/KRnIgDOd/UEVgQ3ezhhhg7jyLukiYaUOrHwFvwoAcQBM5uuOKB3huWiNhntkS26vp1
+ MXosD5k95Jiu3nr26Cz+BqM09N6hsZ+z1oaw9ySU6IkqOkXvJ4pY0obkQWYflL3KCxtZS1c
+ HY5dUZZqqxBsLEXMwkVkw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Esq0MmNfW+U=;b8msz7ZaN05K5cIKb8631PYDtWc
+ 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
 
-On 31/12/2025 11:55, ASHISH YADAV wrote:
-> Add the pmbus driver for the Infineon TDA38740A/TDA38725A
->        voltage regulator.
-> 
-> Signed-off-by: ASHISH YADAV <Ashish.Yadav@infineon.com>
-> ---
->  .../hwmon/pmbus/infineon,tda38740a.yaml       |  73 ++++++
+The Dell OptiPlex 7080 supports the legacy SMM interface for reading
+sensors and performing fan control. Whitelist this machine so that
+this driver loads automatically.
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC (and consider --no-git-fallback argument, so you will
-not CC people just because they made one commit years ago). It might
-happen, that command when run on an older kernel, gives you outdated
-entries. Therefore please be sure you base your patches on recent Linux
-kernel.
+Closes: https://github.com/Wer-Wolf/i8kutils/issues/16
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index a34753fc2973..b9941e8d2c2d 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1316,6 +1316,13 @@ static const struct dmi_system_id i8k_dmi_table[] _=
+_initconst =3D {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "MP061"),
+ 		},
+ 	},
++	{
++		.ident =3D "Dell OptiPlex 7080",
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7080"),
++		},
++	},
+ 	{
+ 		.ident =3D "Dell OptiPlex 7060",
+ 		.matches =3D {
+=2D-=20
+2.52.0
 
->  drivers/hwmon/pmbus/Kconfig                   |  16 ++
->  drivers/hwmon/pmbus/Makefile                  |   1 +
->  drivers/hwmon/pmbus/tda38740a.c               | 223 ++++++++++++++++++
->  4 files changed, 313 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740a.yaml
->  create mode 100644 drivers/hwmon/pmbus/tda38740a.c
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740a.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740a.yaml
-> new file mode 100644
-> index 000000000000..07c8eb94807e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740a.yaml
-
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38740a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Infineon TDA38740A and TDA38725A Synchronous Buck Regulator with I2C
-> +
-> +maintainers:
-> +  - ASHISH YADAV <Ashish.Yadav@infineon.com>
-> +
-> +description: |
-> +  The Infineon TDA38740A/TDA38725A is a 40A/25A Single-voltage Synchronous Buck Regulator with
-> +  I2C designed for Industrial use.
-> +
-> +  Datasheet:
-> +  https://www.infineon.com/assets/row/public/documents/24/49/infineon-tda38740a-tda38725a-datasheet-en.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - infineon,tda38725a
-> +      - infineon,tda38740a
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vout_multiplier:
-
-Please read DTS coding style carefully.
-
-Also, missing vendor prefix.
-
-> +    description: |
-> +      If voltage multiplier present at vout, the voltage at voltage sensor pin
-> +      will be scaled. The properties will convert the raw reading to a more
-> +      meaningful number if voltage multiplier present. It has two numbers,
-> +      numerator ie vout_multiplier[0] and denominator ie vout_multiplier[1].
-> +      Therefore, the adjusted vout is equal to
-> +      Vout = (Vout * vout_multiplier[0]) / vout_multiplier[1].
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  regulators:
-
-No need for this node at all.
-
-> +    type: object
-> +    description:
-> +      list of regulators provided by this controller.
-> +
-> +    properties:
-> +      vout:
-
-Neither this. Just fold the child into the parent.
-
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        type: object
-> +
-> +        unevaluatedProperties: false
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        tda38740a@40 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-If you cannot find a name matching your device, please check in kernel
-sources for similar cases or you can grow the spec (via pull request to
-DT spec repo).
-
-> +            compatible = "infineon,tda38740a";
-> +            reg = <0x40>;
-> +            vout_multiplier = <75 70>;
-> +        };
-> +    };
-
-....
-
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, tda38740a_id);
-> +
-> +static const struct of_device_id __maybe_unused tda38740a_of_match[] = {
-> +	{.compatible = "infineon,tda38725a", .data = (void *)tda38725a },
-> +	{.compatible = "infineon,tda38740a", .data = (void *)tda38740a },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, tda38740a_of_match);
-> +
-> +/**
-> + *  This is the driver that will be inserted
-
-Drop, completely useless comment.
-
-> + */
-> +static struct i2c_driver tda38740a_driver = {
-> +	.driver = {
-> +		.name = "tda38740a",
-> +		.of_match_table = of_match_ptr(tda38740a_of_match),
-> +	},
-> +	.probe = tda38740a_probe,
-> +	.id_table = tda38740a_id,
-> +};
-> +
-> +module_i2c_driver(tda38740a_driver);
-> +
-> +MODULE_AUTHOR("Ashish Yadav <Ashish.Yadav@infineon.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon IPOL");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
-
-
-Best regards,
-Krzysztof
