@@ -1,83 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4601C3BFC;
-	Thu,  8 Jan 2026 17:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0423E32252D;
+	Thu,  8 Jan 2026 20:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767893638; cv=none; b=P+PHQtuNlaTECtLYXBwLMCZ6Qlsuz2TAVQUAS5zj18BwdecmxTOIMeLUwgcAU6lhxB7C7kwrul/5magR1Qmav6EhDgXn2dt823jbt7nRkJi8CyCxVMDcXf/QrhQfWGNxFSRKirZSS2wl0zYPKOSTH63JTTDgtkuuZE3HJvuTjFg=
+	t=1767904149; cv=none; b=uwdP5AU2niBbN6DjOuFOHtfsOato33rzcxQIdJYvZFIqoagLBU6CXmf0oCf/rYCfJn/gH+FtV3wOsqa2xpxi6BPUUWjjm0m7KFuYMpdgKSXmQgZiLz0dDZuMJ65uQEFIruIBUu6Z6xJjK7GbmUV8Y72etuYOlPd1RmTEmaQYqV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767893638; c=relaxed/simple;
-	bh=YfdOM3X+dex2GwYPDQAVwZhy1TpxzRQTxxNf8pg3MnA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UFFbElTRk0ti3nF0EWohIiRj0YWserMiDto4Myig1Sx1oJQLvGuK5UfZvYOBbkIh6DH6dM82NdIpP3zyNlWYTxuq/JA5LwKfd1H3fh+w7FgCQLhG93p600YmMGLEI42t3QYTQEAxk/AVip5I9QN2Di+oKvNUdQmlzKUa55M4O3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OcO32ZHR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767904149; c=relaxed/simple;
+	bh=J5zgVl3LofNAIZuTJWaMznkSwxB14toCZtKNTVHOZsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s1GhSLfHjeMZYNH9cMWJnhWhsZtnG3qHtWCBzdDH7hTva+xYHs8aNSVPLu0ZNJRlYglNQ9jBoiUXb3UjKbzqImKkFo86jqs8tO+eWW0fqefLlq05cWPE2L9y8CVgpwDBXY/NJK8iKx1dBmIQd9nyi93F2TwrsuXqeCOChkAizM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALXoTppO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OcO32ZHR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4428C116D0;
-	Thu,  8 Jan 2026 17:33:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALXoTppO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E57C116C6;
+	Thu,  8 Jan 2026 20:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767893638;
-	bh=YfdOM3X+dex2GwYPDQAVwZhy1TpxzRQTxxNf8pg3MnA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=OcO32ZHR/2IhxRSLh73aJSqfw4ev5w92PgmyVkS9acY6s1BNqiCddFZlIMKHwLVm7
-	 E5wvykFVKq4LNCipDJ5PzpOWxIFuFb9aH9TwYNK6Gehhdc7ofszL9H0HeGafNdcwuh
-	 2YpjVUdWrXMjZ9RBm7bS2mme7ftRAH6e1Tj5+fN/D5vTv89OaW5hd1FIel6lEbSshK
-	 BR/XETisXLw4KzHJaiDgufVQ74MgEUmYN/dfsSJ2kRrJE5hhy9r7fvCLrkK9W6VBge
-	 VhLjMdVDgJEA2IdvJDRdZUB8ipVF7E4HGiS/8a+pWpEOg6oQEOAfVpLT6y6mCczPG9
-	 xFk5Dw5fKnRvQ==
-From: Lee Jones <lee@kernel.org>
-To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- James Calligeros <jcalligeros99@gmail.com>
-Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
- Hector Martin <marcan@marcan.st>
-In-Reply-To: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
-References: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
-Subject: Re: (subset) [PATCH v6 0/7] mfd: macsmc: add rtc, hwmon and hid
- subdevices
-Message-Id: <176789363340.1116194.12135010190762961915.b4-ty@kernel.org>
-Date: Thu, 08 Jan 2026 17:33:53 +0000
+	s=k20201202; t=1767904148;
+	bh=J5zgVl3LofNAIZuTJWaMznkSwxB14toCZtKNTVHOZsw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ALXoTppOivts3pFHK9soFhROljIcDOP2H3TLu65MzlQVXcBqjj4DuhcCWw4gyzMxk
+	 n1g5ZtGVqvvphzyBvzMJ1OUuPdgB/ZpYIX2wxrlO82+nXoltyU2FS8ZJKw6Tu691n9
+	 OvMkaP6qUIhcH3uNKHXPm97+jKagMpLC+8hjOlXsyG+snjxr+RWcJcyf6Ch+uM3bTM
+	 ctx3Q35oB0ffEuzYyiSuK1D3K2+ZDVPoQYGxALu4x/TRK0jRyyOn7mt2ZMfOffL6Os
+	 RBZdGJZdATwahMxFsekknJEKQ+Cy1H8S2nIHzFQB8cC4ZN5Bk6wBKS685BU/IALrXJ
+	 u6Vag8ErB5Qvw==
+Date: Thu, 8 Jan 2026 14:29:07 -0600
+From: Rob Herring <robh@kernel.org>
+To: Luka Kovacic <luka.kovacic@sartura.hr>
+Cc: linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, geert+renesas@glider.be,
+	Max.Merchel@tq-group.com, linux@rempel-privat.de, daniel@0x0f.com,
+	shawnguo@kernel.org, sam@ravnborg.org, arnd@arndb.de,
+	krzysztof.kozlowski@canonical.com, pavo.banicevic@sartura.hr,
+	corbet@lwn.net, lee.jones@linaro.org, pavel@ucw.cz,
+	linux@roeck-us.net, jdelvare@suse.com, goran.medic@sartura.hr,
+	luka.perkov@sartura.hr, robert.marko@sartura.hr
+Subject: Re: [PATCH v9 1/7] dt-bindings: Add IEI vendor prefix and IEI
+ WT61P803 PUZZLE driver bindings
+Message-ID: <20260108202907.GA998297-robh@kernel.org>
+References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
+ <20210824124438.14519-2-luka.kovacic@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-52d38
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210824124438.14519-2-luka.kovacic@sartura.hr>
 
-On Mon, 15 Dec 2025 19:37:44 +1000, James Calligeros wrote:
-> This series adds support for the remaining SMC subdevices. These are the
-> RTC, hwmon, and HID devices. They are being submitted together as the RTC
-> and hwmon drivers both require changes to the SMC DT schema.
+On Tue, Aug 24, 2021 at 02:44:32PM +0200, Luka Kovacic wrote:
+> Add the IEI WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
+> drivers. A new vendor prefix is also added accordingly for
+> IEI Integration Corp.
 > 
-> The RTC driver is responsible for getting and setting the system clock,
-> and requires an NVMEM cell. This series replaces Sven's original RTC driver
-> submission [1].
-> 
-> [...]
+> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
+> Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
+> Cc: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      | 53 ++++++++++++
+>  .../leds/iei,wt61p803-puzzle-leds.yaml        | 39 +++++++++
+>  .../bindings/mfd/iei,wt61p803-puzzle.yaml     | 82 +++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  4 files changed, 176 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
 
-Applied, thanks!
+I found this and applied it (with a couple of fixes for current checks). 
 
-[2/7] mfd: macsmc: Wire up Apple SMC RTC subdevice
-      commit: a13cc4981449b9108921981a5e7c8824eaaa7604
-[3/7] mfd: macsmc: Wire up Apple SMC hwmon subdevice
-      commit: fb90c90aec3a9b7212a243f383f73a01bc653672
-[5/7] mfd: macsmc: Wire up Apple SMC input subdevice
-      commit: 3e9271dcb2dfdc4a98e9f6dc35c9be13276c3cfd
+I guess working on the driver is abandoned, but we already have this 
+binding in use in armada-8040-puzzle-m801.dts. So it's either add the 
+schema or remove the nodes to fix the warnings.
 
---
-Lee Jones [李琼斯]
+Or maybe the whole platform is not used and the entire .dts file can be 
+removed?
 
+Rob
