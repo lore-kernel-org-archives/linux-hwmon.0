@@ -1,84 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0423E32252D;
-	Thu,  8 Jan 2026 20:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C952921C160;
+	Fri,  9 Jan 2026 01:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767904149; cv=none; b=uwdP5AU2niBbN6DjOuFOHtfsOato33rzcxQIdJYvZFIqoagLBU6CXmf0oCf/rYCfJn/gH+FtV3wOsqa2xpxi6BPUUWjjm0m7KFuYMpdgKSXmQgZiLz0dDZuMJ65uQEFIruIBUu6Z6xJjK7GbmUV8Y72etuYOlPd1RmTEmaQYqV0=
+	t=1767921310; cv=none; b=YXbc6rv7rxNiFtpOwwjGrxwLtKH5vV8LCmAVETTPFOS4trlcrCiuhBrcSvC8DTEHp2y+JL2fUbKPUhviAb3v3peDUxY8TlnndjM1mzhDE8Mn0hmYd44WNtZI/0JYETPwNy/P+HJUfNj9iZJ3UXBc8uWyUUic6Szbuckl/b1eVic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767904149; c=relaxed/simple;
-	bh=J5zgVl3LofNAIZuTJWaMznkSwxB14toCZtKNTVHOZsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s1GhSLfHjeMZYNH9cMWJnhWhsZtnG3qHtWCBzdDH7hTva+xYHs8aNSVPLu0ZNJRlYglNQ9jBoiUXb3UjKbzqImKkFo86jqs8tO+eWW0fqefLlq05cWPE2L9y8CVgpwDBXY/NJK8iKx1dBmIQd9nyi93F2TwrsuXqeCOChkAizM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALXoTppO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1767921310; c=relaxed/simple;
+	bh=q3E163uI3K5tcHbZm92cmc4Zh/3hUlsioPVQnfeSCfU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lwwn0fFdchpqtaD+WBuY6J0X02/A9HDNBNzuMu2sesbYwVcfoTQNpKuMrZisskmDBaxrTelLRohWkKfr6MKpUAx1ac2/J8psv39itjmF+751iXyFueaI6L7tiOq+iO1oiVvwmiDVcfqJVVbtDqPa6c7kLL3uCtOi+Y8eKAEvwX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=LRIkXzIr; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALXoTppO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E57C116C6;
-	Thu,  8 Jan 2026 20:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767904148;
-	bh=J5zgVl3LofNAIZuTJWaMznkSwxB14toCZtKNTVHOZsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ALXoTppOivts3pFHK9soFhROljIcDOP2H3TLu65MzlQVXcBqjj4DuhcCWw4gyzMxk
-	 n1g5ZtGVqvvphzyBvzMJ1OUuPdgB/ZpYIX2wxrlO82+nXoltyU2FS8ZJKw6Tu691n9
-	 OvMkaP6qUIhcH3uNKHXPm97+jKagMpLC+8hjOlXsyG+snjxr+RWcJcyf6Ch+uM3bTM
-	 ctx3Q35oB0ffEuzYyiSuK1D3K2+ZDVPoQYGxALu4x/TRK0jRyyOn7mt2ZMfOffL6Os
-	 RBZdGJZdATwahMxFsekknJEKQ+Cy1H8S2nIHzFQB8cC4ZN5Bk6wBKS685BU/IALrXJ
-	 u6Vag8ErB5Qvw==
-Date: Thu, 8 Jan 2026 14:29:07 -0600
-From: Rob Herring <robh@kernel.org>
-To: Luka Kovacic <luka.kovacic@sartura.hr>
-Cc: linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-	Max.Merchel@tq-group.com, linux@rempel-privat.de, daniel@0x0f.com,
-	shawnguo@kernel.org, sam@ravnborg.org, arnd@arndb.de,
-	krzysztof.kozlowski@canonical.com, pavo.banicevic@sartura.hr,
-	corbet@lwn.net, lee.jones@linaro.org, pavel@ucw.cz,
-	linux@roeck-us.net, jdelvare@suse.com, goran.medic@sartura.hr,
-	luka.perkov@sartura.hr, robert.marko@sartura.hr
-Subject: Re: [PATCH v9 1/7] dt-bindings: Add IEI vendor prefix and IEI
- WT61P803 PUZZLE driver bindings
-Message-ID: <20260108202907.GA998297-robh@kernel.org>
-References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
- <20210824124438.14519-2-luka.kovacic@sartura.hr>
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="LRIkXzIr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1767921306;
+	bh=q3E163uI3K5tcHbZm92cmc4Zh/3hUlsioPVQnfeSCfU=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=LRIkXzIr3s7sm5+72Xzzm8SjVCwh35y5UgkNyHoV+JM3WTIw4jCZ0lDvwCm+aPN0e
+	 OQgFLIKM4BqvXo0NDLP3ls7rFqmmBeyhe3rnpJu/pg93332Xw7ohD6Pd9ZJ/hjBMlU
+	 PRjuB0y52YZmZ4+MH64SFaK4M4cz7aGbppx05rQHhJZ74p/FIDNPTDWN0K4c0V0JgD
+	 wiw55qfCcmMSwZ6OUkuCfyWIamYz6ikXWYRWi0kp9pEh45rf87ky9C+o4xQpR/1WKQ
+	 AYxvTEvGFmjwoc8wcX4fj2oaw7HDda+hVz5pALgfHA8ZdaPbXUesk0VOJX+gMBis+I
+	 YapIA/GolbjCw==
+Received: from [192.168.68.115] (unknown [180.150.112.60])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 50B3D7E142;
+	Fri,  9 Jan 2026 09:15:06 +0800 (AWST)
+Message-ID: <0671df0ea3568056e4d46112c4c9d132c64aed01.camel@codeconstruct.com.au>
+Subject: Re: [PATCH RFC 02/16] pinctrl: aspeed: g5: Constrain LPC binding
+ revision workaround to AST2500
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ linux-hwmon@vger.kernel.org, 	devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, 	linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, 	openbmc@lists.ozlabs.org,
+ linux-gpio@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-iio@vger.kernel.org
+Date: Fri, 09 Jan 2026 11:45:05 +1030
+In-Reply-To: <CAD++jLmNGrDt3_w=DFnBnjEuz3LN-=uc1o9KHv1j=4gbGPoPQg@mail.gmail.com>
+References: 
+	<20251211-dev-dt-warnings-all-v1-0-21b18b9ada77@codeconstruct.com.au>
+	 <20251211-dev-dt-warnings-all-v1-2-21b18b9ada77@codeconstruct.com.au>
+	 <CAD++jLmNGrDt3_w=DFnBnjEuz3LN-=uc1o9KHv1j=4gbGPoPQg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210824124438.14519-2-luka.kovacic@sartura.hr>
 
-On Tue, Aug 24, 2021 at 02:44:32PM +0200, Luka Kovacic wrote:
-> Add the IEI WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
-> drivers. A new vendor prefix is also added accordingly for
-> IEI Integration Corp.
-> 
-> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-> Signed-off-by: Pavo Banicevic <pavo.banicevic@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> Cc: Robert Marko <robert.marko@sartura.hr>
-> ---
->  .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      | 53 ++++++++++++
->  .../leds/iei,wt61p803-puzzle-leds.yaml        | 39 +++++++++
->  .../bindings/mfd/iei,wt61p803-puzzle.yaml     | 82 +++++++++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->  4 files changed, 176 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+On Wed, 2025-12-31 at 22:37 +0100, Linus Walleij wrote:
+> On Thu, Dec 11, 2025 at 9:46=E2=80=AFAM Andrew Jeffery
+> <andrew@codeconstruct.com.au> wrote:
+>=20
+> > Discovering a phandle to an AST2400 or AST2600 LPC node indicates an
+> > error for the purpose of the AST2500 pinctrl driver.
+> >=20
+> > Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+>=20
+> Reviewed-by: Linus Walleij <linusw@kernel.org>
+>=20
+> Also pretty obviously correct, can't I just apply this one?
 
-I found this and applied it (with a couple of fixes for current checks). 
+Yep, I'm happy for you to apply this one now. I marked the series RFC
+because it's a bit of a scatter-gun set of changes and I figured there
+might be more feedback than I've received so far :)
 
-I guess working on the driver is abandoned, but we already have this 
-binding in use in armada-8040-puzzle-m801.dts. So it's either add the 
-schema or remove the nodes to fix the warnings.
-
-Or maybe the whole platform is not used and the entire .dts file can be 
-removed?
-
-Rob
+Andrew
