@@ -1,127 +1,92 @@
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EF93FC9;
-	Fri,  9 Jan 2026 07:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5154F3321C2;
+	Fri,  9 Jan 2026 09:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767942418; cv=none; b=moyyr9YSboI2lu3ssIcUB+CSSdbvb7g0WWiGDO4KuzDcnmb5XGW8rf0c1vvDoamJfA9hZrhHMazLj7USoeTG3bXCp1CQy9/SvfqV5KFQBkT0Q+aWPp/eFUFZ+rLQXEgfcvItltbnVMhDZHyfM1Sii4dkAvLTAhg6Wfvkh+3+0/4=
+	t=1767949658; cv=none; b=JsQltcXnb6hL7WJtXkkfe79fDIX4r6iZImOG0Z6XwnsPVwguW5PCasarPGgbcabNKTS1FcY8TdDgYuhVU3KvCdK7oO7mz22Sd6SFpCjRP9jJQRJFG7nn7wWWECRxwcnqo5xJU1ryZ9xHlLXQOUX4n1lLDA9GzkA28c+c64lYTDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767942418; c=relaxed/simple;
-	bh=thLane9WGF2DpAp0kweUs4aLbMDzqC4LoqUQN4zJ3uA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=CHAiBdCH1XEYirxAGgYf5e7VzUSTMKZ4yjl7rgtw31ndkQMMxtU3LMUMcSnYyBOCF+AZQ8XgVx7UlFQO8s/4zWUNvNNQrcrcCfiARLlY7BayD6pnAwGNKo8SwmjcZXarEvrjLCo/kD5G4U85Lv/ow8cMCcGjUQdg6n3YpTfk23Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SBvaRiiO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=zj2R0+Kq; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SBvaRiiO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="zj2R0+Kq"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id A0E0313007C5;
-	Fri,  9 Jan 2026 02:06:55 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 09 Jan 2026 02:06:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1767942415;
-	 x=1767949615; bh=0xenDXx7lDvw8yXMh2jnUM4RAGmn8OTIbAIaZ3lsI3s=; b=
-	SBvaRiiOweZGVYYoIssAxkA+VovknFQRgKJBgHY6c7Pl/td7N9Gwfi2Ogl3zfN5E
-	SaxwtzJPvM4WSVtbedbOTW7+p8IwhUz0KJTLP16dDB7srgZRKMCyIqVBQXA6WDKR
-	kD4YP9xPrQQK3Kqovvcatndaovu8VDLEZi3lz6Y2mFh0CdN3b+UwQw2pLLFJstll
-	EKBzFK2Idhs+FhR8X5XzN6Zzn9JgWNwY2sMKY5mGtyPBlc0Emxc2WgII62CLOQ6P
-	NmsRj1FduexkTnTBAGpNNr0rr7tsNW89cWHNwExlJB8fRCG6rJjxoQQjt5I26fOU
-	I7BmGMFhBwj1HAw/5wco4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767942415; x=
-	1767949615; bh=0xenDXx7lDvw8yXMh2jnUM4RAGmn8OTIbAIaZ3lsI3s=; b=z
-	j2R0+Kq152uZfslXfadj6zOkYSTXM53/Gvjm4NOkbfUAmlgk9Jn7erNAPYPhwLQ3
-	i7cXnPqLzJgaosxar+WHZ0SQJFLSGrg8uVCdwnlWb2wDS4irWquZWVRwLPhBj2qU
-	A+sAstF+L7QmTfuu3nccZFbGJ0Tr7CTVHSCMAbZkxoemSLCtCfyAjvZulw3OB4dc
-	SanxYS81s2WyUR8ZVQCy65BVJUQdXq7EX0xSSXbQpYkJ5uZU8vzetH5lhIMH/kgS
-	TErJrb8yXtWDehOEh+S+BABiZlByqetBd4I0fLOxTHdD9dr9woiQVK85lX2tXIqM
-	rplLb4uyOoHq0xvUiBflA==
-X-ME-Sender: <xms:DqlgaRu_fJGBnNG2oN8aRqVVqNc_VLaWsbEI4YZ4X-qiD9_AUsOZbg>
-    <xme:DqlgaVR0Qni5z9xusGlm7Eop5HeW3Chs0KZYx0pfZjJbyBzywaCfiF77AKQpGV3g7
-    DU5yd_ZSd0EenaAI1WcE1nNY4fMeQaG6tAk6Ihp05l-5VCoT01MMo-N>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdekudejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepgfeiteeffffgieegudekudekfefhfeefhfegjeeiuddtvdeludfhjeehvdegveeu
-    necuffhomhgrihhnpeguthhsrdhsohenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthho
-    pedvfedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrnhhivghlsedtgidtfh
-    drtghomhdprhgtphhtthhopehkrhiihihsiihtohhfrdhkohiilhhofihskhhisegtrghn
-    ohhnihgtrghlrdgtohhmpdhrtghpthhtohepghgvvghrthdorhgvnhgvshgrshesghhlih
-    guvghrrdgsvgdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    ohepshhhrgifnhhguhhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlvggvrdhjoh
-    hnvghssehlihhnrghrohdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgv
-    thdprhgtphhtthhopehsrghmsehrrghvnhgsohhrghdrohhrghdprhgtphhtthhopehlih
-    hnuhigsehrvghmphgvlhdqphhrihhvrghtrdguvg
-X-ME-Proxy: <xmx:DqlgafUtq5PUnKACPYLpae3zgBJmVU5D7JSWQ8mD0IS1a-OvYHuhLA>
-    <xmx:DqlgaTR_q4s2sYu3QkkHi4iILGCAdz5E6mZiFdm8nnql9N3NdvqztQ>
-    <xmx:DqlgaWE6hoT4ybEwHjODalszGkC4kmHoSpjviS6fNRPNmA00g_TWyw>
-    <xmx:DqlgabRIMMNHGICrY4naZYXcQ0D_afiEPZ4snybHEIulNP-jbLyoXQ>
-    <xmx:D6lgaQyok1gp3lYljhgCQQ9Jb1jcj9C7lhBmacxDzoopRWT5MUOKz7LN>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 224E8700065; Fri,  9 Jan 2026 02:06:54 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1767949658; c=relaxed/simple;
+	bh=25LCv3BSgdhyAUdeSJ0tHZVo7fUlDQGRF0LjT82Nq6Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a/Rhe9UNFz07JpuV5sJhWKcfJ8HZtPGhQpSmI7jOLJ74LMSpRNRCnCpF4mZNuBBAKuVKonC+w5DbiMGehZZGsQ0QtgQW4fBWiJMcbtNjGYBsMCrWVkSmem0PcHL68xSKlUb65DLo3Lnl61FFe6vxpxPNDaUkN1MZQq+MtxVBwN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0005182LT.eswin.cn (unknown [10.12.96.155])
+	by app2 (Coremail) with SMTP id TQJkCgBHiaxIxWBpSHOSAA--.22763S2;
+	Fri, 09 Jan 2026 17:07:21 +0800 (CST)
+From: hehuan1@eswincomputing.com
+To: linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	p.zabel@pengutronix.de
+Cc: ningyu@eswincomputing.com,
+	linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com,
+	hehuan1@eswincomputing.com,
+	weishangjuan@eswincomputing.com
+Subject: [PATCH v1 0/2] Add driver support for ESWIN EIC7700 PVT controller
+Date: Fri,  9 Jan 2026 17:07:18 +0800
+Message-Id: <20260109090718.442-1-hehuan1@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ai76N3Tj7qwR
-Date: Fri, 09 Jan 2026 08:06:33 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Rob Herring" <robh@kernel.org>, "Luka Kovacic" <luka.kovacic@sartura.hr>
-Cc: linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
- devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Geert Uytterhoeven" <geert+renesas@glider.be>,
- Max.Merchel@tq-group.com, "Oleksij Rempel" <linux@rempel-privat.de>,
- "Daniel Palmer" <daniel@0x0f.com>, "Shawn Guo" <shawnguo@kernel.org>,
- "Sam Ravnborg" <sam@ravnborg.org>, krzysztof.kozlowski@canonical.com,
- pavo.banicevic@sartura.hr, "Jonathan Corbet" <corbet@lwn.net>,
- "Lee Jones" <lee.jones@linaro.org>, "Pavel Machek" <pavel@ucw.cz>,
- "Guenter Roeck" <linux@roeck-us.net>, "Jean Delvare" <jdelvare@suse.com>,
- goran.medic@sartura.hr, luka.perkov@sartura.hr,
- "Robert Marko" <robert.marko@sartura.hr>
-Message-Id: <dc1826b3-3af6-42f6-9281-52917da2c9ef@app.fastmail.com>
-In-Reply-To: <20260108202907.GA998297-robh@kernel.org>
-References: <20210824124438.14519-1-luka.kovacic@sartura.hr>
- <20210824124438.14519-2-luka.kovacic@sartura.hr>
- <20260108202907.GA998297-robh@kernel.org>
-Subject: Re: [PATCH v9 1/7] dt-bindings: Add IEI vendor prefix and IEI WT61P803 PUZZLE
- driver bindings
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:TQJkCgBHiaxIxWBpSHOSAA--.22763S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF4fZrWfZF1UtF1rXF4Dtwb_yoWDXrbE9r
+	4xWr97Gw18uFn8Aay2yrZ7uFWjkFW5uFyxXFs8t390vwnFqryfJrykA3s7Za1xtrW5AF95
+	X3ykJr40yr17ujkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbhxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwAKzVCY07xG64k0F24lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK6svPMxAIw2
+	8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+	x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+	CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
+	42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+	80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpVbPUUUUU==
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/
 
-On Thu, Jan 8, 2026, at 21:29, Rob Herring wrote:
-> On Tue, Aug 24, 2021 at 02:44:32PM +0200, Luka Kovacic wrote:
->> Add the IEI WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
->> drivers. A new vendor prefix is also added accordingly for
->> IEI Integration Corp.
-...
-> I guess working on the driver is abandoned, but we already have this 
-> binding in use in armada-8040-puzzle-m801.dts. So it's either add the 
-> schema or remove the nodes to fix the warnings.
->
-> Or maybe the whole platform is not used and the entire .dts file can be 
-> removed?
+From: Huan He <hehuan1@eswincomputing.com>
 
-According to the manufacturer's website, the puzzle-m801 product was
-phased out a year ago, along with all other rackmount appliances, so
-it's unlikely that they would still work on it, but it's also recent
-enough that I think it makes sense to keep the dts file around if it
-can be fixed up easily.
+Add support for the ESWIN EIC7700 PVT (Process, Voltage, Temperature)
+sensor
 
-     Arnd
+Features:
+The driver supports monitoring of process, voltage and temperature
+parameters through the hardware monitoring subsystem. It provides an
+access to the sampled Temperature and Voltage.
+
+Test:
+Tested this patch on the SiFive HiFive Premier P550 (which uses the ESWIN
+EIC7700 SoC).
+
+Huan He (2):
+  dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+  hwmon: Add Eswin EIC7700 PVT sensor driver
+
+ .../bindings/hwmon/eswin,eic7700-pvt.yaml     |  92 ++
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/eic7700-pvt.c                   | 797 ++++++++++++++++++
+ drivers/hwmon/eic7700-pvt.h                   | 128 +++
+ 5 files changed, 1030 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+ create mode 100644 drivers/hwmon/eic7700-pvt.c
+ create mode 100644 drivers/hwmon/eic7700-pvt.h
+
+-- 
+2.25.1
+
