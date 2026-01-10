@@ -1,72 +1,71 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BE71DFD8B
-	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0E51FF1C7
+	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768008251; cv=none; b=bQFEImvqPHiio9kVcdFjGdh55VYNY7lyyEsp26RYLqjYRIdoMjuMkRlfCNkk/SfGtP5CzthYm3pT0WFse9K9az8zcfVjv0euUkmKLiQ9BjDxfaVAqVV4ejeGbggctCPZAwovQ5yOhTpo3t9HsvmDHxoB7umb+w9NNEIzupFxi68=
+	t=1768008377; cv=none; b=HV+UxD5/QE0xtz9v3B2sGgHckd9Sl2jYObTW4PVqwtpVr4XdDO4Mc6t6kYYF6+6k+I1IqBBcZEtiVjoZVBlW3fZCtLXS+6verBZDqkUITwIi7IvaZKIvxUJgpTr9cdW4+CZe1bBbdigQ+DKacQzsScBCNrR3946lw7XqF8VwmUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768008251; c=relaxed/simple;
-	bh=0HZUy3Efrzltz8zOWDsnq4KxDebU+Evn00ngo3qLrhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hOkUVsCKOfXmHLmT4fAQsrCCrpzxbyrL1GREiY/LftjxcgBjK4cStd2CuzQOHN8iVCxDb3f9dsjXm4F6kx9+76uYXRMmJeaY+gLWREJdko54I04ygID17Wvy4Yr6vLEUyj1EmsgEESBhBd6MO0hM9O9c80Q64kQzwp9oA4pIVpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=vEtk2/SR; arc=none smtp.client-ip=209.85.221.41
+	s=arc-20240116; t=1768008377; c=relaxed/simple;
+	bh=froxk4PADlHWWB9u4YlxTiYqS98oexpEIGurQzKdi2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uPE6C9e0RsXTTc6LXc/jyYjrpFhCVQjw2XTjnZzHkyhqIJquWRPN63naOmnYQkWRqA13IHC/nsyzTpiFP+khNQtGnvA1HN4ZKik/1ecCGvT9ESR+wJllkwv4DPlLM6ARP92SLq72jCHqM4Nr0JkiMNmwNUGtzV6HzQyC6NH2ECE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=fOQlRfQy; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="vEtk2/SR"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so2703715f8f.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:24:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="fOQlRfQy"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-432dc56951eso715386f8f.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008247; x=1768613047; darn=vger.kernel.org;
+        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008374; x=1768613174; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=48uhg1n8pZrtKH3QTAeljNenkTOpWB0A9Zn6lZHQKGU=;
-        b=vEtk2/SR9EJw6RW2o/tInoJgFysralG4US038MFaBgU39w+dz8tq0RRZ9rP/YxwJLb
-         6tvKiYCOHu9uT+MvZu+5BzOxRx2+22gK0TetSGfTMkGNwYRhQWbGsQ8YABCv8Dlf1vBU
-         iyNItudgWkHKSMG72532f+dUjL5FIRqp3ec0RCqoJ/2FTFLLgLT8qvU2p/Y4G28aut0O
-         WKHyRuAijbl+ghufKrcyJTyzlSgoljS+E2PAt6ZQkuTX7+fkcLnghzJn3hyIHsogAD61
-         Tior868Q2RkOwz8lhvhqsePdpBnP4OxsQxIVjXLTA2s8AapqVVxH1gAqlhrIwRDI+mv5
-         sZBg==
+        bh=qLmqCogD5IRismsS1z8wCFvT7nmCRDdaikYelA4FtTA=;
+        b=fOQlRfQy7AEjos4waJRWDN8nkxb4GFcuFwt8Qh+zKfl7A51zYVNH8lPtf1T74YYu8Z
+         EMvV3MHottPE1xiH/Ih4/dltkbxTTQBzLICAJSpN7KzwloC7J+/D8yxAIUyYRU6GHYb7
+         +VWGs1luYERuW53MnmJnjvZL0RyXXeYxlLlYe7TGOdOiS3dbEuv75lmJwta2m90OMAeJ
+         +hPTJZ2OMoLEsFUTtNSCq4N5BK/DHf1mv+H3GkcwoxujVwoazI4+LBSgIUphqTRurVnI
+         usb8t96+Lwf23rJoK9T2PF7nEJLkukAKpuSXtB6ejFHWo/4JxynOAEQTyM64JvYbmdRK
+         p0Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768008247; x=1768613047;
+        d=1e100.net; s=20230601; t=1768008374; x=1768613174;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=48uhg1n8pZrtKH3QTAeljNenkTOpWB0A9Zn6lZHQKGU=;
-        b=sBB8sCAoPbixrlAyzSgoYit452g3qZ0rmvKDLCAmj1ss9z71ADR5ORYq6/AJdIGY4X
-         eMVLmdvFkOUUj5jdue3JaN4OSMzY/mYi7nyCpdxEysJu2t63eh1OXboXcRm3v+7fKFz0
-         eZApvsN/1cvnPRUXWIZ6/yM0GpSc3Qgkq1c7bukCxI+jk/aRWV8Xz9pPx1q0/5nGE6BG
-         cte1+BfoNBb+GW+j3qZcrannzMjvOvWj+dH30zET9vJiIZoWLtpKPTL/2D1UmbHBCohS
-         ijMiyk9JOw0RcKL6nO4hTmMdv1PQSYdcS4g3QQdc8M6MoqHEN30oQ6UHy8PyPeAdMYf3
-         A+Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUS6uxUaVjUa9DuPVXIxU3s2XZm9ASEfV3EaankLVjlfuDot3Ii+jwARMoNZZ4Dvr1lBjNsNjJNo16XXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVlzk890Nz4vajbr+i7rWUgjqWL1kyiBanSwD6pxxLv89+JuEE
-	G88R+cBVqZmwOWWkop2jSXq3pxE8x7X5Zegmzycgq3jACNkj7pdN2Wub6fGJANAqmoOPcrqbx2U
-	sg7o=
-X-Gm-Gg: AY/fxX6lMXq6xo2kp4wFXCtpXB0cG0oynhqUbQmunegOGJUpByAqZ6nd3VVFd06lId+
-	tL0GbQW8R3x0RSv1Pz+AYHfT9BJw0a0god0AqGd9rsUjdI/gYPhkmKF/3JWl0znRmS1a62YIcj4
-	NAMA2PFGGkuJx7t4pQDP3dtUQLGKFSRXq7yJ1m8p2H36kSkuuho8CUQ1fswUja7hS2kl8kKVMZ2
-	p58if1OO+7+NwOwz1Q4D2zHPDRk/Y8mHdcFrYlbXMJyxnL24iqZdMDhzBQh3CJjOtSR/1A4YcGK
-	LemFDBuzNClXoOAG1ezZ3qqA3dEklqiWVVjVcpAJo6LmzPE02S4THuvIqHrWRTg+O2zQCmLRnia
-	NMwIHcb1S87GcRPJgKWSU9wRlJlKjo6iJ3Kj+LGL/lt+6WXnlLODAa9ouXR03Df7A5d1kbINqDh
-	pz5oT2/SAcw/jvr34srcpZDJ0GE71a
-X-Google-Smtp-Source: AGHT+IHDX5cDjouWNQ8BhAyQtNk9/rlcuTAxcu2j1uBZGQ+Llnak0AzX+Fu4buxyM2LB8HGksdFUDA==
-X-Received: by 2002:a5d:5850:0:b0:42f:bb08:d1f0 with SMTP id ffacd0b85a97d-432c3779051mr13533710f8f.60.1768008246967;
-        Fri, 09 Jan 2026 17:24:06 -0800 (PST)
+        bh=qLmqCogD5IRismsS1z8wCFvT7nmCRDdaikYelA4FtTA=;
+        b=xJDFjv8FC0YeuvG4vE1iyPBkfYMXHPW3+I/kQ8HFihKjrQq3o9LjLrktkY3L1RezpF
+         c58HgDs6WquyHNPpGS2HU2UDBi/Bjn6GrSTkJjrcjFRpS+6F3LHSSwcD32KT0CXp08St
+         FTxeUUQwhES+sVEPhjepuYBl9eM3rYLVbRJwRwMZkDV6KIJpqgJvNSffjWigIfNTCSqp
+         jPNcLj570xhV0Qc+NeX0dMNL/thblHL8Q0N3kbzvK8kq+ceipL8FfBq0DCPNzOrP/OU4
+         9KmDjjs8i9mDSbIOixdQhrd/qFIFYsPFPsWVJ7m0IeHZ47qoQKs92m7fJu77NbzpZkhn
+         NcVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUz7zF58htpEh6LTiipXHt/FyHG+DrbKkdzMdo5FFWKVuf/tGTsdP2m4MLfMFgkAVHqSHEpYNYMv0OgKg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg+lGxPDYYK/MAleW4NsN8PcTHb53tPR8cbDbxehqj3C2mSfiE
+	Y5ryYW2G2csy8T28b73gOmdH9ogpzb9U/baULuwdp+gW649k0bVjc7dE2x1mhx0KIg==
+X-Gm-Gg: AY/fxX6q2rzQZrZdA+XRoOxanh4UOfSIGRoaIGBqCQqUeySN/tGSD98tFSkSSEhrv1n
+	KJWUPJ0pzn2JSjZNShMB5/0CtDIRjMxEDvtueQNEwSN2PAVMipGpYzjNx42YZvFY2z1ouYfizx3
+	mJNKVVo7p/pazn0IyJzQCRM04ETtLw0et/kamIEqjP3F3hJjTwa+RUTJHSpMXKPZdVKrATYS+kp
+	EFF3cuQWd95sI2atl5MymnTJ38TEnyVZTFqVA700qTBH2x02pn9yaDL98hmuANPlWUPcd48xVjk
+	J1AN7SnpDndHvrZX1EzVNEx2g2v80aiLlHScLdjajkVtW6NsJRHbh2GxDrhnulXAW4I5X6uldac
+	E71Y7+GFKweO6cdhEipm4xN6CpZf0vmJ6xy1Il7cW/JfWi8fjHMeE52qwCtfV2YT92SCiafHC5l
+	NjU6zhaBkgSfeR/W4wwC85Om15a5PP
+X-Google-Smtp-Source: AGHT+IFRVg/IVVIXgnAwYUtatppcQRxnxF6r6KkeDRCo5XdXv2qoOYu7jSZthjAesiq5tsCrwOuTIg==
+X-Received: by 2002:a05:6000:24c2:b0:430:f68f:ee96 with SMTP id ffacd0b85a97d-432c37c8649mr12769092f8f.36.1768008374519;
+        Fri, 09 Jan 2026 17:26:14 -0800 (PST)
 Received: from mac.net ([2001:861:8b92:2c50:6cf2:f0aa:7bc6:15fc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee24esm25208007f8f.33.2026.01.09.17.24.06
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e1adbsm25859761f8f.17.2026.01.09.17.26.13
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Jan 2026 17:24:06 -0800 (PST)
+        Fri, 09 Jan 2026 17:26:13 -0800 (PST)
 From: "benoit.masson" <yahoo@perenite.com>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"benoit.masson" <yahoo@perenite.com>
-Subject: [PATCH v3 0/5] hwmon: it87: prep for IT8613E support
-Date: Sat, 10 Jan 2026 02:24:05 +0100
-Message-ID: <20260110012405.47906-1-yahoo@perenite.com>
+Subject: [PATCH v3 1/5] hwmon: it87: describe per-chip temperature resources
+Date: Sat, 10 Jan 2026 02:26:09 +0100
+Message-ID: <20260110012613.48150-1-yahoo@perenite.com>
 X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -76,31 +75,160 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series ports IT8613E support from the out-of-tree it87 fork into
-upstream in small steps. It first adds per-chip resource metadata and
-new PWM temp map handling, then expands temp limits/offsets, adds
-IT8613E detection, and finally the IT8613E configuration.
+Add per-chip temp limit/offset/map counts and wire the driver
+to use them.
 
-Tested on: IT8613E, MEDION B660H7-M20 BIOS motherboard.
+This keeps existing chips on the previous defaults while allowing newer
+chips to advertise larger resources.
 
-Changes in v3:
-- Send as a proper patch series (maintainer request).
-- Fix smatch warning in show_pwm_temp_map() (IS_ERR check before use).
-- PWM control fixes based on fork diff:
-  - Use IT8613E PWM register table (and it8622 for future extension).
-  - Clamp invalid PWM temp map values when reading.
-  - Default new-tempmap PWM mapping to channel 0.
+Signed-off-by: benoit.masson <yahoo@perenite.com>
+---
+ drivers/hwmon/it87.c | 51 +++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 38 insertions(+), 13 deletions(-)
 
-benoit.masson (5):
-  hwmon: it87: describe per-chip temperature resources
-  hwmon: it87: prepare for extended PWM temp maps
-  hwmon: it87: expose additional temperature limits
-  hwmon: it87: add IT8613E identification
-  hwmon: it87: add IT8613E configuration
-
- Documentation/hwmon/it87.rst |   8 +
- drivers/hwmon/it87.c         | 336 +++++++++++++++++++++++++++++------
- 2 files changed, 286 insertions(+), 58 deletions(-)
-
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index e233aafa8856..ec5b1668dd7b 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -54,6 +54,7 @@
+ #include <linux/hwmon-vid.h>
+ #include <linux/err.h>
+ #include <linux/mutex.h>
++#include <linux/minmax.h>
+ #include <linux/sysfs.h>
+ #include <linux/string.h>
+ #include <linux/dmi.h>
+@@ -279,8 +280,9 @@ static const u8 IT87_REG_AUTO_BASE[] = { 0x60, 0x68, 0x70, 0x78, 0xa0, 0xa8 };
+ #define NUM_VIN			ARRAY_SIZE(IT87_REG_VIN)
+ #define NUM_VIN_LIMIT		8
+ #define NUM_TEMP		6
+-#define NUM_TEMP_OFFSET		ARRAY_SIZE(IT87_REG_TEMP_OFFSET)
+-#define NUM_TEMP_LIMIT		3
++#define IT87_TEMP_OFFSET_MAX	ARRAY_SIZE(IT87_REG_TEMP_OFFSET)
++#define IT87_TEMP_LIMIT_DEFAULT	3
++#define IT87_TEMP_MAP_DEFAULT	3
+ #define NUM_FAN			ARRAY_SIZE(IT87_REG_FAN)
+ #define NUM_FAN_DIV		3
+ #define NUM_PWM			ARRAY_SIZE(IT87_REG_PWM)
+@@ -290,6 +292,9 @@ struct it87_devices {
+ 	const char *name;
+ 	const char * const model;
+ 	u32 features;
++	u8 num_temp_limit;
++	u8 num_temp_offset;
++	u8 num_temp_map;
+ 	u8 peci_mask;
+ 	u8 old_peci_mask;
+ 	u8 smbus_bitmap;	/* SMBus enable bits in extra config register */
+@@ -578,6 +583,9 @@ struct it87_data {
+ 	int sioaddr;
+ 	enum chips type;
+ 	u32 features;
++	u8 num_temp_limit;
++	u8 num_temp_offset;
++	u8 num_temp_map;
+ 	u8 peci_mask;
+ 	u8 old_peci_mask;
+ 
+@@ -926,12 +934,13 @@ static struct it87_data *it87_update_device(struct device *dev)
+ 			data->temp[i][0] =
+ 				it87_read_value(data, IT87_REG_TEMP(i));
+ 
+-			if (has_temp_offset(data) && i < NUM_TEMP_OFFSET)
++			if (has_temp_offset(data) &&
++			    i < data->num_temp_offset)
+ 				data->temp[i][3] =
+ 				  it87_read_value(data,
+ 						  IT87_REG_TEMP_OFFSET[i]);
+ 
+-			if (i >= NUM_TEMP_LIMIT)
++			if (i >= data->num_temp_limit)
+ 				continue;
+ 
+ 			data->temp[i][1] =
+@@ -1679,16 +1688,18 @@ static ssize_t show_pwm_temp_map(struct device *dev,
+ 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+ 	struct it87_data *data = it87_update_device(dev);
+ 	int nr = sensor_attr->index;
++	u8 num_map;
+ 	int map;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
++	num_map = data->num_temp_map ?: IT87_TEMP_MAP_DEFAULT;
+ 	map = data->pwm_temp_map[nr];
+-	if (map >= 3)
++	if (map >= num_map)
+ 		map = 0;	/* Should never happen */
+-	if (nr >= 3)		/* pwm channels 3..6 map to temp4..6 */
+-		map += 3;
++	if (nr >= num_map)	/* pwm channels 3..6 map to temp4..6 */
++		map += num_map;
+ 
+ 	return sprintf(buf, "%d\n", (int)BIT(map));
+ }
+@@ -1700,6 +1711,7 @@ static ssize_t set_pwm_temp_map(struct device *dev,
+ 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
+ 	struct it87_data *data = dev_get_drvdata(dev);
+ 	int nr = sensor_attr->index;
++	u8 num_map = data->num_temp_map ?: IT87_TEMP_MAP_DEFAULT;
+ 	long val;
+ 	int err;
+ 	u8 reg;
+@@ -1707,8 +1719,8 @@ static ssize_t set_pwm_temp_map(struct device *dev,
+ 	if (kstrtol(buf, 10, &val) < 0)
+ 		return -EINVAL;
+ 
+-	if (nr >= 3)
+-		val -= 3;
++	if (nr >= num_map)
++		val -= num_map;
+ 
+ 	switch (val) {
+ 	case BIT(0):
+@@ -3206,7 +3218,7 @@ static void it87_check_limit_regs(struct it87_data *data)
+ 		if (reg == 0xff)
+ 			it87_write_value(data, IT87_REG_VIN_MIN(i), 0);
+ 	}
+-	for (i = 0; i < NUM_TEMP_LIMIT; i++) {
++	for (i = 0; i < data->num_temp_limit; i++) {
+ 		reg = it87_read_value(data, IT87_REG_TEMP_HIGH(i));
+ 		if (reg == 0xff)
+ 			it87_write_value(data, IT87_REG_TEMP_HIGH(i), 127);
+@@ -3399,6 +3411,7 @@ static int it87_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct device *dev = &pdev->dev;
+ 	struct it87_sio_data *sio_data = dev_get_platdata(dev);
++	const struct it87_devices *chip;
+ 	int enable_pwm_interface;
+ 	struct device *hwmon_dev;
+ 	int err;
+@@ -3421,9 +3434,21 @@ static int it87_probe(struct platform_device *pdev)
+ 	data->type = sio_data->type;
+ 	data->smbus_bitmap = sio_data->smbus_bitmap;
+ 	data->ec_special_config = sio_data->ec_special_config;
+-	data->features = it87_devices[sio_data->type].features;
+-	data->peci_mask = it87_devices[sio_data->type].peci_mask;
+-	data->old_peci_mask = it87_devices[sio_data->type].old_peci_mask;
++	chip = &it87_devices[sio_data->type];
++	data->features = chip->features;
++	data->peci_mask = chip->peci_mask;
++	data->old_peci_mask = chip->old_peci_mask;
++	data->num_temp_limit = chip->num_temp_limit ?
++			       chip->num_temp_limit : IT87_TEMP_LIMIT_DEFAULT;
++	if (chip->num_temp_offset)
++		data->num_temp_offset = min(chip->num_temp_offset,
++					    (u8)IT87_TEMP_OFFSET_MAX);
++	else if (has_temp_offset(data))
++		data->num_temp_offset = IT87_TEMP_OFFSET_MAX;
++	else
++		data->num_temp_offset = 0;
++	data->num_temp_map = chip->num_temp_map ?
++			     chip->num_temp_map : IT87_TEMP_MAP_DEFAULT;
+ 	/*
+ 	 * IT8705F Datasheet 0.4.1, 3h == Version G.
+ 	 * IT8712F Datasheet 0.9.1, section 8.3.5 indicates 8h == Version J.
 -- 
 2.50.1 (Apple Git-155)
+
