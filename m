@@ -1,74 +1,73 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1CC22541C
-	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318EB22173D
+	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:26:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768008381; cv=none; b=TTMzZ7vauxSVPL3dY+ED75OUzv4LfZ2AMjs9NnESeNgdTL+4TH4Aofj8RLQH5TBrQ7GeJvRUSny79I1Z9MhjO6jXFqe+Nc4WJ77NemxEKngsIEAxjXMi8NqCfwGEMcD2Uu4X+KyMri3rI4DJzrgCW2b1w0y0UYqYNWPBwqrchFc=
+	t=1768008383; cv=none; b=K3ZNl9iErel3EvAaviXUYY08u1s128pYuKUZNiDjWEi7jNormMUa97S4emWqlaCKKN0P61IqaonKB/pbmoK0CWE8sP4g5KN02TdRN+RxiMqwASZOoF1ujjPglZE3Y/MOZVxtRQk8OY+0X/FhRwTqsSe+iQd1+FSdxXAkHHjwhH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768008381; c=relaxed/simple;
-	bh=TDDd9qRH30Jxzs7vVu8CkneY5/auV7dFiBK40vfflKY=;
+	s=arc-20240116; t=1768008383; c=relaxed/simple;
+	bh=iVsgVxLI6I/9ZTlTWmFplWmWlyfeX/jDoBkCd+nkhDI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qsz46snrY/Kftc8PMzGMAbT9+oVWIuNZV/XW7alX3GF46EwfaiEqekFt7EoQ2hBR18WCPTcmBT/tLgi9KjBnS3FL+DO/wzVWGb8VjnQPlZN7QAUNZVa1nHpbo+48J9QGAsEPqA5BXr4+gfcl34FeZu7OU5iA7But6TyZtLqTFis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=cS+YuDRL; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=RGVogdRJkWsZ7Hi76VkoojnbBfzBkQeYUv+0lbeS5d+FkZ4Au/0xIGZK5HdzYJok1tM2a3PpbYq/vOdi+78eFYAqwnDEOPrptzycWReIqYT039tWz/A/3b5DoBE4FK2MB2NSbJ6jUG/qxzh4KBsBXg8R2PhypW6xd+4jLgkfk64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=bkSuLdOH; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="cS+YuDRL"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so45039895e9.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:26:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="bkSuLdOH"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-432d256c2e6so1700772f8f.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:26:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008378; x=1768613178; darn=vger.kernel.org;
+        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008377; x=1768613177; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hzxrMR5YefBOzP4Z2aTyL16iNYZgq3G71L4IYKxvjEo=;
-        b=cS+YuDRLAhBSH486ekG2LblF4fMY2LzN8fCWij9tiKJb8PesgQxqnWthN1CMM1W6hB
-         Nu0U4Ag0Q6wJ5cpf3f9M4d3bcUasB3rkY1jU0EDYONoG3QV51xfmLfjX04oEQTjWZZMo
-         X3mSJTLK96O2bzBNJvf60N8zd6adk3yM+0oCNShE0V+YNP1zrAL3rFgCuG1puSzyD+Le
-         20Mo1Eixkykw0eLifaC4RpOSS8MLdQWacyAAlptgZd6BwaD1u6fx8eZc7SvQ2o6VaCYM
-         PPbqPLBsWw5Asp183ZL9msGq5JUsOhUu7WT5ul4NrM7hLFOiYVp+bB5JV102VPZDfSa5
-         9w3A==
+        bh=v/0a52ze8ZOTMxC366uco1F4iY4yHWTRg5cfVneeIzw=;
+        b=bkSuLdOHabgN81avy7CibkxQUhf4UI6mj8acKB1uIxLLv4VIXvZsdTZEsizMn6bHzg
+         iji1RL5kd3xMu7YbCfWuEzvmvF/qvI4PL8o60IBnkpc0UH45q110wMaiL725ICZRXMNJ
+         EwH2FCmtWLPVU/uNDPvqND8jVGPV9/7XNakHaft3t0CIOhp7xAkI0wzcnODMJ0ovdNxK
+         R8kSSybxhoHVczSScIF++2o+HMWy6Z5c6QhbBYml++gLONTsQhqsRyQDdm1/RpkRH35h
+         ngxoFVbUl5+6RSIXwqnqUk6P4g/BWKnemPG0KTfM3M0ZCBXZKxKy8yCF1r7NPVGv8Rv4
+         H4MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768008378; x=1768613178;
+        d=1e100.net; s=20230601; t=1768008377; x=1768613177;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hzxrMR5YefBOzP4Z2aTyL16iNYZgq3G71L4IYKxvjEo=;
-        b=OPL696+yKq4CiTqb071cHjxHak0D2H0rxu7S+Sz6jttgNalTac3RxmWUYWRJqHxhP6
-         1qc8wHZGOSaJmNnA7gd5K2h9/2try1Hpf3G2uS64n/17F/ySBZqMbwHemQ4hriEKytEs
-         lNwUXVsGeMSJN4MvFATk66inFli5+YcXRs/Nnk5YT6XKI9F+1SZ2M8N8oLdIQ/WOxr1t
-         HXwSiB3vx/VlrVvFLNnXbQ0Q2IvGpW04isJh9MHLeLgfl0fYoQMnazegWLKyoUF43xNf
-         RSay+Yfgmezv+n/B4YIK3kGRKb6nkkijBGamA8qBsH8w/eUiDb2nWw/ISwyPJG0ayIyx
-         KUDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgIRKwCh9FO3JJ2Vm6JLhS9zAh3uoRGXmJ7PCYWMBq7zRuhr3sJnh4rQw0SPtiDxsn1D+jhvPLvx1Y0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFFTNRNN1W5z+khgWdfEo7evE/Qn4gcmqD4sSzLOipZ+JV52jw
-	vrvPcyyZlPh8J7m6Jo6/+8YBJ5V604SH4gaGoYT0e5qp4MWms3jWo1Srm9qxuCk9lZW/3fu2aJR
-	OmoY=
-X-Gm-Gg: AY/fxX7eLgZnBKqs4fohvvTqUHWkDHz4PZTOfhySwmxqLxe3U7FOlnwLoG6YVgNB6RQ
-	apa/mRZScTSVJ4P1XBxLud2TIx0Lp9rfpP+gkbLwT++BAeOcmMYO3Cwh1rmXBDQP9FodrCD9pn/
-	u/kjbaVK2lxq+mB3t/DEVeIaZmYArkRd2JxGClA6gu4grAkgu7vAHCgSgHOy2jo7ChFy5ZvjFJO
-	eoNKxx1z+HU2a5TmAtfdMo+0bjN4wU7E4ElhBp47Fu7tt6BV0WKVvV/SqXdJf4+wlyxFEsw44Or
-	QbVOMsBlnzjfMKMvqTiq/tp9Kn9uWPJFPeyzMM7cz4MsJOpXWnqPoYm9RLEKz8eHE5OzhCk5HDV
-	JieRgLlGLTQ26s7r7aJ7DWXA3dlm74iLJjbWZ3kkmWWBHylLLh+0hLT2+/Jcj75syLsl2prEuca
-	Zg3qGMxLVOKAfwWAKvSquVORoPZENlL4v6TgFlwek=
-X-Google-Smtp-Source: AGHT+IGCig68ibb0nVKyAmIqTKa948YwAGL8D6G1gzKzla18gKcyRGEwF2fYh8wV5ht7uEywSjMTmQ==
-X-Received: by 2002:a05:600c:474f:b0:475:e067:f23d with SMTP id 5b1f17b1804b1-47d84b41294mr125418375e9.25.1768008377117;
-        Fri, 09 Jan 2026 17:26:17 -0800 (PST)
+        bh=v/0a52ze8ZOTMxC366uco1F4iY4yHWTRg5cfVneeIzw=;
+        b=ploky7SwC0xwremH92zKla3qKOcPl6jX3RO+Dw2YNxFNMIKcnneI0D4hZ/NEjA9s4Y
+         3l0y+7GovKD3NXKA6NyCDv/LhfBCfAWv823YDRJmOz57eOJ9KRS0q/zR6ge30Sqhx73o
+         2IHZyRWOE3EF3F1ERVHR90gLTY5L6hFH17wI2nLYvdyMhCI9BGgzEW0cFx8ocqhN1l0L
+         EwMssHYrT8eavl1gHt444xEq6y+9wKFVeUQluIwhmgUxXB1SpWB3L5887ohaPnI2kGe+
+         Nv/4t/g91CnkQqQVaF5yQXUN0eEqN5++SoE09B3DzDO4JvicEs0WP7oJdu7oRXXGNrj7
+         ToYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXNDbdFzuCyJJc+vc5z/QQEQKw4sq9+jJOisQt4LEIcuR7nVcEBPfGRVOszm7YzTEqHAN/sC3MAZxwRsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxnX5khBDiplceLN4Q+pPmgAuSIHZH+0xjIcNI08RZojlb6tEX
+	YSGic9Hw5ueVT9ufOq8WQaHkiOviXSDg2llEn+vaDONsHG+6UGb53Hnv9Y1vJs3Hbw==
+X-Gm-Gg: AY/fxX7Zc88kXTBmAEu7e8DvsBjv6/BuIvgR8UmzWHhW44fFXfoyXHcfqFFy1Ihb4iQ
+	anaFiz672prZgAOSb2dxbTA04mIXq53Z9BLXb/gcqQVc6fnGyVJXRUwm3V3QXV41/h0ohGEPHfV
+	rg2aIftrqeI3/konYCH1Sq/5/kzGPJtzfX3AfKRtlxa6Jfi9myfgO4Hjc9B8lPvSVrE2FKBaQYk
+	ZGHn3fa91B+4jgTUzFA28RgVWV9sKe+b9bsFVjXaQv3p76hkOQ+KJv45EbmOIbYePYTENRwR4/5
+	6FGkrfi+RT9GkVoIJAbJ9hFyMH8lu6h84NSYo8LaXBKk6GZPQFQmVW5jS1vDzsyEl/1nckxgIKm
+	E3Oz8UgT71l7YC/3YzGcrSDIKWZmdIAMD0XrXO7KtzoiDWXtjeF4piEk+l9I5hXD0rtS9n8JwW1
+	ihp8C1b2UyKWF0LdgkbD1IP3uzBo7K
+X-Google-Smtp-Source: AGHT+IGLPUnRkpruevByMVex+ArbD9LeJ1foyACN9GtKOdhYWbeC1JMQnAdw0QatdI1wfN5VEh3dwA==
+X-Received: by 2002:a05:6000:2584:b0:432:5bf9:cf22 with SMTP id ffacd0b85a97d-432c3760f0amr13003628f8f.3.1768008375918;
+        Fri, 09 Jan 2026 17:26:15 -0800 (PST)
 Received: from mac.net ([2001:861:8b92:2c50:6cf2:f0aa:7bc6:15fc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e1adbsm25859761f8f.17.2026.01.09.17.26.16
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e1adbsm25859761f8f.17.2026.01.09.17.26.15
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Jan 2026 17:26:16 -0800 (PST)
+        Fri, 09 Jan 2026 17:26:15 -0800 (PST)
 From: "benoit.masson" <yahoo@perenite.com>
 To: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"benoit.masson" <yahoo@perenite.com>
-Subject: [PATCH v3 5/5] hwmon: it87: add IT8613E configuration
-Date: Sat, 10 Jan 2026 02:26:13 +0100
-Message-ID: <20260110012613.48150-5-yahoo@perenite.com>
+Subject: [PATCH v3 3/5] hwmon: it87: expose additional temperature limits
+Date: Sat, 10 Jan 2026 02:26:11 +0100
+Message-ID: <20260110012613.48150-3-yahoo@perenite.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260110012613.48150-1-yahoo@perenite.com>
 References: <20260110012613.48150-1-yahoo@perenite.com>
@@ -80,132 +79,133 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add IT8613E feature flags, resource counts, ADC scaling, and GPIO
-quirk handling, then document the chip in the hwmon guide.
+Expose extra temp min/max/offset/type/alarm attributes when a chip
+reports more than three temperature resources.
 
 Signed-off-by: benoit.masson <yahoo@perenite.com>
 ---
- Documentation/hwmon/it87.rst |  8 ++++++
- drivers/hwmon/it87.c         | 52 +++++++++++++++++++++++++++++++++++-
- 2 files changed, 59 insertions(+), 1 deletion(-)
+ drivers/hwmon/it87.c | 60 +++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 54 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
-index 5cef4f265000..fa968be84f7c 100644
---- a/Documentation/hwmon/it87.rst
-+++ b/Documentation/hwmon/it87.rst
-@@ -11,6 +11,14 @@ Supported chips:
- 
-     Datasheet: Not publicly available
- 
-+  * IT8613E
-+
-+    Prefix: 'it8613'
-+
-+    Addresses scanned: from Super I/O config space (8 I/O ports)
-+
-+    Datasheet: Not publicly available
-+
-   * IT8620E
- 
-     Prefix: 'it8620'
 diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 1f4936c0e746..746ea9279efc 100644
+index dfd1e896c1ab..90230e693152 100644
 --- a/drivers/hwmon/it87.c
 +++ b/drivers/hwmon/it87.c
-@@ -336,6 +336,7 @@ struct it87_devices {
- #define FEAT_FOUR_TEMP		BIT(22)
- #define FEAT_FANCTL_ONOFF	BIT(23)	/* chip has FAN_CTL ON/OFF */
- #define FEAT_NEW_TEMPMAP	BIT(24)	/* PWM uses extended temp map */
-+#define FEAT_11MV_ADC		BIT(25)
+@@ -1258,8 +1258,26 @@ static SENSOR_DEVICE_ATTR_2(temp3_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
+ static SENSOR_DEVICE_ATTR_2(temp3_offset, S_IRUGO | S_IWUSR, show_temp,
+ 			    set_temp, 2, 3);
+ static SENSOR_DEVICE_ATTR_2(temp4_input, S_IRUGO, show_temp, NULL, 3, 0);
++static SENSOR_DEVICE_ATTR_2(temp4_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    3, 1);
++static SENSOR_DEVICE_ATTR_2(temp4_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    3, 2);
++static SENSOR_DEVICE_ATTR_2(temp4_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 3, 3);
+ static SENSOR_DEVICE_ATTR_2(temp5_input, S_IRUGO, show_temp, NULL, 4, 0);
++static SENSOR_DEVICE_ATTR_2(temp5_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    4, 1);
++static SENSOR_DEVICE_ATTR_2(temp5_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    4, 2);
++static SENSOR_DEVICE_ATTR_2(temp5_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 4, 3);
+ static SENSOR_DEVICE_ATTR_2(temp6_input, S_IRUGO, show_temp, NULL, 5, 0);
++static SENSOR_DEVICE_ATTR_2(temp6_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    5, 1);
++static SENSOR_DEVICE_ATTR_2(temp6_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    5, 2);
++static SENSOR_DEVICE_ATTR_2(temp6_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 5, 3);
  
- static const struct it87_devices it87_devices[] = {
- 	[it87] = {
-@@ -487,6 +488,14 @@ static const struct it87_devices it87_devices[] = {
- 	[it8613] = {
- 		.name = "it8613",
- 		.model = "IT8613E",
-+		.features = FEAT_NEWER_AUTOPWM | FEAT_11MV_ADC | FEAT_16BIT_FANS
-+		  | FEAT_TEMP_OFFSET | FEAT_TEMP_PECI | FEAT_FIVE_FANS
-+		  | FEAT_FIVE_PWM | FEAT_IN7_INTERNAL | FEAT_PWM_FREQ2
-+		  | FEAT_AVCC3 | FEAT_NEW_TEMPMAP,
-+		.num_temp_limit = 6,
-+		.num_temp_offset = 6,
-+		.num_temp_map = 6,
-+		.peci_mask = 0x07,
- 	},
- 	[it8620] = {
- 		.name = "it8620",
-@@ -531,6 +540,7 @@ static const struct it87_devices it87_devices[] = {
- #define has_16bit_fans(data)	((data)->features & FEAT_16BIT_FANS)
- #define has_12mv_adc(data)	((data)->features & FEAT_12MV_ADC)
- #define has_10_9mv_adc(data)	((data)->features & FEAT_10_9MV_ADC)
-+#define has_11mv_adc(data)	((data)->features & FEAT_11MV_ADC)
- #define has_newer_autopwm(data)	((data)->features & FEAT_NEWER_AUTOPWM)
- #define has_old_autopwm(data)	((data)->features & FEAT_OLD_AUTOPWM)
- #define has_temp_offset(data)	((data)->features & FEAT_TEMP_OFFSET)
-@@ -561,7 +571,8 @@ static const struct it87_devices it87_devices[] = {
- #define has_vin3_5v(data)	((data)->features & FEAT_VIN3_5V)
- #define has_noconf(data)	((data)->features & FEAT_NOCONF)
- #define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
--						     FEAT_10_9MV_ADC))
-+						     FEAT_10_9MV_ADC | \
-+						     FEAT_11MV_ADC))
- #define has_fanctl_onoff(data)	((data)->features & FEAT_FANCTL_ONOFF)
- #define has_new_tempmap(data)	((data)->features & FEAT_NEW_TEMPMAP)
+ static int get_temp_type(struct it87_data *data, int index)
+ {
+@@ -1385,6 +1403,12 @@ static SENSOR_DEVICE_ATTR(temp2_type, S_IRUGO | S_IWUSR, show_temp_type,
+ 			  set_temp_type, 1);
+ static SENSOR_DEVICE_ATTR(temp3_type, S_IRUGO | S_IWUSR, show_temp_type,
+ 			  set_temp_type, 2);
++static SENSOR_DEVICE_ATTR(temp4_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 3);
++static SENSOR_DEVICE_ATTR(temp5_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 4);
++static SENSOR_DEVICE_ATTR(temp6_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 5);
  
-@@ -667,6 +678,8 @@ static int adc_lsb(const struct it87_data *data, int nr)
- 		lsb = 120;
- 	else if (has_10_9mv_adc(data))
- 		lsb = 109;
-+	else if (has_11mv_adc(data))
-+		lsb = 110;
- 	else
- 		lsb = 160;
- 	if (data->in_scaled & BIT(nr))
-@@ -3095,6 +3108,43 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 		sio_data->skip_in |= BIT(5); /* No VIN5 */
- 		sio_data->skip_in |= BIT(6); /* No VIN6 */
+ /* 6 Fans */
  
-+		sio_data->beep_pin = superio_inb(sioaddr,
-+						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
-+	} else if (sio_data->type == it8613) {
-+		int reg27, reg29, reg2a;
+@@ -2214,6 +2238,9 @@ static SENSOR_DEVICE_ATTR(fan6_alarm, S_IRUGO, show_alarm, NULL, 7);
+ static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, show_alarm, NULL, 16);
+ static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO, show_alarm, NULL, 17);
+ static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO, show_alarm, NULL, 18);
++static SENSOR_DEVICE_ATTR(temp4_alarm, S_IRUGO, show_alarm, NULL, 19);
++static SENSOR_DEVICE_ATTR(temp5_alarm, S_IRUGO, show_alarm, NULL, 20);
++static SENSOR_DEVICE_ATTR(temp6_alarm, S_IRUGO, show_alarm, NULL, 21);
+ static SENSOR_DEVICE_ATTR(intrusion0_alarm, S_IRUGO | S_IWUSR,
+ 			  show_alarm, clear_intrusion, 4);
+ 
+@@ -2274,6 +2301,9 @@ static SENSOR_DEVICE_ATTR(temp1_beep, S_IRUGO | S_IWUSR,
+ 			  show_beep, set_beep, 2);
+ static SENSOR_DEVICE_ATTR(temp2_beep, S_IRUGO, show_beep, NULL, 2);
+ static SENSOR_DEVICE_ATTR(temp3_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp4_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp5_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp6_beep, S_IRUGO, show_beep, NULL, 2);
+ 
+ static ssize_t vrm_show(struct device *dev, struct device_attribute *attr,
+ 			char *buf)
+@@ -2436,21 +2466,19 @@ static umode_t it87_temp_is_visible(struct kobject *kobj,
+ 	int i = index / 7;	/* temperature index */
+ 	int a = index % 7;	/* attribute index */
+ 
+-	if (index >= 21) {
+-		i = index - 21 + 3;
+-		a = 0;
+-	}
+-
+ 	if (!(data->has_temp & BIT(i)))
+ 		return 0;
+ 
++	if (a && i >= data->num_temp_limit)
++		return 0;
 +
-+		superio_select(sioaddr, GPIO);
+ 	if (a == 3) {
+ 		if (get_temp_type(data, i) == 0)
+ 			return 0;
+ 		return attr->mode;
+ 	}
+ 
+-	if (a == 5 && !has_temp_offset(data))
++	if (a == 5 && i >= data->num_temp_offset)
+ 		return 0;
+ 
+ 	if (a == 6 && !data->has_beep)
+@@ -2485,8 +2513,28 @@ static struct attribute *it87_attributes_temp[] = {
+ 	&sensor_dev_attr_temp3_beep.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 21 */
++	&sensor_dev_attr_temp4_max.dev_attr.attr,
++	&sensor_dev_attr_temp4_min.dev_attr.attr,
++	&sensor_dev_attr_temp4_type.dev_attr.attr,
++	&sensor_dev_attr_temp4_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp4_offset.dev_attr.attr,
++	&sensor_dev_attr_temp4_beep.dev_attr.attr,
 +
-+		/* Check for pwm3, fan3, pwm5, fan5 */
-+		reg27 = superio_inb(sioaddr, IT87_SIO_GPIO3_REG);
-+		if (!(reg27 & BIT(1)))
-+			sio_data->skip_fan |= BIT(4);
-+		if (reg27 & BIT(3))
-+			sio_data->skip_pwm |= BIT(4);
-+		if (reg27 & BIT(6))
-+			sio_data->skip_pwm |= BIT(2);
-+		if (reg27 & BIT(7))
-+			sio_data->skip_fan |= BIT(2);
+ 	&sensor_dev_attr_temp5_input.dev_attr.attr,
++	&sensor_dev_attr_temp5_max.dev_attr.attr,
++	&sensor_dev_attr_temp5_min.dev_attr.attr,
++	&sensor_dev_attr_temp5_type.dev_attr.attr,
++	&sensor_dev_attr_temp5_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp5_offset.dev_attr.attr,
++	&sensor_dev_attr_temp5_beep.dev_attr.attr,
 +
-+		/* Check for pwm2, fan2 */
-+		reg29 = superio_inb(sioaddr, IT87_SIO_GPIO5_REG);
-+		if (reg29 & BIT(1))
-+			sio_data->skip_pwm |= BIT(1);
-+		if (reg29 & BIT(2))
-+			sio_data->skip_fan |= BIT(1);
-+
-+		/* Check for pwm4, fan4 */
-+		reg2a = superio_inb(sioaddr, IT87_SIO_PINX1_REG);
-+		if (!(reg2a & BIT(0)) || (reg29 & BIT(7))) {
-+			sio_data->skip_fan |= BIT(3);
-+			sio_data->skip_pwm |= BIT(3);
-+		}
-+
-+		sio_data->skip_pwm |= BIT(0); /* No pwm1 */
-+		sio_data->skip_fan |= BIT(0); /* No fan1 */
-+		sio_data->skip_in |= BIT(3);  /* No VIN3 */
-+		sio_data->skip_in |= BIT(6);  /* No VIN6 */
-+
- 		sio_data->beep_pin = superio_inb(sioaddr,
- 						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
- 	} else if (sio_data->type == it8620 || sio_data->type == it8628) {
+ 	&sensor_dev_attr_temp6_input.dev_attr.attr,
++	&sensor_dev_attr_temp6_max.dev_attr.attr,
++	&sensor_dev_attr_temp6_min.dev_attr.attr,
++	&sensor_dev_attr_temp6_type.dev_attr.attr,
++	&sensor_dev_attr_temp6_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp6_offset.dev_attr.attr,
++	&sensor_dev_attr_temp6_beep.dev_attr.attr,
+ 	NULL
+ };
+ 
 -- 
 2.50.1 (Apple Git-155)
 
