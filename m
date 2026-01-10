@@ -1,95 +1,106 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5349923817E
-	for <linux-hwmon@vger.kernel.org>; Fri,  9 Jan 2026 17:04:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BE71DFD8B
+	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767978293; cv=none; b=JjZlEVcCm1Coc7DujDJLAOC7BYM8WYim/201QCXhJdV4yh6o3JXQXTfUrwsFFKg0dPAF+9YM+l6R1vfEBNlnPm/hddqOC0MJ5TWWR6/wkWuvxoigWeqZODAkKE/EoXMQjO0f9c9a0JEjCW/H+mngdOvqmtG6MnBaGdF1c8F89Go=
+	t=1768008251; cv=none; b=bQFEImvqPHiio9kVcdFjGdh55VYNY7lyyEsp26RYLqjYRIdoMjuMkRlfCNkk/SfGtP5CzthYm3pT0WFse9K9az8zcfVjv0euUkmKLiQ9BjDxfaVAqVV4ejeGbggctCPZAwovQ5yOhTpo3t9HsvmDHxoB7umb+w9NNEIzupFxi68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767978293; c=relaxed/simple;
-	bh=g19y3Pinpki+o6XOEwFbT67F8PX/sLPM0/1a9WmIq9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JCIxwd7gaUWukG96qTw+kcARnyMReKYZ2CfF+W6gT49BoDZl72Lp0DrbG78DC6ECql08ZtPMZnlsUBVIQM1w7/SC+1n3BkZy37rZN8K/W+c/dwRxst0Z/4K2eK7PHxdhqVMo8mE0/RYWyzi/Skus3w0dJtuQzU83Nhybt6QxS9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1QLIF1k; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768008251; c=relaxed/simple;
+	bh=0HZUy3Efrzltz8zOWDsnq4KxDebU+Evn00ngo3qLrhk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hOkUVsCKOfXmHLmT4fAQsrCCrpzxbyrL1GREiY/LftjxcgBjK4cStd2CuzQOHN8iVCxDb3f9dsjXm4F6kx9+76uYXRMmJeaY+gLWREJdko54I04ygID17Wvy4Yr6vLEUyj1EmsgEESBhBd6MO0hM9O9c80Q64kQzwp9oA4pIVpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=vEtk2/SR; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1QLIF1k"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2ae287a8444so1609706eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 09:04:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="vEtk2/SR"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so2703715f8f.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:24:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767978291; x=1768583091; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g19y3Pinpki+o6XOEwFbT67F8PX/sLPM0/1a9WmIq9M=;
-        b=G1QLIF1kADYnet5aNvl2Iubzrfzp/slN8qNHhAWSGdLgdTs/GZfYWQbuIYtTIZfXXW
-         MsRN9orfHyX3ZsqpDOiSPSdYfJ9Jvg+EYyXp9Mki7TSElPcL9D2YBuDu5kwITGnzeGZi
-         VuFVpKw247lIXdvJTrxkACaLvQlhm8IHPgUQdA3OUG3+Hsw8XXEzevIqBH/54o0MvZ6+
-         0hH29xvq9TuMjPY+wGcjU9kbidWoWEZZHzoZAaa73t6YBjvfIQb1eri77tINEV+R5q+n
-         ZYKdiUHTaPhNcQ/RBQwtIWraVLWwGrNPztf3jy3cgvESFLt+yNfIOygOxB34z9ElUQF6
-         uPuQ==
+        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008247; x=1768613047; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=48uhg1n8pZrtKH3QTAeljNenkTOpWB0A9Zn6lZHQKGU=;
+        b=vEtk2/SR9EJw6RW2o/tInoJgFysralG4US038MFaBgU39w+dz8tq0RRZ9rP/YxwJLb
+         6tvKiYCOHu9uT+MvZu+5BzOxRx2+22gK0TetSGfTMkGNwYRhQWbGsQ8YABCv8Dlf1vBU
+         iyNItudgWkHKSMG72532f+dUjL5FIRqp3ec0RCqoJ/2FTFLLgLT8qvU2p/Y4G28aut0O
+         WKHyRuAijbl+ghufKrcyJTyzlSgoljS+E2PAt6ZQkuTX7+fkcLnghzJn3hyIHsogAD61
+         Tior868Q2RkOwz8lhvhqsePdpBnP4OxsQxIVjXLTA2s8AapqVVxH1gAqlhrIwRDI+mv5
+         sZBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767978291; x=1768583091;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g19y3Pinpki+o6XOEwFbT67F8PX/sLPM0/1a9WmIq9M=;
-        b=EWbD2PreKuNGLf3hdCu8Cazh/Ot1ton2fnVkoW/K7J3NrGmEBHhr7uJI1+4DpNetDr
-         dgHrR/MooFzlWQaKaQnu7cC3kepNCAOene7w2KHaxqr89AZX/+7iSRxhe056BOh5gjwP
-         P13Na2SfpXOCtuMAeE66BN9rdElT3Fa7xXGlz000yxN3OA5jT+4HCWPTxI1OsoGkDT+F
-         SMUC7Qj5meeCMhiCKwUJfmps32FkfR644DzXgctxzMMWNsEKOGORFHxgfdgXYBuq7sLf
-         sPf3pFMZknv/v7oev2hgCGvYzy0KLdGUUTd9P5zqYM4FM7oDX1TkW8sg9OAedAtmcuQq
-         JjDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQW8QoBlxnFPW4aZk4i7mCzoGnBPLLLNinob5n/e/yNM++3R0aoSh1dotY2J8qS3TSl+2bHisbCcDoJA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1k7NJ/GmnyOSZjBd20LJf+tV585JssVLZBZ5x+fgSxlhjTJai
-	Lq3DVfvGv8giWWQtnVWV4p2F70htEnwZ4aFm7Lap4k3DZjWQ7QAwbbce
-X-Gm-Gg: AY/fxX7GDUMm973IwKXinCMTd2wLXwRtclFEpM8s5C/IdBRR9Wm8TBQTgi2iFr0ZxqG
-	oArygFbFJmZpuUtXQS5CAXA9MmRZt60l4Z67ApunnRtZ7VB3r5laNyaioWRhc//UC7Gyr2wEe+W
-	xrEDBCVana+sqLlH4Z0y8HBNxuF8pQnoOgV9aHVYQGzwNjqK4eQ+0yTMcWuIgHLfabVmgYuoCUG
-	BwFnEMjbiff5Mxg4vvdflFg+yPDlcu6Ecc1QfIMggkk8crb8nznWUbfsUjwbM+PvLXP/Uoi4Qg0
-	KVgEDlT6ZCzB+6k0ezGatztnbGa0y6vzSoov7I4MccJtMLu8ByC9Qh6rV4Q+WD3aLxgPWWrSB9f
-	6KP0Zp/VwM90o7iCuw3UNpQ8uAD2P9wVM4PS9UAm7Qbpk+GWJ52+H8ymcH/R3l1ELCSk4S9gSKS
-	7Mzlc9ZRUwh6bjcsq50VCTKQfUjRHP7F897s4=
-X-Google-Smtp-Source: AGHT+IEeR62VuVpweO2BMJrkyIy4R2K4VlLCVmxys/C0VJmaPJE305Y3B/WE86okFDHKftoXnYRPDA==
-X-Received: by 2002:a05:7301:fd0f:b0:2ad:a3d6:7446 with SMTP id 5a478bee46e88-2b16fe7a5a3mr7718350eec.16.1767978291219;
-        Fri, 09 Jan 2026 09:04:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a53fbsm11248130eec.12.2026.01.09.09.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 09:04:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 9 Jan 2026 09:04:48 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: "benoit.masson" <yahoo@perenite.com>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	"open list:IT87 HARDWARE MONITORING DRIVER" <linux-hwmon@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] hwmon: it87: describe per-chip temperature resources
-Message-ID: <8b41b22b-4105-4570-ae30-cceb1bd41584@roeck-us.net>
-References: <20260109101504.47515-1-yahoo@perenite.com>
+        d=1e100.net; s=20230601; t=1768008247; x=1768613047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=48uhg1n8pZrtKH3QTAeljNenkTOpWB0A9Zn6lZHQKGU=;
+        b=sBB8sCAoPbixrlAyzSgoYit452g3qZ0rmvKDLCAmj1ss9z71ADR5ORYq6/AJdIGY4X
+         eMVLmdvFkOUUj5jdue3JaN4OSMzY/mYi7nyCpdxEysJu2t63eh1OXboXcRm3v+7fKFz0
+         eZApvsN/1cvnPRUXWIZ6/yM0GpSc3Qgkq1c7bukCxI+jk/aRWV8Xz9pPx1q0/5nGE6BG
+         cte1+BfoNBb+GW+j3qZcrannzMjvOvWj+dH30zET9vJiIZoWLtpKPTL/2D1UmbHBCohS
+         ijMiyk9JOw0RcKL6nO4hTmMdv1PQSYdcS4g3QQdc8M6MoqHEN30oQ6UHy8PyPeAdMYf3
+         A+Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUS6uxUaVjUa9DuPVXIxU3s2XZm9ASEfV3EaankLVjlfuDot3Ii+jwARMoNZZ4Dvr1lBjNsNjJNo16XXQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVlzk890Nz4vajbr+i7rWUgjqWL1kyiBanSwD6pxxLv89+JuEE
+	G88R+cBVqZmwOWWkop2jSXq3pxE8x7X5Zegmzycgq3jACNkj7pdN2Wub6fGJANAqmoOPcrqbx2U
+	sg7o=
+X-Gm-Gg: AY/fxX6lMXq6xo2kp4wFXCtpXB0cG0oynhqUbQmunegOGJUpByAqZ6nd3VVFd06lId+
+	tL0GbQW8R3x0RSv1Pz+AYHfT9BJw0a0god0AqGd9rsUjdI/gYPhkmKF/3JWl0znRmS1a62YIcj4
+	NAMA2PFGGkuJx7t4pQDP3dtUQLGKFSRXq7yJ1m8p2H36kSkuuho8CUQ1fswUja7hS2kl8kKVMZ2
+	p58if1OO+7+NwOwz1Q4D2zHPDRk/Y8mHdcFrYlbXMJyxnL24iqZdMDhzBQh3CJjOtSR/1A4YcGK
+	LemFDBuzNClXoOAG1ezZ3qqA3dEklqiWVVjVcpAJo6LmzPE02S4THuvIqHrWRTg+O2zQCmLRnia
+	NMwIHcb1S87GcRPJgKWSU9wRlJlKjo6iJ3Kj+LGL/lt+6WXnlLODAa9ouXR03Df7A5d1kbINqDh
+	pz5oT2/SAcw/jvr34srcpZDJ0GE71a
+X-Google-Smtp-Source: AGHT+IHDX5cDjouWNQ8BhAyQtNk9/rlcuTAxcu2j1uBZGQ+Llnak0AzX+Fu4buxyM2LB8HGksdFUDA==
+X-Received: by 2002:a5d:5850:0:b0:42f:bb08:d1f0 with SMTP id ffacd0b85a97d-432c3779051mr13533710f8f.60.1768008246967;
+        Fri, 09 Jan 2026 17:24:06 -0800 (PST)
+Received: from mac.net ([2001:861:8b92:2c50:6cf2:f0aa:7bc6:15fc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee24esm25208007f8f.33.2026.01.09.17.24.06
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 09 Jan 2026 17:24:06 -0800 (PST)
+From: "benoit.masson" <yahoo@perenite.com>
+To: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"benoit.masson" <yahoo@perenite.com>
+Subject: [PATCH v3 0/5] hwmon: it87: prep for IT8613E support
+Date: Sat, 10 Jan 2026 02:24:05 +0100
+Message-ID: <20260110012405.47906-1-yahoo@perenite.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260109101504.47515-1-yahoo@perenite.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 09, 2026 at 11:15:04AM +0100, benoit.masson wrote:
+This series ports IT8613E support from the out-of-tree it87 fork into
+upstream in small steps. It first adds per-chip resource metadata and
+new PWM temp map handling, then expands temp limits/offsets, adds
+IT8613E detection, and finally the IT8613E configuration.
 
-Patch description goes here.
+Tested on: IT8613E, MEDION B660H7-M20 BIOS motherboard.
 
-> Signed-off-by: benoit.masson <yahoo@perenite.com>
-> ---
+Changes in v3:
+- Send as a proper patch series (maintainer request).
+- Fix smatch warning in show_pwm_temp_map() (IS_ERR check before use).
+- PWM control fixes based on fork diff:
+  - Use IT8613E PWM register table (and it8622 for future extension).
+  - Clamp invalid PWM temp map values when reading.
+  - Default new-tempmap PWM mapping to channel 0.
 
-Change log goes here.
+benoit.masson (5):
+  hwmon: it87: describe per-chip temperature resources
+  hwmon: it87: prepare for extended PWM temp maps
+  hwmon: it87: expose additional temperature limits
+  hwmon: it87: add IT8613E identification
+  hwmon: it87: add IT8613E configuration
 
-Please refer to and follow Documentation/process/submitting-patches.rst
-as well as Documentation/hwmon/submitting-patches.rst before submitting
-any further patches or patch revisions.
+ Documentation/hwmon/it87.rst |   8 +
+ drivers/hwmon/it87.c         | 336 +++++++++++++++++++++++++++++------
+ 2 files changed, 286 insertions(+), 58 deletions(-)
 
-Guenter
+-- 
+2.50.1 (Apple Git-155)
