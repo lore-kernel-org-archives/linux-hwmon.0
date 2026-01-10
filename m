@@ -1,76 +1,72 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318EB22173D
-	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 01:26:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376B52C187
+	for <linux-hwmon@vger.kernel.org>; Sat, 10 Jan 2026 03:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768008383; cv=none; b=K3ZNl9iErel3EvAaviXUYY08u1s128pYuKUZNiDjWEi7jNormMUa97S4emWqlaCKKN0P61IqaonKB/pbmoK0CWE8sP4g5KN02TdRN+RxiMqwASZOoF1ujjPglZE3Y/MOZVxtRQk8OY+0X/FhRwTqsSe+iQd1+FSdxXAkHHjwhH0=
+	t=1768016889; cv=none; b=OVjKV/GTmaU/B62oViLx8py+f8uydGEQ7xkzwZOHGuuozqYZ4BNgQ4lCIN64xk2qynIt+NAoP0sacPWiPLFbiSQlE0JFKmtk952YLJ2hWcnmBT3+bJ+E+OIPJ6zQSjjQNT7HBssW/jwcq1zoLqM314uUCDy4ScwLjcurkdX96pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768008383; c=relaxed/simple;
-	bh=iVsgVxLI6I/9ZTlTWmFplWmWlyfeX/jDoBkCd+nkhDI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RGVogdRJkWsZ7Hi76VkoojnbBfzBkQeYUv+0lbeS5d+FkZ4Au/0xIGZK5HdzYJok1tM2a3PpbYq/vOdi+78eFYAqwnDEOPrptzycWReIqYT039tWz/A/3b5DoBE4FK2MB2NSbJ6jUG/qxzh4KBsBXg8R2PhypW6xd+4jLgkfk64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=bkSuLdOH; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
+	s=arc-20240116; t=1768016889; c=relaxed/simple;
+	bh=I5tgSNj1k7nIlLwpPArjJ49L2olCF5Tkg0yHQPQh7pQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bn15owlRohNxy+XSyy87pTnXoVAFv11J7h1E7Qq+39eAW+g59/e4jx7H7Ty30iFQ00judOaTFeMLJJje19lg+mKxGwDJOkfbF/WHdxlz6TwczAHb61oiLjMLu9ZXfUQA+PzNKD4aJ4g9uk5kiVUApHdtq8MPXlSqbt0VlxScHXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wopp95pW; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="bkSuLdOH"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-432d256c2e6so1700772f8f.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 17:26:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wopp95pW"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b1981ca515so1773387eec.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Jan 2026 19:48:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768008377; x=1768613177; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v/0a52ze8ZOTMxC366uco1F4iY4yHWTRg5cfVneeIzw=;
-        b=bkSuLdOHabgN81avy7CibkxQUhf4UI6mj8acKB1uIxLLv4VIXvZsdTZEsizMn6bHzg
-         iji1RL5kd3xMu7YbCfWuEzvmvF/qvI4PL8o60IBnkpc0UH45q110wMaiL725ICZRXMNJ
-         EwH2FCmtWLPVU/uNDPvqND8jVGPV9/7XNakHaft3t0CIOhp7xAkI0wzcnODMJ0ovdNxK
-         R8kSSybxhoHVczSScIF++2o+HMWy6Z5c6QhbBYml++gLONTsQhqsRyQDdm1/RpkRH35h
-         ngxoFVbUl5+6RSIXwqnqUk6P4g/BWKnemPG0KTfM3M0ZCBXZKxKy8yCF1r7NPVGv8Rv4
-         H4MQ==
+        d=gmail.com; s=20230601; t=1768016887; x=1768621687; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0pAVftY7tVlwMU1lS9WfC2TjYVDM89y7C/npUhh1x/U=;
+        b=Wopp95pW0FUuWFqWj5BiPB5otCwgXHegAV8Wirj/attL0/67eln2rR2qfeC0ZEfiRS
+         cHx+Hu8Qmb3/v3XuMrdJ+nX3JcSCrihLp+yhsBhThk7SPtT139siwouRfuK+OWlyL+cL
+         JH2fwqclf7eE6U3seUwMMkwHGtVtzs012b2w8jN6TcFWlj84S82yLTU6e8LOVVGnPkmt
+         Ms8Q4r2A3uk5f9EmsNolDIfMsw5N98siYMN+jsJ66ajgZbUaroq3oP90ZUGuqCdoqaPf
+         RnoMFi3VrRNpwrWvI6np/iPzwnIkd8oAtZqp2NBAqSpR4hVnBRXAAYA1WDJiQPilSdM6
+         oC6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768008377; x=1768613177;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=v/0a52ze8ZOTMxC366uco1F4iY4yHWTRg5cfVneeIzw=;
-        b=ploky7SwC0xwremH92zKla3qKOcPl6jX3RO+Dw2YNxFNMIKcnneI0D4hZ/NEjA9s4Y
-         3l0y+7GovKD3NXKA6NyCDv/LhfBCfAWv823YDRJmOz57eOJ9KRS0q/zR6ge30Sqhx73o
-         2IHZyRWOE3EF3F1ERVHR90gLTY5L6hFH17wI2nLYvdyMhCI9BGgzEW0cFx8ocqhN1l0L
-         EwMssHYrT8eavl1gHt444xEq6y+9wKFVeUQluIwhmgUxXB1SpWB3L5887ohaPnI2kGe+
-         Nv/4t/g91CnkQqQVaF5yQXUN0eEqN5++SoE09B3DzDO4JvicEs0WP7oJdu7oRXXGNrj7
-         ToYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXNDbdFzuCyJJc+vc5z/QQEQKw4sq9+jJOisQt4LEIcuR7nVcEBPfGRVOszm7YzTEqHAN/sC3MAZxwRsw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxnX5khBDiplceLN4Q+pPmgAuSIHZH+0xjIcNI08RZojlb6tEX
-	YSGic9Hw5ueVT9ufOq8WQaHkiOviXSDg2llEn+vaDONsHG+6UGb53Hnv9Y1vJs3Hbw==
-X-Gm-Gg: AY/fxX7Zc88kXTBmAEu7e8DvsBjv6/BuIvgR8UmzWHhW44fFXfoyXHcfqFFy1Ihb4iQ
-	anaFiz672prZgAOSb2dxbTA04mIXq53Z9BLXb/gcqQVc6fnGyVJXRUwm3V3QXV41/h0ohGEPHfV
-	rg2aIftrqeI3/konYCH1Sq/5/kzGPJtzfX3AfKRtlxa6Jfi9myfgO4Hjc9B8lPvSVrE2FKBaQYk
-	ZGHn3fa91B+4jgTUzFA28RgVWV9sKe+b9bsFVjXaQv3p76hkOQ+KJv45EbmOIbYePYTENRwR4/5
-	6FGkrfi+RT9GkVoIJAbJ9hFyMH8lu6h84NSYo8LaXBKk6GZPQFQmVW5jS1vDzsyEl/1nckxgIKm
-	E3Oz8UgT71l7YC/3YzGcrSDIKWZmdIAMD0XrXO7KtzoiDWXtjeF4piEk+l9I5hXD0rtS9n8JwW1
-	ihp8C1b2UyKWF0LdgkbD1IP3uzBo7K
-X-Google-Smtp-Source: AGHT+IGLPUnRkpruevByMVex+ArbD9LeJ1foyACN9GtKOdhYWbeC1JMQnAdw0QatdI1wfN5VEh3dwA==
-X-Received: by 2002:a05:6000:2584:b0:432:5bf9:cf22 with SMTP id ffacd0b85a97d-432c3760f0amr13003628f8f.3.1768008375918;
-        Fri, 09 Jan 2026 17:26:15 -0800 (PST)
-Received: from mac.net ([2001:861:8b92:2c50:6cf2:f0aa:7bc6:15fc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e1adbsm25859761f8f.17.2026.01.09.17.26.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Jan 2026 17:26:15 -0800 (PST)
-From: "benoit.masson" <yahoo@perenite.com>
-To: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
+        d=1e100.net; s=20230601; t=1768016887; x=1768621687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0pAVftY7tVlwMU1lS9WfC2TjYVDM89y7C/npUhh1x/U=;
+        b=RfoR0msWqFpajC5CEpWZHHK1lxQAILuP8ZsBsjpYAvgcSz1mwXFkdlKuV9RyLWPEsR
+         INJnpRoz+J5IHKhnfC1Gn2NbZFBVAMUFOMRjorsc4DGz42szon2QB4K+vB/+ZcXS/FPk
+         R4y0tfo2YljftZrvFpJFRro+spLkxhFZdBM8CEWW24jt3N1E+6tsnIc52KgZAVfd+mFV
+         WepHwUqkxddgN35kj3sSlyMgWdncQ6YmwUMtq9gcxbW/Ac8kvDU1hh09mqruMQcDXiUA
+         WfNp3BJ3Ts1RAfTIPfRoJRjrGCCakEQ+dzccV13LKOh4Aj5M8belsD51Uz56N2SEuJ+E
+         sbkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvk99FdbzObmVYUZZZ01A0M6SMkRJVEUxwvd46OZrh/dOZGZ5WrDojbX7T8QMARePruUHFIo5BvlAQNg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDrtc54htWeJZAirFrrpAEwjxBES/oNyQ3KrUOGt7JQ5+ChbDr
+	V4Ar9Kmi7nLPcP1W+Me7AgVQFCLkXbvqQJGJv+NHdJd6hdxUI7plaz3U
+X-Gm-Gg: AY/fxX6W57PLj3jZRjpbOE7BfQv3gGKtf2bUu7FBnlitheFQCEMo/J/7IwWFs8Cz4xu
+	E9GuTpV7lrnXqZj4ahz1tk/prt88AVKSg0ns3eaX/JN1ub1NqHDOHhkhOptlpoOvyobkcjDD06D
+	K1yDNt2x2eIbRzr2v+csWOcOZC5RRQUH2SgFf60jkyXbpNCqt3jMYN4QohH8EzA8fbxnlSwLkC/
+	9yTSgtK4fXTop+yehEiIjOEb6GFsJzRAo5N7+vPubsh71zwFsoQe2w5FmToZyBtSsEdrG3coVd6
+	i7ygOLPO+YoqSIlD7QcQj+UCypFvPX2wh3lmyhDDnddN8KeNYEf9ZE9YxKPUTnMJg/Y21TDO+Cv
+	cnRM/cj9oGXU5GPS7e0ubxkC0ZFklE8GXOQrj3cCazqhZNaabK60+kq8DHWQ3WLCNXzvRWgJKwJ
+	Zvec69eKFLaY5XCKFvekD2oQcYnW0=
+X-Google-Smtp-Source: AGHT+IE/zXXxozb3RxJsgvxlBw4HkkWbt/Zj+nb70W07g5FYTSrTXrnwfyFum915RUWFiZInVeSxxw==
+X-Received: by 2002:a05:7301:c02:b0:2a4:5005:7ee1 with SMTP id 5a478bee46e88-2b17d2d64bamr6343928eec.37.1768016887272;
+        Fri, 09 Jan 2026 19:48:07 -0800 (PST)
+Received: from dellphi.android606.com ([2601:644:4784:74b0:c2e:ecff:fed9:d646])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b175bee31dsm10239900eec.32.2026.01.09.19.48.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jan 2026 19:48:06 -0800 (PST)
+From: Andrew Mark <android606@gmail.com>
+To: pali@kernel.org
+Cc: linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	"benoit.masson" <yahoo@perenite.com>
-Subject: [PATCH v3 3/5] hwmon: it87: expose additional temperature limits
-Date: Sat, 10 Jan 2026 02:26:11 +0100
-Message-ID: <20260110012613.48150-3-yahoo@perenite.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260110012613.48150-1-yahoo@perenite.com>
-References: <20260110012613.48150-1-yahoo@perenite.com>
+	Andrew Mark <android606@gmail.com>
+Subject: [PATCH] hwmon: (dell-smm) Extend fan support to 5 fans
+Date: Sat, 10 Jan 2026 03:47:32 +0000
+Message-ID: <20260110034732.236285-1-android606@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,133 +75,92 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Expose extra temp min/max/offset/type/alarm attributes when a chip
-reports more than three temperature resources.
+Dell Precision Tower workstations have 5 fan connectors, but the
+driver was limited to 4 fans after commit dbcfcb239b3b ("hwmon:
+(dell-smm) Increment the number of fans").
 
-Signed-off-by: benoit.masson <yahoo@perenite.com>
+This patch increases DELL_SMM_NO_FANS to 5 and adds the necessary
+hwmon channel info for the fifth fan and its PWM control.
+
+Without this patch, the PCIe/GPU cooling fan (fan 5) is not
+controllable, which can lead to overheating on systems with
+high-power fanless GPUs that depend on chassis cooling.
+
+Also adds a DMI quirk for Precision Tower 5810 to provide accurate
+fan labels, as the BIOS reports generic types for these fans.
+
+Tested on Dell Precision Tower 5810 (BIOS A34) with all 5 fans
+responding correctly to PWM control.
+
+Fan mapping for Precision Tower 5810:
+- fan0: CPU heatsink
+- fan1: Second CPU (dual-CPU systems only)
+- fan2: Right DIMM bank
+- fan3: Left DIMM bank
+- fan4: PCIe/GPU cooling
+
+Signed-off-by: Andrew Mark <android606@gmail.com>
 ---
- drivers/hwmon/it87.c | 60 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 54 insertions(+), 6 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index dfd1e896c1ab..90230e693152 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -1258,8 +1258,26 @@ static SENSOR_DEVICE_ATTR_2(temp3_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
- static SENSOR_DEVICE_ATTR_2(temp3_offset, S_IRUGO | S_IWUSR, show_temp,
- 			    set_temp, 2, 3);
- static SENSOR_DEVICE_ATTR_2(temp4_input, S_IRUGO, show_temp, NULL, 3, 0);
-+static SENSOR_DEVICE_ATTR_2(temp4_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    3, 1);
-+static SENSOR_DEVICE_ATTR_2(temp4_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    3, 2);
-+static SENSOR_DEVICE_ATTR_2(temp4_offset, S_IRUGO | S_IWUSR, show_temp,
-+			    set_temp, 3, 3);
- static SENSOR_DEVICE_ATTR_2(temp5_input, S_IRUGO, show_temp, NULL, 4, 0);
-+static SENSOR_DEVICE_ATTR_2(temp5_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    4, 1);
-+static SENSOR_DEVICE_ATTR_2(temp5_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    4, 2);
-+static SENSOR_DEVICE_ATTR_2(temp5_offset, S_IRUGO | S_IWUSR, show_temp,
-+			    set_temp, 4, 3);
- static SENSOR_DEVICE_ATTR_2(temp6_input, S_IRUGO, show_temp, NULL, 5, 0);
-+static SENSOR_DEVICE_ATTR_2(temp6_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    5, 1);
-+static SENSOR_DEVICE_ATTR_2(temp6_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
-+			    5, 2);
-+static SENSOR_DEVICE_ATTR_2(temp6_offset, S_IRUGO | S_IWUSR, show_temp,
-+			    set_temp, 5, 3);
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 6040a8940..b112e6fbc 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -74,7 +74,7 @@
+ #define DELL_SMM_LEGACY_EXECUTE	0x1
  
- static int get_temp_type(struct it87_data *data, int index)
- {
-@@ -1385,6 +1403,12 @@ static SENSOR_DEVICE_ATTR(temp2_type, S_IRUGO | S_IWUSR, show_temp_type,
- 			  set_temp_type, 1);
- static SENSOR_DEVICE_ATTR(temp3_type, S_IRUGO | S_IWUSR, show_temp_type,
- 			  set_temp_type, 2);
-+static SENSOR_DEVICE_ATTR(temp4_type, S_IRUGO | S_IWUSR, show_temp_type,
-+			  set_temp_type, 3);
-+static SENSOR_DEVICE_ATTR(temp5_type, S_IRUGO | S_IWUSR, show_temp_type,
-+			  set_temp_type, 4);
-+static SENSOR_DEVICE_ATTR(temp6_type, S_IRUGO | S_IWUSR, show_temp_type,
-+			  set_temp_type, 5);
+ #define DELL_SMM_NO_TEMP	10
+-#define DELL_SMM_NO_FANS	4
++#define DELL_SMM_NO_FANS	5
  
- /* 6 Fans */
- 
-@@ -2214,6 +2238,9 @@ static SENSOR_DEVICE_ATTR(fan6_alarm, S_IRUGO, show_alarm, NULL, 7);
- static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, show_alarm, NULL, 16);
- static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO, show_alarm, NULL, 17);
- static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO, show_alarm, NULL, 18);
-+static SENSOR_DEVICE_ATTR(temp4_alarm, S_IRUGO, show_alarm, NULL, 19);
-+static SENSOR_DEVICE_ATTR(temp5_alarm, S_IRUGO, show_alarm, NULL, 20);
-+static SENSOR_DEVICE_ATTR(temp6_alarm, S_IRUGO, show_alarm, NULL, 21);
- static SENSOR_DEVICE_ATTR(intrusion0_alarm, S_IRUGO | S_IWUSR,
- 			  show_alarm, clear_intrusion, 4);
- 
-@@ -2274,6 +2301,9 @@ static SENSOR_DEVICE_ATTR(temp1_beep, S_IRUGO | S_IWUSR,
- 			  show_beep, set_beep, 2);
- static SENSOR_DEVICE_ATTR(temp2_beep, S_IRUGO, show_beep, NULL, 2);
- static SENSOR_DEVICE_ATTR(temp3_beep, S_IRUGO, show_beep, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp4_beep, S_IRUGO, show_beep, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp5_beep, S_IRUGO, show_beep, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp6_beep, S_IRUGO, show_beep, NULL, 2);
- 
- static ssize_t vrm_show(struct device *dev, struct device_attribute *attr,
- 			char *buf)
-@@ -2436,21 +2466,19 @@ static umode_t it87_temp_is_visible(struct kobject *kobj,
- 	int i = index / 7;	/* temperature index */
- 	int a = index % 7;	/* attribute index */
- 
--	if (index >= 21) {
--		i = index - 21 + 3;
--		a = 0;
--	}
--
- 	if (!(data->has_temp & BIT(i)))
- 		return 0;
- 
-+	if (a && i >= data->num_temp_limit)
-+		return 0;
-+
- 	if (a == 3) {
- 		if (get_temp_type(data, i) == 0)
- 			return 0;
- 		return attr->mode;
- 	}
- 
--	if (a == 5 && !has_temp_offset(data))
-+	if (a == 5 && i >= data->num_temp_offset)
- 		return 0;
- 
- 	if (a == 6 && !data->has_beep)
-@@ -2485,8 +2513,28 @@ static struct attribute *it87_attributes_temp[] = {
- 	&sensor_dev_attr_temp3_beep.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 21 */
-+	&sensor_dev_attr_temp4_max.dev_attr.attr,
-+	&sensor_dev_attr_temp4_min.dev_attr.attr,
-+	&sensor_dev_attr_temp4_type.dev_attr.attr,
-+	&sensor_dev_attr_temp4_alarm.dev_attr.attr,
-+	&sensor_dev_attr_temp4_offset.dev_attr.attr,
-+	&sensor_dev_attr_temp4_beep.dev_attr.attr,
-+
- 	&sensor_dev_attr_temp5_input.dev_attr.attr,
-+	&sensor_dev_attr_temp5_max.dev_attr.attr,
-+	&sensor_dev_attr_temp5_min.dev_attr.attr,
-+	&sensor_dev_attr_temp5_type.dev_attr.attr,
-+	&sensor_dev_attr_temp5_alarm.dev_attr.attr,
-+	&sensor_dev_attr_temp5_offset.dev_attr.attr,
-+	&sensor_dev_attr_temp5_beep.dev_attr.attr,
-+
- 	&sensor_dev_attr_temp6_input.dev_attr.attr,
-+	&sensor_dev_attr_temp6_max.dev_attr.attr,
-+	&sensor_dev_attr_temp6_min.dev_attr.attr,
-+	&sensor_dev_attr_temp6_type.dev_attr.attr,
-+	&sensor_dev_attr_temp6_alarm.dev_attr.attr,
-+	&sensor_dev_attr_temp6_offset.dev_attr.attr,
-+	&sensor_dev_attr_temp6_beep.dev_attr.attr,
- 	NULL
+ /* limit fan multiplier to avoid overflow */
+ #define DELL_SMM_MAX_FAN_MULT (INT_MAX / U16_MAX)
+@@ -175,6 +175,14 @@ static const char * const docking_labels[] = {
+ 	"Docking Other Fan",
  };
  
++static const char * const precision_tower_5810_labels[] = {
++	"CPU Fan",
++	"CPU Fan 2",
++	"Right DIMM Fan",
++	"Left DIMM Fan",
++	"PCIe Fan",
++};
++
+ static inline const char __init *i8k_get_dmi_data(int field)
+ {
+ 	const char *dmi_data = dmi_get_system_info(field);
+@@ -991,6 +999,12 @@ static const char *dell_smm_fan_label(struct dell_smm_data *data, int channel)
+ 	if (type < 0)
+ 		return ERR_PTR(type);
+ 
++	if (dmi_match(DMI_PRODUCT_NAME, "Precision Tower 5810")) {
++		if (channel < ARRAY_SIZE(precision_tower_5810_labels))
++			return precision_tower_5810_labels[channel];
++		return "Unknown Fan";
++	}
++
+ 	if (type & 0x10) {
+ 		dock = true;
+ 		type &= 0x0F;
+@@ -1129,12 +1143,15 @@ static const struct hwmon_channel_info * const dell_smm_info[] = {
+ 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
+ 			   HWMON_F_TARGET,
+ 			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
++			   HWMON_F_TARGET,
++			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_MIN | HWMON_F_MAX |
+ 			   HWMON_F_TARGET
+ 			   ),
+ 	HWMON_CHANNEL_INFO(pwm,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
++			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE
+ 			   ),
+ 	NULL
 -- 
-2.50.1 (Apple Git-155)
+2.43.0
 
