@@ -1,427 +1,340 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDCA2EA169
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 15:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F7836402C
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768231618; cv=none; b=TPavsqKeSR9m/AA43D320u8toB+gi8ow/lgoA/+OFvphcikkrKN5t8qwLFQIwe/nYsb3dzHy/QTFr17/5CdvmjCzAO1WLn91hyLidryeLs/YQ21idEVBTdjN+K6cPS8JBFQ28yZM1lkqSBLv2IN7MwR9UwiuMfDc7NwL0KETx/g=
+	t=1768234480; cv=none; b=AWJlZTSb1vr1+a1F/fHw6VAlcQ16L51ziCU4Na/2DzEgyx1nNzzr5J8hLE0jQ0QoBabiFn2oODJrOfo6EURkk5/ZX3R/DIvLiNe94/XeMN1HGAVAx4B1AYRrKl2eNJPwWyMH02WwCJoucoH4k1Nz4pH0Snu0lWtVNl23BLtHWys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768231618; c=relaxed/simple;
-	bh=T69JtBxhUZCuCAdXwmO3l5OAmRLeYdL2JM6JMwvsiCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jmTYEJolVtzwntipyyQOUZTMo8lqcXCkRj4BgvbzpmHV/gp7t++W0/TbDV9aeY13BRXOUyTgcrTF4zCuBXVHtY5S1XbPflnT91vJtqCsaFGe06+jfbLa2XZWaP1tMJRS30Sg3JJc0Xcwvn88ujHb2qB93L6O5ISbkU/52iA17iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iV1vjVlw; arc=none smtp.client-ip=74.125.82.172
+	s=arc-20240116; t=1768234480; c=relaxed/simple;
+	bh=YxhHO/6f+kzzobQ5klqwskTnOLBdFzl4YHE8OwAl74w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qoQUPU9ooKI20NI4Li1pjocw9fYhQFkuoZl/orLWYniVmDo3XrWw9jRqqiGdrT+lkIgdtDGh09PDSSBjbxgK92okMrnMLJ9IhJSiUWYH3a2Kfoiw073pBp/xSrh9lGm0EQYlWspN6181y3ooont/YLx5ThKe95l4FUlbBcG4cXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JsyY0CQE; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iV1vjVlw"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2ae29ddaed9so2506837eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 07:26:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JsyY0CQE"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b053ec7d90so5743465eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:14:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768231612; x=1768836412; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=70f5nX6ldwbHHAv0cSLeCqUZ+kUWLA8s5i8rl6D7Oa4=;
-        b=iV1vjVlwu4puiS6eYQguztzKhU8dTlnl6fkRv6fmI+VbW7vlmKhrkvoZPVqO3KFtua
-         mje3/CDFMSisdZftWeXdJbcW+2oOCBQYAVGwexJHlqG0sndTSplpFLvVdhRR5D1ZO2g3
-         4bB/0/U2LoTB2e/P+688bSVG0i08/nVcRBwRuYiu9at3SOnY03MPakMjBeSJbgcj04fs
-         qXCa+KP8o3YF4YlnLGo5QW2xitEP9O0OaIDNtaV1ob8hqC6jx8n6fAQdSqeqznnKzuyl
-         5o7D/7cSC1PWcPLdTtEBxzbyq0/3WmeQPy2g0EHxjGQG7VUhybZbAx9elQfwSgRlDSQu
-         kYjA==
+        d=gmail.com; s=20230601; t=1768234478; x=1768839278; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ps+uQW9AdtTCQpetvK8TRg5LNASGTC021orKjvvrvW0=;
+        b=JsyY0CQESWtTUU/vAaW9XCKVmMq+L45aKhYsv1hgcfBaUmvx1o1NichuHYAunXq72B
+         7crEQor3gNj5sqd/2oZnhyvyehQtL5JcO92ur51VLCwjpgTCVUssNGbXww+tOjmSz/Yw
+         gH826z5ykuF/jAxbSpo58rY27lLcXz5MoVFFI6WY9NLOckQuIhVy+cG6yFk7GFx8KCV2
+         RX8Y5sgCdv6Qi/3WMW6jkWqOeMJNpO95bwLCZ4Gy9e3zJBIbsBShRwXVasSgKVKmcrLw
+         3SZc6qlCh4SsVoojLEzL9oFlmC7f8ZMPwI+2l2A35CKNH3alQUzAyMf0e/HzjuxDHj1N
+         x8Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768231612; x=1768836412;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=70f5nX6ldwbHHAv0cSLeCqUZ+kUWLA8s5i8rl6D7Oa4=;
-        b=BfMGGMe06Cs3aBwe4+aLhPk69PvuI3fWVz57yhT3poIrwlDjRBZz7z/qKXJHtkxg7a
-         ThUgLX15qdzDRzs7eTBH/NMgyMjODtyPlYPGXLZWgMBzZE/Nc2uvFNKcHITWUHwyU25s
-         rFDy6Ek9cwOo8IByNa7FfPPG3cWQUkIkOrDkeST3PensfAOhPQ4mU1ug0cr84oawUzqW
-         IR1UB64DX7mxUk3v9drzMoDekNWczcEH8tQwovkvJI2wz3RPKmLs4wtYUkM2QQ1qGil6
-         SJ+7wpTn6scmN4fM+3sqHyC/7+xt9sG92eWD+MhjU2URpVpL/fB2cn7qAE4SAXRl13E5
-         9djg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGsVTd7RelsohOeZqFe+c5IfV+/GSREPSe2fqUeZL8w2Ek3sJlETX/e+ZjF1M7kvW4DPpDUbmixgidxA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyomEGJccEuq8KGf/BgVADSpw/spQoMPRWvJHr6mWgChB89JbAA
-	k0uRSK+xhxNyuwMotN3UV7VoScnY4Wx7wufch9JbaW/dRkF+TLIedu+V
-X-Gm-Gg: AY/fxX7qz3SGGXPklwbbWmtscA+QWg3g1OKNoFQfPrnJYIRM/BCO41msONd0h8Vxt32
-	BrPREJ8bje7TcYJSFAcScBgz8YkLMLsSTyrxr0rv7HGDBz+k5De+z6jW+3T+70+sR9pYN2B33MN
-	oXmIUG8qOEHNb+d9bG+7uklzJFzbsV10faF3RBeFSGQe3DydPxcQpROcJOQPbtW4xkJvZ4FYFkD
-	hJKq0v7FlOdggTLueAeQwDZsKssRIja/Gq1BM/pZVdcIgblawPHObDrDCYj7t1ouDYPA5VUJFi8
-	6oTQSUP8hV3yjYZdL+saDjZryQKsUXI1IKwtrZA8v7ZsgRqqFvs3yrPQpCcbN5S5ykZZGbMbOuy
-	oLo9lI1z8/Rs9Osue/+5QQ3qOeHfZb/u0YEYIG0ta99UwXt1mEjrI51DBP2CiGEI0tuUPmUdkEa
-	u9KxZq9fsuMr1fw49TJxD/Au98EPc0a/WlLh9uzGfIkjUp8pbafyTEAAolB5C2
-X-Google-Smtp-Source: AGHT+IGYLED8FMeltVsaQmPfawpXtVYg7CvTOfbWRVy7F6TRtygxdsFFWPU+BK/PXEOvVpHCed8WFQ==
-X-Received: by 2002:a05:7300:7fa2:b0:2ab:9c11:4c91 with SMTP id 5a478bee46e88-2b17c842913mr15130512eec.12.1768231612397;
-        Mon, 12 Jan 2026 07:26:52 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a5d3dsm15196864eec.13.2026.01.12.07.26.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 07:26:51 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768234478; x=1768839278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ps+uQW9AdtTCQpetvK8TRg5LNASGTC021orKjvvrvW0=;
+        b=LDIiwUYKBovCkNlAbZ0zSqTY2EH4pEnz6Z2zHjE4C4nHOZ9SSXIE+7FEd0L0RYV759
+         K/LZtHi0eNDoN0zlFewFhIQVWTPZ3MfIN+VCxPnqM9QN+Au6l4iIzFxv6KEdESrrJ019
+         x62T1tq/CPFkD1qY8m2ilQ7k4P0jSPEe+9U3PMFQ8QjcY/NIxDmpCoW9tD15/ELWVt/H
+         NPe4TQ+R61LOJN4vjVrkGNB/3V5JF77d1yU1xb4ZUs9SBouu578Lxlilc5zasT8UTVfr
+         RjwYnXyQ9lyitJ3nWPxe/9THoHiYuzy0Po3tsW0lFBbVEjsTE3bVwxFs0J9bzgiDUbL0
+         Xgaw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKbXw7UYX/KDan42I4Ng9ZPfArbPW3jM33lk9/+dszumE8JQGyIjhfEPeSsG55vi/hpaVCgxoGlgyZNw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbvIfhnE0VuaRCfaqFfrZBG3nvd8/wl4JF94SPeVLavclEhShv
+	/sFu5igImBGPri9jPS6M4rqwjWrkgwvz1ofQurmwf9e5mow59VNSJzai
+X-Gm-Gg: AY/fxX4iGWNtyG3uH6eopVCa6k8EnAmSEh2LiDBuCxH1Cu/fWOUtprQgOExICtNphS4
+	uxebzTTsvGufhZmP8ElXTxgDvmNUdrAqjHff9eUXCEVwb3lrV1zyNOFMvshRkyoBlkMLX66HEpt
+	HJya2IQ39yeDjapLDzpUY5/QYUlGGyZYjyr3NemojFFH0XpaGB6SJoosZ2tioRoMOwOQGR1Qk/p
+	AfWdRtciNhKCj+yWpz8/ef8lqg6FjOumXeV6wb8Z+u4zm4KQ7iuOvq4ooAnCINeyK+KQfuau3re
+	b7xrt5UFUQeIiD4eWtW8MSo0+cMCd4OsqqlG8HtdWoLKp7lz5TLJvUVfVMfTHpu2U/OrEZVNkqJ
+	BlY5Gsmk4QpsBVwK467WbU6xg6deI///WNqMEBFQDaBXs48IIBatxSYuoFMkQjUu+Rns4oBClZz
+	+9L9lnnw7LAt6z/dd6cdIwFrtxtdmCoKiq6Tw=
+X-Google-Smtp-Source: AGHT+IFdg5hRfFh4hBUFDQ4U1a6VG0PeU6IM4r660ArEbSmHUn7Y0f1NN6vXtRDoXL3Wed/RCFPauA==
+X-Received: by 2002:a05:7300:d194:b0:2a4:3592:c60e with SMTP id 5a478bee46e88-2b17d2d60f6mr14078038eec.31.1768234478227;
+        Mon, 12 Jan 2026 08:14:38 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078ccf4sm16324474eec.16.2026.01.12.08.14.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 08:14:37 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <67eb366e-1207-4e9a-9659-3482c8a9ec9b@roeck-us.net>
-Date: Mon, 12 Jan 2026 07:26:49 -0800
+Date: Mon, 12 Jan 2026 08:14:36 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Charles Hsu <hsu.yungteng@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add support for STEF48H28
+Message-ID: <afbcd1d6-a83f-4c0c-859c-f8d452bf3e9d@roeck-us.net>
+References: <20251216083712.260140-1-hsu.yungteng@gmail.com>
+ <20251217013544.363715-1-hsu.yungteng@gmail.com>
+ <20251217013544.363715-3-hsu.yungteng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] hwmon: Add support for HiTRON HAC300S PSU
-To: Vasileios Amoiridis <vassilisamir@gmail.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
-References: <20260106160353.14023-1-vassilisamir@gmail.com>
- <20260106160353.14023-3-vassilisamir@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260106160353.14023-3-vassilisamir@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251217013544.363715-3-hsu.yungteng@gmail.com>
 
-On 1/6/26 08:03, Vasileios Amoiridis wrote:
-> From: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+On Wed, Dec 17, 2025 at 09:35:44AM +0800, Charles Hsu wrote:
+> Add support for STEF48H28 hot-swap controller.
 > 
-> Add Support for HiTRON HAC300S PSU. This is a AC/DC hot-swappable
-> CompactPCI Serial Dual output active current sharing switching power
-> supply with a 312W rating.
-> 
-> Signed-off-by: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
 > ---
->   Documentation/hwmon/hac300s.rst |  37 ++++++++
-
-Needs to be added to index.rst.
-
->   MAINTAINERS                     |   7 ++
->   drivers/hwmon/pmbus/Kconfig     |   9 ++
->   drivers/hwmon/pmbus/Makefile    |   1 +
->   drivers/hwmon/pmbus/hac300s.c   | 152 ++++++++++++++++++++++++++++++++
->   5 files changed, 206 insertions(+)
->   create mode 100644 Documentation/hwmon/hac300s.rst
->   create mode 100644 drivers/hwmon/pmbus/hac300s.c
+>  Documentation/hwmon/index.rst     |  1 +
+>  Documentation/hwmon/stef48h28.rst | 73 +++++++++++++++++++++++++++++
+>  MAINTAINERS                       |  7 +++
+>  drivers/hwmon/pmbus/Kconfig       |  9 ++++
+>  drivers/hwmon/pmbus/Makefile      |  1 +
+>  drivers/hwmon/pmbus/stef48h28.c   | 76 +++++++++++++++++++++++++++++++
+>  6 files changed, 167 insertions(+)
+>  create mode 100644 Documentation/hwmon/stef48h28.rst
+>  create mode 100644 drivers/hwmon/pmbus/stef48h28.c
 > 
-> diff --git a/Documentation/hwmon/hac300s.rst b/Documentation/hwmon/hac300s.rst
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 85d7a686883e..c682751a1fe3 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -233,6 +233,7 @@ Hardware Monitoring Kernel Drivers
+>     shtc1
+>     sis5595
+>     sl28cpld
+> +   stef48h28
+>     smpro-hwmon
+>     smsc47b397
+>     smsc47m192
+> diff --git a/Documentation/hwmon/stef48h28.rst b/Documentation/hwmon/stef48h28.rst
 > new file mode 100644
-> index 000000000000..573269fc81f8
+> index 000000000000..058de12e979f
 > --- /dev/null
-> +++ b/Documentation/hwmon/hac300s.rst
-> @@ -0,0 +1,37 @@
+> +++ b/Documentation/hwmon/stef48h28.rst
+> @@ -0,0 +1,73 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +Kernel driver hac300s
-> +=====================
+> +Kernel driver stef48h28
+> +======================
+
+Bad length of "==="
+
 > +
 > +Supported chips:
 > +
-> +   * HiTRON HAC300S
+> +  * Analog Devices STEF48H28
 > +
-> +     Prefix: 'hac300s'
+> +    Prefix: 'stef48h28'
 > +
-> +     Datasheet: Publicly available at HiTRON website.
+> +    Addresses scanned: -
+> +
+> +    Datasheet: https://www.st.com/resource/en/data_brief/stef48h28.pdf
 > +
 > +Author:
 > +
-> +  - Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+> +  - Charles Hsu <ythsu0511@gmail.com>
+> +
 > +
 > +Description
 > +-----------
 > +
-> +This driver implements support for the HiTRON HAC300S PSU. It is a Universal
-
-s/implements support/supports/
-
-> +AC input harmonic correction AC-DC hot-swappable CompactPCI Serial Dual output
-> +(with 5V standby) 312 Watts active current sharing switching power supply.
+> +The STEF48H28 is a 30 A integrated e-fuse for 9-80 V DC power rails.
+> +It provides inrush control, undervoltage/overvoltage lockout and
+> +overcurrent protection using an adaptive (I x t) scheme that permits
+> +short high-current pulses typical of CPU/GPU loads.
 > +
-> +The device has an input of 90-264VAC and 2 nominal output voltaged at 12V and
-> +5V which they can supplu up to 25A and 2.5A respectively.
+> +The device offers an analog current-monitor output and an on-chip
+> +temperature-monitor signal for system supervision. Startup behavior is
+> +programmable through insertion-delay and soft-start settings.
+> +
+> +Additional features include power-good indication, self-diagnostics,
+> +thermal shutdown and a PMBus interface for telemetry and status
+> +reporting.
+> +
+> +Platform data support
+> +---------------------
+> +
+> +The driver supports standard PMBus driver platform data.
 > +
 > +Sysfs entries
 > +-------------
 > +
-> +======= ==========================================
-> +curr1   Output current
-> +in1     Output voltage
-> +power1  Output power
-> +temp1   Ambient temperature inside the module
-> +temp2   Internal secondary component's temperature
-> +======= ==========================================
+> +================= ========================================
+> +in1_label		"vin".
+> +in1_input		Measured voltage. From READ_VIN register.
+> +in1_min			Minimum Voltage. From VIN_UV_WARN_LIMIT register.
+> +in1_max			Maximum voltage. From VIN_OV_WARN_LIMIT register.
+> +
+> +in2_label		"vout1".
+> +in2_input		Measured voltage. From READ_VOUT register.
+> +in2_min			Minimum Voltage. From VOUT_UV_WARN_LIMIT register.
+> +in2_max			Maximum voltage. From VOUT_OV_WARN_LIMIT register.
+> +
+> +curr1_label "iin".
+> +curr1_input Measured current. From READ_IIN register.
+> +
+> +curr2_label "iout1".
+> +curr2_input Measured current. From READ_IOUT register.
+> +
+> +power1_label		"pin"
+> +power1_input		Measured input power. From READ_PIN register.
+> +
+> +power2_label		"pout1"
+> +power2_input		Measured output power. From READ_POUT register.
+> +
+> +temp1_input		Measured temperature. From READ_TEMPERATURE_1 register.
+> +temp1_max		Maximum temperature. From OT_WARN_LIMIT register.
+> +temp1_crit		Critical high temperature. From OT_FAULT_LIMIT register.
+> +
+> +temp2_input		Measured temperature. From READ_TEMPERATURE_2 register.
+> +================= ========================================
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index a0dd762f5648..feb8ec4d9b17 100644
+> index d701a4d5b00e..be6b6e9ee79b 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -11254,6 +11254,13 @@ F:	kernel/time/timer_list.c
->   F:	kernel/time/timer_migration.*
->   F:	tools/testing/selftests/timers/
->   
-> +HITRON HAC300S PSU DRIVER
-> +M:	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+> @@ -24665,6 +24665,13 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+>  F:	drivers/power/supply/stc3117_fuel_gauge.c
+>  
+> +ST STEF48H28 DRIVER
+> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
 > +L:	linux-hwmon@vger.kernel.org
 > +S:	Maintained
-> +F:	Documentation/hwmon/hac300s.rst
-> +F:	drivers/hwmon/pmbus/hac300s.c
+> +F:	Documentation/hwmon/stef48h28.rst
+> +F:	drivers/hwmon/pmbus/stef48h28.c
 > +
->   DELAY, SLEEP, TIMEKEEPING, TIMERS [RUST]
->   M:	Andreas Hindborg <a.hindborg@kernel.org>
->   R:	Boqun Feng <boqun.feng@gmail.com>
+>  ST STM32 FIREWALL
+>  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+>  S:	Maintained
 > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index f3fb94cebf1a..4c2cb51dbe3f 100644
+> index f3fb94cebf1a..29ea8ba98b8b 100644
 > --- a/drivers/hwmon/pmbus/Kconfig
 > +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -124,6 +124,15 @@ config SENSORS_FSP_3Y
->   	  This driver can also be built as a module. If so, the module will
->   	  be called fsp-3y.
->   
-> +config SENSORS_HAC300S
-> +	tristate "Hitron HAC300S-D120E PSU"
+> @@ -576,6 +576,15 @@ config SENSORS_Q54SJ108A2
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called q54sj108a2.
+>  
+> +config SENSORS_STEF48H28
+> +    tristate "ST STEF48H28"
 > +	help
-> +	  If you say yes here you get hardware monitoring support for the
-> +	  Hitron HAC300S-D120E Power Supply.
+> +	  If you say yes here you get hardware monitoring support for ST
+> +	  STEF48H28.
 > +
 > +	  This driver can also be built as a module. If so, the module will
-> +	  be called hac300s.
+> +	  be called stef48h28.
 > +
->   config SENSORS_IBM_CFFPS
->   	tristate "IBM Common Form Factor Power Supply"
->   	depends on LEDS_CLASS
+>  config SENSORS_STPDDC60
+>  	tristate "ST STPDDC60"
+>  	help
 > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 349a89b6d92e..b92309019d35 100644
+> index 349a89b6d92e..b2497f1d7bd9 100644
 > --- a/drivers/hwmon/pmbus/Makefile
 > +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->   obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
->   obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
->   obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
-> +obj-$(CONFIG_SENSORS_HAC300S)	+= hac300s.o
->   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
->   obj-$(CONFIG_SENSORS_INA233)	+= ina233.o
-> diff --git a/drivers/hwmon/pmbus/hac300s.c b/drivers/hwmon/pmbus/hac300s.c
+> @@ -56,6 +56,7 @@ obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
+>  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+> +obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
+>  obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+>  obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
+>  obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
+> diff --git a/drivers/hwmon/pmbus/stef48h28.c b/drivers/hwmon/pmbus/stef48h28.c
 > new file mode 100644
-> index 000000000000..a1640449e5f5
+> index 000000000000..df7f7429162b
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/hac300s.c
-> @@ -0,0 +1,152 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +// SPDX-FileCopyrightText: 2024 CERN (home.cern)
+> +++ b/drivers/hwmon/pmbus/stef48h28.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0+
 > +/*
-> + * Hardware monitoring driver for Hi-Tron HAC300S PSU.
-> + *
-> + * NOTE: The HAC300S device does not support the PMBUS_VOUT_MODE register.
-> + * On top of that, it returns the Voltage output values in Linear11 which is
-> + * not adhering to the PMBus specifications. (PMBus Specification Part II,
-> + * Section 7.1-7.3). For that reason the PMBUS_VOUT_MODE register is being faked
-> + * and returns the exponent value of the READ_VOUT register. The exponent part
-> + * of the VOUT_* registers is being cleared in order to return the mantissa to
-> + * the pmbus core.
+> + * Hardware monitoring driver for STMicroelectronics digital controller stef48h28
 > + */
 > +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
 > +#include <linux/err.h>
+
+I don't immediately see where this include would be needed.
+
 > +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
 > +#include <linux/module.h>
-> +#include <linux/pmbus.h>
 > +
 > +#include "pmbus.h"
 > +
-> +#define LINEAR11_EXPONENT_MASK GENMASK(15, 11)
-> +#define LINEAR11_MANTISSA_MASK GENMASK(10, 0)
-> +
-> +#define to_hac300s_data(x) container_of(x, struct hac300s_data, info)
-> +
-> +struct hac300s_data {
-> +	struct pmbus_driver_info info;
-> +	bool vout_linear11;
-> +	s8 exponent;
-> +};
-> +
-> +static int hac300s_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct hac300s_data *data = to_hac300s_data(info);
-> +
-> +	if (reg == PMBUS_VOUT_MODE && data->vout_linear11)
-> +		return data->exponent;
-> +
-> +	return pmbus_read_byte_data(client, page, reg);
-> +}
-> +
-> +static int hac300s_read_word_data(struct i2c_client *client, int page,
-> +				   int phase, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct hac300s_data *data = to_hac300s_data(info);
-> +	int rv;
-> +
-> +	rv = pmbus_read_word_data(client, page, phase, reg);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VIRT_READ_IOUT_AVG:
-> +	case PMBUS_VIRT_READ_POUT_AVG:
-> +	case PMBUS_VIRT_READ_TEMP_AVG:
-> +		return -ENXIO;
-> +	case PMBUS_VOUT_OV_WARN_LIMIT:
-> +	case PMBUS_VOUT_UV_WARN_LIMIT:
-> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
-> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> +	case PMBUS_MFR_VOUT_MAX:
-> +	case PMBUS_MFR_VOUT_MIN:
-> +	case PMBUS_READ_VOUT:
-> +		if (data->vout_linear11)
-> +			return FIELD_GET(LINEAR11_MANTISSA_MASK, rv);
-
-Is it guaranteed that the exponent is always the same ? Because if not the
-conversion will have to be explicit.
-
-> +		fallthrough;
-> +	default:
-> +		return rv;
-
-This is wrong. The register should only be read by affected commands, and
-the function should return -ENODATA for the others.
-
-> +	}
-> +}
-> +
-> +#define HAC300S_SW_FUNC (PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | \
-> +			 PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
-> +			 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
-> +			 PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_TEMP)
-> +
-Unnecessary define since it is only used once. Please fold into the declaration
-below.
-
-> +static struct pmbus_driver_info hac300s_info = {
+> +static struct pmbus_driver_info stef48h28_info = {
 > +	.pages = 1,
-> +	.func[0] = HAC300S_SW_FUNC,
-> +	.read_byte_data = hac300s_read_byte_data,
-> +	.read_word_data = hac300s_read_word_data,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +    .format[PSC_CURRENT_IN] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +    .format[PSC_TEMPERATURE] = direct,
+> +    .m[PSC_VOLTAGE_IN] = 50,
+
+Replace spaces with tabs. Also, _please_ run checkpatch on your patches
+because it would have told you.
+
+WARNING: please, no spaces at the start of a line
+#285: FILE: drivers/hwmon/pmbus/stef48h28.c:17:
++    .format[PSC_CURRENT_IN] = direct,$
+
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.R[PSC_VOLTAGE_IN] = 0,
+> +	.m[PSC_VOLTAGE_OUT] = 50,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.R[PSC_VOLTAGE_OUT] = 0,
+> +	.m[PSC_CURRENT_IN] = 100,
+> +	.b[PSC_CURRENT_IN] = 0,
+> +	.R[PSC_CURRENT_IN] = 0,
+> +	.m[PSC_CURRENT_OUT] = 100,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_CURRENT_OUT] = 0,
+> +	.m[PSC_POWER] = 9765,
+> +	.b[PSC_POWER] = 0,
+> +	.R[PSC_POWER] = -3,
+> +	.m[PSC_TEMPERATURE] = 25,
+> +	.b[PSC_TEMPERATURE] = 500,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN
+> +	    | PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+> +	    | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT
 > +};
 > +
-> +static struct pmbus_platform_data hac300s_pdata = {
-> +	.flags = PMBUS_NO_CAPABILITY,
-> +};
-> +
-> +static int hac300s_probe(struct i2c_client *client)
+> +static int stef48h28_probe(struct i2c_client *client)
 > +{
-> +	struct hac300s_data *data;
-> +	int rv;
+> +	return pmbus_do_probe(client, &stef48h28_info);
+> +}
 > +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct hac300s_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
+> +static const struct i2c_device_id stef48h28_id[] = {
+> +	{"stef48h28"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, stef48h28_id);
 > +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA |
-> +				     I2C_FUNC_SMBUS_READ_WORD_DATA))
-> +		return -ENODEV;
+> +static const struct of_device_id __maybe_unused stef48h28_of_match[] = {
+> +	{.compatible = "st,stef48h28"},
+> +	{}
+> +};
 > +
-> +	rv = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
-> +	if (rv < 0) {
+> +/* This is the driver that will be inserted */
 
-This needs explanation. Why try to read PMBUS_VOUT_MODE if the failure is
-expected ? Are there variants of the PSU which return something useful here ?
-The note above does not explain the reason for this conditional.
-
-If this is supposed to check if this is really the expected device,
-read and verify PMBUS_MFR_ID instead.
+I don't know why people like this comment. It is pointless. Please remove.
 
 Thanks,
 Guenter
 
-> +		data->vout_linear11 = true;
-> +		/* LINEAR11 format, use exponent from READ_VOUT register */
-> +		rv = i2c_smbus_read_word_data(client, PMBUS_READ_VOUT);
-> +		if (rv < 0)
-> +			return dev_err_probe(&client->dev, rv, "Failed to read vout_mode\n");
-> +
-> +		data->exponent = FIELD_GET(LINEAR11_EXPONENT_MASK, rv);
-> +	}
-> +
-> +	data->info = hac300s_info;
-> +	client->dev.platform_data = &hac300s_pdata;
-> +	return pmbus_do_probe(client, &data->info);
-> +}
-> +
-> +static const struct of_device_id hac300s_of_match[] = {
-> +	{ .compatible = "hitron,hac300s" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, hac300s_of_match);
-> +
-> +static const struct i2c_device_id hac300s_id[] = {
-> +	{"hac300s", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, hac300s_id);
-> +
-> +static struct i2c_driver hac300s_driver = {
+> +static struct i2c_driver stef48h28_driver = {
 > +	.driver = {
-> +		   .name = "hac300s",
-> +		   .of_match_table = hac300s_of_match,
-> +	},
-> +	.probe = hac300s_probe,
-> +	.id_table = hac300s_id,
-> +
+> +		   .name = "stef48h28",
+> +		   .of_match_table = of_match_ptr(stef48h28_of_match),
+> +		   },
+> +	.probe = stef48h28_probe,
+> +	.id_table = stef48h28_id,
 > +};
-> +module_i2c_driver(hac300s_driver);
 > +
-> +MODULE_AUTHOR("Vasileios Amoiridis");
-> +MODULE_DESCRIPTION("PMBus driver for Hi-Tron HAC300S PSU");
+> +module_i2c_driver(stef48h28_driver);
+> +
+> +MODULE_AUTHOR("Charles Hsu <hsu.yungteng@gmail.com>");
+> +MODULE_DESCRIPTION("PMBus driver for ST stef48h28");
 > +MODULE_LICENSE("GPL");
 > +MODULE_IMPORT_NS("PMBUS");
-
