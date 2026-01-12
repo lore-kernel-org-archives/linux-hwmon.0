@@ -1,340 +1,168 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F7836402C
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59AD366DD0
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768234480; cv=none; b=AWJlZTSb1vr1+a1F/fHw6VAlcQ16L51ziCU4Na/2DzEgyx1nNzzr5J8hLE0jQ0QoBabiFn2oODJrOfo6EURkk5/ZX3R/DIvLiNe94/XeMN1HGAVAx4B1AYRrKl2eNJPwWyMH02WwCJoucoH4k1Nz4pH0Snu0lWtVNl23BLtHWys=
+	t=1768235427; cv=none; b=TdavVphFqtwIFWn3aYx8V+t2dJqsPmvHr1JkliRyZ3o7rG25enwT6gzfTMG+RItMbdBMcUH4VrkBXCPHXLaYrD3EFgObswmd/jKssJXByWV8DUkMk5tLJVwOyqIwASbfdFQc0lfdhRQdOIIx17VyrSAbUOC1HPTwA0D4TUwgSGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768234480; c=relaxed/simple;
-	bh=YxhHO/6f+kzzobQ5klqwskTnOLBdFzl4YHE8OwAl74w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qoQUPU9ooKI20NI4Li1pjocw9fYhQFkuoZl/orLWYniVmDo3XrWw9jRqqiGdrT+lkIgdtDGh09PDSSBjbxgK92okMrnMLJ9IhJSiUWYH3a2Kfoiw073pBp/xSrh9lGm0EQYlWspN6181y3ooont/YLx5ThKe95l4FUlbBcG4cXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JsyY0CQE; arc=none smtp.client-ip=74.125.82.175
+	s=arc-20240116; t=1768235427; c=relaxed/simple;
+	bh=2QK/PbgnUhPWpYYLL+1aspuybQodX2kfFIQlbIU+7iI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KhKDdI2VvAJLAJYpHn25onBHJlK9PXhotVVM4ekUbDcP954yo9fFudt4tdcnjJv2v3b7/qwBTTSjQ53xEUZJ2f/j5cfImnXxMbO52GAachtwoJTAmoKx4NgxjJHcPvpb8GpXsW4/cJiWe6fAqhPpOspQnI7Rmz6eB9iirYZOyiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mf7Ywx6a; arc=none smtp.client-ip=74.125.82.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JsyY0CQE"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b053ec7d90so5743465eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:14:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mf7Ywx6a"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-121b14d0089so7167577c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:30:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768234478; x=1768839278; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ps+uQW9AdtTCQpetvK8TRg5LNASGTC021orKjvvrvW0=;
-        b=JsyY0CQESWtTUU/vAaW9XCKVmMq+L45aKhYsv1hgcfBaUmvx1o1NichuHYAunXq72B
-         7crEQor3gNj5sqd/2oZnhyvyehQtL5JcO92ur51VLCwjpgTCVUssNGbXww+tOjmSz/Yw
-         gH826z5ykuF/jAxbSpo58rY27lLcXz5MoVFFI6WY9NLOckQuIhVy+cG6yFk7GFx8KCV2
-         RX8Y5sgCdv6Qi/3WMW6jkWqOeMJNpO95bwLCZ4Gy9e3zJBIbsBShRwXVasSgKVKmcrLw
-         3SZc6qlCh4SsVoojLEzL9oFlmC7f8ZMPwI+2l2A35CKNH3alQUzAyMf0e/HzjuxDHj1N
-         x8Pg==
+        d=gmail.com; s=20230601; t=1768235425; x=1768840225; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJR6FkeU+NIvLcCVeWrzPvoeuR5k+SY6j8y5pnp86Mk=;
+        b=Mf7Ywx6aje0kGJ+0+mbe+02HV6JEPwDNMDy868MDzI2xXCbfUSv3V+JuuM4YusBWV/
+         IxkPJ3+iAukfQZX52zHOmLCMu8/4k1SUgWGEftRHsFDFUwGKCztZW7UNUZBdWsdtbvc2
+         xbjq8V73Zj7LKqDhi+FG8KsqP9eswuoxxOkbJg6lOIIhfIa4zwvKA+2vAZRbgFhSgZp2
+         tcyTU/DF3tx5ZeoKmqun2h1iDesKPqnF8quRsGab4wR0RLh6YRJ4+FS0Gk3XtOhwZ0Gm
+         2FV/dBxsNczzfmfVzJIDF7JuZ0HeVQ+mnKz/bBydMQvMIfbRj7NoMHbgz2v8iszYmM4d
+         m9EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768234478; x=1768839278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ps+uQW9AdtTCQpetvK8TRg5LNASGTC021orKjvvrvW0=;
-        b=LDIiwUYKBovCkNlAbZ0zSqTY2EH4pEnz6Z2zHjE4C4nHOZ9SSXIE+7FEd0L0RYV759
-         K/LZtHi0eNDoN0zlFewFhIQVWTPZ3MfIN+VCxPnqM9QN+Au6l4iIzFxv6KEdESrrJ019
-         x62T1tq/CPFkD1qY8m2ilQ7k4P0jSPEe+9U3PMFQ8QjcY/NIxDmpCoW9tD15/ELWVt/H
-         NPe4TQ+R61LOJN4vjVrkGNB/3V5JF77d1yU1xb4ZUs9SBouu578Lxlilc5zasT8UTVfr
-         RjwYnXyQ9lyitJ3nWPxe/9THoHiYuzy0Po3tsW0lFBbVEjsTE3bVwxFs0J9bzgiDUbL0
-         Xgaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKbXw7UYX/KDan42I4Ng9ZPfArbPW3jM33lk9/+dszumE8JQGyIjhfEPeSsG55vi/hpaVCgxoGlgyZNw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbvIfhnE0VuaRCfaqFfrZBG3nvd8/wl4JF94SPeVLavclEhShv
-	/sFu5igImBGPri9jPS6M4rqwjWrkgwvz1ofQurmwf9e5mow59VNSJzai
-X-Gm-Gg: AY/fxX4iGWNtyG3uH6eopVCa6k8EnAmSEh2LiDBuCxH1Cu/fWOUtprQgOExICtNphS4
-	uxebzTTsvGufhZmP8ElXTxgDvmNUdrAqjHff9eUXCEVwb3lrV1zyNOFMvshRkyoBlkMLX66HEpt
-	HJya2IQ39yeDjapLDzpUY5/QYUlGGyZYjyr3NemojFFH0XpaGB6SJoosZ2tioRoMOwOQGR1Qk/p
-	AfWdRtciNhKCj+yWpz8/ef8lqg6FjOumXeV6wb8Z+u4zm4KQ7iuOvq4ooAnCINeyK+KQfuau3re
-	b7xrt5UFUQeIiD4eWtW8MSo0+cMCd4OsqqlG8HtdWoLKp7lz5TLJvUVfVMfTHpu2U/OrEZVNkqJ
-	BlY5Gsmk4QpsBVwK467WbU6xg6deI///WNqMEBFQDaBXs48IIBatxSYuoFMkQjUu+Rns4oBClZz
-	+9L9lnnw7LAt6z/dd6cdIwFrtxtdmCoKiq6Tw=
-X-Google-Smtp-Source: AGHT+IFdg5hRfFh4hBUFDQ4U1a6VG0PeU6IM4r660ArEbSmHUn7Y0f1NN6vXtRDoXL3Wed/RCFPauA==
-X-Received: by 2002:a05:7300:d194:b0:2a4:3592:c60e with SMTP id 5a478bee46e88-2b17d2d60f6mr14078038eec.31.1768234478227;
-        Mon, 12 Jan 2026 08:14:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078ccf4sm16324474eec.16.2026.01.12.08.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 08:14:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768235425; x=1768840225;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GJR6FkeU+NIvLcCVeWrzPvoeuR5k+SY6j8y5pnp86Mk=;
+        b=cIEc09LOlfxyv9Do53Y/5nGXUsa9bWinL9F+7/9KxToUzwW0Q5WQ4orwvjycl3HaoZ
+         QcJ8R3CJSqGP7568w4iz5YgVpf5H5jB9hcfzxbtciWUx3j1gpfL4quHB9Ug4hDGSKhn5
+         cw4fHrIdeEjPmSrcoBC4jMDs94mPtgbb+/vN9PhuSedUutBvCPoPvJJRzQ/VByPu94v6
+         yiHVsrL3Riw6zdiBsimmrNed5YYP36tUgveE7rg5/g1SmIL1teWyA+w1MQA69gYvE5Rw
+         oAJLIjEf3WFkkDcdVFOV5nx/0mEgpwppweIUbYigitr+F3IYUC3LNblwWACWub1pEDgn
+         MJwA==
+X-Gm-Message-State: AOJu0Yyz7bzdBjtJBEayyTnbpAadbBgO4tdyvPJePNB0xMIFbkyTAdUc
+	LH4vFn/QlTuXQ06BK947VB2un+bxtwpfHkd22BwkYTvlcMw2ffzlBaEe0R85WQ==
+X-Gm-Gg: AY/fxX68B5wHVO6OA+vpkkV0qL8w/9Eh+cFVMSiK+Qw2qFAQHSb1tcrWm6NjMqCs1h2
+	LCiBZcDIxyS4UDNMT6ckos1I60HRtbAldmprD9D9QXOmVgFgNP0xVb4a0F0LAhEjcih70K7AzE4
+	prnZUYE4YnJq00AE3sRK9+0iun1ntjbYlDXDZL9rupcd6f3Y0ZNkXFwZwIoCJ4DwFG7MmVjCWkG
+	vSawOHjDmyqWDrwqwwe4avXcJKfuhtGrpITwOIq77Gw4YRvXf1/C7PSLVo0c/kcUbMQ1Xtj9CNn
+	ik4o2aNK8q2Kah2VftMVMOrjmjU3L6OZyK23oUco7lS51gRVFg5YT8iKh/uLXSRjnGdT6TV7WZ3
+	ylbLG8YRlXPCtcmlCWJuBnbn8OP2eAVwEmgVmaXaDJns8EM2i4+otNKTtps5AbKPftHAP7H+hEb
+	IRRT1YaHFZ3qCSg/Hk0g+/y5wCp0JnrkKXNAfAbylk/uZgrDZtCmxAOZkA3ZV9
+X-Google-Smtp-Source: AGHT+IGZfs7xnqFUO3j8+WxV8cTfbgGIZvTc9ixEcqLVmeP4190nRGm/nG84VoKQfXB5sFjLWoWbBg==
+X-Received: by 2002:a05:7022:220d:b0:11b:ceee:a46d with SMTP id a92af1059eb24-121f8b0e113mr14147318c88.15.1768235424837;
+        Mon, 12 Jan 2026 08:30:24 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248c246sm25278859c88.11.2026.01.12.08.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 08:30:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 12 Jan 2026 08:14:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Charles Hsu <hsu.yungteng@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add support for STEF48H28
-Message-ID: <afbcd1d6-a83f-4c0c-859c-f8d452bf3e9d@roeck-us.net>
-References: <20251216083712.260140-1-hsu.yungteng@gmail.com>
- <20251217013544.363715-1-hsu.yungteng@gmail.com>
- <20251217013544.363715-3-hsu.yungteng@gmail.com>
+Message-ID: <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net>
+Date: Mon, 12 Jan 2026 08:30:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251217013544.363715-3-hsu.yungteng@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
+ errors
+To: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 17, 2025 at 09:35:44AM +0800, Charles Hsu wrote:
-> Add support for STEF48H28 hot-swap controller.
+On 1/10/26 09:19, Tinsae Tadesse wrote:
+> SPD5118 DDR5 temperature sensors may be temporarily unavailable
+> during s2idle resume. Ignore temporary -ENXIO and -EIO errors during resume and allow
+> register synchronization to be retried later.
 > 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
 > ---
->  Documentation/hwmon/index.rst     |  1 +
->  Documentation/hwmon/stef48h28.rst | 73 +++++++++++++++++++++++++++++
->  MAINTAINERS                       |  7 +++
->  drivers/hwmon/pmbus/Kconfig       |  9 ++++
->  drivers/hwmon/pmbus/Makefile      |  1 +
->  drivers/hwmon/pmbus/stef48h28.c   | 76 +++++++++++++++++++++++++++++++
->  6 files changed, 167 insertions(+)
->  create mode 100644 Documentation/hwmon/stef48h28.rst
->  create mode 100644 drivers/hwmon/pmbus/stef48h28.c
+>   drivers/hwmon/spd5118.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 85d7a686883e..c682751a1fe3 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -233,6 +233,7 @@ Hardware Monitoring Kernel Drivers
->     shtc1
->     sis5595
->     sl28cpld
-> +   stef48h28
->     smpro-hwmon
->     smsc47b397
->     smsc47m192
-> diff --git a/Documentation/hwmon/stef48h28.rst b/Documentation/hwmon/stef48h28.rst
-> new file mode 100644
-> index 000000000000..058de12e979f
-> --- /dev/null
-> +++ b/Documentation/hwmon/stef48h28.rst
-> @@ -0,0 +1,73 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver stef48h28
-> +======================
+> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+> index 5da44571b6a0..ec9f14f6e0df 100644
+> --- a/drivers/hwmon/spd5118.c
+> +++ b/drivers/hwmon/spd5118.c
+> @@ -512,9 +512,15 @@ static int spd5118_resume(struct device *dev)
+>   {
+>   	struct spd5118_data *data = dev_get_drvdata(dev);
+>   	struct regmap *regmap = data->regmap;
+> +	int ret;
+>   
+>   	regcache_cache_only(regmap, false);
+> -	return regcache_sync(regmap);
+> +	ret = regcache_sync(regmap);
+> +	if(ret == -ENXIO || ret == -EIO) {
+> +		dev_warn(dev, "SPD hub not responding on resume (%d), deferring init\n", ret);
+> +		return 0;
+> +	}
+> +	return ret;
+>   }
+>   
+>   static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
 
-Bad length of "==="
 
-> +
-> +Supported chips:
-> +
-> +  * Analog Devices STEF48H28
-> +
-> +    Prefix: 'stef48h28'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: https://www.st.com/resource/en/data_brief/stef48h28.pdf
-> +
-> +Author:
-> +
-> +  - Charles Hsu <ythsu0511@gmail.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +The STEF48H28 is a 30 A integrated e-fuse for 9-80 V DC power rails.
-> +It provides inrush control, undervoltage/overvoltage lockout and
-> +overcurrent protection using an adaptive (I x t) scheme that permits
-> +short high-current pulses typical of CPU/GPU loads.
-> +
-> +The device offers an analog current-monitor output and an on-chip
-> +temperature-monitor signal for system supervision. Startup behavior is
-> +programmable through insertion-delay and soft-start settings.
-> +
-> +Additional features include power-good indication, self-diagnostics,
-> +thermal shutdown and a PMBus interface for telemetry and status
-> +reporting.
-> +
-> +Platform data support
-> +---------------------
-> +
-> +The driver supports standard PMBus driver platform data.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +================= ========================================
-> +in1_label		"vin".
-> +in1_input		Measured voltage. From READ_VIN register.
-> +in1_min			Minimum Voltage. From VIN_UV_WARN_LIMIT register.
-> +in1_max			Maximum voltage. From VIN_OV_WARN_LIMIT register.
-> +
-> +in2_label		"vout1".
-> +in2_input		Measured voltage. From READ_VOUT register.
-> +in2_min			Minimum Voltage. From VOUT_UV_WARN_LIMIT register.
-> +in2_max			Maximum voltage. From VOUT_OV_WARN_LIMIT register.
-> +
-> +curr1_label "iin".
-> +curr1_input Measured current. From READ_IIN register.
-> +
-> +curr2_label "iout1".
-> +curr2_input Measured current. From READ_IOUT register.
-> +
-> +power1_label		"pin"
-> +power1_input		Measured input power. From READ_PIN register.
-> +
-> +power2_label		"pout1"
-> +power2_input		Measured output power. From READ_POUT register.
-> +
-> +temp1_input		Measured temperature. From READ_TEMPERATURE_1 register.
-> +temp1_max		Maximum temperature. From OT_WARN_LIMIT register.
-> +temp1_crit		Critical high temperature. From OT_FAULT_LIMIT register.
-> +
-> +temp2_input		Measured temperature. From READ_TEMPERATURE_2 register.
-> +================= ========================================
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d701a4d5b00e..be6b6e9ee79b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -24665,6 +24665,13 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
->  F:	drivers/power/supply/stc3117_fuel_gauge.c
->  
-> +ST STEF48H28 DRIVER
-> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/stef48h28.rst
-> +F:	drivers/hwmon/pmbus/stef48h28.c
-> +
->  ST STM32 FIREWALL
->  M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
->  S:	Maintained
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index f3fb94cebf1a..29ea8ba98b8b 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -576,6 +576,15 @@ config SENSORS_Q54SJ108A2
->  	  This driver can also be built as a module. If so, the module will
->  	  be called q54sj108a2.
->  
-> +config SENSORS_STEF48H28
-> +    tristate "ST STEF48H28"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for ST
-> +	  STEF48H28.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called stef48h28.
-> +
->  config SENSORS_STPDDC60
->  	tristate "ST STPDDC60"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 349a89b6d92e..b2497f1d7bd9 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -56,6 +56,7 @@ obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
->  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
->  obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
-> +obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
->  obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
->  obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
->  obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
-> diff --git a/drivers/hwmon/pmbus/stef48h28.c b/drivers/hwmon/pmbus/stef48h28.c
-> new file mode 100644
-> index 000000000000..df7f7429162b
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/stef48h28.c
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for STMicroelectronics digital controller stef48h28
-> + */
-> +
-> +#include <linux/err.h>
+Based on the subsequent exchange, this is not the appropriate solution.
+The problem is that the i2c controller suspends too early. It should suspend
+later instead. Alternatively, this driver should suspend early, but it does
+not look like respective PM operations are available.
 
-I don't immediately see where this include would be needed.
+I would suggest to try replacing DEFINE_SIMPLE_DEV_PM_OPS() in drivers/i2c/busses/i2c-i801.c
+with SET_LATE_SYSTEM_SLEEP_PM_OPS() or similar.
 
-> +#include <linux/i2c.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info stef48h28_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +    .format[PSC_CURRENT_IN] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +    .format[PSC_TEMPERATURE] = direct,
-> +    .m[PSC_VOLTAGE_IN] = 50,
-
-Replace spaces with tabs. Also, _please_ run checkpatch on your patches
-because it would have told you.
-
-WARNING: please, no spaces at the start of a line
-#285: FILE: drivers/hwmon/pmbus/stef48h28.c:17:
-+    .format[PSC_CURRENT_IN] = direct,$
-
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 0,
-> +	.m[PSC_VOLTAGE_OUT] = 50,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 0,
-> +	.m[PSC_CURRENT_IN] = 100,
-> +	.b[PSC_CURRENT_IN] = 0,
-> +	.R[PSC_CURRENT_IN] = 0,
-> +	.m[PSC_CURRENT_OUT] = 100,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_CURRENT_OUT] = 0,
-> +	.m[PSC_POWER] = 9765,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = -3,
-> +	.m[PSC_TEMPERATURE] = 25,
-> +	.b[PSC_TEMPERATURE] = 500,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN
-> +	    | PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-> +	    | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT
-> +};
-> +
-> +static int stef48h28_probe(struct i2c_client *client)
-> +{
-> +	return pmbus_do_probe(client, &stef48h28_info);
-> +}
-> +
-> +static const struct i2c_device_id stef48h28_id[] = {
-> +	{"stef48h28"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, stef48h28_id);
-> +
-> +static const struct of_device_id __maybe_unused stef48h28_of_match[] = {
-> +	{.compatible = "st,stef48h28"},
-> +	{}
-> +};
-> +
-> +/* This is the driver that will be inserted */
-
-I don't know why people like this comment. It is pointless. Please remove.
-
-Thanks,
 Guenter
 
-> +static struct i2c_driver stef48h28_driver = {
-> +	.driver = {
-> +		   .name = "stef48h28",
-> +		   .of_match_table = of_match_ptr(stef48h28_of_match),
-> +		   },
-> +	.probe = stef48h28_probe,
-> +	.id_table = stef48h28_id,
-> +};
-> +
-> +module_i2c_driver(stef48h28_driver);
-> +
-> +MODULE_AUTHOR("Charles Hsu <hsu.yungteng@gmail.com>");
-> +MODULE_DESCRIPTION("PMBus driver for ST stef48h28");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS("PMBUS");
