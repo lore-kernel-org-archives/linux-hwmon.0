@@ -1,113 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F1F3806B2;
-	Mon, 12 Jan 2026 18:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65144387371
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 18:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768241316; cv=none; b=INSGD0/JHgg6wTH1W8y/5gvPr0Vk9ePv61RiIZlT7YRa0MRR9G03JOuyx41Z4TVVNyp0gbL+SK3tR+xWjWUH6mJgvjFR+H0+RL3aNnfBu48qtM2s94qjbl/z7X6azXiTQgJrMYrInTHkXg+KxpddHWsMz5kJPui9JRmIbL0RCU0=
+	t=1768241848; cv=none; b=S78tpHmbEzHlJNET4/HvevgU6+RtCOKoGSO4iSUQ4mtZGjDZkwM4nIzpzJP+KbRQsrlv0AE+L7kqAYQK16bql2+J+HfuogGuLwymJPiDAOHX+gb5m6jmF9mPGrA0abWTUhnYzZyKzrgqpUoY767pFIwMDbeBqRdgypczJCqfvGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768241316; c=relaxed/simple;
-	bh=NR0XOa5HitdinUSXh4ltE4RrUkyHrgEI0FBzFid4Fpk=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=iwrPYrlGcevUx8ihhbVAnUmlTvRk1XcryCOXckDOhetFMJIe7TRv4sR0Y3R0usNjOlHioajU6HPRttJnky2pPkahqPLi31T6FoBMS7AYl7w/z6Dul0b0QWvynFxG+sp2w59DOCF3Cl2i6cKLOycMUJd4lfE6Gw6QgTuf5ruMG4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+eYnnjO; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1768241848; c=relaxed/simple;
+	bh=HZWb8NTGhICIn9r0/1N4Kr1/FZT+Sn4S6zblZ/laKMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tVG/aUXE+p94T4DRNvRvoKbPyLGd2rH356d9hpMm81Q9+bF0hCpVU5i+gA6KulYTeyAH+7LxlFQcTxaVOfQn6FOfJjPaginw4enuSeid/JXd71S8FSW40mYKbn8FO6h0U9E8MeOK77tRlUy8WpDy9ZYaZ8ki5s/p8Psszkd4bJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GjUYMmq6; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+eYnnjO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768241316; x=1799777316;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=NR0XOa5HitdinUSXh4ltE4RrUkyHrgEI0FBzFid4Fpk=;
-  b=E+eYnnjOs7+ER9kkKwTOjBgqBjgcznYFfmRJFF4i+bR8aFUxeSnjkuFN
-   Un9Ghv/bVxMdD0SipHRChmxCg4lAdn5UYtglEge3Ru76/OG7RXERpcPWf
-   b1nf04qRxWsm8oLt8CTwhUafB2OSSKQRLfWAxVu59saovtmSxTP/38vvG
-   Sxoz6RmjA89FRy0RQsbVoupkME6MM0XrfJp+wtw8C66tR5552PVmRwkVU
-   aTtr/IGoHq+D8K2s/0tIN8mpJFypLomJ+eSmux8hojBEFxXg9L3KDkUjo
-   tP0i741zkKg63RFbeh88LHHkOYNpiTHuepwX5R43rrmdqsA1uhSFf711I
-   g==;
-X-CSE-ConnectionGUID: UXgm2ZkfShapF+fwobQqzw==
-X-CSE-MsgGUID: KR6bEYjHR4ONvkGsf8ssxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="68727017"
-X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="68727017"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 10:08:35 -0800
-X-CSE-ConnectionGUID: kejYe3AwT3u7402cqvwf8A==
-X-CSE-MsgGUID: q14/Xq31SyCXzoHTKL7bMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="208629735"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.111])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 10:08:32 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 12 Jan 2026 20:08:29 +0200 (EET)
-To: Krishna Chomal <krishna.chomal108@gmail.com>
-cc: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    Hans de Goede <hansg@kernel.org>, linux@roeck-us.net, 
-    platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GjUYMmq6"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a07f8dd9cdso47329885ad.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 10:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768241846; x=1768846646; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EtGlqg5k06i3Wt6eqTAnbJ1drNbM/2MSyECysgkVtSA=;
+        b=GjUYMmq6ihpSNNICeV8pA9aAnEwbo7l5+C1FcMLtFJkog3GMNjZS4b+3gKO2I+kcAG
+         G5xp1Z9cm3cNSrgWtcknFTtzEsEU6QHytB+8jouGSBN3HwUtlL3uvF3fAfuUIQlwJ6dx
+         xMDiVzBIH4uBIYyb7Vay7ibt9JmDcXKj/UYI7++pjCiuHkPEaT3kK2dARWiBR0HSbQkU
+         +0Y3xZgv5VJnja7qmmSwyl9dvO3Y+l7fc57oiZKCkexMUxS7jHlP+tymQ5PbsutffLVH
+         XrgXGQsx3xMDY8/polrh2VZ8jCg28y0A1gfT2m7xpPEUoYwX7tWJXIZKjnHP4qeNiNip
+         nBCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768241846; x=1768846646;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EtGlqg5k06i3Wt6eqTAnbJ1drNbM/2MSyECysgkVtSA=;
+        b=ad95O6Ag+oVhhWKeinXLXmCBKdcJeX7QeD95KXMEZOw5DodbVKqLX10H6zf2jm23eO
+         uhkwgpjZAWzCZB9Hwbn/edHlKldQHASizrPUMyofgTdjf6h9WxK7tWd/V4lxJOjzu92m
+         SaaDWHNGD05upsAXmIQIag0mufeR5iuWwmU7KE/z0Wl8YNaI2bVHFzays60GVb6SiTMv
+         GOLy+3M4Fy+aweDA39xTOdMtN16Bxj4xRNHK6RYQP2W57I/Xd+VFA3rdLgo7xwXKBh+I
+         QgZit652Qwa3CAV0/WqpZj231OPE6JhDZaQbAGEkzUPLPvax94AA2V/Pn7Xp8IuiU8Sm
+         MMwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWw/UYI5GaFY+LWACwjGfPnz3To3b3rw49EDGFiYpQJpvdP/3TgYXpYKbVJwV0v3XY1ckzzBDDiMEKHQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDKMX6Qt5R/AsF43HvS24eKraYrOg1Nt8bcHMFQ/NgRcrASw8e
+	1Gfn6whXbBq53uMHc0wYhJInhuaabSfWnCTWyak5WNmNiD7g0yooGZJG
+X-Gm-Gg: AY/fxX5C8uUSFpPx+VkiMPhpJfOLLaKh0HvnNDiQpjhPyGS9t1asg4+3YGTD+Fq+I2N
+	szAmUY9fuSVIpbsNBsRzJUP8ZQrVpGNmLNJk21SpFmA9rSAIqRWANJgRxtCrhoinKG3JIigZZmY
+	rm00n3njTQadc6Vufg85Bn2oEYKfVKNlCh7E5sQoTYJtXOn6ODImzaxjZ2S4S9pyr4zjvYaFylx
+	MdWanvYO80qcJt4LQfRRl+IRQQi2VGDOtuPuMbS84g/7KcBiptUnIFcUxoKtqfB+bJQjuL/tlKJ
+	LXynyb6UyBrrGnARO6kgCN5Qe+HY5DIr/fmlGITbp5IwlOTTaqy+Dx2BT7/tPSwF0/9NWEdcZqo
+	q0LKSE1w23aMK6djXn2lIBPr6ZTlPZkspHYCMcedIfYS1sksjaNuSzFzsUWAi4nevAnfh8jgCQy
+	2KC+TmZe3gQ6mfM0J7/3g=
+X-Google-Smtp-Source: AGHT+IH67SsAmDW+XdcDdNkuZHCuju5RGcFncESFWYkzYZSMHpAuj4JZCKO+lnsTd85qUcAxrMy/lg==
+X-Received: by 2002:a17:903:1b6b:b0:2a3:c667:e0a0 with SMTP id d9443c01a7336-2a3ee47dee7mr204871275ad.29.1768241845516;
+        Mon, 12 Jan 2026 10:17:25 -0800 (PST)
+Received: from archlinux ([2405:201:1b:225c:eb9d:1fc0:f95c:bd90])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cb2debsm182203665ad.65.2026.01.12.10.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 10:17:25 -0800 (PST)
+Date: Mon, 12 Jan 2026 23:47:15 +0530
+From: Krishna Chomal <krishna.chomal108@gmail.com>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: Hans de Goede <hansg@kernel.org>, linux@roeck-us.net, 
+	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2 1/2] platform/x86: hp-wmi: add manual fan control for
  Victus S models
-In-Reply-To: <aWUvvzDCtVCOaBwq@archlinux>
-Message-ID: <f6ca0445-431a-f9d7-eeee-0d437efa3c76@linux.intel.com>
-References: <20251225142310.204831-1-krishna.chomal108@gmail.com> <20251230145053.516196-1-krishna.chomal108@gmail.com> <20251230145053.516196-2-krishna.chomal108@gmail.com> <ce48f7b8-7d88-266f-ca8d-6af3b01815db@linux.intel.com>
+Message-ID: <aWU5Mf89hTifpewY@archlinux>
+References: <20251225142310.204831-1-krishna.chomal108@gmail.com>
+ <20251230145053.516196-1-krishna.chomal108@gmail.com>
+ <20251230145053.516196-2-krishna.chomal108@gmail.com>
+ <ce48f7b8-7d88-266f-ca8d-6af3b01815db@linux.intel.com>
  <aWUvvzDCtVCOaBwq@archlinux>
+ <f6ca0445-431a-f9d7-eeee-0d437efa3c76@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-100285923-1768241309=:1026"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6ca0445-431a-f9d7-eeee-0d437efa3c76@linux.intel.com>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Jan 12, 2026 at 08:08:29PM +0200, Ilpo Järvinen wrote:
+>On Mon, 12 Jan 2026, Krishna Chomal wrote:
+>
+>> On Mon, Jan 12, 2026 at 05:13:05PM +0200, Ilpo Järvinen wrote:
+>> > On Tue, 30 Dec 2025, Krishna Chomal wrote:
+>> >
+>> [snip]
+>> > >  #include <linux/string.h>
+>> > >  #include <linux/dmi.h>
+>> > > +#include <linux/fixp-arith.h>
+>> > > +#include <linux/limits.h>
+>> > > +#include <linux/minmax.h>
+>> > > +#include <linux/compiler_attributes.h>
+>> > >
+>> [snip]
+>
+>Hmm, these should be ordered alphabetically and if the existing one
+>aren't, try your best (or add a patch to fix the order for all).
+>
 
---8323328-100285923-1768241309=:1026
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Ok, then I will add a separate patch to this series to fix the ordering
+for all includes.
 
-On Mon, 12 Jan 2026, Krishna Chomal wrote:
+>> > > +
+>> > > +struct victus_s_fan_table_header {
+>> > > +	u8 unknown;
+>> > > +	u8 num_entries;
+>> > > +} __packed;
+>> >
+>> > Please add #include for __packed.
+>> >
+>>
+>> __packed is defined in compiler_attributes.h, which is included in this
+>> patch. Please let me know if there are any other headers that should be
+>> included.
+>
+>Sorry, I don't know why I didn't notice it (too much reviewing in a row or
+>too much multi-tasking I guess :-)).
+>
 
-> On Mon, Jan 12, 2026 at 05:13:05PM +0200, Ilpo J=C3=A4rvinen wrote:
-> > On Tue, 30 Dec 2025, Krishna Chomal wrote:
-> >=20
-> [snip]
-> > >  #include <linux/string.h>
-> > >  #include <linux/dmi.h>
-> > > +#include <linux/fixp-arith.h>
-> > > +#include <linux/limits.h>
-> > > +#include <linux/minmax.h>
-> > > +#include <linux/compiler_attributes.h>
-> > >=20
-> [snip]
-
-Hmm, these should be ordered alphabetically and if the existing one=20
-aren't, try your best (or add a patch to fix the order for all).
-
-> > > +
-> > > +struct victus_s_fan_table_header {
-> > > +=09u8 unknown;
-> > > +=09u8 num_entries;
-> > > +} __packed;
-> >=20
-> > Please add #include for __packed.
-> >=20
->=20
-> __packed is defined in compiler_attributes.h, which is included in this
-> patch. Please let me know if there are any other headers that should be
-> included.
-
-Sorry, I don't know why I didn't notice it (too much reviewing in a row or=
-=20
-too much multi-tasking I guess :-)).
-
-
---=20
- i.
-
---8323328-100285923-1768241309=:1026--
+No problem, I understand. Thanks for the quick feedback.
