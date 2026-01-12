@@ -1,178 +1,407 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B079365A0E
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783F0364E87;
+	Mon, 12 Jan 2026 17:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768235808; cv=none; b=Idcw2n5CB7kOQnB5HOLEsNofQnOsHKWnxYRlBl/XKtYCdWn2PtPz3BmhheLeL55sUV9ThoS3WCKBQdQee+a0SfzfV7CygyI/6Y5aeaZIprFJB+xto6EHAEwDehT6q/rcUGQpMS5v50Q+L1OCyt04vjyj/ACX2IU4xJ/IG18bObI=
+	t=1768238725; cv=none; b=ahZyxfgzh034cVJouvDoT5NWvMXAmuMytXoATHVzty5k01asMMlMpBUeoODEo0LY7k2CAabPJBfVc5sd7zb1TTdmIbSNjbKrTpesGhJQ2lfXyAoushDb9FL/D1R3FHs5RsrICcTCwSYDpDLa/9Ys9mclsxTsbY0V6159IjNErCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768235808; c=relaxed/simple;
-	bh=v52Ky1wOh5BZoi029NmMPPgmN3RaD5fSz//WIwq6+Io=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XAZ1qmwqEfAkH/+n4U2GFjxtQuV2X9lanAfA1/V8UkgehJK+Ibt+qUlHHlHdbIoQ1i/ni1IWFZglGLxF3VaHauU5YME8Ccpt1Z4Y2E8yj9LlHdCbCKlXjb9KUr1tkfzQiQEhdz4KsOfrsI6MSQK6jrWExdVLPuSzuaYueonNC8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRf9OpJS; arc=none smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768238725; c=relaxed/simple;
+	bh=QVnU8ndV4X5BJ/myVlXmIlKSbhPB4GakGfTXyL7GW1E=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=CWRM5WdX2lOVClu1qx6mtMZ0i/W5NqeFcwZQN6jIEiMvWMGL3hlmK768dmdo+IFv6581kn7X2sODquW+xwFUBvN1p5xxJTekl2wVxsxRAwr85rK6lkDzOD6woylwPQ7gMUDYqv+Tkp2FD3DNkE1+Gqa5CfL23stipWsZraz04n4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bFO5D7c6; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRf9OpJS"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2ae2eb49b4bso7802112eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768235806; x=1768840606; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qEwj3Z1+yz4D+602dS3e3VxMgHdpbmLRd9kEAo0I53M=;
-        b=CRf9OpJSEKz6ybvT3RhLLoS+uTMAx8lGLXsPpQD7t/pXfMBBTUuA1y/tgEuYnuogPm
-         +0LDJKYLo3doYlFUzYTzz7AIN0PWN9goZoOOPzCZh/EuHB5WbNjm9rsfVBmXw9tacBvc
-         CPQHXS0pYsp304U5e+AZOSopu3Osub5o6saMlGIBHcw0PAk4KT+L9z+Yw7mfd7+3LA0L
-         cXchISHXHZLuqf0U1js7hfnzKz/Qx44zNEFqjy9FL1wnvhIwRVygctolPEmUCGNfY2dG
-         rTydFlUEmnWrTrpMbaFG9YcbhGxqtoSZIViuq/wHeC+xGrOAz7QNFu6rNkdDRmKPzeC7
-         6fxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768235806; x=1768840606;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qEwj3Z1+yz4D+602dS3e3VxMgHdpbmLRd9kEAo0I53M=;
-        b=PxtXLlsBNfbjT+wgrw+tXBDc8cTncIy2ezZ1LGlHfUSf49SQbjlsLPGmhfsBjnyH11
-         sSdjkpryUKOF6AEhCYaGjDco+pO2n8PYYkJdlvUUaczx07a16xf3seJ2ey+2hFmuyFQk
-         i7tUHCAzR6gU4IPgjSnsvGgq59p66V8wd1YPFp5vd1drtICOCcgQpGIls0MCac4ZqCdw
-         013Ij2rp5reGYeia3Ivh5ZgsY2K2zaMQ4i9m4AfPPEoZjlzFBAmZWc+nSOnYHHBebBOo
-         GK/FmHbk5qVKynVPksI8gzKkTviWFxnwawgiycwCCUU3XEcfZpFHvVbgegpFHcjEtNzL
-         r1lQ==
-X-Gm-Message-State: AOJu0YxZxEkqlMuVJsif5L0sRizBl8L/b+94n+Iak/vy96Rnb9pWEA0v
-	vRHtplQF+h79kS6wpoSkMmQj5/sWjwwatTp2mmc1Gv97mwTEH4YDJVfP
-X-Gm-Gg: AY/fxX5Q90bpob3jQN2MKVt44hTD3PyQ+ndCO9d0uiIbPZ06baCb0K5vp4oNhlhmtwd
-	UfD8gEMI+aXx2DU9ViBeiQWMsxXXMWQ9WMFfCRc7dmJS+JveN+cJ7+4JPcAC5/KbbKg96Gzb1c5
-	m/eGJ2wMKXs3FteDVpIMAjjahST3FSDj8kmBtM62KkQFnsXWfv13LYXtEMbFNYICnbpAME79xRf
-	GwVKkJXfWj4ucK2rUs/DPBVjZDD4lV+KC2291ofNl6wZpLRYm2HscMkKcs2xgCuqIzqV/gFfoi6
-	9Yab6yFAeaVumsZ++V039znUxy1UhkErt9tzqQC3aGP8lQ81TPd27jBm1vonym8INY6NQ0mkiXI
-	Qob8Dbh5Hp8M/M2ppzFUE6ogKfIZkZ07RzPH2AAL+wG9T0IJ991SlsEndvZyv8TTAv8UoKmg64A
-	aEH4Q39cHEr+zjeZCwaCqjSze1s0O4IIRLy2cXFN9OZN3E6z3lNGHZkVXiAK7g
-X-Google-Smtp-Source: AGHT+IErz7eSUttdzFHG3zYzPJcQyaJDJQ/fjdBZZZyDn9DDCbg0cFuBnYW9OC9gKOPwBRUDUbpW0g==
-X-Received: by 2002:a05:693c:2115:b0:2ac:2c08:9017 with SMTP id 5a478bee46e88-2b17d295122mr10547622eec.28.1768235806512;
-        Mon, 12 Jan 2026 08:36:46 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b0b2bsm15861092eec.23.2026.01.12.08.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 08:36:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6da5b1c1-bbe5-40a8-8363-3213265fe848@roeck-us.net>
-Date: Mon, 12 Jan 2026 08:36:45 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bFO5D7c6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768238723; x=1799774723;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=QVnU8ndV4X5BJ/myVlXmIlKSbhPB4GakGfTXyL7GW1E=;
+  b=bFO5D7c6JAGtXvrfdcNRt0ZhaYuB6HIimiFZg2v1RUYnULkxPyLEzpg7
+   XxVdnqx+ORXHwLNGESRaezBvHn54jHjfn57auq1umQ+9T3xAH+5G26FTw
+   qbSSVLydK6X8pHrGnnXA7USAaNo64uRXwxr1ptwZXqzWgVv76k7RfLDEm
+   CHEkdDtiHifvH8MSn4p/Do3+Hr/ExTxJRysZYzQsFnNLyCy0fg1bpZw6c
+   Pz0au1tFrFCm0TCCKN6WA7IDgRfBGStTkzMh1Y0t2beTkB8f9VzTLxJR7
+   aMCxdefryDACkJlbE+4PXLmlFLfnq+q4P/l/m946t7oQYaUX22dxVjXK8
+   A==;
+X-CSE-ConnectionGUID: dneGd9zmQCmsn1T3ikE/DQ==
+X-CSE-MsgGUID: V43G6NkmRbOlZYdGfih6FA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80239267"
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="80239267"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 09:25:22 -0800
+X-CSE-ConnectionGUID: 5rGmMs1xRnue0NevFXKHZw==
+X-CSE-MsgGUID: Ir/Esw3JSg+2xchGX1TfbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
+   d="scan'208";a="234852921"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.111])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 09:25:19 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 12 Jan 2026 19:25:15 +0200 (EET)
+To: Rong Zhang <i@rong.moe>
+cc: Mark Pearson <mpearson-lenovo@squebb.ca>, 
+    "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, 
+    Hans de Goede <hansg@kernel.org>, 
+    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+    Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v7 5/7] platform/x86: lenovo-wmi-capdata: Add support
+ for Fan Test Data
+In-Reply-To: <20251125194959.157524-6-i@rong.moe>
+Message-ID: <64d3f499-baa3-5039-dc87-c3581623ce8c@linux.intel.com>
+References: <20251125194959.157524-1-i@rong.moe> <20251125194959.157524-6-i@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
- errors
-To: Armin Wolf <W_Armin@gmx.de>, Tinsae Tadesse <tinsaetadesse2015@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
- <d08f3edd-f5bd-4e6b-b174-e768d42df281@gmx.de>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <d08f3edd-f5bd-4e6b-b174-e768d42df281@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-1045187270-1768238715=:1026"
 
-On 1/10/26 14:27, Armin Wolf wrote:
-> Am 10.01.26 um 18:19 schrieb Tinsae Tadesse:
-> 
->> SPD5118 DDR5 temperature sensors may be temporarily unavailable
->> during s2idle resume. Ignore temporary -ENXIO and -EIO errors during resume and allow
->> register synchronization to be retried later.
-> 
-> Hi,
-> 
-> do you know if the error is caused by the SPD5118 device itself or by the underlying
-> i2c controller? Please also share the output of "acpidump" and the name of the i2c
-> controller used to communicate with the SPD5118.
-> 
->> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
->> ---
->>   drivers/hwmon/spd5118.c | 8 +++++++-
->>   1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
->> index 5da44571b6a0..ec9f14f6e0df 100644
->> --- a/drivers/hwmon/spd5118.c
->> +++ b/drivers/hwmon/spd5118.c
->> @@ -512,9 +512,15 @@ static int spd5118_resume(struct device *dev)
->>   {
->>       struct spd5118_data *data = dev_get_drvdata(dev);
->>       struct regmap *regmap = data->regmap;
->> +    int ret;
->>       regcache_cache_only(regmap, false);
->> -    return regcache_sync(regmap);
->> +    ret = regcache_sync(regmap);
->> +    if(ret == -ENXIO || ret == -EIO) {
->> +        dev_warn(dev, "SPD hub not responding on resume (%d), deferring init\n", ret);
->> +        return 0;
->> +    }
-> 
-> The specification says that the SPD5118 might take up to 10ms to initialize its i2c interface
-> after power on. Can you test if simply waiting for 10ms before syncing the regcache solves this
-> issue?
-> 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-It seems to be highly unlikely that this code executes within 10ms of powering on the memory.
+--8323328-1045187270-1768238715=:1026
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Guenter
+On Wed, 26 Nov 2025, Rong Zhang wrote:
 
-> Thanks,
-> Armin Wolf
-> 
->> +    return ret;
->>   }
->>   static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
-> 
+> Add support for LENOVO_FAN_TEST_DATA WMI data block. Provides an
+> interface for querying the min/max fan speed RPM (reference data) of a
+> given fan ID.
+>=20
+> This interface is optional. Hence, it does not bind to lenovo-wmi-other
+> and is not registered as a component for the moment. Appropriate binding
+> will be implemented in the subsequent patch.
+>=20
+> Signed-off-by: Rong Zhang <i@rong.moe>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> ---
+> Changes in v7:
+> - Rearrange lwmi_cd_fan_list_alloc_cache() to drop gotos (thanks Ilpo
+>   J=C3=A4rvinen)
+> - Move the declarations of __free()-managed variablesto where thet are
+>   assigned (ditto)
+> - Prevent back-and-forth changes (ditto)
+> - Improve the readablity of struct definition (ditto)
+> - Emit unaligned access to the WMI block
+> - Properly calculate array index when we truncate the data
+>=20
+> Changes in v4:
+> - Rebase on top of changes made to [PATCH v4 3/7]
+> - Do not register it as a component until [PATCH v4 6/7]
+>=20
+> Changes in v2:
+> - Reword documentation
+> ---
+>  .../wmi/devices/lenovo-wmi-other.rst          | 17 ++++
+>  drivers/platform/x86/lenovo/wmi-capdata.c     | 96 +++++++++++++++++++
+>  drivers/platform/x86/lenovo/wmi-capdata.h     |  7 ++
+>  3 files changed, 120 insertions(+)
+>=20
+> diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documentati=
+on/wmi/devices/lenovo-wmi-other.rst
+> index fcad595d49af..821282e07d93 100644
+> --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
+> +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> @@ -62,6 +62,13 @@ The following firmware-attributes are implemented:
+>   - ppt_pl2_sppt: Platform Profile Tracking Slow Package Power Tracking
+>   - ppt_pl3_fppt: Platform Profile Tracking Fast Package Power Tracking
+> =20
+> +LENOVO_FAN_TEST_DATA
+> +-------------------------
+> +
+> +WMI GUID ``B642801B-3D21-45DE-90AE-6E86F164FB21``
+> +
+> +The LENOVO_FAN_TEST_DATA interface provides reference data for self-test=
+ of
+> +cooling fans.
+> =20
+>  WMI interface description
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> @@ -115,3 +122,13 @@ data using the `bmfdec <https://github.com/pali/bmfd=
+ec>`_ utility:
+>      [WmiDataId(3), read, Description("Data Size.")] uint32 DataSize;
+>      [WmiDataId(4), read, Description("Default Value"), WmiSizeIs("DataSi=
+ze")] uint8 DefaultValue[];
+>    };
+> +
+> +  [WMI, Dynamic, Provider("WmiProv"), Locale("MS\\0x409"), Description("=
+Definition of Fan Test Data"), guid("{B642801B-3D21-45DE-90AE-6E86F164FB21}=
+")]
+> +  class LENOVO_FAN_TEST_DATA {
+> +    [key, read] string InstanceName;
+> +    [read] boolean Active;
+> +    [WmiDataId(1), read, Description("Mode.")] uint32 NumOfFans;
+> +    [WmiDataId(2), read, Description("Fan ID."), WmiSizeIs("NumOfFans")]=
+ uint32 FanId[];
+> +    [WmiDataId(3), read, Description("Maximum Fan Speed."), WmiSizeIs("N=
+umOfFans")] uint32 FanMaxSpeed[];
+> +    [WmiDataId(4), read, Description("Minumum Fan Speed."), WmiSizeIs("N=
+umOfFans")] uint32 FanMinSpeed[];
+> +  };
+> diff --git a/drivers/platform/x86/lenovo/wmi-capdata.c b/drivers/platform=
+/x86/lenovo/wmi-capdata.c
+> index 08a78dc490f6..9fed162abd17 100644
+> --- a/drivers/platform/x86/lenovo/wmi-capdata.c
+> +++ b/drivers/platform/x86/lenovo/wmi-capdata.c
+> @@ -13,6 +13,10 @@
+>   * attribute has multiple pages, one for each of the thermal modes manag=
+ed by
+>   * the Gamezone interface.
+>   *
+> + * Fan Test Data includes the max/min fan speed RPM for each fan. This i=
+s
+> + * reference data for self-test. If the fan is in good condition, it is =
+capable
+> + * to spin faster than max RPM or slower than min RPM.
+> + *
+>   * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
+>   *   - Initial implementation (formerly named lenovo-wmi-capdata01)
+>   *
+> @@ -45,6 +49,7 @@
+> =20
+>  #define LENOVO_CAPABILITY_DATA_00_GUID "362A3AFE-3D96-4665-8530-96DAD5BB=
+300E"
+>  #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39B3BE01=
+8154"
+> +#define LENOVO_FAN_TEST_DATA_GUID "B642801B-3D21-45DE-90AE-6E86F164FB21"
+> =20
+>  #define ACPI_AC_CLASS "ac_adapter"
+>  #define ACPI_AC_NOTIFY_STATUS 0x80
+> @@ -52,6 +57,7 @@
+>  enum lwmi_cd_type {
+>  =09LENOVO_CAPABILITY_DATA_00,
+>  =09LENOVO_CAPABILITY_DATA_01,
+> +=09LENOVO_FAN_TEST_DATA,
+>  };
+> =20
+>  #define LWMI_CD_TABLE_ITEM(_type)=09=09\
+> @@ -66,6 +72,7 @@ static const struct lwmi_cd_info {
+>  } lwmi_cd_table[] =3D {
+>  =09LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_00),
+>  =09LWMI_CD_TABLE_ITEM(LENOVO_CAPABILITY_DATA_01),
+> +=09LWMI_CD_TABLE_ITEM(LENOVO_FAN_TEST_DATA),
+>  };
+> =20
+>  struct lwmi_cd_priv {
+> @@ -82,6 +89,7 @@ struct cd_list {
+>  =09union {
+>  =09=09DECLARE_FLEX_ARRAY(struct capdata00, cd00);
+>  =09=09DECLARE_FLEX_ARRAY(struct capdata01, cd01);
+> +=09=09DECLARE_FLEX_ARRAY(struct capdata_fan, cd_fan);
+>  =09};
+>  };
+> =20
+> @@ -121,6 +129,10 @@ void lwmi_cd_match_add_all(struct device *master, st=
+ruct component_match **match
+>  =09=09return;
+> =20
+>  =09for (i =3D 0; i < ARRAY_SIZE(lwmi_cd_table); i++) {
+> +=09=09/* Skip sub-components. */
+> +=09=09if (lwmi_cd_table[i].type =3D=3D LENOVO_FAN_TEST_DATA)
+> +=09=09=09continue;
+> +
+>  =09=09component_match_add(master, matchptr, lwmi_cd_match,
+>  =09=09=09=09    (void *)&lwmi_cd_table[i].type);
+>  =09=09if (IS_ERR(*matchptr))
+> @@ -200,6 +212,9 @@ EXPORT_SYMBOL_NS_GPL(lwmi_cd00_get_data, "LENOVO_WMI_=
+CD");
+>  DEF_LWMI_CDXX_GET_DATA(cd01, LENOVO_CAPABILITY_DATA_01, struct capdata01=
+);
+>  EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD");
+> =20
+> +DEF_LWMI_CDXX_GET_DATA(cd_fan, LENOVO_FAN_TEST_DATA, struct capdata_fan)=
+;
+> +EXPORT_SYMBOL_NS_GPL(lwmi_cd_fan_get_data, "LENOVO_WMI_CD");
+> +
+>  /**
+>   * lwmi_cd_cache() - Cache all WMI data block information
+>   * @priv: lenovo-wmi-capdata driver data.
+> @@ -223,6 +238,9 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *priv)
+>  =09=09p =3D &priv->list->cd01[0];
+>  =09=09size =3D sizeof(priv->list->cd01[0]);
+>  =09=09break;
+> +=09case LENOVO_FAN_TEST_DATA:
+> +=09=09/* Done by lwmi_cd_alloc() =3D> lwmi_cd_fan_list_alloc_cache(). */
+> +=09=09return 0;
+>  =09default:
+>  =09=09return -EINVAL;
+>  =09}
+> @@ -245,6 +263,72 @@ static int lwmi_cd_cache(struct lwmi_cd_priv *priv)
+>  =09return 0;
+>  }
+> =20
+> +/**
+> + * lwmi_cd_fan_list_alloc_cache() - Alloc and cache Fan Test Data list
+> + * @priv: lenovo-wmi-capdata driver data.
+> + * @listptr: Pointer to returned cd_list pointer.
+> + *
+> + * Return: count of fans found, or an error.
+> + */
+> +static int lwmi_cd_fan_list_alloc_cache(struct lwmi_cd_priv *priv, struc=
+t cd_list **listptr)
+> +{
+> +=09struct cd_list *list;
+> +=09size_t size;
+> +=09u32 count;
+> +=09int idx;
+> +
+> +=09/* Emit unaligned access to u8 buffer with __packed. */
+> +=09struct cd_fan_block {
+> +=09=09u32 nr;
+> +=09=09u32 data[]; /* id[nr], max_rpm[nr], min_rpm[nr] */
+> +=09} __packed * block;
+> +
+> +=09union acpi_object *ret_obj __free(kfree) =3D wmidev_block_query(priv-=
+>wdev, 0);
+> +=09if (!ret_obj)
+> +=09=09return -ENODEV;
+> +
+> +=09if (ret_obj->type =3D=3D ACPI_TYPE_BUFFER) {
+> +=09=09block =3D (struct cd_fan_block *)ret_obj->buffer.pointer;
+> +=09=09size =3D ret_obj->buffer.length;
+> +
+> +=09=09count =3D size >=3D sizeof(*block) ? block->nr : 0;
+> +=09=09if (size < struct_size(block, data, count * 3)) {
+> +=09=09=09dev_warn(&priv->wdev->dev,
+> +=09=09=09=09 "incomplete fan test data block: %zu < %zu, ignoring\n",
+> +=09=09=09=09 size, struct_size(block, data, count * 3));
+> +=09=09=09count =3D 0;
+> +=09=09} else if (count > U8_MAX) {
 
++ limits.h
+
+--=20
+ i.
+
+> +=09=09=09dev_warn(&priv->wdev->dev,
+> +=09=09=09=09 "too many fans reported: %u > %u, truncating\n",
+> +=09=09=09=09 count, U8_MAX);
+> +=09=09=09count =3D U8_MAX;
+> +=09=09}
+> +=09} else {
+> +=09=09/*
+> +=09=09 * This is usually caused by a dummy ACPI method. Do not return an=
+ error
+> +=09=09 * as failing to probe this device will result in sub-master devic=
+e being
+> +=09=09 * unbound. This behavior aligns with lwmi_cd_cache().
+> +=09=09 */
+> +=09=09count =3D 0;
+> +=09}
+> +
+> +=09list =3D devm_kzalloc(&priv->wdev->dev, struct_size(list, cd_fan, cou=
+nt), GFP_KERNEL);
+> +=09if (!list)
+> +=09=09return -ENOMEM;
+> +
+> +=09for (idx =3D 0; idx < count; idx++) {
+> +=09=09/* Do not calculate array index using count, as it may be truncate=
+d. */
+> +=09=09list->cd_fan[idx] =3D (struct capdata_fan) {
+> +=09=09=09.id      =3D block->data[idx],
+> +=09=09=09.max_rpm =3D block->data[idx + block->nr],
+> +=09=09=09.min_rpm =3D block->data[idx + (2 * block->nr)],
+> +=09=09};
+> +=09}
+> +
+> +=09*listptr =3D list;
+> +=09return count;
+> +}
+> +
+>  /**
+>   * lwmi_cd_alloc() - Allocate a cd_list struct in drvdata
+>   * @priv: lenovo-wmi-capdata driver data.
+> @@ -270,6 +354,12 @@ static int lwmi_cd_alloc(struct lwmi_cd_priv *priv, =
+enum lwmi_cd_type type)
+>  =09case LENOVO_CAPABILITY_DATA_01:
+>  =09=09list_size =3D struct_size(list, cd01, count);
+>  =09=09break;
+> +=09case LENOVO_FAN_TEST_DATA:
+> +=09=09count =3D lwmi_cd_fan_list_alloc_cache(priv, &list);
+> +=09=09if (count < 0)
+> +=09=09=09return count;
+> +
+> +=09=09goto got_list;
+>  =09default:
+>  =09=09return -EINVAL;
+>  =09}
+> @@ -278,6 +368,7 @@ static int lwmi_cd_alloc(struct lwmi_cd_priv *priv, e=
+num lwmi_cd_type type)
+>  =09if (!list)
+>  =09=09return -ENOMEM;
+> =20
+> +got_list:
+>  =09ret =3D devm_mutex_init(&priv->wdev->dev, &list->list_mutex);
+>  =09if (ret)
+>  =09=09return ret;
+> @@ -396,6 +487,8 @@ static int lwmi_cd_probe(struct wmi_device *wdev, con=
+st void *context)
+> =20
+>  =09=09ret =3D component_add(&wdev->dev, &lwmi_cd_component_ops);
+>  =09=09goto out;
+> +=09case LENOVO_FAN_TEST_DATA:
+> +=09=09goto out;
+>  =09default:
+>  =09=09return -EINVAL;
+>  =09}
+> @@ -419,6 +512,8 @@ static void lwmi_cd_remove(struct wmi_device *wdev)
+>  =09case LENOVO_CAPABILITY_DATA_01:
+>  =09=09component_del(&wdev->dev, &lwmi_cd_component_ops);
+>  =09=09break;
+> +=09case LENOVO_FAN_TEST_DATA:
+> +=09=09break;
+>  =09default:
+>  =09=09WARN_ON(1);
+>  =09}
+> @@ -431,6 +526,7 @@ static void lwmi_cd_remove(struct wmi_device *wdev)
+>  static const struct wmi_device_id lwmi_cd_id_table[] =3D {
+>  =09{ LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_00) },
+>  =09{ LWMI_CD_WDEV_ID(LENOVO_CAPABILITY_DATA_01) },
+> +=09{ LWMI_CD_WDEV_ID(LENOVO_FAN_TEST_DATA) },
+>  =09{}
+>  };
+> =20
+> diff --git a/drivers/platform/x86/lenovo/wmi-capdata.h b/drivers/platform=
+/x86/lenovo/wmi-capdata.h
+> index a6d006ef458f..38af4c4e4ef4 100644
+> --- a/drivers/platform/x86/lenovo/wmi-capdata.h
+> +++ b/drivers/platform/x86/lenovo/wmi-capdata.h
+> @@ -26,6 +26,12 @@ struct capdata01 {
+>  =09u32 max_value;
+>  };
+> =20
+> +struct capdata_fan {
+> +=09u32 id;
+> +=09u32 min_rpm;
+> +=09u32 max_rpm;
+> +};
+> +
+>  struct lwmi_cd_binder {
+>  =09struct cd_list *cd00_list;
+>  =09struct cd_list *cd01_list;
+> @@ -34,5 +40,6 @@ struct lwmi_cd_binder {
+>  void lwmi_cd_match_add_all(struct device *master, struct component_match=
+ **matchptr);
+>  int lwmi_cd00_get_data(struct cd_list *list, u32 attribute_id, struct ca=
+pdata00 *output);
+>  int lwmi_cd01_get_data(struct cd_list *list, u32 attribute_id, struct ca=
+pdata01 *output);
+> +int lwmi_cd_fan_get_data(struct cd_list *list, u32 attribute_id, struct =
+capdata_fan *output);
+> =20
+>  #endif /* !_LENOVO_WMI_CAPDATA_H_ */
+>=20
+
+--8323328-1045187270-1768238715=:1026--
