@@ -1,334 +1,242 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617C53803ED
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 18:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2A429D27D
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 18:07:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768241043; cv=none; b=n5oGQVvvB15E/bVF+FAj+Os9qJkXuqJqxY99CUdfZVZkG1AfUoqtflpjiUuGmi22sDe8inpJCzDNkOwihIB5FfJif4ate3gxnzfnG+dvv7zqBIC+TniaKKM2Ue3Mn2Tc0HCwYTsjHRiH+NTsaNXWIdcduE4JH104zddZxx7CVGg=
+	t=1768241268; cv=none; b=CEHo0FE5g9WWll/p44NxImQ4yd1PQTBR4/TB25UFcE6hJAw/IarM4qg+TML8mZArrejuqXBB6n064PmaQXtMs+dj7NEdY0F9k1PbgY8cjoUakFza5t0hA4fC2XczKQn/f5Q3z7Tsm/7m5QxTZMZcjHXyszbIXrdGaywJKay/Sq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768241043; c=relaxed/simple;
-	bh=s0DyzuRoahq/948IDG6/4DfMllFeddohpgguBX6Q5Zw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWxRw37VPSLx3NYe5dO2Wb81UCpvoNaLFyLIyDjrht0Rq1BozBeFmiUpDhSCc3791FgXYlbSuUbm0ErSA56CMSVsrBA4EpmHQl9qDZsG6LJKXZSrStgdAUA6rgueXNKYOV3MjdHttqXPUVC0o8nm1TKgQWswENqobzMOHRpn9T0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+xLCkjw; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1768241268; c=relaxed/simple;
+	bh=GDmnYXdvHq4uW1Az2cjRJhxn2kOSku+cESL1B1kLI2s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WmANJkN5AEfYlNH+gG+xMOJRvp4H8bVhy02nr7kHsNye3FmsXgHU4kwgwIAKtJygE3H859PDP4TIGbfVFm7BzNdHjyJ+7oPUIFpFdFHLQ7/oXP0XZHClE9nwPUNp8X/Q2zVhy9pCcc8+VonFA2UiOUVbviDIYlOuNV3vbO3Hdpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=euthEPt+; arc=none smtp.client-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+xLCkjw"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34f634dbfd6so4800843a91.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 10:04:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="euthEPt+"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2b04fb5c7a7so6065063eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 10:07:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768241042; x=1768845842; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PHOdFCVwPg+cWYrkZjMT76zLSqbmskzKF7iiDprWkXM=;
-        b=Y+xLCkjwQ93q2fybjqeSGN84RYx/myhSlFJn8TxLik6/YFpZTME7/Lv0FPJ8SE/IwC
-         R0k1Rbg90iTmOSWu1aXYTh/3ZA6GNP7lFYNbGb4R5UIIluc2lYIRd4HZlPjSMZ+5dZFF
-         UTmUlIIa2l/WAj0Ofgwn4LHt2xRwlNDYUhmswh9ir20dmd9VK6w/2jT5QARZSAYZ35x0
-         MgKEwKNb45rVhzNTLu5iPBs3Xs5iFbgV1zqijZ0rFbEcRU6KCxPNmhaZAwPU0ar8r1AO
-         Txwtnd70PBNwdNot5TqCXq0XSLxe+5/SUr/VKpBJIH27+IuTFbqFTxbuIa2pb3nXUL7d
-         HHdA==
+        d=gmail.com; s=20230601; t=1768241266; x=1768846066; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLjh1P6W/4FZXrNde0M8mZ0vPLZ29HC+C16qi1BvzVA=;
+        b=euthEPt+JijU7HqBSmY+mMndMvGrXMPqW31nQUBsu/8ag7A2vvkTp9LC2u7h1QF6kd
+         3uiuuuuH4MniDabXMZFYr2sGYfXxhUp3ePIioKC5L9xL7VLVe70WE+GUdLAIKnmIh7cV
+         3XsQgwdhdGotyZIGF1RleMFczadZvei3V41kgFDhI/Vl6hq1+yj/Hi17YvenFa53Ur+E
+         OpmcTHiln0onXYQdWCE7Iy29cqvnRpYMo7nbOwOFq7IW8ss6f+shdAwhMmwE0jLqcXek
+         f3dtKN7QTzOwmePStpCKOQfIYfG6KM7cgi+/Yqj77YKc3TIyH+6r0XQmE9zNe3yzBt51
+         YD0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768241042; x=1768845842;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PHOdFCVwPg+cWYrkZjMT76zLSqbmskzKF7iiDprWkXM=;
-        b=nNoCGEPAhG2xeE41taWMLyS2dvzB2QOGvhNR29G1FE1p8L13DJXelHZw0WVFANpzTS
-         s7Q9ou8ls01MLONOM4gQX9Oy5BdRpspTcJzCBCVCWGUBlsTnoPOeAtBfQYNzXok7eUE8
-         HgJpmK/e28RjFPQJ94eojmwXcsTM6v5jjV3ivkkio8C2QGu0Os6m2uYZNDT04bEyR1kf
-         4A0DlpAFHxeUVEu7phCKRl5kE+XTDQQlgg5+j8r67qGvkluhoSn7Gh7V3Ukzb19ZI2Eh
-         06/pghKikKsTUqxCMiDVpcJ2LwF48AgCzH00GBgTk8Luf8+uxkQ+6VeKrZqKRvEVnMt8
-         6eZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOtNlcniN5IZubYDy6P76kduWICjls7b5xFG7iHYFiy+k87SXN5ty1Ljft11SfJtvWK8uIshNcQyAlqw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxu13O/7Y/B1PjWY0WPPSwqXwe/11cqP5PPDAc7vRZexkclzLOs
-	aognuCWdIPpx3daIEiv+YCcjf4RCukbUDEEWy5xDthwTdVX9KB1CT+ez
-X-Gm-Gg: AY/fxX4ksKgY39tJAKEsInjJGrvK4+cAiKih5rLW1XhEoAOatyoKStPvOrJKLfMdPMb
-	yxyjvBx2jz41j/wJk4AJyYCiEj4wdt3woPo3xpNEv91zE4u2SP48lzgnJ2TA+fhNwdjAUlXrUul
-	JxKNIfb5hsGuf0N/vKX/L0Tlcp4pj0IAKi33oSR/S7uKX85/lwYnIqtu+8FOwV0yYECL7+KTTvT
-	YTbJJe+iWzkWDatEV7io6YJ7eljuS4Eb7mUl03HxI07CofGofrDZVQYHWKbqlZEVjUuUXam9hDX
-	kEygX1pWD+9fH84odton01HrV8GPaNBorQO5qe6GqZN/2KvBXpHLFFCwOhryIs4KA5jA4p2+Gnn
-	vwldF+l6C0yXf/nzzqVolWUCsf3cDD0YXKPEJSTzoz3OGJs5nYnFnOR6FjsQIeB1yms7JYFgRcr
-	xCmDgr9GyHlSTHWgtW/jI=
-X-Google-Smtp-Source: AGHT+IG+4HLDxw75AREG9Cn7q0iZTkTuEpR+ouZIoe4nrPNgxO9/2Yto8IAno89RDPTKdWTsaRJEXQ==
-X-Received: by 2002:a17:90b:5830:b0:338:3789:2e7b with SMTP id 98e67ed59e1d1-34f68c4cdcfmr14902163a91.13.1768241041645;
-        Mon, 12 Jan 2026 10:04:01 -0800 (PST)
-Received: from archlinux ([2405:201:1b:225c:eb9d:1fc0:f95c:bd90])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-350fd7b8e1bsm7135a91.8.2026.01.12.10.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 10:04:01 -0800 (PST)
-Date: Mon, 12 Jan 2026 23:33:52 +0530
-From: Krishna Chomal <krishna.chomal108@gmail.com>
-To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc: Hans de Goede <hansg@kernel.org>, linux@roeck-us.net, 
-	platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] platform/x86: hp-wmi: add manual fan control for
- Victus S models
-Message-ID: <aWUvvzDCtVCOaBwq@archlinux>
-References: <20251225142310.204831-1-krishna.chomal108@gmail.com>
- <20251230145053.516196-1-krishna.chomal108@gmail.com>
- <20251230145053.516196-2-krishna.chomal108@gmail.com>
- <ce48f7b8-7d88-266f-ca8d-6af3b01815db@linux.intel.com>
+        d=1e100.net; s=20230601; t=1768241266; x=1768846066;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jLjh1P6W/4FZXrNde0M8mZ0vPLZ29HC+C16qi1BvzVA=;
+        b=xBZCLqECrNU3IO2NDjRedNMXIzxLhq03pcs3IAMN0liDxGrEMmOqWEcKxSSl6tNoYG
+         4EbJPVIPDDizysZpq1MrJKIRaULowksL4e6KLAK/Za5VRuCH15SHsWu5modlJj4unPQ6
+         Lc5f1I+m8/6CDTFChtDamvQH39zXpODpkFXopjz1JVyXZLSMcxXorxjyLlatJNsEQ4/B
+         Q0vaaNkN5dim0pYi4RDlcf+hDa06idhbzaZoN0KnEncIGkJBV3babD0Be1xQm1Hidk4a
+         4HEiX8Rn6t+vPIlZfFpAEfGX3NocAyCo8albcQKzrRjjt1sEb1XKu3h6TWBIvRWAx4Zf
+         nYxA==
+X-Gm-Message-State: AOJu0YyvbXhw+m+z+ipR4eg19G59peLdTrH4Tm1nUDjhJu9v58nwWiFe
+	UgbVcVDHyDGK5z2ANWvcqty5aSVnRu96NG+2z2rRYWQ8m48z3RMnFc0jKDofpA==
+X-Gm-Gg: AY/fxX7X4wix4YF2eTelnfhXIDKjTzLds5yfWP9stCSMIeBdWK/CxKcaWEjZZF7brpU
+	Y40/b3qNAKdpQ3qCPNFmF4VoGuK/annq38dPmx9xm+I9hMoWTjU4HBZPI3mSeyMf1oJ+vaVnUEF
+	arNDUJZV3P1IggdNdEC0btmmiMg4mBYd+UfKMvYU9PyAxKCCqNC8VPJ7bMQY7nAc6i2pdBbG368
+	jzSbiT8Eo9czpIm7v0jyLe2+dtmrZxD/LHLmjpFrOZj1SB3yC9+ChoEfJevyTdFaiyReyakXDpe
+	/tZOHwlPdU4zwvBHN7XovoJPpNCqY9VzmuwFhipC7Q3ziyBfjIuGfK8e0vymPwmd7agn2XI1+pY
+	kUo2IHO2o4B6NfhR7fSZvOUGlwXbFrD5Rs+Qr3npMG69U84cFMa59ZeNCgAoZh7R5om4C8j3rZw
+	7LrenuNLLh2vBmUtPu7kYm05F/9nCBo4KBL9MfBZYrVCSDJFe4Bw7cm/OC+Wnj
+X-Google-Smtp-Source: AGHT+IEq8llJoSkp6xKGWa1lTBFBhXra0w2au9jKVfJm2Zx4SMyFukCn7Xrwe+tloV96m93ssiYOOQ==
+X-Received: by 2002:a05:7301:711:b0:2b0:4ae1:b4ad with SMTP id 5a478bee46e88-2b17d238b4bmr12209580eec.3.1768241265602;
+        Mon, 12 Jan 2026 10:07:45 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b3c44sm18319019eec.28.2026.01.12.10.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jan 2026 10:07:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9ace6290-8ef8-4158-b48d-fcd841910a23@roeck-us.net>
+Date: Mon, 12 Jan 2026 10:07:43 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
+ errors
+To: Armin Wolf <W_Armin@gmx.de>, TINSAE TADESSE <tinsaetadesse2015@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bhelgaas@google.com, linux-pci@vger.kernel.org
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+ <d08f3edd-f5bd-4e6b-b174-e768d42df281@gmx.de>
+ <CAJ12PfOP_ddk=nqaSDrravpgOYK3eTND24MaXo9RyzdN7cXLfA@mail.gmail.com>
+ <1a107aaf-c1c1-46af-98a8-03eae1bb9db2@gmx.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <1a107aaf-c1c1-46af-98a8-03eae1bb9db2@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ce48f7b8-7d88-266f-ca8d-6af3b01815db@linux.intel.com>
 
-On Mon, Jan 12, 2026 at 05:13:05PM +0200, Ilpo Järvinen wrote:
->On Tue, 30 Dec 2025, Krishna Chomal wrote:
->
-[snip]
->>  #include <linux/string.h>
->>  #include <linux/dmi.h>
->> +#include <linux/fixp-arith.h>
->> +#include <linux/limits.h>
->> +#include <linux/minmax.h>
->> +#include <linux/compiler_attributes.h>
+On 1/12/26 09:41, Armin Wolf wrote:
+> Am 12.01.26 um 12:48 schrieb TINSAE TADESSE:
+> 
+>> On Sun, Jan 11, 2026 at 1:27 AM Armin Wolf <W_Armin@gmx.de> wrote:
+>>> Am 10.01.26 um 18:19 schrieb Tinsae Tadesse:
+>>>
+>>>> SPD5118 DDR5 temperature sensors may be temporarily unavailable
+>>>> during s2idle resume. Ignore temporary -ENXIO and -EIO errors during resume and allow
+>>>> register synchronization to be retried later.
+>>> Hi,
+>>>
+>>> do you know if the error is caused by the SPD5118 device itself or by the underlying
+>>> i2c controller? Please also share the output of "acpidump" and the name of the i2c
+>>> controller used to communicate with the SPD5118.
+>>>
+>>>> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+>>>> ---
+>>>>    drivers/hwmon/spd5118.c | 8 +++++++-
+>>>>    1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>>>> index 5da44571b6a0..ec9f14f6e0df 100644
+>>>> --- a/drivers/hwmon/spd5118.c
+>>>> +++ b/drivers/hwmon/spd5118.c
+>>>> @@ -512,9 +512,15 @@ static int spd5118_resume(struct device *dev)
+>>>>    {
+>>>>        struct spd5118_data *data = dev_get_drvdata(dev);
+>>>>        struct regmap *regmap = data->regmap;
+>>>> +     int ret;
+>>>>
+>>>>        regcache_cache_only(regmap, false);
+>>>> -     return regcache_sync(regmap);
+>>>> +     ret = regcache_sync(regmap);
+>>>> +     if(ret == -ENXIO || ret == -EIO) {
+>>>> +             dev_warn(dev, "SPD hub not responding on resume (%d), deferring init\n", ret);
+>>>> +             return 0;
+>>>> +     }
+>>> The specification says that the SPD5118 might take up to 10ms to initialize its i2c interface
+>>> after power on. Can you test if simply waiting for 10ms before syncing the regcache solves this
+>>> issue?
+>>>
+>>> Thanks,
+>>> Armin Wolf
+>>>
+>>>> +     return ret;
+>>>>    }
+>>>>
+>>>>    static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
+>> Hi Armin,
 >>
-[snip]
->> +
->> +struct victus_s_fan_table_header {
->> +	u8 unknown;
->> +	u8 num_entries;
->> +} __packed;
->
->Please add #include for __packed.
->
-
-__packed is defined in compiler_attributes.h, which is included in this
-patch. Please let me know if there are any other headers that should be
-included.
-
->> +struct victus_s_fan_table_entry {
->> +	u8 cpu_rpm;
->> +	u8 gpu_rpm;
->> +	u8 unknown;
->> +} __packed;
->> +
->> +struct victus_s_fan_table {
->> +	struct victus_s_fan_table_header header;
->> +	struct victus_s_fan_table_entry entries[];
->> +} __packed;
->> +
->> +static inline u8 rpm_to_pwm(u8 rpm, struct hp_wmi_hwmon_priv *priv)
->> +{
->> +	return fixp_linear_interpolate(0, 0, priv->max_rpm, U8_MAX,
->> +					clamp_val(rpm, 0, priv->max_rpm));
->
->Please align the correctly.
->
-
-Apologies for the bad alignment of multi-line function calls and
-if-statements in this patch. I have noted them and will fix them all in
-v3.
-
-[snip]
->> -static int hp_wmi_fan_speed_max_reset(void)
->> -{
->> -	int ret;
->> +	/*
->> +	 * GPU fan speed is always a little higher than CPU fan speed, we fetch
->> +	 * this delta value from the fan table during hwmon init.
->> +	 * Exception: Speed is set to HP_FAN_SPEED_AUTOMATIC, to revert to
->> +	 * automatic mode.
->> +	 */
->> +	if (speed != HP_FAN_SPEED_AUTOMATIC)
->> +		fan_speed[GPU_FAN] = clamp_val((unsigned int)speed +
->> +						(unsigned int)priv->gpu_delta,
->> +						0, U8_MAX);
->
->Add braces is it's multiline if.
->
->If you use unsigned int, clamp to 0 makes no sense as those values have
->already underflowed.
->
->You also have an alignment problem here, but this seems a cleaner way
->which doesn't have underflow issues:
->
->	if (...) {
->		int new_speed = speed + priv->gpu_delta;
->
->		fan_speed[GPU_FAN] = clamp_val(new_speed, 0, U8_MAX);
->	}
->
-
-Understood. I will introduce a new "gpu_speed" variable and follow this
-style in v3.
-
-[snip]
->> @@ -2147,16 +2244,21 @@ static int hp_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->>  		*val = ret;
->>  		return 0;
->>  	case hwmon_pwm:
->> -		switch (hp_wmi_fan_speed_max_get()) {
->> -		case 0:
->> -			/* 0 is automatic fan, which is 2 for hwmon */
->> -			*val = 2;
->> +		if (attr == hwmon_pwm_input) {
->> +			if (!is_victus_s_thermal_profile())
->> +				return -EOPNOTSUPP;
->
->Add an empty line here.
->
-
-Will do.
-
->> +			ret = hp_wmi_get_fan_speed_victus_s(channel);
->> +			if (ret < 0)
->> +				return ret;
->> +			current_rpm = ret;
->
->I'm not sure if using ret here makes things better or not, I'd prefer just
->assigning directly to current_rpm without ret as intermediate var.
->
-
-Understood. I will directly use current_rpm then.
-
-[snip]
->>  static int hp_wmi_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
->>  			      u32 attr, int channel, long val)
->>  {
->> +	struct hp_wmi_hwmon_priv *priv;
->> +	int current_rpm, ret;
->> +
->> +	priv = dev_get_drvdata(dev);
->>  	switch (type) {
->>  	case hwmon_pwm:
->> +		if (attr == hwmon_pwm_input) {
->> +			if (!is_victus_s_thermal_profile())
->> +				return -EOPNOTSUPP;
->> +			/* pwm input is invalid when not in manual mode */
->
->PWM (capitalize textual/comment "pwm"s correctly please).
->
-
-Corrected.
-
->> +			if (priv->mode != PWM_MODE_MANUAL)
->> +				return -EINVAL;
->
->ADd empty line here.
->
-
-Added.
-
->> +			/* ensure pwm input is within valid fan speeds */
->
->PWM
->
-
-Fixed.
-
->> +			priv->pwm = rpm_to_pwm(clamp_val(pwm_to_rpm(val, priv),
->> +							priv->min_rpm,
->> +							priv->max_rpm),
->
->These look misaligned.
->
->I suggest you split this to multiple lines though, it will likely be
->easier to read that way.
->
-
-Agreed, this is too much nesting. I will split it into separate statements
-for each function call.
-
->> +						priv);
->> +			return hp_wmi_apply_fan_settings(priv);
->> +		}
->>  		switch (val) {
->> -		case 0:
->> -			if (is_victus_s_thermal_profile())
->> -				hp_wmi_get_fan_count_userdefine_trigger();
->> -			/* 0 is no fan speed control (max), which is 1 for us */
->> -			return hp_wmi_fan_speed_max_set(1);
->> -		case 2:
->> -			/* 2 is automatic speed control, which is 0 for us */
->> -			if (is_victus_s_thermal_profile()) {
->> -				hp_wmi_get_fan_count_userdefine_trigger();
->> -				return hp_wmi_fan_speed_max_reset();
->> -			} else
->> -				return hp_wmi_fan_speed_max_set(0);
->> +		case PWM_MODE_MAX:
->> +			priv->mode = PWM_MODE_MAX;
->> +			return hp_wmi_apply_fan_settings(priv);
->> +		case PWM_MODE_MANUAL:
->> +			if (!is_victus_s_thermal_profile())
->> +				return -EOPNOTSUPP;
->> +			/*
->> +			 * When switching to manual mode, set fan speed to
->> +			 * current RPM values to ensure a smooth transition.
->> +			 */
->> +			ret = hp_wmi_get_fan_speed_victus_s(channel);
->
->Assign directly to current_rpm ?
->
-
-Yes, will do in v3.
-
->> +			if (ret < 0)
->> +				return ret;
->> +			current_rpm = ret;
->> +			priv->pwm = rpm_to_pwm(current_rpm / 100, priv);
->> +			priv->mode = PWM_MODE_MANUAL;
->> +			return hp_wmi_apply_fan_settings(priv);
->> +		case PWM_MODE_AUTO:
->> +			priv->mode = PWM_MODE_AUTO;
->> +			return hp_wmi_apply_fan_settings(priv);
->>  		default:
->> -			/* we don't support manual fan speed control */
->>  			return -EINVAL;
->>  		}
->>  	default:
->> @@ -2196,7 +2322,7 @@ static int hp_wmi_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>>> Do you know if the error is caused by the SPD5118 device itself or by the underlying i2c controller?
+>> The error appears to be caused by the underlying I2C controller and platform
+>> power sequencing rather than by the SPD5118 device itself.
 >>
->>  static const struct hwmon_channel_info * const info[] = {
->>  	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT, HWMON_F_INPUT),
->> -	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_ENABLE),
->> +	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_ENABLE | HWMON_PWM_INPUT),
->>  	NULL
->>  };
+>> The failure manifests as a temporary -ENXIO occurring only during s2idle
+>> resume. The SPD5118 temperature sensor works correctly before suspend and
+>> after resume once the bus becomes available again. This indicates that the
+>> driver’s resume callback may be invoked before the I2C controller or firmware
+>> has fully re-enabled access to the SPD hub.
 >>
->> @@ -2211,12 +2337,57 @@ static const struct hwmon_chip_info chip_info = {
->>  	.info = info,
->>  };
+>>> Please also share the output of "acpidump" and the name of the i2c
+>> controller used to communicate with the SPD5118.
 >>
->> +static int hp_wmi_setup_fan_settings(struct hp_wmi_hwmon_priv *priv)
->> +{
->> +	u8 fan_data[128] = { 0 };
->> +	struct victus_s_fan_table *fan_table;
->> +	u8 min_rpm, max_rpm, gpu_delta;
->> +	int ret;
->> +
->> +	/* Default behaviour on hwmon init is automatic mode */
->> +	priv->mode = PWM_MODE_AUTO;
->> +
->> +	/* Bypass all non-Victus S devices */
->> +	if (!is_victus_s_thermal_profile())
->> +		return 0;
->> +
->> +	ret = hp_wmi_perform_query(HPWMI_VICTUS_S_GET_FAN_TABLE_QUERY,
->> +				   HPWMI_GM, &fan_data, 4, sizeof(fan_data));
->> +	if (ret)
->> +		return ret;
->> +
->> +	fan_table = (struct victus_s_fan_table *)fan_data;
->> +	if (fan_table->header.num_entries == 0 ||
->> +		sizeof(struct victus_s_fan_table_header) +
->> +		sizeof(struct victus_s_fan_table_entry) * fan_table->header.num_entries >
->> +		sizeof(fan_data))
->
->Badly misaligned.
->
->Splitting at > is somewhat misleading so I'd prefer to avoid it (you can
->use up to 100 chars per line if needed).
->
+>> I have attached the output of acpidump as requested.
+>> The SPD5118 is connected via I2C bus 14 and accessed through the Intel
+>> I801 SMBus controller (0000:00:1f.4), which is ACPI-managed.
+> 
+> Interesting, the ACPI code seems to do two things when the i2c controller suspends (aka is put into D3):
+> 
+> 1. A unknown register 0x84 ("PMEC") is modified
+> 2. The PCI BAR of the i2c controller is disabled
+> 
+> Since the PCI bar is not re-enabled during resume, i suspect that either the firmware
+> is buggy or that the firmware relies on the operating system to restore any BAR settings
+> when resuming.
+> 
+> I do not know how the PCI core handles suspend, so i CCed the associated maintainers.
+> 
+>>> Can you test if simply waiting for 10ms before syncing the regcache solves this
+>> issue?
+>>
+>> I tested adding an explicit msleep(10) in spd5118_resume() before calling
+>> regcache_sync(), for the I2C interface to become ready after power-on.
+>> With this delay in place, the resume failures (-ENXIO during regcache sync)
+>> no longer occur, and repeated suspend/resume cycles are completed successfully.
+>>
+>> However, relying on a fixed delay in the resume path is not robust and would
+>> not be suitable across platforms with different firmware and power sequencing.
+>> It also still performs hardware I/O during PM resume.
+> 
+> In this case the 10 ms delay is OK since the specification of the SPD5118 device explicitly
+> states that the device needs those 10ms to become operational after loosing power.
+> 
 
-Ok, will fix the alignment and ensure to keep the > in a single line.
+I would agree, but it seems to be quite unlikely that this is the actual problem
+since that would mean that the SPD1118 is actually accessed less than 10ms after
+it was powered on. That is unlikely even if the power rail to the SPD chip is separate
+from the power rail to the DDR itself. On top of that, pretty much every chip has
+similar restrictions. I really don't want to have to add similar code to every driver
+because a power sequencer somewhere has a problem and doesn't add the required delay
+after enabling power to a chip (or disables power to a chip before it is properly
+suspended). We have to make _some_ assumptions in the kernel, and one of those
+assumptions is that the chip is still accessible on suspend, and that it is accessible
+on resume.
+
+Worse - if the problem is the i2c controller, there is no guarantee that the 10ms
+delay is sufficient. It may be sufficient in this case, but if the resume order changes
+and the i2c controller is re-enabled even later than it is today, we'd end up in the
+same situation. Either case, if the i2c controller is indeed the problem, trying to
+work around that problem in the driver of a device attached to it is just wrong.
+
+Guenter
+
