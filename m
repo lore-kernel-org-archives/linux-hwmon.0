@@ -1,75 +1,72 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2672341AAE
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 21:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C36321D596
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 21:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768253366; cv=none; b=XXAiQy4wnI8apj0W1x/MkNLpNp5iFD3Jkir3w6yX8A7baVrowxOKtc+TOJ1MTsvvMqAwIjJLNuSI34vPLCzsLK0lrEa5bY2ShQ5nVuq4EpFK3QQPk3Jod3/4BhwP36ri6tzW0uZBwjGRjhhIFWHnrWwyn1IFq0AzJRJx2XGayXU=
+	t=1768253512; cv=none; b=p5AWK3HFnCE0MCmzYIp0y36ie0vG9ygWKG6XVl/lRtMxOX2wb4MDe/UDtgA6cByb276tIeVNSrfX8IBAZG5gWbqOWlkn9ErNphoSRe8p16+LrroZ4xOyqPMePpJHWXhwmh9PEUG6uKhVycYHGOJOu0GK0nKHZ01q/sfH06iqPSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768253366; c=relaxed/simple;
-	bh=yEiPh96Ylaz27aKOvDrJVbUbaTUGlCOL16OXVdHsfu4=;
+	s=arc-20240116; t=1768253512; c=relaxed/simple;
+	bh=+SUleTAyRRBgQnp+GBahWoiKEFLaCNTKSp8pUgYM+GA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T3Q3oY8G48AIeEeYnU3PWddvvPmcwSItq7ybJbzAxyS+ipyydc4kP2rNlUfoIG9VRlu380fp3cXi7bDOIbdzJDo9a93N+HfYgtjjfbEszYC5DUPkeyilSFQ9MVTln5F0pY2UC2C5q88ISi4x4gTizMg5IoyqXCFcGh8KTydU0dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TmzjcRDr; arc=none smtp.client-ip=74.125.82.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=LLYJtOgqP0AD5ENjYqi2wPHVe3cQy+gY8UZMc45EVoo0z+LThpa+1DL/TW7vy5tlO/cZ1jRi3RFLua4EVEtg+XSoKD1U6UJxDGFbvHASuw1e7FmU0ChxTKcZUC2muJiUjZJJX8DbeURcBpjG6mnLez7kzFX30KmeUM1UyUtZriA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JonyWNBX; arc=none smtp.client-ip=74.125.82.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TmzjcRDr"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-11f3e3f0cacso8629828c88.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 13:29:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JonyWNBX"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b05fe2bf14so10572114eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 13:31:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768253364; x=1768858164; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768253509; x=1768858309; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KDKRM2Jj8tzQiskK0Iu71mKzxpKe5PXSshmxSSVrvoY=;
-        b=TmzjcRDroD19PrM8RshowBjtC4k/vSfcv62MUoS0CyE/InEjwaY5/UxRnXEcIYmRCb
-         Xk4+8K+5raRH0fA1kd90tph7VBzH1PVtTNJKsetobMZlPnva6wH+Zn6BW9OKBRND9NGi
-         KQjOIWDKuCWf39eU2G0Ner6waDQrkiOYONVJRATFvv8ExyKRn/Y+TXttLgXidPodEGeW
-         KF4kvOylgz0a7THHM8DsvGAi6CHSwGz2CSjXtGvdOqOSEiLmhVy813k9ZHACsIaURT+N
-         o3DqztAuUmYqG706iwPlApvKDlNfGijt8jrx7hp+3Jvy6iMK94XuzAzt0jga7GM7S2we
-         G42A==
+        bh=7IuRcFHkwKrDdeOI7dQx6qfizBNnx38txGz3onHtm/o=;
+        b=JonyWNBXHhZeuPq+9GDJQBwQnTOrdydLxlPYXvE0i583qHykaWi/xHB4tVy2kAl5U+
+         MzTE+fiqJGKirJACREM4xMF/zyaROd0fXpf/bBDA0JwQolnfRoqmq8OoVDwV/ugkHy0H
+         eH3XfgTZDycqsfJnf/TVkmdyFfWptuJq5A2Ilt+I4TxPksZbTQY+Gg97cbB48axDiEmL
+         lQAmhNTNf6CoPLNu03JmvkgmbMR/MzEE6q2IRWjgUJR2rF01yXDFiibqkHS5ZzgT0pme
+         ZO9Vk44mYzCXiJ2490UYldRn6GDeAT9f2dU7DPkzxhaE3jIbC3QNazo3dyQ7A9JB57XG
+         9HnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768253364; x=1768858164;
+        d=1e100.net; s=20230601; t=1768253509; x=1768858309;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=KDKRM2Jj8tzQiskK0Iu71mKzxpKe5PXSshmxSSVrvoY=;
-        b=pzHJVGntmUF4RsJ3HUibRFNTqdFLzAu1aMrJuKm6Xbax5Zmk4gLRGTQtGlG2BapFKY
-         M8eBpgMLxrzjHnL1rwWI2h9y3a6NK2ALF9i784eeDkXCByy9bn767BLLmUyWoHDA5JVy
-         2fP4Fhsq0kiQ9Uv7iKPqVzXKGzqyd10b21igGTZQphKgnZgA1KGpz0nxS4q8XFDLnjFF
-         qWlgHcX7SvUJnza20Ma6uszzCaSzhc+kO3u5JqkOe9zyjPcB5YHRsg2ZNcv1RFx6I3VD
-         R1VdnHBH/szljU9AfIIR1m1WBm0p+Y0jpeXmk3aNB07LHE0WR/JvAlmMEFGv6XXKidZw
-         oi+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXnBmLwbG7Wr9iuRchW/4vBz4tjfRadmc47pMu2wcyURd76EdPSGcW4opeDD2r19AqfS0iSk3YQE52alg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsfljuTesl4w/ARzzt13IDRTUu4d+2i+QDWruF6hR80X3N/b9Y
-	oWCE6JxdCWWOxuSTLyTvzpoOEqz7yJutI6QfEnh3pLRLhGKqoHgYrEll3mOpow==
-X-Gm-Gg: AY/fxX5yqCl28ZaSfPI7A8Wgf80KPa2iCV36N93dmg3pwc5f/6TjeYsA2bPKBEdYbXi
-	EbSMB5LKWfkHSHNb26bX4fgP8rbxpTWnN8Eysc+FSQSZkDVNxYVLOd7qFRabHhLI2SmdW8jqE9o
-	oRGrPKa/HDlVwfw77P+DC69AdjyKCyaotikCXZUTQirRhA6jCS3Cu9ivo5W/gXP77oXNowl+vUh
-	d9CLJweTe6gxFR+Bv1r1ZnPvIbq/G3fYbMIziyKd7ciZA3LkGE8v24FuZV1UR70i1/si2XA4134
-	9i1+um783GtDFglD/3YAzYPsZUzlGQeWsSOvnVYceIBl9jAdCs6pyE6pw0NLP/fGfJ9aeAQleSS
-	bhoC+vUb/e1XpPWq9rLd3/B7iTd6x2pwOkg/1J+i1h58Y0SWLJsMsyMpgf9nCy4L7yOnFbchyzD
-	K3MeSczks/aJAM23O8UbsTT28x
-X-Google-Smtp-Source: AGHT+IEe2qPn9E71JZ6870MOkW13o09L4U6WZMiRP3FnK/qAfbv5dfHSDbi9fDY4ONJHcb30AS/xog==
-X-Received: by 2002:a05:7301:90a:b0:2a4:3593:dde0 with SMTP id 5a478bee46e88-2b17d259764mr12418326eec.13.1768253363986;
-        Mon, 12 Jan 2026 13:29:23 -0800 (PST)
+        bh=7IuRcFHkwKrDdeOI7dQx6qfizBNnx38txGz3onHtm/o=;
+        b=Ks80h5rc357CPyj5xBpbeKLO9K2mIRYpyo3yDiir22Wi6DsC7fmkwjQHUgtC8Z2yD1
+         JV2OfE2tbPXcivxU4IdHS91Cifdnnd67is8zPo6BnXZCekuCRbHEzV4WodsQdUhiWs64
+         mQgiXnvS3VzflJTR7NnB1QQ1FzneM/0JFUWd6IdpChKcngSWmSkkOSkVQ49sBwMDFIze
+         7V20kdLL+PoJjnlUE6taBbNRkrdBk0aIBbgrbPpN/lpMNtfJY6Jbxj6jmPNf4GvcyGDc
+         YPLi4DKzZql66LCecWf4I3xJ4jlXnJu0hD1L5JqRL9U1Q0GRD3VQ+92AvgUah7UOx/mT
+         ezJg==
+X-Gm-Message-State: AOJu0YwIxqut6DFoPmM+zd+2D/3xBirICYLLZmr+eIVZFvUZplfp6iAP
+	+nVzj9VbnzccQcZZ2Dd/i1FhFMALVWLsFYNXcNemVpCWpSxx+WbOLyCEc5ss/A==
+X-Gm-Gg: AY/fxX5R/VJOiMDnBt2JYRS8xtGaWUL0Bdfob44Z4IWjvk+1e/yIG6IIOfC/BIwYNtW
+	xulCd8MlX+Y4A3WCghCmKTlwIvc7EcUUK0roXjxfabkO5qUialZv3WUp1qk+toT/EsOeZ5Q6NNt
+	7NMN5AUXQSWMn5A0/6EX3xNbrTTTHotkyEyLd2fy6HJeik2qIyWgyma4nwYUGiOKYgDnxEvSpDB
+	tgCjBH9WUBhGHlBOdmp5LfTZQHFZkdAYY5WipFyT11d7qBhEmCF3d85oMhPs93aSD/NG7jTOxPb
+	OfnUmXo+OnQtolg+r2+oOhzi/+0rZZaL0n0UpN5swk9PaUpsUaT0m4+eehSn0gD4k7zafe/e9pp
+	dqw7UP0moTKAMiqPaPHjXRCBh4/HDdSdBy9LBRQ+wbBOjnZbBPPrgazIgMmYLFyNXAg6UjI7t2V
+	yzPBAbeFI6IJZNwfu0WZf3njli
+X-Google-Smtp-Source: AGHT+IHpZztL16EIgh5J9uoMm0fJvBu5YnDSJiyQ6GaXqEHGP3pFPlAOc494gTMr3EFP0hlmTU34jg==
+X-Received: by 2002:a05:7300:aa6:b0:2b0:580b:856c with SMTP id 5a478bee46e88-2b17d2ba77bmr11536670eec.28.1768253508609;
+        Mon, 12 Jan 2026 13:31:48 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078dd84sm16226858eec.17.2026.01.12.13.29.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a53fbsm16396116eec.12.2026.01.12.13.31.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 13:29:23 -0800 (PST)
+        Mon, 12 Jan 2026 13:31:48 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 12 Jan 2026 13:29:22 -0800
+Date: Mon, 12 Jan 2026 13:31:47 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Ban Feng <kcfeng0@nuvoton.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (nct7363) Simplify with scoped for each OF
- child loop
-Message-ID: <2e2dea8d-03c2-4295-b151-4680cd7daf07@roeck-us.net>
-References: <20251224110702.61746-4-krzysztof.kozlowski@oss.qualcomm.com>
- <20251224110702.61746-6-krzysztof.kozlowski@oss.qualcomm.com>
+To: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V1] hwmon: f71882fg: Add F81968 support
+Message-ID: <5a7023ad-10bc-472e-b759-31a3761bd3a4@roeck-us.net>
+References: <20251223051040.10227-1-peter_hong@fintek.com.tw>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,15 +75,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251224110702.61746-6-krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251223051040.10227-1-peter_hong@fintek.com.tw>
 
-On Wed, Dec 24, 2025 at 12:07:05PM +0100, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+On Tue, Dec 23, 2025 at 01:10:40PM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> This adds hardware monitor support the Fintek F81968 Super I/O chip.
+
+"This adds" -> "Add", and "support for".
+
+> It has fully compatible with F81866.
+
+has -> is 
+
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Several products share compatibility with the F81866. To better
+> distinguish between them, this patch ensures the Product ID is
 
-Applied.
+"this patch ensures" -> ensure that
+
+> displayed when the device is probed.
+> 
+> Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
+
+No need to resend, applied after changing the above.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/f71882fg.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
+> index df83f9866fbc..204059d2de6c 100644
+> --- a/drivers/hwmon/f71882fg.c
+> +++ b/drivers/hwmon/f71882fg.c
+> @@ -51,6 +51,7 @@
+>  #define SIO_F81866_ID		0x1010	/* Chipset ID */
+>  #define SIO_F71858AD_ID		0x0903	/* Chipset ID */
+>  #define SIO_F81966_ID		0x1502	/* Chipset ID */
+> +#define SIO_F81968_ID		0x1806	/* Chipset ID */
+>  
+>  #define REGION_LENGTH		8
+>  #define ADDR_REG_OFFSET		5
+> @@ -2570,6 +2571,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
+>  		break;
+>  	case SIO_F81866_ID:
+>  	case SIO_F81966_ID:
+> +	case SIO_F81968_ID:
+>  		sio_data->type = f81866a;
+>  		break;
+>  	default:
+> @@ -2599,9 +2601,9 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
+>  	address &= ~(REGION_LENGTH - 1);	/* Ignore 3 LSB */
+>  
+>  	err = address;
+> -	pr_info("Found %s chip at %#x, revision %d\n",
+> +	pr_info("Found %s chip at %#x, revision %d, devid: %04x\n",
+>  		f71882fg_names[sio_data->type],	(unsigned int)address,
+> -		(int)superio_inb(sioaddr, SIO_REG_DEVREV));
+> +		(int)superio_inb(sioaddr, SIO_REG_DEVREV), devid);
+>  exit:
+>  	superio_exit(sioaddr);
+>  	return err;
