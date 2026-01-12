@@ -1,67 +1,67 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EC6364046
-	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B079365A0E
+	for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768235735; cv=none; b=kkb8/CCaBaZSncE5i+huJEkLefBYYskYJlgIxSihUN5SI//MMlxxLlO0hnOmMArj/4wWZ5g4AsCRN/kn1+KW5zG9dJLlmHH4+qkwyZiD7yNKsM1BDR31WBzIB7uTVwwdex4as4zgmD6w8OC+wgnJ9YwVTwxbdVe8kH1aBpF6I5M=
+	t=1768235808; cv=none; b=Idcw2n5CB7kOQnB5HOLEsNofQnOsHKWnxYRlBl/XKtYCdWn2PtPz3BmhheLeL55sUV9ThoS3WCKBQdQee+a0SfzfV7CygyI/6Y5aeaZIprFJB+xto6EHAEwDehT6q/rcUGQpMS5v50Q+L1OCyt04vjyj/ACX2IU4xJ/IG18bObI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768235735; c=relaxed/simple;
-	bh=EULBpZPqTesUAKKLe/3GTkwUA0kpMiJ6TPjeQ4cKh68=;
+	s=arc-20240116; t=1768235808; c=relaxed/simple;
+	bh=v52Ky1wOh5BZoi029NmMPPgmN3RaD5fSz//WIwq6+Io=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m4SgY9STodrwfVGsArWRKTuvLU9l3Za8p5gGd3h0rq0r6HK7wjOnRaPAsSKudo2fCfxLB+CKfhwsYLpiRSJ+wFHektZP/vtSo+Sphm+QxjFn56E5aR1X7BVrIYfd3e0bNohllEus+54Fqbs97/LjpUKT5tlDRjpS7P9sBbzWZYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1wY7IbH; arc=none smtp.client-ip=74.125.82.170
+	 In-Reply-To:Content-Type; b=XAZ1qmwqEfAkH/+n4U2GFjxtQuV2X9lanAfA1/V8UkgehJK+Ibt+qUlHHlHdbIoQ1i/ni1IWFZglGLxF3VaHauU5YME8Ccpt1Z4Y2E8yj9LlHdCbCKlXjb9KUr1tkfzQiQEhdz4KsOfrsI6MSQK6jrWExdVLPuSzuaYueonNC8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRf9OpJS; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1wY7IbH"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2b04fcfc0daso6628624eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:35:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRf9OpJS"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2ae2eb49b4bso7802112eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 08:36:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768235734; x=1768840534; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768235806; x=1768840606; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5shNgt4nDm3qFmwiIEa3CR3VNo0cvgqutKlqWLUuLo=;
-        b=j1wY7IbHqmREdksBncsxcNJWJJ68jarj6wCIrZBZgYJ7YTtxjh9aS5h1VTxC9YS1l9
-         5rpbib4oZIoVVLV8J7DeTiDzp3vxGfSfUkZj78A+Hj+CFD9dlEWduFOvEfKt9v9efZ2e
-         zVmf51fGW5UJO2j08B7yc1AkkirCvY/M+TpX+l1n47q5ebQRBEZAGXc8DshwYHd2Fz3N
-         9bn/9bYgdniZSvbJIdx8zppHN0GgHRHC7R6D/WSjK/nvusfDzxAmJ/Fm3ZIEeDzX4HxT
-         j82ZiHmPODLM1AgONfnoNEVuAUki68x17vt5/zDXGOtaIGIzMGBBq4DW0O4D++ZZ1NCs
-         x/YA==
+        bh=qEwj3Z1+yz4D+602dS3e3VxMgHdpbmLRd9kEAo0I53M=;
+        b=CRf9OpJSEKz6ybvT3RhLLoS+uTMAx8lGLXsPpQD7t/pXfMBBTUuA1y/tgEuYnuogPm
+         +0LDJKYLo3doYlFUzYTzz7AIN0PWN9goZoOOPzCZh/EuHB5WbNjm9rsfVBmXw9tacBvc
+         CPQHXS0pYsp304U5e+AZOSopu3Osub5o6saMlGIBHcw0PAk4KT+L9z+Yw7mfd7+3LA0L
+         cXchISHXHZLuqf0U1js7hfnzKz/Qx44zNEFqjy9FL1wnvhIwRVygctolPEmUCGNfY2dG
+         rTydFlUEmnWrTrpMbaFG9YcbhGxqtoSZIViuq/wHeC+xGrOAz7QNFu6rNkdDRmKPzeC7
+         6fxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768235734; x=1768840534;
+        d=1e100.net; s=20230601; t=1768235806; x=1768840606;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G5shNgt4nDm3qFmwiIEa3CR3VNo0cvgqutKlqWLUuLo=;
-        b=hSY8hfX+/xyvn0YoHU/05y5DGk5lNRLWbR4MUVMTvrtN60QqshJycHYpaVSOA8g6cd
-         54eyUmuQG8WkFyQcFhUPNQYG18aZVJYiCzFT5PszD//N8ZCVa5lgtnRXKB7yAbRQqghe
-         vU100/p18gWjj5h9Q4nO+Yi4sK9foxapHEK9h/aiEt/Zrd1YyWJKa5yQkIObzyeJtOhm
-         WUGXJXYKLI1TNFcuRdhzAG7IQO144rrzQu/YINXYpgg91VQl4qHnTMd1Jg9tY/9iIRps
-         sEiTc7poNUr4Jy4/ZhPpVuJAx09FuqjzGXoRtAwbqccfm5YvVBglQfMafBeAhpXACY1o
-         l8Lw==
-X-Gm-Message-State: AOJu0YyUEmswZZjdJe/9UurqTw6UotdOJAIo92v4bxynK0HpTgurWDWj
-	jTwPYe7ABoMR2biZa88WHltdll7RxWsOPwj4nND9hoZDscNKn8d7HdE5
-X-Gm-Gg: AY/fxX7N3EsATik5PNqGMwLrrcQeuoUdiYpioayCTvv58jtrLfEQNWDSg1iNi8Avfs2
-	GO78TVdxcU/hEoc38eeNU/4XHhPoX6CGTs5rnF+Ef4ova3aJXTokW6iOsohTdA4v+SAjOKK6L0d
-	za3DpvGYW+aWTsQYLGDgXBxM/SBrivlGgBcO4h6YRbR/ZyMDkfgqIgJeeSYiIl8xw+nCEAcnNvd
-	m/3+7GC1CWJi/LkA3hVtPH3CSdNVFGVKxwxNHjdqIZ5ap2GZy6BTU+6dv4O04ZfbIXvZ6uqtZvN
-	3NqWoexVGllNwS3e99ir1dMawPEqf7HLoat7tpOlhwwiPe8VJmqhS26hk2SvJuPFUp7vjsv19kR
-	ICjDzTONgEiyfJcTXvsNHITh1POegoNTB5KqUdD4h7Xfsaz/YJEvl5fhUfazFxHju+f3dCUFQCq
-	EVzoPjp/zJ2HJKhqBStEeSPkOUB3JWRpmTgB9heGtpfAu4qaQMtPhq7uD/XMyQ
-X-Google-Smtp-Source: AGHT+IFKB2+I/myQd1fOGXHbJDWZP/Kag2FDPafE4GbzUcG1IPLFcwU7Qv47y3mUK8I45RIzNOaOoA==
-X-Received: by 2002:a05:7301:fc07:b0:2ae:5af4:7d65 with SMTP id 5a478bee46e88-2b17d3211d7mr12676004eec.31.1768235733485;
-        Mon, 12 Jan 2026 08:35:33 -0800 (PST)
+        bh=qEwj3Z1+yz4D+602dS3e3VxMgHdpbmLRd9kEAo0I53M=;
+        b=PxtXLlsBNfbjT+wgrw+tXBDc8cTncIy2ezZ1LGlHfUSf49SQbjlsLPGmhfsBjnyH11
+         sSdjkpryUKOF6AEhCYaGjDco+pO2n8PYYkJdlvUUaczx07a16xf3seJ2ey+2hFmuyFQk
+         i7tUHCAzR6gU4IPgjSnsvGgq59p66V8wd1YPFp5vd1drtICOCcgQpGIls0MCac4ZqCdw
+         013Ij2rp5reGYeia3Ivh5ZgsY2K2zaMQ4i9m4AfPPEoZjlzFBAmZWc+nSOnYHHBebBOo
+         GK/FmHbk5qVKynVPksI8gzKkTviWFxnwawgiycwCCUU3XEcfZpFHvVbgegpFHcjEtNzL
+         r1lQ==
+X-Gm-Message-State: AOJu0YxZxEkqlMuVJsif5L0sRizBl8L/b+94n+Iak/vy96Rnb9pWEA0v
+	vRHtplQF+h79kS6wpoSkMmQj5/sWjwwatTp2mmc1Gv97mwTEH4YDJVfP
+X-Gm-Gg: AY/fxX5Q90bpob3jQN2MKVt44hTD3PyQ+ndCO9d0uiIbPZ06baCb0K5vp4oNhlhmtwd
+	UfD8gEMI+aXx2DU9ViBeiQWMsxXXMWQ9WMFfCRc7dmJS+JveN+cJ7+4JPcAC5/KbbKg96Gzb1c5
+	m/eGJ2wMKXs3FteDVpIMAjjahST3FSDj8kmBtM62KkQFnsXWfv13LYXtEMbFNYICnbpAME79xRf
+	GwVKkJXfWj4ucK2rUs/DPBVjZDD4lV+KC2291ofNl6wZpLRYm2HscMkKcs2xgCuqIzqV/gFfoi6
+	9Yab6yFAeaVumsZ++V039znUxy1UhkErt9tzqQC3aGP8lQ81TPd27jBm1vonym8INY6NQ0mkiXI
+	Qob8Dbh5Hp8M/M2ppzFUE6ogKfIZkZ07RzPH2AAL+wG9T0IJ991SlsEndvZyv8TTAv8UoKmg64A
+	aEH4Q39cHEr+zjeZCwaCqjSze1s0O4IIRLy2cXFN9OZN3E6z3lNGHZkVXiAK7g
+X-Google-Smtp-Source: AGHT+IErz7eSUttdzFHG3zYzPJcQyaJDJQ/fjdBZZZyDn9DDCbg0cFuBnYW9OC9gKOPwBRUDUbpW0g==
+X-Received: by 2002:a05:693c:2115:b0:2ac:2c08:9017 with SMTP id 5a478bee46e88-2b17d295122mr10547622eec.28.1768235806512;
+        Mon, 12 Jan 2026 08:36:46 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078d9b1sm17536837eec.18.2026.01.12.08.35.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b0b2bsm15861092eec.23.2026.01.12.08.36.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 08:35:33 -0800 (PST)
+        Mon, 12 Jan 2026 08:36:46 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <01af44b5-8a07-4ebc-b58b-13672b545c8b@roeck-us.net>
-Date: Mon, 12 Jan 2026 08:35:31 -0800
+Message-ID: <6da5b1c1-bbe5-40a8-8363-3213265fe848@roeck-us.net>
+Date: Mon, 12 Jan 2026 08:36:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,12 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] hwmon: spd5118: Retry temperature reads after
- temporary I2C errors
-To: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
+ errors
+To: Armin Wolf <W_Armin@gmx.de>, Tinsae Tadesse <tinsaetadesse2015@gmail.com>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
- <20260110172003.13969-2-tinsaetadesse2015@gmail.com>
+ <d08f3edd-f5bd-4e6b-b174-e768d42df281@gmx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,60 +120,59 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260110172003.13969-2-tinsaetadesse2015@gmail.com>
+In-Reply-To: <d08f3edd-f5bd-4e6b-b174-e768d42df281@gmx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/10/26 09:19, Tinsae Tadesse wrote:
-> After suspend/resume, the SPD5118 hub or the underlying I2C adapter
-> may not be immediately available, causing register reads to fail.
+On 1/10/26 14:27, Armin Wolf wrote:
+> Am 10.01.26 um 18:19 schrieb Tinsae Tadesse:
 > 
-> Attempt a single regcache re-synchronization and retry the read to
-> allow recovery.
+>> SPD5118 DDR5 temperature sensors may be temporarily unavailable
+>> during s2idle resume. Ignore temporary -ENXIO and -EIO errors during resume and allow
+>> register synchronization to be retried later.
 > 
-> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
-> ---
->   drivers/hwmon/spd5118.c | 11 ++++++++++-
->   1 file changed, 10 insertions(+), 1 deletion(-)
+> Hi,
 > 
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index ec9f14f6e0df..63f798991363 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -101,6 +101,7 @@ static int spd5118_read_temp(struct regmap *regmap, u32 attr, long *val)
->   	int reg, err;
->   	u8 regval[2];
->   	u16 temp;
-> +	bool retried = false;
->   
->   	switch (attr) {
->   	case hwmon_temp_input:
-> @@ -122,9 +123,17 @@ static int spd5118_read_temp(struct regmap *regmap, u32 attr, long *val)
->   		return -EOPNOTSUPP;
->   	}
->   
-> +retry:
->   	err = regmap_bulk_read(regmap, reg, regval, 2);
-> -	if (err)
-> +	if (err) {
-> +		if (!retried && (err == -ENXIO || err == -EIO)) {
-> +			retried = true;
-> +			regcache_mark_dirty(regmap);
-> +			if (!regcache_sync(regmap))
-> +				goto retry;
-> +		}
->   		return err;
-> +	}
->   
->   	temp = (regval[1] << 8) | regval[0];
->   
+> do you know if the error is caused by the SPD5118 device itself or by the underlying
+> i2c controller? Please also share the output of "acpidump" and the name of the i2c
+> controller used to communicate with the SPD5118.
+> 
+>> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+>> ---
+>>   drivers/hwmon/spd5118.c | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>> index 5da44571b6a0..ec9f14f6e0df 100644
+>> --- a/drivers/hwmon/spd5118.c
+>> +++ b/drivers/hwmon/spd5118.c
+>> @@ -512,9 +512,15 @@ static int spd5118_resume(struct device *dev)
+>>   {
+>>       struct spd5118_data *data = dev_get_drvdata(dev);
+>>       struct regmap *regmap = data->regmap;
+>> +    int ret;
+>>       regcache_cache_only(regmap, false);
+>> -    return regcache_sync(regmap);
+>> +    ret = regcache_sync(regmap);
+>> +    if(ret == -ENXIO || ret == -EIO) {
+>> +        dev_warn(dev, "SPD hub not responding on resume (%d), deferring init\n", ret);
+>> +        return 0;
+>> +    }
+> 
+> The specification says that the SPD5118 might take up to 10ms to initialize its i2c interface
+> after power on. Can you test if simply waiting for 10ms before syncing the regcache solves this
+> issue?
+> 
 
-
-Wrong solution. This affects all accesses, not just the first access after
-resume. regmap_bulk_read() can fail for any reason, not just because the
-system just returned from resume. The above code just assumes that the failure
-is due to a bad resume based on the returned error code. That may be the case
-for the i801 controller driver, but even that would be just by chance.
+It seems to be highly unlikely that this code executes within 10ms of powering on the memory.
 
 Guenter
+
+> Thanks,
+> Armin Wolf
+> 
+>> +    return ret;
+>>   }
+>>   static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5118_resume);
+> 
 
