@@ -1,233 +1,133 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264233939BD
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 17:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CF036A02E
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 19:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768326885; cv=none; b=QwDGkRqdXHaCPJ1NKj04x8hDgcJWoLzf2tEsZqj9/DL4ZVt1UlR5Y9rj3Tb2xU5h/iT8mMRkjukOf1f9qn/e3RgARDqfonvGtiwm1WsSVMiHgyb5NFUy/TvMZGugmTZaD4pQvJ3w40MPM3WdG/uTj5OR+2nsq0BfhUfAveT818k=
+	t=1768331746; cv=none; b=RieAvT6HITtOMjLh6+M2zd6RKXedr+Gg7S7NwIMkz1xbXT35BmVoHieHGeXuqPwjmP1clun6THxs7l7btwfPayccc2Agan/Vw1IH+dBZk1noVqZcIwfDpuItsnfT4/ckfKkqRc/5rCK1ZL/LEnKjyNz4oruuBd+alr7QfvUT9Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768326885; c=relaxed/simple;
-	bh=7FPJM1dlkAVXylkX7da0xMYxM1z0IV5/snroZAJVOV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PXM6uAQYjS9n5aq0NMt8HTMO73KJe/yS2nsla9/EMzEiXRnFAUfnSrR6vQw2BWrBta2kGKVRXx2wIguSVP79CCooarZjxrza5AbuOSYfJtXi4zxcp+MA/4aQUgoOGNvBLH7IGgjyOQnMsr8NNfoJcgkq32yJ2DpnqHff4rvfvXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vg0NkTq6; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1768331746; c=relaxed/simple;
+	bh=cb27y+8EtEUs8RwU9R0BjoJdYClZyIdMMjL8HNTjTiM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kGBN5+ZAtgQaC916N8hvVqodGZZDEkay7MIcSmhvae1PsM9V/N18XhdRX1XT0daKZQhuazjfmYa13MvyffiFLJWzOpY61GSRlVlJFmq3LLWpkJuf57fnx5ckw9mghCERM6uzKuswhZdox98xrBWSG9nnNW6sJPdCChPxWmKwwi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CxgdgPL+; arc=none smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vg0NkTq6"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2ae38f81be1so8423960eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 09:54:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CxgdgPL+"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-121bf277922so9453565c88.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 11:15:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768326883; x=1768931683; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dyYxtzzilS58b8K7mR2Z5leR7YOClXrIf1D7x5HC/xs=;
-        b=Vg0NkTq6AU+hQAu4Mpcn0uzQi/ZDY6YiQQbayX8AUlwMBrI+Juk+yZFA5PVMvHAG5J
-         VoOOpA2sDikNmeMlOz3RyeBrdVyrEARCZveL6u9Ggn0R72g3odt8YNz53rwad9nAYvve
-         JcEd9FaHOF/mxbnAmYOqWqoq6syPxJNq2u51cGJzlYVg8eLXzkddQK+ut+Hil89vzBww
-         mqyosyVtVS18TGfVbT3OKFs8ZnwA4RqgSyj8QgYVQpU4DgDlNz+rIKEqtqIVOck0UCpd
-         idRgSuETRTLwaVFSTuebXSVT9f+Bcnby/dq2gqBESPff+2g53NkcpRnV51CxnAfAcibC
-         z91Q==
+        d=gmail.com; s=20230601; t=1768331744; x=1768936544; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dpOaHGEAgQJqZnuoKb07PfkKcZZdWnIZRIfjyoaqZlc=;
+        b=CxgdgPL+42wmxaWHdNwU338UcF8ol5O4bSV2rtV+58KYepkGHBL5O+G1/drGtSrdFT
+         oVGip7QaeNctcg2eYU9c9d1CaG7jQqFDyRYpmY/yh30cSIp+JzrCGFwZzUuKCN2ou2Rv
+         JB4Qs79HmjTie4KdCnbLRhObWc3L0f5B4XCk6pKWpmA0VyIqXCLfYIMkJY/ElK/AbXAB
+         VPVO8swOlj1DYTTgSCts9kgGvaM63WXpwmot/yOOGqREgAs2JpiAI0x0gQWxUqy6nWQM
+         24s0aLquvzgU3x3yvevUegIgwKpSag82vG4frZNtz/GUHtOURnua1JMBvzsgHSFxgvdI
+         jwDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768326883; x=1768931683;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dyYxtzzilS58b8K7mR2Z5leR7YOClXrIf1D7x5HC/xs=;
-        b=SysfSom5tLUBlFl2UsZW4ic7lDxYqeKI7uaRvrkGhq803sA5djxr27S0c0949W8ALQ
-         5CL3aFhvM+xkdHpJa7X7lPZNTz1UmYmQYajH6DpzX5WOzQiDYLjlvHMat6RSSgqDu8Q2
-         7yY/jvn0rvJGwS/Q2tqC3Tof29A1P1UbQgXa2xQCQ2TYyFchP5KTKAJt+34BZQuYHDxs
-         bcsy/Ni4NBM/A2fHwmDJYwir+5Drie/cAvOJelipc96SybjzEc9ArXJH6iEgiTLd1kSf
-         0iEyJdV9wI8iUg0HujJucMdbeWiRzSq0WT3GISY3vZmnM1a75g+m/7EuNBeslag1U4xB
-         ADRg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoJOjL55Vgrm3DvNaw3c3nBRuW55xKb0+VUlhB7ngCsIxSNAUL4thkpMeAslIkoD8TqLYUx3DKMfjU7g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT7q8NXw7P0g2sJ4CeYbGrFPZGDym1n7UvTF9mImEJPA1qzSJq
-	oNQYoAvorABKHPqnL3LHoJNlIidHWjRJEz33zraUxUEpYhQWo9h2DCAw8qOVlg==
-X-Gm-Gg: AY/fxX60J9z96Qu8PkUWG4wl7mfP/sXeLFA2d/oT168MXchUx9Z6ql2F2fmKu2y9+N4
-	3VvsdPrmtu1FsxA5vAA2Ws4K99bmoVEN7aP1fA8FoOQr5vW6R+vJOMR81ULA+3+bGbc15qRJ3hz
-	q6vXUP1igFuNSOdjxAnotq0K14L128I3fDc3fJJZuiNC5KPN0BHrp2jmA0N6A4v6T8g08tr6caS
-	IyraB/BF24yVn5nlpewo4Jona+LgggHo58KLjrVnyMW2W7UdyUouRn2Vej0gWRfGTKioyJUX4BD
-	WyTpquwTIrB3E12jw/HVfnD0DMUqQiLlBZ/icSUjNHXjLuwedaa17EQJCRFj8Xx1yiZdXZBFRmu
-	WDYZshXoAwRJYL9oni1PYze9JZAzggBNkxoBhffcEJzNJxvrqURYYJrlZ1RpMZk1L8yZP9nqAJs
-	ykGAsHkXKqW6ff4BKO8zxDaW97
-X-Google-Smtp-Source: AGHT+IEM+7oCXc0yFPWeFB4g5y7tv61UpN9NggMZE0qAH3zBMDg0pt98vUYV9fAQFsH9UiGJXGZPLQ==
-X-Received: by 2002:a05:7301:678d:b0:2ae:605b:d52f with SMTP id 5a478bee46e88-2b17d2e6bc6mr23768975eec.39.1768326883150;
-        Tue, 13 Jan 2026 09:54:43 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a53cdsm18014271eec.11.2026.01.13.09.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 09:54:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 13 Jan 2026 09:54:41 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: "benoit.masson" <yahoo@perenite.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] hwmon: it87: prepare for extended PWM temp maps
-Message-ID: <1410044e-554d-4009-9248-ce063b352659@roeck-us.net>
-References: <20260110012613.48150-1-yahoo@perenite.com>
- <20260110012613.48150-2-yahoo@perenite.com>
+        d=1e100.net; s=20230601; t=1768331744; x=1768936544;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dpOaHGEAgQJqZnuoKb07PfkKcZZdWnIZRIfjyoaqZlc=;
+        b=HPofckz5v5WonuD2t78fJuqudQzdRZIghtorrqfcUSb/1T1u98bqPvunpRETSNoYwT
+         1OHQbWomPpV8MzD7ZGg8ePreGDjShvbBaYfPfIS+LtmaJM092MxZbAM/p4JG9rlTXQ5K
+         FDeVWvP0OifOXJks9RdYOvqTVPmnbyKDo+b0ZaYov6ASNz5Zeg0Sm0pCSnse0GmyIPkp
+         c2Hw6Enc5CYczbjfTsvpVEDAki2XsJCjCMsLX0Rgfzrz0jA0CqJrNb1IuFQ99W/ViC+q
+         a5+elFhoH5O6Pr6w924xAqeF668yvnrGSJSAL6wo3wVapLpOXqQs1nO9OiRlLqIhacE5
+         sMVw==
+X-Gm-Message-State: AOJu0YxRPgYVY6dHZjXe/llBTeKMM1rLTuASs38YcFg3+XFSxjYgjLpE
+	N1ZgIMKfLJf2pXkSkn7KYkkNf9+hTCiHSUX7a7knT2Uh4RqFJKTSJ40Mlhs3jU2lSDrkO4b02CR
+	9bnlAG1qRqWCFPPWzOXJ92sVXtN6OExU=
+X-Gm-Gg: AY/fxX55GlAWAfElgVLMG17wv7O7vn/uxmoXFL+Zm2ycsrVTejetsk1t4q7Vee3q1X/
+	xsRJlZfccewSw66lcbJpyfejkxVJWGIJOViMd3j75L1GW7RPnyr8ppr/DgQZUcmmqGRXPPc45ee
+	atSA6MXuzNMGIhsuJnNHbDMJS3TLMPlHFPyFPTA91Z6i8795VKui0XJTYy67stxo8bZwQB3NlkZ
+	oIbMbyvNjTSxt1VttHnYyk94TTDWljLykDlu7FYxGQGA6HB7oIocuy4KAKNVEU0O7GnxnGl
+X-Received: by 2002:a05:701a:ca0e:b0:11a:4ffb:9849 with SMTP id
+ a92af1059eb24-12336a46b88mr146860c88.21.1768331743909; Tue, 13 Jan 2026
+ 11:15:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260110012613.48150-2-yahoo@perenite.com>
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com> <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net>
+In-Reply-To: <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net>
+From: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
+Date: Tue, 13 Jan 2026 22:15:26 +0300
+X-Gm-Features: AZwV_QhfR7J7Jcg3llYrtvkv4je-pn0MwKOzjJ98berg4Wd3UBGt0j6pLPHcoYg
+Message-ID: <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C errors
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 10, 2026 at 02:26:10AM +0100, benoit.masson wrote:
-> Introduce helper logic for PWM-to-temperature mappings so newer
-> register layouts can be supported without affecting legacy chips.
-> 
-> Signed-off-by: benoit.masson <yahoo@perenite.com>
-> ---
->  drivers/hwmon/it87.c | 178 ++++++++++++++++++++++++++++++++-----------
->  1 file changed, 133 insertions(+), 45 deletions(-)
-> 
-> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-> index ec5b1668dd7b..dfd1e896c1ab 100644
-> --- a/drivers/hwmon/it87.c
-> +++ b/drivers/hwmon/it87.c
-> @@ -251,6 +251,7 @@ static const u8 IT87_REG_TEMP_OFFSET[] = { 0x56, 0x57, 0x59 };
->  #define IT87_REG_FAN_MAIN_CTRL 0x13
->  #define IT87_REG_FAN_CTL       0x14
->  static const u8 IT87_REG_PWM[]         = { 0x15, 0x16, 0x17, 0x7f, 0xa7, 0xaf };
-> +static const u8 IT87_REG_PWM_8665[]    = { 0x15, 0x16, 0x17, 0x1e, 0x1f, 0x92 };
->  static const u8 IT87_REG_PWM_DUTY[]    = { 0x63, 0x6b, 0x73, 0x7b, 0xa3, 0xab };
->  
->  static const u8 IT87_REG_VIN[]	= { 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26,
-> @@ -283,6 +284,7 @@ static const u8 IT87_REG_AUTO_BASE[] = { 0x60, 0x68, 0x70, 0x78, 0xa0, 0xa8 };
->  #define IT87_TEMP_OFFSET_MAX	ARRAY_SIZE(IT87_REG_TEMP_OFFSET)
->  #define IT87_TEMP_LIMIT_DEFAULT	3
->  #define IT87_TEMP_MAP_DEFAULT	3
-> +#define IT87_PWM_OLD_NUM_TEMP	3
->  #define NUM_FAN			ARRAY_SIZE(IT87_REG_FAN)
->  #define NUM_FAN_DIV		3
->  #define NUM_PWM			ARRAY_SIZE(IT87_REG_PWM)
-> @@ -331,6 +333,7 @@ struct it87_devices {
->  #define FEAT_FOUR_PWM		BIT(21)	/* Supports four fan controls */
->  #define FEAT_FOUR_TEMP		BIT(22)
->  #define FEAT_FANCTL_ONOFF	BIT(23)	/* chip has FAN_CTL ON/OFF */
-> +#define FEAT_NEW_TEMPMAP	BIT(24)	/* PWM uses extended temp map */
->  
->  static const struct it87_devices it87_devices[] = {
->  	[it87] = {
-> @@ -554,6 +557,7 @@ static const struct it87_devices it87_devices[] = {
->  #define has_scaling(data)	((data)->features & (FEAT_12MV_ADC | \
->  						     FEAT_10_9MV_ADC))
->  #define has_fanctl_onoff(data)	((data)->features & FEAT_FANCTL_ONOFF)
-> +#define has_new_tempmap(data)	((data)->features & FEAT_NEW_TEMPMAP)
->  
->  struct it87_sio_data {
->  	int sioaddr;
-> @@ -632,7 +636,9 @@ struct it87_data {
->  	u8 has_pwm;		/* Bitfield, pwm control enabled */
->  	u8 pwm_ctrl[NUM_PWM];	/* Register value */
->  	u8 pwm_duty[NUM_PWM];	/* Manual PWM value set by user */
-> -	u8 pwm_temp_map[NUM_PWM];/* PWM to temp. chan. mapping (bits 1-0) */
-> +	u8 pwm_temp_map[NUM_PWM];/* PWM to temp. chan. mapping */
-> +	u8 pwm_temp_map_mask;
-> +	u8 pwm_temp_map_shift;
->  
->  	/* Automatic fan speed control registers */
->  	u8 auto_pwm[NUM_AUTO_PWM][4];	/* [nr][3] is hard-coded */
-> @@ -714,6 +720,72 @@ static int pwm_from_reg(const struct it87_data *data, u8 reg)
->  		return (reg & 0x7f) << 1;
->  }
->  
-> +static inline u8 pwm_temp_map_get(const struct it87_data *data, u8 ctrl)
-> +{
-> +	return (ctrl >> data->pwm_temp_map_shift) &
-> +		data->pwm_temp_map_mask;
-> +}
-> +
-> +static inline u8 pwm_temp_map_set(const struct it87_data *data, u8 ctrl,
-> +				  u8 map)
-> +{
-> +	ctrl &= ~(data->pwm_temp_map_mask << data->pwm_temp_map_shift);
-> +	return ctrl | ((map & data->pwm_temp_map_mask)
-> +		       << data->pwm_temp_map_shift);
-> +}
-> +
-> +static inline u8 pwm_num_temp_map(const struct it87_data *data)
-> +{
-> +	return data->num_temp_map ? data->num_temp_map :
-> +		IT87_TEMP_MAP_DEFAULT;
-> +}
-> +
-> +static unsigned int pwm_temp_channel(const struct it87_data *data,
-> +				     int nr, u8 map)
-> +{
-> +	if (has_new_tempmap(data)) {
-> +		u8 num = pwm_num_temp_map(data);
-> +
-> +		if (map >= num)
-> +			map = 0;
-> +		return map;
-> +	}
-> +
-> +	if (map >= IT87_PWM_OLD_NUM_TEMP)
-> +		map = 0;
-> +
-> +	if (nr >= IT87_PWM_OLD_NUM_TEMP)
-> +		map += IT87_PWM_OLD_NUM_TEMP;
-> +
-> +	return map;
-> +}
-> +
-> +static int pwm_temp_map_from_channel(const struct it87_data *data, int nr,
-> +				     unsigned int channel, u8 *map)
-> +{
-> +	if (has_new_tempmap(data)) {
-> +		u8 num = pwm_num_temp_map(data);
-> +
-> +		if (channel >= num)
-> +			return -EINVAL;
-> +		*map = channel;
-> +		return 0;
-> +	}
-> +
-> +	if (nr >= IT87_PWM_OLD_NUM_TEMP) {
-> +		if (channel < IT87_PWM_OLD_NUM_TEMP ||
-> +		    channel >= 2 * IT87_PWM_OLD_NUM_TEMP)
-> +			return -EINVAL;
-> +		channel -= IT87_PWM_OLD_NUM_TEMP;
-> +	} else {
-> +		if (channel >= IT87_PWM_OLD_NUM_TEMP)
-> +			return -EINVAL;
-> +	}
-> +
-> +	*map = channel;
-> +	return 0;
-> +}
-> +
->  static int DIV_TO_REG(int val)
->  {
->  	int answer = 0;
-> @@ -725,6 +797,14 @@ static int DIV_TO_REG(int val)
->  
->  #define DIV_FROM_REG(val) BIT(val)
->  
-> +static inline u16 it87_reg_pwm(const struct it87_data *data, int nr)
-> +{
-> +	if (data->type == it8613 || data->type == it8622)
+On Mon, Jan 12, 2026 at 7:30=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 1/10/26 09:19, Tinsae Tadesse wrote:
+> > SPD5118 DDR5 temperature sensors may be temporarily unavailable
+> > during s2idle resume. Ignore temporary -ENXIO and -EIO errors during re=
+sume and allow
+> > register synchronization to be retried later.
+> >
+> > Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+> > ---
+> >   drivers/hwmon/spd5118.c | 8 +++++++-
+> >   1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+> > index 5da44571b6a0..ec9f14f6e0df 100644
+> > --- a/drivers/hwmon/spd5118.c
+> > +++ b/drivers/hwmon/spd5118.c
+> > @@ -512,9 +512,15 @@ static int spd5118_resume(struct device *dev)
+> >   {
+> >       struct spd5118_data *data =3D dev_get_drvdata(dev);
+> >       struct regmap *regmap =3D data->regmap;
+> > +     int ret;
+> >
+> >       regcache_cache_only(regmap, false);
+> > -     return regcache_sync(regmap);
+> > +     ret =3D regcache_sync(regmap);
+> > +     if(ret =3D=3D -ENXIO || ret =3D=3D -EIO) {
+> > +             dev_warn(dev, "SPD hub not responding on resume (%d), def=
+erring init\n", ret);
+> > +             return 0;
+> > +     }
+> > +     return ret;
+> >   }
+> >
+> >   static DEFINE_SIMPLE_DEV_PM_OPS(spd5118_pm_ops, spd5118_suspend, spd5=
+118_resume);
+>
+>
+> Based on the subsequent exchange, this is not the appropriate solution.
+> The problem is that the i2c controller suspends too early. It should susp=
+end
+> later instead. Alternatively, this driver should suspend early, but it do=
+es
+> not look like respective PM operations are available.
+>
+> I would suggest to try replacing DEFINE_SIMPLE_DEV_PM_OPS() in drivers/i2=
+c/busses/i2c-i801.c
+> with SET_LATE_SYSTEM_SLEEP_PM_OPS() or similar.
+>
+> Guenter
+>
 
-Did you try to compile this patch ? I guess not, because I get
+Hi Guenter,
 
-drivers/hwmon/it87.c: In function ‘it87_reg_pwm’:
-drivers/hwmon/it87.c:802:27: error: ‘it8613’ undeclared (first use in this function); did you mean ‘it8603’?
-  802 |         if (data->type == it8613 || data->type == it8622)
-      |                           ^~~~~~
-      |                           it8603
-drivers/hwmon/it87.c:802:27: note: each undeclared identifier is reported only once for each function it appears in
-
-The code should use register pointers in struct it87_data to avoid such
-problems and the need for runtime type checks.
-
-Guenter
+I tested changing the i801 SMBus controller to use
+SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
+DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With this
+change, spd5118 resume failures (-ENXIO)
+still persist, suggesting PM ordering alone is insufficient and other
+firmware interactions are involved.
