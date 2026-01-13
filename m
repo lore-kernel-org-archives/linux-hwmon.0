@@ -1,68 +1,68 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358BA2D97AB
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 15:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E083F3806D5
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 15:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768316781; cv=none; b=ssW2Ne0Mk8j2ssgCf6C6C5XtEQDbdB6Qlr7H+Zju4lZUTS2PtnkbRqurnsRtZWHNXg73+GxUrnysVNCNPn4JfdeaIZXqvk7YU5pxErDN47VwsL6K3h4+iIb44WvZPAM/8ZaSPcCUMnej7EquJFlYNCU6IogIMPa47qYuJhknC/0=
+	t=1768317014; cv=none; b=QUc2HZdCRsHMZG5q2vfrT1urJzOB8Ly24S55792/0tTiDmq+DfhnKwwGjUfafBn+x7+dZbViovfjon4bmqbkloNsV9v/wUr5K4xPPdBSCT7ugYsAh+KshJRsae5oXSJg+on7vZLbDQ6Km9eiW5i7pQr2ebqJf+M8n7uSVndiWt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768316781; c=relaxed/simple;
-	bh=ix2vEkDxkx/qX95hGyUcQ/EDh6tqbhd+51wFSLA0+Ro=;
+	s=arc-20240116; t=1768317014; c=relaxed/simple;
+	bh=Gxb3l2ZkVTN8/AW+TlsPGmW4d4paIYYrU+ykzKv31xc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Acy/JU9DZTd6Yuc8Wif1GWh++0sZVNoqcf3yp+RDu6mTUvzcbNovoyNstyZREr+ZAYZji5OEt05U3zWreQ6HsitWOvpBi0YtMCkAHbaGfN53E6fMGtLrpJ4celFlA+qSK7J5ZdPk19GP1pfdaNLTqtpFeITY0yXa5THo48HF4E0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RH5Crice; arc=none smtp.client-ip=74.125.82.42
+	 In-Reply-To:Content-Type; b=Ik0QWL73P3eGIANw/rYNQEujAZtQrkr181y7JBx3m2UZZXFEW8BHG9JVll1epY9FugTXowQSfXNvemAU0o/Dmg7fF3qrZoSR+QHQ5LzXntt0sq9/DthtyT5FQ2JvnJv6pHIG15NnxapclIGgB/vM79FiOM2lZAFZ+cWQTjp40Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BP389UcA; arc=none smtp.client-ip=74.125.82.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RH5Crice"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-11f3a10dcbbso6957864c88.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 07:06:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BP389UcA"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2b04a410f42so6648309eec.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 07:10:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768316777; x=1768921577; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768317007; x=1768921807; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufhPzoOtPDqdj3uM9a6Vgcwlr1IUsrf3mDuYDzQ15Kk=;
-        b=RH5Crice1SZMIIOfGNzD2B2lyWfRGv0T2g1rOWJLuoRosUKVw8EqrzLhxOxS5LLKTe
-         FkW20IXT7rGmrg/hv1zkTwoCQ4j7V6ubNKg3+7afjFb2O1KcrG3eQiJwb/BgkIRjJOdY
-         dK8O5hz/6AiWaKSMIcwYDNXs5QQlO25hLBlcsmIzlE5W804iDo6G8EWSKyZz3jQMtRFj
-         QwT19ifH1wjH11OAr1+rWDmZ8+A7RWkPTWnv1vlL+tJDrfKRA1dmJ0B32T3VR+mN6bAU
-         zzB+/meZS94htQZMn0b1Xj2MuSUg0vzFq46eHijTuV4hLrgkm6RB0nf/JIJFoTRF97CO
-         udug==
+        bh=tsl7cqadgB0ILyuJ5pleT6+lRwkh2wBTJUg/m3d1c4U=;
+        b=BP389UcAySGw8CojUXWpYT0ugKU8kcOw8Ry293mBVkM9l+B5darYDR/fXN3YoG2e8s
+         fScPzbpax3TidGuVvrWlnYj53fhLrCDG6X0/5iwHBiHdUKkZYLFqZ8x5xBDih6+EiIfp
+         0RfBwqpFsqVgCggxO53+3dHwVp8zdwXC3jY1lA+zTwbSFUFg9TPK8oNmouEqyUO+Ei+J
+         Xh8IrZPuvXdVWKcza88WAU/H20D5HDptR7Tua2pbQUxOA/ED2ylophfhiktlM+XsyjFq
+         nRs24hylYsMWUv5R1Q75nmMPKAFrIA08rt4ILKvkGCdvuWjrGXwA/DsbgVDOgjlriSaj
+         0s5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768316777; x=1768921577;
+        d=1e100.net; s=20230601; t=1768317007; x=1768921807;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ufhPzoOtPDqdj3uM9a6Vgcwlr1IUsrf3mDuYDzQ15Kk=;
-        b=HTyR+7XxNY5/l2akyNRznZ0XdW41unN+IIkD3yyMqRpnSiVH7XUHlamMvhL3IinHsG
-         VfNCIUQZgNmA81mO+AKeY7Qlq/ap9o04bFRNDHLWZUSiASBmhk3CnbIYQsNVvg66au5p
-         msH3sP4f8ZUuRuWSPfgK8lLPnXG7RssXncwhzQySyUmACga/S2ODb3kkHd/fjcZvbmOk
-         lCZwXgjVy9uk2wSX8BVtjcCbS6yUKT270UzlT1BUQWZuLYhIkWWNZnD/0JudviPFYE3q
-         J2gPtZZDaV9SjAO/SzFxCIIRytapnSm2gdwHNxVbHhIoc1OqQAEOgLA+3nu9eWW40bmA
-         vtNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXciSvsbn7C+EFcO9+NzJvWTaHCStahz+aZIoCbMwLJhZN4oaITVRcAVx0i0k7p0lZSk2ifbHxencjmFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxn8qXnbDhv+qdgQneVHtbqDOZRXwkU1sGgJSGwMJE7OMgUhasa
-	mlBrWbOAj3XRlwxe7eXoTuO/Zw5Updd+D9DcdOIPVEcGTPkaW252wvZc
-X-Gm-Gg: AY/fxX655w2fBmkTcEZQ09qqlfizfMYt0+vBlY7cbLEW9WLLZp10JFMQIx6vEYEbBw0
-	Opy2l97XAgwhVZwt9rtx9sO2TjJsmP+HnNIHdjDdPjX3GNHWyKxwcze5wUb+/RugEIOPgYoGSyL
-	TIBC6t1Q7tivT7qVvlnSjbCMQa4Wf/DCnCkHcEvvbCCZum3enzOPmgIXu1dbmFMiG184udeqcXI
-	2TLrBP7dw7MCuDwgG1Xz5KCNtisv0DnonGz8k7xtYV5nL7OnGqBM126pgaQRhS/WLAlp3hMoQHk
-	ecbT9YkvZMZcz37oeAjD7pyv3B1ZutZKhep+T0iwpISxi4Dvk90h/BlRRHU/UiM4hY6o86OvUXo
-	luVBrJ4H2lAwbGQwFCaz5wApgFrt9Tfef3ey0DLOxu8jbwnedsVOq0gnksnvtfLYIkf/KojLgX/
-	/ngiEMuX1jw2kDg7WRc7ax2W9ZM8KVRYzVZaxPM+2Yrzcnm4lteq5sBrwE8kf4pkIa41x/NMk=
-X-Google-Smtp-Source: AGHT+IF7WOOz0yQrTGuA2ALq/uQDzLgxDrQjELDB7LIj01YWLMg0N+tr7XNBcTzfkwV+Rkk4zLqBBA==
-X-Received: by 2002:a05:7022:150a:b0:123:2cb4:7346 with SMTP id a92af1059eb24-1232cb47496mr3454339c88.33.1768316776892;
-        Tue, 13 Jan 2026 07:06:16 -0800 (PST)
+        bh=tsl7cqadgB0ILyuJ5pleT6+lRwkh2wBTJUg/m3d1c4U=;
+        b=T2dsRIdIhZOzTatqm0uEXac4+EObsC1q9CWuKUWBoKnYigAONRhCZ9vl+5me9OCP2t
+         cDfVT4LhuusJuh1skki+iSOuHzGLHySXjGSD/I6gar1Sp8CuXFtheV3393EKktbhfsRz
+         31vAOKPbUN03VDd2XYoiMje7B5J5SOBy0nuHIQqDgibC1qGFpBggVWGEX/7gLuz5EPwN
+         8+hPilN1FGejTgoLSCv/iTTzpx4a4txOXdf8ltp5aYHLPHwt1tFpdfV2P37YspyolHnf
+         I+mGLNQNLmkxH6hVGgfPciogHivs8B+48S0C9bP4YbqAk4yfnOZoeZplwVn4VIn2s/m1
+         Ebwg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1ZbM9AMPhBw/88hs4IcTyuH2BIndFtlbhZPsNFGlfFuj79iF9owgM8vfAXIgMzQfBnv1Q4ZxJprj1Fw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTqIfHZIoy8ROeCwH22+epqTUiAziAzeb5Ktgdljk2mJ6cX0Dp
+	QTWv2NcBeTWgyS3lfkQrmfa50pgEToCuhxX7nQnc1nQX4yqD3yD/gHrl
+X-Gm-Gg: AY/fxX5VAMROOqTgduGGs/QHI9U25gvqgohy2o0kLmk+L0Vlk8p3iIi02wc54Zo+Za3
+	ZLd57wG8MMDYly0c4rPYOiwa18XrJsYvGY6T2/A4htTntzW7RFqVkL8mh58XNcVIQeJFUsOXBHN
+	9mvBfi84vWgQXz8CC481yHlgCJt9JpjnRBKXXgaGhJuOGcSrJIiKV7GcCwQfQtdw2yFMplVO6Px
+	FhrPWwvXcq76rju8XeXZIzoV7mz4IDhKUXN3r8Qzw/QDuDECThg8Yh5aNGaJoIBn3on2Is26rka
+	JkxqpYdsJKh37FdCUGDFkNX1AdVZLAHzVwdaI5oRFM5eHOhScv9QxmjIFQJglllxeS3P0AYR6YS
+	n9fKc0rrtG6F7gz7e2u9DvN2RHKQocRA+gVyiFYdIZzA9F8RND/Wnal0AnjmZ9Yj0SiQyT06zND
+	oG8zuL/HuH9RfBGAtFs+0T2qQ9d8CwZ7SzwoJrixEO40UrKinJgzetgzb18PPy
+X-Google-Smtp-Source: AGHT+IHDyD5oG2uXUZIVEGCqh29+M+KMR34zeyrN9l/9A7q54mG4sz3mCfwqFTvAWjK975OSjaMbCw==
+X-Received: by 2002:a05:7301:1e8f:b0:2ae:5d3b:e1c6 with SMTP id 5a478bee46e88-2b17d31c5a3mr26669210eec.21.1768317006674;
+        Tue, 13 Jan 2026 07:10:06 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f243421esm27894312c88.2.2026.01.13.07.06.16
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a6386sm17950034eec.14.2026.01.13.07.10.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 07:06:16 -0800 (PST)
+        Tue, 13 Jan 2026 07:10:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c4f9e253-ae23-4ba2-b70c-1dd3c37dde0a@roeck-us.net>
-Date: Tue, 13 Jan 2026 07:06:14 -0800
+Message-ID: <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
+Date: Tue, 13 Jan 2026 07:10:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,11 +70,16 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: (tmp108) Add support for P3T1035 and P3T2030
-To: Mayank Mahajan <mayankmahajan.x@nxp.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: priyanka.jain@nxp.com, vikash.bansal@nxp.com
-References: <20260113085207.1608-1-mayankmahajan.x@nxp.com>
+Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
+ Regulator Driver
+To: ashish yadav <ashishyadav78@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ASHISH YADAV <Ashish.Yadav@infineon.com>
+References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
+ <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net>
+ <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,38 +125,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260113085207.1608-1-mayankmahajan.x@nxp.com>
+In-Reply-To: <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/13/26 00:52, Mayank Mahajan wrote:
-> Add support for the P3T1035 & P3T2030 temperature sensor. While mostly
-> compatible with the TMP108, P3T1035 uses an 8-bit configuration register
-> instead of the 16-bit layout used by TMP108. Updated driver to handle
-> this difference during configuration read/write.
+On 1/12/26 23:24, ashish yadav wrote:
+
+>> The need for this, especially why it would only be needed for PMBUS_READ_VOUT
+>> but not for any other VOUT related commands, is still insufficiently explained
+>> (and I failed to understand the rationale provided earlier).
+>>
+> 
+> It is specifically needed for READ_VOUT as it is being used by
+> external controller to monitor the rail health.
+> Other Vout related parameters are used internally in the IC to for
+> output voltage related protections and does not impact any external
+> decision making.
 > 
 
-This is way too complex. Use a single regmap configuration, implement the chip
-accesses in the driver, and map the 8-bit configuration register to a 16 bit
-value in the access functions. See the lm75 driver for an example; it does
-exactly the same.
+Sorry, that doesn't really make sense. How would the chip know to match
+VOUT with its VOUT limits if both don't use the same scale ?
 
-The remaining differences are
-
-- Conversion rate. Use tables, like the lm75 driver.
-
-- The new chips don't support hysteresis. Handle in is_visible function;
-   that is what it is for.
-
-- Configuration
-   - Alert polarity. Not supported by the driver, so don't care.
-   - Configuration bit 2 (LC = Latch Control vs. TM = Thermostat Mode).
-     The functionality is the same (if set, alerts remain active until
-     a register is read) and should be set.
-   - Hysteresis. The value doesn't really matter for the P3T1035 since
-     it is in the upper byte of the configuration register which will be
-     ignored by the chip when written through the regmap access function.
-
-Thanks,
 Guenter
 
