@@ -1,77 +1,75 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9070F3B1BD
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 00:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9378D155C82
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 00:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768262430; cv=none; b=XcHZ4VSjEsbezrjD49xFtYn8Dc8baC40WB6SiPt3zeBPGa4OLB3FQli4DtROgGTyzzd6O2lgZaSwF455VoRpvtkeqYTD/1anb04HUFL3ZBcdL+TU7Se1F1bn8L3OwUXkhNChbbmYKd2s3iRhcSAQnbDl3DTAP+lVq08obJGyvOU=
+	t=1768262482; cv=none; b=KIUxOi9abUwxUirWe5LaWTV3wPYpWDvfmB+f7eQg6hf7vGFMIEFhzlouE7pqgI8HWEJjxBm1G93jA3LhfFz19AQJ5WHrT10fJ/5F1lZsPPGUdkuvn9/6dGgdpjU190pjGgh6nJI/pwqhVQgGmJYDPZG+GkR53PyMBPdke4JBFOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768262430; c=relaxed/simple;
-	bh=AB46dIc3yizScZvd1REalZDXMZ+TOT02GcTeNQrT7FM=;
+	s=arc-20240116; t=1768262482; c=relaxed/simple;
+	bh=ljubIT2IkWwAV5PEltj2zpXHUvbHQeZCEk9idJaQXVY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwSoNmi6X3Hk1N1Q77/RJTRKnr0skd+DW3LQp0NLMc+AhOrqasZm6cjxGhE7RxY1BMwoiz/ZMvf0rS1dHpQZRpudHx8FAYn4uTaqhZAy6egPxPrudg9tvTyTnfJg4pdvqd6SBB3z2beyyuvTIXcv4ufQas3XXOW4eO2n05FF3bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cuHn/xHK; arc=none smtp.client-ip=74.125.82.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=S7zSUmwaRRU7FjrqubeVMA9Pxya6aMLbKUPXxxaF9LWbNWp0FN06S/I0Bxt+B5GYxamB+iZQE6IXBfMSzRWEohKMvGBQMIhmPhDY4zUQV7mjgQ2w1IWjTKl+eeyIpdTXhIYF6vpH/9tfzkefEoGXIlFvkc0GCFXDVEXPRmu2rzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pl5hRC7P; arc=none smtp.client-ip=74.125.82.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cuHn/xHK"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2ae255ac8bdso1478789eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:00:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pl5hRC7P"
+Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-2ae287a8444so2719522eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:01:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768262428; x=1768867228; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768262480; x=1768867280; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Ca7ba810N8yfT2a0uOQiRTeHQwK7t+A9fpbfT6p0g0=;
-        b=cuHn/xHKC4Fx4u8p+uokujrGx81NZV/+bb6pQWkWRSqwZAyALsS8kAvtzCG/OJGTmS
-         F7NuYdac3rRaLWQP3KwQ/Lmrl7Q+lxvuvut+HTOkF+3c3GzGeCE+UYH7gOHE0ZArQmp9
-         6TT828npXw3pDvuUBQaMqV9TqNnyfC57kNQqNLzItNRO5uuX5mOk3dFc1RoQO5tQ5kNj
-         6L45SPIs3NkL9j6mH58JfwBWQXqm2FcBQPSKinuzhzzKqbiq3pQzAJxwbVNHnMM2bH9Y
-         FeuNTEhRK0Z8by42PaQI656LKO78KFAJnePwyI/hl73URfPDyQnziyotrJ22iaAYbUhm
-         7zAA==
+        bh=YbMElHy7hB/VQu8Z2iOab/fhBVVxmnUGu6DCKdYqD2g=;
+        b=Pl5hRC7PVQaoGMqkpguSrtu8RQkhwpetgfu3sp5ooc1Qvp/PQPwYSfGcgea93NfYpa
+         wsmA21ikKEJOGcr7mGPmKh782nYXSALNFsJyHsY/QX7JQ/fNo14GBZ7Wa4W9BxkUFzIf
+         CBQYjUJYYWWUyUxcWwUissAX2MWTOo8MDNQW8jkQJEtArTkq20PqzYopaxgITMQQ796I
+         uYS5Ta2W6zVCcEi/lMDNNVsd+DowobzxWVOs2vfd2nWcKyzSlFzplMbWd1n7uQR9JUvZ
+         Laholw9x5/Gl/DKkZ14MgrioEzxw9ttbaoKtg0e8D9HDtPFNT2nFkBKu5cv6M4CEyehg
+         J3FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768262428; x=1768867228;
+        d=1e100.net; s=20230601; t=1768262481; x=1768867281;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=/Ca7ba810N8yfT2a0uOQiRTeHQwK7t+A9fpbfT6p0g0=;
-        b=ZUGJibYvvjWen/2FOhvoubQ05uVi2Ul5Y7wS+hUADAXK+5Gt7UtfVK8tKIh3AIdq0V
-         5vvrhPIuWAk6H1wWjFxlhDxW5ptA9q3aGOMLfBpxBQljZwZ9TOF0xgVNKjm4VBUQ3MAb
-         4KuBGltaccxwuWxrxyNdw8s2KB4KPXD69SUtx3PPWrMDEtJEu18q/xZfpuKkPA05KuOJ
-         qEs78PSPfPd2kM27CDPfl0hNcQ0WMPogltULytA5BScS4l0VuSByGuwdBXo23JJmxtOP
-         GS6F3C060bOnnfx6lQ8st07SO4H/X5J74dLMft+He1R84CZGNcyO+w5YV90xu7LsIDeH
-         Eh/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWjwfDmwdXYz/oHmCXGCGrXukv5pkjG1kKy3gB1Q7ekprlK0rlTmUw/RuvVLmxGtAHWFSrQdVMlhnmkcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRZgDb7dwc/VrMpu7TGFNRCDPfmmGFs/vCZipSg05kwMEOaobK
-	cfvnfVsRTdRqHM5XawHlPWsBOf4W8LDOgvCqtAAsOMUOpZAZssmK000N
-X-Gm-Gg: AY/fxX6pcOw90YOqhy09McUnhhVNbG3qbzAFDalymHWTkEMyoTRsD4B0ewuifv4cT9A
-	4/uIyp9bRl1uUuknrlg0MgQx5Lm+FJ/58rA9e2q43CRXMzAXnowiGQGnP6wzBndC45GBLhKf3GH
-	E3PXklUACmcTitGSdkDjj5aUMDfvOHTwV6Kax/HM+TPVByhs5AMR6rAFknhykv3bLGVhWK+bylS
-	Mxd603PspKHfVAsKDkiJCNFIcp/b8n09vilnt173ifDP056v/iJWbvsqx5K7vk8L/pw59rjsho3
-	09gKGzNlYAERVRH4bqdSljHNC2MKFzp4BXkUqpyRt0HjsfdiLEPeiZDYonfCgAf70hOWKLJWG8x
-	XDg1I6m2tSdqGhFgJWXFfv/2+kMExnbassqManeLGLN5ON0Y/4ns+nW0cANaoFUDyrhAjkMXFey
-	wh7Pa5DzRi2WSU0m5Xvmhf0ixQ
-X-Google-Smtp-Source: AGHT+IE6yvQ2ddlvX9nyemFmo4N5T/S3GXfv8OCsJYg1pE6WW3PJHwa8O1dQ8ly5F9NmxtGXBloc6A==
-X-Received: by 2002:a05:7301:fd8b:b0:2ae:5b24:1cf6 with SMTP id 5a478bee46e88-2b17d30f886mr14686787eec.32.1768262427467;
-        Mon, 12 Jan 2026 16:00:27 -0800 (PST)
+        bh=YbMElHy7hB/VQu8Z2iOab/fhBVVxmnUGu6DCKdYqD2g=;
+        b=FHG+QRrric3RKZEaC0YAauAXE+FJyOKwxWSixqfJKktQ0XmBgp0+lYrGPcNBcfFWay
+         TpJlyhehUqjdet9Y4jl0YgaGG4/UgQsNrkAeD9TMyNVCSUdb5xihCFg7jlHM3ZwBwsIV
+         JOBR4wWPQCO04eJ/Gsyuv5oCFbpV++NnVENXAMuFBFG2y0O6Et8AEZH3mhlARPGXzU9B
+         9GC6ki/41tzIxJJbrh+pFybuZznY2N7B4/vXK+2zbBxwWjutG7Qeka0j+I20OzyCeLRO
+         Xl173dtuRyfGFOngFjOZkRn2a1UhKpzJECEQko4fv9i13pN4J2qkGIo09xtS1jMUWBNB
+         U1AA==
+X-Forwarded-Encrypted: i=1; AJvYcCXkvRpvHyMujhjMz4Vjeulloal6T/5WdLvqiSmKfZBf2eWb4d3w0jzlhgOdW8XhukxLemqjDtRoYzJ15Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrYR3A5Z4wKqcqpBMHIGCkelwUTEu4qu5XISiGBQ8rsHdmhY4N
+	Q8S/6VSTmlH4UHCv1C73lePMl6BVfBAVCxmmIWBPBOrU5hw2ke5ZmFmK58uqyRf0
+X-Gm-Gg: AY/fxX4ZRu6XH2FAGBlzVSzVt2s+rPW8Tnv/d7AU4eeJeGcxKiL4AI92yDqYEl1xBTp
+	ZcD5ldLbe9CASzpuNz4AwwxaCwIb4iwwMp4I+PFLJ5NKaP0I8pP12KFVTHAorZqj9CCemEgWYEM
+	vHtzGDNFqhhpEcBmcX7Fta9RuXFEj9H/NWuWc29UzSx3UD9aYYZcxPpYfDA8oMxQwbPLb5L0keS
+	Ip0/u3VcC27UfCz4kiWxzJ16PzFfEApG3BCgIkvcxKHysY47dVVec4C0Zpzh+i2pNh6C9NjbZAn
+	9nqe952yfdoaIczxUV8f739qeXsx/Z870QnjuwFgn2XZiR/iW1/UBBA2uRE3IzM8ULLzTmdRGZN
+	J1gjzO9CxMoFdheubkhAfqx7WL8EWysCxw0zGdzwakFz2kpH5TnvpcRoyxyZoAmZKW6Ai5lc4tH
+	WKSXd3etndPISyLH7zRsxwCIAQ
+X-Google-Smtp-Source: AGHT+IEktrbnpg5k/hQ/FM7X4gvEV6eHIctAQ/ELVaDdLGEhx2/yHf8MZ+Ac7V4M7GShQRqDtBHM6Q==
+X-Received: by 2002:a05:7300:b58a:b0:2a6:9fb5:f78c with SMTP id 5a478bee46e88-2b44f313ed9mr1202384eec.4.1768262480330;
+        Mon, 12 Jan 2026 16:01:20 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078ccf4sm16958219eec.16.2026.01.12.16.00.26
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b170673b2esm17154773eec.6.2026.01.12.16.01.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 16:00:27 -0800 (PST)
+        Mon, 12 Jan 2026 16:01:19 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 12 Jan 2026 16:00:25 -0800
+Date: Mon, 12 Jan 2026 16:01:19 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Convert aspeed,ast2400-pwm-tacho to
- DT schema
-Message-ID: <8d63c13e-15d2-4555-a110-4d446f3db314@roeck-us.net>
-References: <20260109-dev-dt-warnings-hwmon-v1-1-f2a84cdb0e1b@codeconstruct.com.au>
+To: Laveesh Bansal <laveeshb@laveeshbansal.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Documentation: hwmon: coretemp: Update supported
+ CPUs and TjMax values
+Message-ID: <afac8d11-c70e-4479-9e04-2d502251ff15@roeck-us.net>
+References: <20260106155426.547872-1-laveeshb@laveeshbansal.com>
+ <20260106155426.547872-2-laveeshb@laveeshbansal.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,40 +78,38 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260109-dev-dt-warnings-hwmon-v1-1-f2a84cdb0e1b@codeconstruct.com.au>
+In-Reply-To: <20260106155426.547872-2-laveeshb@laveeshbansal.com>
 
-On Fri, Jan 09, 2026 at 04:40:28PM +1030, Andrew Jeffery wrote:
-> From: "Rob Herring (Arm)" <robh@kernel.org>
+On Tue, Jan 06, 2026 at 03:54:25PM +0000, Laveesh Bansal wrote:
+> Update the coretemp documentation to reflect current driver capabilities:
 > 
-> Convert the ASpeed fan controller binding to DT schema format.
+> - Extend the supported CPU model list to include Atom processors from
+>   Bonnell through Jasper Lake, maintaining the original format with
+>   model numbers and adding X86_FEATURE_DTHERM as the actual detection
+>   mechanism. Added models: 0x37 (Bay Trail), 0x4a (Merrifield),
+>   0x4c (Cherry Trail), 0x5a (Moorefield), 0x5c (Apollo Lake),
+>   0x7a (Gemini Lake), 0x96 (Elkhart Lake), 0x9c (Jasper Lake)
 > 
-> The '#size-cells' value is 0 rather 1.
+> - Update the description to note that per-package temperature sensing
+>   is available on Sandy Bridge and all newer processors
 > 
-> Some users define more that 8 fan nodes where 2 fans share a PWM. The
-> driver seems to let the 2nd fan just overwrite the 1st one. That also
-> creates some addressing errors in the DT (duplicate addresses and wrong
-> unit-addresses).
+> - Clarify that TjMax is read from MSR_IA32_TEMPERATURE_TARGET on modern
+>   CPUs (Nehalem and newer)
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
-> ---
-> Hello,
+> - Add TjMax values for newer Atom processor families to Appendix A:
+>   - 22nm Silvermont/Bay Trail: E38xx at 110C, Z37xx at 90C
+>   - 22nm Silvermont/Moorefield: Z35xx at 90C
+>   - 14nm Airmont/Cherry Trail: Z8xxx at 90C
+>   - 14nm Goldmont/Apollo Lake: 105C
+>   - 14nm Goldmont Plus/Gemini Lake: 105C
+>   - 10nm Tremont/Elkhart Lake: 105C
+>   - 10nm Tremont/Jasper Lake: 105C
 > 
-> This change has been on a bit of a journey[1][2] and was eventually
-> integrated into my RFC series tidying up the AST2600 EVB at [3]. Rob
-> did some further digging at [4] and I've now addressed his finding
-> there.
+> TjMax values obtained from Intel ARK and official datasheets:
+> - E3845: https://www.intel.com/content/www/us/en/products/sku/78475/intel-atom-processor-e3845-2m-cache-1-91-ghz/specifications.html
+> - Z3600/Z3700: https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/atom-z36xxx-z37xxx-datasheet-vol-1.pdf
 > 
-> Much of the series at [3] was merged so I'm splitting out what remains
-> and peeling off the RFC label after making necessary fixes.
-> 
-> Guenter - I've included your A-b tag from [3], but as I'm sending this
-> to be applied through the hwmon tree, do with that as you please.
-> 
-> Changes since the series at [3]:
-> - Update #cooling-cells to 2 based on Rob's observation at [4]
-> 
+> Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
 
 Applied.
 
