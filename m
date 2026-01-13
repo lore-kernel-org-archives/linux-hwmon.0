@@ -1,72 +1,72 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9200636A009
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 07:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514A1369972
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 07:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768289065; cv=none; b=ZbeFMX3HW/Z2iLatB51SKpk737M4VpAGPZHgOKhxu4U105WA22qPOC7lM8iBxF1y+i2p1z4HPHk30HlvWN9mOaplOU4SEcbFPYxFpKdPb5INcu4GV7q53oYSHrcoGufbp8XX5H8WOAPhv801bUWcjqv7Sbvxuhu1ZMk604/ecyU=
+	t=1768289243; cv=none; b=azFqQ+P17gYWrE7QVa5vCu2rOT7ZEPctuzMknGP1zA7BbTPodfn9AhvJ0lsUKkDk3NYf57LEDJg0dgFgPbyj3R8MyG2WirlxR+83dw/PqR1tD9zn+HpgENo054LGaNRcx+98UMij+9YSZwQkClIqOMwMf0DbvEjhmndIkG/OBEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768289065; c=relaxed/simple;
-	bh=BPj6rd9Zk93EO/G+bn4rbaBY2eaRV2cr3U5MsZTBOQw=;
+	s=arc-20240116; t=1768289243; c=relaxed/simple;
+	bh=z+CxB6wZqqrH7MJcSnSrokTYqaFJiWERrQh31SFC+lI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g87WH/0+sBNhTxR0b2TUuqoJfqeMvQJoTrkFFcr4q/soU07tHt9BrhFfpY9zvZ/2WaiBRaYs/YH+MZrUJZHCVySTw6/d3KmGu980WXHDpVxg4ZvdsZgYHIX6AwSgckcjT7wzimhce8YJ4JJf9XhQnQst9vuUA9akXQ7uoD390yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXJMcShj; arc=none smtp.client-ip=74.125.82.174
+	 To:Cc:Content-Type; b=at1O7aM0gW2Uvybz3woX0WhmaBit/v6GfuI5os+4DEiAGNC/B3vszu/vpZZ5bPfmbgEEtqfekNe6YowP7I2jfnoDTt8rBie/EG2kHJTvqVKETDjBEZ+Ar+G8wd+CbrBjXzNq7RhD3iihE0/nR1JiM9qRBP2Jem9bjKr96L8+aSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlGSYS9Q; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXJMcShj"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2ae5af476e1so2913170eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 23:24:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlGSYS9Q"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ae5af476e1so2914022eec.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 23:27:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768289062; x=1768893862; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768289241; x=1768894041; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fi7aqXG+py9eB3OSrxPBr17wRL1b5YG9XuUcO42Y71A=;
-        b=AXJMcShjRGcAfwvhaRjTnYh1qQTvHOrCOnXngN7RGdeNrZoMRRUDzm1cmTWsTfdbnR
-         AHlS2A7lYdjXluNV+Lgu3EvZ8cClbIDJFVN0BmjYjCzZx8nkhPL92el8mFMeCsSgMv3c
-         c/FrtDf30q4BpRqLSytAiZ/KeBX5MT/IbCueWuOUtV4rUbYuVHNyC+o0mKIgMqpO4MxW
-         O4z/UPqrbUNLiwGMJwW6WkhOWt+K6iBZvLxlA9zVACVhZieSSnWeQafpD8TrJL7kqLqQ
-         N5kl81iOPuQZoseV6OMEWmxBWIOBpo0l1uK+3p6EcYw+7zF+P2pcalDg29jTlsU79Elz
-         sxQg==
+        bh=EhYA8353B3GBWmNdp4pASODK5S4UFggTmvUOTHnjKCo=;
+        b=LlGSYS9Q3DBmdGvptZVBG4rif3xOCEUxeUSOEwNkTPssBQXobTpA/wG6CHYiIHEzIw
+         DkLCrdqTmpE1PnqZjlBo2+JBv0dEHFttShqSPB1oas2vV4mSpGTKy0KgZ5srDDaqbmMG
+         lk/+bvzDDOPXO/0s4yCzV+3E6X2v0ZEIaoQBQmZd1a7fqS9tP6IUdW1OJfX5ZBJAjnax
+         Lw1mV1CT6v9DwORP47zHg7NnR2e+0oZkuyZCTFpBzJ62Aselx8WTOIrZAgTfVXUdLQEG
+         9lgInApjiN7c470tJcJEmrIxexjQ4BIb45JBnCAphDAA16NSVtWEDj+17KQ6bg7ZF8XL
+         HGfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768289062; x=1768893862;
+        d=1e100.net; s=20230601; t=1768289241; x=1768894041;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fi7aqXG+py9eB3OSrxPBr17wRL1b5YG9XuUcO42Y71A=;
-        b=c7fjj3aoNINMtAVVYRDBgOQxQQyc5Rg7/c5jtdWXztJa06NAl+07Oo5uKQtvJ/TNJh
-         n1WuMaB4TO+P0oOocrB6yvQFAxpgZcnkZPfPxL7jbATRc++XR2/0p+lSUhwcbUqIas2b
-         IZLTxmu3SIOXAPOoGmmzoskaVHXuQ5UbC4c5XPad5ESCsbt5k0kqwwVAJadsGvoNgA+k
-         iFKJdYjLzgwIWAhqOtSvntUxGSyNqvoY84Jjs1HZYWNJQ24qzeoqDVvDjJ0ifmIYSw70
-         CKFeNFmDQfqf6ZRLUpcPYRBoRfx4hR+IG+VUgk9aiVVmFJwkW/6ztin5MZJitWy1hiCg
-         n2Hw==
-X-Forwarded-Encrypted: i=1; AJvYcCVncVFf9JpqLXwYlaqWDlEL4xJKyDS4LeUQsx883peuQvEH9r9PLXZWoCWLTVVHP0yhQfI1askeNzi09w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKMkCnNWy0qvoAoRBtDGuVNvxJry7JqQLaN5Zd4aBmccXvUG5p
-	Zm3FtRc3yOqK5K/YtpGdrLUwyBjYPDf6YwvSaAgmJw07VdicDZjSCRaqZC1QTHCBhxLO7wwgl7T
-	fH/5qV+yejg483SfYzbXohcttU/0DPWo=
-X-Gm-Gg: AY/fxX7BTN3g+bmdyjdQUwBgjBASsmPaj2ox1eA+F9slSlqmjK4LjbriVkLqVwHK9VM
-	Umbfnau1BSLNuJ1J3qikLlevqwpJY6h4bwZEUzaKjes4jH5AR4FpKw1zQXFpQyqkvH+YZri35Py
-	pHkD4AynXFfqglehBxWgEUpPOf2YqYL9ctz1BJF6T7AfFNvirAUIFMq9eU/eTZhLxgXAVUn+qxX
-	Be+fjA+ji42RZu+M4ubB2SyigAzLtxu/XyMM+EW7C8WoErIHhE0xW4Y6A9+dQFcrf30xCy9
-X-Received: by 2002:a05:7300:bf8a:b0:2ae:5076:b61 with SMTP id
- 5a478bee46e88-2b44f205c54mr1659540eec.3.1768289062398; Mon, 12 Jan 2026
- 23:24:22 -0800 (PST)
+        bh=EhYA8353B3GBWmNdp4pASODK5S4UFggTmvUOTHnjKCo=;
+        b=wDAJ0ITNEKUhrdC9QCO5bM21gIXez7UeZI+wxwFmoc1K2RVQHFG5gPJnSnH8vgMNsN
+         oTzIZwDedWzx3aSVO5S8b+vOE8h3hLf979vgN9b6qvFhK6K+7nEDDHq1R98NLMyfyAMk
+         IU64tlzKm2eN/Xfu2+iGONVxj1hZrWPFmVTjV5BynTww+l9cODHDdpkDdvSRpXLSfarx
+         Vr1j6mmx8lw+Ao69jblXgJ+6zNhiJCqt9vH0PMQ8ybi/DHG/IHvOu1Y+EW7ic+FPjmrj
+         LaSjZIwJjmSqhqXbxQzdFLyZ9zonsguGmz1zKx3Ew3inHylJsLww0J0RJhunQxqyi1WV
+         bFPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2cy7pC70bcOMu3SXtyR0CB+xqTI37/wJJglkHo+QpHPf7YUQNzwi4wkYzZeGoNxkaoDACEZ+1gn+GRw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKv8iiPpP8POt6S3IynYfY3/blI+zPYrtGJRfzH9F07mVjxazu
+	hCAuOMcI36ePQEEYx/VPSSa1hXgW2sUPOTu3fxD+YXbg7Dp3QJEDpxWDr3cJXVfiENwhshbKP6w
+	qoBjxBt/d75wACD/iS0ZgeD4Ujmr+2tM=
+X-Gm-Gg: AY/fxX4hfV/io7em9DmKRyCmnrzj7PUTuNcVTW/4gEEtnWg6dzHZt52IQ11WdgIbv+2
+	NEzY7qPqTZdIkwkhCncSDNcDPklcU2hJl48SpdroO6z5mBgHGRtmucEn7wN+hnVgcKWNpifJEEr
+	QynbEIdXHd6t/sKbsIFBAWnmRabckJbA1diz0cf1ZFN8/S3CN4mklvntw88ebV9oHGCTL2DMVfz
+	YpKJDZTVQTD1WnnlaPdB1l+6EFdZN43QhRaVW1BKKN1zgqThVjQt7RvAAVnne1K4uLKs6Hd
+X-Received: by 2002:a05:7300:a148:b0:2ae:5a2e:de70 with SMTP id
+ 5a478bee46e88-2b44f21b4b9mr2231977eec.8.1768289241352; Mon, 12 Jan 2026
+ 23:27:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260107144507.46491-1-Ashish.Yadav@infineon.com> <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net>
-In-Reply-To: <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net>
+References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
+ <20260107144507.46491-2-Ashish.Yadav@infineon.com> <89927834-9e3c-4076-83c3-add8bbfdf187@roeck-us.net>
+In-Reply-To: <89927834-9e3c-4076-83c3-add8bbfdf187@roeck-us.net>
 From: ashish yadav <ashishyadav78@gmail.com>
-Date: Tue, 13 Jan 2026 12:54:10 +0530
-X-Gm-Features: AZwV_Qj67qX5Y6IyOltha0CsBNV0ZlJjrM9y2HNqeYRMkaY3dEUUMIcLW9PdQQg
-Message-ID: <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
- Regulator Driver
+Date: Tue, 13 Jan 2026 12:57:09 +0530
+X-Gm-Features: AZwV_QjtLx6eP3xSGVFmD7zao3mxMv82keWsciVpDtjQammeg1q9Z0Zo6yzY-KE
+Message-ID: <CAJKbuCaLnpAqcjLt4gbZdXmzZbg4+hvj9ONQEue9tfR48eNTpw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon/pmbus: Add Infineon TDA38740A
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
 	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
@@ -83,337 +83,145 @@ Please find my answer inline.
 With Regards
   Ashish
 
-On Tue, Jan 13, 2026 at 3:21=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+On Tue, Jan 13, 2026 at 3:12=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
 wrote:
 >
 > On 1/7/26 06:45, ASHISH YADAV wrote:
-> > Add the pmbus driver for the Infineon TDA38740A/TDA38725A
-> > DC-DC voltage regulator.
+> > Document the TDA38740A/25A device tree binding.
 > >
 > > Signed-off-by: ASHISH YADAV <Ashish.Yadav@infineon.com>
+> >
 > > ---
 > > Changes in v2:
-> >   - Review comments address.
+> >   - Review comments address:
+> > https://lore.kernel.org/all/2ee75453-0869-4348-ad92-f7ff71aca75d@kernel=
+.org/
+> >
 >
 > That is not a change log.
+>
 
 ACK, I  will  address it in the v3 release .
+
+> Guenter
 >
-> >   - Another Patch for Devicetree binding submitted for Driver
-> >     Documentation.
+> > Driver code in review process:
+> > https://www.spinics.net/lists/kernel/msg5985470.html
 > > ---
-> >   drivers/hwmon/pmbus/Kconfig     |  16 +++
-> >   drivers/hwmon/pmbus/Makefile    |   1 +
-> >   drivers/hwmon/pmbus/tda38740a.c | 203 +++++++++++++++++++++++++++++++=
+> >   .../hwmon/pmbus/infineon,tda38740a.yaml       | 81 ++++++++++++++++++=
 +
->
-> Documentation is missing.
-
-ACK, I  will  address it in the v3 release .
-
-> >   3 files changed, 220 insertions(+)
-> >   create mode 100644 drivers/hwmon/pmbus/tda38740a.c
+> >   1 file changed, 81 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/infi=
+neon,tda38740a.yaml
 > >
-> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > index f3fb94cebf1a..e7d7ff1b57df 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -602,6 +602,22 @@ config SENSORS_TDA38640_REGULATOR
-> >         If you say yes here you get regulator support for Infineon
-> >         TDA38640 as regulator.
-> >
-> > +config SENSORS_TDA38740A
-> > +     tristate "Infineon TDA38740A"
-> > +     help
-> > +       If you say yes here you get hardware monitoring support for Inf=
-ineon
-> > +       TDA38740A/25A.
-> > +
-> > +       This driver can also be built as a module. If so, the module wi=
-ll
-> > +       be called tda38740a.
-> > +
-> > +config SENSORS_TDA38740A_REGULATOR
-> > +     bool "Regulator support for TDA38740A and compatibles"
-> > +     depends on SENSORS_TDA38740A && REGULATOR
-> > +     help
-> > +       If you say yes here you get regulator support for Infineon
-> > +       TDA38740A/25A as regulator.
-> > +
-> >   config SENSORS_TPS25990
-> >       tristate "TI TPS25990"
-> >       help
-> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefil=
-e
-> > index 349a89b6d92e..f422c80cf3d8 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -58,6 +58,7 @@ obj-$(CONFIG_SENSORS_PXE1610)       +=3D pxe1610.o
-> >   obj-$(CONFIG_SENSORS_Q54SJ108A2)    +=3D q54sj108a2.o
-> >   obj-$(CONFIG_SENSORS_STPDDC60)      +=3D stpddc60.o
-> >   obj-$(CONFIG_SENSORS_TDA38640)      +=3D tda38640.o
-> > +obj-$(CONFIG_SENSORS_TDA38740A)  +=3D tda38740a.o
-> >   obj-$(CONFIG_SENSORS_TPS25990)      +=3D tps25990.o
-> >   obj-$(CONFIG_SENSORS_TPS40422)      +=3D tps40422.o
-> >   obj-$(CONFIG_SENSORS_TPS53679)      +=3D tps53679.o
-> > diff --git a/drivers/hwmon/pmbus/tda38740a.c b/drivers/hwmon/pmbus/tda3=
-8740a.c
+> > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda=
+38740a.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda387=
+40a.yaml
 > > new file mode 100644
-> > index 000000000000..b31e1b5c6916
+> > index 000000000000..cd4102350a15
 > > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/tda38740a.c
-> > @@ -0,0 +1,203 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/**
-> > + * Hardware monitoring driver for Infineon Integrated-pol-voltage-regu=
-lators
-> > + * Driver for TDA38725A and TDA38740A
-> > + *
-> > + * Copyright (c) 2025 Infineon Technologies
-> > + */
+> > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/infineon,tda38740a.=
+yaml
+> > @@ -0,0 +1,81 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
 > > +
-> > +#include <linux/err.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/init.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/regulator/driver.h>
-> > +#include "pmbus.h"
+> > +$id: http://devicetree.org/schemas/hwmon/pmbus/infineon,tda38740a.yaml=
+#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
-> > +#define TDA38725A_IC_DEVICE_ID "\xA9"
-> > +#define TDA38740A_IC_DEVICE_ID "\xA8"
+> > +title: Infineon TDA38740A and TDA38725A Synchronous Buck Regulator wit=
+h I2C
 > > +
-> > +static const struct i2c_device_id tda38740a_id[];
+> > +maintainers:
+> > +  - ASHISH YADAV <Ashish.Yadav@infineon.com>
 > > +
-> > +enum chips { tda38725a, tda38740a };
+> > +description: |
+> > +  The Infineon TDA38740A/TDA38725A is a 40A/25A Single-voltage Synchro=
+nous
+> > +  Buck Regulator with I2C designed for Industrial use.
 > > +
-> > +struct tda38740a_data {
-> > +     enum chips id;
-> > +     struct pmbus_driver_info info;
-> > +     u32 vout_voltage_multiplier[2];
-> > +};
+> > +  Datasheet:
+> > +  https://www.infineon.com/assets/row/public/documents/24/49/infineon-=
+tda38740a-tda38725a-datasheet-en.pdf
 > > +
-> > +#define to_tda38740a_data(x) container_of(x, struct tda38740a_data, in=
-fo)
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - infineon,tda38725a
+> > +      - infineon,tda38740a
 > > +
-> > +static const struct regulator_desc __maybe_unused tda38740a_reg_desc[]=
- =3D {
-> > +     PMBUS_REGULATOR("vout", 0),
-> > +};
+> > +  reg:
+> > +    maxItems: 1
 > > +
-> > +static int tda38740a_read_word_data(struct i2c_client *client, int pag=
-e,
-> > +                                 int phase, int reg)
-> > +{
-> > +     const struct pmbus_driver_info *info =3D pmbus_get_driver_info(cl=
-ient);
-> > +     const struct tda38740a_data *data =3D to_tda38740a_data(info);
-> > +     int ret;
+> > +  infineon,vout-voltage-multiplier:
+> > +    description: |
+> > +      TDA38740/25 pin strap parts are available in two flavors of 1:1 =
+& 1:2
+> > +      vout scale loop.
+> > +      For the 1:1 vout_scale_loop version, there is no need for any re=
+sistor
+> > +      divider as output voltage sense pins are directly connected to
+> > +      the output.
 > > +
-> > +     /* Virtual PMBUS Command not supported */
-> > +     if (reg >=3D PMBUS_VIRT_BASE)
-> > +             return -ENXIO;
+> > +      For a 1:2 scale loop version, it is recommended to use 499 ohms =
+each for
+> > +      top and bottom across the feedback path.
+> > +      However, in some applications customers tend to use an intention=
+al
+> > +      resistor divider across the output with a different divider rati=
+o other
+> > +      than 1:1 or 1:2 to alter the actual output voltage.
 > > +
->
-> Why is this needed (instead of just returning -ENODATA) ?
->
-ACK, I  will  address it in the v3 release .
-> > +     switch (reg) {
-> > +     case PMBUS_READ_VOUT:
-> > +             ret =3D pmbus_read_word_data(client, page, phase, reg);
-> > +             if (ret < 0)
-> > +                     return ret;
-> > +             ret =3D ((ret * data->vout_voltage_multiplier[0]) /
-> > +                    data->vout_voltage_multiplier[1]);
->
-> The need for this, especially why it would only be needed for PMBUS_READ_=
-VOUT
-> but not for any other VOUT related commands, is still insufficiently expl=
-ained
-> (and I failed to understand the rationale provided earlier).
->
-
-It is specifically needed for READ_VOUT as it is being used by
-external controller to monitor the rail health.
-Other Vout related parameters are used internally in the IC to for
-output voltage related protections and does not impact any external
-decision making.
-
-> > +             break;
-> > +     case PMBUS_VOUT_COMMAND:
-> > +     case PMBUS_VOUT_MAX:
-> > +     case PMBUS_VOUT_MARGIN_HIGH:
-> > +     case PMBUS_VOUT_MARGIN_LOW:
-> > +     case PMBUS_VOUT_TRANSITION_RATE:
-> > +     case PMBUS_VOUT_DROOP:
-> > +     case PMBUS_VOUT_SCALE_LOOP:
-> > +     case PMBUS_VOUT_OV_FAULT_LIMIT:
-> > +     case PMBUS_VOUT_UV_FAULT_LIMIT:
-> > +     case PMBUS_IOUT_OC_FAULT_LIMIT:
-> > +     case PMBUS_OT_FAULT_LIMIT:
-> > +     case PMBUS_OT_WARN_LIMIT:
-> > +     case PMBUS_VIN_OV_FAULT_LIMIT:
-> > +     case PMBUS_STATUS_WORD:
-> > +     case PMBUS_READ_VIN:
-> > +     case PMBUS_READ_IIN:
-> > +     case PMBUS_READ_IOUT:
-> > +     case PMBUS_READ_TEMPERATURE_1:
-> > +     case PMBUS_READ_POUT:
-> > +     case PMBUS_READ_PIN:
-> > +             ret =3D pmbus_read_word_data(client, page, phase, reg);
->
-> I fail to see why this would be necessary. Just return -ENODATA.
->
-ACK, I  will  address it in the v3 release .
-
-> > +             break;
-> > +     default:
-> > +             ret =3D -ENODATA;
-> > +             break;
-> > +     }
-> > +     return ret;
-> > +}
+> > +      For example, if pin strap part is set to Vboot of 0.7V,they use =
+a
+> > +      resistor divider to generate 0.75V using the equation provided i=
+n
+> > +      Section 13.3 of the datasheet.In this case, as there are only tw=
+o
+> > +      vout_scale_loop options of 1:1 and 1:2 that the IC can identify,
+> > +      Read_Vout would still read as 0.7V in the telemetry and the base=
+board
+> > +      management controllers would use this telemetry data to monitor =
+the
+> > +      rail parameters leading to false tripping of the system.
+> > +      This multiplier is used to offset the telemetry output voltage R=
+ead_Vout
+> > +      so that the telemetry data is reported correctly to the monitori=
+ng
+> > +      controller,in this example the multiplier would be 0.75/0.7 =3D =
+1.071.
 > > +
-> > +static struct pmbus_driver_info tda38740a_info[] =3D {
-> > +     [tda38740a] =3D {
-> > +             .pages =3D 1,
-> > +             .read_word_data =3D tda38740a_read_word_data,
-> > +             .format[PSC_VOLTAGE_IN] =3D linear,
-> > +             .format[PSC_VOLTAGE_OUT] =3D linear,
-> > +             .format[PSC_CURRENT_OUT] =3D linear,
-> > +             .format[PSC_CURRENT_IN] =3D linear,
-> > +             .format[PSC_POWER] =3D linear,
-> > +             .format[PSC_TEMPERATURE] =3D linear,
+> > +      This multiplier is required only for any external monitoring of =
+the rail
+> > +      output voltage. All the other Vout related parameters are used
+> > +      internally by the IC and there is only a slight impact on the fa=
+ult
+> > +      thresholds.The impact can be calculated using equations in Secti=
+on 13.3
+> > +      of the datasheet.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    minItems: 2
+> > +    maxItems: 2
 > > +
-> > +             .func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-> > +                     | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-> > +                     | PMBUS_HAVE_IIN
-> > +                     | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> > +                     | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-> > +                     | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
-> > +#if IS_ENABLED(CONFIG_SENSORS_TDA38740A_REGULATOR)
-> > +             .num_regulators =3D 1,
-> > +             .reg_desc =3D tda38740a_reg_desc,
-> > +#endif
-> > +     },
-> > +};
+> > +required:
+> > +  - compatible
+> > +  - reg
 > > +
-> > +static int tda38740a_get_device_id(struct i2c_client *client)
-> > +{
-> > +     u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
-> > +     enum chips id;
-> > +     int status;
+> > +additionalProperties: false
 > > +
-> > +     status =3D i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID,
-> > +                                        device_id);
-> > +     if (status < 0 || status > 1) {
-> > +             dev_err(&client->dev,
-> > +                     "Failed to read Device ID or unexpected/unsupport=
-ed Device\n");
->
-> How about printing the device ID here if it is unsupported ?
-> It could be printed as hex string.
->
-ACK, I  will  address it in the v3 release .
-
-> > +             return -ENODEV;
-> > +     }
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    i2c {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
 > > +
-> > +     if (!memcmp(TDA38725A_IC_DEVICE_ID, device_id, 1)) {
-> > +             id =3D tda38725a;
-> > +     } else if (!memcmp(TDA38740A_IC_DEVICE_ID, device_id, 1)) {
-> > +             id =3D tda38740a;
-> > +     } else {
-> > +             dev_err(&client->dev, "Unsupported device with ID:%s\n",
-> > +                     device_id);
->
-> device_id is not terminated, and it is not a user readable string.
-> It should be printed as hex string, or as hex byte (0xXX).
->
-ACK, I  will  address it in the v3 release .
-
-> > +             return -ENODEV;
-> > +     }
-> > +
-> > +     return id;
-> > +}
-> > +
-> > +static int tda38740a_probe(struct i2c_client *client)
-> > +{
-> > +     struct device *dev =3D &client->dev;
-> > +     struct tda38740a_data *data;
-> > +     int chip_id;
-> > +
-> > +     if (!i2c_check_functionality(client->adapter,
-> > +                                  I2C_FUNC_SMBUS_BYTE |
-> > +                                          I2C_FUNC_SMBUS_BYTE_DATA |
-> > +                                          I2C_FUNC_SMBUS_WORD_DATA |
-> > +                                          I2C_FUNC_SMBUS_BLOCK_DATA))
-> > +             return -ENODEV;
-> > +
-> > +     chip_id =3D tda38740a_get_device_id(client);
-> > +     if (chip_id < 0)
-> > +             return chip_id;
-> > +
-> > +     data =3D devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +     data->id =3D chip_id;
-> > +     memcpy(&data->info, &tda38740a_info[chip_id], sizeof(data->info))=
-;
-> > +
-> > +     if (!of_property_read_u32_array(client->dev.of_node, "infineon,vo=
-ut-voltage-multiplier",
-> > +                                     data->vout_voltage_multiplier,
-> > +                 ARRAY_SIZE(data->vout_voltage_multiplier))) {
-> > +             dev_info(&client->dev,
-> > +                      "vout-voltage-multiplier from Device Tree:%d %d\=
-n",
-> > +                      data->vout_voltage_multiplier[0],
-> > +                      data->vout_voltage_multiplier[1]);
-> > +     } else {
-> > +             dev_info(&client->dev,
-> > +                      "vout-voltage-multiplier not available from Devi=
-ce Tree,using default values");
-> > +             data->vout_voltage_multiplier[0] =3D 0x01;
-> > +             data->vout_voltage_multiplier[1] =3D 0x01;
-> > +     }
-> > +
-> > +     return pmbus_do_probe(client, &data->info);
-> > +}
-> > +
-> > +static const struct i2c_device_id tda38740a_id[] =3D { { "tda38725a", =
-tda38725a },
-> > +                                                  { "tda38740a", tda38=
-740a },
-> > +                                                  {} };
-> > +
-> > +MODULE_DEVICE_TABLE(i2c, tda38740a_id);
-> > +
-> > +static const struct of_device_id __maybe_unused tda38740a_of_match[] =
-=3D {
-> > +     { .compatible =3D "infineon,tda38725a", .data =3D (void *)tda3872=
-5a },
-> > +     { .compatible =3D "infineon,tda38740a", .data =3D (void *)tda3874=
-0a },
-> > +     {}
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(of, tda38740a_of_match);
-> > +
-> > +static struct i2c_driver tda38740a_driver =3D {
-> > +     .driver =3D {
-> > +             .name =3D "tda38740a",
-> > +             .of_match_table =3D of_match_ptr(tda38740a_of_match),
-> > +     },
-> > +     .probe =3D tda38740a_probe,
-> > +     .id_table =3D tda38740a_id,
-> > +};
-> > +
-> > +module_i2c_driver(tda38740a_driver);
-> > +
-> > +MODULE_AUTHOR("Ashish Yadav <Ashish.Yadav@infineon.com>");
-> > +MODULE_DESCRIPTION("PMBus driver for Infineon TDA38725A/40A IPOL");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS("PMBUS");
+> > +        hwmon@40 {
+> > +            compatible =3D "infineon,tda38740a";
+> > +            reg =3D <0x40>;
+> > +            infineon,vout-voltage-multiplier =3D <75 70>;
+> > +        };
+> > +    };
 >
