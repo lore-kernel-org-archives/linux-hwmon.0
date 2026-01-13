@@ -1,54 +1,42 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EEB30C343;
-	Tue, 13 Jan 2026 07:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768290833; cv=pass; b=c0qylyHwepSUPfq7mAjl/Jb1LxWFfzhEaiU5EKvFwrO6fEm2VgaYc+xQ99l3TgXDnVHnjfrss/dwwsSHue5dyfgixfPP1ojLld9JZ73l1DGjHLTPbz/Gn0IXqtvbnIBodn5W+oVWNIJN1Tg0YA3967i8Vd8t9G2mG//q+R5xgLw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768290833; c=relaxed/simple;
-	bh=3Zpaxu2HZv4d8fwDnd86LpPg04oT/kYAP5QzYC9ImEo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=th5mtgiCrlBepTRs+MRgz8aL7p9dJ+kqPXKv+CxfUG2QbrVrsgvAHkMKMdv0jrSVVFyjJZNMzHffb6P8+k6YhrOJB5hIJOUrsfPc1xlLKNH6cHRybGWC3Z1UMGqgTe8sRgq7u4EPuBIeTFbHPqomLdiM62z2LOxJiqnrqJgNns4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com; spf=pass smtp.mailfrom=laveeshbansal.com; dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b=kL1Wt94g; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=laveeshbansal.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b="kL1Wt94g"
-ARC-Seal: i=1; a=rsa-sha256; t=1768290806; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=GRMLN/nhokWlVZjhns0HUC0Zfp58QRRp3RtGCeA0nFMLC3zC/xQPBdHmpMhCUk9K11rG/IAZ4pa8ccrXXRmOSmdYGwGF6aVMiOHYbrJl0PNMXXLFtzPy/cqz1FHwL9pvkbzXNkFVk4pskc2w7DSjZKHEiZUdoiDXSmbP7PQUkEY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768290806; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=tAixoUQLm/YxDerC//ZHNaRCT6sQVXOg6iwzWAjhbIs=; 
-	b=VzV5qWYwHYlHunfmKAxsCMYKzfyN9+E2JMEGKZ+tfwwecdpqHDf3O/X5MI03sz3KIeYwK53lDqsUFAHdVFzeLk9nm8DIzHVo730zcBeZyxBt4/f/DWF0tdH8mHfWPhhhNMYovC3DZ5IKe4JCPIwoGuC/MPJrpC5x7aDS0RZ+Yes=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=laveeshbansal.com;
-	spf=pass  smtp.mailfrom=laveeshb@laveeshbansal.com;
-	dmarc=pass header.from=<laveeshb@laveeshbansal.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768290806;
-	s=zoho; d=laveeshbansal.com; i=laveeshb@laveeshbansal.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=tAixoUQLm/YxDerC//ZHNaRCT6sQVXOg6iwzWAjhbIs=;
-	b=kL1Wt94gG4rhKhka3YUkHu1Wal4CEoggIY1HLJ7OM89Gl6M0CVeCkLw19TrD1J78
-	6TlR1PaFp+ISSzAS/4KoUO28o5jfbR1hGhVP1HeHRH88jHblgFGHkQPk2MaTpjHUa2s
-	15nL1hyq9L4ZAdR5+9OEvo0DxXsMCUdqIt4eDQHA=
-Received: by mx.zohomail.com with SMTPS id 1768290804441983.3426350377831;
-	Mon, 12 Jan 2026 23:53:24 -0800 (PST)
-From: Laveesh Bansal <laveeshb@laveeshbansal.com>
-To: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: linux@roeck-us.net,
-	corbet@lwn.net,
-	rdunlap@infradead.org,
-	sfr@canb.auug.org.au,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	Laveesh Bansal <laveeshb@laveeshbansal.com>
-Subject: [PATCH v2] Documentation: hwmon: coretemp: Fix malformed RST table
-Date: Tue, 13 Jan 2026 07:53:22 +0000
-Message-ID: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1F536AB4A;
+	Tue, 13 Jan 2026 08:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768294351; cv=none; b=qnHtUqM4tLaxeW8Axxz5NWR+NWiwqpVNwWvgR3RUEes1nsplnEN97WPVBpb7RHogAQxY97c4x1sEVH72I5hafsGGW8pIJuNvRVBRlq5S47p9cs9J+oBIXpkvlPZnSJaKSN1iaW8iZdE6Fpdz5EAB6dXw8Rm6d63qeSu9Ub9j2xM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768294351; c=relaxed/simple;
+	bh=NE1cLMT5rKA59cmFCAbV2rjT261+gg4zPggTkxBmTjU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cnxlBraxSSMYrvMtcYs5bQ9qgMQijr850YXaopmPVfOSQpEYfrSOrxDZL1xT/TsxFzbSTNLU//AujWfPlOXGTHQzYb7q8aFajiQibpvFOF3ahjn7/wZvh0Il6Ndxzn0eKEh8E6zaW7u4aGeGD102aNFlVXohj6HXxbzdD5GGpYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 001AA200B88;
+	Tue, 13 Jan 2026 09:52:27 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BF6B6200960;
+	Tue, 13 Jan 2026 09:52:27 +0100 (CET)
+Received: from NXL37714.wbi.nxp.com (nxl37714.wbi.nxp.com [10.31.156.112])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0033A18000AF;
+	Tue, 13 Jan 2026 16:52:25 +0800 (+08)
+From: Mayank Mahajan <mayankmahajan.x@nxp.com>
+To: linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: priyanka.jain@nxp.com,
+	vikash.bansal@nxp.com,
+	Mayank Mahajan <mayankmahajan.x@nxp.com>
+Subject: [PATCH 2/3] dt-bindings: hwmon: ti,tmp108: Add P3T1035,P3T2030
+Date: Tue, 13 Jan 2026 14:22:23 +0530
+Message-ID: <20260113085224.1176-1-mayankmahajan.x@nxp.com>
+X-Mailer: git-send-email 2.47.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -56,65 +44,54 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-Shorten the Celeron/Pentium processor entries in the TjMax table to fit
-within the 47-character column width, fixing the RST table parsing error.
+Document the NXP P3T1035 and P3T2030 compatibles in TMP108.
 
-The following entries exceeded the column width:
-  - "Celeron/Pentium Processors (Goldmont/Apollo Lake)" (49 chars)
-  - "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)" (54 chars)
-  - "Celeron/Pentium Processors (Tremont/Jasper Lake)" (48 chars)
-
-Drop "Processors" from these entries as this preserves all searchable
-technical keywords (Celeron, Pentium, Goldmont, Gemini Lake, etc.) while
-"Processors" is implied by the chip names and adds no search value.
-
-Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
-Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
+Signed-off-by: Mayank Mahajan <mayankmahajan.x@nxp.com>
 ---
-v2:
-  - Shorten text instead of widening columns (widening would require
-    adjusting 101 data rows to realign TjMax values)
+ .../devicetree/bindings/hwmon/ti,tmp108.yaml        | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Tested with:
-  - python3 -m docutils Documentation/hwmon/coretemp.rst /dev/null
-  - make htmldocs
-
-Open to alternative approaches if anyone has a better solution.
----
- Documentation/hwmon/coretemp.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
-index 3afb179e0ced..3ba44b57d028 100644
---- a/Documentation/hwmon/coretemp.rst
-+++ b/Documentation/hwmon/coretemp.rst
-@@ -120,12 +120,12 @@ Process		Processor					TjMax(C)
- 		x5-E3940/E3930					105
- 		x7-E3950					105
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+index a6f9319e068d..1ca7f3aa4cd4 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+@@ -4,26 +4,29 @@
+ $id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
--14nm		Celeron/Pentium Processors (Goldmont/Apollo Lake)
-+14nm		Celeron/Pentium (Goldmont/Apollo Lake)
- 		J3455/J3355					105
- 		N3450/N3350					105
- 		N4200						105
+-title: TMP108/P3T1085(NXP) temperature sensor
++title: TMP108/P3T1035/P3T1085/P3T2030 temperature sensor
  
--14nm		Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)
-+14nm		Celeron/Pentium (Goldmont Plus/Gemini Lake)
- 		J4105/J4005					105
- 		N4100/N4000					105
- 		N5000						105
-@@ -133,7 +133,7 @@ Process		Processor					TjMax(C)
- 10nm		Atom Processors (Tremont/Elkhart Lake)
- 		x6000E						105
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
  
--10nm		Celeron/Pentium Processors (Tremont/Jasper Lake)
-+10nm		Celeron/Pentium (Tremont/Jasper Lake)
- 		N4500/N5100/N6000 series			105
+ description: |
+-  The TMP108/P3T1085(NXP) is a digital-output temperature sensor with a
+-  dynamically-programmable limit window, and under- and overtemperature
+-  alert functions.
++  The TMP108 or NXP P3T Family (P3T1035, P3T1085 and P3T2030) is a digital-
++  output temperature sensor with a dynamically-programmable limit window,
++  and under- and over-temperature alert functions.
  
- 45nm		Xeon Processors 5400 Quad-Core
+-  P3T1085(NXP) support I3C.
++  NXP P3T Family (P3T1035, P3T1085 and P3T2030) supports I3C.
+ 
+   Datasheets:
+     https://www.ti.com/product/TMP108
+     https://www.nxp.com/docs/en/data-sheet/P3T1085UK.pdf
++    https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
+ 
+ properties:
+   compatible:
+     enum:
++      - nxp,p3t1035
+       - nxp,p3t1085
++      - nxp,p3t2030
+       - ti,tmp108
+ 
+   interrupts:
 -- 
-2.43.0
+2.34.1
+
