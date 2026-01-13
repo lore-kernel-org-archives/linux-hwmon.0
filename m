@@ -1,68 +1,68 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E083F3806D5
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 15:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1D62459FD
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 16:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768317014; cv=none; b=QUc2HZdCRsHMZG5q2vfrT1urJzOB8Ly24S55792/0tTiDmq+DfhnKwwGjUfafBn+x7+dZbViovfjon4bmqbkloNsV9v/wUr5K4xPPdBSCT7ugYsAh+KshJRsae5oXSJg+on7vZLbDQ6Km9eiW5i7pQr2ebqJf+M8n7uSVndiWt0=
+	t=1768320105; cv=none; b=PLzTi4aHb7s9g3qlfcsF5+FCRF2/Kr7L2ojrNTXF5SymP9VGAyBl5Wn0oviRsGMGwWtejMeJAbwKuKax86wEe/I9QcU0+pBWQZZmrisLPY9DaYmDopLES+yK7Gh0x+mQMgv46zqZTOREwBMfBQo3X0tuh7YeVNO6ilZ1AeG0fHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768317014; c=relaxed/simple;
-	bh=Gxb3l2ZkVTN8/AW+TlsPGmW4d4paIYYrU+ykzKv31xc=;
+	s=arc-20240116; t=1768320105; c=relaxed/simple;
+	bh=iqLbJUskSKL4N9IDtD++X0NNSt+LYTZ6yAIiJzJtIKE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ik0QWL73P3eGIANw/rYNQEujAZtQrkr181y7JBx3m2UZZXFEW8BHG9JVll1epY9FugTXowQSfXNvemAU0o/Dmg7fF3qrZoSR+QHQ5LzXntt0sq9/DthtyT5FQ2JvnJv6pHIG15NnxapclIGgB/vM79FiOM2lZAFZ+cWQTjp40Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BP389UcA; arc=none smtp.client-ip=74.125.82.176
+	 In-Reply-To:Content-Type; b=FMOLIKeL/+V8lXaSZkbz3iIJRV/rj4W+77F6wZXA4m8DI+qwAOIzSp64n/XTGHtOHvKcyQDaT3U5qaWR/p5188cRXKeix+JawlVc5+5abcokrNUcOr0z+kfGTIpiDcLI2XvwvSZr3nXjk9/qMoWdLff9nhKbIZdAh1fLCva71q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cl4MHvn7; arc=none smtp.client-ip=209.85.215.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BP389UcA"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2b04a410f42so6648309eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 07:10:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cl4MHvn7"
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c1e4a9033abso3999644a12.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 08:01:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768317007; x=1768921807; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768320104; x=1768924904; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tsl7cqadgB0ILyuJ5pleT6+lRwkh2wBTJUg/m3d1c4U=;
-        b=BP389UcAySGw8CojUXWpYT0ugKU8kcOw8Ry293mBVkM9l+B5darYDR/fXN3YoG2e8s
-         fScPzbpax3TidGuVvrWlnYj53fhLrCDG6X0/5iwHBiHdUKkZYLFqZ8x5xBDih6+EiIfp
-         0RfBwqpFsqVgCggxO53+3dHwVp8zdwXC3jY1lA+zTwbSFUFg9TPK8oNmouEqyUO+Ei+J
-         Xh8IrZPuvXdVWKcza88WAU/H20D5HDptR7Tua2pbQUxOA/ED2ylophfhiktlM+XsyjFq
-         nRs24hylYsMWUv5R1Q75nmMPKAFrIA08rt4ILKvkGCdvuWjrGXwA/DsbgVDOgjlriSaj
-         0s5w==
+        bh=bLrLTIifRNqu5HnU5w9pTdgCpPu1ucQ1Ea9E1Sqzz/M=;
+        b=cl4MHvn7qqEqezFQRM2jm7ini5XEwwyswnJoNUC4JavJBefCZvlZNUd1J2INF5NztE
+         iU3Dg2G9hp90eWxoDo1SyUlsanrdeehM4LXel9mjceFBlvb0uQmVb7PCLpuzDEP6dqgB
+         hNV2e/wZNg/36Pxxs79KSxodXON3CkKQoXF/mrYfzRwP0rHWfbB/TioCygv2H4KkO30O
+         vLdQj2XMlefNfxxxse0sdYl5HLDiGkuSn2PTGU/E37jmSEV+enmpbXSrViJSmdDYHear
+         z/v8nEhYB8BiR5DiWJBExghezlrCtIRB/vy/pOg1bYxjQvaqY18wTn9UXD+LO2z89IJK
+         t3YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768317007; x=1768921807;
+        d=1e100.net; s=20230601; t=1768320104; x=1768924904;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tsl7cqadgB0ILyuJ5pleT6+lRwkh2wBTJUg/m3d1c4U=;
-        b=T2dsRIdIhZOzTatqm0uEXac4+EObsC1q9CWuKUWBoKnYigAONRhCZ9vl+5me9OCP2t
-         cDfVT4LhuusJuh1skki+iSOuHzGLHySXjGSD/I6gar1Sp8CuXFtheV3393EKktbhfsRz
-         31vAOKPbUN03VDd2XYoiMje7B5J5SOBy0nuHIQqDgibC1qGFpBggVWGEX/7gLuz5EPwN
-         8+hPilN1FGejTgoLSCv/iTTzpx4a4txOXdf8ltp5aYHLPHwt1tFpdfV2P37YspyolHnf
-         I+mGLNQNLmkxH6hVGgfPciogHivs8B+48S0C9bP4YbqAk4yfnOZoeZplwVn4VIn2s/m1
-         Ebwg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1ZbM9AMPhBw/88hs4IcTyuH2BIndFtlbhZPsNFGlfFuj79iF9owgM8vfAXIgMzQfBnv1Q4ZxJprj1Fw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTqIfHZIoy8ROeCwH22+epqTUiAziAzeb5Ktgdljk2mJ6cX0Dp
-	QTWv2NcBeTWgyS3lfkQrmfa50pgEToCuhxX7nQnc1nQX4yqD3yD/gHrl
-X-Gm-Gg: AY/fxX5VAMROOqTgduGGs/QHI9U25gvqgohy2o0kLmk+L0Vlk8p3iIi02wc54Zo+Za3
-	ZLd57wG8MMDYly0c4rPYOiwa18XrJsYvGY6T2/A4htTntzW7RFqVkL8mh58XNcVIQeJFUsOXBHN
-	9mvBfi84vWgQXz8CC481yHlgCJt9JpjnRBKXXgaGhJuOGcSrJIiKV7GcCwQfQtdw2yFMplVO6Px
-	FhrPWwvXcq76rju8XeXZIzoV7mz4IDhKUXN3r8Qzw/QDuDECThg8Yh5aNGaJoIBn3on2Is26rka
-	JkxqpYdsJKh37FdCUGDFkNX1AdVZLAHzVwdaI5oRFM5eHOhScv9QxmjIFQJglllxeS3P0AYR6YS
-	n9fKc0rrtG6F7gz7e2u9DvN2RHKQocRA+gVyiFYdIZzA9F8RND/Wnal0AnjmZ9Yj0SiQyT06zND
-	oG8zuL/HuH9RfBGAtFs+0T2qQ9d8CwZ7SzwoJrixEO40UrKinJgzetgzb18PPy
-X-Google-Smtp-Source: AGHT+IHDyD5oG2uXUZIVEGCqh29+M+KMR34zeyrN9l/9A7q54mG4sz3mCfwqFTvAWjK975OSjaMbCw==
-X-Received: by 2002:a05:7301:1e8f:b0:2ae:5d3b:e1c6 with SMTP id 5a478bee46e88-2b17d31c5a3mr26669210eec.21.1768317006674;
-        Tue, 13 Jan 2026 07:10:06 -0800 (PST)
+        bh=bLrLTIifRNqu5HnU5w9pTdgCpPu1ucQ1Ea9E1Sqzz/M=;
+        b=G1Qiy6WDYpHOOg7hHPctXoCo30GVRxYr1JJdD2WHrqNjM626DO5UZWy9y5EkazUyhV
+         eHhlDahWLFLfdJ8QiYA5+NW1G20zJUqu+PYmeGscVxniL0g8h06bQ7rXzo5sx4ctX9vt
+         f/YAyL/n8pVmEvzPN34sn5w62CZ5u3fTzqpxdHIrSl1b9UTIsnB7I8FZutNtFtFMnoAo
+         fNpu/2OCOR2y7O8r+qUjM5KOhD+NWxE4Cx5W065q37fNgSUmb5IiTBfuNrNhptiOpPkN
+         5CP0jqyrPHE2CNnexQfLAlyHa7kINYOAWFhlr0PwXqJ+RrcCtP0/GlQijuSt4UOQwl+3
+         oPbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpeCvG/O/NVZg0H4JIvwBO/eVWiPbCMNyebhvKy0fsH4dHmHdTALetZhKr+61JgcmoUyu7Q/s+FdYlWQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzujwICA1UubrAA623yyguerXD+gMRdDQ2IEk9lIOyRiy+ZbJn4
+	QBKjil5JbstFlwfk0zOxe9CCDNlEb7M8FdChl4KSk7YhJ8b2NHToUL3H3vQjZo6Q
+X-Gm-Gg: AY/fxX7AgsVBCdQHdjeQsDoCuhbWx5y1YkTUnIG0CusCBzcK8NvMtGIdYDYqXrz5tMy
+	uoF1tjeuI7fP7MzSfuHOjnsv8OJa7VW4NteOHirq5QejHTdc1sLtTaQ/5qYYHKK0/QQ8Cy2YRr3
+	9U9tGYyXy4slYxiVFDeWrfZ63R5vVnXf/RDw1FGiz6K2Rb0mYeYfN02sLPyXZCnpWC9p9L6wsRE
+	TsITrlummW/G1Po2BXM0KVa+stgv8zmp09g+IrGtw7vAVVCjGoaChDw7FaRwYrntsiRsh9J9PCN
+	LIXnP8M3jsiMYfqAyfhpDx36TkIWZt3jIniGD4viuQmrIrUFc//FM9LJGI1Xo58fBUqAPnUo/l8
+	H1nv1JvHejew2pZR26nO3hbqwUXaXx/ge/h+fD4aw8ylh+aXWRlLxA7DaUGgkfzhEPPWAzmup7A
+	Nb8dmjwJSlScMpKG0J9QNB+Ew86ANmHGFmOE3yFimU5edIgQQeu3NEWZlXXDxe
+X-Google-Smtp-Source: AGHT+IHKSKZQgADOl4Pfjd3+mTQKk94xUzc05noeHLNnu6YOzYzqI6HhXwvi4DcrMT5Jb//EbsxJjA==
+X-Received: by 2002:a05:7301:1124:b0:2ae:5dc2:3b08 with SMTP id 5a478bee46e88-2b17d208e7fmr20636867eec.18.1768315941203;
+        Tue, 13 Jan 2026 06:52:21 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a6386sm17950034eec.14.2026.01.13.07.10.05
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b175bee31dsm15888653eec.32.2026.01.13.06.52.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 07:10:06 -0800 (PST)
+        Tue, 13 Jan 2026 06:52:20 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
-Date: Tue, 13 Jan 2026 07:10:04 -0800
+Message-ID: <e7b367a2-bcb7-4ac9-83ee-ef55d4c2e303@roeck-us.net>
+Date: Tue, 13 Jan 2026 06:52:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,16 +70,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
- Regulator Driver
-To: ashish yadav <ashishyadav78@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- ASHISH YADAV <Ashish.Yadav@infineon.com>
-References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
- <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net>
- <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: hwmon: coretemp: Fix malformed RST
+ table
+To: Laveesh Bansal <laveeshb@laveeshbansal.com>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: corbet@lwn.net, rdunlap@infradead.org, sfr@canb.auug.org.au,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+References: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,26 +122,56 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
+In-Reply-To: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/12/26 23:24, ashish yadav wrote:
-
->> The need for this, especially why it would only be needed for PMBUS_READ_VOUT
->> but not for any other VOUT related commands, is still insufficiently explained
->> (and I failed to understand the rationale provided earlier).
->>
+On 1/12/26 23:53, Laveesh Bansal wrote:
+> Shorten the Celeron/Pentium processor entries in the TjMax table to fit
+> within the 47-character column width, fixing the RST table parsing error.
 > 
-> It is specifically needed for READ_VOUT as it is being used by
-> external controller to monitor the rail health.
-> Other Vout related parameters are used internally in the IC to for
-> output voltage related protections and does not impact any external
-> decision making.
+> The following entries exceeded the column width:
+>    - "Celeron/Pentium Processors (Goldmont/Apollo Lake)" (49 chars)
+>    - "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)" (54 chars)
+>    - "Celeron/Pentium Processors (Tremont/Jasper Lake)" (48 chars)
 > 
+> Drop "Processors" from these entries as this preserves all searchable
+> technical keywords (Celeron, Pentium, Goldmont, Gemini Lake, etc.) while
+> "Processors" is implied by the chip names and adds no search value.
+> 
+> Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
+> Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
+> ---
+> v2:
+>    - Shorten text instead of widening columns (widening would require
+>      adjusting 101 data rows to realign TjMax values)
+> 
+> Tested with:
+>    - python3 -m docutils Documentation/hwmon/coretemp.rst /dev/null
+>    - make htmldocs
+> 
+> Open to alternative approaches if anyone has a better solution.
+> ---
+>   Documentation/hwmon/coretemp.rst | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
+> index 3afb179e0ced..3ba44b57d028 100644
+> --- a/Documentation/hwmon/coretemp.rst
+> +++ b/Documentation/hwmon/coretemp.rst
+> @@ -120,12 +120,12 @@ Process		Processor					TjMax(C)
+>   		x5-E3940/E3930					105
+>   		x7-E3950					105
+>   
+> -14nm		Celeron/Pentium Processors (Goldmont/Apollo Lake)
+> +14nm		Celeron/Pentium (Goldmont/Apollo Lake)
 
-Sorry, that doesn't really make sense. How would the chip know to match
-VOUT with its VOUT limits if both don't use the same scale ?
+I updated the patch to split the affected lines.
+
+		Celeron/Pentium Processors
+		(Goldmont/Apollo Lake)
 
 Guenter
 
