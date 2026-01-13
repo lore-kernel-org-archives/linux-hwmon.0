@@ -1,76 +1,75 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E924DF6C
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 00:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53EE18FC80
+	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 01:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768262724; cv=none; b=Sy3PESgWg2eIhqGV60gu/hX5JUB5n/vyBaLn/iHNua1hp+8Z7Eufjv1bYGD5M+jJ06tXnqfqJZ5EzSTHvp0ddI1xLqH9Gzma0G6T3gD8CVFAndBD4n5gwnO4x1/9MnBwSp9gLD4ngiLnn2m4JkkT0k0ybsw/k4KNeACIyyxlI7g=
+	t=1768267994; cv=none; b=rjcNx0hGp2H87oLBeXzv8M2xgDB6ANamT5bavN55W2hDqIaEwjy4v66e8pHC5UyqUCHo7HNUC3CltmafZymQYrOwmrX35HKdSAm4LoFXXPXR9cms5a//i0xo1I0u33kfRNI2GmVxVccL9YT9/zm+ePzIEdl3phqb0fHhXoS5uEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768262724; c=relaxed/simple;
-	bh=TBQZ706dz2v4czmT9bidyuALkagvTVYafuXaqgUtD1A=;
+	s=arc-20240116; t=1768267994; c=relaxed/simple;
+	bh=ad32iXyTi4EbZ1XO99xfmDWdXhUVYTE5uI1F/YJLopw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JZ2cQD0RrZYTyEyprKeos2KOuAR8qM3PMH0sClG7lmoTM06+1f3Xm3NhDyKjkiP+opi5bMaCW9ZTEyi5J78hOwf1/K52XyuaKizdhOF/yjPX8ajAtx1jvJrnFkSfA+bKei4A8i5vacjtcGTQexFYIytCQ4COqH35+CZeVTo9cgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3Zxm7KM; arc=none smtp.client-ip=74.125.82.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=PUFg+dDHgTglHd5u7fHNS44CE+0GPtvCdJ/WeQ0QjwVOoXDp7ZC8CFmUHW5hi62a21azhfjMwOlPZHAqmfgXsjG4nf2qBZYwWbrg2oYAa4iYrOMOBqYrKGgnGPHuX+ebYNbE1f6gAGMX3Le0+ZriKvJO3+8LEoghn+2QSlRfugE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nAlkfDCt; arc=none smtp.client-ip=209.85.217.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3Zxm7KM"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-121a0bcd364so7847825c88.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 16:05:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nAlkfDCt"
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5ef3482907aso2799540137.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 17:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768262723; x=1768867523; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768267991; x=1768872791; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GncgElqiq32w9qexfmBMBu8AFPxia/UeTgvOHBdx+u0=;
-        b=W3Zxm7KM/4R8zViV7ZSa89zGO8HTGUCNGQmS4FI7s17a1bs4qo0ylv5Z2j/shLpGzR
-         plrEvnAM2klVglrUaI83dIjGu41lC25Mrc2AuNoM770yUvCmHDg+PkT5LbLYbjq8l5F4
-         WbfrGQ4ZIvAAQMNvNFxrFDutJz2e1wk2Qv5l9Vo3ioAs49BC4uKiLIpLfbie3nhlWyFw
-         voaEghDLE5SaDgEWcC9wwwLFifH2V5H4z+eTJ5K+IZJ9W/RP9fT1ZBF5bMvg51a2jVwW
-         Gs+O1pYQ+a79ED8wtpWpvvxJUbxK01VosjOc+COsmJcq0esKcLllHEy+2xEJwvD7HrYY
-         j4VA==
+        bh=M/HecYQMpzSx+pKogOGD9AgS/QaSSY95HkqZjIA46rM=;
+        b=nAlkfDCtBx+9uVBGlKeMzFxphOObB7fSVsixw8KPYdHiFbFwn55WSBCJ6DllTK96KZ
+         /UdUHGvZmSh7yglW2hwJ7fNd0bDEA6owaYY7WH6SBnM7T23Zh/JcIGsSgQf/a33ZhuLB
+         shw6ae7WIywkNE+eJ28yPOrsZ1PGvWELry8N92gSkkIZ5NJ3DgFN6zsfd/5/ALtq3Utn
+         JCWvOIHqB+pv9qhkFhAGzNHXyiLhU3ymvIRr5OY7Qw1mpyAUo2JqACOQEFcvMF8s7ond
+         LY7gzNTjn6jyr4MBH/kTJwtPjJ13sEMNMrY0xg29fpzILDy++CvZuPKQoPDmcMhI/o0b
+         4d3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768262723; x=1768867523;
+        d=1e100.net; s=20230601; t=1768267991; x=1768872791;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=GncgElqiq32w9qexfmBMBu8AFPxia/UeTgvOHBdx+u0=;
-        b=i0EYxVxdysE+/rtygWWbMDz6gh14UcCvdue1y9d8cRUX4JyUw3pj9KlD5vbtAPmRnV
-         acocEvPk0aF7y0na6P/efvKMdbKrIdam+t6Gpnt95uWsNV7QmKBWyxxTtwUVX8yRWgRb
-         NQxHL92Z8m6MjK7wpj3o9/kDbvBZvHHWxOWd8eX732zIDPYfRi8gSkY4vI/3+YlaWYYv
-         udXqUYxButpAtsgz2YFlu1rlyx25eo+K0NrnDhaWTwO5zEJ9GQcESRllb9Gr9eetrPz/
-         2WCWYS3K4OTylEyOehLqTSQUbJNeFf0GIng2S1TEFbu7AodJeXTizBxsleyLMFpgCvQt
-         L7mQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLYCkIe8rND1d3tMiB5UF/IDN/bgU2puLO8sGPyfBNOwj95oqnsT4VgZN1nBA/yRYAJBDjWCxfA3hGVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzISjjqmRQPddQwKQWR1pEGnphHfDc27syDq0QgjrrIaoKVDhHg
-	5xDRVLsBcStmlx9H8fxuPb/wm9Ksal7IJfU+Vsurbc4uARTEIPdM0i4T
-X-Gm-Gg: AY/fxX4wQ9nkuxX9pH/kWfERtIl1ddZMSIjZL9asPuTJPxEAfAYpb5DtEbIH5dgrRi+
-	vXg/1MvITy4KzIrPYoa4hCv7+fC5bcPTCNCOdHoJ6tC9LCygzLZeRerHx+R9YcUKII4akQNMsuV
-	Hw8W/j63Sd7GfMLyIHfzJJMJwxUATgDlul8KZTEwxlHjC42BSubj44MBxvJXGKcE/khRHvkZwcq
-	j4UkkW3Kjteg/hhkpsTH+4GN0wGvDUfC3tZhk8eOwlCBAvXPH8xVUAVJC9Pv6Hr5UIlQ56AnCwn
-	OZYVpQ2AzbtBD7CjxRlXOAWRkJlvz66lH3rOs46Jv4DZkAJ8GhF3iQl/R0sW3A70SwsfResHOLC
-	z183GxH62XIxa+FaNLCVCeirvYQOWSKuuCcaNXYYj+OYB0CrZjQkL5KH6KaTSTyRN7CAs1pF9rq
-	f1/2EUJ4v+9BhuM24exKqQfosx
-X-Google-Smtp-Source: AGHT+IH2st110NI9ogLDebj2HC2DR5r6GB93sOZj+ArBjQ5xYxHE/S9g7UoPc+q/6FHGx3twpcufbg==
-X-Received: by 2002:a05:7022:eacb:b0:119:e56c:18b3 with SMTP id a92af1059eb24-121f8b7bb53mr13709063c88.27.1768262722658;
-        Mon, 12 Jan 2026 16:05:22 -0800 (PST)
+        bh=M/HecYQMpzSx+pKogOGD9AgS/QaSSY95HkqZjIA46rM=;
+        b=b64ZGf+5vbJkVFRnfqhN+pvxaIMG33yPi/XjiecayBNDIj6jJI97bjEGYJCr7iuzu5
+         l4XPKblU781qN0lRa/xBUbGNBLB6lz4UjWopVlYT0imu8lyH5/1WkAnVxgm8Yb4U+V36
+         hBLgEFtUQX4vuSOj0eUS6PFg/mOGBBX+VRfBHcmEklhkJDqUrjyrUYmJFxsuhkANGw0S
+         8bzkQ6SGZWFNMLzIjtJkAvlA6OSs8dHHI8UHz99y7Dq6vmqFxHkdc1UJK8aRytrwmHNA
+         QQ7p2/9gRGYgAeLrIaQArLxc7HudjpHFNq9dRRvdP6s+lOHfqcAPr12PnuUQnl1nip7T
+         b0aA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+YwJUx6m1p6vDRODn9sGzytN0JrFNXcPGCU6lHqEDtlq6gfIWi4yEioUaALRCdOU/PlQc4vxjvXl6eg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbJZSKYeZsXbLULUsip2bAJ1Wzw6M/O+kM9uDfxgwfNZGFDb/+
+	uO37azWhZbHA5NDSvm+ArO2FPc3jGpyybMue9e1a+v/wO+vcmkmjeAHAFeyW7g==
+X-Gm-Gg: AY/fxX6oYz+fGfbztMhyXJ6jT9ePqec/GpuGpWQpkjMEV3hXCREb/3ZoIei+wpz7WKO
+	/vKzKkiRPpLFrTIyARdhVCsHIUFeqkSDUy4iBiau7RFdPv6uwJYn2oy4s3UKwF2q0xWTCuSw/GC
+	xYwcncc0ys1Al0BxqBnAmzhurQSB10W9G3bOX1mySMseXNn5EMtfoc/ccRf4uH+FQpyE2eISU98
+	L+lF/NOyApK8paWUzj4QUFAponD7mvd9JZy9ojR7BUAXSBVxtC5iNdYOoH7eBqHTg95Bsd0Ga2M
+	sqJ1tSmUFiYBvXZx8/FLeWByfCeVDbaefNeAgF1ppeHDxZfc8gxfZbO+JvQxvXKZcZqlOYZ5Bfr
+	iaz2mV2omc0AcfuvHmYDUsqA67uphL+xeZmsiMLwfdzAdtsVL8fxV9vciFBMwab8k3iZUV2U3Ni
+	vlehf4uS+3ffwLmWLOk/PxYt/Q
+X-Google-Smtp-Source: AGHT+IGq7SH/P29EOxwJv+i4U56r7yzSOhU39ES1wZYIBI+ODZJsWgoNszRhwOG326pCJxzPcgjgSw==
+X-Received: by 2002:a05:693c:4151:10b0:2a4:8576:abf5 with SMTP id 5a478bee46e88-2b17d2b0af0mr12747919eec.23.1768262565381;
+        Mon, 12 Jan 2026 16:02:45 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f243f6c7sm20613445c88.7.2026.01.12.16.05.22
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b0b2bsm16475727eec.23.2026.01.12.16.02.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 16:05:22 -0800 (PST)
+        Mon, 12 Jan 2026 16:02:44 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 12 Jan 2026 16:05:21 -0800
+Date: Mon, 12 Jan 2026 16:02:44 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-Cc: corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, wyx137120466@gmail.com,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add mps mp5926 driver bindings
-Message-ID: <90dd6919-562a-4697-843e-cca988806cf6@roeck-us.net>
-References: <20251223012231.1701-1-Yuxi.Wang@monolithicpower.com>
- <20251223012231.1701-2-Yuxi.Wang@monolithicpower.com>
+To: Cryolitia PukNgae <cryolitia@uniontech.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	zhanjun@uniontech.com, niecheng1@uniontech.com,
+	kylon <3252255+kylon@users.noreply.github.com>
+Subject: Re: [PATCH] hwmon: (gpd-fan) add support for Micro PC 2
+Message-ID: <2892cfa4-f033-41b3-bc8d-b849dcbd1a07@roeck-us.net>
+References: <20251222-mpc2-v1-1-695d8d351cc1@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,13 +78,21 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251223012231.1701-2-Yuxi.Wang@monolithicpower.com>
+In-Reply-To: <20251222-mpc2-v1-1-695d8d351cc1@uniontech.com>
 
-On Tue, Dec 23, 2025 at 09:22:30AM +0800, Yuxi Wang wrote:
-> Add a device tree bindings for mp5926 device.
+On Mon, Dec 22, 2025 at 06:51:39PM +0800, Cryolitia PukNgae wrote:
+> From: Cryolitia PukNgae <cryolitia@uniontech.com>
 > 
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
+> GPD Micro PC 2 is a mobile productivity device with 7-inch screen and
+> abundant ports.[1]
+> 
+> Link: https://www.gpd.hk/gpdmicropc2345345345 #1
+> Co-developed-by: kylon <3252255+kylon@users.noreply.github.com>
+> Signed-off-by: kylon <3252255+kylon@users.noreply.github.com>
+> Tested-by: kylon <3252255+kylon@users.noreply.github.com>
+> Link: https://github.com/Cryolitia/gpd-fan-driver/pull/23
+> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+> ---
 
 Applied.
 
