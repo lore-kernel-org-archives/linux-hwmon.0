@@ -1,100 +1,96 @@
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53EE18FC80
-	for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 01:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768267994; cv=none; b=rjcNx0hGp2H87oLBeXzv8M2xgDB6ANamT5bavN55W2hDqIaEwjy4v66e8pHC5UyqUCHo7HNUC3CltmafZymQYrOwmrX35HKdSAm4LoFXXPXR9cms5a//i0xo1I0u33kfRNI2GmVxVccL9YT9/zm+ePzIEdl3phqb0fHhXoS5uEw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768267994; c=relaxed/simple;
-	bh=ad32iXyTi4EbZ1XO99xfmDWdXhUVYTE5uI1F/YJLopw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PUFg+dDHgTglHd5u7fHNS44CE+0GPtvCdJ/WeQ0QjwVOoXDp7ZC8CFmUHW5hi62a21azhfjMwOlPZHAqmfgXsjG4nf2qBZYwWbrg2oYAa4iYrOMOBqYrKGgnGPHuX+ebYNbE1f6gAGMX3Le0+ZriKvJO3+8LEoghn+2QSlRfugE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nAlkfDCt; arc=none smtp.client-ip=209.85.217.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E03433B3;
+	Tue, 13 Jan 2026 05:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768283686; cv=pass; b=Azc+LBq+RAyJxMnYl/Yr1O0ikwyNmy+a+/hHaffG1h5QN09K9BBW/E2awzqEKEyD7EcWwYbr9Gfn2SfQ+Z1E8nUxjKw3JyVzfhCk2jjdZF1Qkfb+IsnYSdZc0xbVWc/dQtlKPUN5+pLtnv5EeZFJVsx+oouoHbqBviqCYJ2ABG0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768283686; c=relaxed/simple;
+	bh=GriPIkMwEiolukwo/HQUI5brOgWZQuRAMohwDuCqGUg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tB03PYgN3C7a6Yf6eBU75QL88OeFaex+8rgq4XFM9Rzee2qJook3qsO95tMZ8oz0MChQngjE7vqA9d3BWhlTieHIm3CH7zHKVmiku/P5iljp6B+kULLZUnzma1ySxrPze69fbth5MaU3QNrGcLxTTUEbg1lZnqDL0XRxDXbnLxg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com; spf=pass smtp.mailfrom=laveeshbansal.com; dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b=YWcG22de; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=laveeshbansal.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nAlkfDCt"
-Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-5ef3482907aso2799540137.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Jan 2026 17:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768267991; x=1768872791; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M/HecYQMpzSx+pKogOGD9AgS/QaSSY95HkqZjIA46rM=;
-        b=nAlkfDCtBx+9uVBGlKeMzFxphOObB7fSVsixw8KPYdHiFbFwn55WSBCJ6DllTK96KZ
-         /UdUHGvZmSh7yglW2hwJ7fNd0bDEA6owaYY7WH6SBnM7T23Zh/JcIGsSgQf/a33ZhuLB
-         shw6ae7WIywkNE+eJ28yPOrsZ1PGvWELry8N92gSkkIZ5NJ3DgFN6zsfd/5/ALtq3Utn
-         JCWvOIHqB+pv9qhkFhAGzNHXyiLhU3ymvIRr5OY7Qw1mpyAUo2JqACOQEFcvMF8s7ond
-         LY7gzNTjn6jyr4MBH/kTJwtPjJ13sEMNMrY0xg29fpzILDy++CvZuPKQoPDmcMhI/o0b
-         4d3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768267991; x=1768872791;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=M/HecYQMpzSx+pKogOGD9AgS/QaSSY95HkqZjIA46rM=;
-        b=b64ZGf+5vbJkVFRnfqhN+pvxaIMG33yPi/XjiecayBNDIj6jJI97bjEGYJCr7iuzu5
-         l4XPKblU781qN0lRa/xBUbGNBLB6lz4UjWopVlYT0imu8lyH5/1WkAnVxgm8Yb4U+V36
-         hBLgEFtUQX4vuSOj0eUS6PFg/mOGBBX+VRfBHcmEklhkJDqUrjyrUYmJFxsuhkANGw0S
-         8bzkQ6SGZWFNMLzIjtJkAvlA6OSs8dHHI8UHz99y7Dq6vmqFxHkdc1UJK8aRytrwmHNA
-         QQ7p2/9gRGYgAeLrIaQArLxc7HudjpHFNq9dRRvdP6s+lOHfqcAPr12PnuUQnl1nip7T
-         b0aA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+YwJUx6m1p6vDRODn9sGzytN0JrFNXcPGCU6lHqEDtlq6gfIWi4yEioUaALRCdOU/PlQc4vxjvXl6eg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbJZSKYeZsXbLULUsip2bAJ1Wzw6M/O+kM9uDfxgwfNZGFDb/+
-	uO37azWhZbHA5NDSvm+ArO2FPc3jGpyybMue9e1a+v/wO+vcmkmjeAHAFeyW7g==
-X-Gm-Gg: AY/fxX6oYz+fGfbztMhyXJ6jT9ePqec/GpuGpWQpkjMEV3hXCREb/3ZoIei+wpz7WKO
-	/vKzKkiRPpLFrTIyARdhVCsHIUFeqkSDUy4iBiau7RFdPv6uwJYn2oy4s3UKwF2q0xWTCuSw/GC
-	xYwcncc0ys1Al0BxqBnAmzhurQSB10W9G3bOX1mySMseXNn5EMtfoc/ccRf4uH+FQpyE2eISU98
-	L+lF/NOyApK8paWUzj4QUFAponD7mvd9JZy9ojR7BUAXSBVxtC5iNdYOoH7eBqHTg95Bsd0Ga2M
-	sqJ1tSmUFiYBvXZx8/FLeWByfCeVDbaefNeAgF1ppeHDxZfc8gxfZbO+JvQxvXKZcZqlOYZ5Bfr
-	iaz2mV2omc0AcfuvHmYDUsqA67uphL+xeZmsiMLwfdzAdtsVL8fxV9vciFBMwab8k3iZUV2U3Ni
-	vlehf4uS+3ffwLmWLOk/PxYt/Q
-X-Google-Smtp-Source: AGHT+IGq7SH/P29EOxwJv+i4U56r7yzSOhU39ES1wZYIBI+ODZJsWgoNszRhwOG326pCJxzPcgjgSw==
-X-Received: by 2002:a05:693c:4151:10b0:2a4:8576:abf5 with SMTP id 5a478bee46e88-2b17d2b0af0mr12747919eec.23.1768262565381;
-        Mon, 12 Jan 2026 16:02:45 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b0b2bsm16475727eec.23.2026.01.12.16.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 16:02:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 12 Jan 2026 16:02:44 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Cryolitia PukNgae <cryolitia@uniontech.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zhanjun@uniontech.com, niecheng1@uniontech.com,
-	kylon <3252255+kylon@users.noreply.github.com>
-Subject: Re: [PATCH] hwmon: (gpd-fan) add support for Micro PC 2
-Message-ID: <2892cfa4-f033-41b3-bc8d-b849dcbd1a07@roeck-us.net>
-References: <20251222-mpc2-v1-1-695d8d351cc1@uniontech.com>
+	dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b="YWcG22de"
+ARC-Seal: i=1; a=rsa-sha256; t=1768283669; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=KRlLKJ9bOb1AtmMUb/u6dRcXD8RepGyHzMt5gGqa4pvu6KnKGmf0UJ4TcOd6DOlKDdBH0QT1j+8pNdpJw9Is7f+wRUla2FfkiDKuH9fz3Gk3oN+2CTRXeW5qqrC9fmcnmn8I9E3yChNHu6OrZXZyia6fu+dX233oQV1Jkd8bGpY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768283669; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=3BuypCs03Zm3wmsqKYvX7X1od+dzGNjMSqit1lK68qk=; 
+	b=UqEjs/19Jl8wCahK/5QbDX5gW3WwKPtNLtXureGPdoJV54yeb75oJ/zH4k1EEZchvA6ZQLx2qsJ+2qfZ+LY4t/WVUClBZILrBikYT3g2IRASvRPuMbM8pNAjF72A4QTUhHfDdirsIMz1mTsopxEPFB/nv7h5zUzYWwMriemhihU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=laveeshbansal.com;
+	spf=pass  smtp.mailfrom=laveeshb@laveeshbansal.com;
+	dmarc=pass header.from=<laveeshb@laveeshbansal.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768283669;
+	s=zoho; d=laveeshbansal.com; i=laveeshb@laveeshbansal.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=3BuypCs03Zm3wmsqKYvX7X1od+dzGNjMSqit1lK68qk=;
+	b=YWcG22deZK42lWVqnWh/iuigxKuVT+vKiKkvwU7WF++iSVownjUGdvYlzUPwTpxQ
+	Vt7o0Y1ofReEeDbMsVgi1W7D8+m4Lh8QHfFFFPpI5lfB0GdTv/+1Q+d7Nj/zvsFoOTm
+	fj76aD1NxWfyq3JNtIFlTSE+VXPEMUpdonNALhoM=
+Received: by mx.zohomail.com with SMTPS id 1768283666368192.6753733795232;
+	Mon, 12 Jan 2026 21:54:26 -0800 (PST)
+From: Laveesh Bansal <laveeshb@laveeshbansal.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Laveesh Bansal <laveeshb@laveeshbansal.com>
+Subject: [PATCH] Documentation: hwmon: coretemp: Fix malformed RST table
+Date: Tue, 13 Jan 2026 05:54:25 +0000
+Message-ID: <20260113055425.966495-1-laveeshb@laveeshbansal.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260113155444.57c7775b@canb.auug.org.au>
+References: <20260113155444.57c7775b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251222-mpc2-v1-1-695d8d351cc1@uniontech.com>
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Mon, Dec 22, 2025 at 06:51:39PM +0800, Cryolitia PukNgae wrote:
-> From: Cryolitia PukNgae <cryolitia@uniontech.com>
-> 
-> GPD Micro PC 2 is a mobile productivity device with 7-inch screen and
-> abundant ports.[1]
-> 
-> Link: https://www.gpd.hk/gpdmicropc2345345345 #1
-> Co-developed-by: kylon <3252255+kylon@users.noreply.github.com>
-> Signed-off-by: kylon <3252255+kylon@users.noreply.github.com>
-> Tested-by: kylon <3252255+kylon@users.noreply.github.com>
-> Link: https://github.com/Cryolitia/gpd-fan-driver/pull/23
-> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
-> ---
+Widen the processor column in the TjMax table to accommodate longer
+entries like "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)"
+which exceed the previous 47-character column width.
 
-Applied.
+Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
+Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
+---
+ Documentation/hwmon/coretemp.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
+index 3afb179e0ced..a3943656fab6 100644
+--- a/Documentation/hwmon/coretemp.rst
++++ b/Documentation/hwmon/coretemp.rst
+@@ -69,8 +69,8 @@ for your CPU, you can pass the correct TjMax value as a module parameter
+ Appendix A. Known TjMax lists (TBD):
+ Some information comes from ark.intel.com
+ 
+-=============== =============================================== ================
+-Process		Processor					TjMax(C)
++=============== ======================================================= ================
++Process		Processor						TjMax(C)
+ 
+ 22nm		Core i5/i7 Processors
+ 		i7 3920XM, 3820QM, 3720QM, 3667U, 3520M		105
+@@ -228,4 +228,4 @@ Process		Processor					TjMax(C)
+ 65nm		Celeron Processors
+ 		T1700/1600					100
+ 		560/550/540/530					100
+-=============== =============================================== ================
++=============== ======================================================= ================
+-- 
+2.43.0
+
