@@ -1,29 +1,29 @@
 Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC1D26ED35;
-	Wed, 14 Jan 2026 08:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD61637E2F0;
+	Wed, 14 Jan 2026 08:18:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768378723; cv=none; b=p9Vovx3+segAhpaAj1JO2GS55CiurY3wahzATRLYoVHMT64Of8NCejEAmkwoe+DPSFx5CHjfktr1eAJ0vonux9LqzpojrSvuvHDy/wNC7orQrRUo3+jQKMe2OmyFYs3fU20irBpeMvBuBtFjnh3tDO93tMWpQizWlnekqfOv7PA=
+	t=1768378725; cv=none; b=ffw+WY+Nx3BHorhaVJwc3YpAt/vLXSqZJv196ktbEZ6CpYx+aoQYay05COpbQ917M4wTLs7Kamucp+TV7NMkUk9MNYmhyoicd10ErhLdqQpWCrGSfaQJzyo64N0ZFHS9tXoSDJfPuxhXIsqErh5Eg12w57mrhwk61+nET7ledOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768378723; c=relaxed/simple;
-	bh=hBhvsuW3B/69apNkWMzqRnqNgKxIb4+zXZeq0VpfECM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=lbrWOlbH2xTaxNJHcc1hTbmbvEyVqoT+TWxm5NB5jWhxlb+D+gJKBeDR/JzkZnnt4Pt7S5TbXQKc4QRNjGqqUYVD+czYNDGxWm2iDa+AMVaThFBA3uF1sM0xIo9HK7vMDBt8wMZ2QqImh49o+z/0ehaAHA3TXsv/UfQnSwGEL5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=qdJs0g86; arc=none smtp.client-ip=117.135.210.3
+	s=arc-20240116; t=1768378725; c=relaxed/simple;
+	bh=w/Y6f6SdcqZOM/5xlLUcGD4SK3+N7DTKbTwQyyFK8ic=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=YGUE3g7oY8xa/UAAu9NZipiDzHHMLg+dWXVs3KXKmx6D8NmUKN7lYEETUrcrehwtAwnM3B4mYHuL1p/WsAx1cZNeUWl1eEUi7Jq8FMTW9XLYdcudIGHa29x+TgnK6Jp0bI9jQvq1Qnu+C+tM4Cc+k9n6qQP+dMwHP+GjCez22Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=P+Rf0ILB; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="qdJs0g86"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="P+Rf0ILB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=SeKIIdbs9uF8hF/
-	ORo4qkiW+uv23+t/MhSqLxns7ow0=; b=qdJs0g86KwfL6mtNUPnMaOSM+Ody4Br
-	lRzp02s+0NgG6lAHWguI72RboVVSyHZhC9br34vd8KEMdnqxx+tVuf/xem3ya+e8
-	UYHjFKoZNSxpCNhs7t6jD9SJFNjsCC7J4lwYSw0YVvtvdKTeKGqlju4hAZHxGOM+
-	skp9hvl+8GAc=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=b6N5JjTE6Adp8A0
+	d5t2oO4Hebrc0aW5+TFHtmcjf1KY=; b=P+Rf0ILBD1yk5+5RE6L7rvese3rS3cY
+	LXoqlZDnzTptwkKCbI4WmrE7TyYrQL3MlnoN5v55s7B3flw49VuqJIYIyfWPElKg
+	UaaNLJ7Skqz25MMyrTnqCDB6Uadivs2qfL0nNCOzC3ajmrV2mM7ashH0Pw21o42w
+	qfaR/5u2YEOw=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wB3LaYsUWdpIIuhFg--.292S6;
-	Wed, 14 Jan 2026 16:17:55 +0800 (CST)
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wB3LaYsUWdpIIuhFg--.292S8;
+	Wed, 14 Jan 2026 16:17:58 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
 	Jean Delvare <jdelvare@suse.com>
@@ -34,110 +34,239 @@ Cc: Wenliang Yan <wenliang202407@163.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 RESEND 4/8] hwmon: (ina3221) Support alert configuration
-Date: Wed, 14 Jan 2026 03:17:37 -0500
-Message-Id: <20260114081741.111340-5-wenliang202407@163.com>
+Subject: [PATCH v4 RESEND 6/8] hwmon: (ina3221) Support for writing alert limit values and modify the 'ina3221_read_value' function
+Date: Wed, 14 Jan 2026 03:17:39 -0500
+Message-Id: <20260114081741.111340-7-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260114081741.111340-1-wenliang202407@163.com>
 References: <20260114081741.111340-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wB3LaYsUWdpIIuhFg--.292S6
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF48KrWUGrWkCF4furW3KFg_yoW5WFy5pF
-	4ak34rt3W2qF4Sgws7Kan5KFyFy34xWF47trnrW340qFsrJryjvw1kKa4DtFyYvFn5ZFyx
-	tay7tr4UCanrAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0Jj3Ef5UUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbC5xSVaWlnUTTPJgAA3N
+X-CM-TRANSID:_____wB3LaYsUWdpIIuhFg--.292S8
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr4DKrykGr4Utr4rWr47CFg_yoWxuFW8p3
+	yfCF1rtr17tr4Svws2kFs5WFyrAr1xW3y2vr9rK3ySva1UA3W0grykta1Fyry5KFn3ZFsr
+	X3srZF1UCanrJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0Jjn_-9UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbC6BaVaWlnUTbHWgAA32
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add alert configuration for initialization and resume.
+SQ52210 adds power, current, and limit registers. The ina3221_read_value
+function has been refactored to adapt to the new register data reading
+format.
+
+Each channel supports four new alert trigger modes, but only one trigger
+mode can be active at any given time. Alert values are stored in the same
+register. The sq52210_alert_limit_write function has been added to write
+alert threshold values and configure alert source type.
 
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/ina3221.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/hwmon/ina3221.c | 158 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 155 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index b5fa984a5a25..c82ef2d23056 100644
+index 4b2888be0ae2..38dbcd8046bd 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -65,6 +65,8 @@
- 
+@@ -66,6 +66,14 @@
  #define INA3221_MASK_ENABLE_SCC_MASK	GENMASK(14, 12)
  
-+#define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
+ #define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
++#define SQ52210_MASK_ALERT_CHANNEL1 (BIT(15) | BIT(12) | BIT(9) | BIT(6))
++#define SQ52210_MASK_ALERT_CHANNEL2 (BIT(14) | BIT(11) | BIT(8) | BIT(5))
++#define SQ52210_MASK_ALERT_CHANNEL3 (BIT(13) | BIT(10) | BIT(7) | BIT(4))
 +
++#define SQ52210_ALERT_ALL_SUL_MASK	(BIT(15) | BIT(14) | BIT(13))
++#define SQ52210_ALERT_ALL_BOL_MASK	(BIT(12) | BIT(11) | BIT(10))
++#define SQ52210_ALERT_ALL_BUL_MASK	(BIT(9) | BIT(8) | BIT(7))
++#define SQ52210_ALERT_ALL_POL_MASK	(BIT(6) | BIT(5) | BIT(4))
+ 
  #define INA3221_CONFIG_DEFAULT		0x7127
  #define INA3221_RSHUNT_DEFAULT		10000
- #define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
-@@ -123,6 +125,7 @@ struct ina3221_input {
- enum ina3221_ids { ina3221, sq52210 };
+@@ -108,6 +116,13 @@ enum ina3221_channels {
+ 	INA3221_NUM_CHANNELS
+ };
  
- struct ina3221_config {
-+	bool has_alerts;	/* chip supports alerts and limits */
- 	bool has_current;	/* chip has internal current reg */
- 	bool has_power;		/* chip has internal power reg */
- 	int calibration_value;	/* calculate current_lsb */
-@@ -140,6 +143,7 @@ struct ina3221_config {
-  * @reg_config: Register value of INA3221_CONFIG
-  * @summation_shunt_resistor: equivalent shunt resistor value for summation
-  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
-+ * @alert_type_select: Used to store the alert trigger type
-  * @current_lsb_uA: The value of one LSB corresponding to the current register
-  * @power_lsb_uW: The value of one LSB corresponding to the power register
-  * @single_shot: running in single-shot operating mode
-@@ -155,6 +159,7 @@ struct ina3221_data {
- 	u32 reg_config;
- 	int summation_shunt_resistor;
- 	u32 summation_channel_control;
-+	u32 alert_type_select;
- 	long current_lsb_uA;
- 	long power_lsb_uW;
- 
-@@ -163,10 +168,12 @@ struct ina3221_data {
- 
- static const struct ina3221_config ina3221_config[] = {
- 	[ina3221] = {
-+		.has_alerts = false,
- 		.has_current = false,
- 		.has_power = false,
- 	},
- 	[sq52210] = {
-+		.has_alerts = true,
- 		.has_current = true,
- 		.has_power = true,
- 		/*
-@@ -948,6 +955,10 @@ static int ina3221_probe(struct i2c_client *client)
- 			ina->reg_config &= ~INA3221_CONFIG_CHx_EN(i);
- 	}
- 
-+	/* Initialize alert_type_select */
-+	if (ina->config->has_alerts)
-+		ina->alert_type_select = 0;
++enum sq52210_alert_types {
++	SQ52210_ALERT_SUL,
++	SQ52210_ALERT_BOL,
++	SQ52210_ALERT_BUL,
++	SQ52210_ALERT_POL
++};
 +
- 	/* Initialize summation_shunt_resistor for summation channel control */
- 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
- 	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-@@ -1096,6 +1107,17 @@ static int ina3221_resume(struct device *dev)
- 		}
- 	}
+ /**
+  * struct ina3221_input - channel input source specific information
+  * @label: label of channel input source
+@@ -272,6 +287,18 @@ static inline int ina3221_wait_for_data(struct ina3221_data *ina)
+ 					      cvrf, cvrf, wait, wait * 2);
+ }
  
-+	/* Restore alert config register value to hardware */
-+	if (ina->config->has_alerts) {
-+		ret = regmap_update_bits(ina->regmap, SQ52210_ALERT_CONFIG,
-+					 SQ52210_ALERT_CONFIG_MASK,
-+					 ina->alert_type_select & SQ52210_ALERT_CONFIG_MASK);
-+		if (ret) {
-+			dev_err(dev, "Unable to select alert type\n");
-+			return ret;
-+		}
-+	}
++static const u32 alert_groups[] = {
++	SQ52210_MASK_ALERT_CHANNEL1,
++	SQ52210_MASK_ALERT_CHANNEL2,
++	SQ52210_MASK_ALERT_CHANNEL3,
++};
 +
++static const u8 limit_regs[] = {
++	SQ52210_ALERT_LIMIT1,
++	SQ52210_ALERT_LIMIT2,
++	SQ52210_ALERT_LIMIT3,
++};
++
+ static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
+ 			      int *val)
+ {
+@@ -284,13 +311,55 @@ static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
+ 
+ 	/*
+ 	 * Shunt Voltage Sum register has 14-bit value with 1-bit shift
++	 * Current registers have 15-bit value
++	 * Power registers have 16-bit value
++	 * ALERT_LIMIT registers have 16-bit value with 3-bit shift
+ 	 * Other Shunt Voltage registers have 12 bits with 3-bit shift
+ 	 */
+-	if (reg == INA3221_SHUNT_SUM || reg == INA3221_CRIT_SUM)
++	switch (reg) {
++	case INA3221_SHUNT_SUM:
++	case INA3221_CRIT_SUM:
+ 		*val = sign_extend32(regval >> 1, 14);
+-	else
++		break;
++	case SQ52210_CURRENT1:
++	case SQ52210_CURRENT2:
++	case SQ52210_CURRENT3:
++		*val = sign_extend32(regval, 15);
++		break;
++	case SQ52210_POWER1:
++	case SQ52210_POWER2:
++	case SQ52210_POWER3:
++		*val = regval;
++		break;
++	case INA3221_BUS1:
++	case INA3221_BUS2:
++	case INA3221_BUS3:
++	case INA3221_SHUNT1:
++	case INA3221_SHUNT2:
++	case INA3221_SHUNT3:
++	case INA3221_WARN1:
++	case INA3221_WARN2:
++	case INA3221_WARN3:
++	case INA3221_CRIT1:
++	case INA3221_CRIT2:
++	case INA3221_CRIT3:
+ 		*val = sign_extend32(regval >> 3, 12);
+-
++		break;
++	case SQ52210_ALERT_LIMIT1:
++	case SQ52210_ALERT_LIMIT2:
++	case SQ52210_ALERT_LIMIT3:
++		if (ina->alert_type_select & SQ52210_ALERT_ALL_SUL_MASK)
++			*val = sign_extend32(regval, 15);
++		else if (ina->alert_type_select & (SQ52210_ALERT_ALL_BOL_MASK
++					| SQ52210_ALERT_ALL_BUL_MASK))
++			*val = regval >> 3;
++		else if (ina->alert_type_select & SQ52210_ALERT_ALL_POL_MASK)
++			*val = regval;
++		break;
++	default:
++		*val = 0;
++		return -EOPNOTSUPP;
++	};
  	return 0;
  }
  
+@@ -443,6 +512,89 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 	}
+ }
+ 
++static int sq52210_alert_limit_write(struct ina3221_data *ina,
++			enum sq52210_alert_types type, int channel, long val)
++{
++	struct regmap *regmap = ina->regmap;
++	int item = channel % INA3221_NUM_CHANNELS;
++	u8 limit_reg;
++	u32 alert_group, alert_mask = 0;
++	int regval = 0;
++	int ret;
++
++	if (item >= ARRAY_SIZE(alert_groups) || val < 0)
++		return -EINVAL;
++
++	alert_group = alert_groups[item];
++	limit_reg = limit_regs[item];
++
++	/* Clear alerts for this channel group first */
++	ret = regmap_update_bits(regmap, SQ52210_ALERT_CONFIG, alert_group, 0);
++	if (ret)
++		return ret;
++
++	/* Determine alert type and calculate register value */
++	switch (type) {
++	/*
++	 * The alert warning logic is implemented by comparing the limit register values
++	 * with the corresponding alert source register values. Since the current register
++	 * is a 15-bit signed register and the power register is a 16-bit unsigned
++	 * register, but the lower 3 bits of the limit register default to 0, the lower
++	 * 3 bits will be forced to 0 when setting SUL and POL warning values.
++	 * Formula to convert register value:
++	 *     bus_voltage: (regval / 8mV) << 3
++	 *     current: (regval / current_lsb) & 0xfff8
++	 *     power: (regval / current_lsb) & 0xfff8
++	 */
++	case SQ52210_ALERT_SUL:
++		/* SUL: Shunt Under Limit - BIT(15), BIT(14), BIT(13) */
++		alert_mask = BIT(15 - item);
++		/* Current Register, signed register, result in mA */
++		regval = DIV_ROUND_CLOSEST(val * 1000, ina->current_lsb_uA) & 0xfff8;
++		regval = clamp_val(regval, -32760, 32760);
++		break;
++	case SQ52210_ALERT_BOL:
++		/* BOL: Bus Over Limit - BIT(12), BIT(11), BIT(10) */
++		alert_mask = BIT(12 - item);
++		/* Bus Register, signed register, result in mV */
++		regval = clamp_val(val, -32760, 32760);
++		break;
++	case SQ52210_ALERT_BUL:
++		/* BUL: Bus Under Limit - BIT(9), BIT(8), BIT(7) */
++		alert_mask = BIT(9 - item);
++		/* Bus Register, signed register, result in mV */
++		regval = clamp_val(val, -32760, 32760);
++		break;
++	case SQ52210_ALERT_POL:
++		/* POL: Power Over Limit - BIT(6), BIT(5), BIT(4) */
++		alert_mask = BIT(6 - item);
++		/* Power Register, unsigned register, result in mW */
++		regval = DIV_ROUND_CLOSEST(val * 1000, ina->power_lsb_uW) & 0xfff8;
++		regval = clamp_val(regval, 0, 65528);
++		break;
++	default:
++		/* For unsupported attributes, just clear the configuration */
++		ina->alert_type_select &= ~alert_group;
++		return -EOPNOTSUPP;
++	}
++
++	/* Write limit register value */
++	ret = regmap_write(regmap, limit_reg, regval);
++	if (ret)
++		return ret;
++
++	/* Update alert configuration if limit value is non-zero */
++	if (regval) {
++		ina->alert_type_select = (ina->alert_type_select & ~alert_group) | alert_mask;
++		ret = regmap_update_bits(regmap, SQ52210_ALERT_CONFIG,
++					alert_group, alert_mask);
++	} else {
++		ina->alert_type_select &= ~alert_group;
++	}
++
++	return ret;
++}
++
+ static int ina3221_write_chip(struct device *dev, u32 attr, long val)
+ {
+ 	struct ina3221_data *ina = dev_get_drvdata(dev);
 -- 
 2.17.1
 
