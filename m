@@ -1,179 +1,204 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91A01B425C
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 14:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F562D0C62
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 22:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768400632; cv=none; b=rTE/LWZqi6urE1UZ5tu/UpP9dB1LmLl+tgUSWYXhlOfMIS5L06b5TrcAUq3wAPY3fyW2Orh/hLD5UAxgWbR3JxJmeM53bXcen3PQhQKfjOJuFEeqt9mnxuOGPXRqISrMcYmuvOml1P4hwpy/eDvy0AqxEKbA9eaQBdu1GF0x2mQ=
+	t=1768428749; cv=none; b=Yk9NMB0cGHVE/031RT9FNrCbmlwNa/bRbrYEyTbjshMu2Yv716DO6qNRF03fhBiqUlJeJRSZB4WJUWt+zWi5tIc9hnr/rlEnDuUJCGYBDEwK1LbTSJjZqlZxHEdlxC7G5MCDvmb2Hf9tvMlhJIZDvHmVMWWIe1t6It0A65ptAOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768400632; c=relaxed/simple;
-	bh=4yI3qv1paP3863JGJN8EaT90z7WyLn3BHwc7lsAkj0g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=rVqKXGaSHt/jwoqMQ0B3BXufwTVmFcL8fe8zmzG8t0K4DdmeWQERWwKIfkZzmXV82H8PY40EZZz5QGEd43I3G8PU/1FXEjadD5sPRsIRRmBDlLC2r7Dwa2+D3vxoxf+P9d/O8Vg78FCqD8iVJ1qWD6JwugbHEjgGhCZnWCuzIz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoVaa0M/; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768428749; c=relaxed/simple;
+	bh=AqQ7D7MZG5dCwk0+FI4LPwFjNnbWzQHDbkY9jbK4f6A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uoUkn2eS577gQMy7CZm8Q2ZikjU/j4bUqa78hC46lAYy5D+HmOuqex9anMcCDrEv7kSGn91ye6/7zwvsmCONkHx97ub2O5vAEZv21/Ka4lloG6tQb20vMkbEANG+/3nO9kjkgIlj6jxaeesYrDX6O/SWt4pnNWJcj4JY5s+DB+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=Jv6dA1Q/; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoVaa0M/"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1233c155a42so122821c88.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 06:23:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="Jv6dA1Q/"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so1949925e9.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 14:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768400630; x=1769005430; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCTd1UeGbd16C0dw6Flw043UIl8ToTlwb18MsiPCF94=;
-        b=GoVaa0M/ob5LP92LuigTci4rwd8AEn98ed69KJrtijjTKwZOQSNe6VaPoot8EdoJnO
-         YAeeZCBABERSbrdLMCijuAqwLjBiF5xugIA5guZmDDaahAK6o29OlQBvAScp8e8jZ16p
-         NhETAtoS6w1A5u4rclIFGka/r+6IKiSBx9Pocd1XFQqClKUnd+oS25VflweOtoHQNFZ5
-         3nfJZOkO2is6fb3N64ZtRXYxHtJaOMJQDF7MjYFv7f9qnJiC8QuVNJ8j57WSYkxvy5Ry
-         pj40t0Mwm7Etoij6Ic/g46PzTXzelhXBlU0UfzFDQ4lPx52tXuZra6ISlqkzHiE34sX+
-         Ftqg==
+        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768428737; x=1769033537; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TEwZJiV03fJ628aCuxgNtJ0Js2UxACV5+XtPBkCCvVM=;
+        b=Jv6dA1Q/hdZge3jWWBPueAxiXQ57z4IkxAOcHwLHAax7UImoRVPKoDw4PdF7or/BEL
+         tej1t2vHhKUjuBEBiU5D6Hm46nD8B7ybeyVavhyNiboR+m36UQ+Dra2LN7P28rOXyryx
+         LcR1yAz7I+T+wliVw1Lh53Cu9bMGd0fjtOY1ZIjQROoAnHW7HwHQpyfHLQOwaPyCEnNR
+         KIVxR0sS040IasR11+3jBsCk9p7Qwm8+fQivNsssLU4U5pNRIfGba2XAhmInrLebNxK0
+         732MN3yXf81aRMtdoFY/1WcCKvw6iNiAd1g0WkjyeD3m4oWmD1tg3goLI6yun8QyOSi7
+         zmTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768400630; x=1769005430;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VCTd1UeGbd16C0dw6Flw043UIl8ToTlwb18MsiPCF94=;
-        b=JzgrasMXl20pXlBIS0jBPobnrmBAhluoffQsUWa//lcLoV1xM3KpSkP21EQclis3eu
-         3KuJsUTVS2q9Dux1gubWjUq8QwmskicfWcFpQH34IxgxIASN0fmZyANdwNeJLMtyS9V0
-         bQWoVaATOkWcnhIkCtZRnYa7Klo/dOUkbNN9LLYr+4X77Sk0TrHw6rCc9nFrLCD4KyAo
-         wJlrrO6xXu4oZiV73GJCxqKVbi4QfrMpr5tJRfONxty6vHJ/fnctEEs9w86B7EHjKpII
-         zCJsyJsCgYtZEsEdYpNLsGeL6Y88An6+TmfhidPdLt60OOqXDV2zz/jnYAkEQ9dsBXT6
-         V8Rg==
-X-Gm-Message-State: AOJu0YxKOplRc/juMzGAXih20zq+EuSEk0d1Fb/D4jKBt17qSdJGZc7l
-	SaOaMzaHtmttizOG4wI/mQBmZTqQWqwUi2qt+e7B2m7+fCY30hEnB8tlIx9V5g==
-X-Gm-Gg: AY/fxX6T343w//eiLw5SCyTg0iGJo3Me+sklmMBI84F30AAQvOI4wA5B+e06kGICDEp
-	VfHM+YNEmt34UftzTfpkb5qFjG6U2RtEIdmaAEA30TIXdpTNcOfz/aFCtWx1J9n5qyoRfhTeSFn
-	bdcedwDj540qg+Yu4cQxwkVo3HWzJV0iS3rY0iHakr89E0+nA8jEPjfGV8ruFM/ahgvlRVAQpS2
-	fdV7X2aj0UXSPR4NWPKSlmst4+VTCK4SqD73Fu/BAveRinH4ZKnWEXChdM83QWaxxmKAHRVnDw/
-	IXJR67NXq+tJEWG++1dSdxT98tv7WUv/RBN/T5EJCLZw677Yj0z7GOPfocXE9TcoHkF80HrXOyH
-	3y04ZrOEitXWnWhRsFgsZMGDSyEgt0SW83CDx6zJomt4dhhv63cn1IiPMHj3nX8kUni9ezaCTpW
-	JFjtJ1uSRNCewK3DGfeCTI7LOEayQfbbW/bArx6RxKI1adEsW0LoIq+J1nMIf5
-X-Received: by 2002:a05:693c:374a:b0:2ac:2dfd:9ff with SMTP id 5a478bee46e88-2b48731ffeemr3380034eec.41.1768400629498;
-        Wed, 14 Jan 2026 06:23:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b480dea94fsm1886468eec.24.2026.01.14.06.23.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 06:23:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net>
-Date: Wed, 14 Jan 2026 06:23:47 -0800
+        d=1e100.net; s=20230601; t=1768428737; x=1769033537;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TEwZJiV03fJ628aCuxgNtJ0Js2UxACV5+XtPBkCCvVM=;
+        b=EHnTga8JtyOluD2PmGPuzmhAqlIya5iPF/w67LEn4Pnid0JxG5y/qQljmjQoKEdmvO
+         JQiegxkk9uxH4wHzYh11UAx0+Sqcx0fP64HvRqXWh62AHA1iSqQ1ZgC79jeMMow0Gwyn
+         yMIcqVpuG0YVpqV7iSMCUO05UOyYfP77HUw+xcAWQIF+V56TTYBvZwO86TrA+47wrqel
+         IT9CWttsZcYw1qzb8axEdgW/TDqaI66MC1La7hfHinjT4gIEbR8NVESMaAxVHSd5yJQ6
+         8F7Ob3gwbHdLOSae2r8PsYH/m+9IoEiAMdpfpR0Uy82bfuensUzJ0XfxQS03m0RY3xrp
+         WRZg==
+X-Gm-Message-State: AOJu0YzBquyt6SScTp19qp3RUmb99FMdXb2qrto2qFzIPybb5eYMEp0G
+	HiyyhYXhuca9M8pUtoDyHwC1oA4TkDO2MRBLbpNeH93DLclMBIYbBHlHMei+SPvuGQ==
+X-Gm-Gg: AY/fxX7RwCIR5Esw/mH3tqmk6iQAA35BH0u88Czrb24MB8G+8Oqd7MkpPkPYwfU1gJ0
+	IOFstJP4zyqhnFdwSNKd8FhYLIRG4Se4Dj7sTTTEyiImbPLry1CwLtpLCDL64kekd+z4l3aedu2
+	xjRMN5G8oMD0R4EL+Wz58xQ9DFpdO1NEWWEkORJDzzQWnxo1+bRQRyCjeGbyyYBD6VvPWwQe6/K
+	c4FIAJ3MZenhtHjepOO2/kIFMM7WWOqvA9a2n5RyCI0o1uNDMu1FBEbQvHf1aCl3GHvJXIF5kdE
+	mUtBbHjysfSzfv1UANe4jD1hva2M/5Jsty/wEppkwJqYHGGJcmNsiNLyvKBbvHoYMLyyPf0TToG
+	XQ3rf5EkPnqygPQCyvcPA0ax2fQV4e2OtfDnLCslBAv77MWGKU2WSM4xCOAaBvbepp/X5iVluxk
+	bXzc1Urcdd4TnCHsAogHifzeJnKi7tVO7vZJ+GGxhEFZrsnXUNGS7g7cPfW1s21naesuL4sL4d1
+	hxEKXGXS9gOiyXz1g==
+X-Received: by 2002:a05:600c:1f92:b0:47a:94fc:d057 with SMTP id 5b1f17b1804b1-47ee332fa41mr38400435e9.2.1768428736813;
+        Wed, 14 Jan 2026 14:12:16 -0800 (PST)
+Received: from localhost.localdomain (217-128-226-200.ftth.fr.orangecustomers.net. [217.128.226.200])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f941a670dsm3098195e9.5.2026.01.14.14.12.15
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 14 Jan 2026 14:12:16 -0800 (PST)
+From: "benoit.masson" <yahoo@perenite.com>
+To: Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	"benoit.masson" <yahoo@perenite.com>
+Subject: [PATCH v4 3/5] hwmon: it87: expose additional temperature limits
+Date: Wed, 14 Jan 2026 23:12:08 +0100
+Message-ID: <20260114221210.98071-4-yahoo@perenite.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260114221210.98071-1-yahoo@perenite.com>
+References: <20260114221210.98071-1-yahoo@perenite.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
- errors
-To: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
-References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
- <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net>
- <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
- <2740c3ab-7cb0-4931-81a2-30b85e8615f9@roeck-us.net>
- <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
-Content-Language: en-US
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/14/26 05:07, TINSAE TADESSE wrote:
-...
->>> Hi Guenter,
->>>
->>> I tested changing the i801 SMBus controller to use
->>> SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
->>> DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With this
->>> change, spd5118 resume failures (-ENXIO)
->>> still persist, suggesting PM ordering alone is insufficient and other
->>> firmware interactions are involved.
->>
->> How about the problem in the suspend function ? Is that also still seen ?
->>
->> Also, the subject talks about -EIO. Is that still seen ?
->>
->> Either case, can you enable debug logs for the i801 driver ?
->> It should generate log entries when it reports errors.
->>
->> Thanks,
->> Guenter
->>
-> 
-> Hi Guenter,
-> 
-> Thank you for the questions. To clarify:
-> 
-Please do not drop mailing lists from replies.
+Expose extra temp min/max/offset/type/alarm attributes when a chip
+reports more than three temperature resources.
 
-> 1) I have not observed any failures in the suspend path. The suspend
-> callback completes successfully, and
-> I have not seen I2C errors or warnings during suspend at any point.
+Signed-off-by: benoit.masson <yahoo@perenite.com>
+---
+ drivers/hwmon/it87.c | 58 ++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 53 insertions(+), 5 deletions(-)
 
-Sorry, I seem to be missing something.
-
-In that case, what is the point of patch 3/3 of your series which
-removes hardware accesses from the suspend function ?
-
-> 2) I have also not observed -EIO in my testing. The error consistently
-> reported on resume and subsequent hwmon access is -ENXIO.
-> Earlier references to -EIO were based on assumptions rather than
-> observed logs, and I should have been clearer about that.
-> 
-
-Thanks for the clarification.
-
-Guenter
-
-> I am enabling debug logging for the i801 driver to collect more
-> concrete evidence of controller state during resume.
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 2d4264d05bc2..368ae68ace15 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -1334,8 +1334,26 @@ static SENSOR_DEVICE_ATTR_2(temp3_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
+ static SENSOR_DEVICE_ATTR_2(temp3_offset, S_IRUGO | S_IWUSR, show_temp,
+ 			    set_temp, 2, 3);
+ static SENSOR_DEVICE_ATTR_2(temp4_input, S_IRUGO, show_temp, NULL, 3, 0);
++static SENSOR_DEVICE_ATTR_2(temp4_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    3, 1);
++static SENSOR_DEVICE_ATTR_2(temp4_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    3, 2);
++static SENSOR_DEVICE_ATTR_2(temp4_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 3, 3);
+ static SENSOR_DEVICE_ATTR_2(temp5_input, S_IRUGO, show_temp, NULL, 4, 0);
++static SENSOR_DEVICE_ATTR_2(temp5_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    4, 1);
++static SENSOR_DEVICE_ATTR_2(temp5_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    4, 2);
++static SENSOR_DEVICE_ATTR_2(temp5_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 4, 3);
+ static SENSOR_DEVICE_ATTR_2(temp6_input, S_IRUGO, show_temp, NULL, 5, 0);
++static SENSOR_DEVICE_ATTR_2(temp6_min, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    5, 1);
++static SENSOR_DEVICE_ATTR_2(temp6_max, S_IRUGO | S_IWUSR, show_temp, set_temp,
++			    5, 2);
++static SENSOR_DEVICE_ATTR_2(temp6_offset, S_IRUGO | S_IWUSR, show_temp,
++			    set_temp, 5, 3);
+ 
+ static int get_temp_type(struct it87_data *data, int index)
+ {
+@@ -1461,6 +1479,12 @@ static SENSOR_DEVICE_ATTR(temp2_type, S_IRUGO | S_IWUSR, show_temp_type,
+ 			  set_temp_type, 1);
+ static SENSOR_DEVICE_ATTR(temp3_type, S_IRUGO | S_IWUSR, show_temp_type,
+ 			  set_temp_type, 2);
++static SENSOR_DEVICE_ATTR(temp4_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 3);
++static SENSOR_DEVICE_ATTR(temp5_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 4);
++static SENSOR_DEVICE_ATTR(temp6_type, S_IRUGO | S_IWUSR, show_temp_type,
++			  set_temp_type, 5);
+ 
+ /* 6 Fans */
+ 
+@@ -2290,6 +2314,9 @@ static SENSOR_DEVICE_ATTR(fan6_alarm, S_IRUGO, show_alarm, NULL, 7);
+ static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, show_alarm, NULL, 16);
+ static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO, show_alarm, NULL, 17);
+ static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO, show_alarm, NULL, 18);
++static SENSOR_DEVICE_ATTR(temp4_alarm, S_IRUGO, show_alarm, NULL, 19);
++static SENSOR_DEVICE_ATTR(temp5_alarm, S_IRUGO, show_alarm, NULL, 20);
++static SENSOR_DEVICE_ATTR(temp6_alarm, S_IRUGO, show_alarm, NULL, 21);
+ static SENSOR_DEVICE_ATTR(intrusion0_alarm, S_IRUGO | S_IWUSR,
+ 			  show_alarm, clear_intrusion, 4);
+ 
+@@ -2350,6 +2377,9 @@ static SENSOR_DEVICE_ATTR(temp1_beep, S_IRUGO | S_IWUSR,
+ 			  show_beep, set_beep, 2);
+ static SENSOR_DEVICE_ATTR(temp2_beep, S_IRUGO, show_beep, NULL, 2);
+ static SENSOR_DEVICE_ATTR(temp3_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp4_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp5_beep, S_IRUGO, show_beep, NULL, 2);
++static SENSOR_DEVICE_ATTR(temp6_beep, S_IRUGO, show_beep, NULL, 2);
+ 
+ static ssize_t vrm_show(struct device *dev, struct device_attribute *attr,
+ 			char *buf)
+@@ -2512,14 +2542,12 @@ static umode_t it87_temp_is_visible(struct kobject *kobj,
+ 	int i = index / 7;	/* temperature index */
+ 	int a = index % 7;	/* attribute index */
+ 
+-	if (index >= 21) {
+-		i = index - 21 + 3;
+-		a = 0;
+-	}
+-
+ 	if (!(data->has_temp & BIT(i)))
+ 		return 0;
+ 
++	if (a && i >= data->num_temp_limit)
++		return 0;
++
+ 	if (a == 3) {
+ 		if (get_temp_type(data, i) == 0)
+ 			return 0;
+@@ -2561,8 +2589,28 @@ static struct attribute *it87_attributes_temp[] = {
+ 	&sensor_dev_attr_temp3_beep.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 21 */
++	&sensor_dev_attr_temp4_max.dev_attr.attr,
++	&sensor_dev_attr_temp4_min.dev_attr.attr,
++	&sensor_dev_attr_temp4_type.dev_attr.attr,
++	&sensor_dev_attr_temp4_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp4_offset.dev_attr.attr,
++	&sensor_dev_attr_temp4_beep.dev_attr.attr,
++
+ 	&sensor_dev_attr_temp5_input.dev_attr.attr,
++	&sensor_dev_attr_temp5_max.dev_attr.attr,
++	&sensor_dev_attr_temp5_min.dev_attr.attr,
++	&sensor_dev_attr_temp5_type.dev_attr.attr,
++	&sensor_dev_attr_temp5_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp5_offset.dev_attr.attr,
++	&sensor_dev_attr_temp5_beep.dev_attr.attr,
++
+ 	&sensor_dev_attr_temp6_input.dev_attr.attr,
++	&sensor_dev_attr_temp6_max.dev_attr.attr,
++	&sensor_dev_attr_temp6_min.dev_attr.attr,
++	&sensor_dev_attr_temp6_type.dev_attr.attr,
++	&sensor_dev_attr_temp6_alarm.dev_attr.attr,
++	&sensor_dev_attr_temp6_offset.dev_attr.attr,
++	&sensor_dev_attr_temp6_beep.dev_attr.attr,
+ 	NULL
+ };
+ 
+-- 
+2.50.1 (Apple Git-155)
 
