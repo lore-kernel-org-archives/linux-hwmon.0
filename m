@@ -1,108 +1,116 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513ED2F25FB
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 02:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.229.168.213])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D5835BDC2;
+	Wed, 14 Jan 2026 05:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.229.168.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768356075; cv=none; b=vGP1tXzyLCdOBzF2Ityp7J+wdGJZf0npBkG8ODLHLD6wYIGQN/7g/Q+H+7LIq465/0uYwbmHtSCgVxDgzCUMmcEzHXkwnKqqTHJbO5kj7Et2VnTqV8GgiWoMkQecz929wWL8mfEfzKtAsbe15mFT8FJxnr9b2MDCDLAv47PhZvM=
+	t=1768370156; cv=none; b=mBFz34NRpxMkhFDDYseJW+siQE1cH6HUT1AwABI1TN465lc1ht2F/+Gv9pZ5mRUqeVEAaJLxHBQmfZWEtWqGBKo9QrA6FGQG8MJgR72ODbEMxjBP+rdWjYUXDONfAdKM9cqmetl79sW9l3RpuNugpZVUzkPVCbOBHy72XKHC44w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768356075; c=relaxed/simple;
-	bh=P5bf0JH7xtkT1EP8+DuCpWbp10MSGlZL2RNcVbVbl2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cMb3lWCKlJYR3IZ+vQL4iHeaikcU8EiaEaG4Q65ZMsNhuqXH0/qKmpZMGV6RbXTtLVaXIAd70CFzM3ytKujYNC+jLXtUNDJbptaaycY0GS3mscD7IiyWykTTyZijsDg3xrKyOR7qYdQjmRIgPVyj3we+DxVtEvuIwYq0gxM3/Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KolysG+i; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KolysG+i"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8b2a4b6876fso1253589785a.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Jan 2026 18:01:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768356073; x=1768960873; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BFwdy6ucxpsUx3v1DfjYy28EmI+SCHhT+lBJ+O3Qz5I=;
-        b=KolysG+iqUtDPHGH6mw+kMFJnXSYnzX1GRsH6vZUusJ5Jw6Y8/7egTEk0U415Tluk2
-         VZqD8x0e1ogYCKj4+fBFZJlbXfcuqaleR3UjN8eDh9A4E+Y3EF3UcWQtkwNyaaBySupY
-         KmKBBgbWEQu8diNqV5njU4ev/vgjNDyumBqRc49PlilApqjEnrksAVV7UgzmJ5oFnt+b
-         WyUpddaS0S9oQIuixZjK5hJFJeVZajrtMLyu9W5GnwppUbcXP0B+GbFV/ysylqMuv6Cu
-         13eqlhhPOs5U8eWHH6vK4n7ibHPPFQKQLXrV+wB6oE33VdlKYPbXAHYlicm5ZX6DYjwQ
-         v+Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768356073; x=1768960873;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BFwdy6ucxpsUx3v1DfjYy28EmI+SCHhT+lBJ+O3Qz5I=;
-        b=Hdyj4vdDzMqaHKEeyQqNzRv+FSX/JCeVkaMS5Vpg9kJW36YH38KxtIVpV2GCr56+4a
-         yQlVfePRInE0okrZyuNXFSiTuwVzYPfMGppbVrh+L7s17iItPceDecMlQfE2QjT/9D5Q
-         ZGaXHkvyC6Fh7m5enlVbvM6f5obrIEC/tLqzc20fKZ0uWnwRcADMajxDSODUJaQgtHCP
-         YyOINTImhfB4NsICyYy1XJHYnGukwRK/3gzlGUZx1eGS7yFlzDr02JeNHAVhi1TI3zms
-         u4tTKWeS8Jgvv0cZHzlQTENHDcluIwVM5f2gTAn342GscfjuKPKZbmrnoXt7PhsYVlAx
-         64ww==
-X-Forwarded-Encrypted: i=1; AJvYcCXlPBCprFry6PRCrBbnFuNdDWo+Q+AszfBosPp/PrpVIH2lki+XniGGe3oTnVmZBQR8m12Ri5l0B50E5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEfT4z4pSmDnNGrZphElfIi+2bq+WnunsN0KPAO54ZUGUIIHFg
-	amqsuo+88zZdyJtopIx0ah1wYhrQFw+PgZn0G3noPUGHBGLs3rGFdHrp
-X-Gm-Gg: AY/fxX5iQjcCx1D/bOHVvLDALtMY55ngBz6mjtQf+5qfLCCpehm3qWImSUPtHrZOd5B
-	TZCnVvzdtc61zWVQvkqKrP/4Ulm643/q9rkAVCt9jejAQO875lLfsQ0jRYUmrAIgARmQNSS5L9s
-	0+EIs2E4ic5UyPMpNM8samTtiGOizL7JmOAQfnsZDfmf3ASAHFfZ9DyFiaJmk5oMQaL80e7nYvt
-	Sis0A3/jBkObnSTU3Xxb0FOCVMlqfj5qAHce3/ylM8ru4KloytFOV3OnKO6IOeCRsHXRSrec+Wp
-	62YIqABx1cIs96/LaxkaNqYKgwSJRujWwzo+UUXL7J/MGPO+X0rpIeRxBos08WiGGQ/LYah2R56
-	7cKSgByZcMIgPo+ivtdz8frFysAF3FUdZmMItSwgtzWStCoc6ndi9oHcckYoy70WYoelU39NzMr
-	+myZTVwP35BA==
-X-Received: by 2002:a05:620a:198d:b0:861:119b:3052 with SMTP id af79cd13be357-8c52fbe241amr178645885a.51.1768356073253;
-        Tue, 13 Jan 2026 18:01:13 -0800 (PST)
-Received: from melody.ht.home ([2607:fa49:2104:2e00::983c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c530b792d4sm58495685a.25.2026.01.13.18.01.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 18:01:12 -0800 (PST)
-From: leobannocloutier@gmail.com
-To: pali@kernel.org
-Cc: linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Leo Banno-Cloutier <leobannocloutier@gmail.com>
-Subject: [PATCH] hwmon: (dell-smm) Add Dell G15 5510 to fan control whitelist
-Date: Tue, 13 Jan 2026 21:00:35 -0500
-Message-ID: <20260114020108.83288-2-leobannocloutier@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260114020108.83288-1-leobannocloutier@gmail.com>
-References: <20260114020108.83288-1-leobannocloutier@gmail.com>
+	s=arc-20240116; t=1768370156; c=relaxed/simple;
+	bh=CjIBdAxQ2FBe6bSyXyKNgrffCoPGPV0dY+w6qIcieoE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=sV6hTI9aMOM5AJBOGSzpFCGFHdrP08gUmZQTZvmmig1ZqcObUJJfun1OrAzgLYAq8w1MNpmopHhe6kYf6LolG8GvKx6OsgCSrigs+N9Vt9/9ewDCBtfA73rZPYpeEm3uNOCRIcNyO5Oo8LUiYgODBN0tAuyoSXQgCfHfjWQcjm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=52.229.168.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Wed, 14 Jan 2026 13:55:33 +0800 (GMT+08:00)
+Date: Wed, 14 Jan 2026 13:55:33 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	p.zabel@pengutronix.de, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com, weishangjuan@eswincomputing.com
+Subject: Re: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
+ sensor
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20260111-messy-raven-of-efficiency-fbce9f@quoll>
+References: <20260109090718.442-1-hehuan1@eswincomputing.com>
+ <20260109090836.512-1-hehuan1@eswincomputing.com>
+ <20260111-messy-raven-of-efficiency-fbce9f@quoll>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <396a8fd.2444.19bbb12d8e3.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgAHeizVL2dpZQoBAA--.106W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgEHCmlmc-8hDwAB
+	si
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-From: Leo Banno-Cloutier <leobannocloutier@gmail.com>
-
----
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 6040a8940..93143cfc1 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1639,6 +1639,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
- 	},
-+	{
-+		.ident = "Dell G15 5510",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5510"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{
- 		.ident = "Dell G15 5511",
- 		.matches = {
--- 
-2.52.0
-
+PiA+IAo+ID4gQWRkIGRldmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgRVNXSU4g
+RUlDNzcwMCBQcm9jZXNzLCBWb2x0YWdlCj4gPiBhbmQgVGVtcGVyYXR1cmUgc2Vuc29yLgo+ID4g
+Cj4gPiBUaGUgRUlDNzcwMCBTb0MgaW50ZWdyYXRlcyB0d28gUFZUIGluc3RhbmNlcyBmb3IgbW9u
+aXRvcmluZyBTb0MgYW5kIEREUgo+ID4gcG93ZXIgZG9tYWlucyByZXNwZWN0aXZlbHkuCj4gPiAK
+PiA+IFNpZ25lZC1vZmYtYnk6IFl1bGluIEx1IDxsdXl1bGluQGVzd2luY29tcHV0aW5nLmNvbT4K
+PiA+IFNpZ25lZC1vZmYtYnk6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+
+ID4gLS0tCj4gPiAgLi4uL2JpbmRpbmdzL2h3bW9uL2Vzd2luLGVpYzc3MDAtcHZ0LnlhbWwgICAg
+IHwgOTIgKysrKysrKysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA5MiBpbnNlcnRp
+b25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4gPiAKPiA+IGRpZmYgLS1naXQg
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4sZWljNzcwMC1w
+dnQueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixl
+aWM3NzAwLXB2dC55YW1sCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAw
+MDAwMDAwLi43MjY5MzgyOGE0NjEKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4g
+PiBAQCAtMCwwICsxLDkyIEBACj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0y
+LjAtb25seSBPUiBCU0QtMi1DbGF1c2UpCj4gPiArJVlBTUwgMS4yCj4gPiArLS0tCj4gPiArJGlk
+OiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55
+YW1sIwo+ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29y
+ZS55YW1sIwo+ID4gKwo+ID4gK3RpdGxlOiBFU1dJTiBFSUM3NzAwIFBWVCBTZW5zb3IKPiA+ICsK
+PiA+ICttYWludGFpbmVyczoKPiA+ICsgIC0gWXVsaW4gTHUgPGx1eXVsaW5AZXN3aW5jb21wdXRp
+bmcuY29tPgo+ID4gKyAgLSBIdWFuIEhlIDxoZWh1YW4xQGVzd2luY29tcHV0aW5nLmNvbT4KPiA+
+ICsKPiA+ICtkZXNjcmlwdGlvbjoKPiA+ICsgIEVTV0lOIEVJQzc3MDAgU29DIGludGVncmF0ZXMg
+ZW1iZWRkZWQgcHJvY2Vzcywgdm9sdGFnZSBhbmQgdGVtcGVyYXR1cmUKPiA+ICsgIHNlbnNvcnMg
+dG8gbW9uaXRvciB0aGUgaW50ZXJuYWwgU29DIGVudmlyb25tZW50LiBUaGUgc3lzdGVtIGluY2x1
+ZGVzIHR3bwo+ID4gKyAgUFZUIHNlbnNvciBpbnN0YW5jZXMuIFRoZSBQVlQwIG1vbml0b3JzIHRo
+ZSBtYWluIFNvQyBwb3dlciBkb21haW4uIFRoZQo+ID4gKyAgUFZUMSBzZW5zb3IgbW9uaXRvcnMg
+dGhlIEREUiBjb3JlIHBvd2VyIGRvbWFpbi4KPiA+ICsKPiAKPiBZb3UgbWlzcyByZWYgdG8gaHdt
+b24tY29tbW9uCj4gCj4gPiArcHJvcGVydGllczoKPiA+ICsgIGNvbXBhdGlibGU6Cj4gPiArICAg
+IGNvbnN0OiBlc3dpbixlaWM3NzAwLXB2dAo+ID4gKwo+ID4gKyAgcmVnOgo+ID4gKyAgICBtYXhJ
+dGVtczogMQo+ID4gKwo+ID4gKyAgY2xvY2tzOgo+ID4gKyAgICBtYXhJdGVtczogMQo+ID4gKwo+
+ID4gKyAgY2xvY2stbmFtZXM6Cj4gPiArICAgIGl0ZW1zOgo+ID4gKyAgICAgIC0gY29uc3Q6IGNs
+awo+IAo+IERyb3AgY2xvY2stbmFtZXMsIHVzZWxlc3MuIFRoZXJlIGlzIGxpdHRsZSBzZW5zZSBp
+biBjYWxsaW5nIGEgY2xvY2sKPiAiY2xvY2siLgo+IAo+ID4gKwo+ID4gKyAgaW50ZXJydXB0czoK
+PiA+ICsgICAgbWF4SXRlbXM6IDEKPiA+ICsKPiA+ICsgIGxhYmVsOgo+ID4gKyAgICBkZXNjcmlw
+dGlvbjoKPiA+ICsgICAgICBIdW1hbiByZWFkYWJsZSBpZGVudGlmaWVyIHVzZWQgdG8gZGlzdGlu
+Z3Vpc2ggYmV0d2VlbiBkaWZmZXJlbnQgUFZUCj4gPiArICAgICAgaW5zdGFuY2VzIGFuZCBnZW5l
+cmF0ZSBkZXNjcmlwdGl2ZSBzZW5zb3IgbGFiZWxzLiBUeXBpY2FsbHkgInB2dDAiCj4gPiArICAg
+ICAgZm9yIFNvQyBQVlQgc2Vuc29yIGFuZCAicHZ0MSIgZm9yIEREUiBjb3JlIFBWVCBzZW5zb3Iu
+Cj4gPiArCj4gPiArICByZXNldHM6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiArICBy
+ZXNldC1uYW1lczoKPiA+ICsgICAgaXRlbXM6Cj4gPiArICAgICAgLSBjb25zdDogcnN0Cj4gCj4g
+U2FtZSBwcm9ibGVtLgo+IAo+IAo+ID4gKwo+ID4gKyAgJyN0aGVybWFsLXNlbnNvci1jZWxscyc6
+Cj4gPiArICAgIGRlc2NyaXB0aW9uOiBUaGVybWFsIHNlbnNvciBjZWxscyBpZiB1c2VkIGZvciB0
+aGVybWFsIHNlbnNvcmluZy4KPiA+ICsgICAgY29uc3Q6IDAKPiA+ICsKPiA+ICthZGRpdGlvbmFs
+UHJvcGVydGllczogZmFsc2UKPiAKPiBUaGlzIGdvZXMgYWZ0ZXIgcmVxdWlyZWQgYmxvY2suCj4g
+Cj4gPiArCj4gPiArcmVxdWlyZWQ6Cj4gPiArICAtIGNvbXBhdGlibGUKPiA+ICsgIC0gcmVnCj4g
+PiArICAtIGNsb2Nrcwo+ID4gKyAgLSBjbG9jay1uYW1lcwo+ID4gKyAgLSBpbnRlcnJ1cHRzCj4g
+PiArICAtIGxhYmVsCj4gPiArICAtIHJlc2V0cwo+ID4gKyAgLSByZXNldC1uYW1lcwo+ID4gKwo+
+ID4gK2V4YW1wbGVzOgo+ID4gKyAgLSB8Cj4gPiArICAgIHB2dEA1MGIwMDAwMCB7Cj4gPiArICAg
+ICAgY29tcGF0aWJsZSA9ICJlc3dpbixlaWM3NzAwLXB2dCI7Cj4gPiArICAgICAgcmVnID0gPDB4
+NTBiMDAwMDAgMHgxMDAwMD47Cj4gPiArICAgICAgY2xvY2tzID0gPCZjbG9ja3MgMjQ0PjsKPiA+
+ICsgICAgICBjbG9jay1uYW1lcyA9ICJjbGsiOwo+ID4gKyAgICAgIGludGVycnVwdHMgPSA8MzQ5
+PjsKPiA+ICsgICAgICBpbnRlcnJ1cHQtcGFyZW50ID0gPCZwbGljPjsKPiA+ICsgICAgICBsYWJl
+bCA9ICJwdnQwIjsKPiA+ICsgICAgICByZXNldHMgPSA8JnJlc2V0IDExMT47Cj4gPiArICAgICAg
+cmVzZXQtbmFtZXMgPSAicnN0IjsKPiA+ICsgICAgICAjdGhlcm1hbC1zZW5zb3ItY2VsbHMgPSA8
+MD47Cj4gPiArICAgIH07Cj4gPiArCj4gPiArICAgIHB2dEA1MjM2MDAwMCB7Cj4gPiArICAgICAg
+Y29tcGF0aWJsZSA9ICJlc3dpbixlaWM3NzAwLXB2dCI7Cj4gCj4gRHJvcCBlbnRpcmUgbm9kZSwg
+b25lIGV4YW1wbGUgaXMgZW5vdWdoLiBEbyBub3QgZ3JvdyB5b3VyIGJpbmRpbmcgd2l0aAo+IHJl
+ZHVuZGFudCBkYXRhLiBXZSBhcmUgbm90IGFjY2VwdGluZyBjb21taXRzIGJhc2VkIG9uIG51bWJl
+ciBvZiBsaW5lcy4KPiAKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHRha2luZyB0aGUgdGltZSB0
+byByZXZpZXcgdGhlIHBhdGNoIGFuZCBmb3IgeW91cgp2YWx1YWJsZSBmZWVkYmFjay4KQWxsIHRo
+ZXNlIGlzc3VlcyB3aWxsIGJlIGFkZHJlc3NlZCBpbiB0aGUgbmV4dCBwYXRjaC4KCkJlc3QgcmVn
+YXJkcywKSHVhbiBIZQoKCg==
