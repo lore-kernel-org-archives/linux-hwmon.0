@@ -1,66 +1,66 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E6E2C0269
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 14:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91A01B425C
+	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 14:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768400316; cv=none; b=tBEXzQ9Ev5ugZzCHihUv0b/ZCskCD05/Tf4hjuzUX5HZ1cvgebDz3thnP/pAdoHpN4qyMa0vS4cvjUWo6OUBLSg+s3+f6Uts6An0daOux7KtWoUmTQL9ixlhjCPwa7pafcst0hnqomkOlrttpY5rLrmgArncEDJOxAkromzg36k=
+	t=1768400632; cv=none; b=rTE/LWZqi6urE1UZ5tu/UpP9dB1LmLl+tgUSWYXhlOfMIS5L06b5TrcAUq3wAPY3fyW2Orh/hLD5UAxgWbR3JxJmeM53bXcen3PQhQKfjOJuFEeqt9mnxuOGPXRqISrMcYmuvOml1P4hwpy/eDvy0AqxEKbA9eaQBdu1GF0x2mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768400316; c=relaxed/simple;
-	bh=Rk3ORqleX+/gCWzoRYZJTVZf6UQz9i1Hepy9mCzpdW0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fI/eVH2jza/60ukdsA6/I5nytuByO5kgHwaWVx8pDftMnjFI4CnSyTTDH0TT5/bDOPniWd0L12CYr6IhYn2nYTf0gEk0sbBdpGyvSkJNwi+09zHDLIxz8+7pTIRVjib0+L4B6ENzEWKg9B5bGqWpEi6RiUwt8WMgdwv63fEG1W8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nr+EGgjE; arc=none smtp.client-ip=74.125.82.44
+	s=arc-20240116; t=1768400632; c=relaxed/simple;
+	bh=4yI3qv1paP3863JGJN8EaT90z7WyLn3BHwc7lsAkj0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=rVqKXGaSHt/jwoqMQ0B3BXufwTVmFcL8fe8zmzG8t0K4DdmeWQERWwKIfkZzmXV82H8PY40EZZz5QGEd43I3G8PU/1FXEjadD5sPRsIRRmBDlLC2r7Dwa2+D3vxoxf+P9d/O8Vg78FCqD8iVJ1qWD6JwugbHEjgGhCZnWCuzIz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoVaa0M/; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nr+EGgjE"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1233b172f02so366988c88.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 06:18:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoVaa0M/"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1233c155a42so122821c88.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 06:23:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768400314; x=1769005114; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsGqDA8X39rB3JpxEKYPszdyriDFUtOIhybr03zNb7I=;
-        b=Nr+EGgjE9tj+dx5z+FCKs+H0BAQGb4BWcifAs5gMEGCuc8BDtmu7t3Tl1d12CuR8+H
-         qW50J9i/S6Dr8+TIAnAGbYmFUxZ+yIAOTsqrqZ7sLLY9IixpyYA9K4hO92l+z41Gdizj
-         8Js5XbbY8KSHYF5xth4gnxvVg034oNfLDLmoUv83YjM3s8SUnbGSgoVqrwSCcwUhDXnu
-         xDvzTIroeuLOb8hv54DRip+tYQxuG1sWetZoZGuHr4S1KJWOLwgPO1ouxpvYgaQDuf2E
-         73hot5PYPxOhuhrfyC8r0ZQGfKm05Vgclk5e5MrsFQkduDkUW+s0UqAeWifCRfWdkvX8
-         AmZA==
+        d=gmail.com; s=20230601; t=1768400630; x=1769005430; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VCTd1UeGbd16C0dw6Flw043UIl8ToTlwb18MsiPCF94=;
+        b=GoVaa0M/ob5LP92LuigTci4rwd8AEn98ed69KJrtijjTKwZOQSNe6VaPoot8EdoJnO
+         YAeeZCBABERSbrdLMCijuAqwLjBiF5xugIA5guZmDDaahAK6o29OlQBvAScp8e8jZ16p
+         NhETAtoS6w1A5u4rclIFGka/r+6IKiSBx9Pocd1XFQqClKUnd+oS25VflweOtoHQNFZ5
+         3nfJZOkO2is6fb3N64ZtRXYxHtJaOMJQDF7MjYFv7f9qnJiC8QuVNJ8j57WSYkxvy5Ry
+         pj40t0Mwm7Etoij6Ic/g46PzTXzelhXBlU0UfzFDQ4lPx52tXuZra6ISlqkzHiE34sX+
+         Ftqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768400314; x=1769005114;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hsGqDA8X39rB3JpxEKYPszdyriDFUtOIhybr03zNb7I=;
-        b=aaTfYPheJqD49nhrF/0Rc8KDl95esm22gZ7DckpOsv87xpclhnJPWLcaAnSND/ZoJY
-         rTCTQHite8uEdCsZMq8zH0WV3RS6Jd0d7ohhpOSrTBQa/COCKphEtsP6plGExhT4P5PY
-         BSafNh5sN+IJMX2R0g9gfmeqsD0yA/OUUThZcIiCevQKDrkeMrNCp0zvt5/8Aq2XlRNA
-         eqQAEwqpUvpXnNwtp8ANbKbOzhsjN/t4zxxahN6eHuaDW/2bB2/GwskxxfQV962X7CEL
-         Uk2SjJ/Rar/czyDhvWM+Z3uuhPV3+yNAEGkdykRXAHDYYfXTOnmndGHHdtIEUQlbheWr
-         EGKw==
-X-Gm-Message-State: AOJu0YxvJjJ67UhYanA+uDDvq/gvv6WIB6L3++Ad0DLYosOFDhYGiqbR
-	ZX+QLFM3687qnvCeFyVLbgtZSjLixjDm2tX2E++zMt4+yh1lXakQsf8Hkpvejw==
-X-Gm-Gg: AY/fxX4MVLNykAwGT3DIijnxsZP/DmzUupIkg5rB+Um147ovHwMAO5h0jCQZLmvG0RS
-	82+4dIHpeBWGXDV/OSDc2p91FJ7o639Q9jWxHq0U9JdV4QLp/yvgdQVuc86qrAiMs5fJNn71Pug
-	KvL5bWSwE4adV8PGRAYWvtgBQ9FUCVuovEdH862YHwS16IxHVd8Nkh4W5fecouvOlxgFla6TdHH
-	Uhz463lGTvMu4QUlLJDv3tLRnT1tuhO7p78ffGDA/6kou7SlmbWzdO6tS2fKcMfqgJlNnl7kvuN
-	gEI3CQURTC4ykpRDOLq8hkHRE4FEoHUwLiV3f76zUx+gRFqjCC0mQyKj2JwDaQxk3GSJtzlExdQ
-	114IoFk2IIJ1ESh6RdpIFTqY5jK1ffBCyz5J+1zY0LmyhMR4HY9ETUdKR22lu1pDaE0g09PRghD
-	LcWJJc9G4RcKNZO1pRdqkIikudvVAmn1yXTpJ00p6WChqdtYDvSNpjHqZaIYWJ
-X-Received: by 2002:a05:7022:660a:b0:119:e56b:989b with SMTP id a92af1059eb24-12336a0a5a1mr3120144c88.2.1768400313312;
-        Wed, 14 Jan 2026 06:18:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768400630; x=1769005430;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VCTd1UeGbd16C0dw6Flw043UIl8ToTlwb18MsiPCF94=;
+        b=JzgrasMXl20pXlBIS0jBPobnrmBAhluoffQsUWa//lcLoV1xM3KpSkP21EQclis3eu
+         3KuJsUTVS2q9Dux1gubWjUq8QwmskicfWcFpQH34IxgxIASN0fmZyANdwNeJLMtyS9V0
+         bQWoVaATOkWcnhIkCtZRnYa7Klo/dOUkbNN9LLYr+4X77Sk0TrHw6rCc9nFrLCD4KyAo
+         wJlrrO6xXu4oZiV73GJCxqKVbi4QfrMpr5tJRfONxty6vHJ/fnctEEs9w86B7EHjKpII
+         zCJsyJsCgYtZEsEdYpNLsGeL6Y88An6+TmfhidPdLt60OOqXDV2zz/jnYAkEQ9dsBXT6
+         V8Rg==
+X-Gm-Message-State: AOJu0YxKOplRc/juMzGAXih20zq+EuSEk0d1Fb/D4jKBt17qSdJGZc7l
+	SaOaMzaHtmttizOG4wI/mQBmZTqQWqwUi2qt+e7B2m7+fCY30hEnB8tlIx9V5g==
+X-Gm-Gg: AY/fxX6T343w//eiLw5SCyTg0iGJo3Me+sklmMBI84F30AAQvOI4wA5B+e06kGICDEp
+	VfHM+YNEmt34UftzTfpkb5qFjG6U2RtEIdmaAEA30TIXdpTNcOfz/aFCtWx1J9n5qyoRfhTeSFn
+	bdcedwDj540qg+Yu4cQxwkVo3HWzJV0iS3rY0iHakr89E0+nA8jEPjfGV8ruFM/ahgvlRVAQpS2
+	fdV7X2aj0UXSPR4NWPKSlmst4+VTCK4SqD73Fu/BAveRinH4ZKnWEXChdM83QWaxxmKAHRVnDw/
+	IXJR67NXq+tJEWG++1dSdxT98tv7WUv/RBN/T5EJCLZw677Yj0z7GOPfocXE9TcoHkF80HrXOyH
+	3y04ZrOEitXWnWhRsFgsZMGDSyEgt0SW83CDx6zJomt4dhhv63cn1IiPMHj3nX8kUni9ezaCTpW
+	JFjtJ1uSRNCewK3DGfeCTI7LOEayQfbbW/bArx6RxKI1adEsW0LoIq+J1nMIf5
+X-Received: by 2002:a05:693c:374a:b0:2ac:2dfd:9ff with SMTP id 5a478bee46e88-2b48731ffeemr3380034eec.41.1768400629498;
+        Wed, 14 Jan 2026 06:23:49 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f2434abesm31044146c88.4.2026.01.14.06.18.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b480dea94fsm1886468eec.24.2026.01.14.06.23.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 06:18:32 -0800 (PST)
+        Wed, 14 Jan 2026 06:23:48 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ef59dcf1-5a53-426b-8c17-00ddc8fe5d11@roeck-us.net>
-Date: Wed, 14 Jan 2026 06:18:30 -0800
+Message-ID: <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net>
+Date: Wed, 14 Jan 2026 06:23:47 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,13 +68,17 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G15 5510 to fan control
- whitelist
-To: leobannocloutier@gmail.com, pali@kernel.org
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260114020108.83288-1-leobannocloutier@gmail.com>
- <20260114020108.83288-2-leobannocloutier@gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
+ errors
+To: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+ <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net>
+ <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
+ <2740c3ab-7cb0-4931-81a2-30b85e8615f9@roeck-us.net>
+ <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
 Content-Language: en-US
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -119,43 +123,57 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260114020108.83288-2-leobannocloutier@gmail.com>
+In-Reply-To: <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/13/26 18:00, leobannocloutier@gmail.com wrote:
-> From: Leo Banno-Cloutier <leobannocloutier@gmail.com>
+On 1/14/26 05:07, TINSAE TADESSE wrote:
+...
+>>> Hi Guenter,
+>>>
+>>> I tested changing the i801 SMBus controller to use
+>>> SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
+>>> DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With this
+>>> change, spd5118 resume failures (-ENXIO)
+>>> still persist, suggesting PM ordering alone is insufficient and other
+>>> firmware interactions are involved.
+>>
+>> How about the problem in the suspend function ? Is that also still seen ?
+>>
+>> Also, the subject talks about -EIO. Is that still seen ?
+>>
+>> Either case, can you enable debug logs for the i801 driver ?
+>> It should generate log entries when it reports errors.
+>>
+>> Thanks,
+>> Guenter
+>>
+> 
+> Hi Guenter,
+> 
+> Thank you for the questions. To clarify:
+> 
+Please do not drop mailing lists from replies.
+
+> 1) I have not observed any failures in the suspend path. The suspend
+> callback completes successfully, and
+> I have not seen I2C errors or warnings during suspend at any point.
+
+Sorry, I seem to be missing something.
+
+In that case, what is the point of patch 3/3 of your series which
+removes hardware accesses from the suspend function ?
+
+> 2) I have also not observed -EIO in my testing. The error consistently
+> reported on resume and subsequent hwmon access is -ENXIO.
+> Earlier references to -EIO were based on assumptions rather than
+> observed logs, and I should have been clearer about that.
 > 
 
-Please consult Documentation/process/submitting-patches.rst
-and Documentation/hwmon/submitting-patches.rst before submitting patches.
-
-Where does it say that the patch description and rationale shall be
-provided in a separate e-mail ?
+Thanks for the clarification.
 
 Guenter
 
-> ---
->   drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 6040a8940..93143cfc1 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1639,6 +1639,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
->   		},
->   		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
->   	},
-> +	{
-> +		.ident = "Dell G15 5510",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5510"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-> +	},
->   	{
->   		.ident = "Dell G15 5511",
->   		.matches = {
+> I am enabling debug logging for the i801 driver to collect more
+> concrete evidence of controller state during resume.
 
