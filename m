@@ -1,143 +1,154 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC9C3AE6FC
-	for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 22:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CA53D76
+	for <linux-hwmon@vger.kernel.org>; Thu, 15 Jan 2026 00:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768428763; cv=none; b=HaUBX2D7ZVAxWSCjMzju1TdEi4WzEjfx5EmKrxOUwdNJsuBV3FKQjR43iUxpnadEwPrZ6gvRNPlmu6OUQAtEVKOC0I9yV2V4LFRC2usTfSJ3w2aKRHAyOJ5icA3f7Xmm911v/8zmgGVqyDoThfBggJkDJTb4Q3eoCGLZki+SS+M=
+	t=1768436194; cv=none; b=ETAgCNPeIxwqLCYX7sh+FAreXJZ6Ju5QdC9NbT3NbiXlvGM+1Top0FnAEHrKMrrTT2VD8ktSKF6tDU/qNtNBHOFTvBCvkNP/PuTQEHj8XvdHq0mejIKNNm+vqETVbKoH7IGYu9lv+dslJFt7kVo5dO9B13RmvW6DIGKTo/+GtaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768428763; c=relaxed/simple;
-	bh=HcuqsBAtZvOWyIs4Xt0uhzuCiOOW+T+QxtanzaAEL14=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AlbFss3nQDkfSU3Tnt4jM4zN61FhnI8CdEqIiUB+YAQE/r9k6FPGOHCg0/C7pAmeNrfgDjAyfrnQ661gNiiZINWS3BO+gtMmyGr31yxxsGicOEXlOkAZp1sLSgp2XZiryzOYQVvF1hSDQX/scVf71E7r1eD5p1IFOKKTB1duFW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com; spf=pass smtp.mailfrom=perenite.com; dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b=JvK+Vr+B; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=perenite.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perenite.com
+	s=arc-20240116; t=1768436194; c=relaxed/simple;
+	bh=88YVk0Arse2X4YXQXNzA92NXyrRoskw+Ttj51E1gjcw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=F82PQcEYXnpxiUyrJ1b6K9N2t9+El3u/6fXEbIra85Ror6575x7V7c6VUbSJ2s65qobRlyS2y2Dly7r8wDHbUwO0kXjHNNBkdD4QI0gwP65fke85Ba8RYXGZN5ib6lcHKDrQllqoJ3yBHFIqE3cXHLT7lQbI4e/O17fMbvEXOOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NxT775v8; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=perenite-com.20230601.gappssmtp.com header.i=@perenite-com.20230601.gappssmtp.com header.b="JvK+Vr+B"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47ee9817a35so1795905e9.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 14:12:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxT775v8"
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5636784883bso334097e0c.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 14 Jan 2026 16:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=perenite-com.20230601.gappssmtp.com; s=20230601; t=1768428738; x=1769033538; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768436192; x=1769040992; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B9JJU809fV3hatrHlPxX8QZ9hS3VlNGwjApCyrU92DA=;
-        b=JvK+Vr+BbahaQVDnNmy06A3QitSf6QvFTk92pcdPV5x1VMLpV+X934MoHhJCi1HU9R
-         yBL9TDz9HocPqBzBex7RkkZyqw0Zeb3hrAStbYr+JONNWRX85quTtsddiSalx3MShbES
-         Aw1prFRcl9AvRGNumHe26IvI04Ch5mJHexL12NkOxeB7JLibL+ED1vcBR1ZxDrc0D5RN
-         r8HDDm3BiVgQeIFxxMRP0SzeApf1HKzYt7KIPCZqUyOaXWjTaRfTepUnievVM1kcmuxO
-         hTv5h7fm2s2NHNTKtIVpHyvpJwoQJBA09nrDU4XcYXIbs+fomudMhTOA4yHXOHvhvH+U
-         67Eg==
+        bh=6fEHHY+TTyFzggbhkRQjVOIOgLGb+TehajDMunOamqk=;
+        b=NxT775v8ZaSaGbMuTJZ8yoEddM1hkyI7bdUlITPeMjqdARiOnl6DEnkEAb/pt7eEbv
+         Pt64TLYV/WtQitVhPloD/Abg3iJy/XuP+xHLHOy/ordv7ehr56JGo5XTc56y6T91AXfG
+         lpAxAww4t+JNhCyK9+QVCK+TWi8itscbUREo8emCc+WoauWD9+DJBHlo2du0bm0yEywF
+         pweipN46mQ1p8oNl4IkIA7cSW+B+dz+YUm02YcEdhCbLRgJhZ0JvfM7VIkJZN5nrEdkw
+         /3SE+fkHWhMaRqWDgFDFM0FGAUmSv3kYzvNIKqHmopXzToYeuJPpGWNTI562cmTZEDXM
+         vgtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768428738; x=1769033538;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=B9JJU809fV3hatrHlPxX8QZ9hS3VlNGwjApCyrU92DA=;
-        b=aQ543oY5qgE/tgcBdWYKud5BFEDGejs7TGJdA7k7CbMZHfNcsmrGRQ3ETJmkBHSHgP
-         Acv5ovdkwmDcYywriSvBzC8S3uS2FLTZ/sw6pYeUtIx5VPmNsAmas4y1W+MIq6bdsfwa
-         l4wr/9FFpOa3J/2lMWd25OSB3XOdiGTHZvYuJ7keOBD7oNJgNd7aBePhqYw2YXU7Hyug
-         teHisM49+nbcz9On9JEQxM4Y9jj1XNBncmFmjjld/Twg2fBD9R0pw/8bzpOhkGsjSNC+
-         oMERFbOesiNu5dwhFBhB0OKMB0ufHuo7PDbkGVxW48YnnJH9y23yfKc78Aa4A/rgztN+
-         DfQw==
-X-Gm-Message-State: AOJu0YwK0v2TRLopGjliijfTn9b0TpgxIYLn9rV9XY4LDY2sVxQyRu8X
-	wHpxE3f1Seke4akpFHy2f2IIwrc9b684XXlVStko1a1DKZvv4TgB65Zfx9sU/8e0Jw==
-X-Gm-Gg: AY/fxX6ta+uJPxJ6ljSICCAc+AlfaXBub9w8AAzMSJ+OoWP+xKmJbUkBlTMOOmyLnjW
-	51bid5NQMIgr8i4vFtB2/2K0BDbx+8iern3EgjP+fIDT4ZOJeuCkNK8oyWaLO7rXFG4lpifMH2v
-	luMcVPElKSlG3ADEsg18kUC4PX3tlXTlLzEJTW+hd0OmR6jZuoJOGqPmsFXDuAE1WXE1N1XD7Ir
-	J+PQSz38qYJNjfZSSU5ko/AIb99AerfEAIH9e9tEOuupBGTzmZ6ND4N7/jl0Jl6n2Koz+JffdlS
-	55GmNF0gD5YhE459M52+MaWy3OZorI40Diyu2uUtG7oE9KbH2TnlUo9jfRvWoYWB/EstcqwPq+p
-	7BCulZSrb/rZg09oKVJffjF46KvH9/PNUpqS1kH8EjK34TU0U1RkdvVZiE+qceTGwAbnl0qUrge
-	V+obQxXAEd4no7ZhGB7SiFxbxbzg/+eUdDqdcu3pnZ8AoRYCxPzWWhqmZGotzNrFjozVxCyTXvO
-	EbomY1fI0eMClz0SQ==
-X-Received: by 2002:a05:600c:a318:b0:47e:e952:86ca with SMTP id 5b1f17b1804b1-47ee9528812mr13358225e9.2.1768428737713;
-        Wed, 14 Jan 2026 14:12:17 -0800 (PST)
-Received: from localhost.localdomain (217-128-226-200.ftth.fr.orangecustomers.net. [217.128.226.200])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f941a670dsm3098195e9.5.2026.01.14.14.12.16
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 14 Jan 2026 14:12:17 -0800 (PST)
-From: "benoit.masson" <yahoo@perenite.com>
-To: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	"benoit.masson" <yahoo@perenite.com>
-Subject: [PATCH v4 4/5] hwmon: it87: add IT8613E identification
-Date: Wed, 14 Jan 2026 23:12:09 +0100
-Message-ID: <20260114221210.98071-5-yahoo@perenite.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260114221210.98071-1-yahoo@perenite.com>
-References: <20260114221210.98071-1-yahoo@perenite.com>
+        d=1e100.net; s=20230601; t=1768436192; x=1769040992;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6fEHHY+TTyFzggbhkRQjVOIOgLGb+TehajDMunOamqk=;
+        b=vBYE+YqID/vzTLRP/J07Hz58bpDzPiW6MYc6E1s5IsgXAz6th7N/DSIwI9W2klARep
+         pRnGm5xyKsFcFreWRTQChXVzY7s8SIz6DsZAZQl3L0dm2aVXuz3lNvCHeYS4eT2Zohp8
+         moct4yh0nX8UnoFbfk/XTVTFzTbvhGwrYX6RYgIjQARQRbjH1g2a564SScd6t3zJLKJg
+         XXat7RqyUL/H9TBhCX/nKhPacFRAdqBGN8UkNRqLEiTQZiEM3vxmMyFADH/WmxCPv+MI
+         duVj3cQ/QwKvNddIsrPBrpR9ejj0GLYRfASE15pSlQwFGUkYNqXK/0ujwRCe7N4SUIgv
+         mPHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUfBLRw4W5+g4vxGu4EbE9TsunEv7crQijzB7xwf9TlRTx+SgO8vl8q+02csnoDpkZMh2yHTA+/Pw6mw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2jSKsYJsAGwHG/sCVVI+zd/fuhCgL0rWhJuY3RJGA/tQ41Pqt
+	vHXOVbkJdfilgzhDd2V50877r+4QVa9DNicC/mo6/jv2BHSVcXBCudC8
+X-Gm-Gg: AY/fxX7d7dYNKBriwRlvpRLpioH0oBbfyIuB5/xw2mFxZK05lCFXGIhC+jtf2DXz0Rt
+	hmhX+SrhgGDSdl5jDTQoGt6W9j4Yjsnvdtgza9yl2p4xtpDuqYaiNyqj2X/xXokBcfM+ik7r/d7
+	+EqUEwLH/mGSNxKWqCRXpeX5bihu3OcVhuM3hqLiApEUiPXZpoWQKgl87wd+rt/535kguoX1U0s
+	Va2IgBnRw5yfRamkkod4ZLAYjlqQBypbU5PorvIxH9h9ppCURlqC+NKUqbEWTuIc0ICTaZVdDHN
+	+klRVhoyyYHyB+iHSqTSc6OcQUSDAuRDrXffmJG0Tr8pwALDqv6T8lmhdcX0+yk1psucJeL2AKY
+	as4KJXvoTZxekJiN9Ht1FDoQLzv90FgR3aZas1ofSwGGp2NZKU5Q6dsTRz9QH77Z3YbM8d69x36
+	JJ+sV+/F8=
+X-Received: by 2002:a05:6122:d0d:b0:55a:e007:4c7e with SMTP id 71dfb90a1353d-563a093a35dmr2171478e0c.6.1768436192247;
+        Wed, 14 Jan 2026 16:16:32 -0800 (PST)
+Received: from localhost ([2800:bf0:4580:3149:c903:2904:3cc3:8b4c])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-563618ff8d5sm19216082e0c.7.2026.01.14.16.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jan 2026 16:16:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 14 Jan 2026 19:16:30 -0500
+Message-Id: <DFOQB6DGBKBZ.39JQKPB7XDSJG@gmail.com>
+Cc: "Guenter Roeck" <linux@roeck-us.net>,
+ <platform-driver-x86@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v9 7/7] platform/x86: lenovo-wmi-other: Add HWMON for
+ fan reporting/tuning
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Rong Zhang" <i@rong.moe>, "Mark Pearson" <mpearson-lenovo@squebb.ca>,
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, "Armin Wolf"
+ <W_Armin@gmx.de>, "Hans de Goede" <hansg@kernel.org>,
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260114122745.986699-1-i@rong.moe>
+ <20260114122745.986699-8-i@rong.moe>
+In-Reply-To: <20260114122745.986699-8-i@rong.moe>
 
-Teach the Super I/O probe path to recognize IT8613E and advertise
-its model name in the supported device list.
+Hi Rong,
 
-Signed-off-by: benoit.masson <yahoo@perenite.com>
----
- drivers/hwmon/it87.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+On Wed Jan 14, 2026 at 7:27 AM -05, Rong Zhang wrote:
+> Register an HWMON device for fan reporting/tuning according to
+> Capability Data 00 (capdata00) and Fan Test Data (capdata_fan) provided
+> by lenovo-wmi-capdata. The corresponding HWMON nodes are:
+>
+>  - fanX_enable: enable/disable the fan (tunable)
+>  - fanX_input: current RPM
+>  - fanX_max: maximum RPM
+>  - fanX_min: minimum RPM
+>  - fanX_target: target RPM (tunable)
+>
+> Information from capdata00 and capdata_fan are used to control the
+> visibility and constraints of HWMON attributes. Fan info from capdata00
+> is collected on bind, while fan info from capdata_fan is collected in a
+> callback. Once all fan info is collected, register the HWMON device.
+>
+> Signed-off-by: Rong Zhang <i@rong.moe>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+> ---
 
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index 368ae68ace15..4453bf3e8ef4 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -35,6 +35,7 @@
-  *            IT8790E  Super I/O chip w/LPC interface
-  *            IT8792E  Super I/O chip w/LPC interface
-  *            IT87952E  Super I/O chip w/LPC interface
-+ *            IT8613E  Super I/O chip w/LPC interface
-  *            Sis950   A clone of the IT8705F
-  *
-  *  Copyright (C) 2001 Chris Gauthron
-@@ -64,7 +65,7 @@
- 
- enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
- 	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
--	     it8792, it8603, it8620, it8622, it8628, it87952 };
-+	     it8792, it8603, it8613, it8620, it8622, it8628, it87952 };
- 
- static struct platform_device *it87_pdev[2];
- 
-@@ -158,6 +159,7 @@ static inline void superio_exit(int ioreg, bool noexit)
- #define IT8786E_DEVID 0x8786
- #define IT8790E_DEVID 0x8790
- #define IT8603E_DEVID 0x8603
-+#define IT8613E_DEVID 0x8613
- #define IT8620E_DEVID 0x8620
- #define IT8622E_DEVID 0x8622
- #define IT8623E_DEVID 0x8623
-@@ -547,6 +549,10 @@ static const struct it87_devices it87_devices[] = {
- 		.num_temp_map = 4,
- 		.peci_mask = 0x07,
- 	},
-+	[it8613] = {
-+		.name = "it8613",
-+		.model = "IT8613E",
-+	},
- 	[it8620] = {
- 		.name = "it8620",
- 		.model = "IT8620E",
-@@ -2988,6 +2994,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
- 	case IT8623E_DEVID:
- 		sio_data->type = it8603;
- 		break;
-+	case IT8613E_DEVID:
-+		sio_data->type = it8613;
-+		break;
- 	case IT8620E_DEVID:
- 		sio_data->type = it8620;
- 		break;
--- 
-2.50.1 (Apple Git-155)
+...
 
+> diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documentati=
+on/wmi/devices/lenovo-wmi-other.rst
+> index 821282e07d93c..bd1d733ff286d 100644
+> --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
+> +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
+> @@ -31,6 +31,8 @@ under the following path:
+> =20
+>    /sys/class/firmware-attributes/lenovo-wmi-other/attributes/<attribute>=
+/
+> =20
+> +Additionally, this driver also exports attributes to HWMON.
+> +
+>  LENOVO_CAPABILITY_DATA_00
+>  -------------------------
+> =20
+> @@ -39,6 +41,11 @@ WMI GUID ``362A3AFE-3D96-4665-8530-96DAD5BB300E``
+>  The LENOVO_CAPABILITY_DATA_00 interface provides various information tha=
+t
+>  does not rely on the gamezone thermal mode.
+> =20
+> +The following HWMON attributes are implemented:
+> + - fanX_enable: enable/disable the fan (tunable)
+
+I was testing this series and I'm a bit confused about fanX_enable.
+
+Judging by this comment and also by taking a quick look at the code, it
+looks like writting 0 to this attribute disables the fan.
+
+This is however (per hwmon ABI documentation [1]) not how this attribute
+should work. IIUC, it is intended for devices which can disable the fan
+sensor, not the actual fan.
+
+I fail to see how this feature is useful and I also find it dangerous
+for this to be exposed by default, considering the same could be
+achieved with the relaxed module parameter, which at least tells the
+user to be careful.
+
+Apologies if I missed some previous discussion on this.
+
+[1] https://elixir.bootlin.com/linux/v6.19-rc5/source/Documentation/ABI/tes=
+ting/sysfs-class-hwmon#L279
+
+--=20
+Thanks,
+ ~ Kurt
