@@ -1,163 +1,92 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869D338A715
-	for <linux-hwmon@vger.kernel.org>; Thu, 15 Jan 2026 13:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323EF32B9B4;
+	Thu, 15 Jan 2026 13:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768485023; cv=none; b=hLJbP5D7lT+nvntemn+caBX7aCWV2ZKtwmgNIKjo8Lv8G69e37squODgo8pKRAeqdsUaZD3/GGWzIrJ354QS4XjIktAnUJVxjTNchw488aZfTMgXt+jpGkITexJXYQoCWZjQdC1A63ffT5jCc+1M3h1Pk+oJTgijkhpAW4+5pMk=
+	t=1768485158; cv=none; b=hPQhXtW1Ej+YCa6yqK/j3XxMLvFTNnYQNFxQdZ17tOe5RVvyU1G4xIEl+7bo754DNr/sQkIIOEyd46LaEP6lmh6eq9A1hzg88K3Nx+5OZ3EQRQV9aacnqEKcl/C6ca1rgr9BUBRmv4lIQ5WZZL6AEtkiYPDDZOhor84UlDJDhfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768485023; c=relaxed/simple;
-	bh=sLScD0jLJT5TlpL/ICsGU3NJiF3/tmdvmVPvejWkxMI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c8JS6U5CxCYbqKWZk80tQyYDjZwoa24G+KYHXpza4ktlT9If7Opgx7UGjRzEjDzCtBjcxDRLV3dIDfQZwLBSLxDt1Du089NOsROHiXO5xhOTTdBeHK+dUX6sX1BiYTrEgxXhiCP6d0m1MftmSWRlV9A6i0s9Uk/xnx7Rkbtp9nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juT74k8c; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768485158; c=relaxed/simple;
+	bh=qHVmNATUiiMGTcirEvfHaCd1CLlU08CBklegvdvIPHc=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=VfAYps4zjdmvo9M80DhJBndYRJP/BBKEyWArfxJe30BnQH1XwzcCmBSDjpPjVSage96hw1aWIDoebsx9b352R1dvqdzniYId3fr0sKsw+dNjzsk3QyOnr0sIvoohRau28phUSrJn4viL9FfubRNvULv8yLBQ6KVtn2RFDHCNuqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Tp5lkLkC; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juT74k8c"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-121a0bcd364so1199642c88.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Jan 2026 05:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768485022; x=1769089822; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sLScD0jLJT5TlpL/ICsGU3NJiF3/tmdvmVPvejWkxMI=;
-        b=juT74k8c+8LRIaFNSjaLbs4EqSHDmqio/nGSKRb/K47inMJz9GxGvmnHE+15kH/HmH
-         KRFxMvPQKPN5mwPnKjph51wF7Y6JkfYNymwQappAOc7OE8/BK/olQwpxBC5m4zUwt3zD
-         3KZDhIfEdQLXqjX+nWmbo9+tBHuUCLIf8gd5PSD31q79DfoodlJ4Dzs7FMDUnmud3qPY
-         l73flu5aYlfefwILCHXQoWLjhknaU6mg1UfffEItkhsxAqNW2tp9HnEKOfFpCq9xwINQ
-         rB7R1fk7xKg1jhm1xmiuiG7fxXQ6sdZiBmBsPGoZqXEB0Ase8J4zgpVSDbMCyMdoNN3F
-         Xq7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768485022; x=1769089822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sLScD0jLJT5TlpL/ICsGU3NJiF3/tmdvmVPvejWkxMI=;
-        b=mg7jcWrWtCFJSr43sg+etxezIJH3OAHj4KR9GQSq1KUtpfTixdmwYdjM5q3IgxAwML
-         X9UWl0vgOqsBHOqGH4Cx02/gXORxgYFhsmdLomoK+VwbU4TTMnVRRC2p7m8z0Ihb+GTG
-         Qk42naqPxiYcOTceVPJDyuUDEN+mRgW/gmJ62Uu7M1Go2X1so8/tzS3XlKJfxT/vMR1W
-         kw1ILbcyZ4EGqq7U+PozuIYi6F5vkkBxZfP7CrBPzlqcx5V2WscyltReTEqvoSeC25ho
-         O5HishEQJGewW9eV6y9VUNquL4e0r349qzl1J4tHJhFXYH5alpFckcsx6qXi7u+dciz+
-         l1IA==
-X-Gm-Message-State: AOJu0YwJ2hruQGGLysbGugaPWRlyOk36WTikljlbY7kesptURM1LGfS4
-	U+j29k3GXgfZTuPWGJSkgwwdbtZYXVLPJEViZGJpDFTxfmCiUpyksiKv2221xdKmz0n4oDBsv55
-	P5NTHD05VbkZ1evT8pSnj08TIuoKQwLkDETFQEUk=
-X-Gm-Gg: AY/fxX4QIhzJDSWDrQIdTLO8mtHpOhUu+LlP7X1qVxXwTFRRbd+Im2xASq6SujsHxoi
-	SRbMc0Zs6ETMBg3aZe0B/EXRf/KSzlMWMcPyEwm/FSRV5sFWEDvM9fjBpdSuylFCWYQVglRiL2G
-	qcYQ1PKrRTvjdhfc7GDpFvyd11wKSdjcsWUwwZ23m//2B6rhGFVxas2LpTNisIOU03ZynFTMUGF
-	IVqb7T1a9UIqA5hJY4p4d/tb8T61BbIDTYMmk9iTTMwfHLPFWGHbzUxwb/vJ7H/kztrcIo=
-X-Received: by 2002:a05:7022:3a05:b0:123:3508:893f with SMTP id
- a92af1059eb24-1233774913amr5774365c88.31.1768485019972; Thu, 15 Jan 2026
- 05:50:19 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Tp5lkLkC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1768485147; bh=fqq5wPPG1waazmSiv0h7AJkEx+/htctoyL7wW7kkdBI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Tp5lkLkCtlxBN5ILCEx18NaSwehOiua6AF6jLA+mmB8IvRfGjqC6CKVM9OMgpAKjg
+	 K5lD5664utDZiftn33o+czNgG8qJvuXkxpH+RphRjia7G0zPvH4bM9S15whAhdsVw+
+	 bcNMhEwaYwvoXDTJ59MblXi/7vvxV++vhgYsjuCE=
+Received: from localhost.localdomain ([223.166.246.160])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id D1904429; Thu, 15 Jan 2026 21:52:25 +0800
+X-QQ-mid: xmsmtpt1768485145tknoyrs8d
+Message-ID: <tencent_738BA80BBF28F3440301EEE6F9E470165105@qq.com>
+X-QQ-XMAILINFO: MVzyZ2KMQtlaE5UoIVk+YDAnCqTgVXJDgYfrPdt0Dzh40w/jKJMLWDnSfuRt7L
+	 r77SWllSKGBkio5y0haXapOQcoIO4/6f1bfS7fBNE7S9Z1SL6S30pZUFCUJOLt7PhjKVtw4pUa9Q
+	 4I2zmMBowzcnsTCoZzkPkO/XbPMiJa0isgY3OSvyBDh0Efd4wafcsCsSHlzPYPmuVXNKNe6PSq/i
+	 Hz4UFq3iDtjAU6jc5t55LYcRjUDf58hl7SOwxLBrjCskwWad+UjmjS2OIz6ukvJWgTqTkozqBea+
+	 VzDSbrPBrXXnlUA+4mTdVizt1sqISQtHd0XKwLr5FWIGseSvsKqC8qAVWoTYrd/Xlo6guZHDBHHX
+	 B2lZRSQNZK/yXB8L3jhX0p+GPfg6zDuMMszYk8dovsId2ce1Kv0i/27zRMVK+v16GBeEg3WMXj+H
+	 MIkA15jX079ZtX6yStFJHIUx/EfWBpudI+jh7sqFntqIjEyBEZqRpcbCHsxFkPCYcLgNv+sF4F4K
+	 DqRrkyl4nqIlFM7RIYUumPMcpAi6vElj0qU27e1psWKCfc8HhWk7HwT6qIzyu9nlkEydU+dYoKpI
+	 GDnLfRAAEXzuOEhWF4GnUHtddpYjct82jmRyUO3NAM117DPs5Co6w+B1FJmm9D3Qs6/jMoe1Xhn/
+	 iW9Nmg2ylOE1GVU+9Cd/ypQBlQu7E/5LC3tk8eQQZphIHHqSuX90DUSwhjC+od3wtk4bMZ49Lv/s
+	 ZMLLrADiTkvcdXM74AOjG2yuqGvHEd0tEDD3SnP2LdFaUYXNhaOuMbtzDrUXDRNRcy9IEeMGqGGw
+	 HhXU6yhUWzJ+nrBXP+MjgI8UQdcmnDrrS3XMxYWHvMrZUcviQTbOwDUQtjQIQ1lj7KFwVornBGRO
+	 33VhSMq14oN186dXIvO2UgmzQoi1D8skGQk+jkHl9O+/aqsOnFPCHOUDHYNeYf1tMD8+whIZ7SNT
+	 UOI4DddOlY8W90RtfZ5g7wMnLS+kwSI3IGQeoggXj6WYNt/ysP8VwE5oq5GFuAoH/P9tVscW7A7l
+	 4Kl/E/LOAGHAcF0KRdRiEC2oKI3yF2pkLDCQkxvqw0FHlsZ0aIN57KWg1xhA5Y3DCRCPvg58k9ZT
+	 FBm6TNjH3TLKtyfoempU3AJOcfRBKhven26UTkfZTVIMLt1BxQJcrMTRb+02X7f1oFG7SPhVVk/h
+	 Z94f03VZClu7Piey87tP11NUZ7
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: Felix Gu <gu_0233@qq.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Ban Feng <kcfeng0@nuvoton.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Felix Gu <gu_0233@qq.com>
+Subject: [PATCH 1/2] hwmon: emc2305: Fix a resource leak in emc2305_of_parse_pwm_child
+Date: Thu, 15 Jan 2026 21:51:48 +0800
+X-OQ-MSGID: <20260115135149.3886008-1-gu_0233@qq.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <tencent_98E69D461A9CE773D3611822369100FE5A06@qq.com>
+References: <tencent_98E69D461A9CE773D3611822369100FE5A06@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
- <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net> <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
- <2740c3ab-7cb0-4931-81a2-30b85e8615f9@roeck-us.net> <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
- <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net>
-In-Reply-To: <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net>
-From: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
-Date: Thu, 15 Jan 2026 16:50:03 +0300
-X-Gm-Features: AZwV_QjdTq4gioRqUvXrXRtRMZfXGs5fWOysybv5e67TUpVpkLP5lBXoChPgq-8
-Message-ID: <CAJ12PfMC_Potx9aNxaJJ3y=sX=rzyhm-6LJ8Z8OjUyDxiDUNsA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C errors
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 14, 2026 at 5:23=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 1/14/26 05:07, TINSAE TADESSE wrote:
-> ...
-> >>> Hi Guenter,
-> >>>
-> >>> I tested changing the i801 SMBus controller to use
-> >>> SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
-> >>> DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With this
-> >>> change, spd5118 resume failures (-ENXIO)
-> >>> still persist, suggesting PM ordering alone is insufficient and other
-> >>> firmware interactions are involved.
-> >>
-> >> How about the problem in the suspend function ? Is that also still see=
-n ?
-> >>
-> >> Also, the subject talks about -EIO. Is that still seen ?
-> >>
-> >> Either case, can you enable debug logs for the i801 driver ?
-> >> It should generate log entries when it reports errors.
-> >>
-> >> Thanks,
-> >> Guenter
-> >>
-> >
-> > Hi Guenter,
-> >
-> > Thank you for the questions. To clarify:
-> >
-> Please do not drop mailing lists from replies.
->
-> > 1) I have not observed any failures in the suspend path. The suspend
-> > callback completes successfully, and
-> > I have not seen I2C errors or warnings during suspend at any point.
->
-> Sorry, I seem to be missing something.
->
-> In that case, what is the point of patch 3/3 of your series which
-> removes hardware accesses from the suspend function ?
->
-> > 2) I have also not observed -EIO in my testing. The error consistently
-> > reported on resume and subsequent hwmon access is -ENXIO.
-> > Earlier references to -EIO were based on assumptions rather than
-> > observed logs, and I should have been clearer about that.
-> >
->
-> Thanks for the clarification.
->
-> Guenter
->
-> > I am enabling debug logging for the i801 driver to collect more
-> > concrete evidence of controller state during resume.
->
+When calling of_parse_phandle_with_args(), the caller is responsible
+to call of_node_put() to release the reference of device node.
+In emc2305_of_parse_pwm_child, it does not release the reference,
+causing a resource leak.
 
-Hi Guenter,
+Signed-off-by: Felix Gu <gu_0233@qq.com>
+---
+ drivers/hwmon/emc2305.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Sorry, I seem to be missing something.
->
-> In that case, what is the point of patch 3/3 of your series which
-> removes hardware accesses from the suspend function ?
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+index 8f80a39574f3..64b213e1451e 100644
+--- a/drivers/hwmon/emc2305.c
++++ b/drivers/hwmon/emc2305.c
+@@ -578,6 +578,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
+ 		data->pwm_output_mask |= EMC2305_OPEN_DRAIN << ch;
+ 	}
+ 
++	of_node_put(args.np);
+ 	return 0;
+ }
+ 
+-- 
+2.43.0
 
-You are right to question this, and I agree that it needs clarification.
-
-Patch 3/3 was originally proposed under the assumption that the resume fail=
-ures
-were caused by spd5118 performing I2C transactions while the
-controller was not yet available,
-and that removing hardware accesses from the suspend path might
-mitigate the issue.
-At that point, I assumed the problem was limited to the resume callback.
-
-After enabling detailed i801 debug logging and testing with
-SET_LATE_SYSTEM_SLEEP_PM_OPS() in the i801 driver,
-it became clear that this assumption was incorrect. The controller
-itself reports "i801_smbus: No response"
-both during suspend and immediately after resume, and spd5118 merely
-propagates the resulting -ENXIO.
-This indicates that the issue is not caused by spd5118 suspend/resume
-behavior, but by the unavailability of the
-SMBus controller due to platform or firmware interactions during
-s2idle transitions.
-
-Given this, I agree that patch 3/3 does not address the root cause and
-does not provide a justified improvement.
-I am therefore fine with dropping it.
-
-Thank you for pointing this out.
