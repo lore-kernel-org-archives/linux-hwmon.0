@@ -1,59 +1,58 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323EF32B9B4;
-	Thu, 15 Jan 2026 13:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2265038A715;
+	Thu, 15 Jan 2026 13:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768485158; cv=none; b=hPQhXtW1Ej+YCa6yqK/j3XxMLvFTNnYQNFxQdZ17tOe5RVvyU1G4xIEl+7bo754DNr/sQkIIOEyd46LaEP6lmh6eq9A1hzg88K3Nx+5OZ3EQRQV9aacnqEKcl/C6ca1rgr9BUBRmv4lIQ5WZZL6AEtkiYPDDZOhor84UlDJDhfI=
+	t=1768485368; cv=none; b=gugn42Xhki/2ZriP9a67MfYCKakWobMgC/kqKJ2YEdL/CfDoEIRN2YGblHur0g10htf7lh/AU9eXvcoU4S4Vk2UR8wdfHKSi4AlUlxlWtUqbCP+Um2sBG6G6bnFhPZ8aoQsAqrApvb69ZOWhgGPkG+MksQibyl8OFYTuYpY4YCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768485158; c=relaxed/simple;
-	bh=qHVmNATUiiMGTcirEvfHaCd1CLlU08CBklegvdvIPHc=;
+	s=arc-20240116; t=1768485368; c=relaxed/simple;
+	bh=DgSnpbL+6k8y6SlwQtDCX2THryqyuJ3pTecyzhO6Dwg=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=VfAYps4zjdmvo9M80DhJBndYRJP/BBKEyWArfxJe30BnQH1XwzcCmBSDjpPjVSage96hw1aWIDoebsx9b352R1dvqdzniYId3fr0sKsw+dNjzsk3QyOnr0sIvoohRau28phUSrJn4viL9FfubRNvULv8yLBQ6KVtn2RFDHCNuqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Tp5lkLkC; arc=none smtp.client-ip=43.163.128.44
+	 MIME-Version; b=KLu4wrRZyKIJ4XxwRLj+ZCqeHbNDysdJX0T2Wo26T6CMalSmgFLbVOlzXISe/udrPL3rncDCdgJNr65QTrY382eB38rSeulHpnIQv49nOpVDyt/fm55HmszfUZM+xix8gz/PYc+/8ZLIt1D1bK7n2YyTDildwGdw6FZQnzmanlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=KZXozkyh; arc=none smtp.client-ip=162.62.57.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Tp5lkLkC"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="KZXozkyh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1768485147; bh=fqq5wPPG1waazmSiv0h7AJkEx+/htctoyL7wW7kkdBI=;
+	t=1768485355; bh=cgY5YtuqQ8xp3W9TeLS95JF+3us3Q/spTAhDFtiov0w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Tp5lkLkCtlxBN5ILCEx18NaSwehOiua6AF6jLA+mmB8IvRfGjqC6CKVM9OMgpAKjg
-	 K5lD5664utDZiftn33o+czNgG8qJvuXkxpH+RphRjia7G0zPvH4bM9S15whAhdsVw+
-	 bcNMhEwaYwvoXDTJ59MblXi/7vvxV++vhgYsjuCE=
+	b=KZXozkyhjEDXJHwhmZomFTVJxXoGpi98g3b7Frdf1xg19Ya2KK/jn4vyMI9UEdPQQ
+	 O3S/PDl2ydJgRjB4dMXw74PxHNbCJXdEwE7Gdmi/YK+ULTdQ400LQGHD+EXWiVQ80y
+	 +kwRoFyHDi9KvfOCv6WkzaSgn05JlFMwrGnD65ug=
 Received: from localhost.localdomain ([223.166.246.160])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id D1904429; Thu, 15 Jan 2026 21:52:25 +0800
-X-QQ-mid: xmsmtpt1768485145tknoyrs8d
-Message-ID: <tencent_738BA80BBF28F3440301EEE6F9E470165105@qq.com>
-X-QQ-XMAILINFO: MVzyZ2KMQtlaE5UoIVk+YDAnCqTgVXJDgYfrPdt0Dzh40w/jKJMLWDnSfuRt7L
-	 r77SWllSKGBkio5y0haXapOQcoIO4/6f1bfS7fBNE7S9Z1SL6S30pZUFCUJOLt7PhjKVtw4pUa9Q
-	 4I2zmMBowzcnsTCoZzkPkO/XbPMiJa0isgY3OSvyBDh0Efd4wafcsCsSHlzPYPmuVXNKNe6PSq/i
-	 Hz4UFq3iDtjAU6jc5t55LYcRjUDf58hl7SOwxLBrjCskwWad+UjmjS2OIz6ukvJWgTqTkozqBea+
-	 VzDSbrPBrXXnlUA+4mTdVizt1sqISQtHd0XKwLr5FWIGseSvsKqC8qAVWoTYrd/Xlo6guZHDBHHX
-	 B2lZRSQNZK/yXB8L3jhX0p+GPfg6zDuMMszYk8dovsId2ce1Kv0i/27zRMVK+v16GBeEg3WMXj+H
-	 MIkA15jX079ZtX6yStFJHIUx/EfWBpudI+jh7sqFntqIjEyBEZqRpcbCHsxFkPCYcLgNv+sF4F4K
-	 DqRrkyl4nqIlFM7RIYUumPMcpAi6vElj0qU27e1psWKCfc8HhWk7HwT6qIzyu9nlkEydU+dYoKpI
-	 GDnLfRAAEXzuOEhWF4GnUHtddpYjct82jmRyUO3NAM117DPs5Co6w+B1FJmm9D3Qs6/jMoe1Xhn/
-	 iW9Nmg2ylOE1GVU+9Cd/ypQBlQu7E/5LC3tk8eQQZphIHHqSuX90DUSwhjC+od3wtk4bMZ49Lv/s
-	 ZMLLrADiTkvcdXM74AOjG2yuqGvHEd0tEDD3SnP2LdFaUYXNhaOuMbtzDrUXDRNRcy9IEeMGqGGw
-	 HhXU6yhUWzJ+nrBXP+MjgI8UQdcmnDrrS3XMxYWHvMrZUcviQTbOwDUQtjQIQ1lj7KFwVornBGRO
-	 33VhSMq14oN186dXIvO2UgmzQoi1D8skGQk+jkHl9O+/aqsOnFPCHOUDHYNeYf1tMD8+whIZ7SNT
-	 UOI4DddOlY8W90RtfZ5g7wMnLS+kwSI3IGQeoggXj6WYNt/ysP8VwE5oq5GFuAoH/P9tVscW7A7l
-	 4Kl/E/LOAGHAcF0KRdRiEC2oKI3yF2pkLDCQkxvqw0FHlsZ0aIN57KWg1xhA5Y3DCRCPvg58k9ZT
-	 FBm6TNjH3TLKtyfoempU3AJOcfRBKhven26UTkfZTVIMLt1BxQJcrMTRb+02X7f1oFG7SPhVVk/h
-	 Z94f03VZClu7Piey87tP11NUZ7
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id DA639A30; Thu, 15 Jan 2026 21:54:38 +0800
+X-QQ-mid: xmsmtpt1768485278tnzm2qwbx
+Message-ID: <tencent_9717645269E4C07D3D131F52201E12E5E10A@qq.com>
+X-QQ-XMAILINFO: MRMtjO3A6C9XxW1nfEu+kv+qIo8xC+rCyknEa1YyJ1DAcLF5GfcmZE92Aj10zh
+	 5basEksVrUluIPs7T0+jt/gaTwXlolDnGE+iLRhLWTYAbYZi+RbRD9x31qRK+bFgzX86ALL8jBUC
+	 vzU+GL8FHVQaN0OjxZ4BSLG3t9+KPDXOJy3vBWvpDDk8+v41TFxlAGiuwW/Y92boQ5YUnmk9s6sl
+	 s/j1DwnNNUgbgwCpU2VdfEuH395csBYpSAPaLEEM0eWWLUQwm6jQ7kEcxiU/NW3quQ1Dn5a8xdbu
+	 2vrXkgghqGLcqT0Xyu+lQqG93BNXpAzwQgqqYZpA47F9Gk5ACTeBymUicbbvDdZFitZRkoRkxj30
+	 dMErrLZ+ZXeZV4rE8+Uz5tfm8/rNigm7Go6n16VbsxWVL/MPzwEnXTYNzrjInPeKzmbRRatoMNiW
+	 35/qp+I/0zRF1g4S89QQTSjLIZOwwAzndo5148CG2zGIRrCc77CCwvrDIHKEPRUgc21U/lNsYPqr
+	 4GWprtHNgqaqJgxQ5FH7Yuhr38VonO2X0CyAnFNyAdWiS0sBv3V4alI6bxUmo4C2Rhg5vCpNC6Ul
+	 UothM0lwZFYTZiKPHGd91UD7UdAwrjVeUbCeXkC8hBYyI5EJFGG0yksItIp0ROTQn7FqROjCXD8w
+	 m58pdLiESvQrTKsz580n9MJ2W+en4p19LZb3nVelQCJossIAZboG2ZvrhfwX0+LymnWAq1eIeq7E
+	 k6WjX6UnV8AhlUMmXhdcyS8Es+HCsQtnMORoTYV2Ff1NZgnHaEyaQgtlwWg1odvpSwPrK1nCrIqF
+	 qht5y3ZKyGmQeh1yq8Lb1wGi9nRzY0Bkr5XtYz7ScEo6ztcdXu1zc9b9LKv1qbEy5eUUG6swB+9J
+	 5J+0kpCCB1PNXx0aZ91kLs9GiIXRu3FbVsrl8SjT0Wqkja/hIdDCNAMKmieVzkDlETH8uNOJ9Gp2
+	 KjvGvNmBAj0jimylfYDK4seVQHdYCfRfulEJ7VdH6MYAhCAHi4rMzuxq0uwWoNJax7vKIFpy2Kpr
+	 KSLW36LzQVScf++MeuQRdaQFXlVZqxBQnRGILKSgjcykR8UIcu4+kENTRp3k3SrrdLkJomqEfyg+
+	 5KzmoZz/GpLgiI5BS4pQwuHcHs6zm9acSyJFLmdSKu2uBpF9U=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
 From: Felix Gu <gu_0233@qq.com>
 To: Guenter Roeck <linux@roeck-us.net>,
 	Ban Feng <kcfeng0@nuvoton.com>
 Cc: linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Felix Gu <gu_0233@qq.com>
-Subject: [PATCH 1/2] hwmon: emc2305: Fix a resource leak in emc2305_of_parse_pwm_child
-Date: Thu, 15 Jan 2026 21:51:48 +0800
-X-OQ-MSGID: <20260115135149.3886008-1-gu_0233@qq.com>
+Subject: [PATCH 2/2] hwmon: nct7363: Fix a resource leak in nct7363_present_pwm_fanin
+Date: Thu, 15 Jan 2026 21:54:15 +0800
+X-OQ-MSGID: <20260115135415.3886417-1-gu_0233@qq.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <tencent_98E69D461A9CE773D3611822369100FE5A06@qq.com>
 References: <tencent_98E69D461A9CE773D3611822369100FE5A06@qq.com>
@@ -67,26 +66,26 @@ Content-Transfer-Encoding: 8bit
 
 When calling of_parse_phandle_with_args(), the caller is responsible
 to call of_node_put() to release the reference of device node.
-In emc2305_of_parse_pwm_child, it does not release the reference,
+In nct7363_present_pwm_fanin, it does not release the reference,
 causing a resource leak.
 
 Signed-off-by: Felix Gu <gu_0233@qq.com>
 ---
- drivers/hwmon/emc2305.c | 1 +
+ drivers/hwmon/nct7363.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index 8f80a39574f3..64b213e1451e 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -578,6 +578,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
- 		data->pwm_output_mask |= EMC2305_OPEN_DRAIN << ch;
- 	}
+diff --git a/drivers/hwmon/nct7363.c b/drivers/hwmon/nct7363.c
+index 4946d59ff807..20f14d5e0c94 100644
+--- a/drivers/hwmon/nct7363.c
++++ b/drivers/hwmon/nct7363.c
+@@ -349,6 +349,7 @@ static int nct7363_present_pwm_fanin(struct device *dev,
+ 	if (ret)
+ 		return ret;
  
 +	of_node_put(args.np);
- 	return 0;
- }
- 
+ 	if (args.args[0] >= NCT7363_PWM_COUNT)
+ 		return -EINVAL;
+ 	data->pwm_mask |= BIT(args.args[0]);
 -- 
 2.43.0
 
