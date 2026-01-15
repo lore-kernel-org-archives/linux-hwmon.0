@@ -1,142 +1,90 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE9939C65B;
-	Thu, 15 Jan 2026 13:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768482519; cv=pass; b=tqmB1/6amun68w+T3MYP3MoNc3W88skK37YTzjCrX1OZfwWJV3qzIkhYh96wtkUtvteTPAAIACM+/kvb7GTAGvKpaNd2+N2rTj2j7VgTpPwSgScHy+HoPn9lyWDYlEHDv+1CGU/LH1Ye1LsXO9Tu3jgXSwxHZDB9VZhft6pD3nc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768482519; c=relaxed/simple;
-	bh=HKptvILYy8oTKuqHupdPHjBsG10nMu34+5SZ2UAqZXI=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=DX8Po63eE8cEnpyBwncemfwLb698fQKa1HHRhxtMrK8tXgf67NlWQdoDU9rRDi5Z+QOs6qKvaA7mnbnlJssFOD8P+3T9WfSlAbSEatttNbEL2pFGdUheldmmrsvFPxTZFA+iVw2jxXndEwP4JsLjnc8VBBQvaPFijBeUlhySpYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=UWrskF6w; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A445936D50C;
+	Thu, 15 Jan 2026 13:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768483405; cv=none; b=pjn+s0n8u/sp+XNrK8l5qlThFLtlFcr3Ghyo5PUOHypI6SpHDg6H/Cq+sErDXX0+SfXempO2xtLS3nG4T5xn4qTYdg005SOV5Dm4wkI8m5/yQCJnuwsYxrWexxIrfZRnsIwEZxXtvIxKuo4g9KwbrMEQmJ4yDoU/EequDPq81pw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768483405; c=relaxed/simple;
+	bh=SZtGRS7dRppDQPEKZC8TK6WCvUl88aMPOqDvuQTdkqY=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=ca2J/OE1asJrKRR9obxsGmw4RziOZfAeM1R4EwGBITXNPXKnLbAoiSHCxQBSuNeiKgg8uttJtNfgWH72Dov6qds+rMdhIsqAE9xkjDnDoRipDKymzrexa/vEJVZnTBPqwE/X23aPXe/f0UvFxGV2S7bvFrF3X0z1tKZX91XK4hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=VV9SlneX; arc=none smtp.client-ip=162.62.58.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="UWrskF6w"
-ARC-Seal: i=1; a=rsa-sha256; t=1768482495; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=XiLlE7IYSw2EMAQ3Ro+YXYV4C2xyTYcZjVdUX8KQllWMHWRdYvvPl9osBP4rYZE2UsGJ6kJLa+HQMcVwyoEqy4uxsaPRhaFMP2Im9b/HEdIBO/YS/sh1Gg/hZ66MzOFG8KYCG+cnopB4n9l01UkdG9dWF+1UxfA9PO+wCbM4CV4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768482495; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=oR+p2yGSr0JvJ1y3RFsMWh9RLp+XSaz8F0w2lvrVLfQ=; 
-	b=V5xqust9LYBvhbBaUfRzSTLCb+6UrcnemPopPf0DbI8lDrR3l3B4h/rwzRngdpKVHCQ1m5aNW6dxM6WpFtK8X2EuCkuyH1WDmzn8iAMMM34rA68FDXK/IDDs/Bsjw2IPwh1hMRJK5fEQ/s+ZIh20QptviSi3GQ5gm8a1sum0rjM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=rong.moe;
-	spf=pass  smtp.mailfrom=i@rong.moe;
-	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768482495;
-	s=zmail; d=rong.moe; i=i@rong.moe;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:Date:MIME-Version:Message-Id:Reply-To;
-	bh=oR+p2yGSr0JvJ1y3RFsMWh9RLp+XSaz8F0w2lvrVLfQ=;
-	b=UWrskF6wi054gObZlLZ61bB2h37T7IiihYD0yF4ucj0IAVH6a6G1d/lMj4g2BVb4
-	1XzLuQaOpcNNVPMwuOapcrUOSp8FcOQ4ByDt0q5k0kq2o9Zn7V/GVUNMg6a55dvJx97
-	PxvyAmfIOmgx5MxHzSlskj1q9xbXawbDfcjCalqY=
-Received: by mx.zohomail.com with SMTPS id 1768482493633354.59204872071734;
-	Thu, 15 Jan 2026 05:08:13 -0800 (PST)
-Message-ID: <1a9909f4083d85736a1e28067517ae0899e462f2.camel@rong.moe>
-Subject: Re: [PATCH v9 7/7] platform/x86: lenovo-wmi-other: Add HWMON for
- fan reporting/tuning
-From: Rong Zhang <i@rong.moe>
-To: Kurt Borja <kuurtb@gmail.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark"
-	 <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, Hans de Goede
-	 <hansg@kernel.org>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
-	 <ilpo.jarvinen@linux.intel.com>, Guenter Roeck <linux@roeck-us.net>, 
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org
-In-Reply-To: <DFOQB6DGBKBZ.39JQKPB7XDSJG@gmail.com>
-References: <20260114122745.986699-1-i@rong.moe>
-	 <20260114122745.986699-8-i@rong.moe> <DFOQB6DGBKBZ.39JQKPB7XDSJG@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Jan 2026 21:03:04 +0800
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="VV9SlneX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1768483390; bh=exlRvUYTWpNOuCV5ti43A/Ta8hu5FxOTHw5/5w1Y7f0=;
+	h=From:To:Cc:Subject:Date;
+	b=VV9SlneXWpw53ihHNNlfoUfQTHx0ewB9CghhyA5aN6QGVTq9rIOHk2Qmk12E2Ebb4
+	 8TwObehK327ooaU3qXqJyIDQuabU+NDoJDoZ+D4XEUanplXFIDnyoRl/HXY8CJ/zSl
+	 cAB3kvhQh5Y34yWcIq71VHaTbFiFw3L5ScNfeR6g=
+Received: from localhost.localdomain ([223.166.246.160])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id 5C83A4D1; Thu, 15 Jan 2026 21:23:08 +0800
+X-QQ-mid: xmsmtpt1768483388tmv87xffb
+Message-ID: <tencent_98E69D461A9CE773D3611822369100FE5A06@qq.com>
+X-QQ-XMAILINFO: N9ZZIWuX/jP7aLGtL063S3MvxrWGA55ByKmFgTOPt3qt6kkcwxM4ECM7nLYqGS
+	 pBuztQN1/iqSIa10xRhopIvlI53R0dGLwvJe0f+VhOwOPzFfts54j96QpAG6KIeCszgqt31XD5e7
+	 JJc+kc6Ans2ezSL07TW31+FWDLLIznpr+YDR/eRHnX/ntYkvqE1UNzQps1EoEN5b5OpyPbBGTGEp
+	 3Y1vCDb7m+W4Z19GWNtTRMZRNn9R0x8wVICKpgjLxZ1xryrbkIj5VslokeTUjPsc6OT/vPLjKU6q
+	 AVySuXZdxyuEDv8UphvYKxBpfNTEkzWmRJsVfh8VRKty2uUhajb2lCYxpc/P071nMwjWk6AtN7Yp
+	 jDEeaUNNGeP5VsLgzIfzNPDmopKiBivIYAaDcFmUlnVo0RCNFjfeB18XkISTyiGgBw/AMGID0bTw
+	 15RtyQl3En/RiUbY14m0WHuGU8sei/KBmbYXzbCMMDebaf5+UwDLay0YLDLikSqWqKZahLb25A5d
+	 JxbyUdxoY34SRnaTaxH3Kj5x5URlxoN6RpqUUXLUV3/fMIrP2qiIznOBTpXP3TddCzbzHtvSkBkg
+	 hWxJClWGPmUd53hjqpqJBZLfEzGFTmHWzd2cVhkljTIZZTHv1gvNVtYZZjrGhujq7lIyh+yXcMpS
+	 ckW0INvis5pFGfzGGiVbj9DPM+dPji0/ks+jhij7QN5S9TB+5CsU0U3QPjXQrAcQatvbtaeZaQEW
+	 uvvLrt/IP70V8jpBd4bP2LHnzo6YKJ+JES7j7QWASP2IP/opBf5VmpqeDZaWlO9N44ntbYOVAsER
+	 aNJqAezz5H1PYwXs7rjRKbMP6OrOZfTsF0wvrvm22INQF9VzooppT/oEi3vSKkPlRQ9aCtVXwm2Y
+	 CoI8VSNTeiYpV0V1z5jC5+ZmXBumBh4ab3hJcgyU5fhKx4vGE+pHHEbc77cFIUONN/u3veHSxzgS
+	 DM5+IOofe1jYfYkJgaJb/y9JQApC1UgZU1lGiTildxcafTi4JmAA6P5ogkezbmH32ePSawToeUKw
+	 e+qUSe1Zt8U+j1er9i1tc0wud88t32f+Tq0QDGpPgP0O4cjITp5zgSKDEbNOROJkecbquHKlrKk9
+	 PHaHH2/RYStdM+EXQUpOEo41/xFguyTLA5QWYdB+SIwGwza3cj3HtP5oCm1nxYwyGMYo7QSu7r6C
+	 AlbhbUeZtVI9jdSQ==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+From: Felix Gu <gu_0233@qq.com>
+To: gu_0233@qq.com,
+	Guenter Roeck <linux@roeck-us.net>,
+	Ban Feng <kcfeng0@nuvoton.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: Fix resource leaks for device_node
+Date: Thu, 15 Jan 2026 21:22:41 +0800
+X-OQ-MSGID: <20260115-hwmon-fixes-v1-0-f1caf19b71ec@qq.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2-8 
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260115-hwmon-fixes-3d29ded39dbf
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768482384; l=677; i=gu_0233@qq.com; h=from:subject:message-id; bh=SZtGRS7dRppDQPEKZC8TK6WCvUl88aMPOqDvuQTdkqY=; b=J2GhtG/C57ataEMReIrTluPRpTcbHRK3Z7VZkDKMlrgqI9PI61iX5grfmOPGMpg0NIR8Ih96L a/z/vKtKWUNDRuhVp8TMtMBEIrWGKvs6nyDBfYYZ6gCWrOyTE6JZIHF
+X-Developer-Key: i=gu_0233@qq.com; a=ed25519; pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
+Content-Transfer-Encoding: 8bit
 
-Hi Kurt,
+When calling of_parse_phandle_with_args(), the caller is responsible
+to call of_node_put() to release the reference of device node.
+In current code, it does not release the reference, causing a resource leak.
 
-On Wed, 2026-01-14 at 19:16 -0500, Kurt Borja wrote:
-> Hi Rong,
->=20
-> On Wed Jan 14, 2026 at 7:27 AM -05, Rong Zhang wrote:
-> > Register an HWMON device for fan reporting/tuning according to
-> > Capability Data 00 (capdata00) and Fan Test Data (capdata_fan) provided
-> > by lenovo-wmi-capdata. The corresponding HWMON nodes are:
-> >=20
-> >  - fanX_enable: enable/disable the fan (tunable)
-> >  - fanX_input: current RPM
-> >  - fanX_max: maximum RPM
-> >  - fanX_min: minimum RPM
-> >  - fanX_target: target RPM (tunable)
-> >=20
-> > Information from capdata00 and capdata_fan are used to control the
-> > visibility and constraints of HWMON attributes. Fan info from capdata00
-> > is collected on bind, while fan info from capdata_fan is collected in a
-> > callback. Once all fan info is collected, register the HWMON device.
-> >=20
-> > Signed-off-by: Rong Zhang <i@rong.moe>
-> > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
-> > ---
->=20
-> ...
->=20
-> > diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/Documenta=
-tion/wmi/devices/lenovo-wmi-other.rst
-> > index 821282e07d93c..bd1d733ff286d 100644
-> > --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
-> > @@ -31,6 +31,8 @@ under the following path:
-> > =20
-> >    /sys/class/firmware-attributes/lenovo-wmi-other/attributes/<attribut=
-e>/
-> > =20
-> > +Additionally, this driver also exports attributes to HWMON.
-> > +
-> >  LENOVO_CAPABILITY_DATA_00
-> >  -------------------------
-> > =20
-> > @@ -39,6 +41,11 @@ WMI GUID ``362A3AFE-3D96-4665-8530-96DAD5BB300E``
-> >  The LENOVO_CAPABILITY_DATA_00 interface provides various information t=
-hat
-> >  does not rely on the gamezone thermal mode.
-> > =20
-> > +The following HWMON attributes are implemented:
-> > + - fanX_enable: enable/disable the fan (tunable)
->=20
-> I was testing this series and I'm a bit confused about fanX_enable.
+Signed-off-by: Felix Gu <gu_0233@qq.com>
+---
+Felix Gu (2):
+      hwmon: emc2305: Fix a resource leak in emc2305_of_parse_pwm_child
+      hwmon: nct7353: Fix a resource leak in nct7363_present_pwm_fanin
 
-Thanks for testing!
+ drivers/hwmon/emc2305.c | 1 +
+ drivers/hwmon/nct7363.c | 1 +
+ 2 files changed, 2 insertions(+)
+---
+base-commit: 9b7977f9e39b7768c70c2aa497f04e7569fd3e00
+change-id: 20260115-hwmon-fixes-3d29ded39dbf
 
-> Judging by this comment and also by taking a quick look at the code, it
-> looks like writting 0 to this attribute disables the fan.
->=20
-> This is however (per hwmon ABI documentation [1]) not how this attribute
-> should work. IIUC, it is intended for devices which can disable the fan
-> sensor, not the actual fan.
+Best regards,
+-- 
+Felix Gu <gu_0233@qq.com>
 
-Hmm, what a confusing name :-/
-
-> I fail to see how this feature is useful and I also find it dangerous
-> for this to be exposed by default, considering the same could be
-> achieved with the relaxed module parameter, which at least tells the
-> user to be careful.
-
-Makes sense. I will remove the attribute and mention such behavior in
-the module parameter.
-
-> Apologies if I missed some previous discussion on this.
->=20
-> [1] https://elixir.bootlin.com/linux/v6.19-rc5/source/Documentation/ABI/t=
-esting/sysfs-class-hwmon#L279
-
-Thanks,
-Rong
