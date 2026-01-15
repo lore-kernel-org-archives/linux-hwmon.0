@@ -1,63 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B9D35C1B0;
-	Thu, 15 Jan 2026 09:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F2D29ACC6;
+	Thu, 15 Jan 2026 11:14:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768469814; cv=none; b=T9PXxFoH5vyyhoRhXtM6EBIDURRVroaWvyaQY2HSyzRjytouaKZX/ZVic2EPH+i6ozj1XP1HmoRLgO0XvYeCyMqtdP1O5SJSl+wWGYlhLzkO9MLVgI27I9uyQ3dWigWM0wURmOT/nzjyfn9VYauQNVWkDI7hSRXnK9v23ICiCh4=
+	t=1768475666; cv=none; b=UjHOvOgcI37+e1Wupzu6icQE9ScMeF0LVK/sqQkKbkZpDorCH9jbqUs32jlRKgH+PByN7zAZw9f49ULyrE5AMFHuFSAdSTjAJM32l8GNM/+6zjUKka0IOWXj4N+MqwKMEYmoZfD9Adlm63UeTReZXD5lASMMyWXBfomAmy7D0bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768469814; c=relaxed/simple;
-	bh=uFaUuD/A2haTyM9gG6LyPdl4Jk1qU4YC1nz2xl1ItKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQ7XHZOAJq51xH2KauzmyBOfPQHZpC916lcd/1PYuClYrbwhF9ULM0hgnXrkbMlLkEtD7+gZKx8AfJTuDFFEjbp5xmaM83MQlDoL/32YJ9aSmPgT60tkjRSe6YnhdlHG7uCHz1p+eYEPK5s2t8lRZ9fbMHAoF22JAgPkmkk3NSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U45MNPYA; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U45MNPYA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AD1C16AAE;
-	Thu, 15 Jan 2026 09:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768469814;
-	bh=uFaUuD/A2haTyM9gG6LyPdl4Jk1qU4YC1nz2xl1ItKM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U45MNPYAmrIkpWaQ5zdUPRZSQXz2IK8zUE1WDc92xpS4NWHArUZgE1/xqDO1CSKCX
-	 uFXYidXvxYaNbx9pNflZ3nnsHV21TMNh4561zekUumtnkCwrim5tB8rU7VWIOMlDho
-	 Dn6Vl6UZvLveGAxCSVcwwnw8hP3qttLNfssusHp2j71BSpRL0xRf9YFEBnouDe9UwE
-	 KpHLIx/diEkKEXCVGkV1IGXI4iy2gK+2+V1byCvj6LkJwkWjTwY+aeavMgcqbgEjfm
-	 J5o9URtoq38r77cSrGoPI3Hs8iEU1vExOkIu1bLMO/1Mm9kP5xbwyR7AuuLlEvIuac
-	 l61FwJQ0yJIaA==
-Date: Thu, 15 Jan 2026 10:36:51 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Mayank Mahajan <mayankmahajan.x@nxp.com>
-Cc: linux@roeck-us.net, corbet@lwn.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	priyanka.jain@nxp.com, vikash.bansal@nxp.com
-Subject: Re: [PATCH v2 2/3] dt-bindings: hwmon: ti,tmp108: Add P3T1035,P3T2030
-Message-ID: <20260115-glittering-umber-dolphin-05fc4f@quoll>
-References: <20260115065757.35-1-mayankmahajan.x@nxp.com>
- <20260115065757.35-2-mayankmahajan.x@nxp.com>
+	s=arc-20240116; t=1768475666; c=relaxed/simple;
+	bh=UUtNN/zq/MKZGeiZH3wCPMaeyJnM2LfOzzKRzIT+eQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pbFP1T9z3XlS91/r5TWJp/H2wkzDrrDL+0gP8ZZoMok1JfLgq/a4uPSidX+DNXs58krrXxgfhyKB46mIp3n7NYRpDmOgmkXgR4c9S71PJqEv/HTQPQOMzTS1jpCYU1IAZrKl0HsJ7hDOWbCC8M/KE8xHC7Q7WXxz4mH7LQQ+ZEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 773D3200656;
+	Thu, 15 Jan 2026 12:14:23 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4A62B20064B;
+	Thu, 15 Jan 2026 12:14:23 +0100 (CET)
+Received: from NXL37714.wbi.nxp.com (nxl37714.wbi.nxp.com [10.31.156.112])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 863B21800082;
+	Thu, 15 Jan 2026 19:14:21 +0800 (+08)
+From: Mayank Mahajan <mayankmahajan.x@nxp.com>
+To: linux@roeck-us.net,
+	corbet@lwn.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: priyanka.jain@nxp.com,
+	vikash.bansal@nxp.com,
+	Mayank Mahajan <mayankmahajan.x@nxp.com>
+Subject: [PATCH v3 1/3] dt-bindings: hwmon: ti,tmp108: Add P3T1035,P3T2030
+Date: Thu, 15 Jan 2026 16:44:16 +0530
+Message-ID: <20260115111418.1851-1-mayankmahajan.x@nxp.com>
+X-Mailer: git-send-email 2.47.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260115065757.35-2-mayankmahajan.x@nxp.com>
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On Thu, Jan 15, 2026 at 12:27:56PM +0530, Mayank Mahajan wrote:
->  properties:
->    compatible:
->      enum:
-> +      - nxp,p3t1035
->        - nxp,p3t1085
-> +      - nxp,p3t2030
+Document the NXP P3T1035 and P3T2030 compatibles in TMP108.
 
-Your driver code suggests these are compatible, so express
-compatibility (see talks, example-schema, writing bindings).
+Signed-off-by: Mayank Mahajan <mayankmahajan.x@nxp.com>
+---
+V1 -> V2:
+- No changes in v2.
+V2 -> V3:
+- Add P3T1035 fallback for P3T2030 as they are functionally identical.
+- Add comment in the description explaining the use of P3T2030.
 
-Best regards,
-Krzysztof
+ .../devicetree/bindings/hwmon/ti,tmp108.yaml  | 24 ++++++++++++-------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+index a6f9319e068d..1f540c623de6 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+@@ -4,27 +4,35 @@
+ $id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+
+-title: TMP108/P3T1085(NXP) temperature sensor
++title: TMP108/P3T1035/P3T1085/P3T2030 temperature sensor
+
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+
+ description: |
+-  The TMP108/P3T1085(NXP) is a digital-output temperature sensor with a
+-  dynamically-programmable limit window, and under- and overtemperature
+-  alert functions.
++  The TMP108 or NXP P3T Family (P3T1035, P3T1085 and P3T2030) is a digital-
++  output temperature sensor with a dynamically-programmable limit window,
++  and under- and over-temperature alert functions.
+
+-  P3T1085(NXP) support I3C.
++  NXP P3T Family (P3T1035, P3T1085 and P3T2030) supports I3C.
+
+   Datasheets:
+     https://www.ti.com/product/TMP108
+     https://www.nxp.com/docs/en/data-sheet/P3T1085UK.pdf
++    https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
++
++  P3T2030 is functionally identical to P3T1035. Hence, device tree nodes that
++  use the P3T2030 must provide a fallback compatible string of "nxp,p3t1035"
+
+ properties:
+   compatible:
+-    enum:
+-      - nxp,p3t1085
+-      - ti,tmp108
++    oneOf:
++      - items:
++          - const: nxp,p3t2030
++          - const: nxp,p3t1035
++      - const: nxp,p3t1035
++      - const: nxp,p3t1085
++      - const: ti,tmp108
+
+   interrupts:
+     items:
+--
+2.34.1
