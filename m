@@ -1,27 +1,28 @@
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBF32ED87C;
-	Thu, 15 Jan 2026 06:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6C330CDBB;
+	Thu, 15 Jan 2026 06:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768460295; cv=none; b=HFaASwqDNsOuO0PkUyPkcQiigoyPE0BNFOdzpnlYaF1Of9Vyfn0U7k4ki/1I+kBVccHg2uICbik5/5ry/cFyxpH7TYKyTcOM0DzwH2CbHh9MGz6NjPpPfCYOXmTc+g7Us6aG6r1QSiVCpAwl/48qxIRyeAgcE2IzcdbliGI4zHA=
+	t=1768460297; cv=none; b=dAwOO6I1jd71WLwmwASkDHYKs3HA1CJK+g9UdIb7rSCwLdjAoVjEr6+6shrbZQv/jT/ztFM+23ITWiqzPYo5s6gC8fbFFYtfbbYwWccoRf0KcfxseGOaskujdudATcD0SReinogi++SVacZNKu9dmkA5c6z1wiLxMJxZJeCUox0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768460295; c=relaxed/simple;
-	bh=P++U7KcLlQxJyc8Muv34BFI7TX8YQmxCIPPHueOZEC0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NzT5lZZv53CaELDPl1DDyJXjR8WjkYqUoeCWJ9e5OPujI5v0AlNigxa0JZwdZA/eoglshevehrelQGMeFYzESmlO5NP5qhX7nOkLTKG7yrud59yntCyaG+AJruOmAnL0BfDdfmy3yLBgNVqsaxDHC6W2+ItRagIrua1cUWCilYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+	s=arc-20240116; t=1768460297; c=relaxed/simple;
+	bh=pl3W65QY3bGLK1RoZti1dCNu2JaHXPqnZEXZQTLL0fs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZjJLfaMvddoYObOn38wLuexXXW6ywyNjAAp41NSRHo62OpwvBJ4xWl3uTalL/kwXLLjkQUW9flRygCy+dGN//h6aSAHnxB8LdwPCgTjjwhCzieEuBTEsJlvluvHp8GQluI/CNNgO2/YHUzFUYhxdlZjkXzZ+lZzApXBtr+8F+Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EC5422003D0;
-	Thu, 15 Jan 2026 07:58:02 +0100 (CET)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 40D781A0510;
+	Thu, 15 Jan 2026 07:58:05 +0100 (CET)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8D4C22004FA;
-	Thu, 15 Jan 2026 07:58:02 +0100 (CET)
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 02FEC1A04DD;
+	Thu, 15 Jan 2026 07:58:05 +0100 (CET)
 Received: from NXL37714.wbi.nxp.com (nxl37714.wbi.nxp.com [10.31.156.112])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D831D1800086;
-	Thu, 15 Jan 2026 14:58:00 +0800 (+08)
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 47F0A1800086;
+	Thu, 15 Jan 2026 14:58:03 +0800 (+08)
 From: Mayank Mahajan <mayankmahajan.x@nxp.com>
 To: linux@roeck-us.net,
 	corbet@lwn.net,
@@ -35,10 +36,12 @@ To: linux@roeck-us.net,
 Cc: priyanka.jain@nxp.com,
 	vikash.bansal@nxp.com,
 	Mayank Mahajan <mayankmahajan.x@nxp.com>
-Subject: [PATCH v2 1/3] hwmon: (tmp108) Add support for P3T1035 and P3T2030
-Date: Thu, 15 Jan 2026 12:27:55 +0530
-Message-ID: <20260115065757.35-1-mayankmahajan.x@nxp.com>
+Subject: [PATCH v2 2/3] dt-bindings: hwmon: ti,tmp108: Add P3T1035,P3T2030
+Date: Thu, 15 Jan 2026 12:27:56 +0530
+Message-ID: <20260115065757.35-2-mayankmahajan.x@nxp.com>
 X-Mailer: git-send-email 2.47.1.windows.1
+In-Reply-To: <20260115065757.35-1-mayankmahajan.x@nxp.com>
+References: <20260115065757.35-1-mayankmahajan.x@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,453 +51,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: ClamAV using ClamSMTP
 
-Add support for the P3T1035 & P3T2030 temperature sensor. While mostly
-compatible with the TMP108, P3T1035 uses an 8-bit configuration register
-instead of the 16-bit layout used by TMP108. Updated driver to handle
-this difference during configuration read/write.
+Document the NXP P3T1035 and P3T2030 compatibles in TMP108.
 
 Signed-off-by: Mayank Mahajan <mayankmahajan.x@nxp.com>
 ---
 V1 -> V2:
-- Disabled hysteresis in is_visible function for P3T1035.
-- Added tables for conversion rate similar to the LM75 driver.
-- Implemented different bus access depending on the chip being used.
-  - Removed regmap for 8 bits; now we are using one regmap as before.
-  - Added read and write functions for i2c and i3c for use with regmap.
-  - Mapped the 8-bit configuration register to a 16 bit value for P3T1035.
+- No changes in v2.
 
- drivers/hwmon/Kconfig  |   2 +-
- drivers/hwmon/tmp108.c | 244 +++++++++++++++++++++++++++++++++--------
- 2 files changed, 197 insertions(+), 49 deletions(-)
+ .../devicetree/bindings/hwmon/ti,tmp108.yaml        | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 157678b821fc..31969bddc812 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2398,7 +2398,7 @@ config SENSORS_TMP108
- 	select REGMAP_I3C if I3C
- 	help
- 	  If you say yes here you get support for Texas Instruments TMP108
--	  sensor chips and NXP P3T1085.
-+	  sensor chips, NXP temperature sensors P3T1035, P3T1085 and P3T2030.
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+index a6f9319e068d..1ca7f3aa4cd4 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp108.yaml
+@@ -4,26 +4,29 @@
+ $id: http://devicetree.org/schemas/hwmon/ti,tmp108.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called tmp108.
-diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
-index 60a237cbedbc..37f7181a7f28 100644
---- a/drivers/hwmon/tmp108.c
-+++ b/drivers/hwmon/tmp108.c
-@@ -11,22 +11,30 @@
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/i2c.h>
-+#include <linux/i3c/master.h>
- #include <linux/i3c/device.h>
- #include <linux/init.h>
- #include <linux/jiffies.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
-+#include <linux/util_macros.h>
+-title: TMP108/P3T1085(NXP) temperature sensor
++title: TMP108/P3T1035/P3T1085/P3T2030 temperature sensor
 
- #define	DRIVER_NAME "tmp108"
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
 
-+enum tmp108_hw_id {
-+	P3T1035_ID,		/* For sensors p3t1035 and p3t2030 */
-+	P3T1085_ID,
-+	TMP108_ID,
-+};
-+
- #define	TMP108_REG_TEMP		0x00
- #define	TMP108_REG_CONF		0x01
- #define	TMP108_REG_TLOW		0x02
- #define	TMP108_REG_THIGH	0x03
+ description: |
+-  The TMP108/P3T1085(NXP) is a digital-output temperature sensor with a
+-  dynamically-programmable limit window, and under- and overtemperature
+-  alert functions.
++  The TMP108 or NXP P3T Family (P3T1035, P3T1085 and P3T2030) is a digital-
++  output temperature sensor with a dynamically-programmable limit window,
++  and under- and over-temperature alert functions.
 
--#define TMP108_TEMP_MIN_MC	-50000 /* Minimum millicelcius. */
--#define TMP108_TEMP_MAX_MC	127937 /* Maximum millicelcius. */
-+#define TMP108_TEMP_MIN_MC	-50000 /* Minimum millicelsius. */
-+#define TMP108_TEMP_MAX_MC	127937 /* Maximum millicelsius. */
+-  P3T1085(NXP) support I3C.
++  NXP P3T Family (P3T1035, P3T1085 and P3T2030) supports I3C.
 
- /* Configuration register bits.
-  * Note: these bit definitions are byte swapped.
-@@ -61,6 +69,7 @@
- #define TMP108_CONVRATE_1HZ		TMP108_CONF_CR0		/* Default */
- #define TMP108_CONVRATE_4HZ		TMP108_CONF_CR1
- #define TMP108_CONVRATE_16HZ		(TMP108_CONF_CR0|TMP108_CONF_CR1)
-+#define TMP108_CONVRATE_SHIFT		13
+   Datasheets:
+     https://www.ti.com/product/TMP108
+     https://www.nxp.com/docs/en/data-sheet/P3T1085UK.pdf
++    https://www.nxp.com/docs/en/data-sheet/P3T1035XUK_P3T2030XUK.pdf
 
- #define TMP108_CONF_HYSTERESIS_MASK	(TMP108_CONF_HYS0|TMP108_CONF_HYS1)
- #define TMP108_HYSTERESIS_0C		0x0000
-@@ -71,11 +80,21 @@
- #define TMP108_CONVERSION_TIME_MS	30	/* in milli-seconds */
+ properties:
+   compatible:
+     enum:
++      - nxp,p3t1035
+       - nxp,p3t1085
++      - nxp,p3t2030
+       - ti,tmp108
 
- struct tmp108 {
--	struct regmap *regmap;
--	u16 orig_config;
--	unsigned long ready_time;
-+	struct regmap		*regmap;
-+	u16			orig_config;
-+	unsigned long		ready_time;
-+	enum tmp108_hw_id	hw_id;
-+	bool			config_reg_16bits;
-+	u8			reg_buf[1];
-+	u8			val_buf[3];
-+	unsigned int		sample_times[4];
- };
-
-+static const u16 tmp108_sample_set_masks[] = { 3 << TMP108_CONVRATE_SHIFT,
-+					       2 << TMP108_CONVRATE_SHIFT,
-+					       1 << TMP108_CONVRATE_SHIFT,
-+					       0 << TMP108_CONVRATE_SHIFT };
-+
- /* convert 12-bit TMP108 register value to milliCelsius */
- static inline int tmp108_temp_reg_to_mC(s16 val)
- {
-@@ -94,6 +113,8 @@ static int tmp108_read(struct device *dev, enum hwmon_sensor_types type,
- 	struct tmp108 *tmp108 = dev_get_drvdata(dev);
- 	unsigned int regval;
- 	int err, hyst;
-+	u16 conv_rate;
-+	u8 index;
-
- 	if (type == hwmon_chip) {
- 		if (attr == hwmon_chip_update_interval) {
-@@ -101,21 +122,10 @@ static int tmp108_read(struct device *dev, enum hwmon_sensor_types type,
- 					  &regval);
- 			if (err < 0)
- 				return err;
--			switch (regval & TMP108_CONF_CONVRATE_MASK) {
--			case TMP108_CONVRATE_0P25HZ:
--			default:
--				*temp = 4000;
--				break;
--			case TMP108_CONVRATE_1HZ:
--				*temp = 1000;
--				break;
--			case TMP108_CONVRATE_4HZ:
--				*temp = 250;
--				break;
--			case TMP108_CONVRATE_16HZ:
--				*temp = 63;
--				break;
--			}
-+			conv_rate = regval & TMP108_CONF_CONVRATE_MASK;
-+			index = find_closest_descending(conv_rate, tmp108_sample_set_masks,
-+							(int)ARRAY_SIZE(tmp108_sample_set_masks));
-+			*temp = tmp108->sample_times[index];
- 			return 0;
- 		}
- 		return -EOPNOTSUPP;
-@@ -192,22 +202,17 @@ static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
- {
- 	struct tmp108 *tmp108 = dev_get_drvdata(dev);
- 	u32 regval, mask;
-+	u8 index;
- 	int err;
-
- 	if (type == hwmon_chip) {
- 		if (attr == hwmon_chip_update_interval) {
--			if (temp < 156)
--				mask = TMP108_CONVRATE_16HZ;
--			else if (temp < 625)
--				mask = TMP108_CONVRATE_4HZ;
--			else if (temp < 2500)
--				mask = TMP108_CONVRATE_1HZ;
--			else
--				mask = TMP108_CONVRATE_0P25HZ;
-+			index = find_closest(temp, tmp108->sample_times,
-+					     (int)ARRAY_SIZE(tmp108->sample_times));
- 			return regmap_update_bits(tmp108->regmap,
- 						  TMP108_REG_CONF,
- 						  TMP108_CONF_CONVRATE_MASK,
--						  mask);
-+						  tmp108_sample_set_masks[index]);
- 		}
- 		return -EOPNOTSUPP;
- 	}
-@@ -251,6 +256,8 @@ static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
- static umode_t tmp108_is_visible(const void *data, enum hwmon_sensor_types type,
- 				 u32 attr, int channel)
- {
-+	const struct tmp108 *tmp108 = data;
-+
- 	if (type == hwmon_chip && attr == hwmon_chip_update_interval)
- 		return 0644;
-
-@@ -264,8 +271,11 @@ static umode_t tmp108_is_visible(const void *data, enum hwmon_sensor_types type,
- 		return 0444;
- 	case hwmon_temp_min:
- 	case hwmon_temp_max:
-+		return 0644;
- 	case hwmon_temp_min_hyst:
- 	case hwmon_temp_max_hyst:
-+		if (tmp108->hw_id == P3T1035_ID)
-+			return 0;
- 		return 0644;
- 	default:
- 		return 0;
-@@ -311,6 +321,105 @@ static bool tmp108_is_volatile_reg(struct device *dev, unsigned int reg)
- 	return reg == TMP108_REG_TEMP || reg == TMP108_REG_CONF;
- }
-
-+static int tmp108_i2c_reg_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct i2c_client *client = context;
-+	struct tmp108 *tmp108 = i2c_get_clientdata(client);
-+	int ret;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->config_reg_16bits)
-+		ret = i2c_smbus_read_byte_data(client, TMP108_REG_CONF);
-+	else
-+		ret = i2c_smbus_read_word_swapped(client, reg);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->config_reg_16bits)
-+		*val = ret << 8;
-+	else
-+		*val = ret;
-+
-+	return 0;
-+}
-+
-+static int tmp108_i2c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i2c_client *client = context;
-+	struct tmp108 *tmp108 = i2c_get_clientdata(client);
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->config_reg_16bits)
-+		return i2c_smbus_write_byte_data(client, reg, val >> 8);
-+	return i2c_smbus_write_word_swapped(client, reg, val);
-+}
-+
-+static const struct regmap_bus tmp108_i2c_regmap_bus = {
-+	.reg_read = tmp108_i2c_reg_read,
-+	.reg_write = tmp108_i2c_reg_write,
-+};
-+
-+static int tmp108_i3c_reg_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct tmp108 *tmp108 = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 1,
-+			.data.out = tmp108->reg_buf,
-+		},
-+		{
-+			.rnw = true,
-+			.len = 2,
-+			.data.in = tmp108->val_buf,
-+		},
-+	};
-+	int ret;
-+
-+	tmp108->reg_buf[0] = reg;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->config_reg_16bits)
-+		xfers[1].len--;
-+
-+	ret = i3c_device_do_xfers(i3cdev, xfers, 2, I3C_SDR);
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = tmp108->val_buf[0] << 8;
-+	if (!(reg == TMP108_REG_CONF && !tmp108->config_reg_16bits))
-+		*val |= tmp108->val_buf[1];
-+
-+	return 0;
-+}
-+
-+static int tmp108_i3c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct tmp108 *tmp108 = i3cdev_get_drvdata(i3cdev);
-+	struct i3c_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 3,
-+			.data.out = tmp108->val_buf,
-+		},
-+	};
-+
-+	tmp108->val_buf[0] = reg;
-+	tmp108->val_buf[1] = (val >> 8) & 0xff;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->config_reg_16bits)
-+		xfers[0].len--;
-+	else
-+		tmp108->val_buf[2] = val & 0xff;
-+
-+	return i3c_device_do_xfers(i3cdev, xfers, 1, I3C_SDR);
-+}
-+
-+static const struct regmap_bus tmp108_i3c_regmap_bus = {
-+	.reg_read = tmp108_i3c_reg_read,
-+	.reg_write = tmp108_i3c_reg_write,
-+};
-+
- static const struct regmap_config tmp108_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
-@@ -323,7 +432,8 @@ static const struct regmap_config tmp108_regmap_config = {
- 	.use_single_write = true,
- };
-
--static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *name)
-+static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *name,
-+			       enum tmp108_hw_id hw_id)
- {
- 	struct device *hwmon_dev;
- 	struct tmp108 *tmp108;
-@@ -340,10 +450,18 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
-
- 	dev_set_drvdata(dev, tmp108);
- 	tmp108->regmap = regmap;
-+	tmp108->hw_id = hw_id;
-+	tmp108->config_reg_16bits = (hw_id == P3T1035_ID) ? false : true;
-+	if (hw_id == P3T1035_ID)
-+		memcpy(tmp108->sample_times, (unsigned int[]){ 125, 250, 1000, 4000 },
-+		       sizeof(tmp108->sample_times));
-+	else
-+		memcpy(tmp108->sample_times, (unsigned int[]){ 63, 250, 1000, 4000 },
-+		       sizeof(tmp108->sample_times));
-
- 	err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &config);
- 	if (err < 0) {
--		dev_err(dev, "error reading config register: %d", err);
-+		dev_err_probe(dev, err, "Error reading config register");
- 		return err;
- 	}
- 	tmp108->orig_config = config;
-@@ -351,13 +469,12 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
- 	/* Only continuous mode is supported. */
- 	config &= ~TMP108_CONF_MODE_MASK;
- 	config |= TMP108_MODE_CONTINUOUS;
--
- 	/* Only comparator mode is supported. */
- 	config &= ~TMP108_CONF_TM;
-
- 	err = regmap_write(tmp108->regmap, TMP108_REG_CONF, config);
- 	if (err < 0) {
--		dev_err(dev, "error writing config register: %d", err);
-+		dev_err_probe(dev, err, "Error writing config register");
- 		return err;
- 	}
-
-@@ -369,7 +486,7 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
-
- 	err = devm_add_action_or_reset(dev, tmp108_restore_config, tmp108);
- 	if (err) {
--		dev_err(dev, "add action or reset failed: %d", err);
-+		dev_err_probe(dev, err, "Add action or reset failed");
- 		return err;
- 	}
-
-@@ -384,17 +501,34 @@ static int tmp108_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct regmap *regmap;
-+	enum tmp108_hw_id hw_id;
-+	const void *of_data;
-
- 	if (!i2c_check_functionality(client->adapter,
--				     I2C_FUNC_SMBUS_WORD_DATA))
--		return dev_err_probe(dev, -ENODEV,
-+				     I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
-+		return dev_err_probe(dev, -EOPNOTSUPP,
- 				     "adapter doesn't support SMBus word transactions\n");
-
--	regmap = devm_regmap_init_i2c(client, &tmp108_regmap_config);
-+	regmap = devm_regmap_init(dev, &tmp108_i2c_regmap_bus, client, &tmp108_regmap_config);
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed");
-
--	return tmp108_common_probe(dev, regmap, client->name);
-+	/* Prefer OF match data (DT-first systems) */
-+	of_data = device_get_match_data(&client->dev);
-+	if (of_data) {
-+		hw_id = (enum tmp108_hw_id)(uintptr_t)of_data;
-+	} else {
-+		/* Fall back to legacy I2C ID table */
-+		const struct i2c_device_id *id = i2c_client_get_device_id(client);
-+
-+		if (!id) {
-+			dev_err_probe(dev, -ENODEV, "No matching device ID for i2c device\n");
-+			return -ENODEV;
-+		}
-+		hw_id = (enum tmp108_hw_id)id->driver_data;
-+	}
-+
-+	return tmp108_common_probe(dev, regmap, client->name, hw_id);
- }
-
- static int tmp108_suspend(struct device *dev)
-@@ -420,16 +554,20 @@ static int tmp108_resume(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
-
- static const struct i2c_device_id tmp108_i2c_ids[] = {
--	{ "p3t1085" },
--	{ "tmp108" },
--	{ }
-+	{ "p3t1035", P3T1035_ID },
-+	{ "p3t1085", P3T1085_ID },
-+	{ "p3t2030", P3T1035_ID },
-+	{ "tmp108", TMP108_ID },
-+	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(i2c, tmp108_i2c_ids);
-
- static const struct of_device_id tmp108_of_ids[] = {
--	{ .compatible = "nxp,p3t1085", },
--	{ .compatible = "ti,tmp108", },
--	{}
-+	{ .compatible = "nxp,p3t1035", .data = (void *)(uintptr_t)P3T1035_ID },
-+	{ .compatible = "nxp,p3t1085", .data = (void *)(uintptr_t)P3T1085_ID },
-+	{ .compatible = "nxp,p3t2030", .data = (void *)(uintptr_t)P3T1035_ID },
-+	{ .compatible = "ti,tmp108", .data = (void *)(uintptr_t)TMP108_ID },
-+	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, tmp108_of_ids);
-
-@@ -444,8 +582,9 @@ static struct i2c_driver tmp108_driver = {
- };
-
- static const struct i3c_device_id p3t1085_i3c_ids[] = {
--	I3C_DEVICE(0x011b, 0x1529, NULL),
--	{}
-+	I3C_DEVICE(0x011B, 0x1529, (void *)P3T1085_ID),
-+	I3C_DEVICE(0x011B, 0x152B, (void *)P3T1035_ID),
-+	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(i3c, p3t1085_i3c_ids);
-
-@@ -453,13 +592,22 @@ static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
- {
- 	struct device *dev = i3cdev_to_dev(i3cdev);
- 	struct regmap *regmap;
-+	const struct i3c_device_id *id;
-+	enum tmp108_hw_id hw_id;
-
--	regmap = devm_regmap_init_i3c(i3cdev, &tmp108_regmap_config);
-+	regmap = devm_regmap_init(dev, &tmp108_i3c_regmap_bus, i3cdev, &tmp108_regmap_config);
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(dev, PTR_ERR(regmap),
- 				     "Failed to register i3c regmap\n");
-
--	return tmp108_common_probe(dev, regmap, "p3t1085_i3c");
-+	id = i3c_device_match_id(i3cdev, p3t1085_i3c_ids);
-+	if (!id) {
-+		dev_err_probe(dev, -ENODEV, "No matching device ID for i3c device\n");
-+		return -ENODEV;
-+	}
-+	hw_id = (enum tmp108_hw_id)(uintptr_t)id->data;
-+
-+	return tmp108_common_probe(dev, regmap, "p3t1085_i3c", hw_id);
- }
-
- static struct i3c_driver p3t1085_driver = {
+   interrupts:
 --
 2.34.1
