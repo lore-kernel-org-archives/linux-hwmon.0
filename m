@@ -1,324 +1,115 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331F13161AA
-	for <linux-hwmon@vger.kernel.org>; Fri, 16 Jan 2026 09:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6240534A774;
+	Fri, 16 Jan 2026 09:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768554023; cv=none; b=r/58uiFO1NNnzH9+LGmGXOew/1X0B5iY76VMiYnK0eqapnty4AtyANDLBUpmTzMPqTZ+S0zYY3g+K6MvDVUhGkB7MCJbuROKqPSGgVJ+y4pRnC1ejPic1iPoaoEj6OMsUfYvlV5BiDNOCs0z7FHvFHI/8V/DbyR/g2Q0Fpd/6/A=
+	t=1768555175; cv=none; b=A+/uw9Kdp2qNKHX++RiDg14sC4t7fIYuCJLCF3ri4cWIw+ZbnRfSdQpktoL113Ba/9ZAF8cf2RcuXxBe9vNJ+08blxQdQuzdCinnxzkvNIX8UBlC0s1SbigqG+A4KCCzrtGKuyJedaBspdmzGi4GZ60w+bZQTeq3t+V8yGdqfwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768554023; c=relaxed/simple;
-	bh=KdFqC8uQZdpEprq83ekWPGYeqVIIX8UiHw1f0P4UfUs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZS8bwXM6q3bAsZWEQi2uWg88/qa1CTVi9xa5GMeGqOB4WC1PHV+Em3EhOHtbTE0JU2CTeYSPsTqrq10MFRLo8rUE9iiS7ZJmsDKLK8btPV5TsLRbM5IXabK0OluwJIfFL9CR08jR6RDXcfR9tF9G1dZDtpo29SOmfWPGIkEqH+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Glizmiw1; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768555175; c=relaxed/simple;
+	bh=nbqYEwOFH/CNWY515SS06cHxOSHnobg0rVqVqnAYQ3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QGAFB54zSNpFS01pQyL54onNDdi6uTMcuOrArZ5/Otj4UabA/nsuqgTBegS5uVFGceo5kMUWI5MxG+8NBYHhFtlm6Wq9QuVlgm0jqA5Vs0PyRv4kBDEZ2daHQn0P7C8mBku0Yeo4tBMlljmBNFjoTZlTfIja7U8fEF4l4wqTacE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QuO+vis6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Glizmiw1"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a0a95200e8so12079115ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Jan 2026 01:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768554019; x=1769158819; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dJLBOQnDjNb5TbyRhJaSYj/W0V51LDq0L61uS0oktyg=;
-        b=Glizmiw1polfR0zCdBvj58FP3jQ1JUrjY8b5Ojw/Fq+muMxFBhbXtNll59zOBhmIaQ
-         WLdMggOKS9JsqnJrEsCSxaMoYKqE+LS5vbQDnXkeosCCFjQzywRwOlDPz3coplw+/3vC
-         SC9NI0pPGygSU/phuLZPg9cgRCDonbLjJgmz6cqlCcPkqnt9in1//utInHY+xtTBai7f
-         UQWERGMmfGI6jUQtiXf3dEfO7ADVAMhfK9q387zLpP+TKG/XmLk6MARqMUW99OQ/24Nq
-         n52V6elOQJlHf//DPWeSgzR+CkQDCIgZN5tWxSly7jYyDdvqx/z9ozkBNovPGv+mVWch
-         eNQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768554019; x=1769158819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dJLBOQnDjNb5TbyRhJaSYj/W0V51LDq0L61uS0oktyg=;
-        b=PHeq2McPacSJ1q5TtWqjurr32WmacjXihVfvcoS2wDnrIj1CEMdZQiFFGfe/vwU9fZ
-         xYjRVkj9zufQ09AEO4dEszUDzqnHoDbCycmXhxvXBkN4N77QdIRfAfyB9dQAX/P1Q7GA
-         IWUBbh92pFpT/FbpyCzsJ5cyxSvV4gMJUrS+bfACMN0FOeuMXKpqSby6C7bPS91i+GTz
-         b7llL+EQ6xTgSTI6wRMJ7zAMMndRRyewutdYVIM37xxW53hHbkZKtqfs5YAlDxuJP6jl
-         R4dNbZXrN1/twDrOyBNN2dmn9q+QGsteotD2k/U5xVnJLXoLiVRBQ+Fu3T8MW0z92pd6
-         AhMg==
-X-Gm-Message-State: AOJu0Yx2uqJdm35h2Z2IvB/Mo9D9dLB+lNcrcnUElD6h/vc2xvnPhifn
-	areJaVl6kaSKnW1tMt/xijRmq6U730Rw8ZVk+9Opg6q1w16HeVlwwb0Q
-X-Gm-Gg: AY/fxX4pF0prexO5Jv24mDisFZjqs2PSbQKgVLCwjqjldRo3/3HGXlVK7HGOBnw8lQR
-	UbDkQTJGLDO0mPHFe0djpJYuHHwsUZPn/Klg14IhCXCUnA2jFgpX7GYA0VnVxmXm3E1wGQUgjIz
-	z8AjUATrAv2+NadxP6mgQbhmYKY7V2cGcRZia74kpzqyWl4uccX7F/cIxYOZufmjOUluFFNu6/l
-	PQ9UHbicwyaaxsLSOx8NH4waPout8lrUyCmGKsvqRM2IJ40hP5IJobDsTOKt927Scbn6v7m8OVR
-	8GyboGtX5GSsKX8qYkVdj+OF9SAVXAn7+heicP35BVHkBM++Ypri2L5YCVaK++kTnd2WtYzyi7d
-	+02kXy86CkrlltIaHmK/5/vwsV3Ljlpz3EP5DqdYlZXjnTCo1olb1cYsipAB24y9ikVkCVy+N82
-	/+GYxVlZ+ST70GbnZGZ+QHOd0ZuWgYoV9RRo5Y+dp1i+aZmNmFCd7IO8hEfKbQA5TOr0D78D/XA
-	5Fv80qV1UorHVQ22H769TtGe+5Nh3o=
-X-Received: by 2002:a17:902:d492:b0:2a0:8859:3722 with SMTP id d9443c01a7336-2a717532f61mr21394035ad.25.1768554018309;
-        Fri, 16 Jan 2026 01:00:18 -0800 (PST)
-Received: from charles-System-Product-Name.dhcpserver.bu9bmc.local (61-220-246-151.hinet-ip.hinet.net. [61.220.246.151])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a71941b915sm15304445ad.90.2026.01.16.01.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 01:00:17 -0800 (PST)
-From: Charles Hsu <hsu.yungteng@gmail.com>
-To: linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	corbet@lwn.net
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Charles Hsu <hsu.yungteng@gmail.com>
-Subject: [PATCH v6 2/2] hwmon: pmbus: add support for STEF48H28
-Date: Fri, 16 Jan 2026 16:58:02 +0800
-Message-Id: <20260116085802.696661-2-hsu.yungteng@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260116085802.696661-1-hsu.yungteng@gmail.com>
-References: <20260116085802.696661-1-hsu.yungteng@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QuO+vis6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA71C116C6;
+	Fri, 16 Jan 2026 09:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768555175;
+	bh=nbqYEwOFH/CNWY515SS06cHxOSHnobg0rVqVqnAYQ3A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QuO+vis6dGujj7BEcrYm6RDDzfzangbrVY1TMUUeDY3VrT+W2rF3nqHvPxz4nepO1
+	 zNH2sofTQEil8WLKDuWJfRx3qluXBkBlmKo8DAL+v9a4Wd7J6FoSMmcHsVThr7GHDE
+	 ZgMuw4xDmzPqTo7WIc8cV1qWkCoDpE3FgzAAFWveAZ3cXSZX3tKniOE/0pb8IlhAtl
+	 iLQXbVIM/f7oBrEzjhUq1ySs3obQvkSVpagZ6p9X9Si+4MIDBQ9oVhWa5ZD76BYy9B
+	 UhHKdEr16LmsS0DsjdH14cbZtGfU2F68z9Q11S9ybF8yp+adQ1kUNeFy3CECn8G5ky
+	 5Mr516aavFC1Q==
+Message-ID: <bafd22ce-2916-4d22-8bba-1b7c3052f087@kernel.org>
+Date: Fri, 16 Jan 2026 10:19:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: add STEF48H28
+To: Charles Hsu <hsu.yungteng@gmail.com>, linux@roeck-us.net,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20260116085802.696661-1-hsu.yungteng@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260116085802.696661-1-hsu.yungteng@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add support for STEF48H28 hot-swap controller.
+On 16/01/2026 09:58, Charles Hsu wrote:
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stef48h28
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
 
-Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
----
- Documentation/hwmon/index.rst     |  1 +
- Documentation/hwmon/stef48h28.rst | 73 ++++++++++++++++++++++++++++++
- MAINTAINERS                       |  7 +++
- drivers/hwmon/pmbus/Kconfig       |  9 ++++
- drivers/hwmon/pmbus/Makefile      |  1 +
- drivers/hwmon/pmbus/stef48h28.c   | 75 +++++++++++++++++++++++++++++++
- 6 files changed, 166 insertions(+)
- create mode 100644 Documentation/hwmon/stef48h28.rst
- create mode 100644 drivers/hwmon/pmbus/stef48h28.c
+This must be additionalProperties instead, see speeches/presentations
+material or very explicit rule in writing bindings.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 85d7a686883e..c682751a1fe3 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -233,6 +233,7 @@ Hardware Monitoring Kernel Drivers
-    shtc1
-    sis5595
-    sl28cpld
-+   stef48h28
-    smpro-hwmon
-    smsc47b397
-    smsc47m192
-diff --git a/Documentation/hwmon/stef48h28.rst b/Documentation/hwmon/stef48h28.rst
-new file mode 100644
-index 000000000000..00bef9e55651
---- /dev/null
-+++ b/Documentation/hwmon/stef48h28.rst
-@@ -0,0 +1,73 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver stef48h28
-+=======================
-+
-+Supported chips:
-+
-+  * Analog Devices STEF48H28
-+
-+    Prefix: 'stef48h28'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.st.com/resource/en/data_brief/stef48h28.pdf
-+
-+Author:
-+
-+  - Charles Hsu <hsu.yungteng@gmail.com>
-+
-+
-+Description
-+-----------
-+
-+The STEF48H28 is a 30 A integrated e-fuse for 9-80 V DC power rails.
-+It provides inrush control, undervoltage/overvoltage lockout and
-+overcurrent protection using an adaptive (I x t) scheme that permits
-+short high-current pulses typical of CPU/GPU loads.
-+
-+The device offers an analog current-monitor output and an on-chip
-+temperature-monitor signal for system supervision. Startup behavior is
-+programmable through insertion-delay and soft-start settings.
-+
-+Additional features include power-good indication, self-diagnostics,
-+thermal shutdown and a PMBus interface for telemetry and status
-+reporting.
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+Sysfs entries
-+-------------
-+
-+=========================================================
-+in1_label		"vin".
-+in1_input		Measured voltage. From READ_VIN register.
-+in1_min			Minimum Voltage. From VIN_UV_WARN_LIMIT register.
-+in1_max			Maximum voltage. From VIN_OV_WARN_LIMIT register.
-+
-+in2_label		"vout1".
-+in2_input		Measured voltage. From READ_VOUT register.
-+in2_min			Minimum Voltage. From VOUT_UV_WARN_LIMIT register.
-+in2_max			Maximum voltage. From VOUT_OV_WARN_LIMIT register.
-+
-+curr1_label "iin".
-+curr1_input Measured current. From READ_IIN register.
-+
-+curr2_label "iout1".
-+curr2_input Measured current. From READ_IOUT register.
-+
-+power1_label		"pin"
-+power1_input		Measured input power. From READ_PIN register.
-+
-+power2_label		"pout1"
-+power2_input		Measured output power. From READ_POUT register.
-+
-+temp1_input		Measured temperature. From READ_TEMPERATURE_1 register.
-+temp1_max		Maximum temperature. From OT_WARN_LIMIT register.
-+temp1_crit		Critical high temperature. From OT_FAULT_LIMIT register.
-+
-+temp2_input		Measured temperature. From READ_TEMPERATURE_2 register.
-+=========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d701a4d5b00e..be6b6e9ee79b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24665,6 +24665,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
- F:	drivers/power/supply/stc3117_fuel_gauge.c
+OTOH, this is so trivial now, that you could just add it to
+trivial-devices schema.
 
-+ST STEF48H28 DRIVER
-+M:	Charles Hsu	<hsu.yungteng@gmail.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/stef48h28.rst
-+F:	drivers/hwmon/pmbus/stef48h28.c
-+
- ST STM32 FIREWALL
- M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
- S:	Maintained
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index f3fb94cebf1a..29ea8ba98b8b 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -576,6 +576,15 @@ config SENSORS_Q54SJ108A2
- 	  This driver can also be built as a module. If so, the module will
- 	  be called q54sj108a2.
-
-+config SENSORS_STEF48H28
-+    tristate "ST STEF48H28"
-+	help
-+	  If you say yes here you get hardware monitoring support for ST
-+	  STEF48H28.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called stef48h28.
-+
- config SENSORS_STPDDC60
- 	tristate "ST STPDDC60"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 349a89b6d92e..b2497f1d7bd9 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -56,6 +56,7 @@ obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
-+obj-$(CONFIG_SENSORS_STEF48H28)	+= stef48h28.o
- obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
- obj-$(CONFIG_SENSORS_TDA38640)	+= tda38640.o
- obj-$(CONFIG_SENSORS_TPS25990)	+= tps25990.o
-diff --git a/drivers/hwmon/pmbus/stef48h28.c b/drivers/hwmon/pmbus/stef48h28.c
-new file mode 100644
-index 000000000000..4bde2215697c
---- /dev/null
-+++ b/drivers/hwmon/pmbus/stef48h28.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for STMicroelectronics digital controller stef48h28
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+
-+#include "pmbus.h"
-+
-+static struct pmbus_driver_info stef48h28_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_IN] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 50,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 0,
-+	.m[PSC_VOLTAGE_OUT] = 50,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 0,
-+	.m[PSC_CURRENT_IN] = 100,
-+	.b[PSC_CURRENT_IN] = 0,
-+	.R[PSC_CURRENT_IN] = 0,
-+	.m[PSC_CURRENT_OUT] = 100,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	.R[PSC_CURRENT_OUT] = 0,
-+	.m[PSC_POWER] = 9765,
-+	.b[PSC_POWER] = 0,
-+	.R[PSC_POWER] = -3,
-+	.m[PSC_TEMPERATURE] = 25,
-+	.b[PSC_TEMPERATURE] = 500,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN
-+		| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-+		| PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+		| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT
-+};
-+
-+static int stef48h28_probe(struct i2c_client *client)
-+{
-+	return pmbus_do_probe(client, &stef48h28_info);
-+}
-+
-+static const struct i2c_device_id stef48h28_id[] = {
-+	{"stef48h28"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, stef48h28_id);
-+
-+static const struct of_device_id __maybe_unused stef48h28_of_match[] = {
-+	{.compatible = "st,stef48h28"},
-+	{}
-+};
-+
-+static struct i2c_driver stef48h28_driver = {
-+	.driver = {
-+			.name = "stef48h28",
-+			.of_match_table = of_match_ptr(stef48h28_of_match),
-+			},
-+	.probe = stef48h28_probe,
-+	.id_table = stef48h28_id,
-+};
-+
-+module_i2c_driver(stef48h28_driver);
-+
-+MODULE_AUTHOR("Charles Hsu <hsu.yungteng@gmail.com>");
-+MODULE_DESCRIPTION("PMBus driver for ST stef48h28");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
---
-2.34.1
-
+Best regards,
+Krzysztof
