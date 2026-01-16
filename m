@@ -1,394 +1,251 @@
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035B537C0FC
-	for <linux-hwmon@vger.kernel.org>; Fri, 16 Jan 2026 17:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A87C1E51EE;
+	Fri, 16 Jan 2026 21:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768583830; cv=none; b=kNuVIPuXn0gmglteBzFeg7tpr+7zH5VAkFvPveu8XJCPpLgEjhPZjWVV8hrqW3pMaUbLf5jMmawzZOOTGG7L0npp4r0yGwl43lwG3D/JRL31HCy3GD+bfAlGydbGGE+/bt8+V51028swAKi2mrWjb81hZN3z4y7xFGKQuzb3ICI=
+	t=1768599448; cv=none; b=t+0ixVo50Jo9f4FeolWtnvIK7EpaPenEyRleEmTADT4ZvwEc1iwZlJZf/Z/0vJrHnY08+bxqU20rLw3DW1skATNcvAQ93hAXi9lwT1sSckfoKSR+hBfCSmACbzddhahvQa8N+LnpJnd3d6JBl7NqPOh2wxXVYKPz5lMbplLkQEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768583830; c=relaxed/simple;
-	bh=8NIdsHO4R7Z+ITNhfbm3oeuM2cLj1tSAVYP1uCUbvnU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=pM1HGTNLvVfU6Myx0FCGbffZunH4fbet7IyJ/LFvzba8bkETRj/BSL+5niBXhcUhhaL+XZxaHhN/b24Owa+RhttSs1e9QUcbxr3rugQ+nc/84ddXGk4C8/I1YZRb8nSyD/LMrhTA8jUpoeyyF0RZxsMg1dPX4fitRBisRnDrLLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N6/1BR8R; arc=none smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768599448; c=relaxed/simple;
+	bh=euHakU3Cm3tzvjW7BAytl4uh1jyOgYlbifHaTarnt5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I8dW0NJrHYql3fkQXH2yt6iJdA1hBOTK6sfq1O/TZhJh1pwRd5SkfirUHqtx7mm+03Mbbw2TC1KycCYGpfM6Pu8SqXDmkFdzqfE/zLwC/rmxU400eiHrLzbbqz7em0B1Meit6Wz2v9+awQBtHh7j8Ofa5vliZxQ4Zf6Cwkrf0uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cOgIKhsF; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N6/1BR8R"
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5eea75115ceso2392235137.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Jan 2026 09:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768583825; x=1769188625; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=efGgTmZq2s8Wr+4vLiVPiPXTWhArQuy6Lzh7ja4nxnI=;
-        b=N6/1BR8RUaxX6cGefsjmCMMF9Sw11EDcX9jY0Af/DP/hldoUvRutYyVAZ0w1NX8lol
-         nUXkpmbvShEWD0E5IkGyXkw0L/CmED6Ablz5TLHZC2OSZrjlxCbVuKve4nh+IeLtAnBh
-         RXN2pq4+/wOcLEijqAqeu0r9FiC6E/vvZx4NrA6x1fKOSOUWd0D8Ua4pgUBdZM7TLRjo
-         2YiAdzxvp64yBvpFyeBQCpc+mJyjssvKZsjvNnLNBRhKqfKXDPg9P9rm8jR/TJSC1Ego
-         KY1kZvLwD1WaKijom39sj8l93Y2ZFDTOFHZ3HpxIOrqlp6WdxxclKdU9Wt7ND1fl2UcF
-         cscQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768583825; x=1769188625;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=efGgTmZq2s8Wr+4vLiVPiPXTWhArQuy6Lzh7ja4nxnI=;
-        b=MkpaYrEn5UOnFVfG2bssbODfl29+Aw16sH99cBDRoXKzGmPhCBlxOP3oJiktD4aAF4
-         74z1+jqlBi7EkrrKhYAorVdDL3n3t7aXMiXAnUQhk3Ns8RmFrUC1BgHEDow8q/OIplha
-         O3wa55vj3pFRiXjXIbMBiP2P5ohrFdgN86p6ZXdPXKwawfKjfzmQPWSPygGI9OuSwZNL
-         FCb4iTXLzirK5IkCb+cf808cYGlihH3sjInPh8UZsSb2LgdOAR21mJ3XIMWSK/2b0ZEc
-         WpJ2pXRPSNQgbBYySOwH53cQQO/NFd3UL8SY5vMVJpoRmfu8brpayPdDWdyOdzK02QDg
-         LLFw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8mqGzWpg1dPv/yjTtDJYqTS0uWeLPCM3Sh8BXVzj6xCKCXfbziH56QobjvMrsIJgKcvqB+VYaFM8C4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjPzNlJ7P0itA7GL5kzlgYIPd5Ik43K13zcIfdLextFZItErov
-	NZd/BxG9cHLCWWogAFWdszaMxfUr9E9kGpUQX/9abGV3l8DYzbFoYKdH
-X-Gm-Gg: AY/fxX7W3LI5ig9qLO/shWSYESArHir9roEPWWL2fwxECIl2Hl1Mo1UlzFPJ5LHvJ8n
-	fyu++xYNml3oEsrTdyUH8Efwtn13GpSmdwWy+DCURyAADjq2rvpbAhluOQiGxugVA7xKdWLkoya
-	rmAGnL7qi/H3tji4ZXUvy0RJ3+OfV3nLHrKN/VYoE5HqrxO8pESsL4ECb+IBCO+fFfl87Ye6kNg
-	4p5ZqcWHWuLMDokVAh7HUxPHPecFMWzMqZh84DNw4OIwwzBYfNImv2OwlitnBBW60iGtJpfgHCv
-	ZnviEYthPshG66gJKqru8JctKidNC5dhYIfDxU+xmDnkKW8UyJud0YZq/lZXdA0AhZZUh8ECl7j
-	2GeUON81Td3SLIubzf5T3ehukVK9c0QLKiyx6mSWs+bnRvKaXNAMAdvkKHSdTiXvgaiwDCnNTVg
-	M9J4fPC5A=
-X-Received: by 2002:a05:6102:dd1:b0:5ef:a315:28e5 with SMTP id ada2fe7eead31-5f1923fbde7mr3035107137.3.1768583825301;
-        Fri, 16 Jan 2026 09:17:05 -0800 (PST)
-Received: from localhost ([2800:bf0:4580:3149:c903:2904:3cc3:8b4c])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5f1a6925726sm1017693137.5.2026.01.16.09.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 09:17:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cOgIKhsF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768599447; x=1800135447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=euHakU3Cm3tzvjW7BAytl4uh1jyOgYlbifHaTarnt5I=;
+  b=cOgIKhsFGIbY75rBAhMLo68AfECXs32Ezf7V2XPZmyJISOfBaDTJ0ye2
+   uLzI7qXuZ73VwTdMAb+qrwRtWf0sQuvwgN9Eoj7d4PafAbJp/K1vavvUX
+   T2uDto/KQuKL79tJj91PPw55w0QIeMfTCbKwUARrl/U6BpIhezRAnObc9
+   uwU8b6dXxr0zMRPGDDtq8euM6aC9XaWVV3N51CNHA/yV9pcWr2XPDEvXP
+   q0brF3GmkhykZvHBM+/uJvobR8160dStWSsC4jELP4lj7cA/ZhXVgYExB
+   8KKg0gAysCcNP18TKMcb+sac9X/oKql3G7Gohe8QdN84UagJFjB+NUvZm
+   g==;
+X-CSE-ConnectionGUID: FiukX5ZOQLej8tZv9sbBsQ==
+X-CSE-MsgGUID: qBOQvsIvSHaz2O7ZQ5M18g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11673"; a="92583843"
+X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
+   d="scan'208";a="92583843"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 13:37:25 -0800
+X-CSE-ConnectionGUID: XSVjO9CwTziruvACI+9evQ==
+X-CSE-MsgGUID: bjY3thmeRmSmMYbPzk1y/g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,232,1763452800"; 
+   d="scan'208";a="205401657"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 16 Jan 2026 13:37:21 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgrVO-00000000LGW-3A9T;
+	Fri, 16 Jan 2026 21:37:18 +0000
+Date: Sat, 17 Jan 2026 05:37:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mayank Mahajan <mayankmahajan.x@nxp.com>, linux@roeck-us.net,
+	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	priyanka.jain@nxp.com, vikash.bansal@nxp.com,
+	Mayank Mahajan <mayankmahajan.x@nxp.com>
+Subject: Re: [PATCH v4 2/3] hwmon: (tmp108) Add support for P3T1035 and
+ P3T2030
+Message-ID: <202601170516.uQw9DKHB-lkp@intel.com>
+References: <20260116113554.986-2-mayankmahajan.x@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Jan 2026 12:17:02 -0500
-Message-Id: <DFQ6N3R4HO0M.2L0HZMH3N0N49@gmail.com>
-Cc: "Derek J. Clark" <derekjohn.clark@gmail.com>, "Mark Pearson"
- <mpearson-lenovo@squebb.ca>, "Armin Wolf" <W_Armin@gmx.de>, "Hans de Goede"
- <hansg@kernel.org>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, "Guenter Roeck" <linux@roeck-us.net>,
- <platform-driver-x86@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v9 7/7] platform/x86: lenovo-wmi-other: Add HWMON for
- fan reporting/tuning
-From: "Kurt Borja" <kuurtb@gmail.com>
-To: "Rong Zhang" <i@rong.moe>, "Kurt Borja" <kuurtb@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260114122745.986699-1-i@rong.moe>
- <20260114122745.986699-8-i@rong.moe> <DFOQB6DGBKBZ.39JQKPB7XDSJG@gmail.com>
- <1a9909f4083d85736a1e28067517ae0899e462f2.camel@rong.moe>
- <DFP7SAGSD32N.3SIIV8JMYHWRM@gmail.com>
- <9ff2b73e30f06be69b6c0b72b91a19d766310db7.camel@rong.moe>
- <DFPEEI5LNJXZ.2E32AHA8VUJW3@gmail.com>
- <0e7dfebcaa4509e907faa7b43fc8d49ca6729ca2.camel@rong.moe>
-In-Reply-To: <0e7dfebcaa4509e907faa7b43fc8d49ca6729ca2.camel@rong.moe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116113554.986-2-mayankmahajan.x@nxp.com>
 
-On Fri Jan 16, 2026 at 9:18 AM -05, Rong Zhang wrote:
-> Hi Kurt,
->
-> On Thu, 2026-01-15 at 14:09 -0500, Kurt Borja wrote:
->> On Thu Jan 15, 2026 at 11:57 AM -05, Rong Zhang wrote:
->> > Hi Kurt,
->> >=20
->> > On Thu, 2026-01-15 at 08:58 -0500, Kurt Borja wrote:
->> > > On Thu Jan 15, 2026 at 8:03 AM -05, Rong Zhang wrote:
->> > > > Hi Kurt,
->> > > >=20
->> > > > On Wed, 2026-01-14 at 19:16 -0500, Kurt Borja wrote:
->> > > > > Hi Rong,
->> > > > >=20
->> > > > > On Wed Jan 14, 2026 at 7:27 AM -05, Rong Zhang wrote:
->> > > > > > Register an HWMON device for fan reporting/tuning according to
->> > > > > > Capability Data 00 (capdata00) and Fan Test Data (capdata_fan)=
- provided
->> > > > > > by lenovo-wmi-capdata. The corresponding HWMON nodes are:
->> > > > > >=20
->> > > > > >  - fanX_enable: enable/disable the fan (tunable)
->> > > > > >  - fanX_input: current RPM
->> > > > > >  - fanX_max: maximum RPM
->> > > > > >  - fanX_min: minimum RPM
->> > > > > >  - fanX_target: target RPM (tunable)
->> > > > > >=20
->> > > > > > Information from capdata00 and capdata_fan are used to control=
- the
->> > > > > > visibility and constraints of HWMON attributes. Fan info from =
-capdata00
->> > > > > > is collected on bind, while fan info from capdata_fan is colle=
-cted in a
->> > > > > > callback. Once all fan info is collected, register the HWMON d=
-evice.
->> > > > > >=20
->> > > > > > Signed-off-by: Rong Zhang <i@rong.moe>
->> > > > > > Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
->> > > > > > ---
->> > > > >=20
->> > > > > ...
->> > > > >=20
->> > > > > > diff --git a/Documentation/wmi/devices/lenovo-wmi-other.rst b/=
-Documentation/wmi/devices/lenovo-wmi-other.rst
->> > > > > > index 821282e07d93c..bd1d733ff286d 100644
->> > > > > > --- a/Documentation/wmi/devices/lenovo-wmi-other.rst
->> > > > > > +++ b/Documentation/wmi/devices/lenovo-wmi-other.rst
->> > > > > > @@ -31,6 +31,8 @@ under the following path:
->> > > > > > =20
->> > > > > >    /sys/class/firmware-attributes/lenovo-wmi-other/attributes/=
-<attribute>/
->> > > > > > =20
->> > > > > > +Additionally, this driver also exports attributes to HWMON.
->> > > > > > +
->> > > > > >  LENOVO_CAPABILITY_DATA_00
->> > > > > >  -------------------------
->> > > > > > =20
->> > > > > > @@ -39,6 +41,11 @@ WMI GUID ``362A3AFE-3D96-4665-8530-96DAD5BB=
-300E``
->> > > > > >  The LENOVO_CAPABILITY_DATA_00 interface provides various info=
-rmation that
->> > > > > >  does not rely on the gamezone thermal mode.
->> > > > > > =20
->> > > > > > +The following HWMON attributes are implemented:
->> > > > > > + - fanX_enable: enable/disable the fan (tunable)
->> > > > >=20
->> > > > > I was testing this series and I'm a bit confused about fanX_enab=
-le.
->> > > >=20
->> > > > Thanks for testing!
->> > >=20
->> > > Thanks for working on this!
->> > >=20
->> > > >=20
->> > > > > Judging by this comment and also by taking a quick look at the c=
-ode, it
->> > > > > looks like writting 0 to this attribute disables the fan.
->> > > > >=20
->> > > > > This is however (per hwmon ABI documentation [1]) not how this a=
-ttribute
->> > > > > should work. IIUC, it is intended for devices which can disable =
-the fan
->> > > > > sensor, not the actual fan.
->> > > >=20
->> > > > Hmm, what a confusing name :-/
->> > > >=20
->> > > > > I fail to see how this feature is useful and I also find it dang=
-erous
->> > > > > for this to be exposed by default, considering the same could be
->> > > > > achieved with the relaxed module parameter, which at least tells=
- the
->> > > > > user to be careful.
->> > > >=20
->> > > > Makes sense. I will remove the attribute and mention such behavior=
- in
->> > > > the module parameter.
->> > >=20
->> > > Also, it would be worth to mention that writting 0 to the fanY_targe=
-t
->> > > attribute is auto mode, right?
->> >=20
->> > Ah, yes.
->> >=20
->> > > I was testing the fanX_target attribute and it does work as intended=
-,
->> > > i.e. the fan speed changes to the desired speed. However, every time=
- I
->> > > write to this attribute I'm getting -EIO error and it always reads 0=
-.
->> > >=20
->> > > For example:
->> > >=20
->> > > 	$ echo 3550 | sudo tee fan*_target
->> > > 	3550
->> > > 	tee: fan1_target: Input/output error
->> > > 	tee: fan2_target: Input/output error
->> > > 	$ cat fan*_target
->> > > 	0
->> > > 	0
->> > >=20
->> > > But as I said, the fans do reach the desired speed (an approximation=
- of
->> > > it):
->> > >=20
->> > > 	$ cat fan*_input
->> > > 	3500
->> > > 	3500
->> > >=20
->> > > This is a bit weird, but I haven't look in depth into it. I will fin=
-d
->> > > some time to do it later. This happens on a 83KY (Legion 7 16IAX1)
->> > > laptop.
->> >=20
->> > I'd like to fix it in the next revision. Looking forward to your
->> > progress in debugging :-)
->> >=20
->> > It seems to me that the corresponding ACPI method did not return 1 on
->> > success. There should be some clues in the decompiled ASL code. Could
->> > you attach it in your reply? The HWMON implementation was developed
->> > mostly based on my understanding on the decompiled ASL code of my
->> > device. I'd like to check the one of your device as a cross-reference
->> > to see if there are more potential bugs.
->>=20
->> Yep, the ACPI method retval is 0 instead of 1.
->
-> Given the divergence between your device and mine, I think we could
-> just accept both 0 and 1. That should be fine considering that we've
-> strictly checked LENOVO_CAPABILITY_DATA_00 and LENOVO_FAN_TEST_DATA
-> before exposing fan channels.
+Hi Mayank,
 
-Thanks! This fixes the -EIO issue.
+kernel test robot noticed the following build errors:
 
->
->> Here is a snippet of what I believe is the fan control stuff on my
->> device (L: 50393):
->>=20
->>=20
->> 	If ((SFV0 =3D=3D 0x04030001))
->> 	{
->> 		Local0 =3D (SFV1 / 0x64)
->> 		^^PC00.LPCB.EC0.LECR (0xD1, One, Local0, 0x02)
->> 		Return (Zero)
->> 	}
->>=20
->> 	If ((SFV0 =3D=3D 0x04030002))
->> 	{
->> 		Local0 =3D (SFV1 / 0x64)
->> 		^^PC00.LPCB.EC0.LECR (0xD1, 0x02, Local0, 0x02)
->> 		Return (Zero)
->> 	}
->>=20
->> 	If ((SFV0 =3D=3D 0x04030004))
->> 	{
->> 		Local0 =3D (SFV1 / 0x64)
->> 		^^PC00.LPCB.EC0.LECR (0xD1, 0x03, Local0, 0x02)
->> 		Return (Zero)
->> 	}
->
-> On my device, 0x04030001 always returns 1 after writing to EC
-> registers. 0x04030002 is a stub and always returns 0. That was the
-> reason why I assumed 1 =3D> success and 0 =3D> failure. Here's the
-> corresponding code snippet on my device:
+[auto build test ERROR on 983d014aafb14ee5e4915465bf8948e8f3a723b5]
 
-I had this exact issue in the alienware-wmi-wmax driver. OEMs tend to be
-inconsistent with return values across models.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mayank-Mahajan/hwmon-tmp108-Add-support-for-P3T1035-and-P3T2030/20260116-193800
+base:   983d014aafb14ee5e4915465bf8948e8f3a723b5
+patch link:    https://lore.kernel.org/r/20260116113554.986-2-mayankmahajan.x%40nxp.com
+patch subject: [PATCH v4 2/3] hwmon: (tmp108) Add support for P3T1035 and P3T2030
+config: i386-buildonly-randconfig-004-20260117 (https://download.01.org/0day-ci/archive/20260117/202601170516.uQw9DKHB-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260117/202601170516.uQw9DKHB-lkp@intel.com/reproduce)
 
->
->    If ((DEV1 =3D=3D 0x04))
->    {
->        If ((FEA1 =3D=3D 0x03))
->        {
->            Local0 =3D Buffer (0x06){}
->            Local0 [Zero] =3D 0x46
->            If ((TYP1 =3D=3D One))
->            {
->                Local1 =3D ToInteger (DAT1)
->                If ((Local1 =3D=3D Zero))
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601170516.uQw9DKHB-lkp@intel.com/
 
-Here auto mode is more explicit too.
+All errors (new ones prefixed by >>):
 
->                {
->                    Local0 [One] =3D 0x84
->                }
->                Else
->                {
->                    MBGS ("Fan1S")
->                    Local0 [One] =3D 0x85
->                    Divide (Local1, 0x64, Local2, Local1)
->                    Local0 [0x02] =3D Local1
->                }
->            }
->   =20
->            If ((TYP1 =3D=3D 0x02))
->            {
->                MBGS ("Fan2S")
->                Return (Zero)
->            }
->   =20
->            \_SB.PCI0.LPC0.EC0.ERCD (Local0)
->            Return (One)
->        }
->   =20
->        If ((FEA1 =3D=3D 0x04))
->        {
->            MBGS ("wSet FanNoise")
->            DB2H (DAT1)
->            \_SB.FANL =3D DAT1 /* \_SB_.GZFD.WMAE.DAT1 */
->            Notify (\_TZ.VFAN, 0x80) // Status Change
->        }
->    }
->
->> You can find the full acpidump attached in this email.
->
-> Thanks for that.
->
->> Do you have any idea of what 0x04030004 might be?
->
-> It's "system fan". See
-> https://lore.kernel.org/all/CAFqHKTkOZUfDb8cGbGnVPCS9wNbOBsiyOk_MkZR-2_Za=
-6ZPMng@mail.gmail.com/
->
->> This laptop only has 2
->> fans. FW bug?
->
-> Nope, that's not a bug as long as LENOVO_CAPABILITY_DATA_00 or
-> LENOVO_FAN_TEST_DATA only indicates the presence of fan 1&2. Lenovo
-> usually reuses a lot of ASL code among different SKUs, with some other
-> mechanism to gate inapplicable functionalities.
->
-> So I quickly glanced at the decompiled ASL code of your device...
->
-> Method WQA9 is LENOVO_CAPABILITY_DATA_00, and it only exposes fan 4 on
-> specific SKUs (L: 47975):
->
->    If (((GSKU =3D=3D 0x02) || (GSKU =3D=3D 0x03)))
->    {
->        Return (Buffer (0x0C)
->        {
->            /* 0000 */  0x04, 0x00, 0x03, 0x04, 0x07, 0x00, 0x00, 0x00,
->            /* 0008 */  0x01, 0x00, 0x00, 0x00
->        })
->    }
->    Else
->    {
->        Return (Buffer (0x0C)
->        {
->            /* 0000 */  0x04, 0x00, 0x03, 0x04, 0x00, 0x00, 0x00, 0x00,
->            /* 0008 */  0x00, 0x00, 0x00, 0x00
->        })
->    }
->
-> I assume your device should return the latter buffer, indicating fan 4
-> does not exist. That being said, it won't be surprising if the former
-> one is returned -- my device's LENOVO_CAPABILITY_DATA_00 indicates the
-> presence of fan 1&2 while LENOVO_FAN_TEST_DATA only exposes fan 1.
->
-> Method WQAB is LENOVO_FAN_TEST_DATA (L: 48195). It exposes fan 1&2,
-> declaring their RPM range to be [1700,5700].
->
->    Return (Buffer (0x1C)
->    {
->        /* 0000 */  0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
->        /* 0008 */  0x02, 0x00, 0x00, 0x00, 0x44, 0x16, 0x00, 0x00,
->        /* 0010 */  0x44, 0x16, 0x00, 0x00, 0xA4, 0x06, 0x00, 0x00,
->        /* 0018 */  0xA4, 0x06, 0x00, 0x00
->    })
->
-> So these WMI interfaces on your device are implemented mostly well.
-> LENOVO_FAN_TEST_DATA is enough to prevent fan 4 from being exposed on
-> your device.
-
-Yes, fan 4 is not exposed to user-space so everything is fine here.
-
-Thanks for the detailed explaination! I'll check the structure of those
-buffers to understand these drivers better.
-
->
-> Thanks,
-> Rong
+>> drivers/hwmon/tmp108.c:123:33: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     123 |                         *temp = tmp108->sample_times[FIELD_GET(TMP108_CONF_CONVRATE_FLD, regval)];
+         |                                                      ^
+>> drivers/hwmon/tmp108.c:210:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     210 |                                                   FIELD_PREP(TMP108_CONF_CONVRATE_FLD, index));
+         |                                                   ^
+   2 errors generated.
 
 
---=20
-Thanks,
- ~ Kurt
+vim +/FIELD_GET +123 drivers/hwmon/tmp108.c
 
+   109	
+   110	static int tmp108_read(struct device *dev, enum hwmon_sensor_types type,
+   111			       u32 attr, int channel, long *temp)
+   112	{
+   113		struct tmp108 *tmp108 = dev_get_drvdata(dev);
+   114		unsigned int regval;
+   115		int err, hyst;
+   116	
+   117		if (type == hwmon_chip) {
+   118			if (attr == hwmon_chip_update_interval) {
+   119				err = regmap_read(tmp108->regmap, TMP108_REG_CONF,
+   120						  &regval);
+   121				if (err < 0)
+   122					return err;
+ > 123				*temp = tmp108->sample_times[FIELD_GET(TMP108_CONF_CONVRATE_FLD, regval)];
+   124				return 0;
+   125			}
+   126			return -EOPNOTSUPP;
+   127		}
+   128	
+   129		switch (attr) {
+   130		case hwmon_temp_input:
+   131			/* Is it too early to return a conversion ? */
+   132			if (time_before(jiffies, tmp108->ready_time)) {
+   133				dev_dbg(dev, "%s: Conversion not ready yet..\n",
+   134					__func__);
+   135				return -EAGAIN;
+   136			}
+   137			err = regmap_read(tmp108->regmap, TMP108_REG_TEMP, &regval);
+   138			if (err < 0)
+   139				return err;
+   140			*temp = tmp108_temp_reg_to_mC(regval);
+   141			break;
+   142		case hwmon_temp_min:
+   143		case hwmon_temp_max:
+   144			err = regmap_read(tmp108->regmap, attr == hwmon_temp_min ?
+   145					  TMP108_REG_TLOW : TMP108_REG_THIGH, &regval);
+   146			if (err < 0)
+   147				return err;
+   148			*temp = tmp108_temp_reg_to_mC(regval);
+   149			break;
+   150		case hwmon_temp_min_alarm:
+   151		case hwmon_temp_max_alarm:
+   152			err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &regval);
+   153			if (err < 0)
+   154				return err;
+   155			*temp = !!(regval & (attr == hwmon_temp_min_alarm ?
+   156					     TMP108_CONF_FL : TMP108_CONF_FH));
+   157			break;
+   158		case hwmon_temp_min_hyst:
+   159		case hwmon_temp_max_hyst:
+   160			err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &regval);
+   161			if (err < 0)
+   162				return err;
+   163			switch (regval & TMP108_CONF_HYSTERESIS_MASK) {
+   164			case TMP108_HYSTERESIS_0C:
+   165			default:
+   166				hyst = 0;
+   167				break;
+   168			case TMP108_HYSTERESIS_1C:
+   169				hyst = 1000;
+   170				break;
+   171			case TMP108_HYSTERESIS_2C:
+   172				hyst = 2000;
+   173				break;
+   174			case TMP108_HYSTERESIS_4C:
+   175				hyst = 4000;
+   176				break;
+   177			}
+   178			err = regmap_read(tmp108->regmap, attr == hwmon_temp_min_hyst ?
+   179					  TMP108_REG_TLOW : TMP108_REG_THIGH, &regval);
+   180			if (err < 0)
+   181				return err;
+   182			*temp = tmp108_temp_reg_to_mC(regval);
+   183			if (attr == hwmon_temp_min_hyst)
+   184				*temp += hyst;
+   185			else
+   186				*temp -= hyst;
+   187			break;
+   188		default:
+   189			return -EOPNOTSUPP;
+   190		}
+   191	
+   192		return 0;
+   193	}
+   194	
+   195	static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
+   196				u32 attr, int channel, long temp)
+   197	{
+   198		struct tmp108 *tmp108 = dev_get_drvdata(dev);
+   199		u32 regval, mask;
+   200		u8 index;
+   201		int err;
+   202	
+   203		if (type == hwmon_chip) {
+   204			if (attr == hwmon_chip_update_interval) {
+   205				index = find_closest_descending(temp, tmp108->sample_times,
+   206								tmp108->n_sample_times);
+   207				return regmap_update_bits(tmp108->regmap,
+   208							  TMP108_REG_CONF,
+   209							  TMP108_CONF_CONVRATE_MASK,
+ > 210							  FIELD_PREP(TMP108_CONF_CONVRATE_FLD, index));
+   211			}
+   212			return -EOPNOTSUPP;
+   213		}
+   214	
+   215		switch (attr) {
+   216		case hwmon_temp_min:
+   217		case hwmon_temp_max:
+   218			temp = clamp_val(temp, TMP108_TEMP_MIN_MC, TMP108_TEMP_MAX_MC);
+   219			return regmap_write(tmp108->regmap,
+   220					    attr == hwmon_temp_min ?
+   221						TMP108_REG_TLOW : TMP108_REG_THIGH,
+   222					    tmp108_mC_to_temp_reg(temp));
+   223		case hwmon_temp_min_hyst:
+   224		case hwmon_temp_max_hyst:
+   225			temp = clamp_val(temp, TMP108_TEMP_MIN_MC, TMP108_TEMP_MAX_MC);
+   226			err = regmap_read(tmp108->regmap,
+   227					  attr == hwmon_temp_min_hyst ?
+   228						TMP108_REG_TLOW : TMP108_REG_THIGH,
+   229					  &regval);
+   230			if (err < 0)
+   231				return err;
+   232			if (attr == hwmon_temp_min_hyst)
+   233				temp -= tmp108_temp_reg_to_mC(regval);
+   234			else
+   235				temp = tmp108_temp_reg_to_mC(regval) - temp;
+   236			if (temp < 500)
+   237				mask = TMP108_HYSTERESIS_0C;
+   238			else if (temp < 1500)
+   239				mask = TMP108_HYSTERESIS_1C;
+   240			else if (temp < 3000)
+   241				mask = TMP108_HYSTERESIS_2C;
+   242			else
+   243				mask = TMP108_HYSTERESIS_4C;
+   244			return regmap_update_bits(tmp108->regmap, TMP108_REG_CONF,
+   245						  TMP108_CONF_HYSTERESIS_MASK, mask);
+   246		default:
+   247			return -EOPNOTSUPP;
+   248		}
+   249	}
+   250	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
