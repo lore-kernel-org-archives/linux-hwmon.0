@@ -1,113 +1,95 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E2F1ACEDF
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 01:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87657143C61
+	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 14:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768614800; cv=none; b=Dra99rgw11FDFRa7BMLPShma5QRlxyKK10wZIVuikNU4V0mO9+t1k+KWBGoH+Eky7Uq0JI80aiO95Ikq0m+NU0vKyM9OtmUk4TFby3seDwjEJtDOBS7A+2T4DyrhF5dDVAjyNdJjhQM1uUQcCdKNagpHZ0c4BsuplAC9Bqpa2zQ=
+	t=1768660780; cv=none; b=Xa2b4pA6ylN/WJoC0INlLrCwYgQ7kkLNcRUEy2zTiCuTaseFAFIJ1g9WpPRdhUoA/lQJH68Vy+8estEGXAZWSN9WVWkyAh1GzXsHhhhGh47+11n6onsDgIboH/FmRndDqLHMIAE7KCWb7eTX9E66pqs30PeLaIfm/UjZPnq3PRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768614800; c=relaxed/simple;
-	bh=grZSyLlf9fwsYdQb91BOR5AlvFLqnnAf60XnrqA59FE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nlqRj+qS7BWCx1H2PeWyADPz2fW/2knCdhNq8+hv3auUMS+GDcaKsvI872o28v6e8/lYf6VrV8yixyRYXP6a0fqK+QEpUZ8JARnaMoBQvoPXRVi6ywbLtFSR963D6wUNEh6pLY+hFJBlGicPPLFKDQciWrH5fcx9oAnW9z4ntyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IiITPwBh; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1768660780; c=relaxed/simple;
+	bh=PYuKCOV6aj1XU3iT8oUN4z7XzxiPHlZ7vT3vAXmH8vs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sQykGwRHX4DrqSORtHzLsQ9WHtXKHYcNa5U5d/IJ7RGy8Z/qPw4+POlI1p8mjWg1lvD88/mQSD0a7NAsZ2D1TbSrUi8+Wno0GSGoC9ClRjWUEDh3ysfME86slPPoccB3shzfFvdkBQkPFm0lEIDUVm+pmlLdXggwLJIUG8tx3cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LrrNt4ks; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IiITPwBh"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c2c36c10dbso308562885a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 16 Jan 2026 17:53:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrrNt4ks"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12336f33098so2407725c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 06:39:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768614798; x=1769219598; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o3fGVYa8jqbyylm3+KfhI98KZ69x0vgd+VxZp6WJT5s=;
-        b=IiITPwBhM75ROzw4jOIHBZ2Ndwg3YJWers9IfzaCDjYQn9ARoZMRghXa8olXLNsonL
-         sFb/IjdqyQ8VK9+a8/Vv7bavyTD7/tkVVP9EnBi7UaZENxYrYFH2sHrY8LBCZJfb3Jx2
-         UvG6OrJNLQ02T83urDVZgAZzkjhHQN0gq90ovGeSbMkhJWDSY38MCQWpEuiB9ZDlcbaX
-         7/cMLF/G3ciK1GNGuLZudUcAIWSigipNNw0OHr6dLT9YkqHFPgQKgl//BjB8aptz8Whi
-         ZmVOl4X925cZmMH1C4QfMGEuHFKwjw0sejDWPuaRa5ZRlhtOwHxPrD2ioYeHPPlblTcx
-         R9OA==
+        d=gmail.com; s=20230601; t=1768660778; x=1769265578; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eVFY3MiZAadIU2C7x0dHtyl2S8hyE8MpQnzv7RYPmhg=;
+        b=LrrNt4ksoUZ3ZwcEE4OCU40M/yMUcc+Um66sbja/34j0e06I4vValAWXVzNE8Kys2N
+         Kbu4QMMzvkh1+ekZXwke8yKOzzsmH0bRwgCApGFNR2TZf2fgZ5nYDNpLeOas0zKkXgep
+         gdlANO/Degcy6C2JZ4MfkFZ5QGz9PiU+1l0nFCWkCq6AcBX5/S2eSBqd/LazRSHMC1jh
+         DK/57W81rYNAImZPgwQhmUjwhSRC2vBfqXo+/sNDmoJ6rVqxtvZqxxe3ghKhEbfhk/z/
+         w8K4ExnnSj9QwDzslugG25mlLY9cBIXsN2F14OMoQPB6rXiD2d/zf/H4oy9148qryOaA
+         kgIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768614798; x=1769219598;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=o3fGVYa8jqbyylm3+KfhI98KZ69x0vgd+VxZp6WJT5s=;
-        b=jJ9/CrIXmf9FfzODcVYFxy5QbBLxabEj2rBY+Ar2dQjf5RlWzMH0chqi/YqCMfd26+
-         /cmgyXC3YYKn9TSzRwJZ/uCIC87NBxLVRQIndmlIalUOB8wg9/XW11ehS9Ogjjw0U4vn
-         pUIJUQtAiRgFxfquOVggeSXOo3qSkMtVjsNHn/ZEBFUsl+D9bofX5ocFzwMMtwLYiQrj
-         50mQvUg6Vvvbp6CxnBzP+VmAZggLT1AiQDnab+VwZkIxoT/bFzLYd5et6h4gfymH7Nem
-         y7e6uZxuJu3xgm5Mf1jHYA509seDlepLxXcgWUKWUsB+iMXLmhvBfEo4BgrUv19R6Px+
-         onSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWrTOqCw4SUxWHIB44/A1LhdhP5g3h0GtkJOu1Hrgp59wTpxGI7RircRlR0eZVj6jlPrumOZF/6/egPCw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrm9nyRtHp3US1RgEQ/BVv/WJ245nytkPuoGZEDCpJZ/JieHQF
-	1ZXTPQLs4vOfWm9kAUn3PVX++ZICyFw1PlGnMLBAtvu1+mh84yAIvt8q
-X-Gm-Gg: AY/fxX4eCMF0ipdeYmGpuq8BQJrbTtk7MkA6esUW+Dh0rerX3MydGF1lEUt1k+Odwvs
-	M7zD1kENQ4Stjxawd8wVVGVGcivjsd3CVf4RXzHPGzp+MEKGngLyXzbDfS5gTt6MaKSMHnOdfgU
-	OAwpMSKTEYy/oJXIiy2rJDeBmexS+MDoPs2frDYC6Mf6jcRN1Ss0e8OfUGwANBIWD7uzY+5FTzl
-	8eEwHSIGo4XGiJU7F/kjmJK/cgMrEFlaO3qilV626Zev1ZP3dVvVIMivcrnzqfVga62xFKtPYII
-	/5mPWLDmv9DQbh2jB4RmjVw3dF44tu3DabZOgzyLY9LUJ8dhW7orbYrXiH1rs0SdqjcJdFq6pFv
-	xuGqPsl3HRBw8ggGtalJsWER2B8RFoBmTRYNY2v7ZomRKkzE+XXUDv60jQ3XzIihpHO7dXjsuW9
-	Tf8F3HOFQVHg==
-X-Received: by 2002:a05:620a:3199:b0:8b1:5f62:a5d5 with SMTP id af79cd13be357-8c6a6789902mr722211885a.62.1768614797805;
-        Fri, 16 Jan 2026 17:53:17 -0800 (PST)
-Received: from melody.ht.home ([2607:fa49:2104:2e00::983c])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6a724eadcsm356917985a.29.2026.01.16.17.53.17
+        d=1e100.net; s=20230601; t=1768660778; x=1769265578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eVFY3MiZAadIU2C7x0dHtyl2S8hyE8MpQnzv7RYPmhg=;
+        b=YEFmifT1Dx63nRcH2fzIMq0cx21iVh1I9YQNToFziKc0KiOyOaQup6zxEax2/1F9Kw
+         QztYU6ThK6oQdL+BsYj6zRewa+3++7a0HPmDB2nh4gl66E0Q6emddiFosNXdYiXcx0J5
+         hiIUO0oAg7EpHI+gbhUrtGGdbT+qavOBKozALY9lvUL/8CiDbOSfJIanwxkt9eNCg4FE
+         ZYV7aM+k/mhqwGqQAndX0EHvRewhqI0JSqdZ8NPc7Rh+/QsEuz9oKfIxecsWgB/qRe8Q
+         JZWULyNoPHEvzgZ6siTHE0dfEllKdfLCArMgrsDpZqZjKYzULVvv0TKbKpbbnQVNX5ET
+         sTnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCeiWWjOZCFIOdu/9YuqpY8FncrdzPD4F6xvuw5HjlvuqPWhY0u0lO1Ctvl1kyMzLjdMo7vbdJ0uojPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIL+oxMZ1vPfDuK/3dJVggG6lbYzBdY1VySAO6aOeUMf2puQlo
+	NUsazEm+/HdI7cQodFrZueGo5v8aFsIosHm4GjaOj5pXUtc+xsJJt9WO
+X-Gm-Gg: AY/fxX4zLGvDPm3u/MxlDe1HDMR31kBA7jvGabR36e9ZupBSQOa7f8a7rAxI9ezIjMi
+	eDtTEdWGbCh1SjqTMBejd8hWbVhvA7U4UVgl6B7zFfBkpe6km9dTvwFCkzir/hmShiqczPoZZ9K
+	DFEknLdnncrEXVmd80ntmoONZvQ4mvuaisiQlR/t6XRncF8gHR0A9fNMgiuqEK0lAaVLkbRL8Eh
+	+/iTMOVE7LXSte1JpBZ/rzSKPvCi7I84Mw52p/Ves7hBb6KAnoIPTONh2uqjGr02kQ78GavUDcL
+	SYmyn8//aJz7J3Ncw6UxQE4BWgBpzOLxyLCdet4vVgl8UdWV4jD1wC5q4K7Gc5M95mJYovhUtvV
+	gV9LPyxzZ7BfuXl5M7siDWmJ23mf+uTAGs9QUWp6ybADA1M3qKZbmEA8m8KGRxj/MjJZ1mP7Fhg
+	KwwJxEPPu4cMEBB25JTbqJwmEk
+X-Received: by 2002:a05:7022:e16:b0:11a:342e:8a98 with SMTP id a92af1059eb24-1244b282f14mr5315065c88.0.1768660777529;
+        Sat, 17 Jan 2026 06:39:37 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c0f7fsm6066983eec.3.2026.01.17.06.39.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 17:53:17 -0800 (PST)
-From: leobannocloutier@gmail.com
-To: linux@roeck-us.net
-Cc: leobannocloutier@gmail.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pali@kernel.org
-Subject: [PATCH v2 1/1] hwmon: (dell-smm) Add Dell G15 5510 to fan control whitelist
-Date: Fri, 16 Jan 2026 20:53:15 -0500
-Message-ID: <20260117015315.214569-2-leobannocloutier@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260117015315.214569-1-leobannocloutier@gmail.com>
-References: <ef59dcf1-5a53-426b-8c17-00ddc8fe5d11@roeck-us.net>
- <20260117015315.214569-1-leobannocloutier@gmail.com>
+        Sat, 17 Jan 2026 06:39:36 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 17 Jan 2026 06:39:35 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: "benoit.masson" <yahoo@perenite.com>
+Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] hwmon: it87: describe per-chip temperature
+ resources
+Message-ID: <0a4bfdac-3f3f-4dd7-87ca-a4edb58d2bdb@roeck-us.net>
+References: <20260114221210.98071-1-yahoo@perenite.com>
+ <20260114221210.98071-2-yahoo@perenite.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260114221210.98071-2-yahoo@perenite.com>
 
-After running a system upgrade on a Dell G15 5510 (kernel upgraded from
-6.17.8 to 6.18.4), the fans would spin at maximum speed whenever the AC
-power cable was plugged. I copied and adopted the fan control whitelist
-entry for the Dell G15 5511 to enable manual fan control.
+On Wed, Jan 14, 2026 at 11:12:06PM +0100, benoit.masson wrote:
+> Add per-chip temp limit/offset/map counts and wire the driver
+> to use them.
+> 
+> This keeps existing chips on the previous defaults while allowing newer
+> chips to advertise larger resources.
+> 
+> Signed-off-by: benoit.masson <yahoo@perenite.com>
 
-Signed-off-by: Leo Banno-Cloutier <leobannocloutier@gmail.com>
----
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Series applied.
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 6040a8940..93143cfc1 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1639,6 +1639,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
- 	},
-+	{
-+		.ident = "Dell G15 5510",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5510"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-+	},
- 	{
- 		.ident = "Dell G15 5511",
- 		.matches = {
--- 
-2.52.0
-
+Thanks,
+Guenter
