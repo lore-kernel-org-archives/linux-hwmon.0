@@ -1,116 +1,137 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AA6253F07
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 17:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768670182; cv=none; b=CPT2StU2zAAtT0voUplaWXhR006iV3PGDLgAVteXD0wfOOapLe9+U//s6c+UNX/B7a0bqyZYu9Xhjs2EUd02H46AFxHwfI9/UOuNPJc2QM/BFskEitenp0Bn+kqal+UPdCRv/ypm5VUvzL5IXUHHJY34cGpy+eFuRaRSU589+uY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768670182; c=relaxed/simple;
-	bh=XZ8qQTmJgsDlKe661P5iXEFq6xa7mHeyyguZErPXtT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jjE48RWmBgArDymmP6x1Xnp+5hXDx97sgLgIZqop/BkV0SHaqX30b6bDll0uelw5zXTheIkOcjTw9CJPvABghHD6RGTbr8GETxM+JUxEUPe7zP3FlrHV18xVOmKDCVKAJlz4e97Ta7loYwJVP8DQqAkIinZnU5Yi4iDt0VPoH/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M3UJ8IAX; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86959289374;
+	Sat, 17 Jan 2026 21:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768683685; cv=pass; b=XzYEN6xH99nSBJsKs4bTYlbjfScrRoI/4pB4o4/StOjcnhQ9lnxEu/u7xZES0zr3k5ZCw4os9nwSUiw2YQ0Zzkrz5mwCW1zm+gaSKvZrw1LW8qjUWiWodoz4/MFbR3BumJN4LXraiHD7QVoTNjvLcENDo4JBqq7kxHVwOvjcuKc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768683685; c=relaxed/simple;
+	bh=bJxx+BBuu5wOpM8I7XOoLpP/fg4e7MsHw458WiZKB8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=s/Q0Sg//vR6V9Ib4HyemETPpaWAtgVlfP9Jz5K9tINk4FPjCEmvzoolF+2Nh8kJSAeMxeGTnp5QNvXXdMza669no4+mPzJ+2rVSM26mWjoj6f2hxiGE96vm6FrOQXT3BErH55scba1jCR2ChXD2E6W9x4uDoMPE14StMO5S+fAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=097a69c0; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M3UJ8IAX"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2ad70765db9so2634415eec.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 09:16:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768670180; x=1769274980; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y4PPU26eDiciS4G6Di0XcBtKVmNWO7Np0WKIsYVDncg=;
-        b=M3UJ8IAXh1Y3W5lzUL88BE/vZwsKSkdmmI4YH0qfl3CTBakE6tW6YUIjUFrzUSityK
-         Q2nCvpmGdpctUH81sKWdxz1vHAwpIcPGLgPclAAg5LlfrvkTEQuxpR41D5tbXgHIyP17
-         RrUVTOm3ckIuwTetaFU7+HRAgWp7FBO87gOQVs2NuzfC5HL2WSfV1CsRb74PVSVJKJMR
-         +zk8N8udyfXuySZxnxvrrEsJ3/+R+fuVqZl/tO0ZMep2QaSluPnLy/Z3g4nV3EoDmdLN
-         fwZ3iAZKBQew4UDTkqn0OCb/VKIBCYMOlp1jJqweqgay6OmKIVpItihFIc8BZTpjF17w
-         fsyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768670180; x=1769274980;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=y4PPU26eDiciS4G6Di0XcBtKVmNWO7Np0WKIsYVDncg=;
-        b=YPrc5djjmuvncPWV/g2iCAW0SOc9s1GsZsPMT5sfPNnDPwBSN3E/P1Pz/lbbX5wjta
-         M3R4afcWkKciS9HppaHmpIIeW0LxhrmFqYlUUEnDxrS1ZEALrziO7fw3aLco/4Sgu//o
-         LX8icyDX8t2QIwxVhvPqi1HLZ+yRr7UZDhnhO5q77659s/uNZtkYS8uKE5A8WIajqRLU
-         VNTAzie12iL+PWNejCX+tDQnYTebsa2hd5uSlnBe04RceMUmp8RmynYNrxAwXaJlpPH5
-         UR13E5cy2KmZxkLy1fw1GZuC8daEmF/OH4ONUOzj7va2LR16LDSEDY7DYHaMfUuTw2jE
-         Mfgw==
-X-Gm-Message-State: AOJu0YzxoMHH/MUYX9NJBGo+X84giPW1nob0C8fltStqJe7xbzgHM+vf
-	CD1BIZf3Loj9O/qHqc7NrMoZ58m0oSEUvGW9kAYdj2/292kqDXY4CCTyl220iw==
-X-Gm-Gg: AY/fxX7MLwc4jfO29PGw7h2OQ4sr7eAfhGCSwHCFZQV2GAfc1CEPeQOsk1epQEyrC8Y
-	Cl4shIIlslpDYr84AQqsA/lEJPswNO8TrD+VWCEvY0LZwWvDsfe8WmgJTNPsr24m9gVo8QCBSWB
-	FsL6757ktU3siyfldyLBnVlRVR8IJMmkGRStiFAfVf6NYKY3+2LmVWo4Uk7kbHoWnP/EuIcxIk2
-	wmjhZk4CHBGY8R66neS1MKn5TMMnPgR93dG4XWqbtpxttDGmmNen0EOUHJH4KSsF1vbjijevmAD
-	n7OvRnIfChDczzat3Cp2zvjgJSX7AlmgLRTxVYV0l9I6kcYcsqYl+Rp2yPUg4Wteqbdr+QkJDih
-	B/HRekYnh5dsZ7Da6umXIB+zNrpvvDeeBAP85Efjbdhejai542KPRZF02TmqTrsafITb+8ACMus
-	rtPb7NByb4H/tTbQ5lTeP3e/hh
-X-Received: by 2002:a05:7300:cc14:b0:2b0:5696:26c0 with SMTP id 5a478bee46e88-2b6b4e28165mr6679776eec.2.1768670179873;
-        Sat, 17 Jan 2026 09:16:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c0eefsm6524051eec.4.2026.01.17.09.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jan 2026 09:16:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 17 Jan 2026 09:16:18 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: leobannocloutier@gmail.com
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	pali@kernel.org
-Subject: Re: [PATCH v2 1/1] hwmon: (dell-smm) Add Dell G15 5510 to fan
- control whitelist
-Message-ID: <61499322-48a7-4a63-900d-b7a997d2d1e1@roeck-us.net>
-References: <ef59dcf1-5a53-426b-8c17-00ddc8fe5d11@roeck-us.net>
- <20260117015315.214569-1-leobannocloutier@gmail.com>
- <20260117015315.214569-2-leobannocloutier@gmail.com>
+	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="097a69c0"
+ARC-Seal: i=1; a=rsa-sha256; t=1768683663; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=m/jEvTnWhMkOWIQWsdGqRrPq5tzLIA9OSIiIC82fDbVqLiBpjSvlaPUQOkYQ59roCFwlPBFXxv2R4o/pcp7hsdLL4TJ11O3Ck+uUOSqmRiCndkfws4IGBHzR6FCeCSvO0pUd20fmQFCpv0clgceB5p1bHe3XlG8jEftp2AfBLeA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768683663; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ONW/Kjo4Iy8zIk9zApmrQ4M3TAi6EzH5b9Jv+iGr0Ys=; 
+	b=Pyp0M+A5x42Y5tUT/2usNdd2k50JCKhfpziMu/08Zb3ePvPXc4Lq5jaw/IbBg9s9oKV3PYEgWsEAA9/0GudypamipNUaXMwtS8LFjc0ExRDFdNQx8rQzL99lApJGt6ggBbjXNewvlIYBbAbZl7zFPOcDjOeqOju/2rYrIErHurE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768683663;
+	s=zmail; d=rong.moe; i=i@rong.moe;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=ONW/Kjo4Iy8zIk9zApmrQ4M3TAi6EzH5b9Jv+iGr0Ys=;
+	b=097a69c0ubrsp4U2QPZ6YTr1LJUKDgG3U8KvF5lYgrjUCM11zCJrAjj2/afd7Cbr
+	sB8xBHJbGNbcz9Hv/vbzS2wB+2EwS02CYg+zJUpfO8hGRVKWBTnffoaxDDaSPMU++YZ
+	j0IEVRLNXZUoOPUrxa+0tUMKO8rMOTu1PFak59BQ=
+Received: by mx.zohomail.com with SMTPS id 1768683662700355.7582306571446;
+	Sat, 17 Jan 2026 13:01:02 -0800 (PST)
+From: Rong Zhang <i@rong.moe>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Rong Zhang <i@rong.moe>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Kurt Borja <kuurtb@gmail.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v10 1/7] platform/x86: lenovo-wmi-helpers: Convert returned buffer into u32
+Date: Sun, 18 Jan 2026 05:00:42 +0800
+Message-ID: <20260117210051.108988-2-i@rong.moe>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260117210051.108988-1-i@rong.moe>
+References: <20260117210051.108988-1-i@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260117015315.214569-2-leobannocloutier@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Fri, Jan 16, 2026 at 08:53:15PM -0500, leobannocloutier@gmail.com wrote:
-> After running a system upgrade on a Dell G15 5510 (kernel upgraded from
-> 6.17.8 to 6.18.4), the fans would spin at maximum speed whenever the AC
-> power cable was plugged. I copied and adopted the fan control whitelist
-> entry for the Dell G15 5511 to enable manual fan control.
-> 
-> Signed-off-by: Leo Banno-Cloutier <leobannocloutier@gmail.com>
+The Windows WMI-ACPI driver converts all ACPI objects into a common
+buffer format, so returning a buffer with four bytes will look like an
+integer for WMI consumers under Windows.
 
-Applied, after updating the patch description.
+Therefore, some devices may simply implement the corresponding ACPI
+methods to always return a buffer. While lwmi_dev_evaluate_int() expects
+an integer (u32), convert returned >=4B buffer into u32 to support these
+devices.
 
-Guenter
+Suggested-by: Armin Wolf <W_Armin@gmx.de>
+Link: https://lore.kernel.org/r/f1787927-b655-4321-b9d9-bc12353c72db@gmx.de/
+Signed-off-by: Rong Zhang <i@rong.moe>
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+---
+Changes in v7:
+- Fix mistakenly inverted boundary check
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 6040a8940..93143cfc1 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1639,6 +1639,14 @@ static const struct dmi_system_id i8k_whitelist_fan_control[] __initconst = {
->  		},
->  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
->  	},
-> +	{
-> +		.ident = "Dell G15 5510",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell G15 5510"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_30A3_31A3],
-> +	},
->  	{
->  		.ident = "Dell G15 5511",
->  		.matches = {
+Changes in v4:
+- Accept oversized buffer (thanks Armin Wolf)
+- Use get_unaligned_le32() (ditto)
+
+Changes in v2:
+- New patch (thanks Armin Wolf)
+---
+ drivers/platform/x86/lenovo/wmi-helpers.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/platform/x86/lenovo/wmi-helpers.c b/drivers/platform/x86/lenovo/wmi-helpers.c
+index f6fef6296251e..7379defac5002 100644
+--- a/drivers/platform/x86/lenovo/wmi-helpers.c
++++ b/drivers/platform/x86/lenovo/wmi-helpers.c
+@@ -21,6 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/export.h>
+ #include <linux/module.h>
++#include <linux/unaligned.h>
+ #include <linux/wmi.h>
+ 
+ #include "wmi-helpers.h"
+@@ -59,10 +60,24 @@ int lwmi_dev_evaluate_int(struct wmi_device *wdev, u8 instance, u32 method_id,
+ 		if (!ret_obj)
+ 			return -ENODATA;
+ 
+-		if (ret_obj->type != ACPI_TYPE_INTEGER)
+-			return -ENXIO;
++		switch (ret_obj->type) {
++		/*
++		 * The ACPI method may simply return a buffer when a u32
++		 * is expected. This is valid on Windows as its WMI-ACPI
++		 * driver converts everything to a common buffer.
++		 */
++		case ACPI_TYPE_BUFFER:
++			if (ret_obj->buffer.length < sizeof(u32))
++				return -ENXIO;
+ 
+-		*retval = (u32)ret_obj->integer.value;
++			*retval = get_unaligned_le32(ret_obj->buffer.pointer);
++			return 0;
++		case ACPI_TYPE_INTEGER:
++			*retval = (u32)ret_obj->integer.value;
++			return 0;
++		default:
++			return -ENXIO;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.51.0
+
