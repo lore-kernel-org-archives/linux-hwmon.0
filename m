@@ -1,95 +1,168 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87657143C61
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 14:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF401A256B
+	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 15:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768660780; cv=none; b=Xa2b4pA6ylN/WJoC0INlLrCwYgQ7kkLNcRUEy2zTiCuTaseFAFIJ1g9WpPRdhUoA/lQJH68Vy+8estEGXAZWSN9WVWkyAh1GzXsHhhhGh47+11n6onsDgIboH/FmRndDqLHMIAE7KCWb7eTX9E66pqs30PeLaIfm/UjZPnq3PRM=
+	t=1768664635; cv=none; b=gGeYJT38kU2fsvhy4cyZhteUCTE8w/INAylo0aqoAGXcwkJaxaC0NJ8usA+8+Cv4b60LoSFcPv/og9HCdohNkEYfvwvqXYsyBKST4ZVicOfM3iGGD+wFXfppkPpv/Mc6+oIfyQ/b5uzmUKzsXPwWEzEl7fJ/6vnWwkUR/Rocf5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768660780; c=relaxed/simple;
-	bh=PYuKCOV6aj1XU3iT8oUN4z7XzxiPHlZ7vT3vAXmH8vs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQykGwRHX4DrqSORtHzLsQ9WHtXKHYcNa5U5d/IJ7RGy8Z/qPw4+POlI1p8mjWg1lvD88/mQSD0a7NAsZ2D1TbSrUi8+Wno0GSGoC9ClRjWUEDh3ysfME86slPPoccB3shzfFvdkBQkPFm0lEIDUVm+pmlLdXggwLJIUG8tx3cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LrrNt4ks; arc=none smtp.client-ip=74.125.82.53
+	s=arc-20240116; t=1768664635; c=relaxed/simple;
+	bh=zGVqiUZbExuJp8HPc2yTb+NFpNh3b3ieYwXH1xIDW3w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=MoZdjSvQG33Co0LUfaZt9UueI2MyP5weHbzmS2VDLn2Pkl3zusxmxOfe9I6hOdE5a9xC4xSLqaxa1obhInlqhcCj0kKHzTDinAhJ/69fWLbqSWfYfL9m2OXWKYFyor2IDHrKv47fZTEqglOYSSVsQD8qcrftd8C/ovoOK8r2t9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=evx2pCjQ; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrrNt4ks"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12336f33098so2407725c88.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 06:39:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="evx2pCjQ"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1232d9f25e9so5717358c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 07:43:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768660778; x=1769265578; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eVFY3MiZAadIU2C7x0dHtyl2S8hyE8MpQnzv7RYPmhg=;
-        b=LrrNt4ksoUZ3ZwcEE4OCU40M/yMUcc+Um66sbja/34j0e06I4vValAWXVzNE8Kys2N
-         Kbu4QMMzvkh1+ekZXwke8yKOzzsmH0bRwgCApGFNR2TZf2fgZ5nYDNpLeOas0zKkXgep
-         gdlANO/Degcy6C2JZ4MfkFZ5QGz9PiU+1l0nFCWkCq6AcBX5/S2eSBqd/LazRSHMC1jh
-         DK/57W81rYNAImZPgwQhmUjwhSRC2vBfqXo+/sNDmoJ6rVqxtvZqxxe3ghKhEbfhk/z/
-         w8K4ExnnSj9QwDzslugG25mlLY9cBIXsN2F14OMoQPB6rXiD2d/zf/H4oy9148qryOaA
-         kgIA==
+        d=gmail.com; s=20230601; t=1768664633; x=1769269433; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=eOiA/l4ZrHwITLtT0Hu7f0cQ0Aja3092QLlw2Z57TmM=;
+        b=evx2pCjQaZft7bRoxlfqYAfmhtyTS3WOajLif9W71JqAfYgCw6IhlJDb+t9b+dWNbs
+         ME5zXs2TjZDSkrrO41HnXgEtRIcZ2+qAUl/c8MooRVHI4pMUxSYtjMibfgkmngt2o7fV
+         1gogfMP9Fk9vwTvQOHNoRmBXD2DqyCH5+OpdA++KgmqYaf9BYE+6IztvTv39nS6WIrZ0
+         qq7KiEb7HpSQ95Objla3DLw3j4bsceKacoxIjv/BUiG10pdHM0Ojc8K1YklsGdkjb7Nd
+         NIqApi954DurXVLHbZF9Uc+bEXXpH4ktlRAKvhMql2Gwx0aUP10nB0pWjbHSRfE7I4W9
+         lOWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768660778; x=1769265578;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eVFY3MiZAadIU2C7x0dHtyl2S8hyE8MpQnzv7RYPmhg=;
-        b=YEFmifT1Dx63nRcH2fzIMq0cx21iVh1I9YQNToFziKc0KiOyOaQup6zxEax2/1F9Kw
-         QztYU6ThK6oQdL+BsYj6zRewa+3++7a0HPmDB2nh4gl66E0Q6emddiFosNXdYiXcx0J5
-         hiIUO0oAg7EpHI+gbhUrtGGdbT+qavOBKozALY9lvUL/8CiDbOSfJIanwxkt9eNCg4FE
-         ZYV7aM+k/mhqwGqQAndX0EHvRewhqI0JSqdZ8NPc7Rh+/QsEuz9oKfIxecsWgB/qRe8Q
-         JZWULyNoPHEvzgZ6siTHE0dfEllKdfLCArMgrsDpZqZjKYzULVvv0TKbKpbbnQVNX5ET
-         sTnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCeiWWjOZCFIOdu/9YuqpY8FncrdzPD4F6xvuw5HjlvuqPWhY0u0lO1Ctvl1kyMzLjdMo7vbdJ0uojPw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIL+oxMZ1vPfDuK/3dJVggG6lbYzBdY1VySAO6aOeUMf2puQlo
-	NUsazEm+/HdI7cQodFrZueGo5v8aFsIosHm4GjaOj5pXUtc+xsJJt9WO
-X-Gm-Gg: AY/fxX4zLGvDPm3u/MxlDe1HDMR31kBA7jvGabR36e9ZupBSQOa7f8a7rAxI9ezIjMi
-	eDtTEdWGbCh1SjqTMBejd8hWbVhvA7U4UVgl6B7zFfBkpe6km9dTvwFCkzir/hmShiqczPoZZ9K
-	DFEknLdnncrEXVmd80ntmoONZvQ4mvuaisiQlR/t6XRncF8gHR0A9fNMgiuqEK0lAaVLkbRL8Eh
-	+/iTMOVE7LXSte1JpBZ/rzSKPvCi7I84Mw52p/Ves7hBb6KAnoIPTONh2uqjGr02kQ78GavUDcL
-	SYmyn8//aJz7J3Ncw6UxQE4BWgBpzOLxyLCdet4vVgl8UdWV4jD1wC5q4K7Gc5M95mJYovhUtvV
-	gV9LPyxzZ7BfuXl5M7siDWmJ23mf+uTAGs9QUWp6ybADA1M3qKZbmEA8m8KGRxj/MjJZ1mP7Fhg
-	KwwJxEPPu4cMEBB25JTbqJwmEk
-X-Received: by 2002:a05:7022:e16:b0:11a:342e:8a98 with SMTP id a92af1059eb24-1244b282f14mr5315065c88.0.1768660777529;
-        Sat, 17 Jan 2026 06:39:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b34c0f7fsm6066983eec.3.2026.01.17.06.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jan 2026 06:39:36 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768664633; x=1769269433;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eOiA/l4ZrHwITLtT0Hu7f0cQ0Aja3092QLlw2Z57TmM=;
+        b=GWz6Q5rhsALu5XVki385RIFUgk9uhEpVo87EMuGs21JEoFhRsMHRzjDkIOlNMtiUX+
+         8V5E/Ib9NtIU/UmRKfVdU9t/8ZiV4NxAOYfopy3tRn2NlZlMDEOZ+RnnO+2kfxmhRDHV
+         dfO3DbOw9QqhqE0VYce2+FqpPk/QqaDxvoWNmLw6s7TLCfsxSqXlKGo7uDeGhq2iJhFz
+         47aXQB1cgGJTbQ+32rSknpyZ7bvf2fMavQBnSoFnnqLP2ndSE6zvoypGZT0sGtwCBZsJ
+         rb1Uf+YEqIQi7OYIi1u59HpIK28PyWc1edRwGY1LxxCVwpMLXKpB7m4gQTKspfL2TyTV
+         hIdg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJbO5UONF1f1HjKIFDVkbRAeJAMTKfsjs3SWwFI5rlDO/sEwDNjuO9Y5CqAvM2udKgPtgdzH5AdLXiSw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YygOsOmoKU91FQir/7jGWpOHwQ3pFmc+RCEJ6RsEuG8FFpRy7nu
+	B2Hy7wTIKi+Qnyf3ASq+c0MGWsk+E+hbTiNsB5UivAUCxtkpvvQLhk6+CLxWqA==
+X-Gm-Gg: AY/fxX6vWloGZOIo90T1joi+VsJhLqqoGy6Z3dZNkEFggJU1sZc/tm5LOen8FMMmC8I
+	ZB+whDMubahb/Cer7ekA6nKe4hXAb6pXlugB8qV0e5owjTj+urA7Dp5O4rG9sg+ozpc2SAv80Nf
+	FPgANRNE07+t8+FTckWnaATrDKJUEUXVKtwwlC1bnDxbLkJA8CTUhmHqWjODP77wjESZ28L68PS
+	UTTT9gKVnsuDJ3lWzeUw0FWUIb5ZwyQuREMmrjwH/pyKnFk1bI5LOMBmDnINk4DlWPM2/hqhA/b
+	pFs6ifk7CYbHDwHUM6AcnvqfBjaBFdzfpdkp6CX93ommMHFuGo518vCtxhnUbLjqku9zRi4wlIQ
+	/VFT5VSYTnjobE9iaJ24sUJitHq+6pe6DtXMd85kStCl786YFme8HeUOv40V70sqoX7DtJQE/gl
+	FGg4ouDma8xv7gCQL8tqEfV1IzrgjQciblPojzxewfKCEGuR0Pmj0DDMfg1OSZ
+X-Received: by 2002:a05:7022:2204:b0:11e:3e9:3e99 with SMTP id a92af1059eb24-1244a7bbf8dmr6647517c88.49.1768664632816;
+        Sat, 17 Jan 2026 07:43:52 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244ac6c2besm7817777c88.5.2026.01.17.07.43.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jan 2026 07:43:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 17 Jan 2026 06:39:35 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: "benoit.masson" <yahoo@perenite.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] hwmon: it87: describe per-chip temperature
- resources
-Message-ID: <0a4bfdac-3f3f-4dd7-87ca-a4edb58d2bdb@roeck-us.net>
-References: <20260114221210.98071-1-yahoo@perenite.com>
- <20260114221210.98071-2-yahoo@perenite.com>
+Message-ID: <bc9701f5-8873-4778-b5b0-1e538de1f38b@roeck-us.net>
+Date: Sat, 17 Jan 2026 07:43:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114221210.98071-2-yahoo@perenite.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: hwmon: nct6683 ASRock B850 (customer ID 0x164a) PWM write blocked
+To: tech@biorez.de, linux-hwmon@vger.kernel.org
+References: <b1a782b4731c1e04b49cd3173340cdd0@biorez.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <b1a782b4731c1e04b49cd3173340cdd0@biorez.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 14, 2026 at 11:12:06PM +0100, benoit.masson wrote:
-> Add per-chip temp limit/offset/map counts and wire the driver
-> to use them.
+On 1/16/26 13:52, tech@biorez.de wrote:
+> Hello hwmon maintainers,
 > 
-> This keeps existing chips on the previous defaults while allowing newer
-> chips to advertise larger resources.
+> I'm testing the nct6683 hwmon driver on an ASRock B850 LiveMixer WiFi board and ran into a limitation regarding PWM fan control.
 > 
-> Signed-off-by: benoit.masson <yahoo@perenite.com>
+> Hardware details:
+> - Board: ASRock B850 LiveMixer WiFi
+> - Super I/O: Nuvoton NCT6686D
+> - Customer ID: 0x164a
+> - BIOS: ASRock 5.35
+> - EC firmware: 1.0 (build 10/29/24)
+> - Kernel: 6.18.5 (Fedora 43)
+> 
+> The driver detects the chip correctly and exposes temperatures, voltages, and fan RPMs. The nct6686 device shows up under /sys/class/hwmon/ and pwm1-pwm6 nodes are present, but all pwm entries are read-only (0444), so fan control is not possible.
+> 
+> Relevant dmesg output includes:
+> Enabling support for unknown customer ID 0x164a
+> NCT6686D EC firmware version 1.0 build 10/29/24
+> 
+>  From looking at the driver, this seems to be expected behaviour for unrecognized customer IDs. I wanted to ask whether customer ID 0x164a (ASRock B850 LiveMixer WiFi) could be enabled for PWM write access.
+> 
+> I'm happy to test patches or provide additional information if needed.
+> 
 
-Series applied.
+pwm write access is only enabled for Mitac boards. Adding the customer ID
+would not change that; the only difference would be that you'd no longer
+have to provide the force module parameter.
+
+If you can test patches, I assume you can write them as well. Please
+feel free to submit a patch adding the new customer ID to the driver.
+However, again, that would not enable pwm write access.
+
+In case you wonder why pwm write access is not enabled: The NCT668X chips
+are programmable embedded controllers. The controller software varies
+from board to board, as can be seen by the customer ID and firmware
+version. The API between main CPU and the EC is not well defined,
+and may differ from board to board. It may even differ for different
+versions of the chip used by a single manufacturer on different boards.
+For all but the Mitac boards, access is only possible due to reverse
+engineering and guesswork. While that is good enough for read access,
+it would be way too risky for write access.
 
 Thanks,
 Guenter
+
