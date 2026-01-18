@@ -1,67 +1,67 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6AA45C0B
-	for <linux-hwmon@vger.kernel.org>; Sun, 18 Jan 2026 00:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16852BB13
+	for <linux-hwmon@vger.kernel.org>; Sun, 18 Jan 2026 00:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768696061; cv=none; b=Z3aYlHg70pQzqWE5M5fYFetJi4G2RCEaBc2e5F6PpTzhXsE62McfckVOmqAvgf0CRvZa9XckRE6KPmvf/9gqQDm58CNrueQA7Dpeb8fX7DK5rM295pjM7ZrwHhjg87FcixhR+YjhmFPGkNiJzmQ/sN8ibL2KOFoziVrwh3cN53E=
+	t=1768696991; cv=none; b=SD10ynFLlNNwiLLMn1rvcV2/dVs5lVLEBLBr/Esepk/FIS/kzucA2B23MbwSZyOxRpHjMUgHq8kJU3Tg8goCCm//2Mpld/O6xLW0RFow7gBY66j658upWe4qlYU5eNo+bQlqBXFvCPRf9ekOk4N4AR8ZNH9HchBD3sDu6feS/GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768696061; c=relaxed/simple;
-	bh=UC18EEQnpo5KNQ1B8+0gPq/jSkfQsmAtHCiWzpfW+1M=;
+	s=arc-20240116; t=1768696991; c=relaxed/simple;
+	bh=8h6crzWe1SV07XPvNQ3YRXAZ1GEXmBh2p8v+I06VDlc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OQpLywWi9jRg2V67lJeMuTfbLzuwcWU2VU842iy3BOiFzkP5zfQSMp55sc0hPQWC6K/2O52bGk+4u9UMGK6DBxaLVhCzFYe05Ffv54OVNnVU4T2NzU/BEWmAjAx58HW1mHMl1QHgk4L6iaYrDDaxYvMq5p6z5VhBeL+1WiOV9c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EJwAZOfj; arc=none smtp.client-ip=74.125.82.176
+	 In-Reply-To:Content-Type; b=q//c92YGWk+VKzHDS61VglYFWWtdUQQmk8gGat9r7LFgyV8u5pCflcMfcYuDJeACt7nwRgLhL2wOsF3Bs5Q9KLa1GliVjj1w/nklrUZ8QlQKDQXWDRtFMLr7xFzgHpo6QxMSebrqUx9PCPwuHOzL2iZQNmXma3eTuLcyPCiCtcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NODlzAbg; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EJwAZOfj"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ae29ddaed9so2107785eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 16:27:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NODlzAbg"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-124566b6693so1644237c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 16:43:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768696059; x=1769300859; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768696989; x=1769301789; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfyXBIPR2trIB5PXoGw7goBrIzOi0pwZk7JsXji+6PM=;
-        b=EJwAZOfjp8QoBsvbqulEdFR0WDRpazN1rLCJpQyeqn69QtcOqYu+M8RUcx7L0ZrIJW
-         6Q1Z2FFzfrOJnc//p7QQMGCiYQPPGxMXzLL1GRzWUAZK8IsUOY4TubdaOExKFjSqS//t
-         QPpT37vPOB4xqkoZRSc2j5hWsbXkLSs0S3GY+jQAUwcsZ/o7x32pOBzI6AIENt4hhVqH
-         ypaIaPS9zVN/Ku5O48nZiMrSnSYrAQqH95CBr3byV1cjYzH40EEgMdNZInoEuo3jhrZt
-         UxSiSt+YRIC63/u9CP9SF5TIiQFx0Xjt8SRJT04dOwYfZNLg7SfRVPxCasQiiK3k+Ggs
-         eb0A==
+        bh=6ngnw0Pf7oGksa0zFf7fwqwQCWR+z2Dul3Lwc4iUWxU=;
+        b=NODlzAbgkFxp5ANgsWxBx28/6NHgKdXCqLpIkqF1fq/2mxA3RtbNnyD5bC1iBRlfQH
+         aM6csNvzBajpoB19gtNHX8wwF3pnIl2WmLsJzljC33RrwX8wO2Aa1UV+XvDm65WPLGdF
+         YvPPQsErdfUbo6bUfafAHrEEyuw6yOyoLcJu9LjTxwoQ72fuckY8IVFYoCCy4KkChASP
+         maHaBzgLp2Eg8lLYA6BfYfAtybgY8lNckdihLwVwzS+t4LUy/7rJRKuOmDVe5bed6GR3
+         SXxalmcfVe4AF2bINxvHQbv/niCGiRzIUL82/e0pOsooAr74ZDb4Wxxu8XvpB6CgKTj+
+         lbog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768696059; x=1769300859;
+        d=1e100.net; s=20230601; t=1768696989; x=1769301789;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bfyXBIPR2trIB5PXoGw7goBrIzOi0pwZk7JsXji+6PM=;
-        b=eHMZSK5wT4UliTbnc2o+lp/tf409Y03IIvfj/4bFunvlhW2GaUzP3K4sUShwynJBak
-         32YZ6hGXUS/TnqfIuwqx0IBztlt+ejpuGXFHtS21ekvHmYALJ+TrOOOWBh8FkoI4UyhA
-         MbTNh1g81WAkHRWp5JqedB984bs8cM91nAMbR0++VaiGw0qwcAKxUEdBoCs49Nygjfnn
-         pCJzn3N21Bdpm50AT9DHsUlVJzT94XBSUvTpXKZiSYblrcVk3e6+IW+sGfeFY2P7sgkL
-         hB5O7trde0U0x8J+y6CkzpognPxZ98tM+cXK3o/jljTCe1sejothy2q+ITAw+qCzC0ns
-         wZ0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVFBMSu7fSz3BqlAxjIQwEVhLv5gRFq8R/yYS96/uE2d1ddtMGxwf941ZDmmkpPN19El7VeSqfOQIi1mQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrV4znGh2uyASwNNGYmo6q6jsO+0VCVFF9ifNs8GbHMnlwfcW+
-	M+jw3HHzk4f1nhW5yH6wNZ13AoimGKSL8Eb13GMmbOQ+1QPm4uh8YUXB
-X-Gm-Gg: AY/fxX7VfXBw+eTaS4LW0+hENU7SAsCX15yAakEdPQTzUsm0cENQ62siLVu78+aSGXT
-	60lgioY7mMSBZ9eziWL6r2qeUdgWfZY25BKVKh1vt7XCP6lU23VtB3yuOmuWTyRMZNZV80RvlCx
-	EnkJlSsNnkH+puRUPHjoTNeLVkkZvr7bzIHMBoZcP1yXJuyipw80RGn1FHTXEskoaZl6jwAF9X+
-	RnUrWrcVxs8pcHnoLh5+g6VotmCORxKYKcUdLOCFgsSlvaLY/GcOn9R2Gt9ersQdhXM4oMlgyh/
-	lbjATSK3y2Jfq/8zVlQLsR+s8wd1UHH0kpWD3YoG66JW/nlIQUwXwOhOqjn7NmM/GmGc1lUdytH
-	5ofsj7UfhoJVCJf9w3KsLRz0uMgNsjFhqWvhSxiylvDKVsRAd37XkV24JWCyAKW6LLkgil13Xvb
-	esxIhWzFvC25HSpASd0UUX/Ap5BekLFGQSe21NkZSvSIvExTBP6kTn69Eg+n2l
-X-Received: by 2002:a05:7300:4347:b0:2a4:3593:ccad with SMTP id 5a478bee46e88-2b664300ff3mr9615863eec.10.1768696058870;
-        Sat, 17 Jan 2026 16:27:38 -0800 (PST)
+        bh=6ngnw0Pf7oGksa0zFf7fwqwQCWR+z2Dul3Lwc4iUWxU=;
+        b=q7SQGGwr+pgu8vLYRAWepfkYG1ize6JubDGflB/KZJ4wYttH32lK0mayZzeg87F365
+         vXvv9ggmrmC11EILdSkOEU/YGHVJZFoJ7CAlNLYQ0K/2AqWz0ubuUxF9rOTCQGflNHrU
+         BGVKqprLsTeXzQYbCBlVP7RTdKzHn5//LLN319ug8pVyE4nUMdEgp1u7dRfTPaDc/7ab
+         Bmtg+f7TnRPoA1WnBiO5mXUtWXFFvX/7XC9grX74PcLwaaD2PuPGDKI2CeLEER75sKUg
+         NgQP4sT+0ls23L0rlHNyQgYAJjST6ivHonVZtIqfpJLBIs8xBUcIV176DUn0371idlbA
+         6QhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVvxgkCmsh7T9MC8bxXARgB1SzRklxJ1PEOMS/1pnyQLVM/g1QlxlYCiQQraDgZExBdrKqmlGikEw0s0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUVUPqeM7XUXie4t8VaxquDdA1LyqWB+kxGQpJ4tM53lrc1dVw
+	jBWOA6FuUJqo+fSVvFIMJcYdVGY147yC2cxwVWaBjrHROLQUR8wt8WIL
+X-Gm-Gg: AY/fxX6q4Swvjp2HsguhyoQ2xJjeNLS/LC11z5n65fWSy5CclkIwbL/5eiz8rOiYLnS
+	eHHSmtTeuQqtCpo97fqtZyW5wL+TxrQT5xmN+yuEewHe/F+MQlct8WaiQq16Zs2dbjp1oKuEMMZ
+	UMZpRBDXSTyup1pwjP1ZzougsTEejGbcIjWAGdw/h//oLGiGpPc5Db7EIrKn5YY6+s/KmuEClFJ
+	C+iQuO7ljFmL0IpLotSsH5OgishdoY/wG2JXd67PuZKKZeVgO04ZkDVbt/pGdoC0SG8pUQ761qb
+	S6Vd9IYAS3GFSSp3eET4pFs20gg2RhiFfo7T0TTkb4tG2uPsKJYVLdgwqgisbBnaTAm7EOXurQ7
+	gUwdeUjZbeNd0XE/NxwpSUgparc5EW4K5lxxKq3+koV3Y1/Fy8A3tM53i4rr5uoYIobSuKOm2cC
+	R1xMd51Qhx2WopaOAki1NaPWDWvpeCJHJ7CZ4zPpsBXn96F5Gey1lmEz2X4JkP+1Z6t46Co04=
+X-Received: by 2002:a05:7300:148b:b0:2af:fbb:97cf with SMTP id 5a478bee46e88-2b6b5060894mr7206631eec.43.1768696988783;
+        Sat, 17 Jan 2026 16:43:08 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b3502c65sm7335128eec.8.2026.01.17.16.27.37
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b365650bsm7603059eec.29.2026.01.17.16.43.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jan 2026 16:27:38 -0800 (PST)
+        Sat, 17 Jan 2026 16:43:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0ae2d448-06e3-41f6-89aa-8aa3f939d64f@roeck-us.net>
-Date: Sat, 17 Jan 2026 16:27:36 -0800
+Message-ID: <db48e680-2386-449f-8882-387e8069c541@roeck-us.net>
+Date: Sat, 17 Jan 2026 16:43:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,17 +69,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] hwmon: Add support for the LTC4283 Hot Swap
- Controller
-To: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, "Rob Herring (Arm)" <robh@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
-References: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
+Subject: Re: [PATCH v4 RESEND 0/8] hwmon: (ina3221) Various improvement and
+ add support for SQ52210
+To: Wenliang Yan <wenliang202407@163.com>, Jean Delvare <jdelvare@suse.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260114081741.111340-1-wenliang202407@163.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,92 +122,115 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
+In-Reply-To: <20260114081741.111340-1-wenliang202407@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Nuno,
-
-On 12/23/25 04:21, Nuno Sá via B4 Relay wrote:
-> This is v3 for the LTC4283 how swap controller. Main change is that I'm
-> now using the auxiliary bus for adding the GPIO device (done depending
-> on FW properties).
+On 1/14/26 00:17, Wenliang Yan wrote:
+> Resending this series.
 > 
-> Similar to the LTC4282 device, we're clearing some fault logs in the
-> reset_history attributes.
+> 1.Add review information for the binding(PATCH 1).
 > 
-> Guenter, in [1] you can find some replies for some questions you had in
-> v2 that likely you don't remember anymore. Regarding the regmap story I
-> ended up adding a secong regmap for the 16 bit wide registers which
-> seems like a clean solution (if I'm not missing nothing).
+> 2.Modify the description of the patch(PATCH 2).
+> 
+> 3.Add initialization for 'alert_type_select'(PATCH 4).
+> 
+> 4.Add out-of-bounds checks for the array(PATCH 8).
+> 
+> ---
+> v3: https://lore.kernel.org/linux-hwmon/20251120081921.39412-1-wenliang202407@163.com/
+> v2: https://lore.kernel.org/linux-hwmon/20251118125148.95603-1-wenliang202407@163.com/
+> v1: https://lore.kernel.org/linux-hwmon/20251111080546.32421-1-wenliang202407@163.com/
+> 
+> Wenliang Yan (8):
+>    dt-bindings: hwmon: ti,ina3221: Add SQ52210
+>    hwmon: (ina3221) Add support for SQ52210
+>    hwmon: (ina3221) Pre-calculate current and power LSB
+>    hwmon: (ina3221) Support alert configuration
+>    hwmon: (ina3221) Introduce power attribute and alert characteristics
+>    hwmon: (ina3221) Support for writing alert limit values and modify the
+>      'ina3221_read_value' function
+>    hwmon: (ina3221) Support write/read functions for 'power' attribute
+>    hwmon: (ina3221) Modify write/read functions for 'in' and 'curr'
+>      attribute
 > 
 
-Sorry for the long delay.
+I applied the series to the branch and asked to an AI code review.
+The applied patches are:
 
-Actually I prefer the solution used in the lm75 driver: Map all registers
-to 16-bit registers using a regmap bus. Would that be possible ?
+2befc15cc315 (HEAD -> ina3221) hwmon: (ina3221) Modify write/read functions for 'in' and 'curr' attribute
+fe1c157ccfb6 hwmon: (ina3221) Support write/read functions for 'power' attribute
+12ac733cc62c hwmon: (ina3221) Support for writing alert limit values and modify the 'ina3221_read_value' function
+306f47c14733 hwmon: (ina3221) Introduce power attribute and alert characteristics
+bd15aff74e6b hwmon: (ina3221) Support alert configuration
+5780752da297 hwmon: (ina3221) Pre-calculate current and power LSB
+dabf3c279a1f hwmon: (ina3221) Add support for SQ52210
 
-Other than that, I ran the series through an AI review. This is what it told me:
+This is the AI feedback:
 
-   Identified Violations and Observations:
+Review Summary
 
-    * Alphabetical Order of Includes: In drivers/hwmon/ltc4283.c, the include files are not strictly in alphabetical order.
-        * #include <linux/hwmon.h> is listed before #include <linux/hwmon-sysfs.h>.
+   The top 7 patches (commits dabf3c279a1f to 2befc15cc315) introduce support for the Silergy SQ52210 chip. While the overall structure follows the project conventions, there are several critical issues that need to be addressed.
 
--> Actually, linux/hwmon-sysfs.h> does not have to be included in the first place.
+   1. Arithmetic Overflows on 32-bit Systems
+   Several calculations can overflow a 32-bit long, which is common on many embedded architectures supported by the Linux kernel.
 
-        * According to strict ASCII sorting (e.g., LC_ALL=C sort), hwmon-sysfs.h should come first because the hyphen - (ASCII 45) precedes the dot . (ASCII 46).
-    * Documentation Discrepancy: The file Documentation/hwmon/ltc4283.rst includes a section for "Addresses scanned" listing I2C addresses 0x10-0x17 and 0x20-0x2E.
-        * Inaccuracy: The driver does not implement a .detect function, meaning no I2C address scanning is actually performed.
-        * Guideline Violation: The submitting-patches.rst guideline states that only specific I2C addresses (0x18-0x1f, 0x28-0x2f, etc.) shall be probed. The addresses listed in the documentation (specifically 0x10-0x17) are outside of this
-          approved range. While the driver doesn't probe, the documentation misleadingly suggests it does so on non-approved addresses.
+    * `ina3221_read_power` (Patch 2: `fe1c157ccfb6`):
 
--> Please fix.
+    1     *val = DIV_ROUND_CLOSEST(regval * ina->power_lsb_uW, 1000);
+       With a 16-bit regval (up to 65535) and a possible power_lsb_uW of up to 800,000,000 (for a 1µΩ shunt), the product can reach ~52.4e12, significantly exceeding the ~2.1e9 limit of a 32-bit signed long. Even with a standard 10mΩ shunt,
+   the product is ~5.2e9, which still overflows.
+
+    * `ina3221_read_curr` (Patch 1: `2befc15cc315`):
+
+    1     *val = DIV_ROUND_CLOSEST(regval * ina->current_lsb_uA, 1000);
+       Similar to power, regval * current_lsb_uA can exceed 2^31 if the shunt resistor is small (e.g., < 1mΩ).
+
+    * `sq52210_alert_limit_write` (Patch 3: `12ac733cc62c`):
+
+    1     regval = DIV_ROUND_CLOSEST(val * 1000, ina->current_lsb_uA) & 0xfff8;
+    2     ...
+    3     regval = DIV_ROUND_CLOSEST(val * 1000, ina->power_lsb_uW) & 0xfff8;
+       The val * 1000 operation can overflow if val (in mA or mW) is large. For power, a value above 2.1kW will overflow.
+
+   Recommendation: Use u64 for intermediate products and div_u64 or DIV_S64_ROUND_CLOSEST to ensure 64-bit arithmetic is used where necessary.
+
+   2. Documentation Typo (Patch 4: 306f47c14733)
+   In Documentation/hwmon/ina3221.rst:
+
+    1 power[123]_input        Current for channels 1, 2, and 3 respectively
+   The description for power[123]_input should be "Power for channels..." instead of "Current".
+
+   3. Missing Channel Validation (Patch 1: 2befc15cc315)
+   In ina3221_write_in, there is no check to ensure the channel index is within the valid range for alerts (0-2) before calling sq52210_alert_limit_write.
+
+    1 static int ina3221_write_in(struct device *dev, u32 attr, int channel, long val)
+    2 {
+    3     ...
+    4     case hwmon_in_lcrit:
+    5         return sq52210_alert_limit_write(ina, SQ52210_ALERT_BUL, channel, val);
+   Since in4_lcrit through in7_lcrit might be visible (due to ina3221_is_visible logic), a user could write to these attributes. sq52210_alert_limit_write then performs channel % INA3221_NUM_CHANNELS, which would cause in4_lcrit (shunt
+   voltage) to overwrite the bus voltage alert for in1.
+
+   Recommendation: Add if (channel >= INA3221_NUM_CHANNELS) return -EOPNOTSUPP; to ina3221_write_in for the lcrit and crit attributes.
+
+   4. Incorrect Current Alert Validation (Patch 3: 12ac733cc62c)
+   In sq52210_alert_limit_write:
+
+    1 if (item >= ARRAY_SIZE(alert_groups) || val < 0)
+    2     return -EINVAL;
+   This rejects negative values for all alert types. However, the SQ52210 (and INA3221) supports bi-directional current measurement. A "Shunt Under Limit" (SUL) alert should logically be able to trigger on negative current values if the
+   hardware supports it. The subsequent code in the same function even attempts to handle negative values with clamp_val(regval, -32760, 32760).
+
+   Recommendation: Allow negative values for SQ52210_ALERT_SUL.
+
+   5. Inconsistent Register Masking (Patch 3: 12ac733cc62c)
+   In sq52210_alert_limit_write, the SUL and POL types apply & 0xfff8 to the register value, but BOL and BUL (Bus Over/Under Limit) do not. If the hardware ignores the lower 3 bits for all limit types on these registers (as the comments
+   suggest), this masking should be applied consistently.
+
+I did not verify if the entire feedback is correct, but it does look reasonable.
+Please fix or explain why the feedback does not apply.
 
 Thanks,
 Guenter
-
-> [1]: https://lore.kernel.org/linux-hwmon/0765a0b89779331c62a3f136ef030f7f2f40ea47.camel@gmail.com/
-> [2]: https://lore.kernel.org/linux-iio/cover.1761588465.git.geert+renesas@glider.be/
-> 
-> ---
-> Changes in v5:
-> - Patch 2:
->    * Added a secong regmap for the 16bit wide registers;
->    * Add default value for rsense so that we can probe without FW
->      properties;
->    * Make sure to give the right file permissions to the reset_history
->      attrs.
-> - Patch 3:
->    * Make sure to get the right regmap (given that the device now has 2);
->    * Add error handling for getting the regmap.
-> - Link to v4: https://lore.kernel.org/r/20251204-ltc4283-support-v4-0-db0197fd7984@analog.com
-> 
-> ---
-> Nuno Sá (3):
->        dt-bindings: hwmon: Document the LTC4283 Swap Controller
->        hwmon: ltc4283: Add support for the LTC4283 Swap Controller
->        gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
-> 
->   .../devicetree/bindings/hwmon/adi,ltc4283.yaml     |  272 +++
->   Documentation/hwmon/index.rst                      |    1 +
->   Documentation/hwmon/ltc4283.rst                    |  266 +++
->   MAINTAINERS                                        |    9 +
->   drivers/gpio/Kconfig                               |   15 +
->   drivers/gpio/Makefile                              |    1 +
->   drivers/gpio/gpio-ltc4283.c                        |  218 +++
->   drivers/hwmon/Kconfig                              |   12 +
->   drivers/hwmon/Makefile                             |    1 +
->   drivers/hwmon/ltc4283.c                            | 1766 ++++++++++++++++++++
->   10 files changed, 2561 insertions(+)
-> ---
-> base-commit: bc04acf4aeca588496124a6cf54bfce3db327039
-> change-id: 20250812-ltc4283-support-27c8c4e69c6b
-> --
-> 
-> Thanks!
-> - Nuno Sá
-> 
-> 
-> 
 
