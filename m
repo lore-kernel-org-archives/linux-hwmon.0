@@ -1,126 +1,216 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D88241663
-	for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 23:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6AA45C0B
+	for <linux-hwmon@vger.kernel.org>; Sun, 18 Jan 2026 00:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768691436; cv=none; b=iK+MJrLPMhgz+fCbMEkPMcVhK1bXh9X+neplXSxSuAV+9dsHd6wDOPz6RBLz+g5VKQK1EJB+nRWwkNZxGI8H0wI8bhsJR8SP9kynC3V9uJN4Utx3DCA00jhx6bpPlEqoSQKmWPL1jhh9exkVdgRUj6EVmRFFQv9lCTn+xjyyQd8=
+	t=1768696061; cv=none; b=Z3aYlHg70pQzqWE5M5fYFetJi4G2RCEaBc2e5F6PpTzhXsE62McfckVOmqAvgf0CRvZa9XckRE6KPmvf/9gqQDm58CNrueQA7Dpeb8fX7DK5rM295pjM7ZrwHhjg87FcixhR+YjhmFPGkNiJzmQ/sN8ibL2KOFoziVrwh3cN53E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768691436; c=relaxed/simple;
-	bh=wAlNjdCJRie7stmfZa9WM2zSboeZjYbmYAySTdlVC8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RWtiF/xu6AoGq++LSHH1qLHayYgWM+51WZ9axqzeFxsGoIhZVUtB1Vg1hZIVtYGiyChSvNczFFljsSWdV7y6v6JCFxmCDr2WfMyWr0aUmhnX/SeYQmmFkMDWTLZLCC4bOKSyUaP8cjLPlr4BKA+Brt2dFhefoR5BYPrhD7jdBjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fURzfwpF; arc=none smtp.client-ip=74.125.82.50
+	s=arc-20240116; t=1768696061; c=relaxed/simple;
+	bh=UC18EEQnpo5KNQ1B8+0gPq/jSkfQsmAtHCiWzpfW+1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OQpLywWi9jRg2V67lJeMuTfbLzuwcWU2VU842iy3BOiFzkP5zfQSMp55sc0hPQWC6K/2O52bGk+4u9UMGK6DBxaLVhCzFYe05Ffv54OVNnVU4T2NzU/BEWmAjAx58HW1mHMl1QHgk4L6iaYrDDaxYvMq5p6z5VhBeL+1WiOV9c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EJwAZOfj; arc=none smtp.client-ip=74.125.82.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fURzfwpF"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1233bb90317so2553681c88.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 15:10:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EJwAZOfj"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2ae29ddaed9so2107785eec.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 17 Jan 2026 16:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768691435; x=1769296235; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m8Sm/ib2yrFoZ//zI729/fFHatA05xvif8fBBX0u8IA=;
-        b=fURzfwpFePuzbs2K2UPhO2URTaO9H1/lI7VAtINaiTmwzwm9YG9H21LgdAi9VygPIL
-         9us1uj1+G5uha29HaCQRrTXBbQuZpFghctW+tDidzGX5uFLkGtNELvAYB+fyw52qOlLi
-         T+1GYrIgoT3nXmn2c3KYY2fGQWqjgp0Rty4DaIY3x2QVfFGboLinSbK9Wn23M8a7HlOZ
-         PvSscLNcX1N3uPzNP0XECkvjSBTKwkbWUiFK1og++otBR0T3+hnpacCwrQN/T6ev2wOz
-         k0if2j8BBKnAziPC4F1PKdnXxwFI7EuJ/ZMq4MiFqIdNV9QM0pazlyv0OdMA3PE5qqDR
-         I2Qg==
+        d=gmail.com; s=20230601; t=1768696059; x=1769300859; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfyXBIPR2trIB5PXoGw7goBrIzOi0pwZk7JsXji+6PM=;
+        b=EJwAZOfjp8QoBsvbqulEdFR0WDRpazN1rLCJpQyeqn69QtcOqYu+M8RUcx7L0ZrIJW
+         6Q1Z2FFzfrOJnc//p7QQMGCiYQPPGxMXzLL1GRzWUAZK8IsUOY4TubdaOExKFjSqS//t
+         QPpT37vPOB4xqkoZRSc2j5hWsbXkLSs0S3GY+jQAUwcsZ/o7x32pOBzI6AIENt4hhVqH
+         ypaIaPS9zVN/Ku5O48nZiMrSnSYrAQqH95CBr3byV1cjYzH40EEgMdNZInoEuo3jhrZt
+         UxSiSt+YRIC63/u9CP9SF5TIiQFx0Xjt8SRJT04dOwYfZNLg7SfRVPxCasQiiK3k+Ggs
+         eb0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768691435; x=1769296235;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m8Sm/ib2yrFoZ//zI729/fFHatA05xvif8fBBX0u8IA=;
-        b=iK2aRcfRHie8Rr5vYyTAoMw7fBn3FyyuTt35hBk3og3NQAVscl/PlIIqmqcdsrxtSB
-         3zM1WrVSrbU7xadpH01bDGkpgZeJuxySG7puw+bBSQ+QfrqJaS8rhQWZqLz+sdHX/zKn
-         eGn3WyLcUTQRTavD8Oqc2YR5jlpqsxd3LNr0ntTXWnIP75ZbRUtze8zbtVA3GGzERaFV
-         1TsmxA1I+O7H3muOLp4MFk5DI1nniY39r9NWraCUw2KAHCXIgwzw/OQKGGhSody2OIzt
-         346wOYWcwX+LC3GHKahx/gRlr5pawXuAN9WTKHe9eokc9cfutc6x3NYy1jsgV/pnwPz0
-         jSFg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3ubNWFNrTzgmfFPmbbaD6//dWcrl7Owfdtyf6ugalIOKLvfPtiePnPMIkVA7aUbdNS5l1oiDnSgGG6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHWibjClWUDTe04nDzjWf5DFoEK0tDzh1U0kQlICKlNJMdkhjZ
-	uKqndcf49JSUhFMjVwi1RSrEkLF8/6zU8lOr5mvGePnEAUYPz8I9R2Ve
-X-Gm-Gg: AY/fxX5SqmyqywX2gMCV3HxUxM0uHwh/IFd4C3P6WPUBvAcHco/2JhgXA9W+uQh4hOW
-	aC1k6BFaKcTrMP9qckgKciYe+1t2Vvdn7XRxj5bxfgY+LrpgMurR2lcamE5M40g407NbIoAvTOx
-	KJQ2bSrYIqn66lbUNnaw/008RjDqiXdVmX1eSgRJrZ4b7i5dsKJ5tpNdcbDv7AVAyEGhFITNzc1
-	rc8Txy9yu0YeYhbcWNYnVCDuHPY8DA9JOtJpImiSNDYixDnzOzbzTGi/eJ/PsV3522gOuEe0HoN
-	lLuCn1ZMT1EWcMaQuMFh6kD00vQGb73BfqgouZIQm2qgNULiiNB0lZ4kZNXGC8jUn8kMSVRcFAx
-	WTVwU1Ar9LhGk4tyByZQwfEapeMdJHWrnsjC0+SWjcRwLp/YYC0+ZLJJrMhOfi1XgPmuO6PQG4n
-	8O2WOSLf3vPUMo1nOKV8ufStrY
-X-Received: by 2002:a05:7022:f9e:b0:11e:3e9:3e92 with SMTP id a92af1059eb24-1233d11123dmr10057180c88.23.1768691434545;
-        Sat, 17 Jan 2026 15:10:34 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244ad7201fsm8824218c88.7.2026.01.17.15.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jan 2026 15:10:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768696059; x=1769300859;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bfyXBIPR2trIB5PXoGw7goBrIzOi0pwZk7JsXji+6PM=;
+        b=eHMZSK5wT4UliTbnc2o+lp/tf409Y03IIvfj/4bFunvlhW2GaUzP3K4sUShwynJBak
+         32YZ6hGXUS/TnqfIuwqx0IBztlt+ejpuGXFHtS21ekvHmYALJ+TrOOOWBh8FkoI4UyhA
+         MbTNh1g81WAkHRWp5JqedB984bs8cM91nAMbR0++VaiGw0qwcAKxUEdBoCs49Nygjfnn
+         pCJzn3N21Bdpm50AT9DHsUlVJzT94XBSUvTpXKZiSYblrcVk3e6+IW+sGfeFY2P7sgkL
+         hB5O7trde0U0x8J+y6CkzpognPxZ98tM+cXK3o/jljTCe1sejothy2q+ITAw+qCzC0ns
+         wZ0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVFBMSu7fSz3BqlAxjIQwEVhLv5gRFq8R/yYS96/uE2d1ddtMGxwf941ZDmmkpPN19El7VeSqfOQIi1mQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrV4znGh2uyASwNNGYmo6q6jsO+0VCVFF9ifNs8GbHMnlwfcW+
+	M+jw3HHzk4f1nhW5yH6wNZ13AoimGKSL8Eb13GMmbOQ+1QPm4uh8YUXB
+X-Gm-Gg: AY/fxX7VfXBw+eTaS4LW0+hENU7SAsCX15yAakEdPQTzUsm0cENQ62siLVu78+aSGXT
+	60lgioY7mMSBZ9eziWL6r2qeUdgWfZY25BKVKh1vt7XCP6lU23VtB3yuOmuWTyRMZNZV80RvlCx
+	EnkJlSsNnkH+puRUPHjoTNeLVkkZvr7bzIHMBoZcP1yXJuyipw80RGn1FHTXEskoaZl6jwAF9X+
+	RnUrWrcVxs8pcHnoLh5+g6VotmCORxKYKcUdLOCFgsSlvaLY/GcOn9R2Gt9ersQdhXM4oMlgyh/
+	lbjATSK3y2Jfq/8zVlQLsR+s8wd1UHH0kpWD3YoG66JW/nlIQUwXwOhOqjn7NmM/GmGc1lUdytH
+	5ofsj7UfhoJVCJf9w3KsLRz0uMgNsjFhqWvhSxiylvDKVsRAd37XkV24JWCyAKW6LLkgil13Xvb
+	esxIhWzFvC25HSpASd0UUX/Ap5BekLFGQSe21NkZSvSIvExTBP6kTn69Eg+n2l
+X-Received: by 2002:a05:7300:4347:b0:2a4:3593:ccad with SMTP id 5a478bee46e88-2b664300ff3mr9615863eec.10.1768696058870;
+        Sat, 17 Jan 2026 16:27:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b6b3502c65sm7335128eec.8.2026.01.17.16.27.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jan 2026 16:27:38 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 17 Jan 2026 15:10:32 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Benoit Masson <yahoo@perenite.com>
-Cc: Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] hwmon: it87: describe per-chip temperature
- resources
-Message-ID: <174f13cc-f4a5-4fe4-b0e4-1107c90309b7@roeck-us.net>
-References: <20260114221210.98071-1-yahoo@perenite.com>
- <20260114221210.98071-2-yahoo@perenite.com>
- <0a4bfdac-3f3f-4dd7-87ca-a4edb58d2bdb@roeck-us.net>
- <CAGHj7OJ75Sxn9AVguC8uFJwd8rdAvSREKFreWW3_-E+4MaHycQ@mail.gmail.com>
+Message-ID: <0ae2d448-06e3-41f6-89aa-8aa3f939d64f@roeck-us.net>
+Date: Sat, 17 Jan 2026 16:27:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/3] hwmon: Add support for the LTC4283 Hot Swap
+ Controller
+To: nuno.sa@analog.com, linux-hwmon@vger.kernel.org,
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, "Rob Herring (Arm)" <robh@kernel.org>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+References: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGHj7OJ75Sxn9AVguC8uFJwd8rdAvSREKFreWW3_-E+4MaHycQ@mail.gmail.com>
 
-On Sat, Jan 17, 2026 at 11:11:32PM +0100, Benoit Masson wrote:
-> On Sat, Jan 17, 2026 at 3:39 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > Series applied.
-> Guenter, my appologies but after changing some BIOS parameters of the
-> IT8613E it seems the patch has something wrong and creates a null
-> pointer exception. Can you please remove patch for now until I test
-> all BIOS/changes before re-submiting. I'm sorry for the miss here and
-> your work pushing for this but prefer to prevent the patch for getting
-> deeping in the submission chain.
+Hi Nuno,
+
+On 12/23/25 04:21, Nuno Sá via B4 Relay wrote:
+> This is v3 for the LTC4283 how swap controller. Main change is that I'm
+> now using the auxiliary bus for adding the GPIO device (done depending
+> on FW properties).
+> 
+> Similar to the LTC4282 device, we're clearing some fault logs in the
+> reset_history attributes.
+> 
+> Guenter, in [1] you can find some replies for some questions you had in
+> v2 that likely you don't remember anymore. Regarding the regmap story I
+> ended up adding a secong regmap for the 16 bit wide registers which
+> seems like a clean solution (if I'm not missing nothing).
 > 
 
-Does this help ? It is what Gemini had to say about your series.
+Sorry for the long delay.
 
+Actually I prefer the solution used in the lm75 driver: Map all registers
+to 16-bit registers using a regmap bus. Would that be possible ?
+
+Other than that, I ran the series through an AI review. This is what it told me:
+
+   Identified Violations and Observations:
+
+    * Alphabetical Order of Includes: In drivers/hwmon/ltc4283.c, the include files are not strictly in alphabetical order.
+        * #include <linux/hwmon.h> is listed before #include <linux/hwmon-sysfs.h>.
+
+-> Actually, linux/hwmon-sysfs.h> does not have to be included in the first place.
+
+        * According to strict ASCII sorting (e.g., LC_ALL=C sort), hwmon-sysfs.h should come first because the hyphen - (ASCII 45) precedes the dot . (ASCII 46).
+    * Documentation Discrepancy: The file Documentation/hwmon/ltc4283.rst includes a section for "Addresses scanned" listing I2C addresses 0x10-0x17 and 0x20-0x2E.
+        * Inaccuracy: The driver does not implement a .detect function, meaning no I2C address scanning is actually performed.
+        * Guideline Violation: The submitting-patches.rst guideline states that only specific I2C addresses (0x18-0x1f, 0x28-0x2f, etc.) shall be probed. The addresses listed in the documentation (specifically 0x10-0x17) are outside of this
+          approved range. While the driver doesn't probe, the documentation misleadingly suggests it does so on non-approved addresses.
+
+-> Please fix.
+
+Thanks,
 Guenter
 
----
-My analysis of the top 5 patches in the it87 driver reveals a NULL pointer regression introduced by the series.
-
-  The regression is caused by the addition of the IT8613E chip support in commits 8e6b5dcdb757 and 21506a88d3d5. These commits failed to initialize the .reg_pwm field for the it8613 entry in the it87_devices array.
-
-  Technical Details:
-   1. Commit `2fc4e2363316` introduced a new pointer field reg_pwm to struct it87_devices and struct it87_data. It also updated the it87_reg_pwm helper to dereference this pointer:
-
-   1     static inline u16 it87_reg_pwm(const struct it87_data *data, int nr)
-   2     {
-   3         return data->reg_pwm[nr];
-   4     }
-   2. Commit `8e6b5dcdb757` added the it8613 entry to the it87_devices array but missed the .reg_pwm initialization (leaving it as NULL).
-   3. Commit `21506a88d3d5` further configured the it8613 entry but still did not provide a .reg_pwm value.
-   4. Registration Crash: During the probe of an IT8613E chip, it87_probe sets data->reg_pwm = chip->reg_pwm (which is NULL). It then calls it87_check_pwm(dev), which calls it87_reg_pwm(data, i). This result in a NULL pointer dereference
-      when attempting to access data->reg_pwm[i].
-
-  Why commit f977d3bf3614 was suspected:
-  While commit f977d3bf3614 itself is technically safe (as it only added resource counts which were initialized for all existing chips at the time), it was the first patch in the series that introduced per-chip configuration requirements.
-  The user likely associated the crash with this starting point of the series.
-
-  Conclusion:
-  The bug is in the it8613 device definition. It must be updated to include .reg_pwm = IT87_REG_PWM (or the appropriate register map for that chip). Additionally, there is a potential out-of-bounds access in it87_update_device because it8613
-  defines .num_temp_offset = 6, but the IT87_REG_TEMP_OFFSET array only has 3 elements.
+> [1]: https://lore.kernel.org/linux-hwmon/0765a0b89779331c62a3f136ef030f7f2f40ea47.camel@gmail.com/
+> [2]: https://lore.kernel.org/linux-iio/cover.1761588465.git.geert+renesas@glider.be/
+> 
+> ---
+> Changes in v5:
+> - Patch 2:
+>    * Added a secong regmap for the 16bit wide registers;
+>    * Add default value for rsense so that we can probe without FW
+>      properties;
+>    * Make sure to give the right file permissions to the reset_history
+>      attrs.
+> - Patch 3:
+>    * Make sure to get the right regmap (given that the device now has 2);
+>    * Add error handling for getting the regmap.
+> - Link to v4: https://lore.kernel.org/r/20251204-ltc4283-support-v4-0-db0197fd7984@analog.com
+> 
+> ---
+> Nuno Sá (3):
+>        dt-bindings: hwmon: Document the LTC4283 Swap Controller
+>        hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+>        gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
+> 
+>   .../devicetree/bindings/hwmon/adi,ltc4283.yaml     |  272 +++
+>   Documentation/hwmon/index.rst                      |    1 +
+>   Documentation/hwmon/ltc4283.rst                    |  266 +++
+>   MAINTAINERS                                        |    9 +
+>   drivers/gpio/Kconfig                               |   15 +
+>   drivers/gpio/Makefile                              |    1 +
+>   drivers/gpio/gpio-ltc4283.c                        |  218 +++
+>   drivers/hwmon/Kconfig                              |   12 +
+>   drivers/hwmon/Makefile                             |    1 +
+>   drivers/hwmon/ltc4283.c                            | 1766 ++++++++++++++++++++
+>   10 files changed, 2561 insertions(+)
+> ---
+> base-commit: bc04acf4aeca588496124a6cf54bfce3db327039
+> change-id: 20250812-ltc4283-support-27c8c4e69c6b
+> --
+> 
+> Thanks!
+> - Nuno Sá
+> 
+> 
+> 
 
