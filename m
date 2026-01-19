@@ -1,61 +1,63 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30238F252
-	for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 19:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6379538F93F
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 19:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768849694; cv=none; b=JmDwt2wy6rFFFei1tK07k7EurY/tC1eWmfH+vMmRIXeCdmIEoCNG8coMOZJTsAUtRap95z2MaAH1Q0O6c3beXym769On8hhut+QyM9eIXZXJO1iEgVlNaJK/UwIHPAkhpIeI+4Z0Ubd4CDoVPLcPL/qSGm2sZMO7UuVvXtAp9A0=
+	t=1768849695; cv=none; b=nqu2D5s5GMNx0EPUcGdXTk6rBElUFFLCvNBNPyWwkgPsQePaho5HgtiwPkbvevKEkuuVaRciUi9C/XitJNjiSNpr85o+MefZCwHF+Eq5RCK2vxKaUML0GFibczvS1wryd2z6olvBNylrkY91U2xl5yZZbzwEkhMuOMNh6phTZdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768849694; c=relaxed/simple;
-	bh=qfpFdkLsBGgGANgj9kVGeqqpnQlEiiVtS8yzlZ97yaI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NHObg+LDIhk9mYv9WlaD4tUPrnti/C6V6HPg+Zv5N5238yKzGpFQX473c+ofQRj66axdXgOZdfdVIccTFiqt0JZJYZGHv6CP/V59nTIWR/2zJV9sGpcmPaZ+P+HotZYrk2cC6nGQiVV5TdW5C+tW0he4R6nRf21l8Pr3in3uvEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuCrCjvX; arc=none smtp.client-ip=209.85.208.44
+	s=arc-20240116; t=1768849695; c=relaxed/simple;
+	bh=ISqsKDoXGCE7uargYNsShdMm0Y5qbCliuVj3rq0dN/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hrbmaCbpdjWqBiOwEK+60t242alepGXvzL/TnwfMloMA91cVUikGj2yDWkMcCNt5ET0WpTDAOdZnkiyeDhEKyWnCgfLLyiiTf49HyC2JvvWFBGe2c4Noaq0RYHeK8Gyua5y1eWzNCNasZpVEvGLWlPKK0LBI4ZA/TxfquGd2oUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gnbDmoS1; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuCrCjvX"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-652fec696c9so8233211a12.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 11:08:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gnbDmoS1"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-64b7a38f07eso6297655a12.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 11:08:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768849691; x=1769454491; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ML1udjI5WsKTlsN81qTjNJ9Oi94uiir2ybxpHYc2O3U=;
-        b=HuCrCjvXgxQVAys9CwNo2hJL7E0gkBRzr19p8/s5EgzsYwjqUeKzaJ7VuH4QRi75t+
-         TbVwtt1UJXhVwWn2v38ZkgGiO0jVLDJkeKgN7UMcvbrf2LqECRIXGmFnTUYGw+Pfposi
-         1as+kWnZGe0GRArBoXVQo/8W6v6CIbKhLiAYMaZAvsIA+fiY81xdQ1wwYak9VwUB93ia
-         jjXpTR+/+9sYl4xnTzWvguiWqp+GbkTwVKz9jaBLYvVTvBz/8p9oln8nXDNR+ouLifO6
-         VK08SWaLYDuI4YSWPLq1q/3sCP3as5YgG7Cyx6YBqSKVN3asPemvE/kzLyduTZzSZnJm
-         w3cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768849691; x=1769454491;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768849692; x=1769454492; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ML1udjI5WsKTlsN81qTjNJ9Oi94uiir2ybxpHYc2O3U=;
-        b=K0cifOU5kdd/rhnDKagAJBKLf0jCaCzDUD16ubBNebNr9cAAnhG6FqUbcyb/pN4kfK
-         WA3+gFAfY3sVDjsA85esCW+kXMA2869IH8mLpqyOQA7tITpEEANdvnw+p3C+zTdYKj3P
-         Q9H6VbUc1lp55YfdvotvKqst+celww+J2F7IVsR5KFgK+TnQ1CvK4zbfqaxT2Kz8VXD8
-         E+bXb994GWqIdu+z4n6ruobx29bLCRdEBGmyJpTKswTrcqL6BwR47yNs+viE1fG5rj5h
-         yd8W9yTrSCg5AhzBxsfsqGJHE4hUmFCPtSUSZ86GHaqZcET36eVXxOdo+X8RBQ8fd3Qb
-         R3cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWT4Bq3Mvdplk2NYQr7ohmCDOYp+QsNETJjWmpo9/uQGcQY7IfWzmnh/SJGSWgLrHLgfNdX9vgUMVir6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0hac3+KaO4lcyabxfo6ungWwOxjmV1IxrRwE5H8ilOGsR3lMo
-	6cm7palWm95lC1Ga2d8wUcNxvAKksW8mwrAplKpD+rmeRlQ/BXABylsk
-X-Gm-Gg: AY/fxX5Mht1Wlb7N2Ek6/h3Cc+WvS6eKbrLEtSdKCR7CLQfz3Z80X7Qk7j/QshXejZq
-	oDxZ/TWRdC5cV2pjGQv4exKgTHWTMQbXaFnWhhifeXAvQo4qcZg/yDY0QhoU6H0OQ15iOh6GCiv
-	UU29wAuru0ID7PerukAWBEiZEqe+exk6sivN1uMcIpVTf+j52Ysc4tb8oSDnvNQUDChk3XlxlF+
-	BHCtqJ+UrKW+duYEmEIm54MO6Hou5/YI8KuLD5/GvZOsscGk11K6FHiIGYuXP8ziN0mMp84Zskj
-	QqmOT3yuC4Pegg/RVbN9y5LgzeQVQfNlZyCJ7yRW7AoUwIQhUcU6EXKH9NmWueHt3zzCmge18m7
-	wbar948a/GjHEIE4w7773zfGNNbTL5Pa4PgzjLoFoStwj00dsCwKMUcJJc6yZj6CGkILDVM8KfG
-	VtTsPgl95/FFGm0AEDBHPQffw=
-X-Received: by 2002:a17:907:da16:b0:b87:6:3727 with SMTP id a640c23a62f3a-b8792fc4039mr1177830366b.48.1768849690452;
-        Mon, 19 Jan 2026 11:08:10 -0800 (PST)
+        bh=J52ytgfbeFADZKDw62J7y5/K+5VVfpLFyRp/PpNxx+0=;
+        b=gnbDmoS1WA/HqV0J1PbvQT3w51c5FOUIQELciYPw/hAAv5tF1i6Ht6FGoSyF73TJBL
+         vGcl1eeCUVddqc5TU5FLx4QA8XQpYkpTHtSnuwg9p67/D+UsN05YQpJUgiPr4doCHfet
+         kz0EnsM+qP4CJwW083vi4lCp3JJ+JWECp0meDAC/GwwXT7vQAyYSU+6AM0k7cQi+nPWs
+         ZB9iuF36PAitWvC4YL1OY/HlQLkj7XN/E9ZbtSJsqFRUv3s6XieUON7prIxpGR0bPTHe
+         9d180ocqU2UF5cy9Rv+2ubvJSV0w1N+9/4iL5kaadVbR6Yf6GxS7ahqWfCJS/GzW4wZr
+         hTwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768849692; x=1769454492;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=J52ytgfbeFADZKDw62J7y5/K+5VVfpLFyRp/PpNxx+0=;
+        b=QmrcCrY70GcTQU2QzHql52AmTyY3TPMwBgtDaVOzCCDdNSsd/1us+uxbQlFWSEalEr
+         sXx4hgBS+tslGlimEDC7X/aHfYIRhOKfCvBiaMzh67aXrX8EoSlhlMB5zjFCOl7RnxNM
+         5lgmrrXw5cLvSP6/oOYzt7zER8fWdIq1aDqLy5NqjgN0DASkHAO7ggJ1CYG78b5qtTgs
+         EW0IU0PAWYuhLoYmPi3viTeK9zOtkDTU2eIPBfGytriIzg5WsOfGJL1mFlwpMJS3XA6P
+         hxW8vBrgm9OG8jQMBOyliD8i8ko2RYBIE+y+vyJ4scMct5fQHw9YxnYG295M9LWvlcqJ
+         9eag==
+X-Forwarded-Encrypted: i=1; AJvYcCUKEr7CwR4p/9KeMvvHo35sttztxftog+4udenQzOVpgFDtfVQY5kgY5kBNYRqEYs6LPKmTdhwjoRa7dA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHVX97Dy+ZaV/vDRCqaSRLz9jdDG2LFrlqQbiSjWq99nxYzv8X
+	KvzpH0JloZ5Z0cY3qHlIcKQB9CNP5nMt4ccPOi4TTQR0mSM+x8I2/Q8z
+X-Gm-Gg: AY/fxX5/0Cu17IBjoulf7FuDDaEC+Fv224pkCyqZuZmQAUOOgsKStcpgcxgYqlKURS6
+	eSFug6ZQV5+fXCDEIKqhnX4mX4qLexQ/ZesFWZT+T2GwwTiLV8Lm5CZ+xFTYJJdekN43h1QKAaU
+	n8jYqLZWk3KIadAfpebsPS4C+GdhdCtxt5dY1GTTSXeXTMLHiXLygzqT723E7dM3BOQm2rk+IZO
+	mBP6VlU7ayfy/gisFR/VsLnnl/fUet9I34pKEMTfKUOtu76ksMi2IK5jEo+3IK7Bmi3cQjado6Y
+	Qx1qGuFBBB6O8l2r5JZpT7KIyU37pJSFihQDY8BZL0FETei8N6XRzzVC7qhJzaTjYy1YB+mkani
+	Dx9iWJB1Ph8H4y+vs4qiV1ia4ML012bagHn4XdO1UqphOkILZRPUhqAtvLz2URDSbEztGC7Pk+x
+	SNmBEz7xuz6JYz88YUP6auZ1z8TsQJF3uZwg==
+X-Received: by 2002:a17:907:1c9c:b0:b87:39d:2bb4 with SMTP id a640c23a62f3a-b8793028f6fmr1108598866b.59.1768849691548;
+        Mon, 19 Jan 2026 11:08:11 -0800 (PST)
 Received: from vamoirid-laptop.. ([2a04:ee41:82:7577:a4c5:86fc:3b16:bc0a])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b87959ca32esm1193767366b.41.2026.01.19.11.08.09
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b87959ca32esm1193767366b.41.2026.01.19.11.08.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jan 2026 11:08:10 -0800 (PST)
+        Mon, 19 Jan 2026 11:08:11 -0800 (PST)
 From: Vasileios Amoiridis <vassilisamir@gmail.com>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -65,11 +67,14 @@ Cc: devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
-Subject: [PATCH v2 0/2] Add support for HiTRON HAC300S PSU
-Date: Mon, 19 Jan 2026 20:08:04 +0100
-Message-ID: <20260119190806.35276-1-vassilisamir@gmail.com>
+	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Subject: [PATCH v2 1/2] dt-bindings: trivial-devices: Add hitron,hac300s
+Date: Mon, 19 Jan 2026 20:08:05 +0100
+Message-ID: <20260119190806.35276-2-vassilisamir@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260119190806.35276-1-vassilisamir@gmail.com>
+References: <20260119190806.35276-1-vassilisamir@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,52 +85,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
 
-Changes in v2:
---------------
+Add HiTRON HAC300S PSU to trivial devices since it is simple PMBUS
+capable device.
 
-Patch 1/2:
-	- fixed type
-	- Added Ack-By
+Since this is the first supported device from this vendor, document its
+name to the vendor-prefixes.yaml file as well.
 
-Patch 2/2:
-	- removed if statement for VOUT_MODE reg
-	- device specific read_word_data function reads only affected
-	  registers and returns -ENODATA
-	- fixed typos
-
-v1:
+Signed-off-by: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 ---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Add support for the HiTRON HAC300S AC/DC switching power supply in
-compact PCI format, with a 300W rating. This is a simple PMBUS
-compatible device.
-
-There is a small caveat with the internal registers of the device and
-more specifically with the PMBUS_VOUT_MODE. As it is already described
-in the driver, the device does not support the PMBUS_VOUT_MODE register
-and at the same time, it returns the voltage output values in Linear11
-which is not adhering to the PMBus specification (PMBus Specification
-Part II, Section 7.1-7.3). For that reason the PMBUS_VOUT_MODE register
-is being faked and returns the exponent value of the READ_VOUT register.
-The exponent part of the VOUT_* registers is being cleard in order to
-return the mantissa to the pmbus core.
-
-Vasileios Amoiridis (2):
-  dt-bindings: trivial-devices: Add hitron,hac300s
-  hwmon: Add support for HiTRON HAC300S PSU
-
- .../devicetree/bindings/trivial-devices.yaml  |   2 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- Documentation/hwmon/hac300s.rst               |  37 +++++
- Documentation/hwmon/index.rst                 |   1 +
- MAINTAINERS                                   |   7 +
- drivers/hwmon/pmbus/Kconfig                   |   9 ++
- drivers/hwmon/pmbus/Makefile                  |   1 +
- drivers/hwmon/pmbus/hac300s.c                 | 132 ++++++++++++++++++
- 8 files changed, 191 insertions(+)
- create mode 100644 Documentation/hwmon/hac300s.rst
- create mode 100644 drivers/hwmon/pmbus/hac300s.c
-
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index d0f7dbf15d6f..efa1957948a5 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -123,6 +123,8 @@ properties:
+           - fsl,mma8450
+             # MPR121: Proximity Capacitive Touch Sensor Controller
+           - fsl,mpr121
++            # HiTRON AC/DC CompactPCI Power Supply
++          - hitron,hac300s
+             # Honeywell Humidicon HIH-6130 humidity/temperature sensor
+           - honeywell,hi6130
+             # IBM Common Form Factor Power Supply Versions (all versions)
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index c7591b2aec2a..fdb11141e597 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -701,6 +701,8 @@ patternProperties:
+     description: Hitachi Ltd.
+   "^hitex,.*":
+     description: Hitex Development Tools
++  "^hitron,.*":
++    description: HiTRON Electronics Corporation
+   "^holt,.*":
+     description: Holt Integrated Circuits, Inc.
+   "^holtek,.*":
 -- 
 2.47.3
 
