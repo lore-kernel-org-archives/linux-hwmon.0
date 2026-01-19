@@ -1,143 +1,97 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FA421638D;
-	Mon, 19 Jan 2026 12:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1933B23EAA1;
+	Mon, 19 Jan 2026 12:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768824954; cv=none; b=o5l4XQ2mLDgum0qzVZKC5YG23jQMI9Y4bol4kH72DNTttjdOQXaboyCIXZJpQsEb5lkLUalZ37c8JyJWQml8gj8EAd//lFdYUf1NiRqsWQ1/MxH1PJTn6+qtSZmd9gKfq+hX7f/3/ecwDhnIqwMw+oKfQvXWAA1kjr36Ej9z5qU=
+	t=1768824962; cv=none; b=WfR/qaVnpS6g+rBZ744xBLTdxac1judNiEdR8gCom3FqTcRyWlQ6RimSqDiqsqBt4ot25gC33n8KFe4Dci43IeBFHPN26NO2UwGch38SFcp3biUoagCB9sIrHQWuUcxoyfpkIKSRLGTBef7IVEZukTkGiZkVvW2LmqQTFCdnIwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768824954; c=relaxed/simple;
-	bh=hBhvsuW3B/69apNkWMzqRnqNgKxIb4+zXZeq0VpfECM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=VU/Lf/E6Oi+fzoGhp7R5CE/qQyXe7MnYnp9NWCMGv3yV25aMLF+7ZGzbv29gquGTwv9M+TapcVSz9/9a3Y7rPhMFGco+g7NCV5Nkmgm6OWsAmRoiuX1dcL0xA3IuLJo5rDTSFS7z9BdCe54ctY3IC2EXLD4KdZVYDRah6msgy00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=D2qZc4QM; arc=none smtp.client-ip=117.135.210.3
+	s=arc-20240116; t=1768824962; c=relaxed/simple;
+	bh=WjsTHLjgxsy+mXRsoUwpiqJQYbq1MnNhmtWxtQbbl8g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=dzm7DkHqtTsYyZR5la9DCnWti+Vf2IFhe0dNcAxBGGdHRuUWGEPLO5TLpNVi9alch2Zr3OdEM2IERBEa5ANX519okKtHvXQakSroVXI7sQM7hJaicLhSqiGErp+Qr+nPbaoESfR9zAiRYBHevJUFEiwj9BD8nmlWWE39MS6Qky4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=k16fcg4v; arc=none smtp.client-ip=117.135.210.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="D2qZc4QM"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="k16fcg4v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=SeKIIdbs9uF8hF/
-	ORo4qkiW+uv23+t/MhSqLxns7ow0=; b=D2qZc4QMKiTIds9EP5H7UqLGG5NN+i/
-	fBwjAnZ1KAK4cA7BlrCTjUq6DY5wCANGKFtg94lsDzV0Y2cV8G1WW2YvTsqRIddn
-	6AedXZ166JsQXzlJ2+mk6Kp5Wh/q+NEe/zMN7TRrfGaPpLMS1zIntP89+W8aCOrA
-	e9e5eKqsgmIM=
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=MHv2qgvbLAFuri5
+	w6URQ/pAxxfhBNmmanOC7CAD1enM=; b=k16fcg4vTDFibEK3lfibI4FKpv+TC9K
+	2v7lHI9E8HRePQ4DBlD8zVOfcP6rWQe2qM/yoJ0P3gnQDeJy4QUS8Q4ENnkXG2d9
+	BSW86i525fdoikLPXPaHpilCZBCA1g/g7m83aXTaqd79zv1riXEabCzJ4wdmYDHU
+	QC7VlM8xVE1k=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wBHtZdDIG5pljmWGw--.3726S6;
-	Mon, 19 Jan 2026 20:15:07 +0800 (CST)
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wBHtZdDIG5pljmWGw--.3726S3;
+	Mon, 19 Jan 2026 20:15:03 +0800 (CST)
 From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
+	Jean Delvare <jdelvare@suse.com>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Wenliang Yan <wenliang202407@163.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/8] hwmon: (ina3221) Support alert configuration
-Date: Mon, 19 Jan 2026 07:14:42 -0500
-Message-Id: <20260119121446.17469-5-wenliang202407@163.com>
+Subject: [PATCH v5 1/8] dt-bindings: hwmon: ti,ina3221: Add SQ52210
+Date: Mon, 19 Jan 2026 07:14:39 -0500
+Message-Id: <20260119121446.17469-2-wenliang202407@163.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20260119121446.17469-1-wenliang202407@163.com>
 References: <20260119121446.17469-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wBHtZdDIG5pljmWGw--.3726S6
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF48KrWUGrWkCF4furW3KFg_yoW5WFy5pF
-	4ak34rt3W2qF4Sgws7Kan5KFyFy34xWF47trnrW340qFsrJryjvw1kKa4DtFyYvFn5ZFyx
-	tay7tr4UCanrAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0Jj3Ef5UUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbC5wsQ42luIEus6wAA30
+X-CM-TRANSID:_____wBHtZdDIG5pljmWGw--.3726S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw4UGFWkZr13Zw43Wr17ZFb_yoW8Xr43pF
+	s3CFyUWrySqr1fZ39rKFsY9F15Jwn7ua12kFnrGw4SqF4DGa4Fq393Kw1qyFn8ArWfXFW7
+	WFWI9r4Fg397Ar7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUqjgxUUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCvwgQ42luIEhLYgAA3C
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add alert configuration for initialization and resume.
+Add a compatible string for SQ52210, provide brief descriptions for
+both INA3221 and SQ52210, and define the compatibility relationship
+between SQ52210 and INA3221.
+SQ52210 is backward compatible with INA3221.
 
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
- drivers/hwmon/ina3221.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../devicetree/bindings/hwmon/ti,ina3221.yaml     | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index b5fa984a5a25..c82ef2d23056 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -65,6 +65,8 @@
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+index 5f10f1207d69..2dd2fd148792 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,ina3221.yaml
+@@ -10,9 +10,22 @@ maintainers:
+   - Jean Delvare <jdelvare@suse.com>
+   - Guenter Roeck <linux@roeck-us.net>
  
- #define INA3221_MASK_ENABLE_SCC_MASK	GENMASK(14, 12)
- 
-+#define SQ52210_ALERT_CONFIG_MASK	GENMASK(15, 4)
++description: |
++  The INA3221 is a three-channel, high-side current and bus voltage monitor.
 +
- #define INA3221_CONFIG_DEFAULT		0x7127
- #define INA3221_RSHUNT_DEFAULT		10000
- #define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
-@@ -123,6 +125,7 @@ struct ina3221_input {
- enum ina3221_ids { ina3221, sq52210 };
- 
- struct ina3221_config {
-+	bool has_alerts;	/* chip supports alerts and limits */
- 	bool has_current;	/* chip has internal current reg */
- 	bool has_power;		/* chip has internal power reg */
- 	int calibration_value;	/* calculate current_lsb */
-@@ -140,6 +143,7 @@ struct ina3221_config {
-  * @reg_config: Register value of INA3221_CONFIG
-  * @summation_shunt_resistor: equivalent shunt resistor value for summation
-  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
-+ * @alert_type_select: Used to store the alert trigger type
-  * @current_lsb_uA: The value of one LSB corresponding to the current register
-  * @power_lsb_uW: The value of one LSB corresponding to the power register
-  * @single_shot: running in single-shot operating mode
-@@ -155,6 +159,7 @@ struct ina3221_data {
- 	u32 reg_config;
- 	int summation_shunt_resistor;
- 	u32 summation_channel_control;
-+	u32 alert_type_select;
- 	long current_lsb_uA;
- 	long power_lsb_uW;
- 
-@@ -163,10 +168,12 @@ struct ina3221_data {
- 
- static const struct ina3221_config ina3221_config[] = {
- 	[ina3221] = {
-+		.has_alerts = false,
- 		.has_current = false,
- 		.has_power = false,
- 	},
- 	[sq52210] = {
-+		.has_alerts = true,
- 		.has_current = true,
- 		.has_power = true,
- 		/*
-@@ -948,6 +955,10 @@ static int ina3221_probe(struct i2c_client *client)
- 			ina->reg_config &= ~INA3221_CONFIG_CHx_EN(i);
- 	}
- 
-+	/* Initialize alert_type_select */
-+	if (ina->config->has_alerts)
-+		ina->alert_type_select = 0;
++  The Silergy SQ52210 is a power monitor that extends the functionality of
++  the INA3221 by adding additional current registers, power registers, and
++  alert registers. These features are configured internally by the driver
++  and require no board-level device tree configuration.
 +
- 	/* Initialize summation_shunt_resistor for summation channel control */
- 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
- 	for (i = 0; i < INA3221_NUM_CHANNELS; i++) {
-@@ -1096,6 +1107,17 @@ static int ina3221_resume(struct device *dev)
- 		}
- 	}
+ properties:
+   compatible:
+-    const: ti,ina3221
++    oneOf:
++      - items:
++          - const: silergy,sq52210
++          - const: ti,ina3221
++      - items:
++          - const: ti,ina3221
  
-+	/* Restore alert config register value to hardware */
-+	if (ina->config->has_alerts) {
-+		ret = regmap_update_bits(ina->regmap, SQ52210_ALERT_CONFIG,
-+					 SQ52210_ALERT_CONFIG_MASK,
-+					 ina->alert_type_select & SQ52210_ALERT_CONFIG_MASK);
-+		if (ret) {
-+			dev_err(dev, "Unable to select alert type\n");
-+			return ret;
-+		}
-+	}
-+
- 	return 0;
- }
- 
+   reg:
+     maxItems: 1
 -- 
 2.17.1
 
