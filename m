@@ -1,427 +1,228 @@
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D4432F766;
-	Mon, 19 Jan 2026 04:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF381F5437;
+	Mon, 19 Jan 2026 12:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768795523; cv=none; b=TFjxGaeeK5ra6+WMIorczHfOQi4hM3Epo6nMazXR/A7e5FUJIZrqFS49KtYrpQ1+YXgxIVyQEYX9rZbFPz9QQWyqr5t5smiddAxwmwcuCm6pfwFxKAl8+YTGoFa/DJ/lUxvnrhNswL/Gt9HPt2xrzd2ihyvB9csE2IXBdny+oQ8=
+	t=1768824953; cv=none; b=i8Vs5gNBexC2eg+6G06lCxis3eaK7lcbP4BJ4jJtx6scfWV/mh5eDx7mwYVgkm54lFW+Y6YikKx6S3VGIK/yZQtn1KnUo3Ua5Lovkd17pDrCvMejS307a0TirS8Tf2KGt0F7VHwmFh1qso/So6FoUS7pHLP/dz0KKWUxmyYVcW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768795523; c=relaxed/simple;
-	bh=Ksl+mbjm94bAf42aCz/AP8vxJdVRDnCNSRnJBFteJo8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aAYc+ACpIRWtLiMp+192CZaKT+w4TekEJqtp8/m2wlUCsJH7wFfFgtkhdbzTt/Lyy/xeQYpVCn39jVPFKOzo73Q/30I07ra8pF/P81qPEXxBzeDgabfT4HkA2MZt2lYJ9X+k+4+jy2mzJFK7WstjkGWm3d+JknFeG50UvmbvzH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5E97B1A220A;
-	Mon, 19 Jan 2026 05:05:04 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 282371A2208;
-	Mon, 19 Jan 2026 05:05:04 +0100 (CET)
-Received: from lsv031445.swis.in-blr01.nxp.com (lsv031445.swis.in-blr01.nxp.com [92.120.147.159])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id EF9531800086;
-	Mon, 19 Jan 2026 12:05:02 +0800 (+08)
-From: Mayank Mahajan <mayankmahajan.x@nxp.com>
+	s=arc-20240116; t=1768824953; c=relaxed/simple;
+	bh=z6dbCNUriStuBV+KYYiPiE7y9WQMfgpr2xtzjWwHan8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=QXV435N4lQ9uzfUFdEB+eRH1em+xdli/jJrDHZ1O8cxwDyMLQqMBVfwDKW5OhsprubLqHk7caWjKOPFOBUSywNlVXPB34BBICFq34oCs905iVfwofupjNRBscm59nZ3HMtu0bIPI+/2jA94mlcSzW0A1Gf454b6/fp4zrWMKZSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CQllNtJH; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CQllNtJH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=WuEHeMrivFoEujO
+	cr/xi2G/pphMy6vZiBBA1L4Xwt4w=; b=CQllNtJHER3T4cJ9sdMuvSpcpsLs2l3
+	jNOOlj5ZEXUm4GZcmHs1qHo9HoGEQib5IEPOF2E6PYktnAcPRcmAaH7TOKbJBEcy
+	qYl0GIfmbQv08sEWM7vwxwXFRmouBAFHlaT1LAtyfePSEaSR/lf/SHcMxItBa/fB
+	wVGSxkcGzrss=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wBHtZdDIG5pljmWGw--.3726S5;
+	Mon, 19 Jan 2026 20:15:05 +0800 (CST)
+From: Wenliang Yan <wenliang202407@163.com>
 To: linux@roeck-us.net,
-	corbet@lwn.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
+	Jean Delvare <jdelvare@suse.com>
+Cc: Wenliang Yan <wenliang202407@163.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
 	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: priyanka.jain@nxp.com,
-	vikash.bansal@nxp.com,
-	Mayank Mahajan <mayankmahajan.x@nxp.com>
-Subject: [PATCH v5 2/3] hwmon: (tmp108) Add support for P3T1035 and P3T2030
-Date: Mon, 19 Jan 2026 09:34:58 +0530
-Message-Id: <20260119040459.2898998-2-mayankmahajan.x@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260119040459.2898998-1-mayankmahajan.x@nxp.com>
-References: <20260119040459.2898998-1-mayankmahajan.x@nxp.com>
+Subject: [PATCH v5 3/8] hwmon: (ina3221) Pre-calculate current and power LSB
+Date: Mon, 19 Jan 2026 07:14:41 -0500
+Message-Id: <20260119121446.17469-4-wenliang202407@163.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20260119121446.17469-1-wenliang202407@163.com>
+References: <20260119121446.17469-1-wenliang202407@163.com>
+X-CM-TRANSID:_____wBHtZdDIG5pljmWGw--.3726S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JryUAFy5JF4rtw4kAw13urg_yoW7Xry3pF
+	4fKryrta40qF1fKa9Ikw4xGF1rtr97Jr47KrZrGw1IqFsFkryqk3yrJFyDtFy5Ary5ZF17
+	X3y7tr4Duws2yaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRFD73UUUUU=
+X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCwAoQ42luIEqtfgAA3H
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
 
-Add support for the P3T1035 & P3T2030 temperature sensor. While mostly
-compatible with the TMP108, P3T1035 uses an 8-bit configuration register
-instead of the 16-bit layout used by TMP108. Updated driver to handle
-this difference during configuration read/write.
+The LSB for current and power can be pre-calculated for data read/write
+operations. The current LSB is determined by the calibration value and
+shunt resistor value, with the calibration value fixed within the driver.
+The power LSB can be derived from the current LSB.
 
-Signed-off-by: Mayank Mahajan <mayankmahajan.x@nxp.com>
+Signed-off-by: Wenliang Yan <wenliang202407@163.com>
 ---
-V1 -> V2:
-- Disabled hysteresis in is_visible function for P3T1035.
-- Added tables for conversion rate similar to the LM75 driver.
-- Implemented different bus access depending on the chip being used.
-   - Removed regmap for 8 bits; now we are using one regmap as before.
-   - Added read and write functions for i2c and i3c for use with regmap.
-   - Mapped the 8-bit configuration register to a 16 bit value for P3T1035.
-V2 -> V3:
-- Remove changes not relevant to adding a new device in the driver.
-- Address warnings due to incorrect usage of casting operations.
-- Remove the usage of P3T2030 as it's functionally identical to P3T1035.
-V3 -> V4:
-- Add GENMASK for getting mask for conversion rates.
-- Add static arrays for containing sample times for different sensors.
-- Remove redundant code such as checking for NULL pointer in probe.
-- Improve readability by removing double negation.
-- Remove type cast where not required; make reg_buf & val_buf local.
-V4 -> V5:
-- Remove device ID and use a separate parameter structure instead.
-- Revert formatting in the device structure back to the original one.
+ drivers/hwmon/ina3221.c | 85 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
- drivers/hwmon/Kconfig  |   2 +-
- drivers/hwmon/tmp108.c | 197 +++++++++++++++++++++++++++++++++--------
- 2 files changed, 161 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 157678b821fc..31969bddc812 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2398,7 +2398,7 @@ config SENSORS_TMP108
- 	select REGMAP_I3C if I3C
- 	help
- 	  If you say yes here you get support for Texas Instruments TMP108
--	  sensor chips and NXP P3T1085.
-+	  sensor chips, NXP temperature sensors P3T1035, P3T1085 and P3T2030.
-
- 	  This driver can also be built as a module. If so, the module
- 	  will be called tmp108.
-diff --git a/drivers/hwmon/tmp108.c b/drivers/hwmon/tmp108.c
-index 60a237cbedbc..ae258fa7676e 100644
---- a/drivers/hwmon/tmp108.c
-+++ b/drivers/hwmon/tmp108.c
-@@ -17,6 +17,8 @@
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
-+#include <linux/util_macros.h>
-+#include <linux/bitfield.h>
-
- #define	DRIVER_NAME "tmp108"
-
-@@ -70,10 +72,36 @@
-
- #define TMP108_CONVERSION_TIME_MS	30	/* in milli-seconds */
-
-+#define TMP108_CONF_CR0_POS		13
-+#define TMP108_CONF_CR1_POS		14
-+#define TMP108_CONF_CONVRATE_FLD	GENMASK(TMP108_CONF_CR1_POS, TMP108_CONF_CR0_POS)
-+
- struct tmp108 {
- 	struct regmap *regmap;
- 	u16 orig_config;
- 	unsigned long ready_time;
-+	const struct tmp108_params *params;
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index 47ef4fe694ea..b5fa984a5a25 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -67,6 +67,7 @@
+ 
+ #define INA3221_CONFIG_DEFAULT		0x7127
+ #define INA3221_RSHUNT_DEFAULT		10000
++#define SQ52210_SHUNT_LSB			40000000	/* pV/LSB */
+ 
+ enum ina3221_fields {
+ 	/* Configuration */
+@@ -121,8 +122,16 @@ struct ina3221_input {
+ 
+ enum ina3221_ids { ina3221, sq52210 };
+ 
++struct ina3221_config {
++	bool has_current;	/* chip has internal current reg */
++	bool has_power;		/* chip has internal power reg */
++	int calibration_value;	/* calculate current_lsb */
++	int power_lsb_factor;
 +};
 +
-+struct tmp108_params {
-+	bool config_reg_16bits;
-+	const u16 *sample_times;
-+	size_t n_sample_times;
-+};
-+
-+static const u16 p3t1035_sample_times[] = {4000, 1000, 250, 125};
-+static const u16 tmp108_sample_times[] = {4000, 1000, 250, 63};
-+
-+static const struct tmp108_params p3t1035_data = {
-+	.sample_times = p3t1035_sample_times,
-+	.n_sample_times  = ARRAY_SIZE(p3t1035_sample_times),
-+	.config_reg_16bits = false,
-+};
-+
-+static const struct tmp108_params tmp108_data = {
-+	.sample_times = tmp108_sample_times,
-+	.n_sample_times  = ARRAY_SIZE(tmp108_sample_times),
-+	.config_reg_16bits = true,
+ /**
+  * struct ina3221_data - device specific information
++ * @config:	Used to store characteristics of different chips
+  * @chip: Chip type identifier
+  * @pm_dev: Device pointer for pm runtime
+  * @regmap: Register map of the device
+@@ -131,9 +140,12 @@ enum ina3221_ids { ina3221, sq52210 };
+  * @reg_config: Register value of INA3221_CONFIG
+  * @summation_shunt_resistor: equivalent shunt resistor value for summation
+  * @summation_channel_control: Value written to SCC field in INA3221_MASK_ENABLE
++ * @current_lsb_uA: The value of one LSB corresponding to the current register
++ * @power_lsb_uW: The value of one LSB corresponding to the power register
+  * @single_shot: running in single-shot operating mode
+  */
+ struct ina3221_data {
++	const struct ina3221_config *config;
+ 	enum ina3221_ids chip;
+ 
+ 	struct device *pm_dev;
+@@ -143,10 +155,30 @@ struct ina3221_data {
+ 	u32 reg_config;
+ 	int summation_shunt_resistor;
+ 	u32 summation_channel_control;
++	long current_lsb_uA;
++	long power_lsb_uW;
+ 
+ 	bool single_shot;
  };
-
- /* convert 12-bit TMP108 register value to milliCelsius */
-@@ -101,21 +129,8 @@ static int tmp108_read(struct device *dev, enum hwmon_sensor_types type,
- 					  &regval);
- 			if (err < 0)
- 				return err;
--			switch (regval & TMP108_CONF_CONVRATE_MASK) {
--			case TMP108_CONVRATE_0P25HZ:
--			default:
--				*temp = 4000;
--				break;
--			case TMP108_CONVRATE_1HZ:
--				*temp = 1000;
--				break;
--			case TMP108_CONVRATE_4HZ:
--				*temp = 250;
--				break;
--			case TMP108_CONVRATE_16HZ:
--				*temp = 63;
--				break;
--			}
-+			*temp = tmp108->params->sample_times[FIELD_GET(TMP108_CONF_CONVRATE_FLD,
-+								       regval)];
- 			return 0;
- 		}
- 		return -EOPNOTSUPP;
-@@ -192,22 +207,18 @@ static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
- {
- 	struct tmp108 *tmp108 = dev_get_drvdata(dev);
- 	u32 regval, mask;
-+	size_t len;
-+	u8 index;
- 	int err;
-
- 	if (type == hwmon_chip) {
- 		if (attr == hwmon_chip_update_interval) {
--			if (temp < 156)
--				mask = TMP108_CONVRATE_16HZ;
--			else if (temp < 625)
--				mask = TMP108_CONVRATE_4HZ;
--			else if (temp < 2500)
--				mask = TMP108_CONVRATE_1HZ;
--			else
--				mask = TMP108_CONVRATE_0P25HZ;
-+			len = tmp108->params->n_sample_times;
-+			index = find_closest_descending(temp, tmp108->params->sample_times, len);
- 			return regmap_update_bits(tmp108->regmap,
- 						  TMP108_REG_CONF,
- 						  TMP108_CONF_CONVRATE_MASK,
--						  mask);
-+						  FIELD_PREP(TMP108_CONF_CONVRATE_FLD, index));
- 		}
- 		return -EOPNOTSUPP;
- 	}
-@@ -251,6 +262,8 @@ static int tmp108_write(struct device *dev, enum hwmon_sensor_types type,
- static umode_t tmp108_is_visible(const void *data, enum hwmon_sensor_types type,
- 				 u32 attr, int channel)
- {
-+	const struct tmp108 *tmp108 = data;
+ 
++static const struct ina3221_config ina3221_config[] = {
++	[ina3221] = {
++		.has_current = false,
++		.has_power = false,
++	},
++	[sq52210] = {
++		.has_current = true,
++		.has_power = true,
++		/*
++		 * With this default value configuration,
++		 * the following formula can be obtained:
++		 * Current_LSB = Shunt_LSB / Rshunt
++		 */
++		.calibration_value = 256,
++		.power_lsb_factor = 20,
++	},
++};
 +
- 	if (type == hwmon_chip && attr == hwmon_chip_update_interval)
- 		return 0644;
-
-@@ -264,8 +277,11 @@ static umode_t tmp108_is_visible(const void *data, enum hwmon_sensor_types type,
- 		return 0444;
- 	case hwmon_temp_min:
- 	case hwmon_temp_max:
-+		return 0644;
- 	case hwmon_temp_min_hyst:
- 	case hwmon_temp_max_hyst:
-+		if (!tmp108->params->config_reg_16bits)
-+			return 0;
- 		return 0644;
- 	default:
- 		return 0;
-@@ -311,6 +327,106 @@ static bool tmp108_is_volatile_reg(struct device *dev, unsigned int reg)
- 	return reg == TMP108_REG_TEMP || reg == TMP108_REG_CONF;
- }
-
-+static int tmp108_i2c_reg_read(void *context, unsigned int reg, unsigned int *val)
+ static inline bool ina3221_is_enabled(struct ina3221_data *ina, int channel)
+ {
+ 	/* Summation channel checks shunt resistor values */
+@@ -697,6 +729,25 @@ static const struct hwmon_chip_info ina3221_chip_info = {
+ };
+ 
+ /* Extra attribute groups */
++
++/*
++ * Calculate the value corresponding to one LSB of the current and
++ * power registers.
++ * formula : Current_LSB = Shunt_LSB / Rshunt
++ *           Power_LSB = power_lsb_factor * Current_LSB
++ */
++static int ina3221_set_shunt(struct ina3221_data *ina, unsigned long val)
 +{
-+	struct i2c_client *client = context;
-+	struct tmp108 *tmp108 = i2c_get_clientdata(client);
-+	int ret;
++	if (!val || val > SQ52210_SHUNT_LSB)
++		return -EINVAL;
 +
-+	if (reg == TMP108_REG_CONF && !tmp108->params->config_reg_16bits) {
-+		ret = i2c_smbus_read_byte_data(client, TMP108_REG_CONF);
++	ina->current_lsb_uA = DIV_ROUND_CLOSEST(SQ52210_SHUNT_LSB, val);
++	ina->power_lsb_uW = ina->config->power_lsb_factor *
++			    ina->current_lsb_uA;
++
++	return 0;
++}
++
+ static ssize_t ina3221_shunt_show(struct device *dev,
+ 				  struct device_attribute *attr, char *buf)
+ {
+@@ -730,6 +781,17 @@ static ssize_t ina3221_shunt_store(struct device *dev,
+ 	/* Update summation_shunt_resistor for summation channel */
+ 	ina->summation_shunt_resistor = ina3221_summation_shunt_resistor(ina);
+ 
++	/*
++	 * The current and power registers can only be used when
++	 * all enabled channels have identical shunt resistors
++	 */
++	if (ina->summation_shunt_resistor) {
++		if (ina->config->has_current) {
++			ret = ina3221_set_shunt(ina, val);
++			if (ret < 0)
++				return ret;
++		}
++	}
+ 	return count;
+ }
+ 
+@@ -846,6 +908,7 @@ static int ina3221_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	ina->chip = chip;
++	ina->config = &ina3221_config[chip];
+ 
+ 	ina->regmap = devm_regmap_init_i2c(client, &ina3221_regmap_config);
+ 	if (IS_ERR(ina->regmap)) {
+@@ -892,6 +955,16 @@ static int ina3221_probe(struct i2c_client *client)
+ 			ina->summation_channel_control |= BIT(14 - i);
+ 	}
+ 
++	/*
++	 * The current and power registers can only be used when
++	 * all enabled channels have identical shunt resistors
++	 */
++	if (ina->summation_shunt_resistor) {
++		ret = ina3221_set_shunt(ina, ina->summation_shunt_resistor);
 +		if (ret < 0)
 +			return ret;
-+		*val = ret << 8;
-+		return 0;
 +	}
 +
-+	ret = i2c_smbus_read_word_swapped(client, reg);
-+	if (ret < 0)
-+		return ret;
-+	*val = ret;
-+	return 0;
-+}
-+
-+static int tmp108_i2c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i2c_client *client = context;
-+	struct tmp108 *tmp108 = i2c_get_clientdata(client);
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->params->config_reg_16bits)
-+		return i2c_smbus_write_byte_data(client, reg, val >> 8);
-+	return i2c_smbus_write_word_swapped(client, reg, val);
-+}
-+
-+static const struct regmap_bus tmp108_i2c_regmap_bus = {
-+	.reg_read = tmp108_i2c_reg_read,
-+	.reg_write = tmp108_i2c_reg_write,
-+};
-+
-+static int tmp108_i3c_reg_read(void *context, unsigned int reg, unsigned int *val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct tmp108 *tmp108 = i3cdev_get_drvdata(i3cdev);
-+	u8 reg_buf[1], val_buf[2];
-+	struct i3c_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 1,
-+			.data.out = reg_buf,
-+		},
-+		{
-+			.rnw = true,
-+			.len = 2,
-+			.data.in = val_buf,
-+		},
-+	};
-+	int ret;
-+
-+	reg_buf[0] = reg;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->params->config_reg_16bits)
-+		xfers[1].len--;
-+
-+	ret = i3c_device_do_xfers(i3cdev, xfers, 2, I3C_SDR);
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = val_buf[0] << 8;
-+	if (reg != TMP108_REG_CONF || tmp108->params->config_reg_16bits)
-+		*val |= val_buf[1];
-+
-+	return 0;
-+}
-+
-+static int tmp108_i3c_reg_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct i3c_device *i3cdev = context;
-+	struct tmp108 *tmp108 = i3cdev_get_drvdata(i3cdev);
-+	u8 val_buf[3];
-+	struct i3c_xfer xfers[] = {
-+		{
-+			.rnw = false,
-+			.len = 3,
-+			.data.out = val_buf,
-+		},
-+	};
-+
-+	val_buf[0] = reg;
-+	val_buf[1] = (val >> 8) & 0xff;
-+
-+	if (reg == TMP108_REG_CONF && !tmp108->params->config_reg_16bits)
-+		xfers[0].len--;
-+	else
-+		val_buf[2] = val & 0xff;
-+
-+	return i3c_device_do_xfers(i3cdev, xfers, 1, I3C_SDR);
-+}
-+
-+static const struct regmap_bus tmp108_i3c_regmap_bus = {
-+	.reg_read = tmp108_i3c_reg_read,
-+	.reg_write = tmp108_i3c_reg_write,
-+};
-+
- static const struct regmap_config tmp108_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 16,
-@@ -323,7 +439,8 @@ static const struct regmap_config tmp108_regmap_config = {
- 	.use_single_write = true,
- };
+ 	ina->pm_dev = dev;
+ 	dev_set_drvdata(dev, ina);
+ 
+@@ -1009,6 +1082,18 @@ static int ina3221_resume(struct device *dev)
+ 			dev_err(dev, "Unable to control summation channel\n");
+ 			return ret;
+ 		}
++		/*
++		 * The calibration register can only be enabled when all
++		 * shunt resistor values are identical.
++		 */
++		if (ina->config->has_current) {
++			ret = regmap_write(ina->regmap, SQ52210_CALIBRATION,
++						ina->config->calibration_value);
++			if (ret) {
++				dev_err(dev, "Unable to set calibration value\n");
++				return ret;
++			}
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.17.1
 
--static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *name)
-+static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *name,
-+			       const struct tmp108_params *params)
- {
- 	struct device *hwmon_dev;
- 	struct tmp108 *tmp108;
-@@ -340,6 +457,7 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
-
- 	dev_set_drvdata(dev, tmp108);
- 	tmp108->regmap = regmap;
-+	tmp108->params = params;
-
- 	err = regmap_read(tmp108->regmap, TMP108_REG_CONF, &config);
- 	if (err < 0) {
-@@ -351,7 +469,6 @@ static int tmp108_common_probe(struct device *dev, struct regmap *regmap, char *
- 	/* Only continuous mode is supported. */
- 	config &= ~TMP108_CONF_MODE_MASK;
- 	config |= TMP108_MODE_CONTINUOUS;
--
- 	/* Only comparator mode is supported. */
- 	config &= ~TMP108_CONF_TM;
-
-@@ -386,15 +503,15 @@ static int tmp108_probe(struct i2c_client *client)
- 	struct regmap *regmap;
-
- 	if (!i2c_check_functionality(client->adapter,
--				     I2C_FUNC_SMBUS_WORD_DATA))
-+				     I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
- 		return dev_err_probe(dev, -ENODEV,
- 				     "adapter doesn't support SMBus word transactions\n");
-
--	regmap = devm_regmap_init_i2c(client, &tmp108_regmap_config);
-+	regmap = devm_regmap_init(dev, &tmp108_i2c_regmap_bus, client, &tmp108_regmap_config);
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed");
-
--	return tmp108_common_probe(dev, regmap, client->name);
-+	return tmp108_common_probe(dev, regmap, client->name, i2c_get_match_data(client));
- }
-
- static int tmp108_suspend(struct device *dev)
-@@ -420,15 +537,17 @@ static int tmp108_resume(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(tmp108_dev_pm_ops, tmp108_suspend, tmp108_resume);
-
- static const struct i2c_device_id tmp108_i2c_ids[] = {
--	{ "p3t1085" },
--	{ "tmp108" },
--	{ }
-+	{ "p3t1035", (unsigned long)&p3t1035_data },
-+	{ "p3t1085", (unsigned long)&tmp108_data },
-+	{ "tmp108", (unsigned long)&tmp108_data },
-+	{}
- };
- MODULE_DEVICE_TABLE(i2c, tmp108_i2c_ids);
-
- static const struct of_device_id tmp108_of_ids[] = {
--	{ .compatible = "nxp,p3t1085", },
--	{ .compatible = "ti,tmp108", },
-+	{ .compatible = "nxp,p3t1035", .data = &p3t1035_data },
-+	{ .compatible = "nxp,p3t1085", .data = &tmp108_data },
-+	{ .compatible = "ti,tmp108", .data = &tmp108_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, tmp108_of_ids);
-@@ -444,7 +563,8 @@ static struct i2c_driver tmp108_driver = {
- };
-
- static const struct i3c_device_id p3t1085_i3c_ids[] = {
--	I3C_DEVICE(0x011b, 0x1529, NULL),
-+	I3C_DEVICE(0x011B, 0x1529, &tmp108_data),
-+	I3C_DEVICE(0x011B, 0x152B, &p3t1035_data),
- 	{}
- };
- MODULE_DEVICE_TABLE(i3c, p3t1085_i3c_ids);
-@@ -453,13 +573,16 @@ static int p3t1085_i3c_probe(struct i3c_device *i3cdev)
- {
- 	struct device *dev = i3cdev_to_dev(i3cdev);
- 	struct regmap *regmap;
-+	const struct i3c_device_id *id;
-
--	regmap = devm_regmap_init_i3c(i3cdev, &tmp108_regmap_config);
-+	regmap = devm_regmap_init(dev, &tmp108_i3c_regmap_bus, i3cdev, &tmp108_regmap_config);
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(dev, PTR_ERR(regmap),
- 				     "Failed to register i3c regmap\n");
-
--	return tmp108_common_probe(dev, regmap, "p3t1085_i3c");
-+	id = i3c_device_match_id(i3cdev, p3t1085_i3c_ids);
-+
-+	return tmp108_common_probe(dev, regmap, "p3t1085_i3c", id->data);
- }
-
- static struct i3c_driver p3t1085_driver = {
---
-2.34.1
