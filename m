@@ -1,180 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBDC2DB78A;
-	Mon, 19 Jan 2026 19:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078F72FC871
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 22:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768852702; cv=none; b=B4YOJUKLKjlfcteJlkGmBrwvddh5wUqc/sFn/dHTiE8OMDm8GtXt3zSPCdDdjPwLlFMAvaO/BLfnDPq4XGC9ysZK4thoKtU19wiIlZAw3KczJdS4L+yDzEoWbUz+9SbimTIc9DuRFaYfpe+LIW4g0Ulv6VXFP2rQ2nHWqLS4T5Q=
+	t=1768861614; cv=none; b=ZGHMQUCV/nFkRltzcVGhCGEi/Fpu6LiPhYQFb4qoDzGbB3ygXCBLcA8DmocXi/nJdbiO6fOqgKg/XazGjgTx8G/hZimEQgCbzqtfBW6N4+ARkqcJI5ZPB2dx/rl97Wt42ZNXbdafhXKAwx1acWNHzOhCaoyapPXaeybP8L63Jms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768852702; c=relaxed/simple;
-	bh=msICSwtkxpkghstHJnXI71pc2NlWIhXHO2yjL8eJVPc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MLC7gRgzuzygRQybir2t4qUjC61hyxYsD6W/d31feMj3sy8MEeKWno/abWmHxWiTMInN0h/Vx54HPAqZlaHlaNn+/WIUh7vjfLwPjn51LeaLWT5ujs0no3eoVoX0WvwH/8IWXck+JV9dxLmHlC34t1exUoifdukhtzc5cAmR0ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=silS1VYT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768861614; c=relaxed/simple;
+	bh=uvmDme2Gtv/X7hjkklXCqWbJOKuZeI329xIDKGYZh7A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=PNmQUHrgi8tPVCYlCrBSiERqVoL1QcE8vstTtB5bXGx3FZQPty3lbA+bo30DX7VbVQ5WM4OcwlxD8894Y7N0vrIeQkJWlCTYDpOM4m/C7w0Ud0b2xvE4VBU5z79g0upyp9EYMfaF4TWNZgcU2Z/WWum4zuKV7kSb5aMFS8jhWP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iV/QZAyS; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="silS1VYT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A7FC19422;
-	Mon, 19 Jan 2026 19:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768852701;
-	bh=msICSwtkxpkghstHJnXI71pc2NlWIhXHO2yjL8eJVPc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=silS1VYTSbexTEzhnllUdLn+2XjGAWCCUwTMEwr5mWOBZll/R8Try/hpPyUIAhsFZ
-	 85EEkD8ZHsfuLrUugM/5QF11d+gOFxIW+kzFq2ccdO7FZ5LBbA9TbNFSw0lKVPWbrv
-	 s/P2A2b2bj4oEWKFvsti3yws4btkUB0IN7/lM5zHPtoTyysJEJcwZ3eRw3hozjLLzf
-	 /e1x0yURLUt8W8ifupinURhCSjuvAfCOUwjA3gJP2XGu1MdBEG0x4rUDI8S8yJDkCz
-	 b3sXoi/k3VoRa4spYh5mZ/Lt5CDqeiTaO8jSFUe55KeeZwiGwqE1cm5ZjHi4pV2yKC
-	 rh45TFi6LEw1w==
-Date: Mon, 19 Jan 2026 12:58:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: asahi@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Justin Stitt <justinstitt@google.com>,
-	Neal Gompa <neal@gompa.dev>
-Subject: FIELD_PREP failure in drivers/hwmon/macsmc-hwmon.c
-Message-ID: <20260119195817.GA1035354@ax162>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iV/QZAyS"
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56379cb870bso1289981e0c.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 14:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768861612; x=1769466412; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1jURO2ckcFL19RxOJqIofnonofth+ErU8EOq2ZvpXKE=;
+        b=iV/QZAyS5ZdTbN/NXkr+thdA6iXQDy/HPTtTRhON7bh0MryP1cX7nUc174MZzcqXvd
+         n5Nt0jNZCYAXORZ/rSjJiNUMWY4JFE3HSoGz20t14+e6Hm5PxPzdReiJlgctqDHdTmBN
+         eZT3u0/v2f7b8GEB2OZdK3u03woyARCYedt+MCxIwq/y1Y66bhtf/pqtH7BHtCuMGe9p
+         jE4mz3TuMQ2mQS+HP34qRXwM+xqPCT38GsPEXebSmNhuvxGNACUvF7wRSD/JH/mj4lGe
+         W9zgiFYhj2R6+2OMJ4CMum6e7ktoV5ZU93iPbF/AKHRsbLGajan163+iUNukHENgx0Ab
+         xFrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768861612; x=1769466412;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1jURO2ckcFL19RxOJqIofnonofth+ErU8EOq2ZvpXKE=;
+        b=ZpN/9KAs2XdLg2aq2EPLK2W+Aw9YtN8QhBNfQdcGkg6oEKEWjp9Xqh2GDddErB/B7s
+         kBwoU68sz2Q7DHYIO4c7+Pcmo9uhG7/j0Mhn2y7J73rjrpk4WLKXTKsOQaiOv6XQJUFo
+         pbcxkgLyWbgmfBdBagWdvD/cHLPnCn7pe7W5G63Lrhv3ALWgMwca0EGKW1XLGp+Zv5kh
+         cAsbpz8v66QfEY2S3FJXQ43HXgEFe2mALyj0HqYwiqZroRuLQ4cY0L/gcT6wfCGIrSmo
+         lJjeT4EiBUpOTP6IhkNfmPuo9kOW/8avlros/hlwmBkQ7ZFxqTBKMbop4aFcYSYBjEj9
+         x18A==
+X-Forwarded-Encrypted: i=1; AJvYcCVewUFDG/9wc66OD6pdZ7XX9G8IzjgsRKjmbxUL8Qz2kWhFcKCeBP7QLeQi8SbXv354TTAr0qLjhKdd7g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNQ9ct8/qb4SnHwnqwx0tkCxSuskhRQ0bcge9C2VoC2Pa/L3Ez
+	2Z1Cqzu0Xqkv0UgSHbcSx8ATI54vtC9MDfmi3YGr8zGp97zjqKa6BFW5
+X-Gm-Gg: AZuq6aKTFCkuGpcBKrznJPfaOwE8Fr1AI7qbtnSc1QeEeUMgeRokPbVNzidk+bITewK
+	Upm3dC/qiMXauUiPeLGBZNWlnYwCx9ERPxHCqOP3IGqFI/ui/9VS/HsygpJ10xb1VMGN0bMoxG/
+	ak830YZEU4k8pdULX7b+Ms9SPF+tOh4wHQSnNU7NCGwJr2yffBJQ4KMX5Mb0jp/hc0a43OPZriN
+	l4Up0X0KLXm7/WX6aKonEqt6zCOa48fooT1tUuiHHLFF4vTUfQma29RcbeAF8UFYGkuCJqYczix
+	o/3TozbF1wKeZIi8W9QN8cYggTaQeLwDOVrXrQ9lrPYtc973n5SRBZxXBPiG+I6Pj/PAyrOXYfW
+	45SxSgHFPwRJr/p87xYHJWHN44sVciYcSw4UYBRzddo8obXKxO2eQC0f0Raa5E4TBjnoic1mdLd
+	qDXzVpyjc=
+X-Received: by 2002:a05:6122:35c6:b0:563:72d9:8091 with SMTP id 71dfb90a1353d-563b5bbe9f7mr3512987e0c.6.1768861611901;
+        Mon, 19 Jan 2026 14:26:51 -0800 (PST)
+Received: from localhost ([2800:bf0:4580:3149:c903:2904:3cc3:8b4c])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-563b70e58cesm3155768e0c.11.2026.01.19.14.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jan 2026 14:26:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Jan 2026 17:26:49 -0500
+Message-Id: <DFSX3XCGAGAP.2OA0L4PGOLDC8@gmail.com>
+Cc: "Guenter Roeck" <linux@roeck-us.net>, "Kurt Borja" <kuurtb@gmail.com>,
+ <platform-driver-x86@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v10 7/7] platform/x86: lenovo-wmi-other: Add HWMON for
+ fan reporting/tuning
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Rong Zhang" <i@rong.moe>, "Mark Pearson" <mpearson-lenovo@squebb.ca>,
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, "Armin Wolf"
+ <W_Armin@gmx.de>, "Hans de Goede" <hansg@kernel.org>,
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260117210051.108988-1-i@rong.moe>
+ <20260117210051.108988-8-i@rong.moe>
+In-Reply-To: <20260117210051.108988-8-i@rong.moe>
 
-Hi folks,
+On Sat Jan 17, 2026 at 4:00 PM -05, Rong Zhang wrote:
+> Register an HWMON device for fan reporting/tuning according to
+> Capability Data 00 (capdata00) and Fan Test Data (capdata_fan) provided
+> by lenovo-wmi-capdata. The corresponding HWMON nodes are:
+>
+>  - fanX_div: internal RPM divisor
+>  - fanX_input: current RPM
+>  - fanX_max: maximum RPM
+>  - fanX_min: minimum RPM
+>  - fanX_target: target RPM (tunable, 0=3Dauto)
+>
+> Information from capdata00 and capdata_fan are used to control the
+> visibility and constraints of HWMON attributes. Fan info from capdata00
+> is collected on bind, while fan info from capdata_fan is collected in a
+> callback. Once all fan info is collected, register the HWMON device.
+>
+> Signed-off-by: Rong Zhang <i@rong.moe>
+> Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 
-There is a build error from a FIELD_PREP in drivers/hwmon/macsmc-hwmon.c
-when building with clang-17 and older:
+Can't wait to for this to reach stable. Thanks!
 
-  drivers/hwmon/macsmc-hwmon.c:249:10: error: call to '__compiletime_assert_814' declared with 'error' attribute: FIELD_PREP: value too large for the field
-    249 |                        FIELD_PREP(FLT_MANT_MASK, val);
-        |                        ^
-  include/linux/bitfield.h:137:3: note: expanded from macro 'FIELD_PREP'
-    137 |                 __FIELD_PREP(_mask, _val, "FIELD_PREP: ");              \
-        |                 ^
-  include/linux/bitfield.h:90:3: note: expanded from macro '__FIELD_PREP'
-     90 |                 __BF_FIELD_CHECK_MASK(mask, val, pfx);                  \
-        |                 ^
-  include/linux/bitfield.h:69:3: note: expanded from macro '__BF_FIELD_CHECK_MASK'
-     69 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-        |                 ^
-  note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-  include/linux/compiler_types.h:619:2: note: expanded from macro '_compiletime_assert'
-    619 |         __compiletime_assert(condition, msg, prefix, suffix)
-        |         ^
-  include/linux/compiler_types.h:612:4: note: expanded from macro '__compiletime_assert'
-    612 |                         prefix ## suffix();                             \
-        |                         ^
-  <scratch space>:18:1: note: expanded from here
-     18 | __compiletime_assert_814
-        | ^
+Tested-by: Kurt Borja <kuurtb@gmail.com>
 
-This does not appear to be strictly clang related, as this can be
-reproduced with GCC if macsmc_hwmon_write_f32() and
-macsmc_hwmon_write_key() are marked as __always_inline (after an
-internal change in LLVM, these functions are not inlined anymore):
-
-===
-diff --git a/drivers/hwmon/macsmc-hwmon.c b/drivers/hwmon/macsmc-hwmon.c
-index 1c0bbec7e8eb..e66d6ee30d7f 100644
---- a/drivers/hwmon/macsmc-hwmon.c
-+++ b/drivers/hwmon/macsmc-hwmon.c
-@@ -224,7 +224,7 @@ static int macsmc_hwmon_read_key(struct apple_smc *smc,
-        return 0;
- }
-
--static int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
-+static __always_inline int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
- {
-        u64 val;
-        u32 fval = 0;
-@@ -252,7 +252,7 @@ static int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
-        return apple_smc_write_u32(smc, key, fval);
- }
-
--static int macsmc_hwmon_write_key(struct apple_smc *smc,
-+static __always_inline int macsmc_hwmon_write_key(struct apple_smc *smc,
-                                  struct macsmc_hwmon_sensor *sensor, long val)
- {
-        switch (sensor->info.type_code) {
-===
-
-  In file included from <command-line>:
-  In function 'macsmc_hwmon_write_f32',
-      inlined from 'macsmc_hwmon_write_key' at drivers/hwmon/macsmc-hwmon.c:261:10,
-      inlined from 'macsmc_hwmon_write_fan.isra' at drivers/hwmon/macsmc-hwmon.c:317:10:
-  include/linux/compiler_types.h:631:45: error: call to '__compiletime_assert_814' declared with attribute error: FIELD_PREP: value too large for the field
-    631 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-        |                                             ^
-  include/linux/compiler_types.h:612:25: note: in definition of macro '__compiletime_assert'
-    612 |                         prefix ## suffix();                             \
-        |                         ^~~~~~
-  include/linux/compiler_types.h:631:9: note: in expansion of macro '_compiletime_assert'
-    631 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-        |         ^~~~~~~~~~~~~~~~~~~
-  include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-        |                                     ^~~~~~~~~~~~~~~~~~
-  include/linux/bitfield.h:69:17: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     69 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-        |                 ^~~~~~~~~~~~~~~~
-  include/linux/bitfield.h:90:17: note: in expansion of macro '__BF_FIELD_CHECK_MASK'
-     90 |                 __BF_FIELD_CHECK_MASK(mask, val, pfx);                  \
-        |                 ^~~~~~~~~~~~~~~~~~~~~
-  include/linux/bitfield.h:137:17: note: in expansion of macro '__FIELD_PREP'
-    137 |                 __FIELD_PREP(_mask, _val, "FIELD_PREP: ");              \
-        |                 ^~~~~~~~~~~~
-  drivers/hwmon/macsmc-hwmon.c:249:24: note: in expansion of macro 'FIELD_PREP'
-    249 |                        FIELD_PREP(FLT_MANT_MASK, val);
-        |                        ^~~~~~~~~~
-
-Justin did a little digging and saw that through
-
-  macsmc_hwmon_write_fan()
-  -> macsmc_hwmon_write_key()
-    -> macsmc_hwmon_write_f32()
-
-value is 1 so:
-
-static __always_inline int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
-{
-        u64 val;
-        u32 fval = 0;
-        int exp = 0, neg;
-
-        val = abs(value); // val == 1
-        neg = val != value;
-
-        if (val) {
-                int msb = __fls(val) - exp; // __fls(1) == 0, thus msb == 0
-
-                if (msb > 23) {
-                        val >>= msb - FLT_MANT_BIAS;
-                        exp -= msb - FLT_MANT_BIAS;
-                } else if (msb < 23) {
-                        val <<= FLT_MANT_BIAS - msb; // val = (1 << 23) == 0x800000
-                        exp += msb;
-                }
-
-                fval = FIELD_PREP(FLT_SIGN_MASK, neg) |
-                       FIELD_PREP(FLT_EXP_MASK, exp + FLT_EXP_BIAS) |
-                       // Fails __BF_FIELD_CHECK_MASK as
-                       //
-                       // __builtin_ffsll(0x7FFFFF) - 1) == 0
-                       //
-                       // ~(0x7FFFFF >> 0) & (0x800000) == 0x800000
-                       FIELD_PREP(FLT_MANT_MASK, val);
-        }
-
-        return apple_smc_write_u32(smc, key, fval);
-}
-
-It seems like msb of zero is unexpected in this path but I am not sure
-what the fix is, hence the report.
-
-Cheers,
-Nathan
+--=20
+Thanks,
+ ~ Kurt
