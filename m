@@ -1,192 +1,131 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA092512E6;
-	Mon, 19 Jan 2026 12:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30238F252
+	for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 19:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768824967; cv=none; b=Mlg+gmKDrd3MKJNTmiZDc6BrjzWX8b56U6krAve5WyFPtsDaJub6g8K/RZLG9gu3oV9mVhwjaaw+Dv1Nxh62j+ueX0dYb63R4CHa2hM7ZEOv+sEgEeWCZS7UC5ipADxb3hmtRSO68g3CypqaZlMASP3Hq+/uKSkOrj10HY4upkw=
+	t=1768849694; cv=none; b=JmDwt2wy6rFFFei1tK07k7EurY/tC1eWmfH+vMmRIXeCdmIEoCNG8coMOZJTsAUtRap95z2MaAH1Q0O6c3beXym769On8hhut+QyM9eIXZXJO1iEgVlNaJK/UwIHPAkhpIeI+4Z0Ubd4CDoVPLcPL/qSGm2sZMO7UuVvXtAp9A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768824967; c=relaxed/simple;
-	bh=YuPVP77vtjEHj/gJO8wjd20Ss1fiQheCeVUVT27Cn8I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=rxZu9UlJstmB46EkQC9Ou7jrSZknKmqh/Xp3w1BRglY/tIcJxNir0BaaifyZmz+/dXbjnvmn8BkSkbhMlBC5yVB7DefObJ2v6TBIlN6Sr9NIVjR5bWVuxq/VE0EoDXuoP+1p9QS/UjC/i3TAs28JYesYNPreQ8cx8QnzVlOZ3YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MYpyAgjN; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1768849694; c=relaxed/simple;
+	bh=qfpFdkLsBGgGANgj9kVGeqqpnQlEiiVtS8yzlZ97yaI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NHObg+LDIhk9mYv9WlaD4tUPrnti/C6V6HPg+Zv5N5238yKzGpFQX473c+ofQRj66axdXgOZdfdVIccTFiqt0JZJYZGHv6CP/V59nTIWR/2zJV9sGpcmPaZ+P+HotZYrk2cC6nGQiVV5TdW5C+tW0he4R6nRf21l8Pr3in3uvEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HuCrCjvX; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MYpyAgjN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=aR3HDueLetwRpZs
-	tt8M58tW2Jb/r6AWYTK+piBCx8cU=; b=MYpyAgjNU32TQTi415VXNbMsqNhsto6
-	8hr3Bvv2FweH4wuhbTHA2Ao++ku97i1YJYT63v8XnBhup/tVa8qmNe5UE+8HKPFv
-	ika2bKbuo9m0gX66U824jBhfaUR95wMN1rVI1g42mOe4tq+bT0bh17cZGnemKtLI
-	l50eMskYrUAY=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wBHtZdDIG5pljmWGw--.3726S9;
-	Mon, 19 Jan 2026 20:15:13 +0800 (CST)
-From: Wenliang Yan <wenliang202407@163.com>
-To: linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HuCrCjvX"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-652fec696c9so8233211a12.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Jan 2026 11:08:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768849691; x=1769454491; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ML1udjI5WsKTlsN81qTjNJ9Oi94uiir2ybxpHYc2O3U=;
+        b=HuCrCjvXgxQVAys9CwNo2hJL7E0gkBRzr19p8/s5EgzsYwjqUeKzaJ7VuH4QRi75t+
+         TbVwtt1UJXhVwWn2v38ZkgGiO0jVLDJkeKgN7UMcvbrf2LqECRIXGmFnTUYGw+Pfposi
+         1as+kWnZGe0GRArBoXVQo/8W6v6CIbKhLiAYMaZAvsIA+fiY81xdQ1wwYak9VwUB93ia
+         jjXpTR+/+9sYl4xnTzWvguiWqp+GbkTwVKz9jaBLYvVTvBz/8p9oln8nXDNR+ouLifO6
+         VK08SWaLYDuI4YSWPLq1q/3sCP3as5YgG7Cyx6YBqSKVN3asPemvE/kzLyduTZzSZnJm
+         w3cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768849691; x=1769454491;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ML1udjI5WsKTlsN81qTjNJ9Oi94uiir2ybxpHYc2O3U=;
+        b=K0cifOU5kdd/rhnDKagAJBKLf0jCaCzDUD16ubBNebNr9cAAnhG6FqUbcyb/pN4kfK
+         WA3+gFAfY3sVDjsA85esCW+kXMA2869IH8mLpqyOQA7tITpEEANdvnw+p3C+zTdYKj3P
+         Q9H6VbUc1lp55YfdvotvKqst+celww+J2F7IVsR5KFgK+TnQ1CvK4zbfqaxT2Kz8VXD8
+         E+bXb994GWqIdu+z4n6ruobx29bLCRdEBGmyJpTKswTrcqL6BwR47yNs+viE1fG5rj5h
+         yd8W9yTrSCg5AhzBxsfsqGJHE4hUmFCPtSUSZ86GHaqZcET36eVXxOdo+X8RBQ8fd3Qb
+         R3cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWT4Bq3Mvdplk2NYQr7ohmCDOYp+QsNETJjWmpo9/uQGcQY7IfWzmnh/SJGSWgLrHLgfNdX9vgUMVir6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0hac3+KaO4lcyabxfo6ungWwOxjmV1IxrRwE5H8ilOGsR3lMo
+	6cm7palWm95lC1Ga2d8wUcNxvAKksW8mwrAplKpD+rmeRlQ/BXABylsk
+X-Gm-Gg: AY/fxX5Mht1Wlb7N2Ek6/h3Cc+WvS6eKbrLEtSdKCR7CLQfz3Z80X7Qk7j/QshXejZq
+	oDxZ/TWRdC5cV2pjGQv4exKgTHWTMQbXaFnWhhifeXAvQo4qcZg/yDY0QhoU6H0OQ15iOh6GCiv
+	UU29wAuru0ID7PerukAWBEiZEqe+exk6sivN1uMcIpVTf+j52Ysc4tb8oSDnvNQUDChk3XlxlF+
+	BHCtqJ+UrKW+duYEmEIm54MO6Hou5/YI8KuLD5/GvZOsscGk11K6FHiIGYuXP8ziN0mMp84Zskj
+	QqmOT3yuC4Pegg/RVbN9y5LgzeQVQfNlZyCJ7yRW7AoUwIQhUcU6EXKH9NmWueHt3zzCmge18m7
+	wbar948a/GjHEIE4w7773zfGNNbTL5Pa4PgzjLoFoStwj00dsCwKMUcJJc6yZj6CGkILDVM8KfG
+	VtTsPgl95/FFGm0AEDBHPQffw=
+X-Received: by 2002:a17:907:da16:b0:b87:6:3727 with SMTP id a640c23a62f3a-b8792fc4039mr1177830366b.48.1768849690452;
+        Mon, 19 Jan 2026 11:08:10 -0800 (PST)
+Received: from vamoirid-laptop.. ([2a04:ee41:82:7577:a4c5:86fc:3b16:bc0a])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b87959ca32esm1193767366b.41.2026.01.19.11.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jan 2026 11:08:10 -0800 (PST)
+From: Vasileios Amoiridis <vassilisamir@gmail.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux@roeck-us.net
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 7/8] hwmon: (ina3221) Support write/read functions for 'power' attribute
-Date: Mon, 19 Jan 2026 07:14:45 -0500
-Message-Id: <20260119121446.17469-8-wenliang202407@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20260119121446.17469-1-wenliang202407@163.com>
-References: <20260119121446.17469-1-wenliang202407@163.com>
-X-CM-TRANSID:_____wBHtZdDIG5pljmWGw--.3726S9
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXFy3tr48Ar1rGrWUuFWxJFb_yoWrWFykp3
-	yjkFWrtw4Ut3WfuwsakFs8Gw1Yqr4xX3y2yr9Fk3savF4UZr909ryrt3Wvy34UCry3XF47
-	tayxAryru3ZrKrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUXeOdUUUUU=
-X-CM-SenderInfo: xzhqzxhdqjjiisuqlqqrwthudrp/xtbCwBES5WluIFGt-wAA3C
+	linux-doc@vger.kernel.org,
+	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+Subject: [PATCH v2 0/2] Add support for HiTRON HAC300S PSU
+Date: Mon, 19 Jan 2026 20:08:04 +0100
+Message-ID: <20260119190806.35276-1-vassilisamir@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-SQ52210 adds power attributes to report power data and implements
-corresponding read/write functions for this purpose. This includes
-reading power values, reading alert thresholds, reading alert
-trigger status, and writing alert thresholds.
+From: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
 
-Signed-off-by: Wenliang Yan <wenliang202407@163.com>
+Changes in v2:
+--------------
+
+Patch 1/2:
+	- fixed type
+	- Added Ack-By
+
+Patch 2/2:
+	- removed if statement for VOUT_MODE reg
+	- device specific read_word_data function reads only affected
+	  registers and returns -ENODATA
+	- fixed typos
+
+v1:
 ---
- drivers/hwmon/ina3221.c | 79 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
 
-diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index cb292fee564b..2338b3288950 100644
---- a/drivers/hwmon/ina3221.c
-+++ b/drivers/hwmon/ina3221.c
-@@ -92,6 +92,9 @@ enum ina3221_fields {
- 	/* Alert Flags: SF is the summation-alert flag */
- 	F_SF, F_CF3, F_CF2, F_CF1,
- 
-+	/* Alert Flags: AFF is the alert function flag */
-+	F_AFF3, F_AFF2, F_AFF1,
-+
- 	/* sentinel */
- 	F_MAX_FIELDS
- };
-@@ -107,6 +110,10 @@ static const struct reg_field ina3221_reg_fields[] = {
- 	[F_CF3] = REG_FIELD(INA3221_MASK_ENABLE, 7, 7),
- 	[F_CF2] = REG_FIELD(INA3221_MASK_ENABLE, 8, 8),
- 	[F_CF1] = REG_FIELD(INA3221_MASK_ENABLE, 9, 9),
-+
-+	[F_AFF3] = REG_FIELD(SQ52210_ALERT_CONFIG, 1, 1),
-+	[F_AFF2] = REG_FIELD(SQ52210_ALERT_CONFIG, 2, 2),
-+	[F_AFF1] = REG_FIELD(SQ52210_ALERT_CONFIG, 3, 3),
- };
- 
- enum ina3221_channels {
-@@ -512,6 +519,60 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- 	}
- }
- 
-+static const u8 ina3221_power_reg[][INA3221_NUM_CHANNELS] = {
-+	[hwmon_power_input] = { SQ52210_POWER1, SQ52210_POWER2, SQ52210_POWER3 },
-+	[hwmon_power_crit] = { SQ52210_ALERT_LIMIT1, SQ52210_ALERT_LIMIT2,
-+						SQ52210_ALERT_LIMIT3 },
-+	[hwmon_power_crit_alarm] = { F_AFF1, F_AFF2, F_AFF3 },
-+};
-+
-+static int ina3221_read_power(struct device *dev, u32 attr, int channel, long *val)
-+{
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+	u8 reg = ina3221_power_reg[attr][channel];
-+	int regval, ret;
-+
-+	switch (attr) {
-+	case hwmon_power_input:
-+		if (!ina3221_is_enabled(ina, channel))
-+			return -ENODATA;
-+
-+		/* Write CONFIG register to trigger a single-shot measurement */
-+		if (ina->single_shot) {
-+			regmap_write(ina->regmap, INA3221_CONFIG,
-+				     ina->reg_config);
-+
-+			ret = ina3221_wait_for_data(ina);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		fallthrough;
-+	case hwmon_power_crit:
-+		ret = ina3221_read_value(ina, reg, &regval);
-+		if (ret)
-+			return ret;
-+		/* Return power in mW */
-+		*val = DIV_U64_ROUND_CLOSEST((u64)regval * (u64)ina->power_lsb_uW, 1000);
-+		return 0;
-+	case hwmon_power_crit_alarm:
-+		/* No actual register read if channel is disabled */
-+		if (!ina3221_is_enabled(ina, channel)) {
-+			/* Return 0 for alert flags */
-+			*val = 0;
-+			return 0;
-+		}
-+
-+		ret = regmap_field_read(ina->fields[reg], &regval);
-+		if (ret)
-+			return ret;
-+		*val = regval;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- static int sq52210_alert_limit_write(struct ina3221_data *ina,
- 			enum sq52210_alert_types type, int channel, long val)
- {
-@@ -736,6 +797,18 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
- 	return ret;
- }
- 
-+static int ina3221_write_power(struct device *dev, u32 attr, int channel, long val)
-+{
-+	struct ina3221_data *ina = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_power_crit:
-+		return sq52210_alert_limit_write(ina, SQ52210_ALERT_POL, channel, val);
-+	default:
-+		return 0;
-+	}
-+}
-+
- static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
- 			u32 attr, int channel, long *val)
- {
-@@ -752,6 +825,9 @@ static int ina3221_read(struct device *dev, enum hwmon_sensor_types type,
- 	case hwmon_curr:
- 		ret = ina3221_read_curr(dev, attr, channel, val);
- 		break;
-+	case hwmon_power:
-+		ret = ina3221_read_power(dev, attr, channel, val);
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
-@@ -775,6 +851,9 @@ static int ina3221_write(struct device *dev, enum hwmon_sensor_types type,
- 	case hwmon_curr:
- 		ret = ina3221_write_curr(dev, attr, channel, val);
- 		break;
-+	case hwmon_power:
-+		ret = ina3221_write_power(dev, attr, channel, val);
-+		break;
- 	default:
- 		ret = -EOPNOTSUPP;
- 		break;
+Add support for the HiTRON HAC300S AC/DC switching power supply in
+compact PCI format, with a 300W rating. This is a simple PMBUS
+compatible device.
+
+There is a small caveat with the internal registers of the device and
+more specifically with the PMBUS_VOUT_MODE. As it is already described
+in the driver, the device does not support the PMBUS_VOUT_MODE register
+and at the same time, it returns the voltage output values in Linear11
+which is not adhering to the PMBus specification (PMBus Specification
+Part II, Section 7.1-7.3). For that reason the PMBUS_VOUT_MODE register
+is being faked and returns the exponent value of the READ_VOUT register.
+The exponent part of the VOUT_* registers is being cleard in order to
+return the mantissa to the pmbus core.
+
+Vasileios Amoiridis (2):
+  dt-bindings: trivial-devices: Add hitron,hac300s
+  hwmon: Add support for HiTRON HAC300S PSU
+
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ Documentation/hwmon/hac300s.rst               |  37 +++++
+ Documentation/hwmon/index.rst                 |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/hwmon/pmbus/Kconfig                   |   9 ++
+ drivers/hwmon/pmbus/Makefile                  |   1 +
+ drivers/hwmon/pmbus/hac300s.c                 | 132 ++++++++++++++++++
+ 8 files changed, 191 insertions(+)
+ create mode 100644 Documentation/hwmon/hac300s.rst
+ create mode 100644 drivers/hwmon/pmbus/hac300s.c
+
 -- 
-2.17.1
+2.47.3
 
