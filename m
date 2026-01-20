@@ -1,162 +1,137 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A2733E36B
-	for <linux-hwmon@vger.kernel.org>; Tue, 20 Jan 2026 17:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768928515; cv=none; b=aJ+SKn7ntk4CiI6CPWcxiliW8MB/8sud3bbfuQf5EHc9jpC7MVDqi8yllslqTsqzgalgjCjnPhfrXDX6vZUM3j5ulBhLyJHD9ybceMj+ELdMxCe6JScFuGHUvpVmknSG+Cc4daYTgRrqLcESQ8+dV5sqE2yB8fbIjMy5BaJso1E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768928515; c=relaxed/simple;
-	bh=PEGw9xBw4ogKYTSJT9z89Z7FQh9KBbg44pnlT/18sxI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=uGuZHrHaCr58+Ur9J4wltiuLiWC4NxCy56aMefEhTTkYsc9mbwx4p+5y4QUF8KNKv00tfJlkFea+ZX/n3eyxWXMjL9HzFeRQ4J+kx/i/xqN7NTN0aZCk9i2Lpz+GTINLpNWSdoN8J8twKppNbGAm/7JsMNHQYqrGVfLWRpWbdNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VRf33NAZ; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482623A89A8;
+	Tue, 20 Jan 2026 18:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768933298; cv=pass; b=S5BZadonrzdkk2xe+LGVvH6elGiPedy0NKR93XttuqdRTnOVkZPc1UANxFH+pA5g1OK2WAaAGVAtVZWV+tMBtZhqtdZ7vQDS53YyvP832WXIyNzYTdjcQEf4usMQCnlKXMtbBaqesYdws+zdaNeFqrUUbVNvxnO1UkjlZYhoxyc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768933298; c=relaxed/simple;
+	bh=bJxx+BBuu5wOpM8I7XOoLpP/fg4e7MsHw458WiZKB8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YE2sPFhtN+AXC1G3QJp2CN53sDAcCXCDiA96iAvAE6EQx0/SvDC6sryrNDkvKiOHQio0IAaZRjyrOIzdYzZWX0d0KzyzJsSI4440c4ZLQNfBnES3XXQPW+n5eFQVEUi60SHAdugNSdkM57ALayGIi3tVNMPkXqojxIOjBPHHXJY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=lQD+WX8u; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VRf33NAZ"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-12336c0a8b6so11791888c88.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Jan 2026 09:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768928511; x=1769533311; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IUailGl3hB666dLaMWG2vrzy3Z8fMukkGgQryLbTNW4=;
-        b=VRf33NAZuwZlZrDrhC7+EaIjHs01BeBpR2rh523c5lXap450HZptdPEyAbHGNMJyff
-         or5GrNV9DnfYNtlxsi6gXaxOt0geFiNbg5Iv3s4uu5ud+t5yARRHQjxN4rNUCaL+MDJ1
-         sxm66FJkxHA1M8xC46B3kdQ/wMsEkTHxCZMQACt5w4rDgGdZnOTdXAx5GtnuGoqSeXAf
-         MqxtGqeKRWwBUd43OrpQW/ILy2uqH+P89YAml4tzM15AQCKog9GXnFSQrOB0xCCNhUA0
-         YW9rktJyU1TDO4oWLLkZWOlbXUj0V9USF+nmg8wNhmo2pCuYD1ber+R9baoogL6Jlr/2
-         nkXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768928511; x=1769533311;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IUailGl3hB666dLaMWG2vrzy3Z8fMukkGgQryLbTNW4=;
-        b=kzm9qltR0b2lInvO3UZVo0PbrvWm/iX88WCLTW8v6ckaQAo77ZovkonOk4UV0APTGl
-         yZKQ9y0SZjdnz00UJMZ7Rrgw47PKvhpDa07Rtd4y9kJOXOsWUAPvhM3EXy6pISQg05kj
-         csATd5FfHE5EecwcjMARxDm7Z8VaCEQf/gsmD6aeji1JsNlE3SxwBSRfIK53I8LpLJmC
-         1xuxTmcvczAlxiaDwlMjfXYFfRe+0NOL3BdheNuvpqSZ1N9T4B/+jk2jwlRkq9r0sRVv
-         ElW2Arvt3E6fZMViIWGNUszsk6EJynS+FxB764TYb4BSTBqhd0QVTP+HonoLkAhYBbxG
-         f5qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUht1DqjFKCDGSH21oDAW4X0J7fckjaBCf/xf3CxUwDFiX9oBux6meOQktegM0lU353lN/5aQzlVCy6sg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3X1G6K9Ajy1c3g08nnwiU2xJ+f0l/DOPllxOl1PFRAiDJGSS3
-	HDxwqBbUR8e3lAzpepppICSl0l02EZLdcCzbIk+jxBvpAdz9lfCBAfMg
-X-Gm-Gg: AY/fxX5dObXeZQrKd1XDDdFxx6a/XWQgJ+ukQh2dBXaY4WaqlvgP3cdam+pkjYJnSB/
-	xONWPPjipiRk+h6i9OMkt3KKe5jRwkHdXqendPuA6819row05XRuveHVswnpOVDQ9dDqbpzpOCO
-	Ksw5/FyVSLWPW9ewnhL3O1QRW0O8l8/tEAYz+pyBUL9hDZaU5W3L+4m2zuKdq8QR4957xkAW36Z
-	p4LbZ/lyVpah4dQM1DCYT0LiZrZb8D/Rfj9f6irgrvpyfYnUAEuW5qRcWIXKkYMHjut2rQiyTLR
-	JNnwZ3AWAjVd2UOPB6ytd2mlIk6A/2FMoqpwkYjZTC98xBfPBxV0sxqcObmBLZhzmZV7dwLkeeW
-	01mo5dcCB8hdz7b0XVP/D5yyaa2ingOJ7LjkV3RKgN72pjsLqrrCEL9Aa9xdXh1ppKOKHrqEcFK
-	9PMXHex8eveff+d6fg5UnGj5Kd3AyI5R6UvS5DxVgU61wQAeI7FSGSbee/9NebBp6bJ8FTulBOf
-	5lRWqj4Vw==
-X-Received: by 2002:a05:7022:418c:b0:119:e569:fb9d with SMTP id a92af1059eb24-1244a70c431mr12808662c88.12.1768928510832;
-        Tue, 20 Jan 2026 09:01:50 -0800 (PST)
-Received: from ehlo.thunderbird.net (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244af108absm19903798c88.13.2026.01.20.09.01.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 09:01:50 -0800 (PST)
-Date: Tue, 20 Jan 2026 09:01:48 -0800
-From: "Derek J. Clark" <derekjohn.clark@gmail.com>
-To: Rong Zhang <i@rong.moe>,
- =?ISO-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC: Mark Pearson <mpearson-lenovo@squebb.ca>, Armin Wolf <W_Armin@gmx.de>,
- Hans de Goede <hansg@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- Kurt Borja <kuurtb@gmail.com>, platform-driver-x86@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v10_2/7=5D_platform/x86=3A_Rename_?=
- =?US-ASCII?Q?lenovo-wmi-capdata01_to_lenovo-wmi-capdata?=
-User-Agent: Thunderbird for Android
-In-Reply-To: <c437e6e73d74b7aedd269328e1b0411a110444d3.camel@rong.moe>
-References: <20260117210051.108988-1-i@rong.moe> <20260117210051.108988-3-i@rong.moe> <dc356678-4be6-3ba8-dd9e-18ba910f5e62@linux.intel.com> <c437e6e73d74b7aedd269328e1b0411a110444d3.camel@rong.moe>
-Message-ID: <E7E469E6-8C93-4DB8-82E3-5CB82653984B@gmail.com>
+	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="lQD+WX8u"
+ARC-Seal: i=1; a=rsa-sha256; t=1768933274; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nd+nxB2DQIEq74vI0hu2cD91wtSTmlu6Fc965g9QDTntrhRF2jIRiYD2DUQLYCT5aYN1hi91+tpX5p4DCyNhq2JdEpzH5ewMEkcgP30i+LjZ8OcU4a2D0jRyR7HXDHDqPk+MnB4w9/7CH4tfz0MtRi3ZET0iCUktxPp3bZOwIgA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768933274; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=ONW/Kjo4Iy8zIk9zApmrQ4M3TAi6EzH5b9Jv+iGr0Ys=; 
+	b=d6JXMX3eeUzOWvv2DcM/l09yn0WwYaQRIJ0JWr7TkR7GpKmznzjeWpNfJ+z/77FONcc2seW4VqVCUf3HAzOTY4xFC6fSDqWPYtlQ8COq7uwsiLMTeF2C2/VUBDt5p77MXyuxlcLQDASXyHegqiNnQKRbBdk8rRtyvFtqW5UtqqM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768933274;
+	s=zmail; d=rong.moe; i=i@rong.moe;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=ONW/Kjo4Iy8zIk9zApmrQ4M3TAi6EzH5b9Jv+iGr0Ys=;
+	b=lQD+WX8udZm0hskZrY0kitHVANNQ4UiJEquR3TwtOrKDELwc9DkI82ZjGzMpQaPV
+	HzOF8BIyYQ6ALAeOinjVHqdX+sPlKjx57BDkOi8KZ62hxS2vBJDwr2sdS+qLYFZ3P5v
+	69XFT9orVMLnjmsR69n/5Z0NwiR0h1iyoUT8ZFwI=
+Received: by mx.zohomail.com with SMTPS id 176893327357812.052566890538174;
+	Tue, 20 Jan 2026 10:21:13 -0800 (PST)
+From: Rong Zhang <i@rong.moe>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Rong Zhang <i@rong.moe>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Kurt Borja <kuurtb@gmail.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH v11 1/7] platform/x86: lenovo-wmi-helpers: Convert returned buffer into u32
+Date: Wed, 21 Jan 2026 02:20:02 +0800
+Message-ID: <20260120182104.163424-2-i@rong.moe>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260120182104.163424-1-i@rong.moe>
+References: <20260120182104.163424-1-i@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On January 20, 2026 7:20:56 AM PST, Rong Zhang <i@rong=2Emoe> wrote:
->On Tue, 2026-01-20 at 16:48 +0200, Ilpo J=C3=A4rvinen wrote:
->> On Sun, 18 Jan 2026, Rong Zhang wrote:
->>=20
->> > Prepare for the upcoming changes to make it suitable to retrieve
->> > and provide other Capability Data as well=2E
->> >=20
->> > Signed-off-by: Rong Zhang <i@rong=2Emoe>
->> > Reviewed-by: Derek J=2E Clark <derekjohn=2Eclark@gmail=2Ecom>
->> > Tested-by: Derek J=2E Clark <derekjohn=2Eclark@gmail=2Ecom>
->> > ---
->> >  drivers/platform/x86/lenovo/Kconfig           |   4 +-
->> >  drivers/platform/x86/lenovo/Makefile          |   2 +-
->> >  =2E=2E=2E/lenovo/{wmi-capdata01=2Ec =3D> wmi-capdata=2Ec} | 124 ++++=
-+++++---------
->> >  =2E=2E=2E/lenovo/{wmi-capdata01=2Eh =3D> wmi-capdata=2Eh} |  10 +-
->> >  drivers/platform/x86/lenovo/wmi-other=2Ec       |  11 +-
->> >  5 files changed, 78 insertions(+), 73 deletions(-)
->> >  rename drivers/platform/x86/lenovo/{wmi-capdata01=2Ec =3D> wmi-capda=
-ta=2Ec} (60%)
->> >  rename drivers/platform/x86/lenovo/{wmi-capdata01=2Eh =3D> wmi-capda=
-ta=2Eh} (60%)
->> >=20
->> > diff --git a/drivers/platform/x86/lenovo/Kconfig b/drivers/platform/x=
-86/lenovo/Kconfig
->> > index d22b774e0236f=2E=2Efb96a0f908f03 100644
->> > --- a/drivers/platform/x86/lenovo/Kconfig
->> > +++ b/drivers/platform/x86/lenovo/Kconfig
->> > @@ -233,7 +233,7 @@ config YT2_1380
->> >  	  To compile this driver as a module, choose M here: the module wil=
-l
->> >  	  be called lenovo-yogabook=2E
->> > =20
->> > -config LENOVO_WMI_DATA01
->> > +config LENOVO_WMI_DATA
->> >  	tristate
->> >  	depends on ACPI_WMI
->>=20
->> This series is in the review-ilpo-next branch now=2E Thanks to all who =
-have=20
->> participated in getting it into shape!
->
->Thank you for review and merging too! And thanks to Armin, Derek and
->Kurt for review and testing! ;-)
->
->> While reading it through once again while applying, I start to wonder i=
-f=20
->> this config would be better named as LENOVO_WMI_CAPDATA ?
->
->I didn't thought of that when I substituted all occurrences of
->data01/cd01 with data/cd, but it's definitely a better name for me when
->it pops out=2E
->
->Hmm=2E=2E=2E Wait, we have
->
-> 	=2Edriver =3D {
->-		=2Ename =3D "lenovo_wmi_cd01",
->+		=2Ename =3D "lenovo_wmi_cd",
-> 		=2Eprobe_type =3D PROBE_PREFER_ASYNCHRONOUS,
-> 	},
->
->What about adopting the same name here to make everything more
->consistent? Having a unified name will be neater=2E @Derek, what do you
->think?
+The Windows WMI-ACPI driver converts all ACPI objects into a common
+buffer format, so returning a buffer with four bytes will look like an
+integer for WMI consumers under Windows.
 
-No preference personally, nobody is going to see the config option really =
-since we just select it when we enable the others=2E Consistent naming prob=
-ably helps folks who are unfamiliar with the different drivers for this int=
-erface I suppose=2E
+Therefore, some devices may simply implement the corresponding ACPI
+methods to always return a buffer. While lwmi_dev_evaluate_int() expects
+an integer (u32), convert returned >=4B buffer into u32 to support these
+devices.
 
-Thanks,
-Derek
+Suggested-by: Armin Wolf <W_Armin@gmx.de>
+Link: https://lore.kernel.org/r/f1787927-b655-4321-b9d9-bc12353c72db@gmx.de/
+Signed-off-by: Rong Zhang <i@rong.moe>
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+---
+Changes in v7:
+- Fix mistakenly inverted boundary check
 
+Changes in v4:
+- Accept oversized buffer (thanks Armin Wolf)
+- Use get_unaligned_le32() (ditto)
 
->Thank you all,
->Rong
+Changes in v2:
+- New patch (thanks Armin Wolf)
+---
+ drivers/platform/x86/lenovo/wmi-helpers.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/platform/x86/lenovo/wmi-helpers.c b/drivers/platform/x86/lenovo/wmi-helpers.c
+index f6fef6296251e..7379defac5002 100644
+--- a/drivers/platform/x86/lenovo/wmi-helpers.c
++++ b/drivers/platform/x86/lenovo/wmi-helpers.c
+@@ -21,6 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/export.h>
+ #include <linux/module.h>
++#include <linux/unaligned.h>
+ #include <linux/wmi.h>
+ 
+ #include "wmi-helpers.h"
+@@ -59,10 +60,24 @@ int lwmi_dev_evaluate_int(struct wmi_device *wdev, u8 instance, u32 method_id,
+ 		if (!ret_obj)
+ 			return -ENODATA;
+ 
+-		if (ret_obj->type != ACPI_TYPE_INTEGER)
+-			return -ENXIO;
++		switch (ret_obj->type) {
++		/*
++		 * The ACPI method may simply return a buffer when a u32
++		 * is expected. This is valid on Windows as its WMI-ACPI
++		 * driver converts everything to a common buffer.
++		 */
++		case ACPI_TYPE_BUFFER:
++			if (ret_obj->buffer.length < sizeof(u32))
++				return -ENXIO;
+ 
+-		*retval = (u32)ret_obj->integer.value;
++			*retval = get_unaligned_le32(ret_obj->buffer.pointer);
++			return 0;
++		case ACPI_TYPE_INTEGER:
++			*retval = (u32)ret_obj->integer.value;
++			return 0;
++		default:
++			return -ENXIO;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.51.0
 
