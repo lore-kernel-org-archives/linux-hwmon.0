@@ -1,40 +1,41 @@
 Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59ACC43E4A7;
-	Tue, 20 Jan 2026 18:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF84451057;
+	Tue, 20 Jan 2026 18:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768933298; cv=pass; b=BG8KZm5tm/vyHc48Qpta8+oLbQFSsjSuYU9i78LpJAAMrCeFQ68/qs0SiORXsDfx2JUHcRIG6uRxp099k7XvqgFTbmJwPOxYi/zxsSVIyLHo9mo+XHMiYaxopBi/fr3a2U3Aq7RRBE+pnebdH6XNSIPkdJjPkVAc4Iiy3HBWQ2U=
+	t=1768933302; cv=pass; b=T7/GfuKsvmuNYyCjEy62XnGzSMoaB0iO2B1dj3NV9PEDTr06Y3Ur0BsyZZMZGgIzpc8eQmlCpzuWmIVgy570qxV+V3fktDWrhkUmRyfsuBR1noZZQSZv4re7UdRI01vZSO7LsRAMWQtHJPxwXP++afPkoAQSyFX/W8SkYp+Mric=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768933298; c=relaxed/simple;
-	bh=iAU25GbK5O7mWzZRI3l4+PhDXuy14IiYxAXz/62ps/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TpBUkOlYOUS6ngcpjLnF2oP+wIdx92kqgNC4gVOvwFNacK9C3y2m3MWzoczZNXBszP+CnVfTU6JjcLL1RMqu6nPz+iTuPGx3KYnOsRgA294T8uvd5uGy81hglflPC4YKWYvJPOuHN+wR3mpBGzZY92pWyY1ZHpdiNHQD4JRn4lY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=YRGbnXJW; arc=pass smtp.client-ip=136.143.188.15
+	s=arc-20240116; t=1768933302; c=relaxed/simple;
+	bh=FC2UQY4PAqQQ5mBj2RNbUoPcjvnx2n2NR70aJMTikDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iICDeb5NphfPRbTBgAXZX828DNTffpKYc70sAxHxQPFCj1h6YUZnbgczGGU6T6YejCbaO8nRM1c8To6kbSvc2O6j7hnkoU0Z4pzZw4adSJucf3uCViVT5N5zRoEYgqbr+QFybTAC4+I1CzlZwHNex59eF+dtVEsrWX5x18ZXIVc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b=iFRq+Cqz; arc=pass smtp.client-ip=136.143.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="YRGbnXJW"
-ARC-Seal: i=1; a=rsa-sha256; t=1768933272; cv=none; 
+	dkim=pass (1024-bit key) header.d=rong.moe header.i=i@rong.moe header.b="iFRq+Cqz"
+ARC-Seal: i=1; a=rsa-sha256; t=1768933278; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=BBugXmexBRWVdUy9GOoBa7fO1O2E4/JbPilfOPgYp+eon0YWDpkcDNHFOPXPDynQb90WAEqrU8JtujbtlsjLXPIxXBgxHgY3VgWPNgdDLOg5rFSaVwFzzqNvSzjZ84u9nudhbKtOGH64KIASIY5CsVz9UiQX/WmaR3O0MrmpsnY=
+	b=X8BH4cHBd72JwZ6dfITpmdIRYXzQ2fvKIjlu14qAMy8lI9Tr6BlQL3eBzJ/+zg3RUD4bsKnf9OSR4ih/Vz1wB9+udZVw75GctdBKFoTSIK5i4AYAj2Vn8V19zJLtcTKOuljJPad6TDezQMsjLGNfRo7sSmWWIYDGlE+Z+Vbm1JI=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768933272; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=KVcmNvCrLXsdGxdMBrzgh3fQt3XKG2WGFxPI7Dc+A+k=; 
-	b=Ff1SBHeQPqPZWxukFNz0v2aKurb89YJbcVGfCSHVVYRA1x5BhjC560semSNXyHQWHEDBBhW3MmKuidC3wvIrZ2QOxuJjIIEd/MPcHOVkWcG5zTczSlLb5RD2LhD4eJYnDnWthWuLJ2mefP/esuNlJj2rcHCuSkAYrj0tDNqSLMQ=
+	t=1768933278; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=KSW3zvsyMEvFF4CJ1z5n+wq5SoQjFIUjwscera6k1WI=; 
+	b=MRNvrrcZF56qbliEYdd+Cdg7Fv3v01JPKkAYgf/CwJJDnB/3RxN3U7WrszjuWhJD63WJc9WTj1BRq7e14vfaleDh8X7Op+dq5SldEpcv3uPtHWMO46a4PT1jDI+vsIIFiAsiPGCtEoYatKA/FRKR9U47enxPLPR4BBXoLpBzwR4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=rong.moe;
 	spf=pass  smtp.mailfrom=i@rong.moe;
 	dmarc=pass header.from=<i@rong.moe>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768933272;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768933278;
 	s=zmail; d=rong.moe; i=i@rong.moe;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=KVcmNvCrLXsdGxdMBrzgh3fQt3XKG2WGFxPI7Dc+A+k=;
-	b=YRGbnXJWb7di78UKj2qh5josjkqkcaeC9mD92evKeUQwqzCb+qUYENvQzbj5sniY
-	++2ocwGR80SkpKUlXfocMw6GVHEU1kxk8Q8M1aAjcZHbNQqSQXu1Euw4gbfDofjJshv
-	unSE51wNdJ/1RxCOcAX0Udi/jW9KkgkyfkQmsH8w=
-Received: by mx.zohomail.com with SMTPS id 1768933270564394.7028353663237;
-	Tue, 20 Jan 2026 10:21:10 -0800 (PST)
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=KSW3zvsyMEvFF4CJ1z5n+wq5SoQjFIUjwscera6k1WI=;
+	b=iFRq+Cqz96PpWhHrFYpVdPIfXKi2a6wWrHUW1ZP/abkA+qf5OfROYJkj5I9v/WWx
+	CwC+8VZpRbQU0mDrC/kzlreiYwbafGq/IBtMhyLEQhhSbwq+ZlVjOotGa5+oT/Ef42g
+	30rtLsmx2HedEzt2z6VzE1JugpDj0sDTlpCm8cjg=
+Received: by mx.zohomail.com with SMTPS id 1768933276547117.5125103159287;
+	Tue, 20 Jan 2026 10:21:16 -0800 (PST)
 From: Rong Zhang <i@rong.moe>
 To: Mark Pearson <mpearson-lenovo@squebb.ca>,
 	"Derek J. Clark" <derekjohn.clark@gmail.com>,
@@ -47,10 +48,12 @@ Cc: Rong Zhang <i@rong.moe>,
 	platform-driver-x86@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH v11 0/7] platform/x86: lenovo-wmi-{capdata,other}: Add HWMON for fan speed
-Date: Wed, 21 Jan 2026 02:20:01 +0800
-Message-ID: <20260120182104.163424-1-i@rong.moe>
+Subject: [PATCH v11 2/7] platform/x86: Rename lenovo-wmi-capdata01 to lenovo-wmi-capdata
+Date: Wed, 21 Jan 2026 02:20:03 +0800
+Message-ID: <20260120182104.163424-3-i@rong.moe>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260120182104.163424-1-i@rong.moe>
+References: <20260120182104.163424-1-i@rong.moe>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -61,206 +64,431 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Lenovo WMI Other Mode interface also supports querying or setting fan
-speed RPM. This capability is described by LENOVO_CAPABILITY_DATA_00.
-Besides, LENOVO_FAN_TEST_DATA provides reference data for self-test of
-cooling fans, including minimum and maximum fan speed RPM.
+Prepare for the upcoming changes to make it suitable to retrieve
+and provide other Capability Data as well.
 
-This patchset turns lenovo-wmi-capdata01 into a unified driver (now
-named lenovo-wmi-capdata) for LENOVO_CAPABILITY_DATA_{00,01} and
-LENOVO_FAN_TEST_DATA; then adds HWMON support for lenovo-wmi-other:
-
- - fanX_div: internal RPM divisor
- - fanX_input: current RPM
- - fanX_max: maximum RPM
- - fanX_min: minimum RPM
- - fanX_target: target RPM (tunable, 0=auto)
-
-LENOVO_CAPABILITY_DATA_{00,01} presents on all devices, so
-both binds to lenovo-wmi-other. However, some device does not have
-LENOVO_FAN_TEST_DATA and its presence is described by
-LENOVO_CAPABILITY_DATA_00; hence, the former binds to the latter and a
-callback is used to pass the data to lenovo-wmi-other.
-
-Summarizing this scheme:
-
-        lenovo-wmi-other <-> capdata00 <-> capdata_fan
-        |- master            |- component
-                             |- sub-master |- sub-component
-
-The callback will be called once both the master and the sub-component
-are bound to the sub-master (component).
-
-This scheme is essential to solve these issues:
-- The component framework only supports one aggregation per master
-- A binding is only established until all components are found
-- The Fan Test Data interface may be missing on some devices
-- To get rid of queries for the presence of WMI GUIDs
-- The notifier framework cannot cleanly connect capdata_fan to
-  lenovo-wmi-other without introducing assumptions on probing sequence
-
-capdata00 is registered as a component and a sub-master on probe,
-instead of chaining the registrations in one's bind callback. This is
-because calling (un)registration methods of the component framework
-causes deadlock in (un)bind callbacks, i.e., it's impossible to register
-capdata00 as a sub-master/component in its component/sub-master bind
-callback, and vice versa.
-
-The implementation does not rely on a specific binding sequence. This
-has been fuzz-tested using:
-
-	#!/bin/bash
-
-	DRV_DIR=/sys/bus/wmi/drivers/lenovo_wmi_cd
-	CAPDATA_GUIDS=(
-		$(find "$DRV_DIR"/ -name '*-*-*-*-*-*' -printf "%f ")
-	)
-
-	b() {
-		echo -n 'B: '
-		sudo tee "$DRV_DIR"/bind <<<"$1"
-	}
-	u() {
-		echo -n 'U: '
-		sudo tee "$DRV_DIR"/unbind <<<"$1"
-	}
-
-	while read -rsa perm; do
-		for guid in "${perm[@]}"; do
-			u "$guid"
-		done
-		for guid in "${perm[@]}"; do
-			b "$guid"
-		done
-		sensors | grep -A3 lenovo_wmi_other
-		echo '========'
-	done < <(python3 -c "
-	from itertools import permutations
-	guids = '${CAPDATA_GUIDS[*]}'.split()
-	for r in range(1, len(guids) + 1):
-		ps = permutations(guids, r)
-		for p in ps:
-			print(' '.join(p))
-	")
-
-Tested on ThinkBook 14 G7+ ASP.
-
+Signed-off-by: Rong Zhang <i@rong.moe>
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
+Tested-by: Derek J. Clark <derekjohn.clark@gmail.com>
+---
 Changes in v11:
 - Adopt a unified name (lenovo_wmi_capdata) for kmod, Kconfig, export
   namespace and driver (thanks Ilpo Järvinen)
-- Link to v10: https://lore.kernel.org/r/20260117210051.108988-1-i@rong.moe/
-
-Changes in v10:
-- Remove fanX_enable due to semantic mismatch with HWMON ABI (thanks
-  Kurt Borja)
-  - By removing it, its functionality (stopping the fan) is hidden
-    behind the module parameter "relax_fan_constraint", so that users
-    won't accidentally stop the fan while in a default setup (ditto)
-- Mention fanX_target=0 means auto in documentation (ditto)
-- Also accept retval=0 while setting the fan (ditto)
-- Add fanX_div (thanks Derek J. Clark)
-- Round down the written value of fanX_target to the nearest multiple of
-  fanX_div, so that the stored value matches the effective value
-- Fix HWMON missing when capdata01 is reprobed
-- Link to v9: https://lore.kernel.org/r/20260114122745.986699-1-i@rong.moe/
-
-Changes in v9:
-- Make kernel-doc.py happy (thanks Ilpo Järvinen, kernel test robot)
-- Link to v8: https://lore.kernel.org/r/20260113172817.393856-1-i@rong.moe/
-
-Changes in v8:
-- Refactor some statements to improve readability (thanks Ilpo Järvinen)
-- Use more commonly used errno (ditto)
-- Fix missing #include (ditto)
-- Link to v7: https://lore.kernel.org/r/20251125194959.157524-1-i@rong.moe/
-
-Changes in v7:
-- Fix missing #include (thanks Ilpo Järvinen)
-- Fix formatting issues (ditto)
-- dev_dbg() instead of dev_info() on probe success (ditto)
-- Rearrange to drop some gotos (ditto)
-- Move the declarations of __free()-managed variables to where they are
-  assigned (ditto)
-- Improve the readability of struct definition and error paths (ditto)
-- Prevent back-and-forth changes (ditto)
-- Fix mistakenly inverted boundary check
-- Emit unaligned access to Fan Test Data's WMI block
-- Properly calculate array index when we truncate Fan Test Data
-- Fix typo
-- Link to v6: https://lore.kernel.org/r/20251122184522.18677-1-i@rong.moe/
-
-Changes in v6:
-- Fix mistaken error paths
-- Link to v5: https://lore.kernel.org/r/20251114175927.52533-1-i@rong.moe/
-
-Changes in v5:
-- Do not cast pointer to non-pointer or vice versa (thanks kernel test
-  robot)
-- Fix missing include (ditto)
-- Link to v4: https://lore.kernel.org/r/20251113191152.96076-1-i@rong.moe/
-
-Changes in v4:
-- Get rid of wmi_has_guid() (thanks Armin Wolf's inspiration)
-  - Add [PATCH v4 6/7], please review & test
-    - Check 0x04050000.supported and bind capdata_fan to capdata00
-  - Rework HWMON registration
-    - Collect fan info from capdata00 and capdata_fan separately
-    - Use a callback to collect fan info from capdata_fan
-    - Trigger HWMON registration only if all fan info is collected
-    - Do not check 0x04050000.supported, implied by the presence of
-      capdata_fan
-- Drop Reviewed-by & Tested-by from [PATCH v4 7/7] due to the changes,
-  please review & test
-- Link to v3: https://lore.kernel.org/r/20251031155349.24693-1-i@rong.moe/
-
-Changes in v3:
-- Fix grammar (thanks Derek J. Clark)
-- Link to v2: https://lore.kernel.org/r/20251030193955.107148-1-i@rong.moe/
-
-Changes in v2:
-- Add a workaround for ACPI methods that return a 4B buffer for u32
-  (thanks Armin Wolf)
-- Fix function documentation (thanks kernel test bot)
-- Reword documentation (thanks Derek J. Clark)
-- Squash min/max reporting patch into the initial HWMON one (ditto)
-- Query 0x04050000 for interface availability (ditto)
-  - New parameter "expose_all_fans" to skip this check
-- Enforce min/max RPM constraint on set (ditto)
-  - New parameter "relax_fan_constraint" to disable this behavior
-  - Drop parameter "ignore_fan_cap", superseded by the next one
-  - New parameter "expose_all_fans" to expose fans w/o such data
-- Assume auto mode on probe (ditto)
-- Do not register HWMON device if no fan can be exposed
-- fanX_target: Return -EBUSY instead of raw target value when fan stops
-- Link to v1: https://lore.kernel.org/r/20251019210450.88830-1-i@rong.moe/
-
-Rong Zhang (7):
-  platform/x86: lenovo-wmi-helpers: Convert returned buffer into u32
-  platform/x86: Rename lenovo-wmi-capdata01 to lenovo-wmi-capdata
-  platform/x86: lenovo-wmi-{capdata,other}: Support multiple Capability
-    Data
-  platform/x86: lenovo-wmi-capdata: Add support for Capability Data 00
-  platform/x86: lenovo-wmi-capdata: Add support for Fan Test Data
-  platform/x86: lenovo-wmi-capdata: Wire up Fan Test Data
-  platform/x86: lenovo-wmi-other: Add HWMON for fan reporting/tuning
-
- .../wmi/devices/lenovo-wmi-other.rst          |  46 +-
- drivers/platform/x86/lenovo/Kconfig           |   5 +-
+---
+ drivers/platform/x86/lenovo/Kconfig           |   4 +-
  drivers/platform/x86/lenovo/Makefile          |   2 +-
- drivers/platform/x86/lenovo/wmi-capdata.c     | 829 ++++++++++++++++++
- drivers/platform/x86/lenovo/wmi-capdata.h     |  65 ++
- drivers/platform/x86/lenovo/wmi-capdata01.c   | 302 -------
- drivers/platform/x86/lenovo/wmi-capdata01.h   |  25 -
- drivers/platform/x86/lenovo/wmi-helpers.c     |  21 +-
- drivers/platform/x86/lenovo/wmi-other.c       | 528 ++++++++++-
- 9 files changed, 1466 insertions(+), 357 deletions(-)
- create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.c
- create mode 100644 drivers/platform/x86/lenovo/wmi-capdata.h
- delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.c
- delete mode 100644 drivers/platform/x86/lenovo/wmi-capdata01.h
+ .../lenovo/{wmi-capdata01.c => wmi-capdata.c} | 124 +++++++++---------
+ .../lenovo/{wmi-capdata01.h => wmi-capdata.h} |  10 +-
+ drivers/platform/x86/lenovo/wmi-other.c       |  11 +-
+ 5 files changed, 78 insertions(+), 73 deletions(-)
+ rename drivers/platform/x86/lenovo/{wmi-capdata01.c => wmi-capdata.c} (60%)
+ rename drivers/platform/x86/lenovo/{wmi-capdata01.h => wmi-capdata.h} (60%)
 
-
-base-commit: 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+diff --git a/drivers/platform/x86/lenovo/Kconfig b/drivers/platform/x86/lenovo/Kconfig
+index d22b774e0236f..587da1c602ca0 100644
+--- a/drivers/platform/x86/lenovo/Kconfig
++++ b/drivers/platform/x86/lenovo/Kconfig
+@@ -233,7 +233,7 @@ config YT2_1380
+ 	  To compile this driver as a module, choose M here: the module will
+ 	  be called lenovo-yogabook.
+ 
+-config LENOVO_WMI_DATA01
++config LENOVO_WMI_CAPDATA
+ 	tristate
+ 	depends on ACPI_WMI
+ 
+@@ -264,7 +264,7 @@ config LENOVO_WMI_TUNING
+ 	tristate "Lenovo Other Mode WMI Driver"
+ 	depends on ACPI_WMI
+ 	select FW_ATTR_CLASS
+-	select LENOVO_WMI_DATA01
++	select LENOVO_WMI_CAPDATA
+ 	select LENOVO_WMI_EVENTS
+ 	select LENOVO_WMI_HELPERS
+ 	help
+diff --git a/drivers/platform/x86/lenovo/Makefile b/drivers/platform/x86/lenovo/Makefile
+index 7b2128e3a2142..91a9370f11b3a 100644
+--- a/drivers/platform/x86/lenovo/Makefile
++++ b/drivers/platform/x86/lenovo/Makefile
+@@ -12,7 +12,7 @@ lenovo-target-$(CONFIG_LENOVO_YMC)	+= ymc.o
+ lenovo-target-$(CONFIG_YOGABOOK)	+= yogabook.o
+ lenovo-target-$(CONFIG_YT2_1380)	+= yoga-tab2-pro-1380-fastcharger.o
+ lenovo-target-$(CONFIG_LENOVO_WMI_CAMERA)	+= wmi-camera.o
+-lenovo-target-$(CONFIG_LENOVO_WMI_DATA01)	+= wmi-capdata01.o
++lenovo-target-$(CONFIG_LENOVO_WMI_CAPDATA)	+= wmi-capdata.o
+ lenovo-target-$(CONFIG_LENOVO_WMI_EVENTS)	+= wmi-events.o
+ lenovo-target-$(CONFIG_LENOVO_WMI_HELPERS)	+= wmi-helpers.o
+ lenovo-target-$(CONFIG_LENOVO_WMI_GAMEZONE)	+= wmi-gamezone.o
+diff --git a/drivers/platform/x86/lenovo/wmi-capdata01.c b/drivers/platform/x86/lenovo/wmi-capdata.c
+similarity index 60%
+rename from drivers/platform/x86/lenovo/wmi-capdata01.c
+rename to drivers/platform/x86/lenovo/wmi-capdata.c
+index fc7e3454e71dc..ba843b6604b06 100644
+--- a/drivers/platform/x86/lenovo/wmi-capdata01.c
++++ b/drivers/platform/x86/lenovo/wmi-capdata.c
+@@ -1,14 +1,17 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * Lenovo Capability Data 01 WMI Data Block driver.
++ * Lenovo Capability Data WMI Data Block driver.
+  *
+- * Lenovo Capability Data 01 provides information on tunable attributes used by
+- * the "Other Mode" WMI interface. The data includes if the attribute is
+- * supported by the hardware, the default_value, max_value, min_value, and step
+- * increment. Each attribute has multiple pages, one for each of the thermal
+- * modes managed by the Gamezone interface.
++ * Lenovo Capability Data provides information on tunable attributes used by
++ * the "Other Mode" WMI interface.
++ *
++ * Capability Data 01 includes if the attribute is supported by the hardware,
++ * and the default_value, max_value, min_value, and step increment. Each
++ * attribute has multiple pages, one for each of the thermal modes managed by
++ * the Gamezone interface.
+  *
+  * Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com>
++ *   - Initial implementation (formerly named lenovo-wmi-capdata01)
+  */
+ 
+ #include <linux/acpi.h>
+@@ -26,55 +29,55 @@
+ #include <linux/types.h>
+ #include <linux/wmi.h>
+ 
+-#include "wmi-capdata01.h"
++#include "wmi-capdata.h"
+ 
+ #define LENOVO_CAPABILITY_DATA_01_GUID "7A8F5407-CB67-4D6E-B547-39B3BE018154"
+ 
+ #define ACPI_AC_CLASS "ac_adapter"
+ #define ACPI_AC_NOTIFY_STATUS 0x80
+ 
+-struct lwmi_cd01_priv {
++struct lwmi_cd_priv {
+ 	struct notifier_block acpi_nb; /* ACPI events */
+ 	struct wmi_device *wdev;
+-	struct cd01_list *list;
++	struct cd_list *list;
+ };
+ 
+-struct cd01_list {
++struct cd_list {
+ 	struct mutex list_mutex; /* list R/W mutex */
+ 	u8 count;
+ 	struct capdata01 data[];
+ };
+ 
+ /**
+- * lwmi_cd01_component_bind() - Bind component to master device.
+- * @cd01_dev: Pointer to the lenovo-wmi-capdata01 driver parent device.
++ * lwmi_cd_component_bind() - Bind component to master device.
++ * @cd_dev: Pointer to the lenovo-wmi-capdata driver parent device.
+  * @om_dev: Pointer to the lenovo-wmi-other driver parent device.
+- * @data: capdata01_list object pointer used to return the capability data.
++ * @data: cd_list object pointer used to return the capability data.
+  *
+- * On lenovo-wmi-other's master bind, provide a pointer to the local capdata01
+- * list. This is used to call lwmi_cd01_get_data to look up attribute data
++ * On lenovo-wmi-other's master bind, provide a pointer to the local capdata
++ * list. This is used to call lwmi_cd*_get_data to look up attribute data
+  * from the lenovo-wmi-other driver.
+  *
+  * Return: 0
+  */
+-static int lwmi_cd01_component_bind(struct device *cd01_dev,
+-				    struct device *om_dev, void *data)
++static int lwmi_cd_component_bind(struct device *cd_dev,
++				  struct device *om_dev, void *data)
+ {
+-	struct lwmi_cd01_priv *priv = dev_get_drvdata(cd01_dev);
+-	struct cd01_list **cd01_list = data;
++	struct lwmi_cd_priv *priv = dev_get_drvdata(cd_dev);
++	struct cd_list **cd_list = data;
+ 
+-	*cd01_list = priv->list;
++	*cd_list = priv->list;
+ 
+ 	return 0;
+ }
+ 
+-static const struct component_ops lwmi_cd01_component_ops = {
+-	.bind = lwmi_cd01_component_bind,
++static const struct component_ops lwmi_cd_component_ops = {
++	.bind = lwmi_cd_component_bind,
+ };
+ 
+ /**
+  * lwmi_cd01_get_data - Get the data of the specified attribute
+- * @list: The lenovo-wmi-capdata01 pointer to its cd01_list struct.
++ * @list: The lenovo-wmi-capdata pointer to its cd_list struct.
+  * @attribute_id: The capdata attribute ID to be found.
+  * @output: Pointer to a capdata01 struct to return the data.
+  *
+@@ -83,7 +86,7 @@ static const struct component_ops lwmi_cd01_component_ops = {
+  *
+  * Return: 0 on success, or -EINVAL.
+  */
+-int lwmi_cd01_get_data(struct cd01_list *list, u32 attribute_id, struct capdata01 *output)
++int lwmi_cd01_get_data(struct cd_list *list, u32 attribute_id, struct capdata01 *output)
+ {
+ 	u8 idx;
+ 
+@@ -97,17 +100,17 @@ int lwmi_cd01_get_data(struct cd01_list *list, u32 attribute_id, struct capdata0
+ 
+ 	return -EINVAL;
+ }
+-EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CD01");
++EXPORT_SYMBOL_NS_GPL(lwmi_cd01_get_data, "LENOVO_WMI_CAPDATA");
+ 
+ /**
+- * lwmi_cd01_cache() - Cache all WMI data block information
+- * @priv: lenovo-wmi-capdata01 driver data.
++ * lwmi_cd_cache() - Cache all WMI data block information
++ * @priv: lenovo-wmi-capdata driver data.
+  *
+  * Loop through each WMI data block and cache the data.
+  *
+  * Return: 0 on success, or an error.
+  */
+-static int lwmi_cd01_cache(struct lwmi_cd01_priv *priv)
++static int lwmi_cd_cache(struct lwmi_cd_priv *priv)
+ {
+ 	int idx;
+ 
+@@ -131,17 +134,17 @@ static int lwmi_cd01_cache(struct lwmi_cd01_priv *priv)
+ }
+ 
+ /**
+- * lwmi_cd01_alloc() - Allocate a cd01_list struct in drvdata
+- * @priv: lenovo-wmi-capdata01 driver data.
++ * lwmi_cd_alloc() - Allocate a cd_list struct in drvdata
++ * @priv: lenovo-wmi-capdata driver data.
+  *
+- * Allocate a cd01_list struct large enough to contain data from all WMI data
++ * Allocate a cd_list struct large enough to contain data from all WMI data
+  * blocks provided by the interface.
+  *
+  * Return: 0 on success, or an error.
+  */
+-static int lwmi_cd01_alloc(struct lwmi_cd01_priv *priv)
++static int lwmi_cd_alloc(struct lwmi_cd_priv *priv)
+ {
+-	struct cd01_list *list;
++	struct cd_list *list;
+ 	size_t list_size;
+ 	int count, ret;
+ 
+@@ -163,28 +166,28 @@ static int lwmi_cd01_alloc(struct lwmi_cd01_priv *priv)
+ }
+ 
+ /**
+- * lwmi_cd01_setup() - Cache all WMI data block information
+- * @priv: lenovo-wmi-capdata01 driver data.
++ * lwmi_cd_setup() - Cache all WMI data block information
++ * @priv: lenovo-wmi-capdata driver data.
+  *
+- * Allocate a cd01_list struct large enough to contain data from all WMI data
++ * Allocate a cd_list struct large enough to contain data from all WMI data
+  * blocks provided by the interface. Then loop through each data block and
+  * cache the data.
+  *
+  * Return: 0 on success, or an error code.
+  */
+-static int lwmi_cd01_setup(struct lwmi_cd01_priv *priv)
++static int lwmi_cd_setup(struct lwmi_cd_priv *priv)
+ {
+ 	int ret;
+ 
+-	ret = lwmi_cd01_alloc(priv);
++	ret = lwmi_cd_alloc(priv);
+ 	if (ret)
+ 		return ret;
+ 
+-	return lwmi_cd01_cache(priv);
++	return lwmi_cd_cache(priv);
+ }
+ 
+ /**
+- * lwmi_cd01_notifier_call() - Call method for lenovo-wmi-capdata01 driver notifier.
++ * lwmi_cd01_notifier_call() - Call method for cd01 notifier.
+  * block call chain.
+  * @nb: The notifier_block registered to lenovo-wmi-events driver.
+  * @action: Unused.
+@@ -199,17 +202,17 @@ static int lwmi_cd01_notifier_call(struct notifier_block *nb, unsigned long acti
+ 				   void *data)
+ {
+ 	struct acpi_bus_event *event = data;
+-	struct lwmi_cd01_priv *priv;
++	struct lwmi_cd_priv *priv;
+ 	int ret;
+ 
+ 	if (strcmp(event->device_class, ACPI_AC_CLASS) != 0)
+ 		return NOTIFY_DONE;
+ 
+-	priv = container_of(nb, struct lwmi_cd01_priv, acpi_nb);
++	priv = container_of(nb, struct lwmi_cd_priv, acpi_nb);
+ 
+ 	switch (event->type) {
+ 	case ACPI_AC_NOTIFY_STATUS:
+-		ret = lwmi_cd01_cache(priv);
++		ret = lwmi_cd_cache(priv);
+ 		if (ret)
+ 			return NOTIFY_BAD;
+ 
+@@ -230,10 +233,9 @@ static void lwmi_cd01_unregister(void *data)
+ 	unregister_acpi_notifier(acpi_nb);
+ }
+ 
+-static int lwmi_cd01_probe(struct wmi_device *wdev, const void *context)
+-
++static int lwmi_cd_probe(struct wmi_device *wdev, const void *context)
+ {
+-	struct lwmi_cd01_priv *priv;
++	struct lwmi_cd_priv *priv;
+ 	int ret;
+ 
+ 	priv = devm_kzalloc(&wdev->dev, sizeof(*priv), GFP_KERNEL);
+@@ -243,7 +245,7 @@ static int lwmi_cd01_probe(struct wmi_device *wdev, const void *context)
+ 	priv->wdev = wdev;
+ 	dev_set_drvdata(&wdev->dev, priv);
+ 
+-	ret = lwmi_cd01_setup(priv);
++	ret = lwmi_cd_setup(priv);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -257,27 +259,27 @@ static int lwmi_cd01_probe(struct wmi_device *wdev, const void *context)
+ 	if (ret)
+ 		return ret;
+ 
+-	return component_add(&wdev->dev, &lwmi_cd01_component_ops);
++	return component_add(&wdev->dev, &lwmi_cd_component_ops);
+ }
+ 
+-static void lwmi_cd01_remove(struct wmi_device *wdev)
++static void lwmi_cd_remove(struct wmi_device *wdev)
+ {
+-	component_del(&wdev->dev, &lwmi_cd01_component_ops);
++	component_del(&wdev->dev, &lwmi_cd_component_ops);
+ }
+ 
+-static const struct wmi_device_id lwmi_cd01_id_table[] = {
++static const struct wmi_device_id lwmi_cd_id_table[] = {
+ 	{ LENOVO_CAPABILITY_DATA_01_GUID, NULL },
+ 	{}
+ };
+ 
+-static struct wmi_driver lwmi_cd01_driver = {
++static struct wmi_driver lwmi_cd_driver = {
+ 	.driver = {
+-		.name = "lenovo_wmi_cd01",
++		.name = "lenovo_wmi_capdata",
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+ 	},
+-	.id_table = lwmi_cd01_id_table,
+-	.probe = lwmi_cd01_probe,
+-	.remove = lwmi_cd01_remove,
++	.id_table = lwmi_cd_id_table,
++	.probe = lwmi_cd_probe,
++	.remove = lwmi_cd_remove,
+ 	.no_singleton = true,
+ };
+ 
+@@ -290,13 +292,13 @@ static struct wmi_driver lwmi_cd01_driver = {
+  */
+ int lwmi_cd01_match(struct device *dev, void *data)
+ {
+-	return dev->driver == &lwmi_cd01_driver.driver;
++	return dev->driver == &lwmi_cd_driver.driver;
+ }
+-EXPORT_SYMBOL_NS_GPL(lwmi_cd01_match, "LENOVO_WMI_CD01");
++EXPORT_SYMBOL_NS_GPL(lwmi_cd01_match, "LENOVO_WMI_CAPDATA");
+ 
+-module_wmi_driver(lwmi_cd01_driver);
++module_wmi_driver(lwmi_cd_driver);
+ 
+-MODULE_DEVICE_TABLE(wmi, lwmi_cd01_id_table);
++MODULE_DEVICE_TABLE(wmi, lwmi_cd_id_table);
+ MODULE_AUTHOR("Derek J. Clark <derekjohn.clark@gmail.com>");
+-MODULE_DESCRIPTION("Lenovo Capability Data 01 WMI Driver");
++MODULE_DESCRIPTION("Lenovo Capability Data WMI Driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/platform/x86/lenovo/wmi-capdata01.h b/drivers/platform/x86/lenovo/wmi-capdata.h
+similarity index 60%
+rename from drivers/platform/x86/lenovo/wmi-capdata01.h
+rename to drivers/platform/x86/lenovo/wmi-capdata.h
+index bd06c5751f68b..2a4746e38ad43 100644
+--- a/drivers/platform/x86/lenovo/wmi-capdata01.h
++++ b/drivers/platform/x86/lenovo/wmi-capdata.h
+@@ -2,13 +2,13 @@
+ 
+ /* Copyright (C) 2025 Derek J. Clark <derekjohn.clark@gmail.com> */
+ 
+-#ifndef _LENOVO_WMI_CAPDATA01_H_
+-#define _LENOVO_WMI_CAPDATA01_H_
++#ifndef _LENOVO_WMI_CAPDATA_H_
++#define _LENOVO_WMI_CAPDATA_H_
+ 
+ #include <linux/types.h>
+ 
+ struct device;
+-struct cd01_list;
++struct cd_list;
+ 
+ struct capdata01 {
+ 	u32 id;
+@@ -19,7 +19,7 @@ struct capdata01 {
+ 	u32 max_value;
+ };
+ 
+-int lwmi_cd01_get_data(struct cd01_list *list, u32 attribute_id, struct capdata01 *output);
++int lwmi_cd01_get_data(struct cd_list *list, u32 attribute_id, struct capdata01 *output);
+ int lwmi_cd01_match(struct device *dev, void *data);
+ 
+-#endif /* !_LENOVO_WMI_CAPDATA01_H_ */
++#endif /* !_LENOVO_WMI_CAPDATA_H_ */
+diff --git a/drivers/platform/x86/lenovo/wmi-other.c b/drivers/platform/x86/lenovo/wmi-other.c
+index 2a960b278f117..ef34ea742d1ac 100644
+--- a/drivers/platform/x86/lenovo/wmi-other.c
++++ b/drivers/platform/x86/lenovo/wmi-other.c
+@@ -34,7 +34,7 @@
+ #include <linux/types.h>
+ #include <linux/wmi.h>
+ 
+-#include "wmi-capdata01.h"
++#include "wmi-capdata.h"
+ #include "wmi-events.h"
+ #include "wmi-gamezone.h"
+ #include "wmi-helpers.h"
+@@ -74,7 +74,10 @@ enum attribute_property {
+ 
+ struct lwmi_om_priv {
+ 	struct component_master_ops *ops;
+-	struct cd01_list *cd01_list; /* only valid after capdata01 bind */
++
++	/* only valid after capdata bind */
++	struct cd_list *cd01_list;
++
+ 	struct device *fw_attr_dev;
+ 	struct kset *fw_attr_kset;
+ 	struct notifier_block nb;
+@@ -576,7 +579,7 @@ static void lwmi_om_fw_attr_remove(struct lwmi_om_priv *priv)
+ static int lwmi_om_master_bind(struct device *dev)
+ {
+ 	struct lwmi_om_priv *priv = dev_get_drvdata(dev);
+-	struct cd01_list *tmp_list;
++	struct cd_list *tmp_list;
+ 	int ret;
+ 
+ 	ret = component_bind_all(dev, &tmp_list);
+@@ -657,7 +660,7 @@ static struct wmi_driver lwmi_other_driver = {
+ 
+ module_wmi_driver(lwmi_other_driver);
+ 
+-MODULE_IMPORT_NS("LENOVO_WMI_CD01");
++MODULE_IMPORT_NS("LENOVO_WMI_CAPDATA");
+ MODULE_IMPORT_NS("LENOVO_WMI_HELPERS");
+ MODULE_DEVICE_TABLE(wmi, lwmi_other_id_table);
+ MODULE_AUTHOR("Derek J. Clark <derekjohn.clark@gmail.com>");
 -- 
 2.51.0
 
