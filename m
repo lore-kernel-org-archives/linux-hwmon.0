@@ -1,137 +1,131 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E63426EBC
-	for <linux-hwmon@vger.kernel.org>; Thu, 22 Jan 2026 11:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769082178; cv=pass; b=hOPIYQELmjBYhgZ4BEQlUxDxFYy5wOz1p3OK60T4IlXUrB+cbg49zPmF6dUkl+miiE9iPmD+o0/Lzy5fpEXkSYP4pdXigFwVvFyEJh3/kS5UCs91zPce1W7Zc3uND1m67/883f/2wW+d4eNloKe1xA4UsRO5XFY1et8afE/bD90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769082178; c=relaxed/simple;
-	bh=F8Yc9cXJy+2eoQ7TPFhwVWvrGAhXxpTI6YyYLtkj6vw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gK+hOdd2AubYykEWrhPkWAsRXOxEBLcENs4T2kiTo5g1rCfBX/6qSpdt0CjdIjFJgjrerkT2C32yB7uBPSlPI6EbIu4GDeN5hB6VAwVs549nj0CDEAL23U4Mb1lEMXl8Tm42RLP+UgorFdOvgut093tpfZwsu4TVkvbMMX+q01Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dRKl3+Pr; arc=pass smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF431990C7;
+	Thu, 22 Jan 2026 14:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769091802; cv=none; b=BQwDcEhe91e6/00QcHmi4apefZerce1WQG0lUvsVQlZ5eBWjWaZ0LIULS2YFRzWHF2ABAgdOf75W/8kJ3+Rlss373bDMjBVgJOGfvDPbyI+Sy0mL+fHUavaER5X6Td2CzwYHQrK40QS1ZUiOK+af+UkGJ3puBtKyEVwQ3nT5jKI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769091802; c=relaxed/simple;
+	bh=ln7IA6At36MujTqs6Tf+Pr0cH8C/0oMPTb/NCVMcpis=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FgID9kzYvKAEkq7LxRnG0sHpkNs+jFZk1I+cFB+y+GNS4kM3pS6rkD9hUwA4Eo3P9uUftaIirsxMu12lHm0WWd6sCBOqBEbxFOZNKLJfNuXnmTt3M52uVU1Zdt3XpDErawGJHy2lqvmIKPA4UVH0bpv+X/4wTHmSFlAIHGmZNWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=MqTPzCq1; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dRKl3+Pr"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2b0ea1edf11so2014268eec.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jan 2026 03:42:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769082176; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EV0dqpEhXJJnLjHmCilctCZiwKpLThVhqqCK2n13CRmXDQ96kUm0vpIvw3xqI8nQ8j
-         xkbwf1s9sq5xoKDCt/NPB6fuIKwNvlhiby3S78kBNQxpo9RSkVuA4QAyQXNwzfBWHHWX
-         MVAFogS4kCU5oLbmwitfF8wuFvF9ttEffg/VCnjsxJ9dtRc9nwAIjX56hDo8fFqYUO17
-         UfB/JvsrP4xmKMtSmvga9kdO/l56ZA6BazE6CIDXa8SF+YeSxAEHz/la3ADF79s0sdFg
-         sN+crxtOyN3XdzI493tPDSJ5C+6gHacHTSb+M/GwBOS6zQWtbUDmjkmqODQCKYKhnVAX
-         xpaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
-        fh=fkrGTNnwqqGLdXM5ty11Ix6enGkRnfnK0C7xTBVZ2oM=;
-        b=I6Gp64szeKoywIjdQsfBjn++Wz3cUsjAxXOQLkWXcYRrfb+R2js9n8Vl2a5xUMzIJF
-         Xu0acSbWaBZgEqbAmhldLqNrVU1qQ6uIrKS1uCsXRu0M3FbLJZddfpksupya740jh3GG
-         gW5cloF6PNtVEFWNvoDoHLewNHluI4mzswpwQXC5PG5GHlCeSgziJqTJvKGWV/ixVrXJ
-         qkzYMJPi8sYfx9dScPuQr711yXUkpCjwOg5xN731IAqjBtDkmnl7QJkC8OAb6oIikVGF
-         7wD26b108WfyruOxcrJk52ob1mOjQZ7D1NCCaMDKvr90+fPMxqwychu9z694bDQ18HJ3
-         OIZg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769082176; x=1769686976; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
-        b=dRKl3+PrFRsUkEla7QbEOv8VjtEX5B2S8UmxykIR+St9sW9mIVmn374Q7v0QzCJHtt
-         cRpgFDM+1eHwoLplWkajzCd73HCoaaRZmdDIRQO2H0Q41/t2k/J29SoTw/v37b1nETZM
-         875mtEtWwcC62/NMQU1tOgBlvAyNkJ9q91fCC8EVnee8eyhVfVZqOImCtxfDM3d9wyS1
-         CqIXxk7Zmc3tNEf/b9xrSLdlDC2QsMakyLpJNtbaaGhaVTC9qbYVV9oJuVR2iJNpYBlZ
-         QGUONbMsWbFu64xHLWEb7KXx1JXTif6Wx7Hv9C0MNV6HH2+ox9N4ab1n3X8xcT/OmjVY
-         3o3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769082176; x=1769686976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
-        b=Z2+/D2EIpQJoaXaj/NY5bWTJUMVBSlvdBThvRtIHzu2JD0gs1NiHvWSBRMvGySmvoS
-         dSocYAakNOP4+z2DJsbeJdzS4gvQsrLF5VBnbosQmTF10fzER69OLMnzttNYbFGoVvb9
-         9cf/GZ9PxWcsUZwJLgcIlerRTBR4Xpo2KzsC1u7+rm60b6UoMFvdhxn7HGv5YNDRuwP7
-         Ix7rUUIE4qlgjY5Lt2I+vgjcImv9qLOun1eX6GMZIwKy+kIbZAmBPWU0cJriyyjm9Fb2
-         TB8FTCNtMQPawF9Gb5VciF6t3gOZJre6caTG4GnNOlRb2gwLqGmfRroMp7AXDmyp+h3y
-         wAjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGhfP05sp+rppw5FRKlv/dCiTNoIRtBLt6orT2vCrKz69WEpUcXSIKiJNT0ebRUFZYWs+YmS7K2B8jmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvDBArJ+ArxxVacDFzjmNH5SIQ8u4nw5/ypkbTuDQF0XMVy8XW
-	2XduXu2lBkuxmUDb6Nhk8a9f+6tez5PsU9iC4LNb+cV6rO2bRK+lWmkLwIi8NIJhx6tD2PscOjN
-	sSFynpJp9eBXuCEJLNVReuej1LwYAhfg=
-X-Gm-Gg: AZuq6aLJYszWTD0yzPN88Zq3I5nJiJ9XQw5YSW7FVA2OtU6bD5yPXFRhvLHpqoNcUBq
-	C9d8ey3yLPD6n/k0SGPsFZJWFd7aVMZAhLQIlOt3/qPXTgVyK4tAodf+iUnkYgVWvx6j6KCYfz5
-	ibXk4DFLTS2RJGGd9UetgYdIfSu7ubZ+OTjKf8seGsPKGXp5FdQH23Up/UMZPtgLDkxX1c/mF1V
-	796hBCq2WD2szs2jb4PHP21DDFsV2eqYTusJEq72h7TemIPn66LN0Wuhgn/3ujoBjJjr82Y
-X-Received: by 2002:a05:7300:188a:b0:2b7:1d5d:47dc with SMTP id
- 5a478bee46e88-2b71d5d49cfmr2705056eec.22.1769082176019; Thu, 22 Jan 2026
- 03:42:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="MqTPzCq1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=l4OWvZD0QdYckL8UcRFTatggDXwenvoPYXyQIXMKnYE=; b=MqTPzCq1vbw3teNvmYQOGUg7qy
+	dWtC24626u+zjv0l0aaFdfVU4vd7q7FTlyVGu8zG76KalstrgcAKGqRVurztsBfW8YyOEkvBseEnF
+	kldSSiaHpkcxbvhXgKliDvnmt8LMlbEej7PU6XKihl4srCdwm2Cd+wVNhQi2k1cIyCyz88mrTOkNH
+	ViuveA2GZYZnPLqk1xL7B5Kxomf1qTPfOyDRFBxn0Wb+Fs7+0DEZbTdxgBcE1Eb21KmDVyGNrXinO
+	5y58miOOEAMqv0qckS4ErEKuaCLTEOInl0YkMl/wJH0Sxg+u3G9wIG0gao/xFaJN4I/7aj5dIjSjK
+	xCHz5+Gw==;
+Date: Thu, 22 Jan 2026 15:23:06 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Mark Brown <broonie@kernel.org>, jdelvare@suse.com, lgirdwood@gmail.com,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Alistair Francis
+ <alistair@alistair23.me>, "linux-iio@vger.kernel.org"
+ <linux-iio@vger.kernel.org>, Jonathan Cameron <jic23@kernel.org>
+Subject: In-kernel hwmon read: (was: Re: [PATCH RFC 1/2] hwmon: (sy7636a)
+ fix races during probe of mfd subdevices)
+Message-ID: <20260122152306.6211995e@kemnade.info>
+In-Reply-To: <e6c8f022-ebfc-459c-806b-f75618f65916@roeck-us.net>
+References: <20250920114311.291450-1-andreas@kemnade.info>
+	<20250920114311.291450-2-andreas@kemnade.info>
+	<79aa98fe-b9b6-4210-a556-d33863f0129a@sirena.org.uk>
+	<20250920233307.0c425863@kemnade.info>
+	<473e217a-c6b3-4ebc-895d-85beab50267c@sirena.org.uk>
+	<20250924090023.282ae450@kemnade.info>
+	<b68d40d9-6ea9-49a9-8a2e-8b899f33340d@roeck-us.net>
+	<20250924195358.16bbd90c@kemnade.info>
+	<e6c8f022-ebfc-459c-806b-f75618f65916@roeck-us.net>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
- <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net> <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
- <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
-In-Reply-To: <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
-From: ashish yadav <ashishyadav78@gmail.com>
-Date: Thu, 22 Jan 2026 17:12:44 +0530
-X-Gm-Features: AZwV_Qg5AVdgqRe_8IaQnW6DxlahFcEHezmvgXFNpYdUF-cPzZtqukJhMahbLU8
-Message-ID: <CAJKbuCYUCr-R-91Ou1y6XDEPdqabSDvCxUypc-YmW=-EPxgNyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
- Regulator Driver
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	ASHISH YADAV <Ashish.Yadav@infineon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Guenter,
+On Wed, 24 Sep 2025 12:16:14 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Please find my response inline.
+> > But what is the hwmon equivalent for
+> > devm_fwnode_iio_channel_get_by_name() + iio_read_channel_processed()?
+> >   
+> 
+> Assuming you refer to the exported functions for in-kernel use, so far no one has
+> expressed a need for it. The best solution would probably be a hwmon->iio bridge,
+> or equivalent functions could be implemented and exported.
 
-Thanks & Regards
-   Ashish Yadav
+So first analyzing the need of such an interface. I think
+there is a need for such interface. The need just gets masked by some hacks
+to be able to divert to other interfaces.
 
-On Tue, Jan 13, 2026 at 8:40=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 1/12/26 23:24, ashish yadav wrote:
->
-> >> The need for this, especially why it would only be needed for PMBUS_RE=
-AD_VOUT
-> >> but not for any other VOUT related commands, is still insufficiently e=
-xplained
-> >> (and I failed to understand the rationale provided earlier).
-> >>
-> >
-> > It is specifically needed for READ_VOUT as it is being used by
-> > external controller to monitor the rail health.
-> > Other Vout related parameters are used internally in the IC to for
-> > output voltage related protections and does not impact any external
-> > decision making.
-> >
->
-> Sorry, that doesn't really make sense. How would the chip know to match
-> VOUT with its VOUT limits if both don't use the same scale ?
->
-The chip telemetry would still show Vout as 0.7V as it does not know
-about the external feedback resistors.
-Hence, no need to scale internal Vout related parameters.
-This scale is only for external vendor use to tweak their telemetry
-output voltage reading.
+There is out-of-tree waiting to be upstreamed:
+- rockchip_ebc driver: Display on PineNote, uses iio_read_chanel_processed()
+                       in combination with an out-of-tree iio temperature
+		       driver
+- mxc_epdc_drm driver: Display on Kobo/Tolino ebook readers, uses
+                       thermal_zone_get_temp() now.
 
-> Guenter
->
+In tree, there is:
+- drivers/gpu/drm/tiny/repaper.c
+  in combination with
+  Documentation/devicetree/bindings/display/repaper.txt
+
+  Code excerpt:
+        if (!device_property_read_string(dev, "pervasive,thermal-zone",
+                                         &thermal_zone)) {
+                epd->thermal = thermal_zone_get_zone_by_name(thermal_zone);
+
+  and thermal_zone_get_temp() to tune refreshes according to panel temperature.
+
+
+
+The example in the binding is:
+        display_temp: lm75@48 {
+                compatible = "lm75b";
+                reg = <0x48>;
+                #thermal-sensor-cells = <0>;
+        };
+
+        thermal-zones {
+                display {
+                        polling-delay-passive = <0>;
+                        polling-delay = <0>;
+                        thermal-sensors = <&display_temp>;
+                };
+        };
+
+[...]
+                    pervasive,thermal-zone = "display";
+
+
+I would prefer to be able to use e.g. pervasive,temperature-sensor = <&display_temp>;
+or maybe <&display_temp 0> if there are multiple sensors in the same chip.
+so that dtc will tell me when there is a typo and avoid the thermal
+zone layer
+
+So what are the options:
+a) provide similar logic like iio/inkern.c for hwmon usage.
+b) automatically add iio channels during hwmon registration.
+
+looking at the iio_hwmon bridge we already have, it depends on
+iio/inkern.c so for a  hwmon_iio bridge we need a) or b) anyways,
+so I think a separate bridge device/driver has no advantages.
+And having a devicetree node for the bridge would be bad because
+we are then describing linux implementation details instead of
+the actual hardware in the devicetree.
+
+Regards,
+Andreas
