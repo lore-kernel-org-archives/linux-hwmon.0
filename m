@@ -1,113 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182F830C373;
-	Thu, 22 Jan 2026 08:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769069606; cv=none; b=l7ywujhEizq1YOad5tjW1ZxL4bauoiqBZn7JVenG62CiLt+RNSPNhWt611QEVp+YHRokzl8PHJAfyLx5WlbSw3JpuzRN/yRKDmsKJ44xD5TeiLuQXYeOFAqQzAIbsWOLUHiuwjXhAxpOXW/MIA6lgJdYILuRgslbjUM1MWJzzOQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769069606; c=relaxed/simple;
-	bh=CAHeg8HSLTyL4u5efT4cjYDAE+GmmJmalQvHMcYAods=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F8UdaweQPEpBMv5uPPXHRmNk3QNwuSbPiqCyVO/HOrbComPlBnR0QoAuUseWy8gD8Oc/kUVIYq88rlZ3kYophenZ0W0yE0u24OoFcH3WlWlaQ/kmQV6YEBCXyVcR4A2NNIPBrq7SwdMCa++nWJg3vqVK30aXMoZPsVbLRIf8vmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2dXxySR; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E63426EBC
+	for <linux-hwmon@vger.kernel.org>; Thu, 22 Jan 2026 11:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769082178; cv=pass; b=hOPIYQELmjBYhgZ4BEQlUxDxFYy5wOz1p3OK60T4IlXUrB+cbg49zPmF6dUkl+miiE9iPmD+o0/Lzy5fpEXkSYP4pdXigFwVvFyEJh3/kS5UCs91zPce1W7Zc3uND1m67/883f/2wW+d4eNloKe1xA4UsRO5XFY1et8afE/bD90=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769082178; c=relaxed/simple;
+	bh=F8Yc9cXJy+2eoQ7TPFhwVWvrGAhXxpTI6YyYLtkj6vw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gK+hOdd2AubYykEWrhPkWAsRXOxEBLcENs4T2kiTo5g1rCfBX/6qSpdt0CjdIjFJgjrerkT2C32yB7uBPSlPI6EbIu4GDeN5hB6VAwVs549nj0CDEAL23U4Mb1lEMXl8Tm42RLP+UgorFdOvgut093tpfZwsu4TVkvbMMX+q01Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dRKl3+Pr; arc=pass smtp.client-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2dXxySR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13828C116C6;
-	Thu, 22 Jan 2026 08:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769069605;
-	bh=CAHeg8HSLTyL4u5efT4cjYDAE+GmmJmalQvHMcYAods=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h2dXxySR/ulwB4O7X4zV7anKO5F8kKbHAObixPR5JDllkA7RAVkwSd745KdZ1rRQF
-	 acf+kbH0tZ2KiO8tG+sXsJwplHshXKVKDZCv6gB4co/KcBTg9IrF3BU3FL9LBFbiGn
-	 vwExwVR6zwgxFi4mvK8sPm4OCwQS9o/ihgeYrrBIGVxaxkHCH2vA76zVMoPDvJ8CtY
-	 jrIFB1qCkwQnM891NCtn+gPzWACAf9BH/gxhMmDFF5WJ/1Zsk3ckCF7m36t1ADC47N
-	 2ptABpCDnb/jpi8Vemw850lf2kOsDFhOY8A718Sm0ndEI+bQ8JojBinYBAvep/5K+2
-	 WFsTGNuBD5okA==
-Date: Thu, 22 Jan 2026 09:13:23 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Almog Ben Shaul <almogbs@amazon.com>
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, itamark@amazon.com, talel@amazon.com, 
-	farbere@amazon.com, ayalstei@amazon.com, dwmw@amazon.com
-Subject: Re: [PATCH 2/2] hwmon: Add JEDEC PMIC50x0 driver
-Message-ID: <20260122-adamant-stereotyped-bird-e7deec@quoll>
-References: <20260121151947.37719-1-almogbs@amazon.com>
- <20260121151947.37719-3-almogbs@amazon.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dRKl3+Pr"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2b0ea1edf11so2014268eec.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 22 Jan 2026 03:42:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769082176; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EV0dqpEhXJJnLjHmCilctCZiwKpLThVhqqCK2n13CRmXDQ96kUm0vpIvw3xqI8nQ8j
+         xkbwf1s9sq5xoKDCt/NPB6fuIKwNvlhiby3S78kBNQxpo9RSkVuA4QAyQXNwzfBWHHWX
+         MVAFogS4kCU5oLbmwitfF8wuFvF9ttEffg/VCnjsxJ9dtRc9nwAIjX56hDo8fFqYUO17
+         UfB/JvsrP4xmKMtSmvga9kdO/l56ZA6BazE6CIDXa8SF+YeSxAEHz/la3ADF79s0sdFg
+         sN+crxtOyN3XdzI493tPDSJ5C+6gHacHTSb+M/GwBOS6zQWtbUDmjkmqODQCKYKhnVAX
+         xpaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
+        fh=fkrGTNnwqqGLdXM5ty11Ix6enGkRnfnK0C7xTBVZ2oM=;
+        b=I6Gp64szeKoywIjdQsfBjn++Wz3cUsjAxXOQLkWXcYRrfb+R2js9n8Vl2a5xUMzIJF
+         Xu0acSbWaBZgEqbAmhldLqNrVU1qQ6uIrKS1uCsXRu0M3FbLJZddfpksupya740jh3GG
+         gW5cloF6PNtVEFWNvoDoHLewNHluI4mzswpwQXC5PG5GHlCeSgziJqTJvKGWV/ixVrXJ
+         qkzYMJPi8sYfx9dScPuQr711yXUkpCjwOg5xN731IAqjBtDkmnl7QJkC8OAb6oIikVGF
+         7wD26b108WfyruOxcrJk52ob1mOjQZ7D1NCCaMDKvr90+fPMxqwychu9z694bDQ18HJ3
+         OIZg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769082176; x=1769686976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
+        b=dRKl3+PrFRsUkEla7QbEOv8VjtEX5B2S8UmxykIR+St9sW9mIVmn374Q7v0QzCJHtt
+         cRpgFDM+1eHwoLplWkajzCd73HCoaaRZmdDIRQO2H0Q41/t2k/J29SoTw/v37b1nETZM
+         875mtEtWwcC62/NMQU1tOgBlvAyNkJ9q91fCC8EVnee8eyhVfVZqOImCtxfDM3d9wyS1
+         CqIXxk7Zmc3tNEf/b9xrSLdlDC2QsMakyLpJNtbaaGhaVTC9qbYVV9oJuVR2iJNpYBlZ
+         QGUONbMsWbFu64xHLWEb7KXx1JXTif6Wx7Hv9C0MNV6HH2+ox9N4ab1n3X8xcT/OmjVY
+         3o3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769082176; x=1769686976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=HE/sohNG8mICW2nj1/0OeJe/N3MzO12zyrycF9gVJ5s=;
+        b=Z2+/D2EIpQJoaXaj/NY5bWTJUMVBSlvdBThvRtIHzu2JD0gs1NiHvWSBRMvGySmvoS
+         dSocYAakNOP4+z2DJsbeJdzS4gvQsrLF5VBnbosQmTF10fzER69OLMnzttNYbFGoVvb9
+         9cf/GZ9PxWcsUZwJLgcIlerRTBR4Xpo2KzsC1u7+rm60b6UoMFvdhxn7HGv5YNDRuwP7
+         Ix7rUUIE4qlgjY5Lt2I+vgjcImv9qLOun1eX6GMZIwKy+kIbZAmBPWU0cJriyyjm9Fb2
+         TB8FTCNtMQPawF9Gb5VciF6t3gOZJre6caTG4GnNOlRb2gwLqGmfRroMp7AXDmyp+h3y
+         wAjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXGhfP05sp+rppw5FRKlv/dCiTNoIRtBLt6orT2vCrKz69WEpUcXSIKiJNT0ebRUFZYWs+YmS7K2B8jmA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvDBArJ+ArxxVacDFzjmNH5SIQ8u4nw5/ypkbTuDQF0XMVy8XW
+	2XduXu2lBkuxmUDb6Nhk8a9f+6tez5PsU9iC4LNb+cV6rO2bRK+lWmkLwIi8NIJhx6tD2PscOjN
+	sSFynpJp9eBXuCEJLNVReuej1LwYAhfg=
+X-Gm-Gg: AZuq6aLJYszWTD0yzPN88Zq3I5nJiJ9XQw5YSW7FVA2OtU6bD5yPXFRhvLHpqoNcUBq
+	C9d8ey3yLPD6n/k0SGPsFZJWFd7aVMZAhLQIlOt3/qPXTgVyK4tAodf+iUnkYgVWvx6j6KCYfz5
+	ibXk4DFLTS2RJGGd9UetgYdIfSu7ubZ+OTjKf8seGsPKGXp5FdQH23Up/UMZPtgLDkxX1c/mF1V
+	796hBCq2WD2szs2jb4PHP21DDFsV2eqYTusJEq72h7TemIPn66LN0Wuhgn/3ujoBjJjr82Y
+X-Received: by 2002:a05:7300:188a:b0:2b7:1d5d:47dc with SMTP id
+ 5a478bee46e88-2b71d5d49cfmr2705056eec.22.1769082176019; Thu, 22 Jan 2026
+ 03:42:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260121151947.37719-3-almogbs@amazon.com>
+References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
+ <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net> <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
+ <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
+In-Reply-To: <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
+From: ashish yadav <ashishyadav78@gmail.com>
+Date: Thu, 22 Jan 2026 17:12:44 +0530
+X-Gm-Features: AZwV_Qg5AVdgqRe_8IaQnW6DxlahFcEHezmvgXFNpYdUF-cPzZtqukJhMahbLU8
+Message-ID: <CAJKbuCYUCr-R-91Ou1y6XDEPdqabSDvCxUypc-YmW=-EPxgNyQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
+ Regulator Driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ASHISH YADAV <Ashish.Yadav@infineon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 21, 2026 at 03:19:47PM +0000, Almog Ben Shaul wrote:
-> Add hardware monitoring driver for JEDEC PMIC50x0 compliant I2C DDR5
-> PMICs.
-> 
-> The driver provides monitoring for voltage, current, power, and
-> temperature across multiple channels, along with comprehensive error
-> reporting.
-> 
-> Signed-off-by: Almog Ben Shaul <almogbs@amazon.com>
-> Tested-by: Almog Ben Shaul <almogbs@amazon.com>
+Hi Guenter,
 
-Drop. You cannot send it untested, read submitting patches. The tag is
-for OTHER people to test, not create impression that all code is
-untested but here you did some testing.
+Please find my response inline.
 
-> ---
+Thanks & Regards
+   Ashish Yadav
 
-...
+On Tue, Jan 13, 2026 at 8:40=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 1/12/26 23:24, ashish yadav wrote:
+>
+> >> The need for this, especially why it would only be needed for PMBUS_RE=
+AD_VOUT
+> >> but not for any other VOUT related commands, is still insufficiently e=
+xplained
+> >> (and I failed to understand the rationale provided earlier).
+> >>
+> >
+> > It is specifically needed for READ_VOUT as it is being used by
+> > external controller to monitor the rail health.
+> > Other Vout related parameters are used internally in the IC to for
+> > output voltage related protections and does not impact any external
+> > decision making.
+> >
+>
+> Sorry, that doesn't really make sense. How would the chip know to match
+> VOUT with its VOUT limits if both don't use the same scale ?
+>
+The chip telemetry would still show Vout as 0.7V as it does not know
+about the external feedback resistors.
+Hence, no need to scale internal Vout related parameters.
+This scale is only for external vendor use to tweak their telemetry
+output voltage reading.
 
-> +
-> +static int pmic50x0_panic_callback(struct notifier_block *nb,
-> +				   unsigned long action, void *data)
-> +{
-> +	struct pmic50x0 *pmic50x0 = container_of(nb, struct pmic50x0, panic_notifier);
-> +
-> +	dev_emerg(pmic50x0->dev, "volt(mV): A=%ld, B=%ld, C=%ld, D=%ld\n",
-> +		  pmic50x0->last_voltage[0], pmic50x0->last_voltage[1],
-> +		  pmic50x0->last_voltage[2], pmic50x0->last_voltage[3]);
-
-You did not Cc any maintainers, so maybe one of your 5 CCs from Amazon
-can explain me why exactly random hwmon driver should receive panic
-callbacks? Do you see such pattern in hwmon?
-
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static void pmic50x0_panic_notifier_unregister(void *data)
-> +{
-> +	struct pmic50x0 *pmic50x0 = data;
-> +
-> +	atomic_notifier_chain_unregister(&panic_notifier_list, &pmic50x0->panic_notifier);
-> +}
-> +
-> +static int pmic50x0_panic_notifier_register(struct pmic50x0 *pmic50x0)
-> +{
-> +	struct notifier_block *panic_notifier = &pmic50x0->panic_notifier;
-> +	struct device *dev = pmic50x0->dev;
-> +	int ret;
-> +
-> +	panic_notifier->notifier_call = pmic50x0_panic_callback;
-> +	panic_notifier->priority = 0;
-> +
-> +	ret = atomic_notifier_chain_register(&panic_notifier_list, panic_notifier);
-> +	if (ret) {
-> +		dev_err(dev, "failed to register panic notifier (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(dev, pmic50x0_panic_notifier_unregister, pmic50x0);
-> +}
-
-Best regards,
-Krzysztof
-
+> Guenter
+>
