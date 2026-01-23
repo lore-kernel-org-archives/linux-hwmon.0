@@ -1,62 +1,62 @@
 Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8368926E6FB
-	for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 18:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95AD275B03
+	for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 18:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769192539; cv=none; b=GuiiYM//2aEFI58yzmm4ODkX4P8bKbCkXqqZnt7oS5PPyydskVIeMPcnpIdia2eSaW7pA3YOeAn2KXzGe/me46a3sz8jj0JIsGEol0dr+ypGxv+Wbpzwjh1IWIUzN9DaZFAVqm9pHXgpd17DpJNqREZn263Hqq8rqgUJ1SUmDZ0=
+	t=1769192540; cv=none; b=CxIZxe7ZLa6c2yJ9LdYyJGs2yqV9xvq4yecoy1OKaVWcjM1SRZnyhju/fCDZkb14WRDeYDs8MlIQBVIgxtjmdAxorDrsRDCdO5MfekPClm1eQsT1SvJEeyEr+MN3Am2JGb4lVSa1IzGTeUVuBGThlzpWRzubj8S3ZZc6geB6CE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769192539; c=relaxed/simple;
-	bh=vKtkU7K3RqQCKIfjSH/DNJHpr6zN6ZGQr3Ky4UrXBdQ=;
+	s=arc-20240116; t=1769192540; c=relaxed/simple;
+	bh=u8UanGH828x/wa/TE/D0ClcvT3TQ3+GCvwMRIjSql6s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oWfXQ6PfJqC825dE5mAQYY4cbykSdolJ9nBjwCnrm5nN0YQ0eyOTQ2NSOhUXZyxKfe4uvHygNvrZ2n3OpJrKLJlY7MYwD1rtnqE1w/WR+nKe6hQAG69/3Ki2EhOff37t/ChDUWWMDoBxfjwHfK2s2wIiwe+AUE80NpU6c+3lgzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRgL6++q; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=P8vL+vM2M0Wu/EYNaPfYG+A46QAWV9vjnNkkoot59UPtspdqIy4PRSDwhdOdtDU6Jvaf+rjHMp31o3oq5aJ87MNMpAE9xMbLtOC15LW9TwI2xWyaRvVJlBbp674O61cia8h79u2VsVvgTCSL8O2BVW42pMYpGt4F72/N0ujIY0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnMpkFdt; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRgL6++q"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-823081bb15fso1316699b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 10:22:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnMpkFdt"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8230f8f27cfso1006176b3a.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 10:22:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769192536; x=1769797336; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769192538; x=1769797338; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P7PAn6tvHTwmV1TdQFHJFHPiY8QmPdWd/ER1+pyJrOM=;
-        b=FRgL6++qa09KXXcxBLTTqE6V/ZVmsZe3IUjrEO9BrwE/i/bsKc8Yhzrm2n8C9C639G
-         Oi+a/0RLHzlIeE2/1MgkGrfn6WgPDBLlTW/mP0cvsz1OJPhp/aTRhYFxPUz0mvaK3U3h
-         NBGZ/NTJ361FK5Li73zRzWxAkdgnhAGqd3ek1vfuApXXZ9sGMcO3bEQ1yFmX/gDHGUID
-         utdVIJjxoO3jg4tZipw3+Q1HvH03EJ2cPcZTo9pviGyyM1PBWEv3FKCBWg2hJuFIrD18
-         UiX2y51T7AwnzMaUDxKyvp+K7FhCK6sHgR7iGRzAvbDezA4v285S3zhxmxap2CYP9Bnp
-         arJQ==
+        bh=+wgD+Lhq7HXYqBeKTh5vKd8poAoMtNS0Hz8zr8Bfuzs=;
+        b=VnMpkFdtCCkWqz8gI1uZPEWjtKAsIA6IJwXIourWANLuXwEiIUbWXAHjB3jG/S3u4z
+         KoXWHwShLxSW9nVJAoksvRQbdMATcUD/Hie87RS/YeGvvzlQZ3TXf2EhGRA58WYEkvbv
+         z5tDQlXAOjDtG08rGqjDR4gHI5ar0UjpEag8r8vzRX9fmX8JX8kG2mkTzDGYAKdS5H5p
+         MmH/43Q7GsAHiF3gRREtuDKjbYc9oaCKqnXmlTTUyA8Hzx3JxWZmVUY1dPv/HUQaD1va
+         DYVNadZ1WVwLDImV8YMppT3nBCnfODj0T4n58xWbZ+Y7SqFHUT6QSyUJXoh6VgrwyNfA
+         S06A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769192536; x=1769797336;
+        d=1e100.net; s=20230601; t=1769192538; x=1769797338;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7PAn6tvHTwmV1TdQFHJFHPiY8QmPdWd/ER1+pyJrOM=;
-        b=A2FnhqAjX3ERWEcC/LVOluuu1Mi2yMPqnyWqVxCoc3OHs61AH8P6rb9LlSllToU4W2
-         6BEb5hAd/cX8RJaewKfSx6jpfIW/6zfquzrPRlamUDANtaCbsw5CqS9pWS+Jvl6sPLGe
-         7xz1jFhjG6x7qdwEoJP0rxXDSHy9aNGg+fAbcqI18JZFiMx3FKSABXYQqa4IJf8Ln+1Z
-         uxPgtRDUg2sQMukkqsSBphgqhTgquT3+3FHduA/tJN07q4GGny7D5HW0BjW1QXeM4cam
-         BGG1/kp8xjPbBA53scAmm4CotaNhJhO30yHsvrpkse2h7RmrfgfyiSpqk31W8E3Hx8Oi
-         qQTA==
-X-Gm-Message-State: AOJu0Yx5Ndn/7bRWg3CPSV6C8LnMypQVdnoDw6Us21R10Fr7xMP/1+C5
-	QwQ0EcVRdxMxkbgn1sXgTshhyoG8BTXQf4popbGpk08Gwgw1KghfX/cniwImg9jr
-X-Gm-Gg: AZuq6aIvEgOHpLyXf4cyZY52AUX091kjjvvFg0iCaCgw2aArv4kgBzDJNbIR/ahzR1u
-	4a6U0209eVHo9q8kT/dLQdzzdbCttYb/N4eBCRHbxHPsvf3791QdI1eB3LOXoj6oCdpMLP7Jq67
-	7u0DZwC19FYNWWvHskQDsX+3TlZ/hJ7oKfmr7/Jv0MpVQp2VRazktLKOq1LrT9FVZwmMCxgnsjW
-	WH2j9bIprzuG6BwwbSAbqBeAk0qBwxcOGW8VRx3ipvLbhOnJ/ruXUzV7n36T7/GbfQzAQgj7L8o
-	vx5tsPSvsRqhlDJINPnliJ03ctDbJT3FYiPuT3aWun0igQ4ksLMsxFnSLE+tEOUiJH9Lo1GtQL4
-	EayhRhN0zdRF6bn9gLtzmQOTv8k5NvOA0hsVf/tToNWEmwAfD6fx3eXo8/Bg4BYXNjo7jpL9nWs
-	OcbBERkN7q+DPurUsgwak0RLrz
-X-Received: by 2002:a05:6a00:2b88:b0:823:1094:2458 with SMTP id d2e1a72fcca58-82317ad74ecmr2979756b3a.0.1769192536111;
-        Fri, 23 Jan 2026 10:22:16 -0800 (PST)
+        bh=+wgD+Lhq7HXYqBeKTh5vKd8poAoMtNS0Hz8zr8Bfuzs=;
+        b=pVdUrRhTcass/bSsNAWQ8Ce0C9p4KLrJiiGdIsM7zzD7C4FFZy/xAkd2QK/PGIlhRS
+         TIARaL7WRTl3ezV6hAu/X1nHfX1JbvjXr7offDxThLNrGcnxFMi68zmjlJeeYvbrCh6F
+         ZuCHtt+kao3kM6kdXOLIKmrh6hq40SN5cbCwoc7+EVoyQ+jmavDjGW1Q6/P2nWD+W4EC
+         R+nmvrwYGfhlepXuXbp+AISoKkffi3eCkM/VdDqhC3gybjWxsSkugpn1RwxXXBnxchYq
+         yz2F2YZU5r2vvdinitRJo8wNMFjwigStZ3IvvGjfPdvxvF8WxV6wPzFg2FIhMWdC3R/K
+         2h9Q==
+X-Gm-Message-State: AOJu0YzDfHc9+q4eSbhGgb3MAByqmrtY0WGo2U11XuiTLwFocdAbwYF5
+	h9G9wVHmfaBaG4QiZOigczZzXD9YKvUu2tF6S1oETUBU1K4nFSegysTm6wzl+h+0
+X-Gm-Gg: AZuq6aIrBw6LT0r1K0jYvFygNmck7b7wdqizpXCtus7SJwkUNLhWduwbXoy4jdWSIlK
+	n3eRWTG3n3TZuqcxjTtybM2smOcqWnUnIywxxu496NoCn5NqcKbvw2aaldeTTqIQrpNUXAQ3ZT5
+	/r/JeBp0PodV7puNvu84Cz1adpyVGDCH7gELi1fSNaQmoyc3AEe4NXI1jTP2pWjxxJg4CAr658s
+	z7t1ihzp+ORMp5AwudYsus3TPMiJdk2aFyIkBc6wNsG3/wwEMJ9wzIwBun3REz+e76Dlnv/GGGu
+	EDdBtisGuuWGqbcviOWJWxiUQkl8sdM/DHFWhe1FSK+H4CdLekzE0JjStQUOAvM8535chl7CBSd
+	qJ/LT7BITUhHTO2W3XN6TkUi2PW1RZSMv1uZhCEcFmGauzahafxHOPICc8IENROK/FkW1WjKZRt
+	3IFHVObf6zQOTcCaieSxAVPw3K
+X-Received: by 2002:a05:6a00:22d5:b0:7a2:7458:7fc8 with SMTP id d2e1a72fcca58-82317c0fbbfmr3029305b3a.13.1769192537702;
+        Fri, 23 Jan 2026 10:22:17 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82318771569sm2817157b3a.63.2026.01.23.10.22.14
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231871f97asm2759775b3a.40.2026.01.23.10.22.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 10:22:15 -0800 (PST)
+        Fri, 23 Jan 2026 10:22:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: linux-doc@vger.kernel.org,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
 	lihuisong <lihuisong@huawei.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH RFT 1/5] hwmon: Handle attribute visibility evaluation in device core
-Date: Fri, 23 Jan 2026 10:22:04 -0800
-Message-ID: <20260123182208.2229670-2-linux@roeck-us.net>
+Subject: [PATCH RFT 2/5] hwmon: Provide helper function to find thermal zones
+Date: Fri, 23 Jan 2026 10:22:05 -0800
+Message-ID: <20260123182208.2229670-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260123182208.2229670-1-linux@roeck-us.net>
 References: <20260123182208.2229670-1-linux@roeck-us.net>
@@ -80,69 +80,62 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for supporting sysfs attribute updates, move
-attribute visibility evaluation into device core.
+Provide a helper function to find registered thermal zones
+and use it in the thermal notification function.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/hwmon.c | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ drivers/hwmon/hwmon.c | 29 ++++++++++++++++++-----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 0b4bdcd33c7b..9e9ad42b6d7d 100644
+index 9e9ad42b6d7d..1f35285ca7a0 100644
 --- a/drivers/hwmon/hwmon.c
 +++ b/drivers/hwmon/hwmon.c
-@@ -523,10 +523,12 @@ static struct attribute *hwmon_genattr(const void *drvdata,
- 	const char *name;
- 	bool is_string = is_string_attr(type, attr);
- 
-+	/*
-+	 * Basic mode sanity check. This is less than perfect since
-+	 * attribute visibility and with it the mode can change during
-+	 * runtime, but it is the best we can do.
-+	 */
- 	mode = hwmon_is_visible(ops, drvdata, type, attr, index);
--	if (!mode)
--		return ERR_PTR(-ENOENT);
--
- 	if ((mode & 0444) && ((is_string && !ops->read_string) ||
- 				 (!is_string && !ops->read)))
- 		return ERR_PTR(-EINVAL);
-@@ -557,7 +559,7 @@ static struct attribute *hwmon_genattr(const void *drvdata,
- 	a = &dattr->attr;
- 	sysfs_attr_init(a);
- 	a->name = name;
--	a->mode = mode;
-+	a->mode = ops->write ? 0644 : 0444;	/* updated when attributes are generated */
- 
- 	return a;
- }
-@@ -896,6 +898,17 @@ __hwmon_create_attrs(const void *drvdata, const struct hwmon_chip_info *chip)
- 	return attrs;
+@@ -261,6 +261,21 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ 	return 0;
  }
  
-+static umode_t hwmon_kobj_is_visible(struct kobject *kobj, struct attribute *attr, int n)
++static struct hwmon_thermal_data *hwmon_thermal_find_tz(struct device *dev, int index)
 +{
-+	struct device_attribute *dattr = to_dev_attr(attr);
-+	struct hwmon_device_attribute *hattr = to_hwmon_attr(dattr);
-+	struct device *dev = kobj_to_dev(kobj);
-+	void *drvdata = dev_get_drvdata(dev);
++	struct hwmon_device *hwdev = to_hwmon_device(dev);
++	struct hwmon_thermal_data *tzdata;
 +
-+	return hwmon_is_visible(hattr->ops, drvdata, hattr->type, hattr->attr,
-+				hattr->index);
++	if (!IS_ENABLED(CONFIG_THERMAL_OF))
++		return NULL;
++
++	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
++		if (tzdata->index == index)
++			return tzdata;
++	}
++	return NULL;
 +}
 +
- static struct device *
- __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 			const struct hwmon_chip_info *chip,
-@@ -946,6 +959,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
- 		}
+ static int hwmon_thermal_register_sensors(struct device *dev)
+ {
+ 	struct hwmon_device *hwdev = to_hwmon_device(dev);
+@@ -297,18 +312,10 @@ static int hwmon_thermal_register_sensors(struct device *dev)
  
- 		hwdev->group.attrs = attrs;
-+		hwdev->group.is_visible = hwmon_kobj_is_visible;
- 		ngroups = 0;
- 		hwdev->groups[ngroups++] = &hwdev->group;
+ static void hwmon_thermal_notify(struct device *dev, int index)
+ {
+-	struct hwmon_device *hwdev = to_hwmon_device(dev);
+-	struct hwmon_thermal_data *tzdata;
++	struct hwmon_thermal_data *tzdata = hwmon_thermal_find_tz(dev, index);
  
+-	if (!IS_ENABLED(CONFIG_THERMAL_OF))
+-		return;
+-
+-	list_for_each_entry(tzdata, &hwdev->tzdata, node) {
+-		if (tzdata->index == index) {
+-			thermal_zone_device_update(tzdata->tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		}
+-	}
++	if (tzdata)
++		thermal_zone_device_update(tzdata->tzd, THERMAL_EVENT_UNSPECIFIED);
+ }
+ 
+ static int hwmon_attr_base(enum hwmon_sensor_types type)
 -- 
 2.45.2
 
