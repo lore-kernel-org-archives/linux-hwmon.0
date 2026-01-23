@@ -1,62 +1,62 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E600B238C3A
-	for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 18:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239F52BDC3E
+	for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 18:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769192544; cv=none; b=GxOD1z5splnWBI6v2t/TFRpP5syON3ouErNIyQh5JydpszCQsV32S7qc9mv5fwgnocTwqmLwaMgrzG/Os8S287/ICcrkG0jtFUeaKoKmQMMec1mS0bF2KUnQrhSvRdA9amrso6i2i99BYxjyuSNM0jM/tQoeYdpu85tHVInT+Dc=
+	t=1769192548; cv=none; b=WrTvUr8qV9EpfPaRhqsOvHoTW82pWmAVlDw8tXWMaTTG1mTbG1wjI99AmbcYEKkb5lWpbAWAAGymK/897iYhZrsXMpXn4iKCIruKt9QpbT58+bXrIR7uU2XlEagxv4NvHlT21FQxwuE/eObN10x1V+/Wzc8hC/72TjtyC+ME5OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769192544; c=relaxed/simple;
-	bh=pjFIKTAcgTOMhK443dH8yu6xajqx4n3WaCh4sL4FWoQ=;
+	s=arc-20240116; t=1769192548; c=relaxed/simple;
+	bh=SPXPIbBetVfrtSr87AGPJKY7Q8T4ACNl5x7JB3uNAOU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UlrFiLvYrfpWS+ZI+SdiLLA99QXdqGtz9JctyjA7oKT167r8SNRYry9xzo3MbbS2pWWtAvBeHGx//o0sPtUMYWLMrQLXg7DUv2gGZGvI1pEeA6V4svZVv1WSESI5veTsad3Am2yCocZ3eUsMEe/KRct0f6mKrvl12Q0QyK6nrxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Up1OdfDR; arc=none smtp.client-ip=209.85.214.170
+	 MIME-Version; b=aI5TnYTAjB1/NLoCGI5+aU36idpsnqll1WcwhAavIQFXGzzP9heGwrcXMqzTbT4Wa+DyTjk6uj92rrGhtYeyG7fw63lx/t/35AmgmDOEZGRR1R06iwGS38pjkMEJMHQC7reTyNVICbCFUf176t3WOqeTnbZX7fpbb1Y93ZYd56E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AozLaqGX; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Up1OdfDR"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a07fac8aa1so20105225ad.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 10:22:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AozLaqGX"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a07fac8aa1so20105375ad.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 10:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769192542; x=1769797342; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769192544; x=1769797344; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tkJ+o7BV1rRzeunFqGJvREeRYIZ540q5bogHmtrFmU0=;
-        b=Up1OdfDRtohvyuQcuiOAdUbFqFjcsjm87NrZxt3eiKlPB4Ub9imIALghoZ0m/d/Mj2
-         CScoz34F5UfUW/Lg0i+q27avIJpkFq2SNMgizAsNKM3QX6vux83O0EUam9oeA8U//W/b
-         qx1oR3nbbJr+bj5bW39sotrqUK5pnWJVq2hbS9nIEsgwa2zWdrSh7ip4dgrkB6KadHbM
-         kyZ84eZ7rdyAzSfOx5y9bQLzcr2GCI82DE1yXzeGIm4yGS4LBNlpm9PRUHnAVtf3G4fz
-         dPsNU6RdQrpYFULO471Gw5gnJJQhM93djan0srDG+hazXaE79RKFHuG3Z0RmKDokHmrt
-         AlBg==
+        bh=7zXV0Ml05DG2GM6i3iG21b9r1Ulg08rCjKLZ42eCdfw=;
+        b=AozLaqGXFgUIo93vSYugJPxx2oCm/pnMkWWKOm+msOqL55Qfwc50yiON7ZDf8hhOBL
+         b/NMMCN2l4aBVfq0GiCYN2W8xS47MKRhfcPYtaklDYj0/3s7tPcax/neS/RoOvks6vzi
+         Zz//JmqINkhgRlY3kbsuLbMocH5FJJNkuWQtuT5P0hsA8byeU+97SS5kbc0p0jHAzmbZ
+         Ry4YEIAUuntxwN7c67UgKfePQK1ZqqNxSiyVT2TRySxOJcjAOqz8MjYmb78c2rQSNAm5
+         OUjQhS2vwd3jZZ1GPzDOgWQkrgPNkrdwizsWUDi/0qKCwVi/ia/grUS4eMtqPatsC6W4
+         bkZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769192542; x=1769797342;
+        d=1e100.net; s=20230601; t=1769192544; x=1769797344;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tkJ+o7BV1rRzeunFqGJvREeRYIZ540q5bogHmtrFmU0=;
-        b=hQLy/dmFqpHZnc5LvBQyx6wVarnQ6dnPDZ7wrsTQHsrnUCR/C4OPPIqaGPGJXUjJCp
-         nmrTeMiDkFAZQcuzSCktceT+4swWH72zMQDcysJaO4mUoZEpDO633uVn3bjaryJ5Fg7j
-         PcmdYkoKxypxAaB46UasnxS9FNbU8ivHd/z1BgEYf8Okrq+GL3w5OD0QAF1IKEUvO7vb
-         KQUbZDPlF6/oUzc05gYK1ykYoLpzCPUPujyTA1ntdN1m9h3MAMvmPwDBUpJhSviq2gGw
-         ehALMiH7SDABuG4FDe1qsPxUW5KJONplunmgGttUGwk2jMmh5Qwlit+P3e/BBPacaajH
-         PJfA==
-X-Gm-Message-State: AOJu0Yy+OtL8erZ0K7+DbyOlnyZZS53/zDPGOhqOaXcp/glZquiA5jaO
-	5Aop24Bbtn1SOJEhxuUs8nU60r1PCxpzBTdz3+1Gp/2tmNIhI+A5JKZDBwuvln21
-X-Gm-Gg: AZuq6aIuxIeK1Run8nGi63mKWi/kZQSGiZXtQM7a3ZKFmhOwazoIJmSsV5W325YmSwo
-	N/szpuQfb7GGVk1KN979MAkVgrQuRB+YjyiMCUtdZYHzCjSpf0+k+ehEUr76UKbopiOnoK63D9k
-	PJ6YAZFSy7Gnzi3h5yic6KsvGTDxm58DNPwcsBbvWVPO9qUgt/J602UxYcNxgxeWdFnCxGLtYuy
-	LjdI3YObruOuyta+IgcnhHxCxZ5Hp72W4r8mGYbwL3fX+gx/A3LWoZtF2hgZISImyqELFageJl6
-	CO4LHHgFc/ppLgByxf/IKaeLuT+S/pIWAbmXR6RB1dA73VmVOB10x2ecWqdi1ZPbPSIerzZesxp
-	8uDVSrcd8jYilHr5IjjYBKvsWGtJywxDZcFAjd3R4kon9Lb0xO/FoDyjMULAXbyHB2dg78ylAMa
-	zn7vTc1jBdVDOVSfCdfQIUXKTE
-X-Received: by 2002:a17:903:2443:b0:2a0:b62e:e016 with SMTP id d9443c01a7336-2a7fe625081mr32543535ad.32.1769192541799;
-        Fri, 23 Jan 2026 10:22:21 -0800 (PST)
+        bh=7zXV0Ml05DG2GM6i3iG21b9r1Ulg08rCjKLZ42eCdfw=;
+        b=YXkDzfiCxzN1AV//WNkoSkUCso+iZOgpNhgSpT6DIRS8CQWbbz5IPRXnfIzW8IUz22
+         9ApsHmMd2k9SfCDfnL5IL2HT/f0655V/2FOtubPuRpHsOYcNBQtCKLDssiJl3HVhguVo
+         3YjpfqRG1plULL4JhfGemW6DgNcfH8DYi4Y0K1a1bBq0eazb8OTu4a44b1tzh/zlY9L0
+         uQgsWE3pjzIPS9Z0QjSPymuQAnpv1J0hvvgr5XthyQskV/BybwouO5Y2JtQxpDLnZ8Bc
+         K/bKqvma2J0Q7DEHs2ccUhKsyQV8/pXF/LHS0y3INXm+ijFM+X4QC83H1/j4uQnQAK9v
+         tqmg==
+X-Gm-Message-State: AOJu0YyClx1FbLS79BQhtae13BLv3dzwQnBZyl5/x2QqHwsxsUu7a+Gm
+	pMbKPSVVXnsPGoaX0I4kaDdoghbiNoSbYHi3NzNjHRajANMTufq61eyeN3/WbZRq
+X-Gm-Gg: AZuq6aKeUShuYocIMlkrCzkcuqyyLt3gd9DMBxRBIpERk//TtTZzxl5sEA9wRSvGrED
+	XOCcO9PhN1IfMTzjpIRKq0/uMPpEmUNsyZuVVcSg2vv/MXa7QC/NtuznG0HM8/TyqLShsG9tS3G
+	dlBlo/lSg1WZwoVB1m/P7vpUswJNjQma6VVRj0+oCb41VHoXcQQOHmZ2AX9yakYXpmxd77bqGgK
+	FY4WiJ3EV/uS8MGAu5bcia6bTxG758cZJi0H9XISMm9s0IU7Dw6fWZ3RwBxZU5KBwHHO6+pCIKM
+	bLI2Yu039oGBFscOoisSrkAaGpwSVImSRZwTYydh3hFF4IJbKcO9cBgRWgrxQnW3GXWisLjobgy
+	MTQx/8r7+ykDOnLStJ/DjwRXIIJBEXf623Js7We36Er/meAZxIOG41m9hIKZwhJvepbKdz+rBJy
+	fmvjIIaCQrwGsmat7CCBwC+4LL
+X-Received: by 2002:a17:903:189:b0:2a5:8d30:58f7 with SMTP id d9443c01a7336-2a7fe56f709mr42504345ad.17.1769192543622;
+        Fri, 23 Jan 2026 10:22:23 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802fb03dfsm25604715ad.75.2026.01.23.10.22.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802daa85esm25452095ad.1.2026.01.23.10.22.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 10:22:20 -0800 (PST)
+        Fri, 23 Jan 2026 10:22:22 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: linux-doc@vger.kernel.org,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
 	lihuisong <lihuisong@huawei.com>,
 	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH RFT 4/5] hwmon: Implement hwmon_update_groups()
-Date: Fri, 23 Jan 2026 10:22:07 -0800
-Message-ID: <20260123182208.2229670-5-linux@roeck-us.net>
+Subject: [PATCH RFT 5/5] hwmon: (acpi_power_meter) Use hwmon_update_groups() to update sensor visibility
+Date: Fri, 23 Jan 2026 10:22:08 -0800
+Message-ID: <20260123182208.2229670-6-linux@roeck-us.net>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260123182208.2229670-1-linux@roeck-us.net>
 References: <20260123182208.2229670-1-linux@roeck-us.net>
@@ -80,98 +80,137 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In some situations the visibility of hwmon sysfs attributes may change.
-Support this by providing a new API function hwmon_update_groups()
-to update both visible attributes and thermal zones.
+If the driver is notified about hardware a configuration change, the driver
+unregisters the hardware monitoring device and registers it again. This is
+conceptually wrong and can have unintended side effects, especially if a
+userspace application is in the process of reading attributes during that
+time.
+
+If the hardware configuration changed, call hwmon_update_groups() instead
+to update attribute visibility. Update driver locking to use the hardware
+monitoring lock for all locking operations and drop the driver internal
+lock.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/hwmon-kernel-api.rst |  8 ++++++++
- drivers/hwmon/hwmon.c                    | 24 ++++++++++++++++++++++++
- include/linux/hwmon.h                    |  2 ++
- 3 files changed, 34 insertions(+)
+ drivers/hwmon/acpi_power_meter.c | 37 +++++++++++---------------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index 1d7f1397a827..a41b1038fbf0 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -42,6 +42,8 @@ register/unregister functions::
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 29ccdc2fb7ff..59b56217e856 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -75,7 +75,6 @@ struct acpi_power_meter_capabilities {
+ struct acpi_power_meter_resource {
+ 	struct acpi_device	*acpi_dev;
+ 	acpi_bus_id		name;
+-	struct mutex		lock;
+ 	struct device		*hwmon_dev;
+ 	struct acpi_power_meter_capabilities	caps;
+ 	acpi_string		model_number;
+@@ -445,8 +444,6 @@ static int power_meter_read(struct device *dev, enum hwmon_sensor_types type,
+ 	if (type != hwmon_power)
+ 		return -EINVAL;
  
-   char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+-	guard(mutex)(&res->lock);
+-
+ 	switch (attr) {
+ 	case hwmon_power_average:
+ 		ret = update_meter(res);
+@@ -501,7 +498,6 @@ static int power_meter_write(struct device *dev, enum hwmon_sensor_types type,
+ 	if (type != hwmon_power)
+ 		return -EINVAL;
  
-+  int hwmon_update_groups(struct device *dev);
-+
-   void hwmon_lock(struct device *dev);
-   void hwmon_unlock(struct device *dev);
+-	guard(mutex)(&res->lock);
+ 	switch (attr) {
+ 	case hwmon_power_cap:
+ 		ret = set_cap(res, val);
+@@ -547,9 +543,9 @@ static ssize_t power1_average_max_store(struct device *dev,
+ 	if (ret)
+ 		return ret;
  
-@@ -89,6 +91,12 @@ for other functions such as interrupt handlers or for attributes which are
- fully implemented in the driver, hwmon_lock() and hwmon_unlock() can be used
- to ensure that calls to those functions are serialized.
+-	mutex_lock(&res->lock);
++	hwmon_lock(res->hwmon_dev);
+ 	ret = set_trip(res, POWER_METER_TRIP_AVERAGE_MAX_IDX, trip);
+-	mutex_unlock(&res->lock);
++	hwmon_unlock(res->hwmon_dev);
  
-+If the visibility of sysfs attributes changes during runtime, the driver
-+needs to call hwmon_update_groups() with the hwmon device as parameter
-+to update attribute visibility. If the driver registered thermal zones
-+using hwmon_device_register_with_info() and the visibility of thermal
-+sensors changes, this call will also update thermal zones as needed.
-+
- Using devm_hwmon_device_register_with_info()
- --------------------------------------------
- 
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index cb89218a0b6a..9163b8290dbe 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -330,6 +330,11 @@ static int hwmon_thermal_register_sensors(struct device *dev)
- 	return hwmon_thermal_handle_sensors(dev, false);
+ 	return ret == 0 ? count : ret;
  }
+@@ -566,9 +562,9 @@ static ssize_t power1_average_min_store(struct device *dev,
+ 	if (ret)
+ 		return ret;
  
-+static int hwmon_thermal_update_sensors(struct device *dev)
-+{
-+	return hwmon_thermal_handle_sensors(dev, true);
-+}
-+
- static void hwmon_thermal_notify(struct device *dev, int index)
- {
- 	struct hwmon_thermal_data *tzdata = hwmon_thermal_find_tz(dev, index);
-@@ -799,6 +804,25 @@ static const int __templates_size[] = {
- 	[hwmon_intrusion] = ARRAY_SIZE(hwmon_intrusion_attr_templates),
- };
+-	mutex_lock(&res->lock);
++	hwmon_lock(res->hwmon_dev);
+ 	ret = set_trip(res, POWER_METER_TRIP_AVERAGE_MIN_IDX, trip);
+-	mutex_unlock(&res->lock);
++	hwmon_unlock(res->hwmon_dev);
  
-+int hwmon_update_groups(struct device *dev)
-+{
-+	struct hwmon_device *hwdev = to_hwmon_device(dev);
-+	const struct hwmon_chip_info *chip = hwdev->chip;
-+	const struct hwmon_channel_info * const *info;
-+	int ret;
-+
-+	ret = sysfs_update_groups(&dev->kobj, dev->groups);
-+	if (ret || !chip)
-+		return ret;
-+
-+	info = chip->info;
-+	if (info[0]->type != hwmon_chip || !(info[0]->config[0] & HWMON_C_REGISTER_TZ))
-+		return 0;
-+
-+	return hwmon_thermal_update_sensors(dev);
-+}
-+EXPORT_SYMBOL_GPL(hwmon_update_groups);
-+
- int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
- 		       u32 attr, int channel)
- {
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 301a83afbd66..8cadba24ed4b 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -492,6 +492,8 @@ int hwmon_notify_event(struct device *dev, enum hwmon_sensor_types type,
- char *hwmon_sanitize_name(const char *name);
- char *devm_hwmon_sanitize_name(struct device *dev, const char *name);
+ 	return ret == 0 ? count : ret;
+ }
+@@ -825,44 +821,38 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
  
-+int hwmon_update_groups(struct device *dev);
-+
- void hwmon_lock(struct device *dev);
- void hwmon_unlock(struct device *dev);
+ 	switch (event) {
+ 	case METER_NOTIFY_CONFIG:
+-		mutex_lock(&resource->lock);
++		hwmon_lock(resource->hwmon_dev);
+ 		free_capabilities(resource);
+ 		remove_domain_devices(resource);
+-		hwmon_device_unregister(resource->hwmon_dev);
+ 		res = read_capabilities(resource);
+ 		if (res)
+ 			dev_err_once(&device->dev, "read capabilities failed.\n");
+ 		res = read_domain_devices(resource);
+ 		if (res && res != -ENODEV)
+ 			dev_err_once(&device->dev, "read domain devices failed.\n");
+-		resource->hwmon_dev =
+-			hwmon_device_register_with_info(&device->dev,
+-							ACPI_POWER_METER_NAME,
+-							resource,
+-							&power_meter_chip_info,
+-							power_extra_groups);
+-		if (IS_ERR(resource->hwmon_dev))
+-			dev_err_once(&device->dev, "register hwmon device failed.\n");
+-		mutex_unlock(&resource->lock);
++		res = hwmon_update_groups(resource->hwmon_dev);
++		if (res)
++			dev_err_once(&device->dev, "Failed to update hardware monitoring data\n");
++		hwmon_unlock(resource->hwmon_dev);
+ 		break;
+ 	case METER_NOTIFY_TRIP:
+ 		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+ 		break;
+ 	case METER_NOTIFY_CAP:
+-		mutex_lock(&resource->lock);
++		hwmon_lock(resource->hwmon_dev);
+ 		res = update_cap(resource);
+ 		if (res)
+ 			dev_err_once(&device->dev, "update cap failed when capping value is changed.\n");
+-		mutex_unlock(&resource->lock);
++		hwmon_unlock(resource->hwmon_dev);
+ 		sysfs_notify(&device->dev.kobj, NULL, POWER_CAP_NAME);
+ 		break;
+ 	case METER_NOTIFY_INTERVAL:
+ 		sysfs_notify(&device->dev.kobj, NULL, POWER_AVG_INTERVAL_NAME);
+ 		break;
+ 	case METER_NOTIFY_CAPPING:
+-		mutex_lock(&resource->lock);
++		hwmon_lock(resource->hwmon_dev);
+ 		resource->power_alarm = true;
+-		mutex_unlock(&resource->lock);
++		hwmon_unlock(resource->hwmon_dev);
+ 		sysfs_notify(&device->dev.kobj, NULL, POWER_ALARM_NAME);
+ 		dev_info(&device->dev, "Capping in progress.\n");
+ 		break;
+@@ -889,7 +879,6 @@ static int acpi_power_meter_add(struct acpi_device *device)
  
+ 	resource->sensors_valid = 0;
+ 	resource->acpi_dev = device;
+-	mutex_init(&resource->lock);
+ 	strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
+ 	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+ 	device->driver_data = resource;
 -- 
 2.45.2
 
