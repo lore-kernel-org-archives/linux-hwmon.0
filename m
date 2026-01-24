@@ -1,207 +1,305 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C952356BA
-	for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 18:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769192591; cv=none; b=Lu1Zu5RvXI1Acfrstw/In2rOXLNuqIylRJyQTNm0otA1AbtvbWOhmeNxdcY8gAA6Tg9ou3V/BvXnYys7l6CkVNyZGu+wB+ium8Sy6kZ4HfeKtNTVsOfwYFxh706yru52qm7pJcU6yObULuCvfIs3vrZQbBMoxrbSxUocmuhxXZ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769192591; c=relaxed/simple;
-	bh=hSuYv5v8vbr/gNlV73vwdeobcICNU0pqgTaiJbLW0aU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZtKU+iX0b5rG30IHcESsv18f2Vq9q1yCQsp+hQi3l9piJn+YZZ1qVSyok5meUgrujf8kZARqWWfEzCCNDguhkF1Kuxx9bhu7882hizdg3dP/n4mFJcDnsSNUJm5Xf+9hfA5PuW4+LdNAd8yBUpmpHop0g+4TN0qKMvxt6z7lGpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fpdpvds5; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FA014A8E
+	for <linux-hwmon@vger.kernel.org>; Sat, 24 Jan 2026 14:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769265969; cv=pass; b=ide7TByIfNZIQ7YNXj41jdZ7qO1+RBBAh3d1SNBG5SEYblGctw1BgrvYHtVm8YWTAzcQFrzlm4GxWhMYP5DtKpY1DvNO6l/mI3NhUEB17ciF5wo3NXYJifKqqK2yXKQqaetVgz3HK0cGpjMizXNCxghwDhn5f1R64sIDaXGCrQ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769265969; c=relaxed/simple;
+	bh=sibMAjWyxhfk26LiIahxspHYkaM94XID69jPPdNxHnM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pectOp+n/ccyDWBqJiXASoosTyMNDjup0oKTlhDffOVT5NSTMrf/WSK3zEBKl/PZigeOSqcj96DbgWeq9xNZ2F5hkIWTm2AqdK//kbmE7yy2eLwCzxJJ+JHkLMFADOSCMz6vDf3RsM2OmsaKzzJnNsepd276ktemn3ZBNQr4JoQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=acv7uIF1; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fpdpvds5"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c47ee987401so996734a12.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Jan 2026 10:23:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="acv7uIF1"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12336f33098so2979483c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 24 Jan 2026 06:46:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769265967; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KUwSZfpBdwPYSgvDQW/29Ohe3IyKkpQQxKGpbrKqfwi7WcLw2JjVl3rPMRSck3jD8i
+         fgOUHjER6X/oiG73dTJV8jWUYX0YXghUCPq37R96opREy9JKIh4X1QbaAkzs4vcyobVE
+         YRym5AqD+FzALW83Z3q9zVH7gmW2f3ROiw3cqOdg0GL07iZzOjw+4cMWkqmyGPnWGNK8
+         60RCIDQI8MpsHUU+LeD1VTSD6tI4PpGzTN++4mzUdS4X5CXbeCXRZvQbaeWdFhnxcSTx
+         wm18Wt0HpvYy9ASq+Hd4HyUx6P1fuD2eyh+4CisTbvelBJhAYJdWCs7Sprk+iQ94YgCI
+         ybTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MetqOn7IpNzcaMv8vANdpkYZ5A2FXxyutxOpqexIszw=;
+        fh=m2LILBCl4uSAOuQqvFf7BoJo4KwKru3AksxtlsXOLUM=;
+        b=avnP5/O0uLF3owsytCaUJd4wttpRSe60W4cuk9XJXgsviej50iKMydAullrgaPDviu
+         bxzAkQbcC/Ek6DQS/F0vOgtIXK/G6Si+sR9SPi4c/xFQ/jqa7zX3F3S1b9Rnh/L5Fdh6
+         WzaA2nxPjBKHRm8ZiFqKKNShuZ77Lz63laIftfVo3bLhKVZCVsG1BjFTeqy5F4Nb4ySJ
+         GHO38qTYqbGxc3YI7S8HhtjHZb80ueCvG/nLU0ai5tX+k0ZqdJDlJ6sjK46Hj/Bkx2fO
+         vVYtEj5KBTfcY0N36ec9Yt5JRqXhFccwEr3ikFEWk4/CEV7VTFeAjE7r1G77BTAjQT6T
+         AMSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769192589; x=1769797389; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pXMkf2eAYHdtSKc6PKArhP/fQoA/nxpkx2CdpXrIlsA=;
-        b=Fpdpvds5ZxUkqhGM/anFX8vlazjJ3KBafCKVGnitIEqCRc07Y8NimyUyGruzquSQau
-         RCkiZRWW+CIZ/vl1rZ43sQEjWwFXy0oPeGAkiLVA8+JUt2MLJnOOwRTAzUX78XDKmFgD
-         Rho9RB9AmrV4wLTjeDDb+6GilTO8wjHmkIWwRtPkFbZcimggjSgaR6gUwQzbuh3d/uuS
-         ozQrctyHudAMfzrz5Ic24j9d9Ppsynz1EVwejMhk7rfKWMBP5HZxIpbDk+nFc369PRzv
-         Zc2l6dpZd71Dk6mOOZohcV1CQBkq7PbKfpWbBXLvJl9aF9acphYt+Ks02nnnc3yinFa5
-         q+aQ==
+        d=gmail.com; s=20230601; t=1769265967; x=1769870767; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MetqOn7IpNzcaMv8vANdpkYZ5A2FXxyutxOpqexIszw=;
+        b=acv7uIF1a7CuCmG8QUGRx/JHMc0AIdLFgpTS0Z3vxy3Stdt61riH6wXlNrK6nx0kH5
+         4oOp++qhMYGmeJXlnVk3ZmQuZ8SH/xqPYVbJYAXb+u6q0QDMUH+3YzwW/xNflZTBp/Oe
+         /MLq2KBk3Pi1DThxJsKp4ieV4F+M3wIM4zi+o0K9h2Sfc0dxnzhS+sdnhzBa9UJOMNbf
+         Qthc13urRMsHYQrjT+YIgm5y+yuN/3UYnMh0FEEIDaufuuStaJoKVnR2+mVEw70Umoxc
+         e3PiBxGTIsQ7KerW1QcE3F9ySGNfBHnVykh4nhduDJ1zwlY84ysDTCzGfhr9+GKKX/s2
+         BXfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769192589; x=1769797389;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pXMkf2eAYHdtSKc6PKArhP/fQoA/nxpkx2CdpXrIlsA=;
-        b=P9JvDabE2/uOJL/Fh2gtUZH5A/KhRFemfSKkCzvhlEuQ4jvHM41YPUWZV3kJTHkNnw
-         Sn0gAPu93VpNJQLNARaJPf4+J4Ek/CMoM68AvWCHsw5zCAlhdqjCbCs7Y0odb1fhfx9J
-         ok7zP+MEcKHdBJc+z+FrVojtG89SAhc0gIi1Zor50mKbxsEEGL6qZQOBB81dGcApTqYN
-         QnJhuU9QZVfCfyHO4kofyr/THuwwW+Gh9dJXBKuWUx7nqBvFOLuwSszqzNN0OsPG2ktR
-         rF9ngAcNFrVOTfB1a08znSM7zv7v+ttGacdTbiQmmeEtIXSOc/X8qQkOrvFOEPbHHa0z
-         gfGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVj7hKE/LoCpaozqVp7bOJwOhxbZE8zyVeDxasuFdOSKktY5PD8FlLbmJdMcWP7NrXT3nwsmxo0w0qWJA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YypBFYAfyjNBwJeYdJWO5jX8zaf2ncHS5LI57e/WaoaaMAh0vJO
-	oUm06f8TD8Admz1K0fdSa8zpKXCR5MeF4VTOARkV4gKeLjzU2KWbuj2pnBj597aR
-X-Gm-Gg: AZuq6aKH1ggKZI7dwoGyHQk42VfLz9YhxsotDNYv3NbMSMvHvVMAm+kAMmZWPrrjZ42
-	tWsS3i/rsYn/LPRFfNtd4OUhxA26SmJwqB7HG5gX7sQuy1TTl2ZslArLWguzs2iQd59DzS0oM+F
-	3BaKKZXtIvbMZcT2XSzwN7t+iQQXR2PPrp07oheWuJl/97I19kiyVUdWID6k8PhUmBcMFXxovW1
-	I1FYlRpbBhvHlHg02TgQe9fxojwDS0+b3KqcFFl5fb3ZN47QKgetSZSl31SynFisYYMws5U6Yxy
-	2pbAwamcJYDpLgFHT42dgXiEyyCIi+2onpYT+c9X6ajSqDRtSa7x9O9RZr1RyTBYaPtZz7moSF7
-	QaVhD6GQwtvdporkod8Jn1hlaRB08y1RaMYLGD679caHhDASE1qvgxjsmmDrDjw/VqbCU2KTU4V
-	476fSVQQhOw8YXPocc3zZdDihgaE1n6Sa+jXxJl8xdeT333QpvlJYxQOdfAw1JymnM6ydeYNc=
-X-Received: by 2002:a17:90b:2f06:b0:343:cfa1:c458 with SMTP id 98e67ed59e1d1-3536ad17e17mr3266753a91.18.1769192589301;
-        Fri, 23 Jan 2026 10:23:09 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3536b0300fcsm1324353a91.1.2026.01.23.10.23.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jan 2026 10:23:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a7334568-13ce-4600-8650-607273e67976@roeck-us.net>
-Date: Fri, 23 Jan 2026 10:23:07 -0800
+        d=1e100.net; s=20230601; t=1769265967; x=1769870767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MetqOn7IpNzcaMv8vANdpkYZ5A2FXxyutxOpqexIszw=;
+        b=UujUUKO9My2/BVIW+/LsjghOfG1hXOTUHAAHuGqL2VWnQkZ/b+Wlkg1T3TJWMxwUrr
+         PICGh/xXWywd3irv/7miOEi3S6X97yCkZzDONthJxE6nzfYOWWmlVcJN8rdUeu/KQv3B
+         /eK99jZoAVbtn3VpbOzgD7EMRxpO1wB9EwZq8IsqXFRHyFZVjnBlCgn71J6ZLtW0bQKx
+         99Y+HePFGI5WsAD0PsbQ4DdruwVvjOdYAGo2na/3w7JRH92xhIr+dc/fo5xuwyxaTjW3
+         cbNXEiWti/VMY6+qHSUNPspgzmYMGKJwzj0tE6bNJr3s2M5F0ceS8Wibu17eC0lm42UM
+         kqnw==
+X-Gm-Message-State: AOJu0Yyt6xYo/nJoKYSPWF9UKQ2BV3zQNEvMlfGc14vEfYsS1igAuqE4
+	4w+eY16kdoOB5UIs3og/OVkaO4JLZWp0ai/OK8qnzHpL68XGRbnGG3ZK9fY/Gclj84pOrvsgApB
+	/guYozmxJXn5Svywlan1vVDd057Fl75hObQ==
+X-Gm-Gg: AZuq6aLoT7rpaAtoaEGbc28FcQE73ia3dgY91NGdqUuD3cylL/pFoy+5VbrGvbazfPs
+	ZMsIKUnu3ststvbonTatKODG2XPWBCq7/mj3eNtgL3gA8qVh8W44plyHaHeCdea8aqyTnIidyIQ
+	CRxsIPMOuNhCALfdprSTcmPxUJ3Kw7oDo/wR0a+sdgIfCeA+Xqye+Y6/RGEnB/l4Ppy6v3nuyFJ
+	voR7KYpSwVXe++6eO6LwnsJmKmtL4sAXYjyIsf+CDLwDASd83wIUMMyF0bcnSJsY6Snh0BttiFu
+	XMZ3uqM=
+X-Received: by 2002:a05:7022:4388:b0:11a:fb3c:568b with SMTP id
+ a92af1059eb24-1247dbb3ffbmr3316258c88.17.1769265966867; Sat, 24 Jan 2026
+ 06:46:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: acpi_power_meter: power*_average sysfs read hangs, mutex deadlock
- in hwmon_attr_show since v6.18.y
-To: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Igor Raits <igor@gooddata.com>,
- Daniel Secik <daniel.secik@gooddata.com>,
- Zdenek Pesek <zdenek.pesek@gooddata.com>,
- Jiri Jurica <jiri.jurica@gooddata.com>, Huisong Li <lihuisong@huawei.com>
-References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
- <CAJZ5v0jSbGtRYkjqeuYaT3LXbeZ-xk_Gc0dbCpTZPc6nBD8eCQ@mail.gmail.com>
- <e03c8b69-e667-45b8-b82c-2cd4f1c96bdf@roeck-us.net>
- <CAJZ5v0hvKzKTWA8jFYVDHttd+hDv1juu87vgyhf2udOGbqrQdg@mail.gmail.com>
- <d7f34e0f-e258-4fef-93eb-1ef0a3123d95@roeck-us.net>
- <CAK8fFZ4izdX_HDtGN60CZ3Ta61nqkUg7ncViM=mGgxKki_5FoQ@mail.gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAK8fFZ4izdX_HDtGN60CZ3Ta61nqkUg7ncViM=mGgxKki_5FoQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+ <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net> <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
+ <2740c3ab-7cb0-4931-81a2-30b85e8615f9@roeck-us.net> <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
+ <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net> <CAJ12PfMC_Potx9aNxaJJ3y=sX=rzyhm-6LJ8Z8OjUyDxiDUNsA@mail.gmail.com>
+ <39b48803-e236-4acc-84e9-18162770f9ae@roeck-us.net>
+In-Reply-To: <39b48803-e236-4acc-84e9-18162770f9ae@roeck-us.net>
+From: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
+Date: Sat, 24 Jan 2026 17:45:50 +0300
+X-Gm-Features: AZwV_QgP66CvekKvqkUlQ-m9crsBwFoSn_7N6Luqtj6xbA-HYzUC7toNDAWAlqI
+Message-ID: <CAJ12PfMN5SOcYc6vBJEz57YVcxXAOker4WA61Xh1znP=i8aBRg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C errors
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Fri, Jan 16, 2026 at 9:24=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 1/15/26 05:50, TINSAE TADESSE wrote:
+> > On Wed, Jan 14, 2026 at 5:23=E2=80=AFPM Guenter Roeck <linux@roeck-us.n=
+et> wrote:
+> >>
+> >> On 1/14/26 05:07, TINSAE TADESSE wrote:
+> >> ...
+> >>>>> Hi Guenter,
+> >>>>>
+> >>>>> I tested changing the i801 SMBus controller to use
+> >>>>> SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
+> >>>>> DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With this
+> >>>>> change, spd5118 resume failures (-ENXIO)
+> >>>>> still persist, suggesting PM ordering alone is insufficient and oth=
+er
+> >>>>> firmware interactions are involved.
+> >>>>
+> >>>> How about the problem in the suspend function ? Is that also still s=
+een ?
+> >>>>
+> >>>> Also, the subject talks about -EIO. Is that still seen ?
+> >>>>
+> >>>> Either case, can you enable debug logs for the i801 driver ?
+> >>>> It should generate log entries when it reports errors.
+> >>>>
+> >>>> Thanks,
+> >>>> Guenter
+> >>>>
+> >>>
+> >>> Hi Guenter,
+> >>>
+> >>> Thank you for the questions. To clarify:
+> >>>
+> >> Please do not drop mailing lists from replies.
+> >>
+> >>> 1) I have not observed any failures in the suspend path. The suspend
+> >>> callback completes successfully, and
+> >>> I have not seen I2C errors or warnings during suspend at any point.
+> >>
+> >> Sorry, I seem to be missing something.
+> >>
+> >> In that case, what is the point of patch 3/3 of your series which
+> >> removes hardware accesses from the suspend function ?
+> >>
+> >>> 2) I have also not observed -EIO in my testing. The error consistentl=
+y
+> >>> reported on resume and subsequent hwmon access is -ENXIO.
+> >>> Earlier references to -EIO were based on assumptions rather than
+> >>> observed logs, and I should have been clearer about that.
+> >>>
+> >>
+> >> Thanks for the clarification.
+> >>
+> >> Guenter
+> >>
+> >>> I am enabling debug logging for the i801 driver to collect more
+> >>> concrete evidence of controller state during resume.
+> >>
+> >
+> > Hi Guenter,
+> >
+> >> Sorry, I seem to be missing something.
+> >>
+> >> In that case, what is the point of patch 3/3 of your series which
+> >> removes hardware accesses from the suspend function ?
+> >
+> > You are right to question this, and I agree that it needs clarification=
+.
+> >
+> > Patch 3/3 was originally proposed under the assumption that the resume =
+failures
+> > were caused by spd5118 performing I2C transactions while the
+> > controller was not yet available,
+> > and that removing hardware accesses from the suspend path might
+> > mitigate the issue.
+> > At that point, I assumed the problem was limited to the resume callback=
+.
+> >
+> > After enabling detailed i801 debug logging and testing with
+> > SET_LATE_SYSTEM_SLEEP_PM_OPS() in the i801 driver,
+> > it became clear that this assumption was incorrect. The controller
+> > itself reports "i801_smbus: No response"
+> > both during suspend and immediately after resume, and spd5118 merely
+> > propagates the resulting -ENXIO.
+>
+> Outch, that really hurts, because it means that something is seriously
+> broken in both the suspend and resume path. The device _must_ be accessib=
+le
+> in the suspend path. Otherwise there is no guarantee that the device is
+> accessible for normal (pre-suspend) operation. After all, someone could
+> run a script reading sysfs attributes in a tight loop continuously,
+> or the thermal subsystem could try to access the chip. That would suddenl=
+y
+> start to fail if something in the device access path starts to be suspend=
+ed
+> while the underlying hardware is still believed to be operational.
+>
+> I could imagine some hack/quirk for the resume path, such as delaying res=
+ume
+> for some period of time for affected hardware, but I have no idea what to
+> do on the suspend side. We can not just drop device writes during suspend
+> because some broken hardware/firmware does not let us actually access
+> (and thus suspend) the hardware anymore by the time the suspend function
+> is called.
+>
+> Guenter
+>
+> > This indicates that the issue is not caused by spd5118 suspend/resume
+> > behavior, but by the unavailability of the
+> > SMBus controller due to platform or firmware interactions during
+> > s2idle transitions.
+> >
+> > Given this, I agree that patch 3/3 does not address the root cause and
+> > does not provide a justified improvement.
+> > I am therefore fine with dropping it.
+> >
+> > Thank you for pointing this out.
+> >
+>
 
-On 1/23/26 02:19, Jaroslav Pulchart wrote:
-> čt 22. 1. 2026 v 23:28 odesílatel Guenter Roeck <linux@roeck-us.net> napsal:
->>
->> On 1/22/26 12:42, Rafael J. Wysocki wrote:
->>> On Thu, Jan 22, 2026 at 8:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>
->>>> On 1/22/26 10:55, Rafael J. Wysocki wrote:
->>>>> On Thu, Jan 22, 2026 at 7:21 PM Jaroslav Pulchart
->>>>> <jaroslav.pulchart@gooddata.com> wrote:
->>>>>>
->>>>>> Hello,
->>>>>>
->>>>>> after upgrading from kernel 6.17.y to 6.18.y we started to observe a regression
->>>>>> in the ACPI power meter hwmon interface. Reading power*_average sysfs
->>>>>> attributes blocks indefinitely and causes tasks to enter uninterruptible
->>>>>> sleep (D state).
->>>>>
->>>>> The most recent change in the acpi_power_meter driver was made in
->>>>> 6.15, so this is not a regression in that driver.
->>>>>
->>>>> Also, nothing suspicious is done in power1_average_min_show() and
->>>>> power1_average_min_store() AFAICS.
->>>>>
->>>>
->>>> I suspect a circular locking problem between the hwmon lock and the
->>>> resource lock. Unfortunately I don't immediately see it.
->>>>
->>>> Would it be possible to test this with a kernel which has lock debugging
->>>> enabled ? I'd test it myself but I don't have a system available
->>>> that supports the acpi power meter.
->>>
->>> One problem I found in acpi_power_meter through code inspection is
->>> calling hwmon_device_unregister() under resource->lock in
->>> acpi_power_meter_notify(), which may be responsible for the observed
->>> symptoms, but then I'm not sure why it started to be visible after
->>> 6.18.
->>>
->>
->> I noticed that too. It is kind of broken; a driver should never do that.
->> The proper solution would have been to re-evaluate sensor visibility.
->> I have a patch series to add that capability to the hwmon core, but that
->> is untested so I never submitted it.
->>
->> Anyway, I don't immediately see how that would trigger the problem.
->>
->> Guenter
->>
-> 
-> Hello,
-> 
-> Thank you for the analysis and insights.
-> 
-> To add some context from our side: we observe this issue shortly after
-> a server reinstall or fw updates followed by a reboot, typically when
-> hwmon sensors are accessed for the first time (e.g. by monitoring during
-> early system initialization). We have not seen it trigger during normal
-> operation, such as a simple reboot or on long-running systems.
-> 
-> Given this behavior, it is possible that the issue is related to
-> hwmon_device_unregister() being triggered early during system
-> initialization, but I do not have concrete evidence at this point.
-> 
-> As a workaround, we will exclude the ACPI power meter from hwmon monitoring
-> (Grafana Alloy) until the mentioned refactoring or a fix becomes available.
-> 
+Hi Guenter,
 
-Would it be possible for you to test the patch series I just sent out ?
+Thanks for the continued review and for questioning the earlier
+direction =E2=80=94 that helped narrow this down properly.
 
-Thanks,
-Guenter
+After enabling full i801 debug logging (included below in this email)
+and inspecting both drivers, it became clear that the resume
+failures are not caused by spd5118 accessing the hardware too
+early, nor by PM ordering issues. Instead, the SMBus controller
+explicitly reports =E2=80=9CSPD Write Disable is set=E2=80=9D, and any
+block write transactions to the SPD device consistently fail with
+DEV_ERR. spd5118 merely propagates the resulting -ENXIO.
 
+With that in mind, I have dropped the earlier patch that attempted
+to remove hardware access from the suspend path
+unconditionally.
+That patch does not address the root cause and is no longer
+part of the series.
+
+I am instead proposing a minimal 2-patch series:
+
+1/2 records whether the platform enforces SPD write disable at probe
+time (no behavior change).
+2/2 avoids regcache writeback during suspend/resume when the device
+operates in read-only mode, while still allowing read access to
+temperature inputs.
+
+This avoids issuing SMBus transactions that are architecturally
+blocked on these systems, and does not rely on
+delays or PM ordering assumptions, and leaves behavior unchanged on
+platforms where SPD writes are permitted.
+
+If this direction looks acceptable, I=E2=80=99m happy to re-spin and post t=
+he
+series formally.
+
+Thanks again for the guidance.
+
+
+[   13.530830] i2c-core: driver [spd5118] registered
+...
+[   29.555298] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+...
+[   29.582447] i2c i2c-14: Creating spd5118 at 0x52
+[   29.590744] spd5118 14-0052: probe
+...
+[   29.618983] spd5118 14-0052: DDR5 temperature sensor: vendor
+0x00:0xb3 revision 2.2
+[   29.619662] i2c i2c-14: client [spd5118] registered with bus id 14-0052
+...
+[ 1057.504362] PM: suspend entry (s2idle)
+[ 1057.944405] spd5118 14-0052: Entering suspend path...
+[ 1057.945387] i801_smbus 0000:00:1f.4: i801 access: command=3D1a,
+size=3D8, addr=3D0x52, read_write=3D1
+[ 1057.946251] i801_smbus 0000:00:1f.4: i801 access: command=3Db,
+size=3D8, addr=3D0x52, read_write=3D1
+[ 1057.946866] i801_smbus 0000:00:1f.4: i801 access: command=3D1a,
+size=3D8, addr=3D0x52, read_write=3D1
+[ 1057.948324] i801_smbus 0000:00:1f.4: i801 access: command=3Db,
+size=3D8, addr=3D0x52, read_write=3D1
+[ 1057.949817] i801_smbus 0000:00:1f.4: i801 access: command=3D1a,
+size=3D8, addr=3D0x52, read_write=3D0
+[ 1057.949904] i801_smbus 0000:00:1f.4: i801 timeout: status=3D0x4,
+SMBHSTCNT=3D0x15, SMBHSTSTS_DEV_ERR=3D4
+[ 1057.949952] i801_smbus 0000:00:1f.4: No response
+[ 1057.950215] i801_smbus 0000:00:1f.4: Entering suspend path...
+[ 1059.338647] ACPI: EC: interrupt blocked
+[ 1060.756385] ACPI: EC: interrupt unblocked
+[ 1060.926423] i801_smbus 0000:00:1f.4: Entering resume path...
+[ 1060.926623] spd5118 14-0052: Entering resume path...
+[ 1060.927930] i801_smbus 0000:00:1f.4: i801 access: command=3Db,
+size=3D8, addr=3D0x52, read_write=3D0
+[ 1060.927969] i801_smbus 0000:00:1f.4: i801 timeout: status=3D0x4,
+SMBHSTCNT=3D0x15, SMBHSTSTS_DEV_ERR=3D4
+[ 1060.927995] i801_smbus 0000:00:1f.4: No response
+[ 1060.928477] i801_smbus 0000:00:1f.4: i801 access: command=3Db,
+size=3D8, addr=3D0x52, read_write=3D0
+[ 1060.928517] i801_smbus 0000:00:1f.4: i801 timeout: status=3D0x4,
+SMBHSTCNT=3D0x15, SMBHSTSTS_DEV_ERR=3D4
+[ 1060.928543] i801_smbus 0000:00:1f.4: No response
+[ 1060.928582] spd5118 14-0052: Failed to write b =3D 0: -6
+[ 1060.928707] spd5118 14-0052: PM: dpm_run_callback(): spd5118_resume
+returns -6
+[ 1060.928981] spd5118 14-0052: PM: failed to resume async: error -6
+[ 1062.414560] PM: suspend exit
