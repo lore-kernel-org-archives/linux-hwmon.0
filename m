@@ -1,112 +1,152 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F752DB785
-	for <linux-hwmon@vger.kernel.org>; Tue, 27 Jan 2026 15:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C22C242D84;
+	Tue, 27 Jan 2026 15:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769527155; cv=none; b=obGGQzAPun98RioIN2EugreQEHyMDd4Yrh9OsfSjlPIlfdxu6Rda17uy5zZtv8YGwePDOS3khxGvwXJdnUwulpY13Z8DYx9p12F7E4fzA0GVzewSbNtLv63+8VfGNYOM56Leo4E9NUcu5XofixP7oe5IjA8Lnu06wi22sbq1Umg=
+	t=1769527186; cv=none; b=ktuZ1IWZ8f0GfSFt0XcJtcTQMh2h0ovfI6bNMb//+OvUSsPLDgGFg0QvLCRbABVF/sFm2bEz4dqZ4ajDI85duGYNVoOzIxr/CLGLcnx0MI5TOU3C9t+dGKr5Jy/LZzQCdF46kAwnA+AgTKpcF23olj8xghab2XFrJPVJiefND9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769527155; c=relaxed/simple;
-	bh=sqRtYnS4EMx1wud8eWzUNmsiL0QjlWJurfA7CBk479E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ApVTYZ7E9wX2DdpWVY8IimrgByJMAve3FE9vmFNFnwJ/WNxhKiSUDYoHVyw+7jhI2LPS32oKhTlXgg/sBGpQcTb6dm2i8eiCWp1SKEVTs7kWDize5EZgGnlNeCk+AEkvX1nhFo0a4OutEwW0DZj7/jBDpKMezncxIcY6hGLYgSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UpuPk5bm; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769527186; c=relaxed/simple;
+	bh=BqsTfLuyxw/AFqL8l8pnFsC2zOqAYqr1AN7W3ptG+iQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EgMwu3G2AL858iPBPw81drYqVtXvZnvudm85pzAlMTHNEMymlhz0c/wOA8UHxNKdyh8ZzhGQYkE6Z6E00g2SNczCLOalKtF53Sv16toyj/Hej+OXU1t8zq84zzOyR5PxWUtzH7zJK62iOteR/8EF5+j5uYMR2AnescnBSlIgPzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=mAoUKWAt; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UpuPk5bm"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1249acd6ad2so1373712c88.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 27 Jan 2026 07:19:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769527153; x=1770131953; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lo2+pTnr8aPKBBLG3pwCmtVAgLkRnA2s+o7HL4Gsrrg=;
-        b=UpuPk5bmFtgcj0KTCj0P03FzBgBYahm+XT5wUdS4Fu+JiMvLESM8Yj/sOjPeJXQDyV
-         oRFxfDiNmNOBMoq+CH+ON8XrpeSrK+4Kz6q3C9gRB8xovCrZ8MxqgGxb8YyrZA36OS32
-         UnXNaK8nKVS1lrvs5Rgf/fU+mhE9OBLZ18Vses/GaLtzZ7hqs4idgU6Oqn1oTn2Ww5rz
-         KnGmkylxF55hnE+WPBM99k+BzX26CnRH6Uls0VlETsmuQCXvoxvXP6/A7kTcsi2+QwLC
-         uaVBKPz6YxZj1vbZU3T/iaVUzs6cACQAGlXcTRSgo1KDLjR8sAteMFB8+ZC5XeCi/avW
-         hXDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769527153; x=1770131953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lo2+pTnr8aPKBBLG3pwCmtVAgLkRnA2s+o7HL4Gsrrg=;
-        b=I+zZBFUX/jSjlJQfcHgPQMWKwqLzEp9rZXUXCrsVx1XYnKubMVTsc0JByANHHz0K0K
-         gUI4I54uUEJaAd9SeUx8t04uaAx8pl9ORZ0QKpdEmaleZMLxDRZKgVMSJrM9r0yTdfYS
-         lEIIvz43rCu2IYoy5QQSASp9yN16tlL8aw4FETJKCfS7FDfYsEYU9MJe3rX5xpPLCujj
-         CXsZT4d+Nvak1aWL55NiuoG225pTpb/Ied242AF0z+e8HdbQRkK74/OEQLf5faG+uBCB
-         0wGkBYsAnm7olmlVGOuGmSojZ3/t1DCCEiZwKDoy+au+yS2OdHRd7ESvSDNo3GjQgMJB
-         B1NA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjsPK8mdA3JS3aY6DgjMMEbgGh0Mlf4Y4pexqknS1orb7H4JueUe6dS0qFftj+pzAKIywNB2Udux5Myg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnWFej7Omo519MPUTiuuatorK6eUZSawhgbS1EthFNZxKn5KjH
-	tfjcfxOlWxMyr82FpXfqv64Bgr3CxLiM/i2plwBkifmSCYofjf7E/oQu
-X-Gm-Gg: AZuq6aJOhBOSwAV2tPmg/6qIZ9j7iIhF18gEOz0eBpHfgQWRIS07F4IbIJFppcg+bmB
-	bvjKCzd0i9qBPqT+BGONdipziPds9Nfo6O7/jXRwEylQ49v/V5+3Z67VN9tvjBTjhu3PIWpYjpv
-	Xp+Xy8EDHUHkL+kHvUa92x1chvJSeY8J1XKg1R4WBuQXDgm1ah8Z3OpzzLzFOF9r+7qT8Xrf6Vl
-	VPENYzGG9A7hflW7hfgcnAUhnfZ7R+295AgI/MzDfOr0i7OoRaIYfvZVuyW1hubkEfrW13sIldL
-	PYzIs49zgm4B8raG5ker/2fz0yiCVfwYdqi0EpzwGeDcnXIwVR8BiY4GBP5us9VIkB3QYUUZWO4
-	EpyieuWprYMoDeyj/RDylx30UjSsHPA3ZR05Q0nU5DVhNa5ma6Bo7VF2Srmkbi5iu9JY78JdrMh
-	+Mzu2IKEORQ5xMjCLzlx1PxRfP
-X-Received: by 2002:a05:7301:1f01:b0:2b0:5b6b:6529 with SMTP id 5a478bee46e88-2b78da68e7cmr1147445eec.39.1769527152906;
-        Tue, 27 Jan 2026 07:19:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73aa03fd0sm17872331eec.23.2026.01.27.07.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 07:19:12 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 27 Jan 2026 07:19:11 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Vasileios Amoiridis <vassilisamir@gmail.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
-Subject: Re: [PATCH v2 2/2] hwmon: Add support for HiTRON HAC300S PSU
-Message-ID: <19d5da08-5605-414a-a1f3-2849b9bff19b@roeck-us.net>
-References: <20260119190806.35276-1-vassilisamir@gmail.com>
- <20260119190806.35276-3-vassilisamir@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="mAoUKWAt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1769527185; x=1801063185;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BqsTfLuyxw/AFqL8l8pnFsC2zOqAYqr1AN7W3ptG+iQ=;
+  b=mAoUKWAtDq+Uaf5iwCbOCCdpj1VHVYi7vAPfiSQAuvvHBMSNW4aZGG+2
+   h2cPie0JljA8n4q66KMtN6qCPZge+Sgfm+kbVqBTxEpJrDQTJpN7Jkmfu
+   yF21lwfNJQZG9mMsimBDrR+aNvEPQmT1BUYC2hG1msFGkL8m+xBdXEIe1
+   42m5tUXq1BUGlskzgx6RqC2DsNhKNN25YBcScEQMDoueKEEkjtmKlqQWU
+   WlyCZUK2NfKqTYIk2eBIgT5LOrLHGMc8S9gBUybpq6OrvkXZj9kYhbPEM
+   tjME+eE1Mo6V1+XCUl9V2ygiFFVP2GMkIGOAGULYrEuOhly/q8pfASVpk
+   A==;
+X-CSE-ConnectionGUID: xTtkAyu0T72lBJqmICM3yw==
+X-CSE-MsgGUID: RPFR8Q10SQ+FbRn+7P/3Sw==
+X-IronPort-AV: E=Sophos;i="6.21,257,1763449200"; 
+   d="scan'208";a="219793155"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2026 08:19:44 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 27 Jan 2026 08:19:03 -0700
+Received: from vduicu-Virtual-Machine.mshome.net (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 27 Jan 2026 08:19:01 -0700
+From: <victor.duicu@microchip.com>
+To: <linux@roeck-us.net>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <corbet@lwn.net>
+CC: <marius.cristea@microchip.com>, <victor.duicu@microchip.com>,
+	<linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v3 0/2] add support in hwmon for MCP998X
+Date: Tue, 27 Jan 2026 17:18:20 +0200
+Message-ID: <20260127151823.9728-1-victor.duicu@microchip.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260119190806.35276-3-vassilisamir@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Mon, Jan 19, 2026 at 08:08:06PM +0100, Vasileios Amoiridis wrote:
-> From: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
-> 
-> Add Support for HiTRON HAC300S PSU. This is a AC/DC hot-swappable
-> CompactPCI Serial Dual output active current sharing switching power
-> supply with a 312W rating.
-> 
-> Signed-off-by: Vasileios Amoiridis <vasileios.amoiridis@cern.ch>
+From: Victor Duicu <victor.duicu@microchip.com>
 
-checkpatch --strict returns various whitespace errors. Please run that
-command in the future.
+Add support in hwmon for Microchip MCP998X/33 and MCP998XD/33D Multichannel
+Automotive Temperature Monitor Family.
 
-Also,
+The chips in the family have different numbers of external channels,
+ranging from 1 (MCP9982) to 4 channels (MCP9985).
+Reading diodes in anti-parallel connection is supported by MCP9984/85/33
+and MCP9984D/85D/33D. Dedicated hardware shutdown circuitry is present
+only in MCP998XD and MCP9933D.
 
-> +static int hac300s_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct hac300s_data *data = to_hac300s_data(info);
-> +
-> +	if (reg == PMBUS_VOUT_MODE)
-> +		return data->exponent;
-> +
-> +	return pmbus_read_byte_data(client, page, reg);
+The driver supports reading the temperature channels, the temperature
+limits and their corresponding alarms. The user can set the limits,
+the update interval and the hysteresis.
 
-This should return -ENODATA.
+This driver is based on the IIO driver for MCP998X:
+https://lore.kernel.org/all/20250930133131.13797-1-victor.duicu@microchip.com/
 
-No need to resend; I fixed it all up and applied the patch.
+Differences related to previous patch:
+v3:
+- update copyright year.
+- add tempX_max_hyst and tempX_crit_hyst attributes and document
+  them in mcp9982.rst. 
+- in include list add byteorder/generic.h and remove unaligned.h.
+- remove definitions for temperature memory block
+  and status memory block.
+- remove individual definitions for register addresses 1Dh->21h.
+- add constants MCP9982_WAKE_UP_TIME_MAX_US and
+  MCP9982_TIMER_BUFFER_US.
+- add checks to ensure that values read from registers are on 8 bits.
+- in mcp9982_read_limit() simplify calculation, replace bulk read
+  with individual operations and add comment.
+- in mcp9982_read_limit() add explicit case branches for limits
+  that are on 16 bits.
+- in mcp9982_read() replace mdelay() with usleep_range().
+- in mcp9982_read() replace block reading for temperature values with
+  individual operations, add comment and remove unnecessary
+  mask variable.
+- in regmap_read_poll_timeout() add final timeout.
+- in mcp9982_read_label() remove label check.
+- in mcp9982_write_limit() replace put_unaligned_be16() with cpu_to_be16().
+- in mcp9982_write_limit() add explicit case branches for limits
+  that are on 16 bits.
+- in mcp9982_init() write default value for diode alert mask register.
+- in mcp9982_parse_fw_config() replace E2BIG with EINVAL.
 
-Thanks,
-Guenter
+v2:
+- in Kconfig add select REGMAP_I2C.
+- in yaml add power state attribute. For chips with "D" in the name
+  check that Run mode is set in yaml and driver.
+- in the include list: remove cleanup.h, add math.h, minmax.h and
+  util_macros.h.
+- add min, max and crit limits for all channels. These attributes can
+  be read and written. In mcp9982_init() set default values for limits.
+- add alarms for limits.
+- edit regmap ranges to add the limit registers.
+- when writing update interval, don't force the user to set exact value.
+  Search for closest valid value.
+- in mcp9982_parse_fw_config() check value from fwnode_property_read_u32().
+- edit coding style and comments.
+- remove constant MCP9982_SCALE.
+- rename variable sampl_idx from mcp9982_priv to interval_idx.
+- in mcp9982_write() rename variable use_previous_freq
+  to use_previous_interval.
+
+v1:
+- initial version for review.
+
+Victor Duicu (2):
+  dt-bindings: hwmon: add support for MCP998X
+  hwmon: add support for MCP998X
+
+ .../bindings/hwmon/microchip,mcp9982.yaml     |  205 ++++
+ Documentation/hwmon/index.rst                 |    1 +
+ Documentation/hwmon/mcp9982.rst               |  105 ++
+ MAINTAINERS                                   |    8 +
+ drivers/hwmon/Kconfig                         |   11 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/mcp9982.c                       | 1022 +++++++++++++++++
+ 7 files changed, 1353 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
+ create mode 100644 Documentation/hwmon/mcp9982.rst
+ create mode 100644 drivers/hwmon/mcp9982.c
+
+
+base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+-- 
+2.51.0
+
