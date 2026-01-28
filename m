@@ -1,218 +1,250 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D403164B8
-	for <linux-hwmon@vger.kernel.org>; Wed, 28 Jan 2026 16:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F01D248861
+	for <linux-hwmon@vger.kernel.org>; Wed, 28 Jan 2026 17:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769619360; cv=none; b=SPvmljaDsM7DRN8KqHZI+Xy8Ggoz83bH6tzsxJ7N9afjEC41SdQDRpwYVDUohmpUYBTYxfZ9WH59Pk1MSG0RHGAcYNNQFbu0Wxyx27Wq+/Y5jlS0yJR0s8kXlVMabQSipKN27lkivZflE6b7MCdnFGc1+16ONOQhwXM2GGe9B5A=
+	t=1769622113; cv=none; b=lWuBWRysRmQmuPBUk/b5XAGGnVNlZwNVuTty4V4z3Fo7GOK+Oi+kYfKRBhFYd9aH4VyYt4b0T0ALP+OQto1IPPIUGK29jTxNffXgPCcuYPBwz/xBpKTQHIiX4hvLfVInTK9ede7AFXkiswDefiMLereUpLDCKbrHPUvJpxCW/eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769619360; c=relaxed/simple;
-	bh=+PrAcvg+5OdtTUavt01TFD/L57Tt7DDcfpHsvpOvros=;
+	s=arc-20240116; t=1769622113; c=relaxed/simple;
+	bh=wOLhbENIErrvdgzEmJvmkho1S9PkXpwRcz22UzHzCJQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QBq2zNDM0+uTc+pRc7JRb3advQPyCXj3rd1L0ls851nMNUHjM/t7KKDuXOsW4bVM8UeQ6aBmTBdGp55pTeMP6FlZTBzWzZSNFECFH1IaLp/A6/L/LImrExJOVV37gGLc1+DuXNLvq9BraI9XY98rA7CuZJF0nw2xQCxgYxaSS8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nQY0pLE0; arc=none smtp.client-ip=209.85.214.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=QaOsADBUSnD+b+mRibp6xyodWuGrCTjyymKWssDPnqOmmeBiNPsPLGBrwqP9/uOCFlPqfMD1DxIwGXmR7vHGIpst9duN7m9afJQnQhKavJX4TeYcF0BjRUA3umUyZ3WyZHygL5zDFhn/1D8KaLIXOxuGXDUlhVyRsFDdWOkNBaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EvDRt55A; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQY0pLE0"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a7786d7895so48466145ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jan 2026 08:55:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EvDRt55A"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2b7070acfdcso145378eec.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Jan 2026 09:41:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769619358; x=1770224158; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CJ5JUPDgasrNDJPGG/r08vgxAhhTjKNkbpybrz3kURc=;
-        b=nQY0pLE0nnde7DiGZvmZOge8Fv9Bt3YfyARhrE4FS1rnTDXxfADbPQW8y/lhNihN6z
-         CFxctGBPjiKUEWycMhxhOkHQ0DbggfLPLDPQLXMJf8Zv/ZDlfsOE0KZqPhD9QEEeODln
-         c6GzmIi5PtrhS/x70JwvXsaVfVNw1D+P3XekWFjsVvk5tiCu1okBSkODuhyDioGD7/Q6
-         EPT1VC/570ACiDHeUrvjqgkyx9fc+dMSERGmIk3QO1KPxHDcrkUfPmtu/eXM93wuIy1u
-         Lh0vAvwJWXzbgpThyRu7cMCYuMWdrsxceVzj4i3Mkqu1dZDkXaPx2oscz+CpGAbbajUh
-         frpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769619358; x=1770224158;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1769622111; x=1770226911; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CJ5JUPDgasrNDJPGG/r08vgxAhhTjKNkbpybrz3kURc=;
-        b=tOz3wxdtqbmlEYoYkpR6wU1vvYjbDkpGBk2ajhEXGxzQfZosxhR2fVjF3FGkK2p4l9
-         2/AN6hpN3NWWipr/wQ7c9jYFy9/ZBdA0O26BDZd4lPdxEZ9z4GrdvPweAqSQRx7M/Z/u
-         kJn/qc66+R+2QPyG1lExZboc1leZT33O0uZtWRNMVKrDUVO/F5MhWaK7Hls36fjBvL+Z
-         FTtrgXvLn6fkNmY3PRH33/MtPkyj4pXsd6dbkPZFrRVXsDOLuDQ8K2bUds9K21i5zfp9
-         oalJSIZ3Z0XmuTV92XyETcRVmU35kKGpqzvEDqYbCfwn3XocByHb9XNeOJYeg81gTVNO
-         qpSg==
-X-Forwarded-Encrypted: i=1; AJvYcCV8WZ645FS1OU/aPMf/BT/r1F+AuiBinR7fNoiOYGLgKi65QMt808eznn9vg9wwUuAcA5g7BA0qmSlDyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGbMHyWrkJkhiJ7bRhTz09DT2eTmjXrBRuaNCffjc2ZHhFIOP9
-	qgysNNv2YZJ1+aIw1x+Z1qKmFdpGu9UId9HRpn4TVxvNXGfw9BJERXfN
-X-Gm-Gg: AZuq6aIL35SnS33oks69UwnGbzynqdg5htCYDe7WMEhExGWvD8dDr6YnVXGHx5FsFnK
-	QU7pb2N10IwRaFuqlrDwTm51b7SekfMtM0kbgYShRLDA7P0OHrbXXpA4AxrDuZp7tJXzW0p5wxj
-	IWNx0JMTWHYeyURyAW0RTE0ITD+LHNqipUkoOj46wWxolRaMDnclMBtONnBz5DjjIZEStdawL9t
-	3Wuz3v81dOnkfkf02H71/eDyx5UkkxwHv5QQk0oYg6v6nOQUUfUq2aWM++zIVFsC2GAXGknyp3q
-	a16zYvrK8nlG0d/7FU0JqlyHT62YPEWyKREGYjpzG+BkCz6KMHg+OwJo5WBsoBPkoW+iUfsLkEE
-	RVs4wSdD8ZDMZjTf6sVsZyqY+XPf/RSr/8Pg5Cj7A5droTy2f80Nd13FgJUI4+B26Lg8be4GZeH
-	te+gdHryEQ8/iJoP3rLP1FfNud
-X-Received: by 2002:a17:903:2291:b0:29f:2ec4:83e5 with SMTP id d9443c01a7336-2a870d55636mr50468865ad.12.1769619357703;
-        Wed, 28 Jan 2026 08:55:57 -0800 (PST)
+        bh=TtqKFEe5Pzy8luortOc0CwHkX1rIlH8Or++BqJLxyg4=;
+        b=EvDRt55AhwHblYnrGRPbUokShEFJZxM/Y3fhyHjX/04iYsRdNBE4jSI14etAFOAg51
+         t5oB3Di/EjBnO0rMDJJIFEzdzSJOUP06P1lmcbbdVVYng34SvFcCcuzUOkMp4X55GSX3
+         ksWSGeaMX+8Tede1kqhlBOmtdA2FtBMY8Y9hmn3e4EPTCubhlt2bxycCcYJByi2oJj5H
+         XzcxDJdj1W1PJabd0WMH5p8u3s/c1Bb0G7BZMsOwsXPzjY+hAa2eGPsFiVFoSp3cNXO/
+         mKTo4DhC7dqv6ctMKvEsVk+T3vhdgRgiMEYSRI9p+zz7W0T8l5u2Hp5tQRuJate9If8r
+         tp5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769622111; x=1770226911;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TtqKFEe5Pzy8luortOc0CwHkX1rIlH8Or++BqJLxyg4=;
+        b=dNuuqNmDYPMPGQZKIXNWt8WDUFObeQtK4S2hMOsqgrdEDxkkFdFPhmwvAjfHDeNO2n
+         MtOPSKp265TqhhQ/nGYB9GtTH8L3C5banEtDcbs8yEddSISaMgsBfSRjC0j51zH2Uojz
+         Fhsz+K/z72XO3SIMtfsEo3Dt/HtyBX5ZxzVWQHrYrwpyw2GeXf4YBSjndahdKdqMfjJ+
+         ojVRGg9zFrx62uCuPN9LekUitWWEu9wX2/XZ/2IXXk5sWaJsVVcROrPw6P7H92HQfDXq
+         iYMPov4SNzNRfqqUH86twP70efnh3T66x4Qy6wOC2zKWKDWP/aZtI8cqcPvUae/3KLaD
+         4rAw==
+X-Forwarded-Encrypted: i=1; AJvYcCWQvCcTQPG5imdiqaIf87kfrGUOziB/fiPWv0Y8ExV3UpRAznSWeRCy6uY1E0g1ZtGjr9TLDClLW3LZDQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4SWVXAGXQTFPeOFum3M5TS/pAO2055z0BhP6TK86EZK2Lql95
+	VOdj0JvzY8+qRpzlEZhvOCMCoDbxuRz26W0mgTK6S+GjIh0cxEg04Wzh
+X-Gm-Gg: AZuq6aLbWNgPnZ1b5RVzskw43ABa90zfl/0DCIFwe3/iketKz7wbclsG4oHEhoLZm9i
+	cHnx1dnKOIDFhSIE8PUwuLNOPP01HpNx6U9UhuWzsjdDZ+9PSDjN0xC069m/oqujr9zt9IEjtWr
+	e9qfbFW/Ai6aJ3e7SOI3opBWkE9O3vbTnvhxcME36Kjwq/IJK4GZHPZAOpmNCJk+dIOa2JfSjwI
+	JW1IxQadTAx9u5mBgAC3fqm0LgGPj+09OONBw3fVj08Z26ppNLazvtnfRTg9JrCJYEA4mN9pZKq
+	pkNR1qyefIEjc2mhh8/R+HIGUyMbmS06mwj7GrlwuFJundfXQtuHBuwFINGo037ajtjjfXlI5OX
+	Lzg2Do6TmB6c+xcZ2UaqzvOV/CFREwbVUsEUUtzcCHmC0cS7C+nxISSbnW8WAGP4ZtBgOU7R/gJ
+	OZ0fQV3XeFSFFGL6bxmRgasyGU
+X-Received: by 2002:a05:7300:6c84:b0:2b7:3240:542f with SMTP id 5a478bee46e88-2b78da4ef6amr3832732eec.37.1769622110875;
+        Wed, 28 Jan 2026 09:41:50 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b7f32bfsm29327505ad.96.2026.01.28.08.55.56
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a170ca0esm3561748eec.15.2026.01.28.09.41.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 08:55:57 -0800 (PST)
+        Wed, 28 Jan 2026 09:41:50 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 28 Jan 2026 08:55:55 -0800
+Date: Wed, 28 Jan 2026 09:41:49 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>, nuno.sa@analog.com,
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+To: Wenliang Yan <wenliang202407@163.com>
+Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	"Rob Herring (Arm)" <robh@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>
-Subject: Re: [PATCH v5 0/3] hwmon: Add support for the LTC4283 Hot Swap
- Controller
-Message-ID: <02b7cf63-4f87-4cdd-8d9e-53a7d0e808a6@roeck-us.net>
-References: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
- <eed64bf1-93af-4b36-adf5-1476cb40edbb@roeck-us.net>
- <382e259ea3835ffbd2be9c36b529875f5a43f38b.camel@gmail.com>
- <8efa188b-8b91-479c-ac10-3fba5b0cbb5f@roeck-us.net>
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/8] hwmon: (ina3221) Various improvement and add
+ support for SQ52210
+Message-ID: <9e9feb88-46db-4b47-a8ed-e30eb0f658c8@roeck-us.net>
+References: <20260119121446.17469-1-wenliang202407@163.com>
+ <956b92bd-950b-44fc-af85-6f76ed60656f@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8efa188b-8b91-479c-ac10-3fba5b0cbb5f@roeck-us.net>
+In-Reply-To: <956b92bd-950b-44fc-af85-6f76ed60656f@roeck-us.net>
 
-On Wed, Jan 28, 2026 at 02:04:35AM -0800, Guenter Roeck wrote:
-> On 1/28/26 01:44, Nuno Sá wrote:
-> > Hi Guenter,
+On Tue, Jan 27, 2026 at 10:07:50AM -0800, Guenter Roeck wrote:
+> Hi,
+> 
+> On Mon, Jan 19, 2026 at 07:14:38AM -0500, Wenliang Yan wrote:
+> > Make modifications according to the guidance provided in the reply.
 > > 
-> > On Tue, 2026-01-27 at 09:39 -0800, Guenter Roeck wrote:
-> > > Hi Nuno,
-> > > 
-> > > On 12/23/25 04:21, Nuno Sá via B4 Relay wrote:
-> > > > This is v3 for the LTC4283 how swap controller. Main change is that I'm
-> > > > now using the auxiliary bus for adding the GPIO device (done depending
-> > > > on FW properties).
-> > > > 
-> > > > Similar to the LTC4282 device, we're clearing some fault logs in the
-> > > > reset_history attributes.
-> > > > 
-> > > 
-> > > I ran the patch series through an AI review. Results are below.
-> > > Please take a look.
-> > > 
+> > 1.Modify the description for power[123]_input(PATCH 5).
+> > 
+> > 2.Re-annotate the significance of the limit value calculation
+> > and the use of register masks in the sq52210_alert_limit_write.
+> > Modify the calculation process to resolve arithmetic overflow issues.
+> > The limit values SOL, BOL, and BUL are all stored using the upper
+> > 13 bits of the register, so shifting is required. In contrast,
+> > the POL value is configured by setting the lower three bits
+> > to 0 directly(PATCH 6).
+> > 
+> > 3.Resolve arithmetic overflow issues in the ina3221_read_power(PATCH 7).
+> > 
+> > 4.Resolve arithmetic overflow issues in the ina3221_read_curr,
+> > and validate channel indices in ina3221_write_in(PATCH 8).
+> > 
+> 
+> AI review of the series provided the feedback below. Please fix or explain
+> false positives.
+> 
 
-Another run through AI below. Please let me know if there are further inaccuracies.
+Another round of AI reviews below. Please address or explain.
 
 Thanks,
 Guenter
 
 ---
-commit 82433332ce165903d56fae327ced975aeef30475
-Author:     Nuno Sá <nuno.sa@analog.com>
+commit ef198f703062bc5ad58a148eb506821900c3522e
+Author:     Wenliang Yan <wenliang202407@163.com>
+hwmon: (ina3221) Support write/read functions for 'power' attribute
 
-hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+SQ52210 adds power attributes to report power data and implements
+corresponding read/write functions for this purpose. This includes
+reading power values, reading alert thresholds, reading alert
+trigger status, and writing alert thresholds.
 
-Adds support for the LTC4283 Hot Swap Controller I2C interface.
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index cb292fee564b..2338b3288950 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -546,6 +553,12 @@ static int ina3221_read_power(struct device *dev, u32 attr, int channel, long *v
+>  		if (ret)
+>  			return ret;
+>  		/* Return power in mW */
+> -		*val = DIV_U64_ROUND_CLOSEST((u64)regval * (u64)ina->power_lsb_uW, 1000);
+> +		*val = DIV_U64_ROUND_CLOSEST((u64)regval * (u64)ina->power_lsb_uW, 1000);
+>  		return 0;
 
-> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
-> new file mode 100644
-> index 000000000000..402b53f81548
-> --- /dev/null
-> +++ b/drivers/hwmon/ltc4283.c
+Does this return the power value in milliWatts? The hwmon ABI specifies
+that power attributes should be returned in microWatts.
 
-[ ... ]
-
-> +static int ltc4283_read_power_word(const struct ltc4283_hwmon *st,
-> +				   u32 reg, long *val)
+>  	case hwmon_power_crit_alarm:
+>  		/* No actual register read if channel is disabled */
+> @@ -736,6 +797,18 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+>  	return ret;
+>  }
+>  
+> +static int ina3221_write_power(struct device *dev, u32 attr, int channel, long val)
 > +{
-> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILLI;
-> +	unsigned int __raw;
-> +	int ret;
+> +	struct ina3221_data *ina = dev_get_drvdata(dev);
 > +
-> +	ret = regmap_read(st->map_word, reg, &__raw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Power is given by:
-> +	 *     P = CODE(16b) * 32.768mV * 2.048V / (2^16 * Rsense)
-> +	 */
-> +	*val = DIV64_U64_ROUND_CLOSEST(temp * __raw, BIT_ULL(16) * st->rsense);
+> +	switch (attr) {
+> +	case hwmon_power_crit:
+> +		return sq52210_alert_limit_write(ina, SQ52210_ALERT_POL, channel, val);
 
-Does this overflow *val on 32-bit systems if the calculated power exceeds
-2000 Watts (approx 2^31 microWatts)?  The intermediate calculation is
-u64, but the result is assigned to a signed long.
+Does this pass the value in microWatts (as received from the core) to a
+function that expects milliWatts? The sq52210_alert_limit_write()
+implementation multiplies the input by 1000 to convert to microWatts,
+which implies it expects the input in milliWatts.
 
-[ ... ]
-
-> +static bool ltc4283_word_reg(struct device *dev, unsigned int reg)
-> +{
-> +	switch (reg) {
-> +	case LTC4283_SENSE ... LTC4283_ADIO34_MAX:
-> +		return true;
 > +	default:
-> +		return false;
+> +		return 0;
 > +	}
 > +}
+> +
 
-LTC4283_SENSE is 0x41 and LTC4283_ADIO34_MAX is 0x40.  Does this invalid
-range (start > end) effectively disable access to the word registers
-via st->map_word?
+commit 61e453283222e7fc9439a6d5c682ce1104dd24ef
+Author:     Wenliang Yan <wenliang202407@163.com>
+hwmon: (ina3221) Support for writing alert limit values and modify the 'ina3221_read_value' function
 
-> +static const struct regmap_config ltc4283_word_regmap_config = {
-> +	.name = "ltc4283-16",
-> +	.reg_bits = 8,
-> +	.val_bits = 16,
-> +	.max_register = LTC4283_ADIO34_MAX,
-> +	.val_format_endian = REGMAP_ENDIAN_BIG,
-> +	.writeable_reg = ltc4283_word_reg,
-> +	.readable_reg = ltc4283_word_reg,
-> +};
+SQ52210 adds power, current, and limit registers. The ina3221_read_value
+function has been refactored to adapt to the new register data reading
+format.
 
-Does max_register = 0x40 prevent access to the sensor value registers
-(LTC4283_SENSE at 0x41 and above) which are intended to be read as
-words?
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index 4b2888be0ae2..cb292fee564b 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -345,6 +365,17 @@ static int ina3221_read_value(struct ina3221_data *ina, unsigned int reg,
+>  	case INA3221_CRIT3:
+>  		*val = sign_extend32(regval >> 3, 12);
+>  		break;
+> +	case SQ52210_ALERT_LIMIT1:
+> +	case SQ52210_ALERT_LIMIT2:
+> +	case SQ52210_ALERT_LIMIT3:
+> +		if (ina->alert_type_select & SQ52210_ALERT_ALL_SUL_MASK)
+> +			*val = sign_extend32(regval, 15);
 
-commit 5998c620fbd8915340a4b92635c9489a91fae567
-Author:     Nuno Sá <nuno.sa@analog.com>
+Does this return the unshifted register value? The standard Shunt Voltage
+registers (INA3221_SHUNTx) return the value shifted right by 3.
+Returning the unshifted value here causes a scaling inconsistency when
+ina3221_read_curr() applies current_lsb_uA (which is based on the
+shifted LSB), resulting in an 8x error in the reported current limit.
 
-gpio: gpio-ltc4283: Add support for the LTC4283 Swap Controller
-
-Adds GPIO support for the LTC4283.
-
-> diff --git a/drivers/gpio/gpio-ltc4283.c b/drivers/gpio/gpio-ltc4283.c
-> new file mode 100644
-> index 000000000000..fa0c106d4fac
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-ltc4283.c
+> +		else if (ina->alert_type_select & (SQ52210_ALERT_ALL_BOL_MASK
+> +					| SQ52210_ALERT_ALL_BUL_MASK))
+> +			*val = regval >> 3;
+> +		else if (ina->alert_type_select & SQ52210_ALERT_ALL_POL_MASK)
+> +			*val = regval;
+> +		break;
+>  	default:
+>  		*val = 0;
+>  		return -EOPNOTSUPP;
+> @@ -443,6 +512,94 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+>  	}
+>  }
+>  
+> +static int sq52210_alert_limit_write(struct ina3221_data *ina,
+> +			enum sq52210_alert_types type, int channel, long val)
+> +{
+> +	struct regmap *regmap = ina->regmap;
 
 [ ... ]
 
-> +#define LTC4283_PINS_MAX			8
-> +#define LTC4283_PGIOX_START_NR			4
-> +#define LTC4283_INPUT_STATUS			0x02
-> +#define LTC4283_PGIO_CONFIG			0x10
-> +#define   LTC4283_PGIO_CFG_MASK(pin) 
-> +	GENMASK(((pin) - LTC4283_PGIOX_START_NR) * 2 + 1, (((pin) - LTC4283_PGIOX_START_NR) * 2))
-> +#define LTC4283_PGIO_CONFIG_2			0x11
+> +	return ret;
+> +}
 > +
-> +#define LTC42823_ADIO_CONFIG			0x12
 
-This isn't a bug, but should this be LTC4283_ADIO_CONFIG instead of
-LTC42823?
+Is this function unused in this commit? This might cause a build warning
+or error depending on the compiler configuration.
 
-> +/* starts at bit 4 */
-> +#define   LTC4283_ADIOX_CONFIG_MASK(pin)	BIT((pin) + 4)
-> +#define LTC4283_PGIO_DIR_IN			3
-> +#define LTC4283_PGIO_DIR_OUT			2
+commit a0f07f4a272baa0684c7d1ebd30e585dd23a1d77
+Author:     Wenliang Yan <wenliang202407@163.com>
+hwmon: (ina3221) Modify write/read functions for 'in' and 'curr' attribute
 
+Modified the relevant read/write functions for 'in' and 'curr' attributes,
+adding support for crit, lcrit, crit_alarm, and lcrit_alarm features.
+
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index 2338b3288950..fdcd92082c02 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -823,6 +819,10 @@ static int ina3221_write_curr(struct device *dev, u32 attr,
+>  	case hwmon_curr_crit:
+>  	case hwmon_curr_max:
+>  		return ina3221_write_curr_shunt(ina, attr, channel, val);
+> +	case hwmon_curr_lcrit:
+> +		return sq52210_alert_limit_write(ina, SQ52210_ALERT_SUL, channel, val);
+
+Does this pass the current value (in milliAmps) directly to a function
+that expects a Shunt Voltage value (in microVolts)? The
+sq52210_alert_limit_write() function for SQ52210_ALERT_SUL divides by
+5 (implying 5uV LSB), but does not account for the shunt resistor value.
+This will set an incorrect limit unless the shunt resistor happens to
+be 1 mOhm.
+
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
