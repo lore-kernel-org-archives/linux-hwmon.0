@@ -1,20 +1,20 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1338C2DB7A9;
-	Wed, 28 Jan 2026 10:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7781D3EBF1C;
+	Wed, 28 Jan 2026 10:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769595411; cv=none; b=gbTTIRnSv/Tv3RDYfhqxCQwFmaujToa+RXDNaFfN3sstQh9bCVN/sYIllU21Gct0t3JgeuOUHWuygq6I265cyKzFFzbCyOkIniI5GjOb6tseS9F2Q60ViH+nABunLSbM8L+pfAqpzE7P2aDksqAW3+BwPQlWpSik+ZrUOAwy58I=
+	t=1769595444; cv=none; b=qQNNePFVmgxsViLfcpP9/1BcEvXKhs1RYKh/eEpJflP8spKHItYU/QZcba95HSTsVEtPHx3otfLm0BaZaA3b9KS4r3hl3MgmDk69/9KY7qwEfb4q38FByw7VxKdjDaBKPltBVBQPcP8D/jIU0JNa6r+M0UE/vzISvGctDbfbO1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769595411; c=relaxed/simple;
-	bh=iNd6XbEDRnKpxaITqr8TKaAwVS6iSc4TOiIKKSy8yUk=;
+	s=arc-20240116; t=1769595444; c=relaxed/simple;
+	bh=H07ckK6g92TCRJlCX2cOXow8/BIh1LdS9gcH9LwVk2Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZHLXCJbgaPL8hcmcq+N2XGcMp8TiU4HyJWdxvbEomdmZ0me7QoNPGWAH51resEBn5Fuh1fXFYoyN+QR+TMORm4Qdg8VeiEitmG5o7/luQxhoaKMj4KtHwxgEugsb7bZdFMLego+gPXhaAAB6YSA52w90WxZz410xsD3qOK6dJs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=162.243.161.220
+	 MIME-Version; b=X1+UUBgcBmHqpy2vHt2Rw+kVOFtJ/ksc8dnkPDK0/DxJFnlFIq/LRArEq31zlr2NWmLWb4BPsWcrx9zaQ0FiVfpe8O6kdIBggo6p0uvwDHcTDEGm7V/sEzwOe8+SxNvSXUHVLVRaeUVU+oiP53WzmOcyZS58b94v4JBO5I8hxqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.21.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
 Received: from E0005182LT.eswin.cn (unknown [10.12.96.155])
-	by app1 (Coremail) with SMTP id TAJkCgDXJjcI4nlpC3kAAA--.2181S2;
-	Wed, 28 Jan 2026 18:16:41 +0800 (CST)
+	by app2 (Coremail) with SMTP id TQJkCgDXIK0h4nlpfHgAAA--.3205S2;
+	Wed, 28 Jan 2026 18:17:07 +0800 (CST)
 From: hehuan1@eswincomputing.com
 To: linux@roeck-us.net,
 	robh@kernel.org,
@@ -29,9 +29,9 @@ Cc: ningyu@eswincomputing.com,
 	pinkesh.vaghela@einfochips.com,
 	luyulin@eswincomputing.com,
 	Huan He <hehuan1@eswincomputing.com>
-Subject: [PATCH v2 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
-Date: Wed, 28 Jan 2026 18:16:36 +0800
-Message-Id: <20260128101636.914-1-hehuan1@eswincomputing.com>
+Subject: [PATCH v2 2/2] hwmon: Add Eswin EIC7700 PVT sensor driver
+Date: Wed, 28 Jan 2026 18:17:03 +0800
+Message-Id: <20260128101703.969-1-hehuan1@eswincomputing.com>
 X-Mailer: git-send-email 2.31.1.windows.1
 In-Reply-To: <20260128101400.859-1-hehuan1@eswincomputing.com>
 References: <20260128101400.859-1-hehuan1@eswincomputing.com>
@@ -42,116 +42,810 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:TAJkCgDXJjcI4nlpC3kAAA--.2181S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4DWF18ur17Cw4Utw48Crg_yoW5JrW7pa
-	1kCryDGr4Sqry7Z3y7JF10kF4ftws5CFW7Ar1Iq3Wrtr1DJas0qw43Kr15Wa4xCr1SqFW3
-	uFyaqryjy3WDA3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
-	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
-	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQdb8UUUUU=
+X-CM-TRANSID:TQJkCgDXIK0h4nlpfHgAAA--.3205S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfZrWxZry3AF43JF1xJFW8WFg_yoW8uF1DGo
+	WfGFn3Zw18JrWfCrZxGF1IqFyxXw1Ivw4rZa1FkFWq9F12yr1Ygay2gwnrW3W3Kr15Kr4U
+	Zr1fG34rZFZ7t3Wfn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYK7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xva
+	j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
+	x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8
+	Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7M4kE6xkIj40Ew7xC0wCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE-syl42
+	xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
+	GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
+	8JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4U
+	MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
+	8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOHUqUUUUU
 X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/
 
 From: Huan He <hehuan1@eswincomputing.com>
 
-Add device tree binding documentation for ESWIN EIC7700 Process, Voltage
-and Temperature sensor.
+Add support for ESWIN EIC7700 Process, Voltage and Temperature sensor. The
+driver supports temperature and voltage monitoring with polynomial
+conversion, and provides sysfs interface for sensor data access.
 
-The EIC7700 SoC integrates two PVT instances for monitoring SoC and DDR
-power domains respectively.
+The PVT IP contains one temperature sensor and four voltage sensors for
+process variation monitoring.
 
 Signed-off-by: Yulin Lu <luyulin@eswincomputing.com>
 Signed-off-by: Huan He <hehuan1@eswincomputing.com>
 ---
- .../bindings/hwmon/eswin,eic7700-pvt.yaml     | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+ drivers/hwmon/Kconfig       |  12 +
+ drivers/hwmon/Makefile      |   1 +
+ drivers/hwmon/eic7700-pvt.c | 612 ++++++++++++++++++++++++++++++++++++
+ drivers/hwmon/eic7700-pvt.h | 106 +++++++
+ 4 files changed, 731 insertions(+)
+ create mode 100644 drivers/hwmon/eic7700-pvt.c
+ create mode 100644 drivers/hwmon/eic7700-pvt.h
 
-diff --git a/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 157678b821fc..de04ef41bcd9 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2043,6 +2043,18 @@ config SENSORS_DME1737
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called dme1737.
+ 
++config SENSORS_EIC7700_PVT
++	tristate "Eswin EIC7700 Process, Voltage, Temperature sensor driver"
++	depends on ARCH_ESWIN || COMPILE_TEST
++	depends on HWMON
++	select POLYNOMIAL
++	help
++	  If you say yes here you get support for Eswin EIC7700 PVT sensor
++	  embedded into the SoC.
++
++	  This driver can also be built as a module. If so, the module will be
++	  called eic7700-pvt.
++
+ config SENSORS_EMC1403
+ 	tristate "SMSC EMC1403/23 thermal sensor"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index eade8e3b1bde..1b2845bd5a54 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -72,6 +72,7 @@ obj-$(CONFIG_SENSORS_DME1737)	+= dme1737.o
+ obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
+ obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
+ obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
++obj-$(CONFIG_SENSORS_EIC7700_PVT) += eic7700-pvt.o
+ obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
+ obj-$(CONFIG_SENSORS_EMC2103)	+= emc2103.o
+ obj-$(CONFIG_SENSORS_EMC2305)	+= emc2305.o
+diff --git a/drivers/hwmon/eic7700-pvt.c b/drivers/hwmon/eic7700-pvt.c
 new file mode 100644
-index 000000000000..f4ba228924fe
+index 000000000000..faee3fe39161
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/eswin,eic7700-pvt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/hwmon/eic7700-pvt.c
+@@ -0,0 +1,612 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ESWIN EIC7700 Process, Voltage, Temperature sensor driver
++ *
++ * Copyright 2026, Beijing ESWIN Computing Technology Co., Ltd.
++ *
++ * Authors:
++ *   Yulin Lu <luyulin@eswincomputing.com>
++ *   Huan He <hehuan1@eswincomputing.com>
++ */
 +
-+title: ESWIN EIC7700 PVT Sensor
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/polynomial.h>
++#include <linux/reset.h>
++#include "eic7700-pvt.h"
 +
-+maintainers:
-+  - Yulin Lu <luyulin@eswincomputing.com>
-+  - Huan He <hehuan1@eswincomputing.com>
++static const struct pvt_sensor_info pvt_info[] = {
++	PVT_SENSOR_INFO(0, "Temperature", hwmon_temp, TEMP),
++	PVT_SENSOR_INFO(0, "Voltage", hwmon_in, VOLT),
++	PVT_SENSOR_INFO(1, "Low-Vt", hwmon_in, LVT),
++	PVT_SENSOR_INFO(2, "UltraLow-Vt", hwmon_in, ULVT),
++	PVT_SENSOR_INFO(3, "Standard-Vt", hwmon_in, SVT),
++};
 +
-+description:
-+  ESWIN EIC7700 SoC integrates embedded process, voltage and temperature
-+  sensors to monitor the internal SoC environment. The system includes two
-+  PVT sensor instances. The PVT0 monitors the main SoC power domain. The
-+  PVT1 sensor monitors the DDR core power domain.
++/*
++ * The original translation formulae of the temperature (in degrees of Celsius)
++ * to PVT data and vice-versa are following:
++ * N = 6.0818e-8*(T^4) +1.2873e-5*(T^3) + 7.2244e-3*(T^2) + 3.6484*(T^1) +
++ *     1.6198e2,
++ * T = -1.8439e-11*(N^4) + 8.0705e-8*(N^3) + -1.8501e-4*(N^2) +
++ *     3.2843e-1*(N^1) - 4.8690e1,
++ * where T = [-40, 125]C and N = [27, 771].
++ * They must be accordingly altered to be suitable for the integer arithmetics.
++ * The technique is called 'factor redistribution', which just makes sure the
++ * multiplications and divisions are made so to have a result of the operations
++ * within the integer numbers limit. In addition we need to translate the
++ * formulae to accept millidegrees of Celsius. Here what they look like after
++ * the alterations:
++ * N = (60818e-20*(T^4) + 12873e-14*(T^3) + 72244e-9*(T^2) + 36484e-3*T +
++ *     16198e2) / 1e4,
++ * T = -18439e-12*(N^4) + 80705e-9*(N^3) - 185010e-6*(N^2) + 328430e-3*N -
++ *     48690,
++ * where T = [-40000, 125000] mC and N = [27, 771].
++ */
++static const struct polynomial poly_N_to_temp = {
++	.total_divider = 1,
++	.terms = {
++		{4, -18439, 1000, 1},
++		{3, 80705, 1000, 1},
++		{2, -185010, 1000, 1},
++		{1, 328430, 1000, 1},
++		{0, -48690, 1, 1}
++	}
++};
 +
-+allOf:
-+  - $ref: /schemas/hwmon/hwmon-common.yaml#
++/*
++ * Similar alterations are performed for the voltage conversion equations.
++ * The original formulae are:
++ * N = 1.3905e3*V - 5.7685e2,
++ * V = (N + 5.7685e2) / 1.3905e3,
++ * where V = [0.72, 0.88] V and N = [424, 646].
++ * After the optimization they looks as follows:
++ * N = (13905e-3*V - 5768.5) / 10,
++ * V = (N * 10^5 / 13905 + 57685 * 10^3 / 13905) / 10.
++ * where V = [720, 880] mV and N = [424, 646].
++ */
++static const struct polynomial poly_N_to_volt = {
++	.total_divider = 10,
++	.terms = {
++		{1, 100000, 13905, 1},
++		{0, 57685000, 1, 13905}
++	}
++};
 +
-+properties:
-+  compatible:
-+    const: eswin,eic7700-pvt
++static inline u32 eic7700_pvt_update(void __iomem *reg, u32 mask, u32 data)
++{
++	u32 old;
 +
-+  reg:
-+    maxItems: 1
++	old = readl_relaxed(reg);
++	writel((old & ~mask) | (data & mask), reg);
 +
-+  clocks:
-+    maxItems: 1
++	return old & mask;
++}
 +
-+  interrupts:
-+    maxItems: 1
++static inline void eic7700_pvt_set_mode(struct pvt_hwmon *pvt, u32 mode)
++{
++	u32 old;
 +
-+  label:
-+    description:
-+      Human readable identifier used to distinguish between different PVT
-+      instances. Typically "pvt0" for SoC PVT sensor and "pvt1" for DDR
-+      core PVT sensor.
++	mode = FIELD_PREP(PVT_MODE_MASK, mode);
 +
-+  resets:
-+    maxItems: 1
++	old = eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
++	eic7700_pvt_update(pvt->regs + PVT_MODE, PVT_MODE_MASK, mode);
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, old);
++}
 +
-+  '#thermal-sensor-cells':
-+    description: Thermal sensor cells if used for thermal sensoring.
-+    const: 0
++static inline void eic7700_pvt_set_trim(struct pvt_hwmon *pvt, u32 val)
++{
++	u32 old;
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+  - label
-+  - resets
++	old = eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
++	writel(val, pvt->regs + PVT_TRIM);
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, old);
++}
 +
-+additionalProperties: false
++static irqreturn_t eic7700_pvt_hard_isr(int irq, void *data)
++{
++	struct pvt_hwmon *pvt = data;
++	u32 val;
 +
-+examples:
-+  - |
-+    pvt@50b00000 {
-+      compatible = "eswin,eic7700-pvt";
-+      reg = <0x50b00000 0x10000>;
-+      clocks = <&clocks 244>;
-+      interrupts = <349>;
-+      interrupt-parent = <&plic>;
-+      label = "pvt0";
-+      resets = <&reset 111>;
-+      #thermal-sensor-cells = <0>;
-+    };
-+...
++	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
++	/*
++	 * Read the data, update the cache and notify a waiter of this event.
++	 */
++	val = readl(pvt->regs + PVT_DATA);
++	WRITE_ONCE(pvt->data_cache, FIELD_GET(PVT_DATA_OUT, val));
++	complete(&pvt->conversion);
++
++	return IRQ_HANDLED;
++}
++
++static int eic7700_pvt_read_data(struct pvt_hwmon *pvt,
++				 enum pvt_sensor_type type, long *val)
++{
++	u32 data;
++	int ret;
++
++	/*
++	 * Wait for PVT conversion to complete and update the data cache. The
++	 * data read procedure is following: set the requested PVT sensor mode,
++	 * enable conversion, wait until conversion is finished, then disable
++	 * conversion and IRQ, and read the cached data.
++	 */
++	reinit_completion(&pvt->conversion);
++
++	eic7700_pvt_set_mode(pvt, pvt_info[type].mode);
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, PVT_ENA_EN);
++
++	ret = wait_for_completion_interruptible(&pvt->conversion);
++
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
++	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
++
++	data = READ_ONCE(pvt->data_cache);
++
++	if (ret && (ret != -ERESTARTSYS))
++		return ret;
++
++	if (type == PVT_TEMP)
++		*val = polynomial_calc(&poly_N_to_temp, data);
++	else if (type == PVT_VOLT)
++		*val = polynomial_calc(&poly_N_to_volt, data);
++	else
++		*val = data;
++
++	return 0;
++}
++
++static const struct hwmon_channel_info *pvt_channel_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	NULL
++};
++
++static umode_t eic7700_pvt_hwmon_is_visible(const void *data,
++					    enum hwmon_sensor_types type,
++					    u32 attr, int ch)
++{
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++		case hwmon_temp_label:
++			return 0444;
++		case hwmon_temp_offset:
++			return 0644;
++		}
++		break;
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++		case hwmon_in_label:
++			return 0444;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int eic7700_pvt_read_trim(struct pvt_hwmon *pvt, long *val)
++{
++	u32 data;
++
++	data = readl(pvt->regs + PVT_TRIM);
++	*val = data;
++
++	return 0;
++}
++
++static int eic7700_pvt_write_trim(struct pvt_hwmon *pvt, long val)
++{
++	/*
++	 * Update PVT trim register safely while the controller is temporarily
++	 * disabled.
++	 */
++	eic7700_pvt_set_trim(pvt, val);
++
++	return 0;
++}
++
++static int eic7700_pvt_hwmon_read(struct device *dev,
++				  enum hwmon_sensor_types type, u32 attr,
++				  int ch, long *val)
++{
++	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_get_sync(pvt->dev);
++	if (ret < 0) {
++		dev_err(pvt->dev, "Failed to resume PVT device: %d\n", ret);
++		return ret;
++	}
++
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++			ret = eic7700_pvt_read_data(pvt, ch, val);
++			break;
++		case hwmon_temp_offset:
++			ret = eic7700_pvt_read_trim(pvt, val);
++			break;
++		default:
++			ret = -EOPNOTSUPP;
++		}
++		break;
++	case hwmon_in:
++		if (attr == hwmon_in_input)
++			ret = eic7700_pvt_read_data(pvt, PVT_VOLT + ch, val);
++		else
++			ret = -EOPNOTSUPP;
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++	}
++
++	pm_runtime_mark_last_busy(pvt->dev);
++	pm_runtime_put_autosuspend(pvt->dev);
++	return ret;
++}
++
++static int eic7700_pvt_hwmon_read_string(struct device *dev,
++					 enum hwmon_sensor_types type, u32 attr,
++					 int ch, const char **str)
++{
++	switch (type) {
++	case hwmon_temp:
++		if (attr == hwmon_temp_label) {
++			*str = pvt_info[ch].label;
++			return 0;
++		}
++		break;
++	case hwmon_in:
++		if (attr == hwmon_in_label) {
++			*str = pvt_info[PVT_VOLT + ch].label;
++			return 0;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int eic7700_pvt_hwmon_write(struct device *dev,
++				   enum hwmon_sensor_types type, u32 attr,
++				   int ch, long val)
++{
++	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_get_sync(pvt->dev);
++	if (ret < 0) {
++		dev_err(pvt->dev, "Failed to resume PVT device: %d\n", ret);
++		return ret;
++	}
++
++	if (type == hwmon_temp && attr == hwmon_temp_offset)
++		ret = eic7700_pvt_write_trim(pvt, val);
++	else
++		ret = -EOPNOTSUPP;
++
++	pm_runtime_mark_last_busy(pvt->dev);
++	pm_runtime_put_autosuspend(pvt->dev);
++	return ret;
++}
++
++static const struct hwmon_ops pvt_hwmon_ops = {
++	.is_visible = eic7700_pvt_hwmon_is_visible,
++	.read = eic7700_pvt_hwmon_read,
++	.read_string = eic7700_pvt_hwmon_read_string,
++	.write = eic7700_pvt_hwmon_write
++};
++
++static const struct hwmon_chip_info pvt_hwmon_info = {
++	.ops = &pvt_hwmon_ops,
++	.info = pvt_channel_info
++};
++
++static void pvt_clear_data(void *data)
++{
++	struct pvt_hwmon *pvt = data;
++
++	complete_all(&pvt->conversion);
++}
++
++static struct pvt_hwmon *eic7700_pvt_create_data(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct pvt_hwmon *pvt;
++	int ret;
++
++	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
++	if (!pvt)
++		return ERR_PTR(-ENOMEM);
++
++	pvt->dev = dev;
++	init_completion(&pvt->conversion);
++
++	ret = devm_add_action(dev, pvt_clear_data, pvt);
++	if (ret) {
++		dev_err(dev, "Can't add PVT data clear action\n");
++		return ERR_PTR(ret);
++	}
++
++	return pvt;
++}
++
++static int eic7700_pvt_check_pwr(struct pvt_hwmon *pvt)
++{
++	unsigned long tout;
++	int ret = 0;
++
++	/*
++	 * Test out the sensor conversion functionality. If it is not done on
++	 * time then the domain must have been unpowered and we won't be able
++	 * to use the device later in this driver.
++	 */
++	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, PVT_ENA_EN);
++	readl(pvt->regs + PVT_DATA);
++
++	tout = PVT_TOUT_MIN / NSEC_PER_USEC;
++	usleep_range(tout, 2 * tout);
++
++	readl(pvt->regs + PVT_DATA);
++	if (!(readl(pvt->regs + PVT_INT) & PVT_INT_STAT)) {
++		ret = -ENODEV;
++		dev_err(pvt->dev,
++			"Sensor is powered down - no interrupt generated\n");
++	}
++
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
++	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
++
++	return ret;
++}
++
++static int eic7700_pvt_init_iface(struct pvt_hwmon *pvt)
++{
++	unsigned long rate;
++
++	rate = clk_get_rate(pvt->clk);
++	if (!rate) {
++		dev_err(pvt->dev, "Invalid reference clock rate\n");
++		return -ENODEV;
++	}
++	/*
++	 * Make sure controller are disabled so not to accidentally have ISR
++	 * executed before the driver data is fully initialized. Clear the IRQ
++	 * status as well.
++	 */
++	eic7700_pvt_update(pvt->regs + PVT_INT, PVT_INT_CLR, PVT_INT_CLR);
++	eic7700_pvt_update(pvt->regs + PVT_ENA, PVT_ENA_EN, 0);
++	readl(pvt->regs + PVT_INT);
++	readl(pvt->regs + PVT_DATA);
++
++	/* Setup default sensor mode and temperature trim. */
++	eic7700_pvt_set_mode(pvt, pvt_info[PVT_TEMP].mode);
++
++	eic7700_pvt_set_trim(pvt, PVT_TRIM_DEF);
++
++	return 0;
++}
++
++static int eic7700_pvt_request_irq(struct pvt_hwmon *pvt)
++{
++	struct platform_device *pdev = to_platform_device(pvt->dev);
++	int ret;
++
++	pvt->irq = platform_get_irq(pdev, 0);
++	if (pvt->irq < 0)
++		return pvt->irq;
++
++	ret = devm_request_threaded_irq(pvt->dev, pvt->irq,
++					eic7700_pvt_hard_isr, NULL,
++					IRQF_SHARED | IRQF_TRIGGER_HIGH, "pvt",
++					pvt);
++	if (ret) {
++		dev_err(pvt->dev, "Couldn't request PVT IRQ\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static int eic7700_pvt_create_hwmon(struct pvt_hwmon *pvt)
++{
++	struct device *dev = pvt->dev;
++	struct device_node *np = dev->of_node;
++	const char *node_label;
++	int type;
++	const char *names[2] = {"soc_pvt", "ddr_pvt"};
++
++	if (of_property_read_string(np, "label", &node_label)) {
++		dev_err(dev, "Missing 'label' property in DTS node\n");
++		return -EINVAL;
++	}
++
++	if (strcmp(node_label, "pvt0") == 0) {
++		type = 0;
++	} else if (strcmp(node_label, "pvt1") == 0) {
++		type = 1;
++	} else {
++		dev_err(pvt->dev, "Unsupported label: %s\n", node_label);
++		return -EINVAL;
++	}
++
++	pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, names[type],
++							  pvt, &pvt_hwmon_info,
++							  NULL);
++	if (IS_ERR(pvt->hwmon)) {
++		dev_err(pvt->dev, "Couldn't create hwmon device\n");
++		return PTR_ERR(pvt->hwmon);
++	}
++
++	return 0;
++}
++
++static void eic7700_pvt_disable_pm_runtime(void *data)
++{
++	struct pvt_hwmon *pvt = data;
++
++	pm_runtime_dont_use_autosuspend(pvt->dev);
++	pm_runtime_disable(pvt->dev);
++}
++
++static int eic7700_pvt_probe(struct platform_device *pdev)
++{
++	struct pvt_hwmon *pvt;
++	int ret;
++
++	pvt = eic7700_pvt_create_data(pdev);
++	if (IS_ERR(pvt))
++		return PTR_ERR(pvt);
++
++	platform_set_drvdata(pdev, pvt);
++
++	pvt->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(pvt->regs))
++		return PTR_ERR(pvt->regs);
++
++	pvt->clk = devm_clk_get_enabled(&pdev->dev, NULL);
++	if (IS_ERR(pvt->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pvt->clk),
++				     "Couldn't get clock\n");
++
++	pvt->rst = devm_reset_control_get_exclusive_deasserted(&pdev->dev,
++							       NULL);
++	if (IS_ERR(pvt->rst))
++		return dev_err_probe(pvt->dev, PTR_ERR(pvt->rst),
++				     "Couldn't get reset control\n");
++
++	ret = eic7700_pvt_check_pwr(pvt);
++	if (ret)
++		return ret;
++
++	ret = eic7700_pvt_init_iface(pvt);
++	if (ret)
++		return ret;
++
++	ret = eic7700_pvt_request_irq(pvt);
++	if (ret)
++		return ret;
++
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, 3000);
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_get_noresume(&pdev->dev);
++
++	ret = devm_add_action_or_reset(pvt->dev, eic7700_pvt_disable_pm_runtime,
++				       pvt);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "Can't register PM cleanup\n");
++
++	ret = eic7700_pvt_create_hwmon(pvt);
++	if (ret)
++		return ret;
++
++	pm_runtime_put_autosuspend(&pdev->dev);
++
++	return 0;
++}
++
++static int __maybe_unused eic7700_pvt_runtime_resume(struct device *dev)
++{
++	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_prepare_enable(pvt->clk);
++	if (ret) {
++		dev_err(dev, "Failed to enable clock: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int __maybe_unused eic7700_pvt_runtime_suspend(struct device *dev)
++{
++	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
++
++	clk_disable_unprepare(pvt->clk);
++
++	return 0;
++}
++
++static int __maybe_unused eic7700_pvt_suspend(struct device *dev)
++{
++	int ret = 0;
++
++	if (!pm_runtime_status_suspended(dev)) {
++		ret = eic7700_pvt_runtime_suspend(dev);
++		if (ret) {
++			dev_err(dev, "Failed to suspend: %d\n", ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int __maybe_unused eic7700_pvt_resume(struct device *dev)
++{
++	int ret = 0;
++
++	if (!pm_runtime_status_suspended(dev)) {
++		ret = eic7700_pvt_runtime_resume(dev);
++		if (ret) {
++			dev_err(dev, "Failed to resume: %d\n", ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops eic7700_pvt_pm_ops = {
++	SYSTEM_SLEEP_PM_OPS(eic7700_pvt_suspend, eic7700_pvt_resume)
++	RUNTIME_PM_OPS(eic7700_pvt_runtime_suspend, eic7700_pvt_runtime_resume,
++		       NULL)
++};
++
++static const struct of_device_id pvt_of_match[] = {
++	{ .compatible = "eswin,eic7700-pvt"},
++	{ }
++};
++MODULE_DEVICE_TABLE(of, pvt_of_match);
++
++static struct platform_driver pvt_driver = {
++	.probe = eic7700_pvt_probe,
++	.driver = {
++		.name = "eic7700-pvt",
++		.of_match_table = pvt_of_match,
++		.pm = pm_sleep_ptr(&eic7700_pvt_pm_ops),
++	},
++};
++module_platform_driver(pvt_driver);
++
++MODULE_AUTHOR("Yulin Lu <luyulin@eswincomputing.com>");
++MODULE_AUTHOR("Huan He <hehuan1@eswincomputing.com>");
++MODULE_DESCRIPTION("Eswin eic7700 PVT driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/hwmon/eic7700-pvt.h b/drivers/hwmon/eic7700-pvt.h
+new file mode 100644
+index 000000000000..29f38fe48eb2
+--- /dev/null
++++ b/drivers/hwmon/eic7700-pvt.h
+@@ -0,0 +1,106 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * ESWIN EIC7700 Process, Voltage, Temperature sensor driver
++ *
++ * Copyright 2026, Beijing ESWIN Computing Technology Co., Ltd.
++ */
++#ifndef __HWMON_EIC7700_PVT_H__
++#define __HWMON_EIC7700_PVT_H__
++
++#include <linux/completion.h>
++#include <linux/hwmon.h>
++#include <linux/kernel.h>
++#include <linux/time.h>
++
++/* ESWIN EIC7700 PVT registers and their bitfields */
++#define PVT_TRIM		0x04
++#define PVT_MODE		0x08
++#define PVT_MODE_MASK		GENMASK(2, 0)
++#define PVT_CTRL_MODE_TEMP	0x0
++#define PVT_CTRL_MODE_VOLT	0x4
++#define PVT_CTRL_MODE_LVT	0x1
++#define PVT_CTRL_MODE_ULVT	0x2
++#define PVT_CTRL_MODE_SVT	0x3
++#define PVT_ENA			0x0c
++#define PVT_ENA_EN		BIT(0)
++#define PVT_INT			0x10
++#define PVT_INT_STAT		BIT(0)
++#define PVT_INT_CLR		BIT(1)
++#define PVT_DATA		0x14
++#define PVT_DATA_OUT		GENMASK(9, 0)
++
++/*
++ * PVT sensors-related limits and default values
++ * @PVT_TEMP_CHS: Number of temperature hwmon channels.
++ * @PVT_VOLT_CHS: Number of voltage hwmon channels.
++ * @PVT_TRIM_DEF: Default temperature sensor trim value (set a proper value
++ *		  when one is determined for ESWIN EIC7700 SoC).
++ * @PVT_TOUT_MIN: Minimal timeout between samples in nanoseconds.
++ */
++#define PVT_TEMP_CHS		1
++#define PVT_VOLT_CHS		4
++#define PVT_TRIM_DEF		0
++#define PVT_TOUT_MIN		(NSEC_PER_SEC / 3000)
++
++/*
++ * enum pvt_sensor_type - ESWIN EIC7700 PVT sensor types (correspond to each PVT
++ *			  sampling mode)
++ * @PVT_TEMP: PVT Temperature sensor.
++ * @PVT_VOLT: PVT Voltage sensor.
++ * @PVT_LVT: PVT Low-Voltage threshold sensor.
++ * @PVT_ULVT: PVT UltraLow-Voltage threshold sensor.
++ * @PVT_SVT: PVT Standard-Voltage threshold sensor.
++ */
++enum pvt_sensor_type {
++	PVT_TEMP = 0,
++	PVT_VOLT,
++	PVT_LVT,
++	PVT_ULVT,
++	PVT_SVT
++};
++
++/*
++ * struct pvt_sensor_info - ESWIN EIC7700 PVT sensor informational structure
++ * @channel: Sensor channel ID.
++ * @label: hwmon sensor label.
++ * @mode: PVT mode corresponding to the channel.
++ * @type: Sensor type.
++ */
++struct pvt_sensor_info {
++	int channel;
++	const char *label;
++	u32 mode;
++	enum hwmon_sensor_types type;
++};
++
++#define PVT_SENSOR_INFO(_ch, _label, _type, _mode)	\
++	{						\
++		.channel = _ch,				\
++		.label = _label,			\
++		.mode = PVT_CTRL_MODE_ ##_mode,		\
++		.type = _type,				\
++	}
++
++/*
++ * struct pvt_hwmon - Eswin EIC7700 PVT private data
++ * @dev: device structure of the PVT platform device.
++ * @hwmon: hwmon device structure.
++ * @regs: pointer to the Eswin EIC7700 PVT registers region.
++ * @irq: PVT events IRQ number.
++ * @clk: PVT core clock (1.2MHz).
++ * @rst: pointer to the reset descriptor.
++ * @data_cache: data cache in raw format.
++ * @conversion: data conversion completion.
++ */
++struct pvt_hwmon {
++	struct device *dev;
++	struct device *hwmon;
++	void __iomem *regs;
++	int irq;
++	struct clk *clk;
++	struct reset_control *rst;
++	u32 data_cache;
++	struct completion conversion;
++};
++
++#endif /* __HWMON_EIC7700_PVT_H__ */
 -- 
 2.25.1
 
