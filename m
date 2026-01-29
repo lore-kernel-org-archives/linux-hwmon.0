@@ -1,257 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CD03770B;
-	Thu, 29 Jan 2026 14:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AE326CE32
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 14:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769696297; cv=none; b=RHohaU4vFoqueTuqtpuY+9VzOTHr5qK1ndOkhc9uz5rBjzh6M43+UxHgmbGmiklhDVSTKmwJwE7m8+7u1RqdtatIdLbnCed6LOp/yDsltxUUOuJtxTbds8XKTOuz5XxPyLq0cGGwHJ4i2rK4TKMHnXGjGEUIrUrAlayv65PgEK0=
+	t=1769696308; cv=none; b=OhHfhzbutCEoXB6rfhd31p7whtVnBOlX2ZujCE/NnDfFFTeVkvaekL9dOXkjYtnaZnlMHJCVSi8tMIY9lXZpg6PhJZ8ybyOHi6uUzNLTku8jcpkZC+7KdWJNWybbxom76VjNaoPnQOG2714FFF2Q/zsUJxtKf9borT7PFihphVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769696297; c=relaxed/simple;
-	bh=6o70TQiXd/uUsmAM33d6htQTNykph/Iq07haWmLQRug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ed7f0MXFXRnFT6tC5NgNhC5cQUHDrnE1wV3US8Mtgh6/N2X+knbtSdINotwNT1BdepgTnpgmI70HMjecbaXjxsUgvKBs4tEav+szp8hX4IDvX4UJNnHRsfGpyz6H7KKP+Z9iyTE88B7OgLxRoPydy6Uls7l34dxoAx2imcEpzBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ia7CCo3O; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769696308; c=relaxed/simple;
+	bh=EDers8fN2HljLl1KM73ByzR5GscUSEeRnainkZYB2nw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RwrcYaTym6+8V9GkX4hDwAx9M9n8ZImjT30L7EjXITmklFcBIE1+yMxDYPEdYW2bWaFXgqRx2Sbw0mnbkgmtDUJqGd56NOUDiI6xTdqc0Ef75fBeAP9n1zgtPxTKbUX1Bn0W0v9SqZCBf/Cutrad6b2rnmzmic6yh68oN1fnPHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dBKYhtMa; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ia7CCo3O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652BAC4CEF7;
-	Thu, 29 Jan 2026 14:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769696296;
-	bh=6o70TQiXd/uUsmAM33d6htQTNykph/Iq07haWmLQRug=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ia7CCo3OyDPByOOLLKLJ8Jx7jRHsmzxs6Brgrd/XCs04rij1+rU/0cMPpZEEeaxmx
-	 CmNXj5GWHvvGtBuoX32lhqXb+Vzl1c2lO5l3dPYznNdWyoTo0rUtv01Oo0HV8n/HZ+
-	 7YscgrOgG9ateGmuvXsfqzS0Md/48FkFJD3Om42wJzw5vg5zNzC0ahpTMBAVtsdo/v
-	 UCwD/ckhoAZslROS2wILWkSPsg2vosMp9DWhROuKZ4Rl64lCKl0W5l5pwMwRn8yAuc
-	 +8/SBrK7NiAz3zcDlwHV8zAo465leA/sFmiUv9dAS1/y4gymnvJ1Nqa+ZbSWQbyU/e
-	 dDZiZbLQOXpbg==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>,
- Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Cc: linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- Igor Raits <igor@gooddata.com>, Daniel Secik <daniel.secik@gooddata.com>,
- Zdenek Pesek <zdenek.pesek@gooddata.com>,
- Jiri Jurica <jiri.jurica@gooddata.com>, Huisong Li <lihuisong@huawei.com>
-Subject:
- [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related to
- acpi_power_meter_notify()
-Date: Thu, 29 Jan 2026 15:18:11 +0100
-Message-ID: <6252535.lOV4Wx5bFT@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <d45d7b8a-97dd-4db8-a785-56df128983a4@roeck-us.net>
-References:
- <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
- <12855313.O9o76ZdvQC@rafael.j.wysocki>
- <d45d7b8a-97dd-4db8-a785-56df128983a4@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dBKYhtMa"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-352e3d18fa7so601055a91.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 06:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769696306; x=1770301106; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ri7RrmqyAkFYNWJdmG59gMaCqhBOcnxpGMzCXKtgG+Q=;
+        b=dBKYhtMaCahl3pQve4grrg+KQrcnHlDqo72AkZrxMDZRR/05uVySEqPJn3MzWK11Rg
+         1QZ3Dpbi6vRcZq4LimTI3dG38lMl4/SBSr9JNtNO0WwDN1Tj6kbC7w+CurlJNCw1XjzR
+         8xsfjWSTMtj/LrQHoD3Mhsfl1pwXzGW94m3xcaWIU4gLLiBx8ulMPQLbjFilM/wfaKDT
+         DecSz6b6ioH9a5CloWvKrviu4U8Y9og4w0quTbzMi3SebLw/m58ExqjXsqM3rM1wtD07
+         3RgIRWFLx9XdPktzYOdewVSuGsRRyiQQlRrgRmDlIvYtvGykHffGo2L6EZPzzKHkVBaa
+         ir5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769696306; x=1770301106;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ri7RrmqyAkFYNWJdmG59gMaCqhBOcnxpGMzCXKtgG+Q=;
+        b=DhRB8+oNxYuCe9TiiRLNjdbBUYd/VFgWAh1DxKnfEtGoZHvN64oGVaVSkAAFoAbAq6
+         pxNsuVCDr/GepBkjAox8b95GGnffYEmqFyE3c7H6bqe9u98VA+qRNBl/h0qXtUvFE0K+
+         WKzEUx9Tyy7KemDGagdxKDsgYWYvnML5PPonXAEVsLuyXqpBfT1aOFhf62TDAjQkFFp/
+         7XvYmTLAcpB4aAktNHJUNvX2EfHMvlUUX2T1FSqoZ+67GcTy7sOC4iN2/Swv/E9flBpi
+         +16+JpBpIqZTNTpuCEt0IoyAzC2IaNCZ+iRPR68AvIo2aPzc994Zy6jSbc8TY5zfPYez
+         57+Q==
+X-Gm-Message-State: AOJu0YxP1GJsKumoFY3vIhhoe5OxP+sekapCIJRGEB3H4/jeykk7O6H5
+	IFkDLDGCeqGD7zm+Ij2YdA0u0G2gYEX/kG694fKcud94g8m9MejXkiVe
+X-Gm-Gg: AZuq6aLdV0k7e6hNTIVhRhsiJYYf9hXnR0bue09ZFyb/W1Cr9hh/Kol5iGsUhQ9Npuy
+	ziJqFp64DcU1fp7H/4OM2jn8fC2RabSyizd8dYBNXa0o6/FiTElbjTDYyzhmmhQ/90afJXODEG+
+	QDWkx+i9C6H8pZCRdnrYYJLq8BgX+IuhQBdw56DSebgKOSLQV3uzvb6ZQplPoLuNHhbzHhRelHA
+	4/8y+VXuiRV2lTXk4udgIWHcmoItmEnPW/6BfyY+bkWdLNlLpRNDskSfnn8VFpYt/HTNBfYyd0t
+	h0cylj0eG9EkLbr7s5N/QNjuOmBDZTvVQOd4yTOyLnktFA0VhtjZIizkKW0/eppUC8wzZnhGNoE
+	13f7lGh7pIm5PMswmjyO7JBANLsvwEVVx1hwXT6d8qT39v4gJrqhXr0+z9dluzyC3ZGQk7LsnYB
+	am9z4CdjIpSfqDTiXcidMBZxANYtr1V1nvkxY=
+X-Received: by 2002:a17:90b:5208:b0:341:c964:126c with SMTP id 98e67ed59e1d1-353fedae2a1mr7222180a91.34.1769696306252;
+        Thu, 29 Jan 2026 06:18:26 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3542dd54fa8sm246980a91.3.2026.01.29.06.18.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 06:18:25 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 29 Jan 2026 06:18:24 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) Add missing check for
+ device_property_read_u32_array
+Message-ID: <2806020e-725a-4da4-8922-e6d28854b53d@roeck-us.net>
+References: <20260128072610.2476625-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260128072610.2476625-1-nichen@iscas.ac.cn>
 
-On Wednesday, January 28, 2026 10:52:15 PM CET Guenter Roeck wrote:
-> On Wed, Jan 28, 2026 at 08:52:49PM +0100, Rafael J. Wysocki wrote:
-> > On Wednesday, January 28, 2026 7:45:32 PM CET Rafael J. Wysocki wrote:
-> > > On Wed, Jan 28, 2026 at 7:18=E2=80=AFPM Guenter Roeck <linux@roeck-us=
-=2Enet> wrote:
-> > > >
-> > > > Hi all,
-> > > >
-> > > > On Thu, Jan 22, 2026 at 07:55:35PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Thu, Jan 22, 2026 at 7:21=E2=80=AFPM Jaroslav Pulchart
-> > > > > <jaroslav.pulchart@gooddata.com> wrote:
-> > > > > >
-> > > > > > Hello,
-> > > > > >
-> > > > > > after upgrading from kernel 6.17.y to 6.18.y we started to obse=
-rve a regression
-> > > > > > in the ACPI power meter hwmon interface. Reading power*_average=
- sysfs
-> > > > > > attributes blocks indefinitely and causes tasks to enter uninte=
-rruptible
-> > > > > > sleep (D state).
-> > > > >
-> > > > > The most recent change in the acpi_power_meter driver was made in
-> > > > > 6.15, so this is not a regression in that driver.
-> > > > >
-> > > > > Also, nothing suspicious is done in power1_average_min_show() and
-> > > > > power1_average_min_store() AFAICS.
-> > > > >
-> > > >
-> > > > I decided to ask AI (Gemini 3, more specifically) for an analysis o=
-f the
-> > > > problem, using Chris Mason's prompts for guidance. Result is below.
-> > >=20
-> > > So it agrees with me in the analysis part.
-> > >=20
-> Yes.
->=20
-> > > > The suggested fix may be a feasible workaround. Let me know what yo=
-u think.
-> > >=20
-> > > Well, I'm afraid it won't work if two METER_NOTIFY_CONFIG
-> > > notifications compete with each other because they may try to
-> > > unregister the hwmon device at the same time.
-> > >=20
-> Good point.
->=20
-> > > I would just add a separate lock for the notifier (a static one should
-> > > suffice) and make changes to "resource" only under resource->lock.
-> > >=20
-> > > Let me cut a prototype patch for this.
-> > >=20
-> >=20
-> > Something like the below (untested).
-> >=20
-> > Note that it also fixes the driver removal which is tangentially relate=
-d to the
-> > problem at hand.
->=20
-> I can't test it either, but I ran it through Gemini and it tells me:
->=20
->   Fixes: tag missing (y) [Fixes: 16746ce8adfe ("hwmon: (acpi_power_meter)=
- Replace the deprecated hwmon_device_register")]
->=20
->   The commit addresses a deadlock regression introduced by the conversion=
- to
->   hwmon_device_register_with_info.
->=20
->   CHANGE-1: New static mutex `acpi_notify_lock` introduces global seriali=
-zation.
->   This prevents concurrent notification handling for multiple power meter=
- devices.
->   While likely a minor impact given the nature of the device, it technica=
-lly reduces parallelism compared to the per-device locking used previously.
->=20
-> Just for fun I tried again, this time using a model which is more prone to
-> false positives. It pretty much provided the same result in more detail.
-> It is a bit more verbose, so I attached it below. I also asked it to veri=
-fy,
-> using the backtrace, if the patch is complete, and to suggest a patch
-> description. The result is also attached below.
->=20
-> I think this is good enough for a formal patch. WDYT ?
+On Wed, Jan 28, 2026 at 03:26:10PM +0800, Chen Ni wrote:
+> Add check for the return value of device_property_read_u32_array() and
+> return the error if it fails in order to catch the error.
+> 
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
+>  drivers/hwmon/pwm-fan.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 37269db2de84..3535007f5c37 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -609,8 +609,11 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  		for (i = 0; i < ctx->tach_count; i++)
+>  			ctx->pulses_per_revolution[i] = 2;
+>  
+> -		device_property_read_u32_array(dev, "pulses-per-revolution",
+> -					       ctx->pulses_per_revolution, ctx->tach_count);
+> +		ret = device_property_read_u32_array(dev, "pulses-per-revolution",
+> +						     ctx->pulses_per_revolution, ctx->tach_count);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Failed to read pulses-per-revolution\n");
 
-With all due respect to the AI, I think that it has missed a couple of thin=
-gs,
-so below it the patch with my version of the changelog.
+NACK
 
-Also, it really wants to be two patches IMV, one adding the
-IS_ERR(resource->hwmon_dev) checks before hwmon device unregistration and
-another one fixing the deadlock in question on top of it.  Please let me kn=
-ow
-if you want me to split this one.
+This would defeat the purpose of setting the default a couple of lines above.
 
-Jaroslav, it would be nice to get some feedback on it from you as you seem =
-to
-be the only person here who can test it.
+Guenter
 
-=2D--
-=46rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related to acpi=
-_power_meter_notify()
-
-The acpi_power_meter driver's .notify() callback function,
-acpi_power_meter_notify(), calls hwmon_device_unregister() under a lock
-that is also acquired by callbacks in sysfs attributes of the device
-being unregistered which is prone to deadlocks between sysfs access and
-device removal.
-
-Address this by moving the hwmon device removal in
-acpi_power_meter_notify() outside the lock in question, but notice
-that doing it alone is not sufficient because two concurrent
-METER_NOTIFY_CONFIG notifications may be attempting to remove the
-same device at the same time.  To prevent that from happening, add a
-new lock serializing the execution of the switch () statement in
-acpi_power_meter_notify().  For simplicity, it is a static mutex
-which should not be a problem from the performance perspective.
-
-The new lock also allows the hwmon_device_register_with_info()
-in acpi_power_meter_notify() to be called outside the inner lock
-because it prevents the other notifications handled by that function
-from manipulating the "resource" object while the hwmon device based
-on it is being registered.  The sending of ACPI netlink messages from
-acpi_power_meter_notify() is serialized by the new lock too which
-generally helps to ensure that the order of handling firmware
-notifications is the same as the order of sending netlink messages
-related to them.
-
-In addition, notice that hwmon_device_register_with_info() may fail
-in which case resource->hwmon_dev will become an error pointer,
-so add checks to avoid attempting to unregister the hwmon device
-pointer to by it in that case to acpi_power_meter_notify() and
-acpi_power_meter_remove().
-
-=46ixes: 16746ce8adfe ("hwmon: (acpi_power_meter) Replace the deprecated hw=
-mon_device_register")
-Reported-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-=2D--
- drivers/hwmon/acpi_power_meter.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-=2D-- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -47,6 +47,8 @@
- static int cap_in_hardware;
- static bool force_cap_on;
-=20
-+static DEFINE_MUTEX(acpi_notify_lock);
-+
- static int can_cap_in_hardware(void)
- {
- 	return force_cap_on || cap_in_hardware;
-@@ -823,18 +825,26 @@ static void acpi_power_meter_notify(stru
-=20
- 	resource =3D acpi_driver_data(device);
-=20
-+	guard(mutex)(&acpi_notify_lock);
-+
- 	switch (event) {
- 	case METER_NOTIFY_CONFIG:
-+		if (!IS_ERR(resource->hwmon_dev))
-+			hwmon_device_unregister(resource->hwmon_dev);
-+
- 		mutex_lock(&resource->lock);
-+
- 		free_capabilities(resource);
- 		remove_domain_devices(resource);
-=2D		hwmon_device_unregister(resource->hwmon_dev);
- 		res =3D read_capabilities(resource);
- 		if (res)
- 			dev_err_once(&device->dev, "read capabilities failed.\n");
- 		res =3D read_domain_devices(resource);
- 		if (res && res !=3D -ENODEV)
- 			dev_err_once(&device->dev, "read domain devices failed.\n");
-+
-+		mutex_unlock(&resource->lock);
-+
- 		resource->hwmon_dev =3D
- 			hwmon_device_register_with_info(&device->dev,
- 							ACPI_POWER_METER_NAME,
-@@ -843,7 +853,7 @@ static void acpi_power_meter_notify(stru
- 							power_extra_groups);
- 		if (IS_ERR(resource->hwmon_dev))
- 			dev_err_once(&device->dev, "register hwmon device failed.\n");
-=2D		mutex_unlock(&resource->lock);
-+
- 		break;
- 	case METER_NOTIFY_TRIP:
- 		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-@@ -953,7 +963,8 @@ static void acpi_power_meter_remove(stru
- 		return;
-=20
- 	resource =3D acpi_driver_data(device);
-=2D	hwmon_device_unregister(resource->hwmon_dev);
-+	if (!IS_ERR(resource->hwmon_dev))
-+		hwmon_device_unregister(resource->hwmon_dev);
-=20
- 	remove_domain_devices(resource);
- 	free_capabilities(resource);
-
-
-
+>  	}
+>  
+>  	channels = devm_kcalloc(dev, channel_count + 1,
+> -- 
+> 2.25.1
+> 
+> 
