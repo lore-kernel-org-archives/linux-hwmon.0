@@ -1,118 +1,145 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A773590CD;
-	Thu, 29 Jan 2026 03:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B4819004A;
+	Thu, 29 Jan 2026 07:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769656024; cv=none; b=QGBwPAbF6/jhMlXdHQhA+BdwNnjUGu8ZS+qtYi85jCkyH0Pw7YIylGqBfXvTdsbhfYsQ8W/lBV0sH45/K029dG0eUVJo6cvBc4l8Je4FQIxUXeAjtTrkOCN7O0csO0RgMu1J1ghcnAe2/JJdshft3RE0uorpITInJ66Z6q8axeM=
+	t=1769671086; cv=none; b=QorqfV3V32fCjjff3kDiBRG/WXYwgnFKmtmst3seSBDAbxcIhmJg9iTrnywV4XN8eAmiT0ytQYUiERYZfXM5xgQ+2j2VC0AsrvXahfZyrZOEjEEYSBE5GjHzaE8ISNnxR1mU9Nesk5vAfzRZaw78zWdLN3c+/l5BYtCgNnM/kAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769656024; c=relaxed/simple;
-	bh=JaJL33jRnVEW3KS4xSUGTLXuKT3C/sxqFHNlSFMovb0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=dNthc4+A8X7roD7YA+58JcCEeAJyKr+Ta6BW6M61S8+LxxRp7FGdj/07bRJQJBjpEYCKCsPRzn9GeN2jS8ixLpMNaBldZYv3dtOohWn2Ma/EdeKXJS4HrkHihlqy7U0VAiAh/MQeEEZU+k5V4SbUck/UPpVIJ/VTrAPjH1JCTvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Thu, 29 Jan 2026 11:06:17 +0800 (GMT+08:00)
-Date: Thu, 29 Jan 2026 11:06:17 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: "Conor Dooley" <conor@kernel.org>
-Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
-	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
-	luyulin@eswincomputing.com
-Subject: Re: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
- sensor
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <20260128-amperage-handstand-36fa4b3ec447@spud>
-References: <20260128101400.859-1-hehuan1@eswincomputing.com>
- <20260128101636.914-1-hehuan1@eswincomputing.com>
- <20260128-amperage-handstand-36fa4b3ec447@spud>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1769671086; c=relaxed/simple;
+	bh=Oet2Ln0th1MRhkR3vcBzvenkkg7ygxTOK1r4x0Hhp50=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jXJXic+PxJXvMGkzg9BweX6STI5zLJVpXgkUNwex0UuHgGmpBmStu+lqqszb39zl8ruCYy0YtDSFyqxcFnqQFWgK1voUzcqvXpAEWEelxZxH2+k84RrlqA/1su9UlvDLwQ3JLMop6FS+bFAy8jMsiVYZUDUdrB4GaZOanILvmtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nrIN+ZMu; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nrIN+ZMu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25E9C4CEF7;
+	Thu, 29 Jan 2026 07:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769671085;
+	bh=Oet2Ln0th1MRhkR3vcBzvenkkg7ygxTOK1r4x0Hhp50=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=nrIN+ZMu69YummFrvVQMMhOOe4Kmw77A3duaxW73WZpbRcLKYdOjZnZRk4AU4H+02
+	 4n2eDRKa+l3pDGT3uIyRm69xYLfro3oLEj15gehw4wIs0RMYVwr0JPVYBwMIRL6GZf
+	 29zVADBbF+TNhHnfinIzpL/0BrybzulkbkdsraPIcGU8bF2PnL+0kOGbQXHiZMwkov
+	 TEn/9cOuqgB0rQqasjNDHPCx3zV8jakbEU2Mwl/li7Tf03QmatfnaOf1+dVoJhpqXo
+	 iIbtGjj0H06kBD3OdW/opV2XXfXEenSKp/OqPmnudHZ2BjDGqqFWFFrqV8dCWJiFUz
+	 MsMuTGNPvVP6A==
+Date: Thu, 29 Jan 2026 08:17:59 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Charles Hsu <hsu.yungteng@gmail.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Jonathan Corbet
+ <corbet@lwn.net>, huah Khan <skhan@linuxfoundation.org>,
+ linux-doc@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v7 2/2] hwmon: pmbus: add support for STEF48H28
+Message-ID: <20260129081743.50ab5a66@foz.lan>
+In-Reply-To: <46a42764-6cf0-46c8-b764-4c4b394b04d0@roeck-us.net>
+References: <20260126063712.1049025-1-hsu.yungteng@gmail.com>
+	<20260126063712.1049025-2-hsu.yungteng@gmail.com>
+	<46a42764-6cf0-46c8-b764-4c4b394b04d0@roeck-us.net>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <372016a8.2e10.19c07b74792.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgAHUa2pznppMsEAAA--.311W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgECCml6OoINaQAA
-	sE
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-PiA+IAo+ID4gQWRkIGRldmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgRVNXSU4g
-RUlDNzcwMCBQcm9jZXNzLCBWb2x0YWdlCj4gPiBhbmQgVGVtcGVyYXR1cmUgc2Vuc29yLgo+ID4g
-Cj4gPiBUaGUgRUlDNzcwMCBTb0MgaW50ZWdyYXRlcyB0d28gUFZUIGluc3RhbmNlcyBmb3IgbW9u
-aXRvcmluZyBTb0MgYW5kIEREUgo+ID4gcG93ZXIgZG9tYWlucyByZXNwZWN0aXZlbHkuCj4gPiAK
-PiA+IFNpZ25lZC1vZmYtYnk6IFl1bGluIEx1IDxsdXl1bGluQGVzd2luY29tcHV0aW5nLmNvbT4K
-PiA+IFNpZ25lZC1vZmYtYnk6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+
-ID4gLS0tCj4gPiAgLi4uL2JpbmRpbmdzL2h3bW9uL2Vzd2luLGVpYzc3MDAtcHZ0LnlhbWwgICAg
-IHwgNzAgKysrKysrKysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3MCBpbnNlcnRp
-b25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4gPiAKPiA+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4sZWljNzcwMC1w
-dnQueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixl
-aWM3NzAwLXB2dC55YW1sCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAw
-MDAwMDAwLi5mNGJhMjI4OTI0ZmUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4g
-PiBAQCAtMCwwICsxLDcwIEBACj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0y
-LjAtb25seSBPUiBCU0QtMi1DbGF1c2UpCj4gPiArJVlBTUwgMS4yCj4gPiArLS0tCj4gPiArJGlk
-OiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55
-YW1sIwo+ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29y
-ZS55YW1sIwo+ID4gKwo+ID4gK3RpdGxlOiBFU1dJTiBFSUM3NzAwIFBWVCBTZW5zb3IKPiA+ICsK
-PiA+ICttYWludGFpbmVyczoKPiA+ICsgIC0gWXVsaW4gTHUgPGx1eXVsaW5AZXN3aW5jb21wdXRp
-bmcuY29tPgo+ID4gKyAgLSBIdWFuIEhlIDxoZWh1YW4xQGVzd2luY29tcHV0aW5nLmNvbT4KPiA+
-ICsKPiA+ICtkZXNjcmlwdGlvbjoKPiA+ICsgIEVTV0lOIEVJQzc3MDAgU29DIGludGVncmF0ZXMg
-ZW1iZWRkZWQgcHJvY2Vzcywgdm9sdGFnZSBhbmQgdGVtcGVyYXR1cmUKPiA+ICsgIHNlbnNvcnMg
-dG8gbW9uaXRvciB0aGUgaW50ZXJuYWwgU29DIGVudmlyb25tZW50LiBUaGUgc3lzdGVtIGluY2x1
-ZGVzIHR3bwo+ID4gKyAgUFZUIHNlbnNvciBpbnN0YW5jZXMuIFRoZSBQVlQwIG1vbml0b3JzIHRo
-ZSBtYWluIFNvQyBwb3dlciBkb21haW4uIFRoZQo+ID4gKyAgUFZUMSBzZW5zb3IgbW9uaXRvcnMg
-dGhlIEREUiBjb3JlIHBvd2VyIGRvbWFpbi4KPiA+ICsKPiA+ICthbGxPZjoKPiA+ICsgIC0gJHJl
-ZjogL3NjaGVtYXMvaHdtb24vaHdtb24tY29tbW9uLnlhbWwjCj4gCj4gRllJLCBpbmNsdWRpbmcg
-dGhpcyBpcyBraW5kYSBwb2ludGxlc3MgYmVjYXVzZSB5b3UgaGF2ZSB0aGUgbGFiZWwKPiBwcm9w
-ZXJ0eSBkZWZpbmVkIGJlbG93IGFuZCB5b3VyICJhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2Ui
-IGJsb2Nrcwo+IHNodW50LXJlc2lzdG9yLW1pY3JvLW9obXMgZnJvbSBiZWluZyB1c2VkLgoKSSBw
-bGFuIHRvIGtlZXAgdGhlICRyZWY6IC9zY2hlbWFzL2h3bW9uL2h3bW9uLWNvbW1vbi55YW1sIGlu
-IHVzZSwgY2hhbmdlCnRoZSBvcmlnaW5hbCBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UgdG8g
-dW5ldmFsdWF0ZWRQcm9wZXJ0aWVzOiBmYWxzZSwKYW5kIHJlbW92ZSB0aGUgbGFiZWwgZGVmaW5p
-dGlvbiBmcm9tIG91ciBzY2hlbWEgc2luY2UgaXQgaXMgYWxyZWFkeQpwcm92aWRlZCBieSBod21v
-bi1jb21tb24ueWFtbC4gQ291bGQgeW91IHBsZWFzZSBjb25maXJtIGlmIHRoaXMKbW9kaWZpY2F0
-aW9uIGNvbmZvcm1zIHRvIHRoZSBjb21tdW5pdHkgc3RhbmRhcmRzPwoKPiAKPiA+ICsKPiA+ICtw
-cm9wZXJ0aWVzOgo+ID4gKyAgY29tcGF0aWJsZToKPiA+ICsgICAgY29uc3Q6IGVzd2luLGVpYzc3
-MDAtcHZ0Cj4gPiArCj4gPiArICByZWc6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiAr
-ICBjbG9ja3M6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiArICBpbnRlcnJ1cHRzOgo+
-ID4gKyAgICBtYXhJdGVtczogMQo+ID4gKwo+ID4gKyAgbGFiZWw6Cj4gPiArICAgIGRlc2NyaXB0
-aW9uOgo+ID4gKyAgICAgIEh1bWFuIHJlYWRhYmxlIGlkZW50aWZpZXIgdXNlZCB0byBkaXN0aW5n
-dWlzaCBiZXR3ZWVuIGRpZmZlcmVudCBQVlQKPiA+ICsgICAgICBpbnN0YW5jZXMuIFR5cGljYWxs
-eSAicHZ0MCIgZm9yIFNvQyBQVlQgc2Vuc29yIGFuZCAicHZ0MSIgZm9yIEREUgo+ID4gKyAgICAg
-IGNvcmUgUFZUIHNlbnNvci4KPiA+ICsKPiA+ICsgIHJlc2V0czoKPiA+ICsgICAgbWF4SXRlbXM6
-IDEKPiA+ICsKPiA+ICsgICcjdGhlcm1hbC1zZW5zb3ItY2VsbHMnOgo+IAo+ID4gKyAgICBkZXNj
-cmlwdGlvbjogVGhlcm1hbCBzZW5zb3IgY2VsbHMgaWYgdXNlZCBmb3IgdGhlcm1hbCBzZW5zb3Jp
-bmcuCj4gCj4gWW91IGNhbiBkcm9wIHRoaXMgZGVzY3JpcHRpb24gaWYgdGhlcmUncyBhIHJlc2Vu
-ZCwgY29tbW9uIHByb3BlcnRpZXMKPiB1c2VkIGluIHRoZSBvYnZpb3VzIHdheSBkb24ndCBuZWVk
-IGFueSBtb3JlIGluZm8uCgpXZSB3aWxsIHJlbW92ZSB0aGlzIGluIHRoZSBuZXh0IHBhdGNoLgoK
-VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIHJldmlldyB0aGUgcGF0
-Y2ggYW5kIGZvciB5b3VyCnZhbHVhYmxlIGZlZWRiYWNrLgoKQmVzdCByZWdhcmRzLApIdWFuIEhl
-Cgo+IAo+IFJldmlld2VkLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAu
-Y29tPgo+IHB3LWJvdDogbm90LWFwcGxpY2FibGUKPiAKPiBDaGVlcnMsCj4gQ29ub3IuCj4gCj4g
-PiArICAgIGNvbnN0OiAwCj4gPiArCj4gPiArcmVxdWlyZWQ6Cj4gPiArICAtIGNvbXBhdGlibGUK
-PiA+ICsgIC0gcmVnCj4gPiArICAtIGNsb2Nrcwo+ID4gKyAgLSBpbnRlcnJ1cHRzCj4gPiArICAt
-IGxhYmVsCj4gPiArICAtIHJlc2V0cwo+ID4gKwo+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBm
-YWxzZQo+ID4gKwo+ID4gK2V4YW1wbGVzOgo+ID4gKyAgLSB8Cj4gPiArICAgIHB2dEA1MGIwMDAw
-MCB7Cj4gPiArICAgICAgY29tcGF0aWJsZSA9ICJlc3dpbixlaWM3NzAwLXB2dCI7Cj4gPiArICAg
-ICAgcmVnID0gPDB4NTBiMDAwMDAgMHgxMDAwMD47Cj4gPiArICAgICAgY2xvY2tzID0gPCZjbG9j
-a3MgMjQ0PjsKPiA+ICsgICAgICBpbnRlcnJ1cHRzID0gPDM0OT47Cj4gPiArICAgICAgaW50ZXJy
-dXB0LXBhcmVudCA9IDwmcGxpYz47Cj4gPiArICAgICAgbGFiZWwgPSAicHZ0MCI7Cj4gPiArICAg
-ICAgcmVzZXRzID0gPCZyZXNldCAxMTE+Owo+ID4gKyAgICAgICN0aGVybWFsLXNlbnNvci1jZWxs
-cyA9IDwwPjsKPiA+ICsgICAgfTsKPiA+ICsuLi4KPiA+IC0tIAo+ID4gMi4yNS4xCj4gPiAK
+Hi Gunter/Charles,
+
+On Mon, 26 Jan 2026 16:12:42 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
+
+> On Mon, Jan 26, 2026 at 02:37:12PM +0800, Charles Hsu wrote:
+> > Add support for STEF48H28 hot-swap controller.
+> > 
+> > Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>  
+
+This patch completely broke docs build, as it is using a markup meant
+to identify section titles to mark the beginning/ending of a table.
+
+Also, please use get_maintainers.pl:
+
+	$ ./scripts/get_maintainer.pl Documentation/hwmon/stef48h28.rst
+	Charles Hsu <hsu.yungteng@gmail.com> (maintainer:ST STEF48H28 DRIVER)
+	Guenter Roeck <linux@roeck-us.net> (maintainer:HARDWARE MONITORING)
+	Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
+	Shuah Khan <skhan@linuxfoundation.org> (reviewer:DOCUMENTATION)
+	linux-hwmon@vger.kernel.org (open list:ST STEF48H28 DRIVER)
+	linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+	linux-kernel@vger.kernel.org (open list)
+
+(adding documentation folks to C/C and also -next maintainer)
+
+Please apply the enclosed patch to fix linux-next.
+
+Thanks,
+Mauro
+
+---
+
+[PATCH] docs: hwmon: stef48h28.rst: fix a documentation build
+ breakage on -next
+
+The table there is completely misformatted, causing Sphinx to
+badly fail:
+
+Traceback
+=========
+
+      File "/usr/lib/python3.14/site-packages/sphinx/util/parallel.py", line 137, in _join_one
+        raise SphinxParallelError(*result)
+    sphinx.errors.SphinxParallelError: docutils.utils.SystemMessage: /new_devel/docs/Documentation/hwmon/stef48h28.rst:45: (SEVERE/4) Missing matching underline for section title overline.
+
+    =========================================================
+    in1_label               "vin".
+    in1_input               Measured voltage. From READ_VIN register.
+
+The full traceback has been saved in:
+/tmp/sphinx-err-wpoae2yk.log
+
+Fixes: aef6b6b5d5bc ("hwmon: pmbus: add support for STEF48H28")
+Cc: stable@vger.kernel.org
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+diff --git a/Documentation/hwmon/stef48h28.rst b/Documentation/hwmon/stef48h28.rst
+index 00bef9e55651..3bfc37f3be8e 100644
+--- a/Documentation/hwmon/stef48h28.rst
++++ b/Documentation/hwmon/stef48h28.rst
+@@ -42,7 +42,7 @@ The driver supports standard PMBus driver platform data.
+ Sysfs entries
+ -------------
+ 
+-=========================================================
++================	========================================================
+ in1_label		"vin".
+ in1_input		Measured voltage. From READ_VIN register.
+ in1_min			Minimum Voltage. From VIN_UV_WARN_LIMIT register.
+@@ -53,11 +53,11 @@ in2_input		Measured voltage. From READ_VOUT register.
+ in2_min			Minimum Voltage. From VOUT_UV_WARN_LIMIT register.
+ in2_max			Maximum voltage. From VOUT_OV_WARN_LIMIT register.
+ 
+-curr1_label "iin".
+-curr1_input Measured current. From READ_IIN register.
++curr1_label		"iin".
++curr1_input		Measured current. From READ_IIN register.
+ 
+-curr2_label "iout1".
+-curr2_input Measured current. From READ_IOUT register.
++curr2_label		"iout1".
++curr2_input		Measured current. From READ_IOUT register.
+ 
+ power1_label		"pin"
+ power1_input		Measured input power. From READ_PIN register.
+@@ -70,4 +70,4 @@ temp1_max		Maximum temperature. From OT_WARN_LIMIT register.
+ temp1_crit		Critical high temperature. From OT_FAULT_LIMIT register.
+ 
+ temp2_input		Measured temperature. From READ_TEMPERATURE_2 register.
+-=========================================================
++================	========================================================
