@@ -1,140 +1,118 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A942561AB;
-	Thu, 29 Jan 2026 01:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75A773590CD;
+	Thu, 29 Jan 2026 03:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769651736; cv=none; b=RCpDVCB++anmoMM1dx3rTlumx7Z/9rhXIIZUk8WNvf8ktrCQVH4O1f91SBywyT1Pwc3uQP3wLVkvxhqJXGhM6U1SlohhDPBQ8WQG1PqjSqjm2l9D5RtCXL5kSxzX5615JyovUA9E1uhdJhzzdDu6pYbhN50z0f2BR+qOnwvTacg=
+	t=1769656024; cv=none; b=QGBwPAbF6/jhMlXdHQhA+BdwNnjUGu8ZS+qtYi85jCkyH0Pw7YIylGqBfXvTdsbhfYsQ8W/lBV0sH45/K029dG0eUVJo6cvBc4l8Je4FQIxUXeAjtTrkOCN7O0csO0RgMu1J1ghcnAe2/JJdshft3RE0uorpITInJ66Z6q8axeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769651736; c=relaxed/simple;
-	bh=MEXBrquo/PCOd0uRgpmoxeREdZ8LpaLgZWnZ3qWnt/Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=WtC9efxAnGUZd19YsU+UPR18cpHECGdL5rzm9IrA8DMK+hsCmPG+mfERSuQhHPhZUiKahyO3nbma5ECVFu1n2Tya123tCczgyhXluVeFe28paQFbMeCQZ7oM61ou6o6Puf72Y3xlzvo9kcmo3x0VfbAsHSJMQneQtRKGsb4F9c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=VcUF2FGG; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="VcUF2FGG"
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=A/UvhHyoPaHdbp7UqqLLaxXvByURp7Lh1KHTQR7hlkg=;
-	b=VcUF2FGG8IDzklrmoWl84WbNDB1pONDENjN7WI0Z0AVDzKAVuxwoQlry2R1yJKpzV+WrH2zdW
-	kE9kLmOrwl8fMtg4026OrKD+xhBAS4UVgkq8pXRUrCv1YQL4UK4K0Z6XZlxHvNKFXUx9Si16nwW
-	l4IwJoFp4lmfP+d7d1iKaxU=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4f1hv42Ldfzcb4v;
-	Thu, 29 Jan 2026 09:51:12 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7152A4056B;
-	Thu, 29 Jan 2026 09:55:23 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 29 Jan 2026 09:55:22 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 29 Jan
- 2026 09:55:21 +0800
-Message-ID: <38db0583-95f0-47cd-b2e8-c525094bd9eb@huawei.com>
-Date: Thu, 29 Jan 2026 09:55:17 +0800
+	s=arc-20240116; t=1769656024; c=relaxed/simple;
+	bh=JaJL33jRnVEW3KS4xSUGTLXuKT3C/sxqFHNlSFMovb0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=dNthc4+A8X7roD7YA+58JcCEeAJyKr+Ta6BW6M61S8+LxxRp7FGdj/07bRJQJBjpEYCKCsPRzn9GeN2jS8ixLpMNaBldZYv3dtOohWn2Ma/EdeKXJS4HrkHihlqy7U0VAiAh/MQeEEZU+k5V4SbUck/UPpVIJ/VTrAPjH1JCTvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Thu, 29 Jan 2026 11:06:17 +0800 (GMT+08:00)
+Date: Thu, 29 Jan 2026 11:06:17 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: "Conor Dooley" <conor@kernel.org>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com
+Subject: Re: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
+ sensor
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <20260128-amperage-handstand-36fa4b3ec447@spud>
+References: <20260128101400.859-1-hehuan1@eswincomputing.com>
+ <20260128101636.914-1-hehuan1@eswincomputing.com>
+ <20260128-amperage-handstand-36fa4b3ec447@spud>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: acpi_power_meter: power*_average sysfs read hangs, mutex deadlock
- in hwmon_attr_show since v6.18.y
-To: Guenter Roeck <linux@roeck-us.net>, "Rafael J. Wysocki"
-	<rafael@kernel.org>
-CC: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-	<linux-acpi@vger.kernel.org>, <linux-hwmon@vger.kernel.org>, Igor Raits
-	<igor@gooddata.com>, Daniel Secik <daniel.secik@gooddata.com>, Zdenek Pesek
-	<zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>
-References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
- <CAJZ5v0jSbGtRYkjqeuYaT3LXbeZ-xk_Gc0dbCpTZPc6nBD8eCQ@mail.gmail.com>
- <1d969bd7-4969-455d-9600-e4be14a78217@roeck-us.net>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <1d969bd7-4969-455d-9600-e4be14a78217@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+Message-ID: <372016a8.2e10.19c07b74792.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgAHUa2pznppMsEAAA--.311W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgECCml6OoINaQAA
+	sE
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-
-On 1/29/2026 2:18 AM, Guenter Roeck wrote:
-> Hi all,
->
-> On Thu, Jan 22, 2026 at 07:55:35PM +0100, Rafael J. Wysocki wrote:
->> On Thu, Jan 22, 2026 at 7:21 PM Jaroslav Pulchart
->> <jaroslav.pulchart@gooddata.com> wrote:
->>> Hello,
->>>
->>> after upgrading from kernel 6.17.y to 6.18.y we started to observe a regression
->>> in the ACPI power meter hwmon interface. Reading power*_average sysfs
->>> attributes blocks indefinitely and causes tasks to enter uninterruptible
->>> sleep (D state).
->> The most recent change in the acpi_power_meter driver was made in
->> 6.15, so this is not a regression in that driver.
->>
->> Also, nothing suspicious is done in power1_average_min_show() and
->> power1_average_min_store() AFAICS.
->>
-> I decided to ask AI (Gemini 3, more specifically) for an analysis of the
-> problem, using Chris Mason's prompts for guidance. Result is below.
->
-> The suggested fix may be a feasible workaround. Let me know what you think.
->
-> Thanks,
-> Guenter
->
-> ---
-> Summary of crash or warning
-> Deadlock in acpi_power_meter driver between sysfs read and ACPI notify.
->
-> Kernel version if available
-> 6.18.6-1.gdc.el9.x86_64
->
-> Cleaned up copy of oops or stack trace
-> [  740.721209] Call Trace:
-> [  741.467334]  power_meter_read+0x1ea/0x2c0 [acpi_power_meter]
-> [  741.475320]  hwmon_attr_show+0x5e/0x130
-> [  741.481343]  dev_attr_show+0x19/0x60
-> [  741.487325]  sysfs_kf_seq_show+0xbf/0x140
-> [  741.494315]  seq_read_iter+0x112/0x510
-> [  741.503544]  vfs_read+0x215/0x340
->
-> [  740.286380] INFO: task alloy:5901 blocked for more than 122 seconds.
-> [  740.326290] Call Trace:
-> [  740.336311]  __schedule+0x2b5/0x690
-> [  740.341312]  schedule+0x23/0x80
-> [  740.354335]  __mutex_lock.constprop.0+0x3c9/0xa00
-> [  740.360318]  hwmon_attr_show+0x36/0x130
->
-> Explanation of the problem
-> The acpi_power_meter driver exhibits a deadlock when acpi_power_meter_notify
-> is called with METER_NOTIFY_CONFIG while a userspace process is concurrently
-> reading a sysfs attribute (e.g., power1_average).
->
-> The deadlock occurs because acpi_power_meter_notify acquires resource->lock
-> and then calls hwmon_device_unregister. The hwmon_device_unregister function
-> (via device_unregister and kernfs_remove) waits for all active sysfs callbacks
-> to complete. However, the active sysfs callback (power_meter_read) tries to
-> acquire resource->lock which is already held by acpi_power_meter_notify.
->
-> Sequence of events:
-> 1. Userspace reads power1_average.
-> 2. hwmon_attr_show is called. It calls power_meter_read.
-> 3. power_meter_read attempts to acquire resource->lock.
-> 4. Concurrently, ACPI triggers acpi_power_meter_notify with METER_NOTIFY_CONFIG.
-> 5. acpi_power_meter_notify acquires resource->lock.
-> 6. acpi_power_meter_notify calls hwmon_device_unregister.
-> 7. hwmon_device_unregister waits for the active hwmon_attr_show (and thus
->     power_meter_read) to return.
-> 8. power_meter_read is blocked waiting for resource->lock.
-> 9. acpi_power_meter_notify is blocked waiting for power_meter_read to finish.
-Great analysis. Amazing.
-Fully figured out this issue.
+PiA+IAo+ID4gQWRkIGRldmljZSB0cmVlIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgRVNXSU4g
+RUlDNzcwMCBQcm9jZXNzLCBWb2x0YWdlCj4gPiBhbmQgVGVtcGVyYXR1cmUgc2Vuc29yLgo+ID4g
+Cj4gPiBUaGUgRUlDNzcwMCBTb0MgaW50ZWdyYXRlcyB0d28gUFZUIGluc3RhbmNlcyBmb3IgbW9u
+aXRvcmluZyBTb0MgYW5kIEREUgo+ID4gcG93ZXIgZG9tYWlucyByZXNwZWN0aXZlbHkuCj4gPiAK
+PiA+IFNpZ25lZC1vZmYtYnk6IFl1bGluIEx1IDxsdXl1bGluQGVzd2luY29tcHV0aW5nLmNvbT4K
+PiA+IFNpZ25lZC1vZmYtYnk6IEh1YW4gSGUgPGhlaHVhbjFAZXN3aW5jb21wdXRpbmcuY29tPgo+
+ID4gLS0tCj4gPiAgLi4uL2JpbmRpbmdzL2h3bW9uL2Vzd2luLGVpYzc3MDAtcHZ0LnlhbWwgICAg
+IHwgNzAgKysrKysrKysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3MCBpbnNlcnRp
+b25zKCspCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4gPiAKPiA+IGRpZmYgLS1naXQg
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vZXN3aW4sZWljNzcwMC1w
+dnQueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixl
+aWM3NzAwLXB2dC55YW1sCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAw
+MDAwMDAwLi5mNGJhMjI4OTI0ZmUKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55YW1sCj4g
+PiBAQCAtMCwwICsxLDcwIEBACj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0y
+LjAtb25seSBPUiBCU0QtMi1DbGF1c2UpCj4gPiArJVlBTUwgMS4yCj4gPiArLS0tCj4gPiArJGlk
+OiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9od21vbi9lc3dpbixlaWM3NzAwLXB2dC55
+YW1sIwo+ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29y
+ZS55YW1sIwo+ID4gKwo+ID4gK3RpdGxlOiBFU1dJTiBFSUM3NzAwIFBWVCBTZW5zb3IKPiA+ICsK
+PiA+ICttYWludGFpbmVyczoKPiA+ICsgIC0gWXVsaW4gTHUgPGx1eXVsaW5AZXN3aW5jb21wdXRp
+bmcuY29tPgo+ID4gKyAgLSBIdWFuIEhlIDxoZWh1YW4xQGVzd2luY29tcHV0aW5nLmNvbT4KPiA+
+ICsKPiA+ICtkZXNjcmlwdGlvbjoKPiA+ICsgIEVTV0lOIEVJQzc3MDAgU29DIGludGVncmF0ZXMg
+ZW1iZWRkZWQgcHJvY2Vzcywgdm9sdGFnZSBhbmQgdGVtcGVyYXR1cmUKPiA+ICsgIHNlbnNvcnMg
+dG8gbW9uaXRvciB0aGUgaW50ZXJuYWwgU29DIGVudmlyb25tZW50LiBUaGUgc3lzdGVtIGluY2x1
+ZGVzIHR3bwo+ID4gKyAgUFZUIHNlbnNvciBpbnN0YW5jZXMuIFRoZSBQVlQwIG1vbml0b3JzIHRo
+ZSBtYWluIFNvQyBwb3dlciBkb21haW4uIFRoZQo+ID4gKyAgUFZUMSBzZW5zb3IgbW9uaXRvcnMg
+dGhlIEREUiBjb3JlIHBvd2VyIGRvbWFpbi4KPiA+ICsKPiA+ICthbGxPZjoKPiA+ICsgIC0gJHJl
+ZjogL3NjaGVtYXMvaHdtb24vaHdtb24tY29tbW9uLnlhbWwjCj4gCj4gRllJLCBpbmNsdWRpbmcg
+dGhpcyBpcyBraW5kYSBwb2ludGxlc3MgYmVjYXVzZSB5b3UgaGF2ZSB0aGUgbGFiZWwKPiBwcm9w
+ZXJ0eSBkZWZpbmVkIGJlbG93IGFuZCB5b3VyICJhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2Ui
+IGJsb2Nrcwo+IHNodW50LXJlc2lzdG9yLW1pY3JvLW9obXMgZnJvbSBiZWluZyB1c2VkLgoKSSBw
+bGFuIHRvIGtlZXAgdGhlICRyZWY6IC9zY2hlbWFzL2h3bW9uL2h3bW9uLWNvbW1vbi55YW1sIGlu
+IHVzZSwgY2hhbmdlCnRoZSBvcmlnaW5hbCBhZGRpdGlvbmFsUHJvcGVydGllczogZmFsc2UgdG8g
+dW5ldmFsdWF0ZWRQcm9wZXJ0aWVzOiBmYWxzZSwKYW5kIHJlbW92ZSB0aGUgbGFiZWwgZGVmaW5p
+dGlvbiBmcm9tIG91ciBzY2hlbWEgc2luY2UgaXQgaXMgYWxyZWFkeQpwcm92aWRlZCBieSBod21v
+bi1jb21tb24ueWFtbC4gQ291bGQgeW91IHBsZWFzZSBjb25maXJtIGlmIHRoaXMKbW9kaWZpY2F0
+aW9uIGNvbmZvcm1zIHRvIHRoZSBjb21tdW5pdHkgc3RhbmRhcmRzPwoKPiAKPiA+ICsKPiA+ICtw
+cm9wZXJ0aWVzOgo+ID4gKyAgY29tcGF0aWJsZToKPiA+ICsgICAgY29uc3Q6IGVzd2luLGVpYzc3
+MDAtcHZ0Cj4gPiArCj4gPiArICByZWc6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiAr
+ICBjbG9ja3M6Cj4gPiArICAgIG1heEl0ZW1zOiAxCj4gPiArCj4gPiArICBpbnRlcnJ1cHRzOgo+
+ID4gKyAgICBtYXhJdGVtczogMQo+ID4gKwo+ID4gKyAgbGFiZWw6Cj4gPiArICAgIGRlc2NyaXB0
+aW9uOgo+ID4gKyAgICAgIEh1bWFuIHJlYWRhYmxlIGlkZW50aWZpZXIgdXNlZCB0byBkaXN0aW5n
+dWlzaCBiZXR3ZWVuIGRpZmZlcmVudCBQVlQKPiA+ICsgICAgICBpbnN0YW5jZXMuIFR5cGljYWxs
+eSAicHZ0MCIgZm9yIFNvQyBQVlQgc2Vuc29yIGFuZCAicHZ0MSIgZm9yIEREUgo+ID4gKyAgICAg
+IGNvcmUgUFZUIHNlbnNvci4KPiA+ICsKPiA+ICsgIHJlc2V0czoKPiA+ICsgICAgbWF4SXRlbXM6
+IDEKPiA+ICsKPiA+ICsgICcjdGhlcm1hbC1zZW5zb3ItY2VsbHMnOgo+IAo+ID4gKyAgICBkZXNj
+cmlwdGlvbjogVGhlcm1hbCBzZW5zb3IgY2VsbHMgaWYgdXNlZCBmb3IgdGhlcm1hbCBzZW5zb3Jp
+bmcuCj4gCj4gWW91IGNhbiBkcm9wIHRoaXMgZGVzY3JpcHRpb24gaWYgdGhlcmUncyBhIHJlc2Vu
+ZCwgY29tbW9uIHByb3BlcnRpZXMKPiB1c2VkIGluIHRoZSBvYnZpb3VzIHdheSBkb24ndCBuZWVk
+IGFueSBtb3JlIGluZm8uCgpXZSB3aWxsIHJlbW92ZSB0aGlzIGluIHRoZSBuZXh0IHBhdGNoLgoK
+VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIHJldmlldyB0aGUgcGF0
+Y2ggYW5kIGZvciB5b3VyCnZhbHVhYmxlIGZlZWRiYWNrLgoKQmVzdCByZWdhcmRzLApIdWFuIEhl
+Cgo+IAo+IFJldmlld2VkLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAu
+Y29tPgo+IHB3LWJvdDogbm90LWFwcGxpY2FibGUKPiAKPiBDaGVlcnMsCj4gQ29ub3IuCj4gCj4g
+PiArICAgIGNvbnN0OiAwCj4gPiArCj4gPiArcmVxdWlyZWQ6Cj4gPiArICAtIGNvbXBhdGlibGUK
+PiA+ICsgIC0gcmVnCj4gPiArICAtIGNsb2Nrcwo+ID4gKyAgLSBpbnRlcnJ1cHRzCj4gPiArICAt
+IGxhYmVsCj4gPiArICAtIHJlc2V0cwo+ID4gKwo+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBm
+YWxzZQo+ID4gKwo+ID4gK2V4YW1wbGVzOgo+ID4gKyAgLSB8Cj4gPiArICAgIHB2dEA1MGIwMDAw
+MCB7Cj4gPiArICAgICAgY29tcGF0aWJsZSA9ICJlc3dpbixlaWM3NzAwLXB2dCI7Cj4gPiArICAg
+ICAgcmVnID0gPDB4NTBiMDAwMDAgMHgxMDAwMD47Cj4gPiArICAgICAgY2xvY2tzID0gPCZjbG9j
+a3MgMjQ0PjsKPiA+ICsgICAgICBpbnRlcnJ1cHRzID0gPDM0OT47Cj4gPiArICAgICAgaW50ZXJy
+dXB0LXBhcmVudCA9IDwmcGxpYz47Cj4gPiArICAgICAgbGFiZWwgPSAicHZ0MCI7Cj4gPiArICAg
+ICAgcmVzZXRzID0gPCZyZXNldCAxMTE+Owo+ID4gKyAgICAgICN0aGVybWFsLXNlbnNvci1jZWxs
+cyA9IDwwPjsKPiA+ICsgICAgfTsKPiA+ICsuLi4KPiA+IC0tIAo+ID4gMi4yNS4xCj4gPiAK
