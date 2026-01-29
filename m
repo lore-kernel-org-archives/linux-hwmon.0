@@ -1,206 +1,152 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3813542C9
-	for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 17:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9280823A984
+	for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 18:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769709081; cv=none; b=MgHz+FW8UGIOvF+Rf1sm4mRcqtrJMYyHjMeCkhvr1DlI56op77vqR+3PstKKOr79mj5rhxt8z53zBbH9Wt+4fgtOr0ekNY0HQiJri8tCevsKDF9LdVQkcoIOZOpLFrR6p2M2vefbuwpgRfWf+G1LGO7NsioNsbRIadz5rNwkmxw=
+	t=1769710956; cv=none; b=tLpursBS9obGp16bz231dp7B7nTmLkutWQraF8LaPq/aNw0PUJ/IBA1Mlb7XJvG4R5xABJMUlV0FhI5SI6ZKsJCQePmH76QDol+z0vSpnKvGq3RpeoTsKXRA5LAO2c9mpUbr7mkkndDlprx861JQYdBNRHeWx7eOiJvoDHT6S7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769709081; c=relaxed/simple;
-	bh=s0ExOevU/0a1rdHJwbW/G02EvzV9Zu1M8qfhWQppRb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mSin3GGcoaDhwo72I7kXrlOn/CoeMrMlL00OyjbX0ZP9xGGyiYWjfsy1HJdDJRqCjgaDtca3jShQcb45VjseZxrGh7qmkotuh+6xHjXkm/tmaaIq8HhJ94N+aBCbUM4lX82Y94tSvkOQts+KZsvx08lnHkF3D8qbEw4PHX/WYSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GbNAb+9+; arc=none smtp.client-ip=74.125.82.178
+	s=arc-20240116; t=1769710956; c=relaxed/simple;
+	bh=ybnp74LygZZXfv1/uQdkiQ7bL0mmvgLcYkfE4JMSbac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SpjfKfmaFU4/4bX5zk9bhXwfpBAWKDJzuhnag2Pk53FLb6QtSaTCMY0aJ2qcVC3ERhMtzVxfascw4khPkakdhg2x/Y0Efb7Wkr84Osrh8KI2YDr1nS5g5aqGhc0wh97gL0d31UI8QoWzCdSkvPy8VkoWK6gRXadCitpbHQ6trDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9FINoKe; arc=none smtp.client-ip=74.125.82.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GbNAb+9+"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b71320f501so2186472eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 09:51:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9FINoKe"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2b6b0500e06so1919435eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 29 Jan 2026 10:22:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769709078; x=1770313878; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h8nYEZfVyqhzxzccc2BHbsJR4bGKXZNF54TlWa4+clE=;
-        b=GbNAb+9+fNRn9xmmT4W2wracRTTI4KrRs+XgzlxTLTxmEVDC2RmzMO54XLibPHoodg
-         L9nSZsghLJOq+qBu10iwp1URnx+JdCOmBDne/cqCTTqzdr4xlqTsYBUde8COBpasyU3e
-         v50ZrpQXORC9bb7Qc6kUpspkV+1/yiEmmEa4e5tsiW+xbX0CXxIMdYjryQ78664ddpym
-         ffwqgPbRDOWqh3hQG5uBinNmg6qDycQj0nPdsqSI8IXALzqggBs0Pp+onx3QOmXYfHLv
-         UKHClhYqKaDPSoMuji0RDvBrV/3WMFM/LHPX9q6NBIiG3ztT4/p+xoebrL3jGvLKKIvn
-         RHtQ==
+        d=gmail.com; s=20230601; t=1769710955; x=1770315755; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BMLH33nEOc8yI2rxL7oZJuMyWNyMwxmDMdzy7mG5qTI=;
+        b=Y9FINoKeIf8/+rVS4NP3Rr84x+dtmzivm4ti0C7CJ8P25LKj7x6EuBgd04/YxByXvq
+         dN1yOO0HUjVw+7GcueOGA51yTW0wqVIOjlirNo9YDuIzW4HyvOCO4isNdX2q/k5QciLj
+         z9H/aodJYXieUATgxud51/8eyV0SNSIPWNSf3i3AKc9KHJavXVZuoYYHtBGd9FpO4J6l
+         57GZRvEW3GrcP7Tpvk/n55tCY59SA4PLGaebynUjBRc9AvtknH6hXGYr9WqA5ce5DE4d
+         FT0rFvvRvmQatHW2E8bwq9RMKw6qN62gVLT/VBlv4FgSOGg9mdndoQmnIO0X7Xewi7H5
+         k7lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769709078; x=1770313878;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h8nYEZfVyqhzxzccc2BHbsJR4bGKXZNF54TlWa4+clE=;
-        b=SykqiIZzEdNPVMV15c/Qru2xabD999Iec3leu/xhxAvno9V0ADGS1LkU5MRzoHISA1
-         zLSmcCJt+tIFbv2K9ce9elX5buf+IMcptXtLe8j+21m6fWN5w+9ydl8Yeiab6NgW8QcZ
-         XMFpPu24C66HhFqjN5qx7udWmGCNpEW/hpjXt98PDHIjC6Ht5N5AzNSIW+QiuzD4Jv4O
-         73AWsH3QyQ2kfEmqODYgNtWWjKVwZ4mA2KflwqnqxIk482CWopWH8XkpHQIxqhpoI9w7
-         5dqr92WH34RqBWoQeyeknsGsLAfZ3xNdUfv90IiWfp4weUnfc90GNpgYM4XxD8hnngn/
-         PIAg==
-X-Gm-Message-State: AOJu0YwfCZUyc002LskguVxX1ngYn7UdyeSvFfRIDKY6h7nq3rOd2Jxf
-	rUkAUEWJ3DtFU/vSYUxFXmTz36Z3F5AqMDiwYdzhYtIEdbPLGm3SgT54LfZXLBOG
-X-Gm-Gg: AZuq6aL3NW6bZeqH02YRKgbQvr2qGQZ5lwrVT2h3+NteO4BymG8nkvMquR2kvL9SC2G
-	IxZyleZGY8YqNcwS83WUeQYIU7g0n5FpWdbhuQeDWifT3imVyZ51a2e7An6ze49YySTfR/7knwn
-	5PPXEINtAbcf05GQwVKvQlItWHlA6uefTNDZv36UPjhino5whDWTe+7xY/mIoQzCi5p5RPjrvMS
-	JwujqZXCuNSoPvcprQDXSBf7gS2ixyolfQ517MjuZSdwkMy6DH4ACRpjAFbsfOwx7+7TzQjft+C
-	WnXygk5jkjDegQk1+izp7XqON2lpClEZ5CFxrofXRmJKNQjUA/zn9uQPA+EANrnm7m8DM9m101d
-	FO7ejuV55zqHzunTE+HBChwEw1LweE8L/NEOfHjnPAYjHS0l4+2yX20gBUSMbmvPz48qmDoEO0E
-	Fsz1vfgOzXk16jzVV5wUgURcVv
-X-Received: by 2002:a05:7301:e24:b0:2ae:5ab4:e932 with SMTP id 5a478bee46e88-2b7c8943fb6mr99337eec.43.1769709078286;
-        Thu, 29 Jan 2026 09:51:18 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769710955; x=1770315755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BMLH33nEOc8yI2rxL7oZJuMyWNyMwxmDMdzy7mG5qTI=;
+        b=NqFRCoqI/GNxwMhh+OrmjSMpZv0LZ6e74qHbTzuZ+xDjCy0HJAvA/bjt26sQJsTI8S
+         mOZ6xI25ryKgXBA+h2A2Lh8n0pvfuuoXP/LfmROEhIWjDDeGb++xc8qjNXcDsOtFHG/9
+         pTC6VqhAKrRz/OUNrRlcCSufXiM19Nh/7gyYg5bypBQgZPTxl4EkI/pn7uDegoA1qrKR
+         TlghRY3FPdI90MKQF4O2/i2vBbAPRchwg5bf57peKcKjaIRsE28/Nie0WAejo/Hu03ug
+         rqeiTAUHsziS1/1S9SSAZduSbEehWz7jqyHgsLxwDwsl55TmbvArvh73i2KxtCHuAITF
+         kZAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/V4tMjpRcXmIQbUmDKk5GLGC7pOMfldOIFleZpFeU+pRqwcXL1k18tlIZ2CPmno0AkvUZwv+LYfQswg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNyjw3b4W37k9MSayy7SKO7kk22NtUfu3zeZxbtNXVVICcJmrS
+	SnXG62PXXlrWHLuLVrVWnCCz6oHvAvrxO3JgZhZe1gyoTynFgQ624kFd
+X-Gm-Gg: AZuq6aLatGI+HUxGKf/EC+u6PpsMqjhh4J+KROGQuq4U6qGxd8HLndZ9yW7nxSiMkjL
+	m5awIxJ0bEGqLpT87GJLC+cfcRsvjohwSlWnWqd0E6nN8218or0LrrKLg8kHW1XVqMpfU7TxHcQ
+	ZfULfAhRUV0VABkxENs3XKc/PRbSnQDCx86Q/W65qr3CLMXk1A93xoLN1so3fVg5VjKGC+YiTUj
+	9MrX5lsLhPWkyH+DepXS/SX4+wJYRNzr0Nc8iT9qNbYLYj1GvLPvzWbxzPAzyaFooBSHyCF9nXb
+	LyWbWAuSG2MKQr9OmajyECOQHsADVP2ueINDcvqM+5MNZhH7Zmr4QaREUyTLnh+NPUptRWCeAFN
+	R/NRPcByQuoSeKImb3kUOCnykDrb/n/dkW4dYFqv9Jo1IhD0cBg+Hj/4kTxWZXWIGHvUYHvQsYy
+	uw3pkOxJNZRSXKhQ5kVkmBfxJd
+X-Received: by 2002:a05:693c:2c0f:b0:2ae:581f:ce5 with SMTP id 5a478bee46e88-2b7c8638d65mr173862eec.7.1769710954487;
+        Thu, 29 Jan 2026 10:22:34 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1addafesm7962475eec.25.2026.01.29.09.51.17
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a16cf8d6sm7840104eec.3.2026.01.29.10.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 09:51:17 -0800 (PST)
+        Thu, 29 Jan 2026 10:22:33 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 29 Jan 2026 10:22:32 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	James Calligeros <jcalligeros99@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neal Gompa <neal@gompa.dev>,
-	Janne Grunau <j@jannau.net>
-Subject: [PATCH 2/2] hwmon: (macsmc) Fix overflows, underflows, and sign extension
-Date: Thu, 29 Jan 2026 09:51:11 -0800
-Message-ID: <20260129175112.3751907-3-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260129175112.3751907-1-linux@roeck-us.net>
-References: <20260129175112.3751907-1-linux@roeck-us.net>
+To: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, Igor Raits <igor@gooddata.com>,
+	Daniel Secik <daniel.secik@gooddata.com>,
+	Zdenek Pesek <zdenek.pesek@gooddata.com>,
+	Jiri Jurica <jiri.jurica@gooddata.com>,
+	Huisong Li <lihuisong@huawei.com>
+Subject: Re: acpi_power_meter: power*_average sysfs read hangs, mutex
+ deadlock in hwmon_attr_show since v6.18.y
+Message-ID: <4f151d4c-fdc6-4281-87b0-b7120eeb1b46@roeck-us.net>
+References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
+ <CAJZ5v0jSbGtRYkjqeuYaT3LXbeZ-xk_Gc0dbCpTZPc6nBD8eCQ@mail.gmail.com>
+ <e03c8b69-e667-45b8-b82c-2cd4f1c96bdf@roeck-us.net>
+ <CAJZ5v0hvKzKTWA8jFYVDHttd+hDv1juu87vgyhf2udOGbqrQdg@mail.gmail.com>
+ <d7f34e0f-e258-4fef-93eb-1ef0a3123d95@roeck-us.net>
+ <CAK8fFZ4izdX_HDtGN60CZ3Ta61nqkUg7ncViM=mGgxKki_5FoQ@mail.gmail.com>
+ <a7334568-13ce-4600-8650-607273e67976@roeck-us.net>
+ <CAK8fFZ6gKs7s2rJ=f7bt24f+_cY-jGU33TvX3UP=U58uK-1KaQ@mail.gmail.com>
+ <fff54ec8-496e-4c26-b652-358dc4de0de0@roeck-us.net>
+ <CAK8fFZ4wEUdMAHkfdC_z8ohYB_rEXZ=dHArc75jDibgQ_-ozKw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8fFZ4wEUdMAHkfdC_z8ohYB_rEXZ=dHArc75jDibgQ_-ozKw@mail.gmail.com>
 
-The macsmc-hwmon driver experienced several issues related to value
-scaling and type conversion:
+On Thu, Jan 29, 2026 at 04:26:37PM +0100, Jaroslav Pulchart wrote:
+> >
+> > On 1/27/26 03:58, Jaroslav Pulchart wrote:
+> > ...
+> > >>> Hello,
+> > >>>
+> > >>> Thank you for the analysis and insights.
+> > >>>
+> > >>> To add some context from our side: we observe this issue shortly after
+> > >>> a server reinstall or fw updates followed by a reboot, typically when
+> > >>> hwmon sensors are accessed for the first time (e.g. by monitoring during
+> > >>> early system initialization). We have not seen it trigger during normal
+> > >>> operation, such as a simple reboot or on long-running systems.
+> > >>>
+> > >>> Given this behavior, it is possible that the issue is related to
+> > >>> hwmon_device_unregister() being triggered early during system
+> > >>> initialization, but I do not have concrete evidence at this point.
+> > >>>
+> > >>> As a workaround, we will exclude the ACPI power meter from hwmon monitoring
+> > >>> (Grafana Alloy) until the mentioned refactoring or a fix becomes available.
+> > >>>
+> > >>
+> > >> Would it be possible for you to test the patch series I just sent out ?
+> > >
+> > > I suppose these 5 patches from
+> > > https://lore.kernel.org/lkml/20260123182208.2229670-1-linux@roeck-us.net/
+> > >   ?
+> >
+> > Correct.
+> >
+> > > I will try them and let you know.
+> > >
+> > Thanks !
+> 
+> 
+> The issue is still there:
+> ...
 
-1. macsmc_hwmon_read_f32_scaled() clipped values to INT_MAX/INT_MIN.
-   On 64-bit systems, hwmon supports long values, so clipping to
-   32-bit range was premature and caused loss of range for high-power
-   sensors. Changed it to use long and clip to LONG_MAX/LONG_MIN.
-2. The overflow check in macsmc_hwmon_read_f32_scaled() used 1UL,
-   which is 32-bit on some platforms. Switched to 1ULL.
-3. macsmc_hwmon_read_key() used a u32 temporary variable for f32
-   values. When assigned to a 64-bit long, negative values were
-   zero-extended instead of sign-extended, resulting in large
-   positive numbers.
-4. macsmc_hwmon_read_ioft_scaled() used mult_frac() which could
-   overflow during intermediate multiplication. Switched to
-   mul_u64_u32_div() to handle the 64-bit multiplication safely.
-5. ioft values (unsigned 48.16) could overflow long when scaled
-   by 1,000,000. Added explicit clipping to LONG_MAX in the caller.
-6. macsmc_hwmon_write_f32() truncated its long argument to int,
-   potentially causing issues for large values.
+Thnaks a lot for testing.
 
-Fix these issues by using appropriate types and helper functions.
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.105931] INFO: task alloy:5985 blocked for more than 124 seconds.
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.114475]       Tainted: G            E 6.18.7-2.gdc.el9.x86_64 #1
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.122872] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.132932] task:alloy           state:D stack:0     pid:5985 tgid:5871  ppid:1      task_flags:0x400140 flags:0x00080001
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.145975] Call Trace:
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.149985]  <TASK>
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.154931]  __schedule+0x2b5/0x690
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.160934]  schedule+0x23/0x80
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.166498]  schedule_timeout+0xe8/0x100
+> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.172936]  __wait_for_common+0x99/0x1c0
+> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.179148]  ? __pfx_schedule_timeout+0x10/0x10
+> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.185936]  acpi_ipmi_space_handler.part.0+0x1ac/0x370 [acpi_ipmi]
+> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.194929]  acpi_ev_address_space_dispatch+0x16d/0x3c0
 
-Fixes: 785205fd8139 ("hwmon: Add Apple Silicon SMC hwmon driver")
-Cc: James Calligeros <jcalligeros99@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Neal Gompa <neal@gompa.dev>
-Cc: Janne Grunau <j@jannau.net>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/macsmc-hwmon.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+Looks like acpi holds another lock. Can you check if the patch submitted by
+Rafael fixes the problem ?
 
-diff --git a/drivers/hwmon/macsmc-hwmon.c b/drivers/hwmon/macsmc-hwmon.c
-index 40d25c81b443..1500ec2cc9f8 100644
---- a/drivers/hwmon/macsmc-hwmon.c
-+++ b/drivers/hwmon/macsmc-hwmon.c
-@@ -22,6 +22,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/hwmon.h>
-+#include <linux/math64.h>
- #include <linux/mfd/macsmc.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -130,7 +131,7 @@ static int macsmc_hwmon_read_ioft_scaled(struct apple_smc *smc, smc_key key,
- 	if (ret < 0)
- 		return ret;
- 
--	*p = mult_frac(val, scale, 65536);
-+	*p = mul_u64_u32_div(val, scale, 65536);
- 
- 	return 0;
- }
-@@ -140,7 +141,7 @@ static int macsmc_hwmon_read_ioft_scaled(struct apple_smc *smc, smc_key key,
-  * them.
-  */
- static int macsmc_hwmon_read_f32_scaled(struct apple_smc *smc, smc_key key,
--					int *p, int scale)
-+					long *p, int scale)
- {
- 	u32 fval;
- 	u64 val;
-@@ -162,21 +163,21 @@ static int macsmc_hwmon_read_f32_scaled(struct apple_smc *smc, smc_key key,
- 		val = 0;
- 	else if (exp < 0)
- 		val >>= -exp;
--	else if (exp != 0 && (val & ~((1UL << (64 - exp)) - 1))) /* overflow */
-+	else if (exp != 0 && (val & ~((1ULL << (64 - exp)) - 1))) /* overflow */
- 		val = U64_MAX;
- 	else
- 		val <<= exp;
- 
- 	if (fval & FLT_SIGN_MASK) {
--		if (val > (-(s64)INT_MIN))
--			*p = INT_MIN;
-+		if (val > (u64)LONG_MAX + 1)
-+			*p = LONG_MIN;
- 		else
--			*p = -val;
-+			*p = -(long)val;
- 	} else {
--		if (val > INT_MAX)
--			*p = INT_MAX;
-+		if (val > (u64)LONG_MAX)
-+			*p = LONG_MAX;
- 		else
--			*p = val;
-+			*p = (long)val;
- 	}
- 
- 	return 0;
-@@ -195,7 +196,7 @@ static int macsmc_hwmon_read_key(struct apple_smc *smc,
- 	switch (sensor->info.type_code) {
- 	/* 32-bit IEEE 754 float */
- 	case __SMC_KEY('f', 'l', 't', ' '): {
--		u32 flt_ = 0;
-+		long flt_ = 0;
- 
- 		ret = macsmc_hwmon_read_f32_scaled(smc, sensor->macsmc_key,
- 						   &flt_, scale);
-@@ -214,7 +215,10 @@ static int macsmc_hwmon_read_key(struct apple_smc *smc,
- 		if (ret)
- 			return ret;
- 
--		*val = (long)ioft;
-+		if (ioft > LONG_MAX)
-+			*val = LONG_MAX;
-+		else
-+			*val = (long)ioft;
- 		break;
- 	}
- 	default:
-@@ -224,7 +228,7 @@ static int macsmc_hwmon_read_key(struct apple_smc *smc,
- 	return 0;
- }
- 
--static int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, int value)
-+static int macsmc_hwmon_write_f32(struct apple_smc *smc, smc_key key, long value)
- {
- 	u64 val;
- 	u32 fval = 0;
--- 
-2.45.2
-
+Thanks,
+Guenter
