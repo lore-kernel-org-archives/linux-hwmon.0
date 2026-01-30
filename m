@@ -1,205 +1,158 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9A633984D
-	for <linux-hwmon@vger.kernel.org>; Fri, 30 Jan 2026 15:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3033563E7;
+	Fri, 30 Jan 2026 17:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769787869; cv=none; b=Ql9wJPhfiB1Yy0NF8IGsJWlYNwkSm/pimw6OjzMGX1vJF2B79cEQeqIVEt8Abc3FI1G+rE7Y8crEw5Lv/FeY+T32uEQTKESmdJYznS25Z5y3nb8XrGVcGHWhT6rAfkv+KcQxa5HKOlgwFKXIVy2VDAr54Hv15baeK83tx9Gs6Nk=
+	t=1769792688; cv=none; b=YRkqEDd1jjXgMpd+4qrOFzFtPmp50z9qLM3GY5n7Yh2cYjc3A8PvdpEqTfnX4lRL2RbvQ/gCWNMHnTurL086o5BEwXLiHaKeOj4pWEoTAYamZ5k+eEy0JBZ3ECkXRkyjcnQ9PkmyNzwdxg6JEUaGx0san+Y29+5EXv/RrYK48Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769787869; c=relaxed/simple;
-	bh=tWMoCq/TVKZX/ZEK6i8GI3uCfaa9NF997h3oA9U0APQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s5B9oNNADPzGfdJZ1ya9NluR6Z/NwTn4m2yrlCFo+GHafMk7JGEKf0HcFOJP0sudC/kHP5GgshG+x2W20IfcNEpyY3/7i4wDK2iQA4QYBuJUv4IsV0AdXX/SiF37lslSUeI1MTZR7gZwZ10bb3pvIo0eRn/d3P5RIZymj+IDGZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gSoRsY2+; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769792688; c=relaxed/simple;
+	bh=Aokumbn4pYY+yO1AHJkg6UzYFc3KfvSIeFM3/ulG6Lk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+Y+7rhURXX/tFTF0bQiGz/SiKQYvfxw86rYS8FFSOzLV8qVlb2fUt3hMHG5FgB4AiTD9s54yhrYHMubBcGSHZY4gf25FLuQzz0yzGd/hI0cqaqwQadDc8YBcZd6vI6ZS1XyJUwwWZ8GCTgZfbSNLLzgpVbxtRW77igOf5Xhh7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMkDZ4J2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gSoRsY2+"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8230d228372so1207861b3a.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Jan 2026 07:44:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769787867; x=1770392667; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKYnk6Q0VHb2F316NAJG3Y7DCI41HuS4pf69ucGBkr8=;
-        b=gSoRsY2+t76+cStcdWbSzpCDfi4LVOpP/2qgcOFclmsQqvPvmAIrQMDJ4J5vWvaIlK
-         BTc+3CL6XhDnUUw3FbXG2ZPrRZJXG83QNYELmmb4FHBggxrSUhBOMNsZUig9WqfhCAg1
-         RBvnDaYBWjynkWc8JXRcFLVkQPJnnRlR280H7OMGfkIR3tr90O+MTPXVCjDkmjqZmp6p
-         FUvyVIhqZ1LB2mNoIuq6NEvthkeuo7jnPoICO/2/+gz5JYfRusCgLOjx/4Bhw2K+Q5Q6
-         VOGRXuSPD/4yyuvfQaW+0c0qERcmVWkhoId+Sz/RSRfaXag0xk/TBgDHdXAYSb53eA1o
-         T2bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769787867; x=1770392667;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tKYnk6Q0VHb2F316NAJG3Y7DCI41HuS4pf69ucGBkr8=;
-        b=rMzxZKAcOG64jUtR2jzKUPLp4M4yDUYzbYrKqI1VGqOm0caoSZDLJoFk90pPG5k0s2
-         W1Efb+OcKbP0LcixjyKl2zGKkLiHIB10O/cmctDLJX+XW/dVx5JOaMjQDMLZeSyUncTl
-         5pRhkddvdKIzG11vYrSU9wGahCbLKxkisxhrbQkBSw1dTD1U+wVuo0vXzKgDEGEx4QVW
-         GCV7csabdfddeaUAxOElMLnFqV3B9PDxgPH9SxdX3ri9pl7P0wXNK+Tw8WnDIz4Uws6L
-         9lNyn7IzBsV36nerghXZZlWo0WchaHGQOZ2U2FApMvyp0EuswN1T0t6Yqo1mlVzHHJ+l
-         qMfw==
-X-Gm-Message-State: AOJu0YyBBFVixI41W5mKtpnF2aln4m+hGjINl1W+j8VyMmAse01q/zsk
-	wboilQjBO7tE9OSYD/d98qPdgHUyGdxCHsVbGCn9ZHKJDHWJ+FYvpD8ESzv48403
-X-Gm-Gg: AZuq6aIDdiuWwgUT2woyvlBkiMRgqSzHWhW8Gt5ve2KyJNTLbQAGKCgkuGj1dMb235k
-	CPstB3UyWJ4V4hl1XeKYBHxabLCAeCrKWvuBj+Cz3aLgqQbdWx2ixFQYpKDcjbTZX7nSKeXmqDy
-	qwbDdr8ULHcBJ093WgWqueCDJB1rTXI+6X2LVgPPsoGeYe4lKODIBJR81O4hHI6vDqihCZqan88
-	FnaJRMsXUveisTYRwWlpk9nqlCAZHM5kPUnChqmVQ05EcY2yA2dnAJkicYQILfzxKmVxDLIXWTT
-	hMoHpKs2HdjOaD2uNGOa8yd6EBLpeCjHUByxBrDBURo2KZVM7iUvIiTxQXppFtCtG8fy4Lf/hlX
-	o0RM6LA+djuatfdiqU1ASEwpUhacjNUe3u/JA1ecO+fjgKRwaY8AUqZl7HU/GW0JaAGy6JYuxky
-	a7UrnBaHp3kAu+vZpZxzkk20RjzCKHZsYgoJgUBaN8/Lhp0Kg64hLrefpnXU23
-X-Received: by 2002:a05:6a00:9288:b0:81e:372c:b02e with SMTP id d2e1a72fcca58-823ab873c4fmr4013251b3a.47.1769787866900;
-        Fri, 30 Jan 2026 07:44:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379bfcab8sm8005207b3a.36.2026.01.30.07.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jan 2026 07:44:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ae5f1ab3-cd0e-4831-9a11-30dc75f16da0@roeck-us.net>
-Date: Fri, 30 Jan 2026 07:44:24 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMkDZ4J2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD834C4CEF7;
+	Fri, 30 Jan 2026 17:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769792687;
+	bh=Aokumbn4pYY+yO1AHJkg6UzYFc3KfvSIeFM3/ulG6Lk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WMkDZ4J2HLOjRLM8QLA6JSWVjY7CyjMpv+0UoR1aHgdBgeI+JUAYCxdeEZz2oWmhx
+	 tjaOW/eFXq+prCI/35BDgS/8WTFYU9ivIbb/9+8XYlk4XC5R5gW06o9RdI35p4GOWa
+	 bvvcClCyE99Uroz1a1tppdRNFCUuBvCK/1xYtrEXsEt0seQU9fumJoq2zsxhcDWn1C
+	 MNF8G9j/v/7C0526SUHVoWIibMBLXcvzJkI7IPFhFUMZtt+nBgVqnQ6gG8r5jmkV6x
+	 JoHmzSfgBBahAxim8QabBKNuuGNIAtuxWNbgimp0j8HHDXYvaj4+H4+rd+kkN3hMDT
+	 6rTaHTvcakfTA==
+Date: Fri, 30 Jan 2026 17:04:42 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Huan He <hehuan1@eswincomputing.com>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com
+Subject: Re: Re: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add Eswin EIC7700 PVT
+ sensor
+Message-ID: <20260130-variety-unseeing-1abc6a941405@spud>
+References: <20260128101400.859-1-hehuan1@eswincomputing.com>
+ <20260128101636.914-1-hehuan1@eswincomputing.com>
+ <20260128-amperage-handstand-36fa4b3ec447@spud>
+ <372016a8.2e10.19c07b74792.Coremail.hehuan1@eswincomputing.com>
+ <20260129-unpainted-educated-3017ed90c817@spud>
+ <1a01417e.2e9c.19c0ca12dc5.Coremail.hehuan1@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFT 3/5] hwmon: Add support for updating thermal zones
-To: linux-hwmon@vger.kernel.org
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, lihuisong <lihuisong@huawei.com>
-References: <20260123182208.2229670-1-linux@roeck-us.net>
- <20260123182208.2229670-4-linux@roeck-us.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260123182208.2229670-4-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ltszGMIB7Xi46LRn"
+Content-Disposition: inline
+In-Reply-To: <1a01417e.2e9c.19c0ca12dc5.Coremail.hehuan1@eswincomputing.com>
 
-On 1/23/26 10:22, Guenter Roeck wrote:
-> Implement support for updating thermal zones. This is necessary
-> to be able to handle updates to sysfs attribute visibility.
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-This patch is both racy because it doesn't protect the list of thermal
-zones, and it leaks tzdata until the device is removed. SO it will need
-(much) more work.
+--ltszGMIB7Xi46LRn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Fri, Jan 30, 2026 at 10:00:15AM +0800, Huan He wrote:
+> > > > >=20
+> > > > > Add device tree binding documentation for ESWIN EIC7700 Process, =
+Voltage
+> > > > > and Temperature sensor.
+> > > > >=20
+> > > > > The EIC7700 SoC integrates two PVT instances for monitoring SoC a=
+nd DDR
+> > > > > power domains respectively.
+> > > > >=20
+> > > > > Signed-off-by: Yulin Lu <luyulin@eswincomputing.com>
+> > > > > Signed-off-by: Huan He <hehuan1@eswincomputing.com>
+> > > > > ---
+> > > > >  .../bindings/hwmon/eswin,eic7700-pvt.yaml     | 70 +++++++++++++=
+++++++
+> > > > >  1 file changed, 70 insertions(+)
+> > > > >  create mode 100644 Documentation/devicetree/bindings/hwmon/eswin=
+,eic7700-pvt.yaml
+> > > > >=20
+> > > > > diff --git a/Documentation/devicetree/bindings/hwmon/eswin,eic770=
+0-pvt.yaml b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..f4ba228924fe
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.y=
+aml
+> > > > > @@ -0,0 +1,70 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/hwmon/eswin,eic7700-pvt.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: ESWIN EIC7700 PVT Sensor
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Yulin Lu <luyulin@eswincomputing.com>
+> > > > > +  - Huan He <hehuan1@eswincomputing.com>
+> > > > > +
+> > > > > +description:
+> > > > > +  ESWIN EIC7700 SoC integrates embedded process, voltage and tem=
+perature
+> > > > > +  sensors to monitor the internal SoC environment. The system in=
+cludes two
+> > > > > +  PVT sensor instances. The PVT0 monitors the main SoC power dom=
+ain. The
+> > > > > +  PVT1 sensor monitors the DDR core power domain.
+> > > > > +
+> > > > > +allOf:
+> > > > > +  - $ref: /schemas/hwmon/hwmon-common.yaml#
+> > > >=20
+> > > > FYI, including this is kinda pointless because you have the label
+> > > > property defined below and your "additionalProperties: false" blocks
+> > > > shunt-resistor-micro-ohms from being used.
+> > >=20
+> > > I plan to keep the $ref: /schemas/hwmon/hwmon-common.yaml in use, cha=
+nge
+> > > the original additionalProperties: false to unevaluatedProperties: fa=
+lse,
+> > > and remove the label definition from our schema since it is already
+> > > provided by hwmon-common.yaml. Could you please confirm if this
+> > > modification conforms to the community standards?
+> >=20
+> > That's fine. Does the shunt resistor property apply on your platform?
+>=20
+> The shunt-resistor-micro-ohms property does not apply to our platform. We
+> only use the label property from hwmon-common.yaml.
 
-> ---
->   drivers/hwmon/hwmon.c | 34 +++++++++++++++++++++++++++-------
->   1 file changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 1f35285ca7a0..cb89218a0b6a 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -276,7 +276,7 @@ static struct hwmon_thermal_data *hwmon_thermal_find_tz(struct device *dev, int
->   	return NULL;
->   }
->   
-> -static int hwmon_thermal_register_sensors(struct device *dev)
-> +static int hwmon_thermal_handle_sensors(struct device *dev, bool update)
->   {
->   	struct hwmon_device *hwdev = to_hwmon_device(dev);
->   	const struct hwmon_chip_info *chip = hwdev->chip;
-> @@ -294,22 +294,42 @@ static int hwmon_thermal_register_sensors(struct device *dev)
->   			continue;
->   
->   		for (j = 0; info[i]->config[j]; j++) {
-> +			umode_t mode;
->   			int err;
->   
-> -			if (!(info[i]->config[j] & HWMON_T_INPUT) ||
-> -			    !hwmon_is_visible(chip->ops, drvdata, hwmon_temp,
-> -					      hwmon_temp_input, j))
-> +			if (!(info[i]->config[j] & HWMON_T_INPUT))
->   				continue;
-> +			mode = hwmon_is_visible(chip->ops, drvdata, hwmon_temp,
-> +						hwmon_temp_input, j);
-> +			if (!mode) {
-> +				struct hwmon_thermal_data *tzdata;
->   
-> -			err = hwmon_thermal_add_sensor(dev, j);
-> -			if (err)
-> -				return err;
-> +				if (!update)
-> +					continue;
-> +				tzdata = hwmon_thermal_find_tz(dev, j);
-> +				if (tzdata) {
-> +					devm_thermal_of_zone_unregister(dev, tzdata->tzd);
-> +					devm_release_action(dev, hwmon_thermal_remove_sensor,
-> +							    &tzdata->node);
-> +				}
-> +			} else {
-> +				if (!update || !hwmon_thermal_find_tz(dev, j)) {
-> +					err = hwmon_thermal_add_sensor(dev, j);
-> +					if (err)
-> +						return err;
-> +				}
-> +			}
->   		}
->   	}
->   
->   	return 0;
->   }
->   
-> +static int hwmon_thermal_register_sensors(struct device *dev)
-> +{
-> +	return hwmon_thermal_handle_sensors(dev, false);
-> +}
-> +
->   static void hwmon_thermal_notify(struct device *dev, int index)
->   {
->   	struct hwmon_thermal_data *tzdata = hwmon_thermal_find_tz(dev, index);
+You could just remove
+  label:
+    description:
+      Human readable identifier used to distinguish between different PVT
+      instances. Typically "pvt0" for SoC PVT sensor and "pvt1" for DDR
+      core PVT sensor.
 
+and do
+  label: true
+
+or leave it as-is.
+
+I don't mind.
+
+
+--ltszGMIB7Xi46LRn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaXzkpwAKCRB4tDGHoIJi
+0k2bAQD+Ri6xmsnw8mkuYLWgr9qD9hPCKnjnJf0DwQ9PDviU/AEAnW/rxarr2j1h
+zNqOVLU5SybFlbpAipgp63M9Xk0ccA0=
+=4IrT
+-----END PGP SIGNATURE-----
+
+--ltszGMIB7Xi46LRn--
