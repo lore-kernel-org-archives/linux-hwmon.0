@@ -1,176 +1,416 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8610936921C
-	for <linux-hwmon@vger.kernel.org>; Sat, 31 Jan 2026 19:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025932C0F81
+	for <linux-hwmon@vger.kernel.org>; Sat, 31 Jan 2026 19:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769887242; cv=pass; b=RPK762UnLlQZ10wRGVuWJa47cr5cmpkEvtLu7pIIlqtB/bWryS+hmXZoe3dy7CgN8jhO/uJwek6MipraAYf5yPQSJMiCU0n8Wzhfv3YFRvBx7D6UeA4WPgiE/y6Q2N4mpWTqrFxHkZJNKX7tigXQ0MMsaA14LQGj1/EAbZEa8+M=
+	t=1769889030; cv=pass; b=hjmBLxoNT7MB65TbDvkE+RFW0/aAGcApWcdVeibao2ihgGu44M1oSvvVixWyFUCUF9p3mL6W8GkXmKUkfQTAj6oVOE9Q3EX/mIFMGiA3ghjvXGZKeCe4PtYiWsEp/9l8ZOHfwPn7bGibg/rr65yvZf8exSdPF6jf0PLgultA2fM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769887242; c=relaxed/simple;
-	bh=u1blYFOaihwEjJQ0Y79Tn46I3fNM8Qvm8G8aG0FYl5U=;
+	s=arc-20240116; t=1769889030; c=relaxed/simple;
+	bh=n/Pm7WgSCCz/NXHN5Ou5lnb5NCYPJklAKVCX+9up2do=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qIesiEJlsuCgXvlKHUDgOGqlIs7vIGYvITAGnj79yjY+D/jnX9pSBi3LH4kfnWb+e7cjJrk/5Pq0wP91LEYtLiFaOoS8oCcdUfOaSqh90YdHqq/QjAmO0iKmiPc+j/ziWT6Bxn3iyC89oHkPgeO/+nD0QziIC6kQHAWM3oQuxTk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JEuKOkfc; arc=pass smtp.client-ip=74.125.82.43
+	 To:Cc:Content-Type; b=urzEuITaNc9jVMCGkLGOPUfF1Nfg+UPgpfewZvwdvKxppaznAJ+rbquaNR5jedCsgqryZGCtx9oHUhyPs5bQkKvkGQ199Qat3gaB9j+MEh00hjQAtRMtHla4Ukjahsx37fYlKP+ibc4ZXA73J3+L9G84r94ZD/TXcn8zuMLnhMs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ebz/GDAU; arc=pass smtp.client-ip=74.125.82.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JEuKOkfc"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-124899ee9d3so2299722c88.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 31 Jan 2026 11:20:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769887240; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ebz/GDAU"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-124a1b4dd40so3989785c88.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 31 Jan 2026 11:50:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769889028; cv=none;
         d=google.com; s=arc-20240605;
-        b=JD839bXqB5iHopquBRCss7rOWpdZN2H6GtHJij7xEO05f1duK1f/afLkXX8rpH+xwN
-         VgFcgB814P+cxogn6YET8HYeQQEfTXMB9ELb9WcAoca/5MkvFfXY1tMQx52nk0WdV0th
-         YeRFS1HAIyS64Qwjfofab4lJJdsgEQukxg1mUJC4lZOcRnOwSm2uJ1dCVfSf4K5SnbnM
-         MmAOvVnZXsvfcsiRNgsafWO6N+d38gUrbtZjKoVTGbNOcJZsamchDmZgDO9g+cNjrlwx
-         c8ycFl9rIMyhcIvrA7JymlM0GS8tisRh08KXsfjrxF8Tp6cyk/NcB3Lr6epq5aRYGMOS
-         2GdQ==
+        b=GzH1+HZrEF0wbP3qOstn8/J9T7Wii4N9CrIo537It+2y/lmi+B01XTbz2D9uWTFhTF
+         fB/YH6a++cZsKaLfdXLpShxnaPDi3aGYYKCaV5hxv8Iemixz1lUVHw5R3IZkJQk/oYGi
+         qIVayc/ddooeiTT9pk9XU+psMfWkgSVG4ne9rNgw3QpveLQ1Qmjn++r0fn4eohy7WMI4
+         rKUyrIt+syVQ57rVPKAe6cR/P/NL3fXBNVNKaLefQBxDjmxnObEhY1fAoMyri1yxx/Mt
+         w+q3iX9idBfY+QgpIJJp7gqq0VeUdRe+iAqoCrS2N4jEDnppKsSZ3vjvJcio0IGUmyV/
+         aKBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WeCMszZfOl4DyAwowXVTSLmSbWsHdYYmq9ZhDMIcKxY=;
-        fh=7TAiGN0loP9D6il5TOUB/khZrBMnTO8y0n2FZhoQxZU=;
-        b=RwkCJPCfADpDQwqt+2tdYsbuDqOsD6WVp6mnaBqhQ35tE6J4uTMo7lyGtPGnrqQQSj
-         ItDtU4OiMeq/QUdQgt+dCQw4pNUCt1nxwFoSMtdZBWwHAZ3ZK0iru5UZ2cmCuC/Du2LS
-         RbGA2P6gwOrO2k8KqVFQFbNps+0jr+KZqW8RtdhD9euwenQXYpyaxlI8XBhaOOf5rjKz
-         7rkcIocDfbfxjkUu+dz2N3FV4Le/cn+vqxAl4WHbeI/T2Dq9ETiwD9uNcPXYhWPrHDj5
-         sxNA6/WmmbOk/vWctpz0mUvtDqn9Dd7gpSOCs2VTaMwBripyXqoOaqliXcw2iuc8gZEL
-         8mzQ==;
+        bh=n/Pm7WgSCCz/NXHN5Ou5lnb5NCYPJklAKVCX+9up2do=;
+        fh=Psm/asWUvRC+gCGAM/lt62bylYo9IIXPzEH5XnDrSMw=;
+        b=HxLNpFIqob6ojalh0T/vnX2rQTpUaQl2lxYlWcGqrvggyTgPS0kLrgshiUPWycuGVB
+         Jp2BbCUDbJgDy8x2KKdB0GyDQWgxxcHb/Tb5LS2c0O8Ft+zaJ5ga7ugJtxHZd7NW+QBa
+         EeC9ThzQdyxnW14QN9OV3Q6MvDmAcbXkd9ijhI+0Clov0iofanh8tbiLFCYC15rw41YJ
+         Vnvnb3Dt6B/bP4G7FyXrYei8p5nxS+HIfgTuBIEZuq1ikpe2yMA0FQs5aolKVtW2f7Mq
+         9IKMMlARqPLYd5dIQKqxUwSpzxU1Sk2MJXlnCGxcgW6v1+t4366cALB0VOI38NV8tLJe
+         movg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769887240; x=1770492040; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769889028; x=1770493828; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WeCMszZfOl4DyAwowXVTSLmSbWsHdYYmq9ZhDMIcKxY=;
-        b=JEuKOkfcubhqwtGMJ+Ivxt/EMzXi3kyFM2n4x8RB/64TLDXcfEmICHH0dA46bsM9+F
-         OD8cbTTuKBOJjmx8eoKqXT9Bxi32fbwIj02EK4ewBdKZoC62IB5tFqP/wxubXr9stUZn
-         zMmlznW89N/D+V0Yp09hnabQNXrDIKuLXt9W4pcs79ivbtPcBejIwb23W4gwoa1/2PDI
-         nokoRlDD8gEBciSLMN2RyzT7Fz83y+V3zHEcUwmdZAw8F0fOvbg7LL+fmmRBzVJnO/G0
-         flavv8q+AKFPj/jMYXVlrnyFHdOLkUFlYN0Itfons0dmCopbNYrdhh7EnWY6JdBBTFoC
-         /d4A==
+        bh=n/Pm7WgSCCz/NXHN5Ou5lnb5NCYPJklAKVCX+9up2do=;
+        b=Ebz/GDAU/VMMPDJvB8jPoPtw5g5xKdXlmjY96fWzK12YdfHBi5W+8etoaooBs8Ilnj
+         MMkems212t1g9TawwaQCoqA0JrwpljG5UwsgEoxkQ+NSC56+vzx71rAk9GX0g7AGZl0F
+         OGDskqF67SKkao2++FgvbPY3ITJWeNahnSRfR3DdB/MymkUW8KqZ1DWCWzhQuS4DcTCj
+         c+EBSsmfbGE4OAfaA/RnhzHD+M+gpYq6y/9jjvsDuZ3QkVHfs2OzLAWhJO3Drzm17k31
+         Y+aujWJM9SM01ZANLWFN343XuEpujqm28zUODo+1EIKNCDwervITTJZwyz5PLt50TovQ
+         Ba0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769887240; x=1770492040;
+        d=1e100.net; s=20230601; t=1769889028; x=1770493828;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WeCMszZfOl4DyAwowXVTSLmSbWsHdYYmq9ZhDMIcKxY=;
-        b=qVtZGwz5zb6nSzYQ5ftgXqjHBZsAEfAWJ45jS/pnDsoEUZwNLvvyweMZRcLdbMbQrF
-         y+xx3KOdOKLowrn6ZrdIom9NoubAqtgJO25nbi3f19ck5Fas7n6Z/xo46Dsc4APks/je
-         4qozF8R9n8iULDHS6MW18vTMZ6uL7XQfCHKzN6pWlZqSlJGcGFFtptwgWAXCbsG0rhcJ
-         82E0is6mknQz35Y8uVDjoWXO/SnWDdmcbBbddZW3PSdJZdbnaAf9fPZ4LaVcNjYD8x/U
-         NAK4xTTWj79UyussXefy2c1u5KqMzrUNr6TpflXTLULy9J/5wn3P1DUQKav1hfoFLg39
-         LuFg==
-X-Gm-Message-State: AOJu0Yx5ZrXueSkUSVcHMfzqpxd2RrZefZIPYyhh+7FL17Px+Caj8VSU
-	k07wgXaIxMwOjneSJGDPE/tsJmB2xsVW4yAcXG4aQ9angeqxLlixrFGCBGd/K9J+Yq4VjkTf+er
-	DVEN79vBPQO0KDlwW49KUlTbhiYzp3jI=
-X-Gm-Gg: AZuq6aIeYrfDbc3saurGQ9mtITkWtPbEWVixyWF3YXASeFYQLJENsxMseBFmYmcp3fE
-	iUecZNUDYUxHVjpi/Lv7tdBK+/VfKOGq9ob9RxrkQ+jS+qY+svSkcHKUiaqgwTYkary17X1eePy
-	7z8k8EBUsB5Hd76GTQ0Il0/0WFaREB40CyASxJhb2OzECHa7pK3IR/KDR+e/YURqbalfXVh5Zyh
-	rLGFhyYquoyvar6HhDNx1/HKcCln2fyoMAsv9ANhCLx4yTBzcpBKxKDi/rZRN3TCa0JT8hgWg==
-X-Received: by 2002:a05:7022:6627:b0:11b:9386:a38e with SMTP id
- a92af1059eb24-124b109aa6cmr5196513c88.21.1769887240431; Sat, 31 Jan 2026
- 11:20:40 -0800 (PST)
+        bh=n/Pm7WgSCCz/NXHN5Ou5lnb5NCYPJklAKVCX+9up2do=;
+        b=wLQ3Oaxt9k64ie35imH6msLk8lY+G13mMguF4TaFhkh510ryb9cGmJJ586Z1B4/BEP
+         5dVcf9yrJsIDvpvZe7hvFZIOIZ16TTFMl09bMcn6IiIcbrQBx3MmugZzV7tS35BuhqDc
+         XBc4Af1BfPWltG8un4O3D97G6M50/O3ovaHeXXJNeRuDAz/v3d6ZttkJslpFyTWa9XlZ
+         W3ecesR9h1x81zeCTDXysIOuadhn27ztTvzSDP/v3J0mH/9F7dcA9k9RlFI8lFKi4yGA
+         GTHSKpnSIZIMj3LJ/lBWmo1XGe5XYepGxu6R/PFMGHD+/lNAg+RwVztJ33EVjjSCPynN
+         0iNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXkO2JclEqS7UGVsP5bbg7Op1qfAIaSVTKMkj5OW/GlXqpPAcebkx/lGtrL9TQAYIvyJ0GpMPTWfFnaJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAlpVbksl2STQAOiYX3j6wYIobSk0PTMC/cal+I4apDvnYhM+9
+	zFdwsLLpGeFpezyobMfFgnuGkZgkeShWXRZn9qroahWYLuGVgV///r8qa+o9gHkgTzLhp6RUsd5
+	H7wY/cx1FLGgwQdR7n3lxIe6NiWUvUQ9Muws1a/M=
+X-Gm-Gg: AZuq6aLi8ANcbInLtEZQ/bGUy9H072gl8vRJQ8yth+DX+DqBC49htNX/H+mFCCkD1hm
+	38lM9rBdntPg6ypU6UcP9ahe+oEr26dRHngbmWoYhDa1cGYOlfRxI18Cf/KRWeA01yWJhOpN0I7
+	RFwSoU/WHBGN6sSCz4fYmPtLXzeddo+gJkP6OLdtvmaDyq7B/sDSrBHUvnIFq30dhmmKyFnlLkG
+	FghyRXWUCTt6+sHv03KT0Bkz5mNvcS5Gf8zf0/QLLRXzbv358JjOBQUXc3KoSXnERn3EOYPwdoj
+	VF3ITwFa
+X-Received: by 2002:a05:7022:628d:b0:11a:fe6f:806a with SMTP id
+ a92af1059eb24-125c0fdfb0bmr3134197c88.31.1769889027954; Sat, 31 Jan 2026
+ 11:50:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260131152048.2299403-1-linux@roeck-us.net>
-In-Reply-To: <20260131152048.2299403-1-linux@roeck-us.net>
+References: <20260110172003.13969-1-tinsaetadesse2015@gmail.com>
+ <c36306c5-2426-4a9c-9abd-9f3cdab17ed5@roeck-us.net> <CAJ12PfNkde6__QQXMiyBbEoHMbY3efmtsqgbyiKBtBmyfpX5Jw@mail.gmail.com>
+ <2740c3ab-7cb0-4931-81a2-30b85e8615f9@roeck-us.net> <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
+ <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net> <CAJ12PfMC_Potx9aNxaJJ3y=sX=rzyhm-6LJ8Z8OjUyDxiDUNsA@mail.gmail.com>
+ <39b48803-e236-4acc-84e9-18162770f9ae@roeck-us.net> <CAJ12PfMN5SOcYc6vBJEz57YVcxXAOker4WA61Xh1znP=i8aBRg@mail.gmail.com>
+ <5ecc96da-0c87-45f6-ab57-c3ea8eb28de1@gmx.de> <b4ce70ec-7a7a-4ee4-a9bf-55d0a64f8644@roeck-us.net>
+ <CAJ12PfP_P0cz7NrAMBehVtutQn4-OibK33KTNtjec5Qd2msdnA@mail.gmail.com>
+In-Reply-To: <CAJ12PfP_P0cz7NrAMBehVtutQn4-OibK33KTNtjec5Qd2msdnA@mail.gmail.com>
 From: TINSAE TADESSE <tinsaetadesse2015@gmail.com>
-Date: Sat, 31 Jan 2026 22:20:23 +0300
-X-Gm-Features: AZwV_QgUUG-wTTWzA24VkBfaHFMZM1RkfL1tg9ctRMwnXxwOKvj4zhyDpqnP7mY
-Message-ID: <CAJ12PfMjDs2zV+CB4Aj0fi+BUQ2NUQGybfUP2i85Wpdqq8SHiw@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (spd5118) Explicitly enable temperature sensor in
- probe function
+Date: Sat, 31 Jan 2026 22:50:11 +0300
+X-Gm-Features: AZwV_QhCVNL4VMm843eTmmKqpzImXOApjP7BdCo9NwD8TYbajIGbuLLcbSkR3OM
+Message-ID: <CAJ12PfM5xf0+Qy07S5OoLPkpnhZz+bj5a+hTSGTfrEFN2R6PCw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C errors
 To: Guenter Roeck <linux@roeck-us.net>
-Cc: Hardware Monitoring <linux-hwmon@vger.kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
-	Kurt Borja <kuurtb@gmail.com>
+Cc: Armin Wolf <W_Armin@gmx.de>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 31, 2026 at 6:20=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+On Tue, Jan 27, 2026 at 1:35=E2=80=AFPM TINSAE TADESSE
+<tinsaetadesse2015@gmail.com> wrote:
 >
-> Instantiating the driver does not make sense if the temperature sensor
-> is disabled, so enable it unconditionally in the probe function.
 >
-> If that fails, write operations to the chip are likely disabled
-> by the I2C controller. Bail out with an error message if that happens.
 >
-> Cc: Armin Wolf <W_Armin@gmx.de>
-> Cc: Kurt Borja <kuurtb@gmail.com>
-> Cc: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/spd5118.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> On Mon, Jan 26, 2026 at 1:36=E2=80=AFAM Guenter Roeck <linux@roeck-us.net=
+> wrote:
+> >
+> > On 1/24/26 11:11, Armin Wolf wrote:
+> > > Am 24.01.26 um 15:45 schrieb TINSAE TADESSE:
+> > >
+> > >> On Fri, Jan 16, 2026 at 9:24=E2=80=AFAM Guenter Roeck <linux@roeck-u=
+s.net> wrote:
+> > >>> On 1/15/26 05:50, TINSAE TADESSE wrote:
+> > >>>> On Wed, Jan 14, 2026 at 5:23=E2=80=AFPM Guenter Roeck <linux@roeck=
+-us.net> wrote:
+> > >>>>> On 1/14/26 05:07, TINSAE TADESSE wrote:
+> > >>>>> ...
+> > >>>>>>>> Hi Guenter,
+> > >>>>>>>>
+> > >>>>>>>> I tested changing the i801 SMBus controller to use
+> > >>>>>>>> SET_LATE_SYSTEM_SLEEP_PM_OPS() instead of
+> > >>>>>>>> DEFINE_SIMPLE_DEV_PM_OPS() as a diagnostic experiment. With th=
+is
+> > >>>>>>>> change, spd5118 resume failures (-ENXIO)
+> > >>>>>>>> still persist, suggesting PM ordering alone is insufficient an=
+d other
+> > >>>>>>>> firmware interactions are involved.
+> > >>>>>>> How about the problem in the suspend function ? Is that also st=
+ill seen ?
+> > >>>>>>>
+> > >>>>>>> Also, the subject talks about -EIO. Is that still seen ?
+> > >>>>>>>
+> > >>>>>>> Either case, can you enable debug logs for the i801 driver ?
+> > >>>>>>> It should generate log entries when it reports errors.
+> > >>>>>>>
+> > >>>>>>> Thanks,
+> > >>>>>>> Guenter
+> > >>>>>>>
+> > >>>>>> Hi Guenter,
+> > >>>>>>
+> > >>>>>> Thank you for the questions. To clarify:
+> > >>>>>>
+> > >>>>> Please do not drop mailing lists from replies.
+> > >>>>>
+> > >>>>>> 1) I have not observed any failures in the suspend path. The sus=
+pend
+> > >>>>>> callback completes successfully, and
+> > >>>>>> I have not seen I2C errors or warnings during suspend at any poi=
+nt.
+> > >>>>> Sorry, I seem to be missing something.
+> > >>>>>
+> > >>>>> In that case, what is the point of patch 3/3 of your series which
+> > >>>>> removes hardware accesses from the suspend function ?
+> > >>>>>
+> > >>>>>> 2) I have also not observed -EIO in my testing. The error consis=
+tently
+> > >>>>>> reported on resume and subsequent hwmon access is -ENXIO.
+> > >>>>>> Earlier references to -EIO were based on assumptions rather than
+> > >>>>>> observed logs, and I should have been clearer about that.
+> > >>>>>>
+> > >>>>> Thanks for the clarification.
+> > >>>>>
+> > >>>>> Guenter
+> > >>>>>
+> > >>>>>> I am enabling debug logging for the i801 driver to collect more
+> > >>>>>> concrete evidence of controller state during resume.
+> > >>>> Hi Guenter,
+> > >>>>
+> > >>>>> Sorry, I seem to be missing something.
+> > >>>>>
+> > >>>>> In that case, what is the point of patch 3/3 of your series which
+> > >>>>> removes hardware accesses from the suspend function ?
+> > >>>> You are right to question this, and I agree that it needs clarific=
+ation.
+> > >>>>
+> > >>>> Patch 3/3 was originally proposed under the assumption that the re=
+sume failures
+> > >>>> were caused by spd5118 performing I2C transactions while the
+> > >>>> controller was not yet available,
+> > >>>> and that removing hardware accesses from the suspend path might
+> > >>>> mitigate the issue.
+> > >>>> At that point, I assumed the problem was limited to the resume cal=
+lback.
+> > >>>>
+> > >>>> After enabling detailed i801 debug logging and testing with
+> > >>>> SET_LATE_SYSTEM_SLEEP_PM_OPS() in the i801 driver,
+> > >>>> it became clear that this assumption was incorrect. The controller
+> > >>>> itself reports "i801_smbus: No response"
+> > >>>> both during suspend and immediately after resume, and spd5118 mere=
+ly
+> > >>>> propagates the resulting -ENXIO.
+> > >>> Outch, that really hurts, because it means that something is seriou=
+sly
+> > >>> broken in both the suspend and resume path. The device _must_ be ac=
+cessible
+> > >>> in the suspend path. Otherwise there is no guarantee that the devic=
+e is
+> > >>> accessible for normal (pre-suspend) operation. After all, someone c=
+ould
+> > >>> run a script reading sysfs attributes in a tight loop continuously,
+> > >>> or the thermal subsystem could try to access the chip. That would s=
+uddenly
+> > >>> start to fail if something in the device access path starts to be s=
+uspended
+> > >>> while the underlying hardware is still believed to be operational.
+> > >>>
+> > >>> I could imagine some hack/quirk for the resume path, such as delayi=
+ng resume
+> > >>> for some period of time for affected hardware, but I have no idea w=
+hat to
+> > >>> do on the suspend side. We can not just drop device writes during s=
+uspend
+> > >>> because some broken hardware/firmware does not let us actually acce=
+ss
+> > >>> (and thus suspend) the hardware anymore by the time the suspend fun=
+ction
+> > >>> is called.
+> > >>>
+> > >>> Guenter
+> > >>>
+> > >>>> This indicates that the issue is not caused by spd5118 suspend/res=
+ume
+> > >>>> behavior, but by the unavailability of the
+> > >>>> SMBus controller due to platform or firmware interactions during
+> > >>>> s2idle transitions.
+> > >>>>
+> > >>>> Given this, I agree that patch 3/3 does not address the root cause=
+ and
+> > >>>> does not provide a justified improvement.
+> > >>>> I am therefore fine with dropping it.
+> > >>>>
+> > >>>> Thank you for pointing this out.
+> > >>>>
+> > >> Hi Guenter,
+> > >>
+> > >> Thanks for the continued review and for questioning the earlier
+> > >> direction =E2=80=94 that helped narrow this down properly.
+> > >>
+> > >> After enabling full i801 debug logging (included below in this email=
+)
+> > >> and inspecting both drivers, it became clear that the resume
+> > >> failures are not caused by spd5118 accessing the hardware too
+> > >> early, nor by PM ordering issues. Instead, the SMBus controller
+> > >> explicitly reports =E2=80=9CSPD Write Disable is set=E2=80=9D, and a=
+ny
+> > >> block write transactions to the SPD device consistently fail with
+> > >> DEV_ERR. spd5118 merely propagates the resulting -ENXIO.
+> > >
+> > > Oh no, this likely happens even when merely reading values, as the sp=
+d5118
+> > > uses a page register to switch between different register pages. In o=
+rder
+> > > to access temperature data (page 0), you might already have to issue =
+a
+> > > write access to the page register. The only reason why it works for y=
+ou
+> > > is that the spd5118 likely already has page 0 selected by the system =
+firmware
+> > > during boot.
+> > >
+> >
+> > Exactly. There is no guarantee that page 0 is selected.
+> >
+> > >> With that in mind, I have dropped the earlier patch that attempted
+> > >> to remove hardware access from the suspend path
+> > >> unconditionally.
+> > >> That patch does not address the root cause and is no longer
+> > >> part of the series.
+> > >>
+> > >> I am instead proposing a minimal 2-patch series:
+> > >>
+> > >> 1/2 records whether the platform enforces SPD write disable at probe
+> > >> time (no behavior change).
+> > >> 2/2 avoids regcache writeback during suspend/resume when the device
+> > >> operates in read-only mode, while still allowing read access to
+> > >> temperature inputs.
+> > >>
+> > >> This avoids issuing SMBus transactions that are architecturally
+> > >> blocked on these systems, and does not rely on
+> > >> delays or PM ordering assumptions, and leaves behavior unchanged on
+> > >> platforms where SPD writes are permitted.
+> > >>
+> > >> If this direction looks acceptable, I=E2=80=99m happy to re-spin and=
+ post the
+> > >> series formally.
+> > >>
+> > >> Thanks again for the guidance.
+> > >
+> > > I do not know if this is a reliable solution, as the system firmware =
+might
+> > > select a different register page during resume. This will then preven=
+t the
+> > > driver from functioning.
+> > >
+> >
+> > No, it is not reliable. The driver is simply not usable in this scenari=
+o.
+> > This isn't just the temperature sensor code - the eeprom code is affect=
+ed
+> > as well.
+> >
+> > > I would love to see the spd5118 driver working on such systems with r=
+educed
+> > > functionality, but i will leave it to Guenter to decide if this appro=
+ach is
+> > > maintainable.
+> > >
+> > > Besides that: did the spd5118 driver load automatically on your devic=
+e?
+> > >
+> >
+> > I thought that was disabled. The i801 driver is supposed to detect if w=
+rite
+> > protect is enabled and, if so, it is supposed to not instantiate the sp=
+d5118
+> > driver for DDR3. Support for this was added with commit 4d6d35d3417d ("=
+i2c:
+> > smbus: introduce Write Disable-aware SPD instantiating functions"). App=
+arently
+> > the code to do this never made it into the i801 driver.
+> >
+> > The i801 driver needs to be fixed to inform the spd initialization code
+> > that the spd5118 address range is write protected. The patch to do this=
+ was
+> > "i2c: i801: Do not instantiate spd5118 under SPD Write Disable". I have=
+ no idea
+> > why that patch didn't make it upstream.
+> >
+> > Guenter
+> >
 >
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index 5da44571b6a0..d8834d4d980b 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -552,6 +552,20 @@ static int spd5118_common_probe(struct device *dev, =
-struct regmap *regmap,
->         if (!spd5118_vendor_valid(bank, vendor))
->                 return -ENODEV;
+> Hi Guenter,
 >
-> +       /*
-> +        * Some I2C controllers write protect the address range used by S=
-PD5118
-> +        * compliant chips. This makes the chips effectively unaccessible=
- since
-> +        * the driver needs to be able to set the page in the legacy mode
-> +        * register, and it needs to be able to disable the temperature s=
-ensor
-> +        * during suspend. Check if writes to the chip are possible by
-> +        * explicitly enabling the temperature sensor. Bail out if that f=
-ails.
-> +        */
-> +       err =3D regmap_write_bits(regmap, SPD5118_REG_TEMP_CONFIG,
-> +                               SPD5118_TS_DISABLE, 0);
-> +       if (err)
-> +               return dev_err_probe(dev, err,
-> +                                    "Failed to enable temperature sensor=
- (write protected ?)\n");
-> +
->         data->regmap =3D regmap;
->         mutex_init(&data->nvmem_lock);
->         dev_set_drvdata(dev, data);
-> --
-> 2.45.2
+> > > The i801 driver needs to be fixed to inform the spd initialization co=
+de
+> > > that the spd5118 address range is write protected. The patch to do
+> > > this was
+> > > "i2c: i801: Do not instantiate spd5118 under SPD Write Disable". I
+> > > have no idea
+> > > why that patch didn't make it upstream.
 >
+> I initially considered exposing SPD write-protection as a capability to b=
+e consumed by spd5118.
+> However, spd5118 already depends on firmware-initialized state (page sele=
+ction) and cannot reliably
+> determine safe operation at probe time without issuing writes.
+> Given that, suppressing SPD instantiation in the i801 driver when SPD Wri=
+te Disable is
+> the only solution here.
+>
+> Tested the remaining patch [1], and it does not seem to fix the issue, as=
+ it is added at the wrong stage
+> in the initialization of the i801 driver. The attached log shows that spd=
+5118 is instantiated and fully probed
+> before the "do not instantiate spd5118 under SPD Write Disable" is acted =
+upon.
+> This confirms that suppressing instantiation must occur before adapter re=
+gistration in i801.
+> Once the adapter is registered, the SPD scan has already happened, and sp=
+d5118 has bound successfully
+> based on the firmware-initialized state, even though correct operation is=
+ impossible.
+> Therefore, the fix must be run prior to adapter registration.
+>
+> [1] https://lore.kernel.org/all/20250430-for-upstream-i801-spd5118-no-ins=
+tantiate-v2-2-2f54d91ae2c7@canonical.com/
+>
+>
+> The fix is to register the SPD write-disable policy before i2c_add_adapte=
+r(), so the I2C core never
+> probes SPD addresses on write-protected platforms.
+>
+
 
 Hi Guenter,
 
-Tested this patch on my system, and it actually fixes the issue.
+While investigating this issue, I previously mentioned
+about a flow where SPD write disabled state can be
+exported as a capability from the i801 controller, so
+that the SPD5118 hwmon driver consumes it.
 
-[   11.523971] i2c-core: driver [spd5118] registered
-[   28.040686] i801_smbus 0000:00:1f.4: SPD Write Disable is set
-[   28.041003] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
-[   28.078412] i801_smbus 0000:00:1f.4: No response
-[   28.078643] i801_smbus 0000:00:1f.4: No response
-[   28.082927] i2c i2c-14: Creating spd5118 at 0x52
-[   28.087685] spd5118 14-0052: probe
-[   28.092707] i801_smbus 0000:00:1f.4: No response
-[   28.092736] spd5118 14-0052: error -ENXIO: Failed to enable
-temperature sensor (write protected ?)
-[   28.094709] i2c i2c-14: client [spd5118] registered with bus id 14-0052
-[   28.094936] i801_smbus 0000:00:1f.4: No response
-[   28.095143] i801_smbus 0000:00:1f.4: No response
-[   28.095351] i801_smbus 0000:00:1f.4: No response
-[   28.095558] i801_smbus 0000:00:1f.4: No response
-[   28.095757] i801_smbus 0000:00:1f.4: No response
-[   28.095956] i801_smbus 0000:00:1f.4: No response
-[   28.096153] i801_smbus 0000:00:1f.4: No response
-[   28.097139] i801_smbus 0000:00:1f.4: No response
-[   28.097361] i801_smbus 0000:00:1f.4: No response
-[   28.097567] i801_smbus 0000:00:1f.4: No response
-[   78.689689] PM: suspend entry (s2idle)
-[   80.616943] ACPI: EC: interrupt blocked
-[   86.510434] ACPI: EC: interrupt unblocked
-[   88.175249] PM: suspend exit
+The SPD write disabled state is known to the controller
+driver (i2c-i801), but this information is not
+propagated to client drivers. As a result, auto-detected
+devices may be instantiated and probed even though the
+controller cannot support the required access model.
+
+This raises a major architectural question:
+
+Should SMBus / I2C controller drivers be able to
+advertise bus-level capability constraints (such as SPD
+write disabled state) to client drivers, so that clients can
+make an informed decision during probe?
+
+A capability-based approach would allow:
+* controller drivers to expose what is possible on a given bus
+* client drivers to decide whether they can operate correctly
+* avoidance of device-specific policy in controller drivers
+* consistent handling across different SPD-capable devices
+
+I actually tested the possibility of detecting, propagating,
+and consuming the SPD write disabled state using an I2C
+adapter capability flag. Using this approach, I was able to
+fix the issue even with the CONFIG_SENSORS_SPD5118_DETECT
+kernel configuration enabled.
+
+At this stage, I am not proposing a specific implementation.
+The goal of this RFC is to get agreement on whether this type
+of problem should be solved through capability propagation,
+and if so, what mechanism would be preferred.
+
+Any feedback on design direction, or existing infrastructure
+that could be reused would be very welcome.
