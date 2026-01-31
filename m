@@ -1,41 +1,44 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4848B27AC45;
-	Sat, 31 Jan 2026 09:22:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC1A32863A;
+	Sat, 31 Jan 2026 10:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769851352; cv=none; b=oVs1m7RNShn9NMFgg/IGwDOg0E+79VXUvPv6IMCwRBXyoQ9RFFBYeb2yKjdTCSwHvX1nVMD+KowgcDr023rE8fw2u7F4A9Bd4db4CE8pIuqfo44XmkEdn/bfHqybQc56AeG1JnkUFV+7TjN9aBVmk929K/eS5NLFl7RHHyrsY/Y=
+	t=1769853990; cv=none; b=BS/09BMdO2eVvuU+M+tXS0hCz90//Cfn7rAuWTLAY8MBQXbZyjtjhSBtZ5f7kyAG5lZgOCduosoJ9ObW8WOfMUIAvaIn5sSDEIlRXnN86Oj38hsV6IxuDq47MsIos6LxZj31CPlXGM5scHKFI8eBS22Q+1r2tsZCj3+2fh/qQSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769851352; c=relaxed/simple;
-	bh=vu3nwszHlk+WryheOICtx9/nuvgJ9myzct94p/XyHJE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IxZbype3ngX62kZH8oXOSmPNCEh7gyINT4eir4HpQBmNDtUpl96iGPqIFQVsWrCbCcskntj+c4c52vtnJftbUG0Hs7d1oUHb7aKnYlsSKLwaqWxH927LFDjsOzbwhjafgpBoJedfhSG+HEGbfBFMNHaz/AR3usdUmEJJat7/oF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=ndX0ot6Y; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+	s=arc-20240116; t=1769853990; c=relaxed/simple;
+	bh=tAFAjQYAEwyzJwJm4npU0MWJPLKgIG5SE1yVRi+D8qI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ZOnneFLyYd/e/oJmwHpdwWdRYx4cJcm5r7SQZgqIUJDEegTvfB5Pfki51VTrs6q00ABqxogvlwfrqnABgGGR520vmykksTJHWWVGdKZrN0qGYLa0dGVLUuYLxBHdUPFBexe0rYIwmKdPdPQ4PHOr/t+cqK4mZFvbHhJ3XfGH/L8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=IPXOr/Uf; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="ndX0ot6Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1769851348; x=1770456148; i=w_armin@gmx.de;
-	bh=vu3nwszHlk+WryheOICtx9/nuvgJ9myzct94p/XyHJE=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=ndX0ot6YfHoKO1wA8DlHmnOZiaE37P3ojUacqt10zKbisaP14VdetadAnwCwsV3U
-	 cViv5l4y+KJ/ifnADsqOSV9iggAUl/iSmk5dpXGqopXHFBFQID2Q0qzM7khwJddXQ
-	 MVG8Q2+VTqju8/+VXviIG/Ap2TGkJl4TDFuqxE7EK1oPo+F2u5Et1c3qNtxOVk7MD
-	 wEZCZSOWj3e1gzEOXpVqSAJWttsh9eU8qQWqPsZvXS0kA5TYFWh+Sn7MrM+hHvK7s
-	 SSuN6Pv8C4FzhWfRY4DSQXh+cY3MMl2PA6YCgjKrtOOLNllhuSfvR5RH1OHysdZkj
-	 DU5Kb1eS7myJaVl5aQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [10.67.125.97] ([164.15.244.33]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWzjt-1vEoaj0xZJ-00V3tO; Sat, 31
- Jan 2026 10:22:28 +0100
-Message-ID: <77f1f2c8-b072-4625-a4ba-2e4882108ec7@gmx.de>
-Date: Sat, 31 Jan 2026 10:22:26 +0100
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="IPXOr/Uf"
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Cbl68WIFyMtlM1bsnS9e9JwHwzg6RzjTHaaF6rzNdTg=;
+	b=IPXOr/Uf1a85lOy/KQ7o6BkMhTy0hLaSiZ086mZppeGNfA613Llmt1IDwrlXkqBBzpopFJ2g+
+	m6uLb2qvYdP74N1Oh4Y9eufmEA6tCuY13/Qs42aK0OeE5P2yYBXAtbN8JzVE6OO/5eEes/tby3B
+	7/Y3zYvH8TK/4JaR3bwd7PA=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4f37jN23v0zmV6j;
+	Sat, 31 Jan 2026 18:02:48 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id B700940567;
+	Sat, 31 Jan 2026 18:06:18 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 31 Jan 2026 18:06:05 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Sat, 31 Jan
+ 2026 18:06:04 +0800
+Message-ID: <0d8ab2ec-c296-4087-9f77-4389813c75a7@huawei.com>
+Date: Sat, 31 Jan 2026 18:06:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -43,248 +46,252 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] hwmon: spd5118: Do not fail resume on temporary I2C
- errors
-To: Guenter Roeck <linux@roeck-us.net>, Kurt Borja <kuurtb@gmail.com>,
- TINSAE TADESSE <tinsaetadesse2015@gmail.com>
-Cc: "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- linux-kernel@vger.kernel.org, Guenter Roeck <groeck7@gmail.com>
-References: <CAJ12PfP+Dbxd5fFAx-zAaJQ0B53Z1nXAiPbkmivk6smKajf1=Q@mail.gmail.com>
- <e994308a-389a-4d67-9ec9-39a5f0d3f4b6@roeck-us.net>
- <CAJ12PfMC_Potx9aNxaJJ3y=sX=rzyhm-6LJ8Z8OjUyDxiDUNsA@mail.gmail.com>
- <39b48803-e236-4acc-84e9-18162770f9ae@roeck-us.net>
- <CAJ12PfMN5SOcYc6vBJEz57YVcxXAOker4WA61Xh1znP=i8aBRg@mail.gmail.com>
- <5ecc96da-0c87-45f6-ab57-c3ea8eb28de1@gmx.de>
- <b4ce70ec-7a7a-4ee4-a9bf-55d0a64f8644@roeck-us.net>
- <CAJ12PfP_P0cz7NrAMBehVtutQn4-OibK33KTNtjec5Qd2msdnA@mail.gmail.com>
- <6249756d-7e49-464e-bb7e-11dfba3085f3@roeck-us.net>
- <CAJ12PfODdy+rgBumHv5gUeaqikUGMkADg-UoBLuZPrtBanF40w@mail.gmail.com>
- <f6c1e5d5-61ad-44ba-aa7c-231334d3e821@roeck-us.net>
- <DG2D60UNIM2J.3BXEHP4RJU0BL@gmail.com>
- <f9a4e815-bb21-468b-9568-b4acfd792527@roeck-us.net>
- <DG2EEU6SXFFE.20DWQUV1BW9QW@gmail.com>
- <516f5dfd-3e84-4938-bfea-5c52e884f1af@roeck-us.net>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <516f5dfd-3e84-4938-bfea-5c52e884f1af@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:IBwQMCyypokCOvbfXwlQKoIbg3VQJ3b0KiD8heKtVFVJLIjIM3c
- uIGTUPln7LGAqjzFgKeMIeHKxPheBdi/Q81ri2K/Pw57lzYsJE1sfNjVqnWpw8pwmpYPk9i
- qdZjF65TEjWq0/9LE4pdwVoxxt2HBD7mzMim7HfOu22H1731qRiR4WFDsNbwD3JKEHSgwR4
- +4hXk+bBwPuQjYKHB4UJA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:QWOow8CSou0=;Rf8JYS5sEV9j9GDFeZ1AYFykf5J
- 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
- Ykc0vseAbI7XbhEcWvJz
+Subject: Re: [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related to
+ acpi_power_meter_notify()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Guenter Roeck <linux@roeck-us.net>, Jaroslav Pulchart
+	<jaroslav.pulchart@gooddata.com>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, Igor Raits <igor@gooddata.com>, Daniel Secik
+	<daniel.secik@gooddata.com>, Zdenek Pesek <zdenek.pesek@gooddata.com>, "Jiri
+ Jurica" <jiri.jurica@gooddata.com>
+References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
+ <12855313.O9o76ZdvQC@rafael.j.wysocki>
+ <d45d7b8a-97dd-4db8-a785-56df128983a4@roeck-us.net>
+ <6252535.lOV4Wx5bFT@rafael.j.wysocki>
+ <b81b86c8-7780-4b11-8830-09ab9c7dd679@huawei.com>
+ <a980cd48-6dd1-4e90-a872-821ffe799281@roeck-us.net>
+ <b1e5f8dc-4093-4f03-946c-e455612a0c73@huawei.com>
+ <CAJZ5v0gvSdm+FpaO8=RhfvE8SOQTTGwhmBhw9WJ6QLXkmahuww@mail.gmail.com>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <CAJZ5v0gvSdm+FpaO8=RhfvE8SOQTTGwhmBhw9WJ6QLXkmahuww@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-Am 31.01.26 um 03:06 schrieb Guenter Roeck:
 
-> On 1/30/26 17:54, Kurt Borja wrote:
->> On Fri Jan 30, 2026 at 8:21 PM -05, Guenter Roeck wrote:
->>> Hi Kurt,
->>>
->>> On 1/30/26 16:55, Kurt Borja wrote:
->>>> On Tue Jan 27, 2026 at 6:41 PM -05, Guenter Roeck wrote:
->>>>> Hi,
->>>>>
->>>>> On Tue, Jan 27, 2026 at 10:23:24PM +0300, TINSAE TADESSE wrote:
+On 1/31/2026 1:53 AM, Rafael J. Wysocki wrote:
+> On Fri, Jan 30, 2026 at 9:40 AM lihuisong (C) <lihuisong@huawei.com> wrote:
+>>
+>> On 1/30/2026 1:07 PM, Guenter Roeck wrote:
+>>> On 1/29/26 17:47, lihuisong (C) wrote:
+>>>> On 1/29/2026 10:18 PM, Rafael J. Wysocki wrote:
+>>>>> On Wednesday, January 28, 2026 10:52:15 PM CET Guenter Roeck wrote:
+>>>>>> On Wed, Jan 28, 2026 at 08:52:49PM +0100, Rafael J. Wysocki wrote:
+>>>>>>> On Wednesday, January 28, 2026 7:45:32 PM CET Rafael J. Wysocki
+>>>>>>> wrote:
+>>>>>>>> On Wed, Jan 28, 2026 at 7:18 PM Guenter Roeck
+>>>>>>>> <linux@roeck-us.net> wrote:
+>>>>>>>>> Hi all,
+>>>>>>>>>
+>>>>>>>>> On Thu, Jan 22, 2026 at 07:55:35PM +0100, Rafael J. Wysocki wrote:
+>>>>>>>>>> On Thu, Jan 22, 2026 at 7:21 PM Jaroslav Pulchart
+>>>>>>>>>> <jaroslav.pulchart@gooddata.com> wrote:
+>>>>>>>>>>> Hello,
+>>>>>>>>>>>
+>>>>>>>>>>> after upgrading from kernel 6.17.y to 6.18.y we started to
+>>>>>>>>>>> observe a regression
+>>>>>>>>>>> in the ACPI power meter hwmon interface. Reading
+>>>>>>>>>>> power*_average sysfs
+>>>>>>>>>>> attributes blocks indefinitely and causes tasks to enter
+>>>>>>>>>>> uninterruptible
+>>>>>>>>>>> sleep (D state).
+>>>>>>>>>> The most recent change in the acpi_power_meter driver was made in
+>>>>>>>>>> 6.15, so this is not a regression in that driver.
+>>>>>>>>>>
+>>>>>>>>>> Also, nothing suspicious is done in power1_average_min_show() and
+>>>>>>>>>> power1_average_min_store() AFAICS.
+>>>>>>>>>>
+>>>>>>>>> I decided to ask AI (Gemini 3, more specifically) for an
+>>>>>>>>> analysis of the
+>>>>>>>>> problem, using Chris Mason's prompts for guidance. Result is below.
+>>>>>>>> So it agrees with me in the analysis part.
+>>>>>>>>
+>>>>>> Yes.
 >>>>>>
->>>>>> Disabling CONFIG_SENSORS_SPD5118_DETECT completely avoids the=20
->>>>>> issue on
->>>>>> affected platforms,
->>>>>> even without any code changes. This confirms that the failures are
->>>>>> triggered specifically by automatic
->>>>>> SPD5118 instantiation on systems where the i801 controller enforces
->>>>>> SPD Write Disable.
+>>>>>>>>> The suggested fix may be a feasible workaround. Let me know what
+>>>>>>>>> you think.
+>>>>>>>> Well, I'm afraid it won't work if two METER_NOTIFY_CONFIG
+>>>>>>>> notifications compete with each other because they may try to
+>>>>>>>> unregister the hwmon device at the same time.
+>>>>>>>>
+>>>>>> Good point.
+>>>>>>
+>>>>>>>> I would just add a separate lock for the notifier (a static one
+>>>>>>>> should
+>>>>>>>> suffice) and make changes to "resource" only under resource->lock.
+>>>>>>>>
+>>>>>>>> Let me cut a prototype patch for this.
+>>>>>>>>
+>>>>>>> Something like the below (untested).
+>>>>>>>
+>>>>>>> Note that it also fixes the driver removal which is tangentially
+>>>>>>> related to the
+>>>>>>> problem at hand.
+>>>>>> I can't test it either, but I ran it through Gemini and it tells me:
+>>>>>>
+>>>>>>     Fixes: tag missing (y) [Fixes: 16746ce8adfe ("hwmon:
+>>>>>> (acpi_power_meter) Replace the deprecated hwmon_device_register")]
+>>>>>>
+>>>>>>     The commit addresses a deadlock regression introduced by the
+>>>>>> conversion to
+>>>>>>     hwmon_device_register_with_info.
+>>>>>>
+>>>>>>     CHANGE-1: New static mutex `acpi_notify_lock` introduces global
+>>>>>> serialization.
+>>>>>>     This prevents concurrent notification handling for multiple
+>>>>>> power meter devices.
+>>>>>>     While likely a minor impact given the nature of the device, it
+>>>>>> technically reduces parallelism compared to the per-device locking
+>>>>>> used previously.
+>>>>>>
+>>>>>> Just for fun I tried again, this time using a model which is more
+>>>>>> prone to
+>>>>>> false positives. It pretty much provided the same result in more
+>>>>>> detail.
+>>>>>> It is a bit more verbose, so I attached it below. I also asked it
+>>>>>> to verify,
+>>>>>> using the backtrace, if the patch is complete, and to suggest a patch
+>>>>>> description. The result is also attached below.
+>>>>>>
+>>>>>> I think this is good enough for a formal patch. WDYT ?
+>>>>> With all due respect to the AI, I think that it has missed a couple
+>>>>> of things,
+>>>>> so below it the patch with my version of the changelog.
 >>>>>
->>>>> Thanks for confirming. Can you try if the patch below fixes the=20
->>>>> problem ?
->>>>> It is a wild shot, but it might be worth a try.
+>>>>> Also, it really wants to be two patches IMV, one adding the
+>>>>> IS_ERR(resource->hwmon_dev) checks before hwmon device
+>>>>> unregistration and
+>>>>> another one fixing the deadlock in question on top of it. Please let
+>>>>> me know
+>>>>> if you want me to split this one.
 >>>>>
->>>>> Thanks,
->>>>> Guenter
+>>>>> Jaroslav, it would be nice to get some feedback on it from you as
+>>>>> you seem to
+>>>>> be the only person here who can test it.
 >>>>>
 >>>>> ---
->>>>> =C2=A0 From b44c31c2c779a67827e3144b818cf21f5efacea1 Mon Sep 17=20
->>>>> 00:00:00 2001
->>>>> From: Guenter Roeck <linux@roeck-us.net>
->>>>> Date: Tue, 27 Jan 2026 15:32:32 -0800
->>>>> Subject: [PATCH] hwmon: (spd5118) Explicitly enable temperature=20
->>>>> sensor in
->>>>> =C2=A0=C2=A0 probe function
+>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>> Subject: [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related
+>>>>> to acpi_power_meter_notify()
 >>>>>
->>>>> Instantiating the driver does not make sense if the temperature=20
->>>>> sensor
->>>>> is disabled, so enable it unconditionally in the probe function.
+>>>>> The acpi_power_meter driver's .notify() callback function,
+>>>>> acpi_power_meter_notify(), calls hwmon_device_unregister() under a lock
+>>>>> that is also acquired by callbacks in sysfs attributes of the device
+>>>>> being unregistered which is prone to deadlocks between sysfs access and
+>>>>> device removal.
 >>>>>
->>>>> If that fails, write operations to the chip are likely disabled
->>>>> by the I2C controller. Bail out with an eror message if that happens=
-.
+>>>>> Address this by moving the hwmon device removal in
+>>>>> acpi_power_meter_notify() outside the lock in question, but notice
+>>>>> that doing it alone is not sufficient because two concurrent
+>>>>> METER_NOTIFY_CONFIG notifications may be attempting to remove the
+>>>>> same device at the same time.  To prevent that from happening, add a
+>>>>> new lock serializing the execution of the switch () statement in
+>>>>> acpi_power_meter_notify().  For simplicity, it is a static mutex
+>>>>> which should not be a problem from the performance perspective.
 >>>>>
->>>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>>>> The new lock also allows the hwmon_device_register_with_info()
+>>>>> in acpi_power_meter_notify() to be called outside the inner lock
+>>>>> because it prevents the other notifications handled by that function
+>>>>> from manipulating the "resource" object while the hwmon device based
+>>>>> on it is being registered.  The sending of ACPI netlink messages from
+>>>>> acpi_power_meter_notify() is serialized by the new lock too which
+>>>>> generally helps to ensure that the order of handling firmware
+>>>>> notifications is the same as the order of sending netlink messages
+>>>>> related to them.
+>>>>>
+>>>>> In addition, notice that hwmon_device_register_with_info() may fail
+>>>>> in which case resource->hwmon_dev will become an error pointer,
+>>>>> so add checks to avoid attempting to unregister the hwmon device
+>>>>> pointer to by it in that case to acpi_power_meter_notify() and
+>>>>> acpi_power_meter_remove().
+>>>>>
+>>>>> Fixes: 16746ce8adfe ("hwmon: (acpi_power_meter) Replace the
+>>>>> deprecated hwmon_device_register")
+>>>>> Reported-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >>>>> ---
->>>>> =C2=A0=C2=A0 drivers/hwmon/spd5118.c | 5 +++++
->>>>> =C2=A0=C2=A0 1 file changed, 5 insertions(+)
+>>>>>    drivers/hwmon/acpi_power_meter.c |   17 ++++++++++++++---
+>>>>>    1 file changed, 14 insertions(+), 3 deletions(-)
 >>>>>
->>>>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
->>>>> index 5da44571b6a0..3e0e780014f9 100644
->>>>> --- a/drivers/hwmon/spd5118.c
->>>>> +++ b/drivers/hwmon/spd5118.c
->>>>> @@ -552,6 +552,11 @@ static int spd5118_common_probe(struct device=
-=20
->>>>> *dev, struct regmap *regmap,
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!spd5118_vendor_valid(bank,=
- vendor))
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return =
--ENODEV;
->>>>> =C2=A0=C2=A0 +=C2=A0=C2=A0=C2=A0 if (regmap_update_bits(regmap, SPD5=
-118_REG_TEMP_CONFIG,
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SPD5118_TS_DISABLE, 0) < 0)
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return dev_err_probe(dev=
-, -ENODEV,
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to enable t=
-emperature sensor\n");
+>>>>> --- a/drivers/hwmon/acpi_power_meter.c
+>>>>> +++ b/drivers/hwmon/acpi_power_meter.c
+>>>>> @@ -47,6 +47,8 @@
+>>>>>    static int cap_in_hardware;
+>>>>>    static bool force_cap_on;
+>>>>> +static DEFINE_MUTEX(acpi_notify_lock);
 >>>>> +
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data->regmap =3D regmap;
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_init(&data->nvmem_lock);
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_set_drvdata(dev, data);
->>>>
->>>> Hi Guenter,
->>>>
->>>> I'm experiencing the same issue reported in this thread. This patch=
-=20
->>>> does
->>>> not fix it for me :(.
->>>>
->>> Thanks for a note. Well, it was a wild shot, so it is not entirely=20
->>> surprising
->>> that it didn't work. I suspect regmap doesn't actually write the=20
->>> register
->>> if the value is unchanged. Another option might be to try writing a=20
->>> value
->>
->> I tried forcing the write with
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0bool change;
->> =C2=A0=C2=A0=C2=A0=C2=A0err =3D regmap_update_bits_base(regmap, SPD5118=
-_REG_TEMP_CONFIG,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SPD5118_TS_DISAB=
-LE, 0, &change, false, true);
->> =C2=A0=C2=A0=C2=A0=C2=A0if (err)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return dev_err_probe(dev, er=
-r,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Failed to enable temp=
-erature sensor\n");
->>
->> and it fails to probe
->>
->> =C2=A0=C2=A0=C2=A0=C2=A0spd5118 17-0051: error -ENXIO: Failed to enable=
- temperature sensor
->> =C2=A0=C2=A0=C2=A0=C2=A0spd5118 17-0053: error -ENXIO: Failed to enable=
- temperature sensor
->>
->
-> Nice, I didn't know about that API function. And, even better,=20
-> 'change' can be NULL.
->
->>
->>> (e.g., 0x01) into register 0x13 or 0x14. Those are "clear status"=20
->>> registers.
->>> If that fails, we would know that the chip is write protected.
->>
->> I'll try this later too.
->>
->
-> Don't bother. I'll write up a patch using regmap_update_bits_base().
->
-> Thanks!
-> Guenter
->
-Good idea, maybe regmap_write_bits() is exactly what we need for this.
-
-Thanks,
-Armin Wolf
-
+>>>>>    static int can_cap_in_hardware(void)
+>>>>>    {
+>>>>>        return force_cap_on || cap_in_hardware;
+>>>>> @@ -823,18 +825,26 @@ static void acpi_power_meter_notify(stru
+>>>>>        resource = acpi_driver_data(device);
+>>>>> +    guard(mutex)(&acpi_notify_lock);
+>>>>> +
+>>>>>        switch (event) {
+>>>>>        case METER_NOTIFY_CONFIG:
+>>>>> +        if (!IS_ERR(resource->hwmon_dev))
+>>>>> +            hwmon_device_unregister(resource->hwmon_dev);
+>>>>> +
+>>>>>            mutex_lock(&resource->lock);
+>>>>> +
+>>>>>            free_capabilities(resource);
+>>>>>            remove_domain_devices(resource);
+>>>>> -        hwmon_device_unregister(resource->hwmon_dev);
+>>>>>            res = read_capabilities(resource);
+>>>>>            if (res)
+>>>>>                dev_err_once(&device->dev, "read capabilities
+>>>>> failed.\n");
+>>>>>            res = read_domain_devices(resource);
+>>>>>            if (res && res != -ENODEV)
+>>>>>                dev_err_once(&device->dev, "read domain devices
+>>>>> failed.\n");
+>>>>> +
+>>>>> +        mutex_unlock(&resource->lock);
+>>>>> +
+>>>>>            resource->hwmon_dev =
+>>>>> hwmon_device_register_with_info(&device->dev,
+>>>>>                                ACPI_POWER_METER_NAME,
+>>>>> @@ -843,7 +853,7 @@ static void acpi_power_meter_notify(stru
+>>>>>                                power_extra_groups);
+>>>>>            if (IS_ERR(resource->hwmon_dev))
+>>>>>                dev_err_once(&device->dev, "register hwmon device
+>>>>> failed.\n");
+>>>>> -        mutex_unlock(&resource->lock);
+>>>>> +
+>>>>>            break;
+>>>>>        case METER_NOTIFY_TRIP:
+>>>>>            sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
+>>>>> @@ -953,7 +963,8 @@ static void acpi_power_meter_remove(stru
+>>>>>            return;
+>>>>>        resource = acpi_driver_data(device);
+>>>>> -    hwmon_device_unregister(resource->hwmon_dev);
+>>>>> +    if (!IS_ERR(resource->hwmon_dev))
+>>>>> +        hwmon_device_unregister(resource->hwmon_dev);
+>>>> !IS_ERR(resource->hwmon_dev) may be not enough. There might be UAF in
+>>>> concurrent case.
+>>>> How about do it like:
+>>>> if (!IS_ERR_OR_NULL(resource->hwmon_dev)) {
+>>> Not sure what you mean with 'concurrent' case. There is a potential
+>>> race with the
+>> Apologize for your confusion. What I mean is as mentioned in your other
+>> mail.
+>>> notification code, as mentioned in my other mail. Question is if the
+>>> acpi subsystem
+>>> disables notification calls before the remove function is called, and
+>>> guarantees
+>>> that no notifications are pending. If so, I don't think there is a
+>>> problem.
+>>> Also, resource->hwmon_dev should never be NULL.
 >>>
->>> Thanks,
->>> Guenter
+>> All right,
+>> the resource is already released and this notify should not be entered
+>> again if remove() is called first.
 >>
+>> But the .remove() of acpi_power_meter driver must clear the
+>> 'driver_data' in acpi_device.
+>> In this way, even if ACPI subsystem doesn't disable notification,
+> But the ACPI subsystem does disable the notification, so what's the problem?
+ok, so that's no problem.
 >
->
+>> the notify also doesn't perform any action after calling .remove().
