@@ -1,290 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE0829408
-	for <linux-hwmon@vger.kernel.org>; Sun,  1 Feb 2026 07:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2898432BF26
+	for <linux-hwmon@vger.kernel.org>; Sun,  1 Feb 2026 11:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769932129; cv=none; b=B6KTraJGNXVIlCUg5ipJQdDM1ibuYhFgeVhTl6Q5SVXhc2nVXotUr6hO09trPsk8XgAMxhF5nEl2LP5YpgjFCioV90uKaE7Nhle4J72wSe+LWUd73U35GrZwfJgjyABewRvcuRPHLu/w1wExMTP52iYVJk567S8EbhR1vqaL3vI=
+	t=1769946046; cv=none; b=ZLOm+2d7xwkRje9oAC7a9Wcm0ytAcuNCTxUD/ra+EyOAMrsy7Ko2BeLthvDPzGPwRtlZXGo3Dwdc722x7YC3SA38Wbe+E31D8FHuNFTQ2KNvtS+P08guxjySkQy3X6Ylp9Plv7+980OcLyP0AWJVFvVkDzVMkefCmVpJp9ao8Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769932129; c=relaxed/simple;
-	bh=bu59k97L1Ftz7/jTHEb89HYjbnMDTflTvFYHmBCnKsg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Kzrot7NiGtAfq4gSyOCaolKAULmzzub5cCELwmHcB2K1tHEjtF3FOfjh0dkGzIOgoajHpMqg05MAeRQ65zLGZSvpbHRQXpx8uU7pZhqlCVW0XTFFFo55F5npN/cs0hxUHN7adTSVzq+sN/S9jBaTXELBGjOQUT4GoaV3IHRNse0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XG2EFq+s; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769946046; c=relaxed/simple;
+	bh=X7d+pL2lizoInntJAYHY+lwKrg+eG690PPgws7MJqCg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=THpC+jrNlM4Yu8KO7f5lQUGYHfqjeU31SFvBUyWYVK6c3lHGM/fPwyoWOxajV8MuJtCfdArx7ZNCSZLdZLzdXs6Lo38CwfE+jNurHD8mPEPKrdlOgjXI48uSOSgRtv1asdbHuZgyanqWCKc14ytqwTJQH+1DdQ5ikfArXMKmbck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BR8EL3uF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XG2EFq+s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769932126; x=1801468126;
-  h=date:from:to:cc:subject:message-id;
-  bh=bu59k97L1Ftz7/jTHEb89HYjbnMDTflTvFYHmBCnKsg=;
-  b=XG2EFq+sMS/QFeI5SZw0moHG3BwfwTyrjAo/Pt7RMNiPXwIAcMmD7SNb
-   2J16dC1f1Yt6+OeWkgxOIVZiK/eZRKpxXvkSaHZbLYlKK+zVab7daEn2G
-   C4Ge14f/upHegOoUHET/Nme6hIW2k3148rf+Tc1woabEZTzmgg3d/2e9F
-   mD88p4Ba+CAgsJrEIbasDzJnvVXBIugUHbvDHVc3OvFosiiEAio7r2rhF
-   LoivFDvYKJDeRQeMxnGHlvVJvCZtQsVeV+ph8BHpOvmYtn4+xP5i1QcAj
-   PwcDVQ1sznBj8Ti8b5NmkGsL0tARWwFNqYXQ1u5K2A3YHydWyh99plxVc
-   w==;
-X-CSE-ConnectionGUID: wnKzoOeJT1GA7Mvz504mvQ==
-X-CSE-MsgGUID: TU4sSxRWQcOvDly8G56O+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11688"; a="70325707"
-X-IronPort-AV: E=Sophos;i="6.21,266,1763452800"; 
-   d="scan'208";a="70325707"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2026 23:48:46 -0800
-X-CSE-ConnectionGUID: 3xwx8ltnSGS999rszC44CA==
-X-CSE-MsgGUID: A1X0Vln2QKKLfG+M+ngzsg==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 31 Jan 2026 23:48:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vmSCI-00000000eeG-0Uzd;
-	Sun, 01 Feb 2026 07:48:42 +0000
-Date: Sun, 01 Feb 2026 15:48:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- 615901b57b7ef8eb655f71358f7e956e42bcd16b
-Message-ID: <202602011501.2eA1BDmZ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BR8EL3uF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6D2C4CEF7
+	for <linux-hwmon@vger.kernel.org>; Sun,  1 Feb 2026 11:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769946045;
+	bh=X7d+pL2lizoInntJAYHY+lwKrg+eG690PPgws7MJqCg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BR8EL3uFRP2VA6S0bHrjlBqtUEgUycaD7b1Or17dTh18G5HxklFkseqvZ57oEVx/C
+	 4URGF4QL7BF6ch2XO2222H9TURkYhNPYtydy9u+VF8IxWYyYTBiiulUsss10JlVoYf
+	 o/pIO3fOgApwewHYiasnQaN30E5zQxB4jXnx4ZjK7YXMWiSUkU/ng7io5QA2ai9sc2
+	 oM7Y4rtUggR4h6Idg41bPjW6Rf/l1DQhyTFRNs4eBgJGkbO7WuD+hr9h1TB18naHCw
+	 P06dCB1gH5Gt3oaB48nuLwdgglAElVqI3yarVZ+I3pD20+anwn7Gg987WKm+CdxTUx
+	 xAdayFrGQ63bA==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-40970f97638so2134556fac.3
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Feb 2026 03:40:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWZhFTZYQyFaf/unO1h1Bfx0hIt4M9i5DeTIvgRGrl3PIaWxu/INOgn+rHXxPReNAktyUd5pxlM50y3yA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGJEImrcngDADLRt9W4Ecs7JLHFXYAfhZnOxNezne3Sb370foe
+	1Ek/kGQAWpMyW3oq2Iyka+lJv83/Dmb7yWvsrIOczxZwfxPaXGPlfCc7dSkUSuupkP3OziQUToM
+	kjyN4BS7LuBlRGWxNc5zkihD0Z+byZRM=
+X-Received: by 2002:a05:6820:1793:b0:657:717a:8c8 with SMTP id
+ 006d021491bc7-6630f008f69mr3812159eaf.3.1769946044825; Sun, 01 Feb 2026
+ 03:40:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
+ <12855313.O9o76ZdvQC@rafael.j.wysocki> <d45d7b8a-97dd-4db8-a785-56df128983a4@roeck-us.net>
+ <6252535.lOV4Wx5bFT@rafael.j.wysocki> <30300396-25b0-4d56-b8dd-c65d221c80bb@roeck-us.net>
+In-Reply-To: <30300396-25b0-4d56-b8dd-c65d221c80bb@roeck-us.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sun, 1 Feb 2026 12:40:31 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gLs3YU8vj6uojYo=3c8kKLWeo5Ej2PUO+=BcWPjg0g=Q@mail.gmail.com>
+X-Gm-Features: AZwV_Qg1pnvi-gkv78OEWCB9ccxp_AKmbAg3JYhMNeTbWJWjrAQN47JVpLzNzTQ
+Message-ID: <CAJZ5v0gLs3YU8vj6uojYo=3c8kKLWeo5Ej2PUO+=BcWPjg0g=Q@mail.gmail.com>
+Subject: Re: [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related to acpi_power_meter_notify()
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>, 
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	Igor Raits <igor@gooddata.com>, Daniel Secik <daniel.secik@gooddata.com>, 
+	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
+	Huisong Li <lihuisong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 615901b57b7ef8eb655f71358f7e956e42bcd16b  hwmon: (acpi_power_meter) Fix deadlocks related to acpi_power_meter_notify()
+On Sat, Jan 31, 2026 at 4:29=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> Hi all,
+>
+> On Thu, Jan 29, 2026 at 03:18:11PM +0100, Rafael J. Wysocki wrote:
+>
+> I decided to apply the patch below as-is. While we don't have confirmatio=
+n
+> that it fixes the immediate problem, it is a starting point and won't mak=
+e
+> the situation worse. A complete fix which does not require re-registering
+> the hardware monitoring device will require more work and will not be
+> suitable for LTS backports.
 
-elapsed time: 967m
+Sounds good to me, thank you!
 
-configs tested: 215
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            alldefconfig    clang-22
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-22
-arc                                 defconfig    gcc-15.2.0
-arc                         haps_hs_defconfig    gcc-15.2.0
-arc                   randconfig-001-20260201    gcc-10.5.0
-arc                   randconfig-002-20260201    gcc-10.5.0
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                         at91_dt_defconfig    gcc-15.2.0
-arm                                 defconfig    gcc-15.2.0
-arm                            dove_defconfig    gcc-15.2.0
-arm                          gemini_defconfig    clang-22
-arm                            hisi_defconfig    gcc-15.2.0
-arm                       multi_v4t_defconfig    gcc-15.2.0
-arm                        mvebu_v7_defconfig    clang-22
-arm                         nhk8815_defconfig    clang-22
-arm                         orion5x_defconfig    clang-22
-arm                   randconfig-001-20260201    gcc-10.5.0
-arm                   randconfig-002-20260201    gcc-10.5.0
-arm                   randconfig-003-20260201    gcc-10.5.0
-arm                   randconfig-004-20260201    gcc-10.5.0
-arm64                            allmodconfig    clang-22
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                 randconfig-001-20260201    gcc-15.2.0
-arm64                 randconfig-002-20260201    gcc-15.2.0
-arm64                 randconfig-003-20260201    gcc-15.2.0
-arm64                 randconfig-004-20260201    gcc-15.2.0
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                  randconfig-001-20260201    gcc-15.2.0
-csky                  randconfig-002-20260201    gcc-15.2.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260201    gcc-15.2.0
-hexagon               randconfig-002-20260201    gcc-15.2.0
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20260201    clang-20
-i386        buildonly-randconfig-002-20260201    clang-20
-i386        buildonly-randconfig-003-20260201    clang-20
-i386        buildonly-randconfig-004-20260201    clang-20
-i386        buildonly-randconfig-005-20260201    clang-20
-i386        buildonly-randconfig-006-20260201    clang-20
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260201    clang-20
-i386                  randconfig-002-20260201    clang-20
-i386                  randconfig-003-20260201    clang-20
-i386                  randconfig-004-20260201    clang-20
-i386                  randconfig-005-20260201    clang-20
-i386                  randconfig-006-20260201    clang-20
-i386                  randconfig-007-20260201    clang-20
-i386                  randconfig-011-20260201    gcc-14
-i386                  randconfig-012-20260201    gcc-14
-i386                  randconfig-013-20260201    gcc-14
-i386                  randconfig-014-20260201    gcc-14
-i386                  randconfig-015-20260201    gcc-14
-i386                  randconfig-016-20260201    gcc-14
-i386                  randconfig-017-20260201    gcc-14
-loongarch                        allmodconfig    clang-22
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260201    gcc-15.2.0
-loongarch             randconfig-002-20260201    gcc-15.2.0
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                                defconfig    clang-19
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-mips                     cu1830-neo_defconfig    gcc-15.2.0
-mips                  decstation_64_defconfig    clang-22
-mips                      fuloong2e_defconfig    gcc-15.2.0
-mips                           ip22_defconfig    gcc-15.2.0
-mips                           ip30_defconfig    clang-22
-mips                    maltaup_xpa_defconfig    gcc-15.2.0
-mips                      pic32mzda_defconfig    gcc-15.2.0
-mips                       rbtx49xx_defconfig    clang-22
-nios2                            allmodconfig    clang-22
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260201    gcc-15.2.0
-nios2                 randconfig-002-20260201    gcc-15.2.0
-openrisc                         allmodconfig    clang-22
-openrisc                         allmodconfig    gcc-15.2.0
-openrisc                          allnoconfig    clang-22
-openrisc                          allnoconfig    gcc-15.2.0
-openrisc                            defconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-22
-parisc                            allnoconfig    gcc-15.2.0
-parisc                           allyesconfig    clang-19
-parisc                           allyesconfig    gcc-15.2.0
-parisc                              defconfig    gcc-15.2.0
-parisc                randconfig-001-20260201    gcc-14.3.0
-parisc                randconfig-002-20260201    gcc-14.3.0
-parisc64                            defconfig    clang-19
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-22
-powerpc                           allnoconfig    gcc-15.2.0
-powerpc                 mpc8315_rdb_defconfig    gcc-15.2.0
-powerpc                 mpc832x_rdb_defconfig    gcc-15.2.0
-powerpc               randconfig-001-20260201    gcc-14.3.0
-powerpc               randconfig-002-20260201    gcc-14.3.0
-powerpc                    socrates_defconfig    clang-22
-powerpc                     stx_gp3_defconfig    gcc-15.2.0
-powerpc                     tqm8560_defconfig    clang-22
-powerpc64             randconfig-001-20260201    gcc-14.3.0
-powerpc64             randconfig-002-20260201    gcc-14.3.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    clang-22
-riscv                             allnoconfig    gcc-15.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.2.0
-riscv                 randconfig-001-20260201    gcc-13.4.0
-riscv                 randconfig-002-20260201    gcc-13.4.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    gcc-15.2.0
-s390                  randconfig-001-20260201    gcc-13.4.0
-s390                  randconfig-002-20260201    gcc-13.4.0
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-22
-sh                                allnoconfig    gcc-15.2.0
-sh                               allyesconfig    clang-19
-sh                               allyesconfig    gcc-15.2.0
-sh                                  defconfig    gcc-14
-sh                ecovec24-romimage_defconfig    clang-22
-sh                        edosk7760_defconfig    clang-22
-sh                            hp6xx_defconfig    clang-22
-sh                     magicpanelr2_defconfig    gcc-15.2.0
-sh                    randconfig-001-20260201    gcc-13.4.0
-sh                    randconfig-002-20260201    gcc-13.4.0
-sh                           se7343_defconfig    clang-22
-sh                           se7750_defconfig    clang-22
-sh                          urquell_defconfig    gcc-15.2.0
-sparc                             allnoconfig    clang-22
-sparc                             allnoconfig    gcc-15.2.0
-sparc                               defconfig    gcc-15.2.0
-sparc                 randconfig-001-20260201    gcc-8.5.0
-sparc                 randconfig-002-20260201    gcc-8.5.0
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260201    gcc-8.5.0
-sparc64               randconfig-002-20260201    gcc-8.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260201    gcc-8.5.0
-um                    randconfig-002-20260201    gcc-8.5.0
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-22
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260201    clang-20
-x86_64      buildonly-randconfig-002-20260201    clang-20
-x86_64      buildonly-randconfig-003-20260201    clang-20
-x86_64      buildonly-randconfig-004-20260201    clang-20
-x86_64      buildonly-randconfig-005-20260201    clang-20
-x86_64      buildonly-randconfig-006-20260201    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260201    gcc-14
-x86_64                randconfig-002-20260201    gcc-14
-x86_64                randconfig-003-20260201    gcc-14
-x86_64                randconfig-004-20260201    gcc-14
-x86_64                randconfig-005-20260201    gcc-14
-x86_64                randconfig-006-20260201    gcc-14
-x86_64                randconfig-011-20260201    gcc-14
-x86_64                randconfig-012-20260201    gcc-14
-x86_64                randconfig-013-20260201    gcc-14
-x86_64                randconfig-014-20260201    gcc-14
-x86_64                randconfig-015-20260201    gcc-14
-x86_64                randconfig-016-20260201    gcc-14
-x86_64                randconfig-071-20260201    gcc-14
-x86_64                randconfig-072-20260201    gcc-14
-x86_64                randconfig-073-20260201    gcc-14
-x86_64                randconfig-074-20260201    gcc-14
-x86_64                randconfig-075-20260201    gcc-14
-x86_64                randconfig-076-20260201    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-22
-xtensa                            allnoconfig    gcc-15.2.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20260201    gcc-8.5.0
-xtensa                randconfig-002-20260201    gcc-8.5.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > ---
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Subject: [PATCH v1] hwmon: (acpi_power_meter) Fix deadlocks related to =
+acpi_power_meter_notify()
+> >
+> > The acpi_power_meter driver's .notify() callback function,
+> > acpi_power_meter_notify(), calls hwmon_device_unregister() under a lock
+> > that is also acquired by callbacks in sysfs attributes of the device
+> > being unregistered which is prone to deadlocks between sysfs access and
+> > device removal.
+> >
+> > Address this by moving the hwmon device removal in
+> > acpi_power_meter_notify() outside the lock in question, but notice
+> > that doing it alone is not sufficient because two concurrent
+> > METER_NOTIFY_CONFIG notifications may be attempting to remove the
+> > same device at the same time.  To prevent that from happening, add a
+> > new lock serializing the execution of the switch () statement in
+> > acpi_power_meter_notify().  For simplicity, it is a static mutex
+> > which should not be a problem from the performance perspective.
+> >
+> > The new lock also allows the hwmon_device_register_with_info()
+> > in acpi_power_meter_notify() to be called outside the inner lock
+> > because it prevents the other notifications handled by that function
+> > from manipulating the "resource" object while the hwmon device based
+> > on it is being registered.  The sending of ACPI netlink messages from
+> > acpi_power_meter_notify() is serialized by the new lock too which
+> > generally helps to ensure that the order of handling firmware
+> > notifications is the same as the order of sending netlink messages
+> > related to them.
+> >
+> > In addition, notice that hwmon_device_register_with_info() may fail
+> > in which case resource->hwmon_dev will become an error pointer,
+> > so add checks to avoid attempting to unregister the hwmon device
+> > pointer to by it in that case to acpi_power_meter_notify() and
+> > acpi_power_meter_remove().
+> >
+> > Fixes: 16746ce8adfe ("hwmon: (acpi_power_meter) Replace the deprecated =
+hwmon_device_register")
+> > Reported-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/hwmon/acpi_power_meter.c |   17 ++++++++++++++---
+> >  1 file changed, 14 insertions(+), 3 deletions(-)
+> >
+> > --- a/drivers/hwmon/acpi_power_meter.c
+> > +++ b/drivers/hwmon/acpi_power_meter.c
+> > @@ -47,6 +47,8 @@
+> >  static int cap_in_hardware;
+> >  static bool force_cap_on;
+> >
+> > +static DEFINE_MUTEX(acpi_notify_lock);
+> > +
+> >  static int can_cap_in_hardware(void)
+> >  {
+> >       return force_cap_on || cap_in_hardware;
+> > @@ -823,18 +825,26 @@ static void acpi_power_meter_notify(stru
+> >
+> >       resource =3D acpi_driver_data(device);
+> >
+> > +     guard(mutex)(&acpi_notify_lock);
+> > +
+> >       switch (event) {
+> >       case METER_NOTIFY_CONFIG:
+> > +             if (!IS_ERR(resource->hwmon_dev))
+> > +                     hwmon_device_unregister(resource->hwmon_dev);
+> > +
+> >               mutex_lock(&resource->lock);
+> > +
+> >               free_capabilities(resource);
+> >               remove_domain_devices(resource);
+> > -             hwmon_device_unregister(resource->hwmon_dev);
+> >               res =3D read_capabilities(resource);
+> >               if (res)
+> >                       dev_err_once(&device->dev, "read capabilities fai=
+led.\n");
+> >               res =3D read_domain_devices(resource);
+> >               if (res && res !=3D -ENODEV)
+> >                       dev_err_once(&device->dev, "read domain devices f=
+ailed.\n");
+> > +
+> > +             mutex_unlock(&resource->lock);
+> > +
+> >               resource->hwmon_dev =3D
+> >                       hwmon_device_register_with_info(&device->dev,
+> >                                                       ACPI_POWER_METER_=
+NAME,
+> > @@ -843,7 +853,7 @@ static void acpi_power_meter_notify(stru
+> >                                                       power_extra_group=
+s);
+> >               if (IS_ERR(resource->hwmon_dev))
+> >                       dev_err_once(&device->dev, "register hwmon device=
+ failed.\n");
+> > -             mutex_unlock(&resource->lock);
+> > +
+> >               break;
+> >       case METER_NOTIFY_TRIP:
+> >               sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME)=
+;
+> > @@ -953,7 +963,8 @@ static void acpi_power_meter_remove(stru
+> >               return;
+> >
+> >       resource =3D acpi_driver_data(device);
+> > -     hwmon_device_unregister(resource->hwmon_dev);
+> > +     if (!IS_ERR(resource->hwmon_dev))
+> > +             hwmon_device_unregister(resource->hwmon_dev);
+> >
+> >       remove_domain_devices(resource);
+> >       free_capabilities(resource);
