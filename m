@@ -1,291 +1,309 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011071.outbound.protection.outlook.com [40.93.194.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836BA3101B9
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 08:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770019482; cv=none; b=WJvgiIe37KfeR5m9WYcO9rKMLhgpqGGPivUmb7qlJZfSe21G4tH6U1KpI51rsmAO3rxre+X8n8ZcypXaw7T1/INGyS+aQX3iMJwOkhj415/FBxCzenddID+28XHy4cCv7FqQ9RBHj4rlwDOpDRKbJVNh/Tu2c+EP19UDyGCf28E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770019482; c=relaxed/simple;
-	bh=1YjBFMlMygrwfnk4BEfelTSmkv7l652jlGdUz7B943w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U2SJXVzet/IP5tIZrixNhiCn1aZ9UWnQcBouaKKYPGfSNiiEZp6LlWeSN39vhAAWe8s2vE1e/Jk9JiFjxvbh5oR6OZ7RcxbXKh9rrwAukwt6PI3glCoEcZ0HmNatKpN81ip/MYypdSUc822Hr3u7UzeYW0/H+Nw1NLeyME7BwGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cr2EZx3I; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E1433B95A;
+	Mon,  2 Feb 2026 08:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770020162; cv=fail; b=bZn5pJhjytV/N9p5s7AlL2Ly/4CWvsK7sdmRyW9/xZSlpNE2RefkX0peXCidPNhhX0z49ySDUiQd4EvvhH6690KT8dU+tBI26bJWlxJLDarGdSv00+upZpFneFibXTVQZh8G3IZ1A+NDqV+5QvBkD6uU/zO9gsxuYw8kFpA443k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770020162; c=relaxed/simple;
+	bh=RVrXi2YPlm0ckIm59TS2KWMHOsW/iiJqgOdeE2PQuEg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=fzcBzAJobNZqG1FKYob19vGX5W/dnhxMB7thn4GA11WqaN4mciR2UpO9n39wYw0+TSdfWrkkpPAg/aYa+RD9yGtx5oEzqHy3flSzWDYSxw9LvBkoDW8llxXrGH3IDL8t/2fXiCk5sU6mRIHYmh+ytFSqodDaiCt4o9KPhcki+AQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=qyaCik41; arc=fail smtp.client-ip=40.93.194.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cr2EZx3I"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8220bd582ddso2353462b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 00:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770019481; x=1770624281; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ucnn95nrk17FbulixZ/28n+yr+SHkegFd7cld6WxCEE=;
-        b=cr2EZx3IJJaNkkjfwV6gZDLbBBtMaGHqrg5B4vmn1jgP43542H6YhEkm7iqhvXgh0D
-         aT165cih33r3z7ouNJRsSei51oJuQiaRcR4wVZ0ZWbv9dlQpn6AAwpSf+MEzFh/hLvvk
-         5QlFEkqq5noEWkgs80eM78g2XBiBW0DgMP8XNk9SWQKwygq0jq+7tblSRu9Y/RMQLDlH
-         KdbcST0lEErIMv2C+0hjdoqslWATJbCirBJzK5228MFRkds7lKkosp2R8Iif7zGFZ4C6
-         Xm7gYVAXma+nAquyxhNpwOmoV0U32BAPs09hjPc8VYh7VoNTopk0kxhPgJf970sKUT3T
-         dN1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770019481; x=1770624281;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ucnn95nrk17FbulixZ/28n+yr+SHkegFd7cld6WxCEE=;
-        b=GnBhPcjAJWv+28ogM+OhCFenEflbwwjSIshM0jFr8Vdr92pWZxyrDfKWxOg0mPAVg7
-         Li64424n5kKiDnWhNqlMIlAvFlqEN2BNXFJt4RL3ZMIZxiv0+1hORedcTU/AFXq0RzAi
-         y/ucw2m6uRdwMf3re9DTyhZDc60VFgrqBfPcOLpgpvKW34cH8WogwGx7nPywMaKmPnm2
-         XwkK23EKtfrrI+f8c0zkGofC2BNRI+1lI3bpeG74n2bHRQYGr1YvCQsGxOjgTGdDhfPc
-         1MUekrcd382o70GUCCeHI53jpJwBo6L2c0iPKQALb9Eji71XILHpTY1+DTEQjQBOV6y7
-         PDEw==
-X-Gm-Message-State: AOJu0YygVwWqxQkjjFc8/E2eTX55IoxiaUgAx2bhMd/41dX26EBNFgwj
-	HmTLQ4s8RW0CElJI7U287uhoshE4gywW7cDEtYRt4x8OXNODbUVQRRBD
-X-Gm-Gg: AZuq6aJoNYHbqIpJygAyWdSDYfT78AQgU3WTIFFYUn5JmYg0dOvy1ZPRwXfNvA8RUSz
-	H6T57Rpzkq9C3CE03HR9bHLfiSxU1+ECpfVnIxfzYPRHGWIabHY7txqFXtblJibs9bJAhKT1sAZ
-	GVQp2hAOYNAPeTh/qpuZ0nSUP1TanGnmU2uDTsNEKCGfzgg1nMSWAm6LEnpu5+NFcdSve7IM0AW
-	YWVfMwuHVjmpAQE6sU5gNv5TUzBT4DY6Io6fEZFoXc4ELBNcEYtz0BRSq/DMVDnZKKVhv6jLjCi
-	Ik1ifAnfJgMIhn2k+ATNeFycqeJIbFBgSLgAKOqCIwrAMm44tyrtR9jvhtcgDUhtEda4hY3U0FW
-	WdS91djxx7itCU5kwE1AXHcxxpK4BB+pjOB4QiKsliJbRbAmScL2FAJPLGdsiWTUwrsrqdsEAbw
-	g0godO8iLP39EhGfhWXLOzRQkLJU0wGNBASA==
-X-Received: by 2002:a05:6a21:6b05:b0:35e:11ff:45c1 with SMTP id adf61e73a8af0-392e0024999mr10957213637.18.1770019480817;
-        Mon, 02 Feb 2026 00:04:40 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:61bf:a770:ed27:c783:3591:cfc1])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c642a3356b4sm13596938a12.17.2026.02.02.00.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 00:04:40 -0800 (PST)
-From: ASHISH YADAV <ashishyadav78@gmail.com>
-X-Google-Original-From: ASHISH YADAV <Ashish.Yadav@infineon.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ashish Yadav <ashish.yadav@infineon.com>
-Subject: [PATCH 2/2] hwmon:(pmbus/xdpe1a2g7b) Add support for xdpe1a2g5b/7b controllers
-Date: Mon,  2 Feb 2026 13:33:55 +0530
-Message-Id: <20260202080355.53061-3-Ashish.Yadav@infineon.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20260202080355.53061-1-Ashish.Yadav@infineon.com>
-References: <20260202080355.53061-1-Ashish.Yadav@infineon.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="qyaCik41"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UectRGf71C+rrH9fXWtqh3s82fnbtUgZEQl+ltNoZU/24mOI1nJ4QgYF/GxuFjjeqHA7AA72Q138siCrEsuwa2DqQgtUCNr9sGyjGGwcGXAzXfvCk+oPdqLg0tz3PhXpgx/+MYu/T1fbc3d5IQkMQItjZpVseAwIQrlMc3GoZaezAEipC2ahQ/Z4RYUNXGwU6LWStuNQV0hrSWJhLBrFk3IhtBAspNPJaW/IXvq4/4chvI67MB3ICWO+sgikOH5RqcokFUZwk04M8k16q/v9LDKMxg0a+nNPwPI0pmzje5wW4eZEaDPR8h6UFa7hhC2CZPhsiq6TaLTNXR/MAir/NA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RVrXi2YPlm0ckIm59TS2KWMHOsW/iiJqgOdeE2PQuEg=;
+ b=HNIOEhbgEO5x/JYLG0PMV2kTwTKUat2R/HKmA47lNf7IUSSIvyFAQs1h7jRIQSFP4fS8PBH/UB00vRTtivUTpTevP5lvvzaymnsfXwNu7L96WutdOUN8VAXWD+NCkafL9abIRLeorJQZp9sm2YiznjtnvAyHRLGLUX0ApXelb+woBLLk4942oJZATEtIh3wfAANZD2MuMi2AzNgHQ55bYGsbJo0corE0gQo0q+to+Bv85EG77ySxHJSGwRqVYT7314qnGG3OO7KH9w5ZlWjZ2Ty5/uAtCzysnA2lJOmP7oCeZ35oUh7CzwD7yjYo2GrG3kYN2HwIdMjhfNSxqV4GTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RVrXi2YPlm0ckIm59TS2KWMHOsW/iiJqgOdeE2PQuEg=;
+ b=qyaCik41fpw2gvN4m9T5CZyRGCnpwDD6r2EZGAPXc4RsZHtRAyUBTQxYnNlKoBkv7R+RpLHh4865GAfvrI2FPwtCsRBU++Zzj3MnrfU9jccfT+QYNSkGZ+D0prHyuwhvh97Ygp4RfzLz4+AFjr56sMMubZR3YY//ulU6jyq1GyAe2uEuDQ3VJGrsBAgVhVTg0MAnkUGc1hfVkGqZbhzsJP8KzAp08jndqU0jluEGOFAqaQfttkE+tDBpVQVnGZ7eDi6qRffqLIgeXYzA4TXEXIeuO/1y0k5KCQy3yor2In47tqABYz79vlSlhK1kCx4Jxh/Fj2z6/SO4cJbLh2tczg==
+Received: from SN7PR11MB7511.namprd11.prod.outlook.com (2603:10b6:806:347::17)
+ by DS0PR11MB9504.namprd11.prod.outlook.com (2603:10b6:8:28f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Mon, 2 Feb
+ 2026 08:15:55 +0000
+Received: from SN7PR11MB7511.namprd11.prod.outlook.com
+ ([fe80::b0d5:a33a:26fd:3fa0]) by SN7PR11MB7511.namprd11.prod.outlook.com
+ ([fe80::b0d5:a33a:26fd:3fa0%6]) with mapi id 15.20.9564.016; Mon, 2 Feb 2026
+ 08:15:55 +0000
+From: <Victor.Duicu@microchip.com>
+To: <linux@roeck-us.net>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <corbet@lwn.net>
+CC: <Marius.Cristea@microchip.com>, <linux-hwmon@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] hwmon: add support for MCP998X
+Thread-Topic: [PATCH v3 2/2] hwmon: add support for MCP998X
+Thread-Index: AQHcj6BPuXzMsn2URUy9ax6I0iNWhrVmXKAAgAi8bYA=
+Date: Mon, 2 Feb 2026 08:15:55 +0000
+Message-ID: <da5b2f992a430d30efb558502aec7dc6f6769b0d.camel@microchip.com>
+References: <20260127151823.9728-1-victor.duicu@microchip.com>
+				 <20260127151823.9728-3-victor.duicu@microchip.com>
+				 <491bd9ec-d6b7-4f1a-877b-67ffbc658ba8@roeck-us.net>
+In-Reply-To: <491bd9ec-d6b7-4f1a-877b-67ffbc658ba8@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN7PR11MB7511:EE_|DS0PR11MB9504:EE_
+x-ms-office365-filtering-correlation-id: 37d5353c-6f20-445e-1cc9-08de623349fc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?bmlDWmZIUjkyVGp5WGZWODJTeEw4SitValVNWE9FUWloZDBlbndIaS9VK3dG?=
+ =?utf-8?B?VG5WclF1dGE1V1JPOFRpU3pSZnBXdFM4SXJmQ3ZhbGZtQ3ZkTE82RHpXOTh1?=
+ =?utf-8?B?RENWdzZnclJsVUtuM0hNOWlMdklBczgzT3Znb1B3eXBxY29NOUdZckdOcXBB?=
+ =?utf-8?B?a3BmbTFxZm1jWTd3c0x4Qjc3VG5EYzRhSnRUMjhkbWhXZ0ZyZzhTTlU2bEg3?=
+ =?utf-8?B?YkduWW1ST3A5YjVvY2xqZitJeHlNQTRnK0JGbzJDSzliajNnbGdNN0tqd2dG?=
+ =?utf-8?B?UldHTkVIVlZWZzZCMUNsckxJTmF2RVEwUGQ4NVNLSzR5dDlBUTFpTnBsN1ps?=
+ =?utf-8?B?dEMyTHBFMHkvTmxITVhKcjY1dDkzV0R3UjBkcVcyRHE1ZXBoZExDc3NqZkZj?=
+ =?utf-8?B?a0dCTG9mcDBLaDJmSi84d2lJRE41YjJuNmJPNFZxQk5BRVNHTnRCcHZNMGtq?=
+ =?utf-8?B?eXBobnNoK0ZKV1BaWkNlS0dDaVJnVkt5aWdTZG1xNEtqMDlpMFk2VUlHNFZ3?=
+ =?utf-8?B?bmJDVDg4MFBpTXlvdWhiUnJxYVlwaTA5NHhUYWptRVVpbzJ1c1Vvbk9YT2U1?=
+ =?utf-8?B?ZTBKZkZseFEwb2JITXpQQlZ6OGVQYjlOT1JYbC9iSkRqaWk0VWlRMmRYQzdZ?=
+ =?utf-8?B?MzQ5Q0ZDcXBSaTFaWDVPSHR5VGRwakg2MG9xYXZsKzVxWlNXUENZT3hOaFlx?=
+ =?utf-8?B?Y0pOSUthaExQNFRCQlNxdjRMa1BUTXRWeDNKazhNT1BYQkI0RFhWaFJSTVky?=
+ =?utf-8?B?TFFNWlU0K3ROUGJpdHVLcExMaDZlMlJNaEt5QzhBak5JaTJrajlMcmJVRWFL?=
+ =?utf-8?B?VmRTQXJneDFXa0pMUlFnZ2FYYWoyNTM2cDJsbmx1RWJJYjVnNWErb3RucEg1?=
+ =?utf-8?B?a21NeHdxdkFuMFRMbkNkVW9yWWh5bVowOWhTQWlZRDhNQ2dLMW1lajR4MWhF?=
+ =?utf-8?B?L1dYbnRTTkJZRzBoNGpOUHNaUTRMMmpnYURxelVWYkpRam04RHZvSXM3VTdW?=
+ =?utf-8?B?USs0c3Y0NTJmc2NTRSthKzA2empLRk00M0cvdnJSVlk3REJaZVdwTG1EY00z?=
+ =?utf-8?B?T2N1clNUNXlFdzg5a2lWcGk4aVp2WFFURUM0aHFYNllKWjdlR3drejdUL01w?=
+ =?utf-8?B?UmRLc3ZZN3B1K2hhWEZwdCthWVYvSjcyR05OdlVZTVpjMlRLcnF5dHVHOStF?=
+ =?utf-8?B?N1lSb2Rzc2l6Y05pZjh2dlBLK05ESjhUTDU4SGo5bU5GblgyR3c2OVdnMml3?=
+ =?utf-8?B?UmZ6VzVQamxBSGU4UnJPVDNxUUdqcko5MzdNbVNUMGI2Um01elNTYW9NdWl1?=
+ =?utf-8?B?NE1LT0JmcXhYVU5TVkNHM2VENnhpNFRweTMxQW04aTJFRDU3R0VRTlVsQmdp?=
+ =?utf-8?B?ZVAyZUU2eHNxYWxrUkc4NSszY05yN1NTNTFhcmlERFM5VGV1eEJqaDZsQ0cw?=
+ =?utf-8?B?NHh5RHc5am82THJWaGFYdWJlOW5Kd05WSkxEeEFLN3ZySEtVN0pyZDBhVjFq?=
+ =?utf-8?B?a2RWMnVzRFJROVVyZ0ZsdmRSVTd3cHUzMFJHdzlsc21kQ2FrdE1OSnplVzdT?=
+ =?utf-8?B?SVQ0ellMcXpKQU4zK0o3OVBkbUpxbGVNdlo2S0hwdlBhMForQjh0UjVxUUQ4?=
+ =?utf-8?B?Qno4THJVWlFubStFeG15cTJYRm9yNUkvN3ZNK0k4WWZQSkFXb241d3gyZStn?=
+ =?utf-8?B?REpmT0FNSFIzenp5d2hrK0hnRG83WTNubjJLVy9kNWhkdGwzSzlpWlJOeG9p?=
+ =?utf-8?B?WmxFRm4wZ1M1MmswSlNzbk81cGt4M0lWTXVnT3FuTHh3aCtJZjY3TmFtMDlD?=
+ =?utf-8?B?MEpWREhhRWVnQWV2YzZBckI2K2h2MnZjdTRtS1N5YitBY3JuZlFIcWFrSFlX?=
+ =?utf-8?B?Z1dhTnRTNFQ4VHZSaTZrKzFBYWdKWUtEalJsWUs1cmQ0RndzbWR4eU5SSFl3?=
+ =?utf-8?B?Y3N6aUF1S0pwSWdJTUNQamZjZEUyRTluL3pqM0hFWlhCQXd0WExYSW9UUEdV?=
+ =?utf-8?B?S3Z4TmcvQ2NMejNmbVRXMklZMnBkby9MOEJrMXBrdVNtdnF1Y1hlYnV1M2cw?=
+ =?utf-8?B?NkZGZjA1ekhET0puUDNQRUIwcXJiVmxQelFrUVhhN091SlByVmgzeTdiUjVw?=
+ =?utf-8?B?andEWU5qWXZnYkRIVkpPU255SSt4L0EzSUs2QlNvSHpuRjVVV1pWeVFSbTlU?=
+ =?utf-8?Q?Q6x6rqfuqq8iwQfZ9z1/gEk=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7511.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bkJZZzRwQ0Z3amx0M3crRHRQYkdFZEJzbnlQOWZWb0lYaDhTMDlkTUV1OCtF?=
+ =?utf-8?B?ZnZZanNZVUhjUGZQaEFkalZBZUlXNFIyK3dMN3hTVFIzMkdzQkNGYjdLNUJS?=
+ =?utf-8?B?WE1UczQ4S2hGM05kUFJlTm5DamFsLzhXdjlFOFhRS1hURXU0eHNVaEpwU1N0?=
+ =?utf-8?B?b3djQzQ0SjdzK1haSGFwN0I2VHh3eWtuc3NaeWFySnJTck5XNVdKYWQvdW81?=
+ =?utf-8?B?WStERkxodlVDUEY1b3FrWm5GbEZIZ3AyOHc4bDZZNTJ5SWNZOVRibmRpcUZY?=
+ =?utf-8?B?TG1ha3BwTUs4dGszVXBMSmd4U3pqck1oUnFjeFVzTW1FaWRTOG9MTmFsSlpZ?=
+ =?utf-8?B?MkVyRXpZWG00T0FheUlvUVd2cWx4VkhpbzV5bk9xWkNDMitBcEhqNkQwZ1BR?=
+ =?utf-8?B?QzhoU3FuTzIxS0wxNysrSVNvWmhXelQwVDZsTVVXNEFqRzBRblQyTjNyVHFE?=
+ =?utf-8?B?MHhTRFJCb0pUbklGNkdoMlBwMWgvaFZ5cnlFdUwwOU4vNExKVjZheG9rQ1Y3?=
+ =?utf-8?B?RURQcGplWFZUNCtSSU5OL3NJSE5Cd1M2eVBMdXV6dTUxTi9mcUFXZjlWaDkw?=
+ =?utf-8?B?MjlNRDByUE9qcmw5UWs4VjBzRVI2bUtETHU5Qk8vbXpLelgrNE5hRXRWZ3Nq?=
+ =?utf-8?B?STcvWlVZZEZtbi9mQ3d0Z3VMUG1tNmNqUGZmRVFvZzNPbFNkS3dBckZWSE5H?=
+ =?utf-8?B?bVBON0wyMzc4VVBVR0o4SlA3d01nd1BVWUZMSGd3R2ZiWVRTZVdWWG1CbGN1?=
+ =?utf-8?B?cGdpYkgxZkhmRzdKZ0pUcWFOMU8xK2VpYU95ekRZVnE1bUYzdjJkaG1Zd3RH?=
+ =?utf-8?B?T1dQbHowR1I0MHYxM21pU3ZhZDFJUkZOelQ4K0pQTEZmOUY0dnIwUGYzeWh4?=
+ =?utf-8?B?ZVd4N3V2aUplVTZqV0hKM0c4Rm5LMkNMc1JNZWk0aGpLTFJrSW5NS3FiTHdV?=
+ =?utf-8?B?YVRXbHEzY01IWGJtcFJxV0NFVHZ3S1JHTTRlNkxReHpnaysxVG0zMEpPTEpp?=
+ =?utf-8?B?S3NYaEpPNjZvcG85QWJ0VzNpakh4azhjbW5zL21hc3FWYmhZc2lBSEtDeTdV?=
+ =?utf-8?B?OHVZc1dHa0w3ZHh5NWdSNWplSXRqNWR4a2NLT3NOa1R5VzlEb21LK1ZBVWVX?=
+ =?utf-8?B?UkdMMEY1T2pDSGF6TWtuaFVsSExWM3NQRTBVYVdFbDNTMVViNUF3RDE5SHRv?=
+ =?utf-8?B?TTZDb1BMMDBxdU9rY3NYRW1sREtrRXRGRlFhTXJuZlJJMmlsd3FSVUJmcUtw?=
+ =?utf-8?B?dVdzRm1Mdld0RGxNMHVTcTlTSVlXclhQd015Uk9vWDgxSWxZb1hqVjlzeGow?=
+ =?utf-8?B?U3VTYy9TckdKNG56Tzc3RWtieXR5a2pRaWJOaGJpZGF1dGNaVE5oaU5Qa2g4?=
+ =?utf-8?B?dmdnVWxDK2dPU1dRYnEyb0dBeGwwRUhUQ1BsaVRnditxMXJTLzduNTFaK2FL?=
+ =?utf-8?B?Sy90TTluMnIvQ3d6Q0NEMEdDR01pQ0pWK0JtdE1Zd29WQlFsZ1ZPUXZvbE9z?=
+ =?utf-8?B?TEJ3QS9VUkRKOXQ0anQvYWJVTjJsTEwxMEtQTmMxUEs1RkQzM0MzM1RXdVdR?=
+ =?utf-8?B?bEpYZnVIMVVydFVRSHkveXA0Rkw1RW42akZpQXJueE10ajNiV0wvY2MzN25J?=
+ =?utf-8?B?OThQTnRuWmsrN1N2K0JKaUszdTVxdnFONml6THgrMFBpdmNjbis2ZGpyc04z?=
+ =?utf-8?B?NjEyUjR0OE5zaDJqTFdBa2ZURW1BdXJUSFo4ak04WVY4eDFuMTkxS0FZd001?=
+ =?utf-8?B?UEk4UmlnVHJRT3lKSEkzSW90L3RSd21NbjJ0Y0JGamkzajRESzlBc3hLU3Nu?=
+ =?utf-8?B?Zzh6Q1lDSGdFMUZERkRNdVlHbWYwVjlVdG5EMmlVTTdyUEtYRFZMVENwQkRV?=
+ =?utf-8?B?MWM1ZjRPL1FxK1k3NEpZanArcU8xSXJ5YnVGUmprVDc4QmppZFlKd3RpY1JV?=
+ =?utf-8?B?RTh5MUhsWmZNOVNEV3ZIeFJHMWlFS0ttR1NDQm1kNUlhRWZJcHhvY1ZGVlU5?=
+ =?utf-8?B?bkNyTXZlWlRwRTMzaDhnZm9qZXQ3T2xQVWZXWmRwL01yVHM0WkVaWldHSjMy?=
+ =?utf-8?B?cnJLTXdpSGJuMUVWcFB6aVBpK2ttNlhVMmdFb2FKMmxGdy8ycWlpWDlFdklY?=
+ =?utf-8?B?OGdYYVZyTmtyQTdGWGx0MDNRblJGRUdJZDZ0TlJvVzZadzh3UFJBVGQzQkVR?=
+ =?utf-8?B?TTBGalRwbEJSaUVmKzA1T3NHS0VmS3hHVUV5b2dnTHc5dFA3eDlIRVhHVC9w?=
+ =?utf-8?B?RjNsZzhwbHBHZ016S2NvQS83SVpFdEJ5eUVYRXpRUEhNQzhpUFNyY21aTDRS?=
+ =?utf-8?B?TmJDSDRsN0FIeWtSQ05VcGQyT1A2TjYyMExDOTEvNkt0aTBla1RhNk9MWW81?=
+ =?utf-8?Q?2H5CTJ41sczwtR2Q=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9EFD77CCA7D56141ABD90844D8E922EB@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7511.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37d5353c-6f20-445e-1cc9-08de623349fc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2026 08:15:55.6871
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W+0/bLg9dWjUAfto8ZLLwyJxh6lshEWczqskJha345lmT6P8rRXRZWueLziLRY9QOLlXayWkqJXZme1kqlIMmQQvNIz2Ec6qZh/q6X/FFqU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB9504
 
-From: Ashish Yadav <ashish.yadav@infineon.com>
-
-Add the pmbus driver for Infineon Digital Multi-phase XDPE1A2G5B and
-XDPE1A2G7B controllers.
-
-XDPE1A2G5B controller supports Linear Data format for VOUT using VOUT_MODE
-command.
-XDPE1A2G7B controller supports Linear and VID Data format for VOUT using 
-VOUT_MODE command.
-
-In case of vid mode in XDPE1A2G7B controller, NVIDIA PWM VID vrm_version
-is supported:
-Vout = 5mV * (VID-1) + 195mV
-
-Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
----
- drivers/hwmon/pmbus/Kconfig      |   9 +++
- drivers/hwmon/pmbus/Makefile     |   1 +
- drivers/hwmon/pmbus/pmbus.h      |   2 +-
- drivers/hwmon/pmbus/pmbus_core.c |   4 ++
- drivers/hwmon/pmbus/xdpe1a2g7b.c | 115 +++++++++++++++++++++++++++++++
- 5 files changed, 130 insertions(+), 1 deletion(-)
- create mode 100644 drivers/hwmon/pmbus/xdpe1a2g7b.c
-
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index f3fb94cebf1a..c6750bce446d 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -684,6 +684,15 @@ config SENSORS_XDPE152
- 	  This driver can also be built as a module. If so, the module will
- 	  be called xdpe152c4.
- 
-+config SENSORS_XDPE1A2G7B
-+	tristate "Infineon XDPE1A2G7B"
-+	help
-+	  If you say yes here you get hardware monitoring support for Infineon
-+	  XDPE1A2G5B and XDPE1A2G7B.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called xdpe1a2g7b.
-+
- config SENSORS_XDPE122
- 	tristate "Infineon XDPE122 family"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 349a89b6d92e..620f24baa289 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -67,6 +67,7 @@ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
- obj-$(CONFIG_SENSORS_XDP710)	+= xdp710.o
- obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
- obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
-+obj-$(CONFIG_SENSORS_XDPE1A2G7B)	+= xdpe1a2g7b.o
- obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
- obj-$(CONFIG_SENSORS_PIM4328)	+= pim4328.o
- obj-$(CONFIG_SENSORS_CRPS)	+= crps.o
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index d2e9bfb5320f..3ddcb742d289 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -416,7 +416,7 @@ enum pmbus_sensor_classes {
- #define PMBUS_PAGE_VIRTUAL	BIT(31)	/* Page is virtual */
- 
- enum pmbus_data_format { linear = 0, ieee754, direct, vid };
--enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
-+enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv, nvidia195mv };
- 
- /* PMBus revision identifiers */
- #define PMBUS_REV_10 0x00	/* PMBus revision 1.0 */
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index be6d05def115..4d7634ee6148 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -885,6 +885,10 @@ static s64 pmbus_reg2data_vid(struct pmbus_data *data,
- 		if (val >= 0x0 && val <= 0xd8)
- 			rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
- 		break;
-+	case nvidia195mv:
-+		if (val >= 0x01)
-+			rv = 195 + (val - 1) * 5;  /* VID step is 5mv */
-+		break;
- 	}
- 	return rv;
- }
-diff --git a/drivers/hwmon/pmbus/xdpe1a2g7b.c b/drivers/hwmon/pmbus/xdpe1a2g7b.c
-new file mode 100644
-index 000000000000..79b12b56e7b6
---- /dev/null
-+++ b/drivers/hwmon/pmbus/xdpe1a2g7b.c
-@@ -0,0 +1,115 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon Multi-phase Digital XDPE1A2G5B
-+ * and XDPE1A2G7B Controllers
-+ *
-+ * Copyright (c) 2026 Infineon Technologies. All rights reserved.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include "pmbus.h"
-+
-+#define XDPE1A2G7B_PAGE_NUM 2
-+#define XDPE1A2G7B_NVIDIA_195MV 0x1E /* NVIDIA mode 1.95mV, VID step is 5mV */
-+
-+static int xdpe1a2g7b_identify(struct i2c_client *client,
-+			       struct pmbus_driver_info *info)
-+{
-+	u8 vout_params;
-+	int i, ret, vout_mode;
-+
-+	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
-+	if (vout_mode >= 0 && vout_mode != 0xff) {
-+		switch (vout_mode >> 5) {
-+		case 0:
-+			info->format[PSC_VOLTAGE_OUT] = linear;
-+			return 0;
-+		case 1:
-+			info->format[PSC_VOLTAGE_OUT] = vid;
-+			break;
-+		default:
-+			return -ENODEV;
-+		}
-+	}
-+
-+	for (i = 0; i < info->pages; i++) {
-+		/* Read the VOUT_MODE register for VID Code Type. */
-+		ret = pmbus_read_byte_data(client, i, PMBUS_VOUT_MODE);
-+		if (ret < 0)
-+			return ret;
-+
-+		vout_params = ret & GENMASK(4, 0);
-+		switch (vout_params) {
-+		case XDPE1A2G7B_NVIDIA_195MV:
-+			info->vrm_version[i] = nvidia195mv;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct pmbus_driver_info xdpe1a2g7b_info = {
-+	.pages = XDPE1A2G7B_PAGE_NUM,
-+	.identify = xdpe1a2g7b_identify,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP |
-+		   PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
-+	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		   PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_INPUT,
-+};
-+
-+static int xdpe1a2g7b_probe(struct i2c_client *client)
-+{
-+	struct pmbus_driver_info *info;
-+
-+	info = devm_kmemdup(&client->dev, &xdpe1a2g7b_info, sizeof(*info),
-+			    GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static const struct i2c_device_id xdpe1a2g7b_id[] = { { "xdpe1a2g5b" },
-+						      { "xdpe1a2g7b" },
-+						      {} };
-+
-+MODULE_DEVICE_TABLE(i2c, xdpe1a2g7b_id);
-+
-+static const struct of_device_id __maybe_unused xdpe1a2g7b_of_match[] = {
-+	{ .compatible = "infineon,xdpe1a2g5b" },
-+	{ .compatible = "infineon,xdpe1a2g7b" },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, xdpe1a2g7b_of_match);
-+
-+static struct i2c_driver xdpe1a2g7b_driver = {
-+	.driver = {
-+		.name = "xdpe1a2g7b",
-+		.of_match_table = of_match_ptr(xdpe1a2g7b_of_match),
-+	},
-+	.probe = xdpe1a2g7b_probe,
-+	.id_table = xdpe1a2g7b_id,
-+};
-+
-+module_i2c_driver(xdpe1a2g7b_driver);
-+
-+MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon XDPE1A2G5B/7B");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
--- 
-2.39.5
-
+SGkgR3VlbnRlciwKCgo+ID4gK3N0YXRpYyBpbnQgbWNwOTk4Ml9yZWFkX2xpbWl0KHN0cnVjdCBt
+Y3A5OTgyX3ByaXYgKnByaXYsIHU4Cj4gPiBhZGRyZXNzLCBsb25nICp2YWwpCj4gPiArewo+ID4g
+K8KgwqDCoMKgIHVuc2lnbmVkIGludCBsaW1pdCwgcmVnX2hpZ2gsIHJlZ19sb3c7Cj4gPiArwqDC
+oMKgwqAgaW50IHJldDsKPiA+ICsKPiA+ICvCoMKgwqDCoCBzd2l0Y2ggKGFkZHJlc3MpIHsKPiA+
+ICvCoMKgwqDCoCBjYXNlIE1DUDk5ODJfSU5URVJOQUxfSElHSF9MSU1JVF9BRERSOgo+ID4gK8Kg
+wqDCoMKgIGNhc2UgTUNQOTk4Ml9JTlRFUk5BTF9MT1dfTElNSVRfQUREUjoKPiA+ICvCoMKgwqDC
+oCBjYXNlIE1DUDk5ODJfVEhFUk1fTElNSVRfQUREUigwKToKPiA+ICvCoMKgwqDCoCBjYXNlIE1D
+UDk5ODJfVEhFUk1fTElNSVRfQUREUigxKToKPiA+ICvCoMKgwqDCoCBjYXNlIE1DUDk5ODJfVEhF
+Uk1fTElNSVRfQUREUigyKToKPiA+ICvCoMKgwqDCoCBjYXNlIE1DUDk5ODJfVEhFUk1fTElNSVRf
+QUREUigzKToKPiA+ICvCoMKgwqDCoCBjYXNlIE1DUDk5ODJfVEhFUk1fTElNSVRfQUREUig0KToK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0ID0gcmVnbWFwX3JlYWQocHJpdi0+cmVn
+bWFwLCBhZGRyZXNzLCAmbGltaXQpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAo
+cmV0KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJu
+IHJldDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnZhbCA9IGxpbWl0ICYg
+MHhGRjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKnZhbCA9ICgqdmFsIC0gTUNQOTk4
+Ml9PRkZTRVQpICogMTAwMDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0
+dXJuIDA7Cj4gPiArwqDCoMKgwqAgY2FzZSBNQ1A5OTgyX0VYVF9ISUdIX0xJTUlUX0FERFIoMSk6
+Cj4gPiArwqDCoMKgwqAgY2FzZSBNQ1A5OTgyX0VYVF9ISUdIX0xJTUlUX0FERFIoMik6Cj4gPiAr
+wqDCoMKgwqAgY2FzZSBNQ1A5OTgyX0VYVF9ISUdIX0xJTUlUX0FERFIoMyk6Cj4gPiArwqDCoMKg
+wqAgY2FzZSBNQ1A5OTgyX0VYVF9ISUdIX0xJTUlUX0FERFIoNCk6Cj4gPiArwqDCoMKgwqAgY2Fz
+ZSBNQ1A5OTgyX0VYVF9MT1dfTElNSVRfQUREUigxKToKPiA+ICvCoMKgwqDCoCBjYXNlIE1DUDk5
+ODJfRVhUX0xPV19MSU1JVF9BRERSKDIpOgo+ID4gK8KgwqDCoMKgIGNhc2UgTUNQOTk4Ml9FWFRf
+TE9XX0xJTUlUX0FERFIoMyk6Cj4gPiArwqDCoMKgwqAgY2FzZSBNQ1A5OTgyX0VYVF9MT1dfTElN
+SVRfQUREUig0KToKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyoKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCAqIFRoZSByZWdpc3RlciBhZGRyZXNzIGRldGVybWluZXMgd2hl
+dGhlciBhIHNpbmdsZQo+ID4gYnl0ZSBvcgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+ICogbXVsdGlwbGUgYnl0ZSAoYmxvY2spIG9wZXJhdGlvbiBpcyBydW4uIEZvciBhCj4gPiBzaW5n
+bGUgYnl0ZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogb3BlcmF0aW9uLCB0aGUg
+TVNCIG9mIHRoZSByZWdpc3RlciBhZGRyZXNzIGlzIHNldAo+ID4gdG8gIjAiLgo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgICogRm9yIGEgbXVsdGlwbGUgYnl0ZSBvcGVyYXRpb24sIGl0
+IGlzIHNldCB0byAiMSIuCj4gPiBUaGUgYWRkcmVzc2VzCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgKiBxdW90ZWQgaW4gdGhlIHJlZ2lzdGVyIG1hcCBhbmQgdGhyb3VnaG91dCB0aGUg
+ZGF0YQo+ID4gc2hlZXQgYXNzdW1lCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBz
+aW5nbGUgYnl0ZSBvcGVyYXRpb24uIEZvciBtdWx0aXBsZSBieXRlCj4gPiBvcGVyYXRpb25zLCB0
+aGUgdXNlcgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogbXVzdCBzZXQgdGhlIE1T
+QiBvZiBlYWNoIHJlZ2lzdGVyIGFkZHJlc3MgdG8gIjEiLgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgICovCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IHJlZ21hcF9y
+ZWFkKHByaXYtPnJlZ21hcCwgYWRkcmVzcywgJnJlZ19oaWdoKTsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgaWYgKHJldCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHJldHVybiByZXQ7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHJldCA9IHJlZ21hcF9yZWFkKHByaXYtPnJlZ21hcCwgYWRkcmVzcyArIDEsCj4gPiAmcmVnX2xv
+dyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChyZXQpCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ID4gKwo+IENvbnNp
+ZGVyIHVzaW5nIHJlZ21hcF9idWxrX3JlYWQoKS4KCiAgVGhlIE1DUDk5OFggZmFtaWx5IGlzIGRl
+c2lnbmVkIHNvIHRoYXQgYmxvY2sgcmVhZGluZyBpcyBhbGxvd2VkIG9ubHkKb24gdGhlIGRlZGlj
+YXRlZCB0ZW1wZXJhdHVyZSBhbmQgbWVtb3J5IGJsb2Nrcy4gUmVhZGluZyBmcm9tCnRob3NlIG1l
+bW9yeSBhcmVhcyB1c2VzIHRoZSBTTUJ1cyBwcm90b2NvbCwgd2hpY2ggcmV0dXJucyBjb3VudAph
+bmQgdGhlIGRhdGEuIEZyb20gYW55IG90aGVyIG1lbW9yeSByZWdpb24sIHJlYWRpbmcgb25seSBv
+bmUgYnl0ZQppcyBhbGxvd2VkLiBUaGlzIGJlaGF2aW9yIGlzIGRlc2NyaWJlZCBpbiB0aGUgZG9j
+dW1lbnRhdGlvbiBhdCBwYWdlIDI2LgoKICBJbiBWMiBwYXRjaCwgYmxvY2sgcmVhZGluZyB3YXMg
+dXNlZCBpbiB0aGlzIGZ1bmN0aW9uLCBob3dldmVyIHRoaXMKd2FzIGFuIGV4cGxvaXQuIEFmdGVy
+IHJlYWRpbmcgb25lIGJ5dGUgdGhlIGNoaXAgcmV0dXJucyBOQUNLIHRvIGZpbmlzaAp0aGUgcmVh
+ZCwgdGhhdCB3aWxsIGZvcmNlIHRoZSBMaW51eCBkcml2ZXIgdG8gaXNzdWUgYW5vdGhlciAxIGJ5
+dGUgcmVhZApmb3IgdGhlIHNlY29uZCBieXRlLCB3aGljaCB3aWxsIHJldHVybiB0aGUgdmFsdWUg
+YW5kIHN0b3AuCiAgRm9yIHRoZSBhZGRyZXNzZXMgMHgwMCB0byAweDA5ICh0ZW1wZXJhdHVyZSBy
+ZWdpc3RlcnMpIHRoZSBjaGlwIHdpbGwKbm90IHJldHVybiBOQUNLIGFmdGVyIHRoZSBmaXJzdCBi
+eXRlLCBpdCB3aWxsIGp1c3QgZ28gdG8gc2xlZXAgYW5kCnJldHVybiBpbnZhbGlkIGRhdGEgMHhm
+Zi4gVGhhdCB3YXMgYSBkZXNpZ24gY2hvaWNlIHRvIGJlIGJhY2t3YXJkcwpjb21wYXRpYmxlIHdp
+dGggb2xkZXIgcGFydHMuCgouLi4KCj4gPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+c3dpdGNoIChhdHRyKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25f
+dGVtcF9pbnB1dDoKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IC8qCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogVGhl
+IGNoaXBzIHN1cHBvcnQgYmxvY2sgcmVhZGluZyBvbmx5IG9uCj4gPiB0aGUgdGVtcGVyYXR1cmUg
+YW5kCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogc3Rh
+dHVzIG1lbW9yeSBibG9ja3MuIFRoZSBkcml2ZXIgdXNlcyBvbmx5Cj4gPiBpbmRpdmlkdWFsIHJl
+YWQgY29tbWFuZHMuCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgICovCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXQg
+PSByZWdtYXBfcmVhZChwcml2LT5yZWdtYXAsCj4gPiBNQ1A5OTgyX0hJR0hfQllURV9BRERSKGNo
+YW5uZWwpLCAmcmVnX2hpZ2gpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgaWYgKHJldCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ID4gKwo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0ID0gcmVnbWFwX3JlYWQocHJpdi0+cmVn
+bWFwLAo+ID4gTUNQOTk4Ml9ISUdIX0JZVEVfQUREUihjaGFubmVsKSArIDEsCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCAmcmVnX2xvdyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBpZiAocmV0KQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7Cj4gPiArCj4gCj4gQ29uc2lk
+ZXIgdXNpbmcgcmVnbWFwX2J1bGtfcmVhZCgpLgoKICBJbiBWMiBwYXRjaCwgYmxvY2sgcmVhZGlu
+ZyB3YXMgdXNlZCB0byByZWFkIHRoZSB0ZW1wZXJhdHVyZXMgZnJvbSB0aGUKZGVkaWNhdGVkIG1l
+bW9yeS4gSG93ZXZlciwgdGhlIG9wZXJhdGlvbiB3b3VsZCB1c2UgU01CdXMgcHJvdG9jb2wKYW5k
+IHJldHVybiBjb3VudCBhbG9uZ3NpZGUgdGhlIGRhdGEuCgogIFJlZ21hcF9idWxrX3JlYWQoKSBp
+biB0aGlzIGNvbnRleHQgdXNlcyBTTUJ1cyBwcm90b2NvbCwgd2hpbGUgaW4gdGhlCmNvbnRleHQg
+b2YgcmVhZGluZyB0aGUgdGVtcGVyYXR1cmUgbGltaXRzIHVzZXMgSTJDIHByb3RvY29sKGFuZCBp
+cyBhbgppbnZhbGlkIHJlcXVlc3QpLgoKICBJbiBvcmRlciB0byBhdm9pZCBoYXZpbmcgb25lIGZ1
+bmN0aW9uIHdpdGggbXVsdGlwbGUgYmVoYXZpb3JzIGFuZAp0byBrZWVwIHRoZSBkcml2ZXIgbW9y
+ZSBnZW5lcmljIGFsbCBibG9jayByZWFkcyB3ZXJlIHJlbW92ZWQuCgoKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgPSAoKHJlZ19oaWdoIDw8IDgpICsg
+cmVnX2xvdykgPj4gNTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgICp2YWwgPSAoKnZhbCAtIChNQ1A5OTgyX09GRlNFVCA8PCAzKSkgKiAxMjU7Cj4gPiArCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsKPiA+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSBod21vbl90ZW1wX21heDoKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChjaGFubmVsKQo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFk
+ZHIgPQo+ID4gTUNQOTk4Ml9FWFRfSElHSF9MSU1JVF9BRERSKGNoYW5uZWwpOwo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWxzZQo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFkZHIgPQo+ID4g
+TUNQOTk4Ml9JTlRFUk5BTF9ISUdIX0xJTUlUX0FERFI7Cj4gPiArCj4gPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gbWNwOTk4Ml9yZWFkX2xpbWl0KHBy
+aXYsIGFkZHIsIHZhbCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25f
+dGVtcF9tYXhfYWxhcm06Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCAqdmFsID0gcmVnbWFwX3Rlc3RfYml0cyhwcml2LT5yZWdtYXAsCj4gPiBNQ1A5OTgyX0hJ
+R0hfTElNSVRfU1RBVFVTX0FERFIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBCSVQoY2hhbm5lbCkpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgaWYgKCp2YWwgPCAwKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAqdmFsOwo+ID4gKwo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDA7Cj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGNhc2UgaHdtb25fdGVtcF9tYXhfaHlzdDoKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChjaGFubmVsKQo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFkZHIgPQo+
+ID4gTUNQOTk4Ml9FWFRfSElHSF9MSU1JVF9BRERSKGNoYW5uZWwpOwo+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWxzZQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFkZHIgPQo+ID4gTUNQOTk4
+Ml9JTlRFUk5BTF9ISUdIX0xJTUlUX0FERFI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCByZXQgPSBtY3A5OTgyX3JlYWRfbGltaXQocHJpdiwgYWRkciwgdmFs
+KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChyZXQp
+Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgcmV0dXJuIHJldDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHJldCA9IHJlZ21hcF9yZWFkKHByaXYtPnJlZ21hcCwKPiA+IE1DUDk5ODJf
+SFlTX0FERFIsICZoeXN0KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGlmIChyZXQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgLT0gKGh5c3QgJiAweEZGKSAqIDEwMDA7
+Cj4gCj4gV2hhdCBpcyB0aGUgbWFzayBmb3IgPyBUaGUgY2hpcCByZWdpc3RlcnMgYXJlIDggYml0
+IHdpZGUuCj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+dmFsID0gY2xhbXBfdmFsKCp2YWwsIC02NDAwMCwgMTkxODc1KTsKPiAKPiBDbGFtcGluZyBvbiBy
+ZWFkcyBpcyBoaWdobHkgdW51c3VhbC4gV2h5IGlzIHRoaXMgbmVlZGVkID8KCiAgVGhlcmUgYXJl
+IGluc3RhbmNlcyB3aGVuIHRoZSBoeXN0ZXJlc2lzIGxpbWl0IGNvdWxkIGJlIG91dHNpZGUKdGhl
+IHJhbmdlIG9mIHRlbXBlcmF0dXJlcy4KCiAgRm9yIGV4YW1wbGUsIGlmIHRoZSBoaWdoIGxpbWl0
+IGlzIHNldCB0byAtNDUwMDAgYW5kIHRoZSBoeXN0ZXJlc2lzCmlzIHNldCB0byAyMDAwMCwgdGhl
+IGhpZ2ggbGltaXQgaHlzdGVyZXNpcyBpcyAtNjUwMDAgd2hpY2ggaXMgb3V0c2lkZQp0aGUgcmFu
+Z2Ugb2Ygc3VwcG9ydGVkIHRlbXBlcmF0dXJlcy4KCiAgVGhlIGh5c3RlcmVzaXMgaXMgc2V0IHJl
+bGF0ZWQgdG8gdGhlIGNyaXRpY2FsIHRlbXBlcmF0dXJlICh0aGF0IGlzCmhpZ2hlciB0aGVuIHRo
+ZSAiaGlnaCBsaW1pdCIpIGJ1dCBpdCB3aWxsIGJlIGFwcGxpZWQgYWxzbyB0byB0aGUgImhpZ2gK
+dGVtcGVyYXR1cmUiLiBJbiB0aGlzIGNhc2UgdGhlIGh5c3RlcmVzaXMgaXMgdmFsaWQgZm9yIGNy
+aXRpY2FsIGJ1dCBpdAp3aWxsIGJlIG91dCBvZiByYW5nZSBmb3IgdGhlICJoaWdoIHRlbXAiLgoK
+PiAK
