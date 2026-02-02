@@ -1,107 +1,92 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE961367
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 00:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0B51FC8
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 00:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769990710; cv=none; b=WQeef3rqu8Yq3+gli0BoZq8f6hxN32ZJw0Bs/LFYbpDJSr5/rJGRqOPRMdZuWzfSeY3fNZQtygY1ueHrYYgYcAcyFWH59uiP9I9AJrR3Pm+fZ6SvKgo7pKxQGQliipAZ9Wf+7xfX1706209XJ7hll2NOrtquYO9AZY0CZWdKx78=
+	t=1769990811; cv=none; b=pGQvWjglXN/Jkcyc/YJx9NmZJpJZ18X5A6onbt03LC/4egi9LxTSqjGt+VMM2CiifQ78NYifnk9PpTWVAcbU6yTVoE+gZFaLbiMabh1Q/BZbgfnT79ikAspGskyqOC/veciDYWoQqViAFL9k+SmcZqXIylemitcGkKuV6TBxrqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769990710; c=relaxed/simple;
-	bh=Dnrsu7e8llQWO72v7zXc+Arhk+y/Tuhg6viBGyo1KeA=;
+	s=arc-20240116; t=1769990811; c=relaxed/simple;
+	bh=CAR4B78NPLyukVGqEqnXua+RYuL9ObG5iL+ISo/TjQo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iaoq4dPH+ZXwEyLzrXG/ziDw1nSkRY6zL/0FwmC3Fq55Dp/cyNhPFXmafQaB5L9bEaTDGyjvWmK5I7KnccKSocR7vIOGyQoBKCNWNegPwQNm0EpiGSzO0SoX02jkzpIdCM+i5nGbHQyWJcU3nAv55IK5VQdv41Psqs7VmGyDrrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SOE+KyYK; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=VnGrQl75tTS+0DU/llgy2y9cO0VB0cPQrNGW3vJ2K28ncxIqKkuya6mKsR+DvmprynR720nWc8j8sn8dPR9A2Fq/3VmWI10h8KKoVQzvz8ChKIRFp0PRQCSm76ymRPHJpyIlp9iquiaF3VIM8Vpgkt1sG68NIQJZ2mXt4ZevFxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HpJ8Knil; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SOE+KyYK"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34c24f4dfb7so1955904a91.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Feb 2026 16:05:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HpJ8Knil"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c2af7d09533so2598703a12.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Feb 2026 16:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769990709; x=1770595509; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jChbwAD+zWO8CByFHiqQt8kcpZGT0+zEA0U0OKmxeN4=;
-        b=SOE+KyYKvl8lm0KP5lcBImJ6bVWBYjH8N7SdW6A/7HxFq9HUrizec4f70ZcFmTXzRr
-         P2YwlNMbhNQaM+jqzTS0Xm2WB1AVsJJBqKsob7sNZiNkgZPx+jZjZlIythZLJG0uHYyU
-         kYfFFPoulfTJ4reAsfaPFUcaqQ1Hd6uzMDdxTF8uT79tDvOWJQBe0VT0gFWiBc9BynfY
-         8qZE3tAbuiforaPPS+k1JOt5gCAHfpFr82wvcj757EllcxaXOb428RkpeKoNs7fU+BPp
-         MULUWz8QKspdd8XeiOcoocLTFxQmz8C1ghQrDnUYAOEsq5pY8zUSCX9l2Xduk5tnxuwR
-         IEdg==
+        d=gmail.com; s=20230601; t=1769990810; x=1770595610; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VlfFwGUkGSA6/cX9KVEAN9mdtO46Nfgn+UTitEX4c8k=;
+        b=HpJ8Knilj/qaG3Ba8NzuDIWtFNmhA9T8mWfsm2gjYRDQZeo8rRIXvtKwuXrcxNKMiK
+         QNGM5eZasrw/8fwoEMW/T2YA3iuYw0f4h3DBu8Gk5X0xvOySXg9TsU0nH5H4QRf11yjA
+         XWqRLf07LekptCtKAfLLdMMG7GI6lzvnmKKGZHjNbpsDTfUl5Bt7Ohd1l8ytpbfynbnv
+         MuitqzKLDnYC0uJnb31Ce/34MYfCU+f3ZyQhSaaxreGSUGNtWbknCb4KmhNiOvXV5xQU
+         L9p1YDmfXJsIu9GCry3/xET0CX/0zFkDATFsxIEAj7bMTLKFKL4DnFq13P3NtXYTEU5Q
+         dBWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769990709; x=1770595509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jChbwAD+zWO8CByFHiqQt8kcpZGT0+zEA0U0OKmxeN4=;
-        b=huCkkfy01W1M+ZNIV76CnbkFgka2S9ekcjTGSh/dcL8nOLBigS74efyoW0Ln2gYOVw
-         ID3ib8thIXuGOipIU9FZ1Rd3kTBtfyD5CGz3DTJ6vY0pPRcARIRgmLO6lIxHfD6eHVV6
-         38DL7VmDnfXpwqcUU5dD45IXTKVImyEz7mVReZbljvBiiSsmAJY0AYOnoPOCbTg+ZWP/
-         M3L/2GVH495TN79cxW3Yq8HnwWHICjV5n5GAbSSTWf+OD9ODSE33CwOAZWsQBaf9JwIR
-         3U/d6p4XMgPhIbiTfuNmvWLuKNeMqeFIXyD+E4Y67n1jibh96CMyIgyCIJTk7PTGm9qQ
-         TmQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWzT6dvlLdzGYYyMfzYP54eXs6UZ39OhaElUpWWf3hCKfKGRggeDWJvlq8vtDHdK3OXmGkWq+ZUZSCmag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIRG4Qm5BPSrGJOOsrXBqD92F7rDZyHpj95m/ATEJS2HcRjLVK
-	+EAwqstr5r8v8X8tD+JeS7AF2m8/805S+r16UWeS47+0rDekndxOhTpz
-X-Gm-Gg: AZuq6aJ38DFci3FnanoyTz8pUxEM/1xpMLwR7JfZVDgHsWvRbvrqD1BLgqVP/si04iq
-	87I4qnpwB8/kx6hh3dJFxwUWlAlACc1OfXpp0Os2Qw2oeCEX9XlaZM93oAYabb2tfM8YuGdGxqF
-	dMFhIyXMzDVG7TMnE3N63jWT0Q7V7GyI9ut735p/SbqT0KtK+wY5T7XTRlecUqYiOKLoBcE7DY1
-	Rl3DkMzwJU4aVcavZTaBD0AW2zUSzS3Niw+SYibisvu/VOSZvXPYP2NwurLRXPBzY4k3sz8JDG/
-	QJ7CseImhhS7v9qdpdNoPfuoJNWMNhYTL4KK/uNiSRSCY1QULPUqIaLPiZ1YqtByWrz0ryTLljH
-	SRCCMrnSc50tN4mLMels+KAbvyf4RQTHj8r6vHhzedxd7wChGh9s+JPpWr6DHuAYUSqD0ItwpKq
-	/dhPlM5cMhKq6s2mTwbwSe6K2T
-X-Received: by 2002:a17:90b:5446:b0:340:9cf1:54d0 with SMTP id 98e67ed59e1d1-3543b2ebd00mr9605243a91.1.1769990708647;
-        Sun, 01 Feb 2026 16:05:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769990810; x=1770595610;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VlfFwGUkGSA6/cX9KVEAN9mdtO46Nfgn+UTitEX4c8k=;
+        b=svxWttZZ6Lck6lu05Arr3kTySTZUD8jMjpA+oAYWqnkQmf14bpZ4Ab/jmyn+NWi6wc
+         Mu/Iv87M8MZb+Ut9FAG6CnjEFSdL/j8OiP3EAoV1BNFM0Yyvil9N4bVhxXG2MdocqbCP
+         T4i97wPE6FCPGuzHZUm4B+E5RicIODgqJlglYXoATzg5oLX959hmZ1jU+np0zZz0Dgug
+         eNVgxC9jDijrjNeJlCj9M9H5CtBMM6OaREaOc1XW7qJGfv9mKnxOZKo61br/cBt1TFee
+         Wwu5/e+i/DzJ2nj2OZFRtjlqazJfjqdeGo7RcD70qd3tDZfdAM+O47BJMIHxdfrLcTV3
+         4tdA==
+X-Gm-Message-State: AOJu0YzpP9ROMWFt+k72xLv9gM8DUtjQPGfJLvobSAWjjF75rwaKlA57
+	NVNgC2KzBVrRIyBPRLj2xMB3J3448vo091SHtjvPIlo+Bgop0AAqw/Md
+X-Gm-Gg: AZuq6aI397MTe7XyKv8UIoo2afuzYvstZowol5rAXdYZNDQsJBzfjs1rLKTCw8SyuZ0
+	yFQZIrAaMaA1c9hiGgsmOg2SOQ+mxf5R242Dnnozn/LJ8H+g7pjLV7Hywwagen/GZJV2nOtTdyl
+	PYoetOdyjlC3W2WHotFmWFCk20E567tiWMSizamYFdocEtNfx3kEOkucD/VB+bytreIFFOFCMcO
+	tE+rXTSdzEOH4jTDuCp84/M6X6NoWfpqzxf6bPs0Cp3Pwk8xPyiNluH3/k9zOP19F3iwISP+yTP
+	d6KGyIctfib/8CKh4pegzQ9ZIgIQ1KQb4tdEdxDwkb2uu43rkgzGcgH6zLUlUZzo/6knvbISRe/
+	IZoUQ0SxT+Ch+RVnlloQ76qQB8xo/vtOu+oS2A1RytFEyE+JIqIkGRvdo0vi3uXM2Stx9xa0Qun
+	iJQ3AW48YWGv9z16ezVP2wwiGbizSu0UQ4onQ=
+X-Received: by 2002:a05:6a21:33a9:b0:36b:38e0:4bf5 with SMTP id adf61e73a8af0-392e0115c81mr9719575637.51.1769990809996;
+        Sun, 01 Feb 2026 16:06:49 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3543bbfcddasm3241706a91.1.2026.02.01.16.05.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b417394sm126133325ad.42.2026.02.01.16.06.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 16:05:08 -0800 (PST)
+        Sun, 01 Feb 2026 16:06:49 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 1 Feb 2026 16:05:06 -0800
+Date: Sun, 1 Feb 2026 16:06:48 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: gpio-fan: fix set_rpm() return value
-Message-ID: <531f3bc1-a02b-4286-b692-b171a7f70222@roeck-us.net>
-References: <20260201-gpio-fan-set_rpm-retval-fix-v1-1-dc39bc7693ca@gmail.com>
+To: Filippo =?iso-8859-1?Q?Muscher=E0?= <filippo.muschera@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (nct6775) use sysfs_emit instead of sprintf
+Message-ID: <9744e7e3-d26b-42a7-8cff-d0d14f2d51cf@roeck-us.net>
+References: <20260201202721.3871-1-filippo.muschera@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260201-gpio-fan-set_rpm-retval-fix-v1-1-dc39bc7693ca@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260201202721.3871-1-filippo.muschera@gmail.com>
 
-On Sun, Feb 01, 2026 at 09:35:06PM +0100, Gabor Juhos wrote:
-> The set_rpm function is used as a 'store' callback of a device attribute,
-> and as such it should return with the number of bytes consumed. However
-> since commit 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support"),
-> the function returns with zero on success.
+On Sun, Feb 01, 2026 at 09:27:21PM +0100, Filippo Muscherà wrote:
+> Replace sprintf() with sysfs_emit() in sysfs 'show' functions.
+> sysfs_emit() is preferred because it automatically handles the
+> buffer size and PAGE_SIZE boundary checks, preventing potential
+> buffer overflows.
 > 
-> Due to this, the function gets called again and again whenever the user
-> tries to change the FAN speed by writing the desired RPM value into the
-> 'fan1_target' sysfs attribute.
+> This aligns the legacy code with the new functions in the driver
+> that already utilize sysfs_emit.
 > 
-> The broken behaviour can be reproduced easily. For example, the following
-> command never returns unless it gets terminated:
-> 
->   $ echo 500 > /sys/class/hwmon/hwmon1/fan1_target
->   ^C
->   $
-> 
-> Change the code to return with the same value as the 'count' parameter
-> on success to indicate that all bytes from the input buffer are consumed.
-> The function behaved the same way prior to the offending change.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> Signed-off-by: Filippo Muscherà <filippo.muschera@gmail.com>
 
 Applied.
 
