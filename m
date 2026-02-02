@@ -1,67 +1,67 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620A238735A
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 17:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB28238B9AF
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 18:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770054662; cv=none; b=HGOUNtrw3WPh3HDjoXi8aTHJFQkpQNJTmHHujVF96CS0WVjn+R4twNVSuhmlpsU+V4FJk+DoBia8aGdsgY+8aQx8mCHzxUO7HI41BgyyGW9i9Ud7OnP34x4ugDNR/6gZiO2qCmD0KIY7dflPqQAYEeYv8vkbFcNAe/MkuRKJ/X0=
+	t=1770055260; cv=none; b=d0WHyjPYf/MwcJck+R9ajuKMTkt43p9tX7syc8GQqjqxyTV95d5B69PFfQjnZR7wbz72nHKzXmDw4/2NYCYrqXsNNsDqar1ON8SpUFBeyRAbD8SUeAJ4zyORfrSFv7a+W0TCEAhtmtEkJqGfAokPe3dhLwU18tSSqsXudHAxbdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770054662; c=relaxed/simple;
-	bh=vknwjL0TKYnUIle6ZbiLxm1hyGJ42HW/MSeJYODsj9E=;
+	s=arc-20240116; t=1770055260; c=relaxed/simple;
+	bh=zD2IuoVSwNvUncA02blTiyoyy3mk4YM0JDUdBM1suf4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YzWzZeLjnJ1G2TZ9jpTmeBqVuQHaZB+uKyu49k+18qCvTd2I94uFFdpxb7K7LqqDhUq6v6lvtRG5ot+Z9M2JU14QvQjCk4XK9On1l/4lcszUC5Cc9n8R4dDI2cYMRGgLHk9UDGTAKRTqvBbU/HDso5AVv0A5/ehyRKJZFAcGJyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhYZFYfY; arc=none smtp.client-ip=209.85.210.173
+	 In-Reply-To:Content-Type; b=BT42xhqMSa8/riVeq2ziGc+Rm+LnHXXwOEJ0EnJ9VRs9L0IleJN9k8/UcLYw9g8ecpZTmNMfflR0rnV9++NOOL5unmN66bzYJRH339/inE0Auz6NC/tGiaV8c7HlkKSqCYNe9w2WJYlylq9gAgf3HMe+kVp9+xOVyL0nNBBfzE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=El6aRqcr; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhYZFYfY"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-81df6a302b1so4437302b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 09:51:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="El6aRqcr"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-823c56765fdso1332118b3a.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 10:00:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770054661; x=1770659461; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770055258; x=1770660058; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=IYzMM+PDFT0S0J7fPI3P9GPnIxCBaLx35Q93v5Nih6A=;
-        b=hhYZFYfYj3ugTQIiYmqEgwXs5aA42gkEfIVZcU6qJGralFKRe6HDRLXnJykKVV7MZ3
-         x4pYDiu4sva2Ni8MdxqCIXBzd7U4VM7inXnisK3MMiM/qnWCAQ3SmeLxgP7w0jzkd6CL
-         F1nAL3R4kZMJrynsN+mrF2jeMk+kp/7huOP/NmQwXqhRPBWGZsUQA3DidrkY1wSRXheo
-         R6xOfBbp1R6YHmslI2848ercydLrGmafR4hUr/otmmnOejj0a86sAnLzQ12XWCVn1szv
-         NK3+XkfFCKjNlCGFhN/9Jh+Hg2RuSqEkduIgthOX+Iqpq/t3gfstE+V5p22S2gR7KR8c
-         HLSQ==
+        bh=N95LWhnwiTDjRbAQUoKW7KNGEcZrvfdD25aUio1+39o=;
+        b=El6aRqcrzfMrhnmExjMgTI7JXAKdmexUReQCiGTTL7saPPEQVFizjlknKDG2NkuF/A
+         A8DHjojHeNSv3kPv8sjghrJDW+CBX++7/7aGfoLDyrU7kXmAcj+chRDmwNDcy/l3Ad+r
+         pDWvBJkgBJ3QrwiAUpmH+EPbH/H8YlJOAR4Ym/UVxG5L+X61YB6WQ1bOOFrdGTEZr3s8
+         UzEPOH1n8q2Qln6OT4LEdosM1YVu68a5zcVIpXA4wxu4jMEhPWce1DIQciUKyc5jS6Ig
+         BoYqUhmB1weWXD5nE9nv0dPpYcvS8Rm3gYugLtr8RIS34ftRHERxWH7ov1BnwGGmAM3f
+         UZGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770054661; x=1770659461;
+        d=1e100.net; s=20230601; t=1770055258; x=1770660058;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IYzMM+PDFT0S0J7fPI3P9GPnIxCBaLx35Q93v5Nih6A=;
-        b=e0Z9NT9TprL6xi253ldCsW6XeE/eSlRVI84rQH7qgOnYx9PDzpafnSlx9Vm1aRfJq6
-         acYJCGQV6EBYlgDh4TmaQYNTTbXfEjH9QJDBRskewS4WzKHXDBj3aReDudWHQOvnDh+w
-         rU1EUJoETQZF/C8zBX9+uw7yR0z3k3fIByrTVaUDJamupyzOoJvItphZ0EvaYrsYGr5v
-         DD99Hnj2cf9oeI0GwaRhb/Gu57SSZFqMDecRCHnaRAN1cSO1/vGgPuq+DkVCu0Ggjpnu
-         PleHJPT9dTj5h+9RQTELm11+2nRUHSk4lEzYSgrmCoBL8pEqoX7bWY18+54OBrZSdp7Y
-         beEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzHNZmnIjI5R/Novb/gM7aiARlolo1px7PUj+poj6P5w2YO6jSdi0bRn6f2+x542aU7FeAvBuSYfGgdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymyK9OwAEuASVQE1rIftdBoVClg9GX3zLac/wcMhkqOJ5i/2cn
-	hmFxR6jCk0J/fVlm86rlrQdvtBksEMsksIl9TRSt7wdz1nVZlE8Qb84sfiR/KRof
-X-Gm-Gg: AZuq6aItRsBpCItOd06Qp2ZaTC14z9rb/lpH9NpsEsYPi+IUZuvh0gZdGalvSJRiq+N
-	R0+OjEZgo6/MjRlQPXKphCxM4poBi55Veb4yqmult5a4A7Tw0zTsQVPpLuGacbwGDlkFOafEuwZ
-	gBjxMHmSbsF/V5uT1nUBH0rMzvOYXFtPSO7T4PRteCN0nH7hKVYJ7VD4MfwRFdwsX4PY8wnqTyJ
-	g5mWyDGaPZTkbnJpe2rHdDI63TjZ9dNS1DhzlP8AkwTyFwsMFFFbY4VobHTt8IV3jrdRhcnPx8N
-	AgsUKv5wxrub1Vltbf5BMs57dMp1xaeczwwx0SIUEI0fETYAjFjdNlsgX5RUyzHJDhJxKy6QFVE
-	l852mZLWMWt0cNbRawE9fuT1lehm6Rte/iDq+YyrpGchtUr+V9RCpfgDzCF3sR7wMzxSzqOQJgi
-	v9k7+kYC41e/hW2gbXOtI8rhTxkaAoDX54eNAYtkgT5A5HtWKh/8BiULJmA1DammdCu9LyGFo=
-X-Received: by 2002:a05:6a21:7748:b0:393:39a0:f1e5 with SMTP id adf61e73a8af0-39339a1024dmr2759691637.48.1770054660584;
-        Mon, 02 Feb 2026 09:51:00 -0800 (PST)
+        bh=N95LWhnwiTDjRbAQUoKW7KNGEcZrvfdD25aUio1+39o=;
+        b=wmAvBNQ7zqw5flwFZyxZdMbCFGbAL9i1lRNPo4ckKhCC3lpkuZbkjUZYadLIsd1ShZ
+         JZS9RcKkt70LVdmOC8+3UcCgyBFzuktHIqzcSA1mf1F/Jj6XkLRywXgWqhVz40rU2CP/
+         CcSkuzX3BtZmyTRKj3fJBWeYLxvvbKZEYxv8WQCPINgtktsu+zLbfwJlg6OSYqQXnUzs
+         WmFZJ6z+WWb65ID9qbRYeSu3MrydkIBWJow6S107fMSyRyKp2gpuNL+3KjDCnTyQn4od
+         SYXZ6nylcq/i8UpCFUmuGYJBk6HwliWvGDnKDoKHNqM08LKTMPicDCwrVbjSHf9jzQ+A
+         TPvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWH+hSN8DsApxejkvQ8IlEI7QrLR/dzHjkKg26UZu9+vessx1mdk1PZUUetbHIhYQWQFtl+qh48gOOj7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLh0GyJSl9ZR0rt1POFTansZKFdxFDESp4lUKWayVwttE8RxGT
+	+B+BpVKwFbUrdPtW56GoKH39jnqjyI5zL4Xn3AGy9VOsBI2a47m9nmDQ
+X-Gm-Gg: AZuq6aLltmPEa1rmQ/6xV5SQmYqp4uE+EIZWyJT1MlxsnOSGtozv8zkbx9CEJICJSHi
+	aYc318iJZqyT7FtYqyLpgbXZ/llWWxQj5Z8dyvEThsvq4NFDMNqx/lMQQR/vNcNB3Og6TlVY4yV
+	Wd6YzHsRVXYjcREwndLNtw/03PkpHCEAAKad/6ScW0uLk9IKgJXqRIK3Z+dNs7NwcLkRHhHuD8J
+	JF0P1usShEM4aOsXQAXXhHx7lnuzmZ8N3vC9dm9siopuBk9kxlnKGhmGIp+QDWcMRoEr/VjpklS
+	7aJMpgtpDH6E/dMTlEipIKcVosspepXbw81s5fnH1Z/9BK5/LDp8Q+qvVVwEJI1Cc4fsIBV16mV
+	6UmjxL5G7vEap93XKkc2lhXKEzKmG7bJyPSLWhBRaDntyl5ji92peoJNEKIYtz3/2LIG5YOYZ+h
+	O7sRT0wwLkjqhpoaEgeT+5IOg4fJbPSZWt9XVoRqsHbLoUTfx/2UUcLvwuBtfF
+X-Received: by 2002:a05:6a21:690:b0:34f:241f:aa1e with SMTP id adf61e73a8af0-392e006f0abmr12391905637.31.1770055258027;
+        Mon, 02 Feb 2026 10:00:58 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c642b0b4c07sm14937334a12.36.2026.02.02.09.50.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b57fafsm17773526b3a.26.2026.02.02.10.00.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 09:51:00 -0800 (PST)
+        Mon, 02 Feb 2026 10:00:57 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a8f8ee55-3c87-4e9c-a5a9-12929855b86f@roeck-us.net>
-Date: Mon, 2 Feb 2026 09:50:58 -0800
+Message-ID: <27d60756-d33e-4926-9a02-f52505339de6@roeck-us.net>
+Date: Mon, 2 Feb 2026 10:00:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,20 +69,26 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [v2] i3c, iio: fix i3c driver dependencies
-To: Arnd Bergmann <arnd@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jonathan Cameron <jic23@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Shevchenko <andriy.shevchenko@intel.com>, Frank Li <Frank.Li@nxp.com>,
- Adrian Fluturel <fluturel.adrian@gmail.com>,
- Carlos Song <carlos.song@nxp.com>
-Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Jean Delvare <jdelvare@suse.de>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org,
- linux-iio@vger.kernel.org
-References: <20260202160543.3654499-1-arnd@kernel.org>
+Subject: Re: acpi_power_meter: power*_average sysfs read hangs, mutex deadlock
+ in hwmon_attr_show since v6.18.y
+To: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, Igor Raits <igor@gooddata.com>,
+ Daniel Secik <daniel.secik@gooddata.com>,
+ Zdenek Pesek <zdenek.pesek@gooddata.com>,
+ Jiri Jurica <jiri.jurica@gooddata.com>, Huisong Li <lihuisong@huawei.com>
+References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
+ <CAJZ5v0jSbGtRYkjqeuYaT3LXbeZ-xk_Gc0dbCpTZPc6nBD8eCQ@mail.gmail.com>
+ <e03c8b69-e667-45b8-b82c-2cd4f1c96bdf@roeck-us.net>
+ <CAJZ5v0hvKzKTWA8jFYVDHttd+hDv1juu87vgyhf2udOGbqrQdg@mail.gmail.com>
+ <d7f34e0f-e258-4fef-93eb-1ef0a3123d95@roeck-us.net>
+ <CAK8fFZ4izdX_HDtGN60CZ3Ta61nqkUg7ncViM=mGgxKki_5FoQ@mail.gmail.com>
+ <a7334568-13ce-4600-8650-607273e67976@roeck-us.net>
+ <CAK8fFZ6gKs7s2rJ=f7bt24f+_cY-jGU33TvX3UP=U58uK-1KaQ@mail.gmail.com>
+ <fff54ec8-496e-4c26-b652-358dc4de0de0@roeck-us.net>
+ <CAK8fFZ4wEUdMAHkfdC_z8ohYB_rEXZ=dHArc75jDibgQ_-ozKw@mail.gmail.com>
+ <4f151d4c-fdc6-4281-87b0-b7120eeb1b46@roeck-us.net>
+ <CAK8fFZ401-nez_CgDTTnQiPT=oBRRJuYooXyEKFuCdHpGCPXtA@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,114 +134,87 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260202160543.3654499-1-arnd@kernel.org>
+In-Reply-To: <CAK8fFZ401-nez_CgDTTnQiPT=oBRRJuYooXyEKFuCdHpGCPXtA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/2/26 08:04, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 2/2/26 08:48, Jaroslav Pulchart wrote:
+>>
+>> On Thu, Jan 29, 2026 at 04:26:37PM +0100, Jaroslav Pulchart wrote:
+>>>>
+>>>> On 1/27/26 03:58, Jaroslav Pulchart wrote:
+>>>> ...
+>>>>>>> Hello,
+>>>>>>>
+>>>>>>> Thank you for the analysis and insights.
+>>>>>>>
+>>>>>>> To add some context from our side: we observe this issue shortly after
+>>>>>>> a server reinstall or fw updates followed by a reboot, typically when
+>>>>>>> hwmon sensors are accessed for the first time (e.g. by monitoring during
+>>>>>>> early system initialization). We have not seen it trigger during normal
+>>>>>>> operation, such as a simple reboot or on long-running systems.
+>>>>>>>
+>>>>>>> Given this behavior, it is possible that the issue is related to
+>>>>>>> hwmon_device_unregister() being triggered early during system
+>>>>>>> initialization, but I do not have concrete evidence at this point.
+>>>>>>>
+>>>>>>> As a workaround, we will exclude the ACPI power meter from hwmon monitoring
+>>>>>>> (Grafana Alloy) until the mentioned refactoring or a fix becomes available.
+>>>>>>>
+>>>>>>
+>>>>>> Would it be possible for you to test the patch series I just sent out ?
+>>>>>
+>>>>> I suppose these 5 patches from
+>>>>> https://lore.kernel.org/lkml/20260123182208.2229670-1-linux@roeck-us.net/
+>>>>>    ?
+>>>>
+>>>> Correct.
+>>>>
+>>>>> I will try them and let you know.
+>>>>>
+>>>> Thanks !
+>>>
+>>>
+>>> The issue is still there:
+>>> ...
+>>
+>> Thnaks a lot for testing.
+>>
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.105931] INFO: task alloy:5985 blocked for more than 124 seconds.
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.114475]       Tainted: G            E 6.18.7-2.gdc.el9.x86_64 #1
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.122872] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.132932] task:alloy           state:D stack:0     pid:5985 tgid:5871  ppid:1      task_flags:0x400140 flags:0x00080001
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.145975] Call Trace:
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.149985]  <TASK>
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.154931]  __schedule+0x2b5/0x690
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.160934]  schedule+0x23/0x80
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.166498]  schedule_timeout+0xe8/0x100
+>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.172936]  __wait_for_common+0x99/0x1c0
+>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.179148]  ? __pfx_schedule_timeout+0x10/0x10
+>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.185936]  acpi_ipmi_space_handler.part.0+0x1ac/0x370 [acpi_ipmi]
+>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.194929]  acpi_ev_address_space_dispatch+0x16d/0x3c0
+>>
+>> Looks like acpi holds another lock. Can you check if the patch submitted by
+>> Rafael fixes the problem ?
 > 
-> All combined i2c/i3c drivers appear to suffer from the same link
-> time problem when CONFIG_I3C is set to 'm':
+> Hello,
 > 
-> arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
-> mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
+> I tested the patch as a standalone change, and the issue is still present.
 > 
-> This was previously fixed several times by marking individual
-> drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
-> tedious and is somewhat confusing.
+> However, I can now reliably reproduce the problem. It is triggered while
+> Dell iDRAC is being reset or updated and is temporarily unavailable. During
+> this time, a [kipmi0] task enters D state for an extended period, and
+> shortly after (or during this), the ACPI power meter hwmon interface ends up
+> in the locked state described earlier.
 > 
-> Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
-> and use this in all the existing drivers that had already fixed it
-> as well as the new mmc5633 driver.
+> This explains why we mostly observe the issue after redeployments in our
+> environment: server redeployments typically include iDRAC firmware updates
+> or resets performed together with operating system installation or updates.
 > 
-> Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: restore accidentally deleted lines
-> ---
->   drivers/hwmon/Kconfig            |  6 ++----
 
-For hwmon:
+Thanks for the update. Do you have a dmesg log showing the problem with Rafael's
+patch applied, by any chance ?
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
->   drivers/i3c/Kconfig              | 12 ++++++++++++
->   drivers/iio/magnetometer/Kconfig |  2 +-
->   drivers/misc/amd-sbi/Kconfig     |  3 +--
->   4 files changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 41c381764c2b..ecfba861f66d 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1493,8 +1493,7 @@ config SENSORS_LM73
->   
->   config SENSORS_LM75
->   	tristate "National Semiconductor LM75 and compatibles"
-> -	depends on I2C
-> -	depends on I3C || !I3C
-> +	depends on I3C_OR_I2C
->   	select REGMAP_I2C
->   	select REGMAP_I3C if I3C
->   	help
-> @@ -2392,8 +2391,7 @@ config SENSORS_TMP103
->   
->   config SENSORS_TMP108
->   	tristate "Texas Instruments TMP108"
-> -	depends on I2C
-> -	depends on I3C || !I3C
-> +	depends on I3C_OR_I2C
->   	select REGMAP_I2C
->   	select REGMAP_I3C if I3C
->   	help
-> diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
-> index 30a441506f61..626c54b386d5 100644
-> --- a/drivers/i3c/Kconfig
-> +++ b/drivers/i3c/Kconfig
-> @@ -22,3 +22,15 @@ menuconfig I3C
->   if I3C
->   source "drivers/i3c/master/Kconfig"
->   endif # I3C
-> +
-> +config I3C_OR_I2C
-> +	tristate
-> +	default m if I3C=m
-> +	default I2C
-> +	help
-> +	  Device drivers using module_i3c_i2c_driver() can use either
-> +	  i2c or i3c hosts, but cannot be built-in for the kernel when
-> +	  CONFIG_I3C=m.
-> +
-> +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
-> +	  get the correct dependencies.
-> diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-> index 2b81b22c9550..448fef4e5716 100644
-> --- a/drivers/iio/magnetometer/Kconfig
-> +++ b/drivers/iio/magnetometer/Kconfig
-> @@ -143,7 +143,7 @@ config MMC5633
->   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
->   	select REGMAP_I2C if I2C
->   	select REGMAP_I3C if I3C
-> -	depends on I2C || I3C
-> +	depends on I3C_OR_I2C
->   	help
->   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
->   	  magnetic sensor.
-> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
-> index be022c71a90c..30e7fad7356c 100644
-> --- a/drivers/misc/amd-sbi/Kconfig
-> +++ b/drivers/misc/amd-sbi/Kconfig
-> @@ -1,10 +1,9 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   config AMD_SBRMI_I2C
->   	tristate "AMD side band RMI support"
-> -	depends on I2C
-> +	depends on I3C_OR_I2C
->   	depends on ARM || ARM64 || COMPILE_TEST
->   	select REGMAP_I2C
-> -	depends on I3C || !I3C
->   	select REGMAP_I3C if I3C
->   	help
->   	  Side band RMI over I2C/I3C support for AMD out of band management.
+Thanks,
+Guenter
 
