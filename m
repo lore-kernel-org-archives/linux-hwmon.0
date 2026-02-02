@@ -1,129 +1,132 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022B226CE33
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 15:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2062580E1;
+	Mon,  2 Feb 2026 16:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770047952; cv=none; b=O2/n0ONGMvHacqL3cLcLyBdBkyqBLstUKi+40LB3Y1eW4E5c8mCji2gM5eMUuE4D0WAwEAf4jMhYTQ3U/WaIlE/np0G5nbOXaNSLEdwHTQfArpyas53A9xBrfuWuTZYCmGR36uYQgRHvftjKoU5sJbajZG2hTX17qWjlVPNBctE=
+	t=1770048296; cv=none; b=rhXhmr3PunefS/9hmH+vVpXYlZz1gA4Opw3rL/uRFLIL0XqyW0QFWZaOoV4BPlIC06SYN5Da0RbWIc3/R0pGMfOsAAt+VJ6IyOnpBYOY6ycEcGNE//mSQ9x78SVYoYe81ew4knHlWDM4ccFdFlx0dakhNfFbSD6sDEMWA9h66Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770047952; c=relaxed/simple;
-	bh=kARCeaAKhDeIKKAlMz1UbawFMFAokaEWYZvZ6sB7T4w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GLl346nFil5VGG+B+oNBGfxcayXD0oDy2WUHbNhM72O5t2aTyDZE9gc7GthRciq/JExxAmaGZJyyas8xhUaJDcUt1VillfY0ICxB8BF47r7JX9vGHN2ussnz41PXR7JiRIe+ynOXhaE0fuT07ljJ0SA3ojV9LA9HghuNuZhq6eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBrXaunx; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770048296; c=relaxed/simple;
+	bh=sv+D7UbYktk2x5E5ACZQNDaXGZasr2Dse+C6dh5r90s=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MnH+cSQyQYSe4oJLxIwdXL0DTH+e7LynFSzOmnwGMKcZldeZJin1PU/w7rR4zomAeXIBxN9oJVLoKX6nj6rAkzOix23+hczdz+pFJlWDVS1CBXyv5R0RlASwuNrUiJ9lDlwL/+1o+z9/WPn1l44nNnV0a449GoW1WKImL7CDl9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TuT/peSx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=r9bh5Rj4; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBrXaunx"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-42fb0fc5aa9so3175207f8f.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 07:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770047949; x=1770652749; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZZm7iyAn8JIl9dQI6HiLl2VItdwuhdut+41offwFMw=;
-        b=ZBrXaunxXywOGHZplQrwYyDCxtTARGDcrWmRVOJwHk7ZUQC8Br/bXkpHBMr7wxk8gy
-         YnyxfSRHkvbYzYHY4ZJcCdsL8ezoGpze2TLiCjWbyF2Qyp/q5wrqPwcbzqqkYO7BGhCB
-         pFDXiNLdH1oDPZz8h2/s/067IMAGMXMsX4ShoUzzj0xcZHWVJk4kvisAqze9iL7TM30S
-         hk+gORVMwzHLRMvwy/9YqFp5SVqs4zkwUe/OilTiHur71DljQ915BLNRqJLE8mQjl5J6
-         gjdf2HtNMrM+wql2vCss3SBPjNOvGktDS7/4Oa+i6xYRGtP1H0ufzchnct0IB6XQ7+AW
-         f8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770047949; x=1770652749;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LZZm7iyAn8JIl9dQI6HiLl2VItdwuhdut+41offwFMw=;
-        b=pN3jgMaOK1YmvUIBE+YU5an6VYV4w9r287s9vKhEJPOaIPuqoI7wzKtOs61CxjoS8R
-         1cK0Pl/fzpG9g1/ZN3VrYHVu155sQuqIvvQXQ9gZzHH2SRA7sSg6+d4Jk9yg6Qdn7rdM
-         sDf7wNZmW128SfF/4dBJgrPDs/RlnZmLW8Rb7LlWDhuOMwnPJTCakz3FFijjl+jMBHjm
-         t0hFI6iaXVhMdTSPYVbqAaSlaygdfb5dDl+hEImiIb8LuptuBBb54c83oh75laY09eTv
-         VEnkPVTlaa32iOSTNI2Iu9sIR0ziSu8PqHIUASge5OmBoOKBmZsKAa175VZivBsdS7/M
-         4KYA==
-X-Gm-Message-State: AOJu0YzTlXUjhCWxJYHedp5mTrd0CfIQP86XNu9ZfzCOlDfyDjKw+e/f
-	AqjvQ8qpPmYkNN0zTDH2uoAbZvonfAk0xtJC1/CW++GowJlsN2PKRvjwgKKgULgb
-X-Gm-Gg: AZuq6aJ8kWaDcUjh0PiXbGNTW1rczMjxJcU3WQSyU5Z/4Zu6LEGttVCr61kBra9jADb
-	/jjy6m+w5/ndf0wcalGmMEG2rotLOLG5avux5Y+L+/X2sN2IeVZI8fNT2LwWQv9Dlb/Wn2lcJjd
-	Dnfn3AoEX+/+tk9cw5vHKLaQXBdiMwFfreyNa1H4Lz/sq0KGQAzUvVA2paVIYVVx39jlE0xwFNk
-	+6UtMFlsv2gAUFKHViquQTvIDDE1Ah4YwMzFn7gUzCAS9LQOUfaJUbEbCYQ62tAwKIj9yNv7jBQ
-	HeV7Ubx4PRnqZRKAcu6tZqjmE8HYWoBgIwJoQSOnBUJ7njun8rahLMK46dGISEUMc+9H9DplxHD
-	XwWo+AkD4rlo2oBrWiSkyJuGxW8zI4xlm+VoH1PfHWjelrHTWskFADROtRAF3Ak/TSA3NfWll2p
-	NLs+hQNcNI3bqOoLgy2LpK9DwQqRxO0NDbWGTDwZvAFaHbnEIO8PI=
-X-Received: by 2002:a05:6000:26c3:b0:435:b7b9:afe5 with SMTP id ffacd0b85a97d-435f3a66f53mr16112258f8f.1.1770047949225;
-        Mon, 02 Feb 2026 07:59:09 -0800 (PST)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-435e131ce64sm46708334f8f.26.2026.02.02.07.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 07:59:08 -0800 (PST)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Mon, 02 Feb 2026 16:58:57 +0100
-Subject: [PATCH] hwmon: gpio-fan: allow to stop FANs when CONFIG_PM is
- disabled
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TuT/peSx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="r9bh5Rj4"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 4F3E77A0063;
+	Mon,  2 Feb 2026 11:04:53 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Mon, 02 Feb 2026 11:04:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1770048293;
+	 x=1770134693; bh=A5s8vBJiflOObhgPxrKF4zHMzLvR/1OrlhfaqkKdkoM=; b=
+	TuT/peSxHs1OA3x7debrv619RQpqqW3EsiUUfBpztnHZnhfeZHkNKFrEf0mjSwlh
+	CJu9eALI4pvF5Ny0vDcHcn+viOYIyBUKUGDbm6wrcBCKYEuSqw9yiwEAqQx7Ib+m
+	BMhaIslBS5TxNBR2UmgrLlOvqrhJLuI9XRg9wnZ/P+5xbTSENERTwL5Ms1J1OOHX
+	lP8EEf8t451D3LkqVXNVOLgXIPEaM0r3eK7H4ZL/hItkJrUDMRSXavHoaf8k9N4B
+	cyLGTOjG3us3AikX5/aqyOau08Mlldg2Q0YrF9tD9gUGfTScyDfHBOLbUqVKom0v
+	k7W/t2XLsbMzv0gwpxGUoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770048293; x=
+	1770134693; bh=A5s8vBJiflOObhgPxrKF4zHMzLvR/1OrlhfaqkKdkoM=; b=r
+	9bh5Rj4or5gJRgJz8SviVthV9zC8bxUYpEC04QnAUw6JABMBlShBxy8W0mb+WFZG
+	4+zKI0y/My4DNywKqqmnOzilsWsCXvS9joUfUYKS+2w4tR4VvAIa/GMMK2afxzPO
+	7E/pVxn7M8yFMxZxASpwMS0bZMpzQrklHXWIjbxe4oojKLfm+2YmGQTTqxDw/VbU
+	llcOxzXDryTRW7G8iJvHfoFXHG46XkwRQTHP0NyklB+vdZhyD7CPfDroNAQwEL7q
+	AUKdWQjPnZHSWtdRluG8RS65zx8U4QZ/yufr6Rkqf3yjUOwTkVCjQYn7Qvh0evhc
+	FZDIDrPDlgVZiwUTjYdww==
+X-ME-Sender: <xms:JMuAaTXbDgKtpDM816v67-RMy6N2afeQDpGZ5Znc0em5JTMdMSUCwA>
+    <xme:JMuAaWbHrx_lpz3qbnAKy7d7bdfKNSpiYkB8_psAka1rmkv-NM8DK02GAJeHcO72z
+    IwdbtmU1frx2g8FiFN5Wi_y6XvldHLUvr7suZw_82NKD332_jA5Jfc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeektdejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeipdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehnuhhnohdrshgrsegrnhgrlhhoghdrtghomhdprhgtphhtthhope
+    gulhgvtghhnhgvrhessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtoheprghlvgigrghn
+    ughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehflhhuth
+    hurhgvlhdrrggurhhirghnsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihih
+    rdhshhgvvhgthhgvnhhkohesihhnthgvlhdrtghomhdprhgtphhtthhopegrnhguhieskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehjihgtvdefsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhkhh
+    eslhhinhhugihfohhunhgurghtihhonhdrohhrgh
+X-ME-Proxy: <xmx:JMuAaVaMzCa6xGRIp4lVpN70Eh8Dwv_fuc8FO4QIv-jnbFwyT_0cBw>
+    <xmx:JMuAaVxQ2w95eD-3mxzEBGmBgWMHQ2qjSuo_Q2zjmRsbfefpURt8Aw>
+    <xmx:JMuAaQcdY3dZSGKEIRifX31AYO-dGUCcEXQcbkhOQziDPGPuyKHwfQ>
+    <xmx:JMuAaTIk9PEpxRxgXphC27Qnrj8CDQo-_zFW1lQ3EeD7EAusG49GyQ>
+    <xmx:JcuAaaG1E7g8O-V-3CWalHNx4RXVnakZ2xoyZhE-JCO4NGvvDPuwaqIV>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9E8E9700065; Mon,  2 Feb 2026 11:04:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-ThreadId: AS8fLWBco_53
+Date: Mon, 02 Feb 2026 17:04:32 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Arnd Bergmann" <arnd@kernel.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+ "Jonathan Cameron" <jic23@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Frank Li" <Frank.Li@nxp.com>,
+ "Andy Shevchenko" <andriy.shevchenko@intel.com>,
+ "Carlos Song" <carlos.song@nxp.com>,
+ "Adrian Fluturel" <fluturel.adrian@gmail.com>
+Cc: "David Lechner" <dlechner@baylibre.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ "Andy Shevchenko" <andy@kernel.org>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>,
+ linux-iio@vger.kernel.org
+Message-Id: <01676354-a42d-4862-87d9-7377ea55fae8@app.fastmail.com>
+In-Reply-To: <8daadfff-a8c8-4775-93de-72088f929f9f@roeck-us.net>
+References: <20260202095628.1254175-1-arnd@kernel.org>
+ <8daadfff-a8c8-4775-93de-72088f929f9f@roeck-us.net>
+Subject: Re: [PATCH] i3c, iio: fix i3c driver dependencies
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260202-gpio-fan-stop-fix-v1-1-c7853183d93d@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAMDJgGkC/x2MQQqAMAwEv1JyNqC1FPQr4qFoqrm0pRERin83e
- BmYgd0GQpVJYDYNKt0snJPK0BnYzpAOQt7VwfbW9wo8CmeMIaFcuWDkByeKbrM+TKN3oLtSSfP
- /uazv+wF5VnkcYwAAAA==
-X-Change-ID: 20260202-gpio-fan-stop-fix-9ef4c26a9364
-To: Guenter Roeck <linux@roeck-us.net>, 
- Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
 
-When CONFIG_PM is disabled, the GPIO controlled FANs can't be stopped by
-using the sysfs attributes since commit 0d01110e6356 ("hwmon: (gpio-fan)
-Add regulator support").
+On Mon, Feb 2, 2026, at 16:24, Guenter Roeck wrote:
+> On 2/2/26 01:55, Arnd Bergmann wrote:
 
-Using either the 'pwm1' or the 'fan1_target' attribute fails the same way:
+>> @@ -2381,19 +2380,7 @@ config SENSORS_TMP102
+>>   
+>>   config SENSORS_TMP103
+>>   	tristate "Texas Instruments TMP103"
+>> -	depends on I2C
+>> -	select REGMAP_I2C
+>> -	help
+>> -	  If you say yes here you get support for Texas Instruments TMP103
+>> -	  sensor chips.
+>> -
+>> -	  This driver can also be built as a module. If so, the module
+>> -	  will be called tmp103.
+>> 
+>
+> Why ? That doesn't make sense to me, and if it does, it seems unrelated
+> to what this patch claims to do.
 
-  $ echo 0 > /sys/class/hwmon/hwmon1/pwm1
-  ash: write error: Function not implemented
-  $ echo 0 > /sys/class/hwmon/hwmon1/fan1_target
-  ash: write error: Function not implemented
+Indeed, that was not intended here. Sending a fixed version now.
 
-Both commands were working flawlessly before the mentioned commit.
+I have no idea how that change got in there.
 
-The issue happens because pm_runtime_put_sync() returns with -ENOSYS
-when CONFIG_PM is disabled, and the set_fan_speed() function handles
-this as an error.
-
-In order to restore the previous behaviour, change the error check in
-the set_fan_speed() function to ignore the -ENOSYS error code.
-
-Cc: stable@vger.kernel.org
-Fixes: 0d01110e6356 ("hwmon: (gpio-fan) Add regulator support")
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/hwmon/gpio-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-index 516c34bb61c9cfa2927d31ee6459c8306be2fb5b..37645e9141dc7034fd440afed695af57829ec900 100644
---- a/drivers/hwmon/gpio-fan.c
-+++ b/drivers/hwmon/gpio-fan.c
-@@ -148,7 +148,7 @@ static int set_fan_speed(struct gpio_fan_data *fan_data, int speed_index)
- 		int ret;
- 
- 		ret = pm_runtime_put_sync(fan_data->dev);
--		if (ret < 0)
-+		if (ret < 0 && ret != -ENOSYS)
- 			return ret;
- 	}
- 
-
----
-base-commit: 1117702454262fb361869451be5b006c022eb08a
-change-id: 20260202-gpio-fan-stop-fix-9ef4c26a9364
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
-
+       Arnd
