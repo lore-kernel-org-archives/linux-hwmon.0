@@ -1,67 +1,66 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E28121ADA7
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 15:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8CC21CC43
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 15:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770045886; cv=none; b=npJk5V4GZfnhKUy+mYVDWyc619tk1kckrHtVq1bVeckH/Ut13zYKKT4A24/Kg8kQDauaZio2yqB3A4uiKaYvGfjjs9368yWWqZOc+yvxbRbcKfA+SZtnokjzBA0g7Lj2c/X8RJjSaNxh9J6/d9OLynJ5mDoWO930W8yaBBkduYU=
+	t=1770046280; cv=none; b=WYN8jK7vXvjANgTg73zVdnFd+M5efsGDCuue7IBdFYKDxlgnd7HlTz9vQ3QN5/V8ugnBFslQfhqocG+VGIjP42vfA86JUrHneqpxb/HWXxXW/HpTf41QOUa6Xr1S7LRcYfY50LVG7Ta7wvcQWqQd9EbzyfDrO99b8ARWE/QJPU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770045886; c=relaxed/simple;
-	bh=MbaS3LERvHVhVkH8jYF9YOuwA5xWcW9zDPOclh/q5n0=;
+	s=arc-20240116; t=1770046280; c=relaxed/simple;
+	bh=UEzb61WiEx2UmPh655yKl5YB3scIAObWORgpS5rNTkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MPbn9qR2nAP6kbfBHbnRzrFu3iY1jATmRvowQTKRxl1zkL9UW/3wajVpZIauwOtkEylxFSJpssv6C2SfTjBXsN2AeFBraBGQTYo0LWzvsAmTVK423af7hR7douTQGFZrY8QagosJo79khWjKwypH5O91NoU4rCiGxVH8zdQoxR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bi0YFTdx; arc=none smtp.client-ip=74.125.82.169
+	 In-Reply-To:Content-Type; b=eaT6jSCWCHOIQAu2HN/z8eXS0QBDLpu2aEf+g+ZG44PDuS8nERltcnu06Uj6DRRUS5l7t9SchNlR+opBVY8m4sQvDsb1b7uLqC7LZA71ELWBnB5mL2yJoq20Of+pG1r3hLlkohG5QsIRpoHNILmlxG8HFMu1GApCy3XKT7ar3WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MlYiVBrG; arc=none smtp.client-ip=74.125.82.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bi0YFTdx"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2b70abe3417so10041453eec.0
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 07:24:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MlYiVBrG"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-124a95e592fso5336019c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 07:31:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770045884; x=1770650684; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770046276; x=1770651076; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9p8YrmROARkEBgIDOl0qmgBvazyjaoa1X7f/B8K6qZE=;
-        b=Bi0YFTdxyhW6krnScVzXuSx/JCqeiH37370W8U7sbvS6c1TvsiJ4vwfTr+FnUgZS+8
-         ROJp+XI8gAlXy3brWhAdB8cAVd+a1UUxzePuT/QMZOde+iBiDpAqAgTMWVRa4gZSusti
-         oKjFVbNpN9T0tak+3b11nBhqGQ8FWk5FVupm7HfmbywjLCUfZd4l3RuITiwlZAgq0iQM
-         1iWy6tJshTQDtP4w2GzLK1vy2sB7C7f08Xsy6mc6S5hwnHIxdAOgP/F0C3i8wyzfhusc
-         8ijl3ADQ6N6f3F1By/eUPd3mojBiaCzGhStldZdxvdbY9QDs2Iu5dKxmH7jUGn0qS4fS
-         FzCg==
+        bh=KASwKVJAOcRcDQ62DynEubbsVbrQ52fy8su604URc1s=;
+        b=MlYiVBrGUaf5E8ChoapXNaQGq0Tfx1fq5Kt9CBf4dHp/61hInLa8jlZyN7OgMVLDIt
+         9DFbjyrHXox8FHtbxn+m7OH44jcT7xTMwJWR+lW9e21MqLPGZWkttGhur32KGTZi8fqU
+         YNB3mujrRBfE2LNhl6Pc80Fe7gef5HRK/pHRfHvcxVbnAXkoAt+4iZvKM6Vj+WeYEa6Q
+         0VVdkUxRQScaUBpzZq13NqQplzrHnLhEcGTOg40oNyqJUTeyMRxYCdXDazE0nzJxpGse
+         XH4iKzB0TFVWZOz9snJ+6f5iknL/DHiAT9fFyzVqUTfsnl9o4nDSWwHrgC/YStbv4jMS
+         uR6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770045884; x=1770650684;
+        d=1e100.net; s=20230601; t=1770046276; x=1770651076;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9p8YrmROARkEBgIDOl0qmgBvazyjaoa1X7f/B8K6qZE=;
-        b=oc/oK0uyYeA10WB9u7vHSK8PxZglUNYL2wWqCH13rDUtjetARzwuxB4ij8/umzRQVE
-         FG0KZwOYH132cwotBqdpZ5edn6q9oga1xoPCMGk/q+RpyoJ+FedVi5woUleGbGbriS0L
-         /Wx6LqK8QcxdlourwwtT/iGGveGWxwayJgi2BqJ8+BsvWALIXtFVVM9KCKz/zfrslvd8
-         VIVjIPt7wQ5pFBwPwSg6fyixRass03h0scKAdoQXLxEQcSQLQ0dlGJm/qWzRaspFXoJC
-         qH2h8OzOpFkIfSVUHNqhn5YqGB9xomCzVUPE4s0/IvQuI56w9IT28T+eAac8WQLU5k3N
-         Bfsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXy1kD93MPsbEnFjVP/GBOH/Npe+da7c0EL1iIEOBYzKRGRHRqZZOmGW/Xv5Ne4v6WZyij2RZRwnfwNEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCw6TINT9tgp4H/O4yS1fOPNBqOLtdEkOsBglIdg9ra//Ec1Ev
-	rlJZ63W6mpAniZPmkhXbZW94FCT0OvY0wuWA11iyMqx5P8cE7stP5rUoXQGNWvQh
-X-Gm-Gg: AZuq6aJpxQCOzEqFpTbxIrq9Y7ErI6MAf/KZTd8IMxGbUDEwkLzy0xtnWHwcDaffjG9
-	/BkoMMRh/j+qelqRXN0XG+Sqbx+H9JEJHH+1gh8GT6dJjfoP6eXsDbjZ078wJSQrj/3IdEXj5d1
-	hGodFzn9VPuk5sezx42ESBD0XIFn9HyW+pBMzADjUw2r2brw8DhWKhqCda5ZcflufYJB514WX2e
-	WNh8R0mFnDKppcIxlTRYjxy1XQAO8a/DGT5703BLEWETcgU6HE1yrkcH0wgVqdqQFPbSUaNninM
-	gwKXqSR7qYGalJtr/425m1yQ1W5KGGxkslRcdQ4iFt/Xo6+RMNsNniJ+WjqkgSa90sf2Mh3u6CS
-	6DnGWDdGIMmYJEznQbqxsm5nxKGMzc3fKZSCldf0QZuyhSx+Fb2ttvM/UqtW9hkFhnJXm39+Bbr
-	sW4XnFmLwfuLSOuyQOy0M3GXiQVAk5lw9eh0HBtNY23UDOQOY1biIfk7dsA0e1
-X-Received: by 2002:a05:7300:7306:b0:2b7:2664:aeae with SMTP id 5a478bee46e88-2b7c8942454mr6177131eec.37.1770045884054;
-        Mon, 02 Feb 2026 07:24:44 -0800 (PST)
+        bh=KASwKVJAOcRcDQ62DynEubbsVbrQ52fy8su604URc1s=;
+        b=rYwTzEoqCxO8UwgLJqWAHxUqnjLYXtDQGPfOFAb8KCdK4yqzDfc9TL7sgmbaekjmo4
+         gteC04rDh4BZLuJvaMdhn7mzZInCTK3d0lHmjeBWugTiaiULuQB6CAV7vBum2iv1PItM
+         IDnV9PYFEz8/F4lyqOQpFm8500/XeucuYROIRTwouHG40LD5CBOQEQbwPpJeCmPFi8zG
+         +4YuihWVwRkknktCAQYkGUnqSl+prLP7t0Ck99rCKjIlc944rvg8PnwEEKPU3UHU1bsA
+         b5otzjkCv5qxAR8kOTnSMAYd3j5kTU0CL1tPj39tozIFfbxDzsfIPzsU0qcVN4JPHlhQ
+         Fgjw==
+X-Gm-Message-State: AOJu0YzI+3txTUD/ljJ+R69TY7wspou5HAT78dOA//+Aiy7N6A0/W3Dq
+	02dfPRGHj+kou9sa+sWPwDX5JnrkOY2Dcxik6mGWOxtwF4GV/QR6S9cl
+X-Gm-Gg: AZuq6aLkSh8FjJ+2e8NpSY2ycr8qR1rl3e2t2jIqYj7VedBA/Wo49IfozYgEZ71rcVK
+	HybDKJh9DsQmoGWlxgRkU84SnAsmGGnEyagaNLg8nUmYV48fFVjXIflydOC8JcAOEUjupPNas5v
+	EJCRCnLoSAsHI2a4FsSSueoFtABOBolIIQVWe4OYyX9ZErLrqJ++PKzTub7ndFIjlgykZ91b+wX
+	CpCMXNRyg8JO+7KfIptYE8EmE3VR1xkhEsYRpqxaErZcVhG+v+wjVC7fU1V+vqtuAZPobaRdON7
+	+wjpywviBd44Bzxaj1NvKBulo19c/CdPV002RA2+ssqcv2cnYHXHuSiQmZu/3AMMZ6rfkSs1WBC
+	Ij9GK0npqT6ObaiERK40vBWM1gb5LouDgPhftajxA64x37lD5iy8GQz6+TF4PsYoCCtN2JyzLwc
+	1277xLwZZWXG26DzepKI/Sfrzq4UqCq1lmAS7cshQQO+A3K1QqmjQIq9uQc82l
+X-Received: by 2002:a05:7022:124:b0:121:dea2:d54d with SMTP id a92af1059eb24-125c0fafcd7mr5852450c88.20.1770046276127;
+        Mon, 02 Feb 2026 07:31:16 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a16cfaa8sm19624057eec.4.2026.02.02.07.24.42
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1adc60dsm19913850eec.23.2026.02.02.07.31.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 07:24:43 -0800 (PST)
+        Mon, 02 Feb 2026 07:31:15 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8daadfff-a8c8-4775-93de-72088f929f9f@roeck-us.net>
-Date: Mon, 2 Feb 2026 07:24:41 -0800
+Message-ID: <d0854014-7977-48b9-bf31-d66865352ecf@roeck-us.net>
+Date: Mon, 2 Feb 2026 07:31:14 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,19 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i3c, iio: fix i3c driver dependencies
-To: Arnd Bergmann <arnd@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jonathan Cameron <jic23@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Frank Li
- <Frank.Li@nxp.com>, Andy Shevchenko <andriy.shevchenko@intel.com>,
- Carlos Song <carlos.song@nxp.com>,
- Adrian Fluturel <fluturel.adrian@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org
-References: <20260202095628.1254175-1-arnd@kernel.org>
+Subject: Re: [PATCH 2/2] hwmon:(pmbus/xdpe1a2g7b) Add support for
+ xdpe1a2g5b/7b controllers
+To: ASHISH YADAV <ashishyadav78@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ashish Yadav <ashish.yadav@infineon.com>
+References: <20260202080355.53061-1-Ashish.Yadav@infineon.com>
+ <20260202080355.53061-3-Ashish.Yadav@infineon.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,122 +121,245 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260202095628.1254175-1-arnd@kernel.org>
+In-Reply-To: <20260202080355.53061-3-Ashish.Yadav@infineon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/2/26 01:55, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 2/2/26 00:03, ASHISH YADAV wrote:
+> From: Ashish Yadav <ashish.yadav@infineon.com>
 > 
-> All combined i2c/i3c drivers appear to suffer from the same link
-> time problem when CONFIG_I3C is set to 'm':
+> Add the pmbus driver for Infineon Digital Multi-phase XDPE1A2G5B and
+> XDPE1A2G7B controllers.
 > 
-> arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
-> mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
+> XDPE1A2G5B controller supports Linear Data format for VOUT using VOUT_MODE
+> command.
+> XDPE1A2G7B controller supports Linear and VID Data format for VOUT using
+> VOUT_MODE command.
 > 
-> This was previously fixed several times by marking individual
-> drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
-> tedious and is somewhat confusing.
+> In case of vid mode in XDPE1A2G7B controller, NVIDIA PWM VID vrm_version
+> is supported:
+> Vout = 5mV * (VID-1) + 195mV
 > 
-> Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
-> and use this in all the existing drivers that had already fixed it
-> as well as the new mmc5633 driver.
-> 
-> Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
 > ---
->   drivers/hwmon/Kconfig            | 17 ++---------------
->   drivers/i3c/Kconfig              | 12 ++++++++++++
->   drivers/iio/magnetometer/Kconfig |  2 +-
->   drivers/misc/amd-sbi/Kconfig     |  3 +--
->   4 files changed, 16 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 41c381764c2b..1ddb3f73fdc0 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1493,8 +1493,7 @@ config SENSORS_LM73
->   
->   config SENSORS_LM75
->   	tristate "National Semiconductor LM75 and compatibles"
-> -	depends on I2C
-> -	depends on I3C || !I3C
-> +	depends on I3C_OR_I2C
->   	select REGMAP_I2C
->   	select REGMAP_I3C if I3C
->   	help
-> @@ -2381,19 +2380,7 @@ config SENSORS_TMP102
->   
->   config SENSORS_TMP103
->   	tristate "Texas Instruments TMP103"
-> -	depends on I2C
-> -	select REGMAP_I2C
-> -	help
-> -	  If you say yes here you get support for Texas Instruments TMP103
-> -	  sensor chips.
-> -
-> -	  This driver can also be built as a module. If so, the module
-> -	  will be called tmp103.
-> 
+>   drivers/hwmon/pmbus/Kconfig      |   9 +++
+>   drivers/hwmon/pmbus/Makefile     |   1 +
+>   drivers/hwmon/pmbus/pmbus.h      |   2 +-
+>   drivers/hwmon/pmbus/pmbus_core.c |   4 ++
+>   drivers/hwmon/pmbus/xdpe1a2g7b.c | 115 +++++++++++++++++++++++++++++++
 
-Why ? That doesn't make sense to me, and if it does, it seems unrelated
-to what this patch claims to do.
+Driver documentation missing.
 
-> -config SENSORS_TMP108
-> -	tristate "Texas Instruments TMP108"
-> -	depends on I2C
-> -	depends on I3C || !I3C
-> +	depends on I3C_OR_I2C
->   	select REGMAP_I2C
->   	select REGMAP_I3C if I3C
->   	help
-> diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
-> index 30a441506f61..626c54b386d5 100644
-> --- a/drivers/i3c/Kconfig
-> +++ b/drivers/i3c/Kconfig
-> @@ -22,3 +22,15 @@ menuconfig I3C
->   if I3C
->   source "drivers/i3c/master/Kconfig"
->   endif # I3C
-> +
-> +config I3C_OR_I2C
-> +	tristate
-> +	default m if I3C=m
-> +	default I2C
+>   5 files changed, 130 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/hwmon/pmbus/xdpe1a2g7b.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index f3fb94cebf1a..c6750bce446d 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -684,6 +684,15 @@ config SENSORS_XDPE152
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called xdpe152c4.
+>   
+> +config SENSORS_XDPE1A2G7B
+> +	tristate "Infineon XDPE1A2G7B"
 > +	help
-> +	  Device drivers using module_i3c_i2c_driver() can use either
-> +	  i2c or i3c hosts, but cannot be built-in for the kernel when
-> +	  CONFIG_I3C=m.
+> +	  If you say yes here you get hardware monitoring support for Infineon
+> +	  XDPE1A2G5B and XDPE1A2G7B.
 > +
-> +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
-> +	  get the correct dependencies.
-> diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-> index 2b81b22c9550..448fef4e5716 100644
-> --- a/drivers/iio/magnetometer/Kconfig
-> +++ b/drivers/iio/magnetometer/Kconfig
-> @@ -143,7 +143,7 @@ config MMC5633
->   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
->   	select REGMAP_I2C if I2C
->   	select REGMAP_I3C if I3C
-> -	depends on I2C || I3C
-> +	depends on I3C_OR_I2C
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called xdpe1a2g7b.
+> +
+>   config SENSORS_XDPE122
+>   	tristate "Infineon XDPE122 family"
 >   	help
->   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
->   	  magnetic sensor.
-> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
-> index be022c71a90c..30e7fad7356c 100644
-> --- a/drivers/misc/amd-sbi/Kconfig
-> +++ b/drivers/misc/amd-sbi/Kconfig
-> @@ -1,10 +1,9 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   config AMD_SBRMI_I2C
->   	tristate "AMD side band RMI support"
-> -	depends on I2C
-> +	depends on I3C_OR_I2C
->   	depends on ARM || ARM64 || COMPILE_TEST
->   	select REGMAP_I2C
-> -	depends on I3C || !I3C
->   	select REGMAP_I3C if I3C
->   	help
->   	  Side band RMI over I2C/I3C support for AMD out of band management.
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 349a89b6d92e..620f24baa289 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -67,6 +67,7 @@ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+>   obj-$(CONFIG_SENSORS_XDP710)	+= xdp710.o
+>   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+>   obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
+> +obj-$(CONFIG_SENSORS_XDPE1A2G7B)	+= xdpe1a2g7b.o
+>   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
+>   obj-$(CONFIG_SENSORS_PIM4328)	+= pim4328.o
+>   obj-$(CONFIG_SENSORS_CRPS)	+= crps.o
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index d2e9bfb5320f..3ddcb742d289 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -416,7 +416,7 @@ enum pmbus_sensor_classes {
+>   #define PMBUS_PAGE_VIRTUAL	BIT(31)	/* Page is virtual */
+>   
+>   enum pmbus_data_format { linear = 0, ieee754, direct, vid };
+> -enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
+> +enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv, nvidia195mv };
+>   
+>   /* PMBus revision identifiers */
+>   #define PMBUS_REV_10 0x00	/* PMBus revision 1.0 */
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index be6d05def115..4d7634ee6148 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -885,6 +885,10 @@ static s64 pmbus_reg2data_vid(struct pmbus_data *data,
+>   		if (val >= 0x0 && val <= 0xd8)
+>   			rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
+>   		break;
+> +	case nvidia195mv:
+> +		if (val >= 0x01)
+> +			rv = 195 + (val - 1) * 5;  /* VID step is 5mv */
+> +		break;
+>   	}
+>   	return rv;
+>   }
+
+The core change needs to be a separate patch.
+
+> diff --git a/drivers/hwmon/pmbus/xdpe1a2g7b.c b/drivers/hwmon/pmbus/xdpe1a2g7b.c
+> new file mode 100644
+> index 000000000000..79b12b56e7b6
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/xdpe1a2g7b.c
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Infineon Multi-phase Digital XDPE1A2G5B
+> + * and XDPE1A2G7B Controllers
+> + *
+> + * Copyright (c) 2026 Infineon Technologies. All rights reserved.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +#define XDPE1A2G7B_PAGE_NUM 2
+> +#define XDPE1A2G7B_NVIDIA_195MV 0x1E /* NVIDIA mode 1.95mV, VID step is 5mV */
+> +
+> +static int xdpe1a2g7b_identify(struct i2c_client *client,
+> +			       struct pmbus_driver_info *info)
+> +{
+> +	u8 vout_params;
+> +	int i, ret, vout_mode;
+> +
+> +	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+> +	if (vout_mode >= 0 && vout_mode != 0xff) {
+
+What if vout_mode < 0 ? Also, what if the mode is different for page 1 ?
+
+Also, if I understand patch 0 correctly, executing this function is not needed
+for XDPE1A2G5B.
+
+> +		switch (vout_mode >> 5) {
+> +		case 0:
+> +			info->format[PSC_VOLTAGE_OUT] = linear;
+> +			return 0;
+> +		case 1:
+> +			info->format[PSC_VOLTAGE_OUT] = vid;
+> +			break;
+> +		default:
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	for (i = 0; i < info->pages; i++) {
+> +		/* Read the VOUT_MODE register for VID Code Type. */
+> +		ret = pmbus_read_byte_data(client, i, PMBUS_VOUT_MODE);
+
+Given that there are only two pages, reading PMBUS_VOUT_MODE for
+page 0 twice is a bit of a waste. On top of that, the need for the loop
+suggests that the mode can be different across pages. That needs to be
+supported: Bailing out in that case is not acceptable. Worse:
+What if the mode is linear on page 0 but vid on page 1 ?
+
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		vout_params = ret & GENMASK(4, 0);
+> +		switch (vout_params) {
+> +		case XDPE1A2G7B_NVIDIA_195MV:
+> +			info->vrm_version[i] = nvidia195mv;
+> +			break;
+> +		default:
+> +			return -EINVAL;
+
+This warrants an error message and an explanation (comment) why other modes
+are not supported by the driver. The detailed datasheet is not public, so
+you'll have to help out here. As mentioned above, bailing out because the
+mode on page 1 is linear is not acceptable.
+
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct pmbus_driver_info xdpe1a2g7b_info = {
+> +	.pages = XDPE1A2G7B_PAGE_NUM,
+> +	.identify = xdpe1a2g7b_identify,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		   PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP |
+> +		   PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
+> +	.func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_INPUT,
+> +};
+> +
+> +static int xdpe1a2g7b_probe(struct i2c_client *client)
+> +{
+> +	struct pmbus_driver_info *info;
+> +
+> +	info = devm_kmemdup(&client->dev, &xdpe1a2g7b_info, sizeof(*info),
+> +			    GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct i2c_device_id xdpe1a2g7b_id[] = { { "xdpe1a2g5b" },
+> +						      { "xdpe1a2g7b" },
+> +						      {} };
+
+Please use more lines and less indentation.
+
+> +
+> +MODULE_DEVICE_TABLE(i2c, xdpe1a2g7b_id);
+> +
+> +static const struct of_device_id __maybe_unused xdpe1a2g7b_of_match[] = {
+> +	{ .compatible = "infineon,xdpe1a2g5b" },
+> +	{ .compatible = "infineon,xdpe1a2g7b" },
+> +	{}
+
+... just like here.
+
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, xdpe1a2g7b_of_match);
+> +
+> +static struct i2c_driver xdpe1a2g7b_driver = {
+> +	.driver = {
+> +		.name = "xdpe1a2g7b",
+> +		.of_match_table = of_match_ptr(xdpe1a2g7b_of_match),
+> +	},
+> +	.probe = xdpe1a2g7b_probe,
+> +	.id_table = xdpe1a2g7b_id,
+> +};
+> +
+> +module_i2c_driver(xdpe1a2g7b_driver);
+> +
+> +MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon XDPE1A2G5B/7B");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
 
