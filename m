@@ -1,67 +1,67 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA4E376BD0
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 15:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E28121ADA7
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Feb 2026 15:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770045534; cv=none; b=cucYSFzM5QFMcLXMxLTeZQAC25ZMNoZF9ho2Eu1gxcY0wIkMMKnSgme3Ry87MwEDsCQQGnpCdvn4j8xgSNDt6JhRYEptJKlqKI0cG2x+weSpN1Rfet3s3D8jRHJh4LoyN5+Sxhvy5WydZATU6rEYtL9i1lWfpCYeG3oePz2s8ds=
+	t=1770045886; cv=none; b=npJk5V4GZfnhKUy+mYVDWyc619tk1kckrHtVq1bVeckH/Ut13zYKKT4A24/Kg8kQDauaZio2yqB3A4uiKaYvGfjjs9368yWWqZOc+yvxbRbcKfA+SZtnokjzBA0g7Lj2c/X8RJjSaNxh9J6/d9OLynJ5mDoWO930W8yaBBkduYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770045534; c=relaxed/simple;
-	bh=+zjYskbMXQnNft8MzUReBiuObT6dy/7vTEvHmUyjvOM=;
+	s=arc-20240116; t=1770045886; c=relaxed/simple;
+	bh=MbaS3LERvHVhVkH8jYF9YOuwA5xWcW9zDPOclh/q5n0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SakNUIniVRRnSBHLyoTKHgrvMzkutFP5+DSJm8dWdPDK3WmIBvjFlOwDp5Z61wnVSqQxmkiujwO7TGCq215U6lvP5YPOI055DsWYyQN/+vlVpGWN4Bb5Zw8Rbq2M62a+ZtkbGn6Y3SY5bFLxCMhS/NDvrBqDah2iUjDjDJyVmnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToBMxOku; arc=none smtp.client-ip=74.125.82.182
+	 In-Reply-To:Content-Type; b=MPbn9qR2nAP6kbfBHbnRzrFu3iY1jATmRvowQTKRxl1zkL9UW/3wajVpZIauwOtkEylxFSJpssv6C2SfTjBXsN2AeFBraBGQTYo0LWzvsAmTVK423af7hR7douTQGFZrY8QagosJo79khWjKwypH5O91NoU4rCiGxVH8zdQoxR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bi0YFTdx; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToBMxOku"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2b704f08e73so2408929eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 07:18:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bi0YFTdx"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2b70abe3417so10041453eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 07:24:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770045531; x=1770650331; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770045884; x=1770650684; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LDCiY8TG5eNaEr/sCWKc9Mka+bVdBZQpMlZxy/9XJA8=;
-        b=ToBMxOkuVzGfBrX5nWH2p37x/3mhnhtyqsGympfGfzf9SIICPX6yGfAQuG9OcTAULu
-         2goEmrzZTx6b5327A55uKhWzthC0m8Es8hsLJiZNr52mumt8rATpzuNthK9AuwuUo4yY
-         Rgrrnqz+K0YRQC5Wbg6SGF66enzUgatwAgLnGcbERVzA0SIT+BuPVG1+4w1rjvtybuSe
-         629QoObirAqMY02dB3uYhxGEXCoUkl1uFFQLSDBvnjCbD3vhMim6WEkQ6+48NiFbn1JI
-         ngT1wq7V7RJ14hT3dU36BwmQmD1VMIk3WERh1XK0KBqi42lE20L/DVNTF3h4zX83Jj/R
-         BfEA==
+        bh=9p8YrmROARkEBgIDOl0qmgBvazyjaoa1X7f/B8K6qZE=;
+        b=Bi0YFTdxyhW6krnScVzXuSx/JCqeiH37370W8U7sbvS6c1TvsiJ4vwfTr+FnUgZS+8
+         ROJp+XI8gAlXy3brWhAdB8cAVd+a1UUxzePuT/QMZOde+iBiDpAqAgTMWVRa4gZSusti
+         oKjFVbNpN9T0tak+3b11nBhqGQ8FWk5FVupm7HfmbywjLCUfZd4l3RuITiwlZAgq0iQM
+         1iWy6tJshTQDtP4w2GzLK1vy2sB7C7f08Xsy6mc6S5hwnHIxdAOgP/F0C3i8wyzfhusc
+         8ijl3ADQ6N6f3F1By/eUPd3mojBiaCzGhStldZdxvdbY9QDs2Iu5dKxmH7jUGn0qS4fS
+         FzCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770045531; x=1770650331;
+        d=1e100.net; s=20230601; t=1770045884; x=1770650684;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LDCiY8TG5eNaEr/sCWKc9Mka+bVdBZQpMlZxy/9XJA8=;
-        b=h0YFnlwrTooMdxZggj8EpTy5KIxfi6RwY+0nLNNROSYPhwEpbLzVqWb/R/Cnhb+QeD
-         g60bX4K/iY48OWg9itz8vM1vU/s63I2hWVV2sVEm440p/w0z8cbHFoDARxKyAF5j7GRx
-         sJVmAzUUYYpukJgrpNR6SCkCwaI7opsxcQ3dRkyOAGukCIFsHrG3SawB1ThzZ8J16Hs6
-         RxdQCdBffm34DjkOOjFQ1IJ9TmyTzOXoagkXwpcPx40mWRj5d0W5800IfL9G0TT9jpQf
-         N17JY+0+CopTLvoUYhu9SaVBslPErsLh2s+flXeol8B4CbHIczxMiYYXzNuMm3TcdntT
-         Rxzw==
-X-Forwarded-Encrypted: i=1; AJvYcCXyInv8t3/n6Pi00JPtV53TlhjZtgTQYfkrSaZDJLYi9C75l/GpixDYS9phmkew1d3XEKmGLZ9bzM1dtg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYb+17ZDGyiv6LQMtEU1fXIphr0Gg8BvQJZKxtMYj6tIannnw7
-	Mtp1ng/R47sjB+YvKXt4T2QAfrqogvIjZDTbro9CtiyJj+4ZsuAQDSVw
-X-Gm-Gg: AZuq6aK1F7pJuGxnJkiFJql3okUBTjbUvHP/ARr4Us1UAqlfpgU+hr3bnwoIAgTg3k8
-	8atRa7YkF/RGkZ8mnk9YE7rPfskmMot0wFBGofJF0AWci5dGxnJgHOK93ctPqO3zhkiEJ9+Foue
-	sR0MJj8qdhfshn4b1zJQsB9MIFsTERBSIkpL7yyGCoTCBpzORCYEXvI7PqBQ0uYQ65x94dDmPjU
-	GQ4LnguRyzr2TML3Lwyuj+msX/4uTBPB9wtoA1PhCfD2/fqHvFgdMmZdM6k259EKd4ucCUwg0yt
-	0yoZruLLM9MP9UqdcovXAlWDnOcBaTcax5S4dhOkXFx6t7duvfDnNemcUFi6JSAlmcu48riM9Ai
-	/znSb+5Vos1GwopLYmvk9Y8mPEFh8HdWA0CAO+9LQ54s7U/4ZefsZoYCI0VZ6pQlwjHVHnwOK4r
-	QFsDKA7DhUfw+jMGw3SVPpnQ9HHbS6O/VSWm6ZQ64t2einHF8mO3+uXP0RYJrt
-X-Received: by 2002:a05:7300:8b24:b0:2b7:c00a:f733 with SMTP id 5a478bee46e88-2b7c923a06bmr4612479eec.5.1770045529575;
-        Mon, 02 Feb 2026 07:18:49 -0800 (PST)
+        bh=9p8YrmROARkEBgIDOl0qmgBvazyjaoa1X7f/B8K6qZE=;
+        b=oc/oK0uyYeA10WB9u7vHSK8PxZglUNYL2wWqCH13rDUtjetARzwuxB4ij8/umzRQVE
+         FG0KZwOYH132cwotBqdpZ5edn6q9oga1xoPCMGk/q+RpyoJ+FedVi5woUleGbGbriS0L
+         /Wx6LqK8QcxdlourwwtT/iGGveGWxwayJgi2BqJ8+BsvWALIXtFVVM9KCKz/zfrslvd8
+         VIVjIPt7wQ5pFBwPwSg6fyixRass03h0scKAdoQXLxEQcSQLQ0dlGJm/qWzRaspFXoJC
+         qH2h8OzOpFkIfSVUHNqhn5YqGB9xomCzVUPE4s0/IvQuI56w9IT28T+eAac8WQLU5k3N
+         Bfsg==
+X-Forwarded-Encrypted: i=1; AJvYcCXy1kD93MPsbEnFjVP/GBOH/Npe+da7c0EL1iIEOBYzKRGRHRqZZOmGW/Xv5Ne4v6WZyij2RZRwnfwNEw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCw6TINT9tgp4H/O4yS1fOPNBqOLtdEkOsBglIdg9ra//Ec1Ev
+	rlJZ63W6mpAniZPmkhXbZW94FCT0OvY0wuWA11iyMqx5P8cE7stP5rUoXQGNWvQh
+X-Gm-Gg: AZuq6aJpxQCOzEqFpTbxIrq9Y7ErI6MAf/KZTd8IMxGbUDEwkLzy0xtnWHwcDaffjG9
+	/BkoMMRh/j+qelqRXN0XG+Sqbx+H9JEJHH+1gh8GT6dJjfoP6eXsDbjZ078wJSQrj/3IdEXj5d1
+	hGodFzn9VPuk5sezx42ESBD0XIFn9HyW+pBMzADjUw2r2brw8DhWKhqCda5ZcflufYJB514WX2e
+	WNh8R0mFnDKppcIxlTRYjxy1XQAO8a/DGT5703BLEWETcgU6HE1yrkcH0wgVqdqQFPbSUaNninM
+	gwKXqSR7qYGalJtr/425m1yQ1W5KGGxkslRcdQ4iFt/Xo6+RMNsNniJ+WjqkgSa90sf2Mh3u6CS
+	6DnGWDdGIMmYJEznQbqxsm5nxKGMzc3fKZSCldf0QZuyhSx+Fb2ttvM/UqtW9hkFhnJXm39+Bbr
+	sW4XnFmLwfuLSOuyQOy0M3GXiQVAk5lw9eh0HBtNY23UDOQOY1biIfk7dsA0e1
+X-Received: by 2002:a05:7300:7306:b0:2b7:2664:aeae with SMTP id 5a478bee46e88-2b7c8942454mr6177131eec.37.1770045884054;
+        Mon, 02 Feb 2026 07:24:44 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1adef97sm19943163eec.29.2026.02.02.07.18.48
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a16cfaa8sm19624057eec.4.2026.02.02.07.24.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Feb 2026 07:18:48 -0800 (PST)
+        Mon, 02 Feb 2026 07:24:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5e1aaeb-d832-44ac-ba19-77f162b4f31d@roeck-us.net>
-Date: Mon, 2 Feb 2026 07:18:47 -0800
+Message-ID: <8daadfff-a8c8-4775-93de-72088f929f9f@roeck-us.net>
+Date: Mon, 2 Feb 2026 07:24:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,16 +69,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] hwmon: add support for MCP998X
-To: Victor.Duicu@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, corbet@lwn.net
-Cc: Marius.Cristea@microchip.com, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20260127151823.9728-1-victor.duicu@microchip.com>
- <20260127151823.9728-3-victor.duicu@microchip.com>
- <491bd9ec-d6b7-4f1a-877b-67ffbc658ba8@roeck-us.net>
- <da5b2f992a430d30efb558502aec7dc6f6769b0d.camel@microchip.com>
+Subject: Re: [PATCH] i3c, iio: fix i3c driver dependencies
+To: Arnd Bergmann <arnd@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jonathan Cameron <jic23@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Frank Li
+ <Frank.Li@nxp.com>, Andy Shevchenko <andriy.shevchenko@intel.com>,
+ Carlos Song <carlos.song@nxp.com>,
+ Adrian Fluturel <fluturel.adrian@gmail.com>
+Cc: David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org
+References: <20260202095628.1254175-1-arnd@kernel.org>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -124,192 +127,122 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <da5b2f992a430d30efb558502aec7dc6f6769b0d.camel@microchip.com>
+In-Reply-To: <20260202095628.1254175-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 2/2/26 00:15, Victor.Duicu@microchip.com wrote:
-> Hi Guenter,
+On 2/2/26 01:55, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
+> All combined i2c/i3c drivers appear to suffer from the same link
+> time problem when CONFIG_I3C is set to 'm':
 > 
->>> +static int mcp9982_read_limit(struct mcp9982_priv *priv, u8
->>> address, long *val)
->>> +{
->>> +     unsigned int limit, reg_high, reg_low;
->>> +     int ret;
->>> +
->>> +     switch (address) {
->>> +     case MCP9982_INTERNAL_HIGH_LIMIT_ADDR:
->>> +     case MCP9982_INTERNAL_LOW_LIMIT_ADDR:
->>> +     case MCP9982_THERM_LIMIT_ADDR(0):
->>> +     case MCP9982_THERM_LIMIT_ADDR(1):
->>> +     case MCP9982_THERM_LIMIT_ADDR(2):
->>> +     case MCP9982_THERM_LIMIT_ADDR(3):
->>> +     case MCP9982_THERM_LIMIT_ADDR(4):
->>> +             ret = regmap_read(priv->regmap, address, &limit);
->>> +             if (ret)
->>> +                     return ret;
->>> +
->>> +             *val = limit & 0xFF;
->>> +             *val = (*val - MCP9982_OFFSET) * 1000;
->>> +
->>> +             return 0;
->>> +     case MCP9982_EXT_HIGH_LIMIT_ADDR(1):
->>> +     case MCP9982_EXT_HIGH_LIMIT_ADDR(2):
->>> +     case MCP9982_EXT_HIGH_LIMIT_ADDR(3):
->>> +     case MCP9982_EXT_HIGH_LIMIT_ADDR(4):
->>> +     case MCP9982_EXT_LOW_LIMIT_ADDR(1):
->>> +     case MCP9982_EXT_LOW_LIMIT_ADDR(2):
->>> +     case MCP9982_EXT_LOW_LIMIT_ADDR(3):
->>> +     case MCP9982_EXT_LOW_LIMIT_ADDR(4):
->>> +             /*
->>> +              * The register address determines whether a single
->>> byte or
->>> +              * multiple byte (block) operation is run. For a
->>> single byte
->>> +              * operation, the MSB of the register address is set
->>> to "0".
->>> +              * For a multiple byte operation, it is set to "1".
->>> The addresses
->>> +              * quoted in the register map and throughout the data
->>> sheet assume
->>> +              * single byte operation. For multiple byte
->>> operations, the user
->>> +              * must set the MSB of each register address to "1".
->>> +              */
->>> +             ret = regmap_read(priv->regmap, address, &reg_high);
->>> +             if (ret)
->>> +                     return ret;
->>> +
->>> +             ret = regmap_read(priv->regmap, address + 1,
->>> &reg_low);
->>> +             if (ret)
->>> +                     return ret;
->>> +
->> Consider using regmap_bulk_read().
+> arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
+> mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
 > 
->    The MCP998X family is designed so that block reading is allowed only
-> on the dedicated temperature and memory blocks. Reading from
-> those memory areas uses the SMBus protocol, which returns count
-> and the data. From any other memory region, reading only one byte
-> is allowed. This behavior is described in the documentation at page 26.
+> This was previously fixed several times by marking individual
+> drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
+> tedious and is somewhat confusing.
 > 
->    In V2 patch, block reading was used in this function, however this
-> was an exploit. After reading one byte the chip returns NACK to finish
-> the read, that will force the Linux driver to issue another 1 byte read
-> for the second byte, which will return the value and stop.
->    For the addresses 0x00 to 0x09 (temperature registers) the chip will
-> not return NACK after the first byte, it will just go to sleep and
-> return invalid data 0xff. That was a design choice to be backwards
-> compatible with older parts.
+> Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
+> and use this in all the existing drivers that had already fixed it
+> as well as the new mmc5633 driver.
 > 
-This warrants a comment in the code. Others won't know and might send
-a patch to "fix" the code.
+> Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   drivers/hwmon/Kconfig            | 17 ++---------------
+>   drivers/i3c/Kconfig              | 12 ++++++++++++
+>   drivers/iio/magnetometer/Kconfig |  2 +-
+>   drivers/misc/amd-sbi/Kconfig     |  3 +--
+>   4 files changed, 16 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 41c381764c2b..1ddb3f73fdc0 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1493,8 +1493,7 @@ config SENSORS_LM73
+>   
+>   config SENSORS_LM75
+>   	tristate "National Semiconductor LM75 and compatibles"
+> -	depends on I2C
+> -	depends on I3C || !I3C
+> +	depends on I3C_OR_I2C
+>   	select REGMAP_I2C
+>   	select REGMAP_I3C if I3C
+>   	help
+> @@ -2381,19 +2380,7 @@ config SENSORS_TMP102
+>   
+>   config SENSORS_TMP103
+>   	tristate "Texas Instruments TMP103"
+> -	depends on I2C
+> -	select REGMAP_I2C
+> -	help
+> -	  If you say yes here you get support for Texas Instruments TMP103
+> -	  sensor chips.
+> -
+> -	  This driver can also be built as a module. If so, the module
+> -	  will be called tmp103.
+> 
 
-> ...
-> 
->>>
->>> +             switch (attr) {
->>> +             case hwmon_temp_input:
->>> +                     /*
->>> +                      * The chips support block reading only on
->>> the temperature and
->>> +                      * status memory blocks. The driver uses only
->>> individual read commands.
->>> +                      */
->>> +                     ret = regmap_read(priv->regmap,
->>> MCP9982_HIGH_BYTE_ADDR(channel), &reg_high);
->>> +                     if (ret)
->>> +                             return ret;
->>> +
->>> +                     ret = regmap_read(priv->regmap,
->>> MCP9982_HIGH_BYTE_ADDR(channel) + 1,
->>> +                                       &reg_low);
->>> +                     if (ret)
->>> +                             return ret;
->>> +
->>
->> Consider using regmap_bulk_read().
-> 
->    In V2 patch, block reading was used to read the temperatures from the
-> dedicated memory. However, the operation would use SMBus protocol
-> and return count alongside the data.
-> 
->    Regmap_bulk_read() in this context uses SMBus protocol, while in the
-> context of reading the temperature limits uses I2C protocol(and is an
-> invalid request).
-> 
->    In order to avoid having one function with multiple behaviors and
-> to keep the driver more generic all block reads were removed.
-> 
-As above.
+Why ? That doesn't make sense to me, and if it does, it seems unrelated
+to what this patch claims to do.
 
-> 
->>> +                     *val = ((reg_high << 8) + reg_low) >> 5;
->>> +                     *val = (*val - (MCP9982_OFFSET << 3)) * 125;
->>> +
->>> +                     return 0;
->>> +             case hwmon_temp_max:
->>> +                     if (channel)
->>> +                             addr =
->>> MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
->>> +                     else
->>> +                             addr =
->>> MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
->>> +
->>> +                     return mcp9982_read_limit(priv, addr, val);
->>> +             case hwmon_temp_max_alarm:
->>> +                     *val = regmap_test_bits(priv->regmap,
->>> MCP9982_HIGH_LIMIT_STATUS_ADDR,
->>> +                                             BIT(channel));
->>> +                     if (*val < 0)
->>> +                             return *val;
->>> +
->>> +                     return 0;
->>> +             case hwmon_temp_max_hyst:
->>> +                     if (channel)
->>> +                             addr =
->>> MCP9982_EXT_HIGH_LIMIT_ADDR(channel);
->>> +                     else
->>> +                             addr =
->>> MCP9982_INTERNAL_HIGH_LIMIT_ADDR;
->>> +                     ret = mcp9982_read_limit(priv, addr, val);
->>> +                     if (ret)
->>> +                             return ret;
->>> +
->>> +                     ret = regmap_read(priv->regmap,
->>> MCP9982_HYS_ADDR, &hyst);
->>> +                     if (ret)
->>> +                             return ret;
->>> +
->>> +                     *val -= (hyst & 0xFF) * 1000;
->>
->> What is the mask for ? The chip registers are 8 bit wide.
->>
->>> +                     *val = clamp_val(*val, -64000, 191875);
->>
->> Clamping on reads is highly unusual. Why is this needed ?
-> 
->    There are instances when the hysteresis limit could be outside
-> the range of temperatures.
-> 
->    For example, if the high limit is set to -45000 and the hysteresis
-> is set to 20000, the high limit hysteresis is -65000 which is outside
-> the range of supported temperatures.
-> 
->    The hysteresis is set related to the critical temperature (that is
-> higher then the "high limit") but it will be applied also to the "high
-> temperature". In this case the hysteresis is valid for critical but it
-> will be out of range for the "high temp".
-> 
-"Supported" is irrelevant. Question is what is written into and reported by
-the chip. It may be "out of range", but the value is still written into
-the chip. So the question is: How does the chip react to the "out of range"
-values ? I suspect that it technically still works, even if the value is not
-officially supported. That should be reflected in the reported values.
-More specifically, if setting the hysteresis in your example to 19000
-instead of 20000 triggers a different response from the chip, that needs
-to be reflected in the reported values.
-
-Guenter
+> -config SENSORS_TMP108
+> -	tristate "Texas Instruments TMP108"
+> -	depends on I2C
+> -	depends on I3C || !I3C
+> +	depends on I3C_OR_I2C
+>   	select REGMAP_I2C
+>   	select REGMAP_I3C if I3C
+>   	help
+> diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
+> index 30a441506f61..626c54b386d5 100644
+> --- a/drivers/i3c/Kconfig
+> +++ b/drivers/i3c/Kconfig
+> @@ -22,3 +22,15 @@ menuconfig I3C
+>   if I3C
+>   source "drivers/i3c/master/Kconfig"
+>   endif # I3C
+> +
+> +config I3C_OR_I2C
+> +	tristate
+> +	default m if I3C=m
+> +	default I2C
+> +	help
+> +	  Device drivers using module_i3c_i2c_driver() can use either
+> +	  i2c or i3c hosts, but cannot be built-in for the kernel when
+> +	  CONFIG_I3C=m.
+> +
+> +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
+> +	  get the correct dependencies.
+> diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
+> index 2b81b22c9550..448fef4e5716 100644
+> --- a/drivers/iio/magnetometer/Kconfig
+> +++ b/drivers/iio/magnetometer/Kconfig
+> @@ -143,7 +143,7 @@ config MMC5633
+>   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
+>   	select REGMAP_I2C if I2C
+>   	select REGMAP_I3C if I3C
+> -	depends on I2C || I3C
+> +	depends on I3C_OR_I2C
+>   	help
+>   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
+>   	  magnetic sensor.
+> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
+> index be022c71a90c..30e7fad7356c 100644
+> --- a/drivers/misc/amd-sbi/Kconfig
+> +++ b/drivers/misc/amd-sbi/Kconfig
+> @@ -1,10 +1,9 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   config AMD_SBRMI_I2C
+>   	tristate "AMD side band RMI support"
+> -	depends on I2C
+> +	depends on I3C_OR_I2C
+>   	depends on ARM || ARM64 || COMPILE_TEST
+>   	select REGMAP_I2C
+> -	depends on I3C || !I3C
+>   	select REGMAP_I3C if I3C
+>   	help
+>   	  Side band RMI over I2C/I3C support for AMD out of band management.
 
