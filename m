@@ -1,152 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A35729BDBA;
-	Tue,  3 Feb 2026 08:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C7830EF83
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Feb 2026 12:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770108201; cv=none; b=uUydRw/5QEDGbuV9u+ZsegxTjxYJZ4ASzTO/PhE5z415E4TTaORVNOww3nox0Cyc3d8kufLRPJ4MLRdi5yQpBivjE4i6GyC2yZ9ABeRaGQ5UmK4BYQbreJxCcvrI1XE3sb8AWp4Ce2ltYPI41pkgGJ6moccLtUahRDRkHRBinGY=
+	t=1770120971; cv=none; b=ES2Zugx+V3GA/uhr7acyDD7UOHmW/H8BU+LA3Nyo6gt9Od0BGR7cuMTUs0xknLAsOeRoRrApGRANLbydEy3LBss7fGP8B+SQ4QdxaMg0Thu2siunqZSHPYoGZLMNw0VadBCFgf7TB6LFq6cNa0oFpajTx1WWewB96egQgEEsbWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770108201; c=relaxed/simple;
-	bh=hV/ruXO7UDFq1C/AfF42iwnnxPKhJd1hDbMI3qPFY2g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fUrI6KjU65VBCnBwWOsssQiefhXU5q1D9kaJ+fho8Y8bRnNOLJubtvBEl9wEwIaoxPPfYaEKGHOiQyVJnm8AJ8JA6wGacVMOiLR2s7ctTBiupw5e2cvmx5l0IWiPMBeQcPd9RHQdOv+mK3eMH6ynfUXS4SAW/3QJTL4c1jpjg6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNMpFlXi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770120971; c=relaxed/simple;
+	bh=oBNlv8tpYIAfycUufaW2kqcNJPt0+IY20m9BXQcCGbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XKLWWn/on8DfwfAykx5rbi9Rao1h0c//pM4onEZbMMPPfZ6U1oLrKLDLI6ZElzVPm4VDHff80MRZZxS340Yi3/KXR1Uvc7zsNToTTXOM9ac+QXlLnKxCKODz4fvt0/wRhbC8X9qsG/R3Uk06VV436HImsOq39Uh5hRjvLJCqdyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QmXap9PL; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNMpFlXi"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0BFF5C116D0;
-	Tue,  3 Feb 2026 08:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770108201;
-	bh=hV/ruXO7UDFq1C/AfF42iwnnxPKhJd1hDbMI3qPFY2g=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=HNMpFlXi626HBEfHhN/FmLuIFbBREWixMW8MQcl0CUYhF02R2ckqtWz/rAUfvmsMj
-	 vscK5rxRgMe2ulQePnCO/mvNdVGc20+SI3rOxZuggNhrYHfvkAk/UpwnX4As+lLHKH
-	 9kNb/695CpxfNt8KI/ozflIBZ0GYJ0Pzs+C+uibfhB72MqFBwHLrZuPpMjr+jhK6Rq
-	 8TqHf+36sGJZ6zBqWcLTL38EBoRVT5O/loxyK4vP5LccMpqZcX66DPAWv9edbc0nsK
-	 e5jG9/xgjCpPzEQ8dJMQcHHEUpnRysT0a4tKPL02PlckV6++FChjzbZA9/MsKxZwoV
-	 FBKeNlt6iSrjw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0404E8305D;
-	Tue,  3 Feb 2026 08:43:20 +0000 (UTC)
-From: Carl Lee via B4 Relay <devnull+carl.lee.amd.com@kernel.org>
-Date: Tue, 03 Feb 2026 16:42:58 +0800
-Subject: [PATCH] hwmon: pmbus: mpq8785: add support for MPQ8786
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QmXap9PL"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82318b640beso3116372b3a.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 03 Feb 2026 04:16:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770120969; x=1770725769; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ibRrXpgw1lU51ODUe8Kbvxi0SMmu3MLTIurVFgESCMQ=;
+        b=QmXap9PLs4e9k2Ck8cvMq/l+QVIdgig/sfrpTF05+SKiJq0/kOCfLjp0yFnV5NO2jn
+         2T0O0C3wrQVYKah+5qLf5JkbAdWWVWlUepvhxW2lIcN7N7NkVjC3BtFbMUrmaX7A+YBt
+         T3GrlnVWscAtFnUS3nfkEPD43doQ4kxcEeP6kpBWp/n7TVG9SLL8JYRik8sujwRKYi++
+         YQx/DinXD4AUOTq13LMYQVx4UIShP6uO5VS5TVFZwU3u/jfNZd0w0gmNETK6gPi4/Ulm
+         4P8ooZLcyk3WuY0hdAdeJHodROOUSjP/6Ti2nCnWLEDH/eYz1qWm1VuRKtB5vbAqLsu/
+         u8qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770120969; x=1770725769;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibRrXpgw1lU51ODUe8Kbvxi0SMmu3MLTIurVFgESCMQ=;
+        b=ZI/wb7mqHKL3jIZ6RUxBI7tjHzJsFL7eaaiZrUn7T0PtJU5SrG6ONRJhB5ZC3yHyON
+         QKeb5J2EQw5txRum8hAFpKbzxEs/LSfBERow+9uAKfTpzwZlzVMKgE5elmgJi0i5v2Zb
+         ycowQMQSX8Mrudcl3kY6YUEt9gWsFhZXqg3gC6FdQIrdv8P3Ev+2Y7LChu+kSAqTTRdc
+         DbSO2o+HHxxHIEjx2J+3V93ISryFYOfg5IcDa7+CEziVu82xDzEBqUFw8Hm49wcySO57
+         V5KaEvfmn6L6QO1MCAgyKAQML9iJPdDi0nMeMwYf0sJd6hG/RvQtSz4syiS4SCzeLDj4
+         pn1A==
+X-Gm-Message-State: AOJu0YyHF37HE5BCFXgEOMQiot1vGy4AyiaZx/KEHVAo9kHZWK1qmnai
+	MTX/bXZPh4+ens8/izQiH+1BYx1EXJG/n8lmOfo0WEuEqN4BtlCwdNPV
+X-Gm-Gg: AZuq6aIdPFRKUg85OCsQpe8k1tb7mcMXnrWTTHq3HE0OIuGJfus4Aegw04lCadpXx0G
+	gxiMwY379EcoC9YUNb5hcVQLOLR66TURs0RyNqLo3sNaoCgCjSZVpNMrbmGCa88q3Rh2sTW4xFf
+	OG7DKQ1Q5uxgw9Y/mCSHGdfuXpzf6fGyoiH8Qrhf1npQxn66qdwI0Spj4L9FbLqoPy5tYO/3ek2
+	bnpX52dst/Qz8Xw7do5EXf8U9BszSlmMHQ1ITiKlqvG20ZohDID0bw61NLgt+yZz0FEKSd78mV4
+	iSANBayIZMTJ178C9SPFiFrTpobli9jLo5mVq/4edaey5l0oG2eh46YNeAaOabkA6ZcGlTTuznu
+	CjTm72ZORx/gUPr6+mF/0C6CYbahUO2T4QyvkXNkj79QnHHKKtOWi1ydQ8jAoyq/qaT7PuvvOk3
+	eQL0EuA4ZRQ8C2nJaVZfrOhC+L2guCCe9PcfOzaTHe8ayvBZMAq3qOrLg4mElHpeItnR6fM8hKZ
+	7GWP71khMJTHAzqIIoAZFPbiJxkruTVRInfp7pW0fbBulqreeABGwU4E32g1nS7FYbA
+X-Received: by 2002:aa7:9064:0:b0:81f:50b1:51f2 with SMTP id d2e1a72fcca58-823aa71118cmr12594872b3a.41.1770120968901;
+        Tue, 03 Feb 2026 04:16:08 -0800 (PST)
+Received: from 2045D.localdomain (120.sub-75-226-39.myvzw.com. [75.226.39.120])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379bfb924sm19339481b3a.34.2026.02.03.04.16.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 04:16:08 -0800 (PST)
+From: Gui-Dong Han <hanguidong02@gmail.com>
+To: linux@roeck-us.net
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Gui-Dong Han <hanguidong02@gmail.com>,
+	Ben Hutchings <ben@decadent.org.uk>,
+	stable@vger.kernel.org
+Subject: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler optimization induced race
+Date: Tue,  3 Feb 2026 20:14:43 +0800
+Message-ID: <20260203121443.5482-1-hanguidong02@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260203-hwmon-pmbus-mpq8785-add-support-for-mpq8786-v1-1-9ff8c7c50242@amd.com>
-X-B4-Tracking: v=1; b=H4sIABG1gWkC/y2NQQ7CIBAAv9Ls2U0opFD9ivHQlsVyAFbWqknTv
- 0uMx5nDzA5CNZLApduh0itKLLlBf+pgWad8J4y+MWilrdLK4PpOJSOneRNM/BjdOODkPcrGXOo
- TQ6l/b3EgZxZ3tnPoDbQiVwrx87tdb8fxBYEl4UV9AAAA
-X-Change-ID: 20260203-hwmon-pmbus-mpq8785-add-support-for-mpq8786-5e73c796bf13
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- carl.lee@amd.com, peter.shen@amd.com, colin.huang2@amd.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770108199; l=3052;
- i=carl.lee@amd.com; s=20260203; h=from:subject:message-id;
- bh=+PacOTgLkW0YQft+ipYSb3SkImmHU2R/2tpMwxSBWcI=;
- b=Yd7JCbyvZZMcmdLFPfzl/4O8EFB4TwLDrohyaFVZSwFABjGUoyqWynWW9RheKLDA61zIxDfC6
- 9QbRfn67CNzAP/D9FOWXiTut46X8g4qZloJPjrNhBkgPZDbKrh6o7Km
-X-Developer-Key: i=carl.lee@amd.com; a=ed25519;
- pk=pyq7QaQvoxMg806KVkRwpCbiah+7ncWr4MBpK1AEyjA=
-X-Endpoint-Received: by B4 Relay for carl.lee@amd.com/20260203 with
- auth_id=623
-X-Original-From: Carl Lee <carl.lee@amd.com>
-Reply-To: carl.lee@amd.com
+Content-Transfer-Encoding: 8bit
 
-From: Carl Lee <carl.lee@amd.com>
+Simply copying shared data to a local variable cannot prevent data
+races. The compiler is allowed to optimize away the local copy and
+re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
+issue if the data changes between the check and the usage.
 
-Add support for the Monolithic Power Systems MPQ8786 digital voltage
-regulator.
+To enforce the use of the local variable, use READ_ONCE() when reading
+the shared data and WRITE_ONCE() when updating it. Apply these macros to
+the three identified locations (curr_sense, adc, and fault) where local
+variables are used for error validation, ensuring the value remains
+consistent.
 
-Signed-off-by: Carl Lee <carl.lee@amd.com>
+Reported-by: Ben Hutchings <ben@decadent.org.uk>
+Closes: https://lore.kernel.org/all/6fe17868327207e8b850cf9f88b7dc58b2021f73.camel@decadent.org.uk/
+Fixes: f5bae2642e3d ("hwmon: Driver for MAX16065 System Manager and compatibles")
+Fixes: b8d5acdcf525 ("hwmon: (max16065) Use local variable to avoid TOCTOU")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
 ---
- Documentation/hwmon/mpq8785.rst | 7 +++++++
- drivers/hwmon/pmbus/mpq8785.c   | 6 +++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ drivers/hwmon/max16065.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/hwmon/mpq8785.rst b/Documentation/hwmon/mpq8785.rst
-index 198d5dfd7c30..39306033990f 100644
---- a/Documentation/hwmon/mpq8785.rst
-+++ b/Documentation/hwmon/mpq8785.rst
-@@ -8,6 +8,7 @@ Supported chips:
-   * MPS MPM3695 family
-   * MPS MPM82504
-   * MPS MPQ8785
-+  * MPS MPQ8786
+diff --git a/drivers/hwmon/max16065.c b/drivers/hwmon/max16065.c
+index 4c9e7892a73c..43fbb9b26b10 100644
+--- a/drivers/hwmon/max16065.c
++++ b/drivers/hwmon/max16065.c
+@@ -151,27 +151,27 @@ static struct max16065_data *max16065_update_device(struct device *dev)
+ 		int i;
  
-     Prefix: 'mpq8785'
+ 		for (i = 0; i < data->num_adc; i++)
+-			data->adc[i]
+-			  = max16065_read_adc(client, MAX16065_ADC(i));
++			WRITE_ONCE(data->adc[i],
++				   max16065_read_adc(client, MAX16065_ADC(i)));
  
-@@ -38,6 +39,12 @@ buck converter. The MPQ8785 offers a very compact solution that achieves up to
- wide input supply range. The MPQ8785 operates at high efficiency over a wide
- output current load range.
+ 		if (data->have_current) {
+-			data->adc[MAX16065_NUM_ADC]
+-			  = max16065_read_adc(client, MAX16065_CSP_ADC);
+-			data->curr_sense
+-			  = i2c_smbus_read_byte_data(client,
+-						     MAX16065_CURR_SENSE);
++			WRITE_ONCE(data->adc[MAX16065_NUM_ADC],
++				   max16065_read_adc(client, MAX16065_CSP_ADC));
++			WRITE_ONCE(data->curr_sense,
++				   i2c_smbus_read_byte_data(client, MAX16065_CURR_SENSE));
+ 		}
  
-+The MPQ8786 is a fully integrated, PMBus-compatible, high-frequency, synchronous
-+buck converter. The device shares the same PMBus interface and register behavior
-+as the MPQ8785, but provides a lower output current capability of up to 25A per
-+phase. It offers excellent load and line regulation over a wide input supply
-+range and operates at high efficiency over a wide output current load range.
-+
- The PMBus interface provides converter configurations and key parameters
- monitoring.
+ 		for (i = 0; i < 2; i++)
+-			data->fault[i]
+-			  = i2c_smbus_read_byte_data(client, MAX16065_FAULT(i));
++			WRITE_ONCE(data->fault[i],
++				   i2c_smbus_read_byte_data(client, MAX16065_FAULT(i)));
  
-diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-index 1f56aaf4dde8..f35534836cb8 100644
---- a/drivers/hwmon/pmbus/mpq8785.c
-+++ b/drivers/hwmon/pmbus/mpq8785.c
-@@ -12,13 +12,14 @@
+ 		/*
+ 		 * MAX16067 and MAX16068 have separate undervoltage and
+ 		 * overvoltage alarm bits. Squash them together.
+ 		 */
+ 		if (data->chip == max16067 || data->chip == max16068)
+-			data->fault[0] |= data->fault[1];
++			WRITE_ONCE(data->fault[0],
++				   data->fault[0] | data->fault[1]);
  
- #define MPM82504_READ_TEMPERATURE_1_SIGN_POS	9
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
+@@ -185,7 +185,7 @@ static ssize_t max16065_alarm_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(da);
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int val = data->fault[attr2->nr];
++	int val = READ_ONCE(data->fault[attr2->nr]);
  
--enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785 };
-+enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785, mpq8786 };
+ 	if (val < 0)
+ 		return val;
+@@ -203,7 +203,7 @@ static ssize_t max16065_input_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int adc = data->adc[attr->index];
++	int adc = READ_ONCE(data->adc[attr->index]);
  
- static u16 voltage_scale_loop_max_val[] = {
- 	[mpm3695] = GENMASK(9, 0),
- 	[mpm3695_25] = GENMASK(11, 0),
- 	[mpm82504] = GENMASK(9, 0),
- 	[mpq8785] = GENMASK(10, 0),
-+	[mpq8786] = GENMASK(10, 0),
- };
+ 	if (unlikely(adc < 0))
+ 		return adc;
+@@ -216,7 +216,7 @@ static ssize_t max16065_current_show(struct device *dev,
+ 				     struct device_attribute *da, char *buf)
+ {
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int curr_sense = data->curr_sense;
++	int curr_sense = READ_ONCE(data->curr_sense);
  
- static int mpq8785_identify(struct i2c_client *client,
-@@ -87,6 +88,7 @@ static const struct i2c_device_id mpq8785_id[] = {
- 	{ "mpm3695-25", mpm3695_25 },
- 	{ "mpm82504", mpm82504 },
- 	{ "mpq8785", mpq8785 },
-+	{ "mpq8786", mpq8786 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(i2c, mpq8785_id);
-@@ -96,6 +98,7 @@ static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
- 	{ .compatible = "mps,mpm3695-25", .data = (void *)mpm3695_25 },
- 	{ .compatible = "mps,mpm82504", .data = (void *)mpm82504 },
- 	{ .compatible = "mps,mpq8785", .data = (void *)mpq8785 },
-+	{ .compatible = "mps,mpq8786", .data = (void *)mpq8786 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, mpq8785_of_match);
-@@ -128,6 +131,7 @@ static int mpq8785_probe(struct i2c_client *client)
- 		info->read_word_data = mpm82504_read_word_data;
- 		break;
- 	case mpq8785:
-+	case mpq8786:
- 		info->identify = mpq8785_identify;
- 		break;
- 	default:
-
----
-base-commit: 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
-change-id: 20260203-hwmon-pmbus-mpq8785-add-support-for-mpq8786-5e73c796bf13
-
-Best regards,
+ 	if (unlikely(curr_sense < 0))
+ 		return curr_sense;
 -- 
-Carl Lee <carl.lee@amd.com>
-
+2.43.0
 
