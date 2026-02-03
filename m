@@ -1,182 +1,351 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D76309DDB;
-	Mon,  2 Feb 2026 20:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85230286A7
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Feb 2026 00:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770065423; cv=none; b=Ks++ZRcaXISij0aruVwrfbvQxbGo9KghGYVBPH0zSk0grScUGIWLpK3v6th6lVZnrrVFRDYpkduvkscbgEXzfzZF2g6ICq2kE+nWeYhHwc+v3YG/uDF0Sg2n57FqjbBv2xsUp8NWzm1vk2owHmz/8+6bxUD8xze3KxHCYHdHPLE=
+	t=1770078396; cv=none; b=PJAEgFGryXsv2CXUO/bRoxOy+f7PDsHRTHFB0sfnOnYiiRh+NWNbwnMZX9xbnj8jU1xwV7ykP75CB81v4U5GNWGTsx9PmUIu5/XSo/K7hVOdFlwwVeI2/GiCpvFh9gZ9ieFaQnSSmZUXEjHXxNhvCiNEmw/8XTpmXd+DxmplOvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770065423; c=relaxed/simple;
-	bh=1K9FI4E1ObwdqxpHx7LiEIwfiSyDWa5czwseb70lxOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XLiw3ARmbC/0h10G8RQmVQBF6gYubRgEaS97cfpjMO1+t1VdHKFBtHAgF23hyODvzV0ljQv6CIj98Ru5GxbZugz6NoVKo0b7MEGyYbtTJUQpHnayi4clbG97X+hl0xtlJfYm/gREmciRoqczzH22iV0FnurTtbeXLa0uai1rJTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWMEuYN6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770078396; c=relaxed/simple;
+	bh=lBxpp5TwDJeQrWcQDy+VSo0+8Yk8tpMpQP3NeBwBHt0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CwWGl2nP3sJu1kELOwwOZkdhyUgNMqT8GPa8ovicH8x6Al4KcL2lY05mFgrDdubC/Q9N7JqJ+ZkDBGkwM6NhikOJe4IiVRonxJyiVzAoopSZ4kCeNKZIzOXY41Klj4PltSAY4Tz0f4WQ4S2L8tyeCoqHap4+hp1tST+wafda3nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eXOHf1fM; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWMEuYN6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D151C19421;
-	Mon,  2 Feb 2026 20:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770065422;
-	bh=1K9FI4E1ObwdqxpHx7LiEIwfiSyDWa5czwseb70lxOM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DWMEuYN6LL7+Xs4vqeMZxI1nmYb0GyD4q6+L9W5e152Id1qWy63DEzAhJZuKhPqPB
-	 14kn5L3XUXD50ZrsbuoalJeVt7b3qcQvcpb+Ovsdtid5wj++N8dusDPJ4efTiYK917
-	 fT0GmdZz9JXtyCvh47fBGAPYWeWIFZq02V+joLduvLhk8ttgteWqsD51nZKsjyMn4y
-	 YEXpsBuuqpn0wKmcJkl8Zc1wTlUhjqq1MBr3K4sKsSKXhkK81MhRC5OCg7T7blNihd
-	 L5kCcDiS/9oDKFguV9i75Q3rh2cCoYg+O2v43QB/vZTSuKfECGsA9Gd200GEpW0Cdj
-	 8UwRgABQXbE1A==
-Date: Mon, 2 Feb 2026 20:50:11 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Arnd Bergmann <arnd@kernel.org>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Andy Shevchenko
- <andriy.shevchenko@intel.com>, Frank Li <Frank.Li@nxp.com>, Adrian Fluturel
- <fluturel.adrian@gmail.com>, Carlos Song <carlos.song@nxp.com>, David
- Lechner <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Jean Delvare
- <jdelvare@suse.de>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org,
- linux-iio@vger.kernel.org
-Subject: Re: [PATCH] [v2] i3c, iio: fix i3c driver dependencies
-Message-ID: <20260202205011.221c1359@jic23-huawei>
-In-Reply-To: <a8f8ee55-3c87-4e9c-a5a9-12929855b86f@roeck-us.net>
-References: <20260202160543.3654499-1-arnd@kernel.org>
-	<a8f8ee55-3c87-4e9c-a5a9-12929855b86f@roeck-us.net>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eXOHf1fM"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-352f60d6c2fso3269871a91.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Feb 2026 16:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770078394; x=1770683194; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qj9DGCZDqnyud/88uMxDaXERPVFoP9PUcwkcmUSA9xA=;
+        b=eXOHf1fMu7VkgDc9t9BL2Wgnbyic1/mFf/hvqNpUIKDxNrOI25DS91LWCOx7Au0Jmh
+         0w2xHgeWhVvBcfXX44OQbqWK94l5mUg8yAOQk44aXA1JqyB59LedCDBwTQEKTTpwJfKD
+         A1TW6wCm7rToxAcJu9fHanWNpNGJmfTkmLZPAsle3FpP2Rn3nq/z+tlnAAV3B7TjzwZx
+         D9jCulZlEb8yZobIUdLl8PLPMtRB7ZSE6ok2LJ9wJ/xJ6/T4SzGbUvVan+X6YNLNyM0m
+         Iljpbk3wjfYbQFWSalgSLrgo/tfIXmABGTzlHNd8egw8wMogvPsV6AL1qCqDYQExw/ZA
+         Rk3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770078394; x=1770683194;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qj9DGCZDqnyud/88uMxDaXERPVFoP9PUcwkcmUSA9xA=;
+        b=HYQcZDw+UDf1J1v7+KlidO6RkUfDRoeGr3kRW+qOpmwRNJsxIEn8mFSoHRuyp7geDp
+         NErcZZIDyp3C0amy2v/REaZQciiArmwmq7t2voEa4srVZbLFJKM6CYfifY/vVQ23IEgv
+         Ba6MS0Ap91B7yiM2E2uqjc1PBz16Uga47WHX72jCb1c107FKVOuco8Del5J3+Qn2D0uH
+         54RGF3ZqzGn3NmcE0iO6Ea12ZSKxH2d8Qmij6dE8XRIVUpqey4tyEtWTZtiJOJx25HVV
+         aLAExhOqLhdJVj0BxazxN4GFjKfm9J/SjGsLO7OankYpaDnI5mrAGWqYV3OweD4CvDFK
+         L2jQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/BM9wwqIA10GLTPefBOZDLwKk19m3QUBRHSEur2tDxSDg+afBD8mHyc0Y1cvpMM5t3hJp3hTCcj/v8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7GvhK4LwKKCuOGPTx3te6XHDl2whTOUGo+p7TGWp+H2aA+fYP
+	wRgjBmvMeyL6R2oaKqF2+815MdjIbzu0pKkNk4GfC3IAiZq61krcHJ/Fy+Qdun7A
+X-Gm-Gg: AZuq6aKxOvujnINaGNPLC9McUTVO0EyCwjQMlAbEV5W776y5y4rVLVK7Q2bW7M77qsX
+	odwOQjfmQhr58a5NWJ5nLsbmYPp0QiU05CBJi7PZYJrAZSJmc5NNdG6cqfsEtbn9p+0RXUWUF49
+	/OWt0hcHHXOX4U8QlNT3uLLEPe2jtPYzGekux+F7BCVdnXgeFyZ1UEQM2Kq7oyF1UZYUycLaGDp
+	3nISYg8Y73bfpdkZBXDoDtQ+V8GXPQpRxRGKWrm3/w0Bk+UIiAfwJALzcBH8Eqm1s7Ecbry6VKo
+	c8dTpnRNxnub62mDu5q0pzVC5FZ1+696xHSu771WC1W5xxnM0ZDt5HJjxQ5sUoEed4wcTGNWDWd
+	SZ0X+q1WKsoVYR2ws+TDePrp2qLSboAevUXvDrLSmu9WdEBJHax1NgXejnM/xRwFngifuKc14Z3
+	11U2rFq9uw97F2qkgT9laGd1niZzOYGnf32rMepytl9EG+E3jip4tvI5a0Lnoo
+X-Received: by 2002:a17:90b:3c49:b0:340:bfcd:6afa with SMTP id 98e67ed59e1d1-3543b2dcea7mr11180871a91.8.1770078393724;
+        Mon, 02 Feb 2026 16:26:33 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354774e0034sm578711a91.0.2026.02.02.16.26.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 16:26:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a510ab93-ce0a-466e-b3d0-6e872d4fa182@roeck-us.net>
+Date: Mon, 2 Feb 2026 16:26:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: acpi_power_meter: power*_average sysfs read hangs, mutex deadlock
+ in hwmon_attr_show since v6.18.y
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc: linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ Igor Raits <igor@gooddata.com>, Daniel Secik <daniel.secik@gooddata.com>,
+ Zdenek Pesek <zdenek.pesek@gooddata.com>,
+ Jiri Jurica <jiri.jurica@gooddata.com>, Huisong Li <lihuisong@huawei.com>
+References: <CAK8fFZ58fidGUCHi5WFX0uoTPzveUUDzT=k=AAm4yWo3bAuCFg@mail.gmail.com>
+ <CAJZ5v0jSbGtRYkjqeuYaT3LXbeZ-xk_Gc0dbCpTZPc6nBD8eCQ@mail.gmail.com>
+ <e03c8b69-e667-45b8-b82c-2cd4f1c96bdf@roeck-us.net>
+ <CAJZ5v0hvKzKTWA8jFYVDHttd+hDv1juu87vgyhf2udOGbqrQdg@mail.gmail.com>
+ <d7f34e0f-e258-4fef-93eb-1ef0a3123d95@roeck-us.net>
+ <CAK8fFZ4izdX_HDtGN60CZ3Ta61nqkUg7ncViM=mGgxKki_5FoQ@mail.gmail.com>
+ <a7334568-13ce-4600-8650-607273e67976@roeck-us.net>
+ <CAK8fFZ6gKs7s2rJ=f7bt24f+_cY-jGU33TvX3UP=U58uK-1KaQ@mail.gmail.com>
+ <fff54ec8-496e-4c26-b652-358dc4de0de0@roeck-us.net>
+ <CAK8fFZ4wEUdMAHkfdC_z8ohYB_rEXZ=dHArc75jDibgQ_-ozKw@mail.gmail.com>
+ <4f151d4c-fdc6-4281-87b0-b7120eeb1b46@roeck-us.net>
+ <CAK8fFZ401-nez_CgDTTnQiPT=oBRRJuYooXyEKFuCdHpGCPXtA@mail.gmail.com>
+ <27d60756-d33e-4926-9a02-f52505339de6@roeck-us.net>
+ <CAK8fFZ43wrQ8A_bO_g+rKN9O31sxULtqA0hUieZSzEH5KqeW1Q@mail.gmail.com>
+ <CAJZ5v0hEu_io2BAzp9weUDHwHngorjZ37GRUK=ngSXNjtp38qw@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAJZ5v0hEu_io2BAzp9weUDHwHngorjZ37GRUK=ngSXNjtp38qw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2 Feb 2026 09:50:58 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On 2/2/26 08:04, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > All combined i2c/i3c drivers appear to suffer from the same link
-> > time problem when CONFIG_I3C is set to 'm':
-> > 
-> > arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
-> > mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
-> > 
-> > This was previously fixed several times by marking individual
-> > drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
-> > tedious and is somewhat confusing.
-> > 
-> > Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
-> > and use this in all the existing drivers that had already fixed it
-> > as well as the new mmc5633 driver.
-> > 
-> > Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> > v2: restore accidentally deleted lines
-> > ---
-> >   drivers/hwmon/Kconfig            |  6 ++----  
+On 2/2/26 11:26, Rafael J. Wysocki wrote:
+> On Mon, Feb 2, 2026 at 7:14 PM Jaroslav Pulchart
+> <jaroslav.pulchart@gooddata.com> wrote:
+>>
+>>>
+>>> On 2/2/26 08:48, Jaroslav Pulchart wrote:
+>>>>>
+>>>>> On Thu, Jan 29, 2026 at 04:26:37PM +0100, Jaroslav Pulchart wrote:
+>>>>>>>
+>>>>>>> On 1/27/26 03:58, Jaroslav Pulchart wrote:
+>>>>>>> ...
+>>>>>>>>>> Hello,
+>>>>>>>>>>
+>>>>>>>>>> Thank you for the analysis and insights.
+>>>>>>>>>>
+>>>>>>>>>> To add some context from our side: we observe this issue shortly after
+>>>>>>>>>> a server reinstall or fw updates followed by a reboot, typically when
+>>>>>>>>>> hwmon sensors are accessed for the first time (e.g. by monitoring during
+>>>>>>>>>> early system initialization). We have not seen it trigger during normal
+>>>>>>>>>> operation, such as a simple reboot or on long-running systems.
+>>>>>>>>>>
+>>>>>>>>>> Given this behavior, it is possible that the issue is related to
+>>>>>>>>>> hwmon_device_unregister() being triggered early during system
+>>>>>>>>>> initialization, but I do not have concrete evidence at this point.
+>>>>>>>>>>
+>>>>>>>>>> As a workaround, we will exclude the ACPI power meter from hwmon monitoring
+>>>>>>>>>> (Grafana Alloy) until the mentioned refactoring or a fix becomes available.
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Would it be possible for you to test the patch series I just sent out ?
+>>>>>>>>
+>>>>>>>> I suppose these 5 patches from
+>>>>>>>> https://lore.kernel.org/lkml/20260123182208.2229670-1-linux@roeck-us.net/
+>>>>>>>>     ?
+>>>>>>>
+>>>>>>> Correct.
+>>>>>>>
+>>>>>>>> I will try them and let you know.
+>>>>>>>>
+>>>>>>> Thanks !
+>>>>>>
+>>>>>>
+>>>>>> The issue is still there:
+>>>>>> ...
+>>>>>
+>>>>> Thnaks a lot for testing.
+>>>>>
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.105931] INFO: task alloy:5985 blocked for more than 124 seconds.
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.114475]       Tainted: G            E 6.18.7-2.gdc.el9.x86_64 #1
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.122872] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.132932] task:alloy           state:D stack:0     pid:5985 tgid:5871  ppid:1      task_flags:0x400140 flags:0x00080001
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.145975] Call Trace:
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.149985]  <TASK>
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.154931]  __schedule+0x2b5/0x690
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.160934]  schedule+0x23/0x80
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.166498]  schedule_timeout+0xe8/0x100
+>>>>>> 1769654277410 2026-01-29T02:37:57.410Z Jan 29 03:37:57 10.8.8.76  [ 741.172936]  __wait_for_common+0x99/0x1c0
+>>>>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.179148]  ? __pfx_schedule_timeout+0x10/0x10
+>>>>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.185936]  acpi_ipmi_space_handler.part.0+0x1ac/0x370 [acpi_ipmi]
+>>>>>> 1769654277660 2026-01-29T02:37:57.660Z Jan 29 03:37:57 10.8.8.76  [ 741.194929]  acpi_ev_address_space_dispatch+0x16d/0x3c0
+>>>>>
+>>>>> Looks like acpi holds another lock. Can you check if the patch submitted by
+>>>>> Rafael fixes the problem ?
+>>>>
+>>>> Hello,
+>>>>
+>>>> I tested the patch as a standalone change, and the issue is still present.
+>>>>
+>>>> However, I can now reliably reproduce the problem. It is triggered while
+>>>> Dell iDRAC is being reset or updated and is temporarily unavailable. During
+>>>> this time, a [kipmi0] task enters D state for an extended period, and
+>>>> shortly after (or during this), the ACPI power meter hwmon interface ends up
+>>>> in the locked state described earlier.
+>>>>
+>>>> This explains why we mostly observe the issue after redeployments in our
+>>>> environment: server redeployments typically include iDRAC firmware updates
+>>>> or resets performed together with operating system installation or updates.
+>>>>
+>>>
+>>> Thanks for the update. Do you have a dmesg log showing the problem with Rafael's
+>>> patch applied, by any chance ?
+>>
+>> [  740.004138] INFO: task alloy:8260 blocked for more than 122 seconds.
+>> [  740.010752]       Tainted: G            E       6.18.8-1.gdc.el9.x86_64 #1
+>> [  740.019257] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>> disables this message.
+>> [  740.030103] task:alloy           state:D stack:0     pid:8260
+>> tgid:8260  ppid:1      task_flags:0x400100 flags:0x00080001
+>> [  740.045068] Call Trace:
+>> [  740.050334]  <TASK>
+>> [  740.055075]  __schedule+0x2b5/0x690
+>> [  740.062073]  schedule+0x23/0x80
+>> [  740.068081]  schedule_preempt_disabled+0x11/0x20
+>> [  740.074962]  __mutex_lock.constprop.0+0x3c9/0xa00
+>> [  740.083073]  hwmon_attr_show+0x36/0x130
+>> [  740.089081]  dev_attr_show+0x19/0x60
+>> [  740.095876]  sysfs_kf_seq_show+0xbf/0x140
+>> [  740.102810]  seq_read_iter+0x112/0x510
+>> [  740.109070]  ? security_file_permission+0x8e/0xa0
+>> [  740.117100]  vfs_read+0x215/0x340
+>> [  740.123113]  ksys_read+0x61/0xe0
+>> [  740.130088]  do_syscall_64+0x5d/0xb40
+>> [  740.137032]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [  740.144601] RIP: 0033:0x408d8e
+>> [  740.151070] RSP: 002b:000000c001cad498 EFLAGS: 00000206 ORIG_RAX:
+>> 0000000000000000
+>> [  740.160825] RAX: ffffffffffffffda RBX: 0000000000000022 RCX: 0000000000408d8e
+>> [  740.170097] RDX: 0000000000000080 RSI: 000000c007c28880 RDI: 0000000000000022
+>> [  740.180085] RBP: 000000c001cad4d8 R08: 0000000000000000 R09: 0000000000000000
+>> [  740.190074] R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+>> [  740.201069] R13: 0000000000000040 R14: 000000c0058b1dc0 R15: ffffffffffffffff
+>> [  740.211072]  </TASK>
+>> [  740.215117] INFO: task alloy:8268 blocked for more than 123 seconds.
+>> [  740.224109]       Tainted: G            E       6.18.8-1.gdc.el9.x86_64 #1
+>> [  740.234089] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>> disables this message.
+>> [  740.243611] task:alloy           state:D stack:0     pid:8268
+>> tgid:8260  ppid:1      task_flags:0x400140 flags:0x00080001
+>> [  740.258077] Call Trace:
+>> [  740.261260]  <TASK>
+>> [  740.266083]  __schedule+0x2b5/0x690
+>> [  740.273081]  schedule+0x23/0x80
+>> [  740.279055]  schedule_preempt_disabled+0x11/0x20
+>> [  740.286087]  __mutex_lock.constprop.0+0x3c9/0xa00
+>> [  740.294074]  hwmon_attr_show+0x36/0x130
+>> [  740.300089]  dev_attr_show+0x19/0x60
+>> [  740.306074]  sysfs_kf_seq_show+0xbf/0x140
+>> [  740.313074]  seq_read_iter+0x112/0x510
+>> [  740.319075]  ? security_file_permission+0x8e/0xa0
+>> [  740.326064]  vfs_read+0x215/0x340
+>> [  740.331218]  ksys_read+0x61/0xe0
+>> [  740.337078]  do_syscall_64+0x5d/0xb40
+>> [  740.342083]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [  740.349376] RIP: 0033:0x408d8e
+>> [  740.355086] RSP: 002b:000000c008403498 EFLAGS: 00000206 ORIG_RAX:
+>> 0000000000000000
+>> [  740.365088] RAX: ffffffffffffffda RBX: 000000000000001f RCX: 0000000000408d8e
+>> [  740.375072] RDX: 0000000000000080 RSI: 000000c006a47d80 RDI: 000000000000001f
+>> [  740.383669] RBP: 000000c0084034d8 R08: 0000000000000000 R09: 0000000000000000
+>> [  740.393072] R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+>> [  740.401326] R13: 0000000000000040 R14: 000000c005ea7880 R15: ffffffffffffffff
+>> [  740.411087]  </TASK>
+>> [  740.416089] INFO: task alloy:8270 blocked for more than 123 seconds.
+>> [  740.425081]       Tainted: G            E       6.18.8-1.gdc.el9.x86_64 #1
+>> [  740.434091] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>> disables this message.
+>> [  740.444078] task:alloy           state:D stack:0     pid:8270
+>> tgid:8260  ppid:1      task_flags:0x400140 flags:0x00080001
+>> [  740.457108] Call Trace:
+>> [  740.462080]  <TASK>
+>> [  740.467073]  __schedule+0x2b5/0x690
+>> [  740.472252]  schedule+0x23/0x80
+>> [  740.478087]  schedule_preempt_disabled+0x11/0x20
+>> [  740.485099]  __mutex_lock.constprop.0+0x3c9/0xa00
+>> [  740.491096]  hwmon_attr_show+0x36/0x130
+>> [  740.497082]  dev_attr_show+0x19/0x60
+>> [  740.503078]  sysfs_kf_seq_show+0xbf/0x140
+>> [  740.510030]  seq_read_iter+0x112/0x510
+>> [  740.516073]  ? security_file_permission+0x8e/0xa0
+>> [  740.523355]  vfs_read+0x215/0x340
+>> [  740.529077]  ksys_read+0x61/0xe0
+>> [  740.534925]  do_syscall_64+0x5d/0xb40
+>> [  740.540253]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>> [  740.548077] RIP: 0033:0x408d8e
+>> [  740.553078] RSP: 002b:000000c0085cf498 EFLAGS: 00000206 ORIG_RAX:
+>> 0000000000000000
+>> [  740.563075] RAX: ffffffffffffffda RBX: 000000000000001b RCX: 0000000000408d8e
+>> [  740.572088] RDX: 0000000000000080 RSI: 000000c006d44f80 RDI: 000000000000001b
+>> [  740.582076] RBP: 000000c0085cf4d8 R08: 0000000000000000 R09: 0000000000000000
+>> [  740.591086] R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000000
+>> [  740.600086] R13: 0000000000000040 R14: 000000c005703c00 R15: 0000000000000054
+>> [  740.609481]  </TASK>
+>> [  740.614084] INFO: task alloy:8287 blocked for more than 123 seconds.
+>> [  740.623089]       Tainted: G            E       6.18.8-1.gdc.el9.x86_64 #1
+>> [  740.632094] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+>> disables this message.
+>> [  740.642083] task:alloy           state:D stack:0     pid:8287
+>> tgid:8260  ppid:1      task_flags:0x400140 flags:0x00080001
+>> [  740.656080] Call Trace:
+>> [  740.660694]  <TASK>
+>> [  740.665087]  __schedule+0x2b5/0x690
+>> [  740.671086]  schedule+0x23/0x80
+>> [  740.677080]  schedule_timeout+0xe8/0x100
+>> [  740.683134]  __wait_for_common+0x99/0x1c0
 > 
-> For hwmon:
+> So this is wait_for_completion(&tx_msg->tx_complete) in
+> acpi_ipmi_space_handler(), if I'm not mistaken, which never gets
+> completed, so stuff cannot make progress.
 > 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> I guess what happens is that one of the ACPI methods evaluated by the
+> acpi_power_meter driver trips on an IPMI operation region and locks up
+> because of the above.
 > 
-Hi Arnd / All,
-
-I applied a less good fix and the pull request has gone to Greg for
-the IIO bug. I copied the hwmon config you have below.
-
-So I'm absolutely in favour of this improvement but it's
-probably a case of rebase after rc1 and it goes in next cycle.
-Or maybe Greg could pick a rebased version up on top of char-misc-next?
-
-So with it rebased,
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-
-
-Jonathan
-
-> >   drivers/i3c/Kconfig              | 12 ++++++++++++
-> >   drivers/iio/magnetometer/Kconfig |  2 +-
-> >   drivers/misc/amd-sbi/Kconfig     |  3 +--
-> >   4 files changed, 16 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 41c381764c2b..ecfba861f66d 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1493,8 +1493,7 @@ config SENSORS_LM73
-> >   
-> >   config SENSORS_LM75
-> >   	tristate "National Semiconductor LM75 and compatibles"
-> > -	depends on I2C
-> > -	depends on I3C || !I3C
-> > +	depends on I3C_OR_I2C
-> >   	select REGMAP_I2C
-> >   	select REGMAP_I3C if I3C
-> >   	help
-> > @@ -2392,8 +2391,7 @@ config SENSORS_TMP103
-> >   
-> >   config SENSORS_TMP108
-> >   	tristate "Texas Instruments TMP108"
-> > -	depends on I2C
-> > -	depends on I3C || !I3C
-> > +	depends on I3C_OR_I2C
-> >   	select REGMAP_I2C
-> >   	select REGMAP_I3C if I3C
-> >   	help
-> > diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
-> > index 30a441506f61..626c54b386d5 100644
-> > --- a/drivers/i3c/Kconfig
-> > +++ b/drivers/i3c/Kconfig
-> > @@ -22,3 +22,15 @@ menuconfig I3C
-> >   if I3C
-> >   source "drivers/i3c/master/Kconfig"
-> >   endif # I3C
-> > +
-> > +config I3C_OR_I2C
-> > +	tristate
-> > +	default m if I3C=m
-> > +	default I2C
-> > +	help
-> > +	  Device drivers using module_i3c_i2c_driver() can use either
-> > +	  i2c or i3c hosts, but cannot be built-in for the kernel when
-> > +	  CONFIG_I3C=m.
-> > +
-> > +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
-> > +	  get the correct dependencies.
-> > diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
-> > index 2b81b22c9550..448fef4e5716 100644
-> > --- a/drivers/iio/magnetometer/Kconfig
-> > +++ b/drivers/iio/magnetometer/Kconfig
-> > @@ -143,7 +143,7 @@ config MMC5633
-> >   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
-> >   	select REGMAP_I2C if I2C
-> >   	select REGMAP_I3C if I3C
-> > -	depends on I2C || I3C
-> > +	depends on I3C_OR_I2C
-> >   	help
-> >   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
-> >   	  magnetic sensor.
-> > diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
-> > index be022c71a90c..30e7fad7356c 100644
-> > --- a/drivers/misc/amd-sbi/Kconfig
-> > +++ b/drivers/misc/amd-sbi/Kconfig
-> > @@ -1,10 +1,9 @@
-> >   # SPDX-License-Identifier: GPL-2.0-only
-> >   config AMD_SBRMI_I2C
-> >   	tristate "AMD side band RMI support"
-> > -	depends on I2C
-> > +	depends on I3C_OR_I2C
-> >   	depends on ARM || ARM64 || COMPILE_TEST
-> >   	select REGMAP_I2C
-> > -	depends on I3C || !I3C
-> >   	select REGMAP_I3C if I3C
-> >   	help
-> >   	  Side band RMI over I2C/I3C support for AMD out of band management.  
+> Did you, by any chance, upgrade the firmware in the time frame between
+> 6.17 and 6.18?
 > 
+
+"It is triggered while Dell iDRAC is being reset or updated and is temporarily unavailable."
+
+so I guess this is a yes. What I don't understand is why this wasn't seen before.
+I would have assumed that the problem exists even without the additional
+lock in the hardware monitoring core. Obviously I am missing something.
+
+Any idea ?
+
+Thanks,
+Guenter
 
