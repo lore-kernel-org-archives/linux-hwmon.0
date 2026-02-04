@@ -1,67 +1,66 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBC033985
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Feb 2026 22:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D425322B81
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Feb 2026 22:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770242952; cv=none; b=Wjz1uQiXiix+b7HdmQ8NScdwU6kKDcg7k0akWnVT8elujin+wNAA8jpnaX5ENcGyZ/igBjTPwY8jUC0Cf3QJT1PQNpT05awVj0Gc4yahja3+RXZ7wcIM9O0MG1xl4l25wye9vFBl6yDpj315C3yNQpOylcB4YgAanjZiL4G7hGc=
+	t=1770244783; cv=none; b=nDYcCHxyXSFdp6Hl2U0YgxKCBs925FZjBSo83xq1UKlU7lCj6wkPKAE3RESjq7uIiioLWTHozQwR3sucYb5ALO/xlgbVVYEgjB8ASPnU9dsGRjnlPs0NTwnVIiJZbgiKqFAgWXSX69MNFKuOJtDqGdzMAYlCHbNE9PTr5Y5Jz2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770242952; c=relaxed/simple;
-	bh=jzVXfpj2TtaJAU8n3GQn5GE8ngNR11Jg7Qx83YicUeA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=mNEfDWr/LhsL/OSrbIIiJforTM2QsNk4IUNtmRVu2As13+Erv/MggyV8b0Viubht3UGZJSl0qHUqYOfXAGJOwOqNBVRl5PcOK9dwQMQAMJbFbNOPNTgKx8Gs524v/lVEeU4qY2Z4tFNEJI2/Z03hItzvBmCwrROciAHMmIDsPRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XV6AoC1p; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1770244783; c=relaxed/simple;
+	bh=MRs7o+uspEhuovBWK8vduZqW4n6QnZk/Xj9aL67trwg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZS6O4pctiXBrVcQX5OyYtvHOTa4612VVbr4PLYMk26sGl16Tqu6EEsp7gnObMSrSBFaX8XbrfoEbIaq0sZ9hNAkQcS18SLniktzOnUPLzmJKqoSPzLwpzTwfTfzNbdzzPJ8zyYlRVuikPpGwYnUmX9g9XVyofGVGJCLcYjKSqxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AuGBHJ9e; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XV6AoC1p"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a743050256so2159475ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Feb 2026 14:09:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AuGBHJ9e"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-823c56765fdso222061b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Feb 2026 14:39:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770242951; x=1770847751; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770244783; x=1770849583; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6+tFel27j/+qLvMq2SC1oIZUAR+XBVSVb+IrXwy2KNA=;
-        b=XV6AoC1pnwY/5Fk8x/q+RrOHzvXjSZbEmmUETLO7XtTH/tsGX+VFHc7LsetrspSEBl
-         C7BYLFhtmOWKksT3SF4BSIKv3ZRzMrs8zOPOe2l3W/o2PwZr4evLAJ8XiLdvWlhzE4Fx
-         giwFJOCJUj4uhO9+qAf+wn076immUyOHbbEtlu4/V91/X2h0pnPbY35NhFmywTYTtZdD
-         jBjfmA1WqottXHejr26hrOxdn5l4zgRa7If8T3qT3bKC0XsM0CXhQ7nCMFJfK4sfFYv4
-         jp4DeLLDnZQtT0R84Hkscwt9fxLUJOlIH58METDUml5uP6SbkJu1oVcmpmxO0jGClbev
-         2/Uw==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxZo7zqeqh9dI/ONOGvDxhP7HYC4stTlFPIR/ife04U=;
+        b=AuGBHJ9eaiiS0gLonAOarDI0QlxY7RbnDDX+It6IjZv8wkziZI2zfx4RilyZ2mBd3f
+         yJWEjO3Kl8ovmbBfYbwg6SqTu3uPwWV6/8onaYM8zkQNMjIFYn9PGJl3S4FU/OHSpWYi
+         cN2wKqDv387CoVY6bJub47qzpMDavo3X+FeY2alXJS5J2IBLwLAnvxUQupuvKzAs8y0i
+         zifopJ7YqjJDx1t9r5eVDbpEdfq43CZU89tlwkhJrNHcSBYf7x1uZ6jRFAEiwmxkRYcG
+         a+Uxy3xgZ2IXDOVWNDaBw2vay2wxVMJjnrdlSGVCwsPwZw521qZkJH4jbaTqghdeyQoU
+         WiYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770242951; x=1770847751;
+        d=1e100.net; s=20230601; t=1770244783; x=1770849583;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6+tFel27j/+qLvMq2SC1oIZUAR+XBVSVb+IrXwy2KNA=;
-        b=lVLAKM3AA9etW3JbTx0hly4iaBRG2/30KlHUJE1LUgZHlxVEsD4+l098JuRLj/5vu0
-         +r525oBMTm//uwMXCsMebcE4ue+D4JJ9Vq8rveSdkLZ5I9xe1vzxtc/K5bdu1e3eD9SN
-         K1GB/bDSln6MvjSIMTM90/oKOUa0LrHYhon+eRIry/iwOdu1G+ZTozhS53QaXftGXiDV
-         1gejZgHQf66qIAOLx3iuPPk+P86n7DJjh7GRcoeI2t/Z5uVsJxpNOg4hNHziAxS50NGo
-         i2tSEOtra1F9WkE/9Wo4afCA0OgEYgdsYHRXANO2+0/fpwj7t9jy656D0iZRpGMKflex
-         sHHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUThSnEk/4O2byFkVCPXafJbG1LtdN4Ttm7m5/mJiCa/v500SHBT4Yl6VYvWdSBDgp6yDmRM/vj7D5uSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye5XUVWhF0Qn04wVA+FIvFJbhAoKl38Q+wBduOfKGOWIKzn+Kn
-	8AwZY60vS8Cp3p5eWJHINIBHrq2/pt7PmZbFpVJKFC5+NNczeJ6yzgHaEW+ZFKhQ
-X-Gm-Gg: AZuq6aIBz/GoUdcA8XiJkCEDxQbW90xvgDSv9D63GfVIHdS5m65C2WIg7xd9hkkJTDf
-	AI/4stdJj9emRqzNCo9WwPhZgf6xTDSRLdCuBZPPqzknyOmmGlw76FFMfQX9CzTMdF2X/rKHmtb
-	wxEKLaQ7uU8QwVn7eN4RKSp2JrpnLD2k5vmX9wegF8gVa45IlPrmIR5mBZB0KUku3ggg+nIzGCs
-	BqbCJtU8hwH1FpmqZwDyepZXuXOMdFOD/KPj7mixkQwT0WWdiFSQF3XOvBz0j2zDxZOmdaW7ntR
-	+yctMoJcVwFw/CtZxOxIXo1OLnB5wu//e3KSkPAm5Ucjhe9lRqLJtYufQUBTxmAeFwl8iTscoVy
-	0CFMeadVZ45iaoeBX05MtdN3ARc6JqNxvdwNrTMnbbQAzslT3acOMV2/tc+EdOrAX0+PTEWQwKW
-	2gxxVfa23NTV4d/M+iEiVGwpxJGl5kOEToOKjTLvlgFEowQyFMFNrNzhyghf6m
-X-Received: by 2002:a17:903:1983:b0:26d:d860:3dae with SMTP id d9443c01a7336-2a933bc9a9cmr44488295ad.3.1770242951230;
-        Wed, 04 Feb 2026 14:09:11 -0800 (PST)
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mxZo7zqeqh9dI/ONOGvDxhP7HYC4stTlFPIR/ife04U=;
+        b=Llrf3D41cpksMLgHPKzIE4pwGjspGxueyn7z23CyGF64BLxt4HWnFvU+nfHarKlbGB
+         +nppSTdTHA/SKMxvMNjS3Norgk97ZIe3uPFiVoKYvmZ6jlXg14hoJ8l5HuZURrNjbr8B
+         Fx7mjhm/XXSHF0QCTZrxtDJtBzKJJrkpwLj7Ss5dkh3+S+oyrqJWNxnYPqJW5By1HbmZ
+         /dVTzMiQmyBobFLkFHQOBGZRgOKpTG6T5+1LEYMkhEk/DPqWVRLA0hgLl+hPzbJvEdqp
+         vZ2XhS1Gur32wb2IuO9lYpEDb1H+ooU657zXd8HlN/llDifvZD94bmWj7KYWfvMCBVql
+         d9Vw==
+X-Gm-Message-State: AOJu0Yyof2yMObhXgucoRKRwCNPHi4/wg6qXFXGPOOc7oWzH8iIBhwZQ
+	HDvtSHmeMrzrYd9/Bb29AhgMBRlkSRQ3tuxSdoqo6zW0xfQmcAO2WQmrns5yT3kL
+X-Gm-Gg: AZuq6aJJoJC7Tz0cFnZwhnK4oqNBPvPQ3zvgho68zTD1lUWnpn+ZlmMne1gfmHjj6vz
+	3l44wMjCt0/PoT1csyGSxwDHIFL5ypVB7FG8sRJahkAlSRipMqhLGi4RbcwgLQMIvmhWo7xsX62
+	C5x9sEDLb85VIJWtKUWADhmipo1RIFKhLqFWRXJDPrBdGfFBC6SrIt65lB7XkHI9WDkW2pbOzmH
+	GbpHC9kSTM/pXaMIRvgDhOoZ+yVXDIAXpOzXKomsZS55TzKb/KNPy6nRTKV9NHzm8JE58TSYMlS
+	7t+vfr3CXIzwwAT81jYVjUk7BRiw/4785JUGdpf4MtTpJBotgqpYR7iWibDXARp1s/+G/uSqHxZ
+	6t7QvCiPpDgTgNKE8jKWgQsIRHk32vz7AC4Ur7mXEXhzkITTorjYWjuz9kQb9DGRGovIFHFQ3WA
+	HJ/EJBmQyKYQLvG1G6r4nteItQ61NDECeL+YYKaJOr4MtL+2vAJc8D4VS+dS0l
+X-Received: by 2002:a05:6a00:4fc3:b0:81f:5263:eeee with SMTP id d2e1a72fcca58-8241c1deddfmr4038620b3a.21.1770244782541;
+        Wed, 04 Feb 2026 14:39:42 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93394e5d4sm30497415ad.56.2026.02.04.14.09.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8241d49cabdsm3214825b3a.60.2026.02.04.14.39.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Feb 2026 14:09:10 -0800 (PST)
+        Wed, 04 Feb 2026 14:39:42 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3887feb9-344a-43e3-935e-8d651f9b923b@roeck-us.net>
-Date: Wed, 4 Feb 2026 14:09:09 -0800
+Message-ID: <30bad12b-13a3-46b1-b03f-877729fb01e5@roeck-us.net>
+Date: Wed, 4 Feb 2026 14:39:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,10 +68,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: nct6683: fix memory leak in
- nct6683_create_attr_group
-To: Joshua Peisach <jpeisach@ubuntu.com>, linux-hwmon@vger.kernel.org
-References: <20260204211543.70029-1-jpeisach@ubuntu.com>
+Subject: Re: [PATCH] hwmon: pmbus: tda38640: Add identification for
+ PMBUS_VOUT_MODE
+To: Kyle Hsieh <kylehsieh1995@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260204-tda38640_direct_mode-v1-1-72511cd87b41@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,72 +118,105 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260204211543.70029-1-jpeisach@ubuntu.com>
+In-Reply-To: <20260204-tda38640_direct_mode-v1-1-72511cd87b41@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2/4/26 13:15, Joshua Peisach wrote:
-> If allocation fails, free prior allocations before returning.
+On 2/3/26 23:04, Kyle Hsieh wrote:
+> Add support for detecting the PMBUS_VOUT_MODE for tda38640. Both
+> linear and direct modes are now handled. Previously, only linear
+> mode was assumed, which could trigger "Failed to identify chip
+> capabilities" for chips in direct mode.
 > 
-> Not tested on real hardware. Did not update rest of file for style
-> changes, only updated the NULL conditional checks.
+> This change ensures proper identification of the chip regardless
+> of its VOUT mode.
 > 
-> Signed-off-by: Joshua Peisach <jpeisach@ubuntu.com>
-
-Allocation is with devm_kzalloc(), so the memory is released after
-the driver is unloaded, which happens immediately because the probe
-function is about to fail.
-
+> Signed-off-by: Kyle Hsieh <kylehsieh1995@gmail.com>
 > ---
->   drivers/hwmon/nct6683.c | 16 +++++++++++-----
->   1 file changed, 11 insertions(+), 5 deletions(-)
+> This patch adds proper detection of the PMBUS_VOUT_MODE for the
+> tda38640 PMBus driver. Previously, the driver assumed linear mode
+> only, which would trigger "Failed to identify chip capabilities"
+> for chips operating in direct mode.
 > 
-> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-> index 6cda35388..365f6b99d 100644
-> --- a/drivers/hwmon/nct6683.c
-> +++ b/drivers/hwmon/nct6683.c
-> @@ -431,18 +431,18 @@ nct6683_create_attr_group(struct device *dev,
->   		return ERR_PTR(-EINVAL);
+> Changes:
+> - Add support to identify both linear and direct VOUT modes.
+> - Prevent misidentification and improve robustness of the driver.
+> ---
+>   drivers/hwmon/pmbus/tda38640.c | 26 +++++++++++++++++++++++++-
+>   1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/tda38640.c b/drivers/hwmon/pmbus/tda38640.c
+> index d902d39f49f4..410b7fc5aef5 100644
+> --- a/drivers/hwmon/pmbus/tda38640.c
+> +++ b/drivers/hwmon/pmbus/tda38640.c
+> @@ -23,6 +23,30 @@ struct tda38640_data {
+>   	u32 en_pin_lvl;
+>   };
 >   
->   	group = devm_kzalloc(dev, sizeof(*group), GFP_KERNEL);
-> -	if (group == NULL)
-> +	if (!group)
->   		return ERR_PTR(-ENOMEM);
->   
->   	attrs = devm_kcalloc(dev, repeat * count + 1, sizeof(*attrs),
->   			     GFP_KERNEL);
-> -	if (attrs == NULL)
-> -		return ERR_PTR(-ENOMEM);
-> +	if (!attrs)
-> +		goto out_free_group;
->   
->   	su = devm_kzalloc(dev, array3_size(repeat, count, sizeof(*su)),
->   			  GFP_KERNEL);
-> -	if (su == NULL)
-> -		return ERR_PTR(-ENOMEM);
-> +	if (!su)
-> +		goto out_free_attrs;
->   
->   	group->attrs = attrs;
->   	group->is_visible = tg->is_visible;
-> @@ -481,6 +481,12 @@ nct6683_create_attr_group(struct device *dev,
->   	}
->   
->   	return group;
+> +static int tda38640_identify(struct i2c_client *client,
+> +			     struct pmbus_driver_info *info)
+> +{
+> +	int vout_mode;
 > +
-> +out_free_attrs:
-> +	devm_kfree(dev, attrs);
-> +out_free_group:
-> +	devm_kfree(dev, group);
+> +	vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
+> +	if (vout_mode < 0 || vout_mode == 0xff)
 
-That defeats the purpose if using devm_kzalloc().
+This is odd for a chip supposedly supporting the command. Why check
+for 0xff ?
 
-NACK. There is no problem.
+> +		return vout_mode < 0 ? vout_mode : -ENODEV;
+> +	switch (vout_mode >> 5) {
+> +	case 0: /* Linear */
+> +		info->format[PSC_VOLTAGE_OUT] = linear;
 
+This is already set, so there no need to update it.
+
+> +		break;
+> +	case 2: /* Direct */
+> +		info->format[PSC_VOLTAGE_OUT] = direct;
+> +		info->m[PSC_VOLTAGE_OUT] = 1;
+> +		info->b[PSC_VOLTAGE_OUT] = 0;
+> +		info->R[PSC_VOLTAGE_OUT] = 3;
+> +		break;
+
+The datasheet doesn't claim support for direct mode. Where is this documented,
+and where do the coefficients come from ?
+
+Also, I am concerned that this interferes with svid mode.
+We'll have to ensure that this is not the case before proceeding.
+
+Thanks,
 Guenter
 
-> +	return ERR_PTR(-ENOMEM);
->   }
+> +	default:
+> +		return -ENODEV;
+> +	}
+> +	return 0;
+> +}
+> +
+>   #define to_tda38640_data(x)  container_of(x, struct tda38640_data, info)
 >   
->   /* LSB is 16 mV, except for the following sources, where it is 32 mV */
+>   /*
+> @@ -142,7 +166,6 @@ static int svid_mode(struct i2c_client *client, struct tda38640_data *data)
+>   static struct pmbus_driver_info tda38640_info = {
+>   	.pages = 1,
+>   	.format[PSC_VOLTAGE_IN] = linear,
+> -	.format[PSC_VOLTAGE_OUT] = linear,
+>   	.format[PSC_CURRENT_OUT] = linear,
+>   	.format[PSC_CURRENT_IN] = linear,
+>   	.format[PSC_POWER] = linear,
+> @@ -153,6 +176,7 @@ static struct pmbus_driver_info tda38640_info = {
+>   	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+>   	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+>   	    | PMBUS_HAVE_POUT | PMBUS_HAVE_PIN,
+> +	.identify = tda38640_identify,
+>   #if IS_ENABLED(CONFIG_SENSORS_TDA38640_REGULATOR)
+>   	.num_regulators = 1,
+>   	.reg_desc = tda38640_reg_desc,
+> 
+> ---
+> base-commit: 5fd0a1df5d05ad066e5618ccdd3d0fa6cb686c27
+> change-id: 20260204-tda38640_direct_mode-d6e47121a259
+> 
+> Best regards,
 
