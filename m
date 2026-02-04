@@ -1,119 +1,239 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA9038F931;
-	Wed,  4 Feb 2026 17:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D1D3563D6
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Feb 2026 18:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770227564; cv=none; b=rzHPkbdAluw9JjHvg1y2gvTWOuCj5sV6xWAMP1oPCqdYdhHZsQ2GSwEOd8QkxasocxLzSLHlt8pTXmVeudT/PyYaO7s6kVj81K8S7MnByxt8iFgBXYs6BNhTpf0Bab2CqTHb/Ckgb/KztKlsJFcH1wVUKWqAf17ateGSdjgHMwY=
+	t=1770228959; cv=none; b=Tarf4T2TUk+BBr1AdDKELzy+MYWoepUH0hWAe7iv8yZ6ZqwmhAwy5Wx97gyJQXKoCwpD6LnYSCHSEB1qNrfhgKd2TBPKDywXsXa8pJ3XLy91s3UOoD8DAfws0DsQ+OgSMMNZs5MMfpZy7ezm93kzeemupW/vqpcQmS4a5Uja7wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770227564; c=relaxed/simple;
-	bh=mrFMucrzucfxbSgJ5DPr17O3xAFOGfA99TuHVE8WmnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VDuPgiwqKFH7Jc06+2Y7pxY11w3sfW8N766cBvhqVysdTbVGXVqBIIllysGKpzGw1sY5cBl6SeSwvdvDUFONCzXIHa6D+uzJ1vwmP9UryNzYY2FRmqUz0ytu1psoB8cbS4PtBPyemA7zS+5cvj69FOebrSodohab1drUeiV5z7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BSsEtUM3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770228959; c=relaxed/simple;
+	bh=kv/sg/f9nbMhZFTewiOB9ZZ3yXQB2I8tUUf9Pxb6kxA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RG/kvbcdtUNStif6Pp6y/eautqdwGP/HYSv4UnoNlyrwP+R7E/rPrWSgp9dWeoyAKBxVEhk4pIb1iI9h1DtW4+bYsEDUqvGltPXV4b0p1CM4qBqMKoojHc7CW6ignHt68ihFAdJJh7S2bf/SH9ptBcVwtc4z+eECMRdTzN2EPY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hmeISdMu; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BSsEtUM3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B3D0C4CEF7;
-	Wed,  4 Feb 2026 17:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770227563;
-	bh=mrFMucrzucfxbSgJ5DPr17O3xAFOGfA99TuHVE8WmnE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BSsEtUM3iLpiwz+DLB3WOY12DwOmt7nBGm7T3fji7kLKW/Jirv752LtDM1tTZxIk8
-	 bXlYBqQV96pJolVMHaiCvrInnaFKnc5q/ZBbt/ugq/BNVtYGuPSCIapQXQKimAl3f2
-	 tQW+x8dTBrs5A6Y+pYS3FV6XMyxoS3BXFBOdZ4oOvAEiKdHPijPtv0403f02y7NxSp
-	 CiDoXsIj+h6uMtxHw6lvZIoMLOsClykChJCld5LfUWknwQ+3axt1GEdwDPKbq/kkHq
-	 RZFXpYUi+QpBh9kyD1JIiGplAwhDWh6OfTj/sZaPdTKh2aQIyFP5UzT5v9fIs0v3rC
-	 F6ItJGm09xYqA==
-Date: Wed, 4 Feb 2026 17:52:38 +0000
-From: Conor Dooley <conor@kernel.org>
-To: carl.lee@amd.com
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	peter.shen@amd.com, colin.huang2@amd.com
-Subject: Re: [PATCH] dt-bindings: hwmon: pmbus: mpq8785: add MPQ8786 support
-Message-ID: <20260204-sanction-lunacy-903e96c447e4@spud>
-References: <20260203-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v1-1-67b041e2f762@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hmeISdMu"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bd1ce1b35e7so10404a12.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Feb 2026 10:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770228958; x=1770833758; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOVQ+nPE416W0DPiahH1jzaA8OHm3OMY6p/VFvnPU/s=;
+        b=hmeISdMua2s6SQy1BP7/qEG5bsBVf6fkPrY6tUuk43fTICIfuH25faoy/thY6/0YXa
+         vedn2X2JhJGXYzRu5jHV7b4GG2UAdpbyC7/rSE4KjYSQ66ZJ9LSYRM8u8VZTYErYELYk
+         gfEGUE13taFelpeFgMa9iX+u1IKMrnXl06ld+UK9SJ/JQflfnKTIXld5AMxqZGJm4iDc
+         Hrn3Av5tLak6Dn0c98IM/t0bifyyXvfL/LLoRCSfwMiO28VctHchslHEJ4q3moshCuXQ
+         QfH/5/V/OpUZX6tQ3pjK8C2KMgjW/nCMaA/LXu3y/t3GVaMkURDFudBbcX/9GKCF9qBn
+         O3xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770228958; x=1770833758;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jOVQ+nPE416W0DPiahH1jzaA8OHm3OMY6p/VFvnPU/s=;
+        b=cVZwNz/Xiw8Dla5h2pFu/gCWOGrbGIRL+YDNLWq/54CvGDQV89SQJb5LSjpPaDxhjo
+         YzfBfP0X3rqy0Lk12DxsI4Oha6wqNfgUYnTYrSQhKqny2jgsY/kia0U/iA0dcYNp4HJq
+         0AavzOjnqEThNwhR7oDcnCZAjuzXWpd/CVPogil77lfjJEdnI58mELcSF6ScZwldhc8d
+         xZrhU2qgVvoXzRZqKJyO+sYydzRHednRch6E+yo8UXQxGufD+iIwRK3R36jS/npSfTCi
+         WHB+Q+UB9z9pBPHT7UbZ9rsJdlMWASCTh/YTmCDYQ6b7AWJCvcKqXkTPkDk5U6fXjvPk
+         zXag==
+X-Forwarded-Encrypted: i=1; AJvYcCUAuyaR7Cumpl6gDN7DmXp/n0tHYWuO28U6ovmuWOjKONFgN1kWV7PXt5uqmsgKlBZScU27fid8amiHIQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH62sg8kBG8UE1QHAMyLoqD9pnJdNv3kmtGlK6MnxD2qf7sjnE
+	TSmdwCyoPg5Qi7IZjTKHS+2aS8svPsj+mTfs5BmXvdhcvPvbsrdoKCER
+X-Gm-Gg: AZuq6aK4jt7i1w7/i6HIRNHYeHI833F99JhOML0HJ69qQK32B7eG/yqoCdd7DbxQCXA
+	NW8JkmBvsBdvNk9cWPONTsXi8betclUPlnhc6gy7e6doLxMVs278cjus/RFShOWgxJNbL5ii8vy
+	AgSlvGdfCNF7NhNtWjKhc4qukY4J6xsc2JqHz/IQ4lRdm6pNU/3toHU7WQ+k7zDPAe4wRiwHugW
+	ZUqS3a0Qz6Jc5TUhASM39Y845PEEVzidJ7YaDWODDnDam8HaMJCH7l0N9vIdrO8fQJcOLKoGnJ+
+	10V7OcQjXvbmTolVYj7oEU/rvr3Mt0MLRw+cjet2EAkKhS3xpIUWv1u1BsHj6rynMusCaY25L5I
+	spZwRztjxo/mUWKdWsb9Jk7+ihOh18pKkyzqBd8pZs8KSTCuGWg8Q623KrdVI8wYvXn1m7JZw84
+	2Xa2UOheb/wlr1xLouYR24htiyqLQL02oWmBrw8EUXeTY6iVidsj8ObHT4RnCgP5RGTb5pfv4=
+X-Received: by 2002:a05:6a21:7016:b0:366:14ac:e1ee with SMTP id adf61e73a8af0-3937249be13mr4124349637.64.1770228958068;
+        Wed, 04 Feb 2026 10:15:58 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93397cb23sm29570185ad.93.2026.02.04.10.15.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Feb 2026 10:15:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b2fdaf5f-62b3-4695-aa89-b674aabefffb@roeck-us.net>
+Date: Wed, 4 Feb 2026 10:15:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="751yjr4bVVsIixNn"
-Content-Disposition: inline
-In-Reply-To: <20260203-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v1-1-67b041e2f762@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [v3, apply after -rc1] i3c: simplify combined i3c/i2c
+ dependencies
+To: Arnd Bergmann <arnd@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org,
+ linux-iio@vger.kernel.org
+References: <20260204164216.544409-1-arnd@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260204164216.544409-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2/4/26 08:41, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> All combined i2c/i3c drivers appear to suffer from the same link
+> time problem when CONFIG_I3C is set to 'm':
+> 
+> arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
+> mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
+> 
+> This was previously fixed every time by marking individual
+> drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
+> tedious and is somewhat confusing.
+> 
+> Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
+> and use this in all the existing drivers that had already fixed it
+> as well as the new mmc5633 driver.
+> 
+> Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
+> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
---751yjr4bVVsIixNn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For hwmon:
 
-On Tue, Feb 03, 2026 at 04:15:18PM +0800, Carl Lee via B4 Relay wrote:
-> From: Carl Lee <carl.lee@amd.com>
->=20
-> Add device type support for MPQ8786
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-This doesn't seem very helpful on it's own, where's the corresponding
-driver change?
-
->=20
-> Signed-off-by: Carl Lee <carl.lee@amd.com>
 > ---
->  Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.ya=
-ml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> index 90970a0433e9..aec7397a29f9 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> @@ -19,6 +19,7 @@ properties:
->        - mps,mpm3695-25
->        - mps,mpm82504
->        - mps,mpq8785
-> +      - mps,mpq8786
-> =20
->    reg:
->      maxItems: 1
-> @@ -52,7 +53,9 @@ allOf:
->    - if:
->        properties:
->          compatible:
-> -          const: mps,mpq8785
-> +          enum:
-> +            - mps,mpq8785
-> +            - mps,mpq8786
->      then:
->        properties:
->          mps,vout-fb-divider-ratio-permille:
->=20
+> v2: restore accidentally deleted lines
+> v3: rebase on top of Jonathan's IIO patch in linux-next
 > ---
-> base-commit: 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
-> change-id: 20260203-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-f=
-48049e8411e
->=20
-> Best regards,
-> --=20
-> Carl Lee <carl.lee@amd.com>
->=20
->=20
+>   drivers/hwmon/Kconfig            |  6 ++----
+>   drivers/i3c/Kconfig              | 12 ++++++++++++
+>   drivers/iio/magnetometer/Kconfig |  3 +--
+>   drivers/misc/amd-sbi/Kconfig     |  3 +--
+>   4 files changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 41c381764c2b..ecfba861f66d 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1493,8 +1493,7 @@ config SENSORS_LM73
+>   
+>   config SENSORS_LM75
+>   	tristate "National Semiconductor LM75 and compatibles"
+> -	depends on I2C
+> -	depends on I3C || !I3C
+> +	depends on I3C_OR_I2C
+>   	select REGMAP_I2C
+>   	select REGMAP_I3C if I3C
+>   	help
+> @@ -2392,8 +2391,7 @@ config SENSORS_TMP103
+>   
+>   config SENSORS_TMP108
+>   	tristate "Texas Instruments TMP108"
+> -	depends on I2C
+> -	depends on I3C || !I3C
+> +	depends on I3C_OR_I2C
+>   	select REGMAP_I2C
+>   	select REGMAP_I3C if I3C
+>   	help
+> diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
+> index 30a441506f61..626c54b386d5 100644
+> --- a/drivers/i3c/Kconfig
+> +++ b/drivers/i3c/Kconfig
+> @@ -22,3 +22,15 @@ menuconfig I3C
+>   if I3C
+>   source "drivers/i3c/master/Kconfig"
+>   endif # I3C
+> +
+> +config I3C_OR_I2C
+> +	tristate
+> +	default m if I3C=m
+> +	default I2C
+> +	help
+> +	  Device drivers using module_i3c_i2c_driver() can use either
+> +	  i2c or i3c hosts, but cannot be built-in for the kernel when
+> +	  CONFIG_I3C=m.
+> +
+> +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
+> +	  get the correct dependencies.
+> diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
+> index 9345fb6d5317..fb313e591e85 100644
+> --- a/drivers/iio/magnetometer/Kconfig
+> +++ b/drivers/iio/magnetometer/Kconfig
+> @@ -143,8 +143,7 @@ config MMC5633
+>   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
+>   	select REGMAP_I2C
+>   	select REGMAP_I3C if I3C
+> -	depends on I2C
+> -	depends on I3C || !I3C
+> +	depends on I3C_OR_I2C
+>   	help
+>   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
+>   	  magnetic sensor.
+> diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
+> index be022c71a90c..30e7fad7356c 100644
+> --- a/drivers/misc/amd-sbi/Kconfig
+> +++ b/drivers/misc/amd-sbi/Kconfig
+> @@ -1,10 +1,9 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   config AMD_SBRMI_I2C
+>   	tristate "AMD side band RMI support"
+> -	depends on I2C
+> +	depends on I3C_OR_I2C
+>   	depends on ARM || ARM64 || COMPILE_TEST
+>   	select REGMAP_I2C
+> -	depends on I3C || !I3C
+>   	select REGMAP_I3C if I3C
+>   	help
+>   	  Side band RMI over I2C/I3C support for AMD out of band management.
 
---751yjr4bVVsIixNn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaYOHZgAKCRB4tDGHoIJi
-0r4FAQC1Syz3aGW2u20Zbu59J+al5xEALEiV6+Ak0pFlH9g+BgD9GogLBkMq3bC0
-hLcdDa7hfKns8Hcl0G+CQqnOArDIjwo=
-=rMDu
------END PGP SIGNATURE-----
-
---751yjr4bVVsIixNn--
