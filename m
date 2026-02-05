@@ -1,63 +1,63 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4EF38F944
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 10:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26EB3A782B
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 10:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770287399; cv=none; b=aUCCsZGSsUiGLURG3uC/GsylQcany/vsJk06pZtKnB4Yrdp4eEmeyfzYjkOx0cIGGcZhSZ+/Ncto54nOvQOG5gpfjhGbDuefQ/Fj8UnfN5TWUJ678uun5Jz7hqnGtY2dZeZDwtCK6avhmhyCvzZ2AygTb45QkHu92HFUa/Ymxfg=
+	t=1770287748; cv=none; b=KkLfNdXWKyCdhIaxdzuWDUA/TrBZL4JG7XSVA5xwbX8UuOc/FI1D5feRNphpUjUpFWlLP9cx0Ao3vTfjQUKVQns6shcOlGt1VE054QaaS5P3kpXLRyyERHdKVfyR+UQHxL/wh46nPIXIiCTxVbEiSQ9gLRwdToK8cBtBFg5W1Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770287399; c=relaxed/simple;
-	bh=9Uvgn7wB83wIdJ44vZfC1a6QsqNb41gYdz1rDR5ln50=;
+	s=arc-20240116; t=1770287748; c=relaxed/simple;
+	bh=Uml2Jc5zq2ELeW2m7lg/hpmfJO/PpPf6Iv4tN7jmR+U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H/ADp0Q0UYUI1Cb0FNzB4oyO6OVdoePkoqQ1bCZTDmc9dEr0Q1uRVddpdKZHbbJfijki0ma1l4piPz/jgetA2mxWvO+0q3twdjgcCdVUzSG2017GQPFw5xO9MaN3izK8d3sqqoevnTFfIDjcIE3BAR4tpd6Xhv/3CoLUs0BH/co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cMTsEYH5; arc=none smtp.client-ip=209.85.128.53
+	 MIME-Version; b=ffKOA74+8Oye6HiXwyQPvkNyqrMBadn5rmvZJQ5DibI59rButE072gSM7Exra1JQTx2u6EVWgcIaDKgnKJfbQ729Y1cchDMe2/fSuXTTqd2H7VBUi4eLacQpcTq1Qjmn6GT7l6Yc5bY/3OTzhG137vdJbr7LYoatOMriq6VX65A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jc0ZzOzG; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMTsEYH5"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-480706554beso7890175e9.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 02:29:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jc0ZzOzG"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so6325035e9.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 02:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770287397; x=1770892197; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770287746; x=1770892546; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MEdQ0xFhhqTQqO4ph+nQmO3asTf3iBjVYOgorcwP4nc=;
-        b=cMTsEYH5ce5KbB+0RB09d6+9qfcxFDfrDd+2tdIIsvmxGK1Dnqm/s7JrckUVzQtOJ0
-         3+ueuZmU4WDPo8Gp6yIgxJv3+4+TL4W+8QrvmY8zhGzNizakQ1tbdIETRICtVv9wf8vV
-         /6pbks/1lgAPCgyPvE7BFr++Dt9RMfPmDB6YK33GUMsbDUYR9OWgTAOhOWMNpMob6x5u
-         NwW1cbrENtYMWgNF9r5CO7+qRgHuWM7Oio1C6ffQ6MfHAU+z62N1dPfaLLjfH2IlQmCa
-         aHvskdG7o9GD5rl8rdDE3OT4YoNGoOfQdG45aYMRjdhvfSC+Tpjw+4z0nUnPg8wNrC+V
-         wlkQ==
+        bh=W5Uax/LDotqlsD55VWpiCWlcKNKI7QyNOkqZjmWwhCs=;
+        b=Jc0ZzOzGz8ooCzlI1hNelGUfwOaOz9+fQjNxcsJB3qieaYM1ZhGjkzsyd/JEEm3qw8
+         BP1iMrJ0nyojYPBGCCuko1ngs2RmsFtP9Vz2j10X53JAGrxHGwuuzwkVuvapH8nw3gZN
+         gH3jNvk36XEU7WsUTdJ++rdnJ/Zy9ZElWLREqIduTWpaKhiJX95x0DvchaNeLOhsL/s0
+         ULHet1ajRzddY0I0kYI5Q8ivvKNOcjEmBcFd2cy6jYkU56Xbbh9N9YywiU/ONf65EL73
+         JTb4judH41bUwADOsgC5Tpf6snkRPH28JmOfcLJ4xbFaDy+4U8nXjgu+zDVCWMZU56yw
+         cBFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770287397; x=1770892197;
+        d=1e100.net; s=20230601; t=1770287746; x=1770892546;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MEdQ0xFhhqTQqO4ph+nQmO3asTf3iBjVYOgorcwP4nc=;
-        b=YANP4SF0xosU1xz5MAMQgCBB7WBeDVXd9WWmdhD05ASbFo0Oz8DrL69SwWdbXVydD3
-         zR9Sg3/Y4g4Q4gJouLJy+hP2aFMHeALBSrpZWNTs0EbZ1NqoQHlIembYt/wD0Rnqxtau
-         vCh13kg489lT/bolHYTovGkCN6Mmeh9qQBeKtvJzI3nSU6SZtoItvdlRhc+XKxAmdw8g
-         B1D+wZ+BuptSJJtt0Xv/Q9GKeTw2yhcBiZFK5638rQNF5xYey4w18yRMdR76lwkMtfHK
-         dAzT/EcmvCEm7coq6ImM00TvDkv4j1VJX3Zxa5NLJ+68V6E/6/UxmMhQA/LQTJphYZci
-         rgDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXxSL9gxYQQWEmCOKb8pNNN8eKt7XK+FDBJ3ehKTL+Iyn4fOAd6NIoNZBa+6wtMy5wzvGJIArd4mOHupw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrM82COmRptO4+/5KtseLVXW/r2eDuSFkjhhO8NoVLY8bok60t
-	7XJEu6NQaXjmLriu/XaxR4DLoCjE3baAjK0DI03Hcfsa2b0tI0iTkXJM
-X-Gm-Gg: AZuq6aLZ0b5OQS6lTzIY/Syu0JqcVK+oEkBDI0S3pGeEkSzlLHAynxV3rFSQeRH45kB
-	pR6waz2e23KzFCSbx8yK3XR6sNTMXrwMgtqyRqGODPwClMeCcjVb48f00nEt0Q2G9jUgdmzNlKT
-	03rzZXo8yOWwOkrXbRX/oJHW/BqJlRY+PDdhtxdCBPOLzh2kChnVeIBv/Fnle2KKaU9iXL4A5rP
-	a7DTnK8RtRxUgpk3CAT8T5lZlRGMBs9Ner4byh3A19GPi+C+ADHVZKrKAdz6rComvRHUMq+RLPK
-	D7N/GqiIRfMkcet0Qt+c0gFCvyTdmBaKIebIQu3UxnAhBKa08kSz4qZnvw5bpTbFco0H3UgpkN8
-	HKGBQqcftA1uB84LCwX1IBX+3p5fDSdF9I7keUF2rHceYecz5FKycDveeKaZlAPD/sISrHHJw/A
-	K061G7aLGkxSIMwqAm6V+5WgI3QxFA986f
-X-Received: by 2002:a05:600c:6087:b0:483:a21:7744 with SMTP id 5b1f17b1804b1-4830e977f1cmr78474795e9.26.1770287397099;
-        Thu, 05 Feb 2026 02:29:57 -0800 (PST)
+        bh=W5Uax/LDotqlsD55VWpiCWlcKNKI7QyNOkqZjmWwhCs=;
+        b=p5RWRcGNU5lRT9lUODKx+xCR+bb4+ZQ9SMTkVZPXUkiFqDbKxUUNb19WbKNmigueYI
+         X13y5Z0gUOqZGyXxCfq26W8G6jMio1gPEGMGavzKpkMnRy2+DoYKJ9iagjXOnDkHo3uI
+         isRZ7LlVV+HbKrmFWXRtMNNdSZMOKLcH76seZBDMJwG5Ic/X9RW6s9uKDd7g70VunBae
+         IfxOghJFYDbj+P2fljJG0vCfvwFmHY12R/KaxHVpbAez187Ym8X/oPXzKk5qIs8FtZCi
+         Ol3VnM2/aAh4vBcQWZKziCLWmJexkL1GQtT7vbba+41vcsgRmZrdAbEVvLemtKwUcr3j
+         wvPw==
+X-Forwarded-Encrypted: i=1; AJvYcCXlp10CcczWAqOLwSifcD1LGb6Ta3qaOOHEHH5HO6iwC3kGaGmAuLqfBkm3ZMXJLu411JMMXpm0KP8Clw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJSQ6lYMwfnQSHVWPVOaewZx/KVDe7a/TgM/nfJDzdUPKHvKQ6
+	FA3AhlVWEGPmV0pv8//cOj+zbZTcnXreGqqdkxnZG0ukNbwu96ORBNN1lKgs7g==
+X-Gm-Gg: AZuq6aJIgZWf7A2UvG5syp354WJnvTawsYgqzerIrRST4cAPm0UqG0JUiCg0VHW3we2
+	4XFMysA2RezYlj8p/3IBf+IOkhRBwW0iS1fMQrJXy4coybCpzuu73AoIaKKTejOAWV8kBgHRknx
+	3bHE/RJ/k8Tipg+Io1TtEQqr/l+QZ+16OFDXMRKx5HTe6fZbwkjfs6s1r8P0N6zlVyqNiYn7O+3
+	ZaxFxt+cWUYBbLXthXP462o2h+L9ewSCvOJyRGew1qcN/VYUkZk0pfWGLQAjX7n4AA1RV+GKI07
+	nBkinyICP+tONzJuBcbxl0DjO0PzVEwgLAey7KEu4bv0DwX9KzhbbBeiKNjLtLiMT5fawqrTwq1
+	b0qLcxxEQNR9ISnMszsTLwXEYnvwK5GFcQj3XaVYfIyHXsP2KxQnSUvmOfXgxJx285FRD/uLhUA
+	JJpPvD79j0X88XSNNdG6uSydyjl9KPcvwW
+X-Received: by 2002:a05:600c:c4b8:b0:47e:e712:aa88 with SMTP id 5b1f17b1804b1-4830e971bddmr97102565e9.31.1770287746111;
+        Thu, 05 Feb 2026 02:35:46 -0800 (PST)
 Received: from localhost.localdomain ([196.191.61.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4830ec4a76esm67876655e9.1.2026.02.05.02.29.52
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4830ec4a76esm67876655e9.1.2026.02.05.02.35.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 02:29:56 -0800 (PST)
+        Thu, 05 Feb 2026 02:35:45 -0800 (PST)
 From: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -67,9 +67,9 @@ Cc: Tinsae Tadesse <tinsaetadesse2015@gmail.com>,
 	linux-i2c@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] i2c: i801: Detect SPD Write Disable and expose as adapter quirk
-Date: Thu,  5 Feb 2026 13:29:24 +0300
-Message-ID: <20260205102942.28745-2-tinsaetadesse2015@gmail.com>
+Subject: [PATCH 2/2] hwmon: spd5118: Fail probe if SPD writes are disabled
+Date: Thu,  5 Feb 2026 13:29:25 +0300
+Message-ID: <20260205102942.28745-3-tinsaetadesse2015@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260205102942.28745-1-tinsaetadesse2015@gmail.com>
 References: <20260205102942.28745-1-tinsaetadesse2015@gmail.com>
@@ -81,66 +81,52 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Detect SPD Write Disable in SMBHSTCFG and expose it through
-I2C adapter quirk. The I2C client driver may decide whether
-SPD write operations are supported without implementing
-device-specific policies in the SMBus controller driver.
+SPD5118 requires write access for page selection, configuration,
+and cache synchronization during suspend/resume. If the host
+controller does not allow SPD writes, the driver cannot function
+properly.
+
+Detect this state using adapter quirks and determine whether to
+stop the probe.
 
 Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 16 +++++++++++++++-
- include/linux/i2c.h           |  3 +++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ drivers/hwmon/spd5118.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 9e1789725edf..d771e9f5f82f 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1533,6 +1533,11 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
- 	int err, i, bar = SMBBAR;
- 	struct i801_priv *priv;
-+	struct i2c_adapter_quirks *quirks;
-+
-+	quirks = devm_kzalloc(&dev->dev, sizeof(*quirks), GFP_KERNEL);
-+	if (!quirks)
-+		return -ENOMEM;
+diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+index 5da44571b6a0..094d05472562 100644
+--- a/drivers/hwmon/spd5118.c
++++ b/drivers/hwmon/spd5118.c
+@@ -525,6 +525,8 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+ 	unsigned int capability, revision, vendor, bank;
+ 	struct spd5118_data *data;
+ 	struct device *hwmon_dev;
++	struct i2c_client *client;
++	const struct i2c_adapter_quirks *quirks;
+ 	int err;
  
- 	priv = devm_kzalloc(&dev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -1600,8 +1605,17 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		/* Disable SMBus interrupt feature if SMBus using SMI# */
- 		priv->features &= ~FEATURE_IRQ;
- 	}
--	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
-+
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+@@ -552,6 +554,19 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+ 	if (!spd5118_vendor_valid(bank, vendor))
+ 		return -ENODEV;
+ 
 +	/*
-+	 * Detect the SPD Write Disabled status. Mark the adapter
-+	 * as unable to perform SPD writes, which allows consuming
-+	 * drivers to decide on safe operation.
++	 * SPD5118 requires write access for correct operation
++	 * (page selection, configuration, and suspend/resume cache sync).
++	 * If the SPD writes are blocked by the SMBus controller, the
++	 * probe fails.
 +	 */
-+	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD) {
- 		pci_info(dev, "SPD Write Disable is set\n");
-+		quirks->flags |= I2C_AQ_SPD_WRITE_DISABLED;
++	client = to_i2c_client(dev);
++	quirks = client->adapter->quirks;
++	if (quirks && (quirks->flags & I2C_AQ_SPD_WRITE_DISABLED)) {
++		dev_err_probe(dev, -ENODEV, "SPD Write Disable is set on adapter; refusing probe\n");
++		return -ENODEV;
 +	}
-+	priv->adapter.quirks = quirks;
- 
- 	/* Clear special mode bits */
- 	if (priv->features & (FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER))
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 20fd41b51d5c..4b89f0bf62a1 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -726,6 +726,9 @@ struct i2c_adapter_quirks {
- /* adapter cannot do repeated START */
- #define I2C_AQ_NO_REP_START		BIT(7)
- 
-+/* SPD writes are blocked by host controller */
-+#define I2C_AQ_SPD_WRITE_DISABLED	BIT(8)
 +
- /*
-  * i2c_adapter is the structure used to identify a physical i2c bus along
-  * with the access algorithms necessary to access it.
+ 	data->regmap = regmap;
+ 	mutex_init(&data->nvmem_lock);
+ 	dev_set_drvdata(dev, data);
 -- 
 2.52.0
 
