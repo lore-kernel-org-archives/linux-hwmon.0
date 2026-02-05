@@ -1,158 +1,102 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DAC362150
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 08:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770281528; cv=pass; b=gh1fpkj/kvUtAD2oh5tR3MT+95DcvdOl+qyDUzp2INPf8koRsS2zW8ydqqUcdyxJeGg04XMSDb//klQwH/sJd80MFo2YFjcV6rjAXr4lMeMvV2cVGbsldL5LK04FxjU+X9mP/vGegjqCWErjMWhSJ5eaD9rCGTpMQ6ORnhQy00Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770281528; c=relaxed/simple;
-	bh=4A/MiiJVc8pEYXXHDijQAkXnz/x9Cb0tcMWrCvdhwds=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aUky68qQNtvN6rtErZr/lv+g7rdUdPcE3cM/gLMOOQf4aidw0imFDaFHf5NjVU0zLEAp2YGMq8JEJZu8zJicPvVNVaNaEUS59/w1wMO6L+otrAevaEUar9q6sPxGI9TP2Ey1NObwk6jqrQQiN21vcvVchnSno4ew42q4i+bE7tA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7kxUflh; arc=pass smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2D13644D2;
+	Thu,  5 Feb 2026 10:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770285702; cv=none; b=BKKb4/9NbIMIXZ5OyQ8ZR11X4gJyPxRUyqzBBk9uAbUkfpWXCqPi64MdbNhFflYsKjKu/y6EQ+2yIey/9oO3x4K4VFNfSytHvSrz9gCcd3k8a5YqcfaMqc6sUFJ+499hUHpd/FCihEw1BSIiZv7U/yj9ok2xE/dbjzK/rZd+zf8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770285702; c=relaxed/simple;
+	bh=devR7VJmr/xn8ktgzpu6/1ed8rMHKTcaVA5kSFwJ7Jk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Fi3WdS5Ckbo9g6bav6eANNO1PiYVOphcEnEjuz7IPWCV1zdfeohAkbdarVZujtD5DDdYTJ/EZcL+Hh1l8ZYOrmZ7W04IG+NMYD7scpIR0Qvp88HGqMfodXwyBYYXVdw0Np1A2jr1biLuV1rdnuw+Q/VYDjHjWXdxOAftYmRPsZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ffpYEEa3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7kxUflh"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-126ea4e9694so1863862c88.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 00:52:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770281527; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ihzw6i1vXvzBaa1z4Qg0SskMKKmRZLyUPtwOQbJ/ZAA10I9eCkw/H2CTpBHAkbxTc3
-         rBW8tJvZ6v7hUDvCsvmgsM4J376o7i3ZlFLFyUSXoDhXFIXkkBxD5EXdnGegvc1u1Y+O
-         hfR4h/moRm04AGraMMbdqnaWUmEye8l1wMo89fW1woe6hPnCHWPTqhceMMCWgOCsQswc
-         C9OaeYWVgS6GHtSgGyyRkEmFAkKyjcFXMVeop0ZvnFMfpbhIiJpgw8xLJ7JScxnBnvEm
-         Bzof+/YBS9qlJ4n5ELOC34DzI8nlrlbmqIKIyrPFCZXhe/d/kgyIbYtyjm4MO7dyMH/q
-         UIdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6Th4luOWj55mT0ARJ2IHQ1pwY+3KM6qdiQQaJT4jyhQ=;
-        fh=ByPCW8EMEGW7KZ3bWerLG0Uluah6bq84AiNE13ShK14=;
-        b=ea+uo0lKe7KZ33jmCyjIc2rK5TH13Ec6XVPH+S5y/7Eh2di2BRK+k2szsZrp6Hqbt2
-         dj3Pcc9Cet8jTr3aMnu/iS+F0VD4412j+lgapne+02pdb/sfORovrfLzEQLvddhfRlqo
-         qawJzsru4nk46b7Eykhh4nFbAZi2f4lfCyl4+nNZUqiyIUx4y2SdGcx6gu1kadkwZJKK
-         wquJ+yv2WlJANFlWAkd8NEyRWH3TbR0nvzxQKUK0rKS8C6TTKSjLyioPMzACUpY1oXie
-         6X2nnRnz9SFO2EQEiMsxoLChu+0B5c+u3VQL7IcOlueWALTjwDQUqW9H+czb5+hTd+fw
-         9IiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770281527; x=1770886327; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Th4luOWj55mT0ARJ2IHQ1pwY+3KM6qdiQQaJT4jyhQ=;
-        b=G7kxUflhI+1m3lHP33Lh+6ubmgxzEik/RCONFGxjGglJoBkpt7H8tiyPTCHZBQqkJ6
-         P57TKmeDTB3wTxxRwr4Y2bvtYIibIMs69FNOi9r8VXYPlhdChZciKaJPXELsNdOFmk2A
-         JlWWAbYYD/mGrppSqsdX5CJXycMCGiEkePpEiTtLu4QwlyIvAstDVSz0qjJUnX+ga1Dm
-         7pKdeLGJySUkS92yqsh3DoBlOHQkUeehsRm0d2JxuKRb6k1hqwypO8JKxOqjGLXzj3oz
-         rsFlVnPyHS2OfUdcspZ17qNNnI0+jR8RBAU0Ah3DrKmuV3nh/bh/cpPF157mtgra8ZVU
-         Dogg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770281527; x=1770886327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6Th4luOWj55mT0ARJ2IHQ1pwY+3KM6qdiQQaJT4jyhQ=;
-        b=wAFs3BWTkZYnWG4U9ZF1GSpmvS3C8JzfuBDQ5h9uwuasIolz1mdVyDDecIGj1Tj8rY
-         Uhn09Shh4+TKjlN0F/XQbIw5afBEMd6T3Ludex5ddxe2vnlEvy4c7tQ3mvE01jQcLHJM
-         /0n0/Ryqd8+Go01yMqTdNhv6Mz1XiuZuB83+BNpeMQ3HccYVavft+7q4mMq3cXXwj4xj
-         vdNr7HtZgqZxEMlPkzqlIgQNUL6ZsAwvMVxZvU2ieCpznglaJc0b+AbLtfQ9PHMXoojg
-         foitgWPx7fDc98ATXNER8zNY21cHPt5D4iqPxrBBsUOtGc9cW8BGjddEwTZh9klBIQku
-         YAqw==
-X-Gm-Message-State: AOJu0YwVDOYt2r53go2qh09wJIFC2/Dk9mn0O19S+itx66aO4HR1dht2
-	pUrCG0m9pW+qNLgwNGkgY3WSKfHToj0kT/YyaEiY2GwtKntfpgViiE0a6q5E8gHDbamhlkfYQph
-	3eps6RIt0r5sSUs/IeyMsn5RkCybCtj0=
-X-Gm-Gg: AZuq6aIMGRNV9H9mNxmV941Uq6WEA1rF/nPEd0roF27BYwivtFmlxB/nvlgDL12QeJZ
-	lV4zViyaDPn+ZIpkhjLdgLb6ftAdeApjbTNGCdo7dCceQ56XxOd9ZUyEp8mL9AsrRI7Nfuh8fbX
-	FcOKJMRQVjFXX8a38azKtEqPadbYS5vKDgXRSkzd6HaQoPTIqxcZt679LpXrdh4+ckR8gvym+uB
-	G27FpYbyf/fkbJ9PmSDyCTqLb3UMVgsneRMBCxxEYl1WqhRz6rjKr7eBTMmGyb2rpsENlcv
-X-Received: by 2002:a05:7022:6b9b:b0:11b:b179:6e17 with SMTP id
- a92af1059eb24-126f47ce45dmr2584476c88.34.1770281526812; Thu, 05 Feb 2026
- 00:52:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ffpYEEa3"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB626C19423;
+	Thu,  5 Feb 2026 10:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770285701;
+	bh=devR7VJmr/xn8ktgzpu6/1ed8rMHKTcaVA5kSFwJ7Jk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=ffpYEEa3r2u8D8tBKxCo/Tv4wF2Di/1EhYPTBO5FwUNHZN5pf+q5xFUp5PNoenwQ6
+	 k7UshnU02nbyTFdTRw3LkDlhHERxcf81I21zQ/PCn76rzMCwwBqdmWR5rPaneQJEKZ
+	 3ymTnfO7OghaNIbcdgU2Ui3bJUjLYpXORaW0JS4BYF0CBg6O/gD8eD4Nvqfb83gn6S
+	 d+kkDjWu9rh9EVJ7292uk0Jssl0kXcwLZXJJmZ7AQ9Jpdh78rOBf5XlnR2fMGlsB7E
+	 RQWi+JY38ABXAg0a8cz/cf7Y0IVEq9DsZiC/AMgOOQu/79A5CQ+ZwRsBpyFA7HZmEv
+	 fKcAZwdOxJLeQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99485EC1E8F;
+	Thu,  5 Feb 2026 10:01:41 +0000 (UTC)
+From: Carl Lee via B4 Relay <devnull+carl.lee.amd.com@kernel.org>
+Date: Thu, 05 Feb 2026 18:01:37 +0800
+Subject: [PATCH v2 1/3] dt-bindings: hwmon: pmbus: mpq8785: add MPQ8786
+ support
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202080355.53061-1-Ashish.Yadav@infineon.com> <828c7197-e49a-4a93-8290-416a1b691f11@roeck-us.net>
-In-Reply-To: <828c7197-e49a-4a93-8290-416a1b691f11@roeck-us.net>
-From: ashish yadav <ashishyadav78@gmail.com>
-Date: Thu, 5 Feb 2026 14:21:55 +0530
-X-Gm-Features: AZwV_QifYLLFJ5Sp9pPDY_5NHwOvmvcEgLQigAqeCRsc9MatWR7WTf1T3YP_zK8
-Message-ID: <CAJKbuCY8Xc0HMfpVG1FCjW_-QE-Lm_qKVxFht7Dj=18XoGjwUA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add support for Infineon Digital Multi-phase
- Controllers XDPE1A2G5B/7B
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-1-3744cd9b2850@amd.com>
+References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
+In-Reply-To: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"Ashish.Yadav@infineon.com" <ashish.yadav@infineon.com>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Charles Hsu <ythsu0511@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, carl.lee@amd.com, peter.shen@amd.com, 
+ colin.huang2@amd.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770285700; l=966;
+ i=carl.lee@amd.com; s=20260203; h=from:subject:message-id;
+ bh=4VP7aSutSEVwewHFNXv1YMwo/Z3h/7GGV0DuOQPQ1hM=;
+ b=4jLL+R19hP5vpToXhZfcy/anjN+etq253OapCqYxfFxIg0yFgaN2yMvQAHo8pIGdG+N8k2G9/
+ VWaukCD/QVTBm3hbpYicZPWu/IWKXSHi2dAlk7hTqT3ZRTsGTRcuLXo
+X-Developer-Key: i=carl.lee@amd.com; a=ed25519;
+ pk=pyq7QaQvoxMg806KVkRwpCbiah+7ncWr4MBpK1AEyjA=
+X-Endpoint-Received: by B4 Relay for carl.lee@amd.com/20260203 with
+ auth_id=623
+X-Original-From: Carl Lee <carl.lee@amd.com>
+Reply-To: carl.lee@amd.com
 
-Hi Guenter,
+From: Carl Lee <carl.lee@amd.com>
 
-Thank you for taking the time to review and provide feedback.
-I appreciate your input and insights.
-Please find my comments inline below.
+Add device type support for MPQ8786
 
-Best Regards,
-Ashish Yadav
+Signed-off-by: Carl Lee <carl.lee@amd.com>
+---
+ Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
+index 90970a0433e9..aec7397a29f9 100644
+--- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
+@@ -19,6 +19,7 @@ properties:
+       - mps,mpm3695-25
+       - mps,mpm82504
+       - mps,mpq8785
++      - mps,mpq8786
+ 
+   reg:
+     maxItems: 1
+@@ -52,7 +53,9 @@ allOf:
+   - if:
+       properties:
+         compatible:
+-          const: mps,mpq8785
++          enum:
++            - mps,mpq8785
++            - mps,mpq8786
+     then:
+       properties:
+         mps,vout-fb-divider-ratio-permille:
+
+-- 
+2.34.1
 
 
-On Mon, Feb 2, 2026 at 8:39=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
->
-> On 2/2/26 00:03, ASHISH YADAV wrote:
-> > From: Ashish Yadav <ashish.yadav@infineon.com>
-> >
-> > Hi ,
-> >
-> > These patches add support for Infineon Digital Multi-phase Controllers
-> > XDPE1A2G5B and XDPE1A2G7B.
-> >
-> > XDPE1A2G5B controller supports Linear Data format for VOUT using VOUT_M=
-ODE
-> > command.
-> > XDPE1A2G7B controller supports Linear and VID Data format for VOUT usin=
-g
-> > VOUT_MODE command.
-> >
->
-> This suggests that calling the identification code is not necessary for
-> XDPE1A2G5B. Please modify the driver accordingly.
->
-ACK, We will take care of this in the next release.
-
-
-
-> Thanks,
-> Guenter
->
-> > In case of vid mode in XDPE1A2G7B controller, NVIDIA PWM VID vrm_versio=
-n
-> > is supported:
-> > Vout =3D 5mV * (VID-1) + 195mV
-> >
-> > With Best Regards
-> >     Ashish Yadav
-> >
-> > Ashish Yadav (2):
-> >    dt-bindings: trivial-devices: Add support for XDPE1A2G5B/7B
-> >    hwmon:(pmbus/xdpe1a2g7b) Add support for xdpe1a2g5b/7b controllers
-> >
-> >   .../devicetree/bindings/trivial-devices.yaml  |   3 +
-> >   drivers/hwmon/pmbus/Kconfig                   |   9 ++
-> >   drivers/hwmon/pmbus/Makefile                  |   1 +
-> >   drivers/hwmon/pmbus/pmbus.h                   |   2 +-
-> >   drivers/hwmon/pmbus/pmbus_core.c              |   4 +
-> >   drivers/hwmon/pmbus/xdpe1a2g7b.c              | 115 +++++++++++++++++=
-+
-> >   6 files changed, 133 insertions(+), 1 deletion(-)
-> >   create mode 100644 drivers/hwmon/pmbus/xdpe1a2g7b.c
-> >
->
