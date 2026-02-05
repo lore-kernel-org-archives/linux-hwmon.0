@@ -1,113 +1,135 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A94122541B
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 13:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB163382F7
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 13:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770298527; cv=none; b=WGm3C52wBeJK1rG0PTZKrF5k3uCWXnOycWyIqDLjoeFMz465eum8EocHs2+f7ptSfvFQdTirVG4yciU/w5qtEK4BiKnM4XaFhOEniWjUMddDBPkhUlDDgm/i/ItUqORB1mPoDM/zSZOq3FGUpppbSQgeZ93TDZl5FXgE3qjBVEw=
+	t=1770299181; cv=none; b=KTQZ0OKRyP4flRo5K56VsU/AjC0r0AcyqXg8s4myTQRts7MruQ3iBdsH1zTKWK/MvX51KPfwumY4zhEBf/NexKEY8dJVAfLHZxxhmBsgUf2gnvjevvo+8dQkAn3MaWfVLKAuaUkz2lV0FTMWQLuSfeF4ZnTAlxfgcPk8wKIyHIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770298527; c=relaxed/simple;
-	bh=jzOvnTx/W3vkHXNAXJHl105M+tP5MxGbZjwB0Go0Ag8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KfZkyIGj9FcaF9GTVdXSLHIqxAwVToSGaspmRoYThDOJV7SpQEYRdmqTKRx5Zvl6n/Xuhl4KoOEhEhyB592cvmpNLJQ6LDsV86/ia8xNf507ioZCauRLf+kOHVOCpiPdBSBxO1oQtfzUd9eCW5o7yJqIi76ST7MfFj1VrfmtlxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z0zQcrsZ; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1770299181; c=relaxed/simple;
+	bh=l1bejRBRLY+E0zgxMm8aWgHFVVyo8u7BYlnJTLwNLac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YphehEbf9ClPy9/7KTI1FKRNTxd6u15greUHljmD44icSIwqbtHqsILHXpCPrpt0N4FcG5b76/wGkP4h9EB7C7oL77MOLSu+8t1cFhThnjQ+7w4RhzP4SPj8GSEiAs3ocj/orHKg5o6rL4X0qX4ky4w95FaXw3HZ3knVE+KbSmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NqXOijHn; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z0zQcrsZ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a76f90872cso5594585ad.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 05:35:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NqXOijHn"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a929245b6aso9155525ad.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 05:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770298527; x=1770903327; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1770299180; x=1770903980; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A/zGx1Gcz5LYgaI/49wFrBfxIvVXqwuQwGCglo5zagk=;
-        b=Z0zQcrsZOEGbb9nIybtiHp6U7eOnD6pKrZiadncsurWJ3rbR1KFSY+y7hC1e380qcV
-         Ua+OnpzT9nBh2bLsOnESD2X77gz6DBY1ySB+pyA6Ou2TWsakxgCJofZB6mHbNQQFi7Jk
-         7TIVNx2801X4gfsSJD8YFvXCdQMN/vEZqcbpIyefMRIjvuXXzbgGDl1JUzhzbE63JXhn
-         oQqIzW5L0HD05BIcE0EoypRUt2Q0L2RcY434AknUOQPaq3TTGcnj4pbeAWDTzkeWkRGp
-         cCwJnoDDR8IPb7E9deMgDRLj5g7o9+N1JvVTOUWaHX724H5B5H0bs3UBlIIdD1B19lL0
-         G8vw==
+        bh=XNJhfXMPSL9iFWz6R60RceCWsjhIvrWwTqzQWCvi4LI=;
+        b=NqXOijHnwtWGko0FsmvqBGsVenVS+HJo3muYt+bsTWoaW4b2eZR1Ra/Oy1sroobZl7
+         vku/gj11nJtsdL3sO2ODyOH1/k5W0tV0kRs5ToE0kHLyr+rs8a3kQ35+2cEe1P86qELj
+         gvK15x719Ue3tjSG+WfN9u2XC6JFpA+8rdAsGuTXqZqtoXa7Uus/r0GjkEknFbrO76Cy
+         GAuat3jOGNye+/w8Gy5vUFR24k+v3Z89bbZh+DXAy0fWr7zr8nHso90iyLMTXGKEWxcr
+         6aadvHKViMYmHnUSApQF2Art+IP60k/0b8EhXanDajxV5+4Hj5+Xpk1H6C43Nzi/U9eA
+         gxCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770298527; x=1770903327;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+        d=1e100.net; s=20230601; t=1770299180; x=1770903980;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=A/zGx1Gcz5LYgaI/49wFrBfxIvVXqwuQwGCglo5zagk=;
-        b=kwDhusAKB3O2/UTYGRi2Eh/nquhUbrXkylvsywWF9MelUqehv7S8JfL9XVHnGlMfTZ
-         RVl8DC90cjLrRqeN+o2rgMvFTM7TfBuo4Z08w0DBlzb0Xg+hyvL80nAvdXO27NQYe10O
-         nIuGklFh77bSzX/yALo4VPttupP9/aaux0Fzc4IXRU6dp3JyGhBvnjN1q8OM5N/LaFrh
-         /X/X701vIEJ4jpeShEZBV7gawMIcEzpqU+EDuBVIsJ7kcZ/4qch5YKg1E+n+piI+Os7Y
-         CnYLH6CfROJ+zzbSifzaUvwpu8OUWtvLgcIYfUFzw+fjAB9g+XS0bScRznF3F9pO4lh6
-         JQWA==
-X-Gm-Message-State: AOJu0YxRy3BMDBfjvG52RCPENaE1iAbZFlzTR9QdhkYWPNnDKzpZX6R1
-	JmjT3vMnF7xUFPw7N++NuqFug3GcqdHlm6eQGd0iQa+7lKNyZEUu/lgx
-X-Gm-Gg: AZuq6aLO7xz6eZLwZ3gh/kbIXCKlwq+nkxRF9dUj94NXGFFCYALlkO7pIpbAAMlZDNa
-	flwegWzi8STo20n5rCJxw8CwcXBTjKZLRFjBuVMbQqGW5LOOWKrrN7+4rhaftyO/dIYd/B0s5d5
-	pKPLgc71xXSJy6SCVKiBSsbcpy7RtuNaVy9KfoHXrkzFLGmKIUMc2gUrtyRxS6/gTRmJRE/rP9/
-	+aBjxXGTgCSg2812uBkQwADGzn2UCVsn0ChfU2GzZ/87vPagiXIutw403DLNQN20yAlt6sqJJtF
-	bbL6ORTxZnvTpf9vn8NVJWoP/WvseIb5YP/VsGHrPGabDchxkjqa++0m2j++EYoE7EXJ3ZayrFZ
-	PAPndhxpbqVzepflWx+e9ixwqCvzCPIMaglxZfiGxs1FkTqhLMUdmYdgCBfiky0d7+GOECeQ032
-	vd93XVJqw=
-X-Received: by 2002:a17:902:f684:b0:2a0:acca:f3f0 with SMTP id d9443c01a7336-2a93400c9damr78505625ad.49.1770298526798;
-        Thu, 05 Feb 2026 05:35:26 -0800 (PST)
-Received: from [127.0.1.1] ([218.32.81.133])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a933850f41sm57760505ad.7.2026.02.05.05.35.24
+        bh=XNJhfXMPSL9iFWz6R60RceCWsjhIvrWwTqzQWCvi4LI=;
+        b=kQHPfFhSCKmGsuAcZVWaLxOPhb8ii4ywwjATl9zs3+RGCbF2EIz6u2U+o7AiOwR7nn
+         lLmG0Huzn23B547BNTxK7/mcunjQOcWPHJeS6i35hZm6tXHiwQICijYEMD9RPblhq8oj
+         nmLY074r/eXC5dcHiv9beZu1XkP978nGSBMuGMI+MIoUQe20BWGGR41s2bT8WNZcLFEE
+         iKDqeqOeFMmMqbZCtDrAVbNLU6FyDE/dJQIxT9G0st4eLdBZ3XnujYJEX8ZjvXdjxPsW
+         GzDpNxSAkXTJq+HkR3d3DVTH1lf9BO/5j4Ft+V17LW6QrYcWWeJMb6rbbzHyh5pKhmGd
+         qz0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX5Sd6V3ExyhGgfsj2fuUipVozeR1Avdb6OsAotqgi5IdVxPjAtSXL0pM47JLaM6A2DvK0edgGZtIJQSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHbte5715q+VmifE24cdmsU1yA0q353p6GpYHxmqa9gL1QEyPL
+	+BeARD3t5enOEiRIvRHJRrOgXJcGIsqZ782XYyG6zJ94OvTuQT2iB4VU
+X-Gm-Gg: AZuq6aKmCjfhBif5DajtWi2L24A68JnUqe0t/lWA2OAwf1hNwcZCILNoAND7h3+S8uO
+	hfBuBUOBNmIiRDDDu9cXLopPNALI5pP9isbIUPj9++cGcI1xWBPLYPrrTySG2c3AhKoMie7CQqB
+	OZEyDhif2EUuNjBqcD6o4+tHfdDhPxxVIZl28zdVp8cr9QCDvVtdwzcdt7ZQpoel/cqDyS68fyP
+	kHHGXxzhCUSwbuHGQRLdrTV20la/r7c8RsWKbg0/I2+utHP0iyUkEec+RxHXYgLmf8GbF8d723J
+	d2nkrwFsgOJlLeJUCR6sPm/iZaTKoYNRbyYKzhfWzlaI58uJd3WrzdbUQar5VtUN9PTOFbjRqF8
+	lydx8kdvai2YfVLRlPuOq+vaJyqCWl/uJrxQYS5T569641oWGS1FMpt+yUn/Qj7hkDjT0HWEkPr
+	xo2T+cUFrwaxcnwATwTccwjyn0xaw1CLAK9sE=
+X-Received: by 2002:a17:903:1c2:b0:2a9:43b0:edd9 with SMTP id d9443c01a7336-2a943b0f3d6mr22736135ad.60.1770299180084;
+        Thu, 05 Feb 2026 05:46:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93396747esm52048515ad.80.2026.02.05.05.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 05:35:26 -0800 (PST)
-From: Colin Huang <u8813345@gmail.com>
-Date: Thu, 05 Feb 2026 21:34:37 +0800
-Subject: [PATCH 3/3] docs: hwmon: Add Q54SN120A1 and Q54SW120A7 to index
+        Thu, 05 Feb 2026 05:46:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Feb 2026 05:46:18 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: spd5118: Fail probe if SPD writes are disabled
+Message-ID: <6cd7920b-165d-43e4-9c60-aae9492bc814@roeck-us.net>
+References: <20260205102942.28745-1-tinsaetadesse2015@gmail.com>
+ <20260205102942.28745-3-tinsaetadesse2015@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-add-q54sn120a1-q54q54sw120a7-v1-3-09061ecacfc7@gmail.com>
-References: <20260205-add-q54sn120a1-q54q54sw120a7-v1-0-09061ecacfc7@gmail.com>
-In-Reply-To: <20260205-add-q54sn120a1-q54q54sw120a7-v1-0-09061ecacfc7@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org, Colin.Huang2@amd.com, 
- Carl.Lee@amd.com, Peter.Shen@amd.com, Colin Huang <u8813345@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770298516; l=603;
- i=u8813345@gmail.com; s=20260202; h=from:subject:message-id;
- bh=jzOvnTx/W3vkHXNAXJHl105M+tP5MxGbZjwB0Go0Ag8=;
- b=SQRmAR2FLHCMb2rc5Nq3fpB7zsG3L9iKsSUN6Bj2NcQ6ClR//eQEXcGw1gRqY5Phiz4QQTBev
- 3rcl1hD0x0GAhH53lF2v1blOC5n0K0QbHSKxsI2YCrS8wM2TKFVoYqk
-X-Developer-Key: i=u8813345@gmail.com; a=ed25519;
- pk=Zlg0WqpCw4qbswOqamTBTXIchwR/3SnYZpy7rjaGMdQ=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260205102942.28745-3-tinsaetadesse2015@gmail.com>
 
-Add the Delta Q54SN120A1 and Q54SW120A7 PMBus modules to the hwmon
-driver index.
+On Thu, Feb 05, 2026 at 01:29:25PM +0300, Tinsae Tadesse wrote:
+> SPD5118 requires write access for page selection, configuration,
+> and cache synchronization during suspend/resume. If the host
+> controller does not allow SPD writes, the driver cannot function
+> properly.
+> 
+> Detect this state using adapter quirks and determine whether to
+> stop the probe.
+> 
+> Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+> ---
+>  drivers/hwmon/spd5118.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+> index 5da44571b6a0..094d05472562 100644
+> --- a/drivers/hwmon/spd5118.c
+> +++ b/drivers/hwmon/spd5118.c
+> @@ -525,6 +525,8 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+>  	unsigned int capability, revision, vendor, bank;
+>  	struct spd5118_data *data;
+>  	struct device *hwmon_dev;
+> +	struct i2c_client *client;
+> +	const struct i2c_adapter_quirks *quirks;
+>  	int err;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> @@ -552,6 +554,19 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+>  	if (!spd5118_vendor_valid(bank, vendor))
+>  		return -ENODEV;
+>  
+> +	/*
+> +	 * SPD5118 requires write access for correct operation
+> +	 * (page selection, configuration, and suspend/resume cache sync).
+> +	 * If the SPD writes are blocked by the SMBus controller, the
+> +	 * probe fails.
+> +	 */
+> +	client = to_i2c_client(dev);
+> +	quirks = client->adapter->quirks;
+> +	if (quirks && (quirks->flags & I2C_AQ_SPD_WRITE_DISABLED)) {
+> +		dev_err_probe(dev, -ENODEV, "SPD Write Disable is set on adapter; refusing probe\n");
+> +		return -ENODEV;
 
-Signed-off-by: Colin Huang <u8813345@gmail.com>
----
- Documentation/hwmon/index.rst | 2 ++
- 1 file changed, 2 insertions(+)
+		return dev_err_probe(...);
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 85d7a686883e..62d6fc0817eb 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -216,6 +216,8 @@ Hardware Monitoring Kernel Drivers
-    pxe1610
-    pwm-fan
-    q54sj108a2
-+   q54sn120a1
-+   q54sw120a7
-    qnap-mcu-hwmon
-    raspberrypi-hwmon
-    sa67
-
--- 
-2.34.1
-
+> +	}
+> +
+>  	data->regmap = regmap;
+>  	mutex_init(&data->nvmem_lock);
+>  	dev_set_drvdata(dev, data);
+> -- 
+> 2.52.0
+> 
