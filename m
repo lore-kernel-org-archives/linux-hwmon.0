@@ -1,353 +1,188 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B41B328B55
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 21:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46897326955
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 21:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770325350; cv=none; b=hwWjfWBL/W7u4MxUS4r/1XuW0rM/UoHOMhR7iiDM/V/R5rJoYaT3E08HVARimg8hiVM1oXK6LB89lENS5OtwVskFtJf5MdygK53gT1klG5POlXQPOOljNNAbPbEtDsoFzCryoZDspf4hqom2gSmO6lYvbKzx4lVdGSzNhEjPv0Y=
+	t=1770326097; cv=none; b=NQfN8naCjen4H+CsWuRu/EHrOJgnPT6vsTgxLQ7WZvr0E1yYkXJjRrdd7mYxWDrZ3QA9+MAFJDrxVTljzEwrhsjWKnoNExDFo+NySUMk8f6D8xHeVqG+ryXGp9WGihACOYRLXYoOylaHn00up8tultobZqU6nqeGUsP56ZQgys8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770325350; c=relaxed/simple;
-	bh=eXwQ9SgcUhDKN59vyhZtqEkgpqtPjys6BZik72szYvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CmrW+W9rLKm0fy6K7bzTciHOzh9KR97iVOEy3KgpqKQsC0rqIWNY/DjbiqQ58/kWmXK5LouxMJ3Z1bQSyTsagZxEwdFXmenKbN9dz0DfIdg2RbKtGze8n6fUffejENLfnr9kGNbppmOYOCihgLU0sYRtX0Yh2HvlUE8mVgcnScA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bd/oMC4+; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770326097; c=relaxed/simple;
+	bh=R28ctyRfWvYF1AcAyUM3MdJI+xYN+EibX6fe5/NpQSY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bBj4FUHzaBWKaLZfVgqK844aNlGWDwmJJLCUvlF+qLA/+85ilHOkAFiZQJcXXYaApdmBFOckYMdgXTYXEigZK0cWtMeWjO/mO98LWxqBR7DaiG6oD19JrAxLkrbDegNBEQbMkMxSUjRbJsSZF9u2tOuUanI063lLy84dnVvEDXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Cpm6O+cd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=gqkKt7Q8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bd/oMC4+"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8c713a6a6f8so168999985a.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 13:02:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Cpm6O+cd";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="gqkKt7Q8"
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 615Frhx4872443
+	for <linux-hwmon@vger.kernel.org>; Thu, 5 Feb 2026 21:14:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=zMAmK55w1caUuW1KuyJwzi
+	CE6kDjy5Wma1Xxymy+Hw0=; b=Cpm6O+cdn1zqXu2MWl8YKiSCH3iunm/5Ljd17A
+	ZLrJ6aFdfEmjabM9E5GX7kodBf0FUHQiy4d9laJwviULV+kKnFJcSAJGCpnUga8m
+	Pq+qQluzgu0aIlgN2P8d6KtjSEq5AwPuDaI1jbOaOhSCwn+3Z0e2vSEBA0Yl+jAe
+	hOyQ2VnybvmubNg6Ej/zgLlFhMxJU9FokMVdg4fhSXFMNqjSlFRK2wRRMqvVny9s
+	lhtMTkWkzkZVNXygJNA8e1EIiu7PaZMRTMIGyzv8Ewb66vbh5nbquaGPga2tOBfx
+	LiU8qgauKA+SIGkUEs9i8dhowGcG/HOyg3KIADuSRA3mnZhQ==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c4x8bh124-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 21:14:56 +0000 (GMT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-3547cd89bcfso3266941a91.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 13:14:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770325349; x=1770930149; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iiWXSjYD8iWQZkhbOZvxGQgWjvd+mTWIbvYj/f3atxo=;
-        b=Bd/oMC4+tkqiqqEPZIRRIF9BVeDqsd7yWCncnEO3rxNSaq8z5CAjiIDn2xtH0iweq1
-         //igQjkI285rqCPEsLdTzLmdliF9OKpg5MwUwG6GEmwajse93N6/8jTBWwwYxyZmdjZ8
-         GMO6DkDg/ODlpsQgwcuDxCpLgpDn+SbpH/nEOO/YKa8ryojJ3n0o64v6HRqHK54ilqVz
-         3tuuiwNoc0+ZH5lUaHqRQUVWstCdLiE+wMewsM/YRqbIPwdZgm60LybSjuMyZrEYBbj7
-         0Gtfk7v6K9xxGK1LHuRcU6c4yQo7E7gWipx4KAExyNHgRL+HXG2u0TcaMXEotWVwyWA8
-         tr/A==
+        d=oss.qualcomm.com; s=google; t=1770326096; x=1770930896; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zMAmK55w1caUuW1KuyJwziCE6kDjy5Wma1Xxymy+Hw0=;
+        b=gqkKt7Q8jWk9keHG7HOa2jdfXPMyZV2pr9gOdJsiT23qW5/DsPLLXObF4ViYXkOmDa
+         WLdIHUT/PfPlRCWpfxOQUmEHO17skQk/PdeXtdXRfA9js15mCkcJM/zrsMnM7QPuMiDZ
+         pces/tGSRoJAQak6AHQRiOR5jC5tqBpNtXZO+dJPAraUI+Do2BjXJ3AByWdEDzhCtEaB
+         DefcVSrSkI1Jh90aqwV+fyDWSS45OMyl2EgPFMA2hhWGEJabVxEln6mR3sATcGk2QLPH
+         4UC7Zdbok2nIwSsnYnYL0iB+aC4s0nuTABv69QB7jcxkuKe7JysygapnJ7HhluSWc6f7
+         iE/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770325349; x=1770930149;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iiWXSjYD8iWQZkhbOZvxGQgWjvd+mTWIbvYj/f3atxo=;
-        b=d/F94E93s1oWSJGnVepDQRYjOWOSiBDqTp5h7aSMP0kvUd6gbmE0CBV45pZt4l9+ti
-         mwnM7HiuxhJ0HrbFuOUfDwU7DqPnShLb5o5N8wzyrKJPqCIsL++XCXxB/TYRv9iiMZW2
-         hTZGI/N5Gxm7uf9kHSiSpuV50zz7K6pFmW3UBX7Tkwr68o9oypP20QYl5w9mm+uv3rte
-         rhnqLL5oxl6AMFS2wm680TAqNch9cwqkEJdDW8zCXh7mhZMFHOXUGvqUAYykw00GHwij
-         /oG4e9ID1B2REXinH50J+cc60sRrwkHs0cITPNFdcDN8yl0xp5A+Ja/yo8H6f8+/2Z1P
-         cI5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUEyC1FNqXgo0VFJj2AIKKtJnC0j6BV39Hs6MFRalmYFg2FG3E7P61CSnlqE4Bi4rlY8PWd54U04/rKpw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHXM5ElcLhrveLay5NExP3MXL5qOzSGQg9ipdsS0neQId/quBx
-	x2jwyoS5vpWsHO9KA5wv1kXUf58a0oApcwJTx3eLi6vVugTnlb8rjJA/T6uPBRjW
-X-Gm-Gg: AZuq6aJdR6gxffNXW49WLoM6mDUvXknPK6dJhqFZ93vfcoNYw9IRHMIKojTmZUJSrzC
-	KiwWLjsLm2uF+6LWg5HZC7uHHnc4eAJckdvQhxQipGwvfOSSwPU6e+6ViNruLQ0r20ovJWd5aif
-	OTBhHyY0Nlb/ud4OW5tgRxyruJzRhx52fBGAW6M+PVWUCQ9teKPmVU2NDyMWBGA0SOm6xdSGDqb
-	LqS8bYEWn9iD3UI92XLyrFpOCPNFExdjNAgxHj3fAk4msjJKt2r3FpBYhXvc4Pv91m+Wl4QCg7A
-	5rHG+T0OKpPQ+zhZZmXpbboXaK7FQ/aBMI0A1crsd9GpX8HF7MNtedGY3502pfiPPxW9wxbl8nX
-	nD0poM5ixCCeLDAy+iqOheU+E/0+AZkGPFcnOT4vTZ0hVrerzMgnsds5IZeflVWkV9mBEB3b/w6
-	+g7YlH8aWQC2JFsImAmddwunIt
-X-Received: by 2002:a05:693c:3111:b0:2b7:a6fa:3f87 with SMTP id 5a478bee46e88-2b855d341cfmr131450eec.19.1770319108298;
-        Thu, 05 Feb 2026 11:18:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b855c88cb4sm165396eec.30.2026.02.05.11.18.26
+        d=1e100.net; s=20230601; t=1770326096; x=1770930896;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zMAmK55w1caUuW1KuyJwziCE6kDjy5Wma1Xxymy+Hw0=;
+        b=lAxPfJQ60WZTKmJPHY4+GMO9rh7Z+yYzPia5VF85Mffr54ZX2CS78ZivqgB52zyXaQ
+         ISt8S2XNifQjVxjhAKvC21lnmInT8pm98BsEYKW8CwJ+DoK1MNBLys8bwLbrwRHiYlii
+         xvvGXRu2cx8Reqhbm18mr7qcGi1iHeA8YZwXcNGcRF+apgKWSxqxhxxvIaM6wE8c5Xjv
+         k4bLIWsYq1b68YdCxIf2SvVmS9nEp/kgxmsXGki/Ig4pbtMnBYDuYgfGwq6h2ucEiJTD
+         fs/dl8aduKXToJT93vT7+sg5NwzEsbnhAavFrA2n1vV62QKwVmlfT6w9jaLJ0Ydl6+D0
+         o62w==
+X-Gm-Message-State: AOJu0Yy9v03LjKk0XHbu9HIkTb5PWhtcVArmNXnJvzHDRURI/kUAGBc6
+	vPWC4Frvvk0bjDkHsUBkwIHNeb4vy+ob9zvCdETeJpgEBpzSUIf21xA7XOiTuJP78slCUsM4x3n
+	781S3A9VKM0MYxMzT9KZmX6podIHJOTbiNx6WBSHh792+1hFvED5WEpnjZagcR++UCQ==
+X-Gm-Gg: AZuq6aKfxnC25tZTaqOKrYezdTpikd+kXDlN7EC0A50eXD0SlAp32GbMj6zeyB6+7LA
+	b3gn+C4tqPazt2fHTxtaO+9M9MtdlnFQtTVnZWndN13XGUOGNcanvokL3Ye7exk9z5wBzQAu12W
+	fkY/YlIABkSPuvAkrHDVKE5DBL2Gch3UP3bx5gXWMI81uRDwtU2kvLXGtegRuYkbqohYu3Nx5fI
+	FucqvYsPvPTzl5KdViZMoahRTK4hQ0gR7vNdfLtpWs7PIaoYUGSr0cN3zGSZMdSFc8YaQAiu4zm
+	pxpvCCkcAw5GYelZspm7ct3YMAlmW5hTh3G5E2GF5h4ya0T+lDwqDhEKPO2z/wwQxbfh9sBbcp2
+	YKTD9ueiJXsKv7Ycgq4qCXqKgBgUPmnPK1rew5ortRhUa
+X-Received: by 2002:a17:90a:f947:b0:34c:fe57:2793 with SMTP id 98e67ed59e1d1-354b3e264e3mr277531a91.20.1770326095640;
+        Thu, 05 Feb 2026 13:14:55 -0800 (PST)
+X-Received: by 2002:a17:90a:f947:b0:34c:fe57:2793 with SMTP id 98e67ed59e1d1-354b3e264e3mr277499a91.20.1770326095076;
+        Thu, 05 Feb 2026 13:14:55 -0800 (PST)
+Received: from hu-manafm-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354b4575897sm74536a91.3.2026.02.05.13.14.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 11:18:27 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 5 Feb 2026 11:18:25 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Marius Cristea <marius.cristea@microchip.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: temperature: add support for
- EMC1812
-Message-ID: <a83b48a4-76ba-48df-9aba-adb018949914@roeck-us.net>
-References: <20260205-hw_mon-emc1812-v5-0-232835aefe8f@microchip.com>
- <20260205-hw_mon-emc1812-v5-1-232835aefe8f@microchip.com>
+        Thu, 05 Feb 2026 13:14:54 -0800 (PST)
+From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Subject: [PATCH 0/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
+Date: Fri, 06 Feb 2026 02:44:04 +0530
+Message-Id: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205-hw_mon-emc1812-v5-1-232835aefe8f@microchip.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABwIhWkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDIwMz3cLk/FzdpOQc3Yzy3Pw8XUMTy+RUc+MUSxMTAyWgpoKi1LTMCrC
+ B0bG1tQCCmTWQYAAAAA==
+X-Change-ID: 20260206-qcom-bcl-hwmon-149ce73d9440
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770326090; l=2419;
+ i=manaf.pallikunhi@oss.qualcomm.com; s=20260206; h=from:subject:message-id;
+ bh=R28ctyRfWvYF1AcAyUM3MdJI+xYN+EibX6fe5/NpQSY=;
+ b=LomUW48sd/c8DDC9GA+Hgmzh6Mc1dSngB0j0DKcFtgZddiNhJxqAcA2XPOx/b2TejvDLs8+L8
+ sIxJEkhSkSHBzpmDVsbIfjUX327WIdVqmYQhLf9DXgbMTvtRzeLoDIQ
+X-Developer-Key: i=manaf.pallikunhi@oss.qualcomm.com; a=ed25519;
+ pk=oZ3x9jh+FDyPwxHmCbyzEMQHMzKqrH6hUbbL7dEBe2g=
+X-Authority-Analysis: v=2.4 cv=GaoaXAXL c=1 sm=1 tr=0 ts=69850850 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=NRMeOcx5ysTwsLa4DNsA:9
+ a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
+X-Proofpoint-ORIG-GUID: RzgGMhnRtdgpK1D9Tsw9cpeNBcTwvMst
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA1MDE2MSBTYWx0ZWRfX48Qc8BP3nwS1
+ QbZYmS1LP+WhIbhRrimfQwl2q2jYdMMYG88rkTWWZth5GQIsX5A2D2dmKbyXoInXbFMLBftrHgE
+ sDPU7mflAe9dwPwpfErbKMTMrAMjLeKbinTs0robSOWMEFoZ1BXJxjjTmUcHHv8xiNI07D8PtW6
+ PARPbYtCEFcOkNUa0+NfEHw8kn2bOd9Hn0jP2yj2XyUNydNEclKbQjgYK/oFmMkCnYys5gxvU/F
+ GJaRwlsVE+TFXBMguLTeSexTusMc7To8EgZe0qmE0v6SEeOnTUXr026k573AJOVuE2ififWGm56
+ ge0KsibUf9vaQvWhJOV2xj9X5EO+AiX7r818GT7cRuJOp8LgwjN2o5OfnfhbhG7FbPkWYMByldg
+ gwmdL5021heuIRrEjQIf60LZ2RqxE0VJXT5t8BmWUPZv0fKi/8ka6lqFsbKHxFnTN5Kh2FmRSYu
+ b/wWV7QgYtcSuDRb9wA==
+X-Proofpoint-GUID: RzgGMhnRtdgpK1D9Tsw9cpeNBcTwvMst
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-05_05,2026-02-05_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 spamscore=0 clxscore=1011 impostorscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602050161
 
-On Thu, Feb 05, 2026 at 09:09:03AM +0200, Marius Cristea wrote:
-> This is the devicetree schema for Microchip EMC1812/13/14/15/33
-> Multichannel Low-Voltage Remote Diode Sensor Family.
-> 
-> EMC1812 has one external remote temperature monitoring channel.
-> EMC1813 has two external remote temperature monitoring channels.
-> EMC1814 has three external remote temperature monitoring channels and
-> channels 2 and 3 supports anti parallel diode.
-> EMC1815 has four external remote temperature monitoring channels and
-> channels 1/2  and 3/4 supports anti parallel diode.
-> EMC1833 has two external remote temperature monitoring channels and
-> channels 1 and 2 supports anti parallel diode.
-> 
-> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/hwmon/microchip,emc1812.yaml          | 182 +++++++++++++++++++++
->  MAINTAINERS                                        |   6 +
->  2 files changed, 188 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml b/Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..759e004eafdfc0772e110fe484767eb66a623294
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-> @@ -0,0 +1,182 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/microchip,emc1812.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip EMC1812/13/14/15/33 multichannel temperature sensor
-> +
-> +maintainers:
-> +  - Marius Cristea <marius.cristea@microchip.com>
-> +
-> +description: |
-> +  The Microchip EMC1812/13/14/15/33 is a high-accuracy 2-wire multichannel
-> +  low-voltage remote diode temperature monitor.
-> +
-> +  The datasheet can be found here:
-> +    https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/EMC1812-3-4-5-33-Data-Sheet-DS20005751.pdf
-> +
-> +  EMC1812 has one external remote temperature monitoring channel
-> +  EMC1813 has two external remote temperature monitoring channels
-> +  EMC1814 has three external remote temperature monitoring channels and
-> +    channels 2 and 3 supports anti parallel diode
-> +  EMC1815 has four external remote temperature monitoring channels and
-> +    channels 1/2  and 3/4 supports anti parallel diode
-> +  EMC1833 has two external remote temperature monitoring channels and
-> +    channels 1 and 2 supports anti parallel diode
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,emc1812
-> +      - microchip,emc1813
-> +      - microchip,emc1814
-> +      - microchip,emc1815
-> +      - microchip,emc1833
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: alert-therm2 asserts when the ALERT limit is exceeded.
-> +      - description: therm-addr asserts when the THERM limit is exceeded.
-> +    minItems: 1
-> +
-> +  interrupt-names:
-> +    items:
-> +      - enum: [alert-therm2, therm-addr]
+Add support for Qualcomm PMIC Battery Current Limiting (BCL) hardware
+monitor driver. The BCL peripheral is present in Qualcomm PMICs and
+provides real-time monitoring battery overcurrent and under voltage
+conditions.
 
-AI feedback:
+Hardware Overview:
+The BCL hardware monitors battery voltage and current through dedicated
+channels with configurable thresholds. It supports different alarm
+levels with independent interrupt lines:
+- Level 0 (LVL0): Maximum/Minimum threshold - mapped to hwmon min/max
+- Level 1 (LVL1): Critical threshold - mapped to hwmon lcrit/crit
 
-If interrupt names are being used to identify the interrupts, should
-the interrupts property be less restrictive?
+There are 3 modes of BCL hardware
+- BMX -  Both under voltage and over current monitor support
+- CORE - Only under voltage monitor support
+- WB -   Both under voltage and over current monitor support. It also
+         supports current comparator for current monitor
 
-Currently, the items list in interrupts enforces a strict order:
-the first interrupt must match the first description (alert-therm2),
-and the second must match the second description (therm-addr).
+The hardware uses different threshold representation schemes:
+- Raw ADC values for Level 0 voltage thresholds
+- Indexed values for Level 1 voltage thresholds
+- Raw ADC values with variant-specific scaling for current thresholds
+- Indexed value for current threshold for BCL WB modes.
 
-However, the interrupt-names definition for the first item allows it
-to be "therm-addr".
+Voltage and current monitoring can be independently enabled/disabled
+by firmware, and the driver automatically detects the enabled features
+at probe time.
 
-If the intention is to support providing only the second interrupt (therm-addr)
-as the first item in the list, then the interrupts property definition
-prevents that by enforcing the first item to be alert-therm2.
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+---
+Manaf Meethalavalappu Pallikunhi (4):
+      dt-bindings: hwmon: Add qcom,bcl-hwmon yaml bindings
+      hwmon: Add Qualcomm PMIC BCL hardware monitor driver
+      arm64: dts: qcom: pm7250b: Enable Qualcomm BCL device
+      arm64: dts: qcom: pm8350c: Enable Qualcomm BCL device
 
-2nd feedback:
+ .../devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml  | 128 +++
+ MAINTAINERS                                        |   9 +
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi              |  10 +
+ arch/arm64/boot/dts/qcom/pm8350c.dtsi              |   9 +
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/qcom-bcl-hwmon.c                     | 982 +++++++++++++++++++++
+ drivers/hwmon/qcom-bcl-hwmon.h                     | 311 +++++++
+ 8 files changed, 1459 insertions(+)
+---
+base-commit: 0f8a890c4524d6e4013ff225e70de2aed7e6d726
+change-id: 20260206-qcom-bcl-hwmon-149ce73d9440
 
-The interrupts property description lists two possible interrupts ("alert-therm2"
-and "therm-addr"), but this definition restricts interrupt-names to a single
-item.
+Best regards,
+-- 
+Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
 
-Should this be updated to allow providing names for both interrupts if the
-device is configured with both?
-
-[ I don't know how this is supposed to work, so the feedback needs to be taken
-  with two grains of salt. ]
-
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  microchip,parasitic-res-on-channel1-2:
-> +    description:
-> +      Indicates that the chip and the diodes/transistors are sufficiently
-> +      far apart that a parasitic resistance is added to the wires, which can
-> +      affect the measurements. Due to the anti-parallel diode connections,
-> +      channels 1 and 2 are affected together.
-> +    type: boolean
-> +
-> +  microchip,parasitic-res-on-channel3-4:
-> +    description:
-> +      Indicates that the chip and the diodes/transistors are sufficiently far
-> +      apart that a parasitic resistance is added to the wires, which can affect
-> +      the measurements. Due to the anti-parallel diode connections, channels
-> +      3 and 4 are affected together.
-> +    type: boolean
-> +
-> +  vdd-supply: true
-> +
-> +patternProperties:
-> +  "^channel@[1-4]$":
-> +    description:
-> +      Represents the external temperature channels to which
-> +      a remote diode is connected.
-> +    type: object
-> +
-> +    properties:
-> +      reg:
-> +        items:
-> +          minimum: 1
-> +          maximum: 4
-
-I (or, rather, AI review) asked this before:
-
-Does this reg property need maxItems: 1?
-
-Without it, the schema might allow reg properties with multiple items,
-provided the first item is within the minimum/maximum range.
-
-[ Presumably the _values_ should be 1..4, not the number of items ]
-
-> +
-> +      label:
-> +        description: Unique name to identify which channel this is.
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vdd-supply
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,emc1812
-> +              - microchip,emc1813
-> +              - microchip,emc1833
-> +    then:
-> +      properties:
-> +        microchip,parasitic-res-on-channel3-4: false
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,emc1812
-> +    then:
-> +      properties:
-> +        channel@1:
-> +          properties:
-> +            reg:
-> +              items:
-> +                const: 1
-> +      patternProperties:
-> +        "^channel@[2-4]$": false
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          pattern: "^microchip,emc18[13]3"
-> +    then:
-> +      patternProperties:
-> +        "^channel@[12]$":
-> +          properties:
-> +            reg:
-> +              items:
-> +                maximum: 2
-> +        "^channel@[34]$": false
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          pattern: "^microchip,emc1814"
-> +    then:
-> +      patternProperties:
-> +        "^channel@[1-3]$":
-> +          properties:
-> +            reg:
-> +              items:
-> +                maximum: 3
-> +      properties:
-> +        channel@4: false
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        temperature-sensor@4c {
-> +            compatible = "microchip,emc1813";
-> +            reg = <0x4c>;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            microchip,parasitic-res-on-channel1-2;
-> +
-> +            vdd-supply = <&vdd>;
-> +
-> +            channel@1 {
-> +                reg = <1>;
-> +                label = "External CH1 Temperature";
-> +            };
-> +
-> +            channel@2 {
-> +                reg = <2>;
-> +                label = "External CH2 Temperature";
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6d7b697bfdba16e4f0ee5f4f0195b9d7da06dae5..85c236df781e47c78deeb7ef4d80bc94bba604c4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16646,6 +16646,12 @@ S:	Supported
->  F:	Documentation/devicetree/bindings/interrupt-controller/microchip,sama7g5-eic.yaml
->  F:	drivers/irqchip/irq-mchp-eic.c
->  
-> +MICROCHIP EMC1812 DRIVER
-> +M:	Marius Cristea <marius.cristea@microchip.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-> +
->  MICROCHIP I2C DRIVER
->  M:	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
->  L:	linux-i2c@vger.kernel.org
-> 
-> -- 
-> 2.51.0
-> 
