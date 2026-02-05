@@ -1,152 +1,179 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A67B27B352
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 19:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82852D3A86;
+	Thu,  5 Feb 2026 20:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770319908; cv=none; b=NptCnseIr9XdQH0qW7eLmaWTgLadk+1iFjsN4ScJRxLyY9dWIqVZQTzyDuYVP/5enA63MkwwAi1yZhQIgRn1jqDom4kqDp6F4emuaUOV98wOKcDs0g10fq5yjftmuklYtLELS3cgQUUVNsMbDOHIknEzwCYS9WcvoHzmcj0AXDw=
+	t=1770322297; cv=none; b=fNsWrvOK3f3PEDr7ZtQBmCWkKUQ14as+qA/0YfH2RJ/zEInx8K/zKdWmq2qvuEj5AZNITggnCdsZdgdYZQbcWtDB2u2Ke7qPF7ec93akZ06g/XP5n8LsVrS57Sw5zpXM6Y2qavdjM2Amx8P8/4nt2Xwd1g0l7zG4Rf/Pt7gxnmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770319908; c=relaxed/simple;
-	bh=SNSK7Cot9ZIbbKE74SRCFLW/frVlnHaL3hZaVj368qc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ig1pwU5nmYI+Ij/GM2CLl5/TXDWMaZSzrFikP6c1hG1viQU3UiOsFnIhbp4RLYZaR5x33Wx0SiNX509zYQ/+TJkCRwS4GavbxXfTthtNpUcedrIdMdh2T2mDBB1FQsRcgQmH13aspbm9dVHhQiwvYFALY9tcdl3SQ8GOqvfD8K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mbKV4Z6W; arc=none smtp.client-ip=74.125.82.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770322297; c=relaxed/simple;
+	bh=gekqAShyRuvBQ70OScUhtcb+pcqa6F/iTOcndq1RCqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SWuImza0aiIbBAHwtRWz4dyPeRUGOQg048Y4HOSZLH8KuA9XdvBmRvIoJVSNBFQbfbAZ1CQrAU4iSZJiwIIq0X76Jki4bTMJtjlYH8eGdVxLlHX+sC/n8QJVwO2T3SJOdJ2A0rFMiWqGkgeRocRP02YZLyzp3X30L3BqQGhNHWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRW4MRm5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mbKV4Z6W"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-124b117776fso867950c88.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 11:31:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770319907; x=1770924707; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ArrtrCatvVEunchquCbZFqkaHBYMn7L4hO5jWdJUlIM=;
-        b=mbKV4Z6W3nrgpmNEBq9EGyzlDCzzSf48nFduAryajbPUi6Di5wV4hRoK3X9r0/bKp6
-         gFDkm8VdjboicmaeyicQY42D5TMMZxlI5JVAb6SDScuoRAFdFugHn58Y7J/r/weztBb6
-         66iFHRGNTkW1BB9tJsGqGQSWUiAhNa+PCroWIpas5O/KMcDO//vDnvJZ1fneqrH3fqNA
-         +S8a6FnexvgKyxcO+1mWSaeV+PlfHCtFFJ5+snMkSjjMvg32XRSr51RM5Iqzg7JyBjCA
-         t2k+mbii6UbOyGNMjFulPI7rvfvlxUgD1eVECQHedAXhxku84bwQl2o4WzbnOtx6Edb0
-         Mx5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770319907; x=1770924707;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ArrtrCatvVEunchquCbZFqkaHBYMn7L4hO5jWdJUlIM=;
-        b=AE4DKoeC2elR25NwEETq+WcVpsQ3zBf3FQf9YlpjR9H2nTZ6ZPLCtLC77WQt8OXQcs
-         XNAcM+kbpdwJ7xMdOyia0AOh+0L2x2WDjJBxoHfReXCcNTtWY+wm75iBNCe4G7tM5rOF
-         OQ9ak/JiP9HvY5bR+W5p0dI/pTXDEeZqDl1Nm+NIIx0gy8JTsyuQ8HwVm6LuClSV/baH
-         JPd/7GKeV4qCTPqrDqV1IXXD+MtSKG6ihmKjrw2rUwwFYFPFQ5gMlpVt6EQb8oO2T9aA
-         kBOc2I2FdM6tCX0xUbPUiyNsNTJusjFB0bBy2JzAzyoAMdB9O4QJ3v1NSHL0xp/5Ok1H
-         aLWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnSd/sbqnNPd3VXxydeUlUdU0ovFBqZFnQzlmFbcaHNM8Blo9CypIjJiukMixzB9BBuo1mJED4lseyUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqRPLkHOxze6Jmlpcr8GvTs3vg2StXwr8yYE1SRpfRRxZ8OCqn
-	xZGNeqChi84mWZBCRHxal4xCPckLGvV0yamLN98tAlLkor72FkhmEYCh
-X-Gm-Gg: AZuq6aJlXW6Yz7Qy3zWYSxqRaDCaio++fT6RQKIifECewISbRsRyfdIchv2nYHVX9Rg
-	mwOsrxKjWDMW0MCgCMsQ253pszt4P2h3hoJLhuLBYa5gWGQXjLihn2v/XxbnaZ3C/obKbmR/T/0
-	xZs0ujwKOxCszjB+9MlMen6+2rcNHmjeTTT8Ry9l1sgTYLMgx3Z98iOZuUCLrgSGpXsPQF46PVj
-	/cC799RDJkdK5j7LfC5XxGAeIh7CyjEk//zzJoCQIqpQDAlETcxAZLwLffIwGen22tvD70HdpjH
-	TEkwoaY5aD9eijVihCXDkg6NyLNkWgwKhtm3DmqdTadONFJd/igtjBLLv/kcKYF+ymbth1Iqmyz
-	QV68xVFFI8lsilh9IEKdjY5LrXg7iepSpDbwdi/CSzMvc5EuaQUJmBTpzSOtHKPqOokhXUoceE1
-	t3fkxhBfRxPWavifHcRM2fHne0
-X-Received: by 2002:a05:7022:6611:b0:119:fb9c:4ebb with SMTP id a92af1059eb24-12704049ad1mr125795c88.30.1770319906948;
-        Thu, 05 Feb 2026 11:31:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127041e61b9sm175140c88.8.2026.02.05.11.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 11:31:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 5 Feb 2026 11:31:45 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Marius Cristea <marius.cristea@microchip.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] hwmon: temperature: add support for EMC1812
-Message-ID: <22549d9e-62fb-4ffb-aa18-50b65fa2591e@roeck-us.net>
-References: <20260205-hw_mon-emc1812-v5-0-232835aefe8f@microchip.com>
- <20260205-hw_mon-emc1812-v5-2-232835aefe8f@microchip.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRW4MRm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A064C4CEF7;
+	Thu,  5 Feb 2026 20:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770322297;
+	bh=gekqAShyRuvBQ70OScUhtcb+pcqa6F/iTOcndq1RCqQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CRW4MRm5nF4wuvXyDII9FT73yPbbSWMIWjih9eQdHpW6nKwwDUpOCDJfl8ko6MAzJ
+	 IFYZWFoATiMpJ3pdXXCyPTaP1qCKUUOfWbFGRC5pBN+LCge6jreE48SZWpv/aXTjuz
+	 N+KsNgutufpAE8FB6duSHJ1/+bEHexidn90Imgksg8hv6uNrGi06hvjD6ZcG8kOg/V
+	 zjbO1NGwGWAIvLFB2d0a8nWzMuF2aYBUaJ9jBEE+5WgVVQYrfNgI0KmGmblD85bNcx
+	 6dn7xPV31jBPBt4h1MRhZn1UAdWHYtB3amJ5LzzgSH6EALgGIN+rNTBOLJoKSOBj5g
+	 lfvv//diTw/Kg==
+Date: Thu, 5 Feb 2026 20:11:26 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@kernel.org>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Jonathan
+ Cameron <jonathan.cameron@huawei.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org,
+ linux-iio@vger.kernel.org
+Subject: Re: [PATCH] [v3, apply after -rc1] i3c: simplify combined i3c/i2c
+ dependencies
+Message-ID: <20260205201126.66995e9e@jic23-huawei>
+In-Reply-To: <b2fdaf5f-62b3-4695-aa89-b674aabefffb@roeck-us.net>
+References: <20260204164216.544409-1-arnd@kernel.org>
+	<b2fdaf5f-62b3-4695-aa89-b674aabefffb@roeck-us.net>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260205-hw_mon-emc1812-v5-2-232835aefe8f@microchip.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 05, 2026 at 09:09:04AM +0200, Marius Cristea wrote:
-> This is the hwmon driver for Microchip EMC1812/13/14/15/33
-> Multichannel Low-Voltage Remote Diode Sensor Family.
+On Wed, 4 Feb 2026 10:15:56 -0800
+Guenter Roeck <linux@roeck-us.net> wrote:
+
+> On 2/4/26 08:41, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > All combined i2c/i3c drivers appear to suffer from the same link
+> > time problem when CONFIG_I3C is set to 'm':
+> > 
+> > arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
+> > mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
+> > 
+> > This was previously fixed every time by marking individual
+> > drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
+> > tedious and is somewhat confusing.
+> > 
+> > Add a Kconfig symbol 'I3C_OR_I2C' to help replace those dependencies,
+> > and use this in all the existing drivers that had already fixed it
+> > as well as the new mmc5633 driver.
+> > 
+> > Fixes: 6e5f6bf2e3f0 ("iio: magnetometer: Add mmc5633 sensor")
+
+I think can drop the Fixes tag now given there is a fix in between for
+the original issue.
+
+> > Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>  
 > 
-> EMC1812 has one external remote temperature monitoring channel.
-> EMC1813 has two external remote temperature monitoring channels.
-> EMC1814 has three external remote temperature monitoring channels and
-> channels 2 and 3 supports anti parallel diode.
-> EMC1815 has four external remote temperature monitoring channels and
-> channels 1/2  and 3/4 supports anti parallel diode.
-> EMC1833 has two external remote temperature monitoring channels and
-> channels 1 and 2 supports anti parallel diode.
+> For hwmon:
 > 
-> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
-> ---
-...
-> diff --git a/drivers/hwmon/emc1812.c b/drivers/hwmon/emc1812.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..30bbc377d592622b07a156732b71cad555987934
-...
-> +static int emc1812_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +			 int channel, long val)
-> +{
-> +	struct emc1812_data *data = dev_get_drvdata(dev);
-> +	unsigned int interval, regval;
-> +	int convrate;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		/* Range is always -64 to 191.875°C */
-> +		val = clamp_val(val, -64000, 191875);
-> +		val = val + (EMC1812_TEMP_OFFSET * 1000);
-> +
-> +		switch (attr) {
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max:
-> +			return emc1812_set_temp(dev, data, channel, emc1812_temp_map[attr], val);
-> +		case hwmon_temp_crit:
-> +			/* critical temperature limit is stored on 8bits */
-> +			val = DIV_ROUND_CLOSEST(val, 1000);
-> +			return regmap_write(data->regmap, emc1812_temp_crit_regs[channel], val);
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-AI feedback:
+For IIO
+Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
-If the input value is 191875 (the maximum allowed by the clamp above), adding the offset gives 255875.
-DIV_ROUND_CLOSEST(255875, 1000) results in 256. Since the registers are 8-bit, this will be truncated
-to 0 (-64 degrees C), potentially causing an immediate critical alarm. The value should be clamped
-to 255 for 8-bit registers. This also applies to emc1812_set_temp() for the internal channel (channel 0).
+Thanks!
 
-> +		case hwmon_temp_crit_hyst:
-> +			/* critical temperature hysteresis is stored on 8bits */
-> +			regval = DIV_ROUND_CLOSEST(val, 1000);
-> +			return emc1812_set_hyst(data, channel, regval);
+Jonathan
 
-The same problem really applies to emc1812_set_hyst() as well. It clamps
-the register value to (0, 256). 256 is truncated to 0. So either the clamp
-in emc1812_set_hyst() is not needed (I didn't check possible value ranges)
-or it is wrong.
+> 
+> > ---
+> > v2: restore accidentally deleted lines
+> > v3: rebase on top of Jonathan's IIO patch in linux-next
+> > ---
+> >   drivers/hwmon/Kconfig            |  6 ++----
+> >   drivers/i3c/Kconfig              | 12 ++++++++++++
+> >   drivers/iio/magnetometer/Kconfig |  3 +--
+> >   drivers/misc/amd-sbi/Kconfig     |  3 +--
+> >   4 files changed, 16 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 41c381764c2b..ecfba861f66d 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1493,8 +1493,7 @@ config SENSORS_LM73
+> >   
+> >   config SENSORS_LM75
+> >   	tristate "National Semiconductor LM75 and compatibles"
+> > -	depends on I2C
+> > -	depends on I3C || !I3C
+> > +	depends on I3C_OR_I2C
+> >   	select REGMAP_I2C
+> >   	select REGMAP_I3C if I3C
+> >   	help
+> > @@ -2392,8 +2391,7 @@ config SENSORS_TMP103
+> >   
+> >   config SENSORS_TMP108
+> >   	tristate "Texas Instruments TMP108"
+> > -	depends on I2C
+> > -	depends on I3C || !I3C
+> > +	depends on I3C_OR_I2C
+> >   	select REGMAP_I2C
+> >   	select REGMAP_I3C if I3C
+> >   	help
+> > diff --git a/drivers/i3c/Kconfig b/drivers/i3c/Kconfig
+> > index 30a441506f61..626c54b386d5 100644
+> > --- a/drivers/i3c/Kconfig
+> > +++ b/drivers/i3c/Kconfig
+> > @@ -22,3 +22,15 @@ menuconfig I3C
+> >   if I3C
+> >   source "drivers/i3c/master/Kconfig"
+> >   endif # I3C
+> > +
+> > +config I3C_OR_I2C
+> > +	tristate
+> > +	default m if I3C=m
+> > +	default I2C
+> > +	help
+> > +	  Device drivers using module_i3c_i2c_driver() can use either
+> > +	  i2c or i3c hosts, but cannot be built-in for the kernel when
+> > +	  CONFIG_I3C=m.
+> > +
+> > +	  Add 'depends on I2C_OR_I3C' in Kconfig for those drivers to
+> > +	  get the correct dependencies.
+> > diff --git a/drivers/iio/magnetometer/Kconfig b/drivers/iio/magnetometer/Kconfig
+> > index 9345fb6d5317..fb313e591e85 100644
+> > --- a/drivers/iio/magnetometer/Kconfig
+> > +++ b/drivers/iio/magnetometer/Kconfig
+> > @@ -143,8 +143,7 @@ config MMC5633
+> >   	tristate "MEMSIC MMC5633 3-axis magnetic sensor"
+> >   	select REGMAP_I2C
+> >   	select REGMAP_I3C if I3C
+> > -	depends on I2C
+> > -	depends on I3C || !I3C
+> > +	depends on I3C_OR_I2C
+> >   	help
+> >   	  Say yes here to build support for the MEMSIC MMC5633 3-axis
+> >   	  magnetic sensor.
+> > diff --git a/drivers/misc/amd-sbi/Kconfig b/drivers/misc/amd-sbi/Kconfig
+> > index be022c71a90c..30e7fad7356c 100644
+> > --- a/drivers/misc/amd-sbi/Kconfig
+> > +++ b/drivers/misc/amd-sbi/Kconfig
+> > @@ -1,10 +1,9 @@
+> >   # SPDX-License-Identifier: GPL-2.0-only
+> >   config AMD_SBRMI_I2C
+> >   	tristate "AMD side band RMI support"
+> > -	depends on I2C
+> > +	depends on I3C_OR_I2C
+> >   	depends on ARM || ARM64 || COMPILE_TEST
+> >   	select REGMAP_I2C
+> > -	depends on I3C || !I3C
+> >   	select REGMAP_I3C if I3C
+> >   	help
+> >   	  Side band RMI over I2C/I3C support for AMD out of band management.  
+> 
+> 
 
-...
-
-> +	i2c_set_clientdata(client, data);
-
-I don't immediately see why this would be needed.
-
-Thanks,
-Guenter
