@@ -1,65 +1,65 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CC93F23C1
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 14:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D86F407583
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Feb 2026 14:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770301923; cv=none; b=nVFGRKsXG9WZyI7JUvZbBQdMfTB8hkTCZ420iftqiNvJPOvr3mCLbyht2YkSjR7IaWhge4wACi3sZRo1jgpdbf5uT8FYrUKHy2HtBk9B9eZHbcFq/2iBn3+64kREgkpELEndnJS1vQJeh6m8ur+3aMzulHHLs8k0E/TqmQnYrfc=
+	t=1770302020; cv=none; b=JSWQneu8gqvjzArPVrxBkrwBQeAdchsybx6wslb4LSwNZRt/77qzNwTYij+PniV8K2rm+JX64p5yRH5VdqQrv9OwIuUQBUWNpPkHgQTQMbOtm/EKl38v7YPbQDxWE5FfZQ6D/W49ew8l/Y5V6qw7+trgfk2VEi+bR6B2jNqZaIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770301923; c=relaxed/simple;
-	bh=KrpVq21uAPBgvMwD5bVVvOvj4m0oV3UgX1RtALao//I=;
+	s=arc-20240116; t=1770302020; c=relaxed/simple;
+	bh=8mtHYKz85mrDlNo26Vu/58tRJscT6uBhGIxN5uFSaDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YCai3GnyUvtOjxf0GT2Tk9lPx+mxSH+m9CwcaTUpqxgzR+itm70+eu7+6K5JqimY0YX5II+FzFiTrrcAwS+uIYJs+ArjRUWOVW7ncD9NZBe+bp9HBjSJIdTvX4vpUUwyZUT5Yf5a/YRIWGPyj9ALflJUZtjoDF9JNUWF/W7VlJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FtsXkg+s; arc=none smtp.client-ip=209.85.216.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=ujvYLK7YOQoDEIt0S3en6ESGXjZ9kENV7DQ0jSUPM5S5fkJJw3tIX/AwY4AcDfvKreE+hJcomynbtdgYPJV78RQmSceeDP6cOtYYxh5gHeL2GXr9P6jZx/QNfAjFmv5jQvPxZC6AKqPOR9zEVDOq9Hsam/XwuzlkLkcXtMb1hiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rgj6yKJ4; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FtsXkg+s"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3530e7b3dc2so827428a91.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 06:32:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rgj6yKJ4"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-81f4f4d4822so557816b3a.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 06:33:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770301922; x=1770906722; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770302019; x=1770906819; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PWMAbfW1h3czFpPAr6dxtSn9+/tMTdi7V3empbBhtRA=;
-        b=FtsXkg+sNa0qzWzZpm3Ti8pleS/bqFWS+IWo+QERjEk+ellcBkOmpZT3CmEWmGA4HT
-         nraZDIVCPqt3Il/Hw0IVbkDiH7xXGQdEEW6z71JFI9GqRevVcTRWBgTQLtWbK1MS5OwZ
-         MkDoJA1UD0DB+t8uuUA49Gv4nyo43xe1gunGUhVqqEYMaZfyKYezqNBDLr+wZZH4naHi
-         PNnrbwFLSGlfqu0Yv7RWc7oILrjeEtdvfNEZbf/GXCx5VEmnd+vTVa6PvnFpAgsdmp9m
-         FcD1EIGWqvQ8RR+M40gTKOSzEnZpiyvK1ONCV/ZzFOL8B6Z8sjk+6glKDqpGwGlA9zSa
-         YQ3g==
+        bh=pyK0JQ1lbzkHe30b8rjazNYXS7yd13NCbDJg71YiAfA=;
+        b=Rgj6yKJ4Sq8U1eq1tNAPcfU9LGF4Hci96O9m8P39lS5kYQTBOrZUCodFHBvhEFq/OV
+         rVQw1lAZ7pYjax3XpS2bndJgWtAoDZmAf5TFiewxKEG8WTUpNWDWDc3UYw85gdboIUX/
+         WE1bHNcEgoNx0GVKUkA7FM0bpV4htzke59Px7Ha8Bc3BsA9h/yrqAghqcQoqfcuHvXl1
+         NAO70vMA6jaEXGctKH29ak9rVCMAYEc7P9cUnheeLu1lUh8YYGdKrpGjxg1g0fhRdQuQ
+         YlLHD6MEJHv1Q+d/BjPGT2Ro0J3qRzUt30buN3YdQL1U/rJKC234oYKLQu9WTBKTVRkP
+         fzPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770301922; x=1770906722;
+        d=1e100.net; s=20230601; t=1770302019; x=1770906819;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=PWMAbfW1h3czFpPAr6dxtSn9+/tMTdi7V3empbBhtRA=;
-        b=K11YHPwU1JA7IAt5oKj85//WjINL1I3aepjxfA6gle7/0ZJp13z9MLOsehiV4IPdbw
-         69OrK37cnPIGOZT8y2ti49rBwcOk6Tq5899nLUZsfagMUQ1TPzbBcFkvKVFbVDAa919b
-         1yMNTPMPLv4btmqOUaxu13i5wFAP9QqSa8PPccAW2mrUuS7y9sQwHeShywLMrB73ZH3f
-         F7wC++LcvlB8ivDG7eu057sOgxSkeT5lFB+9NoArzRxaK8tZw0VsDCr6I7000XJMaQ0B
-         W0FHrxByrYLozQIZJR4/yppZ3oo2ZoIan8I2n1jTO/pkE0doEKC1arIt4/+hEkMyxhu6
-         Ykuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXiIaXdnwYpVIVuElN4omz9lHsgT8VFKVfInVbl7etCYLZzJEko/TM8PFaXI8kbb23Tfk1q6bVmNoLQGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEpFhcdzQfB+lLnNwxhMAUdXm9f+ccE5pvwG1C87Jf4pTSkwQW
-	6+hjVaxl/nyfx7FLBTGiX8hjttYD0wQwbB0cFFUgAIR4aUo0xEZ5k5E520lczAnC
-X-Gm-Gg: AZuq6aLDF/iyC4s+GH1zIlsium+R4nrsjWNw6s8UIx+zcERzG3EoT2ROdnsA7tMSVsj
-	ytXzzjwTIYFk49jxOd7CenLYRO3jpP8tn0JIQz3MXO4PDz6h49O6UZNZ5oIq4E30lmzYaKLCsiE
-	QS85AB8AFaHIPeoP0kUdsoU1bnrMiw1JIAaPj1Zpa2wistuq+tyu8N4RKJ6OvwNLPz6POf0ZGay
-	7pQgSwFTVkzfLxby9bmDU+ey+EJcQAbScevNKE6ABPgZwtn9/RWdA8A9a1a59caibg3yP9MnaEz
-	2n/Dl8HGRmOSD+inkBVnbD1SePiyb/z3kZy8Z0vLqftz6CM6+PGqvH2v4p1UnORTF1vNeJaSoCx
-	Q+7ylxgIL2Lbt1FwEf8AtL9YeidAqkONh8OzB4OD6OAW6j1t748RCOUu7jGMBQsk/ZUALHyHJvu
-	4e8kBhR74JO78L/GlshbQ9LeodBoogj8aD9tQ=
-X-Received: by 2002:a17:90b:5870:b0:353:5595:3247 with SMTP id 98e67ed59e1d1-354870dd823mr6355651a91.12.1770301922346;
-        Thu, 05 Feb 2026 06:32:02 -0800 (PST)
+        bh=pyK0JQ1lbzkHe30b8rjazNYXS7yd13NCbDJg71YiAfA=;
+        b=a4MLRxA4aOqJnM8xeZ8VQzGRna9ZHhctIPByJz2R8iDcprJdJmhDks0uoBEHRDlo3a
+         a+O15n/BYn+qh2Jgyz3FDBaljafY1Kamxy1TKIydj5dC04CqhLAL6Ec/whKx7Sgkg+3l
+         hio871PNEBsOSRrnP8qVMA/GBj5Gqm1XxiTxG0f74djg53rsyUbWiwwK/cGCr4Lypdtu
+         /bmuW2sIxBqqiTgtn7sUtvCXwltl8gSt96du3WXuR8WqHoF3nF/xproYwzj8SDfaxUdn
+         BHX2Z2PJ4OAH2FKF6y/vH4DZHtLuFpA66IxGFoliPYZ+BiDIvaUKL+kvp2TvSKOV0SeO
+         BtEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfhzAN2AFli7sJq3hnyGlYq5400+SLTbdP0nh+XHLVkJZByMa+tsVJnUyanpF/EL52ZOZlt6JJIZKwqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbWirYpiiayQCbdEc0RlNooHEZCzqNfmkMF6VCA2IEXUwy8opl
+	tcurxKgmNvpd9Qm9n2poDjdYT5+OvjgX7HuFKCRFobnjdhgpNRq5luBdpkxZiZcb
+X-Gm-Gg: AZuq6aK95hHIxpQkTuikEw6LyOiaEYPYPPhdR2L1M4uFxtOD7BwVFPOl6UyLKOSILpF
+	rg9KlSQCUaaLGPzh7ZTQ6bXF5P4ymiEVq25Z676NtezuNGM++J1UXM24uRbb4cRBY4TVWd1ZfiW
+	SOWzLQFn41N+mMEl0ZSX8lzh+Sscdjuw/HmC3OTPeKuz5ov+M2xsom+GXI2FWTves0K3ZOwmgUn
+	rA4o/JB08Udflm5W7re/TTmwxm4Ky18CPfmZRLtnD4/iZp2GTZmBP5znuufZOoCLRPbQfD9QyKj
+	8t/0SIV+1GY58oQEXphi4go6Mujz5W9AWh76wsm+wSBHUBltV7pM5AwfEFVp/AOZGClXTTAs0qQ
+	z3VhTcAyF57Poo+OBIoSz2hmbaOvlnX5b0M4XohXtmikATWUQteKEFiRH/m6ex/jTY3wheGC+CR
+	SPgSwkVu8b4uJEVnfYaPfmoIMS
+X-Received: by 2002:a05:6a00:1949:b0:81f:852b:a93a with SMTP id d2e1a72fcca58-8241c19d22dmr6066843b3a.2.1770302019265;
+        Thu, 05 Feb 2026 06:33:39 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35487726e6bsm2092960a91.6.2026.02.05.06.32.01
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8241d16f5b9sm7826047b3a.7.2026.02.05.06.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 06:32:01 -0800 (PST)
+        Thu, 05 Feb 2026 06:33:38 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 5 Feb 2026 06:32:01 -0800
+Date: Thu, 5 Feb 2026 06:33:38 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Colin Huang <u8813345@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -68,10 +68,11 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-doc@vger.kernel.org, Colin.Huang2@amd.com, Carl.Lee@amd.com,
 	Peter.Shen@amd.com
-Subject: Re: [PATCH 3/3] docs: hwmon: Add Q54SN120A1 and Q54SW120A7 to index
-Message-ID: <a3094382-087d-4167-900d-1f2c587aaa18@roeck-us.net>
+Subject: Re: [PATCH 2/3] dt-bindings: trivial-devices: Add Delta Q54SN120A1
+ and Q54SW120A7
+Message-ID: <f03ee47e-1f24-4170-9bb7-a83a09d683a8@roeck-us.net>
 References: <20260205-add-q54sn120a1-q54q54sw120a7-v1-0-09061ecacfc7@gmail.com>
- <20260205-add-q54sn120a1-q54q54sw120a7-v1-3-09061ecacfc7@gmail.com>
+ <20260205-add-q54sn120a1-q54q54sw120a7-v1-2-09061ecacfc7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -80,38 +81,35 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260205-add-q54sn120a1-q54q54sw120a7-v1-3-09061ecacfc7@gmail.com>
+In-Reply-To: <20260205-add-q54sn120a1-q54q54sw120a7-v1-2-09061ecacfc7@gmail.com>
 
-On Thu, Feb 05, 2026 at 09:34:37PM +0800, Colin Huang wrote:
-> Add the Delta Q54SN120A1 and Q54SW120A7 PMBus modules to the hwmon
-> driver index.
+On Thu, Feb 05, 2026 at 09:34:36PM +0800, Colin Huang wrote:
+> Add two additional Delta 1/4-brick DC/DC power modules,
+> Q54SN120A1 and Q54SW120A7, to the trivial-devices list.
 > 
 > Signed-off-by: Colin Huang <u8813345@gmail.com>
+
+This should be the first patch of the series.
+
 > ---
->  Documentation/hwmon/index.rst | 2 ++
->  1 file changed, 2 insertions(+)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 85d7a686883e..62d6fc0817eb 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -216,6 +216,8 @@ Hardware Monitoring Kernel Drivers
->     pxe1610
->     pwm-fan
->     q54sj108a2
-> +   q54sn120a1
-> +   q54sw120a7
-
-Documentations are for drivers, not for chips. There are no such documentation files.
-Add q54sn120a1 and q54sw120a7 to the documentation of the q54sj108a2 driver instead
-and drop this patch.
-
-Thanks,
-Guenter
-
->     qnap-mcu-hwmon
->     raspberrypi-hwmon
->     sa67
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index d0f7dbf15d6f..f430e49b9ec1 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -95,6 +95,10 @@ properties:
+>            - delta,dps920ab
+>              # 1/4 Brick DC/DC Regulated Power Module
+>            - delta,q54sj108a2
+> +            # 1300W 1/4 Brick DC/DC Regulated Power Module
+> +          - delta,q54sn120a1
+> +            # 2000W 1/4 Brick DC/DC Regulated Power Module
+> +          - delta,q54sw120a7
+>              # Devantech SRF02 ultrasonic ranger in I2C mode
+>            - devantech,srf02
+>              # Devantech SRF08 ultrasonic ranger
 > 
 > -- 
 > 2.34.1
