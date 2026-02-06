@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7419718B0A;
-	Fri,  6 Feb 2026 08:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D27346E54;
+	Fri,  6 Feb 2026 08:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770365345; cv=none; b=XVfVsls62r9zE4CcYKfSuFApxnwwQ4ov9RHLjKB1lJrBEabH+s4i5isFIDSjlgddpy9J+W3eZDtLVeK2KNnzkvrHbuHNJR0jwdl//6/4IiB2HxVOTVVZHNdNmPTiiC9tjXWFyG99JDkPhlbi/prtjhqnjPJZadu/gO774vevO/k=
+	t=1770365573; cv=none; b=o3Oj5V4NWGcwUxbXf0B2U0VxrkmdAV5qHPNZ2PCTP48k+mO99z0RRO1xbsUdE8jmqCy0eg92riA67Ag4JpPMqj5RpJc0bwgcbniY/tvbDK4v00dhbKYlogZ3ulGt6jDYQbqZ7bK4sCeZdcBCZEx4T2OM6SxHqnNzmuZ1S2Z4fW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770365345; c=relaxed/simple;
-	bh=PcwT3lXtBIV6a0P2Dxld1TPIWyUNGaZpfrDN01TGU9o=;
+	s=arc-20240116; t=1770365573; c=relaxed/simple;
+	bh=niNVADaVUtdWJSNgFcuPDgkezYumY11HVp0GvpPI32A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZChCQ0pVyNBgToo/nS76IZyDBvBvZ9Ye4bzdsRauKtQklKTMEK77YoYtYMHAy9hhnZKlGP8CaeKu/O/hgQtQdxcojvYeJJ6DR88AV4lQiWfdCk52qqd1NQJ2rEAw2nukO0EKTokgGb11SuPFe/IV1itirtiqjvQGr9EWn/edp/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8ute3ad; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=PV1jk1OFjVetz376S8zoVtvsYV97sokFMtcwx2bzmOG0U46rvVb6qKuEWPvuCUNcdtsw/+Gah2rfFvAMSCkHwTPCLpgLsUgjmMfHr161Eay6u9eeJEs3OybEP0NOCIJ9gJvA1IuEWuxCh0PADN5AJGrjwiE2HrJ+0BCjz3JNj5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9Mx7v1A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8ute3ad"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419DDC116C6;
-	Fri,  6 Feb 2026 08:09:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9Mx7v1A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3A1C19425;
+	Fri,  6 Feb 2026 08:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770365344;
-	bh=PcwT3lXtBIV6a0P2Dxld1TPIWyUNGaZpfrDN01TGU9o=;
+	s=k20201202; t=1770365572;
+	bh=niNVADaVUtdWJSNgFcuPDgkezYumY11HVp0GvpPI32A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k8ute3adGhsxg+35RrkxHzX2AIaqfEWPhwNSun8/XMBmXDvyhZc5uOf4O1b4NAEAc
-	 x92MvfdF5LtI99WG7gb2i67mMY3Fv0YWcFBSQTxbGU1yMVDRMriSTsYbsT4lfbDDQc
-	 mNzeopJzYLhxdDfL8Fa31FBzWnf2QEgULbjWCtPpz6ARTrhkS6OtO5uoRoMDDdLTm9
-	 h8X8k//J8I21D4phS/gASwYcVTDPolqcR2ziVuRxXPsayaYq/bKndwD5x59bpgyZ/o
-	 qqmls+7bvxYzjrQV1H8biBOqAyJiqz2irp2BeKkprM+Q5YRNNQTFAtQr3zKk9GEChM
-	 JggcbCBWYsjhw==
-Date: Fri, 6 Feb 2026 09:09:02 +0100
+	b=Z9Mx7v1A4V7paPZ2NgbwGUlr/Kw8KeYIvcYDAAhhmQDGD1EDmiWD7WRY2aiocRJF9
+	 WqWnH/84TTdJuzphZ8mQN7et6KzCXl7F5cB4NxC9WrgsLhkHzCYIWNgwtI3ZF0TjI+
+	 ggoyqovAasui6u2bxe+Ax0YoDFU35PwyP6d5rJePBzlkcmSMp7KJtc/dbHxEbEfQBG
+	 M7qVjGUE0IxYGErhzWAXIDpsW5t2rqfUf5sR3cyz8acm+19tWV38RO2R9WTNjFN7rm
+	 CvXrSal4BrTtfgVYlfdjCqwEEq8lG55AXdbl3UncE0vmfVUZrzndc1m7MuVYrkwCye
+	 xN031yhtXVJig==
+Date: Fri, 6 Feb 2026 09:12:50 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
@@ -35,10 +35,10 @@ Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	amit.kucheria@oss.qualcomm.com, Daniel Lezcano <daniel.lezcano@linaro.org>, 
 	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: hwmon: Add qcom,bcl-hwmon yaml bindings
-Message-ID: <20260206-tricky-funky-bison-ffafa3@quoll>
+Subject: Re: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
+Message-ID: <20260206-garrulous-lilac-porcupine-083b08@quoll>
 References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
- <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
+ <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -47,193 +47,104 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
+In-Reply-To: <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
 
-On Fri, Feb 06, 2026 at 02:44:05AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
-> Add devicetree binding documentation for Qualcomm PMIC Battery Current
+On Fri, Feb 06, 2026 at 02:44:06AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+> +	bcl->hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +							      bcl->hwmon_name,
+> +							      bcl,
+> +							      &bcl_hwmon_chip_info,
+> +							      NULL);
+> +	if (IS_ERR(bcl->hwmon_dev)) {
+> +		dev_err(&pdev->dev, "Failed to register hwmon device: %ld\n",
+> +			PTR_ERR(bcl->hwmon_dev));
+> +		return PTR_ERR(bcl->hwmon_dev);
+> +	}
+> +
+> +	dev_dbg(&pdev->dev, "BCL hwmon device with version: %u.%u registered\n",
+> +		bcl_get_version_major(bcl), bcl_get_version_minor(bcl));
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id bcl_match[] = {
+> +	{
+> +		.compatible = "qcom,bcl-v1",
+> +		.data = &pm7250b_data,
 
-Subject - You almost hit bingo of what not to do. You miss the third one.
-When you hit the bingo, get in touch for a beer.
+And that's the proof that your binding is just repeating downstream
+bollocks pattern. Something like "v1" does not exist if you even here
+claim this is not "v1", but pm7250.
 
-And before, read the docs, because this was repeated SO MANY TIMES.
+> +	}, {
+> +		.compatible = "qcom,bcl-v2",
+> +		.data = &pm8350_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-bmx",
+> +		.data = &pm8550b_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-wb",
+> +		.data = &pmw5100_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-core",
+> +		.data = &pm8550_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-bmx",
+> +		.data = &pmih010_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-wb",
+> +		.data = &pmw6100_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-core",
+> +		.data = &pmh010_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-pmv010",
+> +		.data = &pmv010_data,
+> +	},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, bcl_match);
+> +
+> +static struct platform_driver bcl_driver = {
+> +	.probe	= bcl_probe,
+> +	.driver	= {
+> +		.name		= BCL_DRIVER_NAME,
 
+No, just use name here.
 
-> Limiting (BCL) hardware monitor. The BCL hardware provides monitoring
-> and alarm functionality for battery overcurrent and battery/system
-> under voltage conditions.
+> +		.of_match_table	= bcl_match,
+> +	},
+> +};
+> +
+> +MODULE_AUTHOR("Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>");
+> +MODULE_DESCRIPTION("QCOM BCL HWMON driver");
+> +module_platform_driver(bcl_driver);
+> +MODULE_LICENSE("GPL");
+
+...
+
+> +
+> +/**
+> + * bcl_disable_irq - Generic helper to disable alarm irq
+> + * @alarm: BCL level alarm data
+> + */
+> +static inline void bcl_disable_irq(struct bcl_alarm_data *alarm)
+
+Why do you write actual functions/code in the headers?
+
+Please follow standard C rules, which mean that the C unit contains code
+intended for execution. Headers are only for declarations.
+
+> +{
+> +	if (!alarm->irq_enabled)
+> +		return;
+> +	alarm->irq_enabled = false;
+> +	disable_irq_nosync(alarm->irq);
+> +	disable_irq_wake(alarm->irq);
+> +}
+> +
+> +#endif /* __QCOM_BCL_HWMON_H__ */
 > 
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-> ---
->  .../devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml  | 128 +++++++++++++++++++++
->  1 file changed, 128 insertions(+)
+> -- 
+> 2.43.0
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml
-> new file mode 100644
-> index 000000000000..a0e8eaf13eec
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml
-> @@ -0,0 +1,128 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/qcom,bcl-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SPMI PMIC Battery Current Limiting (BCL) Hardware Monitor
-> +
-> +maintainers:
-> +  - Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-> +
-> +description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +  SPMI PMIC Battery Current Limiting (BCL) hardware provides monitoring and
-> +  alarm functionality for battery overcurrent and battery or system under
-> +  voltage conditions. It monitors battery voltage and current, and
-> +  can trigger interrupts when configurable thresholds are exceeded.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - description: v1 based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pm7250b-bcl
-> +              - qcom,pm8250b-bcl
-> +          - const: qcom,bcl-v1
-
-Drop all bcl fallbacks. Pointless, incorrect and misleading.
-
-> +
-> +      - description: v2 based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pm8350b-bcl
-> +              - qcom,pm8350c-bcl
-> +          - const: qcom,bcl-v2
-> +
-> +      - description: v3 bmx based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pm8550b-bcl
-> +              - qcom,pm7550ba-bcl
-> +          - const: qcom,bcl-v3-bmx
-> +
-> +      - description: v3 core based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pm8550-bc0l
-> +              - qcom,pm7550-bcl
-> +          - const: qcom,bcl-v3-core
-> +
-> +      - description: v3 wb based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pmw5100-bcl
-> +          - const: qcom,bcl-v3-wb
-> +
-> +      - description: v4 bmx based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pmih010-bcl
-> +          - const: qcom,bcl-v4-bmx
-> +
-> +      - description: v4 bmx with different scale based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pmv010-bcl
-> +          - const: qcom,bcl-v4-pmv010
-> +
-> +      - description: v4 core based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pmh010-bcl
-> +          - const: qcom,bcl-v4-core
-> +
-> +      - description: v4 wb based BCL
-> +        items:
-> +          - enum:
-> +              - qcom,pmw6100-bcl
-> +          - const: qcom,bcl-v4-wb
-
-I really do not get what you are expressing here but all this is wrong.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: BCL base address in the SPMI PMIC register map
-
-Bus defines it. Drop descrip=tion.
-
-> +
-> +  interrupts:
-> +    minItems: 2
-
-Drop.
-
-> +    maxItems: 2
-> +    description:
-> +      BCL alarm interrupts for different threshold levels
-
-Drop
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: bcl-max-min
-> +      - const: bcl-critical
-
-Drop bcl
-
-> +
-> +  overcurrent-thresholds-milliamp:
-> +    description:
-> +      Current thresholds in milliamperes for the two configurable current
-> +      alarm levels (max and critical). These values are used to override
-> +      default thresholds if a platform has different battery ocp specification.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-
-No, please read basic guides or presentations about DT bindings. The
-suffix already defines this.
-
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +
-> +unevaluatedProperties: false
-
-You did not bother to read the docs prior to posting this.
-
-You are supposed to do internal review first. Did it happen? I checked
-and cannot find anything. It's not acceptable to use the community
-instead of your internal review.
-
-NAK
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    pmic {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        bcl@1d00 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-If you cannot find a name matching your device, please check in kernel
-sources for similar cases or you can grow the spec (via pull request to
-DT spec repo).
-
-Best regards,
-Krzysztof
-
