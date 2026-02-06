@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E98B2367CF;
-	Fri,  6 Feb 2026 16:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8581C84C0;
+	Fri,  6 Feb 2026 16:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770396553; cv=none; b=rK1gzTB9XydEeYbCHLKIFot2phg+v32X8AHKEJzvFNGd9s0W69eXNuGZn9+E6QaAHfnES6vPm1b6t+G7Zzzk8sxpss7b6m3R7H4mUH26xdxWKVKw+BClJtEEZCMd3uJKouBNwWm2bJh0zXwkLSBJgIU+tL/vhXycDrJKI4pAsas=
+	t=1770396684; cv=none; b=riDxZ919Z0sipRcSrfK4QPLtp4AyWNraZpTzdqYYGdJIV95o4oe4bJQ6cecu5IMbFCn/5uoBNTyoPrEZ1dNqZQ4HQxBp0t1NTRJ4aNwpgYuUPAB5kQPvEGXdP7Q8U8JtnfxEz76G/Ds2kzH0xcKiOzVZa+UIgSK9BJayMkYQQrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770396553; c=relaxed/simple;
-	bh=Yl4dSccPhR6B3kyqtOX1xwX69pXmeE87NneoQgVKVZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qksoXy7UidbIwk1GIDknvsF/hC7Ya/zXkVJabZWumIC2D1n7b3Sc3y+5QUPynrtmBhPqvrZVRAA6VvPgXH1PXwuPXvDAxhhp9n+VqU56XAOmbWg29+WT8xAGdYDB5DpvIwvOvkuFfu05UWz0bO20sKiGAj02lOLq33huHa4Im3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrSsuIJ9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770396684; c=relaxed/simple;
+	bh=EO89/1W/xghtBULV7ky1sJ8p9vE/WBj3E2buZLD73z0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Wo+sasNW36xzNtAFhVcb7YJUufx3hK2sAU8skupr3iy3p5Jy/t1r009nPv0zvve+9AlGQJDeemFn82gMn7iLy4E18YH2iwHTwYBQ3iHozgwk0NkG/FhZLXUKktd4GILgeYVeR5s0XNpPRuL0sRc12URzWQSTkE2eLwpcxgPjY9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEV0RJnN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrSsuIJ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48ECBC116C6;
-	Fri,  6 Feb 2026 16:49:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEV0RJnN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF70C19422;
+	Fri,  6 Feb 2026 16:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770396552;
-	bh=Yl4dSccPhR6B3kyqtOX1xwX69pXmeE87NneoQgVKVZI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DrSsuIJ90A7uFY7Wwc0xfQFsJbe+a/Q9JgAQFA/PXm6qoZlmbERTqHdZyv1aif9UJ
-	 6pXigSlUdK6gPfl2v4iwhkYVK/3GHOrgZCsXDBO3SI0eO4m97NQIiqIHX5ZjhYw3Za
-	 zk2e4oj3odNJVR1zQveWcr4B4Y+BUR9iBq00hUNLIrHTU4CnXu+w0+y60dj7HCJvKN
-	 Tdz71IwMwFZjsw8uCeSL1QwuERWhbk8P+OprCmJtUgI96Hhly5CC6hOZvPEHYrQEz/
-	 /xdiQB/iamKICvuu9jfnX9i+3+vmkOk9B6RTfkepET0yA5fliFsT52IrMHx89tiy7C
-	 34X9mM3/UlvlQ==
-Message-ID: <942d6dc7-26ad-405a-bb6a-270e2261a329@kernel.org>
-Date: Fri, 6 Feb 2026 17:49:08 +0100
+	s=k20201202; t=1770396684;
+	bh=EO89/1W/xghtBULV7ky1sJ8p9vE/WBj3E2buZLD73z0=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=cEV0RJnN+IzUXizsUnDbLw2m3FSBG9nNjrOh0qv3SWhvGrCgKfHt86jVFonXgt7Vk
+	 Xn5qLNavEpc+ZOUADZaavzWGJa64JFqq3FWm9Q03/z0czevWd0mXVvgDUMB+BjGbj5
+	 EI3jNx2f4FOEgkfSt/4aXF17J6/jZaGH5k2fGefNrBjPQeyVwv54m9OqWeUfixEByc
+	 /2MgRtAJhueQNdOOapw22gOIgXayBRqLuiVi2FYu2etbjvm6tBTE0m0hW4zBhxbe5g
+	 nSuc+rzNcbJgM1246Zt1Q4yZa7YTHV6q2Q/yxGRqn44jQrg2oflLqMgkCY4Vx6G1jO
+	 0ug0cE/yeFJIQ==
+Message-ID: <a306b2ad-b973-4e89-b4e1-305816179218@kernel.org>
+Date: Fri, 6 Feb 2026 17:51:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -36,6 +36,7 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: add support for MCP998X
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Victor.Duicu@microchip.com, linux@roeck-us.net
 Cc: corbet@lwn.net, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  robh@kernel.org, linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
@@ -44,7 +45,7 @@ References: <20260127151823.9728-1-victor.duicu@microchip.com>
  <20260127151823.9728-2-victor.duicu@microchip.com>
  <0b3979d6-895f-4c8a-8251-d3c793385bf4@roeck-us.net>
  <595e616ad403e805ee50fa7bc57d25584949924d.camel@microchip.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <942d6dc7-26ad-405a-bb6a-270e2261a329@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -89,43 +90,54 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <595e616ad403e805ee50fa7bc57d25584949924d.camel@microchip.com>
+In-Reply-To: <942d6dc7-26ad-405a-bb6a-270e2261a329@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 06/02/2026 15:17, Victor.Duicu@microchip.com wrote:
->>> +
->>> +  interrupts:
->>> +    items:
->>> +      - description: Signal coming from ALERT/THERM pin.
->>> +      - description: Signal coming from THERM/ADDR pin.
->>> +      - description: Signal coming from SYS_SHDN pin.
->>> +
->>> +  interrupt-names:
->>> +    items:
->>> +      - const: alert-therm
->>> +      - const: therm-addr
->>> +      - const: sys-shutdown
+On 06/02/2026 17:49, Krzysztof Kozlowski wrote:
+> On 06/02/2026 15:17, Victor.Duicu@microchip.com wrote:
+>>>> +
+>>>> +  interrupts:
+>>>> +    items:
+>>>> +      - description: Signal coming from ALERT/THERM pin.
+>>>> +      - description: Signal coming from THERM/ADDR pin.
+>>>> +      - description: Signal coming from SYS_SHDN pin.
+>>>> +
+>>>> +  interrupt-names:
+>>>> +    items:
+>>>> +      - const: alert-therm
+>>>> +      - const: therm-addr
+>>>> +      - const: sys-shutdown
+>>>
+>>> The top-level definition of interrupt-names specifies exactly 3
+>>> items.
+>>> How does this interact with variants that only have 2 interrupts?
+>>>
 >>
->> The top-level definition of interrupt-names specifies exactly 3
->> items.
->> How does this interact with variants that only have 2 interrupts?
->>
+>> The chips with "D" in the family have the sys-shutdown and alert-therm
+>> interrupt pins. The rest have alert-therm and therm-addr interrupt
+>> pins. The conditional assigns the interrupt names depending on the
+>> chip.
 > 
-> The chips with "D" in the family have the sys-shutdown and alert-therm
-> interrupt pins. The rest have alert-therm and therm-addr interrupt
-> pins. The conditional assigns the interrupt names depending on the
-> chip.
+> 
+> No, the top level says you have three interrupts. Do not create bindings
+> which contradict themselves.
+> 
+> More important I am 100% sure this fails tests if you wrote proper, so a
+> complete example. It passes only because you made a limited example,
+> without properties.
+> 
+> No, drop review, fix and request re-review.
 
+And I already TOLD YOU THIS!
 
-No, the top level says you have three interrupts. Do not create bindings
-which contradict themselves.
+https://lore.kernel.org/all/20250901-piquant-rousing-skunk-14da73@kuoka/
 
-More important I am 100% sure this fails tests if you wrote proper, so a
-complete example. It passes only because you made a limited example,
-without properties.
+Which you completely ignored!
 
-No, drop review, fix and request re-review.
+So you received review, you ignored it and kept pushing buggy patch.
+
+NAK
 
 Best regards,
 Krzysztof
