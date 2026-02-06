@@ -1,268 +1,314 @@
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010030.outbound.protection.outlook.com [52.101.193.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C8F2EC553;
-	Fri,  6 Feb 2026 14:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770387457; cv=fail; b=qRqgRPdaLENfj6B1oDx9/8AWNgWM9gWxepkfjZEAniovwCJcKuAeUJthZfgUTLWy/OJQ2Kzk8fW24BOMX61pU0xmXo5sFIBhEEHac+cwmzTC8siejDSLvbMq6U/DnbiYpEH7PIZsiOf6B8hD4ho0ErYMpI5VVpKpg2/ayGwyXXE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770387457; c=relaxed/simple;
-	bh=VM/pvv7aUGI4kmWQHJCFtSel1Z9sB4R4GzXQh1AcliQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ZynPMQXRa0wXgt/9x/7LOVrfUq/e7TOFwIiyigGmpBQk1GaGbM8Xr+w1ZWNthYrlPYIHJxK+vaBpaCiNDkskbvQ4WihpUx2yEXZVZzsGTaUxF7h+7oFRXCNf/1BfefP8YFHOic+Fr99XV0qXT2satKBAyWvXAutbNE89QozOJzU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=z1BY29/N; arc=fail smtp.client-ip=52.101.193.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0836A2DF155
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 15:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770393506; cv=none; b=CvZYpM2vsYWrV303ZnOtW0xqo07JVfW2u2i6bYTcBgYiqgPhsPu3qzm7jRd8LmdHyPLsAo2JJIhm3FRXirrAc8rkp0zsBwI0a4NoHlpC5N73Q+qUV/Ksfbpd4nFQqjPCA+6jUuxuQnV2Ac62Uc72Up6tPc/Y6A8SPuDKW4QroLk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770393506; c=relaxed/simple;
+	bh=k43UdQ9Re1TzNFIkJqfnQF93crpnlpYPjCvi4ztDVrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hFszPt5hqBGB/8JnelKIm7Wyapx9hpKyzAaMUhcPX3LWsWtpba5WRZ3Sprih2VPpl0rZPPSLksDnUjfx+DjoaltCwGyvUNjM0EQDPAdBWlCmbcs7k4UyrBrQaLWNeg9rJa5+GB/FvvSeD97JseNnYipiIrn2nazU+FZUbe5Omc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=PPC5rNS7; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=minyard.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="z1BY29/N"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZlUtQA7QNoUxGbFOE3BWp4ZWRCvJSHFsLkcJZ/G6AVWbiSi4yMSdnI3/ePY0eINagRH5hBJOBWy0/qlqvJ1M3EfkoM4i/o7LH39CxCI6k4ka5ajLtR1lu6UimECgZ4gN7uN6lemr7d7fDrYR+iJKWDGBCP/Sx4jkouiqEbcMLjd08l+3sg49bzLyMwenNUO3AIeP4wyeutntJkfd6D5Ol5myEoNhK38CjKD0lk5vq8+4vF7Riz64F/hnQcbecvrZE9KvUXi99crvtyqWEIsyzcStWp7iwWeR7FTfY4/XgRj1Tm36rJfAO+apmCkcN85iLMkqVFD0jAe9yzNEJMqiJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VM/pvv7aUGI4kmWQHJCFtSel1Z9sB4R4GzXQh1AcliQ=;
- b=NUvaVOUpsCkG7YvYi75QlT37lxuyjM50N4QxLZWqaBQ9o5CioJHjEi/Wi000AVyqHL7k6e5FPmAk3aAnxm5VeWAPUN+GcD4akk4DgA0Ge8ClR09n7FoKbujIghyBL/IiYfOJeVVFiwqgIKKFBbpbH89TWa3rU1q12o2gokXOBc/rV+yle3oRbyT3ruRV2M7Yav3iNOj+DByqYAX0g5iPNVmrR6qoRbe0vlhsrvwPBQvj6N9/4XrHkobLk17CbOVK/5k98kXc/8ne1QChkjhPDhEjmAX0ZWnlOJTeACqsdW0jhIfzbuBZ9FsDqSpZxx7x5lO7+guLPh5u1wX2BYvfrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VM/pvv7aUGI4kmWQHJCFtSel1Z9sB4R4GzXQh1AcliQ=;
- b=z1BY29/NId8bn6GKNTWdDPPcpHNxavTqJkaCh74YkbF9327n6DR1+RIHd1zaCK9ocseIum0+PP7BjHHqBl4o00Fhp2MdwjNv9Hb/jJNF7ddLjAltORLHA6cbubBTIr4sFD9ICc+nheAE28wGl+TRyp3PlY9F0s9bzgGdJhVZSI1iaq/YhjTAuqRNxljn5lo/MjGZ5f9fl1c75BqxDnCpjj/J2ouqm159jNaFPAWeY2EvPpOEFbdDnqihdxB136lSUZ0jH+8RYAOMSNXMgDOGmsGY0LvdkLEpNdNS+qMPZjIoXDC0ItyfHX8Q0oAmc0Rc5BxUsN/V+XKtBdIgiybD8g==
-Received: from SN7PR11MB7511.namprd11.prod.outlook.com (2603:10b6:806:347::17)
- by DM4PR11MB7376.namprd11.prod.outlook.com (2603:10b6:8:100::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.15; Fri, 6 Feb
- 2026 14:17:33 +0000
-Received: from SN7PR11MB7511.namprd11.prod.outlook.com
- ([fe80::b0d5:a33a:26fd:3fa0]) by SN7PR11MB7511.namprd11.prod.outlook.com
- ([fe80::b0d5:a33a:26fd:3fa0%6]) with mapi id 15.20.9587.013; Fri, 6 Feb 2026
- 14:17:33 +0000
-From: <Victor.Duicu@microchip.com>
-To: <linux@roeck-us.net>
-CC: <corbet@lwn.net>, <linux-hwmon@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <robh@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <krzk+dt@kernel.org>,
-	<linux-doc@vger.kernel.org>, <Marius.Cristea@microchip.com>,
-	<conor+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: add support for MCP998X
-Thread-Topic: [PATCH v3 1/2] dt-bindings: hwmon: add support for MCP998X
-Thread-Index: AQHcj6BW6iGqyMwWZEe+A522Hs6wtLVxY7wAgARjsYA=
-Date: Fri, 6 Feb 2026 14:17:33 +0000
-Message-ID: <595e616ad403e805ee50fa7bc57d25584949924d.camel@microchip.com>
-References: <20260127151823.9728-1-victor.duicu@microchip.com>
-		 <20260127151823.9728-2-victor.duicu@microchip.com>
-		 <0b3979d6-895f-4c8a-8251-d3c793385bf4@roeck-us.net>
-In-Reply-To: <0b3979d6-895f-4c8a-8251-d3c793385bf4@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN7PR11MB7511:EE_|DM4PR11MB7376:EE_
-x-ms-office365-filtering-correlation-id: fd63cc71-d5a1-4d66-6d40-08de658a7899
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|38070700021|18082099003;
-x-microsoft-antispam-message-info:
- =?utf-8?B?WG1DV2NDay8wZ21KSDJLcE5vTThWd2hDeU5CU2NuSjlRRlozdEI2WGxacFNU?=
- =?utf-8?B?NHBYV0NXcEw0cCtPam5wR2hWNDJ4MzA1cUtBYUVwMzNZV0tPK1VWWkJaY1Q3?=
- =?utf-8?B?U2F2aUVFeHAxTlRhZ0ZpN1JseU1BYVgycTd6MTgzVjNPTTZNRUQzYU9KNGVa?=
- =?utf-8?B?dFpQRFhqNlpKRU5iYlJpaXU5bzdEKzh2U1pNVmNDWmRYbTBzNzFBc0VDMnZJ?=
- =?utf-8?B?NUkrRWFDY29hcGx6dnRmaFpXdTk0MmxrNnBNOUhUbXIveDFlYlY3N2tJMFhx?=
- =?utf-8?B?RzE2MHBFbCtNOWJleUR4dlN3QnJaaGVNZkk4ditWbk1GSUhRUTBubU8xZnQ4?=
- =?utf-8?B?dCtFZjQ4QnI5RndlY1BNOEdpWXB5ZDB3WVMvcjNFOGVnL3JxQklrTVlPd1g2?=
- =?utf-8?B?dDFUK3pYYVdoOUxkd3RrWU5oZ1lXK0FoaDBNSDZNS2krRVhnQ0lpb09BTEZ3?=
- =?utf-8?B?M3cvRDJheExUNjA2ekpKK3NpVGVPa3BoWWM3eXNsejNlTmNaWXBGV29yRy84?=
- =?utf-8?B?YU1HVjhsOGdtRi9hNWhONEJ2cDBteDBnZVVuSUFOejlHOU1DOVlwMzlvSTBW?=
- =?utf-8?B?d29BWEl5VjNMSXhuRWs0RERhSjBKcUtObisxTEltYVN3aERBTCszaFdxcUVj?=
- =?utf-8?B?dFZnNkJiVlhIT3VCTnZUWWJnVWZXamZTZ21KSTM3WHNCVzRYODJTSkhPMERD?=
- =?utf-8?B?bzlEYS82NmZTczM1KzJYN1plenQrb0hpVVpiT1diOXZUdk5XV3hzbFpqWmhE?=
- =?utf-8?B?QkJUQUZBVmJiQmt6ZGU1NVNkek55eFFpTDUxcWhoWkRjbWpCbTdtc3JEQmdC?=
- =?utf-8?B?L3RIWVVUMm9XWmJsVkJFOFdkclFFRWd0YlZaQ01XUTJFVi84MHJjWU5Hb0N3?=
- =?utf-8?B?eWE2Q24xdmVXUUlyVUk4L2RveEQ5OVBwaUMxNFBta3pRMnRwTEZwRFZyaDlV?=
- =?utf-8?B?WFZiQUJXb2JTNGpDelNHd01oc0tVTE4vU0hqRVJwMSttYXVuVFJVVzdxemho?=
- =?utf-8?B?TUpyS0xwdnYwUExjUW1KamZsOUNuWml2ZU5pUkFIWm5JTkVmSWNyc1Ztcytk?=
- =?utf-8?B?dlBFaEs4VU9iY3lkdlhKc0NKS2VoeEtNRG92ZCtkWDJhdEJ2VjhmL0FVaTMr?=
- =?utf-8?B?STBqWnlPbXhwcUdaWFllQnY0bXd0ZSt2M2MyeXBsNXIveWJGbmJNWFdVa1k0?=
- =?utf-8?B?QzBGVWlheDBuMmpzVkJyY3ZWM09ZUmpBdEptZk9HVmNNanpJem9PY2VVUlEv?=
- =?utf-8?B?SzFVaHRHTTVSK01CZ3lTNlVVdkZPUE5VdXM1MFVVdDArSlEyZ1NDSFNNRlNZ?=
- =?utf-8?B?VjhCT2xlajYyV2dZdGg5Ylp5NnNCN1hjcVpENUhNMEE2T2FqS1dVUm5WWEtq?=
- =?utf-8?B?Z3pQUFMrRExGelNLRzlkYnVlVGlBNFRuUnB2NEFIOFdHWkhzc1E2UjhsMCtZ?=
- =?utf-8?B?aDVmeUU5RjJUTDNxdUoxOVVrcHU5RlJaSXBvV2U0WXZ0Q1FmMmQ0RTBSQzdG?=
- =?utf-8?B?ODV2ZWpFMmpmeGZjaHBhRTA3QU1CVjVmZ2JQcUw3Q3N4b05pYy8wVWJrMllQ?=
- =?utf-8?B?SGRydHBubmhXMjZOdy80SE94cmF3L3FtNi8xeE15MFExZU9XRHYvUTdrOE00?=
- =?utf-8?B?QkRodGhxWnYxNkE5SG9PZ0lwcUg4eFVDR2VldGJBUDJwdXlRKzJpV1VLV2pF?=
- =?utf-8?B?MVpIdkU3Z3hmYmtVK2RYQ01IWFh2cHc5YXpiSy9heS93TVFyTFk5ajZjZ1hr?=
- =?utf-8?B?SitCZ3hBZThWdUQ3T0pZbUVOcFpvcXhyQ2U5aDRqQk51VjBOVEhtOW9XNWd3?=
- =?utf-8?B?SnB6THZkRFFQUEI0WVRKQXQyOXd3YXVWU3ZTR0lnZUFSZGR4YWlpSWRNYzRO?=
- =?utf-8?B?TndNZGdJOU84aFJUSnlyWHpaZU9Lc29uSGd4bTVBcnJwMHFKUnU0TDZaTmpP?=
- =?utf-8?B?VDNVbXlSNXJzVXBCNUh6bFFZdG1BYlBIOEk0WUpnNEJ0ajh3VERyenA2eEwv?=
- =?utf-8?B?UjVpdGRyWFFkMG9XbjJVMlB5aHJNZnA0ZkhFaXM5L0hwVndGcmk2NHFyZ2tS?=
- =?utf-8?B?TEpqR2cwOXB1aWpHQ2lJbUx3NlJPM0plWC9BTzVjaERpZ1BvbmU3a0hqRzEy?=
- =?utf-8?Q?mXrAWj3IZV0R/cyfaiR0ypqgD?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7511.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021)(18082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?V2Rtemc0ZjdhWmUrd1Z2VjI4M1dXY1lXLzdoeXZOOW9tdVZEdFVXLzNvVGRY?=
- =?utf-8?B?bXRZcUdaWVpjYWZHdzdHczFiQUlRdXNkd0lRY2ZHd2kyblNrYjZvNllzTnVu?=
- =?utf-8?B?U3N0MnhneTdZR3EyTkRTVmdMUkMrQjE2clJ1eVJ0dUJFTTdmMlUrQXBabmNL?=
- =?utf-8?B?aktocU5zZlRLVk43S0Z3cWVKZkczZm5DRktZSEx2Q3hTaFlQUkVRNTh5NlNG?=
- =?utf-8?B?M0dzNUVaYlpqSkhGZnhIdVlHa2YxT1ZmVG81eGpLVmpJaTRJK3BzT0NiVUhs?=
- =?utf-8?B?ZVFpRndmZXd3Y3R4MFNmL2p0aEFLSnZkcHVHTFJYTGFzNzg2aldOUGNNMVhR?=
- =?utf-8?B?eFpTMkJ0Y2xRNzBvZXZsNk0wTnRmZEtWcFREUHNtK3N3YXpwR3plNzlWMWtq?=
- =?utf-8?B?ZHFEM2l4L21lc3lKUXNVOGwxdjlNWnNnSFFzRmVjSXJQbjI1cGhBMSt3TWhW?=
- =?utf-8?B?bU9OWHZCS05CL0MzRDIrMUM3WUUxU1ozT09HUUN4WkNDZVdUV2dDa09vRkRW?=
- =?utf-8?B?WXlPdzVuY2Rudi9uTWc5cGlvbnJJcHMvaVp1RnJFZyt5aHROUHJSYW9wSkMz?=
- =?utf-8?B?YXRnRWthTUgyWEY5dmJNdHArdjJ4UExibFJ6SGJPS0Vob1Exb0o3NTl5MU9L?=
- =?utf-8?B?TXljYyttTHRjcnoxM09zQ3d0Kzc0eS9rTHR2RFltNDk4dlVXbm4rSE40Y3Ez?=
- =?utf-8?B?RkpXb0RBRHNibm9yZ0w1bnA2Yy9PZmJROFZRRTVzSlcyZXZnTFUvR0xhTHlS?=
- =?utf-8?B?VThJWHJuUHQ0YmduY0cyS29JVk1OcXpacGRwSG0zNkh4VUtvbzBMeW5MZGtw?=
- =?utf-8?B?QVNuRmJnWjB1OEthQmE5eDVOVWw2SnJJQnNHNlV4dmhXNTk0Tng1SnRsZWc5?=
- =?utf-8?B?SFZ1dnJyUlpuSWRDR2VRaVpqR3N3RUhuWDJSMW1OeGovY01VaTg4QVk3T3R4?=
- =?utf-8?B?YkFFOGJKY0wvUXVoSDRYMjJzeWYwNDkvNmFCYXg1RE8yZXZqeEdtRHZDK3JU?=
- =?utf-8?B?eHFYUXMwVlRWQ2o0cjZkTE5YVlRibUFZVGg3dXZTc0R4K005RnBQZUdNeFVW?=
- =?utf-8?B?KytrZW1xSjdrQ2RacXdESE0zWElvUnpYclFpcHBTTmVKWlBnaHpkQ0p5VTRy?=
- =?utf-8?B?Qkh0QVJEcFZ6Z1VlaDczbnZKSHBpLzBJeHk2bThGajRQUURIcXVjUmhxRmJz?=
- =?utf-8?B?cktBT2xMdUx3dU9KU3F0Z2xWNnV5amFjN1BVVXl4Y2doTTFZbXB6RENaYkZo?=
- =?utf-8?B?VHBkMndGSGluN1ZyT216VXl0MlFVcm9KK0RqNVV2WXJDdU96a3Z5WGcxWTQz?=
- =?utf-8?B?dFJLek0xdHE4ckZNS1ZRaG96UmJBSkpCT3NVS3N3U214eW9HdVNBUVg1bUJw?=
- =?utf-8?B?cVhhd0ZFc1B5dVR5UG03M1ZNeHpXbm1CdVNBa0w1OXFML3NZSzlTdHdnYlk0?=
- =?utf-8?B?ejJEVUdNb2tJaGpxaU8zN1FGbDgyRmYyaDJ6NC9UU2JEY1dUaGFJNGxzNEkv?=
- =?utf-8?B?Zm9QQjZ2RW5ob1lOclNlVWxSTUR1RHBxeWtTL3ZCbHY2bERYWFFQUUZuY3VI?=
- =?utf-8?B?NlV1YU5lT2tVQUl0OSt1UVpRZzFFNHNuYm1qaEFvNWN3UWhvMUdBTmxnR0Jx?=
- =?utf-8?B?aDI3Y2VVU0pPa3JJNjlsTzJCNTJwWGdGWW9heDV3bzY5SWZzNHd3c1BLdlBY?=
- =?utf-8?B?cEg3a3NSajAraE1NaEp1eEViVEYzSWlUcGFTUWlVNUxhWkJpTFptcFpZVjZw?=
- =?utf-8?B?bjJqV2kwcGo5MGFVTWR3RExaZnVEWmtpZnBUQnFyTHFIbDRnOXZaK0Rrb0Fy?=
- =?utf-8?B?N0FSSC9WTXEvTkhFVnZuUklRN1VJWnlXZjFITjBYYkdwdkcrL3FuNW9YODA2?=
- =?utf-8?B?VG8zamxoZnIxdy9Dd1RSZCsxd2RrRTFxc1ZyemNBV096ZkI3bHBpUUd0b1lD?=
- =?utf-8?B?a251cFpFVk5sVVNIRmZPRVAvVTRkSDNlTkdEQzVHWGE1and3OVFLQ1cxaENu?=
- =?utf-8?B?WkpMSW5FVjIxeXhaOXlaaDdWblg2RjVkcVA4NDBTd1NteVJ0NC9GYjY2OWM0?=
- =?utf-8?B?VHgvQkd5QzNrNHFwaXd0R3FKWnB0SURlTHNrai8ydVJmU1Arc3RhVkhaajFT?=
- =?utf-8?B?RFprSjVtYThUYjUvV0lvT0ZrT2wwRkpCTDl1dGpSQzI4NHV2QTBOblhNemRh?=
- =?utf-8?B?Wk01MzZDTDNZOWIwR3hWUHRLTjE4bUU2UUtWeEZWbFZXWVQwUnVMV3NTdkxI?=
- =?utf-8?B?Rjl5UlZqaXhYYVRtWWh5RVlXQTcrNTlmWkcxYVZCcmJJcSs0cU1SZ1Q4VmNP?=
- =?utf-8?B?NDB2cWwyZFJrMUgwVEV1L0l0elZUNVdzUHlLazZDU2Fwby9QNVQ0SzlqUFdS?=
- =?utf-8?Q?hMrvmv7M4ZYN83hQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6E3E1DB752CC084E974D2A2F8CBEC8C3@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="PPC5rNS7"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7d1890f7ee4so1473167a34.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Feb 2026 07:58:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=minyard.net; s=google; t=1770393505; x=1770998305; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:reply-to:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OjbSJlcsw5yIkoZdZ3xPdlH3uqkpByDwo5mEd4lWTgY=;
+        b=PPC5rNS7G0aachJPV0y9pgW0Iqccy1WPlAwFNEuDkiAAR+NNeVtCaHsIX8QDXtw7vS
+         TBou0ia9mQq4xhbWamNlD2SXfeI5a38Jd94bF8ICcf84UmAdMf6dr4w5Ut5bzz8/daYF
+         yDS84bnDAtooIHL38Djetkmp4NTRLF0OuIF/G58QmN0R1mYOf8NHCtl8ONLk+iZLXFIu
+         olqiv11ogIL4COQ/RqH+mjYIg7cd075qVvoZqODe4TnhPQNA1mR9ki1rUqtzK5TV9d23
+         l+HJuNNNLJnjHYQprmxpQP1snibOPD/PUtne/6XmivWIjOKTuERlRnwoX96lvEQD7NNR
+         Cxsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770393505; x=1770998305;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:reply-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OjbSJlcsw5yIkoZdZ3xPdlH3uqkpByDwo5mEd4lWTgY=;
+        b=qY/ap2BSnJMVaEgIE2ZV00jO/Oi26RG4wk8vluQ0vj/YyzwnEDH5BtJlfgft22M91S
+         nf1FyNV5sgL4RjxATa2zUq3+7x4j5iTRupOCEv1ieSylwU41qY8OpWfy3o9F5xQoS+wk
+         tBZoxcNgyBNscikgtb7V7CBBK7+TREcMVx6rlOpDF2K7hiZbWOVJHH/uhYZS8TYkkXMY
+         jzBEIPbWxzpdtAJ771DG6JWruVzfuHcY8OETVj5an9BbnKWg2By76dkAd1wUZAHsq8nH
+         J65R3DBvm54RZTLLk5B+xcUpvog4Hnc05KJEs34aNMyBuJUCdrc1hVEoEBQ78oQC4SqB
+         iSvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXxS3I106Xmg4XRRCF3AfcqIrRXY9qaeVQu2vPNxK0AUwmT7qWoSs9IwAKWETqed+AVPAfzeHwynovQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN5ESEf/dMFM5JcU0jbfsDcEXvkM1Tm7eIaTqIv/Yh13vZmHZN
+	vsn+WC1Qbin3ZLmJdcTl/oThwr60SH7b6WWW02qndoKutigi82ckteFLeIt7YBfNbQU=
+X-Gm-Gg: AZuq6aJN6JuRepFinah+XjbnTwrp1oXKrJa/hu6l33gCg0XiJyDd8vo70y+I2LRpe1O
+	YPou+hztFjDK6FC7iERs2DODH4LEd0iGLkvVT2G+sZ0njdwzJB1OnObtSo602QyNUt+YvzZzcsr
+	QhB18Yspy0sXvPQ9bkXiGS7W0c3jVELQogBGiC/csmHU/1LKIkPkTFYjTBL+4Dl1QDMyQDly4/Y
+	gmq5fdTwXBFG7IIoRVz87DDzA4gQFQ4J1ATyhMoQhcj0ugR7wYzqFOd7NDxelPYsWuPHno3EBV5
+	gCJ71o+eVpLki2cwsAUC+vevtq0KX/cIbNRsDJ+lStKo3/FJmgjEhIEu5wDsS8WkWUY0/YpuiSm
+	Kkou+jie0dX2XI+qFBm0MrRuD+tN/TIlSD7K+A3kSG5R2MO3/JshaGaqaw+EUHcFckN4O3uvGud
+	SbOdVloL7iqOpcvjfW6xcdhighmwC4K1qYkM5BNsfaHRKoIBQCqOOZHerlRvBGgK2pFGtI/8aud
+	iJNo9Entzaslg==
+X-Received: by 2002:a05:6830:268c:b0:7cf:e4e6:2ce9 with SMTP id 46e09a7af769-7d46440ace6mr1396357a34.9.1770393504747;
+        Fri, 06 Feb 2026 07:58:24 -0800 (PST)
+Received: from mail.minyard.net ([2001:470:b8f6:1b:aed7:ea82:7abb:dd28])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d46470df08sm1947716a34.8.2026.02.06.07.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 07:58:24 -0800 (PST)
+Date: Fri, 6 Feb 2026 09:58:20 -0600
+From: Corey Minyard <corey@minyard.net>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Igor Raits <igor@gooddata.com>,
+	Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
+	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Daniel Secik <daniel.secik@gooddata.com>,
+	Zdenek Pesek <zdenek.pesek@gooddata.com>,
+	Jiri Jurica <jiri.jurica@gooddata.com>,
+	Huisong Li <lihuisong@huawei.com>
+Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average
+ sysfs read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
+Message-ID: <aYYPnATz1JakV3m7@mail.minyard.net>
+Reply-To: corey@minyard.net
+References: <CAK8fFZ65Vro5nQqJq_cvsY93hgDbfTdibWnNr5b0Bixzc-ESfg@mail.gmail.com>
+ <CAK8fFZ6Vi4xayvdKh-_eLi-nDNMLuEoMsvwEnb33QqnwS7o4BA@mail.gmail.com>
+ <1c8f748a-5c5d-4234-ae86-7bb12045a373@roeck-us.net>
+ <CA+9S74i+BC3=E0opOPMff0cuC1OPYSecii0C8fVZ+NM7bptNcQ@mail.gmail.com>
+ <fee01c19-2711-487e-91e9-d57f9be04b98@roeck-us.net>
+ <CA+9S74jR9jRRE-DNMxNg=6Uv2uDAUar2n-RkVDJqzkDfNu3eog@mail.gmail.com>
+ <39100538-a1f3-48dc-82d6-5e3314a43b4d@roeck-us.net>
+ <CAJZ5v0jo4CV__AoUfqxuhVgkw6hA=hM_fBU+W=pTzqDLmNmytw@mail.gmail.com>
+ <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
+ <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microchip.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7511.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd63cc71-d5a1-4d66-6d40-08de658a7899
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2026 14:17:33.5960
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +WK+IXDmmxMJkJ3QKMVQPAgylKijC8h4EcJDyqATgotcsJF1ClCEr1jzZsiS/7HDUpmuK2FAhdJScVYnam/Fcg4+UjU6lHlLqFSEdcPZxb8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7376
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
 
-T24gVHVlLCAyMDI2LTAyLTAzIGF0IDExOjE1IC0wODAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
-PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMg
-dW5sZXNzIHlvdQ0KPiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFR1ZSwgSmFu
-IDI3LCAyMDI2IGF0IDA1OjE4OjIxUE0gKzAyMDAsDQo+IHZpY3Rvci5kdWljdUBtaWNyb2NoaXAu
-Y29twqB3cm90ZToNCj4gPiBGcm9tOiBWaWN0b3IgRHVpY3UgPHZpY3Rvci5kdWljdUBtaWNyb2No
-aXAuY29tPg0KPiA+IA0KPiA+IFRoaXMgaXMgdGhlIGRldmljZXRyZWUgc2NoZW1hIGZvciBNaWNy
-b2NoaXAgTUNQOTk4WC8zMyBhbmQNCj4gPiBNQ1A5OThYRC8zM0QgTXVsdGljaGFubmVsIEF1dG9t
-b3RpdmUgVGVtcGVyYXR1cmUgTW9uaXRvciBGYW1pbHkuDQo+ID4gDQo+ID4gQWNrZWQtYnk6IENv
-bm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+ID4gU2lnbmVkLW9mZi1i
-eTogVmljdG9yIER1aWN1IDx2aWN0b3IuZHVpY3VAbWljcm9jaGlwLmNvbT4NCj4gDQo+IFNvbWUg
-QUkgZ2VuZXJhdGVkIGZlZWRiYWNrIGlubGluZSwgZ2VuZXJhdGVkIHVzaW5nIEdlbWluaSAzIGFu
-ZCBDaHJpcw0KPiBNYXNvbidzDQo+IHByb21wdHMgYXMgYmFzZS4gSSBkb24ndCBrbm93IG11Y2gg
-aWYgYW55dGhpbmcgYWJvdXQgZGV2aWNldHJlZQ0KPiBwcm9wZXJ0aWVzLA0KPiBidXQgaXQgZG9l
-cyBzZWVtIHRvIG1lIHRoYXQgdGhlIEFJIGhhcyBhIHBvaW50Lg0KPiANCj4gPiAtLS0NCj4gPiDC
-oC4uLi9iaW5kaW5ncy9od21vbi9taWNyb2NoaXAsbWNwOTk4Mi55YW1swqDCoMKgwqAgfCAyMDUN
-Cj4gPiArKysrKysrKysrKysrKysrKysNCj4gPiDCoE1BSU5UQUlORVJTwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKg
-wqAgNiArDQo+ID4gwqAyIGZpbGVzIGNoYW5nZWQsIDIxMSBpbnNlcnRpb25zKCspDQo+ID4gwqBj
-cmVhdGUgbW9kZSAxMDA2NDQNCj4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
-aHdtb24vbWljcm9jaGlwLG1jcDk5ODIueWFtbA0KPiA+IA0KPiA+IGRpZmYgLS1naXQNCj4gPiBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9od21vbi9taWNyb2NoaXAsbWNwOTk4
-Mi55YW1sDQo+ID4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vbWlj
-cm9jaGlwLG1jcDk5ODIueWFtbA0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXgg
-MDAwMDAwMDAwMDAwLi4wNWVhM2M2YTU2MTgNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrDQo+
-ID4gYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaHdtb24vbWljcm9jaGlwLG1j
-cDk5ODIueWFtbA0KPiA+IEBAIC0wLDAgKzEsMjA1IEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlk
-ZW50aWZpZXI6IChHUEwtMi4wIE9SIEJTRC0yLUNsYXVzZSkNCj4gPiArJVlBTUwgMS4yDQo+ID4g
-Ky0tLQ0KPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL2h3bW9uL21pY3Jv
-Y2hpcCxtY3A5OTgyLnlhbWwjDQo+ID4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9t
-ZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ICsNCj4gPiArdGl0bGU6IE1pY3JvY2hpcCBNQ1A5
-OThYLzMzIGFuZCBNQ1A5OThYRC8zM0QgVGVtcGVyYXR1cmUgTW9uaXRvcg0KPiA+ICsNCj4gPiAr
-bWFpbnRhaW5lcnM6DQo+ID4gK8KgIC0gVmljdG9yIER1aWN1IDx2aWN0b3IuZHVpY3VAbWljcm9j
-aGlwLmNvbT4NCj4gPiArDQo+ID4gK2Rlc2NyaXB0aW9uOiB8DQo+ID4gK8KgIFRoZSBNQ1A5OThY
-LzMzIGFuZCBNQ1A5OThYRC8zM0QgZmFtaWx5IGlzIGEgaGlnaC1hY2N1cmFjeSAyLXdpcmUNCj4g
-PiArwqAgbXVsdGljaGFubmVsIGF1dG9tb3RpdmUgdGVtcGVyYXR1cmUgbW9uaXRvci4NCj4gPiAr
-wqAgVGhlIGRhdGFzaGVldCBjYW4gYmUgZm91bmQgaGVyZToNCj4gPiArwqDCoMKgDQo+ID4gaHR0
-cHM6Ly93dzEubWljcm9jaGlwLmNvbS9kb3dubG9hZHMvYWVtRG9jdW1lbnRzL2RvY3VtZW50cy9N
-U0xEL1Byb2R1Y3REb2N1bWVudHMvRGF0YVNoZWV0cy9NQ1A5OThYLUZhbWlseS1EYXRhLVNoZWV0
-LURTMjAwMDY4MjcucGRmDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICvCoCBjb21wYXRp
-YmxlOg0KPiA+ICvCoMKgwqAgZW51bToNCj4gPiArwqDCoMKgwqDCoCAtIG1pY3JvY2hpcCxtY3A5
-OTMzDQo+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTkzM2QNCj4gPiArwqDCoMKgwqDC
-oCAtIG1pY3JvY2hpcCxtY3A5OTgyDQo+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4
-MmQNCj4gPiArwqDCoMKgwqDCoCAtIG1pY3JvY2hpcCxtY3A5OTgzDQo+ID4gK8KgwqDCoMKgwqAg
-LSBtaWNyb2NoaXAsbWNwOTk4M2QNCj4gPiArwqDCoMKgwqDCoCAtIG1pY3JvY2hpcCxtY3A5OTg0
-DQo+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4NGQNCj4gPiArwqDCoMKgwqDCoCAt
-IG1pY3JvY2hpcCxtY3A5OTg1DQo+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4NWQN
-Cj4gPiArDQo+ID4gK8KgIHJlZzoNCj4gPiArwqDCoMKgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+
-ICvCoCBpbnRlcnJ1cHRzOg0KPiA+ICvCoMKgwqAgaXRlbXM6DQo+ID4gK8KgwqDCoMKgwqAgLSBk
-ZXNjcmlwdGlvbjogU2lnbmFsIGNvbWluZyBmcm9tIEFMRVJUL1RIRVJNIHBpbi4NCj4gPiArwqDC
-oMKgwqDCoCAtIGRlc2NyaXB0aW9uOiBTaWduYWwgY29taW5nIGZyb20gVEhFUk0vQUREUiBwaW4u
-DQo+ID4gK8KgwqDCoMKgwqAgLSBkZXNjcmlwdGlvbjogU2lnbmFsIGNvbWluZyBmcm9tIFNZU19T
-SEROIHBpbi4NCj4gPiArDQo+ID4gK8KgIGludGVycnVwdC1uYW1lczoNCj4gPiArwqDCoMKgIGl0
-ZW1zOg0KPiA+ICvCoMKgwqDCoMKgIC0gY29uc3Q6IGFsZXJ0LXRoZXJtDQo+ID4gK8KgwqDCoMKg
-wqAgLSBjb25zdDogdGhlcm0tYWRkcg0KPiA+ICvCoMKgwqDCoMKgIC0gY29uc3Q6IHN5cy1zaHV0
-ZG93bg0KPiANCj4gVGhlIHRvcC1sZXZlbCBkZWZpbml0aW9uIG9mIGludGVycnVwdC1uYW1lcyBz
-cGVjaWZpZXMgZXhhY3RseSAzDQo+IGl0ZW1zLg0KPiBIb3cgZG9lcyB0aGlzIGludGVyYWN0IHdp
-dGggdmFyaWFudHMgdGhhdCBvbmx5IGhhdmUgMiBpbnRlcnJ1cHRzPw0KPiANCg0KVGhlIGNoaXBz
-IHdpdGggIkQiIGluIHRoZSBmYW1pbHkgaGF2ZSB0aGUgc3lzLXNodXRkb3duIGFuZCBhbGVydC10
-aGVybQ0KaW50ZXJydXB0IHBpbnMuIFRoZSByZXN0IGhhdmUgYWxlcnQtdGhlcm0gYW5kIHRoZXJt
-LWFkZHIgaW50ZXJydXB0DQpwaW5zLiBUaGUgY29uZGl0aW9uYWwgYXNzaWducyB0aGUgaW50ZXJy
-dXB0IG5hbWVzIGRlcGVuZGluZyBvbiB0aGUNCmNoaXAuDQoNCi4uLg0KDQo+IA0KPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqAgaXRlbXM6DQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLSBjb25z
-dDogYWxlcnQtdGhlcm0NCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAtIGNvbnN0OiB0aGVy
-bS1hZGRyDQo+ID4gK8KgwqDCoMKgwqDCoMKgIG1pY3JvY2hpcCxwb3dlci1zdGF0ZTogdHJ1ZQ0K
-PiA+ICsNCj4gPiArwqAgLSBpZjoNCj4gPiArwqDCoMKgwqDCoCBwcm9wZXJ0aWVzOg0KPiA+ICvC
-oMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlOg0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqAgY29udGFp
-bnM6DQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGF0dGVybjogJ15taWNyb2NoaXAsbWNw
-OTk4KDJ8MykkJw0KPiA+ICvCoMKgwqAgdGhlbjoNCj4gPiArwqDCoMKgwqDCoCBwcm9wZXJ0aWVz
-Og0KPiA+ICvCoMKgwqDCoMKgwqDCoCBtaWNyb2NoaXAsZW5hYmxlLWFudGktcGFyYWxsZWw6IGZh
-bHNlDQo+IA0KPiBJZiAiRCIgdmFyaWFudHMgb25seSBzdXBwb3J0IFJ1biBtb2RlIGFzIGRlc2Ny
-aWJlZCBpbiB0aGUgcHJvcGVydHkNCj4gZGVzY3JpcHRpb24sIHdoeSBpcyB0aGlzIHByb3BlcnR5
-IHJlcXVpcmVkIGluIHRoZSBkZXZpY2V0cmVlPw0KPiANCj4gU2Vjb25kIGZlZWRiYWNrOg0KPiAN
-Cj4gU2luY2UgdGhlIGRlc2NyaXB0aW9uIHNheXMgIkQiIHZlcnNpb25zIGNhbiBvbmx5IGJlIHNl
-dCBpbiBSdW4gbW9kZQ0KPiAod2hlcmUgVHJ1ZSBzZXRzIFJ1biBzdGF0ZSksIHNob3VsZCB0aGlz
-IHByb3BlcnR5IGFsc28gaGF2ZSBhIGNvbnN0Og0KPiB0cnVlDQo+IGNvbnN0cmFpbnQgaGVyZT8N
-Cj4gDQoNClRoZSBwcm9wZXJ0eSB0aGF0IHNldHMgdGhlIG9wZXJhdGlvbiBtb2RlIGlzIG1pY3Jv
-Y2hpcCxwb3dlci1zdGF0ZS4NCkNoaXBzIHdpdGggIkQiIGNhbiB3b3JrIG9ubHkgaW4gUnVuIG1v
-ZGUsIGJ1dCB0aGUgb3RoZXIgb25lcyBjYW4NCndvcmsgaW4gUnVuIG9yIFN0YW5kYnkgbW9kZS4N
-CkluIHRoZSBjb25kaXRpb25zIHdlIGZvcmNlIFJ1biBtb2RlIG9uIHRoZSBjaGlwcyB0aGF0IHJl
-cXVpcmUgaXQNCmFuZCBhY2NlcHQgZWl0aGVyIG1vZGUgaW4gdGhlIG90aGVyIGhhbGYgb2YgdGhl
-IGZhbWlseS4NCg0KPiA+ICsNCj4gPiArwqAgLSBpZjoNCj4gPiArwqDCoMKgwqDCoCBwcm9wZXJ0
-aWVzOg0KPiA+ICvCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlOg0KPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqAgY29udGFpbnM6DQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGF0dGVybjogJ15t
-aWNyb2NoaXAsbWNwOTk4KDJ8MylkJCcNCj4gPiArwqDCoMKgIHRoZW46DQo+ID4gK8KgwqDCoMKg
-wqAgcHJvcGVydGllczoNCj4gPiArwqDCoMKgwqDCoMKgwqAgbWljcm9jaGlwLGVuYWJsZS1hbnRp
-LXBhcmFsbGVsOiBmYWxzZQ0KPiA+ICvCoMKgwqDCoMKgIHJlcXVpcmVkOg0KPiA+ICvCoMKgwqDC
-oMKgwqDCoCAtIG1pY3JvY2hpcCxwYXJhc2l0aWMtcmVzLW9uLWNoYW5uZWwxLTINCj4gPiArwqDC
-oMKgwqDCoMKgwqAgLSBtaWNyb2NoaXAscGFyYXNpdGljLXJlcy1vbi1jaGFubmVsMy00DQo+IA0K
-PiBTaG91bGQgdGhlIHBhcmFzaXRpYyByZXNpc3RhbmNlIGNvbXBlbnNhdGlvbiBwcm9wZXJ0aWVz
-IGJlIHJlcXVpcmVkPw0KPiBUaGVzZQ0KPiByZXByZXNlbnQgYm9hcmQtc3BlY2lmaWMgcGFyYXNp
-dGljcyBhbmQgbWF5IG5vdCBiZSBwcmVzZW50IG9uIGFsbA0KPiBkZXNpZ25zIHVzaW5nIHRoZXNl
-IGNoaXAgdmFyaWFudHMuDQo+IA0KDQpBcyBub3RlZCBpbiB0aGUgZG9jdW1lbnRhdGlvbiwgZm9y
-IGNoaXBzIHdpdGggIkQiIHBhcmFzaXRpYyByZXNpc3RhbmNlDQplcnJvciBjb3JyZWN0aW9uIG11
-c3QgYmUgZW5hYmxlZCBzbyB0aGF0IHRoZSBoYXJkd2FyZSBzaHV0ZG93biBmZWF0dXJlDQpjYW4n
-dCBiZSBvdmVycmlkZGVuLg0KDQo+IA0K
+On Fri, Feb 06, 2026 at 01:08:56PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Feb 5, 2026 at 11:34 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. Wysocki wrote:
+> > > Cc: Corey
+> > >
+> > > On Thu, Feb 5, 2026 at 6:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > > >
+> > > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Raits wrote:
+> > > > > On Wed, Feb 4, 2026 at 11:49 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > > > > >
+> > > > > > On 2/4/26 11:54, Igor Raits wrote:
+> > > > > > > I have written a patch with the help of AI and it fixes the problem. Attached.
+> > > > > > >
+> > > > > >
+> > > > > > "No MIME, no links, no compression, no attachments.  Just plain text"
+> > > > >
+> > > > > Sorry for that, I had assumed that attaching the file would make it in-line.
+> > > > >
+> > > > > > ... which means I can not provide inline feedback, which is the whole
+> > > > > > point of the above.
+> > > > > >
+> > > > > > Your patch crosses subsystems, so it will need to be split in two
+> > > > > > (assuming the ACPI side is even needed). Also, references to iDRAC
+> > > > > > in common code seem inappropriate.
+> > > > >
+> > > > > Yes, this I believe was the essential part (it was the last piece in
+> > > > > my testing which fixed the hanging):
+> > > > >
+> > > >
+> > > > Then I'll need to ask differently: What happens if you drop the IPMI code,
+> > > > and just keep the wait_for_completion -> wait_for_completion_timeout
+> > > > change ? Would that be sufficient to solve the problem ?
+> > >
+> > > I'd rather say "Would that be sufficient to make the symptoms go
+> > > away?" as it most likely papers over the real problem.
+> > >
+> >
+> > Good point. Worse, it may result in UAF or memory leaks.
+> >
+> > > > Either case, the need for this change suggests that the ipmi change
+> > > > may not be complete, since it should send a completion with an error.
+> > >
+> > > I think that reverting commit bc3a9d217755 ("ipmi:si: Gracefully
+> > > handle if the BMC is non-functional") should also be considered as a
+> > > possible way forward because it clearly did not improve things as
+> > > expected, at least in this particular case.
+> > >
+> >
+> > I tend to agree. I ran a number of AI code reviews over the patch, and
+> > each time it finds new (and different) problems. The fact that the acpi
+> > patch is still needed even after applying the ipmi changes suggests that
+> > something is still missing in the ipmi code.
+> >
+> > > It evidently did something that confuses things quite a bit.  Either
+> > > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UNSPECIFIED, or it is
+> > > the "hosed" state and refusing to accept messages.
+> > >
+> >
+> > More than that. My latest AI results are below, just for reference
+> > (using Gemini 3 with Chris Mason's debug prompts). The prompt I used
+> > for this run is:
+> 
+> Well, I guess it's time to send a revert patch then.
+
+Thanks for the CC.
+
+Let's fix it right in the IPMI driver.
+
+> 
+> > "
+> > The top commit in the linux/ directory results in hung tasks if the BMC
+> > stops responding. Using @review-prompts/kernel/debugging.md analyze the
+> > patch, identify the reason for the hung task problem, suggest and implement
+> > a fix. Note that there may be more than one problem in the patch, so analyze
+> > the complete patch and do not stop after fiding the first regression.
+> > "
+> >
+> > I think that catches most of the problem, but not all of it.
+> >
+> > Guenter
+> >
+> > ---
+> >
+> > Summary of crash or warning:
+> > Hung task detected in ipmi_si driver when BMC becomes non-functional.
+> > Processes waiting for IPMI responses (e.g. ipmitool, monitoring agents) enter D state and never recover.
+> >
+> > Kernel version if available:
+> > Top of tree (commit bc3a9d217755f65c137f145600f23bf1d6c31ea9)
+> >
+> > Machine type if available:
+> > Generic Server with BMC
+> >
+> > Cleaned up copy of oops or stack trace:
+> > [  120.123456] INFO: task ipmitool:1234 blocked for more than 120 seconds.
+> > [  120.123457]       Not tainted 6.14.0-rc1 #1
+> > [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > [  120.123459] task:ipmitool        state:D stack:    0 pid: 1234 ppid:  100 flags:0x00000000
+> > [  120.123460] Call Trace:
+> > [  120.123461]  <TASK>
+> > [  120.123462]  __schedule+0x123/0x456
+> > [  120.123463]  schedule+0x45/0x78
+> > [  120.123464]  schedule_timeout+0x9a/0xbc
+> > [  120.123465]  wait_for_completion+0xde/0xf0
+> > [  120.123466]  ipmi_request_settime+0x123/0x145
+> > [  120.123467]  ...
+> > [  120.123468]  </TASK>
+> >
+> > Any other kernel messages you found relevant:
+> > N/A
+> >
+> > Explanation of the problem:
+> > 1. Hung Task:
+> > The patch "ipmi:si: Gracefully handle if the BMC is non-functional" introduces a new state `SI_HOSED` to handle BMC failures. When the driver detects that the BMC is not responding, it transitions to `SI_HOSED` and fails the currently processing message (`curr_msg`). However, if a new message is queued via `sender()` (populating `waiting_msg`) during a recovery probe (state `SI_GETTING_FLAGS`), and that probe subsequently fails, the state machine transitions back to `SI_HOSED`. In this transition, the driver checks and fails `curr_msg`, but it neglects to check or fail `waiting_msg`. As a result, the `waiting_msg` remains in the queue indefinitely, causing the waiting process to hang.
+> 
+> That's quite convincing and it would explain the observed symptoms.
+
+Yes, and it's a fairly easy fix, I think.  The waiting message just
+needs to be returned in that case.  The following patch should do it:
+
+diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
+index 5459ffdde8dc..ff159b1162b9 100644
+--- a/drivers/char/ipmi/ipmi_si_intf.c
++++ b/drivers/char/ipmi/ipmi_si_intf.c
+@@ -809,6 +809,12 @@ static enum si_sm_result smi_event_handler(struct smi_info *smi_info,
+                         */
+                        return_hosed_msg(smi_info, IPMI_BUS_ERR);
+                }
++               if (smi_info->waiting_msg != NULL) {
++                       /* Also handle if there was a message waiting. */
++                       smi_info->curr_msg = smi_info->waiting_msg;
++                       smi_info->waiting_msg = NULL;
++                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
++               }
+                smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
+                goto out;
+        }
+
+
+Thanks,
+
+-corey
+
+> 
+> > 2. Excessive Polling (Timer Overwrite):
+> > In `smi_timeout()`, the timer is unconditionally reset to a short timeout (e.g., 10ms) at the end of the function, unless the state machine is IDLE. When the state machine returns `SI_SM_HOSED`, `smi_event_handler()` correctly sets the timer to a long backoff (1 second). However, `smi_timeout()` subsequently overwrites this with the short timeout. This causes the driver to poll the hosed BMC every 10ms instead of backing off for 1 second, resulting in unnecessary CPU overhead.
+> 
+> Well, that's not nice, but it doesn't seem to be related to the
+> observed symptoms.
+> 
+> > Functions, snippets and call traces of code related to the problem:
+> >
+> > drivers/char/ipmi/ipmi_si_intf.c: smi_event_handler()
+> >
+> >         } else if (si_sm_result == SI_SM_HOSED) {
+> >                 /* ... */
+> >                 smi_info->si_state = SI_HOSED;
+> >                 if (smi_info->curr_msg != NULL) {
+> >                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
+> >                 }
+> >                 /* BUG 1: waiting_msg is NOT checked here! */
+> >
+> >                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED); /* Sets 1s timeout */
+> >                 goto out;
+> >         }
+> >
+> > drivers/char/ipmi/ipmi_si_intf.c: smi_timeout()
+> >
+> >         smi_result = smi_event_handler(smi_info, time_diff);
+> >         /* ... */
+> >         if (smi_result != SI_SM_IDLE)
+> >                 smi_mod_timer(smi_info, timeout); /* BUG 2: Overwrites 1s timeout with ~10ms */
+> >
+> > List of potential commits related to the problem:
+> > bc3a9d217755f65c137f145600f23bf1d6c31ea9 ipmi:si: Gracefully handle if the BMC is non-functional
+> >
+> > Suggested fix:
+> > 1. When entering `SI_HOSED` state in `smi_event_handler`, check for and fail any pending `waiting_msg` in addition to `curr_msg`.
+> > 2. In `smi_timeout`, do not reset the timer if the state is `SI_HOSED`, preserving the backoff timeout set by `smi_event_handler`.
+> >
+> > ---
+> > Suggested diffs from that run:
+> >
+> > diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
+> > index 1c65275906b4..023b0e819f91 100644
+> > --- a/drivers/char/ipmi/ipmi_si_intf.c
+> > +++ b/drivers/char/ipmi/ipmi_si_intf.c
+> > @@ -810,6 +810,11 @@ static enum si_sm_result smi_event_handler(struct smi_info *smi_info,
+> >                          */
+> >                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
+> >                 }
+> > +               if (smi_info->waiting_msg != NULL) {
+> > +                       smi_info->curr_msg = smi_info->waiting_msg;
+> > +                       smi_info->waiting_msg = NULL;
+> > +                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
+> > +               }
+> >                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
+> >                 goto out;
+> >         }
+> > @@ -1130,10 +1135,12 @@ static void smi_timeout(struct timer_list *t)
+> >                 timeout = jiffies + SI_TIMEOUT_JIFFIES;
+> >         }
+> >
+> > -       if (smi_result != SI_SM_IDLE)
+> > -               smi_mod_timer(smi_info, timeout);
+> > -       else
+> > +       if (smi_result != SI_SM_IDLE) {
+> > +               if (smi_info->si_state != SI_HOSED)
+> > +                       smi_mod_timer(smi_info, timeout);
+> > +       } else {
+> >                 smi_info->timer_running = false;
+> > +       }
+> >         spin_unlock_irqrestore(&(smi_info->si_lock), flags);
+> >  }
+> 
+> Well, I'd leave fixing the IPMI handling to somebody familiar with that code.
