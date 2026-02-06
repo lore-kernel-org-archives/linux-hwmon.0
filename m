@@ -1,132 +1,291 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19FC2F290A
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 10:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAC8309EE7
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 12:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770373691; cv=none; b=g31rIJwTiZQOTjZjcj4TE3W1KItDQJ91XqNVvZ4D0AE94fYa3Pdq9R3D0vdhu7GHTYhGUjStds+IPCqokuXAX4okaPnaIGnf9A7y5rAD6uo7SvaWy8x9lhPx5FCyEpN+8sfgq4umDP17dsRhUxW+TesgPtNfAvA1qT6FW4mmPMA=
+	t=1770379749; cv=none; b=jxSqoZjlmCGRD8zO+qZQsLXxdweLY7G0vq7PWfOEb+KsVnDSWB+30N1QppybUzZUmZ7yCrpJwCkUg7j8O5t1RjKFkSvMPnKrdrcbe8e1VjswNezDWSjyOzfYtbJsmYBDaMVdb5e1QA3yEK1l9jJA6y61AVRiwkWT2EkA/7xuaLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770373691; c=relaxed/simple;
-	bh=MGzU5XV9oidAi7TVfG3Lywdby56GcQhKhZjDkTR9Nnk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=puAIa+7mz1ZGyuijNPagDR4wsmpUWcDmzxMTFMCKVNgvmyhjDqeYph9XppLsdwFdCXVhfJsyNU8hdivBDYGoHrSaSQ1Oi1PPFVSRVyz86jNAI07pNESCh0r4eIn3yuiVpnpUtwnP6irP9Bsr+o7h7NDJIHIhziFqAeA7KBV7sB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cRG/guzL; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770379749; c=relaxed/simple;
+	bh=YhG37LeR9IP7/7ZENXZfb+hZAsjNbmgjXLGpt1n63Gg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tl/rBVHhRZU5ml4GRQHGamBZI54VAFFshfUsvIeyP6G0RmvUnjuyNvz4P85gMxJhCqnbLQrKSqAIyPpnvd+LiEHm2C1Z9gPMgcuInvFATQvJkXHTQaJFWilz86ufRje8KZWks4rGSB75pHgH/38Ec9nuhnAsjXRh+rQYQWF/GzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=msRoMfjU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cRG/guzL"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-482f2599980so22964905e9.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Feb 2026 02:28:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770373689; x=1770978489; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1znmvJRZinh0UjxXVnbV8XU237BL4In8MXKnqCzTiis=;
-        b=cRG/guzLCvhrYnEdDGTwevhiQ/cwTE1LcIBoz71CtdDrX8xt3lEPRcjjL82M9Diwv0
-         Bn7Wvr7R3OMYbrluamnJEmXm+g9kW7SC77cdAAJcATOZIJpY8X/mZ1bdF/XOIWKn7Buj
-         xYRUrXaL8WIBWvoQZDqoVOAmsgpLtDRk6xrqoKORKZO6ywPeqjGBrvRiReLKJU2F22qC
-         DNP/cq0dP5Mn3LFlFBrzcn+yDfLI3+diky+ISCY13gCa8x9zhL7+nUT8kG0uFISkTvEr
-         3FzJAiZxI8PFiD+3D9R1VurO/UK/gddQQ2D5r5Us1KWt0CJq137mxT/gn85h1t4jEy8n
-         znUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770373689; x=1770978489;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1znmvJRZinh0UjxXVnbV8XU237BL4In8MXKnqCzTiis=;
-        b=ixmniF3UdxucSXTCojS03tuEOEWObJM6hgZbnoD0EKyplHfqnjIaRW098U4dI2gW6h
-         jArZZiOJGkmtCm98+ZFK9v9HY78sUEX674tSYGOoRnidjpWN00EY1nOD+JlwO9MQmD5Z
-         TrGyvY+v7aZRl7gq76SnRU293h2YE5JAexHi/ur2UgkoRYd7uTMrrLCRkBs1y5MZUfFv
-         CFpKc0JfJ6b74aJX/ZOGKx/S/eojAgmJ7EcluxlNdCpCZSesN6vLV2WpD9Qq7h5PV8V8
-         yYFHyaMRS1t4MNp/qTGPyRGFS9JwWksFz8MMh/d3JOIKHbMSkc7lnbxspDS9N0UiSidO
-         nQDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLzu+Ny5KEdxkUWdvJYNZgdy22xbnb5KWDRY7nE7aozN+kJHhsS7OANghWTdt/ax4eI894OWBbWVP17w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8kZdC+NJU6bjfqNmeZTU+H3fS8FKAlCRPJ/xGAjSLvQhWTcKj
-	KU8BPz0o6+VJC8XEY7B1Q8R9B7dMyY4+txh1y4ek88ADZssBsG2y+WAZ
-X-Gm-Gg: AZuq6aKR1Drw0VOMQL1C/wpg7E+u2YsZU1wEw58PhBVqmOUr6ycuYTB6PRbBKXYMyoK
-	ZH1YbNfwGaAFsX8IRPtnsBZvr6ErlS5UluRjlpI8tSxx/SlAUO3d4V0Sxj9dcebiA4Q9OdrMjCG
-	IHKu62xYFtkMTmqrEe3+UGc1fP5JgJb3RfMZr4uQDb8DGdNiZ5B+veivho1ZYHWffYzQrTyj77Y
-	eE8Cidneiws73FJlxYuUOiKy6IEIkL5diM7ksDNDEqHRsBDLcYyU+LD04fMBDB/HfvVILibleX9
-	eTwukp63uJCczu5FbO8WgtvK7l6N8zcXQbcLbMOpEmfx3qHDVskBGIa6X0TvKXPkZQ2bHG/WqUN
-	lZfKHZbvO1UV0kLWPelXW4SFHpTXK0hxz3ADwwXiJ1ic7R42OaYx/cqevLqG0wZ3BUdMTJVHZVG
-	CZTDxA7wgT6HiqW/QazBYq5HkvZgHLentg+qJRvYFbY2qA2YM=
-X-Received: by 2002:a05:600c:548d:b0:480:7162:fa48 with SMTP id 5b1f17b1804b1-483201ecd90mr35232785e9.13.1770373688883;
-        Fri, 06 Feb 2026 02:28:08 -0800 (PST)
-Received: from localhost.localdomain ([196.189.144.157])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d299bfsm108677295e9.2.2026.02.06.02.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 02:28:08 -0800 (PST)
-From: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Tinsae Tadesse <tinsaetadesse2015@gmail.com>,
-	linux-i2c@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] hwmon: spd5118: Fail probe if SPD writes are disabled
-Date: Fri,  6 Feb 2026 13:26:59 +0300
-Message-ID: <20260206102758.14626-1-tinsaetadesse2015@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="msRoMfjU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C350C19422
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 12:09:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770379749;
+	bh=YhG37LeR9IP7/7ZENXZfb+hZAsjNbmgjXLGpt1n63Gg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=msRoMfjUNYZLVWSFNPALKU4CRj1M4YsVLdoGppduDnAA1HF6rgD1IwSFh+HxxS5F3
+	 HojO2hiMoYCX2E5pIylsScXB6aUIfI9+GONpORIFxgWvSjwyEXKW3JskE7rxNWHkZ3
+	 WsOpXq1tJOmIXleWqCJQzlVv3aDVzpb8tjTrlXGQKotl3sLWA8kb/Ulwo7cSxNQ8VM
+	 fnsXP3cLtBH/sioDUJGOI3fPUlyZIOrkfJ/uoZxkwkcRCHF3A94uQ7enQOkLM+CXbE
+	 gug/SDbMQcU2idsaYgK77mQrzMQNSn40c3o5zu9+kZBUKZUnUicdFt5EF6M8TxHklX
+	 8lXEtlT0EbWJQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4094f6f4b7bso236065fac.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Feb 2026 04:09:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWN7CKx+XFAi3kVri6Cjylxp0nZ3h+Sj+0dRJFm8mOvjh4vXResjhJ31AecLoSbCfRkbc46IlkqxXEpag==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/LsLav+CKSCKNIOkHFe6QMTeQKxXHya6CQ7AwhGiffxP9L9IT
+	in/lGcmTK7NX31N5qS0LFNFirbOj2TLSugG1Mvwxx5r5xjLiOmxLZR/XtSpZSeA9Q6jhU/J/fmm
+	LlJvgRo9ZS9+ZpWL85pSZcy9Dr2qpKk0=
+X-Received: by 2002:a05:6870:d06:b0:3e8:983c:c8a with SMTP id
+ 586e51a60fabf-40a96e80e57mr1332822fac.37.1770379748073; Fri, 06 Feb 2026
+ 04:09:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAK8fFZ43wrQ8A_bO_g+rKN9O31sxULtqA0hUieZSzEH5KqeW1Q@mail.gmail.com>
+ <CAJZ5v0hEu_io2BAzp9weUDHwHngorjZ37GRUK=ngSXNjtp38qw@mail.gmail.com>
+ <CAK8fFZ65Vro5nQqJq_cvsY93hgDbfTdibWnNr5b0Bixzc-ESfg@mail.gmail.com>
+ <CAK8fFZ6Vi4xayvdKh-_eLi-nDNMLuEoMsvwEnb33QqnwS7o4BA@mail.gmail.com>
+ <1c8f748a-5c5d-4234-ae86-7bb12045a373@roeck-us.net> <CA+9S74i+BC3=E0opOPMff0cuC1OPYSecii0C8fVZ+NM7bptNcQ@mail.gmail.com>
+ <fee01c19-2711-487e-91e9-d57f9be04b98@roeck-us.net> <CA+9S74jR9jRRE-DNMxNg=6Uv2uDAUar2n-RkVDJqzkDfNu3eog@mail.gmail.com>
+ <39100538-a1f3-48dc-82d6-5e3314a43b4d@roeck-us.net> <CAJZ5v0jo4CV__AoUfqxuhVgkw6hA=hM_fBU+W=pTzqDLmNmytw@mail.gmail.com>
+ <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
+In-Reply-To: <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 6 Feb 2026 13:08:56 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
+X-Gm-Features: AZwV_Qi1z9oFoRF9DTyjg8MChUsKPf90ghSceMYHLJww31ZKI2B7idUzdkUm9ac
+Message-ID: <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
+Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average sysfs
+ read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Igor Raits <igor@gooddata.com>, 
+	Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, Daniel Secik <daniel.secik@gooddata.com>, 
+	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
+	Huisong Li <lihuisong@huawei.com>, Corey Minyard <corey@minyard.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SPD5118 requires write access for page selection, configuration,
-and cache synchronization during suspend/resume. If the host
-controller does not allow SPD writes, the driver cannot function
-properly.
+On Thu, Feb 5, 2026 at 11:34=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. Wysocki wrote:
+> > Cc: Corey
+> >
+> > On Thu, Feb 5, 2026 at 6:51=E2=80=AFPM Guenter Roeck <linux@roeck-us.ne=
+t> wrote:
+> > >
+> > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Raits wrote:
+> > > > On Wed, Feb 4, 2026 at 11:49=E2=80=AFPM Guenter Roeck <linux@roeck-=
+us.net> wrote:
+> > > > >
+> > > > > On 2/4/26 11:54, Igor Raits wrote:
+> > > > > > I have written a patch with the help of AI and it fixes the pro=
+blem. Attached.
+> > > > > >
+> > > > >
+> > > > > "No MIME, no links, no compression, no attachments.  Just plain t=
+ext"
+> > > >
+> > > > Sorry for that, I had assumed that attaching the file would make it=
+ in-line.
+> > > >
+> > > > > ... which means I can not provide inline feedback, which is the w=
+hole
+> > > > > point of the above.
+> > > > >
+> > > > > Your patch crosses subsystems, so it will need to be split in two
+> > > > > (assuming the ACPI side is even needed). Also, references to iDRA=
+C
+> > > > > in common code seem inappropriate.
+> > > >
+> > > > Yes, this I believe was the essential part (it was the last piece i=
+n
+> > > > my testing which fixed the hanging):
+> > > >
+> > >
+> > > Then I'll need to ask differently: What happens if you drop the IPMI =
+code,
+> > > and just keep the wait_for_completion -> wait_for_completion_timeout
+> > > change ? Would that be sufficient to solve the problem ?
+> >
+> > I'd rather say "Would that be sufficient to make the symptoms go
+> > away?" as it most likely papers over the real problem.
+> >
+>
+> Good point. Worse, it may result in UAF or memory leaks.
+>
+> > > Either case, the need for this change suggests that the ipmi change
+> > > may not be complete, since it should send a completion with an error.
+> >
+> > I think that reverting commit bc3a9d217755 ("ipmi:si: Gracefully
+> > handle if the BMC is non-functional") should also be considered as a
+> > possible way forward because it clearly did not improve things as
+> > expected, at least in this particular case.
+> >
+>
+> I tend to agree. I ran a number of AI code reviews over the patch, and
+> each time it finds new (and different) problems. The fact that the acpi
+> patch is still needed even after applying the ipmi changes suggests that
+> something is still missing in the ipmi code.
+>
+> > It evidently did something that confuses things quite a bit.  Either
+> > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UNSPECIFIED, or it is
+> > the "hosed" state and refusing to accept messages.
+> >
+>
+> More than that. My latest AI results are below, just for reference
+> (using Gemini 3 with Chris Mason's debug prompts). The prompt I used
+> for this run is:
 
-Detect this state using adapter quirks and determine whether to
-stop the probe.
+Well, I guess it's time to send a revert patch then.
 
-Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
----
-Changes in v2:
-- Return the device probe error value
+> "
+> The top commit in the linux/ directory results in hung tasks if the BMC
+> stops responding. Using @review-prompts/kernel/debugging.md analyze the
+> patch, identify the reason for the hung task problem, suggest and impleme=
+nt
+> a fix. Note that there may be more than one problem in the patch, so anal=
+yze
+> the complete patch and do not stop after fiding the first regression.
+> "
+>
+> I think that catches most of the problem, but not all of it.
+>
+> Guenter
+>
+> ---
+>
+> Summary of crash or warning:
+> Hung task detected in ipmi_si driver when BMC becomes non-functional.
+> Processes waiting for IPMI responses (e.g. ipmitool, monitoring agents) e=
+nter D state and never recover.
+>
+> Kernel version if available:
+> Top of tree (commit bc3a9d217755f65c137f145600f23bf1d6c31ea9)
+>
+> Machine type if available:
+> Generic Server with BMC
+>
+> Cleaned up copy of oops or stack trace:
+> [  120.123456] INFO: task ipmitool:1234 blocked for more than 120 seconds=
+.
+> [  120.123457]       Not tainted 6.14.0-rc1 #1
+> [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disable=
+s this message.
+> [  120.123459] task:ipmitool        state:D stack:    0 pid: 1234 ppid:  =
+100 flags:0x00000000
+> [  120.123460] Call Trace:
+> [  120.123461]  <TASK>
+> [  120.123462]  __schedule+0x123/0x456
+> [  120.123463]  schedule+0x45/0x78
+> [  120.123464]  schedule_timeout+0x9a/0xbc
+> [  120.123465]  wait_for_completion+0xde/0xf0
+> [  120.123466]  ipmi_request_settime+0x123/0x145
+> [  120.123467]  ...
+> [  120.123468]  </TASK>
+>
+> Any other kernel messages you found relevant:
+> N/A
+>
+> Explanation of the problem:
+> 1. Hung Task:
+> The patch "ipmi:si: Gracefully handle if the BMC is non-functional" intro=
+duces a new state `SI_HOSED` to handle BMC failures. When the driver detect=
+s that the BMC is not responding, it transitions to `SI_HOSED` and fails th=
+e currently processing message (`curr_msg`). However, if a new message is q=
+ueued via `sender()` (populating `waiting_msg`) during a recovery probe (st=
+ate `SI_GETTING_FLAGS`), and that probe subsequently fails, the state machi=
+ne transitions back to `SI_HOSED`. In this transition, the driver checks an=
+d fails `curr_msg`, but it neglects to check or fail `waiting_msg`. As a re=
+sult, the `waiting_msg` remains in the queue indefinitely, causing the wait=
+ing process to hang.
 
----
- drivers/hwmon/spd5118.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+That's quite convincing and it would explain the observed symptoms.
 
-diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-index 5da44571b6a0..9aa2b2aa6b39 100644
---- a/drivers/hwmon/spd5118.c
-+++ b/drivers/hwmon/spd5118.c
-@@ -525,6 +525,8 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
- 	unsigned int capability, revision, vendor, bank;
- 	struct spd5118_data *data;
- 	struct device *hwmon_dev;
-+	struct i2c_client *client;
-+	const struct i2c_adapter_quirks *quirks;
- 	int err;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-@@ -552,6 +554,19 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
- 	if (!spd5118_vendor_valid(bank, vendor))
- 		return -ENODEV;
- 
-+	/*
-+	 * SPD5118 requires write access for correct operation
-+	 * (page selection, configuration, and suspend/resume cache sync).
-+	 * If the SPD writes are blocked by the SMBus controller, the
-+	 * probe fails.
-+	 */
-+	client = to_i2c_client(dev);
-+	quirks = client->adapter->quirks;
-+	if (quirks && (quirks->flags & I2C_AQ_SPD_WRITE_DISABLED)) {
-+		return dev_err_probe(dev, -ENODEV,
-+				"SPD Write Disable is set on adapter; refusing probe\n");
-+	}
-+
- 	data->regmap = regmap;
- 	mutex_init(&data->nvmem_lock);
- 	dev_set_drvdata(dev, data);
--- 
-2.52.0
+> 2. Excessive Polling (Timer Overwrite):
+> In `smi_timeout()`, the timer is unconditionally reset to a short timeout=
+ (e.g., 10ms) at the end of the function, unless the state machine is IDLE.=
+ When the state machine returns `SI_SM_HOSED`, `smi_event_handler()` correc=
+tly sets the timer to a long backoff (1 second). However, `smi_timeout()` s=
+ubsequently overwrites this with the short timeout. This causes the driver =
+to poll the hosed BMC every 10ms instead of backing off for 1 second, resul=
+ting in unnecessary CPU overhead.
 
+Well, that's not nice, but it doesn't seem to be related to the
+observed symptoms.
+
+> Functions, snippets and call traces of code related to the problem:
+>
+> drivers/char/ipmi/ipmi_si_intf.c: smi_event_handler()
+>
+>         } else if (si_sm_result =3D=3D SI_SM_HOSED) {
+>                 /* ... */
+>                 smi_info->si_state =3D SI_HOSED;
+>                 if (smi_info->curr_msg !=3D NULL) {
+>                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
+>                 }
+>                 /* BUG 1: waiting_msg is NOT checked here! */
+>
+>                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED); /* S=
+ets 1s timeout */
+>                 goto out;
+>         }
+>
+> drivers/char/ipmi/ipmi_si_intf.c: smi_timeout()
+>
+>         smi_result =3D smi_event_handler(smi_info, time_diff);
+>         /* ... */
+>         if (smi_result !=3D SI_SM_IDLE)
+>                 smi_mod_timer(smi_info, timeout); /* BUG 2: Overwrites 1s=
+ timeout with ~10ms */
+>
+> List of potential commits related to the problem:
+> bc3a9d217755f65c137f145600f23bf1d6c31ea9 ipmi:si: Gracefully handle if th=
+e BMC is non-functional
+>
+> Suggested fix:
+> 1. When entering `SI_HOSED` state in `smi_event_handler`, check for and f=
+ail any pending `waiting_msg` in addition to `curr_msg`.
+> 2. In `smi_timeout`, do not reset the timer if the state is `SI_HOSED`, p=
+reserving the backoff timeout set by `smi_event_handler`.
+>
+> ---
+> Suggested diffs from that run:
+>
+> diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si=
+_intf.c
+> index 1c65275906b4..023b0e819f91 100644
+> --- a/drivers/char/ipmi/ipmi_si_intf.c
+> +++ b/drivers/char/ipmi/ipmi_si_intf.c
+> @@ -810,6 +810,11 @@ static enum si_sm_result smi_event_handler(struct sm=
+i_info *smi_info,
+>                          */
+>                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
+>                 }
+> +               if (smi_info->waiting_msg !=3D NULL) {
+> +                       smi_info->curr_msg =3D smi_info->waiting_msg;
+> +                       smi_info->waiting_msg =3D NULL;
+> +                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
+> +               }
+>                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
+>                 goto out;
+>         }
+> @@ -1130,10 +1135,12 @@ static void smi_timeout(struct timer_list *t)
+>                 timeout =3D jiffies + SI_TIMEOUT_JIFFIES;
+>         }
+>
+> -       if (smi_result !=3D SI_SM_IDLE)
+> -               smi_mod_timer(smi_info, timeout);
+> -       else
+> +       if (smi_result !=3D SI_SM_IDLE) {
+> +               if (smi_info->si_state !=3D SI_HOSED)
+> +                       smi_mod_timer(smi_info, timeout);
+> +       } else {
+>                 smi_info->timer_running =3D false;
+> +       }
+>         spin_unlock_irqrestore(&(smi_info->si_lock), flags);
+>  }
+
+Well, I'd leave fixing the IPMI handling to somebody familiar with that cod=
+e.
