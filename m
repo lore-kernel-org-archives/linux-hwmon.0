@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82282367CF;
-	Fri,  6 Feb 2026 16:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E98B2367CF;
+	Fri,  6 Feb 2026 16:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770396456; cv=none; b=oBg3QCup8CLL0dp41F+wQ6uJMazy/7Tn5iebLU05UrRrLC2fQtGLnEFRXcQSWk7qx7kYNDV3oZ0V7M3/4jn+5S6lkiDaVOWpNz8haRxlffX0AVRlcdAxTaceWa02kyL86YnOjxG3XfDc4qpYBmfIfrQojMO+QWd5o2WQTtMXH1s=
+	t=1770396553; cv=none; b=rK1gzTB9XydEeYbCHLKIFot2phg+v32X8AHKEJzvFNGd9s0W69eXNuGZn9+E6QaAHfnES6vPm1b6t+G7Zzzk8sxpss7b6m3R7H4mUH26xdxWKVKw+BClJtEEZCMd3uJKouBNwWm2bJh0zXwkLSBJgIU+tL/vhXycDrJKI4pAsas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770396456; c=relaxed/simple;
-	bh=8ni2wyMhJ8YY1Q56zt2R6P4WRq1z9vdPykPrpeyDO00=;
+	s=arc-20240116; t=1770396553; c=relaxed/simple;
+	bh=Yl4dSccPhR6B3kyqtOX1xwX69pXmeE87NneoQgVKVZI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oDjj0gpP7kUYM/IowLfTkTlvoZtzquvL3QsfruVleLYT7yan5YtJGm80s8xPFhRh5Ki8mhUFZmGjvOZLZkJozATDuP3Qhsq+fbxpeWT887T/NtZcf+qczC4sxiINd3bvOD4DzNvwP4RMpL2RTWIdy/5+EnHqRimvkvx4zIWbZvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEWrQfhB; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=qksoXy7UidbIwk1GIDknvsF/hC7Ya/zXkVJabZWumIC2D1n7b3Sc3y+5QUPynrtmBhPqvrZVRAA6VvPgXH1PXwuPXvDAxhhp9n+VqU56XAOmbWg29+WT8xAGdYDB5DpvIwvOvkuFfu05UWz0bO20sKiGAj02lOLq33huHa4Im3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrSsuIJ9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEWrQfhB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D253EC116C6;
-	Fri,  6 Feb 2026 16:47:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrSsuIJ9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48ECBC116C6;
+	Fri,  6 Feb 2026 16:49:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770396456;
-	bh=8ni2wyMhJ8YY1Q56zt2R6P4WRq1z9vdPykPrpeyDO00=;
+	s=k20201202; t=1770396552;
+	bh=Yl4dSccPhR6B3kyqtOX1xwX69pXmeE87NneoQgVKVZI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KEWrQfhB8ij0qK+sIIb2mdun5UyVkmF8NKV+EWRP1aF4QA317jEHXzKZZCS7b5ud5
-	 AW9aDZEJjcTPRJMQw61eMxc/1zMWtdafPIeLtrdhEdt4sL7jQL5tUrJphD5/HLvlGS
-	 ASXN5KjW9AtK6X+WCeeAPl6sziJkycl63+s+Jh65BOABWdeDENB1ZSxRucHxMmZPvb
-	 7R62ZzYfKrthDXJTQnCqQxCS3zZ74vLXKBsaKlJGdoKcVhrWmTf5cTv0DmKms2szEG
-	 JoprrHLGHY07h2/22YSQ0ec5cgMMif0h+BAq7zXwD4urQ+frqvOtlUZ/xlduSw5je5
-	 DwkquriYlGL4Q==
-Message-ID: <a9d4b53f-d8c2-4b31-aa13-901838c2933c@kernel.org>
-Date: Fri, 6 Feb 2026 17:47:31 +0100
+	b=DrSsuIJ90A7uFY7Wwc0xfQFsJbe+a/Q9JgAQFA/PXm6qoZlmbERTqHdZyv1aif9UJ
+	 6pXigSlUdK6gPfl2v4iwhkYVK/3GHOrgZCsXDBO3SI0eO4m97NQIiqIHX5ZjhYw3Za
+	 zk2e4oj3odNJVR1zQveWcr4B4Y+BUR9iBq00hUNLIrHTU4CnXu+w0+y60dj7HCJvKN
+	 Tdz71IwMwFZjsw8uCeSL1QwuERWhbk8P+OprCmJtUgI96Hhly5CC6hOZvPEHYrQEz/
+	 /xdiQB/iamKICvuu9jfnX9i+3+vmkOk9B6RTfkepET0yA5fliFsT52IrMHx89tiy7C
+	 34X9mM3/UlvlQ==
+Message-ID: <942d6dc7-26ad-405a-bb6a-270e2261a329@kernel.org>
+Date: Fri, 6 Feb 2026 17:49:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -36,13 +36,14 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: add support for MCP998X
-To: victor.duicu@microchip.com, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net
-Cc: marius.cristea@microchip.com, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-doc@vger.kernel.org
+To: Victor.Duicu@microchip.com, linux@roeck-us.net
+Cc: corbet@lwn.net, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ robh@kernel.org, linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
+ linux-doc@vger.kernel.org, Marius.Cristea@microchip.com, conor+dt@kernel.org
 References: <20260127151823.9728-1-victor.duicu@microchip.com>
  <20260127151823.9728-2-victor.duicu@microchip.com>
+ <0b3979d6-895f-4c8a-8251-d3c793385bf4@roeck-us.net>
+ <595e616ad403e805ee50fa7bc57d25584949924d.camel@microchip.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -88,106 +89,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260127151823.9728-2-victor.duicu@microchip.com>
+In-Reply-To: <595e616ad403e805ee50fa7bc57d25584949924d.camel@microchip.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 27/01/2026 16:18, victor.duicu@microchip.com wrote:
-> From: Victor Duicu <victor.duicu@microchip.com>
+On 06/02/2026 15:17, Victor.Duicu@microchip.com wrote:
+>>> +
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: Signal coming from ALERT/THERM pin.
+>>> +      - description: Signal coming from THERM/ADDR pin.
+>>> +      - description: Signal coming from SYS_SHDN pin.
+>>> +
+>>> +  interrupt-names:
+>>> +    items:
+>>> +      - const: alert-therm
+>>> +      - const: therm-addr
+>>> +      - const: sys-shutdown
+>>
+>> The top-level definition of interrupt-names specifies exactly 3
+>> items.
+>> How does this interact with variants that only have 2 interrupts?
+>>
 > 
-> This is the devicetree schema for Microchip MCP998X/33 and
-> MCP998XD/33D Multichannel Automotive Temperature Monitor Family.
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Victor Duicu <victor.duicu@microchip.com>
-> ---
->  .../bindings/hwmon/microchip,mcp9982.yaml     | 205 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  2 files changed, 211 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml b/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-> new file mode 100644
-> index 000000000000..05ea3c6a5618
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/microchip,mcp9982.yaml
-> @@ -0,0 +1,205 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/microchip,mcp9982.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MCP998X/33 and MCP998XD/33D Temperature Monitor
-> +
-> +maintainers:
-> +  - Victor Duicu <victor.duicu@microchip.com>
-> +
-> +description: |
-> +  The MCP998X/33 and MCP998XD/33D family is a high-accuracy 2-wire
-> +  multichannel automotive temperature monitor.
-> +  The datasheet can be found here:
-> +    https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/MCP998X-Family-Data-Sheet-DS20006827.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mcp9933
-> +      - microchip,mcp9933d
-> +      - microchip,mcp9982
-> +      - microchip,mcp9982d
-> +      - microchip,mcp9983
-> +      - microchip,mcp9983d
-> +      - microchip,mcp9984
-> +      - microchip,mcp9984d
-> +      - microchip,mcp9985
-> +      - microchip,mcp9985d
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Signal coming from ALERT/THERM pin.
-> +      - description: Signal coming from THERM/ADDR pin.
-> +      - description: Signal coming from SYS_SHDN pin.
-
-As Guenter pointed out - code is wrong (thanks Guenter!)
-
-This does not match your if:then:.
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: alert-therm
-> +      - const: therm-addr
-> +      - const: sys-shutdown
-
-Neither this.
+> The chips with "D" in the family have the sys-shutdown and alert-therm
+> interrupt pins. The rest have alert-therm and therm-addr interrupt
+> pins. The conditional assigns the interrupt names depending on the
+> chip.
 
 
-...
+No, the top level says you have three interrupts. Do not create bindings
+which contradict themselves.
 
-> +    then:
-> +      properties:
-> +        interrupts-names:
-> +          items:
-> +            - const: alert-therm
-> +            - const: sys-shutdown
+More important I am 100% sure this fails tests if you wrote proper, so a
+complete example. It passes only because you made a limited example,
+without properties.
 
-So three interrupts, but two AND three interrupt-names? This is mess.
-
-> +      required:
-> +        - microchip,power-state
-> +    else:
-> +      properties:
-> +        interrupts-names:
-> +          items:
-> +            - const: alert-therm
-> +            - const: therm-addr
-
-Where are all b4 lore links for previous versions so I can trace the
-actual review happening here? Why aren't you using b4?
+No, drop review, fix and request re-review.
 
 Best regards,
 Krzysztof
