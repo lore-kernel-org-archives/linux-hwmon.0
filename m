@@ -1,130 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DB1242D89;
-	Fri,  6 Feb 2026 09:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19FC2F290A
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 10:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770370727; cv=none; b=enaXfMoFnWhdYhhcwHF4oc8YmzXVun5qBZwSUckuq3EboCgritVlZIJC8F4JYN2o95Zcb1tngW8/3d9GCE1ArJh2vGFFHTME3+rB0+7FzPr1Pg1ysXhMZBkE+39H+OKLpOvAyONRtCTZjSzI5F8LquqCtZ1QlbQoroE19MCaOEs=
+	t=1770373691; cv=none; b=g31rIJwTiZQOTjZjcj4TE3W1KItDQJ91XqNVvZ4D0AE94fYa3Pdq9R3D0vdhu7GHTYhGUjStds+IPCqokuXAX4okaPnaIGnf9A7y5rAD6uo7SvaWy8x9lhPx5FCyEpN+8sfgq4umDP17dsRhUxW+TesgPtNfAvA1qT6FW4mmPMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770370727; c=relaxed/simple;
-	bh=PqYGsn/8F6q+TyD961a6MCyXjj9Egvi0GM/8Doya3cc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j8kaE+jM9EjjOSsQYSeJbC7YlsoS/z4qdSlZzUxS47+/EFcVamY7ONT0PXXz0bY6DMhy49yJkOpmsntZEzAzDshoVV7cVKnYGGvi8O/F8dNhtf4UycySxFl5x71i0xJKCu+iRbcUki12VhFHX0MvcNE+m9XyQCO6hHoQpBUn7po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FvBsdqFD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770373691; c=relaxed/simple;
+	bh=MGzU5XV9oidAi7TVfG3Lywdby56GcQhKhZjDkTR9Nnk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=puAIa+7mz1ZGyuijNPagDR4wsmpUWcDmzxMTFMCKVNgvmyhjDqeYph9XppLsdwFdCXVhfJsyNU8hdivBDYGoHrSaSQ1Oi1PPFVSRVyz86jNAI07pNESCh0r4eIn3yuiVpnpUtwnP6irP9Bsr+o7h7NDJIHIhziFqAeA7KBV7sB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cRG/guzL; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FvBsdqFD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E912BC116C6;
-	Fri,  6 Feb 2026 09:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770370727;
-	bh=PqYGsn/8F6q+TyD961a6MCyXjj9Egvi0GM/8Doya3cc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FvBsdqFD3mEiukbYUfsRBKjFu0b+XwX3vF8qFkqEl7n4+ksOL+b9DmQeFCY9Vklmh
-	 BViKnMCkGrbSN26zHxJCpqAqPNGVhIf7yMJX7r8+Wy4ZByxQ3P85g/SYrC8m/u1UDy
-	 VLH3Ue+adIW1J45Bjf3aIAql4MoENcCE96A2rrIE05mpIzRpoBkY5/W/qea+7bHzL9
-	 A3TZg9h3eaSHH8Ix0P83CGYypihPXmXXU/QyztnUk/9/hM4CGknBDBTI479XbD2gsi
-	 cL+/DM9AMjUcL9PFdLb/7yaw0WxQjn9MWY6QzPx3/2jKaboSSjKwXIETzXG6sbXtQ8
-	 vFXpGlMOWJmow==
-Message-ID: <57a1a5fc-5ae0-40b7-97fa-1612b8da997e@kernel.org>
-Date: Fri, 6 Feb 2026 10:38:42 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cRG/guzL"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-482f2599980so22964905e9.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Feb 2026 02:28:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770373689; x=1770978489; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1znmvJRZinh0UjxXVnbV8XU237BL4In8MXKnqCzTiis=;
+        b=cRG/guzLCvhrYnEdDGTwevhiQ/cwTE1LcIBoz71CtdDrX8xt3lEPRcjjL82M9Diwv0
+         Bn7Wvr7R3OMYbrluamnJEmXm+g9kW7SC77cdAAJcATOZIJpY8X/mZ1bdF/XOIWKn7Buj
+         xYRUrXaL8WIBWvoQZDqoVOAmsgpLtDRk6xrqoKORKZO6ywPeqjGBrvRiReLKJU2F22qC
+         DNP/cq0dP5Mn3LFlFBrzcn+yDfLI3+diky+ISCY13gCa8x9zhL7+nUT8kG0uFISkTvEr
+         3FzJAiZxI8PFiD+3D9R1VurO/UK/gddQQ2D5r5Us1KWt0CJq137mxT/gn85h1t4jEy8n
+         znUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770373689; x=1770978489;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1znmvJRZinh0UjxXVnbV8XU237BL4In8MXKnqCzTiis=;
+        b=ixmniF3UdxucSXTCojS03tuEOEWObJM6hgZbnoD0EKyplHfqnjIaRW098U4dI2gW6h
+         jArZZiOJGkmtCm98+ZFK9v9HY78sUEX674tSYGOoRnidjpWN00EY1nOD+JlwO9MQmD5Z
+         TrGyvY+v7aZRl7gq76SnRU293h2YE5JAexHi/ur2UgkoRYd7uTMrrLCRkBs1y5MZUfFv
+         CFpKc0JfJ6b74aJX/ZOGKx/S/eojAgmJ7EcluxlNdCpCZSesN6vLV2WpD9Qq7h5PV8V8
+         yYFHyaMRS1t4MNp/qTGPyRGFS9JwWksFz8MMh/d3JOIKHbMSkc7lnbxspDS9N0UiSidO
+         nQDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLzu+Ny5KEdxkUWdvJYNZgdy22xbnb5KWDRY7nE7aozN+kJHhsS7OANghWTdt/ax4eI894OWBbWVP17w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8kZdC+NJU6bjfqNmeZTU+H3fS8FKAlCRPJ/xGAjSLvQhWTcKj
+	KU8BPz0o6+VJC8XEY7B1Q8R9B7dMyY4+txh1y4ek88ADZssBsG2y+WAZ
+X-Gm-Gg: AZuq6aKR1Drw0VOMQL1C/wpg7E+u2YsZU1wEw58PhBVqmOUr6ycuYTB6PRbBKXYMyoK
+	ZH1YbNfwGaAFsX8IRPtnsBZvr6ErlS5UluRjlpI8tSxx/SlAUO3d4V0Sxj9dcebiA4Q9OdrMjCG
+	IHKu62xYFtkMTmqrEe3+UGc1fP5JgJb3RfMZr4uQDb8DGdNiZ5B+veivho1ZYHWffYzQrTyj77Y
+	eE8Cidneiws73FJlxYuUOiKy6IEIkL5diM7ksDNDEqHRsBDLcYyU+LD04fMBDB/HfvVILibleX9
+	eTwukp63uJCczu5FbO8WgtvK7l6N8zcXQbcLbMOpEmfx3qHDVskBGIa6X0TvKXPkZQ2bHG/WqUN
+	lZfKHZbvO1UV0kLWPelXW4SFHpTXK0hxz3ADwwXiJ1ic7R42OaYx/cqevLqG0wZ3BUdMTJVHZVG
+	CZTDxA7wgT6HiqW/QazBYq5HkvZgHLentg+qJRvYFbY2qA2YM=
+X-Received: by 2002:a05:600c:548d:b0:480:7162:fa48 with SMTP id 5b1f17b1804b1-483201ecd90mr35232785e9.13.1770373688883;
+        Fri, 06 Feb 2026 02:28:08 -0800 (PST)
+Received: from localhost.localdomain ([196.189.144.157])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d299bfsm108677295e9.2.2026.02.06.02.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 02:28:08 -0800 (PST)
+From: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: Tinsae Tadesse <tinsaetadesse2015@gmail.com>,
+	linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/2] hwmon: spd5118: Fail probe if SPD writes are disabled
+Date: Fri,  6 Feb 2026 13:26:59 +0300
+Message-ID: <20260206102758.14626-1-tinsaetadesse2015@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
- <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
- <7911bbae-c507-4420-a05c-89242941f774@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <7911bbae-c507-4420-a05c-89242941f774@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 06/02/2026 10:27, Konrad Dybcio wrote:
-> On 2/5/26 10:14 PM, Manaf Meethalavalappu Pallikunhi wrote:
-> 
->> +static unsigned int bcl_get_version_major(const struct bcl_device *bcl)
->> +{
->> +	u32 raw_val = 0;
->> +
->> +	bcl_read_field_value(bcl, F_V_MAJOR, &raw_val);
->> +
->> +	return raw_val;
->> +}
->> +
->> +static unsigned int bcl_get_version_minor(const struct bcl_device *bcl)
->> +{
->> +	u32 raw_val = 0;
->> +
->> +	bcl_read_field_value(bcl, F_V_MINOR, &raw_val);
->> +
->> +	return raw_val;
->> +}
-> 
-> Do we really need so many read-1-value functions?
+SPD5118 requires write access for page selection, configuration,
+and cache synchronization during suspend/resume. If the host
+controller does not allow SPD writes, the driver cannot function
+properly.
 
-Yes, because we need multiple layers of indirections and multiple
-abstract layers, so the code will be difficult to understand. This gives
-us job security. Also, more lines of code justifies our spent time.
-That's why this should also include kerneldoc of at least 10 lines.
+Detect this state using adapter quirks and determine whether to
+stop the probe.
 
-Best regards,
-Krzysztof
+Signed-off-by: Tinsae Tadesse <tinsaetadesse2015@gmail.com>
+---
+Changes in v2:
+- Return the device probe error value
+
+---
+ drivers/hwmon/spd5118.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+index 5da44571b6a0..9aa2b2aa6b39 100644
+--- a/drivers/hwmon/spd5118.c
++++ b/drivers/hwmon/spd5118.c
+@@ -525,6 +525,8 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+ 	unsigned int capability, revision, vendor, bank;
+ 	struct spd5118_data *data;
+ 	struct device *hwmon_dev;
++	struct i2c_client *client;
++	const struct i2c_adapter_quirks *quirks;
+ 	int err;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+@@ -552,6 +554,19 @@ static int spd5118_common_probe(struct device *dev, struct regmap *regmap,
+ 	if (!spd5118_vendor_valid(bank, vendor))
+ 		return -ENODEV;
+ 
++	/*
++	 * SPD5118 requires write access for correct operation
++	 * (page selection, configuration, and suspend/resume cache sync).
++	 * If the SPD writes are blocked by the SMBus controller, the
++	 * probe fails.
++	 */
++	client = to_i2c_client(dev);
++	quirks = client->adapter->quirks;
++	if (quirks && (quirks->flags & I2C_AQ_SPD_WRITE_DISABLED)) {
++		return dev_err_probe(dev, -ENODEV,
++				"SPD Write Disable is set on adapter; refusing probe\n");
++	}
++
+ 	data->regmap = regmap;
+ 	mutex_init(&data->nvmem_lock);
+ 	dev_set_drvdata(dev, data);
+-- 
+2.52.0
+
