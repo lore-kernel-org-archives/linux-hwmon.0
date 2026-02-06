@@ -1,119 +1,239 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19BDF199E94
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 06:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7419718B0A;
+	Fri,  6 Feb 2026 08:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770360392; cv=none; b=PtWlpacNdCDTLnKALDmmDoBT3ZTD4SNtP+zoKU8wep/bF8BH37AYx59gDFsxx4Y9n6xoHBxo8R18oZniZUXC12yKEhl7Hy/7yExQ6F1CC3K7ii8s8b4n2mfdjsiZaSY7QszrpRrKmiIDYfjN16aL8Xdn4HASe+B3MKExdiuEXY0=
+	t=1770365345; cv=none; b=XVfVsls62r9zE4CcYKfSuFApxnwwQ4ov9RHLjKB1lJrBEabH+s4i5isFIDSjlgddpy9J+W3eZDtLVeK2KNnzkvrHbuHNJR0jwdl//6/4IiB2HxVOTVVZHNdNmPTiiC9tjXWFyG99JDkPhlbi/prtjhqnjPJZadu/gO774vevO/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770360392; c=relaxed/simple;
-	bh=WiVCL2N7W7Z83sa4da1RkbscoHvjHZG2CD9WHgQ1Oe8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e8SSZZnGROY6xI1dCMxILYW1/JzqQrKd0L8Ue2yOzjKK3umUQBC2mEQWROWTlQEbBekpuUUDVtdRehn5FBeauvp1MET6jr9SSf2FGnoB83I9cZNgMQBo5cq5pfYDcZmLFtsirwfmJF1k6IelS8wfwNdEREJb2KmTaObkH6WmK/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J8boQzC0; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770365345; c=relaxed/simple;
+	bh=PcwT3lXtBIV6a0P2Dxld1TPIWyUNGaZpfrDN01TGU9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZChCQ0pVyNBgToo/nS76IZyDBvBvZ9Ye4bzdsRauKtQklKTMEK77YoYtYMHAy9hhnZKlGP8CaeKu/O/hgQtQdxcojvYeJJ6DR88AV4lQiWfdCk52qqd1NQJ2rEAw2nukO0EKTokgGb11SuPFe/IV1itirtiqjvQGr9EWn/edp/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8ute3ad; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J8boQzC0"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a929245b6aso3366885ad.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Feb 2026 22:46:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770360391; x=1770965191; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xFavTOM5Ob1Mhf/gDvrOoo/QZ0J69oHZtkL9VA2e+uw=;
-        b=J8boQzC01eLJNaBXu3gkKRoDjtQSxetodoACWsKefCaJwYMCE21zLrYeHw84e1PWvt
-         8J3wnM7gJ81w+12H7at5NytIUjKznCAZwbgvLucxoBcHmt1bDRGAoYohzWDd345z+7ln
-         htt7ogkHl4UQdY1mSU6C0pGcv5h8d6CEi8pXZcMy2Fqyi+SBzl83pq9oWGX8tbVRo/Ov
-         a1Z+HwNE5sfvQjxzQNKSCKNAFsqBrmHIVknHgZus0IyZrEXLaGWiskWNmFPTLGkL5ONX
-         lSNaafVoYs+nURBYHwSmMUSzfLkvSsPD63tR1pcMxvrVC78qmL7OIsU5pfEYWXuqInTf
-         e2YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770360391; x=1770965191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xFavTOM5Ob1Mhf/gDvrOoo/QZ0J69oHZtkL9VA2e+uw=;
-        b=SjBuShHIeoCXYsxuR8oCKX/tAtScQR9yWjYK7lyKeChByduh/EsC3+JezKcSmvHcwC
-         ELNncPtGpeENfH2nb7aBqurPuJ2VFstdhvh13Ict2CxCX0PDjj/aG3DBaXzo5p8a6ARy
-         auVcmY4tzqWdNFx4Y0LxnsGCyohBs0DsiVeWsHiWEXMfKJ1hPbuRHo1akIRWqrJbuvQN
-         cu/M5tV8oItJ4zSLWM5ivggba9xnw6uzelv+fllCD1kRORV/DAePv8rfbSUEkYjXYuMi
-         TqFu3JEtnwFBUJVv8KEanR7/oY6FWyZdrEjuKrmJMP24wsSyubAU0UCB4Xit4m2YNn7v
-         Z44A==
-X-Forwarded-Encrypted: i=1; AJvYcCUcRKOJR2ELKmHJYm4Cf0JZECvxNqAOomMO9MZu5+lgX4fnmMtfJN53kjlN24FbdIfX6hkIF94FoCYaQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YziDHMEUUdzfLfjHyhlcDKcIDIf8+Mtb89VQ55SPLiutjpDJR/6
-	0YLWLGs73SU7SM9t0kYL4LnkceHoS5L29GYLtmVHEOfpSh3G26Ed/gH4
-X-Gm-Gg: AZuq6aKbncjmBfYKtgrBQu3erb3QVyV5DDg91i6Tzj+oFGtyYjxiTYoYFUD1ofZIngp
-	Mr1uB94Jv6qG1QsC6ydb3VOcx046UDXsfYGNmVNzjk+sCQ8aXj+cYwEx1aBBy4SoqVsSO9ySEeP
-	/3Q681EezfatV5ufHcTGueRLp2aFYV77f3zwYf4yUtT4Ko6pIb/AhXHtB4MSbRMHHcrYPV28jm4
-	KDDIXunEXolj42FS/ooA/+wmWdtLXed/mGIDL8QDZTCEXjQ6on2n+XidDFUsMiYxoQSuuS9K3BE
-	s1OG0fXhbe0zTOePsX4qvSwSGaEMdbdwr0ULuAhV5XRkc/ep1I2COmx0Qug5Ppgw4i5AxACkw59
-	Uc9eGg0YEUqEUMWPuY/id11jt+exDiPUKkgRSNGiGm5yh+CnVJTPiz72RkXIarp/HDAs7RPUrum
-	u1Lvme/h3bYpRN
-X-Received: by 2002:a17:902:ea06:b0:2a9:4cab:f4f5 with SMTP id d9443c01a7336-2a95192a995mr20043405ad.38.1770360391460;
-        Thu, 05 Feb 2026 22:46:31 -0800 (PST)
-Received: from localhost ([218.32.81.133])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9521b8d79sm13229505ad.61.2026.02.05.22.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 22:46:30 -0800 (PST)
-From: Carl Lee <qq1145099@gmail.com>
-X-Google-Original-From: Carl Lee <carl.lee@amd.com>
-Date: Fri, 6 Feb 2026 14:46:28 +0800
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	peter.shen@amd.com, colin.huang2@amd.com
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: pmbus: mpq8785: add MPQ8786
- support
-Message-ID: <aYWORPv2goAEfIgt@carl-amd>
-References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
- <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-1-3744cd9b2850@amd.com>
- <20260205-cordial-warping-pronghorn-aeebe7@quoll>
- <79a6a2bc-4894-4ff9-8a11-5ed71195cf09@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8ute3ad"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419DDC116C6;
+	Fri,  6 Feb 2026 08:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770365344;
+	bh=PcwT3lXtBIV6a0P2Dxld1TPIWyUNGaZpfrDN01TGU9o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k8ute3adGhsxg+35RrkxHzX2AIaqfEWPhwNSun8/XMBmXDvyhZc5uOf4O1b4NAEAc
+	 x92MvfdF5LtI99WG7gb2i67mMY3Fv0YWcFBSQTxbGU1yMVDRMriSTsYbsT4lfbDDQc
+	 mNzeopJzYLhxdDfL8Fa31FBzWnf2QEgULbjWCtPpz6ARTrhkS6OtO5uoRoMDDdLTm9
+	 h8X8k//J8I21D4phS/gASwYcVTDPolqcR2ziVuRxXPsayaYq/bKndwD5x59bpgyZ/o
+	 qqmls+7bvxYzjrQV1H8biBOqAyJiqz2irp2BeKkprM+Q5YRNNQTFAtQr3zKk9GEChM
+	 JggcbCBWYsjhw==
+Date: Fri, 6 Feb 2026 09:09:02 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	amit.kucheria@oss.qualcomm.com, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: hwmon: Add qcom,bcl-hwmon yaml bindings
+Message-ID: <20260206-tricky-funky-bison-ffafa3@quoll>
+References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
+ <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <79a6a2bc-4894-4ff9-8a11-5ed71195cf09@roeck-us.net>
+In-Reply-To: <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
 
-On Thu, Feb 05, 2026 at 08:17:07AM -0800, Guenter Roeck wrote:
-> On Thu, Feb 05, 2026 at 02:46:29PM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Feb 05, 2026 at 06:01:37PM +0800, Carl Lee wrote:
-> > > Add device type support for MPQ8786
-> > > 
-> > > Signed-off-by: Carl Lee <carl.lee@amd.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> > > index 90970a0433e9..aec7397a29f9 100644
-> > > --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> > > +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> > > @@ -19,6 +19,7 @@ properties:
-> > >        - mps,mpm3695-25
-> > >        - mps,mpm82504
-> > >        - mps,mpq8785
-> > > +      - mps,mpq8786
-> > 
-> > Your driver code says they are the same, so compatible. Express it with
-> > fallback or provide real rationale in commit msg.
-> > 
-> 
-> Agreed. The mpq8785 datasheet is public, but the mpq8786 datasheet isn't.
-> That makes it all but impossible to determine if there are indeed no
-> notable differences between the chips.
-> 
-> Guenter
+On Fri, Feb 06, 2026 at 02:44:05AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+> Add devicetree binding documentation for Qualcomm PMIC Battery Current
 
-There is no chip-specific difference in the driver code to justify
-separate MPQ8786 support. 
-Therefore, Therefore, I will use MPQ8785 for support.
+Subject - You almost hit bingo of what not to do. You miss the third one.
+When you hit the bingo, get in touch for a beer.
+
+And before, read the docs, because this was repeated SO MANY TIMES.
+
+
+> Limiting (BCL) hardware monitor. The BCL hardware provides monitoring
+> and alarm functionality for battery overcurrent and battery/system
+> under voltage conditions.
+> 
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+> ---
+>  .../devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml  | 128 +++++++++++++++++++++
+>  1 file changed, 128 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml
+> new file mode 100644
+> index 000000000000..a0e8eaf13eec
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/qcom,bcl-hwmon.yaml
+> @@ -0,0 +1,128 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/qcom,bcl-hwmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SPMI PMIC Battery Current Limiting (BCL) Hardware Monitor
+> +
+> +maintainers:
+> +  - Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+> +
+> +description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+> +  SPMI PMIC Battery Current Limiting (BCL) hardware provides monitoring and
+> +  alarm functionality for battery overcurrent and battery or system under
+> +  voltage conditions. It monitors battery voltage and current, and
+> +  can trigger interrupts when configurable thresholds are exceeded.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: v1 based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pm7250b-bcl
+> +              - qcom,pm8250b-bcl
+> +          - const: qcom,bcl-v1
+
+Drop all bcl fallbacks. Pointless, incorrect and misleading.
+
+> +
+> +      - description: v2 based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pm8350b-bcl
+> +              - qcom,pm8350c-bcl
+> +          - const: qcom,bcl-v2
+> +
+> +      - description: v3 bmx based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pm8550b-bcl
+> +              - qcom,pm7550ba-bcl
+> +          - const: qcom,bcl-v3-bmx
+> +
+> +      - description: v3 core based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pm8550-bc0l
+> +              - qcom,pm7550-bcl
+> +          - const: qcom,bcl-v3-core
+> +
+> +      - description: v3 wb based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pmw5100-bcl
+> +          - const: qcom,bcl-v3-wb
+> +
+> +      - description: v4 bmx based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pmih010-bcl
+> +          - const: qcom,bcl-v4-bmx
+> +
+> +      - description: v4 bmx with different scale based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pmv010-bcl
+> +          - const: qcom,bcl-v4-pmv010
+> +
+> +      - description: v4 core based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pmh010-bcl
+> +          - const: qcom,bcl-v4-core
+> +
+> +      - description: v4 wb based BCL
+> +        items:
+> +          - enum:
+> +              - qcom,pmw6100-bcl
+> +          - const: qcom,bcl-v4-wb
+
+I really do not get what you are expressing here but all this is wrong.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: BCL base address in the SPMI PMIC register map
+
+Bus defines it. Drop descrip=tion.
+
+> +
+> +  interrupts:
+> +    minItems: 2
+
+Drop.
+
+> +    maxItems: 2
+> +    description:
+> +      BCL alarm interrupts for different threshold levels
+
+Drop
+
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: bcl-max-min
+> +      - const: bcl-critical
+
+Drop bcl
+
+> +
+> +  overcurrent-thresholds-milliamp:
+> +    description:
+> +      Current thresholds in milliamperes for the two configurable current
+> +      alarm levels (max and critical). These values are used to override
+> +      default thresholds if a platform has different battery ocp specification.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+No, please read basic guides or presentations about DT bindings. The
+suffix already defines this.
+
+> +    minItems: 2
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +unevaluatedProperties: false
+
+You did not bother to read the docs prior to posting this.
+
+You are supposed to do internal review first. Did it happen? I checked
+and cannot find anything. It's not acceptable to use the community
+instead of your internal review.
+
+NAK
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pmic {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        bcl@1d00 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+If you cannot find a name matching your device, please check in kernel
+sources for similar cases or you can grow the spec (via pull request to
+DT spec repo).
+
+Best regards,
+Krzysztof
 
