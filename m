@@ -1,291 +1,402 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAC8309EE7
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 12:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D438336EA91;
+	Fri,  6 Feb 2026 13:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770379749; cv=none; b=jxSqoZjlmCGRD8zO+qZQsLXxdweLY7G0vq7PWfOEb+KsVnDSWB+30N1QppybUzZUmZ7yCrpJwCkUg7j8O5t1RjKFkSvMPnKrdrcbe8e1VjswNezDWSjyOzfYtbJsmYBDaMVdb5e1QA3yEK1l9jJA6y61AVRiwkWT2EkA/7xuaLE=
+	t=1770384243; cv=none; b=ckLD0vHbU7jVbnnehenagQ9JhjGFErkfxAwKdQ6d+uBVSzHBCTILotoy9mPLUEkf61c6u6hBtCiEoCt/92/ssQQKpuKZo4gf88n8V/9uX2PKv1dLYrQmMsDFjd51QftcVSSv+fCwwwAqXJZaynWoRT/Cohyp2eaHYDm+GNHeJws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770379749; c=relaxed/simple;
-	bh=YhG37LeR9IP7/7ZENXZfb+hZAsjNbmgjXLGpt1n63Gg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tl/rBVHhRZU5ml4GRQHGamBZI54VAFFshfUsvIeyP6G0RmvUnjuyNvz4P85gMxJhCqnbLQrKSqAIyPpnvd+LiEHm2C1Z9gPMgcuInvFATQvJkXHTQaJFWilz86ufRje8KZWks4rGSB75pHgH/38Ec9nuhnAsjXRh+rQYQWF/GzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=msRoMfjU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770384243; c=relaxed/simple;
+	bh=FduWvw3ubyVJfuwnx6b4VchiNgkQI5eokDQ8NIaGrJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XlZkrsHAlEbGovS0kwMgxjSu6bsHcFQWmSQ+ekMh0wEWZtIjgnMrJ2f76baRVjnrwRZO1+nLtKxNgsJmG/Hhpvdp48O4/QvJ2XPEUHhjm7OS1K9vzfRqNzBDQj2n620nQuVMsiJpYXivlIc5F/NahnS9EkxO4Z1fWJ7W+ESIQHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XgWUuiaJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="msRoMfjU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C350C19422
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Feb 2026 12:09:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XgWUuiaJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4064FC116C6;
+	Fri,  6 Feb 2026 13:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770379749;
-	bh=YhG37LeR9IP7/7ZENXZfb+hZAsjNbmgjXLGpt1n63Gg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=msRoMfjUNYZLVWSFNPALKU4CRj1M4YsVLdoGppduDnAA1HF6rgD1IwSFh+HxxS5F3
-	 HojO2hiMoYCX2E5pIylsScXB6aUIfI9+GONpORIFxgWvSjwyEXKW3JskE7rxNWHkZ3
-	 WsOpXq1tJOmIXleWqCJQzlVv3aDVzpb8tjTrlXGQKotl3sLWA8kb/Ulwo7cSxNQ8VM
-	 fnsXP3cLtBH/sioDUJGOI3fPUlyZIOrkfJ/uoZxkwkcRCHF3A94uQ7enQOkLM+CXbE
-	 gug/SDbMQcU2idsaYgK77mQrzMQNSn40c3o5zu9+kZBUKZUnUicdFt5EF6M8TxHklX
-	 8lXEtlT0EbWJQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4094f6f4b7bso236065fac.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Feb 2026 04:09:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWN7CKx+XFAi3kVri6Cjylxp0nZ3h+Sj+0dRJFm8mOvjh4vXResjhJ31AecLoSbCfRkbc46IlkqxXEpag==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/LsLav+CKSCKNIOkHFe6QMTeQKxXHya6CQ7AwhGiffxP9L9IT
-	in/lGcmTK7NX31N5qS0LFNFirbOj2TLSugG1Mvwxx5r5xjLiOmxLZR/XtSpZSeA9Q6jhU/J/fmm
-	LlJvgRo9ZS9+ZpWL85pSZcy9Dr2qpKk0=
-X-Received: by 2002:a05:6870:d06:b0:3e8:983c:c8a with SMTP id
- 586e51a60fabf-40a96e80e57mr1332822fac.37.1770379748073; Fri, 06 Feb 2026
- 04:09:08 -0800 (PST)
+	s=k20201202; t=1770384243;
+	bh=FduWvw3ubyVJfuwnx6b4VchiNgkQI5eokDQ8NIaGrJM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XgWUuiaJaxr9u6BqbrGP2Zz0DRfxcorNK3odBPvMA3qXQStNbVl/ppVEngCmlF5vG
+	 n36GGiMRsYwi74TC/CRE7FrtxgSsbb+xu2cHwX5p+n3YdC5QJOfweWIq8+AXabQbOR
+	 2ddk/B+t+0KUG4f/KQqTmbP7k2085VhH06o0ysglWgDifsSXcGmsyC9HW7q7rfXzwD
+	 PhJ2zPCyKGufzruOUhrsHpGXV8Y0sted5s1rlr+4g0fEq7FlOJdHPaGL5YyNQ6FoEE
+	 J9xzy420X0iDGBUkvuvYJZgSnOrhncHyfRW1QLdnK51uhqFje/ikB9rQnxHqyoqzor
+	 E6AOr8TePgPiQ==
+Date: Fri, 6 Feb 2026 07:24:00 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, 
+	linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
+Message-ID: <ndkdgw6tiau4y7psfl53tmzylrfi27h6j5likx5mahufv34625@na3yyn56fgw6>
+References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
+ <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAK8fFZ43wrQ8A_bO_g+rKN9O31sxULtqA0hUieZSzEH5KqeW1Q@mail.gmail.com>
- <CAJZ5v0hEu_io2BAzp9weUDHwHngorjZ37GRUK=ngSXNjtp38qw@mail.gmail.com>
- <CAK8fFZ65Vro5nQqJq_cvsY93hgDbfTdibWnNr5b0Bixzc-ESfg@mail.gmail.com>
- <CAK8fFZ6Vi4xayvdKh-_eLi-nDNMLuEoMsvwEnb33QqnwS7o4BA@mail.gmail.com>
- <1c8f748a-5c5d-4234-ae86-7bb12045a373@roeck-us.net> <CA+9S74i+BC3=E0opOPMff0cuC1OPYSecii0C8fVZ+NM7bptNcQ@mail.gmail.com>
- <fee01c19-2711-487e-91e9-d57f9be04b98@roeck-us.net> <CA+9S74jR9jRRE-DNMxNg=6Uv2uDAUar2n-RkVDJqzkDfNu3eog@mail.gmail.com>
- <39100538-a1f3-48dc-82d6-5e3314a43b4d@roeck-us.net> <CAJZ5v0jo4CV__AoUfqxuhVgkw6hA=hM_fBU+W=pTzqDLmNmytw@mail.gmail.com>
- <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
-In-Reply-To: <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 6 Feb 2026 13:08:56 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
-X-Gm-Features: AZwV_Qi1z9oFoRF9DTyjg8MChUsKPf90ghSceMYHLJww31ZKI2B7idUzdkUm9ac
-Message-ID: <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
-Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average sysfs
- read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Igor Raits <igor@gooddata.com>, 
-	Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Daniel Secik <daniel.secik@gooddata.com>, 
-	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
-	Huisong Li <lihuisong@huawei.com>, Corey Minyard <corey@minyard.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
 
-On Thu, Feb 5, 2026 at 11:34=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. Wysocki wrote:
-> > Cc: Corey
-> >
-> > On Thu, Feb 5, 2026 at 6:51=E2=80=AFPM Guenter Roeck <linux@roeck-us.ne=
-t> wrote:
-> > >
-> > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Raits wrote:
-> > > > On Wed, Feb 4, 2026 at 11:49=E2=80=AFPM Guenter Roeck <linux@roeck-=
-us.net> wrote:
-> > > > >
-> > > > > On 2/4/26 11:54, Igor Raits wrote:
-> > > > > > I have written a patch with the help of AI and it fixes the pro=
-blem. Attached.
-> > > > > >
-> > > > >
-> > > > > "No MIME, no links, no compression, no attachments.  Just plain t=
-ext"
-> > > >
-> > > > Sorry for that, I had assumed that attaching the file would make it=
- in-line.
-> > > >
-> > > > > ... which means I can not provide inline feedback, which is the w=
-hole
-> > > > > point of the above.
-> > > > >
-> > > > > Your patch crosses subsystems, so it will need to be split in two
-> > > > > (assuming the ACPI side is even needed). Also, references to iDRA=
-C
-> > > > > in common code seem inappropriate.
-> > > >
-> > > > Yes, this I believe was the essential part (it was the last piece i=
-n
-> > > > my testing which fixed the hanging):
-> > > >
-> > >
-> > > Then I'll need to ask differently: What happens if you drop the IPMI =
-code,
-> > > and just keep the wait_for_completion -> wait_for_completion_timeout
-> > > change ? Would that be sufficient to solve the problem ?
-> >
-> > I'd rather say "Would that be sufficient to make the symptoms go
-> > away?" as it most likely papers over the real problem.
-> >
->
-> Good point. Worse, it may result in UAF or memory leaks.
->
-> > > Either case, the need for this change suggests that the ipmi change
-> > > may not be complete, since it should send a completion with an error.
-> >
-> > I think that reverting commit bc3a9d217755 ("ipmi:si: Gracefully
-> > handle if the BMC is non-functional") should also be considered as a
-> > possible way forward because it clearly did not improve things as
-> > expected, at least in this particular case.
-> >
->
-> I tend to agree. I ran a number of AI code reviews over the patch, and
-> each time it finds new (and different) problems. The fact that the acpi
-> patch is still needed even after applying the ipmi changes suggests that
-> something is still missing in the ipmi code.
->
-> > It evidently did something that confuses things quite a bit.  Either
-> > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UNSPECIFIED, or it is
-> > the "hosed" state and refusing to accept messages.
-> >
->
-> More than that. My latest AI results are below, just for reference
-> (using Gemini 3 with Chris Mason's debug prompts). The prompt I used
-> for this run is:
+On Fri, Feb 06, 2026 at 02:44:06AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+> diff --git a/drivers/hwmon/qcom-bcl-hwmon.c b/drivers/hwmon/qcom-bcl-hwmon.c
+> new file mode 100644
+> index 000000000000..a7e3b865de5c
+> --- /dev/null
+> +++ b/drivers/hwmon/qcom-bcl-hwmon.c
+> @@ -0,0 +1,982 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Qualcomm pmic BCL hardware driver for battery overcurrent and
+> + * battery or system under voltage monitor
+> + *
+> + * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
 
-Well, I guess it's time to send a revert patch then.
+That's the wrong statement.
 
-> "
-> The top commit in the linux/ directory results in hung tasks if the BMC
-> stops responding. Using @review-prompts/kernel/debugging.md analyze the
-> patch, identify the reason for the hung task problem, suggest and impleme=
-nt
-> a fix. Note that there may be more than one problem in the patch, so anal=
-yze
-> the complete patch and do not stop after fiding the first regression.
-> "
->
-> I think that catches most of the problem, but not all of it.
->
-> Guenter
->
-> ---
->
-> Summary of crash or warning:
-> Hung task detected in ipmi_si driver when BMC becomes non-functional.
-> Processes waiting for IPMI responses (e.g. ipmitool, monitoring agents) e=
-nter D state and never recover.
->
-> Kernel version if available:
-> Top of tree (commit bc3a9d217755f65c137f145600f23bf1d6c31ea9)
->
-> Machine type if available:
-> Generic Server with BMC
->
-> Cleaned up copy of oops or stack trace:
-> [  120.123456] INFO: task ipmitool:1234 blocked for more than 120 seconds=
-.
-> [  120.123457]       Not tainted 6.14.0-rc1 #1
-> [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disable=
-s this message.
-> [  120.123459] task:ipmitool        state:D stack:    0 pid: 1234 ppid:  =
-100 flags:0x00000000
-> [  120.123460] Call Trace:
-> [  120.123461]  <TASK>
-> [  120.123462]  __schedule+0x123/0x456
-> [  120.123463]  schedule+0x45/0x78
-> [  120.123464]  schedule_timeout+0x9a/0xbc
-> [  120.123465]  wait_for_completion+0xde/0xf0
-> [  120.123466]  ipmi_request_settime+0x123/0x145
-> [  120.123467]  ...
-> [  120.123468]  </TASK>
->
-> Any other kernel messages you found relevant:
-> N/A
->
-> Explanation of the problem:
-> 1. Hung Task:
-> The patch "ipmi:si: Gracefully handle if the BMC is non-functional" intro=
-duces a new state `SI_HOSED` to handle BMC failures. When the driver detect=
-s that the BMC is not responding, it transitions to `SI_HOSED` and fails th=
-e currently processing message (`curr_msg`). However, if a new message is q=
-ueued via `sender()` (populating `waiting_msg`) during a recovery probe (st=
-ate `SI_GETTING_FLAGS`), and that probe subsequently fails, the state machi=
-ne transitions back to `SI_HOSED`. In this transition, the driver checks an=
-d fails `curr_msg`, but it neglects to check or fail `waiting_msg`. As a re=
-sult, the `waiting_msg` remains in the queue indefinitely, causing the wait=
-ing process to hang.
+> + */
+> +
+[..]
+> +static void bcl_hw_channel_mon_init(struct bcl_device *bcl)
+> +{
+> +	bcl->in_mon_enabled = bcl_in_monitor_enabled(bcl);
+> +	bcl->in_input_enabled = bcl_in_input_enabled(bcl);
+> +	bcl->curr_mon_enabled = bcl_curr_monitor_enabled(bcl);
+> +}
+> +
+> +static int bcl_alarm_irq_init(struct platform_device *pdev,
+> +			      struct bcl_device *bcl)
+> +{
+> +	int ret = 0, irq_num = 0, i = 0;
 
-That's quite convincing and it would explain the observed symptoms.
+First use of these three variables are assignments, no need to
+zero-initialize them here.
 
-> 2. Excessive Polling (Timer Overwrite):
-> In `smi_timeout()`, the timer is unconditionally reset to a short timeout=
- (e.g., 10ms) at the end of the function, unless the state machine is IDLE.=
- When the state machine returns `SI_SM_HOSED`, `smi_event_handler()` correc=
-tly sets the timer to a long backoff (1 second). However, `smi_timeout()` s=
-ubsequently overwrites this with the short timeout. This causes the driver =
-to poll the hosed BMC every 10ms instead of backing off for 1 second, resul=
-ting in unnecessary CPU overhead.
+> +	struct bcl_alarm_data *alarm;
+> +
+> +	for (i = LVL0; i < ALARM_MAX; i++) {
 
-Well, that's not nice, but it doesn't seem to be related to the
-observed symptoms.
+I would prefer ARRAY_SIZE(bcl->bcl_alarms) over ALARM_MAX.
 
-> Functions, snippets and call traces of code related to the problem:
->
-> drivers/char/ipmi/ipmi_si_intf.c: smi_event_handler()
->
->         } else if (si_sm_result =3D=3D SI_SM_HOSED) {
->                 /* ... */
->                 smi_info->si_state =3D SI_HOSED;
->                 if (smi_info->curr_msg !=3D NULL) {
->                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
->                 }
->                 /* BUG 1: waiting_msg is NOT checked here! */
->
->                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED); /* S=
-ets 1s timeout */
->                 goto out;
->         }
->
-> drivers/char/ipmi/ipmi_si_intf.c: smi_timeout()
->
->         smi_result =3D smi_event_handler(smi_info, time_diff);
->         /* ... */
->         if (smi_result !=3D SI_SM_IDLE)
->                 smi_mod_timer(smi_info, timeout); /* BUG 2: Overwrites 1s=
- timeout with ~10ms */
->
-> List of potential commits related to the problem:
-> bc3a9d217755f65c137f145600f23bf1d6c31ea9 ipmi:si: Gracefully handle if th=
-e BMC is non-functional
->
-> Suggested fix:
-> 1. When entering `SI_HOSED` state in `smi_event_handler`, check for and f=
-ail any pending `waiting_msg` in addition to `curr_msg`.
-> 2. In `smi_timeout`, do not reset the timer if the state is `SI_HOSED`, p=
-reserving the backoff timeout set by `smi_event_handler`.
->
-> ---
-> Suggested diffs from that run:
->
-> diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si=
-_intf.c
-> index 1c65275906b4..023b0e819f91 100644
-> --- a/drivers/char/ipmi/ipmi_si_intf.c
-> +++ b/drivers/char/ipmi/ipmi_si_intf.c
-> @@ -810,6 +810,11 @@ static enum si_sm_result smi_event_handler(struct sm=
-i_info *smi_info,
->                          */
->                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
->                 }
-> +               if (smi_info->waiting_msg !=3D NULL) {
-> +                       smi_info->curr_msg =3D smi_info->waiting_msg;
-> +                       smi_info->waiting_msg =3D NULL;
-> +                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
-> +               }
->                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
->                 goto out;
->         }
-> @@ -1130,10 +1135,12 @@ static void smi_timeout(struct timer_list *t)
->                 timeout =3D jiffies + SI_TIMEOUT_JIFFIES;
->         }
->
-> -       if (smi_result !=3D SI_SM_IDLE)
-> -               smi_mod_timer(smi_info, timeout);
-> -       else
-> +       if (smi_result !=3D SI_SM_IDLE) {
-> +               if (smi_info->si_state !=3D SI_HOSED)
-> +                       smi_mod_timer(smi_info, timeout);
-> +       } else {
->                 smi_info->timer_running =3D false;
-> +       }
->         spin_unlock_irqrestore(&(smi_info->si_lock), flags);
->  }
+> +		alarm = &bcl->bcl_alarms[i];
+> +		alarm->type = i;
+> +		alarm->device = bcl;
+> +
+> +		ret = devm_delayed_work_autocancel(bcl->dev, &alarm->alarm_poll_work,
+> +					   bcl_alarm_enable_poll);
+> +		if (ret)
+> +			return ret;
+> +
+> +		irq_num = platform_get_irq_byname(pdev, bcl_int_names[i]);
+> +		if (irq_num <= 0)
+> +			continue;
+> +
+> +		ret = devm_request_threaded_irq(&pdev->dev, irq_num, NULL,
+> +						bcl_handle_alarm, IRQF_ONESHOT,
+> +						bcl_int_names[i], alarm);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "Error requesting irq(%s).err:%d\n",
+> +				bcl_int_names[i], ret);
+> +			return ret;
+> +		}
+> +		enable_irq_wake(alarm->irq);
+> +		alarm->irq_enabled = true;
+> +		alarm->irq = irq_num;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int bcl_regmap_field_init(struct device *dev, struct bcl_device *bcl,
+> +				 const struct bcl_desc *data)
+> +{
+> +	int i;
+> +	struct reg_field fields[F_MAX_FIELDS];
+> +
+> +	BUILD_BUG_ON(ARRAY_SIZE(common_reg_fields) != COMMON_FIELD_MAX);
+> +
+> +	for (i = 0; i < data->num_reg_fields; i++) {
+> +		if (i < COMMON_FIELD_MAX)
+> +			fields[i] = common_reg_fields[i];
+> +		else
+> +			fields[i] = data->reg_fields[i];
+> +
+> +		/* Need to adjust BCL base from regmap dynamically */
+> +		fields[i].reg += bcl->base;
+> +	}
+> +
+> +	return devm_regmap_field_bulk_alloc(dev, bcl->regmap, bcl->fields,
+> +					   fields, data->num_reg_fields);
+> +}
+> +
+> +static int bcl_get_device_property_data(struct platform_device *pdev,
+> +				   struct bcl_device *bcl)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	int ret;
+> +	u32 reg;
+> +
+> +	ret = device_property_read_u32(dev, "reg", &reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	bcl->base = reg;
+> +
+> +	device_property_read_u32_array(dev, "overcurrent-thresholds-milliamp",
+> +				       bcl->curr_thresholds, 2);
+> +	return 0;
+> +}
+> +
+> +static int bcl_probe(struct platform_device *pdev)
+> +{
+> +	struct bcl_device *bcl;
+> +	int ret;
+> +
+> +	bcl = devm_kzalloc(&pdev->dev, sizeof(*bcl), GFP_KERNEL);
+> +	if (!bcl)
+> +		return -ENOMEM;
+> +
+> +	bcl->dev = &pdev->dev;
+> +	bcl->desc = device_get_match_data(&pdev->dev);
+> +	if (!bcl->desc)
+> +		return -EINVAL;
+> +
+> +	ret = devm_mutex_init(bcl->dev, &bcl->lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	bcl->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!bcl->regmap) {
+> +		dev_err(&pdev->dev, "Couldn't get parent's regmap\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = bcl_get_device_property_data(pdev, bcl);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = bcl_regmap_field_init(bcl->dev, bcl, bcl->desc);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "Unable to allocate regmap fields, err:%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	if (!bcl_hw_is_enabled(bcl))
+> +		return -ENODEV;
+> +
+> +	ret = bcl_curr_thresh_update(bcl);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = bcl_alarm_irq_init(pdev, bcl);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	bcl_hw_channel_mon_init(bcl);
+> +
+> +	dev_set_drvdata(&pdev->dev, bcl);
+> +
+> +	bcl->hwmon_name = devm_hwmon_sanitize_name(&pdev->dev,
+> +						   dev_name(bcl->dev));
+> +	if (IS_ERR(bcl->hwmon_name)) {
+> +		dev_err(&pdev->dev, "Failed to sanitize hwmon name\n");
 
-Well, I'd leave fixing the IPMI handling to somebody familiar with that cod=
-e.
+Afaict, devm_hwmon_sanitize_name() can only return -ENOMEM, which
+already printed an error.
+
+> +		return PTR_ERR(bcl->hwmon_name);
+> +	}
+> +
+> +	bcl->hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+> +							      bcl->hwmon_name,
+> +							      bcl,
+> +							      &bcl_hwmon_chip_info,
+> +							      NULL);
+> +	if (IS_ERR(bcl->hwmon_dev)) {
+> +		dev_err(&pdev->dev, "Failed to register hwmon device: %ld\n",
+> +			PTR_ERR(bcl->hwmon_dev));
+> +		return PTR_ERR(bcl->hwmon_dev);
+> +	}
+> +
+> +	dev_dbg(&pdev->dev, "BCL hwmon device with version: %u.%u registered\n",
+> +		bcl_get_version_major(bcl), bcl_get_version_minor(bcl));
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id bcl_match[] = {
+> +	{
+> +		.compatible = "qcom,bcl-v1",
+> +		.data = &pm7250b_data,
+
+Why generic compatibles but pmic-specific data structures? If anything
+I'd expect tthe other way around...
+
+> +	}, {
+> +		.compatible = "qcom,bcl-v2",
+> +		.data = &pm8350_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-bmx",
+> +		.data = &pm8550b_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-wb",
+> +		.data = &pmw5100_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v3-core",
+> +		.data = &pm8550_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-bmx",
+> +		.data = &pmih010_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-wb",
+> +		.data = &pmw6100_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-core",
+> +		.data = &pmh010_data,
+> +	}, {
+> +		.compatible = "qcom,bcl-v4-pmv010",
+> +		.data = &pmv010_data,
+> +	},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, bcl_match);
+> +
+> +static struct platform_driver bcl_driver = {
+> +	.probe	= bcl_probe,
+> +	.driver	= {
+> +		.name		= BCL_DRIVER_NAME,
+> +		.of_match_table	= bcl_match,
+> +	},
+> +};
+> +
+> +MODULE_AUTHOR("Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>");
+> +MODULE_DESCRIPTION("QCOM BCL HWMON driver");
+> +module_platform_driver(bcl_driver);
+
+This relates to the bcl_driver declaration, not module properties. So
+move it there.
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/hwmon/qcom-bcl-hwmon.h b/drivers/hwmon/qcom-bcl-hwmon.h
+
+Why is there a header file, is this going to be accessed by some other
+driver? It mostly contain driver-internal thing, and some helpers that
+won't be useful outside of the driver.
+
+> new file mode 100644
+> index 000000000000..28a7154d9486
+> --- /dev/null
+> +++ b/drivers/hwmon/qcom-bcl-hwmon.h
+> @@ -0,0 +1,311 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
+
+Please fix this one as well. (Or...drop the file)
+
+> + */
+> +
+> +#ifndef __QCOM_BCL_HWMON_H__
+> +#define __QCOM_BCL_HWMON_H__
+> +
+> +#define BCL_DRIVER_NAME			"qcom-bcl-hwmon"
+
+This belong in the driver...but frankly, you can just put the string
+directly in bcl_driver.driver.name, no need to have a define for it...
+
+[..]
+> +/**
+> + * bcl_field_enabled - Generic helper to check if a regmap field is enabled
+> + * @bcl: BCL device structure
+> + * @field: Index in bcl->fields[]
+> + *
+> + * Return: true if field is non-zero, false otherwise
+> + */
+> +static inline bool bcl_field_enabled(const struct bcl_device *bcl, enum bcl_fields id)
+> +{
+> +	int ret;
+> +	u32 val = 0;
+> +
+> +	ret = regmap_field_read(bcl->fields[id], &val);
+> +	if (ret)
+> +		return false;
+> +
+> +	return !!val;
+> +}
+> +
+> +#define bcl_in_input_enabled(bcl)	bcl_field_enabled(bcl, F_IN_INPUT_EN)
+> +#define bcl_curr_monitor_enabled(bcl)	bcl_field_enabled(bcl, F_CURR_MON_EN)
+> +#define bcl_in_monitor_enabled(bcl)	bcl_field_enabled(bcl, F_IN_MON_EN)
+> +#define bcl_hw_is_enabled(bcl)		bcl_field_enabled(bcl, F_CTL_EN)
+
+This whole thing is only used in bcl_hw_channel_mon_init(), just put the
+code in bcl_hw_channel_mon_init().
+
+
+You have a few other regmap_field_*() calls in the driver, I would
+suggest that you just call that directly for these cases as well.
+
+> +
+> +/**
+> + * bcl_enable_irq - Generic helper to enable alarm irq
+> + * @alarm: BCL level alarm data
+> + */
+> +static inline void bcl_enable_irq(struct bcl_alarm_data *alarm)
+> +{
+> +	if (alarm->irq_enabled)
+> +		return;
+
+This can't happen, but because you separated this to a helper function
+it's not obvious
+
+I'd suggest that you inline the remaining 3 lines in the one place where
+this function is called.
+
+> +	alarm->irq_enabled = true;
+> +	enable_irq(alarm->irq);
+> +	enable_irq_wake(alarm->irq);
+> +}
+> +
+> +/**
+> + * bcl_disable_irq - Generic helper to disable alarm irq
+> + * @alarm: BCL level alarm data
+> + */
+> +static inline void bcl_disable_irq(struct bcl_alarm_data *alarm)
+> +{
+> +	if (!alarm->irq_enabled)
+> +		return;
+
+This is tricker, because there's a window between
+devm_request_threaded_irq() and the assignment of irq_enabled, where the
+interrupt function might execute and the attempt to bcl_disable_irq()
+will face irq_enabled == 0.
+
+But I don't think that's intentional...
+
+I think this too would be better to just inline in the one place its'
+being called.
+
+Regards,
+Bjorn
+
+> +	alarm->irq_enabled = false;
+> +	disable_irq_nosync(alarm->irq);
+> +	disable_irq_wake(alarm->irq);
+> +}
+> +
+> +#endif /* __QCOM_BCL_HWMON_H__ */
+> 
+> -- 
+> 2.43.0
+> 
