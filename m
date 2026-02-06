@@ -1,27 +1,27 @@
 Received: from carl-amd.amd.com (unknown [218.32.81.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFE32D837C;
-	Fri,  6 Feb 2026 06:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165F41D6AA;
+	Fri,  6 Feb 2026 06:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.32.81.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770357783; cv=none; b=M0g+EoEfmCWnvWh8Au8/B4cOYpgPpHVwoCincmXI81ApKyOPbvuoj/kOWYbL47JHcDs1yXLID/P5jGUGQ2xRgLJoJULZo6dp2SDkccw10w4ibmvo4ejkvwO8xqitZyzobNfDZaYXxh+8OsTf8P3Rzv1rcqELrdtXve7xWuHjZew=
+	t=1770360141; cv=none; b=WXAu3taog7jh48nGgUyKVUPKTJWqnuAi924HKqqijeqAO8PHqAFqZotcuT60mHWbYXVkJl3HAg2cDx/AFI+lTpFMyrXsCoGNBctgtB6sHS9NrZLPzlrUcHGm1KEZO0SePlT5BkYgxpTaXNc93piwfY6XzqehP5SE1d1qQDzxw6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770357783; c=relaxed/simple;
-	bh=5ni1MN+rQF2mPjhb+eQuAuhxFYWrWeUb+IOk8x1yHR8=;
+	s=arc-20240116; t=1770360141; c=relaxed/simple;
+	bh=WxU43T15Ay7FVgSmMVyl4sbcVpIPJA6jURP2oOfkTXs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i2Ti2b9pLBBtqyjzjP1TiPvEMJdNGscRSMEv1NjSzFnOeOq9gdBwUlSIvxNP2k9n30bitrJfE/nYg2ajuNSue/dORnYcAah7ltTvv7dR46KwSnkeG9VpzGeVrRhNHqHAJVt/4he6M8qqZ6lHPL59KSk4Cd5tdhJptVHdfWbiXqs=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ssEOwjbtcbg9MRsxWURKEVnY08TYp4hEdV6S0eXDZ2YwwSOk+EngpqldChRlzhLmVULwrH4/g7FYv4gh7eAqBo6Ax0rjpSOPSCrgK1apAbWxhEu+IHiwqLN/XgL0xJAcs/j1y24mMstZKT9+9I8JZquAOrqH0hlNFZvDwEWRrS8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; arc=none smtp.client-ip=218.32.81.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Received: from carl-amd.amd.com (localhost [127.0.0.1])
-	by carl-amd.amd.com (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 6165sKnR1007604;
-	Fri, 6 Feb 2026 13:54:20 +0800
+	by carl-amd.amd.com (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 6166fs1e1008273;
+	Fri, 6 Feb 2026 14:41:54 +0800
 Received: (from carl@localhost)
-	by carl-amd.amd.com (8.15.2/8.15.2/Submit) id 6165sIx21007603;
-	Fri, 6 Feb 2026 13:54:18 +0800
+	by carl-amd.amd.com (8.15.2/8.15.2/Submit) id 6166fsxI1008272;
+	Fri, 6 Feb 2026 14:41:54 +0800
 X-Authentication-Warning: carl-amd.amd.com: carl set sender to carl.lee@amd.com using -f
-Date: Fri, 6 Feb 2026 13:54:18 +0800
+Date: Fri, 6 Feb 2026 14:41:53 +0800
 From: Carl Lee <carl.lee@amd.com>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -30,7 +30,7 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
         linux-kernel@vger.kernel.org, peter.shen@amd.com, colin.huang2@amd.com
 Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: pmbus: mpq8785: add MPQ8786
  support
-Message-ID: <aYWAvWwjEXA1e/ny@carl-amd>
+Message-ID: <aYWNMdfFpW2A0SGy@carl-amd>
 References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
  <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-1-3744cd9b2850@amd.com>
  <20260205-cordial-warping-pronghorn-aeebe7@quoll>
@@ -76,4 +76,5 @@ On Thu, Feb 05, 2026 at 08:17:07AM -0800, Guenter Roeck wrote:
 > Guenter
 
 Agreed. There is no chip-specific difference in the driver code to justify
-separate MPQ8786 support. Therefore, we rely on MPQ8785 support.
+separate MPQ8786 support. 
+Therefore, Therefore, I will use MPQ8785 for support.
