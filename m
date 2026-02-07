@@ -1,129 +1,150 @@
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [65.21.191.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D9D331A71;
-	Sat,  7 Feb 2026 11:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.21.191.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770464626; cv=none; b=i7hYXsgMe4EGB0nYFOdil5Vck1ZqxYaDow5KP0e38OrjJxxyRZsU42QHZmD/2oWfe2r3DdAhmiCp8K/7T4Ae2kelhlwrNvKcvjHaGHIXXG/wtKQ/+UjHrBKNmcWnt+oBiaFKfFXtTh9+jSNVokB8I4YxWvSPTwncS1yAIWKkF9M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770464626; c=relaxed/simple;
-	bh=6QoShjV6qd53C5oB9Tf3vfSjqYfwF01ob27R1R+zDME=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=okX0yZPDcqM5cgA+xoMhi/V793iqVfTCip9CzZwYus9B60mcS2Ip3ZCmL47uGZpE/ei5HNvy9wlOigrrJja+td1tl6e7+AJimGdhIWEXu4PZlGJ1vwN0Hwxq95Cn92IfKzgczfBNUKiDEN7PHntw3GRH/eI7/4Ep37tzIUzIfqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk; spf=pass smtp.mailfrom=decadent.org.uk; arc=none smtp.client-ip=65.21.191.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=decadent.org.uk
-Received: from [2a02:578:851f:1502:391e:c5f5:10e2:b9a3] (helo=deadeye)
-	by maynard with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ben@decadent.org.uk>)
-	id 1vogiu-0048sz-1S;
-	Sat, 07 Feb 2026 11:43:35 +0000
-Received: from ben by deadeye with local (Exim 4.99.1)
-	(envelope-from <ben@decadent.org.uk>)
-	id 1vogis-000000021iH-1mWw;
-	Sat, 07 Feb 2026 12:43:34 +0100
-Message-ID: <f6710a1f44d2b32df1cb9b09cddc6695bf76eec2.camel@decadent.org.uk>
-Subject: Re: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
- optimization induced race
-From: Ben Hutchings <ben@decadent.org.uk>
-To: David Laight <david.laight.linux@gmail.com>, Gui-Dong Han
-	 <hanguidong02@gmail.com>
-Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com, stable@vger.kernel.org
-Date: Sat, 07 Feb 2026 12:43:29 +0100
-In-Reply-To: <20260207104308.1bc31102@pumpkin>
-References: <20260203121443.5482-1-hanguidong02@gmail.com>
-	 <20260207104308.1bc31102@pumpkin>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-+DcWWCeRBAOX1jARWoNK"
-User-Agent: Evolution 3.56.2-8 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8055F304BA3
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Feb 2026 11:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770465065; cv=pass; b=VWpM6H6KBvVKJ6ImPevy4mgIhAeMV77etc/O+qurvhSVfWcZl5VmJHGfGimy4AbXiRsV4CygJaM9ZvsKbKOwSWAT/GkX+N2ZfCgIWTXNOc+ZxAqhgCsE0LQIPbGBiByVj++NwJQNpaciUjUzi6L5Ub1/CljdxKg8yIwt8Jux2Wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770465065; c=relaxed/simple;
+	bh=0zHemBC6Bdjzuqlz5xgkTYqv69RbXXUlNK063knTChw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WQKSWP4os5X8Wm4nNjlJ0/K2WUkgoowZQE3HseKvz0/Z5QkuRg1OrDNQO1l3XnHd0/HUUBhd8+pKaIq43Kn0OM+SFxCRb6Jyg9XN3NGEQjN++9+tcUErJBtb6Rq0VZN2nZH02DWycMXdZ0Lu5flEqZ8nr0l3CzKikTs8nfFmVVc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uvntph6P; arc=pass smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uvntph6P"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7d18dd2adf7so1787001a34.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Feb 2026 03:51:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770465064; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X37p8A2QRCGmbJkRyID8Qq4uWKwJdqXaZS5sainlaRSBLs6Uu16ajgaG8aW1Php2Cu
+         Uejs7wuovwQiOc7aqJDOXD5PMKuqIIJEZcsPzAMXZ67g1csH3a4sKRbXtmG6kFWe4oJw
+         3edQpCElrdm1YQPlO6C75GLE6ZBU64jSFByu62Ttb+UnpyvNuMSNuXcjaLlVpoLbaze0
+         im4SuLxI6JxzCtjBQvrHoNrZ7KedhKRgUVQU21jZY6HqrVwz0H5YcYkZbUbJnrGguMrJ
+         jGWmpZM8gnmCkaOFQ5iYswFCuHBjMueDThnA/4xpI7+D+en2cuY9IRLYv15oc5A+I1zI
+         iwpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zFHkmGEuQHGZJWf/M/aLuLTajVSyTFYMnDHLnCKCwgk=;
+        fh=cXai9HmDT+9/Iqb1ReL+U/rrb/+fC8mWYTUfzdY71l8=;
+        b=gKgsYrydoZh+K691F5nTcAgu7lXtkpUcJaQpT/fzozZ5LlET00qUyWnkOoykTBmHOq
+         3RdM5a7L5suSmizv97wJU2sKKOKdLmDehKraA90iqpbpjE6bK1zpWjFdXFP7xlCTrWaf
+         mMswgTEjoQKJ+VfHE0tv/s5fjgw9t1kD+18tBhBQ4UR9M5RoAtnWye4ciLYozJoGGiS7
+         fxyQBm2vh/ODPiwwXlnNnlafnOS/iBte2WBCU9hFXaEFupapp4ckKiD4bISEyCVfU6iz
+         wRBoyXu+WafV6ffbViUzAU2rSUetPHEjBcMQOqf15Q7SMuvwfu5/jlFpi2DVZcNtGu7r
+         PmSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770465064; x=1771069864; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zFHkmGEuQHGZJWf/M/aLuLTajVSyTFYMnDHLnCKCwgk=;
+        b=Uvntph6P92NV5FF6zLHiLBB0fXBIZ2XDdvtIpUUaiNITmwMGErlnmVar4dO7okr9+H
+         OSoYLNJCK6hjK8AfkU0AfbF88XnGriuAbn0rQR+EiQGX55WX3J+h+v90YwoLD2y8yGeC
+         EH0lDtD5xUo5wYOXJi+JfUWD8VsI+5vh5TQxxNBlWZIWW19gVQ5TBGpYW0i7eGfMVf32
+         g7wMyL4Qca0fmNsNvhbKWeRmukpYGABY/lP3rdbZIk4tRlb1cyitCOW/VtMfItbyNf/q
+         NEJNsziZMcGBeYJhgq+LlriAAajTP1HwqOPz+cCVF2RB2V7IJtV9GC17DBfSFq0/NwMR
+         T0sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770465064; x=1771069864;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zFHkmGEuQHGZJWf/M/aLuLTajVSyTFYMnDHLnCKCwgk=;
+        b=HWLlyY0FcpuUKguZf9m8QNWH4pLuHImQkHolFLlAo6TEjJ8T6zAexL14agPrzdaBZf
+         gjtS4AxVlPp5D/dOhZt+IXsll6XlOcQucwegt0y6wPXqhVT+O5z7B1G8II2t0RnTdjNu
+         WFTzUsPH/yrQP890mXnXzHkJwtZzDbWbBZc0uNm10mfJaB/L/UA1XAhGWTJN8vHTy2bn
+         4NoKmsJOzbS8ZvOQCBL/LHjGNzpNGzBWIBL3uv7TLO8u4p57Cvj4jt0KjLmMPtG5hG7c
+         46RzNhclxargX6kauio/L5A6GDjiY1g8ClKo1VNA6rE5vkl09D62rKpEimR9vfTOq7Aq
+         fJnA==
+X-Forwarded-Encrypted: i=1; AJvYcCV009jZiOzjXUlQiVOjAupX4P9byfPsMFdnKVrDc+hx+8pAtoZz0TiLEIiwfcaKGIBhwXhM5cI9LnLMUg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqhXB4W0/EKhaMUN2HU8uUQDB9A0DtSNS3/2xMGJiTkbZWb5ca
+	scGkpHL1QIzBoBvIdniOUC4fRtoGYmaViaeDfhlsCWWVyIv7k+FQGVIVB9/GjIIGSzqW/5UGWtN
+	X5D1V2We/A73c1jjRydSgcUExRMe7UPM=
+X-Gm-Gg: AZuq6aJagLlgCuhEsPbSD0RMWFhl/t5YMJAS2IXbK3K5jiiqqbBjGxnuiOPPwF7FH9Q
+	3Tq+Mj1yNCgQJWcJchtxxTMZYSWsf387FNA/QbMBvNXQNjp1XPXnHdo3fpcH03Gr2uhlC+60Olv
+	WHBdNy5/mYfJydqw70K7eWoqB/Kc2WUExt9co1nuTywK+/10NWU43rqF+kcOzhH85Lu5Ls2Iv6R
+	pi/XLgrqjPuPC4jck0x9ZcaEuF1xJvl93XC/NYNOeuMajXLByCHSBGu1SYZtYNtzKx+S7xILzEC
+	NYNnIkz2t8tQaZkRxkxtvz0nhSZSkCfYp/Jgk/EFO4rEOn1jEe4NpbHcLNtR
+X-Received: by 2002:a05:6830:600b:b0:7c6:ca92:3621 with SMTP id
+ 46e09a7af769-7d464489281mr3417737a34.22.1770465064248; Sat, 07 Feb 2026
+ 03:51:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a02:578:851f:1502:391e:c5f5:10e2:b9a3
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
-
-
---=-+DcWWCeRBAOX1jARWoNK
+References: <20260203121443.5482-1-hanguidong02@gmail.com> <20260207104308.1bc31102@pumpkin>
+In-Reply-To: <20260207104308.1bc31102@pumpkin>
+From: Gui-Dong Han <hanguidong02@gmail.com>
+Date: Sat, 7 Feb 2026 19:50:53 +0800
+X-Gm-Features: AZwV_QjmF7D3mncUisHZQfmM35uKMQc-Xzh6Vh9NG3y8UrfrmKdKsLLq4Ty8_ro
+Message-ID: <CALbr=LZ3XtE8Fd_qj8f1znZOKSB02gGQYw=fGEAM4BS_wNi76Q@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
+ optimization induced race
+To: David Laight <david.laight.linux@gmail.com>
+Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com, 
+	Ben Hutchings <ben@decadent.org.uk>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2026-02-07 at 10:43 +0000, David Laight wrote:
+On Sat, Feb 7, 2026 at 6:43=E2=80=AFPM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
 > On Tue,  3 Feb 2026 20:14:43 +0800
 > Gui-Dong Han <hanguidong02@gmail.com> wrote:
->=20
+>
 > > Simply copying shared data to a local variable cannot prevent data
 > > races. The compiler is allowed to optimize away the local copy and
 > > re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
 > > issue if the data changes between the check and the usage.
->=20
+>
 > While the compiler is allowed to do this, is there any indication
 > that either gcc or clang have ever done it?
 > ISTR someone saying that they never did - although I thought that
 > was the original justification for adding ACCESS_ONCE().
 
-They do it sometimes and it's precisely why these maros were added.  It
-makes no sense to me to look at what these compilers currrently do (for
-some particular versions, optimisation settings, and targets) and
-extrapolate that to the assertion that they will never optimise away a
-copy.
+This patch addresses an issue originally reported by Ben Hutchings
+during his review of the 5.10 stable queue. Ben explicitly pointed out
+the potential race and suggested using READ/WRITE_ONCE to enforce
+local variable usage [1]. Many of his recent suggestions on stable
+patches have been adopted by maintainers like Greg KH.
 
+>
 > READ_ONCE() also includes barriers to guarantee ordering between cpu.
 > These are empty on x86 but add code to architectures where the cpu
 > can (IIRC) re-order writes.
 > This is worst on alpha but affects arm and probably ppc.
-
-No, READ_ONCE() and WRITE_ONCE() don't include any CPU memory barriers.
-
+>
 > For these cases is it enough to add the compile-time barrier() after
 > reading the variable to a local.
 > That will also generate better code on x86.
->=20
+>
 > The WRITE_ONCE() aren't needed at all, the compilers definitely
 > guarantee to do a single memory access for aligned accesses that are
 > less than the size of a word.
 
-I think in this case WRITE_ONCE() might not be needed, but it's also
-harmless and it's much easier to reason about {READ,WRITE}_ONCE() being
-paired up.
+Following his report, I consulted the LKMM documentation. The access
+pattern here fits the definition of a data race, and the documentation
+recommends annotating these accesses to eliminate the data race [2].
 
+>
 > This all stinks of being an AI generated patch.
 
-This is a follow-up to an earlier patch that claimed to fix the TOCTOU
-issue.  I objected to that because in the absense of READ_ONCE() it was
-not guaranteed to do so.
+I assure you this patch was not generated by AI. It was created based
+on feedback from an experienced developer and kernel documentation.
 
-Ben.
+Thanks.
 
---=20
-Ben Hutchings
-If more than one person is responsible for a bug, no one is at fault.
-
---=-+DcWWCeRBAOX1jARWoNK
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmmHJWEACgkQ57/I7JWG
-EQmoKg//exLS0OLNWramvNGGiNkdQ+cWZkRqZ8v2C2dVaH4prmpIdxYI3FbOX4Tz
-HKEWz6VZtd4F6tM/os8WM1cGSLk5IiztGfEKaZM6NCrKjmFHZuhw23OATgh3LX66
-iwlrw9//raENnA2eCfSmrS2xpaSitRA7+TUgTEkYtQhkG3P9S9LtJ24LZnogjr3E
-Tz+xmb3iDdZGzIMuhcV8685OlhJ6G0kmAwke3QQx54VJLTTDvnio/GPYrZQScv79
-xxDVVYSYm9PnEM5PufwGo5dScX2cmRJcD6F6JxGRAxTVe7v9WCHXR7GMl964YnoW
-9yiKy36wt7d3czEel4VvMgH4AsZJQ0JlWGXMttb3vjQndmgusgPxYf+ecCM7MV/d
-CTM0wG0CcjFltLZkfJVLOBRujwZCWfDSdp5fhxuLnei/G+qZk+BhCFSuo23B8UqR
-4WUVPhi1zdoi97R3+L71kpKhxVFR01nVH6X0AHtjcgn9EU36HDzlPwAJVe5Sz7DU
-ZlVTnVvwPe0bc4qaiTy9XYLHXG6pq+Iitf+EdwNouDrhqovP7GnBmEL8d13u/S/L
-LWwvKmPmSFA0d+62z/SuKLLKMNx331X+iTvUyk9V1fjUoFx0uSCB858P8FvL450y
-fpDfnMf6GcaDzk6OOwDE90OBCtWSEVHFiQuJY9SX09YLSIfkYls=
-=7BoC
------END PGP SIGNATURE-----
-
---=-+DcWWCeRBAOX1jARWoNK--
+[1] https://lore.kernel.org/all/6fe17868327207e8b850cf9f88b7dc58b2021f73.ca=
+mel@decadent.org.uk/
+[2] https://elixir.bootlin.com/linux/v6.19-rc5/source/tools/memory-model/Do=
+cumentation/explanation.txt#L2231
