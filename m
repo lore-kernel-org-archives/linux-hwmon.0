@@ -1,137 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E22933F8C1;
-	Sat,  7 Feb 2026 11:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F41A239A;
+	Sat,  7 Feb 2026 11:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770462441; cv=none; b=mL/TMNTHK5TR5YeIi5yJdsmGCZ/UyZnr3KB54Gx7TZep/5PDuEhRAm/iMwiWS4N/d4IT17RtbmSHKhYHiYE2QccZ1GcGXLxYT6D1/EX26U/ZwFd9fSaOe8oMFCYFUHXttaR9Kb5paSn0MfNaR05j5oNgSidQdnd0Tx/VeUQHfaE=
+	t=1770462945; cv=none; b=VXHP6j2ZB+vUwz1VUwaotVMvHhLC52RNoj/Eq7QbM66pPK9rJxkBQrQz/25BQTkV6AS8WODWU9FMD7b8tN539U+fL4AxJ+fDqyvmjEQRnfonW3pJrTy2Rfaz54Yx/LMvJ/2alxGjOWCmyAyf8XZNrBPewMiDh+FTSvzo/fJF1OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770462441; c=relaxed/simple;
-	bh=JJDSvq6jLPNOYp7IMWhQQACodeFcTDQahaU9LbVqvTw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kaiV5ma4Je3eT0YsIb1wyxJ1kgqz2y96jNOgE982u1Wup234EFu2cvKAaLTLYlTL3FYBL3IsprOOTvl/Yz2qMGnMtT3Arn8uY1NaYuu6NctKr9DYddcxzUF0pFpL9eGXUql7vDPrxZNVpfR25y+dZJXyQsAEfyJifVo/ewolzz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JvsaKb6v; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770462945; c=relaxed/simple;
+	bh=qOTMyY8iw0Hxk+7JdvvZN0z2iHOtYdPDl/VrlBCuGrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FlkKwwZvksqkDBVWtMBXj5uTrMYRP8xrLsxoPVqVmspc1p/WwEGdk32YlLRNSOQnmxmA9mHMt4iAwK2/vP8zG30lxtt3FOQnOCVhdWvoZL6uJvwQ755hxkrj2fH0Xof9ksDsXSXQ6razuKHi0C0m8wIryXRiQpI3ZV6UVg4SigM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQfBHcHQ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JvsaKb6v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81DA2C116D0;
-	Sat,  7 Feb 2026 11:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770462440;
-	bh=JJDSvq6jLPNOYp7IMWhQQACodeFcTDQahaU9LbVqvTw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JvsaKb6vNt1bOC6gLQY3XK95yM3fFrvy8LZyRvlUkE4vpVJdQ7zABJ3qKYk8eKqgK
-	 DDQGJi0PJHjKCwWto8d+0wylnFqGkvkegI1vnEEcnFgNuK/Q8LFhdYs+RzC+hVtp/X
-	 FZALAXUlBouY1Wm99QmMbaoGAkCM59VN0wxZuBLfJLKXlKzScs3WhxqM6kPz8Oq8Xm
-	 7wleVKaR2k/9SQAFy7n0MLmWSJsqFmUwud6Xh038ucrphq0slxOGqP5G2rqtzsxaQY
-	 H9oDzdTCT1RfrC2qcGylysh9Re9cAwi/8UV2V+ub0h1CGebEP+F3fMlYTRfYYaEA0/
-	 FLygHB/v0Qldg==
-Message-ID: <92521b16-7fcd-4b04-ae6a-c72720b3ecf3@kernel.org>
-Date: Sat, 7 Feb 2026 12:07:16 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQfBHcHQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770462945; x=1801998945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qOTMyY8iw0Hxk+7JdvvZN0z2iHOtYdPDl/VrlBCuGrU=;
+  b=FQfBHcHQf0C6qenjTD2yu5P1R8KURIOMvsG8oI7VaPXfbdPVyiOEMpB6
+   IRv90uFvk3n05sxHygcab1WHdwGfaZ2Fzs1mrozCJGEzG+XfzVEQYOCoe
+   z7ZCKWnikMlBXA0L+m5WXWrdCj5yO+X4bUPkt1d7s53OA2r7IcruApxsS
+   AJayUxwVmyie2zLvmqEtDwr8wAsamL1NCm9nC9s0k1dmWtSLzArAaHLge
+   3OfT8KLAFhTdFRlm++BIaUzgXr0NOQf9lVtd0ReJzk6Rq1HevqHlXczEG
+   6d9E+ET8mqw3GgOzEKSNae9yp71Cw3wdLjh4zKypCeBg+SHEXVCEiX1sl
+   Q==;
+X-CSE-ConnectionGUID: duXWD3Z3SDyxymREthCv1Q==
+X-CSE-MsgGUID: DdEumKn9R9mehV939xGs0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="59219637"
+X-IronPort-AV: E=Sophos;i="6.21,278,1763452800"; 
+   d="scan'208";a="59219637"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2026 03:15:44 -0800
+X-CSE-ConnectionGUID: 7vXsVE9ATjei0yXdix2TyA==
+X-CSE-MsgGUID: 2xznzKtsTV+/GqjsCPehrQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,278,1763452800"; 
+   d="scan'208";a="241759485"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 07 Feb 2026 03:15:41 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vogHr-00000000lbs-02mx;
+	Sat, 07 Feb 2026 11:15:39 +0000
+Date: Sat, 7 Feb 2026 19:15:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Carl Lee via B4 Relay <devnull+carl.lee.amd.com@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Charles Hsu <ythsu0511@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	carl.lee@amd.com, peter.shen@amd.com, colin.huang2@amd.com
+Subject: Re: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID
+ VOUT on MPQ8785/MPQ8786
+Message-ID: <202602071904.asgoYuoc-lkp@intel.com>
+References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: pmbus: mpq8785: add MPQ8786
- support
-To: Carl Lee <qq1145099@gmail.com>, Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Charles Hsu <ythsu0511@gmail.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, peter.shen@amd.com, colin.huang2@amd.com
-References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
- <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-1-3744cd9b2850@amd.com>
- <20260205-cordial-warping-pronghorn-aeebe7@quoll>
- <79a6a2bc-4894-4ff9-8a11-5ed71195cf09@roeck-us.net>
- <aYWORPv2goAEfIgt@carl-amd>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <aYWORPv2goAEfIgt@carl-amd>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
 
-On 06/02/2026 07:46, Carl Lee wrote:
-> On Thu, Feb 05, 2026 at 08:17:07AM -0800, Guenter Roeck wrote:
->> On Thu, Feb 05, 2026 at 02:46:29PM +0100, Krzysztof Kozlowski wrote:
->>> On Thu, Feb 05, 2026 at 06:01:37PM +0800, Carl Lee wrote:
->>>> Add device type support for MPQ8786
->>>>
->>>> Signed-off-by: Carl Lee <carl.lee@amd.com>
->>>> ---
->>>>  Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 5 ++++-
->>>>  1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->>>> index 90970a0433e9..aec7397a29f9 100644
->>>> --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->>>> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
->>>> @@ -19,6 +19,7 @@ properties:
->>>>        - mps,mpm3695-25
->>>>        - mps,mpm82504
->>>>        - mps,mpq8785
->>>> +      - mps,mpq8786
->>>
->>> Your driver code says they are the same, so compatible. Express it with
->>> fallback or provide real rationale in commit msg.
->>>
->>
->> Agreed. The mpq8785 datasheet is public, but the mpq8786 datasheet isn't.
->> That makes it all but impossible to determine if there are indeed no
->> notable differences between the chips.
->>
->> Guenter
-> 
-> There is no chip-specific difference in the driver code to justify
-> separate MPQ8786 support. 
-> Therefore, Therefore, I will use MPQ8785 for support.
+Hi Carl,
 
-One message is enough.
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Carl-Lee-via-B4-Relay/dt-bindings-hwmon-pmbus-mpq8785-add-MPQ8786-support/20260205-180428
+base:   4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
+patch link:    https://lore.kernel.org/r/20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850%40amd.com
+patch subject: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID VOUT on MPQ8785/MPQ8786
+config: s390-randconfig-001-20260207 (https://download.01.org/0day-ci/archive/20260207/202602071904.asgoYuoc-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602071904.asgoYuoc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602071904.asgoYuoc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/mpq8785.c: In function 'mpq8785_read_byte_data':
+>> drivers/hwmon/pmbus/mpq8785.c:61:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+      if ((ret >> 5) == 1)
+         ^
+   drivers/hwmon/pmbus/mpq8785.c:63:2: note: here
+     default:
+     ^~~~~~~
+
+
+vim +61 drivers/hwmon/pmbus/mpq8785.c
+
+    50	
+    51	static int mpq8785_read_byte_data(struct i2c_client *client, int page, int reg)
+    52	{
+    53		int ret;
+    54	
+    55		switch (reg) {
+    56		case PMBUS_VOUT_MODE:
+    57			ret = pmbus_read_byte_data(client, page, reg);
+    58			if (ret < 0)
+    59				return ret;
+    60	
+  > 61			if ((ret >> 5) == 1)
+    62				return PB_VOUT_MODE_DIRECT;
+    63		default:
+    64			return -ENODATA;
+    65		}
+    66	
+    67		return ret;
+    68	}
+    69	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
