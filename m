@@ -1,70 +1,58 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED238125A0
-	for <linux-hwmon@vger.kernel.org>; Sat,  7 Feb 2026 16:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770481311; cv=none; b=pOXFGLYnHI2qi9W7p8n8JzKM9tl7hbA6hsVKL8OTheEUbi6pwzZy8U2kHA0oJLpxtgUc1QUwOFSiWhPTtUXvlWuZ0UwFOuoBKWrdIkQKnkQeAYpLNGLQecJJcy1W8jLzI/GNSTNsH9OBrBSQH35OiB0vWE911JeNWMHGop1SFnw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770481311; c=relaxed/simple;
-	bh=0wLp3S9WMCg5iFn83SJAlI2xUOuhmKnhC+oxMLP0AAc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vEPPK9I7QqEqN+HpYcx/dFMrk4YgDa/tKzeKbaj62sWLPLgLvPELYMIbMC9QqEbTKxRDJDD9oSanGekEGV4ce6wKqMqMKvh6+L52H9taMub25fvbY5RdZZlfY4Zu43TZ/bdSugWGG6i7LkRLfPBgwd09NalUbb/B3Ugy8fFDMl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lWnWe/2F; arc=none smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B893299AAB;
+	Sat,  7 Feb 2026 17:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770485042; cv=pass; b=Aj07GLLhzdtx+DAJD2SD8Fo+0u1D7dPwgobiE9YsPnJ8tXxF3ENBfI6Zz4/Qge1JdlACOfb8JILvd+sW5RDFXcevEE6qmDYwevGkoezbV/jgrOoRb3aAoB5LumKkYpFuU7G9gd5xMPBzPrOBikTJcxe+Yjv9fdjCGghgI4JqA+o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770485042; c=relaxed/simple;
+	bh=s41gT87dWvuzHdqIUv41leecdIo/clKsPj7uK0KyjcM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FVJqu/tWdEDxR+7r9KD5HFBpHQK/4WTGlbqM8/7yami4yHt68qh4LTDDlzPhmZM6eHfccZlzl/+p/dHOJVLOsnlo1CMrY59XQ3X/3l5MznFMiH2EjD+GBXJYJwFHt1AvV1mWPIcaJMUEQ7ffCrvqh8gbHxIaQ3wypJZQd9rI2wk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe; spf=pass smtp.mailfrom=rong.moe; dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b=jXLxCrBm; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rong.moe
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rong.moe
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lWnWe/2F"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1233bb90317so3007823c88.1
-        for <linux-hwmon@vger.kernel.org>; Sat, 07 Feb 2026 08:21:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770481310; x=1771086110; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bN8iaEMB/sPo/G/blTL3KXQdqWeom9PfBw1fZipaMyU=;
-        b=lWnWe/2FiG3fCLXM/lMaRLul07NjIjWh22y/NbHkfhtaEX/4I+Yrt2nr0I+TmduNlj
-         EpPmTHitpi7OgVaHdFJ/O/rNTbvU5wYUerjvR2tWx513TDoWsbvXuc880g+usKA+OA5Z
-         kvM41MirSJtRMBcPkrsm7JBAy4lqW6pHU+vdTOJ7TqCpxO99JWTUhssDly5vAXH5zGCv
-         BxsWvB6hLk8iEqLHSAxSPUHPlokH5s35+MZg1zHHA0pI3OVNXXFZdM0Gt5e8CknUYSiJ
-         NFE+l5iZDX2orPtlVRVXHOYGETFkohJOYXfGRiDUB5EhjCBgpdhK/SLf8Kg6JjDGshlM
-         1SWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770481310; x=1771086110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bN8iaEMB/sPo/G/blTL3KXQdqWeom9PfBw1fZipaMyU=;
-        b=CwpjXPO3DvP6yoSJG3EubMai4CVhtW9WPb94ie3FXFS7kK7HQQK4+SuWTM+nR8Ccbe
-         rzBBNrVLI5Hb+nM/wi79LxWGZihPKQ6v4i5baxfd+Fe97dmcTqiq1Hv84ZSJncdw1dUX
-         rrk91GMVPewi80Ozr38qyYHU44/IN+dnFHn8NmLySbuyggwo9aVyuWU2Ml4jw9/D1gU/
-         Rte5Txa7F4Enaq5TDoHFb0Ojb78mvL6dLoL2FbQDKkyVxHGeDKnbKicmYRruy4SyKwJN
-         xYQMsmapQf10YN9RFYs/l2aJnwtWAkI4zqlGrwZbvgLmODnvqX6kpsmcqMIDIlmdPI9F
-         lGfg==
-X-Gm-Message-State: AOJu0YyjQRSLQyP9rkWnoDK/r0IHNIeGLVLDmsGs84VoJTYgm4sdm0zl
-	8mkRFQ00ga6MVddih+/rP1DmR9TqVWj34S1ufTQWcnKZYMyPU7O5AYWnlBy8unXa
-X-Gm-Gg: AZuq6aJxTm74oUh9QOR/blJ2QeV1ezRLQEcibUzzZrjOyhFLzqfLEtesV1T2PimqMBB
-	NqOKWynijGNUJ/ix6uB1pHi8LLdJsQppyYdoa7Uwf976Ia/hMsTftj/YB9hgnzd0nV06NBd57M/
-	KfIiU1AdH5X/IQ6Zxu8CqGvIwMcet0eeYlI81g0ipQM3dBnytznDm6jSY+R9UjgXaiTtruQnpFc
-	sLYhU/wVTRVbhVpwERgtKyimEl/T9vUcUSRd+UMRsMn2CIZ1pO+uw6zG07JM2QhoNNaddGSqQB1
-	xA1F5W7EBL02js9Fh+FZw/LHE/hd7DTb7ZuHYg/HFWK1RyAhNeNIvfRpiW3spYs4GqVGhg75/X9
-	keU7ySQAmVpCgQEAXo3R0C8x/rdUoXBeBsC14Bq6MIv/94RfAYXBTB7xhG1nvbBT6c/oWfu51YD
-	Mtvn75Aw1JXykfy5C0dfT0ZBkHhOhKUTYruZk=
-X-Received: by 2002:a05:7022:418f:b0:123:36f3:2d2f with SMTP id a92af1059eb24-126fc1f1000mr5005069c88.26.1770481309648;
-        Sat, 07 Feb 2026 08:21:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12706faa047sm3535613c88.14.2026.02.07.08.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Feb 2026 08:21:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.de>,
-	Junrui Luo <moonafterrain@outlook.com>
-Subject: [PATCH] Revert "hwmon: (ibmpex) fix use-after-free in high/low store"
-Date: Sat,  7 Feb 2026 08:21:46 -0800
-Message-ID: <20260207162147.467133-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=rong.moe header.i=i@rong.moe header.b="jXLxCrBm"
+ARC-Seal: i=1; a=rsa-sha256; t=1770485018; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=A8b6ucQgsHtCFZX9QWtRpFb6BqxWFrC7T0Bu4xZ0ErtC7SV2sZDVh2AzBen9Rs0t2yfFsPJOaBTOyht0uUlKtuup4St0kDOgSuMFOO0dnJMHWQNbzeuvcGHen8NZnA10nzTkZMDIZtTphzdwSp3DKlDIbm2/pTNzN8az8+HHJpA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1770485018; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=faMM77TcsvJrLJnEOJkg9GDeZL+mgoEejPqj8vRk9u8=; 
+	b=MSrhfo5ksRH3c6lxzSKC31bDbljy/MyJTTrOuqxmGU8+Mp9xM/rvQfIbtPTbUOjNj3sKyoulR0WMMz5jPTlUS+lcJlCx4YafkB/Zy1L4pzPXGDCmRckXDrapTFgg40rr0940bd05I9iX96sKvuOeCgDQwaOe1JRuYpQIKEO8+Bo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=rong.moe;
+	spf=pass  smtp.mailfrom=i@rong.moe;
+	dmarc=pass header.from=<i@rong.moe>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770485018;
+	s=zmail2048; d=rong.moe; i=i@rong.moe;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=faMM77TcsvJrLJnEOJkg9GDeZL+mgoEejPqj8vRk9u8=;
+	b=jXLxCrBmwZ09vVYjcVtQ9tzkyXlXoACPj4Wuwcq63JaReciULr+1JzhFvyzXuAgu
+	JIWbtEu1OdEzLGXky6F14ck6/DAVCQwVuWCXEqvL0XUvs3QgJSuSxjNw2zGahF8ClNU
+	hXOZPt90QrWVO1QxSoEW8/l+KQsMH7FMfScWlswE+7PUBQUkpA6KbysPqynch24Vmhw
+	Ck4xNkY/NhvZHW/W/xMRxyimTq2oD05zRmQYZkG2lK5+j3/hCbNg57J7dZyv6ZVgRGx
+	5KRLq8NHTfbWibuciJRFZj8O9sb1JJGcYCz4BggPA0UHm6m4yYBs0NvYmvMLBTrZCtF
+	8/nFc239qw==
+Received: by mx.zohomail.com with SMTPS id 1770485016956754.7552455871597;
+	Sat, 7 Feb 2026 09:23:36 -0800 (PST)
+From: Rong Zhang <i@rong.moe>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Rong Zhang <i@rong.moe>,
+	Guenter Roeck <linux@roeck-us.net>,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH] platform/x86: lenovo-wmi-{capdata,other}: Fix HWMON channel visibility
+Date: Sun,  8 Feb 2026 01:23:27 +0800
+Message-ID: <20260207172327.80111-1-i@rong.moe>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,82 +60,64 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-This reverts commit 6946c726c3f4c36f0f049e6f97e88c510b15f65d.
+The LWMI_SUPP_MAY_{GET,SET} macros are fundamentally broken. When I
+introduced them, I meant to check LWMI_SUPP_VALID *and* the
+corresponding bits for get/set capabilities. However, `supported &
+LWMI_SUPP_MAY_{GET,SET}' means *or*, so it accidentally passes the check
+when LWMI_SUPP_VALID is set.
 
-Jean Delvare points out that the patch does not completely
-fix the reported problem, that it in fact introduces a
-(new) race condition, and that it may actually not be needed in
-the first place.
+Fix them by only including the corresponding get/set bit without
+LWMI_SUPP_VALID. Meanwhile, rename them to LWMI_SUPP_{GET,SET} to make
+them less confusing.
 
-Various AI reviews agree. Specific and relevant AI feedback:
-
-"
-This reordering sets the driver data to NULL before removing the sensor
-attributes in the loop below.
-
-ibmpex_show_sensor() retrieves this driver data via dev_get_drvdata() but
-does not check if it is NULL before dereferencing it to access
-data->sensors[].
-
-If a userspace process reads a sensor file (like temp1_input) while this
-delete function is running, could it race with the dev_set_drvdata(...,
-NULL) call here and crash in ibmpex_show_sensor()?
-
-Would it be safer to keep the original order where device_remove_file() is
-called before clearing the driver data? device_remove_file() should wait
-for any active sysfs callbacks to complete, which might already prevent the
-use-after-free this patch intends to fix.
-"
-
-Revert the offending patch. If it can be shown that the originally reported
-alleged race condition does indeed exist, it can always be re-introduced
-with a complete fix.
-
-Reported-by: Jean Delvare <jdelvare@suse.de>
-Closes: https://lore.kernel.org/linux-hwmon/20260121095342.73e723cb@endymion/
-Cc: Jean Delvare <jdelvare@suse.de>
-Cc: Junrui Luo <moonafterrain@outlook.com>
-Fixes: 6946c726c3f4 ("hwmon: (ibmpex) fix use-after-free in high/low store")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 67d9a39ce85f ("platform/x86: lenovo-wmi-capdata: Wire up Fan Test Data")
+Signed-off-by: Rong Zhang <i@rong.moe>
 ---
- drivers/hwmon/ibmpex.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/platform/x86/lenovo/wmi-capdata.h | 4 ++--
+ drivers/platform/x86/lenovo/wmi-other.c   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
-index 129f3a9e8fe9..228c5f6c6f38 100644
---- a/drivers/hwmon/ibmpex.c
-+++ b/drivers/hwmon/ibmpex.c
-@@ -277,9 +277,6 @@ static ssize_t ibmpex_high_low_store(struct device *dev,
- {
- 	struct ibmpex_bmc_data *data = dev_get_drvdata(dev);
+diff --git a/drivers/platform/x86/lenovo/wmi-capdata.h b/drivers/platform/x86/lenovo/wmi-capdata.h
+index 59ca3b3e5760b..8c1df3efcc553 100644
+--- a/drivers/platform/x86/lenovo/wmi-capdata.h
++++ b/drivers/platform/x86/lenovo/wmi-capdata.h
+@@ -9,8 +9,8 @@
+ #include <linux/types.h>
  
--	if (!data)
--		return -ENODEV;
--
- 	ibmpex_reset_high_low_data(data);
+ #define LWMI_SUPP_VALID		BIT(0)
+-#define LWMI_SUPP_MAY_GET	(LWMI_SUPP_VALID | BIT(1))
+-#define LWMI_SUPP_MAY_SET	(LWMI_SUPP_VALID | BIT(2))
++#define LWMI_SUPP_GET		BIT(1)
++#define LWMI_SUPP_SET		BIT(2)
  
- 	return count;
-@@ -511,9 +508,6 @@ static void ibmpex_bmc_delete(struct ibmpex_bmc_data *data)
- {
- 	int i, j;
+ #define LWMI_ATTR_DEV_ID_MASK	GENMASK(31, 24)
+ #define LWMI_ATTR_FEAT_ID_MASK	GENMASK(23, 16)
+diff --git a/drivers/platform/x86/lenovo/wmi-other.c b/drivers/platform/x86/lenovo/wmi-other.c
+index 2a9ede27e13d4..6040f45aa2b0d 100644
+--- a/drivers/platform/x86/lenovo/wmi-other.c
++++ b/drivers/platform/x86/lenovo/wmi-other.c
+@@ -216,7 +216,7 @@ static umode_t lwmi_om_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_t
  
--	hwmon_device_unregister(data->hwmon_dev);
--	dev_set_drvdata(data->bmc_device, NULL);
--
- 	device_remove_file(data->bmc_device,
- 			   &sensor_dev_attr_reset_high_low.dev_attr);
- 	device_remove_file(data->bmc_device, &dev_attr_name.attr);
-@@ -527,7 +521,8 @@ static void ibmpex_bmc_delete(struct ibmpex_bmc_data *data)
- 		}
+ 		switch (attr) {
+ 		case hwmon_fan_target:
+-			if (!(priv->fan_info[channel].supported & LWMI_SUPP_MAY_SET))
++			if (!(priv->fan_info[channel].supported & LWMI_SUPP_SET))
+ 				return 0;
  
- 	list_del(&data->list);
--
-+	dev_set_drvdata(data->bmc_device, NULL);
-+	hwmon_device_unregister(data->hwmon_dev);
- 	ipmi_destroy_user(data->user);
- 	kfree(data->sensors);
- 	kfree(data);
+ 			if (relax_fan_constraint ||
+@@ -233,7 +233,7 @@ static umode_t lwmi_om_hwmon_is_visible(const void *drvdata, enum hwmon_sensor_t
+ 			return 0;
+ 		case hwmon_fan_div:
+ 		case hwmon_fan_input:
+-			visible = priv->fan_info[channel].supported & LWMI_SUPP_MAY_GET;
++			visible = priv->fan_info[channel].supported & LWMI_SUPP_GET;
+ 			break;
+ 		case hwmon_fan_min:
+ 			visible = priv->fan_info[channel].min_rpm >= 0;
+
+base-commit: eeeb4c9874bb7ad11d322156443b1d3ebfaaa1cf
 -- 
-2.45.2
+2.51.0
 
