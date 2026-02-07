@@ -1,129 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [65.21.191.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86F41A239A;
-	Sat,  7 Feb 2026 11:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D9D331A71;
+	Sat,  7 Feb 2026 11:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.21.191.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770462945; cv=none; b=VXHP6j2ZB+vUwz1VUwaotVMvHhLC52RNoj/Eq7QbM66pPK9rJxkBQrQz/25BQTkV6AS8WODWU9FMD7b8tN539U+fL4AxJ+fDqyvmjEQRnfonW3pJrTy2Rfaz54Yx/LMvJ/2alxGjOWCmyAyf8XZNrBPewMiDh+FTSvzo/fJF1OU=
+	t=1770464626; cv=none; b=i7hYXsgMe4EGB0nYFOdil5Vck1ZqxYaDow5KP0e38OrjJxxyRZsU42QHZmD/2oWfe2r3DdAhmiCp8K/7T4Ae2kelhlwrNvKcvjHaGHIXXG/wtKQ/+UjHrBKNmcWnt+oBiaFKfFXtTh9+jSNVokB8I4YxWvSPTwncS1yAIWKkF9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770462945; c=relaxed/simple;
-	bh=qOTMyY8iw0Hxk+7JdvvZN0z2iHOtYdPDl/VrlBCuGrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FlkKwwZvksqkDBVWtMBXj5uTrMYRP8xrLsxoPVqVmspc1p/WwEGdk32YlLRNSOQnmxmA9mHMt4iAwK2/vP8zG30lxtt3FOQnOCVhdWvoZL6uJvwQ755hxkrj2fH0Xof9ksDsXSXQ6razuKHi0C0m8wIryXRiQpI3ZV6UVg4SigM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQfBHcHQ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQfBHcHQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770462945; x=1801998945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qOTMyY8iw0Hxk+7JdvvZN0z2iHOtYdPDl/VrlBCuGrU=;
-  b=FQfBHcHQf0C6qenjTD2yu5P1R8KURIOMvsG8oI7VaPXfbdPVyiOEMpB6
-   IRv90uFvk3n05sxHygcab1WHdwGfaZ2Fzs1mrozCJGEzG+XfzVEQYOCoe
-   z7ZCKWnikMlBXA0L+m5WXWrdCj5yO+X4bUPkt1d7s53OA2r7IcruApxsS
-   AJayUxwVmyie2zLvmqEtDwr8wAsamL1NCm9nC9s0k1dmWtSLzArAaHLge
-   3OfT8KLAFhTdFRlm++BIaUzgXr0NOQf9lVtd0ReJzk6Rq1HevqHlXczEG
-   6d9E+ET8mqw3GgOzEKSNae9yp71Cw3wdLjh4zKypCeBg+SHEXVCEiX1sl
-   Q==;
-X-CSE-ConnectionGUID: duXWD3Z3SDyxymREthCv1Q==
-X-CSE-MsgGUID: DdEumKn9R9mehV939xGs0Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11693"; a="59219637"
-X-IronPort-AV: E=Sophos;i="6.21,278,1763452800"; 
-   d="scan'208";a="59219637"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2026 03:15:44 -0800
-X-CSE-ConnectionGUID: 7vXsVE9ATjei0yXdix2TyA==
-X-CSE-MsgGUID: 2xznzKtsTV+/GqjsCPehrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,278,1763452800"; 
-   d="scan'208";a="241759485"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 07 Feb 2026 03:15:41 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vogHr-00000000lbs-02mx;
-	Sat, 07 Feb 2026 11:15:39 +0000
-Date: Sat, 7 Feb 2026 19:15:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Carl Lee via B4 Relay <devnull+carl.lee.amd.com@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	carl.lee@amd.com, peter.shen@amd.com, colin.huang2@amd.com
-Subject: Re: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID
- VOUT on MPQ8785/MPQ8786
-Message-ID: <202602071904.asgoYuoc-lkp@intel.com>
-References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
+	s=arc-20240116; t=1770464626; c=relaxed/simple;
+	bh=6QoShjV6qd53C5oB9Tf3vfSjqYfwF01ob27R1R+zDME=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=okX0yZPDcqM5cgA+xoMhi/V793iqVfTCip9CzZwYus9B60mcS2Ip3ZCmL47uGZpE/ei5HNvy9wlOigrrJja+td1tl6e7+AJimGdhIWEXu4PZlGJ1vwN0Hwxq95Cn92IfKzgczfBNUKiDEN7PHntw3GRH/eI7/4Ep37tzIUzIfqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk; spf=pass smtp.mailfrom=decadent.org.uk; arc=none smtp.client-ip=65.21.191.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=decadent.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=decadent.org.uk
+Received: from [2a02:578:851f:1502:391e:c5f5:10e2:b9a3] (helo=deadeye)
+	by maynard with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1vogiu-0048sz-1S;
+	Sat, 07 Feb 2026 11:43:35 +0000
+Received: from ben by deadeye with local (Exim 4.99.1)
+	(envelope-from <ben@decadent.org.uk>)
+	id 1vogis-000000021iH-1mWw;
+	Sat, 07 Feb 2026 12:43:34 +0100
+Message-ID: <f6710a1f44d2b32df1cb9b09cddc6695bf76eec2.camel@decadent.org.uk>
+Subject: Re: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
+ optimization induced race
+From: Ben Hutchings <ben@decadent.org.uk>
+To: David Laight <david.laight.linux@gmail.com>, Gui-Dong Han
+	 <hanguidong02@gmail.com>
+Cc: linux@roeck-us.net, linux-hwmon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com, stable@vger.kernel.org
+Date: Sat, 07 Feb 2026 12:43:29 +0100
+In-Reply-To: <20260207104308.1bc31102@pumpkin>
+References: <20260203121443.5482-1-hanguidong02@gmail.com>
+	 <20260207104308.1bc31102@pumpkin>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-+DcWWCeRBAOX1jARWoNK"
+User-Agent: Evolution 3.56.2-8 
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
-
-Hi Carl,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Carl-Lee-via-B4-Relay/dt-bindings-hwmon-pmbus-mpq8785-add-MPQ8786-support/20260205-180428
-base:   4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
-patch link:    https://lore.kernel.org/r/20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850%40amd.com
-patch subject: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID VOUT on MPQ8785/MPQ8786
-config: s390-randconfig-001-20260207 (https://download.01.org/0day-ci/archive/20260207/202602071904.asgoYuoc-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260207/202602071904.asgoYuoc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602071904.asgoYuoc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/hwmon/pmbus/mpq8785.c: In function 'mpq8785_read_byte_data':
->> drivers/hwmon/pmbus/mpq8785.c:61:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
-      if ((ret >> 5) == 1)
-         ^
-   drivers/hwmon/pmbus/mpq8785.c:63:2: note: here
-     default:
-     ^~~~~~~
+X-SA-Exim-Connect-IP: 2a02:578:851f:1502:391e:c5f5:10e2:b9a3
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
 
 
-vim +61 drivers/hwmon/pmbus/mpq8785.c
+--=-+DcWWCeRBAOX1jARWoNK
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-    50	
-    51	static int mpq8785_read_byte_data(struct i2c_client *client, int page, int reg)
-    52	{
-    53		int ret;
-    54	
-    55		switch (reg) {
-    56		case PMBUS_VOUT_MODE:
-    57			ret = pmbus_read_byte_data(client, page, reg);
-    58			if (ret < 0)
-    59				return ret;
-    60	
-  > 61			if ((ret >> 5) == 1)
-    62				return PB_VOUT_MODE_DIRECT;
-    63		default:
-    64			return -ENODATA;
-    65		}
-    66	
-    67		return ret;
-    68	}
-    69	
+On Sat, 2026-02-07 at 10:43 +0000, David Laight wrote:
+> On Tue,  3 Feb 2026 20:14:43 +0800
+> Gui-Dong Han <hanguidong02@gmail.com> wrote:
+>=20
+> > Simply copying shared data to a local variable cannot prevent data
+> > races. The compiler is allowed to optimize away the local copy and
+> > re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
+> > issue if the data changes between the check and the usage.
+>=20
+> While the compiler is allowed to do this, is there any indication
+> that either gcc or clang have ever done it?
+> ISTR someone saying that they never did - although I thought that
+> was the original justification for adding ACCESS_ONCE().
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+They do it sometimes and it's precisely why these maros were added.  It
+makes no sense to me to look at what these compilers currrently do (for
+some particular versions, optimisation settings, and targets) and
+extrapolate that to the assertion that they will never optimise away a
+copy.
+
+> READ_ONCE() also includes barriers to guarantee ordering between cpu.
+> These are empty on x86 but add code to architectures where the cpu
+> can (IIRC) re-order writes.
+> This is worst on alpha but affects arm and probably ppc.
+
+No, READ_ONCE() and WRITE_ONCE() don't include any CPU memory barriers.
+
+> For these cases is it enough to add the compile-time barrier() after
+> reading the variable to a local.
+> That will also generate better code on x86.
+>=20
+> The WRITE_ONCE() aren't needed at all, the compilers definitely
+> guarantee to do a single memory access for aligned accesses that are
+> less than the size of a word.
+
+I think in this case WRITE_ONCE() might not be needed, but it's also
+harmless and it's much easier to reason about {READ,WRITE}_ONCE() being
+paired up.
+
+> This all stinks of being an AI generated patch.
+
+This is a follow-up to an earlier patch that claimed to fix the TOCTOU
+issue.  I objected to that because in the absense of READ_ONCE() it was
+not guaranteed to do so.
+
+Ben.
+
+--=20
+Ben Hutchings
+If more than one person is responsible for a bug, no one is at fault.
+
+--=-+DcWWCeRBAOX1jARWoNK
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmmHJWEACgkQ57/I7JWG
+EQmoKg//exLS0OLNWramvNGGiNkdQ+cWZkRqZ8v2C2dVaH4prmpIdxYI3FbOX4Tz
+HKEWz6VZtd4F6tM/os8WM1cGSLk5IiztGfEKaZM6NCrKjmFHZuhw23OATgh3LX66
+iwlrw9//raENnA2eCfSmrS2xpaSitRA7+TUgTEkYtQhkG3P9S9LtJ24LZnogjr3E
+Tz+xmb3iDdZGzIMuhcV8685OlhJ6G0kmAwke3QQx54VJLTTDvnio/GPYrZQScv79
+xxDVVYSYm9PnEM5PufwGo5dScX2cmRJcD6F6JxGRAxTVe7v9WCHXR7GMl964YnoW
+9yiKy36wt7d3czEel4VvMgH4AsZJQ0JlWGXMttb3vjQndmgusgPxYf+ecCM7MV/d
+CTM0wG0CcjFltLZkfJVLOBRujwZCWfDSdp5fhxuLnei/G+qZk+BhCFSuo23B8UqR
+4WUVPhi1zdoi97R3+L71kpKhxVFR01nVH6X0AHtjcgn9EU36HDzlPwAJVe5Sz7DU
+ZlVTnVvwPe0bc4qaiTy9XYLHXG6pq+Iitf+EdwNouDrhqovP7GnBmEL8d13u/S/L
+LWwvKmPmSFA0d+62z/SuKLLKMNx331X+iTvUyk9V1fjUoFx0uSCB858P8FvL450y
+fpDfnMf6GcaDzk6OOwDE90OBCtWSEVHFiQuJY9SX09YLSIfkYls=
+=7BoC
+-----END PGP SIGNATURE-----
+
+--=-+DcWWCeRBAOX1jARWoNK--
