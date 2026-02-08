@@ -1,104 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E2D2FE071;
-	Sun,  8 Feb 2026 01:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FDF350297
+	for <linux-hwmon@vger.kernel.org>; Sun,  8 Feb 2026 11:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770514086; cv=none; b=gb0BNBxoII2fSHwrlGvpjM2531UdunnzYUO/84oTSk3kuwJ0WVSco+nX8yn0hxuiu0MOZEBI6tZcuLBFORTgqahbpGsWf1DvSswPFk1zS6WvG9tYwcn+xcyeAbJmzegjosOrnKy2Hfz448EmwyUFg0hiJzcOcshbW2Rf0+7mxuU=
+	t=1770551293; cv=none; b=XE8fTDEUiGiHaAFe8VARjyEt6NZhyhLddc3O1lunVkQUp4cIbOv3L5Z6bvVTrmT/5oDg52M+PfSmgTns8iTnemMPniRXbEGqaE5531bcEsRf4lqfClTPXaLphalTmOLnwswK+k1eCdWnvliQMlVpCUzmJ2GZiyOk9bl3z0mHJRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770514086; c=relaxed/simple;
-	bh=00vtT39Jvixfi9ZVfpFlajnoDWPhiFq0HqXBPIp6ZRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eVO9c4nnDp3joFYK3MSZANlmvtqrQ3SjYhEenxMZCJDZNwelfpO9P12fHqL8yiEieoHemgO7vO9xrKxZQRBtoYelX1yd70rbC0kbZ7Eyzgb6rf6oiGa8+ZSYCaaEpsa0oR+ws8w6VHeLHMohZCC+2gsz6B5hmA/6qw4YIEF5WLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i51G6pAK; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770551293; c=relaxed/simple;
+	bh=kOtJUkHc7QaeZVHQeI7ehTWWIzpadGTi8Vudy6UBKfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iCnTvi9l9Y6dkGWcOYg++7X3Wy86u3wT1Tznsd1xQ2IPdTOFC+g+fqYPDwqd1cdXopBUItZk48USoLOGm0H5oULoMaJi5E4ky48VZKQhRN4xSo05ew1yFOA5qJSJnmgWuFdPvhXLqbsYNKUJaL7k6kGOdATHhGuuj/4e5pIe7Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e+ZHYATC; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i51G6pAK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770514086; x=1802050086;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=00vtT39Jvixfi9ZVfpFlajnoDWPhiFq0HqXBPIp6ZRs=;
-  b=i51G6pAKyuCXaAQ5uyOLw4969y2fdpjKiWN/fUSeYENTZSHvGgh+WXwX
-   tPc0ZZtLj5NTjGo9IU6WW4LFTSSTBF4PktLi8itBq1fwd56HFCfQqB7Ay
-   imQC3eDZW8vB/NLIVAamu4i3b0BuN/a3m/MmUafUSPrK4COOOlv5sfXrT
-   npxToBe2utvpa0ei/E28Oz1+PzScaRu+F56fw5G3fF/JCMUXBqRZafbn0
-   0WQoD+Hp5CjB591NTQc9GjdIgj20cpff4VuyNqaug9n+50g0F3YmRokVD
-   /5EBKb6HfOu+WyieYGcek49dGpdc96Mi5izn0Yuc4i6v9U2gCHSBQIdiF
-   A==;
-X-CSE-ConnectionGUID: rpDwlkS8Su6VYhBVyaKt/g==
-X-CSE-MsgGUID: +j8L9GSeSRmw1u3Y15X9gQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11694"; a="82407605"
-X-IronPort-AV: E=Sophos;i="6.21,279,1763452800"; 
-   d="scan'208";a="82407605"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2026 17:28:05 -0800
-X-CSE-ConnectionGUID: Z8lL18aARnOxVCVEXE5i8w==
-X-CSE-MsgGUID: uY40Je0aRMOw+ecg6shhpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,279,1763452800"; 
-   d="scan'208";a="211037611"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Feb 2026 17:28:02 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1votai-00000000m00-0D9Z;
-	Sun, 08 Feb 2026 01:28:00 +0000
-Date: Sun, 8 Feb 2026 09:27:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	amit.kucheria@oss.qualcomm.com,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-Subject: Re: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
-Message-ID: <202602080939.NxUyWMbv-lkp@intel.com>
-References: <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+ZHYATC"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so33643415e9.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 08 Feb 2026 03:48:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770551292; x=1771156092; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vYOGoHWlR/eu7M6OQ2kE1xOB0jjtOqAsLw5aYMd4kfY=;
+        b=e+ZHYATCDil7QXla5wldWTQb5Mw8evJ/+FvxcrGSHrdNTuDDER64nn/baIwNuWRKoB
+         uxYw4F656JSMrFLzkLVDUFakNUaS3yLpopdHzHX4HRMMLkC0vvFTNCh7x8FgbFORLMUa
+         abizx0D8+ViJbwBL5JboCX+VjCINu+EFMCF185nPKRuPp8G5vxaxCwS4++e2BVm+hmoC
+         tHjotq+FdEQV4C6v6VN4ey9rpmL6RNSCKI9OarUsfRf2+NwzhXTjJySN5sqGL8k+Vvpn
+         XzWxZWF3/wHa54Fo40hJCGVbLYK735Qg+J8kWU3S2wuUBrUJv0T9CSyXoq3efM+uNNja
+         l4GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770551292; x=1771156092;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vYOGoHWlR/eu7M6OQ2kE1xOB0jjtOqAsLw5aYMd4kfY=;
+        b=OdJJ6afVlBDILta59Ueb1qz4/+UcK+7IoRn9mNAEdNp3sV31NtzG0tn2RwPmsJ/2pG
+         /9V+GlhiSb7IYC41CfhQp+sQMihujlYQB1e2mVIogsxDqH3sWbFLpxsqIN4K0dHHEAQc
+         Is995mEzsfNjdJBiaEy9/r6/+VmVBbFzSbxbX6b/lKFfDlp8SAHqmrrNW0GoSPQI0aPe
+         fgc5PZylrHeeR929mAeQieraxoHLTjRr1XQ21YtnXaNSxh4OpZuNtwUlPg5dpMdGoQGV
+         9EvfU4zM4gXlVxaEtxHW65G0Sf0vd3MXyuOcfIbhcDgF+KMgnJaU+fFyAY+IpCxzPZTn
+         w/sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZGejli+qU6dEqIbG5Zu2hzp9/o2fflRcwM7AjFGiOwc5eDKwVkhU6sh4XOebYuXlTaH/u7PCAv+zhRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrCqzkQHyfZ1Kg+PZE/CraSpGzKZU6libWWGunwPanM2LrZe9s
+	il+MeYjP2r5qxP7hGFTkoQsUW13Ee358IxFDoOZ2Rhzk9rm5U7XBTJvK
+X-Gm-Gg: AZuq6aIoFFDOktrpTpkNMkb2LhVpTtFZlxO3J7fVVXHpV8jvEOTBJBe8Pk8ptDdTpZb
+	dD0FmRRpY9nYoorE8m4Te5S/96w3MyQ4muNJyLEUPLz37lUtQ/b4C86MurgXi8Bgo1YoqaL7ZBL
+	BJv0Pv8twzQaZAH8ypReOHlSp9gZ90QJKRX1KOcZhwcsQ/tpzRKYuNpkHJHT79vkIIBu/YKD4yO
+	6JtCQJwNAzXHnesdsFYe5qmWLhc1hvVKQkz5bCabfHKED8NG4FWEEE9J1zbcFLQfDUmZJOWAUKs
+	UM4yLtXXiY8Yt+oPGfZB54UN8h4YvvhPC5zbxm3Db/tdQvIMCQ4EIq1i98mVt0+C0hdhEZv1Sww
+	ITyU1qBtJrQl5x136+kC1dFOwq1EdR3s0a1fyOv7SN8a9+3gK3GOebLJi72VsfbH+XwScNockv+
+	bJAjBMAsEGhuDgHEqfWSMduFNET7rf3aXBp44WgLzodAL5chGhytYE
+X-Received: by 2002:a05:600c:c4a7:b0:480:f27c:6335 with SMTP id 5b1f17b1804b1-48320236645mr117866695e9.25.1770551291467;
+        Sun, 08 Feb 2026 03:48:11 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d3e245sm276610505e9.8.2026.02.08.03.48.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Feb 2026 03:48:11 -0800 (PST)
+Date: Sun, 8 Feb 2026 11:48:10 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Ben Hutchings <ben@decadent.org.uk>
+Cc: Gui-Dong Han  <hanguidong02@gmail.com>, linux@roeck-us.net,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ baijiaju1990@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
+ optimization induced race
+Message-ID: <20260208114810.3709364b@pumpkin>
+In-Reply-To: <f6710a1f44d2b32df1cb9b09cddc6695bf76eec2.camel@decadent.org.uk>
+References: <20260203121443.5482-1-hanguidong02@gmail.com>
+	<20260207104308.1bc31102@pumpkin>
+	<f6710a1f44d2b32df1cb9b09cddc6695bf76eec2.camel@decadent.org.uk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Manaf,
+On Sat, 07 Feb 2026 12:43:29 +0100
+Ben Hutchings <ben@decadent.org.uk> wrote:
 
-kernel test robot noticed the following build warnings:
+> On Sat, 2026-02-07 at 10:43 +0000, David Laight wrote:
+> > On Tue,  3 Feb 2026 20:14:43 +0800
+> > Gui-Dong Han <hanguidong02@gmail.com> wrote:
+> >   
+> > > Simply copying shared data to a local variable cannot prevent data
+> > > races. The compiler is allowed to optimize away the local copy and
+> > > re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
+> > > issue if the data changes between the check and the usage.  
+> > 
+> > While the compiler is allowed to do this, is there any indication
+> > that either gcc or clang have ever done it?
+> > ISTR someone saying that they never did - although I thought that
+> > was the original justification for adding ACCESS_ONCE().  
+> 
+> They do it sometimes and it's precisely why these maros were added.  It
+> makes no sense to me to look at what these compilers currrently do (for
+> some particular versions, optimisation settings, and targets) and
+> extrapolate that to the assertion that they will never optimise away a
+> copy.
+> 
+> > READ_ONCE() also includes barriers to guarantee ordering between cpu.
+> > These are empty on x86 but add code to architectures where the cpu
+> > can (IIRC) re-order writes.
+> > This is worst on alpha but affects arm and probably ppc.  
+> 
+> No, READ_ONCE() and WRITE_ONCE() don't include any CPU memory barriers.
 
-[auto build test WARNING on 0f8a890c4524d6e4013ff225e70de2aed7e6d726]
+Look at the alpha version and the arm64 LTO code.
+The latter changes the reads to have 'acquire' semantics to stop re-ordering.
+Needed for LTO, but the thought is it might be needed in other cases.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manaf-Meethalavalappu-Pallikunhi/dt-bindings-hwmon-Add-qcom-bcl-hwmon-yaml-bindings/20260206-051819
-base:   0f8a890c4524d6e4013ff225e70de2aed7e6d726
-patch link:    https://lore.kernel.org/r/20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1%40oss.qualcomm.com
-patch subject: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
-config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20260208/202602080939.NxUyWMbv-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260208/202602080939.NxUyWMbv-lkp@intel.com/reproduce)
+	David 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602080939.NxUyWMbv-lkp@intel.com/
+> 
+> > For these cases is it enough to add the compile-time barrier() after
+> > reading the variable to a local.
+> > That will also generate better code on x86.
+> > 
+> > The WRITE_ONCE() aren't needed at all, the compilers definitely
+> > guarantee to do a single memory access for aligned accesses that are
+> > less than the size of a word.  
+> 
+> I think in this case WRITE_ONCE() might not be needed, but it's also
+> harmless and it's much easier to reason about {READ,WRITE}_ONCE() being
+> paired up.
+> 
+> > This all stinks of being an AI generated patch.  
+> 
+> This is a follow-up to an earlier patch that claimed to fix the TOCTOU
+> issue.  I objected to that because in the absense of READ_ONCE() it was
+> not guaranteed to do so.
+> 
+> Ben.
+> 
 
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/hwmon/qcom-bcl-hwmon.c:338 function parameter 'mval' not described in 'bcl_convert_milliunit_to_raw'
->> Warning: drivers/hwmon/qcom-bcl-hwmon.c:338 function parameter 'mval' not described in 'bcl_convert_milliunit_to_raw'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
