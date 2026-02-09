@@ -1,67 +1,68 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E9523D291
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Feb 2026 15:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BFA284898
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Feb 2026 16:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770651875; cv=none; b=czG264SAHHq00hHVWvz/8hSusNaqsxuB5aw0yC5wm7O3tauzX9hlyZbtM8rcp90O0WfetQRtnUqDESBA4ESkncnTZHEfjmA5EZdAEYY2xluANI8iExkBsNxS/Qnh5RsbSoaZSmOUpXA0WBSmMfudGOBvD7/JnUf1nUZQeK8IXxk=
+	t=1770653385; cv=none; b=GELgsHkGB1KJ6Xii79SBNnFuDfzRufRVcfFsdvDgdjzs/Lziogww83CcxUJhPop+NtKRLj9ujQ8QgFdkAzOKlPb8LhjcWUvkO95EJXbUBymxe0jwKdkZwAGxcKg5J844K5IsGB5dsMX5jIc79Zu3y9rvU9OswVSGCwZTEG+4G1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770651875; c=relaxed/simple;
-	bh=KbQ1DR7eIjUwgWiTwhYGN3wCp8ERiDAQnoS/oIvZWRg=;
+	s=arc-20240116; t=1770653385; c=relaxed/simple;
+	bh=x23B6GizLVDZsuyoSM1xBG6dBw5dt7tNDmNlRvlJwik=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cO5ODq/N8DxYyQaPL8TXvAew3dILFGVyO4EQ7rMfMOo8JHnEQ0LMHUoCZpBG2eIRyxiVFQ+Ta39CJNtWXmPaNtfSAk500fvWc21CRTiLoOaoVYinfEvsIzfmlJ1+H9m2OzYpGXJH6FtDYE/MJSnj1q3tzbICu7pioY0so16DxFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hbQRsvgK; arc=none smtp.client-ip=74.125.82.47
+	 In-Reply-To:Content-Type; b=doBPoz1/H3nwezFaDC3HbvGoqiQ/aVuCR2BiwL3qBL6huYdYCvgj4bfaob8OW7pQt717cZJlFMGy5r7DACUa6+R2WpSHubWvrPKoWv4A5xG4nAHiwifeeV++tdUYyadL78z48Zg3hnhmY0VLNp82Z8jozbyDlcs7rtis4t0+ABA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KNW4Eg6q; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbQRsvgK"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-12721cd256bso579550c88.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 09 Feb 2026 07:44:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KNW4Eg6q"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2b785801c93so7835451eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Feb 2026 08:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770651874; x=1771256674; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770653384; x=1771258184; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=c3Bl4JPOZwyRHkiDx2Lqy82QSiWS6py48zegDEINFNE=;
-        b=hbQRsvgKwkoly4XJKwJvOa447rzBIeREH+LMd8vQPsFFy6mFgj1X1/lJh9VYYnwKWi
-         nwKuqnKYNsxI2WNXMsqhssmJ0bR+TGDE73wHJMvl7BTuAr6kJB8liayXQhiWlZdYqGIF
-         RczVX2OOI1h9h6pvgv5bavUpW5JTtgNBaWTRihnecfXTcm/IqJX/DgsIkrgFvdZlo4cY
-         BhmCKl1CVzJkdtLYicqc2GsC+9tm2O58RcFdQeLhCkaiz1fhn7FrWkeYnHEIaOTVW294
-         SHR371XOmz5v34YihU7bOp2+O8QqtKvA5Wdr+n5mVe4f9bqrfS3k/hpE1leXpVukQqF6
-         F5OA==
+        bh=avYfqMHCJo+KZqUl2SP1UKiIRcfHhUX2kRVWwEPX4Ys=;
+        b=KNW4Eg6qKm7f36edmicKnyxkgjvDUNaXz2jgdQN0kbie+mnYx0+2gMMcZJyvpSxXxu
+         oBKQGYq8scYSxIFnGylc/iCBV3WV4fJziILcgj188MwDv2IHMDHR1NHTO5sJt+rGIPeA
+         4l75M8eWQj0FH1+fe0AOW3G3uVl3sojIGHHOiEfiGr2o/nCHyxDMxdJDCPmG0dZcvhrj
+         40Lxxi9tN8MQSebr6i3236c4g5253VrWOoPKpluEGMkMq9IZHJAjylpj+vnSiThumo6a
+         v3v5CRmJEGWdvJjgs1NIB/7C4RLMKCYROYspQxFHdhtr3zsmh+9Jg+pQPfeFrtY5RR2R
+         Gtig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770651874; x=1771256674;
+        d=1e100.net; s=20230601; t=1770653384; x=1771258184;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=c3Bl4JPOZwyRHkiDx2Lqy82QSiWS6py48zegDEINFNE=;
-        b=wPnCaPbFWtBH7lP5uF1Yxyki9UcGQ7DxXwVzhpbsjnUnXNN2gy9XXPhvJybxFRd6Bl
-         Pcs261jl2K5FlVmqnnIGnUmHWQyjSakMOFSqecTMFqQc9W3ainyOGxeerOTcEbTcA4eP
-         9YCuk5vUfVAZo+e0ELf3+QM5MQ7jh3/miQ8My91m2otdfcG0fAGExTTxmUrvG0pYrsoT
-         bOGCvt7PNnxwAjGOAuR4bu8R+VNHcShyxa38Ygn0qT+j7SDEYX79Nu3lL4nXAW/y3lZa
-         gL3h8ZaIPSBbWhC23Ckx/s4arf3jkVsjj98rAt7jlryGpMed7GcV+rdAR3L9J4SvVsm5
-         /vzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWXD3vOBDrWJ/YDMPzdzA+9CYxdGLYgqxForXdu1Buz9bKSZZOol482c+5OZ4IeNxPKaKTBOxzi97N2ZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVw8ZqZpwfcmkcdPgWDVGDsyzYKURibopTdV9Zy5Ist9183Vi8
-	7Q5Ih2IcBjb+stQKaKW5ahQcVuu+/Cs71Cl74Cnd+zJrRDvL450IC4q5
-X-Gm-Gg: AZuq6aKBfpExHu4RcXll7yWQqOnqz0CDXf5dn+MLowsXk/TsRjCzNllzgX/iX7RVLM6
-	b0eRl6AsbqNh2zv4a9GLAIdGlUnxrgnPIuTe9tFI1jwm0cqr2DPjEy8hcS5aSaS7AEIsEL+rjNd
-	lacnjjUN7/rTSueaiP6jhbUZqDnfnLT+vTSoVUaka/geIxdfejs8i2k3sMg4PnRjatNsYjc7KjW
-	x7zb0/aMxQ6P3EWQwJMW3LdmlGvksCq3np5coBVq8R8G7svAdZAzwiPKlk73bfyLG6QX9Fb4/AN
-	03563VQyp14lqx9wSr5PLm6LlxNzqQCKEqCiwIzrc4K2ia+Q4McwJMVkkUUAX83d+5IRMW0cJbG
-	RlncbMywi+XvD3KMEjsdrypT/8CO1aJeEoWeb01rdrX2gHhMLEwUw4KLJSGfnF97pXvZW4DTJbd
-	jykfwNHdVAldC/VpIQnD966c6wDiACdbBeMkB8dAoDWwyJCzVeHpWgJlvcm7iV
-X-Received: by 2002:a05:7022:6997:b0:11d:f440:b757 with SMTP id a92af1059eb24-12703fcfed1mr5405150c88.26.1770651874127;
-        Mon, 09 Feb 2026 07:44:34 -0800 (PST)
+        bh=avYfqMHCJo+KZqUl2SP1UKiIRcfHhUX2kRVWwEPX4Ys=;
+        b=JOMUuY3nLmWpb2JoexxqQEyiEvBvbcP7NUzpqP5NWEQGlV/o10M7LImK7UBro06sy0
+         deRn0Fw0lK24dGvQSXpEfgKQRhAxECTprDWS05RGqrnfEqvD0ZSg+IBSeu7LCuQVcjQW
+         TsWU7hcQRs7sSesUd0VFFqTNtnmeI6rtskzXyGcMhehq3bO4hHqPm4n3nhsx/VIs4fn8
+         sRPrUv0+nTvbDl4TXtgZOcPq6VnwgUWHjxQsLJmlUg9vqZ79/hpDcvBJl7QcHV/NQY5w
+         a8GOHT9nZ8vGtyRVDLrCB8IreDxOwsSHm7zzNnIM5r2At+yhktck7Qm6ZCMa81Ry6tro
+         pGtg==
+X-Forwarded-Encrypted: i=1; AJvYcCXl/zK0RzLHHPruuwrhwi/NP45dVWO/NAMT/MBx0fToeNEu3FHA6XT1h4NHVbfrYKdyrEWxQhwYHFY+Ow==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9e586zFxYthH1nzU08Acs2HQ5gACt6POmoA6P+/8eAsqQYZkJ
+	/jtW+1nhvgCDZLAA+8QfM3jK3uibMN82IOwA3FuWCt0hLu0I7FKp3wgG
+X-Gm-Gg: AZuq6aKTkHbBWyN3khy485fERv2O+Sey9SWRiHVfC1GNOhbesQUvPRfjgvdW3K3lf2n
+	5xJd03fzBBnG8aBU5HCHibTpCn+nLetW7EUTqJcq9FKWPblxyxcD3ypJCZjXhQ3b4XUVV7fofut
+	wKb3D6RuTimYDzGY/lE/J+cqvxkzpWDHLzShAsWSdEgOeCztcqwQnRPQw6e7XKqRIZykSuOp4o4
+	u3RDUoUX7PeDijtr/hwnzAo3hj5wqzSBYHkYHEQqpHw9IH5anJhgFSet6vro2ipWArJ147uU9bl
+	Xtmz5GH2qfiY/rXKf7I3Sn/QQfXHKd075OebBEGaNYmuMNwiUYYpssNhUTRYcLkcn9de5q0lCtX
+	vJcR6G6mCApx0aIoQOuGx8QIgUKq3YNPGWwvuvEuf9K3+cLYxZEcSduIS3stIu0avf8/F9KogGl
+	I3zwyQ1zLdVEBR9o1n2hZD7R+k8TahQuzE9gExox9SpvsH/CARuGcXr17TQkZne8Gd7BshD+XB1
+	NPcASj9KcQ=
+X-Received: by 2002:a05:693c:25c1:b0:2ba:7404:f587 with SMTP id 5a478bee46e88-2ba7404fd75mr1653117eec.21.1770653383851;
+        Mon, 09 Feb 2026 08:09:43 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1270414f28bsm9681347c88.0.2026.02.09.07.44.31
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b855c8a8f6sm7670772eec.32.2026.02.09.08.09.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Feb 2026 07:44:32 -0800 (PST)
+        Mon, 09 Feb 2026 08:09:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c640192d-e0ca-49ce-8316-b6216a9a18f8@roeck-us.net>
-Date: Mon, 9 Feb 2026 07:44:30 -0800
+Message-ID: <045c408f-6d52-4135-ae82-bc8598c41fab@roeck-us.net>
+Date: Mon, 9 Feb 2026 08:09:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,17 +70,20 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID
- VOUT on MPQ8785/MPQ8786
-To: Carl Lee <carl.lee@amd.com>
+Subject: Re: [PATCH v2 1/2] hwmon:(pmbus/tda38740a) TDA38740A Voltage
+ Regulator Driver
+To: ashish yadav <ashishyadav78@gmail.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Charles Hsu <ythsu0511@gmail.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, peter.shen@amd.com, colin.huang2@amd.com
-References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
- <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
- <07c39c3e-f82d-4ec0-b7fc-6ca9721d246d@roeck-us.net>
- <aYl+pTlG9rEuE59h@carl-amd>
+ Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ASHISH YADAV <Ashish.Yadav@infineon.com>
+References: <20260107144507.46491-1-Ashish.Yadav@infineon.com>
+ <03da3b10-dfe9-466a-9dc9-b51e29938e3e@roeck-us.net>
+ <CAJKbuCYcRMrX5H5rWXWXOz4FCZi5iu8CCE2Oi3WEsWqEikqsYg@mail.gmail.com>
+ <f0d230be-676b-47b9-9565-22319b8e62cc@roeck-us.net>
+ <CAJKbuCYUCr-R-91Ou1y6XDEPdqabSDvCxUypc-YmW=-EPxgNyQ@mail.gmail.com>
+ <787ffcff-28cb-43e0-97db-19dd7a996d13@roeck-us.net>
+ <CAJKbuCav7iCdpph7HYW4=QxEmJ5+vuwadRmaQVUxT-TBSBBGVg@mail.gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,123 +129,115 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aYl+pTlG9rEuE59h@carl-amd>
+In-Reply-To: <CAJKbuCav7iCdpph7HYW4=QxEmJ5+vuwadRmaQVUxT-TBSBBGVg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2/8/26 22:28, Carl Lee wrote:
-> On Thu, Feb 05, 2026 at 08:58:37AM -0800, Guenter Roeck wrote:
->> On Thu, Feb 05, 2026 at 06:01:39PM +0800, Carl Lee via B4 Relay wrote:
->>> From: Carl Lee <carl.lee@amd.com>
+On 2/8/26 21:04, ashish yadav wrote:
+> Hi Guenter,
+> 
+> I hope you are doing well.
+> 
+> Please find my response inline.
+> 
+> With Best Regards
+>    Ashish Yadav
+> 
+> 
+> On Mon, Feb 2, 2026 at 5:59 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 1/22/26 03:42, ashish yadav wrote:
+>>> Hi Guenter,
 >>>
->>> According to MPQ8785/MPQ8786 datasheet, VID mode configuration is
->>> the same as direct mode configuration. Therefore, when VOUT is
->>> reported in VID mode, it must be forced to use direct format.
+>>> Please find my response inline.
+>>>
+>>> Thanks & Regards
+>>>      Ashish Yadav
+>>>
+>>> On Tue, Jan 13, 2026 at 8:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>
+>>>> On 1/12/26 23:24, ashish yadav wrote:
+>>>>
+>>>>>> The need for this, especially why it would only be needed for PMBUS_READ_VOUT
+>>>>>> but not for any other VOUT related commands, is still insufficiently explained
+>>>>>> (and I failed to understand the rationale provided earlier).
+>>>>>>
+>>>>>
+>>>>> It is specifically needed for READ_VOUT as it is being used by
+>>>>> external controller to monitor the rail health.
+>>>>> Other Vout related parameters are used internally in the IC to for
+>>>>> output voltage related protections and does not impact any external
+>>>>> decision making.
+>>>>>
+>>>>
+>>>> Sorry, that doesn't really make sense. How would the chip know to match
+>>>> VOUT with its VOUT limits if both don't use the same scale ?
+>>>>
+>>> The chip telemetry would still show Vout as 0.7V as it does not know
+>>> about the external feedback resistors.
+>>> Hence, no need to scale internal Vout related parameters.
+>>> This scale is only for external vendor use to tweak their telemetry
+>>> output voltage reading.
 >>>
 >>
->> Why "must" ? Yes, the LSB is the same, at least for MPQ8785,
->> but that doesn't mean that the mode _must_ be overwritten. Maybe
->> I am missing it, but as far as I can see the datasheet doesn't
->> say that the VID mode configuration is the same as direct mode
->> configuration. It says that the _LSB_ is the same for both modes.
+>> You fail to explain why VOUT_SCALE_LOOP - which is supposed to handle such
+>> situations - can not be used, and why it would be acceptable for other VOUT
+>> related attributes such as VOUT_MIN, VOUT_MAX, VOUT_MARGIN_LOW, VOUT_MARGIN_HIGH,
+>> and the various VOUT fault limits to show the wrong values.
 >>
->> I _think_ the problem may be that the output voltages are not really
->> reported as VID values but as raw voltages, but the datasheet is a bit
->> vague in that regard. It talks about LSB values but doesn't exactly
->> say how voltages are reported, and for READ_VIN it is most definitely
->> wrong ("This bit is in VID mode with 25mv/LSB" doesn't make any sense).
+>> For reference:
 >>
->> Thanks,
->> Guenter
+>> VOUT_SCALE_LOOP:
+>> "Used to account for any external attenuation network on VOUT sense
+>>    feedback and provide correct VOUT reporting."
+>>
 > 
-> Thanks for your feedback. I see your point about “must.”
-> The datasheet only says the LSB is the same for VID and direct modes;
-> it doesn’t state that VID mode configuration is identical to direct mode.
+> TDA38725A/TDA38740A has only two options of vout_scale_loop. These are
+> 1 and 0.5.
+> If the output voltage is directly connected to the output rail, then
+> vout_scale_loop = 1 as there is no resistor divider in the feedback
+> and feedback voltage is equal to the actual output voltage.
 > 
-> Based on current hardware testing where the chip reports VOUT Mode as VID,
-> Observations on actual hardware:
+> If vout_scale_loop = 0.5, it is recommended to use a resistor divider
+> (top & bottom – 499ohms each) with a ratio of  0.5 in the feedback
+> path.
+> In this case, feedback voltage will be 0.5 x actual output voltage.
+> As the vout_scale_loop is set to 0.5, IC would use this
+> vout_scale_loop internally to provide the correct telemetry data.
 > 
-> 1.Without forcing the mode: driver fails to initialize.
-> dmesg | grep -i mpq8785
-> mpq8785 58-0046: Failed to identify chip capabilities
+> If a customer uses a resistor divider of 2.21k (top) & 22.1k (bottom),
+> the divider ratio would be (2.21/22.1 + 2.21 = 0.09).
+
+Is that theory or practice ?
+
+> This is not an option available in the IC as it can only identify 1 and 0.5.
+> In this case, they configure the IC in vout_scale_loop of 1 and use a
+> multiplier in Linux code to correct the READ_VOUT telemetry voltage.
 > 
+> Why can vout_scale_loop not be used?
+> Using vout_scale_loop for correction will also impact all the Vout
+> related parameters and makes it cumbersome.
 
-Wrong conclusion. That message means that the chip reports to be in VID mode,
-while the configuration data disagrees.
+No, it causes the other values to be reported correctly. There is nothing
+cumbersome about that. It would be not cumbersome but troubling and
+potentially critical to have the chip report adjusted voltages but raw
+limits.
 
-That has nothing to do with how voltages are actually reported by the chip.
+> To simplify the linux code, customers prefer changing only Read_Vout
+> value and accept that IC would still operate based on vout_scale_loop
+> value configured to 1.
 
-As it turns out, mpq8785_identify() already translates VID mode to direct
-mode. Here is the real problem: The identify function knows that VID mode
-is handled wrongly by the chip, and configures the driver for direct mode.
-pmbus_identify_common(), however, does not take that into account and bails
-out if the mode read from the chip does not match the configured mode.
+That explains why vout_scale_loop can not be used, assuming that the
+use case is real. It does not explain why it would make sense to only
+adjust READ_VOUT but not all the limits, nor does it explain if this
+is an actual use case or just theory.
 
-That is what needs to be fixed, and until I find a cleaner solution the
-patch is indeed acceptable. However, the above needs to be explained in
-a comment and in the patch description.
+I am inclined to suggest that a devicetree property should only
+indicate if vout_scale_loop is 1:1 or 1:2, and that all other
+adjustments should be handled in the sensors configuration file.
+What is completely unacceptable, customer desire or not, is to just
+adjust READ_VOUT and not all other VOUT related register values.
 
 Thanks,
 Guenter
-
-> 2.Forcing direct mode: voltage readings are consistent and as expected.
-> cat /sys/bus/i2c/devices/58-0046/hwmon/hwmon2/in2_input
-> 3293
-> 
-> This suggests that the issue is related to how the chip reports voltages in VID mode,
-> rather than a datasheet requirement to overwrite the mode.
-> I’ll revise the patch and update the wording accordingly.
-> 
-> Thanks,
-> Carl
-> 
->   
->>> Signed-off-by: Carl Lee <carl.lee@amd.com>
->>> ---
->>>   drivers/hwmon/pmbus/mpq8785.c | 20 ++++++++++++++++++++
->>>   1 file changed, 20 insertions(+)
->>>
->>> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
->>> index f35534836cb8..d6624af076c3 100644
->>> --- a/drivers/hwmon/pmbus/mpq8785.c
->>> +++ b/drivers/hwmon/pmbus/mpq8785.c
->>> @@ -48,6 +48,25 @@ static int mpq8785_identify(struct i2c_client *client,
->>>   	return 0;
->>>   };
->>>   
->>> +static int mpq8785_read_byte_data(struct i2c_client *client, int page, int reg)
->>> +{
->>> +	int ret;
->>> +
->>> +	switch (reg) {
->>> +	case PMBUS_VOUT_MODE:
->>> +		ret = pmbus_read_byte_data(client, page, reg);
->>> +		if (ret < 0)
->>> +			return ret;
->>> +
->>> +		if ((ret >> 5) == 1)
->>> +			return PB_VOUT_MODE_DIRECT;
->>> +	default:
->>> +		return -ENODATA;
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> +
->>>   static int mpm82504_read_word_data(struct i2c_client *client, int page,
->>>   				   int phase, int reg)
->>>   {
->>> @@ -133,6 +152,7 @@ static int mpq8785_probe(struct i2c_client *client)
->>>   	case mpq8785:
->>>   	case mpq8786:
->>>   		info->identify = mpq8785_identify;
->>> +		info->read_byte_data = mpq8785_read_byte_data;
->>>   		break;
->>>   	default:
->>>   		return -ENODEV;
->>>
->>> -- 
->>> 2.34.1
->>>
->>>
 
