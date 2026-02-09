@@ -1,142 +1,140 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0210315785
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Feb 2026 06:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7BC364032
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Feb 2026 09:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770620022; cv=none; b=rmzbR78IADTaaSZvZvAgRXc8+ldSHhwSGNTIzQ0p+ek+gRDtlcrf+fg5MVrkG/TLj+FMaYZEAciS3h6suO5fKDWAAEprBVz1bcI+/Fq2SXj9P5Qaf4jAe1APhBKwlA4uG5WzL/CxTm3MYgQsQr9a/epCjW7Us83uBQj9WWxKAXM=
+	t=1770630642; cv=none; b=dhPHow3zb3edERLjfoELdCwZj4Vb3LpDthdbRPaZLqNZ9V9py3mo273Z1R8AHOjMkFgPI8OkhvZsD3iWH93Rcwh1lxOtzp8NTrAEnSaF/TXFAWVm3tyERua92Rp7p2WURxNeHAE0NKEddzcKzlE04OGTlSygqV+1jmUBUyx9GUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770620022; c=relaxed/simple;
-	bh=34oE8k9pbYUI5EGosABwPmeVX24fpZFq86+F+iptjnk=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XPS/uc2xEntALOK1+iY/wMbkqJbnquuEph9m0A6nTOGvRJYLWXNewErfbDzvZcaNIG4kUfaPPAi9q141Q9Pj87KVE49hucN4f1LQjm4eP8yeOlkka6lzrV/yaFGfdpUCqPIZk9XTZQe6TNYKyv4k/JB6wEW5HoOec7PgaGc+a/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TR8pGz/t; arc=none smtp.client-ip=209.85.216.48
+	s=arc-20240116; t=1770630642; c=relaxed/simple;
+	bh=G0AZtPKM9LqmL8+9X5WtJjbdlbwoTFZvZ9q6vhURmcc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Rw3H1noVelxAICLMLxQRGZXm80L66hHKw3lcFlOFONEw7oOw6xjQToo1JjtlmmdtBUOuMzg5VWT3HInRE6480HvqIZTm/NLg9II6KuhrIC41bQcL6mX55IshFf6XGc+be2bgkibAKq8oER87GYAXX9o2/Pd6EHwC010baBDoN3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QkrESqaO; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TR8pGz/t"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-352dda4a34eso1718431a91.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 08 Feb 2026 22:53:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QkrESqaO"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4359a16a400so3960278f8f.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 09 Feb 2026 01:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770620022; x=1771224822; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J0yBZlUfIwO8R+8/v699G5QRXerYU4/HGTHJycEONF0=;
-        b=TR8pGz/tufmAFgA6xgWviADId42jKk5sYv0ITja6rUsXUI5Lg1iYtJ5wxZWKSTK2qe
-         ilhc5MsAa97OEUtdoWR61MEPXMh1j829hrPSqfR6oKHkEcnnZFx3bNL5Dmz+jXqVAR4p
-         C8eyFmaOjvWI9ccLfkl56uzEJjQr7ivUix4WE6Qy9nOySJhvL3BAdRl90LoVAuezzzB8
-         LzBbVM0u5eXZifpZdg+/00WihuTbUxL37GBtKWNFHIQCs4z0D5Z4l7uroMQ8UwU8/Tz1
-         9GqP6locmbG5uYTACkJEmDcp2eObVk31d3zvd9dHQYhsAuZgyRIG/4k33962wyuXud4x
-         wMwA==
+        d=gmail.com; s=20230601; t=1770630640; x=1771235440; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G3Fl1LdKzLTKTPiN1YZNuSPUICwP+bYYrhH9RATSKdE=;
+        b=QkrESqaOo2uIYUQEwMF7O1u4QzRqqiSn5/5X1VnxFmhyw6qP93+e8lmjeeyi/sZE8v
+         xZEsSmrlfYXCoFP23EPEsXR61m8kLjdqDpF84S9JU8mKOGh48aPJtvAn/Bdh77n5YdIS
+         59ZuwsOEcWaHAXyan48s10JC3O4nWZrs6i6+r/9g/12gllOIenR/Y49A8k4h8lYJ90Aa
+         Ou37v4UpM5s6zXTxlANh5ZbyFyt6Hr/n9d4+Z1XUQJcIo8hDhXWn8cceuxy98wXJKHhT
+         wysYEsCeOpF6InYOYS4x9c95sXciZCVCnoiv3j6kcav5TrL954V+5Ud4flW6RNMCmyTu
+         eQYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770620022; x=1771224822;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0yBZlUfIwO8R+8/v699G5QRXerYU4/HGTHJycEONF0=;
-        b=Jej6vI91m+4DXeon2GGXPKpLeke27+pdbRyOkOpwSrOyIIeP2+k003XkvDio+KcUvb
-         zqKriatObSkxJAWvL8hNEe1Gs6pnTBm1WydeDhLoQc+GbqVSFoGqOizfxnJgINFtjH5c
-         qc/GkklNlc3WiUs/oQmTqxhulHvzdfjhwi5OJM1DIQFodAcxLqPcu1Vz/XiamaPn+Eae
-         zhXrotyfhVSW3Bg9WGN4JfXn+oie1AL+3aVLizU2Vk1Et0WdME3jbuKgpD5R8khNtds0
-         RqVBoBvuM3ShU46Z3P78ysiYWId6HGDlNUmdO8jdZht6UW0YtGLKOVBshssRndOsovcD
-         xK1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUrRRyV053pm4W4Sl3hXya7Eymmw5xCiE9KraWnNQ3krE3R/mUVGuAwXzX2tiJ102s7ujNpHVwnWRQBQA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVLhahSQPAMx8kFqVA+JHVRwVYm2QftdT3oppPk5xEhvmoNjJk
-	LTHu6qkQj+aRfLKagkYjz2f8IwpS5HemtZiREBxpsndJFeUYWx8/VZDb
-X-Gm-Gg: AZuq6aJhtDe1O3oYxf/3wz1/ZpZGs3KlJBWIJmIyzztVp8oRdBDDaVBolEsJR0IY0qn
-	0I8lv1Oir7n/EtQvEhxJ8FVOcrUn+FeiyhojZlhCs9O04EQI0OWaVvaHD+lpXoguMfmudmdB3k0
-	IhMHwBzaiey89qu7sY+/ByWjF3q9fwq78nRFNIaDwe4v4e1vrCjkeMbfPVRILD7iu/jkptuO0gG
-	Gl2kfwXqnqtx3460d4LhuR/rtFGmnAA0uRnGs2fBdusepsV2JVSOA0xvvaU2dBiBbJ/ISpAFFAa
-	L2t/LP6zxKL5lKVK89YZGgkohvSUJx2buCPNperdYAfWKRorBat6eXVbD36gn58oz9MfpjHsBYB
-	/PfwEBo8J7PvX1LFtDSX0aed17EmwkGFsZDPDSeitof0+ZashuuIrfLY9jP6T0hFjSZjs0p33AT
-	foKg==
-X-Received: by 2002:a17:90b:1c87:b0:34c:3501:d118 with SMTP id 98e67ed59e1d1-354b3ba32cemr7736151a91.1.1770620021939;
-        Sun, 08 Feb 2026 22:53:41 -0800 (PST)
-Received: from localhost ([218.32.81.133])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354c7fad6c6sm4166851a91.1.2026.02.08.22.53.40
+        d=1e100.net; s=20230601; t=1770630640; x=1771235440;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G3Fl1LdKzLTKTPiN1YZNuSPUICwP+bYYrhH9RATSKdE=;
+        b=INvD42ZZpF/gPHx8QZNiT5JTQTAoqgs1nvIJ3aEJBKV8ghZ4+Zbi7A299mTC40A8vr
+         nm8gyStD4h76QY7GTjaampS1j04MZNuoDbPhZfCepfcySpe/MYVAVGTDeVBng8vFYBfg
+         RK2PpY8gAFdByNY2jMqQpj/Ufnbt19xSi9dPh6bNJzSlRHQR3LJiVbgWE1J8pZOe+vrR
+         2EDe4aTzrUW6GnDZ4J44yv0v2HdBjLSd6jN5+xeeLW5oXa0cCMKGDbe7l4qSOjvzEt67
+         XmK/SxfRvytxje3wx/Vhi+IVJqphWAcVCTmFwA8DbFtOtvUEuYhvY7OSOfbIpwOHDIgz
+         Y8Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/IYtjo/wdwHnkD4dMxkhK5fonZB+4JwGD0IyeE9UXtYgQJS9ZLkZJDc7Bi9rb0Cl1IecuG8+fkeJXFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5ekR+B8AL7GUoWQbxhDf8X8kP27aFglkSdiCo9xzl99o4ha+s
+	wQ0kirdDSfXc8Cm/R/geM3wk5tRaIt0uQdqswS9UCHhZKDEwVVzfgVIr
+X-Gm-Gg: AZuq6aKg+uXceGZusM1CjmRfjQDC1MD8nktrHaA7ziH+K1hhjX2MlDqhFRixL48waZK
+	p9/qh0Ve4t3Q7dU6puHsSYxtuC39u97qCplDboyT+PQ/eC0xB0KlQkoNOXc2KWsqa5beHIffuK9
+	nOm0Ly854exIvwQLGqqdwL2I1bm1Xh1nzio5fTrB87N9H6JqwCN6aiRnE6W3smraCM3asE+/hsS
+	mxlGw4Uc2OF/X5xcRtDRta6SJyYaTP2asLS917vOBIEl5pzOctZD/F6kwC3wtDdM16Y0fr6bUnQ
+	XJq3OrGjXw4pamX9Et6vBHGYOGkSMULLa+lIEqpOusuSn9veuYk/jWdo8MNA7lmISL9EgDbWrid
+	M50tpHoYb5Hjqctda6bM2hiUqPUAQ2rvEZmg8m1SPqIs163t4F0iVfSd/+/46v+oBFrZylhTcJY
+	QhW2jRvzWR2BEtEiDICdHBSxhuE2AN0L047oK2o0NEtreTiL4SuYHC
+X-Received: by 2002:a05:6000:3105:b0:436:42cc:25ec with SMTP id ffacd0b85a97d-43642cc27d7mr6508644f8f.9.1770630640051;
+        Mon, 09 Feb 2026 01:50:40 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-437699bc1cdsm11376577f8f.7.2026.02.09.01.50.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 22:53:41 -0800 (PST)
-From: Carl Lee <qq1145099@gmail.com>
-X-Google-Original-From: Carl Lee <carl.lee@amd.com>
-Date: Mon, 9 Feb 2026 14:53:38 +0800
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	peter.shen@amd.com, colin.huang2@amd.com
-Subject: Re: [PATCH v2 3/3] hwmon: pmbus: mpq8785: force direct mode for VID
- VOUT on MPQ8785/MPQ8786
-Message-ID: <aYmEctaGrQ578xfD@carl-amd>
-References: <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com>
- <20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-3-3744cd9b2850@amd.com>
- <fa07bf22-d56f-46fc-8e39-a50dae2efc46@roeck-us.net>
+        Mon, 09 Feb 2026 01:50:39 -0800 (PST)
+Date: Mon, 9 Feb 2026 09:50:38 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Ben Hutchings <ben@decadent.org.uk>
+Cc: Gui-Dong Han <hanguidong02@gmail.com>, linux@roeck-us.net,
+ linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ baijiaju1990@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
+ optimization induced race
+Message-ID: <20260209095038.50e62eda@pumpkin>
+In-Reply-To: <000915fc444a6e1f840f3d4ed6493058aefe850f.camel@decadent.org.uk>
+References: <20260203121443.5482-1-hanguidong02@gmail.com>
+	<20260207104308.1bc31102@pumpkin>
+	<f6710a1f44d2b32df1cb9b09cddc6695bf76eec2.camel@decadent.org.uk>
+	<20260208114810.3709364b@pumpkin>
+	<000915fc444a6e1f840f3d4ed6493058aefe850f.camel@decadent.org.uk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa07bf22-d56f-46fc-8e39-a50dae2efc46@roeck-us.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 05, 2026 at 09:46:05AM -0800, Guenter Roeck wrote:
-> On Thu, Feb 05, 2026 at 06:01:39PM +0800, Carl Lee via B4 Relay wrote:
-> > From: Carl Lee <carl.lee@amd.com>
-> > 
-> > According to MPQ8785/MPQ8786 datasheet, VID mode configuration is
-> > the same as direct mode configuration. Therefore, when VOUT is
-> > reported in VID mode, it must be forced to use direct format.
-> > 
-> > Signed-off-by: Carl Lee <carl.lee@amd.com>
-> > ---
-> >  drivers/hwmon/pmbus/mpq8785.c | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-> > index f35534836cb8..d6624af076c3 100644
-> > --- a/drivers/hwmon/pmbus/mpq8785.c
-> > +++ b/drivers/hwmon/pmbus/mpq8785.c
-> > @@ -48,6 +48,25 @@ static int mpq8785_identify(struct i2c_client *client,
-> >  	return 0;
-> >  };
-> >  
-> > +static int mpq8785_read_byte_data(struct i2c_client *client, int page, int reg)
-> > +{
-> > +	int ret;
-> > +
-> > +	switch (reg) {
-> > +	case PMBUS_VOUT_MODE:
-> > +		ret = pmbus_read_byte_data(client, page, reg);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		if ((ret >> 5) == 1)
-> > +			return PB_VOUT_MODE_DIRECT;
-> > +	default:
-> > +		return -ENODATA;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> 
-> In addition to my earlier reply, here is AI code review feedback:
-> 
-> This switch statement appears to fall through to the default case when the
-> mode is not VID (when (ret >> 5) != 1). If it falls through, it returns
-> -ENODATA.  The core function _pmbus_read_byte_data() will then see -ENODATA
-> and call pmbus_read_byte_data() again, resulting in a second I2C transaction
-> for the same register.
-> 
-> Also, the `return ret;` at the end of the function is unreachable because
-> the default case returns.
-> 
-> Should the PMBUS_VOUT_MODE case return `ret` instead of falling through?
-> 
-> Guenter
+On Sun, 08 Feb 2026 23:33:31 +0100
+Ben Hutchings <ben@decadent.org.uk> wrote:
 
-Got it, I’ll correct this.
+> On Sun, 2026-02-08 at 11:48 +0000, David Laight wrote:
+> > On Sat, 07 Feb 2026 12:43:29 +0100
+> > Ben Hutchings <ben@decadent.org.uk> wrote:
+> >   
+> > > On Sat, 2026-02-07 at 10:43 +0000, David Laight wrote:  
+> > > > On Tue,  3 Feb 2026 20:14:43 +0800
+> > > > Gui-Dong Han <hanguidong02@gmail.com> wrote:
+> > > >     
+> > > > > Simply copying shared data to a local variable cannot prevent data
+> > > > > races. The compiler is allowed to optimize away the local copy and
+> > > > > re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
+> > > > > issue if the data changes between the check and the usage.    
+> > > > 
+> > > > While the compiler is allowed to do this, is there any indication
+> > > > that either gcc or clang have ever done it?
+> > > > ISTR someone saying that they never did - although I thought that
+> > > > was the original justification for adding ACCESS_ONCE().    
+> > > 
+> > > They do it sometimes and it's precisely why these maros were added.  It
+> > > makes no sense to me to look at what these compilers currrently do (for
+> > > some particular versions, optimisation settings, and targets) and
+> > > extrapolate that to the assertion that they will never optimise away a
+> > > copy.
+> > >   
+> > > > READ_ONCE() also includes barriers to guarantee ordering between cpu.
+> > > > These are empty on x86 but add code to architectures where the cpu
+> > > > can (IIRC) re-order writes.
+> > > > This is worst on alpha but affects arm and probably ppc.    
+> > > 
+> > > No, READ_ONCE() and WRITE_ONCE() don't include any CPU memory barriers.  
+> > 
+> > Look at the alpha version and the arm64 LTO code.
+> > The latter changes the reads to have 'acquire' semantics to stop re-ordering.
+> > Needed for LTO, but the thought is it might be needed in other cases.  
+> [...]
+> 
+> Oh, so they do.  Sorry for "correcting" you based on my old information.
+
+I'm not at all sure that the field which just need protection from TOCTOU
+and load/store tearing shouldn't just be marked volatile.
+ISTR that part of the original objection was that not all accesses needed
+it - but the static check code seems to be enforcing that now.
+Marking things volatile mostly stops the compiler doing CSE - which is
+exactly what you want here.
+
+	David
+
+
+> 
+> Ben.
+> 
+
