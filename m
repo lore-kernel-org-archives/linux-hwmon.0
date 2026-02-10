@@ -1,183 +1,94 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EED826ED35
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 15:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFCC26ED48;
+	Tue, 10 Feb 2026 15:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770736379; cv=none; b=WuhOatyADf/4vRrvkidcJ0lfL0KGv3WTYe3fe25fiX1TbaE1t+wkZvL2Zq/W2e4k9fRTryhRVglNFCGxd4bF+b+Baqus13LB94WG+5gRRxbYFXoEuRhx8qQKLozjHGmsBq6GWWfhYLYkFQyEoQYB5e/lFI19W8GDJLct181bRi4=
+	t=1770737031; cv=none; b=IfXMkAwwd7iXSUuJcFIvmlq9iBBfzcWgml2fAbLBj1ujaFTrVFGgYWK+GVn9nbwQWr6JjH8uRsZcGuUwGThMfU8OkMqHHiGo8GqcGFrA3gukJqkzw54NBSAWcpofOMK42DVN1Xdbeq3scd4b0SrQq4d9auF4MGAJL27yBDbC7R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770736379; c=relaxed/simple;
-	bh=ujTMw5OZHbZh10WeFW61t2hTTQT4Vze0CVoiCixRuLE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CcTHJytuiqygwsT42Uc592YT0XKIghVosveURgZSk1yeMbtixM0lREADRP05BoZH92RUb68kgLk63tRBWeP7AOpoFLeTAjNjvkz4V/8V65ryBaQhxWX8LjjbOHmlo1UP+ivNXqdLYlJv1x3PXOsAlmpkjFK4IocEcoOiPcem8Rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gq1+VRoT; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770737031; c=relaxed/simple;
+	bh=YNGJ8MR3eEHf9snY+3nSK24o/UGGU1OpVLEAncpm5Ps=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=XMSqqxJnGH01d2CT0nAGdQc3+TFadeQY6JcF2nknrXDmk9tLEW2FFNtZkPLaq0/8wOO3zk5Peivi28xeWyoFD1D7u71ZGcWiUq/qA6OovMLw6crrfLgGksYnAY97EBDG1r9mBtyQTQm6qEmQw0Agk3QoIHnryZ0a26CiHGJJoyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JDnckZWp; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gq1+VRoT"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b740872a01so1917668eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 07:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770736377; x=1771341177; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fAxxTmaAkGZtVBPyg8LKag6i7qhLx1ugcDwEBREgoo8=;
-        b=Gq1+VRoTiMopHK3zsF2BPmu9MBUTXcRcaD8fhqo6ynet/F3tjMqGRcsT8PDEUXVuIa
-         jI4jU++1jT6fqicKJQ7hv5imghOST3tNnflvvsyfICUMyC/FPsn5KYkHFY5mlqLDIF3q
-         n9bU1aD+Yt+u40ZF7DVZbv+a3yb01qOHH8CavY6AVluCnsAI7pwvWDGlojxnK1JL/ZNU
-         rpNGVmVmmdqgoccY7uDw+6i6atYvl7+0KemBLZA+ZvdvYUBSuTGnppSdKKQofaXy7s7j
-         t9rAcU5U8ItxhSEFCQSywuz5Xwcg4hpWtH6Y6M0ZoUg1uGzwHcrA4MdnjnTZYJ2wfdyU
-         8FVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770736377; x=1771341177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fAxxTmaAkGZtVBPyg8LKag6i7qhLx1ugcDwEBREgoo8=;
-        b=hwtDwUtnrlYg75XrDdKJdKAVgO6JNVOrdSbKkQPQNRmYXZo9IjzFPBHvn1ebgAgjxs
-         5TIhmEQIyTCfYGDscBXF5dZb/VeQyBDsdsHPPvYvZ6x53HlA54qnloC5sM/oq053PN3E
-         IO+3+xkTb57mFiKQHSrI8O0Szm1OdFnKzhK5kRhrW8gib58ZnxqvSHrU/ABfIKYE7a5h
-         1FTbQv7P6WZNACozkuPf7HmNg4d/9U9zqwELeDE0oeQHWmNb+XIeNtwdq4f+4T5fxyb6
-         UxtVBDDsN7tAaVmFgcIBNLGgQl7BYSf6k5m/TbLv+7B27hYrLyzgIncLz7ng9RQ8U4XO
-         Cvng==
-X-Forwarded-Encrypted: i=1; AJvYcCUkRUxSqwkdvNvzEGSwTUNDcQPpjBb80g94yAeQO3J3sTnNEJQzdKhiXz9SdaAxIyTpI5txHBAsrvLO0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAjtMi/3EJZ2cxC3sfL1ulYBN73nrFzpOvJVwRxdSvXzPGoWGz
-	bOB3ashrBg2xowQ3yWLSMd6m03M0ihpMnO9VPLzacQZ8Tl38ugZ4eKT3
-X-Gm-Gg: AZuq6aJjrzpBNyfA3bkZQqAka6wklWSt5hqNhOGVyS0aHtUQsQHI/AeBG0R0lOBLs0K
-	o3+kW+oQ74fpQi/QmeLmsOJwyPvGM2zkWIQ9PXbxLwkkLJhfAfjWyK0USd2EQFy25Xr/5vokeQe
-	MQuLv0UvE6KCNRFyCpjYUXC4Jcs7Qa3jGyRED63Sq2LbvIh2bWW2HGiWD/DB1kREtvr35X7pY4A
-	A5qWK5RR9FOyW39IYbmUTOUPSNu03XoVXS0q0g6v6SEovp7zKOeHC2mFM0CU3P+P8qG9o9t0QBB
-	UrluHxZJEulhqw1Zu0jARtQ0qQuNjtFbqQ5JHBWEhT51chSKgCluHbTV5RRoxdgza4fD4ocDO4s
-	OO0RMWGT521JzoXOut3hwhGhOyC0zXy0rKVXr1QH3q58VyA+W+QXlZi/Bg29Y7zYpERoWKQgnrX
-	IQN4wuTxGm1/JGUVPds0fGn5WTPJmRGvHFErIf
-X-Received: by 2002:a05:7300:caca:b0:2b6:ab62:ae74 with SMTP id 5a478bee46e88-2b85683314cmr5728590eec.35.1770736376765;
-        Tue, 10 Feb 2026 07:12:56 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba6baef3aasm5675049eec.25.2026.02.10.07.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 07:12:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 10 Feb 2026 07:12:53 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Carl Lee <carl.lee@amd.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Charles Hsu <ythsu0511@gmail.com>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	peter.shen@amd.com, colin.huang2@amd.com
-Subject: Re: [PATCH v3] hwmon: pmbus: mpq8785: fix VOUT_MODE mismatch during
- identification
-Message-ID: <3f44923f-f411-4712-870b-b0348e4fe8b0@roeck-us.net>
-References: <20260210-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v3-1-84636ccfe76f@amd.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JDnckZWp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770737031; x=1802273031;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=YNGJ8MR3eEHf9snY+3nSK24o/UGGU1OpVLEAncpm5Ps=;
+  b=JDnckZWp2PEF4QDwmyPpNnLaMmU9vlwyYMAFgKZHS298oiMNYnNDDSOG
+   V+WIomkTsC0dEkdLZRyIcbSzR2FDI8MSKxaE5yBfv72tkk9HnnnwbACO8
+   /TpTVixZx+DFBkDllCirYyWGB3a4lCiu3jVzcjo4xTuO6cOnSihHK0+bI
+   LuTc5CIKW2IlUN0+liDSEr9+lkHBQ6WB/Z2X0NKWShY7HeiSf2UqHuH0x
+   4ZyC6938npVoSYnDqTJDdi5bqgAclOf/t3zJqRlsnDr4Ch9ahZPP6Cdor
+   eGoHr2d1LTzKWscRC18z/ddfFtYFwoi23Obp7pqHJK6iPrQaBCHr1Pfi7
+   g==;
+X-CSE-ConnectionGUID: q9Xdd0tOTN2Ca3ndQznegQ==
+X-CSE-MsgGUID: adp/sj7xQbyI+t8lkeoPLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="71854528"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="71854528"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 07:23:50 -0800
+X-CSE-ConnectionGUID: 72MbbWFEQJOoHopteGgRmQ==
+X-CSE-MsgGUID: mUPGSxL5SFeTlwWXPy0BkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="216478631"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.63])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 07:23:42 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>, 
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, Armin Wolf <W_Armin@gmx.de>, 
+ Hans de Goede <hansg@kernel.org>, Rong Zhang <i@rong.moe>
+Cc: Guenter Roeck <linux@roeck-us.net>, platform-driver-x86@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+In-Reply-To: <20260207172327.80111-1-i@rong.moe>
+References: <20260207172327.80111-1-i@rong.moe>
+Subject: Re: [PATCH] platform/x86: lenovo-wmi-{capdata,other}: Fix HWMON
+ channel visibility
+Message-Id: <177073701772.1935.17832144626573387865.b4-ty@linux.intel.com>
+Date: Tue, 10 Feb 2026 17:23:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260210-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v3-1-84636ccfe76f@amd.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Tue, Feb 10, 2026 at 03:26:34PM +0800, Carl Lee wrote:
-> From: Carl Lee <carl.lee@amd.com>
-> 
-> When MPQ8785 reports VOUT_MODE as VID mode, mpq8785_identify()
-> configures the driver for direct mode. The subsequent
-> pmbus_identify_common() check then fails due to a mismatch
-> between the reported mode and the configured mode, causing
-> device initialization to fail.
-> 
-> Override the reported VOUT_MODE to direct mode to keep the
-> driver configuration consistent with the reported mode and
-> allow successful device initialization.
-> 
-> This does not change how voltages are interpreted, but avoids
-> a false identification failure caused by mismatched mode
-> handling.
-> 
-> Signed-off-by: Carl Lee <carl.lee@amd.com>
+On Sun, 08 Feb 2026 01:23:27 +0800, Rong Zhang wrote:
 
-Applied.
+> The LWMI_SUPP_MAY_{GET,SET} macros are fundamentally broken. When I
+> introduced them, I meant to check LWMI_SUPP_VALID *and* the
+> corresponding bits for get/set capabilities. However, `supported &
+> LWMI_SUPP_MAY_{GET,SET}' means *or*, so it accidentally passes the check
+> when LWMI_SUPP_VALID is set.
+> 
+> Fix them by only including the corresponding get/set bit without
+> LWMI_SUPP_VALID. Meanwhile, rename them to LWMI_SUPP_{GET,SET} to make
+> them less confusing.
+> 
+> [...]
 
-Thanks,
-Guenter
 
-> ---
-> This series fixes a device identification failure on MPQ8785 caused by
-> a mismatch between the reported VOUT_MODE and the driver-configured mode.
-> 
-> When the chip reports VOUT_MODE as VID, the driver already treats it as
-> direct mode, but the mismatch causes the common identification code to
-> fail. The patch ensures the reported mode is consistent with the driver
-> configuration so the device can initialize successfully.
-> ---
-> Changes in v3:
-> - Drop patches 1/3 and 2/3 from the series.
-> - Pass through non-VID modes unchanged
-> - Add clarify code comments
-> - Link to v2: https://lore.kernel.org/r/20260205-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v2-0-3744cd9b2850@amd.com
-> 
-> Changes in v2:
-> - Combine DT binding and driver changes into a single series
-> - Fix VOUT reporting by forcing direct mode for VID VOUT
-> - Link to v1: https://lore.kernel.org/r/20260203-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-v1-1-67b041e2f762@amd.com
-> ---
->  drivers/hwmon/pmbus/mpq8785.c | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> 
-> ---
-> base-commit: 4c87cdd0328495759f6e9f9f4e1e53ef8032a76f
-> change-id: 20260203-dt-bindings-hwmon-pmbus-mpq8785-add-mpq8786-support-f48049e8411e
-> 
-> Best regards,
-> 
-> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-> index 1f56aaf4dde8..87bd039c77b9 100644
-> --- a/drivers/hwmon/pmbus/mpq8785.c
-> +++ b/drivers/hwmon/pmbus/mpq8785.c
-> @@ -47,6 +47,33 @@ static int mpq8785_identify(struct i2c_client *client,
->  	return 0;
->  };
->  
-> +static int mpq8785_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VOUT_MODE:
-> +		ret = pmbus_read_byte_data(client, page, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if ((ret >> 5) == 1) {
-> +			/*
-> +			 * The MPQ8785 chip reports VOUT_MODE as VID mode, but the driver
-> +			 * treats VID as direct mode. Without this, identification would fail
-> +			 * due to mode mismatch.
-> +			 * This override ensures the reported mode matches the driver
-> +			 * configuration, allowing successful initialization.
-> +			 */
-> +			return PB_VOUT_MODE_DIRECT;
-> +		}
-> +
-> +		return ret;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
->  static int mpm82504_read_word_data(struct i2c_client *client, int page,
->  				   int phase, int reg)
->  {
-> @@ -129,6 +156,7 @@ static int mpq8785_probe(struct i2c_client *client)
->  		break;
->  	case mpq8785:
->  		info->identify = mpq8785_identify;
-> +		info->read_byte_data = mpq8785_read_byte_data;
->  		break;
->  	default:
->  		return -ENODEV;
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/1] platform/x86: lenovo-wmi-{capdata,other}: Fix HWMON channel visibility
+      commit: 5a5203a45b063a594e89a2aeaf9e4923893a5b4c
+
+--
+ i.
+
