@@ -1,302 +1,332 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BACF2EDD40
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 15:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C835D385EC2
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 15:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770737856; cv=none; b=Q09JJqxck0y4cWNmBA/7QB4yeqE+fjwyj7eJ6Q1aOkSUomIDk0H3EpPg2jxgSNdQvGddj/SbLjXozfJ7m9n+92KwWm7ClzquTvYZ5QmDi+AaT2DdacrutMZt1VFVZjrItNxooKFBll9iyViQThzbhogeUGTUn4OWk85YzQK75Ys=
+	t=1770739028; cv=none; b=XwD5hYZeKq9yagjpa63P2MC4/dhI1lquKxXAkha387Y4HzUaNzoS/DFA+zJmGr5s/FMO7SaynI3eaYnZwOW0qqmY/OQhWuWAbqO31G1L2vB7+5RKqKdf8KcJFvIXqEBTKDTt27TiMwc6qht1zamxbX2pMN0k4Q3Hv1em94A9M0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770737856; c=relaxed/simple;
-	bh=FCnhrAvE6GZr/XkTEmtO37z1aLo4j9sdAf1KFf6NX3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Bi5isQlt4isI8tcPJXnX46IzxdH1D2aVktJFyXOEJfCHq7vmRc8EBpIwWMZ6C76c5uYBL+OalIGEObtozndq/w/Cu/7xJmqS4FgPQ7z8mNv6GqQA7H3RXJUWJ4VFZ7UOqbxABzh1C6rie9yZFkBaO0UIn7MKdUPcIZ3GS/OG88Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YEBrtPs/; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1770739028; c=relaxed/simple;
+	bh=r03sluLS+oFdhKyCjrad+WXjQvkS4ewAU1a/LBepu20=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NX77mP5nHDMPd9jOFuPYzr2quSsccSfHFovRQxFsillOje372AAJItoeOBlXndwIgZtX5VeoRg1Py565ej/ZhOgRgeXTU96P7D/xEAmCfBLDC8CqgciTT2Cp+TulDG8VAYUMujK1EeiXaDB9gYTw9gcd13sqFYjiNTnGFesOAqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ht2Q0OhU; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YEBrtPs/"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ba94dbf739so358408eec.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 07:37:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ht2Q0OhU"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-436e8758b91so1572594f8f.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 07:57:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770737853; x=1771342653; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770739025; x=1771343825; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=up1C/Rgw4SQ2rhQeqXsMiwbPqkxhRbqgm6UC1Bxi8XM=;
-        b=YEBrtPs/mwtfZSfMOUU+rx/aH3yurkZ3X2qggfN5+Ny9Xp/wrCM9XOMQxSX3gJr0LC
-         Zodul+iynn7NWRP5gWd9vdGUG+56pwnlwZp2VTbwArcFgA4d2zUfRd8uEkFKfK4znrCp
-         qfwEtJScYB6gOxhKJtO8xUjiPRIansfFqP6buzfhZ2g3wMSTsnvecuylVTkhtY9fVyWf
-         tMxNJUJCWbOlk9kztAqjdT+bBTeXBke2MoT1I1ECcvyT9IA72nzvt4cDFo9owi5qJk9T
-         3OA1F61OCAelDBnz68d5k1r7T+92Iy9VxYpZ3PyhVbt+epmhRP6EUDrKNu3hkjPXZsAm
-         EWFQ==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDxHw3Hq9zG9KAhSV/T4bFN5OhynGtCKzUgVN+dy8Fc=;
+        b=Ht2Q0OhUBoHJb07sr8HzPGEVOYlN6B2lbzOuTiKCP7fx/YezgiwwucnsUB81RrPf6Y
+         Nk9wNEXz2ozL4DXARI4imWxL1MgSnANemG0iWRUT68sZi/7eNxc6f1k+kQ2UaJ6tJYUr
+         rkeFvcnbNq1+HskgJRJtg66S0PvFwDeff2goxXcqfP5tHiOSC8IF+kd8jpCZ0jpgb5j6
+         inEu6RTpAuvZr6p2OQ8irW+d699A9oEiukmNVHxC7AXrthAeM8ssUU8XYIPycKJPqL5x
+         tXc16LuHV3tisrgMKve9PqcYAVHo44xHrRoqS0+eSPRF1NwbeEpX7dhfdPKQr/67l3Ma
+         LxxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770737853; x=1771342653;
+        d=1e100.net; s=20230601; t=1770739025; x=1771343825;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=up1C/Rgw4SQ2rhQeqXsMiwbPqkxhRbqgm6UC1Bxi8XM=;
-        b=bz6rtdhDv4t+GAla9dTYhO7NIV+Ubkj552hpJ3EnJo3BBAr8G5xJQG4df92UGm42gB
-         Vd27e6eS3Oe8uEQ+OK7Dj9BNyqWEhb2Nx3jV685ey3vbZaZsIEDVvYDZb16gqTHwEPvI
-         dw2lFB1hCSoRnkkEkTHvLKognPmrvW6vkXeGR2B/OS8E3kiC6lKeFY5xFCjXrhfMzTbM
-         tcqFQz00GDNqK3dGPfmYrE7CYF+ohvIhHuTjQcDZ/c1yCP7AgyG4wZm+6DbtJP3csbWt
-         86aDP3pSzvjHooWNaYtazCMohQ/dh3Gx22U6y1PzpmQWQs6cg1gX6grPq+wsvSpnvoYs
-         tblw==
-X-Gm-Message-State: AOJu0Yw6igk5KMbkLGSD5w6QkUPQOy4zhHq8BIxuXgcbpiiA+xXiSPBW
-	NMpG4+n1nL6AKtJGYHgd/xsngvgkcUgZtKXfEr7F8fhlY6jDzk6wOkAk
-X-Gm-Gg: AZuq6aL6gtGHWpWeiNsbh/0LrWGUP93q8HVPhkIdUh6Y/BIWDaAtHZbfdtwpe9FeUqR
-	+VbJzWegGvae/E3/i1uXsGvVbWyLN9BFS1lGiNk94PMKX9OngUSUS5R2Gxo9IjBsaMXkpp1Vo3l
-	kiPlgF/Bpz2UwwkdvBfXtiwNaBSWy3IqXS2odzsulySIniMdya/gpwB0qNBFxAELBDUvhl0ABV/
-	xyRa0jTjuC38mfWqmidCp7uW3NWKgAFRbDeqII6ksKLRpzn8BAlLsYU3NwMwuD9uSkXkNDW4vDi
-	Y7UWxcuBVRXlKPMN73LksCNEKscF+yEnuFo8OXRZsi8WAOCLSkloYcZbPypLcjloXnv0t2FW8qe
-	1lT6hKZ9X5b6unREfStdC9aqKUv0GajVKFbz1NND1DOMf6GxjCMO3YKAigX4buEQzdnRzGpMg0d
-	wtopXCUrgqjAQziGQmBNNSHul0hG0CQMKb0Rug
-X-Received: by 2002:a05:7301:3c0e:b0:2b8:1d16:9726 with SMTP id 5a478bee46e88-2b856830f07mr7152319eec.31.1770737853155;
-        Tue, 10 Feb 2026 07:37:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba93de9c9dsm499267eec.11.2026.02.10.07.37.32
+        bh=KDxHw3Hq9zG9KAhSV/T4bFN5OhynGtCKzUgVN+dy8Fc=;
+        b=e9CTXJKvIWj776Px/WnQEgqBA1HdKTMkXULKaxGCMJWZNpOYMvoKPXDwsLbmxBKGAo
+         qKynN6A51Ew+Jpkj6VAeIvYZXlrPA4arJGq+JfR2IUC9JTMFFZshQk5JRKaNC38XOp70
+         x/nLKDkkEg5sJnGQbiOi8CeB1ALG26+F4X+WTAh0zH0cx/iBcUoAvKsvmt1cGl/kLPYk
+         tHEXiPQaHFw8Cx2Rl6qcQLetETluQqgBpDMeHivv5ArSIru5kAZQRDQ8EdMIcTa/G9gz
+         4DWmQlWpSHOPGQK3LZihFpuEfGdooHECYw6YMxu1a8xuuy+otQ0IH//cCHp9SdWLFqHy
+         rNng==
+X-Forwarded-Encrypted: i=1; AJvYcCUeXTmOVeFBLm+LkmQsyOvjtgCBHgkOondG8bx8vGvdHd7VSeX3fzbJvZkXNqQkGRcGECVz7+SiL+M2kQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwA5U7Il69YaXgBBJdd8qlH3Msk8s+RJLQOZ+/6dVDxzuoNF5mV
+	teeRDQZ+Drkw9Sc503lLIImeq7qoConoqz3Rm9JbwcxA6xHW4yuurwpE
+X-Gm-Gg: AZuq6aLLI1RQE2HPtUoG54+AGHCFWkzGDgeJJRRSJAGPxA5F8YCQDu4AALlqxRiZ5RL
+	fhHNb6Ha1SeDdk90YEClhs2dm26gdm9h0udxU/4xb5sSHao9zi54RD6ifuK7I7Sn5Vw4mZDpnoE
+	H/pLqxx/dvry89ELnfKkeownx6aRgX8YfGEfsKqRZyiul3l6VFsfdR3v1cBOhrBdVmWvXNsAbvO
+	4CFLap2aXxTXMjsMzgDZ2eh6KWcHt6LfDjjYeYIAf+tNi0W9O1VXeGUis/Be+V0deq241SWAXIW
+	1LCfz9a2a6IgHJfHbbDnc28mMpv5zYqe0A22WQiaCbwwaQhor+EAKtN22STxIqCERB5SyJTXUKo
+	Q87wLAb0ttLRS/FAG2/3V1WNgzjtqknBCHGawfVG3GKIdudzxiOvEIZoykk12zrfkDlwxuSLb3N
+	iP274gi4NxnfWqWQm7bRnBjwdjSjImORbTwA==
+X-Received: by 2002:a05:6000:2010:b0:437:71cc:a246 with SMTP id ffacd0b85a97d-43771cca558mr10374442f8f.10.1770739024825;
+        Tue, 10 Feb 2026 07:57:04 -0800 (PST)
+Received: from taln60.nuvoton.co.il ([212.199.177.18])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4376806626fsm22051809f8f.37.2026.02.10.07.57.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 07:37:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updated for hwmon-for-v7.0-rc1
-Date: Tue, 10 Feb 2026 07:37:30 -0800
-Message-ID: <20260210153731.3719742-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+        Tue, 10 Feb 2026 07:57:04 -0800 (PST)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: andrew@codeconstruct.com.au,
+	avifishman70@gmail.com,
+	tali.perry1@gmail.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	openbmc@lists.ozlabs.org,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1] dt-bindings: hwmon: convert npcm750-pwm-fan to DT schema
+Date: Tue, 10 Feb 2026 17:41:17 +0200
+Message-Id: <20260210154117.1126857-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+Convert the Nuvoton HWMON PWM and FAN controllers binding to schema
+format.
 
-Please pull hwmon updated for Linux hwmon-for-v7.0-rc1 from signed tag:
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ .../bindings/hwmon/npcm750-pwm-fan.txt        |  88 ------------
+ .../bindings/hwmon/npcm750-pwm-fan.yaml       | 132 ++++++++++++++++++
+ 2 files changed, 132 insertions(+), 88 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+ create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.0-rc1
+diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
+deleted file mode 100644
+index 18095ba87a5a..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
++++ /dev/null
+@@ -1,88 +0,0 @@
+-Nuvoton NPCM PWM and Fan Tacho controller device
+-
+-The Nuvoton BMC NPCM7XX supports 8 Pulse-width modulation (PWM)
+-controller outputs and 16 Fan tachometer controller inputs.
+-
+-The Nuvoton BMC NPCM8XX supports 12 Pulse-width modulation (PWM)
+-controller outputs and 16 Fan tachometer controller inputs.
+-
+-Required properties for pwm-fan node
+-- #address-cells : should be 1.
+-- #size-cells	: should be 0.
+-- compatible	: "nuvoton,npcm750-pwm-fan" for Poleg NPCM7XX.
+-				: "nuvoton,npcm845-pwm-fan" for Arbel NPCM8XX.
+-- reg			: specifies physical base address and size of the registers.
+-- reg-names	: must contain:
+-					* "pwm" for the PWM registers.
+-					* "fan" for the Fan registers.
+-- clocks		: phandle of reference clocks.
+-- clock-names	: must contain
+-					* "pwm" for PWM controller operating clock.
+-					* "fan" for Fan controller operating clock.
+-- interrupts	: contain the Fan interrupts with flags for falling edge.
+-- pinctrl-names	: a pinctrl state named "default" must be defined.
+-- pinctrl-0	: phandle referencing pin configuration of the PWM and Fan
+-					controller ports.
+-
+-fan subnode format:
+-===================
+-Under fan subnode can be upto 8 child nodes, each child node representing a fan.
+-Each fan subnode must have one PWM channel and at least one Fan tach channel.
+-
+-For PWM channel can be configured cooling-levels to create cooling device.
+-Cooling device could be bound to a thermal zone for the thermal control.
+-
+-Required properties for each child node:
+-- reg : specify the PWM output channel.
+-	integer value in the range 0 through 7, that represent
+-	the PWM channel number that used.
+-
+-- fan-tach-ch : specify the Fan tach input channel.
+-		integer value in the range 0 through 15, that represent
+-		the fan tach channel number that used.
+-
+-		At least one Fan tach input channel is required
+-
+-Optional property for each child node:
+-- cooling-levels: PWM duty cycle values in a range from 0 to 255
+-                  which correspond to thermal cooling states.
+-
+-Examples:
+-
+-pwm_fan:pwm-fan-controller@103000 {
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	compatible = "nuvoton,npcm750-pwm-fan";
+-	reg = <0x103000 0x2000>,
+-		<0x180000 0x8000>;
+-	reg-names = "pwm", "fan";
+-	clocks = <&clk NPCM7XX_CLK_APB3>,
+-		<&clk NPCM7XX_CLK_APB4>;
+-	clock-names = "pwm","fan";
+-	interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+-			<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pwm0_pins &pwm1_pins &pwm2_pins
+-			&fanin0_pins &fanin1_pins &fanin2_pins
+-			&fanin3_pins &fanin4_pins>;
+-	fan@0 {
+-		reg = <0x00>;
+-		fan-tach-ch = /bits/ 8 <0x00 0x01>;
+-		cooling-levels = <127 255>;
+-	};
+-	fan@1 {
+-		reg = <0x01>;
+-		fan-tach-ch = /bits/ 8 <0x02 0x03>;
+-	};
+-	fan@2 {
+-		reg = <0x02>;
+-		fan-tach-ch = /bits/ 8 <0x04>;
+-	};
+-
+-};
+diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
+new file mode 100644
+index 000000000000..954ba7d38b93
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
+@@ -0,0 +1,132 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/npcm750-pwm-fan.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NPCM7xx/NPCM8xx PWM and Fan Tach Controller
++
++maintainers:
++  - Tomer Maimon <tmaimon77@gmail.com>
++
++description: |
++  The NPCM7xx/NPCM8xx family includes a PWM and Fan Tachometer controller.
++  The controller provides up to 8 (NPCM7xx) or 12 (NPCM8xx) PWM channels and up
++  to 16 tachometer inputs. It is used for fan speed control and monitoring.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-pwm-fan
++      - nuvoton,npcm845-pwm-fan
++
++  reg:
++    maxItems: 2
++    description: Register addresses for PWM and Fan Tach units.
++
++  reg-names:
++    items:
++      - const: pwm
++      - const: fan
++
++  clocks:
++    maxItems: 2
++    description: Clocks for the PWM and Fan Tach modules.
++
++  clock-names:
++    items:
++      - const: pwm
++      - const: fan
++
++  interrupts:
++    description: |
++      Contains the Fan interrupts with flags for falling edge.
++      For NPCM7XX, 8 interrupt lines are expected (one per PWM channel).
++      For NPCM8XX, 12 interrupt lines are expected (one per PWM channel).
++    minItems: 8
++    maxItems: 12
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++patternProperties:
++  "^fan@[0-9a-f]+$":
++    type: object
++    $ref: fan-common.yaml#
++    unevaluatedProperties: false
++
++    properties:
++      reg:
++        maxItems: 1
++        description: |
++          Specify the PWM output channel. Integer value in the range 0-7 for
++          NPCM7XX or 0-11 for NPCM8XX, representing the PWM channel number.
++
++      fan-tach-ch:
++        $ref: /schemas/types.yaml#/definitions/uint32-array
++        description: |
++          The tach channel(s) used for the fan.
++          Integer values in the range 0-15.
++
++      cooling-levels:
++        $ref: /schemas/types.yaml#/definitions/uint32-array
++        description: |
++          PWM duty cycle values in a range from 0 to 255 which
++          correspond to thermal cooling states. This property enables
++          thermal zone integration for automatic fan speed control
++          based on temperature.
++
++    required:
++      - reg
++      - fan-tach-ch
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    pwm_fan: pwm-fan@103000 {
++        compatible = "nuvoton,npcm750-pwm-fan";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        reg = <0x103000 0x2000>, <0x180000 0x8000>;
++        reg-names = "pwm", "fan";
++
++        clocks = <&clk NPCM7XX_CLK_APB3>, <&clk NPCM7XX_CLK_APB4>;
++        clock-names = "pwm", "fan";
++
++        interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pwm0_pins &fanin0_pins>;
++
++        fan@0 {
++            reg = <0>;
++            fan-tach-ch = <0 1>;
++            cooling-levels = <64 128 192 255>;
++        };
++
++        fan@1 {
++            reg = <1>;
++            fan-tach-ch = <2>;
++        };
++    };
+-- 
+2.34.1
 
-Thanks,
-Guenter
-------
-
-The following changes since commit 615901b57b7ef8eb655f71358f7e956e42bcd16b:
-
-  hwmon: (acpi_power_meter) Fix deadlocks related to acpi_power_meter_notify() (2026-01-31 07:36:57 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.0-rc1
-
-for you to fetch changes up to 9e33c1dba22431bea9b2bf48adf56859e52fc7ec:
-
-  hwmon: (pmbus/mpq8785) fix VOUT_MODE mismatch during identification (2026-02-10 07:14:45 -0800)
-
-----------------------------------------------------------------
-hwmon updates for v7.0
-
-- New drivers
-
-  * PMBus driver for HiTRON HAC300S power supply
-
-  * PMBus Driver for Monolithic MP5926 Hot-Swap Controller
-
-  * PMBus Driver for STEF48H28 hot-swap controller
-
-- Support for new chips in existing drivers
-
-  * asus-ec-sensors: Support for Pro WS TRX50-SAGE WIFI A and
-    ROG MAXIMUS X HERO
-
-  * dell-smm: Support for Dell OptiPlex 7080
-
-  * f71882fg: Support for F81968
-
-  * gpd-fan: Support for Micro PC 2
-
-  * nct6683: New customer ID for ASRock Z590 Taichi
-
-  * nct6775: Support for ASUS Pro WS WRX90E-SAGE SE
-
-  * sht3x: Support for SHT85
-
-  * tmp108: Support for P3T1035 and P3T2030
-
-- Bug fixes
-
-  * ibmpex: Revert "fix" for UAF which didn't fix a UAF but introduced a
-    race condition resulting in a NULL pointer crash.
-
-  * pmbus/mpq8785: Fix failure to instantiate driver if the chip is
-    configured for VID mode
-
-  * max16065: Use READ/WRITE_ONCE to avoid compiler optimization induced
-    race
-
-  * nct7363, emc2305: Resource leak fixes
-
-- Other notable changes
-
-  * cros_ec: Support for temperature limit thresholds
-
-  * coretemp: Add TjMax for Silvermont through Tremont Atoms
-
-Various other minor improvements.
-
-----------------------------------------------------------------
-Anj Duvnjak (1):
-      hwmon: (nct6683) Add customer ID for ASRock Z590 Taichi
-
-Antoni Pokusinski (1):
-      hwmon: (sht3x) add support for SHT85
-
-Armin Wolf (1):
-      hwmon: (dell-smm) Add support for Dell OptiPlex 7080
-
-Carl Lee (1):
-      hwmon: (pmbus/mpq8785) fix VOUT_MODE mismatch during identification
-
-Charles Hsu (2):
-      dt-bindings: hwmon: add STEF48H28
-      hwmon: pmbus: add support for STEF48H28
-
-Cryolitia PukNgae (1):
-      hwmon: (gpd-fan) add support for Micro PC 2
-
-Denis Pauk (1):
-      hwmon: (nct6775) Add ASUS Pro WS WRX90E-SAGE SE
-
-Felix Gu (2):
-      hwmon: (emc2305) Fix a resource leak in emc2305_of_parse_pwm_child
-      hwmon: (nct7363) Fix a resource leak in nct7363_present_pwm_fanin
-
-Filippo Muscherà (1):
-      hwmon: (nct6775) use sysfs_emit instead of sprintf
-
-Guenter Roeck (1):
-      Revert "hwmon: (ibmpex) fix use-after-free in high/low store"
-
-Gui-Dong Han (2):
-      hwmon: submitting-patches: Explain race conditions caused by calculations in macros
-      hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler optimization induced race
-
-Jai Kith (1):
-      hwmon: (asus-ec-sensors) Add VRM temperature for Pro WS WRX90E-SAGE SE
-
-Ji-Ze Hong (Peter Hong) (1):
-      hwmon: (f71882fg) Add F81968 support
-
-Kari Argillander (2):
-      hwmon: Fix wrong return errno in *sanitize_name()
-      hwmon: Use sysfs_emit in show function callbacks
-
-Krzysztof Kozlowski (3):
-      hwmon: (emc2305) Simplify with scoped for each OF child loop
-      hwmon: (max6639) Simplify with scoped for each OF child loop
-      hwmon: (nct7363) Simplify with scoped for each OF child loop
-
-Laveesh Bansal (2):
-      Documentation: hwmon: coretemp: Update supported CPUs and TjMax values
-      hwmon: (coretemp) Add TjMax for Silvermont through Tremont Atoms
-
-Mayank Mahajan (3):
-      dt-bindings: hwmon: ti,tmp108: Add P3T1035,P3T2030
-      hwmon: (tmp108) Add support for P3T1035 and P3T2030
-      hwmon: (tmp108) Add P3T1035 and P3T2030 support
-
-Randy Dunlap (1):
-      hwmon: pmbus: fix table in STEF48H28 documentation
-
-Reis Holmes (1):
-      hwmon: (asus-ec-sensors) add ROG MAXIMUS X HERO
-
-Rob Herring (Arm) (1):
-      dt-bindings: hwmon: Convert aspeed,ast2400-pwm-tacho to DT schema
-
-Robert Marko (1):
-      dt-bindings: hwmon: sparx5: add microchip,lan9691-temp
-
-Robert McIntyre (1):
-      hwmon: (asus-ec-sensors) add Pro WS TRX50-SAGE WIFI A
-
-Szymon Wilczek (1):
-      hwmon: (acpi_power_meter) Replace deprecated strcpy() with strscpy()
-
-Thomas Weißschuh (4):
-      hwmon: (cros_ec) Split up supported features in the documentation
-      hwmon: (cros_ec) Add support for fan target speed
-      hwmon: (cros_ec) Move temperature channel params to a macro
-      hwmon: (cros_ec) Add support for temperature thresholds
-
-Vaibhav Gupta (1):
-      hwmon: (fam15h_power) Use generic power management
-
-Vasileios Amoiridis (2):
-      dt-bindings: trivial-devices: Add hitron,hac300s
-      hwmon: Add support for HiTRON HAC300S PSU
-
-Wensheng Wang (1):
-      hwmon: (mp2925) Add vid offset for vid mode
-
-Yuxi Wang (2):
-      dt-bindings: hwmon: Add mps mp5926 driver bindings
-      hwmon: (pmbus) Add mp5926 driver
-
- .../bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml   | 106 +++++++++++
- .../devicetree/bindings/hwmon/aspeed-pwm-tacho.txt |  73 --------
- .../bindings/hwmon/microchip,sparx5-temp.yaml      |   8 +-
- .../devicetree/bindings/hwmon/ti,tmp108.yaml       |  21 ++-
- .../devicetree/bindings/trivial-devices.yaml       |   6 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- Documentation/hwmon/asus_ec_sensors.rst            |   2 +
- Documentation/hwmon/coretemp.rst                   |  59 ++++--
- Documentation/hwmon/cros_ec_hwmon.rst              |  29 ++-
- Documentation/hwmon/gpd-fan.rst                    |   3 +
- Documentation/hwmon/hac300s.rst                    |  37 ++++
- Documentation/hwmon/index.rst                      |   3 +
- Documentation/hwmon/mp5926.rst                     |  92 ++++++++++
- Documentation/hwmon/nct6683.rst                    |   1 +
- Documentation/hwmon/sht3x.rst                      |  18 +-
- Documentation/hwmon/stef48h28.rst                  |  71 ++++++++
- Documentation/hwmon/submitting-patches.rst         |   5 +-
- Documentation/hwmon/tmp108.rst                     |  17 ++
- MAINTAINERS                                        |  21 +++
- drivers/hwmon/Kconfig                              |   6 +-
- drivers/hwmon/acpi_power_meter.c                   |   4 +-
- drivers/hwmon/asus-ec-sensors.c                    |  17 +-
- drivers/hwmon/coretemp.c                           |   9 +
- drivers/hwmon/cros_ec_hwmon.c                      | 130 +++++++++++---
- drivers/hwmon/dell-smm-hwmon.c                     |   7 +
- drivers/hwmon/emc2305.c                            |   8 +-
- drivers/hwmon/f71882fg.c                           |   6 +-
- drivers/hwmon/fam15h_power.c                       |  11 +-
- drivers/hwmon/gpd-fan.c                            |  27 ++-
- drivers/hwmon/hwmon.c                              |  11 +-
- drivers/hwmon/ibmpex.c                             |   9 +-
- drivers/hwmon/max16065.c                           |  26 +--
- drivers/hwmon/max6639.c                            |   7 +-
- drivers/hwmon/nct6683.c                            |   3 +
- drivers/hwmon/nct6775-core.c                       |  70 ++++----
- drivers/hwmon/nct6775-platform.c                   |   1 +
- drivers/hwmon/nct7363.c                            |   8 +-
- drivers/hwmon/pmbus/Kconfig                        |  27 +++
- drivers/hwmon/pmbus/Makefile                       |   3 +
- drivers/hwmon/pmbus/hac300s.c                      | 132 ++++++++++++++
- drivers/hwmon/pmbus/mp2925.c                       |  23 ++-
- drivers/hwmon/pmbus/mp5926.c                       | 184 +++++++++++++++++++
- drivers/hwmon/pmbus/mpq8785.c                      |  28 +++
- drivers/hwmon/pmbus/stef48h28.c                    |  75 ++++++++
- drivers/hwmon/sht3x.c                              |   1 +
- drivers/hwmon/tmp108.c                             | 197 +++++++++++++++++----
- 46 files changed, 1345 insertions(+), 259 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2400-pwm-tacho.yaml
- delete mode 100644 Documentation/devicetree/bindings/hwmon/aspeed-pwm-tacho.txt
- create mode 100644 Documentation/hwmon/hac300s.rst
- create mode 100644 Documentation/hwmon/mp5926.rst
- create mode 100644 Documentation/hwmon/stef48h28.rst
- create mode 100644 drivers/hwmon/pmbus/hac300s.c
- create mode 100644 drivers/hwmon/pmbus/mp5926.c
- create mode 100644 drivers/hwmon/pmbus/stef48h28.c
