@@ -1,332 +1,249 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C835D385EC2
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 15:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA5B3EBF03
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 16:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770739028; cv=none; b=XwD5hYZeKq9yagjpa63P2MC4/dhI1lquKxXAkha387Y4HzUaNzoS/DFA+zJmGr5s/FMO7SaynI3eaYnZwOW0qqmY/OQhWuWAbqO31G1L2vB7+5RKqKdf8KcJFvIXqEBTKDTt27TiMwc6qht1zamxbX2pMN0k4Q3Hv1em94A9M0Y=
+	t=1770741114; cv=none; b=T4mlET2Mqvue6Q0ildC9xNLOe8Pe+lyzmRVohUQyUX9FZypX3KHawYCkheb/YPBjYuvkaMWfloRwfIEYQirEFdmZnScW4RhWXaAJNx5N4qIN6zJuP4lO0SVpQ1GOlRq+x96yy2TYP55n12K3DLuZTHbibIrrsGjmjgZoHwuWZ4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770739028; c=relaxed/simple;
-	bh=r03sluLS+oFdhKyCjrad+WXjQvkS4ewAU1a/LBepu20=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NX77mP5nHDMPd9jOFuPYzr2quSsccSfHFovRQxFsillOje372AAJItoeOBlXndwIgZtX5VeoRg1Py565ej/ZhOgRgeXTU96P7D/xEAmCfBLDC8CqgciTT2Cp+TulDG8VAYUMujK1EeiXaDB9gYTw9gcd13sqFYjiNTnGFesOAqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ht2Q0OhU; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770741114; c=relaxed/simple;
+	bh=cLkLskF8N+8CApUKd1ekAVZvkESpQzIoWenY+UcixUU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kSu3kj0hsjsS8lBy3kSzM32nbYIWEM9ca+w5Fot9roD8N4qAuDoENtkg16X72g4X8MEV0OttwEXcMwVEdPIFkvEWxjOszwrtwD1/oHxEOUnIfiPN8MYseASi7hjentMH3HtXv+dPBMnd0OIpj/tSR5GmTozAkFiY2FG+UEuMJMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYuvtQrJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ht2Q0OhU"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-436e8758b91so1572594f8f.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 07:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770739025; x=1771343825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KDxHw3Hq9zG9KAhSV/T4bFN5OhynGtCKzUgVN+dy8Fc=;
-        b=Ht2Q0OhUBoHJb07sr8HzPGEVOYlN6B2lbzOuTiKCP7fx/YezgiwwucnsUB81RrPf6Y
-         Nk9wNEXz2ozL4DXARI4imWxL1MgSnANemG0iWRUT68sZi/7eNxc6f1k+kQ2UaJ6tJYUr
-         rkeFvcnbNq1+HskgJRJtg66S0PvFwDeff2goxXcqfP5tHiOSC8IF+kd8jpCZ0jpgb5j6
-         inEu6RTpAuvZr6p2OQ8irW+d699A9oEiukmNVHxC7AXrthAeM8ssUU8XYIPycKJPqL5x
-         tXc16LuHV3tisrgMKve9PqcYAVHo44xHrRoqS0+eSPRF1NwbeEpX7dhfdPKQr/67l3Ma
-         LxxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770739025; x=1771343825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KDxHw3Hq9zG9KAhSV/T4bFN5OhynGtCKzUgVN+dy8Fc=;
-        b=e9CTXJKvIWj776Px/WnQEgqBA1HdKTMkXULKaxGCMJWZNpOYMvoKPXDwsLbmxBKGAo
-         qKynN6A51Ew+Jpkj6VAeIvYZXlrPA4arJGq+JfR2IUC9JTMFFZshQk5JRKaNC38XOp70
-         x/nLKDkkEg5sJnGQbiOi8CeB1ALG26+F4X+WTAh0zH0cx/iBcUoAvKsvmt1cGl/kLPYk
-         tHEXiPQaHFw8Cx2Rl6qcQLetETluQqgBpDMeHivv5ArSIru5kAZQRDQ8EdMIcTa/G9gz
-         4DWmQlWpSHOPGQK3LZihFpuEfGdooHECYw6YMxu1a8xuuy+otQ0IH//cCHp9SdWLFqHy
-         rNng==
-X-Forwarded-Encrypted: i=1; AJvYcCUeXTmOVeFBLm+LkmQsyOvjtgCBHgkOondG8bx8vGvdHd7VSeX3fzbJvZkXNqQkGRcGECVz7+SiL+M2kQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA5U7Il69YaXgBBJdd8qlH3Msk8s+RJLQOZ+/6dVDxzuoNF5mV
-	teeRDQZ+Drkw9Sc503lLIImeq7qoConoqz3Rm9JbwcxA6xHW4yuurwpE
-X-Gm-Gg: AZuq6aLLI1RQE2HPtUoG54+AGHCFWkzGDgeJJRRSJAGPxA5F8YCQDu4AALlqxRiZ5RL
-	fhHNb6Ha1SeDdk90YEClhs2dm26gdm9h0udxU/4xb5sSHao9zi54RD6ifuK7I7Sn5Vw4mZDpnoE
-	H/pLqxx/dvry89ELnfKkeownx6aRgX8YfGEfsKqRZyiul3l6VFsfdR3v1cBOhrBdVmWvXNsAbvO
-	4CFLap2aXxTXMjsMzgDZ2eh6KWcHt6LfDjjYeYIAf+tNi0W9O1VXeGUis/Be+V0deq241SWAXIW
-	1LCfz9a2a6IgHJfHbbDnc28mMpv5zYqe0A22WQiaCbwwaQhor+EAKtN22STxIqCERB5SyJTXUKo
-	Q87wLAb0ttLRS/FAG2/3V1WNgzjtqknBCHGawfVG3GKIdudzxiOvEIZoykk12zrfkDlwxuSLb3N
-	iP274gi4NxnfWqWQm7bRnBjwdjSjImORbTwA==
-X-Received: by 2002:a05:6000:2010:b0:437:71cc:a246 with SMTP id ffacd0b85a97d-43771cca558mr10374442f8f.10.1770739024825;
-        Tue, 10 Feb 2026 07:57:04 -0800 (PST)
-Received: from taln60.nuvoton.co.il ([212.199.177.18])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4376806626fsm22051809f8f.37.2026.02.10.07.57.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 07:57:04 -0800 (PST)
-From: Tomer Maimon <tmaimon77@gmail.com>
-To: andrew@codeconstruct.com.au,
-	avifishman70@gmail.com,
-	tali.perry1@gmail.com,
-	linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: venture@google.com,
-	yuenn@google.com,
-	benjaminfair@google.com,
-	openbmc@lists.ozlabs.org,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1] dt-bindings: hwmon: convert npcm750-pwm-fan to DT schema
-Date: Tue, 10 Feb 2026 17:41:17 +0200
-Message-Id: <20260210154117.1126857-1-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYuvtQrJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C08DBC4AF09
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 16:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770741113;
+	bh=cLkLskF8N+8CApUKd1ekAVZvkESpQzIoWenY+UcixUU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VYuvtQrJkUnhQ8siFmZOOFJbHo0SHFDx9tp5suAECzifROBc0w3dLLKj4w3jXF8bi
+	 2mLqwlspAXb+lFH+0OLaLDiZgIJ3QO7PeR92RLTf7+e+Bi4BeOI1n6jTWfXa14fK9S
+	 kDCZT7hm8OsnRFdeAnTxokuSzNNl0zaepX2D0jD7ibCsxmU9vUyag9TGsg+Me2mNGo
+	 4AJZWwImTwDps3oxZ+yC90uwQmUeAJLntOaTusrOoQHSq0zB++k2Pt4mHps2iJJyGq
+	 h7xpwNjnapEexHtn2Ub3OdCthUkp5ZWMNig2VXA7wPeAEfSQQA3QlzuE3Q/56i3jSt
+	 MWvwtlGyHMejw==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-662f30d3f1fso3570703eaf.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Feb 2026 08:31:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXzem4U7PAPqSX9nrSzgmiBC4AqeAYDzpqR1NtT5jO0Q2bl2fq/LLRWBV5qpJXga/jwe5lJ4WXfbcsk7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRCnLfONYOafNmahrT/+iN7Wm2zbHIqpWxN8TU7yQ9ZuTfoirh
+	EDapfFDqMMkhhM1hJCTIv0wCUeY+DxehOkks5N9COnAw2VNSCc3hq4rhXixYlou9Dx6JMVkX+bS
+	XT0aHoUhdTUKLHBu4FoNT9N+LTQVbNvA=
+X-Received: by 2002:a05:6820:a00e:b0:673:e982:1c3e with SMTP id
+ 006d021491bc7-673e98226e9mr196411eaf.8.1770741112792; Tue, 10 Feb 2026
+ 08:31:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAK8fFZ65Vro5nQqJq_cvsY93hgDbfTdibWnNr5b0Bixzc-ESfg@mail.gmail.com>
+ <CAK8fFZ6Vi4xayvdKh-_eLi-nDNMLuEoMsvwEnb33QqnwS7o4BA@mail.gmail.com>
+ <1c8f748a-5c5d-4234-ae86-7bb12045a373@roeck-us.net> <CA+9S74i+BC3=E0opOPMff0cuC1OPYSecii0C8fVZ+NM7bptNcQ@mail.gmail.com>
+ <fee01c19-2711-487e-91e9-d57f9be04b98@roeck-us.net> <CA+9S74jR9jRRE-DNMxNg=6Uv2uDAUar2n-RkVDJqzkDfNu3eog@mail.gmail.com>
+ <39100538-a1f3-48dc-82d6-5e3314a43b4d@roeck-us.net> <CAJZ5v0jo4CV__AoUfqxuhVgkw6hA=hM_fBU+W=pTzqDLmNmytw@mail.gmail.com>
+ <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net> <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
+ <aYYPnATz1JakV3m7@mail.minyard.net>
+In-Reply-To: <aYYPnATz1JakV3m7@mail.minyard.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 10 Feb 2026 17:31:41 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h1irjy_ovyQw9ObGOTAUWajT_BK6u=rWQqR9awQBrY3A@mail.gmail.com>
+X-Gm-Features: AZwV_QhFln3Yl-AMb67lS_ZtQvI-dyutZe4l66yKfXWKJvR8XxVHh_H6cwdSbNE
+Message-ID: <CAJZ5v0h1irjy_ovyQw9ObGOTAUWajT_BK6u=rWQqR9awQBrY3A@mail.gmail.com>
+Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average sysfs
+ read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
+To: corey@minyard.net, Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Igor Raits <igor@gooddata.com>, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, Daniel Secik <daniel.secik@gooddata.com>, 
+	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
+	Huisong Li <lihuisong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert the Nuvoton HWMON PWM and FAN controllers binding to schema
-format.
+On Fri, Feb 6, 2026 at 4:58=E2=80=AFPM Corey Minyard <corey@minyard.net> wr=
+ote:
+>
+> On Fri, Feb 06, 2026 at 01:08:56PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Feb 5, 2026 at 11:34=E2=80=AFPM Guenter Roeck <linux@roeck-us.n=
+et> wrote:
+> > >
+> > > On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. Wysocki wrote:
+> > > > Cc: Corey
+> > > >
+> > > > On Thu, Feb 5, 2026 at 6:51=E2=80=AFPM Guenter Roeck <linux@roeck-u=
+s.net> wrote:
+> > > > >
+> > > > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Raits wrote:
+> > > > > > On Wed, Feb 4, 2026 at 11:49=E2=80=AFPM Guenter Roeck <linux@ro=
+eck-us.net> wrote:
+> > > > > > >
+> > > > > > > On 2/4/26 11:54, Igor Raits wrote:
+> > > > > > > > I have written a patch with the help of AI and it fixes the=
+ problem. Attached.
+> > > > > > > >
+> > > > > > >
+> > > > > > > "No MIME, no links, no compression, no attachments.  Just pla=
+in text"
+> > > > > >
+> > > > > > Sorry for that, I had assumed that attaching the file would mak=
+e it in-line.
+> > > > > >
+> > > > > > > ... which means I can not provide inline feedback, which is t=
+he whole
+> > > > > > > point of the above.
+> > > > > > >
+> > > > > > > Your patch crosses subsystems, so it will need to be split in=
+ two
+> > > > > > > (assuming the ACPI side is even needed). Also, references to =
+iDRAC
+> > > > > > > in common code seem inappropriate.
+> > > > > >
+> > > > > > Yes, this I believe was the essential part (it was the last pie=
+ce in
+> > > > > > my testing which fixed the hanging):
+> > > > > >
+> > > > >
+> > > > > Then I'll need to ask differently: What happens if you drop the I=
+PMI code,
+> > > > > and just keep the wait_for_completion -> wait_for_completion_time=
+out
+> > > > > change ? Would that be sufficient to solve the problem ?
+> > > >
+> > > > I'd rather say "Would that be sufficient to make the symptoms go
+> > > > away?" as it most likely papers over the real problem.
+> > > >
+> > >
+> > > Good point. Worse, it may result in UAF or memory leaks.
+> > >
+> > > > > Either case, the need for this change suggests that the ipmi chan=
+ge
+> > > > > may not be complete, since it should send a completion with an er=
+ror.
+> > > >
+> > > > I think that reverting commit bc3a9d217755 ("ipmi:si: Gracefully
+> > > > handle if the BMC is non-functional") should also be considered as =
+a
+> > > > possible way forward because it clearly did not improve things as
+> > > > expected, at least in this particular case.
+> > > >
+> > >
+> > > I tend to agree. I ran a number of AI code reviews over the patch, an=
+d
+> > > each time it finds new (and different) problems. The fact that the ac=
+pi
+> > > patch is still needed even after applying the ipmi changes suggests t=
+hat
+> > > something is still missing in the ipmi code.
+> > >
+> > > > It evidently did something that confuses things quite a bit.  Eithe=
+r
+> > > > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UNSPECIFIED, or it=
+ is
+> > > > the "hosed" state and refusing to accept messages.
+> > > >
+> > >
+> > > More than that. My latest AI results are below, just for reference
+> > > (using Gemini 3 with Chris Mason's debug prompts). The prompt I used
+> > > for this run is:
+> >
+> > Well, I guess it's time to send a revert patch then.
+>
+> Thanks for the CC.
+>
+> Let's fix it right in the IPMI driver.
+>
+> >
+> > > "
+> > > The top commit in the linux/ directory results in hung tasks if the B=
+MC
+> > > stops responding. Using @review-prompts/kernel/debugging.md analyze t=
+he
+> > > patch, identify the reason for the hung task problem, suggest and imp=
+lement
+> > > a fix. Note that there may be more than one problem in the patch, so =
+analyze
+> > > the complete patch and do not stop after fiding the first regression.
+> > > "
+> > >
+> > > I think that catches most of the problem, but not all of it.
+> > >
+> > > Guenter
+> > >
+> > > ---
+> > >
+> > > Summary of crash or warning:
+> > > Hung task detected in ipmi_si driver when BMC becomes non-functional.
+> > > Processes waiting for IPMI responses (e.g. ipmitool, monitoring agent=
+s) enter D state and never recover.
+> > >
+> > > Kernel version if available:
+> > > Top of tree (commit bc3a9d217755f65c137f145600f23bf1d6c31ea9)
+> > >
+> > > Machine type if available:
+> > > Generic Server with BMC
+> > >
+> > > Cleaned up copy of oops or stack trace:
+> > > [  120.123456] INFO: task ipmitool:1234 blocked for more than 120 sec=
+onds.
+> > > [  120.123457]       Not tainted 6.14.0-rc1 #1
+> > > [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" dis=
+ables this message.
+> > > [  120.123459] task:ipmitool        state:D stack:    0 pid: 1234 ppi=
+d:  100 flags:0x00000000
+> > > [  120.123460] Call Trace:
+> > > [  120.123461]  <TASK>
+> > > [  120.123462]  __schedule+0x123/0x456
+> > > [  120.123463]  schedule+0x45/0x78
+> > > [  120.123464]  schedule_timeout+0x9a/0xbc
+> > > [  120.123465]  wait_for_completion+0xde/0xf0
+> > > [  120.123466]  ipmi_request_settime+0x123/0x145
+> > > [  120.123467]  ...
+> > > [  120.123468]  </TASK>
+> > >
+> > > Any other kernel messages you found relevant:
+> > > N/A
+> > >
+> > > Explanation of the problem:
+> > > 1. Hung Task:
+> > > The patch "ipmi:si: Gracefully handle if the BMC is non-functional" i=
+ntroduces a new state `SI_HOSED` to handle BMC failures. When the driver de=
+tects that the BMC is not responding, it transitions to `SI_HOSED` and fail=
+s the currently processing message (`curr_msg`). However, if a new message =
+is queued via `sender()` (populating `waiting_msg`) during a recovery probe=
+ (state `SI_GETTING_FLAGS`), and that probe subsequently fails, the state m=
+achine transitions back to `SI_HOSED`. In this transition, the driver check=
+s and fails `curr_msg`, but it neglects to check or fail `waiting_msg`. As =
+a result, the `waiting_msg` remains in the queue indefinitely, causing the =
+waiting process to hang.
+> >
+> > That's quite convincing and it would explain the observed symptoms.
+>
+> Yes, and it's a fairly easy fix, I think.  The waiting message just
+> needs to be returned in that case.  The following patch should do it:
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- .../bindings/hwmon/npcm750-pwm-fan.txt        |  88 ------------
- .../bindings/hwmon/npcm750-pwm-fan.yaml       | 132 ++++++++++++++++++
- 2 files changed, 132 insertions(+), 88 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
- create mode 100644 Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
+Jaroslav, it would be good to test the patch below on top of 6.19.  I
+can put it on a test git branch if need be, so please let me know.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-deleted file mode 100644
-index 18095ba87a5a..000000000000
---- a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.txt
-+++ /dev/null
-@@ -1,88 +0,0 @@
--Nuvoton NPCM PWM and Fan Tacho controller device
--
--The Nuvoton BMC NPCM7XX supports 8 Pulse-width modulation (PWM)
--controller outputs and 16 Fan tachometer controller inputs.
--
--The Nuvoton BMC NPCM8XX supports 12 Pulse-width modulation (PWM)
--controller outputs and 16 Fan tachometer controller inputs.
--
--Required properties for pwm-fan node
--- #address-cells : should be 1.
--- #size-cells	: should be 0.
--- compatible	: "nuvoton,npcm750-pwm-fan" for Poleg NPCM7XX.
--				: "nuvoton,npcm845-pwm-fan" for Arbel NPCM8XX.
--- reg			: specifies physical base address and size of the registers.
--- reg-names	: must contain:
--					* "pwm" for the PWM registers.
--					* "fan" for the Fan registers.
--- clocks		: phandle of reference clocks.
--- clock-names	: must contain
--					* "pwm" for PWM controller operating clock.
--					* "fan" for Fan controller operating clock.
--- interrupts	: contain the Fan interrupts with flags for falling edge.
--- pinctrl-names	: a pinctrl state named "default" must be defined.
--- pinctrl-0	: phandle referencing pin configuration of the PWM and Fan
--					controller ports.
--
--fan subnode format:
--===================
--Under fan subnode can be upto 8 child nodes, each child node representing a fan.
--Each fan subnode must have one PWM channel and at least one Fan tach channel.
--
--For PWM channel can be configured cooling-levels to create cooling device.
--Cooling device could be bound to a thermal zone for the thermal control.
--
--Required properties for each child node:
--- reg : specify the PWM output channel.
--	integer value in the range 0 through 7, that represent
--	the PWM channel number that used.
--
--- fan-tach-ch : specify the Fan tach input channel.
--		integer value in the range 0 through 15, that represent
--		the fan tach channel number that used.
--
--		At least one Fan tach input channel is required
--
--Optional property for each child node:
--- cooling-levels: PWM duty cycle values in a range from 0 to 255
--                  which correspond to thermal cooling states.
--
--Examples:
--
--pwm_fan:pwm-fan-controller@103000 {
--	#address-cells = <1>;
--	#size-cells = <0>;
--	compatible = "nuvoton,npcm750-pwm-fan";
--	reg = <0x103000 0x2000>,
--		<0x180000 0x8000>;
--	reg-names = "pwm", "fan";
--	clocks = <&clk NPCM7XX_CLK_APB3>,
--		<&clk NPCM7XX_CLK_APB4>;
--	clock-names = "pwm","fan";
--	interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
--			<GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pwm0_pins &pwm1_pins &pwm2_pins
--			&fanin0_pins &fanin1_pins &fanin2_pins
--			&fanin3_pins &fanin4_pins>;
--	fan@0 {
--		reg = <0x00>;
--		fan-tach-ch = /bits/ 8 <0x00 0x01>;
--		cooling-levels = <127 255>;
--	};
--	fan@1 {
--		reg = <0x01>;
--		fan-tach-ch = /bits/ 8 <0x02 0x03>;
--	};
--	fan@2 {
--		reg = <0x02>;
--		fan-tach-ch = /bits/ 8 <0x04>;
--	};
--
--};
-diff --git a/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
-new file mode 100644
-index 000000000000..954ba7d38b93
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/npcm750-pwm-fan.yaml
-@@ -0,0 +1,132 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/npcm750-pwm-fan.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton NPCM7xx/NPCM8xx PWM and Fan Tach Controller
-+
-+maintainers:
-+  - Tomer Maimon <tmaimon77@gmail.com>
-+
-+description: |
-+  The NPCM7xx/NPCM8xx family includes a PWM and Fan Tachometer controller.
-+  The controller provides up to 8 (NPCM7xx) or 12 (NPCM8xx) PWM channels and up
-+  to 16 tachometer inputs. It is used for fan speed control and monitoring.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-pwm-fan
-+      - nuvoton,npcm845-pwm-fan
-+
-+  reg:
-+    maxItems: 2
-+    description: Register addresses for PWM and Fan Tach units.
-+
-+  reg-names:
-+    items:
-+      - const: pwm
-+      - const: fan
-+
-+  clocks:
-+    maxItems: 2
-+    description: Clocks for the PWM and Fan Tach modules.
-+
-+  clock-names:
-+    items:
-+      - const: pwm
-+      - const: fan
-+
-+  interrupts:
-+    description: |
-+      Contains the Fan interrupts with flags for falling edge.
-+      For NPCM7XX, 8 interrupt lines are expected (one per PWM channel).
-+      For NPCM8XX, 12 interrupt lines are expected (one per PWM channel).
-+    minItems: 8
-+    maxItems: 12
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+patternProperties:
-+  "^fan@[0-9a-f]+$":
-+    type: object
-+    $ref: fan-common.yaml#
-+    unevaluatedProperties: false
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+        description: |
-+          Specify the PWM output channel. Integer value in the range 0-7 for
-+          NPCM7XX or 0-11 for NPCM8XX, representing the PWM channel number.
-+
-+      fan-tach-ch:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: |
-+          The tach channel(s) used for the fan.
-+          Integer values in the range 0-15.
-+
-+      cooling-levels:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: |
-+          PWM duty cycle values in a range from 0 to 255 which
-+          correspond to thermal cooling states. This property enables
-+          thermal zone integration for automatic fan speed control
-+          based on temperature.
-+
-+    required:
-+      - reg
-+      - fan-tach-ch
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    pwm_fan: pwm-fan@103000 {
-+        compatible = "nuvoton,npcm750-pwm-fan";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        reg = <0x103000 0x2000>, <0x180000 0x8000>;
-+        reg-names = "pwm", "fan";
-+
-+        clocks = <&clk NPCM7XX_CLK_APB3>, <&clk NPCM7XX_CLK_APB4>;
-+        clock-names = "pwm", "fan";
-+
-+        interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pwm0_pins &fanin0_pins>;
-+
-+        fan@0 {
-+            reg = <0>;
-+            fan-tach-ch = <0 1>;
-+            cooling-levels = <64 128 192 255>;
-+        };
-+
-+        fan@1 {
-+            reg = <1>;
-+            fan-tach-ch = <2>;
-+        };
-+    };
--- 
-2.34.1
-
+> diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si=
+_intf.c
+> index 5459ffdde8dc..ff159b1162b9 100644
+> --- a/drivers/char/ipmi/ipmi_si_intf.c
+> +++ b/drivers/char/ipmi/ipmi_si_intf.c
+> @@ -809,6 +809,12 @@ static enum si_sm_result smi_event_handler(struct sm=
+i_info *smi_info,
+>                          */
+>                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
+>                 }
+> +               if (smi_info->waiting_msg !=3D NULL) {
+> +                       /* Also handle if there was a message waiting. */
+> +                       smi_info->curr_msg =3D smi_info->waiting_msg;
+> +                       smi_info->waiting_msg =3D NULL;
+> +                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
+> +               }
+>                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
+>                 goto out;
+>         }
