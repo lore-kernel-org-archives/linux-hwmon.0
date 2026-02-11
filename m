@@ -1,94 +1,127 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFCC366827;
-	Wed, 11 Feb 2026 09:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC053542FF;
+	Wed, 11 Feb 2026 10:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770803766; cv=none; b=WcrvFileXrriRuThayoSVHXhkWVixAmZxkPgtQ3zNa9S1ACu0X6aPjkpWfXk+XUdTAiVWxYp623b6VKRWLweg4zp1aadSqSOitowSHD9eUd6AH9uShvtxHLmIz4S7XbhC4pdQTXumptlMqVN2Ljr834ohnXaCHy6hlQEHuN6m/U=
+	t=1770806774; cv=none; b=T9hGrK+ZCvzzeYJ5fBa/UnW4w9ScGGlk6RDeyH0dE82SWcArBGgdBB90Cm3OJHAl0vzPHbl7LphjA7L3us/1QEtgwSSuZnlfMRjX2iFJNjwb8ALNUacpOBK98cjxDZM7b2TiZRHnjIbzvVkmihdbQD0IEV2vNr5iu5wF6pn/bvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770803766; c=relaxed/simple;
-	bh=AruFY8w4UezkwYIrCC+S4ULMIKU8rUkvNNNZ5SmVyR8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=Xe4z1zBH8CWj6ftlezrFFRZ0fe+GKnt6SNOnzt/GZXKlLvUahz0p2uL3wQnpY3FD4eq657Fg+4vt13aoewm82QnOOgobRn9mxC24xOV0ahWNysFFWof38UXHTVmg76jLj/Cr/gqYzwdGoQroICG6RjMEs9li3ANxycUW1iqTMCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
- ajax-webmail-app2 (Coremail) ; Wed, 11 Feb 2026 17:55:47 +0800 (GMT+08:00)
-Date: Wed, 11 Feb 2026 17:55:47 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Huan He" <hehuan1@eswincomputing.com>
-To: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
-Subject: Re: [PATCH v2 0/2] Add driver support for ESWIN EIC7700 PVT
- controller
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <20260128101400.859-1-hehuan1@eswincomputing.com>
-References: <20260128101400.859-1-hehuan1@eswincomputing.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1770806774; c=relaxed/simple;
+	bh=2x0IV+kSfIJ0GzDwMyJqVo44FSQyWPaHiFqrTCxYLQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mmGQA77AzvkjWiZueDDpZ3EsDIjZ4FRYYU6fzCfGOp0g0y32ey1870QiTVX2BoMmxew0ozbVLY1zoIkl40jK7krtw4H5dypRamvANo/5DVSJZbhWUAylDY7jZLp1kQxa4QrSje/aekh3bNhKSllcPyAh6n981ZwlbYoPcQ3H7KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKm85Uje; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKm85Uje"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE7DC4CEF7;
+	Wed, 11 Feb 2026 10:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770806773;
+	bh=2x0IV+kSfIJ0GzDwMyJqVo44FSQyWPaHiFqrTCxYLQ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PKm85Uje8dWY1H9cuXmW6csiL+eyoD60a9uAtHnlhI5fjJukm0fbl7q1fDomZAtQN
+	 8gV9OwernkT476DFElSwC47tzJGMlyfpQa+1VhjzEwO+c/nOhtb451vDmVhGQd4RAE
+	 lQHFW9511iZOo8v020YhRM1shSb5tDhV38n74hQFeXPCWx7N7iqcBrVv8jcw06KzjH
+	 cds10Y7ZfChc8DRRc2s3S6Vh90CPoTnCcJrmvMi9PQKU7Sy43jXPQODwtgGleUuTE/
+	 W333pL+fFp3X0OpL+IVgyERtBSrnx+y1+mKaAtFieKEgQEkyJ/RIM+CLsi8mvOKBWT
+	 jhJLzf/yAcaeg==
+Date: Wed, 11 Feb 2026 11:46:11 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	DRI mailing list <dri-devel@lists.freedesktop.org>, lee@kernel.org, danielt@kernel.org, jingoohan1@gmail.com, 
+	Richard Weinberger <richard.weinberger@gmail.com>
+Subject: Re: PWM implementation in HWMON and backlight
+Message-ID: <aYxaXmguGRk1pWpT@monoceros>
+References: <CAFLxGvyhdpQMnW6VqyXjLPKyZSQvrV-+GFdUogV4JX7DiGePyg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <1a08e50a.362b.19c4c20db59.Coremail.hehuan1@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgD38s0jUoxp0hoAAA--.182W
-X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgEPCmmLXgRK6QAB
-	sc
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3g76ma3xf4oo32nw"
+Content-Disposition: inline
+In-Reply-To: <CAFLxGvyhdpQMnW6VqyXjLPKyZSQvrV-+GFdUogV4JX7DiGePyg@mail.gmail.com>
 
-PiAKPiBBZGQgc3VwcG9ydCBmb3IgdGhlIEVTV0lOIEVJQzc3MDAgUFZUIChQcm9jZXNzLCBWb2x0
-YWdlLCBUZW1wZXJhdHVyZSkKPiBzZW5zb3IKPiAKPiBGZWF0dXJlczoKPiBUaGUgZHJpdmVyIHN1
-cHBvcnRzIG1vbml0b3Jpbmcgb2YgcHJvY2Vzcywgdm9sdGFnZSBhbmQgdGVtcGVyYXR1cmUKPiBw
-YXJhbWV0ZXJzIHRocm91Z2ggdGhlIGhhcmR3YXJlIG1vbml0b3Jpbmcgc3Vic3lzdGVtLiBJdCBw
-cm92aWRlcyBhbgo+IGFjY2VzcyB0byB0aGUgc2FtcGxlZCBUZW1wZXJhdHVyZSBhbmQgVm9sdGFn
-ZS4KPiAKPiBUZXN0Ogo+IFRlc3RlZCB0aGlzIHBhdGNoIG9uIHRoZSBTaUZpdmUgSGlGaXZlIFBy
-ZW1pZXIgUDU1MCAod2hpY2ggdXNlcyB0aGUgRVNXSU4KPiBFSUM3NzAwIFNvQykuCj4gCj4gVXBk
-YXRlczoKPiAKPiAgIENoYW5nZXMgaW4gdjI6Cj4gICAtIFVwZGF0ZSBlc3dpbixlaWM3NzAwLXB2
-dC55YW1sCj4gICAgIC0gUmVmZXJlbmNlIHRoZSBod21vbi1jb21tb24ueWFtbCBmaWxlCj4gICAg
-IC0gUmVtb3ZlIHRoZSBjbG9jay1uYW1lcyBhbmQgcmVzZXQtbmFtZXMgcHJvcGVydGllcwo+ICAg
-ICAtIE1vdmUgYWRkaXRpb25hbFByb3BlcnRpZXM6IGZhbHNlIGFmdGVyIHRoZSByZXF1aXJlZCBi
-bG9jawo+ICAgICAtIFJlbW92ZSBvbmUgZXhhbXBsZSBub2RlIHRvIGF2b2lkIHJlZHVuZGFuY3kK
-PiAgIC0gVXBkYXRlIGVpYzc3MDAtcHZ0LmMgYW5kIGVpYzc3MDAtcHZ0LmgKPiAgICAgLSBSZW1v
-dmUgdW51c2VkIHNlbnNvciBtYWNyb3MgKFBWVF9TRU5TT1JfRklSU1QsIFBWVF9TRU5TT1JfTEFT
-VCwKPiAgICAgICBQVlRfU0VOU09SU19OVU0pCj4gICAgIC0gRHJvcCB0aGUgdW5uZWNlc3Nhcnkg
-aHdtb24tc3lzZnMuaCBoZWFkZXIKPiAgICAgLSBSZXBsYWNlIGR5bmFtaWMgc2Vuc29yIGluZm8g
-YWxsb2NhdGlvbiB3aXRoIGEgc3RhdGljIGFycmF5IGFuZCB1bmlmeQo+ICAgICAgIHNlbnNvciBs
-YWJlbHMKPiAgICAgLSBSZW1vdmUgdW51c2VkIGh3bW9uX3RlbXBfdHlwZSBhdHRyaWJ1dGUKPiAg
-ICAgLSBFbGltaW5hdGUgcmVkdW5kYW50IHZhbGlkYXRpb24gY2hlY2tzCj4gICAgIC0gUmVtb3Zl
-IG11dGV4IGFuZCByZWxhdGVkIGxvY2tpbmcsIHJlbHlpbmcgb24gaHdtb24gY29yZQo+ICAgICAg
-IHNlcmlhbGl6YXRpb24KPiAgICAgLSBSZXBsYWNlIHBlci1zZW5zb3IgY2FjaGVzIGFuZCBjb21w
-bGV0aW9ucyB3aXRoIGEgc2luZ2xlIGRhdGEgY2FjaGUKPiAgICAgICBhbmQgY29tcGxldGlvbiBv
-YmplY3QKPiAgICAgLSBSZW1vdmUgcHZ0LT5zZW5zb3IgdHJhY2tpbmcuIElTUiBubyBsb25nZXIg
-ZGVwZW5kcyBvbiB0aGUgY3VycmVudGx5Cj4gICAgICAgc2VsZWN0ZWQgc2Vuc29yCj4gICAgIC0g
-TW92ZSBkZXZtX2FkZF9hY3Rpb24oKSByZWdpc3RyYXRpb24gYWZ0ZXIgaW5pdF9jb21wbGV0aW9u
-KCkgZm9yCj4gICAgICAgc2FmZXIgY2xlYW51cCwgYW5kIHVwZGF0ZSBjbGVhbnVwIGZ1bmN0aW9u
-IChwdnRfY2xlYXJfZGF0YSkKPiAgICAgLSBSZXBsYWNlIGRldm1fcmVzZXRfY29udHJvbF9nZXRf
-b3B0aW9uYWxfZXhjbHVzaXZlKCkgd2l0aAo+ICAgICAgIGRldm1fcmVzZXRfY29udHJvbF9nZXRf
-ZXhjbHVzaXZlX2RlYXNzZXJ0ZWQoKQo+ICAgICAtIFJlcGxhY2UgZWljNzcwMF9wdnRfcmVtb3Zl
-KCkgd2l0aCBlaWM3NzAwX3B2dF9kaXNhYmxlX3BtX3J1bnRpbWUoKQo+ICAgICAgIGFuZCBtb3Zl
-IGl0IGFmdGVyIFBNIHJ1bnRpbWUgZW5hYmxlIHRvIGF2b2lkIHJlc291cmNlIGxlYWtzIG9uIHBy
-b2JlCj4gICAgICAgZmFpbHVyZSBhbmQgcmVtb3ZlIGNsb2NrIGRpc2FibGUgYW5kIHJlc2V0IGFz
-c2VydCBmcm9tCj4gICAgICAgZWljNzcwMF9wdnRfZGlzYWJsZV9wbV9ydW50aW1lKCkgYXMgaXQg
-aXMgYWxyZWFkeSBoYW5kbGVkIGJ5IGRldm1fKgo+ICAgICAgIGZyYW1ld29yawo+ICAgICAtIFJl
-bW92ZSByZWR1bmRhbnQgY2xvY2sgcHJlc2VuY2UgY2hlY2sgaW4gcnVudGltZV9yZXN1bWUKPiAK
-CkhpIEtyenlzenRvZiwgR3VlbnRlciwgYWxsLAoKVGhlIHYxIHBhdGNoIHJlY2VpdmVkIHJldmll
-d3MgYW5kIGNvbW1lbnRzIGZyb20gS3J6eXN6dG9mIGFuZCBHdWVudGVyLgpUaGUgdjIgcGF0Y2gg
-aW5jb3Jwb3JhdGVzIGNoYW5nZXMgYmFzZWQgb24gdGhvc2UgY29tbWVudHMgYW5kIGhhcyByZWNl
-aXZlZApmZWVkYmFjayBmcm9tIENvbm9yLgoKSSdtIG5vdCBzdXJlIGlmIHRoZXJlIGhhcyBiZWVu
-IHRpbWUgdG8gcmV2aWV3IHRoZSB1cGRhdGVkIHYyIHlldC4gU2hvdWxkIEkKd2FpdCBmb3IgZnVy
-dGhlciBmZWVkYmFjaywgb3IgaXMgYW55IGFjdGlvbiBuZWVkZWQgZnJvbSBteSBzaWRlPwoKQmVz
-dCByZWdhcmRzLApIdWFuIEhlCgo+ICAgLSBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9hbGwvMjAyNjAxMDkwOTA3MTguNDQyLTEtaGVodWFuMUBlc3dpbmNvbXB1dGluZy5jb20v
-Cj4K
+
+--3g76ma3xf4oo32nw
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: PWM implementation in HWMON and backlight
+MIME-Version: 1.0
+
+Hello Guenter,
+
+On Wed, Feb 11, 2026 at 10:28:55AM +0100, Richard Weinberger wrote:
+> The backlight of a board I am working with is controlled via PWM.
+> Naturally, I thought this would be a straightforward task using the
+> pwm-backlight driver.
+>=20
+> However, the PWM in question is implemented using an NCT6106D chip.
+> The associated HWMON driver, nct6775-core.c, does not implement a
+> standard PWM device interface but rather its own custom one.
+
+Looking around in drivers/hwmon made me a sad. There are four drivers
+that handle parsing #pwm-cells:
+
+	$ git grep pwm-cell drivers/hwmon/
+	drivers/hwmon/adt7475.c:        ret =3D fwnode_property_get_reference_args=
+(fwnode, "pwms", "#pwm-cells", 0, 0, &rargs);
+	drivers/hwmon/amc6821.c:        if (of_parse_phandle_with_args(fan_np, "pw=
+ms", "#pwm-cells", 0, &args))
+	drivers/hwmon/emc2305.c:        ret =3D of_parse_phandle_with_args(child, =
+"pwms", "#pwm-cells", 0, &args);
+	drivers/hwmon/nct7363.c:        ret =3D of_parse_phandle_with_args(child, =
+"pwms", "#pwm-cells",
+
+instead of using the pwm subsystem. Also the driver mentioned by Richard
+above has some self-made PWM handling including a set of driver specific
+sysfs files to control the PWMs. I stopped looking at the output of
+
+	git grep pwm drivers/hwmon/
+
+after finding some more sad things. (My "favourite" so far was:
+
+	dev_dbg(dev, "chmod -w pwm%d failed\n", nr + 1);
+=20
+=2E)
+
+> I am a bit puzzled, is there a specific reason why HWMON does not
+> utilize the standard PWM framework in this case?
+
+Yes please!
+
+I think that the PWM waveform API that exists since v6.13-rc1 is
+flexible enough that hwmon chips should be able to both implement and
+use it properly.
+
+Can you please make sure that the next hardware driver for a pwm capable
+chip uses a proper PWM chip? Feel free to send patch authors in my
+direction for that.
+
+And if I'm wrong and using the pwm subsystem in these cases is a burden,
+I want to hear about that and discuss how this can be made better.
+
+Thanks
+Uwe
+
+--3g76ma3xf4oo32nw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmmMXfAACgkQj4D7WH0S
+/k7joAf/c52aGGunHs5yjL8dsP/QyJ2X+3laEnNnlzswH5qzwRZXgFUp6a0Agi2U
+Hng8Rd3NIj6+Lyxn+3HbpzKbFJ9s8+6b0XgFGip7/Cw4kg0D3+nCE/p9lfzkJM/K
+CylbMHX0amrF5C4JO2jbfGmvAKBvx3EfyJXXhb+WVJrjOT6Qp7V3fhk7UKSVGS7+
+HwfiXLHvh6W8Me/7FlsQuWiP7bKxC6D2mUSa/ZSN3iu+plWp+ncS3LZb49eRWjQu
+sq62l3R2E5cOFq/2BzCoEw2fJC//cmnkehpPIK7hFnhv4arhJI0Pvf0oI+U0peko
+k+snDrxS2n4yRtJkLMdcZ2MG8/oteA==
+=aCwC
+-----END PGP SIGNATURE-----
+
+--3g76ma3xf4oo32nw--
