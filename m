@@ -1,33 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43BB259C80;
-	Wed, 11 Feb 2026 11:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027A329BDA3
+	for <linux-hwmon@vger.kernel.org>; Wed, 11 Feb 2026 15:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770807932; cv=none; b=VmFMbTySK7hl2992LctVTToz+BKx23+Dwbm6VDgl/KqNLHQDTfKe0QGsQYd47gxcRwzR1oCbu7Wyxg8GNnkc1+CPunSl2rpW3styOIThm8Kodkx5ZjrdYgQ6dUnvaVETENtCvaa2sIqNN1dMf+BwEEc3AeGTXTVJE2p0fspVjKU=
+	t=1770824861; cv=none; b=LeFLuLzRkJPU805n83G/fc3xn8VZt+gmhP6E3Un8z8eIHvJEXA7dfPo9aimqeZAw8hLJGOPM/4Pav0hqyOYk0dOdTm/wnnUx8nJ4xl6ZPRuJ933iO9JF9YGbW8dbtJk29lmRU2M7kuzrAcrphPSnmN6TFb8tAt7EkLZMBff1RnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770807932; c=relaxed/simple;
-	bh=QlrzbNV+WBY3/rSYKRQjtDijPuAspQHRwf4h+Tm7W04=;
+	s=arc-20240116; t=1770824861; c=relaxed/simple;
+	bh=jaPtLpxoLQMf9lhHA8QnvCT2dM1u6RhVaQWKr8jWatI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t0c0AN/i0BclKym1JuV9Kg81T+eLcC8j28bPPATw3WR6kPftNl7YMjdzqhEfUFVgJMlBmBCV9riulrOGBRIdcdOj/x74CkWkssPp0KBS1KAo0aUWOGpz2LIRwIs6wspy0zKrU6O6220ZxUjqeWFZvVTnjmbenolXAToSRXVh0qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5dk9cnF; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=OcQeCzUJDuhxmemesQf2ri76IVf0RXwYRV2LD0X9qHkKKqo9U6m3jkoRlIcrkPymu9Aid+1ciCxJ6+OqtCthfY25s3YKBriCoIRpq5jEuCX3iHu5khUQ8/FSLbNq+9POrmapXTUWivtiIOjCdJwDgdNfh3MqrwI7J4INKXpAPgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJS8JYoN; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5dk9cnF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6106C4CEF7;
-	Wed, 11 Feb 2026 11:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770807931;
-	bh=QlrzbNV+WBY3/rSYKRQjtDijPuAspQHRwf4h+Tm7W04=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Q5dk9cnF0KY/CNk6bACFN1q9lQ8YDthftcEDrMXwdxG8vsLmOOxC+4WCQ9HXHelAV
-	 hYkSUXogZ96HkNpVKgQgPXDXtCQt2E02OQ7ro6udxCCR7QoQaavfrIVRBVXBFdJs89
-	 EAOeEdqh/rpzllOOl0Duqg60X2yuLg23MCquMrLa2tYhhPkDuAWSig/H6kVt93bJ2J
-	 Dx+BY8Oi73ltgw6IWkhO9QcvpUz6Px9cc5axKzJqgOoA5ub3QApLK881XdJ28RixGy
-	 0JlxVkYiIAWEcPkI2BnqDV6asd6QlCdh6h3xasFyPSi9twz4PvmCr1b+9b6sWCeD4Z
-	 CJ4ri1QF1JwUA==
-Message-ID: <e648565e-59a9-4270-bbbd-7c53f5f65c6c@kernel.org>
-Date: Wed, 11 Feb 2026 12:05:26 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJS8JYoN"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-124a95e592fso2941925c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 11 Feb 2026 07:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770824859; x=1771429659; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=KlFHu80yx1UAJ8ZWXa9GNpflS81fuBvY+gQcHfmBFoY=;
+        b=aJS8JYoNU0r2mPqFY6ttFz6cqX1k1LvtvJkrxyZ/Q7HRCzb6+KzwBkubt433+7WRok
+         Swyo69ELY6/b2YC/UmZ5jdzUJZMD2kFWG5PoCjf/vGBWz/2JErHG616GKWNjMjNTU19q
+         tJDZD+s4NCfplw/vNxzsSDYGgxo1IP6tJj8j1QgZ/lIxZ1AwicgWy5ViSPLU4/NpsqCh
+         kS41cPlxj+Yv5cU6uGU8W4FFGCaV759puMULUmXL11Mh4uGFj9CeIdrtbJ4YrmM+T+lK
+         OlOSXt2cD3hiN7363urIN31UM7uOtNysNv7c2MKUO9jzVDJyHHSUy215DVhoM8wrEK4v
+         ui0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770824859; x=1771429659;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KlFHu80yx1UAJ8ZWXa9GNpflS81fuBvY+gQcHfmBFoY=;
+        b=iCaugNlnPHHddHKu5A1AZ40H9PFfoZI0JKwOIKf3XoLqPfXfjeVaG40jLCR5ccnXUZ
+         lg3Yu9qB8mOAj4gTrOJLxaaq6jQ7ZMnnYOJdNbtMw5iIlVx/vClhA77l8ydErW3aCKuB
+         5Ehq8c5XbCpJM/zmd4xzjrWeGugEGlmAyH7yPhS1wxU2aUGTjswxe/VI4OKc4QmkO7TK
+         WZ0XQMSaShrT3P39uXjh/Ths+pNeowTXRhJU1f6LPuc2YNMYN8hW2ezi3pSIBlxvjmWM
+         Y/u70IrSua0Mf1pbJzTVr33dePOxB8UHAEJQ/ZDGpcIh39ZrabCWkSpwn+4NYuXJkzzw
+         8Uyw==
+X-Gm-Message-State: AOJu0YwhD8d07wYAgal5T1Or4EwfBTk9zdUbMpR6o3g6AKVdFIZUdmhE
+	DptakTK3wEMl7liG3V6UuG25oQVs63901zJ0Xhgfolez8Spe0cJvN0Cq0FjByIcH
+X-Gm-Gg: AZuq6aIWPIF3LEsH583/S3Mf/IcULRemKboFxZM9mmH1AThzyU6ImgCJkPyF9c3pCJz
+	d0LYQ9FXq/jMRpt+TFaOqCbkrrdaz9F1j7uu9U8KJHUK0O0IHJTy/VgrA4QLK3fF7LatCl2sT2t
+	Lc+1Aa9TLwglRHslJV4oTP2H1FvpDS8yamIhPwnZw3Z7a8D0ZZDhUg6R8FXn1fE6P9iXYgNL6KO
+	J80dwmNAqSUNyaQckXo8ruO4vZQYV33vBtUJIQ2JALRQ4TEVwKJZZg1BUFfb7YGQiVAUlaVPMdv
+	mb9sVwbq1UHdmX0SjwCuxTo5kmL3Bfd39LQaiAPwl1lg8/uL2/kf3sIOs3kSZIxlOOZ/lLuZh9q
+	QQqodxfe1iiG0PJURw+6XcyT/ETk4XluxNTvZThEP5NXFbo6Uk+zwj7IRME5205Zm1vpmV1G5ZO
+	fcfofjwQGxKu39Y/nkDs+4fyn8WrYi9KG3SWKRbe5p/dVrgXa4+J0UaLWJC2y32sfEBQWmo2eI
+X-Received: by 2002:a05:7022:101:b0:121:dea2:d54d with SMTP id a92af1059eb24-1272a78ba3dmr1125645c88.20.1770824858900;
+        Wed, 11 Feb 2026 07:47:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1272a636095sm2349945c88.0.2026.02.11.07.47.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 07:47:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e5ccfd91-9c0c-45f1-bbc8-40e93bffca43@roeck-us.net>
+Date: Wed, 11 Feb 2026 07:47:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,82 +68,149 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Add driver support for ESWIN EIC7700 PVT
- controller
-To: Huan He <hehuan1@eswincomputing.com>, linux@roeck-us.net,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
- pinkesh.vaghela@einfochips.com, luyulin@eswincomputing.com
-References: <20260128101400.859-1-hehuan1@eswincomputing.com>
- <1a08e50a.362b.19c4c20db59.Coremail.hehuan1@eswincomputing.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: PWM implementation in HWMON and backlight
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+ DRI mailing list <dri-devel@lists.freedesktop.org>, lee@kernel.org,
+ danielt@kernel.org, jingoohan1@gmail.com,
+ Richard Weinberger <richard.weinberger@gmail.com>
+References: <CAFLxGvyhdpQMnW6VqyXjLPKyZSQvrV-+GFdUogV4JX7DiGePyg@mail.gmail.com>
+ <aYxaXmguGRk1pWpT@monoceros>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <1a08e50a.362b.19c4c20db59.Coremail.hehuan1@eswincomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <aYxaXmguGRk1pWpT@monoceros>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 11/02/2026 10:55, Huan He wrote:
->>     - Remove redundant clock presence check in runtime_resume
+
+On 2/11/26 02:46, Uwe Kleine-König wrote:
+> Hello Guenter,
+> 
+> On Wed, Feb 11, 2026 at 10:28:55AM +0100, Richard Weinberger wrote:
+>> The backlight of a board I am working with is controlled via PWM.
+>> Naturally, I thought this would be a straightforward task using the
+>> pwm-backlight driver.
 >>
+>> However, the PWM in question is implemented using an NCT6106D chip.
+>> The associated HWMON driver, nct6775-core.c, does not implement a
+>> standard PWM device interface but rather its own custom one.
 > 
-> Hi Krzysztof, Guenter, all,
+> Looking around in drivers/hwmon made me a sad. There are four drivers
+> that handle parsing #pwm-cells:
 > 
-> The v1 patch received reviews and comments from Krzysztof and Guenter.
-> The v2 patch incorporates changes based on those comments and has received
-> feedback from Conor.
+> 	$ git grep pwm-cell drivers/hwmon/
+> 	drivers/hwmon/adt7475.c:        ret = fwnode_property_get_reference_args(fwnode, "pwms", "#pwm-cells", 0, 0, &rargs);
+> 	drivers/hwmon/amc6821.c:        if (of_parse_phandle_with_args(fan_np, "pwms", "#pwm-cells", 0, &args))
+> 	drivers/hwmon/emc2305.c:        ret = of_parse_phandle_with_args(child, "pwms", "#pwm-cells", 0, &args);
+> 	drivers/hwmon/nct7363.c:        ret = of_parse_phandle_with_args(child, "pwms", "#pwm-cells",
 > 
-> I'm not sure if there has been time to review the updated v2 yet. Should I
-> wait for further feedback, or is any action needed from my side?
+> instead of using the pwm subsystem. Also the driver mentioned by Richard
+> above has some self-made PWM handling including a set of driver specific
+> sysfs files to control the PWMs. I stopped looking at the output of
+> 
+> 	git grep pwm drivers/hwmon/
+> 
+> after finding some more sad things. (My "favourite" so far was:
+> 
+> 	dev_dbg(dev, "chmod -w pwm%d failed\n", nr + 1);
+>   
 
+That code is from 2006. Are you serious ? Did you bother to read
+the context ? Did you bother considering that this was possibly the
+best means available at the time to control visibility of an
+attribute file ?
 
-Huh? You received review on v2 thus such ping suggests that you don't
-consider that given review as an important one. That would be very sad
-impression to make...
+If calls to sysfs_chmod_file() bother you, I would suggest to send
+patches updating affected drivers and to drop the API function from
+the kernel.
 
-Best regards,
-Krzysztof
+> .)
+> 
+>> I am a bit puzzled, is there a specific reason why HWMON does not
+>> utilize the standard PWM framework in this case?
+> 
+> Yes please!
+> 
+> I think that the PWM waveform API that exists since v6.13-rc1 is
+> flexible enough that hwmon chips should be able to both implement and
+> use it properly.
+> 
+> Can you please make sure that the next hardware driver for a pwm capable
+> chip uses a proper PWM chip? Feel free to send patch authors in my
+> direction for that.
+> 
+> And if I'm wrong and using the pwm subsystem in these cases is a burden,
+> I want to hear about that and discuss how this can be made better.
+> 
+
+For the most part the pwm implementation in hwmon chips is tied to supporting
+pwm output for fans and isn't usable for anything else. This gets worse for
+chips where pwm vs. voltage control on the output signal can be selected.
+
+Unless there is an actual use case for utilizing the pwm subsystem for a
+given chip, doing so would just create overhead. _If_ there is a proven
+use case, I don't mind if people submit patches to add generic support
+for the the pwm subsystem to such drivers. Keep in mind though that support
+for the ability to switch between pwm and voltage control (as is very common
+for fans) is mandatory for chips with that capability.
+
+Talking about this specific driver, it has been in the upstream kernel since v3.10
+(2013). Almost all hwmon drivers supporting pwm fan control are much older than
+v6.13. While many of those would benefit from a modernization update, supporting
+the pwm subsystem just because it exists would, from my perspective, be a waste
+of time. I most certainly won't do it.
+
+In my opinion calling it "sad" that drivers are not re-implemented to use a
+newly available out-of-subsystem API is close to being an insult to those
+who would have to do that work.
+
+Sorry, you folks really got me on the wrong foot. If there is anything sad,
+it is people complaining about 20 year old code without doing anything about
+it themselves. I by now spent months if not years of my time modernizing hwmon
+drivers. Did you ?
+
+Guenter
+
