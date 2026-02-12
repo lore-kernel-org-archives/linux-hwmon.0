@@ -1,160 +1,148 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53151225775
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 14:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D51A2C234A;
+	Thu, 12 Feb 2026 14:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770904840; cv=none; b=G3dXbHPApck8S488w0/eJjpEeRE7nZWuU71P0P0cJTfXwnJn+P4ZaCNfYlhk1H787EdQnMoZ1IoQTdsUqThato9rN+ps+dbFE0VSHQcEtDnNX1vg1M2GyZoHCUs6bS+g37lDClf9jjwLO2HLW4ZweenBIxw2/Ts9K9ljOV3YA8Y=
+	t=1770905017; cv=none; b=W5D8nM4cl9udt/WwSBQZc1xClATZuy3ny+Z4m5E35re+hCNh7aU2kA1djrbxrJqANA2dvG/ZKB6VlHip+475m8tJ5Yxh5a+OJCiVtYn5KWIhESazYgXWKindnE6D9AFhvB69/kGovMPAIxFm9ghUGeh4IVsbb4HhDpiJj0V1BgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770904840; c=relaxed/simple;
-	bh=EMslkeK4yt1/2dVDmbcC70GgkmYYINeF79GnZRnXG+c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AaMkePGq9+UH2dAdau8TbtrPDX6sWDkWgRUftpJFFqIPUMpURAbQEHOkvjz1J7LJHhKitsHVNf1+nvFqmqJdtjuW3podpvo5U5Vc4uwX48YTEunra5Saniyq8AhWLKV0NxbHUj+ZQbH/hfR+ExdEi6+Mlx0VLGktCZsefq2XHOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e8T00ao1; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770905017; c=relaxed/simple;
+	bh=EyQunCWi4Z1DGhSr1/8zGP7hAM9s1Yj4u4pyQcPZisY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hzmLkyEI7WAkGZABzb39aOAVHkHFD92asZvxo4gHFy2UwPLD4Z8ltADvcWB80waIf73bUzGpDmbMhTi7W1JDcC28CnLMl743AA3OcdYQUyr/3xqTF+AijmOXBB7Q9El4HIM5qZqcnWsoUmuFBMDobYfCyLGNgDoD/gLodozeSbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HIbQ4AtR; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e8T00ao1"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2ba64b5a53aso4577949eec.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 06:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770904838; x=1771509638; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ylimFk0+B20t6OX8XGGamXW0xE6sIJivZp3QqF6GFLA=;
-        b=e8T00ao1oJOOGKAdvqDCZ2DRgftfp0KPX692xEUbVNY3t2KEvBPCpkPtPjByrJAgC8
-         jBJK9d9jE6rfa8oxNmwx0oSz1190UvRea/JpvenAELlcd5ECfcVRruBwZ5uhL2uEEmMO
-         iHN0uQf1hAQwD73d0HMbYo/4KouO4IaaaP5oUjHtThMvCoGM9QazMMZKELuL9Ex/90qZ
-         DbN3zjdSo10X6hBFI/hU99BU5sGcy3z0QUIsX55iyB5tRR25n8Tk6w2TVl6bqIQrP6oF
-         9E89B/D2NVM8BU3AbpH1GzY/5izuSO+QIuB980TqfAplEo1hQknAcS5aRlZ6+9WH4rKH
-         45Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770904838; x=1771509638;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ylimFk0+B20t6OX8XGGamXW0xE6sIJivZp3QqF6GFLA=;
-        b=VZo9BwUHJvISZ6Sqq5+KaHU8WjMEfnqSwVI//aJRXzGlcXF4yy0KWUOHPxSWO4s7We
-         ocH6eRmKCxSx/Vq4oNXW3XAR+qClhvj9i+FOp2bBrKymDyXGHQYQ6pGbUairTCBTpAWr
-         QLTQuG6ha+64gMsV2Ksbk4xRUcG/Zgio5cFPyoanpl1vvU5FVuoJAH3ggXVXL5SRjsnk
-         DFJgxgykKsJiVrj1UvC90gmsGjIhTxQK8DObCIbTRb7ZvLzvqet8uk/6gJjIxpsXSIsQ
-         IbMWNQWd+N8m535M34D08fpzagBYBBzLzI2qVfJzl6lHI8+g/NECnHC9L4EPWgQON9rQ
-         t4uQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwQqCjhl05HVzchMjbTDJBp/2ddLlYHsqqg3HZyAR0UCI3Q124CqsqSqG9njtWVbsxsinliMGIddvDDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPyM2t4EIFf1uwyQntd7teQDWq0g/eAiCwXWQm5H5tCfAcEVvo
-	oHwEnQS2P3TNqmh4TSSwCm8myc3NLRLA8cooviTNNsWrcF3l4hCZ+F9q
-X-Gm-Gg: AZuq6aImo+zOBUiz9q6Q/RWfcAMXVuVxMvvTh5WjYn3iw4hFoEW5m7G7OQGRXQwwl+j
-	LLqI7MKBbz8T9jSwTDUpM4t76UjG3MgwUqdDV7k0K/Is8nlBUhsNG9Q5OUEzPMVCHYv3mwnWO2j
-	iTYWfoveXjT9ciFzWV2JyGCWkQKA3ZtVb5BXmrM0+rteWROwuU12NZLEjIcW2nfy24r+EqIAAOG
-	ktrr2ZnrLuyhuJdMtgPv7xGKIwEmRJ2OoUici+weoitBahirzP07sk69V18qcBsOlHlcu+zGUuK
-	WXdVebv0BPmI3EFfulqvGeNb8Y+D8o0EyCJbrBKgQ2YFVmFxh+B9ibUN2J6qgLcENjdznNxfZs5
-	2kfPYjPyP9NWKMxBVe44jUF7EYXIHx1HlU2w8kCMavnfI5Te/ClBMp1n7Htyu/77XnYmMRz3DPY
-	R18PaM7EGRW6QAXv66fVdQWNGeP+avZy/Eyc3c0qoxmDNL5guOsUv15eMUVdtAsVX4EJXY+zsO
-X-Received: by 2002:a05:7300:a14c:b0:2b7:95d5:3a32 with SMTP id 5a478bee46e88-2baa7f7c7e5mr1192493eec.1.1770904838009;
-        Thu, 12 Feb 2026 06:00:38 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd00d2sm3919413eec.20.2026.02.12.06.00.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Feb 2026 06:00:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <975b4e7a-e007-4710-9048-b975cd66780d@roeck-us.net>
-Date: Thu, 12 Feb 2026 06:00:34 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HIbQ4AtR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770905016; x=1802441016;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EyQunCWi4Z1DGhSr1/8zGP7hAM9s1Yj4u4pyQcPZisY=;
+  b=HIbQ4AtRUazPzYsqClhfkLVAmx8EVct7RfdCdSbkFOjbFgAjuBsErXkn
+   oCsGdh43kHYGNwWAMqD4Hi4ix1yQ5JgqRre09iY6eyK4e/SYNiSdYHQNs
+   rlhv6ANt2uTPTlDjbFJ67WdwdDA1OZUl2RQXBBTjO5MhHw+DtRHLQ20jO
+   inUW39mlEcGy0TQriSRZDNZqYI1BklKMbKTpUR1cvBJahJVVKybCHSOxa
+   CECCg/97mBffOLqAIpJccTtLkhZ3j4YnrQqrzfqg3Ys3AhskMqVuQU30J
+   c54b3hrvN4AkGUAh8nvWqZ+K0X+XNTK8Bg9Zvme70j/CKZwpOXZoSO1Ek
+   g==;
+X-CSE-ConnectionGUID: jhujUUZsS4eErCSq89rb+Q==
+X-CSE-MsgGUID: y8KGPU/xRgmHZeEkLCT09A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="71976922"
+X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
+   d="scan'208";a="71976922"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 06:03:35 -0800
+X-CSE-ConnectionGUID: b9UPKEm5RXKY0a9hXxjt7A==
+X-CSE-MsgGUID: sIgKH/6ER8+H6qHzV4ooXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,286,1763452800"; 
+   d="scan'208";a="211861087"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 12 Feb 2026 06:03:32 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqXI1-00000000rDE-3YFM;
+	Thu, 12 Feb 2026 14:03:29 +0000
+Date: Thu, 12 Feb 2026 22:03:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stoyan Bogdanov <sbogdanov@baylibre.com>, jbrunet@baylibre.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stoyan Bogdanov <sbogdanov@baylibre.com>
+Subject: Re: [PATCH v1 1/3] hwmon: (pmbus/tps25990): Rework TPS25990 non
+ standatd direct conversion
+Message-ID: <202602122114.dKAeIkiK-lkp@intel.com>
+References: <20260212084502.1795-2-sbogdanov@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] Revert "ipmi:si: Gracefully handle if the BMC is
- non-functional"
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>, Corey Minyard <corey@minyard.net>
-Cc: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
- LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- openipmi-developer@lists.sourceforge.net, regressions@lists.linux.dev,
- Igor Raits <igor@gooddata.com>, linux-hwmon@vger.kernel.org
-References: <10802540.nUPlyArG6x@rafael.j.wysocki>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <10802540.nUPlyArG6x@rafael.j.wysocki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260212084502.1795-2-sbogdanov@baylibre.com>
 
-On 2/12/26 05:41, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Revert commit bc3a9d217755 ("ipmi:si: Gracefully handle if the BMC is
-> non-functional") that attempted to improve the handling of the cases
-> in which the BMC was not responsive, but did not succeed.
-> 
-> Instead, it introduced a regression causing AML in ACPI tables that use
-> IMPI operation regions to block indefinitely on the tx_msg->tx_complete
-> completion in acpi_ipmi_space_handler(), which may affect ACPI control
-> methods on any system where IPMI is involved resulting in various types
-> of breakage that is not straightforward to diagnose.
-> 
-> For example, on the system where the regression was first observed, it
-> caused sysfs accesses to attributes exposed by the acpi_power_meter
-> driver to block because they involved AML evaluation which is not
-> super-easy to connect to IPMI.
-> 
-> This is a nasty and rather urgent problem with no viable fix in sight.
-> 
-> Note that AI was involved in diagnosing it, but didn't help much.
-> 
-> Fixes: bc3a9d217755 ("ipmi:si: Gracefully handle if the BMC is non-functional")
-> Closes: https://lore.kernel.org/linux-acpi/CAK8fFZ6Vi4xayvdKh-_eLi-nDNMLuEoMsvwEnb33QqnwS7o4BA@mail.gmail.com/
-> Reported-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-> Tested-by: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-> Cc: All applicable <stable@vger.kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Stoyan,
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.19 next-20260211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stoyan-Bogdanov/hwmon-pmbus-tps25990-Rework-TPS25990-non-standatd-direct-conversion/20260212-164903
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20260212084502.1795-2-sbogdanov%40baylibre.com
+patch subject: [PATCH v1 1/3] hwmon: (pmbus/tps25990): Rework TPS25990 non standatd direct conversion
+config: parisc-randconfig-002-20260212 (https://download.01.org/0day-ci/archive/20260212/202602122114.dKAeIkiK-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260212/202602122114.dKAeIkiK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602122114.dKAeIkiK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/hwmon/pmbus/tps25990.c: In function 'tps25990_probe':
+>> drivers/hwmon/pmbus/tps25990.c:463:11: error: 'ENOTSUP' undeclared (first use in this function); did you mean 'ENOTSUPP'?
+      return -ENOTSUP;
+              ^~~~~~~
+              ENOTSUPP
+   drivers/hwmon/pmbus/tps25990.c:463:11: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +463 drivers/hwmon/pmbus/tps25990.c
+
+   447	
+   448	static int tps25990_probe(struct i2c_client *client)
+   449	{
+   450		struct device *dev = &client->dev;
+   451		struct tps25990_data *data;
+   452		u32 rimon = TPS25990_DEFAULT_RIMON;
+   453		struct pmbus_driver_info *info_get;
+   454		struct local_direct_value *info_local_get;
+   455		int ret;
+   456	
+   457		ret = device_property_read_u32(dev, "ti,rimon-micro-ohms", &rimon);
+   458		if (ret < 0 && ret != -EINVAL)
+   459			return dev_err_probe(dev, ret, "failed to get rimon\n");
+   460	
+   461		data = (struct tps25990_data *)of_device_get_match_data(dev);
+   462		if (!data)
+ > 463			return -ENOTSUP;
+   464	
+   465		info_get = data->info;
+   466		/* Make copy of pmbus_info and replace it to preserve original values */
+   467		data->info = devm_kmemdup(dev, info_get, sizeof(*info_get), GFP_KERNEL);
+   468		if (!data->info)
+   469			return -ENOMEM;
+   470	
+   471		info_local_get = data->info_local;
+   472		/* Make copy of pmbus_info and replace it to preserve original values */
+   473		data->info_local = devm_kmemdup(dev, info_local_get, sizeof(*info_local_get), GFP_KERNEL);
+   474		if (!data->info_local)
+   475			return -ENOMEM;
+   476	
+   477		/* Adapt the current and power scale for each instance */
+   478		tps25990_set_m(&data->info->m[PSC_CURRENT_IN], rimon);
+   479		tps25990_set_m(&data->info->m[PSC_POWER], rimon);
+   480	
+   481		return pmbus_do_probe(client, data->info);
+   482	}
+   483	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
