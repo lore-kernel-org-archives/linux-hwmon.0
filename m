@@ -1,68 +1,85 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B042475CF
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 04:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEBE275AE4
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 06:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770958712; cv=none; b=kfBVZplVv9bqcpJLj3qDSWsxweKA5EFDpQPsF5sDgyXIXQFKQOM6zx8hrrw1scLQN+pPg1HDORx2dx4+3ILZfBV5sLZF1BLY7hnVY1Ib/TBG9rZp+E/VlGugFrIHWRSkg4qdlhGmtUduD8pUuoKJl8RO3/784P9ye6PNzDe3S2k=
+	t=1770962669; cv=none; b=rqHYqFhI4s7WLDN7Dhk8ZXnob7YnG8D0BOKBT07i9xloojGJgY2Sq1+Bao+1ApH0eGDG91nQL4Hiqa2sWR53Cya8oNGef6eB2dSGurOr7Um4nd/VKcrBz/gCtt5x+HN6dLC/rYSY8B8HBG7lhqPo71RPa+p7esQkHv8LWMjgUkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770958712; c=relaxed/simple;
-	bh=eRvFQXt0bkK7pDKSapaD6W78pFPmc8Voh9Ptsr0FL6E=;
+	s=arc-20240116; t=1770962669; c=relaxed/simple;
+	bh=rjn4uS5Q5xBLLj0PgsfNVNXngHTCJ/gdwngN/hdD2AA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NkYfi+mk6Ow+5n/VoS4C7hoxsXCy4EsV2B7VFwIUgdqSs874G5XL9pxrf9GPmb41BzuwZ1Yw5qctPwYoOq1SFUmB+rk/K3DrLBi2fGHYIF8yeU/ZzZBpv2YpEZKhhAG0crfJOvxNmwYfRnjSBxgKdTiBV7b2sPLNe0qgkHXPYLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDUlBCqf; arc=none smtp.client-ip=74.125.82.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=Oqfh3kD4wlkZTa0bFoo9HnbbX6NuXMTrX+lrXzA/DcwswMAEDUGPFQqQq4cI2Cn/lEqRH2W19s5ANrKJdoxZOEVw4Brm2svjY+w9Xyv18HJKgS6rF9/9BcZ7kCRg41B2uMviaL7idXbA/lbbZkasaOZvVdh6b3H03DdM1lflDt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Rwdjd1p+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=C/ku7Ptx; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDUlBCqf"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2b740872a01so1039509eec.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 20:58:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Rwdjd1p+";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="C/ku7Ptx"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61D0BpCu2733827
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 06:04:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	SAtm3wjHBikGFT8In9EnBOV9rR/eOV8HdTMdzwZje7c=; b=Rwdjd1p++KEUqmdE
+	9BsmosOhb2OCK9uG/Edqz3QdIF7+HZ+8gaR4wMO0qdQg0MZvyHapQesCRaL2RJTs
+	ir40YSJUBZZuXrN9fSgnRXnaq12oa8lk1+nPINnwqxXwCG0yT9misi2ZquohRDgb
+	hUB5FUypJNLfnRcFpBJrP7Au8TEM0G9LHhV35A1de394eOsYe6k4rp8PMWbGs76N
+	so4BJP21Q0B2IZSbipF20BaHOT7NSAyi2qZez+GDehY3uYfjJJK16JltQ9Q02pgp
+	a/74AfwBvXvIvISvaeYghBwQZ5rt7EbJ+orBavYpovM3dwbWNEPgqiN8sf+2tqx5
+	8g6DZQ==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c9s6wrywb-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 06:04:27 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2aad6045810so5788205ad.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 22:04:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770958710; x=1771563510; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iGoHd6Wwp0UoOk5RmQ7t22wxxGbD4/6f+sXmlD85vTI=;
-        b=LDUlBCqfaXoYprRmNmNTuJxgLFyFLWLujRXyBRLqMziRH4X5gwSHlmVZG2Csrh0sr3
-         voEav7JvKWOwMroAzaw8Lqw39SnrlK3ys6BauWNPuh3SwpUOrbKoMH2DcNrGnUn9lr3y
-         UeO6MekMjR3eCVp79662bNBZ+YrufCGoNfVVuMYXp/J44yfuJC9uxXkha0mLERFr7P8t
-         OTggAerC5+wne52mlvo9b487eXHgMZoP7rJzXzMFN37Z1318PTvxv0Q54lPAoZ6CtR0x
-         utUk9SD3eg2qmaxIjiubZ+D+VlRbumyg6Qnbvz8iCiBBNSv168mBqvB2LpjNba8mEdNa
-         QtDA==
+        d=oss.qualcomm.com; s=google; t=1770962666; x=1771567466; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SAtm3wjHBikGFT8In9EnBOV9rR/eOV8HdTMdzwZje7c=;
+        b=C/ku7PtxIiAt779I1bmk21ZVYAQ9xxLrZVYWlLk7tNRmyCcek6TlUwjHi2TbLL9FMS
+         mT3MMGNvWRSaahGKl2X6V/5WnPJhwvf74hZOfEqB/faA4WD548q1iZ4bcrglG1s3qXdU
+         ZwmyOTa01AhZr7LqCNTDfr95sz7pe4jdcg1fozmu/uT0XyQee7coR9a5yPbxgXaX7bjI
+         /DyCwNuxIBAc5sxyWhu+hhs84+95tzDLpIrNeztw21iWYeHIYdzBwS1fa5tltA8ykINF
+         NBqaKy5TnKO+UJW5/rURUxuPBsExPk49L5a6xTmzVnbtMS+xIM83N3V7PyR/kb/nNsW0
+         99DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770958710; x=1771563510;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iGoHd6Wwp0UoOk5RmQ7t22wxxGbD4/6f+sXmlD85vTI=;
-        b=EBErZpCiCbl9EEAFJG7vDzm+NMnsjfW1CtBcq+ZmSj5xJxdI6pADfk53i6HWO67LpL
-         3layBS9klx1qKusGtCLrATOB5JaFaQyYsZ+TWeFwbAHTAX7yVL+wTpRbmVMdR0oMeGgR
-         7P/T/j1xCRtR21zglLYrVi3qxrfxRl9hjYc87u56FtabGo5m9SrPnlMe9V+iSASDImLm
-         A1w90PQ9jhlo+4EaPfrNw7komfN7J2bQGQIsb4BydctSg5v1MlqCVhphKHoKy44dWBS3
-         hNOGHJFMEfSk3Ck6/dUGFnbOYlDjcVD4SauTudKyNqOCUsCCB+lpxQGNTTrbbRiqHtUp
-         +cow==
-X-Forwarded-Encrypted: i=1; AJvYcCWZfv8SdsZ633OCeOcPD0oM6gxxL3/0PWcsF37wzN/VoIzA0pSIFlt1Vznl5Ko039mF0rWD1U84mnkShA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzseq36GRKGPH3I8IQuJ1EpCzTxaksBOC/FOQFEoWzlbI4GsNlg
-	gkY7iVyJyUcA7IMRuEOA0CpBP3HIDl8tUNVbjRSNEt9G79aDqK+y0QXn
-X-Gm-Gg: AZuq6aKziwKwAL+q7ZmNGCusP+pBRe+oJmE7R8A4JzOKW5H7O2AoGSVM0rf65qjRJi9
-	LnLLqefz1AHpNVGVZp08EPV9aUa9yHQVplwhYMekCkqL7/zvoe8upCrfQZ5qh20Mo9HcCqP9K99
-	07visEcnlYrEfUOHpxxT0kBlDj8s7xG7WtvoEX3nVGO6tPRN5FlWMwVwR0Pmqsp17OU7L8vwm2X
-	KzQyL0PzkI3JMofFBovsXEunB0tE91K7EEF9juBRF6oupVgFKbSosAAetThPgK4s80To7IhEDeo
-	iC4Ea36FVewMXJf3alLBLCezCQf67yDC4Avd8QceJsjZN+QRLuuHVYgjzg6HuB6HRFhFHImS4KY
-	lDRAkI+yoACvPXNKENWsWDVwmj7aQX1PRh9YRmKLaHgRjDi3rvYUXsCDMUEImnbK5+eSb1Z78hu
-	SgrQA2UN+wpl2NADJw/sCTOcjhnzWErH1+1EUSvXJzFnulfYtS9usTEk3jx5Te1hknk0HiQTPDs
-	393DOEd3sM=
-X-Received: by 2002:a05:7301:fa10:b0:2ba:7717:2bdd with SMTP id 5a478bee46e88-2babc46ea54mr267397eec.27.1770958709451;
-        Thu, 12 Feb 2026 20:58:29 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dbd6524sm4833351eec.12.2026.02.12.20.58.28
+        d=1e100.net; s=20230601; t=1770962666; x=1771567466;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SAtm3wjHBikGFT8In9EnBOV9rR/eOV8HdTMdzwZje7c=;
+        b=R2R4H5M/vHdaFY/vQh4wBbrQ8+v4LKT2ccbGM7+xjYptYHSsEGX+ENbEuwVOx5DbjJ
+         hdQta6EA2DKN+uio6H73eSDaw2a+6gr65t8yp/y2zkt33CwIYSBbMjc7fPB95SS75jzU
+         rvMOizipRmVgxP6C4QZeqBhCB1ZE6bDrI10cxFSNyPqf8C++Dw5ICdnbFw+NL/YSKsUG
+         pxhi7WUXsvIREBVIixIEWo6uSB1AG+utEiUPEjSZTlE4/ee3qGgzQhofdkPtyFBItNdU
+         MCAphIwXigA6Eo+xGc2apcEERc5CJM9GA5KpuLpZAx7SltcrUt8udeGODKoNk6tdBZM8
+         Tf2g==
+X-Gm-Message-State: AOJu0YzfzV+q3Svqs+Q+MR+k4oj7/M1plqes2Xie4xXwJ5k/r+L+NYV1
+	9n4XEnzU+uq/MPUrP5OcoOVbLYITjpvowgdFraAI0lydS5nG66h71WkyMAelmmIhk3ZIy46xb+6
+	YE8HKC2kNjfmX3Emq6Ou4QT3IFosKTiDMMp6+lJdW+VbR9IpTR6Dlk7XJ0gvNFHRogw==
+X-Gm-Gg: AZuq6aIXzgNXn+Bx8riYmakD8sfFCrTFsxxBVsp/wd6olt833EhNHw59Dt6nGcMdjjh
+	JqdC/qk6CCDt80ilTuuQ3yHXanQfE7u9BYR0uuKYZmzwzaf1HwWupwefNMK2dTYsd8dj7tE5Dkf
+	yGpNEDy6t/CUj5DixgOr9X8MOTGn2kY5tuOxu56+hIFSac2/78bZyW3+DEJI4Et/wEXsHoJA9lo
+	pzFoRw9fMumg13dfXBKKnR98AOw2PNagwUvSt2L5Tg4+2+CyX9KH+oY919zQztzWlHdolrlgp6z
+	2cGyI+Q0A01hOR5hYmbrr5gQZunFMzxqE8fkTmSXwTTDwSywt1Bu1KLETh3VekcI+XANcIrd2xC
+	tL1bacwslWhZfrC1+i5OrSSQZtsVJ/ABOCuCnxz8LmnWCX2bkLx4nmtSRQw==
+X-Received: by 2002:a17:902:c947:b0:29e:bf76:2d91 with SMTP id d9443c01a7336-2ab505a365cmr7959545ad.42.1770962666508;
+        Thu, 12 Feb 2026 22:04:26 -0800 (PST)
+X-Received: by 2002:a17:902:c947:b0:29e:bf76:2d91 with SMTP id d9443c01a7336-2ab505a365cmr7959215ad.42.1770962665954;
+        Thu, 12 Feb 2026 22:04:25 -0800 (PST)
+Received: from [10.217.198.130] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab29998eeasm73094635ad.87.2026.02.12.22.04.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Feb 2026 20:58:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b1ab525-8a60-4980-90f4-c7a761cf1536@roeck-us.net>
-Date: Thu, 12 Feb 2026 20:58:26 -0800
+        Thu, 12 Feb 2026 22:04:25 -0800 (PST)
+Message-ID: <15fe2128-5a88-4140-8aba-0e8d73350df9@oss.qualcomm.com>
+Date: Fri, 13 Feb 2026 11:34:20 +0530
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,368 +87,83 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon:(pmbus/xdpe1a2g7b) Add support for
- xdpe1a2g5b/7b controllers
-To: ashish yadav <ashishyadav78@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Ashish Yadav <ashish.yadav@infineon.com>
-References: <20260202080355.53061-1-Ashish.Yadav@infineon.com>
- <20260202080355.53061-3-Ashish.Yadav@infineon.com>
- <d0854014-7977-48b9-bf31-d66865352ecf@roeck-us.net>
- <CAJKbuCan+5AMuGuqKg4V1qs5HYZQ9zgS9S1rDDJ1usjJAjEGqw@mail.gmail.com>
- <CAJKbuCavMxc7xc4-QW95NfCaUCbLZck5nP1+iMtVxOt4LZ5esg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: hwmon: Add qcom,bcl-hwmon yaml bindings
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
+ <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
+ <ae2802d8-2eb4-4dcf-8212-d8f2a41a7185@oss.qualcomm.com>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <CAJKbuCavMxc7xc4-QW95NfCaUCbLZck5nP1+iMtVxOt4LZ5esg@mail.gmail.com>
+From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+In-Reply-To: <ae2802d8-2eb4-4dcf-8212-d8f2a41a7185@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: dC_1MF2Nm4oUPINjkyeYjQbFZAd8ab3o
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDA0MyBTYWx0ZWRfXxaDd4doRpOYr
+ ZadFVNkNndIL5LOqXu8Iuto0k9sqwZfUmv6msLLtHWR7P3oMGRztS6acWAcFpCIflJAPWmUnGNR
+ iM51hLhcFhYCxUUhqxp8Gns+xZQDhWgHFpVgj9qM8zBqmMOAXT65RACkZjQwJILGzkaouM6L7DF
+ yIlfdRqvIHL7mD2xeqEdPeoTOTeZwQJJPhjOZofOZALw2Pg/BpoLwX0ERERnjsnWe/W2FO7jdnN
+ cb+4UrOnfHna5D/hTUOh3AsegVgjX0x0svIWdvBAqObJRthAY9atsd4X2oiZ2nJ4tozGpsAM+eg
+ CoKaN1vaF4B1RXBV7/LhYbor2h4ocTfe/5su5CQ7SQC3TMxoDMQzIssduExp1jPTHDllO/+rTJ3
+ 372X0sYxNAzvAdRE5DMtv5lNun41Nh4Nv/BX/D5CwD+rtwWvnV4BdBKjG0bya5du7S/NgfMWVkV
+ OEPIbIpwWBn302WtNVg==
+X-Proofpoint-GUID: dC_1MF2Nm4oUPINjkyeYjQbFZAd8ab3o
+X-Authority-Analysis: v=2.4 cv=CLInnBrD c=1 sm=1 tr=0 ts=698ebeeb cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
+ a=EUspDBNiAAAA:8 a=w_4w4FFK3glb3pLQdE8A:9 a=QEXdDO2ut3YA:10
+ a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-12_05,2026-02-12_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602130043
 
-On 2/12/26 19:45, ashish yadav wrote:
-> Hi Guenter,
-> 
-> I hope this email finds you well.
-> 
-> I am reaching out to request your assistance with a specific inquiry
-> regarding the handling of loops/pages for different VOUT modes
-> independently.
-> The challenge I am facing is that the Linux kernel provides a single
-> "PSC_VOLTAGE_OUT" for the chip, which is not page-specific, making it
-> difficult to handle these different modes independently.
-> 
-> I would greatly appreciate it if you could provide me with more
-> information or guidance on how to address this issue, as your
-> expertise in this area would be invaluable in helping me find a
-> solution.
-> 
+Hi Konrad,
 
-Best idea I have at this point is to announce a single mode for all pages
-and convert values for pages with other modes. We _could_ enhance the pmbus
-code to support per-page modes, but that only makes sense if more than a
-single chip is affected and if this is a real problem.
+On 2/6/2026 2:38 PM, Konrad Dybcio wrote:
+> On 2/5/26 10:14 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>> Add devicetree binding documentation for Qualcomm PMIC Battery Current
+>> Limiting (BCL) hardware monitor. The BCL hardware provides monitoring
+>> and alarm functionality for battery overcurrent and battery/system
+>> under voltage conditions.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+>> ---
+> [...]
+>
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +      - description: v1 based BCL
+>> +        items:
+>> +          - enum:
+>> +              - qcom,pm7250b-bcl
+>> +              - qcom,pm8250b-bcl
+>> +          - const: qcom,bcl-v1
+> I see that e.g. PMI8998 has a BCL block, would that also be 'v1',
+> or something else?
 
-Practical question is if the chip supports this. So far I have not encountered
-a chip which does. Unfortunately Infineon doesn't provide datasheets for these
-chips, so it is impossible for me to determine if this is a real or a theoretic
-problem.
+I added support for pmic 5 bcl design from v1 to v4 in this series. 
+PMI8998 is older pmic design(pmic 4). As of now, we don't have any 
+requirement to enable it
 
-Guenter
+Thanks,
 
-> With Best Regards,
->    Ashish Yadav
-> 
-> 
-> On Thu, Feb 5, 2026 at 2:20 PM ashish yadav <ashishyadav78@gmail.com> wrote:
->>
->> Hi Guenter,
->>
->> Thank you for taking the time to review and provide feedback.
->> I appreciate your input and insights.
->> Please find my comments inline below.
->>
->> Best regards,
->> Ashish Yadav
->>
->> On Mon, Feb 2, 2026 at 9:01 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>> On 2/2/26 00:03, ASHISH YADAV wrote:
->>>> From: Ashish Yadav <ashish.yadav@infineon.com>
->>>>
->>>> Add the pmbus driver for Infineon Digital Multi-phase XDPE1A2G5B and
->>>> XDPE1A2G7B controllers.
->>>>
->>>> XDPE1A2G5B controller supports Linear Data format for VOUT using VOUT_MODE
->>>> command.
->>>> XDPE1A2G7B controller supports Linear and VID Data format for VOUT using
->>>> VOUT_MODE command.
->>>>
->>>> In case of vid mode in XDPE1A2G7B controller, NVIDIA PWM VID vrm_version
->>>> is supported:
->>>> Vout = 5mV * (VID-1) + 195mV
->>>>
->>>> Signed-off-by: Ashish Yadav <ashish.yadav@infineon.com>
->>>> ---
->>>>    drivers/hwmon/pmbus/Kconfig      |   9 +++
->>>>    drivers/hwmon/pmbus/Makefile     |   1 +
->>>>    drivers/hwmon/pmbus/pmbus.h      |   2 +-
->>>>    drivers/hwmon/pmbus/pmbus_core.c |   4 ++
->>>>    drivers/hwmon/pmbus/xdpe1a2g7b.c | 115 +++++++++++++++++++++++++++++++
->>>
->>> Driver documentation missing.
->>>
->>     ACK, We will take care of this in the next release.
->>
->>>>    5 files changed, 130 insertions(+), 1 deletion(-)
->>>>    create mode 100644 drivers/hwmon/pmbus/xdpe1a2g7b.c
->>>>
->>>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>>> index f3fb94cebf1a..c6750bce446d 100644
->>>> --- a/drivers/hwmon/pmbus/Kconfig
->>>> +++ b/drivers/hwmon/pmbus/Kconfig
->>>> @@ -684,6 +684,15 @@ config SENSORS_XDPE152
->>>>          This driver can also be built as a module. If so, the module will
->>>>          be called xdpe152c4.
->>>>
->>>> +config SENSORS_XDPE1A2G7B
->>>> +     tristate "Infineon XDPE1A2G7B"
->>>> +     help
->>>> +       If you say yes here you get hardware monitoring support for Infineon
->>>> +       XDPE1A2G5B and XDPE1A2G7B.
->>>> +
->>>> +       This driver can also be built as a module. If so, the module will
->>>> +       be called xdpe1a2g7b.
->>>> +
->>>>    config SENSORS_XDPE122
->>>>        tristate "Infineon XDPE122 family"
->>>>        help
->>>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->>>> index 349a89b6d92e..620f24baa289 100644
->>>> --- a/drivers/hwmon/pmbus/Makefile
->>>> +++ b/drivers/hwmon/pmbus/Makefile
->>>> @@ -67,6 +67,7 @@ obj-$(CONFIG_SENSORS_UCD9200)       += ucd9200.o
->>>>    obj-$(CONFIG_SENSORS_XDP710)        += xdp710.o
->>>>    obj-$(CONFIG_SENSORS_XDPE122)       += xdpe12284.o
->>>>    obj-$(CONFIG_SENSORS_XDPE152)       += xdpe152c4.o
->>>> +obj-$(CONFIG_SENSORS_XDPE1A2G7B)     += xdpe1a2g7b.o
->>>>    obj-$(CONFIG_SENSORS_ZL6100)        += zl6100.o
->>>>    obj-$(CONFIG_SENSORS_PIM4328)       += pim4328.o
->>>>    obj-$(CONFIG_SENSORS_CRPS)  += crps.o
->>>> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
->>>> index d2e9bfb5320f..3ddcb742d289 100644
->>>> --- a/drivers/hwmon/pmbus/pmbus.h
->>>> +++ b/drivers/hwmon/pmbus/pmbus.h
->>>> @@ -416,7 +416,7 @@ enum pmbus_sensor_classes {
->>>>    #define PMBUS_PAGE_VIRTUAL  BIT(31) /* Page is virtual */
->>>>
->>>>    enum pmbus_data_format { linear = 0, ieee754, direct, vid };
->>>> -enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
->>>> +enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv, nvidia195mv };
->>>>
->>>>    /* PMBus revision identifiers */
->>>>    #define PMBUS_REV_10 0x00   /* PMBus revision 1.0 */
->>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>>> index be6d05def115..4d7634ee6148 100644
->>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>>> @@ -885,6 +885,10 @@ static s64 pmbus_reg2data_vid(struct pmbus_data *data,
->>>>                if (val >= 0x0 && val <= 0xd8)
->>>>                        rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
->>>>                break;
->>>> +     case nvidia195mv:
->>>> +             if (val >= 0x01)
->>>> +                     rv = 195 + (val - 1) * 5;  /* VID step is 5mv */
->>>> +             break;
->>>>        }
->>>>        return rv;
->>>>    }
->>>
->>> The core change needs to be a separate patch.
->>>
->> ACK, We will take care of this in the next release.
->>
->>>> diff --git a/drivers/hwmon/pmbus/xdpe1a2g7b.c b/drivers/hwmon/pmbus/xdpe1a2g7b.c
->>>> new file mode 100644
->>>> index 000000000000..79b12b56e7b6
->>>> --- /dev/null
->>>> +++ b/drivers/hwmon/pmbus/xdpe1a2g7b.c
->>>> @@ -0,0 +1,115 @@
->>>> +// SPDX-License-Identifier: GPL-2.0+
->>>> +/*
->>>> + * Hardware monitoring driver for Infineon Multi-phase Digital XDPE1A2G5B
->>>> + * and XDPE1A2G7B Controllers
->>>> + *
->>>> + * Copyright (c) 2026 Infineon Technologies. All rights reserved.
->>>> + */
->>>> +
->>>> +#include <linux/err.h>
->>>> +#include <linux/i2c.h>
->>>> +#include <linux/init.h>
->>>> +#include <linux/kernel.h>
->>>> +#include <linux/module.h>
->>>> +#include "pmbus.h"
->>>> +
->>>> +#define XDPE1A2G7B_PAGE_NUM 2
->>>> +#define XDPE1A2G7B_NVIDIA_195MV 0x1E /* NVIDIA mode 1.95mV, VID step is 5mV */
->>>> +
->>>> +static int xdpe1a2g7b_identify(struct i2c_client *client,
->>>> +                            struct pmbus_driver_info *info)
->>>> +{
->>>> +     u8 vout_params;
->>>> +     int i, ret, vout_mode;
->>>> +
->>>> +     vout_mode = pmbus_read_byte_data(client, 0, PMBUS_VOUT_MODE);
->>>> +     if (vout_mode >= 0 && vout_mode != 0xff) {
->>>
->>> What if vout_mode < 0 ? Also, what if the mode is different for page 1 ?
->>
->> ACK, We will take care of this in the next release.
->>
->>> Also, if I understand patch 0 correctly, executing this function is not needed
->>> for XDPE1A2G5B.
->>>
->> ACK, We will take care of this in the next release.
->>
->>>> +             switch (vout_mode >> 5) {
->>>> +             case 0:
->>>> +                     info->format[PSC_VOLTAGE_OUT] = linear;
->>>> +                     return 0;
->>>> +             case 1:
->>>> +                     info->format[PSC_VOLTAGE_OUT] = vid;
->>>> +                     break;
->>>> +             default:
->>>> +                     return -ENODEV;
->>>> +             }
->>>> +     }
->>>> +
->>>> +     for (i = 0; i < info->pages; i++) {
->>>> +             /* Read the VOUT_MODE register for VID Code Type. */
->>>> +             ret = pmbus_read_byte_data(client, i, PMBUS_VOUT_MODE);
->>>
->>> Given that there are only two pages, reading PMBUS_VOUT_MODE for
->>> page 0 twice is a bit of a waste. On top of that, the need for the loop
->>> suggests that the mode can be different across pages. That needs to be
->>> supported: Bailing out in that case is not acceptable. Worse:
->>> What if the mode is linear on page 0 but vid on page 1 ?
->>>
->> ACK, We will take care of this in the next release.
->>
->>>> +             if (ret < 0)
->>>> +                     return ret;
->>>> +
->>>> +             vout_params = ret & GENMASK(4, 0);
->>>> +             switch (vout_params) {
->>>> +             case XDPE1A2G7B_NVIDIA_195MV:
->>>> +                     info->vrm_version[i] = nvidia195mv;
->>>> +                     break;
->>>> +             default:
->>>> +                     return -EINVAL;
->>>
->>> This warrants an error message and an explanation (comment) why other modes
->>> are not supported by the driver. The detailed datasheet is not public, so
->>> you'll have to help out here. As mentioned above, bailing out because the
->>> mode on page 1 is linear is not acceptable.
->>>
->> ACK, we will provide comments in the next release.
->> Additionally, please note that the XDPE1A2G7B Controller only supports
->> the 'nvidia195mv' vrm_version in the VID Data format for VOUT.
->> We will ensure that this limitation is properly documented and
->> commented on in the next release.
->>
->>>> +             }
->>>> +     }
->>>> +
->>>> +     return 0;
->>>> +}
->>>> +
->>>> +static struct pmbus_driver_info xdpe1a2g7b_info = {
->>>> +     .pages = XDPE1A2G7B_PAGE_NUM,
->>>> +     .identify = xdpe1a2g7b_identify,
->>>> +     .format[PSC_VOLTAGE_IN] = linear,
->>>> +     .format[PSC_TEMPERATURE] = linear,
->>>> +     .format[PSC_CURRENT_IN] = linear,
->>>> +     .format[PSC_CURRENT_OUT] = linear,
->>>> +     .format[PSC_POWER] = linear,
->>>> +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
->>>> +                PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->>>> +                PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_STATUS_TEMP |
->>>> +                PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
->>>> +     .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
->>>> +                PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
->>>> +                PMBUS_HAVE_PIN | PMBUS_HAVE_POUT | PMBUS_HAVE_STATUS_INPUT,
->>>> +};
->>>> +
->>>> +static int xdpe1a2g7b_probe(struct i2c_client *client)
->>>> +{
->>>> +     struct pmbus_driver_info *info;
->>>> +
->>>> +     info = devm_kmemdup(&client->dev, &xdpe1a2g7b_info, sizeof(*info),
->>>> +                         GFP_KERNEL);
->>>> +     if (!info)
->>>> +             return -ENOMEM;
->>>> +
->>>> +     return pmbus_do_probe(client, info);
->>>> +}
->>>> +
->>>> +static const struct i2c_device_id xdpe1a2g7b_id[] = { { "xdpe1a2g5b" },
->>>> +                                                   { "xdpe1a2g7b" },
->>>> +                                                   {} };
->>>
->>> Please use more lines and less indentation.
->>>
->> ACK, We will take care of this in the next release.
->>
->>>> +
->>>> +MODULE_DEVICE_TABLE(i2c, xdpe1a2g7b_id);
->>>> +
->>>> +static const struct of_device_id __maybe_unused xdpe1a2g7b_of_match[] = {
->>>> +     { .compatible = "infineon,xdpe1a2g5b" },
->>>> +     { .compatible = "infineon,xdpe1a2g7b" },
->>>> +     {}
->>>
->>> ... just like here.
->>>
->>>> +};
->>>> +
->>>> +MODULE_DEVICE_TABLE(of, xdpe1a2g7b_of_match);
->>>> +
->>>> +static struct i2c_driver xdpe1a2g7b_driver = {
->>>> +     .driver = {
->>>> +             .name = "xdpe1a2g7b",
->>>> +             .of_match_table = of_match_ptr(xdpe1a2g7b_of_match),
->>>> +     },
->>>> +     .probe = xdpe1a2g7b_probe,
->>>> +     .id_table = xdpe1a2g7b_id,
->>>> +};
->>>> +
->>>> +module_i2c_driver(xdpe1a2g7b_driver);
->>>> +
->>>> +MODULE_AUTHOR("Ashish Yadav <ashish.yadav@infineon.com>");
->>>> +MODULE_DESCRIPTION("PMBus driver for Infineon XDPE1A2G5B/7B");
->>>> +MODULE_LICENSE("GPL");
->>>> +MODULE_IMPORT_NS("PMBUS");
->>>
+Manaf
 
+>
+> Konrad
