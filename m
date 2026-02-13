@@ -1,173 +1,374 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B5535B136
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617F42EBBB7
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770984025; cv=none; b=UabCxFS3ULoqtcmp3XWIuw6RIcGAAU7y7YjAD1aTS5LuDQ0g2MpbrI71kaM7fh3VZkqveC3xVG8yu86pMz83UGgwn/j7YxHX/zsHniRo6Fdro+737N+FKRyCuEXx+jG5lYmyTNZjOnG0VQLb2C+0okCgk7vd0sDNyie7D1yvgLQ=
+	t=1770986849; cv=none; b=gTxz9dRWGDEMlj2f9BcP+qpBL81b7aZQr/N160Sj6+hJmU24yFmmpmAbPr0SjGecPsxDOG4rVFiVEuI4H3cWBwotwKeRAJHd0D0J+BQo5MuDnvTZGhKTQT7j5APrBeRLC3EalDsM2Bp85TyslYI9C0JrdCf2TevemWHT9FFGAJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770984025; c=relaxed/simple;
-	bh=OSvJKuP6dgZ4Wha7nT0kEvQYfBniuU9cyWrZ/6/n0Cw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hyTiZ2lTM+46IIuD//w9niI3X/DbLsxn18l4+l10riF19lyfy1EnPcHvaGofWdjPM9eFBken01k7vsDbeVl2uueTuXZbdasjUl6wnrX4ny/WjaYEUOh1DkqjNFjEdjF5t69QEnbWzfWs92Q9bOviS/0E4xGWNgWSbRoCPhjYMfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cVWusH1c; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=el4iMATa; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1770986849; c=relaxed/simple;
+	bh=rR11qtaVtUzfRjXnaVf5c72VIuWT4W11rCkyJBV2LrM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bkh9UnTTDd171+j2jv4b16qUxT22ty7S7GqkX8YFG9IufyFPiVl6GUz3v0mT0z/3N3UZOIHKVUoJf46b7BSKLGWH+9P6S/XPTtSFGSO7BCbYQcLtF1LeUUqdImohnLuVBOVjmsoARgRn39oABZaZnoB7UAMmc9Jm0Wp9uJiPdLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+hqR7nG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cVWusH1c";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="el4iMATa"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61D9efbj3022808
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:00:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	OSvJKuP6dgZ4Wha7nT0kEvQYfBniuU9cyWrZ/6/n0Cw=; b=cVWusH1cLDLvSgTd
-	wCVpvSKoBeylXV8QrScOSTBW6FZZAcgKEGRRk5+qrADiI5GYJwt52FahfAXD6slV
-	F6ll+p/rrJK9Y3qXQI3CTJluA14xN33QVYHNAgFYVbuR16fzcHEzj1H5JBTPLeqj
-	8Zt9/kTQs+CMoBLLzSa57njkBjvoNJLNIBSb/YMkqXxQhum5dTMrWl1/pZrKRwC4
-	oLrzdEd/CJRSizouGVLdnxfc1A3DTbtny9/lJ9cw9SAQjy5idsCSnJoLAU6cKvte
-	huWWNmsMNUHHHvldmSUxwz0ig2fIqOTs3a6vT7qrnqUVQjiEXQpYFZYu02ifboLx
-	i88TZw==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ca1hn0eku-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:00:22 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2aae0d40a47so33345275ad.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 04:00:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1770984022; x=1771588822; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OSvJKuP6dgZ4Wha7nT0kEvQYfBniuU9cyWrZ/6/n0Cw=;
-        b=el4iMATa4Mwk1ImzEZGCKyktzExrkW3DOZjK5FVxn0LNxGAWcM5DunafrIubklIL34
-         1h5XjrhMqM/4M8q+0lLVfQca3q0m8/i+NWuffhNpakXUqY6jewwBeqZl4QuZSucn8UMx
-         htKhglphjZnuiocV9lMzctEavds28TMrKmo/aCv5PpKNLsqhEmtnb8il6H1gjrO399lT
-         G1pVgK+l9v5DxNltsDIZ/zLujR+kwrhY0iS1V5P33MnO3/DgjyDOcZWyP3QMKn62jEXg
-         q7xLDSx8Eh6673xgSCWsYmvjGdyS2B0mKEPOhzsPL2FMlsBQQsjHFyw8uq4NkKK9YBHJ
-         ld+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770984022; x=1771588822;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OSvJKuP6dgZ4Wha7nT0kEvQYfBniuU9cyWrZ/6/n0Cw=;
-        b=uTxQ3LqCSK65YC1IBo3yxWVaeOFaSyOrHJ5CUIzi+RC8q1bcptbPOrIEnC4QZzI+TL
-         Sfgpw1/+1QkUtXVfp1YUqr1kZaCv6mc2vOSbQM+lZQ4bCXG+CJT8Co7iIuEcbNKPU1oj
-         fC7gta9+LQTGgM7Xvl5v3HdQo5HRlFoO0e4fp1y+saIMNypzbYiFd3tUcoqsvNWXgM1S
-         VwY3UlsMwpJ5ojhvmT2603NyJXYHdMNhQzt6owBSBCgK9I14DwGAdqVBSkbb2LJv24Jp
-         85yJATz6VWCz0km6uy0mGplfUgMvbPDKng0o8QpZyZnRt4HZVN8A2NwEoP6WzvkVhe+W
-         r4KQ==
-X-Gm-Message-State: AOJu0YxeMbKwfVr1Jxo/0W3vsP6ypo0RheGNb+UBbge1lPmjxF23taiw
-	F/FOCV74xsY2pi/AMTeZ2Zn2SY7nP46PfFXCzIwXEVkAs5R0CJl2wgan35X285JephfQMdiNehM
-	gZdcX8c5I5+Low8DgI19iz/E35g75Qxi/oInkuEqVIRv6/26hY7nMWzUcOsV3zAOtdg==
-X-Gm-Gg: AZuq6aL/4A7ny2FALUv5sCWkrMpaqVb7EHvYMuXrXmdbZllC87tPilizWExDlLLA36B
-	1PaZ89tFXfbuBholRz/4oH3OIFy24k2L/pd+WxWsXTH80iDDu24Y3J673chx6fYSslDBXDYYuhG
-	hXIm99jVtAQHpF+DvTQV1edI9IddA5JA5JE68INyiYn7tnrFDuqYl0kq9qSDvUIT8YZIvvQYEyV
-	VX97JqB+3+kn7eX9tKgZZHyQ/NkP/ujjjrq4MpoYL7W8X5eEMARiT86XWh5vpUDtpfMiR768xg2
-	BQmALn+MJQrObCBDTwLrzqfUxqwYSQtNEB8698mrADR2nDlmdqrbohgQ5N7FgeeBplu7S26FrWJ
-	AGpxpllZG3qGqQNk1PNE1IXyDqysnO6QaoyM8QrW3GXDXXHIHM1ZG25jbDw==
-X-Received: by 2002:a17:903:ac5:b0:2aa:d7fe:8611 with SMTP id d9443c01a7336-2ab50568010mr18240385ad.27.1770984021493;
-        Fri, 13 Feb 2026 04:00:21 -0800 (PST)
-X-Received: by 2002:a17:903:ac5:b0:2aa:d7fe:8611 with SMTP id d9443c01a7336-2ab50568010mr18239755ad.27.1770984020748;
-        Fri, 13 Feb 2026 04:00:20 -0800 (PST)
-Received: from [10.217.198.130] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab2997bf86sm84627445ad.74.2026.02.13.04.00.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Feb 2026 04:00:20 -0800 (PST)
-Message-ID: <8420d839-cc1f-4d03-a3ee-725d944577ec@oss.qualcomm.com>
-Date: Fri, 13 Feb 2026 17:30:15 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+hqR7nG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334C4C2BC86
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770986849;
+	bh=rR11qtaVtUzfRjXnaVf5c72VIuWT4W11rCkyJBV2LrM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=k+hqR7nG5kYMWhygQz9Zs6QbiCQda5zPZ0nNVc8WQZYeOGWLZmjOVpiKeMcMSNmda
+	 iFvlycP+PxoFbCookwk9QmO+yNh0yogYHYD/6WwUJtcOLH1MkGezBlLLsq5iXHCpND
+	 S1NJD0eqN67KP6W2a13jVYwI/hEmaHwpEU1WKWtmPF/DVt5ylMYX3MQLv7ybLHfzLG
+	 tmG3adphJOuBtba9CnsTCD6y/MJig9w9VvEoPPecC4Flr1FxzEIjShAjT6gyv3wNeW
+	 /Q6jSmcyJkAe5FeaXw6xlDo7BfOUmd1I6pV7xC1Jfa5gjdKNOJsjiaE8C/hSLRgRGI
+	 LQTHQbAgULiaA==
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-45f18e8f2f5so577285b6e.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 04:47:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWvunqvBDrxIHPK+eRHsujUy9CRlbR1oDkgdPBQOn89PACRaMUIKCmp4hijuBys/cFVZoCDVr7cPN4JGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznDmL+Zqkcleuh5CJNyTTqY7AvJBPTAU4B46QLxzsJ5JkpSeIT
+	VJ4570KRzxrDJ13CAqVF5VNxaoSliaL/+bAkFoTmR0tzvTgDL0LQ/IAd/irWN9dfprGKzOOUiU9
+	AxFfe3zxuGCpuMX7jHRvjChj6atCk5NU=
+X-Received: by 2002:a05:6808:2e45:b0:462:dbf2:514f with SMTP id
+ 5614622812f47-4639f079553mr1041120b6e.23.1770986848197; Fri, 13 Feb 2026
+ 04:47:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: hwmon: Add qcom,bcl-hwmon yaml bindings
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
- <20260206-qcom-bcl-hwmon-v1-1-7b426f0b77a1@oss.qualcomm.com>
- <ae2802d8-2eb4-4dcf-8212-d8f2a41a7185@oss.qualcomm.com>
- <15fe2128-5a88-4140-8aba-0e8d73350df9@oss.qualcomm.com>
- <a4cfbe52-51cd-4851-8a1a-2830886c4dfc@oss.qualcomm.com>
-Content-Language: en-US
-From: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
-In-Reply-To: <a4cfbe52-51cd-4851-8a1a-2830886c4dfc@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=Wt0m8Nfv c=1 sm=1 tr=0 ts=698f1256 cx=c_pps
- a=cmESyDAEBpBGqyK7t0alAg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=EUspDBNiAAAA:8 a=eFyIGa5nQRDKMWRvKKsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-ORIG-GUID: EAq5pC3wBLPmkWfAJHO6ibnkjXFTZvKg
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDA5MiBTYWx0ZWRfX763vc4bCEu/P
- qcy2GMzhVYzJk6bSwnZ1Lw03PU4fmGh3Nsa4AERhfC59eHTYOjDo77qv6SnRvUiFZq7xrYZ2bt7
- VCl0aDzaPpIPBB5wZp1UD9FhJOvRs2eNqJMoJPlOWp5v2QTNQMtbAErQJNutvhDAGsuStXRe1tZ
- LaK99PxigrTEiVsFD0p/MUo9uChJ7NUxFS5zHBmlZBLveaHlLtuZEpNfbV9rDNtvect6OQzEPiz
- Tx4FsdsSGalgAxO96o60p/G629aJN6NO6/y4GT1O1X+J+EZ0GkmCTH3iMyt9y09FKmdBwX8D+U/
- Ukq6jlc8R1CmvONnEkNdt8LiG9dI/YUS5lJGfsVlAfRs/RVUOr4gVP87nLbb1F7sJNtnslq+eXg
- lpk/+Ueorg1YO3OyMzqOtjctxkaCN6G6sI8WQRfsRy5PxQxnPE9u7Yhsh9OY3Gth84qJdM4+27U
- dqgjDRyhe17fWekaFZg==
-X-Proofpoint-GUID: EAq5pC3wBLPmkWfAJHO6ibnkjXFTZvKg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-13_02,2026-02-12_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1015 priorityscore=1501 adultscore=0 spamscore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602130092
+References: <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
+ <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
+ <aYYPnATz1JakV3m7@mail.minyard.net> <CAJZ5v0h1irjy_ovyQw9ObGOTAUWajT_BK6u=rWQqR9awQBrY3A@mail.gmail.com>
+ <CAK8fFZ4Ut6K-QGpy769_1N1K-GKpReo2wQgA=uXyXdGZ+QgGxA@mail.gmail.com>
+ <CAJZ5v0hCEECyuAJZ4GAn=DeJR-UgtUXOMYYN9JQgEyghVnCYsw@mail.gmail.com>
+ <aY4EUQcGbmT3Rexz@mail.minyard.net> <CAJZ5v0ip-Ke9p-2Qd9EQpp-J4Te53S4WsrJDeJPi_5o+U2_wNA@mail.gmail.com>
+ <aY4dT-Mj5ZJIavdP@mail.minyard.net> <CAJZ5v0iS939x7VMQoNgks=Edichx2C+Qq8_kfiLpLh0ov=gwpw@mail.gmail.com>
+ <aY7K3cHE3dgnEC4L@mail.minyard.net>
+In-Reply-To: <aY7K3cHE3dgnEC4L@mail.minyard.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 13 Feb 2026 13:47:17 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h+qs22qGevTKvSzy+J+R0NDFdLJPFX-REMqg7Ee8h7PQ@mail.gmail.com>
+X-Gm-Features: AZwV_Qhnr881IzvTaVv6LE3qZhYP0nkFghuOx7IaJ4L5GqR0z3M_SBuV9or7mMk
+Message-ID: <CAJZ5v0h+qs22qGevTKvSzy+J+R0NDFdLJPFX-REMqg7Ee8h7PQ@mail.gmail.com>
+Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average sysfs
+ read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
+To: corey@minyard.net
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Igor Raits <igor@gooddata.com>, linux-acpi@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, Daniel Secik <daniel.secik@gooddata.com>, 
+	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
+	Huisong Li <lihuisong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Konrad,
-
-On 2/13/2026 4:11 PM, Konrad Dybcio wrote:
-> On 2/13/26 7:04 AM, Manaf Meethalavalappu Pallikunhi wrote:
->> Hi Konrad,
->>
->> On 2/6/2026 2:38 PM, Konrad Dybcio wrote:
->>> On 2/5/26 10:14 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>>> Add devicetree binding documentation for Qualcomm PMIC Battery Current
->>>> Limiting (BCL) hardware monitor. The BCL hardware provides monitoring
->>>> and alarm functionality for battery overcurrent and battery/system
->>>> under voltage conditions.
->>>>
->>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
->>>> ---
->>> [...]
->>>
->>>> +properties:
->>>> +  compatible:
->>>> +    oneOf:
->>>> +      - description: v1 based BCL
->>>> +        items:
->>>> +          - enum:
->>>> +              - qcom,pm7250b-bcl
->>>> +              - qcom,pm8250b-bcl
->>>> +          - const: qcom,bcl-v1
->>> I see that e.g. PMI8998 has a BCL block, would that also be 'v1',
->>> or something else?
->> I added support for pmic 5 bcl design from v1 to v4 in this series. PMI8998 is older pmic design(pmic 4). As of now, we don't have any requirement to enable it
-> Right, but then you never mentioned "PMIC5" anywhere in the compatible
-> or the binding, so this wasn't obvious at all. With the request from others
-> to shift towards PMIC-specific compatibles that won't be an issue
-Sure, will move to pmic specific compatibles.
-Thanks,
-Manaf
+On Fri, Feb 13, 2026 at 7:55=E2=80=AFAM Corey Minyard <corey@minyard.net> w=
+rote:
 >
-> Konrad
+> On Thu, Feb 12, 2026 at 10:33:15PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Feb 12, 2026 at 7:35???PM Corey Minyard <corey@minyard.net> wro=
+te:
+> > >
+> > > On Thu, Feb 12, 2026 at 06:22:08PM +0100, Rafael J. Wysocki wrote:
+> > > > On Thu, Feb 12, 2026 at 5:48???PM Corey Minyard <corey@minyard.net>=
+ wrote:
+> > > > >
+> > > > > On Thu, Feb 12, 2026 at 01:27:41PM +0100, Rafael J. Wysocki wrote=
+:
+> > > > > > On Thu, Feb 12, 2026 at 10:11???AM Jaroslav Pulchart
+> > > > > > <jaroslav.pulchart@gooddata.com> wrote:
+> > > > > > >
+> > > > > > > >
+> > > > > > > > On Fri, Feb 6, 2026 at 4:58???PM Corey Minyard <corey@minya=
+rd.net> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, Feb 06, 2026 at 01:08:56PM +0100, Rafael J. Wysoc=
+ki wrote:
+> > > > > > > > > > On Thu, Feb 5, 2026 at 11:34???PM Guenter Roeck <linux@=
+roeck-us.net> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. W=
+ysocki wrote:
+> > > > > > > > > > > > Cc: Corey
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Thu, Feb 5, 2026 at 6:51???PM Guenter Roeck <lin=
+ux@roeck-us.net> wrote:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Ra=
+its wrote:
+> > > > > > > > > > > > > > On Wed, Feb 4, 2026 at 11:49???PM Guenter Roeck=
+ <linux@roeck-us.net> wrote:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > On 2/4/26 11:54, Igor Raits wrote:
+> > > > > > > > > > > > > > > > I have written a patch with the help of AI =
+and it fixes the problem. Attached.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > "No MIME, no links, no compression, no attach=
+ments.  Just plain text"
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Sorry for that, I had assumed that attaching th=
+e file would make it in-line.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > ... which means I can not provide inline feed=
+back, which is the whole
+> > > > > > > > > > > > > > > point of the above.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Your patch crosses subsystems, so it will nee=
+d to be split in two
+> > > > > > > > > > > > > > > (assuming the ACPI side is even needed). Also=
+, references to iDRAC
+> > > > > > > > > > > > > > > in common code seem inappropriate.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Yes, this I believe was the essential part (it =
+was the last piece in
+> > > > > > > > > > > > > > my testing which fixed the hanging):
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Then I'll need to ask differently: What happens i=
+f you drop the IPMI code,
+> > > > > > > > > > > > > and just keep the wait_for_completion -> wait_for=
+_completion_timeout
+> > > > > > > > > > > > > change ? Would that be sufficient to solve the pr=
+oblem ?
+> > > > > > > > > > > >
+> > > > > > > > > > > > I'd rather say "Would that be sufficient to make th=
+e symptoms go
+> > > > > > > > > > > > away?" as it most likely papers over the real probl=
+em.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > Good point. Worse, it may result in UAF or memory lea=
+ks.
+> > > > > > > > > > >
+> > > > > > > > > > > > > Either case, the need for this change suggests th=
+at the ipmi change
+> > > > > > > > > > > > > may not be complete, since it should send a compl=
+etion with an error.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I think that reverting commit bc3a9d217755 ("ipmi:s=
+i: Gracefully
+> > > > > > > > > > > > handle if the BMC is non-functional") should also b=
+e considered as a
+> > > > > > > > > > > > possible way forward because it clearly did not imp=
+rove things as
+> > > > > > > > > > > > expected, at least in this particular case.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > I tend to agree. I ran a number of AI code reviews ov=
+er the patch, and
+> > > > > > > > > > > each time it finds new (and different) problems. The =
+fact that the acpi
+> > > > > > > > > > > patch is still needed even after applying the ipmi ch=
+anges suggests that
+> > > > > > > > > > > something is still missing in the ipmi code.
+> > > > > > > > > > >
+> > > > > > > > > > > > It evidently did something that confuses things qui=
+te a bit.  Either
+> > > > > > > > > > > > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UN=
+SPECIFIED, or it is
+> > > > > > > > > > > > the "hosed" state and refusing to accept messages.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > More than that. My latest AI results are below, just =
+for reference
+> > > > > > > > > > > (using Gemini 3 with Chris Mason's debug prompts). Th=
+e prompt I used
+> > > > > > > > > > > for this run is:
+> > > > > > > > > >
+> > > > > > > > > > Well, I guess it's time to send a revert patch then.
+> > > > > > > > >
+> > > > > > > > > Thanks for the CC.
+> > > > > > > > >
+> > > > > > > > > Let's fix it right in the IPMI driver.
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > > "
+> > > > > > > > > > > The top commit in the linux/ directory results in hun=
+g tasks if the BMC
+> > > > > > > > > > > stops responding. Using @review-prompts/kernel/debugg=
+ing.md analyze the
+> > > > > > > > > > > patch, identify the reason for the hung task problem,=
+ suggest and implement
+> > > > > > > > > > > a fix. Note that there may be more than one problem i=
+n the patch, so analyze
+> > > > > > > > > > > the complete patch and do not stop after fiding the f=
+irst regression.
+> > > > > > > > > > > "
+> > > > > > > > > > >
+> > > > > > > > > > > I think that catches most of the problem, but not all=
+ of it.
+> > > > > > > > > > >
+> > > > > > > > > > > Guenter
+> > > > > > > > > > >
+> > > > > > > > > > > ---
+> > > > > > > > > > >
+> > > > > > > > > > > Summary of crash or warning:
+> > > > > > > > > > > Hung task detected in ipmi_si driver when BMC becomes=
+ non-functional.
+> > > > > > > > > > > Processes waiting for IPMI responses (e.g. ipmitool, =
+monitoring agents) enter D state and never recover.
+> > > > > > > > > > >
+> > > > > > > > > > > Kernel version if available:
+> > > > > > > > > > > Top of tree (commit bc3a9d217755f65c137f145600f23bf1d=
+6c31ea9)
+> > > > > > > > > > >
+> > > > > > > > > > > Machine type if available:
+> > > > > > > > > > > Generic Server with BMC
+> > > > > > > > > > >
+> > > > > > > > > > > Cleaned up copy of oops or stack trace:
+> > > > > > > > > > > [  120.123456] INFO: task ipmitool:1234 blocked for m=
+ore than 120 seconds.
+> > > > > > > > > > > [  120.123457]       Not tainted 6.14.0-rc1 #1
+> > > > > > > > > > > [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_t=
+imeout_secs" disables this message.
+> > > > > > > > > > > [  120.123459] task:ipmitool        state:D stack:   =
+ 0 pid: 1234 ppid:  100 flags:0x00000000
+> > > > > > > > > > > [  120.123460] Call Trace:
+> > > > > > > > > > > [  120.123461]  <TASK>
+> > > > > > > > > > > [  120.123462]  __schedule+0x123/0x456
+> > > > > > > > > > > [  120.123463]  schedule+0x45/0x78
+> > > > > > > > > > > [  120.123464]  schedule_timeout+0x9a/0xbc
+> > > > > > > > > > > [  120.123465]  wait_for_completion+0xde/0xf0
+> > > > > > > > > > > [  120.123466]  ipmi_request_settime+0x123/0x145
+> > > > > > > > > > > [  120.123467]  ...
+> > > > > > > > > > > [  120.123468]  </TASK>
+> > > > > > > > > > >
+> > > > > > > > > > > Any other kernel messages you found relevant:
+> > > > > > > > > > > N/A
+> > > > > > > > > > >
+> > > > > > > > > > > Explanation of the problem:
+> > > > > > > > > > > 1. Hung Task:
+> > > > > > > > > > > The patch "ipmi:si: Gracefully handle if the BMC is n=
+on-functional" introduces a new state `SI_HOSED` to handle BMC failures. Wh=
+en the driver detects that the BMC is not responding, it transitions to `SI=
+_HOSED` and fails the currently processing message (`curr_msg`). However, i=
+f a new message is queued via `sender()` (populating `waiting_msg`) during =
+a recovery probe (state `SI_GETTING_FLAGS`), and that probe subsequently fa=
+ils, the state machine transitions back to `SI_HOSED`. In this transition, =
+the driver checks and fails `curr_msg`, but it neglects to check or fail `w=
+aiting_msg`. As a result, the `waiting_msg` remains in the queue indefinite=
+ly, causing the waiting process to hang.
+> > > > > > > > > >
+> > > > > > > > > > That's quite convincing and it would explain the observ=
+ed symptoms.
+> > > > > > > > >
+> > > > > > > > > Yes, and it's a fairly easy fix, I think.  The waiting me=
+ssage just
+> > > > > > > > > needs to be returned in that case.  The following patch s=
+hould do it:
+> > > > > > > >
+> > > > > > > > Jaroslav, it would be good to test the patch below on top o=
+f 6.19.  I
+> > > > > > > > can put it on a test git branch if need be, so please let m=
+e know.
+> > > > > > > >
+> > > > > > > > > diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/c=
+har/ipmi/ipmi_si_intf.c
+> > > > > > > > > index 5459ffdde8dc..ff159b1162b9 100644
+> > > > > > > > > --- a/drivers/char/ipmi/ipmi_si_intf.c
+> > > > > > > > > +++ b/drivers/char/ipmi/ipmi_si_intf.c
+> > > > > > > > > @@ -809,6 +809,12 @@ static enum si_sm_result smi_event_h=
+andler(struct smi_info *smi_info,
+> > > > > > > > >                          */
+> > > > > > > > >                         return_hosed_msg(smi_info, IPMI_B=
+US_ERR);
+> > > > > > > > >                 }
+> > > > > > > > > +               if (smi_info->waiting_msg !=3D NULL) {
+> > > > > > > > > +                       /* Also handle if there was a mes=
+sage waiting. */
+> > > > > > > > > +                       smi_info->curr_msg =3D smi_info->=
+waiting_msg;
+> > > > > > > > > +                       smi_info->waiting_msg =3D NULL;
+> > > > > > > > > +                       return_hosed_msg(smi_info, IPMI_B=
+US_ERR);
+> > > > > > > > > +               }
+> > > > > > > > >                 smi_mod_timer(smi_info, jiffies + SI_TIME=
+OUT_HOSED);
+> > > > > > > > >                 goto out;
+> > > > > > > > >         }
+> > > > > > >
+> > > > > > > I apply ^ patch to both 6.18.10 and 6.19 and reproduced the i=
+ssue on
+> > > > > > > both, so it does not fix the problem.
+> > > > > >
+> > > > > > Thanks!
+> > > > > >
+> > > > > > With all due respect to everyone involved (including the AI), t=
+his
+> > > > > > means that we are not anywhere close to fixing the problem and =
+it
+> > > > > > would be a shame to ship 7.0 with it.
+> > > > > >
+> > > > > > I'm sending a revert patch shortly.
+> > > > >
+> > > > > Unfortunately, that patch fixed an issue others were having.
+> > > >
+> > > > Granted, it broke something else, so it needs to be fixed or revert=
+ed.
+> > >
+> > > Yes, certainly.
+> > >
+> > > >
+> > > > Maybe there is a way to address the original problem fixed by it di=
+fferently?
+> > >
+> > > I'm not sure.  This is not the first attempt...
+> >
+> > I see.
+> >
+> > > >
+> > > > Do you have any pointers to any problem reports regarding that one?
+> > >
+> > > The original problem came as a patch set:
+> > >
+> > > https://lore.kernel.org/lkml/20221007092617.87597-1-zhangyuchen.lcr@b=
+ytedance.com/
+> > >
+> > > That had a lockup problem, and it had some other issues.  So I rework=
+ed
+> > > the code to the current form.
+> >
+> > OK, thanks!
+> >
+> > > I'm working on qemu now.  This needs to be added as part of the test =
+suite, anyway.
+> >
+> > There is something in the current code that seems to be problematic.
+> >
+> > When acpi_ipmi_space_handler() runs, it calls ipmi_request_settime()
+> > to queue up a message.  AFAICS, if all goes well, this ends up calling
+> > smi_send() via i_ipmi_request().
+> >
+> > If intf->curr_msg is NULL, the new message will not be added to a list
+> > in there, but intf->curr_msg will be set to point to it instead and
+> > handlers->sender() will be called on it.  But handlers->sender points
+> > to sender() defined in ipmi_si_intf.c which returns IPMI_BUS_ERR
+> > without doing anything if smi_info->si_state =3D=3D SI_HOSED and its
+> > return value is ignored.
+> >
+> > The message is only pointed to by intf->curr_msg at that point and
+> > AFAICS it will never get actually processed because intf->curr_msg is
+> > never really dereferenced (it is only compared with other pointers and
+> > checked against NULL if I'm not mistaken).
+> >
+> > It looks like smi_send() needs to check the handlers->sender() return
+> > value and maybe return it to the caller so i_ipmi_request() can return
+> > an error if it fails.
+>
+> This was indeed an issue, and had to be handled correctly in a lot of
+> places.  And there were other issues.  I tested a lot of different
+> scenarios.
+>
+> Patches are currently in my next tree
+> https://github.com/cminyard/linux-ipmi.git for-next
+> and I'll send emails with them, too.
+>
+> I was able to reproduce the issue with qemu.  Assuming this works, next
+> step is to automate the tests.
+
+Many thanks for the fixes!
