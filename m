@@ -1,317 +1,301 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF64299950
-	for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 22:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A5B1509AB
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 00:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770933983; cv=none; b=OBeN9ethJ/ywUucnNQkrFd14fKSQFZHcGsFtYewt1T6Y5nU1ulO6Fb4L4BeV/7OaLWjdWqckV4nDqA2qGSEk7aIZpGYo09DadwAs2eVHu0sW913sTkvxupeP8//TLCgq5FkzeBYJty/pDE7hqjmg2BJ4BjbYVtrvd6IwMwPxIdU=
+	t=1770941720; cv=none; b=IFFsq2YlQDyCZdFtePSwzweV/FrNLCms+v1e7EEdfKa0Wl+Va18UZhA+xCNAUOG+JVSYXU89vuV8tQW1P2U1r+MxjPEIAmNFlpqjha9n2HvUimzOR2KbwwMMwZfvuYaAsQEwl0OZlnt11SZjkRYYOR1AMlvpbNF+0CojKszYW08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770933983; c=relaxed/simple;
-	bh=FA9Sa4ZScDMsKUsdS5zZWNPvFD772JVJVeWxvkxf5L8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQgpn1OPxVRMUt36RqiFTwRUwFEmJSNjwBYd7jP64hP3F0O/N6A+ERnRdpVDSEW2zLJIwH2RUC/LODMcF0YI6k3sLb5N8Hfmet4QXFinExgcz281Fq4tsTMGaQpvnZJTDvBwaO8FKBzyP6RfgzDwXm8yUT8kQEQ2vcILWbj1aug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=b0N7+eXP; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=minyard.net
+	s=arc-20240116; t=1770941720; c=relaxed/simple;
+	bh=MBxXvm9SN85wIbPQozevHNwhIzjPtliVSJlxB+6iP8A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jV9yp9O4xIVDHxQWgxWKpoX0TJMY4yaiIPYEYZNVXf4U3iRcyyl1TeeIY8HsbCp25FT1wWiEWhWJ6qyP2sRfnSicjHeMtp+M2uBNAmhyK83EAIQ2xV7dykULrCIIvxnDoIstinh+cEQIFQZ+Diw9mtsolw1IMpTHQZqgMNqd0mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=DZ67Pj5r; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="b0N7+eXP"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7d18f80b5c2so244163a34.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 14:06:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="DZ67Pj5r"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so2757395e9.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 16:15:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=minyard.net; s=google; t=1770933980; x=1771538780; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1770941718; x=1771546518; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VMZsU008s1b0NUMycPyjWaPsbDd+SQs/nQ6naksV2T0=;
-        b=b0N7+eXPxbbc6CMCgSFoNtXgxvjQsTPAGyCJVp+KcYR6Jr/GabuWhn3PoYTCa9qJJ2
-         kMQ2cWwdbWhOkl0qI2YAOcLT/EOY3f8A6dv3hfCMki34MEKTMC/dEDpM1GZkXWw/Magn
-         i6HAdXsqWaR50lVtsDtZGaE52MkR/T2f/3KOGKEgVLgJrOOtOHgZy1AeLrBXN2g83Hgt
-         L23rDHHcEUAd/TxtZDuGXitE1/fiLAwYz+PYTh6oLCgFJHzxHqxzO8H0N2NDh23aPq0r
-         JEmWc2sJQX7xnm8Q+J3kYmuCaQu5TrgXaYz8E3Kt3f4V5FqibLUQB+TNFuBFr8I4xVsZ
-         ZFag==
+        bh=nkpDAlBYfnDGxcVrWynzmo5K/OoXZi98TxFwnjNQDvI=;
+        b=DZ67Pj5r2NRtJDLbAF9tPO3yboADCvKntmnCV3l2o5HoXxZ75Uj4Fd7+7+V/muCkwJ
+         +v+6ssbzcnMjx3XharQrFOl6hhsYACYZCgUk0LY2QodGaIJe+clwHGOMnzo54k0zXHYQ
+         pDYbOo9g+X+n3ArPujQ95PcaVVrAp23FnUMEBmXc5LoIEV01uapMz/hc1eWZl9S9DWzO
+         ddcYq+yv9UcHEa1j1yuenQCglpBp5DV+5sIu0BZfKEzW0aAL76HKlPPcEsxdm/XAWc9B
+         4hXLKDfpid/OCcSH4seyE3WiMz4W+TjKnt+4nM9opoFKm8sEFAgwJ+ixbgvH2KnfhaOh
+         Xr2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770933980; x=1771538780;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1770941718; x=1771546518;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VMZsU008s1b0NUMycPyjWaPsbDd+SQs/nQ6naksV2T0=;
-        b=IVwdktXRRLUCkYV0oPNZTmgWluSevvO8p87GWisOk4S5l/HGUgZji0u3oy6Wn+DlqF
-         f7PqOhHiYs89UqEYigm9+/T5DJ80NnLCFIkniZYZw23zyOaODj2DeLtTX500h6lUbTd9
-         1LhZfIDjYEQpXGzQfMkyrn+xwV0qZerBiLmP41gGqdGINXlyFANoLq60NSZNz9d67AgS
-         HnHxtKM9RriSyn4uAA07tEdj0QCn1vFGVd4WIuGlncD7yxBOSdZeVOl1WTG15N/Os/U2
-         Hztd0UUu0cAgUkTZInVMycPqK4mxbx55kASkBlWC/keLgqTom5rXesEBdHjBqoiGDa3n
-         bvCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGfgTdreu27X9wjJc4ot9YGjUOG2mrGVHySFFZNar7cWV8cg4bOUxfr42fFrdGSrUbmoggew2+z0vKFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+8DtFNo7yJTK/2git2wa7bMiCAtEOraUjK5CnHhy9EV4EtBWN
-	zKGFnu/gBUMgX+oY/NkzmEg75+OFsyuxT3ibs9CHMsPSoYBlj96suP8hrBcmNWeRtmM=
-X-Gm-Gg: AZuq6aIgUnyrX+tTCy022jMxwful9IF6djOpJ8eYSGYMirgxcXsnAGkBh4f/Lo3roys
-	MbbUFG0FYFQclnuyB6TL1P8xeaxblkcaN+dwZITrVII7cxn58+f0n6kQRBJPa/mOMOcEaDt/+99
-	mNr/RcssApUqr73FfH30a77JpgurpvbBFGGa0HKogc9UT4MExRbeSoEt+8+vgyxca1+dP+Ew3Eu
-	nyy4DWawj4CNhRzLpl+QsMkFhdVrDEAGpNgdciLur874rtAzZrWsirkwc0kzvGfOQF/loAoak/G
-	FaHE/vMOlIVGKMyFeHIiGNVvieinrKgMajIYb0FgyCvZ7vjuJdj0Us086AZRHof5ffKfFfdUDDZ
-	FxzQOS9LRplyOhvDJok1hIpid4OUfJZNal+T3BEx42J+NodQRy16U+ot4nm7ir2M8lmK4ojgm7g
-	uuebnq50+231FKyWzmfJm01+NGDUm+vilJchbxzD0CXuDpsT7UkBjwqPjbSv189Xbot0eY4TsC2
-	7d1ur7EHKBUWsU=
-X-Received: by 2002:a05:6830:7313:b0:7c7:4f2:e15d with SMTP id 46e09a7af769-7d4c3028d5bmr316756a34.16.1770933980193;
-        Thu, 12 Feb 2026 14:06:20 -0800 (PST)
-Received: from mail.minyard.net ([2001:470:b8f6:1b:a3ab:7352:1dc1:6b46])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d4a76df04dsm4998416a34.15.2026.02.12.14.06.19
+        bh=nkpDAlBYfnDGxcVrWynzmo5K/OoXZi98TxFwnjNQDvI=;
+        b=nSu5XLlCmxN0qzoIxtGUaNvYZ0R/+IfPfVxoo/wunpuN6Aj0XIZhZvVnNPDliomrGT
+         qxXmeKlNI7/R5pW1Mt7CxOPiP1cBvCZYhnhCKyusq1pHojpeRzQjAI8jnMjgpv3521hk
+         Icu+86VrKVylNqgqX/Vf5OjPdIs3KBHhPMnl9wxW75w74k433BYDYxmfuXhROqvPenRy
+         LyhSgiTKWAuwrE5jalGEr6n/HsJI0vOM2hI6Oe9j6LPkJDY0Jru7bY3LOPWgBKn1/fBE
+         m7ZBPmk16RPtv5aOuSW2WRCgsIhjeDNqAxIclAXiUK0dHOOR7EfFknmQvVn5HB378Ur/
+         SyUw==
+X-Gm-Message-State: AOJu0Yw9nCmyjWFHlT2F5KqWyYycyPqlYytjaTZTQEc2QCDYzmzU7SWW
+	/kEA5hnt81iDh43YABKMg7K8hF47b5GjZb3p8X1K0szAuANthFZ4++DeLhyGsdKdQdA=
+X-Gm-Gg: AZuq6aKPlzbCUpT02x//XISoSEYDJUB0Z76SrRgEB2Ckl5sXl4SdjSXeOEXSku86kIp
+	dKBfgI+zYL5pMISwwf35bUEtY2SIhklsmhCpADcWH8HPyNQwpabm8wHVJGg3Xnko4jsJboWt4iY
+	kNYxr8KFIPJWt0jXYomH/ZERT/mCXQ90qrC2zjVjYomAMBihTfcnN4yxw5DlSJ8AxccsR/jcZS6
+	+j5VmU9Ysk2HiVl/y2PdRQOJ/1C71vZ7Ubh3wY0MdvjneahoMAlAh/qNDQeMYo+jqUVDvSjWAfG
+	9P/spVamGST0I0GDoCveUO2MzoGuePqoFbDN2Cvn0iQu4jFRMGqJvRb9HQKVOSMDvf9KLe5AF29
+	JNqr1BI9WwgOT24rVDWptzIW2bsmbtfaIUotT1Nyt0iyExYD4ykRPL8M2YBb+Lp4bCX7GB0bV4v
+	kNHDl2GlzXNQ03P3EgB/N/IDAcd5UTNH1V1ZoVSt4fZldTKjqjQVKU/YVL+4q2zKEi+E6+aK+3s
+	Y5Y//qaIg==
+X-Received: by 2002:a05:600c:1381:b0:483:ea6:8767 with SMTP id 5b1f17b1804b1-48371098c8dmr12349945e9.36.1770941717627;
+        Thu, 12 Feb 2026 16:15:17 -0800 (PST)
+Received: from silence.. ([46.10.240.40])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835d99497asm234440945e9.6.2026.02.12.16.15.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 14:06:19 -0800 (PST)
-Date: Thu, 12 Feb 2026 16:06:15 -0600
-From: Corey Minyard <corey@minyard.net>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-	Guenter Roeck <linux@roeck-us.net>, Igor Raits <igor@gooddata.com>,
-	linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Daniel Secik <daniel.secik@gooddata.com>,
-	Zdenek Pesek <zdenek.pesek@gooddata.com>,
-	Jiri Jurica <jiri.jurica@gooddata.com>,
-	Huisong Li <lihuisong@huawei.com>
-Subject: Re: [BISECTED - impi related]: acpi_power_meter: power*_average
- sysfs read hangs, mutex deadlock in hwmon_attr_show since v6.18.y
-Message-ID: <aY5O1z6SbrGSDaDs@mail.minyard.net>
-Reply-To: corey@minyard.net
-References: <1642aec8-e8c1-4ad4-a5b7-556feeedfd93@roeck-us.net>
- <CAJZ5v0i_BmeGROzQFpUCyF5MkA7sFkP3y8jjqH0mD2r2Wqj_xA@mail.gmail.com>
- <aYYPnATz1JakV3m7@mail.minyard.net>
- <CAJZ5v0h1irjy_ovyQw9ObGOTAUWajT_BK6u=rWQqR9awQBrY3A@mail.gmail.com>
- <CAK8fFZ4Ut6K-QGpy769_1N1K-GKpReo2wQgA=uXyXdGZ+QgGxA@mail.gmail.com>
- <CAJZ5v0hCEECyuAJZ4GAn=DeJR-UgtUXOMYYN9JQgEyghVnCYsw@mail.gmail.com>
- <aY4EUQcGbmT3Rexz@mail.minyard.net>
- <CAJZ5v0ip-Ke9p-2Qd9EQpp-J4Te53S4WsrJDeJPi_5o+U2_wNA@mail.gmail.com>
- <aY4dT-Mj5ZJIavdP@mail.minyard.net>
- <CAJZ5v0iS939x7VMQoNgks=Edichx2C+Qq8_kfiLpLh0ov=gwpw@mail.gmail.com>
+        Thu, 12 Feb 2026 16:15:17 -0800 (PST)
+From: Stoyan Bogdanov <sbogdanov@baylibre.com>
+To: jbrunet@baylibre.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stoyan Bogdanov <sbogdanov@baylibre.com>
+Subject: [PATCH v2 1/3] hwmon: (pmbus/tps25990): Rework TPS25990 non standatd direct conversion
+Date: Fri, 13 Feb 2026 02:14:06 +0200
+Message-Id: <20260213001408.2454567-2-sbogdanov@baylibre.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260213001408.2454567-1-sbogdanov@baylibre.com>
+References: <20260213001408.2454567-1-sbogdanov@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iS939x7VMQoNgks=Edichx2C+Qq8_kfiLpLh0ov=gwpw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 12, 2026 at 10:33:15PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Feb 12, 2026 at 7:35???PM Corey Minyard <corey@minyard.net> wrote:
-> >
-> > On Thu, Feb 12, 2026 at 06:22:08PM +0100, Rafael J. Wysocki wrote:
-> > > On Thu, Feb 12, 2026 at 5:48???PM Corey Minyard <corey@minyard.net> wrote:
-> > > >
-> > > > On Thu, Feb 12, 2026 at 01:27:41PM +0100, Rafael J. Wysocki wrote:
-> > > > > On Thu, Feb 12, 2026 at 10:11???AM Jaroslav Pulchart
-> > > > > <jaroslav.pulchart@gooddata.com> wrote:
-> > > > > >
-> > > > > > >
-> > > > > > > On Fri, Feb 6, 2026 at 4:58???PM Corey Minyard <corey@minyard.net> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, Feb 06, 2026 at 01:08:56PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > On Thu, Feb 5, 2026 at 11:34???PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Thu, Feb 05, 2026 at 08:04:12PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > > > Cc: Corey
-> > > > > > > > > > >
-> > > > > > > > > > > On Thu, Feb 5, 2026 at 6:51???PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Thu, Feb 05, 2026 at 08:25:57AM +0100, Igor Raits wrote:
-> > > > > > > > > > > > > On Wed, Feb 4, 2026 at 11:49???PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > On 2/4/26 11:54, Igor Raits wrote:
-> > > > > > > > > > > > > > > I have written a patch with the help of AI and it fixes the problem. Attached.
-> > > > > > > > > > > > > > >
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > "No MIME, no links, no compression, no attachments.  Just plain text"
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Sorry for that, I had assumed that attaching the file would make it in-line.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > > ... which means I can not provide inline feedback, which is the whole
-> > > > > > > > > > > > > > point of the above.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Your patch crosses subsystems, so it will need to be split in two
-> > > > > > > > > > > > > > (assuming the ACPI side is even needed). Also, references to iDRAC
-> > > > > > > > > > > > > > in common code seem inappropriate.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Yes, this I believe was the essential part (it was the last piece in
-> > > > > > > > > > > > > my testing which fixed the hanging):
-> > > > > > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > Then I'll need to ask differently: What happens if you drop the IPMI code,
-> > > > > > > > > > > > and just keep the wait_for_completion -> wait_for_completion_timeout
-> > > > > > > > > > > > change ? Would that be sufficient to solve the problem ?
-> > > > > > > > > > >
-> > > > > > > > > > > I'd rather say "Would that be sufficient to make the symptoms go
-> > > > > > > > > > > away?" as it most likely papers over the real problem.
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Good point. Worse, it may result in UAF or memory leaks.
-> > > > > > > > > >
-> > > > > > > > > > > > Either case, the need for this change suggests that the ipmi change
-> > > > > > > > > > > > may not be complete, since it should send a completion with an error.
-> > > > > > > > > > >
-> > > > > > > > > > > I think that reverting commit bc3a9d217755 ("ipmi:si: Gracefully
-> > > > > > > > > > > handle if the BMC is non-functional") should also be considered as a
-> > > > > > > > > > > possible way forward because it clearly did not improve things as
-> > > > > > > > > > > expected, at least in this particular case.
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > I tend to agree. I ran a number of AI code reviews over the patch, and
-> > > > > > > > > > each time it finds new (and different) problems. The fact that the acpi
-> > > > > > > > > > patch is still needed even after applying the ipmi changes suggests that
-> > > > > > > > > > something is still missing in the ipmi code.
-> > > > > > > > > >
-> > > > > > > > > > > It evidently did something that confuses things quite a bit.  Either
-> > > > > > > > > > > it is returning IPMI_BUS_ERR instead of IPMI_ERR_UNSPECIFIED, or it is
-> > > > > > > > > > > the "hosed" state and refusing to accept messages.
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > More than that. My latest AI results are below, just for reference
-> > > > > > > > > > (using Gemini 3 with Chris Mason's debug prompts). The prompt I used
-> > > > > > > > > > for this run is:
-> > > > > > > > >
-> > > > > > > > > Well, I guess it's time to send a revert patch then.
-> > > > > > > >
-> > > > > > > > Thanks for the CC.
-> > > > > > > >
-> > > > > > > > Let's fix it right in the IPMI driver.
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > "
-> > > > > > > > > > The top commit in the linux/ directory results in hung tasks if the BMC
-> > > > > > > > > > stops responding. Using @review-prompts/kernel/debugging.md analyze the
-> > > > > > > > > > patch, identify the reason for the hung task problem, suggest and implement
-> > > > > > > > > > a fix. Note that there may be more than one problem in the patch, so analyze
-> > > > > > > > > > the complete patch and do not stop after fiding the first regression.
-> > > > > > > > > > "
-> > > > > > > > > >
-> > > > > > > > > > I think that catches most of the problem, but not all of it.
-> > > > > > > > > >
-> > > > > > > > > > Guenter
-> > > > > > > > > >
-> > > > > > > > > > ---
-> > > > > > > > > >
-> > > > > > > > > > Summary of crash or warning:
-> > > > > > > > > > Hung task detected in ipmi_si driver when BMC becomes non-functional.
-> > > > > > > > > > Processes waiting for IPMI responses (e.g. ipmitool, monitoring agents) enter D state and never recover.
-> > > > > > > > > >
-> > > > > > > > > > Kernel version if available:
-> > > > > > > > > > Top of tree (commit bc3a9d217755f65c137f145600f23bf1d6c31ea9)
-> > > > > > > > > >
-> > > > > > > > > > Machine type if available:
-> > > > > > > > > > Generic Server with BMC
-> > > > > > > > > >
-> > > > > > > > > > Cleaned up copy of oops or stack trace:
-> > > > > > > > > > [  120.123456] INFO: task ipmitool:1234 blocked for more than 120 seconds.
-> > > > > > > > > > [  120.123457]       Not tainted 6.14.0-rc1 #1
-> > > > > > > > > > [  120.123458] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > > > > > > > > > [  120.123459] task:ipmitool        state:D stack:    0 pid: 1234 ppid:  100 flags:0x00000000
-> > > > > > > > > > [  120.123460] Call Trace:
-> > > > > > > > > > [  120.123461]  <TASK>
-> > > > > > > > > > [  120.123462]  __schedule+0x123/0x456
-> > > > > > > > > > [  120.123463]  schedule+0x45/0x78
-> > > > > > > > > > [  120.123464]  schedule_timeout+0x9a/0xbc
-> > > > > > > > > > [  120.123465]  wait_for_completion+0xde/0xf0
-> > > > > > > > > > [  120.123466]  ipmi_request_settime+0x123/0x145
-> > > > > > > > > > [  120.123467]  ...
-> > > > > > > > > > [  120.123468]  </TASK>
-> > > > > > > > > >
-> > > > > > > > > > Any other kernel messages you found relevant:
-> > > > > > > > > > N/A
-> > > > > > > > > >
-> > > > > > > > > > Explanation of the problem:
-> > > > > > > > > > 1. Hung Task:
-> > > > > > > > > > The patch "ipmi:si: Gracefully handle if the BMC is non-functional" introduces a new state `SI_HOSED` to handle BMC failures. When the driver detects that the BMC is not responding, it transitions to `SI_HOSED` and fails the currently processing message (`curr_msg`). However, if a new message is queued via `sender()` (populating `waiting_msg`) during a recovery probe (state `SI_GETTING_FLAGS`), and that probe subsequently fails, the state machine transitions back to `SI_HOSED`. In this transition, the driver checks and fails `curr_msg`, but it neglects to check or fail `waiting_msg`. As a result, the `waiting_msg` remains in the queue indefinitely, causing the waiting process to hang.
-> > > > > > > > >
-> > > > > > > > > That's quite convincing and it would explain the observed symptoms.
-> > > > > > > >
-> > > > > > > > Yes, and it's a fairly easy fix, I think.  The waiting message just
-> > > > > > > > needs to be returned in that case.  The following patch should do it:
-> > > > > > >
-> > > > > > > Jaroslav, it would be good to test the patch below on top of 6.19.  I
-> > > > > > > can put it on a test git branch if need be, so please let me know.
-> > > > > > >
-> > > > > > > > diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
-> > > > > > > > index 5459ffdde8dc..ff159b1162b9 100644
-> > > > > > > > --- a/drivers/char/ipmi/ipmi_si_intf.c
-> > > > > > > > +++ b/drivers/char/ipmi/ipmi_si_intf.c
-> > > > > > > > @@ -809,6 +809,12 @@ static enum si_sm_result smi_event_handler(struct smi_info *smi_info,
-> > > > > > > >                          */
-> > > > > > > >                         return_hosed_msg(smi_info, IPMI_BUS_ERR);
-> > > > > > > >                 }
-> > > > > > > > +               if (smi_info->waiting_msg != NULL) {
-> > > > > > > > +                       /* Also handle if there was a message waiting. */
-> > > > > > > > +                       smi_info->curr_msg = smi_info->waiting_msg;
-> > > > > > > > +                       smi_info->waiting_msg = NULL;
-> > > > > > > > +                       return_hosed_msg(smi_info, IPMI_BUS_ERR);
-> > > > > > > > +               }
-> > > > > > > >                 smi_mod_timer(smi_info, jiffies + SI_TIMEOUT_HOSED);
-> > > > > > > >                 goto out;
-> > > > > > > >         }
-> > > > > >
-> > > > > > I apply ^ patch to both 6.18.10 and 6.19 and reproduced the issue on
-> > > > > > both, so it does not fix the problem.
-> > > > >
-> > > > > Thanks!
-> > > > >
-> > > > > With all due respect to everyone involved (including the AI), this
-> > > > > means that we are not anywhere close to fixing the problem and it
-> > > > > would be a shame to ship 7.0 with it.
-> > > > >
-> > > > > I'm sending a revert patch shortly.
-> > > >
-> > > > Unfortunately, that patch fixed an issue others were having.
-> > >
-> > > Granted, it broke something else, so it needs to be fixed or reverted.
-> >
-> > Yes, certainly.
-> >
-> > >
-> > > Maybe there is a way to address the original problem fixed by it differently?
-> >
-> > I'm not sure.  This is not the first attempt...
-> 
-> I see.
-> 
-> > >
-> > > Do you have any pointers to any problem reports regarding that one?
-> >
-> > The original problem came as a patch set:
-> >
-> > https://lore.kernel.org/lkml/20221007092617.87597-1-zhangyuchen.lcr@bytedance.com/
-> >
-> > That had a lockup problem, and it had some other issues.  So I reworked
-> > the code to the current form.
-> 
-> OK, thanks!
-> 
-> > I'm working on qemu now.  This needs to be added as part of the test suite, anyway.
-> 
-> There is something in the current code that seems to be problematic.
-> 
-> When acpi_ipmi_space_handler() runs, it calls ipmi_request_settime()
-> to queue up a message.  AFAICS, if all goes well, this ends up calling
-> smi_send() via i_ipmi_request().
-> 
-> If intf->curr_msg is NULL, the new message will not be added to a list
-> in there, but intf->curr_msg will be set to point to it instead and
-> handlers->sender() will be called on it.  But handlers->sender points
-> to sender() defined in ipmi_si_intf.c which returns IPMI_BUS_ERR
-> without doing anything if smi_info->si_state == SI_HOSED and its
-> return value is ignored.
-> 
-> The message is only pointed to by intf->curr_msg at that point and
-> AFAICS it will never get actually processed because intf->curr_msg is
-> never really dereferenced (it is only compared with other pointers and
-> checked against NULL if I'm not mistaken).
-> 
-> It looks like smi_send() needs to check the handlers->sender() return
-> value and maybe return it to the caller so i_ipmi_request() can return
-> an error if it fails.
+Rework existing implementation for calculation of direct
+format conversion for TPS25990. With this implamentation
+is leveraged code reusability for non standard parameters.
+ - Add enum for parameter
+ - Add m, b, R structure to hold value per device
+ - Add data structure to hold for pmbus_driver_info and
+   local_direct_values
+ - Conversion functions are implemented according to formula from
+   TPS25990 datasheet
+ - Remove previously used defines replace with structure
 
-Yes, I think you might be right.  I've just gotten qemu to a point where
-I can test this.
+Signed-off-by: Stoyan Bogdanov <sbogdanov@baylibre.com>
+---
+ drivers/hwmon/pmbus/tps25990.c | 115 +++++++++++++++++++++++++--------
+ 1 file changed, 88 insertions(+), 27 deletions(-)
 
-Until that code was added handlers->sender() never returned an error.
-Hopefully I can figure this out soon.
+diff --git a/drivers/hwmon/pmbus/tps25990.c b/drivers/hwmon/pmbus/tps25990.c
+index c13edd7e1abf..33f6367f797c 100644
+--- a/drivers/hwmon/pmbus/tps25990.c
++++ b/drivers/hwmon/pmbus/tps25990.c
+@@ -36,17 +36,58 @@
+ #define  TPS25990_UNLOCKED		BIT(7)
+ 
+ #define TPS25990_8B_SHIFT		2
+-#define TPS25990_VIN_OVF_NUM		525100
+-#define TPS25990_VIN_OVF_DIV		10163
+-#define TPS25990_VIN_OVF_OFF		155
+-#define TPS25990_IIN_OCF_NUM		953800
+-#define TPS25990_IIN_OCF_DIV		129278
+-#define TPS25990_IIN_OCF_OFF		157
+ 
+ #define PK_MIN_AVG_RST_MASK		(PK_MIN_AVG_RST_PEAK | \
+ 					 PK_MIN_AVG_RST_AVG  | \
+ 					 PK_MIN_AVG_RST_MIN)
+ 
++enum tps25990_parameters {
++	TPS25990_VIN_OVF = 0, /* VIN over volatage fault */
++	TPS25990_IIN_OCF, /* IIN Over currect fault */
++	TPS25590_DIRECT_VALUES_MAX, /* Max value ensure there enough space */
++};
++
++struct local_direct_value {
++	int m[TPS25590_DIRECT_VALUES_MAX]; /* mantissa for direct data format */
++	int b[TPS25590_DIRECT_VALUES_MAX]; /* offset */
++	int R[TPS25590_DIRECT_VALUES_MAX]; /* exponent */
++};
++
++struct tps25990_data {
++	struct pmbus_driver_info *info;
++	struct local_direct_value *info_local;
++};
++
++static int tps25990_raw_to_value(struct i2c_client *client, int param, int raw)
++{
++	struct tps25990_data *data = (struct tps25990_data *)of_device_get_match_data(&client->dev);
++	struct local_direct_value *info_local = data->info_local;
++
++	/* Formula : X = (Y / 10^R - b) / m */
++	if (info_local->R[param] >= 0)
++		raw /= int_pow(10, info_local->R[param]);
++	else
++		raw *= int_pow(10, -info_local->R[param]);
++
++	return DIV_ROUND_CLOSEST(raw - info_local->b[param], info_local->m[param]);
++}
++
++static unsigned int tps25990_value_to_raw(struct i2c_client *client, int param, int val)
++{
++	struct tps25990_data *data = (struct tps25990_data *)of_device_get_match_data(&client->dev);
++	struct local_direct_value *info_local = data->info_local;
++
++	/* Formula : Y = ( m * X + b) * 10^R */
++	val = (long)val * info_local->m[param] + info_local->b[param];
++
++	if (info_local->R[param] >= 0)
++		val *= int_pow(10, info_local->R[param]);
++	else
++		val = DIV_ROUND_CLOSEST(val, int_pow(10, -info_local->R[param]));
++
++	return val;
++}
++
+ /*
+  * Arbitrary default Rimon value: 1kOhm
+  * This correspond to an overcurrent limit of 55A, close to the specified limit
+@@ -184,9 +225,7 @@ static int tps25990_read_word_data(struct i2c_client *client,
+ 		ret = pmbus_read_word_data(client, page, phase, reg);
+ 		if (ret < 0)
+ 			break;
+-		ret = DIV_ROUND_CLOSEST(ret * TPS25990_VIN_OVF_NUM,
+-					TPS25990_VIN_OVF_DIV);
+-		ret += TPS25990_VIN_OVF_OFF;
++		ret = tps25990_raw_to_value(client, TPS25990_VIN_OVF, ret);
+ 		break;
+ 
+ 	case PMBUS_IIN_OC_FAULT_LIMIT:
+@@ -198,9 +237,7 @@ static int tps25990_read_word_data(struct i2c_client *client,
+ 		ret = pmbus_read_byte_data(client, page, TPS25990_VIREF);
+ 		if (ret < 0)
+ 			break;
+-		ret = DIV_ROUND_CLOSEST(ret * TPS25990_IIN_OCF_NUM,
+-					TPS25990_IIN_OCF_DIV);
+-		ret += TPS25990_IIN_OCF_OFF;
++		ret = tps25990_raw_to_value(client, TPS25990_IIN_OCF, ret);
+ 		break;
+ 
+ 	case PMBUS_VIRT_SAMPLES:
+@@ -246,17 +283,13 @@ static int tps25990_write_word_data(struct i2c_client *client,
+ 		break;
+ 
+ 	case PMBUS_VIN_OV_FAULT_LIMIT:
+-		value -= TPS25990_VIN_OVF_OFF;
+-		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_VIN_OVF_DIV,
+-					  TPS25990_VIN_OVF_NUM);
++		value = tps25990_value_to_raw(client, TPS25990_VIN_OVF, value);
+ 		value = clamp_val(value, 0, 0xf);
+ 		ret = pmbus_write_word_data(client, page, reg, value);
+ 		break;
+ 
+ 	case PMBUS_IIN_OC_FAULT_LIMIT:
+-		value -= TPS25990_IIN_OCF_OFF;
+-		value = DIV_ROUND_CLOSEST(((unsigned int)value) * TPS25990_IIN_OCF_DIV,
+-					  TPS25990_IIN_OCF_NUM);
++		value = tps25990_value_to_raw(client, TPS25990_IIN_OCF, value);
+ 		value = clamp_val(value, 0, 0x3f);
+ 		ret = pmbus_write_byte_data(client, page, TPS25990_VIREF, value);
+ 		break;
+@@ -337,7 +370,16 @@ static const struct regulator_desc tps25990_reg_desc[] = {
+ };
+ #endif
+ 
+-static const struct pmbus_driver_info tps25990_base_info = {
++struct local_direct_value tps25590_local_info = {
++	.m[TPS25990_VIN_OVF] = 10163,
++	.b[TPS25990_VIN_OVF] = -30081,
++	.R[TPS25990_VIN_OVF] = -4,
++	.m[TPS25990_IIN_OCF] = 9538,
++	.b[TPS25990_IIN_OCF] = 0,
++	.R[TPS25990_IIN_OCF] = -6,
++};
++
++static struct pmbus_driver_info tps25990_base_info = {
+ 	.pages = 1,
+ 	.format[PSC_VOLTAGE_IN] = direct,
+ 	.m[PSC_VOLTAGE_IN] = 5251,
+@@ -386,14 +428,19 @@ static const struct pmbus_driver_info tps25990_base_info = {
+ #endif
+ };
+ 
++struct tps25990_data data_tps25990 = {
++	.info = &tps25990_base_info,
++	.info_local = &tps25590_local_info,
++};
++
+ static const struct i2c_device_id tps25990_i2c_id[] = {
+-	{ "tps25990" },
++	{ .name = "tps25990", .driver_data = (kernel_ulong_t)&data_tps25990 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(i2c, tps25990_i2c_id);
+ 
+ static const struct of_device_id tps25990_of_match[] = {
+-	{ .compatible = "ti,tps25990" },
++	{ .compatible = "ti,tps25990", .data = &data_tps25990 },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, tps25990_of_match);
+@@ -401,23 +448,37 @@ MODULE_DEVICE_TABLE(of, tps25990_of_match);
+ static int tps25990_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+-	struct pmbus_driver_info *info;
++	struct tps25990_data *data;
+ 	u32 rimon = TPS25990_DEFAULT_RIMON;
++	struct pmbus_driver_info *info_get;
++	struct local_direct_value *info_local_get;
+ 	int ret;
+ 
+ 	ret = device_property_read_u32(dev, "ti,rimon-micro-ohms", &rimon);
+ 	if (ret < 0 && ret != -EINVAL)
+ 		return dev_err_probe(dev, ret, "failed to get rimon\n");
+ 
+-	info = devm_kmemdup(dev, &tps25990_base_info, sizeof(*info), GFP_KERNEL);
+-	if (!info)
++	data = (struct tps25990_data *)of_device_get_match_data(dev);
++	if (!data)
++		return -EOPNOTSUPP;
++
++	info_get = data->info;
++	/* Make copy of pmbus_info and replace it to preserve original values */
++	data->info = devm_kmemdup(dev, info_get, sizeof(*info_get), GFP_KERNEL);
++	if (!data->info)
++		return -ENOMEM;
++
++	info_local_get = data->info_local;
++	/* Make copy of pmbus_info and replace it to preserve original values */
++	data->info_local = devm_kmemdup(dev, info_local_get, sizeof(*info_local_get), GFP_KERNEL);
++	if (!data->info_local)
+ 		return -ENOMEM;
+ 
+ 	/* Adapt the current and power scale for each instance */
+-	tps25990_set_m(&info->m[PSC_CURRENT_IN], rimon);
+-	tps25990_set_m(&info->m[PSC_POWER], rimon);
++	tps25990_set_m(&data->info->m[PSC_CURRENT_IN], rimon);
++	tps25990_set_m(&data->info->m[PSC_POWER], rimon);
+ 
+-	return pmbus_do_probe(client, info);
++	return pmbus_do_probe(client, data->info);
+ }
+ 
+ static struct i2c_driver tps25990_driver = {
+-- 
+2.34.1
 
--corey
