@@ -1,149 +1,126 @@
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED636277C88
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 06:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAB6330B27;
+	Fri, 13 Feb 2026 09:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770965747; cv=none; b=p+v8hKkPptm4+EWzPlJ3ta/NukIIm7Cv+IrQCSzyHQQ6HHaY/Q/sHUz5qYYlwd+8aC9KiCNa81kt1BPRgCsuYunguGhcfdU/tPlfAV9PgR0XgY+yBWykm8dHI/Ye+L/vBKWaJZOP0af7lW9mT3+k0JMbLj7bnUdW60X0HrlG1Zw=
+	t=1770973827; cv=none; b=jTbcdGuoWNUIyxlKNeRu4jEGGU7guR5uRez39OkUgaM0vA5Z9X564wIPxFB7Jwd06cCjf+0EyhJJiH/ll4Xfhb7NeH6ohUSMu9KJAm8c/14SZCwNieUsGon2J9hP9F1iDe12ry/gabOiJwJrSCAhM3ni/T9ihmO5XP++4mbYZTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770965747; c=relaxed/simple;
-	bh=lQbl8rYIfrG6wxU4E3tWWSxo4aRWKZ/dPc/QN30m1rE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O4Mpf1qAtOOnUanYtkMkVltec5BaK3hxOvSG7ZiOpymOexQ+Fm5JZI/heNDpFGX/ZvAoqFI0yuLYUIeBNSFecvs7FedlNcXxGSKncGbDIin1qBccQOUlBJF+G4VQSs6cizy0+ZqUsQ83cUGhPX9iSeZefx5j//F+mlq79QYE1QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net; spf=pass smtp.mailfrom=minyard.net; dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b=ZNbtDBtP; arc=none smtp.client-ip=209.85.167.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=minyard.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=minyard.net
+	s=arc-20240116; t=1770973827; c=relaxed/simple;
+	bh=WLpab8z9L1FvsgPhhCAmW2PjbccD56OWmkO0q/7nCGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fnoDnGWCLfIvQNySD0N6FVDaBYySFYFo9MbvKXU1xo2I5uY1CxZzVUEInHjybm6GXOlam2LOM/y1m7A91nlKOi6u01PW4wZfdwyFSuge3nnPtbCnVIc5dpT/cBmhrMIABfO+lEjqT5KRMRj47g06xQ4rDW2rn5Qo3O7K8SnfihM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TXfuSbD1; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=minyard.net header.i=@minyard.net header.b="ZNbtDBtP"
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-45f053b7b90so415276b6e.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Feb 2026 22:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=minyard.net; s=google; t=1770965744; x=1771570544; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UWDi80vPYKTAc6upvJphSdvAtuHW5MV8Yc1eLb4RAzw=;
-        b=ZNbtDBtPb0lSM6o2LcZ7iDkFi/n3hx/bsvxEuT+cl23EngTjBIEuYp9scehwqKOzvQ
-         GKUGRZhn9VW8r+j4MvrFxDUZYuq55B+n/6+PKwSST4781ID0e+1LdmL9z9BWgMsEqWL3
-         CbFPOAH7Drz0tRu7utXXsXSI28dsxmW5qGea9s5rW2HA1D6iIngQSMjd6My6LVA25Wv1
-         uD+GYJMPpk7bbAvd0vTTU1Ii9eayMfqVR1TGRwOId5Ulo58a6M1sR6IcIYe+xkWhOCM2
-         KMCouXmVDvv3Rfn2AMe0P9icQsHYz5pknu+BAgL0Ej8YNgr/QnhffK+tEnByhgeeRxMv
-         JIwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770965744; x=1771570544;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UWDi80vPYKTAc6upvJphSdvAtuHW5MV8Yc1eLb4RAzw=;
-        b=kVrjvFK3zFQYabJqElvv3SAweri45Gv7iIWSGxpdvthssHYAfsES6OE95uAEVBfBrO
-         5wKhtg5rjlEZxAQb9Fr7VjgYWhmOKecsIQygpefAj5R7w5v4Jns8bQM2g7/qgS/E4cc8
-         Gw1OGpwcaGU8PCYmKFDZ2A9+7T2E1yi1iwNH7JWoRT8g/UbQaH2J7kmnL/dISMfc8woy
-         +xa2rK5YRysjKbuC2v0V+DV9OePK+Fb+Tfe5F1OiO2FMG03utDjNQ70Bn5C4W7ArFnpP
-         SlI5VSox39Z2EBL32BpfOv59Un6ueZW5iYBzE/ma6vQ45DR/j96yQc1rNSoJ4ahntuH+
-         1n6w==
-X-Forwarded-Encrypted: i=1; AJvYcCU0oc1FtlEjSJihCYUe5KYwVhVb1YKXjriBj59FD1blfqHXbJ1Xv0GKa/RUdjh1MdJnvAf0bygxAg7bPw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9jZ6B4QI7YPjKTrTu8j89l7KKFHtUTlM8H+U+TsaMJCw/7wEe
-	RpWPG1+S4LyN/w/Z1n2f75u93fNZp6Ate5XYyVsI6jgJoPnKMnlvcDmYsPT0Ql2Pn/s=
-X-Gm-Gg: AZuq6aI/b7vMri7LPQ2+gLiuL2HPzH3SH4oEMOsopIV0/OJJvPh6u30/gjVbCOGQFIF
-	YkXTDONO/0o01j+vLJdYNmKUgwnEun6mEpoAgp2RlA1qvl3TSA1LV6BHvW8mJAC2rHP18tl5mlV
-	t854hfF6Y92Z/1AV78fnpiSPmWrqPDe/drSOPo2nvosjITF3O5xlhwNz/Br3AzeewLKS8YWCqmI
-	wAf32YnDDv3QptzyqRx5bkgIvXNslKALMjO/OISmmwickdY4m8gnR5HT5zn4TqhLN3rOSlt6ys4
-	IuS/svBD56J8TxQ+yWDGh9gO2nv0WLVebpj9AlBvVIhp/P92vayhJ5Ms3aoM7pcqM8fAR7z36j/
-	Lj/DxVpeM0nMUx3Q3MtCe5+ryR38Wj+5uLpc49unwg7lXHDreqDXy/F5SkzLtIpamH2M3HfRXwH
-	LpXL3lTwpJsMNACj2tq4cYdVmwLdfrKYWlSQrOvObsx/LRmwlUt6zaNy5RPPqaqOy7+i68Gaaz4
-	yLOODKx0ky6kq54
-X-Received: by 2002:a05:6808:c1e8:b0:45a:770c:d77b with SMTP id 5614622812f47-4639f1dcb8fmr563573b6e.35.1770965743932;
-        Thu, 12 Feb 2026 22:55:43 -0800 (PST)
-Received: from localhost ([2001:470:b8f6:1b:a3ab:7352:1dc1:6b46])
-        by smtp.gmail.com with UTF8SMTPSA id 5614622812f47-4636b065d46sm4261406b6e.12.2026.02.12.22.55.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Feb 2026 22:55:42 -0800 (PST)
-From: Corey Minyard <corey@minyard.net>
-To: "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Igor Raits <igor@gooddata.com>,
-	linux-acpi@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Daniel Secik <daniel.secik@gooddata.com>,
-	Zdenek Pesek <zdenek.pesek@gooddata.com>,
-	Jiri Jurica <jiri.jurica@gooddata.com>,
-	Huisong Li <lihuisong@huawei.com>,
-	Corey Minyard <corey@minyard.net>
-Subject: [PATCH 3/3] ipmi:si: Fix check for a misbehaving BMC
-Date: Fri, 13 Feb 2026 00:52:15 -0600
-Message-ID: <20260213065351.915707-4-corey@minyard.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260213065351.915707-1-corey@minyard.net>
-References: <20260213065351.915707-1-corey@minyard.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TXfuSbD1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770973826; x=1802509826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WLpab8z9L1FvsgPhhCAmW2PjbccD56OWmkO0q/7nCGI=;
+  b=TXfuSbD1QLR+hpgbHX/VaXA/BZ59T9MGAorGpnPUCF9OVh5dJKfvfF60
+   PxZAzg74gUw+xXpCcNQ+x4WgflAQnaZImJLGH5+Tc7jtMR2DdSknkNkma
+   907bIZwHKOsTNrG1Fyp3LRJQ72rvzDb3PqNSfa/jOV6bTmNfcjATTH+kd
+   MS+rcZHSrvXWGmussGayHSmjSTl9TYhFZQHhwNqqGRPOTVx08jRUuGSs/
+   GyNGaLtuImgObdQhfyxbEPy69po0Xf0Q66+ZywxOlfwj4hVbxgW+YegZ1
+   k++uTIEifFFKy/JMBqXX+gLMn3NUDOgeN85oBBgn9ochKFbE3RaRWps5N
+   A==;
+X-CSE-ConnectionGUID: 0NgGteq2QDuZ4gagFfWtOw==
+X-CSE-MsgGUID: hxFOHue0Rs22QL4TgjIC1Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="97614663"
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="97614663"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 01:10:26 -0800
+X-CSE-ConnectionGUID: O0rARFFOQ0CiE6O9xfc6iQ==
+X-CSE-MsgGUID: K4gaZ9zgQ/WYA+DpW14OMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="212117102"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2026 01:10:23 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vqpBs-00000000vFs-1rlU;
+	Fri, 13 Feb 2026 09:10:20 +0000
+Date: Fri, 13 Feb 2026 17:10:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stoyan Bogdanov <sbogdanov@baylibre.com>, jbrunet@baylibre.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stoyan Bogdanov <sbogdanov@baylibre.com>
+Subject: Re: [PATCH v2 1/3] hwmon: (pmbus/tps25990): Rework TPS25990 non
+ standatd direct conversion
+Message-ID: <202602131712.Lruy3UMc-lkp@intel.com>
+References: <20260213001408.2454567-2-sbogdanov@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260213001408.2454567-2-sbogdanov@baylibre.com>
 
-There is a race on checking the state in the sender, it needs to be
-checked under a lock.  But you also need a check to avoid issues with
-a misbehaving BMC for run to completion mode.  So leave the check at
-the beginning for run to completion, and add a check under the lock
-to avoid the race.
+Hi Stoyan,
 
-Reported-by: Rafael J. Wysocki <rafael@kernel.org>
-Fixes: bc3a9d217755 ("ipmi:si: Gracefully handle if the BMC is non-functional")
-Signed-off-by: Corey Minyard <corey@minyard.net>
----
- drivers/char/ipmi/ipmi_si_intf.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
-index 3667033fcc51..6eda61664aaa 100644
---- a/drivers/char/ipmi/ipmi_si_intf.c
-+++ b/drivers/char/ipmi/ipmi_si_intf.c
-@@ -924,9 +924,14 @@ static int sender(void *send_info, struct ipmi_smi_msg *msg)
- {
- 	struct smi_info   *smi_info = send_info;
- 	unsigned long     flags;
-+	int rv = IPMI_CC_NO_ERROR;
- 
- 	debug_timestamp(smi_info, "Enqueue");
- 
-+	/*
-+	 * Check here for run to completion mode.  A check under lock is
-+	 * later.
-+	 */
- 	if (smi_info->si_state == SI_HOSED)
- 		return IPMI_BUS_ERR;
- 
-@@ -940,18 +945,15 @@ static int sender(void *send_info, struct ipmi_smi_msg *msg)
- 	}
- 
- 	spin_lock_irqsave(&smi_info->si_lock, flags);
--	/*
--	 * The following two lines don't need to be under the lock for
--	 * the lock's sake, but they do need SMP memory barriers to
--	 * avoid getting things out of order.  We are already claiming
--	 * the lock, anyway, so just do it under the lock to avoid the
--	 * ordering problem.
--	 */
--	BUG_ON(smi_info->waiting_msg);
--	smi_info->waiting_msg = msg;
--	check_start_timer_thread(smi_info);
-+	if (smi_info->si_state == SI_HOSED) {
-+		rv = IPMI_BUS_ERR;
-+	} else {
-+		BUG_ON(smi_info->waiting_msg);
-+		smi_info->waiting_msg = msg;
-+		check_start_timer_thread(smi_info);
-+	}
- 	spin_unlock_irqrestore(&smi_info->si_lock, flags);
--	return IPMI_CC_NO_ERROR;
-+	return rv;
- }
- 
- static void set_run_to_completion(void *send_info, bool i_run_to_completion)
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.19 next-20260212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stoyan-Bogdanov/hwmon-pmbus-tps25990-Rework-TPS25990-non-standatd-direct-conversion/20260213-081713
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20260213001408.2454567-2-sbogdanov%40baylibre.com
+patch subject: [PATCH v2 1/3] hwmon: (pmbus/tps25990): Rework TPS25990 non standatd direct conversion
+config: i386-randconfig-011-20260213 (https://download.01.org/0day-ci/archive/20260213/202602131712.Lruy3UMc-lkp@intel.com/config)
+compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260213/202602131712.Lruy3UMc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602131712.Lruy3UMc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/hwmon/pmbus/tps25990.o: in function `tps25990_value_to_raw':
+>> drivers/hwmon/pmbus/tps25990.c:86:(.text+0x1e3): undefined reference to `__udivdi3'
+   ld: drivers/hwmon/pmbus/tps25990.o: in function `tps25990_raw_to_value':
+   drivers/hwmon/pmbus/tps25990.c:68:(.text+0x4d8): undefined reference to `__udivdi3'
+
+
+vim +86 drivers/hwmon/pmbus/tps25990.c
+
+    74	
+    75	static unsigned int tps25990_value_to_raw(struct i2c_client *client, int param, int val)
+    76	{
+    77		struct tps25990_data *data = (struct tps25990_data *)of_device_get_match_data(&client->dev);
+    78		struct local_direct_value *info_local = data->info_local;
+    79	
+    80		/* Formula : Y = ( m * X + b) * 10^R */
+    81		val = (long)val * info_local->m[param] + info_local->b[param];
+    82	
+    83		if (info_local->R[param] >= 0)
+    84			val *= int_pow(10, info_local->R[param]);
+    85		else
+  > 86			val = DIV_ROUND_CLOSEST(val, int_pow(10, -info_local->R[param]));
+    87	
+    88		return val;
+    89	}
+    90	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
