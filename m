@@ -1,180 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28B21E5B63;
-	Sat, 14 Feb 2026 01:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106AE31DDBB;
+	Sat, 14 Feb 2026 06:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771031255; cv=none; b=krLwqnG8u9cXgvn18db2wlW9ajBysUeMJvVgwKCTTroIMuHNXhfMjIYHCHEAoBoqBxBPdvGk1nCkH5OUHyGNXUevBpsL2Vo2xGfPwI+E3nhQfJzdwzO8+8E5Skm5+YQ8kn9k8fMMuowjfEpbTpyQZlSE9QBO1SXaX++iWER426M=
+	t=1771051713; cv=none; b=mkyc46m4h3yxD8MzaQg42+gDZoO6vK7puAoAjRrewt/80J5LhFB+66rGUY2Dn+cGvNyfiewh3G3tR65pM1k0DGHiht8Yv48O/hnI7M4rPQn4ilbqy5y3zkqXM4Opr7fvr4h4DltC+mFxZ4GP3iy20WpQqmxcbdX2cGj+1vPPVDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771031255; c=relaxed/simple;
-	bh=eH7GBxutsBYerARSGn0elPJyiXpbxtbh/y6973Psm4Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AtirVZ0qV/pl+Kmo0BX2Qf4KbumIbsosx0tUgsunn+oPRqrAB38qddVrgdkyLfQKUbNBC0F+Zp/ylfo2jLEwwMOhlM9Fiph4SpbFSkSRGhrvMUdFVvdzxblm7edNAkW3smVEfl1qQ/edHZnyoX1KInouwfCZvlIb/LqYg4iJsdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhqEvJDu; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhqEvJDu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F76C19424;
-	Sat, 14 Feb 2026 01:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771031255;
-	bh=eH7GBxutsBYerARSGn0elPJyiXpbxtbh/y6973Psm4Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VhqEvJDurRo1wvvoE56OpauhzLxJTsUoVKmuvDB9ZU3dfpiwpwFerjoaykTl9Kkq0
-	 5CdJmgCn4UVnqtL3TjMkF1OnyYPzzjMOpcMs9zPP/jSghSkMxpKQP3agimFQ4iScAg
-	 9ns08VWE8k4TGABTy4xQsQSxckc0N7FT57I+WTWKgBxaf1GHhaTZGFmhUQrnafdbdf
-	 IYUf9QlztR+h+Ek5lC3KGSqH5gtU2h8XMlP63lZJAmKJTdWdxJQMmtG3UQZKgrC1fE
-	 nOQYH5WHob0f58jHzEc/QKSm+kO10mtL6qciCB4Mve04YB99TWfQsEpy0eLXyZ1O32
-	 jlEFV3j9T6Ujg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Armin Wolf <W_Armin@gmx.de>,
-	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.12] hwmon: (dell-smm) Add support for Dell OptiPlex 7080
-Date: Fri, 13 Feb 2026 20:00:03 -0500
-Message-ID: <20260214010245.3671907-123-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
-References: <20260214010245.3671907-1-sashal@kernel.org>
+	s=arc-20240116; t=1771051713; c=relaxed/simple;
+	bh=FIphOdHWLBKNrj0c4HGXly4r6agSKqPR6jPL54nT+wE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=cDoJ2s+g0pmbRvJ7Vz/Ndv4w2HnAZF7ZfTyo9pY4Iga2duPuWMxcBgB8Inp+sesSbCWyWmN3ROCHTF9Bw2bkqD5LUNWiY284WebgqmnH9mXW4HmzX25Sw0cQWE30Susaq8GgGTrgBcxwa2ZNZPhVf4lLtp1B5itu9Yeugcvub4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Sat, 14 Feb 2026 14:48:05 +0800 (GMT+08:00)
+Date: Sat, 14 Feb 2026 14:48:05 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: "Krzysztof Kozlowski" <krzk@kernel.org>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com
+Subject: Re: Re: Re: [PATCH v2 0/2] Add driver support for ESWIN EIC7700 PVT
+ controller
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <0183a68b-f8e9-48b8-b77f-5ae0a048a2bf@roeck-us.net>
+References: <20260128101400.859-1-hehuan1@eswincomputing.com>
+ <1a08e50a.362b.19c4c20db59.Coremail.hehuan1@eswincomputing.com>
+ <e648565e-59a9-4270-bbbd-7c53f5f65c6c@kernel.org>
+ <2c43c2a.366b.19c5017e58a.Coremail.hehuan1@eswincomputing.com>
+ <0183a68b-f8e9-48b8-b77f-5ae0a048a2bf@roeck-us.net>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Transfer-Encoding: 8bit
+Message-ID: <46752141.375d.19c5ae8161e.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgDH3aClGpBpC4sAAA--.270W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAgESCmmPUoQMPQAA
+	sa
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-From: Armin Wolf <W_Armin@gmx.de>
-
-[ Upstream commit 46c3e87a79179454f741f797c274dd25f5c6125e ]
-
-The Dell OptiPlex 7080 supports the legacy SMM interface for reading
-sensors and performing fan control. Whitelist this machine so that
-this driver loads automatically.
-
-Closes: https://github.com/Wer-Wolf/i8kutils/issues/16
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Acked-by: Pali Rohár <pali@kernel.org>
-Link: https://lore.kernel.org/r/20260104000654.6406-1-W_Armin@gmx.de
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-## Analysis
-
-### Commit Message Analysis
-
-This commit adds a DMI whitelist entry for the Dell OptiPlex 7080 to the
-`dell-smm-hwmon` driver. The commit message explains that this machine
-supports the legacy SMM interface for reading sensors and performing fan
-control, and the whitelist entry enables the driver to load
-automatically on this hardware.
-
-There's a linked issue (`https://github.com/Wer-
-Wolf/i8kutils/issues/16`) showing a real user request for this support.
-
-### Code Change Analysis
-
-The change is a simple addition of a single DMI matching entry to the
-`i8k_dmi_table[]` array:
-
-```c
-{
-    .ident = "Dell OptiPlex 7080",
-    .matches = {
-        DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-        DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7080"),
-    },
-},
-```
-
-This is structurally identical to the existing entries for OptiPlex
-7060, 7050, and 7040. The pattern uses `DMI_EXACT_MATCH` for the product
-name (matching the convention of other OptiPlex entries), preventing
-false matches with similarly named models.
-
-### Classification
-
-This falls squarely into the **device ID / hardware quirk / whitelist**
-exception category. It's adding a machine identifier to an existing
-driver's whitelist table so the driver auto-loads on that hardware.
-Without this entry, the Dell OptiPlex 7080 doesn't get hardware
-monitoring and fan control support from this driver (unless force-
-loaded).
-
-### Scope and Risk Assessment
-
-- **Lines changed**: +7 lines (a single DMI table entry)
-- **Files touched**: 1 (`drivers/hwmon/dell-smm-hwmon.c`)
-- **Risk**: Extremely low. The entry only affects Dell OptiPlex 7080
-  machines. It cannot affect any other hardware. The matching pattern is
-  well-established and identical in structure to dozens of other entries
-  in the same table.
-- **Complexity**: Trivial
-
-### User Impact
-
-Users with Dell OptiPlex 7080 machines running stable kernels would
-benefit from having hardware monitoring and fan control work
-automatically. This is a desktop PC used in corporate
-environments—exactly the kind of hardware that runs stable/LTS kernels.
-
-### Stability Indicators
-
-- **Acked-by**: Pali Rohár (co-maintainer of this driver)
-- **Signed-off-by**: Guenter Roeck (hwmon maintainer)
-- The existing driver framework is mature and well-tested
-- The same pattern is used for many other Dell models already in the
-  table
-
-### Dependency Check
-
-No dependencies. The driver and DMI matching infrastructure exist in all
-relevant stable trees. This is a self-contained addition to a data
-table.
-
-### Conclusion
-
-This is a textbook example of a hardware whitelist addition that is
-appropriate for stable backporting. It enables existing, well-tested
-driver functionality on a specific hardware platform. The change is
-trivial, zero-risk to other systems, reviewed by the subsystem
-maintainers, and benefits real users running stable kernels on Dell
-OptiPlex 7080 desktops.
-
-**YES**
-
- drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 93143cfc157cf..038edffc1ac74 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1325,6 +1325,13 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "MP061"),
- 		},
- 	},
-+	{
-+		.ident = "Dell OptiPlex 7080",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "OptiPlex 7080"),
-+		},
-+	},
- 	{
- 		.ident = "Dell OptiPlex 7060",
- 		.matches = {
--- 
-2.51.0
-
+SGkgR3VlbnRlciwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHRha2luZyB0aGUgdGltZSB0byBy
+ZXZpZXcgdGhpcyBwYXRjaCBhbmQgZm9yCnByb3ZpZGluZyBzdWNoIGRldGFpbGVkIGZlZWRiYWNr
+LgoKPiAKPiAjIENvbW1pdCA2ZjRkNTY5OGYzMzQgKCJod21vbjogQWRkIEVzd2luIEVJQzc3MDAg
+UFZUIHNlbnNvciBkcml2ZXIiKQo+IDEuICBlaWM3NzAwLXB2dC5jOjQ4NzogRVJST1I6IFVuYmFs
+YW5jZWQgY2xvY2sgcmVmY291bnQgd2l0aCBSdW50aW1lIFBNCj4gICAgID4gKwlwdnQtPmNsayA9
+IGRldm1fY2xrX2dldF9lbmFibGVkKCZwZGV2LT5kZXYsIE5VTEwpOwo+IAo+ICAgICBVc2luZyBg
+ZGV2bV9jbGtfZ2V0X2VuYWJsZWQoKWAgZW5hYmxlcyB0aGUgY2xvY2sgYW5kIHJlZ2lzdGVycyBh
+IGRldm0gYWN0aW9uCj4gICAgIHRvIGRpc2FibGUgaXQgb24gcmVtb3ZhbC4gSG93ZXZlciwgdGhl
+IGRyaXZlciBhbHNvIHVzZXMgUnVudGltZSBQTSB0byBtYW5hZ2UKPiAgICAgdGhlIHNhbWUgY2xv
+Y2s6Cj4gCj4gICAgID4gK3N0YXRpYyBpbnQgX19tYXliZV91bnVzZWQgZWljNzcwMF9wdnRfcnVu
+dGltZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikKPiAgICAgPiArewo+ICAgICA+ICsJc3Ry
+dWN0IHB2dF9od21vbiAqcHZ0ID0gZGV2X2dldF9kcnZkYXRhKGRldik7Cj4gICAgID4gKwo+ICAg
+ICA+ICsJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHB2dC0+Y2xrKTsKPiAKPiAgICAgSWYgdGhlIGRl
+dmljZSBpcyBydW50aW1lIHN1c3BlbmRlZCB3aGVuIGByZW1vdmUoKWAgaXMgY2FsbGVkOgo+ICAg
+ICAxLiBgcHJvYmUoKWA6IGBjbGtfcHJlcGFyZV9lbmFibGUoKWAgKFJlZjogMSkKPiAgICAgMi4g
+YHJ1bnRpbWVfc3VzcGVuZCgpYDogYGNsa19kaXNhYmxlX3VucHJlcGFyZSgpYCAoUmVmOiAwKQo+
+ICAgICAzLiBgcmVtb3ZlKClgICh2aWEgZGV2bSk6IGBjbGtfZGlzYWJsZV91bnByZXBhcmUoKWAg
+KFJlZjogLTEpCj4gCj4gICAgIFRoaXMgbGVhZHMgdG8gYSByZWZjb3VudCB1bmRlcmZsb3cgYW5k
+IHdhcm5pbmcuCj4gCj4gICAgIEZpeDogVXNlIGBkZXZtX2Nsa19nZXQoKWAgYW5kIG1hbnVhbGx5
+IGNhbGwgYGNsa19wcmVwYXJlX2VuYWJsZSgpYCBpbiBwcm9iZS4KPiAgICAgRW5zdXJlIHRoYXQg
+dGhlIG1hbnVhbCBlbmFibGUgaXMgYmFsYW5jZWQgY29ycmVjdGx5LCBvciByZWx5IG9uIFJ1bnRp
+bWUgUE0KPiAgICAgKGFuZCBgcG1fcnVudGltZV9nZXRfc3luY2AgaW4gcHJvYmUpIHRvIGhhbmRs
+ZSB0aGUgY2xvY2ssIGVuc3VyaW5nCj4gICAgIGBwbV9ydW50aW1lX3B1dGAgYmFsYW5jZXMgaXQu
+IFNpbmNlIGBjaGVja19wd3JgIG5lZWRzIHRoZSBjbG9jayBiZWZvcmUKPiAgICAgUnVudGltZSBQ
+TSBpcyBlbmFibGVkLCB5b3Ugc2hvdWxkIGVuYWJsZSBpdCBtYW51YWxseSBhbmQgdGhlbiBwb3Nz
+aWJseQo+ICAgICBkaXNhYmxlIGl0IGJlZm9yZSBlbmFibGluZyBSdW50aW1lIFBNLCBvciBrZWVw
+IGl0IGVuYWJsZWQgYW5kIGxldCBSdW50aW1lIFBNCj4gICAgIHRha2Ugb3ZlciAoYnV0IGVuc3Vy
+ZSBgcmVtb3ZlYCBkb2Vzbid0IGRvdWJsZSBkaXNhYmxlKS4KPiAKPiAgICAgQSBjb21tb24gcGF0
+dGVybjoKPiAgICAgYGBgYwo+ICAgICBwdnQtPmNsayA9IGRldm1fY2xrX2dldChkZXYsIE5VTEwp
+Owo+ICAgICAuLi4KPiAgICAgY2xrX3ByZXBhcmVfZW5hYmxlKHB2dC0+Y2xrKTsKPiAgICAgLi4u
+Cj4gICAgIHBtX3J1bnRpbWVfZW5hYmxlKGRldik7Cj4gICAgIHBtX3J1bnRpbWVfZ2V0X25vcmVz
+dW1lKGRldik7Cj4gICAgIC4uLgo+ICAgICBwbV9ydW50aW1lX3B1dChkZXYpOwo+ICAgICBgYGAK
+PiAgICAgQW5kIGVuc3VyZSBgcmVtb3ZlYCAob3IgZGV2bSBhY3Rpb24pIGRpc2FibGVzIGl0IE9O
+TFkgaWYgbm90IHN1c3BlbmRlZD8KPiAgICAgQWN0dWFsbHksIHNpbXBsZXIgaXM6Cj4gICAgIERv
+bid0IHVzZSBgZGV2bV9jbGtfZ2V0X2VuYWJsZWRgIGlmIHlvdSB1c2UgYHJ1bnRpbWVfc3VzcGVu
+ZGAgdG8gZGlzYWJsZSBpdC4KPiAgICAgVXNlIGBkZXZtX2Nsa19nZXRgLgo+ICAgICBJbiBwcm9i
+ZTogYGNsa19wcmVwYXJlX2VuYWJsZWAuCj4gICAgIFJlZ2lzdGVyIGEgYGRldm1fYWRkX2FjdGlv
+bmAgdGhhdCBjYWxscyBgY2xrX2Rpc2FibGVfdW5wcmVwYXJlYCAqb25seSBpZiogdGhlCj4gICAg
+IGRyaXZlciBpcyBub3QgdXNpbmcgUnVudGltZSBQTSB0byBjb250cm9sIGl0PyBObywgdGhhdCdz
+IG1lc3N5Lgo+IAo+ICAgICBCZXR0ZXIgZml4Ogo+ICAgICBVc2UgYGRldm1fY2xrX2dldGAuCj4g
+ICAgIEluIHByb2JlOiBgY2xrX3ByZXBhcmVfZW5hYmxlYC4KPiAgICAgSW4gcmVtb3ZlIChkZXZt
+IGFjdGlvbj8pOiBgY2xrX2Rpc2FibGVfdW5wcmVwYXJlYCAoYnV0IHRoaXMgc3RpbGwgaGFzIHRo
+ZSBpc3N1ZSkuCj4gCj4gICAgIENvcnJlY3QgRml4Ogo+ICAgICBEbyBub3QgdXNlIGBjbGtfZGlz
+YWJsZV91bnByZXBhcmVgIGluIGBydW50aW1lX3N1c3BlbmRgIGlmIHlvdSB1c2VkCj4gICAgIGBk
+ZXZtX2Nsa19nZXRfZW5hYmxlZGAuCj4gICAgIE9SCj4gICAgIERvbid0IHVzZSBgZGV2bV9jbGtf
+Z2V0X2VuYWJsZWRgLiBVc2UgYGRldm1fY2xrX2dldGAuCj4gICAgIE1hbmFnZSB0aGUgY2xvY2sg
+ZW50aXJlbHkgdmlhIFJ1bnRpbWUgUE0uCj4gICAgIEluIHByb2JlOgo+ICAgICBgY2xrX3ByZXBh
+cmVfZW5hYmxlKHB2dC0+Y2xrKTtgIChUZW1wb3JhcnkgZm9yIGNoZWNrX3B3cikKPiAgICAgYGNo
+ZWNrX3B3ci4uLmAKPiAgICAgYGNsa19kaXNhYmxlX3VucHJlcGFyZShwdnQtPmNsayk7YAo+ICAg
+ICBgcG1fcnVudGltZV9lbmFibGUoZGV2KTtgCj4gICAgIC4uLgoKV2Ugd2lsbCByZXByb2R1Y2Ug
+YW5kIGZ1cnRoZXIgYW5hbHl6ZSB0aGUgY2xvY2sgcmVmY291bnQgaW1iYWxhbmNlCnNjZW5hcmlv
+LgoKPiAKPiAyLiAgZWljNzcwMC1wdnQuYzoxNTQ6IEVSUk9SOiBTd2FsbG93aW5nIHNpZ25hbCBp
+bnRlcnJ1cHRpb24KPiAgICAgPiArCWlmIChyZXQgJiYgKHJldCAhPSAtRVJFU1RBUlRTWVMpKQo+
+ICAgICA+ICsJCXJldHVybiByZXQ7Cj4gCj4gICAgIElmIGB3YWl0X2Zvcl9jb21wbGV0aW9uX2lu
+dGVycnVwdGlibGUoKWAgcmV0dXJucyBgLUVSRVNUQVJUU1lTYCAod2hpY2ggaXMKPiAgICAgbm9u
+LXplcm8pLCB0aGUgY29uZGl0aW9uIGAocmV0ICE9IC1FUkVTVEFSVFNZUylgIGlzIGZhbHNlLCBz
+byB0aGUgaWYtc3RhdGVtZW50Cj4gICAgIGlzIHNraXBwZWQuIFRoZSBmdW5jdGlvbiB0aGVuIHBy
+b2NlZWRzIHRvIHJldHVybiAwIChzdWNjZXNzKSB3aXRoIHBvdGVudGlhbGx5Cj4gICAgIHVuaW5p
+dGlhbGl6ZWQvc3RhbGUgZGF0YS4KPiAKPiAgICAgRml4Ogo+ICAgICBgYGBjCj4gICAgIGlmIChy
+ZXQpCj4gICAgICAgICByZXR1cm4gcmV0Owo+ICAgICBgYGAKCkluIHYzLCB3ZSB3aWxsIHJldHVy
+biBhbGwgbm9uLXplcm8gZXJyb3IgY29kZXMgZGlyZWN0bHksIHdpdGhvdXQKc3BlY2lhbC1jYXNp
+bmcgLUVSRVNUQVJUU1lTLgoKPiAKPiAzLiAgZWljNzcwMC1wdnQuYzozNjg6IFdBUk46IFNwdXJp
+b3VzIGludGVycnVwdHMgb24gc2hhcmVkIElSUSBsaW5lCj4gICAgID4gKwllaWM3NzAwX3B2dF91
+cGRhdGUocHZ0LT5yZWdzICsgUFZUX0VOQSwgUFZUX0VOQV9FTiwgUFZUX0VOQV9FTik7Cj4gCj4g
+ICAgIGBjaGVja19wd3JgIGVuYWJsZXMgdGhlIGRldmljZSAoYW5kIHRodXMgcG90ZW50aWFsIGlu
+dGVycnVwdHMpIGJlZm9yZQo+ICAgICBgcmVxdWVzdF9pcnFgIGlzIGNhbGxlZC4gSWYgdGhlIElS
+USBsaW5lIGlzIHNoYXJlZCBhbmQgdGhlIGRldmljZSBhc3NlcnRzCj4gICAgIGFuIGludGVycnVw
+dCBpbW1lZGlhdGVseSwgdGhlIGludGVycnVwdCB3aWxsIGJlIHVuaGFuZGxlZCAoc3B1cmlvdXMp
+IGJlY2F1c2UKPiAgICAgbm8gaGFuZGxlciBpcyByZWdpc3RlcmVkIHlldC4KPiAKPiAgICAgRml4
+OiBSZXF1ZXN0IHRoZSBJUlEgYmVmb3JlIGVuYWJsaW5nIHRoZSBkZXZpY2UsIG9yIGVuc3VyZSBp
+bnRlcnJ1cHRzIGFyZSBtYXNrZWQKPiAgICAgYXQgdGhlIGNvbnRyb2xsZXIgbGV2ZWwgKGlmIHBv
+c3NpYmxlKSBiZWZvcmUgZW5hYmxpbmcgdGhlIGJsb2NrLiBTaW5jZSBgY2hlY2tfcHdyYAo+ICAg
+ICByZWxpZXMgb24gcG9sbGluZyBhbmQgSVNSIGNsZWFycyB0aGUgc3RhdHVzLCBtb3ZpbmcgYHJl
+cXVlc3RfaXJxYCBpcyB0cmlja3kuCj4gICAgIFZlcmlmeSBpZiBgUFZUX0VOQWAgaGFzIGEgc2Vw
+YXJhdGUgaW50ZXJydXB0IGVuYWJsZSBiaXQgb3IgaWYgYFBWVF9JTlRgIGhhcyBhIG1hc2suCj4g
+ICAgIElmIG5vdCwgdGhpcyBpcyBhIGhhcmR3YXJlL2RyaXZlciBkZXNpZ24gcmlzay4KPiAKCkNv
+bmZpcm1lZCB3aXRoIHRoZSBoYXJkd2FyZSB0ZWFtLCB0aGUgUFZUX0VOQSByZWdpc3RlciBoYXMg
+bm8gaW5kZXBlbmRlbnQKaW50ZXJydXB0IGVuYWJsZSwgYW5kIFBWVF9JTlQgZG9lcyBub3Qgc3Vw
+cG9ydCBtYXNraW5nLgpFbmFibGluZyB0aGUgZGV2aWNlIGJlZm9yZSByZXF1ZXN0X2lycSBtYXkg
+Z2VuZXJhdGUgaW50ZXJydXB0cywgYnV0IHRoZQpkcml2ZXIgZGlzYWJsZXMgdGhlIFBWVCBtb2R1
+bGUgKFBWVF9FTkFfRU4gPSAwKSBhbmQgY2xlYXJzIGludGVycnVwdHMgYnkKd3JpdGluZyBQVlRf
+SU5UX0NMUi4gSW4gcHJhY3RpY2UsIG5vIGlzc3VlcyBoYXZlIGJlZW4gb2JzZXJ2ZWQuCgo+IDQu
+ICBlaWM3NzAwLXB2dC5jOjE0NzogTk9URTogSW5maW5pdGUgd2FpdCBwb3NzaWJpbGl0eQo+ICAg
+ICA+ICsJcmV0ID0gd2FpdF9mb3JfY29tcGxldGlvbl9pbnRlcnJ1cHRpYmxlKCZwdnQtPmNvbnZl
+cnNpb24pOwo+IAo+ICAgICBJZiB0aGUgaGFyZHdhcmUgZmFpbHMgdG8gZ2VuZXJhdGUgYW4gaW50
+ZXJydXB0IChlLmcuLCBoYW5ncyksIHRoaXMgd2lsbCB3YWl0Cj4gICAgIGluZGVmaW5pdGVseSAo
+dW5sZXNzIGEgc2lnbmFsIGlzIHNlbnQpLiBJdCBpcyBnZW5lcmFsbHkgc2FmZXIgdG8gdXNlCj4g
+ICAgIGB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXRgIGluIGhhcmR3YXJlIGRyaXZlcnMuCj4g
+CgpJbiB2Mywgd2Ugd2lsbCByZXBsYWNlIHdhaXRfZm9yX2NvbXBsZXRpb25faW50ZXJydXB0aWJs
+ZSgpIHdpdGgKd2FpdF9mb3JfY29tcGxldGlvbl90aW1lb3V0KCkuCgpCZXN0IHJlZ2FyZHMsCkh1
+YW4gSGUK
