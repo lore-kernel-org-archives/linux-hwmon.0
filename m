@@ -1,135 +1,164 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01E3EBF10
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:58:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17311ADC97;
+	Sat, 14 Feb 2026 01:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770987512; cv=none; b=eQ+3H6wkhJ0bs6S8aKpeAgap7KBqNr6qcIZAFHy7mj79cQjAtLqVFqob39VOYuKGed1Gf5Xi9PQO8tWoxdDUV5gejr/0zjQUSBi5oRTka7Hg7U/07pMy9nw0ssYl5h5Ho/sptLDTxNGXbU0BWeJOH2zMYRvW5/lNDAuBbQ9/kHI=
+	t=1771031031; cv=none; b=FUAsUEBHy4PIQObx7Eq28kYheU8WVEV2bOWPuYj2zzC20w8aEnutK+iErPllh1Ok4lgVTX8tdl7oXQ/3NlDJwQ95OwUaiVh4oiqQh9L4Xp8L0pK6lOBWlTQwTigloXxnc/0/zYHoZg8UpTj+MLpUGjpP/WokrNVjjiVz+RUaQYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770987512; c=relaxed/simple;
-	bh=ACjKR0hdQl4xOp/kq26MjMBCt4LpCNT0bAiqNHRzKG0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E6AScrkXS+yUgpjZU8RGzJEil/FN3qt7ExMvlrhCSKgouGroo0F2/mnzR+qeNbMzXpErJkczmDSLhY0aOfWTgh1CwTFohCI6rC2RbAYbnB+m1gBI3O7N7MghG0mw0Mg70nmjdwz63s28Y0fMhmEhpPavaXsOoyzr8xTgky3vjOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQsHaeSR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771031031; c=relaxed/simple;
+	bh=7Ax7O5xU/XKNjc++DiZfBXmM1hs2inRsy74vM8vYJOs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KKT6OqIzwgofSW5rhz30s8WVZUvlvWPqeKwbv+bYxYGHYqP+k1Q6ymQiY6yDNZbDF/jd0seEqABwgSB4cECLAcljYwH9/zHd1WEipHXozNXadKmKWS0hGRCj6vXV/fOLttoCH9af+OxjSE4wlegxZ50xK1tW7pOD/utespWqeS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XmiIPLHX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQsHaeSR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74213C19424
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 12:58:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XmiIPLHX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA0AC16AAE;
+	Sat, 14 Feb 2026 01:03:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770987512;
-	bh=ACjKR0hdQl4xOp/kq26MjMBCt4LpCNT0bAiqNHRzKG0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CQsHaeSRVsMVln3ruuPtax1wPLhPfHNmYPlCSGOetaULeIPnxgeQ8TKMTo3sLqodQ
-	 TyHzfipyIZxvGew/un4GbTfEo2TEJxF5MC27sZAaHwzNHUINwhglVi41wPEEJIVGhS
-	 bPfDCqTQJfl9+coUVv6X7h8x/U21bbh1NPG+9Wq7vUGxTPgeJwFDyoad69lrEmw1S1
-	 ZUdfXLGv+fneB9UbG1VPTVgpALZxNd4plFwB7SuoOW4V6gJmO144+/iwStWw9dvizF
-	 zE/gyYA+yzzm3PyVZQYZyp4nRyiOyIAyuP+BQB+DPG45m1Kb4Y7cQW0Dhx9D3k3w98
-	 VMkBL8VAzLmcQ==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-662fc35291eso490541eaf.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Feb 2026 04:58:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXqdCGNXS7ZzniRgBxPfSICTI0p+2b0LKrTzwmtk4c3j6XLHE/ZVh1wAKdqZGuqXfCjxxrFc+OpooVXHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykwJgs9J95V2WSItI86HcXcf+wsLD/E0HI4XGkqYCw89jJy8wk
-	YDJyBxQV3jJiDeMjcRKhqkdOJEAi1SRaW8mZLfR/eFcSN0xdXHb3UkTLAKwlgGMJ7EVenWFbkz/
-	C0+Cj0/dAiw/ZifP2fFTfKvlaz7f0r2A=
-X-Received: by 2002:a05:6820:229f:b0:662:8b01:c7cb with SMTP id
- 006d021491bc7-67769d67cfdmr626143eaf.84.1770987511577; Fri, 13 Feb 2026
- 04:58:31 -0800 (PST)
+	s=k20201202; t=1771031030;
+	bh=7Ax7O5xU/XKNjc++DiZfBXmM1hs2inRsy74vM8vYJOs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XmiIPLHXX0t+GeTLbPxB03pBvTql0x5HcwnK6zoG/ZUswqI8l4OQID3Su4VwKWTzC
+	 eaRF8P9n31jRQ0JPyzN68xm46oXSqg9ZomOaUJbmrOsISZo4dcgSE3vYa5Vp4gg6Pl
+	 sZMlfTtM7WG7cBtmL2qkqDHuX8/5af7hcSmgHKfsn9i3anclQgxhDc+LEzS0xiIZSm
+	 J4FovgDX6ejsg7GF7yAQex+u10I7ZG/Mhb7LgzfgpmJg6M1TN6P2+T2RhAGkig3Gwj
+	 aT7xV/ksXOExPXMc0g5bHhxNX3Oj66+tnC/Kx4O8kMyFm/nFt0o32xrezg6dKUFoec
+	 dAH7zkqJ2jzag==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Robert McIntyre <rjmcinty@hotmail.com>,
+	Eugene Shalygin <eugene.shalygin@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.19] hwmon: (asus-ec-sensors) add Pro WS TRX50-SAGE WIFI A
+Date: Fri, 13 Feb 2026 19:58:31 -0500
+Message-ID: <20260214010245.3671907-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
+References: <20260214010245.3671907-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260213065351.915707-1-corey@minyard.net> <20260213065351.915707-4-corey@minyard.net>
-In-Reply-To: <20260213065351.915707-4-corey@minyard.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 13 Feb 2026 13:58:20 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gGzF3p4sG8QS6rmAb52vm1UmCcdj2_wdSWSErfAFmFvQ@mail.gmail.com>
-X-Gm-Features: AZwV_QhIXNhZ3V-MEfitSDk2dXXRBYipZ9UgqbxkDolFhOXqJNfE2LzaAj0SxEk
-Message-ID: <CAJZ5v0gGzF3p4sG8QS6rmAb52vm1UmCcdj2_wdSWSErfAFmFvQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ipmi:si: Fix check for a misbehaving BMC
-To: Corey Minyard <corey@minyard.net>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>, 
-	Guenter Roeck <linux@roeck-us.net>, Igor Raits <igor@gooddata.com>, linux-acpi@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Daniel Secik <daniel.secik@gooddata.com>, 
-	Zdenek Pesek <zdenek.pesek@gooddata.com>, Jiri Jurica <jiri.jurica@gooddata.com>, 
-	Huisong Li <lihuisong@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.19
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 13, 2026 at 7:55=E2=80=AFAM Corey Minyard <corey@minyard.net> w=
-rote:
->
-> There is a race on checking the state in the sender, it needs to be
-> checked under a lock.  But you also need a check to avoid issues with
-> a misbehaving BMC for run to completion mode.  So leave the check at
-> the beginning for run to completion, and add a check under the lock
-> to avoid the race.
->
-> Reported-by: Rafael J. Wysocki <rafael@kernel.org>
-> Fixes: bc3a9d217755 ("ipmi:si: Gracefully handle if the BMC is non-functi=
-onal")
-> Signed-off-by: Corey Minyard <corey@minyard.net>
+From: Robert McIntyre <rjmcinty@hotmail.com>
 
-That's what I would do in sender(), more or less, so
+[ Upstream commit af7e57d444141ac9e77b57296d59c3e965c4c4fa ]
 
-Reviewed-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+Adding support for Pro WS TRX50-SAGE WIFI A, which is identical
+sensors-wise to Pro WS TRX50-SAGE WIFI
 
-> ---
->  drivers/char/ipmi/ipmi_si_intf.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si=
-_intf.c
-> index 3667033fcc51..6eda61664aaa 100644
-> --- a/drivers/char/ipmi/ipmi_si_intf.c
-> +++ b/drivers/char/ipmi/ipmi_si_intf.c
-> @@ -924,9 +924,14 @@ static int sender(void *send_info, struct ipmi_smi_m=
-sg *msg)
->  {
->         struct smi_info   *smi_info =3D send_info;
->         unsigned long     flags;
-> +       int rv =3D IPMI_CC_NO_ERROR;
->
->         debug_timestamp(smi_info, "Enqueue");
->
-> +       /*
-> +        * Check here for run to completion mode.  A check under lock is
-> +        * later.
-> +        */
->         if (smi_info->si_state =3D=3D SI_HOSED)
->                 return IPMI_BUS_ERR;
->
-> @@ -940,18 +945,15 @@ static int sender(void *send_info, struct ipmi_smi_=
-msg *msg)
->         }
->
->         spin_lock_irqsave(&smi_info->si_lock, flags);
-> -       /*
-> -        * The following two lines don't need to be under the lock for
-> -        * the lock's sake, but they do need SMP memory barriers to
-> -        * avoid getting things out of order.  We are already claiming
-> -        * the lock, anyway, so just do it under the lock to avoid the
-> -        * ordering problem.
-> -        */
-> -       BUG_ON(smi_info->waiting_msg);
-> -       smi_info->waiting_msg =3D msg;
-> -       check_start_timer_thread(smi_info);
-> +       if (smi_info->si_state =3D=3D SI_HOSED) {
-> +               rv =3D IPMI_BUS_ERR;
-> +       } else {
-> +               BUG_ON(smi_info->waiting_msg);
-> +               smi_info->waiting_msg =3D msg;
-> +               check_start_timer_thread(smi_info);
-> +       }
->         spin_unlock_irqrestore(&smi_info->si_lock, flags);
-> -       return IPMI_CC_NO_ERROR;
-> +       return rv;
->  }
->
->  static void set_run_to_completion(void *send_info, bool i_run_to_complet=
-ion)
-> --
-> 2.43.0
->
+Signed-off-by: Robert McIntyre <rjmcinty@hotmail.com>
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+Link: https://lore.kernel.org/r/20251213200531.259435-4-eugene.shalygin@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+## Analysis
+
+### Commit Message Analysis
+This commit adds support for a new motherboard variant — the "Pro WS
+TRX50-SAGE WIFI A" — to the asus-ec-sensors hwmon driver. The commit
+message explicitly states that this board is "identical sensors-wise" to
+the already-supported "Pro WS TRX50-SAGE WIFI".
+
+### Code Change Analysis
+The change is minimal and purely additive:
+
+1. **Documentation**: Adds one line to `asus_ec_sensors.rst` listing the
+   new board name in the supported boards list.
+
+2. **Driver**: Adds two lines to the DMI matching table in `asus-ec-
+   sensors.c`:
+  ```c
+  DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS TRX50-SAGE WIFI A",
+  &board_info_pro_ws_trx50_sage_wifi),
+  ```
+  This reuses the **exact same** `board_info_pro_ws_trx50_sage_wifi`
+  structure as the existing "Pro WS TRX50-SAGE WIFI" entry. No new
+  board_info structure, no new sensor definitions, no new code paths —
+  just a new DMI string mapping to an existing configuration.
+
+### Classification: New Device ID / Board ID
+This falls squarely into the **"New Device IDs"** exception category for
+stable backports. It is analogous to adding a new PCI ID or USB ID to an
+existing driver. The driver already exists and supports this hardware
+configuration; only the board name string is different.
+
+### Risk Assessment
+- **Risk: Extremely low**. The change adds a DMI match entry that points
+  to an already-tested board configuration. If the DMI doesn't match
+  (user has a different board), this code is never reached. If it does
+  match, it uses the same well-tested sensor configuration.
+- **Scope**: 3 lines of actual code change (1 doc line + 2 driver
+  lines).
+- **Dependencies**: None. The `board_info_pro_ws_trx50_sage_wifi`
+  structure and the `DMI_EXACT_MATCH_ASUS_BOARD_NAME` macro already
+  exist in stable trees.
+- **Regression potential**: Essentially zero — this cannot affect any
+  existing board's behavior.
+
+### User Impact
+Without this patch, users with the "Pro WS TRX50-SAGE WIFI A"
+motherboard variant have no hardware monitoring sensor support through
+this driver, even though the hardware is identical to the already-
+supported model. This is a real-world hardware enablement issue.
+
+### Stable Criteria Check
+- **Obviously correct**: Yes — trivial DMI table addition reusing
+  existing config.
+- **Fixes a real issue**: Yes — enables hardware monitoring on a board
+  variant that should work but doesn't.
+- **Small and contained**: Yes — 3 lines.
+- **No new features**: Correct — this uses existing driver
+  functionality; it just adds a new board name to match against.
+- **No new APIs**: Correct.
+
+**YES**
+
+ Documentation/hwmon/asus_ec_sensors.rst | 1 +
+ drivers/hwmon/asus-ec-sensors.c         | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+index 232885f24430d..b5e1bc7ac0643 100644
+--- a/Documentation/hwmon/asus_ec_sensors.rst
++++ b/Documentation/hwmon/asus_ec_sensors.rst
+@@ -10,6 +10,7 @@ Supported boards:
+  * PRIME X670E-PRO WIFI
+  * PRIME Z270-A
+  * Pro WS TRX50-SAGE WIFI
++ * Pro WS TRX50-SAGE WIFI A
+  * Pro WS X570-ACE
+  * Pro WS WRX90E-SAGE SE
+  * ProArt X570-CREATOR WIFI
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index 61b18b88ee8ff..a1445799e23d8 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -793,6 +793,8 @@ static const struct dmi_system_id dmi_table[] = {
+ 					&board_info_pro_art_x870E_creator_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS TRX50-SAGE WIFI",
+ 					&board_info_pro_ws_trx50_sage_wifi),
++	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS TRX50-SAGE WIFI A",
++					&board_info_pro_ws_trx50_sage_wifi),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS WRX90E-SAGE SE",
+ 					&board_info_pro_ws_wrx90e_sage_se),
+ 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE",
+-- 
+2.51.0
+
