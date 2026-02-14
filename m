@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE2121CFEF;
-	Sat, 14 Feb 2026 01:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42ACE21CFEF;
+	Sat, 14 Feb 2026 01:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771031171; cv=none; b=YibQxT8FsXwxrtZTnUrb3K7OrZNs/t+Uzjrb7HSKD1w7cQprkYT+zfXhpxCR5TYmBK5abP0dLU/0Pi557+VMpeTnVaKsDd6mGS8cYBZuNM5YIfew/DBTGur3dUrG1btyF5FGkqY2hIYLOnSKel6G0kwLFWMoy+DxIae9pWsWuRQ=
+	t=1771031194; cv=none; b=I08YOTEoc+GP0UkcZLPplxx22aSaC4MvKrzXJk4+8HeuuASXz9lcq2zdSE6LZMgq9rDm1VdcSfD0Xt5duoYoG6QZmoZF8k3ceFiKJJK6x34oPYIT2hazTsylH8y3TFoPAWV2ht3rMOznZYtac6kH+Xj4VQKj3GCLO348jhYAs5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771031171; c=relaxed/simple;
-	bh=smfSuVs2WQG0qqAAjLH2JNAXM9pb/6C+MBprENgB1to=;
+	s=arc-20240116; t=1771031194; c=relaxed/simple;
+	bh=7hMeVkvsA0gGwoVYMGwgHvrV7O2gLPrQILkoi1Ws+eo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rbRx2/eCR78vx9iKwGKU8tAIKF3jE/+icqEFCxQAVD253xJGhgz5fr+0/CQE7uuMw9iYb9iwCXXTFI6NHpppoM9Dn2g0SGtgssNJwwqE7SXhB+y/4cFE9uAFyTtXhp5+tChQ6Y8PMmVIvWr2eXRC96BIx59KINkq55dqUCnXCNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uFlnFvpm; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=gHYdGqWH4OVqfpVz4CP8tq+0aOYZTkLBjYYRkJbLcyEOjNDYBWzb7cvq9vIj52e/e67rfDu+ZeU+9xXHDFmyxeO4r8p78zIYFp+CpAGSy7h7EOMt22btpzrEnp2KusBpb5Akq11ayaQZ2h2LVIJ2JPTxVfK3fFvCxN0YGHCrFw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKccyw60; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uFlnFvpm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAB9C19423;
-	Sat, 14 Feb 2026 01:06:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKccyw60"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC5FC116C6;
+	Sat, 14 Feb 2026 01:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771031171;
-	bh=smfSuVs2WQG0qqAAjLH2JNAXM9pb/6C+MBprENgB1to=;
+	s=k20201202; t=1771031194;
+	bh=7hMeVkvsA0gGwoVYMGwgHvrV7O2gLPrQILkoi1Ws+eo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uFlnFvpmLgAlSH2B9rvdjIkeJTVkt76I3V3PIA9zHUgIXwBIJ8c76OIZKwi6uJQUS
-	 Hf37fpaOh2wypKdIyTFcuokf6ZtXWZ7myBrjO7B/ZReuWeoQaRUV5dDQGn8UO3dV1t
-	 fhf98zAAvcuO6eOZhAlcIo/CgtdUk7BOR/WkTh/L1Re2Zdiui/zm9GHl2ubZHoS2li
-	 ZtoAUxadksPx8bV/IXOycKaNBzG4KnRGsVlXNGFKNxLUra8fQwgsHJgzjGAui53D5m
-	 O7/jlz2MfHYhEyBtLznJw6v4e2TxEVkma4tYR5AYD/NHjL3LJmmNsKpAtwGKS0ZKAD
-	 tp5pX/3nUF2ug==
+	b=MKccyw607povjPZOjDggncofGiSD5iUBUaVys13+FtOFBP5Lmc5vBf87IpxqHun/f
+	 B2d0kEU00phF/5eJXqAquhWBI/TdU0PfS3qsIVA3otxpaeE58mNYPmFdWJsOQQW3+e
+	 sW+8h6Ap+ewxnu26WrTfqpkIbyCM2F/0q0JsYjqb85ueY+PF86sZkfIfPwUsiVHSz8
+	 iBzZ/S2zqYh3A+PZskelHx7xJ7t5q1by9EJS7X0lLmFbaJgdDXYAKonX7+2x+MAbqu
+	 qnZLlcT7O/eMYjCnznWQvovK0pni50dgu4ZZKzSv3ojhQ+146lElw/ZwGz6wKmNiOt
+	 RBiBK57Sc8aag==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Felix Gu <gu_0233@qq.com>,
+Cc: Denis Pauk <pauk.denis@gmail.com>,
+	Marcus <shoes2ga@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.18] hwmon: (emc2305) Fix a resource leak in emc2305_of_parse_pwm_child
-Date: Fri, 13 Feb 2026 19:59:28 -0500
-Message-ID: <20260214010245.3671907-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-6.6] hwmon: (nct6775) Add ASUS Pro WS WRX90E-SAGE SE
+Date: Fri, 13 Feb 2026 19:59:36 -0500
+Message-ID: <20260214010245.3671907-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
 References: <20260214010245.3671907-1-sashal@kernel.org>
@@ -51,102 +52,108 @@ X-stable-base: Linux 6.19
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Felix Gu <gu_0233@qq.com>
+From: Denis Pauk <pauk.denis@gmail.com>
 
-[ Upstream commit 2954ce672b7623478c1cfeb69e6a6e4042a3656e ]
+[ Upstream commit 246167b17c14e8a5142368ac6457e81622055e0a ]
 
-When calling of_parse_phandle_with_args(), the caller is responsible
-to call of_node_put() to release the reference of device node.
-In emc2305_of_parse_pwm_child, it does not release the reference,
-causing a resource leak.
+Boards Pro WS WRX90E-SAGE SE has got a nct6775 chip, but by default there's
+no use of it because of resource conflict with WMI method.
 
-Signed-off-by: Felix Gu <gu_0233@qq.com>
-Link: https://lore.kernel.org/r/tencent_738BA80BBF28F3440301EEE6F9E470165105@qq.com
+Add the board to the WMI monitoring list.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+Tested-by: Marcus <shoes2ga@gmail.com>
+Link: https://lore.kernel.org/r/20251231155316.2048-1-pauk.denis@gmail.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Looking at the full function:
+## Analysis
 
-1. **Line 551**: `of_parse_phandle_with_args()` is called, which sets
-   `args.np` to a device node with an incremented refcount.
-2. **Line 553-554**: If `ret` is non-zero, we return early - but
-   `args.np` is not set in the error case (the function failed), so no
-   leak there.
-3. **Line 581** (before patch): `return 0;` without calling
-   `of_node_put(args.np)` - this is the leak.
-4. **Line 581** (after patch): `of_node_put(args.np);` is added before
-   `return 0;`.
+### Commit Message Analysis
+This commit adds a board identifier string ("Pro WS WRX90E-SAGE SE") to
+the `asus_msi_boards[]` list in the nct6775 hwmon driver. The commit
+message explains that this ASUS motherboard has an nct6775 hardware
+monitoring chip, but it cannot be used by default due to a resource
+conflict with WMI methods. Adding the board to the WMI monitoring list
+resolves this conflict and enables hardware monitoring.
 
-The fix is correct. There's only one successful return path after
-`of_parse_phandle_with_args()`, and that's the `return 0;` at the end.
-The error return at line 554 doesn't need `of_node_put()` because
-`of_parse_phandle_with_args()` failed and didn't set `args.np`.
+### Code Change Analysis
+The change is a **single line addition** — inserting one string into an
+alphabetically sorted list of board names:
 
-### Classification
+```c
+"Pro WS WRX90E-SAGE SE",
+```
 
-This is a **resource leak fix** — a missing `of_node_put()` call. This
-is one of the most common types of stable backport fixes (reference
-counting bugs). The device tree node reference count will never be
-decremented, preventing the node from being freed.
+This is inserted between "Pro WS W790E-SAGE SE" and "ProArt
+B650-CREATOR", maintaining alphabetical order. No logic changes, no new
+functions, no structural modifications.
 
-### Scope and Risk Assessment
-
-- **Size**: Single line addition — minimal.
-- **Risk**: Essentially zero. `of_node_put()` is a standard, well-tested
-  kernel API. Calling it on the `args.np` returned by
-  `of_parse_phandle_with_args()` is the correct and expected pattern.
-  This cannot introduce a regression.
-- **Files affected**: 1 file, 1 line.
-
-### User Impact
-
-The emc2305 is a fan controller chip used in embedded systems. This leak
-occurs every time the device tree parsing runs for each PWM child node.
-While a single leaked reference is small, on systems with hot-plugging
-or repeated probe/remove cycles, it accumulates. More importantly, this
-is a correctness issue — violating the OF API contract.
+### Classification: Hardware Quirk / Device ID Addition
+This falls squarely into the **"hardware quirks/workarounds"** exception
+category for stable backports. The `asus_msi_boards[]` list is
+effectively a board-level quirk table that tells the driver to use WMI-
+based monitoring instead of direct I/O, resolving the resource conflict.
+Without this entry, users of this specific motherboard cannot use
+hardware monitoring at all.
 
 ### Stability Indicators
+- **Tested-by:** Marcus confirmed the fix works on the actual hardware
+- **Bug report link:**
+  https://bugzilla.kernel.org/show_bug.cgi?id=204807 — this is a
+  documented real-world issue
+- **Reviewed and merged by:** Guenter Roeck, the hwmon subsystem
+  maintainer
+- **Pattern:** Identical to dozens of other board additions in this same
+  file that have been backported to stable
 
-- The fix follows a well-established kernel pattern (of_node_put after
-  of_parse_phandle_with_args).
-- It was reviewed and accepted by the hwmon maintainer Guenter Roeck.
-- It's a textbook one-line reference counting fix.
+### Risk Assessment
+- **Risk: Extremely low.** Adding a string to a board match list cannot
+  affect any other board or any other code path. The match is exact —
+  only the "Pro WS WRX90E-SAGE SE" board is affected.
+- **Scope:** Single line in a single file
+- **Dependencies:** None — the WMI monitoring infrastructure already
+  exists in stable trees
+- **Regression potential:** Essentially zero
 
-### Dependency Check
+### User Impact
+Without this fix, users of the ASUS Pro WS WRX90E-SAGE SE motherboard (a
+workstation-class board) have no hardware monitoring capability. This is
+a real user-reported bug (kernel bugzilla #204807) with a tested fix.
 
-No dependencies. The `of_node_put()` API and the emc2305 driver have
-been in the kernel for a long time.
-
-### Conclusion
-
-This is a textbook stable backport candidate:
-- Fixes a real bug (device tree node reference leak)
-- Obviously correct (standard kernel pattern)
-- Minimal scope (one line)
-- Zero regression risk
-- No new features or API changes
+### Stable Criteria Check
+1. **Obviously correct and tested:** Yes — single string addition,
+   tested by user
+2. **Fixes a real bug:** Yes — hardware monitoring doesn't work without
+   it
+3. **Important issue:** Yes — complete loss of hwmon functionality for
+   this board
+4. **Small and contained:** Yes — one line
+5. **No new features:** Correct — enables existing functionality on
+   specific hardware
+6. **Applies cleanly:** Very likely — it's a simple list insertion
 
 **YES**
 
- drivers/hwmon/emc2305.c | 1 +
+ drivers/hwmon/nct6775-platform.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index ceae96c07ac45..67e82021da210 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -578,6 +578,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
- 		data->pwm_output_mask |= EMC2305_OPEN_DRAIN << ch;
- 	}
- 
-+	of_node_put(args.np);
- 	return 0;
- }
- 
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index c3a719aef1ace..555029dfe713f 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1357,6 +1357,7 @@ static const char * const asus_msi_boards[] = {
+ 	"Pro WS W680-ACE IPMI",
+ 	"Pro WS W790-ACE",
+ 	"Pro WS W790E-SAGE SE",
++	"Pro WS WRX90E-SAGE SE",
+ 	"ProArt B650-CREATOR",
+ 	"ProArt B660-CREATOR D4",
+ 	"ProArt B760-CREATOR D4",
 -- 
 2.51.0
 
