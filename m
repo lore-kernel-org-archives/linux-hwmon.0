@@ -1,41 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461831D5ABA;
-	Sat, 14 Feb 2026 01:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE2121CFEF;
+	Sat, 14 Feb 2026 01:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771031140; cv=none; b=c7Mi+5LB7pTiVs3pnQ+R8hRu6TLGPcu2oS/ujAd0DuQqhB9gc5/F+Svi/5tEZrhU6lX0Oy20PcZgzveGw0BxQ7BHOYtWV/uPr1N3TWgzUSIaH+XgNXXXOfjI2I0Rd0+bHYBXtCJ4OQB5/2RrOpcHKfIQpRUKly/cveaD+yJjnzg=
+	t=1771031171; cv=none; b=YibQxT8FsXwxrtZTnUrb3K7OrZNs/t+Uzjrb7HSKD1w7cQprkYT+zfXhpxCR5TYmBK5abP0dLU/0Pi557+VMpeTnVaKsDd6mGS8cYBZuNM5YIfew/DBTGur3dUrG1btyF5FGkqY2hIYLOnSKel6G0kwLFWMoy+DxIae9pWsWuRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771031140; c=relaxed/simple;
-	bh=/Z03jB1iwzLqTsCbH9tms1oGkhdUDjoezz4HCzMFyC0=;
+	s=arc-20240116; t=1771031171; c=relaxed/simple;
+	bh=smfSuVs2WQG0qqAAjLH2JNAXM9pb/6C+MBprENgB1to=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K6xzZST6PyOZXZcgK0FeGKxImmrVrcwsmIUsgTph5rIndzqNQ1L1i3CTTyV4Tb3t39mdG2u2NhXct8tw3bUIuRw2rG575kPQeVdgRV1hymkC+uOVJwGp9WM82LWEb/Uzb499jlPd8+nEE6U0wghcOFauPaXnrUBtBBM9iTBA/3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WnH+j+yk; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=rbRx2/eCR78vx9iKwGKU8tAIKF3jE/+icqEFCxQAVD253xJGhgz5fr+0/CQE7uuMw9iYb9iwCXXTFI6NHpppoM9Dn2g0SGtgssNJwwqE7SXhB+y/4cFE9uAFyTtXhp5+tChQ6Y8PMmVIvWr2eXRC96BIx59KINkq55dqUCnXCNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uFlnFvpm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WnH+j+yk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD08C19424;
-	Sat, 14 Feb 2026 01:05:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uFlnFvpm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAB9C19423;
+	Sat, 14 Feb 2026 01:06:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771031140;
-	bh=/Z03jB1iwzLqTsCbH9tms1oGkhdUDjoezz4HCzMFyC0=;
+	s=k20201202; t=1771031171;
+	bh=smfSuVs2WQG0qqAAjLH2JNAXM9pb/6C+MBprENgB1to=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WnH+j+ykT37gMwCpVCRg2NSqXFzRn5A6LdWQJTUbI8AF+DEXhg2jTm0Hq1YhnxjZb
-	 LMTCwhC4q2ISYv4qwjAn/+UHqKBWNA3rZbEnAsAaXwlmowmy2MJhM6lSBrs+PVUT08
-	 cmfDK1bcTCHVRqW5yQGSo3ZBhoL1qN31xNsrmgW3wNbjU/zRff76AtbObfochLau3+
-	 KPDvGvWTjeyoWTRFyIWUDDINt71xy9VYAEyuzTWjUOkndF8DkkWChmnKLf2pRxY7cG
-	 TRIQhIGbvzeRW/KQGQHM3CueqlDGrIbAc9cHO46PAK2iPdexQScz16JC2OF5qJke5r
-	 i1SehlSKbiAFA==
+	b=uFlnFvpmLgAlSH2B9rvdjIkeJTVkt76I3V3PIA9zHUgIXwBIJ8c76OIZKwi6uJQUS
+	 Hf37fpaOh2wypKdIyTFcuokf6ZtXWZ7myBrjO7B/ZReuWeoQaRUV5dDQGn8UO3dV1t
+	 fhf98zAAvcuO6eOZhAlcIo/CgtdUk7BOR/WkTh/L1Re2Zdiui/zm9GHl2ubZHoS2li
+	 ZtoAUxadksPx8bV/IXOycKaNBzG4KnRGsVlXNGFKNxLUra8fQwgsHJgzjGAui53D5m
+	 O7/jlz2MfHYhEyBtLznJw6v4e2TxEVkma4tYR5AYD/NHjL3LJmmNsKpAtwGKS0ZKAD
+	 tp5pX/3nUF2ug==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+Cc: Felix Gu <gu_0233@qq.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.1] hwmon: (f71882fg) Add F81968 support
-Date: Fri, 13 Feb 2026 19:59:18 -0500
-Message-ID: <20260214010245.3671907-78-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-6.18] hwmon: (emc2305) Fix a resource leak in emc2305_of_parse_pwm_child
+Date: Fri, 13 Feb 2026 19:59:28 -0500
+Message-ID: <20260214010245.3671907-88-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260214010245.3671907-1-sashal@kernel.org>
 References: <20260214010245.3671907-1-sashal@kernel.org>
@@ -48,141 +48,105 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+From: Felix Gu <gu_0233@qq.com>
 
-[ Upstream commit e4a3d6f79c9933fece64368168c46d6cf5fc2e52 ]
+[ Upstream commit 2954ce672b7623478c1cfeb69e6a6e4042a3656e ]
 
-Add hardware monitoring support for the Fintek F81968 Super I/O chip.
-It is fully compatible with F81866.
+When calling of_parse_phandle_with_args(), the caller is responsible
+to call of_node_put() to release the reference of device node.
+In emc2305_of_parse_pwm_child, it does not release the reference,
+causing a resource leak.
 
-Several products share compatibility with the F81866. To better distinguish
-between them, ensure that the Product ID is displayed when the device is
-probed.
-
-Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
-Link: https://lore.kernel.org/r/20251223051040.10227-1-peter_hong@fintek.com.tw
+Signed-off-by: Felix Gu <gu_0233@qq.com>
+Link: https://lore.kernel.org/r/tencent_738BA80BBF28F3440301EEE6F9E470165105@qq.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-## Analysis
+Looking at the full function:
 
-### Commit Message Analysis
+1. **Line 551**: `of_parse_phandle_with_args()` is called, which sets
+   `args.np` to a device node with an incremented refcount.
+2. **Line 553-554**: If `ret` is non-zero, we return early - but
+   `args.np` is not set in the error case (the function failed), so no
+   leak there.
+3. **Line 581** (before patch): `return 0;` without calling
+   `of_node_put(args.np)` - this is the leak.
+4. **Line 581** (after patch): `of_node_put(args.np);` is added before
+   `return 0;`.
 
-The commit adds hardware monitoring support for a new Fintek F81968
-Super I/O chip to the existing f71882fg hwmon driver. The commit message
-explicitly states "It is fully compatible with F81866." Additionally, it
-enhances the probe log message to include the Product ID (devid) for
-better distinguishing between compatible products.
-
-### Code Change Analysis
-
-The changes are minimal and straightforward:
-
-1. **New chip ID definition** (1 line): `#define SIO_F81968_ID 0x1806` -
-   adds the device ID constant.
-
-2. **New case in switch statement** (1 line): `case SIO_F81968_ID:` is
-   added as a fall-through alongside the existing `SIO_F81866_ID` and
-   `SIO_F81966_ID` cases, all mapping to `sio_data->type = f81866a`.
-   This follows the exact same pattern as the existing F81966 which was
-   also added as F81866-compatible.
-
-3. **Enhanced log message** (2 lines changed): The `pr_info` message now
-   includes `devid: %04x` to display the product ID during probe. This
-   is a minor informational enhancement.
+The fix is correct. There's only one successful return path after
+`of_parse_phandle_with_args()`, and that's the `return 0;` at the end.
+The error return at line 554 doesn't need `of_node_put()` because
+`of_parse_phandle_with_args()` failed and didn't set `args.np`.
 
 ### Classification
 
-This falls squarely into the **"New Device IDs"** exception category for
-stable backporting:
-- It adds a new chip ID to an **existing, mature driver** (f71882fg)
-- The new chip (F81968) is declared **fully compatible** with F81866,
-  which is already supported
-- The pattern is identical to how F81966 was added (also as
-  F81866-compatible)
-- No new code paths, no new functionality beyond recognizing the ID
+This is a **resource leak fix** — a missing `of_node_put()` call. This
+is one of the most common types of stable backport fixes (reference
+counting bugs). The device tree node reference count will never be
+decremented, preventing the node from being freed.
 
 ### Scope and Risk Assessment
 
-- **Lines changed**: ~5 lines (1 define, 1 case label, 2-line log
-  message change)
-- **Files touched**: 1 (drivers/hwmon/f71882fg.c)
-- **Risk**: Extremely low. The new ID simply falls through to an
-  existing, well-tested code path (f81866a). The only other change is
-  adding `devid` to a log message, which is trivially safe.
-- **Regression potential**: Near zero. Existing hardware is completely
-  unaffected.
+- **Size**: Single line addition — minimal.
+- **Risk**: Essentially zero. `of_node_put()` is a standard, well-tested
+  kernel API. Calling it on the `args.np` returned by
+  `of_parse_phandle_with_args()` is the correct and expected pattern.
+  This cannot introduce a regression.
+- **Files affected**: 1 file, 1 line.
 
 ### User Impact
 
-Without this patch, users with F81968-based hardware get no hwmon
-support (the driver prints "Unsupported Fintek device: 1806" and returns
--ENODEV). With this patch, their hardware monitoring works using the
-proven F81866 code path. This is a real-world hardware enablement fix.
+The emc2305 is a fan controller chip used in embedded systems. This leak
+occurs every time the device tree parsing runs for each PWM child node.
+While a single leaked reference is small, on systems with hot-plugging
+or repeated probe/remove cycles, it accumulates. More importantly, this
+is a correctness issue — violating the OF API contract.
 
 ### Stability Indicators
 
-- The author is from Fintek (the chip manufacturer), who has direct
-  knowledge of chip compatibility
-- The maintainer (Guenter Roeck) accepted it, and he is well-known for
-  the hwmon subsystem
-- The pattern matches exactly how previous compatible chips (F81966)
-  were added
+- The fix follows a well-established kernel pattern (of_node_put after
+  of_parse_phandle_with_args).
+- It was reviewed and accepted by the hwmon maintainer Guenter Roeck.
+- It's a textbook one-line reference counting fix.
 
-### Dependencies
+### Dependency Check
 
-None. The patch is completely self-contained and applies to any kernel
-version that has the f71882fg driver with F81866/F81966 support.
+No dependencies. The `of_node_put()` API and the emc2305 driver have
+been in the kernel for a long time.
 
-### Decision
+### Conclusion
 
-This is a textbook device ID addition to an existing driver - one of the
-explicitly listed exceptions for stable backporting. It's tiny, zero-
-risk, enables real hardware, and follows an established pattern in the
-driver.
+This is a textbook stable backport candidate:
+- Fixes a real bug (device tree node reference leak)
+- Obviously correct (standard kernel pattern)
+- Minimal scope (one line)
+- Zero regression risk
+- No new features or API changes
 
 **YES**
 
- drivers/hwmon/f71882fg.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/hwmon/emc2305.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/f71882fg.c b/drivers/hwmon/f71882fg.c
-index df83f9866fbcf..204059d2de6cd 100644
---- a/drivers/hwmon/f71882fg.c
-+++ b/drivers/hwmon/f71882fg.c
-@@ -51,6 +51,7 @@
- #define SIO_F81866_ID		0x1010	/* Chipset ID */
- #define SIO_F71858AD_ID		0x0903	/* Chipset ID */
- #define SIO_F81966_ID		0x1502	/* Chipset ID */
-+#define SIO_F81968_ID		0x1806	/* Chipset ID */
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
+index ceae96c07ac45..67e82021da210 100644
+--- a/drivers/hwmon/emc2305.c
++++ b/drivers/hwmon/emc2305.c
+@@ -578,6 +578,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
+ 		data->pwm_output_mask |= EMC2305_OPEN_DRAIN << ch;
+ 	}
  
- #define REGION_LENGTH		8
- #define ADDR_REG_OFFSET		5
-@@ -2570,6 +2571,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
- 		break;
- 	case SIO_F81866_ID:
- 	case SIO_F81966_ID:
-+	case SIO_F81968_ID:
- 		sio_data->type = f81866a;
- 		break;
- 	default:
-@@ -2599,9 +2601,9 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
- 	address &= ~(REGION_LENGTH - 1);	/* Ignore 3 LSB */
++	of_node_put(args.np);
+ 	return 0;
+ }
  
- 	err = address;
--	pr_info("Found %s chip at %#x, revision %d\n",
-+	pr_info("Found %s chip at %#x, revision %d, devid: %04x\n",
- 		f71882fg_names[sio_data->type],	(unsigned int)address,
--		(int)superio_inb(sioaddr, SIO_REG_DEVREV));
-+		(int)superio_inb(sioaddr, SIO_REG_DEVREV), devid);
- exit:
- 	superio_exit(sioaddr);
- 	return err;
 -- 
 2.51.0
 
