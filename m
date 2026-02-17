@@ -1,141 +1,116 @@
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309EE31A051;
-	Mon, 16 Feb 2026 16:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DB22D8798
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Feb 2026 08:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771259286; cv=none; b=R75kkqnRaiWaUJns6Hu8vglFbjxg9ma5k7fucNwz4MRXzZfq/KSOSbRxqUhAVmImMlPrzapuv2OVxCnA6oMMuiRoCE3HVwQpvABZz8ltRqs/S1li+gnEbgUyQ9nal3+j02AzjYNgew+6hcTCMnfLFVdrauQbvNnUby1766mq9Cw=
+	t=1771315933; cv=none; b=HRhfEor6CMl5BPe644x19mZZXmLRENeBxWZPitkBSq6y7QooLSTp9TGeGoRQmdCicc3J2qAAzcsOMdPB4RO0pAfgrLkyRE5c9nhqOeiJSZJ6QOMHesKhAHZt4aUvRzcdps2sbfqBxMvkyJE7ITKFKqWOgE2t66V6TD3SzzVVACQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771259286; c=relaxed/simple;
-	bh=DxfnFkyKJVMGTyOCW8lUOhCWwAKvXMljswjv2mgUGJY=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=MCetTqP4i6lJOcDGxKoNKevcrB0i4Kjim658qLWImMs5XLHleWeSrr8dxqfAMicpnl6NBUl2uJq3qVdQl36Ik/YQZNJ+BgJ+V4Q0D7SVpaCD+lvCLpKgE3KAu3DFf0ztDyP7TCvjEVOAYhtDWDGxy4OteklaTBa9/w164eD0iZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=HDf1VCwl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R/b+qeHO; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1771315933; c=relaxed/simple;
+	bh=nUEhTFG/7UBE/bp1GdYkZho+b3xUavo+boubP6XYsBw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hRpJf/YiIdzTvtk9dBeqriJnAOmkzflzdAQ8iDu3YOWvBnoH0Vy3GSRJKHBN/ma8wO4HOq8p41LTKkougiEPDz0TFUAusGlkXzGC++fW8KkvdGMnqhXgv87t93pgHaEv22JQiw1tnFpctwErqnjHktJTcodT5f3gCzbj6A6xO4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=jUJwPgRG; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="HDf1VCwl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R/b+qeHO"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 639D81400024;
-	Mon, 16 Feb 2026 11:28:04 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 16 Feb 2026 11:28:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1771259284;
-	 x=1771345684; bh=1Yl0Y9bvubAtUFocle2sVeYCdqu4O5AiOcYxmmV1DTc=; b=
-	HDf1VCwl6cbD029CDJD8SKrYlXf8UYtOWonsP8qk9b/YtOVbjQFQUnL4IkgRZwl9
-	3r1kOpaODHiXqTBqIUehTikYIXnUUOaXfKnIw+OT4l+DCBugIhi/D1MiX+jL4uIY
-	pxHAXTpdgXI3+7QQxWgmJ/Szc9F4a56JGkJgSrtjI0NzwUG50q3kwEsMLs1499Gf
-	CDDLcA4QA6tr4Oz+96ultvsIg4JDvs/U9Nt3wd9M/LVVnAhJRhtyqpWRdKRo00Ts
-	EsML26msUSPJAlUCB/VeGyUnlVaQSGTqUt9QwxaWfvvP+grDDTxtQFLjmEnmLwjZ
-	EeTK7KZLbjmb0heRs6lhPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1771259284; x=
-	1771345684; bh=1Yl0Y9bvubAtUFocle2sVeYCdqu4O5AiOcYxmmV1DTc=; b=R
-	/b+qeHOj8MhcWHddaNIyxoShuO7e/N5vgQplGSEULo8c3Kdna8mQlKoHi5onshMh
-	CJdJeUqSLWPXB/vtbrJpvJlwlogXq8p1ManSc9dCopEZWdEIkUkQ7V0l94Y9RnhP
-	hlK6sukLkNlcNiofEyF83en4vTbycHHy7mlF7e5l6wLEjVkCXVYNie60NRSwVqz6
-	PC+E6IrDQfQb7T1rLmbdxa7vw1icPrGxXDIBYofVmqxopBdnD+aXadSazeQ2lz33
-	yzdhyw9yHrIZN+QQi2TyGFK9AepFcbhsK4Z6TLSeup4On1CHh/5QCm9sJIbFN+T3
-	y6AuTTju4O6sNnqD/ugcg==
-X-ME-Sender: <xms:lEWTaZ3PY3S3Z_ws5zjrWyRQG0EMJA-0OJ0Ny336QC9jPiHJbmZCAg>
-    <xme:lEWTaa5HUaHcVuarhaXZeqTqTWhxSyOuC1I0qA7TEoJNd_BwxFmE2ArwSupZ1dUPq
-    J04e18q2URScQmcAZJ-vvm4ySwCTIhFHY2O0qHf6ZkGrF2gEruLC1U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvudejfeehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
-    epohhlthgvrghnvhesghhmrghilhdrtghomhdprhgtphhtthhopegvughumhgriigvthes
-    ghhoohhglhgvrdgtohhmpdhrtghpthhtoheprghrnhgusehkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrvgif
-    sehluhhnnhdrtghhpdhrtghpthhtohepuggrnhhivghlsehmrghkrhhothhophhirgdroh
-    hrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohep
-    lhhinhhugiesrhhovggtkhdquhhsrdhnvght
-X-ME-Proxy: <xmx:lEWTaRyHozYazLRknExXjsLZvAXHoBcF9w0mNo8rsWVg02q1mEdlIg>
-    <xmx:lEWTaXotPlcR9kidGmWg2zxff3gBCDykMrAWb1zqrAnxGDruKo6zug>
-    <xmx:lEWTaXkavTeauyZhw8V6nmtFrSHaUx_vaDqloeNekt1aT9kruofgsQ>
-    <xmx:lEWTaRWbRlyr3u_GArY_g9PGWvhFtUClXpRx168KeJPKN7LHJ47v6Q>
-    <xmx:lEWTaUtOwqse-29Swr9CxLmUnqDy6XBaOW0SWwZ2Mmqc2c-BIWqZHN_4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E685B700065; Mon, 16 Feb 2026 11:28:03 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="jUJwPgRG"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4807068eacbso29966815e9.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Feb 2026 00:12:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1771315929; x=1771920729; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gb6W1GryaZfBbGOxIz34ZV52pWSStvnj73mIghaUYWU=;
+        b=jUJwPgRGOdcXz9utJSkIrokB+h+hNDJpOIhmYbEEGxq50sWZ2dDPoZ/Vi2NAvUNkdd
+         plJMKeR8pBbdg9DwPtW93YaO8l0qXFlZy6MlfrPXnd1fMi6GduR6nzCe27wuJMUwHhdb
+         EFChAFAhmMTBHSe6u36h1Pe+amsCEZxcQBGcqkhx4CtzDLjtwNaCvpt8aoSXOR/g3iCy
+         ScCiCTsMlq3q5cxwbaUqZnlHbmitj6CB9t+BJO1CGTYw8faG7Behj9LrvRqzZT2UmwsZ
+         Ap9jhvu2r8zF94ft42+jOpdN+6Qi02F7WBUUV8/bnKukaKfzNrodyj1dcAi/fwyf/1JS
+         3cXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771315929; x=1771920729;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gb6W1GryaZfBbGOxIz34ZV52pWSStvnj73mIghaUYWU=;
+        b=pmJnqaTWPL0vck/V+j41Eb4fdy8zMafmgiU4m3Qw/AEyByLA0cENV72ruVPpIXN5tW
+         hFvlGrI+E5FKX9eFN+aFHMBuLouiIH6qKZQmdraJwnbC/ic7XZe0r3Kg1t/vKjOAspA5
+         4+KpapAHSOLIg/WO/dN3SLDN8FkUVwi4fq8mT4Z5OLJ3+M7Pd7HaYzXboOJNSuTe/w8x
+         swAIVc4guhe2ht3sg/H56HprABLw8ceHTVXxJnyofCRD96wniZx8+clZ5i5Ty+lA4SDj
+         RosM8+0gpG7C1XOATmkPZXXKlSUxf73ZcWX7QeJ+e+jb9Ia42Uo5Pyxscc5cXzbwDS44
+         J7Xw==
+X-Gm-Message-State: AOJu0YwPgct0U8fMqxiZItnJJtR6Lxs1tQmJtHPiEpM3WFFzkh/CAdJT
+	UEpONLCUERsioqYp2Y43FuvxRUzbRQYKCCyU8sodgKe4kL5OiC36OQPQiaFbKjYH7Rw=
+X-Gm-Gg: AZuq6aL8mQ0qs4WlkCMcqPXLWmdPjaA7v/HeIDQ47nb4ZCUmKfVJEuuVsADL3B//hd7
+	hSFB5CMc5oFJEVxaa19XiviyEmJiGoUSK2WHTv/SLpGP6+Xe7Sni1OVzRyAwy6lw1XzebeDSFpl
+	/tCru4NyJPYfFZvFBmtSmHMs4RzSct5ydoIXZes8uV1W3Rl9p1EBoLUc0NV0P5D/E/+7G6eth8Y
+	qP+ZaE9J3v5UXr1lK7DleMZNUf0awxDWfR+2R8XlqCTNqheND6XHYK1M1VMSdMQdplhBnvRF1PD
+	SDqCoJdzoL8OcYbX0pOQEfaCkFm28CBsDXln1nkGWUM0IUsJ+Llsn++/3n9jUizjTqhUVw9VPZQ
+	rAnOC17LOk4UnDwTMM9b1j5M5xZOO0xqfVieBXLyM4jhLeNu5Udxwol3gIyMO6XtdleiZL6XeTf
+	Z8G5EwsMXlxDhCH+lIVcvfShUQ0gSvl95Skm1rHpSN3C3kSrMvBRW4WwSDAxiVBJZqCgca6JMp8
+	0MfUf7S1A==
+X-Received: by 2002:a05:600c:3d87:b0:480:3ad0:93c0 with SMTP id 5b1f17b1804b1-48373a5d6d5mr188570635e9.23.1771315929400;
+        Tue, 17 Feb 2026 00:12:09 -0800 (PST)
+Received: from silence.. ([46.10.240.40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a5d156sm35757690f8f.5.2026.02.17.00.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Feb 2026 00:12:08 -0800 (PST)
+From: Stoyan Bogdanov <sbogdanov@baylibre.com>
+To: jbrunet@baylibre.com,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org
+Cc: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stoyan Bogdanov <sbogdanov@baylibre.com>
+Subject: [PATCH v3 0/3]  Add TI TPS1689 pmbus eFuse
+Date: Tue, 17 Feb 2026 10:12:00 +0200
+Message-Id: <20260217081203.1792025-1-sbogdanov@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ABuPgj6G8jlB
-Date: Mon, 16 Feb 2026 17:27:42 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Daniel Golle" <daniel@makrotopia.org>,
- "Guenter Roeck" <linux@roeck-us.net>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>,
- "Vladimir Oltean" <olteanv@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, Netdev <netdev@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Message-Id: <316a6ee6-9e5e-4518-8dc4-2f39805934a9@app.fastmail.com>
-In-Reply-To: <aZNEKS-fefEgqhTs@makrotopia.org>
-References: <20260216105522.2382373-1-arnd@kernel.org>
- <aZMKXavVQPelSXcG@makrotopia.org>
- <306e79fb-f3ee-434e-a90e-547e97d2a5aa@roeck-us.net>
- <c881a13a-0687-4e4d-b70b-900f91acd212@app.fastmail.com>
- <70a195ab-3b61-47fb-a361-17b53cf7bdda@roeck-us.net>
- <aZNEKS-fefEgqhTs@makrotopia.org>
-Subject: Re: [PATCH] net: dsa: MxL862xx: don't force-enable MAXLINEAR_GPHY
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 16, 2026, at 17:22, Daniel Golle wrote:
-> On Mon, Feb 16, 2026 at 08:20:41AM -0800, Guenter Roeck wrote:
->> On 2/16/26 07:34, Arnd Bergmann wrote:
->> > On Mon, Feb 16, 2026, at 16:17, Guenter Roeck wrote:
->> > > On 2/16/26 04:15, Daniel Golle wrote:
->> > > 
->> > > Technically, with "select MAXLINEAR_GPHY", NET_DSA_MXL862 should depend
->> > > on "depends on HWMON || HWMON=n". That would prevent NET_DSA_MXL862=y
->> > > and with it MAXLINEAR_GPHY=y.
->> > > 
->> > > Maybe it is time to implement dummy functions for hwmon API calls
->> > > to avoid all this.
+Rework TPS25990 eFuse pmbus driver to provide more unified way for
+non standard direct conversions.Remove existing defines for TPS25990
+conversions and replace them with enum listing all supported parameters
+and structure using m, b, R. Add functions to covert raw to real value
+and real value back to raw. Add data structure to hold pmbus_driver_info
+and local_direct_values for direct conversion.
 
-I think I misread this bit earlier, sorry
+Add support TPS1689 support to TPS25990 driver, since both
+chips are sharing a lot of similar internal functions with exception of
+work range like Voltage and Current.
 
->> > I had considered this when I found the build failure, but
->> > I think removing the 'select' here is much better: this
->> > simplifies the dependencies, and allows a valid configuration
->> > with hwmon and gphy support in a loadable module that would
->> > otherwise be impossible.
->> > 
->> 
->> Makes sense. I think I'll move forward with the dummy functions anyway
->> because with that the #ifdefs in drivers are no longer necessary
->> and the "depends on HWMON || HWMON=n" becomes optional.
->
-> Yes, that would be great and eliminate that whole class of obstacles
-> with some inline no-op stubs in the header.
+Change log v2 -> v3:
+- Fix error detected from kernel test bot regarding division
 
-What I meant above is that I had considered and rejected the extra
-dependencies in the ethernet driver. I don't think there is a good
-way to add inline helpers. Technically, one could use IS_REACHABLE()
-here, to stub out the functions when the caller is built-in, but
-I find that even worse because it replaces a trivial build-time
-failure with very subtle runtime bug.
+Tests:
+- Test builds for x86_64, arm64, i386
+- Retest driver on arm64
+- Validate driver direct conversion functions manualy
 
-      Arnd
+Stoyan Bogdanov (3):
+  hwmon: (pmbus/tps25990): Rework TPS25990 non standatd direct
+    conversion
+  dt-bindings: hwmon: pmbus/tps1689: Add TPS1689
+  hwmon: (pmbus/tps1689): Add TPS1689 support
+
+ .../bindings/hwmon/pmbus/ti,tps25990.yaml     |   4 +-
+ Documentation/hwmon/tps25990.rst              |  15 +-
+ drivers/hwmon/pmbus/tps25990.c                | 190 +++++++++++++++---
+ 3 files changed, 175 insertions(+), 34 deletions(-)
+
+-- 
+2.34.1
+
