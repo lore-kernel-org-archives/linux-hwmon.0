@@ -1,105 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7781F1315;
-	Thu, 19 Feb 2026 14:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DCF33F8C4;
+	Thu, 19 Feb 2026 14:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771511461; cv=none; b=QohvwGQgBO+E1FlPIkeBDS4liUZ4yJhvBJoPJZoRLNrRagbW/+loDny7F4HlVBvkuP75vBgANTV7bS3BpzxzXtPomnHidYWm1jaKCYNQMAObJLVqs7xAnVgg2wpZGds8lMFbtLirIpEL30UukAyRqTs7P7DXjh7eKCaJBHc1fbM=
+	t=1771513080; cv=none; b=Drxrf6vuyaLvCHGtEy75irKZNgkdFe60AMwklQGAbddH/AJfE8CLCAMDsSmpQz9qWRghxRwiE0jXqwOW65/YIzOnMzEHxsiQRuFaz3WyawG78kVIaxhGs2MzDPgw/8KHSk0RBRI5Mmg+eRQCz7cGwxB32/2XDIcTTbJKXXBqyZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771511461; c=relaxed/simple;
-	bh=rBpoBcixdo3XXI5AYO9izJdZq6HBdIuS1mca5ggHAQg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KyJ6l0O54H+vJUTN/VCi3J3pk2Z9vnKZgCc7KXUnD7F8qpq8+l0N+IU4lwfH474nKprRvg2l7Ct8vu727hwtez2l6NCeD/Sfj66PxHslj8+938CoOcTXhsBzoQsXl1+9eTayrtT2uwI5ZhdmWIMIDtSEdX/UG8+J//bGAchoQ9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PqPB7Xgm; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1771513080; c=relaxed/simple;
+	bh=KnVRf0qXmVKbcBFjA5wXUheKw/RtmSbg3lWxWm3SAEQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Yd1Qa4+nF5giX0LtoB2U4DjBhi31NFpGdltSjQhwv9+bZl6lI2Z7LVDJI6AvUFuFMcAe31lAhMdi45y9v+9ngKP18M28Aeu0YcDPYbTlxOrj77e+mdEgePIlVtX6RPjS53EFz8rs04/ZRMsZETNjHXMzjgwKiPXqrpW7hRTemXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l1u3WImZ; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PqPB7Xgm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l1u3WImZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771511459; x=1803047459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rBpoBcixdo3XXI5AYO9izJdZq6HBdIuS1mca5ggHAQg=;
-  b=PqPB7XgmWIt2uAvQtMLiPcjJopVvNZZlRi/CrxmB2enIqA/EYwqsKOmN
-   oQDZJh29OxzG5IP04IcD4SzyaoY9dvrVCarsKPOmfyDT4/m6h7fjMEQ+M
-   kpMREID7IdEujXGzQ2IlYDRllkDf8UtqqSvGOYh3w7nN6fUH0qGmHl6FV
-   B9s2ZdOCcIOC0wWBsyZM4z9aM6THa4Sw5YRlcgh0b2s8cWRnEVBftdv51
-   IyKxkyeJ3n7XSz35bdmRpJf3avJHcmj1m+iMaKZHgX/9C32TA5pvE+ouC
-   JZ7GIv09E94MlI3Xtv0WW50QZcvOk2z1/sesDsmcybem0iMUTTrONX7Dk
-   A==;
-X-CSE-ConnectionGUID: 0OoYamSuRR+o/8FGIkKDCg==
-X-CSE-MsgGUID: zOuz66lhSFOqPfrRIQoU0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="72496453"
+  t=1771513079; x=1803049079;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KnVRf0qXmVKbcBFjA5wXUheKw/RtmSbg3lWxWm3SAEQ=;
+  b=l1u3WImZiUTzE10LAJcsqkw51LlH/Ughyb90VcYiZ8i703XuDqslcDc1
+   VB5AnBJYnAKBS5tCdm5RulTxQ97jHbO2KtrKXmpJ/FLjV9BG37aB92/vA
+   usCLziEe/XZsNZQLEb4WAjV46a+5uxIAqCiD7ltAvJS/iZ5JEnnW5Ng5v
+   1+vKY5nom38Jamaef60xcv0JDDkbR+pdNRDQw+UQ4rc7rHnIAbHBqy8cD
+   Xpn0XxPNGF2ZVt9vrEn4G1o00442MGrooyDuW403RElXqUGO3qrOHvOrx
+   7Dns6V4VyYMWZmEuH5cNQptWuknMmhTBivBUiaBpMp+QmTQohSe3ihRcU
+   g==;
+X-CSE-ConnectionGUID: OcYd6dmbS8inNKCKL6tmMQ==
+X-CSE-MsgGUID: uTT3SCiXQ2CjaFsj0rGwaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="83221958"
 X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
-   d="scan'208";a="72496453"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 06:30:58 -0800
-X-CSE-ConnectionGUID: WYAj0HUKSrCmLivtFbGXZQ==
-X-CSE-MsgGUID: oysE1EO2SM2Fwpy102YBmw==
+   d="scan'208";a="83221958"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 06:57:58 -0800
+X-CSE-ConnectionGUID: ORuc2/5rTW+lFB80MG/8wQ==
+X-CSE-MsgGUID: nrUAxB7QRfKuxNTkI3y4OA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
-   d="scan'208";a="219530903"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.244.114])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 06:30:56 -0800
-Date: Thu, 19 Feb 2026 16:30:53 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Carsten =?iso-8859-1?Q?Spie=DF?= <mail@carsten-spiess.de>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] hwmon: (isl28022) Don't check for specific errors
- when parsing properties
-Message-ID: <aZcenabXYsOdBu84@smile.fi.intel.com>
-References: <20260219140532.2259235-1-andriy.shevchenko@linux.intel.com>
- <CAMuHMdX9CdQNBGegrfHz+-UpuyO-rmHEQ2HUa=JjVpG_0ryacg@mail.gmail.com>
+   d="scan'208";a="245130308"
+Received: from rchatre-mobl4.amr.corp.intel.com (HELO [10.125.110.10]) ([10.125.110.10])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 06:57:58 -0800
+Message-ID: <f4697d4b-aaf5-45a0-8de7-54beef48eac3@intel.com>
+Date: Thu, 19 Feb 2026 06:57:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX9CdQNBGegrfHz+-UpuyO-rmHEQ2HUa=JjVpG_0ryacg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] peci: Remove dependency on x86 CPU variables
+To: David Laight <david.laight.linux@gmail.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+ Guenter Roeck <linux@roeck-us.net>, "H. Peter Anvin" <hpa@zytor.com>,
+ Ingo Molnar <mingo@redhat.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+ linux-hwmon@vger.kernel.org, openbmc@lists.ozlabs.org,
+ Thomas Gleixner <tglx@kernel.org>, Tony Luck <tony.luck@intel.com>,
+ x86@kernel.org
+References: <20260218170301.D814B556@davehans-spike.ostc.intel.com>
+ <20260219102057.1da25411@pumpkin>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260219102057.1da25411@pumpkin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 19, 2026 at 03:21:29PM +0100, Geert Uytterhoeven wrote:
-> On Thu, 19 Feb 2026 at 15:06, Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > Instead of checking for the specific error codes (that can be considered
-> > a layering violation to some extent) check for the property existence first
-> > and then either parse it, or apply a default value.
+On 2/19/26 02:20, David Laight wrote:
+>> tl;dr: The non-x86 PECI driver #includes an arch/x86 header.  This is
+>> ostensibly to avoid duplicating CPU model number constants, but the
+>> result is complexity and duplicated *code* which is a far worse fate
+>> than duplicated constants.
+> Is is possible/sensible to add a check in one file that includes both
+> headers that the constants match?
+> 
+> That will help pick up any typos.
 
-> IIRC, we have removed superfluous presence checks all over the tree
-> during the past few years? E.g. of_property_read_*() is documented to
-> return -EINVAL if a property does not exist.
+I don't think it's worth it. Honestly, the _only_ reason to share names
+is to avoid doubling the inevitable name bikeshedding that happens every
+time we try to name a CPU model.
 
-Even though, it's still fragile. When we have a check for explicit device
-presence, we wouldn't care of the error code we get in case of unsuccessful
-parsing.
-
-> So this patch looks like a step back to me...
-
-Obviously I have a disagreement here, this is step forward to weaken
-the dependency on the certain error code in the cases when we can avoid
-that. Motivation is mentioned in the commit message.
-
-Also note, -EINVAL can sneak in tons of mysterious ways as it's one of
-the most overloaded error code in the kernel, its semantic is basically
-equals to "an error happened".
-
-Having the code above, we make it robust against some subtle nuances which
-may not be discovered in time.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+I honestly don't think it matters if the names diverge otherwise.
