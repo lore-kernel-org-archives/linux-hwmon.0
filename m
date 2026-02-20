@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BB31A9F8D;
-	Fri, 20 Feb 2026 01:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6807723AB8D;
+	Fri, 20 Feb 2026 01:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771550039; cv=none; b=JnYlADoW7oARvdOkjn676ku4Ccgy+nvgZcj46leuRR9BxlRpi2buN83dookCeToPD+j90Qb1mhOSYdA0QH2OwJQuKTzXwjL70QOkpov0NAlTpNCp2SnAWO1YgQXjqUFLgLQRxHqbpZWWCztdDKKZta4QOU4CFdifOn0Ohs7hkmo=
+	t=1771552493; cv=none; b=kuZTiWHWyLvb9czkvnMFvhHC4bjqlJXrWS3ubjBGjRbcMcikCosemsPT0tSMQVK5RfAQCzKKL/7eLltLarapONxIOg1j4uROQx6AJek7NpfiWzSVVY2as6MksxxeWNze8FLfHT6XJgmTsWde+yNOzMy/+Nr8SamhFfg9NfnbwgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771550039; c=relaxed/simple;
-	bh=Uq4XQS8dU09FtCJ8bnNQfMf26F15Ik2f8EpY3Wa09Z4=;
+	s=arc-20240116; t=1771552493; c=relaxed/simple;
+	bh=amj2/r37tEQ+KwUHgqjeGVevgv1Vv4eiGifbH6nzByA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RaVx8OozlTLBZ3qMOBTy1FmVX2Rrh+vmqFVmH7o7ZD3WXcZ7doP8nPQPH88uEWarVew6U0SWvoYka0fJ7D40vpgBPbiGcKNI+/M2k//8d4GoF5N40myG7mjWElWQdyMgX+Ad3h3PRI1JLLou4OeEP5xzCFFhnuDa7UWSUl7o2kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aKxlCoqP; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=bJGoY4k1/W232FsHigT7focKZ0qMLUQ5qW7OBtscyvdAODPT2h4MghXl1ikKI5es0aMqy+ofUyngRV1ssPX89pENRDjEqMsOuH8hruEebqxTge/tg5qIcJjYaEZ1QNtCYUT6O6b4UWwVoL9G+gQtVXIg2vbHMBAE3CHKFhgjNlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hc8KHx1O; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aKxlCoqP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hc8KHx1O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771550037; x=1803086037;
+  t=1771552490; x=1803088490;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Uq4XQS8dU09FtCJ8bnNQfMf26F15Ik2f8EpY3Wa09Z4=;
-  b=aKxlCoqPGXf/3phYGN1QPCuPTw6ruL25fb8JK+MAVQxk/FkED4B0ZJrs
-   m5zujorxP4BPTTNdzALj05FwSv/i87c6glQAHpC7D1LmiBvqIOwr3adq2
-   h/CtoHT8LKPoNqpMWyqVdDOoLsneXyKshC4d+K2D4p28Sgm0Nv2JZ/iCa
-   RDYmbMYHbOwdRy9hLC37hDZhTahl/T8/IvrnY0Qj2sEAGATdfXUBEuCJR
-   ocXpjjyvawINBVs2VL5mTZvYgmZOpFVdW9tv8ancLcUQHC47hHGXh6qfC
-   MJMU1NyKJKwG048XbyeApcm5S+7ZWeimmXdBKcvPCFHV5ZNmh0PuA4TVB
+  bh=amj2/r37tEQ+KwUHgqjeGVevgv1Vv4eiGifbH6nzByA=;
+  b=Hc8KHx1O1ylYpvwGaO3ZfOt/UE9Hiapi+7YYHoGTHsAxtySyXGWjOwhu
+   zr1eASdwvbObXsjAPJSqnic41OJxImACuw0fqsO5yI4yXl2xZpgIhE5NE
+   1K+W1Uw4un+ilO2690sPMugktNMzBkGjN12xMm0ASJcV9t8cRqePhNrLN
+   N+nAgwZuJZ8qxK2ETRdWHGiji6SU0Q5U/IaRZxN7Lb0g2I/QBRoz2hfMJ
+   n1HGjnip/7Y5U1Ty6XzIRv/JHvjQ84Q/fNfZfIbh2fh+sxofrAAy12kYy
+   iu1ae2oDVmm1WNNEztKi5cJeQuw7+NakPAilQnVotzmsn1YS2fUQlxUUD
    w==;
-X-CSE-ConnectionGUID: ruhqB8fiTUix7SjLiwD/qw==
-X-CSE-MsgGUID: EubmqbdgS2mJGgauFF8fTQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="90232786"
+X-CSE-ConnectionGUID: lli2rmFcSHCDHUOr5YdYiA==
+X-CSE-MsgGUID: C5UhKLkqTR2ybGbJ9PGyCQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="72826484"
 X-IronPort-AV: E=Sophos;i="6.21,301,1763452800"; 
-   d="scan'208";a="90232786"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 17:13:57 -0800
-X-CSE-ConnectionGUID: Hh94V0sQRrSdFC5OGfN1hA==
-X-CSE-MsgGUID: HZApc8IJQdqIOVtNmEtqsg==
+   d="scan'208";a="72826484"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 17:54:49 -0800
+X-CSE-ConnectionGUID: IlQDyiYzS32viGzyeTeczg==
+X-CSE-MsgGUID: n7RmtbGaQ4+m1lzx+4SGhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,301,1763452800"; 
-   d="scan'208";a="213939680"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 19 Feb 2026 17:13:54 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+   d="scan'208";a="214733473"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 19 Feb 2026 17:54:47 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vtF5b-000000013gW-1zU3;
-	Fri, 20 Feb 2026 01:13:51 +0000
-Date: Fri, 20 Feb 2026 09:13:12 +0800
+	id 1vtFj9-0000000046z-2yB1;
+	Fri, 20 Feb 2026 01:54:43 +0000
+Date: Fri, 20 Feb 2026 02:54:42 +0100
 From: kernel test robot <lkp@intel.com>
 To: Ian Ray <ian.ray@gehealthcare.com>, Guenter Roeck <linux@roeck-us.net>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,7 +61,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Ian Ray <ian.ray@gehealthcare.com>,
 	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH V2 2/3] hwmon: (ina2xx) Make it easier to add more devices
-Message-ID: <202602200951.bP8YVa4Y-lkp@intel.com>
+Message-ID: <202602200201.hafkm9wo-lkp@intel.com>
 References: <20260219130127.87901-3-ian.ray@gehealthcare.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -87,14 +87,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Ray/dt-bindings-hwmon
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20260219130127.87901-3-ian.ray%40gehealthcare.com
 patch subject: [PATCH V2 2/3] hwmon: (ina2xx) Make it easier to add more devices
-config: x86_64-randconfig-014-20260219 (https://download.01.org/0day-ci/archive/20260220/202602200951.bP8YVa4Y-lkp@intel.com/config)
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260220/202602200201.hafkm9wo-lkp@intel.com/config)
 compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602200951.bP8YVa4Y-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602200201.hafkm9wo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602200951.bP8YVa4Y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602200201.hafkm9wo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
