@@ -1,131 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A6913959D;
-	Fri, 20 Feb 2026 18:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCB02E8B9B
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 20:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771611615; cv=none; b=YpLlZThYaDj/bigvw5phmtReNY3EHUhg/Sif79feCE+NteIhPrXorrWrrUy+ta1es9U5MxmM3i5BuFfAyPXHwLEVAFLvheQiHNMTZv7Vodwl48ur0XenY2OXrHH27P6zULNlYSKdj73dbvXmxhTWegPPOocQbg0SNjjEW/H4nJY=
+	t=1771619185; cv=none; b=SyUNZJ/aPaGunumpvtLwvpLGfYFETwxUyYe9k6i++oo8DlJsO5vt/2FJ0Qe7FSnrOhKNiARU43utWko11IfnDseLm544VnfhtBTgisQTdQslsJze8LBliznuY9KhuZ95ji9B5X91e7J86T/+DG/T3b5IB7OBk06FzRfx2yBfwGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771611615; c=relaxed/simple;
-	bh=M3KxmJSpm/J/Qer0dyNiUpPXvP+M/PLw6HPD7xRheQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i0ZsNwvzrfki8CrzuCsJwS8z59T8mXZGH367RCpq8WlPHO53RQjNsM55D/xyGjhOwVbm4mSq1OpFLTFzY8om+82srtilRYJZmkhvkskvixvbixsVSeXZjm6UWNFLH5gdvoFfuhYzZe+WrtbKc09/9Vpe9HvWKfNxc0R5ql3Vqb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nSlvDGII; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771619185; c=relaxed/simple;
+	bh=3LrO+3uAhEcYoNGmJx3iNjvB7cvq/qu/fv/qFBwznC8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r71GxZ29lm6TlHJNRCKF8W40PbCHPShekX5nxfkBz+sirjjY9sYabZE+CFSVa3juALvcaWZjgzmCh/IJ//YnUfxR572liRZGFHlNz6sXjcJM9bv4vmMr3u8uXhDuhZ3llTaKgbFwS7gQQPai/+9u2yUgBhLhFpayso4HxK3m/CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZmc7gG7; arc=none smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nSlvDGII"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771611614; x=1803147614;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M3KxmJSpm/J/Qer0dyNiUpPXvP+M/PLw6HPD7xRheQ8=;
-  b=nSlvDGIIqqnO4sCk+4wqVCPG7XIA+BZxYKzHW3jNpfnvbLxYUO+BBVYA
-   ymRvIzHZuP+tGucX+ZNH8tTwjh983S5HHNCTPEVNTUwi5bDqxVWzHUL82
-   4+9UBXghaxErWE2+uKTO+rzyoxUuiVJrEKd+0ERrwe9nAcmpS6hGkher6
-   MrnbTMjt/bKaJFeTKDtQVKHpFgNWu63WfwPq2O/pmklQPVEUlwsulZh+d
-   pRY2Z01VlRz5jkY3YwUpp04Lgzvm5bA+F4tFc8z6UTkON+Luhwx2lkvH1
-   bpLwQApX/gFfE3/o3qzh62LU4myvG/BuMIrPFs/pkjjSw7dnqr/ubjM42
-   g==;
-X-CSE-ConnectionGUID: /Sr1TCiFRgGf23yDQ2B1nw==
-X-CSE-MsgGUID: 04kApXA6SRWVFg/RL1PwiA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="72586535"
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="72586535"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 10:20:13 -0800
-X-CSE-ConnectionGUID: 7Z8YEr0EQR2fhEiXFHG6+A==
-X-CSE-MsgGUID: CT3ruYKTSZ6ESuEnPWoC6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="212662795"
-Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.110.77]) ([10.125.110.77])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 10:20:13 -0800
-Message-ID: <13b9f03f-04e2-4363-af95-edded1c895c4@intel.com>
-Date: Fri, 20 Feb 2026 10:20:14 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZmc7gG7"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b82c605dbdso1934247eec.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 12:26:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771619183; x=1772223983; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ZUWYRoA/blMOConDb/gz4Dp4zS4A+VuBuSeP0SKMyw=;
+        b=IZmc7gG7Tsyn64Cbea/WqgpZPQSsFlOwfvBY9nBg6TG5Gi6Zw6GmVX7NulXl0JHD2+
+         pAHOJcP5ob/IqJ+5XU3YyNE8aUIqf+0c+ShZdXmJN4hSHV5ceBtS+LI8aRmtE016Wys9
+         1ZOYbOVLqabtuyoJvE8P4liM08+O4f0OPJ4OX77BOcbTkjaM+Hs8UiSnkCFSvP8FqWxD
+         ZhC5cSe/h6GN0CZpGmX10xkyfnihZgEDXlN23v/4govSr5dvIv5gfmYuXGwJ1QR2Cz5L
+         ZCoNBHUSSAMJ5XHQJ2akv+HOCobdDrCrmbl6FFKAFpPk368xWaaFmoa0+URRfUXCKyoz
+         PixA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771619183; x=1772223983;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7ZUWYRoA/blMOConDb/gz4Dp4zS4A+VuBuSeP0SKMyw=;
+        b=V14M3rieXiFVdPAdXV+HhTfTEWA5YqHNbvaDaAQTfJLc7fMxBd/TD/GOHeMCzDHfEY
+         MYb83CrUwlS/7SMF02gbg5LVmqG5GZH7UHTThwtHGF+Tg+gI50df8jq9NRaR+RaYqpE1
+         TZTUm4iQVOVYqwL2+fSNrL8iGtHn2S7AgdEqj+mlT506bLTEzV8ooKG+LYW0zKpw5HnT
+         FaKdNxvDRXrW/hMyHcbHfs9zBj8+suFhvv5q1ZydzMbi4xFRjIkgpXMi3UyFGsfHm+h+
+         +iqBtSG6DiOZDa3AeKpfif+ZvSJw0ndwDqOO2W3/bQDf1XDUOBZquSlAXgoA6uIxfC2S
+         E3yA==
+X-Forwarded-Encrypted: i=1; AJvYcCV94Xg6GjhpzcoQMyVpvoZV1okZvpDG3etBEei+johgj/nsq8iL985eqBsQo54tXRvJT7SLLEvt9OPKAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1/A+JiSH8OuKg9+2AALZv6VWZjfOeQjgIklNynhQ7cEdLoyv2
+	5wZ1W7FkahMxb+J1f3zrtldJpI/XmWF63caP9iWLmuJ1ux0zTLUQsetzFBBOeZHU
+X-Gm-Gg: AZuq6aICYGHs+46nHZ1xQvs+NCXIooaq0RQpqI7EdH2DUNO4IoI07Z+UBZDc5ev3E9x
+	tzTbq8GiDCl8VdLpEm9oyk0bwG3PJMJu/0PbTWjp+WtrEeLXwM6YLpIWCQ6k3LqjbhsHlsHI210
+	X0hopliifWsULGW1FgMO1Je4gto/e8HxI1CX/SVVPlRfJygH+KC6BxmB6vtrA9/1EVdeFlNnD0B
+	LA//QxqmWUwcuG5xCHO+HTGaDfUYCkgRV7wLmAXvS2+FDLV01g+Jsu87nsg7AizqMsnkK+4qUzc
+	Ym/HvPVj8Mm3NLVEw7B5lrC+IG9r/IS8xTHc2Tnk7zW/5K6YIoU+mTT5cGbqiH5L8l70P8ZMyCU
+	YoxgkOnobhgmaXCH2zZBOAJRX21BkJM+0EaMZ3rQLrEdoEo1wdOuYZmOQScyNTzaJTU4MpWz+tF
+	Or1ZL0vf0XID5HD3/SI8NiszODxFtAAlSf8Yx6QQIZnUwS4wo=
+X-Received: by 2002:a05:7022:50b:b0:123:3461:99be with SMTP id a92af1059eb24-1276ad1a7e6mr475490c88.21.1771619182982;
+        Fri, 20 Feb 2026 12:26:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af8ac3fsm415246c88.13.2026.02.20.12.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 12:26:22 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 20 Feb 2026 12:26:20 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: "Timothy C. Sweeney-Fanelli" <tim@zerobytellc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (asus-ec-sensors )add ROG CROSSHAIR X670E
+ EXTREME
+Message-ID: <08e82cad-4482-427b-9c80-df49151c6477@roeck-us.net>
+References: <20260215151743.20138-1-eugene.shalygin@gmail.com>
+ <20260215151743.20138-3-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [v2] peci: Remove dependency on x86 CPU variables
-To: Sohil Mehta <sohil.mehta@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org
-Cc: Borislav Petkov <bp@alien8.de>, Guenter Roeck <linux@roeck-us.net>,
- "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
- Iwona Winiarska <iwona.winiarska@intel.com>, linux-hwmon@vger.kernel.org,
- openbmc@lists.ozlabs.org, Thomas Gleixner <tglx@kernel.org>,
- Tony Luck <tony.luck@intel.com>, x86@kernel.org
-References: <20260220175121.C16ADAAA@davehans-spike.ostc.intel.com>
- <b59da36c-4ddd-4cd9-98f2-b5a1db698889@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <b59da36c-4ddd-4cd9-98f2-b5a1db698889@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260215151743.20138-3-eugene.shalygin@gmail.com>
 
-On 2/20/26 10:14, Sohil Mehta wrote:
-> On 2/20/2026 9:51 AM, Dave Hansen wrote:
+On Sun, Feb 15, 2026 at 04:16:18PM +0100, Eugene Shalygin wrote:
+> From: "Timothy C. Sweeney-Fanelli" <tim@zerobytellc.com>
 > 
->>   * struct peci_device_id - PECI device data to match
->>   * @data: pointer to driver private data specific to device
->> - * @x86_vfm: device vendor-family-model
->> + * @device_id: device identifier, includes CPU vendor-family-model
-> Just a nit. There is an inconsistency between the two Kdoc comments.
+> Adding support for ROG CROSSHAIR X670E EXTREME
+
+Nit: Add
+
 > 
-> device_id no longer stores the vendor. The one below one is correct.
-> CPUID.01H:EAX only gives the family-model-stepping information which is
-> stored in the device_id after removing the stepping.
+> Signed-off-by: Timothy C. Sweeney-Fanelli <tim@zerobytellc.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-Very true. I'll change that for v3. I'll just be:
+Applied.
 
- * @device_id: device identifier, includes CPU family-model
-
-
+Thanks,
+Guenter
