@@ -1,134 +1,171 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010038.outbound.protection.outlook.com [52.101.56.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06D5337BBA
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 10:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771583158; cv=none; b=mSr8uaDTFdzoPBntruu5+xkZpKy5V3dLxbQI/911jdsxT7qLV16GT5FLLiBdrYU6dz5IPXgJZVGk43fkvwKUFXBYMxP1yKOiFJ+eD/w2gYMn1pDEr6KNnGpNYXONK1U84flRX6pv7jOy+M4cl/kerKt0itlbC4YQcs2dh1pYNPw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771583158; c=relaxed/simple;
-	bh=ea6FoIyDdE50TNheY3dZvBnONWDw8MiuQPExl9pn4AY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SnBNo18ctcNahs+kbEK+pSIhFvff+JzCQJXriL01OfDT8fQqx7IFAQo9i+YopFdC6+qn3pKPG7AJRAiRlgp8Ru3FhQ1UfgnSC/2/7YHIF3SqCWm1Bw2cUuqYMX2Pza6chKYb/f+HNPetU+sdVbkY2jmjX0uKS4B+qidAWSAqzdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDL8Ejwf; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249F932D435;
+	Fri, 20 Feb 2026 11:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771586434; cv=fail; b=D/sm+BnDJ89naw+fb9YmdPAQdd3fsmB8JBVkD4ZJpaWT6ExdoU06N4cj0nqtYaekJ5iTEBzDOEQjYfLpplZ+HafOsiMzhdCOTF35MyhF4k09KeHy9hBHwtoDvge7ptSaHMWRU1vjfBVdy2NkND10K6j9c8Xijy+SzJOPXE4az9g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771586434; c=relaxed/simple;
+	bh=0v0RIhS9/4pTnM2DC3KheQpW/CMy2qN3TciD9S5kWVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PQUQFRbqk5bqilPZmzxbxNMzTNTnMThswfP+Ia8Vpb0qs4t2EV/+oSiMeNSFcV5wSoD+dbkRsJzZOxRcyB+4zlyt1GfX/pDHHsabaZ+qNMupxMProNEO3Rxtbc5LlDP27cOGbBMuy2RyxZGGMPqJb41R7YHfgLXEz8vvd8pD68E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gehealthcare.com; spf=pass smtp.mailfrom=gehealthcare.com; dkim=pass (2048-bit key) header.d=gehealthcare.com header.i=@gehealthcare.com header.b=eXESOUx+; arc=fail smtp.client-ip=52.101.56.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gehealthcare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gehealthcare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDL8Ejwf"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8217f2ad01eso2001334b3a.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 02:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771583156; x=1772187956; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jT2fPsvFGwKp1vks8mSORfzqK5+lGI8gp2Wvz8JBoDY=;
-        b=SDL8EjwfvDxYt2gOpcYpoTaEvuXWkZlwE2vIpB8GlQNPS3d0bc0zzgEzBF67B3eIwj
-         URTiN3AcaRgzXjllsKyD7ky3DJFj2NSvyYGR9o378kY/sfhfDySQc09uxWK/u5T3Cyeu
-         jiIYubTgQxHbhx1wT+QuRyoIlsvmm8OOgz8EPPEOIeMqRTzEuUG5WfxT4+qkVevlIEv+
-         7SYJU7H2oCS/oJDqfcGJjIrGI8TK7jtuGW0Qs0w0IasmHdpmuqq3ptjNLG40i+AjQ4pB
-         XG0CH9SP2cG6Mmr5ezqSUGo2dpvrsoc5VRnh9FPq0eE8D6RXPVzvdrOvAqf62i7jmeFK
-         sTlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771583156; x=1772187956;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jT2fPsvFGwKp1vks8mSORfzqK5+lGI8gp2Wvz8JBoDY=;
-        b=mWFfqYJn5sx7iOP76iBDwIFJzLTYqQ+d3b8Fz1AZYT2GG2uwcDsilESO/psTTx4svH
-         ypfW8rpPTaGuHguk03UB/0s1zCDflEAEUdh9sn8ZxV4DLMvvDOkcCjWQXJOspprfCbDT
-         P4PySma9wy6eyBJmwZJR8kO1yjuiormuXOelWgQ0F6KXqOuOvu35Vs4M6Qmhhv6+s/zh
-         OEXNl3hvira24kdPhjAAZ7AZfHHe5zkkS7i0pLTxNZHZkNY1afjfB9IVDg/nJRQY8eB5
-         22/alxLzJLWA1BjZ/6vY8mCQmk6TfSxUZxJNSUKPGaxgF39AiXYKwoG3FLSkl0G3usy6
-         1Hfw==
-X-Gm-Message-State: AOJu0YxMPF6ucEiEgZ2IQvPlSLWUVV7zgBVJ4olvIsFA2Y0Bhpg18pVP
-	BHQyZk7+NqmpbNV4BOMvY7mwsuCl+aNWveU62OpRktz5RYs4psfsmRblnquPUQ==
-X-Gm-Gg: AZuq6aJ0SR/2RIWZONnbPHViZtrDn9HI0XWoSZ+B9LVeELUAo9YaImWw6yXtoX6NlIr
-	hZwFIPAZ/qHrttLSHtzIydfpBNzkIdMA3J1BZOPFrexUhdLfheYi0dE2JobK8mz1PVYtAZbSkFU
-	ytMc26DK0KTpiVeYDogukMZr5D3cWP9wbwxoKV6kAIrchcD5V7jgzpHSQP6vecmz0ZV7P1PgN+e
-	2AlkTCZk+QlCtEeB91gSPjCwq0cM8pAFC42tv7rkoUyxqFnnGC9FII0TigKIU67Gsy7z7rzJHhB
-	8xcIQrDHmC0s2jtzcjZHO9h+j03fF7YcypveSSV/mVM/xAIuGciAp0xf+oxfh6UZ6lupCAJqKAF
-	Z4yI56tW/OEwvEFfuHc5lHcv5gvQrWkPMLxF3zKn6mY2PrFKFTrmt69i+FzDGjJwfEsOEek7E6H
-	hYtegx1Juf8EgzQA5QXHQ2ztapjFML7oTWJwPdoYTbe9u5fJjCZea2rB+e6MbwhwYRiAE0T2aC+
-	bi+r28SQhgpBXP0u6OfFs28rCD0pZr52yxaoGSFGJn+BEawkNRQh3Lp9w7bq3z6WCkwdgPME5cA
-	gtUuCVYs97KMHQ==
-X-Received: by 2002:a05:6a00:3d4f:b0:824:b304:2cf0 with SMTP id d2e1a72fcca58-826d07a23ddmr1323427b3a.31.1771583155886;
-        Fri, 20 Feb 2026 02:25:55 -0800 (PST)
-Received: from setsuna.localnet ([2403:581e:d87e:0:fc2d:ed31:e80e:412d])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6b9084asm29378242b3a.43.2026.02.20.02.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 02:25:55 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-To: Hardware Monitoring <linux-hwmon@vger.kernel.org>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: Guenter Roeck <linux@roeck-us.net>, Nathan Chancellor <nathan@kernel.org>,
- Neal Gompa <neal@gompa.dev>, Janne Grunau <j@jannau.net>
-Subject:
- Re: [PATCH 1/2] hwmon: (macsmc) Fix regressions in Apple Silicon SMC hwmon
- driver
-Date: Fri, 20 Feb 2026 20:20:37 +1000
-Message-ID: <3032259.e9J7NaK4W3@setsuna>
-In-Reply-To: <20260129175112.3751907-2-linux@roeck-us.net>
-References:
- <20260129175112.3751907-1-linux@roeck-us.net>
- <20260129175112.3751907-2-linux@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gehealthcare.com header.i=@gehealthcare.com header.b="eXESOUx+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k7oSPQfkwJezCOK+ZFevx9sf5AZwwSd0TiiW5lDKceL2EpD+dCJe/XrI8lsUzTptO+oRxYpqWpxun5nmWjWJ7KBzC7frSzOlBr5PI08lYPYYAzDkMIvmhb1HkEYJvfYHpsRT/RXdT+4fc33yQNVS2aOET1+VAZ5d41zAFTEsdrNLVn/8aM1qPCqBCvaDuvWn0RVEeoN7/jBESpGzLRJ6s4Ns04/3Y4qGvCzxZWhEiuaCSnUTcvULS753i9pfzU0rTOm/8VHaQNfgChHVz2d/mKHiUjg6cwD01ZneCs6Vt6VvSuPPozbsvRHs7tb0HFVnfOJYd8c2RkxtGeAiVLL4tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x2HnPQ8zWkmcfhwsrjEuzFYYHQqQukTbUV9G/F4R/gA=;
+ b=vkuqDoF4jgXJRFPsAQqHHqBKc8D3lC/8SzYZH2DM0AWaUsqtDh851Tx6aOKYLzAnScMzRovaViSbwfhW0vsVu6TpmgBkDon+P9z6Ebo2Mhxb6X9qCY3ofPwOxz7+wQKCoZ/p/mmE5hWufRZrWpAe6nW7Y7hV59vQgx8wAzREt9aD4BF/EfhwFSXZQsdwV6NqDUOF4mP46H1O4zbB2eZLyxlyh0ozCf3F9wVYMR/yF7sUq7Vk4bCwaGM1vdbrQD/p0KypZ7zG8P8L1fpcLiE4zF/lBzWN58DkkrNVdVJGAk77OvdKvVmi7D8ag1egp7GPiyrtoJs9yYqVUICxtaOTTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 165.85.157.49) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=gehealthcare.com; dmarc=fail (p=quarantine sp=quarantine
+ pct=100) action=quarantine header.from=gehealthcare.com; dkim=none (message
+ not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gehealthcare.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x2HnPQ8zWkmcfhwsrjEuzFYYHQqQukTbUV9G/F4R/gA=;
+ b=eXESOUx+7njUNj/dhYlHvY+1eUXTOhj2s/5nrWBsM7QA8F04lTfb7XefKTYiJJUHjOlTw1kiD16XPiRRdyl1dQGme6Pj9sa45MembcylfDgzwUnX4MZv8BsctGWbhx0uzWScycQxqpkE+H+ogbax7Q8zTeiCJ9/egwth//rVxHT0E1Xsfo49EVC/MDkOVu/a3ho+HV6cdsUUjUE4uRjF6lqR7XlnpJ0MbB2GYROXEE40g2j/X9ujSfzdvau12XftLE0o3DKxHAs+fWOzeULhsApHMiL/r6RETi4p2jj7NXGXosu10ZpsS6dVUOOtpwyRu+dsRTTX3avQVEjStZyiAQ==
+Received: from MN2PR05CA0032.namprd05.prod.outlook.com (2603:10b6:208:c0::45)
+ by CYYPR22MB4201.namprd22.prod.outlook.com (2603:10b6:930:c1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.16; Fri, 20 Feb
+ 2026 11:20:29 +0000
+Received: from BN2PEPF00004FBF.namprd04.prod.outlook.com
+ (2603:10b6:208:c0:cafe::a4) by MN2PR05CA0032.outlook.office365.com
+ (2603:10b6:208:c0::45) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.17 via Frontend Transport; Fri,
+ 20 Feb 2026 11:20:26 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 165.85.157.49)
+ smtp.mailfrom=gehealthcare.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=gehealthcare.com;
+Received-SPF: Fail (protection.outlook.com: domain of gehealthcare.com does
+ not designate 165.85.157.49 as permitted sender)
+ receiver=protection.outlook.com; client-ip=165.85.157.49;
+ helo=atlrelay1.compute.ge-healthcare.net;
+Received: from atlrelay1.compute.ge-healthcare.net (165.85.157.49) by
+ BN2PEPF00004FBF.mail.protection.outlook.com (10.167.243.185) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Fri, 20 Feb 2026 11:20:29 +0000
+Received: from zeus.fihel.lab.ge-healthcare.net (zoo13.fihel.lab.ge-healthcare.net [10.168.174.111])
+	by builder1.fihel.lab.ge-healthcare.net (Postfix) with ESMTP id 68D521A2CC;
+	Fri, 20 Feb 2026 13:20:26 +0200 (EET)
+From: Ian Ray <ian.ray@gehealthcare.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Ian Ray <ian.ray@gehealthcare.com>,
+	=?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>,
+	=?UTF-8?q?Toma=C5=BE=20Zaman?= <tomaz@mono.si>,
+	linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: [PATCH V3 0/3] hwmon: INA234
+Date: Fri, 20 Feb 2026 13:20:19 +0200
+Message-ID: <20260220112024.97446-1-ian.ray@gehealthcare.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBF:EE_|CYYPR22MB4201:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12aa8f23-ce2d-49d3-fd1c-08de70720e08
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Rjd1OEQ4dVA3elBMbTI1NE5JOXYrNnVXZDlub1MwYTF2L0NsQ1E3aFhmMnhF?=
+ =?utf-8?B?NlIrTVVMNUhCSWNweUtzdCtMTlJSV1h1U2dNcmtoZDQ0K3ppU2Exb2lMQU9y?=
+ =?utf-8?B?dVd4T05aWDk3WSszTTlXQWdVWmZNT1NjdjdXYnNqUmhmcDVpbmVCcEJtWjJY?=
+ =?utf-8?B?Mmt2Z2dmUEEzcEdrUXF3dW9PQU0wWUswRXpHLytJRWRqL0FhWFpib1F3YWFO?=
+ =?utf-8?B?Zm5FV29lZUNKVkxtYUhUcGdEVzY5WGdGS1hVckM0SGp1eGd5TWZudUJPajdz?=
+ =?utf-8?B?YmpTamhhTUFWL2hUOVJKdlU2SlpOWmtFK21uUnVBemlPVHFWMjB5dVBNVDdi?=
+ =?utf-8?B?MFJwQytTaytVdk1yUUN6S1k2T2ZQYzUzWVJyU000SnNTeVJUdWdPWktoaFFu?=
+ =?utf-8?B?T1ZoOHg0UmhtLzRSYXlXQ29lK0hqWFVlM09zSkNmSER3TVA4K0V0Zks0VEh6?=
+ =?utf-8?B?WnVTdlhxNXRBU084aEZub0dXd21wOUR2ZWFyM3d3L25ZY0N2a094TjVOVnB3?=
+ =?utf-8?B?WVBzdmNtNHoyTDA3NXFISEZXYS9wTWM5NjBVV1pVaThmcFRac2lPbk05UXFB?=
+ =?utf-8?B?dUF4R2lDbWoyS2VrbWp6QldwY29rY0FoME1lUzNDanhSMVVaeGVXN3orZXRZ?=
+ =?utf-8?B?RkhHRTlhK2VxRDZwOXVqSmZoeElOV1BYMDMzdmhscmFaMElLR1VwS2tsK0ND?=
+ =?utf-8?B?TFAzVmhpQ3dzYmp4WHh2L1ZmbUxnVEdaUFJRQkVuL0VTVFQxNkhHMThxN25F?=
+ =?utf-8?B?T3QzY0R0VjR6V0wwbjlLY2FBL1RQRE9yaDBKQnlJR1FYRTdEZ2s1aytPMzBr?=
+ =?utf-8?B?NmI2MDE2eFBFVnBaVHhMeVVyMUZXSjZhZ2hpanZsV2lYcVAzZE1VVVY0ZjV0?=
+ =?utf-8?B?MllCbU9BQ3RQcUVSbC8xSDVkeEdjY09lMG5ybTlxVG4yZnB6N216V25CT285?=
+ =?utf-8?B?V0sraDZxS2RiNm1WOW95d0J1ZUtHV1hoTWtwNUdSZkp1enhxUk1kNlM2d3hB?=
+ =?utf-8?B?NGR6QWlXa0VzQm9FcitITytNUjhKQzZ6ODNvek9Fc0k2WXZVQmlGcUFDWlJ2?=
+ =?utf-8?B?OGU1TnluSzRqbElWZUdKcy9oVlB0eFdsWjVkeG11b2hxS0pSdDJselZHM1Y3?=
+ =?utf-8?B?MnNZclVlY0Y2ektqYVJDVU1iUFBzV2xjRCt3VkRJdGxyb0NBSEM3VzI0bmc0?=
+ =?utf-8?B?TmdXVjFJL2tNY05FUnlreDQ1djZrZlg4UzJCZzJWSXlBRFlyOUptUTQ5ODNM?=
+ =?utf-8?B?QllvRTUrSEZCbkxFVjZ4SjlqS3d1bmd2ZHJkMFFaYXZvMVRKNDdZQzRUZktK?=
+ =?utf-8?B?anFFNlZEZU5FaFMwUXJvVDFwbTZ5RmYrbXd1d1BUS3JmaThVN3lsdkdXd3ow?=
+ =?utf-8?B?V0QrbTFkakd4K20rLzdnUnJ4ZU1DMnZrTllCMHJqNGdTRmZXQmRsMmpLdnJ2?=
+ =?utf-8?B?NndwOVd4Y0pZVndhVDJveUl4ZUptMlI1bnZzak9hUXZlQmNRT2xUT3FHRXkz?=
+ =?utf-8?B?VmF6cnB0UFVpM2Q3MlcvZFZ0bW9lbEVMVHFJak02aXZ4OXFwcVBvdndOWmFo?=
+ =?utf-8?B?SkM3M1lzcjRTbjNkTWlSVzNXMzVpSldrWENoSzNXQ2NlRkU3cmwrb0swcmZI?=
+ =?utf-8?B?VHNNK2RIMGI0S0kwZEVzRkJsaVZVcWZyMHZYNHJZY1Z0OE9FVEsveWJDL1NN?=
+ =?utf-8?B?K0hwTDhGNW12emFzTUVBaXhUNUNiNm9QNVFlWnBPWGJmbTBYazZSYkRWVnQ3?=
+ =?utf-8?B?SytxVkNqVVJ1VXhGYjQxVlNLMFA1WHVsT2Z3VzNzSUpHY0ZVcU9FTXFzeEdY?=
+ =?utf-8?B?YlgvRlpldWRTWXZHRXo0MlNiWTdPOGxxTU1kSzA0WTdRZEdkZ1duZ003dTUy?=
+ =?utf-8?B?dGFvU09VdzdYR1RPdUxicHNoeFR4b2IyM3FLY3NqSnE1eFh5WnNsVnZYcjhM?=
+ =?utf-8?B?SURDV0M1a2w5T0FTazRUUGRpTGNna3BMVTFvbmVZYVprSjNJWGZHUXlVSkNV?=
+ =?utf-8?B?cEVnOFdXNmVtKzFiZVhFRHQ3NXI1ZnNrMVRLNm0rSlRBVlVLNXd4UDkzMmVo?=
+ =?utf-8?B?VTQvN0txOURFNm90QlF5Y1BTeDFZSFd4Y2hLRXdQRmYvNFkwME8yOFNoRnNi?=
+ =?utf-8?B?V3JGMWtaNjhvWHpJbVFaWVZ3N3pLNXAyK09CVVE1ODFtVXBtQ0tSR29HWGE3?=
+ =?utf-8?B?RjIvQ3pqVldvMWdNMHdYdyt6UmRNbW04bVlTVzNFd3Y2SS8xcDl2RXo3bnNG?=
+ =?utf-8?B?Y3BzK3FzYXN1eTB6OTRtbUdUYWZ3PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:165.85.157.49;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:atlrelay1.compute.ge-healthcare.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	vjMBwuqmN8RKw16Z4AZdUdzEQuF1VxYUHsgnUq/VjXo6LDR9xI4XPt9p99+0Skj2ofDiUEqYzsthyDx/DBVYs1nLkHzukGy5aqBdokLMi4hMGmU0ZcQlASC1RYfU2GgdF2GCt9/JHa+W8AnH/RQBjOVQtl1Rkb7+YExajBtw5AikJrUHGqwmWYSVuAnq0nt0gCIBpr0nl3vV+0tEWG/NvWCL8M9GTNeU2GYLSB7mLee/ozdsQRdVJjxge2bYwAFDrW62BHA/v7KtYCNRMU64b4SwbwYpErJ9NkNRMN6rTENVHWBY73ZbDpsuZLjb59u456bt7gZBbMd+/SVw2Hf1Uqy4gfXKWC4odDqGlArgZBO/Kc0yBD3oVfwJyNnSib2/K04oNUCuN6yzXC7NwLyW7uG+wgNKS7tow2Vl2/ISXYsDdH2pZpOXaEUpx9KK0oxz
+X-OriginatorOrg: gehealthcare.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2026 11:20:29.4053
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12aa8f23-ce2d-49d3-fd1c-08de70720e08
+X-MS-Exchange-CrossTenant-Id: 9a309606-d6ec-4188-a28a-298812b4bbbf
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=9a309606-d6ec-4188-a28a-298812b4bbbf;Ip=[165.85.157.49];Helo=[atlrelay1.compute.ge-healthcare.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-BN2PEPF00004FBF.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR22MB4201
 
-On Friday, 30 January 2026 3:51:10=E2=80=AFam Australian Eastern Standard T=
-ime
-Guenter Roeck wrote:
-> The recently added macsmc-hwmon driver contained several critical
-> bugs in its sensor population logic and float conversion routines.
->=20
-> Specifically:
-> - The voltage sensor population loop used the wrong prefix ("volt-"
->   instead of "voltage-") and incorrectly assigned sensors to the
->   temperature sensor array (hwmon->temp.sensors) instead of the
->   voltage sensor array (hwmon->volt.sensors). This would lead to
->   out-of-bounds memory access or data corruption when both temperature
->   and voltage sensors were present.
-> - The float conversion in macsmc_hwmon_write_f32() had flawed exponent
->   logic for values >=3D 2^24 and lacked masking for the mantissa, which
->   could lead to incorrect values being written to the SMC.
->=20
-> Fix these issues to ensure correct sensor registration and reliable
-> manual fan control.
->=20
-> Confirm that the reported overflow in FIELD_PREP is fixed by declaring
-> macsmc_hwmon_write_f32() as __always_inline for a compile test.
->=20
-> Fixes: 785205fd8139 ("hwmon: Add Apple Silicon SMC hwmon driver")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Closes: https://lore.kernel.org/linux-hwmon/20260119195817.GA1035354@ax16=
-2/
-> Cc: James Calligeros <jcalligeros99@gmail.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Neal Gompa <neal@gompa.dev>
-> Cc: Janne Grunau <j@jannau.net>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/hwmon/macsmc-hwmon.c | 23 ++++++++++-------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
->=20
+Add support for INA234.
 
-Reviewed-by: James Calligeros <jcalligeros99@gmail.com> for the series.
+Changes since v2:
+ - Patch 1/3: No changes, kept Reviewed-by from v1
+ - Patch 2/3: Drop hunk agreed in review, kept Reviewed-by from v2
+ - Patch 3/3: No changes, kept Reviewed-by from v2
 
-It would be helpful to Cc the Asahi list as per MAINTAINERS in the
-future; any one of us could have reviewed and tested these two patches while
-I had been unable to[1].
+Signed-off-by: Ian Ray <ian.ray@gehealthcare.com>
+---
+Ian Ray (3):
+  dt-bindings: hwmon: ti,ina2xx: Add INA234 device
+  hwmon: (ina2xx) Make it easier to add more devices
+  hwmon: (ina2xx) Add support for INA234
 
-Regards,
-James
+ .../devicetree/bindings/hwmon/ti,ina2xx.yaml  |  3 ++
+ Documentation/hwmon/ina2xx.rst                | 25 +++++++++++--
+ drivers/hwmon/Kconfig                         |  2 +-
+ drivers/hwmon/ina2xx.c                        | 36 ++++++++++++++++---
+ 4 files changed, 58 insertions(+), 8 deletions(-)
 
-[1] https://lore.kernel.org/asahi/CAHgNfTynZHNt3=3DJY82-WPR1b_1JyoJ=3Dhnazc=
-PwJtSStOZsA1=3Dg@mail.gmail.com/
-
+-- 
+2.49.0
 
