@@ -1,267 +1,1817 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011061.outbound.protection.outlook.com [52.101.62.61])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FF732F74D;
-	Fri, 20 Feb 2026 11:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771586437; cv=fail; b=aHoIzf8ckPjh4nWVEOGDE8ibmvcyc+3PZln6e3KzXZ1Du+h5DlTUzXDk13H74KtMvXcwsW/otctnTOgIbpbZJW6scl7R5nmGc/++sUzmMzv/4L44inaxC/+Jc/jZTlOTtvqchpd5ZYDMlRBx1cKl7v6LWuuykVwoEidG9kg36dQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771586437; c=relaxed/simple;
-	bh=tA7nvkXGKnh3Fg/NYcGIScu+nJ1iOLGu6EbHNvTsHhs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jqA1MUH2MLxE7PSpceKP5alLTMA9ZPNZ23oMV/RCmkXDdbiGEeUZTVoqH3kZfUgygSaGfOME/jqhTnRfJcewTCMeVwvXmztwi8ZCKOsNlaHJ5UzVlLQ0H57CeVy3EngsFrejpOZTjfGeONojppjxH06xB8RN8XDlcOKpbqfz6S8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gehealthcare.com; spf=pass smtp.mailfrom=gehealthcare.com; dkim=pass (2048-bit key) header.d=gehealthcare.com header.i=@gehealthcare.com header.b=SBouBhTN; arc=fail smtp.client-ip=52.101.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gehealthcare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gehealthcare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA8A26F2AF;
+	Fri, 20 Feb 2026 14:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771598174; cv=none; b=Y0EixotdX9cyLtAa41Gn9w+Mv9hSbZEkBuBLs45xlUsnDEJp3sZDpX2YPICGbx/rR75e/3BzjTlSWcrRhFlNLJZZbNGMSYucn74fO6CR+Vx2l6uw0NvyDax/ayOs/q+KgUi/azZfLP11vWwXtnZEVlsr9M0pL5b6B6Wwg4oyqTY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771598174; c=relaxed/simple;
+	bh=BL4fRfhgkXMe4a0VKEytXY02bGtBXKjE7seiCyIdgVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tZsTbYFCIg/v4dE5w1D/qgpCarParC9Qka9toHXuwzFyAk/Q+HPaT6x2g7s3A7ef6Nt95Pkq8wbOrKPCMmfNHs03FeQAvF+TROyhL6mIrSihlGXmf3q3Eaz7KIOeBXJtd7+xP4wOD1cXNcyUJFNwPHpgSzQ9UzbZTAILQTbebtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Azl6wzJt; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gehealthcare.com header.i=@gehealthcare.com header.b="SBouBhTN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=j9yqx2fDg0y3Jfcjs1Wq3ts60HE31gO/tMxJdwdU0+kt4HblQTw8paBNH4l7EjnB1RlCU2cu7gEWKL6WVYXfOSPlQt0Ru099a8JegYNNh8+Pd9G8Cu4Mkzy54VnXocM21eTcMBAxMkLkBCXmxzxeN7+Y0/wgIoNVkye/DaNwR5Px/P8Utd4Tkps4n+LYMzvBrRLHOto8c0ejUsvYkRhpwVshezSbdtvpYHNve3dB/AjrKyDpStYRhhrWTJtw42dc3S7EcWrGv0zMNVtYtsGrnhtAfKsQJ6H8ccaktEzXl/uVqNPduFFeLjvlh5egAv01CgcBIDDFO2m9Ccg0hFcbOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=trsTXgYxKLvvSW9Ye4G9qUzbRhMVpNV0IBkiskZPB9Y=;
- b=qwvPS/KDwtIGtCMZgjPJPb1Ztxj66hbakxcWq9CfDIcKY0rbzLqfP0dOuTMr1YJRiNQNS6Y7OZASgpwF9ezDVsLbete7lT+HNGPl1FOaG3CGtuwnrrBcBYbYDA64y+KTeH8QpTDbQ0i2f+0O91mQ7XldOk1x6axafG4K5k0M6VfSiuaWGaxrz5sO55rozl+m0Eg2nU6H3wfNOM37qXz3KXSzh2aZo8djG3YRP0JED4UsqGGei+n0OHxLjL2BL8raxsD9Q44MoHySoAzuUa6IgQOZd7fhELvncEgAilrnaaa/cwk3ZDjRsQ991aWuBD+e1FTlh+KZUHhzqB9P2TVZRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 165.85.157.49) smtp.rcpttodomain=vger.kernel.org
- smtp.mailfrom=gehealthcare.com; dmarc=fail (p=quarantine sp=quarantine
- pct=100) action=quarantine header.from=gehealthcare.com; dkim=none (message
- not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gehealthcare.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=trsTXgYxKLvvSW9Ye4G9qUzbRhMVpNV0IBkiskZPB9Y=;
- b=SBouBhTN8ZgEVEVq1RWEwR8ZItGIeBV858L93801WH1HC6sC8IZWWwf4qhjRG2rbYcNSr1Y76EVvEKamRlf/6PZPGWU9m0QN5wK0AuOIZt8ung/hcMoJDuO9wbT4arSWPLISv+pHTo078JadeYUQfQ7q52Ek4ZxwCzYokZxSE9AaXHMGf/xMoiP+nhqGsICLurOwdKUWTQqIimxIuzi/XThmPk3CiiTIftyX29pOusYFCoG6S3c/hziFrNGPXNicWUWALvJEHVAj3Las4O8UR+Rxfbj6hXQj3GsoQkBjs4BFJiPdA5MfSsgWp50ZS38rxX5fDX0EjyPF8xh4PKZe+w==
-Received: from MN2PR05CA0035.namprd05.prod.outlook.com (2603:10b6:208:c0::48)
- by LV3PR22MB4848.namprd22.prod.outlook.com (2603:10b6:408:1de::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.13; Fri, 20 Feb
- 2026 11:20:30 +0000
-Received: from BN2PEPF00004FBF.namprd04.prod.outlook.com
- (2603:10b6:208:c0:cafe::f) by MN2PR05CA0035.outlook.office365.com
- (2603:10b6:208:c0::48) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.16 via Frontend Transport; Fri,
- 20 Feb 2026 11:20:29 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 165.85.157.49)
- smtp.mailfrom=gehealthcare.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=gehealthcare.com;
-Received-SPF: Fail (protection.outlook.com: domain of gehealthcare.com does
- not designate 165.85.157.49 as permitted sender)
- receiver=protection.outlook.com; client-ip=165.85.157.49;
- helo=atlrelay1.compute.ge-healthcare.net;
-Received: from atlrelay1.compute.ge-healthcare.net (165.85.157.49) by
- BN2PEPF00004FBF.mail.protection.outlook.com (10.167.243.185) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9632.12 via Frontend Transport; Fri, 20 Feb 2026 11:20:30 +0000
-Received: from zeus.fihel.lab.ge-healthcare.net (zoo13.fihel.lab.ge-healthcare.net [10.168.174.111])
-	by builder1.fihel.lab.ge-healthcare.net (Postfix) with ESMTP id 75576FD310;
-	Fri, 20 Feb 2026 13:20:26 +0200 (EET)
-From: Ian Ray <ian.ray@gehealthcare.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Azl6wzJt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771598171; x=1803134171;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BL4fRfhgkXMe4a0VKEytXY02bGtBXKjE7seiCyIdgVI=;
+  b=Azl6wzJtHnne1urA3y8PKOQfm2uFJYsZnGark2AUs+yYJ0055lEXGXyg
+   /3HRDTwxRMx4ch9OKJrVZ1znAVpthHf3gvqAeGDGouGUQfCCbB8VRzNQb
+   JTYccShNuLeUfYASmhKpdxQtAEJsvh3OwR1d4zCiOfh2tJGwNl85fpBGu
+   PKcbHyhthNQ+iqYHqmn41XHKJNr0hw8rbHRAm/jUYngn6LNacqjLGEdYp
+   BJoItBK6MFcPwx2Zxn/hSvB2rOyChMwS1Td4Opw5vMY/sWu/K+DLk8XXe
+   PRRlB5URxzyjwhLwfPN+iN6nlpkE06ipj377KgEZUCCkKHvcsufEG2CU4
+   A==;
+X-CSE-ConnectionGUID: vkAsyKL9S16epY5ukqiE5g==
+X-CSE-MsgGUID: 5lrEWjNcTSWNiJb28KPt2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="76303954"
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="76303954"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 06:36:11 -0800
+X-CSE-ConnectionGUID: dBlVrLfCS0y+gUC8JPzVog==
+X-CSE-MsgGUID: f+opLNHGRC+h6Sm5IfyX7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
+   d="scan'208";a="213972699"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa006.jf.intel.com with ESMTP; 20 Feb 2026 06:36:07 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 3D5E295; Fri, 20 Feb 2026 15:36:06 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Ian Ray <ian.ray@gehealthcare.com>,
-	=?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <bence98@sch.bme.hu>,
-	=?UTF-8?q?Toma=C5=BE=20Zaman?= <tomaz@mono.si>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	devicetree@vger.kernel.org
-Subject: [PATCH V3 2/3] hwmon: (ina2xx) Make it easier to add more devices
-Date: Fri, 20 Feb 2026 13:20:21 +0200
-Message-ID: <20260220112024.97446-3-ian.ray@gehealthcare.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260220112024.97446-1-ian.ray@gehealthcare.com>
-References: <20260220112024.97446-1-ian.ray@gehealthcare.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] hwmon (bt1-pvt) Remove not-going-to-be-supported code for Baikal SoC
+Date: Fri, 20 Feb 2026 15:35:00 +0100
+Message-ID: <20260220143500.2401057-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBF:EE_|LV3PR22MB4848:EE_
-X-MS-Office365-Filtering-Correlation-Id: f02e7044-5478-4c1c-5c62-08de70720e9c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Tjc5RHo4a0hJbVRBMTBFcmlVMnJ4ZXdmTDJPV1FvZWJZWW91eW1jdFdURExF?=
- =?utf-8?B?c1NKT2xpM2dZZ2xGeWlEZEZrQ2N5TlRrTkM5RTZQVjRadGk5eHBVWVR6bDZZ?=
- =?utf-8?B?QkJVN3JYa1hRd2ZNNVBZMkRPQlVranMzTDA3cmhDTjdqUEF3R1Y1enRFSHUx?=
- =?utf-8?B?OWFoUUxsZERoZUkyb1NwUm1PNDFzdXgyYzVtQSt0ekc1QmRMcFFHY3cyN2hl?=
- =?utf-8?B?ZmplN3pYQS85bFUvYm1sR0lHTk95Y1pGblFNSE5kb1VqUEdvMzdvaWl3T21S?=
- =?utf-8?B?WElTU0Ftam1IMzQ0NmxzRFlZdTJYU2NvTFBuSzBIOXdPMFo4U25ZVG95V3RY?=
- =?utf-8?B?aU5VRGw4MWR4NUx1ZTYvejNmUEZlaG5XNGJiQzM3eEQvWE5YRGhkUTQ5K1Ix?=
- =?utf-8?B?UmsyMHJYdkg1RjIyU1YzMnNmOU9TN1k5NHR6Q0dXZ0NxaUN0SGNObEo2V00x?=
- =?utf-8?B?Y1JNWXFVUjN2QlBodXQrbDhDOVVSZFJXRVgzb2cySHFwWkJNaU5WSGhBU0xL?=
- =?utf-8?B?ZEpqZThjaHBZTVY1OWdoZUZlY0dKQkNZRTZrV3lSUHlyb0VQUXVZcGMwZFlu?=
- =?utf-8?B?SEVsdjN6TDM3cmtDcHlRVkMxQWNxTXJUZXVOUmI1TWpZdGpOdzQzVE5JVHNG?=
- =?utf-8?B?NXdLajJNYXJKWXNnRDZmRDFQL3Q1a2cwT0NvK255YlAyNHpZYmFobEpNNmdm?=
- =?utf-8?B?TU94SFhSRDEyeUFpTTlWMVY2TEpMWUNWNFFHR013cjY5SjVZcU9qKzZSQXNP?=
- =?utf-8?B?ditDaXJCWWEyY2VKbWhCRFFhdjkyZXdkMFRsM1FYZEJ5VUIyOGVQbGRIbHpz?=
- =?utf-8?B?ZE5yMGlGV09JVzZtK2xaN0RWTTVRMG1IVDdxcy82ZkViSHJtdjJuYVRURGE5?=
- =?utf-8?B?alJZRjI1eGVhR2RJZlpteElETkZnd0VpWkVJTVpyUjI0c1JqUUlRMFB0ZFlW?=
- =?utf-8?B?blF0YU1wSWljYlNhMnlMRVJVREtzU1lXMUczcDJobmtQWXFIbklZYmJNYU43?=
- =?utf-8?B?YUlNS2lUTDJIckNtTElBVXk1MU1aMXhjck9aUHptcWg0VHB4b3pZQmJra1Jw?=
- =?utf-8?B?ZmZwNkJ3M0FxYXRqVnI3RC9nYTRjRTU2YkZZOEFORGFJZFdwUi9UcFRDaHQ0?=
- =?utf-8?B?Q3M4aGV3VTVWdVJxQ2Y3R3NNK28rYmkrdW81ZG1xUnhrVlV4Sm5rbmhEU0RD?=
- =?utf-8?B?VXVtWDR1UHNodkdDQUkxT0FYVmlYWlNISUdoVW9yOWxpdkY1aWkzUlI4bnlC?=
- =?utf-8?B?bjVFWUN6RUo4Q09ZT1Nkb3hneCsyNk5qK2lrNVNqZDl6azhXMFNMTTdjQ0pr?=
- =?utf-8?B?bWJPUkNPUGR4d1U3QjRtWENWc05sdExvL2t1ZmdlWjI0Wk16TnZ6KzNQdUZ0?=
- =?utf-8?B?aXlSY3NqeG9JMSt0MXBHTngwcTM5Q25OOFpxRjJ0Y0VtOFdHVHlLOTFNcXBJ?=
- =?utf-8?B?ZHh4czgyMElNQ3VhSlRoWXJlQ1JGSm8za3RCdklteFpRYkVkOGVOS0MvdGZY?=
- =?utf-8?B?Zkp3UGMwWUQwQmVoc2ZBR1lxVGt3dGcreG54L2hKdVJXRHc4RUhkZ3JVbnJK?=
- =?utf-8?B?ZUdEcUtPQS9yREUrV25iMU9zRDJtL0pUUTNCSThKN0p5UEJiS01kRGhyWjh3?=
- =?utf-8?B?TnRKUXlFbEpnZWhZcjB1YzgxUU1KaXdMaGd1aW00ZXdES2Y0Z09OYlE3anV4?=
- =?utf-8?B?SE9jaFVvS2RtQ1ZYR3JScFc0bWw1WHozMCsxQUZYQkpWRzdjeHR1VWFBRmtF?=
- =?utf-8?B?Q3UrWmVNMXJORllCN0pmTnRpamRaOVJaZFRtZE9HTXZTd1ZFaTJkWG50Mm5y?=
- =?utf-8?B?c0FXWm96MlhYNmNwQ1NhWHE0M0IxMmZTMjA4R0pYRVhjUmgrZzVGeVFRdmdP?=
- =?utf-8?B?QVorVTUrVWZZMVpwUWxHd3F3N2grdjVhWDM3WGJCRHVQblhpcUpOcXhqYXJN?=
- =?utf-8?B?Yi9IYW40ZEl1V3ZJM3d0cmMrWmF1bERLVUlPdGNVS054VXRuNHNEOSt4RVMr?=
- =?utf-8?B?VUVhQ3ZIZ2dKSDNKWEZ0TW1Oc09OMnJicDI2anVkK21IZ0NySWNML2dxdXAz?=
- =?utf-8?B?aS91azhSVGhyQWNoa1JwWFA2WmtzcFVLd1FkaFY1WjhzQUMxRTJ5QStoL1R4?=
- =?utf-8?B?Y3NRalJqbm1FK1RwVzZYQWx1ZUNyTE5iQzNOTTFvQjlWOXRzK0lJdjN3S1lW?=
- =?utf-8?B?aDE2bTZZWVhYbTZleXNGZ3ltK0dqUERBdTV5S3pzQUJJaTBxKzYxK3VEVG82?=
- =?utf-8?B?OEY3N2dKcEtZdysxcVREeUlOMHVnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:165.85.157.49;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:atlrelay1.compute.ge-healthcare.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	W0RR5QdM1Kz9mV+jS4R9GNgQDLRMsUWYiVBlxC1hVgqEj30uK314/kifWkzgNU9HfwpbPpIACwXYLiMoJdmBsPRsljaYGH9rWYUHfwlYcjg/pH05SH23PWZ4bZDEMpgnpycjEkwhzoa8nVSpXDVPSkklsbGIIY7G4Wxq5QoeM1SjMeAIU4rC5rG6/OcQRNGVmbtDK2jRtLI00vNPz2hKoULwShRTimMsxQ8NzEeyJZR8vAX1VIHGFjaF9xHWk/cymKlnY4t7Dr16ECfUkUWFB7FIF2vkKNfQb+q8ZbeUtTGckgj1Sg11Ee/HK+VQb6u1yVORpcHbbEXgoMaaA8XBAUuOTtO8DxYCyJYGwUOYBLPgXx7AEUcC1aZ8NQOjVUu9e42UmusGdZzyADQjUscCSe7xYLEMzL0OZB/+qX/cnRPnlxVmx+8X+bcIAV99CZpf
-X-OriginatorOrg: gehealthcare.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2026 11:20:30.3692
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f02e7044-5478-4c1c-5c62-08de70720e9c
-X-MS-Exchange-CrossTenant-Id: 9a309606-d6ec-4188-a28a-298812b4bbbf
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=9a309606-d6ec-4188-a28a-298812b4bbbf;Ip=[165.85.157.49];Helo=[atlrelay1.compute.ge-healthcare.net]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-BN2PEPF00004FBF.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR22MB4848
 
-* Make sysfs entries documentation easier to maintain.
-* Use multi-line enum.
-* Correct "has_power_average" comment.
+As noticed in the discussion [1] the Baikal SoC and platforms
+are not going to be finalized, hence remove stale code.
 
-Create a new "has_update_interval" member for chips which support
-averaging.
-
-Signed-off-by: Ian Ray <ian.ray@gehealthcare.com>
-Reviewed-by: Bence Csókás <bence98@sch.bme.hu> # v2
+Link: https://lore.kernel.org/lkml/22b92ddf-6321-41b5-8073-f9c7064d3432@infradead.org/ [1]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- Documentation/hwmon/ina2xx.rst | 12 ++++++++++--
- drivers/hwmon/ina2xx.c         | 18 ++++++++++++++----
- 2 files changed, 24 insertions(+), 6 deletions(-)
+ .../bindings/hwmon/baikal,bt1-pvt.yaml        |  105 --
+ Documentation/hwmon/bt1-pvt.rst               |  117 --
+ Documentation/hwmon/index.rst                 |    1 -
+ drivers/hwmon/Kconfig                         |   26 -
+ drivers/hwmon/Makefile                        |    1 -
+ drivers/hwmon/bt1-pvt.c                       | 1171 -----------------
+ drivers/hwmon/bt1-pvt.h                       |  247 ----
+ 7 files changed, 1668 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+ delete mode 100644 Documentation/hwmon/bt1-pvt.rst
+ delete mode 100644 drivers/hwmon/bt1-pvt.c
+ delete mode 100644 drivers/hwmon/bt1-pvt.h
 
-diff --git a/Documentation/hwmon/ina2xx.rst b/Documentation/hwmon/ina2xx.rst
-index a3860aae444c..a4ddf4bd2b08 100644
---- a/Documentation/hwmon/ina2xx.rst
-+++ b/Documentation/hwmon/ina2xx.rst
-@@ -124,8 +124,16 @@ power1_input		Power(uW) measurement channel
- shunt_resistor		Shunt resistance(uOhm) channel (not for ina260)
- ======================= ===============================================
+diff --git a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml b/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
+deleted file mode 100644
+index 5d3ce641fcde..000000000000
+--- a/Documentation/devicetree/bindings/hwmon/baikal,bt1-pvt.yaml
++++ /dev/null
+@@ -1,105 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-# Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/hwmon/baikal,bt1-pvt.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Baikal-T1 PVT Sensor
+-
+-maintainers:
+-  - Serge Semin <fancer.lancer@gmail.com>
+-
+-description: |
+-  Baikal-T1 SoC provides an embedded process, voltage and temperature
+-  sensor to monitor an internal SoC environment (chip temperature, supply
+-  voltage and process monitor) and on time detect critical situations,
+-  which may cause the system instability and even damages. The IP-block
+-  is based on the Analog Bits PVT sensor, but is equipped with a dedicated
+-  control wrapper, which provides a MMIO registers-based access to the
+-  sensor core functionality (APB3-bus based) and exposes an additional
+-  functions like thresholds/data ready interrupts, its status and masks,
+-  measurements timeout. Its internal structure is depicted on the next
+-  diagram:
+-
+-     Analog Bits core                     Bakal-T1 PVT control block
+-  +--------------------+                  +------------------------+
+-  | Temperature sensor |-+         +------| Sensors control        |
+-  |--------------------| |<---En---|      |------------------------|
+-  | Voltage sensor     |-|<--Mode--| +--->| Sampled data           |
+-  |--------------------| |<--Trim--+ |    |------------------------|
+-  | Low-Vt sensor      |-|           | +--| Thresholds comparator  |
+-  |--------------------| |---Data----| |  |------------------------|
+-  | High-Vt sensor     |-|           | +->| Interrupts status      |
+-  |--------------------| |--Valid--+-+ |  |------------------------|
+-  | Standard-Vt sensor |-+         +---+--| Interrupts mask        |
+-  +--------------------+                  |------------------------|
+-           ^                              | Interrupts timeout     |
+-           |                              +------------------------+
+-           |                                        ^  ^
+-  Rclk-----+----------------------------------------+  |
+-  APB3-------------------------------------------------+
+-
+-  This bindings describes the external Baikal-T1 PVT control interfaces
+-  like MMIO registers space, interrupt request number and clocks source.
+-  These are then used by the corresponding hwmon device driver to
+-  implement the sysfs files-based access to the sensors functionality.
+-
+-properties:
+-  compatible:
+-    const: baikal,bt1-pvt
+-
+-  reg:
+-    maxItems: 1
+-
+-  interrupts:
+-    maxItems: 1
+-
+-  clocks:
+-    items:
+-      - description: PVT reference clock
+-      - description: APB3 interface clock
+-
+-  clock-names:
+-    items:
+-      - const: ref
+-      - const: pclk
+-
+-  "#thermal-sensor-cells":
+-    description: Baikal-T1 can be referenced as the CPU thermal-sensor
+-    const: 0
+-
+-  baikal,pvt-temp-offset-millicelsius:
+-    description: |
+-      Temperature sensor trimming factor. It can be used to manually adjust the
+-      temperature measurements within 7.130 degrees Celsius.
+-    default: 0
+-    minimum: 0
+-    maximum: 7130
+-
+-additionalProperties: false
+-
+-required:
+-  - compatible
+-  - reg
+-  - interrupts
+-  - clocks
+-  - clock-names
+-
+-examples:
+-  - |
+-    #include <dt-bindings/interrupt-controller/mips-gic.h>
+-
+-    pvt@1f200000 {
+-      compatible = "baikal,bt1-pvt";
+-      reg = <0x1f200000 0x1000>;
+-      #thermal-sensor-cells = <0>;
+-
+-      interrupts = <GIC_SHARED 31 IRQ_TYPE_LEVEL_HIGH>;
+-
+-      baikal,pvt-temp-offset-millicelsius = <1000>;
+-
+-      clocks = <&ccu_sys>, <&ccu_sys>;
+-      clock-names = "ref", "pclk";
+-    };
+-...
+diff --git a/Documentation/hwmon/bt1-pvt.rst b/Documentation/hwmon/bt1-pvt.rst
+deleted file mode 100644
+index cbb0c0613132..000000000000
+--- a/Documentation/hwmon/bt1-pvt.rst
++++ /dev/null
+@@ -1,117 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0-only
+-
+-Kernel driver bt1-pvt
+-=====================
+-
+-Supported chips:
+-
+-  * Baikal-T1 PVT sensor (in SoC)
+-
+-    Prefix: 'bt1-pvt'
+-
+-    Addresses scanned: -
+-
+-    Datasheet: Provided by BAIKAL ELECTRONICS upon request and under NDA
+-
+-Authors:
+-    Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+-    Serge Semin <Sergey.Semin@baikalelectronics.ru>
+-
+-Description
+------------
+-
+-This driver implements support for the hardware monitoring capabilities of the
+-embedded into Baikal-T1 process, voltage and temperature sensors. PVT IP-core
+-consists of one temperature and four voltage sensors, which can be used to
+-monitor the chip internal environment like heating, supply voltage and
+-transistors performance. The driver can optionally provide the hwmon alarms
+-for each sensor the PVT controller supports. The alarms functionality is made
+-compile-time configurable due to the hardware interface implementation
+-peculiarity, which is connected with an ability to convert data from only one
+-sensor at a time. Additional limitation is that the controller performs the
+-thresholds checking synchronously with the data conversion procedure. Due to
+-these in order to have the hwmon alarms automatically detected the driver code
+-must switch from one sensor to another, read converted data and manually check
+-the threshold status bits. Depending on the measurements timeout settings
+-(update_interval sysfs node value) this design may cause additional burden on
+-the system performance. So in case if alarms are unnecessary in your system
+-design it's recommended to have them disabled to prevent the PVT IRQs being
+-periodically raised to get the data cache/alarms status up to date. By default
+-in alarm-less configuration the data conversion is performed by the driver
+-on demand when read operation is requested via corresponding _input-file.
+-
+-Temperature Monitoring
+-----------------------
+-
+-Temperature is measured with 10-bit resolution and reported in millidegree
+-Celsius. The driver performs all the scaling by itself therefore reports true
+-temperatures that don't need any user-space adjustments. While the data
+-translation formulae isn't linear, which gives us non-linear discreteness,
+-it's close to one, but giving a bit better accuracy for higher temperatures.
+-The temperature input is mapped as follows (the last column indicates the input
+-ranges)::
+-
+-	temp1: CPU embedded diode	-48.38C - +147.438C
+-
+-In case if the alarms kernel config is enabled in the driver the temperature input
+-has associated min and max limits which trigger an alarm when crossed.
+-
+-Voltage Monitoring
+-------------------
+-
+-The voltage inputs are also sampled with 10-bit resolution and reported in
+-millivolts. But in this case the data translation formulae is linear, which
+-provides a constant measurements discreteness. The data scaling is also
+-performed by the driver, so returning true millivolts. The voltage inputs are
+-mapped as follows (the last column indicates the input ranges)::
+-
+-	in0: VDD		(processor core)		0.62V - 1.168V
+-	in1: Low-Vt		(low voltage threshold)		0.62V - 1.168V
+-	in2: High-Vt		(high voltage threshold)	0.62V - 1.168V
+-	in3: Standard-Vt	(standard voltage threshold)	0.62V - 1.168V
+-
+-In case if the alarms config is enabled in the driver the voltage inputs
+-have associated min and max limits which trigger an alarm when crossed.
+-
+-Sysfs Attributes
+-----------------
+-
+-Following is a list of all sysfs attributes that the driver provides, their
+-permissions and a short description:
+-
+-=============================== ======= =======================================
+-Name				Perm	Description
+-=============================== ======= =======================================
+-update_interval			RW	Measurements update interval per
+-					sensor.
+-temp1_type			RO	Sensor type (always 1 as CPU embedded
+-					diode).
+-temp1_label			RO	CPU Core Temperature sensor.
+-temp1_input			RO	Measured temperature in millidegree
+-					Celsius.
+-temp1_min			RW	Low limit for temp input.
+-temp1_max			RW	High limit for temp input.
+-temp1_min_alarm			RO	Temperature input alarm. Returns 1 if
+-					temperature input went below min limit,
+-					0 otherwise.
+-temp1_max_alarm			RO	Temperature input alarm. Returns 1 if
+-					temperature input went above max limit,
+-					0 otherwise.
+-temp1_offset			RW	Temperature offset in millidegree
+-					Celsius which is added to the
+-					temperature reading by the chip. It can
+-					be used to manually adjust the
+-					temperature measurements within 7.130
+-					degrees Celsius.
+-in[0-3]_label			RO	CPU Voltage sensor (either core or
+-					low/high/standard thresholds).
+-in[0-3]_input			RO	Measured voltage in millivolts.
+-in[0-3]_min			RW	Low limit for voltage input.
+-in[0-3]_max			RW	High limit for voltage input.
+-in[0-3]_min_alarm		RO	Voltage input alarm. Returns 1 if
+-					voltage input went below min limit,
+-					0 otherwise.
+-in[0-3]_max_alarm		RO	Voltage input alarm. Returns 1 if
+-					voltage input went above max limit,
+-					0 otherwise.
+-=============================== ======= =======================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index d91dbb20c7dc..d860de4a0b75 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -52,7 +52,6 @@ Hardware Monitoring Kernel Drivers
+    bcm54140
+    bel-pfe
+    bpa-rs600
+-   bt1-pvt
+    cgbc-hwmon
+    chipcap2
+    coretemp
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 41c381764c2b..03d393ff5955 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -457,32 +457,6 @@ config SENSORS_ATXP1
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called atxp1.
  
--Additional sysfs entries for ina226, ina230, ina231, ina260, and sy24655
--------------------------------------------------------------------------
-+Additional sysfs entries
-+------------------------
-+
-+Additional entries are available for the following chips:
-+
-+  * ina226
-+  * ina230
-+  * ina231
-+  * ina260
-+  * sy24655
- 
- ======================= ====================================================
- curr1_lcrit		Critical low current
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 69ac0468dee4..cd0d39ee7616 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -135,13 +135,19 @@ static const struct regmap_config ina2xx_regmap_config = {
- 	.writeable_reg = ina2xx_writeable_reg,
- };
- 
--enum ina2xx_ids { ina219, ina226, ina260, sy24655 };
-+enum ina2xx_ids {
-+	ina219,
-+	ina226,
-+	ina260,
-+	sy24655
-+};
- 
- struct ina2xx_config {
- 	u16 config_default;
- 	bool has_alerts;	/* chip supports alerts and limits */
- 	bool has_ishunt;	/* chip has internal shunt resistor */
--	bool has_power_average;	/* chip has internal shunt resistor */
-+	bool has_power_average;	/* chip supports average power */
-+	bool has_update_interval;
- 	int calibration_value;
- 	int shunt_div;
- 	int bus_voltage_shift;
-@@ -171,6 +177,7 @@ static const struct ina2xx_config ina2xx_config[] = {
- 		.has_alerts = false,
- 		.has_ishunt = false,
- 		.has_power_average = false,
-+		.has_update_interval = false,
- 	},
- 	[ina226] = {
- 		.config_default = INA226_CONFIG_DEFAULT,
-@@ -182,6 +189,7 @@ static const struct ina2xx_config ina2xx_config[] = {
- 		.has_alerts = true,
- 		.has_ishunt = false,
- 		.has_power_average = false,
-+		.has_update_interval = true,
- 	},
- 	[ina260] = {
- 		.config_default = INA260_CONFIG_DEFAULT,
-@@ -192,6 +200,7 @@ static const struct ina2xx_config ina2xx_config[] = {
- 		.has_alerts = true,
- 		.has_ishunt = true,
- 		.has_power_average = false,
-+		.has_update_interval = true,
- 	},
- 	[sy24655] = {
- 		.config_default = SY24655_CONFIG_DEFAULT,
-@@ -203,6 +212,7 @@ static const struct ina2xx_config ina2xx_config[] = {
- 		.has_alerts = true,
- 		.has_ishunt = false,
- 		.has_power_average = true,
-+		.has_update_interval = false,
- 	},
- };
- 
-@@ -706,7 +716,7 @@ static umode_t ina2xx_is_visible(const void *_data, enum hwmon_sensor_types type
- 	const struct ina2xx_data *data = _data;
- 	bool has_alerts = data->config->has_alerts;
- 	bool has_power_average = data->config->has_power_average;
--	enum ina2xx_ids chip = data->chip;
-+	bool has_update_interval = data->config->has_update_interval;
- 
- 	switch (type) {
- 	case hwmon_in:
-@@ -768,7 +778,7 @@ static umode_t ina2xx_is_visible(const void *_data, enum hwmon_sensor_types type
- 	case hwmon_chip:
- 		switch (attr) {
- 		case hwmon_chip_update_interval:
--			if (chip == ina226 || chip == ina260)
-+			if (has_update_interval)
- 				return 0644;
- 			break;
- 		default:
+-config SENSORS_BT1_PVT
+-	tristate "Baikal-T1 Process, Voltage, Temperature sensor driver"
+-	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
+-	select POLYNOMIAL
+-	help
+-	  If you say yes here you get support for Baikal-T1 PVT sensor
+-	  embedded into the SoC.
+-
+-	  This driver can also be built as a module. If so, the module will be
+-	  called bt1-pvt.
+-
+-config SENSORS_BT1_PVT_ALARMS
+-	bool "Enable Baikal-T1 PVT sensor alarms"
+-	depends on SENSORS_BT1_PVT
+-	help
+-	  Baikal-T1 PVT IP-block provides threshold registers for each
+-	  supported sensor. But the corresponding interrupts might be
+-	  generated by the thresholds comparator only in synchronization with
+-	  a data conversion. Additionally there is only one sensor data can
+-	  be converted at a time. All of these makes the interface impossible
+-	  to be used for the hwmon alarms implementation without periodic
+-	  switch between the PVT sensors. By default the data conversion is
+-	  performed on demand from the user-space. If this config is enabled
+-	  the data conversion will be periodically performed and the data will be
+-	  saved in the internal driver cache.
+-
+ config SENSORS_CGBC
+ 	tristate "Congatec Board Controller Sensors"
+ 	depends on MFD_CGBC
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index eade8e3b1bde..9d3659123ad5 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -58,7 +58,6 @@ obj-$(CONFIG_SENSORS_ASPEED_G6) += aspeed-g6-pwm-tach.o
+ obj-$(CONFIG_SENSORS_ASUS_ROG_RYUJIN)	+= asus_rog_ryujin.o
+ obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
+ obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+-obj-$(CONFIG_SENSORS_BT1_PVT)	+= bt1-pvt.o
+ obj-$(CONFIG_SENSORS_CGBC)	+= cgbc-hwmon.o
+ obj-$(CONFIG_SENSORS_CHIPCAP2) += chipcap2.o
+ obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
+deleted file mode 100644
+index b77ebac2e0ce..000000000000
+--- a/drivers/hwmon/bt1-pvt.c
++++ /dev/null
+@@ -1,1171 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+- *
+- * Authors:
+- *   Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>
+- *   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+- *
+- * Baikal-T1 Process, Voltage, Temperature sensor driver
+- */
+-
+-#include <linux/bitfield.h>
+-#include <linux/bitops.h>
+-#include <linux/clk.h>
+-#include <linux/completion.h>
+-#include <linux/delay.h>
+-#include <linux/device.h>
+-#include <linux/hwmon-sysfs.h>
+-#include <linux/hwmon.h>
+-#include <linux/interrupt.h>
+-#include <linux/io.h>
+-#include <linux/kernel.h>
+-#include <linux/ktime.h>
+-#include <linux/limits.h>
+-#include <linux/module.h>
+-#include <linux/mutex.h>
+-#include <linux/of.h>
+-#include <linux/platform_device.h>
+-#include <linux/polynomial.h>
+-#include <linux/seqlock.h>
+-#include <linux/sysfs.h>
+-#include <linux/types.h>
+-
+-#include "bt1-pvt.h"
+-
+-/*
+- * For the sake of the code simplification we created the sensors info table
+- * with the sensor names, activation modes, threshold registers base address
+- * and the thresholds bit fields.
+- */
+-static const struct pvt_sensor_info pvt_info[] = {
+-	PVT_SENSOR_INFO(0, "CPU Core Temperature", hwmon_temp, TEMP, TTHRES),
+-	PVT_SENSOR_INFO(0, "CPU Core Voltage", hwmon_in, VOLT, VTHRES),
+-	PVT_SENSOR_INFO(1, "CPU Core Low-Vt", hwmon_in, LVT, LTHRES),
+-	PVT_SENSOR_INFO(2, "CPU Core High-Vt", hwmon_in, HVT, HTHRES),
+-	PVT_SENSOR_INFO(3, "CPU Core Standard-Vt", hwmon_in, SVT, STHRES),
+-};
+-
+-/*
+- * The original translation formulae of the temperature (in degrees of Celsius)
+- * to PVT data and vice-versa are following:
+- * N = 1.8322e-8*(T^4) + 2.343e-5*(T^3) + 8.7018e-3*(T^2) + 3.9269*(T^1) +
+- *     1.7204e2,
+- * T = -1.6743e-11*(N^4) + 8.1542e-8*(N^3) + -1.8201e-4*(N^2) +
+- *     3.1020e-1*(N^1) - 4.838e1,
+- * where T = [-48.380, 147.438]C and N = [0, 1023].
+- * They must be accordingly altered to be suitable for the integer arithmetics.
+- * The technique is called 'factor redistribution', which just makes sure the
+- * multiplications and divisions are made so to have a result of the operations
+- * within the integer numbers limit. In addition we need to translate the
+- * formulae to accept millidegrees of Celsius. Here what they look like after
+- * the alterations:
+- * N = (18322e-20*(T^4) + 2343e-13*(T^3) + 87018e-9*(T^2) + 39269e-3*T +
+- *     17204e2) / 1e4,
+- * T = -16743e-12*(D^4) + 81542e-9*(D^3) - 182010e-6*(D^2) + 310200e-3*D -
+- *     48380,
+- * where T = [-48380, 147438] mC and N = [0, 1023].
+- */
+-static const struct polynomial __maybe_unused poly_temp_to_N = {
+-	.total_divider = 10000,
+-	.terms = {
+-		{4, 18322, 10000, 10000},
+-		{3, 2343, 10000, 10},
+-		{2, 87018, 10000, 10},
+-		{1, 39269, 1000, 1},
+-		{0, 1720400, 1, 1}
+-	}
+-};
+-
+-static const struct polynomial poly_N_to_temp = {
+-	.total_divider = 1,
+-	.terms = {
+-		{4, -16743, 1000, 1},
+-		{3, 81542, 1000, 1},
+-		{2, -182010, 1000, 1},
+-		{1, 310200, 1000, 1},
+-		{0, -48380, 1, 1}
+-	}
+-};
+-
+-/*
+- * Similar alterations are performed for the voltage conversion equations.
+- * The original formulae are:
+- * N = 1.8658e3*V - 1.1572e3,
+- * V = (N + 1.1572e3) / 1.8658e3,
+- * where V = [0.620, 1.168] V and N = [0, 1023].
+- * After the optimization they looks as follows:
+- * N = (18658e-3*V - 11572) / 10,
+- * V = N * 10^5 / 18658 + 11572 * 10^4 / 18658.
+- */
+-static const struct polynomial __maybe_unused poly_volt_to_N = {
+-	.total_divider = 10,
+-	.terms = {
+-		{1, 18658, 1000, 1},
+-		{0, -11572, 1, 1}
+-	}
+-};
+-
+-static const struct polynomial poly_N_to_volt = {
+-	.total_divider = 10,
+-	.terms = {
+-		{1, 100000, 18658, 1},
+-		{0, 115720000, 1, 18658}
+-	}
+-};
+-
+-static inline u32 pvt_update(void __iomem *reg, u32 mask, u32 data)
+-{
+-	u32 old;
+-
+-	old = readl_relaxed(reg);
+-	writel((old & ~mask) | (data & mask), reg);
+-
+-	return old & mask;
+-}
+-
+-/*
+- * Baikal-T1 PVT mode can be updated only when the controller is disabled.
+- * So first we disable it, then set the new mode together with the controller
+- * getting back enabled. The same concerns the temperature trim and
+- * measurements timeout. If it is necessary the interface mutex is supposed
+- * to be locked at the time the operations are performed.
+- */
+-static inline void pvt_set_mode(struct pvt_hwmon *pvt, u32 mode)
+-{
+-	u32 old;
+-
+-	mode = FIELD_PREP(PVT_CTRL_MODE_MASK, mode);
+-
+-	old = pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_MODE_MASK | PVT_CTRL_EN,
+-		   mode | old);
+-}
+-
+-static inline u32 pvt_calc_trim(long temp)
+-{
+-	temp = clamp_val(temp, 0, PVT_TRIM_TEMP);
+-
+-	return DIV_ROUND_UP(temp, PVT_TRIM_STEP);
+-}
+-
+-static inline void pvt_set_trim(struct pvt_hwmon *pvt, u32 trim)
+-{
+-	u32 old;
+-
+-	trim = FIELD_PREP(PVT_CTRL_TRIM_MASK, trim);
+-
+-	old = pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_TRIM_MASK | PVT_CTRL_EN,
+-		   trim | old);
+-}
+-
+-static inline void pvt_set_tout(struct pvt_hwmon *pvt, u32 tout)
+-{
+-	u32 old;
+-
+-	old = pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	writel(tout, pvt->regs + PVT_TTIMEOUT);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, old);
+-}
+-
+-/*
+- * This driver can optionally provide the hwmon alarms for each sensor the PVT
+- * controller supports. The alarms functionality is made compile-time
+- * configurable due to the hardware interface implementation peculiarity
+- * described further in this comment. So in case if alarms are unnecessary in
+- * your system design it's recommended to have them disabled to prevent the PVT
+- * IRQs being periodically raised to get the data cache/alarms status up to
+- * date.
+- *
+- * Baikal-T1 PVT embedded controller is based on the Analog Bits PVT sensor,
+- * but is equipped with a dedicated control wrapper. It exposes the PVT
+- * sub-block registers space via the APB3 bus. In addition the wrapper provides
+- * a common interrupt vector of the sensors conversion completion events and
+- * threshold value alarms. Alas the wrapper interface hasn't been fully thought
+- * through. There is only one sensor can be activated at a time, for which the
+- * thresholds comparator is enabled right after the data conversion is
+- * completed. Due to this if alarms need to be implemented for all available
+- * sensors we can't just set the thresholds and enable the interrupts. We need
+- * to enable the sensors one after another and let the controller to detect
+- * the alarms by itself at each conversion. This also makes pointless to handle
+- * the alarms interrupts, since in occasion they happen synchronously with
+- * data conversion completion. The best driver design would be to have the
+- * completion interrupts enabled only and keep the converted value in the
+- * driver data cache. This solution is implemented if hwmon alarms are enabled
+- * in this driver. In case if the alarms are disabled, the conversion is
+- * performed on demand at the time a sensors input file is read.
+- */
+-
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-
+-#define pvt_hard_isr NULL
+-
+-static irqreturn_t pvt_soft_isr(int irq, void *data)
+-{
+-	const struct pvt_sensor_info *info;
+-	struct pvt_hwmon *pvt = data;
+-	struct pvt_cache *cache;
+-	u32 val, thres_sts, old;
+-
+-	/*
+-	 * DVALID bit will be cleared by reading the data. We need to save the
+-	 * status before the next conversion happens. Threshold events will be
+-	 * handled a bit later.
+-	 */
+-	thres_sts = readl(pvt->regs + PVT_RAW_INTR_STAT);
+-
+-	/*
+-	 * Then lets recharge the PVT interface with the next sampling mode.
+-	 * Lock the interface mutex to serialize trim, timeouts and alarm
+-	 * thresholds settings.
+-	 */
+-	cache = &pvt->cache[pvt->sensor];
+-	info = &pvt_info[pvt->sensor];
+-	pvt->sensor = (pvt->sensor == PVT_SENSOR_LAST) ?
+-		      PVT_SENSOR_FIRST : (pvt->sensor + 1);
+-
+-	/*
+-	 * For some reason we have to mask the interrupt before changing the
+-	 * mode, otherwise sometimes the temperature mode doesn't get
+-	 * activated even though the actual mode in the ctrl register
+-	 * corresponds to one. Then we read the data. By doing so we also
+-	 * recharge the data conversion. After this the mode corresponding
+-	 * to the next sensor in the row is set. Finally we enable the
+-	 * interrupts back.
+-	 */
+-	mutex_lock(&pvt->iface_mtx);
+-
+-	old = pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID,
+-			 PVT_INTR_DVALID);
+-
+-	val = readl(pvt->regs + PVT_DATA);
+-
+-	pvt_set_mode(pvt, pvt_info[pvt->sensor].mode);
+-
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID, old);
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	/*
+-	 * We can now update the data cache with data just retrieved from the
+-	 * sensor. Lock write-seqlock to make sure the reader has a coherent
+-	 * data.
+-	 */
+-	write_seqlock(&cache->data_seqlock);
+-
+-	cache->data = FIELD_GET(PVT_DATA_DATA_MASK, val);
+-
+-	write_sequnlock(&cache->data_seqlock);
+-
+-	/*
+-	 * While PVT core is doing the next mode data conversion, we'll check
+-	 * whether the alarms were triggered for the current sensor. Note that
+-	 * according to the documentation only one threshold IRQ status can be
+-	 * set at a time, that's why if-else statement is utilized.
+-	 */
+-	if ((thres_sts & info->thres_sts_lo) ^ cache->thres_sts_lo) {
+-		WRITE_ONCE(cache->thres_sts_lo, thres_sts & info->thres_sts_lo);
+-		hwmon_notify_event(pvt->hwmon, info->type, info->attr_min_alarm,
+-				   info->channel);
+-	} else if ((thres_sts & info->thres_sts_hi) ^ cache->thres_sts_hi) {
+-		WRITE_ONCE(cache->thres_sts_hi, thres_sts & info->thres_sts_hi);
+-		hwmon_notify_event(pvt->hwmon, info->type, info->attr_max_alarm,
+-				   info->channel);
+-	}
+-
+-	return IRQ_HANDLED;
+-}
+-
+-static inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
+-{
+-	return 0644;
+-}
+-
+-static inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
+-{
+-	return 0444;
+-}
+-
+-static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			 long *val)
+-{
+-	struct pvt_cache *cache = &pvt->cache[type];
+-	unsigned int seq;
+-	u32 data;
+-
+-	do {
+-		seq = read_seqbegin(&cache->data_seqlock);
+-		data = cache->data;
+-	} while (read_seqretry(&cache->data_seqlock, seq));
+-
+-	if (type == PVT_TEMP)
+-		*val = polynomial_calc(&poly_N_to_temp, data);
+-	else
+-		*val = polynomial_calc(&poly_N_to_volt, data);
+-
+-	return 0;
+-}
+-
+-static int pvt_read_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			  bool is_low, long *val)
+-{
+-	u32 data;
+-
+-	/* No need in serialization, since it is just read from MMIO. */
+-	data = readl(pvt->regs + pvt_info[type].thres_base);
+-
+-	if (is_low)
+-		data = FIELD_GET(PVT_THRES_LO_MASK, data);
+-	else
+-		data = FIELD_GET(PVT_THRES_HI_MASK, data);
+-
+-	if (type == PVT_TEMP)
+-		*val = polynomial_calc(&poly_N_to_temp, data);
+-	else
+-		*val = polynomial_calc(&poly_N_to_volt, data);
+-
+-	return 0;
+-}
+-
+-static int pvt_write_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			   bool is_low, long val)
+-{
+-	u32 data, limit, mask;
+-	int ret;
+-
+-	if (type == PVT_TEMP) {
+-		val = clamp(val, PVT_TEMP_MIN, PVT_TEMP_MAX);
+-		data = polynomial_calc(&poly_temp_to_N, val);
+-	} else {
+-		val = clamp(val, PVT_VOLT_MIN, PVT_VOLT_MAX);
+-		data = polynomial_calc(&poly_volt_to_N, val);
+-	}
+-
+-	/* Serialize limit update, since a part of the register is changed. */
+-	ret = mutex_lock_interruptible(&pvt->iface_mtx);
+-	if (ret)
+-		return ret;
+-
+-	/* Make sure the upper and lower ranges don't intersect. */
+-	limit = readl(pvt->regs + pvt_info[type].thres_base);
+-	if (is_low) {
+-		limit = FIELD_GET(PVT_THRES_HI_MASK, limit);
+-		data = clamp_val(data, PVT_DATA_MIN, limit);
+-		data = FIELD_PREP(PVT_THRES_LO_MASK, data);
+-		mask = PVT_THRES_LO_MASK;
+-	} else {
+-		limit = FIELD_GET(PVT_THRES_LO_MASK, limit);
+-		data = clamp_val(data, limit, PVT_DATA_MAX);
+-		data = FIELD_PREP(PVT_THRES_HI_MASK, data);
+-		mask = PVT_THRES_HI_MASK;
+-	}
+-
+-	pvt_update(pvt->regs + pvt_info[type].thres_base, mask, data);
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	return 0;
+-}
+-
+-static int pvt_read_alarm(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			  bool is_low, long *val)
+-{
+-	if (is_low)
+-		*val = !!READ_ONCE(pvt->cache[type].thres_sts_lo);
+-	else
+-		*val = !!READ_ONCE(pvt->cache[type].thres_sts_hi);
+-
+-	return 0;
+-}
+-
+-static const struct hwmon_channel_info * const pvt_channel_info[] = {
+-	HWMON_CHANNEL_INFO(chip,
+-			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+-	HWMON_CHANNEL_INFO(temp,
+-			   HWMON_T_INPUT | HWMON_T_TYPE | HWMON_T_LABEL |
+-			   HWMON_T_MIN | HWMON_T_MIN_ALARM |
+-			   HWMON_T_MAX | HWMON_T_MAX_ALARM |
+-			   HWMON_T_OFFSET),
+-	HWMON_CHANNEL_INFO(in,
+-			   HWMON_I_INPUT | HWMON_I_LABEL |
+-			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
+-			   HWMON_I_MAX | HWMON_I_MAX_ALARM,
+-			   HWMON_I_INPUT | HWMON_I_LABEL |
+-			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
+-			   HWMON_I_MAX | HWMON_I_MAX_ALARM,
+-			   HWMON_I_INPUT | HWMON_I_LABEL |
+-			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
+-			   HWMON_I_MAX | HWMON_I_MAX_ALARM,
+-			   HWMON_I_INPUT | HWMON_I_LABEL |
+-			   HWMON_I_MIN | HWMON_I_MIN_ALARM |
+-			   HWMON_I_MAX | HWMON_I_MAX_ALARM),
+-	NULL
+-};
+-
+-#else /* !CONFIG_SENSORS_BT1_PVT_ALARMS */
+-
+-static irqreturn_t pvt_hard_isr(int irq, void *data)
+-{
+-	struct pvt_hwmon *pvt = data;
+-	struct pvt_cache *cache;
+-	u32 val;
+-
+-	/*
+-	 * Mask the DVALID interrupt so after exiting from the handler a
+-	 * repeated conversion wouldn't happen.
+-	 */
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID,
+-		   PVT_INTR_DVALID);
+-
+-	/*
+-	 * Nothing special for alarm-less driver. Just read the data, update
+-	 * the cache and notify a waiter of this event.
+-	 */
+-	val = readl(pvt->regs + PVT_DATA);
+-	if (!(val & PVT_DATA_VALID)) {
+-		dev_err(pvt->dev, "Got IRQ when data isn't valid\n");
+-		return IRQ_HANDLED;
+-	}
+-
+-	cache = &pvt->cache[pvt->sensor];
+-
+-	WRITE_ONCE(cache->data, FIELD_GET(PVT_DATA_DATA_MASK, val));
+-
+-	complete(&cache->conversion);
+-
+-	return IRQ_HANDLED;
+-}
+-
+-#define pvt_soft_isr NULL
+-
+-static inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
+-{
+-	return 0;
+-}
+-
+-static inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
+-{
+-	return 0;
+-}
+-
+-static int pvt_read_data(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			 long *val)
+-{
+-	struct pvt_cache *cache = &pvt->cache[type];
+-	unsigned long timeout;
+-	u32 data;
+-	int ret;
+-
+-	/*
+-	 * Lock PVT conversion interface until data cache is updated. The
+-	 * data read procedure is following: set the requested PVT sensor
+-	 * mode, enable IRQ and conversion, wait until conversion is finished,
+-	 * then disable conversion and IRQ, and read the cached data.
+-	 */
+-	ret = mutex_lock_interruptible(&pvt->iface_mtx);
+-	if (ret)
+-		return ret;
+-
+-	pvt->sensor = type;
+-	pvt_set_mode(pvt, pvt_info[type].mode);
+-
+-	/*
+-	 * Unmask the DVALID interrupt and enable the sensors conversions.
+-	 * Do the reverse procedure when conversion is done.
+-	 */
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID, 0);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, PVT_CTRL_EN);
+-
+-	/*
+-	 * Wait with timeout since in case if the sensor is suddenly powered
+-	 * down the request won't be completed and the caller will hang up on
+-	 * this procedure until the power is back up again. Multiply the
+-	 * timeout by the factor of two to prevent a false timeout.
+-	 */
+-	timeout = 2 * usecs_to_jiffies(ktime_to_us(pvt->timeout));
+-	ret = wait_for_completion_timeout(&cache->conversion, timeout);
+-
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID,
+-		   PVT_INTR_DVALID);
+-
+-	data = READ_ONCE(cache->data);
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	if (!ret)
+-		return -ETIMEDOUT;
+-
+-	if (type == PVT_TEMP)
+-		*val = polynomial_calc(&poly_N_to_temp, data);
+-	else
+-		*val = polynomial_calc(&poly_N_to_volt, data);
+-
+-	return 0;
+-}
+-
+-static int pvt_read_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			  bool is_low, long *val)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int pvt_write_limit(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			   bool is_low, long val)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static int pvt_read_alarm(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+-			  bool is_low, long *val)
+-{
+-	return -EOPNOTSUPP;
+-}
+-
+-static const struct hwmon_channel_info * const pvt_channel_info[] = {
+-	HWMON_CHANNEL_INFO(chip,
+-			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+-	HWMON_CHANNEL_INFO(temp,
+-			   HWMON_T_INPUT | HWMON_T_TYPE | HWMON_T_LABEL |
+-			   HWMON_T_OFFSET),
+-	HWMON_CHANNEL_INFO(in,
+-			   HWMON_I_INPUT | HWMON_I_LABEL,
+-			   HWMON_I_INPUT | HWMON_I_LABEL,
+-			   HWMON_I_INPUT | HWMON_I_LABEL,
+-			   HWMON_I_INPUT | HWMON_I_LABEL),
+-	NULL
+-};
+-
+-#endif /* !CONFIG_SENSORS_BT1_PVT_ALARMS */
+-
+-static inline bool pvt_hwmon_channel_is_valid(enum hwmon_sensor_types type,
+-					      int ch)
+-{
+-	switch (type) {
+-	case hwmon_temp:
+-		if (ch < 0 || ch >= PVT_TEMP_CHS)
+-			return false;
+-		break;
+-	case hwmon_in:
+-		if (ch < 0 || ch >= PVT_VOLT_CHS)
+-			return false;
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	/* The rest of the types are independent from the channel number. */
+-	return true;
+-}
+-
+-static umode_t pvt_hwmon_is_visible(const void *data,
+-				    enum hwmon_sensor_types type,
+-				    u32 attr, int ch)
+-{
+-	if (!pvt_hwmon_channel_is_valid(type, ch))
+-		return 0;
+-
+-	switch (type) {
+-	case hwmon_chip:
+-		switch (attr) {
+-		case hwmon_chip_update_interval:
+-			return 0644;
+-		}
+-		break;
+-	case hwmon_temp:
+-		switch (attr) {
+-		case hwmon_temp_input:
+-		case hwmon_temp_type:
+-		case hwmon_temp_label:
+-			return 0444;
+-		case hwmon_temp_min:
+-		case hwmon_temp_max:
+-			return pvt_limit_is_visible(ch);
+-		case hwmon_temp_min_alarm:
+-		case hwmon_temp_max_alarm:
+-			return pvt_alarm_is_visible(ch);
+-		case hwmon_temp_offset:
+-			return 0644;
+-		}
+-		break;
+-	case hwmon_in:
+-		switch (attr) {
+-		case hwmon_in_input:
+-		case hwmon_in_label:
+-			return 0444;
+-		case hwmon_in_min:
+-		case hwmon_in_max:
+-			return pvt_limit_is_visible(PVT_VOLT + ch);
+-		case hwmon_in_min_alarm:
+-		case hwmon_in_max_alarm:
+-			return pvt_alarm_is_visible(PVT_VOLT + ch);
+-		}
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	return 0;
+-}
+-
+-static int pvt_read_trim(struct pvt_hwmon *pvt, long *val)
+-{
+-	u32 data;
+-
+-	data = readl(pvt->regs + PVT_CTRL);
+-	*val = FIELD_GET(PVT_CTRL_TRIM_MASK, data) * PVT_TRIM_STEP;
+-
+-	return 0;
+-}
+-
+-static int pvt_write_trim(struct pvt_hwmon *pvt, long val)
+-{
+-	u32 trim;
+-	int ret;
+-
+-	/*
+-	 * Serialize trim update, since a part of the register is changed and
+-	 * the controller is supposed to be disabled during this operation.
+-	 */
+-	ret = mutex_lock_interruptible(&pvt->iface_mtx);
+-	if (ret)
+-		return ret;
+-
+-	trim = pvt_calc_trim(val);
+-	pvt_set_trim(pvt, trim);
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	return 0;
+-}
+-
+-static int pvt_read_timeout(struct pvt_hwmon *pvt, long *val)
+-{
+-	int ret;
+-
+-	ret = mutex_lock_interruptible(&pvt->iface_mtx);
+-	if (ret)
+-		return ret;
+-
+-	/* Return the result in msec as hwmon sysfs interface requires. */
+-	*val = ktime_to_ms(pvt->timeout);
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	return 0;
+-}
+-
+-static int pvt_write_timeout(struct pvt_hwmon *pvt, long val)
+-{
+-	unsigned long rate;
+-	ktime_t kt, cache;
+-	u32 data;
+-	int ret;
+-
+-	rate = clk_get_rate(pvt->clks[PVT_CLOCK_REF].clk);
+-	if (!rate)
+-		return -ENODEV;
+-
+-	/*
+-	 * If alarms are enabled, the requested timeout must be divided
+-	 * between all available sensors to have the requested delay
+-	 * applicable to each individual sensor.
+-	 */
+-	cache = kt = ms_to_ktime(val);
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-	kt = ktime_divns(kt, PVT_SENSORS_NUM);
+-#endif
+-
+-	/*
+-	 * Subtract a constant lag, which always persists due to the limited
+-	 * PVT sampling rate. Make sure the timeout is not negative.
+-	 */
+-	kt = ktime_sub_ns(kt, PVT_TOUT_MIN);
+-	if (ktime_to_ns(kt) < 0)
+-		kt = ktime_set(0, 0);
+-
+-	/*
+-	 * Finally recalculate the timeout in terms of the reference clock
+-	 * period.
+-	 */
+-	data = ktime_divns(kt * rate, NSEC_PER_SEC);
+-
+-	/*
+-	 * Update the measurements delay, but lock the interface first, since
+-	 * we have to disable PVT in order to have the new delay actually
+-	 * updated.
+-	 */
+-	ret = mutex_lock_interruptible(&pvt->iface_mtx);
+-	if (ret)
+-		return ret;
+-
+-	pvt_set_tout(pvt, data);
+-	pvt->timeout = cache;
+-
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	return 0;
+-}
+-
+-static int pvt_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+-			  u32 attr, int ch, long *val)
+-{
+-	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
+-
+-	if (!pvt_hwmon_channel_is_valid(type, ch))
+-		return -EINVAL;
+-
+-	switch (type) {
+-	case hwmon_chip:
+-		switch (attr) {
+-		case hwmon_chip_update_interval:
+-			return pvt_read_timeout(pvt, val);
+-		}
+-		break;
+-	case hwmon_temp:
+-		switch (attr) {
+-		case hwmon_temp_input:
+-			return pvt_read_data(pvt, ch, val);
+-		case hwmon_temp_type:
+-			*val = 1;
+-			return 0;
+-		case hwmon_temp_min:
+-			return pvt_read_limit(pvt, ch, true, val);
+-		case hwmon_temp_max:
+-			return pvt_read_limit(pvt, ch, false, val);
+-		case hwmon_temp_min_alarm:
+-			return pvt_read_alarm(pvt, ch, true, val);
+-		case hwmon_temp_max_alarm:
+-			return pvt_read_alarm(pvt, ch, false, val);
+-		case hwmon_temp_offset:
+-			return pvt_read_trim(pvt, val);
+-		}
+-		break;
+-	case hwmon_in:
+-		switch (attr) {
+-		case hwmon_in_input:
+-			return pvt_read_data(pvt, PVT_VOLT + ch, val);
+-		case hwmon_in_min:
+-			return pvt_read_limit(pvt, PVT_VOLT + ch, true, val);
+-		case hwmon_in_max:
+-			return pvt_read_limit(pvt, PVT_VOLT + ch, false, val);
+-		case hwmon_in_min_alarm:
+-			return pvt_read_alarm(pvt, PVT_VOLT + ch, true, val);
+-		case hwmon_in_max_alarm:
+-			return pvt_read_alarm(pvt, PVT_VOLT + ch, false, val);
+-		}
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	return -EOPNOTSUPP;
+-}
+-
+-static int pvt_hwmon_read_string(struct device *dev,
+-				 enum hwmon_sensor_types type,
+-				 u32 attr, int ch, const char **str)
+-{
+-	if (!pvt_hwmon_channel_is_valid(type, ch))
+-		return -EINVAL;
+-
+-	switch (type) {
+-	case hwmon_temp:
+-		switch (attr) {
+-		case hwmon_temp_label:
+-			*str = pvt_info[ch].label;
+-			return 0;
+-		}
+-		break;
+-	case hwmon_in:
+-		switch (attr) {
+-		case hwmon_in_label:
+-			*str = pvt_info[PVT_VOLT + ch].label;
+-			return 0;
+-		}
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	return -EOPNOTSUPP;
+-}
+-
+-static int pvt_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+-			   u32 attr, int ch, long val)
+-{
+-	struct pvt_hwmon *pvt = dev_get_drvdata(dev);
+-
+-	if (!pvt_hwmon_channel_is_valid(type, ch))
+-		return -EINVAL;
+-
+-	switch (type) {
+-	case hwmon_chip:
+-		switch (attr) {
+-		case hwmon_chip_update_interval:
+-			return pvt_write_timeout(pvt, val);
+-		}
+-		break;
+-	case hwmon_temp:
+-		switch (attr) {
+-		case hwmon_temp_min:
+-			return pvt_write_limit(pvt, ch, true, val);
+-		case hwmon_temp_max:
+-			return pvt_write_limit(pvt, ch, false, val);
+-		case hwmon_temp_offset:
+-			return pvt_write_trim(pvt, val);
+-		}
+-		break;
+-	case hwmon_in:
+-		switch (attr) {
+-		case hwmon_in_min:
+-			return pvt_write_limit(pvt, PVT_VOLT + ch, true, val);
+-		case hwmon_in_max:
+-			return pvt_write_limit(pvt, PVT_VOLT + ch, false, val);
+-		}
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	return -EOPNOTSUPP;
+-}
+-
+-static const struct hwmon_ops pvt_hwmon_ops = {
+-	.is_visible = pvt_hwmon_is_visible,
+-	.read = pvt_hwmon_read,
+-	.read_string = pvt_hwmon_read_string,
+-	.write = pvt_hwmon_write
+-};
+-
+-static const struct hwmon_chip_info pvt_hwmon_info = {
+-	.ops = &pvt_hwmon_ops,
+-	.info = pvt_channel_info
+-};
+-
+-static void pvt_clear_data(void *data)
+-{
+-	struct pvt_hwmon *pvt = data;
+-#if !defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-	int idx;
+-
+-	for (idx = 0; idx < PVT_SENSORS_NUM; ++idx)
+-		complete_all(&pvt->cache[idx].conversion);
+-#endif
+-
+-	mutex_destroy(&pvt->iface_mtx);
+-}
+-
+-static struct pvt_hwmon *pvt_create_data(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct pvt_hwmon *pvt;
+-	int ret, idx;
+-
+-	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
+-	if (!pvt)
+-		return ERR_PTR(-ENOMEM);
+-
+-	ret = devm_add_action(dev, pvt_clear_data, pvt);
+-	if (ret) {
+-		dev_err(dev, "Can't add PVT data clear action\n");
+-		return ERR_PTR(ret);
+-	}
+-
+-	pvt->dev = dev;
+-	pvt->sensor = PVT_SENSOR_FIRST;
+-	mutex_init(&pvt->iface_mtx);
+-
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-	for (idx = 0; idx < PVT_SENSORS_NUM; ++idx)
+-		seqlock_init(&pvt->cache[idx].data_seqlock);
+-#else
+-	for (idx = 0; idx < PVT_SENSORS_NUM; ++idx)
+-		init_completion(&pvt->cache[idx].conversion);
+-#endif
+-
+-	return pvt;
+-}
+-
+-static int pvt_request_regs(struct pvt_hwmon *pvt)
+-{
+-	struct platform_device *pdev = to_platform_device(pvt->dev);
+-
+-	pvt->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(pvt->regs))
+-		return PTR_ERR(pvt->regs);
+-
+-	return 0;
+-}
+-
+-static void pvt_disable_clks(void *data)
+-{
+-	struct pvt_hwmon *pvt = data;
+-
+-	clk_bulk_disable_unprepare(PVT_CLOCK_NUM, pvt->clks);
+-}
+-
+-static int pvt_request_clks(struct pvt_hwmon *pvt)
+-{
+-	int ret;
+-
+-	pvt->clks[PVT_CLOCK_APB].id = "pclk";
+-	pvt->clks[PVT_CLOCK_REF].id = "ref";
+-
+-	ret = devm_clk_bulk_get(pvt->dev, PVT_CLOCK_NUM, pvt->clks);
+-	if (ret) {
+-		dev_err(pvt->dev, "Couldn't get PVT clocks descriptors\n");
+-		return ret;
+-	}
+-
+-	ret = clk_bulk_prepare_enable(PVT_CLOCK_NUM, pvt->clks);
+-	if (ret) {
+-		dev_err(pvt->dev, "Couldn't enable the PVT clocks\n");
+-		return ret;
+-	}
+-
+-	ret = devm_add_action_or_reset(pvt->dev, pvt_disable_clks, pvt);
+-	if (ret) {
+-		dev_err(pvt->dev, "Can't add PVT clocks disable action\n");
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-static int pvt_check_pwr(struct pvt_hwmon *pvt)
+-{
+-	unsigned long tout;
+-	int ret = 0;
+-	u32 data;
+-
+-	/*
+-	 * Test out the sensor conversion functionality. If it is not done on
+-	 * time then the domain must have been unpowered and we won't be able
+-	 * to use the device later in this driver.
+-	 * Note If the power source is lost during the normal driver work the
+-	 * data read procedure will either return -ETIMEDOUT (for the
+-	 * alarm-less driver configuration) or just stop the repeated
+-	 * conversion. In the later case alas we won't be able to detect the
+-	 * problem.
+-	 */
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_ALL, PVT_INTR_ALL);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, PVT_CTRL_EN);
+-	pvt_set_tout(pvt, 0);
+-	readl(pvt->regs + PVT_DATA);
+-
+-	tout = PVT_TOUT_MIN / NSEC_PER_USEC;
+-	usleep_range(tout, 2 * tout);
+-
+-	data = readl(pvt->regs + PVT_DATA);
+-	if (!(data & PVT_DATA_VALID)) {
+-		ret = -ENODEV;
+-		dev_err(pvt->dev, "Sensor is powered down\n");
+-	}
+-
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-
+-	return ret;
+-}
+-
+-static int pvt_init_iface(struct pvt_hwmon *pvt)
+-{
+-	unsigned long rate;
+-	u32 trim, temp;
+-
+-	rate = clk_get_rate(pvt->clks[PVT_CLOCK_REF].clk);
+-	if (!rate) {
+-		dev_err(pvt->dev, "Invalid reference clock rate\n");
+-		return -ENODEV;
+-	}
+-
+-	/*
+-	 * Make sure all interrupts and controller are disabled so not to
+-	 * accidentally have ISR executed before the driver data is fully
+-	 * initialized. Clear the IRQ status as well.
+-	 */
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_ALL, PVT_INTR_ALL);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	readl(pvt->regs + PVT_CLR_INTR);
+-	readl(pvt->regs + PVT_DATA);
+-
+-	/* Setup default sensor mode, timeout and temperature trim. */
+-	pvt_set_mode(pvt, pvt_info[pvt->sensor].mode);
+-	pvt_set_tout(pvt, PVT_TOUT_DEF);
+-
+-	/*
+-	 * Preserve the current ref-clock based delay (Ttotal) between the
+-	 * sensors data samples in the driver data so not to recalculate it
+-	 * each time on the data requests and timeout reads. It consists of the
+-	 * delay introduced by the internal ref-clock timer (N / Fclk) and the
+-	 * constant timeout caused by each conversion latency (Tmin):
+-	 *   Ttotal = N / Fclk + Tmin
+-	 * If alarms are enabled the sensors are polled one after another and
+-	 * in order to get the next measurement of a particular sensor the
+-	 * caller will have to wait for at most until all the others are
+-	 * polled. In that case the formulae will look a bit different:
+-	 *   Ttotal = 5 * (N / Fclk + Tmin)
+-	 */
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-	pvt->timeout = ktime_set(PVT_SENSORS_NUM * PVT_TOUT_DEF, 0);
+-	pvt->timeout = ktime_divns(pvt->timeout, rate);
+-	pvt->timeout = ktime_add_ns(pvt->timeout, PVT_SENSORS_NUM * PVT_TOUT_MIN);
+-#else
+-	pvt->timeout = ktime_set(PVT_TOUT_DEF, 0);
+-	pvt->timeout = ktime_divns(pvt->timeout, rate);
+-	pvt->timeout = ktime_add_ns(pvt->timeout, PVT_TOUT_MIN);
+-#endif
+-
+-	trim = PVT_TRIM_DEF;
+-	if (!of_property_read_u32(pvt->dev->of_node,
+-	     "baikal,pvt-temp-offset-millicelsius", &temp))
+-		trim = pvt_calc_trim(temp);
+-
+-	pvt_set_trim(pvt, trim);
+-
+-	return 0;
+-}
+-
+-static int pvt_request_irq(struct pvt_hwmon *pvt)
+-{
+-	struct platform_device *pdev = to_platform_device(pvt->dev);
+-	int ret;
+-
+-	pvt->irq = platform_get_irq(pdev, 0);
+-	if (pvt->irq < 0)
+-		return pvt->irq;
+-
+-	ret = devm_request_threaded_irq(pvt->dev, pvt->irq,
+-					pvt_hard_isr, pvt_soft_isr,
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-					IRQF_SHARED | IRQF_TRIGGER_HIGH |
+-					IRQF_ONESHOT,
+-#else
+-					IRQF_SHARED | IRQF_TRIGGER_HIGH,
+-#endif
+-					"pvt", pvt);
+-	if (ret) {
+-		dev_err(pvt->dev, "Couldn't request PVT IRQ\n");
+-		return ret;
+-	}
+-
+-	return 0;
+-}
+-
+-static int pvt_create_hwmon(struct pvt_hwmon *pvt)
+-{
+-	pvt->hwmon = devm_hwmon_device_register_with_info(pvt->dev, "pvt", pvt,
+-		&pvt_hwmon_info, NULL);
+-	if (IS_ERR(pvt->hwmon)) {
+-		dev_err(pvt->dev, "Couldn't create hwmon device\n");
+-		return PTR_ERR(pvt->hwmon);
+-	}
+-
+-	return 0;
+-}
+-
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-
+-static void pvt_disable_iface(void *data)
+-{
+-	struct pvt_hwmon *pvt = data;
+-
+-	mutex_lock(&pvt->iface_mtx);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, 0);
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID,
+-		   PVT_INTR_DVALID);
+-	mutex_unlock(&pvt->iface_mtx);
+-}
+-
+-static int pvt_enable_iface(struct pvt_hwmon *pvt)
+-{
+-	int ret;
+-
+-	ret = devm_add_action(pvt->dev, pvt_disable_iface, pvt);
+-	if (ret) {
+-		dev_err(pvt->dev, "Can't add PVT disable interface action\n");
+-		return ret;
+-	}
+-
+-	/*
+-	 * Enable sensors data conversion and IRQ. We need to lock the
+-	 * interface mutex since hwmon has just been created and the
+-	 * corresponding sysfs files are accessible from user-space,
+-	 * which theoretically may cause races.
+-	 */
+-	mutex_lock(&pvt->iface_mtx);
+-	pvt_update(pvt->regs + PVT_INTR_MASK, PVT_INTR_DVALID, 0);
+-	pvt_update(pvt->regs + PVT_CTRL, PVT_CTRL_EN, PVT_CTRL_EN);
+-	mutex_unlock(&pvt->iface_mtx);
+-
+-	return 0;
+-}
+-
+-#else /* !CONFIG_SENSORS_BT1_PVT_ALARMS */
+-
+-static int pvt_enable_iface(struct pvt_hwmon *pvt)
+-{
+-	return 0;
+-}
+-
+-#endif /* !CONFIG_SENSORS_BT1_PVT_ALARMS */
+-
+-static int pvt_probe(struct platform_device *pdev)
+-{
+-	struct pvt_hwmon *pvt;
+-	int ret;
+-
+-	pvt = pvt_create_data(pdev);
+-	if (IS_ERR(pvt))
+-		return PTR_ERR(pvt);
+-
+-	ret = pvt_request_regs(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_request_clks(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_check_pwr(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_init_iface(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_request_irq(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_create_hwmon(pvt);
+-	if (ret)
+-		return ret;
+-
+-	ret = pvt_enable_iface(pvt);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
+-}
+-
+-static const struct of_device_id pvt_of_match[] = {
+-	{ .compatible = "baikal,bt1-pvt" },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(of, pvt_of_match);
+-
+-static struct platform_driver pvt_driver = {
+-	.probe = pvt_probe,
+-	.driver = {
+-		.name = "bt1-pvt",
+-		.of_match_table = pvt_of_match
+-	}
+-};
+-module_platform_driver(pvt_driver);
+-
+-MODULE_AUTHOR("Maxim Kaurkin <maxim.kaurkin@baikalelectronics.ru>");
+-MODULE_DESCRIPTION("Baikal-T1 PVT driver");
+-MODULE_LICENSE("GPL v2");
+diff --git a/drivers/hwmon/bt1-pvt.h b/drivers/hwmon/bt1-pvt.h
+deleted file mode 100644
+index 93b8dd5e7c94..000000000000
+--- a/drivers/hwmon/bt1-pvt.h
++++ /dev/null
+@@ -1,247 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+- *
+- * Baikal-T1 Process, Voltage, Temperature sensor driver
+- */
+-#ifndef __HWMON_BT1_PVT_H__
+-#define __HWMON_BT1_PVT_H__
+-
+-#include <linux/completion.h>
+-#include <linux/hwmon.h>
+-#include <linux/kernel.h>
+-#include <linux/ktime.h>
+-#include <linux/mutex.h>
+-#include <linux/seqlock.h>
+-
+-/* Baikal-T1 PVT registers and their bitfields */
+-#define PVT_CTRL			0x00
+-#define PVT_CTRL_EN			BIT(0)
+-#define PVT_CTRL_MODE_FLD		1
+-#define PVT_CTRL_MODE_MASK		GENMASK(3, PVT_CTRL_MODE_FLD)
+-#define PVT_CTRL_MODE_TEMP		0x0
+-#define PVT_CTRL_MODE_VOLT		0x1
+-#define PVT_CTRL_MODE_LVT		0x2
+-#define PVT_CTRL_MODE_HVT		0x4
+-#define PVT_CTRL_MODE_SVT		0x6
+-#define PVT_CTRL_TRIM_FLD		4
+-#define PVT_CTRL_TRIM_MASK		GENMASK(8, PVT_CTRL_TRIM_FLD)
+-#define PVT_DATA			0x04
+-#define PVT_DATA_VALID			BIT(10)
+-#define PVT_DATA_DATA_FLD		0
+-#define PVT_DATA_DATA_MASK		GENMASK(9, PVT_DATA_DATA_FLD)
+-#define PVT_TTHRES			0x08
+-#define PVT_VTHRES			0x0C
+-#define PVT_LTHRES			0x10
+-#define PVT_HTHRES			0x14
+-#define PVT_STHRES			0x18
+-#define PVT_THRES_LO_FLD		0
+-#define PVT_THRES_LO_MASK		GENMASK(9, PVT_THRES_LO_FLD)
+-#define PVT_THRES_HI_FLD		10
+-#define PVT_THRES_HI_MASK		GENMASK(19, PVT_THRES_HI_FLD)
+-#define PVT_TTIMEOUT			0x1C
+-#define PVT_INTR_STAT			0x20
+-#define PVT_INTR_MASK			0x24
+-#define PVT_RAW_INTR_STAT		0x28
+-#define PVT_INTR_DVALID			BIT(0)
+-#define PVT_INTR_TTHRES_LO		BIT(1)
+-#define PVT_INTR_TTHRES_HI		BIT(2)
+-#define PVT_INTR_VTHRES_LO		BIT(3)
+-#define PVT_INTR_VTHRES_HI		BIT(4)
+-#define PVT_INTR_LTHRES_LO		BIT(5)
+-#define PVT_INTR_LTHRES_HI		BIT(6)
+-#define PVT_INTR_HTHRES_LO		BIT(7)
+-#define PVT_INTR_HTHRES_HI		BIT(8)
+-#define PVT_INTR_STHRES_LO		BIT(9)
+-#define PVT_INTR_STHRES_HI		BIT(10)
+-#define PVT_INTR_ALL			GENMASK(10, 0)
+-#define PVT_CLR_INTR			0x2C
+-
+-/*
+- * PVT sensors-related limits and default values
+- * @PVT_TEMP_MIN: Minimal temperature in millidegrees of Celsius.
+- * @PVT_TEMP_MAX: Maximal temperature in millidegrees of Celsius.
+- * @PVT_TEMP_CHS: Number of temperature hwmon channels.
+- * @PVT_VOLT_MIN: Minimal voltage in mV.
+- * @PVT_VOLT_MAX: Maximal voltage in mV.
+- * @PVT_VOLT_CHS: Number of voltage hwmon channels.
+- * @PVT_DATA_MIN: Minimal PVT raw data value.
+- * @PVT_DATA_MAX: Maximal PVT raw data value.
+- * @PVT_TRIM_MIN: Minimal temperature sensor trim value.
+- * @PVT_TRIM_MAX: Maximal temperature sensor trim value.
+- * @PVT_TRIM_DEF: Default temperature sensor trim value (set a proper value
+- *		  when one is determined for Baikal-T1 SoC).
+- * @PVT_TRIM_TEMP: Maximum temperature encoded by the trim factor.
+- * @PVT_TRIM_STEP: Temperature stride corresponding to the trim value.
+- * @PVT_TOUT_MIN: Minimal timeout between samples in nanoseconds.
+- * @PVT_TOUT_DEF: Default data measurements timeout. In case if alarms are
+- *		  activated the PVT IRQ is enabled to be raised after each
+- *		  conversion in order to have the thresholds checked and the
+- *		  converted value cached. Too frequent conversions may cause
+- *		  the system CPU overload. Lets set the 50ms delay between
+- *		  them by default to prevent this.
+- */
+-#define PVT_TEMP_MIN		-48380L
+-#define PVT_TEMP_MAX		147438L
+-#define PVT_TEMP_CHS		1
+-#define PVT_VOLT_MIN		620L
+-#define PVT_VOLT_MAX		1168L
+-#define PVT_VOLT_CHS		4
+-#define PVT_DATA_MIN		0
+-#define PVT_DATA_MAX		(PVT_DATA_DATA_MASK >> PVT_DATA_DATA_FLD)
+-#define PVT_TRIM_MIN		0
+-#define PVT_TRIM_MAX		(PVT_CTRL_TRIM_MASK >> PVT_CTRL_TRIM_FLD)
+-#define PVT_TRIM_TEMP		7130
+-#define PVT_TRIM_STEP		(PVT_TRIM_TEMP / PVT_TRIM_MAX)
+-#define PVT_TRIM_DEF		0
+-#define PVT_TOUT_MIN		(NSEC_PER_SEC / 3000)
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-# define PVT_TOUT_DEF		60000
+-#else
+-# define PVT_TOUT_DEF		0
+-#endif
+-
+-/*
+- * enum pvt_sensor_type - Baikal-T1 PVT sensor types (correspond to each PVT
+- *			  sampling mode)
+- * @PVT_SENSOR*: helpers to traverse the sensors in loops.
+- * @PVT_TEMP: PVT Temperature sensor.
+- * @PVT_VOLT: PVT Voltage sensor.
+- * @PVT_LVT: PVT Low-Voltage threshold sensor.
+- * @PVT_HVT: PVT High-Voltage threshold sensor.
+- * @PVT_SVT: PVT Standard-Voltage threshold sensor.
+- */
+-enum pvt_sensor_type {
+-	PVT_SENSOR_FIRST,
+-	PVT_TEMP = PVT_SENSOR_FIRST,
+-	PVT_VOLT,
+-	PVT_LVT,
+-	PVT_HVT,
+-	PVT_SVT,
+-	PVT_SENSOR_LAST = PVT_SVT,
+-	PVT_SENSORS_NUM
+-};
+-
+-/*
+- * enum pvt_clock_type - Baikal-T1 PVT clocks.
+- * @PVT_CLOCK_APB: APB clock.
+- * @PVT_CLOCK_REF: PVT reference clock.
+- */
+-enum pvt_clock_type {
+-	PVT_CLOCK_APB,
+-	PVT_CLOCK_REF,
+-	PVT_CLOCK_NUM
+-};
+-
+-/*
+- * struct pvt_sensor_info - Baikal-T1 PVT sensor informational structure
+- * @channel: Sensor channel ID.
+- * @label: hwmon sensor label.
+- * @mode: PVT mode corresponding to the channel.
+- * @thres_base: upper and lower threshold values of the sensor.
+- * @thres_sts_lo: low threshold status bitfield.
+- * @thres_sts_hi: high threshold status bitfield.
+- * @type: Sensor type.
+- * @attr_min_alarm: Min alarm attribute ID.
+- * @attr_min_alarm: Max alarm attribute ID.
+- */
+-struct pvt_sensor_info {
+-	int channel;
+-	const char *label;
+-	u32 mode;
+-	unsigned long thres_base;
+-	u32 thres_sts_lo;
+-	u32 thres_sts_hi;
+-	enum hwmon_sensor_types type;
+-	u32 attr_min_alarm;
+-	u32 attr_max_alarm;
+-};
+-
+-#define PVT_SENSOR_INFO(_ch, _label, _type, _mode, _thres)	\
+-	{							\
+-		.channel = _ch,					\
+-		.label = _label,				\
+-		.mode = PVT_CTRL_MODE_ ##_mode,			\
+-		.thres_base = PVT_ ##_thres,			\
+-		.thres_sts_lo = PVT_INTR_ ##_thres## _LO,	\
+-		.thres_sts_hi = PVT_INTR_ ##_thres## _HI,	\
+-		.type = _type,					\
+-		.attr_min_alarm = _type## _min,			\
+-		.attr_max_alarm = _type## _max,			\
+-	}
+-
+-/*
+- * struct pvt_cache - PVT sensors data cache
+- * @data: data cache in raw format.
+- * @thres_sts_lo: low threshold status saved on the previous data conversion.
+- * @thres_sts_hi: high threshold status saved on the previous data conversion.
+- * @data_seqlock: cached data seq-lock.
+- * @conversion: data conversion completion.
+- */
+-struct pvt_cache {
+-	u32 data;
+-#if defined(CONFIG_SENSORS_BT1_PVT_ALARMS)
+-	seqlock_t data_seqlock;
+-	u32 thres_sts_lo;
+-	u32 thres_sts_hi;
+-#else
+-	struct completion conversion;
+-#endif
+-};
+-
+-/*
+- * struct pvt_hwmon - Baikal-T1 PVT private data
+- * @dev: device structure of the PVT platform device.
+- * @hwmon: hwmon device structure.
+- * @regs: pointer to the Baikal-T1 PVT registers region.
+- * @irq: PVT events IRQ number.
+- * @clks: Array of the PVT clocks descriptor (APB/ref clocks).
+- * @ref_clk: Pointer to the reference clocks descriptor.
+- * @iface_mtx: Generic interface mutex (used to lock the alarm registers
+- *	       when the alarms enabled, or the data conversion interface
+- *	       if alarms are disabled).
+- * @sensor: current PVT sensor the data conversion is being performed for.
+- * @cache: data cache descriptor.
+- * @timeout: conversion timeout cache.
+- */
+-struct pvt_hwmon {
+-	struct device *dev;
+-	struct device *hwmon;
+-
+-	void __iomem *regs;
+-	int irq;
+-
+-	struct clk_bulk_data clks[PVT_CLOCK_NUM];
+-
+-	struct mutex iface_mtx;
+-	enum pvt_sensor_type sensor;
+-	struct pvt_cache cache[PVT_SENSORS_NUM];
+-	ktime_t timeout;
+-};
+-
+-/*
+- * struct pvt_poly_term - a term descriptor of the PVT data translation
+- *			  polynomial
+- * @deg: degree of the term.
+- * @coef: multiplication factor of the term.
+- * @divider: distributed divider per each degree.
+- * @divider_leftover: divider leftover, which couldn't be redistributed.
+- */
+-struct pvt_poly_term {
+-	unsigned int deg;
+-	long coef;
+-	long divider;
+-	long divider_leftover;
+-};
+-
+-/*
+- * struct pvt_poly - PVT data translation polynomial descriptor
+- * @total_divider: total data divider.
+- * @terms: polynomial terms up to a free one.
+- */
+-struct pvt_poly {
+-	long total_divider;
+-	struct pvt_poly_term terms[];
+-};
+-
+-#endif /* __HWMON_BT1_PVT_H__ */
 -- 
-2.49.0
+2.50.1
 
