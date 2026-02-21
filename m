@@ -1,66 +1,67 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D4B303C8A
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 20:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A9223BD1D
+	for <linux-hwmon@vger.kernel.org>; Sat, 21 Feb 2026 01:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771620570; cv=none; b=DDUkKPFVCmugOHVZD7x3Z/SZcZOs9l6us6EKNsYGpsHOljLpWi16Q6NyOHo4tQ7LQWiQq9or5sTJKrBxelwyGdBPtTPcolN0GoDjIUjnWnkOQQRnSwPe/38Evlweie4wX0ZDJ1dgvDSnL1LEH/9QMd/0iWbb1+8+EOnvDTVJHoc=
+	t=1771636647; cv=none; b=o6PbB/1No/pui7A2aYTn9SkE1ppvaiuvlaLcRHxqSqOeohehzbJAGoCCn2bLrGHBGW8hlwk2fOhxHwBwduJI2tcK68vXUvmQPnD2rq1f01w3qVefKSHDAyYR+vw1yy3rs2/VxbSfOsQvvTx20wwiMOW+av0cAmQLvB5VXaseeU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771620570; c=relaxed/simple;
-	bh=flwg3Cg8CqkjX2Xk3RfS7vZeldonOJZHQD8B09TnYdE=;
+	s=arc-20240116; t=1771636647; c=relaxed/simple;
+	bh=FzQVHmJODu+G3HNyUQgVcA5eBLWvbUIqTdOdWxoPD5c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HeNcKvkPiGhsnUAYHo9gDlLKeyd82oQ3ZrfWEuIQothbS7WKpv2y955vm6a2s2OifORCSIA9NKYEVpwpEO5vSJF57CVlkgM3fXnyV1DHY7zRot/YpkZjYEBrBeAR+MwUmY2f2EYtmoMli9zFM95iHxcPKD3Fx3lh0IRAdiK0hJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S75FK6cv; arc=none smtp.client-ip=74.125.82.53
+	 In-Reply-To:Content-Type; b=Y/oda11BApOKPGnOvjiX6/tAU1lWZoDxFg/mjnutgcH8MpPlZTzOcQF6bCAeDATeAGYLLs0fzcdDAeJPQDg+2ojf6R6IXvT9L07AbDje1uBOu4iAqViGFy5sSCFFi2mTvl4G8dWmW3SypSav7r1xzefK9nw0KwNMa4UnxDqAw5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L909svEH; arc=none smtp.client-ip=74.125.82.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S75FK6cv"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12732165d1eso2832241c88.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 12:49:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L909svEH"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12713e56abdso1895536c88.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 17:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771620568; x=1772225368; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771636645; x=1772241445; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hG+wlknKI2i2FvW/8fhyL8NFzyl3ugIODzwBYkDCcS0=;
-        b=S75FK6cvRm/vVVyzwJARQUUD1XHnqB3esaMBsOMxRZ2jv9XtoRAQJ027PEHu6Pw5d6
-         bAJMUbYelZuaZcGh8NoNSph+w30sZa3PnbXQVqKsCufCfw5ZP8GlAVKb/incYH3VKKmB
-         /ChJ5uP7T0Bh+rWw0iQ0yLQZxr1rzNJpyRLhbqRsRBfS9/3u/80YBLE7YjLYghssorHr
-         8lSeTn6mxmeqe2+jaqMRYg2V3fAsq+MQan3RKWpsN+3jlh7QZlclYRmcujEshhnKUK0G
-         VOsZbuJM4tTvbpkgTUOpqjb3a0ZvOSqi7d+KROz7Mj16uNhIzVyDxvl7IhJcOOB9A6Zg
-         deZg==
+        bh=cq/oORE8SUUgFzgZ/eOT8NiZ5MP8bTXVkKNEhYsFzp4=;
+        b=L909svEHpDRdtvzcMAHn4RerXEvvxWu9UDbh2XkTgtRww50FfMikJxmVPkeKBFB3Ki
+         72MaEYYi6zXu8i48bp5XUhS865D/53SUHHqsc+EXbnBhRHBQ8/g9rC9JTDThDmqlQ+08
+         FhxprRFdDKWc16EFbM1ybbXm92lIapIvx2gm0FY+Bq42i4tMWi/gtgeSDdg5MxYClPIa
+         ZbYfoiHJg1qfsr5yVDFHdfjMpdTtX6augOCcIkwr/9R8JJ6Xaugs/bY+hU6DcO8PFKg7
+         7iXlgy7c/qV34Lk+Yc3qTZZUKBVh7fBg6kaSnSv17oZ63LnBGJgqY3KUldpx2lRji6mU
+         Ei4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771620568; x=1772225368;
+        d=1e100.net; s=20230601; t=1771636645; x=1772241445;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hG+wlknKI2i2FvW/8fhyL8NFzyl3ugIODzwBYkDCcS0=;
-        b=Yxqxt1nYQn1bkma1A7i9lY2k3cwb7Wr/e+DulrGbNtatoZAmiQxmiThtJlUyIzEn0I
-         Eqz1r7vgZ99nYpMxGMxamiYmE/gGLutTWAcuLRfCE05+9C3keSiQt0uz59YJ+lYolP5k
-         HR2fAZHCdOgsgU/iCLpuZfF1vguFnbQWvUclK23uBGKtx6+V2Z8Bf2ygqWqO+R7DRP4l
-         hB/jA50UhYp57orIWlln3x7YPkOxW7qkuie4F2EidmaTyAQTNs+P9tjHjXQUjMcnByiv
-         yToEcZe8+gdrgzGpDqqpJccpdU/tc9mDiyVWB1eLggEchgmRfULrCvHv3va5qCrtKiB1
-         OIiw==
-X-Gm-Message-State: AOJu0YxDJLazQRNe+Rw80e2IA+E0UivfZzYKWuGmj70/vTr3IA4fh1pf
-	6tYKtag+ulieAcbKmT1BDpnD6gf1lSmRatBActURTmGUxlO2THecXcyh
-X-Gm-Gg: AZuq6aKaNWJaNRkjfviMLHXOoTOOxQ+i9CNSUO3Uv+01j9P117Nl7bPX3wtSiAqjYTn
-	WSFD2lMq5ovBOULXkA8IIZqlejJvifxKTY+bcumPRESiaKlYI8lktzYragvtBr7+TKBH6i7R0cN
-	l8aInCHldQ5iaj5oqqboUNu3brc3O4cAnQfBnZ5jMuds18bZ1tJ+qW+liJsFhXHSWBEnVflrNtV
-	23cnUshmQ+60zSpTl7gwzGX8kQUP7OBjaxFfdF2JTbT0MAYr4/6kLVDR9kceU06dzQAQmiN9Apg
-	rouW2zozKnwUpqdjutJ252VQoRxtbf9ekiYwAJt62guCi6NJD9TuiLbSgfU4IRgnC77kqksJBPl
-	7+Metr6bMVdP8EtU+PwE+WpwTvm+lc4ix0R1LQUQEEVNQM2o0KO5VytkLIS1R4w1RJsplhbwJHl
-	aaHwpB2bUoaSxYtZgI8IbJfIpvoh5mzjGDWpFv4aIMSgerXaeze5yA5qW6di1498pdn8nAid1L
-X-Received: by 2002:a05:7022:1601:b0:11b:a892:80a5 with SMTP id a92af1059eb24-1276acfb85dmr356956c88.13.1771620567943;
-        Fri, 20 Feb 2026 12:49:27 -0800 (PST)
+        bh=cq/oORE8SUUgFzgZ/eOT8NiZ5MP8bTXVkKNEhYsFzp4=;
+        b=NNpsEVgwjGF+KrL0w9EmtomlCKw+0ewYYKOB1OFMhBw6B5vYNsa5ofx0R13ElcscYd
+         VHnyRbLmIhc59/D/OkFmDqHpa7SHeFgrhtLfgayrRDHHH3GBdaRD3/dukDohw8wfia05
+         K6Ifc4CYTe0OEEjQadthtBrFwgtWvnTammRnRhnxg0iSeVnnFb9Kh7PnP9k4Qu4Jz+q4
+         zyNeX5VGcZuthvB1Q+1iI4VE6LiQeiHCevCE684/L5bq2HReu3l38Ik1W3HXYTgBW1Pe
+         3xoHN5KJ/nWXNCIknUImsxEz/2rw6JrzwiBo/cgS87AKccRIVLyfLLoMULwpXtD/F9le
+         JFxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWy8/LtHhfupZ3Q7alzZvaCDd11YzU/P+JYVkBfFS7zzpn3uQmlayde+zbYwP3q+Pv5JWMwWxd6jOZ6XQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAynI+ERaxhs75AnHC7ZW0JykSGoadg5Mzfdi57Rpxxd0eWBNE
+	9rBBGLiWCiS9RTYcj0/kQgYhEMdcDOKC/R+ptPnGzqHouWKoiKaPLmf7
+X-Gm-Gg: AZuq6aJnLfd7Rxgr6+jMdiA7sw/sLyNfp/yiIbeJE0YVH6e6ivgmSiy627rVbuqHzF0
+	tobbSQ954X9KRu/GmaFsuXTyTqMfnrbwY7kxAiU2QD40aevlXgeSErOqLezO+vYHLOxBGHwUoZj
+	jXGT3pZYPPJEoPzKhGY3vQftiu2pTBPB+w0DLUD5yoof0YdLLDg1B0sQiLx5aE4VwJCO/Ffkk9n
+	Av24KUCRojD65nG5VzsK+v2p/etb9AZaSiWZE+1HmawhquI2m9v/qDCSO54Hq/pKlYXUZTkcsyj
+	Rl6hFHzokksVbjXXThIUbtrJpLri94a9zoZLM2n16rkbXRoWViUaOqQZqixUVKrRNvUK300ojvy
+	bPy51ncGZX3KsMXqANXKc8wmXSFYGgurgQfFcNCq9QHWl8c0RqWP+l5PaakG/7is5jjB4vwYVUS
+	MEVpIwC5bvnfeyAn/cE8JLDWGNs/Xc1EZDTkowfJg3J3EA8p52kholuiRkfVA1U+MCzCzEQ2Tk
+X-Received: by 2002:a05:7022:41a0:b0:11b:9b9f:427c with SMTP id a92af1059eb24-1275fa9dca7mr3005244c88.13.1771636645348;
+        Fri, 20 Feb 2026 17:17:25 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af7ae99sm506894c88.10.2026.02.20.12.49.27
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af7ae99sm990629c88.10.2026.02.20.17.17.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Feb 2026 12:49:27 -0800 (PST)
+        Fri, 20 Feb 2026 17:17:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4b24f1f4-b395-467a-81b7-1334a2d48845@roeck-us.net>
-Date: Fri, 20 Feb 2026 12:49:25 -0800
+Message-ID: <1c9b5717-94bf-4f00-982c-09938937cd5c@roeck-us.net>
+Date: Fri, 20 Feb 2026 17:17:23 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,19 +69,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] hwmon: (isl28022) Don't check for specific errors
- when parsing properties
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, =?UTF-8?Q?Carsten_Spie=C3=9F?=
- <mail@carsten-spiess.de>, Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>
-References: <20260219140532.2259235-1-andriy.shevchenko@linux.intel.com>
- <CAMuHMdX9CdQNBGegrfHz+-UpuyO-rmHEQ2HUa=JjVpG_0ryacg@mail.gmail.com>
- <aZcenabXYsOdBu84@smile.fi.intel.com>
+Subject: Re: [PATCH v5 0/3] hwmon: Add support for the LTC4283 Hot Swap
+ Controller
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>, nuno.sa@analog.com,
+ linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, "Rob Herring (Arm)" <robh@kernel.org>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+References: <20251223-ltc4283-support-v5-0-1152bff59a61@analog.com>
+ <0ae2d448-06e3-41f6-89aa-8aa3f939d64f@roeck-us.net>
+ <4a9ecd101d502515d25a7f27a8043b6b592f510c.camel@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,46 +127,52 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <aZcenabXYsOdBu84@smile.fi.intel.com>
+In-Reply-To: <4a9ecd101d502515d25a7f27a8043b6b592f510c.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/19/26 06:30, Andy Shevchenko wrote:
-> On Thu, Feb 19, 2026 at 03:21:29PM +0100, Geert Uytterhoeven wrote:
->> On Thu, 19 Feb 2026 at 15:06, Andy Shevchenko
->> <andriy.shevchenko@linux.intel.com> wrote:
->>> Instead of checking for the specific error codes (that can be considered
->>> a layering violation to some extent) check for the property existence first
->>> and then either parse it, or apply a default value.
+On 2/17/26 05:39, Nuno Sá wrote:
+> On Sat, 2026-01-17 at 16:27 -0800, Guenter Roeck wrote:
+>> Hi Nuno,
+>>
+>> On 12/23/25 04:21, Nuno Sá via B4 Relay wrote:
+>>> This is v3 for the LTC4283 how swap controller. Main change is that I'm
+>>> now using the auxiliary bus for adding the GPIO device (done depending
+>>> on FW properties).
+>>>
+>>> Similar to the LTC4282 device, we're clearing some fault logs in the
+>>> reset_history attributes.
+>>>
+>>> Guenter, in [1] you can find some replies for some questions you had in
+>>> v2 that likely you don't remember anymore. Regarding the regmap story I
+>>> ended up adding a secong regmap for the 16 bit wide registers which
+>>> seems like a clean solution (if I'm not missing nothing).
+>>>
+>>
+>> Sorry for the long delay.
+>>
+>> Actually I prefer the solution used in the lm75 driver: Map all registers
+>> to 16-bit registers using a regmap bus. Would that be possible ?
 > 
->> IIRC, we have removed superfluous presence checks all over the tree
->> during the past few years? E.g. of_property_read_*() is documented to
->> return -EINVAL if a property does not exist.
+> Hi Guenter,
 > 
-> Even though, it's still fragile. When we have a check for explicit device
-> presence, we wouldn't care of the error code we get in case of unsuccessful
-> parsing.
+> I intend to send the next iteration by the end of the week (finally!) but there's something
+> I wanted to know if you have any strong opinion on.
 > 
->> So this patch looks like a step back to me...
+> So, the above is a bit annoying because of the energy reading which is 6 bytes long (so, 6 regmap
+> reads). Given that our custom bus will now have val_bits = 16 that won't work out of the box. So:
 > 
-> Obviously I have a disagreement here, this is step forward to weaken
-> the dependency on the certain error code in the cases when we can avoid
-> that. Motivation is mentioned in the commit message.
+> 1. Either I directly use the i2c block API to get the 6 bytes.
+> 2. Or I use regmap_bulk_read() with val_count of 3.
 > 
-> Also note, -EINVAL can sneak in tons of mysterious ways as it's one of
-> the most overloaded error code in the kernel, its semantic is basically
-> equals to "an error happened".
+> I don't like much of mixing regmap with "plain" bus calls but given it's only in one place, might
+> not be that bad. OTOH, to use regmap I do need to account for it (and yet another corner case) in
+> the read callback (so I do not use the i2c swapped version for the energy reading).
 > 
-> Having the code above, we make it robust against some subtle nuances which
-> may not be discovered in time.
+> I do not have any strong opinion but I'm more tempted in going with 1.
 > 
 
-Is that documented somewhere ? I have been asking people to use the current
-approach to reduce code size. device_property_present() isn't even mentioned
-as API in Documentation/. If "do not rely on error codes from device property
-API functions to determine if a default should be applied" or similar is a new
-rule or guidance, it should be clearly documented somewhere.
+Sorry, this got lost. I think 1 is the better choice here. This is really a messy chip :-(.
 
-Thanks,
 Guenter
 
