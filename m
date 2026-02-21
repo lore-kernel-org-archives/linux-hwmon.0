@@ -1,109 +1,93 @@
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E6B8F7D;
-	Sat, 21 Feb 2026 02:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47A729C351
+	for <linux-hwmon@vger.kernel.org>; Sat, 21 Feb 2026 07:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771639550; cv=none; b=pl12vMjzf3IgWDRgSuifkrSjB16QT4cStJBO2FHA/0f1JyGlAUEzsLZhyMdUh2PW13LFDIRCLHNfEF6x5DtkUmvKdbWecZhXJziAQwdAS+zJ/8xiDZNdOPbyqqMLy7eZEt5FPRQStTDHWUlqWKGIdwRY4F2/L3TVBCRFCkdyaWM=
+	t=1771657454; cv=none; b=a//2z2Zf1xoEayo/iVGdEmCTCVzMB7R7tdfOzBHJ5wz5zLutEPgfqu9xHp9s+txxaFMPQpUnI8USnCckcy1Gn1fHSQbNode5wNDHxUlkzmaMk+2iXbT5D/du/dhtQ6EuhznR+EUfLToQe9ASYCtNJu7tsmCSp/3FGKvTw2NcqNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771639550; c=relaxed/simple;
-	bh=/1L0eOLHIcuq+KMQYlBxMwouNHovymbAHhI7qfeT0uI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Behb595uC5nAhJPPSCTbJSlZnG9sgbPUdTkzN9WdiKx7DuSe+102LPU1u4tVMKq3HbRXXsmWULEh0HcYFNvcFd/KWS1KuQb+EUrhqqlroa29umunKCUmu4sO4WVAiDdGK7l1CSWJSST7R1OwP+3b4lLiw/WfH1ArvCZqKm/nlWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.99)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1vtcN8-000000002I0-3Udj;
-	Sat, 21 Feb 2026 02:05:30 +0000
-Date: Sat, 21 Feb 2026 02:05:27 +0000
-From: Daniel Golle <daniel@makrotopia.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: MxL862xx: don't force-enable MAXLINEAR_GPHY
-Message-ID: <aZkS585QOq6g7Ax-@makrotopia.org>
-References: <20260216105522.2382373-1-arnd@kernel.org>
- <aZMKXavVQPelSXcG@makrotopia.org>
- <306e79fb-f3ee-434e-a90e-547e97d2a5aa@roeck-us.net>
- <c881a13a-0687-4e4d-b70b-900f91acd212@app.fastmail.com>
- <70a195ab-3b61-47fb-a361-17b53cf7bdda@roeck-us.net>
- <aZNEKS-fefEgqhTs@makrotopia.org>
- <316a6ee6-9e5e-4518-8dc4-2f39805934a9@app.fastmail.com>
- <9d7aee5a-ac46-47d9-ac26-0f3a63b6a8ab@roeck-us.net>
+	s=arc-20240116; t=1771657454; c=relaxed/simple;
+	bh=13CRBHcD6KBHtEqtfL3tA27y+BHqeVSJrLp6MxN/284=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EZIn0MXST+f/BNLOyvVviXGP/nQgV2t51eYjDHTkLXyNtYSHVRMOzj1j6ZzjNiwaD5wKRBFOt22LexhjajnSzCFVdBcUva1Po/i4GBR5DKZEa5SasPt4IoIZWiZgpPqElXhQg/soKjBfR6sTxiNct5/ZlYWjosi6eBFIwl5ljHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aY9cLGU3; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aY9cLGU3"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ad22a5e245so19228275ad.2
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Feb 2026 23:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771657452; x=1772262252; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=13CRBHcD6KBHtEqtfL3tA27y+BHqeVSJrLp6MxN/284=;
+        b=aY9cLGU3nHecSem/fGp49Toc0yYCy34ikk0pEA4knY16l/nZFJdhqPzc3gRz5T/BO4
+         wlRqoBVswVxzP3KVxtlmhl+jEJ6NeU91wEPGldotZbD9xrMTsh3new3qKOrJ4GxV0Svj
+         QcueFNnRCC+q5jL4GM1NKAeHTzRqMdhq3SNJn/0TCtscryCO3Mwo+9dh4afw7p1FW2sz
+         oWhOAccF9R/dpkNl2QZsLVSvnUsYDhfQS6Hj2qJaGrUqXERg7Js6E68EuS4xgCvtCxP7
+         VBZmFeVygedAgYO3yOd2qtdtaMnMkgf6LQ4NJ2/fBSMupuhgVMSYwP58y/kiUZUazf9r
+         N9SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771657452; x=1772262252;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=13CRBHcD6KBHtEqtfL3tA27y+BHqeVSJrLp6MxN/284=;
+        b=L0leiA2MNE3U3CpfNw6p43uqdRvn9sKbHfNTR8+jdzzClggEI9n5KyadGWLpLg819z
+         2IhyvtCER7TftSKBTtYfw9BjJ2+W8xenLjjrvmPQCpJhje/3w8d2rbJ4jZjt7QLNVP1I
+         maOp62HVSGrWqlN9nWRPk0ajHP3fVVBZOlTAvhJtsb8weZ9OpVA3W6hmRGIqgkVl3J8F
+         XXeEHMn32uZQva1VKhNLn7rIMK8fIBvmsw3/VJ3JLFM2ZI5JKJ34p5XwSGDH3OKJ2vFS
+         BREkKO7eIbtpeESBfCbpjnPhe3PysO1mTqmSGoO8Mfd/OhejhhP7+9eIUzE3UtYkyPlG
+         C4lA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfC7b3cqLJS0Bh20Y+zpOUm3SyYgQk3Grl2RaNnAfaxo43ztw1sUv8sDwoiTyHoCo3jR/Z+0HZpF4igQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxHrqouThO7y7WGjxreDuX1qLkDCb5fWtLa23rQ9Euv2WHzGyh
+	6W7020W04RG74XRnKxyF2KFnB6WvtyjFEssNKLczRpKxYmM8cpbR8xIw
+X-Gm-Gg: AZuq6aKr+g+rxQdi3QfpaCofh29UTt6xCLbzRQVJJ218O3UR/VZWi22muAG/LWUjxhs
+	KC7a8YrDzSjIXBTHL1+FKzmw9W+XNvwnhPFoxxDQgo1HfIPk8viAaspMbkVtJR0cNkfPeMWJxLf
+	SshsehChjK/whSQOoLVJsdb5RXN6c68aRTlg4baiyAWC5DRKi07JoCkv1D6EOE/yRxM11JscVQ6
+	5l8WgFYQ9Bam7XlfEh0VT2QcBTfNyjErrWqWyddERnJM81rqo+qCB+DgN+3SarAPB4fDjVAYygz
+	gpyeKv8Ko+Bjc7RSm3prdRX/lV7i0+tgVl65dZD4+sFaQxDcLhDvFKux1ekeFIlUXYXxRgwTQ5s
+	V5ejxKmLvae5JbHlC4U2C+WsNF/38fAXu/xcd08hhPV3lSwNOiGyx3FwAhcSF7AT/rMakk6KNCT
+	PsKBwnywU0pbI=
+X-Received: by 2002:a17:903:124d:b0:2a3:c667:e0a0 with SMTP id d9443c01a7336-2ad744edc09mr22461975ad.29.1771657451841;
+        Fri, 20 Feb 2026 23:04:11 -0800 (PST)
+Received: from donbot ([50.38.105.223])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad74f5dba7sm13929255ad.26.2026.02.20.23.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 23:04:11 -0800 (PST)
+From: Jens Almer <bagawk@gmail.com>
+To: ian.ray@gehealthcare.com
+Cc: bence98@sch.bme.hu,
+	conor+dt@kernel.org,
+	corbet@lwn.net,
+	devicetree@vger.kernel.org,
+	krzk+dt@kernel.org,
+	krzk@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	skhan@linuxfoundation.org,
+	tomaz@mono.si,
+	Jens Almer <bagawk@gmail.com>
+Subject: Re: [PATCH V2 0/3] hwmon: INA234
+Date: Fri, 20 Feb 2026 23:02:07 -0800
+Message-ID: <20260221070206.1962499-2-bagawk@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260219130127.87901-1-ian.ray@gehealthcare.com>
+References: <20260219130127.87901-1-ian.ray@gehealthcare.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d7aee5a-ac46-47d9-ac26-0f3a63b6a8ab@roeck-us.net>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 20, 2026 at 05:25:06PM -0800, Guenter Roeck wrote:
-> On 2/16/26 08:27, Arnd Bergmann wrote:
-> > On Mon, Feb 16, 2026, at 17:22, Daniel Golle wrote:
-> > > On Mon, Feb 16, 2026 at 08:20:41AM -0800, Guenter Roeck wrote:
-> > > > On 2/16/26 07:34, Arnd Bergmann wrote:
-> > > > > On Mon, Feb 16, 2026, at 16:17, Guenter Roeck wrote:
-> > > > > > On 2/16/26 04:15, Daniel Golle wrote:
-> > > > > > 
-> > > > > > Technically, with "select MAXLINEAR_GPHY", NET_DSA_MXL862 should depend
-> > > > > > on "depends on HWMON || HWMON=n". That would prevent NET_DSA_MXL862=y
-> > > > > > and with it MAXLINEAR_GPHY=y.
-> > > > > > 
-> > > > > > Maybe it is time to implement dummy functions for hwmon API calls
-> > > > > > to avoid all this.
-> > 
-> > I think I misread this bit earlier, sorry
-> > 
-> > > > > I had considered this when I found the build failure, but
-> > > > > I think removing the 'select' here is much better: this
-> > > > > simplifies the dependencies, and allows a valid configuration
-> > > > > with hwmon and gphy support in a loadable module that would
-> > > > > otherwise be impossible.
-> > > > > 
-> > > > 
-> > > > Makes sense. I think I'll move forward with the dummy functions anyway
-> > > > because with that the #ifdefs in drivers are no longer necessary
-> > > > and the "depends on HWMON || HWMON=n" becomes optional.
-> > > 
-> > > Yes, that would be great and eliminate that whole class of obstacles
-> > > with some inline no-op stubs in the header.
-> > 
-> > What I meant above is that I had considered and rejected the extra
-> > dependencies in the ethernet driver. I don't think there is a good
-> > way to add inline helpers. Technically, one could use IS_REACHABLE()
-> > here, to stub out the functions when the caller is built-in, but
-> > I find that even worse because it replaces a trivial build-time
-> > failure with very subtle runtime bug.
-> > 
-> 
-> Lots of kernel APIs have dummy implementations. hwmon isn't really that
-> different to those. Also, arguably, that would not be a subtle runtime
-> bug but a feature.
-> 
-> In this context:
-> 
-> If NET_DSA_MXL862 is enabled but MAXLINEAR_GPHY isn't, does the system
-> still work ?
+Tested on a Mono Gateway Development Kit. All sensors reported and the values were in line with a patch created by Tomaz Zaman against the NXP 6.12 fork.
 
-The switches supported by NET_DSA_MXL862 come with 5 or 8 twistedpair
-ports provided by built-in PHYs. For the ports to (fully) work the
-MAXLINEAR_GPHY driver is required, as without it they would be detected
-as "Generic PHY".
-
-This is similar to the situation on other DSA switches, and there is
-apparently no clear rule whether this (runtime) dependency should be
-treated as depedency in Kconfig which is typically used only to express
-linking dependencies.
+Tested-by: Jens Almer <bagawk@gmail.com>
