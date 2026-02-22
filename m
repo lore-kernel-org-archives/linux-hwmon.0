@@ -1,67 +1,67 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BCF352F9B
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Feb 2026 15:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8348E1096F
+	for <linux-hwmon@vger.kernel.org>; Sun, 22 Feb 2026 15:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771775096; cv=none; b=aAPaZUSRqDFA6oYtoWG15cjIbw6g9t/8DT5K4ZAyFrsFYQoVI3xqObg8GqcihKIx/el67AJjFCyXAdhFcMOtqRlAl8oFLLXsY+tVxDvA+TWR/2Sgj3aGdLWk4Q8wbrDIWqnaZs7JA/FszijrQZPjwAzEnWy5VwOvHkUqVzMuLTc=
+	t=1771775190; cv=none; b=ACpiVnDeyEQl8lRQn4Jhv6XVKPVG+59Ha4wkkCZUOhxMHODaymuB5aRTNThMJQtTTYa0aGwUAHUSQI5JfNHm4c6t+rirAeTxB3TGMWrupZyVibp/U6+8i9T/d8H3mOpnwYp2dEpQmgySe62Qy/quDFIlABlCUZbHVjHuvul1tac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771775096; c=relaxed/simple;
-	bh=GDXeDdZIT8e6Ekck7+QHOeFdtoAXk18KLFlCirrOc9E=;
+	s=arc-20240116; t=1771775190; c=relaxed/simple;
+	bh=S9Gp+ua6oQHSyVSA38TUi6p87mciQfyR2SinVvwnW2I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xyg1sa/4G1eB5eoNo3lbYywO6h5JuqSbQKVaXEpaBlS2kYottZhHFEoDQiSsl3nsR9v++EWMXrKSTIDJ8hHAtT65NU9/SIlzR4UiT05oxchZlQxZxI3JIqybIsgei2YqKlFwjpx3g9IGdmHEH1w5hqBS99uSRwTF/Jj18ZOPojA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P0qlIPYp; arc=none smtp.client-ip=209.85.210.171
+	 In-Reply-To:Content-Type; b=OP4Mhd0GzTCV2Q7h3hyqs0F2hJzm/+3UIAI8nev6aLUAOiO9yfU92KFIzlbPBGIvy8MAQUhyWBtKNaOHH3zCneQUInS+hddNvShnos3v5FNyfbOnjKuDnXBvOgFSEfzJqvRxSC26aVrwEY29yeQy4l/FxHx3B6zTXyd2nfV5xrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=caA7I6GU; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P0qlIPYp"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-823081bb15fso2119396b3a.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Feb 2026 07:44:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="caA7I6GU"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a77c1d5c3bso14431125ad.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 22 Feb 2026 07:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771775093; x=1772379893; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771775189; x=1772379989; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7xO6usibUEKimdMAc7KCxTcRTfewI3MRrrOCGbTFIA=;
-        b=P0qlIPYpsmhyzi29Jzxu2YP/gdGJ9XXPC3hb+JQJAG8n3bQ8H1dNCUJ9YgHcY2NueD
-         NjJlJzBDUurT/JPITni7+Ni3k5OBXH2E9SF+1m0iYUBQCcyA/CHR2Tq5wdIWdb46+4B+
-         5psyRhmtffTRvitmJ9mJ3jfg/pFbk/gYPFzo97KbtkKAeT9W18I2JAOVdv6IfoZc1OD4
-         pNYfbZc/xWgQwne2yai+I06lmOteXz+Qr/AZL1EKBMR4EU/JAat6d1oIbYZY5jS3R7uL
-         YA/bmGRJNFkygxXV2EwtYprK6jRZyHHWob+uLTufvTnmERkQOQSsugDxMKy5ztPUMR76
-         XyOQ==
+        bh=v8O0eJWbs4dETPQNI2FxYNYIJCXejPFz6DhCeZCThTM=;
+        b=caA7I6GUwA+rnM2a86pEB9TxPJCH67T0b4w5rY/bjWo/yKj/d13S8PSUsycgxQ9kfb
+         iWiW5yejyOFFWqw2kaHkmuxpaATaDK19IvfQbAEuglaLAJTlRmNYqTPq3r+tcCdQdXfi
+         3oJEI/+PYz9bPFA6kwGtOd8sr79TnJ78H1ylfGVCdBDIy3y9nNdqDtEELBDrWjigcjmp
+         0M5Pn1q8YNY+aYjumJqqA4pKOtvRm+zSvbfwGa8XyGmU9/J79nVH3N8UEIgSVEc/GykN
+         JYitWAyx2a4JZ1wSuhXrrKCFDcYELYDCL0jaTEGadRQyQOVEg1j8wAcUAo0PSJCiF0O8
+         JoXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771775093; x=1772379893;
+        d=1e100.net; s=20230601; t=1771775189; x=1772379989;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=o7xO6usibUEKimdMAc7KCxTcRTfewI3MRrrOCGbTFIA=;
-        b=h99QYHOoczWuAuxdZFawcyJ+itxMUAzlNwJD9X1O56yjOWzMSPi3ZUR/QAx6irVyjM
-         Mf457bYuLKx2XsAxTarjmpB072FgRvNSC97rX0pduDGIPY2WVbJcM1HxxLHa79FddNOi
-         4yEgPrkyv+L6cCu0brROcssdF1NQZ1Gr6tTJNRWJiwGo0MHRQjyPf1FWNOjW3MBOUhQo
-         XUvdpWJMMmKfdskSa1B0wsSS7Aqn1WInOeKGQmci8l/N2X4SyIKQXaxpDN64hQs3HamM
-         dWl+GpVWX+aSbEO/ePcYYW9tmRCNK62dcrRZ53capG/Rucpm20U2v6kIkN3Qly7loRyZ
-         IkaA==
-X-Forwarded-Encrypted: i=1; AJvYcCXF+ocHNMX39QlnNR4aPmr/3VClR3hbX+Ith4zfLDqhz94CEDGHr11gJIk/5Xb1FIYiCpvPBdIAozykTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDwkVL76/G8yEDrNHIElVrDCR2d1kbIeeSK6gJTz9DDuQ+VyZv
-	sCvwcFryTG4V5/dIDzA1D9isbteW5SCmbH0IG11E5yf2sQAuvUKt5xPn
-X-Gm-Gg: AZuq6aJGHm1qDxR/dYmkNjHCduI9a1BL7OmEGqFqUPnnSeFDhbPKE2tEDYIv2rbXp4Y
-	VclAJ3hSRpAwL/tn0fNfqlmm47YwGhWJuB6AohO6ZuXfAl7YHeq1CgjCDjMVILpMow7WWGvCc/4
-	S8TxI7LygF3XC/lZ8PDPWYIMzhEj/UaP//ps9jMcH6xROpRsNctc5xSkNKiu4aPi7V+TZA6Yqmk
-	aafKpQ8/fAVfx+kxBzw+gAxukkMi6flbrVK83f3E1p4IA5HSVPzJwQITyg3q5zMciua7I87oMaI
-	OpgzyTvaLEr6/YzBSkmuwxxF33BmPy197niM97QMQ9KA1ABnNeKUFQeEFkOo9yZGCXV1Ms4pqMN
-	29PieUn7EyU2eL/yIgF3JGEh5EJ2l6IfOwvKvzRXFIzhqoowv8EAmR2rlZI+dGk+vWYCj+CCEX4
-	qu3aOTZoKXqXJ+iBmjxsYc+5kl+YTynyxul8zCXsJ7yY2+1zsDnRwXXaZ/r4XT0WC1mbd9GpVt
-X-Received: by 2002:aa7:9a87:0:b0:7a4:460e:f86a with SMTP id d2e1a72fcca58-826da90af1cmr4820979b3a.25.1771775093022;
-        Sun, 22 Feb 2026 07:44:53 -0800 (PST)
+        bh=v8O0eJWbs4dETPQNI2FxYNYIJCXejPFz6DhCeZCThTM=;
+        b=vlreAsSoOeKK7t1cb6+LcE4HN+8Wcc/WXWeq2YubiDBdSgQqyxIyfTo1Q+JprPHqOC
+         hm3iWOHOXAm613E3oCrVuFeIWLK3FTcxBp7H1d3Paaloil2qe1AgxLh+l/IN5kbi1Pcd
+         Reh/CF9UnTwnyPiuFkf3ECJvK4/Ssi9iJEErboyF8nE5V4VL4JC2hXxQg1JilT4JGHpt
+         Ex2PDut4CJhJxJrGR+EAunA0ZGqtxIRrlUkRTY+T5mAUYjJB60IewNobluhuHp78cpPM
+         Y2RjGjfx5+BmaAKy8SxHN/2RgeuJoQbm1xbPLJcMcRcEyJRfSdeVH9GJx40YLeICER1J
+         KAiw==
+X-Forwarded-Encrypted: i=1; AJvYcCXkb83E6+Y6Fb/Gk0jdmMHCz/Gh4Nx1gl13ZLnitB89jmA/Urua55BpSM5pk7C6ZEZEllP60hwk4a/Zgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzH5jsI6nzFszMgVHa8baGEB9UACqq3534pwT1RN3Qilac7jeY
+	RbkbRZTTaoT0QFUehiSuvVceCw7xewxTQuhLsXyLCmNpNCDMnhtlTuQk
+X-Gm-Gg: AZuq6aJmBt/WPKnm+K6lXo59dj7xqrjSsRN2CbUPAXVOkOYeAYVAuPaoqng5psCPQ0/
+	DPCi29slyjFkzsvm0kF64Y8zs9FezraY1ZT/v7qLWiQvvYswh6F9agRjGY6vAlxPN5KS6P02U4U
+	AGj4QiciqfTHC/BjJg36zvypNP44dQI+VCh9hVh5Cs9z/k9NxbjynQ/xorgDxSMi4QR3dtocoNS
+	tpJWuYf3c3oDcDyaHBZHuD+WEN8TMXK2m+1+vIeXVNCGPw/SGWSNy13Tk8Zs9ZE1GuR6TTAR6uv
+	Iw7rPT/wBYchhDqMtVZwQ74tsD9MYG/2dhMcNoYm+ztRnQs2jOiUIPP1IG84k4iQtmhea5jv5+1
+	XpCepNdOgqohTFlwH7Soi8CWOk3+uhcLxHwULSYyCDmCV/kejOwcr4zKoSbr7UzncRdutLqYKE2
+	+4rwvmDZChFCNhObgfVieT7bDn/6Z2k3egFcNS2Kwg9wQmhyTEnJwtFhPMSIiZcmpjsshrfzeb
+X-Received: by 2002:a17:903:b88:b0:2aa:d29f:1444 with SMTP id d9443c01a7336-2ad743ffd28mr52582705ad.10.1771775188758;
+        Sun, 22 Feb 2026 07:46:28 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd89cda7sm4423383b3a.44.2026.02.22.07.44.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad75027b0asm51145265ad.67.2026.02.22.07.46.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Feb 2026 07:44:52 -0800 (PST)
+        Sun, 22 Feb 2026 07:46:28 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f03ce33f-10ff-495a-aef3-1cfa4436805c@roeck-us.net>
-Date: Sun, 22 Feb 2026 07:44:50 -0800
+Message-ID: <ed657bd5-eb96-45e0-beda-7b459e7891ee@roeck-us.net>
+Date: Sun, 22 Feb 2026 07:46:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -130,19 +130,9 @@ On 2/22/26 02:58, Hao Yu wrote:
 > Correct AHT20 initialization command sequence and
 > change DHT20 command format to 0bxxxxx notation.
 > 
-
-That needs to explain what is wrong. The current initialization command
-is 0b11100001. Changing it to 0b10111110 but does not explain why the old
-value is incorrect. Something like "Per AHT20 datasheet, the initialization
-command for AHT20 is 0b10111110" plus an explanation that the AHT10
-initialization sequence does not work as intended.
-
 > Tested on rk3566_lckfb board with aht20 sensor connected at i2c-2 port.
 > 
 > Signed-off-by: Hao Yu <haoyufine@gmail.com>
-
-Fixes: d2abcb5cc885 ("hwmon: (aht10) Add support for compatible aht20")
-
 > ---
 >   drivers/hwmon/aht10.c | 16 ++++++++++++++--
 >   1 file changed, 14 insertions(+), 2 deletions(-)
@@ -157,15 +147,9 @@ Fixes: d2abcb5cc885 ("hwmon: (aht10) Add support for compatible aht20")
 >   
 > -#define DHT20_CMD_INIT	0x71
 > +#define AHT20_CMD_INIT 0b10111110
-
-tab after AHT20_CMD_INIT
-
-Thanks,
-Guenter
-
 > +
 > +#define DHT20_CMD_INIT	0b01110001
->  
+>   
 >   /*
 >    * Flags in the answer byte/command
 > @@ -60,6 +62,15 @@ static const struct i2c_device_id aht10_id[] = {
@@ -178,6 +162,13 @@ Guenter
 > +	{ .compatible = "aosong,dht20", .data = (void *)dht20 },
 > +	{}
 > +};
+
+Also, adding DT support needs a separate patch. One is a bug fix which needs
+to be marked as such for stable backport. Adding DT support is new code.
+
+Thanks,
+Guenter
+
 > +
 > +MODULE_DEVICE_TABLE(of, aht10_of_match);
 > +
