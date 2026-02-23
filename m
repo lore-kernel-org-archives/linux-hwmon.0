@@ -1,87 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2CA34D39C;
-	Mon, 23 Feb 2026 10:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C65D35B62C;
+	Mon, 23 Feb 2026 10:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771841138; cv=none; b=jsb1itIBlZSnJuvCH/lYhB15rMrA/p8kP50Wl/5ZbT8F9aJCS/9b1Pyxi4NoLK9hfg6fdkx56dmVRvJUMu2WBMATP75Av/YbAuCT2Xvpn2sIz5HEFF0Xr0Zgd1u6KaN2ywENfjuLB9zWXp1rAlJpeymp33PWuCoCsroF86sSGc4=
+	t=1771842732; cv=none; b=uV5V4Z3CfsPNIS5rhoOH+lwJ5fxyp4xPgVSrDce1AMFW3mPxsB7WuU+5Jfr/BDWT+NgCiSiELdsfM0wWbxoH0RG4JrfrYNcrBexp5TWMGWn/DndKxV31kMjRq9mAJqw2DLeiTLNExI1rgDEuD51XBw2zaPBEco3dbD3nXdJM/qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771841138; c=relaxed/simple;
-	bh=h4Fmnm9DvFB3jjLMnVgmIRJrmS+gvXG7HnQy50p7Cpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dk9woHJD5qOVT8qi16O+HFaPb0dev6RgqfqYrFigSR3O4FlpJO2qZVApV8Z7jV7ciKQd3IsJSZoSud4ohobcmn7ksvPsgGz2mEW9IpfjiKtNv0n74lftQLL71AbtVY4CAWj/Tt1aOFUK/iY5ysbLHHYpUNE83dakgtGUZH1bvUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mk2Wwfz2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771842732; c=relaxed/simple;
+	bh=NPLT8X6ipQ/GeUoSR0YAw9+n5uaaiwOMYlEmKyXO5Mo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQkvYjlVTspkRBCRZq/ZZZ7Jn7kXZK0GoGJfdiQULStHkyWOi/UusUpMjfqyyxns8l6Lbu1yypTJbrpT272grnAL9ILc14tpKHZcI5xv2Ug52EaJwr34VPdMSsW+vwDI/+1KKCYT3+FG1mF4v5iiv0/eUG0T19UjsmK+LkkkuUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTJx90G2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mk2Wwfz2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9752AC116C6;
-	Mon, 23 Feb 2026 10:05:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTJx90G2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1983AC116C6;
+	Mon, 23 Feb 2026 10:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771841138;
-	bh=h4Fmnm9DvFB3jjLMnVgmIRJrmS+gvXG7HnQy50p7Cpo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mk2Wwfz2FCtMm7F+LirBqE0NRbtFtvMCWndhwc39OSeMgt3Hv1MnkHOfMVPAEc5m4
-	 vsxqDd2kkiJhRZDr6TJd0nbwWnaX5qoEyiiVd5ZHSYutcAiWGBTTo4AB5xD/HTI665
-	 ndKBJNYr30dt2+Y5l0TzB9oAm9ZUAaEsoAeCvTfmt36oFffDgtCabaOEugwyrN95+3
-	 IS4nR+3pqnbuP48TTcNRgHP28Un1IU8b6xMkX4hVQvcIweWHf+E3o+VC9Pl8dHqV5k
-	 axgwwqptV+31zb3HwEth//CmW0lvTUJFGpCkcXerlQopUgqZmvoeYTizdnMcT8r3om
-	 RUgZor/b4RwTQ==
-From: Michael Walle <mwalle@kernel.org>
-To: Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>
-Subject: [PATCH 8/8] Revert "dt-bindings: hwmon: sl28cpld: add sa67mcu compatible"
-Date: Mon, 23 Feb 2026 11:04:53 +0100
-Message-ID: <20260223100459.844967-9-mwalle@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260223100459.844967-1-mwalle@kernel.org>
-References: <20260223100459.844967-1-mwalle@kernel.org>
+	s=k20201202; t=1771842731;
+	bh=NPLT8X6ipQ/GeUoSR0YAw9+n5uaaiwOMYlEmKyXO5Mo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gTJx90G2/P3/Sxi6344IOBh+yZoDt/T5C5BgtsRjn0RNaz1YbuHlWf7fyi4RhsmXb
+	 Lz6VwwK1tBUnTMP5UMt0dKxy/m29+etmLfBtoWnl5aGqkY2OslIOIF3GzOhHOqrm1K
+	 aVk25Id/0lcz1y0qTK/D7VFZpsDhaMoXRljxbQRgshUM8Jw9AxgD9ZaMEVd85aW5dT
+	 /jaD0fdrW9k3yUXx1i7+JyTKDBt/Zjil5D3B6dZdwIP4VX8uU0KdGF0iQ8EV3mvzam
+	 lCIQH37bNlnGHF62taIEv+m2XFsgyRfTc+KROIPPdPZq68CYla8Wu3SJfxDC0lJ15B
+	 UXGssyJh88y2Q==
+Date: Mon, 23 Feb 2026 11:32:09 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Hao Yu <haoyufine@gmail.com>
+Cc: linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, jcdra1@gmail.com, akhilesh@ee.iitb.ac.in, 
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: hwmon: add aosong,aht10 family
+Message-ID: <20260223-sincere-agouti-of-resistance-eef518@quoll>
+References: <20260222170332.1616-1-haoyufine@gmail.com>
+ <20260222170332.1616-2-haoyufine@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260222170332.1616-2-haoyufine@gmail.com>
 
-This reverts commit 0f6eae86e626e0561d2f545a3183be2e12108410.
+On Mon, Feb 23, 2026 at 01:03:30AM +0800, Hao Yu wrote:
+> Add device tree bindings for Aosong AHT10, AHT20 and DHT20 sensors.
+> 
+> Signed-off-by: Hao Yu <haoyufine@gmail.com>
+> ---
+>  .../bindings/hwmon/aosong,aht10.yaml          | 41 +++++++++++++++++++
 
-I was just informed that this product is discontinued (without being
-ever released to the market). Pull the plug and let's not waste any more
-maintainers time.
+This should go to trivial-devices schema.
 
-Signed-off-by: Michael Walle <mwalle@kernel.org>
----
- .../devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml        | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-index 966b221b6caa..5803a1770cad 100644
---- a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-@@ -16,7 +16,6 @@ description: |
- properties:
-   compatible:
-     enum:
--      - kontron,sa67mcu-hwmon
-       - kontron,sl28cpld-fan
- 
-   reg:
--- 
-2.47.3
+Best regards,
+Krzysztof
 
