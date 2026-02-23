@@ -1,126 +1,109 @@
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD714335575
-	for <linux-hwmon@vger.kernel.org>; Mon, 23 Feb 2026 17:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAC93382E4;
+	Mon, 23 Feb 2026 17:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771868507; cv=none; b=bcaASF9AHjqwmDxNV/EVt4ZiAM6XwZtULu9Zl5iJvF/u/vAQcmoMsKTTxZmCPA466QaaeGVBFdi2k08nqcVteytcCsaQvBbeOtYwfGKx8wb+dwJV05jskRJmeupfiEXp4buju7kh8V2H2bi6hyXDUEUOdU6SyW3fFzA37LD9vAg=
+	t=1771868817; cv=none; b=f52GtNS6mSqDeTGE0dljoVHInOfp5sWd5ua34wkph7PtTa8BmxzNwVtAtF3aYnqu6WnPtrmSRB4yRA7+G/6LAourR0VN9E4D+pZGw7DadF+pirGnjTmvrgt1m1+BtfQ9BQjzM9e8Xu/x7l1EyKHskeNr4CRRtTXfMDyl86PkB2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771868507; c=relaxed/simple;
-	bh=tidd1TdFYWp4jDWkTB+dQ7/+l7i8iyrf+OeVMuTs/Q8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PeDt6GQtTmRghCcGGVDQmYCjKRP7onmIPJbCbSdgZIS+i+r68D8d2tSFM0Sy8fBoCcg/zaYWtJJIT2SvdFi+fBwJ6Loudr75sf2AaDzonztt1oyGTtoQ0HGWWHfnWPKopHA7N2NxFhZHzKa9Do8n6+klZyw4JCKoi483R0DhGSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y16jBxtZ; arc=none smtp.client-ip=209.85.210.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771868817; c=relaxed/simple;
+	bh=g/aaxOcjyVRFIFVQ5lDD6E51a6OF3UQfhs033IrpbEU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IUIFdmdb6qJ9JgtAliveT0swQbVuhDCiP2NNWgy7UhVPOY2HxyqvfeFLtd7zlVKlRQ3VMTMLpStKYxUKePMSXsvK0xxDzV+nLU/+68os7EjyCar4aYlBbVSQkfAviiHoLzRLyqLPUapYB8lZXTY6Ar6eEtlhCXY/c48kXiYOOX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+QACFtI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y16jBxtZ"
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-824a3ba5222so2444580b3a.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Feb 2026 09:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771868505; x=1772473305; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XMOrkl/BziQHRI8pHgCZt8ZfPDD6UJ51/RQxt9kpqgc=;
-        b=Y16jBxtZWdwFhHIcAN8rw3921Z7sc6jXDT7rEtuYRzev2gTpylr7fPoX2TnpuhXOJx
-         5Qrc3poS+12GVgcTgEyZ+oKFmOxohbhUdn9AWQedAsyul8SqItwJGFW1JHUWJqiKJHAc
-         yIgq0KVynzM/SjpHIVECL7reLGRX/aOK2GS4sPtNFX0V9+mKC5NbOvcyoHRU65a+xxzN
-         N4jfM3AZuuhm7MkH4OWLX/3xA6Wg1YHpgJRENkZ1xUkKFJxOlPw103A5XEzKy97BU1Jc
-         mDN1wPOIQ5iXeIuzAo6FJY/4UxUNO4ZsLo/h/QxgafxYlCrMaf+prvXVaZu/DKPM+B3b
-         4B7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771868505; x=1772473305;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XMOrkl/BziQHRI8pHgCZt8ZfPDD6UJ51/RQxt9kpqgc=;
-        b=jZn/DqH5Q2SGh36RlIHRKWk79T6R9UXIg045ttcOKgh+R6psHeomyfjmCXuPB+Rn54
-         AedyVKA69ZnlTlyg+AUyi10a4MHnhWBHjWEoUm9EiOZIDy5V4TR3Kok9JG4KmY8mPf2s
-         LllkVrb+eziSS3zSdhA87s4y/eB9SS3XCM7P8ZQzqO9rsd0dRbQMFC/3f1f/EFjn1DgR
-         b6zZPtkmynNz2QxHr+7F7oy+kCcPWXI2+gIjlxdim0aCNjEyeoaDYLQmqPAFcFMkTK3a
-         2ugE6z9rubPP6opCEgh423C2SYJ7f9q1qWN5uhl/Dz1P8vLcKa62aY6aBSGBHhC3WElH
-         bMHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxf9Ita960LgimOcEeSlmZMI/qQ8xwi0mc6sQ3a3Kf3d00y+1zHXj6uQf5OVB9YGt/bIl+CVko05AK1A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEfba+4+wqIJwlumErxS1UQm0mzBJd92ROioq/EgAI0Gna43bC
-	8QBLLvjHa7X9Tdoi5c1iawhkdttPMLDJuHoSYbP/kAsd+WxypkygXkGN
-X-Gm-Gg: ATEYQzwTPhKR8Q7SUleCx62faANMEN65IOa0QVWRaDRUl0vTwJJg1soK8KOtFMhUGPU
-	9MGWgZl/C4EXCnf8GfpZKWE3W4NJtw/eV8Q/S2UTrooZ8jm0Yi1VhnTBn4YyQDFywDphOtlVduB
-	NQbUjweLndakn01CLDA3DiBHTLBMYsax5AZafDfqdmOYH9zbnbj6Y6QdSDbtcosFUYMvEFQgSUl
-	4RatLZNenAS/i+Na8GhksE6zThn5IZ6Dll2aoRr1ChDcWI7G7LxaYNi8ZuELrbSl+/5ApkPWLLb
-	upzKBSpO2WDauTKtGi0JGO3zgLYBnahWKuW7aOd0jq+a2L6G+zAAqnk4R5118CEeHnv5EdCJgJV
-	lWe+WpXapSPjkKuVLRJVimkvz01iZm/RiLTxkJZHreSsxPwtXW5jzUIzhc4DwiK+GbsPBQBnwqo
-	UXGNocntZSFWWiXMCP
-X-Received: by 2002:a05:6a00:1d83:b0:823:3056:c2b9 with SMTP id d2e1a72fcca58-826daaf421amr7076910b3a.65.1771868505069;
-        Mon, 23 Feb 2026 09:41:45 -0800 (PST)
-Received: from yu.. ([120.242.225.43])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-826dd47c737sm7873090b3a.0.2026.02.23.09.41.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 09:41:44 -0800 (PST)
-From: Hao Yu <haoyufine@gmail.com>
-To: krzk@kernel.org
-Cc: akhilesh@ee.iitb.ac.in,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	haoyufine@gmail.com,
-	jcdra1@gmail.com,
-	krzk+dt@kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux@roeck-us.net,
-	robh@kernel.org
-Subject: [PATCH v3 2/2] hwmon: (aht10) add device tree ID matching
-Date: Tue, 24 Feb 2026 01:38:53 +0800
-Message-Id: <20260223173853.30617-3-haoyufine@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260222105831.7360-1-haoyufine@gmail.com>
-References: <20260222105831.7360-1-haoyufine@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+QACFtI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7081C116C6;
+	Mon, 23 Feb 2026 17:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771868817;
+	bh=g/aaxOcjyVRFIFVQ5lDD6E51a6OF3UQfhs033IrpbEU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=f+QACFtIqO6ZPR5kL7D/teTJlplZOCLt5XDN/dObSZSv7HMLF9VQ3IL1GbJvseGRN
+	 Rayw8Ju5aCg+oWVWd9IciGGIHEgr2HLySEI4Oo3an49YLeQ46sDOoPsE6jwZwUivgE
+	 XV2PTruCNXA8LJGygKyRtHwMjKC18CWMSLCYNexg3cD6ff3X6FAKXk5yw+j/xyiE/r
+	 TPA9fE4is5/1DrIqgOsu5VAh29MLr9E8znbb8NIGqmAm8f6nRxadSWvv7+6ZwK/6c1
+	 Z+6zhgwgep7Rwejw88fjcV0o+3o0VMiDDMAYrhYCBNxn97BKJQWES/xbFEL1VJlhJa
+	 dry9I2W1LfLyw==
+Message-ID: <2c99e704-e4ef-484a-85c7-d9698931956d@kernel.org>
+Date: Mon, 23 Feb 2026 18:46:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: add Aosong AHT10/AHT20/DHT20
+ to trivial devices
+To: Hao Yu <haoyufine@gmail.com>
+Cc: akhilesh@ee.iitb.ac.in, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ jcdra1@gmail.com, krzk+dt@kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux@roeck-us.net, robh@kernel.org
+References: <20260222105831.7360-1-haoyufine@gmail.com>
+ <20260223173853.30617-2-haoyufine@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260223173853.30617-2-haoyufine@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add of_device_id table to allow the driver to be matched via
-Device Tree. This is required for supporting the AHT10/20/DHT20
-sensors on platforms using DT.
+On 23/02/2026 18:38, Hao Yu wrote:
+> Add Aosong AHT10, AHT20 and DHT20 temperature and humidity sensors
+> to the trivial-devices documentation. These sensors use a standard
+> I2C interface and do not require complex binding definitions.
+> 
+> Signed-off-by: Hao Yu <haoyufine@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Signed-off-by: Hao Yu <haoyufine@gmail.com>
----
- drivers/hwmon/aht10.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
-index 007befdba977..cd802dad5eca 100644
---- a/drivers/hwmon/aht10.c
-+++ b/drivers/hwmon/aht10.c
-@@ -60,6 +60,15 @@ static const struct i2c_device_id aht10_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, aht10_id);
- 
-+static const struct of_device_id aht10_of_match[] = {
-+	{ .compatible = "aosong,aht10", .data = (void *)aht10 },
-+	{ .compatible = "aosong,aht20", .data = (void *)aht20 },
-+	{ .compatible = "aosong,dht20", .data = (void *)dht20 },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, aht10_of_match);
-+
- /**
-  *   struct aht10_data - All the data required to operate an AHT10/AHT20 chip
-  *   @client: the i2c client associated with the AHT10/AHT20
-@@ -375,6 +384,7 @@ static int aht10_probe(struct i2c_client *client)
- static struct i2c_driver aht10_driver = {
- 	.driver = {
- 		.name = "aht10",
-+		.of_match_table = aht10_of_match,
- 	},
- 	.probe      = aht10_probe,
- 	.id_table   = aht10_id,
--- 
-2.34.1
-
+Best regards,
+Krzysztof
