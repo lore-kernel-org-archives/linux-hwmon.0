@@ -1,228 +1,463 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from lithops.sigma-star.at (mailout.nod.at [116.203.167.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742F73A9DB1
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Feb 2026 11:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EF139902C;
+	Wed, 25 Feb 2026 12:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.167.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772020076; cv=none; b=LbMFzOrLJdGUOKOZZ+vj7o6kFIlKRhTlBPUFXgQdlCpXHBSYf73r2q7W9S0uD0KhnmCOZQlRsykd9A2JLfJIRBm+9AgGcErDDx3BeOGIU9/8kA3Vac7D6sHIJ4eB0eb//IC/WO8YlDgahLuiK4Ph4VV1Z6wOb7CG+3Zd1cKsvhE=
+	t=1772023944; cv=none; b=USmhyDGiXAtumQxJNMMfYQ7yOMXvxn1aMhG9SpANte5v8WhfMDfAAXwhoFd3lpMyPeUHxOHlV/psk00RU+qVWcp23qU1f8yQmHevyI5KF75AWPPSi39W0bV8uE2poYy/IemyVig8IWLjiS8epeHJ52CEuycpgn1sAseK/DnvLaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772020076; c=relaxed/simple;
-	bh=Pk73OIPdiMTezSidqgT/3Y+vHmMsprwcdHK/ge+sk+Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r2WeTtcKA0iWp/b2SWyNy3qpIRFVT77Zfal3aBeBYK85oaQjFpvLGvN8TN9G8oGCNkBeVMjk/WGswZA+dlNPL9KxsrmozaFJs4T+IdD2S3kWobZGh0jhcz//nqQxG9BAUsowWUGvJsQE3LifJRM1h/PJLIfRzf5cHkk6KNtIKVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JTomlRX1; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=J/pdRn3E; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JTomlRX1";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="J/pdRn3E"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61P9Ssu92127726
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Feb 2026 11:47:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	lkD15yZ9jHj5uXSPvJd6NEVT6IBzh30wdXxfpfM53eM=; b=JTomlRX18bHxHi+J
-	mjs+YskRpdJ/nw9tW+LDNlItQ5F90bMqfBUd15wh+hhLdJzhn1FvAfpJcG+YT/C5
-	qHsqXnAIZgQdiJI32zq7hzS+TGNpoODSk8Pry6tKsFuHr4PYHKx6qggeSQ/1AbeU
-	9g3CwO9lSJRaCtRLJdJmyr1cW/iz6bt080mOuDs5gfekXG9Po0t78LjKozbMFNaV
-	pzCuxe10padylKc8rmNKRm1s/daOjpaw15YsAAFUduNCiTA+pB9HlWbokwytSfpI
-	B9OrfoAVupw9LS893AVGuadJjE3cJGQKKvMDtNgZ2aFxnhEqcmi9FMwjRckkIkDI
-	Tfy72g==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4chexekbpd-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-hwmon@vger.kernel.org>; Wed, 25 Feb 2026 11:47:53 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8cb456d53a5so626734485a.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Feb 2026 03:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772020072; x=1772624872; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkD15yZ9jHj5uXSPvJd6NEVT6IBzh30wdXxfpfM53eM=;
-        b=J/pdRn3EtOQm6Aw7hNOfjMa8LiyqNIKIE1bFxDpys1edWaLV5ckefkbzEgPD7umk9J
-         OD3hpsNSvEZG2NSN1TbSRCFiEmJXMIAnKEDshTllj/S+/QPUwzZGhr/TSTUza/tiFDgB
-         46OVWy3hULc1okTh/B00P05iOw2vOPSGvJ6ucHYNXxGNIq8m2x/yf4fL+/4dzssSOPmU
-         JFwoAzNok45ZqfhTUkqWo8gkXXVp+ODSn/1YdAO6TbxIwXZh7BLMIzQbSCtGEUe+u1cZ
-         NoD4v5FyaC+GYBRSyRH7yoRkJeBHTyfirlmUba9lW1Jkg7ouFxSMz0vXePFsSSgSFEcX
-         uJZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772020072; x=1772624872;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkD15yZ9jHj5uXSPvJd6NEVT6IBzh30wdXxfpfM53eM=;
-        b=wDbZ/wj0in/NpIFxzit6FPaYQuCLeTaorAP3HbHHkIxvtD61QtxnPjoSDTCjdq/2ku
-         Eiq0+FbuaaSvu386/aW2RfN+XbGXYELLqhCHM/B+Id9Lm6gvjDu0jrNruqcuaHOtbU1n
-         ZboXPIpbR1cEnRFQi2F+yXR+/k8cd4FV2E18g4nGPQ07QUdvsbOpWIJQ9pmylNApxSp7
-         4yfPuunRzCDce+u6VNeJNTj+7WJnvpqJH1dyqt7/ehkPHXj+73vAX0gGQImjn46P1O82
-         c8St934Y5YmSqR1A0NMxWmT2sK3H9Xn4ZrF0khudvt5VjeRNnzW969JkvHdR1MpolsZr
-         UpSQ==
-X-Gm-Message-State: AOJu0YzjyeKroCcbOAAh3xmZuJ4q8fNqpd4nAFVnikrR/acT/EgN6D+I
-	fd+hrwb30KiAFbeqKsPBh6chXPiZrAUZ1TcPXWEyAFaHt6yb06fA+E4yKFG7L2wbV3tecTrxOQw
-	9AHHf+2K0i960GYaumrWFDNWT6gX0fYMb1xo3zOuflqZ+g4KnjhrOEV7INZBDuL+t0Q==
-X-Gm-Gg: ATEYQzyV/lFio1Ras+eShJ/vFcLhfXp7EjBrCL+PkzeLKsTBuidYdaNRuVsyqimDkTL
-	pobdlsDmR3zrZbViUHGWYurwRlbBLrI9wQb+gGeKsTGMtXgOmbIKC5JtdUqImy0TVOut+ljEz3S
-	ydVoe17zv7uxHlmmLTSBjImHtVpRBglOPiUF819mGZPSIVMc08caDd4FdQMnZBBFeWrfrMU37/h
-	Ii9fJq/xfckhqHVP6siVV+PwDqD1Jqg5uc7LBwc228ik9yLjWyrPnhfUuB46W0RtkGfLoMi1R3M
-	Ztl0UROUsYtmn/JQZ8KUZFmNA3AOzHpqDfs4ilNxMnnZ/euMGU7bnfc/DNVR2jxTzElna9w93kA
-	vUFdC12Q8RPyDnAZl6AEZ6TG26CH7rFjZTAo0pO2l/1iyv5BfiMuSpKh0xog3WzU/DxX7VMJmaa
-	/T31Q=
-X-Received: by 2002:a05:620a:4104:b0:8c0:c999:df5a with SMTP id af79cd13be357-8cb8cab0685mr1584818485a.6.1772020072495;
-        Wed, 25 Feb 2026 03:47:52 -0800 (PST)
-X-Received: by 2002:a05:620a:4104:b0:8c0:c999:df5a with SMTP id af79cd13be357-8cb8cab0685mr1584816685a.6.1772020071940;
-        Wed, 25 Feb 2026 03:47:51 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084e9fd46sm511111466b.53.2026.02.25.03.47.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Feb 2026 03:47:50 -0800 (PST)
-Message-ID: <5da495ce-9114-49da-82a2-0d9082a3e506@oss.qualcomm.com>
-Date: Wed, 25 Feb 2026 12:47:47 +0100
+	s=arc-20240116; t=1772023944; c=relaxed/simple;
+	bh=R5MwjWSydbdyQue8I2dgG91hyACCSZpNi8sAhk1mnS0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iPumFbydklRpv4BH9sOpMIRq8/f6c8A8HuwL0nLGmQl+SfOXSkFFIfPRA7IcMUUyAAFMwWxxvO+dZfGSg5HKZ6lTK2snSVES52VANz+Qny1N6L3W4GHLzo3Qluiyzns023ERa66Rz2cq6Tl17Fh1ViPOyiS3JFJA6NFEKopKiBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at; spf=fail smtp.mailfrom=nod.at; arc=none smtp.client-ip=116.203.167.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nod.at
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 6ED1329ABCA;
+	Wed, 25 Feb 2026 13:52:12 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id qwRo6-6h9Zeo; Wed, 25 Feb 2026 13:52:11 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by lithops.sigma-star.at (Postfix) with ESMTP id 3D5ED29ABD6;
+	Wed, 25 Feb 2026 13:52:11 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id hS1Cfun_JASb; Wed, 25 Feb 2026 13:52:11 +0100 (CET)
+Received: from foxxylove.corp.sigma-star.at (unknown [82.150.214.1])
+	by lithops.sigma-star.at (Postfix) with ESMTPSA id DEEB929ABCA;
+	Wed, 25 Feb 2026 13:52:10 +0100 (CET)
+From: Richard Weinberger <richard@nod.at>
+To: linux-kernel@vger.kernel.org
+Cc: linux-pwm@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	ukleinek@kernel.org,
+	linux@roeck-us.net,
+	julian.friedrich@frequentis.com,
+	Richard Weinberger <richard@nod.at>
+Subject: [PATCH] [RFC] hwmon: nct6775: Register fan PWMs as PWM chip
+Date: Wed, 25 Feb 2026 13:51:59 +0100
+Message-ID: <20260225125159.20822-1-richard@nod.at>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: pm7250b: Enable Qualcomm BCL device
-To: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
-        Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>,
-        Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc: linux-hwmon@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
- <20260206-qcom-bcl-hwmon-v1-3-7b426f0b77a1@oss.qualcomm.com>
- <98ad13d8-82d0-4def-917d-b99cf455c5f1@oss.qualcomm.com>
- <fa6ce650-42b8-4090-9c80-7f4e4c85a96e@oss.qualcomm.com>
- <91425550-35f6-4941-917c-f639dfadb42d@oss.qualcomm.com>
- <f62c0595-16ce-4af3-b0e1-0ebb84dc4236@oss.qualcomm.com>
- <81d31750-f301-4332-84fa-a5c1aa401507@oss.qualcomm.com>
- <cbfd429a-459a-481a-93b5-fc9204d9ca8c@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <cbfd429a-459a-481a-93b5-fc9204d9ca8c@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDExNSBTYWx0ZWRfX6mMAXu5PWb9H
- G0HrENbnQTIGbEtNff3GS7/tzr3v5fq7Kcoo8fLBkyDCIx28DoWXMC5wCa/O2h/DXjhwITdA/4v
- 3gRxxy/1j58nYri8x0S9gjEJSeWPozkGdGXwORPbdpXXNpkTRDPkzjZtSpTj8uRrvntjnfsFYu3
- LC5hAfZZwtPpHldnV5Bi+WNpOn1OZd9g0DgDF9NUKxb/dgaR7S25ZNC6IzDbkq9Knp2+XeAgI+9
- Nij76M+yx5/R/A7hxqXS9M+rdFGk/o64lvRPmwzoYi3VHU6SjDAVn5mIVePySR5ska3elcAW/4U
- 3M8x8QBRNFUeFU0wT+z4qAFTioG7cV40CR2YWNAPhgZ9mOkvj/qmMXHD3Ht41SoNrnLECAUSeAn
- FsL8XuZbM56Y02YhFnGYdGjcT878o/mdGzJXdkACi0jTs6qmNAeTnpicJBX1ibegmcSB5+CiPpy
- xyBc9Lgn1MYc6pTdHpA==
-X-Authority-Analysis: v=2.4 cv=V85wEOni c=1 sm=1 tr=0 ts=699ee169 cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
- a=EUspDBNiAAAA:8 a=lfvPHyuYFvH2aD9VkFsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-GUID: jQNFdyBWQxqn9qcHVIccRSWjQLeaP37s
-X-Proofpoint-ORIG-GUID: jQNFdyBWQxqn9qcHVIccRSWjQLeaP37s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 spamscore=0
- suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602250115
+Content-Transfer-Encoding: quoted-printable
 
-On 2/24/26 7:35 PM, Manaf Meethalavalappu Pallikunhi wrote:
-> Hi Konrad,
-> 
-> On 2/19/2026 6:34 PM, Konrad Dybcio wrote:
->> On 2/19/26 12:34 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>> Hi Konrad,
->>>
->>> On 2/16/2026 5:18 PM, Konrad Dybcio wrote:
->>>> On 2/13/26 12:55 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>>>> Hi Konrad,
->>>>>
->>>>> On 2/6/2026 2:41 PM, Konrad Dybcio wrote:
->>>>>> On 2/5/26 10:14 PM, Manaf Meethalavalappu Pallikunhi wrote:
->>>>>>> Enable Qualcomm BCL hardware devicetree binding configuration
->>>>>>> for pm7250b.
->>>>>>>
->>>>>>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
->>>>>>> ---
->>>>>>>     arch/arm64/boot/dts/qcom/pm7250b.dtsi | 10 ++++++++++
->>>>>>>     1 file changed, 10 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>> index 0761e6b5fd8d..69ad76831cde 100644
->>>>>>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
->>>>>>> @@ -202,6 +202,16 @@ pm7250b_gpios: gpio@c000 {
->>>>>>>                 interrupt-controller;
->>>>>>>                 #interrupt-cells = <2>;
->>>>>>>             };
->>>>>>> +
->>>>>>> +        bcl@1d00 {
->>>>>>> +            compatible = "qcom,pm7250b-bcl", "qcom,bcl-v1";
->>>>>>> +            reg = <0x1d00>;
->>>>>>> +            interrupts = <PM7250B_SID 0x1d 0x0 IRQ_TYPE_EDGE_RISING>,
->>>>>>> +                     <PM7250B_SID 0x1d 0x1 IRQ_TYPE_EDGE_RISING>;
->>>>>>> +            interrupt-names = "bcl-max-min",
->>>>>>> +                      "bcl-critical";
->>>>>> We should strip the "bcl-" prefix, since these interrupts happen
->>>>>> to be under the bcl device
->>>>> Ack
->>>>>>
->>>>>>> +            overcurrent-thresholds-milliamp = <5500 6000>;
->>>>>> Is that something that we expect to change between boards, or is
->>>>>> that an electrical characteristic of the PM7250B?
->>>>> Yes,  It can change based on battery used for that board as these thresholds will be close below battery OCP spec.
->>>>> It is not based on pmic spec. Max current threshold support for specific pmic bcl is taken care in driver pmic data.
->>>>
->>>> Okay, so this property must not live in the common PMIC DTSI then..
->>>
->>> Ack, I will move it into board file wherever it is required in next revision
->>>
->>>>
->>>> I think ideally this could be communicated over battmgr, since it already
->>>> has a lot of information about the battery that's currently connected to
->>>> the device. Do you think that would be reasonable? Would you know who we
->>>> could talk to internally?
->>>
->>> We are not adding any battery information here. This configuration is specifically for the BCL peripheral to monitor current and trigger an over‑current alarm. While the BCL settings are derived from battery specifications, they are not the same as the battery’s own limits,the BCL thresholds will always be set below the battery’s OCP specification.
->>> The intent of the BCL is to provide early detection of over‑current or under‑voltage conditions, notify the SoC/peripherals, and allow corrective action before the system ever reaches the battery’s actual protection limits.
->>
->> Right, but as you say they are derived from the battery spec, I would
->> guesstimate it's something like "90% max current", so swapping out different
->> batteries for the same device could potentially affect this value. Since we
-> 
-> No, there is no predefined equation to derive these values directly from the battery specifications. The actual limits depend on multiple factors, including the underlying mitigation support available on the board for different components (fast path/slow path), the peak‑current use cases defined for that board, the battery characteristics etc. Simply swapping the battery will not automatically make it work. These parameters must be carefully tuned and configured.
+The Nuvoton 6775 chip family also offers PWM functionality to control
+various fans. Depending on the hardware design, the PWM can also be
+used for other purposes, such as controlling a display backlight.
 
-What I had in mind is that if a battery is dual- (or more-) sourced for a
-given device by a given vendor, they could perform all that tuning and then
-store the data alongside other battery configuration that they presumably
-already are required to include in battmgr for all of the specific battery
-types they intend to support
+Historically, the driver implemented its own sysfs-based interface to
+control the PWMs. This made it impossible to use the PWM as a backend
+for other drivers, such as pwm-backlight.
 
-> I discussed this with the internal battery manager driver team, and they mentioned that the power‑supply framework does not expose any discharging current spec details. Typically, only charging‑current–related information is provided.
+This patch registers the PWM functionality as a PWM chip within the
+PWM subsystem. Since the Nuvoton chip has non-trivial control logic,
+the following constraints exist:
 
-Right, but the power-supply framework happens to be open-source, so if that
-would be worth implementing, I think the maintainers would certainly be open
-to having that discussion (+Sebastian)
+ - Exporting a PWM for external use is only allowed when the fan mode
+   is set to manual or off.
+ - As soon as a PWM is exported, changing its configuration is no
+   longer possible through the hwmon sysfs interface, reading is
+   still allowed.
+ - Changing the PWM period is not supported. IMHO, it is too risky
+   since the PWMs usually control system fans and similar components.
+ - Reading and decoding the current PWM period is only supported for
+   one chip variant so far, for all other chips, a fixed period of
+   100ms is assumed.
 
+Signed-off-by: Richard Weinberger <richard@nod.at>
+---
+ drivers/hwmon/nct6775-core.c | 249 +++++++++++++++++++++++++++++++++--
+ drivers/hwmon/nct6775.h      |   3 +
+ 2 files changed, 238 insertions(+), 14 deletions(-)
 
-> For some modern battery use cases, these configurations must also be adjusted dynamically based on factors such as ambient temperature and battery state of charge. The driver already supports this through the hwmon sysfs interface, allowing these values to be overridden at runtime.
+diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
+index 79bc67ffb9986..bc3b0fb505c39 100644
+--- a/drivers/hwmon/nct6775-core.c
++++ b/drivers/hwmon/nct6775-core.c
+@@ -56,6 +56,7 @@
+ #include <linux/bitops.h>
+ #include <linux/nospec.h>
+ #include <linux/regmap.h>
++#include <linux/pwm.h>
+ #include "lm75.h"
+ #include "nct6775.h"
+=20
+@@ -770,6 +771,7 @@ static const u16 NCT6106_FAN_PULSE_SHIFT[] =3D { 0, 2=
+, 4 };
+ static const u8 NCT6106_REG_PWM_MODE[] =3D { 0xf3, 0xf3, 0xf3, 0, 0 };
+ static const u8 NCT6106_PWM_MODE_MASK[] =3D { 0x01, 0x02, 0x04, 0, 0 };
+ static const u16 NCT6106_REG_PWM_READ[] =3D { 0x4a, 0x4b, 0x4c, 0xd8, 0x=
+d9 };
++static const u16 NCT6106_REG_PWM_FREQ[] =3D { 0xf0, 0xf1, 0xf2 };
+ static const u16 NCT6106_REG_FAN_MODE[] =3D { 0x113, 0x123, 0x133 };
+ static const u16 NCT6106_REG_TEMP_SOURCE[] =3D {
+ 	0xb0, 0xb1, 0xb2, 0xb3, 0xb4, 0xb5 };
+@@ -2482,6 +2484,9 @@ store_pwm_mode(struct device *dev, struct device_at=
+tribute *attr,
+ 	int err;
+ 	u16 reg;
+=20
++	if (data->pwm_exported[nr])
++		return -EBUSY;
++
+ 	err =3D kstrtoul(buf, 10, &val);
+ 	if (err < 0)
+ 		return err;
+@@ -2510,13 +2515,8 @@ store_pwm_mode(struct device *dev, struct device_a=
+ttribute *attr,
+ 	return err ? : count;
+ }
+=20
+-static ssize_t
+-show_pwm(struct device *dev, struct device_attribute *attr, char *buf)
++static int read_pwm(struct nct6775_data *data, int nr, int index)
+ {
+-	struct nct6775_data *data =3D nct6775_update_device(dev);
+-	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
+-	int nr =3D sattr->nr;
+-	int index =3D sattr->index;
+ 	int err;
+ 	u16 pwm;
+=20
+@@ -2535,18 +2535,87 @@ show_pwm(struct device *dev, struct device_attrib=
+ute *attr, char *buf)
+ 		pwm =3D data->pwm[index][nr];
+ 	}
+=20
+-	return sprintf(buf, "%d\n", pwm);
++	return pwm;
++}
++
++static u64 nct6106d_calc_period(u8 val)
++{
++	/*
++	 * Case 1: Bit 7 is set
++	 * --------------------
++	 *
++	 * frequency f in kHz is 92.5 / (val[6:0] + 1)
++	 * persiod_ns =3D 1000000 / (92.5 / (val[6:0] + 1))
++	 * ...rearrange
++	 * persiod_ns =3D (1000000 * (val[6:0] + 1)) / 92.5
++	 * ...eleminate decimals places by muliplying with 2 / 2
++	 * persiod_ns =3D (2000000 * (val[6:0] + 1)) / 185
++	 *
++	 * Case 2: Bit 7 is unset
++	 * ----------------------
++	 *
++	 * frequency f in Hz is 1008 / (val[3:0] + 1)
++	 * persiod_ns =3D 1000000000 / (1008 / (val[3:0] + 1))
++	 * ...rearrange
++	 * persiod_ns =3D (1000000000 * (val[3:0] + 1)) / 1008
++	 */
++	if (val & 0x80)
++		return DIV_ROUND_CLOSEST_ULL(2000000ULL * ((val & 0x7F) + 1), 185);
++	else
++		return DIV_ROUND_CLOSEST_ULL(1000000000ULL * ((val & 0x0F) + 1), 1008)=
+;
++}
++
++static int get_pwm_period(struct nct6775_data *data, int nr, u64 *period=
+)
++{
++	int err;
++	u16 val;
++
++	if (!data->REG_PWM_FREQ) {
++		/*
++		 * Use 100ms period if PWM frequency can't be obtained.
++		 */
++		*period =3D 100000000ULL;
++		return 0;
++	}
++
++	if (!data->pwm_freq[nr]) {
++		err =3D nct6775_read_value(data, data->REG_PWM_FREQ[nr], &val);
++		if (err)
++			return err;
++
++		data->pwm_freq[nr] =3D val & 0xFF;
++	}
++
++	switch (data->kind) {
++	case nct6106:
++		*period =3D nct6106d_calc_period(data->pwm_freq[nr]);
++		break;
++	default:
++		WARN_ONCE(1, "REG_PWM_FREQ configured but no calc function");
++		return -EINVAL;
++	}
++
++	return 0;
+ }
+=20
+ static ssize_t
+-store_pwm(struct device *dev, struct device_attribute *attr, const char =
+*buf,
+-	  size_t count)
++show_pwm(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+-	struct nct6775_data *data =3D dev_get_drvdata(dev);
++	struct nct6775_data *data =3D nct6775_update_device(dev);
+ 	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
+ 	int nr =3D sattr->nr;
+ 	int index =3D sattr->index;
+-	unsigned long val;
++	u16 pwm;
++
++	pwm =3D read_pwm(data, nr, index);
++	if (pwm < 0)
++		return pwm;
++
++	return sprintf(buf, "%d\n", pwm);
++}
++
++static int write_pwm(struct nct6775_data *data, int nr, int index, unsig=
+ned long val)
++{
+ 	int minval[7] =3D { 0, 1, 1, data->pwm[2][nr], 0, 0, 0 };
+ 	int maxval[7]
+ 	  =3D { 255, 255, data->pwm[3][nr] ? : 255, 255, 255, 255, 255 };
+@@ -2560,9 +2629,6 @@ store_pwm(struct device *dev, struct device_attribu=
+te *attr, const char *buf,
+ 	if (index =3D=3D 0 && data->pwm_enable[nr] > manual)
+ 		return -EBUSY;
+=20
+-	err =3D kstrtoul(buf, 10, &val);
+-	if (err < 0)
+-		return err;
+ 	val =3D clamp_val(val, minval[index], maxval[index]);
+=20
+ 	mutex_lock(&data->update_lock);
+@@ -2581,6 +2647,28 @@ store_pwm(struct device *dev, struct device_attrib=
+ute *attr, const char *buf,
+ 	}
+ out:
+ 	mutex_unlock(&data->update_lock);
++
++	return 0;
++}
++
++static ssize_t
++store_pwm(struct device *dev, struct device_attribute *attr, const char =
+*buf,
++	  size_t count)
++{
++	struct sensor_device_attribute_2 *sattr =3D to_sensor_dev_attr_2(attr);
++	struct nct6775_data *data =3D dev_get_drvdata(dev);
++	unsigned long val;
++	int err;
++
++	if (data->pwm_exported[sattr->nr])
++		return -EBUSY;
++
++	err =3D kstrtoul(buf, 10, &val);
++	if (err < 0)
++		return err;
++
++	err =3D write_pwm(data, sattr->nr, sattr->index, val);
++
+ 	return err ? : count;
+ }
+=20
+@@ -2681,6 +2769,9 @@ store_pwm_enable(struct device *dev, struct device_=
+attribute *attr,
+ 	int err;
+ 	u16 reg;
+=20
++	if (data->pwm_exported[nr])
++		return -EBUSY;
++
+ 	err =3D kstrtoul(buf, 10, &val);
+ 	if (err < 0)
+ 		return err;
+@@ -3501,6 +3592,131 @@ static int add_temp_sensors(struct nct6775_data *=
+data, const u16 *regp,
+ 	return 0;
+ }
+=20
++static int nct6775_pwm_round_waveform_fromhw(struct pwm_chip *chip,
++					     struct pwm_device *pwm,
++					     const void *_wfhw,
++					     struct pwm_waveform *wf)
++{
++	struct nct6775_data *data =3D pwmchip_get_drvdata(chip);
++	const u8 *wfhw =3D _wfhw;
++
++	if (get_pwm_period(data, pwm->hwpwm, &wf->period_length_ns))
++		return 1;
++
++	wf->duty_length_ns =3D mul_u64_u64_div_u64(*wfhw, wf->period_length_ns,=
+ 255);
++	wf->duty_offset_ns =3D 0;
++
++	return 0;
++}
++
++static int nct6775_pwm_round_waveform_tohw(struct pwm_chip *chip,
++					   struct pwm_device *pwm,
++					   const struct pwm_waveform *wf,
++					   void *_wfhw)
++{
++	struct nct6775_data *data =3D pwmchip_get_drvdata(chip);
++	u8 *wfhw =3D _wfhw;
++	u64 cur_period;
++
++	if (wf->period_length_ns =3D=3D 0) {
++		*wfhw =3D 0;
++		return 0;
++	}
++
++	if (get_pwm_period(data, pwm->hwpwm, &cur_period))
++		return 1;
++
++	if (wf->duty_length_ns >=3D cur_period)
++		*wfhw =3D 255;
++	else
++		*wfhw =3D mul_u64_u64_div_u64(wf->duty_length_ns, 255, wf->period_leng=
+th_ns);
++
++	if (wf->period_length_ns !=3D cur_period)
++		return 1;
++
++	return 0;
++}
++
++
++static int nct6775_pwm_write_waveform(struct pwm_chip *chip,
++				      struct pwm_device *pwm,
++				      const void *_wfhw)
++{
++	struct nct6775_data *data =3D pwmchip_get_drvdata(chip);
++	const u8 *wfhw =3D _wfhw;
++
++	return write_pwm(data, pwm->hwpwm, 0, *wfhw);
++}
++
++static int nct6775_pwm_read_waveform(struct pwm_chip *chip,
++				     struct pwm_device *pwm,
++				     void *_wfhw)
++{
++	struct nct6775_data *data =3D nct6775_update_device(pwmchip_parent(chip=
+));
++	u8 *wfhw =3D _wfhw;
++	int val;
++
++	val =3D read_pwm(data, pwm->hwpwm, 0);
++	if (val < 0)
++		return val;
++
++	*wfhw =3D (u8)val;
++
++	return 0;
++}
++
++static int nct6775_pwm_request(struct pwm_chip *chip, struct pwm_device =
+*pwm)
++{
++	struct nct6775_data *data =3D pwmchip_get_drvdata(chip);
++
++	if (data->pwm_enable[pwm->hwpwm] > manual)
++		return -EBUSY;
++
++	data->pwm_exported[pwm->hwpwm] =3D true;
++
++	return 0;
++}
++
++static void nct6775_pwm_free(struct pwm_chip *chip, struct pwm_device *p=
+wm)
++{
++	struct nct6775_data *data =3D pwmchip_get_drvdata(chip);
++
++	data->pwm_exported[pwm->hwpwm] =3D false;
++}
++
++static const struct pwm_ops nct6775_pwm_ops =3D {
++	.sizeof_wfhw =3D sizeof(u8),
++	.request =3D nct6775_pwm_request,
++	.free =3D nct6775_pwm_free,
++	.round_waveform_fromhw =3D nct6775_pwm_round_waveform_fromhw,
++	.round_waveform_tohw =3D nct6775_pwm_round_waveform_tohw,
++	.write_waveform =3D nct6775_pwm_write_waveform,
++	.read_waveform =3D nct6775_pwm_read_waveform,
++};
++
++static int nct6775_register_pwm_chip(struct device *dev, struct nct6775_=
+data *data)
++{
++	struct pwm_chip *chip;
++	int ret;
++
++	if (data->pwm_num < 1)
++		return 0;
++
++	chip =3D devm_pwmchip_alloc(dev, data->pwm_num, 0);
++	if (IS_ERR(chip))
++		return PTR_ERR(chip);
++
++	chip->ops =3D &nct6775_pwm_ops;
++	pwmchip_set_drvdata(chip, data);
++
++	ret =3D devm_pwmchip_add(dev, chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "Could not add PWM chip\n");
++
++
++	return 0;
++}
++
+ int nct6775_probe(struct device *dev, struct nct6775_data *data,
+ 		  const struct regmap_config *regmapcfg)
+ {
+@@ -3563,6 +3779,7 @@ int nct6775_probe(struct device *dev, struct nct677=
+5_data *data,
+ 		data->REG_PWM[6] =3D NCT6106_REG_WEIGHT_DUTY_BASE;
+ 		data->REG_PWM_READ =3D NCT6106_REG_PWM_READ;
+ 		data->REG_PWM_MODE =3D NCT6106_REG_PWM_MODE;
++		data->REG_PWM_FREQ =3D NCT6106_REG_PWM_FREQ;
+ 		data->PWM_MODE_MASK =3D NCT6106_PWM_MODE_MASK;
+ 		data->REG_AUTO_TEMP =3D NCT6106_REG_AUTO_TEMP;
+ 		data->REG_AUTO_PWM =3D NCT6106_REG_AUTO_PWM;
+@@ -4379,6 +4596,10 @@ int nct6775_probe(struct device *dev, struct nct67=
+75_data *data,
+ 	if (err)
+ 		return err;
+=20
++	err =3D nct6775_register_pwm_chip(dev, data);
++	if (err)
++		return err;
++
+ 	if (data->have_tsi_temp) {
+ 		tsi_temp_tg.templates =3D nct6775_tsi_temp_template;
+ 		tsi_temp_tg.is_visible =3D nct6775_tsi_temp_is_visible;
+diff --git a/drivers/hwmon/nct6775.h b/drivers/hwmon/nct6775.h
+index 296eff99d0038..2032962f980f7 100644
+--- a/drivers/hwmon/nct6775.h
++++ b/drivers/hwmon/nct6775.h
+@@ -65,6 +65,7 @@ struct nct6775_data {
+ 				 * [5]=3Dweight_duty_step, [6]=3Dweight_duty_base
+ 				 */
+ 	const u16 *REG_PWM_READ;
++	const u16 *REG_PWM_FREQ;
+=20
+ 	const u16 *REG_CRITICAL_PWM_ENABLE;
+ 	u8 CRITICAL_PWM_ENABLE_MASK;
+@@ -137,6 +138,8 @@ struct nct6775_data {
+ 				 * [3]=3Dpwm_max, [4]=3Dpwm_step,
+ 				 * [5]=3Dweight_duty_step, [6]=3Dweight_duty_base
+ 				 */
++	u8 pwm_freq[NUM_FAN];
++	bool pwm_exported[NUM_FAN];
+=20
+ 	u8 target_temp[NUM_FAN];
+ 	u8 target_temp_mask;
+--=20
+2.51.0
 
-One could assume that depends on (presumably) proprietary userspace and I
-would imagine it'd be generally preferred to keep as much charging infra as
-possible inside the kernel (or even better, in some battle-tested FW).
-
-Konrad
