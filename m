@@ -1,166 +1,122 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D6C3A1A3B
-	for <linux-hwmon@vger.kernel.org>; Thu, 26 Feb 2026 22:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391E4244692
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Feb 2026 23:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772145510; cv=none; b=S0CmGFL0wLiIKcMEiptCuPo45obIkvYwjqgKCxKKz7j/1tukc5zPEgqjyMktJws8l3bhaRGt/8JK4wY5mISmE5pljtWbG32ydIQa9IqBOeCg6Nv//mxKravaYvQtj+viVgcrDe/0rC+Ar4sJpZUHBD7KrClFb/nyZqZ7yX55aWI=
+	t=1772146855; cv=none; b=Ikqf/q1hzpEX2bpBMSks1jiNDi5tSuqmCFe6CsuzSpQsyOvOrzfkhnda4U0kR4hnQympeGfcTB/8QHrIsTf4EtkLbldb8kgGoajeoHcYkb2U4JToLlrhpqTwFhm8yBJsvUZEvCRKqSTnu/iXXvObnyoVZHcJg0zSKZB0B0oe1NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772145510; c=relaxed/simple;
-	bh=T/wDQ2iMi0vXLDT1EzlM4qZzSytYxtK6USzhQ5vl0fk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mqgqNdcPw82iTH2bV23/o3wVYCC+6JKdCu7yA05Leo7mPec+Epfe6KGAS01XOfdcNexJ9b7CcbbvB6jmN0oi3zj+xet3G2V1Xi+/J/vMkluErpE8M0cT4YbF6cL5nSn1C5DRC59x3EH7uLdUv2f/iGj0wi/DZIieanmThGQIOmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UFB3zBH9; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772146855; c=relaxed/simple;
+	bh=8NfYHIs2u8PYfKkw4JpNbu7c/jRe8VpjpEv1ZVGuM/8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HveCTtUXGmFKjlP6q2s7Oy9Hb5MvPF9F8QGPS7Cw0ishKnXVkpmFqX4zNp1jFSTnrPnAHgqk88VMMFVqavIo3enrdxWW59X8Hmyd5wcnJnIB+nDMSfm4M8yoGE2DDDcmHQxPJb2ro1JcKAh8sJqCu6Osq6440hfUreBUJAbOSh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/itnBvW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UFB3zBH9"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ad9f316d68so6705055ad.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Feb 2026 14:38:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772145509; x=1772750309; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=15sIrA1WeByRKFhSIpDX14/vR1M9GDJaSXD4pcCTCFI=;
-        b=UFB3zBH9tSto4xIK/qbSEjV8ZItR+iVAAdywCeShT4xdn547cSQC09RARFCb0EoRP6
-         loL6nAswd07QNTB1mtv8E9PM7+VwyHxJ7eIrrvFuTrJjbWOPCjxZ7iYpTmPzuJgiyyS4
-         6wzuBtfqYBu4KWvtz1gsBzKS8lpJb1Hiwv+0uaUcHTNK/dDQIeNZ3mwHB8bczGC0zlVY
-         g/UrTYXRAF47rkdTWbUs+RxH1iSk0dH9lvmZz+3FiQ6kL4++U6b+BySc0dJz2Vnh4Dqr
-         iCyX0K3Of/ujICdqdIe5/cmsiLDLbdcacmrdpvZ5e5wNVxGsxaYvTmZ3QSR+8g4hZunh
-         5Gag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772145509; x=1772750309;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=15sIrA1WeByRKFhSIpDX14/vR1M9GDJaSXD4pcCTCFI=;
-        b=Ub42rTbxdNHstAVjzaDFo9LYyTI4ZERiAOApyJlZQVq7fTMQS2p1ONijbRLZvXuq27
-         qXwjmTK2rIez8GBOjAljP3RzfKwMdQ48/aQ9kwd+i3FsOruDzG2UO6YXK8Ga6VotJvAg
-         HvAJ7cLx/2BDh9kp8UYHBwiFK3Gi4pElRslRbuMiu1+/nHRej+yEnivpxEtFO1WHaFpL
-         o0c5ObhPKHU5Pwqe1PEqrqwXRY1CiqxINbsbBdWIIXabl1zAcgqYfsByeFLsGTlOZDQ7
-         jGowCXIsbU64wYjJ5LlMl7YrqaBKDWa2tF/T/nx9SE5s+L2ewg5ULPMbHopaEsIhrpeQ
-         Nj8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVSpWI0OefGJ+RAGbnitDCXXNMd7yucyS29Or8RvPMpiI8FDatsRQ94mh5885l2dvwdA5Sl7+tGGuYBQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwirTKKy6dkOZwlfQS++HA+Bb+yhQeOLPck9ALIx6drCCz0Z1Xy
-	jr12UYTQW0d4hTqI2cHirLVO83xlfhG5JWg5p9e0ildDJ9k0lO3xK2YJ
-X-Gm-Gg: ATEYQzxr4B2Giw/WbVJAH/hmrwVn00qKKEcXlXf1cSR6eChkpXfpAaDSANV6VpAPTlw
-	GtrrNvhR3dOses6UAb4qR1rnNt3pMAQx/qhz9McqliAJ1gOfzkXWIcY3Z30Tamoce3nDNyxwwAg
-	BaLKveddX0tCyKEF9Tgi5eET6EWkSj48gXMizn2x0Z67nnBNgu44Vnn/dGpO5F50ErvAXw8+AuV
-	GlAgVIvcHOi0IS/Grhhqot0Mxojg22c1q0OfaXrRXf2DHwaBNjQ8sQ/5wyT2+s7/tFELDmyeWeS
-	EBopzWwgMzB0Dlt5lNgAXVwIU9Y+WYGsJktP7wMRpwcvZRHIP84VKt+ULOruB5GkDYrlQbm4Luh
-	AqzCWlemncSt5C1hqgm1DeKRTOmxT/l7Xxttg9dkuHNUYQyTSFlJdPMzoh70zjFf+kIyDZ1QlEh
-	9dPBYovlDv5VenNpehcbpfWtPHnb1Yiy7PPrrXjrMM3At7XpAmwuW7TOW5UKUAa+Y2xWCUPbgD
-X-Received: by 2002:a17:903:32c5:b0:2a0:c942:8adf with SMTP id d9443c01a7336-2ae2e3e0f59mr4324455ad.8.1772145509003;
-        Thu, 26 Feb 2026 14:38:29 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb69f9c2sm36880365ad.51.2026.02.26.14.38.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 14:38:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9c733024-8ad6-459d-ae5a-a9825f85c506@roeck-us.net>
-Date: Thu, 26 Feb 2026 14:38:27 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/itnBvW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F2FC2BC9E
+	for <linux-hwmon@vger.kernel.org>; Thu, 26 Feb 2026 23:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772146854;
+	bh=8NfYHIs2u8PYfKkw4JpNbu7c/jRe8VpjpEv1ZVGuM/8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B/itnBvW2Z5XflU3hz8kop32RTtw7zbafsmciu8bA00tJbl0nsKjMYOsLjr5z/3zz
+	 DmAKG1bwZ5xYkF1hfMovC4qvMJ/wWhRlNy8Az2v0vpTQLBmg2vj6OVUU0Un17UF9tO
+	 14mKCu7wfADzBDM4EUDKWYm7PbVzqiFmD07+6ArArulcJEjos+okD4bvid2eUi9fAp
+	 kVaD8AF0cCzHTF+SEduiypJloXtcsuERmvfsP7Z1Z2gAFSxNA9jBXle7XJMx1kdNq9
+	 zR8vKlvbJ1ZijGGfkB5Hp/p2LMdECgMJdTYwaqyQPo5I45jM9kJ0eJARZhsFi+7TAo
+	 /gAgBUAmpCbaQ==
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-64aedd812baso1149751d50.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Feb 2026 15:00:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXrjBLW304l/lF1DjxMQRmnBh+p80b6BwIQmK3RvNNRSHhPh6lhY4/sE61DaB/gGDmBXg68DvnWDc6MWA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuGAA+I7iZW+9qxuJKbMa9FoQh3FkeyQpZleukPWGtx7W0/Ncg
+	9IckqxsX7YXptfLrXLlCvxlBD6DfU4Tb4u+Rg4ksli3a8U2cPhblg32PyGuYI3EMZmvk7OsEn9h
+	t948ZY1zHKxp74xMK4nf1evy9/LWu2Js=
+X-Received: by 2002:a05:690c:3506:b0:798:71e8:3e3c with SMTP id
+ 00721157ae682-798855a43eamr9121307b3.40.1772146854204; Thu, 26 Feb 2026
+ 15:00:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [RFC] hwmon: nct6775: Register fan PWMs as PWM chip
-To: Richard Weinberger <richard@nod.at>, linux-kernel@vger.kernel.org
-Cc: linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
- ukleinek@kernel.org, julian.friedrich@frequentis.com
-References: <20260225125159.20822-1-richard@nod.at>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260225125159.20822-1-richard@nod.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260225171545.1980385-1-o.rempel@pengutronix.de> <20260225171545.1980385-4-o.rempel@pengutronix.de>
+In-Reply-To: <20260225171545.1980385-4-o.rempel@pengutronix.de>
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 27 Feb 2026 00:00:43 +0100
+X-Gmail-Original-Message-ID: <CAD++jLnkfcgme27DbAUOKn60HJbJuBghetEqpC8dhGnuMPk=Kw@mail.gmail.com>
+X-Gm-Features: AaiRm50m6oV6TlZxbQPsC6-EQt93_b_JUZykrqE8gN-rjOqdfnJE3otrxdt5BrE
+Message-ID: <CAD++jLnkfcgme27DbAUOKn60HJbJuBghetEqpC8dhGnuMPk=Kw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/8] dt-bindings: pinctrl: add NXP MC33978/MC34978 pinctrl
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Peter Rosin <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/25/26 04:51, Richard Weinberger wrote:
-> The Nuvoton 6775 chip family also offers PWM functionality to control
-> various fans. Depending on the hardware design, the PWM can also be
-> used for other purposes, such as controlling a display backlight.
-> 
-> Historically, the driver implemented its own sysfs-based interface to
-> control the PWMs. This made it impossible to use the PWM as a backend
-> for other drivers, such as pwm-backlight.
-> 
-> This patch registers the PWM functionality as a PWM chip within the
-> PWM subsystem. Since the Nuvoton chip has non-trivial control logic,
-> the following constraints exist:
-> 
->   - Exporting a PWM for external use is only allowed when the fan mode
->     is set to manual or off.
->   - As soon as a PWM is exported, changing its configuration is no
->     longer possible through the hwmon sysfs interface, reading is
->     still allowed.
->   - Changing the PWM period is not supported. IMHO, it is too risky
->     since the PWMs usually control system fans and similar components.
->   - Reading and decoding the current PWM period is only supported for
->     one chip variant so far, for all other chips, a fixed period of
->     100ms is assumed.
-> 
+Hi Oleksij,
 
-This is a good start, but I'll want to see stronger safeguards.
-- Creating a pwmchip entry for a pwm channel must be triggered by
-   device property data, obtained either from devicetree or through
-   DMI or through device properties embedded in ACPI data. For each
-   channel, this must be confirmed by checking that the channel is
-   not associated with a fan control channel.
-- If a pwm channel is configured as pwmchip, it must not be used for fan
-   control, meaning the hwmon properties associated with that channel
-   must not be created.
+thanks for your patch for this very interesting hardware!
 
-This will retain current functionality while enabling support for using
-pwm channels for purposes other than fan control.
+On Wed, Feb 25, 2026 at 6:16=E2=80=AFPM Oleksij Rempel <o.rempel@pengutroni=
+x.de> wrote:
 
-Thanks,
-Guenter
+> Add device tree binding documentation for the pin control and GPIO block
+> of the NXP MC33978/MC34978 Multiple Switch Detection Interface (MSDI).
+>
+> This block manages 22 switch detection inputs (14 Switch-to-Ground,
+> 8 Programmable) and acts as a GPIO controller.
+>
+> Additionally, it supports pin configuration for hardware-specific feature=
+s
+> required for long-term contact maintenance in harsh environments, such as
+> adjusting the continuous/pulsed wetting current to penetrate oxide layers
+> on mechanical switches.
+>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
+Are the hardware-specific pin configurations for oxide layer
+penetration (!) and stuff excluded from these bindings? (It looks
+like.)
+
+> +++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP MC33978/MC34978 Pinctrl/GPIO Driver
+> +
+> +maintainers:
+> +  - David Jander <david@protonic.nl>
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: |
+> +  Pin control and GPIO driver for the MC33978/MC34978 MSDI device.
+> +
+> +  Pin numbering:
+> +  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs)
+
+I don't know what a switch-to-ground input is, but I talked to an AI
+about it.
+
+It appears to be directly incorrect to use such a line without
+flagging it as GPIO_ACTIVE_LOW in the consumer so this should
+be mentioned here, GPIO lines 0-13 *must* be flagged
+GPIO_ACTIVE_LOW. (I don't know a good way to enforce it
+in schema, sadly, maybe Conor has ideas.)
+
+> +  - Pins 14-21: SP0-SP7 (Programmable inputs, can be SG or SB)
+
+What is SB now? Please explain :)
+
+Other than that it looks good to me!
+
+Yours,
+Linus Walleij
