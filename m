@@ -1,94 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BE641B342
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 14:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503CA43E9E4
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 15:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772201327; cv=none; b=jltsvZc5pMiJF+chub3N5baj9gMmXCLgEI0gNGvBf77xZdFxtl36qo0/CrkXp3aThi+0VNOY3ehT5cwtJBTa1XODhwe+7nqn8cS5L0RzVoak0dEADuEOx02RO5BI8c/g9hXBYQsW1psqPDpIaIOVf689rlj+IAnZv6EMNrGt5dw=
+	t=1772206452; cv=none; b=BuGoD8BFWCIzGXHsphJiVG00cJCiRCGvs0FG1kn2Z7FYDaOJQ0Cq/Trvh+T8jiTz3KKeIJK5mzX18fgGoDRIH/vi5E3lSYWBabMUB0tElW7n0nlq5nrUh3W7g9soENm+GmJyi0u9Yj8bqSK1GNUlNkYUn8OS1MVUfVT7ikppxxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772201327; c=relaxed/simple;
-	bh=y+3rbUMsFH6STnRgyWIB91wX0pLNRrq2pIp4p+Xt2Gs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pUdAOqUzH5mWJJhxBKLb4HJPc3Xad91xiwf5VIGZlYpVBkW6JPt13vDI2iMvSy/IcynG6ytkwwZ49Z/a7kDKljPjbwezZxu+3jrDk4Mu553niA1uvp/XbUHSP7OaPN+8F+adFsmlHsC5KdXekcZ0Ul3EPZ1Dkk5xXh+KG5zosJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEld6riC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772206452; c=relaxed/simple;
+	bh=Q5M7jajGD8mocuB5vbEVGa2RaWXjdo/7DN4Gts8cvcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufMYgtArniVdIqn7Zw3XYMm+nyV5GCnp4gzdvqkInaT1RfAZ9nP2YHEnRW6kVNr3U6kEw/N2RrVtlrw4FpZRqKtz6IoJ9sIUMt4ICyJD9au3ncnALWiQ/XAnVOGvZxzYM/CgvZtyR+KnYOX3LuWuRbfL8/XxXciKstuBocWrqBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xe3dZhFN; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEld6riC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAC4C2BC86
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 14:08:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772201326;
-	bh=y+3rbUMsFH6STnRgyWIB91wX0pLNRrq2pIp4p+Xt2Gs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gEld6riCZd2kvzj5ofkF6tZ1YSoP9vlkRWI+SgbVLCwvGPEJFvuQtsIyv7lI3DLCf
-	 KOmEk3aXUmU+7JT85z8Xu8//nT4F5xWo2KnnUGgem/stnoe6uYDi7/tTOeRGJRI7b/
-	 P/1sZ0r8P7gVekWaUqhX2QxOmu8pwNCMzw8jnNFoZqGBi4tjj40qdiE5ioEGW4In/K
-	 huaE4jjYAbsYG3/QReyOAj9QtE0YfS1byAoAnRpglmGVKKezt4KoKJcgXvCkAKwFWU
-	 qFSrEJQuTkA50szl/7zTLVuovCNpzOK2cU1L1NfwAyKqxT+83l0Eb3rS9u2aVJGrHD
-	 PZaA9vLKNgI8Q==
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-798374d0f44so44445907b3.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 06:08:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXIqBV4pa/VyNt+LkOomImHVkIuCpEqCoBfegCEx0PzcOxHNshvF2rIUi8oyA58rGLOud5ZRsy1Si2Hfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywgr0e5/rGxP5R7SGd5wmginrtd32PomSlcnj8uQ6kAM5jsAFKp
-	X7WyhaTsNQcwAXCPjFvWOfMkbnQKk6ALKcbJVC0ktTM190rXpI6FJvRGmLxp+kbqO1Rn9FwtPz7
-	QGSslssDfqJCBoMGfuy7YAKoL6++ZFmQ=
-X-Received: by 2002:a05:690c:4802:b0:798:534e:4a0b with SMTP id
- 00721157ae682-79874bf3391mr56667937b3.15.1772201326242; Fri, 27 Feb 2026
- 06:08:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xe3dZhFN"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 9DE404E419C1;
+	Fri, 27 Feb 2026 15:34:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6CD0F5FE46;
+	Fri, 27 Feb 2026 15:34:05 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 71B41103682F4;
+	Fri, 27 Feb 2026 16:33:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772206444; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=om+ILXLhJC6eYOYq4v80L5Ebke/E4rCiLTomLCU79aU=;
+	b=xe3dZhFNZPJfK/ipyEgL/hl+RZ6s6mu2jfTK+6HdWISCrUVTjenydvYCx/gIm3pNL3CzRk
+	CA20q+EDUMY3NHtb4jXUgZ8JLkOxZ4CRylK6BuHcj/WLLF84RPvPXLFgdMamlhqwA3ct0M
+	wIpr9Hutk5Jhdfxa8lytUOedg+cg/ygaDVjamStXMOrdpzVwJgABOB2bQILoIl+Hi0fXNl
+	dUcxKndFAS5eQ2pAazT0PVihh7qP5ZxKmjoRiKPwSNyrF3zA2WFIj2A//epCj1JfXr8siX
+	hECAYH3tCX7sJUFg/dari92jFbrRHm8O7fSMMa5fIeeX7Y12oTNzE/LONKeUQQ==
+Date: Fri, 27 Feb 2026 16:33:58 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i3c@lists.infradead.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH] [v3, apply after -rc1] i3c: simplify combined i3c/i2c
+ dependencies
+Message-ID: <177220641632.201056.5029746753419046340.b4-ty@bootlin.com>
+References: <20260204164216.544409-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260225171545.1980385-1-o.rempel@pengutronix.de>
- <20260225171545.1980385-5-o.rempel@pengutronix.de> <CAD++jLnrXHi3dEGWDK1ymnKUvbtSr+BjFzxMXzH+gAS8RToj-A@mail.gmail.com>
- <aaF4zKMK1XOT7L40@pengutronix.de>
-In-Reply-To: <aaF4zKMK1XOT7L40@pengutronix.de>
-From: Linus Walleij <linusw@kernel.org>
-Date: Fri, 27 Feb 2026 15:08:35 +0100
-X-Gmail-Original-Message-ID: <CAD++jLnX+vSh8+Sxu4YtwbmCf1a+m8yGT0aB9yNzC=CSx54YPA@mail.gmail.com>
-X-Gm-Features: AaiRm52zSRwDnOFexQxpGMC2RtMNpIQU19Z0k6kTABARIgBcABSrhEmUVLwGRYU
-Message-ID: <CAD++jLnX+vSh8+Sxu4YtwbmCf1a+m8yGT0aB9yNzC=CSx54YPA@mail.gmail.com>
-Subject: Re: [PATCH v1 4/8] pinctrl: add NXP MC33978/MC34978 pinctrl driver
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Bartosz Golaszewski <brgl@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Peter Rosin <peda@axentia.se>, David Jander <david@protonic.nl>, kernel@pengutronix.de, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260204164216.544409-1-arnd@kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Feb 27, 2026 at 11:58=E2=80=AFAM Oleksij Rempel <o.rempel@pengutron=
-ix.de> wrote:
+On Wed, 04 Feb 2026 17:41:58 +0100, Arnd Bergmann wrote:
+> All combined i2c/i3c drivers appear to suffer from the same link
+> time problem when CONFIG_I3C is set to 'm':
+> 
+> arm-linux-gnueabi-ld: drivers/iio/magnetometer/mmc5633.o: in function `mmc5633_i3c_driver_init':
+> mmc5633.c:(.init.text+0x30): undefined reference to `i3c_driver_register_with_owner'
+> 
+> This was previously fixed every time by marking individual
+> drivers as 'depends on I2C; depends on I3C || !I3C', but this gets
+> tedious and is somewhat confusing.
+> 
+> [...]
 
-> > The driver needs to report the *physical* level on the line. Then the
-> > lines need to be flagged with GPIO_ACTIVE_LOW or GPIO_ACTIVE_HIGH
-> > on the consumers in the device tree.
->
-> Returning the physical level is actually exactly what this code is
-> trying to do. I need to rewrite the comment :)
+Applied, thanks!
 
-Aha OK I'm not very smart at times...
+[1/1] i3c: simplify combined i3c/i2c dependencies
+      https://git.kernel.org/abelloni/c/663eb8763c25
 
-> The issue is that the MC33978 hardware does not report the physical
-> voltage level on the pin. As per section 9.10.27 (Read switch status) of
-> the datasheet: "A Logic [1] means the switch is closed while a Logic [0]
-> is an open switch."
->
-> Because it only reports this abstract "contact status", I have to
-> translate it back to the actual physical voltage level (1 =3D High, 0 =3D
-> Low) based on the pin's current configuration:
->
-> In Switch-to-Ground (SG) mode: the status bit stays 0 when the physical
-> voltage on the line is High (open), and reports 1 when the physical
-> voltage is Low (shorted to ground).
-> In Switch-to-Battery (SB) mode: the exact opposite happens.
+Best regards,
 
-Fair enough, as long as we have a (possibly verbose...) explanation
-about what is going on in the binding document I think the
-proper driver behaviour will come out as obvious in the end.
-
-Yours,
-Linus Walleij
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
