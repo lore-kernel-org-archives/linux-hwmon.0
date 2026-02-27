@@ -1,41 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8908535A3A4;
-	Fri, 27 Feb 2026 09:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9E73E8C73
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 10:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772186010; cv=none; b=EVzYMUj7fpRZz9RI6+UrcYIXvT/eiMoAMGimJ9NWiK40wt3eIJjCy5S/5535yQu919HES9jQOOeK+ZWUSY9mCoDz9/m/tlMpVDErfiONQrODir6YGLSA4ItqDtx/XP8x/ywLqq5LiqbY6ZguY6yoSYSKSD5nL70f6L8AJmp/MLE=
+	t=1772186729; cv=none; b=ekxz7DPNs2JgxQfGiCxVTH7nNl6mkUdCZeqfjMKD8656FzAEWjXd+Do8uJqPg755VpVn6nT+hHrx7XhZ3lkG8vc+CJYfmvEPnoCe0fBuW2eSdF3jySwHMs5DU96FwgADdTRVu3OQA6DgAe0aPX9u0wdDZ0O7eeoyYtERguVp9EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772186010; c=relaxed/simple;
-	bh=HLcFWey9DSUCv86ZYg8BCuwo9lyJIVnXPQ6nUhzQ4qI=;
+	s=arc-20240116; t=1772186729; c=relaxed/simple;
+	bh=byKhIKAZjGddb3Nt3Z0anMMrJfpi4EDJyAA3QvmxmWA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rdb8XOcxav/vAtmFj9g1ZAgs4FmbO4WGHpg60LeQ7ReuWsrsSihlpmwzDjP7Sc5zHDz3Mk9ECfrS9OFWRke9TxS1MBQJbCqy62i/Th2hwro8fLqwKB7wqauO4KYjXLSJL81Mlsi6HLzjHRQfhfYRcwy1k+pXiXg8NFLG2htqq7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kg7iVEHO; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kg7iVEHO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB11C116C6;
-	Fri, 27 Feb 2026 09:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772186010;
-	bh=HLcFWey9DSUCv86ZYg8BCuwo9lyJIVnXPQ6nUhzQ4qI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kg7iVEHOPHvLwQwLc9TJfYAzmZ4kf85QcRSKBvUk0sCfIL4RtXdWbng2q98TlF2Nb
-	 OOgS94vhcYwdT9aYJJ1bzOV0a13ACFN/hbgUrah/ovwif/rFEMQiUNfPp3DpPXk4/8
-	 7CxzbPALgmdfw6toMFWc3lWh+y6QbPyfl4y1Ngg8jPXFUC1jopaC1EWu47v6/TyC82
-	 41giFDFZ9yhiGUStDBGJ4YOwqArK2oNlCEqBMC8QNlKywV6e/9QmlBom/h6e2HDItv
-	 PBpM7WcqfC6EzDc6uIx3x/9WnGcilg9F4Vw6Of7f/vAINBsJXXZ6tLP/juDR/PXPhG
-	 k4OXicN7tcsJg==
-Date: Fri, 27 Feb 2026 10:53:27 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alexey Charkov <alchark@flipper.net>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add DT schema for TI INA4230
-Message-ID: <20260227-prudent-tunneling-mole-6dedf5@quoll>
-References: <20260225-ina4230-v1-0-92b1de981d46@flipper.net>
- <20260225-ina4230-v1-1-92b1de981d46@flipper.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YBUccMF2gorq/UdJ5hMgdOMlS9aKm+ml6bzavJmgNag2eolK1fJhyzoN4YeXvtKF3x3hc+i2Zyx+kh70VQlgWphJagSJhJttm0/+fYwpp1Vj3b54RS+BVlIXyUevnMa2zyk5xa54Ky7OHrorFX2LwooLCTg09h7LbJxNVRsXfZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vvuiO-0002IP-Il; Fri, 27 Feb 2026 11:04:56 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vvuiM-002sKB-1S;
+	Fri, 27 Feb 2026 11:04:55 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vvuiN-00000008csb-2p2A;
+	Fri, 27 Feb 2026 11:04:55 +0100
+Date: Fri, 27 Feb 2026 11:04:55 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: Re: [PATCH v1 3/8] dt-bindings: pinctrl: add NXP MC33978/MC34978
+ pinctrl
+Message-ID: <aaFsR67vLeapQZ_U@pengutronix.de>
+References: <20260225171545.1980385-1-o.rempel@pengutronix.de>
+ <20260225171545.1980385-4-o.rempel@pengutronix.de>
+ <CAD++jLnkfcgme27DbAUOKn60HJbJuBghetEqpC8dhGnuMPk=Kw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -44,67 +53,50 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260225-ina4230-v1-1-92b1de981d46@flipper.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD++jLnkfcgme27DbAUOKn60HJbJuBghetEqpC8dhGnuMPk=Kw@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 25, 2026 at 01:29:11PM +0400, Alexey Charkov wrote:
-> Add DT binding for TI INA4230, which is a 48V 4-channel 16-bit I2C-based
-> current/voltage/power/energy monitor with alert function.
+On Fri, Feb 27, 2026 at 12:00:43AM +0100, Linus Walleij wrote:
+> Hi Oleksij,
 > 
+> thanks for your patch for this very interesting hardware!
+> 
+> On Wed, Feb 25, 2026 at 6:16 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> 
+> > Add device tree binding documentation for the pin control and GPIO block
+> > of the NXP MC33978/MC34978 Multiple Switch Detection Interface (MSDI).
+> >
+> > This block manages 22 switch detection inputs (14 Switch-to-Ground,
+> > 8 Programmable) and acts as a GPIO controller.
+> >
+> > Additionally, it supports pin configuration for hardware-specific features
+> > required for long-term contact maintenance in harsh environments, such as
+> > adjusting the continuous/pulsed wetting current to penetrate oxide layers
+> > on mechanical switches.
+> >
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> Are the hardware-specific pin configurations for oxide layer
+> penetration (!) and stuff excluded from these bindings? (It looks
+> like.)
 
-A nit, subject: drop second/last, redundant "DT schema". The
-"dt-bindings" prefix is already stating that this DT and this cannot be
-non-schema.
-See also:
-https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+Yes, they are excluded for now. The target board is general-purpose, so
+the attached switches or LEDs will vary. I'd prefer to gather more
+concrete use cases before designing a generic interface for the
+wetting currents.
 
-
-> +patternProperties:
-> +  "^input@[0-3]$":
-> +    description: The node contains optional child nodes for four channels.
-> +      Each child node describes the information of input source. Input channels
-> +      default to enabled in the chip. Unless channels are explicitly disabled
-> +      in device-tree, input channels will be enabled.
-> +    type: object
-> +    additionalProperties: false
-> +    properties:
-> +      reg:
-> +        description: Must be 0, 1, 2 or 3, corresponding to the IN1, IN2, IN3
-> +          or IN4 ports of the INA4230, respectively.
-> +        enum: [ 0, 1, 2, 3 ]
-> +
-> +      label:
-> +        description: name of the input source
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description: shunt resistor value in micro-Ohm
-> +
-> +      ti,maximum-expected-current-microamp:
-
-Please add it also to the example at least to one node.
-
-With these two fixes:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-<form letter>
-This is an automated instruction, just in case, because many review
-tags are being ignored. If you know the process, just skip it entirely
-(please do not feel offended by me posting it here - no bad intentions
-intended, no patronizing, I just want to avoid wasted efforts). If you
-do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions of patchset, under or above your Signed-off-by tag, unless
-patch changed significantly (e.g. new properties added to the DT
-bindings). Tag is "received", when provided in a message replied to you
-on the mailing list. Tools like b4 can help here ('b4 trailers -u ...').
-However, there's no need to repost patches *only* to add the tags. The
-upstream maintainer will do that for tags received on the version they
-apply.
-
-https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitting-patches.rst#L591
-</form letter>
-
-Best regards,
-Krzysztof
-
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
