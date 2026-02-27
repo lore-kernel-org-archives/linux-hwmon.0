@@ -1,182 +1,286 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1090D38BF66
-	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 08:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA32E3290DA;
+	Fri, 27 Feb 2026 09:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772180226; cv=none; b=JzS7WaPTMZD26MzSBdciUsO73GsxAknDDF39iS+0JH14otck0oxZGksGfVraZDgIg3ePN+lT1tkyiYf701l5RmxaK7D0Bm7+3k6pqJXr4bocybwak7CgUg49dHebG+xDv6yTj32x14OyMnm8l8Uk7Zetm8qbRi6w8SwmLLG32dI=
+	t=1772185799; cv=none; b=lFFyx8D/isRcJpAoibOtt6E7KSjbyXlm4bUVOGofNCTYz6m/Rb7RvJdqdnpT8PT8oMMxZi6IXeWjpRxUNn7r4HAI4Ns+HASB66FRurU7xNRJbVfIz7FbBQ6AHuFu3REK4SIyZKB1dFq1rCMc0Zy8MeJi5QZMsxR6r6pC7JOY/JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772180226; c=relaxed/simple;
-	bh=NsnXR732HR9l2oml/8CObM0jr3+sZuVFltQ6q3u+bbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pndh3CFqDCLqi0GGxkfMCI3xq7AnfytFo385Hkat6tj3cbThg9RA9caMHqxRdO6dgFUUTc4F2PsKObcuox4k8qEOhhWKU7Mozzjxfft36l9Ki7ltqE1qPIERIH6RRn00x3p9r92ArEzPJbGXTJNUj6yG9dIiMZ68Tijg/7yHAFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJIq7ZKu; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772185799; c=relaxed/simple;
+	bh=asngTag3zYvylC/yoe41u7eejah9wkmXhWZZd615ALg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GFN8i91h3VzydC9iWe84OSGX9PNXLe9b85yz9rMVjPLdTg5FSh6xEo1Tn9Ra5tzrQzzhY1mazdJe1ZTUU4Zv6XpRaKQYoTa1H7xsNIZv4hiTORHioS7qnjF5WEkgzcXjL7GAIp7OPANK3ZAF+8ys0yDPu1Y0c7k19dazhoOFdVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GNzZnUDp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJIq7ZKu"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2aaf5d53eaaso12473695ad.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 00:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772180224; x=1772785024; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=LuyVLLrSQcNLZs9Zxojz4eiomlcsRYNEFiNRapTyc2o=;
-        b=iJIq7ZKu2axQ58MqA3zpNuViuXI+tEu1Sp0d8U7Os3YcPfcOLtvyW/y24azzYRNVHn
-         QQEKVTbwVPd45LW//WSz/iWV5LSaVmpjTXlr7USGf3k5WVx2V25g3o6GeOz1KAYHNIzW
-         nKQoMz5rP5HCmf2r4JwnC4TL3XtENon8UXBvZK83V67YYgqYprrVtNUtlyHmkeOrmBWj
-         OKYO7kBBuVqUaqaApCB1Tua36M4tIg/1b2n3d8e3WfNI4NWENlwYY17OEtzlfHiHwcUG
-         kbX7y7zzKDlEL5cmwgBGbxhiRm9liitiP4s8x017XMXIocksp7w9jBJUGCWZQq4TS3nd
-         WaSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772180224; x=1772785024;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LuyVLLrSQcNLZs9Zxojz4eiomlcsRYNEFiNRapTyc2o=;
-        b=AX+wvASLU/QekxSWUkALL9QwyxEt4pShfaCrMdTWgiF/vo8KQ4DpvgGzRuWNnWhTaG
-         Xts0KEQfLCb563N4JIZ1NXRXzcUCC4Ep6jzYJOvfA8YPXHSpFMmFl1+buJmnd0t5NYd4
-         avQsjISSEFZ2YQz0G/NeHK+S1fer/9sIh2gUWhJtMgiP8Vp1kSFiC1XWS01p2ShpsG5q
-         docAG2WGLcwFYs5Uusq/b7YTyaXI2R403/WwaGq2InSt9GvGdjWOoXfHrIAKCY0tJyYT
-         y5OtBKt4NRQkbgZIDFmwng5+NkMStJsh6m8Pc9B8kg3/CWiV9kWNyLuvZ6K1vPDIjmFf
-         zeBg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+maWvi+j/uHfiEPKlBj4+9XT/mS+njoTkfE3ITpZnbszE53ij9D0Sy6kJYZ22aDw+SJXArhaBNT6b0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF3IXz4xmc5eP7VTxcRf0hBWPPDjtQoh1s6Od4iQAH8/YGY+XA
-	Y3Cyy8LfbrwcRzXEAMxnotzUpkECudNXCp7H/9MAunpNA29sdQC+52D95DU52p0T
-X-Gm-Gg: ATEYQzxWrntnORbh53biRcZGTk26DAfK4uUVOHKtKmcTe9uv5WH+Cuv+jyEjrfjim/H
-	bp2Haoo75a7d3FIDdHViy2RV57SFIGQbypqnv/m2hPK9UXCzrpOOdP+IdL1B0H7Ef7ZcpVCcyRO
-	y+DMzoqfEfIypyE0b4Jxo3sR7Sg4Eb+fEIm1U5AMZGFkW2qUXT38+uJ9IUse3HG9F9rya911S9d
-	wVGAzIoJRfNQ/IRA9HdHEuGyq0dIofEKii0iTDrPH8FgcdsDjfy1E4ISgy4ScNXMPlq7yezvb4z
-	2Mkn37OPwbX8VhQuA9sVWmLK62FyX2b8jlMueToJ7D0R1uOWfCKUiiWDLcZ1zGrqINIqwvH3AnX
-	2qD3lUeGsxex39o3r1LGVlnenEhy7fmuFo/MEQTDkOeFC5ezMOYp8680oM/q0TX8Iw0jo/1Eemk
-	vd/VNVvINUoqdxi7SZDL+1HHOg/R8e/TyheWp5TUgnYOgQkgQOjDWfc4YxBwzNGnRfwxt45U3c
-X-Received: by 2002:a17:902:cec2:b0:2ad:c66d:ad02 with SMTP id d9443c01a7336-2ae2e4d9735mr18263295ad.49.1772180224124;
-        Fri, 27 Feb 2026 00:17:04 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5c244asm55369655ad.30.2026.02.27.00.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Feb 2026 00:17:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <163f68da-c31b-4ee6-a187-a81d14202311@roeck-us.net>
-Date: Fri, 27 Feb 2026 00:17:00 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GNzZnUDp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF27C116C6;
+	Fri, 27 Feb 2026 09:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772185798;
+	bh=asngTag3zYvylC/yoe41u7eejah9wkmXhWZZd615ALg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GNzZnUDpkBzcFL+FM1MNpgCyCADefD/E9sVs21o75lx07Sm7CFwcNG5p7G/U+TpzX
+	 o+Bg8kUpyRSR1jhCpmvjundHD7KmZxJ+oTxGcO/5xGmNeGVz2pPhBBXtqwpdd4rItU
+	 cIsX8HMx3dV5SXBXCrW4znZ4s4MhzHVS2dRW9C1yKmoJla4RqfEFN0+GAqWBJTRCwY
+	 qlvPMu0M4Dvjxh7WbhB+76DU7bjpzhjHHmCJe4MSD9Rtkf89CLjSFQUEDviAHGVeNE
+	 WM9+T11k0+24/mxM1Fq8a+lBw793KM5aMzrpPGrVdbYPK2ZW62b3/+qJpj0Fxb5dbJ
+	 XirqdPVKA9QQQ==
+Date: Fri, 27 Feb 2026 10:49:56 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alexey Charkov <alchark@flipper.net>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: Add support for TI INA4230 power monitor
+Message-ID: <20260227-victorious-parakeet-of-control-bef3ea@quoll>
+References: <20260225-ina4230-v1-0-92b1de981d46@flipper.net>
+ <20260225-ina4230-v1-2-92b1de981d46@flipper.net>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [RFC] hwmon: nct6775: Register fan PWMs as PWM chip
-To: Richard Weinberger <richard@nod.at>
-Cc: linux-kernel <linux-kernel@vger.kernel.org>,
- linux-pwm <linux-pwm@vger.kernel.org>,
- linux-hwmon <linux-hwmon@vger.kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- julian friedrich <julian.friedrich@frequentis.com>
-References: <20260225125159.20822-1-richard@nod.at>
- <9c733024-8ad6-459d-ae5a-a9825f85c506@roeck-us.net>
- <1892064865.155.1772178411224.JavaMail.zimbra@nod.at>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <1892064865.155.1772178411224.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260225-ina4230-v1-2-92b1de981d46@flipper.net>
 
-Hi Richard,
-
-On 2/26/26 23:46, Richard Weinberger wrote:
-> Hello Guenter,
+On Wed, Feb 25, 2026 at 01:29:12PM +0400, Alexey Charkov wrote:
+> Add a driver for the TI INA4230, a 4-channel power monitor with I2C
+> interface.
 > 
-> ----- Ursprüngliche Mail -----
->> Von: "Guenter Roeck" <linux@roeck-us.net>
->>>    - Exporting a PWM for external use is only allowed when the fan mode
->>>      is set to manual or off.
->>>    - As soon as a PWM is exported, changing its configuration is no
->>>      longer possible through the hwmon sysfs interface, reading is
->>>      still allowed.
->>>    - Changing the PWM period is not supported. IMHO, it is too risky
->>>      since the PWMs usually control system fans and similar components.
->>>    - Reading and decoding the current PWM period is only supported for
->>>      one chip variant so far, for all other chips, a fixed period of
->>>      100ms is assumed.
->>>
->>
->> This is a good start, but I'll want to see stronger safeguards.
->> - Creating a pwmchip entry for a pwm channel must be triggered by
->>    device property data, obtained either from devicetree or through
->>    DMI or through device properties embedded in ACPI data. For each
->>    channel, this must be confirmed by checking that the channel is
->>    not associated with a fan control channel.
+> The driver supports voltage, current, power and energy measurements, but
+> skips the alert functionality in this initial implementation.
 > 
-> In my case it's a x86 based industrial PC with direct access.
-> What safeguard do you suggest in this case? A module parameter?
+> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+> ---
+>  MAINTAINERS             |   6 +
+>  drivers/hwmon/Kconfig   |  11 +
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/ina4230.c | 997 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 1015 insertions(+)
 > 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4d879f6a7b51..77f7a416e682 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12511,6 +12511,12 @@ S:	Maintained
+>  F:	Documentation/hwmon/ina233.rst
+>  F:	drivers/hwmon/pmbus/ina233.c
+>  
+> +INA4230 HWMON DRIVER
+> +M:	Alexey Charkov <alchark@flipper.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/hwmon/ina4230.c
 
-Presumably it has DMI information or some other means to identify the system.
-That information can be used to set device properties, which would then be used
-in the probe function to determine if a channel is modeled as pwm channel.
-See device_add_software_node() and friends to get an idea how that works.
+List here binding as well, please.
 
-How exactly those properties would look like needs to be documented in
-nuvoton,nct6775.yaml. I'd assume that the pwm channels would be described
-in there just like for any other pwm chips.
 
-> Also for ACPI data, what exactly do you have in mind?
+...
+
+> +
+> +static int ina4230_probe_child_from_dt(struct device *dev,
+> +				       struct device_node *child,
+> +				       struct ina4230_data *ina)
+> +{
+> +	struct ina4230_input *input;
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(child, "reg", &val);
+> +	if (ret) {
+> +		dev_err(dev, "missing reg property of %pOFn\n", child);
+> +		return ret;
+> +	} else if (val > INA4230_CHANNEL4) {
+> +		dev_err(dev, "invalid reg %d of %pOFn\n", val, child);
+
+All these are probe, so return dev_err_probe
+
+> +		return -EINVAL;
+> +	}
+> +
+
+...
+
+> +	ina->regmap = devm_regmap_init_i2c(client, &ina4230_regmap_config);
+> +	if (IS_ERR(ina->regmap)) {
+> +		dev_err(dev, "Unable to allocate register map\n");
+> +		return PTR_ERR(ina->regmap);
+> +	}
+> +
+> +	for (i = 0; i < F_MAX_FIELDS; i++) {
+> +		ina->fields[i] = devm_regmap_field_alloc(dev,
+> +							 ina->regmap,
+> +							 ina4230_reg_fields[i]);
+> +		if (IS_ERR(ina->fields[i])) {
+> +			dev_err(dev, "Unable to allocate regmap fields\n");
+> +			return PTR_ERR(ina->fields[i]);
+
+Syntax is return dev_err_probe, but allocations should not have printks.
+It is not possible to get there any other error code.
+
+> +		}
+> +	}
+> +
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
+> +		ina->inputs[i].shunt_resistor = INA4230_RSHUNT_DEFAULT;
+> +		/* Default for 1mA LSB current measurements */
+> +		ina->inputs[i].max_expected_current = 32768000;
+> +	}
+> +
+> +	ret = ina4230_probe_from_dt(dev, ina);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to probe from device tree\n");
+> +		return ret;
+
+return dev_err_probe
+
+> +	}
+> +
+> +	/* The driver will be reset, so use reset value */
+> +	ina->reg_config1 = INA4230_CONFIG_DEFAULT;
+> +	ina->reg_config2 = 0;
+> +
+> +	if (ina->single_shot)
+> +		FIELD_MODIFY(INA4230_CONFIG1_MODE_MASK, &ina->reg_config1,
+> +			     INA4230_MODE_BUS_SHUNT_SINGLE);
+> +
+> +	/* Disable channels if their inputs are disconnected */
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
+> +		if (ina->inputs[i].disconnected)
+> +			ina->reg_config1 &= ~INA4230_CONFIG_CHx_EN(i);
+> +	}
+> +
+> +	/* Set calibration values */
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
+> +		if (!ina->inputs[i].disconnected)
+> +			ina4230_set_calibration(ina, i);
+> +	}
+> +
+> +	ina->pm_dev = dev;
+> +	dev_set_drvdata(dev, ina);
+> +
+> +	/* Enable PM runtime -- status is suspended by default */
+> +	pm_runtime_enable(ina->pm_dev);
+> +
+> +	/* Initialize (resume) the device */
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
+> +		if (ina->inputs[i].disconnected)
+> +			continue;
+> +		/* Match the refcount with number of enabled channels */
+> +		ret = pm_runtime_get_sync(ina->pm_dev);
+> +		if (ret < 0)
+> +			goto fail;
+> +	}
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ina,
+> +							 &ina4230_chip_info,
+> +							 ina4230_groups);
+> +	if (IS_ERR(hwmon_dev)) {
+> +		dev_err(dev, "Unable to register hwmon device\n");
+> +		ret = PTR_ERR(hwmon_dev);
+
+just ret = dev_err_probe
+
+> +		goto fail;
+> +	}
+> +
+> +	return 0;
+> +
+> +fail:
+> +	pm_runtime_disable(ina->pm_dev);
+> +	pm_runtime_set_suspended(ina->pm_dev);
+> +	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++)
+> +		pm_runtime_put_noidle(ina->pm_dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ina4230_remove(struct i2c_client *client)
+> +{
+> +	struct ina4230_data *ina = dev_get_drvdata(&client->dev);
+> +	int i;
+> +
+> +	pm_runtime_disable(ina->pm_dev);
+> +	pm_runtime_set_suspended(ina->pm_dev);
+> +
+> +	/* pm_runtime_put_noidle() will decrease the PM refcount until 0 */
+> +	for (i = 0; i < INA4230_NUM_CHANNELS; i++)
+> +		pm_runtime_put_noidle(ina->pm_dev);
+> +}
+> +
+> +static int ina4230_suspend(struct device *dev)
+> +{
+> +	struct ina4230_data *ina = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Save config register value and enable cache-only */
+> +	ret = regmap_read(ina->regmap, INA4230_CONFIG1, &ina->reg_config1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	regcache_cache_only(ina->regmap, true);
+> +	regcache_mark_dirty(ina->regmap);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ina4230_resume(struct device *dev)
+> +{
+> +	struct ina4230_data *ina = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	regcache_cache_only(ina->regmap, false);
+> +
+> +	/* Software reset the chip */
+> +	ret = regmap_field_write(ina->fields[F_RST], true);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to reset device\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Restore cached register values to hardware */
+> +	ret = regcache_sync(ina->regmap);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_RUNTIME_DEV_PM_OPS(ina4230_pm, ina4230_suspend, ina4230_resume,
+> +				 NULL);
+> +
+> +static const struct of_device_id ina4230_of_match_table[] = {
+> +	{ .compatible = "ti,ina4230", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ina4230_of_match_table);
+> +
+> +static const struct i2c_device_id ina4230_ids[] = {
+> +	{ "ina4230" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ina4230_ids);
+> +
+> +static struct i2c_driver ina4230_i2c_driver = {
+> +	.probe = ina4230_probe,
+> +	.remove = ina4230_remove,
+> +	.driver = {
+> +		.name = INA4230_DRIVER_NAME,
+> +		.of_match_table = ina4230_of_match_table,
+> +		.pm = pm_ptr(&ina4230_pm),
+> +	},
+> +	.id_table = ina4230_ids,
+> +};
+> +module_i2c_driver(ina4230_i2c_driver);
+> +
+> +MODULE_AUTHOR("Alexey Charkov <alchark@flipper.net>");
+> +MODULE_DESCRIPTION("Texas Instruments INA4230 HWMon Driver");
+> +MODULE_LICENSE("GPL");
 > 
-ACPI can be used to provide devicetree properties. The information is embedded
-in the DSDT table. Conceptually that is identical to devicetree data. That is
-not something you need to be concerned about unless you are responsible for that
-system and in control of the firmware. Technically the company selling that
-industrial PC should provide the information in the DSDT table, but of course
-that needs to be standardized first (and then they would have to actually use it).
-
-Hope this helps,
-
-Guenter
-
+> -- 
+> 2.52.0
+> 
