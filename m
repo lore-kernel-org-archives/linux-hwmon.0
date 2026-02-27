@@ -1,102 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902573ED127;
-	Fri, 27 Feb 2026 11:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772190666; cv=none; b=sEa0mnXXr7d6FLfIuNUMRJactbegpjv/nY+HCMTbSi3MNCI4ZNooRaQEUII68Dyr2aG7reqc3azAuKUCOuv2A0VPK63Hlx9YOG8+DPXKxS6JMUd9ANHfZBAw/Jq59bqJTo8lLPAQhaS1kVhIOh6uC7DSLfG6rCqvv9/tbXA0o5o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772190666; c=relaxed/simple;
-	bh=yUQAxqIlsz966wGsDqvB1YhJnmBsPKUfDEivZFSts60=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hrs9agdfL4XLNDC+GDD+5qo+g2mGk09nYgqabYKXZMNSYa/yZjmUv/i/2GSsjTXUZBI4Iqzasd6dvAE4Fkj/lCY9UnsO7fs6qIz309oUWziM0aA8Rffe15ZwSx5mMeyj/+GtbtQap8SEcHDnW5Fx+7We6tnXieAJD/dlAaZmy5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KQxpYIyd; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01DF33A030
+	for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 11:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772191158; cv=pass; b=Jtec7f0ekdNybLYQQBSsIfRK6olSVrTUSaLJvBIj/pPKtYIlx9GB/4nhNcYob4oxScm2QXz4TOm2k5h+8kN+v6k/CWNQ7+tdEgePUvSKer9fBYTxOqOYAsncC4TR9Sln3lUH5HugFFqFOrnPTComXuZjBiYYvpbhfO7PHT/vf0g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772191158; c=relaxed/simple;
+	bh=IqYEhsL1D9wOTVoKnbtmM4dfqH6hZJq5zpOWmWUsdDI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E/WpWEuTBiluSJTNbzL9rYqDvgJgK5XIMIcFP4TnlpBS6GBlAWxKDCXOqOCzJDqzRzC4+sE7q/7QwfcKgWLEAV7F/xdSgnYAko4l9Te2yiRBBryHnmXdLl7j9Yf0fwfryiAjE2JGnMYmOx2YSO+/mhBlTGbNi4OSLFJDRZa5xYE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=iAH7MK5y; arc=pass smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KQxpYIyd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772190665; x=1803726665;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yUQAxqIlsz966wGsDqvB1YhJnmBsPKUfDEivZFSts60=;
-  b=KQxpYIyd/GwJjl+Ek44e3Jt2zIBlQ8LJTlhKNGYSWhH69wDbO3d5ta7C
-   Z53RbcssRCjDBAYx6h8Vc0a8flQ2E+v9bcDAhY8kLWAa29vuud0rkcCpE
-   vrmpmr3ikGyGatK2tnsrbJrUODg7sx792CslZz0hPRozOn6RWLrpfxFpl
-   7NwADyJcz7Yn1KF2PG2KXtRzOdJadt8J6CxuEi7TOywn1+CN1dSzXuNsl
-   M9Vd51L+vaAOXoIeGVrXcXjIyIdtgVeLvtpQ90h9TEypnGKge9Vo29TaL
-   T2W83gOSFu4njUS1ItUBL/xNcBdzx7Ya5p2ngNV++FaPa4SLX6+TUZVrd
-   Q==;
-X-CSE-ConnectionGUID: Zm/wTfa6R4+Rsx1/9URaJw==
-X-CSE-MsgGUID: Yt4nizpUTtiCqLaxQS9AEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11713"; a="90674902"
-X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
-   d="scan'208";a="90674902"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 03:11:04 -0800
-X-CSE-ConnectionGUID: 6m0FN7VlTGKYlJFSScBnCA==
-X-CSE-MsgGUID: G9KY5nb2S1OKBZgrxYq5VA==
-X-ExtLoop1: 1
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 27 Feb 2026 03:10:54 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvvjU-00000000AUZ-0u4I;
-	Fri, 27 Feb 2026 11:10:22 +0000
-Date: Fri, 27 Feb 2026 18:58:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Morduan Zang <zhangdandan@uniontech.com>,
-	devnull+cryolitia.gmail.com@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	CoelacanthusHex@gmail.com, Cryolitia@gmail.com, corbet@lwn.net,
-	jdelvare@suse.com, linux-doc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux@roeck-us.net, marcin@stragowski.com,
-	Morduan Zang <zhangdandan@uniontech.com>
-Subject: Re: [PATCH] hwmon: gpd-fan: replace custom EC I/O with kernel
- ec_read/ec_write
-Message-ID: <202602271850.wkrqotlH-lkp@intel.com>
-References: <53C09CAECC90EB98+20260227024945.151198-1-zhangdandan@uniontech.com>
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="iAH7MK5y"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-65c5a7785b4so3093859a12.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Feb 2026 03:19:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772191155; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ou74TzM4e7qlHq871SOBgE/qf2ncsVPTGc8PTPCbJdeaoZhPm27Y0xwSBY9DL1tEIs
+         jur3Q102AONDiahJCf/ftf6oOAiz7dAQsjXjIiDKnU3wwr/J3wRmfYW+FyAxnrVGvQSr
+         QIecxil5mNiy5NxgRXzLOzndWLp0zee88IPMT83E5dZbdm6ff7ww5rBm3rZ9KncEkkVk
+         N/20K5XsDtXumLZS5nKXY1rwitttqYUBX43os0xOPqhBHq0cDpMKdDBwEAb4lbd3WYJe
+         rE4XAljWIIUl8/3X1QFTuN2bul/EyVzahwP1yR/NfGIspPpNUamkPWfqmssf3fpMJd5u
+         6g9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=V4Xpqv2bHmTvN1Dj3fqhmrqYQsZINM78hGn3frtqwk8=;
+        fh=vRYnEhK96BJpaWQDPdDL12HpvV7WYqH/b41vJNRguQU=;
+        b=JntHHQLQpBBAx8h3ogNq+snIjiigq9VeMg8kIlHsia82cF3F614MMGLzT0YIHrFuF2
+         sHklBlhoU6+QMyrTVotJg7CcXpGX57j3Nar9GtLonm+rrVX2mlr5xD+xvzuarqMAyhr7
+         vK1mOZy8vVOXsXzTFhFgH6dBJNntJog1XPqLyO4z1KHK1pJCiK7haCJNOYJMSb5daLK5
+         +MYmRUcga0kzGK06TcFXg87/nRRsZBRWnd1rcSDUzs4VrOObXm2ukd5w3fmeyPcgAzrW
+         OsZEyKH7WcRtrS1OEeyH6RcXyibvvEIL66wuURKp+G7EzKJylmUW9lTrO27oB87cKQ8t
+         J9dA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flipper.net; s=google; t=1772191155; x=1772795955; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V4Xpqv2bHmTvN1Dj3fqhmrqYQsZINM78hGn3frtqwk8=;
+        b=iAH7MK5y4UCjKCLlC5p4toxmeQaBlNrXFrMxS4nMACM37Lc7yXyZfJn3E5POwdOqKT
+         kR/6It4Lwakqj8TPcliC0J1ZcrMcuynA1ej8VLZ/9woN90RloAvyaLpR4IviTJrNqayg
+         JbwhlpfYqLY4hVS116+fkzuqpJmtPbgGcomdP4hkL4BmEG/mudOS+iW48MTF84a6PmgO
+         saIzOm6Q219vu/XsiT6DkITE2vdwsjVYU8JB8bwB7rnJrwLZzVi964/VlIfrtukyE84M
+         ILQCjFVml4sLoufyIJUXR4mfi9YFZa8j4vk0bcM62Sxmxkpnoam94M37hkO3yZt70qbP
+         rgjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772191155; x=1772795955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=V4Xpqv2bHmTvN1Dj3fqhmrqYQsZINM78hGn3frtqwk8=;
+        b=MNHRXDY7THDd9OD1FfdcYnPCCMbSHpzWG1bsxp27bGwvp30X0I7ViK+9Ia9vxzMtgD
+         1sXoVuc5S+v747opJXFzOzf/ksOAjMC2VenrJAarxF8TLLJTvyvzXVQq6fxADxoOJ4/w
+         WhsP8vDnWDbKa2OciJsgWDk9WmrEm4yphaIZp9kegkwiDFpJxOHPf2gezDekL6t9dQuv
+         1dPSVEFj8Ax3slh4CK5VTDNCuQZm157+Lr/DWcUPSCDjokTqw+jAamXm1kgVlpoV03Ph
+         qgFjiPRS5m3DJ1ySq65k20D8TY32p3cx0K4+ZUoO2a33AWHuADq0GQf6LIkTEtrnJB7M
+         9oCg==
+X-Forwarded-Encrypted: i=1; AJvYcCURhq14R2x+emhsPqK0ZqPubfwigx7SQIf8xhZ8tNjXrRCwPpccodjAU5QqguMBwq4Awhr2rfmU62PwSw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwESN3OwfD/Ztpn1IbQkU85bgIZV00D3z8HwIDMKNZaku8pZqSN
+	VbxlfrWtR+NWBvw+MWRFI6UbjKoHA1yekd3tIpS/+z2fm18I8LLsa+Whw2N9Fg56WGtvVpHL1go
+	hrrIIiVYC1YsuaQ+5qHSbbQKmATcEvOIKIEbkh+tr/qgRLtln9qCWIqv6RQ==
+X-Gm-Gg: ATEYQzy8BfG+5EFkQAe4I6ojwL9fifrZgkCZwsWtNkiHU60/+1OHtzNSLzIV5/Sgr/a
+	IjzHZOqs6Ss4BapnOl8WIv6wCi2CoEBtmAnvtqVMqMTCtFVduypiriZ57gKHU4S85UCCJlw2I4x
+	cGlfuyqK231B8Mee6huDL2XuoCofPRuWZYvzX/cqAF/L1J+PIdJDM8z25B5WWCC1fY4IHxEeOOl
+	0R4UzQmz5dA1QcVlvUaGuAYrUtxKjQBNSTIayZsYMAwA8Hui7A63aLw1kAfbaFqO+yrNvuElSJV
+	+/bz+w==
+X-Received: by 2002:a17:906:9fc8:b0:b88:4c99:bc0e with SMTP id
+ a640c23a62f3a-b93763d2329mr157001066b.26.1772191154904; Fri, 27 Feb 2026
+ 03:19:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53C09CAECC90EB98+20260227024945.151198-1-zhangdandan@uniontech.com>
+References: <20260225-ina4230-v1-0-92b1de981d46@flipper.net>
+ <20260225-ina4230-v1-1-92b1de981d46@flipper.net> <20260227-prudent-tunneling-mole-6dedf5@quoll>
+In-Reply-To: <20260227-prudent-tunneling-mole-6dedf5@quoll>
+From: Alexey Charkov <alchark@flipper.net>
+Date: Fri, 27 Feb 2026 15:19:02 +0400
+X-Gm-Features: AaiRm51rCw0oHYNDVqiMqSIblU7wjQqf9rO_7JmzfthzvHDl0ktahOmA-FUnRUc
+Message-ID: <CAKTNdwFuBRvFXABOHiRnS6TEDiUDRAteF2N+-wx5zH-GRDYB-Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: Add DT schema for TI INA4230
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Morduan,
+On Fri, Feb 27, 2026 at 1:53=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On Wed, Feb 25, 2026 at 01:29:11PM +0400, Alexey Charkov wrote:
+> > Add DT binding for TI INA4230, which is a 48V 4-channel 16-bit I2C-base=
+d
+> > current/voltage/power/energy monitor with alert function.
+> >
+>
+> A nit, subject: drop second/last, redundant "DT schema". The
+> "dt-bindings" prefix is already stating that this DT and this cannot be
+> non-schema.
+> See also:
+> https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetre=
+e/bindings/submitting-patches.rst#L18
 
-kernel test robot noticed the following build errors:
+Ack, will drop in v2.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v7.0-rc1 next-20260226]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > +patternProperties:
+> > +  "^input@[0-3]$":
+> > +    description: The node contains optional child nodes for four chann=
+els.
+> > +      Each child node describes the information of input source. Input=
+ channels
+> > +      default to enabled in the chip. Unless channels are explicitly d=
+isabled
+> > +      in device-tree, input channels will be enabled.
+> > +    type: object
+> > +    additionalProperties: false
+> > +    properties:
+> > +      reg:
+> > +        description: Must be 0, 1, 2 or 3, corresponding to the IN1, I=
+N2, IN3
+> > +          or IN4 ports of the INA4230, respectively.
+> > +        enum: [ 0, 1, 2, 3 ]
+> > +
+> > +      label:
+> > +        description: name of the input source
+> > +
+> > +      shunt-resistor-micro-ohms:
+> > +        description: shunt resistor value in micro-Ohm
+> > +
+> > +      ti,maximum-expected-current-microamp:
+>
+> Please add it also to the example at least to one node.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Morduan-Zang/hwmon-gpd-fan-replace-custom-EC-I-O-with-kernel-ec_read-ec_write/20260227-105255
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/53C09CAECC90EB98%2B20260227024945.151198-1-zhangdandan%40uniontech.com
-patch subject: [PATCH] hwmon: gpd-fan: replace custom EC I/O with kernel ec_read/ec_write
-config: x86_64-randconfig-014-20260227 (https://download.01.org/0day-ci/archive/20260227/202602271850.wkrqotlH-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260227/202602271850.wkrqotlH-lkp@intel.com/reproduce)
+Ack, will add in v2.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602271850.wkrqotlH-lkp@intel.com/
+> With these two fixes:
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Thanks for your review Krzysztof!
 
->> ERROR: modpost: "ec_read" [drivers/hwmon/gpd-fan.ko] undefined!
->> ERROR: modpost: "ec_write" [drivers/hwmon/gpd-fan.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Alexey
