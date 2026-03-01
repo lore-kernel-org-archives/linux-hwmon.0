@@ -1,44 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E812D97BA;
-	Sun,  1 Mar 2026 13:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7FD2D97BA;
+	Sun,  1 Mar 2026 13:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772371168; cv=none; b=seIzJHli+bcebmmeWSTkPl/8yFXlMcHU3jd8qGesO81fIPnxKxUnNNo9tF85FS0LKhRthRekj7dnBhUXo5BHPvUOm7vfauB0ozFS7nKCxY8gSaG1KFXP0qA6nY9gzQUD+DytGS/RNgoLKCqKorjWgt6UrCCvZgUdA5vp5cFfOIo=
+	t=1772371172; cv=none; b=MUasW5Uz0TpURfTsAPX/Hpj2tFX1oscP6XJIr3+tyLkuRP7Zb3eePQpN9e3174P+7NB9Z28cKXJ6pvZl0WjHMWWfYt8f+cgLxOzk+vVJigTcuMrbTFUDBflz1AuKxOcecrJ509WENmpEUw3WGoiNUTDKvKfEXu/YjOAGkicmTsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772371168; c=relaxed/simple;
-	bh=PP4bpZpdIuvgF+e3wTm941JlTDMsXhgQul3e3sRZuMI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OkkBYUy9kxzUirjqZ1cv2+lUfFq0XqGw8agAninHUvqgQLtQ+MZetqPMgRtJNfy8p0iCzl21nLgw3I3PQS62NFl3obqnyEDt40mnk/tmY33GFXtJbvKhpYW5XXAAZFi0xSyM3xgsYz45GRDYd8f/6xgbpNwUZTi13Nn6AKCZEUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJKUFcYk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772371172; c=relaxed/simple;
+	bh=zJ0F6o4geoAAqzE9/XwWR1ABpdm/VoPF34FCss5gwN4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JldsI2nBPYk3D8VCPN0eGRMzwhAwefhu4zXL8bPq75ksLsFWoRs63xjcQTLp36wVP4Fsj0qUeY/CPhlNOVrb7eGy3UeXtWrxBppLQpWqQdqZUMx8wmA7eq2/Vv+MGB6yKzvbT+JSVGHnWHwJJls9V4JIxf8Llu7Sszowu6QJImY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyyJj+R4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJKUFcYk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4FFC19422;
-	Sun,  1 Mar 2026 13:19:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyyJj+R4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF88C2BC9E;
+	Sun,  1 Mar 2026 13:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772371168;
-	bh=PP4bpZpdIuvgF+e3wTm941JlTDMsXhgQul3e3sRZuMI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oJKUFcYkggaA6whnNweZ+sTxVHy7yZtJczI/hdmsgs3e0UaTuvqfzu3aqQHOe3VRK
-	 1Ml2ag9DSTQfCmiCgnrETOo7+A1TL3M20FqfPJMLKDbVnFLnbjSTbZ271APQDuT7Oo
-	 oc+vSGkYFhucbngVwg3SgC8znXq/fUJAmL+jIb6Bqwm6DeNoITFPRLsr0qul9A1YdG
-	 yCBJ1pbz1qQovhUnx/S4XuJ3O6b24mnst62qkYHWZPGj6kVl6Za75vqTQeuh43/0c6
-	 mk1as3U76TFlQsw1wzHD7NJPagvakaHBWdmGTe1tymYDv2XtvnwEmSb1TCvCMWKhM5
-	 p+HsnzXSk1mJQ==
+	s=k20201202; t=1772371172;
+	bh=zJ0F6o4geoAAqzE9/XwWR1ABpdm/VoPF34FCss5gwN4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SyyJj+R4qPFh3ZewVrXx5j73xWTyngC1GCrDsV33LyzQKfvP2OHDkZ/n8HesSd9/a
+	 8GMAMCHXNJ0CjN8KtQT312XV6tpq9fKe5kcEP5inrPlR7RAyxs7kPclaKoH+xJ1Hej
+	 G6UDb7zYZULwAvPeOw/4eVcWUnqRirDDKoluq7oWZj251F67WzaiGhQtDq8oe3K+WP
+	 S2mzcWLWSpJq315tFzkaNE2AewTZfTkgeUA4P8QaQkRZ2RvFg6xF8yHCPTEgdZW5xw
+	 8Bc7usSMdrq8bv0BBN9BoZp3KmVodAEUoWbVQtc1SoZNJSkGAoAB3sF+Dyt42+tDP1
+	 977iHe/e8X2LA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
- LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
- linux-hwmon@vger.kernel.org
+To: Guenter Roeck <linux@roeck-us.net>,
+ Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>, linux-hwmon@vger.kernel.org
 Subject:
- [PATCH v1 1/3] hwmon: (acpi_power_meter) Drop redundant checks from three
- functions
-Date: Sun, 01 Mar 2026 14:17:19 +0100
-Message-ID: <5085645.31r3eYUQgx@rafael.j.wysocki>
+ [PATCH v1 0/3] hwmon: (acpi_power_meter) Bind the driver to a platform device
+Date: Sun, 01 Mar 2026 14:16:03 +0100
+Message-ID: <5974797.DvuYhMxLoT@rafael.j.wysocki>
 Organization: Linux Kernel Development
-In-Reply-To: <5974797.DvuYhMxLoT@rafael.j.wysocki>
-References: <5974797.DvuYhMxLoT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -48,86 +44,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Hi All,
 
-Since acpi_power_meter_notify() and acpi_power_meter_remove() are
-.notify() and .remove() callback functions of an ACPI driver,
-respectively, the first argument of the former and the only argument
-of the latter cannot be NULL.  Likewise, the acpi_power_meter_resume()
-argument cannot be NULL because it is a system resume callback
-function.
+This series is part of a larger effort to switch over all drivers using
+the struct acpi_driver interface to the more common struct platform_driver
+interface and eliminate the former.  The background is explained in
+Documentation/driver-api/acpi/acpi-drivers.rst and in the changelog of
+the patch that introduced the above document:
 
-Moreover, since all of these functions can only run after
-acpi_power_meter_add() has returned 0, the driver_data field in the
-struct acpi_device object used by them cannot be NULL either.
+https://lore.kernel.org/all/2396510.ElGaqSPkdT@rafael.j.wysocki/
 
-Accordingly, drop the redundant "device" checks against NULL from
-acpi_power_meter_notify() and acpi_power_meter_remove(), drop the
-redundant "dev" check against NULL from acpi_power_meter_resume(),
-and drop the redundant acpi_driver_data() checks against NULL from
-all of these functions.
+The bottom line is that the kernel would be better off without struct
+acpi_driver and so it is better to get rid of it.
 
-Additionally, combine the initialization of the "resource" local
-variable in acpi_power_meter_notify() and acpi_power_meter_remove()
-with its declaration.
+This series carries out driver conversion of the hwmon acpi_power_meter
+driver.
 
-No intentional functional impact.
+Patch [1/3] removes some redundant checks from three functions in the
+driver to facilitate subsequent changes.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/hwmon/acpi_power_meter.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+Patch [2/3] updates the driver to install an ACPI notify handler by itself
+instead of using the .notify() callback from struct acpi_driver, which is
+requisite for the driver conversion.
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index 1e3fab5f7946..49e57c20ef70 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -816,14 +816,9 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
- /* Handle ACPI event notifications */
- static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- {
--	struct acpi_power_meter_resource *resource;
-+	struct acpi_power_meter_resource *resource = acpi_driver_data(device);
- 	int res;
- 
--	if (!device || !acpi_driver_data(device))
--		return;
--
--	resource = acpi_driver_data(device);
--
- 	guard(mutex)(&acpi_notify_lock);
- 
- 	switch (event) {
-@@ -956,12 +951,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 
- static void acpi_power_meter_remove(struct acpi_device *device)
- {
--	struct acpi_power_meter_resource *resource;
-+	struct acpi_power_meter_resource *resource = acpi_driver_data(device);
- 
--	if (!device || !acpi_driver_data(device))
--		return;
--
--	resource = acpi_driver_data(device);
- 	if (!IS_ERR(resource->hwmon_dev))
- 		hwmon_device_unregister(resource->hwmon_dev);
- 
-@@ -975,12 +966,7 @@ static int acpi_power_meter_resume(struct device *dev)
- {
- 	struct acpi_power_meter_resource *resource;
- 
--	if (!dev)
--		return -EINVAL;
--
- 	resource = acpi_driver_data(to_acpi_device(dev));
--	if (!resource)
--		return -EINVAL;
- 
- 	free_capabilities(resource);
- 	read_capabilities(resource);
--- 
-2.51.0
+Patch [3/3] converts the driver to using struct platform_driver for device
+binding.
 
+@Jaroslaw, testing this on your systems where the acpi_power_meter driver
+is used would be much appreciated.
+
+Thanks!
 
 
 
