@@ -1,172 +1,94 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA18F305047
-	for <linux-hwmon@vger.kernel.org>; Sun,  1 Mar 2026 20:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A448175A8F
+	for <linux-hwmon@vger.kernel.org>; Sun,  1 Mar 2026 23:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772396267; cv=none; b=B19hlrzkpjmjrfa8ldApaV0ZK7eA9baHd0qs+ITkYm7rNvG2FgOQqxiZWcOhRjzPp2WFALcJLACMLUMai63qBvk4ea71cHoCqfoDw7LIpl34/URqGLCcVbakOAV9bbk+NiuhqbuiIWAsbz5U68KbjJMKbep4gRLWZa1RqpM8D78=
+	t=1772409120; cv=none; b=OS4pxx/DxHmPiBBsLv8PRZfQ2Y5A+uHk1aVz5/BXUftbH4aDpUkmlVSqjshHOWZf/2+v05hBNuCdDU3cDAZtfHWEgmxMZPBpgvpAU4jVBEjx5HW8fdVt1VZutrsNKCMfyaHqImT5LQkFKXg/zicfmOa0aH+nTplSnJBKNI9ymBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772396267; c=relaxed/simple;
-	bh=2EJV1heyXGYyCRbbPt15J5PkDaiXV2MX3OCZT9DDtq4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T5kAy17YCLL9QvIhmkEj+8/28iinTTpioVAYAaCtmUcDNjxUHeuoA7Jk2Dz8PEw7wnbKq+2ygn1kCbuCb3WTvbaqYYo0/zvSgQrxBPb8h7FvwAG1Y8sMzb5srrOLJeKWbqH3YT02VPluG+Gn4hupVrAPHtbomoHdxxv6tjyYVaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OM0/0+C9; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1772409120; c=relaxed/simple;
+	bh=BUbG9VHoEMwn6jZhEe9i4ZwgG6crNviML3hjzpid2Dk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SRtpmg7afFFsTYtkKglk3+Xff10Ctx68RMBBROpcJ3fKjbNNaZCWNNXqP1WDMWtCsyUK7nk+2xiaLK5iyXt3AUEm+bp6ooYYl5X+wf/RYdYef5Zondu/Fh1hr5kQzA39weZ3K+jKz8G9zJcL6aZsC61A25ZH2PM7fPl1iysBa2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHrWjNgK; arc=none smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OM0/0+C9"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3585ec417f6so1792746a91.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Mar 2026 12:17:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHrWjNgK"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-12732165d1eso3980352c88.1
+        for <linux-hwmon@vger.kernel.org>; Sun, 01 Mar 2026 15:51:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772396265; x=1773001065; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ozmx6Ip3e2l/TKlIxRVYZzE0ge3/onETLnKh186ItU=;
-        b=OM0/0+C9joGArQVz5ZgrLSErkqW7zKmBpDDEnRVF5DYCGQclQwZcwpftKX0mWNPKGK
-         x8kJFrD8euSGbUZCSOy8a/KfhKKYT8guUHsDxXY0LtZBWOgJVtKpYPZH4Fw6Xd0bliWb
-         XS9cmXoqkxMrRGi7wZ/H7/txvVDoQHBb8cW1kdmkUOdYMuxX230HG6DDG/0rVe3vumRF
-         Aymth0LrzVAeesle9FrQuI+QmYr+cYfIbtVCdIuK3Akd+Ohp8oitxs6XfP3arSdpBVUf
-         tZVwQ6n1tZ8Q++MC/h/3kLCLOgnOrKAfqSZxD+XI229RrSdLL8Pgyak/3pErCFx3qJT/
-         coug==
+        d=gmail.com; s=20230601; t=1772409118; x=1773013918; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZVqD17OuZxx4cythfStgDT/uYwbR00pycs97eaa/Hlw=;
+        b=BHrWjNgKtP6JvbRI8niy3m3M8v3exrY3paVX9qblX1GeP+HJFSgRxmxDdMilE2XT9w
+         WZO/0yUEvWwbcpsLP+ZS2gtXaP1AWGJrfgAX5uLVND3IIyWp6WPlv+p9EqSNde628clB
+         dTf7igLUC7C8GL9kwVdESUFHNKCWC1fvc7ZNalu6MybU8WFxQXRxdn0EEMMdKcrKIfQ1
+         HD0naBSg1DrC9y4BiKgp5webrHGKDOJED9ZwTfALvECYUEG93YQpOPJZTPEHlyxrA4TI
+         nttYucOQSZnxHb0M2JOlmRAQoqvsdKb/x3L8MZTp+4208KX3+yMgnOHQuiwc+60T1uhg
+         j5EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772396265; x=1773001065;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ozmx6Ip3e2l/TKlIxRVYZzE0ge3/onETLnKh186ItU=;
-        b=QnEysrSKT8zxvg5FFnIWo0YDSeSs5zi42zXitMlvr0CElNXAARVufJwlWEQdUFFZq3
-         ZIUP8MmZehcRy4vWIRzJodTjL4LS5ahp5OKLBVnCCxtjVpdXEEPUZlrBxJabtfMaL9VB
-         3zPWmt+BUY6FC+CFmN3cmZAAHtJacPvCUln5r9gAkUZvjNMiDcmOXFl5mL33PRfB7IzK
-         +8fNd7O/+ScmxIgke8z3C3FAsbO1yg+8NJbKSXoRzy2arqFpy17fYY0HyUucpmEsiKsE
-         JzqOviMuqigStj5NXrjatVoLDEuEhRjSB1luXbDYj0NmXTtxIeqLWaEp+dTgr9u9wPfJ
-         62yA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8kaa2NPrPtMMpfVB1hx7GeeoPP/GnVUHV+U6FuR8OzxF9WdJiWqU4XbQkDrZiAHvl/eoy0mHs1Q///g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNiCXBZQx/acbH7M2ay+Vw8S577iZTQ+gxwxy5zrsWbt284BAH
-	iyMOcmPzulY39aRLcoTUmGVD35Nm1ZIh3yyeN+anmADS7wyuMq+Em+I5
-X-Gm-Gg: ATEYQzyNpizinhs1g3Sn8hQVBRUM+m2YLaatbQ6ZUl4pDD9a0Vt5kcAM7rqoJQV36aP
-	k15/GXMFI4PtjvkXYOZbqK7SPDkaKAbbtJrNiLjkiW1/lcP6BPt78t70MwzfjQkJV/I3ksfu+yN
-	BR1qUniiJ34q66iZZbkyl9IAHt1yIZTWUNOR13WkNp3XwbQuKrXFenKDsEYvT4N2wgOCHtF4T2V
-	06p30JkNr3+Q96KjOeRpsjUdEkHj/QSj9YYytxIsZdMPic9bSb/2DWo0mmxiZ8y1RorLXnvja0p
-	BRqoequM6rwElSc/iy6TbqioRcCG6NWbURITBhJu/sb3i0bpfngkjl6Jb40qh+ho+/qWbWFTxAi
-	LMOKklWxpQGQqgplE0wz7UC3u6k+sx65nf7bsQCjlSi+wa+qaF5HPrt33nRmxeBLMbACO0XY7vR
-	qPmDbb5nebLz8ET6VxVfLBwjqr6bPJSSxijdpFO2cFM1i8WWqDm+PqRBVkgXlSxJxgtPUbNSXk
-X-Received: by 2002:a17:90b:2587:b0:356:256c:4bf0 with SMTP id 98e67ed59e1d1-359690409b0mr9543755a91.17.1772396265185;
-        Sun, 01 Mar 2026 12:17:45 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3598d0b793bsm1036109a91.4.2026.03.01.12.17.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Mar 2026 12:17:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772409118; x=1773013918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZVqD17OuZxx4cythfStgDT/uYwbR00pycs97eaa/Hlw=;
+        b=GpXzIbN52gN23fFM8q6o/Ck1lAPNtqL59g2Yg0bvS1WEAua7PmxSfzFjS6cggGlfs0
+         caoAmxhetY4AVHtk/dyrwa1RNTrTlMpaQTX9w53ruH6InsRB6c385mpkpwiuJJxCH4mk
+         4aTLi7KgTDfOMETWrtdCkyxXVtBqUWonwsl2tzPGaJ15KaBii3+MIjnOKQ33mZhOm0YA
+         LfFi9ruju5yeR6cOGR0PG4Ku/HPqYm/1OE1vmNSJi6bhSui5NYaax4rr0jIxgAbYZ63d
+         ryidS3B9bMeEkVCyI008WwP1H2VnA8CZBEHc1/MXc1wAPksURuVt0ISqp4VFtsXQLENQ
+         z3rw==
+X-Forwarded-Encrypted: i=1; AJvYcCV8cqt+dfLlFmZl75pY6bi/Odn0hkiTXlpWu2PU7CEDSykDF3/aCxp6vbKUsKxwCWAXyVV63Lqcz+rHJA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSYBkGlv6RqhOLYKdGelQzfSm6tOLa+Hb7g2U2c3uDufH/jGIJ
+	QwyK23Td+argUzBLS2kGLaSu6/0pDchINyu3jfy01x8g8+4Ujvh1ACWa
+X-Gm-Gg: ATEYQzw7O8Qx8jfZ8ECrpRZseX11XTJn6rOYNbeC9dNKtA+6nzZTq7WlJ2uM3cCVxxm
+	YzOti6iiGC7PsBH+OdlRORd9QcqBUBIU98uDXcKpyKr95dBYH5RLfwsXge6H3HBioHAtiXsRyfN
+	NwoHoi5fDcbMtuA4xC15jIl47Qv2lQyUTOzqmHZfHzh7FRIKXDhh+QRX6gcIFExAehAGo78bd0d
+	489xiFIz3BXiqqZ85fFp38znBWx6M1s0+e4pU6iE8pr5DGzI9EV85O5xKI2XAN1Kg/R4caUXl8e
+	nkGbm16x+dUWl6AFfCpZV07XWv11ajeiTAm8mdTokCVPYsZpxB57QNhNnj3Bkzn48GV8TGR+AqU
+	DGvAe4EMaEpOfzKZUBWA+QZAEoQceDCEB+gOVcm00372OVZEYbUz8Aid9OU4tuhdrB1uqjC4WqQ
+	kN6iLR3gwkHunCBtKx4vG4LQgCyvrsilnjg8NbK23qtx9npIM=
+X-Received: by 2002:a05:7022:ea55:20b0:127:9cad:1a65 with SMTP id a92af1059eb24-1279cad2199mr858655c88.14.1772409118320;
+        Sun, 01 Mar 2026 15:51:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a43a18sm14535779c88.13.2026.03.01.15.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Mar 2026 15:51:57 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <209dcf13-858a-4241-b9c1-cd9a33186bfe@roeck-us.net>
-Date: Sun, 1 Mar 2026 12:17:42 -0800
+Date: Sun, 1 Mar 2026 15:51:56 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX Z790-H GAMING WIFI
+Message-ID: <9f4b0e26-fb25-4053-986a-0e5cf02dc538@roeck-us.net>
+References: <20260228114412.358148-1-eugene.shalygin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PMBus memory overflow
-To: Matt Corallo <yalbrymrb@mattcorallo.com>, Kees Cook <kees@kernel.org>,
- Greg KH <gregkh@linuxfoundation.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
- security@kernel.org
-References: <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
- <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
- <aAtEydwUfVcE0XeA@shikoro>
- <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
- <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
- <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
- <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
- <03da7997-74f4-4435-a6c5-6aa5aea2f6d7@mattcorallo.com>
- <2025060749-attendant-trout-d2c8@gregkh>
- <695ebdae-7292-4a83-8aff-763da184921e@mattcorallo.com>
- <2025060848-reset-recovery-f67a@gregkh>
- <d16cb075-f924-4bd4-adec-8eaba589a3f2@mattcorallo.com>
- <a149cb52-925a-4365-8529-081e7e0a7b81@mattcorallo.com>
- <87767DC8-784D-4B9D-A2F2-0BB10EC4A96A@kernel.org>
- <e1eaab50-3a21-4aee-9224-6a1bbf8cfa6e@mattcorallo.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <e1eaab50-3a21-4aee-9224-6a1bbf8cfa6e@mattcorallo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260228114412.358148-1-eugene.shalygin@gmail.com>
 
-On 3/1/26 09:10, Matt Corallo wrote:
+On Sat, Feb 28, 2026 at 12:44:02PM +0100, Eugene Shalygin wrote:
+> From: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>
 > 
+> Add limited support for ROG STRIX Z790-H GAMING WIFI (VRM temp and
+> T_Sensor only).
 > 
-> On 3/1/26 11:12 AM, Kees Cook wrote:
->>
->>
->> On March 1, 2026 5:46:33 AM PST, Matt Corallo <yalbrymrb@mattcorallo.com> wrote:
->>>
->>>
->>> On 6/9/25 9:57 AM, Matt Corallo wrote:
->>>>
->>>>
->>>> On 6/8/25 3:14 AM, Greg KH wrote:
->>>>> Have a pointer to that patch on lore for the maintainers involved to
->>>>> review?  Note, we are in the middle of the merge window, so no new
->>>>> changes can be added to our trees until -rc1 is out.
->>>>
->>>> A proposed patch was posted by Guenter, and tested and confirmed that it fixes the issue by myself, at https://lore.kernel.org/linux-hwmon/284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net/ . Wolfram suggested this patch was acceptable at https://lore.kernel.org/linux-hwmon/aAtEydwUfVcE0XeA@shikoro/ but that's the last he chimed in on this issue.
->>>
->>> Any update on getting this patch applied Wolfram? Looks like the buffer overflow is still present on at least 6.18.
->>
->> Looking at the code, I think probably the best place to check would be in i2c_smbus_read_block_data() when it does a I2C_SMBUS_BLOCK_DATA cmd, since the callers are all already checking the returned status.
-> 
-> I believe that's what the above patch does?
-> 
+> Signed-off-by: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
-That wasn't a formal patch. I thought you had volunteered to submit one,
-but my memory may defeat me and I may be wrong.
+Applied.
 
+Thanks,
 Guenter
-
