@@ -1,132 +1,161 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E252F25F0
-	for <linux-hwmon@vger.kernel.org>; Sat, 28 Feb 2026 11:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C0223C4F2;
+	Sun,  1 Mar 2026 01:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772279067; cv=none; b=V4WoMYfSI/P/nx2MpwqbpBx6nI6Hyw0TmZwKr6wfAcXAO2aKOKufFbzsZaHrTBLuGlYFwk6f4Lrp8gmJY6L+1DmXcH3lRyKmM8anuTR1/fxsuHOyEMO8cLT+0RS8NefUFFcsN6ytB/KnSbdhd9JEcEGMXmBSwmpGHNv5myHl0cc=
+	t=1772327861; cv=none; b=Z+XZbiTOlBvvh+xB6taEEzFO9PAdI2gNbP72CqDKs4jvPxPZWYUT+xPIPD5tQDh+IcChgN7Itd5YIiCAOZlIkht4/UNFudb45d6PMeTOygp4SmlvgOWmsRvDkFvOvPYfjrNexQMZORzv6TKfIQiS9eat1HorjaUNcEcav05FT4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772279067; c=relaxed/simple;
-	bh=y2VxJYVpFPHCUjmN+HLpUN8Jj2ve1ZiTJ40Sxpt4ML4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nzwCV6HjMF4rvg6s/+8JIiYXKf60ZtdeKYQBqDNeS1gJJHsoe9AdOWmGLASTu+TOq/sLNRediFNMYt8KD4Yz5foWyC+KU0CjFnO7XjrBwXWvUwcBXTlM3mSZm6GP7OYg4dRWtMhJatF5qx2mkIWVYANjAjvaxn3sAA5IOvIBmeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rlk172LN; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772327861; c=relaxed/simple;
+	bh=HXGcoAijH4/4ohVsu57ubguTxoppGZjmfdYLM0hPuDM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=koJoRyNcO0G/Oh+ElOiO9hoAPXZM5OHBpvOe+z96GJeABrZKtf4/j+4//zEPOwHMa886EyFVw+e8GhxdeljnT/SJo9kYEPecF9KxFHkcBwgzk5I03Wn0ACmrM+Yrgpt2hwzz0WS45MvyC/q88Lop0WSylAsbNyrY7QSi4t1tQZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjSXws4U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rlk172LN"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4837907f535so25347705e9.3
-        for <linux-hwmon@vger.kernel.org>; Sat, 28 Feb 2026 03:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772279064; x=1772883864; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=98h2Yf/UHTEpAy1GYwD6YY/YONXeb7JoAzQUMndrfgM=;
-        b=Rlk172LNjxTa6tIakpBpA1IC4uTKl3T+T4GjqQiqHDkfbqnWHdgMpETzwVc4mZx3Cu
-         SUAswy0ZM4AqulYyv4F51m5x4+tLe9bvHlh7FepwwG4xX9bddzyLIhfqlL5yj3c+2+9P
-         e12+ugsSwD0OO8PYwCN42maa/qDN60dqDcKDScZE+aCZlLdL8DRGNRlq8tO7pq0hRXOC
-         PAOfcfM39J+Vl3lOvnKy5DeCuDVJEyHNVtsJ81YOtxN9IbvHB4rD9Ok0KEWvzvNpU2tM
-         H4Sw8zb8DpNAoXXfEOdbKBj+75BijmGGj1p1ud0ZzpebM1jgD7i4Ppvg2IDa4+MN1u2U
-         v15Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772279064; x=1772883864;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=98h2Yf/UHTEpAy1GYwD6YY/YONXeb7JoAzQUMndrfgM=;
-        b=dEnuhWLl5wf7UxOVQkgRJcaeDTCl+6AR1rxyKlae+TBXF0cCWMNlOgMMtDRxH9sTFV
-         UB68v1sS/Aslupw3u947mQXYq8IAferH33C5WVHlrZUOyOZm9jMcHZ3+M0bYrVPQ5hEK
-         91eiIbQxI8bKOvZyTmv2ZgEl6Lf3YK7O2ksDnJUKZXpOXwCy0nNTu0PRM06he1p+u70y
-         BKuGeMfyjoBF4yKo/7f8u2dfvS2nxNFeTJ8uhNrDjbkK+pVNh07mfMijUdFGSUPBjfHj
-         UHbzvJMpkUtBUb1RGW+YiNZR4+kP/Wsm6uxkSqV8gOzKxosMMpnB/kVmn22R8xBKXZ4p
-         /uxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXV8r6BLm2h/sukPH0+aNPRGGMVga3I0n3u2EnLRb50zFBNdsoBoIHnTYpBPXcHbyAd0vKzvYQjoo3LGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+UUCT+c5oe72GzoE77m8ezndbbgexayIG3QFivf7Kd7bF34+t
-	eYo0L76uibfHXSMo+hTOjHF0zf77SOEL4b9r+pZxpkzY430OBUcopqy6
-X-Gm-Gg: ATEYQzwV291NCZGdI1MuHSRWhHZTBrHnkENes4KHabqD5HDltovOMjxT4vf3nwygn9o
-	RLhZSiOSq8sp8yFxQ4+3n3Df6GwardORqyoFJoZDcn4ED9vA01QDqWMvmtDGWPlFulyPfoP5m+z
-	a5brv3GRxx9g54bjutGQ6d3s2bBz7Useea4vEBLdL1Q8t4j/PssvUdY1RcXVwd4obFne+9rHX4d
-	QGFUF8wTgiOTywXMxIUZjAYnYOuxnzfHMC+AXWYJ/bSujZg2M/gRKuBxh2Bm4VJSy5E2ng/RsU0
-	UxtK6IQQQlJSL4WSITPckV9we3xNjW3Y/Z0lftRj+qKv9h+DpckmnM/wG91QyaZPL6+XVdvxjEe
-	iB1CccWmx6YtW59La7R+pvOoHxmIb5qW61bqdSePK+CK/iMq9gwXM2vmZgDsnzOuySwgI3Dz3yP
-	qN8DAw1cWXGneBD89BNOsO//bppWS9/+E4RGYEwYfgQw==
-X-Received: by 2002:a05:600c:350d:b0:47e:e779:36d with SMTP id 5b1f17b1804b1-483c9bc5721mr101981405e9.23.1772279064394;
-        Sat, 28 Feb 2026 03:44:24 -0800 (PST)
-Received: from puma.museclub.art ([2a00:6020:b326:d300:d19:a765:d8d7:bedc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd6f26d7sm293394635e9.3.2026.02.28.03.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 03:44:23 -0800 (PST)
-From: Eugene Shalygin <eugene.shalygin@gmail.com>
-To: eugene.shalygin@gmail.com
-Cc: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjSXws4U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C58C19421;
+	Sun,  1 Mar 2026 01:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772327861;
+	bh=HXGcoAijH4/4ohVsu57ubguTxoppGZjmfdYLM0hPuDM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RjSXws4UGJ/CSHS2su0cZCmS2T45tnIlTeQsJI/qocgmVBgZ9ZwVA6tl962NdSE/S
+	 sVjUYVbDT+JvIguL6EOD801EqggYPeow/YabHsLCF6bFK4u4D+valUlxHP6yPBT0mi
+	 p5ByIavt0Tjf08Vv7RIwivEny4na2w1iaLP9+2sOh6vr9HMFWKke4a/nTIYMimpI5T
+	 wnxu0j4Jo9qGI9rkr5tjWdfF7EPDtUxMM46V1xTPrNwz/3DySDMZ5yYN0onOyN9m66
+	 HL9dpZ7k/EawVjmye2SNR0PZwpluOJYOmWUMBMWl4gV6d7dmh+jLmEkmf2NJ5VDno0
+	 pShELnIDhdmVQ==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	hanguidong02@gmail.com
+Cc: Ben Hutchings <ben@decadent.org.uk>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) add ROG STRIX Z790-H GAMING WIFI
-Date: Sat, 28 Feb 2026 12:44:02 +0100
-Message-ID: <20260228114412.358148-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	linux-hwmon@vger.kernel.org
+Subject: FAILED: Patch "hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler optimization induced race" failed to apply to 6.18-stable tree
+Date: Sat, 28 Feb 2026 20:17:39 -0500
+Message-ID: <20260301011739.1671643-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Patchwork-Hint: ignore
+X-stable: review
 Content-Transfer-Encoding: 8bit
 
-From: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>
+The patch below does not apply to the 6.18-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-Add limited support for ROG STRIX Z790-H GAMING WIFI (VRM temp and
-T_Sensor only).
+Thanks,
+Sasha
 
-Signed-off-by: Volodimir Buchakchiyskiy <vladimirbuchakchiiskiy@gmail.com>
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+------------------ original commit in Linus's tree ------------------
+
+From 007be4327e443d79c9dd9e56dc16c36f6395d208 Mon Sep 17 00:00:00 2001
+From: Gui-Dong Han <hanguidong02@gmail.com>
+Date: Tue, 3 Feb 2026 20:14:43 +0800
+Subject: [PATCH] hwmon: (max16065) Use READ/WRITE_ONCE to avoid compiler
+ optimization induced race
+
+Simply copying shared data to a local variable cannot prevent data
+races. The compiler is allowed to optimize away the local copy and
+re-read the shared memory, causing a Time-of-Check Time-of-Use (TOCTOU)
+issue if the data changes between the check and the usage.
+
+To enforce the use of the local variable, use READ_ONCE() when reading
+the shared data and WRITE_ONCE() when updating it. Apply these macros to
+the three identified locations (curr_sense, adc, and fault) where local
+variables are used for error validation, ensuring the value remains
+consistent.
+
+Reported-by: Ben Hutchings <ben@decadent.org.uk>
+Closes: https://lore.kernel.org/all/6fe17868327207e8b850cf9f88b7dc58b2021f73.camel@decadent.org.uk/
+Fixes: f5bae2642e3d ("hwmon: Driver for MAX16065 System Manager and compatibles")
+Fixes: b8d5acdcf525 ("hwmon: (max16065) Use local variable to avoid TOCTOU")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+Link: https://lore.kernel.org/r/20260203121443.5482-1-hanguidong02@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/asus_ec_sensors.rst | 1 +
- drivers/hwmon/asus-ec-sensors.c         | 8 ++++++++
- 2 files changed, 9 insertions(+)
+ drivers/hwmon/max16065.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-index 84b92093771e..9ad3f0a57f55 100644
---- a/Documentation/hwmon/asus_ec_sensors.rst
-+++ b/Documentation/hwmon/asus_ec_sensors.rst
-@@ -50,6 +50,7 @@ Supported boards:
-  * ROG STRIX Z690-A GAMING WIFI D4
-  * ROG STRIX Z690-E GAMING WIFI
-  * ROG STRIX Z790-E GAMING WIFI II
-+ * ROG STRIX Z790-H GAMING WIFI
-  * ROG STRIX Z790-I GAMING WIFI
-  * ROG ZENITH II EXTREME
-  * ROG ZENITH II EXTREME ALPHA
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index ba1db62ad646..070bb368f2b7 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -762,6 +762,12 @@ static const struct ec_board_info board_info_strix_z790_e_gaming_wifi_ii = {
- 	.family = family_intel_700_series,
- };
+diff --git a/drivers/hwmon/max16065.c b/drivers/hwmon/max16065.c
+index 4c9e7892a73c1..43fbb9b26b102 100644
+--- a/drivers/hwmon/max16065.c
++++ b/drivers/hwmon/max16065.c
+@@ -151,27 +151,27 @@ static struct max16065_data *max16065_update_device(struct device *dev)
+ 		int i;
  
-+static const struct ec_board_info board_info_strix_z790_h_gaming_wifi = {
-+	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
-+	.mutex_path = ASUS_HW_ACCESS_MUTEX_SB_PC00_LPCB_SIO1_MUT0,
-+	.family = family_intel_700_series,
-+};
-+
- static const struct ec_board_info board_info_strix_z790_i_gaming_wifi = {
- 	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_T_SENSOR_2 |
- 		SENSOR_TEMP_VRM,
-@@ -893,6 +899,8 @@ static const struct dmi_system_id dmi_table[] = {
- 					&board_info_strix_z690_e_gaming_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-E GAMING WIFI II",
- 					&board_info_strix_z790_e_gaming_wifi_ii),
-+	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-H GAMING WIFI",
-+					&board_info_strix_z790_h_gaming_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z790-I GAMING WIFI",
- 					&board_info_strix_z790_i_gaming_wifi),
- 	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+ 		for (i = 0; i < data->num_adc; i++)
+-			data->adc[i]
+-			  = max16065_read_adc(client, MAX16065_ADC(i));
++			WRITE_ONCE(data->adc[i],
++				   max16065_read_adc(client, MAX16065_ADC(i)));
+ 
+ 		if (data->have_current) {
+-			data->adc[MAX16065_NUM_ADC]
+-			  = max16065_read_adc(client, MAX16065_CSP_ADC);
+-			data->curr_sense
+-			  = i2c_smbus_read_byte_data(client,
+-						     MAX16065_CURR_SENSE);
++			WRITE_ONCE(data->adc[MAX16065_NUM_ADC],
++				   max16065_read_adc(client, MAX16065_CSP_ADC));
++			WRITE_ONCE(data->curr_sense,
++				   i2c_smbus_read_byte_data(client, MAX16065_CURR_SENSE));
+ 		}
+ 
+ 		for (i = 0; i < 2; i++)
+-			data->fault[i]
+-			  = i2c_smbus_read_byte_data(client, MAX16065_FAULT(i));
++			WRITE_ONCE(data->fault[i],
++				   i2c_smbus_read_byte_data(client, MAX16065_FAULT(i)));
+ 
+ 		/*
+ 		 * MAX16067 and MAX16068 have separate undervoltage and
+ 		 * overvoltage alarm bits. Squash them together.
+ 		 */
+ 		if (data->chip == max16067 || data->chip == max16068)
+-			data->fault[0] |= data->fault[1];
++			WRITE_ONCE(data->fault[0],
++				   data->fault[0] | data->fault[1]);
+ 
+ 		data->last_updated = jiffies;
+ 		data->valid = true;
+@@ -185,7 +185,7 @@ static ssize_t max16065_alarm_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(da);
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int val = data->fault[attr2->nr];
++	int val = READ_ONCE(data->fault[attr2->nr]);
+ 
+ 	if (val < 0)
+ 		return val;
+@@ -203,7 +203,7 @@ static ssize_t max16065_input_show(struct device *dev,
+ {
+ 	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int adc = data->adc[attr->index];
++	int adc = READ_ONCE(data->adc[attr->index]);
+ 
+ 	if (unlikely(adc < 0))
+ 		return adc;
+@@ -216,7 +216,7 @@ static ssize_t max16065_current_show(struct device *dev,
+ 				     struct device_attribute *da, char *buf)
+ {
+ 	struct max16065_data *data = max16065_update_device(dev);
+-	int curr_sense = data->curr_sense;
++	int curr_sense = READ_ONCE(data->curr_sense);
+ 
+ 	if (unlikely(curr_sense < 0))
+ 		return curr_sense;
 -- 
-2.53.0
+2.51.0
+
+
+
 
