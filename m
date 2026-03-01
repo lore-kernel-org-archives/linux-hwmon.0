@@ -1,79 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.as397444.net (mail.as397444.net [69.59.18.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7FD2D97BA;
-	Sun,  1 Mar 2026 13:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4929277035;
+	Sun,  1 Mar 2026 13:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.59.18.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772371172; cv=none; b=MUasW5Uz0TpURfTsAPX/Hpj2tFX1oscP6XJIr3+tyLkuRP7Zb3eePQpN9e3174P+7NB9Z28cKXJ6pvZl0WjHMWWfYt8f+cgLxOzk+vVJigTcuMrbTFUDBflz1AuKxOcecrJ509WENmpEUw3WGoiNUTDKvKfEXu/YjOAGkicmTsY=
+	t=1772373510; cv=none; b=j/nGKsetnnAOZsIOlmJYgiZk4t3/yaRnC6vL5MLuMr6BaVJmTkK0S2moiJFL0W3PgfOGDzh1F6WkRSMOKaviiwVIcQaG8EFUvOh8xAI5411oN/mZbK45xhHweSHEmOdP+nb7RzvF4U0Spu1AGkhZ8E6MO2P6RdW4jEtzVOBnQ5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772371172; c=relaxed/simple;
-	bh=zJ0F6o4geoAAqzE9/XwWR1ABpdm/VoPF34FCss5gwN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JldsI2nBPYk3D8VCPN0eGRMzwhAwefhu4zXL8bPq75ksLsFWoRs63xjcQTLp36wVP4Fsj0qUeY/CPhlNOVrb7eGy3UeXtWrxBppLQpWqQdqZUMx8wmA7eq2/Vv+MGB6yKzvbT+JSVGHnWHwJJls9V4JIxf8Llu7Sszowu6QJImY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SyyJj+R4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772373510; c=relaxed/simple;
+	bh=VBAxkN79KbtbIQxki1glUGp8krKbyCWtPtGK9crataA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u9dr8ABZ/NeRyISrUQoh7EjglIn4zR42tAfkpxDsGS173WVnkR9g0BppZ72uurPXjnsO2h674wA/40nbkka9dxMY53j3H6G+IyPLWJaVLyHYpkWI1KUxQ4hP3aH0+Kmj/w+CDB+QxuOriT6dIiDczwN2Tt0ftgvMpSqKjqc/5p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com; spf=pass smtp.mailfrom=mattcorallo.com; dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b=VZJmOYAM; dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b=rp/Vl/O+; arc=none smtp.client-ip=69.59.18.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mattcorallo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mattcorallo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SyyJj+R4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF88C2BC9E;
-	Sun,  1 Mar 2026 13:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772371172;
-	bh=zJ0F6o4geoAAqzE9/XwWR1ABpdm/VoPF34FCss5gwN4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SyyJj+R4qPFh3ZewVrXx5j73xWTyngC1GCrDsV33LyzQKfvP2OHDkZ/n8HesSd9/a
-	 8GMAMCHXNJ0CjN8KtQT312XV6tpq9fKe5kcEP5inrPlR7RAyxs7kPclaKoH+xJ1Hej
-	 G6UDb7zYZULwAvPeOw/4eVcWUnqRirDDKoluq7oWZj251F67WzaiGhQtDq8oe3K+WP
-	 S2mzcWLWSpJq315tFzkaNE2AewTZfTkgeUA4P8QaQkRZ2RvFg6xF8yHCPTEgdZW5xw
-	 8Bc7usSMdrq8bv0BBN9BoZp3KmVodAEUoWbVQtc1SoZNJSkGAoAB3sF+Dyt42+tDP1
-	 977iHe/e8X2LA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>,
- Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>, linux-hwmon@vger.kernel.org
-Subject:
- [PATCH v1 0/3] hwmon: (acpi_power_meter) Bind the driver to a platform device
-Date: Sun, 01 Mar 2026 14:16:03 +0100
-Message-ID: <5974797.DvuYhMxLoT@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	dkim=pass (2048-bit key) header.d=mattcorallo.com header.i=@mattcorallo.com header.b="VZJmOYAM";
+	dkim=pass (2048-bit key) header.d=clients.mail.as397444.net header.i=@clients.mail.as397444.net header.b="rp/Vl/O+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=mattcorallo.com; s=1772371262; h=In-Reply-To:From:References:Cc:To:Subject:
+	From:Subject:To:Cc:Reply-To; bh=03hGzaCRmdd/bGfmzvUfQvUWBy+Zp/ur0GSlkHmwux8=;
+	b=VZJmOYAM8VVgYoN/ByhW0vhh1yroTivOJZBkgQFTHeujCT5p5g5rgyNGJ3NVnnyhfO+f8afIiea
+	+cKlm36+DPIrRaWy5Q4XX1E7Z2HnbAaCDt68swCCrFP0zTSGtWMaQKd2ExG4O4m4UY0RLqD1QN44+
+	oosJeKCFh/w/0dHovWaYTbnAGt4717vkY9cEYxrnaRRcNYUzHNkFEquU7txS6ivr4qm2KhhRDC7Kg
+	RZzcUvDuj3yIqjcJoPFQtlygjGiMSEMJMXOj4jidNMffb/gD1zpdN8PYhQ9q8DF+B0SW1VT7G+xZE
+	3hKr132n8YeBSZFxcIAlT0pUMmj7uJpe8Lvw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=clients.mail.as397444.net; s=1772371264; h=In-Reply-To:From:References:Cc:
+	To:Subject:From:Subject:To:Cc:Reply-To;
+	bh=03hGzaCRmdd/bGfmzvUfQvUWBy+Zp/ur0GSlkHmwux8=; b=rp/Vl/O+LUWMcI5+Tdqd6yLmva
+	DRsFwcsw8AgsKxrSGjxWMKPH7PZHXk7yW5tnnttyMky3I9/VoUh91qhyQRNdhDb3ftNfkjxuogFeU
+	wt4GVJcRmFv/91SNtGhjHM5wqrh81rR1pvR5seQ4+OzKEgIkIXGocXG0hame9gQAdGIHJRsqFQXxh
+	wIb8m9PPavr0aTkSqEkFG/4LRgwJkB66cXZiYoqAaWKeGQvDrFSRiLw7DEu+1IH2YzvM+nSFHmnkk
+	T268zICk9Q685f2IcgB7ZzkBH+28IYaYqo1GS57k9lHao8du/wXRDk/SbWL1zTmcUdtQrlNz/6B8H
+	TVuoNirA==;
+X-DKIM-Note: Keys used to sign are likely public at
+X-DKIM-Note: https://as397444.net/dkim/mattcorallo.com and
+X-DKIM-Note: https://as397444.net/dkim/clients.mail.as397444.net
+X-DKIM-Note: For more info, see https://as397444.net/dkim/
+Received: by mail.as397444.net with esmtpsa (TLS1.3) (Exim)
+	(envelope-from <yalbrymrb@mattcorallo.com>)
+	id 1vwh7y-0000000BJeH-40u5;
+	Sun, 01 Mar 2026 13:46:35 +0000
+Message-ID: <a149cb52-925a-4365-8529-081e7e0a7b81@mattcorallo.com>
+Date: Sun, 1 Mar 2026 08:46:33 -0500
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-
-Hi All,
-
-This series is part of a larger effort to switch over all drivers using
-the struct acpi_driver interface to the more common struct platform_driver
-interface and eliminate the former.  The background is explained in
-Documentation/driver-api/acpi/acpi-drivers.rst and in the changelog of
-the patch that introduced the above document:
-
-https://lore.kernel.org/all/2396510.ElGaqSPkdT@rafael.j.wysocki/
-
-The bottom line is that the kernel would be better off without struct
-acpi_driver and so it is better to get rid of it.
-
-This series carries out driver conversion of the hwmon acpi_power_meter
-driver.
-
-Patch [1/3] removes some redundant checks from three functions in the
-driver to facilitate subsequent changes.
-
-Patch [2/3] updates the driver to install an ACPI notify handler by itself
-instead of using the .notify() callback from struct acpi_driver, which is
-requisite for the driver conversion.
-
-Patch [3/3] converts the driver to using struct platform_driver for device
-binding.
-
-@Jaroslaw, testing this on your systems where the acpi_power_meter driver
-is used would be much appreciated.
-
-Thanks!
+Subject: Re: PMBus memory overflow
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ linux-hwmon@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>,
+ security@kernel.org
+References: <d5abeb59-8286-425c-9f78-cd60b0e26ada@mattcorallo.com>
+ <00baca6f-8046-46ae-a68c-525472562be7@roeck-us.net>
+ <aAtEydwUfVcE0XeA@shikoro>
+ <3a9ab7bf-6761-4a14-983e-e6bb288ce58a@mattcorallo.com>
+ <e0e789b3-24c2-4ea3-9c79-fa815d801d83@roeck-us.net>
+ <bc9a14b5-8b10-436f-a791-28df245465e6@mattcorallo.com>
+ <4e198aa1-527b-4ad8-abc5-e7408296bfbd@roeck-us.net>
+ <03da7997-74f4-4435-a6c5-6aa5aea2f6d7@mattcorallo.com>
+ <2025060749-attendant-trout-d2c8@gregkh>
+ <695ebdae-7292-4a83-8aff-763da184921e@mattcorallo.com>
+ <2025060848-reset-recovery-f67a@gregkh>
+ <d16cb075-f924-4bd4-adec-8eaba589a3f2@mattcorallo.com>
+Content-Language: en-US
+From: Matt Corallo <yalbrymrb@mattcorallo.com>
+In-Reply-To: <d16cb075-f924-4bd4-adec-8eaba589a3f2@mattcorallo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
 
+On 6/9/25 9:57 AM, Matt Corallo wrote:
+> 
+> 
+> On 6/8/25 3:14 AM, Greg KH wrote:
+>> On Sat, Jun 07, 2025 at 09:25:44AM -0400, Matt Corallo wrote:
+>>>
+>>>
+>>> On 6/7/25 4:19 AM, Greg KH wrote:
+>>>> On Fri, Jun 06, 2025 at 04:57:37PM -0400, Matt Corallo wrote:
+>>>>> Adding security@kernel.org cause probably they should make sure this gets fixed.
+>>>>
+>>>> That's not how security@k.o works, sorry.  As this is already public, no
+>>>> need for security@k.o to get involved at all, the normal development
+>>>> process happens here now.
+>>>>
+>>>> So, submit a patch and people will be glad to review it!
+>>>
+>>> Thanks, figured I'd ask. Sadly there is a patch that folks seem to be okay
+>>> with to fix a buffer overflow but its just sitting.
+>>
+>> Have a pointer to that patch on lore for the maintainers involved to
+>> review?  Note, we are in the middle of the merge window, so no new
+>> changes can be added to our trees until -rc1 is out.
+> 
+> A proposed patch was posted by Guenter, and tested and confirmed that it fixes the issue by myself, 
+> at https://lore.kernel.org/linux-hwmon/284466fd-39e8-419e-8af5-41dbabb788af@roeck-us.net/ . Wolfram 
+> suggested this patch was acceptable at https://lore.kernel.org/linux-hwmon/aAtEydwUfVcE0XeA@shikoro/ 
+> but that's the last he chimed in on this issue.
+
+Any update on getting this patch applied Wolfram? Looks like the buffer overflow is still present on 
+at least 6.18.
+
+Matt
