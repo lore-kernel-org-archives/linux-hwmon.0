@@ -1,81 +1,81 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA644383C9D
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 07:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF65B37C110
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 08:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772436949; cv=pass; b=U8nh4q1SaEkHEsiabc4V7JeWfTKRkRsAcd5EPcZaVyRXUVeZ8dFvxTkPm/ibfSMp2J59aUJ1Pnx/9Z0VK4Y3YzJ2R4Zv/0YRm6uNkhiXG9hbGjnvv9TrJy00PIPm+FGu46l8MyDwZqmyqZS/zFxh5kSzt+i+DuSnegPpx9rA4dU=
+	t=1772440599; cv=pass; b=AxsR6ypPJ0p1VM4PQvCYOBCwqOAeoWxiGXlCxNKDttwg6zdONJ5K/rtzf96V0FphMQztgX4tTSWn+0pbh5MQSdOswErLUM8KEfzju1NAejYHu4c6k1Ih+AurZWDVOka65V4ZLPCgahhWGZGZGyYddZgvc3BHByDN4Py5sU/ogFE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772436949; c=relaxed/simple;
-	bh=ujd5yXOhTDzHrD3boEovwrv4TuSWaU3Puvvt4/TwwnY=;
+	s=arc-20240116; t=1772440599; c=relaxed/simple;
+	bh=1GZQSHitluQNTjjmJ2I4j/0ggHOUPtN+HUcjzFFw0es=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cY9MQubUge6tdLqwH12g6/xnxFoyiOFokDwpbiTwn/mbWAGyCGntHmoiAXLkAYIbY4uBGN9p2p3xJIg0R/0rGJvsMcqQ+zR3reCCdJzLlWVkCOpRCoqsV0a4rNtvm2D+i35S51WAJab9Gv85ZW5bU6ootm5kzpJzfe28EhTEHjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8Ntw6FO; arc=pass smtp.client-ip=209.85.161.42
+	 To:Cc:Content-Type; b=ROS8x1J09BtbvCVRzLOaR1hjaTCEtSSiRiQ+Bbx/8Gq6Ys5BobYWR+DN/ICb1iKFFluKmudZlgN7l35p/+8szeQQeSRgzquTh6u+mclt/ide6d2vKYHT6q7zmEg6HxK6NNnUihn20HPGK/Lu++2QKYBpf8HzzNTao37gj8MKv44=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKyknCBv; arc=pass smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8Ntw6FO"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-662f5c5507cso3695175eaf.3
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Mar 2026 23:35:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772436944; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKyknCBv"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-677bb1c3a9dso1328839eaf.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Mar 2026 00:36:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772440596; cv=none;
         d=google.com; s=arc-20240605;
-        b=dQU6h2q4KKel230RqvzkNUQMj1Yg8F0yXZnqH9BlqwAdP0ssXfLLeMPgTVsvpfLoz6
-         UUURE3eGwIxf3tLoCa1qBFDIEtw6F/da5oeo7yQDNpA/8xfJReZNoBtQVGvwCx1Tvc+M
-         hER791yXjEq6k+GC1RJrEIVBwqJZj1ASCDihCoLAQfgwG7nF+w3WCewjrMp2U/si2cOD
-         h2oJjzmZR8crz2jesEUxz3Fcvia6KTtup5+3et5xi6nPYsKQCnLFOouECdE1GCfowV1q
-         w4Ugpxst4OPsew4+7qCHIzrhJncA4OHXJ1Ey1D1zXWxiXKW0vCvHf10uyEW+HIULDK4k
-         pTqw==
+        b=ZCBmElwJz8eZ9AypdMF3qt7xINyJSrnCt5uUt72c4tpFFy6wVRbxTO5OdfXfrl1mzw
+         DdPtj/33grAlcUQc4IDIIUVM80trdQFFm9Fz2njiKXP9z9BYez+99XCkP1IDq2R26pr0
+         OQiymXvQWTgKsCrp4PoHhqLCrc0LURMHzvaa9H+sAjY3ZCtFymjK1ZCX9Uyzees2ZU0n
+         2Qw3k4P9twjYdIZA0+/jddcZ0sTOevF/Ffad6Z/r18WvrnPf0/wKFYRLKVsh5hbnnoua
+         i09LmJAq3V6Mw7kM2i7oozqh4D05oIL9Amia3qaYcKTzMnQFlNkwFv7kNXpQ3WPgSVGv
+         /UMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=2mC1y6DD7pcz5Nf2sOZ2nH/LBUN0Jx9nFjMcf/CfvDQ=;
-        fh=dB2EFWRbam9P4koD1KFCps2/KRTAF4UlFYlXbh6VWJY=;
-        b=IDGZ2fikQduc2r5OYG+Vn5YU9d5bg1pg72+0mVQKrucyz1fiZR184OWw6e6PfSvebC
-         bhBuHKYLsZqK70XHBx0g5fkUdBBvW7+JYF4A6bN1sfnaCMQEgYFDTdhgLmHohwJ2+wLU
-         xb9QJAKjRlGrxo8EqLky21Wxe7iltwlfuZ7rTsiPcJqDv/232eYAXYgVTW3Z3elfCp53
-         7DZmEfoTzqtvrn4PRznTh7ZMokO2c3EVR62nqFqIzoTDcmsj+z+Z1IL5A6JopJxk/3DO
-         2lmO8pcKK/i5g6Xnz7No1KwUMdV02NlTS8zoh5sDpzNKklp0ThjLy60uRjJq50pURCVE
-         8kUw==;
+        bh=RJ2NNQwmgjk+we0fjyCXc+/B1tN8WZHhhsi0KDBtJrA=;
+        fh=A0vlfoSAAHELysODFJNMrl6EzDMdiIO1GFXVf0v/5bo=;
+        b=SdzYJGinx1c8CO1lOVi8WbkbeEBj45tp7bTy44BFYQLF+xnmh/66WLySJuvQp9VY3M
+         6v8pYRo1BfVi+CkKr9VDIJBe/XNzZ5+eVtTCk82Cc+ZFZ28u97QaNSUojfsmRuS1rhk0
+         hK+6jCsaTgMAqpOE1u1vQa/f/kcU9NcNnmD+7lOBuSGAHCTf8sdrcSsO3n/P8JaQPHCa
+         PbQG4Q0U7YcIkfBmNS+zmyh8v+3xC5AkZEz+E3IFj40yno6JzKtkAVmljkh7MbysSo+o
+         5EnkFdy21+UBDVp+N0yb+VmSCnJ7n4zkeH5VwK6SfgPzkyzuXRe2AKDUsRqZ7Vs6Dq+7
+         5s+w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772436944; x=1773041744; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772440596; x=1773045396; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2mC1y6DD7pcz5Nf2sOZ2nH/LBUN0Jx9nFjMcf/CfvDQ=;
-        b=m8Ntw6FOSkzOoGz3z/IVAB246ZBJDlR/21/auBqxdeK+rG7Xc4eUvihwi3B/uUM9Jo
-         ZmUi4I0WaiiYSfHkmAw8cFv5ZBfLWpJxQQkdZ0OJ6oBElwZL4O7kwkH/VkM0CdNhuvfO
-         k24xEa2MBuL4XlUI+dMJ7lMbLyJzqGe36lJQBuhPzCfdjrUEf+ABPKR4mTPw/fDxqIqz
-         u//5pySzidrpVWw4r2a51zsg8L+FXe6c/NMKc9i6eMlR37AUxoZkXh2BH9kHLJAEUCxk
-         f+dcpq+it/gBx3HF38OCJGg9L4wN6KrgOEKiwlMUFJtRaI6vOTzyq9WcczzKiJgf9TQ+
-         KEgA==
+        bh=RJ2NNQwmgjk+we0fjyCXc+/B1tN8WZHhhsi0KDBtJrA=;
+        b=EKyknCBvZohZ1myTBk6swdhxhfDdDvnH398QByv7I7TAMOsN+Dq3ZKmtfvXTierQuJ
+         C2UglWe6MkU5pcwq+ldOWKFFmQVqDFDLS3+uSgpDQT041tGp+m1wMiAMdzTdtOq/ajqZ
+         K0oaAfA3mde9EUQ8TwhplZAOL+MGA/SN6vuHJtgoghYCathP84TAv/S1Wt/jVNHOJVlV
+         qiO210qO19M4auEyLVlEzTiq/FyPfPbf1Ws7UHcs2ubTkeJSmb3rgbm14eNX/NBRx9mg
+         MTfZ+4zJTlWasjQkqtAFKje1kVkhFzg7obQ3o8/IlEqk0YY/ctJa2nNZHv7e8Xrrbezr
+         UDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772436944; x=1773041744;
+        d=1e100.net; s=20230601; t=1772440596; x=1773045396;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2mC1y6DD7pcz5Nf2sOZ2nH/LBUN0Jx9nFjMcf/CfvDQ=;
-        b=n3GrVwhdQQQPKQukjhDN2wwVwMm/Q39jVgEH5xtrARGe1BU663ab13DSOKidPmwccj
-         AhJCDsGMxDA+8wQskvxIPCq1Pbrxgy+gmU/uKgcpkNmg54mddq0zhsOYDRErqLy/ZjEa
-         veJy7vTg2P/r3okGp90X9UqichI/JHomQRVBQXzU9AQg/+1KIIXGtFZjSjQFUO+dEPUl
-         pR2UW4d0cKoNR2CAVdYaOScOsYWI7jObKdQIfm7iPB1T6I9TX3V83cQCTFd7BeXCVSjv
-         U9pDKgj4HmOQs2OTz9iA04rocmglwrZQ+6ELxWYSsjwrQHG896SHEjrpBCTg1ZB+x1vc
-         6jcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQjz1/GcgRn6biDqAR7n0nMrpRmgsn/P+iMMqxRw2hG/R//1e1EB0ejxhNGu7d40Oz+kzMQwlOXkJxRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBbEoJXJFEDhkZNcRSZ9o0sBmKb5M1SyBTPr543GqhDL6b+E+O
-	VPnlhJ0GtFMlN8kwUIRwAh7gLJk0dDj/Ga6w50B8acDz+IuRO601+CdjuN3S1EE5++JYQ96xwGe
-	HtO0ziT85ZdU7h8xSHQgeT3vq0d/Nld4=
-X-Gm-Gg: ATEYQzxv0DJEA2fCIqDwT6fPk6cVwgaLomOtRiveOY5n9GNo8hL5oa4l0T67LvHIQy5
-	HpSh2TMpzR3TH1enFWgluair2x27OdW7cfhJi/M9fBX1VtTGcF+UCfnFODsuQqd7iXb56LaI7dG
-	deTFpzFLpqQFdDwj9vzuqIdC434XTDSc01mVnAtWsn3OwVgW05r08Vc1e2s5/vFVx/xHIq8mG+D
-	g9cNotEDT3LKddvF/O7lduvY/jzdhn7zckuzQ4TZ0qYc+kuRvyenAoU1WACw/B/3mapXCRrSrnr
-	To7lSI3sIvr4X7p5HXcxKbSy7oWGxKB6pUhQ+PpdfQeKlkYOVK8ogU/c3ncWryLQjZ8xzOCNuoc
-	cL9HTs+kbaQ==
-X-Received: by 2002:a05:6820:4988:b0:66e:1928:ca4f with SMTP id
- 006d021491bc7-679faf11891mr5541109eaf.49.1772436943542; Sun, 01 Mar 2026
- 23:35:43 -0800 (PST)
+        bh=RJ2NNQwmgjk+we0fjyCXc+/B1tN8WZHhhsi0KDBtJrA=;
+        b=lwdX3HlMPQfXZMhy3G86XnNpxbKRi6qMR6YB8oN09zrCc2O9Z1Qwybq29UWYfpbPTI
+         99hxXJrZpVKn024sKSKBEy5MlIOBKPs4LX1HvE1jhOCjnVlBaQx8whDqKuT/NeX3/hEV
+         NYd5cPOSH4NNKH0DNCh9uT8zYCHZuwBktdXRMNX4Xzx7zqcqMFBFLSo81Tn8ID59Iu7H
+         sGgvMS0baehYXgvIBxZKwQm53rNoM7rUpq2dgKMDelRCZAGNvp6A38GPZSReoJWLv+ID
+         GaJL7+ZQ3jDrxTmJpy4vmAPlsckDK5UQlYDRqzy9R9Q/ZavRhPT0slxT8LOvYStYZi8T
+         8Arw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMW6d7iwZkdkdbvb4FtVDsjzyBbF5p8ix+tuXex31Hjimhr70jPqeOIQz0W/ZoSG5WnCwM8dkrnTpk5A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVnDwpKvYW1xI2ti2E4FF0owIZOwDo0ZsWMy0oyNKlN0GI4hpO
+	WCuVL93okCwBFk/z12Lx3TEuINVcuTTY5+Oq0+842FRri7iZhFW/4pA5yeCSoInQHdUKbYK5ITc
+	Bk1RmChsXo3OIeMtNbQXK2RyozPRCAAk=
+X-Gm-Gg: ATEYQzxP8HSSEAmlDm0f0gM3gtlVLwomR0G4Eg0zbAb5Z4wXVGywXGUu6ITc1iOTUvg
+	S68ykZpCCMtjVXmdkdftFgRKuQtm3Bl7ssoh7+79Ia1snVElW2ZuLMys1ApBnpkf5Y+89aOv7hk
+	zr0G5YmbeT6/eJtWhAT8hy35Dl29mxfzhG16qdOMbfcWO/t/+JYhPvuutrUglY6cDb6iOpTiOMd
+	6ne3N37p+xQPTlVVFEwzy1X21caJKo+0iiggCYuAWxtWOnyoQ11kZNl68utmVyxJyH8PxpcRMP1
+	jVp/CkDn/s0tfGKcrQx1e33lXjp2QklzQ62ALSrm9sBWC06W0CR242eWkSNo7GGw/482UD9usY8
+	=
+X-Received: by 2002:a05:6820:4de4:b0:667:7e1a:204a with SMTP id
+ 006d021491bc7-679faf91292mr6464642eaf.71.1772440595639; Mon, 02 Mar 2026
+ 00:36:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -85,9 +85,9 @@ MIME-Version: 1.0
 References: <20260302002729.19438-1-dakr@kernel.org> <20260302002729.19438-2-dakr@kernel.org>
 In-Reply-To: <20260302002729.19438-2-dakr@kernel.org>
 From: Gui-Dong Han <hanguidong02@gmail.com>
-Date: Mon, 2 Mar 2026 15:35:32 +0800
-X-Gm-Features: AaiRm50_s22j6LsCWMU-TfsOHqNdXrP3vXkDmNbbxBCzOFnGOAxq_l0pLMJKbQI
-Message-ID: <CALbr=LbsXYYVGc6d6AC7APDW+u+UHzLj2-c3DNcMKN2ZSyYYJw@mail.gmail.com>
+Date: Mon, 2 Mar 2026 16:36:25 +0800
+X-Gm-Features: AaiRm53VKaieIbBWkzD1yY0EUmtpQaKFtqT6KmFajHbooqaebtPFWL-mvDVMBSU
+Message-ID: <CALbr=LYqfhMi4eGp18r20XFzOWqRYCB8tO0mc_TAydb5cgbX-A@mail.gmail.com>
 Subject: Re: [PATCH 1/3] driver core: generalize driver_override in struct device
 To: Danilo Krummrich <dakr@kernel.org>
 Cc: gregkh@linuxfoundation.org, rafael@kernel.org, ysato@users.sourceforge.jp, 
@@ -129,161 +129,41 @@ rote:
 el.org/ [2]
 > Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 
-Hi Danilo,
+Applying the following diff fixes the KASAN issue. It was just a minor bug.
 
-I wanted to test if this fixes the issue using PoCs, but I'm hitting a
-KASAN splat right during boot. The issue disappears if I revert this
-patch.
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a8cb90577d10..09b98f02f559 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2556,6 +2556,7 @@ static void device_release(struct kobject *kobj)
+        devres_release_all(dev);
 
-KASAN report:
-[    7.266874] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[    7.267707] BUG: KASAN: slab-use-after-free in device_release+0x1f4/0x24=
-0
-[    7.267707] Read of size 8 at addr ffff888003f4a370 by task kworker/1:0/=
-24
-[    7.267707]
-[    7.267707] CPU: 1 UID: 0 PID: 24 Comm: kworker/1:0 Not tainted
-7.0.0-rc2-00001-gc1a10dc76109 #4 PREEMP
-[    7.267707] Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX,
-arch_caps fix, 1996), BIOS 1.16.3-de4
-[    7.267707] Workqueue: events_long serio_handle_event
-[    7.267707] Call Trace:
-[    7.267707]  <TASK>
-[    7.267707]  dump_stack_lvl+0x66/0xa0
-[    7.267707]  print_report+0xce/0x660
-[    7.267707]  ? device_release+0x1f4/0x240
-[    7.267707]  ? __virt_addr_valid+0x208/0x410
-[    7.267707]  ? device_release+0x1f4/0x240
-[    7.267707]  kasan_report+0xe0/0x110
-[    7.267707]  ? device_release+0x1f4/0x240
-[    7.267707]  device_release+0x1f4/0x240
-[    7.267707]  kobject_put+0x1c8/0x450
-[    7.267707]  atkbd_connect+0x615/0x9e0
-[    7.267707]  ? __pfx_atkbd_connect+0x10/0x10
-[    7.267707]  ? kernfs_create_link+0x169/0x230
-[    7.267707]  ? do_raw_spin_unlock+0x53/0x220
-[    7.267707]  serio_driver_probe+0x72/0xb0
-[    7.267707]  really_probe+0x254/0x910
-[    7.267707]  __driver_probe_device+0x20b/0x3d0
-[    7.267707]  driver_probe_device+0x45/0x130
-[    7.267707]  __driver_attach+0x1f6/0x550
-[    7.267707]  ? __pfx___driver_attach+0x10/0x10
-[    7.267707]  bus_for_each_dev+0x103/0x180
-[    7.267707]  ? __pfx_bus_for_each_dev+0x10/0x10
-[    7.267707]  ? _raw_spin_unlock_irqrestore+0x3f/0x50
-[    7.267707]  ? lockdep_hardirqs_on_prepare+0xea/0x1a0
-[    7.267707]  serio_handle_event+0x1ce/0x840
-[    7.267707]  process_one_work+0x7fc/0x1760
-[    7.267707]  ? __pfx_process_one_work+0x10/0x10
-[    7.267707]  ? lock_is_held_type+0x8f/0x100
-[    7.267707]  ? __pfx_serio_handle_event+0x10/0x10
-[    7.267707]  worker_thread+0x593/0xfb0
-[    7.267707]  ? __pfx_worker_thread+0x10/0x10
-[    7.267707]  kthread+0x319/0x400
-[    7.267707]  ? __pfx_kthread+0x10/0x10
-[    7.267707]  ret_from_fork+0x590/0x830
-[    7.267707]  ? __pfx_ret_from_fork+0x10/0x10
-[    7.267707]  ? __switch_to+0x860/0xe50
-[    7.267707]  ? __switch_to_asm+0x39/0x70
-[    7.267707]  ? __switch_to_asm+0x33/0x70
-[    7.267707]  ? __pfx_kthread+0x10/0x10
-[    7.267707]  ret_from_fork_asm+0x1a/0x30
-[    7.267707]  </TASK>
-[    7.267707]
-[    7.267707] Allocated by task 24:
-[    7.267707]  kasan_save_stack+0x33/0x60
-[    7.267707]  kasan_save_track+0x14/0x30
-[    7.267707]  __kasan_kmalloc+0x8f/0xa0
-[    7.267707]  input_allocate_device+0x3f/0x330
-[    7.267707]  atkbd_connect+0x97/0x9e0
-[    7.267707]  serio_driver_probe+0x72/0xb0
-[    7.267707]  really_probe+0x254/0x910
-[    7.267707]  __driver_probe_device+0x20b/0x3d0
-[    7.267707]  driver_probe_device+0x45/0x130
-[    7.267707]  __driver_attach+0x1f6/0x550
-[    7.267707]  bus_for_each_dev+0x103/0x180
-[    7.267707]  serio_handle_event+0x1ce/0x840
-[    7.267707]  process_one_work+0x7fc/0x1760
-[    7.267707]  worker_thread+0x593/0xfb0
-[    7.267707]  kthread+0x319/0x400
-[    7.267707]  ret_from_fork+0x590/0x830
-[    7.267707]  ret_from_fork_asm+0x1a/0x30
-[    7.267707]
-[    7.267707] Freed by task 24:
-[    7.267707]  kasan_save_stack+0x33/0x60
-[    7.267707]  kasan_save_track+0x14/0x30
-[    7.267707]  kasan_save_free_info+0x3b/0x60
-[    7.267707]  __kasan_slab_free+0x43/0x70
-[    7.267707]  kfree+0x193/0x4f0
-[    7.267707]  input_dev_release+0xa6/0xd0
-[    7.267707]  device_release+0x9a/0x240
-[    7.267707]  kobject_put+0x1c8/0x450
-[    7.267707]  atkbd_connect+0x615/0x9e0
-[    7.267707]  serio_driver_probe+0x72/0xb0
-[    7.267707]  really_probe+0x254/0x910
-[    7.267707]  __driver_probe_device+0x20b/0x3d0
-[    7.267707]  driver_probe_device+0x45/0x130
-[    7.267707]  __driver_attach+0x1f6/0x550
-[    7.267707]  bus_for_each_dev+0x103/0x180
-[    7.267707]  serio_handle_event+0x1ce/0x840
-[    7.267707]  process_one_work+0x7fc/0x1760
-[    7.267707]  worker_thread+0x593/0xfb0
-[    7.267707]  kthread+0x319/0x400
-[    7.267707]  ret_from_fork+0x590/0x830
-[    7.267707]  ret_from_fork_asm+0x1a/0x30
-[    7.267707]
-[    7.267707] The buggy address belongs to the object at ffff888003f4a000
-[    7.267707]  which belongs to the cache kmalloc-2k of size 2048
-[    7.267707] The buggy address is located 880 bytes inside of
-[    7.267707]  freed 2048-byte region [ffff888003f4a000, ffff888003f4a800)
-[    7.267707]
-[    7.267707] The buggy address belongs to the physical page:
-[    7.267707] page: refcount:0 mapcount:0 mapping:0000000000000000
-index:0xffff888003f4b800 pfn:0x3f48
-[    7.267707] head: order:3 mapcount:0 entire_mapcount:0
-nr_pages_mapped:0 pincount:0
-[    7.267707] flags: 0x100000000000240(workingset|head|node=3D0|zone=3D1)
-[    7.267707] page_type: f5(slab)
-[    7.267707] raw: 0100000000000240 ffff888001043240 ffff888001041088
-ffff888001041088
-[    7.267707] raw: ffff888003f4b800 0000000000050002 00000000f5000000
-0000000000000000
-[    7.267707] head: 0100000000000240 ffff888001043240
-ffff888001041088 ffff888001041088
-[    7.267707] head: ffff888003f4b800 0000000000050002
-00000000f5000000 0000000000000000
-[    7.267707] head: 0100000000000003 ffffea00000fd201
-00000000ffffffff 00000000ffffffff
-[    7.267707] head: 0000000000000000 0000000000000000
-00000000ffffffff 0000000000000000
-[    7.267707] page dumped because: kasan: bad access detected
-[    7.267707]
-[    7.267707] Memory state around the buggy address:
-[    7.267707]  ffff888003f4a200: fb fb fb fb fb fb fb fb fb fb fb fb
-fb fb fb fb
-[    7.267707]  ffff888003f4a280: fb fb fb fb fb fb fb fb fb fb fb fb
-fb fb fb fb
-[    7.267707] >ffff888003f4a300: fb fb fb fb fb fb fb fb fb fb fb fb
-fb fb fb fb
-[    7.267707]                                                             =
- ^
-[    7.267707]  ffff888003f4a380: fb fb fb fb fb fb fb fb fb fb fb fb
-fb fb fb fb
-[    7.267707]  ffff888003f4a400: fb fb fb fb fb fb fb fb fb fb fb fb
-fb fb fb fb
-[    7.267707] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[    7.293685] Disabling lock debugging due to kernel taint
+        kfree(dev->dma_range_map);
++       kfree(dev->driver_override.name);
 
-This is on a basic QEMU x86_64 VM. Note that I did not apply the "WIP:
-treewide: make callsites use generic driver_override" patch.
+        if (dev->release)
+                dev->release(dev);
+@@ -2566,7 +2567,6 @@ static void device_release(struct kobject *kobj)
+        else
+                WARN(1, KERN_ERR "Device '%s' does not have a
+release() function, it is broken and must be fixed. See
+Documentation/core-api/kobject.rst.\n",
+                        dev_name(dev));
+-       kfree(dev->driver_override.name);
+        kfree(p);
+ }
 
-I'm currently looking into the root cause.
+With this applied, along with the PCI driver diff from the WIP patch,
+the issue is resolved. I tested this on PCI and both PoCs no longer
+trigger KASAN. I also ran with other debug options enabled (lockdep,
+sleep inside atomic, etc.) and hit no warnings.
 
-Thanks.
+I was working on a similar patch recently, but your version is better.
+Not returning the string directly provides better encapsulation and
+makes the API much harder to misuse.
+
+Tested-by: Gui-Dong Han <hanguidong02@gmail.com>
+Reviewed-by: Gui-Dong Han <hanguidong02@gmail.com>
 
 > ---
 >  drivers/base/core.c    |  2 ++
