@@ -1,112 +1,109 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E015F18AFD
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 00:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD254183CC3;
+	Mon,  2 Mar 2026 00:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772409692; cv=none; b=pAQ72JkY8SEU2DAjurOvepc9u/nFNk68xA9XEhLuJwz6YdzwOL7ixI/rERL/Q0vGSs8x/oAxx2+G0OQB1cYKNnuSiiI99fh9uOJs0C0OKmMiFNA709HXFjVj3qtZdgjq03P93jtujYecjB4J0MHx+2fzV1AK/BnJQK8UH5L0vYk=
+	t=1772411274; cv=none; b=ps1N2ewQYScVyaYszYKbUXTpyAsBHfcIPPGaY8GO/WqVIhAR6HJRSOKLUAcEkrIh53Pr1zhzLReYwyVwG+0kiJjgdT10k5ohl3Rph8SLqmRrKpWx1Y6CZ0dVf/nTWAJSZmCZQU8l6wHq64DbtzucZ199fpalS/3DN2tbsoQtswo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772409692; c=relaxed/simple;
-	bh=eFZMfr+s0Q1UNOMfLG3ds5RmyUtjt747TkosvoFWIWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XEBYsp8k+qbj+rn5P+EtCprkf1UFzMymWgWgSYhWhRGdP03C8Ik8fCDQpqUgFVrDhvKvnuzej7aYJL1AvF1BUn2EjwDHSFf8MmDBJSXPr7OmPq5sx/bqAt/QuHUkikd7r36fd8btosKWa4l8BoqG9T0mcXyxf6dIyd4DC4M7O+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIJUHd55; arc=none smtp.client-ip=74.125.82.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772411274; c=relaxed/simple;
+	bh=Pns+Gig1BWJSqDMXsjGA6andnLvpaxx09TdwPTjU55g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UZHZp1wkJKyBMObNjnOTGv5tkjC4/ujSP2s+jxgYkyvs9+Q7siOKZfPKRyOtut26VXRlasMzmaZHvqiGpKagf80MqhWezbhE8BrOTbmXZZjtLMyBIio5BKJdw68jYxm4Oak7f1wls2k1Pi1hq/hcjb5F1dvdPnzXF1V/5W5SXLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjtZn7Aa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIJUHd55"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2bdfd262114so1884602eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 01 Mar 2026 16:01:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772409690; x=1773014490; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OfArcU3dsTEXyfI4YzrqdiJ40D8RtnJz+9pcEe41QRs=;
-        b=IIJUHd55Sb3qO1XdCzysM72J+evfQl5CkODxAisZ3I5WOUarunsVF0+FNZ9qjNDbRA
-         Yr0eF6UaR47713K+6OxejLdPtj6xlLVcIp9sMym88yHWKPJHLgPoXYuotBvleRMljAqL
-         /b9r5jojct+82qhcw33gbJ33hYGfyrEiLpir6qrRdcvb67NJRQgpHlSn3fX6CrAUTllH
-         HKSviWCgNhpA1Y8TjldwMpMKvAWARRhYaLnA2U2htvHMYeBAIXxNlbZT+rAyxGC+HllR
-         INXY6GJfvRLOkCAw2nBgJgwRHOmNqfZXTJAvRgt0mPtfGE2yss8nvmKTQn8eMWAtmw/y
-         sTMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772409690; x=1773014490;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OfArcU3dsTEXyfI4YzrqdiJ40D8RtnJz+9pcEe41QRs=;
-        b=bpWryCxVkjaDIcjoWZCwV7jvv1k00b6CUNjR1TGHml/Of1ntKDKYszj0AFezmSdiWm
-         G3Ho+bMI3uD0ALv6KQf39y2LeVDdHzH9jkhrJ6bDKKtMIZZmlXXHjnQy+9Q/ryoEyafi
-         2uh0Ac3q2hmt3RpkRa5VjpOwtQsUoZXAbw2qkq2tbXxL69OZke4NMOoJ/k/8P8lzeCeO
-         Su5kyUKRCPRmu3EDB99lEv1bO3CQM0plpzqYPt4Xw8UG+ggDhHNhlgqJfMf1OASzPaFJ
-         JGv0E1zIdvum9E8YYusmxTvTRf8l+x6a9fucgP8Lqi3m7C75p7Y9rRQmYtdLWCDPqxve
-         8+vg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9U7tMDnctC1ne8uAPpVaGtpZhl7OwBJiq1Yj3K6T+T9iOA2nxfGD3okrqSAdepH2IRO3SHU1rx2bIWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMFHC3mfLABD8wPSmz4kN+sjBh8X9H/zUwvnmTRjB+RIZRoTS6
-	KBIVjeW6STQFUlEfLNhThXmV0XOt2id10sTaK5OD9t3ogT/BzzncTWc8
-X-Gm-Gg: ATEYQzzke2e2luvZ3Hh8rymYycatf5aUEhgmCIcNGMzlTDIQ9CeYbaqFLRLYiElyhp4
-	9rkP0W5ccjG4AOZu8DPhEj+mLGQPHlkc3tg9F18IBB8IyYZVsmkGTS8LSNVIrEDdiH8Ausb9zMK
-	L118DJ/xc6LZ6Q/tCcutfVwOpdphWRfp8f0yJyJjLSyEBrt4MpdXE+FNHiEz9BSl4yimMPyLQvP
-	IaMx1WoNu9IMWltF304DN0fL7L+1vdfs4oSvcxZSlzCp8Emc+XsnRUfZfLGALOaSBJZcUBPq5ZB
-	EC22YOrKEh3KlTxDeEizcI/w2Wng3tjXDLthqIgaz2ttWNxlJzMXsgB8UaQrjH3piJBtA/luMpA
-	w5FBUgS2f+wvNNFadi6CsxbBcsoZhUOASQE28N1RdmSuODyFBnMFZxqw+fK7OnUZ18kmnxtXQr/
-	bdtz2JgIbmiC0qAyjinP8ay0RcRp2IkAxWj+uG
-X-Received: by 2002:a05:7301:1e96:b0:2ae:5ffa:8da4 with SMTP id 5a478bee46e88-2bde1bbf780mr4542339eec.1.1772409689898;
-        Sun, 01 Mar 2026 16:01:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be1731b6b6sm94244eec.5.2026.03.01.16.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2026 16:01:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 1 Mar 2026 16:01:28 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux ACPI <linux-acpi@vger.kernel.org>,
-	linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] hwmon: (acpi_power_meter) Convert ACPI driver to
- a platform one
-Message-ID: <b93aae74-6b66-4597-9eda-71e2363f7bba@roeck-us.net>
-References: <5974797.DvuYhMxLoT@rafael.j.wysocki>
- <1952740.tdWV9SEqCh@rafael.j.wysocki>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjtZn7Aa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8EEC116C6;
+	Mon,  2 Mar 2026 00:27:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772411274;
+	bh=Pns+Gig1BWJSqDMXsjGA6andnLvpaxx09TdwPTjU55g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EjtZn7AaXiIU2Ks2SxjbV1LgW/hXT8bmYzHXEb91QrW0MDYwU5i3yjwu31XlQXr/+
+	 cl5+dWxBDhFArVxrZ77ImiU6MLDVYrimHtUcgsWKnfXhgfJr+R1hJnwzcKDn+izlHJ
+	 YltjyggOMjkjkDbDycQSpjLu3SsHHKexwU6tY/xF+E0DenRaySoNiWUueHXxSEg3hE
+	 9X2cgbajLIaz5vrCxD5UoTerJyGusi22Gxcw+TyifyZa9hPtQZvT3ewKFd18js4S1g
+	 KJbr9EEUCFaUBJ4r3hWVMlGQnRu0MQ3kZ0jnGNnPDb4wOkbDQ1rJj0+UW+vXENIium
+	 yce6JBBlvZa4Q==
+From: Danilo Krummrich <dakr@kernel.org>
+To: gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	hanguidong02@gmail.com,
+	ysato@users.sourceforge.jp,
+	dalias@libc.org,
+	glaubitz@physik.fu-berlin.de,
+	abelvesa@kernel.org,
+	srini@kernel.org,
+	s.nawrocki@samsung.com,
+	nuno.sa@analog.com
+Cc: driver-core@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: [PATCH 0/3] driver core: generalize driver_override infrastructure
+Date: Mon,  2 Mar 2026 01:25:55 +0100
+Message-ID: <20260302002729.19438-1-dakr@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1952740.tdWV9SEqCh@rafael.j.wysocki>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 01, 2026 at 02:18:49PM +0100, Rafael J. Wysocki wrote:
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> In all cases in which a struct acpi_driver is used for binding a driver
-> to an ACPI device object, a corresponding platform device is created by
-> the ACPI core and that device is regarded as a proper representation of
-> underlying hardware.  Accordingly, a struct platform_driver should be
-> used by driver code to bind to that device.  There are multiple reasons
-> why drivers should not bind directly to ACPI device objects [1].
-> 
-> Overall, it is better to bind drivers to platform devices than to their
-> ACPI companions, so convert the hwmon ACPI power meter driver to a
-> platform one.
-> 
-> After this change, the subordinate hwmon device will be registered
-> under the platform device representing the ACPI power meter, sysfs
-> notifications will trigger on that device, and diagnostic messages
-> will be printed relative to it instead of its ACPI companion.
-> 
-> Link: https://lore.kernel.org/all/2396510.ElGaqSPkdT@rafael.j.wysocki/ [1]
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Currently, there are 12 busses (including platform and PCI) that duplicate the
+driver_override logic for their individual devices.
 
-Thanks a lot for this cleanup work.
+All of them seem to be prone to the bug described in [1].
 
-I decided to apply the entire series right away to hopefully get some test
-feedback before the next commit window.
+While this could be solved for every bus individually using a separate lock,
+solving this in the driver-core generically results in less (and cleaner)
+changes overall.
 
-Thanks,
-Guenter
+Thus, move driver_override to struct device, provide corresponding accessors for
+busses and handle locking with a separate lock internally.
+
+In particular, add device_set_driver_override(), device_has_driver_override(),
+device_match_driver_override() and a helper, DEVICE_ATTR_DRIVER_OVERRIDE(), to
+declare the corresponding sysfs store() and show() callbacks.
+
+Until all busses have migrated, keep driver_set_override() in place.
+
+Note that we can't use the device lock for the reasons described in [2].
+
+This patch series includes the migration of the platform bus; patches for all
+other affected busses still need to be extracted as a follow-up of the WIP
+treewide patch in [3].
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=220789
+[2] https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kernel.org/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=driver_override
+
+Danilo Krummrich (3):
+  driver core: generalize driver_override in struct device
+  hwmon: axi-fan: don't use driver_override as IRQ name
+  driver core: platform: use generic driver_override infrastructure
+
+ arch/sh/drivers/platform_early.c |  6 ++-
+ drivers/base/core.c              |  2 +
+ drivers/base/dd.c                | 60 +++++++++++++++++++++++
+ drivers/base/platform.c          | 35 ++------------
+ drivers/bus/simple-pm-bus.c      |  4 +-
+ drivers/clk/imx/clk-scu.c        |  3 +-
+ drivers/hwmon/axi-fan-control.c  |  2 +-
+ drivers/slimbus/qcom-ngd-ctrl.c  |  6 +--
+ include/linux/device.h           | 81 ++++++++++++++++++++++++++++++++
+ include/linux/platform_device.h  |  5 --
+ sound/soc/samsung/i2s.c          |  6 +--
+ 11 files changed, 161 insertions(+), 49 deletions(-)
+
+
+base-commit: 78437ab3b769f80526416570f60173c89858dd84
+-- 
+2.53.0
+
