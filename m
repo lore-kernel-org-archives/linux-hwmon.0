@@ -1,103 +1,154 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233073FD15D
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 15:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B34642048
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 15:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772463889; cv=none; b=e5HIb1RYylFkW7rWP0kHNkPzHo8Tg/IW8irX6kR+4LTY+EpPNFMlcyIh+3jsS/w0rvJKOafM658u1cMte+ZWh4SQQ2Inc3w6j+5WQmDDyjJdQwvNtOgOJjtKotLBtUNr4I+fWjDAfiixnwuwwZOEkOSQ81/C/I8aYaHmL2jq0NE=
+	t=1772465194; cv=none; b=fPR6kB19NJOOEKVPRIbGqmIon5BoV6hryHSpORokgejEcU4aYurCLXoQHqftPvjKPkStsvkOdC9/oRwGYIfP8z/BMfN7njZSqr8d/c4Pc8SiXrN2ZejWopUW2FV1lLQUPsIx6fkHN1uKAZ+31n0bkZb/KeJ1+1tPZhBWUPEtKkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772463889; c=relaxed/simple;
-	bh=Z3QuW44a1cqmJAISoawP8xM8uOw+Gue0DhunUahM9Dk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKccWpKsvFpuFthJkZo05lckZWVIQ1dFIF597Gnmd9r+oRCRhgdLSizIEOJ+Z/8ZQa9hNyFp9QKBZwUAFKuoc23Os7+6ES5dr7X40LKa/n6A5jT7O2CULlH0B9Zglqu6LNeBOK/96csPjp/8e/mlGYBM8/Z8p0G6HS4CP0fsk4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WruRTr3d; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WruRTr3d"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2be06c02f66so2976479eec.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Mar 2026 07:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772463887; x=1773068687; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PJQJNNM+4DO9CQxRQrJTKsiJbgSUIZ685yVxcgsm7ic=;
-        b=WruRTr3d7U8Z2pIdAmkls+egdPYBPfFo5wW3NFFWeXLLB0Im7vVRDV2PrNuz/yhSDR
-         gKnnwBCz5L2+ssq4RtN7eGYiar4EGGRUt9E53m/NBS7Nlxfs6VI7Lh96+7vbTiEqoqJa
-         TVFQjVM+SQAvjg4Ch01zaCmsaYptDT+dwtberO2qqmx5tReiPHRSnRfBzfCMccQ0Jqix
-         +ofOK2wGc+yCydQycFKQUAK/xrxibd1Mp4ZA24mVUaV7+eUC6JgZzXOTJKLNCbClgK/W
-         vC7YJna+FfI39W3pq+j+wDP1REc9Dkuv970+3OTsu8zYjLYcmoYX1aFWQ/h4f2sqhvzI
-         939Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772463887; x=1773068687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PJQJNNM+4DO9CQxRQrJTKsiJbgSUIZ685yVxcgsm7ic=;
-        b=keIBJg9JvUUHilo+1QOQten0vhuXA8YEsRbGgP2RqNhrDjh+iLycegLhaTZFfaS7Ld
-         2cUMU1PkKH3xkLl5YVJIYlUlGN63zj6wL2bJbgLFw9KxRtswBIsm7tPcJCWPeH8c00EK
-         sIJaKv4Gjd/sNuoRMs06ooUgzhe/ZDz5Ndwvj/sAQUvHDTGtexc4bT/XZaonu2DvR3tR
-         3DVBx+5U7Tm9Ty2GyIwGm7yn2of6mYLdWYYn9HRHPOUGHSFbgj8kwica6o66pMyrHGjN
-         PqnxtjPRjqxKdfvktFQmcU33Ho8nwf9XUGoWyj9ysPekPMAXUVJ4xvUyS9FMVYvufLUl
-         1MkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbbeAALIEzb/qWXSaPJa/BmiczG8w3fhczbvbdcJCYkdZMwWmIuRDJnt2JpRoZgAMt5RGvph/3Pl8qWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGOBhIfnlf31+fHMKWNq1eEehyNllUeOmdAEu22BWNZ/brBDTd
-	qQr3ZmTL0SgPCELKRiGKd1DOwAc1q7l207dX5rEwkizXsPSCcD8ucNse
-X-Gm-Gg: ATEYQzxXsa2jv+W17Y3RDsGw6QIZO8t7SYTEUFTFfh3jtrPNQeGmbc3Jkap9zEakBjI
-	E6M84b55IPtfBNE14Fc5tbpD3kOAz1F/lGYTHwVtYYNenNxDgWgPotSdazSC1Bw7HhRRUEfeqbG
-	POkkfl2ASxMbftdwyw9V9c6axsXy0jUEMKq63pfCGZRi1QCwKit1le8SZZA9JrvJ3YM9x5i3r25
-	Pci9saowd42NaQ3aL48DwhVh6a/HPNBAhMMjFcSY75oTOaNm/G/VafjlIkciMKfg7GSiH86SyOh
-	pd6b5H0+t0AxbujapwucWKUFJSkZrtfKpgzEKkU3lf7LGasxVnULQUVXcA7hokuAwQLh90JX7Aj
-	nb1zQm2JXO1ywlqi2TwmQXGSHv7vF5auJLlQuHWfmMbvLQKFgXgtf80GnNBAU3L0oeJDgf50O1+
-	Wq1Kh2HJEwHpRKcDte0iL03rb+9JVeSfpFquMm
-X-Received: by 2002:a05:7300:f194:b0:2be:142f:d48a with SMTP id 5a478bee46e88-2be142fd895mr1194048eec.27.1772463886899;
-        Mon, 02 Mar 2026 07:04:46 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f23c01sm10987949eec.16.2026.03.02.07.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 07:04:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 2 Mar 2026 07:04:45 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Michael Walle <mwalle@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 7/7] dt-bindings: hwmon: sl28cpld: Drop sa67mcu
- compatible
-Message-ID: <917915df-3a4a-4cc0-b41f-106b5933db20@roeck-us.net>
-References: <20260302122540.1377444-1-mwalle@kernel.org>
- <20260302122540.1377444-8-mwalle@kernel.org>
+	s=arc-20240116; t=1772465194; c=relaxed/simple;
+	bh=a3D9RrXSZxjYb+GrfIIS8vczbVo2gPY9v8kAdvVaCzk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LpT+hyvi3nIUKasCLolByE+MS9YT4TsDhkw+oVFXn/aATwLsogC1V/BqGMM/sMC1R8+C9YE0r61Sm21DpzAPTbUeN9XEVSHb0YlN5pSwjfF5ecJU0H4305VQRyr6cmt7brLzmWm5ZuKjJ/D5oyqi2WC+rCFUk9bLqvB4RU9UGNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <jre@pengutronix.de>)
+	id 1vx5AF-0004YF-Sh; Mon, 02 Mar 2026 16:26:31 +0100
+From: Jonas Rebmann <jre@pengutronix.de>
+Date: Mon, 02 Mar 2026 16:26:25 +0100
+Subject: [PATCH] (ina2xx) Drop bus_voltage_shift configuration
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260302122540.1377444-8-mwalle@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260302-ina2xx-shift-v1-1-4ff5b7b76d51@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIACCspWkC/x3MTQqAIBBA4avIrBNsot+rRAvRMWdjoRGCePek5
+ bd4r0CiyJRgEwUivZz4Cg19J8B4HU6SbJsBFU5qUCg5aMxZJs/ukctKFs1okWaEltyRHOd/tx+
+ 1fu/LEXheAAAA
+X-Change-ID: 20260302-ina2xx-shift-89ed2c5d2e72
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Ian Ray <ian.ray@gehealthcare.com>, Jonas Rebmann <jre@pengutronix.de>
+X-Mailer: b4 0.15-dev-7abec
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3659; i=jre@pengutronix.de;
+ h=from:subject:message-id; bh=a3D9RrXSZxjYb+GrfIIS8vczbVo2gPY9v8kAdvVaCzk=;
+ b=owGbwMvMwCV2ZcYT3onnbjcwnlZLYshcukZd6scHjeUCPrmLOp+tE7DJmpPym89duaWNrdElL
+ ED7+My4jlIWBjEuBlkxRZZYNTkFIWP/62aVdrEwc1iZQIYwcHEKwEQWFTP84blm/6c5TapI617v
+ ySNqlaF3VR9O1JcNrlQ8aXw6h/NYLCPDk5tsHYlPpih1a5QJbWe5e/PStzDOia/tEyzYqrKE23f
+ zAwA=
+X-Developer-Key: i=jre@pengutronix.de; a=openpgp;
+ fpr=0B7B750D5D3CD21B3B130DE8B61515E135CD49B5
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::ac
+X-SA-Exim-Mail-From: jre@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 02, 2026 at 01:24:52PM +0100, Michael Walle wrote:
-> I was just informed that this product is discontinued (without being
-> ever released to the market). Pull the plug and let's not waste any more
-> maintainers time and revert commit 0f6eae86e626 ("dt-bindings: hwmon:
-> sl28cpld: add sa67mcu compatible").
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Michael Walle <mwalle@kernel.org>
+The INA219 has the lowest three bits of the bus voltage register
+zero-reserved and the bus_voltage_shift ina2xx_config field was
+introduced to accommodate for that.
 
-Applied.
+The INA234 has four bits of the bus voltage, of the shunt voltage, and
+of the current registers zero-reserved but the latter two were
+implemented by choosing a 16x higher conversion constant instead of a
+separate field specifying a bit shift.
 
-Guenter
+For consistency and simplicity, drop bus_voltage_shift and adapt the
+conversion constants for INA219 and INA234 accordingly, yielding the
+same measurement values.
+
+Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
+---
+ drivers/hwmon/ina2xx.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index 836e15a5a780..d7c894d7353c 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -151,7 +151,6 @@ struct ina2xx_config {
+ 	bool has_update_interval;
+ 	int calibration_value;
+ 	int shunt_div;
+-	int bus_voltage_shift;
+ 	int bus_voltage_lsb;	/* uV */
+ 	int power_lsb_factor;
+ };
+@@ -172,8 +171,7 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 		.config_default = INA219_CONFIG_DEFAULT,
+ 		.calibration_value = 4096,
+ 		.shunt_div = 100,
+-		.bus_voltage_shift = 3,
+-		.bus_voltage_lsb = 4000,
++		.bus_voltage_lsb = 500,
+ 		.power_lsb_factor = 20,
+ 		.has_alerts = false,
+ 		.has_ishunt = false,
+@@ -184,7 +182,6 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 		.config_default = INA226_CONFIG_DEFAULT,
+ 		.calibration_value = 2048,
+ 		.shunt_div = 400,
+-		.bus_voltage_shift = 0,
+ 		.bus_voltage_lsb = 1250,
+ 		.power_lsb_factor = 25,
+ 		.has_alerts = true,
+@@ -196,8 +193,7 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 		.config_default = INA226_CONFIG_DEFAULT,
+ 		.calibration_value = 2048,
+ 		.shunt_div = 400, /* 2.5 µV/LSB raw ADC reading from INA2XX_SHUNT_VOLTAGE */
+-		.bus_voltage_shift = 4,
+-		.bus_voltage_lsb = 25600,
++		.bus_voltage_lsb = 1600,
+ 		.power_lsb_factor = 32,
+ 		.has_alerts = true,
+ 		.has_ishunt = false,
+@@ -207,7 +203,6 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 	[ina260] = {
+ 		.config_default = INA260_CONFIG_DEFAULT,
+ 		.shunt_div = 400,
+-		.bus_voltage_shift = 0,
+ 		.bus_voltage_lsb = 1250,
+ 		.power_lsb_factor = 8,
+ 		.has_alerts = true,
+@@ -219,7 +214,6 @@ static const struct ina2xx_config ina2xx_config[] = {
+ 		.config_default = SY24655_CONFIG_DEFAULT,
+ 		.calibration_value = 4096,
+ 		.shunt_div = 400,
+-		.bus_voltage_shift = 0,
+ 		.bus_voltage_lsb = 1250,
+ 		.power_lsb_factor = 25,
+ 		.has_alerts = true,
+@@ -281,8 +275,7 @@ static int ina2xx_get_value(struct ina2xx_data *data, u8 reg,
+ 		val = DIV_ROUND_CLOSEST((s16)regval, data->config->shunt_div);
+ 		break;
+ 	case INA2XX_BUS_VOLTAGE:
+-		val = (regval >> data->config->bus_voltage_shift) *
+-		  data->config->bus_voltage_lsb;
++		val = regval * data->config->bus_voltage_lsb;
+ 		val = DIV_ROUND_CLOSEST(val, 1000);
+ 		break;
+ 	case INA2XX_POWER:
+@@ -387,7 +380,7 @@ static u16 ina226_alert_to_reg(struct ina2xx_data *data, int reg, long val)
+ 		return clamp_val(val, 0, SHRT_MAX);
+ 	case INA2XX_BUS_VOLTAGE:
+ 		val = clamp_val(val, 0, 200000);
+-		val = (val * 1000) << data->config->bus_voltage_shift;
++		val = val * 1000;
+ 		val = DIV_ROUND_CLOSEST(val, data->config->bus_voltage_lsb);
+ 		return clamp_val(val, 0, USHRT_MAX);
+ 	case INA2XX_POWER:
+
+---
+base-commit: f08c5de5f61a117ba5326d3d5b86e884077da2d0
+change-id: 20260302-ina2xx-shift-89ed2c5d2e72
+
+Best regards,
+--  
+Jonas Rebmann <jre@pengutronix.de>
+
