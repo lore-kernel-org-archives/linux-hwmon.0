@@ -1,67 +1,66 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2687939A046
-	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 20:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A3D359A8A
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 21:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772484914; cv=none; b=cUuNWYvk9bacpClZIjC8L4nc3gfgS2QttMLRzFDWfKUsNwMIMob8PEl3mVGG1k8JW25j+uGQL5/1OZmDV40sNMYUFAn1BDwX39BsIwtHT6d4Uu+12Lk7cJ81g4Y/7Nz9Y9Wd9cLb4SDCG5S3Q1TYZPBzVoHECmdFp7G94ucbE0M=
+	t=1772485485; cv=none; b=Nua3Fdq5rvLC/iOano3crH4LN878avN1e3Hc3jHXBz2vMqGz4IOT0nxlk3hPUzIqxNrKfbK9aJ8Fh+FbMhVy+WNiIW3yFuuy2J46BLvEQTPT9l2Lss/WeQn1nCEpQaXf8Yw7+990jwmaKVbn9GfU6E8FS1mmIAtT9MlGuXyPUrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772484914; c=relaxed/simple;
-	bh=1H08dPbrV9MRuGByvJZqnHwG0SSDNOZtpUN6A2JhHKI=;
+	s=arc-20240116; t=1772485485; c=relaxed/simple;
+	bh=/gouw5TP1fzJ/b2kstkQNC+QzsI5T26eKxhEydBmzWw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IJDt9OZMgPZnCFbt/NL34H0G+lXnw461vwZDZLhV3dDO8X2YJi0RgtyTKM/kK3iyqxSyymJUIsvNtRK1QQqJ9L4ECV3cW4VNZtT4SaRl1CyJAJ5MsNa/Ay674MswcAIqmyE2VHPlpY4RXNQW/jLqhbJs+g9puAJGWJF5kSy3K/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ClN+2c7H; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=HV5bjb85ZB9R62qMQLjVvjSicrZsnujrZTVE6s9vjsurTaHlKPOtNPKJl9zIGpSh32o2jpz3Dl0royRbg7YmeTLMA9j6kJIkw/mP/A4TweGxAkFZUn0L2c1m3YRQu7YU8dymYt30cxZfxvY7lD2ACx/fOhXvUBG7Aq/hcXVPzG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ch6xadXd; arc=none smtp.client-ip=74.125.82.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ClN+2c7H"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ad617d5b80so31296585ad.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 02 Mar 2026 12:55:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ch6xadXd"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2ba895adfeaso4271171eec.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Mar 2026 13:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772484912; x=1773089712; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772485483; x=1773090283; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mAwDRdoHwE+BSgZv+5N1GMI+c/EActrCOoFM3AVs2OU=;
-        b=ClN+2c7H4fdUvpM45L14xrs496HFOQqCz9kUBcdZqOWgGUM4O3x2eq/ha1w/BUJ2ZG
-         Krf5gOqT7Pycwq3rosP/4knY24JZnEFYlH6s+e2g9kde97DBBPvHuOzTSqMzyEC2/bTn
-         6Alz6cvzoUY9sOa6bfocTYkkNGgvoZzeyTVwcEVc1lpRY3FCOap51KSaMgHCIr+Eba0w
-         ItVqy8hhKDOiuY+k6X5mTbdSyB1BzJqPnVkKC5COOGOROFo1g9uGykBMrj11pBdpbRkJ
-         9bffbzUkHIQQXNGR9Se7fVd+cXISOh2SeR9yjbX/zY9vCIJ3SlIImuUhTWuGAUN7LK/Q
-         bbMA==
+        bh=yu/9ECEl0WAg+psvJiVOlpxZlKJGs77sxaWqlF6W5q0=;
+        b=Ch6xadXdBCrQvuSNQCou0+ZLbXGFw8WlkiXJwpvhjmOs/ARgXTs5/5GC20efEE6ayT
+         5Gd6DYIU4g7zM0o1ZoPuTcpR8PiVFzlzZMYgDK6K+6d+5ADowVNPZXq6hPupF7iyUBtZ
+         VBXAJeO4qMrl7Y2kCcnRCmY+8utyRK9XYL0i2Pj1txh0Ekqft76ac1tGQ75owwW5qOB+
+         O6dC/67QdnT0EcnvHr3IhmbIJ/wnzCWnYVlwcVbO95nywHzfR+S+u0WlrTC/wPFuM1Bz
+         ilzkwZeqw/nL13ouqo+SvpykfJKNAq1YdEsPDTziC0/CQmuuAXMWKyKOaxl3kmCn0UAg
+         v+OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772484912; x=1773089712;
+        d=1e100.net; s=20230601; t=1772485483; x=1773090283;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mAwDRdoHwE+BSgZv+5N1GMI+c/EActrCOoFM3AVs2OU=;
-        b=AAo5G5Z5NSUn8N4aXs9n8ROyuJtnnOQiTkD248W+YtZm0+jenXB8rOAEv299Q/gqGD
-         657HkqEWlVSPNdteWS6Kov+AkxNHByA29Pau8S9QvF52JH8g1pEx/qKvvI7IWONRrVCG
-         Yd5FVQurxqShcit0CLnpYim+OqtcRBVZursVfNh0VRR3ZQr+33tS3s1KfkOgGNNW2Yp7
-         nvQS0e3UXwLkPiBtNzGyfW4JtIycVVb11LRju4uFwy93/lLBilSjd4HhNATjCJhMd+ZB
-         /9xvNjWggjhOTMNr75FM69eWngoTtexPFFH0EVmL7MNRJ6mc2+VoiKK0f5nX519OuXqe
-         dHnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXork2Dx8pe/sSpl+TUOIaWNm3lf9dGVlnl/hteDjZvggY89sRR9Vft6W97u/Y2/dz/0WCg5vZFQe6dAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyE4/5kn/h6DxAueiucv9+Kgsi5Fmw9u3OES4DZAByQJ8phwMJ
-	YOqbY530ZSpppYK8Lcnmw+/gnbGy0kchAsjZgi9hq4lZqq6ek8b/LznJ
-X-Gm-Gg: ATEYQzzqxuBW76L/Xe3WEsTF6B/VsNW/yKsATcx3dK+pfDuPVwo7dOGT15MESL9xtd1
-	eofeCB7g+UIy1FcVo9uzZCuaRO00ZpIaAbW2EO6LgKmsqisQY8qUs/CBgiofcs3NSz3C2ko8j+t
-	zt6hlsilPVhKk9MNWPHVyITFcvOTjN2aLmnEnnNYTytO726eCBD2SoX2g/qg0SHLiOZwkC6tjur
-	ohxannzBmHj6fr68rJqWrvUNxRKzn2Cc0iYuxGul/ln5q6v7rOPAX1APbp9Hb9bJ1yJCJu+L+S+
-	10r+fqBhDqpSSc3nRGFharvYiGwS8rLsG0Puvy40JG9th10dsmPEP3gEEl6+no23NXGHCIzcLxe
-	FF8/PHOa7Ahk/lbUDD1O8gPkKWPL6Md6J4TkuOy0jIpWfyhk+gS9sQIbqsR7OmiJmMdEh+1yWrF
-	+G6K/rRe77SPwcByFd/5/mSGSm2AKc+P1PilUEvM0ZKd4wE0uzDxYpkH1xG1JaNQdUXjwaGlui
-X-Received: by 2002:a17:903:2c0d:b0:2ae:517d:5cf with SMTP id d9443c01a7336-2ae518c4e43mr36226155ad.54.1772484912491;
-        Mon, 02 Mar 2026 12:55:12 -0800 (PST)
+        bh=yu/9ECEl0WAg+psvJiVOlpxZlKJGs77sxaWqlF6W5q0=;
+        b=nyqsbsgZzjIsWzVuzFZmBQJjmAfNyac3qRva8/+GKUpT7EhPEQtfe4hFE871ZCIHrV
+         OQhlco8znlTysM2Y7RzpZzpVzpoMptvPOgIg01Y4Qm4qlyoaFTgcdcd/Lj/YxeouN0UE
+         99sIXM0Opt+4Xd7CGUFzBr9fLJI+wtBPOdVYhKWgcTIAjLA1NYmJHV0ofh/BEg4RZaih
+         ABy/AEWvxz4KnesMbq3QiAwFOgqjEMyMNux0ASq0iAPLgaxKss4cohhS/lxa4J+VBMgk
+         h3b3fc19FC6lN5XRW/CSc7ZV6PPuSC310ydjssahBGboLWUVMH+rcN9XmSudVVp/lGW2
+         W4tg==
+X-Gm-Message-State: AOJu0YxS5vcfcbvS56a7o5SKGMiKgIAaQImno3IYmrb4E7/ZgbymiKHk
+	dzE3HRYwPZ3f4tM+69WsZeuR+yBpw2QCVjmsxABnYu7QYjOJQ4gTy1O2
+X-Gm-Gg: ATEYQzxOt4iZCt50z8RrAxlJht9QbKJqc8O8bxjJ9VXAgSObIbVYKfj2K/4Rt8ePEZl
+	kicJZ7oPROXWaG4geITQArDTizL6FT4q97xw/MxhDGxaGvCNuvZ7QZfT7NlElS86pyXuENXyFcI
+	tgbADU6XYII66Ga7mBvw8UepGosXxI1Ec/XYwFWkm8PFaXnPrLff+WgU+FrXBUMxmO8oYf3/3mG
+	ZuZgQdJCFLOUtX/Vr26RCbPi7UvSvL62VDFVOamZ5qeKM+bEZnsxCW0mL7lrYfD3o9zxTLqwydT
+	B4PBjMLCntqt4PTS56UoGmZDztQsWHjIWVD+kL67N0u8+8VG5WcTyXgln7R3/cq2LsAkfGtHRwL
+	qsjGc0h4DqlxSIsxhKjVk0dE+vRj6kIcjIcL/ToV7z3y6VqskWnO4chdbw/cwWBq3Cs7MRD6wor
+	BNXhnogowzB4QxUglJ+9eib9YLMUp3Ehwp0hPDAKOIYOZq4VImgjHF/MBt9zBxjA1R6gyEIrTi
+X-Received: by 2002:a05:7300:8cac:b0:2bd:cbc7:16ec with SMTP id 5a478bee46e88-2bde1efba67mr5143605eec.24.1772485482877;
+        Mon, 02 Mar 2026 13:04:42 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6d1ba9sm153161045ad.76.2026.03.02.12.55.11
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a5312dsm15168260c88.16.2026.03.02.13.04.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2026 12:55:12 -0800 (PST)
+        Mon, 02 Mar 2026 13:04:42 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f5a30ac0-b364-444c-a44b-4b4e8d16baa9@roeck-us.net>
-Date: Mon, 2 Mar 2026 12:55:11 -0800
+Message-ID: <c3fc43bb-9a4b-4b1c-aabe-5fee0302518b@roeck-us.net>
+Date: Mon, 2 Mar 2026 13:04:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,10 +68,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] hwmon: Replace sprintf() with sysfs_emit()
-To: Amay Agarwal <tt@turingtested.xyz>, linux-hwmon@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-References: <20260302192813.10625-3-tt@turingtested.xyz>
+Subject: Re: [PATCH] (ina2xx) Drop bus_voltage_shift configuration
+To: Jonas Rebmann <jre@pengutronix.de>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Ian Ray <ian.ray@gehealthcare.com>
+References: <20260302-ina2xx-shift-v1-1-4ff5b7b76d51@pengutronix.de>
+ <58c0e46e-fa58-40ba-91f0-235a4cef034c@roeck-us.net>
+ <b55cb982-6431-4db7-84d1-d64145bf4a66@pengutronix.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,35 +120,53 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260302192813.10625-3-tt@turingtested.xyz>
+In-Reply-To: <b55cb982-6431-4db7-84d1-d64145bf4a66@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/2/26 11:28, Amay Agarwal wrote:
-> This series of commits replaces sprintf() with sysfs_emit() in the code
-> for several drivers (tc74, max31722, ads7828, max6659, emc1403) and
-> helps avoid potential buffer overflows.
+On 3/2/26 08:02, Jonas Rebmann wrote:
+> Hi Guenter,
 > 
-> Amay Agarwal (5):
->    hwmon: tc74: use sysfs_emit() instead of sprintf()
->    hwmon: max31722: use sysfs_emit() instead of sprintf()
->    hwmon: ads7828: use sysfs_emit() instead of sprintf()
->    hwmon: max6650: use sysfs_emit() instead of sprintf()
->    hwmon: emc1403: use sysfs_emit() instead of sprintf()
+> On 2026-03-02 16:50, Guenter Roeck wrote:
+>> Hi,
+>>
+>> On 3/2/26 07:26, Jonas Rebmann wrote:
+>>> The INA219 has the lowest three bits of the bus voltage register
+>>> zero-reserved and the bus_voltage_shift ina2xx_config field was
+>>> introduced to accommodate for that.
+>>>
+>>> The INA234 has four bits of the bus voltage, of the shunt voltage, and
+>>> of the current registers zero-reserved but the latter two were
+>>> implemented by choosing a 16x higher conversion constant instead of a
+>>> separate field specifying a bit shift.
+>>>
+>>> For consistency and simplicity, drop bus_voltage_shift and adapt the
+>>> conversion constants for INA219 and INA234 accordingly, yielding the
+>>> same measurement values.
+>>>
+>>
+>> This isn't about simplicity, it is about correctness.
+>>
+>> The datasheet for INA234 says for the lower 4 bits:
+>>
+>>       Always returns 0. Remove these bits from the full result by doing a
+>>       right arithmetic shift
+>>
+>> which is what we should do for all chips with reserved bits instead of
+>> assuming that the reserved bits always return 0.
 > 
->   drivers/hwmon/ads7828.c  | 2 +-
->   drivers/hwmon/emc1403.c  | 2 +-
->   drivers/hwmon/max31722.c | 3 ++-
->   drivers/hwmon/max6650.c  | 3 ++-
->   drivers/hwmon/tc74.c     | 2 +-
->   5 files changed, 7 insertions(+), 5 deletions(-)
+> It says that for the reserved-zero bits at the lower end of the shunt
+> voltage and current registers of INA234 as well as for the bus voltage
+> register.
 > 
-> Thank you,
-> Amay
+> If bus_voltage_shift is kept, wouldn't a shunt_voltage_shift and
+> current_shift need to be introduced to support those registers of the
+> INA234 with the same notion of correctness?
 > 
-I have not seen patches 3..5 yet, but I bet I am sure they have
-the same problem as the first two patches, so I won't separately
-comment on those.
 
+shunt_voltage_shift, yes, but the current register is not used,
+so a current_shift would be unnecessary.
+
+Thanks,
 Guenter
 
