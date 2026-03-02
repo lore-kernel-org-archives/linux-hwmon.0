@@ -1,88 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE0236CE0B;
-	Mon,  2 Mar 2026 12:26:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149C14014AE
+	for <linux-hwmon@vger.kernel.org>; Mon,  2 Mar 2026 14:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772454387; cv=none; b=RhrzACNcBtzTRoUtAIJZ8jlJ2jFpow8PYM9K+RiNAYr6JFMkZawZIlnroakHrBobeAFhZTCACOXHgOBzTfgroJIAHOn6Htz8PpKgcG5oSv/EqzEnaUDtcZB+7mhxUbiRDB4L3Vsx1VybULfzfvlhfdp/a3vgdVHC5WET5jlgg9g=
+	t=1772463329; cv=none; b=JdLEaWNY1PFfNU4Acw9WY2LXknGxEZ/Kq70H5pq6dyNdLWelh65IPEaI5QEzOlaXOG93pXms5TFmZRMNKVCWta5wcNtCthPtYEX6MI8gHBm9tOgVmb7SiXH7zaeKp1bEuVe1FCwFNbsH0U8HqVLv0RcCztK6yMFkWSYD9nf871M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772454387; c=relaxed/simple;
-	bh=0gVshRELHMBLwniWVamW9E81/1A4qAcYqA637gtwMmY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OJTkqLeJMpVlJ0zV+oaKibXViSMt0aNCegDSpAz4+0ot3cVpeVr8l3UkpTYTRA4LBxlfFt+i5EsMen/bNS68ZqkDtN7DpGhGs5arOIdCK1FwH2iBB2Ho2lgbwn+Xw2N/iMyj/1tcxxCJeQS78RNt0flJDFBtO8RFyX31H77GjMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghAi/BLP; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghAi/BLP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476A7C2BCB0;
-	Mon,  2 Mar 2026 12:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772454387;
-	bh=0gVshRELHMBLwniWVamW9E81/1A4qAcYqA637gtwMmY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ghAi/BLPrEay4xwAg+w5+3lpHz2BrAymAywyI2dk9NZLQm/PCuVnYjrxMLBuNU85C
-	 r0HtmxGyb84zGsn6jeEbgK0YuPRoFXhRsLma+fCUnhubFFhWWwT/Q3CI3r3cMp4KCk
-	 7QCuTBYXnX2zQPMLzbG95Pcj2YrA+yWk0pQdHGOwOQlD+ynSJcz0qGQycyZ4KqHidt
-	 I8sbXD96ae4qBRqft6nHIKLuQL93YSoBD5NDK+kVZ0EqDocSvi8Pm4akCT0HkVS9EK
-	 Lw8gNogZJfXXrQ1xsmh/IdSnUdIsIJZMTFZJUcE21npQs8vWz8jkbSmHQjSplYExSE
-	 VUtctLfElofOg==
-From: Michael Walle <mwalle@kernel.org>
-To: Nishanth Menon <nm@ti.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 7/7] dt-bindings: hwmon: sl28cpld: Drop sa67mcu compatible
-Date: Mon,  2 Mar 2026 13:24:52 +0100
-Message-ID: <20260302122540.1377444-8-mwalle@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260302122540.1377444-1-mwalle@kernel.org>
-References: <20260302122540.1377444-1-mwalle@kernel.org>
+	s=arc-20240116; t=1772463329; c=relaxed/simple;
+	bh=Z3U8Qtdow5hcMvzV8D6QhOjTW4vKZxIT4nwKWn+Fywo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sMtEajN5sfI0emnGbfcU1HA2SsVQ02v907B6Sfk9KxGQjUlB5IxfAxXsGlNIt6cjJ5gPlbnvlDY4HW5/b6dMZWcjFuydEjLEEtZ2G74XEoV8hiH8sFoTImwNZR1HssTCvHz9TnamMN7WdERfYN36ZDfu5Em2baTTcUkRgiAzFSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <jre@pengutronix.de>)
+	id 1vx4fr-0007db-8K; Mon, 02 Mar 2026 15:55:07 +0100
+Message-ID: <5353f9f9-adbf-4532-9fd9-e71e70017548@pengutronix.de>
+Date: Mon, 2 Mar 2026 15:55:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 3/3] hwmon: (ina2xx) Add support for INA234
+To: Ian Ray <ian.ray@gehealthcare.com>, Guenter Roeck <linux@roeck-us.net>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+ =?UTF-8?Q?Toma=C5=BE_Zaman?= <tomaz@mono.si>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzk@kernel.org>, devicetree@vger.kernel.org
+References: <20260220112024.97446-1-ian.ray@gehealthcare.com>
+ <20260220112024.97446-4-ian.ray@gehealthcare.com>
+From: Jonas Rebmann <jre@pengutronix.de>
+Content-Language: en-US
+In-Reply-To: <20260220112024.97446-4-ian.ray@gehealthcare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: jre@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-I was just informed that this product is discontinued (without being
-ever released to the market). Pull the plug and let's not waste any more
-maintainers time and revert commit 0f6eae86e626 ("dt-bindings: hwmon:
-sl28cpld: add sa67mcu compatible").
+On 2026-02-20 12:20, Ian Ray wrote:
+> INA234 is register compatible to INA226 (excepting manufacturer and die
+> or device id registers) but has different scaling.
+> 
+> Signed-off-by: Ian Ray <ian.ray@gehealthcare.com>
+> Reviewed-by: Bence Csókás <bence98@sch.bme.hu> # v2
+> ---
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Michael Walle <mwalle@kernel.org>
----
- .../devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml        | 1 -
- 1 file changed, 1 deletion(-)
+Hi Ian,
 
-diff --git a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-index 966b221b6caa..5803a1770cad 100644
---- a/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-@@ -16,7 +16,6 @@ description: |
- properties:
-   compatible:
-     enum:
--      - kontron,sa67mcu-hwmon
-       - kontron,sl28cpld-fan
- 
-   reg:
+You were faster to mainline your take on the ina234 support :)
+
+Tested-by: Jonas Rebmann <jre@pengutronix.de>
+
 -- 
-2.47.3
-
+Pengutronix e.K.                           | Jonas Rebmann               |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
