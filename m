@@ -1,115 +1,78 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CCC42315F
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 14:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AC348C3EF
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 15:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772549564; cv=none; b=jlVLh+TEdwrSZur6nqV8yKrw1Cn1mzQOMcOCtcpqd1UQI2gBJ9P2EAs6S0nDwdW9qfnpSh9LkD/K3X6Uaf0w7KMcGO6ATZQ2/7rUqn4iZ/tjzg7YW7XVJrozDEES1VBMEnqPYZgnfESrfHwGIBpRFq0ecL0SkLNI6GJpcYLo2vs=
+	t=1772551525; cv=none; b=F8W3ES1UgfRu5BfHENRQ7HAI2wNLXek1OFcoIweIT21D8U3Mprvms5Ufo70BT/+EhV+SwCGkXfhggysJLvqnSkjIy+loPmoezH5G4YwXJ31tNFALBN5TcbULaV4tcz/7CZf4d4RXHOo706QNqgD6Lv6pbeFDdPBRZpqjbbp9FAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772549564; c=relaxed/simple;
-	bh=mSRQ1eMomHCwVtqBWfZCdjiyysv7g8iYFUzJOGWZess=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hyHa94eT6UYdDqqiy0cU7Z79S6kiklr/IXUyDbwwNufsV4X4AfQ0vC7CzEcQzlIeCyyE2Q0ADtM2HywSCVp+yfhg6JGX7VqsNVcMEBb43Yo2aQYeE/GRyo8NyRkyWDo6uxxn+BEeP+kpAejZYwhbR36PN8LvPVAdtv4ZJtxRPsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DIeDQHi0; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772551525; c=relaxed/simple;
+	bh=a4iMqy/fW5/A5lSOCsK4qMP6nEqheUwfM351dNzJtdY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LZ5fRIr4Eqa2ahvgK6P5SNyhkc0jJTb4bmiRm5xPDwNOV7PVzpi+Ktkg4+g2EeZe+p2R6q6bBjUcHt+Cc/TF5ZCpQzHzypvvN9Fsl6wSwPTjBw9bvrAVO8NvIMycg8gTpzOLaqPDwlH1eZ1DYaNsdk6CptDfsni85p5fpM9r8K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turingtested.xyz; spf=pass smtp.mailfrom=turingtested.xyz; dkim=pass (2048-bit key) header.d=turingtested.xyz header.i=@turingtested.xyz header.b=qYUBkaVD; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=HPrcGtAv; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turingtested.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=turingtested.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DIeDQHi0"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439c5b40f60so33444f8f.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Mar 2026 06:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772549561; x=1773154361; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=h+8QbcRC2pjzuahdlMd9N/WzqWRbPt5M/XdWso0LY5g=;
-        b=DIeDQHi0AAP91R6YbGWauz2eMg14tui6twbk5qs60s0DoQ+1m4sNZYPu4gM/D9DH1t
-         hNmg2wPiCPvmc55Y13z7FQ6XbJB5Tou0H+GOL3lB5aw7HmnYKeMv0+mwUBic/58SF7oZ
-         wihlcPIH4+FqRGqWqn04EyiWDXuZmM1k0zPviKdcBcgND8M5aRd1aWRm2fS16xL1pjoh
-         boqcDFZv3MptHnPpOhCbOZnxFpV+yeIZ36XKxIy48p8jJ7CGYar4mNBW6FIPHgKRrOj7
-         U+jozLWw9ItdmiDZTQQvdptl4UqQuTo626xTP3rk0nf+6jVzTUnnvm4a9kMDiVnUZHyJ
-         yaYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772549561; x=1773154361;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+8QbcRC2pjzuahdlMd9N/WzqWRbPt5M/XdWso0LY5g=;
-        b=qsTr2FWAftnP+jzcnQyNsQWnBySpb5Du3FY4GTFKiVOL4FAM8sG+rskXqiugwfe+Pa
-         kD/+Qv/9fwBfGlhHdyY9hN893bwJwQ6PBK9RPmUPVk+4LA3XBab6sn7WxiCr+skk2EpB
-         Ek7uwJe7LVGQLt+efyozPCVwjS83enZA3uXtTi8NLAr+VNky74KA3B+mkZZT+EcwDI31
-         TfxuRpwgbXjTu9Slz+fey8L4nBG8KtH8A9KBSUv4BXl6fbPXVHdnlUvmpjpJmQqmuxkV
-         ci6xcc08YBg/xNYVNIUUfD5ievkHJoX2FFeAad06MgYvYYDWj7EouKaHFqDc5x2zcwsX
-         StWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhBSNidvIRaUcZcrksAobeJREN1Ie/KD9eFD40W5PP+1BkkuFlWcSPWWUWuN1d34NC0xbuSnMBmSBb0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIFpWdc26ERQ2O5QKyKlx0MzWDyz2IL7OGbuYZ5nZSmx3m8N1X
-	8VbY61n+abY5ZetcEJsj1S0oz4zxTvfnoUbn0xKNxfNm8swurz0fCDGO
-X-Gm-Gg: ATEYQzwkddPehq+CMaX1VXjHY/IrR8UAEpNnXk+RkecY7DT2oVHMdRAiVTgFTFA8i5D
-	mFRRGM1r4//OZqSFhDSZ3Amq+Dbqya1sZ6X1s9I/MJduzsVpRH1ro4d2SnttJ9HDZD49oRxdBA/
-	UvuOhpGClxIa5UJceyiNvQ2ppxcisGNd113/MbVRykDLmkcYW6o05vUfiFtTYI/HPssS7KG8uKh
-	PEyYvHnu9uFON6T54zO4sXm2RASkQIXIjhCqsSJAD+3VgAoK96GNOXddVZ8kjskdAarA3qj1BQy
-	QU/0Nij+Idqoy+9/LuSwHqP0GBkMv2x2Cxdli7FVh1RYvrJPyQoL+N4sZaRss041w/qSd7K83Dt
-	D98kbDfD7WShJa/yXN+ibFsWXkuGaOOJ8f3lK27N7KAuy/Fxtq9jJmlrysRIv6N9Ux2Oz8TtT9B
-	PHf0r+ryk4QNOd+TvHJMXjVFJEjnH5CsU=
-X-Received: by 2002:a05:6000:4387:b0:439:c279:32ea with SMTP id ffacd0b85a97d-439c27935b1mr3280566f8f.39.1772549560930;
-        Tue, 03 Mar 2026 06:52:40 -0800 (PST)
-Received: from [192.168.1.187] ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b03db76bsm20531779f8f.18.2026.03.03.06.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 06:52:40 -0800 (PST)
-Message-ID: <bddd7c86f5d9535ce5fe58e6271396da40750cb0.camel@gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon: axi-fan: don't use driver_override as IRQ
- name
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Danilo Krummrich <dakr@kernel.org>, gregkh@linuxfoundation.org, 
-	rafael@kernel.org, hanguidong02@gmail.com, ysato@users.sourceforge.jp, 
-	dalias@libc.org, glaubitz@physik.fu-berlin.de, abelvesa@kernel.org, 
-	srini@kernel.org, s.nawrocki@samsung.com, nuno.sa@analog.com
-Cc: driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-hwmon@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, 	linux-sound@vger.kernel.org,
- linux-sh@vger.kernel.org
-Date: Tue, 03 Mar 2026 14:53:24 +0000
-In-Reply-To: <20260303115720.48783-4-dakr@kernel.org>
-References: <20260303115720.48783-1-dakr@kernel.org>
-	 <20260303115720.48783-4-dakr@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+	dkim=pass (2048-bit key) header.d=turingtested.xyz header.i=@turingtested.xyz header.b="qYUBkaVD";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="HPrcGtAv"
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=qYUBkaVDz6KF98QkdJJ7xWs627+dOHb6oF4OFSIifH3fP/0r61TjA7GQ7CaxszNazm2iIIuEn+QT4IR0K3IloAA09vI3QU/yS0kL8P3qt/AEF3Hrk4v+jYFXbIO0HQC9Bc9/7yy/CVGw/jzhcDsrtPPsau2mdQZdEtSOjO09iq0g0pp/H4HHalv1/eSOCgxzbKR9yII+xHTDp8S8XHNaRzAsjywTlY9AkVmk/a8JLUUFNjuTX1+QcgXep+VFcSnz6EVvN7AX8NixZZzPs+KViu8J40g9uv6vR7w+Y9N06silPDPE6M3BaXjM8jLaCI9Do4T/LaefiPm7sNCVKHpMnQ==; s=purelymail3; d=turingtested.xyz; v=1; bh=a4iMqy/fW5/A5lSOCsK4qMP6nEqheUwfM351dNzJtdY=; h=Received:From:To:Subject:Date;
+DKIM-Signature: a=rsa-sha256; b=HPrcGtAvXnk2eY9/+LWGbBQKJW+qOUO9roBTeUXYDPrcrNL5c9VMW/Qh4QuoUxdTUzG+CRvpBFQlKupJg2ZncE+oRZC5OdVYNoYDiXxJ2hUal1NIrafRf50qBOlH3oLxLBi/nZyYY/4Dv9zHw7qCkMqbYvGl9fT75S1teq1tkYHOfM0hTtmhO0bIPpeWWd/wTsx8CO2MZHiv33bikW0sW6BWLr5EjFhRyXOmrWjHUqOR+Oj7cfUUtgAsjHyOb88r7AA/caKNJYgNbhU/lC/JzPL0/vZgbNdg8s66QBkmHUTMZvGSJPu++frYvvCurIrV7F8LmoljcDgaPYZGaObRXw==; s=purelymail3; d=purelymail.com; v=1; bh=a4iMqy/fW5/A5lSOCsK4qMP6nEqheUwfM351dNzJtdY=; h=Feedback-ID:Received:From:To:Subject:Date;
+Feedback-ID: 591296:32372:null:purelymail
+X-Pm-Original-To: linux-hwmon@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1339122984;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Tue, 03 Mar 2026 15:25:18 +0000 (UTC)
+From: Amay Agarwal <tt@turingtested.xyz>
+To: linux-hwmon@vger.kernel.org
+Cc: linux@roeck-us.net,
+	linux-kernel@vger.kernel.org,
+	Amay Agarwal <tt@turingtested.xyz>
+Subject: [PATCH v2 0/5] hwmon: Replace sprintf() with sysfs_emit()
+Date: Tue,  3 Mar 2026 20:54:51 +0530
+Message-ID: <20260303152456.35763-1-tt@turingtested.xyz>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-On Tue, 2026-03-03 at 12:53 +0100, Danilo Krummrich wrote:
-> Do not use driver_override as IRQ name, as it is not guaranteed to point
-> to a valid string; use NULL instead (which makes the devm IRQ helpers
-> use dev_name()).
->=20
-> Fixes: 8412b410fa5e ("hwmon: Support ADI Fan Control IP")
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
-> ---
+This series replaces sprintf() with sysfs_emit() in several hwmon
+drivers when writing to sysfs buffers.
 
-Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+sysfs_emit() performs proper bounds checking and is the preferred
+helper for sysfs output.
 
-> =C2=A0drivers/hwmon/axi-fan-control.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-cont=
-rol.c
-> index b7bb325c3ad9..01590dfa55e6 100644
-> --- a/drivers/hwmon/axi-fan-control.c
-> +++ b/drivers/hwmon/axi-fan-control.c
-> @@ -507,7 +507,7 @@ static int axi_fan_control_probe(struct platform_devi=
-ce *pdev)
-> =C2=A0	ret =3D devm_request_threaded_irq(&pdev->dev, ctl->irq, NULL,
-> =C2=A0					axi_fan_control_irq_handler,
-> =C2=A0					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> -					pdev->driver_override, ctl);
-> +					NULL, ctl);
-> =C2=A0	if (ret)
-> =C2=A0		return dev_err_probe(&pdev->dev, ret,
-> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0 "failed to request an irq\n");
+No functional changes intended.
+
+Changes in v2:
+
+1. Use imperative mood in commit messages
+
+2. Format subjects as "hwmon: (driver) ..."
+
+3. Remove redundant driver name from commit descriptions
+
+Amay Agarwal (5):
+  hwmon: (tc74) Replace sprintf() with sysfs_emit()
+  hwmon: (max31722) Replace sprintf() with sysfs_emit()
+  hwmon: (ads7828) Replace sprintf() with sysfs_emit()
+  hwmon: (max6650) Replace sprintf() with sysfs_emit()
+  hwmon: (emc1403) Replace sprintf() with sysfs_emit()
+
+ drivers/hwmon/ads7828.c  | 2 +-
+ drivers/hwmon/emc1403.c  | 2 +-
+ drivers/hwmon/max31722.c | 3 ++-
+ drivers/hwmon/max6650.c  | 3 ++-
+ drivers/hwmon/tc74.c     | 2 +-
+ 5 files changed, 7 insertions(+), 5 deletions(-)
+
+--=20
+2.53.0
+
