@@ -1,72 +1,71 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81FC3C3C05
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 17:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BE53C3C05
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 17:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772557361; cv=none; b=oe6NxOmsxK9yc6zp0l3z7Sg+7GhNYMELg8ymRM447dTaKmVdx+RRj3HqkoiFDTJIh3rfbRqXrJzDN3kAvX4n1BfUz1/GGLugKjC9aSxxsLyTEyz75bm09oEPL9odyWG5wreOsOZ/KxtHGQgBndnIfA1kHUqn9XtadXEDaJQNErc=
+	t=1772557396; cv=none; b=nqyLD7ogXKU2vfJqOzof9jFMpw9JGXNElYOaOpW5AfJEdGJwfCvd+yAEGuIEknDf+zdT7ELGf/i1eNNj46dDQJ1X32QccRO8Q21BYJ34TO6iUfzkUOugIcTuG+QkVrjJcD4BIwo0lH/qvTWScnhzJ8ZLPes1z9B4Rz7Wzy+s4BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772557361; c=relaxed/simple;
-	bh=c9sAb0xHLBh6N0aOPyj+zMqFuqKW7h4L7dRFz9K73uI=;
+	s=arc-20240116; t=1772557396; c=relaxed/simple;
+	bh=c7aLvDSU+raKnP5v/QpAuebhnXlsccPbqB8amLtAhOs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j5PeYzOC44m/8yI+C/YppnMqV60vQ7Hdt+qg3WFo9WGZLlth49sjEb22FOzllnuOjeTgUg6CcAheqlKbaY8VPk189c0f7KKPguSCPXWsmFrXQMNFB/FpZSy4lOknNJOxmyPwk1SDO6B0V5aHbmmqgqC00eROkAmVExv09wo1zPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LbdT8ck9; arc=none smtp.client-ip=209.85.210.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=O9fI/MbNJsm0eeFni2WUcduGlv/kDoIsdUcSyDWr5qQMdiKqnXcLiY2jJ0uhH7x87dhMWLRytHXncGUt05knTg438nNvT4Dz0F4lEUBawLOzV0kJSLCRLOxmEUuetUOC7tTOFSg1vmwLhnI5OPizezAgq8pzCYQ0nrUGO1ZQRTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A7qy6f71; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LbdT8ck9"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-827307b12dfso3177496b3a.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Mar 2026 09:02:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7qy6f71"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2adbfab4501so26796935ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 03 Mar 2026 09:03:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772557360; x=1773162160; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772557395; x=1773162195; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eYkG6kBom6xkGiVWltyG7jkGst9QV8WXBklk6Zic4FM=;
-        b=LbdT8ck9aBUrZ9jwBemE9oz0LYExrwiHlI14XKmagbO5eoJxgxYlts3CfXKPwafWp1
-         Oy60oFeC20js5/NdeAlTa+uiod/HJtCjFMbPUtoxruFf/0cVlj11S+ci3BOfvu/wz6aW
-         K63I1Ho3QmDnYpJtIOJSYtSZVIEfIphMsoX2VbQBYqMlvws2T3K9NuGQNxntooT2OTjh
-         qsi7OIGzRpsE52iK1zF30/PhsFz+NjgqiWR16BhsZ/qn/bayf5Jn/ItWYem2Qnct114/
-         TAMnCjfZEpadM0/i1ds/RqwIc8/oXNnschZ+gTUKHIE3iP6ZMnFVVNZIk4pETZLEz4PF
-         X6jw==
+        bh=Eh5hnbYyCw4n6Sax5xc1Wesgy7fTwBbegBAK9uTylYc=;
+        b=A7qy6f71uqUEu4mxOGFo8/AofHQDNnWAdiXwlhpy9otpF/FyhZTMPViattehCYUl3Q
+         5C19iRCD5fHk6PUrEZDFF6lZw63g8bY/F2UzNiQ0d1b3+8lmsBBBUHKTVrPgdJnaBIDg
+         FV3DRDW860NlE0gLk8iCVOTZ0DgJrBp4zhLsnhdlV8BGCLyb8vppDSpbGjhhR9Ei+LsE
+         Ad/HvsrdK6R6LztR85GGzmqsE2X7ScFaVvB5FfeOKzglbMt08ntA7CCub04I89H7W77C
+         8cf7O5I+SvprEb2u+fvYX0Cy48kIBWilwQP4xZIgqyZ7YinlTBpyDw3bzdQ2+2otdDah
+         KNPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772557360; x=1773162160;
+        d=1e100.net; s=20230601; t=1772557395; x=1773162195;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=eYkG6kBom6xkGiVWltyG7jkGst9QV8WXBklk6Zic4FM=;
-        b=xNU5FzfAxvlDmNx/aVWwfmvzupEkVbG2pY+J+xcJ76RW4IHSupeuUwqb43HWn2twGY
-         ccYoE7J+iGRkYhjHcbU2H3BKcTgimAzjiTiOmfXJB0dMv/iF4Nl8Ih4YjmdXvkXXahrY
-         p808wRo6oWq4yjoNJ9WfJ/DIDIqXoEZ5k//1SoET59dtTQbOdpAb9Y31BXiEX/LB4Nr0
-         emWzf8APH7P/KT/dN0h1lrNsaIdnNshpVwtZSVDUPgm/OE4GkyjEG1s+ynLTTDahh7Xi
-         qqNtEh3g1nU5pzPWflXT8+kMQFGe7CXR4fNHA6NBxMgIlxGzKcoZ6Wz1KoqP+/SwfMZi
-         ES9w==
-X-Gm-Message-State: AOJu0YyCAMGf+hr52hqAJT2Fo5jL0T/PH0/vW7De2o6BwAlRwOC5JMdg
-	g3Dx1/W3lsaFTa0LUSi05eAoissdQnVRzB30iQMogADUiogAQeV7Db5fhQv2dL9o
-X-Gm-Gg: ATEYQzxB81ApRfcXwR9xX76LZRgN83FuhU5fTXhpCZ6p+Q9rImV6XYBPiON7msy2gYL
-	/xdL231j2j/RyHbviCvyxEcunTAgtjnLF8nccYXEafkYL+qqwjnnkeRAK7l276jyUt1YZ52FMrQ
-	8iyRiQ6q2ocwfSy87rvNB3Il7JxhyypKZR5nrGctOzObfPZAOxQxP7EW9gm7wrUTPn1Wo0qW/g0
-	/qFs8LGb+dG2SSnNzqJnNUs7kI3ECPJ8QkLSPixq32LudbtwTjOo166Y5vhJJHImMhJPXycaSw4
-	8eAfCxy1/1Y/T8sS4ENh3CNVjkmTIFbXAXulsYWHOtuQkECCBKhIZtgaJ43YgZtIZlbd8a1KqvS
-	7YzyzC6Rcfq1nxHjOaLSLkZSrNfkY8KODvCO6/t1AuqPmQ028KRMpfVN5ifQdWOt/RxgDbjQa0X
-	ixR/9np2ntnLSFh+1XaCN03yQyP6F/KcDW3ugC
-X-Received: by 2002:a05:6a21:3cca:b0:35d:cc9a:8bc1 with SMTP id adf61e73a8af0-39814456fd1mr2347413637.27.1772557359838;
-        Tue, 03 Mar 2026 09:02:39 -0800 (PST)
+        bh=Eh5hnbYyCw4n6Sax5xc1Wesgy7fTwBbegBAK9uTylYc=;
+        b=HuuvUmqKU+3/HuBiiP9DojhxaZBfHKI33tOpHfJiyWi+KO+rw69W+AM5ab5Ptn6byA
+         8GbgUxDUjiKTRQ5MVnrLKqynxfAdKq7hcRNoLBlwO7u47YYj7nZiIB7TVjHUQXJDWDXS
+         /eGIZ1q06TvDnxRYKftBYQ0B2U5vuLjMt52VTKYebTdpjF7TtIH3pwsQGRDQa4d4dbQw
+         6IOwhYPyD0sF4ps+2TbbFEwOGH9n7k0jXAclPKcLm2JbOpu/2AdJ5PWpveN+VzXCHfe4
+         SAyHlei9+q8GXFk4/fR4o8pSursofMocAq2C0+HBSyPyuisr6jcKlso51Sb+3RnASFyk
+         IaJA==
+X-Gm-Message-State: AOJu0YzQ5OCyJK8C6qnhxznwhEHl+w8sl0Bc0P9LGy0bbB/FiFlyfkBO
+	1fNFBS6VUNtpXzfhFb9buhsOBnZ1X0gcYF087fUixjzDagmU+afRjLl2
+X-Gm-Gg: ATEYQzzNccjJoq04JzH5LtL0vPqg3FeXmp3Z3ZW2FvtlP2y3ClXa0ZUyCum427ZR+sp
+	/soQCGbpqz13pkn3TKVz3cM01WsMjUfo/7+WRH7RMfla43vfxHDuN4+6jxdRXDHUSISEBopSWjk
+	OwP2eJznNeQam6GmyUI+gNyQQNCBlBu/hK8KUkaUQh2XeEC/fw4tdjE7tD+vVy6Fo71hazZS4Gb
+	0ayOJ1QtBnUHeUUdydiQY5sWQSLCjE5OiKHPkQo43zGrnqjTh4mZPDmOrwIYr5KFsIdNfLOfUJZ
+	ING3bbp7+SAUEilI18r0QtWprHIwK9kS9WI3D4/I9u1YPaDlWjqeMVjfHB+k6Mg0RZJD2Qd/yRY
+	SoWiT1VqxHIQa1a7djrgbXB8ee7GrgKhJfuJWraSN05Ac7BAAQRkAnpcpB6iGU+DXDdxw8ocUf/
+	pu/JoV1WTU+wpbiC80FdKQd1Lthr5jCRfDUKr7
+X-Received: by 2002:a17:902:d54f:b0:2ae:5d94:28e8 with SMTP id d9443c01a7336-2ae5d9471d6mr41577495ad.56.1772557394122;
+        Tue, 03 Mar 2026 09:03:14 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa848471sm14541102a12.30.2026.03.03.09.02.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae4b9ac021sm74436055ad.86.2026.03.03.09.03.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 09:02:39 -0800 (PST)
+        Tue, 03 Mar 2026 09:03:13 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 3 Mar 2026 09:02:38 -0800
+Date: Tue, 3 Mar 2026 09:03:12 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Jonas Rebmann <jre@pengutronix.de>
+To: Amay Agarwal <tt@turingtested.xyz>
 Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (ina2xx) Shift INA234 shunt and current
- registers
-Message-ID: <245e095d-d357-4fb7-b202-4b63e5cfbee6@roeck-us.net>
-References: <20260303-ina234-shift-v1-0-318c33ac4480@pengutronix.de>
- <20260303-ina234-shift-v1-2-318c33ac4480@pengutronix.de>
+Subject: Re: [PATCH v2 1/5] hwmon: (tc74) Replace sprintf() with sysfs_emit()
+Message-ID: <181ed7bd-b4cb-4daf-abcc-fb37a8466507@roeck-us.net>
+References: <20260303152456.35763-1-tt@turingtested.xyz>
+ <20260303152456.35763-2-tt@turingtested.xyz>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -75,29 +74,17 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260303-ina234-shift-v1-2-318c33ac4480@pengutronix.de>
+In-Reply-To: <20260303152456.35763-2-tt@turingtested.xyz>
 
-On Tue, Mar 03, 2026 at 12:07:02PM +0100, Jonas Rebmann wrote:
-> The INA219 has the lowest three bits of the bus voltage register
-> zero-reserved, the bus_voltage_shift ina2xx_config field was introduced
-> to accommodate for that.
+On Tue, Mar 03, 2026 at 08:54:52PM +0530, Amay Agarwal wrote:
+> Replace sprintf() with sysfs_emit() when writing to sysfs buffers.
 > 
-> The INA234 has four bits of the bus voltage, of the shunt voltage, and
-> of the current registers zero-reserved but the latter two were
-> implemented by choosing a 16x higher shunt_div instead of a separate
-> field specifying a bit shift.
+> sysfs_emit() performs proper bounds checking and is the preferred helper
+> for sysfs output.
 > 
-> This is possible because shunt voltage and current are divided by
-> shunt_div, hence a 16x higher shunt_div results in a 16x smaller LSB for
-> both the shunt voltage and the current register, perfectly accounting
-> for the missing bit shift.
+> No functional change intended
 > 
-> For consistency and correctness, account for the reserved bits via
-> shunt_voltage_shift and current_shift configuration fields as already
-> done for voltage registers and use the conversion constants given in the
-> INA234 datasheet.
-> 
-> Signed-off-by: Jonas Rebmann <jre@pengutronix.de>
+> Signed-off-by: Amay Agarwal <tt@turingtested.xyz>
 
 Applied.
 
