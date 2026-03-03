@@ -1,132 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDA032E73E
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 11:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B43633F383;
+	Tue,  3 Mar 2026 11:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772538489; cv=none; b=aALM96a5xJACozH/+ACayAlk3Hdf81tiXf9nVgsIDSfIcbIJwvvuUNk8ADZX9c9cM5/ltS3ZFvzARNygGmtRq9KfBOg3oVt1/siJnlsECKUsS78DnyDZ6G/Zrxdbr+Bz3N52+ykjQR89p8rll5jg8T2rM5HNrUC6Un/PrW4GC8g=
+	t=1772539051; cv=none; b=MNwlTF36O620k4TrwVMh2+m+JwrulypwQDVL5YQgwNIdOKbuBhw9o67Ogl6GA0owlijK1UueaaepmBjYHHJZyJNmhGNcclKuc2OYQDXIahW8M0bSGbNctrr5UXGgvPj19FLOug6WdRwc0TVxk/gjOnFCBHIxylkyEhcMLhE4804=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772538489; c=relaxed/simple;
-	bh=EVmZY7JHKD0bO5OwtkcnvtiZd2A0o/JTQR24pgMujw0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=A8VB0WiLHuO+pj6CEaeqzLWnuhFXEagi00gDd5P9c7jJXd+gdvpr98o1fcZ2Iodz9TYxt8rDKGkJf1zSc6nX7e8PNTYOgzq/MoJqqfHTsiEIHq4APZz9yO6Zr9VG6586Av2/x8j2AklSKHdGQifBV7AmJ27kgiYTKpBNoGsoU+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oEhgG5UY; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772539051; c=relaxed/simple;
+	bh=vXaHvCEHJXa60E12gJk4qXYIo6yuZXE+bxs1JmCmVKI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fnMhORnIDoCroHZqMJcdlhK99E/snPeCUX1fq1CmTj0SDR2cVHQydvAyzqCUN/j8ykvqX9L63uXwOZsXP3i0PWpDZY56Ajou2jVyJEAxZv4AMf6cjtYuBPG4BVEryvSPjkm3q3ecoh9rIlCyJdCg4VitHz+lrTeUE2mB5RxarMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMEYOJMB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oEhgG5UY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772538488; x=1804074488;
-  h=date:from:to:cc:subject:message-id;
-  bh=EVmZY7JHKD0bO5OwtkcnvtiZd2A0o/JTQR24pgMujw0=;
-  b=oEhgG5UYE+oprBl8+GGRXxHD2aEWkS7pNd3knBrOchWyC3/7DlV/IcAb
-   Da/jxhDwRMpXwnBPm9B+bs4gU2OxJr0ar9sB7EOXzqWXoU4g6i41F4c98
-   Nj8Ur8/njK6JuB7A1GPOI7jsol28OGpxuYj0u4OsbOfY1pBWPDcGvBUQO
-   UMv0daPTwmJBYXWkFvX+5QDuUjQzP/pBHb8v6PQ0LLTwpb9/MYTO3KJUG
-   CeDA49ogz8w8XbOVNxxz0RC6jjGWdBqLFK9U92rQakBwNyndynTHo6Hed
-   Wvrh87LlPGCy5xgtVjYR8GWVe7NAez7kXvszYD0Zl/a45nuyE8OkYCqPB
-   w==;
-X-CSE-ConnectionGUID: cboYtSG5QIuzaiNTgUNHeQ==
-X-CSE-MsgGUID: f157psn1TXu1s6EKjmdblA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="73766094"
-X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
-   d="scan'208";a="73766094"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 03:48:08 -0800
-X-CSE-ConnectionGUID: ZSfKS1ZATA2H1EWaN6fiTw==
-X-CSE-MsgGUID: +j0LOvl1R5OgCkRAYY65pA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
-   d="scan'208";a="215498325"
-Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 03 Mar 2026 03:48:07 -0800
-Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vxOEO-000000002AD-1mhJ;
-	Tue, 03 Mar 2026 11:48:04 +0000
-Date: Tue, 03 Mar 2026 19:48:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org
-Subject: [groeck-staging:hwmon] BUILD SUCCESS
- e176ad7b57a1a15ece213251b7f3103bd929e26c
-Message-ID: <202603031953.KzwoLW5I-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMEYOJMB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1895CC116C6;
+	Tue,  3 Mar 2026 11:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772539050;
+	bh=vXaHvCEHJXa60E12gJk4qXYIo6yuZXE+bxs1JmCmVKI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QMEYOJMB3DeR1jQdolTaUXAdR0T4xlXJUqmGaZ2z2Fb7auuJToYN8vNDDx5lCCpAw
+	 SzgzOogn/OsS2Jhw2ROKEJHX1igHMLBUIzsJ4PhyQXfWxAEXBblCVI1g/YZY/To7i3
+	 qRZT4rb7NcxkziIe0UHAQQk93MJFTpMb+eX8SYirsJu89Bq5Do/w+fdv9vLeDq/hic
+	 Ey2QaLrbeiIZPs7s0MgK2/gUNVBnFTmcBYXQ/ovv1PWIO1EGIg0PF4co8x1vGQhCKt
+	 Mlr8UIgcT6EMfLzt2opMnPSXylZB+OU5L4qsYgU0RHDi2317uZgnJecmrc16iu2rVo
+	 KaL/iRCcpArqA==
+From: Danilo Krummrich <dakr@kernel.org>
+To: gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	hanguidong02@gmail.com,
+	ysato@users.sourceforge.jp,
+	dalias@libc.org,
+	glaubitz@physik.fu-berlin.de,
+	abelvesa@kernel.org,
+	srini@kernel.org,
+	s.nawrocki@samsung.com,
+	nuno.sa@analog.com
+Cc: driver-core@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-hwmon@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	Danilo Krummrich <dakr@kernel.org>
+Subject: [PATCH v2 0/4] driver core: generalize driver_override infrastructure
+Date: Tue,  3 Mar 2026 12:53:17 +0100
+Message-ID: <20260303115720.48783-1-dakr@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: e176ad7b57a1a15ece213251b7f3103bd929e26c  dt-bindings: hwmon: sl28cpld: Drop sa67mcu compatible
+Currently, there are 12 busses (including platform and PCI) that duplicate the
+driver_override logic for their individual devices.
 
-elapsed time: 1220m
+All of them seem to be prone to the bug described in [1].
 
-configs tested: 55
-configs skipped: 0
+While this could be solved for every bus individually using a separate lock,
+solving this in the driver-core generically results in less (and cleaner)
+changes overall.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thus, move driver_override to struct device, provide corresponding accessors for
+busses and handle locking with a separate lock internally.
 
-tested configs:
-alpha         allnoconfig    gcc-15.2.0
-alpha        allyesconfig    gcc-15.2.0
-arc          allmodconfig    gcc-15.2.0
-arc           allnoconfig    gcc-15.2.0
-arc          allyesconfig    gcc-15.2.0
-arm           allnoconfig    clang-23
-arm          allyesconfig    gcc-15.2.0
-arm64        allmodconfig    clang-19
-arm64         allnoconfig    gcc-15.2.0
-csky         allmodconfig    gcc-15.2.0
-csky          allnoconfig    gcc-15.2.0
-hexagon      allmodconfig    clang-17
-hexagon       allnoconfig    clang-23
-i386         allmodconfig    gcc-14
-i386          allnoconfig    gcc-14
-i386         allyesconfig    gcc-14
-loongarch    allmodconfig    clang-19
-loongarch     allnoconfig    clang-23
-m68k         allmodconfig    gcc-15.2.0
-m68k          allnoconfig    gcc-15.2.0
-m68k         allyesconfig    gcc-15.2.0
-microblaze    allnoconfig    gcc-15.2.0
-microblaze   allyesconfig    gcc-15.2.0
-mips         allmodconfig    gcc-15.2.0
-mips          allnoconfig    gcc-15.2.0
-mips         allyesconfig    gcc-15.2.0
-nios2        allmodconfig    gcc-11.5.0
-nios2         allnoconfig    gcc-11.5.0
-openrisc     allmodconfig    gcc-15.2.0
-openrisc      allnoconfig    gcc-15.2.0
-parisc       allmodconfig    gcc-15.2.0
-parisc        allnoconfig    gcc-15.2.0
-parisc       allyesconfig    gcc-15.2.0
-powerpc      allmodconfig    gcc-15.2.0
-powerpc       allnoconfig    gcc-15.2.0
-riscv        allmodconfig    clang-23
-riscv         allnoconfig    gcc-15.2.0
-riscv        allyesconfig    clang-16
-s390         allmodconfig    clang-18
-s390          allnoconfig    clang-23
-s390         allyesconfig    gcc-15.2.0
-sh           allmodconfig    gcc-15.2.0
-sh            allnoconfig    gcc-15.2.0
-sh           allyesconfig    gcc-15.2.0
-sparc         allnoconfig    gcc-15.2.0
-sparc64      allmodconfig    clang-23
-um           allmodconfig    clang-19
-um            allnoconfig    clang-23
-um           allyesconfig    gcc-14
-x86_64       allmodconfig    clang-20
-x86_64        allnoconfig    clang-20
-x86_64       allyesconfig    clang-20
-x86_64      rhel-9.4-rust    clang-20
-xtensa        allnoconfig    gcc-15.2.0
-xtensa       allyesconfig    gcc-15.2.0
+In particular, add device_set_driver_override(), device_has_driver_override(),
+device_match_driver_override() and a helper, DEVICE_ATTR_DRIVER_OVERRIDE(), to
+declare the corresponding sysfs store() and show() callbacks.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Until all busses have migrated, keep driver_set_override() in place.
+
+Note that we can't use the device lock for the reasons described in [2].
+
+This patch series includes the migration of the platform bus; patches for all
+other affected busses still need to be extracted as a follow-up of the WIP
+treewide patch in [3].
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=220789
+[2] https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kernel.org/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=driver_override
+
+Changes in v2:
+  - Drop DEVICE_ATTR_DRIVER_OVERRIDE() and make driver_override a
+    struct bus_type feature instead.
+  - Add driver_override documentation in .../driver-model/binding.rst.
+  - Move kfree(dev->driver_override.name) before release().
+  - hwmon: axi-fan: Use NULL instead of dev_name() in
+    devm_request_threaded_irq().
+
+Danilo Krummrich (4):
+  driver core: generalize driver_override in struct device
+  docs: driver-model: document driver_override
+  hwmon: axi-fan: don't use driver_override as IRQ name
+  driver core: platform: use generic driver_override infrastructure
+
+ .../driver-api/driver-model/binding.rst       | 48 +++++++++++++++
+ arch/sh/drivers/platform_early.c              |  6 +-
+ drivers/base/bus.c                            | 43 ++++++++++++-
+ drivers/base/core.c                           |  2 +
+ drivers/base/dd.c                             | 60 +++++++++++++++++++
+ drivers/base/platform.c                       | 37 ++----------
+ drivers/bus/simple-pm-bus.c                   |  4 +-
+ drivers/clk/imx/clk-scu.c                     |  3 +-
+ drivers/hwmon/axi-fan-control.c               |  2 +-
+ drivers/slimbus/qcom-ngd-ctrl.c               |  6 +-
+ include/linux/device.h                        | 54 +++++++++++++++++
+ include/linux/device/bus.h                    |  4 ++
+ include/linux/platform_device.h               |  5 --
+ sound/soc/samsung/i2s.c                       |  6 +-
+ 14 files changed, 228 insertions(+), 52 deletions(-)
+
+
+base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
+-- 
+2.53.0
+
