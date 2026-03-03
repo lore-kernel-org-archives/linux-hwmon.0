@@ -1,15 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03B42D3EE5
-	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 13:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BFE339719
+	for <linux-hwmon@vger.kernel.org>; Tue,  3 Mar 2026 13:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772545212; cv=none; b=RQI6PeWnRiztxnv2AZROjPtRIoR99FyLamqzMFOPjujWWXLDzqPXEmfxd34rqhy1CgWio+nor41mcwRoNSNq9z38Ip1gbHdMhWFvwOuNm9LwJOQ4+rRqddmz70aGAZg5J7nxpkGyvRRwZSiqgDOQrU9O+GNLVV31QwkPGfR3EbE=
+	t=1772545213; cv=none; b=crjcgSm1vopqG9ZmG/SPGHEqh8n05BLFLQ971REUsCE1Ewt6RgqRe3E/mWwa4xAZNjDczK0/mh64CqPWSNpSFd5aSTy6PCdEU5JOaNYVSWAlFnbKdLL1g/dT62KJ7axljecj3c+VgUSmH84dQzpZV59n58yW4GLy/BHcea2PG9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772545212; c=relaxed/simple;
-	bh=ptKTas1/SjXV8genyRxgEalbS2XAhrhf6XX3TXn16w4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FDOHDkR6Fk58e3kQ0Xi0vzicMNlpmSuPgJFikFaZP+YBAEBsMyg5dIKBC9nT4Xri/xWZq0Xn62XeMRcLLVVOlGMgRTZcpblb9Nj0ffNKe9A4IozqJy8PVDjSRelU7CH/AN3O9I07g5ADeW+Rf5niYL+qmgBWh2ynJtX3hwmgQuY=
+	s=arc-20240116; t=1772545213; c=relaxed/simple;
+	bh=7wDbf7wyQjoL90n5TJA9XwWPBOceOjkb0ikFuhKIIzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e4R3Gl56fedsOeu1Jl0LJT5snjHuSuh6+/XG2H4VonIt53YA8TUHD7T5kYq9Pqm7uKWuTp8uu3Zv/6Af5UO+HUrdhbJ4gRQcf7C605lRY2FKoC5l+XCNinhcX3jhehSq/jW/hwpaXupJFJv6jQIy0zoeOj1V8ip5zeEOEMkOMo0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -17,17 +18,17 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vxPyX-0000VJ-8x; Tue, 03 Mar 2026 14:39:49 +0100
+	id 1vxPyX-0000VP-DM; Tue, 03 Mar 2026 14:39:49 +0100
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vxPyV-003YX8-1h;
-	Tue, 03 Mar 2026 14:39:48 +0100
+	id 1vxPyV-003YXM-2g;
+	Tue, 03 Mar 2026 14:39:49 +0100
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vxPyW-00000004ic3-3GFc;
-	Tue, 03 Mar 2026 14:39:48 +0100
+	id 1vxPyX-00000004ifL-0JpE;
+	Tue, 03 Mar 2026 14:39:49 +0100
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
 	Rob Herring <robh@kernel.org>,
@@ -43,10 +44,12 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v2 0/8] mfd: Add support for NXP MC33978/MC34978 MSDI
-Date: Tue,  3 Mar 2026 14:39:40 +0100
-Message-ID: <20260303133947.1123575-1-o.rempel@pengutronix.de>
+Subject: [PATCH v2 6/6] mux: add NXP MC33978/MC34978 AMUX driver
+Date: Tue,  3 Mar 2026 14:39:46 +0100
+Message-ID: <20260303133947.1123575-7-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260303133947.1123575-1-o.rempel@pengutronix.de>
+References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -59,61 +62,190 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-Interface (MSDI) via the MFD framework.
+Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
+embedded in the NXP MC33978/MC34978 Multiple Switch Detection
+Interface (MSDI) devices.
 
-Architecture overview:
-* mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
-  linear irq_domain. Harvests status bits from SPI MISO MSB.
-* pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
-  the MFD domain.
-* hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
-  fault alarms.
-* mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
-  temperature, VBATP) to an external ADC.
-
-Initial pinctrl implementation by David Jander, reworked into this MFD
-architecture.
-
-Best regards,
-Oleksij
-
-David Jander (1):
-  pinctrl: add NXP MC33978/MC34978 pinctrl driver
-
-Oleksij Rempel (5):
-  dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-  mfd: add NXP MC33978/MC34978 core driver
-  pinctrl: core: Make pin group callbacks optional
-  hwmon: add NXP MC33978/MC34978 driver
-  mux: add NXP MC33978/MC34978 AMUX driver
-
- .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 +++
- .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 ++
- drivers/hwmon/Kconfig                         |  10 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/mc33978-hwmon.c                 | 430 +++++++++
- drivers/mfd/Kconfig                           |  14 +
- drivers/mfd/Makefile                          |   2 +
- drivers/mfd/mc33978.c                         | 832 ++++++++++++++++++
- drivers/mux/Kconfig                           |  14 +
- drivers/mux/Makefile                          |   2 +
- drivers/mux/mc33978-mux.c                     | 120 +++
- drivers/pinctrl/Kconfig                       |  14 +
- drivers/pinctrl/Makefile                      |   1 +
- drivers/pinctrl/core.c                        |  25 +-
- drivers/pinctrl/pinconf.c                     |  18 +-
- drivers/pinctrl/pinctrl-mc33978.c             | 733 +++++++++++++++
- include/linux/mfd/mc33978.h                   |  86 ++
- 17 files changed, 2488 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
- create mode 100644 drivers/hwmon/mc33978-hwmon.c
- create mode 100644 drivers/mfd/mc33978.c
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+changes v2:
+- Add missing <linux/err.h> include.
+- Add platform_device_id table
+---
+ drivers/mux/Kconfig       |  14 +++++
+ drivers/mux/Makefile      |   2 +
+ drivers/mux/mc33978-mux.c | 120 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 136 insertions(+)
  create mode 100644 drivers/mux/mc33978-mux.c
- create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
- create mode 100644 include/linux/mfd/mc33978.h
 
---
+diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
+index c68132e38138..7532da7e087e 100644
+--- a/drivers/mux/Kconfig
++++ b/drivers/mux/Kconfig
+@@ -45,6 +45,20 @@ config MUX_GPIO
+ 	  To compile the driver as a module, choose M here: the module will
+ 	  be called mux-gpio.
+ 
++config MUX_MC33978
++	tristate "NXP MC33978/MC34978 Analog Multiplexer"
++	depends on MFD_MC33978
++	help
++	  MC33978/MC34978 24-to-1 analog multiplexer (AMUX) driver.
++
++	  This driver provides mux-control for the analog multiplexer,
++	  which can route switch voltages, temperature, and battery voltage
++	  to an external ADC. Typically used with IIO ADC drivers to measure
++	  analog values from the 22 switch inputs plus temperature and VBATP.
++
++	  To compile the driver as a module, choose M here: the module will
++	  be called mc33978-mux.
++
+ config MUX_MMIO
+ 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+ 	depends on OF
+diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
+index 6e9fa47daf56..339c44b4d4f4 100644
+--- a/drivers/mux/Makefile
++++ b/drivers/mux/Makefile
+@@ -7,10 +7,12 @@ mux-core-objs			:= core.o
+ mux-adg792a-objs		:= adg792a.o
+ mux-adgs1408-objs		:= adgs1408.o
+ mux-gpio-objs			:= gpio.o
++mux-mc33978-objs		:= mc33978-mux.o
+ mux-mmio-objs			:= mmio.o
+ 
+ obj-$(CONFIG_MULTIPLEXER)	+= mux-core.o
+ obj-$(CONFIG_MUX_ADG792A)	+= mux-adg792a.o
+ obj-$(CONFIG_MUX_ADGS1408)	+= mux-adgs1408.o
+ obj-$(CONFIG_MUX_GPIO)		+= mux-gpio.o
++obj-$(CONFIG_MUX_MC33978)	+= mux-mc33978.o
+ obj-$(CONFIG_MUX_MMIO)		+= mux-mmio.o
+diff --git a/drivers/mux/mc33978-mux.c b/drivers/mux/mc33978-mux.c
+new file mode 100644
+index 000000000000..47bf6e146287
+--- /dev/null
++++ b/drivers/mux/mc33978-mux.c
+@@ -0,0 +1,120 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
++/*
++ * MC33978/MC34978 Analog Multiplexer (AMUX) Driver
++ *
++ * This driver provides mux-control for the 24-to-1 analog multiplexer.
++ * The AMUX routes one of the following signals to the external AMUX pin:
++ * - Channels 0-13: SG0-SG13 switch voltages
++ * - Channels 14-21: SP0-SP7 switch voltages
++ * - Channel 22: Internal temperature diode
++ * - Channel 23: Battery voltage (VBATP)
++ *
++ * Consumer drivers (typically IIO ADC drivers) use the mux-control
++ * subsystem to select which signal to measure.
++ *
++ * Architecture:
++ * ============
++ * The MC33978 does not have an internal ADC. Instead, it routes analog
++ * signals to an external AMUX pin that must be connected to an external
++ * ADC (such as the SoC's internal ADC). The IIO subsystem is responsible
++ * for coordinating the mux selection and ADC sampling.
++ */
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/mux/driver.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++
++#include <linux/mfd/mc33978.h>
++
++/* AMUX_CTRL register field definitions */
++#define MC33978_AMUX_CTRL_MASK	GENMASK(5, 0)	/* 6-bit channel select */
++
++struct mc33978_mux_priv {
++	struct device *dev;
++	struct regmap *map;
++};
++
++static int mc33978_mux_set(struct mux_control *mux, int state)
++{
++	struct mc33978_mux_priv *priv = mux_chip_priv(mux->chip);
++	int ret;
++
++	if (state < 0 || state >= MC33978_NUM_AMUX_CH)
++		return -EINVAL;
++
++	ret = regmap_update_bits(priv->map, MC33978_REG_AMUX_CTRL,
++				 MC33978_AMUX_CTRL_MASK, state);
++	if (ret) {
++		dev_err(priv->dev, "Failed to set AMUX channel %d: %d\n",
++			state, ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct mux_control_ops mc33978_mux_ops = {
++	.set = mc33978_mux_set,
++};
++
++static int mc33978_mux_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mc33978_mux_priv *priv;
++	struct mux_chip *mux_chip;
++	struct mux_control *mux;
++	int ret;
++
++	mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*priv));
++	if (IS_ERR(mux_chip))
++		return dev_err_probe(dev, PTR_ERR(mux_chip), "Failed to allocate mux chip\n");
++
++	/* Borrow the parent's DT node so consumers can find this mux chip */
++	device_set_node(&mux_chip->dev, dev_fwnode(dev->parent));
++
++	priv = mux_chip_priv(mux_chip);
++	priv->dev = dev;
++
++	priv->map = dev_get_regmap(dev->parent, NULL);
++	if (!priv->map)
++		return dev_err_probe(dev, -ENODEV, "Failed to get parent regmap\n");
++
++	mux_chip->ops = &mc33978_mux_ops;
++
++	mux = &mux_chip->mux[0];
++	mux->states = MC33978_NUM_AMUX_CH;
++
++	ret = devm_mux_chip_register(dev, mux_chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to register mux chip\n");
++
++	platform_set_drvdata(pdev, mux_chip);
++
++	return 0;
++}
++
++static const struct platform_device_id mc33978_mux_id[] = {
++	{ "mc33978-mux", },
++	{ "mc34978-mux", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, mc33978_mux_id);
++
++static struct platform_driver mc33978_mux_driver = {
++	.driver = {
++		.name = "mc33978-mux",
++	},
++	.probe = mc33978_mux_probe,
++	.id_table = mc33978_mux_id,
++};
++module_platform_driver(mc33978_mux_driver);
++
++MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Analog Multiplexer Driver");
++MODULE_LICENSE("GPL");
+-- 
 2.47.3
 
