@@ -1,445 +1,138 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F1C2F5A06
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 02:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772591280; cv=pass; b=jjq4/WLC12566ADOUPtX18mnz8yx/VPx8QPQ0thD9qTW/bd0n+hMRlc6x+rxcVhcMFBCPBVvOFrP+wzBLrMOGRcJF3rQjgUufrx9Rs6QSL+W2+xwy5MRqDLZLnfyR9h2uF7ifFt6jKV8iXpiBvNQNSwwKDG3PTgqKqNmzBodO3Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772591280; c=relaxed/simple;
-	bh=py3aKKVn93HvEcbikt3U0dk2M/t9J8+imzeqfvnOlMA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EN7haVeu9T+ORJhiYqJH5DD8FgV81FaawVoai9QmMGowmBXLVmDkK4YWwKIr523BxC6+JVk1AIRAobBog72U4YWqqwo/f6vFldDgVxa/fZqKRUawgSZm1K3NqKdso00wpgPyOUQQekIO99bQ+JUdzrEgfvxPaH5uC7Tme32niUE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FITNUxCj; arc=pass smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2E61DF25C
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 04:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772599099; cv=none; b=YHNZkrsUUrZ/LGqtdqgESUoSkkwYkxW+ZrNwc9A0AqzPMquJgLtmFxcQH1+5wafkrxHKhSRySSmNi9mK9jZkVYAQJGKMNYBc0d/2Vda+FoC9VVzsolVukxAgKPBWuep9qM+xnnalG09QazO2DSimpWSBdsI0vYCypYAhxWy+RX8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772599099; c=relaxed/simple;
+	bh=zyQrfEVidkyIVVDKC12XXgv18LC8R5ksHza4aYZTXIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sBsm/m/i9zPVp408uf2jfdzG04xAMqQYEt0UREgujw5uUyXGjYmPgYQ9hPbj6b318e0mGv94//J0bo6pdciUeAFYRBQIH/AqGnB1tsCEKkTvCYlkrdG9TmJfEnRn3xkyJU8RtNMGadVpOP0jfS/8kOWYh0/lhOlu+3g1VXQj+gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L6KC96rw; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FITNUxCj"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4648447c899so4134613b6e.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 03 Mar 2026 18:27:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772591278; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TBOZGYv79NjrhOfL1oaRwkM93YObUDc9OgsNMi3iWNgEUShhu9NT0flDVddjOwxM9w
-         rzdbPMqIGn+3dq4Wwm9OpkT4ctmxTAWRleIPdCHayZg+djIJQD7TaEfVK+R/WyOhu2Vv
-         N789xaWB2vdNHhBrwTDfp7z7WM2BGwSTfdujitWJKIJgZxTAhDGBhKHB8QvIJ61YTBX+
-         Q2nXNgpCYXUnvA5VF8fUDzU580KWi3ABV4ihuv5esyA359+VoY75RYDv+ZU0er+Pwz8D
-         YzUD0XBX6w7xPUD65X0DsdwV85yikTk7ckcjAsEm6+rUQ3P9iL5NsVvDV4fcbsLffep6
-         VgWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
-        fh=n4RCDrbwxNtG7t+XiouA92jZI9cE5D6gnpnoaYr5ero=;
-        b=MbhKtwBsAoYeO+so1MVhAU6MfTUFlMM5Pf8g3E2qB8Bj4E0IkyhY4a5UAxIwi+bOt5
-         6i82llBAxSQD2eYI/J+Rs0/dpbL511wrhrn17AV4DUJJAscGP5WXX2ad/p0z7xYMFC0f
-         +3ak+AWmFu8r7yZUT/HGoNgGzyMY+TUbPgibLtHiD1uUphlw3oSlyXvOgUsL/OfdI5FI
-         wf1LbS06JUeHMWpzhvecJgP7+hzAhFqaYBD0ijSzwLro6Has3PbNmOXHLSW55qgPZvBr
-         XigbPM23BKx0JyIplf1HJ9e7mPJN+eSYQViqe9pOFzXeI2ZjEML+AoVuhK7KwL6HEy20
-         Z+6w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772591278; x=1773196078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
-        b=FITNUxCj0wnZV+AucLW0u5QCeeR9Za4KXpVt5oPxTbfTrr5dzZDc5IEno46XyK6iP1
-         Pwyx7rq+nT/p60PLhXIN6klrfk3dErZW16ZAlsLzqFH5zywODRK5+j6WjHwY8fOWl7ys
-         XDY8QdOyLIj0zQG40HkvdHCrvNRWKzZSSOTLluFyi7A3KiQxKlV48RhJr7wYF8UHiiJp
-         8pqSJJFb3U3EtXXsmqsekfxfk6MSCD0UkHguo9OXPDfH1ta7Uf10EMPmaTsDZ7OMFYsr
-         ZxVX2azCNXbEMMhQEY1l/y81pv4x/ctv6rlxEztY8j4LbJfxfsNPZG8a4jGZr3Xc0DGr
-         nFqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772591278; x=1773196078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
-        b=OrzHvZni3oyjCCKdEY+lMlYZa9A3iQUZ+JQ6rvYWcAH7RtnA4+fR3wDeb/zHVPI9UF
-         StLupGolrnAZZcnTx5ZJGI9dSllgpyU8EWFoo+zOnF7C3UjbWo/+3cZEZ9JO9RmPe2fm
-         08e5BtotHp2rxBVE+7gbA1/pAfR6u4ZKHVPWEyRE4EcTIL5sunwcHczVz+RpewFYXb8Y
-         VAy9kaqBb6qYNH5KFFdSDBeihLu2IaO4VkpXV9ybr8TwMOUteevONIELpNAD8h47B0Zn
-         UJysByLxk7uDXMNdH/eZ9WrMTawQNyCmYUNwqWc7PIqPzYnAKsaLdSYIiV/ZRvtlzAnh
-         w0Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEyCmnrP5Dgll1nYYMaaP2NnO5wXzP+IOfT4FgKlQzp9RPpG6bTyw/uFGpfT03m7r/0dTSM6vfgse6mA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgWMj6rX9Iaq2gZjf5Oec41gM649wGHBt5JZO80hI8M+NzgdE7
-	pFZCPoqRheuDL5LvkFFtSisBlA5n8Iwnyge4X3rrRoRz6VwLpDmFxdDsFRUVePlb53NfKgD60jE
-	LFTcmDVcf/YIqP66NeFRg5vCR5bRrUsU=
-X-Gm-Gg: ATEYQzxjw/92PBcbwyKUda5gm1jilz+V5cvWGlpboX8VceJ080bMKSFWxVXUwOk1wNZ
-	sr2Bp5LZE1iPVW13cTp1Rn/kxu4HS2icPlHgBsqoLaYbl7UbEJCsabu3c++sB/CBnxOTuWFw6xW
-	ZAz6TnOhBPc0G6G9mVoWhiwBSGXtFe15maFjWZ4Ndt7QervDlWfHOhQabfo6f62AIAHXzu1dbNK
-	ZUeKQthwxFYjD9sdU3xi7fAAF9t84VJFbLUEcMU2U9Nz/wWqdKESpe87zUWPkhVA4zF4sjjSZGP
-	RBTP/2pfoVStC3sSeCgAvYZRQRv2bK+0/tNOkKqBf+blfGOWdhqcBcdJILQkYY/OQilEgthe0Q=
-	=
-X-Received: by 2002:a05:6808:30a1:b0:463:f9ad:a4cf with SMTP id
- 5614622812f47-4651abb472dmr293614b6e.23.1772591277687; Tue, 03 Mar 2026
- 18:27:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L6KC96rw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772599096; x=1804135096;
+  h=date:from:to:cc:subject:message-id;
+  bh=zyQrfEVidkyIVVDKC12XXgv18LC8R5ksHza4aYZTXIQ=;
+  b=L6KC96rwQcztFVpN6MjhWtEFVbE23nInmIMniN+ktr/3ERAHVBwHwX14
+   Jfmpy6Zh5B0mCLAs1Isko24cYTjBybViSmZ9OjbTEkw8XbbWhaM7x/09y
+   YCRl6ghvhCun+15oDFu5gv48v9fYHH7eCywnPGKiwBU2GbI80vAb1BqRf
+   0/h9TS+kiS1TadN1CLI4typAgu4xWhutC7ZiOiQ7dW5Qxjqn53dqVf2FX
+   oXg222Ql/rOXCvW2NrxuvG00Kqii6DlUvggIIjlB7NFmNJwTDJODoyilG
+   fq9eH6y8z2RKDP51jvoCX2vaK27qMrNwDImc3OXTmIlNYLShxflSXzBIX
+   A==;
+X-CSE-ConnectionGUID: LlmCR218RRChO/bzitKqBg==
+X-CSE-MsgGUID: KOEbahMDTb+2kGouT2tlsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="73526798"
+X-IronPort-AV: E=Sophos;i="6.21,323,1763452800"; 
+   d="scan'208";a="73526798"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 20:38:15 -0800
+X-CSE-ConnectionGUID: msjCZGMoS5WKrgS6WgdHXQ==
+X-CSE-MsgGUID: iEczb/OzSnOQugzT6ndaIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,323,1763452800"; 
+   d="scan'208";a="256109855"
+Received: from lkp-server01.sh.intel.com (HELO f27a57aa7a36) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 03 Mar 2026 20:38:14 -0800
+Received: from kbuild by f27a57aa7a36 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vxdzv-000000003G5-1sbH;
+	Wed, 04 Mar 2026 04:38:11 +0000
+Date: Wed, 04 Mar 2026 12:38:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Subject: [groeck-staging:hwmon-next] BUILD SUCCESS
+ 78558965440b27814592ec82d8f3668395953b1b
+Message-ID: <202603041253.acNcImcL-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260303115720.48783-1-dakr@kernel.org> <20260303115720.48783-2-dakr@kernel.org>
-In-Reply-To: <20260303115720.48783-2-dakr@kernel.org>
-From: Gui-Dong Han <hanguidong02@gmail.com>
-Date: Wed, 4 Mar 2026 10:27:49 +0800
-X-Gm-Features: AaiRm50ScKkUps_9Yhs72XBQaSHbpuEPqc11o2wDZQVrApNZde3wmBwc1fLjihM
-Message-ID: <CALbr=LaR0B4BhEQ6md0nBe=7KtPHJYPq6i_p9Gn+s8zcoFAW6A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] driver core: generalize driver_override in struct device
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: gregkh@linuxfoundation.org, rafael@kernel.org, ysato@users.sourceforge.jp, 
-	dalias@libc.org, glaubitz@physik.fu-berlin.de, abelvesa@kernel.org, 
-	srini@kernel.org, s.nawrocki@samsung.com, nuno.sa@analog.com, 
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-hwmon@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-sh@vger.kernel.org, Wang Jiayue <akaieurus@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 3, 2026 at 7:57=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> w=
-rote:
->
-> Currently, there are 12 busses (including platform and PCI) that
-> duplicate the driver_override logic for their individual devices.
->
-> All of them seem to be prone to the bug described in [1].
->
-> While this could be solved for every bus individually using a separate
-> lock, solving this in the driver-core generically results in less (and
-> cleaner) changes overall.
->
-> Thus, move driver_override to struct device, provide corresponding
-> accessors for busses and handle locking with a separate lock internally.
->
-> In particular, add device_set_driver_override(),
-> device_has_driver_override(), device_match_driver_override() and a
-> helper, DEVICE_ATTR_DRIVER_OVERRIDE(), to declare the corresponding
-> sysfs store() and show() callbacks.
->
-> Until all busses have migrated, keep driver_set_override() in place.
->
-> Note that we can't use the device lock for the reasons described in [2].
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220789 [1]
-> Link: https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kern=
-el.org/ [2]
-> Co-developed-by: Gui-Dong Han <hanguidong02@gmail.com>
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 78558965440b27814592ec82d8f3668395953b1b  hwmon: Add LattePanda Sigma EC driver
 
-Tested this on QEMU PCI with various debug options enabled.
-Everything looks good so far, no issues found.
+elapsed time: 1523m
 
-Will keep testing.
+configs tested: 61
+configs skipped: 2
 
-> ---
->  drivers/base/bus.c         | 43 ++++++++++++++++++++++++++-
->  drivers/base/core.c        |  2 ++
->  drivers/base/dd.c          | 60 ++++++++++++++++++++++++++++++++++++++
->  include/linux/device.h     | 54 ++++++++++++++++++++++++++++++++++
->  include/linux/device/bus.h |  4 +++
->  5 files changed, 162 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index bb61d8adbab1..c734e7162b74 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -504,6 +504,36 @@ int bus_for_each_drv(const struct bus_type *bus, str=
-uct device_driver *start,
->  }
->  EXPORT_SYMBOL_GPL(bus_for_each_drv);
->
-> +static ssize_t driver_override_store(struct device *dev,
-> +                                    struct device_attribute *attr,
-> +                                    const char *buf, size_t count)
-> +{
-> +       int ret;
-> +
-> +       ret =3D __device_set_driver_override(dev, buf, count);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return count;
-> +}
-> +
-> +static ssize_t driver_override_show(struct device *dev,
-> +                                   struct device_attribute *attr, char *=
-buf)
-> +{
-> +       guard(spinlock)(&dev->driver_override.lock);
-> +       return sysfs_emit(buf, "%s\n", dev->driver_override.name);
-> +}
-> +static DEVICE_ATTR_RW(driver_override);
-> +
-> +static struct attribute *driver_override_dev_attrs[] =3D {
-> +       &dev_attr_driver_override.attr,
-> +       NULL,
-> +};
-> +
-> +static const struct attribute_group driver_override_dev_group =3D {
-> +       .attrs =3D driver_override_dev_attrs,
-> +};
-> +
->  /**
->   * bus_add_device - add device to bus
->   * @dev: device being added
-> @@ -537,9 +567,15 @@ int bus_add_device(struct device *dev)
->         if (error)
->                 goto out_put;
->
-> +       if (sp->bus->driver_override) {
-> +               error =3D device_add_group(dev, &driver_override_dev_grou=
-p);
-> +               if (error)
-> +                       goto out_groups;
-> +       }
-> +
->         error =3D sysfs_create_link(&sp->devices_kset->kobj, &dev->kobj, =
-dev_name(dev));
->         if (error)
-> -               goto out_groups;
-> +               goto out_override;
->
->         error =3D sysfs_create_link(&dev->kobj, &sp->subsys.kobj, "subsys=
-tem");
->         if (error)
-> @@ -550,6 +586,9 @@ int bus_add_device(struct device *dev)
->
->  out_subsys:
->         sysfs_remove_link(&sp->devices_kset->kobj, dev_name(dev));
-> +out_override:
-> +       if (dev->bus->driver_override)
-> +               device_remove_group(dev, &driver_override_dev_group);
->  out_groups:
->         device_remove_groups(dev, sp->bus->dev_groups);
->  out_put:
-> @@ -607,6 +646,8 @@ void bus_remove_device(struct device *dev)
->
->         sysfs_remove_link(&dev->kobj, "subsystem");
->         sysfs_remove_link(&sp->devices_kset->kobj, dev_name(dev));
-> +       if (dev->bus->driver_override)
-> +               device_remove_group(dev, &driver_override_dev_group);
->         device_remove_groups(dev, dev->bus->dev_groups);
->         if (klist_node_attached(&dev->p->knode_bus))
->                 klist_del(&dev->p->knode_bus);
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 791f9e444df8..09b98f02f559 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2556,6 +2556,7 @@ static void device_release(struct kobject *kobj)
->         devres_release_all(dev);
->
->         kfree(dev->dma_range_map);
-> +       kfree(dev->driver_override.name);
->
->         if (dev->release)
->                 dev->release(dev);
-> @@ -3159,6 +3160,7 @@ void device_initialize(struct device *dev)
->         kobject_init(&dev->kobj, &device_ktype);
->         INIT_LIST_HEAD(&dev->dma_pools);
->         mutex_init(&dev->mutex);
-> +       spin_lock_init(&dev->driver_override.lock);
->         lockdep_set_novalidate_class(&dev->mutex);
->         spin_lock_init(&dev->devres_lock);
->         INIT_LIST_HEAD(&dev->devres_head);
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 0354f209529c..697e36e63cab 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -381,6 +381,66 @@ static void __exit deferred_probe_exit(void)
->  }
->  __exitcall(deferred_probe_exit);
->
-> +int __device_set_driver_override(struct device *dev, const char *s, size=
-_t len)
-> +{
-> +       const char *new, *old;
-> +       char *cp;
-> +
-> +       if (!s)
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * The stored value will be used in sysfs show callback (sysfs_em=
-it()),
-> +        * which has a length limit of PAGE_SIZE and adds a trailing newl=
-ine.
-> +        * Thus we can store one character less to avoid truncation durin=
-g sysfs
-> +        * show.
-> +        */
-> +       if (len >=3D (PAGE_SIZE - 1))
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Compute the real length of the string in case userspace sends =
-us a
-> +        * bunch of \0 characters like python likes to do.
-> +        */
-> +       len =3D strlen(s);
-> +
-> +       if (!len) {
-> +               /* Empty string passed - clear override */
-> +               spin_lock(&dev->driver_override.lock);
-> +               old =3D dev->driver_override.name;
-> +               dev->driver_override.name =3D NULL;
-> +               spin_unlock(&dev->driver_override.lock);
-> +               kfree(old);
-> +
-> +               return 0;
-> +       }
-> +
-> +       cp =3D strnchr(s, len, '\n');
-> +       if (cp)
-> +               len =3D cp - s;
-> +
-> +       new =3D kstrndup(s, len, GFP_KERNEL);
-> +       if (!new)
-> +               return -ENOMEM;
-> +
-> +       spin_lock(&dev->driver_override.lock);
-> +       old =3D dev->driver_override.name;
-> +       if (cp !=3D s) {
-> +               dev->driver_override.name =3D new;
-> +               spin_unlock(&dev->driver_override.lock);
-> +       } else {
-> +               /* "\n" passed - clear override */
-> +               dev->driver_override.name =3D NULL;
-> +               spin_unlock(&dev->driver_override.lock);
-> +
-> +               kfree(new);
-> +       }
-> +       kfree(old);
-> +
-> +       return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(__device_set_driver_override);
-> +
->  /**
->   * device_is_bound() - Check if device is bound to a driver
->   * @dev: device to check
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 0be95294b6e6..e65d564f01cd 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -483,6 +483,8 @@ struct device_physical_location {
->   *             on.  This shrinks the "Board Support Packages" (BSPs) and
->   *             minimizes board-specific #ifdefs in drivers.
->   * @driver_data: Private pointer for driver specific info.
-> + * @driver_override: Driver name to force a match.  Do not touch directl=
-y; use
-> + *                  device_set_driver_override() instead.
->   * @links:     Links to suppliers and consumers of this device.
->   * @power:     For device power management.
->   *             See Documentation/driver-api/pm/devices.rst for details.
-> @@ -576,6 +578,10 @@ struct device {
->                                            core doesn't touch it */
->         void            *driver_data;   /* Driver data, set and get with
->                                            dev_set_drvdata/dev_get_drvdat=
-a */
-> +       struct {
-> +               const char      *name;
-> +               spinlock_t      lock;
-> +       } driver_override;
->         struct mutex            mutex;  /* mutex to synchronize calls to
->                                          * its driver.
->                                          */
-> @@ -701,6 +707,54 @@ struct device_link {
->
->  #define kobj_to_dev(__kobj)    container_of_const(__kobj, struct device,=
- kobj)
->
-> +int __device_set_driver_override(struct device *dev, const char *s, size=
-_t len);
-> +
-> +/**
-> + * device_set_driver_override() - Helper to set or clear driver override=
-.
-> + * @dev: Device to change
-> + * @s: NUL-terminated string, new driver name to force a match, pass emp=
-ty
-> + *     string to clear it ("" or "\n", where the latter is only for sysf=
-s
-> + *     interface).
-> + *
-> + * Helper to set or clear driver override of a device.
-> + *
-> + * Returns: 0 on success or a negative error code on failure.
-> + */
-> +static inline int device_set_driver_override(struct device *dev, const c=
-har *s)
-> +{
-> +       return __device_set_driver_override(dev, s, s ? strlen(s) : 0);
-> +}
-> +
-> +/**
-> + * device_has_driver_override() - Check if a driver override has been se=
-t.
-> + * @dev: device to check
-> + *
-> + * Returns true if a driver override has been set for this device.
-> + */
-> +static inline bool device_has_driver_override(struct device *dev)
-> +{
-> +       guard(spinlock)(&dev->driver_override.lock);
-> +       return !!dev->driver_override.name;
-> +}
-> +
-> +/**
-> + * device_match_driver_override() - Match a driver against the device's =
-driver_override.
-> + * @dev: device to check
-> + * @drv: driver to match against
-> + *
-> + * Returns > 0 if a driver override is set and matches the given driver,=
- 0 if a
-> + * driver override is set but does not match, or < 0 if a driver overrid=
-e is not
-> + * set at all.
-> + */
-> +static inline int device_match_driver_override(struct device *dev,
-> +                                              const struct device_driver=
- *drv)
-> +{
-> +       guard(spinlock)(&dev->driver_override.lock);
-> +       if (dev->driver_override.name)
-> +               return !strcmp(dev->driver_override.name, drv->name);
-> +       return -1;
-> +}
-> +
->  /**
->   * device_iommu_mapped - Returns true when the device DMA is translated
->   *                      by an IOMMU
-> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index 99c3c83ea520..cda597812324 100644
-> --- a/include/linux/device/bus.h
-> +++ b/include/linux/device/bus.h
-> @@ -63,6 +63,9 @@ struct fwnode_handle;
->   *                     this bus.
->   * @pm:                Power management operations of this bus, callback=
- the specific
->   *             device driver's pm-ops.
-> + * @driver_override:   Set to true if this bus supports the driver_overr=
-ide
-> + *                     mechanism, which allows userspace to force a spec=
-ific
-> + *                     driver to bind to a device via a sysfs attribute.
->   * @need_parent_lock:  When probing or removing a device on this bus, th=
-e
->   *                     device core should lock the device's parent.
->   *
-> @@ -104,6 +107,7 @@ struct bus_type {
->
->         const struct dev_pm_ops *pm;
->
-> +       bool driver_override;
->         bool need_parent_lock;
->  };
->
-> --
-> 2.53.0
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha         allnoconfig    gcc-15.2.0
+alpha        allyesconfig    gcc-15.2.0
+arc          allmodconfig    clang-16
+arc          allmodconfig    gcc-15.2.0
+arc           allnoconfig    gcc-15.2.0
+arc          allyesconfig    gcc-15.2.0
+arm           allnoconfig    clang-23
+arm          allyesconfig    clang-16
+arm          allyesconfig    gcc-15.2.0
+arm64        allmodconfig    clang-19
+arm64         allnoconfig    gcc-15.2.0
+csky         allmodconfig    gcc-15.2.0
+csky          allnoconfig    gcc-15.2.0
+hexagon      allmodconfig    clang-17
+hexagon      allmodconfig    gcc-15.2.0
+hexagon       allnoconfig    clang-23
+i386          allnoconfig    gcc-14
+i386         allyesconfig    gcc-14
+loongarch    allmodconfig    clang-19
+loongarch     allnoconfig    clang-23
+m68k         allmodconfig    gcc-15.2.0
+m68k          allnoconfig    gcc-15.2.0
+m68k         allyesconfig    clang-16
+m68k         allyesconfig    gcc-15.2.0
+microblaze    allnoconfig    gcc-15.2.0
+microblaze   allyesconfig    gcc-15.2.0
+mips         allmodconfig    gcc-15.2.0
+mips          allnoconfig    gcc-15.2.0
+mips         allyesconfig    gcc-15.2.0
+nios2        allmodconfig    gcc-11.5.0
+nios2         allnoconfig    gcc-11.5.0
+openrisc     allmodconfig    gcc-15.2.0
+openrisc      allnoconfig    gcc-15.2.0
+parisc       allmodconfig    gcc-15.2.0
+parisc        allnoconfig    gcc-15.2.0
+parisc       allyesconfig    clang-19
+parisc       allyesconfig    gcc-15.2.0
+powerpc      allmodconfig    gcc-15.2.0
+powerpc       allnoconfig    gcc-15.2.0
+riscv        allmodconfig    clang-23
+riscv         allnoconfig    gcc-15.2.0
+riscv        allyesconfig    clang-16
+s390         allmodconfig    clang-18
+s390         allmodconfig    clang-19
+s390          allnoconfig    clang-23
+s390         allyesconfig    gcc-15.2.0
+sh           allmodconfig    gcc-15.2.0
+sh            allnoconfig    gcc-15.2.0
+sh           allyesconfig    clang-19
+sh           allyesconfig    gcc-15.2.0
+sparc         allnoconfig    gcc-15.2.0
+sparc64      allmodconfig    clang-23
+um           allmodconfig    clang-19
+um            allnoconfig    clang-23
+um           allyesconfig    gcc-14
+um           allyesconfig    gcc-15.2.0
+x86_64       allmodconfig    clang-20
+x86_64        allnoconfig    clang-20
+x86_64       allyesconfig    clang-20
+x86_64      rhel-9.4-rust    clang-20
+xtensa        allnoconfig    gcc-15.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
