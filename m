@@ -1,217 +1,81 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7ED639A04A
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 22:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED993542E1
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 22:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.227.64.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772661913; cv=none; b=qmdCsxD1yevPr2mGtoF9UsqckWyzni8lawcNrarDzJMEbK5+GfLI3WugZe85MAQ4q+d1by1HXaW15qGPs++cDH0CbTUeL1XOC5Ac23dmQtdX1huEn1VMcuQA89WckdE6KablDBz+C8SZAMgPUmacgQY2TfkWyWAfFJ7/rxWIrI4=
+	t=1772662481; cv=none; b=RGPw2Kp4/KnobXXSRMHIeiRue3Ar4hg+S1pd1wqoF3Ur5v10CN+VDiMUigAOVGndpJW02yHJ29cj32kG04iZ5Rkut2R4V6O5DZ8wwL7hyObjvYhSZYlseyJ9Ay6cvCU6PfozDHd3nMMdZsSMrwFeOLCB+cNRQqMIofro8C9ZjVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772661913; c=relaxed/simple;
-	bh=VYhrWTE4e+8Rk+PQgt/i0bSrU7RRLhVkbRlbYbdphn4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=keRT53XzI+gM+ieUiN/BafBterVHxYH2blCZFbhxggBMp4ri5xbehVjk/e6eklw38/fevuSWl/3ttMLYEpM4qf5I5ltopd1UQUHH1iug1zTivcXOD6A4F+xenPQRf5Ey/RcvMSfcEW24h9Tb5gvixDoQJm3Ajyb62kaBfCJ6x6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=laMvp36f; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772662481; c=relaxed/simple;
+	bh=p/FZGYSgjd8d3iCw9nzYGrrNbHJNHtjAgJz5eeYkzZE=;
+	h=Date:Message-ID:Subject:MIME-Version:Content-Type:From:To:Cc; b=PQI+6C9qPf1D2MRGn4O4gZxvPYVgeuN6qZgrbygFMXNiAjgSBb/laRp/sxPxZ8e5uOaWqUgJa2sVltoYnehmowJnJ7zVa5Wq5xJIOwajxGyrLhIHRoi2Bs1BGUhCT0I1CBlMWLt6k8xE4Gayhph1ilmw0vqJeuTC13mVxkSYEbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl; spf=pass smtp.mailfrom=rere.qmqm.pl; dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b=hJuK7B8g; arc=none smtp.client-ip=91.227.64.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rere.qmqm.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rere.qmqm.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="laMvp36f"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82746ed8cb1so4101889b3a.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 14:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772661909; x=1773266709; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=DnNS/tGaGpFQwBjHzq319MKLMKV3i/bV/reb9OTZndE=;
-        b=laMvp36f+GDt599xkUcvrFWC/sLQOUACqmyeoo5zQJlcqfu7YG68sSX3Y1FUPIGJj2
-         dr+Ie+Y9u2nCjTenjIMSJmXnoKSk0wH9DC6G0Ab62LJVRw8nB/A6r/ykiZ57SZ8aIG/1
-         5xnFPbUINo6M05lwq6t1KGTcjyfUMJhTDy5jfcPe6k4Ame1Ll+hG7t0OrqOKBdywWcPn
-         wIT+Z3pSE6l8MjVnthYsIyRF91ph5ypSwwg0RSgSAhNKIVSecShPowbOOG4gccCpq1zA
-         MQmMc3IC3mpHndcS4k8ususK6LgMxNxLmrellS0QOerv6injHRgZjlgBnYHms/qr84nr
-         4sLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772661909; x=1773266709;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DnNS/tGaGpFQwBjHzq319MKLMKV3i/bV/reb9OTZndE=;
-        b=ojOp3YKhgOJxeBkitpLY+Fc6PH6wIWoo68dXzhG16J/vTOGBfPx1AiZyJ4yza73X8t
-         5pDJdNe1VkpeuIKRMX6qG4ATaTwVWv5E5Zg8ezgQCUo9DDovIV5sPlxGGAlGK1hnmvAT
-         oGP58Dl/K4RE21e+Qd6bXfMx52u0bm1Jaml5088mVLNRlhFQ1wrs9hITQ45kAAC7QBW/
-         8Pwy/ygw02wmaAJ6nBccu6Y3mK5DfW6vrXgkG1ARqKCKcj78u/kOtauZkelvGWkuEVXY
-         +QFatWAbHIvuLbfCOOp+TadvgGOAq5Ohf8rauPtkTzLWWEePcSG/ZyEM7Qbb2QRRB9Yb
-         8o8g==
-X-Gm-Message-State: AOJu0Yzf5Shlko8Q+SD9AI9QCbAVpJag/JmMba1v4Wzqw3dAk5RFiTHE
-	cFYkhwWrHOGLbfQMp/v83UzRk0aXfdJl/HveO2pEAeEZ8a+IzZoG9Nxac/77oC8w
-X-Gm-Gg: ATEYQzxI7OCHCPG80RpOu3Beih0kqHDI0I8KMeJw9xofoAvBSDabxroCAMWGiKobFKn
-	8/NDIhqcM7NFzcB+yofjh8T2Bc3+BDjFwuf/JvyuOGJ3Fg6j1bHMjPPNdWBR8WKarpvln9rWoF0
-	J1nNORyZ6q5W0XtHgIQf7TnKzQqCd8yzMYvIYWIabUlBU2cyk+CJGVWlgYCCTaMwkamxWM2rtff
-	5LVveOvpXqlvP4gmzEEONfhuBYlRpPSrsh2PQ/9Ldt0sjw31Wr986JrkQLuXQ1Hrf/+oah7zkhB
-	PewVAZWzhojSbGNxpDCSChGgIHNGTKaTXD40JKE2u5QvVlO4ezXk+qjeeR/DOdi49x//0mZPePB
-	EEHM738nKJA8Id7Ecy3LlHkJ8qg8un1fFeSDkyUzmLw/dd2xQG0oVQfkv3A41K5VNp+bDVSlthW
-	4F7kNE/tJeWdSeilE5dM0U8fcT45AtEeiOJQVsKenJK3vLU71kjqpx1a5GjRz4rYg3SUmqI1tCo
-	tT7xiR/fRE=
-X-Received: by 2002:a05:6a21:9a01:b0:395:151c:4ed5 with SMTP id adf61e73a8af0-3982e19c6fbmr2875990637.37.1772661908898;
-        Wed, 04 Mar 2026 14:05:08 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa5ef997sm16817797a12.2.2026.03.04.14.05.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 14:05:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e7191c1c-ecd4-40f8-9e47-9357bd82984f@roeck-us.net>
-Date: Wed, 4 Mar 2026 14:05:07 -0800
+	dkim=pass (2048-bit key) header.d=rere.qmqm.pl header.i=@rere.qmqm.pl header.b="hJuK7B8g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+	t=1772661924; bh=p/FZGYSgjd8d3iCw9nzYGrrNbHJNHtjAgJz5eeYkzZE=;
+	h=Date:Subject:From:To:Cc:From;
+	b=hJuK7B8gNCezM/woaiuiCMWo2YlroM9K1oadsZ0wDo0tFrNRACZ8meJIEoDgYapGV
+	 GGW4pFp/R2PL46P8tOF/RCUq+N7RSSUWHtAx5+pioBCycVB6WIUI8ZOuWshGBYdUZL
+	 Xnr7DvkwVroKaNn5G/1iEoh9QD+IVz6jE7Ge4qKvVY1soklUhTjUcWJiwo+4+VqYy2
+	 uy38DPUTolNkfd/JbT1n9lUtfco7bJeZ+YfowXEBn98KtMsWqlUa8c80KX2EyAaTdh
+	 RjV7r510f8VF8ucHWF4kfAGSfaiZn806AT8n1WqC5EbpOc54gyRaX5x0b7t/QAZdS/
+	 AAKugcRitf76w==
+Received: from remote.user (localhost [127.0.0.1])
+	by rere.qmqm.pl (Postfix) with UTF8SMTPSA id 4fR6DN1pgLzbg;
+	Wed, 04 Mar 2026 23:05:24 +0100 (CET)
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 1.4.3 at mail
+Date: Wed, 04 Mar 2026 23:05:23 +0100
+Message-ID: <c7a3a0b6c1658a8ce4cc5962de18c5b2cdbcdb8f.1772661800.git.mirq-linux@rere.qmqm.pl>
+Subject: [PATCH 1/5] hwmon: gigabyte_waterforce: Add PID for 2nd gen coolers.
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] hwmon: (pmbus/q54sj108a2) fix stack overflow in
- debugfs read
-To: Sanman Pradhan <sanman.p211993@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, andriy.shevchenko@intel.com,
- Sanman Pradhan <psanman@juniper.net>
-References: <SA1PR05MB8708FB8CDA1A57DE77D158A7BA7CA@SA1PR05MB8708.namprd05.prod.outlook.com>
- <20260304070607.1942-1-psanman@juniper.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260304070607.1942-1-psanman@juniper.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+From:	=?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+To:	Aleksa Savic <savicaleksa83@gmail.com>
+Cc:	Guenter Roeck <linux@roeck-us.net>,
+	linux-hwmon@vger.kernel.org
 
-On 3/3/26 23:06, Sanman Pradhan wrote:
-> The q54sj108a2_debugfs_read function suffers from a stack buffer overflow
-> due to incorrect arguments passed to bin2hex(). The function currently
-> passes 'data' as the destination and 'data_char' as the source.
-> 
-> Because bin2hex() converts each input byte into two hex characters, a
-> 32-byte block read results in 64 bytes of output. Since 'data' is only
-> 34 bytes (I2C_SMBUS_BLOCK_MAX + 2), this writes 30 bytes past the end
-> of the buffer onto the stack.
-> 
-> Additionally, the arguments were swapped: it was reading from the
-> zero-initialized 'data_char' and writing to 'data', resulting in
-> all-zero output regardless of the actual I2C read.
-> 
-> Fix this by:
-> 1. Expanding 'data_char' to 66 bytes to safely hold the hex output.
-> 2. Correcting the bin2hex() argument order and using the actual read count.
-> 3. Using a pointer to select the correct output buffer for the final
->     simple_read_from_buffer call.
-> 
-> Fixes: d014538aa385 ("hwmon: (pmbus) Driver for Delta power supplies Q54SJ108A2")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
-> ---
-> 
-> v2:
-> - Fixed email formatting/line-wrapping issues
-> 
-Unfortunately:
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+---
+ drivers/hwmon/gigabyte_waterforce.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Sanman Pradhan <sanman.p211993@gmail.com>' != 'Signed-off-by: Sanman Pradhan <psanman@juniper.net>'
-
-Guenter
-
-> ---
->   drivers/hwmon/pmbus/q54sj108a2.c | 19 ++++++++++---------
->   1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
-> index fc030ca34480..d5d60a9af8c5 100644
-> --- a/drivers/hwmon/pmbus/q54sj108a2.c
-> +++ b/drivers/hwmon/pmbus/q54sj108a2.c
-> @@ -79,7 +79,8 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
->   	int idx = *idxp;
->   	struct q54sj108a2_data *psu = to_psu(idxp, idx);
->   	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> -	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> +	char data_char[I2C_SMBUS_BLOCK_MAX * 2 + 2] = { 0 };
-> +	char *out = data;
->   	char *res;
->   
->   	switch (idx) {
-> @@ -150,27 +151,27 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
->   		if (rc < 0)
->   			return rc;
->   
-> -		res = bin2hex(data, data_char, 32);
-> -		rc = res - data;
-> -
-> +		res = bin2hex(data_char, data, rc);
-> +		rc = res - data_char;
-> +		out = data_char;
->   		break;
->   	case Q54SJ108A2_DEBUGFS_FLASH_KEY:
->   		rc = i2c_smbus_read_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, data);
->   		if (rc < 0)
->   			return rc;
->   
-> -		res = bin2hex(data, data_char, 4);
-> -		rc = res - data;
-> -
-> +		res = bin2hex(data_char, data, rc);
-> +		rc = res - data_char;
-> +		out = data_char;
->   		break;
->   	default:
->   		return -EINVAL;
->   	}
->   
-> -	data[rc] = '\n';
-> +	out[rc] = '\n';
->   	rc += 2;
->   
-> -	return simple_read_from_buffer(buf, count, ppos, data, rc);
-> +	return simple_read_from_buffer(buf, count, ppos, out, rc);
->   }
->   
->   static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *buf,
+diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
+index 27487e215bdd..ecefac756a19 100644
+--- a/drivers/hwmon/gigabyte_waterforce.c
++++ b/drivers/hwmon/gigabyte_waterforce.c
+@@ -16,7 +16,6 @@
+ #define DRIVER_NAME	"gigabyte_waterforce"
+ 
+ #define USB_VENDOR_ID_GIGABYTE		0x1044
+-#define USB_PRODUCT_ID_WATERFORCE	0x7a4d	/* Gigabyte AORUS WATERFORCE X240, X280 and X360 */
+ 
+ #define STATUS_VALIDITY		(2 * 1000)	/* ms */
+ #define MAX_REPORT_LENGTH	6144
+@@ -397,8 +396,11 @@ static void waterforce_remove(struct hid_device *hdev)
+ }
+ 
+ static const struct hid_device_id waterforce_table[] = {
+-	{ HID_USB_DEVICE(USB_VENDOR_ID_GIGABYTE, USB_PRODUCT_ID_WATERFORCE) },
+-	{ }
++	/* AORUS WATERFORCE X240, X280 and X360 */
++	{ HID_USB_DEVICE(USB_VENDOR_ID_GIGABYTE, 0x7a4d) },
++	/* AORUS WATERFORCE II X240, X280 and X360 */
++	{ HID_USB_DEVICE(USB_VENDOR_ID_GIGABYTE, 0x7a5e) },
++	/* sentinel */ {}
+ };
+ 
+ MODULE_DEVICE_TABLE(hid, waterforce_table);
+-- 
+2.47.3
 
