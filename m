@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22FC395DA3;
-	Wed,  4 Mar 2026 09:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A63639EF1A;
+	Wed,  4 Mar 2026 09:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615908; cv=none; b=mBs8l9BpgVotw2P1TwxNjO7IBwVa8E3WOTH8iYerdbHiXJ75M4rvxnvbSEJryJLxfsy3ryv8/ugwTp+/Vz41gp1cZyE1XBV3pjUQt0+h1IBPi26WD7R/rvr/Zp8NhWerKn6ZPSJRcbAHFByWMp5LlTvrd7hQtpIefgtMGvvL3oc=
+	t=1772617751; cv=none; b=SeVI/mHv7dOt6q/do4kvv7AGd+GrB1syltGVHZ41DrjdlBs2GLCvjCX+9zBInVqPTFPcFvVvIexGY5F4cdBy+9rWBo9UQyfK4K49HnAdA8X4luPBoZm6XcM41wRoopvOqlBvvpqE8z2FnoA2ORquqbX28gIFq2nux3glCueacSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615908; c=relaxed/simple;
-	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
+	s=arc-20240116; t=1772617751; c=relaxed/simple;
+	bh=oLThTf7bYoQDLx0hiK0AbFOM/522lPn6Nc/qW89O7BI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c1TXIfqhXL5rApicYjGBTObX5zkwESv4oFjfWmBAbjZTSdoElX+C0eS+07ecLUt+ckH74giM6jL1Ew9dDdaGGh0D1NQW69nRdJmHc0ehSm6PMQ3L04XZ62hfLULaXWRdRPL6sKhmYg0WxiIOvvsZlKY8aZuSOyri1rveLYn7IUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnWrIXro; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Y5Vl5PRVWow3Y9H6d9wbxuX4y14t4Vw39HMXw4950/3Xd9jBVNdtFN229pJgUx31T7tPRt+8FCaPBe8xFNxtlypoCiPtdzVP0Vovcfay2wLJLSxoPJaqRe4BOkfKbfIrFvrQdrcXBVsanGsnbYVAKQXhfgSemH9gGpqheGZR0ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOMqdRMw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnWrIXro"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D60C19425;
-	Wed,  4 Mar 2026 09:18:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOMqdRMw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B089BC19423;
+	Wed,  4 Mar 2026 09:49:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772615907;
-	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
+	s=k20201202; t=1772617750;
+	bh=oLThTf7bYoQDLx0hiK0AbFOM/522lPn6Nc/qW89O7BI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BnWrIXroRr6DGO6COgDOsecmpa7x+fF4yHx2u2k5WsZ+BLWzvzUUV7uMfNIoE+iQs
-	 mdoGPSlZc5kn466gYE/XfSeyng33oXkMDsg0aemnWoU6RYpNSCTaHml0kjxL8q74MP
-	 SGXt4SuWVja8WXGIX2YM+yHvI/BtWxlwFxtniqrT2FTrVITiI0mSIOQzGxB40qTb4t
-	 01cuZXikRWIUb+pX7EDFNBbWVCDy1Hz6X++yupk9wfbTs0+Fa6FiLXxi0KaGhO19NR
-	 DHp8BPZqYYB7ADvmkyvU/D4747R18C1Chuzd92zyNH3hQnNTSLQ8HWJskm8ahAhvXP
-	 ElVD3LF0lvU+w==
-Message-ID: <d9e9703f-8166-41a9-a927-5bcd7ad4a8db@kernel.org>
-Date: Wed, 4 Mar 2026 10:18:16 +0100
+	b=LOMqdRMwEj0KRmM7VUNI3JOdenubt0F2JlIbEjq4j3U94UtiH2i/r/MpdRr5Ec7FT
+	 mhqbO1St5Jxn46Ew138PrB2nuHS/cA05qYGRdsLYhpLg/tXXUC8dDlRQulgpurHvGf
+	 IcNXqo9tO0Z1cCtXWmmySvFcd1Bt84MS0qxW+D60KGaYdXhPgB9swifeplFB7dVq54
+	 1FPiAkDhWezrjACHQhdY37oabwTsA5ydN0I1T9rr5EOBW9aLTr9cBthzHQ0yUpV1/o
+	 y94ZpQuU2azGfMeKkqI5ty0JPFHMYTo2VsNnWyJfCJX2utFE2YZNjZw5NTQsn0hWLi
+	 TMOkf2lnGF8gQ==
+Message-ID: <4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
+Date: Wed, 4 Mar 2026 10:49:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,67 +35,144 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/14] powerpc: drop unneeded dependency on OF_GPIO
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
- Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Russell King <linux@armlinux.org.uk>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-pm@vger.kernel.org
-References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
- <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
+To: David Jander <david@protonic.nl>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+ "Rob Herring (Arm)" <robh@kernel.org>, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>, kernel@pengutronix.de,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ Lee Jones <lee@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ Linus Walleij <linusw@kernel.org>, linux-hwmon@vger.kernel.org
+References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
+ <20260303133947.1123575-2-o.rempel@pengutronix.de>
+ <177254885509.3251575.14819823286886805862.robh@kernel.org>
+ <aacH7NmkOzZued0Y@pengutronix.de>
+ <20260304-graceful-sweet-bittern-98efdb@quoll>
+ <20260304100642.44d00b99@erd003.prtnl>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260304100642.44d00b99@erd003.prtnl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-Le 04/03/2026 à 10:02, Bartosz Golaszewski a écrit :
-> OF_GPIO is automatically enabled on all OF systems. There's no need to
-> select it explicitly.
+On 04/03/2026 10:06, David Jander wrote:
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-
-> ---
->   arch/powerpc/platforms/85xx/Kconfig | 1 -
->   1 file changed, 1 deletion(-)
+> Hi Krzysztof,
 > 
-> diff --git a/arch/powerpc/platforms/85xx/Kconfig b/arch/powerpc/platforms/85xx/Kconfig
-> index 604c1b4b6d45c11dc3149ee8b9adabe593882c8e..6805c19ac8a915dae1bd24b13010a56cf1948ad4 100644
-> --- a/arch/powerpc/platforms/85xx/Kconfig
-> +++ b/arch/powerpc/platforms/85xx/Kconfig
-> @@ -217,7 +217,6 @@ config GE_IMP3A
->   config SGY_CTS1000
->   	tristate "Servergy CTS-1000 support"
->   	select GPIOLIB
-> -	select OF_GPIO
->   	depends on CORENET_GENERIC
->   	help
->   	  Enable this to support functionality in Servergy's CTS-1000 systems.
+> On Wed, 4 Mar 2026 09:05:11 +0100
+> Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> 
+>> On Tue, Mar 03, 2026 at 05:10:20PM +0100, Oleksij Rempel wrote:
+>>> Hi Krzysztof and Rob,
+>>>
+>>> On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:  
+>>>>>  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++++++
+>>>>>  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
+>>>>>  2 files changed, 196 insertions(+)
+>>>>>  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+>>>>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+>>>>>   
+>>>>
+>>>> My bot found errors running 'make dt_binding_check' on your patch:
+>>>>
+>>>> yamllint warnings/errors:
+>>>>
+>>>> dtschema/dtc warnings/errors:
+>>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
+>>>> 	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
+>>>>   
+>>>
+>>> Folding the mux node into the parent as suggested [1] causes this error.
+>>> Because the parent now has #mux-control-cells, the generic
+>>> mux-controller.yaml forces the node name to be mux-controller. Since
+>>> this chip is primarily a switch/GPIO controller, naming the parent SPI
+>>> node mux-controller@0 is misleading.
+>>>
+>>> What is the preferred way to go here?  
+>>
+>> https://www.nxp.com/products/interfaces/multi-switch-detection-interface/22-i-o-msdi-programmable-current-analog-mux:MC33978
+>>
+>> Name of the mc33978 device is "programmable analog mux" and further
+>> description says "analog multiplexer for reading analog inputs ", so I
+>> don't find "mux-controller" a confusing name. It is EXACTLY a
+>> mux, so mux-controller.
+> 
+> Sorry to chime in here. I'm afraid the NXP description on that link you posted
+> is a typo. It is not correct. This chip is primarily a "Switch Detection
+> Interface", or in other wordt a switch input interface. Wee here for the same
+> page for the MC34978, which is the exact same chip:
+> 
+> https://www.nxp.com/products/interfaces/multi-switch-detection-interface/switch-detection-interface-22-i-os-programmable-wetting-current-temp-sensor-3-3-v-5-0-v-spi:MC34978
+
+That's MC34978 and I commented on MC33978.
+
+What is the primary function of MC33978 being described here as the base?
+
+> 
+> It has an additional function that can be used as an analog MUX, but it is an
+> extra feature and definitely NOT its primary function.
+> 
+> Not sure if this is relevant, but I fear there might be some confusion.
+> 
+> Best regards,
+> 
+>> Anyway if you want gpio, then please add a patch extending the pattern
+>> in mux-controller.yaml to allow "gpio".
+>>
+>> Alternative, because it is rather a mux than a controller of a mux,
+>> would be to call it just "mux" or "io-mux" (maybe the latter, since we
+>> have "i2c-mux" in the spec) and allow that pattern to be in
+>> mux-controller.
+>>
+>>
+>> Best regards,
+>> Krzysztof
 > 
 
+
+Best regards,
+Krzysztof
