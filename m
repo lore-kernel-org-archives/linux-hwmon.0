@@ -1,274 +1,445 @@
-Received: from mx0b-00273201.pphosted.com (mx0a-00273201.pphosted.com [208.84.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD451C28E;
-	Wed,  4 Mar 2026 01:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.84.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F1C2F5A06
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 02:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772586091; cv=fail; b=YxTJD4eLDf1r+g4auNmJemUILv5mRjeip9xhqQ02pySumw4HnwqvfSTwJ/QPPWKZoWe3c/p6UEbUQVsSHSl46O7T9SzjApTw/IGvaH/ebVuxiTBgiXWNGlaCQ0F5CwiGtVemJpr6oLQwVGOKKgDczC1JE8Pjhnbs8nEDJWg8shc=
+	t=1772591280; cv=pass; b=jjq4/WLC12566ADOUPtX18mnz8yx/VPx8QPQ0thD9qTW/bd0n+hMRlc6x+rxcVhcMFBCPBVvOFrP+wzBLrMOGRcJF3rQjgUufrx9Rs6QSL+W2+xwy5MRqDLZLnfyR9h2uF7ifFt6jKV8iXpiBvNQNSwwKDG3PTgqKqNmzBodO3Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772586091; c=relaxed/simple;
-	bh=O9CNCGv+HhOVBMb67leWWBf4oGeFkgM/m6Bk7G7jEtQ=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=BHDsQTldjrRbQZEtAp43vHPxRD4it0CksZkGwPEOYC1C4QqKJfrx+QjugOZx3FvcxtyZi9iJ7A/n8usmHyNJ8+pfkEzmcRfI+GaKtOh63ycA/DYb20Gf4nEfJvEe0fnVmYlLSDzID4gnZzHgEMl/RSqj8y9lxwFFidSWbmGGnE4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=juniper.net; spf=pass smtp.mailfrom=juniper.net; dkim=pass (2048-bit key) header.d=juniper.net header.i=@juniper.net header.b=i6p9d+is; dkim=fail (0-bit key) header.d=juniper.net header.i=@juniper.net header.b=KX0gAI0O reason="key not found in DNS"; arc=fail smtp.client-ip=208.84.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=juniper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=juniper.net
+	s=arc-20240116; t=1772591280; c=relaxed/simple;
+	bh=py3aKKVn93HvEcbikt3U0dk2M/t9J8+imzeqfvnOlMA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EN7haVeu9T+ORJhiYqJH5DD8FgV81FaawVoai9QmMGowmBXLVmDkK4YWwKIr523BxC6+JVk1AIRAobBog72U4YWqqwo/f6vFldDgVxa/fZqKRUawgSZm1K3NqKdso00wpgPyOUQQekIO99bQ+JUdzrEgfvxPaH5uC7Tme32niUE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FITNUxCj; arc=pass smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=juniper.net header.i=@juniper.net header.b="i6p9d+is";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=juniper.net header.i=@juniper.net header.b="KX0gAI0O"
-Received: from pps.filterd (m0108157.ppops.net [127.0.0.1])
-	by mx0a-00273201.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 623Nhul21409866;
-	Tue, 3 Mar 2026 17:01:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=juniper.net; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=PPS1017; bh=x1lytjGATh09qQpfU7UhMHyM
-	zsF2Fvl+wGjbHAahbuk=; b=i6p9d+isZiHjgyNBpUx8d0E4ZNvYk6RVvFF6BQQP
-	mQYdTWn/NhLqLZJ0A/mZeRefOjXqJzBRU5bIQC1UWFBNIiAq1T3onfHBiK2OwUJU
-	fCURcjZ8CXUtX3QQs2btsajsOSnDRMrbNdH0wFFHHZp/QvUIEpFxkrPXKB7obz1k
-	cogXdsG4CewV8D+0IJqt7hRkWwf/lqgiN44asH1eIqwx0MYFPw16uiz4GMv5HfUO
-	T8dUupa1UC/REVnb7w23SqTs5Dl9A8qq5X61dX+PDn8bBxxfkqtsNOadBD4spnJa
-	77RX0nS/VS13n83NCiFeVNQ7/zbEGWdC3T99nAN/yNbpKg==
-Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazon11011068.outbound.protection.outlook.com [52.101.62.68])
-	by mx0a-00273201.pphosted.com (PPS) with ESMTPS id 4cp38at9dn-2
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 17:01:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OzQIhd8kj5lHClDCFpMsc4ArYA4kSqhiR483nWzEXAfUcBglg3t7Cd/ejsl3l+iIZumT5sjfvJYldSPOUGJIbwA8BEoOVYu0/stvWwil+wALYTj0dI+Vpq73KVKz2rczy91+wyKLyHbX2Dfunx2BJQnYHCIKPjiVfDqZrE1pAMwNCI9CQ5YZtS0uzWMccLJoiPBsZYf+vQr1dM98lB6+I66bSsa6t3Q+dpbE9UyCTl+L80TJrWip3CQCf0TG2gB8vESfUEQOMV8uC/1LGiTAxktq0abEqq4iK+UwyfC+AljJIvlD4zGTzX+epugKIaR+WrNuSk4oNtywCBaQ+OJryw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x1lytjGATh09qQpfU7UhMHyMzsF2Fvl+wGjbHAahbuk=;
- b=uroslJxsVDoj474Zhyox3QXtHOk6eYSGhnNgBngOdlRdVPPGeX22Jec73WvpEEvbZ1MUss6SHGu2xov+bt4T+K+pLnKtz7rXb+EJDb/ptMoSoeeVhAXAU+y+1Zk6UQM3snDMLbhSYcNSzOoaYTVWNVQD9ES8Pg/371wefUpLJ+1iPklxBVFN5NfuAarZD2yooEYcIKW4aoQZLqMMBSOn2uevpR3/xlyERNMBgdgmdE/W0DTGlswcfwTc4DD6R/a34lMJWu7GwXWzPjwa/8MnczAHbGTXN2HM/hHTUC65Vy+GKMCY/lVqeE8OwRPPwLpmzIdPyxICUxY/XAf9GTTGUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=juniper.net; dmarc=pass action=none header.from=juniper.net;
- dkim=pass header.d=juniper.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=juniper.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x1lytjGATh09qQpfU7UhMHyMzsF2Fvl+wGjbHAahbuk=;
- b=KX0gAI0Oa8pvqU3UoRGHhnBPk4l9kHe/z5GiVhw6c7e+0fnbsrpX+c1P/BQ8wonnxexMx3/eb8BBh5qwc4v8tgvdo+J95B1eGGlloEsssvHdDCxCnsFE7DPQ0c6FK1S1IteTBKOoj4cAP1LPOLK3D9RSSc8L2wCrQZZS8qcwDo4=
-Received: from SA1PR05MB8708.namprd05.prod.outlook.com (2603:10b6:806:1cb::17)
- by MW4PR05MB8521.namprd05.prod.outlook.com (2603:10b6:303:120::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Wed, 4 Mar
- 2026 01:00:56 +0000
-Received: from SA1PR05MB8708.namprd05.prod.outlook.com
- ([fe80::4233:c6d8:b4:2416]) by SA1PR05MB8708.namprd05.prod.outlook.com
- ([fe80::4233:c6d8:b4:2416%5]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
- 01:00:55 +0000
-From: Sanman Pradhan <psanman@juniper.net>
-To: Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton
-	<akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andy
- Shevchenko <andriy.shevchenko@intel.com>,
-        "linux-hwmon@vger.kernel.org"
-	<linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-CC: "Pradhan, Sanman" <sanman.pradhan@hpe.com>
-Subject: [PATCH] hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read
-Thread-Topic: [PATCH] hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs
- read
-Thread-Index: AQHcq3Dq2YzGTeT1jkeGQl1SYqwBJQ==
-Date: Wed, 4 Mar 2026 01:00:55 +0000
-Message-ID:
- <SA1PR05MB8708FB8CDA1A57DE77D158A7BA7CA@SA1PR05MB8708.namprd05.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_Enabled=True;MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_SiteId=bea78b3c-4cdb-4130-854a-1d193232e5f4;MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_SetDate=2026-03-04T01:00:54.760Z;MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_Name=Juniper
- Business Use
- Only;MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_ContentBits=1;MSIP_Label_0633b888-ae0d-4341-a75f-06e04137d755_Method=Standard;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR05MB8708:EE_|MW4PR05MB8521:EE_
-x-ms-office365-filtering-correlation-id: abb219a8-8865-4217-c70b-08de79897d74
-x-ld-processed: bea78b3c-4cdb-4130-854a-1d193232e5f4,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|366016|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- 3RQgvKsWZkUPWtawYJtgxf8RHFSP2fV9qKABi3u0OGjog7MnfbCjhzJMcTOkIQzwdoNtB9GjgUBq3kmLNc+93jnhpVPAKxy/LenfHKehFjCTanqQsB6VLrpxhrfWrRucd3Bk0tIiiE5LrpF00lZsoaEmYn1hSNq2w7705GN9fTTZvDH4jL5Kw34J+QEVHW9XThyxw5FESe06bDaXxpgqs6glRV9kjXzsVmmVrCumcbOcKTMz1kWI1GYZh579PmOTq4qie/bBJPBA1GrqI727f/dKi+1fiPEllJDYrkdScW1tdd5t5kEy8mrfNSBBDZCP9Q3nw5HAPd8pzIjfOzhSB2yZwj3LYUvET17XffwKlxzudhu8VoZeOKaiIlqObltvcq0WSMSSZa+hobIByA8BoaDLgH64lDO74iBpOfc6Tnau574WKIRQpGV04X9H2s33WrPFNCMg5erNSx3R/pjJt8+vVx8hXKzpniycsGMdX9htBHFNrijZ8yyfH+zQTcQ5qmPn8bC6uz1vk7aCGgWFdG4WAyva0Y166NLgoIMrbrlRU7GtxEwhRzwH+HHxzekrxHsp6BnEbqzn1QhBltlnJjALJ2OP8RMUztBslT/EZXE5cyO4gTwlhGiKe0kGmVj9nNLyiNYNYBhnukcrIk04zc3SlsXXgQsBe7+/h6+MEM5erZhOS/8oewL4wrVG7bYCfImNXxyFHrqNwcOD4nVh+Z7yXOdJsriMldg7/XKUXwXDWROQFA6PIJc6GsUV1QrSFRWzfmJRYJ6OyCQtHvonMnJIIrk8RFhjHubORoXYrYA=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR05MB8708.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?6+HGHE8V1a1pwxl6S7dUR9lbrf90xEPMc/zYO4d8vqMUYnzZgNwabfF2B6?=
- =?iso-8859-1?Q?XfeZZiSAyrrylGUSxvmEIDBiK8hOu0eENILcSj+etnJ740i2HZKQ/OOmNh?=
- =?iso-8859-1?Q?5RQ5Prp/NJQ4fwgRzcmCNIxGpB5yEJ7v4bfRigUHyP/gj8FvkefI2Faso4?=
- =?iso-8859-1?Q?+pddwe/uvBHdaD30LdhNQloHcCoHqq0F5b5B8jjlpE2cqLSV4pD6wZJUDK?=
- =?iso-8859-1?Q?fRpMbC1RgO6Nokef/zg3y0VAr2g5piV6VpEReXOC5yFpBsi6J3NYnCyyFs?=
- =?iso-8859-1?Q?eajLgW10y/l47lJ8Cf+cggrH5SgT16ybqO6v4acZeQbR3M+yxM1IcwlId/?=
- =?iso-8859-1?Q?pSPuwq4pBK8hq1On/UKvUpZsvbAe3R5Nvjie4CIiBjWHFxvKfcV9Izc8JP?=
- =?iso-8859-1?Q?mlYjglJoIKi4YXp07ZqUJDwf/qjoGTpOiJQ6ApWArLccRonMp7Ax/E0g3p?=
- =?iso-8859-1?Q?ZNR1CO2B1mEWoKk5FwlAl7voB1Ltk/AJ4uNEXavRPEQzfgoVikTKaBxQZa?=
- =?iso-8859-1?Q?yAImaI/4GhfRyp6W70x26uj9HeGcppzymgTpV3QFrGOXc9yZBxGIetZnNQ?=
- =?iso-8859-1?Q?EJLv8beJOGFal+05noNSoOUBN0GdRCzcJz5lzxNXf6j0YIg5XexJ5m4O74?=
- =?iso-8859-1?Q?gQZYvmrUpC0iclnwe9XRe4+FFQS8BDB5lXi1RdjaiJ6S9FbhZGEaVB1Trf?=
- =?iso-8859-1?Q?9x2gV2O0PsBPsIGNCE7P/uNHpaV+nsIjvw7FNOnOdGAJAOrLL9DlRprljI?=
- =?iso-8859-1?Q?rhL3JmAuJycs3qh8Ez9YLgFuahP5wWw8G1DAhuffqo/VONDD2NxW6WcGHq?=
- =?iso-8859-1?Q?v7TXzsJ9TLNdj9cI2vxdeatDgKFkQhQWFa65UD1A+lIHW+3TuWU8foVloa?=
- =?iso-8859-1?Q?u5m7arSLs0ne3bOpar7MJbaqXyvG+TrHdqMlRKRq4jWie2uAjGpckeJhat?=
- =?iso-8859-1?Q?L4vJT2xjoTsflLGv40yio5ry15bXv2xioKZUX1a1aB4toNpMZigyXVr7NN?=
- =?iso-8859-1?Q?GpoIBmpmxt1jpG4uM4C8jn5stf9YOHeDjnw/Q42xyLDBYvWRA3/TI3nwt6?=
- =?iso-8859-1?Q?C28sVpxVehqm0s5s8tIhEjf1jiALsNoY9LF8ctvAv10k5ZQHuY0pCnIJzL?=
- =?iso-8859-1?Q?0LpJiGTHCzifVD7qD9IXHoLv43YBdSJx6i19BtFz3Rv/ykAS9zrUUihuRG?=
- =?iso-8859-1?Q?EYHcp5Mj51f/XTT39hn41qKcLmwnKjCDMM7dTbr+jiSurVhkEWERSj4be0?=
- =?iso-8859-1?Q?e2bXF8KSBqykkqbtns7icK9agt6h5YLX1qIor8TvGTqmZ4Fa3xjQaVDq4Y?=
- =?iso-8859-1?Q?LKSonynepA8WNXBkxcSugJ/OayXGZpr85zg/UNsEKu2kwENJCumEWDqidE?=
- =?iso-8859-1?Q?Sp1G2+sxHNCI3dRQ8jNIjXVusoYAktgCnYF0yCweTDFSSdupEpFMj7JMmD?=
- =?iso-8859-1?Q?LKbNcBsm2wrJwqVi7NZqw7vbRxaYmjne39VxCcZCiafhaOnKSGvA19VMqF?=
- =?iso-8859-1?Q?9aj8feIIG8uJWvjHww/zLiqe8Lv919ZX9NEsxpRJBfbBxblyHjXJNd9ZmG?=
- =?iso-8859-1?Q?p9lNoEb9yfGX5JFLwsE7VEV5issqRBynD8DaEwf2f4NvYcEjZepTpB8qQW?=
- =?iso-8859-1?Q?IqMp8z9jSl2ghK1das46MJOf2/0iwy0kcACFLCYy1nocWLnOj5v9t8b808?=
- =?iso-8859-1?Q?lTHvdu3I21tPc+AuSv3LKPwcCM0BX6Xzu3UOUuMo6t8dziHsoe2h6QYjev?=
- =?iso-8859-1?Q?JVIbAsWbhNKYNYY8qChgnMsduGu5KhaM3dfKAUBZ5gW5Ux?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FITNUxCj"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4648447c899so4134613b6e.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 03 Mar 2026 18:27:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772591278; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TBOZGYv79NjrhOfL1oaRwkM93YObUDc9OgsNMi3iWNgEUShhu9NT0flDVddjOwxM9w
+         rzdbPMqIGn+3dq4Wwm9OpkT4ctmxTAWRleIPdCHayZg+djIJQD7TaEfVK+R/WyOhu2Vv
+         N789xaWB2vdNHhBrwTDfp7z7WM2BGwSTfdujitWJKIJgZxTAhDGBhKHB8QvIJ61YTBX+
+         Q2nXNgpCYXUnvA5VF8fUDzU580KWi3ABV4ihuv5esyA359+VoY75RYDv+ZU0er+Pwz8D
+         YzUD0XBX6w7xPUD65X0DsdwV85yikTk7ckcjAsEm6+rUQ3P9iL5NsVvDV4fcbsLffep6
+         VgWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
+        fh=n4RCDrbwxNtG7t+XiouA92jZI9cE5D6gnpnoaYr5ero=;
+        b=MbhKtwBsAoYeO+so1MVhAU6MfTUFlMM5Pf8g3E2qB8Bj4E0IkyhY4a5UAxIwi+bOt5
+         6i82llBAxSQD2eYI/J+Rs0/dpbL511wrhrn17AV4DUJJAscGP5WXX2ad/p0z7xYMFC0f
+         +3ak+AWmFu8r7yZUT/HGoNgGzyMY+TUbPgibLtHiD1uUphlw3oSlyXvOgUsL/OfdI5FI
+         wf1LbS06JUeHMWpzhvecJgP7+hzAhFqaYBD0ijSzwLro6Has3PbNmOXHLSW55qgPZvBr
+         XigbPM23BKx0JyIplf1HJ9e7mPJN+eSYQViqe9pOFzXeI2ZjEML+AoVuhK7KwL6HEy20
+         Z+6w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772591278; x=1773196078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
+        b=FITNUxCj0wnZV+AucLW0u5QCeeR9Za4KXpVt5oPxTbfTrr5dzZDc5IEno46XyK6iP1
+         Pwyx7rq+nT/p60PLhXIN6klrfk3dErZW16ZAlsLzqFH5zywODRK5+j6WjHwY8fOWl7ys
+         XDY8QdOyLIj0zQG40HkvdHCrvNRWKzZSSOTLluFyi7A3KiQxKlV48RhJr7wYF8UHiiJp
+         8pqSJJFb3U3EtXXsmqsekfxfk6MSCD0UkHguo9OXPDfH1ta7Uf10EMPmaTsDZ7OMFYsr
+         ZxVX2azCNXbEMMhQEY1l/y81pv4x/ctv6rlxEztY8j4LbJfxfsNPZG8a4jGZr3Xc0DGr
+         nFqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772591278; x=1773196078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6Lcbeb/64UCshEgxWIZnEJ+ommj9WqeVen8Lhvcah74=;
+        b=OrzHvZni3oyjCCKdEY+lMlYZa9A3iQUZ+JQ6rvYWcAH7RtnA4+fR3wDeb/zHVPI9UF
+         StLupGolrnAZZcnTx5ZJGI9dSllgpyU8EWFoo+zOnF7C3UjbWo/+3cZEZ9JO9RmPe2fm
+         08e5BtotHp2rxBVE+7gbA1/pAfR6u4ZKHVPWEyRE4EcTIL5sunwcHczVz+RpewFYXb8Y
+         VAy9kaqBb6qYNH5KFFdSDBeihLu2IaO4VkpXV9ybr8TwMOUteevONIELpNAD8h47B0Zn
+         UJysByLxk7uDXMNdH/eZ9WrMTawQNyCmYUNwqWc7PIqPzYnAKsaLdSYIiV/ZRvtlzAnh
+         w0Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEyCmnrP5Dgll1nYYMaaP2NnO5wXzP+IOfT4FgKlQzp9RPpG6bTyw/uFGpfT03m7r/0dTSM6vfgse6mA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgWMj6rX9Iaq2gZjf5Oec41gM649wGHBt5JZO80hI8M+NzgdE7
+	pFZCPoqRheuDL5LvkFFtSisBlA5n8Iwnyge4X3rrRoRz6VwLpDmFxdDsFRUVePlb53NfKgD60jE
+	LFTcmDVcf/YIqP66NeFRg5vCR5bRrUsU=
+X-Gm-Gg: ATEYQzxjw/92PBcbwyKUda5gm1jilz+V5cvWGlpboX8VceJ080bMKSFWxVXUwOk1wNZ
+	sr2Bp5LZE1iPVW13cTp1Rn/kxu4HS2icPlHgBsqoLaYbl7UbEJCsabu3c++sB/CBnxOTuWFw6xW
+	ZAz6TnOhBPc0G6G9mVoWhiwBSGXtFe15maFjWZ4Ndt7QervDlWfHOhQabfo6f62AIAHXzu1dbNK
+	ZUeKQthwxFYjD9sdU3xi7fAAF9t84VJFbLUEcMU2U9Nz/wWqdKESpe87zUWPkhVA4zF4sjjSZGP
+	RBTP/2pfoVStC3sSeCgAvYZRQRv2bK+0/tNOkKqBf+blfGOWdhqcBcdJILQkYY/OQilEgthe0Q=
+	=
+X-Received: by 2002:a05:6808:30a1:b0:463:f9ad:a4cf with SMTP id
+ 5614622812f47-4651abb472dmr293614b6e.23.1772591277687; Tue, 03 Mar 2026
+ 18:27:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	khvMWXvJLMlYYqBRh3gpWfo7LHz3TY5n8/AX0AvsO97fUKu1xqNsND3IxtLMOQCCIvZH93QZX6iqYe2/He9oMU1lvxGrKW3UiIEDn3lFHQ8LM4tQ4HqhaC6LSOYpt+LS8lUAeDe21ASh0oD9cG9Kzalk8Dq4j87PVVLG9b39lz9w7mIVD3RlxugC+MR8QmjXm8n/8R6zsMAuM8yWctuMH0SFwUWyI2B9NbEJPOLXsuq1EA5gGK7IXEmTF1lp0eUcYvIeN/V/X03n5QF2y9JVrsc6Hzaytgdacxa9Y9l++mWLUAtuSaGOAEeFcGELsVxUO5JLwoc++qpMYwj4bncGOA==
-X-OriginatorOrg: juniper.net
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR05MB8708.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abb219a8-8865-4217-c70b-08de79897d74
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2026 01:00:55.5155
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bea78b3c-4cdb-4130-854a-1d193232e5f4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wTvQCXisGeKCosvcsdgAPGFn0CI9X4hIjkdbK6d1U/Z25T7krEQwgwdzb9Sb1FFbQbhVsETBgeU+VvN8rb8yAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR05MB8521
-X-Proofpoint-GUID: wde7Yo85VMI58dKHbDBZrLC6I7Fvi4cm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDAwNSBTYWx0ZWRfX3vmM5q133jOP
- 6BuZxmDUPYT6wWA/jS7o7FgfW2pBhTurcVGnJGvz0II5Kkz4K9oZBLBTcNoLMrLUH7wiLrKMj97
- 4I4ENPMYj8dEUdwkFv88pzTvgomETQ12O+ASNXeXOm2xZBcdP17qx2nIuFvXsAt9SoiXz3flLiG
- ag4C0xW12LoJkLshs7zK3Yd/uJjEViYKP25cybKtme3VMxp87oAsug4CVsMZbjIEmOo7+1tnLyJ
- WYf6WjApn7F4nEthInOoFCUspIKu+PLUPhYEGX5O+NkDAfe1lfLoPjy776/nuSH4qYP6xvdno+j
- JEZU8mpmH4mpcOA088nPmZvRe0Q4ydJip42VuMUtVwxOByDnx6+51eVeF0F/sYjp0KYIODAOFYb
- R1ODXy9Kx/HhdVmjjwLF6Hmp53zynaEP2diAgw8uCVgaMVNwls6a957Q5OGiumaozmaTpJFc8/D
- HlD0SGAO5cNyXlLR4/A==
-X-Authority-Analysis: v=2.4 cv=UfhciaSN c=1 sm=1 tr=0 ts=69a78450 cx=c_pps
- a=q0rL5DqQyazLQqY8Xi1ihA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
- a=Yq5XynenixoA:10 a=rhJc5-LppCAA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7vL3O5uBSuztJ3xaqtyr:22 a=O1S9G-DnkxobS-ZkPuRe:22 a=OUXY8nFuAAAA:8
- a=VwQbUJbxAAAA:8 a=XEP7nfSnI9DmOhtiKToA:9 a=wPNLvfGTeEIA:10
- a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-ORIG-GUID: wde7Yo85VMI58dKHbDBZrLC6I7Fvi4cm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-03_03,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_spam_notspam policy=outbound_spam
- score=0 lowpriorityscore=0 bulkscore=0 adultscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 phishscore=0 impostorscore=0 clxscore=1011
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2603040005
+References: <20260303115720.48783-1-dakr@kernel.org> <20260303115720.48783-2-dakr@kernel.org>
+In-Reply-To: <20260303115720.48783-2-dakr@kernel.org>
+From: Gui-Dong Han <hanguidong02@gmail.com>
+Date: Wed, 4 Mar 2026 10:27:49 +0800
+X-Gm-Features: AaiRm50ScKkUps_9Yhs72XBQaSHbpuEPqc11o2wDZQVrApNZde3wmBwc1fLjihM
+Message-ID: <CALbr=LaR0B4BhEQ6md0nBe=7KtPHJYPq6i_p9Gn+s8zcoFAW6A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] driver core: generalize driver_override in struct device
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, ysato@users.sourceforge.jp, 
+	dalias@libc.org, glaubitz@physik.fu-berlin.de, abelvesa@kernel.org, 
+	srini@kernel.org, s.nawrocki@samsung.com, nuno.sa@analog.com, 
+	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-hwmon@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-sh@vger.kernel.org, Wang Jiayue <akaieurus@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From 166d8a9220dc783b752cb212937a31e6e1adc811 Mon Sep 17 00:00:00 2001=0A=
-From: Sanman Pradhan <psanman@juniper.net>=0A=
-Date: Tue, 3 Mar 2026 16:22:08 -0800=0A=
-Subject: [PATCH] hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs re=
-ad=0A=
-=0A=
-The q54sj108a2_debugfs_read function suffers from a stack buffer overflow=
-=0A=
-due to incorrect arguments passed to bin2hex(). The function currently=0A=
-passes 'data' as the destination and 'data_char' as the source.=0A=
-=0A=
-Because bin2hex() converts each input byte into two hex characters, a=0A=
-32-byte block read results in 64 bytes of output. Since 'data' is only=0A=
-34 bytes (I2C_SMBUS_BLOCK_MAX + 2), this writes 30 bytes past the end=0A=
-of the buffer onto the stack.=0A=
-=0A=
-Additionally, the arguments were swapped: it was reading from the=0A=
-zero-initialized 'data_char' and writing to 'data', resulting in=0A=
-all-zero output regardless of the actual I2C read.=0A=
-=0A=
-Fix this by:=0A=
-1. Expanding 'data_char' to 66 bytes to safely hold the hex output.=0A=
-2. Correcting the bin2hex() argument order and using the actual read count.=
-=0A=
-3. Using a pointer to select the correct output buffer for the final=0A=
-   simple_read_from_buffer call.=0A=
-=0A=
-Fixes: d014538aa385 ("hwmon: (pmbus) Driver for Delta power supplies Q54SJ1=
-08A2")=0A=
-Cc: stable@vger.kernel.org=0A=
-Signed-off-by: Sanman Pradhan <psanman@juniper.net>=0A=
----=0A=
- drivers/hwmon/pmbus/q54sj108a2.c | 19 ++++++++++---------=0A=
- 1 file changed, 10 insertions(+), 9 deletions(-)=0A=
-=0A=
-diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj10=
-8a2.c=0A=
-index fc030ca34480..d5d60a9af8c5 100644=0A=
---- a/drivers/hwmon/pmbus/q54sj108a2.c=0A=
-+++ b/drivers/hwmon/pmbus/q54sj108a2.c=0A=
-@@ -79,7 +79,8 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file,=
- char __user *buf,=0A=
-	int idx =3D *idxp;=0A=
-	struct q54sj108a2_data *psu =3D to_psu(idxp, idx);=0A=
-	char data[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };=0A=
--	char data_char[I2C_SMBUS_BLOCK_MAX + 2] =3D { 0 };=0A=
-+	char data_char[I2C_SMBUS_BLOCK_MAX * 2 + 2] =3D { 0 };=0A=
-+	char *out =3D data;=0A=
-	char *res;=0A=
- =0A=
-	switch (idx) {=0A=
-@@ -150,27 +151,27 @@ static ssize_t q54sj108a2_debugfs_read(struct file *f=
-ile, char __user *buf,=0A=
-		if (rc < 0)=0A=
-			return rc;=0A=
-=0A=
--		res =3D bin2hex(data, data_char, 32);=0A=
--		rc =3D res - data;=0A=
--=0A=
-+		res =3D bin2hex(data_char, data, rc);=0A=
-+		rc =3D res - data_char;=0A=
-+		out =3D data_char;=0A=
-		break;=0A=
-	case Q54SJ108A2_DEBUGFS_FLASH_KEY:=0A=
-		rc =3D i2c_smbus_read_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, data=
-);=0A=
-		if (rc < 0)=0A=
-			return rc;=0A=
-=0A=
--		res =3D bin2hex(data, data_char, 4);=0A=
--		rc =3D res - data;=0A=
--=0A=
-+		res =3D bin2hex(data_char, data, rc);=0A=
-+		rc =3D res - data_char;=0A=
-+		out =3D data_char;=0A=
-		break;=0A=
-	default:=0A=
-		return -EINVAL;=0A=
-	}=0A=
- =0A=
--	data[rc] =3D '\n';=0A=
-+	out[rc] =3D '\n';=0A=
-	rc +=3D 2;=0A=
- =0A=
--	return simple_read_from_buffer(buf, count, ppos, data, rc);=0A=
-+	return simple_read_from_buffer(buf, count, ppos, out, rc);=0A=
- }=0A=
-=0A=
- static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __us=
-er *buf,=0A=
--- =0A=
-2.34.1=0A=
-=0A=
-=0A=
-Thank you.=0A=
-=0A=
-Regards,=0A=
-Sanman Pradhan=
+On Tue, Mar 3, 2026 at 7:57=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> w=
+rote:
+>
+> Currently, there are 12 busses (including platform and PCI) that
+> duplicate the driver_override logic for their individual devices.
+>
+> All of them seem to be prone to the bug described in [1].
+>
+> While this could be solved for every bus individually using a separate
+> lock, solving this in the driver-core generically results in less (and
+> cleaner) changes overall.
+>
+> Thus, move driver_override to struct device, provide corresponding
+> accessors for busses and handle locking with a separate lock internally.
+>
+> In particular, add device_set_driver_override(),
+> device_has_driver_override(), device_match_driver_override() and a
+> helper, DEVICE_ATTR_DRIVER_OVERRIDE(), to declare the corresponding
+> sysfs store() and show() callbacks.
+>
+> Until all busses have migrated, keep driver_set_override() in place.
+>
+> Note that we can't use the device lock for the reasons described in [2].
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D220789 [1]
+> Link: https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kern=
+el.org/ [2]
+> Co-developed-by: Gui-Dong Han <hanguidong02@gmail.com>
+> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
+> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+
+Tested this on QEMU PCI with various debug options enabled.
+Everything looks good so far, no issues found.
+
+Will keep testing.
+
+> ---
+>  drivers/base/bus.c         | 43 ++++++++++++++++++++++++++-
+>  drivers/base/core.c        |  2 ++
+>  drivers/base/dd.c          | 60 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/device.h     | 54 ++++++++++++++++++++++++++++++++++
+>  include/linux/device/bus.h |  4 +++
+>  5 files changed, 162 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+> index bb61d8adbab1..c734e7162b74 100644
+> --- a/drivers/base/bus.c
+> +++ b/drivers/base/bus.c
+> @@ -504,6 +504,36 @@ int bus_for_each_drv(const struct bus_type *bus, str=
+uct device_driver *start,
+>  }
+>  EXPORT_SYMBOL_GPL(bus_for_each_drv);
+>
+> +static ssize_t driver_override_store(struct device *dev,
+> +                                    struct device_attribute *attr,
+> +                                    const char *buf, size_t count)
+> +{
+> +       int ret;
+> +
+> +       ret =3D __device_set_driver_override(dev, buf, count);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return count;
+> +}
+> +
+> +static ssize_t driver_override_show(struct device *dev,
+> +                                   struct device_attribute *attr, char *=
+buf)
+> +{
+> +       guard(spinlock)(&dev->driver_override.lock);
+> +       return sysfs_emit(buf, "%s\n", dev->driver_override.name);
+> +}
+> +static DEVICE_ATTR_RW(driver_override);
+> +
+> +static struct attribute *driver_override_dev_attrs[] =3D {
+> +       &dev_attr_driver_override.attr,
+> +       NULL,
+> +};
+> +
+> +static const struct attribute_group driver_override_dev_group =3D {
+> +       .attrs =3D driver_override_dev_attrs,
+> +};
+> +
+>  /**
+>   * bus_add_device - add device to bus
+>   * @dev: device being added
+> @@ -537,9 +567,15 @@ int bus_add_device(struct device *dev)
+>         if (error)
+>                 goto out_put;
+>
+> +       if (sp->bus->driver_override) {
+> +               error =3D device_add_group(dev, &driver_override_dev_grou=
+p);
+> +               if (error)
+> +                       goto out_groups;
+> +       }
+> +
+>         error =3D sysfs_create_link(&sp->devices_kset->kobj, &dev->kobj, =
+dev_name(dev));
+>         if (error)
+> -               goto out_groups;
+> +               goto out_override;
+>
+>         error =3D sysfs_create_link(&dev->kobj, &sp->subsys.kobj, "subsys=
+tem");
+>         if (error)
+> @@ -550,6 +586,9 @@ int bus_add_device(struct device *dev)
+>
+>  out_subsys:
+>         sysfs_remove_link(&sp->devices_kset->kobj, dev_name(dev));
+> +out_override:
+> +       if (dev->bus->driver_override)
+> +               device_remove_group(dev, &driver_override_dev_group);
+>  out_groups:
+>         device_remove_groups(dev, sp->bus->dev_groups);
+>  out_put:
+> @@ -607,6 +646,8 @@ void bus_remove_device(struct device *dev)
+>
+>         sysfs_remove_link(&dev->kobj, "subsystem");
+>         sysfs_remove_link(&sp->devices_kset->kobj, dev_name(dev));
+> +       if (dev->bus->driver_override)
+> +               device_remove_group(dev, &driver_override_dev_group);
+>         device_remove_groups(dev, dev->bus->dev_groups);
+>         if (klist_node_attached(&dev->p->knode_bus))
+>                 klist_del(&dev->p->knode_bus);
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 791f9e444df8..09b98f02f559 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2556,6 +2556,7 @@ static void device_release(struct kobject *kobj)
+>         devres_release_all(dev);
+>
+>         kfree(dev->dma_range_map);
+> +       kfree(dev->driver_override.name);
+>
+>         if (dev->release)
+>                 dev->release(dev);
+> @@ -3159,6 +3160,7 @@ void device_initialize(struct device *dev)
+>         kobject_init(&dev->kobj, &device_ktype);
+>         INIT_LIST_HEAD(&dev->dma_pools);
+>         mutex_init(&dev->mutex);
+> +       spin_lock_init(&dev->driver_override.lock);
+>         lockdep_set_novalidate_class(&dev->mutex);
+>         spin_lock_init(&dev->devres_lock);
+>         INIT_LIST_HEAD(&dev->devres_head);
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 0354f209529c..697e36e63cab 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -381,6 +381,66 @@ static void __exit deferred_probe_exit(void)
+>  }
+>  __exitcall(deferred_probe_exit);
+>
+> +int __device_set_driver_override(struct device *dev, const char *s, size=
+_t len)
+> +{
+> +       const char *new, *old;
+> +       char *cp;
+> +
+> +       if (!s)
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * The stored value will be used in sysfs show callback (sysfs_em=
+it()),
+> +        * which has a length limit of PAGE_SIZE and adds a trailing newl=
+ine.
+> +        * Thus we can store one character less to avoid truncation durin=
+g sysfs
+> +        * show.
+> +        */
+> +       if (len >=3D (PAGE_SIZE - 1))
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * Compute the real length of the string in case userspace sends =
+us a
+> +        * bunch of \0 characters like python likes to do.
+> +        */
+> +       len =3D strlen(s);
+> +
+> +       if (!len) {
+> +               /* Empty string passed - clear override */
+> +               spin_lock(&dev->driver_override.lock);
+> +               old =3D dev->driver_override.name;
+> +               dev->driver_override.name =3D NULL;
+> +               spin_unlock(&dev->driver_override.lock);
+> +               kfree(old);
+> +
+> +               return 0;
+> +       }
+> +
+> +       cp =3D strnchr(s, len, '\n');
+> +       if (cp)
+> +               len =3D cp - s;
+> +
+> +       new =3D kstrndup(s, len, GFP_KERNEL);
+> +       if (!new)
+> +               return -ENOMEM;
+> +
+> +       spin_lock(&dev->driver_override.lock);
+> +       old =3D dev->driver_override.name;
+> +       if (cp !=3D s) {
+> +               dev->driver_override.name =3D new;
+> +               spin_unlock(&dev->driver_override.lock);
+> +       } else {
+> +               /* "\n" passed - clear override */
+> +               dev->driver_override.name =3D NULL;
+> +               spin_unlock(&dev->driver_override.lock);
+> +
+> +               kfree(new);
+> +       }
+> +       kfree(old);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(__device_set_driver_override);
+> +
+>  /**
+>   * device_is_bound() - Check if device is bound to a driver
+>   * @dev: device to check
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 0be95294b6e6..e65d564f01cd 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -483,6 +483,8 @@ struct device_physical_location {
+>   *             on.  This shrinks the "Board Support Packages" (BSPs) and
+>   *             minimizes board-specific #ifdefs in drivers.
+>   * @driver_data: Private pointer for driver specific info.
+> + * @driver_override: Driver name to force a match.  Do not touch directl=
+y; use
+> + *                  device_set_driver_override() instead.
+>   * @links:     Links to suppliers and consumers of this device.
+>   * @power:     For device power management.
+>   *             See Documentation/driver-api/pm/devices.rst for details.
+> @@ -576,6 +578,10 @@ struct device {
+>                                            core doesn't touch it */
+>         void            *driver_data;   /* Driver data, set and get with
+>                                            dev_set_drvdata/dev_get_drvdat=
+a */
+> +       struct {
+> +               const char      *name;
+> +               spinlock_t      lock;
+> +       } driver_override;
+>         struct mutex            mutex;  /* mutex to synchronize calls to
+>                                          * its driver.
+>                                          */
+> @@ -701,6 +707,54 @@ struct device_link {
+>
+>  #define kobj_to_dev(__kobj)    container_of_const(__kobj, struct device,=
+ kobj)
+>
+> +int __device_set_driver_override(struct device *dev, const char *s, size=
+_t len);
+> +
+> +/**
+> + * device_set_driver_override() - Helper to set or clear driver override=
+.
+> + * @dev: Device to change
+> + * @s: NUL-terminated string, new driver name to force a match, pass emp=
+ty
+> + *     string to clear it ("" or "\n", where the latter is only for sysf=
+s
+> + *     interface).
+> + *
+> + * Helper to set or clear driver override of a device.
+> + *
+> + * Returns: 0 on success or a negative error code on failure.
+> + */
+> +static inline int device_set_driver_override(struct device *dev, const c=
+har *s)
+> +{
+> +       return __device_set_driver_override(dev, s, s ? strlen(s) : 0);
+> +}
+> +
+> +/**
+> + * device_has_driver_override() - Check if a driver override has been se=
+t.
+> + * @dev: device to check
+> + *
+> + * Returns true if a driver override has been set for this device.
+> + */
+> +static inline bool device_has_driver_override(struct device *dev)
+> +{
+> +       guard(spinlock)(&dev->driver_override.lock);
+> +       return !!dev->driver_override.name;
+> +}
+> +
+> +/**
+> + * device_match_driver_override() - Match a driver against the device's =
+driver_override.
+> + * @dev: device to check
+> + * @drv: driver to match against
+> + *
+> + * Returns > 0 if a driver override is set and matches the given driver,=
+ 0 if a
+> + * driver override is set but does not match, or < 0 if a driver overrid=
+e is not
+> + * set at all.
+> + */
+> +static inline int device_match_driver_override(struct device *dev,
+> +                                              const struct device_driver=
+ *drv)
+> +{
+> +       guard(spinlock)(&dev->driver_override.lock);
+> +       if (dev->driver_override.name)
+> +               return !strcmp(dev->driver_override.name, drv->name);
+> +       return -1;
+> +}
+> +
+>  /**
+>   * device_iommu_mapped - Returns true when the device DMA is translated
+>   *                      by an IOMMU
+> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> index 99c3c83ea520..cda597812324 100644
+> --- a/include/linux/device/bus.h
+> +++ b/include/linux/device/bus.h
+> @@ -63,6 +63,9 @@ struct fwnode_handle;
+>   *                     this bus.
+>   * @pm:                Power management operations of this bus, callback=
+ the specific
+>   *             device driver's pm-ops.
+> + * @driver_override:   Set to true if this bus supports the driver_overr=
+ide
+> + *                     mechanism, which allows userspace to force a spec=
+ific
+> + *                     driver to bind to a device via a sysfs attribute.
+>   * @need_parent_lock:  When probing or removing a device on this bus, th=
+e
+>   *                     device core should lock the device's parent.
+>   *
+> @@ -104,6 +107,7 @@ struct bus_type {
+>
+>         const struct dev_pm_ops *pm;
+>
+> +       bool driver_override;
+>         bool need_parent_lock;
+>  };
+>
+> --
+> 2.53.0
+>
