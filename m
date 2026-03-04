@@ -1,140 +1,104 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED773A6F0A
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 12:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846C03C2796;
+	Wed,  4 Mar 2026 17:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772626785; cv=none; b=ccp1Fz9SnBvsKTWioPKbPo85/9XNlupJtX7F8zSgAeVhogIyF899KAxaJNhMYehz/BUSMbda3cBT+WrOf1goZsj8PAzLDKpf+rD1sJUcD/WXkMXFziz/64eUMunHxgj/+xQ66UPwySbABeUf4kBzGffGP0F8NZvamn82PuBXTyQ=
+	t=1772645722; cv=none; b=QBvN4aZSi8lBnDNKGAnHGMdR7OmD2clz4+49CPJfb2jB0wTRn8HQgFYR7yovOSdiuEf4u9zwCE+3dWx1mzn+Rb+tag6/mO4BUJ4Bkv+eXuxlw/CuRj6ZlR29PZTTygZqCvQVKIwLkWZH/n7lpVGx2nTrCQro8GdaSrP974lg2bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772626785; c=relaxed/simple;
-	bh=8jaB9xhr+C3taJqbbWa5n/w0SjBdD0Ab/HQmNKTmf5w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DX6b6OcXbr9LnVGWDJGouT+DlCMDB+O6nH499FQMrk5dh63jlNpAUh4iJTjhd98cmsG5ytp9fqkXyP+nur//F9Eh/CfVx8a50WZcHjz7qoXvYCtN6dsZ/YahSulGtP4ysFNuimmV/H1ucFwOj40NRMuVPQ8cUk2RhQqZtq1Nxbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPGS7qcY; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772645722; c=relaxed/simple;
+	bh=G9vyc/ilKI+19PmiBHaHsKJ89Xu7vIMfI3QiSI5VErY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qrh2JJAaZezbUVr81myQ6njNg/NWr4lbFIZQ5mE/jpl2cawZ89z/lIp8IgcYT/o9qGWFwPulL1RlMkmZ7Rtp7OI9vaZoO5cQMGlhNDQegsD4cwGIbEzhKmIhtBPbJDbjL0sDL9lyC35acKySSr9CEwL80frdEgqF1koGN0w3Dtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p3gRyRbA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPGS7qcY"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-439b790af67so1934079f8f.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 04:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772626782; x=1773231582; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FrV9cbgp4wuO7j5QZsaUWjFR+kDOuc1YVBeslenYsE8=;
-        b=mPGS7qcYgizPq0GUZEFxBiiZXF7J3p+av3wLK1Y+kbcw9Zz4Hi0XPDjE3MnudZb42x
-         5MYVxuHHhzpxS2V1aHm8eI+I+0Tf5qIbElxaYYqDPw6Ax73zRmJwkyr+Nysi17c3Rppk
-         z3its7D8ypyaT2gg7RKuZ41epVo8umsilAbjwI+JvMbz8QZq14KK19EBTMSgtt/4ZcgC
-         RYnH2xIRZK5G2+Nmim/vXEx9EZPOcuBR9n/t2usMiuG9OyopEW+fTr9+MOhZbKj7JXvF
-         B6GNfEdf4hIXoIOf9zT71etn5a5IE6Km6u7TwlZNblgB6hj/NClk9fd81to/W49WEJLt
-         H5aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772626782; x=1773231582;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FrV9cbgp4wuO7j5QZsaUWjFR+kDOuc1YVBeslenYsE8=;
-        b=sGEihm8L4JczLLrFAzz5o9uQtjvZ4pOQEFZk6PBJOFhxB3XWvw3x0BQU2flboW+/IJ
-         wWqluhuhzi+ChqkjGX9pVPxdLlFN8tYK3xdu8Sf4M+/zlsFeygqR7Ch1XHZ1ViPEGJ0e
-         UIXt397msiExsIqEx7eSqbtYvmS3fixV8idcmkkVZuqC4+Dbjg9JDT7ZTNBOxlHAnGCo
-         tEyTlNjehxTn4SD674A7ScHuYdtpMkAuQD7GBi2lDh1SXSxIFkYYnyFxUU6txfHWYm8r
-         LMbx8x0k+5wbXfwIWw9BKNCA3u+OqLcF5e1XsUaZcfIz72RCzthpgWAHlsrnEMHjRMtt
-         L0hw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzqdUXZ0x8Jjj3YNLlIQJgUap5al5bBylwisqlP0Y0H9+1AU5cQY3+JBs7mLibuNjb3Y+XlQOlW++few==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQP3pourIBgxCkMG0c1zKNo8bzUBqkqYAYMkTosPxHB+yV6QVx
-	zRon0j5HBSB4r5fphIfSH/THDnnGuwdkjDcqqycpqRDSiDW5ruFJs7cH
-X-Gm-Gg: ATEYQzwKheDLEktFDQLEBupVm1yvfb3zSV69KUzCXcEhx26/e3XuxTuLnZU18WMu1eV
-	ThctLizbyrS34Q19yZ8gT59H/lme0+UQqnX6+ltCdxAH40cYnGv+asm4ZNqgK9m7E10yFjm/Cir
-	5nkZhQFV0s/3ZeG2UfIi1eDCpfOKuY/SlOXVbJBKdENb9oPtYOwGwJgqhHYsaUWNfmEJjWOS19W
-	W4Bj0Ve7r/LQh/7owlHE0lwybumXsphUzAvR6SRFm3EzGNjrlIOeLlHjcReR8ZmrXh7JgI4JtE7
-	46VrettZdaK/ew1yGuX+uykGs/JUODB567hjPdrwDa+apSL0Y80oVeKay8dyund9Z7hqcZ9rnjm
-	JyVXmi6iBZfi61x/YJ1JHTxhYs+HOcidl3IPOaYYWYbDNaMVAAOg0ALZnOhqIQt9o0J7gOXAed9
-	hCX3BLfgORjDY5Ow4P8i4bEvH2XOBuwiI=
-X-Received: by 2002:a05:6000:2912:b0:439:b9e8:635f with SMTP id ffacd0b85a97d-439c8a9f004mr3065699f8f.21.1772626781522;
-        Wed, 04 Mar 2026 04:19:41 -0800 (PST)
-Received: from [192.168.1.187] ([148.63.225.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b3cc2e65sm27010827f8f.2.2026.03.04.04.19.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 04:19:41 -0800 (PST)
-Message-ID: <f3fa4c490a61c4544fa93682f3dd18e0f98b8473.camel@gmail.com>
-Subject: Re: [PATCH v6 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
- Controller
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: kernel test robot <lkp@intel.com>, Nuno =?ISO-8859-1?Q?S=E1?= via B4
- Relay <devnull+nuno.sa.analog.com@kernel.org>, linux-gpio@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>,  Jonathan Corbet	 <corbet@lwn.net>, Linus
- Walleij <linusw@kernel.org>, Bartosz Golaszewski	 <brgl@kernel.org>
-Date: Wed, 04 Mar 2026 12:20:25 +0000
-In-Reply-To: <202603041109.HFnPWnj8-lkp@intel.com>
-References: <20260303-ltc4283-support-v6-2-efe11502fad2@analog.com>
-	 <202603041109.HFnPWnj8-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p3gRyRbA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829B1C4CEF7;
+	Wed,  4 Mar 2026 17:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772645722;
+	bh=G9vyc/ilKI+19PmiBHaHsKJ89Xu7vIMfI3QiSI5VErY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=p3gRyRbAmt88QYW+qJdvWj5qtD8qosiS8iWmV/39WnJFzuC4DFAe3Tyh3mY5h74qn
+	 7FInoYzEWeFQ7CY8OwV54MEwdqBRVWYnNQjTVdnKRUwBSziNDWA8ecqaRvzzK/Ff90
+	 NfHNcwk1I3PM4D715Ch9BaVnphe1VPolSNNw/U/tzszjymiQfwM4YNdTcdbZC7y810
+	 7RYshqucnV1ca7eqd5+alsDV7oBEf6j/gB6X5uQ0hYuTexFE8Xvio9sCPsXsInNbYo
+	 9ZA6X79vEceTQn8vjICVOHvGoStAFiT1AZGx6edtfTQ2DKM/24xYE+6Yy8QIDT5o5s
+	 kOKClwu9c5Q9w==
+Message-ID: <f00b1812-a27f-49db-9277-6697af098248@kernel.org>
+Date: Wed, 4 Mar 2026 09:35:19 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 02/14] arc: axs10x: drop unneeded dependency on OF_GPIO
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
+ Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+ linux-pm@vger.kernel.org
+References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
+ <20260304-gpio-of-kconfig-v1-2-d597916e79e7@oss.qualcomm.com>
+From: Vineet Gupta <vgupta@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20260304-gpio-of-kconfig-v1-2-d597916e79e7@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2026-03-04 at 12:05 +0100, kernel test robot wrote:
-> Hi Nuno,
->=20
-> kernel test robot noticed the following build warnings:
->=20
-> [auto build test WARNING on 78558965440b27814592ec82d8f3668395953b1b]
->=20
-> url:=C2=A0=C2=A0=C2=A0
-> https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-bin=
-dings-hwmon-Document-the-LTC4283-Swap-Controller/20260304-010255
-> base:=C2=A0=C2=A0 78558965440b27814592ec82d8f3668395953b1b
-> patch link:=C2=A0=C2=A0=C2=A0 https://lore.kernel.org/r/20260303-ltc4283-=
-support-v6-2-efe11502fad2%40analog.com
-> patch subject: [PATCH v6 2/3] hwmon: ltc4283: Add support for the LTC4283=
- Swap Controller
-> compiler: clang version 20.1.8
-> (https://github.com/llvm/llvm-project=C2=A087f0227cb60147a26a1eeb4fb06e3b=
-505e9c7261)
-> docutils: docutils (Docutils 0.21.2, Python 3.13.5, on linux)
-> reproduce:
-> (https://download.01.org/0day-ci/archive/20260304/202603041109.HFnPWnj8-l=
-kp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202603041109.HFnPWnj8-lkp=
-@intel.com/
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> =C2=A0=C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [docutils]
-> > > Documentation/hwmon/ltc4283.rst:258: WARNING: Blank line required aft=
-er table. [docutils]
-> =C2=A0=C2=A0 Documentation/mm/memfd_preservation:7: ./mm/memfd_luo.c:13: =
-ERROR: Unexpected section title.
->=20
->=20
-> vim +258 Documentation/hwmon/ltc4283.rst
->=20
-> =C2=A0=C2=A0 256=09
-> =C2=A0=C2=A0 257	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D		=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =C2=A0> 258	power1_failed_fault_log		Set to 1 by a power1 fault occurring=
-.
 
-Arggh, will wait for more feedback before spinning a new version.
 
-- Nuno S=C3=A1
+On 3/4/26 1:02 AM, Bartosz Golaszewski wrote:
+> OF_GPIO is automatically enabled on all OF systems. There's no need to
+> select it explicitly.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> ---
+>  arch/arc/plat-axs10x/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/arc/plat-axs10x/Kconfig b/arch/arc/plat-axs10x/Kconfig
+> index b9652c69d1b90e506f82b3b8c5be373c51246671..40f2a74d404ad9759ab9d6764c2496159eea045a 100644
+> --- a/arch/arc/plat-axs10x/Kconfig
+> +++ b/arch/arc/plat-axs10x/Kconfig
+> @@ -7,7 +7,6 @@ menuconfig ARC_PLAT_AXS10X
+>  	bool "Synopsys ARC AXS10x Software Development Platforms"
+>  	select DW_APB_ICTL
+>  	select GPIO_DWAPB
+> -	select OF_GPIO
+>  	select HAVE_PCI
+>  	select GENERIC_IRQ_CHIP
+>  	select GPIOLIB
+
+Acked-by: Vineet Gupta <vgupta@kernel.org>
+
+Thx and apologies for the delay in getting to it.
+
+Cheers,
+-Vineet
