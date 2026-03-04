@@ -1,187 +1,227 @@
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010017.outbound.protection.outlook.com [52.101.85.17])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744AF2E2DF3;
-	Wed,  4 Mar 2026 08:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772612141; cv=fail; b=J1MF/9pH7yheMtom3ThLQR6vjF9rBPzIS6YKlWrdgB6ZrOnl4LY4b3dnfWVUTFDcIzGOvRs3ejJz4dylNoTpX+4PNasArs2fAxdKIp38D1yX6HBHEwlftYEUb0efAU6MTFdesPNfOFA3QQGgVw1Gt1+Bdoy3scg+rzTfE6cRa6U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772612141; c=relaxed/simple;
-	bh=y61it8vyPqc0EnkuwzQvimMaMRIeE8Wxb0gQ0HFMqWY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=hIhkN9r7wsa5YYv0kaYLmiDtuVMQqFmgsgw/iYoMNOfM/89poF1I0ZipFMinwPdFBI8wbG2bFwGhxXjxFRy4wZN/lKNlIjl614CKe5cjN5IU/rX+5fR3vRvS8/S0aSxvHe/zPYrLRdwa8HhXTzhBRdysZTKBj+ldxpvDZctBp3w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MXiUXpv3; arc=fail smtp.client-ip=52.101.85.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78AB34F48F
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 09:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772614974; cv=none; b=T9OIZBMPZyZ6SFnC47OERLJkbJxVhZqVigU+j9li6iw6QE8d8YiokmxkMcb07tuI841eWOX5BsGSujzgUN04wzOVokImSFZ500IZFkMrrxJ4X/A37cQFKSVhJO2uj8TfQJuGt7wId5OG0kiFsReYuk5BGDRp8nL3MTUKURgnZk4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772614974; c=relaxed/simple;
+	bh=vzKg2CmRZRz9tDx8jerfN1FNHIadNDJlHWQvRijQXa4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=G6VnVzvvWyB0xlvJBjd9ksHEJrtcV8gKVgJa3QmHxhywYhEu12r+ZPak4ntkLPt5h+V/M7df3M+dgD0J8jA1uYGTFw30Y8KMkjZWsBgqAgPe7OJVV+ddQWPCxcYirD2SBcq+4mcafYJT4PnLaNo7M7VmKL/kIJaw4gksbV1YoTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=P11c3pKE; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=MowoujlV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MXiUXpv3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p6esLdXaNx368VQLzU/yc9exuFhjlOLptvessPmiMJGVU8vQWU3cHqzJHsSrihQOlE+dhcOy/wfJ9eqdl61G2NASPRH24vzPTojuu4khlgrCf/DvB65a1ZE5NPiwXkzSYdc14rtMlS42vRYtoNvpNlLcbIIf7fLr2CczNHWxVKGqOuV5NLCkkyY7v0+2e2ircyif1rkF8JeZny+uvT9lDUG/jLZzZG8Vt9P2oRmeh1bqaToxOy6HPYlFndayEohQRYK7nnOCw1ivEL7j8bZzoniJhPSdE4h6/v6m67Yr5fF1KaTmNtzX8M79r6RVA/4fqY0WOCrfUQXs2Bx6PJ8sUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y61it8vyPqc0EnkuwzQvimMaMRIeE8Wxb0gQ0HFMqWY=;
- b=vIRXy1pRQuvTYLUKu99C21ySPxklzPAGTlLuDqazIjrHhWrHbQSCWi6AUycRrEymwFwkt1pbptIDbpCyPrnXLuy3W+lTAEtrFCmgFRVJOyAHlaJz66w5FbqUnfsDXKQyIUi9+ulPzwZEnQpGpk7QXxBBGddTsyhQ7hIa1AH354tDTdofMVhs9ufFL+glfAV77gisHrB7J++5HgF+SEXpdci4BhqTf/OW86FaPKzOkj253RlxchxlOTLeQkpf/tvuTPhDOvYjeRPkFXLxIUnIGMCK81zAEZVnLIvt6tSIyZDsf3NYiLTuJ4Sgl3Eqb83vR2MxfxLOO/6Sor8rKZJ7bA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y61it8vyPqc0EnkuwzQvimMaMRIeE8Wxb0gQ0HFMqWY=;
- b=MXiUXpv3Z3/eAg7bsVp/JPTDdW8MQDSK5/kCq2G+df/y+NDR6Lu2/08BfiAw0DpJXqu0k4YtHxpd+xxcrpVsEVORbsY5UwjL7RQyth3AJ8v4farTwIrpZhP7LFGW5Ozp4s/wm0wCBgAe6u/pYMmk/2F1ellMYe3QAhRmo6QT95RM1gVtZQTLuvl+EezU13Q3EdsUqAfgJfCyJsfrmwYYIP2nkhAkJKi2suqIRUUor6CIki7eJKelfrh5akJTmqQkW2BMSEV5Ffhdec/QIte/tZoGCWTZrXEoNc0E22q6FW9GWGtKQJ0+XD4P+MWqZEJJ1Z4IXIBNEMdYYk/HJk5UHA==
-Received: from SN7PR11MB7511.namprd11.prod.outlook.com (2603:10b6:806:347::17)
- by LV1PR11MB8849.namprd11.prod.outlook.com (2603:10b6:408:2b3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.17; Wed, 4 Mar
- 2026 08:15:33 +0000
-Received: from SN7PR11MB7511.namprd11.prod.outlook.com
- ([fe80::b0d5:a33a:26fd:3fa0]) by SN7PR11MB7511.namprd11.prod.outlook.com
- ([fe80::b0d5:a33a:26fd:3fa0%6]) with mapi id 15.20.9654.022; Wed, 4 Mar 2026
- 08:15:33 +0000
-From: <Victor.Duicu@microchip.com>
-To: <krzk@kernel.org>
-CC: <corbet@lwn.net>, <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <robh@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <krzk+dt@kernel.org>,
-	<linux-doc@vger.kernel.org>, <conor+dt@kernel.org>,
-	<Marius.Cristea@microchip.com>
-Subject: Re: [PATCH v10 1/2] dt-bindings: hwmon: add support for MCP998X
-Thread-Topic: [PATCH v10 1/2] dt-bindings: hwmon: add support for MCP998X
-Thread-Index:
- AQHcoBa9pxaxrTCHNUam0PksYnBYNrWHUwkAgARfnYCAAYuegIAC61YAgAADx4CADfCVAA==
-Date: Wed, 4 Mar 2026 08:15:33 +0000
-Message-ID: <77012a7d3ac4b7a6b66322fb84fa1adc42f1ff7f.camel@microchip.com>
-References: <20260217-add-mcp9982-hwmon-v10-0-5e0aaae6f289@microchip.com>
-	 <20260217-add-mcp9982-hwmon-v10-1-5e0aaae6f289@microchip.com>
-	 <20260217-sincere-spotted-lionfish-d7abca@quoll>
-	 <9a39d9f1d97eea245dd194a2db481297b92c6fbf.camel@microchip.com>
-	 <4a84d57c-ede6-4038-9883-42aeafce2687@kernel.org>
-	 <e32684ab5fd4e86ad61d2ca0e4f219fa29bd26fc.camel@microchip.com>
-	 <17f4acc7-28ff-4325-b628-cf8d9307754e@kernel.org>
-In-Reply-To: <17f4acc7-28ff-4325-b628-cf8d9307754e@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN7PR11MB7511:EE_|LV1PR11MB8849:EE_
-x-ms-office365-filtering-correlation-id: 91a98c10-b28a-402d-b422-08de79c63505
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- S+0tLxjWfCzpMZ1kmxAbQe5qN2PRC5kiYg9WphoWcyNo2T1/qHqTw77AhyZaISo3n3HGSY9GLx/Nzxg3qKamEQ9EYT8EZrLVy+Wv2kLcMxb3cNlJdonNcmvty3ai3j8TqDK/V8Pyz4CoPNGaxiR9JieZo92tHqx8mwV3HcwrDxkVhasbXXKVTXNka8XhCvVLeunao+gXQDUKRaa26WvsxUvYIe5exV+Rhl0LbD01AGlBD+xwxMIwZE2pkrsMgKhohfXNgtbc8r2ttxeUzKNrzh7BLQsKf8u6lbp/4jaFEt3KoGlhQZDvXV5Ejj9zDm97H/7jmkBQFQwd+8Q2mrc0fW75kAI7IWG7AtSJsjUuUbjKVXK44iYN03cZ3v8BVnR/VnizQapDiV+DcbSW/eJu3nh3qbdzdR071XNLXOAelRc1HDUEDFmqE4CwnEZ7qaJM9HKj7kJTSixWu/ykt7FSPOEk8Z0tkhLYn/QlaDuHn2f2KUlJ+2JA9q9vmZMOtDEw6OCz7EbwNRKOv/GjzUg2+hBu7MAtchWMZYWQWlxphgMtaQVc0KmHiMDKzz6bB0EcE7oszvJfOcY41M00pwDCbks2lKqAD/sxgkAfABFsozL/vxkfwsLWEsHFXhn8XR6/qyr5m0QuNNYNDEHjtVddIvQ0dzZ7fTTDrk3MbT+Yz4FBu8YsqnoH03eQ4xdFKhllVYZ5x6iKDryW0mrpwnFEnNJMT8jktYLgmoiOReh5ZcS/R9zYPZmGc9x0PQLaln6heTK0TMhg0B8t/xfOIJD4/Kjw2IQ1EwhDudDBfV5yOck=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7511.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?OHorZ1RySTJCOUZ0a2k1RklBYmVQd1A0Z05GdmQ1NFJwT1ZtNzRETnVXd1hq?=
- =?utf-8?B?RjZ3cXlTdys2NUkrUDJUNkhpV0h5SDlqQk5HZ3JlM3NlcXNzT2J6QVBobkpN?=
- =?utf-8?B?Z21UYmZJM3czTVpYOU9wNzI0dHZBcVNCOWVjdGVFbHJDMDVjWE4zRjJIdzJv?=
- =?utf-8?B?cWdBSkQyQkhoSHRuQ2V5aytoNkQ0Q0xRSVpjQjFUQ2x3Nkhld2h3RjdPSlVT?=
- =?utf-8?B?aVQ3RzFDdldyaWJta01sRlUvbHBBN1c1VjhBazJqeFc0dit6QU55K3ZWemhs?=
- =?utf-8?B?ajQ5VHhUZFN0NlpaQ1J4WkQ1TEhWWkQvamw2dTdKUkIycDRrb2JlQnFRSXBk?=
- =?utf-8?B?WmhZV0N1S3JwcWowSVViTHpqbFZKa29PWE5EQ21rTHI5MmRkeEhGOHhramZN?=
- =?utf-8?B?dEgyUG45OHZTMkVOUWVDY3B4bVkydXNSWVhlckxXNXpFQ3BmbXNwZEczNWJX?=
- =?utf-8?B?bXFZVTJBdkNNYTJsdk1lc1g0NzI4K214c1dmWXZrUXl5bXlIUWo4dlExMVZu?=
- =?utf-8?B?UFhXbWhoRUtUMHNYbXJYYWllenBTZXVrMnl2UUJCL3lMOVFjaHo2cmYvcXhk?=
- =?utf-8?B?RHBTekI3Qzd5eENWTitBOFFxM3FIWTFPbDUrNXQ0UU0xcnR5QVo5QW02K2xF?=
- =?utf-8?B?WWJHWFVvZTRnT1lpODEwOHZZejJmZ055MU8rbnJ3aWdCRGVrYk03ZXo0RkxQ?=
- =?utf-8?B?SEZaVGd4cFE0RVE5anR0cjBwSjAreHM4QXN0c29zUXRha2xmODk4YzhWeU9T?=
- =?utf-8?B?V1E5R0xUV0t2bnI4U0U1NmxoaEFpcnpURHJlbHFEOEkwYzJJN2NjWDFBVFQ0?=
- =?utf-8?B?MDRjZUxTYmhwWWNiditla0diNkFzUXV2VVI3ZkpKandZRFY0MEU2ckx0QXdD?=
- =?utf-8?B?OHAyYWQwUDRlRVRLcW5wQ3NyNWVyVmV5RWpYcFRWdG1sSXZiQ3FRL2M1RzFG?=
- =?utf-8?B?dVJEQkV5dDRNSi9oSjZQTlY5U3h2UGxSWkx3NXQ5T2xPdSs3VkYzZkxTZHJF?=
- =?utf-8?B?MUxCcE9QTGU4R2JhaW54dCtONGpFc0dwOThWUXZXTjdQcld5bGpkZGhVSldu?=
- =?utf-8?B?SWU3cjd1dHgzY3duNjJsZUJQQk9iQUtpRys4Q29NZ1c5WTFKU1ZPMGY5SEhB?=
- =?utf-8?B?eFp3KzFBU1BPK3VScGRmKzhubFp5L2EzdkVDaG42QTBmck1MTXJKQ1IrQVdL?=
- =?utf-8?B?M3hvYmZtaFhiZTZrUDB5K2V4SkNncENWS3l4eTVxbmZvZ1ZsTUxVeXdybFMr?=
- =?utf-8?B?TStxaTZIdyt1V2VsR3pObWhma3hCN3c4ZmwyVFJxakhsbE11a0R3WXorazFs?=
- =?utf-8?B?T0xQaDdQWjVXZFJJMG1BZG5heEM4aXNxN1ViMlorOUNtZWRFZmlIZG1aL042?=
- =?utf-8?B?cnNjV2tEZ2M2T1RQSERWeTNXUlk0VEZJc05HZXUrRGJXejgzUTVoTzdWUk1D?=
- =?utf-8?B?RE1kVTkzeitIdUZDS1pCNDBPYk5HR1ZrR1R0dUxud2dXVTJwcUZJSG93YVlZ?=
- =?utf-8?B?cWhwM2dZN3lpZVRmQmRIYmlWZ2pTUFV2T1RmVi9BSU5pMXBDWlR2NkI4YkNs?=
- =?utf-8?B?SjhEWUVwRGw0NTZVUi9wbmlwTWswL0xnR2M2elE2ZVhNMmNMRE9iNDVaeHVn?=
- =?utf-8?B?Mkd5dGpqQWovNVJmU1hCMHdLcnlSWFNISHN4ZUFVZ1l6TVVKY2hzRHJuN1JI?=
- =?utf-8?B?SCtESFh6aUc5UFNKYmJOcVFkbDFrQ1pydy9QZ2dISGFIMkU4QkM1V3ZpOHBP?=
- =?utf-8?B?bVlDSGFkWG1vdmJGWHNna1c0OGd4amZ0aVdsOCtaMEJCVnVBM09YWE15dlNh?=
- =?utf-8?B?eXRzT2xESHZqc2FkOTNYa1lGV2ZGY1RyMzRZbnBwVk41OXE1MmdTMTJvK2xk?=
- =?utf-8?B?TlVERkxHcmxjSDUvSjN2ZXVZaVlQWFJ0bFR1VmxqRVYvZWsvZDljeDZFODlV?=
- =?utf-8?B?VkkzSWVBdjdrY3FRK0ZPb2NUUTZkL2JhOXRiYmlTT0FxM3YvRGxMUzc4eTNJ?=
- =?utf-8?B?N3BhdmFOOHRRaHE0ZGRsaXBoM1oxbmNGTi92NVZOdG9keGFLaFdNdDIrOVE1?=
- =?utf-8?B?WGVWcWU1Qk5YMDYrUUg3RmpzZkJFK09CY3dzeWw3aDRjK0RSQTRMcUJxdzlV?=
- =?utf-8?B?OXBxRmRZNUZ3MWtqWlV6U3ZQMnlFd0NGdmZ4WElPL2VteTJQRVJxUDFmMmg5?=
- =?utf-8?B?c1NOOUw5azZQL2hLVjR1Y0RaMEY0YlptVGxCSitjM3dxRzhBZHpiY0NaMlNT?=
- =?utf-8?B?U1hpaUlzeU1wUE5NdW94dmpmTE1ocW5KS1kvYmZoU2hhQ2xIYVN4bWg4RVZa?=
- =?utf-8?B?bzhMendFMlNpYUkwZ08zeVlsOHFHc040S2hOYVphTmpWVDR6NVZjbUZIbmpt?=
- =?utf-8?Q?0auihkEJjHKodFWQ=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D1C5ED7D22251D479F3AF6FBD99838B8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="P11c3pKE";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="MowoujlV"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6245SRfF2275140
+	for <linux-hwmon@vger.kernel.org>; Wed, 4 Mar 2026 09:02:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=oemXeHFiAD8fwC6Dvlocm0
+	aqSqueWx/Mi2JGUCBaDkQ=; b=P11c3pKEW59ZBshwgxJxorRIb/Cvzay+2NGICC
+	TUIUByAaAlcJ4kZ2u+UQRh4xlir4oUZ+Q4bGcQlsbPpUNxvswgzYkQGeGnf14P6Z
+	cQyRSBvUq28fC5gx6GVvkfsI0fZSqw/uzBYgsGj4SDJoTSWaerzUDMO3bOVZa+GO
+	WHl188CFGvZ1icutpN8PmB1fhnMHjGSISUiSpwMVEYdAcjiiBfAlQiuod4toeHcj
+	O0r8mK1uDg9SCCe2nZPDDCy7UP7vKNiEqXPDGeazBlvFXHErYyAGTVHX6OMBYVqK
+	snkDYFGNPNyWf9q16AhJCZHo6WGOQbvwCO3SUEWD6ILYkaaw==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cpc4ms5vs-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 09:02:51 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cb3d11b913so4158385985a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 01:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1772614971; x=1773219771; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oemXeHFiAD8fwC6Dvlocm0aqSqueWx/Mi2JGUCBaDkQ=;
+        b=MowoujlV1gyg3zhOB5PPghswHIK5rZoR0GqX2KF145OEj3cJan+U5t+igXU20ottbT
+         BixPxXo5FY3lZzQo+yoQYkbPISYeJLMhUW/EtWuIXA3GeHNwvOlDL0eryzDCb6K9ENwH
+         SpFAjxpB70usmzpbUDTTZL52NpPN+Q9WZCjP3Dur6KtoTL3rfOVMCJcGn0fSfgqiC/cE
+         kPl5bDfnKBjfjsm2aeDl5NFefA2g8hzldqh4DLxsUUcGm43spdH2Yy4gfJx37rbr8q/V
+         BLSKf25oxRYdHzLUwA+MwASHUKo0/yt5c9U2Yg7eqkRwVg8SOvQxnE2cmrkrZtehmT3d
+         JWKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772614971; x=1773219771;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oemXeHFiAD8fwC6Dvlocm0aqSqueWx/Mi2JGUCBaDkQ=;
+        b=XtNp0VIcswmTEtKI9X/aj84cQWNj2bxtvm8RXazCJ9yPJh5vKLhF62iy8IbxKN3o+p
+         zcfAWTwFY1bJiFJQvg+XD+9rIjxgfXPMyqBV8tWd+zWaik6cEcF1DrK5UTw12GsP6Ydy
+         5WfRMl2GLO8KUeNxgoWrG30gPH6wZHwK2sf3O2RksMg9bLNnE/6GqaSvsl5XbypcuSsG
+         egciaOGberUL4hcsVcc25swY2wAcJu5PJ3vVNhtNchNvqiifUcgSGFoi6Np9Z4oYbXxc
+         J76BvGD8xhgaiRLmiWxnWXqPges9kZocsuIXlLbKWT3F276j9M3b59AgnPdb8DTTkkGe
+         jHpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzlST2cjODbfGUNJs/kaXEkoJJOFouFJ9XkribZ7UeCxihdXCUf749UEKiDYthZ0c7CcHxHZsC6lJa1g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+7nrVPTl80kz18KgaEnwpsClZiVgLjzMEU3f1HOp61x4rwVWM
+	odqgl7GEpr96CihBCWR6VJXevS0cNsyCvVZLnsFXj2dwM+ODuNYW0ZVhQ4L7jsEu+RqGK/0bnVE
+	UTOjFLt5a5Yuvce9Y8ukU/YeFCka/ui//5DXsQHMct5d1mptx7Ep8HsSUH9bACVlCVw==
+X-Gm-Gg: ATEYQzzDMcQXKg7w8SZUZDY9RFf/OPqk3MzSwTQx61cGUjAEkxbfL6Ec8E+IHoAYPs1
+	sD8D8LuPfXiQQRF5h+bBM4aQpdYeEdmUaBSLGtGweSPH3dXUPsHp3xADGmSfETV/H45X0oyI1vx
+	NbVLqLOpTzOvC5r4y7OgotNCFxiuQDQl34IWMH0fa2mxudCmdW4VTMCzwT6kXNu3PsB1AdO+UgS
+	EWvsUtAjomQlPF2BdDX2grDFMzBMuryXfQopR6e2zcpyD7P2vb4G8uC5wW/5wgY+P3DIScUrXOR
+	Djn/NPvsc5d9ZnTjX3RdK7V4p0oiHmHhM1i/g4yhtj1u2wbwBAGoD/7/0ro4dkmAE5rN+XX4RmV
+	X1ihl1wpKumDcDgYUFKFG+V9UAD8Rh4AVBOz6Q2R2XS4tIcXDHIoV
+X-Received: by 2002:a05:620a:258d:b0:8b0:f2bd:4762 with SMTP id af79cd13be357-8cd5afd3c5fmr156644185a.75.1772614971139;
+        Wed, 04 Mar 2026 01:02:51 -0800 (PST)
+X-Received: by 2002:a05:620a:258d:b0:8b0:f2bd:4762 with SMTP id af79cd13be357-8cd5afd3c5fmr156638885a.75.1772614970677;
+        Wed, 04 Mar 2026 01:02:50 -0800 (PST)
+Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:edb0:af14:f4c7:c6ac])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851ad02ffcsm3644895e9.20.2026.03.04.01.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 01:02:49 -0800 (PST)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [PATCH 00/14] gpio: remove uneeded Kconfig dependencies on OF_GPIO
+Date: Wed, 04 Mar 2026 10:02:21 +0100
+Message-Id: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microchip.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7511.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91a98c10-b28a-402d-b422-08de79c63505
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2026 08:15:33.2899
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jLaQ4gqynE/87BGmqfJeROsrUJw7D4L2fcFcD0G9XOSVFSZRXmlsnqZczqjLr3zdBl0HV7U8b/oAZSIT8FLaaV8mDLBn270s+0zDWU8O4KU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV1PR11MB8849
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB31p2kC/x3MTQqAIBBA4avErBsw+6OuEi3ERhsCJxQiEO+et
+ PwW72VIFJkSrE2GSA8nllDRtQ3Y0wRPyEc1aKUn1asB/c2C4vCyEhx7JD3OZGa7GLVAre5Ijt/
+ /uO2lfCyoFdRhAAAA
+X-Change-ID: 20260304-gpio-of-kconfig-e257ea7c9a09
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@kernel.org>, Scott Wood <oss@buserror.net>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-pm@vger.kernel.org, brgl@kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2687;
+ i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
+ bh=vzKg2CmRZRz9tDx8jerfN1FNHIadNDJlHWQvRijQXa4=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpp/UlV7KEbnku5SM6ln9ww7x/7ZvkbRgT9akwX
+ ZTKY7PzrYiJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaaf1JQAKCRAFnS7L/zaE
+ w5VxD/sFAI2igPWylEwWYYIK15BDRKiW+6YYGAfBqLpYl9ZCdmVgeZD06r7JMW6noA5hFzEkv66
+ pvwjnkkl7u3DFOw8V3GJsnoNOOowaj6Scqektj5r5FiQwuHc5I8abfSLEsV+V4cO0v7ZKq29NWM
+ Slk6AkPOz4Dk9WvQW94bOEYC8bLWudd5dgScZ5sDtsXB2ZVkOU4Un4t2pkX+8AD230La5Ao4gHq
+ 2nfPT5kU2Ogk9EZLOE66LyX5r1zO/Vj5OAtjgB62Cm3oV01ZLErMP+entT0fo8yY5ScmRMaFpUo
+ 3lszEgJlDfA1/ZDe7YGcx1Iqfxnt3/YFva8swh9EU9K0fTllltoiemPhEcDsQa5L+CR683lH/5a
+ FVYvSL0skiru5EDCrTdHr9OUO3u/OD/twdunXvFtT4F/LzO3iDxvE4CEGqlnI+tyOOv2IzMGGGv
+ vbQtrKM8lRKn0N/IC77/tT7IX4aqycoE1lunxb24p/sgoxdJc7e5jEgkPRPmXIOB76VxKbGc0+n
+ 1F3iiZCY9qL3lsySV+j+61W3cjjIYoI/L5iDJbnwnolQDGAK7PEXv6yL4e4j8aGyXOwDd8Gq1aO
+ avM0vTJekP9BWzuxJMN/Y9MbMnlPvTbKHGY0BPgrchdO2JNNJztzOUyRDL4+1lGfij7PFp3V2kf
+ qVTMwUWNMgBvbzQ==
+X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+X-Proofpoint-ORIG-GUID: SPmjr5Ide9RMSCBg5tGUvqQjMhJDNbqG
+X-Proofpoint-GUID: SPmjr5Ide9RMSCBg5tGUvqQjMhJDNbqG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDA2NyBTYWx0ZWRfX3vqgDYkhgbBG
+ R2b9Pc5orZKYfHn40vf4HxXb4rT77lrtplHyFz4W/bPZOvwCKgICs4c+/Htr0EdnVgiuC4+VUDz
+ 17V3qLJLKNdqex0Lo7ICzqVyyd5HDui0N3BIisnGu0NpaAeF0tJhY+K0p7LRyOODbfGUYvzLMgG
+ ZJwWoxS9WDqal24G6aw0oi0HcgVhR77Gv5r8Vjj6keSIA8Iv11ilf0KYlKpM/ma29zFFbwe86fE
+ +9YEzM7apAaHlexFq+BnVmrDA4mgJMfoTLZFkw21rf2DNmbB6aXHVYppwOiSHAMT6Sc/wh1Ar+s
+ Nb9zODkgdpPfnIevuKmWWPTOPdpEveNr0znXBqD6KU22jL66AuJrAEp2orDMJiOM+BXIwFLibfS
+ +lnuZKO+eRlAu2u+SQwwbmzgQYURi7o/QQWVSRh+XfYTsgesPI3lFjSOXueWusqcdAViejfKbR8
+ 0kuzznJvPMZCfJoJsnA==
+X-Authority-Analysis: v=2.4 cv=C67kCAP+ c=1 sm=1 tr=0 ts=69a7f53b cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8
+ a=RbMT-lXscSRh0E1VkaUA:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-04_04,2026-03-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1011 phishscore=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603040067
 
-SGkgS3J6eXN6dG9mLA0KDQouLi4NCj4gPiA+ID4gPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ID4gPiA+
-ID4gK8KgIGNvbXBhdGlibGU6DQo+ID4gPiA+ID4gPiArwqDCoMKgIGVudW06DQo+ID4gPiA+ID4g
-PiArwqDCoMKgwqDCoCAtIG1pY3JvY2hpcCxtY3A5OTMzDQo+ID4gPiA+ID4gPiArwqDCoMKgwqDC
-oCAtIG1pY3JvY2hpcCxtY3A5OTMzZA0KPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2No
-aXAsbWNwOTk4Mg0KPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4MmQN
-Cj4gPiA+ID4gPiA+ICvCoMKgwqDCoMKgIC0gbWljcm9jaGlwLG1jcDk5ODMNCj4gPiA+ID4gPiA+
-ICvCoMKgwqDCoMKgIC0gbWljcm9jaGlwLG1jcDk5ODNkDQo+ID4gPiA+ID4gPiArwqDCoMKgwqDC
-oCAtIG1pY3JvY2hpcCxtY3A5OTg0DQo+ID4gPiA+ID4gPiArwqDCoMKgwqDCoCAtIG1pY3JvY2hp
-cCxtY3A5OTg0ZA0KPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4NQ0K
-PiA+ID4gPiA+ID4gK8KgwqDCoMKgwqAgLSBtaWNyb2NoaXAsbWNwOTk4NWQNCj4gPiA+ID4gPiA+
-ICsNCj4gPiA+ID4gPiA+ICvCoCByZWc6DQo+ID4gPiA+ID4gPiArwqDCoMKgIG1heEl0ZW1zOiAx
-DQo+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiArwqAgaW50ZXJydXB0czoNCj4gPiA+ID4gPiAN
-Cj4gPiA+ID4gPiBZb3VyIGludGVycnVwdC1uYW1lcyBzYXkgMSBpdGVtIGlzIGNvcnJlY3QsIHNv
-IHRoZXNlIGFyZSBkZS0NCj4gPiA+ID4gPiBzeW5jZWQuDQo+ID4gPiA+ID4gVGhleQ0KPiA+ID4g
-PiA+IHNob3VsZCBiZSBhbHdheXMgY29uc3RyYWluZWQgdGhlIHNhbWUgd2F5Lg0KPiA+ID4gPiA+
-IA0KPiA+ID4gPiANCj4gPiA+ID4gV2Ugd2FudCB0byBhbGxvdyB0aGUgdXNlciB0byB1c2Ugbm9u
-ZSwgb25lIG9yIGJvdGggaW50ZXJydXB0cy4NCj4gPiA+IA0KPiA+ID4gV2hvIGlzIHRoZSAidXNl
-ciIgaGVyZT8gSU9XLCBjYW4gdGhlICpoYXJkd2FyZSogd29yayBjb3JyZWN0bHkNCj4gPiA+IHdp
-dGhvdXQNCj4gPiA+IHRoZSBpbnRlcnJ1cHQgbGluZSBjb25uZWN0ZWQgYW55d2hlcmU/DQo+ID4g
-PiANCj4gPiANCj4gPiBZZXMsIHRoZSBoYXJkd2FyZSBjYW4gd29yayB3aGlsZSB0aGUgaW50ZXJy
-dXB0IGxpbmVzIGFyZSBub3QNCj4gPiBjb25uZWN0ZWQuDQo+IA0KPiBBbG1vc3QgdGhlcmUuLi4N
-Cj4gDQo+ID4gQXQgdGhlIG1vbWVudCB0aGUgZHJpdmVyIGRvZXMgbm90IHN1cHBvcnQgaW50ZXJy
-dXB0cy4NCj4gDQo+IA0KPiAuLi5hbmQgcnVpbmVkIGl0LiBUaGlzIGRvZXMgbm90IG1hdHRlciBh
-bmQgdXNpbmcgaXQgYXMgYXJndW1lbnQgbWVhbnMNCj4gSQ0KPiBkbyBub3QgYmVsaWV2ZSB5b3Ug
-YWN0dWFsbHkgY2hlY2tlZCBpZiBoYXJkd2FyZSBjYW4gd29yayB3aXRob3V0DQo+IGludGVycnVw
-dCBsaW5lcyBjb25uZWN0ZWQuIFlvdSBvbmx5IGNoZWNrZWQgdGhlIGRyaXZlci4gUGxlYXNlIHJl
-YWQNCj4geW91cg0KPiBkYXRhc2hlZXQgY2FyZWZ1bGx5Lg0KPiANCj4gQmVzdCByZWdhcmRzLA0K
-PiBLcnp5c3p0b2YNCg0KQXMgZGVzY3JpYmVkIG9uIHBhZ2UgMTEgb2YgdGhlIGRvY3VtZW50YXRp
-b24gdGhlIGFsZXJ0LXRoZXJtLA0KdGhlcm0tYWRkciBhbmQgc3lzLXNodGR3biBwaW5zIGFyZSBv
-ZiB0eXBlIG9wZW4tZHJhaW4uDQpNb3N0IG9mIHRoZSBkZXZpY2VzIG5lZWQgYSBwdWxsLXVwIHJl
-c2lzdG9yIGluIG9yZGVyIHRvIHNldHVwIHRoZSBJMkMNCmFkZHJlc3MoZm9yIHBhcnRzIHdpdGgg
-bmFtZSBlbmRpbmcgaW4gIi1BIikgb3IgdG8gY29udHJvbCB0aGUNCmhhcmR3YXJlIHRoZXJtYWwg
-c2h1dGRvd24gbGltaXQoZm9yIGNoaXBzIHdpdGggIkQiIGluIHRoZSBuYW1lKS4NCkluIGFsbCBv
-dGhlciBjYXNlcyBpdCBpcyByZWNvbW1lbmRlZCB0byBjb25uZWN0IGEgcHVsbC11cCByZXNpc3Rv
-ciB0bw0KdGhlIHBpbiwgYnV0IGl0IGlzIG5vdCBtYW5kYXRvcnkuIElmIHRoZSBoYXJkd2FyZSBk
-b2VzIG5vdCB1c2UgdGhhdA0Kc2lnbmFsLCB0aGUgcHVsbC11cCBjYW4gYmUgbWlzc2luZy4NCklm
-IHRoZSBpbnRlcnJ1cHQgZnVuY3Rpb25hbGl0eSBpcyB1c2VkIHRoZW4gaXQncyBtYW5kYXRvcnkg
-dG8gdXNlIGENCnB1bGwtdXAgcmVzaXN0b3IuDQoNCkluIG15IHZpZXcgdGhlICJ1c2VyIiBpcyB0
-aGUgcGVyc29uIGRvaW5nIHRoZSBkZXNpZ24gZm9yIGEgc3lzdGVtDQp3aGljaCBpbmNsdWRlcyB0
-aGUgTUNQOTk4WCBjaGlwLiBQbGVhc2UgY29ycmVjdCBtZSBpZiBJJ20gd3JvbmcsDQpJIGFtIHVu
-ZGVyIHRoZSBpbXByZXNzaW9uIHRoYXQgdGhlIGRldmljZSB0cmVlIGlzIGEgaGFyZHdhcmUgZGVz
-Y3JpcHRvcg0KZm9yIHRoZSBkcml2ZXIgdG8ga25vdyBob3cgdGhlIGhhcmR3YXJlIGlzIHNldHVw
-L2NvbmZpZ3VyZWQgYnV0DQpzaG91bGQgbm90IHN1cGVyc2VkZSB0aGUgZGF0YXNoZWV0IGZvciBk
-ZXNpZ25pbmcgbmV3IHN5c3RlbXMuDQoNCktpbmQgcmVnYXJkcywNClZpY3Rvcg0K
+NOTE: Each patch in this series can be picked up independently into
+maintainer trees.
+
+CONFIG_OF_GPIO is a switch that enables the compilation of the gpiolib-of
+module. The module itself handles GPIO lookup via the OF-node tree and
+is automatically enabled on all OF systems. It does not export any
+public symbols to drivers. There is no reason for them to select or
+depend on it in Kconfig.
+
+This series removes any such dependencies from Kconfig. If a given entry
+has no other dependencies than OF_GPIO - they are converted to OF to
+avoid new symbols popping up for everyone in make config.
+
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+---
+Bartosz Golaszewski (14):
+      arm64: Kconfig: drop unneeded dependency on OF_GPIO
+      arc: axs10x: drop unneeded dependency on OF_GPIO
+      powerpc: drop unneeded dependency on OF_GPIO
+      net: mdio: drop unneeded dependency on OF_GPIO
+      regulator: drop unneeded dependencies on OF_GPIO
+      gpio: drop unneeded Kconfig dependencies on OF_GPIO
+      pinctrl: Kconfig: drop unneeded dependencies on OF_GPIO
+      leds: Kconfig: drop unneeded dependency on OF_GPIO
+      hwmon: drop unneeded dependency on OF_GPIO
+      watchdog: convert the Kconfig dependency on OF_GPIO to OF
+      bus: drop unneeded dependency on OF_GPIO
+      staging: media: max96712: drop unneeded dependency on OF_GPIO
+      power: reset: drop unneeded dependencies on OF_GPIO
+      media: i2c: drop unneeded dependencies on OF_GPIO
+
+ arch/arc/plat-axs10x/Kconfig           |  1 -
+ arch/arm64/Kconfig.platforms           |  1 -
+ arch/powerpc/platforms/85xx/Kconfig    |  1 -
+ drivers/bus/Kconfig                    |  2 +-
+ drivers/gpio/Kconfig                   | 53 +++++++++++-----------------------
+ drivers/hwmon/Kconfig                  |  1 -
+ drivers/leds/Kconfig                   |  1 -
+ drivers/media/i2c/Kconfig              | 12 ++++----
+ drivers/net/mdio/Kconfig               |  2 +-
+ drivers/pinctrl/Kconfig                |  9 ------
+ drivers/pinctrl/bcm/Kconfig            |  4 +--
+ drivers/pinctrl/meson/Kconfig          |  1 -
+ drivers/pinctrl/starfive/Kconfig       |  2 --
+ drivers/pinctrl/sunplus/Kconfig        |  1 -
+ drivers/power/reset/Kconfig            |  8 ++---
+ drivers/regulator/Kconfig              |  2 --
+ drivers/staging/media/max96712/Kconfig |  1 -
+ drivers/watchdog/Kconfig               |  2 +-
+ 18 files changed, 31 insertions(+), 73 deletions(-)
+---
+base-commit: c025f6cf4209e1542ec2afebe49f42bbaf1a5c7b
+change-id: 20260304-gpio-of-kconfig-e257ea7c9a09
+
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+
