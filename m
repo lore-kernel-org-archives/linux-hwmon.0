@@ -1,155 +1,109 @@
-Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [94.124.121.40])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181743A2544
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 10:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.124.121.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECD0371CF1;
+	Wed,  4 Mar 2026 11:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772619975; cv=none; b=KONEbAD6PjjN0v/fK1LW8Q6ZD2q8rL0AyJprze2eT5AUp/QLRq7nNR0HI3SU2sfdUdV6nH1L9pVQUJgKSky+OWbVmRS73jfCCSlmm5AGILS6PUMRrWN416tTLyyAItbj9jQP3GTRUkPiCVtziS1Cs7NnmkpqnULNZG1VLZhxePs=
+	t=1772622333; cv=none; b=TW7iMzfyZ1COz+ghwCFjBEMXnpLrc3PWUJgB9r4ODG53HWLXk1qt06Oywoguv7FgOOwZqCKgxcDjZWzE12K/vsp5kMkKTZuhPY1vmnraAPdLbc8vPiYkFGspwtoBYK+UPS1TAYO7spLYh7CGiAkI5nC2SpGSJ3ioEXHwhlKW6Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772619975; c=relaxed/simple;
-	bh=iaoKu1YAbCoudL14l3Rwg8N48l6zL3jjv2BcSRhzbo0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E1P+mNejl1TT5VPjgmBKdpzg+a1t8ZFTcg0nJut7T9oW5iM6o7SpJ/zhcEMh+lY7tO5bR1eLyea7SdMo1q1PIYMBI5hqI+muz9YJJJrrkp0jvVogH1E4FSM5tfwmyQH3mFEZA8r09/oiplmEEPWvNXU1mhQin0sDAWq8EngKImk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl; spf=pass smtp.mailfrom=protonic.nl; dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b=rxQg0s9M; arc=none smtp.client-ip=94.124.121.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonic.nl
+	s=arc-20240116; t=1772622333; c=relaxed/simple;
+	bh=/Pp8xd0MR53jkbmdo8SmhG/HDAzp5ECtWSf22t4Ir9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h7dtzVm8lLlraooazlgiokiAsy8V4A0NDXiltUlhresfTKXiWFepacYkVXBUKGjTHkMzdSNIcYeu03j+btw5z6Fr+eJ6eIDhG0lhbjkAsC8CbME3nN+gOYuxazXehkWDKwe3COo6KpkovE3cpLDq2K+tqrS0TlGCuWGoGz90zrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iZTR737A; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b="rxQg0s9M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=protonic.nl; s=202111;
-	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-	 message-id:subject:cc:to:from:date:from;
-	bh=w6F9EZJVS8+TF1xyzyXSI4fM3c5Dtg3XikqZDLJUQME=;
-	b=rxQg0s9M7zsl29LETTXvuEN2hLbg7fHyi7KWCFsfIibM4SdvaeotGKAcJvJLdtpWmY02EHyKO2IcJ
-	 jSjkE/blulrRpemUlqg5mDYXA9IyYZwbhn8XfkX0eqxE2mo0H92PtLIIQvFGHJ3SAYGt/hoTTWimWY
-	 NnPfzJJsCBabFtdedNTtaRYO9ex26bEw+7qjDyTv+wPMIs/WK+8nQ9HS7OakRBBA7sRV8/gA9rhlNQ
-	 gyC4OetacoqxSyAO22YZV9oFybgny7sx0zfBQPjRKJaJoTmdY4LDrNjqXQ/817UrDycxwn64xcZgWf
-	 lFZWNcM1OLp6MFVXxNEoLk6bDXKu/og==
-X-MSG-ID: 66bae932-17b4-11f1-b532-0050568164d1
-Date: Wed, 4 Mar 2026 11:25:00 +0100
-From: David Jander <david@protonic.nl>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, "Rob Herring (Arm)"
- <robh@kernel.org>, devicetree@vger.kernel.org, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter Rosin
- <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, Guenter Roeck
- <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260304112500.4766f21b@erd003.prtnl>
-In-Reply-To: <4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
-	<20260303133947.1123575-2-o.rempel@pengutronix.de>
-	<177254885509.3251575.14819823286886805862.robh@kernel.org>
-	<aacH7NmkOzZued0Y@pengutronix.de>
-	<20260304-graceful-sweet-bittern-98efdb@quoll>
-	<20260304100642.44d00b99@erd003.prtnl>
-	<4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZTR737A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772622331; x=1804158331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/Pp8xd0MR53jkbmdo8SmhG/HDAzp5ECtWSf22t4Ir9Q=;
+  b=iZTR737AbBow32u27dy4kK+89mXzFd1UukxzyPnK9mG2NKUKW0QReCZx
+   pZ4w8fS32Tc0NNB4JEhEKUT9brjAY5sAU6ayxGscDj6oJ3xD0jfMhYDTq
+   uFNTFQgXTEx1MQMSXyZvd2KvbbnTdgFPXsZzmIJZvUSppxH5vIz0/Notp
+   PkymIdIO2BuFCWU7xPX7wTk8IzatJKgtgZRSRVIMx9c2qeVIfnOpSt7z5
+   gdkBE5gmim3PfRGFNPuFDEhE2DJ8oCrXd9kln2JS7eOWFZ59T0Td0AJde
+   k2vxB3VKAoiz1gGgRU6boTHd6iMcTzPSgphEyFM9rvtPpooo58rABhr3B
+   w==;
+X-CSE-ConnectionGUID: IePeBvWLSsSXFK1VNhNzdg==
+X-CSE-MsgGUID: otAfXvRZSJmkpTF9l7Ko2Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="76281171"
+X-IronPort-AV: E=Sophos;i="6.21,323,1763452800"; 
+   d="scan'208";a="76281171"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2026 03:05:30 -0800
+X-CSE-ConnectionGUID: ChR8CHo2Rjma9c6r6eCz2w==
+X-CSE-MsgGUID: kQr/68s/S6W37euO0DGe1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,323,1763452800"; 
+   d="scan'208";a="216624885"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 04 Mar 2026 03:05:27 -0800
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vxk2f-000000001fp-3THD;
+	Wed, 04 Mar 2026 11:05:25 +0000
+Date: Wed, 4 Mar 2026 12:05:00 +0100
+From: kernel test robot <lkp@intel.com>
+To: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
+	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>
+Subject: Re: [PATCH v6 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+Message-ID: <202603041109.HFnPWnj8-lkp@intel.com>
+References: <20260303-ltc4283-support-v6-2-efe11502fad2@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260303-ltc4283-support-v6-2-efe11502fad2@analog.com>
 
-On Wed, 4 Mar 2026 10:49:06 +0100
-Krzysztof Kozlowski <krzk@kernel.org> wrote:
+Hi Nuno,
 
-> On 04/03/2026 10:06, David Jander wrote:
-> > 
-> > Hi Krzysztof,
-> > 
-> > On Wed, 4 Mar 2026 09:05:11 +0100
-> > Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >   
-> >> On Tue, Mar 03, 2026 at 05:10:20PM +0100, Oleksij Rempel wrote:  
-> >>> Hi Krzysztof and Rob,
-> >>>
-> >>> On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:    
-> >>>>>  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++++++
-> >>>>>  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
-> >>>>>  2 files changed, 196 insertions(+)
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
-> >>>>>     
-> >>>>
-> >>>> My bot found errors running 'make dt_binding_check' on your patch:
-> >>>>
-> >>>> yamllint warnings/errors:
-> >>>>
-> >>>> dtschema/dtc warnings/errors:
-> >>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-> >>>> 	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
-> >>>>     
-> >>>
-> >>> Folding the mux node into the parent as suggested [1] causes this error.
-> >>> Because the parent now has #mux-control-cells, the generic
-> >>> mux-controller.yaml forces the node name to be mux-controller. Since
-> >>> this chip is primarily a switch/GPIO controller, naming the parent SPI
-> >>> node mux-controller@0 is misleading.
-> >>>
-> >>> What is the preferred way to go here?    
-> >>
-> >> https://www.nxp.com/products/interfaces/multi-switch-detection-interface/22-i-o-msdi-programmable-current-analog-mux:MC33978
-> >>
-> >> Name of the mc33978 device is "programmable analog mux" and further
-> >> description says "analog multiplexer for reading analog inputs ", so I
-> >> don't find "mux-controller" a confusing name. It is EXACTLY a
-> >> mux, so mux-controller.  
-> > 
-> > Sorry to chime in here. I'm afraid the NXP description on that link you posted
-> > is a typo. It is not correct. This chip is primarily a "Switch Detection
-> > Interface", or in other wordt a switch input interface. Wee here for the same
-> > page for the MC34978, which is the exact same chip:
-> > 
-> > https://www.nxp.com/products/interfaces/multi-switch-detection-interface/switch-detection-interface-22-i-os-programmable-wetting-current-temp-sensor-3-3-v-5-0-v-spi:MC34978  
-> 
-> That's MC34978 and I commented on MC33978.
-> 
-> What is the primary function of MC33978 being described here as the base?
+kernel test robot noticed the following build warnings:
 
-The MC34978 and MC33978 are the exact same part (except for the temperature
-range). The fact that NXP has two different web-pages with two different
-descriptions of it certainly doesn't help, but you can also check the
-datasheet[1] description: "MC33978: 22-channel multiple switch detection
-interface with programmable wetting current"
+[auto build test WARNING on 78558965440b27814592ec82d8f3668395953b1b]
 
-Further down in the description it says: "It also features a 24-to-1 analog
-multiplexer for reading inputs as analog."
-IMHO this makes it clear that this is NOT primarily a MUX.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-bindings-hwmon-Document-the-LTC4283-Swap-Controller/20260304-010255
+base:   78558965440b27814592ec82d8f3668395953b1b
+patch link:    https://lore.kernel.org/r/20260303-ltc4283-support-v6-2-efe11502fad2%40analog.com
+patch subject: [PATCH v6 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap Controller
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+docutils: docutils (Docutils 0.21.2, Python 3.13.5, on linux)
+reproduce: (https://download.01.org/0day-ci/archive/20260304/202603041109.HFnPWnj8-lkp@intel.com/reproduce)
 
-Actually, I doubt many users of this chip will use the analog MUX function at
-all since it has quite a few limitations that make it not very practical to
-use.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603041109.HFnPWnj8-lkp@intel.com/
 
-The most fitting Linux framework for this chip's primary funtcion IMHO is
-pinctrl/gpio, but there are some caveats unfortunately.
+All warnings (new ones prefixed by >>):
 
-[1] https://www.nxp.com/docs/en/data-sheet/MC33978.pdf
+   =======================         ========================================== [docutils]
+>> Documentation/hwmon/ltc4283.rst:258: WARNING: Blank line required after table. [docutils]
+   Documentation/mm/memfd_preservation:7: ./mm/memfd_luo.c:13: ERROR: Unexpected section title.
 
-Best regards,
 
-> > It has an additional function that can be used as an analog MUX, but it is an
-> > extra feature and definitely NOT its primary function.
-> > 
-> > Not sure if this is relevant, but I fear there might be some confusion.
-> > 
-> > Best regards,
-> >   
-> >> Anyway if you want gpio, then please add a patch extending the pattern
-> >> in mux-controller.yaml to allow "gpio".
-> >>
-> >> Alternative, because it is rather a mux than a controller of a mux,
-> >> would be to call it just "mux" or "io-mux" (maybe the latter, since we
-> >> have "i2c-mux" in the spec) and allow that pattern to be in
-> >> mux-controller.
+vim +258 Documentation/hwmon/ltc4283.rst
 
+   256	
+   257	=======================		==========================================
+ > 258	power1_failed_fault_log		Set to 1 by a power1 fault occurring.
 
 -- 
-David Jander
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
