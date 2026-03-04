@@ -1,112 +1,102 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857431946DA
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 21:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396B13845C2
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 21:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772659244; cv=none; b=q9LyCJqcfqbypXdUwPFEE7b2uJQovw8g4nnyCNgqXk4feU7cDrO1o8wyUzZd34vFNlyEPjyDfORjFRA5swUpAauIN6UckmkaRG5ByiO+dB0kXqWpoQw9tX7d5/2mY/60rqQ1/RjUeKxl+nP7+XzzKNdZRR4nPsls8/XnBHWFP8Q=
+	t=1772661455; cv=none; b=YWH9kxRVjkWUl/ZE5He8XRICPFg2Nl0RdUkMQVyPFE3IJLqrrv32y0DHzM/MkM7hL6h9OgCDWkYSYDsj/0Pr388iS8UyoV7aeHbyOO3G2POI/zS+ooxTD645uH5iQuZaDJH6iz8iDLFXWqw6PXUHvl7sFQbVxtX9SKe/bAjmhF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772659244; c=relaxed/simple;
-	bh=6R8PrkFcQOCkIy4N2WzayI9dh6LczXsY2dRZzlQ20Ac=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FDthm/ghoNgPQijvd9mcWlshglgOqbCT2rCNrMJmAsh9Z4f11IYJFc/zXieZqGvDGuDTZ7KN87tvnK3cJExquCmmD3MEp4FYSVl9EHo6bKtYPgaagJeYg3ltWru78N9cVDqsQAMQ+Nki/AGWkbrSakHtqG0uqChkRiepp9+IbXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sobrie.be; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhTgeb/D; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sobrie.be
+	s=arc-20240116; t=1772661455; c=relaxed/simple;
+	bh=Q0VOiMFU1aqQcqk7bOZo/Sz1HFmSvyb1z6+x5NoPBl0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ecx+RPGGHVqPeLVKqH4PLle23tX1cvM8vFBxDzezwW5gwwQGyibmSZJC3k4KhsOubE2HZijPqZfkKLFyuJSv+Dj7YbeT1cDSiuPPedlASRY1lKBC0rt0PSE6mtTRZJQUswv2HSuh0lgJasYokBIZv1ppbxgVkVP2NBH7qmeL4Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+87FxpO; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhTgeb/D"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b904e1cd038so982719366b.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 13:20:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+87FxpO"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-826c49b7628so4659515b3a.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 13:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772659241; x=1773264041; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6fnLdIBwuzKkIFXrEW2ZKLeYt2tdG7l6PDBWXCSAU8=;
-        b=YhTgeb/DZlu6PqJLI7pFECxTMaczmWreCEUxtUqjBRh7JBxrDYSsfAnO24FptkUQKG
-         eOI134xYI+YVXiy/0SkkTb8/UJF5iiW5XAVHno90phWN+f8AJf5kMVzqzYS49EIsiJHB
-         vbZ2a7qoVATfME9j4jVhXbw0BtLgJovYM7eMxFEzrWzohHrxsqZwfGRUEcV43Y2MWUAK
-         jEIxPP7qLgJbLsFSVZrNHifyr2UhEE1ttPdNKNYdydc6G+aZJfSGECBsIlC/VCdZv1i0
-         2mmSw/ELoMw8OjrL5BXdjRQnE8r8I0rzzzOuMUE4bGpK3h2kwXAvdkWi8hZ1n858DQXP
-         ViWg==
+        d=gmail.com; s=20230601; t=1772661453; x=1773266253; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CFJiUEJ4cZ9DGUU1Xeu28F+GFEVJPvOhjnpWSIGW3Yg=;
+        b=T+87FxpOerXOSPOHCJD7pTwThQNNDcByWBrNNZ+Fl7JYDcqHvbf+cmuXNqSE1vsEQS
+         mTyReITTid7Brr7x6eUyOIOOBRUsmxm4OGm2EcuhqKyUxmgKovW9UoAlRt0z0hFto0HX
+         ZyGkfRDFMt4jg5xJVD5GRjPI0H+JbSywnlcXCXCm9jUHgky4Hd1FfG8BWPPrQQpGJkbN
+         2pXhLytxxEUGao9hbV874VcPk7nfWcRU/wgcb3v1ZcEOqIHH7ki3YVBAxxmtAXZrhh8f
+         YcpZHm4AwEDD5icTsY4rdsErWCp2QtHuT0E4XE0CTctxQtEcfb2WFwk4dYLdw95c5c9u
+         KLxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772659241; x=1773264041;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A6fnLdIBwuzKkIFXrEW2ZKLeYt2tdG7l6PDBWXCSAU8=;
-        b=s99IZn44H6GD4+AymrquGxvGPkY6tQeGS20Drx+nPJmQIwI3AWzjFi2WJdlbbgjS63
-         mjYrqbODCDpAkR+weubx+sIMLl42u5MdlF4BIvgPdLVuoDHfWl/niCOeswQi6CZoR048
-         4025OSRadm0S9oQoZVkVFNBP+9IxyxLJonLh7t0TKaLwvIM0LWCzeMcXvQknDUB4bCrd
-         RUYAN64IJmkGPn3Ns9vXBI5ovzxalbuETVEKvnANtSGEL203P+palBATCjad4YC/j4lk
-         QJKf9ZSeta6yZclnQ5Jqn7QSnge+zQcwZP59OEcAdEXZ8lui0kmX7ilriwjOEneMDRKi
-         1Geg==
-X-Gm-Message-State: AOJu0Ywu/RZjJEuZKMNkoIKWUslDR3qN/iyscHsavTan1cpD68kDSKKk
-	R9pwdDNJbksPsLUkZiKujGIOJroTlbfTBexNf05diNTO1C+QSFpvddU+Ji/3Lh89
-X-Gm-Gg: ATEYQzzOXw+r9l8xDBQEgwVQO1y301joURQI5BOe5KMCJjPDZMPgvQG8Lrv6N1aLlLi
-	Q621n4fruHed7/dmtJatWdvZ1TS4oRfyLR1zKCglDPjgfjLaUBs7jkW6TMWYJXeyHiHHChV8T92
-	gK/RKf3NvC0OplDKM63riFrrIlo8B5I6Cmda0eufGl0NcFnAzONmw4ClGeN1bTqzCp6ZYWMh+xu
-	B/4NYV5LGUCT4cdsrBzrix7oDStLg6wgOKiaEFPAhp8nvuCDNXaeR8nmfTeY2vHAs4Y28antzCs
-	apojkuKeY2IM7Dc0PW9QmM3bUQgCmh0GOyzseJHxgAurTuRw8drRtg8tbGaMEVKqdDU49/6wzsU
-	130QM13jOyEJXL7F+rxzWZ3NZBPjuXy8sPcGbcQQjIsyKSQ5nYbNJPuej5Hsp73z5/WY8iuzz03
-	1ZZn2MTLlCgLImn73Stul4p7DQukGOP/f0sBUnhIl6g9xN3AXfgFw=
-X-Received: by 2002:a17:907:70e:b0:b73:2b08:ac70 with SMTP id a640c23a62f3a-b93f1430131mr202869766b.49.1772659240655;
-        Wed, 04 Mar 2026 13:20:40 -0800 (PST)
-Received: from localhost ([2a02:a03f:b7dc:2b00:a97a:8551:7733:cb60])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b93c8e3d060sm331313266b.56.2026.03.04.13.20.40
+        d=1e100.net; s=20230601; t=1772661453; x=1773266253;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CFJiUEJ4cZ9DGUU1Xeu28F+GFEVJPvOhjnpWSIGW3Yg=;
+        b=Bnlph4uZ565dS0etDyDVXkAgkPvtTUzbTOdh5A2ANYBQgvv4XeNXED9GVwZNkdcVOg
+         hK6Oo7Fr7FXSDzv+ks13rRccA6zt99kNkCx+dStsw5XV9GxpmjaNG9hsqJI8GZi74I/H
+         41sEKNC5u7a5TeqVraUyKfV3ElmEOJqRNlLt54LRjMiZ9bGALYHRaQ67gtQ9EvegtBol
+         Pw39F5eh4f5XZH+jAuhLNkxmGlv6So5Jv4pPwaxzz4Q6MIUAgzTVD4qUIou7zDNcGjkC
+         53XNO+O2INf9KKzsW4BfoDgFhfphoFfA/fbtHnd4X7SbiOxeitLwzOxwkAU4hcGf01v0
+         GhoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVroQfBHXT/O3qGce+7cmY/FVABrn90lIWgrlXHtW8aw9XwllKXWH8IMAk4d2gLm52+TTfgCpi0ijwsKQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZDDc8LrVVBHGyMQw6X7VfJoD9+7jYLO+rLCID61ynMJNTZPN/
+	LLMcq0JcMydyC0xTyP6YqAYRXSMHorPuvK109TMBgnXMvH46tzPmJZNqKpn8HHv1
+X-Gm-Gg: ATEYQzxTRM+Kwhe159HA45FB6dFJ1Gh/3aR1NstyepWWL/Jg1Be+HWCNO5i1QsbD4Lb
+	t9nmw+nYzaWBs6oE1SlLltHHtLrn8skO4eIOLauOUy0LnOxNw43o32/7HeGfLgssxnqerqEjjTs
+	tNCrU6fdxUOlITBoI3PP5UmRl3t2O9Ebp26BPTyFIEZSYfZUcPjV5YJrbsk3tjszuFvk3vZaiyo
+	Jakd5WRXOqH70OBPTbIEaJR9iRz84VqbvJaKCD/S+UCuO5K1l1MgiRzDL8Dq1bRIRgdTR9S3nu1
+	dmtLhmb+mzfmzfQoX48wpP+oBTf+wlqp7tTLMIdCAM1DGc7u951oewLuGmOWsg40hA17FgP2a1V
+	rVp+XeBg+NHKM+4mJi8Axas6wPjQiNS9xPrytY0xChB+GGe0iy1PBqsH4C33OwyNGgWwSlKV1/L
+	mVs8BX9Ts5wqnt9J6Nq+xorAW7XB+8JVvpPnNt
+X-Received: by 2002:a05:6a00:ac01:b0:823:1406:8797 with SMTP id d2e1a72fcca58-82972c63f44mr3058316b3a.31.1772661453188;
+        Wed, 04 Mar 2026 13:57:33 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82984a01827sm109414b3a.43.2026.03.04.13.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 13:20:40 -0800 (PST)
-Sender: Olivier Sobrie <olivier.sobrie@gmail.com>
-From: Olivier Sobrie <olivier@sobrie.be>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Naresh Solanki <naresh.solanki@9elements.com>
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (max6639) fix inverted polarity
-Date: Wed,  4 Mar 2026 22:20:39 +0100
-Message-ID: <20260304212039.570274-1-olivier@sobrie.be>
-X-Mailer: git-send-email 2.53.0
+        Wed, 04 Mar 2026 13:57:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 4 Mar 2026 13:57:31 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Olivier Sobrie <olivier@sobrie.be>
+Cc: Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max6639) fix inverted polarity
+Message-ID: <374b8fe8-3eba-4c60-8700-8559fdd3660a@roeck-us.net>
+References: <20260304212039.570274-1-olivier@sobrie.be>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304212039.570274-1-olivier@sobrie.be>
 
-According to MAX6639 documentation:
+On Wed, Mar 04, 2026 at 10:20:39PM +0100, Olivier Sobrie wrote:
+> According to MAX6639 documentation:
+> 
+>   D1: PWM Output Polarity. PWM output is low at
+>   100% duty cycle when this bit is set to zero. PWM
+>   output is high at 100% duty cycle when this bit is set
+>   to 1.
+> 
+> Up to commit 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using
+> info structure"), the polarity was set to high (0x2) when no platform
+> data was set. After the patch, the polarity register wasn't set anymore
+> if no platform data was specified. Nowadays, since commit 7506ebcd662b
+> ("hwmon: (max6639) : Configure based on DT property"), it is always set
+> to low which doesn't match with the comment above and change the
+> behavior compared to versions prior 0f33272b60ed.
+> 
+> Fixes: 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using info structure")
+> Signed-off-by: Olivier Sobrie <olivier@sobrie.be>
 
-  D1: PWM Output Polarity. PWM output is low at
-  100% duty cycle when this bit is set to zero. PWM
-  output is high at 100% duty cycle when this bit is set
-  to 1.
+Applied.
 
-Up to commit 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using
-info structure"), the polarity was set to high (0x2) when no platform
-data was set. After the patch, the polarity register wasn't set anymore
-if no platform data was specified. Nowadays, since commit 7506ebcd662b
-("hwmon: (max6639) : Configure based on DT property"), it is always set
-to low which doesn't match with the comment above and change the
-behavior compared to versions prior 0f33272b60ed.
-
-Fixes: 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using info structure")
-Signed-off-by: Olivier Sobrie <olivier@sobrie.be>
----
- drivers/hwmon/max6639.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
-index a0a1dbbda887..9a3c515efe2e 100644
---- a/drivers/hwmon/max6639.c
-+++ b/drivers/hwmon/max6639.c
-@@ -607,7 +607,7 @@ static int max6639_init_client(struct i2c_client *client,
- 			return err;
- 
- 		/* Fans PWM polarity high by default */
--		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
-+		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
- 		if (err)
- 			return err;
- 
--- 
-2.53.0
-
+Thanks,
+Guenter
