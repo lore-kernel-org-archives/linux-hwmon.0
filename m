@@ -1,128 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0F73D75BC;
-	Wed,  4 Mar 2026 18:33:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857431946DA
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 21:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772649219; cv=none; b=klsPSk3O/37XDI+5qexGSKgXGzsChFJzZPBGkSZjPDulgTKLEr/CtRBoZJC0jWAoW1RQoJthbigq08yOB3SMqz7yl/7ob999/rOEwLU55ZPIA6QBIRGUeI7PhVamWU7Hvqhfikqo5KZE2ytVHbFKt9Q+PPjHqq9Rgj+IPmzKWmI=
+	t=1772659244; cv=none; b=q9LyCJqcfqbypXdUwPFEE7b2uJQovw8g4nnyCNgqXk4feU7cDrO1o8wyUzZd34vFNlyEPjyDfORjFRA5swUpAauIN6UckmkaRG5ByiO+dB0kXqWpoQw9tX7d5/2mY/60rqQ1/RjUeKxl+nP7+XzzKNdZRR4nPsls8/XnBHWFP8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772649219; c=relaxed/simple;
-	bh=w8dR++hhXxQtWH2BpT5SkGX66qauJQYHnx33Sx5blsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=up/69DQZhjM/koqqyYXJZzqyPCjy5+a5VbFD40+0zTwubSY3rrS81aQ/LYr+4K9s1g6vrJCECJKxkrkVtWxVAm80/OyV0w4z9KwDUp8B40niqBtMpfNwvsNPVMdGmeIwkSXvJ2OXd3IcHjhUgqNBuGGXyQmWf1q38rsYnSZ9ZXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhG4EDX8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772659244; c=relaxed/simple;
+	bh=6R8PrkFcQOCkIy4N2WzayI9dh6LczXsY2dRZzlQ20Ac=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FDthm/ghoNgPQijvd9mcWlshglgOqbCT2rCNrMJmAsh9Z4f11IYJFc/zXieZqGvDGuDTZ7KN87tvnK3cJExquCmmD3MEp4FYSVl9EHo6bKtYPgaagJeYg3ltWru78N9cVDqsQAMQ+Nki/AGWkbrSakHtqG0uqChkRiepp9+IbXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sobrie.be; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhTgeb/D; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sobrie.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhG4EDX8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3181C2BC86;
-	Wed,  4 Mar 2026 18:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772649219;
-	bh=w8dR++hhXxQtWH2BpT5SkGX66qauJQYHnx33Sx5blsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YhG4EDX8hzX7QC15XddQlQE1x8g0HC5zBisOADN5TV8Hf9MSZ9pvEcP/3PrOH26s7
-	 TvRaVzaA9pwU+FGrPb1bYtDymZi0zpujDD1Xvi7pN7UGDTtnqK2o9klgFRs3X3OBiS
-	 K6v/5GVa5b4tJUZcZrKp0mw3PlGwpfaDGW+rPtdv1ulh2jMoMQVpu02iqxO1zon8YN
-	 /shfPVD4jn2JQYpKik5F+gwNo41wV+SlnKX7dj3JZOubOUvTwIOanugaNiEC0OJdOW
-	 KL43ntLevfC7tSvSnKh5Sh/NSb6XibeWLO0xK/1fu9ps8dtPgYzP9b5fuLE/cPQsVv
-	 fF7xkI2act/hA==
-Date: Wed, 4 Mar 2026 18:33:34 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>,
-	Lee Jones <lee@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-	Linus Walleij <linusw@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260304-arose-pampers-fe07c893d079@spud>
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
- <20260303133947.1123575-2-o.rempel@pengutronix.de>
- <177254885509.3251575.14819823286886805862.robh@kernel.org>
- <aacH7NmkOzZued0Y@pengutronix.de>
- <CAL_JsqJztUNizCcn=VCoGfmaMy3r6wDTLwZH5r6vj7kh6q9qAA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhTgeb/D"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b904e1cd038so982719366b.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 13:20:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772659241; x=1773264041; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6fnLdIBwuzKkIFXrEW2ZKLeYt2tdG7l6PDBWXCSAU8=;
+        b=YhTgeb/DZlu6PqJLI7pFECxTMaczmWreCEUxtUqjBRh7JBxrDYSsfAnO24FptkUQKG
+         eOI134xYI+YVXiy/0SkkTb8/UJF5iiW5XAVHno90phWN+f8AJf5kMVzqzYS49EIsiJHB
+         vbZ2a7qoVATfME9j4jVhXbw0BtLgJovYM7eMxFEzrWzohHrxsqZwfGRUEcV43Y2MWUAK
+         jEIxPP7qLgJbLsFSVZrNHifyr2UhEE1ttPdNKNYdydc6G+aZJfSGECBsIlC/VCdZv1i0
+         2mmSw/ELoMw8OjrL5BXdjRQnE8r8I0rzzzOuMUE4bGpK3h2kwXAvdkWi8hZ1n858DQXP
+         ViWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772659241; x=1773264041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6fnLdIBwuzKkIFXrEW2ZKLeYt2tdG7l6PDBWXCSAU8=;
+        b=s99IZn44H6GD4+AymrquGxvGPkY6tQeGS20Drx+nPJmQIwI3AWzjFi2WJdlbbgjS63
+         mjYrqbODCDpAkR+weubx+sIMLl42u5MdlF4BIvgPdLVuoDHfWl/niCOeswQi6CZoR048
+         4025OSRadm0S9oQoZVkVFNBP+9IxyxLJonLh7t0TKaLwvIM0LWCzeMcXvQknDUB4bCrd
+         RUYAN64IJmkGPn3Ns9vXBI5ovzxalbuETVEKvnANtSGEL203P+palBATCjad4YC/j4lk
+         QJKf9ZSeta6yZclnQ5Jqn7QSnge+zQcwZP59OEcAdEXZ8lui0kmX7ilriwjOEneMDRKi
+         1Geg==
+X-Gm-Message-State: AOJu0Ywu/RZjJEuZKMNkoIKWUslDR3qN/iyscHsavTan1cpD68kDSKKk
+	R9pwdDNJbksPsLUkZiKujGIOJroTlbfTBexNf05diNTO1C+QSFpvddU+Ji/3Lh89
+X-Gm-Gg: ATEYQzzOXw+r9l8xDBQEgwVQO1y301joURQI5BOe5KMCJjPDZMPgvQG8Lrv6N1aLlLi
+	Q621n4fruHed7/dmtJatWdvZ1TS4oRfyLR1zKCglDPjgfjLaUBs7jkW6TMWYJXeyHiHHChV8T92
+	gK/RKf3NvC0OplDKM63riFrrIlo8B5I6Cmda0eufGl0NcFnAzONmw4ClGeN1bTqzCp6ZYWMh+xu
+	B/4NYV5LGUCT4cdsrBzrix7oDStLg6wgOKiaEFPAhp8nvuCDNXaeR8nmfTeY2vHAs4Y28antzCs
+	apojkuKeY2IM7Dc0PW9QmM3bUQgCmh0GOyzseJHxgAurTuRw8drRtg8tbGaMEVKqdDU49/6wzsU
+	130QM13jOyEJXL7F+rxzWZ3NZBPjuXy8sPcGbcQQjIsyKSQ5nYbNJPuej5Hsp73z5/WY8iuzz03
+	1ZZn2MTLlCgLImn73Stul4p7DQukGOP/f0sBUnhIl6g9xN3AXfgFw=
+X-Received: by 2002:a17:907:70e:b0:b73:2b08:ac70 with SMTP id a640c23a62f3a-b93f1430131mr202869766b.49.1772659240655;
+        Wed, 04 Mar 2026 13:20:40 -0800 (PST)
+Received: from localhost ([2a02:a03f:b7dc:2b00:a97a:8551:7733:cb60])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b93c8e3d060sm331313266b.56.2026.03.04.13.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2026 13:20:40 -0800 (PST)
+Sender: Olivier Sobrie <olivier.sobrie@gmail.com>
+From: Olivier Sobrie <olivier@sobrie.be>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Naresh Solanki <naresh.solanki@9elements.com>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (max6639) fix inverted polarity
+Date: Wed,  4 Mar 2026 22:20:39 +0100
+Message-ID: <20260304212039.570274-1-olivier@sobrie.be>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qjo2UGZGSkQvYaoF"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJztUNizCcn=VCoGfmaMy3r6wDTLwZH5r6vj7kh6q9qAA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
+According to MAX6639 documentation:
 
---Qjo2UGZGSkQvYaoF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  D1: PWM Output Polarity. PWM output is low at
+  100% duty cycle when this bit is set to zero. PWM
+  output is high at 100% duty cycle when this bit is set
+  to 1.
 
-On Wed, Mar 04, 2026 at 12:26:17PM -0600, Rob Herring wrote:
-> On Tue, Mar 3, 2026 at 10:10=E2=80=AFAM Oleksij Rempel <o.rempel@pengutro=
-nix.de> wrote:
-> >
-> > Hi Krzysztof and Rob,
-> >
-> > On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:
-> > > >  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++=
-++++
-> > > >  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
-> > > >  2 files changed, 196 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc339=
-78.yaml
-> > > >  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,m=
-c33978-pinctrl.yaml
-> > > >
-> > >
-> > > My bot found errors running 'make dt_binding_check' on your patch:
-> > >
-> > > yamllint warnings/errors:
-> > >
-> > > dtschema/dtc warnings/errors:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0'=
- does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-> > >       from schema $id: http://devicetree.org/schemas/mux/mux-controll=
-er.yaml
-> > >
-> >
-> > Folding the mux node into the parent as suggested [1] causes this error.
-> > Because the parent now has #mux-control-cells, the generic
-> > mux-controller.yaml forces the node name to be mux-controller. Since
-> > this chip is primarily a switch/GPIO controller, naming the parent SPI
-> > node mux-controller@0 is misleading.
-> >
-> > What is the preferred way to go here?
->=20
-> I think there was another series dropping the mux-controller node
-> name. Not sure what happened to it, but that's what we need to do
-> here.
+Up to commit 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using
+info structure"), the polarity was set to high (0x2) when no platform
+data was set. After the patch, the polarity register wasn't set anymore
+if no platform data was specified. Nowadays, since commit 7506ebcd662b
+("hwmon: (max6639) : Configure based on DT property"), it is always set
+to low which doesn't match with the comment above and change the
+behavior compared to versions prior 0f33272b60ed.
 
-It's here:
-https://lore.kernel.org/all/cover.1769703480.git.tommaso.merciai.xr@bp.rene=
-sas.com/
+Fixes: 0f33272b60ed ("hwmon: (max6639) : Update hwmon init using info structure")
+Signed-off-by: Olivier Sobrie <olivier@sobrie.be>
+---
+ drivers/hwmon/max6639.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tommaso pinged me about it wondering what to do. Mux maintainer has been
-unresponsive. Maybe you should grab the binding portion since it is
-blocking other work?
-https://lore.kernel.org/all/cover.1769703480.git.tommaso.merciai.xr@bp.rene=
-sas.com/
+diff --git a/drivers/hwmon/max6639.c b/drivers/hwmon/max6639.c
+index a0a1dbbda887..9a3c515efe2e 100644
+--- a/drivers/hwmon/max6639.c
++++ b/drivers/hwmon/max6639.c
+@@ -607,7 +607,7 @@ static int max6639_init_client(struct i2c_client *client,
+ 			return err;
+ 
+ 		/* Fans PWM polarity high by default */
+-		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x00);
++		err = regmap_write(data->regmap, MAX6639_REG_FAN_CONFIG2a(i), 0x02);
+ 		if (err)
+ 			return err;
+ 
+-- 
+2.53.0
 
->=20
-> Rob
-
---Qjo2UGZGSkQvYaoF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaah6/gAKCRB4tDGHoIJi
-0nbTAQDZHJjbK0X6GeGdOzcNTEKGox6JxWx5yN9g37UvqLkpeAEAhUPjVf/4c1h7
-SN18YwVeRy8PDF1ZBvjlP/Ek/l0Yhgo=
-=pcLD
------END PGP SIGNATURE-----
-
---Qjo2UGZGSkQvYaoF--
