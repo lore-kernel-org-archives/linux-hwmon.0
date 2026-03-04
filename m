@@ -1,127 +1,101 @@
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [94.124.121.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59468389107
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 09:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.124.121.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22FC395DA3;
+	Wed,  4 Mar 2026 09:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615276; cv=none; b=gCm5kjNacbPhp6NCx4e/GvAe2lYMtP2aaBFszi7mw8XIsAherbz6MeGcwxxSXK2UQ3qDWUqqouu7wge0fWAcP58SCoESvyzjQtL2s2T022il5Lv93g10nOVfDCDc6IkmPq7T7U3GcvLZsnnMU19EnpS/sCOdEnlnWDkuGsAEc50=
+	t=1772615908; cv=none; b=mBs8l9BpgVotw2P1TwxNjO7IBwVa8E3WOTH8iYerdbHiXJ75M4rvxnvbSEJryJLxfsy3ryv8/ugwTp+/Vz41gp1cZyE1XBV3pjUQt0+h1IBPi26WD7R/rvr/Zp8NhWerKn6ZPSJRcbAHFByWMp5LlTvrd7hQtpIefgtMGvvL3oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615276; c=relaxed/simple;
-	bh=HzGhRH94uYQhm+jiWYn+DKKu4qjvpXaVupl5oLLTzEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ii/eqLxtRiGuuy+DnlvWyyLi0LtGjwNXb/qYdX6Xa3k/KoLOsHpU8AkJnPwi5iTVpGNVatWIhnB3htHwZH4wQtQaf2kvJKXMky+Juhc+WSG9ACtvHhCe+Sz9ER36S+TkNvSpHQAzVEPToMl0MVXVBqZYzAOGZONw7qWHzuqq3rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl; spf=pass smtp.mailfrom=protonic.nl; dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b=Xwx9n+xa; arc=none smtp.client-ip=94.124.121.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonic.nl
+	s=arc-20240116; t=1772615908; c=relaxed/simple;
+	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c1TXIfqhXL5rApicYjGBTObX5zkwESv4oFjfWmBAbjZTSdoElX+C0eS+07ecLUt+ckH74giM6jL1Ew9dDdaGGh0D1NQW69nRdJmHc0ehSm6PMQ3L04XZ62hfLULaXWRdRPL6sKhmYg0WxiIOvvsZlKY8aZuSOyri1rveLYn7IUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnWrIXro; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b="Xwx9n+xa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=protonic.nl; s=202111;
-	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-	 message-id:subject:cc:to:from:date:from;
-	bh=ANgf0NirWa/yPqZ74gRfT33LDkbxijfweyinRAYArLg=;
-	b=Xwx9n+xaFIhq1CObs4uX0c/ShhFw6TqnK1+/PvKSZcM0go5tDwJUPghr/UHqI5Lpw22ejAKMy6TDR
-	 E2zysWfgMZRPnEGAkM6GLHuOyoUNofUEAiu99erPrqsxMLmP5S5BD2kINOoQf+5dPhlO31yQMUyXRk
-	 zlwJDYie0pVavdchPu+bZjUk8xY1waITkH4HCSxAki+aMxteC04nmLL7S3lyvysT42aMSre04j+GPE
-	 UJawikvRkDA3Zu67ej7X5DXJiPNo6JNYW9t4CX7/oqpKjMEAGyrW9scckueCbV2EDQ6r8IJ+LqKlJP
-	 mj1eTjouyzWZff0wnrUnfVgDbEaBfgw==
-X-MSG-ID: 76524656-17a9-11f1-9155-005056817704
-Date: Wed, 4 Mar 2026 10:06:42 +0100
-From: David Jander <david@protonic.nl>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, "Rob Herring (Arm)"
- <robh@kernel.org>, devicetree@vger.kernel.org, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter Rosin
- <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, Guenter Roeck
- <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>,
- linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260304100642.44d00b99@erd003.prtnl>
-In-Reply-To: <20260304-graceful-sweet-bittern-98efdb@quoll>
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
-	<20260303133947.1123575-2-o.rempel@pengutronix.de>
-	<177254885509.3251575.14819823286886805862.robh@kernel.org>
-	<aacH7NmkOzZued0Y@pengutronix.de>
-	<20260304-graceful-sweet-bittern-98efdb@quoll>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnWrIXro"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D60C19425;
+	Wed,  4 Mar 2026 09:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772615907;
+	bh=DqQFigDJ368Z5nPS5m9Q7Nq+wqG5hNprsu/1QDUlhA8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BnWrIXroRr6DGO6COgDOsecmpa7x+fF4yHx2u2k5WsZ+BLWzvzUUV7uMfNIoE+iQs
+	 mdoGPSlZc5kn466gYE/XfSeyng33oXkMDsg0aemnWoU6RYpNSCTaHml0kjxL8q74MP
+	 SGXt4SuWVja8WXGIX2YM+yHvI/BtWxlwFxtniqrT2FTrVITiI0mSIOQzGxB40qTb4t
+	 01cuZXikRWIUb+pX7EDFNBbWVCDy1Hz6X++yupk9wfbTs0+Fa6FiLXxi0KaGhO19NR
+	 DHp8BPZqYYB7ADvmkyvU/D4747R18C1Chuzd92zyNH3hQnNTSLQ8HWJskm8ahAhvXP
+	 ElVD3LF0lvU+w==
+Message-ID: <d9e9703f-8166-41a9-a927-5bcd7ad4a8db@kernel.org>
+Date: Wed, 4 Mar 2026 10:18:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/14] powerpc: drop unneeded dependency on OF_GPIO
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
+ Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+ linux-pm@vger.kernel.org
+References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
+ <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260304-gpio-of-kconfig-v1-3-d597916e79e7@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-Hi Krzysztof,
 
-On Wed, 4 Mar 2026 09:05:11 +0100
-Krzysztof Kozlowski <krzk@kernel.org> wrote:
-
-> On Tue, Mar 03, 2026 at 05:10:20PM +0100, Oleksij Rempel wrote:
-> > Hi Krzysztof and Rob,
-> > 
-> > On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:  
-> > > >  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++++++
-> > > >  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
-> > > >  2 files changed, 196 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
-> > > >  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
-> > > >   
-> > > 
-> > > My bot found errors running 'make dt_binding_check' on your patch:
-> > > 
-> > > yamllint warnings/errors:
-> > > 
-> > > dtschema/dtc warnings/errors:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-> > > 	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
-> > >   
-> > 
-> > Folding the mux node into the parent as suggested [1] causes this error.
-> > Because the parent now has #mux-control-cells, the generic
-> > mux-controller.yaml forces the node name to be mux-controller. Since
-> > this chip is primarily a switch/GPIO controller, naming the parent SPI
-> > node mux-controller@0 is misleading.
-> > 
-> > What is the preferred way to go here?  
+Le 04/03/2026 à 10:02, Bartosz Golaszewski a écrit :
+> OF_GPIO is automatically enabled on all OF systems. There's no need to
+> select it explicitly.
 > 
-> https://www.nxp.com/products/interfaces/multi-switch-detection-interface/22-i-o-msdi-programmable-current-analog-mux:MC33978
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+
+Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+
+> ---
+>   arch/powerpc/platforms/85xx/Kconfig | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> Name of the mc33978 device is "programmable analog mux" and further
-> description says "analog multiplexer for reading analog inputs ", so I
-> don't find "mux-controller" a confusing name. It is EXACTLY a
-> mux, so mux-controller.
-
-Sorry to chime in here. I'm afraid the NXP description on that link you posted
-is a typo. It is not correct. This chip is primarily a "Switch Detection
-Interface", or in other wordt a switch input interface. Wee here for the same
-page for the MC34978, which is the exact same chip:
-
-https://www.nxp.com/products/interfaces/multi-switch-detection-interface/switch-detection-interface-22-i-os-programmable-wetting-current-temp-sensor-3-3-v-5-0-v-spi:MC34978
-
-It has an additional function that can be used as an analog MUX, but it is an
-extra feature and definitely NOT its primary function.
-
-Not sure if this is relevant, but I fear there might be some confusion.
-
-Best regards,
-
-> Anyway if you want gpio, then please add a patch extending the pattern
-> in mux-controller.yaml to allow "gpio".
+> diff --git a/arch/powerpc/platforms/85xx/Kconfig b/arch/powerpc/platforms/85xx/Kconfig
+> index 604c1b4b6d45c11dc3149ee8b9adabe593882c8e..6805c19ac8a915dae1bd24b13010a56cf1948ad4 100644
+> --- a/arch/powerpc/platforms/85xx/Kconfig
+> +++ b/arch/powerpc/platforms/85xx/Kconfig
+> @@ -217,7 +217,6 @@ config GE_IMP3A
+>   config SGY_CTS1000
+>   	tristate "Servergy CTS-1000 support"
+>   	select GPIOLIB
+> -	select OF_GPIO
+>   	depends on CORENET_GENERIC
+>   	help
+>   	  Enable this to support functionality in Servergy's CTS-1000 systems.
 > 
-> Alternative, because it is rather a mux than a controller of a mux,
-> would be to call it just "mux" or "io-mux" (maybe the latter, since we
-> have "i2c-mux" in the spec) and allow that pattern to be in
-> mux-controller.
-> 
-> 
-> Best regards,
-> Krzysztof
 
--- 
-David Jander
