@@ -1,106 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp28.bhosted.nl (smtp28.bhosted.nl [94.124.121.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AD336A029;
-	Wed,  4 Mar 2026 10:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181743A2544
+	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 10:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.124.121.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772619430; cv=none; b=R3/2/amNKih8DBctYfi69gmbTGEPZZySBDVLpMoMQVuS8uj7BMj/iqk55hO6FeDaYh8RrN42ZRLslslkrSaiwwLWBHBHZAuiOf3l0ccY+VASUXO5vF14ObVS5KdT+3jp66RoQgvKIYjjb+qt0sPPYMdbY+9dWqxk7+eEqf8YfbI=
+	t=1772619975; cv=none; b=KONEbAD6PjjN0v/fK1LW8Q6ZD2q8rL0AyJprze2eT5AUp/QLRq7nNR0HI3SU2sfdUdV6nH1L9pVQUJgKSky+OWbVmRS73jfCCSlmm5AGILS6PUMRrWN416tTLyyAItbj9jQP3GTRUkPiCVtziS1Cs7NnmkpqnULNZG1VLZhxePs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772619430; c=relaxed/simple;
-	bh=Oy7ryrZDnPvluOVj01dEpy0ZZDiJCTqPr/cX/fkZcP0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ly7rzK3bB5c6UUMkn7GO2/Yp6agHetkhdLLaRYanIWN6y0vEjuVSIUUqWGzglCqBgNfyohvWABy1n8ibnIMXIs5w4bUIQQtAryQTJz90g5nQ8cLy+6IPxZ5Hv/kxvmRfVzACYd5cCIW59b7qnOMhWfPqPs0GJBdQ4mcjzDH/K6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfL65dmM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772619975; c=relaxed/simple;
+	bh=iaoKu1YAbCoudL14l3Rwg8N48l6zL3jjv2BcSRhzbo0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E1P+mNejl1TT5VPjgmBKdpzg+a1t8ZFTcg0nJut7T9oW5iM6o7SpJ/zhcEMh+lY7tO5bR1eLyea7SdMo1q1PIYMBI5hqI+muz9YJJJrrkp0jvVogH1E4FSM5tfwmyQH3mFEZA8r09/oiplmEEPWvNXU1mhQin0sDAWq8EngKImk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl; spf=pass smtp.mailfrom=protonic.nl; dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b=rxQg0s9M; arc=none smtp.client-ip=94.124.121.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonic.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfL65dmM"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9031CC19425;
-	Wed,  4 Mar 2026 10:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772619430;
-	bh=Oy7ryrZDnPvluOVj01dEpy0ZZDiJCTqPr/cX/fkZcP0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=lfL65dmMjh0cLf/2SneU0q/hRoSTvkCUVh416xMlIGhqimBqcjSS0Kq0ze6Dlf5Hh
-	 rUJY512GQn6y+LuZCORzErefaAy/ue3sqVreKoKszSUrK7WzfD5IVU9+6/oOhNLvkE
-	 B2jt4Svbrr+rcc8mjZu428oFfhZ3PxSAw0mvoJiW4LIYCImdDlUfyKfflKtFeAIiOR
-	 DKyiOwMXD5l3sWqNd+76sQfVGmD25jPPCp4SgWhlrvOKpYZYQ1+7hVI5DcVzaSdkay
-	 0fkfo9qs/Ur3E+OfkczEOYz5zBCznyeOci4rzcwPWeFK9b7xsx9wqXmL1mbtTQHbaI
-	 orcuPZoxDns9A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85BA7EB7EB9;
-	Wed,  4 Mar 2026 10:17:10 +0000 (UTC)
-From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
-Date: Wed, 04 Mar 2026 10:17:48 +0000
-Subject: [PATCH 2/2] hwmon: (ltc4282) Add default rsense value
+	dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b="rxQg0s9M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=protonic.nl; s=202111;
+	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+	 message-id:subject:cc:to:from:date:from;
+	bh=w6F9EZJVS8+TF1xyzyXSI4fM3c5Dtg3XikqZDLJUQME=;
+	b=rxQg0s9M7zsl29LETTXvuEN2hLbg7fHyi7KWCFsfIibM4SdvaeotGKAcJvJLdtpWmY02EHyKO2IcJ
+	 jSjkE/blulrRpemUlqg5mDYXA9IyYZwbhn8XfkX0eqxE2mo0H92PtLIIQvFGHJ3SAYGt/hoTTWimWY
+	 NnPfzJJsCBabFtdedNTtaRYO9ex26bEw+7qjDyTv+wPMIs/WK+8nQ9HS7OakRBBA7sRV8/gA9rhlNQ
+	 gyC4OetacoqxSyAO22YZV9oFybgny7sx0zfBQPjRKJaJoTmdY4LDrNjqXQ/817UrDycxwn64xcZgWf
+	 lFZWNcM1OLp6MFVXxNEoLk6bDXKu/og==
+X-MSG-ID: 66bae932-17b4-11f1-b532-0050568164d1
+Date: Wed, 4 Mar 2026 11:25:00 +0100
+From: David Jander <david@protonic.nl>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, "Rob Herring (Arm)"
+ <robh@kernel.org>, devicetree@vger.kernel.org, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter Rosin
+ <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>,
+ linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
+Message-ID: <20260304112500.4766f21b@erd003.prtnl>
+In-Reply-To: <4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
+References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
+	<20260303133947.1123575-2-o.rempel@pengutronix.de>
+	<177254885509.3251575.14819823286886805862.robh@kernel.org>
+	<aacH7NmkOzZued0Y@pengutronix.de>
+	<20260304-graceful-sweet-bittern-98efdb@quoll>
+	<20260304100642.44d00b99@erd003.prtnl>
+	<4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260304-hwmon-ltc4282-minor-improvs-v1-2-344622924d3a@analog.com>
-References: <20260304-hwmon-ltc4282-minor-improvs-v1-0-344622924d3a@analog.com>
-In-Reply-To: <20260304-hwmon-ltc4282-minor-improvs-v1-0-344622924d3a@analog.com>
-To: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772619475; l=1381;
- i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=1K80NKgB8MIVoZ4myHTgOKtZ/0xG3qVAlLQ5ld8hUek=;
- b=kxY5Ss5sCb/V23P159h1ab5UWHaWON3Zq3/b4JhCG6EoFGlTeOk2QyxcreQdMgYqJN3qdFQy8
- rS5MQbuZGJfB6zQQgtTDjtTNfR+lmtvqpTyVVe6Ke9vh1CSihFp4yHy
-X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
- pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
-X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
- auth_id=100
-X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Reply-To: nuno.sa@analog.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Nuno Sá <nuno.sa@analog.com>
+On Wed, 4 Mar 2026 10:49:06 +0100
+Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-Instead of failing probe when the "adi,rsense-nano-ohms" firmware
-property is not provided, default rsense to 1 * MICRO. This allows
-the device to probe without requiring firmware properties, which
-might be useful for some high level testing.
+> On 04/03/2026 10:06, David Jander wrote:
+> > 
+> > Hi Krzysztof,
+> > 
+> > On Wed, 4 Mar 2026 09:05:11 +0100
+> > Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >   
+> >> On Tue, Mar 03, 2026 at 05:10:20PM +0100, Oleksij Rempel wrote:  
+> >>> Hi Krzysztof and Rob,
+> >>>
+> >>> On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:    
+> >>>>>  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++++++
+> >>>>>  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
+> >>>>>  2 files changed, 196 insertions(+)
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+> >>>>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+> >>>>>     
+> >>>>
+> >>>> My bot found errors running 'make dt_binding_check' on your patch:
+> >>>>
+> >>>> yamllint warnings/errors:
+> >>>>
+> >>>> dtschema/dtc warnings/errors:
+> >>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
+> >>>> 	from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
+> >>>>     
+> >>>
+> >>> Folding the mux node into the parent as suggested [1] causes this error.
+> >>> Because the parent now has #mux-control-cells, the generic
+> >>> mux-controller.yaml forces the node name to be mux-controller. Since
+> >>> this chip is primarily a switch/GPIO controller, naming the parent SPI
+> >>> node mux-controller@0 is misleading.
+> >>>
+> >>> What is the preferred way to go here?    
+> >>
+> >> https://www.nxp.com/products/interfaces/multi-switch-detection-interface/22-i-o-msdi-programmable-current-analog-mux:MC33978
+> >>
+> >> Name of the mc33978 device is "programmable analog mux" and further
+> >> description says "analog multiplexer for reading analog inputs ", so I
+> >> don't find "mux-controller" a confusing name. It is EXACTLY a
+> >> mux, so mux-controller.  
+> > 
+> > Sorry to chime in here. I'm afraid the NXP description on that link you posted
+> > is a typo. It is not correct. This chip is primarily a "Switch Detection
+> > Interface", or in other wordt a switch input interface. Wee here for the same
+> > page for the MC34978, which is the exact same chip:
+> > 
+> > https://www.nxp.com/products/interfaces/multi-switch-detection-interface/switch-detection-interface-22-i-os-programmable-wetting-current-temp-sensor-3-3-v-5-0-v-spi:MC34978  
+> 
+> That's MC34978 and I commented on MC33978.
+> 
+> What is the primary function of MC33978 being described here as the base?
 
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
----
- drivers/hwmon/ltc4282.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+The MC34978 and MC33978 are the exact same part (except for the temperature
+range). The fact that NXP has two different web-pages with two different
+descriptions of it certainly doesn't help, but you can also check the
+datasheet[1] description: "MC33978: 22-channel multiple switch detection
+interface with programmable wetting current"
 
-diff --git a/drivers/hwmon/ltc4282.c b/drivers/hwmon/ltc4282.c
-index db6534e67991..53dbf904a172 100644
---- a/drivers/hwmon/ltc4282.c
-+++ b/drivers/hwmon/ltc4282.c
-@@ -1328,15 +1328,16 @@ static int ltc4282_setup(struct ltc4282_state *st, struct device *dev)
- 	if (ret)
- 		return ret;
- 
-+	/* default to 1 micro ohm so we can probe without FW properties */
-+	st->rsense = 1 * MICRO;
- 	ret = device_property_read_u32(dev, "adi,rsense-nano-ohms",
- 				       &st->rsense);
--	if (ret)
--		return dev_err_probe(dev, ret,
--				     "Failed to read adi,rsense-nano-ohms\n");
--	if (st->rsense < CENTI)
--		return dev_err_probe(dev, -EINVAL,
--				     "adi,rsense-nano-ohms too small (< %lu)\n",
--				     CENTI);
-+	if (!ret) {
-+		if (st->rsense < CENTI)
-+			return dev_err_probe(dev, -EINVAL,
-+					     "adi,rsense-nano-ohms too small (< %lu)\n",
-+					     CENTI);
-+	}
- 
- 	/*
- 	 * The resolution for rsense is tenths of micro (eg: 62.5 uOhm) which
+Further down in the description it says: "It also features a 24-to-1 analog
+multiplexer for reading inputs as analog."
+IMHO this makes it clear that this is NOT primarily a MUX.
+
+Actually, I doubt many users of this chip will use the analog MUX function at
+all since it has quite a few limitations that make it not very practical to
+use.
+
+The most fitting Linux framework for this chip's primary funtcion IMHO is
+pinctrl/gpio, but there are some caveats unfortunately.
+
+[1] https://www.nxp.com/docs/en/data-sheet/MC33978.pdf
+
+Best regards,
+
+> > It has an additional function that can be used as an analog MUX, but it is an
+> > extra feature and definitely NOT its primary function.
+> > 
+> > Not sure if this is relevant, but I fear there might be some confusion.
+> > 
+> > Best regards,
+> >   
+> >> Anyway if you want gpio, then please add a patch extending the pattern
+> >> in mux-controller.yaml to allow "gpio".
+> >>
+> >> Alternative, because it is rather a mux than a controller of a mux,
+> >> would be to call it just "mux" or "io-mux" (maybe the latter, since we
+> >> have "i2c-mux" in the spec) and allow that pattern to be in
+> >> mux-controller.
+
 
 -- 
-2.53.0
-
-
+David Jander
