@@ -1,103 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496F63A0B35
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 12:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69EC19C54E
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 13:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772715274; cv=none; b=IhGakNF3qsChkzlWzLJGfVvHqJy+wiEEqKr/73jrO7FSkjmg/R0/hx4j1jvfKNQhER/LZtykM+TwpS/vu5hUH0PG38yjSJyFxwf1l1ipA97gxILrr4yvUAcJ6T2RXo3BgSpWFv5lQCbnOxtReY8l1B07e1h7NentO398Mge7vtE=
+	t=1772718090; cv=none; b=oA6Ue8o85/j7Gxr0QdIoExh1/QHVFC9N9uNmQ4CWWnhQKrQ7HMYarnK9QnhqufJi7tnTy2vZptqgY9YmIW1pJtdrokFw6ibt7MG62amsz6nNHJ2+Mk/JsJ/2+6K+rBWZ0p0L53fnGifdFnyTgbXCTHYwPYAx1aAyV2kqJ9DrSFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772715274; c=relaxed/simple;
-	bh=cu1oUJaDlhadNZdXZeA7Rjo/Km1gQ9Mb1DfAEjrTJ2w=;
+	s=arc-20240116; t=1772718090; c=relaxed/simple;
+	bh=nQ0TL66BvmGTxU4P/K19cUkjZF7VrlRWe+4oIDFI9cs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SKdQMpqGItspwdhv/PxTxsTzojhu/0qTg2VzbXHGTkaP/HgGAdoj6V3+N6R15UFLDOAGAyBCSQgW9kDDYxHzjWxc1jGLFNonxXFOnFn5Dq//T1K18ATuagKCSUX0m2xK57Tk7DC5kW8CBh5PYRthW3KrhloWAAU/ID+rqfd2PTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S+QZVT4R; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=ZgaR9MurjcCvr5alzK7SZtU7KbNfQmbtlb7H895sHjChLcvjr0W/Re1p0LQ/0aTQxEj5xdDqliUeZftnWeDJSGkz2jCVQLXql3zBXzqv34ATeGUaYo3Cf+5p1uH0djL8iFaCS5eyUj5Kk1DCbPzdRrLYedB7D/Y6GoMp1UjGanI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3gviU/h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S+QZVT4R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D136C2BCB8
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 12:54:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3gviU/h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA60C116C6
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 13:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772715274;
-	bh=cu1oUJaDlhadNZdXZeA7Rjo/Km1gQ9Mb1DfAEjrTJ2w=;
+	s=k20201202; t=1772718090;
+	bh=nQ0TL66BvmGTxU4P/K19cUkjZF7VrlRWe+4oIDFI9cs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S+QZVT4RT0FLmiZb/7pVI2B73TrycHXpt1F/2QFKoOIBZ5xZeuqA4nRau2E2EhaZy
-	 eUZuoMdY9O2quh8Pgvd4wyC14ZzyThxDtQVuc9qc1puWBLW2VpozZ22D9asc3b1frM
-	 /auNoRJJWpKdZr0bY5MJ3YrnVF5kvNoisCV1ptx0Vy/0Yv96OuSLfp1YoznhGlvwFC
-	 mV6TuJ21d1Pm/1nGBG9n9rE831rLCesZ341q7SnrrbIeshbkblvL+c92dBZoE0xUVb
-	 ShV0dmTcy7dVNsoda/iHhsv3K0r6fM5aGuEa8DGUnp731TlIJVzDQPt65buYIRkdqO
-	 UU/pkmXVNm5xA==
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64c9a398bc7so7521230d50.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Mar 2026 04:54:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUD1JtWMNQWs1ppRjtesiq1OAG2KTjjJ+C7AqNn0tl1cr6vC4svVfmr8Yv8ygNIeZao4xagV3SvtqHbHA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLgX3Z4snc+7PpGqJjj9f6/SrixxN20W1uGtCtOHvxF9/Xrykq
-	CaFbSTJyHIRTEZZzSpQeXH/1LZ/xAm8cu2PemuUKiQ5HfnMDA1VZ/NtEKmzQdEI71Xqaq1Wfav9
-	umATYqZx5x6s7izDToIBpBc4ecaDDTHE=
-X-Received: by 2002:a53:e197:0:b0:64a:cdf1:99f6 with SMTP id
- 956f58d0204a3-64cf9ff1cc4mr3631131d50.63.1772715273377; Thu, 05 Mar 2026
- 04:54:33 -0800 (PST)
+	b=a3gviU/h6COsyvtnM03E/mUVslzF6/qF358oxk8ufPDD8eIn1by0819SrzlD192uA
+	 1Sma8UaYjGAwc8p57mNGa5jDK7+B2vUi1anibEXYGaSBlVVjfpsRG0yOsnDKb+AxIc
+	 uUu51jDzjlHY95yHlv1CuM2EdtOqhjD3EbhqFS+94XAvm/lf7hnbFySCiZKa8DTiGa
+	 rUWgZ+2zx6Fu0KN0mFsKJFQiKtsiihSNm9Io6TIcoe+gExhP9r1BZ3mSPYcSuIvDFU
+	 ljAiZg1u+eRBZ0tJJIU1Zrk5m1iUPRefNdEQipldflK9EPUL9ujoE0mps7Y03inzoS
+	 DkQJzRkUaR4jQ==
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-64c9a398bc7so7564013d50.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Mar 2026 05:41:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXFKCdFjAT2revZ+RRM58xP9dus+9myRm1sgp4KHyn7RvDzwkZWOpX6unVmit07r1+vWZByQA0V3EGj2Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqxuZZKeGAoekpIg9hHxn9DhTKZu/cmq4+InPZZ0zyYSUHoIOb
+	e3D772+bj+Cah1gxhl85aK3EPdb7PCD1BsnB9Sb73T59RHA6K5c4nVJHXHYyJHTQxyDyz7LOZi0
+	Qs9aEDdtqmqzgFchLBPJN29tzDrV3E9o=
+X-Received: by 2002:a05:690e:e25:b0:64a:d539:1b50 with SMTP id
+ 956f58d0204a3-64cf9b97783mr3920949d50.38.1772718089942; Thu, 05 Mar 2026
+ 05:41:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
- <20260303133947.1123575-2-o.rempel@pengutronix.de> <177254885509.3251575.14819823286886805862.robh@kernel.org>
- <aacH7NmkOzZued0Y@pengutronix.de> <20260304-graceful-sweet-bittern-98efdb@quoll>
- <20260304100642.44d00b99@erd003.prtnl> <4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
- <20260304112500.4766f21b@erd003.prtnl> <98debf2d-cc29-42dc-bb93-ee97439683fd@kernel.org>
- <20260304131731.4d54f051@erd003.prtnl>
-In-Reply-To: <20260304131731.4d54f051@erd003.prtnl>
+References: <20260303133947.1123575-1-o.rempel@pengutronix.de> <20260303133947.1123575-5-o.rempel@pengutronix.de>
+In-Reply-To: <20260303133947.1123575-5-o.rempel@pengutronix.de>
 From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 5 Mar 2026 13:54:20 +0100
-X-Gmail-Original-Message-ID: <CAD++jLkK5od7cODqQ2BsEKE7tvp8vVAsv6erLu1dEzcn35F8QA@mail.gmail.com>
-X-Gm-Features: AaiRm52hABlQPGceianpxeT2EH5vBUlmCgYDsJIaxmSxvInyVQGTDhdoIviYV4s
-Message-ID: <CAD++jLkK5od7cODqQ2BsEKE7tvp8vVAsv6erLu1dEzcn35F8QA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-To: David Jander <david@protonic.nl>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Oleksij Rempel <o.rempel@pengutronix.de>, 
-	"Rob Herring (Arm)" <robh@kernel.org>, devicetree@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Date: Thu, 5 Mar 2026 14:41:17 +0100
+X-Gmail-Original-Message-ID: <CAD++jL=ZYwZ4qCBCnaUPKXGFpNvBgTr3Cyg2ZtrE0ZqAhK1e=w@mail.gmail.com>
+X-Gm-Features: AaiRm52QfYDonYBknli9ovJN02qNn7gBdrQenWct8xubGHAgrt_G8nsy7xblEwo
+Message-ID: <CAD++jL=ZYwZ4qCBCnaUPKXGFpNvBgTr3Cyg2ZtrE0ZqAhK1e=w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] pinctrl: add NXP MC33978/MC34978 pinctrl driver
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Peter Rosin <peda@axentia.se>, David Jander <david@protonic.nl>, kernel@pengutronix.de, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 4, 2026 at 1:18=E2=80=AFPM David Jander <david@protonic.nl> wro=
-te:
+Hi Oleksij,
 
-> > OK, thanks for the explanation, but then primary function is not GPIO
-> > either, because nothing on linked page says it is a generic purpose IO.
-> > It says it is switch detection. Maybe better generic name is then
-> > "pinctrl", thus also "pinctrl" child should be folded into the parent..=
-.
-> > but switch detection is also not a pinctrl. :/
->
-> I agree. This chip is indeed not very clear-cut with respect to the corre=
-ct
-> Linux subsystem. It could also be an input device if you view it strictly=
- from
-> the "switches" standpoint. I thought about this also, but figured that it
-> would be more flexible to just view it as a pinctrl device, which could a=
-lways
-> be used in combination with something like gpio-keys.c if one really want=
-ed
-> the input functionality. For context, our use-case is primarily for indus=
-trial
-> control reading digital sensors such as mechanical switches or industrial
-> optical sensors, and that is AFAIK the main application for this chip any=
-way.
-> For this the gpio UAPI is a good match.
+this is starting to look good!
 
-I have read the datasheets and GPIO+pinctrl is the best fit in my opinion,
-mostly because there are a lot of electric properties involved and there
-are industrial use cases, which is a good fit for the GPIO character
-device and the pinctrl+GPIO generic pin config options, some which
-are already identical.
+One thing bothers me:
 
-The alternative would be to create something new in drivers/iio
-which I think is overkill.
+On Tue, Mar 3, 2026 at 2:40=E2=80=AFPM Oleksij Rempel <o.rempel@pengutronix=
+.de> wrote:
+
+> - Add a comment to mc33978_gpio_to_irq() explaining why it must act as a
+>   proxy to the parent MFD's irq_domain (shared physical INT_B line with h=
+wmon).
+(...)
+
+> +static int mc33978_set(struct gpio_chip *chip, unsigned int offset, int =
+value)
+> +{
+> +       struct mc33978_pinctrl *mpc =3D gpiochip_get_data(chip);
+> +       int pull;
+> +       int ret;
+> +
+> +       /*
+> +        * We emulate open-drain/-source outputs by routing or isolating =
+the
+> +        * active wetting current sources.
+> +        * To drive the line, we apply the current source.
+> +        * To turn the line OFF (achieve High-Impedance), we MUST use the
+> +        * hardware TRI_SP / TRI_SG tri-state registers to physically iso=
+late
+> +        * it.
+> +        */
+> +       if (mc33978_is_sp(offset)) {
+> +               pull =3D value ? MC33978_PU : MC33978_PD;
+> +               value =3D 1;
+> +       } else {
+> +               pull =3D MC33978_PU;
+> +       }
+> +
+> +       mutex_lock(&mpc->lock);
+
+Have you considered using guards for this to avoid the goto:s?
+
+> +static int mc33978_gpio_to_irq(struct gpio_chip *chip, unsigned int offs=
+et)
+> +{
+> +       struct mc33978_pinctrl *mpc =3D gpiochip_get_data(chip);
+> +       int virq;
+> +
+> +       if (!mpc->domain)
+> +               return -ENXIO;
+> +
+> +       /*
+> +        * The hardware shares a single physical INT_B line for both GPIO=
+ pin
+> +        * changes and internal hardware faults (hwmon). Therefore, the I=
+RQ
+> +        * domain and threaded handler are centrally managed by the MFD c=
+ore.
+> +        */
+> +       virq =3D irq_create_mapping(mpc->domain, offset);
+> +       if (!virq) {
+> +               dev_err(mpc->dev, "Failed to map hwirq %u to virq\n", off=
+set);
+> +               return -ENXIO;
+> +       }
+> +
+> +       return virq;
+> +}
+
+I don't know about this.
+
+If it is clear from internal registers which bits represents the hwmon
+IRQs and which bits are GPIO IRQs, the modern way to handle this
+is hierarchical irqchip. Have you looked into that?
+
+For a simple example c.f. drivers/gpio/gpio-ixp4xx.c how this
+is registered with a parent irqchip using
+girq->parent_domain =3D parent;
+girq->child_to_parent_hwirq =3D ixp4xx_gpio_child_to_parent_hwirq;
+and
+ixp4xx_gpio_child_to_parent_hwirq().
+
+This way a unique irqchip for GPIO can be created as a child
+of the MFD irqchip.
 
 Yours,
 Linus Walleij
