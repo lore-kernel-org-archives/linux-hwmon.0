@@ -1,98 +1,115 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512F43A7F56;
-	Thu,  5 Mar 2026 14:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 452783B3C1F
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 14:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772721675; cv=none; b=Y7FDJ+YLSvTk/utde6x9qeRZ9ZUpEjUwrPIUCQ8H5E+G6P0puAKTwraew3y0pOHOkOnhKiQSQZiE3OK2z2/A4EnYA2nonsicfZVCIWMbrfBX2MiDHWRm3He7bYOt0Zo4eOolDnPqd8iT1eBZvBgt9s0z0kY5Fp0YDl83EhjaCaw=
+	t=1772721913; cv=none; b=t0vsQK+CVRja/4e1HfpBrLuWqf3vfJqLnjMVyWRRxySHLqpSmo90oP+AbgyL3PH4ZH25qf03+BW0REAzAHmoNHdsrMUArPEJMDBNDtrX9o6jVHNHDI+T8FqOWgjRzD2pjAOK9UJVxQBVqc4R2eOgr1XNNwg5Nl6s71wqLtXfmuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772721675; c=relaxed/simple;
-	bh=hAT3ItrZbJ3/rLJDOV+a4uv/6PitPVglKopYcJDVXzA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KG7UBj4TCig9sMOoytVVPWnL82yZhxIK5qU5iJK8GlLOH3U4lQLfG5xynjEeg3MSjpWXazE/6s3BKnEyGcDF74njC7OUKP34Q6ZzhqvHnW8GCWzM5jLRCUP0FKtB+oC0xzDLEZ/vYjedzNC0bPKgMjPamL7pTK3Cp3cm4aieg9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from edelgard.fodlan.icenowy.me (unknown [112.94.103.14])
-	by APP-03 (Coremail) with SMTP id rQCowABnhNvulalpTx7iCQ--.24548S4;
-	Thu, 05 Mar 2026 22:41:02 +0800 (CST)
-From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Rahul Tanwar <rtanwar@maxlinear.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Subject: [PATCH v2 2/2] riscv: dts: thead: th1520: add coefficients to the PVT node
-Date: Thu,  5 Mar 2026 22:40:44 +0800
-Message-ID: <20260305144044.44208-3-zhengxingda@iscas.ac.cn>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260305144044.44208-1-zhengxingda@iscas.ac.cn>
-References: <20260305144044.44208-1-zhengxingda@iscas.ac.cn>
+	s=arc-20240116; t=1772721913; c=relaxed/simple;
+	bh=JxAXDy8Qg0kPE0csEH3JZwQ2zDkqgb1p9YwasOy2dlc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QEbSDi4WdaUQrjTk8Kkc2Sdvn8556GwzqKfxELEVjuM/2TXuKCbh2PUQKwZZDIWTv+Xi62BYM8OGS2kJmatIEwzBYLm+PrN0TMxOxezd2jiieyIUrOg68sABpp8XsyIeWYmkn+WT4jD1Owzv9QKRlDbXgPiDcRmXOrhyRZ1K6U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LZkeeuZe; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LZkeeuZe"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2be1c918173so6660829eec.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 05 Mar 2026 06:45:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772721910; x=1773326710; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l1/ypJ6rTR5qngL/oS2fXdtqhXdpRH9GGWDsGzbr/Gg=;
+        b=LZkeeuZeRsVYLpGK4f5QTR8n83Lg1QJnAfYz9usZi6ZJ35erXz9hehWRrRRSvO0s3M
+         OoAwKT0UkuVzRdfBEIOQcCjg/tpmjpksfOvqz0id2xYYtPvUWr7pBFSi7Up/mM6tj/8m
+         PmuPDoNvQ3ky9glAl45LTbNyIp3A+b10YPgbU4mVtacm45C+1ibqyViVjW8FtI72YVv7
+         Ub1HMvyMg+w6N0SauOT3LCdYzPGHCb/ub/7dF6PIryB24eh/AJ16fCmWay0yu3z42t6U
+         UZjDfjHbAFUS7d89pJNz8+9TM4Ccy5Hcy2jGNrwlGIngzroDKSiVdsfkaCBbCr9fng5T
+         dsBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772721910; x=1773326710;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=l1/ypJ6rTR5qngL/oS2fXdtqhXdpRH9GGWDsGzbr/Gg=;
+        b=WLSyjqTGVQ246JYlPnz4rTE7AMqsMFHn14PQSe2O6/ufV875e0bqu34pHY6wWTqFev
+         xeNZK9h2BCVmmV3SKC10/AgKwBAifd9/tiID99B8G4bf/FwBLpP3BzFFZJEANaRYiR2e
+         mDaoPbw+zwGsB2djP9bPONWASUssWnPL73AsMzqcAlQYicZzHxNTb/Uf0JXZZDHHBIyc
+         QxAzpimQlqMJrZUkkgFNR8lzASFI5TzF96UyVR4Y1TsbW7aDttLh4A5TeNP9lqTR0BGP
+         P+pGLsQ5YflKNjmaSMGSfNTE9gTRr3wJsjiidMgkAiI/Rf7dSNnBxwcyu54UU6X6Swmt
+         aGTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUplqbsgNKnIVoo5bxroBNx92zfbhZl7szpXOEaR36jJE7gJo1KW525Feqlj+yYo5c2qUQhZNSNw/9FRg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHBQC0ja1u5yAQcT/ADyP4xGGeTA48Q2p2q9WEwX1ivAQ4lBTM
+	eOpOmpTM8h2nE56OoFSYofKaXrzGSSd4inbvaXF4vBuW7vQAAcI0NgBYlVL46KKd
+X-Gm-Gg: ATEYQzyL/prvWyGKJEk4dY8oOG8iYi95+RDEdCuW/AKXy2TFMRG1LZus0meXgarQ6xA
+	97/UNwjH8UaSunE7iBmk3oaFrqmKibe19K/MY+5nxXfhCVzZHzQGRWe/WE9z+/1iicMjianajgx
+	yWfGGMmtBv0DOviWAIHPDjUc9lGcxk69DyDBpqYf22RJcfhkd1ZZLWlxVKNAW7Y2pZC/cwKG+Ft
+	C0EUfVp4oND0BXHMhqf4r9MHprHE7aRmciYiZvdBcJ0pSN59YefPyBYn2qM9347P4iJl+DCAcFF
+	y9P1te+OdhTECqYYacG7h4ohAPZaEvgIHsmAaEPRDDmtyo9UGMKYaczTlZNCQ0LI2vR0w0tECGE
+	9giOvSk/RemgYSNiGKMhFsFG+8ytxQ3+v80Ter5gUqwokelVI82UVsqu6ENKzd/eANzBPkeEY2I
+	GPp5YXwONBTDR3olyPAs2TjIYJLh70vs8C4fSQ
+X-Received: by 2002:a05:7300:d717:b0:2ba:7b0b:e20a with SMTP id 5a478bee46e88-2be311df80bmr2191076eec.37.1772721910085;
+        Thu, 05 Mar 2026 06:45:10 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be381d5ae9sm2343977eec.26.2026.03.05.06.45.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Mar 2026 06:45:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 5 Mar 2026 06:45:08 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Sanman Pradhan <sanman.p211993@gmail.com>
+Cc: psanman@juniper.net, andriy.shevchenko@intel.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: (pmbus/q54sj108a2) fix stack overflow in
+ debugfs read
+Message-ID: <c64ac068-d657-4d68-8721-dde09978e4dd@roeck-us.net>
+References: <e7191c1c-ecd4-40f8-9e47-9357bd82984f@roeck-us.net>
+ <20260304235116.1045-1-sanman.p211993@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABnhNvulalpTx7iCQ--.24548S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw18KFW5Ar4DCw4fKw4DJwb_yoWfZrX_KF
-	1fGa15Za1fAFWfXF9rZrn5XFy5A34Yyw4Fyr9avr1UKas8Ww40qayqgas5Cw1DuFW5tFn7
-	Aw47XFW8t39FyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbkxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-	0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-	wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-	ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I2
-	62IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcV
-	AFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG
-	0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI
-	1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-	Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
-	CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
-	I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-	8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kfnx
-	nUUI43ZEXa7VUbH5lUUUUUU==
-X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260304235116.1045-1-sanman.p211993@gmail.com>
 
-The manual of TH1520 contains a set of coefficients a little different
-to the driver default ones.
+Hi,
 
-Add them to the device tree node of PVT.
+On Wed, Mar 04, 2026 at 03:51:17PM -0800, Sanman Pradhan wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
+> 
+> The q54sj108a2_debugfs_read function suffers from a stack buffer overflow
+> due to incorrect arguments passed to bin2hex(). The function currently
+> passes 'data' as the destination and 'data_char' as the source.
+> 
+> Because bin2hex() converts each input byte into two hex characters, a
+> 32-byte block read results in 64 bytes of output. Since 'data' is only
+> 34 bytes (I2C_SMBUS_BLOCK_MAX + 2), this writes 30 bytes past the end
+> of the buffer onto the stack.
+> 
+> Additionally, the arguments were swapped: it was reading from the
+> zero-initialized 'data_char' and writing to 'data', resulting in
+> all-zero output regardless of the actual I2C read.
+> 
+> Fix this by:
+> 1. Expanding 'data_char' to 66 bytes to safely hold the hex output.
+> 2. Correcting the bin2hex() argument order and using the actual read count.
+> 3. Using a pointer to select the correct output buffer for the final
+>    simple_read_from_buffer call.
+> 
+> Fixes: d014538aa385 ("hwmon: (pmbus) Driver for Delta power supplies Q54SJ108A2")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
 
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
----
-No changes in v2.
+For future patches, please do _not_send new versions of a patch as reply to old
+versions. The reason is explained in Documentation/process/submitting-patches.rst.
 
- arch/riscv/boot/dts/thead/th1520.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index bd5d33840884e..2160c8b6c2261 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -753,6 +753,10 @@ pvt: pvt@fffff4e000 {
- 			reg-names = "common", "ts", "pd", "vm";
- 			clocks = <&aonsys_clk>;
- 			#thermal-sensor-cells = <1>;
-+			moortec,ts-coeff-g = <42740>;
-+			moortec,ts-coeff-h = <220500>;
-+			moortec,ts-coeff-j = <(-160)>;
-+			moortec,ts-coeff-cal5 = <4094>;
- 		};
- 
- 		gpio@fffff52000 {
--- 
-2.52.0
-
+Thanks,
+Guenter
