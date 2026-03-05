@@ -1,66 +1,66 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9861FC7FB
-	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 01:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCD316A395
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 01:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772673734; cv=none; b=Fl9CzllenfqMrp4pxC6mdOgjHRc+u2k2tEdJ7H+/Kk0vpW0HABCiyMh7deI1GpdG8UP922n2FzVwUjDQV3Sla3WsuIx8edpEJxH57paBzF+viST96b1YKyCNWWvRpstjIvt2rvhC4/mhFgvVUISQSRN1uefUyaVFqf2Sx7GeNc4=
+	t=1772673911; cv=none; b=swEnMTzsS8VyJsRq6J62xQG9VOkhX0qYN7UEIfliMxC7tCw/SGMkx6+nalPq/Z5HH/C9DdfDkn2KiGAT1FTU1KNx0lwX4Qv0qTcTWSwMyt30ajS0Atbl9gKmt7tEze0Ocj0fjpHvAATOglFAQaWFDpZLpDVL2SLeCIAPrn/a5FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772673734; c=relaxed/simple;
-	bh=Nmhg+r+jQmk+JKM2u+BHfkLJTgalKKIAmQE1LNudc8I=;
+	s=arc-20240116; t=1772673911; c=relaxed/simple;
+	bh=g/2zdmedr0+cA1/ngz0aUDnFf7nfgXl04OLe1cRt4KY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BJyvUGh7aGtHNO7EWfJ5gkQEuuyRUVNdYK5NVv263rBJSnbIIKREFqW2jjHftY18WeZra37hH6k+lWFzMNeMCijvt8eUuFxGuAaajkc6hQcCOqbGkiy7gDC2eQ/DrFr9X3Kve+WLdaXKYdXjnnxX4fgBn7S7zXDBjmZVBh/8znk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iQI4wQSV; arc=none smtp.client-ip=209.85.216.50
+	 In-Reply-To:Content-Type; b=sydaA4x+5NXA/cAQZSt/9Anf47Cl9v46qFM/HGZmzofk2ENr2QJhazSoohNfnQVufAkARBvdJWpQEgmDHxCTaflL9ZYndvE+LtdnzN7lnDBwijNm6SNH2mYTZFQU/ktQRj/HTSwrh4TYbksbcgttTKFu1GX7NEt9C2KG2xEeiJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LGc+lZMr; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQI4wQSV"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3598581ed7bso1619884a91.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 17:22:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LGc+lZMr"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ae56e68216so27701835ad.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 17:25:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772673733; x=1773278533; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772673909; x=1773278709; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=huHR0LQZVqodSu33LVLAl1zLvi0W/qpmCk4qa2PGbMM=;
-        b=iQI4wQSVVSUjVIkq/hVSIzx59k2PJwednk4Kz9SZw6gtZ7C69vnB9lO44uM6GSv6Np
-         ZHSmPorcQM3YZj14zdUR12f1EpnJIdEmHBZTT8zC8k6OqaIRG/zaXOGEyeXs/5GF8NH4
-         H68oKTStYuUtuaJoYmwgKwzYF/SJ47t6cuY+DP1HikaAR+F9XNVatq/ZtQFma4tDOWuv
-         GrITPFL7IA2Pwmo+HoIIekfCjqsiPF02PeFwIYb4S2YkV7VTQSDmirNCzmH7aLLe6cog
-         dkXo4VOIbC5zoLsm1TOxKQOoACdfcDt4mGRMMXXbdJ+T42rUtKfLffkg4kWgQXqnPtwv
-         WHXw==
+        bh=ZSPLmA16vS4uzO9z7fTVabMUYxwof/qK5VsxUKuP71s=;
+        b=LGc+lZMrzfcvdaUxIBNI5gls9Wx4svCU8yccHqu01jjClkh/Bmp5CTgtyCf5IRuGuY
+         iD+Z/rIyenYqnEpnrSbcBuFbmygv0Zut8MozZpHP1pb7Z8ZWltX1Qc4+/LrdZiBsqA9S
+         TBe5sPPEp91mHmrr3mwe7QOT7Pv87iT97vWzSjnaEAsuaiV6So5JxgltlMs/nZZj9d4a
+         mR0Slko3AK8p4l9MsKzpParnAz/muoEOsTxwmhHZbEC3AweRtx1gTaiqQuVPmpdypHRg
+         bsOmeDVJfihuR8GAv7EOM/EQfaxRXr0/5zvWGvEsD+0FDuxO5wiWGLwBt7JPJ8CfXAW1
+         yb2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772673733; x=1773278533;
+        d=1e100.net; s=20230601; t=1772673909; x=1773278709;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=huHR0LQZVqodSu33LVLAl1zLvi0W/qpmCk4qa2PGbMM=;
-        b=QnkTCoBXR+FhiLt+364GMjHXMSn246PU3uIVkJR0rwKK8D8h22wt+a+ms8ckf2IcoF
-         3OnBY4lApzehyEQM0CCZryJRGnpaUGVcNiU+kkictV4DiDDp9Qh5SjUr1zmRVCnhY/hx
-         TrWCk8+l5gXDbRcsy0p/IkWwAgvPnOkOsBzzPN6F0iRCPXrqlZL9axOlSNChLjxaodpt
-         QbltK0G/477kGmKZGeABQ0pkLDXc013Y8TxiQkeET1YoxEsDTJ7uDei00y9Hph/gIRHf
-         aASccuCDDirWb2ng7wkqDz4nVD08ZJGGo0IgmGWiIW8dRpM2fDb5DpA1fj4UMcthQ2be
-         1Ziw==
-X-Gm-Message-State: AOJu0YwRZFaSUprYrtp7dAduwWaRG9twykwGrmK/9YbhhAXDZYQ+kh2U
-	wFBJsRscyrYMrqa63xqVv5HcSztprXPJTajw25OpmLE0/0liI9x2A6y1
-X-Gm-Gg: ATEYQzy56h5hN0mzGsolFNnXrhyq03XMOb0TEoBEaqEcdCnDWmEx6hVYWnP9V58VsGF
-	9kWX3S8Be2r+ctlO8wkVvNEnfv8coobD0FmVHiwa5tLQBJ6C+8G0v5amF7YnNAshMTFOw/z6ryf
-	rqz18JnrBmqtwz2ceVr1yKuTUSZeUahqeTee9Cit6CIhEiXsAJRMGQr3grspQ2N/414eCgddad0
-	oZUeVfsRCRCY61QQzddVlElgaNS8XVytYHJDF3RViSgVH0qs8/J0Ft+YhvkBdyK6Q2Bk3qLp2tp
-	wQkjibzADwGKQuo2Mt3r8hlZrTpVbim2no8aqC9Socv//fY4SNS7mq3JWp7LZDLH0aLbq3IAPY2
-	UuKqbPmNUtVEgBh3IDGZlQqgyYbOl/rryYF73HTvfNzfzTtCn0xx15gfPDAwU6rQ/hTpfI+/1Le
-	/+7TleReYmQfDl+1wOyGUI1oj+nIUyRngij5at5IafiIv7HjJ4olOJwBEMP0MeEJWPKednGmSy
-X-Received: by 2002:a17:90b:184d:b0:359:7906:d998 with SMTP id 98e67ed59e1d1-359a6a4f88bmr3488178a91.18.1772673732875;
-        Wed, 04 Mar 2026 17:22:12 -0800 (PST)
+        bh=ZSPLmA16vS4uzO9z7fTVabMUYxwof/qK5VsxUKuP71s=;
+        b=N/VVh82teRuaGrdrEXhtlsbSOqJr2zFZgIGdwmbgxe2JRtgLhjcVQDzMTFGjPNoS/H
+         TeniCqaUJmO4vpt7LuO3RE4iGRLFZxumSDzKYo0Z3D+gmG1oFiVKawInPfh0U8Rv9SfH
+         4gt+5rYb7P0CHNT4I1Lit7y/SZDdrr1KHTnKlA7SdTN8zONK0D1zSdhhqqu8+ru6Ucjt
+         cH/OyI1sc3jmVIanfJWn1scLf0zRWC8A4orHdGIcs59rdOS1u1cAI2bmrIUr1A7qHpSw
+         oPuh7Fg30NU5TIANgYuMZqAqIEh7R6gx94M6dJ43ATMWkijJ6l+xyyiNMhQl0TaOCVnZ
+         95TA==
+X-Gm-Message-State: AOJu0YwRKQ86GiEoyb6JfkO/ulzuLOQ7NJcZUKqEEw+SeMTqkq9rcJIZ
+	bbGNepv6AFYpQK6eiXlEYQ3qeSfTRUu39kHQTpvXcYsyvZvLL2tnTqip
+X-Gm-Gg: ATEYQzxJB2ybOTieJDNaVZUxM/PRQ/VDHgGRfmnIrf3pn3wWfihYbBPsm3fMYCCrui2
+	a6c5CaO1bP35o9TW+7JL913O0TzCQ7hb8wrLCGHOQRnsj36+x074hy64TvQANYdw6CCqElkbpJ1
+	9/FEULLxeA3KtA8gdCfXLBDNh/3hpLv+T4mwJ9Cwk1xSqJ9FrHGmQBAUSrRCLv+xNWMAhmYAGm8
+	kg9MvoiQ6Pt7vNoruT5Fl3GaO1SnrRwDQNo+m9LCbRti093wY5lZuh1FLw9ygGPMi+vawiajJNd
+	XBCvcmN8wYG1nSM/5IrX2NQME1aWEhRg/LWcsJJ7xsS7KdxqJCSSGiVz3akfJvoCj9Q5j+G7GNx
+	yBnA8HU4+PuudpSTv+B/QhwE0Em2s3/b8Zga1DOk/FC3o2DQMX7/FDnbWx0D63llMYAwbJl1Cyk
+	+l5apiRmL68SkhtkymqLxT/iescegT8wdt0D4xAto7n/jCcPJrOYqdgjYTPzOOeSrS5dOoCrLb
+X-Received: by 2002:a17:903:41c4:b0:2ae:61db:797b with SMTP id d9443c01a7336-2ae6a88bf82mr36181915ad.0.1772673909243;
+        Wed, 04 Mar 2026 17:25:09 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739db1d6dsm17906763b3a.26.2026.03.04.17.22.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5b36e1sm207233325ad.9.2026.03.04.17.25.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 17:22:10 -0800 (PST)
+        Wed, 04 Mar 2026 17:25:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ac78d67f-29d7-4c7f-b307-c49f5d89d341@roeck-us.net>
-Date: Wed, 4 Mar 2026 17:22:09 -0800
+Message-ID: <89b06d69-0094-4b5e-a240-b668bd8b0719@roeck-us.net>
+Date: Wed, 4 Mar 2026 17:25:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,13 +68,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] hwmon: gigabyte_waterforce: Allocate buffer with the
- driver data.
+Subject: Re: [PATCH 4/5] hwmon: gigabyte_waterforce: name input sub-reports
 To: =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
  Aleksa Savic <savicaleksa83@gmail.com>
 Cc: linux-hwmon@vger.kernel.org
 References: <c7a3a0b6c1658a8ce4cc5962de18c5b2cdbcdb8f.1772661800.git.mirq-linux@rere.qmqm.pl>
- <5939119b783a9b71b51593fe19a2fa53b06c069d.1772661800.git.mirq-linux@rere.qmqm.pl>
+ <7c37034ab5b1c4067d42eb75997a993dbbbdc366.1772661800.git.mirq-linux@rere.qmqm.pl>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,53 +119,109 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <5939119b783a9b71b51593fe19a2fa53b06c069d.1772661800.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <7c37034ab5b1c4067d42eb75997a993dbbbdc366.1772661800.git.mirq-linux@rere.qmqm.pl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 3/4/26 14:05, Michał Mirosław wrote:
-> Avoid an extra allocation for a constant-sized USB buffer: include it at
-> the end of the driver data.
+> Use a switch(command) with named labels instead of an if() sequence. The
+> hardware only ever uses 0x99 as the first byte (the report ID), so check
+> it at the beginning.
 > 
 > Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 > ---
->   drivers/hwmon/gigabyte_waterforce.c | 9 ++-------
->   1 file changed, 2 insertions(+), 7 deletions(-)
+>   drivers/hwmon/gigabyte_waterforce.c | 47 +++++++++++++++++------------
+>   1 file changed, 27 insertions(+), 20 deletions(-)
 > 
 > diff --git a/drivers/hwmon/gigabyte_waterforce.c b/drivers/hwmon/gigabyte_waterforce.c
-> index 06eae143bc4e..ef27c1ff8fd8 100644
+> index ef27c1ff8fd8..7f5c88f66e40 100644
 > --- a/drivers/hwmon/gigabyte_waterforce.c
 > +++ b/drivers/hwmon/gigabyte_waterforce.c
-> @@ -64,9 +64,10 @@ struct waterforce_data {
->   	u16 speed_input[2];	/* Fan and pump speed in RPM */
->   	u8 duty_input[2];	/* Fan and pump duty in 0-100% */
+> @@ -18,8 +18,12 @@
+>   #define USB_VENDOR_ID_GIGABYTE		0x1044
 >   
-> -	u8 *buffer;
->   	int firmware_version;
->   	unsigned long updated;	/* jiffies */
+>   #define STATUS_VALIDITY		(2 * 1000)	/* ms */
+> +#define REPORT_ID		0x99
+>   #define MAX_REPORT_LENGTH	6144
+>   
+> +#define CMD_FIRMWARE_VERSION	0xD6
+> +#define CMD_STATUS		0xDA
 > +
-> +	u8 buffer[MAX_REPORT_LENGTH];
+>   #define WATERFORCE_TEMP_SENSOR	0xD
+>   #define WATERFORCE_FAN_SPEED	0x02
+>   #define WATERFORCE_PUMP_SPEED	0x05
+> @@ -27,11 +31,11 @@
+>   #define WATERFORCE_PUMP_DUTY	0x09
+>   
+>   /* Control commands, inner offsets and lengths */
+> -static const u8 get_status_cmd[] = { 0x99, 0xDA };
+> +static const u8 get_status_cmd[] = { REPORT_ID, CMD_STATUS };
+>   
+>   #define FIRMWARE_VER_START_OFFSET_1	2
+>   #define FIRMWARE_VER_START_OFFSET_2	3
+> -static const u8 get_firmware_ver_cmd[] = { 0x99, 0xD6 };
+> +static const u8 get_firmware_ver_cmd[] = { REPORT_ID, CMD_FIRMWARE_VERSION };
+>   
+>   /* Command lengths */
+>   #define GET_STATUS_CMD_LENGTH		2
+> @@ -257,32 +261,35 @@ static int waterforce_raw_event(struct hid_device *hdev, struct hid_report *repo
+>   {
+>   	struct waterforce_data *priv = hid_get_drvdata(hdev);
+>   
+> -	if (data[0] == get_firmware_ver_cmd[0] && data[1] == get_firmware_ver_cmd[1]) {
+> +	if (data[0] != REPORT_ID)
+> +		return 0;
+> +
+> +	switch (data[1]) {
+> +	case CMD_FIRMWARE_VERSION:
+>   		/* Received a firmware version report */
+>   		priv->firmware_version =
+>   		    data[FIRMWARE_VER_START_OFFSET_1] * 10 + data[FIRMWARE_VER_START_OFFSET_2];
+>   
+>   		if (!completion_done(&priv->fw_version_processed))
+>   			complete_all(&priv->fw_version_processed);
+> -		return 0;
+> +		break;
+> +
+> +	case CMD_STATUS:
+> +		priv->temp_input[0] = data[WATERFORCE_TEMP_SENSOR] * 1000;
+> +		priv->speed_input[0] = get_unaligned_le16(data + WATERFORCE_FAN_SPEED);
+> +		priv->speed_input[1] = get_unaligned_le16(data + WATERFORCE_PUMP_SPEED);
+> +		priv->duty_input[0] = data[WATERFORCE_FAN_DUTY];
+> +		priv->duty_input[1] = data[WATERFORCE_PUMP_DUTY];
+> +
+> +		spin_lock(&priv->status_report_request_lock);
+> +		if (!completion_done(&priv->status_report_received))
+> +			complete_all(&priv->status_report_received);
+> +		spin_unlock(&priv->status_report_request_lock);
+> +
+> +		priv->updated = jiffies;
+> +		break;
 
-That needs confirmation that the buffer does not have to be cache line
-aligned. I never know if that is the case for usb transactions.
+That needs a default: case.
 
 Thanks,
 Guenter
 
->   };
->   
->   static umode_t waterforce_is_visible(const void *data,
-> @@ -348,12 +349,6 @@ static int waterforce_probe(struct hid_device *hdev, const struct hid_device_id
->   		goto fail_and_stop;
 >   	}
 >   
-> -	priv->buffer = devm_kzalloc(&hdev->dev, MAX_REPORT_LENGTH, GFP_KERNEL);
-> -	if (!priv->buffer) {
-> -		ret = -ENOMEM;
-> -		goto fail_and_close;
-> -	}
+> -	if (data[0] != get_status_cmd[0] || data[1] != get_status_cmd[1])
+> -		return 0;
 > -
->   	mutex_init(&priv->status_report_request_mutex);
->   	mutex_init(&priv->buffer_lock);
->   	spin_lock_init(&priv->status_report_request_lock);
+> -	priv->temp_input[0] = data[WATERFORCE_TEMP_SENSOR] * 1000;
+> -	priv->speed_input[0] = get_unaligned_le16(data + WATERFORCE_FAN_SPEED);
+> -	priv->speed_input[1] = get_unaligned_le16(data + WATERFORCE_PUMP_SPEED);
+> -	priv->duty_input[0] = data[WATERFORCE_FAN_DUTY];
+> -	priv->duty_input[1] = data[WATERFORCE_PUMP_DUTY];
+> -
+> -	spin_lock(&priv->status_report_request_lock);
+> -	if (!completion_done(&priv->status_report_received))
+> -		complete_all(&priv->status_report_received);
+> -	spin_unlock(&priv->status_report_request_lock);
+> -
+> -	priv->updated = jiffies;
+> -
+>   	return 0;
+>   }
+>   
 
