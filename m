@@ -1,104 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA1957C9F;
-	Thu,  5 Mar 2026 02:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from sgoci-sdnproxy-4.icoremail.net (sgoci-sdnproxy-4.icoremail.net [129.150.39.64])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF71B248F66;
+	Thu,  5 Mar 2026 11:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.150.39.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772678311; cv=none; b=kPsIRqCReJKsLUDXd+nXrSindHlSfMyKYAuwElSOD/Q59K2CDtHz4oPRKjjGD1cJIERQIdVq75AWCcP4fQLY+dWnJ9oZNMVu8zpVO7WArANtC9hi7+bsmigBMQCdzZKGHZvplyEEqiAJF8h6KQfGIyXPw8JiMlfh1Zo6Ho3c/yk=
+	t=1772709171; cv=none; b=UJrxL/YIUE66aP4uKJuiBRTbOy+sTbWVgOmbbfJkh5YxxP6zrCwG/xDaEdDIOqLMWUdCvCQkRNPZShxCeoOfr+ETB1PoKMFYdSFxJuj9eOYGy2yWgBgtmsCMq7LRdE6u06R8k0vpxAyYuCBc1sIIJrSYCYbIRw3LOmq8t6FVvl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772678311; c=relaxed/simple;
-	bh=506uDU247HDePGang6seeRFn49SvlHkZJdjIiHrnIIM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4amTnbuEp7gxDpOLYfOF60skZ9Ylsk6DnXrs5HcWZewSgr62AVLpFTOqUQlpkFfio20HsiJRwhk9Ps6rU/XVnxQL1mclNm513HObnhXVOVgkgjFVuUURKOLmAy5sbLsT82tx0h2/YhcyNYHj+vRRcpf+Fz7Wb8Z4agUCEqHFb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JqK66pFk; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JqK66pFk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D0FDC4CEF7;
-	Thu,  5 Mar 2026 02:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772678310;
-	bh=506uDU247HDePGang6seeRFn49SvlHkZJdjIiHrnIIM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JqK66pFkJv3DsxZtTjLCQTS5nU5r/UkcspNfG1yr0Wp8HYy1av1eFpgN08faC+bas
-	 wb/a4TGMvAAFd/cDtfzUsR5Wv75LUdswOgNKG8u0Wzu9vJWEC22OkOIqONRs6naE9F
-	 wnUzpwkdCKc60naF4k/CAjcsC4PvNc5OrMdSvFlcaCc+CKN0WvVEQbxJqn/Ab6Sn2F
-	 QiR16M12tA+1b+jSnDRaVZUgVkPjXP9DMNi/m95pSIWZ++dFg8mR/4UXS+oe1BLWUZ
-	 cdCB2E49+fIf3xquWRxCPNRHVkWpiWzjnYPxvu1zMCFNToq203GCzR2HzLWji7C5rx
-	 LZ5UuYRHmaU7Q==
-Date: Wed, 4 Mar 2026 20:38:29 -0600
-From: Rob Herring <robh@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>, devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>,
-	Lee Jones <lee@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-	Linus Walleij <linusw@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260305023829.GA3128030-robh@kernel.org>
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
- <20260303133947.1123575-2-o.rempel@pengutronix.de>
- <177254885509.3251575.14819823286886805862.robh@kernel.org>
- <aacH7NmkOzZued0Y@pengutronix.de>
- <CAL_JsqJztUNizCcn=VCoGfmaMy3r6wDTLwZH5r6vj7kh6q9qAA@mail.gmail.com>
- <20260304-arose-pampers-fe07c893d079@spud>
+	s=arc-20240116; t=1772709171; c=relaxed/simple;
+	bh=nYaHsF7AslIOlshqZI+a0bPZ+z/2Rs0fxX3RmakdcoQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=LUfwyTFyjZvnU4cNGZLmOBeO6+DzxP3t4q3tYXvJ8dndjTlR5lULTSOHMs1C+uQyzJ8pfLXy7qcKbWcudLPpqGxGLlXemBsTR/CSscTPJygh+msIAyOaMFcwiQ4jp+2ttgdhWa0J6dd/HjUW545QTZfC8cJDXvVMQn0i5j87ykk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=129.150.39.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from hehuan1$eswincomputing.com ( [10.12.96.103] ) by
+ ajax-webmail-app2 (Coremail) ; Thu, 5 Mar 2026 19:12:37 +0800 (GMT+08:00)
+Date: Thu, 5 Mar 2026 19:12:37 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From: "Huan He" <hehuan1@eswincomputing.com>
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: "Krzysztof Kozlowski" <krzk@kernel.org>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ningyu@eswincomputing.com,
+	linmin@eswincomputing.com, pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com
+Subject: Re: Re: Re: Re: [PATCH v2 0/2] Add driver support for ESWIN EIC7700
+ PVT controller
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
+ 20241203(6b039d88) Copyright (c) 2002-2026 www.mailtech.cn
+ mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
+In-Reply-To: <46752141.375d.19c5ae8161e.Coremail.hehuan1@eswincomputing.com>
+References: <20260128101400.859-1-hehuan1@eswincomputing.com>
+ <1a08e50a.362b.19c4c20db59.Coremail.hehuan1@eswincomputing.com>
+ <e648565e-59a9-4270-bbbd-7c53f5f65c6c@kernel.org>
+ <2c43c2a.366b.19c5017e58a.Coremail.hehuan1@eswincomputing.com>
+ <0183a68b-f8e9-48b8-b77f-5ae0a048a2bf@roeck-us.net>
+ <46752141.375d.19c5ae8161e.Coremail.hehuan1@eswincomputing.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260304-arose-pampers-fe07c893d079@spud>
+Message-ID: <6803a67f.3e27.19cbdb318ff.Coremail.hehuan1@eswincomputing.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:TQJkCgDH3aAlZalpyOIFAA--.1499W
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/1tbiAQERCmmoXpIKGwAE
+	sD
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+	daVFxhVjvjDU=
 
-On Wed, Mar 04, 2026 at 06:33:34PM +0000, Conor Dooley wrote:
-> On Wed, Mar 04, 2026 at 12:26:17PM -0600, Rob Herring wrote:
-> > On Tue, Mar 3, 2026 at 10:10 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > >
-> > > Hi Krzysztof and Rob,
-> > >
-> > > On Tue, Mar 03, 2026 at 08:40:55AM -0600, Rob Herring (Arm) wrote:
-> > > > >  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 114 ++++++++++++++++++
-> > > > >  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
-> > > > >  2 files changed, 196 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
-> > > > >  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
-> > > > >
-> > > >
-> > > > My bot found errors running 'make dt_binding_check' on your patch:
-> > > >
-> > > > yamllint warnings/errors:
-> > > >
-> > > > dtschema/dtc warnings/errors:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/nxp,mc33978.example.dtb: gpio@0 (nxp,mc33978): $nodename:0: 'gpio@0' does not match '^mux-controller(@.*|-([0-9]|[1-9][0-9]+))?$'
-> > > >       from schema $id: http://devicetree.org/schemas/mux/mux-controller.yaml
-> > > >
-> > >
-> > > Folding the mux node into the parent as suggested [1] causes this error.
-> > > Because the parent now has #mux-control-cells, the generic
-> > > mux-controller.yaml forces the node name to be mux-controller. Since
-> > > this chip is primarily a switch/GPIO controller, naming the parent SPI
-> > > node mux-controller@0 is misleading.
-> > >
-> > > What is the preferred way to go here?
-> > 
-> > I think there was another series dropping the mux-controller node
-> > name. Not sure what happened to it, but that's what we need to do
-> > here.
-> 
-> It's here:
-> https://lore.kernel.org/all/cover.1769703480.git.tommaso.merciai.xr@bp.renesas.com/
-> 
-> Tommaso pinged me about it wondering what to do. Mux maintainer has been
-> unresponsive. Maybe you should grab the binding portion since it is
-> blocking other work?
-> https://lore.kernel.org/all/cover.1769703480.git.tommaso.merciai.xr@bp.renesas.com/
-
-It is now applied.
-
-Rob
-
+SGkgR3VlbnRlciwKClRoYW5rIHlvdSB2ZXJ5IG11Y2ggZm9yIHlvdXIgZGV0YWlsZWQgcmV2aWV3
+IGFuZCB2YWx1YWJsZSBmZWVkYmFjay4gSQphcG9sb2dpemUgZm9yIHRoZSBkZWxheWVkIHJlc3Bv
+bnNlLgoKPiA+IAo+ID4gIyBDb21taXQgNmY0ZDU2OThmMzM0ICgiaHdtb246IEFkZCBFc3dpbiBF
+SUM3NzAwIFBWVCBzZW5zb3IgZHJpdmVyIikKPiA+IDEuICBlaWM3NzAwLXB2dC5jOjQ4NzogRVJS
+T1I6IFVuYmFsYW5jZWQgY2xvY2sgcmVmY291bnQgd2l0aCBSdW50aW1lIFBNCj4gPiAgICAgPiAr
+CXB2dC0+Y2xrID0gZGV2bV9jbGtfZ2V0X2VuYWJsZWQoJnBkZXYtPmRldiwgTlVMTCk7Cj4gPiAK
+PiA+ICAgICBVc2luZyBgZGV2bV9jbGtfZ2V0X2VuYWJsZWQoKWAgZW5hYmxlcyB0aGUgY2xvY2sg
+YW5kIHJlZ2lzdGVycyBhIGRldm0gYWN0aW9uCj4gPiAgICAgdG8gZGlzYWJsZSBpdCBvbiByZW1v
+dmFsLiBIb3dldmVyLCB0aGUgZHJpdmVyIGFsc28gdXNlcyBSdW50aW1lIFBNIHRvIG1hbmFnZQo+
+ID4gICAgIHRoZSBzYW1lIGNsb2NrOgo+ID4gCj4gPiAgICAgPiArc3RhdGljIGludCBfX21heWJl
+X3VudXNlZCBlaWM3NzAwX3B2dF9ydW50aW1lX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQo+
+ID4gICAgID4gK3sKPiA+ICAgICA+ICsJc3RydWN0IHB2dF9od21vbiAqcHZ0ID0gZGV2X2dldF9k
+cnZkYXRhKGRldik7Cj4gPiAgICAgPiArCj4gPiAgICAgPiArCWNsa19kaXNhYmxlX3VucHJlcGFy
+ZShwdnQtPmNsayk7Cj4gPiAKPiA+ICAgICBJZiB0aGUgZGV2aWNlIGlzIHJ1bnRpbWUgc3VzcGVu
+ZGVkIHdoZW4gYHJlbW92ZSgpYCBpcyBjYWxsZWQ6Cj4gPiAgICAgMS4gYHByb2JlKClgOiBgY2xr
+X3ByZXBhcmVfZW5hYmxlKClgIChSZWY6IDEpCj4gPiAgICAgMi4gYHJ1bnRpbWVfc3VzcGVuZCgp
+YDogYGNsa19kaXNhYmxlX3VucHJlcGFyZSgpYCAoUmVmOiAwKQo+ID4gICAgIDMuIGByZW1vdmUo
+KWAgKHZpYSBkZXZtKTogYGNsa19kaXNhYmxlX3VucHJlcGFyZSgpYCAoUmVmOiAtMSkKPiA+IAo+
+ID4gICAgIFRoaXMgbGVhZHMgdG8gYSByZWZjb3VudCB1bmRlcmZsb3cgYW5kIHdhcm5pbmcuCj4g
+PiAKPiA+ICAgICBGaXg6IFVzZSBgZGV2bV9jbGtfZ2V0KClgIGFuZCBtYW51YWxseSBjYWxsIGBj
+bGtfcHJlcGFyZV9lbmFibGUoKWAgaW4gcHJvYmUuCj4gPiAgICAgRW5zdXJlIHRoYXQgdGhlIG1h
+bnVhbCBlbmFibGUgaXMgYmFsYW5jZWQgY29ycmVjdGx5LCBvciByZWx5IG9uIFJ1bnRpbWUgUE0K
+PiA+ICAgICAoYW5kIGBwbV9ydW50aW1lX2dldF9zeW5jYCBpbiBwcm9iZSkgdG8gaGFuZGxlIHRo
+ZSBjbG9jaywgZW5zdXJpbmcKPiA+ICAgICBgcG1fcnVudGltZV9wdXRgIGJhbGFuY2VzIGl0LiBT
+aW5jZSBgY2hlY2tfcHdyYCBuZWVkcyB0aGUgY2xvY2sgYmVmb3JlCj4gPiAgICAgUnVudGltZSBQ
+TSBpcyBlbmFibGVkLCB5b3Ugc2hvdWxkIGVuYWJsZSBpdCBtYW51YWxseSBhbmQgdGhlbiBwb3Nz
+aWJseQo+ID4gICAgIGRpc2FibGUgaXQgYmVmb3JlIGVuYWJsaW5nIFJ1bnRpbWUgUE0sIG9yIGtl
+ZXAgaXQgZW5hYmxlZCBhbmQgbGV0IFJ1bnRpbWUgUE0KPiA+ICAgICB0YWtlIG92ZXIgKGJ1dCBl
+bnN1cmUgYHJlbW92ZWAgZG9lc24ndCBkb3VibGUgZGlzYWJsZSkuCj4gPiAKPiA+ICAgICBBIGNv
+bW1vbiBwYXR0ZXJuOgo+ID4gICAgIGBgYGMKPiA+ICAgICBwdnQtPmNsayA9IGRldm1fY2xrX2dl
+dChkZXYsIE5VTEwpOwo+ID4gICAgIC4uLgo+ID4gICAgIGNsa19wcmVwYXJlX2VuYWJsZShwdnQt
+PmNsayk7Cj4gPiAgICAgLi4uCj4gPiAgICAgcG1fcnVudGltZV9lbmFibGUoZGV2KTsKPiA+ICAg
+ICBwbV9ydW50aW1lX2dldF9ub3Jlc3VtZShkZXYpOwo+ID4gICAgIC4uLgo+ID4gICAgIHBtX3J1
+bnRpbWVfcHV0KGRldik7Cj4gPiAgICAgYGBgCj4gPiAgICAgQW5kIGVuc3VyZSBgcmVtb3ZlYCAo
+b3IgZGV2bSBhY3Rpb24pIGRpc2FibGVzIGl0IE9OTFkgaWYgbm90IHN1c3BlbmRlZD8KPiA+ICAg
+ICBBY3R1YWxseSwgc2ltcGxlciBpczoKPiA+ICAgICBEb24ndCB1c2UgYGRldm1fY2xrX2dldF9l
+bmFibGVkYCBpZiB5b3UgdXNlIGBydW50aW1lX3N1c3BlbmRgIHRvIGRpc2FibGUgaXQuCj4gPiAg
+ICAgVXNlIGBkZXZtX2Nsa19nZXRgLgo+ID4gICAgIEluIHByb2JlOiBgY2xrX3ByZXBhcmVfZW5h
+YmxlYC4KPiA+ICAgICBSZWdpc3RlciBhIGBkZXZtX2FkZF9hY3Rpb25gIHRoYXQgY2FsbHMgYGNs
+a19kaXNhYmxlX3VucHJlcGFyZWAgKm9ubHkgaWYqIHRoZQo+ID4gICAgIGRyaXZlciBpcyBub3Qg
+dXNpbmcgUnVudGltZSBQTSB0byBjb250cm9sIGl0PyBObywgdGhhdCdzIG1lc3N5Lgo+ID4gCj4g
+PiAgICAgQmV0dGVyIGZpeDoKPiA+ICAgICBVc2UgYGRldm1fY2xrX2dldGAuCj4gPiAgICAgSW4g
+cHJvYmU6IGBjbGtfcHJlcGFyZV9lbmFibGVgLgo+ID4gICAgIEluIHJlbW92ZSAoZGV2bSBhY3Rp
+b24/KTogYGNsa19kaXNhYmxlX3VucHJlcGFyZWAgKGJ1dCB0aGlzIHN0aWxsIGhhcyB0aGUgaXNz
+dWUpLgo+ID4gCj4gPiAgICAgQ29ycmVjdCBGaXg6Cj4gPiAgICAgRG8gbm90IHVzZSBgY2xrX2Rp
+c2FibGVfdW5wcmVwYXJlYCBpbiBgcnVudGltZV9zdXNwZW5kYCBpZiB5b3UgdXNlZAo+ID4gICAg
+IGBkZXZtX2Nsa19nZXRfZW5hYmxlZGAuCj4gPiAgICAgT1IKPiA+ICAgICBEb24ndCB1c2UgYGRl
+dm1fY2xrX2dldF9lbmFibGVkYC4gVXNlIGBkZXZtX2Nsa19nZXRgLgo+ID4gICAgIE1hbmFnZSB0
+aGUgY2xvY2sgZW50aXJlbHkgdmlhIFJ1bnRpbWUgUE0uCj4gPiAgICAgSW4gcHJvYmU6Cj4gPiAg
+ICAgYGNsa19wcmVwYXJlX2VuYWJsZShwdnQtPmNsayk7YCAoVGVtcG9yYXJ5IGZvciBjaGVja19w
+d3IpCj4gPiAgICAgYGNoZWNrX3B3ci4uLmAKPiA+ICAgICBgY2xrX2Rpc2FibGVfdW5wcmVwYXJl
+KHB2dC0+Y2xrKTtgCj4gPiAgICAgYHBtX3J1bnRpbWVfZW5hYmxlKGRldik7YAo+ID4gICAgIC4u
+Lgo+IAo+IFdlIHdpbGwgcmVwcm9kdWNlIGFuZCBmdXJ0aGVyIGFuYWx5emUgdGhlIGNsb2NrIHJl
+ZmNvdW50IGltYmFsYW5jZQo+IHNjZW5hcmlvLgoKUmVnYXJkaW5nIHRoZSBSdW50aW1lIFBNIGlz
+c3VlIHBvdGVudGlhbGx5IGNhdXNpbmcgY2xvY2sgcmVmY291bnQKaW1iYWxhbmNlLCB3ZSBoYXZl
+IGludmVzdGlnYXRlZCBpdCBhbmQgd2lsbCBhZGRyZXNzIHRoaXMgaW4gdGhlIHYzIHBhdGNoLgoK
+PiAKPiA+IAo+ID4gMy4gIGVpYzc3MDAtcHZ0LmM6MzY4OiBXQVJOOiBTcHVyaW91cyBpbnRlcnJ1
+cHRzIG9uIHNoYXJlZCBJUlEgbGluZQo+ID4gICAgID4gKwllaWM3NzAwX3B2dF91cGRhdGUocHZ0
+LT5yZWdzICsgUFZUX0VOQSwgUFZUX0VOQV9FTiwgUFZUX0VOQV9FTik7Cj4gPiAKPiA+ICAgICBg
+Y2hlY2tfcHdyYCBlbmFibGVzIHRoZSBkZXZpY2UgKGFuZCB0aHVzIHBvdGVudGlhbCBpbnRlcnJ1
+cHRzKSBiZWZvcmUKPiA+ICAgICBgcmVxdWVzdF9pcnFgIGlzIGNhbGxlZC4gSWYgdGhlIElSUSBs
+aW5lIGlzIHNoYXJlZCBhbmQgdGhlIGRldmljZSBhc3NlcnRzCj4gPiAgICAgYW4gaW50ZXJydXB0
+IGltbWVkaWF0ZWx5LCB0aGUgaW50ZXJydXB0IHdpbGwgYmUgdW5oYW5kbGVkIChzcHVyaW91cykg
+YmVjYXVzZQo+ID4gICAgIG5vIGhhbmRsZXIgaXMgcmVnaXN0ZXJlZCB5ZXQuCj4gPiAKPiA+ICAg
+ICBGaXg6IFJlcXVlc3QgdGhlIElSUSBiZWZvcmUgZW5hYmxpbmcgdGhlIGRldmljZSwgb3IgZW5z
+dXJlIGludGVycnVwdHMgYXJlIG1hc2tlZAo+ID4gICAgIGF0IHRoZSBjb250cm9sbGVyIGxldmVs
+IChpZiBwb3NzaWJsZSkgYmVmb3JlIGVuYWJsaW5nIHRoZSBibG9jay4gU2luY2UgYGNoZWNrX3B3
+cmAKPiA+ICAgICByZWxpZXMgb24gcG9sbGluZyBhbmQgSVNSIGNsZWFycyB0aGUgc3RhdHVzLCBt
+b3ZpbmcgYHJlcXVlc3RfaXJxYCBpcyB0cmlja3kuCj4gPiAgICAgVmVyaWZ5IGlmIGBQVlRfRU5B
+YCBoYXMgYSBzZXBhcmF0ZSBpbnRlcnJ1cHQgZW5hYmxlIGJpdCBvciBpZiBgUFZUX0lOVGAgaGFz
+IGEgbWFzay4KPiA+ICAgICBJZiBub3QsIHRoaXMgaXMgYSBoYXJkd2FyZS9kcml2ZXIgZGVzaWdu
+IHJpc2suCj4gPiAKPiAKPiBDb25maXJtZWQgd2l0aCB0aGUgaGFyZHdhcmUgdGVhbSwgdGhlIFBW
+VF9FTkEgcmVnaXN0ZXIgaGFzIG5vIGluZGVwZW5kZW50Cj4gaW50ZXJydXB0IGVuYWJsZSwgYW5k
+IFBWVF9JTlQgZG9lcyBub3Qgc3VwcG9ydCBtYXNraW5nLgo+IEVuYWJsaW5nIHRoZSBkZXZpY2Ug
+YmVmb3JlIHJlcXVlc3RfaXJxIG1heSBnZW5lcmF0ZSBpbnRlcnJ1cHRzLCBidXQgdGhlCj4gZHJp
+dmVyIGRpc2FibGVzIHRoZSBQVlQgbW9kdWxlIChQVlRfRU5BX0VOID0gMCkgYW5kIGNsZWFycyBp
+bnRlcnJ1cHRzIGJ5Cj4gd3JpdGluZyBQVlRfSU5UX0NMUi4gSW4gcHJhY3RpY2UsIG5vIGlzc3Vl
+cyBoYXZlIGJlZW4gb2JzZXJ2ZWQuCj4gCgpGb3IgdGhlIHNwdXJpb3VzIGludGVycnVwdCBjb25j
+ZXJuOiBhZnRlciBjb25maXJtaW5nIHdpdGggdGhlIGhhcmR3YXJlCnRlYW0sIHRoZSBQVlRfRU5B
+IHJlZ2lzdGVyIGhhcyBubyBpbmRlcGVuZGVudCBpbnRlcnJ1cHQgZW5hYmxlLCBhbmQKUFZUX0lO
+VCBkb2VzIG5vdCBzdXBwb3J0IG1hc2tpbmcuIEluIHRoZSBjdXJyZW50IGltcGxlbWVudGF0aW9u
+LCBlbmFibGluZwp0aGUgZGV2aWNlIGR1cmluZyBjaGVja19wd3IgbWF5IGdlbmVyYXRlIGFuIGlu
+dGVycnVwdCwgYnV0IHRoZSBkcml2ZXIKc3Vic2VxdWVudGx5IGRpc2FibGVzIHRoZSBQVlQgbW9k
+dWxlIChQVlRfRU5BX0VOID0gMCkgYW5kIGNsZWFycyB0aGUKaW50ZXJydXB0IHN0YXR1cyBieSB3
+cml0aW5nIFBWVF9JTlRfQ0xSLiBJbiBwcmFjdGljZSwgbm8gaXNzdWVzIGhhdmUgYmVlbgpvYnNl
+cnZlZC4KCkNvdWxkIHlvdSBwbGVhc2UgY29uZmlybSB3aGV0aGVyIGl0IGlzIGFjY2VwdGFibGUg
+dG8ga2VlcCB0aGUgY3VycmVudAppbXBsZW1lbnRhdGlvbiB1bmRlciB0aGVzZSBjb25kaXRpb25z
+PwogCkJlc3QgcmVnYXJkcywKSHVhbiBIZQo=
