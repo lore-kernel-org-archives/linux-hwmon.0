@@ -1,170 +1,182 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E1636309F
-	for <linux-hwmon@vger.kernel.org>; Wed,  4 Mar 2026 23:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B1D1632C8
+	for <linux-hwmon@vger.kernel.org>; Thu,  5 Mar 2026 00:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772668473; cv=none; b=Y8HDisfsyb9QwVd+d4D7y+KfuDEydcQKO/gFlCwHopu/SbamHW0l012iX5rnmRML4vnxUo7qKpqDc1WoLrgVcGwcl4tTpN4/6RWHXgh3YEwbJ70pPjkLTTb30FPoACJKfs94TwDorP6uiwVgAiOrcAt2Zqgj6UJY/DIoaZkgwT4=
+	t=1772671657; cv=none; b=CsSw+eBM3G/gZ1spEcuuXJB4jrpCv/L/rhcAyD7Nrc1omTvSqOv5EdGlRH1/F+dk9ScNOy0SDoscNdjkO3/SUB0io33lXaRtqMAPzDTfcZ2gVK3W86KPOt7eK/qNdqlbRYFGDmHOFLGUjNOJUpl/K7+RWYIcRPC5BjduWPsaaa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772668473; c=relaxed/simple;
-	bh=1ryANju3Ar4X9WTQ8vLKNNPSH0DRzpHGinxvGeEFaac=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VkIxspCYPXqBfy/Q8u9uryp6G71u9FupXu6IhDaeRXRkMOQmus/oLPPSmolmPrim9QTo0ywbzE/sDMSY0dX9daFWCiZ+V4ELyWsZ98cNT7tMep/JH41dKe9zDrSROV18cnQHIVbchjuMwHlf4uzqHQGtsp2YYIMlH2AjZLkza2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k0z/7OPT; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1772671657; c=relaxed/simple;
+	bh=jwYlQBzET3f4zTTMKAlhyCamvFBUK1aZIoy+0DU6SqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T1SqKSDmPALfDMTUPUDcmNFJ4qFfert8UQI1TNWAQnf14QkCe5cTQkBXuxBIICdBGRKPeD8sjpYHA/qaDZlImSEfyNVHs3Yd0WbF7+hTy+VCMUcw6pgGeccxfMBAG18tckHixcq2U1dVZ1rRzhEEe7gSio8KRGkbIcvOLz4TfEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SbddCAUB; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0z/7OPT"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2be27fa54feso3181546eec.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 15:54:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SbddCAUB"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1275910b930so4687589c88.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Mar 2026 16:47:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772668471; x=1773273271; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WpK5v0erAcEOSlwebTzYjsOHzTGHJQo4jlwH6VYDLJw=;
-        b=k0z/7OPTF3OE9a5QviAT3O0lttW8MP+NJaHCt7uI0F84qPuw660VdkJKSaRcTjurJy
-         6mOVMLwRcD6we6InSsCwJ2g7ZLuGI/oZ+1YxLVLQygfyEwmGBw4hG1rOwwM0agg8UE+v
-         kWklKrz0JfiM8fzgG7o+humkdU+KcKbygfEowmtTN8bBKJ7/jtqooJt086CdYqRbsoYC
-         x1uqb0oN33eyoVz/ZoeUbMN1YvjYWz2N3SKuszpYJYI3wR7kGzeqoPbAFPehvUqo2RA2
-         nuMmufjFgXM6WtK5my9/5Q0xUtz8z9pGGdQHRRH/JSHJsAZyKQyO2IPizNiwAY8WnFDg
-         L8Pg==
+        d=gmail.com; s=20230601; t=1772671655; x=1773276455; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=II0rb2vFhVofV67r7/LZnYmrjLvZ0d0KzZkjaY3PKtc=;
+        b=SbddCAUBnLjmLTQY/rJhZqfvH7bg5T41qJWf3/z4zM84FzeTLOFOzZ8KpYCH8sbiOK
+         Ty7fe2qNGVbJXZFDcb2Y5Yv1QR7TfLPaCOnsP2qmjKqLZ5Vr3kYbsTojBZ1v+2hB3tc8
+         9jCgf7gBsMmtkfi9JDjMDip/i1wj1MzCIw5u+p70I/YG4iKR6yKjqY7LP9joSih/+v5e
+         gmxoIKYoaPghVoNLw4KmBD0qjha71qxYto/Cwqs+X6LXBqWociO0nFQ/L8Tot7/tVFSk
+         B4qCkSbjsihsd9C/G95FSoYxr1WvIZMRJN8qnCoXhVu12UqUxdAW3nUmAvmpKvrJRLe1
+         35mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772668471; x=1773273271;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WpK5v0erAcEOSlwebTzYjsOHzTGHJQo4jlwH6VYDLJw=;
-        b=p20/gbojmAExmkJ036/F0goajvPVd3uTOsmMoJGqj9RN7YKc1JWQrPsBP/InHD4EIt
-         Tu6YV96ZUfsmsV2OYmcJZfWo0XehDmV57VfKsqOximXCr8Q3UsAyVB8QMoJvihJk+LVI
-         E3ihC350IiSCIwX2n/zR5RrskthW30l9XpsLocU/lf6SiCFmVItP57W99iByXGCNtiJ3
-         /1wuvc28aMlwFvUn9pqAPSeGgD/dmCAmuY5J0eIJQzhU7WqkHZlWuxD2vWqxDpsqmdUv
-         WscCvBXYqlwNHB7kKvjabNz3PrqI6tr1MFX4yND7OzoFkHQ0Q64INJR1ok4qGUGKXTBr
-         pJEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXt9oLHKqwdX8V4+3Ppa1Dx/L2eYj1f6+nAgLvokUgoENGRWeSWycBElPKkASSHE/MVqD8BcsHNQ7oJYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/9K9MJn8CEPcCVBtInyzbufqjqD/joYO6st0cuWJhnPMnlq/B
-	hCLDx8ipcDbNCYUo9X5axOaSBvuH7qyct/3TehL3RszgocCFJp+nav3/
-X-Gm-Gg: ATEYQzyxbeMj1Hq0E6gacZC9vXfeIgnwtjjppfctzwhywvrgAyT3wPKRKdw6FoFSsJs
-	dXewgQ56aXyLfxqnWS7wLDR4H/ETUpNpLuROIU9XI6Vcl5H4p9Ac/od02ViJQ6cySQJo7Y5Eo66
-	aExNGTw3ivvUrM5wmqZQyUP1exfPNuMMh7QmT2+3sMuFgdAzyrSzyRQGA1kohbGoYv8Ym/AWZLa
-	xKyT3AfRyqj24+BGsXWfvpNRi3qhHtkuv5zSQcz0chh4UDHRCdZLKKR5xLqYzmoDd25at1WxaPB
-	fiUZi+wbjAFhGvToc01CMy6sH/1h6Lm1f/FWUSIM1mtm0BzBOj5Dt27JbfmfwcdR62OSeT9I+Sk
-	42rziJzNjDhzCLRubA43cru3Caxqa16igfhyY0Tq+A2VZ+LCVS9o/Z12qvGWhI/MLyPBr1jDN9i
-	zuGx3VSbt1qWAwjqRSM8M+5PFRF4EEwguvPIDmEmD1AQ/Q+KIQJ8BNd39+1/iJ9DObTY5gJgLDI
-	HPvUMw=
-X-Received: by 2002:a05:7300:6423:b0:2be:1f56:ecf6 with SMTP id 5a478bee46e88-2be30fcff4bmr1485430eec.6.1772668471087;
-        Wed, 04 Mar 2026 15:54:31 -0800 (PST)
-Received: from localhost.localdomain (c-67-164-93-214.hsd1.ca.comcast.net. [67.164.93.214])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be12805b93sm9269888eec.15.2026.03.04.15.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2026 15:54:30 -0800 (PST)
-From: Sanman Pradhan <sanman.p211993@gmail.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: psanman@juniper.net,
-	andriy.shevchenko@intel.com,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v3] hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read
-Date: Wed,  4 Mar 2026 15:51:17 -0800
-Message-Id: <20260304235116.1045-1-sanman.p211993@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e7191c1c-ecd4-40f8-9e47-9357bd82984f@roeck-us.net>
-References: <e7191c1c-ecd4-40f8-9e47-9357bd82984f@roeck-us.net>
+        d=1e100.net; s=20230601; t=1772671655; x=1773276455;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=II0rb2vFhVofV67r7/LZnYmrjLvZ0d0KzZkjaY3PKtc=;
+        b=ZMmepXSSf0l7gvcomqITr4kXVWh1XlzHEthkwI9s0UDVrnSsNiXxc2Q5Ho+XbeCvOt
+         fqONomyTYAy+l7Y0ZtcEy6m3OeEoZfDreLCodv0jAl+SeFN4YUT2L/rDRXa+KB4kXe0E
+         rEPM44UFli2e2NMEjWkt1vD3YXCwmnDzgE4VLmOJQXjIVYlh+mems8t2ClCDw4CT1GcY
+         FpcXMCkxceR0GUGR9cihLcABTeCi9nBLz9kitsOxnP4kt0WLswzXraNfdyeAOaZXITjY
+         kC4AyIzaTfCUswiR/TrgfwsTjLxsq5W25Rw0m8hNaO8ch07BBL8x6yh/72wizOezcDn5
+         CHuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIeFZl7LLi1TrW9QoH4oaJixXhUmpBDm5UyoRSj99opWZYpvAt8bdsQM9zy7qB9yJksH1sN0RZ7KPJ6Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFRWhEVsWlbQ/e4j2DPd8Vn0rmvDnK4XSYXhjGJWM9R0fSbh2a
+	YsxtsevLqFTY4YAt7CtmxU6wu/ZIl3osSSyPsJY8IL1b7JPfxUdGBOnK
+X-Gm-Gg: ATEYQzyBwnXPLlBDU6A07q+MDwPIK1UdXfpojMnYJqBxggxYJGc7YvIZ8d1tTghPK5o
+	YKIYhIA5E/WVcAnlzTO8PnQuV/O6pareldueBdk+he1JH6rIjjqnKMqUCAKCz2+UOx8IjUNMmg/
+	z71Zz/YzwKmBBHNw7Ihj0r8Uf9V3qOni6ovv1rWfnvuqVqNlFtIbGXpFZXzA4a7modywNsQRJer
+	lc5GmZdt9fHvluE7i5q5hIJpe+TFa5Q3K4cDFriwNdorBO1lBygU/D/EtUrTX00/kTMlnKawVqr
+	7G2yM79+DVzDZCjD6T3lXhmxlKXPSeYXH9NqPFSidmXZCEO/SXGJx3CFBPndSFtFQhVqx0Gy13h
+	XVVpC4gLBsebqEfGw632mB0JvLfQTBsHTLZxJ9uyT7UwoaeJ9/pi58yB7wtAHHKNvIjnAgyd93s
+	XAa9M4tXOj8PNRy9src+VreCMAlKFfsC+0ksqnvAdW2PCCUaPRhDf7HYkMYCaZJtQn88hyJ8eW
+X-Received: by 2002:a05:7022:911:b0:123:2de5:346e with SMTP id a92af1059eb24-128bbebf073mr299216c88.0.1772671655140;
+        Wed, 04 Mar 2026 16:47:35 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127899eab46sm19645861c88.8.2026.03.04.16.47.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2026 16:47:34 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0387c2a3-fa2b-428c-a897-0da2d87fe008@roeck-us.net>
+Date: Wed, 4 Mar 2026 16:47:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 10/14] watchdog: convert the Kconfig dependency on OF_GPIO
+ to OF
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexey Brodkin <abrodkin@synopsys.com>, Vineet Gupta <vgupta@kernel.org>,
+ Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>,
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+ linux-pm@vger.kernel.org
+References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
+ <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Sanman Pradhan <psanman@juniper.net>
+On 3/4/26 01:02, Bartosz Golaszewski wrote:
+> OF_GPIO is selected automatically on all OF systems. Any symbols it
+> controls also provide stubs so there's really no reason to select it
+> explicitly. We could simply remove the dependency but in order to avoid
+> a new symbol popping up for everyone in make config - just convert it to
+> requiring CONFIG_OF.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
-The q54sj108a2_debugfs_read function suffers from a stack buffer overflow
-due to incorrect arguments passed to bin2hex(). The function currently
-passes 'data' as the destination and 'data_char' as the source.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Because bin2hex() converts each input byte into two hex characters, a
-32-byte block read results in 64 bytes of output. Since 'data' is only
-34 bytes (I2C_SMBUS_BLOCK_MAX + 2), this writes 30 bytes past the end
-of the buffer onto the stack.
-
-Additionally, the arguments were swapped: it was reading from the
-zero-initialized 'data_char' and writing to 'data', resulting in
-all-zero output regardless of the actual I2C read.
-
-Fix this by:
-1. Expanding 'data_char' to 66 bytes to safely hold the hex output.
-2. Correcting the bin2hex() argument order and using the actual read count.
-3. Using a pointer to select the correct output buffer for the final
-   simple_read_from_buffer call.
-
-Fixes: d014538aa385 ("hwmon: (pmbus) Driver for Delta power supplies Q54SJ108A2")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sanman Pradhan <psanman@juniper.net>
----
-
-v3:
-- Added in-body From: header to fix author/sender mismatch.
-v2:
-- Fixed email formatting/line-wrapping issues.
-
----
- drivers/hwmon/pmbus/q54sj108a2.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
-index fc030ca34480..d5d60a9af8c5 100644
---- a/drivers/hwmon/pmbus/q54sj108a2.c
-+++ b/drivers/hwmon/pmbus/q54sj108a2.c
-@@ -79,7 +79,8 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
- 	int idx = *idxp;
- 	struct q54sj108a2_data *psu = to_psu(idxp, idx);
- 	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
--	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-+	char data_char[I2C_SMBUS_BLOCK_MAX * 2 + 2] = { 0 };
-+	char *out = data;
- 	char *res;
- 
- 	switch (idx) {
-@@ -150,27 +151,27 @@ static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
- 		if (rc < 0)
- 			return rc;
- 
--		res = bin2hex(data, data_char, 32);
--		rc = res - data;
--
-+		res = bin2hex(data_char, data, rc);
-+		rc = res - data_char;
-+		out = data_char;
- 		break;
- 	case Q54SJ108A2_DEBUGFS_FLASH_KEY:
- 		rc = i2c_smbus_read_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, data);
- 		if (rc < 0)
- 			return rc;
- 
--		res = bin2hex(data, data_char, 4);
--		rc = res - data;
--
-+		res = bin2hex(data_char, data, rc);
-+		rc = res - data_char;
-+		out = data_char;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
--	data[rc] = '\n';
-+	out[rc] = '\n';
- 	rc += 2;
- 
--	return simple_read_from_buffer(buf, count, ppos, data, rc);
-+	return simple_read_from_buffer(buf, count, ppos, out, rc);
- }
- 
- static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *buf,
--- 
-2.34.1
+> ---
+>   drivers/watchdog/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index dc78729ba2a5d6e035ed3cbe5c2b631d11b76b20..ef200339a22a6f9c51a46c9c0b8466add74313e2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -250,7 +250,7 @@ config DA9062_WATCHDOG
+>   
+>   config GPIO_WATCHDOG
+>   	tristate "Watchdog device controlled through GPIO-line"
+> -	depends on OF_GPIO
+> +	depends on OF
+>   	select WATCHDOG_CORE
+>   	help
+>   	  If you say yes here you get support for watchdog device
+> 
 
