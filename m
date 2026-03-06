@@ -1,75 +1,79 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4561D32D0DE
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 16:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3443ED5BC
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 16:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772813587; cv=none; b=JncOD/rFeWmmBZacxovZb7i+pmBnBEshFKVh1/SUo7nXnFMmuf8toNxTzlYOsc1t1w8UsN3/XLzRhxHQ4nW0D1u2KvBROQt+PtC0ciF6R9RH7FUuuxpw1VqZcxjSHIzQqdHFuST9OT1SQ//stEVxYtBlgGkgHEGfNkfJX++0N38=
+	t=1772813801; cv=none; b=i+afmHykPCLr/A/hc6mlYP9a+o8cPVo1hQx9yKqlwMGwYOtqEL6IH1/1AMbWeytCxltU+RWNAqKwtVTo3Xn8Pg483UWkrDyuVoWeULTrbCU0fS0v02zSujdPUvEh9W87JLp20zmgbbT2xPiczASzcrW4cMwJ8hiHRAHBwwp8miU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772813587; c=relaxed/simple;
-	bh=GbHZvMrlDjk98tFLySxmu7d7hM4MTcgCQPURO46KJPQ=;
+	s=arc-20240116; t=1772813801; c=relaxed/simple;
+	bh=Q03wZP+jr95hI+NvHot1Du0zkm1UPz2DNNkQXx9mhXQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQCEjqxWF7PdSlXHkFA0XstHf+Z2YYBb5SeKh4DuD/Fal5IEz6ue07CFjo4nttduNL2baSxXxTbVTeRiAFFl5tTATtIOyFCkEQbE/bYAb4iiwdJ58FCfmFwlvskB0cc2ePc54DPY7itjjhx9d1lYbkr203UM66NfeB+7JrVO2x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WcJ4ELEf; arc=none smtp.client-ip=74.125.82.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=dhKW/HzRBIt9naJwKh7hykN+YztJWXp4U7TE8HbDigvboktSSjCPnmGcE2CRs3JU5qLengHeygBrSzhkVk2xabg3j2mbxdEytGWTIJUCezx4PvXLqbePFtTI9D1cSB4MJhPpe0AouHqjnGaXQQ19+fiSNOVqyYOaOUy0wY4ZUuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5I3SB28; arc=none smtp.client-ip=74.125.82.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WcJ4ELEf"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2be1ab1fa7dso534696eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2026 08:13:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5I3SB28"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1273349c56bso11591173c88.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2026 08:16:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772813584; x=1773418384; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772813799; x=1773418599; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2ExyNVSWsZEiPhZCTeAKx/MrxZrOY+AoCmCT2YcRTRo=;
-        b=WcJ4ELEfu5j/mE0YjraLcHB+98yCpJoKbx+g8pRRZKw6ifhjvGWDZwVhUwAHnCq6Pp
-         T6VMjZCl9AFwb7ZqHd7jFYhz+Uj7z60SzlzyuKxv+JTUXpcGmGK9WMXmha3l4fg2Hnmg
-         R4RN99bLTJ6uR2dEclau1N7hk74ULzrVbWQd1qTm67Kizm28UpiUnUh+RG+BazEyI0zP
-         frqfrzrBqYt/Ey9OEB6ELMw+AMOIn08U5A5BrJ2tIXMe6HXijO7UdqNCSusnkzjBQMKh
-         q6uk3H+y0xV5n7gaqnAJUnxgBluACxN7nIgBep/ZKWEHW1XcGyTL4f9bklRqZzuZ8nEG
-         3ikQ==
+        bh=SnvWTL3iEv/kL4tiEZKqQzSZXrgIInwKEy4wywpIFZk=;
+        b=j5I3SB28qbl+1DiCPa6MKyA5QeufhImaZw/hyWbtmxd3kNMd2JpeZdM1ya2oPexZSJ
+         eB/rGpXefxET2RAtO4MdJhN1N4MJoi96s92hQybxdSiF5DVOp7UicRExGZATk3lHYVtL
+         GVtFW0Wmv8fUgMV1cMGrmqm3iPfRgSaB07zagWo1hMi4HIkuGwRgExRabPejx3S1TAkC
+         Son7KnNFLY3VHb+X8M+rj+mGqvqCYQLCT6Y0tRzvQUxCi2KTJPP6kb4ZeoY7uI5BAV5F
+         SGihLEgJM+AJ54sNWqVV+X4wg+0C3rHMA/Eb+8RvmqbYWHpHUvqziFk/9WH6uwZO9juA
+         ggtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772813584; x=1773418384;
+        d=1e100.net; s=20230601; t=1772813799; x=1773418599;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=2ExyNVSWsZEiPhZCTeAKx/MrxZrOY+AoCmCT2YcRTRo=;
-        b=wMhZlJoN9RwPmm9cA3tTs6U+kcdNKCq4xCDLF3gHq7X/iaI2PbW3bmpXDzI9fSpcS+
-         yNSUyINZj5DZGmFwjB5pWUGcE8MLHcw4toYEQsFqR0rK9PUYtS6LYBOksIgAXz83LI1I
-         NDhoYSdla0Wna7B4iWsOsXeyDiz03biAKC0AbflCXcVsANap3hkB6BrWC8IEaMklxOkB
-         qx0Eqwb83lXWbQIxPL4ogMfHA/9LWsCK7Ng7vuXWNNhumTop+T3h5oAQb/aq1s8bnsrk
-         uh5mvBdB+/sAdZHh6V0KGYRb5K9zNJyc2sbNUvA63GGo/wh2+QyDlGOtjXzOfeQRCRbD
-         9Q7w==
-X-Forwarded-Encrypted: i=1; AJvYcCV1Tb8//JKTgzisEsh09cEBsaXoUoAPrSfXpOfjLVqd/m/skkC7I8deqR+Yt+Sa58GQqJkl53weH/aEXw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxM7WRSvQuETxZTmR6F9reNnGtL6KGuqySdDaP/mALj9rT+M9z
-	kEoQvMJTa7bTWlF7oU5+4/vlM1JAqbUvby8Oz9am7p1h3huO/NxkmpuH
-X-Gm-Gg: ATEYQzzEQKV+sAri5G+p34KOOKzMpkkIrP8CCSySlizhW/VQbd/RKL6MIjsKYuJAro/
-	M9oF135qs7VJjTVyG94tPcD+bXtnpmOXsGHthhyfC/ln5K5+UTknHFc6F0X8M3jfhRVNGSvC83s
-	baUH4tk30uyZLy9IJOFiLyyUQ36tturNsLqlHkccHtQ6w54Y8d428K5pk3HN+EYj5rr7gex9Ylj
-	vrp10AL2IVknqqvt2woH6nTfJ96xpjbeFT8LwVmBTKsrWUCHa4iiO3fhFkGhIwKsMNM9yUN/rYV
-	1JpH2sJwuF9F+eKdOVVtwuwUqNK1wD+tuRx0kIGfxWS1O1Rt7jSIHxl2LsRD1xcB/jrzAl5ZW0r
-	10bKIqgOwiuugaQp5oWIQ74/QL6CGBsZxlosXBE4HFT1yBoW31Xq3GuZbLib8lP8wQxCTIajAL1
-	3GIgSEpMD5FiRtErUmxrS0m7p/UpikOOSJ4xXK
-X-Received: by 2002:a05:7300:320a:b0:2b7:fdb6:ccf2 with SMTP id 5a478bee46e88-2be4de99574mr1150793eec.13.1772813584166;
-        Fri, 06 Mar 2026 08:13:04 -0800 (PST)
+        bh=SnvWTL3iEv/kL4tiEZKqQzSZXrgIInwKEy4wywpIFZk=;
+        b=ilJ8USNJbqynzrS6kNae8Cx/2zOYZElGjKPTVAhDLRwFUE4hi9qSMcPvIWxeNg7y3M
+         RFkcV8+ERVlq6jpB7DtztUhlbxEU3NuMIbT8R6JeNL6J4lLnrbJBb/mPlyN5GZZf2xmk
+         wjGyXuDNBteMQMeKFs32113+60n/y7x3ZheojRivj7JxDXVkcxsMHY/f9duTGAMUOerH
+         ia2Am59zwGFYPGvAkx9Xw7ocyZqS0vTe/f/NQ0+DPYPpfw/gdLyWpkY/z+DLVtEC9zch
+         eizzfAmMWHLoVtjAcQa5O+x9VhoTdWzQ5rFpkPOzFkTEvKLkTQCRc4ivV1OEfdC4bsnB
+         i4+w==
+X-Forwarded-Encrypted: i=1; AJvYcCU/T2hGIOwtCBEpSmYY5hUEZTs6VekBvUfY5nVVcgEXcIUltpeRLJnwJGIBAvfekx4yN0dKkHrXrLlxLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq4jyYwcC87mDtrLvoL+5KBo8ogg6+qIJwfjoJU1nlC5a3S3Mn
+	Cgy5tCt/+9VbYAH/LjtYUGPUlEpoo5iBAyfSqUMBCpK5J3oxWiSDr4ba0BVENr+s
+X-Gm-Gg: ATEYQzzxu4AfU2zusYArGttIggKqEV+A+oI095NH9a0bPLjRZ8iQ2kXMgDdsKmM6KO5
+	ATR+u5zv8g51DzfGnKiEe/fxaWZ+eAdZXHgn4FIUmWN7PPQEF/rfUF3wj212a0LXhFjF9Z517NF
+	8gWW1RE4o8fIZt1ClGGBKhY/gpTmGknRPLQxLHctBqpN+CX9JaVSQySRrlYGDESs+RUPlGduPVs
+	HPF1un7qtCYgr5rPNxnEQ9UnO8TIZtuERus8an1juiSdksIfElez9sjROsQ9CNyxl3A4SynvX4M
+	AkV1xnVUF1q/IXIEgV0DpKmjoyFsnb3iJm1NysbmSOsN6DmBNL1xG1klNOHjqHCD8I0hVT6IwRS
+	PbnIXHMwerU+C4ft/IYNTgMx0BDAopGnbOhe8eBtBSxRB3waUY3/ebl1MtgQDpOU8pvqLQHpWeC
+	NbdaYPhWMnzRRlQRcQqWZ4KtcX8GU9sJ2ZDyCCdcy+pMHL0LA=
+X-Received: by 2002:a05:7022:1e03:b0:11b:9386:8264 with SMTP id a92af1059eb24-128c2ec8795mr901108c88.41.1772813798951;
+        Fri, 06 Mar 2026 08:16:38 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f94823esm1578036eec.20.2026.03.06.08.13.03
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128c3f5a102sm1569468c88.13.2026.03.06.08.16.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 08:13:03 -0800 (PST)
+        Fri, 06 Mar 2026 08:16:38 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 6 Mar 2026 08:13:02 -0800
+Date: Fri, 6 Mar 2026 08:16:37 -0800
 From: Guenter Roeck <linux@roeck-us.net>
-To: Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aspeed-g6-pwm-tach): fix driver data handling in
- probe/remove
-Message-ID: <e6c06c88-d2cd-4501-8a15-b89ba5a36e5f@roeck-us.net>
-References: <20260306-pwm_fixes-v1-1-e8ede6fbaf47@aspeedtech.com>
+To: Andrew Davis <afd@ti.com>
+Cc: Chiang Brian <chiang.brian@inventec.com>,
+	Erick Karanja <karanja99erick@gmail.com>,
+	Grant Peltier <grantpeltier93@gmail.com>,
+	Jeff Lin <jefflin994697@gmail.com>,
+	Cherrence Sarip <cherrence.sarip@analog.com>,
+	Kim Seer Paller <kimseer.paller@analog.com>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/11] hwmon: (pmbus/bel-pfe) Remove use of i2c_match_id()
+Message-ID: <a39c4e55-ca0f-48cf-a3f5-fe678e23467e@roeck-us.net>
+References: <20260305195642.830695-1-afd@ti.com>
+ <20260305195642.830695-2-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,62 +82,65 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260306-pwm_fixes-v1-1-e8ede6fbaf47@aspeedtech.com>
+In-Reply-To: <20260305195642.830695-2-afd@ti.com>
 
-On Fri, Mar 06, 2026 at 02:44:31PM +0800, Billy Tsai wrote:
-> Ensure proper association of driver data by setting and retrieving
-> the platform device's driver data during probe and remove.
+On Thu, Mar 05, 2026 at 01:56:32PM -0600, Andrew Davis wrote:
+> The function i2c_match_id() is used to fetch the matching ID from
+> the i2c_device_id table. This is often used to then retrieve the
+> matching driver_data. This can be done in one step with the helper
+> i2c_get_match_data().
 > 
-> Fixes: 7e1449cd15d1 ("hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach")
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> ---
->  drivers/hwmon/aspeed-g6-pwm-tach.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/aspeed-g6-pwm-tach.c b/drivers/hwmon/aspeed-g6-pwm-tach.c
-> index 44e1ecba205d..0c03d272279a 100644
-> --- a/drivers/hwmon/aspeed-g6-pwm-tach.c
-> +++ b/drivers/hwmon/aspeed-g6-pwm-tach.c
-> @@ -490,6 +490,7 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip))
->  		return PTR_ERR(chip);
->  
-> +	platform_set_drvdata(pdev, chip);
->  	pwmchip_set_drvdata(chip, priv);
->  	chip->ops = &aspeed_pwm_ops;
->  
-> @@ -519,7 +520,8 @@ static int aspeed_pwm_tach_probe(struct platform_device *pdev)
->  
->  static void aspeed_pwm_tach_remove(struct platform_device *pdev)
->  {
-> -	struct aspeed_pwm_tach_data *priv = platform_get_drvdata(pdev);
-> +	struct pwm_chip *chip = platform_get_drvdata(pdev);
-> +	struct aspeed_pwm_tach_data *priv = aspeed_pwm_chip_to_data(chip);
->  
->  	reset_control_assert(priv->reset);
+> This helper has a couple other benefits:
+>  * It doesn't need the i2c_device_id passed in so we do not need
+>    to have that forward declared, allowing us to remove those or
+>    move the i2c_device_id table down to its more natural spot
+>    with the other module info.
+>  * It also checks for device match data, which allows for OF and
+>    ACPI based probing. That means we do not have to manually check
+>    those first and can remove those checks.
 
-AI review has the same (and more) concerns. Here is what it has to say:
+The above seem to be boilerplates, not matching the actual patches.
 
-Does asserting the reset here place the hardware into reset while the sysfs
-interfaces are still active?
+AI review says:
 
-Since probe uses devm_pwmchip_add() and
-devm_hwmon_device_register_with_info(), those devices are unregistered
-during devres cleanup, which happens after this remove function returns. If
-userspace accesses the devices before devres cleanup finishes, it could
-access an IP block that is in reset and cause a system hang.
+  This isn't a bug, but this description is inaccurate for this specific driver.
+  Looking at the code before this commit, there were no manual checks for OF or
+  ACPI match data (like of_match_device or acpi_match_device) in
+  pfe_pmbus_probe(). The driver only ever relied on i2c_match_id().
+  Could the commit message be updated to avoid claiming it removes manual
+  OF/ACPI checks from this specific driver?
 
-Also, since probe already registers a devres action
-(devm_add_action_or_reset()) to call aspeed_pwm_tach_reset_assert(),
-this explicit assert appears to be redundant. Can the remove function be
-dropped entirely?
-
-This isn't a bug, but probe calls of_platform_populate() without a
-corresponding of_platform_depopulate(). Using
-devm_of_platform_populate() in probe would fix the leak and allow
-deleting this remove function.
-
-I think all those points are valid.
+Similar feedback applies to most of the patches in this series. Please resend
+the series and drop inaccurate information from the commit descriptions.
 
 Thanks,
 Guenter
+
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  drivers/hwmon/pmbus/bel-pfe.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/bel-pfe.c b/drivers/hwmon/pmbus/bel-pfe.c
+> index ddf9d9a2958c4..6499556f735b4 100644
+> --- a/drivers/hwmon/pmbus/bel-pfe.c
+> +++ b/drivers/hwmon/pmbus/bel-pfe.c
+> @@ -88,13 +88,10 @@ static struct pmbus_driver_info pfe_driver_info[] = {
+>  	},
+>  };
+>  
+> -static const struct i2c_device_id pfe_device_id[];
+> -
+>  static int pfe_pmbus_probe(struct i2c_client *client)
+>  {
+> -	int model;
+> +	int model = (uintptr_t)i2c_get_match_data(client);
+>  
+> -	model = (int)i2c_match_id(pfe_device_id, client)->driver_data;
+>  	client->dev.platform_data = &pfe_plat_data;
+>  
+>  	/*
+> -- 
+> 2.39.2
+> 
