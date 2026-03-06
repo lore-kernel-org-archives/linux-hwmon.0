@@ -1,94 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [94.124.121.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E968B19F48D;
-	Fri,  6 Mar 2026 07:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F5F3793DA
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 08:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.124.121.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772782361; cv=none; b=d7CZVNNnZvN7zrC0MNkq1Aua/gdMal5wBkUfhgCYvuEQsBc8LnPkek90EK9J04mndEq8p1n+xsfl2pisf9m1WHS9PrNBB0/RzeWWhyujRMfdRXi2+QF6F0cYnzGE8vMhDkV65coUx8Fk4CUayosf56BPsdWMBBB/vYiW9mFi4HY=
+	t=1772786659; cv=none; b=PE+6g/6hj0d/dGnh8I1BQsV3t56kTWExK+/xq+iYirjMgEceC+mdAkhX8I62ZZ7PzQqGfgn6UYOPvKycMosMP4VDfxxcPSrz1Dqb+S+KGJDyPpnsNdMnn0mQGeH8Lhbgxco1owRYvAOts1uOnlEU4Z04gedKHxsbJLIq4x68E2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772782361; c=relaxed/simple;
-	bh=DVzgvb8y4ShBZBiB5XfsC+MoSBbpxmPP73ac6hYIeNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M5xVqMIGmdnsFn03KpcgkiGCTnoLY5sZ6jEfZEQZR0fcPQKLc53hXlR7ZuTFuIgh4/8mryqNM273PLPtcDa+M4LTQlsEjf09nbG2bgNpB8KBHrCGM+9i7Hi7fy9CSqAtQsj/1KJBtN49nyDGKsIBynybze6PyAZqdi6LfREKhA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FF3w4aOI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772786659; c=relaxed/simple;
+	bh=D6F0UJ2ZkvqTPyGd9m4PkTYYRFrED8lZB9Mn0Ev+ROU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VB8DU4LsJ8PZDwWkKKaEGQndCa1bONzd3N4SZAxPguGibdw4e3LNkypB5B1h4K++RYUnRiUFr+4VkbZLstDQ8dyFXNDpHBaW4m4vQNx+fyaYtk3ajAPbDPQq3nDsAb8myeZtX/hCy3s+xbYh08tgpfs7mUAPhYiNA2n0WmzpJTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl; spf=pass smtp.mailfrom=protonic.nl; dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b=HXX1rf/2; arc=none smtp.client-ip=94.124.121.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonic.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FF3w4aOI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF94C4CEF7;
-	Fri,  6 Mar 2026 07:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772782360;
-	bh=DVzgvb8y4ShBZBiB5XfsC+MoSBbpxmPP73ac6hYIeNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FF3w4aOIbJ0brVEkGQQ8zRx/LmvMFUFfe+HepOLyVKtX6t8j4Hr05bu7jWXzBg29U
-	 ZAK7AX/EPaBCIzwaMMAXHLRNspS6SXkmezALwpZJxDMJ1RGjq8vghPamP/gdvbyFeM
-	 x0NfDtL6+zean8JYahUdtrb9FuovZycdTwXcfp76mXZkO63/k3pCI47VY0T0NSogtz
-	 3TXo5/stD4BmQ8FjTSSyurTj9ADgXeV2dif2n9C/MWM29+kOOwaepxmk720OrjdJsB
-	 rys+OZ9ClJsOO+E6yombFnOAzumbpBss3D2yT4oKvYnxMDwybmVkWS0ipWHVttFw75
-	 10o/nokcY59kw==
-Date: Fri, 6 Mar 2026 08:32:37 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Victor Duicu <victor.duicu@microchip.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, marius.cristea@microchip.com
-Subject: Re: [PATCH v11 1/2] dt-bindings: hwmon: add support for MCP998X
-Message-ID: <20260306-mellow-warthog-of-security-d12ae3@quoll>
-References: <20260305-add-mcp9982-hwmon-v11-0-6e914ba63239@microchip.com>
- <20260305-add-mcp9982-hwmon-v11-1-6e914ba63239@microchip.com>
+	dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b="HXX1rf/2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=protonic.nl; s=202111;
+	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
+	 message-id:subject:cc:to:from:date:from;
+	bh=tAcuA+a1KykKeZ1RijPONIr+jxmrxZBNuPK76HmvjIs=;
+	b=HXX1rf/24Zgl1mtZxcRUn2OX63+U873JJnduIY9pDgl3eIAHHpph0LV6CYUFvfR+wm7qMZD2OpxdE
+	 P9zxqm0HkuuT2ZWsTk2GcJeMX0aeDj+C/r5IrD/tM2mSpB31az8OZhJY7pDC2861BykSYEM+QjimK8
+	 eP6dJT707TCRoFjjfCwpjkXJlp1G5NKXh33oGOD7KCVPbw2woH9ExbNhyijyjJoIxiffOS0Vf7Ylhx
+	 aS0bO+2uEwIRU+MWAw8qEeIrY9cIBFp2xrUaLfK84+qDRGdLSSeUF+mGW95pPW+mJHNE+YHuy8C3gk
+	 R+XsGW6BWFDW9KKkmUq8Gkz1X9zT3xQ==
+X-MSG-ID: a304989c-1938-11f1-9155-005056817704
+Date: Fri, 6 Mar 2026 09:44:06 +0100
+From: David Jander <david@protonic.nl>
+To: Linus Walleij <linusw@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Oleksij Rempel
+ <o.rempel@pengutronix.de>, "Rob Herring (Arm)" <robh@kernel.org>,
+ devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
+ kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
+Message-ID: <20260306094406.6cafaeea@erd003.prtnl>
+In-Reply-To: <CAD++jL=Gaaq0_20wDjjPkYwpyL6HWx7bmKqBmy_tieYu4scB6Q@mail.gmail.com>
+References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
+	<20260303133947.1123575-2-o.rempel@pengutronix.de>
+	<177254885509.3251575.14819823286886805862.robh@kernel.org>
+	<aacH7NmkOzZued0Y@pengutronix.de>
+	<20260304-graceful-sweet-bittern-98efdb@quoll>
+	<20260304100642.44d00b99@erd003.prtnl>
+	<4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
+	<20260304112500.4766f21b@erd003.prtnl>
+	<98debf2d-cc29-42dc-bb93-ee97439683fd@kernel.org>
+	<20260304131731.4d54f051@erd003.prtnl>
+	<CAD++jLkK5od7cODqQ2BsEKE7tvp8vVAsv6erLu1dEzcn35F8QA@mail.gmail.com>
+	<20260305161019.09b67af2@erd003.prtnl>
+	<CAD++jL=Gaaq0_20wDjjPkYwpyL6HWx7bmKqBmy_tieYu4scB6Q@mail.gmail.com>
+Organization: Protonic Holland
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260305-add-mcp9982-hwmon-v11-1-6e914ba63239@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 05, 2026 at 05:26:04PM +0200, Victor Duicu wrote:
-> Add devicetree schema for Microchip MCP998X/33 and MCP998XD/33D
-> Multichannel Automotive Temperature Monitor Family.
-> 
-> Signed-off-by: Victor Duicu <victor.duicu@microchip.com>
-> ---
+On Fri, 6 Mar 2026 00:40:16 +0100
+Linus Walleij <linusw@kernel.org> wrote:
 
-Why you are making it every time DIFFERENT changeset? Just look at your
-change-ids. You made it impossible to compare your work!
+> On Thu, Mar 5, 2026 at 4:10=E2=80=AFPM David Jander <david@protonic.nl> w=
+rote:
+>=20
+> > I am tempted to think that hardware developers that use this chip might=
+ expect
+> > the GPIO driver to report the state as it is read from the register. Bu=
+t I
+> > suspect that the Linux kernel GPIO framework might enforce strictly the
+> > logical state to be equal to the voltage at the pin (i.e. logic 0 =3D=
+=3D zero volt,
+> > and logic 1 =3D=3D positive non-zero voltage), but is this true? =20
+>=20
+> GPIO assumes all values are expressing the (raw) voltage on the pin
+> clamped to [0,1] logic level.
 
-b4 diff '20260305-add-mcp9982-hwmon-v11-0-6e914ba63239@microchip.com'
-Grabbing thread from lore.kernel.org/all/20260305-add-mcp9982-hwmon-v11-0-6e914ba63239@microchip.com/t.mbox.gz
-Checking for older revisions
----
-Analyzing 4 messages in the thread
-Could not find lower series to compare against.
+This sounds like a good, usable definition. I like it, but I can't find it =
+in
+the documentation. To make it more complete, I'd add one more clarification=
+ in
+case we deal with negative voltage levels (0 and -5V for example), but it is
+usable for this case. Where can I find it? Or.. should we add it to the
+documentation if it isn't documented this way yet?
 
-This is completly broken way of using b4.
+> It can further invert the meaning of this using GPIO_ACTIVE_LOW,
+> ACTIVE LOW means the same as  "overstrike"  or #VAL in schematic
+> so if a signal is active low and low voltage on the board it is
+> presented as active (1) to the consumers in the kernel or
+> userspace.
+>=20
+> If it represents anything else than the raw logic voltage on the line,
+> the semantics of GPIO_ACTIVE_LOW would be completely
+> confusing.
+>=20
+> To represent switch states, I think using drivers or userspace code
+> should interpret this.
+>=20
+> You can also add a custom debugfs file to your driver to help
+> users by providing the actual switch state and more.
 
-
-...
-
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - microchip,mcp9982d
-> +              - microchip,mcp9983d
-> +              - microchip,mcp9984d
-> +              - microchip,mcp9985d
-> +              - microchip,mcp9933d
-> +    then:
-> +      properties:
-> +        interrupt-names:
-> +          items:
-> +            enum: [alert-therm, sys-shtdwn]
-
-You need to list the items, so the first item is fixed.
+Thanks for clarifying. This makes sense taking into account the above
+definition of raw logic-level =3D=3D raw voltage on pin clamped to [0,1].
+But for the future users of this driver I would need this officially defined
+somewhere, so I can point there to avoid confusion.
 
 Best regards,
-Krzysztof
 
+--=20
+David Jander
