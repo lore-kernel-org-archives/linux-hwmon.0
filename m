@@ -1,117 +1,145 @@
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [94.124.121.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F5F3793DA
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 08:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.124.121.27
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1DB3161A1;
+	Fri,  6 Mar 2026 09:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772786659; cv=none; b=PE+6g/6hj0d/dGnh8I1BQsV3t56kTWExK+/xq+iYirjMgEceC+mdAkhX8I62ZZ7PzQqGfgn6UYOPvKycMosMP4VDfxxcPSrz1Dqb+S+KGJDyPpnsNdMnn0mQGeH8Lhbgxco1owRYvAOts1uOnlEU4Z04gedKHxsbJLIq4x68E2I=
+	t=1772790222; cv=none; b=eIIJz1NLFmlnJCs0phXbhrafrW1HmSWGdzxyK8b24ET1yP7HSHg2704ZJzapnmqTMQAvNUErsOvkOzjvwdc74831toa0W3UMaCcQbn7rGXjJr3ikOL9HkuQycpVd2zSBlGi4B0lXs6oiJCe6+ogV4LQ6t/ynOLPhT7WWXgAeLCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772786659; c=relaxed/simple;
-	bh=D6F0UJ2ZkvqTPyGd9m4PkTYYRFrED8lZB9Mn0Ev+ROU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VB8DU4LsJ8PZDwWkKKaEGQndCa1bONzd3N4SZAxPguGibdw4e3LNkypB5B1h4K++RYUnRiUFr+4VkbZLstDQ8dyFXNDpHBaW4m4vQNx+fyaYtk3ajAPbDPQq3nDsAb8myeZtX/hCy3s+xbYh08tgpfs7mUAPhYiNA2n0WmzpJTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl; spf=pass smtp.mailfrom=protonic.nl; dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b=HXX1rf/2; arc=none smtp.client-ip=94.124.121.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=protonic.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonic.nl
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonic.nl header.i=@protonic.nl header.b="HXX1rf/2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=protonic.nl; s=202111;
-	h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-	 message-id:subject:cc:to:from:date:from;
-	bh=tAcuA+a1KykKeZ1RijPONIr+jxmrxZBNuPK76HmvjIs=;
-	b=HXX1rf/24Zgl1mtZxcRUn2OX63+U873JJnduIY9pDgl3eIAHHpph0LV6CYUFvfR+wm7qMZD2OpxdE
-	 P9zxqm0HkuuT2ZWsTk2GcJeMX0aeDj+C/r5IrD/tM2mSpB31az8OZhJY7pDC2861BykSYEM+QjimK8
-	 eP6dJT707TCRoFjjfCwpjkXJlp1G5NKXh33oGOD7KCVPbw2woH9ExbNhyijyjJoIxiffOS0Vf7Ylhx
-	 aS0bO+2uEwIRU+MWAw8qEeIrY9cIBFp2xrUaLfK84+qDRGdLSSeUF+mGW95pPW+mJHNE+YHuy8C3gk
-	 R+XsGW6BWFDW9KKkmUq8Gkz1X9zT3xQ==
-X-MSG-ID: a304989c-1938-11f1-9155-005056817704
-Date: Fri, 6 Mar 2026 09:44:06 +0100
-From: David Jander <david@protonic.nl>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Oleksij Rempel
- <o.rempel@pengutronix.de>, "Rob Herring (Arm)" <robh@kernel.org>,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
- kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, Lee Jones <lee@kernel.org>, Guenter Roeck
- <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260306094406.6cafaeea@erd003.prtnl>
-In-Reply-To: <CAD++jL=Gaaq0_20wDjjPkYwpyL6HWx7bmKqBmy_tieYu4scB6Q@mail.gmail.com>
-References: <20260303133947.1123575-1-o.rempel@pengutronix.de>
-	<20260303133947.1123575-2-o.rempel@pengutronix.de>
-	<177254885509.3251575.14819823286886805862.robh@kernel.org>
-	<aacH7NmkOzZued0Y@pengutronix.de>
-	<20260304-graceful-sweet-bittern-98efdb@quoll>
-	<20260304100642.44d00b99@erd003.prtnl>
-	<4d4c6ebc-698b-44c2-9a91-607381d6ece1@kernel.org>
-	<20260304112500.4766f21b@erd003.prtnl>
-	<98debf2d-cc29-42dc-bb93-ee97439683fd@kernel.org>
-	<20260304131731.4d54f051@erd003.prtnl>
-	<CAD++jLkK5od7cODqQ2BsEKE7tvp8vVAsv6erLu1dEzcn35F8QA@mail.gmail.com>
-	<20260305161019.09b67af2@erd003.prtnl>
-	<CAD++jL=Gaaq0_20wDjjPkYwpyL6HWx7bmKqBmy_tieYu4scB6Q@mail.gmail.com>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1772790222; c=relaxed/simple;
+	bh=qsreWzyxtOtxuqf+KhLjVwMxzrmCGCPyJOgoFvyLyR0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=St4CZaXBhqXMaRcnf7W+cA449b/WkSpZ0K+OXxxVFIVz5ljYJlIHUyXroSAQ3qCzMqIptmHhjQARbMZbe3x6QBXtWfOGadg1As2TT86F/Gk10Aiv3yZbUzRdIN5f7uszIWCOS4G6KhJKhXM3aXKFuldpWCXzC7OcwN77OKJKFKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
+Received: from E0005182LT.eswin.cn (unknown [10.12.96.155])
+	by app1 (Coremail) with SMTP id TAJkCgC3THG_oappmi4GAA--.22320S2;
+	Fri, 06 Mar 2026 17:43:28 +0800 (CST)
+From: hehuan1@eswincomputing.com
+To: linux@roeck-us.net,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	p.zabel@pengutronix.de,
+	linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: ningyu@eswincomputing.com,
+	linmin@eswincomputing.com,
+	pinkesh.vaghela@einfochips.com,
+	luyulin@eswincomputing.com,
+	Huan He <hehuan1@eswincomputing.com>
+Subject: [PATCH v3 0/2] Add driver support for ESWIN EIC7700 PVT controller
+Date: Fri,  6 Mar 2026 17:43:12 +0800
+Message-Id: <20260306094312.1043-1-hehuan1@eswincomputing.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:TAJkCgC3THG_oappmi4GAA--.22320S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr48CFy7WrWkuFWfuw17Wrg_yoW5Kr4Upa
+	18Gry5Kr4DXrWSqa9rJ3WF9r4fJan3JFW3Ar4xWwn5Z3Z8t34jvFy8K3Wj9FyDZrn5XasI
+	yFy8tr1xGF1DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxkF7I0En4kS14v26r1q6r43MxkIecxEwVCm-wCF04
+	k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+	MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+	1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
+	IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+	A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUmjgxUUUUU=
+X-CM-SenderInfo: 5khk3tzqr6v25zlqu0xpsx3x1qjou0bp/
 
-On Fri, 6 Mar 2026 00:40:16 +0100
-Linus Walleij <linusw@kernel.org> wrote:
+From: Huan He <hehuan1@eswincomputing.com>
 
-> On Thu, Mar 5, 2026 at 4:10=E2=80=AFPM David Jander <david@protonic.nl> w=
-rote:
->=20
-> > I am tempted to think that hardware developers that use this chip might=
- expect
-> > the GPIO driver to report the state as it is read from the register. Bu=
-t I
-> > suspect that the Linux kernel GPIO framework might enforce strictly the
-> > logical state to be equal to the voltage at the pin (i.e. logic 0 =3D=
-=3D zero volt,
-> > and logic 1 =3D=3D positive non-zero voltage), but is this true? =20
->=20
-> GPIO assumes all values are expressing the (raw) voltage on the pin
-> clamped to [0,1] logic level.
+Add support for the ESWIN EIC7700 PVT (Process, Voltage, Temperature)
+sensor
 
-This sounds like a good, usable definition. I like it, but I can't find it =
-in
-the documentation. To make it more complete, I'd add one more clarification=
- in
-case we deal with negative voltage levels (0 and -5V for example), but it is
-usable for this case. Where can I find it? Or.. should we add it to the
-documentation if it isn't documented this way yet?
+Features:
+The driver supports monitoring of process, voltage and temperature
+parameters through the hardware monitoring subsystem. It provides an
+access to the sampled Temperature and Voltage.
 
-> It can further invert the meaning of this using GPIO_ACTIVE_LOW,
-> ACTIVE LOW means the same as  "overstrike"  or #VAL in schematic
-> so if a signal is active low and low voltage on the board it is
-> presented as active (1) to the consumers in the kernel or
-> userspace.
->=20
-> If it represents anything else than the raw logic voltage on the line,
-> the semantics of GPIO_ACTIVE_LOW would be completely
-> confusing.
->=20
-> To represent switch states, I think using drivers or userspace code
-> should interpret this.
->=20
-> You can also add a custom debugfs file to your driver to help
-> users by providing the actual switch state and more.
+Test:
+Tested this patch on the SiFive HiFive Premier P550 (which uses the ESWIN
+EIC7700 SoC).
 
-Thanks for clarifying. This makes sense taking into account the above
-definition of raw logic-level =3D=3D raw voltage on pin clamped to [0,1].
-But for the future users of this driver I would need this officially defined
-somewhere, so I can point there to avoid confusion.
+Updates:
 
-Best regards,
+  Changes in v3:
+  - Update eswin,eic7700-pvt.yaml
+    - Remove redundant label property description and use 'label: true' to
+      reference the definition in hwmon-common.yaml
+    - Replace 'additionalProperties: false' with
+      'unevaluatedProperties: false'
+    - Remove the description for '#thermal-sensor-cells'
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Fix clock reference count imbalance with Runtime PM:
+      Replace devm_clk_get_enabled() with devm_clk_get() and manually
+      manage clock enable/disable to avoid double-disable in remove() when
+      Runtime PM is active. Clock is now enabled only during probe for
+      eic7700_pvt_check_pwr(), then disabled before enabling Runtime PM,
+      which takes full control of the clock thereafter
+    - Add detailed comment explaining the spurious interrupt risk in
+      eic7700_pvt_check_pwr()
+    - Replace wait_for_completion_interruptible() with
+      wait_for_completion_timeout() to prevent infinite wait
 
---=20
-David Jander
+  Changes in v2:
+  - Update eswin,eic7700-pvt.yaml
+    - Reference the hwmon-common.yaml file
+    - Remove the clock-names and reset-names properties
+    - Move additionalProperties: false after the required block
+    - Remove one example node to avoid redundancy
+  - Update eic7700-pvt.c and eic7700-pvt.h
+    - Remove unused sensor macros (PVT_SENSOR_FIRST, PVT_SENSOR_LAST,
+      PVT_SENSORS_NUM)
+    - Drop the unnecessary hwmon-sysfs.h header
+    - Replace dynamic sensor info allocation with a static array and unify
+      sensor labels
+    - Remove unused hwmon_temp_type attribute
+    - Eliminate redundant validation checks
+    - Remove mutex and related locking, relying on hwmon core
+      serialization
+    - Replace per-sensor caches and completions with a single data cache
+      and completion object
+    - Remove pvt->sensor tracking. ISR no longer depends on the currently
+      selected sensor
+    - Move devm_add_action() registration after init_completion() for
+      safer cleanup, and update cleanup function (pvt_clear_data)
+    - Replace devm_reset_control_get_optional_exclusive() with
+      devm_reset_control_get_exclusive_deasserted()
+    - Replace eic7700_pvt_remove() with eic7700_pvt_disable_pm_runtime()
+      and move it after PM runtime enable to avoid resource leaks on probe
+      failure and remove clock disable and reset assert from
+      eic7700_pvt_disable_pm_runtime() as it is already handled by devm_*
+      framework
+    - Remove redundant clock presence check in runtime_resume
+
+  - Link to v1: https://lore.kernel.org/all/20260109090718.442-1-hehuan1@eswincomputing.com/
+
+Huan He (2):
+  dt-bindings: hwmon: Add Eswin EIC7700 PVT sensor
+  hwmon: Add Eswin EIC7700 PVT sensor driver
+
+ .../bindings/hwmon/eswin,eic7700-pvt.yaml     |  65 ++
+ drivers/hwmon/Kconfig                         |  12 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/eic7700-pvt.c                   | 634 ++++++++++++++++++
+ drivers/hwmon/eic7700-pvt.h                   | 108 +++
+ 5 files changed, 820 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/eswin,eic7700-pvt.yaml
+ create mode 100644 drivers/hwmon/eic7700-pvt.c
+ create mode 100644 drivers/hwmon/eic7700-pvt.h
+
+-- 
+2.25.1
+
