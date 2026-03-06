@@ -1,65 +1,65 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878F23EB80D
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 16:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882D036A023
+	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 16:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772814168; cv=none; b=C239KqBulBBXnplDyGX3rxGJzj0FpFyJEZFKheBqnZBf8ERZAU0ySYnk6hP2HL4TgqECDhkbUjrznEszUE+qoIS8HBc5BaRT6ENI4UeIbRcokf2NK9Z8PdMfvCyxqXxxs8henQgFI7K4lyMwDhDIANxWCFL3SmpNXFfAY8j3c1U=
+	t=1772814408; cv=none; b=JxhrqTcq9er8WzDHtLV8sFIIElLB9gyqcVx05VFOxxdjsAwiGVUiGjJMGW09IS8TtHwGl6vnr96gSiJObUl4PpOauADIKMp0cktKN4YMvcieJSaNibOMIXCilxIGhHmiQH/qn7l8neTgyMwGmoq1yOrJvX8FhXRMCZ+2HXEJS3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772814168; c=relaxed/simple;
-	bh=RTlYYkZYNjOQMgYETbCkdxYuRb/GQVaSBT807Dubhy0=;
+	s=arc-20240116; t=1772814408; c=relaxed/simple;
+	bh=arIjddhmeKYjbeYv9OdncJsTPLjH/d1u//2YzVvYGhw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WERMApYoJ+vpMGcoiy3Um+L+5Q8GFZrtmfsYHTg3JUtmMhpH1aoF2G0zjaJYBJKleTE/Q/7tnhtmy7QghMq7uKmnBPeL1Z1dVOR1f0zO0I2skM88AAVCkMws0A/VfSsNr1WnPRzxRrN/Vg0vFCL57019bf5HrMTavKyldAkRDA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q5aXQydV; arc=none smtp.client-ip=74.125.82.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=gwb2+h50h+gOhJCy3MQqV6ZnFBOIBPn2yHv5kzy96lp/7DvSKm5FjIWZzLMLD6VYEOn8FuWJJ4HyJxbK9UpicBwPAWZrVG3wwVm8YGvF01AQqh92UPDUkRlFwB7846aQEDQDoltKNtN9nw/VU5nhOXdk82O1bs/9PcLmqd7c/rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtWz2o4W; arc=none smtp.client-ip=74.125.82.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5aXQydV"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2be3bdfda8eso2533861eec.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2026 08:22:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtWz2o4W"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-128cba36eceso64801c88.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2026 08:26:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772814166; x=1773418966; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772814407; x=1773419207; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xZaLKsYrYsqmlYJpsUyzhmqrHURB2MPZmeFHvFmeA5g=;
-        b=Q5aXQydVgv2pDdNpSjjVvgnUOXn6T+qanCb6egv8s+GQCvjUuKB8Zn1Duq3QlxQkTW
-         BVBFhg89+D2W6PnbGBNoIGfvKXqgd79OnCyLFN/pSq6yvQxvMb4jnn1xYDTazJLEH6Yw
-         TzoVW5+JrEpHZg899204+WPp5MxKGoFcN66+XjN7mdh87IQbVkFht/iquLrIj+/YVyq7
-         jiMmZvRJ5nUrURuDBomtNZM85EmWiGfx25ayyiyU2tkRoRZKY83EM3Cz8UiuTgslT8+p
-         9UjajeMmFyPEMywCk3UxjYERmK+yqw0P+UEDsyANV86h30kIS1ZdqB2zRBvuldXJ2Il+
-         42Tg==
+        bh=lBC7Bn2gzpWf9cr0AUTi36+mTJ8I7brySGNlqYgTOc4=;
+        b=VtWz2o4WbnutsUDarKmsbdgWyAWSmUglaQZnMoK5ltv1e+krPn0Vy4LrK0Vd0C5Unw
+         ZGlnHEiOLS3y6Wg02mFBLtgLg8N+dq2ZZIqI/a0kLdcnFquzpSoWNpqHajjHAPCE94Ih
+         atKgNUFfFeHEmvTBzeueuMtywCXrhLuknLXjownTh63dh8MZxa8pVh9amd8Z8dRff6BB
+         Gim/rI1ts9d9lu+xLSfMiLuFcXQgfq8hjCveAsIjUCu3Waesy3AjtCG79y4gi8lq150U
+         kaloJxJ7UYoOFptQw6hQxtiEoRnJOmHwlDUjz1jIA/JauMjHMIc/vimcoLIbry0Fm9zD
+         xi1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772814166; x=1773418966;
+        d=1e100.net; s=20230601; t=1772814407; x=1773419207;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xZaLKsYrYsqmlYJpsUyzhmqrHURB2MPZmeFHvFmeA5g=;
-        b=agjuckQd7Y3cuk1IauqYwPqtisGT2flB27mnzwuhXhYKnmGcxjOObN+RGUJdguoxNJ
-         Bi5f6rXbuZ1NDaVKb9hyZhzCgD6942zlNHRRCYxzIsQreGuFz+T1EesXDpj4aef+e7Rl
-         YqJqKZ3vHGCv6QvoTBh2ZGrh/UHste0om9wlJyscgbIoPqqVxoIbVlUSDY8GBEypGTmR
-         27oWK0ZRRDkj+i9XaUVVJshHgdNx68OeVtB7RL5EjM1TlxSZsofDO02j+agcAcapX2Xy
-         SnPcCJdK3CfhhKaomLbs7+2RbzSFqiqAWkp8ElDxVQCuO3VPfli+4MsAFd+Zcxmmx8DQ
-         VCJg==
-X-Forwarded-Encrypted: i=1; AJvYcCWf0G+UEYQLMjLfxPPpdR9gLeZRbWn8IhP65L1u8MjXVAHSvbab/6Bh2ax4o7Q7HWeOqcllZLki01a2BQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaUS0VkqQWI0Ug9fWKrVyWoDT/dbCC/BSlM4yRJpPC0dy2tS7p
-	AoTfUMrLQe5HAQbFC1G4ztNuPtjU5WA0ACHiV8Q535lzb3DLT1HPW2u3
-X-Gm-Gg: ATEYQzyDWOGe3NXPZLJ9rBXojvEgqxXXkHXTmioWg6USapaIe/uKT0jr9JNkt/kTr7m
-	LlObbCORfsuux8aSC8y8FzhnaKXnF6xGKPOKxnM4Dd3IVjoAXlpegJNAAKdAGTtHqwZousDNGls
-	/8bDZoa5GUjICvCmB24PaH1XijYpN4pTkDC3GDX3ZO4il3OzDOt6C4VR/Bt6SR11kYSeuXx9NwP
-	U5cCkN3dnDQf0/uunYEVHaR/JK/9VSLoTB9glKI54Dj46NUa8nZNspfK1Kjt5WAujoaiXeiZlPA
-	hz4gUlA2mXrx0p8Ubo81zVDVHnDcxppDxNuJCNMLOFTokXGC17M3dc2+IlFjaQ/5Uv7VsCt2l2D
-	iijFmP1DEY2mSGAh+wNnr0/MAulY9jHvJ39Zrd7k7d2hQay413OtaMFO1/OYWOpN3EMMPUppeZ/
-	rCStvIMwj3AslD2r6AATfM0JLUolQF5nLr9dqX
-X-Received: by 2002:a05:7300:a887:b0:2be:1f58:329c with SMTP id 5a478bee46e88-2be4de8fc9cmr1071354eec.11.1772814165502;
-        Fri, 06 Mar 2026 08:22:45 -0800 (PST)
+        bh=lBC7Bn2gzpWf9cr0AUTi36+mTJ8I7brySGNlqYgTOc4=;
+        b=S3XqG8U4tYPnSmMdp26zNkxl18YJhESGFfxMr3k2chySiNKyDQG+NvT8B5Fk64x+WH
+         5plkw78kwHNK7r3jis/3fLjP6UAGI+imqAyK8XAmo+ViBhqONawMva/QfE/l9yAQpnXD
+         b3mIduh1+SyCVk/37nXfLruoUZAm0PHP5NCh9R8DC4FWiuWja1bgIl67UEVSYddQzyje
+         QhlmqOMr7w1urt88xtBFSpRcHps4a2vhwloJ3QXcA7Q6WtofomGUNxCvGui7uCVgvMXU
+         hz+tlbngWGnU1CxMhWHB1b9n270s7WaBS7AicnzJbLS3Kygc5glqXjaWGjpbGFObc2m5
+         IuXw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2BNGvdfJNhv979qnqCF43ZNorYG85XeO5lApFK6RQsLXUeJnhE3SrGvKSYvA1mQ2ZQtrVYkVG5c61Vg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzCjBHrVtCUQghOxjqX7kbxvO6MBFL3jd8lISeJcMQBSMGIZ6R
+	WmqpHoz7b3zRsTfFJOtlo4vn/DgPIoYllvog3IJ3eo2X9J2H2AVPc3le
+X-Gm-Gg: ATEYQzwn21phQvsq3qgQGyCPraWWecM0vrIPyQVPs70i+bkCgqRYaRPgjyPHvz8y7YB
+	3x14cuMGNC/DfHHzMtbMOjc7cAm8mtca7wi85quZ1KUq2KllCTxkdXiGVmEOos9FZpa/KqisL1m
+	I1inRIWoJFnECRnxGnFFAkr8T94BsW/vnzs7irBA6cB+CllGe4dUJWXD2aEzgF6dRJlwvMMVjjV
+	tcEfOXz20ZonSH7U09ezCvBL68gETgngeQehqyKPlSG3s1u8TLEQfgmFCQ3LGLH7yi0zi3D0f0W
+	9tiGuHLCyRneE8S6taWdXudkS8b1wbfIuVLCXZjjCY2R2n0v5JpRONmLNm/7NhYFDKr2Cja/mWm
+	ppjO64Pwxb1fmynn09KbW21jHfGAGMvUz6XKp/Q7mC5IaHTwvygNFkrOvyd0PCing/4pgBaTugX
+	kXUs6lMguTj9T/BwrUUeS8BjR4MYcnA4W8XKpe07i/m/ozntQ=
+X-Received: by 2002:a05:7022:49c:b0:11b:baa5:f4d1 with SMTP id a92af1059eb24-128c2d8e759mr1233951c88.6.1772814406473;
+        Fri, 06 Mar 2026 08:26:46 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f8078c6sm1769855eec.5.2026.03.06.08.22.44
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f670062sm1501662eec.0.2026.03.06.08.26.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 08:22:44 -0800 (PST)
+        Fri, 06 Mar 2026 08:26:45 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 6 Mar 2026 08:22:43 -0800
+Date: Fri, 6 Mar 2026 08:26:44 -0800
 From: Guenter Roeck <linux@roeck-us.net>
 To: Andrew Davis <afd@ti.com>
 Cc: Chiang Brian <chiang.brian@inventec.com>,
@@ -70,11 +70,11 @@ Cc: Chiang Brian <chiang.brian@inventec.com>,
 	Kim Seer Paller <kimseer.paller@analog.com>,
 	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
 	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/11] hwmon: (pmbus/max16601) Remove use of
+Subject: Re: [PATCH 08/11] hwmon: (pmbus/tps53679) Remove use of
  i2c_match_id()
-Message-ID: <5066f410-a1da-4d66-acd9-e198f8e7df2e@roeck-us.net>
+Message-ID: <14f4df53-9f40-4d7e-a229-26f7af590556@roeck-us.net>
 References: <20260305195642.830695-1-afd@ti.com>
- <20260305195642.830695-12-afd@ti.com>
+ <20260305195642.830695-9-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -83,16 +83,13 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260305195642.830695-12-afd@ti.com>
+In-Reply-To: <20260305195642.830695-9-afd@ti.com>
 
-On Thu, Mar 05, 2026 at 01:56:42PM -0600, Andrew Davis wrote:
+On Thu, Mar 05, 2026 at 01:56:39PM -0600, Andrew Davis wrote:
 > The function i2c_match_id() is used to fetch the matching ID from
 > the i2c_device_id table. This is often used to then retrieve the
 > matching driver_data. This can be done in one step with the helper
 > i2c_get_match_data().
-
-... but the code below doesn;t actually call i2c_get_match_data().
-
 > 
 > This helper has a couple other benefits:
 >  * It doesn't need the i2c_device_id passed in so we do not need
@@ -100,7 +97,9 @@ On Thu, Mar 05, 2026 at 01:56:42PM -0600, Andrew Davis wrote:
 >    move the i2c_device_id table down to its more natural spot
 >    with the other module info.
 
-... but it doesn't do that.
+The patch does not actually remove the forward declaration or move 
+the i2c_device_id table. At the very least this is misleading.
+The same applies to other patches of the series as well.
 
 >  * It also checks for device match data, which allows for OF and
 >    ACPI based probing. That means we do not have to manually check
@@ -108,22 +107,22 @@ On Thu, Mar 05, 2026 at 01:56:42PM -0600, Andrew Davis wrote:
 > 
 > Signed-off-by: Andrew Davis <afd@ti.com>
 > ---
->  drivers/hwmon/pmbus/max16601.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/pmbus/tps53679.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/max16601.c b/drivers/hwmon/pmbus/max16601.c
-> index d696e506aafba..36dc13424d929 100644
-> --- a/drivers/hwmon/pmbus/max16601.c
-> +++ b/drivers/hwmon/pmbus/max16601.c
-> @@ -318,7 +318,7 @@ static int max16601_probe(struct i2c_client *client)
->  	if (chip_id < 0)
->  		return chip_id;
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index ca2bfa25eb04c..df2726659a4ed 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -253,10 +253,7 @@ static int tps53679_probe(struct i2c_client *client)
+>  	struct pmbus_driver_info *info;
+>  	enum chips chip_id;
 >  
-> -	id = i2c_match_id(max16601_id, client);
-> +	id = i2c_client_get_device_id(client);
->  	if (chip_id != id->driver_data)
->  		dev_warn(&client->dev,
->  			 "Device mismatch: Configured %s (%d), detected %d\n",
-> -- 
-> 2.39.2
-> 
+> -	if (dev->of_node)
+> -		chip_id = (uintptr_t)of_device_get_match_data(dev);
+> -	else
+> -		chip_id = i2c_match_id(tps53679_id, client)->driver_data;
+> +	chip_id = (uintptr_t)i2c_get_match_data(client);
+>  
+>  	info = devm_kmemdup(dev, &tps53679_info, sizeof(*info), GFP_KERNEL);
+>  	if (!info)
