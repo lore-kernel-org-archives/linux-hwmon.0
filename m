@@ -1,164 +1,153 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685B0277007
-	for <linux-hwmon@vger.kernel.org>; Sat,  7 Mar 2026 10:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99F829B233
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Mar 2026 11:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772880459; cv=none; b=HceCpNDYwx6PXyxVQmJsosIn1s3mDnXNtwGfSos/pyQh+y1zj0wu/q5N0kUceWkQWFKGvdIykwadI/QMlFHY4ceYDvDSMD3t8FJsmHENKQXcq5LAX0dEs/zzR/Ly6WY+DVBhM2T60Y0GN+YSm4mRzGLtMWSHRjzW51o8DG/mbuY=
+	t=1772883805; cv=none; b=tCeB3xb6++JWKZn7ettRZy8VQ569sYP71Rj+k8ULCJRwWcsg/g+mfh4NXKIt8VAH0dHQV1TxFfzxzcYOmJIzP8xiy/oVBJ2rIrSuK6irAdQMzeVdcpngFlJegbJXqmqaoy/n6jiiIBJDfN7VB6GDPEkuf0xVmVgwJHu/xwNhpaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772880459; c=relaxed/simple;
-	bh=jxoK1sraQZVo1DWK0pPS4lyDH2/EPwJM1MqUp/zASCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tBQoL9ImoI5DGrSZwdJlkRQPiqQQ9N5QK7Cvn/NJ3IVCNBmcL317JqQkbdBXkodoMC7CutVMQeOFZlDGt3AOBkkK7L1rI+fXx9kzxWqa5xFRNjlECqVqk8+fWbyLgfhSGraULpD6WoITDU80I6qRQ7qLZ1FfAe8yMTxjmIdHAjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iKUvPEto; arc=none smtp.client-ip=74.125.82.173
+	s=arc-20240116; t=1772883805; c=relaxed/simple;
+	bh=IXfwFY3OESqP0kr8bRMSU8wArS0Wfr+8qwQ7WC7PpPo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KOCp7T+Otlgurlz+m9N9cElZcWTeNS/pQdjGjgygTg6b37zvUTUMtSO9jcJTVrefwF/fjJxZ0W4TQ4hbwdxvxdOqJuA9lUQ+XZAm6+mMe36JWnJj4HCjfwiuomF1a63/w0N3ZuiAonndhDbZkng4xytbj3bBKG5hmWj5fdkrak4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqNm32ML; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iKUvPEto"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2bdfd129c52so6676800eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 07 Mar 2026 02:47:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqNm32ML"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2be1ab1fa7dso1682777eec.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Mar 2026 03:43:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772880456; x=1773485256; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WkBTKT8pSWi5GvnwqkVL5i4g9s8QuDBQAXAc3e6y3ZU=;
-        b=iKUvPEtoo+BUv0YBZXwUraTHOrnaxWwsNhV+KlsvPbM6Jr43qVYI/r1R5rGTXcmv9Q
-         E36CjsbFwLNBWFOwfwDAyDr4LmLylNjepGlnZyD5JLLShaycGexrjf73un2EfOQcekS/
-         c61foaKNjwhTP9pAe4vCrSM4ugEC6nx85vllDVg0ZUgFSeKM+cGi5sB3k52OIDDZ28N7
-         Ki3V+5rpDq7AUG71PO3bWA9sl/27FGfT3fDFvMt3LfOYLzW6dhFCiWxIfO9UwnNPdNXB
-         xmtPTJrfBvaVTWD/AzS6dm2wMxukmlwfrOPm8X9gYVnsEktkP29EK9tuHwZX8BCu9nQs
-         uJZA==
+        d=gmail.com; s=20230601; t=1772883803; x=1773488603; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQZpzM02+/x2oL0zfHuciQbGzUsWb2fbVWQdxt4B6g4=;
+        b=cqNm32MLAdQ2xzdvEhoZNjAISZ/AexJE9NuF7QX4XEsnJ4c2qMySSevgJlftlBnlrn
+         7P/GKlg0iD4ZaascA+9hgWk6kOW4BUAToENMkf3a/wlAoKeS7sMuuaD0AtUdY1RpSZMJ
+         tQxWfbTesPmHyZZlTQJzxqz9vMbQmnEN0uhcE63i8RGR1ClbQRQtidBScHRCxDpZootK
+         qXqhoPzmUWFjAxgUfOw0yfU3naiIvifntZUTKzuuS731Q2oBeulAEGmRWj/ETBOhIOx9
+         6jrfkLzaWDeNV54ILh2O2cKS2bj4ysbPzdP6BVZTh3Cp1V/hFHW2BVC6P8pfGtd5zC0a
+         kmCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772880456; x=1773485256;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WkBTKT8pSWi5GvnwqkVL5i4g9s8QuDBQAXAc3e6y3ZU=;
-        b=TTFwYQUci8hJedP+yXjr1E+ADZKx0P9ZWre5yvapOn+cz0s2d4lIrXkYiKTxUsh+hG
-         aihWui4mDObiCTWeoJOHqEjRu7U/qboFpa8G8JsZCnyyHu6t7kNEz7zqkV8VasWipqgd
-         sf1ke3ufqXtjJ6uvf2aW/ur2A5I380Wgruqs37QTQbzbgsHOP59uKkdUiLtALgdWvN5T
-         cmDfgidwgPbHI7iVlhqnN62qB6JY3XuCJ3Of4RB1VVRIcVMDK/KSDMeInLDc5QeqQqJr
-         PmKwWgtoz3Q5UHT/mCEUoQlOacbzKO7nIIi/73Uu2OUN7DB+ffX4BF7cgdJJyRCxzOP/
-         /zaw==
-X-Gm-Message-State: AOJu0YxwbyeE5ZI0Q/sNZs66Gx7lk7VP2RZ2gJNLTG2km3NyqSH4U/Wq
-	W5FxI7yDkWJQcYplIn/3KIiFnZn/dErl8DQMpNnfzgLUJvMgjcZlaWaj
-X-Gm-Gg: ATEYQzzArHwhuLWjkvN9/OcTTVvZ0WIUCyQbOEh8NtMrg7XqcC+O5uXZp90OlrMEBpu
-	WCm4gnajaYWHdvuzFonWhcQgupBULvtHBsIs+Y9J+eKtR3weMX8D6PjFE7cHX+QonsREvmjwrDL
-	pVZXkCgtPitpHt77mJ5julw1Izjp+CeKOg0UU1g8IUNynDKo2qTx38JFbbF9mjhcP9LhB7xAdks
-	FkL40bQflFdcyJWzJgrDkWXX5/Tir+ih9llw6w+cj1R1TRaZBnKdCckXhy9LYm2pkC3y7c0ogpc
-	VBDN7oLD6Y3d8Wc+fvSgzLJUT5LMp1v6N4qUlNHoKFvkRXtWxv9qtmLouXIbEYuIUEguZhYx+cH
-	YP7R2+drE1m2b7pthNkdAS/wLC+Mw+y9ITZlGykWb7aHbQCjRBYHmPjQhPPwNjCHOijrK/c6CDE
-	+R7iyRvN2pJHffWoyHpHTeWLU3OJAFSt0tzLQTfxNw5IJvZQC2ShsmQDu26LY9DaPOktiqqbNT
-X-Received: by 2002:a05:7301:3d1a:b0:2be:10f5:42f4 with SMTP id 5a478bee46e88-2be4e063448mr1875098eec.28.1772880456383;
-        Sat, 07 Mar 2026 02:47:36 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f94823esm3504495eec.20.2026.03.07.02.47.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Mar 2026 02:47:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772883803; x=1773488603;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yQZpzM02+/x2oL0zfHuciQbGzUsWb2fbVWQdxt4B6g4=;
+        b=eZwTydCOC8DMJ2ktt5QmeE+tLt06TRxRYN/iEzxAKoe9BHEIk1WeM+Hiyx618rhlIQ
+         Rl2ocoJBzkXK8ZCHjHDTERunSpmBMyYEgomyhfIYFvGQsbHQW5cDb00XAtnl7dnW/YHW
+         CT8cD8VGxoLLdPZ6kGUKx4yY+mLiUGxB4+cQ/kU1yIc4LQ93TZzgLWzEozvYUWd3LkEy
+         ip9Slj+A56BceYQY+0Y3QYaMQA8VaRRFqra5pz1SC1iIUqmYAIBzYCjh8coLNgeSuvTA
+         vFZFkR9eerPR1+a4HMyeap4UVDggM0VthU2i5ZGRVaHq07jgrGuXCfrk/BMaI5zGcgpU
+         364A==
+X-Gm-Message-State: AOJu0Yx2vGmSS6ymg2gQA16DodHWxRoggf6GIAFApBPpNhErEuB9x0Bp
+	XbWoFFanERoXugFBR53TPkRCXrQ8AhD3q/49EaEcItesF0u7bUSVC1JRIkSsgy1D
+X-Gm-Gg: ATEYQzyz27oNiwwj2If/AnXWfWh2es4+/16UUloR7FFDXdi8TUinYM4JxHFVFvsPn2o
+	pwF53vWhLGEpKgQgZhjDI0ETO/2xMbTBY12EqnXOF9iuMByAnYOT6FqR3tOh7wgsugfXO+odOKg
+	akHui6nsB8SbftIVhb75RvItEWeneZe7TYK2kfnF0mLgpfuMUENbxFcS3UT/uztJOnIqzTmlRVr
+	Eu/MMIkBrlr45Cq+n80wITOIpqMZUlEncxwaf7ZMHmF3lFkAgC3KORh/5grO3LxD77h2zhsWg2R
+	cCY9vkyWCk7+abE24FTXXeYmmoNfA74YWTtV5Fn9xgNcnyntRZFOsuKPlv9TUEGOVy2jxVSD+0P
+	YXdFLEXblcu9G+D8ziJrK3TeeFF9Cl0AIzTDKPLl2E0Mpx0qgOP6qpTB8C870Uq1HtNSbEUKTvS
+	zPAFKFNJXMzJt0MgJUTIgaPdhHpvWlbLCeP5py
+X-Received: by 2002:a05:7300:7494:b0:2bd:fff8:c7ea with SMTP id 5a478bee46e88-2be4e06a7damr2222785eec.38.1772883802769;
+        Sat, 07 Mar 2026 03:43:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f80d72esm3737750eec.4.2026.03.07.03.43.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Mar 2026 03:43:21 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6884381a-9f03-4cd4-9407-0028eb86676c@roeck-us.net>
-Date: Sat, 7 Mar 2026 02:47:33 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for hwmon-for-v7.0-rc3
+Date: Sat,  7 Mar 2026 03:43:20 -0800
+Message-ID: <20260307114320.1638058-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwmon: (ads7871) Fix incorrect error code in voltage_show
-To: Tabrez Ahmed <tabreztalks@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Brigham Campbell <me@brighamcampbell.com>
-References: <20260307101633.21414-1-tabreztalks@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260307101633.21414-1-tabreztalks@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Hi Linus,
 
-On 3/7/26 02:16, Tabrez Ahmed wrote:
-> The voltage_show() function returns -1 when the A/D conversion
-> fails to complete within the polling loop. -1 maps to -EPERM
-> (operation not permitted), which does not describe the actual
-> failure.
-> 
-> Replace this -1 error code with -ETIMEDOUT to better indicate
-> the timeout condition to userspace.
-> 
-> Note: not runtime tested due to lack of hardware.
-> 
-> Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
-> ---
-> Note: This patch applies on top of my previously submitted patch:
-> "hwmon: (ads7871) Replace sprintf() with sysfs_emit()"
->   
->   drivers/hwmon/ads7871.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
-> index b84426c940c5e..4df54c86f786c 100644
-> --- a/drivers/hwmon/ads7871.c
-> +++ b/drivers/hwmon/ads7871.c
-> @@ -126,7 +126,7 @@ static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
->   		val = ((val >> 2) * 25000) / 8192;
->   		return sysfs_emit(buf, "%d\n", val);
->   	} else {
-> -		return -1;
-> +		return -ETIMEDOUT;
->   	}
->   }
->   
+Please pull hwmon fixes for Linux hwmon-for-v7.0-rc3 from signed tag:
 
-Good find, but please also drop the else (else after return is unnecessary).
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.0-rc3
 
 Thanks,
 Guenter
+------
 
+The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+
+  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.0-rc3
+
+for you to fetch changes up to 25dd70a03b1f5f3aa71e1a5091ecd9cd2a13ee43:
+
+  hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read (2026-03-04 16:48:06 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v7.0-rc3
+
+- aht10: Fix initialization commands for AHT20
+
+- emc1403: correct a malformed email address
+
+- it87: Check the it87_lock() return value
+
+- max6639: fix inverted polarity
+
+- macsmc: Fix overflows, underflows, sign extension, and other problems
+
+- pmbus/q54sj108a2: fix stack overflow in debugfs read
+
+- Drop support for SMARC-sAM67 (discontinued and never released to market)
+
+----------------------------------------------------------------
+Bart Van Assche (1):
+      hwmon: (it87) Check the it87_lock() return value
+
+Guenter Roeck (2):
+      hwmon: (macsmc) Fix regressions in Apple Silicon SMC hwmon driver
+      hwmon: (macsmc) Fix overflows, underflows, and sign extension
+
+Hao Yu (1):
+      hwmon: (aht10) Fix initialization commands for AHT20
+
+Michael Walle (2):
+      Revert "hwmon: add SMARC-sAM67 support"
+      dt-bindings: hwmon: sl28cpld: Drop sa67mcu compatible
+
+Olivier Sobrie (1):
+      hwmon: (max6639) fix inverted polarity
+
+Randy Dunlap (1):
+      hwmon: (emc1403) correct a malformed email address
+
+Sanman Pradhan (1):
+      hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read
+
+ .../bindings/hwmon/kontron,sl28cpld-hwmon.yaml     |   1 -
+ Documentation/hwmon/emc1403.rst                    |   2 +-
+ Documentation/hwmon/index.rst                      |   1 -
+ Documentation/hwmon/sa67.rst                       |  41 ------
+ MAINTAINERS                                        |   1 -
+ drivers/hwmon/Kconfig                              |  10 --
+ drivers/hwmon/Makefile                             |   1 -
+ drivers/hwmon/aht10.c                              |   6 +-
+ drivers/hwmon/it87.c                               |   5 +-
+ drivers/hwmon/macsmc-hwmon.c                       |  51 +++----
+ drivers/hwmon/max6639.c                            |   2 +-
+ drivers/hwmon/pmbus/q54sj108a2.c                   |  19 +--
+ drivers/hwmon/sa67mcu-hwmon.c                      | 161 ---------------------
+ 13 files changed, 46 insertions(+), 255 deletions(-)
+ delete mode 100644 Documentation/hwmon/sa67.rst
+ delete mode 100644 drivers/hwmon/sa67mcu-hwmon.c
