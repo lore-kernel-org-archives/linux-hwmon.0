@@ -1,154 +1,106 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8629437C104
-	for <linux-hwmon@vger.kernel.org>; Fri,  6 Mar 2026 23:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466D936A02B
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Mar 2026 08:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772840019; cv=none; b=i0BmeRn6Ofgm0lGMYQ3HFWk9jqQFk0PVJZxqF4YEzbparYBw8xTkC+lCRUGPJkCGht/OeNXBy3J8TXvlJA4WWn4aNReUI933VoZViQs9AdF09TDqGGBeAPLuIO2Yt1Z7TjyUI/hMeAgm80P4BOwuQZVJVSwscpmbWlqvDn98h9Q=
+	t=1772872707; cv=none; b=DPtbL/o0RhmSRUNrAFQhtyiF2CYoHD/EtdCIsziSp44vO71ponNrvl48JaXEJkF46BsU2cB/C6ydSWoJLAqf8qr/75VRkVN7IVc2u9tR8UgofiyxJ9t2PQ3ydFLOBMP/nshV+KbpmfuaSzKmD+fzIQyGnHAZhPMNq5kZDBZSpaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772840019; c=relaxed/simple;
-	bh=plzyiDYL13gMDVwQr9Dj9f8cir0m0t5cKB6vFZUg2cY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FuEi0i166b9jt/89/fKAOEPLAW1bJ1/H7zL1b3/nRfiK3Q7Xu56OMzNWIyEM8XCaRj6cdVi2ipKB1a47SkOcYQ6jqz+mhQc3kkJjp2xrYR41NrbKnpSsKaRWiu1oghBvx4iOTz6Ng+mMgpoyfiF2FaSUbll4mrru1IglLflaZq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/wZENZC; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1772872707; c=relaxed/simple;
+	bh=wv7PF3CPthuMuMLY9Sl9xqb7g1UD/3KaIZAayvTerzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oM81vpk39LhdB5p+0Q38oHELrsQmcdsx7j8Z0A8vxazIFHP2CR7tbSB4LcGCH0yfRUlQpIh4Vm/xlpmPx5LWfazFHul7/HcTZM5wtw4xzH3+vpFQOFB9Obrj/l8fkghXidE9o2jEQkqPctbhnoXfOhsO1FOxFOi0ZadcFBhJUWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a+C61ADD; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/wZENZC"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35980423087so3336478a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2026 15:33:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a+C61ADD"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c738d1fa6f1so1396377a12.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Mar 2026 00:38:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772840018; x=1773444818; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A3n1MjNRco+xhIuiD22YqqFeZmP/U2HpmvCL9DYQOmg=;
-        b=N/wZENZCtnWx8XFZ0kyLD+P1jMXI1eOOU4pu38Tub9fp/sFNmGx7bJ6qd13qqxBcd+
-         9FxIPe26xE++UcdJThW6DFIdREb7TCRSAGOjb6V8a0HCiCpU70tT95TNpuRqal93lshz
-         5vU67DX3D6ChDH+R/zzpwpvbFk9gPuz7Wg+Km8g8Aon1r5rnFJ+/xXlE6pXG9Qg34Thq
-         pZBOW1J0CnrWpASKBSjPOtVzyascg0vhc/yEqdDpDvuXRBOa5tzst5rcOBdoft+lriaU
-         kTtCKnDMNFjElDDX52pUfaqOQSWk4znRHWesOW63O4+fQLkSSIyQFUsNy094v+Vog9su
-         GUMg==
+        d=gmail.com; s=20230601; t=1772872705; x=1773477505; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XvIHZZEg8NEPZV4vJCPvRe+osiFJZCXqUTnywKUIgH8=;
+        b=a+C61ADD2vQfS3hEhUlfpsAEth+6Umopwl5T3DTt7j53aDzPjEfesHorpEEb2z9hPR
+         vssMKlPzDmOurpRX3azUvWxB+tBEO6bSss5eADL8IZB9q1rIl/ZT4Woc0G1dCR/JVANr
+         c80h2QbXQWkrVrGo1o0hePBtz69n7hCVW6jDL/JDfyN6p/YJcbtjPj7CJUjA9bbmYRW6
+         u3nfkrY6uxE7fYSn5GgcJ5m1wjOFYFb1V6Vj2fQrsEbK5bZR8EJpZBnIB4ae9OUjRFhk
+         //hxZvDPPDZM6yWfsM1qILmNlLEf01FUY0uknC1jHLDh0rkJ3XQu3ZvAtSJUHlAPBwsX
+         HDwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772840018; x=1773444818;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=A3n1MjNRco+xhIuiD22YqqFeZmP/U2HpmvCL9DYQOmg=;
-        b=EJkNyq88Q2zu5O8xWEDd/nUYxNVJvsduQ0q/tCUXRbDYyYxyW792LFNxfDbdWdxcHf
-         jHcsfDuDJp74J2oo/rTYUmyjDBE2L1FZ9h8apWtiNS5hXYmQk9ThrYx6JEKCNuHwHsOq
-         ulttlsm2jlvhcX5U4ByXlrQlYHSwR/cZX5iOqZqFzgPcdQK0fCoNhHmTDeXaebJ8D8id
-         EA7r9O3fICE/Ac3C4Qf9ajcdQY4Z8cJEy9g9CCQrNLlo3pUbs9qhJrD48rsPfylzQB9e
-         vK3H8Hgmd3dVcKrmc3A43vwVU6j6UlgWQJJrsy5nRpQq9eO1Q+UEKkko5gHbj3kLgZ1H
-         GrDg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6kxBVoVtJVTSSBXVOukh9ezeKBeiSWwAfpij+I6K3HzvK2KgmHtFrUeBXygO7GkOI45xv42a882tPeA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YztJhzSoZxpfozajSZCNS7MSL94cNmO8c/vuYtbE64qSPkPbXlL
-	61riuE2mo6lZtwhEIVJP6f7ZfvM3l9bDThGQgY3QCquZjxo0cEppn2wV
-X-Gm-Gg: ATEYQzxe5FwSDWMNlpmv2JhpBbiWXInXGY7rafLL02BYOsfi7hlc1hmYGRrFu22amw4
-	LUtyMK8BWXbwG0E7Wh1VjrUJT3fz2JeOesdD+gJK/0eIi7Yddj6YvZLROhRtmQLLrpZY9Sa448/
-	JbbpT2mWLMuAsdx5nxQ9DR9S2DimOyEiuOMlJHpY4xXtFRs+nC+odY+80EdB7SgZEj/3/hYMG+s
-	Y++3teJ4rm/wxq+QnFgWZvPjS5uSTlRYeC9+bv/ywr2txerMN+//EE9vnVpddSbAVjNDmWlohDo
-	K2hVbDYyTDMKaj5z18Y5oRJIWndYakBEa+Sz1CNAVR8kc7vjuNqjkvoG3j+xhgzNI5MwXHQlo1V
-	wBKjWdYUXOIPTOPR2sHHGqZVMUUYXMh2bR+qsqH1L1xdeGOf7jvHSiygNzIGj5YF8nacn9jvIIb
-	ekjvXjMFdJrFPKIg/DiRbrwxsMmWCC2DKxMepD
-X-Received: by 2002:a17:90b:38c4:b0:32e:528c:60ee with SMTP id 98e67ed59e1d1-359be31746amr3476775a91.24.1772840017833;
-        Fri, 06 Mar 2026 15:33:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359b2de79f6sm6579296a91.9.2026.03.06.15.33.36
+        d=1e100.net; s=20230601; t=1772872705; x=1773477505;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XvIHZZEg8NEPZV4vJCPvRe+osiFJZCXqUTnywKUIgH8=;
+        b=oJuPyDi/nJ2dB9+Pru/dY99WPALCcz6vDgGj6f+TpOIJW5Lbhkf4tHK3W29stjJf+0
+         bdfy+LnkwZLrSSiiT7FA/Zv1/O4FWk6PBx2sbdq1USKBqIaTb5XArtMGO7L7z4hBeJHv
+         +ViqpcfcXZYpHHSH8WMv1i4Kkvz0wyquB2i0q0pxidKyUVLAPH4ogz6y/pVPNfC68vLF
+         S4ZKkVLqIHnFS5z8RvHi+unme2yNaCEoA9gHsPjcVnvV7nyI0+8fUxi8iE2DYN7y2Cyu
+         lD9cysOHV4eJ3JW/HfyVTt1P3kwkxjlzDYzCqiFyD8l6BaDfkvdMUKBEZebqogtGdLtB
+         5E1g==
+X-Gm-Message-State: AOJu0Yw2uAQuTJWiXulwBR/y1+Q2uy9ZOboy/0r24KRK3kT8eChUfo2O
+	+u3N10g/vtFbzateR6bvvcfRidi/7+dz489bQJbkTu0vragSq+IO7QzRTmw9Xw==
+X-Gm-Gg: ATEYQzzZ7c8LKpTbOF+rJYGT7jwpYAJMbItNnfCRT9QF0enTX3sTzSuGjPDW5y5fEz1
+	WFKW4GbrnlXlQvgPilcAgwsrk/l4wN1F2nKHv5HqnDwwsGnKqcHXXYhh/Vu0pLV20V0d0+RmHpl
+	LIcx+tXT0umarKOhRN7No96auwX5CJ80VKXqnWGc1FDVE4rj8CDfKQEBq0W3z8aPlWb5igHhvSR
+	9oouZNAwsN6RHF4f0D4AszlhzgHkoOp4POgUv8Zn3+R5+H05xO9ZRTKQ+XagWD1wBi+7AYZfPqg
+	QsKayEC/N0f0LsvHTybQWrdS/SE3LUkbZ8yFCm8isZnM7hVs3uU3XTLcFQNp5MV4+2tqUH1puIc
+	3viBgPb1E2TWogBqnTUYGV8kYNvPi0ay+ArqIhDk88CuNXVwsr/43xFXMqQld5SG8CcdO9uNcJo
+	Tp8k1c1i77qwOaNJDXNVVHe4LY+eAGH593acFDWVxfdAnHu2/LbcpkdW4Q6tklRTLKD3+xiH0f
+X-Received: by 2002:a05:6a21:329d:b0:393:2434:683a with SMTP id adf61e73a8af0-398590f6823mr5398694637.67.1772872705550;
+        Sat, 07 Mar 2026 00:38:25 -0800 (PST)
+Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([2401:4900:4e5f:8ac8:a739:6c36:ff08:6f05])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c739e16cefcsm3620712a12.19.2026.03.07.00.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 15:33:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 6 Mar 2026 15:33:36 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Alexey Brodkin <abrodkin@synopsys.com>,
-	Vineet Gupta <vgupta@kernel.org>, Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Dvorkin Dmitry <dvorkin@tibbo.com>, Wells Lu <wellslutw@gmail.com>,
-	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-amlogic@lists.infradead.org, linux-leds@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 10/14] watchdog: convert the Kconfig dependency on
- OF_GPIO to OF
-Message-ID: <07aa5d40-96b6-41a1-b8ce-22f2c2c94aed@roeck-us.net>
-References: <20260304-gpio-of-kconfig-v1-0-d597916e79e7@oss.qualcomm.com>
- <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
+        Sat, 07 Mar 2026 00:38:25 -0800 (PST)
+From: Tabrez Ahmed <tabreztalks@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Brigham Campbell <me@brighamcampbell.com>,
+	Tabrez Ahmed <tabreztalks@gmail.com>
+Subject: [PATCH] hwmon: (ads7871) Replace sprintf() with sysfs_emit()
+Date: Sat,  7 Mar 2026 14:08:15 +0530
+Message-ID: <20260307083815.12095-1-tabreztalks@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260304-gpio-of-kconfig-v1-10-d597916e79e7@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 04, 2026 at 10:02:31AM +0100, Bartosz Golaszewski wrote:
-> OF_GPIO is selected automatically on all OF systems. Any symbols it
+Use sysfs_emit() instead of sprintf() in the sysfs show function
+voltage_show() to comply with the preferred kernel interface for
+writing to sysfs buffers, which ensures PAGE_SIZE buffer limits
+are respected.
 
-Actually, that isn't really true.
+No functional change intended.
 
-if GPIOLIB
-...
-config OF_GPIO
-        def_bool y
-        depends on OF
-        depends on HAS_IOMEM
+Note: Not runtime tested due to lack of hardware.
 
-OF_GPIO also depends on GPIOLIB and HAS_IOMEM. I don't know why it needs
-to depend on HAS_IOMEM, but the GPIOLIB dependency is real.
+Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+---
+ drivers/hwmon/ads7871.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Guenter
+diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
+index 5434c37969d75..b84426c940c5e 100644
+--- a/drivers/hwmon/ads7871.c
++++ b/drivers/hwmon/ads7871.c
+@@ -124,7 +124,7 @@ static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
+ 		val = ads7871_read_reg16(spi, REG_LS_BYTE);
+ 		/*result in volts*10000 = (val/8192)*2.5*10000*/
+ 		val = ((val >> 2) * 25000) / 8192;
+-		return sprintf(buf, "%d\n", val);
++		return sysfs_emit(buf, "%d\n", val);
+ 	} else {
+ 		return -1;
+ 	}
+-- 
+2.43.0
 
-> controls also provide stubs so there's really no reason to select it
-> explicitly. We could simply remove the dependency but in order to avoid
-> a new symbol popping up for everyone in make config - just convert it to
-> requiring CONFIG_OF.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/watchdog/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index dc78729ba2a5d6e035ed3cbe5c2b631d11b76b20..ef200339a22a6f9c51a46c9c0b8466add74313e2 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -250,7 +250,7 @@ config DA9062_WATCHDOG
->  
->  config GPIO_WATCHDOG
->  	tristate "Watchdog device controlled through GPIO-line"
-> -	depends on OF_GPIO
-> +	depends on OF
->  	select WATCHDOG_CORE
->  	help
->  	  If you say yes here you get support for watchdog device
