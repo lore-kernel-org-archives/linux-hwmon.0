@@ -1,69 +1,71 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99F829B233
-	for <linux-hwmon@vger.kernel.org>; Sat,  7 Mar 2026 11:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0583016E5
+	for <linux-hwmon@vger.kernel.org>; Sat,  7 Mar 2026 11:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772883805; cv=none; b=tCeB3xb6++JWKZn7ettRZy8VQ569sYP71Rj+k8ULCJRwWcsg/g+mfh4NXKIt8VAH0dHQV1TxFfzxzcYOmJIzP8xiy/oVBJ2rIrSuK6irAdQMzeVdcpngFlJegbJXqmqaoy/n6jiiIBJDfN7VB6GDPEkuf0xVmVgwJHu/xwNhpaA=
+	t=1772884367; cv=none; b=qnCsf5r511S1dW1iRSE+vv85edQobZ32fFyU/3/qupFZBmyEz5kQV17d6043tca+3Zn+yDU11DaE4tIC4UYIxH7vVIJnUVaGZ9XMv32KuA2GJVCtY9+B3GumfWLyFWx7SHILho5DUpzdepT3MGyj/HE+Xkoj5JXfD+nJQcRYTdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772883805; c=relaxed/simple;
-	bh=IXfwFY3OESqP0kr8bRMSU8wArS0Wfr+8qwQ7WC7PpPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KOCp7T+Otlgurlz+m9N9cElZcWTeNS/pQdjGjgygTg6b37zvUTUMtSO9jcJTVrefwF/fjJxZ0W4TQ4hbwdxvxdOqJuA9lUQ+XZAm6+mMe36JWnJj4HCjfwiuomF1a63/w0N3ZuiAonndhDbZkng4xytbj3bBKG5hmWj5fdkrak4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqNm32ML; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1772884367; c=relaxed/simple;
+	bh=x14hvFkGwF04Zj4c1Booyr8tA2c9CZMGV8bNdLcE47M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hSyVmJGEUZy0HfZvfqdXfIQit40a8Tgie+QDkZXNEtQeOKy4XhvhhNFefY/sq4qZG3DuSw51iOSfmrjorrGYcwpf1TT7dL+kD/LrLsD/GgCK+6mHs3xehXca1ham3ltUIwfZYt+m3KPPVFvt67g6KFy/e+TPg47KaQJqfYYvwdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RddsZBUQ; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqNm32ML"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2be1ab1fa7dso1682777eec.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 07 Mar 2026 03:43:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RddsZBUQ"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ae527552acso23637295ad.0
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Mar 2026 03:52:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772883803; x=1773488603; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772884366; x=1773489166; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQZpzM02+/x2oL0zfHuciQbGzUsWb2fbVWQdxt4B6g4=;
-        b=cqNm32MLAdQ2xzdvEhoZNjAISZ/AexJE9NuF7QX4XEsnJ4c2qMySSevgJlftlBnlrn
-         7P/GKlg0iD4ZaascA+9hgWk6kOW4BUAToENMkf3a/wlAoKeS7sMuuaD0AtUdY1RpSZMJ
-         tQxWfbTesPmHyZZlTQJzxqz9vMbQmnEN0uhcE63i8RGR1ClbQRQtidBScHRCxDpZootK
-         qXqhoPzmUWFjAxgUfOw0yfU3naiIvifntZUTKzuuS731Q2oBeulAEGmRWj/ETBOhIOx9
-         6jrfkLzaWDeNV54ILh2O2cKS2bj4ysbPzdP6BVZTh3Cp1V/hFHW2BVC6P8pfGtd5zC0a
-         kmCQ==
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dZDKh4IaVMdclzCWCv4XLUPdebdU7YmkNEuX3WsVI6M=;
+        b=RddsZBUQEchcYXGAEM4WvCEidp/AHz52fq6kSzS242LxJQUJ1GMyt1tfBTO6hzcp0e
+         W20dnzGLLnFX4oW6ZLLX9dmSFL9J/NA6PPE4NJeSllAdBLazCzWQYNAK5MA7YXytMGCd
+         4O98t/ZDrJjLWd4VRp8UKRa5qBBFpVlOj+CxIyez1Ddh9WuHfLScRE9/gvQsy6fcN6oU
+         g9KkMjaN+nykzn6y1AcRGFJq+8s3GzmxyKwhZtOvHkih+LNH90/7U1kj/FTeySEcyW/V
+         9Rx/u9PVgv40jaZz7IQN7rjdKTYPRA/najf4HqG8H9XzFjZkax5jt+xbsvTO64VEI5NY
+         HrnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772883803; x=1773488603;
+        d=1e100.net; s=20230601; t=1772884366; x=1773489166;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yQZpzM02+/x2oL0zfHuciQbGzUsWb2fbVWQdxt4B6g4=;
-        b=eZwTydCOC8DMJ2ktt5QmeE+tLt06TRxRYN/iEzxAKoe9BHEIk1WeM+Hiyx618rhlIQ
-         Rl2ocoJBzkXK8ZCHjHDTERunSpmBMyYEgomyhfIYFvGQsbHQW5cDb00XAtnl7dnW/YHW
-         CT8cD8VGxoLLdPZ6kGUKx4yY+mLiUGxB4+cQ/kU1yIc4LQ93TZzgLWzEozvYUWd3LkEy
-         ip9Slj+A56BceYQY+0Y3QYaMQA8VaRRFqra5pz1SC1iIUqmYAIBzYCjh8coLNgeSuvTA
-         vFZFkR9eerPR1+a4HMyeap4UVDggM0VthU2i5ZGRVaHq07jgrGuXCfrk/BMaI5zGcgpU
-         364A==
-X-Gm-Message-State: AOJu0Yx2vGmSS6ymg2gQA16DodHWxRoggf6GIAFApBPpNhErEuB9x0Bp
-	XbWoFFanERoXugFBR53TPkRCXrQ8AhD3q/49EaEcItesF0u7bUSVC1JRIkSsgy1D
-X-Gm-Gg: ATEYQzyz27oNiwwj2If/AnXWfWh2es4+/16UUloR7FFDXdi8TUinYM4JxHFVFvsPn2o
-	pwF53vWhLGEpKgQgZhjDI0ETO/2xMbTBY12EqnXOF9iuMByAnYOT6FqR3tOh7wgsugfXO+odOKg
-	akHui6nsB8SbftIVhb75RvItEWeneZe7TYK2kfnF0mLgpfuMUENbxFcS3UT/uztJOnIqzTmlRVr
-	Eu/MMIkBrlr45Cq+n80wITOIpqMZUlEncxwaf7ZMHmF3lFkAgC3KORh/5grO3LxD77h2zhsWg2R
-	cCY9vkyWCk7+abE24FTXXeYmmoNfA74YWTtV5Fn9xgNcnyntRZFOsuKPlv9TUEGOVy2jxVSD+0P
-	YXdFLEXblcu9G+D8ziJrK3TeeFF9Cl0AIzTDKPLl2E0Mpx0qgOP6qpTB8C870Uq1HtNSbEUKTvS
-	zPAFKFNJXMzJt0MgJUTIgaPdhHpvWlbLCeP5py
-X-Received: by 2002:a05:7300:7494:b0:2bd:fff8:c7ea with SMTP id 5a478bee46e88-2be4e06a7damr2222785eec.38.1772883802769;
-        Sat, 07 Mar 2026 03:43:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f80d72esm3737750eec.4.2026.03.07.03.43.21
+        bh=dZDKh4IaVMdclzCWCv4XLUPdebdU7YmkNEuX3WsVI6M=;
+        b=GK9wLSzPdHhAUTqzkrzVOy4hOIuyjxdOlOH27BRtksZtMtyRXk/XGsR1csZr9opLSv
+         HVx9Cvtyo+RF/lEqAyOvMSY4TCQRaN++Y6bQC5OA7XoSbf/DD03FnftGThwiWD2jPpzR
+         sH6P1wxt2dB+mZ2T5AJiTDpyL0NUofk4ru02i9Q5wigkn7qcyIsKHRRrnesplyl/cuu8
+         YYE6FlsmEJt8rO1cJlFfd8xL3svEr58puV0+aXWlE9fJwHccuwnQS20JG3T8aN7hEhU5
+         yATtvtgG62gbUt2c9/fa9vN/gKQhjuj411RVZp2Pee6R38ZCFHqdalyu8qMw5TKBxchI
+         dnuA==
+X-Gm-Message-State: AOJu0Yy1ML0O8dei6S2Kax7LzY7nzInfhY8Oz46JKfad+6WZiY0Ubec6
+	RWt0GvZ/wpE1tvZJ5eDMrWpaalBLXb6FKgwWGljrJ24OCW0thWF4qNsAXNo33Q==
+X-Gm-Gg: ATEYQzw13jvgaBvDiCSa8XhL+j/IV2XBe1JW/fpqUzImuPpTHDTo+8whQCHchBAbnQ1
+	Isfik0dFgW6XkubfpZQRKK1IFUoCYkysF15hwQJoD057EbeYSJ1GN0dbWrMuiy7izDYGxxgiwKG
+	JfUQIdvIy5JgW+HhneDqxmMnPj9v7G8h6OlnX1VfSDY04TxVGf8IsZ/ghLvWJwKVgn9fDAUN0jP
+	HgQW5fR+A8hMir1Q62NsCJO9FKhUGP+Tny/5Kb2vJuXxJmqhCnAVFRdOQcfbwQBPk7RbhwgOs1I
+	B4Gu+ATxloNY95Pkj8He7TtqYpzuRci5RyV40XrHEgfIFNo57/xw7WiMZbhS14dDm1sQskaY1zC
+	YTfn83ge5Q6gfEBWLdNHJhzqR+dx9AtuSMh6yFhNLid5OHuYtIaJ1u4RLzBY3SIMDWJEQJgK+so
+	/05qEqpYHhK3QcimrumkcoMS8hNHXhcJbueKQ3b3b7YehLS+3NdL9bonNfHyQctOy66izx1ch3
+X-Received: by 2002:a17:902:ef08:b0:2ae:5b64:12da with SMTP id d9443c01a7336-2ae82506badmr59211005ad.45.1772884365886;
+        Sat, 07 Mar 2026 03:52:45 -0800 (PST)
+Received: from tabrez-VivoBook-ASUSLaptop-X513UA-KM513UA.. ([2401:4900:4e5f:8ac8:a739:6c36:ff08:6f05])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e78f77sm67756675ad.21.2026.03.07.03.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Mar 2026 03:43:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: Linus Torvalds <torvalds@linux-foundation.org>
+        Sat, 07 Mar 2026 03:52:45 -0800 (PST)
+From: Tabrez Ahmed <tabreztalks@gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for hwmon-for-v7.0-rc3
-Date: Sat,  7 Mar 2026 03:43:20 -0800
-Message-ID: <20260307114320.1638058-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Brigham Campbell <me@brighamcampbell.com>,
+	Tabrez Ahmed <tabreztalks@gmail.com>
+Subject: [PATCH v2] hwmon: (ads7871) Fix incorrect error code in voltage_show
+Date: Sat,  7 Mar 2026 17:22:26 +0530
+Message-ID: <20260307115226.25757-1-tabreztalks@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -72,82 +74,45 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+The voltage_show() function returns -1 when the A/D conversion
+fails to complete within the polling loop. -1 maps to -EPERM
+(operation not permitted), which does not describe the actual
+failure.
 
-Please pull hwmon fixes for Linux hwmon-for-v7.0-rc3 from signed tag:
+Replace this -1 error code with -ETIMEDOUT to better indicate
+the timeout condition to userspace.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v7.0-rc3
+Drop the else block after return.
 
-Thanks,
-Guenter
-------
+Note: not runtime tested due to lack of hardware.
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+Signed-off-by: Tabrez Ahmed <tabreztalks@gmail.com>
+---
+Changes in v2:
+- Dropped unnecessary 'else' block after return as suggested by Guenter Roeck.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+Note: This patch applies on top of my previously submitted patch:
+"hwmon: (ads7871) Replace sprintf() with sysfs_emit()"
 
-are available in the Git repository at:
+ drivers/hwmon/ads7871.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v7.0-rc3
+diff --git a/drivers/hwmon/ads7871.c b/drivers/hwmon/ads7871.c
+index b84426c940c5e..753bf77ce19b4 100644
+--- a/drivers/hwmon/ads7871.c
++++ b/drivers/hwmon/ads7871.c
+@@ -125,9 +125,9 @@ static ssize_t voltage_show(struct device *dev, struct device_attribute *da,
+ 		/*result in volts*10000 = (val/8192)*2.5*10000*/
+ 		val = ((val >> 2) * 25000) / 8192;
+ 		return sysfs_emit(buf, "%d\n", val);
+-	} else {
+-		return -1;
+ 	}
++
++	return -ETIMEDOUT;
+ }
+ 
+ static SENSOR_DEVICE_ATTR_RO(in0_input, voltage, 0);
+-- 
+2.43.0
 
-for you to fetch changes up to 25dd70a03b1f5f3aa71e1a5091ecd9cd2a13ee43:
-
-  hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read (2026-03-04 16:48:06 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v7.0-rc3
-
-- aht10: Fix initialization commands for AHT20
-
-- emc1403: correct a malformed email address
-
-- it87: Check the it87_lock() return value
-
-- max6639: fix inverted polarity
-
-- macsmc: Fix overflows, underflows, sign extension, and other problems
-
-- pmbus/q54sj108a2: fix stack overflow in debugfs read
-
-- Drop support for SMARC-sAM67 (discontinued and never released to market)
-
-----------------------------------------------------------------
-Bart Van Assche (1):
-      hwmon: (it87) Check the it87_lock() return value
-
-Guenter Roeck (2):
-      hwmon: (macsmc) Fix regressions in Apple Silicon SMC hwmon driver
-      hwmon: (macsmc) Fix overflows, underflows, and sign extension
-
-Hao Yu (1):
-      hwmon: (aht10) Fix initialization commands for AHT20
-
-Michael Walle (2):
-      Revert "hwmon: add SMARC-sAM67 support"
-      dt-bindings: hwmon: sl28cpld: Drop sa67mcu compatible
-
-Olivier Sobrie (1):
-      hwmon: (max6639) fix inverted polarity
-
-Randy Dunlap (1):
-      hwmon: (emc1403) correct a malformed email address
-
-Sanman Pradhan (1):
-      hwmon: (pmbus/q54sj108a2) fix stack overflow in debugfs read
-
- .../bindings/hwmon/kontron,sl28cpld-hwmon.yaml     |   1 -
- Documentation/hwmon/emc1403.rst                    |   2 +-
- Documentation/hwmon/index.rst                      |   1 -
- Documentation/hwmon/sa67.rst                       |  41 ------
- MAINTAINERS                                        |   1 -
- drivers/hwmon/Kconfig                              |  10 --
- drivers/hwmon/Makefile                             |   1 -
- drivers/hwmon/aht10.c                              |   6 +-
- drivers/hwmon/it87.c                               |   5 +-
- drivers/hwmon/macsmc-hwmon.c                       |  51 +++----
- drivers/hwmon/max6639.c                            |   2 +-
- drivers/hwmon/pmbus/q54sj108a2.c                   |  19 +--
- drivers/hwmon/sa67mcu-hwmon.c                      | 161 ---------------------
- 13 files changed, 46 insertions(+), 255 deletions(-)
- delete mode 100644 Documentation/hwmon/sa67.rst
- delete mode 100644 drivers/hwmon/sa67mcu-hwmon.c
