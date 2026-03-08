@@ -1,38 +1,38 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E5B21B192;
-	Sun,  8 Mar 2026 00:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1BA217F27;
+	Sun,  8 Mar 2026 00:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772929540; cv=none; b=kLtbMRTpsbeZfJ7U9It3QrhlrDv13CWdqjz3B/o3NeGJNpsVYP9vJzgx5x1SrPPSmKzxaPE3HVhY8ap5vczhHXSQBgtj5DEJGxJIFzdXEhrYd47FePIwkRho1XmnQGs0dd+P1vGfVtHrPTzs665n/CRkqTTCeKoGdhb97mKubAg=
+	t=1772929543; cv=none; b=fEShmTv6kSysBQDA2+RgKqDfsn/kwabypBJPARItf/UcDug2QZlMoi3WiXaoomK6JlHQ1YztjQDHA5NX9HvgF2k4DK3Mktk16LpaNV+tef5oycFu1Ha1ocJSfSUl3PfEuGN3R5dmP5uCI+kizZMFzLeEgvhGUKDvTtDbE2lf5gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772929540; c=relaxed/simple;
-	bh=iPCUkxzT1pgRAs55EHDRcdwaaj7ZNbWDMLDA1ox4Qpk=;
+	s=arc-20240116; t=1772929543; c=relaxed/simple;
+	bh=XkCMJ7ozZ5TIFut03c48XQ8wVAkXKSmOEqRVO85lZyc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=n7Af2hrWHZLCghcKS2G4BxyXes8lljOSdN8ngWXvsS1BWaj1V5bs4BlfQXKdIzunSsNCs1UnIqldBmsFvQGZd9Qk0b5oLcuQSj9ZUJKSZ0goknfQaGOO1bHgrTRgu0P2+MQfAjXXYM2xgQF1PiGTHAntys70p1pksVVLiBi59co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=EPJ3UOEs; arc=none smtp.client-ip=212.227.17.21
+	 MIME-Version; b=sEeaWIKl1ZOlo5csR31XDKr9xhm5bKE37YnH6MFXzHPdMhmgQewMpVkEltSkN7rAm71PsVRvcNuoHV6fmrhz6Fd1CVq1jz/skP/X2RKE80beo2rLCa33fi7BZVrGXa6ygaswpQm5Y9Vk14QbK5cbfPHl9/LrJPOzUVfoCOLCSr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=T0t2q6Ed; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="EPJ3UOEs"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="T0t2q6Ed"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1772929535; x=1773534335; i=w_armin@gmx.de;
-	bh=9yYEAN8R/q+eJ/epVkmHeoIfIOY6a1BOEdI7zdNvdbE=;
+	s=s31663417; t=1772929536; x=1773534336; i=w_armin@gmx.de;
+	bh=U70qC46D3P6sJ9E78bZU/zkNQ2aG3Rvvw/Di3Z3vUrQ=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=EPJ3UOEs/ApX2STTQ0Ly3ynaoaWMZ/eCUAKyEgnLxqLauJwZey/b8ejotNzmOllP
-	 qfUcv3atTsVFqhsTw5s+jB3yDsceHC2GNL4B2yDReXFba8l/1zYQDy7qb+c1qKkqh
-	 BKEtkafjj60wv2GXSP0iYZcTefr4e0bZ/1w+HO+oXL7AxnpbYifiXWxV39BDo6U66
-	 oN09zX7iS6ifCpFtUje/RMNrT5burDOHd+Ki3NkF8ZOkLV42Nw4a3OQLfmjm9KV4j
-	 C22RfqxRHLwu2r69Ru8V4EIkchqsTmybn+niW2RhAI97aG/o1fTbwMQy0OVh/RWkN
-	 gSvNPrzYQfJEp9tmxQ==
+	b=T0t2q6EdW2MCivPzFi2YZ5ZE5VTVq7ytyv+ZWi4drTPL259Mn8ZtQ6X7C0Dx8xjL
+	 tgtqE1TLmd/YyRP3yWPKB0fjx6recpl8/0HlAQA3zSM7QEu46I5GHliW4WHuEoULk
+	 jo7wuflTu9cwVT/GGdtPlrpC1f9L/3UUN9C4GFcGHgf5aZ0CDct8O+g3dSyGr8osh
+	 CmcZtAHKY8o8mdGZA8vXY7hnVrRZcbTqV+/+L7udivKVzmuxfk8Gz3o+5OhJx4aO9
+	 rpKqjlT2xfTR/9BSOtA2hHE5Ny+C/8bRmPvgxiFEWhR8gmHJcuIwH75jRq6xPWZeB
+	 hFy9mAodqhcRux5Hjw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVvPJ-1w6yQF36E1-00MPGA; Sun, 08
- Mar 2026 01:25:34 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4hzj-1vYBp12VQl-00wHMA; Sun, 08
+ Mar 2026 01:25:36 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: Dell.Client.Kernel@dell.com,
 	pali@kernel.org,
@@ -43,9 +43,9 @@ Cc: hansg@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH 5/9] platform/x86: dell-ddv: Use new buffer-based WMI API
-Date: Sun,  8 Mar 2026 01:25:18 +0100
-Message-Id: <20260308002522.4185-6-W_Armin@gmx.de>
+Subject: [PATCH 7/9] platform/wmi: Make wmi_bus_class const
+Date: Sun,  8 Mar 2026 01:25:20 +0100
+Message-Id: <20260308002522.4185-8-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260308002522.4185-1-W_Armin@gmx.de>
 References: <20260308002522.4185-1-W_Armin@gmx.de>
@@ -56,511 +56,108 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:QOaHDdaASEvtIRIk5wBOip189o5TQqFAhRDsbrdsmWJ9BTPMPAB
- +AHwOsTB0t9vENlc2/tydswedAMSgBhxb/wzsMwefPUWnroTuApZ1bKozzjixNwb0D0kowA
- nyBXEqUWNYflfjBQUfa7Q9mq13N5GS8lR1j5tqDa64uKQA9vBHAeFnNXWEfm/N+JuRgP1V7
- Nj/TqcBGumPr0cLG9cFKA==
+X-Provags-ID: V03:K1:kFkDScghcW/iOcmbYksqcJojfCyt0GFot5Chwu45O7cVvZMTFux
+ Bfty3fqTJ25xE7Y+RPE3qB9/HQJ8mXeVZYjf0jP2Fagu+2aZyzHTivziMt2SP330GI42+Ud
+ 641kRcWsCXdVEyN+NxtZIYcUfAZF6dsZW1YYnwjr6Inxs0pKOSa/xbDIE8P0AE6VZJ1B/zy
+ JNsprgWNUzyTZFV2hM0hA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:IuDaoCC5aSk=;xlRfaNLcVORZf8FEzpovI1swJQe
- 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
+UI-OutboundReport: notjunk:1;M01:P0:Az72nDoYo1c=;sYuzkXWMTJZcOGIHG3lEJncwzlf
+ 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
+ x5hqu60eqtjOXsAKcCaAuBHmvjqvKqaXhyOVNM
 
-Use the new buffer-based WMI API to also support ACPI firmware
-implementations that do not use ACPI intergers/strings/packages
-for exchanging data.
+The functions class_register()/_unregister() and device_create()
+both support taking a const pointer to the class struct. Use this
+to mark wmi_bus_class as const so that it can be placed into
+read-only memory for better security.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/platform/x86/dell/dell-wmi-ddv.c | 194 ++++++++++++-----------
- 1 file changed, 105 insertions(+), 89 deletions(-)
+ drivers/platform/wmi/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
-86/dell/dell-wmi-ddv.c
-index 62e3d060f038..a744fd21b8af 100644
-=2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
-+++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-@@ -7,8 +7,8 @@
+diff --git a/drivers/platform/wmi/core.c b/drivers/platform/wmi/core.c
+index b8e6b9a421c6..082c85625878 100644
+=2D-- a/drivers/platform/wmi/core.c
++++ b/drivers/platform/wmi/core.c
+@@ -1069,7 +1069,7 @@ static void wmi_dev_shutdown(struct device *dev)
+ 	}
+ }
 =20
- #define pr_format(fmt) KBUILD_MODNAME ": " fmt
-=20
--#include <linux/acpi.h>
- #include <linux/bitfield.h>
-+#include <linux/compiler_attributes.h>
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/device/driver.h>
-@@ -99,6 +99,11 @@ enum dell_ddv_method {
- 	DELL_DDV_THERMAL_SENSOR_INFORMATION	=3D 0x22,
+-static struct class wmi_bus_class =3D {
++static const struct class wmi_bus_class =3D {
+ 	.name =3D "wmi_bus",
  };
 =20
-+struct dell_wmi_buffer {
-+	__le32 raw_size;
-+	u8 raw_data[];
-+} __packed;
-+
- struct fan_sensor_entry {
- 	u8 type;
- 	__le16 rpm;
-@@ -126,7 +131,7 @@ struct dell_wmi_ddv_sensors {
- 	bool active;
- 	struct mutex lock;	/* protect caching */
- 	unsigned long timestamp;
--	union acpi_object *obj;
-+	struct dell_wmi_buffer *buffer;
- 	u64 entries;
- };
-=20
-@@ -158,105 +163,122 @@ static const char * const fan_dock_labels[] =3D {
- 	"Docking Chipset Fan",
- };
-=20
--static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv=
-_method method, u32 arg,
--				   union acpi_object **result, acpi_object_type type)
-+static int dell_wmi_ddv_query(struct wmi_device *wdev, enum dell_ddv_meth=
-od method, u32 arg,
-+			      struct wmi_buffer *output)
- {
--	struct acpi_buffer out =3D { ACPI_ALLOCATE_BUFFER, NULL };
--	const struct acpi_buffer in =3D {
--		.length =3D sizeof(arg),
--		.pointer =3D &arg,
-+	__le32 arg2 =3D cpu_to_le32(arg);
-+	const struct wmi_buffer input =3D {
-+		.length =3D sizeof(arg2),
-+		.data =3D &arg2,
- 	};
--	union acpi_object *obj;
--	acpi_status ret;
--
--	ret =3D wmidev_evaluate_method(wdev, 0x0, method, &in, &out);
--	if (ACPI_FAILURE(ret))
--		return -EIO;
--
--	obj =3D out.pointer;
--	if (!obj)
--		return -ENODATA;
-=20
--	if (obj->type !=3D type) {
--		kfree(obj);
--		return -ENOMSG;
--	}
--
--	*result =3D obj;
--
--	return 0;
-+	return wmidev_invoke_method(wdev, 0x0, method, &input, output);
- }
-=20
- static int dell_wmi_ddv_query_integer(struct wmi_device *wdev, enum dell_=
-ddv_method method,
- 				      u32 arg, u32 *res)
- {
--	union acpi_object *obj;
-+	struct wmi_buffer output;
-+	__le32 *argr;
- 	int ret;
-=20
--	ret =3D dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_INTEG=
-ER);
-+	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output);
- 	if (ret < 0)
- 		return ret;
-=20
--	if (obj->integer.value <=3D U32_MAX)
--		*res =3D (u32)obj->integer.value;
--	else
--		ret =3D -ERANGE;
-+	if (output.length >=3D sizeof(*argr)) {
-+		argr =3D output.data;
-+		*res =3D le32_to_cpu(*argr);
-+	} else {
-+		ret =3D -EIO;
-+	}
-=20
--	kfree(obj);
-+	kfree(output.data);
-=20
- 	return ret;
- }
-=20
- static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_d=
-dv_method method,
--				     u32 arg, union acpi_object **result)
-+				     u32 arg, struct dell_wmi_buffer **result)
- {
--	union acpi_object *obj;
--	u64 buffer_size;
-+	struct dell_wmi_buffer *buffer;
-+	struct wmi_buffer output;
-+	size_t buffer_size;
- 	int ret;
-=20
--	ret =3D dell_wmi_ddv_query_type(wdev, method, arg, &obj, ACPI_TYPE_PACKA=
-GE);
-+	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output);
- 	if (ret < 0)
- 		return ret;
-=20
--	if (obj->package.count !=3D 2 ||
--	    obj->package.elements[0].type !=3D ACPI_TYPE_INTEGER ||
--	    obj->package.elements[1].type !=3D ACPI_TYPE_BUFFER) {
--		ret =3D -ENOMSG;
-+	if (output.length < sizeof(*buffer)) {
-+		ret =3D -EIO;
-=20
- 		goto err_free;
- 	}
-=20
--	buffer_size =3D obj->package.elements[0].integer.value;
--
--	if (!buffer_size) {
-+	buffer =3D output.data;
-+	if (!le32_to_cpu(buffer->raw_size)) {
- 		ret =3D -ENODATA;
-=20
- 		goto err_free;
- 	}
-=20
--	if (buffer_size > obj->package.elements[1].buffer.length) {
-+	buffer_size =3D struct_size(buffer, raw_data, le32_to_cpu(buffer->raw_si=
-ze));
-+	if (buffer_size > output.length) {
- 		dev_warn(&wdev->dev,
--			 FW_WARN "WMI buffer size (%llu) exceeds ACPI buffer size (%d)\n",
--			 buffer_size, obj->package.elements[1].buffer.length);
-+			 FW_WARN "Dell WMI buffer size (%zu) exceeds WMI buffer size (%zu)\n",
-+			 buffer_size, output.length);
- 		ret =3D -EMSGSIZE;
-=20
- 		goto err_free;
- 	}
-=20
--	*result =3D obj;
-+	*result =3D buffer;
-=20
- 	return 0;
-=20
- err_free:
--	kfree(obj);
-+	kfree(output.data);
-=20
- 	return ret;
- }
-=20
--static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_d=
-dv_method method,
--				     u32 arg, union acpi_object **result)
-+static ssize_t dell_wmi_ddv_query_string(struct wmi_device *wdev, enum de=
-ll_ddv_method method,
-+					 u32 arg, char *buf, size_t length)
- {
--	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRI=
-NG);
-+	struct wmi_buffer output;
-+	struct wmi_string *str;
-+	size_t str_size;
-+	ssize_t count;
-+	int ret;
-+
-+	ret =3D dell_wmi_ddv_query(wdev, method, arg, &output);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (output.length < sizeof(*str)) {
-+		count =3D -EIO;
-+
-+		goto err_free;
-+	}
-+
-+	str =3D output.data;
-+	str_size =3D sizeof(*str) + le16_to_cpu(str->length);
-+	if (str_size > output.length) {
-+		dev_warn(&wdev->dev,
-+			 FW_WARN "WMI string size (%zu) exceeds WMI buffer size (%zu)\n",
-+			 str_size, output.length);
-+		count =3D -EMSGSIZE;
-+
-+		goto err_free;
-+	}
-+
-+	count =3D wmi_string_to_utf8s(str, buf, length);
-+
-+err_free:
-+	kfree(output.data);
-+
-+	return count;
- }
-=20
- /*
-@@ -265,28 +287,26 @@ static int dell_wmi_ddv_query_string(struct wmi_devi=
-ce *wdev, enum dell_ddv_meth
- static int dell_wmi_ddv_update_sensors(struct wmi_device *wdev, enum dell=
-_ddv_method method,
- 				       struct dell_wmi_ddv_sensors *sensors, size_t entry_size)
- {
-+	struct dell_wmi_buffer *buffer;
- 	u64 buffer_size, rem, entries;
--	union acpi_object *obj;
--	u8 *buffer;
- 	int ret;
-=20
--	if (sensors->obj) {
-+	if (sensors->buffer) {
- 		if (time_before(jiffies, sensors->timestamp + HZ))
- 			return 0;
-=20
--		kfree(sensors->obj);
--		sensors->obj =3D NULL;
-+		kfree(sensors->buffer);
-+		sensors->buffer =3D NULL;
- 	}
-=20
--	ret =3D dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
-+	ret =3D dell_wmi_ddv_query_buffer(wdev, method, 0, &buffer);
- 	if (ret < 0)
- 		return ret;
-=20
- 	/* buffer format sanity check */
--	buffer_size =3D obj->package.elements[0].integer.value;
--	buffer =3D obj->package.elements[1].buffer.pointer;
-+	buffer_size =3D le32_to_cpu(buffer->raw_size);
- 	entries =3D div64_u64_rem(buffer_size, entry_size, &rem);
--	if (rem !=3D 1 || buffer[buffer_size - 1] !=3D 0xff) {
-+	if (rem !=3D 1 || buffer->raw_data[buffer_size - 1] !=3D 0xff) {
- 		ret =3D -ENOMSG;
- 		goto err_free;
- 	}
-@@ -296,14 +316,14 @@ static int dell_wmi_ddv_update_sensors(struct wmi_de=
-vice *wdev, enum dell_ddv_me
- 		goto err_free;
- 	}
-=20
--	sensors->obj =3D obj;
-+	sensors->buffer =3D buffer;
- 	sensors->entries =3D entries;
- 	sensors->timestamp =3D jiffies;
-=20
- 	return 0;
-=20
- err_free:
--	kfree(obj);
-+	kfree(buffer);
-=20
- 	return ret;
- }
-@@ -328,7 +348,7 @@ static int dell_wmi_ddv_fan_read_channel(struct dell_w=
-mi_ddv_data *data, u32 att
- 	if (channel >=3D data->fans.entries)
- 		return -ENXIO;
-=20
--	entry =3D (struct fan_sensor_entry *)data->fans.obj->package.elements[1]=
-.buffer.pointer;
-+	entry =3D (struct fan_sensor_entry *)data->fans.buffer->raw_data;
- 	switch (attr) {
- 	case hwmon_fan_input:
- 		*val =3D get_unaligned_le16(&entry[channel].rpm);
-@@ -354,7 +374,7 @@ static int dell_wmi_ddv_temp_read_channel(struct dell_=
-wmi_ddv_data *data, u32 at
- 	if (channel >=3D data->temps.entries)
- 		return -ENXIO;
-=20
--	entry =3D (struct thermal_sensor_entry *)data->temps.obj->package.elemen=
-ts[1].buffer.pointer;
-+	entry =3D (struct thermal_sensor_entry *)data->temps.buffer->raw_data;
- 	switch (attr) {
- 	case hwmon_temp_input:
- 		*val =3D entry[channel].now * 1000;
-@@ -411,7 +431,7 @@ static int dell_wmi_ddv_fan_read_string(struct dell_wm=
-i_ddv_data *data, int chan
- 	if (channel >=3D data->fans.entries)
- 		return -ENXIO;
-=20
--	entry =3D (struct fan_sensor_entry *)data->fans.obj->package.elements[1]=
-.buffer.pointer;
-+	entry =3D (struct fan_sensor_entry *)data->fans.buffer->raw_data;
- 	type =3D entry[channel].type;
- 	switch (type) {
- 	case 0x00 ... 0x07:
-@@ -442,7 +462,7 @@ static int dell_wmi_ddv_temp_read_string(struct dell_w=
-mi_ddv_data *data, int cha
- 	if (channel >=3D data->temps.entries)
- 		return -ENXIO;
-=20
--	entry =3D (struct thermal_sensor_entry *)data->temps.obj->package.elemen=
-ts[1].buffer.pointer;
-+	entry =3D (struct thermal_sensor_entry *)data->temps.buffer->raw_data;
- 	switch (entry[channel].type) {
- 	case 0x00:
- 		*str =3D "CPU";
-@@ -553,8 +573,8 @@ static void dell_wmi_ddv_hwmon_cache_invalidate(struct=
- dell_wmi_ddv_sensors *sen
- 		return;
-=20
- 	mutex_lock(&sensors->lock);
--	kfree(sensors->obj);
--	sensors->obj =3D NULL;
-+	kfree(sensors->buffer);
-+	sensors->buffer =3D NULL;
- 	mutex_unlock(&sensors->lock);
- }
-=20
-@@ -564,7 +584,7 @@ static void dell_wmi_ddv_hwmon_cache_destroy(void *dat=
-a)
-=20
- 	sensors->active =3D false;
- 	mutex_destroy(&sensors->lock);
--	kfree(sensors->obj);
-+	kfree(sensors->buffer);
- }
-=20
- static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_de=
-vice *wdev,
-@@ -750,7 +770,7 @@ static void dell_wmi_battery_invalidate(struct dell_wm=
-i_ddv_data *data,
- static ssize_t eppid_show(struct device *dev, struct device_attribute *at=
-tr, char *buf)
- {
- 	struct dell_wmi_ddv_data *data =3D container_of(attr, struct dell_wmi_dd=
-v_data, eppid_attr);
--	union acpi_object *obj;
-+	ssize_t count;
- 	u32 index;
- 	int ret;
-=20
-@@ -758,19 +778,19 @@ static ssize_t eppid_show(struct device *dev, struct=
- device_attribute *attr, cha
- 	if (ret < 0)
- 		return ret;
-=20
--	ret =3D dell_wmi_ddv_query_string(data->wdev, DELL_DDV_BATTERY_EPPID, in=
-dex, &obj);
--	if (ret < 0)
--		return ret;
--
--	if (obj->string.length !=3D DELL_EPPID_LENGTH && obj->string.length !=3D=
- DELL_EPPID_EXT_LENGTH)
--		dev_info_once(&data->wdev->dev, FW_INFO "Suspicious ePPID length (%d)\n=
-",
--			      obj->string.length);
-+	count =3D dell_wmi_ddv_query_string(data->wdev, DELL_DDV_BATTERY_EPPID, =
-index, buf,
-+					  PAGE_SIZE);
-+	if (count < 0)
-+		return count;
-=20
--	ret =3D sysfs_emit(buf, "%s\n", obj->string.pointer);
-+	if (count !=3D DELL_EPPID_LENGTH && count !=3D DELL_EPPID_EXT_LENGTH)
-+		dev_info_once(&data->wdev->dev, FW_INFO "Suspicious ePPID length (%zd)\=
-n", count);
-=20
--	kfree(obj);
-+	ret =3D sysfs_emit_at(buf, count, "\n");
-+	if (ret < 0)
-+		return ret;
-=20
--	return ret;
-+	return count + ret;
- }
-=20
- static int dell_wmi_ddv_get_health(struct dell_wmi_ddv_data *data, u32 in=
-dex,
-@@ -994,19 +1014,15 @@ static int dell_wmi_ddv_buffer_read(struct seq_file=
- *seq, enum dell_ddv_method m
- {
- 	struct device *dev =3D seq->private;
- 	struct dell_wmi_ddv_data *data =3D dev_get_drvdata(dev);
--	union acpi_object *obj;
--	u64 size;
--	u8 *buf;
-+	struct dell_wmi_buffer *buffer;
- 	int ret;
-=20
--	ret =3D dell_wmi_ddv_query_buffer(data->wdev, method, 0, &obj);
-+	ret =3D dell_wmi_ddv_query_buffer(data->wdev, method, 0, &buffer);
- 	if (ret < 0)
- 		return ret;
-=20
--	size =3D obj->package.elements[0].integer.value;
--	buf =3D obj->package.elements[1].buffer.pointer;
--	ret =3D seq_write(seq, buf, size);
--	kfree(obj);
-+	ret =3D seq_write(seq, buffer->raw_data, le32_to_cpu(buffer->raw_size));
-+	kfree(buffer);
-=20
- 	return ret;
- }
 =2D-=20
 2.39.5
 
