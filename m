@@ -1,38 +1,38 @@
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BB533A6FE;
-	Sun,  8 Mar 2026 20:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA2033A6FE;
+	Sun,  8 Mar 2026 20:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773000184; cv=none; b=by78Zh0cHslimr70OO4uOn6jnNiMAW61cf6QjUNUat6Qz5Edoq4DfsVtyEX74pxhGqt4ff3PL5Ehjt+KnjpSVUMllBpWp34adoU+QFTrdcggWmwuP0vNPeRyNLiAA3qV5MvfsdDi1Kh+6uHzCYrbzvTKrccFtnngcWvb3tSruf8=
+	t=1773000191; cv=none; b=SdmrdBwBJY/FF6ziq2tuaHIgR4SJVaak1Tyx6BF8uv2wBCPPhtWatSAskjmFnJX69oLLVwvdiXQ8ZKpVry/sriWkS/IfnRwzMEB+PMOEhAC4RYB+casVfe5GWX8q3OqPCp84JA57vF1C4q86IqmF7rZDBk5Kr6mPcyn06Q51Nzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773000184; c=relaxed/simple;
-	bh=/eGwD4fhg8LTJnCVSRrW0gkeOJMBW8xCMHNlNZwM9Oc=;
+	s=arc-20240116; t=1773000191; c=relaxed/simple;
+	bh=EIEAIMAWlivOEsKWrFH805avfGEQHpaDoGyT6YNUhJI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qrQ9kRAJuwkfcEgYgYrUb8/4nblQjQ8Yi+G7YKwm97Lul666vNub84QKxJ1Zgi/ulmO9JwfWWpq8oNoCbTYl4LxzhyMPkOQTuPKWo+RTfFcJAAms7KV4Z/11oShsc/qWALEs00PYIHihBz+GPsqWtcSw1v6zxxFpHoDLM99ysro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=COLvMSCp; arc=none smtp.client-ip=212.227.15.18
+	 MIME-Version; b=c4/dv72clEaP1ZO6bANdKbSqK+WYAcE6L6XHuuDi6Ax0zea0ExkPvq4dG+Own4auNV5uUfr3sgi1hNDm0SlDDBf3dxMNc74YxP5XTTVUIUCv9XxAOPb8s4xT/eNyUIgw2Dwzu0Ck53bUfTCe1P856auy6jQemy2J8gcn2sGBqqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=Ojma0o3V; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="COLvMSCp"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="Ojma0o3V"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1773000161; x=1773604961; i=w_armin@gmx.de;
-	bh=X0M69zc2AGnZp/wYLbrO9ROF+xDzTXntMd5s3xSM94k=;
+	s=s31663417; t=1773000164; x=1773604964; i=w_armin@gmx.de;
+	bh=6sk9cZuhnKYi0MkbTnCeftlMbOwsXCX+l4ak3dLD9wk=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=COLvMSCpMRE7gGpdge4oKNZ1bb8BER7G9Qvj/8aGyyr2S4LfF5YjZh5OT1WKNgPv
-	 8R/w7Q/PCoc8i4iPbyrt/+0ztziwy4m888g4Wxt8J9wMOuR+Whmb7lC4ikOqQft4s
-	 CO1OqLhTJ0quuHfHIB7xyK/GoZml0Grd2WnwCS0eTXVsPIyHljArukXFxPojvOQLa
-	 1RO4odEH2GVblozEu1zYkeM3DEroO1B4aJYQeEPf64MFXWTSTAC2KPWETks1x3hl0
-	 T+SyifMr6btER1OTtVqgdD5CMyMA91pN1xA9T+3AnefdSrzuBFsxeXklRokN7O+Kj
-	 yVbVxSlnNSqa2Tt03A==
+	b=Ojma0o3VhUDIMZbuLGdGMeTumS9W+MULy6pzM3E5lJmfd9Gx4IkRqf/mCcUI5CQH
+	 3mSxS5eGNftTz5B2/uwePwDG4E8fPJGjsmqr/WhUAqPenPwd9mpS/AagkijeRWBy/
+	 5dboQvLWfEN7eQOMiMpqEyAkhhExB5o8sSsKFzZT9Wet9f5aVldhSJjkyM1rJrgl0
+	 i+16MKaruM7HzFhrRIQ1ZaLBq2f3wXSbSOLwlVg2Md79aoLpE4ZF/8k288WeQs4s+
+	 DTvqraoHMHU6Fnv2QO4pc400YWDheNIPG6S7ghWv+E65izWJSeUOaXwEuVIGnnGNH
+	 tJiFL+kJkPFnWhWbpw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1My32L-1vist41v4B-014XAB; Sun, 08
- Mar 2026 21:02:41 +0100
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N9MpS-1vc2BU1mkO-00xjdB; Sun, 08
+ Mar 2026 21:02:44 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: Dell.Client.Kernel@dell.com,
 	pali@kernel.org,
@@ -43,9 +43,9 @@ Cc: hansg@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux@roeck-us.net,
 	linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 8/9] platform/wmi: Make sysfs attributes const
-Date: Sun,  8 Mar 2026 21:01:54 +0100
-Message-Id: <20260308200155.118950-9-W_Armin@gmx.de>
+Subject: [PATCH v2 9/9] modpost: Handle malformed WMI GUID strings
+Date: Sun,  8 Mar 2026 21:01:55 +0100
+Message-Id: <20260308200155.118950-10-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20260308200155.118950-1-W_Armin@gmx.de>
 References: <20260308200155.118950-1-W_Armin@gmx.de>
@@ -56,206 +56,165 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Bupesr35kr82y5IdEcm6w3msXNtkzJnj4aTG3wmJ23BY9xR2RYF
- Iu3nz+3YFRzDhV15xvaAzbtTeurcRUgXOWKsi+EkHBCDoOu/i/hwYz60kPk7LH8cYrZOjcT
- Y/jNOdgEaQCXu/IU2tps8rWq7m/vYnQ1IkzPkoBieiuUVI1fhT9NeEOuMC9mazMhiNlj51F
- zz+lvCPAmAJKOeV4AkBsA==
+X-Provags-ID: V03:K1:MYcgl7ySGH/E0JSSdxRWfoUmZ1Wx37wOEhhczKpvwaL4CEAtW9f
+ A6KUpXsr2HuYP/FQQrn44YdotBA7A/LFUW6wBFJDlt2Wgh6p1HFdSZq6XVDzXbeskoGpoa0
+ deXz5LpUMNEeSttiucXyZSfzVHkr39NM5rMrS1HY8a5jbMz3AX9HfBpQg3Z6yOZN0SE1gbl
+ 9rOSx6ljtF5QZJ2o1qf2Q==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:/4/uP7pG3VM=;N+gGpGunFfLZhyMDITenTJAFAGG
- Ar4W2TlPiQRnl3vUTV/2vnXeja+17WGQmepBuSfva4Fq8V3iyu+w6Z1ntFEt+B4TPTVXGHg+W
- eCROa5dMYaIS+eE6kGlX0Ebita9i9u3RQ5dS5kaQWizpbZB7flV/ib/opVAtt5wM3Js8LdnCn
- edH4q4SsrCHtlzLjKlVlzhktZPuhNQYKYjYnK0QMknwinqxgssFkTyoMKAG/HegfUwDitBt3v
- eBTaB8PLnunvy2UpfjdNaTW0dXiVxtuhfxsLLpe75LbG2oTaBjHbZqrUv1jOEAc5raRx/DnOW
- WCNoqRHJrugkORFXWYBe08eWE+0EmWZYIH/CmpFdEtFyRD5wtBoh/Tmx/7sX42maSXzoFMuMb
- b3NXnf1OEbgF5pL5l8bR0Jo7JOQYBHUikjAr6hgdz2EC1zPIrtlzHJ3F8yrxji6oEP1V5U8Vv
- XS8xrqKlf+/OFjpUrhIZJHUnygqGgKnaiU+Q0QPNYUjBRVkX3GxVVWZN8i8vIiIiSYUVJMQ3I
- C42RpHvutTn2gdlT69kIz9VfWCwAZM/DwrN06UkNZ9z1BIQM8w/l4OrIH2tnI6/3sf4GZskjz
- bbbxOOMYP/nZgHpvOSEgY/5BDtYCNiYVuOwTc9w04yHQZVeuzFCHDQyZvLTzOSlKbK+vZTgkc
- Gz5rcqQDlIoqsNKIzDW10OWELogIyxwQNvPYoW1KbslD2hQkCDBkIM3JaY++AxWmLVF6g7ryT
- r/w2mZMWoHtZN2iz9x5fzKs9l6xUw4hvdplF5FTMY4GXKALC06eXcrtJpUc8yrh6Siu1izTHP
- anf5WuIR1dW2hPVBq7VeE7+uiTKgeBSoy3V0eMauvkaUasMwPN2YudPotU1wOL/D30mci4bW3
- v1s9sf7jNhfXEHrfAUmFKuk76exzXujq67Ju/sjA6ZznplHhRcK6dGXUENF2NevmKkjIzLTxL
- fGPj1rQ9UVZQlWB3r9y4fMhsaCnw9/ZEezCMVvbdMCuKHQgbNM9jr3Imq6ts840lSbkrMPYrG
- oP2ikBjC2ErKdPCZpfDLbz0Yh4/aJty0wI70SJ6PdnJ2sjLkXjce3wOyTj/2CL5v9GOr+AYiz
- jP3T/At2Z93fOr+qd6sML5Gy6ECLH0GUva9hnzi3i9+/8l+GK7prpxf2vqptRCEc7hMJySSjI
- RY6tQ0edHtX1pb0nPPDW2j5ywB0ehG8Kz8J0+TZt2MuCyYEDqnQVdssOuS3D+Npug5eVhgYRm
- vHckxOKHWON6pts349MPZxVCyPK7I/cyo9IFPsQJxMhLDeBrDX8uyMj/tmiOhTCQ4LpLBQx4D
- 9X+oWBuYWJ8DZYn/phTsYxDSTVsyAHvl3eEmJbRgj64wlKNHCb6Fv0n4UWUJEl3YxJp4/wcK2
- hb4EthT/Nv8JFsh6amkfk5c9ZaJtp8hFnNI7P9giWiPZdBnY6Uaqapm+5zk83mM5FEAOI3g2X
- O6LIBe9qTD5UsUUvi8ZOjdCN4pP1KlOacwdVmDVzHhiLedtQtYUGMSuV1ohg8cCNNfcvAcJYq
- J0gTnMP39iRUZeeQjKTF+YSqCGI7oNIQVmtnlXETOZWZ1TIT+RbpDlvkaU5ntbhu0AZaRJtIX
- pnLwbQfJik0SIR5G9G0z58sx3K86iK7C7O9JScEbf+uXXW5uC4O1HZH08h5yQ5pQ90UPmEC8d
- E2li5KqYYOyiAWSsYJcyBdvZoPg6VT5WKuS+yTIpzvS20nmpqr0nP4ByzKFlA4Mnl/qYChOIp
- Er6V6/l7avCS1z3r5BHa2H3RdTckOpMIF0QXJ3oPDisjkoiH2M6TlCLXUzrRjAHzCJvDdjWqQ
- vcCOVAw45Ie0o6F+1BlXQE1hCZ7hMs62de+dG7YLZeatxhYadyFts5yod9apcodX8gFQ+/Swq
- 3oIYm60ycNpaaVPuj3lgux4ZKAxcdGeTukFtHxHNkzqJQ5DASrf8qyaOhc6sRtnt2vvVCSZZ6
- 7D6qdebsLessa6b957I99dMiQ4aXmDDkk4hMvIb17sVMRK7dA2zMs+1pPcbEm44S2AWWM83lr
- JqHDKhJvbACkLa7BE8AvjnE/r8lzrbF7w09k1j8A//2l5JTTcCS7Eeyuv0oixLN2MPOWHLDhO
- Uri2dmoQp87jN6VVwXDEIUEpjjn8BTb5czYMXllYlr1pA2/vPiN8XJlddrTiTc59/WrslDMAF
- ywCpMGl28S0N0HIWYUxbRyneEyzWMIFQ25RgIOhly//PplThqY/XbYPAKgPnEhLrf7YphG2qe
- Rz7+JFyyxU5gsudexb3onhVe7nlNvtBdygywvIzqWRMlIAlpDy2J8lj+WZtZYNXfzEJaoywCD
- dGY4dMwUZMLqMm1ck8V60rYFZyTfDbDMZj37zIiM1h2NIFqAVRyCLkcciN0cNKWRGA7PdDeY/
- oO2aRUewTsm4vLRrFEuOW+MRKC4TQu0fOtzRMGkkggDWxne5Lu0CK+17KWq8wCO5n21nmsrDc
- UsByy8w8RuHH4630ca5nXhHXgoQxKDam1E00OJXalW/1MzQxHlOqhFeMyMQQppKaaqrSNc/y6
- 7nJC7JEys8oQaVw8SMlFxgAJsntRgiTJQEXhOgyMdWnIbLcBC81IyG2bRnWv77jeYPT7Fcewv
- TSUZDmyrGbNzZUamPghwFDX1WNUX0bjPc0y+ZvpLYaqM/+SeQUAtP8mtLHqTUfY7NBiZYwJP8
- PyE3lwVcmG3osSli8K//mUmvHd3ou61aawEGUO9DOibbX2Tz6+gZp/uEN7McBkTCsB9TbXalE
- IULREGev3AHxd/lTWUUQ7I59j+k0DCUIolS5z7MkWSyqmDKPT/SA2yX3mQN71Ls9rSd3e0I2W
- QXiM5MpbG4QuOvXhvEGJ6bT4UhSlrg/SdVu8rYwoKEfVbZhmn0+A47AfUl0O41+qCPFIudIfh
- phFAlVT7VvozYq4jySBHHSd3WOFWtpM9+Xvoa6ojm4jNth6BTEmrwP/NLet6MiaVQCbXx1zwS
- C3jCv5C03HO8s3exLPRGxCuXRRNwl31kmajhe02QHDXyw1al1pjrlTvQbCZGHb1ll7oCBVHxv
- 50GJrxVgfpEQDItK5lS6aujBi2jtt2kuYOjdmU/9HLXtItkZv6gycEP0VQG5VpEqqfInsGWB3
- 3F/xJ7JP/sQAoHvIhZeQDEuO/rMWJpuvP79p9GeawHtJ59hVboP1vYkhlGS22zrhT2kTmetEE
- HRIrd3oA31WwvhdPTq+2VmTKlPmpSHO7tbbypMGRx9Q+RVkigCRzCidDD2AIMTW5gMDUp+HkH
- H1fmbkktg8cacgC/CDFwkT7cyA3A82mN9dHNv76Z4C4JjkL1QgQQJUZ3AZdpg+rar5LgitLNe
- raIPg5RrYeHG5r1Hswm71Mm62r9IdnDXFjwwmgJ/aP5K8awhI1TzNUMqjWfoYopEypa6HI7jT
- D5+cj3uvVVEVmf0A95+1epCPyIPjt6rggKaTJphYbhhbpKv+9fikZjkzTsADJM26Tcq7dx1/f
- ACSkIgSLFn2Ke5CpY/XdJSV+SYpNETEU07JMIRPoM9hiktzToyVIbyWvobizn9xOOSEczluLn
- 8eOJliMHxHZSxHwbLiCHSNA6DTjBYYJugXSrhiqlzSeLBDO9qN3Zy6aIht76SZdT4ELkd8fR1
- c0JIIpghgz1WPEuqy9GJV6UbbQmPdtePsdSPQLByU9My8ewPEAdofdzy+i2/qbtkDqPhTYHgC
- DYShS0sHS3EYvgH4EgVBI9UkkmxHxqkHLQqV8wRVEiGWOZg4sH9vxi/6zzAmQYIBYCNRWozXr
- yC6ywuQMtNlHK8NYpH56SsQq+S0FPiFEwo+RHLYc66x+MVnP/40M4quG7RZeEkD016ED8hGi3
- tvjlUfomG3+OzvmQlOkVJ+DYV3lMYHVdfYEqiiXFWR7XK67lXAp71Z4hj06yzfNpgvbEPqRKv
- XooNE78D2eF30bZGudFmAmmoO/y8hC/dVk1NEFQsgLxhOy0ZIVn95O354S51QAmRhg50oyKUO
- 3phlPXaDhBueX0yF9nLoaxSuyQ0fCgwVOGEX+cz61ukjQ/OynyHCNk/rQQG3Qq8Nf8idpyTWM
- H8LALtdmggX1bBb4Ekg4/DSqfCg5/3b+zsNKKd+GBbRWnXltkBdIMOaTM6dqIBKtle2TQhroo
- 83WUz1fcuVmbqzAhtAbj5RCaiUcGzIOLxVgYQwHHWP5ZlOdyQ0aSRV1/k5VSmUZ6p7Ege9w4C
- lLhHzdLLoKlBArx6Pm+Q67GuAdWqHR7+M2hv6oh9FBOFYJqmmpD8uYY/JymrTCtri7u3USmEi
- BdJHr04vdK9ljfI0jAihAiA0JSYdJ+duNqdXvBd4nBbhOG9GBnuI7xylY9UgFMf5EaVpYyuYS
- qpGkDLOzaM3Oetq0lHgdHpM3Kvun68EaEFsdy9EZ28t/0DfRy+sqqB+6mf/oTWWg833SdfOka
- P1OkwtwVrsXsG9VMCFyucBB93nLSgHJR9DS0cgNYXKUqEfqIRgqVMJjP1Z16BpfuTZWepGPVY
- OFC221f6M9U0RE0rYcYV85qxgguZqpB8C+ogMdqNZkdE8WCq0tPEDn/TfEyswY+iVMrAy15G/
- SyVsa59FK6QuROgmwpwpARAFa7p1wOVVkqRfU8NJEyO5mLwDBRG44CsecJPiccULDB7iv7Ih0
- jyku7/YKhjgMsusXi9ZDyMHu7twBBNBun9Mmiml/9a1+0IbsW7eWpff1mks1UfNKB41r6Y/IT
- Po7Sa/igHR9kGGwiPwn8cUephmnDvyx+E8l2ic1Iyk873ww43gRuCHEupwd7d9miNyv2t//Jq
- rSoKXlJ8oMVhllGkWlqEfRkgh4M7asMhlLZPZSnbDbHjRdJWmeWHWT5fNOYMqVOwHe8iW4FHc
- 319kXY7uI8lalbZArKIJU8h0tnkVIx4pGar/fKy1uHXpTvjwk2KemtNhrZwpZBLP3qphWtUaE
- RokZDSQ8BAOSRkRywuqrff8TVHdPycdauF02jvXn6omRXJmbdiVF78tunqNWhwx8djSVemgOX
- XoPqDaGw8PLb3AujtjKSFZbnwTViwSiWz2tQg3T0xxzRApcTfyyX3BkN0S3Y49vGlSpDn1lkA
- jXeYVyYH9qj0Feeqc0srvk14str4T6eWmRDi1vAuLs6H/DiRzE1TB4UPQAV4XvaK7xJLpjdbt
- m180yP37UsavK4yaq0HINao6wvOPR9Fd/UgKydSBKOKm1Hgsgz2Ks8p4H4YBaxVXq1QjqRLII
- XOGXmabR6RaESe3Yv4abYjzvG0dCV
+UI-OutboundReport: notjunk:1;M01:P0:KTZuMQdA3pM=;xpKw6wuPtKG2e1YI2x8/HBeoLpc
+ 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
 
-The sysfs core supports const attributes. Use this to mark all
-sysfs attributes as const so that they can be placed into read-only
-memory for better security.
+Some WMI GUIDs found inside binary MOF files contain both
+uppercase and lowercase characters. Blindly copying such
+GUIDs will prevent the associated WMI driver from loading
+automatically because the WMI GUID found inside WMI device ids
+always contains uppercase characters.
+
+Avoid this issue by always converting WMI GUID strings to
+uppercase. Also verify that the WMI GUID string actually looks
+like a valid GUID.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/platform/wmi/core.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ .../wmi/driver-development-guide.rst          |  2 +-
+ scripts/mod/file2alias.c                      | 28 ++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/wmi/core.c b/drivers/platform/wmi/core.c
-index 082c85625878..1b5bb3410252 100644
-=2D-- a/drivers/platform/wmi/core.c
-+++ b/drivers/platform/wmi/core.c
-@@ -812,7 +812,8 @@ static ssize_t modalias_show(struct device *dev, struc=
-t device_attribute *attr,
+diff --git a/Documentation/wmi/driver-development-guide.rst b/Documentatio=
+n/wmi/driver-development-guide.rst
+index fbc2d9b12fe9..74bb156ad9cc 100644
+=2D-- a/Documentation/wmi/driver-development-guide.rst
++++ b/Documentation/wmi/driver-development-guide.rst
+@@ -54,7 +54,7 @@ to matching WMI devices using a struct wmi_device_id tab=
+le:
+ ::
 =20
- 	return sysfs_emit(buf, "wmi:%pUL\n", &wblock->gblock.guid);
- }
--static DEVICE_ATTR_RO(modalias);
+   static const struct wmi_device_id foo_id_table[] =3D {
+-         /* Only use uppercase letters! */
++         /* Using only uppercase letters is recommended */
+          { "936DA01F-9ABD-4D9D-80C7-02AF85C822A8", NULL },
+          { }
+   };
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index 4e99393a35f1..20e542a888c4 100644
+=2D-- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1253,6 +1253,8 @@ static void do_tee_entry(struct module *mod, void *s=
+ymval)
+ static void do_wmi_entry(struct module *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, wmi_device_id, guid_string);
++	char result[sizeof(*guid_string)];
++	int i;
+=20
+ 	if (strlen(*guid_string) !=3D UUID_STRING_LEN) {
+ 		warn("Invalid WMI device id 'wmi:%s' in '%s'\n",
+@@ -1260,7 +1262,31 @@ static void do_wmi_entry(struct module *mod, void *=
+symval)
+ 		return;
+ 	}
+=20
+-	module_alias_printf(mod, false, WMI_MODULE_PREFIX "%s", *guid_string);
++	for (i =3D 0; i < UUID_STRING_LEN; i++) {
++		char value =3D (*guid_string)[i];
++		bool valid =3D false;
 +
-+static const DEVICE_ATTR_RO(modalias);
-=20
- static ssize_t guid_show(struct device *dev, struct device_attribute *att=
-r,
- 			 char *buf)
-@@ -821,7 +822,8 @@ static ssize_t guid_show(struct device *dev, struct de=
-vice_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%pUL\n", &wblock->gblock.guid);
- }
--static DEVICE_ATTR_RO(guid);
++		if (i =3D=3D 8 || i =3D=3D 13 || i =3D=3D 18 || i =3D=3D 23) {
++			if (value =3D=3D '-')
++				valid =3D true;
++		} else {
++			if (isxdigit(value))
++				valid =3D true;
++		}
 +
-+static const DEVICE_ATTR_RO(guid);
-=20
- static ssize_t instance_count_show(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
-@@ -830,7 +832,8 @@ static ssize_t instance_count_show(struct device *dev,
-=20
- 	return sysfs_emit(buf, "%d\n", (int)wblock->gblock.instance_count);
- }
--static DEVICE_ATTR_RO(instance_count);
++		if (!valid) {
++			warn("Invalid character %c inside WMI GUID string '%s' in '%s'\n",
++			     value, *guid_string, mod->name);
++			return;
++		}
 +
-+static const DEVICE_ATTR_RO(instance_count);
-=20
- static ssize_t expensive_show(struct device *dev,
- 			      struct device_attribute *attr, char *buf)
-@@ -840,7 +843,8 @@ static ssize_t expensive_show(struct device *dev,
- 	return sysfs_emit(buf, "%d\n",
- 			  (wblock->gblock.flags & ACPI_WMI_EXPENSIVE) !=3D 0);
- }
--static DEVICE_ATTR_RO(expensive);
++		/* Some GUIDs from BMOF definitions contain lowercase characters */
++		result[i] =3D toupper(value);
++	}
 +
-+static const DEVICE_ATTR_RO(expensive);
-=20
- static ssize_t driver_override_show(struct device *dev, struct device_att=
-ribute *attr,
- 				    char *buf)
-@@ -867,9 +871,10 @@ static ssize_t driver_override_store(struct device *d=
-ev, struct device_attribute
-=20
- 	return count;
- }
--static DEVICE_ATTR_RW(driver_override);
-=20
--static struct attribute *wmi_attrs[] =3D {
-+static const DEVICE_ATTR_RW(driver_override);
++	result[i] =3D '\0';
 +
-+static const struct attribute * const wmi_attrs[] =3D {
- 	&dev_attr_modalias.attr,
- 	&dev_attr_guid.attr,
- 	&dev_attr_instance_count.attr,
-@@ -886,9 +891,10 @@ static ssize_t notify_id_show(struct device *dev, str=
-uct device_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%02X\n", (unsigned int)wblock->gblock.notify_id)=
-;
++	module_alias_printf(mod, false, WMI_MODULE_PREFIX "%s", result);
  }
--static DEVICE_ATTR_RO(notify_id);
 =20
--static struct attribute *wmi_event_attrs[] =3D {
-+static const DEVICE_ATTR_RO(notify_id);
-+
-+static const struct attribute * const wmi_event_attrs[] =3D {
- 	&dev_attr_notify_id.attr,
- 	NULL
- };
-@@ -902,7 +908,8 @@ static ssize_t object_id_show(struct device *dev, stru=
-ct device_attribute *attr,
- 	return sysfs_emit(buf, "%c%c\n", wblock->gblock.object_id[0],
- 			  wblock->gblock.object_id[1]);
- }
--static DEVICE_ATTR_RO(object_id);
-+
-+static const DEVICE_ATTR_RO(object_id);
-=20
- static ssize_t setable_show(struct device *dev, struct device_attribute *=
-attr,
- 			    char *buf)
-@@ -911,16 +918,17 @@ static ssize_t setable_show(struct device *dev, stru=
-ct device_attribute *attr,
-=20
- 	return sysfs_emit(buf, "%d\n", (int)wdev->setable);
- }
--static DEVICE_ATTR_RO(setable);
-=20
--static struct attribute *wmi_data_attrs[] =3D {
-+static const DEVICE_ATTR_RO(setable);
-+
-+static const struct attribute * const wmi_data_attrs[] =3D {
- 	&dev_attr_object_id.attr,
- 	&dev_attr_setable.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(wmi_data);
-=20
--static struct attribute *wmi_method_attrs[] =3D {
-+static const struct attribute * const wmi_method_attrs[] =3D {
- 	&dev_attr_object_id.attr,
- 	NULL
- };
+ /* Looks like: mhi:S */
 =2D-=20
 2.39.5
 
