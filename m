@@ -1,147 +1,252 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D44362129
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 10:29:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773052176; cv=pass; b=qCceA3U55dD/lxp1wGV2+iBkIvgvLsNd0QA/XiHeG7oL/jeqGMG/N5BjQGBiAZcHOF7li+Yrzd/o9Cj4D3yFm81RXoCAe69DJWq/E0zqCekTCXu3KVWLoWl6SfPkpPPHeFINbHrPmb3j2vCPIL6ksdV5SQe5OwjSLH81DgKcjiE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773052176; c=relaxed/simple;
-	bh=nzcbenEcYkPYYRcM15AOs1wov/pK1dlaepSRpqvipk8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZDGFrq+z/AxAPTvWQqS9mW83QB0GCpoC/lqoDIOabxDuzISGU2u5vStUfWNDBovP634F7lVF3DvIkrMjcJXHEiWx3IjdnmIxCUFgLDD3lCVHaTIpQlO9DcifH7FRzzfkerESuMYQ4z4jgIopVhncjwgxCc9b87Vb/MHR8l7BqQE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=iKKxMWPg; arc=pass smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="iKKxMWPg"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6617f0bcad2so5479573a12.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 09 Mar 2026 03:29:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773052173; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fbHSl2nGif+1C5uWH6R88QIeb04+4hmvVBeLH/VY8by0Wo60hEp2UgA0EFmPCOzzu7
-         5Ro6IVAdDl3JllkBlXQ+8ozLgJNiLi5D4j4UDKg+wn+ps6UWIjnngjFPHEaGB6mU4A0a
-         LiISJ2q+pYxlV7B/71vpYyfp1vSCO24JMklnyqNiSVvJf2mkZHLQMrfsNikuAFS70enx
-         u6f0Y39kvxTrUxkfoZP88wTKNjJF32W9rifn4soHkEEMVcAq0FtyQ9fUVU3xIxXghbXu
-         DtJckCbB8vbJJ68GX9vBT2atE30g+KWhIEK4XBzEyZXugsI+OQborocOS7AGUMf+3w/n
-         o1Jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZK2rFDeX0KxwuJJMF0gWd/rE1Tda8J7ydGgJVSDAuto=;
-        fh=FfyPoZ79cfuHLIppCsjsrtdh8msTLOQjruvLBvLivIM=;
-        b=CqMR71RoACmMqWLvRibtBXWHw55AoYdOx0opMKJ6vsnclkzMvl46gFFGeHblKO8DN7
-         MUnPqQ3eDJxuviT+qz84MEY0j3M+77RAIy+l1Di7k1ROjtme22EIbERqeXlWSgepgkgn
-         Eq7s/8ELNP1d53Cr0laSMkryf66LrmkdLPWZE2Mew7PG0wOBTU5V2wEn1VMEr3LcQQ+5
-         hU+38yTV3PgIA7v5dSjdUVXZx4s0t5mCbwhFZjBk0+VjuA/zcU98fp9oapuCKtqJhb73
-         ce8+r2pS3AKWM4eG3G200mdMzGeoXHpzQu+SECDnZzeLPKmv/3fM5ipGfeIUJKgZaaWB
-         nuAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773052173; x=1773656973; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZK2rFDeX0KxwuJJMF0gWd/rE1Tda8J7ydGgJVSDAuto=;
-        b=iKKxMWPg5la4lx4k0o+gpw2SybnPOtL2JnRhcZBEoawcVs+OnyquSu7WrgfCx61QYQ
-         ycMdSLanUVlSvnHkY9fmju9J6bzqCtH+3I+Kp6wLAtr0tTq1HmneIX4fivIjSBf7HxqA
-         ofRqBBpfn9KNviP1UmVBw27SRh08P5kMn00D2Prd78fSReqj4+qapv09n5cScXJO0DJS
-         oAiYOJPke4DM8M0UqJ3A7owZnLoIW5ms/rPdXtMFMM3E+VmifqcQ9IvkS1E2sByRkOJE
-         9/YIVPd8Q5reVbffjCJPm0ZhPvRApJMAv3L4eKzRNGgnwETrydRXt7TXzc/T6F9ZEq7g
-         03UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773052173; x=1773656973;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZK2rFDeX0KxwuJJMF0gWd/rE1Tda8J7ydGgJVSDAuto=;
-        b=odJGXov9ufIn1Ax5HjXIm+MLOXlBj8aiLr09n6WZx3+54rqaceqIdyXDX+M4wQxuDs
-         ASHGLYK3ll1OpWCFsPMaRLh79s820dF1/7z7a+ZmHubErMwWe0MOgZHHLKtJjZzXwFge
-         AtZCwmBsY38DuTo44GWj5D+53pqiGkXhjpZmkegBU6ee1dmY3whEXG1NTjsq5BugRZ4l
-         ghraPsYwdMt7SsDAHbYb/taHZ8+2jjw+712VnZGfkh84O08PcShRr0sS/g/fg2wiX3+o
-         QQiPLTmh4TBFK7QnVGomj9I9Cm3DWMIKuE4H5AgW/pmGLfIaZFIPu5YjsAVlGYngci27
-         fNFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXApeKXzOQlcpT0AQiJmJiTsXO/egUQrciz3k+oTOq0ArVSBHK3q6yfxEm1lOcGd3GCipVfUAW2IgAfKg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQDIFTOe2uG7PAk8XY/AKEVu2lHxN0nAXfk4J8WqKh8y6ivrsh
-	dl5V8a2VaHfnXHpdBGOQBJTULY8+UZY2PQVIbZA3LJfbaExI3My6C73S0EsUmKyjnlMBM+af8TH
-	fNNOGC13QZHwh5LOwhd5o5+3uax6fzBtl2sAWuEka8w==
-X-Gm-Gg: ATEYQzxOgqDm/mdLsABO+8lQtRDUjeDtkMAGNKHm0PLJB9+2iy6UKmaG4YJDGblJm2X
-	Nhs5b9I006BeEPf6sNTdBh6ST68j1doogHIvOhBeQLlP7QYq2CDHu51r9xg1wIelDtfu2eIJfTW
-	Zm3pHWeX1YINUkiPJJtNDUHcHeg0gqX/Ohn3fUk/beUSgljlL5+JyOuwIGURkUP4aLhtC4JsFA5
-	0ZOWvh7BiLuKoWHtntIxHMvU9hOMarAQoYIGcuOqMn9+5y5CxNzaSOlT44At+f6xU8ECqPm12L8
-	flfueDA=
-X-Received: by 2002:a17:906:ef06:b0:b8e:8874:8384 with SMTP id
- a640c23a62f3a-b942dbcdc8fmr543893266b.4.1773052173195; Mon, 09 Mar 2026
- 03:29:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CF43BED05
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 13:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773064184; cv=none; b=JGLaMk+N86yJYzDnasnlZkc4Df6lmTNXAIkhHO1u0Y7iSgay1r1+10LjWPALOeBl9kYhzYWY4hQrQOxObWZ+v4oB4YfffrkLGmjdrslOqeXMNFyEMJ5JGC/O35REd5ZMmqeo9nhTyNv/idntloWS/X6RVRmQjGcI5ejJMcPyjbI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773064184; c=relaxed/simple;
+	bh=voQ3PVHZ91k2HF9py972+zOQaT9+cswu5qeP2vJdCHA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FhxOYH3A/gogpD1EuzcY3zQh6E7FWumU/69/czhVISy49O0LYQXCHE/4K2GuHmZgDYM5gpS0MN+TiRAvmEo8G8yk2Umht7esGmM95yJ/MlcLlBZoMxNoyyUDVpDPTLo9XaJjq34pAwAyOU4Ei+TpfqVjpbyubQZ7oGKVU49b1ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vzaz5-0006fl-Ed; Mon, 09 Mar 2026 14:49:23 +0100
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vzaz2-004XYo-2B;
+	Mon, 09 Mar 2026 14:49:22 +0100
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1vzaz3-0000000834g-3lw8;
+	Mon, 09 Mar 2026 14:49:21 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v3 7/7] mux: add NXP MC33978/MC34978 AMUX driver
+Date: Mon,  9 Mar 2026 14:49:18 +0100
+Message-ID: <20260309134920.1918294-8-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260309134920.1918294-1-o.rempel@pengutronix.de>
+References: <20260309134920.1918294-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260302-ina4230-v2-0-55b49d19d2ab@flipper.net>
- <20260302-ina4230-v2-1-55b49d19d2ab@flipper.net> <8584bf59-84a4-4b23-90f1-62297ee0da57@roeck-us.net>
-In-Reply-To: <8584bf59-84a4-4b23-90f1-62297ee0da57@roeck-us.net>
-From: Alexey Charkov <alchark@flipper.net>
-Date: Mon, 9 Mar 2026 14:29:24 +0400
-X-Gm-Features: AaiRm50_OXYeMv9cxXjeiyzokshUjqswaEkBZbVdDO0ssxvP7RrafNQdZtT7u4c
-Message-ID: <CAKTNdwGdMoFN3yd+pdS=Bd3vHmx6WE+j3ccworu5O_ysRCznDg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TI INA4230 4-channel I2C
- power monitor
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Sun, Mar 8, 2026 at 9:46=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
->
-> On 3/2/26 02:55, Alexey Charkov wrote:
-> > Add TI INA4230, which is a 48V 4-channel 16-bit I2C-based
-> > current/voltage/power/energy monitor with alert function.
-> >
-> > Link: https://www.ti.com/product/INA4230
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> > Signed-off-by: Alexey Charkov <alchark@flipper.net>
-> > ---
-> >   .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 130 ++++++++++++=
-+++++++++
-> >   MAINTAINERS                                        |   6 +
-> >   2 files changed, 136 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml b/=
-Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-> > new file mode 100644
-> > index 000000000000..69839e7a3197
-> ...
-> > +      ti,maximum-expected-current-microamp:
-> > +        description: |
-> > +          This value indicates the maximum current in microamps that y=
-ou can
-> > +          expect to measure with ina4230 in your circuit.
-> > +
-> > +          This value will be used to calculate the Current_LSB and cur=
-rent/power
-> > +          coefficient for the pmbus and to calibrate the IC.
->
-> pmbus ? Is this a typo or cut-and-paste error ? This is not a PMBus chip.
+Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
+embedded in the NXP MC33978/MC34978 Multiple Switch Detection
+Interface (MSDI) devices.
 
-Indeed, cut-and-paste from ina3221 which I used as the basis for
-making this one. Thanks for spotting, will fix in the next version.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+changes v3:
+- no changes
+changes v2:
+- Add missing <linux/err.h> include.
+- Add platform_device_id table
+---
+ drivers/mux/Kconfig       |  14 +++++
+ drivers/mux/Makefile      |   2 +
+ drivers/mux/mc33978-mux.c | 119 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 135 insertions(+)
+ create mode 100644 drivers/mux/mc33978-mux.c
 
-Perhaps it should say this instead:
+diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
+index c68132e38138..7532da7e087e 100644
+--- a/drivers/mux/Kconfig
++++ b/drivers/mux/Kconfig
+@@ -45,6 +45,20 @@ config MUX_GPIO
+ 	  To compile the driver as a module, choose M here: the module will
+ 	  be called mux-gpio.
+ 
++config MUX_MC33978
++	tristate "NXP MC33978/MC34978 Analog Multiplexer"
++	depends on MFD_MC33978
++	help
++	  MC33978/MC34978 24-to-1 analog multiplexer (AMUX) driver.
++
++	  This driver provides mux-control for the analog multiplexer,
++	  which can route switch voltages, temperature, and battery voltage
++	  to an external ADC. Typically used with IIO ADC drivers to measure
++	  analog values from the 22 switch inputs plus temperature and VBATP.
++
++	  To compile the driver as a module, choose M here: the module will
++	  be called mc33978-mux.
++
+ config MUX_MMIO
+ 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+ 	depends on OF
+diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
+index 6e9fa47daf56..339c44b4d4f4 100644
+--- a/drivers/mux/Makefile
++++ b/drivers/mux/Makefile
+@@ -7,10 +7,12 @@ mux-core-objs			:= core.o
+ mux-adg792a-objs		:= adg792a.o
+ mux-adgs1408-objs		:= adgs1408.o
+ mux-gpio-objs			:= gpio.o
++mux-mc33978-objs		:= mc33978-mux.o
+ mux-mmio-objs			:= mmio.o
+ 
+ obj-$(CONFIG_MULTIPLEXER)	+= mux-core.o
+ obj-$(CONFIG_MUX_ADG792A)	+= mux-adg792a.o
+ obj-$(CONFIG_MUX_ADGS1408)	+= mux-adgs1408.o
+ obj-$(CONFIG_MUX_GPIO)		+= mux-gpio.o
++obj-$(CONFIG_MUX_MC33978)	+= mux-mc33978.o
+ obj-$(CONFIG_MUX_MMIO)		+= mux-mmio.o
+diff --git a/drivers/mux/mc33978-mux.c b/drivers/mux/mc33978-mux.c
+new file mode 100644
+index 000000000000..de79073e15aa
+--- /dev/null
++++ b/drivers/mux/mc33978-mux.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
++/*
++ * MC33978/MC34978 Analog Multiplexer (AMUX) Driver
++ *
++ * This driver provides mux-control for the 24-to-1 analog multiplexer.
++ * The AMUX routes one of the following signals to the external AMUX pin:
++ * - Channels 0-13: SG0-SG13 switch voltages
++ * - Channels 14-21: SP0-SP7 switch voltages
++ * - Channel 22: Internal temperature diode
++ * - Channel 23: Battery voltage (VBATP)
++ *
++ * Consumer drivers (typically IIO ADC drivers) use the mux-control
++ * subsystem to select which signal to measure.
++ *
++ * Architecture:
++ * The MC33978 does not have an internal ADC. Instead, it routes analog
++ * signals to an external AMUX pin that must be connected to an external
++ * ADC (such as the SoC's internal ADC). The IIO subsystem is responsible
++ * for coordinating the mux selection and ADC sampling.
++ */
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/mux/driver.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++
++#include <linux/mfd/mc33978.h>
++
++/* AMUX_CTRL register field definitions */
++#define MC33978_AMUX_CTRL_MASK	GENMASK(5, 0)	/* 6-bit channel select */
++
++struct mc33978_mux_priv {
++	struct device *dev;
++	struct regmap *map;
++};
++
++static int mc33978_mux_set(struct mux_control *mux, int state)
++{
++	struct mc33978_mux_priv *priv = mux_chip_priv(mux->chip);
++	int ret;
++
++	if (state < 0 || state >= MC33978_NUM_AMUX_CH)
++		return -EINVAL;
++
++	ret = regmap_update_bits(priv->map, MC33978_REG_AMUX_CTRL,
++				 MC33978_AMUX_CTRL_MASK, state);
++	if (ret) {
++		dev_err(priv->dev, "Failed to set AMUX channel %d: %d\n",
++			state, ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct mux_control_ops mc33978_mux_ops = {
++	.set = mc33978_mux_set,
++};
++
++static int mc33978_mux_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mc33978_mux_priv *priv;
++	struct mux_chip *mux_chip;
++	struct mux_control *mux;
++	int ret;
++
++	mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*priv));
++	if (IS_ERR(mux_chip))
++		return dev_err_probe(dev, PTR_ERR(mux_chip), "Failed to allocate mux chip\n");
++
++	/* Borrow the parent's DT node so consumers can find this mux chip */
++	device_set_node(&mux_chip->dev, dev_fwnode(dev->parent));
++
++	priv = mux_chip_priv(mux_chip);
++	priv->dev = dev;
++
++	priv->map = dev_get_regmap(dev->parent, NULL);
++	if (!priv->map)
++		return dev_err_probe(dev, -ENODEV, "Failed to get parent regmap\n");
++
++	mux_chip->ops = &mc33978_mux_ops;
++
++	mux = &mux_chip->mux[0];
++	mux->states = MC33978_NUM_AMUX_CH;
++
++	ret = devm_mux_chip_register(dev, mux_chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to register mux chip\n");
++
++	platform_set_drvdata(pdev, mux_chip);
++
++	return 0;
++}
++
++static const struct platform_device_id mc33978_mux_id[] = {
++	{ "mc33978-mux", },
++	{ "mc34978-mux", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, mc33978_mux_id);
++
++static struct platform_driver mc33978_mux_driver = {
++	.driver = {
++		.name = "mc33978-mux",
++	},
++	.probe = mc33978_mux_probe,
++	.id_table = mc33978_mux_id,
++};
++module_platform_driver(mc33978_mux_driver);
++
++MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Analog Multiplexer Driver");
++MODULE_LICENSE("GPL");
+-- 
+2.47.3
 
-This value will be used to calculate the Current_LSB to maximize
-available precision while ensuring your expected maximum current fits
-within the chip's ADC range. It will also enable built-in shunt gain
-to increase ADC granularity by a factor of 4 if the provided maximum
-current / shunt resistance combination does not produce more than
-20.48 mV drop at the shunt.
-
-Best regards,
-Alexey
