@@ -1,469 +1,140 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022134.outbound.protection.outlook.com [52.101.126.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E08233149
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 00:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773017189; cv=none; b=VQfhjNJ2070vAMLAS5UNUQTf0RafuQ4YEjRMOu/Vw5c6+TatkC66Clo2Ch7Ob8jVKCET8+/KoWzt1PdfEXQPYLjGmVn2CC4oEvV46oy9Z/VMCTfWLiMRUdhxRUtydCD133g8ufM+ZRo5w4GCkHk4/PTMZRc4i0V6vrhFBET/6IY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773017189; c=relaxed/simple;
-	bh=X2q0K7KXeQr+i/EiogY7plkuwkb2uPhRevC2mCm6jRk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=G3T27GX0sVsqxX4mYzX5QhGdLMIOE2kNPmHvw7qsyROTTTLfXKB/aUAdtnU7XQOtU0TCvZrXu4BrjIiG68NDoDm+gjQ2cQ0Kqgi8ZZ2Rw6gS0oalXu2ML6g46j24KKbKtkLS75J2QsRqeJXuKIfUctO56BQ3XzJcMG2kACNIMPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KHhscEuc; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03325199920;
+	Mon,  9 Mar 2026 01:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.134
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773020411; cv=fail; b=uyHTb0fggce5+emDAfqh086pa87WQuGdybCtv/OGvwjUgY8ZLWjnV9AJvMC56HMPovyTgPW7hCZE+sgG+Mz/uoxPYQUKus6moakva7clOgS0hJdMDiVnFpgBpVQuPGOqs5OXRMgy4ssVYFKg93HrwyTPJyXyhLaTHQ9vk3mctZI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773020411; c=relaxed/simple;
+	bh=fKFdywF4ewDCwdZCTJ3JPol1xo4n+zrOcm0jFh3u26Y=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=lyQUf7IasVN7H7lQL1foeqZXmYudm0Cv3K6iOG1rbCT3y2rNBfJSUPZdSI94zyoovBwro0u5NEADXS19K/GNPvKsj3KWpOxsrsCDpjKrXeorXiDIDNYMvhTG33sf+vNvp7a7F849GwTLas6l9RSSw4A5GHCkV/LxedEDLoc0/GQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=gl9qE+4y; arc=fail smtp.client-ip=52.101.126.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KHhscEuc"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ba895adfeaso9286015eec.0
-        for <linux-hwmon@vger.kernel.org>; Sun, 08 Mar 2026 17:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773017187; x=1773621987; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uY5sNjIhX7Zl6yY6urvp7Znt7FvylVOGJgh7rxozuas=;
-        b=KHhscEucFjjyJINHbcDwbCLSs+nIt3WTaxe7jWOyz7Z4BkVcqA15Xb1xswHvrxXWSS
-         BJAwXid0cdUGiJpz8pLcLFv0emQzWDFFkbUXtaMqQDUaJrnmRfeFFldgrplofRuGcxNt
-         UE7zI8fEnhic+POHHd7STXjQlF8FzcXTo5kbI/mnYLUCxFLk6FTXP6uCASRoXPf8Rqik
-         nFLV2X46PKajjBEkX5yJb1YhpnCbP6TguLlheHW3M98IONouzS5aUwcUiz8YBZyazkQf
-         iyiNJbnrpAWb16tbbPiy31bA7wnOxPZrCX1EpialFcRYzu94x0ZZ31mSe2WGaIDgZM3/
-         E8/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773017187; x=1773621987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uY5sNjIhX7Zl6yY6urvp7Znt7FvylVOGJgh7rxozuas=;
-        b=vlVw510UHy7vSivgVi8D4c4MGQxmgmZZfjSmKCctVFjIzwiWSl+SOV87NH3nOScYan
-         kRqRKHcQYmUu5XVPkdYzG+VukrO6/hss6XSLnJz5J00+mAWKuryDigpKQzwz/yW//uMu
-         NJYa28UjjZ9EC/sHfCTUuWv/zjPIkU18j8NMmQszn1Flv0Rub34tAJKpjp3B7Gebcc8M
-         yHmEWG/I43hDnyATHGJ6o3yIQF2fn05Lu+jHttCULTBtPU1VvtJ09svzLDEZL9XSzn+Q
-         Yo/f9tPrWo+9gPK+F/oF3R3T8hRlU3jr/wK7FRDDGvdDIUYAeZL9DPKVXt2N9WkKreAE
-         Iong==
-X-Forwarded-Encrypted: i=1; AJvYcCXnvnZ8hc0lAPcxg752DKUwBw3svyQXfo+Ehh3Yc8D4OXRTLl7TKkUiTdoDZ3tcPtbFj7y5ewwM44P4Mg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqMU76IyWQmqJIyMYi9w9CvSfTNE4yqONY107RX8tUfq1iQabm
-	zOKJpQyzrgTUyUKufB0ko4ajeLkSNkPT0++g5yDxuFpt3Qk0zvNVKHy0
-X-Gm-Gg: ATEYQzw2o1N1X/nZHBtMZ3SKMqux3gbg8LnlcSLtl3kaQS1iiaWuGkl/53/dC5GyM2d
-	5s7eZ49e8aZwWzHiI/TrfScWB8ElP2ZIQsf30wYPAa+FJRg8HFZP3fyynApEAfATQxi/ZMUB9Qh
-	nmvPY1obNopvfkx5g+AyC7tTXGfJgm+MOHwY7vC6B/bLQtxXtE9cyVnMZ29LrcxslJvPfQAOqE5
-	akJlkd7lM2HT0tSdg0hWXxLKDV9NkfURaZrEuAbaeMcGgV+n0b3E1JvCBcbGAhOCfbeSqrSp4p8
-	lmUf1EgFpo7r9bnzLwYsdEZs9r8yAEL7OXPsmrGLpwfAcHqOqQieL/MWcloiQIwZBKm/fFHb+hp
-	OHETFwPAINLDD1nqLCBzs2Jn0Nm2yqYn2WBKivqROn/ttfxHEhDDCpiHAx9Etmvj8tCNsr0Eu6F
-	QB1+jzJ4PswcLMqV56bfbdCs2/JDlAZj0JclsDkUaP4Gk3riEokL6ZzLgmMH2jtCvXrsEhRqPgv
-	tXHpDI=
-X-Received: by 2002:a05:7300:a10b:b0:2be:1779:3289 with SMTP id 5a478bee46e88-2be4e062b68mr3535871eec.35.1773017187276;
-        Sun, 08 Mar 2026 17:46:27 -0700 (PDT)
-Received: from localhost.localdomain (c-67-164-93-214.hsd1.ca.comcast.net. [67.164.93.214])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f948631sm7240105eec.19.2026.03.08.17.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 17:46:26 -0700 (PDT)
-From: Sanman Pradhan <sanman.p211993@gmail.com>
-To: Sanman Pradhan <sanman.p211993@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: Sanman Pradhan <psanman@juniper.net>,
-	linux-hwmon <linux-hwmon@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] hwmon: (pmbus/max31785) use access_delay for PMBus-mediated accesses
-Date: Sun,  8 Mar 2026 17:45:08 -0700
-Message-Id: <20260309004508.78609-3-sanman.p211993@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260309004508.78609-1-sanman.p211993@gmail.com>
-References: <20260309004508.78609-1-sanman.p211993@gmail.com>
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="gl9qE+4y"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lEfQr5M+flMItmiqbfkHf55e85KKmiiUcr3bw2LvMm7Lew1JpxRAiKvol4aRrp5mim4kTuTRHc/q9J4hBoJYUyIds8z7XTX1MjeJ4q62SsslBK1/XG+S0oOS+pbXEkjKTbv6a1+J2eko38sfalPYyU2uKidG+AVm0dRVfcd+FhfZHADzvT116j+LUH3jPxRs8o3i7HsHchij/QA8FZLk77vsilsBnovgC3IObY6mzEa8Bjk47j5IfyoLzt4PBurkvfxJDN3NLX1f0mgpCRc/8suX3iLqO126PQMTmUIAbpj9TazjkyhXOfuAQuVNnGnNBk0e4O4rRcNtObDVALtbGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fKFdywF4ewDCwdZCTJ3JPol1xo4n+zrOcm0jFh3u26Y=;
+ b=RTgQeByw54ukUqEP2sfpDlC3lbt2n++5fJABfczF8F6YyUq+mFEP1DUJK5FUIbhKhLLuagqGo8/JiUb0dMMnPguixgJFr9XGytUenSVROWWuANPT+GeLDCczjKAGMcU11ffB52Du+B5B0RyVFlD8ScTEQHAjkA/Xz3ktxZnGZozxcDN+cCE5OP4g6m+MkiEWDWEal/lqy8PrsRFHGiJg5LNMMbaHyxesZWZU0pliBttENM0kTzx4sjk+w/5U8a6FFGfz//2oary4N8DjDese9AX+5BHAialtyHaPyOKHEk3nWD0dvCo5Vdo4KG8XUwSPdrkTSz57Ab+FpU/6qEcFdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fKFdywF4ewDCwdZCTJ3JPol1xo4n+zrOcm0jFh3u26Y=;
+ b=gl9qE+4yBgYpZZPxlb2tO3NaE9HPl3w4Jcu7S/IkrAOkFF8XxJErNvpFVBVlvvNFssOt5OCNxElCwr+RCV8W4CPv9zWvI8NO8m1P0GHDffgH8FMVvnYsZcek13CzluQ9agQUpEUELzYhHcGdo2h8CokXDqKiUoOetGmVKRXYII/IdB9nXopk5AHTzPNw4q03YY6eZFLjFawMqDG8Wh+Y/jX2w32tYptVjUrhGlKxshcT5kUyPlUwc9YVnfX08auY//PTq6Xw6e6IJLuUwgqGlVXLtzu7NXCHHEdZn1DRGpe28pFeuot3ooTdxDfFYpvWhuKLDaatcKTx6xGcm/6XSQ==
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com (2603:1096:604:29c::6)
+ by KL1PR0601MB5461.apcprd06.prod.outlook.com (2603:1096:820:c0::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.24; Mon, 9 Mar
+ 2026 01:40:05 +0000
+Received: from OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::92af:c9d9:8779:d19]) by OSQPR06MB7252.apcprd06.prod.outlook.com
+ ([fe80::92af:c9d9:8779:d19%4]) with mapi id 15.20.9678.017; Mon, 9 Mar 2026
+ 01:40:04 +0000
+From: Billy Tsai <billy_tsai@aspeedtech.com>
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Joel Stanley <joel@jms.id.au>, Andrew Jeffery
+	<andrew@codeconstruct.com.au>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: (aspeed-g6-pwm-tach): fix driver data handling in
+ probe/remove
+Thread-Topic: [PATCH] hwmon: (aspeed-g6-pwm-tach): fix driver data handling in
+ probe/remove
+Thread-Index: AQHcrTS5FY/Kas9MhESiOtz2OxbSkLWhrc0AgAPCAZg=
+Date: Mon, 9 Mar 2026 01:40:04 +0000
+Message-ID:
+ <OSQPR06MB725208C4FA6C90ACC394B3188B79A@OSQPR06MB7252.apcprd06.prod.outlook.com>
+References: <20260306-pwm_fixes-v1-1-e8ede6fbaf47@aspeedtech.com>
+ <e6c06c88-d2cd-4501-8a15-b89ba5a36e5f@roeck-us.net>
+In-Reply-To: <e6c06c88-d2cd-4501-8a15-b89ba5a36e5f@roeck-us.net>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSQPR06MB7252:EE_|KL1PR0601MB5461:EE_
+x-ms-office365-filtering-correlation-id: b3427d82-ff6c-4770-cdf1-08de7d7cc99f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700021;
+x-microsoft-antispam-message-info:
+ vYsjFUEvxDYVxF93YfLQVWcZdlAbUnhiH/hMq3BfXMd2vnN5nOggpDwiZ+h127IHUTS2lQ8I/aoHwCuRFuzea1K6v6m/SLNW+X+jB/sWNj1DjLJ6s+h5p9ZQhnyjGay0yKeJxM8zyYFaUkiE+LFx37Hl3Ff87Y8HCBI5n245GkZ0gzI3soHpCZY5iylo/gEHxrE35nYBvE83kvt+Ntguu7N8ovogZiD3jyCQnthqyHhSiytoMQwsVxnEYqtgUQaBsrxEpohssBsFPg8xe86xpJtDg0UDoCNy9tHbU5xURm5qgf2oc0hz+jOmQK9211DMWFsAvi7ggpo6ttw/Du37HgJC/cbLLQ9HpEfnOwl6oHaMb2kAsMC1Ql76dJFuk62fRdV9anMSzMRwkBUP93XUjWEkPN4oWR6cEFZZVy1Q6ZPakEaOQ90an7tiKvZjy+sGt2nRZXGAPtYXKJ2l9HE1pNp86BCdqczP3reDX+h2NjSsfM3wkGFrsIoGu6kLOJB0VPiJFkcyz3shRw2z4rsUV7oWA8m3+RhTuOdGuf7O4hxsMe0e+L6wcGXeqk84V28+0tW5jANkIHnkllN33NryEYYgnJdqsD052zkWsaNZfiKYG5Ok2V+R+9T5M0uEUjowcFqJmvvyFixWPKs2MdIsIuwFEyb8uIfsMV66POFqT2/O6ozyxjAZ6ytpBZ3gM8gw9p48UX5ZW0LXGfY+e0ll1ErLCPd/mO2vD52TJnqYqKsa5dlnNDf1oBLzZZWYHuQRZ81J5K2363BW05YqYZyIo0ouHixkcWRwCCGqAmxwLTg=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSQPR06MB7252.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?Windows-1252?Q?2Xywvp7M3h2rxBHZ3vBEwHhRaJsw3qdPyFKZzJ/Lbm1t3Y/V92OzyVfU?=
+ =?Windows-1252?Q?5MRFZajt7WxTIcqUqrMaHENvfEc2GbbntDbdX2L73MRAMH1NFSnc7fQC?=
+ =?Windows-1252?Q?F7DwgR8eiwI/s11QdvHdl2YnKjAPjYxta1M0j9mIyMx0QutAmuqQ720F?=
+ =?Windows-1252?Q?kMsEa/9T7TiNuBXCebT6Hq5Ig66Y1c8+EXtfj5wd7UsWDjngbLS+W1u7?=
+ =?Windows-1252?Q?styHYVT6n18Yc7fosR3usEbe8GejUNtZiQdngQ/wLXeW0StEeVHJwXJe?=
+ =?Windows-1252?Q?b16/ZtZr4RyZ8pdWytPziZyXlLs15ofQfkk7aOqahBp1LlLBmrlXDgHn?=
+ =?Windows-1252?Q?RF6cUkpEckvrr7rSZz5/dA8VdMYUKlWOmSewbtFoe64XJ8R/YiG5pB/g?=
+ =?Windows-1252?Q?5qP4Ap/6o8jctoH+AToGNJYxj3O8h04iUPsEmZ9TXnix0O1hVupAV/vL?=
+ =?Windows-1252?Q?viohgKnqnGb30vaQvQHin2j4o3zDhuQrRMXlFvAI6FvL9fQfFDrKFqBV?=
+ =?Windows-1252?Q?3L0PKeiQIpgBHi+hdJcorFETX/5cM5I8c+ypP9Ni/qJ4zqx58+1INCid?=
+ =?Windows-1252?Q?Mh2lWiuxM0+b5IuwnWkSvJgl+aIW28NhjEFIq7mLdQPLMYlfxw8S67rJ?=
+ =?Windows-1252?Q?XgD2ECJjqcKzFA5j5NJ1gnXjZ2qwFLwGxWHG59s1WqfUT742bIV+hP9P?=
+ =?Windows-1252?Q?iLH3YNa20VvjfhlUIc5bNPrM9JA0aO+CgWfIMj60LcrvDqL16rIo4dA/?=
+ =?Windows-1252?Q?eQeZhf+kfn04tPaEaWb05FmZJGpMXkEBX6nAL463/YFRAC4uXMihYu5O?=
+ =?Windows-1252?Q?snPTI5gHF6O+9bGmSah1P3IEtKz+A6rk54RGqnebciFNoQjGKIHl6BpA?=
+ =?Windows-1252?Q?VHQXSx0dS7IXWBWrFSXq4ceJ+1SscBtvppc6vlcHML0KAlJGqFyWbMdh?=
+ =?Windows-1252?Q?rnrqNDvc5wfrYf234Ky5N7plZ0RV9kQJNisCgZYY/cN57BOJLn7yIo/d?=
+ =?Windows-1252?Q?sHDwJY2QlODW+GlXlMG/uJbbGe1iLICdmi09gYBsmxCKAJhx1NXOTbDQ?=
+ =?Windows-1252?Q?6JS1I1g158sonmqDWAChwFFUGhVspcuEJx/pPnzBRdq1e+tKk/Miprqp?=
+ =?Windows-1252?Q?kmXuLCWLKg8H+c9n4xFyajcmVPscebOaIsOUdSFQfgkr2ez708ROj8s0?=
+ =?Windows-1252?Q?IOOTskrvRojgm/q0UjFX0iviJCFdgIa/W7LgS5ho/TGSpzc7fGFVoCTz?=
+ =?Windows-1252?Q?h3lKlQh4C6WDUXQAC0awzI8RLr1GEN57+surJPsrev98awg3mKw7jagr?=
+ =?Windows-1252?Q?dPLBfmvGKXBFLOxYzD1vUNoit1RccCGmgNFQkYZarTvSYkV2df3QNFRQ?=
+ =?Windows-1252?Q?KypTju/Y56Z5WzFcAgTfC78HRrBZi9WUIbSTvSV0Xcsl3KZ8DebD5ul0?=
+ =?Windows-1252?Q?FgvE4xi8xd0MllXaC4NVakipdlnAhupSRAjW+630sCrQ+PM9h0TIR/IA?=
+ =?Windows-1252?Q?biyyGd8jm4KXjnZ/nLESPipx9dBaTOqUHAnwVf/Skx1XbnO4MoE2BAVe?=
+ =?Windows-1252?Q?GyLX+LPbOwc7XRcvwQCgehRVAnUF+Q+HH0boau1hpq4+quX03YOjmwxe?=
+ =?Windows-1252?Q?NMzIPM1opTbsp4d8PJGWfyRx5mfm0F7v33iqZMFJ4o8yA+koSaiTUQYV?=
+ =?Windows-1252?Q?vNok8b7UcO5Vj7zttHMZLoTY6nqjm04XAoeUzIfUPoLwh/1lCFf67Gg4?=
+ =?Windows-1252?Q?dnHLSTCA79mo+bWt6kPdnbwC50G4Vpn61jiOjdXL3d2HAQ3E4QQuEQs5?=
+ =?Windows-1252?Q?/Ffimowiywo6x6+XcZrIymJeTCDpkVX4mj1JvVUe3eHkXP/mJt1NRWCT?=
+ =?Windows-1252?Q?002xUSjMC+0D1w=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSQPR06MB7252.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3427d82-ff6c-4770-cdf1-08de7d7cc99f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2026 01:40:04.4710
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6rWEK1mgd6BPXmrOSqfsol8Ib9USPH54Aoh24bT5qzTfy+Lto6IR1bqhTeEB7ByO3uUhCXq/gEJaEXoi/eOg3aen38NnkRDw3mpjX8OOKU8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5461
 
-From: Sanman Pradhan <psanman@juniper.net>
-
-The MAX31785 fan controller occasionally NACKs master transactions if
-accesses are too tightly spaced. To avoid this, the driver currently
-enforces a 250us inter-access delay with a private timestamp and wrapper
-functions around both raw SMBus accesses and PMBus helper paths.
-
-Simplify the driver by using pmbus_driver_info.access_delay for normal
-PMBus-mediated accesses instead, and remove the driver-local PMBus
-read/write wrappers.
-
-Keep local delay handling for raw SMBus accesses used before
-pmbus_do_probe(). For the raw i2c_transfer() long-read path, which
-bypasses PMBus core timing, leverage the newly exported pmbus_wait() and
-pmbus_update_ts() core functions. This replaces hardcoded usleep_range()
-calls and ensures the PMBus core tracks the raw transaction. Placing
-pmbus_update_ts() before the error check fixes a bug where a failed
-i2c_transfer() would skip the delay and impact subsequent PMBus commands.
-
-Additionally, update max31785_read_byte_data() so PMBUS_FAN_CONFIG_12
-accesses are only remapped for virtual pages, allowing physical-page
-accesses to fall back to the PMBus core. With that change, we can safely
-drop the custom max31785_update_fan() wrapper in favor of the core
-pmbus_update_fan() helper.
-
-Also use the delayed raw read helper for MFR_REVISION during probe, drop
-the unused to_max31785_data() macro, and rename the local variable
-"virtual" to "vpage".
-
-Signed-off-by: Sanman Pradhan <psanman@juniper.net>
----
- drivers/hwmon/pmbus/max31785.c | 187 +++++++++++----------------------
- 1 file changed, 59 insertions(+), 128 deletions(-)
-
-diff --git a/drivers/hwmon/pmbus/max31785.c b/drivers/hwmon/pmbus/max31785.c
-index 50073fe0c5e8..098f43486c45 100644
---- a/drivers/hwmon/pmbus/max31785.c
-+++ b/drivers/hwmon/pmbus/max31785.c
-@@ -31,8 +31,6 @@ struct max31785_data {
- 	struct pmbus_driver_info info;
- };
- 
--#define to_max31785_data(x)  container_of(x, struct max31785_data, info)
--
- /*
-  * MAX31785 Driver Workaround
-  *
-@@ -40,9 +38,8 @@ struct max31785_data {
-  * These issues are not indicated by the device itself, except for occasional
-  * NACK responses during master transactions. No error bits are set in STATUS_BYTE.
-  *
-- * To address this, we introduce a delay of 250us between consecutive accesses
-- * to the fan controller. This delay helps mitigate communication problems by
-- * allowing sufficient time between accesses.
-+ * Keep minimal local delay handling for raw pre-probe SMBus accesses.
-+ * Normal PMBus-mediated accesses use pmbus_driver_info.access_delay instead.
-  */
- static inline void max31785_wait(const struct max31785_data *data)
- {
-@@ -54,89 +51,42 @@ static inline void max31785_wait(const struct max31785_data *data)
- }
- 
- static int max31785_i2c_write_byte_data(struct i2c_client *client,
--					struct max31785_data *driver_data,
--					int command, u8 data)
-+					struct max31785_data *data,
-+					int command, u8 value)
- {
- 	int rc;
- 
--	max31785_wait(driver_data);
--	rc = i2c_smbus_write_byte_data(client, command, data);
--	driver_data->access = ktime_get();
-+	max31785_wait(data);
-+	rc = i2c_smbus_write_byte_data(client, command, value);
-+	data->access = ktime_get();
- 	return rc;
- }
- 
- static int max31785_i2c_read_word_data(struct i2c_client *client,
--				       struct max31785_data *driver_data,
-+				       struct max31785_data *data,
- 				       int command)
- {
- 	int rc;
- 
--	max31785_wait(driver_data);
-+	max31785_wait(data);
- 	rc = i2c_smbus_read_word_data(client, command);
--	driver_data->access = ktime_get();
--	return rc;
--}
--
--static int _max31785_read_byte_data(struct i2c_client *client,
--				    struct max31785_data *driver_data,
--				    int page, int command)
--{
--	int rc;
--
--	max31785_wait(driver_data);
--	rc = pmbus_read_byte_data(client, page, command);
--	driver_data->access = ktime_get();
--	return rc;
--}
--
--static int _max31785_write_byte_data(struct i2c_client *client,
--				     struct max31785_data *driver_data,
--				     int page, int command, u16 data)
--{
--	int rc;
--
--	max31785_wait(driver_data);
--	rc = pmbus_write_byte_data(client, page, command, data);
--	driver_data->access = ktime_get();
--	return rc;
--}
--
--static int _max31785_read_word_data(struct i2c_client *client,
--				    struct max31785_data *driver_data,
--				    int page, int phase, int command)
--{
--	int rc;
--
--	max31785_wait(driver_data);
--	rc = pmbus_read_word_data(client, page, phase, command);
--	driver_data->access = ktime_get();
--	return rc;
--}
--
--static int _max31785_write_word_data(struct i2c_client *client,
--				     struct max31785_data *driver_data,
--				     int page, int command, u16 data)
--{
--	int rc;
--
--	max31785_wait(driver_data);
--	rc = pmbus_write_word_data(client, page, command, data);
--	driver_data->access = ktime_get();
-+	data->access = ktime_get();
- 	return rc;
- }
- 
- static int max31785_read_byte_data(struct i2c_client *client, int page, int reg)
- {
--	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
--	struct max31785_data *driver_data = to_max31785_data(info);
- 
- 	switch (reg) {
- 	case PMBUS_VOUT_MODE:
- 		return -ENOTSUPP;
- 	case PMBUS_FAN_CONFIG_12:
--		return _max31785_read_byte_data(client, driver_data,
--						page - MAX31785_NR_PAGES,
--						reg);
-+		if (page < MAX31785_NR_PAGES)
-+			return -ENODATA;
-+
-+		return pmbus_read_byte_data(client,
-+					    page - MAX31785_NR_PAGES,
-+					    reg);
- 	}
- 
- 	return -ENODATA;
-@@ -178,7 +128,20 @@ static int max31785_read_long_data(struct i2c_client *client, int page,
- 	if (rc < 0)
- 		return rc;
- 
-+	/* Ensure the raw transfer is properly spaced from the
-+	 * preceding PMBus transaction.
-+	 */
-+	pmbus_wait(client);
-+
- 	rc = i2c_transfer(client->adapter, msg, ARRAY_SIZE(msg));
-+
-+	/*
-+	 * Update PMBus core timing state for the raw transfer, even on error.
-+	 * Pass 0 as the operation mask since this is a raw read, intentionally
-+	 * neither PMBUS_OP_WRITE nor PMBUS_OP_PAGE_CHANGE.
-+	 */
-+	pmbus_update_ts(client, 0);
-+
- 	if (rc < 0)
- 		return rc;
- 
-@@ -203,19 +166,18 @@ static int max31785_get_pwm(struct i2c_client *client, int page)
- 	return rv;
- }
- 
--static int max31785_get_pwm_mode(struct i2c_client *client,
--				 struct max31785_data *driver_data, int page)
-+static int max31785_get_pwm_mode(struct i2c_client *client, int page)
- {
- 	int config;
- 	int command;
- 
--	config = _max31785_read_byte_data(client, driver_data, page,
--					  PMBUS_FAN_CONFIG_12);
-+	config = pmbus_read_byte_data(client, page,
-+				      PMBUS_FAN_CONFIG_12);
- 	if (config < 0)
- 		return config;
- 
--	command = _max31785_read_word_data(client, driver_data, page, 0xff,
--					   PMBUS_FAN_COMMAND_1);
-+	command = pmbus_read_word_data(client, page, 0xff,
-+				       PMBUS_FAN_COMMAND_1);
- 	if (command < 0)
- 		return command;
- 
-@@ -233,8 +195,6 @@ static int max31785_get_pwm_mode(struct i2c_client *client,
- static int max31785_read_word_data(struct i2c_client *client, int page,
- 				   int phase, int reg)
- {
--	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
--	struct max31785_data *driver_data = to_max31785_data(info);
- 	u32 val;
- 	int rv;
- 
-@@ -263,7 +223,7 @@ static int max31785_read_word_data(struct i2c_client *client, int page,
- 		rv = max31785_get_pwm(client, page);
- 		break;
- 	case PMBUS_VIRT_PWM_ENABLE_1:
--		rv = max31785_get_pwm_mode(client, driver_data, page);
-+		rv = max31785_get_pwm_mode(client, page);
- 		break;
- 	default:
- 		rv = -ENODATA;
-@@ -294,35 +254,7 @@ static inline u32 max31785_scale_pwm(u32 sensor_val)
- 	return (sensor_val * 100) / 255;
- }
- 
--static int max31785_update_fan(struct i2c_client *client,
--			       struct max31785_data *driver_data, int page,
--			       u8 config, u8 mask, u16 command)
--{
--	int from, rv;
--	u8 to;
--
--	from = _max31785_read_byte_data(client, driver_data, page,
--					PMBUS_FAN_CONFIG_12);
--	if (from < 0)
--		return from;
--
--	to = (from & ~mask) | (config & mask);
--
--	if (to != from) {
--		rv = _max31785_write_byte_data(client, driver_data, page,
--					       PMBUS_FAN_CONFIG_12, to);
--		if (rv < 0)
--			return rv;
--	}
--
--	rv = _max31785_write_word_data(client, driver_data, page,
--				       PMBUS_FAN_COMMAND_1, command);
--
--	return rv;
--}
--
--static int max31785_pwm_enable(struct i2c_client *client,
--			       struct max31785_data *driver_data, int page,
-+static int max31785_pwm_enable(struct i2c_client *client, int page,
- 			       u16 word)
- {
- 	int config = 0;
-@@ -351,23 +283,21 @@ static int max31785_pwm_enable(struct i2c_client *client,
- 		return -EINVAL;
- 	}
- 
--	return max31785_update_fan(client, driver_data, page, config,
-+	return pmbus_update_fan(client, page, 0, config,
- 				   PB_FAN_1_RPM, rate);
- }
- 
- static int max31785_write_word_data(struct i2c_client *client, int page,
- 				    int reg, u16 word)
- {
--	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
--	struct max31785_data *driver_data = to_max31785_data(info);
- 
- 	switch (reg) {
- 	case PMBUS_VIRT_PWM_1:
--		return max31785_update_fan(client, driver_data, page, 0,
--					   PB_FAN_1_RPM,
--					   max31785_scale_pwm(word));
-+		return pmbus_update_fan(client, page, 0, 0,
-+					PB_FAN_1_RPM,
-+					max31785_scale_pwm(word));
- 	case PMBUS_VIRT_PWM_ENABLE_1:
--		return max31785_pwm_enable(client, driver_data, page, word);
-+		return max31785_pwm_enable(client, page, word);
- 	default:
- 		break;
- 	}
-@@ -391,6 +321,7 @@ static const struct pmbus_driver_info max31785_info = {
- 	.read_byte_data = max31785_read_byte_data,
- 	.read_word_data = max31785_read_word_data,
- 	.write_byte = max31785_write_byte,
-+	.access_delay = MAX31785_WAIT_DELAY_US,
- 
- 	/* RPM */
- 	.format[PSC_FAN] = direct,
-@@ -438,29 +369,29 @@ static const struct pmbus_driver_info max31785_info = {
- };
- 
- static int max31785_configure_dual_tach(struct i2c_client *client,
--					struct pmbus_driver_info *info)
-+					struct max31785_data *data)
- {
-+	struct pmbus_driver_info *info = &data->info;
- 	int ret;
- 	int i;
--	struct max31785_data *driver_data = to_max31785_data(info);
- 
- 	for (i = 0; i < MAX31785_NR_FAN_PAGES; i++) {
--		ret = max31785_i2c_write_byte_data(client, driver_data,
-+		ret = max31785_i2c_write_byte_data(client, data,
- 						   PMBUS_PAGE, i);
- 		if (ret < 0)
- 			return ret;
- 
--		ret = max31785_i2c_read_word_data(client, driver_data,
-+		ret = max31785_i2c_read_word_data(client, data,
- 						  MFR_FAN_CONFIG);
- 		if (ret < 0)
- 			return ret;
- 
- 		if (ret & MFR_FAN_CONFIG_DUAL_TACH) {
--			int virtual = MAX31785_NR_PAGES + i;
-+			int vpage = MAX31785_NR_PAGES + i;
- 
--			info->pages = virtual + 1;
--			info->func[virtual] |= PMBUS_HAVE_FAN12;
--			info->func[virtual] |= PMBUS_PAGE_VIRTUAL;
-+			info->pages = vpage + 1;
-+			info->func[vpage] |= PMBUS_HAVE_FAN12;
-+			info->func[vpage] |= PMBUS_PAGE_VIRTUAL;
- 		}
- 	}
- 
-@@ -471,7 +402,7 @@ static int max31785_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct pmbus_driver_info *info;
--	struct max31785_data *driver_data;
-+	struct max31785_data *data;
- 	bool dual_tach = false;
- 	int ret;
- 
-@@ -480,20 +411,20 @@ static int max31785_probe(struct i2c_client *client)
- 				     I2C_FUNC_SMBUS_WORD_DATA))
- 		return -ENODEV;
- 
--	driver_data = devm_kzalloc(dev, sizeof(struct max31785_data), GFP_KERNEL);
--	if (!driver_data)
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
- 		return -ENOMEM;
- 
--	info = &driver_data->info;
--	driver_data->access = ktime_get();
-+	data->access = ktime_get();
-+	info = &data->info;
- 	*info = max31785_info;
- 
--	ret = max31785_i2c_write_byte_data(client, driver_data,
--					   PMBUS_PAGE, 255);
-+	ret = max31785_i2c_write_byte_data(client, data,
-+					   PMBUS_PAGE, 0xff);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = i2c_smbus_read_word_data(client, MFR_REVISION);
-+	ret = max31785_i2c_read_word_data(client, data, MFR_REVISION);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -509,7 +440,7 @@ static int max31785_probe(struct i2c_client *client)
- 	}
- 
- 	if (dual_tach) {
--		ret = max31785_configure_dual_tach(client, info);
-+		ret = max31785_configure_dual_tach(client, data);
- 		if (ret < 0)
- 			return ret;
- 	}
--- 
-2.34.1
-
+Hi Guenter,=0A=
+=0A=
+You=92re right=97the probe path already registers a devres action (devm_add=
+_action_or_reset()) to call aspeed_pwm_tach_reset_assert(). Therefore, ther=
+e is no need to perform this again. We can simply remove the remove callbac=
+k, since all resources are already managed by the devm_* APIs.=0A=
+=0A=
+Thanks=
