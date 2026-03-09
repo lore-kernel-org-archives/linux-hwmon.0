@@ -1,72 +1,76 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEBF1D5ABA
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 00:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E1320297C
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 00:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773017134; cv=none; b=kW5Ab1uhF2ruIFJ1wLLMNL/GtIMCOWeHnoNbEitLX88dgyuvm/i5/ktA+BhlJaj7JchYl98xMpUZqWYqHlOqNqBBjajQ1/xUgfwlkfd+74aJ2dVaq4pR2cTK0tmjuPsJMXPdR9SGOpcb3mHhkBmlCfRpIUcaz6TdGkF8K22uoPA=
+	t=1773017188; cv=none; b=nMHrBSTUbkVH7M1q6QMiZdGU50q+AWpjKZXSoIkgo4gf2mzNYTQE0rVKuRUZYYE1rXV5xENgDOv6IFYM3zZ03MsrM53ON7OBS81puabyBjIpi17eYUcr2dKqPxZNGSkfgs0S7j/I17/crEj/TYAXiA6slLuWLA/h4iIqdaZSJbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773017134; c=relaxed/simple;
-	bh=Z2WC+T44vZv36HJ9LB3k8rtYSZuJtp5EHsW584XWTZk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TNBuakveb0vIZxkqkgRdvzQJE97pLFloPN0WHY5QwClcPCBHUkCfA9qTOS/dJHIhuPOHiuTMsOtAhULKoQOs6jQ/6SbTIYWwFt4PTf+v2KLEY0M3mHEhvT4hdo1QeUZEBpg071mJLWoky9iyY3QSmTcbPX+wkYvwhPF4BVz6fk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YT2Q9a14; arc=none smtp.client-ip=74.125.82.175
+	s=arc-20240116; t=1773017188; c=relaxed/simple;
+	bh=tHoeMFRi6s6I6LRKk8F/SrOG3eKQxuLtAy2rH6tfvWs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=DdYlON5b6Cu9Rc6loPaxylDG45R9sEkh8UqMvtpmZdToedYW5I0oFnnfsA6xqE88MRWqcgsEJLmBla9oYzX9in41E4fWzs6QZDK2k6f+xhcVP3oLw5QvKfRXGFa9g79K2Z1K7S3OIwLI0Nm8kER//34865BMEWuzAAfqzbASW8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RA0lnivn; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YT2Q9a14"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2be3bdfda8eso4129174eec.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 08 Mar 2026 17:45:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RA0lnivn"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2ba895adfeaso9286001eec.0
+        for <linux-hwmon@vger.kernel.org>; Sun, 08 Mar 2026 17:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773017133; x=1773621933; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uBR4plYfhG1YvXoyQZA+wjr+zEYEMIT2HuNQ1S4zVVs=;
-        b=YT2Q9a14wHSZN+QbhP0ffdic277zQ3FTa0wzZAdRXDEfeEHqJd2cpDqHCplRO7VmH1
-         QJPNTsbpF/B2VmpEfe734DYN84A1/u4ZCslM58XrrgEBL2MYnmqA1Cnm1EfDltMUEcL/
-         zcTaNo3DG8N4FYKs+ED9FMgFGQPOC0Po/qdOTk0fwPPX18fgocqqpPi+S6x8O76KUds7
-         AXsygXoHEwuowducSUCRpvWeW4gK2KIsPIeKFjDRu6O4aImUYIYYOfbmJtym2VEwgGvi
-         BWQFar0q4Oqu25bIM9u8oW9HNbEciChUOfSgAEKYkPTTw7Grth/hF3hqiQu17wMyDur+
-         fS3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773017133; x=1773621933;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1773017185; x=1773621985; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uBR4plYfhG1YvXoyQZA+wjr+zEYEMIT2HuNQ1S4zVVs=;
-        b=L7D8nh78COqy50MrXeYz3//p7YeRGR7SnedAS+UALCUrSxxTFgpu+EEi2LasaQiq1c
-         736f6ckYAUWFNgsp6jL60za2LinHsu6J36FjBZpVT5pMWrRgCW25LPya6thoVZczEBSi
-         vy+z/5vQ+Yh/piYZ2O4RTtMGZflrnZ7dBNnsvVHE7gCasEhe84oy8AbCdRwdlV/penVG
-         1PIddyidsXHb1u7Z2J9bE1MaTRtUe1Z3etMd5mVTYBQlelbxBo3+txUv3TPZJY9azlya
-         liTbYSGE5LQNKISKIX7bD+Y2h/+kDL+MjiZh3ZfVBQe0AvPF03cjgTlZO86/AFzMVAWi
-         Sg2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXhHl0XntyKUceKXGA9POgTBO3cLnvnMOyhHpz6luW5fBA92GG9V0Df98t8XXYWSMywf2JwZMoPyjMp0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6XOiGcDu110JBrNRXkeALLRlKbA6VR+cvKqITxNDfmFEB3PMe
-	I6QzD9UTpLIgsAUguGbu/aQ4jTPInGm+XnUTFF2YJ4SKwuAy1LRW7w7r
-X-Gm-Gg: ATEYQzzKuPw3zgiqj9PvwzCqQ45pCLQEs44VzzIekYL8MRYbrhX5eCEJ/zA4x2bJ46C
-	oGK2SxeFjwoLAsYelFT5nfUuUTu49cMceE+9cjwSmp+oqij+uc5weNPFgvNXzZ7Ot2zOmsbhGVP
-	0qf4V7FF3Fa3Og5I89BjFMBHFs3FzezKPxbSo4VdTaw+0HC8fwJ4oObHrj15MvVwYlkDQ6crv5p
-	0RI3ugZaqnSFKwKZQodbyMv5AkFYqvQ0H5n1IA6spNIxJJ7VS35vJ2tRrsSOyws15wD7p622o8f
-	/d9GS6Oapp096OBELZeId8A59KmL6343/V1s2J8ojVhDNxftN/ttAndAK2RmeSWB11MZ9X1cM2+
-	HSBKC1rimLn3f4/e7k3NQ5hgLYYYlg6ViMMAONoLNO1847jFbAmsuj32NaclRtAMyLLLr6PGjc9
-	YW594TsKdtl8iCGuV9DhamArZd31QbwNlL6DMibLVVVdQq6JKXortqY4mr3R9+ywycyBWh3nPWv
-	vV7rrE=
-X-Received: by 2002:a05:693c:6096:b0:2be:70b4:fd62 with SMTP id 5a478bee46e88-2be70b5165emr135654eec.4.1773017132603;
-        Sun, 08 Mar 2026 17:45:32 -0700 (PDT)
+        bh=cxW4Is3pvycjCruApvPYUDJnnf0G3HJdKTnyBvELzWs=;
+        b=RA0lnivnhQYoOfESDHVp9EogGPXieqJ5+UYXY0DUuVZmZwV8MMihWaEL08yU3xrKjM
+         u7vScGllQHHsrr03MGXHXA9dJoXhZSDSLABUaLmRrwnKJxAeOlMG2Kk6iUhX38bjaPgU
+         3zg/LbLF9wJnPGO7TUpEXhG7vXjLmcQKN4XCjQKmuwxHhzbLGsCeyohdqiaAa6GcmlMW
+         jcI47pZyLWYUyNUsS+noA1lVLL6T9+kEBwXqmxrBT/4XvFSHAw58XQBjy2miV+CNQI6i
+         cmcz6LdN8iJLtnuo11qH8a6dofH9CvCYg+ICExjq0QSF57zw5orFEwdTZbm/CtF3jznu
+         nypw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773017185; x=1773621985;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cxW4Is3pvycjCruApvPYUDJnnf0G3HJdKTnyBvELzWs=;
+        b=c19Q/aQVNKnOHmLsYfPmunZDC8eHb0wGUIYyUaMSMVF9LZWL3ft2U6E2dqqBqcnA0z
+         1HpJ3l/MQKSv6MITmIzFF97LW4qpnOgv/jbqIXTPUuGmO4Nlgg3EsXatsvCn+hqoCb0m
+         cboiRByw1zKTQkhEeYKxwosOVueBdvLqxoEEyFKkBngk8pzjkIdZTu+b5vrE0azKI2cl
+         3VhHQtT/3gyFuIaKKJzGe8mwkQ+V2AFEDkKVSAvXjTMvKUfn3jgsRPPEPKnf+sHxVd2y
+         hiC/02cUXjyJFMtm5STa8w0zSEdVx2XCQY/7okV9TmncvlUTfqtjuNKC36JFo5IOUBIR
+         3ENw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxNySz550fvaqHb5YHnuRtMBdfAsiOuY6Y6eUDjiMbsv4DM3x/ynMCHrvM/5H21m6JM5GTbvi72LxHEA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS5DO5DP+AAYsDecf+qzyVGGV8I40RjRpT4/vh8vmS1tMcpcUK
+	YBN5xI6KwfBdyyWS0Nu6dM+DPz8yeF2QvYw6hAR3xQAwU6eFAfBAd9p0
+X-Gm-Gg: ATEYQzzCx4qb6BjCKadB0zZkCbAotOJtLiajU6IPMZhfkkDa4plRsAABgcVlixOh5Dm
+	YLcgLxMEoxRzwYHYIZONYhhYflGUlQ0k5IYUsBwU6O7JOu6gNhcMBravIstER2ievhwq5Ry+gof
+	EDPH+ccZx8Z8Hqk0eHkDa06dX4liq17IOztE7J9kf9yXPwX1ScmXH5ZLT6gsr3uMo9XJNRO69f/
+	9bog39fc4qVP8Js9S7mbtwrA0HDk+vM4f9+dr6vMKOk6Olhahc/WN0Y7NgB2KZszmrtICqD6GC2
+	z+24A04hP8RJBSUOkO6C5zCb6c95tUx0BrX1zfZyKRKCHZ+T6/uj7hIHfpLswRKbni858+ZLsrR
+	AW8J8MxwBWb6JURbpFrK5PWqfnqe5Tf1zoXWUUbbs5o8Q1FOh5ZfwaMd4Xxyinbz8CLrylu3hj+
+	ANR1ln9TVKuDYzngYGnatnaq6rqEEcnodRAKD2i2JxoMnmfLD6zQCdxh+P+hUk6jVbLJEwiCjKD
+	fRk92c=
+X-Received: by 2002:a05:7300:cd90:b0:2be:2b16:b99f with SMTP id 5a478bee46e88-2be4de928fcmr3334893eec.13.1773017184928;
+        Sun, 08 Mar 2026 17:46:24 -0700 (PDT)
 Received: from localhost.localdomain (c-67-164-93-214.hsd1.ca.comcast.net. [67.164.93.214])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f948631sm7240105eec.19.2026.03.08.17.45.31
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be4f948631sm7240105eec.19.2026.03.08.17.46.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Mar 2026 17:45:32 -0700 (PDT)
+        Sun, 08 Mar 2026 17:46:24 -0700 (PDT)
 From: Sanman Pradhan <sanman.p211993@gmail.com>
 To: Sanman Pradhan <sanman.p211993@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>
 Cc: Sanman Pradhan <psanman@juniper.net>,
 	linux-hwmon <linux-hwmon@vger.kernel.org>,
 	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 0/2] hwmon: (pmbus/max31785) refactor inter-access delay
-Date: Sun,  8 Mar 2026 17:45:06 -0700
-Message-Id: <20260309004508.78609-1-sanman.p211993@gmail.com>
+Subject: [PATCH v2 1/2] hwmon: (pmbus) export pmbus_wait and pmbus_update_ts
+Date: Sun,  8 Mar 2026 17:45:07 -0700
+Message-Id: <20260309004508.78609-2-sanman.p211993@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260309004508.78609-1-sanman.p211993@gmail.com>
+References: <20260309004508.78609-1-sanman.p211993@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -77,31 +81,103 @@ Content-Transfer-Encoding: 8bit
 
 From: Sanman Pradhan <psanman@juniper.net>
 
-Thanks for applying Patch 1 from the previous series.
+Some PMBus devices require strict inter-transaction delays to avoid
+NACKs or communication faults. The PMBus core manages this automatically
+for standard PMBus accesses via pmbus_wait() and pmbus_update_ts().
 
-This v2 series addresses the feedback regarding the raw i2c_transfer() 
-error path in the MAX31785 driver. Instead of relying on local 
-usleep_range() calls, this series exports the PMBus core timing helpers 
-so the driver can utilize the core's delay management.
+However, when a device driver performs raw I2C/SMBus transfers (e.g.,
+for long reads or custom commands) that bypass the PMBus core, the core's
+timing state machine is unaware of the transaction. This can cause the
+next core-mediated PMBus access to violate the device's required delay.
 
-Changes in v2:
-- Dropped the i2c_smbus_write_byte_data() wrapper cleanup (applied upstream).
-- Patch 1 (New): Export pmbus_wait() and pmbus_update_ts() from the PMBus 
-  core, and move PMBUS_OP_* macros to drivers/hwmon/pmbus/pmbus.h.
-- Patch 2: Replaced the usleep_range() sandwich in max31785_read_long_data() 
-  with the newly exported core timing functions. Placed pmbus_update_ts() 
-  before the error check to ensure the core accurately tracks the bus 
-  transaction even on failure.
+Export pmbus_wait() and pmbus_update_ts() to the PMBUS namespace so
+device-specific drivers can explicitly synchronize their raw transfers
+with the core's delay management.
 
-Sanman Pradhan (2):
-  hwmon: (pmbus/core) export pmbus_wait and pmbus_update_ts
-  hwmon: (pmbus/max31785) use access_delay for PMBus-mediated accesses
+Additionally, move the PMBUS_OP_WRITE and PMBUS_OP_PAGE_CHANGE bitmasks
+into the drivers/hwmon/pmbus/pmbus.h header so callers can accurately
+report the nature of their raw transactions.
 
- drivers/hwmon/pmbus/max31785.c   | 184 ++++++++++---------------------
- drivers/hwmon/pmbus/pmbus.h      |   9 ++
- drivers/hwmon/pmbus/pmbus_core.c |  13 +--
- 3 files changed, 70 insertions(+), 136 deletions(-)
+Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+---
+ drivers/hwmon/pmbus/pmbus.h      |  9 +++++++++
+ drivers/hwmon/pmbus/pmbus_core.c | 13 ++++---------
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index d2e9bfb5320f..afd58128b37e 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -424,6 +424,13 @@ enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
+ #define PMBUS_REV_12 0x22	/* PMBus revision 1.2 */
+ #define PMBUS_REV_13 0x33	/* PMBus revision 1.3 */
+ 
++/*
++ * The type of operation used for picking the delay between
++ * successive pmbus operations.
++ */
++#define PMBUS_OP_WRITE		BIT(0)
++#define PMBUS_OP_PAGE_CHANGE	BIT(1)
++
+ struct pmbus_driver_info {
+ 	int pages;		/* Total number of pages */
+ 	u8 phases[PMBUS_PAGES];	/* Number of phases per page */
+@@ -555,6 +562,8 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ void pmbus_clear_faults(struct i2c_client *client);
+ bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg);
+ bool pmbus_check_word_register(struct i2c_client *client, int page, int reg);
++void pmbus_wait(struct i2c_client *client);
++void pmbus_update_ts(struct i2c_client *client, int op);
+ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info);
+ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client
+ 						      *client);
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index be6d05def115..4864a30988bf 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -32,13 +32,6 @@
+ #define PMBUS_ATTR_ALLOC_SIZE	32
+ #define PMBUS_NAME_SIZE		24
+ 
+-/*
+- * The type of operation used for picking the delay between
+- * successive pmbus operations.
+- */
+-#define PMBUS_OP_WRITE		BIT(0)
+-#define PMBUS_OP_PAGE_CHANGE	BIT(1)
+-
+ static int wp = -1;
+ module_param(wp, int, 0444);
+ 
+@@ -173,7 +166,7 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
+ EXPORT_SYMBOL_NS_GPL(pmbus_set_update, "PMBUS");
+ 
+ /* Some chips need a delay between accesses. */
+-static void pmbus_wait(struct i2c_client *client)
++void pmbus_wait(struct i2c_client *client)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	s64 delay = ktime_us_delta(data->next_access_backoff, ktime_get());
+@@ -181,9 +174,10 @@ static void pmbus_wait(struct i2c_client *client)
+ 	if (delay > 0)
+ 		fsleep(delay);
+ }
++EXPORT_SYMBOL_NS_GPL(pmbus_wait, "PMBUS");
+ 
+ /* Sets the last operation timestamp for pmbus_wait */
+-static void pmbus_update_ts(struct i2c_client *client, int op)
++void pmbus_update_ts(struct i2c_client *client, int op)
+ {
+ 	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	const struct pmbus_driver_info *info = data->info;
+@@ -197,6 +191,7 @@ static void pmbus_update_ts(struct i2c_client *client, int op)
+ 	if (delay > 0)
+ 		data->next_access_backoff = ktime_add_us(ktime_get(), delay);
+ }
++EXPORT_SYMBOL_NS_GPL(pmbus_update_ts, "PMBUS");
+ 
+ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ {
 -- 
 2.34.1
 
