@@ -1,16 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E153D1CD0
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 13:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E440375F86
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 13:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773064188; cv=none; b=EMMVeoV1r5NOeXOXFSNskzQuf7+mbKm9f4jUgC5PRG8kW+KovUOxQeONgd1Fl7WG8x6ffJ46db0oou3GR1+0NaxkHDmevQctkwkwnJ6HVdr6eV8cOWRKbt4sg18j2/lRyr1hQL+EvtX0Ui73r7D6mRZAoi2ZOZxIIn4ekrJZU0Y=
+	t=1773064192; cv=none; b=Y5XZ1H6gM9VJyva4sZpGY/M958S/VB2FRnDW69vp2/5R5dbrdaSZpEiwvOxeiRp2aNG+p2wZ0ipcQc1fqKEy6Fqq+mgIDh65y6Y83bndGeNlZyc9c2FyR8zbjeWwCMLn7CEANMlNFsDoXtqi93HsPQSwygohIMSL42Zv7k0uKkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773064188; c=relaxed/simple;
-	bh=edic6BPHPs4rzzaANWW2/y9R7HvSKfZcrDg1tvRbWn0=;
+	s=arc-20240116; t=1773064192; c=relaxed/simple;
+	bh=9d3h03P42Cdvda2XkFTeus4f1oyw8dBft79tJ70bjRQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QPy6d9E+zat9DiR6ImJn8kPHKIxZTj4ZzRh0t6tRfYvZRxOWkmyq26gk4A/xm3Rb8ia9D38/3WuquYrvyC+6fO9CHE/05v+2DcF2fix6YSctFxrWyRiKhtKM4rCZRLEStq4gZXqkJAksQ1l0GXxmhxfYeDDwcjB3d2dGpXhOiys=
+	 MIME-Version; b=al+htVC2tLQwXlOh5hD9+ltxp4NrCa3p6dNdwklBrU23tGn4onEN5481ZKWEaydvbjkAdSnndpvZaSlf01Gw95DuJy2dXrD2Qu8A2VC1aAsHfdSKx487rOfjd52cOmAv/GoTm3VbY38QV8aOhSfj0nEcY2GdvvDurkxiMctLtK4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -18,16 +18,16 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz5-0006fi-Ed; Mon, 09 Mar 2026 14:49:23 +0100
+	id 1vzaz5-0006ff-Ed; Mon, 09 Mar 2026 14:49:23 +0100
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz2-004XYg-1u;
+	id 1vzaz2-004XYc-1Y;
 	Mon, 09 Mar 2026 14:49:21 +0100
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz3-0000000834A-3Ubt;
+	id 1vzaz3-0000000833g-3AFj;
 	Mon, 09 Mar 2026 14:49:21 +0100
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -44,9 +44,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v3 4/7] gpio: gpiolib: fix allocation order in hierarchical IRQ domains
-Date: Mon,  9 Mar 2026 14:49:15 +0100
-Message-ID: <20260309134920.1918294-5-o.rempel@pengutronix.de>
+Subject: [PATCH v3 1/7] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
+Date: Mon,  9 Mar 2026 14:49:12 +0100
+Message-ID: <20260309134920.1918294-2-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260309134920.1918294-1-o.rempel@pengutronix.de>
 References: <20260309134920.1918294-1-o.rempel@pengutronix.de>
@@ -62,79 +62,259 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-In gpiochip_hierarchy_irq_domain_alloc(), calling irq_domain_set_info()
-before irq_domain_alloc_irqs_parent() causes a NULL pointer dereference
-for slow-bus (SPI/I2C) IRQ chips.
+Add device tree binding documentation for the NXP MC33978 and MC34978
+Multiple Switch Detection Interface (MSDI) devices.
 
-irq_domain_set_info() locks the child descriptor, triggering .irq_bus_lock.
-If the child proxies this lock to the parent, it crashes because
-parent->chip is not yet allocated.
+These ICs monitor up to 22 mechanical switch contacts in automotive and
+industrial environments. They provide configurable wetting currents to
+break through contact oxidation and feature extensive hardware
+protection against thermal overload and voltage transients (load
+dumps/brown-outs).
 
-Fix this by allocating the parent IRQs first, ensuring parent->chip is
-populated before the child's .irq_bus_lock is invoked.
+The device interfaces via SPI and provides multiple functions. To
+accurately represent the hardware without unnecessary DT overhead, the
+binding is structured as follows:
+- pinctrl: A dedicated child node managing the 22 switch inputs (SG/SP
+  pins) and their GPIO configurations.
+- hwmon: Integrated into the parent node, exposing critical hardware
+  faults (OT, OV, UV) and static voltage/temperature thresholds.
+- mux: Integrated into the parent node, controlling the 24-to-1 analog
+  multiplexer to route pin voltages, internal temperature, or battery
+  voltage to an external SoC ADC.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
-changes v3
-- new patch
+changes v3:
+- Drop regular expression pattern from pinctrl child node and define
+  it as a standard property
+- Reorder required properties list in MFD binding
+- Remove stray blank line from the MFD binding devicetree example
+- Replace unevaluatedProperties with additionalProperties in the pinctrl
+  binding
+changes v2:
+- Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
+- Removed the empty hwmon child node
+- Folded the mux-controller node into the parent MFD node
+- Added vbatp-supply and vddq-supply to the required properties block
+- Changed the example node name from mc33978@0 to gpio@0
+- Removed unnecessary literal block scalars (|) from descriptions
+- Documented SG, SP, and SB pin acronyms in the pinctrl description
+- Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
+  inputs, with a note on output circuit dependency
+- Updated commit message
 ---
- drivers/gpio/gpiolib.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 112 ++++++++++++++++++
+ .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
+ 2 files changed, 194 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index ada572aaebd6..1ea9531934cc 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1628,19 +1628,6 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
- 	}
- 	gpiochip_dbg(gc, "found parent hwirq %u\n", parent_hwirq);
- 
--	/*
--	 * We set handle_bad_irq because the .set_type() should
--	 * always be invoked and set the right type of handler.
--	 */
--	irq_domain_set_info(d,
--			    irq,
--			    hwirq,
--			    gc->irq.chip,
--			    gc,
--			    girq->handler,
--			    NULL, NULL);
--	irq_set_probe(irq);
--
- 	/* This parent only handles asserted level IRQs */
- 	ret = girq->populate_parent_alloc_arg(gc, &gpio_parent_fwspec,
- 					      parent_hwirq, parent_type);
-@@ -1657,12 +1644,27 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
- 	 */
- 	if (irq_domain_is_msi(d->parent) && (ret == -EEXIST))
- 		ret = 0;
--	if (ret)
-+	if (ret) {
- 		gpiochip_err(gc,
- 			     "failed to allocate parent hwirq %d for hwirq %lu\n",
- 			     parent_hwirq, hwirq);
-+		return ret;
-+	}
- 
--	return ret;
-+	/*
-+	 * We set handle_bad_irq because the .set_type() should
-+	 * always be invoked and set the right type of handler.
-+	 */
-+	irq_domain_set_info(d,
-+			    irq,
-+			    hwirq,
-+			    gc->irq.chip,
-+			    gc,
-+			    girq->handler,
-+			    NULL, NULL);
-+	irq_set_probe(irq);
+diff --git a/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml b/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+new file mode 100644
+index 000000000000..23520315d484
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/nxp,mc33978.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	return 0;
- }
- 
- static unsigned int gpiochip_child_offset_to_irq_noop(struct gpio_chip *gc,
++title: NXP MC33978/MC34978 Multiple Switch Detection Interface
++
++maintainers:
++  - David Jander <david@protonic.nl>
++  - Oleksij Rempel <o.rempel@pengutronix.de>
++
++description:
++  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSDI)
++  devices with 22 switch inputs, integrated fault detection, and analog
++  multiplexer (AMUX) for voltage/temperature monitoring.
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++properties:
++  $nodename:
++    pattern: "^gpio(@.*)?$"
++
++  compatible:
++    enum:
++      - nxp,mc33978
++      - nxp,mc34978
++
++  reg:
++    maxItems: 1
++    description: SPI chip select number
++
++  spi-max-frequency:
++    maximum: 8000000
++    description: Maximum SPI clock frequency (up to 8 MHz)
++
++  interrupts:
++    maxItems: 1
++    description:
++      INT_B pin interrupt. Active-low, indicates pin state changes or
++      fault conditions.
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++    description:
++      First cell is the IRQ number (0-21 for pins, 22 for faults).
++      Second cell is the trigger type (IRQ_TYPE_* from interrupt-controller.h).
++
++  '#mux-control-cells':
++    const: 0
++    description:
++      Present if the device AMUX selector is used as a mux provider.
++      Consumers (e.g. io-channel-mux) must provide settle-time-us for the
++      external ADC sampling path.
++
++  vddq-supply:
++    description: Digital supply voltage
++
++  vbatp-supply:
++    description: Battery/power supply
++
++  pinctrl:
++    type: object
++    $ref: /schemas/pinctrl/nxp,mc33978-pinctrl.yaml#
++    description:
++      Pinctrl and GPIO controller child node for the 22 switch inputs.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-controller
++  - '#interrupt-cells'
++  - vddq-supply
++  - vbatp-supply
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        msdi: gpio@0 {
++            compatible = "nxp,mc33978";
++            reg = <0>;
++            spi-max-frequency = <4000000>;
++
++            interrupt-parent = <&gpiog>;
++            interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++            interrupt-controller;
++            #interrupt-cells = <2>;
++
++            vddq-supply = <&reg_3v3>;
++            vbatp-supply = <&reg_12v>;
++
++            #mux-control-cells = <0>;
++
++            pinctrl {
++                compatible = "nxp,mc33978-pinctrl";
++                gpio-controller;
++                #gpio-cells = <2>;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+new file mode 100644
+index 000000000000..ba946906557c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP MC33978/MC34978 Pinctrl/GPIO Driver
++
++maintainers:
++  - David Jander <david@protonic.nl>
++  - Oleksij Rempel <o.rempel@pengutronix.de>
++
++description: |
++  Pin control and GPIO driver for the MC33978/MC34978 MSDI device.
++
++  Pin numbering:
++  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
++    contacts closed to ground and typically require GPIO_ACTIVE_LOW
++    flags when used as digital inputs.
++  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
++    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
++    inputs monitor contacts closed to the battery voltage and typically
++    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
++
++  Output Emulation:
++  The hardware lacks standard push-pull output drivers. Outputs are emulated
++  by toggling the programmable wetting current sources (acting as pull-ups or
++  pull-downs) and the hardware tri-state registers. Because of this physical
++  constraint:
++  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAIN or
++    GPIO_OPEN_SOURCE in the device tree.
++  - Push-pull configurations are physically unsupported.
++  - The active polarity depends entirely on the external circuit (e.g., how an
++    LED is wired) and must be flagged accordingly by the consumer.
++
++properties:
++  compatible:
++    enum:
++      - nxp,mc33978-pinctrl
++      - nxp,mc34978-pinctrl
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++  ngpios:
++    const: 22
++
++patternProperties:
++  "^.*-grp$":
++    type: object
++    $ref: pincfg-node.yaml#
++    additionalProperties: false
++    description:
++      Pin configuration subnodes.
++    properties:
++      pins: true
++      bias-pull-up: true
++      bias-pull-down: true
++      bias-high-impedance: true
++
++required:
++  - compatible
++  - gpio-controller
++  - '#gpio-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    pinctrl {
++        compatible = "nxp,mc33978-pinctrl";
++        gpio-controller;
++        #gpio-cells = <2>;
++        ngpios = <22>;
++
++        door-grp {
++            pins = "sg0";
++            bias-high-impedance;
++        };
++    };
 -- 
 2.47.3
 
