@@ -1,44 +1,44 @@
 Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7BC344056
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 22:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7128F256C84
+	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 22:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773094744; cv=none; b=tZggT9J38ouQsaO4bZP5/2oFEK54jnBAqH4CwX3QgDfoQI8BODYSmukte4qiTuVMInldWbl25fVEqFKreXfHvoK12M7y6nJ9tX2cygK77JsFM0AoDVnCMu7z+wkX5YrWGaUaBl4kJ+s4tdIRqEsu/oLWM6c0CPdQ+M0QqCUzjVw=
+	t=1773095472; cv=none; b=AmjMbxJfYAC5CWYlatNZBqnxAqnREe+Xm+jFZ5UVjut5GwfT4FPQTsjkpBtCPtAMdfu//bld3AD1eAGlPRXRIZZIuigNnfcJhlwoZ+bL//gGzvztpowmNqnP1CfxVrYyC9Dm5X1CACrz+NBpXTSkDbAAXOyVt19gvf1G6+LTbHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773094744; c=relaxed/simple;
+	s=arc-20240116; t=1773095472; c=relaxed/simple;
 	bh=hks4Il8pPCtNoIsrJKFQAI0wrnEmxkg91YtSsyPXs7U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OFB60VHvRAd2Mf4VUXk7DBRDKD0v+8WY+LPUym0NXFaEQf4XnTzbJ6EZdLLMCkLIrMggrPX+uuX2ZrRLACYRMNWGZd3ynuiiVAjlB9L5kFDoSmi3TaCAWhnJHi9lCMCo5MGngkyuXVOy95dV8mkfqnehLeu8++gorYfJ5TEH3zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thehoffs.at; spf=pass smtp.mailfrom=thehoffs.at; dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b=mZMg9QOq; arc=none smtp.client-ip=80.241.56.152
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SN2qz69EvZhIawc0NJaPi/4s6pUMTw6+nLsveq1PpCo9C2tACvqeO3zyTj1JrYsSJEAd6kEejvOyBeCyBNnD2sRgJ43tpqzdACZsQksWEYouNGU6Tgk/t8k9NG7c1Qm0/8jfvNN96VGsd0xrhRGj/WEiyV+GXZ00EJR0l6PXKq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thehoffs.at; spf=pass smtp.mailfrom=thehoffs.at; dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b=TU9wqays; arc=none smtp.client-ip=80.241.56.152
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thehoffs.at
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thehoffs.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b="mZMg9QOq"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+	dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b="TU9wqays"
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4fVBHb47S2z9v9n;
-	Mon,  9 Mar 2026 23:18:51 +0100 (CET)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4fVBYm2Jt6z9smr;
+	Mon,  9 Mar 2026 23:31:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thehoffs.at; s=MBO0001;
-	t=1773094731;
+	t=1773095468;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding;
 	bh=w2fDL4wXJ+jUboUW3U0aizbxj/HDcNybU521xcjQLe8=;
-	b=mZMg9QOqzDV7smbI2gCprCjEwlQGGXM2NTf/QQtfeEAzzseH0+F+sbF9YBvL+ItnWKU5OG
-	25bha/j7FFJAT0sxUvmaHIvvvk39N+2TgtBkvgbze/LplaVCDUwkR1iJMZT/K/a2ivZMTt
-	RM/Ll+xheKf6yYdV4JJ/uhFb/WhiddzTnYn3Z2aODE9DsiUfv8jrpsYjKkoF9r60dpRZUC
-	6mMJO+I10eOdKhZISzUuXobFUylMiqnFtRnq7c1z3s9r1wXjqJEnvd4PaslvviNwqFqdhg
-	+3dFXnp3gXL1m+p8HL4mGs9o+e2AnoPQk2pOniB1UfOSW5/ihBd0DUo2HCNYCw==
+	b=TU9wqayscBbpt+7gIRi84CKRK5TcVM4dPTAX+XE/nkXQJEi4JoYtdQB4wj0htUv/+Yq0yz
+	f50tPSAIFOh4wKgZvSKWSE2h/UazRmxRk9+oYF6iWJIpXcfqwwAI3YGGOMpxtDo/uEPfpR
+	FuL08vI9PN+16xa7QydtGo+HrelrAdN53alZVp1WLa6m/q+zJlsmuPcYUvUZkxBa/AidJc
+	KGH3i3WjzphGHO4lxaVV6tAKIQWW2E9fngPUHGnLxtZrtWWrW69QM6J9tIBruBPZm+7wkk
+	5vFND2C6Bn8gE5dYq9lugfUA4sdPIcHCJ8kXd5A8AKxzCmcmlM54Xj4XeGcxrQ==
 From: Markus Hoffmann <markus@thehoffs.at>
 To: linux-hwmon@vger.kernel.org
 Cc: linux@roeck-us.net,
 	Markus Hoffmann <markus@thehoffs.at>
 Subject: [PATCH] hwmon: (it87) Add support for IT8689E
-Date: Mon,  9 Mar 2026 22:16:03 +0000
-Message-ID: <20260309221602.167882-2-markus@thehoffs.at>
+Date: Mon,  9 Mar 2026 22:31:03 +0000
+Message-ID: <20260309223103.175443-1-markus@thehoffs.at>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
