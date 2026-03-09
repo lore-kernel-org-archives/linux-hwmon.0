@@ -1,919 +1,309 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011043.outbound.protection.outlook.com [52.101.57.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D63E3D3CF6
-	for <linux-hwmon@vger.kernel.org>; Mon,  9 Mar 2026 13:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773064202; cv=none; b=pCpUjB18oZlLV3KoWZVBKBjiMpLX9S3vVNyPzw7dx9X8w3UEEweP1MaHsGhfCGR/9I4RPBOtTUCS2yes2Vr/yjNnD7fepyKqn7kNvs1iIzUTLQ95Y8QD5IuYM1jqYGGI8CBq9M9uuF+wDSqquzBJfbmYQFg/tp2m4NhlUkL34bk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773064202; c=relaxed/simple;
-	bh=a1H+SBBQW05u1LDal81JHAzKjjd8BQIo/0vK3NvYIvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gbrtB4DH8Tr5uRhrNrCFIVF80w/K8CDG1rOBaaIONN5qwU7HT/sLKUG42SAB8Iy3kajl021WHqRnlGLHFQUcIDriZPxLmhy+Kf1HwBkYOB2I7p5RU6J+6Y6XxFcPxeOx0nptvYmbgsA1RWzL0K8QG2hzy9oI1oCIl9abC6tI+d0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz5-0006fj-Em; Mon, 09 Mar 2026 14:49:23 +0100
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz2-004XYj-1x;
-	Mon, 09 Mar 2026 14:49:21 +0100
-Received: from ore by dude04 with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1vzaz3-0000000834K-3alo;
-	Mon, 09 Mar 2026 14:49:21 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>,
-	Linus Walleij <linusw@kernel.org>
-Cc: David Jander <david@protonic.nl>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH v3 5/7] pinctrl: add NXP MC33978/MC34978 pinctrl driver
-Date: Mon,  9 Mar 2026 14:49:16 +0100
-Message-ID: <20260309134920.1918294-6-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260309134920.1918294-1-o.rempel@pengutronix.de>
-References: <20260309134920.1918294-1-o.rempel@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADC53D9045;
+	Mon,  9 Mar 2026 15:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773070888; cv=fail; b=NhL0bIbuSPBRk0vnGsgCRkFKnVyWZr8Ecdll+OxihZcZ7MlhA+8jmNQ/TuqzjMuS4ozGezCj78lxe5IBXxY2lm/vy6WiIvObpYbvrF8u9ik8RBYLJCtqf7uHY5zOo9RFGwLWyVceC8SBrHFMhH29nUF/KY7IaXAW/zbbBdLDwtM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773070888; c=relaxed/simple;
+	bh=na5MVNFfiNciV9r3sJJdgC80pfXAoV328RsuhJ1fpBs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=p8ysTwPQO5y6Qpikd5gHZkuxisgOB6UAXXT1TgN/kwF3iLahAdfjzMjQw2FJP8AcmK7BaNa9jUE7IcXv+8Dxcjgv0a+PvyY+XG+votDXjoUXIIS+kvPAr4oaG/1KQcdX4Z4knOwPgrLu1D0NDCybBh4otSvySeUWUOHrfkc4muc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QCtAWiKz; arc=fail smtp.client-ip=52.101.57.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QCtAWiKz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gAv7MedS8k86ZkkFREf7aeneoI2Ys+Zj6tRSaxn6nCoLgZGVBZ8NOUlHhl5DqEcAxyHAlGnSvPyrqAqhN3Nq8OKi3irnuBqza9rI87gGZ/DJAo/7iCfCh4LZVqdkjwvihhCHl4wy8scnCjKmskntYRMmpY+wt5Kw9XIHJ52CZxwKI9WErqEgPQsxN8XH68caWhpo7sUjDKcnos/yoKfixm36c7Px3UXORA/V+0hR7QdLdDERbs+E+x59W4ph5DB6+IshJnENnSlSrCfMqLSbBgyHap/m0Pv3av8estBLCvUJnI4+HZDL9T+IaJ3E2qBgJejzDnjZ+x+RP/M7SkHzbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cv34+U3uIcVEA9ZGaRk2DvvyrXI88OYfo+2KzJpnaNs=;
+ b=pHO8wpCNrLGWbdZZmTnq4yqaSGpjvqEn/ElqxVvkKAkotuXw9/dO2hl0zH0GEMH3kASfTpgN38t39AzudSaPeQmZJjzoteJTzbc0nLQvm5EXr8vLyzn4H5BSXi440nyu7DyiMwmPcE8krgKI4tGKoBZtHZlykxrJlWzVS+x3Oz8mQX62M1KnIXV2nNnFuOPgEO5RIICucMkE9uRQSfrzInmfayOYDmbP82ueC/t5xKhIEh7KCkXl3abd1ccrEeygiGf9tdGOdIUVL9y6NBBdbTFaJTksnKsxQooAgchl0Vm+maN2Ok3L6WPtDmiuI2lzDAEPq8LEc3U6UYFhHA8DjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cv34+U3uIcVEA9ZGaRk2DvvyrXI88OYfo+2KzJpnaNs=;
+ b=QCtAWiKzLc2USXUxHvx2ZC52xss8rKoERWg452k8P2+Gb+YluSE0c0W17QOBmDHCc19VcbR5YbSpLTAAp1jqSSDvCnhlV/jeUA7eHB49qpDXyz8/S62A0yK9NIj/i/a7ZISlPTn3Av6TAct5JNsIcxltXr5iG+/7FeQq8bwNQ+M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com (2603:10b6:806:9d::10)
+ by SA3PR12MB7973.namprd12.prod.outlook.com (2603:10b6:806:305::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.11; Mon, 9 Mar
+ 2026 15:41:23 +0000
+Received: from SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287]) by SA0PR12MB4557.namprd12.prod.outlook.com
+ ([fe80::885a:79b3:8288:287%5]) with mapi id 15.20.9700.010; Mon, 9 Mar 2026
+ 15:41:23 +0000
+Message-ID: <39bdcdf7-a771-4f1b-a3a0-0ecde272d914@amd.com>
+Date: Mon, 9 Mar 2026 10:41:20 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] platform/x86: dell-descriptor: Use new buffer-based
+ WMI API
+To: Armin Wolf <W_Armin@gmx.de>, Dell.Client.Kernel@dell.com,
+ pali@kernel.org, mjg59@srcf.ucam.org
+Cc: hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+ platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux@roeck-us.net, linux-hwmon@vger.kernel.org
+References: <20260308002522.4185-1-W_Armin@gmx.de>
+ <20260308002522.4185-2-W_Armin@gmx.de>
+Content-Language: en-US
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20260308002522.4185-2-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR13CA0060.namprd13.prod.outlook.com
+ (2603:10b6:610:b2::35) To SA0PR12MB4557.namprd12.prod.outlook.com
+ (2603:10b6:806:9d::10)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4557:EE_|SA3PR12MB7973:EE_
+X-MS-Office365-Filtering-Correlation-Id: a516af3d-b561-4f0e-607c-08de7df25151
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	38YCcDxIzPoq5N+UDzEzT0Z9ZqW5zoHUpc0vna+1EUpUlhyGwOp5bilnVobJN9wpfPOTn9HTbamtn82cmTRWzIekmpT6zzGb2SLpKya7z395b1npD4jNXj7FwpbDdJXy/HCPwctnK7UlC9RpvDQHig7rNEcLLKZNkqA+sqdIh3vJdLO8RpOXaCQSMQGVrqiirmHl8hthFR8BvCM+mCEvrBlNRgT2i5gLnmwWwqTWLTVNYwfOltnwzP6NeVm3mMPcfP906jSQQDXWsHBlEE5Dp4VKIp4rqVfw88a557Est7lTN3YJSkSnVtI4p/wlx2lwtqT9MmT4pMl73h+B+527EoDcMM0iVsboaHan2G+wGXFoqwLTT1mBSO2J28328SwmBjyf1BqPGhs+tZYBaNqzql9NOWjZ7md4+ILq8xXNPFkPkaF0GazS2nsOi/qRQU+3xicU3rF5r+lv7SNjZ5dW7AglN5YwcnPEzrDj+8bt6jlQM6mFOFW77koOzcJv9zwwko1g2Eu/73O+YNv6FdAeXnWaz9Zhd2MEYPAgHMiwJPuwAvTH+IBqMgKa1gKhflXOfmIjSM6QoWnhJoZtovGswpRpqmrtpkycBCf2YYux0FOFMwOEOpFzGPASV18AHl2PbjqyxpIVvA1BpkZzLco42y1RZQLKcPLbcpHtYsV2+AKx9SEHQHGRSUgwjYoE8GXxMTc7QXGWuTfAY9h3AfmTIjNIqLmo9KnIpyG6N+VRz18=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4557.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NEV1MElpbUpPa29RcnVpaGZIY1Vxa3R3V0FFUlh3NU5IRUhzMXArZlZBTWlK?=
+ =?utf-8?B?dTJ0ZE1HOTZCb21GQU1GcHJpZWw2UXlmRzBQd0FtSFhQNkM5UUk0QTZ6MG05?=
+ =?utf-8?B?RW0ySWhnWGVGckQ1OUtXNHhuaEtmN2dCSWFHKzVNQ0ZMemZTbXBmQzRraFk5?=
+ =?utf-8?B?OFFQQVRzOXhpNVVFVmVqeC9CR3NoL3h2OVBFclNlWG5PcjROSy96cVBsNVA3?=
+ =?utf-8?B?bnJQQzJSWjVLSi8zVDFlak5aMVVuUjYwN0xaSy8zaGFpRUxzemxlU0FvdjBD?=
+ =?utf-8?B?TWpiTlZEdC9nRGVBb3NBUTdSbE1HcHhVdVN4Nm4wSWd3bjhsT25LWGZoU0Q0?=
+ =?utf-8?B?VE9xbjV3dHBEREV0Yi80dnd1cFNKd2NKWkUyVjBYWUNkaHhjQjhlQUVDSEs0?=
+ =?utf-8?B?RGhtQ2Rnc1lMUHNNck91a1VqeUtoRGNaODhrczIwbHpQTEZIVTBHSnNPelB0?=
+ =?utf-8?B?bkF0QkRFOVQ4OHVHQVczU0I0cnRkRVhEbWdIVlhoeUl3K0hqQ3VlcVJsa0Yv?=
+ =?utf-8?B?TGFmV3dMVElia3NxaW44Yy9sSGFZenBYNi9FZlgxbHdqN0ZGb0RKdXhMOVZx?=
+ =?utf-8?B?TjF2ZG5ybjFIODFsdHdKVDRtTFM4UHZ3WnRnVWRnMHVHNXMvSFRkTGtHcHhT?=
+ =?utf-8?B?Uy9HUzlOVnZ5bkpOOVcvUEViY0U1KzJ5TDRoNU5yYmVZYUZwYzMvU3NkYXJL?=
+ =?utf-8?B?U2p4bFc3RnA1MFkxMWVaaExHUmNheEg5NzdVRW5nNDE2WlhHbEdncENTWU9s?=
+ =?utf-8?B?T2pvcUh2bTk3TVg0TWlRbHNBcW9BbU9PMEVXajBkdmhYTEIxM08vTXdlVnZs?=
+ =?utf-8?B?bFlBUy81Mng3cVZETUhOaHZNUkRyVm9uK3FhcFBIdG1TS3lxengrU3RUZVFH?=
+ =?utf-8?B?RS9RVWRxd01mbmI1SldDYkJUTGFLaTczTlN6djlpYmxLd29YOHlnOGlQQkxG?=
+ =?utf-8?B?dEpNMi96OXI3cC9OdHJJYmRPQUp4MjZ5MWlFajRHZmd3MmdUMHlKVXpGT0pm?=
+ =?utf-8?B?Zmcvb0ZrbWhoVmdjcWZFb0FmYWtJRFNkQTF3eXZoTVdDaXVSOERGTFZrUzVw?=
+ =?utf-8?B?R0hTM0VQUndlL0pVa01YejNvbUlyWmZvaVdJdUJ6U0ZxenBSZTFKU2swSHNp?=
+ =?utf-8?B?RmYzbkZyQTRuWDJuWXJFWTgzcXJCdlhVUmd2MWc4SkJPLzNvbmdPVEpUR29J?=
+ =?utf-8?B?R3BjNm12N2RpRnZnRSt4cm1zMldQbmNOMk9VMEJyL3ZZcitLUG50QnkzZTdq?=
+ =?utf-8?B?Q0Y4Rzc5YzZjN3hWSWtCTEVvbXIzYm51VGVwdUlkaE1GeElLVzNUY0NzeUJM?=
+ =?utf-8?B?SEFSMDBVeFhTaHNPdHBpd2VQTGVzVENMNnlsdDJ1RlVFeWlMcmR4UC9TQWFl?=
+ =?utf-8?B?czFoTlRRUUFzQ1VyTUtkNWZRTWR2ZjJCcnRIQ0YrVFFiRHRkTDRnK20vSGJF?=
+ =?utf-8?B?Zm5qWnFrQWNkc09rNDJ3RzVpVlE0c21iZXVVWVhBZ00wOERNZ1R6UkFSRXhP?=
+ =?utf-8?B?QVIxQjZWQndsdHdhL1B2NWdXN0FVUVJObm5sZVEvK2h5R1l5K0FtM3IxM2lz?=
+ =?utf-8?B?ZllkWWFWYmJoc0NhRkowMEtFTFNqY2lmZkZQWkpRUVRkd2lBaThlQ0tNSnB4?=
+ =?utf-8?B?Y0dwREpYVTJjQVd0UU5qV01NVlhRZWhTelMrNWJsUndYcHRlbnE0dHVaK1NQ?=
+ =?utf-8?B?TmxIeDZ1cEZjdUlmNEE3djJDbnc0WTJXTFlyMUppSTlrZVNKM0JQeUgwSTA2?=
+ =?utf-8?B?a2JPVERNeVpmNmZDVllZQnlnOVl0UWRoaUg5aSt1a2JGUjVmZjF0eFE2T3J6?=
+ =?utf-8?B?WEgrMXRUMXVORkpoWnBZbWZUK1ZZYWlqOWRuTUNvVGxMaHdOOWpJK0pUS2hU?=
+ =?utf-8?B?ZUpNR1VtUnNaUmJ6U0ZCZVlTQlA3Mm43UW9tM05NaVcyR2pEU1ZYL3pWSWZU?=
+ =?utf-8?B?Vm8wS0J3eWhiU2kxbVpzSysrbllxaWV6aGVNMU13d01sb093L3R0NzdJbGdW?=
+ =?utf-8?B?bU5mWE8wb0NsUnlGMlpOQnA0M2JnZm5lcHpvSFZJSjhDZmlDcVRLMGVnaElU?=
+ =?utf-8?B?ZnlGcmZsdGpnSHd1cXA0cXNVZlUxRExXRTl0RUw0aFEzNm05cURQWVUvQXJO?=
+ =?utf-8?B?Ym02THQvV3M1a1lPaHJHOFZEcDhEK1V6MXBIK3QxbTd3UERYY1o0TWRBOEtB?=
+ =?utf-8?B?dG43dU9hZFJQSHpTZWpmREh4Wis2QTBZbmZaUWV1UDNrK1g2bjhVdytSNnlR?=
+ =?utf-8?B?d2JkcG1tWTZGNjEwcXNzVTBRb3RrR28zem5CSFVsK3B2ZU5nY1E1ZFZEVmtQ?=
+ =?utf-8?B?elNrNGx3QmZWZGdDVCswanJEbkZkUk13MEJod3crQ3hTZ0xZMnFzQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a516af3d-b561-4f0e-607c-08de7df25151
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4557.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2026 15:41:23.4283
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uEbxN8QZz5PRF1R859+l21pCEs4PgQu+h79xSaZhBj8XwiZCCutO/tJ6Cw3TdC5sjadbBc7kYvJktsEKbon3Pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7973
 
-From: David Jander <david@protonic.nl>
 
-Add pin control and GPIO driver for the NXP MC33978/MC34978 Multiple
-Switch Detection Interface (MSDI) devices.
 
-This driver exposes the 22 mechanical switch detection inputs (14
-Switch-to-Ground, 8 Programmable) as standard GPIOs.
+On 3/7/2026 6:25 PM, Armin Wolf wrote:
+> Use the new buffer-based WMI API to also support ACPI firmware
+> implementations that do not use ACPI buffers for the descriptor.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>   .../platform/x86/dell/dell-wmi-descriptor.c   | 96 ++++++++++---------
+>   1 file changed, 49 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-wmi-descriptor.c b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> index c2a180202719..621502368895 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-descriptor.c
+> @@ -7,7 +7,7 @@
+>   
+>   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>   
+> -#include <linux/acpi.h>
+> +#include <linux/compiler_attributes.h>
+>   #include <linux/list.h>
+>   #include <linux/module.h>
+>   #include <linux/wmi.h>
+> @@ -15,6 +15,24 @@
+>   
+>   #define DELL_WMI_DESCRIPTOR_GUID "8D9DDCBC-A997-11DA-B012-B622A1EF5492"
+>   
+> +/*
+> + * Descriptor buffer is 128 byte long and contains:
+> + *
+> + *       Name             Offset  Length  Value
+> + * Vendor Signature          0       4    "DELL"
+> + * Object Signature          4       4    " WMI"
+> + * WMI Interface Version     8       4    <version>
+> + * WMI buffer length        12       4    <length>
+> + * WMI hotfix number        16       4    <hotfix>
+> + */
+> +struct descriptor {
+> +	__le32 vendor_signature;
+> +	__le32 object_signature;
+> +	__le32 interface_version;
+> +	__le32 buffer_length;
+> +	__le32 hotfix_number;
+> +} __packed;
+> +
+>   struct descriptor_priv {
+>   	struct list_head list;
+>   	u32 interface_version;
+> @@ -88,76 +106,60 @@ bool dell_wmi_get_hotfix(u32 *hotfix)
+>   }
+>   EXPORT_SYMBOL_GPL(dell_wmi_get_hotfix);
+>   
+> -/*
+> - * Descriptor buffer is 128 byte long and contains:
+> - *
+> - *       Name             Offset  Length  Value
+> - * Vendor Signature          0       4    "DELL"
+> - * Object Signature          4       4    " WMI"
+> - * WMI Interface Version     8       4    <version>
+> - * WMI buffer length        12       4    <length>
+> - * WMI hotfix number        16       4    <hotfix>
+> - */
+> -static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+> -				     const void *context)
+> +static int dell_wmi_descriptor_probe(struct wmi_device *wdev, const void *context)
+>   {
+> -	union acpi_object *obj = NULL;
+>   	struct descriptor_priv *priv;
+> -	u32 *buffer;
+> +	struct wmi_buffer buffer;
+> +	struct descriptor *desc;
+>   	int ret;
+>   
+> -	obj = wmidev_block_query(wdev, 0);
+> -	if (!obj) {
+> -		dev_err(&wdev->dev, "failed to read Dell WMI descriptor\n");
+> -		ret = -EIO;
+> -		goto out;
+> -	}
+> +	ret = wmidev_query_block(wdev, 0, &buffer);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -	if (obj->type != ACPI_TYPE_BUFFER) {
+> -		dev_err(&wdev->dev, "Dell descriptor has wrong type\n");
+> +	if (buffer.length < sizeof(*desc)) {
+> +		dev_err(&wdev->dev,
+> +			"Dell descriptor buffer contains not enough data (%zu)\n",
+> +			buffer.length);
+>   		ret = -EINVAL;
+>   		descriptor_valid = ret;
+>   		goto out;
+>   	}
+>   
+> -	/* Although it's not technically a failure, this would lead to
+> -	 * unexpected behavior
+> -	 */
+> -	if (obj->buffer.length != 128) {
+> -		dev_err(&wdev->dev,
+> -			"Dell descriptor buffer has unexpected length (%d)\n",
+> -			obj->buffer.length);
+> -		ret = -EINVAL;
+> +	desc = buffer.data;
+> +
+> +	/* "DELL" */
+> +	if (le32_to_cpu(desc->vendor_signature) != 0x4C4C4544) {
 
-Key features implemented:
-- GPIO read/write: Translates physical switch states (open/closed)
-  to logical GPIO levels based on the configured switch topology
-  (Switch-to-Ground vs. Switch-to-Battery).
-- Emulated Output: Allows setting pins "high" or "low" by manipulating
-  the tri-state registers and hardware pull topologies.
-- Interrupt routing: Proxies GPIO interrupt requests to the irq_domain
-  managed by the parent MFD core driver.
+Do you think you could come up with a helper for matching an expected 
+"string" like this?  I /suspect/ it's going to be a common pattern that 
+vendors use and it will increase code readability going forward if a 
+helper is possible.  I see it at least twice in this patch alone.
 
-Signed-off-by: David Jander <david@protonic.nl>
-Co-developed-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v3:
-- replace manual mutex_lock()/mutex_unlock() paths with guard(mutex)
-- Unify error checking style by replacing if (ret < 0) with if (ret)
-- Migrate from a custom .to_irq callback to a hierarchical gpio_irq_chip
-- Implement .irq_bus_lock and .irq_bus_sync_unlock proxies to properly
-  cascade SPI bus lock operations to the parent MFD domain
-- Set girq->handler to handle_simple_irq
-changes v2:
-- Translate all remaining German comments to English.
-- Remove unnecessary #ifdef CONFIG_OF wrappers around dt_node_to_map.
-- Add detailed comments to mc33978_get() and mc33978_get_multiple() explaining
-  the hardware comparator logic (1 = closed, 0 = open) and justifying the
-  bitwise inversion required to report actual physical voltage levels.
-- Add comments to the .set() and .set_config() callbacks explaining why
-  gpiolib's standard open-drain emulation (switching to input mode) fails on
-  this hardware due to active wetting currents, and why tri-state isolation is
-  mandatory.
-- Add a comment to mc33978_gpio_to_irq() explaining why it must act as a
-  proxy to the parent MFD's irq_domain (shared physical INT_B line with hwmon).
-- Drop dummy pin group callbacks (get_groups_count, etc.). This relies on a
-  preparatory patch in this series making these callbacks optional in the core.
-- Fix debugfs 'pinconf-pins' read errors by correctly returning -ENOTSUPP
-  instead of -EOPNOTSUPP for unsupported generic configurations.
-- Fix empty 'gpio-ranges' and missing debugfs labels by explicitly calling
-  gpiochip_add_pin_range() during probe.
-- Eliminate "magic" bitwise math in the wetting current configuration by
-  introducing a static lookup array (mc33978_wet_mA).
-- Resolve checkpatch.pl strict warnings regarding macro argument reuse by
-  converting MC33978_SPSG, MC33978_PINSHIFT, MC33978_WREG, and MC33978_WSHIFT
-  to static inline functions.
-- Remove artifacts from previous interrupt handling implementations.
-- Address minor formatting and whitespace nits.
----
- drivers/pinctrl/Kconfig           |  14 +
- drivers/pinctrl/Makefile          |   1 +
- drivers/pinctrl/pinctrl-mc33978.c | 749 ++++++++++++++++++++++++++++++
- 3 files changed, 764 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-mc33978.c
+Something like this prototype:
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index afecd9407f53..c315656c0fe5 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -388,6 +388,20 @@ config PINCTRL_MAX77620
- 	  function in alternate mode. This driver also configure push-pull,
- 	  open drain, FPS slots etc.
- 
-+config PINCTRL_MC33978
-+	tristate "MC33978/MC34978 industrial input controller support"
-+	depends on MFD_MC33978
-+	select GPIOLIB
-+	select GENERIC_PINCONF
-+	help
-+	  Say Y here to enable support for NXP MC33978/MC34978 Multiple
-+	  Switch Detection Interface (MSDI) devices. This driver provides
-+	  pinctrl and GPIO interfaces for the 22 mechanical switch inputs
-+	  (14 Switch-to-Ground, 8 Programmable).
-+
-+	  It allows reading switch states, configuring hardware pull
-+	  topologies, and handling interrupts for state changes.
-+
- config PINCTRL_MCP23S08_I2C
- 	tristate
- 	select REGMAP_I2C
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index f7d5d5f76d0c..afb58fb5a197 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
- obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
- obj-$(CONFIG_PINCTRL_MAX7360)	+= pinctrl-max7360.o
- obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
-+obj-$(CONFIG_PINCTRL_MC33978)	+= pinctrl-mc33978.o
- obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
- obj-$(CONFIG_PINCTRL_MCP23S08_SPI)	+= pinctrl-mcp23s08_spi.o
- obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
-diff --git a/drivers/pinctrl/pinctrl-mc33978.c b/drivers/pinctrl/pinctrl-mc33978.c
-new file mode 100644
-index 000000000000..c7fe227e950b
---- /dev/null
-+++ b/drivers/pinctrl/pinctrl-mc33978.c
-@@ -0,0 +1,749 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
-+ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
-+ *
-+ * MC33978/MC34978 Multiple Switch Detection Interface - Pinctrl/GPIO Driver
-+ *
-+ * Provides GPIO and pinctrl interfaces for the 22 switch detection inputs.
-+ * Handles digital input reading and wetting current configuration. Analog AMUX
-+ * functionality is handled by a separate mux driver.
-+ *
-+ * GPIO Mapping:
-+ * - GPIO 0-13:  SG0-SG13 (Switch-to-Ground inputs)
-+ * - GPIO 14-21: SP0-SP7 (Programmable: Switch-to-Ground or Switch-to-Battery)
-+ * This is dictated by the READ_IN register where bits [21:14] = SP[7:0]
-+ * and bits [13:0] = SG[13:0].
-+ *
-+ * Register Organization:
-+ * Configuration registers are generally paired. The _SP register at offset N
-+ * controls SP0-SP7, and the _SG register at offset N+2 controls SG0-SG13.
-+ *
-+ * Wetting Currents vs. Pull Resistors:
-+ * The hardware physically lacks traditional passive pull-up or pull-down
-+ * resistors. Instead, it uses active, controllable current regulators
-+ * (wetting currents) to detect switch states and clean mechanical contacts.
-+ * - Because these are active current sources, specifying an ohmic value for
-+ * pull-up/down biases is physically invalid. The driver ignores ohm arguments.
-+ * - 8 selectable current values: 2, 6, 8, 10, 12, 14, 16, 20 mA.
-+ * - Exposed via the pinconf PIN_CONFIG_DRIVE_STRENGTH parameter (in mA).
-+ *
-+ * Emulated Outputs:
-+ * The hardware lacks traditional push-pull output drivers; it is strictly an
-+ * input device. "Outputs" are simulated by toggling the wetting currents and
-+ * physically isolating the pins via hardware tri-state registers. Consequently,
-+ * consumers MUST flag outputs with GPIO_OPEN_DRAIN or GPIO_OPEN_SOURCE in
-+ * the Device Tree.
-+ *
-+ * Input Detection Mechanics:
-+ * This input mechanism relies on the active current regulators rather than
-+ * passive hard resistors. For a Switch-to-Ground (SG) pin, the chip sources
-+ * a constant current. When the switch is open, the pin voltage floats up to
-+ * the battery voltage. When the switch closes, it creates a path to ground;
-+ * because the current is strictly regulated, the pin voltage drops sharply
-+ * below the internal 4.0V comparator threshold.
-+ * * The hardware evaluates this and reports an abstract "contact status"
-+ * (1 = closed, 0 = open). For SG pins, a closed switch (~0V) reports as '1'.
-+ * To align with gpiolib expectations where ~0V equals a physical logical '0',
-+ * this driver explicitly inverts the hardware status for all SG-configured
-+ * pins before reporting them.
-+ *
-+ * Interrupts:
-+ * The physical INT_B line and threaded IRQ domain are managed centrally by
-+ * the parent MFD core. This driver simply proxies .to_irq() to the parent.
-+ *
-+ * Written by David Jander <david@protonic.nl>
-+ *
-+ * Datasheet:
-+ * https://www.nxp.com/docs/en/data-sheet/MC33978.pdf
-+ */
-+
-+#include <linux/cleanup.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/seq_file.h>
-+
-+#include <linux/mfd/mc33978.h>
-+
-+#define MC33978_NGPIO		22
-+
-+/*
-+ * Input numbering is dictated by bit-order of the input register:
-+ * Inputs 0-13 -> SG0-SG13
-+ * Inputs 14-21 -> SP0-SP7
-+ */
-+#define MC33978_NUM_SG		14
-+#define MC33978_SP_MASK		GENMASK(MC33978_NGPIO - 1, MC33978_NUM_SG)
-+#define MC33978_SG_MASK		GENMASK(MC33978_NUM_SG - 1, 0)
-+#define MC33978_SG_SHIFT	0
-+#define MC33978_SP_SHIFT	MC33978_NUM_SG
-+
-+#define MC33978_TRISTATE	0
-+#define MC33978_PU		1
-+#define MC33978_PD		2
-+
-+struct mc33978_pinctrl {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	int irq;
-+
-+	struct irq_domain *domain;
-+
-+	struct gpio_chip chip;
-+	struct pinctrl_dev *pctldev;
-+	struct pinctrl_desc pinctrl_desc;
-+
-+	/*
-+	 * Protects multi-register hardware sequences in .set() and atomic
-+	 * READ_IN + CONFIG reads in .get()
-+	 */
-+	struct mutex lock;
-+};
-+
-+static const struct pinctrl_pin_desc mc33978_pins[] = {
-+	PINCTRL_PIN(0, "sg0"),
-+	PINCTRL_PIN(1, "sg1"),
-+	PINCTRL_PIN(2, "sg2"),
-+	PINCTRL_PIN(3, "sg3"),
-+	PINCTRL_PIN(4, "sg4"),
-+	PINCTRL_PIN(5, "sg5"),
-+	PINCTRL_PIN(6, "sg6"),
-+	PINCTRL_PIN(7, "sg7"),
-+	PINCTRL_PIN(8, "sg8"),
-+	PINCTRL_PIN(9, "sg9"),
-+	PINCTRL_PIN(10, "sg10"),
-+	PINCTRL_PIN(11, "sg11"),
-+	PINCTRL_PIN(12, "sg12"),
-+	PINCTRL_PIN(13, "sg13"),
-+	PINCTRL_PIN(14, "sp0"),
-+	PINCTRL_PIN(15, "sp1"),
-+	PINCTRL_PIN(16, "sp2"),
-+	PINCTRL_PIN(17, "sp3"),
-+	PINCTRL_PIN(18, "sp4"),
-+	PINCTRL_PIN(19, "sp5"),
-+	PINCTRL_PIN(20, "sp6"),
-+	PINCTRL_PIN(21, "sp7"),
-+};
-+
-+static inline bool mc33978_is_sp(unsigned int pin)
-+{
-+	return pin >= MC33978_NUM_SG;
-+}
-+
-+/* Choose register offset for _SG/_SP registers. reg is always the _SP addr. */
-+static inline u8 mc33978_spsg(u8 reg, unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? reg : reg + 2;
-+}
-+
-+/* Get the bit index into the corresponding register */
-+static inline unsigned int mc33978_pinshift(unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? pin - MC33978_NUM_SG : pin;
-+}
-+
-+#define MC33978_PINMASK(pin)	BIT(mc33978_pinshift(pin))
-+
-+/*
-+ * Wetting current registers: 3 in total, each pin uses a 3-bit field,
-+ * 8 pins per register, except for the last one.
-+ */
-+static inline u8 mc33978_wreg(u8 reg, unsigned int pin)
-+{
-+	return reg + (mc33978_is_sp(pin) ? 0 : 2 + 2 * (pin / 8));
-+}
-+
-+static inline unsigned int mc33978_wshift(unsigned int pin)
-+{
-+	return mc33978_is_sp(pin) ? 3 * (pin - MC33978_NUM_SG) : 3 * (pin % 8);
-+}
-+
-+#define MC33978_WMASK(pin)	(7 << mc33978_wshift(pin))
-+
-+static int mc33978_read(struct mc33978_pinctrl *mpc, u8 reg, u32 *val)
-+{
-+	int ret;
-+
-+	ret = regmap_read(mpc->regmap, reg, val);
-+	if (ret)
-+		dev_err_ratelimited(mpc->dev, "Regmap read error %d at reg: %02x.\n",
-+				    ret, reg);
-+	return ret;
-+}
-+
-+static int mc33978_update_bits(struct mc33978_pinctrl *mpc, u8 reg, u32 mask, u32 val)
-+{
-+	int ret;
-+
-+	ret = regmap_update_bits(mpc->regmap, reg, mask, val);
-+	if (ret)
-+		dev_err_ratelimited(mpc->dev, "Regmap update bits error %d at reg: %02x.\n",
-+				    ret, reg);
-+	return ret;
-+}
-+
-+static const struct pinctrl_ops mc33978_pinctrl_ops = {
-+	.dt_node_to_map = pinconf_generic_dt_node_to_map_pin,
-+	.dt_free_map = pinconf_generic_dt_free_map,
-+};
-+
-+static int mc33978_get_pull(struct mc33978_pinctrl *mpc, unsigned int pin, int *val)
-+{
-+	unsigned int data;
-+	int ret;
-+
-+	ret = mc33978_read(mpc, mc33978_spsg(MC33978_REG_TRI_SP, pin), &data);
-+	if (ret)
-+		return ret;
-+
-+	/* Is the pin tri-stated? */
-+	if (data & MC33978_PINMASK(pin)) {
-+		*val = MC33978_TRISTATE;
-+		return 0;
-+	}
-+
-+	/* Pins 0..13 only support pull-up */
-+	if (!mc33978_is_sp(pin)) {
-+		*val = MC33978_PU;
-+		return 0;
-+	}
-+
-+	/* Check pin pull direction for pins 14..21 */
-+	ret = mc33978_read(mpc, MC33978_REG_CONFIG, &data);
-+	if (ret)
-+		return ret;
-+
-+	if (data & MC33978_PINMASK(pin))
-+		*val = MC33978_PD;
-+	else
-+		*val = MC33978_PU;
-+
-+	return 0;
-+}
-+
-+static int mc33978_set_pull(struct mc33978_pinctrl *mpc, unsigned int pin, int val)
-+{
-+	unsigned int mask = MC33978_PINMASK(pin);
-+	int ret;
-+
-+	/* SG pins physically lack pull-downs current sources */
-+	if (val == MC33978_PD && !mc33978_is_sp(pin))
-+		return -EINVAL;
-+
-+	/* Configure direction (Exclusively for SP pins) */
-+	if (mc33978_is_sp(pin) && val != MC33978_TRISTATE) {
-+		ret = mc33978_update_bits(mpc, MC33978_REG_CONFIG, mask,
-+					  (val == MC33978_PD) ? mask : 0);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Enable current source or set to tri-state  */
-+	return mc33978_update_bits(mpc, mc33978_spsg(MC33978_REG_TRI_SP, pin),
-+				   mask,
-+				   (val == MC33978_TRISTATE) ? mask : 0);
-+}
-+
-+static const unsigned int mc33978_wet_mA[] = { 2, 6, 8, 10, 12, 14, 16, 20 };
-+
-+static int mc33978_set_ds(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			  unsigned int val)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mc33978_wet_mA); i++) {
-+		if (val == mc33978_wet_mA[i]) {
-+			return mc33978_update_bits(mpc,
-+					mc33978_wreg(MC33978_REG_WET_SP, pin),
-+					MC33978_WMASK(pin),
-+					i << mc33978_wshift(pin));
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int mc33978_get_ds(struct mc33978_pinctrl *mpc, unsigned int pin,
-+			  unsigned int *val)
-+{
-+	unsigned int data;
-+	int ret;
-+
-+	ret = mc33978_read(mpc, mc33978_wreg(MC33978_REG_WET_SP, pin), &data);
-+	if (ret)
-+		return ret;
-+
-+	data &= MC33978_WMASK(pin);
-+	data >>= mc33978_wshift(pin);
-+
-+	if (data >= ARRAY_SIZE(mc33978_wet_mA))
-+		return -EINVAL;
-+
-+	*val = mc33978_wet_mA[data];
-+
-+	return 0;
-+}
-+
-+static int mc33978_pinconf_get(struct pinctrl_dev *pctldev, unsigned int pin,
-+			       unsigned long *config)
-+{
-+	struct mc33978_pinctrl *mpc = pinctrl_dev_get_drvdata(pctldev);
-+	enum pin_config_param param = pinconf_to_config_param(*config);
-+	unsigned int data, status;
-+	int ret;
-+
-+	switch (param) {
-+	case PIN_CONFIG_BIAS_PULL_UP:
-+		ret = mc33978_get_pull(mpc, pin, &data);
-+		if (ret)
-+			return ret;
-+		status = (data == MC33978_PU);
-+		break;
-+	case PIN_CONFIG_BIAS_PULL_DOWN:
-+		ret = mc33978_get_pull(mpc, pin, &data);
-+		if (ret)
-+			return ret;
-+		status = (data == MC33978_PD);
-+		break;
-+	case PIN_CONFIG_BIAS_DISABLE:
-+	case PIN_CONFIG_BIAS_HIGH_IMPEDANCE:
-+		ret = mc33978_get_pull(mpc, pin, &data);
-+		if (ret)
-+			return ret;
-+		status = (data == MC33978_TRISTATE);
-+		break;
-+	case PIN_CONFIG_DRIVE_STRENGTH:
-+		ret = mc33978_get_ds(mpc, pin, &data);
-+		if (ret)
-+			return ret;
-+		*config = pinconf_to_config_packed(param, data);
-+		status = 1;
-+		break;
-+	default:
-+		/*
-+		 * Ignore checkpatch warning: the pinctrl core specifically
-+		 * expects -ENOTSUPP to silently skip unsupported generic
-+		 * parameters. Using -EOPNOTSUPP causes debugfs read failures.
-+		 */
-+		return -ENOTSUPP;
-+	}
-+
-+	return status ? 0 : -EINVAL;
-+}
-+
-+/*
-+ * Hardware constraint regarding PIN_CONFIG_BIAS_PULL_UP/DOWN:
-+ * The MC33978 utilizes active constant current sources (wetting currents)
-+ * rather than passive pull-resistors. Since the equivalent ohmic resistance
-+ * scales dynamically with the fluctuating board voltage (VBATP), computing
-+ * a static ohm value is physically invalid.
-+ * The driver intentionally ignores resistance arguments during configuration
-+ * and continuously reports 0 ohms to the pinctrl framework.
-+ */
-+static int mc33978_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
-+			       unsigned long *configs, unsigned int num_configs)
-+{
-+	struct mc33978_pinctrl *mpc = pinctrl_dev_get_drvdata(pctldev);
-+	enum pin_config_param param;
-+	int ret = 0;
-+	u32 arg;
-+	int i;
-+
-+	for (i = 0; i < num_configs; i++) {
-+		param = pinconf_to_config_param(configs[i]);
-+		arg = pinconf_to_config_argument(configs[i]);
-+
-+		/*
-+		 * The hardware physically lacks push-pull output drivers.
-+		 * By explicitly handling OPEN_DRAIN and OPEN_SOURCE here, we
-+		 * signal to gpiolib that we support these modes "natively".
-+		 * This crucially prevents gpiolib from falling back to its
-+		 * software emulation (which sets the pin to input mode to
-+		 * achieve High-Z). On the MC33978, input mode is NOT High-Z;
-+		 * it actively drives the line with a wetting current!
-+		 */
-+		switch (param) {
-+		case PIN_CONFIG_DRIVE_OPEN_SOURCE:
-+		case PIN_CONFIG_BIAS_PULL_UP:
-+			ret = mc33978_set_pull(mpc, pin, MC33978_PU);
-+			break;
-+		case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-+		case PIN_CONFIG_BIAS_PULL_DOWN:
-+			if (!mc33978_is_sp(pin)) {
-+				dev_err(mpc->dev, "Pin %u is SG and does not support pull-down\n",
-+					pin);
-+				return -EINVAL;
-+			}
-+			ret = mc33978_set_pull(mpc, pin, MC33978_PD);
-+			break;
-+		case PIN_CONFIG_DRIVE_STRENGTH_UA:
-+			arg /= 1000;
-+			fallthrough;
-+		case PIN_CONFIG_DRIVE_STRENGTH:
-+			ret = mc33978_set_ds(mpc, pin, arg);
-+			break;
-+		default:
-+			/*
-+			 * Required by the pinctrl core to safely fall back or
-+			 * skip unsupported configs. Do not use -EOPNOTSUPP.
-+			 */
-+			return -ENOTSUPP;
-+		}
-+
-+		if (ret) {
-+			dev_err(mpc->dev, "Failed to set config param %04x for pin %u: %d\n",
-+				param, pin, ret);
-+			return ret;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct pinconf_ops mc33978_pinconf_ops = {
-+	.pin_config_get = mc33978_pinconf_get,
-+	.pin_config_set = mc33978_pinconf_set,
-+	.is_generic = true,
-+};
-+
-+static int mc33978_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+
-+	/*
-+	 * This chip only has inputs. We emulate outputs by setting a
-+	 * wetting current and/or using the tri-state register to turn it on
-+	 * and off. If a pin was an output and is now tri-stated, we should
-+	 * disable the tri-state now to make the input work correctly.
-+	 */
-+	guard(mutex)(&mpc->lock);
-+	return mc33978_update_bits(mpc, mc33978_spsg(MC33978_REG_TRI_SP, offset),
-+				   MC33978_PINMASK(offset), 0);
-+}
-+
-+static int mc33978_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	bool is_switch_to_ground = true;
-+	bool is_switch_closed;
-+	int status, ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	/* Read hardware switch status (open or closed) */
-+	ret = mc33978_read(mpc, MC33978_REG_READ_IN, &status);
-+	if (ret)
-+		return ret;
-+
-+	is_switch_closed = !!(status & BIT(offset));
-+
-+	/* Determine current topology for SP pins */
-+	if (mc33978_is_sp(offset)) {
-+		int config_reg;
-+
-+		ret = mc33978_read(mpc, MC33978_REG_CONFIG, &config_reg);
-+		if (ret == 0) {
-+			/* CONFIG: 0 = Switch-to-Ground (PU), 1 = Switch-to-Battery (PD) */
-+			if (config_reg & MC33978_PINMASK(offset))
-+				is_switch_to_ground = false;
-+		}
-+	}
-+
-+	/*
-+	 * The hardware evaluates pin voltage against a threshold (default 4.0V)
-+	 * and reports an abstract contact status (1 = closed, 0 = open):
-+	 *
-+	 * SG (Switch-to-Ground) topology (pull-up current source):
-+	 * - Voltage > Threshold: Switch Open   (HW reports 0) -> Physical High
-+	 * - Voltage < Threshold: Switch Closed (HW reports 1) -> Physical Low
-+	 *
-+	 * SB (Switch-to-Battery) topology (pull-down current source):
-+	 * - Voltage > Threshold: Switch Closed (HW reports 1) -> Physical High
-+	 * - Voltage < Threshold: Switch Open   (HW reports 0) -> Physical Low
-+	 *
-+	 * We translate this contact status back into physical voltage levels.
-+	 * This translation is necessary because the hardware's contact status
-+	 * (e.g., reporting 1 when an SG pin is grounded) contradicts the
-+	 * typical GPIO expectation where ~0V corresponds to a logical 0.
-+	 */
-+	if (is_switch_to_ground)
-+		status = !is_switch_closed;
-+	else
-+		status = is_switch_closed;
-+
-+	return status;
-+}
-+
-+static int mc33978_get_multiple(struct gpio_chip *chip,
-+				unsigned long *mask, unsigned long *bits)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	unsigned int status;
-+	unsigned int config_reg = 0;
-+	unsigned int inv_mask;
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	ret = mc33978_read(mpc, MC33978_REG_READ_IN, &status);
-+	if (ret)
-+		return ret;
-+
-+	/* Read CONFIG register only if the requested mask involves SP pins */
-+	if (*mask & MC33978_SP_MASK) {
-+		ret = mc33978_read(mpc, MC33978_REG_CONFIG, &config_reg);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/*
-+	 * Create an inversion mask for all pins currently operating in
-+	 * Switch-to-Ground (SG) topology. As explained in mc33978_get(),
-+	 * SG pins must have their hardware status bits inverted to
-+	 * correctly report their physical voltage levels.
-+	 */
-+	inv_mask = MC33978_SG_MASK |
-+		   (~(config_reg << MC33978_NUM_SG) & MC33978_SP_MASK);
-+
-+	*bits = (status ^ inv_mask) & *mask;
-+
-+	return 0;
-+}
-+
-+static int mc33978_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	int pull;
-+	int ret;
-+
-+	/*
-+	 * We emulate open-drain/-source outputs by routing or isolating the
-+	 * active wetting current sources.
-+	 * To drive the line, we apply the current source.
-+	 * To turn the line OFF (achieve High-Impedance), we MUST use the
-+	 * hardware TRI_SP / TRI_SG tri-state registers to physically isolate
-+	 * it.
-+	 */
-+	if (mc33978_is_sp(offset)) {
-+		pull = value ? MC33978_PU : MC33978_PD;
-+		value = 1;
-+	} else {
-+		pull = MC33978_PU;
-+	}
-+
-+	guard(mutex)(&mpc->lock);
-+
-+	/*
-+	 * Break-before-make sequencing to prevent hardware glitches (spikes).
-+	 * Since SPI transfers take time, writing the pull and tri-state
-+	 * registers in the wrong order causes a brief moment where current
-+	 * flows to the pin before it is masked, causing a visible LED flash.
-+	 */
-+	if (value) {
-+		/*
-+		 * Turn ON: Configure the underlying current source (pull) first,
-+		 * then route it to the pin by disabling tri-state.
-+		 */
-+		ret = mc33978_set_pull(mpc, offset, pull);
-+		if (ret)
-+			return ret;
-+
-+		ret = mc33978_update_bits(mpc, mc33978_spsg(MC33978_REG_TRI_SP,
-+							    offset),
-+					  MC33978_PINMASK(offset), 0);
-+	} else {
-+		/*
-+		 * Turn OFF: Isolate the pin first by enabling tri-state,
-+		 * then safely disable the underlying current source.
-+		 */
-+		ret = mc33978_update_bits(mpc, mc33978_spsg(MC33978_REG_TRI_SP,
-+							    offset),
-+					  MC33978_PINMASK(offset),
-+					  MC33978_PINMASK(offset));
-+	}
-+
-+	return ret;
-+}
-+
-+static int mc33978_set_multiple(struct gpio_chip *chip,
-+				unsigned long *mask, unsigned long *bits)
-+{
-+	unsigned int sgmask = (*mask & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-+	unsigned int sgbits = (*bits & MC33978_SG_MASK) >> MC33978_SG_SHIFT;
-+	unsigned int spmask = (*mask & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-+	unsigned int spbits = (*bits & MC33978_SP_MASK) >> MC33978_SP_SHIFT;
-+	struct mc33978_pinctrl *mpc = gpiochip_get_data(chip);
-+	int ret;
-+
-+	guard(mutex)(&mpc->lock);
-+	if (spmask)
-+		ret = mc33978_update_bits(mpc, MC33978_REG_TRI_SP, spmask,
-+					  ~spbits);
-+	if (sgmask)
-+		ret = mc33978_update_bits(mpc, MC33978_REG_TRI_SG, sgmask,
-+					  ~sgbits);
-+
-+	return ret;
-+}
-+
-+static int mc33978_direction_output(struct gpio_chip *chip, unsigned int offset,
-+				    int value)
-+{
-+	return mc33978_set(chip, offset, value);
-+}
-+
-+static int mc33978_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
-+					      unsigned int child,
-+					      unsigned int child_type,
-+					      unsigned int *parent,
-+					      unsigned int *parent_type)
-+{
-+	*parent_type = child_type;
-+	*parent = child;
-+
-+	return 0;
-+}
-+
-+static void mc33978_gpio_irq_bus_lock(struct irq_data *data)
-+{
-+	struct irq_data *parent = data->parent_data;
-+
-+	parent->chip->irq_bus_lock(parent);
-+}
-+
-+static void mc33978_gpio_irq_bus_sync_unlock(struct irq_data *data)
-+{
-+	struct irq_data *parent = data->parent_data;
-+
-+	parent->chip->irq_bus_sync_unlock(parent);
-+}
-+
-+static const struct irq_chip mc33978_gpio_irqchip = {
-+	.name = "mc33978-gpio",
-+	.irq_mask = irq_chip_mask_parent,
-+	.irq_unmask = irq_chip_unmask_parent,
-+	.irq_set_type = irq_chip_set_type_parent,
-+	.irq_bus_lock = mc33978_gpio_irq_bus_lock,
-+	.irq_bus_sync_unlock = mc33978_gpio_irq_bus_sync_unlock,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
-+static void mc33978_init_gpio_chip(struct mc33978_pinctrl *mpc,
-+				   struct device *dev)
-+{
-+	struct gpio_irq_chip *girq;
-+
-+	mpc->chip.label = dev_name(dev);
-+	mpc->chip.direction_input = mc33978_direction_input;
-+	mpc->chip.get = mc33978_get;
-+	mpc->chip.get_multiple = mc33978_get_multiple;
-+	mpc->chip.direction_output = mc33978_direction_output;
-+	mpc->chip.set = mc33978_set;
-+	mpc->chip.set_multiple = mc33978_set_multiple;
-+	mpc->chip.set_config = gpiochip_generic_config;
-+
-+	mpc->chip.base = -1;
-+	mpc->chip.ngpio = MC33978_NGPIO;
-+	mpc->chip.can_sleep = true;
-+	mpc->chip.parent = dev;
-+	mpc->chip.owner = THIS_MODULE;
-+
-+	girq = &mpc->chip.irq;
-+	gpio_irq_chip_set_chip(girq, &mc33978_gpio_irqchip);
-+	girq->fwnode = dev_fwnode(dev);
-+	girq->parent_domain = mpc->domain;
-+	girq->child_to_parent_hwirq = mc33978_gpio_child_to_parent_hwirq;
-+	girq->handler = handle_simple_irq;
-+	girq->default_type = IRQ_TYPE_NONE;
-+}
-+
-+static void mc33978_init_pinctrl_desc(struct mc33978_pinctrl *mpc,
-+				      struct device *dev)
-+{
-+	mpc->pinctrl_desc.name = dev_name(dev);
-+
-+	mpc->pinctrl_desc.pctlops = &mc33978_pinctrl_ops;
-+	mpc->pinctrl_desc.confops = &mc33978_pinconf_ops;
-+	mpc->pinctrl_desc.pins = mc33978_pins;
-+	mpc->pinctrl_desc.npins = MC33978_NGPIO;
-+	mpc->pinctrl_desc.owner = THIS_MODULE;
-+}
-+
-+static int mc33978_pinctrl_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mc33978_pinctrl *mpc;
-+	struct device_node *np = dev->of_node;
-+	int ret;
-+
-+	if (!np)
-+		return dev_err_probe(dev, -EINVAL, "Missing device tree node\n");
-+
-+	mpc = devm_kzalloc(dev, sizeof(*mpc), GFP_KERNEL);
-+	if (!mpc)
-+		return -ENOMEM;
-+
-+	mpc->dev = dev;
-+
-+	mpc->regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!mpc->regmap)
-+		return dev_err_probe(dev, -ENODEV, "Failed to get parent regmap\n");
-+
-+	mpc->domain = irq_find_host(dev->parent->of_node);
-+	if (!mpc->domain)
-+		return dev_err_probe(dev, -ENODEV, "Failed to find parent IRQ domain\n");
-+
-+	mutex_init(&mpc->lock);
-+
-+	mc33978_init_gpio_chip(mpc, dev);
-+	mc33978_init_pinctrl_desc(mpc, dev);
-+
-+	mpc->pctldev = devm_pinctrl_register(dev, &mpc->pinctrl_desc, mpc);
-+	if (IS_ERR(mpc->pctldev))
-+		return dev_err_probe(dev, PTR_ERR(mpc->pctldev),
-+				     "can't register pinctrl\n");
-+
-+	ret = devm_gpiochip_add_data(dev, &mpc->chip, mpc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "can't add GPIO chip\n");
-+
-+	ret = gpiochip_add_pin_range(&mpc->chip, dev_name(dev), 0, 0,
-+				     MC33978_NGPIO);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to add pin range\n");
-+
-+	platform_set_drvdata(pdev, mpc);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id mc33978_pinctrl_of_match[] = {
-+	{ .compatible = "nxp,mc33978-pinctrl" },
-+	{ .compatible = "nxp,mc34978-pinctrl" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, mc33978_pinctrl_of_match);
-+
-+static struct platform_driver mc33978_pinctrl_driver = {
-+	.driver = {
-+		.name = "mc33978-pinctrl",
-+		.of_match_table = mc33978_pinctrl_of_match,
-+	},
-+	.probe = mc33978_pinctrl_probe,
-+};
-+module_platform_driver(mc33978_pinctrl_driver);
-+
-+MODULE_AUTHOR("David Jander <david@protonic.nl>");
-+MODULE_DESCRIPTION("NXP MC33978/MC33978 pinctrl driver");
-+MODULE_LICENSE("GPL");
--- 
-2.47.3
+bool wmi_valid_signature(u32 field, const char* expected_str);
+
+
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid vendor signature (%u)\n",
+> +			le32_to_cpu(desc->vendor_signature));
+> +		ret = -ENOMSG;
+>   		descriptor_valid = ret;
+>   		goto out;
+>   	}
+>   
+> -	buffer = (u32 *)obj->buffer.pointer;
+> -
+> -	if (strncmp(obj->string.pointer, "DELL WMI", 8) != 0) {
+> -		dev_err(&wdev->dev, "Dell descriptor buffer has invalid signature (%8ph)\n",
+> -			buffer);
+> -		ret = -EINVAL;
+> +	/* " WMI" */
+> +	if (le32_to_cpu(desc->object_signature) != 0x494D5720) {
+> +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid object signature (%u)\n",
+> +			le32_to_cpu(desc->object_signature));
+> +		ret = -ENOMSG;
+>   		descriptor_valid = ret;
+>   		goto out;
+>   	}
+>   	descriptor_valid = 0;
+>   
+> -	if (buffer[2] != 0 && buffer[2] != 1)
+> -		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%lu)\n",
+> -			(unsigned long) buffer[2]);
+> -
+> -	priv = devm_kzalloc(&wdev->dev, sizeof(struct descriptor_priv),
+> -	GFP_KERNEL);
+> +	if (le32_to_cpu(desc->interface_version) > 2)
+> +		dev_warn(&wdev->dev, "Dell descriptor buffer has unknown version (%u)\n",
+> +			 le32_to_cpu(desc->interface_version));
+>   
+> +	priv = devm_kzalloc(&wdev->dev, sizeof(*priv), GFP_KERNEL);
+>   	if (!priv) {
+>   		ret = -ENOMEM;
+>   		goto out;
+>   	}
+>   
+> -	priv->interface_version = buffer[2];
+> -	priv->size = buffer[3];
+> -	priv->hotfix = buffer[4];
+> +	priv->interface_version = le32_to_cpu(desc->interface_version);
+> +	priv->size = le32_to_cpu(desc->buffer_length);
+> +	priv->hotfix = le32_to_cpu(desc->hotfix_number);
+>   	ret = 0;
+>   	dev_set_drvdata(&wdev->dev, priv);
+>   	mutex_lock(&list_mutex);
+> @@ -170,7 +172,7 @@ static int dell_wmi_descriptor_probe(struct wmi_device *wdev,
+>   		(unsigned long) priv->hotfix);
+>   
+>   out:
+> -	kfree(obj);
+> +	kfree(buffer.data);
+>   	return ret;
+>   }
+>   
 
