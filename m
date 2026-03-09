@@ -1,102 +1,105 @@
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F54239B490;
-	Mon,  9 Mar 2026 16:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23AB3C3C08;
+	Mon,  9 Mar 2026 17:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773073520; cv=none; b=Pp442wBCkS0MlFp45cetg2ZspgeDbWH+j5RF2/kXrW49R7NY38+gUrMO6GRXcf0ApYMia7g4vaWXRvFCc0Nr79Q/7RvbERI3NR9EYMuYMwDrANR8y0EQlnOJ1lNDCpJMs0AECfO75ezuUEAmpheR6Gy3ApZEmc03J2PopzPfrco=
+	t=1773076994; cv=none; b=HLd3EWSQm/n5FtwtbTBTH/8M/w9q1A4HvYtThMqXfhA6ukmVX4gfsEYYORLX21jd3RYDnHNV4AxNUR8uWVp65nlp3lp7C3uXOF8V14Clj8k1YVtyyV0tpf862tPoxNmlZEU65+eeYSb6Pj0IZ8iybWgO3orO1GqQaqzSebmiUNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773073520; c=relaxed/simple;
-	bh=xF3DVn19Bne3hFSxydLlqYCVKj7CplgD76yq8FcuPh4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l9xFooNZNLt/+mRL3wKwX/y6x69LOsDs94zyI2H+5WxFaQiAVsURIVaOoJM4adfxpQuFaVPewbwgGLMASkhIUgt7rrIrLVrgNTDJvd6znA0ZdpzdXPHBqbJgHYdDpMHn+Qr2IkfV+rOtF5pL459kdPI9XLJHEVw4jEDUavILz5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from edelgard.fodlan.icenowy.me (unknown [112.94.103.14])
-	by APP-05 (Coremail) with SMTP id zQCowABH1Qhb9K5pgkP5CQ--.22703S4;
-	Tue, 10 Mar 2026 00:25:09 +0800 (CST)
-From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Drew Fustini <fustini@kernel.org>,
-	Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Rahul Tanwar <rtanwar@maxlinear.com>
-Cc: linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Icenowy Zheng <uwu@icenowy.me>,
-	Han Gao <rabenda.cn@gmail.com>,
-	Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Subject: [PATCH v3 2/2] riscv: dts: thead: th1520: add coefficients to the PVT node
-Date: Tue, 10 Mar 2026 00:24:57 +0800
-Message-ID: <20260309162457.4128205-3-zhengxingda@iscas.ac.cn>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
-References: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
+	s=arc-20240116; t=1773076994; c=relaxed/simple;
+	bh=4rOz6vSUmerTq0k7LmyDdZAnzbukgGgjBdJyWrBQ8cc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A2aNnUzGiZfgEff3LdR89YPuwYewG7AvuhkVKjJpe0UEg2xbdswy5RBIpWYcKTcK4jiqFEefWhHtixgOsaOKIf8R6VJ5F3Mck7odoyM7YGekH26IPaf6+M3CRSuByRpQIq1uYiZEEVu8mmIH+MA5z750WidVe1l0GfgCLPhLEpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=knBcEnJ6; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="knBcEnJ6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A60C4CEF7;
+	Mon,  9 Mar 2026 17:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773076993;
+	bh=4rOz6vSUmerTq0k7LmyDdZAnzbukgGgjBdJyWrBQ8cc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=knBcEnJ64zpX8G5B754WiqB/pbP7C9GQk8sQoyMx2Ddz+cjqGr5S8DABc3Wyop6IJ
+	 c1OHAQ28Nr7qt49XFZErpRYjpStNz3O2LW1XSxSKzGkL3AHgYESqRC088jRlBwOpgK
+	 2dsi0Bhc3vUVDRkl8tfnAAQw9k4HANKMmJiRtbhvOhwnOkYUovZKPn5dCXvetQ4LV2
+	 kf8dnXIATK7lEP115VkdO327fUxmiAxnAhTQ0PB8+2tLTh6ZBLLgiawkdbfkRhR5/Z
+	 IV1EjkmGxAOcZzIkaJ3+HL/FEIxmvUb9mRSDeBcFow9bfP5l7hhb50uNHh/eJSbkwD
+	 PtVhPoCGMkIEg==
+Received: by pali.im (Postfix)
+	id C795B687; Mon,  9 Mar 2026 18:23:09 +0100 (CET)
+Date: Mon, 9 Mar 2026 18:23:09 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Armin Wolf <W_Armin@gmx.de>, Dell.Client.Kernel@dell.com,
+	mjg59@srcf.ucam.org, hansg@kernel.org,
+	ilpo.jarvinen@linux.intel.com, platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux@roeck-us.net,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/9] platform/x86: dell-descriptor: Use new buffer-based
+ WMI API
+Message-ID: <20260309172309.a3ukif3bejbicywl@pali>
+References: <20260308002522.4185-1-W_Armin@gmx.de>
+ <20260308002522.4185-2-W_Armin@gmx.de>
+ <39bdcdf7-a771-4f1b-a3a0-0ecde272d914@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowABH1Qhb9K5pgkP5CQ--.22703S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw18KFW5Ar4DCw4fKw4DJwb_yoWDWFb_KF
-	1fGa15Aa1fAFWfAFyDZrn5XFyFy3yYyw4rt3savr15Kas8Ww40qayqgas5Cw1DuFZ8tFs7
-	Aw47XFW8twsFyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbkxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-	0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-	wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-	ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AI
-	xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-	vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-	r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
-	v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-	AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-	2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-	C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
-	nUUI43ZEXa7VUbH5lUUUUUU==
-X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39bdcdf7-a771-4f1b-a3a0-0ecde272d914@amd.com>
+User-Agent: NeoMutt/20180716
 
-The manual of TH1520 contains a set of coefficients a little different
-to the driver default ones.
+On Monday 09 March 2026 10:41:20 Mario Limonciello wrote:
+> On 3/7/2026 6:25 PM, Armin Wolf wrote:
+> > +	/* "DELL" */
+> > +	if (le32_to_cpu(desc->vendor_signature) != 0x4C4C4544) {
+> 
+> Do you think you could come up with a helper for matching an expected
+> "string" like this?  I /suspect/ it's going to be a common pattern that
+> vendors use and it will increase code readability going forward if a helper
+> is possible.  I see it at least twice in this patch alone.
+> 
+> Something like this prototype:
+> 
+> bool wmi_valid_signature(u32 field, const char* expected_str);
 
-Add them to the device tree node of PVT.
+When I read your comment, I come to another idea. What about introducing
+a macro which will convert 4-byte string to u32 number? For example:
 
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Reviewed-by: Drew Fustini <fustini@kernel.org>
----
-Changes in v3:
-- Added Drew's R-b.
-No changes in v2.
+  #define str_to_u32(str) ({ _Static_assert(__builtin_types_compatible_p(__typeof__(str), char[5]), "wrong type"); (u32)(u8)(str)[0] | ((u32)((u8)(str)[1]) << 8) | ((u32)((u8)(str)[2]) << 16) | ((u32)((u8)(str)[3]) << 24); })
 
- arch/riscv/boot/dts/thead/th1520.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+The whole conversion would be done in compile time (with -O2) so should
+not cause any possible performance issues.
 
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index bd5d33840884e..2160c8b6c2261 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -753,6 +753,10 @@ pvt: pvt@fffff4e000 {
- 			reg-names = "common", "ts", "pd", "vm";
- 			clocks = <&aonsys_clk>;
- 			#thermal-sensor-cells = <1>;
-+			moortec,ts-coeff-g = <42740>;
-+			moortec,ts-coeff-h = <220500>;
-+			moortec,ts-coeff-j = <(-160)>;
-+			moortec,ts-coeff-cal5 = <4094>;
- 		};
- 
- 		gpio@fffff52000 {
--- 
-2.52.0
+With it, the condition could be written as:
 
+  if (le32_to_cpu(desc->vendor_signature) != str_to_u32("DELL")) {
+
+and no need to use magic number 0x4C4C4544 and write comment that this
+number in ASCII is the "DELL" string.
+
+> 
+> > +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid vendor signature (%u)\n",
+> > +			le32_to_cpu(desc->vendor_signature));
+> > +		ret = -ENOMSG;
+> >   		descriptor_valid = ret;
+> >   		goto out;
+> >   	}
+> > -	buffer = (u32 *)obj->buffer.pointer;
+> > -
+> > -	if (strncmp(obj->string.pointer, "DELL WMI", 8) != 0) {
+> > -		dev_err(&wdev->dev, "Dell descriptor buffer has invalid signature (%8ph)\n",
+> > -			buffer);
+> > -		ret = -EINVAL;
+> > +	/* " WMI" */
+> > +	if (le32_to_cpu(desc->object_signature) != 0x494D5720) {
+> > +		dev_err(&wdev->dev, "Dell descriptor buffer has invalid object signature (%u)\n",
+> > +			le32_to_cpu(desc->object_signature));
+> > +		ret = -ENOMSG;
+> >   		descriptor_valid = ret;
+> >   		goto out;
+> >   	}
