@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F7A352C4F;
-	Tue, 10 Mar 2026 11:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12BE389471;
+	Tue, 10 Mar 2026 11:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773141189; cv=none; b=Rz5MastjMZK4zRFvnqLndrdC+t+pLX1GRugC+QFHmftQw9GBMfQnGfWdU73Em/Y2L9s8Hb59MuRS5TRKCz1UbT9clgbvqqQDvKODDR61UcerdBAcTxhmDxx3eIcYKVAGRNlWDCyu/0ViJMtOJSd+7lKDZQX1PZA8d+Zjdi7SGzg=
+	t=1773142128; cv=none; b=OSQUGjTnJRt+4QwuaG+a3QbY9GTrAYVRvof21HDC6Z81Mj5E56kr3RCvDpGSbgO9J9e0VeodHM1LuEv0Emki412wOT92b7UTiGzgBwvjHi/e7Be5njtZ3HbWlg0sCaEoNCv956DduomVaVoOpUn7mdKAw+rJ4lrvd+hYRG8qgu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773141189; c=relaxed/simple;
+	s=arc-20240116; t=1773142128; c=relaxed/simple;
 	bh=ZAuG8IKAu45hV2mMVEd4KoN4NMaMHWFK5R0z0/qDGpY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKny9aS08mJVVvREpTRz+bq0yzd7lO9PPAy6UXvxYmt/QcMW4C7r+IQGvzHX3jFxDduiwfwXOtUlzIU//b+5ls7wYNoy+Y5tnhCr+rCD0hDMl2Y6fPuNvCai/B19PqT1imeVwEtQAyMEgZbi6ZLYjqwWJt/1HiudK2Ue1BqmliQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jG137keq; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=HeTPkZ3C0odeaRseqLS1bnz0ZTZYxhWWaHhCNP8Ul0kCFnJYfEScwHwFec1vBgv/7x3XuDnbD0DASmgJFoIZOo0iA9spG5retjreGGPYCWMKIMzCcnwVSJRxb0kQJ4+tZr/ybBLnEIyBpzFO1fQlQ4mGgWuNqy982zbPIDkR5sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sFIlRNPd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jG137keq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D84C19423;
-	Tue, 10 Mar 2026 11:13:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sFIlRNPd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BADF4C2BC9E;
+	Tue, 10 Mar 2026 11:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773141189;
+	s=k20201202; t=1773142128;
 	bh=ZAuG8IKAu45hV2mMVEd4KoN4NMaMHWFK5R0z0/qDGpY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jG137keqWyoZjxerhUjJY2Z8M1KOZjshUrviEwUC/Kv1Xtf5ttyGRpOYIgBKdlzoc
-	 jxDpxQiUwNkCPu3fAE/llFWM1HLzv74Pxs/gWGUSwS2T/yByIZ6cjv40RIHVIa1F8R
-	 ZNmkAJJwzBIl9wKqfUQ6XP9WFkNl+tqPM5UBVUrDnfvHLPlFosHeD69P3U9/lu/sXI
-	 JPbPTDq2OrsJV4Mi+DtuahzvkBWnaMopFz8AtIUY+OyG5Tky78wbaCY6BsdI7V6+Md
-	 AhnokrkxZPIMjv5gv3xacPcgeOyXl9zC0a1BLpyCapWcikgau/8J7Yzmrqi0Aa0S19
-	 Adw/jNZBGPmfA==
+	b=sFIlRNPdWg6bMFUEEGpCRWojkJMGsY76/cBl7EX22GrQ1B0tVD5OxsTlqus1uKheg
+	 zAZtKybOldUaKy4aa/lFxSFJq7fZ3MTYx2+/JaUMvnrnQieGQO5O/iLdnCQgiDLPo7
+	 2oeTJgtIgCrLro3lWWQx85mm8aZD9pBOp4beXxl816vie+qGciHeb/L8Gy4Ey33aJE
+	 6vVKxEQR4S3OuNqJj8XrtU7LmbfiQc98BE8+XHviMVEF9HEg1ZGfbyLkKD/vwwEcg5
+	 WiJQNVMHxmQl7R1xUytJMJtk9uIHJM8qpTq9eqW19ILjvL7qJqr5socKFEPF9mC/Iy
+	 5YXWZ/5b8PPwA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -35,12 +35,12 @@ Cc: Bart Van Assche <bvanassche@acm.org>,
 	Jean Delvare <jdelvare@suse.com>,
 	linux-hwmon@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.19 191/311] hwmon: (it87) Check the it87_lock() return value
-Date: Tue, 10 Mar 2026 07:03:58 -0400
-Message-ID: <7d981cf6f5f0b15b6683f709c343d9bfae468994.1773140655.git.sashal@kernel.org>
+Subject: [PATCH 6.18 217/314] hwmon: (it87) Check the it87_lock() return value
+Date: Tue, 10 Mar 2026 07:17:56 -0400
+Message-ID: <9fa18b2a83be7aae70a73880a36086931f347296.1773141555.git.sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1773140654.git.sashal@kernel.org>
-References: <cover.1773140654.git.sashal@kernel.org>
+In-Reply-To: <cover.1773141554.git.sashal@kernel.org>
+References: <cover.1773141554.git.sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
