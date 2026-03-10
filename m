@@ -1,67 +1,66 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE1E38945E
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 11:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A986838A702
+	for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 11:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773143036; cv=none; b=WCiNCmnTqfTjXsiu/UVQjHkugDTe6IIOj/TArxM5ggnn734qsZ7eQoFvXcl4hqSRbpChoyrd7QS9G759iereLVm4VnxZ8jYkbxgPVKcfuvyNZ4ZctqpwbS5qiq+6ninHpEvTtWNRP41ryp540f/YP6rKDpM86vX4vJsIFk3JC0s=
+	t=1773143040; cv=none; b=u21ZymLP+kd+fMMZBCT3P7V4L0733QuQigJzRssVS5MLOXl//HQo1DQFgVr1niTTw7PDNH2JGZ/35b+lEaUgxxCyqGoeaQoPvEVdP0ajN4vDl4aEq4T8a0SC6nReQBtQ5hespQ1aWlLSPavr8ONMtwKLhnR6g0MQqgGbV6zdFwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773143036; c=relaxed/simple;
-	bh=vYR6R0xAlGyJOKPka5f5e+VU0LDMPSCdIMPETAplrI8=;
+	s=arc-20240116; t=1773143040; c=relaxed/simple;
+	bh=G3MtqMKafpLNucg97qxshZA/N6KPWJSwt2+v5K33rWA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uDLT/a4hHHR7cwHU/1KjHJ7DQRmUzIaDIG5H1Nr53EQKrjhTd37x1wJdgSsM9RS0QU7YjyA5W2b4XeyFXE8Ne/55nIVTyK3PMeutZSJ5II8yFWWa9Hjd3CsF0xkcTnWCTWbKLlocckKUYsGLUaE5QSRyJZl5w3SyNsZ8Z5cy5Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=KEhz80wH; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:To:Cc; b=VrhUUPxG5SxQRPKfgpNAksQBufmqxBinuhXgpUlgx+YuZkkehUtrgWxlUPZf//ZH2qTYOkROEzdFwZP8cfyBFzmq32GuCM+RwFPGAzZJlEG/OKldyH+99M5xneHKPQx56k2YEpUScUMUk+ITbXLYk1odc3eu/n1lbGJ8mG5V3D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net; spf=pass smtp.mailfrom=flipper.net; dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b=Eqs3HZUu; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=flipper.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flipper.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="KEhz80wH"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso27829005e9.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 04:43:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=flipper.net header.i=@flipper.net header.b="Eqs3HZUu"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48535a0ef86so20489175e9.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 04:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flipper.net; s=google; t=1773143034; x=1773747834; darn=vger.kernel.org;
+        d=flipper.net; s=google; t=1773143036; x=1773747836; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FUaHHGjX//QqgU4DYt1eH54CJSDOOAyxvdOGOgcLp5o=;
-        b=KEhz80wHM33B2aZGDfOVmVEFg9vFxtiki//7PG7Rob3owNkRkxqHBlCMdRg7NoU60c
-         QAKAtpX/BeKG5WNsB2cVxnYbBN+BSeqjmPblj23oWMj5g5pEIr5eiCdEaXyjl/10OvpW
-         AGXwQ2WU8Gv5cagIKOr9MuspjD6hVjUU5mocXwz23/2z1+oI89ocmai6pZDltPzk37ME
-         tnfiIHm5CgHWnl+rrlM0ZqHLQ8ToecNJ7CzxkwQqU3bg3rZs3sLI59mBPi5mazkkvxTl
-         4Aix3U1hPUo0xI0c7L9CsK3/0k5BlTHxv3AloVfiX7ysXjZSjHGYwdObREBdloWS9JGh
-         923A==
+        bh=QSURpBzaWzxRVKWicQ4ojOkEk7LCz0gq/IP5lnEmszM=;
+        b=Eqs3HZUugjaw8TbvP/KDpQcc1l5kGu30xdT1CqNl7vtgGAKIt4B8Txp8nn97XN6Cdv
+         iiI7+fheJKfdAMCPA87QajxAXE/WkWSBu4lg+lP84GeObrmz8yi9jMYSOAPKmaZLlKc/
+         7LYGve31AZyUFR5PaUfkNVd8+XTnpTlgY3eD41kzVAFgcky3kopQGGiBodvhOV+9ImfP
+         P+uwTygdihJoELXLepXWTr4waqfd0krdvmhfJ7W4lAqmFf7z8bnVOtJLv5A7MCZR6lLW
+         OewCN2qd+ahjwUVuM08UY0aZ+Bt//yEy4uRUcGrd5SjS8LYG3PUnh4gLJdd2B5hObgOb
+         1r1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773143034; x=1773747834;
+        d=1e100.net; s=20230601; t=1773143036; x=1773747836;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=FUaHHGjX//QqgU4DYt1eH54CJSDOOAyxvdOGOgcLp5o=;
-        b=vL5fLxjyFJqGvqcISIM5vBVaUPMi/ZVXHzrSg9vrZsiUTGghNlgoxyvCGomdDNm4/u
-         3RwoYfa3DOrCGZCoZs7dZuFJYr4m7QzdKVvdkVg41IqumcyQd5uFpLDtC+5NVvLqmsTR
-         4ongdtIHkWyqLb2b/a6lLYEY5HkzjBcbM/LB+T6hH/A/x4vcBpu9nZLzGTG6bozSwcXJ
-         n3VlWY1/6J6+TEt0GzRMOfgKOhBZhmOEDjBCtlgDIMvg9CY86mT/V48gjfzmktE8fLta
-         Mf/B6AhakqGJzF7YNu9EjRnuevRRigaBTA+IUYJWBmsmR3oR2JrH6/9onrnH4p0yUQSm
-         XZBQ==
-X-Gm-Message-State: AOJu0YwBl7gRX1E+xijE8RfM86DPBZVA68j/LECrC6z9LGAOAlK0YaKt
-	CuL78+N9+Yxgq7hFGc+g6HmzmZTv5C8mQXOBgQr2g3ex2BZRGHMluSuHk5C4n5BNn/w=
-X-Gm-Gg: ATEYQzyr0dRn5NiD4uf8MiItjY5Tubb4zxajSGNIEE+hbNDeEtxijB7n/MAPLAlXsXo
-	JVjtG1XbZ0rWCrTnRV25gybk420mFQsvyGlXyltRI0kYrnqQWIPd7/NPQIGOIkvDsxjyhI7EBUG
-	oiNBvNSV3Hx6OrSOrGbccOtCwyse4eR74qrWxYFXSFpOa8+6gBU5l9sUaZIe+K4VYQ8YVIuDSHE
-	fM94f6/w8G2k16sApOM5xfDmTrz0P58ypqy2Oiu/0R+UpFg01JPqj8PkAwbBLW6P1P286ggqUHW
-	BnkmTO1sVsodR7Zw0l1+nmCO07KtIh7bBV1KC1yB45n+H1CNd8OYglK0l18zO43hqDxQyOewBdf
-	v0O+6wZmclFANt3DjjLpqllumVpLsh+c0A4vC6oPi1yBDd3cnu67yq8nsRZ628cBDsWthI5xpg0
-	h8kKNL3EjH2Y3FUdiwLQK4ag07w+3Vh3BcPrXOH19Px0BTGJtE9Mcgc5ConxIRlj+nzIdzQKj9R
-	u3isQ==
-X-Received: by 2002:a05:600c:8b26:b0:480:1c85:88bf with SMTP id 5b1f17b1804b1-4852697a5c1mr238645245e9.27.1773143033512;
-        Tue, 10 Mar 2026 04:43:53 -0700 (PDT)
+        bh=QSURpBzaWzxRVKWicQ4ojOkEk7LCz0gq/IP5lnEmszM=;
+        b=QUkb8jkT/7i5ovUjhG3ZGVrC9NO0M0vHM8Fki7R7K9ouG/H7uShB+xBYQVTQx4b0d9
+         ceRTZEHDwf5jrnhzXrWOtU3rwo75+8rgOBtnMrMgF4h6+Rs0yCLqt7hywCaC31i3pwry
+         Aa3VSTgGL5dMrVwV5lySjh+SK0N4TBlNH4ngkjQ5mbLKafgG+Op1oCRIB+yyF0HBG5vz
+         MIem4SqGPz4e4uKfyaoXIV03MJ0Yvi9TS395ESWjlupkDykMemSeBnt6yTYNILhGA353
+         cGIAKra5qb4JZ4uruzOY0AYhwMMlsrl4y/AZY18NyJnIvD7uiP3SGgl3ob/3mdKvG9Xm
+         +slA==
+X-Gm-Message-State: AOJu0Yx/yBVJPPhT5rOukJIHlaV0XgEIDzUFS3RTEldLgiwucSNVQhkO
+	SBoi4wx6Riz0tlZvP1n6BrH/InFaNlkgEt//PIkW1CmWhV6PZWrmdbKiRuyRBqPwrsE=
+X-Gm-Gg: ATEYQzzgQSJcKoiJBen39DTTZwdKhS2u09vdn3KahYKjLhccbmo/whM1nwIzpIsjjEX
+	ov3tI6bD3heC8tQCmMIokOTlsP31AL8ZGYhdBZzvxyQxrnbUyJ++jImoA7Rhb4Zhc2b3RL/zcZd
+	cgZMTkDyNqCURxGZHpbYeggYB/XUN0OxSM2bwukCcrPQHMIXVdZpZOxrg77VOONc5HqwBRCJn+f
+	lpG9K+ys7j/ErdhzmAx8HaKgG25o5k1EjF4wH0Kd6HLgcpPw0xqYwEualH3ZO2OLcpcAe5wJHHb
+	BrLRkjRv2r5NcGhP56lc83nrwqYv8ttmjZeUYQV2+Mp9YXVTKTRhVVZQxbk7yRoyKUEKnKjwKiM
+	3kdaLKLhnWA30Hpsv65uLD26oVO644Ctw7c9fQBHjA8SQBmUhNQevNxbqDnQxgh3H358xvbuTYh
+	fiNlOYd+4ZBUqOkvMXXZJ6HlS5FCQcVvrBQST3ZLPlLX+fpyrDyuBYYlzjTxXA3c5GoyKC3YUuj
+	PmnGaQfXVvR+Oe0
+X-Received: by 2002:a05:600c:19ca:b0:485:3d43:7c9a with SMTP id 5b1f17b1804b1-4853d437d40mr91462945e9.25.1773143035590;
+        Tue, 10 Mar 2026 04:43:55 -0700 (PDT)
 Received: from alchark-surface.localdomain (bba-86-98-192-109.alshamil.net.ae. [86.98.192.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541a7f182sm96234825e9.5.2026.03.10.04.43.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541a7f182sm96234825e9.5.2026.03.10.04.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 04:43:53 -0700 (PDT)
+        Tue, 10 Mar 2026 04:43:55 -0700 (PDT)
 From: Alexey Charkov <alchark@flipper.net>
-Date: Tue, 10 Mar 2026 15:43:46 +0400
-Subject: [PATCH v3 1/2] dt-bindings: hwmon: Add TI INA4230 4-channel I2C
- power monitor
+Date: Tue, 10 Mar 2026 15:43:47 +0400
+Subject: [PATCH v3 2/2] hwmon: Add support for TI INA4230 power monitor
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,193 +69,1156 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260310-ina4230-v3-1-06ab3a77c570@flipper.net>
+Message-Id: <20260310-ina4230-v3-2-06ab3a77c570@flipper.net>
 References: <20260310-ina4230-v3-0-06ab3a77c570@flipper.net>
 In-Reply-To: <20260310-ina4230-v3-0-06ab3a77c570@flipper.net>
 To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Alexey Charkov <alchark@flipper.net>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+ linux-kernel@vger.kernel.org, Alexey Charkov <alchark@flipper.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5501; i=alchark@flipper.net;
- h=from:subject:message-id; bh=vYR6R0xAlGyJOKPka5f5e+VU0LDMPSCdIMPETAplrI8=;
- b=owGbwMvMwCW2adGNfoHIK0sZT6slMWRuYP6x62joNA097RW+e/t9q8su6uZpVeaHZ11ZdOv2E
- eGpLyKzOyayMIhxMViKKbLM/bbEdqoR36xdHh5fYeawMoEMkRZpYAACFga+3MS8UiMdIz1TbUM9
- Q0MdYx0jBi5OAZhqo+0M/+ziHyffnSDgGjHj0dozRhtkvuybvCb9hdiSav98Q9c3avsY/nB7iyu
- 53081uaScW5DyRPv0tdYv+41Nvzhn3HO5Ibb1Oi8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=34132; i=alchark@flipper.net;
+ h=from:subject:message-id; bh=G3MtqMKafpLNucg97qxshZA/N6KPWJSwt2+v5K33rWA=;
+ b=owGbwMvMwCW2adGNfoHIK0sZT6slMWRuYP7xK1c154NN8yaZ5Qlu5yZaJjKJvGm0a+N8dOfOi
+ SSu61U8HRNZGMS4GCzFFFnmfltiO9WIb9YuD4+vMHNYmUCGSIs0MAABCwNfbmJeqZGOkZ6ptqGe
+ oaGOsY4RAxenAEz1hAqGf6YnU2flzflsXfRzx6n7tfU5K6e53nILF8j1aK5gYpM5f46RYcMhmwI
+ jQ+u+pvIvH450BgnO7uxdsCdVt4L18M6VMUIyTAA=
 X-Developer-Key: i=alchark@flipper.net; a=openpgp;
  fpr=9DF6A43D95320E9ABA4848F5B2A2D88F1059D4A5
 
-Add TI INA4230, which is a 48V 4-channel 16-bit I2C-based
-current/voltage/power/energy monitor with alert function.
+Add a driver for the TI INA4230, a 4-channel power monitor with I2C
+interface.
 
-Link: https://www.ti.com/product/INA4230
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+The driver supports voltage, current, power and energy measurements, but
+skips the alert functionality in this initial implementation.
+
 Signed-off-by: Alexey Charkov <alchark@flipper.net>
 ---
- .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 134 +++++++++++++++++++++
- MAINTAINERS                                        |   6 +
- 2 files changed, 140 insertions(+)
+ MAINTAINERS             |    1 +
+ drivers/hwmon/Kconfig   |   11 +
+ drivers/hwmon/Makefile  |    1 +
+ drivers/hwmon/ina4230.c | 1066 +++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 1079 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-new file mode 100644
-index 000000000000..f33e52a12657
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-@@ -0,0 +1,134 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/ti,ina4230.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments INA4230 quad-channel power monitors
-+
-+maintainers:
-+  - Alexey Charkov <alchark@flipper.net>
-+
-+description: |
-+  The INA4230 is a 48V quad-channel 16-bit current, voltage, power and energy
-+  monitor with an I2C interface.
-+
-+  Datasheet:
-+    https://www.ti.com/product/INA4230
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,ina4230
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#address-cells":
-+    description: Required only if a child node is present.
-+    const: 1
-+
-+  "#size-cells":
-+    description: Required only if a child node is present.
-+    const: 0
-+
-+  vs-supply:
-+    description: phandle to the regulator that provides the VS supply typically
-+      in range from 1.7 V to 5.5 V.
-+
-+  ti,alert-polarity-active-high:
-+    description: Alert pin is asserted based on the value of Alert polarity Bit
-+      of the CONFIG2 register. Default value is 0, for which the alert pin
-+      toggles from high to low during faults. When this property is set, the
-+      corresponding register bit is set to 1, and the alert pin toggles from
-+      low to high during faults.
-+    $ref: /schemas/types.yaml#/definitions/flag
-+
-+patternProperties:
-+  "^input@[0-3]$":
-+    description: The node contains optional child nodes for four channels.
-+      Each child node describes the information of input source. Input channels
-+      default to enabled in the chip. Unless channels are explicitly disabled
-+      in device-tree, input channels will be enabled.
-+    type: object
-+    additionalProperties: false
-+    properties:
-+      reg:
-+        description: Must be 0, 1, 2 or 3, corresponding to the IN1, IN2, IN3
-+          or IN4 ports of the INA4230, respectively.
-+        enum: [ 0, 1, 2, 3 ]
-+
-+      label:
-+        description: name of the input source
-+
-+      shunt-resistor-micro-ohms:
-+        description: shunt resistor value in micro-Ohm
-+
-+      ti,maximum-expected-current-microamp:
-+        description: |
-+          This value indicates the maximum current in microamps that you can
-+          expect to measure with ina4230 in your circuit.
-+
-+          This value will be used to calculate the Current_LSB to maximize the
-+          available precision while ensuring your expected maximum current fits
-+          within the chip's ADC range. It will also enable built-in shunt gain
-+          to increase ADC granularity by a factor of 4 if the provided maximum
-+          current / shunt resistance combination does not produce more than
-+          20.48 mV drop at the shunt.
-+        minimum: 32768
-+        maximum: 4294967295
-+        default: 32768000
-+
-+    required:
-+      - reg
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: hwmon-common.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        power-sensor@44 {
-+            compatible = "ti,ina4230";
-+            reg = <0x44>;
-+            vs-supply = <&vdd_3v0>;
-+            ti,alert-polarity-active-high;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            input@0 {
-+                reg = <0x0>;
-+                /*
-+                 * Input channels are enabled by default in the device and so
-+                 * to disable, must be explicitly disabled in device-tree.
-+                 */
-+                status = "disabled";
-+            };
-+
-+            input@1 {
-+                reg = <0x1>;
-+                shunt-resistor-micro-ohms = <50000>;
-+                ti,maximum-expected-current-microamp = <300000>;
-+            };
-+
-+            input@2 {
-+                reg = <0x2>;
-+                label = "VDD_5V";
-+                shunt-resistor-micro-ohms = <10000>;
-+                ti,maximum-expected-current-microamp = <5000000>;
-+            };
-+
-+            input@3 {
-+                reg = <0x3>;
-+            };
-+        };
-+    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 1121276c59a1..10a330c5b44d 100644
+index 10a330c5b44d..7d9c5cd667a3 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -12516,6 +12516,12 @@ S:	Maintained
- F:	Documentation/hwmon/ina233.rst
- F:	drivers/hwmon/pmbus/ina233.c
+@@ -12521,6 +12521,7 @@ M:	Alexey Charkov <alchark@flipper.net>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
++F:	drivers/hwmon/ina4230.c
  
-+INA4230 HWMON DRIVER
-+M:	Alexey Charkov <alchark@flipper.net>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-+
  INDEX OF FURTHER KERNEL DOCUMENTATION
  M:	Carlos Bilbao <carlos.bilbao@kernel.org>
- S:	Maintained
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index fb77baeeba27..06c151ff8a60 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2297,6 +2297,17 @@ config SENSORS_INA3221
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called ina3221.
+ 
++config SENSORS_INA4230
++	tristate "Texas Instruments INA4230 Quad Current/Voltage Monitor"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  If you say yes here you get support for the TI INA4230 Quad
++	  Current/Voltage Monitor.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called ina4230.
++
+ config SENSORS_SPD5118
+ 	tristate "SPD5118 Compliant Temperature Sensors"
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 556e86d277b1..3d83eba94bec 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -104,6 +104,7 @@ obj-$(CONFIG_SENSORS_INA209)	+= ina209.o
+ obj-$(CONFIG_SENSORS_INA2XX)	+= ina2xx.o
+ obj-$(CONFIG_SENSORS_INA238)	+= ina238.o
+ obj-$(CONFIG_SENSORS_INA3221)	+= ina3221.o
++obj-$(CONFIG_SENSORS_INA4230)	+= ina4230.o
+ obj-$(CONFIG_SENSORS_INTEL_M10_BMC_HWMON) += intel-m10-bmc-hwmon.o
+ obj-$(CONFIG_SENSORS_ISL28022)	+= isl28022.o
+ obj-$(CONFIG_SENSORS_IT87)	+= it87.o
+diff --git a/drivers/hwmon/ina4230.c b/drivers/hwmon/ina4230.c
+new file mode 100644
+index 000000000000..7e5c7fe2274b
+--- /dev/null
++++ b/drivers/hwmon/ina4230.c
+@@ -0,0 +1,1066 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * INA4230 Quad Current/Voltage Monitor
++ *
++ * Based on INA3221 driver by Texas Instruments Incorporated - https://www.ti.com/
++ * Adapted for INA4230 by Alexey Charkov <alchark@flipper.net>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/byteorder/generic.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/math.h>
++#include <linux/math64.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/util_macros.h>
++
++#define INA4230_DRIVER_NAME			"ina4230"
++
++#define INA4230_SHUNT_VOLTAGE_CH1		0x00
++#define INA4230_BUS_VOLTAGE_CH1			0x01
++#define INA4230_CURRENT_CH1			0x02
++#define INA4230_POWER_CH1			0x03
++#define INA4230_ENERGY_CH1			0x04
++#define INA4230_CALIBRATION_CH1			0x05
++#define INA4230_ALERT_LIMIT1			0x06
++#define INA4230_ALERT_CONFIG1			0x07
++#define INA4230_SHUNT_VOLTAGE_CH2		0x08
++#define INA4230_BUS_VOLTAGE_CH2			0x09
++#define INA4230_CURRENT_CH2			0x0A
++#define INA4230_POWER_CH2			0x0B
++#define INA4230_ENERGY_CH2			0x0C
++#define INA4230_CALIBRATION_CH2			0x0D
++#define INA4230_ALERT_LIMIT2			0x0E
++#define INA4230_ALERT_CONFIG2			0x0F
++#define INA4230_SHUNT_VOLTAGE_CH3		0x10
++#define INA4230_BUS_VOLTAGE_CH3			0x11
++#define INA4230_CURRENT_CH3			0x12
++#define INA4230_POWER_CH3			0x13
++#define INA4230_ENERGY_CH3			0x14
++#define INA4230_CALIBRATION_CH3			0x15
++#define INA4230_ALERT_LIMIT3			0x16
++#define INA4230_ALERT_CONFIG3			0x17
++#define INA4230_SHUNT_VOLTAGE_CH4		0x18
++#define INA4230_BUS_VOLTAGE_CH4			0x19
++#define INA4230_CURRENT_CH4			0x1A
++#define INA4230_POWER_CH4			0x1B
++#define INA4230_ENERGY_CH4			0x1C
++#define INA4230_CALIBRATION_CH4			0x1D
++#define INA4230_ALERT_LIMIT4			0x1E
++#define INA4230_ALERT_CONFIG4			0x1F
++#define INA4230_CONFIG1				0x20
++#define INA4230_CONFIG2				0x21
++#define INA4230_FLAGS				0x22
++#define INA4230_MANUFACTURER_ID			0x7E
++
++#define INA4230_CALIBRATION_MASK		GENMASK(14, 0)
++
++#define INA4230_ALERT_CHANNEL_MASK		GENMASK(4, 3)
++#define INA4230_ALERT_MASK			GENMASK(2, 0)
++/* Shunt voltage over limit */
++#define INA4230_ALERT_MASK_SOL			0x1
++/* Shunt voltage under limit */
++#define INA4230_ALERT_MASK_SUL			0x2
++/* Bus voltage over limit */
++#define INA4230_ALERT_MASK_BOL			0x3
++/* Bus voltage under limit */
++#define INA4230_ALERT_MASK_BUL			0x4
++/* Power over limit */
++#define INA4230_ALERT_MASK_POL			0x5
++
++#define INA4230_CONFIG1_ACTIVE_CHANNEL_MASK	GENMASK(15, 12)
++#define INA4230_CONFIG1_AVG_MASK		GENMASK(11, 9)
++#define INA4230_CONFIG1_VBUSCT_MASK		GENMASK(8, 6)
++#define INA4230_CONFIG1_VSHCT_MASK		GENMASK(5, 3)
++#define INA4230_CONFIG1_MODE_MASK		GENMASK(2, 0)
++#define INA4230_MODE_POWERDOWN			0
++#define INA4230_MODE_SHUNT_SINGLE		1
++#define INA4230_MODE_BUS_SINGLE			2
++#define INA4230_MODE_BUS_SHUNT_SINGLE		3
++#define INA4230_MODE_POWERDOWN1			4
++#define INA4230_MODE_SHUNT_CONTINUOUS		5
++#define INA4230_MODE_BUS_CONTINUOUS		6
++#define INA4230_MODE_BUS_SHUNT_CONTINUOUS	7
++
++#define INA4230_CONFIG2_RST			BIT(15)
++#define INA4230_CONFIG2_ACC_RST_MASK		GENMASK(11, 8)
++#define INA4230_CONFIG2_CNVR_MASK		BIT(7)
++#define INA4230_CONFIG2_ENOF_MASK		BIT(6)
++#define INA4230_CONFIG2_ALERT_LATCH		BIT(5)
++#define INA4230_CONFIG2_ALERT_POL		BIT(4)
++#define INA4230_CONFIG2_RANGE_MASK		GENMASK(3, 0)
++#define INA4230_CONFIG2_RANGE_CH(x) \
++		FIELD_PREP(INA4230_CONFIG2_RANGE_MASK, BIT((x)))
++
++#define INA4230_FLAGS_LIMIT4_ALERT		BIT(15)
++#define INA4230_FLAGS_LIMIT3_ALERT		BIT(14)
++#define INA4230_FLAGS_LIMIT2_ALERT		BIT(13)
++#define INA4230_FLAGS_LIMIT1_ALERT		BIT(12)
++#define INA4230_FLAGS_ENERGY_OVERFLOW_CH4	BIT(11)
++#define INA4230_FLAGS_ENERGY_OVERFLOW_CH3	BIT(10)
++#define INA4230_FLAGS_ENERGY_OVERFLOW_CH2	BIT(9)
++#define INA4230_FLAGS_ENERGY_OVERFLOW_CH1	BIT(8)
++#define INA4230_FLAGS_CVRF			BIT(7)
++#define INA4230_FLAGS_MATH_OVERFLOW		BIT(6)
++
++#define INA4230_RSHUNT_DEFAULT			10000
++#define INA4230_CONFIG_DEFAULT \
++		(FIELD_PREP(INA4230_CONFIG1_ACTIVE_CHANNEL_MASK, 0xF) | \
++		FIELD_PREP(INA4230_CONFIG1_AVG_MASK, 0x1) | \
++		FIELD_PREP(INA4230_CONFIG1_VBUSCT_MASK, 0x4) | \
++		FIELD_PREP(INA4230_CONFIG1_VSHCT_MASK, 0x4) | \
++		FIELD_PREP(INA4230_CONFIG1_MODE_MASK, 0x7))
++#define INA4230_CONFIG_CHx_EN(x) \
++		FIELD_PREP(INA4230_CONFIG1_ACTIVE_CHANNEL_MASK, BIT((x)))
++
++enum ina4230_fields {
++	/* Alert configuration settings: channel masks */
++	F_ALERT1_CH, F_ALERT2_CH, F_ALERT3_CH, F_ALERT4_CH,
++	/* Alert configuration settings: alert masks */
++	F_ALERT1_TYPE, F_ALERT2_TYPE, F_ALERT3_TYPE, F_ALERT4_TYPE,
++	/* Configuration registers */
++	F_CH_EN, F_AVG, F_VBUSCT, F_VSHCT, F_MODE,
++	F_RST, F_ACC_RST, F_CNV_ALERT, F_ENOF, F_ALERT_LATCH, F_ALERT_POL, F_RANGE,
++	/* Status flags */
++	F_LIMIT1_ALERT, F_LIMIT2_ALERT, F_LIMIT3_ALERT, F_LIMIT4_ALERT,
++	F_ENERGY_OVERFLOW_CH1, F_ENERGY_OVERFLOW_CH2, F_ENERGY_OVERFLOW_CH3, F_ENERGY_OVERFLOW_CH4,
++	F_CVRF, F_MATH_OVERFLOW,
++	/* sentinel */
++	F_MAX_FIELDS
++};
++
++static const struct reg_field ina4230_reg_fields[] = {
++	[F_ALERT1_CH] = REG_FIELD(INA4230_ALERT_CONFIG1, 3, 4),
++	[F_ALERT2_CH] = REG_FIELD(INA4230_ALERT_CONFIG2, 3, 4),
++	[F_ALERT3_CH] = REG_FIELD(INA4230_ALERT_CONFIG3, 3, 4),
++	[F_ALERT4_CH] = REG_FIELD(INA4230_ALERT_CONFIG4, 3, 4),
++
++	[F_ALERT1_TYPE] = REG_FIELD(INA4230_ALERT_CONFIG1, 0, 2),
++	[F_ALERT2_TYPE] = REG_FIELD(INA4230_ALERT_CONFIG2, 0, 2),
++	[F_ALERT3_TYPE] = REG_FIELD(INA4230_ALERT_CONFIG3, 0, 2),
++	[F_ALERT4_TYPE] = REG_FIELD(INA4230_ALERT_CONFIG4, 0, 2),
++
++	[F_CH_EN] = REG_FIELD(INA4230_CONFIG1, 12, 15),
++	[F_AVG] = REG_FIELD(INA4230_CONFIG1, 9, 11),
++	[F_VBUSCT] = REG_FIELD(INA4230_CONFIG1, 6, 8),
++	[F_VSHCT] = REG_FIELD(INA4230_CONFIG1, 3, 5),
++	[F_MODE] = REG_FIELD(INA4230_CONFIG1, 0, 2),
++	[F_RST] = REG_FIELD(INA4230_CONFIG2, 15, 15),
++	[F_ACC_RST] = REG_FIELD(INA4230_CONFIG2, 8, 11),
++	[F_CNV_ALERT] = REG_FIELD(INA4230_CONFIG2, 7, 7),
++	[F_ENOF] = REG_FIELD(INA4230_CONFIG2, 6, 6),
++	[F_ALERT_LATCH] = REG_FIELD(INA4230_CONFIG2, 5, 5),
++	[F_ALERT_POL] = REG_FIELD(INA4230_CONFIG2, 4, 4),
++	[F_RANGE] = REG_FIELD(INA4230_CONFIG2, 0, 3),
++
++	[F_LIMIT1_ALERT] = REG_FIELD(INA4230_FLAGS, 12, 12),
++	[F_LIMIT2_ALERT] = REG_FIELD(INA4230_FLAGS, 13, 13),
++	[F_LIMIT3_ALERT] = REG_FIELD(INA4230_FLAGS, 14, 14),
++	[F_LIMIT4_ALERT] = REG_FIELD(INA4230_FLAGS, 15, 15),
++	[F_ENERGY_OVERFLOW_CH1] = REG_FIELD(INA4230_FLAGS, 8, 8),
++	[F_ENERGY_OVERFLOW_CH2] = REG_FIELD(INA4230_FLAGS, 9, 9),
++	[F_ENERGY_OVERFLOW_CH3] = REG_FIELD(INA4230_FLAGS, 10, 10),
++	[F_ENERGY_OVERFLOW_CH4] = REG_FIELD(INA4230_FLAGS, 11, 11),
++	[F_CVRF] = REG_FIELD(INA4230_FLAGS, 7, 7),
++	[F_MATH_OVERFLOW] = REG_FIELD(INA4230_FLAGS, 6, 6),
++};
++
++enum ina4230_channels {
++	INA4230_CHANNEL1,
++	INA4230_CHANNEL2,
++	INA4230_CHANNEL3,
++	INA4230_CHANNEL4,
++	INA4230_NUM_CHANNELS
++};
++
++/**
++ * struct ina4230_input - channel input source specific information
++ * @label: label of channel input source
++ * @shunt_resistor: shunt resistor value of channel input source
++ * @shunt_gain: gain of shunt voltage for current calculation
++ * @max_expected_current: maximum expected current in micro-Ampere for ADC
++ *			  calibration
++ * @current_lsb_uA: current LSB in micro-Amperes
++ * @disconnected: connection status of channel input source
++ */
++struct ina4230_input {
++	const char *label;
++	int shunt_resistor;
++	int shunt_gain;
++	int max_expected_current;
++	int current_lsb_uA;
++	bool disconnected;
++};
++
++/**
++ * struct ina4230_data - device specific information
++ * @pm_dev: Device pointer for pm runtime
++ * @regmap: Register map of the device
++ * @fields: Register fields of the device
++ * @inputs: Array of channel input source specific structures
++ * @reg_config1: cached value of CONFIG1 register
++ * @reg_config2: cached value of CONFIG2 register
++ * @single_shot: flag indicating single-shot measurement mode
++ * @alert_active_high: flag indicating alert polarity is active high
++ */
++struct ina4230_data {
++	struct device *pm_dev;
++	struct regmap *regmap;
++	struct regmap_field *fields[F_MAX_FIELDS];
++	struct ina4230_input inputs[INA4230_NUM_CHANNELS];
++	unsigned int reg_config1;
++	unsigned int reg_config2;
++	bool single_shot;
++	bool alert_active_high;
++};
++
++static inline bool ina4230_is_enabled(struct ina4230_data *ina, int channel)
++{
++	return pm_runtime_active(ina->pm_dev) &&
++		!ina->inputs[channel].disconnected;
++}
++
++/* Lookup table for Bus and Shunt conversion times in usec */
++static const u16 ina4230_conv_time[] = {
++	140, 204, 332, 588, 1100, 2116, 4156, 8244,
++};
++
++/* Lookup table for number of samples used in averaging mode */
++static const int ina4230_avg_samples[] = {
++	1, 4, 16, 64, 128, 256, 512, 1024,
++};
++
++/* Converting update_interval in msec to conversion time in usec */
++static inline u32 ina4230_interval_ms_to_conv_time(u16 config, int interval)
++{
++	u32 channels = hweight16(config & INA4230_CONFIG1_ACTIVE_CHANNEL_MASK);
++	u32 samples_idx = FIELD_GET(INA4230_CONFIG1_AVG_MASK, config);
++	u32 samples = ina4230_avg_samples[samples_idx];
++
++	/* Bisect the result to Bus and Shunt conversion times */
++	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
++}
++
++/* Converting CONFIG register value to update_interval in usec */
++static inline u32 ina4230_reg_to_interval_us(u16 config)
++{
++	u32 channels = hweight16(config & INA4230_CONFIG1_ACTIVE_CHANNEL_MASK);
++	u32 vbus_ct_idx = FIELD_GET(INA4230_CONFIG1_VBUSCT_MASK, config);
++	u32 vsh_ct_idx = FIELD_GET(INA4230_CONFIG1_VSHCT_MASK, config);
++	u32 vbus_ct = ina4230_conv_time[vbus_ct_idx];
++	u32 vsh_ct = ina4230_conv_time[vsh_ct_idx];
++
++	/* Calculate total conversion time */
++	return channels * (vbus_ct + vsh_ct);
++}
++
++static inline int ina4230_wait_for_data(struct ina4230_data *ina)
++{
++	u32 wait, cvrf;
++
++	wait = ina4230_reg_to_interval_us(ina->reg_config1);
++
++	/* Polling the CVRF bit to make sure read data is ready */
++	return regmap_field_read_poll_timeout(ina->fields[F_CVRF],
++					      cvrf, cvrf, wait, wait * 2);
++}
++
++static const u8 ina4230_calibration_reg[] = {
++	INA4230_CALIBRATION_CH1,
++	INA4230_CALIBRATION_CH2,
++	INA4230_CALIBRATION_CH3,
++	INA4230_CALIBRATION_CH4,
++};
++
++static int ina4230_set_calibration(struct ina4230_data *ina, int channel)
++{
++	struct ina4230_input *input = &ina->inputs[channel];
++	u8 reg = ina4230_calibration_reg[channel];
++	int shunt_range_uV, ret;
++	u32 calibration;
++	u64 n, d;
++
++	shunt_range_uV = mult_frac(input->max_expected_current,
++				   input->shunt_resistor,
++				   1000000);
++	input->shunt_gain = shunt_range_uV > 20480 ? 1 : 4;
++	ina->reg_config2 &= ~INA4230_CONFIG2_RANGE_CH(channel);
++	if (input->shunt_gain == 4)
++		ina->reg_config2 |= INA4230_CONFIG2_RANGE_CH(channel);
++
++	ret = regmap_write(ina->regmap, INA4230_CONFIG2, ina->reg_config2);
++	if (ret)
++		return ret;
++
++	input->current_lsb_uA = DIV_ROUND_UP(input->max_expected_current, 32768);
++	n = 5120000000ULL;
++	d = (u64)input->current_lsb_uA * input->shunt_resistor * input->shunt_gain;
++	/* Ensure rounding to the closest integer */
++	n += d / 2;
++	n = div64_u64(n, d);
++	if (n > INA4230_CALIBRATION_MASK) {
++		dev_err(ina->pm_dev,
++			"Shunt %duOhm too low for expected current %duA, cannot calibrate channel %d\n",
++			input->shunt_resistor, input->max_expected_current, channel + 1);
++		return -ERANGE;
++	}
++
++	calibration = n & INA4230_CALIBRATION_MASK;
++
++	return regmap_write(ina->regmap, reg, calibration);
++}
++
++static const u8 ina4230_in_reg[] = {
++	INA4230_BUS_VOLTAGE_CH1,
++	INA4230_BUS_VOLTAGE_CH2,
++	INA4230_BUS_VOLTAGE_CH3,
++	INA4230_BUS_VOLTAGE_CH4,
++	INA4230_SHUNT_VOLTAGE_CH1,
++	INA4230_SHUNT_VOLTAGE_CH2,
++	INA4230_SHUNT_VOLTAGE_CH3,
++	INA4230_SHUNT_VOLTAGE_CH4,
++};
++
++static const u8 ina4230_curr_reg[][INA4230_NUM_CHANNELS] = {
++	[hwmon_curr_input] = { INA4230_CURRENT_CH1, INA4230_CURRENT_CH2,
++			       INA4230_CURRENT_CH3, INA4230_CURRENT_CH4 },
++};
++
++static const u8 ina4230_power_reg[] = {
++	INA4230_POWER_CH1, INA4230_POWER_CH2, INA4230_POWER_CH3, INA4230_POWER_CH4
++};
++
++static const u8 ina4230_energy_reg[] = {
++	INA4230_ENERGY_CH1, INA4230_ENERGY_CH2,
++	INA4230_ENERGY_CH3, INA4230_ENERGY_CH4
++};
++
++static int ina4230_read_chip(struct device *dev, u32 attr, long *val)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	int regval;
++
++	switch (attr) {
++	case hwmon_chip_samples:
++		regval = FIELD_GET(INA4230_CONFIG1_AVG_MASK, ina->reg_config1);
++		*val = ina4230_avg_samples[regval];
++		return 0;
++	case hwmon_chip_update_interval:
++		/* Return in msec */
++		*val = ina4230_reg_to_interval_us(ina->reg_config1);
++		*val = DIV_ROUND_CLOSEST(*val, 1000);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_read_in(struct device *dev, u32 attr, int channel, long *val)
++{
++	const bool is_shunt = channel > INA4230_CHANNEL4;
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	u8 reg = ina4230_in_reg[channel];
++	int regval, ret;
++
++	/*
++	 * Translate shunt channel index to sensor channel index
++	 */
++	channel %= INA4230_NUM_CHANNELS;
++
++	switch (attr) {
++	case hwmon_in_input:
++		if (!ina4230_is_enabled(ina, channel))
++			return -ENODATA;
++
++		/* Write CONFIG register to trigger a single-shot measurement */
++		if (ina->single_shot) {
++			ret = regmap_write(ina->regmap, INA4230_CONFIG1,
++				     ina->reg_config1);
++			if (ret)
++				return ret;
++
++			ret = ina4230_wait_for_data(ina);
++			if (ret)
++				return ret;
++		}
++
++		ret = regmap_read(ina->regmap, reg, &regval);
++		if (ret)
++			return ret;
++
++		/*
++		 * Scale of shunt voltage (uV): LSB is 2.5uV or 625nV
++		 *				depending on gain setting
++		 * Scale of bus voltage (mV): LSB is 1.6mV
++		 */
++		if (is_shunt)
++			*val = mult_frac((long)(int16_t)regval,
++					 2500 / ina->inputs[channel].shunt_gain,
++					 1000000);
++		else
++			*val = mult_frac((long)(int16_t)regval,
++					 1600,
++					 1000);
++		return 0;
++	case hwmon_in_enable:
++		*val = ina4230_is_enabled(ina, channel);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_read_power(struct device *dev, u32 attr, int channel, long *val)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	u8 reg = ina4230_power_reg[channel];
++	int regval, ret;
++
++	switch (attr) {
++	case hwmon_power_input:
++		if (!ina4230_is_enabled(ina, channel))
++			return -ENODATA;
++
++		ret = regmap_read(ina->regmap, reg, &regval);
++		if (ret)
++			return ret;
++
++		*val = (int16_t)regval *
++			(long)ina->inputs[channel].current_lsb_uA * 32;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_read_energy(struct device *dev, u32 attr, int channel, long *val)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	u8 reg = ina4230_energy_reg[channel];
++	int ret;
++	__be32 regval;
++
++	switch (attr) {
++	case hwmon_energy_input:
++		if (!ina4230_is_enabled(ina, channel))
++			return -ENODATA;
++
++		ret = regmap_noinc_read(ina->regmap, reg, &regval, sizeof(regval));
++		if (ret)
++			return ret;
++
++		*val = be32_to_cpu(regval) *
++			(long)ina->inputs[channel].current_lsb_uA * 32;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_read_curr(struct device *dev, u32 attr,
++			     int channel, long *val)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	u8 reg = ina4230_curr_reg[attr][channel];
++	int regval, ret;
++
++	switch (attr) {
++	case hwmon_curr_input:
++		if (!ina4230_is_enabled(ina, channel))
++			return -ENODATA;
++
++		/* Write CONFIG1 register to trigger a single-shot measurement */
++		if (ina->single_shot) {
++			ret = regmap_write(ina->regmap, INA4230_CONFIG1,
++				       ina->reg_config1);
++			if (ret)
++				return ret;
++
++			ret = ina4230_wait_for_data(ina);
++			if (ret)
++				return ret;
++		}
++
++		ret = regmap_read(ina->regmap, reg, &regval);
++		if (ret)
++			return ret;
++
++		*val = (int16_t)regval *
++			(long)ina->inputs[channel].current_lsb_uA / 1000;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_write_chip(struct device *dev, u32 attr, long val)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	int idx;
++	u32 tmp;
++
++	switch (attr) {
++	case hwmon_chip_samples:
++		idx = find_closest(val, ina4230_avg_samples,
++				   ARRAY_SIZE(ina4230_avg_samples));
++
++		FIELD_MODIFY(INA4230_CONFIG1_AVG_MASK, &ina->reg_config1, idx);
++		return regmap_write(ina->regmap, INA4230_CONFIG1, ina->reg_config1);
++	case hwmon_chip_update_interval:
++		tmp = ina4230_interval_ms_to_conv_time(ina->reg_config1, val);
++		idx = find_closest(tmp, ina4230_conv_time,
++				   ARRAY_SIZE(ina4230_conv_time));
++
++		FIELD_MODIFY(INA4230_CONFIG1_VBUSCT_MASK, &ina->reg_config1, idx);
++		FIELD_MODIFY(INA4230_CONFIG1_VSHCT_MASK, &ina->reg_config1, idx);
++		return regmap_write(ina->regmap, INA4230_CONFIG1, ina->reg_config1);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ina4230_write_enable(struct device *dev, int channel, bool enable)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	u16 config, mask = INA4230_CONFIG_CHx_EN(channel);
++	u16 config_old = ina->reg_config1 & mask;
++	u32 tmp;
++	int ret;
++
++	config = enable ? mask : 0;
++
++	/* Bypass if enable status is not being changed */
++	if (config_old == config)
++		return 0;
++
++	/* For enabling routine, increase refcount and resume() at first */
++	if (enable) {
++		ret = pm_runtime_resume_and_get(ina->pm_dev);
++		if (ret < 0) {
++			dev_err(dev, "Failed to get PM runtime\n");
++			return ret;
++		}
++	}
++
++	/* Enable or disable the channel */
++	tmp = (ina->reg_config1 & ~mask) | (config & mask);
++	ret = regmap_write(ina->regmap, INA4230_CONFIG1, tmp);
++	if (ret)
++		goto fail;
++
++	/* Cache the latest config register value */
++	ina->reg_config1 = tmp;
++
++	/* For disabling routine, decrease refcount or suspend() at last */
++	if (!enable)
++		pm_runtime_put_sync(ina->pm_dev);
++
++	return 0;
++
++fail:
++	if (enable) {
++		dev_err(dev, "Failed to enable channel %d: error %d\n",
++			channel, ret);
++		pm_runtime_put_sync(ina->pm_dev);
++	}
++
++	return ret;
++}
++
++static int ina4230_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
++	int ret;
++
++	switch (type) {
++	case hwmon_chip:
++		ret = ina4230_read_chip(dev, attr, val);
++		break;
++	case hwmon_in:
++		/* 0-align channel ID */
++		ret = ina4230_read_in(dev, attr, channel - 1, val);
++		break;
++	case hwmon_curr:
++		ret = ina4230_read_curr(dev, attr, channel, val);
++		break;
++	case hwmon_power:
++		ret = ina4230_read_power(dev, attr, channel, val);
++		break;
++	case hwmon_energy:
++		ret = ina4230_read_energy(dev, attr, channel, val);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++	return ret;
++}
++
++static int ina4230_write(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long val)
++{
++	int ret;
++
++	switch (type) {
++	case hwmon_chip:
++		ret = ina4230_write_chip(dev, attr, val);
++		break;
++	case hwmon_in:
++		/* 0-align channel ID */
++		ret = ina4230_write_enable(dev, channel - 1, val);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++	return ret;
++}
++
++static int ina4230_read_string(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, const char **str)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	int index = channel - 1;
++
++	*str = ina->inputs[index].label;
++
++	return 0;
++}
++
++static umode_t ina4230_is_visible(const void *drvdata,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	const struct ina4230_data *ina = drvdata;
++	const struct ina4230_input *input = NULL;
++
++	switch (type) {
++	case hwmon_chip:
++		switch (attr) {
++		case hwmon_chip_samples:
++		case hwmon_chip_update_interval:
++			return 0644;
++		default:
++			return 0;
++		}
++	case hwmon_in:
++		/* Ignore in0_ */
++		if (channel == 0)
++			return 0;
++
++		switch (attr) {
++		case hwmon_in_label:
++			if (channel - 1 <= INA4230_CHANNEL4)
++				input = &ina->inputs[channel - 1];
++			/* Hide label node if label is not provided */
++			return (input && input->label) ? 0444 : 0;
++		case hwmon_in_input:
++			return 0444;
++		case hwmon_in_enable:
++			return 0644;
++		default:
++			return 0;
++		}
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			return 0444;
++		default:
++			return 0;
++		}
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++			return 0444;
++		default:
++			return 0;
++		}
++	case hwmon_energy:
++		switch (attr) {
++		case hwmon_energy_input:
++			return 0444;
++		default:
++			return 0;
++		}
++	default:
++		return 0;
++	}
++}
++
++static const struct hwmon_channel_info * const ina4230_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_SAMPLES,
++			   HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(in,
++			   /* 0: dummy, skipped in is_visible */
++			   HWMON_I_INPUT,
++			   /* 1-4: input voltage Channels */
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   /* 5-8: shunt voltage Channels */
++			   HWMON_I_INPUT,
++			   HWMON_I_INPUT,
++			   HWMON_I_INPUT,
++			   HWMON_I_INPUT),
++	HWMON_CHANNEL_INFO(curr,
++			   /* 1-4: current channels*/
++			   HWMON_C_INPUT,
++			   HWMON_C_INPUT,
++			   HWMON_C_INPUT,
++			   HWMON_C_INPUT),
++	HWMON_CHANNEL_INFO(power,
++			   /* 1-4: power channels*/
++			   HWMON_P_INPUT,
++			   HWMON_P_INPUT,
++			   HWMON_P_INPUT,
++			   HWMON_P_INPUT),
++	HWMON_CHANNEL_INFO(energy,
++			   /* 1-4: energy channels*/
++			   HWMON_E_INPUT,
++			   HWMON_E_INPUT,
++			   HWMON_E_INPUT,
++			   HWMON_E_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops ina4230_hwmon_ops = {
++	.is_visible = ina4230_is_visible,
++	.read_string = ina4230_read_string,
++	.read = ina4230_read,
++	.write = ina4230_write,
++};
++
++static const struct hwmon_chip_info ina4230_chip_info = {
++	.ops = &ina4230_hwmon_ops,
++	.info = ina4230_info,
++};
++
++/* Extra attribute groups */
++static ssize_t ina4230_shunt_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	unsigned int channel = sd_attr->index;
++	struct ina4230_input *input = &ina->inputs[channel];
++
++	return sysfs_emit(buf, "%d\n", input->shunt_resistor);
++}
++
++static ssize_t ina4230_shunt_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	struct sensor_device_attribute *sd_attr = to_sensor_dev_attr(attr);
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	unsigned int channel = sd_attr->index;
++	struct ina4230_input *input = &ina->inputs[channel];
++	int val;
++	int ret;
++
++	ret = kstrtoint(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	val = clamp_val(val, 1, INT_MAX);
++
++	input->shunt_resistor = val;
++	ret = ina4230_set_calibration(ina, channel);
++	if (ret)
++		return ret;
++
++	return count;
++}
++
++/* shunt resistance */
++static SENSOR_DEVICE_ATTR_RW(shunt1_resistor, ina4230_shunt, INA4230_CHANNEL1);
++static SENSOR_DEVICE_ATTR_RW(shunt2_resistor, ina4230_shunt, INA4230_CHANNEL2);
++static SENSOR_DEVICE_ATTR_RW(shunt3_resistor, ina4230_shunt, INA4230_CHANNEL3);
++static SENSOR_DEVICE_ATTR_RW(shunt4_resistor, ina4230_shunt, INA4230_CHANNEL4);
++
++static struct attribute *ina4230_attrs[] = {
++	&sensor_dev_attr_shunt1_resistor.dev_attr.attr,
++	&sensor_dev_attr_shunt2_resistor.dev_attr.attr,
++	&sensor_dev_attr_shunt3_resistor.dev_attr.attr,
++	&sensor_dev_attr_shunt4_resistor.dev_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(ina4230);
++
++static const struct regmap_range ina4230_vol_ranges[] = {
++	regmap_reg_range(INA4230_SHUNT_VOLTAGE_CH1, INA4230_ENERGY_CH1),
++	regmap_reg_range(INA4230_SHUNT_VOLTAGE_CH2, INA4230_ENERGY_CH2),
++	regmap_reg_range(INA4230_SHUNT_VOLTAGE_CH3, INA4230_ENERGY_CH3),
++	regmap_reg_range(INA4230_SHUNT_VOLTAGE_CH4, INA4230_ENERGY_CH4),
++	regmap_reg_range(INA4230_FLAGS, INA4230_FLAGS),
++};
++
++static const struct regmap_access_table ina4230_volatile_table = {
++	.yes_ranges = ina4230_vol_ranges,
++	.n_yes_ranges = ARRAY_SIZE(ina4230_vol_ranges),
++};
++
++static const struct regmap_config ina4230_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 16,
++
++	.cache_type = REGCACHE_MAPLE,
++	.volatile_table = &ina4230_volatile_table,
++};
++
++static int ina4230_probe_child_from_dt(struct device *dev,
++				       struct device_node *child,
++				       struct ina4230_data *ina)
++{
++	struct ina4230_input *input;
++	u32 val;
++	int ret;
++
++	ret = of_property_read_u32(child, "reg", &val);
++	if (ret)
++		return dev_err_probe(dev, ret,
++			"missing reg property of %pOFn\n", child);
++	else if (val > INA4230_CHANNEL4)
++		return dev_err_probe(dev, -EINVAL,
++			"invalid reg %d of %pOFn\n", val, child);
++
++	input = &ina->inputs[val];
++
++	/* Log the disconnected channel input */
++	if (!of_device_is_available(child)) {
++		input->disconnected = true;
++		return 0;
++	}
++
++	/* Save the connected input label if available */
++	of_property_read_string(child, "label", &input->label);
++
++	/* Overwrite default shunt resistor value optionally */
++	if (!of_property_read_u32(child, "shunt-resistor-micro-ohms", &val)) {
++		if (val < 1 || val > INT_MAX)
++			return dev_err_probe(dev, -EINVAL,
++				"invalid shunt resistor value %u of %pOFn\n",
++				val, child);
++
++		input->shunt_resistor = val;
++	}
++
++	/* Save the expected maxcurrent */
++	if (!of_property_read_u32(child, "ti,maximum-expected-current-microamp", &val)) {
++		if (val < 32768 || val > INT_MAX)
++			return dev_err_probe(dev, -EINVAL,
++				"invalid max current value %u of %pOFn\n",
++				val, child);
++
++		input->max_expected_current = val;
++	}
++
++	return 0;
++}
++
++static int ina4230_probe_from_dt(struct device *dev, struct ina4230_data *ina)
++{
++	const struct device_node *np = dev->of_node;
++	int ret;
++
++	/* Compatible with non-DT platforms */
++	if (!np)
++		return 0;
++
++	ina->single_shot = of_property_read_bool(np, "ti,single-shot");
++	ina->alert_active_high = of_property_read_bool(np, "ti,alert-polarity-active-high");
++
++	for_each_child_of_node_scoped(np, child) {
++		ret = ina4230_probe_child_from_dt(dev, child, ina);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int ina4230_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	struct ina4230_data *ina;
++	struct device *hwmon_dev;
++	int i, ret;
++
++	ina = devm_kzalloc(dev, sizeof(*ina), GFP_KERNEL);
++	if (!ina)
++		return -ENOMEM;
++
++	ina->regmap = devm_regmap_init_i2c(client, &ina4230_regmap_config);
++	if (IS_ERR(ina->regmap))
++		return PTR_ERR(ina->regmap);
++
++	ret = devm_regmap_field_bulk_alloc(dev, ina->regmap, ina->fields,
++					   ina4230_reg_fields,
++					   ARRAY_SIZE(ina4230_reg_fields));
++	if (ret)
++		return ret;
++
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		ina->inputs[i].shunt_resistor = INA4230_RSHUNT_DEFAULT;
++		/* Default for 1mA LSB current measurements */
++		ina->inputs[i].max_expected_current = 32768000;
++	}
++
++	ret = ina4230_probe_from_dt(dev, ina);
++	if (ret)
++		return dev_err_probe(dev, ret,
++			"Unable to probe from device tree\n");
++
++	/* The driver will be reset, so use reset value */
++	ina->reg_config1 = INA4230_CONFIG_DEFAULT;
++	ina->reg_config2 = 0;
++
++	if (ina->single_shot)
++		FIELD_MODIFY(INA4230_CONFIG1_MODE_MASK, &ina->reg_config1,
++			     INA4230_MODE_BUS_SHUNT_SINGLE);
++
++	/* Disable channels if their inputs are disconnected */
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		if (ina->inputs[i].disconnected)
++			ina->reg_config1 &= ~INA4230_CONFIG_CHx_EN(i);
++	}
++
++	ina->pm_dev = dev;
++	dev_set_drvdata(dev, ina);
++
++	/* Enable PM runtime -- status is suspended by default */
++	pm_runtime_enable(ina->pm_dev);
++
++	/* Initialize (resume) the device */
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		if (ina->inputs[i].disconnected)
++			continue;
++
++		/* Match the refcount with number of enabled channels */
++		ret = pm_runtime_get_sync(ina->pm_dev);
++		if (ret < 0)
++			goto fail;
++	}
++
++	/* Set calibration values after device resume/reset */
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		if (!ina->inputs[i].disconnected) {
++			ret = ina4230_set_calibration(ina, i);
++			if (ret)
++				goto fail;
++		}
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, ina,
++							 &ina4230_chip_info,
++							 ina4230_groups);
++	if (IS_ERR(hwmon_dev)) {
++		ret = dev_err_probe(dev, PTR_ERR(hwmon_dev),
++			"Unable to register hwmon device\n");
++		goto fail;
++	}
++
++	return 0;
++
++fail:
++	pm_runtime_disable(ina->pm_dev);
++	pm_runtime_set_suspended(ina->pm_dev);
++	/* pm_runtime_put_noidle() for connected channels to balance get_sync */
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		if (!ina->inputs[i].disconnected)
++			pm_runtime_put_noidle(ina->pm_dev);
++	}
++
++	return ret;
++}
++
++static void ina4230_remove(struct i2c_client *client)
++{
++	struct ina4230_data *ina = dev_get_drvdata(&client->dev);
++	int i;
++
++	pm_runtime_disable(ina->pm_dev);
++	pm_runtime_set_suspended(ina->pm_dev);
++
++	/* pm_runtime_put_noidle() for connected channels to balance get_sync */
++	for (i = 0; i < INA4230_NUM_CHANNELS; i++) {
++		if (!ina->inputs[i].disconnected)
++			pm_runtime_put_noidle(ina->pm_dev);
++	}
++}
++
++static int ina4230_suspend(struct device *dev)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	int ret;
++
++	/* Save config register value and enable cache-only */
++	ret = regmap_read(ina->regmap, INA4230_CONFIG1, &ina->reg_config1);
++	if (ret)
++		return ret;
++
++	regcache_cache_only(ina->regmap, true);
++	regcache_mark_dirty(ina->regmap);
++
++	return 0;
++}
++
++static int ina4230_resume(struct device *dev)
++{
++	struct ina4230_data *ina = dev_get_drvdata(dev);
++	int ret;
++
++	regcache_cache_only(ina->regmap, false);
++
++	/* Software reset the chip */
++	ret = regmap_field_write(ina->fields[F_RST], true);
++	if (ret) {
++		dev_err(dev, "Unable to reset device\n");
++		return ret;
++	}
++
++	/* Restore cached register values to hardware */
++	ret = regcache_sync(ina->regmap);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static DEFINE_RUNTIME_DEV_PM_OPS(ina4230_pm, ina4230_suspend, ina4230_resume,
++				 NULL);
++
++static const struct of_device_id ina4230_of_match_table[] = {
++	{ .compatible = "ti,ina4230", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, ina4230_of_match_table);
++
++static const struct i2c_device_id ina4230_ids[] = {
++	{ "ina4230" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(i2c, ina4230_ids);
++
++static struct i2c_driver ina4230_i2c_driver = {
++	.probe = ina4230_probe,
++	.remove = ina4230_remove,
++	.driver = {
++		.name = INA4230_DRIVER_NAME,
++		.of_match_table = ina4230_of_match_table,
++		.pm = pm_ptr(&ina4230_pm),
++	},
++	.id_table = ina4230_ids,
++};
++module_i2c_driver(ina4230_i2c_driver);
++
++MODULE_AUTHOR("Alexey Charkov <alchark@flipper.net>");
++MODULE_DESCRIPTION("Texas Instruments INA4230 HWMon Driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.52.0
