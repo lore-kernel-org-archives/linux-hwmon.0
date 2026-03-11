@@ -1,187 +1,298 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C86A36897F
-	for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 20:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973D92BE043;
+	Wed, 11 Mar 2026 06:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773174986; cv=none; b=TtH5d4Y7PDy+5Q1Q7pGq1VSdhF1Bs746wKsQbaEkbi1vqfIl3/aZ2PQFA7KzLewq+fWK+yx+dDAi5YgZWZ2fo/LL1roiTOn9/KPSO3BNVdCNo6NBSzTdvfWPkP23Lh7qViJrRFuckJUg1JAYTBJem9WiOK471Nrn7/ftzMjrtTE=
+	t=1773211902; cv=none; b=Er+py1Q/Pv0WuTRNcDbKO4HHWjvQtkYH4vWVpqPvPWhRblrqnnIV5gZwgwllNoOkocaVkZPvv/r/ZTwAr6crwGfvzeCRr2lEFteT3dCU8a1kHXBHT9J6lt7thcsbEdySd/ppGyY1927Bpsatd9xghFIWX6eE6Qkafgtc5ysvHUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773174986; c=relaxed/simple;
-	bh=UxKU/c+6UtfxgiXtYB9CIvu6YNjRUy0H34f8efaNJiA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L364zRnds51xeyuyNG9o/tkqFvtnI1EGDGHnrKslmsdOr+z00XaIOhi9CJlk6fdxknHjr6eoeDPHqY6jF7DTRq5W9syiXHZNiT4RGTotNlcsizIhDziD85TZspbHysJwNIRrzCHDaer2bhOgcCsX6duRd1DObJ9UGU5ItfAwgjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApFSVtlX; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773211902; c=relaxed/simple;
+	bh=Oc2x3ElYrjUwgmDviA0P5KAGFhDwqTHN0y27sRC7lR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CBBSC7PjC778A58Ia7hw7KIlM8ROXj9akPotW+9uWUWjx7qL0I4AzaEQ8t4L9EzsAcPG1dXr+Iz4FAe07TU6rh1Mx8vI7vUriF5CzxrSXIjThlOsVX4SQxLosMrZt466UVsgVo1YgMjLdUXLyehoxvhbX+o0kn1f51V38OGRwr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jsL+5bKx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApFSVtlX"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852fdb36a8so41307745e9.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Mar 2026 13:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773174984; x=1773779784; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YWC89SNBP14Ak3zMdsjrEcAqrqhx0MSOXRT5kJJSs2w=;
-        b=ApFSVtlXYwA/qlgT4bALmslYxlxt8LNSYXM2xDUG7fhLpE4H2Rj/22Jr65FsbArQw+
-         t9KPJSjeKJfytlDpbUl1D1BbKTRs1IGgZgULhI+O3KkHXIYFPD9CJwrqbD+osLJrx8Vp
-         Sl83DPTceJPogiY4s0+kZ8kXBkBEkaJJ0U7VPNHzkFjxRQ02mPEBsMKzj9ewTB/icMQv
-         A1Gqbpf23YEgvFkD+eDT7iwvOf2+Alp4+uSEfh9hXrBfuK3+IDt+eCuQCtmOnfd5JgR2
-         DEe1IVimuFSiqnxOm4BodrKDGtik0HJIhYEXeYsBB6ZnES/rI6zofOvEiyDuAjpHed2l
-         bUvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773174984; x=1773779784;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YWC89SNBP14Ak3zMdsjrEcAqrqhx0MSOXRT5kJJSs2w=;
-        b=FTZ3Rehl6dp1AFY+kqeQ+ptb/Kj/HMLczdSQQNgBahujF6iArJq0KsVJwKDcHrylZ5
-         sbNMp+CwZ7S1Cn2itYVqiifaginAxyFeWfkaSGI/t/AzqkDeIpp7542DfjdB4I6CgTLv
-         jHTOfLb/wd23mbqvpPwecfoY6AkmIri+7AiYcaTNC5h4G7cWt/4ZCSEPBo5zIgPgi8Mi
-         xl5SvrhLaRCAJx4mMo0o1Z2pwfCSkAzLJ0bM9extaJMvpCHL9PZo6WtS7JoYZ+vYe8Bf
-         CosfIvNN58GlSchSFXF0nKp1TUqgXDWS+4FE/YL/mHflQ8qT18u719xP8FCX2yAb4vtC
-         M7XA==
-X-Gm-Message-State: AOJu0YwGHSxTUoBLI2r10yZGP+HZkVtE6IcCREMdTEU6750uwh0R1pw9
-	XHbRHkfbrpphNGmNQOOuMpFqDn8EElGZ3Iti9I5N8oIYPH1MLxW40DSx
-X-Gm-Gg: ATEYQzwKPLVPuKXH8cqIZm0I4yXCxPeb05OMZURKwgnO2uWr22pqNdCVfs4PgzblSV9
-	dHMGoSbv//lwmJt+dhjMi3JVO2Q6zhstNYn6nBGkAmOcfy2owdt8RUdyHPALXqRitBniaXTMvTK
-	IfHVf96ZYR0irnZOC5mbrnKJo8zRHClrLH9/kOCAYY6ZC27fXi8pVfISWkL8Qs7Ktn/tudx+ctN
-	k+wl5SKyijvr9OAzDHGdy508DLb8gErdWUA4f78NH4kSINnrlmpEP67m/uo3Ma96J56lKfryp8K
-	L2ow69q2T7oMBMRBEU+gtug7261zwJZ/JoDTO0s6nMb7zxViG3Zy1hCngaCjqXAqPagDO56Zf9d
-	/YHxNhb0p6N78O/4XIQeo9gN0E60GUbRf5vBC+Krarf8TCGduUQzv+6+2+iGf5F67H6ANpOhlp/
-	WGtvPGneDOBhRu921l2C/R8tHlCA==
-X-Received: by 2002:a05:600c:314d:b0:480:1d0b:2d32 with SMTP id 5b1f17b1804b1-4854b0e8111mr2819035e9.12.1773174983720;
-        Tue, 10 Mar 2026 13:36:23 -0700 (PDT)
-Received: from localhost ([37.228.227.224])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48541b7f3cdsm117372275e9.14.2026.03.10.13.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 13:36:23 -0700 (PDT)
-From: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
-To: linux@roeck-us.net
-Cc: linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
-Subject: [PATCH] hwmon: ibmpex: check ibmpex_send_message() return value
-Date: Tue, 10 Mar 2026 20:35:55 +0000
-Message-Id: <20260310203555.33896-1-jaime.saguillo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jsL+5bKx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4025C4CEF7;
+	Wed, 11 Mar 2026 06:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773211902;
+	bh=Oc2x3ElYrjUwgmDviA0P5KAGFhDwqTHN0y27sRC7lR8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jsL+5bKxgNsi/48zPwMoDvq7iH/riRJGMq1T9F0TL9FP6jo7qIelqRRE/WIgyaJZs
+	 EM+Sdd4dy4FfnxWUoSLuO/DF5v35BKcnC3vc+n0kTD+LPsrVdLvpDkeN8IyZASON7K
+	 92rYjdOpwbw+jQ+wFPvkN8VtFaBKuq6zJY7wJEOE+C4WNOaY78SNJkX5eIt6iIlCrw
+	 XDoIRX7HvHnr9LXFOvyzborf81bqd+627nf4hoxLDhhD/2y5oyVv6QoJaTzgIVK8Cx
+	 SJO6FFtarpkfmUvu0xWn5DLjfscwdV8vPUdLjs426Agghl9a5Dmy/ro3RtC27PI8Mi
+	 E3Zj74CnTEMeQ==
+Date: Wed, 11 Mar 2026 07:51:39 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>, kernel@pengutronix.de, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
+Subject: Re: [PATCH v3 1/7] dt-bindings: mfd: add NXP MC33978/MC34978 MSDI
+Message-ID: <20260311-icy-dove-of-endurance-ab2bbe@quoll>
+References: <20260309134920.1918294-1-o.rempel@pengutronix.de>
+ <20260309134920.1918294-2-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260309134920.1918294-2-o.rempel@pengutronix.de>
 
-Several ibmpex request helpers ignore the return value of
-ibmpex_send_message() and then unconditionally wait for
-read_complete.
+On Mon, Mar 09, 2026 at 02:49:12PM +0100, Oleksij Rempel wrote:
+> Add device tree binding documentation for the NXP MC33978 and MC34978
+> Multiple Switch Detection Interface (MSDI) devices.
+> 
+> These ICs monitor up to 22 mechanical switch contacts in automotive and
+> industrial environments. They provide configurable wetting currents to
+> break through contact oxidation and feature extensive hardware
+> protection against thermal overload and voltage transients (load
+> dumps/brown-outs).
+> 
+> The device interfaces via SPI and provides multiple functions. To
+> accurately represent the hardware without unnecessary DT overhead, the
+> binding is structured as follows:
+> - pinctrl: A dedicated child node managing the 22 switch inputs (SG/SP
+>   pins) and their GPIO configurations.
+> - hwmon: Integrated into the parent node, exposing critical hardware
+>   faults (OT, OV, UV) and static voltage/temperature thresholds.
+> - mux: Integrated into the parent node, controlling the 24-to-1 analog
+>   multiplexer to route pin voltages, internal temperature, or battery
+>   voltage to an external SoC ADC.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+> changes v3:
+> - Drop regular expression pattern from pinctrl child node and define
+>   it as a standard property
+> - Reorder required properties list in MFD binding
+> - Remove stray blank line from the MFD binding devicetree example
+> - Replace unevaluatedProperties with additionalProperties in the pinctrl
+>   binding
+> changes v2:
+> - Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
+> - Removed the empty hwmon child node
+> - Folded the mux-controller node into the parent MFD node
+> - Added vbatp-supply and vddq-supply to the required properties block
+> - Changed the example node name from mc33978@0 to gpio@0
+> - Removed unnecessary literal block scalars (|) from descriptions
+> - Documented SG, SP, and SB pin acronyms in the pinctrl description
+> - Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
+>   inputs, with a note on output circuit dependency
+> - Updated commit message
+> ---
+>  .../devicetree/bindings/mfd/nxp,mc33978.yaml  | 112 ++++++++++++++++++
+>  .../bindings/pinctrl/nxp,mc33978-pinctrl.yaml |  82 +++++++++++++
+>  2 files changed, 194 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml b/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+> new file mode 100644
+> index 000000000000..23520315d484
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/nxp,mc33978.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/nxp,mc33978.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP MC33978/MC34978 Multiple Switch Detection Interface
+> +
+> +maintainers:
+> +  - David Jander <david@protonic.nl>
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description:
+> +  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSDI)
+> +  devices with 22 switch inputs, integrated fault detection, and analog
+> +  multiplexer (AMUX) for voltage/temperature monitoring.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^gpio(@.*)?$"
 
-If transmit fails, no response will arrive and the code may wait
-indefinitely. Check ibmpex_send_message() return values and
-propagate errors to callers instead of continuing.
+@.+, because it is not optional, or just drop the nodename completely.
 
-Also propagate reset command failures through
-ibmpex_high_low_store().
+> +
+> +  compatible:
+> +    enum:
+> +      - nxp,mc33978
+> +      - nxp,mc34978
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: SPI chip select number
+> +
+> +  spi-max-frequency:
+> +    maximum: 8000000
+> +    description: Maximum SPI clock frequency (up to 8 MHz)
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description:
+> +      INT_B pin interrupt. Active-low, indicates pin state changes or
+> +      fault conditions.
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    const: 2
+> +    description:
+> +      First cell is the IRQ number (0-21 for pins, 22 for faults).
+> +      Second cell is the trigger type (IRQ_TYPE_* from interrupt-controller.h).
+> +
+> +  '#mux-control-cells':
+> +    const: 0
+> +    description:
+> +      Present if the device AMUX selector is used as a mux provider.
+> +      Consumers (e.g. io-channel-mux) must provide settle-time-us for the
+> +      external ADC sampling path.
+> +
+> +  vddq-supply:
+> +    description: Digital supply voltage
+> +
+> +  vbatp-supply:
+> +    description: Battery/power supply
+> +
+> +  pinctrl:
+> +    type: object
+> +    $ref: /schemas/pinctrl/nxp,mc33978-pinctrl.yaml#
+> +    description:
+> +      Pinctrl and GPIO controller child node for the 22 switch inputs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - '#interrupt-cells'
+> +  - vddq-supply
+> +  - vbatp-supply
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        msdi: gpio@0 {
+> +            compatible = "nxp,mc33978";
+> +            reg = <0>;
+> +            spi-max-frequency = <4000000>;
+> +
+> +            interrupt-parent = <&gpiog>;
+> +            interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +
+> +            vddq-supply = <&reg_3v3>;
+> +            vbatp-supply = <&reg_12v>;
+> +
+> +            #mux-control-cells = <0>;
+> +
+> +            pinctrl {
+> +                compatible = "nxp,mc33978-pinctrl";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
 
-Signed-off-by: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
----
- drivers/hwmon/ibmpex.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+pin grp nodes should be here
 
-diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
-index dec730798d58..92cda205e57c 100644
---- a/drivers/hwmon/ibmpex.c
-+++ b/drivers/hwmon/ibmpex.c
-@@ -133,9 +133,13 @@ static int ibmpex_send_message(struct ibmpex_bmc_data *data)
- 
- static int ibmpex_ver_check(struct ibmpex_bmc_data *data)
- {
-+	int err;
-+
- 	data->tx_msg_data[0] = PEX_GET_VERSION;
- 	data->tx_message.data_len = 1;
--	ibmpex_send_message(data);
-+	err = ibmpex_send_message(data);
-+	if (err)
-+		return err;
- 
- 	wait_for_completion(&data->read_complete);
- 
-@@ -159,9 +163,13 @@ static int ibmpex_ver_check(struct ibmpex_bmc_data *data)
- 
- static int ibmpex_query_sensor_count(struct ibmpex_bmc_data *data)
- {
-+	int err;
-+
- 	data->tx_msg_data[0] = PEX_GET_SENSOR_COUNT;
- 	data->tx_message.data_len = 1;
--	ibmpex_send_message(data);
-+	err = ibmpex_send_message(data);
-+	if (err)
-+		return err;
- 
- 	wait_for_completion(&data->read_complete);
- 
-@@ -173,10 +181,14 @@ static int ibmpex_query_sensor_count(struct ibmpex_bmc_data *data)
- 
- static int ibmpex_query_sensor_name(struct ibmpex_bmc_data *data, int sensor)
- {
-+	int err;
-+
- 	data->tx_msg_data[0] = PEX_GET_SENSOR_NAME;
- 	data->tx_msg_data[1] = sensor;
- 	data->tx_message.data_len = 2;
--	ibmpex_send_message(data);
-+	err = ibmpex_send_message(data);
-+	if (err)
-+		return err;
- 
- 	wait_for_completion(&data->read_complete);
- 
-@@ -188,10 +200,14 @@ static int ibmpex_query_sensor_name(struct ibmpex_bmc_data *data, int sensor)
- 
- static int ibmpex_query_sensor_data(struct ibmpex_bmc_data *data, int sensor)
- {
-+	int err;
-+
- 	data->tx_msg_data[0] = PEX_GET_SENSOR_DATA;
- 	data->tx_msg_data[1] = sensor;
- 	data->tx_message.data_len = 2;
--	ibmpex_send_message(data);
-+	err = ibmpex_send_message(data);
-+	if (err)
-+		return err;
- 
- 	wait_for_completion(&data->read_complete);
- 
-@@ -206,9 +222,13 @@ static int ibmpex_query_sensor_data(struct ibmpex_bmc_data *data, int sensor)
- 
- static int ibmpex_reset_high_low_data(struct ibmpex_bmc_data *data)
- {
-+	int err;
-+
- 	data->tx_msg_data[0] = PEX_RESET_HIGH_LOW;
- 	data->tx_message.data_len = 1;
--	ibmpex_send_message(data);
-+	err = ibmpex_send_message(data);
-+	if (err)
-+		return err;
- 
- 	wait_for_completion(&data->read_complete);
- 
-@@ -276,8 +296,11 @@ static ssize_t ibmpex_high_low_store(struct device *dev,
- 				     const char *buf, size_t count)
- {
- 	struct ibmpex_bmc_data *data = dev_get_drvdata(dev);
-+	int err;
- 
--	ibmpex_reset_high_low_data(data);
-+	err = ibmpex_reset_high_low_data(data);
-+	if (err)
-+		return err;
- 
- 	return count;
- }
--- 
-2.34.1
+
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..ba946906557c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978-pinctrl.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP MC33978/MC34978 Pinctrl/GPIO Driver
+
+s/Driver// because otherwise it sounds like "pinctrl driver" and you
+cannot drive pin controls.
+
+> +
+> +maintainers:
+> +  - David Jander <david@protonic.nl>
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: |
+> +  Pin control and GPIO driver for the MC33978/MC34978 MSDI device.
+> +
+> +  Pin numbering:
+> +  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
+> +    contacts closed to ground and typically require GPIO_ACTIVE_LOW
+> +    flags when used as digital inputs.
+> +  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
+> +    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
+> +    inputs monitor contacts closed to the battery voltage and typically
+> +    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
+> +
+> +  Output Emulation:
+> +  The hardware lacks standard push-pull output drivers. Outputs are emulated
+> +  by toggling the programmable wetting current sources (acting as pull-ups or
+> +  pull-downs) and the hardware tri-state registers. Because of this physical
+> +  constraint:
+> +  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAIN or
+> +    GPIO_OPEN_SOURCE in the device tree.
+> +  - Push-pull configurations are physically unsupported.
+> +  - The active polarity depends entirely on the external circuit (e.g., how an
+> +    LED is wired) and must be flagged accordingly by the consumer.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,mc33978-pinctrl
+> +      - nxp,mc34978-pinctrl
+
+I did not raise it before, but now I think these compatibles are
+pointless. MC33978 is a one, specific (as in fixed) device, so its
+pinctrl/gpio part won't be taken and used in some other device. They
+should be dropped. That way entire schema would fit parent one, although
+its placement is odd - it's not really MFD device.
+
+
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  ngpios:
+> +    const: 22
+> +
+> +patternProperties:
+> +  "^.*-grp$":
+
+Keep consistent quotes, either ' or "
+
+Best regards,
+Krzysztof
 
