@@ -1,79 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799CA3845B9;
-	Thu, 12 Mar 2026 15:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE803FE646;
+	Thu, 12 Mar 2026 17:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773328884; cv=none; b=ZpYMbL3kK4XhAPOZ/kX1rKyji8/eSHJAGOXUq5QkaqwUSI1eQLcH3CHedOHn1FPCDwgtgw8xdnOv1O4oLLWKP31TsCm9/PTOy4/ZI+Rz+41eAkIM0xh2bLvt7YdHKLNd9B7DDtFiIk3y/a4IAOCyMkHxkpmCiXBFec6Wliokx6g=
+	t=1773337076; cv=none; b=r4E+YYct6ET42FBe7YwBs8iZxsxL9HZOoTic86qXiEnA/WoIkFQ/fjuNJ6tIZZEf4QN6NpKTWSWqtXgbZYdAKB96WMnfggW9Sgh0k5o6ubhSkeY8Fyl4Q4QooQXFOFThzklPfeoymTpB50PU46Wcik5tp5ntjigs10EP0HM07Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773328884; c=relaxed/simple;
-	bh=YTAxrKfaWlpyf0/MK7MHIXvdGyAf3SGdE+RVhDUnn4k=;
+	s=arc-20240116; t=1773337076; c=relaxed/simple;
+	bh=aFQX/mwVXIQpPQX7qxE0nuMOaK4qcK/SeR4LGJuFsa8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cctAT8BaCIYDl84OjHPi4uoxMxHrGOW48u7ToIYVMH52rrl+q8AbbaJ3xjkPVxYmRrTHyvZYCAoOeNuOZJ6bhJqQpMcYueE4l2WeLs6VxBWPrbR9GNxR8pv1LKSiWh4/RH5wvhzUaat1pANAHYjk/NsFIihnwFqt27DfsyHabjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=H9Q9X2T3; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=LbNXwss0sM1Pm7epOEarWnYCaAYCAQV9tnH/PInodP/Oaq/xVfO2hoji/3+7V9wmX7Etbyli0USO+wy3kcNsV1V87eJrvzVsX8zsaxUo2pDEBgVYjTIEeJWFqRGxC9unkPqXYG3gvLviFUUmpDkn4+WFxQY0DRQLOFW22L+nT/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ff4qP7P0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="H9Q9X2T3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A01FC4CEF7;
-	Thu, 12 Mar 2026 15:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773328884;
-	bh=YTAxrKfaWlpyf0/MK7MHIXvdGyAf3SGdE+RVhDUnn4k=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ff4qP7P0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1704C4CEF7;
+	Thu, 12 Mar 2026 17:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773337076;
+	bh=aFQX/mwVXIQpPQX7qxE0nuMOaK4qcK/SeR4LGJuFsa8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H9Q9X2T3SiKNqN8iRSmDM2YLLYjtuMVcUUEgGBorB2p3By5rIVUWBVkHKRrccuaK1
-	 AmHkVUXLmmm3QX1mxuG5EGKkoxKrI4B6D46oXzR5d/qXCINt3gjp4P1p21uUJU/xRc
-	 7G5wmia3BsnaRZZBII3WDSOtyYry38I/7UO63WB0=
-Date: Thu, 12 Mar 2026 16:21:19 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: rafael@kernel.org, hanguidong02@gmail.com, ysato@users.sourceforge.jp,
-	dalias@libc.org, glaubitz@physik.fu-berlin.de, abelvesa@kernel.org,
-	srini@kernel.org, s.nawrocki@samsung.com, nuno.sa@analog.com,
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev, linux-hwmon@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-sh@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] driver core: generalize driver_override
- infrastructure
-Message-ID: <2026031211-landside-subtype-5750@gregkh>
-References: <20260303115720.48783-1-dakr@kernel.org>
+	b=Ff4qP7P0InVUnBUhM3Vtq96wZ0ILUUgkGrxZYHaddnDcFs6PP+8gyhTAdIIQHPk2Y
+	 bOfSGdMdcc2cBbuQ1gxKzvzr5buWAShjm7rNFD+OvKTMrfvtiTh58eoQjFMc6UksGQ
+	 6zzbiroo7h6rEQLex6MVQrAvRvw10XGGSbYCdRFNCe5ixJdrzrfagC7rKEuIvs9Umd
+	 g/k72i7MWJ+/ClO8ORAOF7wiAw9nYo+oC9RiMeYljmAL/vq+NvPZzSSyBDxHdAFgKE
+	 l31FhuKTIMQ1Yw6UGKNFZfHhTNYdEkMlfRmpiagxyWcWqUt28APqTDRU5v/lENzIFo
+	 se6GtOW65l5aQ==
+Date: Thu, 12 Mar 2026 17:37:51 +0000
+From: Conor Dooley <conor@kernel.org>
+To: florin.leotescu@oss.nxp.com
+Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, viorel.suman@nxp.com,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+Subject: Re: [RFC PATCH v2 1/2] dt-bindings: hwmon: emc2305: Add
+ fan-shutdown-percent property
+Message-ID: <20260312-triage-shallot-1b3d9f07d250@spud>
+References: <20260312122248.1281572-1-florin.leotescu@oss.nxp.com>
+ <20260312122248.1281572-2-florin.leotescu@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="oDbvumbCQdRDhubR"
+Content-Disposition: inline
+In-Reply-To: <20260312122248.1281572-2-florin.leotescu@oss.nxp.com>
+
+
+--oDbvumbCQdRDhubR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260303115720.48783-1-dakr@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 03, 2026 at 12:53:17PM +0100, Danilo Krummrich wrote:
-> Currently, there are 12 busses (including platform and PCI) that duplicate the
-> driver_override logic for their individual devices.
-> 
-> All of them seem to be prone to the bug described in [1].
-> 
-> While this could be solved for every bus individually using a separate lock,
-> solving this in the driver-core generically results in less (and cleaner)
-> changes overall.
-> 
-> Thus, move driver_override to struct device, provide corresponding accessors for
-> busses and handle locking with a separate lock internally.
-> 
-> In particular, add device_set_driver_override(), device_has_driver_override(),
-> device_match_driver_override() and a helper, DEVICE_ATTR_DRIVER_OVERRIDE(), to
-> declare the corresponding sysfs store() and show() callbacks.
-> 
-> Until all busses have migrated, keep driver_set_override() in place.
-> 
-> Note that we can't use the device lock for the reasons described in [2].
-> 
-> This patch series includes the migration of the platform bus; patches for all
-> other affected busses still need to be extracted as a follow-up of the WIP
-> treewide patch in [3].
-> 
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=220789
-> [2] https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kernel.org/
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git/log/?h=driver_override
+On Thu, Mar 12, 2026 at 02:22:47PM +0200, florin.leotescu@oss.nxp.com wrote:
+> From: Florin Leotescu <florin.leotescu@nxp.com>
+>=20
+> The EMC2305 fan controller supports multiple independent PWM fan
+> outputs. Some systems require fans to enter a defined safe state
+> during system shutdown or reboot handoff, until firmware or the next
+> boot stage reconfigures the controller.
+>=20
+> Add an optional "fan-shutdown-percent" property to fan child nodes
+> allowing the shutdown fan speed to be configured per fan output.
+>=20
+> Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
+> ---
+>  .../devicetree/bindings/hwmon/microchip,emc2305.yaml      | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.ya=
+ml b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> index d3f06ebc19fa..7bcadfab9fc4 100644
+> --- a/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/microchip,emc2305.yaml
+> @@ -54,6 +54,12 @@ patternProperties:
+>            The fan number used to determine the associated PWM channel.
+>          maxItems: 1
+> =20
+> +      fan-shutdown-percent:
+> +        description:
+> +          Fan RPM in percent set during shutdown.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This sounds like something generic, that other devices might need and
+should be in fan-common.yaml?
+
+> +        minimum: 0
+> +        maximum: 100
+> +
+>      required:
+>        - reg
+> =20
+> @@ -80,12 +86,14 @@ examples:
+>              fan@0 {
+>                  reg =3D <0x0>;
+>                  pwms =3D <&fan_controller 26000 PWM_POLARITY_INVERTED 1>;
+> +                fan-shutdown-percent =3D <100>;
+>                  #cooling-cells =3D <2>;
+>              };
+> =20
+>              fan@1 {
+>                  reg =3D <0x1>;
+>                  pwms =3D <&fan_controller 26000 0 1>;
+> +                fan-shutdown-percent =3D <50>;
+>                  #cooling-cells =3D <2>;
+>              };
+> =20
+> --=20
+> 2.34.1
+>=20
+
+--oDbvumbCQdRDhubR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCabL57wAKCRB4tDGHoIJi
+0noHAP9z/fCiq8hV4ZCCK6xJrtd6hvHbeRv80Hgr1bMapjuwoAD/QTtp9v/Ab3J9
+3q1keEgHBJviuIq0kTxW0wHKYbkL+g0=
+=Y6RW
+-----END PGP SIGNATURE-----
+
+--oDbvumbCQdRDhubR--
