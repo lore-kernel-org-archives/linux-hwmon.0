@@ -1,16 +1,16 @@
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D03331A56
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 14:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBBF39659B
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 14:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773410570; cv=none; b=opMIQdy6It2NIdLE7JS8QKziYo08fDguIjqaD/egeP4NIFV0YYq0HsU5ED8+N6ao1nzSC/Kf7XKnK8s34gMt24Hwwer3H2A6YOkDVGKsiruwDTXy4IcIjBJWk3kXEkJOyU3dEtSoob+6FVN3m/gjZIwvW27yj2z7Vj+ijBRfHOs=
+	t=1773410574; cv=none; b=C6Q0VyzJ8WTKUQhXNvTCd+45+JfSijxSMlhEn0i9TvzmD9WICnQgJoJHGCp7nF+9Z61tfRgLowZSyj3AzcfWU0mQuKO8ifzbtsx4EZZVHwqfdXEbr4De+3HrfggAGoCaQZ00IAGSTq+MYR+tEJhTQKuqL4Oh0vu79rkk+LrzBQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773410570; c=relaxed/simple;
-	bh=nVi4fnB21BQnsw3d7NxzTf6aE/i4SZDs5SPCB9HlxDc=;
+	s=arc-20240116; t=1773410574; c=relaxed/simple;
+	bh=96WIg8Hzrxqo8cK84L/k6XozbT381jgbo5yN9aAe2ZY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QNW12+kvyrJGCpW7tvkX++yMZckeQ0Y/Z9GymCAWbWTKITa7eIE87IIi016QtxTMAVie4DNlX4zANfZosfkcUm+g6TxaYqsBOF8VQVXsrf3VRAlyU2PNO4zh34DwwHu4U3OfTNL+gzC4EMe733OHv7yMKYXg3Jc3uXvu4/22+5M=
+	 MIME-Version:Content-Type; b=ARtcbiH3Dq9psgsgF2Wt0ly8NZ37qMbe8zXpxt0mJmWOQKcGolsAGnp/d57cjdJ9R0hIVNPojPqqrBEx+WcpyavHJdYdl1hjggydTQek0TkorpUUhg5ItCSXfulgOH24lyXX5z3ifzrfhSPdkOaWxTzvJ5mBz77gE0AgEVTlzn8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -18,16 +18,16 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w135r-0007Jb-4b; Fri, 13 Mar 2026 15:02:23 +0100
+	id 1w135r-0007Jp-B5; Fri, 13 Mar 2026 15:02:23 +0100
 Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w135q-0005cp-2q;
-	Fri, 13 Mar 2026 15:02:22 +0100
+	id 1w135r-0005cv-03;
+	Fri, 13 Mar 2026 15:02:23 +0100
 Received: from ore by dude04 with local (Exim 4.98.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1w135q-000000055hH-3Px3;
+	id 1w135q-000000055hv-3rfB;
 	Fri, 13 Mar 2026 15:02:22 +0100
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Guenter Roeck <linux@roeck-us.net>,
@@ -44,9 +44,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org,
 	David Jander <david@protonic.nl>
-Subject: [PATCH v4 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-Date: Fri, 13 Mar 2026 15:02:12 +0100
-Message-ID: <20260313140218.1213393-2-o.rempel@pengutronix.de>
+Subject: [PATCH v4 5/6] hwmon: add NXP MC33978/MC34978 driver
+Date: Fri, 13 Mar 2026 15:02:16 +0100
+Message-ID: <20260313140218.1213393-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260313140218.1213393-1-o.rempel@pengutronix.de>
 References: <20260313140218.1213393-1-o.rempel@pengutronix.de>
@@ -56,217 +56,502 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Add device tree binding documentation for the NXP MC33978 and MC34978
-Multiple Switch Detection Interface (MSDI) devices.
+Add hardware monitoring support for the NXP MC33978/MC34978 MSDI.
 
-These ICs monitor up to 22 mechanical switch contacts in automotive and
-industrial environments. They provide configurable wetting currents to
-break through contact oxidation and feature extensive hardware
-protection against thermal overload and voltage transients (load
-dumps/brown-outs).
-
-The device interfaces via SPI. While it provides multiple functions, its
-primary hardware purpose is pin/switch control. To accurately represent
-the hardware as a single physical integrated circuit without unnecessary
-DT overhead, all functions are flattened into a single pinctrl node:
-- pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controller
-  and managing their pin configurations.
-- hwmon: Exposing critical hardware faults (OT, OV, UV) and static
-  voltage/temperature thresholds.
-- mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
-  internal temperature, or battery voltage to an external SoC ADC.
+The driver exposes static operating thresholds (thermal, over-voltage,
+under-voltage) and reports dynamic hardware fault alarms.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
 changes v4:
-- Drop the standalone mfd/nxp,mc33978.yaml schema entirely.
-- Move the unified device binding to bindings/pinctrl/nxp,mc33978.yaml,
-- Remove the dedicated child node compatible strings (nxp,mc33978-pinctrl).
-- Flatten the pinctrl/gpio properties directly into the main SPI device
-  node.
+- no changes
 changes v3:
-- Drop regular expression pattern from pinctrl child node and define
-  it as a standard property
-- Reorder required properties list in MFD binding
-- Remove stray blank line from the MFD binding devicetree example
-- Replace unevaluatedProperties with additionalProperties in the pinctrl
-  binding
+- no changes
 changes v2:
-- Squashed MFD, pinctrl, hwmon, and mux bindings into a single patch
-- Removed the empty hwmon child node
-- Folded the mux-controller node into the parent MFD node
-- Added vbatp-supply and vddq-supply to the required properties block
-- Changed the example node name from mc33978@0 to gpio@0
-- Removed unnecessary literal block scalars (|) from descriptions
-- Documented SG, SP, and SB pin acronyms in the pinctrl description
-- Added consumer polarity guidance (GPIO_ACTIVE_LOW/HIGH) for SG/SB
-  inputs, with a note on output circuit dependency
-- Updated commit message
+- Switch from OF match table to platform_device_id
 ---
- .../bindings/pinctrl/nxp,mc33978.yaml         | 148 ++++++++++++++++++
- 1 file changed, 148 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+ drivers/hwmon/Kconfig         |  10 +
+ drivers/hwmon/Makefile        |   1 +
+ drivers/hwmon/mc33978-hwmon.c | 430 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 441 insertions(+)
+ create mode 100644 drivers/hwmon/mc33978-hwmon.c
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 486152a8ea77..afe691539df3 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -700,6 +700,16 @@ config SENSORS_MC13783_ADC
+         help
+           Support for the A/D converter on MC13783 and MC13892 PMIC.
+ 
++config SENSORS_MC33978
++	tristate "NXP MC33978/MC34978 fault monitoring"
++	depends on MFD_MC33978
++	help
++	  If you say yes here you get fault monitoring support for the
++	  NXP MC33978/MC34978 Multiple Switch Detection Interface (MSDI).
++
++	  This driver can also be built as a module. If so, the module
++	  will be called mc33978-hwmon.
++
+ config SENSORS_MC33XS2410
+ 	tristate "MC33XS2410 HWMON support"
+ 	depends on PWM_MC33XS2410
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 5833c807c688..4c3db5433a10 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -167,6 +167,7 @@ obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
+ obj-$(CONFIG_MAX31827) += max31827.o
+ obj-$(CONFIG_SENSORS_MAX77705) += max77705-hwmon.o
+ obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
++obj-$(CONFIG_SENSORS_MC33978)	+= mc33978-hwmon.o
+ obj-$(CONFIG_SENSORS_MC33XS2410) += mc33xs2410_hwmon.o
+ obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
+ obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
+diff --git a/drivers/hwmon/mc33978-hwmon.c b/drivers/hwmon/mc33978-hwmon.c
 new file mode 100644
-index 000000000000..58a641a7c615
+index 000000000000..8740523773f7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/nxp,mc33978.yaml
-@@ -0,0 +1,148 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/nxp,mc33978.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/hwmon/mc33978-hwmon.c
+@@ -0,0 +1,430 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
++/*
++ * MC33978/MC34978 Hardware Monitor Driver
++ *
++ * CRITICAL HARDWARE BEHAVIOR - THERMAL (tLIM):
++ * When the thermal limit (>155°C) is reached, the IC autonomously
++ * reduces the continuous wetting current (CWET) to 2.0 mA to prevent
++ * thermal destruction. This throttling persists until the silicon cools
++ * down below 140°C (15°C hysteresis).
++ *
++ * WARNING FOR PINCTRL/GPIO CONSUMERS:
++ * During an active tLIM fault, the switch state detection becomes
++ * inherently unreliable. A throttled wetting current of 2.0 mA may
++ * be insufficient to break through the oxide layer of mechanical
++ * contacts in the field, leading to false-open GPIO readings.
++ *
++ * VOLTAGE DEGRADATION WARNING (VBATP):
++ * While the hard Undervoltage Lockout (UVLO) asserts strictly at 4.5V,
++ * the silicon operates with degraded parametrics whenever the supply
++ * drops below 6.0V. System designers must be aware that analog routing
++ * (AMUX) and switch detection logic may behave non-deterministically
++ * before the actual UV alarm triggers.
++ */
 +
-+title: NXP MC33978/MC34978 Multiple Switch Detection Interface
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/hwmon.h>
++#include <linux/interrupt.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
 +
-+maintainers:
-+  - David Jander <david@protonic.nl>
-+  - Oleksij Rempel <o.rempel@pengutronix.de>
++#include <linux/mfd/mc33978.h>
 +
-+description: |
-+  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSDI)
-+  devices with 22 switch inputs, integrated fault detection, and analog
-+  multiplexer (AMUX) for voltage/temperature monitoring.
++/* Thermal Warning threshold (~120C) */
++#define MC33978_TEMP_WARN_MC		120000
 +
-+  Pin numbering:
-+  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
-+    contacts closed to ground and typically require GPIO_ACTIVE_LOW
-+    flags when used as digital inputs.
-+  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
-+    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
-+    inputs monitor contacts closed to the battery voltage and typically
-+    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
++/* Thermal Limit / tLIM (>155C) - Hardware enters CWET throttling */
++#define MC33978_TEMP_CRIT_MC		155000
 +
-+  Output Emulation:
-+  The hardware lacks standard push-pull output drivers. Outputs are emulated
-+  by toggling the programmable wetting current sources (acting as pull-ups
-+  or pull-downs) and the hardware tri-state registers. Because of this
-+  physical constraint:
-+  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAIN or
-+    GPIO_OPEN_SOURCE in the device tree.
-+  - Push-pull configurations are physically unsupported.
-+  - The active polarity depends entirely on the external circuit (e.g., how
-+    an LED is wired) and must be flagged accordingly by the consumer.
++/* Hysteresis for tLIM recovery (Silicon must cool to <140C) */
++#define MC33978_TEMP_HYST_MC		15000
 +
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++/* VBATP (in0) IC Level thresholds */
++#define MC33978_VBATP_OV_MV		36000 /* Overvoltage limit */
++#define MC33978_VBATP_FUNC_MV		28000 /* Functional/Normal boundary */
++#define MC33978_VBATP_DEGRADED_MV	6000 /* Degraded parametrics start */
++#define MC33978_VBATP_UVLO_MV		4500 /* UV Rising Threshold max */
 +
-+properties:
-+  compatible:
-+    enum:
-+      - nxp,mc33978
-+      - nxp,mc34978
++/* VDDQ (in1) Logic Supply thresholds */
++#define MC33978_VDDQ_MAX_MV		5250 /* Operating Condition max */
++#define MC33978_VDDQ_MIN_MV		3000 /* Operating Condition min */
++#define MC33978_VDDQ_UV_MV		2800 /* UV Falling Threshold max */
 +
-+  reg:
-+    maxItems: 1
-+    description: SPI chip select number
++enum mc33978_hwmon_in_channels {
++	MC33978_IN_VBATP,
++	MC33978_IN_VDDQ,
++};
 +
-+  spi-max-frequency:
-+    maximum: 8000000
-+    description: Maximum SPI clock frequency (up to 8 MHz)
++struct mc33978_hwmon_priv {
++	struct device *dev;
++	struct device *hwmon_dev;
++	struct regmap *map;
++	int fault_irq;
++	u32 last_faults;
++};
 +
-+  interrupts:
-+    maxItems: 1
-+    description:
-+      INT_B pin interrupt. Active-low, indicates pin state changes or
-+      fault conditions.
++static int mc33978_hwmon_read_fault(struct mc33978_hwmon_priv *priv,
++				    u32 *faults)
++{
++	unsigned int val;
++	int ret;
 +
-+  interrupt-controller: true
++	ret = regmap_read(priv->map, MC33978_REG_FAULT, &val);
++	if (ret)
++		return ret;
 +
-+  '#interrupt-cells':
-+    const: 2
-+    description:
-+      First cell is the IRQ number (0-21 for pins, 22 for faults).
-+      Second cell is the trigger type (IRQ_TYPE_* from interrupt-controller.h).
++	*faults = val;
 +
-+  '#mux-control-cells':
-+    const: 0
-+    description:
-+      Present if the device AMUX selector is used as a mux provider.
-+      Consumers (e.g. io-channel-mux) must provide settle-time-us for the
-+      external ADC sampling path.
++	return 0;
++}
 +
-+  vddq-supply:
-+    description: Digital supply voltage
++static void mc33978_hwmon_report_faults(struct mc33978_hwmon_priv *priv,
++					u32 new_faults)
++{
++	/*
++	 * Log only newly asserted critical faults to prevent kernel log spam
++	 * during persistent hardware fault conditions.
++	 * dev_*_ratelimited provides an additional safety net against noisy IRQs.
++	 */
++	if (!new_faults)
++		return;
 +
-+  vbatp-supply:
-+    description: Battery/power supply
++	if (new_faults & MC33978_FAULT_OT)
++		dev_crit_ratelimited(priv->dev, "Over-temperature fault detected!\n");
 +
-+  gpio-controller: true
++	if (new_faults & MC33978_FAULT_OV)
++		dev_crit_ratelimited(priv->dev, "Over-voltage fault detected!\n");
 +
-+  '#gpio-cells':
-+    const: 2
++	if (new_faults & MC33978_FAULT_UV)
++		dev_err_ratelimited(priv->dev, "Under-voltage fault detected!\n");
++}
 +
-+  ngpios:
-+    const: 22
++static irqreturn_t mc33978_hwmon_fault_irq(int irq, void *data)
++{
++	struct mc33978_hwmon_priv *priv = data;
++	u32 faults, new_faults, changed_faults;
++	int ret;
 +
-+patternProperties:
-+  '^.*-grp$':
-+    type: object
-+    $ref: /schemas/pinctrl/pincfg-node.yaml#
-+    additionalProperties: false
-+    description: Pin configuration subnodes.
-+    properties:
-+      pins: true
-+      bias-pull-up: true
-+      bias-pull-down: true
-+      bias-high-impedance: true
++	ret = mc33978_hwmon_read_fault(priv, &faults);
++	if (ret) {
++		dev_err_ratelimited(priv->dev, "Failed to read fault register: %pe\n",
++				    ERR_PTR(ret));
++		return IRQ_NONE;
++	}
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+  - vddq-supply
-+  - vbatp-supply
-+  - gpio-controller
-+  - '#gpio-cells'
++	changed_faults = faults ^ priv->last_faults;
++	if (!changed_faults)
++		return IRQ_HANDLED;
 +
-+unevaluatedProperties: false
++	new_faults = faults & ~priv->last_faults;
++	if (new_faults)
++		mc33978_hwmon_report_faults(priv, new_faults);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
++	priv->last_faults = faults;
 +
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++	if (changed_faults & MC33978_FAULT_UV)
++		hwmon_notify_event(priv->hwmon_dev, hwmon_in,
++				   hwmon_in_lcrit_alarm, MC33978_IN_VBATP);
 +
-+        msdi: gpio@0 {
-+            compatible = "nxp,mc33978";
-+            reg = <0>;
-+            spi-max-frequency = <4000000>;
++	if (changed_faults & MC33978_FAULT_OV)
++		hwmon_notify_event(priv->hwmon_dev, hwmon_in,
++				   hwmon_in_crit_alarm, MC33978_IN_VBATP);
 +
-+            interrupt-parent = <&gpiog>;
-+            interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
++	if (changed_faults & MC33978_FAULT_TEMP_WARN)
++		hwmon_notify_event(priv->hwmon_dev, hwmon_temp,
++				   hwmon_temp_max_alarm, 0);
 +
-+            vddq-supply = <&reg_3v3>;
-+            vbatp-supply = <&reg_12v>;
++	if (changed_faults & MC33978_FAULT_OT)
++		hwmon_notify_event(priv->hwmon_dev, hwmon_temp,
++				   hwmon_temp_crit_alarm, 0);
 +
-+            #mux-control-cells = <0>;
++	/* Push a chip-level alarm on any hardware status change */
++	hwmon_notify_event(priv->hwmon_dev, hwmon_chip,
++			   hwmon_chip_alarms, 0);
 +
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+            ngpios = <22>;
++	return IRQ_HANDLED;
++}
 +
-+            door-grp {
-+                pins = "sg0";
-+                bias-high-impedance;
-+            };
-+        };
-+    };
++static umode_t mc33978_hwmon_is_visible(const void *data,
++					enum hwmon_sensor_types type,
++					u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_chip:
++		if (attr == hwmon_chip_alarms)
++			return 0444;
++		break;
++
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_max:
++		case hwmon_temp_crit:
++		case hwmon_temp_crit_hyst:
++		case hwmon_temp_max_alarm:
++		case hwmon_temp_crit_alarm:
++			return 0444;
++		default:
++			break;
++		}
++		break;
++
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_label:
++		case hwmon_in_max:
++		case hwmon_in_min:
++		case hwmon_in_lcrit:
++			return 0444;
++		case hwmon_in_crit:
++			if (channel == MC33978_IN_VBATP)
++				return 0444;
++			break;
++		case hwmon_in_crit_alarm:
++		case hwmon_in_lcrit_alarm:
++			if (channel == MC33978_IN_VBATP)
++				return 0444;
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int mc33978_hwmon_read(struct device *dev,
++			      enum hwmon_sensor_types type,
++			      u32 attr, int channel, long *val)
++{
++	struct mc33978_hwmon_priv *priv = dev_get_drvdata(dev);
++	u32 faults;
++	int ret;
++
++	switch (type) {
++	case hwmon_in:
++		if (channel == MC33978_IN_VBATP) {
++			switch (attr) {
++			case hwmon_in_crit:
++				*val = MC33978_VBATP_OV_MV;
++				return 0;
++			case hwmon_in_max:
++				*val = MC33978_VBATP_FUNC_MV;
++				return 0;
++			case hwmon_in_min:
++				*val = MC33978_VBATP_DEGRADED_MV;
++				return 0;
++			case hwmon_in_lcrit:
++				*val = MC33978_VBATP_UVLO_MV;
++				return 0;
++			default:
++				break;
++			}
++		} else if (channel == MC33978_IN_VDDQ) {
++			switch (attr) {
++			case hwmon_in_max:
++				*val = MC33978_VDDQ_MAX_MV;
++				return 0;
++			case hwmon_in_min:
++				*val = MC33978_VDDQ_MIN_MV;
++				return 0;
++			case hwmon_in_lcrit:
++				*val = MC33978_VDDQ_UV_MV;
++				return 0;
++			default:
++				break;
++			}
++		}
++		break;
++
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_max:
++			*val = MC33978_TEMP_WARN_MC;
++			return 0;
++		case hwmon_temp_crit:
++			*val = MC33978_TEMP_CRIT_MC;
++			return 0;
++		case hwmon_temp_crit_hyst:
++			*val = MC33978_TEMP_CRIT_MC - MC33978_TEMP_HYST_MC;
++			return 0;
++		default:
++			break;
++		}
++		break;
++
++	default:
++		break;
++	}
++
++	/* 2. Dynamic alarms (read hardware flags) */
++	ret = mc33978_hwmon_read_fault(priv, &faults);
++	if (ret)
++		return ret;
++
++	switch (type) {
++	case hwmon_chip:
++		if (attr == hwmon_chip_alarms) {
++			*val = faults;
++			return 0;
++		}
++		break;
++
++	case hwmon_in:
++		if (channel == MC33978_IN_VBATP) {
++			switch (attr) {
++			case hwmon_in_crit_alarm:
++				*val = !!(faults & MC33978_FAULT_OV);
++				return 0;
++			case hwmon_in_lcrit_alarm:
++				*val = !!(faults & MC33978_FAULT_UV);
++				return 0;
++			default:
++				*val = 0;
++				return 0;
++			}
++		}
++		/* VDDQ has no dedicated hardware fault flags */
++		*val = 0;
++		return 0;
++
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_max_alarm:
++			*val = !!(faults & MC33978_FAULT_TEMP_WARN);
++			return 0;
++		case hwmon_temp_crit_alarm:
++			*val = !!(faults & MC33978_FAULT_OT);
++			return 0;
++		default:
++			break;
++		}
++		break;
++
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	return -EOPNOTSUPP;
++}
++
++static int mc33978_hwmon_read_string(struct device *dev,
++				     enum hwmon_sensor_types type,
++				     u32 attr, int channel, const char **str)
++{
++	/* Only in_label is supported for string reads */
++	if (type != hwmon_in || attr != hwmon_in_label)
++		return -EOPNOTSUPP;
++
++	switch (channel) {
++	case MC33978_IN_VBATP:
++		*str = "VBATP";
++		return 0;
++	case MC33978_IN_VDDQ:
++		*str = "VDDQ";
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct hwmon_channel_info * const mc33978_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_ALARMS),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST |
++			   HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM),
++	HWMON_CHANNEL_INFO(in,
++			   /* Index 0: MC33978_IN_VBATP */
++			   HWMON_I_LABEL | HWMON_I_CRIT | HWMON_I_MAX |
++			   HWMON_I_MIN | HWMON_I_LCRIT |
++			   HWMON_I_CRIT_ALARM | HWMON_I_LCRIT_ALARM,
++
++			   /* Index 1: MC33978_IN_VDDQ */
++			   HWMON_I_LABEL | HWMON_I_MAX | HWMON_I_MIN |
++			   HWMON_I_LCRIT),
++	NULL
++};
++
++static const struct hwmon_ops mc33978_hwmon_ops = {
++	.is_visible = mc33978_hwmon_is_visible,
++	.read_string = mc33978_hwmon_read_string,
++	.read = mc33978_hwmon_read,
++};
++
++static const struct hwmon_chip_info mc33978_hwmon_chip_info = {
++	.ops = &mc33978_hwmon_ops,
++	.info = mc33978_hwmon_info,
++};
++
++static int mc33978_hwmon_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mc33978_hwmon_priv *priv;
++	struct device *hwmon_dev;
++	int ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->dev = dev;
++
++	priv->map = dev_get_regmap(dev->parent, NULL);
++	if (!priv->map)
++		return dev_err_probe(dev, -ENODEV, "failed to get regmap\n");
++
++	platform_set_drvdata(pdev, priv);
++
++	priv->fault_irq = platform_get_irq(pdev, 0);
++	if (priv->fault_irq < 0)
++		return priv->fault_irq;
++
++	ret = mc33978_hwmon_read_fault(priv, &priv->last_faults);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to read initial faults\n");
++
++	if (priv->last_faults & MC33978_FAULT_CRITICAL)
++		mc33978_hwmon_report_faults(priv, priv->last_faults);
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, "mc33978", priv,
++							 &mc33978_hwmon_chip_info,
++							 NULL);
++	if (IS_ERR(hwmon_dev))
++		return dev_err_probe(dev, PTR_ERR(hwmon_dev),
++				     "failed to register hwmon device\n");
++
++	priv->hwmon_dev = hwmon_dev;
++
++	ret = devm_request_threaded_irq(dev, priv->fault_irq, NULL,
++					mc33978_hwmon_fault_irq, IRQF_ONESHOT,
++					dev_name(dev), priv);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to request fault IRQ\n");
++
++	return 0;
++}
++
++static const struct platform_device_id mc33978_hwmon_id[] = {
++	{ "mc33978-hwmon", },
++	{ "mc34978-hwmon", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, mc33978_hwmon_id);
++
++static struct platform_driver mc33978_hwmon_driver = {
++	.driver = {
++		.name = "mc33978-hwmon",
++	},
++	.probe = mc33978_hwmon_probe,
++	.id_table = mc33978_hwmon_id,
++};
++module_platform_driver(mc33978_hwmon_driver);
++
++MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Hardware Monitor Driver");
++MODULE_LICENSE("GPL");
 -- 
 2.47.3
 
