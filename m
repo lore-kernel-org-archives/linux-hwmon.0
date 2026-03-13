@@ -1,75 +1,70 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904113DEADB
-	for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 18:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520383D903E
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 18:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773427088; cv=none; b=mcjAY8B0ZxUqoS2tN29ZxwCsyr1WGYsoUXTza6aQoLXyP59HsaOwNskAZB2qTzmXKzO/R+2WCQONFv6XhQbkW8vkcZ/lVQXsUcf2GFN4r/JRqFB0vtM5h/4DUrCsQiopDpQWjXaO7033iQ9WVOCbDv4f0Fou6IuNywZc+t7abm8=
+	t=1773427559; cv=none; b=qYKEIw4G1RF3myFkrbHeuJqEVzDmOxX1N3oMQucaPcGug4Xutegl5IKq/CRSv4TxRP6+bb4b0eeQio6Img/YbLfBfMKmK9BQA2oS82q0rLOYhzMXmOMJsAxhEXctsiI1aV+ChBiEJh3zn54D6fUzeXPf7hS9OrmfqdHjAE848Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773427088; c=relaxed/simple;
-	bh=IC3W1fF8lre9ZUCS8NDhRva8zIinkQfLZ7J80XkE+wM=;
+	s=arc-20240116; t=1773427559; c=relaxed/simple;
+	bh=2zQ+a5ycGOUKJKRXheLqg4HnDrao521k/fJ1jyibxE0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TQ96JH9jJ/+p2iT64eQT6ehAyCcU+KEFFbd/0Ho/LihbODF+wAh9ccbKf+1NZBRgOpJvxjcNj5x9v+QUSU7u25U8Lz4Ix+NNCVx7pIbK2QKs5W+gxk4EIAauE6JNpNZ8nUKXqM7CaGo73nJE2GGPioHHKDvhDdjxDp6sXBUboj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ob1WRnqN; arc=none smtp.client-ip=74.125.82.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=WIXJhfUkWdYCPSLv67avRfxEIOhUONZ2XcifEHiLdNQd2mix/26AIBIN3iEGLVffPZKVmZNvjqsjx9XgOoPktAHitkdVDqvTZP3+S1gW4GHj+y48oflHnLXmGfvqDVAaZMepoVQhYOG2QsC1Iy1svsp9qiabp2DtBAEkjUaj9wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ct/9abw4; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ob1WRnqN"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2beab594d8eso1259676eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 11:38:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ct/9abw4"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-126ea4e9694so344271c88.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 11:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773427079; x=1774031879; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773427557; x=1774032357; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eg7eI9ivG3+/ZJvb3PtZ/9IeNP82PhJuviBrZwDJey8=;
-        b=Ob1WRnqNqPegpR4NDAuVyQnNY6+cfYo3ijqj7LCAeNq75zkvCjVQTgKF3XtUdpwPkV
-         xQH7MzcoD/lZx11euSaUjUKG7UM2N/CUzYXjIi+n8XYXjYzgEpSdaYzBJXiagrj3Sdsu
-         Bn0zVRDpMUQPC/qK0VMLnUtPzc8UYQUm2rfET8aKy3534Y4ZN0gpicURdeD+ZPW/uPcK
-         6Qy9o8GHDtkxtXnhnHPg7UdOJUiuJ3/3IlQr//G/gbyYYZh1VJmz5U9c6waAFOtL5gpB
-         rQnLbMzGDM1SfOkJyCUBtpS2Cg53QY0lDWcis30axunlZxLiyRfBuixTHgWEESS2ittl
-         L+xw==
+        bh=smH+Txpt1bCAmMOLghTOk87dk1umeAnh8F4uUYgOBdE=;
+        b=ct/9abw41esy+iOfHptwNK1uTJ4avbXt0sZL1cdrm2h+2RTcH5Caqel8kq509p2715
+         pC7Qb5obSdwmw/GtywMrZL7hMGs/GDpN3Jhll3XKD3vvv42iaH2HbUcO2RyBzPKrJTCR
+         RmSRWBsQgngVHuDaQMINp6EZyXh7RTU7oMP/JZXdltz0mFybT8GYn2VubfpMBTgVvSfo
+         JJQpUJtILxr3gl0zrRLWRLrVvqmZfPWb1yHHraxYdu8rdn29L6SBGZM+ZvcDOb/qnGhk
+         lmeEan/aZGhgYiTCVlNeKMHNPrGlQAbMqk1u9Du+/WYAzWzwGGmTOEDK3scnClqYqx/9
+         jJKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773427079; x=1774031879;
+        d=1e100.net; s=20251104; t=1773427557; x=1774032357;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=eg7eI9ivG3+/ZJvb3PtZ/9IeNP82PhJuviBrZwDJey8=;
-        b=qbe3c+7T20YScIxQcnP7LxzruyqDVII8gQhGI7q32XpfbUTmTC9HbjjIg0leAFc7PF
-         cnXejOVxwqxVjcE7sjzANSWFbNdki7A54Xm+NoUhN/fAxTIxagHpWETo38cNwGASWZCY
-         fjKWkOYRmhetrg+W0KgJGsI52HFCf8j0cU5hI5JGsGEdbAkTMSlYiC71Xeb7NUQJGlAl
-         UXU40F6BBaU7JxCsyMHT+jXRx6vNul7oSnxtRQVO/Tw6zl1ws9dmnKwMuopZY6z3fjJk
-         o9iBxqwFClfyqc6IBd+P2s7WXwdKYESaV/wNGcNWsCzj8fjNn6YSEKO5nd9P+Xf5yAxZ
-         a2Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCVN+FPzafU3Dak6Enbs8hyIm1mZtY1HRTTTheiD0M2RFITVQON6kmH8fBJiQUsBEWFCimoKYErdgJXYEQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaR4B3xoQBbvX6PsSyNJJZ0h9dcrVR+8RQr04sEiq7eJbGwYjq
-	MyGNQX6cdwbMvwAbHGtPrym3cK0AeItNeLvbq8f6a2KULB/FtD9kq9Z+
-X-Gm-Gg: ATEYQzwEDeuAZAoSgP4eHdsRA5B7C76VhNvdaYulRirlt+/xeGbpadXlKa3y8Kjg/Gh
-	RLIoWGBjHhfs9UlgJ9taQ+w4UWnABe/BE5lnl6aBaIiLpa+/ogvPlwIsNYmiG7KLdTR7YW/bFQs
-	T+D+fI5ECFGZLQ+XuY3d9f8w2guEc7TBma67Ix0NnncUzcBsv3V4rr29hsYDNV0qVcCmOREax6Q
-	vj7rPHOpUB+4KkXr6rIsR68OX/zTZGq2xK2Nhv2AwM7w2G7sr7RJAUHPF66u3Idy4aqD74OYqv5
-	5R7AjGQtcOqKNqtJLeDtK/oBLJKSFbuvL7vBeGhbZjYfb8JZfDPpKE1/57KRmVjQujzAJu575OV
-	iRmmbSj3CM2JN7oC4FfhkDc12+PvICYqH5cO8Xa3uLJ4a6FQYpY5XwmKmlYKFzS3AFtyoLNbJ5R
-	tTWWgirvKdYfchQ69ioibo37kcJ9TO87/q1Nmw
-X-Received: by 2002:a05:693c:408b:b0:2be:ad5b:d5a7 with SMTP id 5a478bee46e88-2bead5bd7cbmr1024934eec.4.1773427079093;
-        Fri, 13 Mar 2026 11:37:59 -0700 (PDT)
+        bh=smH+Txpt1bCAmMOLghTOk87dk1umeAnh8F4uUYgOBdE=;
+        b=HTpD+1SRKMh9r4wHTR4OVHfIKmlboopCeCDGfwO4PyZIJpGOWtlJXy0vjGXSws5Xc+
+         rTYBC5oApkVlZ0ZnkH1vwJ3xAZAtRQnQuNyrPrsKcXxQO6rE4Ms/5O3Af3otW4BWA4Dy
+         2xTpwOYi1JNlWcmVK/SauuUnHgUo4BScAc5aFvsUn0qi0mU0oMGhAQXT3ZRzTXM7IjHC
+         un18PWLoIDnjwTmpVzG9DHfKCuN8U1XIYNrm1pHJGBFxk3LyMZnXvuLbhdTJwM9Df2Qg
+         IjxPAMxtrjbyLw/bULfyd91yjAsicnoVWB7/j8MvTsUoa/mV0Ft5MsYX1galXR/Y8WQl
+         ZvUQ==
+X-Gm-Message-State: AOJu0YyztwzBn6yGe8t+9Ex00udWcPwwnAga4ZHRY8DQHoY6nuT6RCGy
+	F9EjO4nBikF5B6S2ye7h0TSdIc+nTmdw/3+B7Y/vH1ZxqQwMWmtXqLZx
+X-Gm-Gg: ATEYQzy/HvizGTI/UWjKgo128Je7hhBZirGfVw2lFSLzXSxrkcrBXgRmhgGJgf5D7al
+	FgOn069IR613U/v47qIo1ttBHSnbN+NjlEg9pnJVlQ4yRZvYO1G+Xz158I2OBXPVkYLpsLPPuz8
+	8LwZ6/ijuuF5c036kbI2HVkDZlUe63Y/UIeoLXbXZJDOtj/1DYtH2f2ex4HtxUvYH+tGCSA5LWe
+	rojELh17piZom55YaRrSVypjl/9IbULCRaUb5g7rB3JMCDwl3fD4iqOJVgVs70mou0y+JDr/Vmi
+	mTnyJOyVrD1BCWYBkWwvRZLddaHfKKdVB4b2cAoH+JUv8xEAJIF6fJbjsYXuRNYeaGNUMAlzh6s
+	/5X9ACshiKz9j919PJE4CL4jZjEprhfHxuYBzt3ODJYoFgBgELEskHNFVKVsTVyTHbpOFmG0QJC
+	3lfNytC58QzLe66bzwWQLw8RDjN7AKK6/ygTZ9W/Q9bTl+v8Y=
+X-Received: by 2002:a05:7022:2393:b0:11b:2de8:6271 with SMTP id a92af1059eb24-128f3e350bcmr2399423c88.39.1773427557171;
+        Fri, 13 Mar 2026 11:45:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2beab555c44sm4279781eec.25.2026.03.13.11.37.58
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128f618f01csm3236004c88.0.2026.03.13.11.45.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2026 11:37:58 -0700 (PDT)
+        Fri, 13 Mar 2026 11:45:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 13 Mar 2026 11:37:57 -0700
+Date: Fri, 13 Mar 2026 11:45:55 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Flaviu Nistor <flaviu.nistor@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: lm75: Add support for label
-Message-ID: <b1118a3d-85bb-4214-84f0-bf12e0cd4ade@roeck-us.net>
-References: <20260311105809.107357-1-flaviu.nistor@gmail.com>
- <20260311105809.107357-2-flaviu.nistor@gmail.com>
+To: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: ibmpex: check ibmpex_send_message() return value
+Message-ID: <3e0baf34-2177-408f-8ec1-923789357887@roeck-us.net>
+References: <20260310203555.33896-1-jaime.saguillo@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -78,90 +73,148 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260311105809.107357-2-flaviu.nistor@gmail.com>
+In-Reply-To: <20260310203555.33896-1-jaime.saguillo@gmail.com>
 
-On Wed, Mar 11, 2026 at 12:58:08PM +0200, Flaviu Nistor wrote:
-> Add support for label sysfs attribute similar to other hwmon devices.
-> This is particularly useful for systems with multiple sensors on the
-> same board, where identifying individual sensors is much easier since
-> labels can be defined via device tree.
+On Tue, Mar 10, 2026 at 08:35:55PM +0000, Jaime Saguillo Revilla wrote:
+> Several ibmpex request helpers ignore the return value of
+> ibmpex_send_message() and then unconditionally wait for
+> read_complete.
 > 
-> Signed-off-by: Flaviu Nistor <flaviu.nistor@gmail.com>
+> If transmit fails, no response will arrive and the code may wait
+> indefinitely. Check ibmpex_send_message() return values and
+> propagate errors to callers instead of continuing.
+> 
+> Also propagate reset command failures through
+> ibmpex_high_low_store().
+> 
+> Signed-off-by: Jaime Saguillo Revilla <jaime.saguillo@gmail.com>
+
+Is that an actual problem ? This driver has a variety of problems,
+starting with its use of a long since deprecated ABI.
+Checking those return values is a minor issus. Also see inline comments
+(from AI review).
+
 > ---
->  drivers/hwmon/lm75.c | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
+>  drivers/hwmon/ibmpex.c | 35 +++++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index eda93a8c23c9..66178ac63e4f 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -108,6 +108,7 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
->  #define PCT2075_REG_IDLE	0x04
+> diff --git a/drivers/hwmon/ibmpex.c b/drivers/hwmon/ibmpex.c
+> index dec730798d58..92cda205e57c 100644
+> --- a/drivers/hwmon/ibmpex.c
+> +++ b/drivers/hwmon/ibmpex.c
+> @@ -133,9 +133,13 @@ static int ibmpex_send_message(struct ibmpex_bmc_data *data)
 >  
->  struct lm75_data {
-> +	const char *label;
->  	struct regmap			*regmap;
->  	u16				orig_conf;
->  	u8				resolution;	/* In bits, 9 to 16 */
-> @@ -363,6 +364,16 @@ static irqreturn_t lm75_alarm_handler(int irq, void *private)
->  	return IRQ_HANDLED;
->  }
->  
-> +static int lm75_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +			    u32 attr, int channel, const char **str)
-> +{
-> +	struct lm75_data *data = dev_get_drvdata(dev);
-> +
-> +	*str = data->label;
-> +
-> +	return 0;
-> +}
-> +
->  static int lm75_read(struct device *dev, enum hwmon_sensor_types type,
->  		     u32 attr, int channel, long *val)
+>  static int ibmpex_ver_check(struct ibmpex_bmc_data *data)
 >  {
-> @@ -534,6 +545,9 @@ static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
->  		switch (attr) {
->  		case hwmon_temp_input:
->  			return 0444;
-> +		case hwmon_temp_label:
-> +		/* Hide label node if label is not provided */
-> +			return (config_data->label) ? 0444 : 0;
-
-Unnecessary ()
-
->  		case hwmon_temp_max:
->  		case hwmon_temp_max_hyst:
->  			return 0644;
-> @@ -553,13 +567,14 @@ static const struct hwmon_channel_info * const lm75_info[] = {
->  	HWMON_CHANNEL_INFO(chip,
->  			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
->  	HWMON_CHANNEL_INFO(temp,
-> -			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_MAX | HWMON_T_MAX_HYST |
->  			   HWMON_T_ALARM),
->  	NULL
->  };
->  
->  static const struct hwmon_ops lm75_hwmon_ops = {
->  	.is_visible = lm75_is_visible,
-> +	.read_string = lm75_read_string,
->  	.read = lm75_read,
->  	.write = lm75_write,
->  };
-> @@ -721,6 +736,9 @@ static int lm75_generic_probe(struct device *dev, const char *name,
->  	/* needed by custom regmap callbacks */
->  	dev_set_drvdata(dev, data);
->  
-> +	/* Save the connected input label if available */
-> +	of_property_read_string(dev->of_node, "label", &data->label);
-
-Please use device_property_read_string().
-
-Thanks,
-Guenter
-
+> +	int err;
 > +
->  	data->kind = kind;
->  	data->regmap = regmap;
+>  	data->tx_msg_data[0] = PEX_GET_VERSION;
+>  	data->tx_message.data_len = 1;
+> -	ibmpex_send_message(data);
+> +	err = ibmpex_send_message(data);
+> +	if (err)
+> +		return err;
 >  
+>  	wait_for_completion(&data->read_complete);
+>  
+> @@ -159,9 +163,13 @@ static int ibmpex_ver_check(struct ibmpex_bmc_data *data)
+>  
+>  static int ibmpex_query_sensor_count(struct ibmpex_bmc_data *data)
+>  {
+> +	int err;
+> +
+>  	data->tx_msg_data[0] = PEX_GET_SENSOR_COUNT;
+>  	data->tx_message.data_len = 1;
+> -	ibmpex_send_message(data);
+> +	err = ibmpex_send_message(data);
+> +	if (err)
+> +		return err;
+>  
+>  	wait_for_completion(&data->read_complete);
+>  
+> @@ -173,10 +181,14 @@ static int ibmpex_query_sensor_count(struct ibmpex_bmc_data *data)
+>  
+>  static int ibmpex_query_sensor_name(struct ibmpex_bmc_data *data, int sensor)
+>  {
+> +	int err;
+> +
+>  	data->tx_msg_data[0] = PEX_GET_SENSOR_NAME;
+>  	data->tx_msg_data[1] = sensor;
+>  	data->tx_message.data_len = 2;
+> -	ibmpex_send_message(data);
+> +	err = ibmpex_send_message(data);
+> +	if (err)
+> +		return err;
+>  
+>  	wait_for_completion(&data->read_complete);
+>  
+> @@ -188,10 +200,14 @@ static int ibmpex_query_sensor_name(struct ibmpex_bmc_data *data, int sensor)
+>  
+>  static int ibmpex_query_sensor_data(struct ibmpex_bmc_data *data, int sensor)
+>  {
+> +	int err;
+> +
+>  	data->tx_msg_data[0] = PEX_GET_SENSOR_DATA;
+>  	data->tx_msg_data[1] = sensor;
+>  	data->tx_message.data_len = 2;
+> -	ibmpex_send_message(data);
+> +	err = ibmpex_send_message(data);
+> +	if (err)
+> +		return err;
+>  
+>  	wait_for_completion(&data->read_complete);
+>  
+> @@ -206,9 +222,13 @@ static int ibmpex_query_sensor_data(struct ibmpex_bmc_data *data, int sensor)
+>  
+>  static int ibmpex_reset_high_low_data(struct ibmpex_bmc_data *data)
+>  {
+> +	int err;
+> +
+>  	data->tx_msg_data[0] = PEX_RESET_HIGH_LOW;
+>  	data->tx_message.data_len = 1;
+> -	ibmpex_send_message(data);
+> +	err = ibmpex_send_message(data);
+> +	if (err)
+> +		return err;
+>  
+>  	wait_for_completion(&data->read_complete);
+
+Should we also check data->rx_result here?
+The commit message mentions propagating reset command failures through
+ibmpex_high_low_store. While the local transmission error is caught by
+checking the return value of ibmpex_send_message, if the BMC rejects or
+fails the reset command, data->rx_result will contain a non-zero error
+code.
+Since data->rx_result is ignored here, the function will still return
+success to userspace, which seems to result in incomplete error propagation.
+
+>  
+> @@ -276,8 +296,11 @@ static ssize_t ibmpex_high_low_store(struct device *dev,
+>  				     const char *buf, size_t count)
+>  {
+>  	struct ibmpex_bmc_data *data = dev_get_drvdata(dev);
+> +	int err;
+>  
+> -	ibmpex_reset_high_low_data(data);
+> +	err = ibmpex_reset_high_low_data(data);
+> +	if (err)
+> +		return err;
+
+Does this sysfs store function need to acquire the data->lock mutex?
+ibmpex_reset_high_low_data writes directly to the shared message buffers
+data->tx_msg_data and data->tx_message.data_len, and ibmpex_send_message
+increments data->tx_msgid.
+If sysfs operations run concurrently, this could corrupt the transmitted
+messages. Furthermore, if data->tx_msgid is incremented concurrently before
+the BMC responds, the IPMI response handler might silently drop the
+response due to a message ID mismatch. This would skip the completion call
+and cause the thread to hang indefinitely.
+Other functions like ibmpex_update_device appear to protect these shared
+resources by holding mutex_lock(&data->lock).
+
+>  
+>  	return count;
+>  }
+> -- 
+> 2.34.1
+> 
