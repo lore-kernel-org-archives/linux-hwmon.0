@@ -1,225 +1,254 @@
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011002.outbound.protection.outlook.com [52.101.125.2])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD44349AE1;
-	Fri, 13 Mar 2026 13:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.2
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773409969; cv=fail; b=ksUX8m4zKzJt8WrQWCifldWwtT3s6aj8EMiYTHBWtNzmqk1J/7QRZw/6hPCmSJxc/hVjJqOTfpHb5HSYVUDcG83yFSJY8/2RyFSR3L8uZKQpxH9ncN6lhpaXOVltUPcKGgodLA0Rxp1w/Ppc+Rnl2UAgzF5L2tpO589q5QqFBhg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773409969; c=relaxed/simple;
-	bh=qz3g6q0tKXOqzCyC9ax69bBa1Dfo1SFcshnBPxAWjmQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=m+lDaynMfq6i17zhnazO54dDug3vLrdZ+FJmBqLnmQLMBvNB1WKZWDYmxHiusybMDFX/b2LTeWNQSy5ogHNhJ0DbsFdMneYy06+a9ZenIdq5S0C7subEfkDqRnPMko3z8z+xnu6Ds2pQfhgbvVNl7Pmaau5b4g1iDzwbfdg7Qk0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=pe/v+ToB; arc=fail smtp.client-ip=52.101.125.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="pe/v+ToB"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vuWpmTANglf0WuRiRpw6eSq25VHMWnagr7PXv3lx6BM8j1v/Pnpv44bsAKdrr8Ztiwc+vhdmYym6oZE+ERAq/PbkL50YjicUvb6qqkcMj+32VMJm4QdiKlmH+53KcUObiILQesGxT9FFwwP+liTNpSSFp/PYURo7THm88ALg9kQaaC60sMmtqmDd38224W/JMcwAiiJJ/kyifC85ZK1A24JI9H5QoLgErt0iMHpvteFLbsTl7dpNWuDGij+iWmedxywEDC+mXAkw9izP/MIrXJmwiTm8L/nsvPyDeSKNi+qkwztB6ILu26Aj490gGP8AXR5DuZDyiFi2RP/t9K/o7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O2u2lbpEQnqtRuaKrTAqtngpUwR1Ua+lq+zZsfwlKpc=;
- b=J0hJGVimGAbiE+Z0GrbLx5tn4EBygsOqzVqzDxWX9rxyOUMRlZJfgWCO0J34rr31GN8faADkxM6bfDGoiJl8llQ/qwdBhHT3u07uez7YVvOC3v0SY/yzr6+EIJ12S2WopJQ+Ho3l6hj154ELhnTO/HNKyiGTN4KRpQHRkr8HaLNAABQniksUlVj4GGl9Rj8AZ8nULopapNbnUnWKCcSxoRilEGY7rr49UDUMEvwDwHcpTsB0XJvmsN7ogMIGPeOV9OJP1HYWatNJTt/Wzl/OdCY5G4ZqXbWj9G5BjOaYLtXLlWfV+KZ2HD6zBtn3P5DkZJRCvzXRiXT5N7ajNSHFaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O2u2lbpEQnqtRuaKrTAqtngpUwR1Ua+lq+zZsfwlKpc=;
- b=pe/v+ToB/QkqXXRa/oWqKjbsxFjhvEt/mSKSjOo1NYE/t3C8rBiyWq908p0i98aCSMNAzuftAkcFMDoAioygx+GP8Sw2GvE5keGLBNxmx2rgDhhMO3HCC6GP+4exjO/o5RJWb8642EuYP7ZFf2yUpC2ooM1yonxyAy14btSQ5ek=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com (2603:1096:400:3e1::6)
- by TYCPR01MB8125.jpnprd01.prod.outlook.com (2603:1096:400:11f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.11; Fri, 13 Mar
- 2026 13:52:40 +0000
-Received: from TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8]) by TYCPR01MB11947.jpnprd01.prod.outlook.com
- ([fe80::33f1:f7cd:46be:e4d8%5]) with mapi id 15.20.9700.017; Fri, 13 Mar 2026
- 13:52:29 +0000
-Message-ID: <7b1e12b2-f55d-4e70-9cb7-ecfa9d82ebdf@bp.renesas.com>
-Date: Fri, 13 Mar 2026 14:52:30 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/7] gpio: gpiolib: fix allocation order in
- hierarchical IRQ domains
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>,
- kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>,
- biju.das.jz@bp.renesas.com, tomm.merciai@gmail.com
-References: <20260309134920.1918294-1-o.rempel@pengutronix.de>
- <20260309134920.1918294-5-o.rempel@pengutronix.de>
- <abPqGvy5FqJ0a0ug@tom-desktop> <abQMQAbbvV60bV2j@pengutronix.de>
-Content-Language: en-US
-From: Tommaso Merciai <tommaso.merciai.xr@bp.renesas.com>
-In-Reply-To: <abQMQAbbvV60bV2j@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0063.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:ce::10) To TYCPR01MB11947.jpnprd01.prod.outlook.com
- (2603:1096:400:3e1::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678192DF134
+	for <linux-hwmon@vger.kernel.org>; Fri, 13 Mar 2026 14:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773410559; cv=none; b=nqI2OPNG7dP/qhWVqlUrKP9NS3WOCOHYyQ3r7jNqnH5g4fAKT6fhWAFxmLNleHKaUTQkf6t0NFstAPggtNBcRQTWHbDf0wa3cFJBfEi17P2RO6ncF4CW9RYSLMWyuN0H+dXVYPKicPaNc8i47NCEkZj5i3pzgtJeszlGnL2D138=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773410559; c=relaxed/simple;
+	bh=CeS4wdaaiNaQWZjEUnnXF4AIgR9+Dlca/S49VoNDuZk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qSmgD7VpjjP65mxEUo2ae22bypZdeEfpd6nNyR5pOfOvX3e4LE91cDjLgSmUma4PAyIXeqSfcK5wvetH6bPlKOWPNCe+0s0JxM6EpiKV29Ck+pw23wZm2S2f0/viK2v6GaYjAF3fMa+7gPgzJXAZsgqezFIZI2HJJoPgL57xUs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w135r-0007Jq-Ah; Fri, 13 Mar 2026 15:02:23 +0100
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w135r-0005cw-04;
+	Fri, 13 Mar 2026 15:02:23 +0100
+Received: from ore by dude04 with local (Exim 4.98.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1w135q-000000055i6-3xJd;
+	Fri, 13 Mar 2026 15:02:22 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Peter Rosin <peda@axentia.se>,
+	Linus Walleij <linusw@kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	David Jander <david@protonic.nl>
+Subject: [PATCH v4 6/6] mux: add NXP MC33978/MC34978 AMUX driver
+Date: Fri, 13 Mar 2026 15:02:17 +0100
+Message-ID: <20260313140218.1213393-7-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260313140218.1213393-1-o.rempel@pengutronix.de>
+References: <20260313140218.1213393-1-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB11947:EE_|TYCPR01MB8125:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b79d7fd-fb15-4ef1-9796-08de8107c45c
-X-LD-Processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	N0shkcavno60xnkbCFyXuIbybL+PvjmkgDEurhS9swzLA0LUWyshzYlhUZEqnbJJK0uHrhPzks24f8MKnewigsZKaWMFWktkq6iy/zvOsJLp8NczC+L2dp12Jl5qC4zaq1VjvzUEuHqrH+HfDQeT9ni6tkwtbVNbogRKlreKEQEXzjxOgarTUzqJA/oFvSVq/Z/ClAYprga36NOT8CVlGXal9VBs9vlFjkaRhXXvEIjO6yUXyhfG3DYI6K9NJfAiFkuOE3BivneECp2sM2TjjJ7N3r51mQ6EyK3Nshf2bIprkRNH6FhIHEBIzbReV6wmbz9zi8vbL5XfuvgG/1y2yRad9IPs5jMAVgnUeEJrcNmatwMNwwy0LHeKJwEWZlNe5gT1ne6vnm67FRhaYQ5LhLkG4H/NYe0JTMXVuAXiqdCEvwTgOdB3Zk3eAU0hjt8iG/QhIs6OhNZpskWpuAmd2z7MMysirt6u8mtvAE7mk8px/H/1wWt0L8IvT2kkqW35kjKLKPMNwHc01GEQuNVF/GGpLOMqHFl82aLYisq/+xbVTFg4zM4KN2Tps1ASFw65iNErlVaMouXidPTTL8VAfkzOFstK8DDHwPaWVuTRa2x/97mjLBZ9QUS1jBtHdhpFJjucOB+6iYypxxBex0kiDqj88vveUZuOGyRFfZ+jRivsg/mPSeOL99kQa7MTIxQke+pC/Sp0DB6a2M0cgNH/2OEhpWZidnE5e9sBZvG1tjk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11947.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Y1htc1ordFIxYWljNnJ1eDg0VG9FODZMM1htUWhnSWRoMWVBQ05Xc2cybXJ4?=
- =?utf-8?B?b0NtS0t3clJLSDcyVGRiQTJpSVZDR1lqbFI3TGRJYTYxME8vZnFrdGZLazFN?=
- =?utf-8?B?Q3VCYjNqSUM3YzZtaGdCdDdDRWxnUlRpdzcvS2taQmU5VUdPckxyZ3E0VU1h?=
- =?utf-8?B?UHBUUUp4NGVqRkFhTmViNjVrNUd6dWZtSmRVeUlVTjYyQXdCakQ1NlltcXd1?=
- =?utf-8?B?N3BzUEdxZDk1bHcxRmZKOEo2SkVYRi91MlZqRmhPZUY0c1J4Q01uMG1WQVhX?=
- =?utf-8?B?d2RLYVVYME9RVUNJOHRqZTNyVkJzN1lzWDFxUitaek9yczN1YmhBNyt1NGFL?=
- =?utf-8?B?d2Q2eXlZeGJPU1N4V0dWcmxDSEpadmxINS9MZ2JzTTMxNHRmdHE3TW9Qa0FN?=
- =?utf-8?B?c3UyYUJJMlA1SG44ekVML21oSEVhSXVXN1NSSDJGVmZQR1JwL0ZESG83cVI3?=
- =?utf-8?B?ZVJ0a0xoUFJESWZKNFU5bUZqNVVQeU13UDBzMS9GVVhPQTAwSER2clNyQUlM?=
- =?utf-8?B?SWZTc1Y2b3R4SStXQ3FvVVBPM0NiOWF2RzhlWGZqVm1xZzAvN2pOeGJxUXVR?=
- =?utf-8?B?QXZnaktWbTNXSEhMcktkVGcreVFHNUNPemIwR1lrMU1JRnF6UzZwVWJSbitE?=
- =?utf-8?B?dm1nLzlLSGNGQ0xTdHlUREVBdlJCdkhTMUprM0Jzc2NNUTJOWXpzSlN0VEo3?=
- =?utf-8?B?YnJqWnZybzdTeXdlZE5hU256bW1DSU5aVlRjLzJpcjJMcnpFYUd6WFNySE11?=
- =?utf-8?B?eVNRQlVmdFBZMmdHQ2JncEhndi91ZW9Zd1M1NnI1WGRuRVIvMUxwdzVMSG5T?=
- =?utf-8?B?RkU4U1dyTVpObyt6bmtLMG1rWDJMSGJoWEJJbDRIWG9CYWFsNStLWVpOQmMr?=
- =?utf-8?B?aXZhc3dpQmJOc2ZEakpTbDVnU0lOc0EzMGV5MkNJRXVHT0E2bkpHYTFxT3Jz?=
- =?utf-8?B?a0FqdDY1TDNQKzVxMXZ5aDZrbldPbktmeEg2cEJlMWpsNEZKMTRXOW9lSFdF?=
- =?utf-8?B?eEoxYkI1dkNlSjFCc3NWOXk3dnE1ampkc1Z4RWQ3Y01wOUtRZWg0eXlPa09w?=
- =?utf-8?B?dVVybk1JZ29HUW9BelZZZVlqYmNraXliUmJobnMrSWVDNnVGZkVUa01RTUxG?=
- =?utf-8?B?VDhBeDBGTWpIc1dTK1hac0RCb21PWFo4c0ZPdFcxVzRRMTczOWxCK2ZqR25Y?=
- =?utf-8?B?WkhIZGEyTy9lcXpvZmZ5czFtdmxUdHFhN2I5cXdMRDBtZEkzOU9zMFgvemtl?=
- =?utf-8?B?SUk2RDRZaUhadTQ4L0hMcTcydGg2cE13ZFBhNGFHcVQ2S3lDWDg5TTZ3MkU3?=
- =?utf-8?B?bUNhc215eGk3TVRzb3hobW42ZlNta1dDN1d2a1ZVTkpIUXQ1NG5obGUxR09F?=
- =?utf-8?B?UHBOSzJ3Q1FMb2hZTWVMNlZVNHZMdjk1WldhUDYxNXo4Y1MxMXB2c2VVTVRL?=
- =?utf-8?B?VjBEQmNqYmxJV3lQMStXd0pock1HWWdIOTAvRCtWd3laaVVZUnpZVXZITEFF?=
- =?utf-8?B?Y2I2VzZwSm8zZVdiMGlpbGpYZmRNVVhwOVo1SnNpeUlvbEgrSDgwUjFrOTk2?=
- =?utf-8?B?N1QvZFVCSWFyRU9HaWRMVkZJN2hGQ080Sm9ZalVYT2ZMNXUrYUxNR0p4blJx?=
- =?utf-8?B?cWpadHNOeVNKQnpyMWFFRzg1OHBzTWloeFlKUzBuTzFiWWxhdTIzQzVuWlpO?=
- =?utf-8?B?cmFaV2NrOGt5Q2JxcngrbzZyc1FOT0VLQ0sxZWJRQzRmUlYzUGk4dU5uUkdI?=
- =?utf-8?B?eTdMOEZDZ3JRb256eGcwN1NqaEZaNXMzUmhTMkY0dFBQY202UmdZYTdVZi96?=
- =?utf-8?B?dHdlVzAzYTZaaVpIc3hzUnJvbVFzOUxTMG43cy9UTjUxcjIrY1FWdjZlaTFE?=
- =?utf-8?B?N0JkV005cVdldndrM0lrN21SeUlSTHV5WjlpVWQ0dDEvT1hpVTU2ZEgwa0Uv?=
- =?utf-8?B?enZOcGw3ZUhrSGc1dFc4UC9xQkR3RURseXljL0lYZ2RucTJ5QUpUVlRDeHZD?=
- =?utf-8?B?Uk5hNVYvRWdEdHNka2hZVW94aWUwa0VqQnVHa1orYXArK0VSR3NQem1XS3cy?=
- =?utf-8?B?eXpFekkvd3MzM09qbVQzbmNnTk5HeExBSEZOYXkrWWtpSFZiMHNSelU5VkVt?=
- =?utf-8?B?MHQ5ODFRUTN2VWIvVVdlOHVYYWRRRnJFb0x1d2U2RFVyWGVNVGlOZWx2bGc2?=
- =?utf-8?B?citMa1d1d05JQzU5RERHdWd2R29YTWVmUWJvdzFVM1NFZXB3d3NPQi92MWV5?=
- =?utf-8?B?ZTdtblpxRG04aGd1aENRS0JMWTR4SDR6eDdrWjBCUTNXUUsrTHhXbFN4bnpM?=
- =?utf-8?B?aWJkVElnMmFSUlQ5ZXpTdUNtSWMvU1RQT0JPdlJwaGQ1WHNkUkhVNExESDNP?=
- =?utf-8?Q?pHRgIs9OgTiprAoCQchG5XYRmps2hiBJcR8/U?=
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b79d7fd-fb15-4ef1-9796-08de8107c45c
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11947.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2026 13:52:29.3655
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PdrNhVwpkRRUxhpyJPwAboxQbqikfNbAPDtetNxqMVnr7dMUpZSFdMfmEwbVACC97j1sou7aqqlCryDd6n1uNNEMbWR+wxUCnou1tYlYuEPfhk72iNAnBcEjpuige/Gg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8125
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-Hi Oleksij,
+Add a mux-control driver for the 24-to-1 analog multiplexer (AMUX)
+embedded in the NXP MC33978/MC34978 Multiple Switch Detection
+Interface (MSDI) devices.
 
-On 3/13/26 14:08, Oleksij Rempel wrote:
-> Hi Tommaso,
-> 
-> On Fri, Mar 13, 2026 at 11:42:34AM +0100, Tommaso Merciai wrote:
->> Hi Oleksij,
->> Thanks for your patch.
->>
->> I'm working on DSI support for RZ/G3E
->>
->> from this morning rebasing on top of next-20260312 I'm seeing
->> the following:
->> I found out the the issue is related to the interrupt of the adv7535
->> bridge:
->>
->>          adv7535: hdmi1@3d {
->>                  compatible = "adi,adv7535";
->>                  ...
->>                  ...
->>                  interrupts-extended = <&pinctrl RZG3E_GPIO(L, 4) IRQ_TYPE_EDGE_FALLING>;
->>
->> RZ/G3E is using:
->>   - drivers/pinctrl/renesas/pinctrl-rzg2l.c
->>
->> Reverting this patch fix the issue.
->> (git revert a23463beb3d5)
-> 
-> Thank you for the feedback! If I understand the problem correctly, the
-> adv7535 is asserting its IRQ line early during probe, which creates an
-> irq storm due to a missing handler.
-> 
-> My patch moved irq_domain_set_info() after the parent allocation. When
-> the parent allocates the IRQ, the pending hardware interrupt fires
-> immediately. Because the child descriptor isn't fully configured yet, it
-> routes to handle_bad_irq. This fails to acknowledge the hardware
-> interrupt, locking up the CPU and causing the RCU stall.
-> 
-> I hope splitting the irq_domain_set_info() should fix the regression.
-> Can you please test if this change resolve the RCU stalls on your setup:
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+changes v4:
+- no changes
+changes v3:
+- no changes
+changes v2:
+- Add missing <linux/err.h> include.
+- Add platform_device_id table
+---
+ drivers/mux/Kconfig       |  14 +++++
+ drivers/mux/Makefile      |   2 +
+ drivers/mux/mc33978-mux.c | 119 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 135 insertions(+)
+ create mode 100644 drivers/mux/mc33978-mux.c
 
-Thanks for sharing.
-
-> 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 13dd97344b26..376daeddbbbb 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1628,6 +1628,9 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
->   	}
->   	gpiochip_dbg(gc, "found parent hwirq %u\n", parent_hwirq);
->   
-> +	irq_set_handler(irq, girq->handler);
-> +	irq_set_handler_data(irq, gc);
-> +
->   	/* This parent only handles asserted level IRQs */
->   	ret = girq->populate_parent_alloc_arg(gc, &gpio_parent_fwspec,
->   					      parent_hwirq, parent_type);
-> @@ -1655,13 +1658,7 @@ static int gpiochip_hierarchy_irq_domain_alloc(struct irq_domain *d,
->   	 * We set handle_bad_irq because the .set_type() should
->   	 * always be invoked and set the right type of handler.
->   	 */
-> -	irq_domain_set_info(d,
-> -			    irq,
-> -			    hwirq,
-> -			    gc->irq.chip,
-> -			    gc,
-> -			    girq->handler,
-> -			    NULL, NULL);
-> +	irq_domain_set_hwirq_and_chip(d, irq, hwirq, gc->irq.chip, gc);
->   	irq_set_probe(irq);
->   
->   	return 0;
-
-Tested on RZ/G3E + adv7535.
-
-With this fix all is working fine on my side.
-I'm not more seeing the seeing the RCU stall.
-
-Thanks.
-
-Kind Regards,
-Tommaso
+diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
+index c68132e38138..7532da7e087e 100644
+--- a/drivers/mux/Kconfig
++++ b/drivers/mux/Kconfig
+@@ -45,6 +45,20 @@ config MUX_GPIO
+ 	  To compile the driver as a module, choose M here: the module will
+ 	  be called mux-gpio.
+ 
++config MUX_MC33978
++	tristate "NXP MC33978/MC34978 Analog Multiplexer"
++	depends on MFD_MC33978
++	help
++	  MC33978/MC34978 24-to-1 analog multiplexer (AMUX) driver.
++
++	  This driver provides mux-control for the analog multiplexer,
++	  which can route switch voltages, temperature, and battery voltage
++	  to an external ADC. Typically used with IIO ADC drivers to measure
++	  analog values from the 22 switch inputs plus temperature and VBATP.
++
++	  To compile the driver as a module, choose M here: the module will
++	  be called mc33978-mux.
++
+ config MUX_MMIO
+ 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+ 	depends on OF
+diff --git a/drivers/mux/Makefile b/drivers/mux/Makefile
+index 6e9fa47daf56..339c44b4d4f4 100644
+--- a/drivers/mux/Makefile
++++ b/drivers/mux/Makefile
+@@ -7,10 +7,12 @@ mux-core-objs			:= core.o
+ mux-adg792a-objs		:= adg792a.o
+ mux-adgs1408-objs		:= adgs1408.o
+ mux-gpio-objs			:= gpio.o
++mux-mc33978-objs		:= mc33978-mux.o
+ mux-mmio-objs			:= mmio.o
+ 
+ obj-$(CONFIG_MULTIPLEXER)	+= mux-core.o
+ obj-$(CONFIG_MUX_ADG792A)	+= mux-adg792a.o
+ obj-$(CONFIG_MUX_ADGS1408)	+= mux-adgs1408.o
+ obj-$(CONFIG_MUX_GPIO)		+= mux-gpio.o
++obj-$(CONFIG_MUX_MC33978)	+= mux-mc33978.o
+ obj-$(CONFIG_MUX_MMIO)		+= mux-mmio.o
+diff --git a/drivers/mux/mc33978-mux.c b/drivers/mux/mc33978-mux.c
+new file mode 100644
+index 000000000000..de79073e15aa
+--- /dev/null
++++ b/drivers/mux/mc33978-mux.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (c) 2026 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
++/*
++ * MC33978/MC34978 Analog Multiplexer (AMUX) Driver
++ *
++ * This driver provides mux-control for the 24-to-1 analog multiplexer.
++ * The AMUX routes one of the following signals to the external AMUX pin:
++ * - Channels 0-13: SG0-SG13 switch voltages
++ * - Channels 14-21: SP0-SP7 switch voltages
++ * - Channel 22: Internal temperature diode
++ * - Channel 23: Battery voltage (VBATP)
++ *
++ * Consumer drivers (typically IIO ADC drivers) use the mux-control
++ * subsystem to select which signal to measure.
++ *
++ * Architecture:
++ * The MC33978 does not have an internal ADC. Instead, it routes analog
++ * signals to an external AMUX pin that must be connected to an external
++ * ADC (such as the SoC's internal ADC). The IIO subsystem is responsible
++ * for coordinating the mux selection and ADC sampling.
++ */
++
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/mux/driver.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/regmap.h>
++
++#include <linux/mfd/mc33978.h>
++
++/* AMUX_CTRL register field definitions */
++#define MC33978_AMUX_CTRL_MASK	GENMASK(5, 0)	/* 6-bit channel select */
++
++struct mc33978_mux_priv {
++	struct device *dev;
++	struct regmap *map;
++};
++
++static int mc33978_mux_set(struct mux_control *mux, int state)
++{
++	struct mc33978_mux_priv *priv = mux_chip_priv(mux->chip);
++	int ret;
++
++	if (state < 0 || state >= MC33978_NUM_AMUX_CH)
++		return -EINVAL;
++
++	ret = regmap_update_bits(priv->map, MC33978_REG_AMUX_CTRL,
++				 MC33978_AMUX_CTRL_MASK, state);
++	if (ret) {
++		dev_err(priv->dev, "Failed to set AMUX channel %d: %d\n",
++			state, ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct mux_control_ops mc33978_mux_ops = {
++	.set = mc33978_mux_set,
++};
++
++static int mc33978_mux_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct mc33978_mux_priv *priv;
++	struct mux_chip *mux_chip;
++	struct mux_control *mux;
++	int ret;
++
++	mux_chip = devm_mux_chip_alloc(dev, 1, sizeof(*priv));
++	if (IS_ERR(mux_chip))
++		return dev_err_probe(dev, PTR_ERR(mux_chip), "Failed to allocate mux chip\n");
++
++	/* Borrow the parent's DT node so consumers can find this mux chip */
++	device_set_node(&mux_chip->dev, dev_fwnode(dev->parent));
++
++	priv = mux_chip_priv(mux_chip);
++	priv->dev = dev;
++
++	priv->map = dev_get_regmap(dev->parent, NULL);
++	if (!priv->map)
++		return dev_err_probe(dev, -ENODEV, "Failed to get parent regmap\n");
++
++	mux_chip->ops = &mc33978_mux_ops;
++
++	mux = &mux_chip->mux[0];
++	mux->states = MC33978_NUM_AMUX_CH;
++
++	ret = devm_mux_chip_register(dev, mux_chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to register mux chip\n");
++
++	platform_set_drvdata(pdev, mux_chip);
++
++	return 0;
++}
++
++static const struct platform_device_id mc33978_mux_id[] = {
++	{ "mc33978-mux", },
++	{ "mc34978-mux", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, mc33978_mux_id);
++
++static struct platform_driver mc33978_mux_driver = {
++	.driver = {
++		.name = "mc33978-mux",
++	},
++	.probe = mc33978_mux_probe,
++	.id_table = mc33978_mux_id,
++};
++module_platform_driver(mc33978_mux_driver);
++
++MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
++MODULE_DESCRIPTION("NXP MC33978/MC34978 Analog Multiplexer Driver");
++MODULE_LICENSE("GPL");
+-- 
+2.47.3
 
