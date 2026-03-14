@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722F1233721;
-	Sat, 14 Mar 2026 16:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABEC38F9C;
+	Sat, 14 Mar 2026 16:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773507389; cv=none; b=dPjPR5dYG1oAYZBpcuBaQiZT00vYy4PUVtJy1w90pY0wY+7hgvRmTQIJOWLJ0iTdCc/yI2RvIMYErc2c3jIrLgOIwq89GnYv7DRXDphWcXAcZqL5wFP+VnYzdUKWH6as66oXkO0HYa/nLwFFaDMBC0GlQPrghcyHDGq+A4ZMtBs=
+	t=1773507465; cv=none; b=TLMIcXwe4LbKGNISg/Frd3kHf3J2/GCGuLad0N49NRm21VNXLXVkxsWGyCVkHaV82rB6rvQ1WneIx6ia6Z+gpLXvs+yqHbQ8d5TgWzhoVEBCtGfdMokSGshSTcFAUJ0DmM4AB+U9u0EfctgEIZr3xRmTKBsJi88a8EtniGuXZV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773507389; c=relaxed/simple;
-	bh=K2/51MC7bI/87I8mto05HaeOL1q9UD0Pz5lwJ/71o/4=;
+	s=arc-20240116; t=1773507465; c=relaxed/simple;
+	bh=1QgLBpuzpumxuzLwiduaG7BRUXzEsWH9tCQ1NLudE8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDWEvyEXOW1rHs9697G0wFb9v4pyXlSTTnGFjHCRkaK6+X6WpRntjwMUvlgknA9N49PBkvqslSjRVmxZumjB5LCxb5VLeWsd1xhgPftvdUhFTN15IlpxTHRC3BhbeO/ai7tP89fxxIVmBjgbBxNIEs02fGQoEprXPRqXi4YjP98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsJ+5EBH; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=WEEWB/nrsYNjZkXeXrRwZFyllVFhcuaES3NKHhtcaH5YEze2IHwLBBRK8LlDi8qlJ8NlME8HCauET9aHLZBXkkYT72fyievIIhK1S4K3zyiRjfSUG91zMY8g7z1jZqqc/jNQPPHxI+Pl70U93mUpN1OxrshRHeXm3cx+QBbOW30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBhpxFbx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsJ+5EBH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC902C116C6;
-	Sat, 14 Mar 2026 16:56:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBhpxFbx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3899C116C6;
+	Sat, 14 Mar 2026 16:57:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773507389;
-	bh=K2/51MC7bI/87I8mto05HaeOL1q9UD0Pz5lwJ/71o/4=;
+	s=k20201202; t=1773507465;
+	bh=1QgLBpuzpumxuzLwiduaG7BRUXzEsWH9tCQ1NLudE8M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UsJ+5EBHkfaXYTFY7PI8OeYdt2u9isrCQDZ4tpK+CcWe3/Iqum+vK2TSUaJUtWi4I
-	 KiDqjZXijttMtJsUrSPSAMIPwY6BPPyrDYeyPf8pzVAOnqnOL2lMzdS+HN9AphXA58
-	 nkHrlvYUxMJ7nGDyb320oQamwGcjKwjypuNryunDbDwisHbMciB22vEKIySphyF3aI
-	 pBtj5KfjH9r9DvDRUn5qF7BU9qhIUwd5wupk7aCk1ABHJPoEk6sEoLjbIqmcd2AfAo
-	 3XT/f1G0ngCUCorEXlPj70ExYWaGAN3r4/imwUBcJB1qST7m0tClf1mXhq9FP6UeQI
-	 z3oc99jzfi/aQ==
-Date: Sat, 14 Mar 2026 09:56:27 -0700
+	b=mBhpxFbxjovN1pMXc5+sqAYNmShCKqCCyPvMkI4tqtFmDWvmRzovEEjhSdRZgoXil
+	 aBGufqNe/a3q1NYbm5dXhoNVZUPPYOAdzbKgl6N9nPoGnW4jLiwG1MgN3R/64fB8QS
+	 MW78SLQJuOBnmRbmwG4nA/vQ/dVrt0jQZa9OJdrzeCzlTxBeY94JHCzSYD5OewNUQn
+	 Jwi2f02iERKsUAVQSO6x63WD6GrZ5LqigbS5nAE4cYfuaO7/tDumj/HnmtAo4JKSft
+	 8jwlKJGCTrbNPfZIH0/09yDkb/AUSZA6H57GBrEiiXDk8SQA0bGyEleaoqglERplrC
+	 SL2cyuxjpuGIw==
+Date: Sat, 14 Mar 2026 09:57:43 -0700
 From: Drew Fustini <fustini@kernel.org>
 To: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
@@ -36,11 +36,11 @@ Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
 	Icenowy Zheng <uwu@icenowy.me>, Han Gao <rabenda.cn@gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: moortec,mr75203: adapt
- multipleOf for T-Head TH1520
-Message-ID: <abWTO7QBFIcjxKn6@x1>
+Subject: Re: [PATCH v3 2/2] riscv: dts: thead: th1520: add coefficients to
+ the PVT node
+Message-ID: <abWTh/HkVAiIjInt@x1>
 References: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
- <20260309162457.4128205-2-zhengxingda@iscas.ac.cn>
+ <20260309162457.4128205-3-zhengxingda@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,58 +49,47 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260309162457.4128205-2-zhengxingda@iscas.ac.cn>
+In-Reply-To: <20260309162457.4128205-3-zhengxingda@iscas.ac.cn>
 
-On Tue, Mar 10, 2026 at 12:24:56AM +0800, Icenowy Zheng wrote:
-> The G and J coefficients provided by T-Head TH1520 manual (which calls
-> them A and C coefficients and calls H coefficient in the binding as B)
-> have 1/100 degree Celsius precision (the values are 42.74 and -0.16
-> respectively), however the binding currently only allows coefficients as
-> precise as 100 milli-Celsius (1/10 degree Celsius).
+On Tue, Mar 10, 2026 at 12:24:57AM +0800, Icenowy Zheng wrote:
+> The manual of TH1520 contains a set of coefficients a little different
+> to the driver default ones.
 > 
-> Change the multipleOf value of these two coefficients to 10 (in the unit
-> of milli-Celsius) to satisfy the need of TH1520.
+> Add them to the device tree node of PVT.
 > 
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 > Reviewed-by: Drew Fustini <fustini@kernel.org>
 > ---
 > Changes in v3:
 > - Added Drew's R-b.
-> - Fixed some typos in the commit message and slightly reworded the
->   precision sentence.
+> No changes in v2.
 > 
->  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/riscv/boot/dts/thead/th1520.dtsi | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index 56db2292f062d..7d57c2934a8a1 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -105,7 +105,7 @@ properties:
->        G coefficient for temperature equation.
->        Default for series 5 = 60000
->        Default for series 6 = 57400
-> -    multipleOf: 100
-> +    multipleOf: 10
->      minimum: 1000
->      $ref: /schemas/types.yaml#/definitions/uint32
+> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
+> index bd5d33840884e..2160c8b6c2261 100644
+> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
+> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
+> @@ -753,6 +753,10 @@ pvt: pvt@fffff4e000 {
+>  			reg-names = "common", "ts", "pd", "vm";
+>  			clocks = <&aonsys_clk>;
+>  			#thermal-sensor-cells = <1>;
+> +			moortec,ts-coeff-g = <42740>;
+> +			moortec,ts-coeff-h = <220500>;
+> +			moortec,ts-coeff-j = <(-160)>;
+> +			moortec,ts-coeff-cal5 = <4094>;
+>  		};
 >  
-> @@ -131,7 +131,7 @@ properties:
->        J coefficient for temperature equation.
->        Default for series 5 = -100
->        Default for series 6 = 0
-> -    multipleOf: 100
-> +    multipleOf: 10
->      maximum: 0
->      $ref: /schemas/types.yaml#/definitions/int32
->  
+>  		gpio@fffff52000 {
 > -- 
 > 2.52.0
-> 
+>
 
-I have applied this to thead-dt-for-next.
+I have applied this to thead-dt-for-next:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=thead-dt-for-next&id=eb4fd43ff6793681f0a0a8e8ac861142caba2b19
+https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=thead-dt-for-next&id=2592a7072a816be80337b0a85e6279f75498262b
 
 Thanks,
 Drew
