@@ -1,1121 +1,195 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C215139F18A
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 14:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B990D394498
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 14:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773669948; cv=none; b=AU/U+A1RfwnCuLRJFWVl/cn2T0AEBAjxMVlSL99u0TBeLtwGOxUxlc3ftsh7TC7H4jceHCBNElS2+dEgEkSj6e6qtHdRq7DbevyUa3Q+9kw+se5yYMKJrPnxXNh4NHItpKkAqQAGJ6Z2sjGGTtbKiVlkXkevoGQ64Ke2Vb11LZo=
+	t=1773670304; cv=none; b=ACV+vPy5cEOemw2zz8b+a7qHOf6MZYkpWwtzbBZffEJsAQ5yIZT5tJj03xjAprdsdPnN76txR9TVVgkvny84XUulnruXskaIIjO480ApWn4uRLP4PME0jRFugg1/Gqy60gcpuGsFqRW2+HfujpZ2fT61OakZSArWK0dIczUr8Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773669948; c=relaxed/simple;
-	bh=Xkvgw2QyF6U1Ps3LI3+/h+t/Ndx7//g0F0S2MxzJU1o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H4S/eU0kX1lesEZHRlptdVGN0uovh5EQszvIujs2XGQyWAh38OCM7NJBMoSRCBWKxw84y8rPwah+UqiAiFokfrOw8tiFFXDFJceqxT3p8Kpxj1CDtZqCqsmF29oxuFci9VLpZKj/6UXhdELXjntuFX+58NfTzmXnWgYnm2x1skY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w28ZI-0002G4-E8; Mon, 16 Mar 2026 15:05:16 +0100
-Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac] helo=dude04)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w28ZH-000a8L-2T;
-	Mon, 16 Mar 2026 15:05:15 +0100
-Received: from ore by dude04 with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w28ZH-00000005twe-2tjO;
-	Mon, 16 Mar 2026 15:05:15 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>,
-	Linus Walleij <linusw@kernel.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	David Jander <david@protonic.nl>
-Subject: [PATCH v5 2/7] mfd: add NXP MC33978/MC34978 core driver
-Date: Mon, 16 Mar 2026 15:05:07 +0100
-Message-ID: <20260316140514.1406588-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260316140514.1406588-1-o.rempel@pengutronix.de>
-References: <20260316140514.1406588-1-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1773670304; c=relaxed/simple;
+	bh=htLGnvtizetVXxTUy6snLHUbevhddIJzI+a5EvNU898=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F8nDpJquCgdyIdAAdx5YRO4o4Px0ZP7attN/aUkqTFNyakN8XPueaB3ys1La0yED5Jtd3Ri0hEZoCn3plsEWOJu3CQoJuRAWsfFyn8/5QNRCak+0ojHZrMg5QlIoKwUyKlJfpcW4X+jiCFRqJKorXkZlPeGLGCTQR9JBoC1lhRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q85g/Kf3; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q85g/Kf3"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-128e4d0cc48so5109451c88.1
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 07:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773670302; x=1774275102; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qTyet+vUs4i5zO6iAQ/90TtCdIDVFVxtPrkgLSGy3qg=;
+        b=Q85g/Kf3o26F6A7qpv1xZ/e0ql/2889cl/oeTt4uOlNJJDM+HWUzsir+Ve5j3IfPGx
+         M2oRPiEDCN/6Br87YxdOAP/wCVdgGf6z9v99D0oud0o/GaHtR/+FSNABauV7MAzxysz1
+         T+PlsRifIkr8ElCvdQiDJiUIOuBnG8DhPsEZFs9YDzssXcY7DXgFG6G9ubthX+/VwtGd
+         W4Ql0SGcOBneDmnq1r2yRCLrcleSCx9zV5BW8Bl3J31Sth8Jm3t5L4O7CCWpWz1cWAnJ
+         ggYP2FyWhNjhRjXPgvoBYuSiTmhI9uuVb2JGgCYPb67mf+xwVrYd/oAcfDKKtKIEpnkS
+         Co6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773670302; x=1774275102;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qTyet+vUs4i5zO6iAQ/90TtCdIDVFVxtPrkgLSGy3qg=;
+        b=K9OjQZctUkxXAQMHSnpcb5Mqk4FPXcM86e4OxkyK0ngx8yl3KdhQZB50ar9Owh/HGF
+         C7p8alOZJXX3saB7ZJXNGotCn2tqR9Hc4iDTN6gEOVeEpaKLBEkvWHDNHb0IzQScNzrg
+         vJl9823IC9oxbsa1738hCa9KO5fJFgVC+tVJkmw9SO8wGSk8/nbn7QB5sF+xezdrQSy/
+         DBJUVXOVvOHlySVRg16GS5iSZ1DLBjigwJGidJo6tnKNTfXZf/kjrMVpv7O/YBBhPfrs
+         fDCJVOxDEjvcmhed2mQAV59183/qWdbb9wdOOwIDGOxsE/4ae0Dygbe7oTST1AwCVFRq
+         b9XA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjp2f9ltlZJGw8PZWHsRAEIy+BhflEnMoi8k36pbnXvZOOhOGalMW0yvjJuzse1NrFL63AY9/sa+y0Xw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrUkjXi6rkYiol2WhQlECqsXt7xk1TNN3KcYIoU/24toF69r2A
+	/cPuqBeul3TtLu6YuYcB+Ni3iZmWTAYUnyBqKIkxXqHTWVef0sPiM2d3
+X-Gm-Gg: ATEYQzzuY6aP74RGKPAXWTIJFhOcNxj6BgAsekKxWPonsRY8aXQA2zkt/iBV1W61mtp
+	6/XxbJE1nPqbBGcKoGJYOxraucSbsRpp7Y+n3gB6i6WRxDLtt6Y3SeVkxHcfSPYHeF30XXHaWUE
+	HP63M9OgjzDcr0QOx8TofP5mJ0Nki0KW+CiTjxZ2CBobaoVV9vIUPaXvDHO1CPeLh+FpvevFibM
+	GiJ+MVpzzHlxPT2hB7NI2P//6prJFZFmp2d8GREsOiiI9NHWsjShY8lQPCQ2B3El5WK9cUTUdsC
+	pzUhOw1d8McuuxxIXrOVp4Vqf8Wa8vujkU2SEvr8ccWHP42dBQjgR5dOVBw/14NdG7oBeeNX1v+
+	vqtmLqluS5VdFDURxX9E0eeN/+Q3SNimnWHSsfQWHy/6reTYP+3VxxscZuW/xLzHKSCNt7HJy+0
+	n6O+fnzs8S1aCtT0YWI/SuownFFOU2TzC88BYCT2HQmniYOkoxXqbQDqBprfiQ/jqiF+lggWFz
+X-Received: by 2002:a05:7022:b9c:b0:128:cc63:82f0 with SMTP id a92af1059eb24-128f3e2aa9emr5757183c88.25.1773670301528;
+        Mon, 16 Mar 2026 07:11:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128f6283845sm12630518c88.2.2026.03.16.07.11.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 07:11:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0f88a17c-7c21-4ae5-b418-dfb4b4ac5d6a@roeck-us.net>
+Date: Mon, 16 Mar 2026 07:11:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: moortec,mr75203: adapt
+ multipleOf for T-Head TH1520
+To: Conor Dooley <conor@kernel.org>, Drew Fustini <fustini@kernel.org>
+Cc: Icenowy Zheng <zhengxingda@iscas.ac.cn>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei
+ <wefu@redhat.com>, Rahul Tanwar <rtanwar@maxlinear.com>,
+ linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ Icenowy Zheng <uwu@icenowy.me>, Han Gao <rabenda.cn@gmail.com>
+References: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
+ <20260309162457.4128205-2-zhengxingda@iscas.ac.cn> <abWTO7QBFIcjxKn6@x1>
+ <20260315-cogwheel-dislodge-a3efe31728d1@spud>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260315-cogwheel-dislodge-a3efe31728d1@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add core Multi-Function Device (MFD) driver for the NXP MC33978 and
-MC34978 Multiple Switch Detection Interfaces (MSDI).
+On 3/15/26 05:12, Conor Dooley wrote:
+> On Sat, Mar 14, 2026 at 09:56:27AM -0700, Drew Fustini wrote:
+>> On Tue, Mar 10, 2026 at 12:24:56AM +0800, Icenowy Zheng wrote:
+>>> The G and J coefficients provided by T-Head TH1520 manual (which calls
+>>> them A and C coefficients and calls H coefficient in the binding as B)
+>>> have 1/100 degree Celsius precision (the values are 42.74 and -0.16
+>>> respectively), however the binding currently only allows coefficients as
+>>> precise as 100 milli-Celsius (1/10 degree Celsius).
+>>>
+>>> Change the multipleOf value of these two coefficients to 10 (in the unit
+>>> of milli-Celsius) to satisfy the need of TH1520.
+>>>
+>>> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+>>> Reviewed-by: Drew Fustini <fustini@kernel.org>
+>>> ---
+>>> Changes in v3:
+>>> - Added Drew's R-b.
+>>> - Fixed some typos in the commit message and slightly reworded the
+>>>    precision sentence.
+>>>
+>>>   Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>> index 56db2292f062d..7d57c2934a8a1 100644
+>>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>> @@ -105,7 +105,7 @@ properties:
+>>>         G coefficient for temperature equation.
+>>>         Default for series 5 = 60000
+>>>         Default for series 6 = 57400
+>>> -    multipleOf: 100
+>>> +    multipleOf: 10
+>>>       minimum: 1000
+>>>       $ref: /schemas/types.yaml#/definitions/uint32
+>>>   
+>>> @@ -131,7 +131,7 @@ properties:
+>>>         J coefficient for temperature equation.
+>>>         Default for series 5 = -100
+>>>         Default for series 6 = 0
+>>> -    multipleOf: 100
+>>> +    multipleOf: 10
+>>>       maximum: 0
+>>>       $ref: /schemas/types.yaml#/definitions/int32
+>>>   
+>>> -- 
+>>> 2.52.0
+>>>
+>>
+>> I have applied this to thead-dt-for-next.
+> 
+> That's odd, why is a hwmon binding in your branch?
+> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=thead-dt-for-next&id=eb4fd43ff6793681f0a0a8e8ac861142caba2b19
+> 
+> I don't see an ack on it from the relevant maintainer either?
 
-The MC33978/MC34978 devices provide 22 switch detection inputs, analog
-multiplexing (AMUX), and comprehensive hardware fault detection.
+I don't get it either. Normally I am the one to apply hwmon bindings
+through the hwmon branch.
 
-This core driver handles:
-- SPI communications via a custom regmap bus to support the device's
-  pipelined two-frame MISO response requirement.
-- Power sequencing for the VDDQ (logic) and VBATP (battery) regulators.
-- Interrupt demultiplexing, utilizing an irq_domain to provide 22 virtual
-  IRQs for switch state changes and 1 virtual IRQ for hardware faults.
-- Inline status harvesting from the SPI MSB to detect and trigger events
-  without requiring dedicated status register polling.
-
-Child devices (pinctrl, hwmon, mux) are populated automatically via
-the device tree.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-changes v5:
-- no changes
-changes v4:
-- Removed .of_compatible strings from the mfd_cell arrays
-changes v3:
-- Select IRQ_DOMAIN_HIERARCHY in Kconfig
-- Add .alloc and .free callbacks to irq_domain_ops to support hierarchical
-  IRQ domains
-- Set IRQ_DOMAIN_FLAG_HIERARCHY flag on the core MFD irq_domain
-- replace manual lock/unlock with guard()
-changes v2:
-- Rewrite the driver header comment
-- Explicitly reject IRQ_TYPE_LEVEL_HIGH and IRQ_TYPE_LEVEL_LOW in
-  mc33978_irq_set_type() to correctly reflect the hardware's edge-only
-  interrupt capabilities.
-- Pass the hardware fault IRQ to the hwmon child driver via mfd_cell
-  resources, rather than requiring the child to parse the parent's irq_domain.
-- Ensure the Kconfig strictly depends on OF and SPI
----
- drivers/mfd/Kconfig         |  15 +
- drivers/mfd/Makefile        |   2 +
- drivers/mfd/mc33978.c       | 870 ++++++++++++++++++++++++++++++++++++
- include/linux/mfd/mc33978.h |  86 ++++
- 4 files changed, 973 insertions(+)
- create mode 100644 drivers/mfd/mc33978.c
- create mode 100644 include/linux/mfd/mc33978.h
-
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 7192c9d1d268..6dc9554822c9 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -2566,6 +2566,21 @@ config MFD_UPBOARD_FPGA
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called upboard-fpga.
- 
-+config MFD_MC33978
-+	tristate "NXP MC33978/MC34978 industrial input controller core"
-+	depends on OF
-+	depends on SPI
-+	select IRQ_DOMAIN_HIERARCHY
-+	select MFD_CORE
-+	select REGMAP
-+	help
-+	  Support for the NXP MC33978/MC34978 industrial input controllers
-+	  using the SPI interface.
-+
-+	  This driver provides common support for accessing the device.
-+	  Additional drivers must be enabled in order to use the functionality
-+	  of the device.
-+
- config MFD_MAX7360
- 	tristate "Maxim MAX7360 I2C IO Expander"
- 	depends on I2C
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index e75e8045c28a..dcd99315f683 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -122,6 +122,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
- obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
- obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
- 
-+obj-$(CONFIG_MFD_MC33978)	+= mc33978.o
-+
- obj-$(CONFIG_MFD_PF1550)	+= pf1550.o
- 
- obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
-diff --git a/drivers/mfd/mc33978.c b/drivers/mfd/mc33978.c
-new file mode 100644
-index 000000000000..ccc2a62d61c9
---- /dev/null
-+++ b/drivers/mfd/mc33978.c
-@@ -0,0 +1,870 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
-+ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
-+ *
-+ * MC33978/MC34978 Multiple Switch Detection Interface - MFD Core Driver
-+ *
-+ * Driver Architecture:
-+ * This is the core MFD driver handling the physical SPI interface, power
-+ * management, and central interrupt routing. It instantiates the following
-+ * child devices:
-+ * - pinctrl: For GPIO read/write and wetting current configuration.
-+ * - hwmon:   For hardware fault monitoring (tLIM, over/under-voltage).
-+ * - mux:     For the 24-to-1 analog multiplexer (AMUX).
-+ *
-+ * Custom SPI Regmap & Event Harvesting:
-+ * The device uses a non-standard pipelined SPI protocol where the MISO
-+ * response logically lags the MOSI command by one frame. Furthermore, the
-+ * hardware embeds volatile global status bits (INT_flg, FAULT_STAT) into the
-+ * high byte of almost every SPI response (with specific exceptions handled by
-+ * the decoder). This core implements a custom regmap_bus to handle the
-+ * 2-frame dummy fetches and transparently "harvests" these status bits in
-+ * the background to schedule event processing.
-+ *
-+ * Interrupt Quirks & Limitations:
-+ * - Clear-on-Read: The physical INT_B line is directly tied to the INT_flg
-+ * bit. The hardware deasserts INT_B immediately upon *any* SPI transfer
-+ * that returns INT_flg. Harvesting this bit from all SPI traffic is the
-+ * ONLY way to know this device triggered an interrupt (crucial for shared
-+ * IRQ lines).
-+ * - Stateless Pin Edge Detection: The hardware lacks per-pin interrupt status
-+ * registers. To determine which pin triggered an event, the driver must
-+ * read the current pin states and XOR them against a previously cached state.
-+ * - Missed Short Pulses: Because pin interrupts are state-derived rather than
-+ * hardware-latched, very short physical pulses (shorter than the SPI read
-+ * latency) will be missed entirely if the pin reverts to its original state
-+ * before the READ_IN register is sampled by the IRQ thread.
-+ * - Edge-Only Pin Interrupts: The hardware only asserts INT_B on a state
-+ * change. It cannot continuously assert an interrupt while a pin is held at a
-+ * specific logic level. Consequently, the driver strictly emulates edge
-+ * interrupts (RISING/FALLING) and explicitly rejects LEVEL interrupt
-+ * configurations to prevent consumer misalignment.
-+ */
-+
-+#include <linux/array_size.h>
-+#include <linux/atomic.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/cleanup.h>
-+#include <linux/device.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/spi/spi.h>
-+#include <linux/string.h>
-+
-+#include <linux/mfd/mc33978.h>
-+
-+#define MC33978_DRV_NAME		"mc33978"
-+
-+/* Device identification signature returned by CHECK register */
-+#define MC33978_CHECK_SIGNATURE		0x123456
-+
-+/*
-+ * Pipelined two-frame SPI transfer:
-+ * [REQ]  - Transmits command/write-data, receives dummy/previous response
-+ * [PIPE] - Transmits dummy CHECK, receives actual response to current command
-+ */
-+enum mc33978_frame_index {
-+	MC33978_FRAME_REQ = 0,
-+	MC33978_FRAME_PIPE,
-+	MC33978_FRAME_COUNT
-+};
-+
-+/* SPI frame byte offsets (transmitted MSB first) */
-+enum mc33978_frame_offset {
-+	MC33978_FRAME_CMD = 0,
-+	MC33978_FRAME_DATA_HI,
-+	MC33978_FRAME_DATA_MID,
-+	MC33978_FRAME_DATA_LO
-+};
-+
-+#define MC33978_FRAME_LEN		4
-+
-+/* Regmap internal value buffer offsets */
-+enum mc33978_payload_offset {
-+	MC33978_PAYLOAD_HI = 0,
-+	MC33978_PAYLOAD_MID,
-+	MC33978_PAYLOAD_LO
-+};
-+
-+#define MC33978_PAYLOAD_LEN		3
-+
-+/*
-+ * SPI Command Byte (FRAME_CMD).
-+ * Maps to frame bit [24] in the datasheet.
-+ */
-+#define MC33978_CMD_BYTE_WRITE		BIT(0)
-+
-+/* High Payload Byte Masks (FRAME_DATA_HI / PAYLOAD_HI). */
-+#define MC33978_HI_BYTE_STAT_FAULT     BIT(7) /* Maps to frame bit [23] */
-+#define MC33978_HI_BYTE_STAT_INT       BIT(6) /* Maps to frame bit [22] */
-+
-+#define MC33978_HI_BYTE_STATUS_MASK    (MC33978_HI_BYTE_STAT_FAULT | \
-+					MC33978_HI_BYTE_STAT_INT)
-+
-+/* Maps to frame bits [21:16] */
-+#define MC33978_HI_BYTE_DATA_MASK	GENMASK(5, 0)
-+
-+#define MC33978_CACHE_SG_PIN_MASK	GENMASK(13, 0)
-+#define MC33978_CACHE_SP_PIN_MASK	GENMASK(21, 14)
-+
-+#define MC33978_SG_PIN_MASK		GENMASK(13, 0)
-+#define MC33978_SP_PIN_MASK		GENMASK(7, 0)
-+
-+struct mc33978_data {
-+	const struct mfd_cell *cells;
-+	int num_cells;
-+};
-+
-+struct mc33978_mfd_priv {
-+	struct spi_device *spi;
-+	struct regmap *map;
-+
-+	struct regulator *vddq;
-+	struct regulator *vbatp;
-+
-+	/* Protects event processing loop and hardware state machine */
-+	struct mutex event_lock;
-+	struct work_struct event_work;
-+	atomic_t is_handling;
-+	atomic_t harvested_flags;
-+	u32 cached_pin_state;
-+	u32 cached_pin_mask;
-+	u32 irq_rise;
-+	u32 irq_fall;
-+
-+	/* Protects IRQ mask registers and cached IRQ state */
-+	struct mutex irq_lock;
-+	struct irq_domain *domain;
-+
-+	/* Pre-built SPI messages */
-+	struct spi_message msg_read;
-+	struct spi_message msg_write;
-+	struct spi_transfer xfer_read[MC33978_FRAME_COUNT];
-+	struct spi_transfer xfer_write;
-+
-+	/* DMA buffers at the end */
-+	u8 tx_frame[MC33978_FRAME_COUNT][MC33978_FRAME_LEN] ____cacheline_aligned;
-+	u8 rx_frame[MC33978_FRAME_COUNT][MC33978_FRAME_LEN];
-+};
-+
-+static void mc33978_irq_mask(struct irq_data *data)
-+{
-+	struct mc33978_mfd_priv *mc = irq_data_get_irq_chip_data(data);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(data);
-+
-+	mc->cached_pin_mask &= ~BIT(hwirq);
-+}
-+
-+static void mc33978_irq_unmask(struct irq_data *data)
-+{
-+	struct mc33978_mfd_priv *mc = irq_data_get_irq_chip_data(data);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(data);
-+
-+	mc->cached_pin_mask |= BIT(hwirq);
-+}
-+
-+static void mc33978_irq_bus_lock(struct irq_data *data)
-+{
-+	struct mc33978_mfd_priv *mc = irq_data_get_irq_chip_data(data);
-+
-+	mutex_lock(&mc->irq_lock);
-+}
-+
-+/**
-+ * mc33978_irq_bus_sync_unlock() - Sync cached IRQ mask to hardware and unlock
-+ * @data: IRQ data
-+ *
-+ * Writes the cached interrupt mask to the hardware IE_SG and IE_SP registers,
-+ * then releases the IRQ lock. This is where the actual hardware update occurs
-+ * after mask/unmask operations.
-+ */
-+static void mc33978_irq_bus_sync_unlock(struct irq_data *data)
-+{
-+	struct mc33978_mfd_priv *mc = irq_data_get_irq_chip_data(data);
-+	u32 sg_mask, sp_mask;
-+	int ret;
-+
-+	/*
-+	 * Split the cached 22-bit pin mask into hardware register format:
-+	 * - SG pins: bits [13:0] (14 pins, mask 0x3FFF)
-+	 * - SP pins: bits [21:14] (8 pins, mask 0xFF)
-+	 */
-+	sg_mask = FIELD_GET(MC33978_CACHE_SG_PIN_MASK, mc->cached_pin_mask);
-+	sp_mask = FIELD_GET(MC33978_CACHE_SP_PIN_MASK, mc->cached_pin_mask);
-+
-+	ret = regmap_update_bits(mc->map, MC33978_REG_IE_SG,
-+				 MC33978_SG_PIN_MASK, sg_mask);
-+	if (ret)
-+		goto unlock;
-+
-+	ret = regmap_update_bits(mc->map, MC33978_REG_IE_SP,
-+				 MC33978_SP_PIN_MASK, sp_mask);
-+unlock:
-+	if (ret)
-+		dev_err(&mc->spi->dev, "Failed to sync IRQ mask to hardware: %d\n",
-+			ret);
-+
-+	mutex_unlock(&mc->irq_lock);
-+}
-+
-+static int mc33978_irq_set_type(struct irq_data *data, unsigned int type)
-+{
-+	struct mc33978_mfd_priv *mc = irq_data_get_irq_chip_data(data);
-+	irq_hw_number_t hwirq = irqd_to_hwirq(data);
-+	u32 mask = BIT(hwirq);
-+
-+	if (hwirq == MC33978_HWIRQ_FAULT)
-+		return 0;
-+
-+	if (type & (IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW))
-+		return -EINVAL;
-+
-+	if (type & IRQ_TYPE_EDGE_RISING)
-+		mc->irq_rise |= mask;
-+	else
-+		mc->irq_rise &= ~mask;
-+
-+	if (type & IRQ_TYPE_EDGE_FALLING)
-+		mc->irq_fall |= mask;
-+	else
-+		mc->irq_fall &= ~mask;
-+
-+	return 0;
-+}
-+
-+static struct irq_chip mc33978_irq_chip = {
-+	.name			= MC33978_DRV_NAME,
-+	.irq_mask		= mc33978_irq_mask,
-+	.irq_unmask		= mc33978_irq_unmask,
-+	.irq_bus_lock		= mc33978_irq_bus_lock,
-+	.irq_bus_sync_unlock	= mc33978_irq_bus_sync_unlock,
-+	.irq_set_type		= mc33978_irq_set_type,
-+};
-+
-+static int mc33978_irq_map(struct irq_domain *d, unsigned int virq,
-+			   irq_hw_number_t hw)
-+{
-+	struct mc33978_mfd_priv *mc = d->host_data;
-+
-+	irq_set_chip_data(virq, mc);
-+	irq_set_chip_and_handler(virq, &mc33978_irq_chip, handle_simple_irq);
-+
-+	irq_set_nested_thread(virq, 1);
-+	irq_clear_status_flags(virq, IRQ_NOREQUEST | IRQ_NOPROBE);
-+
-+	return 0;
-+}
-+
-+static int mc33978_irq_domain_alloc(struct irq_domain *domain,
-+				    unsigned int virq,
-+				    unsigned int nr_irqs, void *arg)
-+{
-+	struct mc33978_mfd_priv *mc = domain->host_data;
-+	struct irq_fwspec *fwspec = arg;
-+	irq_hw_number_t hwirq;
-+	int i;
-+
-+	if (fwspec->param_count < 1)
-+		return -EINVAL;
-+
-+	hwirq = fwspec->param[0];
-+
-+	for (i = 0; i < nr_irqs; i++) {
-+		irq_domain_set_hwirq_and_chip(domain, virq + i, hwirq + i,
-+					      &mc33978_irq_chip, mc);
-+		irq_set_nested_thread(virq + i, 1);
-+		irq_clear_status_flags(virq + i, IRQ_NOREQUEST | IRQ_NOPROBE);
-+	}
-+
-+	return 0;
-+}
-+
-+static void mc33978_irq_domain_free(struct irq_domain *domain,
-+				    unsigned int virq,
-+				    unsigned int nr_irqs)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_irqs; i++)
-+		irq_domain_reset_irq_data(irq_domain_get_irq_data(domain,
-+								  virq + i));
-+}
-+
-+static const struct irq_domain_ops mc33978_irq_domain_ops = {
-+	.map	= mc33978_irq_map,
-+	.alloc	= mc33978_irq_domain_alloc,
-+	.free	= mc33978_irq_domain_free,
-+	.xlate	= irq_domain_xlate_twocell,
-+};
-+
-+static void mc33978_irq_domain_remove(void *data)
-+{
-+	struct irq_domain *domain = data;
-+
-+	irq_domain_remove(domain);
-+}
-+
-+static bool mc33978_handle_pin_changes(struct mc33978_mfd_priv *mc,
-+				       unsigned int pin_state)
-+{
-+	u32 fired_pins = 0;
-+	u32 changed_pins;
-+	int i;
-+
-+	changed_pins = pin_state ^ mc->cached_pin_state;
-+	if (!changed_pins)
-+		return false;
-+
-+	mc->cached_pin_state = pin_state;
-+	changed_pins &= mc->cached_pin_mask;
-+
-+	if (!changed_pins)
-+		return false;
-+
-+	fired_pins |= (changed_pins & pin_state) & mc->irq_rise;
-+	fired_pins |= (changed_pins & ~pin_state) & mc->irq_fall;
-+
-+	for_each_set_bit(i, (unsigned long *)&fired_pins, MC33978_NUM_PINS) {
-+		int virq = irq_find_mapping(mc->domain, i);
-+
-+		handle_nested_irq(virq);
-+	}
-+
-+	return true;
-+}
-+
-+static bool mc33978_handle_fault_condition(struct mc33978_mfd_priv *mc)
-+{
-+	int virq;
-+
-+	virq = irq_find_mapping(mc->domain, MC33978_HWIRQ_FAULT);
-+	if (virq > 0)
-+		handle_nested_irq(virq);
-+
-+	return true;
-+}
-+
-+static bool mc33978_process_single_event(struct mc33978_mfd_priv *mc)
-+{
-+	unsigned int pin_state;
-+	bool handled = false;
-+	u8 hw_flags;
-+	int ret;
-+
-+	ret = regmap_read(mc->map, MC33978_REG_READ_IN, &pin_state);
-+	if (ret)
-+		return false;
-+
-+	/*
-+	 * harvested_flags will be set by regmap_read() above if the FAULT_STAT
-+	 * or INT_flg bits were detected in the response
-+	 */
-+	hw_flags = atomic_xchg(&mc->harvested_flags, 0);
-+
-+	if (mc33978_handle_pin_changes(mc, pin_state))
-+		handled = true;
-+
-+	if (hw_flags & MC33978_HI_BYTE_STAT_FAULT &&
-+	    mc33978_handle_fault_condition(mc))
-+		handled = true;
-+
-+	if (hw_flags & MC33978_HI_BYTE_STAT_INT)
-+		handled = true;
-+
-+	return handled;
-+}
-+
-+static bool mc33978_handle_events(struct mc33978_mfd_priv *mc)
-+{
-+	bool handled = false;
-+
-+	guard(mutex)(&mc->event_lock);
-+
-+	do {
-+		atomic_set(&mc->is_handling, 1);
-+
-+		if (mc33978_process_single_event(mc))
-+			handled = true;
-+
-+		atomic_set(&mc->is_handling, 0);
-+
-+	} while (atomic_read(&mc->harvested_flags) != 0);
-+
-+	return handled;
-+}
-+
-+static irqreturn_t mc33978_irq_thread(int irq, void *data)
-+{
-+	return mc33978_handle_events(data) ? IRQ_HANDLED : IRQ_NONE;
-+}
-+
-+static int mc33978_irq_init(struct mc33978_mfd_priv *mc)
-+{
-+	struct device *dev = &mc->spi->dev;
-+	int ret;
-+
-+	mutex_init(&mc->irq_lock);
-+
-+	/*
-+	 * Create IRQ domain with 23 interrupts:
-+	 * - hwirq 0-21: Pin change interrupts (22 pins)
-+	 * - hwirq 22: Fault interrupt (for hwmon driver)
-+	 */
-+	mc->domain = irq_domain_add_linear(dev->of_node, MC33978_NUM_PINS + 1,
-+					   &mc33978_irq_domain_ops, mc);
-+	if (!mc->domain)
-+		return dev_err_probe(dev, -ENOMEM, "Failed to create IRQ domain\n");
-+
-+	mc->domain->flags |= IRQ_DOMAIN_FLAG_HIERARCHY;
-+
-+	ret = devm_add_action_or_reset(dev, mc33978_irq_domain_remove,
-+				       mc->domain);
-+	if (ret)
-+		return ret;
-+
-+	if (mc->spi->irq <= 0)
-+		return dev_err_probe(dev, -EINVAL, "No valid IRQ provided for INT_B pin\n");
-+
-+	ret = devm_request_threaded_irq(dev, mc->spi->irq, NULL,
-+					mc33978_irq_thread,
-+					IRQF_ONESHOT | IRQF_SHARED,
-+					dev_name(dev), mc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to request IRQ\n");
-+
-+	return 0;
-+}
-+
-+static void mc33978_event_work(struct work_struct *work)
-+{
-+	struct mc33978_mfd_priv *mc =
-+		container_of(work, struct mc33978_mfd_priv, event_work);
-+
-+	mc33978_handle_events(mc);
-+}
-+
-+/**
-+ * mc33978_harvest_status() - Collect status flags from SPI responses
-+ * @mc: Device private data
-+ * @status: Status bits (FAULT_STAT and INT_flg) from MISO frame
-+ *
-+ * Accumulates status flags harvested from SPI responses and schedules
-+ * event processing if not already in progress. Called by the SPI
-+ * read/write functions when status bits are detected in responses.
-+ */
-+static void mc33978_harvest_status(struct mc33978_mfd_priv *mc, u8 status)
-+{
-+	if (!status)
-+		return;
-+
-+	atomic_or(status, &mc->harvested_flags);
-+
-+	if (!atomic_read(&mc->is_handling))
-+		schedule_work(&mc->event_work);
-+}
-+
-+/**
-+ * mc33978_prepare_messages() - Initialize the persistent SPI messages
-+ * @mc: Device private data
-+ *
-+ * Hardware pipelining constraints:
-+ * - Write (1 Frame): The device executes write commands immediately upon
-+ * CS de-assertion. No fetch frame is required.
-+ * - Read (2 Frames): The MISO response logically lags by one frame.
-+ * Frame 1 transmits the read request and toggles CS to latch it.
-+ * Frame 2 transmits a dummy CHECK command to fetch the actual payload.
-+ */
-+static void mc33978_prepare_messages(struct mc33978_mfd_priv *mc)
-+{
-+	/* --- Prepare Write Message (1 Frame) --- */
-+	spi_message_init(&mc->msg_write);
-+
-+	mc->xfer_write.tx_buf = mc->tx_frame[MC33978_FRAME_REQ];
-+	mc->xfer_write.rx_buf = mc->rx_frame[MC33978_FRAME_REQ];
-+	mc->xfer_write.len = MC33978_FRAME_LEN;
-+
-+	spi_message_add_tail(&mc->xfer_write, &mc->msg_write);
-+
-+	/* --- Prepare Read Message (2 Frames) --- */
-+	spi_message_init(&mc->msg_read);
-+
-+	/* Frame 1: Request */
-+	mc->xfer_read[MC33978_FRAME_REQ].tx_buf =
-+		mc->tx_frame[MC33978_FRAME_REQ];
-+	mc->xfer_read[MC33978_FRAME_REQ].rx_buf =
-+		mc->rx_frame[MC33978_FRAME_REQ];
-+	mc->xfer_read[MC33978_FRAME_REQ].len = MC33978_FRAME_LEN;
-+	mc->xfer_read[MC33978_FRAME_REQ].cs_change = 1; /* Latch command */
-+
-+	/* Frame 2: Fetch (Dummy CHECK) */
-+	mc->xfer_read[MC33978_FRAME_PIPE].tx_buf =
-+		mc->tx_frame[MC33978_FRAME_PIPE];
-+	mc->xfer_read[MC33978_FRAME_PIPE].rx_buf =
-+		mc->rx_frame[MC33978_FRAME_PIPE];
-+	mc->xfer_read[MC33978_FRAME_PIPE].len = MC33978_FRAME_LEN;
-+
-+	/* Preload the dummy CHECK command statically */
-+	mc->tx_frame[MC33978_FRAME_PIPE][MC33978_FRAME_CMD] = MC33978_REG_CHECK;
-+
-+	spi_message_add_tail(&mc->xfer_read[MC33978_FRAME_REQ], &mc->msg_read);
-+	spi_message_add_tail(&mc->xfer_read[MC33978_FRAME_PIPE], &mc->msg_read);
-+}
-+
-+/**
-+ * mc33978_rx_decode() - Decode MISO response frame and extract status
-+ * @rx_frame: Received SPI frame buffer (4 bytes)
-+ * @val_buf: Output buffer for regmap (exactly 3 bytes, optional)
-+ *
-+ * Translates the 4-byte SPI response into a 3-byte regmap payload.
-+ * Harvests the volatile INTflg and FAULT_STAT bits from the MSB.
-+ *
-+ * Return: Status bits if present, 0 otherwise.
-+ */
-+static u8 mc33978_rx_decode(const u8 *rx_frame, u8 *val_buf)
-+{
-+	u8 cmd = rx_frame[MC33978_FRAME_CMD] & ~MC33978_CMD_BYTE_WRITE;
-+	bool has_status;
-+	u8 status = 0;
-+
-+	switch (cmd) {
-+	case MC33978_REG_CHECK:
-+	case MC33978_REG_WET_SP:
-+	case MC33978_REG_WET_SG0:
-+		has_status = false;
-+		break;
-+	default:
-+		has_status = true;
-+		break;
-+	}
-+
-+	if (has_status)
-+		status = rx_frame[MC33978_FRAME_DATA_HI] &
-+						MC33978_HI_BYTE_STATUS_MASK;
-+
-+	if (!val_buf)
-+		return status;
-+
-+	memcpy(val_buf, &rx_frame[MC33978_FRAME_DATA_HI], MC33978_PAYLOAD_LEN);
-+
-+	if (has_status)
-+		val_buf[MC33978_PAYLOAD_HI] &= MC33978_HI_BYTE_DATA_MASK;
-+
-+	return status;
-+}
-+
-+static int mc33978_spi_write(void *ctx, const void *data, size_t count)
-+{
-+	struct mc33978_mfd_priv *mc = ctx;
-+	u8 status;
-+	int ret;
-+
-+	if (count != MC33978_FRAME_LEN)
-+		return -EINVAL;
-+
-+	memcpy(mc->tx_frame[MC33978_FRAME_REQ], data, MC33978_FRAME_LEN);
-+
-+	ret = spi_sync(mc->spi, &mc->msg_write);
-+	if (ret)
-+		return ret;
-+
-+	status = mc33978_rx_decode(mc->rx_frame[MC33978_FRAME_REQ], NULL);
-+	mc33978_harvest_status(mc, status);
-+
-+	return 0;
-+}
-+
-+static int mc33978_spi_read(void *ctx, const void *reg_buf, size_t reg_size,
-+			    void *val_buf, size_t val_size)
-+{
-+	struct mc33978_mfd_priv *mc = ctx;
-+	u8 status_req, status_pipe;
-+	int ret;
-+
-+	if (reg_size != 1 || val_size != MC33978_PAYLOAD_LEN)
-+		return -EINVAL;
-+
-+	memset(&mc->tx_frame[MC33978_FRAME_REQ][MC33978_FRAME_DATA_HI], 0,
-+	       MC33978_PAYLOAD_LEN);
-+	mc->tx_frame[MC33978_FRAME_REQ][MC33978_FRAME_CMD] =
-+		((const u8 *)reg_buf)[0];
-+
-+	ret = spi_sync(mc->spi, &mc->msg_read);
-+	if (ret)
-+		return ret;
-+
-+	status_req = mc33978_rx_decode(mc->rx_frame[MC33978_FRAME_REQ], NULL);
-+	status_pipe = mc33978_rx_decode(mc->rx_frame[MC33978_FRAME_PIPE],
-+					val_buf);
-+
-+	mc33978_harvest_status(mc, status_req | status_pipe);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_bus mc33978_regmap_bus = {
-+	.read = mc33978_spi_read,
-+	.write = mc33978_spi_write,
-+};
-+
-+static const struct regmap_range mc33978_volatile_range[] = {
-+	regmap_reg_range(MC33978_REG_READ_IN, MC33978_REG_RESET),
-+};
-+
-+static const struct regmap_access_table mc33978_volatile_table = {
-+	.yes_ranges = mc33978_volatile_range,
-+	.n_yes_ranges = ARRAY_SIZE(mc33978_volatile_range),
-+};
-+
-+static const struct regmap_range mc33978_precious_range[] = {
-+	regmap_reg_range(MC33978_REG_READ_IN, MC33978_REG_RESET),
-+};
-+
-+static const struct regmap_access_table mc33978_precious_table = {
-+	.yes_ranges = mc33978_precious_range,
-+	.n_yes_ranges = ARRAY_SIZE(mc33978_precious_range),
-+};
-+
-+/*
-+ * NOTE: Need to fake REG_IRQ and REG_RESET as readable, so that regcache
-+ * will NOT write to them on a cache sync. Sounds counterintuitive, but marking
-+ * a reg as "precious" or "volatile" is the only way to avoid this, and that
-+ * works only with readable regs.
-+ */
-+static const struct regmap_range mc33978_readable_range[] = {
-+	regmap_reg_range(MC33978_REG_CHECK, MC33978_REG_WET_SG1),
-+	regmap_reg_range(MC33978_REG_CWET_SP, MC33978_REG_WDEB_SG),
-+	regmap_reg_range(MC33978_REG_AMUX_CTRL, MC33978_REG_RESET),
-+};
-+
-+static const struct regmap_access_table mc33978_readable_table = {
-+	.yes_ranges = mc33978_readable_range,
-+	.n_yes_ranges = ARRAY_SIZE(mc33978_readable_range),
-+};
-+
-+static const struct regmap_range mc33978_writable_range[] = {
-+	regmap_reg_range(MC33978_REG_CONFIG, MC33978_REG_WET_SG1),
-+	regmap_reg_range(MC33978_REG_CWET_SP, MC33978_REG_AMUX_CTRL),
-+	regmap_reg_range(MC33978_REG_IRQ, MC33978_REG_RESET),
-+};
-+
-+static const struct regmap_access_table mc33978_writable_table = {
-+	.yes_ranges = mc33978_writable_range,
-+	.n_yes_ranges = ARRAY_SIZE(mc33978_writable_range),
-+};
-+
-+static const struct regmap_config mc33978_regmap_config = {
-+	.name = MC33978_DRV_NAME,
-+	.reg_bits = 8,
-+	.val_bits = 24,
-+	.reg_stride = 2,
-+	.write_flag_mask = MC33978_CMD_BYTE_WRITE,
-+	.reg_format_endian = REGMAP_ENDIAN_BIG,
-+	.val_format_endian = REGMAP_ENDIAN_BIG,
-+	.use_single_read = true,
-+	.use_single_write = true,
-+	.volatile_table = &mc33978_volatile_table,
-+	.precious_table = &mc33978_precious_table,
-+	.rd_table = &mc33978_readable_table,
-+	.wr_table = &mc33978_writable_table,
-+	.cache_type = REGCACHE_MAPLE,
-+	.max_register = MC33978_REG_RESET,
-+};
-+
-+static int mc33978_power_on(struct mc33978_mfd_priv *mc)
-+{
-+	struct device *dev = &mc->spi->dev;
-+	int ret;
-+
-+	ret = regulator_enable(mc->vddq);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable VDDQ supply\n");
-+
-+	ret = regulator_enable(mc->vbatp);
-+	if (ret) {
-+		regulator_disable(mc->vddq);
-+		return dev_err_probe(dev, ret, "Failed to enable VBATP supply\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static void mc33978_power_off(void *data)
-+{
-+	struct mc33978_mfd_priv *mc = data;
-+
-+	regulator_disable(mc->vbatp);
-+	regulator_disable(mc->vddq);
-+}
-+
-+/**
-+ * mc33978_check_device() - Verify SPI communication with device
-+ * @mc: Device context
-+ *
-+ * Reads the CHECK register which should return a fixed signature (0x123456).
-+ * This verifies that SPI communication is working correctly.
-+ *
-+ * Return: 0 on success, -ENODEV if signature doesn't match
-+ */
-+static int mc33978_check_device(struct mc33978_mfd_priv *mc)
-+{
-+	struct device *dev = &mc->spi->dev;
-+	unsigned int check;
-+	int ret;
-+
-+	ret = regmap_read(mc->map, MC33978_REG_CHECK, &check);
-+	if (ret)
-+		return ret;
-+
-+	if (check != MC33978_CHECK_SIGNATURE)
-+		return dev_err_probe(dev, -ENODEV,
-+				     "SPI check failed. Expected: 0x%06x, got: 0x%06x\n",
-+				     MC33978_CHECK_SIGNATURE, check);
-+
-+	return 0;
-+}
-+
-+static const struct resource mc33978_hwmon_resources[] = {
-+	DEFINE_RES_IRQ(MC33978_HWIRQ_FAULT),
-+};
-+
-+static const struct mfd_cell mc33978_cells[] = {
-+	{ .name = "mc33978-pinctrl" },
-+	{
-+		.name = "mc33978-hwmon",
-+		.resources = mc33978_hwmon_resources,
-+		.num_resources = ARRAY_SIZE(mc33978_hwmon_resources),
-+	},
-+	{ .name = "mc33978-mux" },
-+};
-+
-+static const struct mfd_cell mc34978_cells[] = {
-+	{ .name = "mc34978-pinctrl" },
-+	{
-+		.name = "mc34978-hwmon",
-+		.resources = mc33978_hwmon_resources,
-+		.num_resources = ARRAY_SIZE(mc33978_hwmon_resources),
-+	},
-+	{ .name = "mc34978-mux" },
-+};
-+
-+static const struct mc33978_data mc33978_match_data = {
-+	.cells = mc33978_cells,
-+	.num_cells = ARRAY_SIZE(mc33978_cells),
-+};
-+
-+static const struct mc33978_data mc34978_match_data = {
-+	.cells = mc34978_cells,
-+	.num_cells = ARRAY_SIZE(mc34978_cells),
-+};
-+
-+static int mc33978_probe(struct spi_device *spi)
-+{
-+	const struct mc33978_data *match_data;
-+	struct device *dev = &spi->dev;
-+	struct mc33978_mfd_priv *mc;
-+	int ret;
-+
-+	match_data = spi_get_device_match_data(spi);
-+	if (!match_data)
-+		return dev_err_probe(dev, -ENODEV, "No device match data found\n");
-+
-+	mc = devm_kzalloc(dev, sizeof(*mc), GFP_KERNEL);
-+	if (!mc)
-+		return -ENOMEM;
-+
-+	mc->spi = spi;
-+	spi_set_drvdata(spi, mc);
-+
-+	mc->vddq = devm_regulator_get(dev, "vddq");
-+	if (IS_ERR(mc->vddq))
-+		return dev_err_probe(dev, PTR_ERR(mc->vddq),
-+				     "Failed to get VDDQ regulator\n");
-+
-+	mc->vbatp = devm_regulator_get(dev, "vbatp");
-+	if (IS_ERR(mc->vbatp))
-+		return dev_err_probe(dev, PTR_ERR(mc->vbatp),
-+				     "Failed to get VBATP regulator\n");
-+
-+	ret = mc33978_power_on(mc);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_add_action_or_reset(dev, mc33978_power_off, mc);
-+	if (ret)
-+		return ret;
-+
-+	mutex_init(&mc->event_lock);
-+	INIT_WORK(&mc->event_work, mc33978_event_work);
-+
-+	atomic_set(&mc->harvested_flags, 0);
-+	atomic_set(&mc->is_handling, 0);
-+
-+	mc33978_prepare_messages(mc);
-+
-+	mc->map = devm_regmap_init(dev, &mc33978_regmap_bus, mc,
-+				   &mc33978_regmap_config);
-+	if (IS_ERR(mc->map))
-+		return dev_err_probe(dev, PTR_ERR(mc->map), "can't init regmap\n");
-+
-+	ret = mc33978_check_device(mc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Can't use SPI bus\n");
-+
-+	ret = regmap_write(mc->map, MC33978_REG_IE_SP, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_write(mc->map, MC33978_REG_IE_SG, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = mc33978_irq_init(mc);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
-+				   match_data->cells, match_data->num_cells,
-+				   NULL, 0, mc->domain);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to add MFD child devices\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id mc33978_of_match[] = {
-+	{ .compatible = "nxp,mc33978", .data = &mc33978_match_data },
-+	{ .compatible = "nxp,mc34978", .data = &mc34978_match_data },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, mc33978_of_match);
-+
-+static const struct spi_device_id mc33978_spi_id[] = {
-+	{ "mc33978", (kernel_ulong_t)&mc33978_match_data },
-+	{ "mc34978", (kernel_ulong_t)&mc34978_match_data },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, mc33978_spi_id);
-+
-+static struct spi_driver mc33978_driver = {
-+	.driver = {
-+		.name = MC33978_DRV_NAME,
-+		.of_match_table = mc33978_of_match,
-+	},
-+	.probe = mc33978_probe,
-+	.id_table = mc33978_spi_id,
-+};
-+module_spi_driver(mc33978_driver);
-+
-+MODULE_AUTHOR("David Jander <david@protonic.nl>");
-+MODULE_DESCRIPTION("NXP MC33978/MC34978 MFD core driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/mfd/mc33978.h b/include/linux/mfd/mc33978.h
-new file mode 100644
-index 000000000000..2d21657581aa
---- /dev/null
-+++ b/include/linux/mfd/mc33978.h
-@@ -0,0 +1,86 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2024 David Jander <david@protonic.nl>, Protonic Holland
-+ * Copyright (C) 2026 Oleksij Rempel <kernel@pengutronix.de>, Pengutronix
-+ *
-+ * MC34978/MC33978 Multiple Switch Detection Interface - Shared Definitions
-+ */
-+
-+#ifndef _LINUX_MFD_MC34978_H
-+#define _LINUX_MFD_MC34978_H
-+
-+#include <linux/bits.h>
-+
-+/* Register Map - All addresses are base command bytes (R/W bit = 0) */
-+#define MC33978_REG_CHECK	0x00	/* SPI communication check */
-+#define MC33978_REG_CONFIG	0x02	/* Device configuration */
-+#define MC33978_REG_TRI_SP	0x04	/* Tri-state enable SP */
-+#define MC33978_REG_TRI_SG	0x06	/* Tri-state enable SG */
-+#define MC33978_REG_WET_SP	0x08	/* Wetting current level SP */
-+#define MC33978_REG_WET_SG0	0x0a	/* Wetting current level SG0 (SG7-SG0) */
-+#define MC33978_REG_WET_SG1	0x0c	/* Wetting current level SG1 (SG13-SG8) */
-+#define MC33978_REG_CWET_SP	0x16	/* Continuous wetting current SP */
-+#define MC33978_REG_CWET_SG	0x18	/* Continuous wetting current SG */
-+#define MC33978_REG_IE_SP	0x1a	/* Interrupt enable SP */
-+#define MC33978_REG_IE_SG	0x1c	/* Interrupt enable SG */
-+#define MC33978_REG_LPM_CONFIG	0x1e	/* Low-power mode configuration */
-+#define MC33978_REG_WAKE_SP	0x20	/* Wake-up enable SP */
-+#define MC33978_REG_WAKE_SG	0x22	/* Wake-up enable SG */
-+#define MC33978_REG_COMP_SP	0x24	/* Comparator only mode SP */
-+#define MC33978_REG_COMP_SG	0x26	/* Comparator only mode SG */
-+#define MC33978_REG_LPM_VT_SP	0x28	/* LPM voltage threshold SP */
-+#define MC33978_REG_LPM_VT_SG	0x2a	/* LPM voltage threshold SG */
-+#define MC33978_REG_IP_SP	0x2c	/* Polling current SP */
-+#define MC33978_REG_IP_SG	0x2e	/* Polling current SG */
-+#define MC33978_REG_SPOLL_SP	0x30	/* Slow polling SP */
-+#define MC33978_REG_SPOLL_SG	0x32	/* Slow polling SG */
-+#define MC33978_REG_WDEB_SP	0x34	/* Wake-up debounce SP */
-+#define MC33978_REG_WDEB_SG	0x36	/* Wake-up debounce SG */
-+#define MC33978_REG_ENTER_LPM	0x38	/* Enter low-power mode (write-only) */
-+#define MC33978_REG_AMUX_CTRL	0x3a	/* AMUX control */
-+#define MC33978_REG_READ_IN	0x3e	/* Read switch status (READ_SW in datasheet) */
-+#define MC33978_REG_FAULT	0x42	/* Fault status register */
-+#define MC33978_REG_IRQ		0x46	/* Interrupt request (write-only) */
-+#define MC33978_REG_RESET	0x48	/* Reset (write-only) */
-+
-+/*
-+ * FAULT Register (0x42) bit definitions
-+ * Reading this register clears most fault flags except persistent conditions
-+ */
-+#define MC33978_FAULT_SPI_ERROR	BIT(10)	/* SPI communication error */
-+#define MC33978_FAULT_HASH	BIT(9)	/* SPI register hash mismatch */
-+#define MC33978_FAULT_UV	BIT(7)	/* VBATP undervoltage */
-+#define MC33978_FAULT_OV	BIT(6)	/* VBATP overvoltage */
-+#define MC33978_FAULT_TEMP_WARN	BIT(5)	/* Temperature warning threshold */
-+#define MC33978_FAULT_OT	BIT(4)	/* Over-temperature */
-+#define MC33978_FAULT_INTB_WAKE	BIT(3)	/* Woken by INT_B pin */
-+#define MC33978_FAULT_WAKEB_WAKE BIT(2)	/* Woken by WAKE_B pin */
-+#define MC33978_FAULT_SPI_WAKE	BIT(1)	/* Woken by SPI message */
-+#define MC33978_FAULT_POR	BIT(0)	/* Power-on reset occurred */
-+
-+/* Critical faults that need immediate attention */
-+#define MC33978_FAULT_CRITICAL	(MC33978_FAULT_UV | \
-+				 MC33978_FAULT_OV | \
-+				 MC33978_FAULT_OT)
-+
-+#define MC33978_NUM_PINS	22
-+
-+/*
-+ * Virtual IRQ number for fault handling.
-+ * Using hwirq 22 (beyond the 22 pin IRQs 0-21).
-+ */
-+#define MC33978_HWIRQ_FAULT	22
-+
-+/*
-+ * AMUX channel definitions
-+ * The AMUX can route one of 24 signals to the external AMUX pin
-+ */
-+#define MC33978_AMUX_CH_SG0	0	/* Switch-to-Ground inputs 0-13 */
-+#define MC33978_AMUX_CH_SG13	13
-+#define MC33978_AMUX_CH_SP0	14	/* Programmable switch inputs 0-7 */
-+#define MC33978_AMUX_CH_SP7	21
-+#define MC33978_AMUX_CH_TEMP	22	/* Internal temperature diode */
-+#define MC33978_AMUX_CH_VBATP	23	/* Battery voltage sense */
-+#define MC33978_NUM_AMUX_CH	24	/* Total number of AMUX channels */
-+
-+#endif /* _LINUX_MFD_MC34978_H */
--- 
-2.47.3
+Guenter
 
