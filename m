@@ -1,67 +1,67 @@
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B990D394498
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 14:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D410E39A06D
+	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 14:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773670304; cv=none; b=ACV+vPy5cEOemw2zz8b+a7qHOf6MZYkpWwtzbBZffEJsAQ5yIZT5tJj03xjAprdsdPnN76txR9TVVgkvny84XUulnruXskaIIjO480ApWn4uRLP4PME0jRFugg1/Gqy60gcpuGsFqRW2+HfujpZ2fT61OakZSArWK0dIczUr8Wo=
+	t=1773670410; cv=none; b=Opvkx1k6Y0fs8eQJZOBUIfOopp+sfPnM+Ae9IWbpRqsZnbMcBVbeNqjKS7qayNXAMLR4AUK+eWYsLcv8GW6P5SzZd9YlyLV/NgtKFfSUfxw4dsDnV5EwAaVIiG86PuYZA6j0P8uFcidePUO7jh1gSH4NiaFbLfDFIkOx5l+PXGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773670304; c=relaxed/simple;
-	bh=htLGnvtizetVXxTUy6snLHUbevhddIJzI+a5EvNU898=;
+	s=arc-20240116; t=1773670410; c=relaxed/simple;
+	bh=TwxPg4RSXx5BNsPRkWf834jmL3m9mgr7v/t/XtQuIzw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F8nDpJquCgdyIdAAdx5YRO4o4Px0ZP7attN/aUkqTFNyakN8XPueaB3ys1La0yED5Jtd3Ri0hEZoCn3plsEWOJu3CQoJuRAWsfFyn8/5QNRCak+0ojHZrMg5QlIoKwUyKlJfpcW4X+jiCFRqJKorXkZlPeGLGCTQR9JBoC1lhRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q85g/Kf3; arc=none smtp.client-ip=74.125.82.49
+	 In-Reply-To:Content-Type; b=I+O7kZfNEM9andZIwSoH91KV3q5l0zmrQ6Hz6k6UcOvCsHCGeGeVmHiu/y3+hGMbBteba+isSYMbMCY/m3p3PaBMG/Yni48sjjrN4cbl4jvGYRxvuKYI4nPc0KuTCRGcAmQ4F9jgcgHTlwWlXzT5Kjs9XneFSgUVcGkwrB+7JGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZcZ5bHUF; arc=none smtp.client-ip=74.125.82.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q85g/Kf3"
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-128e4d0cc48so5109451c88.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 07:11:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZcZ5bHUF"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1273349c56bso6681769c88.0
+        for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 07:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773670302; x=1774275102; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773670408; x=1774275208; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTyet+vUs4i5zO6iAQ/90TtCdIDVFVxtPrkgLSGy3qg=;
-        b=Q85g/Kf3o26F6A7qpv1xZ/e0ql/2889cl/oeTt4uOlNJJDM+HWUzsir+Ve5j3IfPGx
-         M2oRPiEDCN/6Br87YxdOAP/wCVdgGf6z9v99D0oud0o/GaHtR/+FSNABauV7MAzxysz1
-         T+PlsRifIkr8ElCvdQiDJiUIOuBnG8DhPsEZFs9YDzssXcY7DXgFG6G9ubthX+/VwtGd
-         W4Ql0SGcOBneDmnq1r2yRCLrcleSCx9zV5BW8Bl3J31Sth8Jm3t5L4O7CCWpWz1cWAnJ
-         ggYP2FyWhNjhRjXPgvoBYuSiTmhI9uuVb2JGgCYPb67mf+xwVrYd/oAcfDKKtKIEpnkS
-         Co6w==
+        bh=LQ0mg0iTQfY7doxy4pSiWFN/FrO9Rma90YeZ4+gFic8=;
+        b=ZcZ5bHUFKKHPzZBk3GhA0lzuW5+HY8ORf2CGDuROjEVYlu93kvawldu1QFcHjFNDTp
+         TFyL23iLbY6DlUz3BfwbUO4Q+owuTYqPGbCECSMNcNmnZujB6rm3VA4k+V6yPLBLqGnh
+         Mm2L169N7BfwQYvyFaJjhj6vllA6bpLI9Nm8Rkp5fb/axV9V2Hz0cVwkiRa5umawFkWs
+         EG1AMRySi8ocP76kHaGQwV8kFc0q4JgEhoBr2Hhnm886XriipO5v4h/qGMyiGB47je3b
+         cr5IGpq82sKhkwXU+Iw+C01jINppIoo/njKsRQ+1aOT2RZDlbz/YE4twKVxnJYxxgaWw
+         OCDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773670302; x=1774275102;
+        d=1e100.net; s=20251104; t=1773670408; x=1774275208;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qTyet+vUs4i5zO6iAQ/90TtCdIDVFVxtPrkgLSGy3qg=;
-        b=K9OjQZctUkxXAQMHSnpcb5Mqk4FPXcM86e4OxkyK0ngx8yl3KdhQZB50ar9Owh/HGF
-         C7p8alOZJXX3saB7ZJXNGotCn2tqR9Hc4iDTN6gEOVeEpaKLBEkvWHDNHb0IzQScNzrg
-         vJl9823IC9oxbsa1738hCa9KO5fJFgVC+tVJkmw9SO8wGSk8/nbn7QB5sF+xezdrQSy/
-         DBJUVXOVvOHlySVRg16GS5iSZ1DLBjigwJGidJo6tnKNTfXZf/kjrMVpv7O/YBBhPfrs
-         fDCJVOxDEjvcmhed2mQAV59183/qWdbb9wdOOwIDGOxsE/4ae0Dygbe7oTST1AwCVFRq
-         b9XA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjp2f9ltlZJGw8PZWHsRAEIy+BhflEnMoi8k36pbnXvZOOhOGalMW0yvjJuzse1NrFL63AY9/sa+y0Xw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrUkjXi6rkYiol2WhQlECqsXt7xk1TNN3KcYIoU/24toF69r2A
-	/cPuqBeul3TtLu6YuYcB+Ni3iZmWTAYUnyBqKIkxXqHTWVef0sPiM2d3
-X-Gm-Gg: ATEYQzzuY6aP74RGKPAXWTIJFhOcNxj6BgAsekKxWPonsRY8aXQA2zkt/iBV1W61mtp
-	6/XxbJE1nPqbBGcKoGJYOxraucSbsRpp7Y+n3gB6i6WRxDLtt6Y3SeVkxHcfSPYHeF30XXHaWUE
-	HP63M9OgjzDcr0QOx8TofP5mJ0Nki0KW+CiTjxZ2CBobaoVV9vIUPaXvDHO1CPeLh+FpvevFibM
-	GiJ+MVpzzHlxPT2hB7NI2P//6prJFZFmp2d8GREsOiiI9NHWsjShY8lQPCQ2B3El5WK9cUTUdsC
-	pzUhOw1d8McuuxxIXrOVp4Vqf8Wa8vujkU2SEvr8ccWHP42dBQjgR5dOVBw/14NdG7oBeeNX1v+
-	vqtmLqluS5VdFDURxX9E0eeN/+Q3SNimnWHSsfQWHy/6reTYP+3VxxscZuW/xLzHKSCNt7HJy+0
-	n6O+fnzs8S1aCtT0YWI/SuownFFOU2TzC88BYCT2HQmniYOkoxXqbQDqBprfiQ/jqiF+lggWFz
-X-Received: by 2002:a05:7022:b9c:b0:128:cc63:82f0 with SMTP id a92af1059eb24-128f3e2aa9emr5757183c88.25.1773670301528;
-        Mon, 16 Mar 2026 07:11:41 -0700 (PDT)
+        bh=LQ0mg0iTQfY7doxy4pSiWFN/FrO9Rma90YeZ4+gFic8=;
+        b=LmPr1Po6MJ0VEXuM8CFTGPu2k2+mewQNMzIOcgt6sfuvCf/fuDD4GR59umaQyX3vHS
+         wxOqV0cOIxwmdoEMu3rZruZfPXGZIcHNWcu1h2og+oVSRwET/1nCxEt6U7jI0DuuKGB1
+         uqenufAU9UY5RdpCPTPCIqj0KnMdiY0lY5tB0m7aGAAsqy4nS0D1sv05PUh1fJvg6n66
+         T8jvnA+hRmmj+y5M43eLa5aOsNYRsNBmZfFCcRP7BGR/CvQpsYQzvnG1auGiDZIhnKwo
+         +MSY87a5QvfHLrgcOSgIv43Ee1p4hoyME0v4LP0/0vQVEVaBQ/eUrrOnYAasK9j1ev2x
+         vnzA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhyn+USaGhkg5ongMa19iarw+EqYTNRv440nWrJ+Um9ZUtC6o742WrNPvHZkPvd/+zr99vQvW/pQnB5w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBIDD15mtTP6yasFwuj4EapjyCtu9DKbDIcYVKK5ObcO8/mQLf
+	pEs9tx4FMaOAODkP4W86PRjItWp0eOZyEgWjBL+BXQQbnZOkJ1GCId/wYgx+4Q==
+X-Gm-Gg: ATEYQzwJ3g7ADJHT2+f3HhBBt7zFi1ulyEnDssQOC3HAdP/DuYLVgzjycOo/kEMP4En
+	I9TU/CQRF1gigmmGKIFQzK672Lpvqf22YSLB7nysppRRmljStGGcpu539KVjJkXTcVbe3AX/PKL
+	BtVDPwjfb38qUAX+bcc/LvpgzPL/BDFj7yZddRLMt/FMTlTD8Ua66aU8qcuRzIJZtX79APlMKKj
+	RgBlZxH9LbSeN/Ek/J8GeReHs45/4bTquYxszXcb6u0TQLbMPEnLdK1hxOJlipiHILxd3w//JhR
+	nvtAL6KGk9R6haq5rWKO7j/wjHKYdhoYV1ke9edLWJfYlztBuPam8L5N1eBuCsBV4OMID0yxZRN
+	1iL3+8E5JdrvLINOIVvi22ijg+sRXAR5XFbiXfghBco8C9j9zB07BQWPeNkhPswI5piHOhuw0Oe
+	olm7jIpdHIZhZemC1O7n29FBSOcceDc7auyJfdXnqZWJIBBZ5zf33OCkWLTbbwYmEziQDqicNM
+X-Received: by 2002:a05:7022:458c:b0:11b:9386:8265 with SMTP id a92af1059eb24-128f3e1d951mr6117870c88.42.1773670407752;
+        Mon, 16 Mar 2026 07:13:27 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128f6283845sm12630518c88.2.2026.03.16.07.11.38
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128f62991c7sm12119295c88.5.2026.03.16.07.13.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 07:11:40 -0700 (PDT)
+        Mon, 16 Mar 2026 07:13:26 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0f88a17c-7c21-4ae5-b418-dfb4b4ac5d6a@roeck-us.net>
-Date: Mon, 16 Mar 2026 07:11:37 -0700
+Message-ID: <d8c3d6be-1c4a-449e-bf38-69e71f544513@roeck-us.net>
+Date: Mon, 16 Mar 2026 07:13:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,7 +81,8 @@ Cc: Icenowy Zheng <zhengxingda@iscas.ac.cn>, Rob Herring <robh@kernel.org>,
  Icenowy Zheng <uwu@icenowy.me>, Han Gao <rabenda.cn@gmail.com>
 References: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
  <20260309162457.4128205-2-zhengxingda@iscas.ac.cn> <abWTO7QBFIcjxKn6@x1>
- <20260315-cogwheel-dislodge-a3efe31728d1@spud>
+ <20260315-cogwheel-dislodge-a3efe31728d1@spud> <abbTwrAALGy3QbxN@gen8>
+ <20260316-handshake-subdivide-9de6c4410927@spud>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,69 +128,85 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260315-cogwheel-dislodge-a3efe31728d1@spud>
+In-Reply-To: <20260316-handshake-subdivide-9de6c4410927@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/15/26 05:12, Conor Dooley wrote:
-> On Sat, Mar 14, 2026 at 09:56:27AM -0700, Drew Fustini wrote:
->> On Tue, Mar 10, 2026 at 12:24:56AM +0800, Icenowy Zheng wrote:
->>> The G and J coefficients provided by T-Head TH1520 manual (which calls
->>> them A and C coefficients and calls H coefficient in the binding as B)
->>> have 1/100 degree Celsius precision (the values are 42.74 and -0.16
->>> respectively), however the binding currently only allows coefficients as
->>> precise as 100 milli-Celsius (1/10 degree Celsius).
+On 3/16/26 04:09, Conor Dooley wrote:
+> On Sun, Mar 15, 2026 at 08:44:02AM -0700, Drew Fustini wrote:
+>> On Sun, Mar 15, 2026 at 12:12:13PM +0000, Conor Dooley wrote:
+>>> On Sat, Mar 14, 2026 at 09:56:27AM -0700, Drew Fustini wrote:
+>>>> On Tue, Mar 10, 2026 at 12:24:56AM +0800, Icenowy Zheng wrote:
+>>>>> The G and J coefficients provided by T-Head TH1520 manual (which calls
+>>>>> them A and C coefficients and calls H coefficient in the binding as B)
+>>>>> have 1/100 degree Celsius precision (the values are 42.74 and -0.16
+>>>>> respectively), however the binding currently only allows coefficients as
+>>>>> precise as 100 milli-Celsius (1/10 degree Celsius).
+>>>>>
+>>>>> Change the multipleOf value of these two coefficients to 10 (in the unit
+>>>>> of milli-Celsius) to satisfy the need of TH1520.
+>>>>>
+>>>>> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+>>>>> Reviewed-by: Drew Fustini <fustini@kernel.org>
+>>>>> ---
+>>>>> Changes in v3:
+>>>>> - Added Drew's R-b.
+>>>>> - Fixed some typos in the commit message and slightly reworded the
+>>>>>    precision sentence.
+>>>>>
+>>>>>   Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 ++--
+>>>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>>>> index 56db2292f062d..7d57c2934a8a1 100644
+>>>>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>>>>> @@ -105,7 +105,7 @@ properties:
+>>>>>         G coefficient for temperature equation.
+>>>>>         Default for series 5 = 60000
+>>>>>         Default for series 6 = 57400
+>>>>> -    multipleOf: 100
+>>>>> +    multipleOf: 10
+>>>>>       minimum: 1000
+>>>>>       $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>   
+>>>>> @@ -131,7 +131,7 @@ properties:
+>>>>>         J coefficient for temperature equation.
+>>>>>         Default for series 5 = -100
+>>>>>         Default for series 6 = 0
+>>>>> -    multipleOf: 100
+>>>>> +    multipleOf: 10
+>>>>>       maximum: 0
+>>>>>       $ref: /schemas/types.yaml#/definitions/int32
+>>>>>   
+>>>>> -- 
+>>>>> 2.52.0
+>>>>>
+>>>>
+>>>> I have applied this to thead-dt-for-next.
 >>>
->>> Change the multipleOf value of these two coefficients to 10 (in the unit
->>> of milli-Celsius) to satisfy the need of TH1520.
+>>> That's odd, why is a hwmon binding in your branch?
 >>>
->>> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
->>> Reviewed-by: Drew Fustini <fustini@kernel.org>
->>> ---
->>> Changes in v3:
->>> - Added Drew's R-b.
->>> - Fixed some typos in the commit message and slightly reworded the
->>>    precision sentence.
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=thead-dt-for-next&id=eb4fd43ff6793681f0a0a8e8ac861142caba2b19
 >>>
->>>   Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
->>> index 56db2292f062d..7d57c2934a8a1 100644
->>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
->>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
->>> @@ -105,7 +105,7 @@ properties:
->>>         G coefficient for temperature equation.
->>>         Default for series 5 = 60000
->>>         Default for series 6 = 57400
->>> -    multipleOf: 100
->>> +    multipleOf: 10
->>>       minimum: 1000
->>>       $ref: /schemas/types.yaml#/definitions/uint32
->>>   
->>> @@ -131,7 +131,7 @@ properties:
->>>         J coefficient for temperature equation.
->>>         Default for series 5 = -100
->>>         Default for series 6 = 0
->>> -    multipleOf: 100
->>> +    multipleOf: 10
->>>       maximum: 0
->>>       $ref: /schemas/types.yaml#/definitions/int32
->>>   
->>> -- 
->>> 2.52.0
->>>
+>>> I don't see an ack on it from the relevant maintainer either?
 >>
->> I have applied this to thead-dt-for-next.
+>> Sorry, my mistake, I should not have applied the binding. And you are
+>> right to point out that there was no ack from Guenter or Rahul Tanwar.
 > 
-> That's odd, why is a hwmon binding in your branch?
+> It was Guenter I was thinking of, but there's not one from myself, Rob
+> or Krzysztof either.
 > 
->> https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=thead-dt-for-next&id=eb4fd43ff6793681f0a0a8e8ac861142caba2b19
-> 
-> I don't see an ack on it from the relevant maintainer either?
 
-I don't get it either. Normally I am the one to apply hwmon bindings
-through the hwmon branch.
+... which is why I didn't apply it yet.
 
 Guenter
+
+>> I will drop both patches from thead-dt-for-next and wait for agreement
+>> on the binding.
+>>
+>> Thanks,
+>> Drew
+> 
+> 
 
