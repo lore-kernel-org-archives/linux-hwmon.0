@@ -1,37 +1,34 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9503639022A
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 10:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A25925BEF8;
+	Mon, 16 Mar 2026 11:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773658191; cv=none; b=ooqPSU4xqo3q2MecWZlMc6Ok2ZTvUhs3/HwDYNkJzEDIXoLl6cNCEaFieutdutx1D6qpYEWzfwMOU9P5/hBHaVTy4bVrRsDhkQtYpmdEhto37d3EWity/XlkVAx3zCNLP2ErgqGcz98cuH+Q+yRaOqDSDtAAjivOO3SmjqqYApk=
+	t=1773658932; cv=none; b=bOMwQ33chJWDnAiD257aoQisrldq6T1qKwln4ogLUdenEvlgZkWAI4BxdDWql8tVvZZg5TXPwzZMDg+t2S3dqtwvqqEDDY2quciCmHitMAqmlwneF+qGOxKqzhIvgdUyzzh6Lx74U8o40F17p5E8BYTMJCpgiPnvIrvIkxRTRCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773658191; c=relaxed/simple;
-	bh=HHOsISjCw6STMOS1IkdFbgNlHwOBzhyTNrxlUafEby4=;
+	s=arc-20240116; t=1773658932; c=relaxed/simple;
+	bh=2WrmRtPPWS7QjKt1bst/l9hvGi2jFxB3qCVZ5N7Qxv4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qKgtSa6pqf7r70iy9eCGpKoXXgAuLpF/4+CF4tTNqSPiF91v9WiuYVw4oLQiY6lqf8+1dyLU0tTAdCXo9O1Zp9BS1hTrEl43/2jGmXFbawA4mwa3yzrbxzEuF63HDJw+vQEkWUCqu3V/C7alyl7kBFY98DsZ+RGwvni1Gn2Jw8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w25Vm-0007z9-9V; Mon, 16 Mar 2026 11:49:26 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w25Vl-000YUs-1M;
-	Mon, 16 Mar 2026 11:49:25 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w25Vl-00000005Q1P-1Hwo;
-	Mon, 16 Mar 2026 11:49:25 +0100
-Date: Mon, 16 Mar 2026 11:49:25 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Conor Dooley <conor@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yjaa+7AnvYDqMftRTtf9tynkA3AKqgNy0LZUoP2YcN6FePNRRHn9KBmy0OZzNX30ewnEsWpSugz7hhsRVbcrZ64gQcxtDM1sua7hCl1hNfKIqy9GtusOWMcxJQlMzTZhsgdk0oGpTXzl0popA3GVvH3Xn2O+qFlmX9xWF1FcT+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQapjEjS; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQapjEjS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18340C19425;
+	Mon, 16 Mar 2026 11:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773658931;
+	bh=2WrmRtPPWS7QjKt1bst/l9hvGi2jFxB3qCVZ5N7Qxv4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gQapjEjSFbY1PwcppCIljbexVxu5r+ktpPVEa9yaNjPcqf32mS7XG3cydSQrM4Pg2
+	 epUhcc96pmKJf9bsa14PX2jRFBn63gAv/ck2wUzL80/HdRrZTwuvra5uyxAu9Th14q
+	 XstDIxts1dBQY1+iGEpxsJYuMujyMGrvQoFsBe9XiAr+vUZT2goJUV8ybToijumRtr
+	 ME30R6T8Dm1+U90OGPrc4OYoM519BPK0BWoeBudwmWvNmJ9VQVHzsYjPGeetouQHRV
+	 RWAVqRxx0ChVMXLaO3JKEjrNFvBew2L1WlgpUKZT2ovd/ZbjR0h9xB6rAmSablaD9v
+	 aX3SfTX1a+61w==
+Date: Mon, 16 Mar 2026 11:02:06 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
 Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -40,106 +37,119 @@ Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
 	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
 Subject: Re: [PATCH v4 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-Message-ID: <abfgNaCp4VeKZUWE@pengutronix.de>
+Message-ID: <20260316-brick-corrosive-c0ce739651ac@spud>
 References: <20260313140218.1213393-1-o.rempel@pengutronix.de>
  <20260313140218.1213393-2-o.rempel@pengutronix.de>
  <20260313-shortwave-baguette-5914f1af60f8@spud>
+ <abfgNaCp4VeKZUWE@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="GOr+HRVBfYVMkRXD"
+Content-Disposition: inline
+In-Reply-To: <abfgNaCp4VeKZUWE@pengutronix.de>
+
+
+--GOr+HRVBfYVMkRXD
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260313-shortwave-baguette-5914f1af60f8@spud>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 13, 2026 at 05:16:31PM +0000, Conor Dooley wrote:
-> On Fri, Mar 13, 2026 at 03:02:12PM +0100, Oleksij Rempel wrote:
-=2E..
-> > +maintainers:
-> > +  - David Jander <david@protonic.nl>
-> > +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> > +
-> > +description: |
-> > +  The MC33978 and MC34978 are Multiple Switch Detection Interface (MSD=
-I)
-> > +  devices with 22 switch inputs, integrated fault detection, and analog
-> > +  multiplexer (AMUX) for voltage/temperature monitoring.
-> > +
-> > +  Pin numbering:
-> > +  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
-> > +    contacts closed to ground and typically require GPIO_ACTIVE_LOW
-> > +    flags when used as digital inputs.
-> > +  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configured
-> > +    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
-> > +    inputs monitor contacts closed to the battery voltage and typically
-> > +    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
-> > +
-> > +  Output Emulation:
-> > +  The hardware lacks standard push-pull output drivers. Outputs are em=
-ulated
-> > +  by toggling the programmable wetting current sources (acting as pull=
--ups
-> > +  or pull-downs) and the hardware tri-state registers. Because of this
-> > +  physical constraint:
-> > +  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DRAI=
-N or
-> > +    GPIO_OPEN_SOURCE in the device tree.
-> > +  - Push-pull configurations are physically unsupported.
-> > +  - The active polarity depends entirely on the external circuit (e.g.=
-, how
-> > +    an LED is wired) and must be flagged accordingly by the consumer.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - nxp,mc33978
-> > +      - nxp,mc34978
+On Mon, Mar 16, 2026 at 11:49:25AM +0100, Oleksij Rempel wrote:
+> On Fri, Mar 13, 2026 at 05:16:31PM +0000, Conor Dooley wrote:
+> > On Fri, Mar 13, 2026 at 03:02:12PM +0100, Oleksij Rempel wrote:
+> ...
+> > > +maintainers:
+> > > +  - David Jander <david@protonic.nl>
+> > > +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> > > +
+> > > +description: |
+> > > +  The MC33978 and MC34978 are Multiple Switch Detection Interface (M=
+SDI)
+> > > +  devices with 22 switch inputs, integrated fault detection, and ana=
+log
+> > > +  multiplexer (AMUX) for voltage/temperature monitoring.
+> > > +
+> > > +  Pin numbering:
+> > > +  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
+> > > +    contacts closed to ground and typically require GPIO_ACTIVE_LOW
+> > > +    flags when used as digital inputs.
+> > > +  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configur=
+ed
+> > > +    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
+> > > +    inputs monitor contacts closed to the battery voltage and typica=
+lly
+> > > +    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
+> > > +
+> > > +  Output Emulation:
+> > > +  The hardware lacks standard push-pull output drivers. Outputs are =
+emulated
+> > > +  by toggling the programmable wetting current sources (acting as pu=
+ll-ups
+> > > +  or pull-downs) and the hardware tri-state registers. Because of th=
+is
+> > > +  physical constraint:
+> > > +  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DR=
+AIN or
+> > > +    GPIO_OPEN_SOURCE in the device tree.
+> > > +  - Push-pull configurations are physically unsupported.
+> > > +  - The active polarity depends entirely on the external circuit (e.=
+g., how
+> > > +    an LED is wired) and must be flagged accordingly by the consumer.
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - nxp,mc33978
+> > > +      - nxp,mc34978
+> >=20
+> > What's different about these that a fallback is not suitable?
 >=20
-> What's different about these that a fallback is not suitable?
+> The difference are operation temperature ranges. But, it is not
+> detectable by software. This information can be reused for the hwmon.
 
-The difference are operation temperature ranges. But, it is not
-detectable by software. This information can be reused for the hwmon.
+Can you note this in your commit message please?
 
-> > +patternProperties:
-> > +  '^.*-grp$':
-> > +    type: object
-> > +    $ref: /schemas/pinctrl/pincfg-node.yaml#
-> > +    additionalProperties: false
-> > +    description: Pin configuration subnodes.
-> > +    properties:
-> > +      pins: true
 >=20
-> This seems overly permissive, think it should only allow the couple of
-> options that your hardware has. Probably just make it an enum? Shouldn't
-> have to check the driver to know what the acceptable pin names are.
+> > > +patternProperties:
+> > > +  '^.*-grp$':
+> > > +    type: object
+> > > +    $ref: /schemas/pinctrl/pincfg-node.yaml#
+> > > +    additionalProperties: false
+> > > +    description: Pin configuration subnodes.
+> > > +    properties:
+> > > +      pins: true
+> >=20
+> > This seems overly permissive, think it should only allow the couple of
+> > options that your hardware has. Probably just make it an enum? Shouldn't
+> > have to check the driver to know what the acceptable pin names are.
+>=20
+> Some thing like this?
+>=20
+>       pins:
+>         items:
+>           enum: [ sg0, sg1, sg2, sg3, sg4, sg5, sg6, sg7, sg8, sg9,
+>                   sg10, sg11, sg12, sg13, sp0, sp1, sp2, sp3,
+>                   sp4, sp5, sp6, sp7 ]
 
-Some thing like this?
+Yeah.
 
-      pins:
-        items:
-          enum: [ sg0, sg1, sg2, sg3, sg4, sg5, sg6, sg7, sg8, sg9,
-                  sg10, sg11, sg12, sg13, sp0, sp1, sp2, sp3,
-                  sp4, sp5, sp6, sp7 ]
+--GOr+HRVBfYVMkRXD
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best Regards,
-Oleksij
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5=7F555=
- |
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCabfjLgAKCRB4tDGHoIJi
+0sV4APwM/hhP6nB8AEEJ+l+y1n0i3Dciru0XcE5FsV3fHWqf9gEAq1xyrNzxRd8C
+3Zu4SafwjPsD4RAD4zAAzQxRpmkJvgU=
+=e1xM
+-----END PGP SIGNATURE-----
+
+--GOr+HRVBfYVMkRXD--
