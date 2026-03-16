@@ -1,95 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A664139D
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 20:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AA732B989;
+	Mon, 16 Mar 2026 23:56:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773694168; cv=none; b=bRCPjMJnSs3A44d2G9vKdsmz26BUwfrYHqwzBvd1lHNXx13VvYnCF6FbIXKVfFXosdb9pjYZO4f0JtDclKAsohn6U55FZ654uv6WqmAI26wpEH1wF/Mk4dLF62hlM8zXXDBzNim/YTiG5T+AQadPe2pJADlokQqzXKZctGdKv+g=
+	t=1773705417; cv=none; b=TwvNaMESOJ3fEBkucMEyCrGmyN3oRciZAdh2+e55mAhPT7SH9yoNjNfXTZc1G484GvLTuBlyaAdxA8WFJCUYxP2x67uI70Uf8At9EftPFVbG+atULfulEqeiMsigK5VLlW6GCCaH59FIgODgNcSj0xISs6gb7W+zt7Pb1vkWtTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773694168; c=relaxed/simple;
-	bh=VZUSzFpH7fKfBRGH53Do1z+WiVQ0GQnMNjCweAfneyg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MB7HkJFcW/Wyd5A1tTZU2UNd6LxS3sCnKRyzsgeF9DSK5ovDkpI7QJffrIolIumcKLU4k/2AqLef1kmxQGibZS9fgiV0SmexxayljApjmUq+lgCMqz7ZYs2HtS8N+OZEikL0mhTQ2rHtoNYs0qqgD3LfXXJMXeEEyThxhf5sTY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H9EY3ga4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773705417; c=relaxed/simple;
+	bh=aBVSLPCBbP60rhVv5ksFK1Kh9ObDpoNnsj1rgiOLFWs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=m/SdG6J1KaQIeAWap9sIA5S5I33s7ob1F9b6EYffpC8TpR0fzcxEww0iFlOgSkS67S+lm6ODEvSXctJiSKsW1PoQynYsDxWSLk+90856+SfVL+80Ik1AYYixRUn8lgmL89qkD2twfqi1cLQVPrcc/l17z/Ofqh64mN5eF/WaWSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bulxpirw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H9EY3ga4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486C9C2BCB3
-	for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 20:49:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bulxpirw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6C9C19421;
+	Mon, 16 Mar 2026 23:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773694168;
-	bh=VZUSzFpH7fKfBRGH53Do1z+WiVQ0GQnMNjCweAfneyg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=H9EY3ga4LUto5uDWzRTQrsBo2mW6DKDK0cTJaCFAcQZCrpF25PfrOmBk7xVEYpFD6
-	 K+e2MZhXRJqgQEKIFHBnyed2trV9JGrSz4JnhSPh2nuuYjt4dMk+ZGBCOVgHqWkrYg
-	 vMeBgRQ7DqbtYMkL622Ss0+VtTEF7bM6/C16Rr6j4YwX6CR5LlBH1WGGytiW+AkEsk
-	 XUI1bt5+J58mrcHZUCcQuttp0SWj4nMFGF+RAkrDoudYfV4t9DeZM+iPtnLIj2l/Yq
-	 YtUB3lBwuGNF78EUE/gfy2RZXp/HMLdjcvXSFUogCXlHmSUIhU1fFK07caiiK8JH2D
-	 IoH7RYbvdksjg==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-79827d28fc4so44652917b3.1
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 Mar 2026 13:49:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWQQW8DJfLKGnWYsl43i/OElK47TFC+etvQngmPxM3/98Bq+jcnNIyf1Oae5bgcIJm9N+On0s5pT4J2Uw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGiMFf99+gRfEphG+e01DtATA1YQPm4yCl09LAW8CN0qbCvdpB
-	/x3a0B9RXYMc9BU5xpQ9y3TgFI/xhnsVzuVkbiTboGFsRn1TOFAWERsQK6GojybwPqc3kEunIiT
-	823tTVhLd9Rc4mfeyMExUtHxt1kLmNqU=
-X-Received: by 2002:a05:690c:93:b0:799:1af1:6c52 with SMTP id
- 00721157ae682-79a1c1acb77mr150733297b3.40.1773694167554; Mon, 16 Mar 2026
- 13:49:27 -0700 (PDT)
+	s=k20201202; t=1773705417;
+	bh=aBVSLPCBbP60rhVv5ksFK1Kh9ObDpoNnsj1rgiOLFWs=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=bulxpirw9VyaOzQWWwrJxzZ3IWjFxgNtERN05KF3F6lULec4Wd0PrM+oRAJK4y85b
+	 i4WpYh3nRd0fnlbjWGoTrdSXg3pcJsLlLBtxj39/YohKPGvXREMZpEQvYo1eeh8hyl
+	 VRDxJxBXnL+qU7lBLe+FGreRxemuoHjm/1qQQvSqAjEXgaigZRFjqWS0oolb3M8n86
+	 aaYWwOqkLKoMbg4nm6q/pF3tRX4gs4gmfbIte71xWfSeJUqAaBauxQF3ucnmpzP7nx
+	 Jjb1U5kqrz4+hj3XfKACoE+KHuD/iFi8N8GLJMeeeiXSuIHXrYelelV+ZPuYN8nBq7
+	 pATFfxjOfNpCg==
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260316140514.1406588-1-o.rempel@pengutronix.de> <20260316140514.1406588-2-o.rempel@pengutronix.de>
-In-Reply-To: <20260316140514.1406588-2-o.rempel@pengutronix.de>
-From: Linus Walleij <linusw@kernel.org>
-Date: Mon, 16 Mar 2026 21:49:16 +0100
-X-Gmail-Original-Message-ID: <CAD++jLm_afaTuP+9af8HZq+O7+dxfw5tEnP19VABuktZby8buQ@mail.gmail.com>
-X-Gm-Features: AaiRm53_qNzFzZsldUXICUMpShw_eWYlVf_nVALoc4j9_4pb00jh-R42NW1p5IQ
-Message-ID: <CAD++jLm_afaTuP+9af8HZq+O7+dxfw5tEnP19VABuktZby8buQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Peter Rosin <peda@axentia.se>, kernel@pengutronix.de, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 17 Mar 2026 00:56:52 +0100
+Message-Id: <DH4M3DJ4P58T.1BGVAVXN71Z09@kernel.org>
+Subject: Re: [PATCH v2 4/4] driver core: platform: use generic
+ driver_override infrastructure
+Cc: <driver-core@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+ <imx@lists.linux.dev>, <linux-hwmon@vger.kernel.org>,
+ <linux-arm-msm@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+ <linux-sh@vger.kernel.org>
+To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+ <hanguidong02@gmail.com>, <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+ <glaubitz@physik.fu-berlin.de>, <abelvesa@kernel.org>, <srini@kernel.org>,
+ <s.nawrocki@samsung.com>, <nuno.sa@analog.com>, <brgl@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260303115720.48783-1-dakr@kernel.org>
+ <20260303115720.48783-5-dakr@kernel.org>
+In-Reply-To: <20260303115720.48783-5-dakr@kernel.org>
 
-On Mon, Mar 16, 2026 at 3:05=E2=80=AFPM Oleksij Rempel <o.rempel@pengutroni=
-x.de> wrote:
+(Cc: Bartosz)
 
-> Add device tree binding documentation for the NXP MC33978 and MC34978
-> Multiple Switch Detection Interface (MSDI) devices.
->
-> The MC33978 and MC34978 differ primarily in their operating temperature
-> ranges. While not software-detectable, providing specific compatible
-> strings allows the hwmon subsystem to correctly interpret thermal
-> thresholds and hardware faults.
->
-> These ICs monitor up to 22 mechanical switch contacts in automotive and
-> industrial environments. They provide configurable wetting currents to
-> break through contact oxidation and feature extensive hardware
-> protection against thermal overload and voltage transients (load
-> dumps/brown-outs).
->
-> The device interfaces via SPI. While it provides multiple functions, its
-> primary hardware purpose is pin/switch control. To accurately represent
-> the hardware as a single physical integrated circuit without unnecessary
-> DT overhead, all functions are flattened into a single pinctrl node:
-> - pinctrl: Exposing the 22 switch inputs (SG/SP pins) as a GPIO controlle=
-r
->   and managing their pin configurations.
-> - hwmon: Exposing critical hardware faults (OT, OV, UV) and static
->   voltage/temperature thresholds.
-> - mux: Controlling the 24-to-1 analog multiplexer to route pin voltages,
->   internal temperature, or battery voltage to an external SoC ADC.
->
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On Tue Mar 3, 2026 at 12:53 PM CET, Danilo Krummrich wrote:
+> diff --git a/arch/sh/drivers/platform_early.c b/arch/sh/drivers/platform_=
+early.c
+> index 143747c45206..3cd17bb0be67 100644
+> --- a/arch/sh/drivers/platform_early.c
+> +++ b/arch/sh/drivers/platform_early.c
+> @@ -25,10 +25,12 @@ static int platform_match(struct device *dev, struct =
+device_driver *drv)
+>  {
+>  	struct platform_device *pdev =3D to_platform_device(dev);
+>  	struct platform_driver *pdrv =3D to_platform_driver(drv);
+> +	int ret;
+> =20
+>  	/* When driver_override is set, only bind to the matching driver */
+> -	if (pdev->driver_override)
+> -		return !strcmp(pdev->driver_override, drv->name);
+> +	ret =3D device_match_driver_override(dev, drv);
+> +	if (ret >=3D 0)
+> +		return ret;
+> =20
+>  	/* Then try to match against the id table */
+>  	if (pdrv->id_table)
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+I was just about to pick up this series, but then noticed that checking for
+driver_override in the platform_early case doesn't make sense in the first =
+place
+and was accidentally added when the platform_match() callback was copied ov=
+er in
+commit 507fd01d5333 ("drivers: move the early platform device support to
+arch/sh").
 
-Yours,
-Linus Walleij
+Thus, I'm going to drop this hunk and add in the following patch; please le=
+t me
+know if there are any concerns.
+
+commit 39cae4095efda4b00b436c0fc46f21de84128969
+Author: Danilo Krummrich <dakr@kernel.org>
+Date:   Tue Mar 17 00:37:15 2026 +0100
+
+    sh: platform_early: remove pdev->driver_override check
+
+    In commit 507fd01d5333 ("drivers: move the early platform device suppor=
+t to
+    arch/sh") platform_match() was copied over to the sh platform_early
+    code, accidentally including the driver_override check.
+
+    This check does not make sense for platform_early, as sysfs is not even
+    available in first place at this point in the boot process, hence remov=
+e
+    the check.
+
+    Fixes: 507fd01d5333 ("drivers: move the early platform device support t=
+o arch/sh")
+    Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+
+diff --git a/arch/sh/drivers/platform_early.c b/arch/sh/drivers/platform_ea=
+rly.c
+index 143747c45206..48ddbc547bd9 100644
+--- a/arch/sh/drivers/platform_early.c
++++ b/arch/sh/drivers/platform_early.c
+@@ -26,10 +26,6 @@ static int platform_match(struct device *dev, struct dev=
+ice_driver *drv)
+        struct platform_device *pdev =3D to_platform_device(dev);
+        struct platform_driver *pdrv =3D to_platform_driver(drv);
+
+-       /* When driver_override is set, only bind to the matching driver */
+-       if (pdev->driver_override)
+-               return !strcmp(pdev->driver_override, drv->name);
+-
+        /* Then try to match against the id table */
+        if (pdrv->id_table)
+                return platform_match_id(pdrv->id_table, pdev) !=3D NULL;
+
