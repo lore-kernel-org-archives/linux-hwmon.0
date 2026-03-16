@@ -1,47 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A25925BEF8;
-	Mon, 16 Mar 2026 11:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1034027281E;
+	Mon, 16 Mar 2026 11:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773658932; cv=none; b=bOMwQ33chJWDnAiD257aoQisrldq6T1qKwln4ogLUdenEvlgZkWAI4BxdDWql8tVvZZg5TXPwzZMDg+t2S3dqtwvqqEDDY2quciCmHitMAqmlwneF+qGOxKqzhIvgdUyzzh6Lx74U8o40F17p5E8BYTMJCpgiPnvIrvIkxRTRCw=
+	t=1773659390; cv=none; b=JSmXKl3D0OGTPfMjuhBIqsFKaQiJ4wIVEU0MZMGuxvvYB6nAXB/qlDFM+z+btObsBdQUU/mpAJjQ84QBB22KWjcT/WV2n0pno5wF+dsr6a3UbOEbfGLe4RPxc0RS7gwkhI9DsUfJCGAT3rzk9s1LR6xgMFjiyxlv4pIbm3cU7LM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773658932; c=relaxed/simple;
-	bh=2WrmRtPPWS7QjKt1bst/l9hvGi2jFxB3qCVZ5N7Qxv4=;
+	s=arc-20240116; t=1773659390; c=relaxed/simple;
+	bh=HBdCmmhHtctxj1golQhPltmCQklAUr8W6M2Q6tKeyGU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yjaa+7AnvYDqMftRTtf9tynkA3AKqgNy0LZUoP2YcN6FePNRRHn9KBmy0OZzNX30ewnEsWpSugz7hhsRVbcrZ64gQcxtDM1sua7hCl1hNfKIqy9GtusOWMcxJQlMzTZhsgdk0oGpTXzl0popA3GVvH3Xn2O+qFlmX9xWF1FcT+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQapjEjS; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OMphIxnp1edDrh9rYKIJgDombOSefUAon0RFat3XBYxCPTT0CbbftPJcPWIZ+uGL8tmlnr8Y5Lf3ZW2HfKp564WVLRGv4HhxytMfOOp76Ev2Iyh4Gz+LduIqBsdf9iRvBFh4kB2e1AR8DO61QOA75nh545ryKRGfXt7Jd87Tp2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJoecujV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQapjEjS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18340C19425;
-	Mon, 16 Mar 2026 11:02:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJoecujV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC91C19421;
+	Mon, 16 Mar 2026 11:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773658931;
-	bh=2WrmRtPPWS7QjKt1bst/l9hvGi2jFxB3qCVZ5N7Qxv4=;
+	s=k20201202; t=1773659389;
+	bh=HBdCmmhHtctxj1golQhPltmCQklAUr8W6M2Q6tKeyGU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gQapjEjSFbY1PwcppCIljbexVxu5r+ktpPVEa9yaNjPcqf32mS7XG3cydSQrM4Pg2
-	 epUhcc96pmKJf9bsa14PX2jRFBn63gAv/ck2wUzL80/HdRrZTwuvra5uyxAu9Th14q
-	 XstDIxts1dBQY1+iGEpxsJYuMujyMGrvQoFsBe9XiAr+vUZT2goJUV8ybToijumRtr
-	 ME30R6T8Dm1+U90OGPrc4OYoM519BPK0BWoeBudwmWvNmJ9VQVHzsYjPGeetouQHRV
-	 RWAVqRxx0ChVMXLaO3JKEjrNFvBew2L1WlgpUKZT2ovd/ZbjR0h9xB6rAmSablaD9v
-	 aX3SfTX1a+61w==
-Date: Mon, 16 Mar 2026 11:02:06 +0000
+	b=FJoecujV0GhhUofpqraiqNvaycUK2foFtkkhWG/1mZ62T4TLwbg5moDADqE6rzYgO
+	 MlEsN7lus4cw/Y4hsYyxzsr8oAH4JRhtU9XAaU4ITQuxLZhs7YyUGNTIx2woO/3Zgv
+	 mwTl+MrvvVspIY4QNM3UNGMzEPROiy3GfwHNbSuVkKveOtypeoN68jWceEFa+bZn4c
+	 bD5Mk3Gjh70V3CBhlL535R/4c+MzmcbAXGrtojGhXXOzA4J4YBcrFerkmi614Aogv3
+	 EuEww9OPB8zOaFIEYrRKSFBcgKMRH8R/FlL2ZGHIZQ95LN+ty5fz8h1DI/rsEY8nU9
+	 9fS54PdTj/ATA==
+Date: Mon, 16 Mar 2026 11:09:44 +0000
 From: Conor Dooley <conor@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+To: Drew Fustini <fustini@kernel.org>
+Cc: Icenowy Zheng <zhengxingda@iscas.ac.cn>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH v4 1/6] dt-bindings: pinctrl: add NXP MC33978/MC34978 MSDI
-Message-ID: <20260316-brick-corrosive-c0ce739651ac@spud>
-References: <20260313140218.1213393-1-o.rempel@pengutronix.de>
- <20260313140218.1213393-2-o.rempel@pengutronix.de>
- <20260313-shortwave-baguette-5914f1af60f8@spud>
- <abfgNaCp4VeKZUWE@pengutronix.de>
+	Conor Dooley <conor+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, Rahul Tanwar <rtanwar@maxlinear.com>,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Icenowy Zheng <uwu@icenowy.me>, Han Gao <rabenda.cn@gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: moortec,mr75203: adapt
+ multipleOf for T-Head TH1520
+Message-ID: <20260316-handshake-subdivide-9de6c4410927@spud>
+References: <20260309162457.4128205-1-zhengxingda@iscas.ac.cn>
+ <20260309162457.4128205-2-zhengxingda@iscas.ac.cn>
+ <abWTO7QBFIcjxKn6@x1>
+ <20260315-cogwheel-dislodge-a3efe31728d1@spud>
+ <abbTwrAALGy3QbxN@gen8>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -49,107 +52,104 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GOr+HRVBfYVMkRXD"
+	protocol="application/pgp-signature"; boundary="ZWjbRAn/4RQId7UP"
 Content-Disposition: inline
-In-Reply-To: <abfgNaCp4VeKZUWE@pengutronix.de>
+In-Reply-To: <abbTwrAALGy3QbxN@gen8>
 
 
---GOr+HRVBfYVMkRXD
+--ZWjbRAn/4RQId7UP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 11:49:25AM +0100, Oleksij Rempel wrote:
-> On Fri, Mar 13, 2026 at 05:16:31PM +0000, Conor Dooley wrote:
-> > On Fri, Mar 13, 2026 at 03:02:12PM +0100, Oleksij Rempel wrote:
-> ...
-> > > +maintainers:
-> > > +  - David Jander <david@protonic.nl>
-> > > +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> > > +
-> > > +description: |
-> > > +  The MC33978 and MC34978 are Multiple Switch Detection Interface (M=
-SDI)
-> > > +  devices with 22 switch inputs, integrated fault detection, and ana=
-log
-> > > +  multiplexer (AMUX) for voltage/temperature monitoring.
-> > > +
-> > > +  Pin numbering:
-> > > +  - Pins 0-13: SG0-SG13 (Switch-to-Ground inputs). These pins monitor
-> > > +    contacts closed to ground and typically require GPIO_ACTIVE_LOW
-> > > +    flags when used as digital inputs.
-> > > +  - Pins 14-21: SP0-SP7 (Programmable inputs). These can be configur=
-ed
-> > > +    as SG (Switch-to-Ground) or SB (Switch-to-Battery) inputs. SB
-> > > +    inputs monitor contacts closed to the battery voltage and typica=
-lly
-> > > +    require GPIO_ACTIVE_HIGH flags when used as digital inputs.
-> > > +
-> > > +  Output Emulation:
-> > > +  The hardware lacks standard push-pull output drivers. Outputs are =
-emulated
-> > > +  by toggling the programmable wetting current sources (acting as pu=
-ll-ups
-> > > +  or pull-downs) and the hardware tri-state registers. Because of th=
-is
-> > > +  physical constraint:
-> > > +  - Consumers using pins as outputs MUST flag them with GPIO_OPEN_DR=
-AIN or
-> > > +    GPIO_OPEN_SOURCE in the device tree.
-> > > +  - Push-pull configurations are physically unsupported.
-> > > +  - The active polarity depends entirely on the external circuit (e.=
-g., how
-> > > +    an LED is wired) and must be flagged accordingly by the consumer.
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - nxp,mc33978
-> > > +      - nxp,mc34978
+On Sun, Mar 15, 2026 at 08:44:02AM -0700, Drew Fustini wrote:
+> On Sun, Mar 15, 2026 at 12:12:13PM +0000, Conor Dooley wrote:
+> > On Sat, Mar 14, 2026 at 09:56:27AM -0700, Drew Fustini wrote:
+> > > On Tue, Mar 10, 2026 at 12:24:56AM +0800, Icenowy Zheng wrote:
+> > > > The G and J coefficients provided by T-Head TH1520 manual (which ca=
+lls
+> > > > them A and C coefficients and calls H coefficient in the binding as=
+ B)
+> > > > have 1/100 degree Celsius precision (the values are 42.74 and -0.16
+> > > > respectively), however the binding currently only allows coefficien=
+ts as
+> > > > precise as 100 milli-Celsius (1/10 degree Celsius).
+> > > >=20
+> > > > Change the multipleOf value of these two coefficients to 10 (in the=
+ unit
+> > > > of milli-Celsius) to satisfy the need of TH1520.
+> > > >=20
+> > > > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+> > > > Reviewed-by: Drew Fustini <fustini@kernel.org>
+> > > > ---
+> > > > Changes in v3:
+> > > > - Added Drew's R-b.
+> > > > - Fixed some typos in the commit message and slightly reworded the
+> > > >   precision sentence.
+> > > >=20
+> > > >  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 +=
++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr7520=
+3.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > > index 56db2292f062d..7d57c2934a8a1 100644
+> > > > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > > @@ -105,7 +105,7 @@ properties:
+> > > >        G coefficient for temperature equation.
+> > > >        Default for series 5 =3D 60000
+> > > >        Default for series 6 =3D 57400
+> > > > -    multipleOf: 100
+> > > > +    multipleOf: 10
+> > > >      minimum: 1000
+> > > >      $ref: /schemas/types.yaml#/definitions/uint32
+> > > > =20
+> > > > @@ -131,7 +131,7 @@ properties:
+> > > >        J coefficient for temperature equation.
+> > > >        Default for series 5 =3D -100
+> > > >        Default for series 6 =3D 0
+> > > > -    multipleOf: 100
+> > > > +    multipleOf: 10
+> > > >      maximum: 0
+> > > >      $ref: /schemas/types.yaml#/definitions/int32
+> > > > =20
+> > > > --=20
+> > > > 2.52.0
+> > > >=20
+> > >=20
+> > > I have applied this to thead-dt-for-next.
 > >=20
-> > What's different about these that a fallback is not suitable?
->=20
-> The difference are operation temperature ranges. But, it is not
-> detectable by software. This information can be reused for the hwmon.
-
-Can you note this in your commit message please?
-
->=20
-> > > +patternProperties:
-> > > +  '^.*-grp$':
-> > > +    type: object
-> > > +    $ref: /schemas/pinctrl/pincfg-node.yaml#
-> > > +    additionalProperties: false
-> > > +    description: Pin configuration subnodes.
-> > > +    properties:
-> > > +      pins: true
+> > That's odd, why is a hwmon binding in your branch?
 > >=20
-> > This seems overly permissive, think it should only allow the couple of
-> > options that your hardware has. Probably just make it an enum? Shouldn't
-> > have to check the driver to know what the acceptable pin names are.
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/com=
+mit/?h=3Dthead-dt-for-next&id=3Deb4fd43ff6793681f0a0a8e8ac861142caba2b19
+> >=20
+> > I don't see an ack on it from the relevant maintainer either?
 >=20
-> Some thing like this?
+> Sorry, my mistake, I should not have applied the binding. And you are
+> right to point out that there was no ack from Guenter or Rahul Tanwar.
+
+It was Guenter I was thinking of, but there's not one from myself, Rob
+or Krzysztof either.
+
+> I will drop both patches from thead-dt-for-next and wait for agreement
+> on the binding.
 >=20
->       pins:
->         items:
->           enum: [ sg0, sg1, sg2, sg3, sg4, sg5, sg6, sg7, sg8, sg9,
->                   sg10, sg11, sg12, sg13, sp0, sp1, sp2, sp3,
->                   sp4, sp5, sp6, sp7 ]
+> Thanks,
+> Drew
 
-Yeah.
 
---GOr+HRVBfYVMkRXD
+
+--ZWjbRAn/4RQId7UP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCabfjLgAKCRB4tDGHoIJi
-0sV4APwM/hhP6nB8AEEJ+l+y1n0i3Dciru0XcE5FsV3fHWqf9gEAq1xyrNzxRd8C
-3Zu4SafwjPsD4RAD4zAAzQxRpmkJvgU=
-=e1xM
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCabfk+AAKCRB4tDGHoIJi
+0hWfAQDZ0FufgisOFhUsbTsOfB8kghldgdUrVL5N9dOE+aRvqgD+NxMI7qC0YpnD
+E1yazpn740hQ65uhnVmZxGGP4eLCwQ0=
+=pOwF
 -----END PGP SIGNATURE-----
 
---GOr+HRVBfYVMkRXD--
+--ZWjbRAn/4RQId7UP--
