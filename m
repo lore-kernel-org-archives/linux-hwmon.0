@@ -1,76 +1,75 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F752DA756
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 15:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5CA2F691D
+	for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 16:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773763185; cv=none; b=E1pCPkV98GxW6COykLdy2AICe/DHW/y7M5UoGkDoUnvrV1PKTjLa1KvMtz1gM38FdQoiolqPTjgPXa8gRzgTxBwKb2Zp3epuxbPwuxeGxa5zQJMkNBBQXK4c9xha/Wu7vlN7PtfGj4xlx+52V40gizzWG7hDYbie+tMW+a3I514=
+	t=1773763629; cv=none; b=s1kQrW9eT0HTbGn3+YQU6VL4soEtJm9BkOpoHs4HskDN1JmrIBhv2/jcpjpYUOCpVQ4ObxHLOqse8P6zIKpKRfLho5vbtA+L5a6DbvKrSp23UUg2kc9pTpQI2vr8enBKI0WiQzTanJocfMh2hlbHoF9FU6cE/WtU1i+/TA9I32M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773763185; c=relaxed/simple;
-	bh=rhfyqxH0aD0+p3Dpg2vsvaa7zDV0kR6JjfIqK+30h9Q=;
+	s=arc-20240116; t=1773763629; c=relaxed/simple;
+	bh=8W1wLcDuGnh70heYzZXk1lmp712fZJuM8sRYD3B3c+Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N6V+qCesKyO+pwsw8zorM6SSGYeHNImJO7vmQ1aU6E7Ij9WIg9rN5olfKyWDZsN2WtjMXZWldOPpMIVIP8PhnsghrS0GXpmsN6VjuCcouDpdMtZSpmuXmqxHw70/TtDXv5Y6yp2PB5ohW+hFl/HNqZJGtXYxCy5O7bVhH/oS8Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTJUnI07; arc=none smtp.client-ip=74.125.82.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=YwSRWecZMxstVf8nq/nyaIEt/BWc/dzkRZD/kYoWyTnZqHFZNarxCVbxWhkx8H9cZZGbC2CnfFaFZNc9tWuWJatwiZBbhEX6FxB6J+xPRX/HavXGN01vhSbPInsZndQMxmVqLd5WzX/2lc5Z8kJ0J+gu25TxARrz37YbeYpHers=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9oBrIjC; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTJUnI07"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-128ef6c4a41so2807218c88.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 08:59:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9oBrIjC"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2aecc6b0861so26388495ad.2
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 09:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773763184; x=1774367984; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773763628; x=1774368428; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qStIndcPGw+JcPKLiWKmJZ3dJRcw/C0qeNG09MqJaTo=;
-        b=BTJUnI07Ig1TLRJUdNAoARb+Z2uKhqlcdfd3nDrqmiWutbADOx4WmMlpabQfnFymla
-         tP/9D9c59Ih48EVjsIybtttehOkCWb/5OZXbkbkbWGJpLM2RJsaijBxLfRNgz43P/rS+
-         ARrk2g1u2WoBZJz7nA/l3th4DoMGf0L7UdmgcAlEkFpfFwum9XGDxJGg1gDCD2svgIaR
-         MpEttFVmQO7Ri4ofKghaPtVH6kjDcLl79LF+IIDgzsS4EJM3UaGz0jqxksRrkTnAlGP+
-         gOBrK1qvHUQ7re803B/nszktl6PC3yS2XK5Jc7GxLZ7eFCZ4MhXPsSW6It6iC+RyLOMt
-         ClEQ==
+        bh=mzkNk18hc0Wjw2irPNMaFA/+tdksSmqqnGsewo6/mYw=;
+        b=K9oBrIjCZ1b8lpQpwosLMgRyEO6dXVhuti63bFi9hsnSu9qen07+lAA4xkqcv5JQNu
+         KYeRl3ZccP+SEEAxhV0r0eaPpGmpuwkfr+yz3LGbYAe4Zky+ch+9+vlbc1ZlKGSSGtEA
+         aEJyVr9LB6QD6Ze0eprOCe9ODthV4HSdDvvDUT9RbVSr8vw0bH6Ui2YtBpbVO5TpP2JI
+         YuhKRvkQul6lPW7ZxpqhhDbpValJRm2ssjoJHg/C1u50lEYDMFP5xEm+Mn18eFvN6IML
+         JMLcecKS4D4nFCtNy+sDZGMbJN65LIvAIX+qBCCosPuWQJr5cpofukOseUKDvlDDrTSz
+         3vlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773763184; x=1774367984;
+        d=1e100.net; s=20251104; t=1773763628; x=1774368428;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=qStIndcPGw+JcPKLiWKmJZ3dJRcw/C0qeNG09MqJaTo=;
-        b=gUHPeCxYC5nGhzRSVUNbZO8Q82/z5Z9uz1w492/vQcepuAyGYNaOGobLR3p3zErdiz
-         wk/ld4n1WmkXejdZenM6M1XtExo7tf7bA+ylJ3kidzmcu0Vq58EfDfU6an5CHmJxuMse
-         khfdJQA8wMmdPLIxLCqhmtOAvgvTdmQCr6sjhBSsXi8fmZuukseTUQuQgLBzibxS00/g
-         KqRfncAb7aeLm1mwAE1aEPR29VW3pR1w5G8P6xW2HihHiCyu7wAKG8DDbhlylTyk8znx
-         lygzxHQ7LR76BGQhBjptAWuuV4yIBJDWPK6LLFmAoenrKTBN4zcjrGNvxSY3mi0VjchC
-         FKdA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9BGaSkknFOqZeqErDtDhXy3iJFnotagtvcxu2HiDnd1xJIwPekdUMN1GqMQlfcVWEHCapT6Wq8Sp2HQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI2lEC/x1eUV+livu2ofrbJh4bJlTDYxbpOpaiIS0EMTIcQG6r
-	zx/NvemJt9axVkkjYy4BmE1VCPF7RPSvgytXfottd/D4ihMLH9IlXpA+
-X-Gm-Gg: ATEYQzyptBZJDskTy+X4nIu5Hac1Yj6d7iahvVwFgpmqQvtmrcT8LVCVlnv/Kz02jFk
-	ikj3aC1hZ3KwXi4QgOFW+syq49gEMpK+so0oEy6SqeJUUxSHLHtyVRcvg7N9rxHzQMfgJvGGlNV
-	vVTkiepTxyVLijqcdsN2B3N8EKeeqLsnBoYUh1P7SjlQ+WZpzEcGbuWfKQuz3kmpWTsJ7M4ExEJ
-	bOfPEONczANR5LbPXpx+BQCAFRkTGG9UXO+2oDTriNtFgQsOq2+68VcnC+VzXqXaeNecuuhh6Ma
-	PR22YLX8Egf8eIeNXtub8C+GghfcvyLF+H287wP81ZeKdzXmew4fcc9o11IFPLurJ8k1QojjHJN
-	d0KR8gDMv0WGtFfwWVe77ZkGhjYTTaOufi+JUSLGSb6lhprKn5R4ssbYIw1vKu52weobEdl4DXc
-	LxrE6MkiAiTslvPesLrIky0/5tFl96p6gT1lfz
-X-Received: by 2002:a05:7022:4387:b0:119:e569:f609 with SMTP id a92af1059eb24-1299ba1cb97mr18072c88.2.1773763183880;
-        Tue, 17 Mar 2026 08:59:43 -0700 (PDT)
+        bh=mzkNk18hc0Wjw2irPNMaFA/+tdksSmqqnGsewo6/mYw=;
+        b=cjrncYfeOqmSFf4LEzyEkptBHIijjbBTVb5pQSKKoG5q59jPKha94FSAkYgLbnbiTd
+         eqFBMKnOdUntjxf6y8NMH4yTPdhVu2EDpuamovExUuz56vrWQ2sYKIeRwSpYmnObVs8p
+         l6tvbdXs2VxkwXLQ7esUJJbwEdWf+3eQWoukyEYui9rPpA/qvu/WIh8uQxdgpXkEb6Pn
+         ZxtB5VH+rDvR3IuChnrtn9JhLxiWIZFipYUopYriJGyFAm17AdmvwnW5lHo8mdPZRG2J
+         wwL1rexpuJ+0+miWWm3ee2bYaxZ60SOS3JmOR1dK26yhdC8q1Ivn1lSL+Mzdjqz6CJM7
+         ERbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuJ70pEf374syIVUGU+6ooABymBJADu7kQgZyzieD8PeMTg20DFjQP18vZe2S97UsTSGzJB7ao5VBD/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4Pl1RKoNvnbQ4g+3PuYG5QY3AUIFe777w056FrygBi69Kvooq
+	ehkFW9GGi8WRVbar6CkC+ChumtpHDL0XWBAV2a4WnmpM7l2W2LOKtLGI
+X-Gm-Gg: ATEYQzxcKxBd8c7xwJ1tabdY3lXNa7Tfic5Z+aqGDxHWXVhdZ5OYpMN4vNvbB4mW9zS
+	yhM876z3aIkIERcB1PVJ+vqcfPBeD2GBXcBIgNZglsIh6CngMNf/qWS/hRrqTmaBjSqy9TE8PKU
+	bVrQE9mtUETtbjvaCdL7us8Of1iywLOXvzlR8XmdIA0AkY4e1aCBAPExbzVpU109yBP+F+chrCd
+	QFRtg5AGXYdudRMMn3EaBBWyU0py44qU9pbd+VzONaHeTn1qSlfwUwM3xdHeTbzT2MdPQbIEXuM
+	xN3Hd+x8Ynpx9Gkf/IzBFSxbCmFko0qTE9qGzRRq+gAWqFVZuwD3jfxdXQz0QPpQhq3LV6HzqA3
+	924h64v1QTH+TwOrBb5TLYhzxyr/JbJfWvfOgTYfathRnIoM8edrvhQqq7c7fKrjbcmMtKZQKWV
+	+G2zJVoinVhYw+yqXa3PMJhmuUL3aE4DKyJBc3
+X-Received: by 2002:a17:903:2282:b0:2ae:6579:4795 with SMTP id d9443c01a7336-2b06e35b4a0mr344755ad.21.1773763627779;
+        Tue, 17 Mar 2026 09:07:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128f62991c7sm16442227c88.5.2026.03.17.08.59.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2aece594b4fsm136171625ad.20.2026.03.17.09.07.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 08:59:38 -0700 (PDT)
+        Tue, 17 Mar 2026 09:07:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 17 Mar 2026 08:59:36 -0700
+Date: Tue, 17 Mar 2026 09:07:06 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Billy Tsai <billy_tsai@aspeedtech.com>
-Cc: Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+To: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (aspeed-g6-pwm-tach): remove redundant driver
- remove callback
-Message-ID: <351decf2-0a11-4f4c-a332-d5ae28c4c13f@roeck-us.net>
-References: <20260309-pwm_fixes-v2-1-ca9768e70470@aspeedtech.com>
+Subject: Re: [PATCH v2] hwmon: add driver for ARCTIC Fan Controller
+Message-ID: <7c5667fc-6650-4f0a-85a1-1b9c0beb33d0@roeck-us.net>
+References: <c6d6c506-1407-4676-b730-f9fff595bb75@roeck-us.net>
+ <20260313111955.36811-1-aureo.serrano@arctic.de>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -79,17 +78,39 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260309-pwm_fixes-v2-1-ca9768e70470@aspeedtech.com>
+In-Reply-To: <20260313111955.36811-1-aureo.serrano@arctic.de>
 
-On Mon, Mar 09, 2026 at 10:33:24AM +0800, Billy Tsai wrote:
-> Drops the remove callback as it only asserts reset and the probe already
-> registers a devres action (devm_add_action_or_reset()) to call
-> aspeed_pwm_tach_reset_assert().
+Hi,
+
+On Fri, Mar 13, 2026 at 07:19:55PM +0800, Aureo Serrano de Souza wrote:
+> Add hwmon driver for the ARCTIC Fan Controller (USB HID VID 0x3904,
+> PID 0xF001) with 10 fan channels. Exposes fan RPM and PWM via sysfs.
+> Device pushes IN reports at ~1 Hz; PWM is set via interrupt OUT reports.
 > 
-> Fixes: 7e1449cd15d1 ("hwmon: (aspeed-g6-pwm-tacho): Support for ASPEED g6 PWM/Fan tach")
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> Fan speed control is manual-only: the device does not change PWM
+> autonomously. After applying an OUT report, the device sends back a
+> 2-byte ACK (Report ID 0x02); the driver waits up to 1 s for this ACK
+> using a completion.
+> 
+> The report buffer is kmalloc'd per write for two reasons:
+> 
+> 1. Stack placement (suggested by reviewers with __aligned()) was tested
+>    but hard-rejected by usb_hcd_map_urb_for_dma(), which calls
+>    object_is_on_stack() and returns -EAGAIN regardless of alignment
+>    attributes. Confirmed on AMD X670E with AMD-Vi (IOMMU) enabled.
+> 
+> 2. Struct-embedded placement (suggested as an alternative) would create
+>    a shared resource between concurrent arctic_fan_write() calls, causing
+>    a race if two users write different PWM channels simultaneously.
+> 
+> kmalloc per write avoids both problems: the buffer is heap-allocated
+> (passes DMA checks) and private to each write call (no sharing).
+> 
+> Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> ---
 
-Applied.
+Please also see AI review feedback at
+https://sashiko.dev/#/patchset/20260313111955.36811-1-aureo.serrano%40arctic.de.
 
 Thanks,
 Guenter
