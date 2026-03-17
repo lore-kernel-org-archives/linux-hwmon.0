@@ -1,205 +1,178 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC8733D4E1
-	for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 19:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AF237C0FD;
+	Tue, 17 Mar 2026 20:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773777129; cv=none; b=Ev9eCRLRZ6WPyL3doG08arlwqaCJbvu204c6ASqVQO3AHP/ehKDldY58u43oAk0mNi2guJ18IMmUI7/uiAskhibn1bXFOM7Zi6lFk3gIMFm8PRp7XAVyflqQFHvQNNFpKzb4tS5yEup+BpQC/f4gD7rAlu4rZYDNRQJcaWZ2Ius=
+	t=1773778310; cv=none; b=NoAgX/rvzXTVKMpsa5d//I5WRcSPL3u0Gc+KbDk9KHJcDSWqetlaBYODxbefzfYgaB6BnkHJzbqi6Nq9/5wz2nJNXbivkoERCBt+nhqB5x93aQO2JBTSTgev4BlM0n5jav0bX12J/QA3l3F/LeobWE1G8tdVpqMhUobNr3FCRUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773777129; c=relaxed/simple;
-	bh=ogKC+c2UlJOTTNUwTjAN18d6KohDFlaYVIJyoaKGqYE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/UfeVZ6tYRfgCunlaEvQvdKj0U1LblEc7x8nW52l78BVXSMl7SaImkjBbJCxCX5ivr8kdYuN0cWdNnJiLm78C5IYAJilFLEvsfFbRlIybuYHXpLcnPxSS/LaUVTSBbZkXVSUqum1Ya4kUkAX6gO6lD9lDq1gsQT6Z6sjtA2xIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMgPxxxO; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773778310; c=relaxed/simple;
+	bh=gsb+15dC+Fj6OcnuL2uhktCQQrcMGYUlCFtqXAckdVs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZHpl92wc1nR/RCjgj0WPMForjiTnKgGvnAUpsBR0zgS7cuz+BjzG8teilvNwb4PMhdePJvaCMqVIIkrCE5DEUDGN9t8/+AfbptxhbaEun4vpp0R2Ni2HjdD4FgPQ6DiV5gsO7QV4l+WIWCNAiNZbnFtoCJ7BP2espJn9+eaxjmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=mdQxax9Z; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMgPxxxO"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c0d36f3888so2033579eec.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 12:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773777126; x=1774381926; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmUcttp3wBsYArrFOUjW9PH5NmkZe1nXWSW5R4bPR8I=;
-        b=aMgPxxxO9Ki/pu+drSYDuzb6LHC1fhrNxB92MVlobMS2sxewoIOZY/zY7rFmRby4Vy
-         CSd/+ZsvtMjqPFL7ExyGOE5CvGSxLwl1+3jAxo7ntuA+no3niWB6qlGCKVvnknNatSXL
-         +jtB7+UofrT6lRHkRMVOEZqy24n7aDpQ1VsW2PZ7hFlhEDyqoN7PHFKF3iqd6MZTQEt+
-         WFY5z/jhc8P2oEN9kFwMBawRySHYtF9U9BtLiHcSXm/qrWJUa655ye9gwtAot3LogIFY
-         b446EoR5Nj/67eTLGGirmBN9uOYYf1KMvILYLtStXyZ1uxQVxsFnpp02wz2rPyRp6XCx
-         xSLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773777126; x=1774381926;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hmUcttp3wBsYArrFOUjW9PH5NmkZe1nXWSW5R4bPR8I=;
-        b=bDPZbQOAG23GVgq0L8tPH7nai83P2chYYDeNEZx6/0ibOAGkiHEkMOL0NAn4xQvoY2
-         zWR/V5nkdtnIBp5NT1LK2VvBHsaKyTkrng7+atZ7nsw74lwlftW/G8ML1nNvl4JNT97u
-         DVyLJWk4lSKBXPLELxgIcm4Z43Cph5XMeYe8asyUn1jHSk89z22SgA7DyRPr7ofK0Egv
-         iTaUd2Ypo2je3YwdMt+G3/4BCX/sWOA+ppJOTcFtACA2LhJmPbn6ZkORT+a0xMm8WZ3q
-         ZvtVcBawoRqr/7+UPCyqwJ9e6jLwqe3G+8AztoSekrSQkWHTKKwzdKEEFS0bEDBCMhot
-         ulhw==
-X-Forwarded-Encrypted: i=1; AJvYcCXfbaYHv2R/LsRnXxw5UorX8T187nLePwXq7QYvrvw/Qj7ZZmZP1wqVhZyeUtwLCA9oem9vWIbyJtCzKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuFipcva41MZVlg4Pl9qZ0Ejv0FDHLVVg5h+o3ya6ixjczecuD
-	1LspV0O0uxj9SeXH0K23gC+m4jLP6iXV3cE1Sn5EeEcbDUq8rJxCh74d
-X-Gm-Gg: ATEYQzwJTaP/jTYen2DomTtW99c2xO6pWSs5fxHSRbCde8cddGhqcRr8V7o19ZcyQVN
-	cZyQYATiXXDMOFV7CxblnlB26zjJy2JJ77XWkTHALJD3kcpsJ6z4W0he6XmWJ0SflhKl1kfXOCy
-	KTD+4i8CYL3FhLovnD4BwaKpca1NXr5DIMYcL1sVgQRe9p0hpsup+qZHFdDD7bAsXkcBhaMmnbF
-	3PceNwDYFnJE8cQtXoHMj+tCDF97vJpHNLmGcvPndH35obTvSoaTx8ozt68e8rJgIpd/8IX5ldy
-	dQaDuBpKyOkSFogfjURYcZQanHlURev4nO8v5AQYcVQ5tNLLMk50RStj048jVornNqsIuFR3bGi
-	1c97lZ/OC1LeABi3ygZLpGmpS0Htnv/VqtHw/8OdLw9CI4ge2wnpuKIR8czke3XNvt2YTqfsl1d
-	iCYt0Mg3LP35+kgGqBDeTcd2jHiFJyk3iK7D2+
-X-Received: by 2002:a05:7301:1285:b0:2b7:1d38:3596 with SMTP id 5a478bee46e88-2c0e5074bd0mr328051eec.4.1773777125448;
-        Tue, 17 Mar 2026 12:52:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e5582bdasm660352eec.19.2026.03.17.12.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 12:52:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 17 Mar 2026 12:52:03 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Alexey Charkov <alchark@flipper.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: hwmon: Add TI INA4230 4-channel I2C
- power monitor
-Message-ID: <d83026f9-62ea-4851-8188-5ce4150b6fcb@roeck-us.net>
-References: <20260310-ina4230-v3-0-06ab3a77c570@flipper.net>
- <20260310-ina4230-v3-1-06ab3a77c570@flipper.net>
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="mdQxax9Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1773778275; x=1774383075; i=w_armin@gmx.de;
+	bh=gsb+15dC+Fj6OcnuL2uhktCQQrcMGYUlCFtqXAckdVs=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=mdQxax9Z/ELaGnWvucMhtrzx/k+0yAjkfrVAIy/S/h2/jGNNyH4IITWST5EPWZqA
+	 TDlMqkSjLcDglrZoxQhjMA23VgCmahsF5aSPOfglBjlqv+l646Oo3ZIBr45Fvlfg+
+	 x//h5T27DOQNFjXtaf/3eA5/3KUSkA4iDpZatDlI4edygDPo2jUWQKlyOhxWt3eh0
+	 ho7Pw5/C4pex5aTeOltv/Ejqlyn8GIMwtVhzt8L0/760Gwne5fE6UNnKb7qfJqumk
+	 lehjfcNsTErz6/g0O3xVjy3K87GSO/MeX21gCBHHGnLFzglvIVA62uYaSFPAduFz3
+	 l/7DX5a6TmY842wwxA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVNB1-1wCnTQ0eBT-00O7HW; Tue, 17
+ Mar 2026 21:11:15 +0100
+Message-ID: <52dabfaa-cb3c-4c2f-92a0-efaa175bf4be@gmx.de>
+Date: Tue, 17 Mar 2026 21:11:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-ina4230-v3-1-06ab3a77c570@flipper.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/9] Convert most Dell WMI drivers to use the new
+ buffer-based API
+To: Guenter Roeck <linux@roeck-us.net>, Dell.Client.Kernel@dell.com,
+ pali@kernel.org, mjg59@srcf.ucam.org
+Cc: soyer@irl.hu, hansg@kernel.org, ilpo.jarvinen@linux.intel.com,
+ platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, mario.limonciello@amd.com
+References: <20260314175249.16040-1-W_Armin@gmx.de>
+ <502ea01b-e5e1-45a2-b5f8-ad236dc8f006@roeck-us.net>
+Content-Language: en-US
+From: Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <502ea01b-e5e1-45a2-b5f8-ad236dc8f006@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:udtRzCCpS8fcCG3mfxIJGWEx6m8AlhT+YDafZLfZjakk1Ex4orM
+ 9TRsERlR61lSx/8WR6zIzNoC23bwGrWJI8dIMC4C7BGkkH2PqQfrVaOO/swpRngVQcbjfka
+ 03ZJal6SMMX2y7PmbZ/j8y9Mq7s0lksYbOLYNs3yaZkRErudGANjmFXtSU0PaewRC4jvhd+
+ Zirk1MJajTtEuHpSr5/3A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:97R1tnHiDOQ=;ttLBk8dfblGmzRW978PwbqzhC0Z
+ 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
+ XKjjCIhkdl7Kcra2fGgx
 
-On Tue, Mar 10, 2026 at 03:43:46PM +0400, Alexey Charkov wrote:
-> Add TI INA4230, which is a 48V 4-channel 16-bit I2C-based
-> current/voltage/power/energy monitor with alert function.
-> 
-> Link: https://www.ti.com/product/INA4230
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> Signed-off-by: Alexey Charkov <alchark@flipper.net>
+Am 17.03.26 um 16:52 schrieb Guenter Roeck:
 
-AI review feedback inline. As far as I can see all are valid points
-which will need to be addressed either in the bindings or in the driver.
+> On 3/14/26 10:52, Armin Wolf wrote:
+>> The new buffer-based WMI API improves the compatibility between
+>> different ACPI firmware implementations by performing marshalling/
+>> unmarshalling of WMI buffers like the original Windows driver.
+>>
+>> Convert most Dell WMI drivers to use this new API. This also
+>> removes all ACPI-related code from those drivers because the
+>> new buffer-based WMI API uses abstract WMI buffer objects instead
+>> of ACPI objects.
+>>
+>> All drivers have been tested on a Dell Inspiron 3505 and appear
+>> to work normally.
+>>
+>> The last three patches contain some misc. cleanups for the WMI
+>> driver core itself. The most important change is a fix for modprobe
+>> to verify any WMI GUID strings from WMI drivers and convert them
+>> to uppercase if necessary. This should fix autoloading for WMI
+>> drivers that use WMI GUID strings with lowercase letters.
+>>
+>
+> The series doesn't give hints to maintainers if the patches should be
+> applied on a per-subsystem basis (i.e., are independent of each other)
+> or if they need to be applied together. I Acked the hwmon patch, assumin=
+g
+> that it will be applied through a common branch. If the patches are
+> supposed to be applied in subsystem branches, please let me know.
+>
+> Thanks,
+> Guenter=20
 
-Guenter
+I would prefer if the whole series was applied together on the platform dr=
+ivers tree.
 
-> ---
->  .../devicetree/bindings/hwmon/ti,ina4230.yaml      | 134 +++++++++++++++++++++
->  MAINTAINERS                                        |   6 +
->  2 files changed, 140 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-> new file mode 100644
-> index 000000000000..f33e52a12657
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,ina4230.yaml
-> @@ -0,0 +1,134 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ti,ina4230.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments INA4230 quad-channel power monitors
-> +
-> +maintainers:
-> +  - Alexey Charkov <alchark@flipper.net>
-> +
-> +description: |
-> +  The INA4230 is a 48V quad-channel 16-bit current, voltage, power and energy
-> +  monitor with an I2C interface.
-> +
-> +  Datasheet:
-> +    https://www.ti.com/product/INA4230
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,ina4230
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    description: Required only if a child node is present.
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    description: Required only if a child node is present.
-> +    const: 0
-> +
-> +  vs-supply:
-> +    description: phandle to the regulator that provides the VS supply typically
-> +      in range from 1.7 V to 5.5 V.
-> +
-> +  ti,alert-polarity-active-high:
-> +    description: Alert pin is asserted based on the value of Alert polarity Bit
-> +      of the CONFIG2 register. Default value is 0, for which the alert pin
-> +      toggles from high to low during faults. When this property is set, the
-> +      corresponding register bit is set to 1, and the alert pin toggles from
-> +      low to high during faults.
-> +    $ref: /schemas/types.yaml#/definitions/flag
+Thanks,
+Armin Wolf
 
-The property is defined here and read by the driver in a subsequent
-patch, but the driver never uses the value to set the ALERT_POL bit
-in the CONFIG2 register. This renders the property non-functional.
-
-> +
-> +patternProperties:
-> +  "^input@[0-3]$":
-> +    description: The node contains optional child nodes for four channels.
-> +      Each child node describes the information of input source. Input channels
-> +      default to enabled in the chip. Unless channels are explicitly disabled
-> +      in device-tree, input channels will be enabled.
-> +    type: object
-> +    additionalProperties: false
-> +    properties:
-> +      reg:
-> +        description: Must be 0, 1, 2 or 3, corresponding to the IN1, IN2, IN3
-> +          or IN4 ports of the INA4230, respectively.
-> +        enum: [ 0, 1, 2, 3 ]
-> +
-> +      label:
-> +        description: name of the input source
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description: shunt resistor value in micro-Ohm
-> +
-> +      ti,maximum-expected-current-microamp:
-> +        description: |
-> +          This value indicates the maximum current in microamps that you can
-> +          expect to measure with ina4230 in your circuit.
-> +
-> +          This value will be used to calculate the Current_LSB to maximize the
-> +          available precision while ensuring your expected maximum current fits
-> +          within the chip's ADC range. It will also enable built-in shunt gain
-> +          to increase ADC granularity by a factor of 4 if the provided maximum
-> +          current / shunt resistance combination does not produce more than
-> +          20.48 mV drop at the shunt.
-> +        minimum: 32768
-> +        maximum: 4294967295
-> +        default: 32768000
-
-The binding allows values up to UINT32_MAX, but the driver rejects
-values above INT_MAX. While 2147 Amperes is likely sufficient, the
-mismatch should be resolved.
-
-The driver also attempts to read a "ti,single-shot" property which is
-missing from this binding file. Given it was present in the INA3221
-bindings this driver is based on, its omission appears to be an
-oversight.
-
-Furthermore, the "vs-supply" property is defined in the bindings but
-completely ignored by the driver (it does not acquire or enable the
-regulator).
