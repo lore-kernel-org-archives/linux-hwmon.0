@@ -1,62 +1,62 @@
-Received: from FR4P281CU032.outbound.protection.outlook.com (mail-germanywestcentralazon11022131.outbound.protection.outlook.com [40.107.149.131])
+Received: from BEUP281CU002.outbound.protection.outlook.com (mail-germanynorthazon11020107.outbound.protection.outlook.com [52.101.169.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA4A285C88;
-	Tue, 17 Mar 2026 04:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F62F356A03;
+	Tue, 17 Mar 2026 04:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.169.107
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773721247; cv=fail; b=X4SSz5s5nuqzU0JJXLhagpyr75a2ImNfLAeSt+DNE5ybyVkIDFoMw/HG1Y3WjfwCg/56Eh8jli+Rw5kvozVCwSr7Q8XPFpLH5t8K7Rspxk6uMIPF+xxf2ccCCY+sAv65YNgLhY0XN7wsp/Hyp+Y2K3XfpDut6aWdCYUiabG8Ot4=
+	t=1773721303; cv=fail; b=prA1AoROx0QBOmNbElK515M+b0IuX4ThgcZdnGvzU6OeKPjtqw8sH9EjqjxTUEfsIYk1jZWrEWNNkBw7NmDsvLGwNvhSXle18e6EFaQOgzGF46GNgv+s/hCFQWeXMa9x2JPv+KBAWcy0HZC19KhAiDDBdZ5SHamX3T+NuaQmAvc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773721247; c=relaxed/simple;
-	bh=t5v8G+YluIR5bAYONe3nzHhmawV/q1Np8gvH3Xj7c1Q=;
+	s=arc-20240116; t=1773721303; c=relaxed/simple;
+	bh=Fgs2ouUWkNbpkoL87eGl9gVn1bNk/HFlfmCiLGSAAXU=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=KR5+waJaT31zXODTVSypAOofC7gpdcA7VUPUq3A3tbfQf9xQTUwRzeAAdt+cE6M2r8sNtkp7ObNxmZfBTDLPB0YxzyAXwPubzfRtopHbfPnjcn+P7EcST8kg7dfx7L9Uh/a/wX0DUYiwiDN5j6F2gCJY7U6AFGLcWfjf0fAiwy4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arctic.de; spf=pass smtp.mailfrom=arctic.de; dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b=IZo8BgiK; arc=fail smtp.client-ip=40.107.149.131
+	 Content-Type:MIME-Version; b=XdS9mXTtQpUwH4L6IHzRvseIu3medgMkYwuo76ySixW8hgl/jdL80InHsEaG9FEih9a9yUNJfLKseUwRzoxNPkzmwac+p/e7x+Nmw4w5ChzjgTz1kUIaX2ZYAHJFr4jx7yO8dUKOFaaiUB9NhJwIlRNULolCTOP6TI3Yw1+6gMY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arctic.de; spf=pass smtp.mailfrom=arctic.de; dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b=e26tLUok; arc=fail smtp.client-ip=52.101.169.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arctic.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arctic.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b="IZo8BgiK"
+	dkim=pass (2048-bit key) header.d=Arctic.de header.i=@Arctic.de header.b="e26tLUok"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y2U71poJ3BXkL7T8TYuuVXEM5jiFuwajTIYzgVaxTYmoysdxtmrr0e7vNItyHyPf+cKRloTvgHjlnWYmXACTQZ2tnyQIw0yADjwLvbht67lc4nAxHK2lqFM8r8QJeu2PVyvS+tEPOT1Fn83cB1gpDiBB1W3U94ADdjvPK5hNF7YQeUl3cawJ/qip3UKttjksxyI8JsuPT8g0GR6DmUd20ApkuN6mLTum00esuaxY7wI69TTrEBBc60QX4FlMsuveq+5JW3Toy4xJmAvuCg61cr9ILlImYYu5HWJxMrmIHhXxmAc6EBT66Rf0uAd4BnTJ0SFuwcfIgiSv+9X/QX7Ssg==
+ b=cQz0JGXUoeWvV20zaZIbwqO/QyYuKoZmr0SO/yBxZMX4HjjfQl3JBsO4lMfOCcSIlE7qoA8JNiWXyd7mEiXg89MC1FdaCoMDE7YJ+LajjpsN8xtmK+tR4mgRLuja2Q6idww+buBrZoJ1c20z1dnLq6xNWdnOtsj3X/cX1P2F7aUTxrtel/6Rcd/LsuqhoPWc9IqMfL8gldfuBtlw7V4JivbPa2hpikuyXqqUoh1r2zdOaibvl6O9PdQQ0P6twLwwdu4OACh6xom0un8DWP1tcd5ueuZNyfeHr6GIZrs0Rua9urMOKM2dJRvIjmnG1nWsNlfiKMNqUeNlBPjn2eeYhQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XpHKoBBWug6EUhR8VVqP2UEcwGchWSzt8K+EZE794UE=;
- b=l2rYm8k/8qlFLZF4UNNm8smfTtK4rKLpa1NR3VF9n7vfhW3+wCabc9y7ecrSi93iLN6LH6/fzao6sRLF+KrnxRis+OvQAupQaC+pIXuOowoA/GkHlvR6GutAK1NEkGnzFSDxqFLf3dXJA+w+tvk1JyEK0G2QLNFoFX9FnDKzY5VE5rmTPUi7U0VIa4JnHF/Z8ku8Nzl886Q95UUvyfxe05rLdLdYQv2uPQYZtI8zcv6G4VCS9kXUo9PawcHExs4RerEiWt5D3GB6J5bIYlJ7T2HmkD35nWgGUg0Lo2jXeK3xZbHQJ/S01cQhcMAB22/8Jmzy4fRCiRWTkmhp7kYBxw==
+ bh=la95DVZZ+swxFONTSaixNQw8O0TF0RkD6xMTqWG88Yc=;
+ b=yo2mDW9fDYhSiayBIsAI1vCY2a3UswEGOeeiMfqYYQMxId3trCIy9+GkzKgjKxpvgP0GH8mq3TjVNKsyVm8JIXHUeeoixFDaoOfkEInLf0YqjwawjA4fKNLn8oLvhyh3NWfMm6diIN+aAKxvPy1EqV5rtPmLqeDXun2LgOg/CXKIeFnZ1eZVNTalGsQUsgS41BcM3enuXWUfNXMMWMQrgyvYUPgTktRsqETKBTuPCtUYqe4I8uk+yhGMnbaE5vaEIsyxQudulf1VfWznWNCznM3R21PPMGhYGE41G4AxjHrofKtGzjSfYHYttJdiZ86wnFRWU3ojjqj5Qamg4yvt7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=arctic.de; dmarc=pass action=none header.from=arctic.de;
  dkim=pass header.d=arctic.de; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Arctic.de;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XpHKoBBWug6EUhR8VVqP2UEcwGchWSzt8K+EZE794UE=;
- b=IZo8BgiKG+hMaVaExcUaT9d6RtvujPvyV37pay6X1b/WqOzYTjR8nuKalgppwJNAXAZzMqsLUfnWbGl/jFRISnlTStmI1UtS74zssGkB6k6VbN/XsQHMJ6yINzs1QbDTVxmTBUW4QaeMFXnRrCqlYCeT6b8kctNVXWXexsb3uRFtuHNal+eI108e27NCaZuxJQBo+K7cTPpwPGhcq0IADIvXFG6bCF2vebTzOlZB/gTVI8FQ8hLuS8CAyPx2gWW1lx98eFLc3JaJFwMzq9Fi/Dp1KN5rZOhcHl3BYBdsyvC8mZ2T5zMfa0eIosXrmku52hmWg6AOlvxDzV8Qod7KFQ==
+ bh=la95DVZZ+swxFONTSaixNQw8O0TF0RkD6xMTqWG88Yc=;
+ b=e26tLUokqI3S8ao/pYIJY+yiAditTsczTG05OVkV3CiDg/rQkOBr+SxRceHgXrdqVebu6ZfqfxtgI2vsK8oTYVFP62xRzCoSXjnvaOlhVsoTmXdocNgWpLkIfA3Pu+VI2L22fzc95qSASXqqQCpZ2oDmRj4eQDfdl2HZpmVVDQSTnl8I4qTFOfUdmWWPkThui78wi7lpaSMBJoff8nUeoCYdITyUUcIta52gSWl4OxQppcHqRt0jxPl4110NxS63Hl/e2GBfMw7lh8U6w41kQQGBPbEmfaROE3JcdULSke6OSutHt7LGmZocq049cstF+i2xLLeeNbmq0N4ThRxYCQ==
 Received: from FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1bf::9)
- by FRYP281MB1995.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:46::8) with
+ by FR3P281MB1758.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:7d::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.27; Tue, 17 Mar
- 2026 04:20:39 +0000
+ 2026 04:21:37 +0000
 Received: from FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
  ([fe80::7eba:ac95:a60d:521c]) by FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
  ([fe80::7eba:ac95:a60d:521c%5]) with mapi id 15.20.9700.024; Tue, 17 Mar 2026
- 04:20:39 +0000
+ 04:21:37 +0000
 From: Aureo Serrano <aureo.serrano@arctic.de>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: =?iso-8859-1?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+To: =?iso-8859-1?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>
+CC: Guenter Roeck <linux@roeck-us.net>, "linux-hwmon@vger.kernel.org"
+	<linux-hwmon@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2] hwmon: add driver for ARCTIC Fan Controller
 Thread-Topic: [PATCH v2] hwmon: add driver for ARCTIC Fan Controller
-Thread-Index: AQHcsturmfE4I1kpGEmwRyayOo/BcLWsr+sAgAVzrwY=
-Date: Tue, 17 Mar 2026 04:20:39 +0000
+Thread-Index: AQHcsturmfE4I1kpGEmwRyayOo/BcLWsu5IAgAVpgQw=
+Date: Tue, 17 Mar 2026 04:21:37 +0000
 Message-ID:
- <FR6P281MB590093105CE0A62A1A69BBFDEF41A@FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM>
+ <FR6P281MB59004A7AB7FC97402E5897A8EF41A@FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM>
 References: <c6d6c506-1407-4676-b730-f9fff595bb75@roeck-us.net>
  <20260313111955.36811-1-aureo.serrano@arctic.de>
- <60ba4d74-5145-4996-a26d-b883ea67dcc9@roeck-us.net>
-In-Reply-To: <60ba4d74-5145-4996-a26d-b883ea67dcc9@roeck-us.net>
+ <a3c4d461-c2b7-451d-b140-6d759da6f30c@t-8ch.de>
+In-Reply-To: <a3c4d461-c2b7-451d-b140-6d759da6f30c@t-8ch.de>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -65,50 +65,50 @@ msip_labels:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=arctic.de;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: FR6P281MB5900:EE_|FRYP281MB1995:EE_
-x-ms-office365-filtering-correlation-id: 62b52aca-0650-417d-c041-08de83dc8bb6
+x-ms-traffictypediagnostic: FR6P281MB5900:EE_|FR3P281MB1758:EE_
+x-ms-office365-filtering-correlation-id: ad7b4fa6-fe9d-4c23-423f-08de83dcae87
 x-ms-exchange-atpmessageproperties: SA
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|38070700021|18002099003|56012099003|22082099003|55112099003;
+ BCL:0;ARA:13230040|366016|376014|1800799024|56012099003|22082099003|18002099003|38070700021|55112099003;
 x-microsoft-antispam-message-info:
- fKIVz+Zom3E1iuxEtL3QcTaf7pLq96RA1aQF/REpyy7Wo8i73Si7zGQSS7T9ht1ZA6UjEUtvMY/DNSueQ0Jpg6EmV70q8KcbhvP50FI9m2hjEYPPQhFRbs1UZ1rHEBwD2vERMNi4CIlju0RJ74P79PUPtttP3+M1ijAQTUniCaRTKj4o4u4U429VJWLeAZ/4xRogQAQbdtSGrWTZ/zeVtduug+LpHyzV0h4gLcNFPeUPPcqsrPR5puWl8i8yd8O3LDKrWmRm7JfMoqlpSxq/KxBh/VuuiD0An4Q1tJa+s6tFzUOf1S9zFnunNd3ziT9Cyj2LH1UXl/Pr0K2aaHJTinsxLKzxZTUALWNqJGKr4myus/W/xMpejwf1isvQD10yGzz9G6Ze26x7MdQrXyNLzRc6kKRyTbIrC15KFp9dOeaB2HDChtFk+eumIoZ7eZ/AQax7a1UJOxNiLIbYJW91gMijQ0Jvee9xOkDlkHtu9f6kqvF+7nTjIoRvM8TduH+w2MOJvoRj8dAzQD6xK7lqpnrDdSPOb8ITIy/Y3hHcce39JqTDRjAeGjNnD7Fd9Xwgv0ltNwsQWgh4kFXVvXvISE0Pm/WzqrFY/z+VVqVlCr2Z9uCHjlXzEXcyhbxTKM6agN4MNSQivDJ3yzDHpTCbrTcoBJ4EREV9IcRvLUETi1ZGhEjtJZ52QVn0EMwlrGKyMZoixGIuD2mqpkgriGHkKm2q1l8oITZXI+2mLi/4oVInQ9BK8pnUEibpdXqxszVRhtm8YUxtG2ECvqMuXTKaqhpiSDXbqJSAKBg4+00qZ7Y=
+ xRx90JQCQGmOLa3N9LtQdPP/dtVuikLccIB1VJwuO/DACDVWiMiXzHU89bbwsTE/KqKZen6MSGex0tOvGqPpYaQ2Meq7e0vrq7bYhiZIvNJYGl5HBto9KKOhfhulgWhGAfC5/6Az+eYgz21eIkiLnTv5gbqG9+f8ajaXNfQJ0tdWYFZ0srdUJxaRrNVbqbkiuMdbW6P72RJvggVTMcPzCr4kMJA9vnfgWYlLze7EvIZTHJwiEofQuiXLFxDbZjtaDHLMvS9p2/Tg45vY05A8SxOkTebHNIH+mlKQWrQHhi0z4Lijz+5gfJeNSM3P5zERG5VZSnjYP+Ew0G9a8v5XKAOaMBNqNGtXEInuEUAX5eXL2OGyBIS8/h7nh0xpwaxkUrl0aRmnuacZCALjvJzhb6kW1C0l7D6efKPYRq/PlVPI+0WMgxb+S7rAAi3rGIXsrjjN+gU6A5g5XvoANb5700bZdQyAaIHuR6+AzZVt9dHb5XPC8tcv6MJ+uy9k/IXDimBjjBwqE6fGe0dPNtiX/1UI8Il30BNSRAz2eVOCftDjagAKDhuqNX0cjtDcfKtgRPwJiEI93J5Z0tB1OYwtZMWRMcfcWhDB6YX+lPDAHrszCABnpudXL2yubEBA83E8gRKmjSUSezpULs50KhBa7OKV9ULg2GedPdWq9usvZaJ6u6aQaQAyxvL03ptlr9l5svmhk3OglWTRHxXq/menb9kDVlkPff8VZ4jSVM0yjYa/PCeLczHMtgpzZSwTtsHWa1sd2TaCdkf+FJ5L9wo8OAAeI99m//wxt+NXMO0Sc1E=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021)(18002099003)(56012099003)(22082099003)(55112099003);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(56012099003)(22082099003)(18002099003)(38070700021)(55112099003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?SeumMlGeKCezzJoJPzi+RTD8vRbb7nc3/BHuu193IMKJfNDpmHFEnlmKEC?=
- =?iso-8859-1?Q?aONW5nc/DFQ9LwwO5SiTn+kknLnVTLH8iUvYLpfqX0WYG2v33MvNBKu8nM?=
- =?iso-8859-1?Q?KuL84iCypCD7PtmZCxiAuLhCJwbForTWenqwakc5PqxASZhO+7vp5nSWY5?=
- =?iso-8859-1?Q?3zIp/juY5sq2+vBBegk2u8q8xwlpZPmqdbxIFbNduth2hTnBAmhLbY8v1X?=
- =?iso-8859-1?Q?s1yKG2nT4r5AAiXU79vf9ZvbFr5n539btvueV390kQxVBxbqmkohCtC+i6?=
- =?iso-8859-1?Q?9H+h/IXmyi+vTkooAtrtRPEItb6P4s951Trh2GPHrv67g/JI9ucUamsNRJ?=
- =?iso-8859-1?Q?LU3gHFvuBWisq5tQqg6aywo1EqHIm7mzSPvOkZwtnFfTtFw/RVCphG1uEU?=
- =?iso-8859-1?Q?/2kTSIbVe4Hcx06sIvN0wmbPul7DCOnjGe0OWXR21U8pSjhB7+A2flvWL+?=
- =?iso-8859-1?Q?LRwPiDTtwGSBISPZrgagDf8rWgFK5fLb98S+HvRo/2YCd08gOleY7HMBmM?=
- =?iso-8859-1?Q?08TpqQqMM+hDuorDDB7lyw/aPFdep/oHoWauQ0RvO5SqA6GLaBMYb9tPNY?=
- =?iso-8859-1?Q?TRphjnwBhiP2/B4Fcsa3ug11i9/XcwSWXY1H2RWPmyoLlNJYocsogVMYpH?=
- =?iso-8859-1?Q?ggK95EyMNT1T06fIs/o63htFPMigK76vrBECQGuLugoKKZ2+d894kzfwRp?=
- =?iso-8859-1?Q?I/di6cpDQ7nGT2rNleCGW5xctEi2Qw4G4hfYd18O6wHc+yVYxrm98LbbKi?=
- =?iso-8859-1?Q?DW5uCXGSBs36L86Lri1yWXG6+O1muXPWxFqGIN4siOlvMfbK0ZUcesMgIN?=
- =?iso-8859-1?Q?OPLokSlJfPLOfQQHO7dQKBBv5mO9245iBQqRNF+Uf15712WH6tN0j838Ih?=
- =?iso-8859-1?Q?6ZdEqsDsoTBaQIafiT9tgCMS6yii9BWFO8JnpPSLPIKSSl4lv20iMx7rUh?=
- =?iso-8859-1?Q?6wMpFjHwflghizKEUrqlNLrSU+FhJTY6woFrMLff63UJPE3noo/YT6/ukh?=
- =?iso-8859-1?Q?Rg7F+CTmAthZhSHg1Nvx3HfmXKipy0163OZI/AG43FCNFTU+FzTegbkVa9?=
- =?iso-8859-1?Q?fi55zCYoZ3QhnWgRLP1eL17jYYFqxo2wqeLt6j8mmtOXzl5wTQvuZ/dMOJ?=
- =?iso-8859-1?Q?75ohpGZovlh3EJtr0YipvSBIITKy9zV3r2VoM9VLAd2da/5uBFJwY5fG8l?=
- =?iso-8859-1?Q?xBQ1+S8FNINEWYM7+m92qczXHthIOjwVokC6yaWoMObdBOoUjbi8n3VLg1?=
- =?iso-8859-1?Q?cOPm85D6y9/Qv7HxDe4kpBtH6VcmhB34mc5o/quOXO/DEbG2Uh4eati//X?=
- =?iso-8859-1?Q?r2GbxHzVVbKn/4vXcvrWuP70FHu1ObWb/tGqMTbx6rIBpkjeb9uUAmc6cj?=
- =?iso-8859-1?Q?r8HjiXhMVokw7tyLwoC5nPFe3SD5eEmMoYZlFRbL4T5s4yiSFwis8+3TNR?=
- =?iso-8859-1?Q?PNS2XgvFAJVskDjiUHDJ3RacTQLbyx8YZOcJMMO4dazaaQCCGPs1UndT8/?=
- =?iso-8859-1?Q?SHKkUscTgOGdk8/6WmlK1frwzldrl7qYBdNoSOFSt3HUXL8FgHKOjLiqsC?=
- =?iso-8859-1?Q?h8nIjlp+COBR6l/J0W0SyqPtTYlnwUt3Qw1XYATaxS8RvY47zFJ4KS+vz4?=
- =?iso-8859-1?Q?JRfkY5B2zkqpFuLg6ozeYcZ0KNYxaUmJMjeFARYMRRpvXMn5h7wIJwyszJ?=
- =?iso-8859-1?Q?B2E1PlL+fIsci1mrLRyVUzl9fGXfZQkmC0mH3joSZ3crHDn6CSh/lJR0W5?=
- =?iso-8859-1?Q?hZhAunPK1xJw1l1sWeWtDa7ua/Ax85m74dJnoQz5YcVrjNceNCwrQhzc1f?=
- =?iso-8859-1?Q?BgY2LVWTKA=3D=3D?=
+ =?iso-8859-1?Q?zJtbeNjSEAGMXMEZp2iwmzaSnHD240NcMkljD2dp+tFwbeBeQOVD0IMYQo?=
+ =?iso-8859-1?Q?jBqX/YXMPZRy77tUfMKpZXBM0LCr2Mz4rsSN9ho6Ku2uH2yLSDjmdkttlh?=
+ =?iso-8859-1?Q?frlquT88gZ9IEueJld4aEP/9K/Tlm9re2vAxA0nGVymT1MeSSxYHtvss1B?=
+ =?iso-8859-1?Q?XVuTvWYaK/knjQCSv3WEsQehU18NUmos/97uhnD/kAlx6ez2kWSEwOJc3Q?=
+ =?iso-8859-1?Q?ZNsP4X74CN9McAeEVQH9fPXk6W5xdTrX/ZxaaosbOiDujbWItGqdXatpHY?=
+ =?iso-8859-1?Q?DEW9ljgfEpBrQ1UCW6jsbKn2rNXyNdD6MdyOQy2gB0+MqEOYw9gS8u3dCI?=
+ =?iso-8859-1?Q?GonAEUcokiP+QrpBwxcYcXCP6H5HhnrHphaEKjqR0nSQiAaFreoLUz/hn/?=
+ =?iso-8859-1?Q?/EapfvKAbpjnv22HYZTJej3bJWvarF88ay4xcpmIfk53BwU4gi7B2w6gvs?=
+ =?iso-8859-1?Q?mXQG83Sn5CfofVw44gYp7DZSt0EVpCE3XN9eORra82MDqkZpPQIoh27aKu?=
+ =?iso-8859-1?Q?6fe6KbeI9nE5NbyjmhRQXcwjDOQi2k9lMwHZ+ZlKIHCSuDVyRLLVr4uQJD?=
+ =?iso-8859-1?Q?n75j9pxazqN7A7VINxTfwgqlKfhsWhcRulagLeCk981HsX2zrEr9qRHuES?=
+ =?iso-8859-1?Q?lSIl2x4Zh1oqy0URK+K68+IjkV65h4DoGHqH6U7K1ginZ2DUrw66kYU/hI?=
+ =?iso-8859-1?Q?oAM7amiekdU0KVonmEZQ4Fip34Mj336v66QyYDKCXo/7ag9Lj72yQV1Czq?=
+ =?iso-8859-1?Q?dL3GgCmSJDf5HWfPI1ULszgnRNqa5sKhlIH47/ix7YyGS58gzDfLp6vuz6?=
+ =?iso-8859-1?Q?A6O+iDT3Za8I1hdVahpC2jdtXBWmcNjyzBJtcuvlwj0qo9d0A/jCrRifke?=
+ =?iso-8859-1?Q?RvC4tbWOg5Xua7fDVzSZ/ehrQSwoGRix8xtbgRAeq1RKUibR/4FoiiJY2z?=
+ =?iso-8859-1?Q?6wvPbmTfD9DOvE5j3Vad4ynuq35d+KinbP3CrYUMU7SAUZ1s/pT3r57C5s?=
+ =?iso-8859-1?Q?jo2R+qTe2QyAQJilgcuPV0ByusHxUjkuuIzl6HcrZNFlR1KeHv97SqOnaD?=
+ =?iso-8859-1?Q?E7VSthj02LAAETuRnbHBPqU5ceLS8K43Sb+nfwHHe6uyNCnkJHzHqdAemq?=
+ =?iso-8859-1?Q?5iMS7n2kt06/QdsyPIuaalnGYJSIx163RtQoXt/d/7U+nMNKaozMVhgVyb?=
+ =?iso-8859-1?Q?St+nDjLwk9yzmEBJnG20JiUVw+J9HCBoYNwV1vNwsneK1FXCmmLegCiDkn?=
+ =?iso-8859-1?Q?UYQVYFzZptY/WlKeU1Gr/QjSussP9QP0jzVX4sroaCafDKjiUsxvlJr3cH?=
+ =?iso-8859-1?Q?7GCvDnJBVsHk8mAfQha+2WXmsF+sVuaByrjl0vdkQ8n7JdMR96p01x/qSs?=
+ =?iso-8859-1?Q?73Flw1ZcIbfJ4OIdNuUk7nObGPvSvchFRHonTZCNzFd/QMlHuQ1xb1y+f8?=
+ =?iso-8859-1?Q?gRJsxK9F4WKOj00Pjcdx0qPWa7YYMsPklsrWjWgDZQvh3WrkXDDwlw4Jl1?=
+ =?iso-8859-1?Q?vkmT1gDwhV7Yj0Mg416CHgmzhvvMischeo/ed/7vjHK1U5EYhohex0ZiRY?=
+ =?iso-8859-1?Q?IwrOqssRkrvRVHV/lSBmKu5NzjDvxxAnprkUnZk6xClROVTAKXuqQlpqK8?=
+ =?iso-8859-1?Q?2jMcyZi05kSw7zcbbF1JqfSS0tLUbfUfpAN3ntJ28/grfnctCtccmZmIdj?=
+ =?iso-8859-1?Q?GGmaxlbTgQx87Cci6BGqzLl+RWNwkAmRUomjAWcC5JzFcrOIRz/TUB5dQ8?=
+ =?iso-8859-1?Q?6Ef+rs6SV1t8gjzL9iICz9xOaLpIACnWSCDLlNc/l77ZL75ao1qqk0TNG/?=
+ =?iso-8859-1?Q?rXH2B8hC6Q=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -120,55 +120,37 @@ MIME-Version: 1.0
 X-OriginatorOrg: Arctic.de
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: FR6P281MB5900.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62b52aca-0650-417d-c041-08de83dc8bb6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2026 04:20:39.3118
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad7b4fa6-fe9d-4c23-423f-08de83dcae87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2026 04:21:37.6744
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 51cc2c5f-af21-4667-81ec-d88d36e264bb
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wRSQLiGROdaz5lYBnqkkETJIt11B2Wc4kTh+vofKGvd7Xsnahp+aaB8dgt0P4Zs2GZkPwm4nHkK68fz5jkxs8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FRYP281MB1995
+X-MS-Exchange-CrossTenant-userprincipalname: 2PwTmB27RU0p9TCfXva5sfzBLptfofwdAdzj/q5opRki312C23mIcbn+fC+q9/QzEFEU3Wr2RRFV6oJZSroouA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR3P281MB1758
 
-On 2026-03-13 09:59:56-0700, Guenter Roeck wrote:=0A=
-> > +	buf =3D kmalloc(ARCTIC_REPORT_LEN, GFP_KERNEL);=0A=
-> > +	if (!buf)=0A=
-> > +		return -ENOMEM;=0A=
+On 2026-03-13 18:41:38+0100, Thomas Wei=DFschuh wrote:=0A=
+> > +#define ARCTIC_ACK_TIMEOUT_MS	1000=0A=
 >=0A=
-> The second problem does not exist since the hwmon core serializes sysfs=
+> One second is a very long time. How long does the device take in=0A=
+> practice?=0A=
 =0A=
-> attribute accesses, and a single once-allocated buffer would be sufficien=
-t=0A=
-> for the same reason.=0A=
+Measured over 500 iterations: min ~32 ms, average ~100 ms, max ~563 ms.=0A=
+The latency is a characteristic of the device firmware and cannot be=0A=
+changed at this stage. I can change ARCTIC_ACK_TIMEOUT_MS from 1000 to 700.=
 =0A=
-Moved the buffer into the struct (u8 buf[ARCTIC_REPORT_LEN]), allocated=0A=
-once via devm_kzalloc with the rest of the struct. Per-write kmalloc/kfree=
+Does it work for you?=0A=
 =0A=
-removed. Does that match what you had in mind?=0A=
-=0A=
-> > +	{=0A=
-> > +		guard(mutex)(&priv->lock);=0A=
-> >=0A=
-> The { } around the guard() are unnecessary, both here and elsewhere in=0A=
-> the code.=0A=
+> > +	memset(buf + 11, 0, ARCTIC_REPORT_LEN - 11);=0A=
 >=0A=
-> If the guard() is added is because the call is from an event handler,=0A=
-> use hwmon_lock() and hwmon_unlock() to serialize accesses.=0A=
+> The magic '11' should be '1 + ARCTIC_NUM_FANS'.=0A=
+> Or even easier, use kzalloc() above.=0A=
 =0A=
-Braces removed. arctic_fan_parse_report() now uses hwmon_lock()/=0A=
-hwmon_unlock() as suggested.=0A=
+Since the buffer is now struct-embedded and devm_kzalloc zeroes the struct=
 =0A=
-One consequence worth checking: since read and write callbacks are already=
+at allocation, bytes 11-31 are always zero and the memset is not needed at=
 =0A=
-invoked with the hwmon core lock held, keeping a separate private mutex=0A=
-alongside hwmon_lock() would protect the same data with two different locks=
-.=0A=
-I removed the private mutex entirely instead of converting it with=0A=
-devm_mutex_init(). Is that the right conclusion, or would you prefer keepin=
-g=0A=
-the mutex?=0A=
+all. This also addresses the suggestion from another reviewer to use a=0A=
+single once-allocated buffer rather than allocating per write. Hope that is=
 =0A=
-> > +	mutex_init(&priv->lock);=0A=
->=0A=
-> Use devm_mutex_init().=0A=
-=0A=
-Addressed as described above.=0A=
+acceptable.=
