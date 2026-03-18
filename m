@@ -1,68 +1,66 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA6F355F4A
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 17:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8683603FB
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 18:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773856154; cv=none; b=rc4h7mHjqw5wmqBbsym727z5c1K2Qksju2DPgfOHT+lzvm+3ugl03yd2DGSl7A6nCfVrDTycoekL7ZraoywRpI0zeGQD5VpJ2w2zKkoze71nOw1UfUiGdJnqPOWyWsUZ7sF7EhC4a4/4Uk3jwLw6S2PDJn4fqVAh/BbEV3UbmkM=
+	t=1773857498; cv=none; b=NY5R2E16me0zNBtDI+tv2W0EiAuosofYCLAH+Gqi+6p02DE3Dj+88DTdvofbsfftRs0qE+r9A9JwN7s8FBO4Zop/3hcPcVdGi88SMwQwKx/Bh+I+B1NuP36u+zTz/c/TM9qn/hEiKm1RqWMSZpJDbIfUMIWdu/unRr0gKpomKOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773856154; c=relaxed/simple;
-	bh=7foqOo4PO1+dY1J9snRPo3pULD+nFZ65/Jc53Tf6BUE=;
+	s=arc-20240116; t=1773857498; c=relaxed/simple;
+	bh=qNG7XEKNJ3eK/WSUNROIvI5dSg1+nMT5Pv3rsCFWPjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nvCk2Skheg6TRYRoeiyZz9swu5jmlYaCiZhGJmUJykoghriXqPoyLI1ByvWQLvSvab6vUAWO87q0x+VceCWLYjMLMTCVfBTDTolMuimlg9ZCge/vkknuak7L2ZCcax9BmHkCNZb+xdVJlPDpgXZfbRpOqf+ZiCDtCoh4tOiNiJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2pRfzic; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=CnjjK3bjT85a7N8MSX+Z2hCFKSU/ig6eM8JqgOxvO+ZVdWR0/nUed4/ABlCoezNsLTxDz99LO+M7Nc67QNEU2XrrvqMrEyazyPDd6RfT1/n65a5eGxlUGHFrfsGCcOaCixIyiiufLGcXaW++CGdlDYmyRILqlWNON+6oW9C/EKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AJsKXQvo; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2pRfzic"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2aecefc7503so438165ad.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AJsKXQvo"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35bb863824fso133380a91.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 11:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773856152; x=1774460952; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773857497; x=1774462297; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kweWB3MHB0sQFqv3t56LlX9dg8y07f5j3ZR4fhpqzGk=;
-        b=R2pRfzicrEth/rmvQIt78s2xyxoRCQd63voZ+mMyEJnGU9WX7jxOySDIWfDcvm0JtZ
-         wRgZ5vbDgCfLaw9MzbBTZWYMB+wBZvblhyZvsIl+OUFCBowxwp5I8A/lUphHO619vqfi
-         S4Dnuk+2wTmhOiUsbmRDbppKWK7e6Vn61jpPNEJBnPd313pbyelMdPpv5MVpZr5V45DC
-         QMbZNzwVohf/ehlo/yI8wcpqdUZH98eomckDA0+jkgMsECYAG9hXceZhQis2pgofskEz
-         X776OXl+WZdaiZuLZVPiizbjnHuSh9SQTaVV4hv57DDhj2EkBj9mSFA0ELpJqLPNAyj6
-         CIlQ==
+        bh=U1ETtoeekXbdJ83n8y2Hf9hAjdE8pezoMIdxEKwj+qs=;
+        b=AJsKXQvo77xKwUG0P0wA1OAbKLwOmtEntLTo2D6aqfMHMwC5Kdxg82FAe4cCUaTsu2
+         6BFIHcQVL6JqgN9fNyHFt2fCW+BGcc17DYyQAvqR/ee+u60+R/XAwWzqfNkPwgPymj+9
+         JXQ/clJoUTCy+Bb2uj9PQ8ULL9yLln12bitm0iBgDLVvXtLjbj387OAoDTIoOgqMY6Cc
+         N9qyNEue0GREJm3mc0vL9Ka9v67J+Uy32oDIStLiOIprqOdVhc6ALlW0IbU9eMDKsdkU
+         ZXb4s6aHjjGFXFCBWMxGJBDVNLePLruCsgDVnDd0TPXk9lnI94+6nWwfqyi86X3AXJAC
+         ldag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773856152; x=1774460952;
+        d=1e100.net; s=20251104; t=1773857497; x=1774462297;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kweWB3MHB0sQFqv3t56LlX9dg8y07f5j3ZR4fhpqzGk=;
-        b=MSNo9IWtUXzcZ8U7C1lyVpzwjxyNQX1TM9MQdDoWnbmx3bCpoctEk5uGv4K2+CAXmB
-         wU+YD6JqcNQcUt01Fa3/o5tyhY3QTpWo8HNd81CuGSlEqSCRhtL9OkLy55jbVfcWb3Z8
-         8jzaODaEuyw6g/eti9tezla/L0g7saeEEATfw/z0wdrUEgNkHOUrUbqBLVD9XrmlGLnq
-         77Rdr2Xj/AnI36kuvmdeGJbqQkDS1eM2iNkFPopawywJ6UaN9oVI+RixuD2qTyC9kXfv
-         NJ7WsX2Tuw0hpmd4NAIgnHOzG4F4be/qwNq3WK0jrBuU8rHBnw0RTgnmi1aUHbEZWqx3
-         C07Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUh3nmA/wq0T19OsS1cpUsE8qTwCkv865pGXatX9hnWeD2C3bb7hVPJix3tC134POJcQSqKJuaStHhrGg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJCuHJIkdeAYxV86TluHjTb+hztAWKhqnfms6lJQZKyQDlfWLj
-	IaOcaGbO9aRGqs+tol1NlHbwZuTT6WzzP6YHQxIA8CJ2tCULm4xTEiZT
-X-Gm-Gg: ATEYQzyCynN1a1XoH3XFC87Oit7Bi/dbeU9BuhThf/llSmjumlOMr34kRSCcn4S1qIt
-	v/qN3UHBXAkgdseSCHt7sba0TJKAaU303fLgo1crTBIewQTVNKAKf3NH0ekEKn2nEkllI+2g68L
-	FHK8L7uq+URyzma4CoZB83tgd/c9pgZ3FAIVLrMeADDw9pMCSuzdGewyElm/+8EmZkpi+Tktpg9
-	7R3dhi/5GOx9//Vce0u6Gj436LSQav6AYGuPLoWCTJFnqntRIMnt2Joj1b3ZFbY2p4c0iDHpWAE
-	DQZbGiWjVH/q4SbOfRUYFv0L9gEJUBUCNPEqDfNoIT+08Enb3Y8SvakPXymlon6kTOOR2zYp2x+
-	JSt2mFLzvxP4AsBeLfZPpqxHS+Gmm8CinstSMz+bQLjVoOn7aIbVH7eli4qvxvMk0HzSTYYK1DX
-	yXQjmtWilaHlBfSNQUOfNqlNf4TgcfTuoJJko20ND1AG2jaMDzGfvn6XXTnU2lNCqR+gNgb5R+8
-	z+6if/Bu14=
-X-Received: by 2002:a17:903:1a67:b0:2b0:5a4c:726a with SMTP id d9443c01a7336-2b06e41afc9mr40969735ad.43.1773856152438;
-        Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
+        bh=U1ETtoeekXbdJ83n8y2Hf9hAjdE8pezoMIdxEKwj+qs=;
+        b=egHivyh+22HCPY/0gHAycB6LWWsQkeM7CC9bJqFUYilCVMuNZg/IXOz3ACJg4OBZIu
+         /kAXo0Hl16O5VwmIHN7o0LT5xhHGggAd38LHYfDfCqkfDiCdiG9NvD2EMeXq9g/cyC3C
+         95mJT6aMsBO9BMIofXk97ptreKl7ALPPD3WDV4cvmYGqEQNHv6xmuBBO6XGJtF6Uf28D
+         OA26jgb9TuHmjj5x3zPoHroAT9xAQjX3QwP3532Ca5bi2Zc5dq4Od3yF8anCdru0lgb5
+         /H9p/axZEK0btPoXwHPkP3PHCXXz9KMhnyB0tTKkhdPUTBDG/ClX7ABIO4wlL6CgUqf0
+         3x4g==
+X-Gm-Message-State: AOJu0YwhgxnhCU/4eoT5HAr1yIJCVvaG9hNfFoExxzAMFmWSHouOmcaZ
+	rMBpMsYQU5Mrps2zHMNq1S+HlYT7rpxcSqMKYShjDrLDnYZFiKjm/2KG
+X-Gm-Gg: ATEYQzwSNf3IqkKXRFtuORd0bcbIQl6YcFIBTkW+a4Gd2bbodT158+8/VpzLWbcvKRl
+	icF0D/gNPYiV8aemosLTmBV9da1rZB1YUaK5PQ7iqZW3i4Uzicnxrh+BzZ9qnADX1tr57c6Ve6T
+	FU9nwT00pifGKPIGyrBVQqF998NP8lGy0soBiYyN3AYhqSpIlai0XNyc5GDPt6tstf8fvUclK6v
+	rkbvaurAES6uMRFv5oz0OZfVrgNTbR4T9hhEaAZ2W6MODQct4p0so1RinC3a9XLVD/eK31kWWvf
+	1sn8NllJ/IwfdN/22pmy4owyRNzo8ZENKO0lDR/UQFRU/aUqZS7fv8h7ilP3YKcF75P51pslmRj
+	TV5E75l9b4i8dFxJ3JLJGJDykUEbqhWJ2xiekCQIH+/Y4O6OwK82BezQpRVK3JRjvwhqsfJb82d
+	rxOgqNEvQ0mK5csihKUAjCO5zg3rWjgwTY9t6iPtk1UzD1FmmxqDVHFfzRjxBn8B14cTcDXyM8
+X-Received: by 2002:a17:90b:2ec4:b0:35b:9777:8bae with SMTP id 98e67ed59e1d1-35bb9f2e162mr3712391a91.21.1773857496834;
+        Wed, 18 Mar 2026 11:11:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e603937sm34123755ad.57.2026.03.18.10.49.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc6310b72sm262365a91.13.2026.03.18.11.11.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
+        Wed, 18 Mar 2026 11:11:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f6101afc-b1df-4f6d-9e32-09b09e17afa9@roeck-us.net>
-Date: Wed, 18 Mar 2026 10:49:10 -0700
+Message-ID: <5ef86cbf-63d4-4ed6-8559-956b949d7952@roeck-us.net>
+Date: Wed, 18 Mar 2026 11:11:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,20 +68,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/isl68137) Add support for Renesas
- RAA228942 and RAA228943
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Dawei Liu <dawei.liu.jy@renesas.com>, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, geert+renesas@glider.be, magnus.damm@gmail.com,
- grant.peltier.jg@renesas.com, linda.xin.jg@renesas.com, tabreztalks@gmail.com
-References: <20260316053541.3903-1-dawei.liu.jy@renesas.com>
- <20260318021921.75-1-dawei.liu.jy@renesas.com>
- <20260318021921.75-3-dawei.liu.jy@renesas.com>
- <9ec35dce-5f6a-454a-9ab5-e61b22796325@roeck-us.net>
- <20260318-elite-archetypal-porcupine-a5d2a5@quoll>
+Subject: Re: [PATCH 0/2] hwmon: pmbus: Add support for mpm3695-20 and
+ mpm3690s-15
+To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, paweldembicki@gmail.com,
+ carl.lee@amd.com, ythsu0511@gmail.com
+Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, wyx137120466@gmail.com
+References: <0111019d0057a612-70585e60-1d6a-460c-8fae-d5bd16fc5e4f-000000@us-west-1.amazonses.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -129,37 +121,26 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260318-elite-archetypal-porcupine-a5d2a5@quoll>
+In-Reply-To: <0111019d0057a612-70585e60-1d6a-460c-8fae-d5bd16fc5e4f-000000@us-west-1.amazonses.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/18/26 01:25, Krzysztof Kozlowski wrote:
-> On Tue, Mar 17, 2026 at 10:23:57PM -0700, Guenter Roeck wrote:
->> On 3/17/26 19:19, Dawei Liu wrote:
->>> Both RAA228942 and RAA228943 are digital dual-output 16-Phase
->>> (X+Y <= 16) PWM controllers. They are PMBus command compatible
->>> with the RAA228228/RAA228244/RAA228246 family and use the same
->>> 2-rail non-TC driver configuration.
->>>
->>> Signed-off-by: Dawei Liu <dawei.liu.jy@renesas.com>
->>
->> For my reference:
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->>
->> Note that technically the devicetree patch should come first,
->> and I can not apply this and the next patch because you dropped
->> Krzysztof's Acked-by: tag from that patch.
+On 3/18/26 02:47, Yuxi Wang wrote:
+> Add support for mpm3695-20 and mpm3690s-15 in mpq8785 driver.
 > 
-> Was there an Ack? I see only one reply from me, but maybe something is
-> lost because entire posting is completely mixed up (v2 being part of v1)
-> so it all appears mixed in my inbox.
+> Yuxi Wang (2):
+>    dt-bindings: hwmon: pmbus: mpq8785: add mpm3695-20 and mpm3690s-15
+>      support
+>    hwmon: pmbus: mpq8785: add support for mpm3695-20 and mpm3690s-15
 > 
+>   .../devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml   |  2 ++
+>   drivers/hwmon/pmbus/mpq8785.c                          | 10 +++++++++-
+>   2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+In addition to my other comments, please also check AI review feedback at
 
-My sincere apologies. No, there wasn't. Not a good excuse, but I got confused
-with another submission.
+https://sashiko.dev/#/patchset/20260318094635.1873-1-Yuxi.Wang%40monolithicpower.com
 
-Sorry for that.
-
+Thanks,
 Guenter
 
