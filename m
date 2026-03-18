@@ -1,77 +1,82 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1441D1C861A
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 00:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38D81A9F83
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 01:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773793485; cv=none; b=Mrpd6mFPuGIuae2BySMfIGhIZjgP1ESIeIbaMmP8JoXGz36/URXEv7fs08nF9FwG7c+D3283ejKf7OOicNV5Oej6njyQFlOkvJ+CBQOU8xzk6m5PUix6pEQs/lwYd82TA78DU5p082F/ojf56SjfWotB6vronsfGoU8wHhibCx0=
+	t=1773796653; cv=none; b=uCdGDqANK4NsVaaeBAKdshzZPZQbpRPtuoLltPKxwjmQ3fFa09unpay3F9Nro7CpyO0AWp1hdBDXaaQTkSSexMZZPL74BVioKonw3dfyuW08BF6pxwawHZyQuobvuhUpyxu0ABZNquggOL4ZOZRirwP3+KyO8Uz4HYgxBRq3YLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773793485; c=relaxed/simple;
-	bh=BJMZWrNCDJOAf2aAFr/XQ6xBsCH6FtGgXXML5AlTylY=;
+	s=arc-20240116; t=1773796653; c=relaxed/simple;
+	bh=qaP4m+T9lFFf2Azbea1AENl/mdX/1LAZPs+tSkCDJ/g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rGqWojKe7Va+WFLRTDw/LNZ4wihY6T/qwkAXfsg3H0Oco7w1Xp6pOYutS49wJLOpqKuognnPIg22lw5CE0SEFC9weqYxYZh+ognyYYj97XFQWDTUwr2EO2oWbKLsobd6HDpmGzZUEmNNTt2CZl7vtTz2M6It9a8A54O7kBFZpho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnhLsGxk; arc=none smtp.client-ip=74.125.82.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=lTWw743FxPlPVjesHmVPzkSg4BPa9KLvuBmcab5Y0kx25I/Cs34ej6fZxr90/1faeP2Umv380pn//9fZtSdHDUM9KKWjVEuS6zH5MLEO8KFZwh61rOI+CctuqlZhy/g22PLftfKnR7M+/IFGLUJOa7p5b+63RI0puO+6os1l7kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OH2qB+/F; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnhLsGxk"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-128d2e3074fso8218522c88.0
-        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 17:24:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OH2qB+/F"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82418b0178cso3760751b3a.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2026 18:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773793482; x=1774398282; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773796649; x=1774401449; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vI/VxlQl8DoWuexYKNHc2aHn9vXIlPG4hBbbhQms7B0=;
-        b=WnhLsGxkcUGWomtNkcXLL0lgvdP8x+XGD6VX559HIoAhKrjrzxgdei9CV2p/effWC8
-         2LmUzh20hJ/syyozD20NHUsC3ibztA7GcTYtnET6TEuhzTQF3t6z1WoxmLRUrFSTgdCr
-         wRRK+lFygD0kevhd2tL05/VK8guApMb9HRrbh2m+anmty2SEsTVQBghKkqX1T7RAf9IT
-         mTjwa916yEZigdt2zgSd8d+Bj4iL+3cLHSpqp55P7Zrahbx4Z++db/Xzg4kiOpgRwcZf
-         2Z9FoihA26mFUJigMnekFTJax9BZZ4WrQozXO5Kj5QpzvL7aiyL0wxRs0ZbwrBse6alH
-         euWg==
+        bh=924gw6VEmoi/laUZsaAue8hvyEOMwp2IvbijfhO4bqI=;
+        b=OH2qB+/FVLge/iIt1mr0/W6SvmjwFF5F1SOGiAvnoEdl9AGjFuKgI8z9vG2lTYup6f
+         EbRS5gPYy6l9uy8e7WSXmoigE9swFuGOSiSbkD4p/3scFpFLl+4gXKHewm/TkS5gOIX2
+         eMCppCcMNKWXeyQ/3JgDG3D5vFBs6IGX1fojbP8fqPT+RaS60ISXRpVR++qGaj3hV91u
+         8AWyITjuy8RmbgBL8q9Cw9t2w9AUPkLWH6Z+kVp6w99Cn+2/ji0ZHdEeYEQYQtgOFKU5
+         5VKyVIuGVWgTArlXkPq1xxzPnVmlh/QOZpWYaxx4tGhxYkq94pKb/Djifmgv5YIRg0wf
+         JrjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773793482; x=1774398282;
+        d=1e100.net; s=20251104; t=1773796649; x=1774401449;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vI/VxlQl8DoWuexYKNHc2aHn9vXIlPG4hBbbhQms7B0=;
-        b=QTiIoAghdzvHV30rrLoZ0Wp+80HfwV1vIfEThZ5EGtZazOFhA9uRBAu+AOJPuLL+6/
-         1cBF1PC2QGsI90y5DbqkVRy+fqnRAWZchE5EGQkTqucwfgrMJXvz4HkGrM5cFi21VIz8
-         9NKRY4Vj4hyQxeVaui1oPMg8Y4XfP2ifVoWbcYmiJD9FS4T5DEA3Mp7kaQgFS7GX0rXa
-         W28VLVVbzKB50TMFD7TG6lfcG6A9WgzCULLax4qgyUMjUITy20gatwwvQCzz29lOAkh5
-         bE4tn+jCPNevm1oYr4NaUzMXWq7rGkYDeaP2d7RXG+x18QkebETElQwV4M28VoqMCdCl
-         SM7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXNOyIz2jof/hniWgDMxz/UERC0g02rTOQYasHARypZ1S4k7e/eHnQq5CaleNF1u8/Hypj1n4xv05nb4Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQrp2vasmWThaZYAxy6IRs/ZtguljIyTcWu6kbXFfT0Y5/BIZG
-	Q5l2PtJZCMnYmeExih9SkCuFqzglbp4WVGfVBZ8+mwbntZAGh219hwrQ
-X-Gm-Gg: ATEYQzzKQmy0zYUkloEjbg68WnC+ZXtO8saNLd2371VBUfREA5C1RUJcW8o3FvLBIbn
-	rkqrqaqsKZDQuy9EyNrKC4FJ0toqyLzU5NdtptkRqMMQfG+p4jeoNfkJPU7yApsxTeU0T6zWjr7
-	O7Vx7VV6RwssH/z2XCxmi/i32jdEThK4J04+LD6qpbfZPN/zYqSn6XQFz6afLrHdVDtTpjh9Gpn
-	4NL/lRgkVxuX+G7dySbOduLQl1VE71RpNm258yR3z5llhoaE+UbKV6mmLbv5gtrqtzT58jaqRKq
-	rPg5xT+/aYZkF1WQBNiGlZvVHxJm3u8MPOXiZVB2wqpyAdZeMIWVg6G6eELQg/2TUUEh4VJtcRq
-	l/iDYOhLjfeUz8pYGA7gWwjUjbFCzbys516HmQsxUTibyIqp0LpeNYHzeqchncQrvFfpjig1KYh
-	dyiweAy6Fv7aJxzq+ftdXLwoZntO7CMEkqTkFR
-X-Received: by 2002:a05:7022:4197:b0:128:ea82:5146 with SMTP id a92af1059eb24-129a7146f17mr746341c88.24.1773793481906;
-        Tue, 17 Mar 2026 17:24:41 -0700 (PDT)
+        bh=924gw6VEmoi/laUZsaAue8hvyEOMwp2IvbijfhO4bqI=;
+        b=aXP9eGe/t1zVsRxXb9HKZN5ky6PCPmAIo89+XbvXTUf6Pb9wz6Y/Ut3SjVwIgPTkrJ
+         pz7Ceffa2SL0CK5RxFE5SOQXel81tcqQIMXz5X+FJgHC40FIw/BtAPQipgULRztcuAZ9
+         aYBrmPwBjOQxUfpDV2IiWpETDbmK79Ba7Z6CVgwEOdZx+QvT1grlNScbFW8OfGjgfrNW
+         cc6/LfUHTi6cG/wjIgP5t7F9vUVAB8UNlJqwAxr7y806gON2zQouNfFAXDvEAOAWXr6H
+         lC56DajT8LYqtxvHH7uf8jF1I0QvE7CYnOdIH+5f2oXapaJ5h/pu2z2G4sLH9hnihp9Q
+         z8Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9db+gGy4shktvkVmO+uISkt46o0dFekg9LiFMD/S5DZpmnnDWhPxnMd66hsgAUX9HkhkJiklrQs8upA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6X8TJMwd4ONLgtJENHWnB/SxgfZdmz1/T38FMdF9xF5p05ywM
+	Nxw2QRVy1yJXGmOc5vd4MvCaM9CBnPVZL+ZTI8RAiAff2V6uSimDCnul
+X-Gm-Gg: ATEYQzzjYnQ8gRmTWseHo859vJAWaojlGqFBKTTA/Pz9aL7AyQe+e82MbZ0lhAlmgJ3
+	7otXkwHmCGb+1+vUrK3Osm+NBPJtuLBLDjQSVWP0lTZzd7+oxVeI/r6vtJbh+6W1UkIi81LiNmd
+	jdxlN0ASknCu1MAbi+K9Zv4cDWNBG2nXR6+oWp+jILRYoM5pzjQYLqmqp9F0e807ILgUin9Am0Z
+	I5jdM592Xgat2PSKK2cCwSn2/6N0GtkvqKk5fmplr9SAo09jcuz5zxo47wae04PWRJv5uxq/O3M
+	OJzZVNpO+ocAq2N6qwtrHgpvevsc4vmGBVP+8mqumyP6ATHOEkTJBdvue04ybrHQsBizQhAE9ct
+	xeVoqxENvInzL+54Lg0wjpzZnQtyVH/MXMNu/ngtgqFYZasHRHUIhbW69uu6bktS6LPB/jvoYa7
+	IpytrjuSW1GgGt1tY12P6inXG6rZyDzWO5TqE66vx0Vt+26t4=
+X-Received: by 2002:a05:6a00:2985:b0:81e:81fb:b392 with SMTP id d2e1a72fcca58-82a6ac92ef3mr1190224b3a.11.1773796648501;
+        Tue, 17 Mar 2026 18:17:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e53e616csm1564206eec.13.2026.03.17.17.24.40
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6b541cafsm731907b3a.12.2026.03.17.18.17.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2026 17:24:41 -0700 (PDT)
+        Tue, 17 Mar 2026 18:17:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 17 Mar 2026 17:24:40 -0700
+Date: Tue, 17 Mar 2026 18:17:26 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Marius Cristea <marius.cristea@microchip.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+To: Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc: linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] hwmon: temperature: add support for EMC1812
-Message-ID: <f1e55e6e-a374-4b97-b1f3-706d627ebab5@roeck-us.net>
-References: <20260310-hw_mon-emc1812-v8-0-bc155727e0d2@microchip.com>
- <20260310-hw_mon-emc1812-v8-2-bc155727e0d2@microchip.com>
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>
+Subject: Re: [PATCH v7 2/3] hwmon: ltc4283: Add support for the LTC4283 Swap
+ Controller
+Message-ID: <69e4e158-bd91-4df6-906c-a64f10408ae9@roeck-us.net>
+References: <20260314-ltc4283-support-v7-0-1cda48e93802@analog.com>
+ <20260314-ltc4283-support-v7-2-1cda48e93802@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -81,1154 +86,2190 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260310-hw_mon-emc1812-v8-2-bc155727e0d2@microchip.com>
+In-Reply-To: <20260314-ltc4283-support-v7-2-1cda48e93802@analog.com>
 
-On Tue, Mar 10, 2026 at 04:50:46PM +0200, Marius Cristea wrote:
-> This is the hwmon driver for Microchip EMC1812/13/14/15/33
-> Multichannel Low-Voltage Remote Diode Sensor Family.
+On Sat, Mar 14, 2026 at 10:52:20AM +0000, Nuno Sá wrote:
+> From: Nuno Sá <nuno.sa@analog.com>
 > 
-> EMC1812 has one external remote temperature monitoring channel.
-> EMC1813 has two external remote temperature monitoring channels.
-> EMC1814 has three external remote temperature monitoring channels and
-> channels 2 and 3 support anti parallel diode.
-> EMC1815 has four external remote temperature monitoring channels and
-> channels 1/2  and 3/4 support anti parallel diode.
-> EMC1833 has two external remote temperature monitoring channels and
-> channels 1 and 2 support anti parallel diode.
+> Support the LTC4283 Hot Swap Controller. The device features programmable
+> current limit with foldback and independently adjustable inrush current to
+> optimize the MOSFET safe operating area (SOA). The SOA timer limits MOSFET
+> temperature rise for reliable protection against overstresses.
 > 
-> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> An I2C interface and onboard ADC allow monitoring of board current,
+> voltage, power, energy, and fault status.
+> 
+> Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 > ---
->  Documentation/hwmon/emc1812.rst |  66 +++
->  Documentation/hwmon/index.rst   |   1 +
->  MAINTAINERS                     |   2 +
->  drivers/hwmon/Kconfig           |  11 +
->  drivers/hwmon/Makefile          |   1 +
->  drivers/hwmon/emc1812.c         | 953 ++++++++++++++++++++++++++++++++++++++++
->  6 files changed, 1034 insertions(+)
+>  Documentation/hwmon/index.rst   |    1 +
+>  Documentation/hwmon/ltc4283.rst |  266 ++++++
+>  MAINTAINERS                     |    1 +
+>  drivers/hwmon/Kconfig           |   12 +
+>  drivers/hwmon/Makefile          |    1 +
+>  drivers/hwmon/ltc4283.c         | 1787 +++++++++++++++++++++++++++++++++++++++
+>  6 files changed, 2068 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/emc1812.rst b/Documentation/hwmon/emc1812.rst
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 559c32344cd38a9b5bf01a0b7570213f5ae1ab8b..eab95152abee0ae87acd9d01dab005200d80e924 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
+>     ltc4260
+>     ltc4261
+>     ltc4282
+> +   ltc4283
+>     ltc4286
+>     macsmc-hwmon
+>     max127
+> diff --git a/Documentation/hwmon/ltc4283.rst b/Documentation/hwmon/ltc4283.rst
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..7ec754d0ab96166dd5ea882772b27f2013a7e121
+> index 0000000000000000000000000000000000000000..ba88445e45f4c2918a3c7f99a4b54efe69d4d048
 > --- /dev/null
-> +++ b/Documentation/hwmon/emc1812.rst
-> @@ -0,0 +1,66 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/Documentation/hwmon/ltc4283.rst
+> @@ -0,0 +1,266 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
 > +
-> +Kernel driver emc1812
-> +=====================
+> +Kernel drivers ltc4283
+> +==========================================
 > +
 > +Supported chips:
 > +
-> +  * Microchip EMC1812, EMC1813, EMC1814, EMC1815, EMC1833
+> +  * Analog Devices LTC4283
 > +
-> +    Prefix: 'emc1812'
+> +    Prefix: 'ltc4283'
 > +
-> +    Datasheets:
+> +    Addresses scanned: -
 > +
-> +	- https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/EMC1812-3-4-5-33-Data-Sheet-DS20005751.pdf
+> +    Datasheet:
 > +
-> +Author:
-> +    Marius Cristea <marius.cristea@microchip.com>
+> +        https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4283.pdf
 > +
+> +Author: Nuno Sá <nuno.sa@analog.com>
 > +
 > +Description
-> +-----------
+> +___________
 > +
-> +The Microchip EMC181x/33 chips contain up to 4 remote temperature sensors
-> +and one internal.
-> +- The EMC1812 is a single channel remote temperature sensor.
-> +- The EMC1813 and EMC1833 is a dual channel remote temperature sensor. The
-
-s/is a/are/
-
-> +remote channels for this selection of devices can support substrate diodes,
-> +discrete diode-connected transistors or CPU/GPU thermal diodes.
-> +- The EMC1814 is a three channel remote temperature sensor that supports
-> +Anti-Parallel Diode (APD) only on one channel. For the channel that does not
-> +support APD functionality, substrate diodes, discrete diode-connected
-> +transistors or CPU/GPU thermal diodes are supported. For the channel that
-> +supports APD, only discrete diode-connected transistors may be implemented.
-> +However, if APD is disabled on the EMC1814, then the channel that supports
-> +APD will be functional with substrate diodes, discrete diode-connected
-> +transistors and CPU/GPU thermal diodes.
-> +- The EMC1815 is a four channel remote temperature sensor. The EMC1815 and
-> +EMC1833 support APD on all channels. When APD is enabled, the channels support
-> +only diode-connected transistors. If APD is disabled, then the channels will
-> +support substrate transistors, discrete diode-connected transistors and
-> +CPU/GPU thermal diodes.
+> +The LTC4283 negative voltage hot swap controller drives an external N-channel
+> +MOSFET to allow a board to be safely inserted and removed from a live backplane.
+> +The device features programmable current limit with foldback and independently
+> +adjustable inrush current to optimize the MOSFET safe operating area (SOA). The
+> +SOA timer limits MOSFET temperature rise for reliable protection against
+> +overstresses. An I2C interface and onboard gear-shift ADC allow monitoring of
+> +board current, voltage, power, energy, and fault status.  Additional features
+> +respond to input UV/OV, interrupt the host when a fault has occurred, notify
+> +when output power is good, detect insertion of a board, turn off the MOSFET
+> +if an external supply monitor fails to indicate power good within a timeout
+> +period, and auto-reboot after a programmable delay following a host commanded
+> +turn-off.
 > +
-> +Note: Disabling APD functionality to implement substrate diodes on devices
-> +that support APD eliminates the benefit of APD (two diodes on one channel).
+> +Sysfs entries
+> +_____________
 > +
-> +The chips implement three limits for each sensor: low (tempX_min), high
-> +(tempX_max) and critical (tempX_crit). The chips also implement an
-> +hysteresis mechanism which applies to all limits. The relative difference
-> +is stored in a single register on the chip, which means that the relative
-> +difference between the limit and its hysteresis is always the same for
-> +all three limits.
+> +The following attributes are supported. Limits are read-write and all the other
+> +attributes are read-only. Note that the VADIOx channels might not be available
+> +if the ADIO pins are used as GPIOs (naturally also affects the respective
+> +differential channels).
 > +
-> +This implementation detail implies the following:
+> +======================= ==========================================
+> +in0_lcrit_alarm         Critical Undervoltage alarm
+> +in0_crit_alarm          Critical Overvoltage alarm
+> +in0_label		Channel label (VIN)
 > +
-> +* When setting a limit, its hysteresis will automatically follow, the
-> +  difference staying unchanged. For example, if the old critical limit was
-> +  80 degrees C, and the hysteresis was 75 degrees C, and you change the
-> +  critical limit to 90 degrees C, then the hysteresis will automatically
-> +  change to 85 degrees C.
-> +* The hysteresis values can't be set independently. We decided to make
-> +  only tempX_crit_hyst writable, while all other hysteresis attributes
-> +  are read-only. Setting tempX_crit_hyst writes the difference between
-> +  tempX_crit_hyst and tempX_crit into the chip, and the same relative
-> +  hysteresis applies automatically to all other limits.
-> +* The limits should be set before the hysteresis. At power up the device
-> +  starts with a 10 degree written into hysteresis register.
-
-10 degree hysteresis
-
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 51a5bdf75b08656ee6499c6b5c50a51fc4d7c210..a03e97f9a97f4d3edf7bcd1e8d1b73a21d5f0ab5 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -69,6 +69,7 @@ Hardware Monitoring Kernel Drivers
->     ds1621
->     ds620
->     emc1403
-> +   emc1812
->     emc2103
->     emc2305
->     emc6w201
+> +in1_input		Output voltage (mV).
+> +in1_min			Undervoltage threshold
+> +in1_max			Overvoltage threshold
+> +in1_lowest		Lowest measured voltage
+> +in1_highest		Highest measured voltage
+> +in1_reset_history	Write 1 to reset history.
+> +in1_min_alarm		Undervoltage alarm
+> +in1_max_alarm		Overvoltage alarm
+> +in1_label		Channel label (VPWR)
+> +
+> +in2_input		Output voltage (mV).
+> +in2_min			Undervoltage threshold
+> +in2_max			Overvoltage threshold
+> +in2_lowest		Lowest measured voltage
+> +in2_highest		Highest measured voltage
+> +in2_reset_history	Write 1 to reset history.
+> +in2_min_alarm		Undervoltage alarm
+> +in2_max_alarm		Overvoltage alarm
+> +in2_enable		Enable/Disable monitoring.
+> +in2_label		Channel label (VADI1)
+> +
+> +in3_input		Output voltage (mV).
+> +in3_min			Undervoltage threshold
+> +in3_max			Overvoltage threshold
+> +in3_lowest		Lowest measured voltage
+> +in3_highest		Highest measured voltage
+> +in3_reset_history	Write 1 to reset history.
+> +in3_min_alarm		Undervoltage alarm
+> +in3_max_alarm		Overvoltage alarm
+> +in3_enable		Enable/Disable monitoring.
+> +in3_label		Channel label (VADI2)
+> +
+> +in4_input		Output voltage (mV).
+> +in4_min			Undervoltage threshold
+> +in4_max			Overvoltage threshold
+> +in4_lowest		Lowest measured voltage
+> +in4_highest		Highest measured voltage
+> +in4_reset_history	Write 1 to reset history.
+> +in4_min_alarm		Undervoltage alarm
+> +in4_max_alarm		Overvoltage alarm
+> +in4_enable		Enable/Disable monitoring.
+> +in4_label		Channel label (VADI3)
+> +
+> +in5_input		Output voltage (mV).
+> +in5_min			Undervoltage threshold
+> +in5_max			Overvoltage threshold
+> +in5_lowest		Lowest measured voltage
+> +in5_highest		Highest measured voltage
+> +in5_reset_history	Write 1 to reset history.
+> +in5_min_alarm		Undervoltage alarm
+> +in5_max_alarm		Overvoltage alarm
+> +in5_enable		Enable/Disable monitoring.
+> +in5_label		Channel label (VADI4)
+> +
+> +in6_input		Output voltage (mV).
+> +in6_min			Undervoltage threshold
+> +in6_max			Overvoltage threshold
+> +in6_lowest		Lowest measured voltage
+> +in6_highest		Highest measured voltage
+> +in6_reset_history	Write 1 to reset history.
+> +in6_min_alarm		Undervoltage alarm
+> +in6_max_alarm		Overvoltage alarm
+> +in6_enable		Enable/Disable monitoring.
+> +in6_label		Channel label (VADIO1)
+> +
+> +in7_input		Output voltage (mV).
+> +in7_min			Undervoltage threshold
+> +in7_max			Overvoltage threshold
+> +in7_lowest		Lowest measured voltage
+> +in7_highest		Highest measured voltage
+> +in7_reset_history	Write 1 to reset history.
+> +in7_min_alarm		Undervoltage alarm
+> +in7_max_alarm		Overvoltage alarm
+> +in7_enable		Enable/Disable monitoring.
+> +in7_label		Channel label (VADIO2)
+> +
+> +in8_input		Output voltage (mV).
+> +in8_min			Undervoltage threshold
+> +in8_max			Overvoltage threshold
+> +in8_lowest		Lowest measured voltage
+> +in8_highest		Highest measured voltage
+> +in8_reset_history	Write 1 to reset history.
+> +in8_min_alarm		Undervoltage alarm
+> +in8_max_alarm		Overvoltage alarm
+> +in8_enable		Enable/Disable monitoring.
+> +in8_label		Channel label (VADIO3)
+> +
+> +in9_input		Output voltage (mV).
+> +in9_min			Undervoltage threshold
+> +in9_max			Overvoltage threshold
+> +in9_lowest		Lowest measured voltage
+> +in9_highest		Highest measured voltage
+> +in9_reset_history	Write 1 to reset history.
+> +in9_min_alarm		Undervoltage alarm
+> +in9_max_alarm		Overvoltage alarm
+> +in9_enable		Enable/Disable monitoring.
+> +in9_label		Channel label (VADIO4)
+> +
+> +in10_input		Output voltage (mV).
+> +in10_min		Undervoltage threshold
+> +in10_max		Overvoltage threshold
+> +in10_lowest		Lowest measured voltage
+> +in10_highest		Highest measured voltage
+> +in10_reset_history	Write 1 to reset history.
+> +in10_min_alarm		Undervoltage alarm
+> +in10_max_alarm		Overvoltage alarm
+> +in10_enable		Enable/Disable monitoring.
+> +in10_label		Channel label (DRNS)
+> +
+> +in11_input		Output voltage (mV).
+> +in11_min		Undervoltage threshold
+> +in11_max		Overvoltage threshold
+> +in11_lowest		Lowest measured voltage
+> +in11_highest		Highest measured voltage
+> +in11_reset_history	Write 1 to reset history.
+> +			Also clears fet bad and short fault logs.
+> +in11_min_alarm		Undervoltage alarm
+> +in11_max_alarm		Overvoltage alarm
+> +in11_enable		Enable/Disable monitoring
+> +in11_fault		Failure in the MOSFET. Either bad or shorted FET.
+> +in11_label		Channel label (DRAIN)
+> +
+> +in12_input		Output voltage (mV).
+> +in12_min		Undervoltage threshold
+> +in12_max		Overvoltage threshold
+> +in12_lowest		Lowest measured voltage
+> +in12_highest		Highest measured voltage
+> +in12_reset_history	Write 1 to reset history.
+> +in12_min_alarm		Undervoltage alarm
+> +in12_max_alarm		Overvoltage alarm
+> +in12_enable		Enable/Disable monitoring.
+> +in12_label		Channel label (ADIN2-ADIN1)
+> +
+> +in13_input		Output voltage (mV).
+> +in13_min		Undervoltage threshold
+> +in13_max		Overvoltage threshold
+> +in13_lowest		Lowest measured voltage
+> +in13_highest		Highest measured voltage
+> +in13_reset_history	Write 1 to reset history.
+> +in13_min_alarm		Undervoltage alarm
+> +in13_max_alarm		Overvoltage alarm
+> +in13_enable		Enable/Disable monitoring.
+> +in13_label		Channel label (ADIN4-ADIN3)
+> +
+> +in14_input		Output voltage (mV).
+> +in14_min		Undervoltage threshold
+> +in14_max		Overvoltage threshold
+> +in14_lowest		Lowest measured voltage
+> +in14_highest		Highest measured voltage
+> +in14_reset_history	Write 1 to reset history.
+> +in14_min_alarm		Undervoltage alarm
+> +in14_max_alarm		Overvoltage alarm
+> +in14_enable		Enable/Disable monitoring.
+> +in14_label		Channel label (ADIO2-ADIO1)
+> +
+> +in15_input		Output voltage (mV).
+> +in15_min		Undervoltage threshold
+> +in15_max		Overvoltage threshold
+> +in15_lowest		Lowest measured voltage
+> +in15_highest		Highest measured voltage
+> +in15_reset_history	Write 1 to reset history.
+> +in15_min_alarm		Undervoltage alarm
+> +in15_max_alarm		Overvoltage alarm
+> +in15_enable		Enable/Disable monitoring.
+> +in15_label		Channel label (ADIO4-ADIO3)
+> +
+> +curr1_input		Sense current (mA)
+> +curr1_min		Undercurrent threshold
+> +curr1_max		Overcurrent threshold
+> +curr1_lowest		Lowest measured current
+> +curr1_highest		Highest measured current
+> +curr1_reset_history	Write 1 to reset curr1 history.
+> +			Also clears overcurrent fault logs.
+> +curr1_min_alarm		Undercurrent alarm
+> +curr1_max_alarm		Overcurrent alarm
+> +curr1_crit_alarm        Critical Overcurrent alarm
+> +curr1_label		Channel label (ISENSE)
+> +
+> +power1_input		Power (in uW)
+> +power1_min		Low power threshold
+> +power1_max		High power threshold
+> +power1_input_lowest	Historical minimum power use
+> +power1_input_highest	Historical maximum power use
+> +power1_reset_history	Write 1 to reset power1 history.
+> +			Also clears power fault logs.
+> +power1_min_alarm	Low power alarm
+> +power1_max_alarm	High power alarm
+> +power1_label		Channel label (Power)
+> +
+> +energy1_input		Measured energy over time (in microJoule)
+> +energy1_enable		Enable/Disable Energy accumulation
+> +======================= ==========================================
+> +
+> +DebugFs entries
+> +_______________
+> +
+> +The chip also has a fault log register where failures can be logged. Hence,
+> +as these are logging events, we give access to them in debugfs. Note that
+> +even if some failure is detected in these logs, it does necessarily mean
+> +that the failure is still present. As mentioned in the proper Sysfs entries,
+> +these logs can be cleared by writing in the proper reset_history attribute.
+> +
+> +.. warning:: The debugfs interface is subject to change without notice
+> +             and is only available when the kernel is compiled with
+> +             ``CONFIG_DEBUG_FS`` defined.
+> +
+> +``/sys/kernel/debug/i2c/i2c-[X]/[X]-addr/``
+> +contains the following attributes:
+> +
+> +=======================		==========================================
+> +power1_failed_fault_log		Set to 1 by a power1 fault occurring.
+> +power1_good_input_fault_log	Set to 1 by a power1 good input fault occurring at PGIO3.
+> +in11_fet_short_fault_log	Set to 1 when a FET-short fault occurs.
+> +in11_fet_bad_fault_log		Set to 1 when a FET-BAD fault occurs.
+> +in0_lcrit_fault_log		Set to 1 by a VIN undervoltage fault occurring.
+> +in0_crit_fault_log		Set to 1 by a VIN overvoltage fault occurring.
+> +curr1_crit_fault_log		Set to 1 by an overcurrent fault occurring.
+> +======================= 	==========================================
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 85c236df781e47c78deeb7ef4d80bc94bba604c4..fcb712549ea679d49fde8c97840af9528b52d52b 100644
+> index 13ae2f3db449e5fd3a7d0fbac92aabdc01734ba9..38d22cf622b7982e157b19e3ecbf30a80dfbb04d 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -16651,6 +16651,8 @@ M:	Marius Cristea <marius.cristea@microchip.com>
+> @@ -15146,6 +15146,7 @@ M:	Nuno Sá <nuno.sa@analog.com>
 >  L:	linux-hwmon@vger.kernel.org
 >  S:	Supported
->  F:	Documentation/devicetree/bindings/hwmon/microchip,emc1812.yaml
-> +F:	Documentation/hwmon/emc1812.rst
-> +F:	drivers/hwmon/emc1812.c
+>  F:	Documentation/devicetree/bindings/hwmon/adi,ltc4283.yaml
+> +F:	drivers/hwmon/ltc4283.c
 >  
->  MICROCHIP I2C DRIVER
->  M:	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+>  LTC4286 HARDWARE MONITOR DRIVER
+>  M:	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 2760feb9f83b5d3b990b27acff572e587b373e9d..3b53572fd8bfbd752c2235ca429c4f74b1db3095 100644
+> index fb77baeeba27b9ec51142040beccc953df0a1e3e..99ab14726d6b559a2f8bc2af5b79ecd9d0b80b87 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -2042,6 +2042,17 @@ config SENSORS_EMC1403
->  	  Threshold values can be configured using sysfs.
->  	  Data from the different diodes are accessible via sysfs.
+> @@ -1157,6 +1157,18 @@ config SENSORS_LTC4282
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called ltc4282.
 >  
-> +config SENSORS_EMC1812
-> +	tristate "Microchip Technology EMC1812 driver"
+> +config SENSORS_LTC4283
+> +	tristate "Analog Devices LTC4283"
 > +	depends on I2C
 > +	select REGMAP_I2C
+> +	select AUXILIARY_BUS
 > +	help
-> +	  If you say yes here to build support for Microchip Technology's
-> +	  EMC181X/33  Multichannel Low-Voltage Remote Diode Sensor Family.
+> +	  If you say yes here you get support for Analog Devices LTC4283
+> +	  Negative Voltage Hot Swap Controller I2C interface.
 > +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called emc1812.
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called ltc4283.
 > +
->  config SENSORS_EMC2103
->  	tristate "SMSC EMC2103"
->  	depends on I2C
+>  config SENSORS_LTQ_CPUTEMP
+>  	bool "Lantiq cpu temperature sensor driver"
+>  	depends on SOC_XWAY
 > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 73b2abdcc6dd9cfae4c84b350febc5d8c191e385..e93e4051e99db698dbaae97ac4841e6d810ee8c4 100644
+> index 556e86d277b195d8c98798012f0069c78a2f37dc..cb77938dbe07ddb0c2db69f27ade2794139c2d01 100644
 > --- a/drivers/hwmon/Makefile
 > +++ b/drivers/hwmon/Makefile
-> @@ -73,6 +73,7 @@ obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
->  obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
->  obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
->  obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
-> +obj-$(CONFIG_SENSORS_EMC1812)	+= emc1812.o
->  obj-$(CONFIG_SENSORS_EMC2103)	+= emc2103.o
->  obj-$(CONFIG_SENSORS_EMC2305)	+= emc2305.o
->  obj-$(CONFIG_SENSORS_EMC6W201)	+= emc6w201.o
-> diff --git a/drivers/hwmon/emc1812.c b/drivers/hwmon/emc1812.c
+> @@ -147,6 +147,7 @@ obj-$(CONFIG_SENSORS_LTC4245)	+= ltc4245.o
+>  obj-$(CONFIG_SENSORS_LTC4260)	+= ltc4260.o
+>  obj-$(CONFIG_SENSORS_LTC4261)	+= ltc4261.o
+>  obj-$(CONFIG_SENSORS_LTC4282)	+= ltc4282.o
+> +obj-$(CONFIG_SENSORS_LTC4283)	+= ltc4283.o
+>  obj-$(CONFIG_SENSORS_LTQ_CPUTEMP) += ltq-cputemp.o
+>  obj-$(CONFIG_SENSORS_MACSMC_HWMON)	+= macsmc-hwmon.o
+>  obj-$(CONFIG_SENSORS_MAX1111)	+= max1111.o
+> diff --git a/drivers/hwmon/ltc4283.c b/drivers/hwmon/ltc4283.c
 > new file mode 100644
-> index 0000000000000000000000000000000000000000..1c1ff57d97171bb343a6c51336101768d16b4619
+> index 0000000000000000000000000000000000000000..2066ff5d568fbaa75c66d1f75087f7eb8cfe83a2
 > --- /dev/null
-> +++ b/drivers/hwmon/emc1812.c
-> @@ -0,0 +1,953 @@
-> +// SPDX-License-Identifier: GPL-2.0+
+> +++ b/drivers/hwmon/ltc4283.c
+> @@ -0,0 +1,1787 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * HWMON driver for Microchip EMC1812/13/14/15/33 Multichannel high-accuracy
-> + * 2-wire low-voltage remote diode temperature monitor family.
+> + * Analog Devices LTC4283 I2C Negative Voltage Hot Swap Controller (HWMON)
 > + *
-> + * Copyright (C) 2026 Microchip Technology Inc. and its subsidiaries
-> + *
-> + * Author: Marius Cristea <marius.cristea@microchip.com>
-> + *
-> + * Datasheet can be found here:
-> + * https://ww1.microchip.com/downloads/aemDocuments/documents/MSLD/ProductDocuments/DataSheets/EMC1812-3-4-5-33-Data-Sheet-DS20005751.pdf
+> + * Copyright 2025 Analog Devices Inc.
 > + */
-> +
+> +#include <linux/auxiliary_bus.h>
 > +#include <linux/bitfield.h>
+> +#include <linux/bitmap.h>
 > +#include <linux/bitops.h>
 > +#include <linux/bits.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/device.h>
+> +#include <linux/device/devres.h>
 > +#include <linux/hwmon.h>
 > +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
+> +#include <linux/math.h>
 > +#include <linux/math64.h>
+> +#include <linux/minmax.h>
+> +#include <linux/module.h>
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/overflow.h>
 > +#include <linux/property.h>
 > +#include <linux/regmap.h>
-> +#include <linux/string.h>
+> +#include <linux/unaligned.h>
 > +#include <linux/units.h>
-> +#include <linux/util_macros.h>
 > +
-> +/* EMC1812 Registers Addresses */
-> +#define EMC1812_STATUS_ADDR				0x02
-> +#define EMC1812_CONFIG_LO_ADDR				0x03
+> +#define LTC4283_SYSTEM_STATUS		0x00
+> +#define LTC4283_FAULT_STATUS		0x03
+> +#define   LTC4283_OV_MASK		BIT(0)
+> +#define   LTC4283_UV_MASK		BIT(1)
+> +#define   LTC4283_OC_MASK		BIT(2)
+> +#define   LTC4283_FET_BAD_MASK		BIT(3)
+> +#define   LTC4283_FET_SHORT_MASK	BIT(6)
+> +#define LTC4283_FAULT_LOG		0x04
+> +#define   LTC4283_OV_FAULT_MASK		BIT(0)
+> +#define   LTC4283_UV_FAULT_MASK		BIT(1)
+> +#define   LTC4283_OC_FAULT_MASK		BIT(2)
+> +#define   LTC4283_FET_BAD_FAULT_MASK	BIT(3)
+> +#define   LTC4283_PGI_FAULT_MASK	BIT(4)
+> +#define   LTC4283_PWR_FAIL_FAULT_MASK	BIT(5)
+> +#define   LTC4283_FET_SHORT_FAULT_MASK	BIT(6)
+> +#define LTC4283_ADC_ALM_LOG_1		0x05
+> +#define   LTC4283_POWER_LOW_ALM		BIT(0)
+> +#define   LTC4283_POWER_HIGH_ALM	BIT(1)
+> +#define   LTC4283_SENSE_LOW_ALM		BIT(4)
+> +#define   LTC4283_SENSE_HIGH_ALM	BIT(5)
+> +#define LTC4283_ADC_ALM_LOG_2		0x06
+> +#define LTC4283_ADC_ALM_LOG_3		0x07
+> +#define LTC4283_ADC_ALM_LOG_4		0x08
+> +#define LTC4283_ADC_ALM_LOG_5		0x09
+> +#define LTC4283_CONTROL_1		0x0a
+> +#define   LTC4283_RW_PAGE_MASK		BIT(0)
+> +#define   LTC4283_PIGIO2_ACLB_MASK	BIT(2)
+> +#define   LTC4283_PWRGD_RST_CTRL_MASK	BIT(3)
+> +#define   LTC4283_FET_BAD_OFF_MASK	BIT(4)
+> +#define   LTC4283_THERM_TMR_MASK	BIT(5)
+> +#define   LTC4283_DVDT_MASK		BIT(6)
+> +#define LTC4283_CONTROL_2		0x0b
+> +#define   LTC4283_OV_RETRY_MASK		BIT(0)
+> +#define   LTC4283_UV_RETRY_MASK		BIT(1)
+> +#define   LTC4283_OC_RETRY_MASK		GENMASK(3, 2)
+> +#define   LTC4283_FET_BAD_RETRY_MASK	GENMASK(5, 4)
+> +#define   LTC4283_EXT_FAULT_RETRY_MASK	BIT(7)
+> +#define LTC4283_RESERVED_OC		0x0c
+> +#define LTC4283_CONFIG_1		0x0d
+> +#define   LTC4283_FB_MASK		GENMASK(3, 2)
+> +#define   LTC4283_ILIM_MASK		GENMASK(7, 4)
+> +#define LTC4283_CONFIG_2		0x0e
+> +#define   LTC4283_COOLING_DL_MASK	GENMASK(3, 1)
+> +#define   LTC4283_FTBD_DL_MASK		GENMASK(5, 4)
+> +#define LTC4283_CONFIG_3		0x0f
+> +#define   LTC4283_VPWR_DRNS_MASK	BIT(6)
+> +#define   LTC4283_EXTFLT_TURN_OFF_MASK	BIT(7)
+> +#define LTC4283_PGIO_CONFIG		0x10
+> +#define   LTC4283_PGIO1_CFG_MASK	GENMASK(1, 0)
+> +#define   LTC4283_PGIO2_CFG_MASK	GENMASK(3, 2)
+> +#define   LTC4283_PGIO3_CFG_MASK	GENMASK(5, 4)
+> +#define   LTC4283_PGIO4_CFG_MASK	GENMASK(7, 6)
+> +#define LTC4283_PGIO_CONFIG_2		0x11
+> +#define   LTC4283_ADC_MASK		GENMASK(2, 0)
+> +#define LTC4283_ADC_SELECT(c)		(0x13 + (c) / 8)
+> +#define   LTC4283_ADC_SELECT_MASK(c)	BIT((c) % 8)
+> +#define LTC4283_SENSE_MIN_TH		0x1b
+> +#define LTC4283_SENSE_MAX_TH		0x1c
+> +#define LTC4283_VPWR_MIN_TH		0x1d
+> +#define LTC4283_VPWR_MAX_TH		0x1e
+> +#define LTC4283_POWER_MIN_TH		0x1f
+> +#define LTC4283_POWER_MAX_TH		0x20
+> +#define LTC4283_ADC_2_MIN_TH(c)		(0x21 + (c) * 2)
+> +#define LTC4283_ADC_2_MAX_TH(c)		(0x22 + (c) * 2)
+> +#define LTC4283_ADC_2_MIN_TH_DIFF(c)	(0x39 + (c) * 2)
+> +#define LTC4283_ADC_2_MAX_TH_DIFF(c)	(0x3a + (c) * 2)
+> +#define LTC4283_SENSE			0x41
+> +#define LTC4283_SENSE_MIN		0x42
+> +#define LTC4283_SENSE_MAX		0x43
+> +#define LTC4283_VPWR			0x44
+> +#define LTC4283_VPWR_MIN		0x45
+> +#define LTC4283_VPWR_MAX		0x46
+> +#define LTC4283_POWER			0x47
+> +#define LTC4283_POWER_MIN		0x48
+> +#define LTC4283_POWER_MAX		0x49
+> +#define LTC4283_RESERVED_68		0x68
+> +#define LTC4283_RESERVED_6D		0x6D
+> +/* get channels from ADC 2 */
+> +#define LTC4283_ADC_2(c)		(0x4a + (c) * 3)
+> +#define LTC4283_ADC_2_MIN(c)		(0x4b + (c) * 3)
+> +#define LTC4283_ADC_2_MAX(c)		(0x4c + (c) * 3)
+> +#define LTC4283_ADC_2_DIFF(c)		(0x6e + (c) * 3)
+> +#define LTC4283_ADC_2_MIN_DIFF(c)	(0x6f + (c) * 3)
+> +#define LTC4283_ADC_2_MAX_DIFF(c)	(0x70 + (c) * 3)
+> +#define LTC4283_ENERGY			0x7a
+> +#define LTC4283_METER_CONTROL		0x84
+> +#define   LTC4283_INTEGRATE_I_MASK	BIT(0)
+> +#define   LTC4283_METER_HALT_MASK	BIT(6)
+> +#define LTC4283_RESERVED_86		0x86
+> +#define LTC4283_RESERVED_8F		0x8F
+> +#define LTC4283_FAULT_LOG_CTRL		0x90
+> +#define   LTC4283_FAULT_LOG_EN_MASK	BIT(7)
+> +#define LTC4283_RESERVED_91		0x91
+> +#define LTC4283_RESERVED_A1		0xA1
+> +#define LTC4283_RESERVED_A3		0xA3
+> +#define LTC4283_RESERVED_AC		0xAC
+> +#define LTC4283_POWER_PLAY_MSB		0xE7
+> +#define LTC4283_POWER_PLAY_LSB		0xE8
+> +#define LTC4283_RESERVED_F1		0xF1
+> +#define LTC4283_RESERVED_FF		0xFF
 > +
-> +#define EMC1812_CFG_ADDR				0x09
-> +#define EMC1812_CONV_ADDR				0x0A
-> +#define EMC1812_INT_DIODE_HIGH_LIMIT_ADDR		0x0B
-> +#define EMC1812_INT_DIODE_LOW_LIMIT_ADDR		0x0C
-> +#define EMC1812_EXT1_HIGH_LIMIT_HIGH_BYTE_ADDR		0x0D
-> +#define EMC1812_EXT1_LOW_LIMIT_HIGH_BYTE_ADDR		0x0E
-> +#define EMC1812_ONE_SHOT_ADDR				0x0F
+> +/* also applies for differential channels */
+> +#define LTC4283_ADC1_FS_uV		32768
+> +#define LTC4283_ADC2_FS_mV		2048
+> +#define LTC4283_TCONV_uS		64103
+> +#define LTC4283_VILIM_MIN_uV		15000
+> +#define LTC4283_VILIM_MAX_uV		30000
+> +#define LTC4283_VILIM_RANGE	\
+> +	(LTC4283_VILIM_MAX_uV - LTC4283_VILIM_MIN_uV + 1)
 > +
-> +#define EMC1812_EXT1_HIGH_LIMIT_LOW_BYTE_ADDR		0x13
-> +#define EMC1812_EXT1_LOW_LIMIT_LOW_BYTE_ADDR		0x14
-> +#define EMC1812_EXT2_HIGH_LIMIT_HIGH_BYTE_ADDR		0x15
-> +#define EMC1812_EXT2_LOW_LIMIT_HIGH_BYTE_ADDR		0x16
-> +#define EMC1812_EXT2_HIGH_LIMIT_LOW_BYTE_ADDR		0x17
-> +#define EMC1812_EXT2_LOW_LIMIT_LOW_BYTE_ADDR		0x18
-> +#define EMC1812_EXT1_THERM_LIMIT_ADDR			0x19
-> +#define EMC1812_EXT2_THERM_LIMIT_ADDR			0x1A
-> +#define EMC1812_EXT_DIODE_FAULT_STATUS_ADDR		0x1B
+> +#define LTC4283_PGIO_FUNC_GPIO		2
+> +#define LTC4283_PGIO2_FUNC_ACLB		3
 > +
-> +#define EMC1812_DIODE_FAULT_MASK_ADDR			0x1F
-> +#define EMC1812_INT_DIODE_THERM_LIMIT_ADDR		0x20
-> +#define EMC1812_THRM_HYS_ADDR				0x21
-> +#define EMC1812_CONSEC_ALERT_ADDR			0x22
+> +/* voltage channels */
+> +enum {
+> +	LTC4283_CHAN_VIN,
+> +	LTC4283_CHAN_VPWR,
+> +	LTC4283_CHAN_ADI_1,
+> +	LTC4283_CHAN_ADI_2,
+> +	LTC4283_CHAN_ADI_3,
+> +	LTC4283_CHAN_ADI_4,
+> +	LTC4283_CHAN_ADIO_1,
+> +	LTC4283_CHAN_ADIO_2,
+> +	LTC4283_CHAN_ADIO_3,
+> +	LTC4283_CHAN_ADIO_4,
+> +	LTC4283_CHAN_DRNS,
+> +	LTC4283_CHAN_DRAIN,
+> +	/* differential channels */
+> +	LTC4283_CHAN_ADIN12,
+> +	LTC4283_CHAN_ADIN34,
+> +	LTC4283_CHAN_ADIO12,
+> +	LTC4283_CHAN_ADIO34,
+> +	LTC4283_CHAN_MAX
+> +};
 > +
-> +#define EMC1812_EXT1_BETA_CONFIG_ADDR			0x25
-> +#define EMC1812_EXT2_BETA_CONFIG_ADDR			0x26
-> +#define EMC1812_EXT1_IDEALITY_FACTOR_ADDR		0x27
-> +#define EMC1812_EXT2_IDEALITY_FACTOR_ADDR		0x28
+> +/* Just for ease of use on the regmap  */
+> +#define LTC4283_ADIO34_MAX \
+> +	LTC4283_ADC_2_MAX_DIFF(LTC4283_CHAN_ADIO34 - LTC4283_CHAN_ADIN12)
 > +
-> +#define EMC1812_EXT3_HIGH_LIMIT_HIGH_BYTE_ADDR		0x2C
-> +#define EMC1812_EXT3_LOW_LIMIT_HIGH_BYTE_ADDR		0x2D
-> +#define EMC1812_EXT3_HIGH_LIMIT_LOW_BYTE_ADDR		0x2E
-> +#define EMC1812_EXT3_LOW_LIMIT_LOW_BYTE_ADDR		0x2F
-> +#define EMC1812_EXT3_THERM_LIMIT_ADDR			0x30
-> +#define EMC1812_EXT3_IDEALITY_FACTOR_ADDR		0x31
+> +struct ltc4283_hwmon {
+> +	struct regmap *map;
+> +	struct i2c_client *client;
+> +	unsigned long gpio_mask;
+> +	unsigned long ch_enable_mask;
+> +	/* in microwatt */
+> +	long power_max;
+> +	/* in millivolt */
+> +	u32 vsense_max;
+> +	/* in tenths of microohm*/
+> +	u32 rsense;
+> +	bool energy_en;
+> +	bool ext_fault;
+> +};
 > +
-> +#define EMC1812_EXT4_HIGH_LIMIT_HIGH_BYTE_ADDR		0x34
-> +#define EMC1812_EXT4_LOW_LIMIT_HIGH_BYTE_ADDR		0x35
-> +#define EMC1812_EXT4_HIGH_LIMIT_LOW_BYTE_ADDR		0x36
-> +#define EMC1812_EXT4_LOW_LIMIT_LOW_BYTE_ADDR		0x37
-> +#define EMC1812_EXT4_THERM_LIMIT_ADDR			0x38
-> +#define EMC1812_EXT4_IDEALITY_FACTOR_ADDR		0x39
-> +#define EMC1812_HIGH_LIMIT_STATUS_ADDR			0x3A
-> +#define EMC1812_LOW_LIMIT_STATUS_ADDR			0x3B
-> +#define EMC1812_THERM_LIMIT_STATUS_ADDR			0x3C
-> +#define EMC1812_ROC_GAIN_ADDR				0x3D
-> +#define EMC1812_ROC_CONFIG_ADDR				0x3E
-> +#define EMC1812_ROC_STATUS_ADDR				0x3F
-> +#define EMC1812_R1_RESH_ADDR				0x40
-> +#define EMC1812_R1_LIMH_ADDR				0x41
-> +#define EMC1812_R1_LIML_ADDR				0x42
-> +#define EMC1812_R1_SMPL_ADDR				0x43
-> +#define EMC1812_R2_RESH_ADDR				0x44
-> +#define EMC1812_R2_3_RESL_ADDR				0x45
-> +#define EMC1812_R2_LIMH_ADDR				0x46
-> +#define EMC1812_R2_LIML_ADDR				0x47
-> +#define EMC1812_R2_SMPL_ADDR				0x48
-> +#define EMC1812_PER_MAXTH_1_ADDR			0x49
-> +#define EMC1812_PER_MAXT1L_ADDR				0x4A
-> +#define EMC1812_PER_MAXTH_2_ADDR			0x4B
-> +#define EMC1812_PER_MAXT2_3L_ADDR			0x4C
-> +#define EMC1812_GBL_MAXT1H_ADDR				0x4D
-> +#define EMC1812_GBL_MAXT1L_ADDR				0x4E
-> +#define EMC1812_GBL_MAXT2H_ADDR				0x4F
-> +#define EMC1812_GBL_MAXT2L_ADDR				0x50
-> +#define EMC1812_FILTER_SEL_ADDR				0x51
+> +static int ltc4283_read_voltage_word(const struct ltc4283_hwmon *st,
+> +				     u32 reg, u32 fs, long *val)
+> +{
+> +	unsigned int __raw;
+> +	int ret;
 > +
-> +#define EMC1812_INT_HIGH_BYTE_ADDR		0x60
-> +#define EMC1812_INT_LOW_BYTE_ADDR		0x61
-> +#define EMC1812_EXT1_HIGH_BYTE_ADDR		0x62
-> +#define EMC1812_EXT1_LOW_BYTE_ADDR		0x63
-> +#define EMC1812_EXT2_HIGH_BYTE_ADDR		0x64
-> +#define EMC1812_EXT2_LOW_BYTE_ADDR		0x65
-> +#define EMC1812_EXT3_HIGH_BYTE_ADDR		0x66
-> +#define EMC1812_EXT3_LOW_BYTE_ADDR		0x67
-> +#define EMC1812_EXT4_HIGH_BYTE_ADDR		0x68
-> +#define EMC1812_EXT4_LOW_BYTE_ADDR		0x69
-> +#define EMC1812_HOTTEST_DIODE_HIGH_BYTE_ADDR	0x6A
-> +#define EMC1812_HOTTEST_DIODE_LOW_BYTE_ADDR	0x6B
-> +#define EMC1812_HOTTEST_STATUS_ADDR		0x6C
-> +#define EMC1812_HOTTEST_CFG_ADDR		0x6D
+> +	ret = regmap_read(st->map, reg, &__raw);
+> +	if (ret)
+> +		return ret;
 > +
-> +#define EMC1812_PRODUCT_ID_ADDR		0xFD
-> +#define EMC1812_MANUFACTURER_ID_ADDR	0xFE
-> +#define EMC1812_REVISION_ADDR		0xFF
+> +	*val = DIV_ROUND_CLOSEST(__raw * fs, BIT(16));
+> +	return 0;
+> +}
 > +
-> +/* EMC1812 Config Bits */
-> +#define EMC1812_CFG_MSKAL		BIT(7)
-> +#define EMC1812_CFG_RS			BIT(6)
-> +#define EMC1812_CFG_ATTHM		BIT(5)
-> +#define EMC1812_CFG_RECD12		BIT(4)
-> +#define EMC1812_CFG_RECD34		BIT(3)
-> +#define EMC1812_CFG_RANGE		BIT(2)
-> +#define EMC1812_CFG_DA_ENA		BIT(1)
-> +#define EMC1812_CFG_APDD		BIT(0)
+> +static int ltc4283_read_voltage_byte(const struct ltc4283_hwmon *st,
+> +				     u32 reg, u32 fs, long *val)
+> +{
+> +	int ret;
+> +	u32 in;
 > +
-> +/* EMC1812 Status Bits */
-> +#define EMC1812_STATUS_ROCF		BIT(7)
-> +#define EMC1812_STATUS_HOTCHG		BIT(6)
-> +#define EMC1812_STATUS_BUSY		BIT(5)
-> +#define EMC1812_STATUS_HIGH		BIT(4)
-> +#define EMC1812_STATUS_LOW		BIT(3)
-> +#define EMC1812_STATUS_FAULT		BIT(2)
-> +#define EMC1812_STATUS_ETHRM		BIT(1)
-> +#define EMC1812_STATUS_ITHRM		BIT(0)
+> +	ret = regmap_read(st->map, reg, &in);
+> +	if (ret)
+> +		return ret;
 > +
-> +#define EMC1812_BETA_LOCK_VAL		0x0F
+> +	*val = DIV_ROUND_CLOSEST(in * fs, BIT(8));
+> +	return 0;
+> +}
 > +
-> +#define EMC1812_TEMP_CH_ADDR(index)	(EMC1812_INT_HIGH_BYTE_ADDR + 2 * (index))
+> +static u32 ltc4283_in_reg(u32 attr, u32 channel)
+> +{
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		if (channel == LTC4283_CHAN_VPWR)
+> +			return LTC4283_VPWR;
+> +		if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN)
+> +			return LTC4283_ADC_2(channel - LTC4283_CHAN_ADI_1);
+> +		return LTC4283_ADC_2_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	case hwmon_in_highest:
+> +		if (channel == LTC4283_CHAN_VPWR)
+> +			return LTC4283_VPWR_MAX;
+> +		if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN)
+> +			return LTC4283_ADC_2_MAX(channel - LTC4283_CHAN_ADI_1);
+> +		return LTC4283_ADC_2_MAX_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	case hwmon_in_lowest:
+> +		if (channel == LTC4283_CHAN_VPWR)
+> +			return LTC4283_VPWR_MIN;
+> +		if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN)
+> +			return LTC4283_ADC_2_MIN(channel - LTC4283_CHAN_ADI_1);
+> +		return LTC4283_ADC_2_MIN_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	case hwmon_in_max:
+> +		if (channel == LTC4283_CHAN_VPWR)
+> +			return LTC4283_VPWR_MAX_TH;
+> +		if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN)
+> +			return LTC4283_ADC_2_MAX_TH(channel - LTC4283_CHAN_ADI_1);
+> +		return LTC4283_ADC_2_MAX_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	default:
+> +		if (channel == LTC4283_CHAN_VPWR)
+> +			return LTC4283_VPWR_MIN_TH;
+> +		if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN)
+> +			return LTC4283_ADC_2_MIN_TH(channel - LTC4283_CHAN_ADI_1);
+> +		return LTC4283_ADC_2_MIN_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	}
+> +}
 > +
-> +#define EMC1812_FILTER_MASK_LEN		2
+> +static int ltc4283_read_in_vals(const struct ltc4283_hwmon *st,
+> +				u32 attr, u32 channel, long *val)
+> +{
+> +	u32 reg = ltc4283_in_reg(attr, channel);
+> +	int ret;
 > +
-> +#define EMC1812_PID			0x81
-> +#define EMC1813_PID			0x87
-> +#define EMC1814_PID			0x84
-> +#define EMC1815_PID			0x85
-> +#define EMC1833_PID			0x83
+> +	if (channel < LTC4283_CHAN_ADIN12) {
+> +		if (attr != hwmon_in_max && attr != hwmon_in_min)
+> +			return ltc4283_read_voltage_word(st, reg,
+> +							 LTC4283_ADC2_FS_mV,
+> +							 val);
 > +
-> +/* The maximum number of channels a member of the family can have */
-> +#define EMC1812_MAX_NUM_CHANNELS		5
-> +#define EMC1812_TEMP_OFFSET			64
+> +		return ltc4283_read_voltage_byte(st, reg,
+> +						 LTC4283_ADC2_FS_mV, val);
+> +	}
 > +
-> +#define EMC1812_DEFAULT_IDEALITY_FACTOR		0x12
+> +	if (attr != hwmon_in_max && attr != hwmon_in_min)
+> +		ret = ltc4283_read_voltage_word(st, reg,
+> +						LTC4283_ADC1_FS_uV, val);
+> +	else
+> +		ret = ltc4283_read_voltage_byte(st, reg,
+> +						LTC4283_ADC1_FS_uV, val);
+> +	if (ret)
+> +		return ret;
 > +
-> +#define EMC1812_TEMP_MASK (HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX | \
-> +			   HWMON_T_CRIT | HWMON_T_MAX_HYST | HWMON_T_CRIT_HYST | \
-> +			   HWMON_T_MIN_ALARM | HWMON_T_MAX_ALARM | \
-> +			   HWMON_T_CRIT_ALARM | HWMON_T_LABEL)
+> +	*val = DIV_ROUND_CLOSEST(*val, MILLI);
+> +	return 0;
+> +}
 > +
-> +static const struct hwmon_channel_info * const emc1812_info[] = {
-> +	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   EMC1812_TEMP_MASK,
-> +			   EMC1812_TEMP_MASK | HWMON_T_FAULT,
-> +			   EMC1812_TEMP_MASK | HWMON_T_FAULT,
-> +			   EMC1812_TEMP_MASK | HWMON_T_FAULT,
-> +			   EMC1812_TEMP_MASK | HWMON_T_FAULT
-> +			   ),
+> +static int ltc4283_read_alarm(struct ltc4283_hwmon *st, u32 reg,
+> +			      u32 mask, long *val)
+> +{
+> +	u32 alarm;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, reg, &alarm);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = !!(alarm & mask);
+> +
+> +	/* If not status/fault logs, clear the alarm after reading it. */
+> +	if (reg != LTC4283_FAULT_STATUS && reg != LTC4283_FAULT_LOG)
+> +		return regmap_clear_bits(st->map, reg, mask);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_in_alarm(struct ltc4283_hwmon *st, u32 channel,
+> +				 bool max_alm, long *val)
+> +{
+> +	if (channel == LTC4283_VPWR)
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  BIT(2 + max_alm), val);
+> +
+> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_ADI_4) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADI_1) * 2;
+> +		/*
+> +		 * Lower channels go to higher bits. We also want to go +1 down
+> +		 * in the min_alarm case.
+> +		 */
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_2,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+> +
+> +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADIO_1) * 2;
+> +
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_3,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+> +
+> +	if (channel >= LTC4283_CHAN_ADIN12 && channel <= LTC4283_CHAN_ADIN34) {
+> +		u32 bit = (channel - LTC4283_CHAN_ADIN12) * 2;
+> +
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_5,
+> +					  BIT(7 - bit - !max_alm), val);
+> +	}
+> +
+> +	if (channel == LTC4283_CHAN_DRNS)
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4,
+> +					  BIT(6 + max_alm), val);
+> +
+> +	return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_4, BIT(4 + max_alm),
+> +				  val);
+> +}
+> +
+> +static int ltc4283_read_in(struct ltc4283_hwmon *st, u32 attr, u32 channel,
+> +			   long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		if (!test_bit(channel, &st->ch_enable_mask))
+> +			return -ENODATA;
+> +
+> +		return ltc4283_read_in_vals(st, attr, channel, val);
+> +	case hwmon_in_highest:
+> +	case hwmon_in_lowest:
+> +	case hwmon_in_max:
+> +	case hwmon_in_min:
+> +		return ltc4283_read_in_vals(st, attr, channel, val);
+> +	case hwmon_in_max_alarm:
+> +		return ltc4283_read_in_alarm(st, channel, true, val);
+> +	case hwmon_in_min_alarm:
+> +		return ltc4283_read_in_alarm(st, channel, false, val);
+> +	case hwmon_in_crit_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
+> +					  LTC4283_OV_MASK, val);
+> +	case hwmon_in_lcrit_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
+> +					  LTC4283_UV_MASK, val);
+> +	case hwmon_in_fault:
+> +		/*
+> +		 * We report failure if we detect either a fer_bad or a
+> +		 * fet_short in the status register.
+> +		 */
+> +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
+> +					  LTC4283_FET_BAD_MASK | LTC4283_FET_SHORT_MASK, val);
+> +	case hwmon_in_enable:
+> +		*val = test_bit(channel, &st->ch_enable_mask);
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_current_word(const struct ltc4283_hwmon *st, u32 reg,
+> +				     long *val)
+> +{
+> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * DECA * MILLI;
+> +	unsigned int __raw;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, reg, &__raw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = DIV64_U64_ROUND_CLOSEST(__raw * temp,
+> +				       BIT_ULL(16) * st->rsense);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_current_byte(const struct ltc4283_hwmon *st, u32 reg,
+> +				     long *val)
+> +{
+> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * DECA * MILLI;
+> +	u32 curr;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, reg, &curr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = DIV_ROUND_CLOSEST_ULL(curr * temp, BIT(8) * st->rsense);
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_curr(struct ltc4283_hwmon *st, u32 attr, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_curr_input:
+> +		return ltc4283_read_current_word(st, LTC4283_SENSE, val);
+> +	case hwmon_curr_highest:
+> +		return ltc4283_read_current_word(st, LTC4283_SENSE_MAX, val);
+> +	case hwmon_curr_lowest:
+> +		return ltc4283_read_current_word(st, LTC4283_SENSE_MIN, val);
+> +	case hwmon_curr_max:
+> +		return ltc4283_read_current_byte(st, LTC4283_SENSE_MAX_TH, val);
+> +	case hwmon_curr_min:
+> +		return ltc4283_read_current_byte(st, LTC4283_SENSE_MIN_TH, val);
+> +	case hwmon_curr_max_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  LTC4283_SENSE_HIGH_ALM, val);
+> +	case hwmon_curr_min_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  LTC4283_SENSE_LOW_ALM, val);
+> +	case hwmon_curr_crit_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_FAULT_STATUS,
+> +					  LTC4283_OC_MASK, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_read_power_word(const struct ltc4283_hwmon *st,
+> +				   u32 reg, long *val)
+> +{
+> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILLI;
+> +	unsigned int __raw;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, reg, &__raw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Power is given by:
+> +	 *     P = CODE(16b) * 32.768mV * 2.048V / (2^16 * Rsense)
+> +	 */
+> +	*val = DIV64_U64_ROUND_CLOSEST(temp * __raw, BIT_ULL(16) * st->rsense);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_power_byte(const struct ltc4283_hwmon *st,
+> +				   u32 reg, long *val)
+> +{
+> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILLI;
+> +	u32 power;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, reg, &power);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = DIV_ROUND_CLOSEST_ULL(power * temp, BIT(8) * st->rsense);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read_power(struct ltc4283_hwmon *st, u32 attr, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_input:
+> +		return ltc4283_read_power_word(st, LTC4283_POWER, val);
+> +	case hwmon_power_input_highest:
+> +		return ltc4283_read_power_word(st, LTC4283_POWER_MAX, val);
+> +	case hwmon_power_input_lowest:
+> +		return ltc4283_read_power_word(st, LTC4283_POWER_MIN, val);
+> +	case hwmon_power_max_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  LTC4283_POWER_HIGH_ALM, val);
+> +	case hwmon_power_min_alarm:
+> +		return ltc4283_read_alarm(st, LTC4283_ADC_ALM_LOG_1,
+> +					  LTC4283_POWER_LOW_ALM, val);
+> +	case hwmon_power_max:
+> +		return ltc4283_read_power_byte(st, LTC4283_POWER_MAX_TH, val);
+> +	case hwmon_power_min:
+> +		return ltc4283_read_power_byte(st, LTC4283_POWER_MIN_TH, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_read_energy(struct ltc4283_hwmon *st, u32 attr, s64 *val)
+> +{
+> +	u64 temp = LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV, energy, temp_2;
+> +	u8 raw[8] = {};
+> +	int ret;
+> +
+> +	if (!st->energy_en)
+> +		return -ENODATA;
+> +
+> +	ret = i2c_smbus_read_i2c_block_data(st->client, LTC4283_ENERGY, 6, raw);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret != 6)
+> +		return -EIO;
+> +
+> +	energy = get_unaligned_be64(raw) >> 16;
+> +
+> +	/*
+> +	 * The formula for energy is given by:
+> +	 *	E = CODE(48b) * 32.768mV * 2.048V * Tconv / 2^24 * Rsense
+> +	 *
+> +	 * As Rsense can have tenths of micro-ohm resolution, we need to
+> +	 * multiply by DECA to get microjoule.
+> +	 */
+> +	if (check_mul_overflow(temp * LTC4283_TCONV_uS, energy, &temp_2)) {
+> +		/*
+> +		 * We multiply again by 1000 to make sure that we don't get 0
+> +		 * in the following division which could happen for big rsense
+> +		 * values. OTOH, we then divide energy first by 1000 so that
+> +		 * we do not overflow u64 again for very small rsense values.
+> +		 * We add 100 factor for proper conversion to microjoule.
+> +		 */
+> +		temp_2 = DIV64_U64_ROUND_CLOSEST(temp * LTC4283_TCONV_uS * MILLI,
+> +						 BIT_ULL(24) * st->rsense);
+> +		energy = DIV_ROUND_CLOSEST_ULL(energy, MILLI * CENTI) * temp_2;
+> +	} else {
+> +		/* Put rsense back into nanoohm so we get microjoule. */
+> +		energy = DIV64_U64_ROUND_CLOSEST(temp_2, BIT_ULL(24) * st->rsense * CENTI);
+> +	}
+> +
+> +	*val = energy;
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	struct ltc4283_hwmon *st = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_in:
+> +		return ltc4283_read_in(st, attr, channel, val);
+> +	case hwmon_curr:
+> +		return ltc4283_read_curr(st, attr, val);
+> +	case hwmon_power:
+> +		return ltc4283_read_power(st, attr, val);
+> +	case hwmon_energy:
+> +		*val = st->energy_en;
+> +		return 0;
+> +	case hwmon_energy64:
+> +		return ltc4283_read_energy(st, attr, (s64 *)val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_write_power_byte(const struct ltc4283_hwmon *st, u32 reg,
+> +				    long val)
+> +{
+> +	u64 temp = (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILLI;
+> +	u32 __raw;
+> +
+> +	clamp_val(val, 0, st->power_max);
+
+Result of clamp_val() is ignored.
+
+> +	__raw = DIV64_U64_ROUND_CLOSEST(val * BIT_ULL(8) * st->rsense, temp);
+> +
+> +	return regmap_write(st->map, reg, __raw);
+> +}
+> +
+> +static int ltc4283_write_power_word(const struct ltc4283_hwmon *st,
+> +				    u32 reg, long val)
+> +{
+> +	u64 temp = st->rsense * BIT_ULL(16), temp_2;
+> +	u16 __raw;
+> +
+> +	if (check_mul_overflow(val, temp, &temp_2)) {
+> +		temp = DIV_ROUND_CLOSEST_ULL(temp, DECA * MILLI);
+> +		__raw = DIV_ROUND_CLOSEST_ULL(temp * val, LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV);
+> +	} else {
+> +		temp = (u64)LTC4283_ADC1_FS_uV * LTC4283_ADC2_FS_mV * DECA * MILLI;
+> +		__raw = DIV64_U64_ROUND_CLOSEST(temp_2, temp);
+> +	}
+> +
+> +	return regmap_write(st->map, reg, __raw);
+> +}
+> +
+> +static int ltc4283_reset_power_hist(struct ltc4283_hwmon *st)
+> +{
+> +	int ret;
+> +
+> +	ret = ltc4283_write_power_word(st, LTC4283_POWER_MIN, st->power_max);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ltc4283_write_power_word(st, LTC4283_POWER_MAX, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Clear possible power faults. */
+> +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +				 LTC4283_PWR_FAIL_FAULT_MASK | LTC4283_PGI_FAULT_MASK);
+> +}
+> +
+> +static int ltc4283_write_power(struct ltc4283_hwmon *st, u32 attr, long val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_max:
+> +		return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, val);
+> +	case hwmon_power_min:
+> +		return ltc4283_write_power_byte(st, LTC4283_POWER_MIN_TH, val);
+> +	case hwmon_power_reset_history:
+> +		return ltc4283_reset_power_hist(st);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_write_in_history(struct ltc4283_hwmon *st, u32 reg,
+> +				    long lowest, u32 fs)
+> +{
+> +	u32 __raw;
+> +	int ret;
+> +
+> +	__raw = DIV_ROUND_CLOSEST(BIT(16) * lowest, fs);
+> +	if (__raw == BIT(16))
+> +		__raw = U16_MAX;
+> +
+> +	ret = regmap_write(st->map, reg, __raw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_write(st->map, reg + 1, 0);
+> +}
+> +
+> +static int ltc4283_write_in_byte(const struct ltc4283_hwmon *st,
+> +				 u32 reg, u32 fs, long val)
+> +{
+> +	u32 __raw;
+> +
+> +	val = clamp_val(val, 0, fs);
+> +	__raw = DIV_ROUND_CLOSEST(val * BIT(8), fs);
+> +	if (__raw == BIT(8))
+> +		__raw = U8_MAX;
+> +
+> +	return regmap_write(st->map, reg, __raw);
+> +}
+> +
+> +static int ltc4283_reset_in_hist(struct ltc4283_hwmon *st, u32 channel)
+> +{
+> +	u32 reg, fs;
+> +	int ret;
+> +
+> +	/*
+> +	 * Make sure to clear possible under/over voltage faults. Otherwise the
+> +	 * chip won't latch on again.
+> +	 */
+> +	if (channel == LTC4283_CHAN_VIN)
+> +		return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +					 LTC4283_OV_FAULT_MASK | LTC4283_UV_FAULT_MASK);
+> +
+> +	if (channel == LTC4283_CHAN_VPWR)
+> +		return ltc4283_write_in_history(st, LTC4283_VPWR_MIN,
+> +						LTC4283_ADC2_FS_mV,
+> +						LTC4283_ADC2_FS_mV);
+> +
+> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN) {
+> +		fs = LTC4283_ADC2_FS_mV;
+> +		reg = LTC4283_ADC_2_MIN(channel - LTC4283_CHAN_ADI_1);
+> +	} else {
+> +		fs = LTC4283_ADC1_FS_uV;
+> +		reg = LTC4283_ADC_2_MIN_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	}
+> +
+> +	ret = ltc4283_write_in_history(st, reg, fs, fs);
+> +	if (ret)
+> +		return ret;
+> +	if (channel != LTC4283_CHAN_DRAIN)
+> +		return 0;
+> +
+> +	/* Then, let's also clear possible fet faults. Same as above. */
+> +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +				 LTC4283_FET_BAD_FAULT_MASK | LTC4283_FET_SHORT_FAULT_MASK);
+> +}
+> +
+> +static int ltc4283_write_in_en(struct ltc4283_hwmon *st, u32 channel, bool en)
+> +{
+> +	unsigned int bit, adc_idx = channel - LTC4283_CHAN_ADI_1;
+> +	unsigned int reg = LTC4283_ADC_SELECT(adc_idx);
+> +	int ret;
+> +
+> +	bit = LTC4283_ADC_SELECT_MASK(adc_idx);
+> +	if (channel > LTC4283_CHAN_DRAIN)
+> +		/* Account for two reserved fields after DRAIN. */
+> +		bit <<= 2;
+> +
+> +	if (en)
+> +		ret = regmap_set_bits(st->map, reg, bit);
+> +	else
+> +		ret = regmap_clear_bits(st->map, reg, bit);
+> +	if (ret)
+> +		return ret;
+> +
+> +	__assign_bit(channel, &st->ch_enable_mask, en);
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_write_minmax(struct ltc4283_hwmon *st, long val,
+> +				u32 channel, bool is_max)
+> +{
+> +	u32 reg;
+> +
+> +	if (channel == LTC4283_CHAN_VPWR) {
+> +		if (is_max)
+> +			return ltc4283_write_in_byte(st, LTC4283_VPWR_MAX_TH,
+> +						     LTC4283_ADC2_FS_mV, val);
+> +
+> +		return ltc4283_write_in_byte(st, LTC4283_VPWR_MIN_TH,
+> +					     LTC4283_ADC2_FS_mV, val);
+> +	}
+> +
+> +	if (channel >= LTC4283_CHAN_ADI_1 && channel <= LTC4283_CHAN_DRAIN) {
+> +		if (is_max) {
+> +			reg = LTC4283_ADC_2_MAX_TH(channel - LTC4283_CHAN_ADI_1);
+> +			return ltc4283_write_in_byte(st, reg,
+> +						     LTC4283_ADC2_FS_mV, val);
+> +		}
+> +
+> +		reg = LTC4283_ADC_2_MIN_TH(channel - LTC4283_CHAN_ADI_1);
+> +		return ltc4283_write_in_byte(st, reg, LTC4283_ADC2_FS_mV, val);
+> +	}
+> +
+> +	if (is_max) {
+> +		reg = LTC4283_ADC_2_MAX_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +		return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV,
+> +					     val * MILLI);
+> +	}
+> +
+> +	reg = LTC4283_ADC_2_MIN_TH_DIFF(channel - LTC4283_CHAN_ADIN12);
+> +	return ltc4283_write_in_byte(st, reg, LTC4283_ADC1_FS_uV, val * MILLI);
+> +}
+> +
+> +static int ltc4283_write_in(struct ltc4283_hwmon *st, u32 attr, long val,
+> +			    int channel)
+> +{
+> +	switch (attr) {
+> +	case hwmon_in_max:
+> +		return ltc4283_write_minmax(st, val, channel, true);
+> +	case hwmon_in_min:
+> +		return ltc4283_write_minmax(st, val, channel, false);
+> +	case hwmon_in_reset_history:
+> +		return ltc4283_reset_in_hist(st, channel);
+> +	case hwmon_in_enable:
+> +		return ltc4283_write_in_en(st, channel, !!val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_write_curr_byte(const struct ltc4283_hwmon *st,
+> +				   u32 reg, long val)
+> +{
+> +	u32 temp = LTC4283_ADC1_FS_uV * DECA * MILLI;
+> +	u32 reg_val, isense_max;
+> +
+> +	isense_max = DIV_ROUND_CLOSEST(st->vsense_max * MICRO * DECA, st->rsense);
+> +	clamp_val(val, 0, isense_max);
+
+Result ignored.
+
+> +	reg_val = DIV_ROUND_CLOSEST_ULL(val * BIT_ULL(8) * st->rsense, temp);
+> +
+> +	return regmap_write(st->map, reg, reg_val);
+> +}
+> +
+> +static int ltc4283_write_curr_history(struct ltc4283_hwmon *st)
+> +{
+> +	int ret;
+> +
+> +	ret = ltc4283_write_in_history(st, LTC4283_SENSE_MIN,
+> +				       st->vsense_max * MILLI,
+> +				       LTC4283_ADC1_FS_uV);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Now, let's also clear possible overcurrent logs. */
+> +	return regmap_clear_bits(st->map, LTC4283_FAULT_LOG,
+> +				 LTC4283_OC_FAULT_MASK);
+> +}
+> +
+> +static int ltc4283_write_curr(struct ltc4283_hwmon *st, u32 attr, long val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_curr_max:
+> +		return ltc4283_write_curr_byte(st, LTC4283_SENSE_MAX_TH, val);
+> +	case hwmon_curr_min:
+> +		return ltc4283_write_curr_byte(st, LTC4283_SENSE_MIN_TH, val);
+> +	case hwmon_curr_reset_history:
+> +		return ltc4283_write_curr_history(st);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc4283_energy_enable_set(struct ltc4283_hwmon *st, long val)
+> +{
+> +	int ret;
+> +
+> +	/* Setting the bit halts the meter. */
+> +	val = !!val;
+> +	ret = regmap_update_bits(st->map, LTC4283_METER_CONTROL,
+> +				 LTC4283_METER_HALT_MASK,
+> +				 FIELD_PREP(LTC4283_METER_HALT_MASK, !val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	st->energy_en = val;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_write(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long val)
+> +{
+> +	struct ltc4283_hwmon *st = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_power:
+> +		return ltc4283_write_power(st, attr, val);
+> +	case hwmon_in:
+> +		return ltc4283_write_in(st, attr, val, channel);
+> +	case hwmon_curr:
+> +		return ltc4283_write_curr(st, attr, val);
+> +	case hwmon_energy:
+> +		return ltc4283_energy_enable_set(st, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static umode_t ltc4283_in_is_visible(const struct ltc4283_hwmon *st,
+> +				     u32 attr, int channel)
+> +{
+> +	/* If ADIO is set as a GPIO, don´t make it visible. */
+> +	if (channel >= LTC4283_CHAN_ADIO_1 && channel <= LTC4283_CHAN_ADIO_4) {
+> +		/* ADIOX pins come at index 0 in the gpio mask. */
+> +		channel -= LTC4283_CHAN_ADIO_1;
+> +		if (test_bit(channel, &st->gpio_mask))
+> +			return 0;
+> +	}
+> +
+> +	/* Also take care of differential channels. */
+> +	if (channel >= LTC4283_CHAN_ADIO12 && channel <= LTC4283_CHAN_ADIO34) {
+> +		channel -= LTC4283_CHAN_ADIO12;
+> +		/* If one channel in the pair is used, make it invisible. */
+> +		if (test_bit(channel * 2, &st->gpio_mask) ||
+> +		    test_bit(channel * 2 + 1, &st->gpio_mask))
+> +			return 0;
+> +	}
+> +
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +	case hwmon_in_highest:
+> +	case hwmon_in_lowest:
+> +	case hwmon_in_max_alarm:
+> +	case hwmon_in_min_alarm:
+> +	case hwmon_in_label:
+> +	case hwmon_in_lcrit_alarm:
+> +	case hwmon_in_crit_alarm:
+> +	case hwmon_in_fault:
+> +		return 0444;
+> +	case hwmon_in_max:
+> +	case hwmon_in_min:
+> +	case hwmon_in_enable:
+> +		return 0644;
+> +	case hwmon_in_reset_history:
+> +		return 0200;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t ltc4283_curr_is_visible(u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_curr_input:
+> +	case hwmon_curr_highest:
+> +	case hwmon_curr_lowest:
+> +	case hwmon_curr_max_alarm:
+> +	case hwmon_curr_min_alarm:
+> +	case hwmon_curr_crit_alarm:
+> +	case hwmon_curr_label:
+> +		return 0444;
+> +	case hwmon_curr_max:
+> +	case hwmon_curr_min:
+> +		return 0644;
+> +	case hwmon_curr_reset_history:
+> +		return 0200;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t ltc4283_power_is_visible(u32 attr)
+> +{
+> +	switch (attr) {
+> +	case hwmon_power_input:
+> +	case hwmon_power_input_highest:
+> +	case hwmon_power_input_lowest:
+> +	case hwmon_power_label:
+> +	case hwmon_power_max_alarm:
+> +	case hwmon_power_min_alarm:
+> +		return 0444;
+> +	case hwmon_power_max:
+> +	case hwmon_power_min:
+> +		return 0644;
+> +	case hwmon_power_reset_history:
+> +		return 0200;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static umode_t ltc4283_is_visible(const void *data,
+> +				  enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_in:
+> +		return ltc4283_in_is_visible(data, attr, channel);
+> +	case hwmon_curr:
+> +		return ltc4283_curr_is_visible(attr);
+> +	case hwmon_power:
+> +		return ltc4283_power_is_visible(attr);
+> +	case hwmon_energy:
+> +		/* hwmon_energy_enable */
+> +		return 0644;
+> +	case hwmon_energy64:
+> +		/* hwmon_energy_input */
+> +		return 0444;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static const char * const ltc4283_in_strs[] = {
+> +	"VIN", "VPWR", "VADI1", "VADI2", "VADI3", "VADI4", "VADIO1", "VADIO2",
+> +	"VADIO3", "VADIO4", "DRNS", "DRAIN", "ADIN2-ADIN1", "ADIN4-ADIN3",
+> +	"ADIO2-ADIO1", "ADIO4-ADIO3"
+> +};
+> +
+> +static int ltc4283_read_labels(struct device *dev,
+> +			       enum hwmon_sensor_types type,
+> +			       u32 attr, int channel, const char **str)
+> +{
+> +	switch (type) {
+> +	case hwmon_in:
+> +		*str = ltc4283_in_strs[channel];
+> +		return 0;
+> +	case hwmon_curr:
+> +		*str = "ISENSE";
+> +		return 0;
+> +	case hwmon_power:
+> +		*str = "Power";
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +/*
+> + * Set max limits for ISENSE and Power as that depends on the max voltage on
+> + * rsense that is defined in ILIM_ADJUST. This is specially important for power
+> + * because for some rsense and vfsout values, if we allow the default raw 255
+> + * value, that would overflow long in 32bit archs when reading back the max
+> + * power limit.
+> + */
+> +static int ltc4283_set_max_limits(struct ltc4283_hwmon *st, struct device *dev)
+> +{
+> +	u32 temp = st->vsense_max * DECA * MICRO;
+> +	int ret;
+> +
+> +	ret = ltc4283_write_in_byte(st, LTC4283_SENSE_MAX_TH, LTC4283_ADC1_FS_uV,
+> +				    st->vsense_max * MILLI);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Power is given by ISENSE * Vout. */
+> +	st->power_max = DIV_ROUND_CLOSEST(temp, st->rsense) * LTC4283_ADC2_FS_mV;
+> +	return ltc4283_write_power_byte(st, LTC4283_POWER_MAX_TH, st->power_max);
+> +}
+> +
+> +static int ltc4283_parse_array_prop(const struct ltc4283_hwmon *st,
+> +				    struct device *dev, const char *prop,
+> +				    const u32 *vals, u32 n_vals)
+> +{
+> +	u32 prop_val;
+> +	int ret;
+> +	u32 i;
+> +
+> +	ret = device_property_read_u32(dev, prop, &prop_val);
+> +	if (ret)
+> +		return n_vals;
+> +
+> +	for (i = 0; i < n_vals; i++) {
+> +		if (prop_val != vals[i])
+> +			continue;
+> +
+> +		return i;
+> +	}
+> +
+> +	return dev_err_probe(dev, -EINVAL,
+> +			     "Invalid %s property value %u, expected one of: %*ph\n",
+> +			     prop, prop_val, n_vals, vals);
+> +}
+> +
+> +static int ltc4283_get_defaults(struct ltc4283_hwmon *st)
+> +{
+> +	u32 reg_val, ilm_adjust, c;
+> +	int ret;
+> +
+> +	ret = regmap_read(st->map, LTC4283_METER_CONTROL, &reg_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	st->energy_en = !FIELD_GET(LTC4283_METER_HALT_MASK, reg_val);
+> +
+> +	ret = regmap_read(st->map, LTC4283_CONFIG_1, &reg_val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ilm_adjust = FIELD_GET(LTC4283_ILIM_MASK, reg_val);
+> +	st->vsense_max = LTC4283_VILIM_MIN_uV / MILLI + ilm_adjust;
+> +
+> +	/* VPWR and VIN are always enabled */
+> +	__set_bit(LTC4283_CHAN_VIN, &st->ch_enable_mask);
+> +	__set_bit(LTC4283_CHAN_VPWR, &st->ch_enable_mask);
+> +	for (c = LTC4283_CHAN_ADI_1; c < LTC4283_CHAN_MAX; c++) {
+> +		u32 chan = c - LTC4283_CHAN_ADI_1, bit;
+> +
+> +		ret = regmap_read(st->map, LTC4283_ADC_SELECT(chan), &reg_val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		bit = LTC4283_ADC_SELECT_MASK(chan);
+> +		if (c > LTC4283_CHAN_DRAIN)
+> +			/* account for two reserved fields after DRAIN */
+> +			bit <<= 2;
+> +
+> +		if (!(bit & reg_val))
+> +			continue;
+> +
+> +		__set_bit(c, &st->ch_enable_mask);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const char * const ltc4283_pgio1_funcs[] = {
+> +	"inverted_power_good", "power_good", "gpio"
+> +};
+> +
+> +static const char * const ltc4283_pgio2_funcs[] = {
+> +	 "inverted_power_good", "power_good", "gpio", "active_current_limiting"
+> +};
+> +
+> +static const char * const ltc4283_pgio3_funcs[] = {
+> +	"inverted_power_good_input", "power_good_input", "gpio"
+> +};
+> +
+> +static const char * const ltc4283_pgio4_funcs[] = {
+> +	"inverted_external_fault", "external_fault", "gpio"
+> +};
+> +
+> +enum {
+> +	LTC4283_PIN_ADIO1,
+> +	LTC4283_PIN_ADIO2,
+> +	LTC4283_PIN_ADIO3,
+> +	LTC4283_PIN_ADIO4,
+> +	LTC4283_PIN_PGIO1,
+> +	LTC4283_PIN_PGIO2,
+> +	LTC4283_PIN_PGIO3,
+> +	LTC4283_PIN_PGIO4,
+> +};
+> +
+> +static int ltc4283_pgio_config(struct ltc4283_hwmon *st, struct device *dev)
+> +{
+> +	int ret, func;
+> +
+> +	func = device_property_match_property_string(dev, "adi,pgio1-func",
+> +						     ltc4283_pgio1_funcs,
+> +						     ARRAY_SIZE(ltc4283_pgio1_funcs));
+> +	if (func < 0 && func != -EINVAL)
+
+!= or == ?
+
+for all -EINVAL checks. At the very least,
+
+> +		return dev_err_probe(dev, func,
+> +				     "Invalid adi,pgio1-func property\n");
+
+The "Invalid" messages are confusing. Why say it is invalid when it isn't ?
+And why _only_ accept -EINVAL errors ? That seems odd.
+
+> +	if (func >= 0) {
+> +		if (func == LTC4283_PGIO_FUNC_GPIO) {
+> +			__set_bit(LTC4283_PIN_PGIO1, &st->gpio_mask);
+> +			/* If GPIO, default to an input pin. */
+> +			func++;
+> +		}
+> +
+> +		ret = regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
+> +					 LTC4283_PGIO1_CFG_MASK,
+> +					 FIELD_PREP(LTC4283_PGIO1_CFG_MASK, func));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	func = device_property_match_property_string(dev, "adi,pgio2-func",
+> +						     ltc4283_pgio2_funcs,
+> +						     ARRAY_SIZE(ltc4283_pgio2_funcs));
+> +
+> +	if (func < 0 && func != -EINVAL)
+> +		return dev_err_probe(dev, func,
+> +				     "Invalid adi,pgio2-func property\n");
+> +	if (func >= 0) {
+> +		if (func != LTC4283_PGIO2_FUNC_ACLB) {
+> +			if (func == LTC4283_PGIO_FUNC_GPIO)  {
+> +				__set_bit(LTC4283_PIN_PGIO2, &st->gpio_mask);
+> +				func++;
+> +			}
+> +
+> +			ret = regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
+> +						 LTC4283_PGIO2_CFG_MASK,
+> +						 FIELD_PREP(LTC4283_PGIO2_CFG_MASK, func));
+> +		} else {
+> +			ret = regmap_set_bits(st->map, LTC4283_CONTROL_1,
+> +					      LTC4283_PIGIO2_ACLB_MASK);
+> +		}
+> +
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	func = device_property_match_property_string(dev, "adi,pgio3-func",
+> +						     ltc4283_pgio3_funcs,
+> +						     ARRAY_SIZE(ltc4283_pgio3_funcs));
+> +
+> +	if (func < 0 && func != -EINVAL)
+> +		return dev_err_probe(dev, func,
+> +				     "Invalid adi,pgio3-func property\n");
+> +	if (func >= 0) {
+> +		if (func == LTC4283_PGIO_FUNC_GPIO) {
+> +			__set_bit(LTC4283_PIN_PGIO3, &st->gpio_mask);
+> +			func++;
+> +		}
+> +
+> +		ret = regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
+> +					 LTC4283_PGIO3_CFG_MASK,
+> +					 FIELD_PREP(LTC4283_PGIO3_CFG_MASK, func));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	func = device_property_match_property_string(dev, "adi,pgio4-func",
+> +						     ltc4283_pgio4_funcs,
+> +						     ARRAY_SIZE(ltc4283_pgio4_funcs));
+> +
+> +	if (func < 0 && func != -EINVAL)
+
+The usual -EINVAL question.
+
+> +		return dev_err_probe(dev, func,
+> +				     "Invalid adi,pgio4-func property\n");
+> +	if (func >= 0) {
+> +		if (func == LTC4283_PGIO_FUNC_GPIO) {
+> +			__set_bit(LTC4283_PIN_PGIO4, &st->gpio_mask);
+> +			func++;
+> +		} else {
+> +			st->ext_fault = true;
+> +		}
+> +
+> +		ret = regmap_update_bits(st->map, LTC4283_PGIO_CONFIG,
+> +					 LTC4283_PGIO4_CFG_MASK,
+> +					 FIELD_PREP(LTC4283_PGIO4_CFG_MASK, func));
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Shouldn't this set the default value (inverted_external_fault) if the
+property is not provided (i.e., set st->ext_fault and write func = 0
+into LTC4283_PGIO4_CFG_MASK) ?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_adio_config(struct ltc4283_hwmon *st, struct device *dev,
+> +			       const char *prop, u32 pin)
+> +{
+> +	u32 adc_idx;
+> +	int ret;
+> +
+> +	if (!device_property_read_bool(dev, prop))
+> +		return 0;
+> +
+> +	adc_idx = LTC4283_CHAN_ADIO_1 - LTC4283_CHAN_ADI_1 + pin;
+> +	ret = regmap_clear_bits(st->map, LTC4283_ADC_SELECT(adc_idx),
+> +				LTC4283_ADC_SELECT_MASK(adc_idx));
+> +	if (ret)
+> +		return ret;
+> +
+> +	__set_bit(pin, &st->gpio_mask);
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_pin_config(struct ltc4283_hwmon *st, struct device *dev)
+> +{
+> +	int ret;
+> +
+> +	ret = ltc4283_pgio_config(st, dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ltc4283_adio_config(st, dev, "adi,gpio-on-adio1", LTC4283_PIN_ADIO1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ltc4283_adio_config(st, dev, "adi,gpio-on-adio2", LTC4283_PIN_ADIO2);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ltc4283_adio_config(st, dev, "adi,gpio-on-adio3", LTC4283_PIN_ADIO3);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ltc4283_adio_config(st, dev, "adi,gpio-on-adio4", LTC4283_PIN_ADIO4);
+> +}
+> +
+> +static const char * const ltc4283_oc_fet_retry[] = {
+> +	"latch-off", "1", "7", "unlimited"
+> +};
+> +
+> +static const u32 ltc4283_fb_factor[] = {
+> +	100, 50, 20, 10
+> +};
+> +
+> +static const u32 ltc4283_cooling_dl[] = {
+> +	512, 1002, 2005, 4100, 8190, 16400, 32800, 65600
+> +};
+> +
+> +static const u32 ltc4283_fet_bad_delay[] = {
+> +	256, 512, 1002, 2005
+> +};
+> +
+> +static int ltc4283_setup(struct ltc4283_hwmon *st, struct device *dev)
+> +{
+> +	u32 val, chan;
+> +	int ret;
+> +
+> +	/* The part has an eeprom so let's get the needed defaults from it */
+> +	ret = ltc4283_get_defaults(st);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Default to 1 micro ohm so we can probe without FW properties. Note
+> +	 * the below division expects rsense in nano ohms.
+> +	 */
+> +	st->rsense = 1 * MILLI;
+> +	ret = device_property_read_u32(dev, "adi,rsense-nano-ohms",
+> +				       &st->rsense);
+> +	if (!ret) {
+> +		if (st->rsense < CENTI)
+> +			return dev_err_probe(dev, -EINVAL,
+> +					     "adi,rsense-nano-ohms too small (< %lu)\n",
+> +					     CENTI);
+> +	}
+> +
+> +	/*
+> +	 * The resolution for rsense is tenths of micro (eg: 62.5 uOhm) which
+> +	 * means we need nano in the bindings. However, to make things easier to
+> +	 * handle (with respect to overflows) we divide it by 100 as we don't
+> +	 * really need the last two digits.
+> +	 */
+> +	st->rsense /= CENTI;
+> +
+> +	ret = device_property_read_u32(dev, "adi,current-limit-sense-microvolt",
+> +				       &st->vsense_max);
+> +	if (!ret) {
+> +		u32 reg_val;
+> +
+> +		if (!in_range(st->vsense_max, LTC4283_VILIM_MIN_uV,
+> +			      LTC4283_VILIM_RANGE)) {
+> +			return dev_err_probe(dev, -EINVAL,
+> +					     "adi,current-limit-sense-microvolt (%u) out of range [%u %u]\n",
+> +					     st->vsense_max, LTC4283_VILIM_MIN_uV,
+> +					     LTC4283_VILIM_MAX_uV);
+> +		}
+> +
+> +		st->vsense_max /= MILLI;
+> +		reg_val = FIELD_PREP(LTC4283_ILIM_MASK,
+> +				     st->vsense_max - LTC4283_VILIM_MIN_uV / MILLI);
+> +		ret = regmap_update_bits(st->map, LTC4283_CONFIG_1,
+> +					 LTC4283_ILIM_MASK, reg_val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = ltc4283_parse_array_prop(st, dev, "adi,current-limit-foldback-factor",
+> +				       ltc4283_fb_factor, ARRAY_SIZE(ltc4283_fb_factor));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret < ARRAY_SIZE(ltc4283_fb_factor)) {
+> +		ret = regmap_update_bits(st->map, LTC4283_CONFIG_1, LTC4283_FB_MASK,
+> +					 FIELD_PREP(LTC4283_FB_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = ltc4283_parse_array_prop(st, dev, "adi,cooling-delay-ms",
+> +				       ltc4283_cooling_dl, ARRAY_SIZE(ltc4283_cooling_dl));
+> +	if (ret < 0)
+> +		return ret;
+> +	if (ret < ARRAY_SIZE(ltc4283_cooling_dl)) {
+> +		ret = regmap_update_bits(st->map, LTC4283_CONFIG_2, LTC4283_COOLING_DL_MASK,
+> +					 FIELD_PREP(LTC4283_COOLING_DL_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = ltc4283_parse_array_prop(st, dev, "adi,fet-bad-timer-delay-ms",
+> +				       ltc4283_fet_bad_delay, ARRAY_SIZE(ltc4283_fet_bad_delay));
+> +	if (ret < 0)
+> +		return ret;
+
+This (and other attributes if missing) have a default and should not blindly
+return an error.
+
+> +	if (ret < ARRAY_SIZE(ltc4283_fet_bad_delay)) {
+> +		ret = regmap_update_bits(st->map, LTC4283_CONFIG_2, LTC4283_FTBD_DL_MASK,
+> +					 FIELD_PREP(LTC4283_FTBD_DL_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = ltc4283_set_max_limits(st, dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ltc4283_pin_config(st, dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (device_property_read_bool(dev, "adi,power-good-reset-on-fet")) {
+> +		ret = regmap_clear_bits(st->map, LTC4283_CONTROL_1,
+> +					LTC4283_PWRGD_RST_CTRL_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,fet-turn-off-disable")) {
+> +		ret = regmap_clear_bits(st->map, LTC4283_CONTROL_1,
+> +					LTC4283_FET_BAD_OFF_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,tmr-pull-down-disable")) {
+> +		ret = regmap_set_bits(st->map, LTC4283_CONTROL_1,
+> +				      LTC4283_THERM_TMR_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,dvdt-inrush-control-disable")) {
+> +		ret = regmap_clear_bits(st->map, LTC4283_CONTROL_1,
+> +					LTC4283_DVDT_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,undervoltage-retry-disable")) {
+> +		ret = regmap_clear_bits(st->map, LTC4283_CONTROL_2,
+> +					LTC4283_UV_RETRY_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,overvoltage-retry-disable")) {
+> +		ret = regmap_clear_bits(st->map, LTC4283_CONTROL_2,
+> +					LTC4283_OV_RETRY_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,external-fault-retry-enable")) {
+> +		if (!st->ext_fault)
+> +			return dev_err_probe(dev, -EINVAL,
+> +					     "adi,external-fault-retry-enable set but PGIO4 not configured\n");
+> +		ret = regmap_set_bits(st->map, LTC4283_CONTROL_2,
+> +				      LTC4283_EXT_FAULT_RETRY_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,fault-log-enable")) {
+> +		ret = regmap_set_bits(st->map, LTC4283_FAULT_LOG_CTRL,
+> +				      LTC4283_FAULT_LOG_EN_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = device_property_match_property_string(dev, "adi,overcurrent-retries",
+> +						    ltc4283_oc_fet_retry,
+> +						    ARRAY_SIZE(ltc4283_oc_fet_retry));
+> +	/* We still want to catch when an invalid string is given. */
+> +	if (ret != -EINVAL)
+
+Is that supposed to be "== -EINVAL" ?
+
+Because otherwise it returns immediately (even if there is no error)
+all the time.
+
+> +		return dev_err_probe(dev, ret,
+> +				     "adi,overcurrent-retries invalid value\n");
+> +	if (ret >= 0) {
+> +		ret = regmap_update_bits(st->map, LTC4283_CONTROL_2,
+> +					 LTC4283_OC_RETRY_MASK,
+> +					 FIELD_PREP(LTC4283_OC_RETRY_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = device_property_match_property_string(dev, "adi,fet-bad-retries",
+> +						    ltc4283_oc_fet_retry,
+> +						    ARRAY_SIZE(ltc4283_oc_fet_retry));
+> +	if (ret != -EINVAL)
+
+Same here.
+
+> +		return dev_err_probe(dev, ret,
+> +				     "adi,fet-bad-retries invalid value\n");
+> +	if (ret >= 0) {
+> +		ret = regmap_update_bits(st->map, LTC4283_CONTROL_2,
+> +					 LTC4283_FET_BAD_RETRY_MASK,
+> +					 FIELD_PREP(LTC4283_FET_BAD_RETRY_MASK, ret));
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,external-fault-fet-off-enable")) {
+> +		if (!st->ext_fault)
+> +			return dev_err_probe(dev, -EINVAL,
+> +					     "adi,external-fault-fet-off-enable set but PGIO4 not configured\n");
+> +		ret = regmap_set_bits(st->map, LTC4283_CONFIG_3,
+> +				      LTC4283_EXTFLT_TURN_OFF_MASK);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (device_property_read_bool(dev, "adi,vpower-drns-enable")) {
+> +		__clear_bit(LTC4283_CHAN_DRAIN, &st->ch_enable_mask);
+
+That kind of conflicts with the devicetree description, which says that the
+_drain_ voltage should be monitored if this property is enabled.
+
+> +		chan = LTC4283_CHAN_DRAIN - LTC4283_CHAN_ADI_1;
+> +		val = 1;
+> +	} else {
+> +		__clear_bit(LTC4283_CHAN_DRNS, &st->ch_enable_mask);
+> +		chan = LTC4283_CHAN_DRNS - LTC4283_CHAN_ADI_1;
+> +		val = 0;
+> +	}
+> +	/*
+> +	 * Then, let's by default disable the channel from the ADC2 that is
+> +	 * already being monitored by the VPWR channel. One can still enable it
+> +	 * later on if needed.
+> +	 */
+> +	ret = regmap_clear_bits(st->map, LTC4283_ADC_SELECT(chan),
+> +				LTC4283_ADC_SELECT_MASK(chan));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(st->map, LTC4283_CONFIG_3,
+> +				 LTC4283_VPWR_DRNS_MASK,
+> +				 FIELD_PREP(LTC4283_VPWR_DRNS_MASK, val));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Make sure the ADC has 12bit resolution since we're assuming that. */
+> +	ret = regmap_update_bits(st->map, LTC4283_PGIO_CONFIG_2,
+> +				 LTC4283_ADC_MASK,
+> +				 FIELD_PREP(LTC4283_ADC_MASK, 3));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Energy reads (which are 6 byte block reads) rely on page access */
+> +	ret = regmap_set_bits(st->map, LTC4283_CONTROL_1, LTC4283_RW_PAGE_MASK);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Make sure we are integrating power as we only support reporting
+> +	 * consumed energy.
+> +	 */
+> +	return regmap_clear_bits(st->map, LTC4283_METER_CONTROL,
+> +				 LTC4283_INTEGRATE_I_MASK);
+> +}
+> +
+> +static const struct hwmon_channel_info * const ltc4283_info[] = {
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_LCRIT_ALARM | HWMON_I_CRIT_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_MAX_ALARM | HWMON_I_RESET_HISTORY |
+> +			   HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_FAULT | HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LOWEST | HWMON_I_HIGHEST |
+> +			   HWMON_I_MAX | HWMON_I_MIN | HWMON_I_MIN_ALARM |
+> +			   HWMON_I_RESET_HISTORY | HWMON_I_MAX_ALARM |
+> +			   HWMON_I_ENABLE | HWMON_I_LABEL),
+> +	HWMON_CHANNEL_INFO(curr,
+> +			   HWMON_C_INPUT | HWMON_C_LOWEST | HWMON_C_HIGHEST |
+> +			   HWMON_C_MAX | HWMON_C_MIN | HWMON_C_MIN_ALARM |
+> +			   HWMON_C_MAX_ALARM | HWMON_C_CRIT_ALARM |
+> +			   HWMON_C_RESET_HISTORY | HWMON_C_LABEL),
+> +	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_INPUT_LOWEST |
+> +			   HWMON_P_INPUT_HIGHEST | HWMON_P_MAX | HWMON_P_MIN |
+> +			   HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
+> +			   HWMON_P_RESET_HISTORY | HWMON_P_LABEL),
+> +	HWMON_CHANNEL_INFO(energy,
+> +			   HWMON_E_ENABLE),
+> +	HWMON_CHANNEL_INFO(energy64,
+> +			   HWMON_E_INPUT),
 > +	NULL
 > +};
 > +
-> +/**
-> + * struct emc1812_features - features of a emc1812 instance
-> + * @name:		chip's name
-> + * @phys_channels:	number of physical channels supported by the chip
-> + */
-> +struct emc1812_features {
-> +	const char	*name;
-> +	u8		phys_channels;
+> +static const struct hwmon_ops ltc4283_ops = {
+> +	.read = ltc4283_read,
+> +	.write = ltc4283_write,
+> +	.is_visible = ltc4283_is_visible,
+> +	.read_string = ltc4283_read_labels,
 > +};
 > +
-> +static const struct emc1812_features emc1833_chip_config = {
-> +	.name = "emc1833",
-> +	.phys_channels = 3,
+> +static const struct hwmon_chip_info ltc4283_chip_info = {
+> +	.ops = &ltc4283_ops,
+> +	.info = ltc4283_info,
 > +};
 > +
-> +static const struct emc1812_features emc1812_chip_config = {
-> +	.name = "emc1812",
-> +	.phys_channels = 2,
+> +static int ltc4283_show_fault_log(void *arg, u64 *val, u32 mask)
+> +{
+> +	struct ltc4283_hwmon *st = arg;
+> +	long alarm;
+> +	int ret;
+> +
+> +	ret = ltc4283_read_alarm(st, LTC4283_FAULT_LOG, mask, &alarm);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = alarm;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_show_in0_lcrit_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_UV_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_in0_lcrit_fault_log,
+> +			 ltc4283_show_in0_lcrit_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_in0_crit_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_OV_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_in0_crit_fault_log,
+> +			 ltc4283_show_in0_crit_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_fet_bad_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_FET_BAD_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_fet_bad_fault_log,
+> +			 ltc4283_show_fet_bad_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_fet_short_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_FET_SHORT_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_fet_short_fault_log,
+> +			 ltc4283_show_fet_short_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_curr1_crit_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_OC_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_curr1_crit_fault_log,
+> +			 ltc4283_show_curr1_crit_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_power1_failed_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_PWR_FAIL_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_power1_failed_fault_log,
+> +			 ltc4283_show_power1_failed_fault_log, NULL, "%llu\n");
+> +
+> +static int ltc4283_show_power1_good_input_fault_log(void *arg, u64 *val)
+> +{
+> +	return ltc4283_show_fault_log(arg, val, LTC4283_PGI_FAULT_MASK);
+> +}
+> +DEFINE_DEBUGFS_ATTRIBUTE(ltc4283_power1_good_input_fault_log,
+> +			 ltc4283_show_power1_good_input_fault_log, NULL, "%llu\n");
+> +
+> +static void ltc4283_debugfs_init(struct ltc4283_hwmon *st, struct i2c_client *i2c)
+> +{
+> +	debugfs_create_file_unsafe("in0_crit_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_in0_crit_fault_log);
+> +	debugfs_create_file_unsafe("in0_lcrit_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_in0_lcrit_fault_log);
+> +	debugfs_create_file_unsafe("in0_fet_bad_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_fet_bad_fault_log);
+> +	debugfs_create_file_unsafe("in0_fet_short_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_fet_short_fault_log);
+> +	debugfs_create_file_unsafe("curr1_crit_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_curr1_crit_fault_log);
+> +	debugfs_create_file_unsafe("power1_failed_fault_log", 0400, i2c->debugfs, st,
+> +				   &ltc4283_power1_failed_fault_log);
+> +	debugfs_create_file_unsafe("power1_good_input_fault_log", 0400, i2c->debugfs,
+> +				   st, &ltc4283_power1_good_input_fault_log);
+> +}
+> +
+> +static bool ltc4283_is_word_reg(unsigned int reg)
+> +{
+> +	return reg >= LTC4283_SENSE && reg <= LTC4283_ADIO34_MAX;
+> +}
+> +
+> +static int ltc4283_reg_read(void *context, unsigned int reg, unsigned int *val)
+> +{
+> +	struct i2c_client *client = context;
+> +	int ret;
+> +
+> +	if (ltc4283_is_word_reg(reg))
+> +		ret = i2c_smbus_read_word_swapped(client, reg);
+> +	else
+> +		ret = i2c_smbus_read_byte_data(client, reg);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = ret;
+> +	return 0;
+> +}
+> +
+> +static int ltc4283_reg_write(void *context, unsigned int reg, unsigned int val)
+> +{
+> +	struct i2c_client *client = context;
+> +
+> +	if (ltc4283_is_word_reg(reg))
+> +		return i2c_smbus_write_word_swapped(client, reg, val);
+> +
+> +	return i2c_smbus_write_byte_data(client, reg, val);
+> +}
+> +
+> +static const struct regmap_bus ltc4283_regmap_bus = {
+> +	.reg_read = ltc4283_reg_read,
+> +	.reg_write = ltc4283_reg_write,
 > +};
 > +
-> +static const struct emc1812_features emc1813_chip_config = {
-> +	.name = "emc1813",
-> +	.phys_channels = 3,
-> +};
-> +
-> +static const struct emc1812_features emc1814_chip_config = {
-> +	.name = "emc1814",
-> +	.phys_channels = 4,
-> +};
-> +
-> +static const struct emc1812_features emc1815_chip_config = {
-> +	.name = "emc1815",
-> +	.phys_channels = 5,
-> +};
-> +
-> +enum emc1812_limit_type {temp_min, temp_max};
-> +
-> +static u8 emc1812_temp_map[] = {
-
-const
-
-> +	[hwmon_temp_min] = temp_min,
-> +	[hwmon_temp_max] = temp_max,
-> +};
-> +
-> +static u8 emc1812_temp_crit_regs[] = {
-
-const 
-> +	[0] = EMC1812_INT_DIODE_THERM_LIMIT_ADDR,
-> +	[1] = EMC1812_EXT1_THERM_LIMIT_ADDR,
-> +	[2] = EMC1812_EXT2_THERM_LIMIT_ADDR,
-> +	[3] = EMC1812_EXT3_THERM_LIMIT_ADDR,
-> +	[4] = EMC1812_EXT4_THERM_LIMIT_ADDR,
-> +};
-> +
-> +static u8 emc1812_limit_regs[][2] = {
-
-const
-
-> +	[0] = {
-> +		[temp_min] = EMC1812_INT_DIODE_LOW_LIMIT_ADDR,
-> +		[temp_max] = EMC1812_INT_DIODE_HIGH_LIMIT_ADDR,
-> +	},
-> +	[1] = {
-> +		[temp_min] = EMC1812_EXT1_LOW_LIMIT_HIGH_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT1_HIGH_LIMIT_HIGH_BYTE_ADDR,
-> +	},
-> +	[2] = {
-> +		[temp_min] = EMC1812_EXT2_LOW_LIMIT_HIGH_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT2_HIGH_LIMIT_HIGH_BYTE_ADDR,
-> +	},
-> +	[3] = {
-> +		[temp_min] = EMC1812_EXT3_LOW_LIMIT_HIGH_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT3_HIGH_LIMIT_HIGH_BYTE_ADDR,
-> +	},
-> +	[4] = {
-> +		[temp_min] = EMC1812_EXT4_LOW_LIMIT_HIGH_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT4_HIGH_LIMIT_HIGH_BYTE_ADDR,
-> +	},
-> +};
-> +
-> +static u8 emc1812_limit_regs_low[][2] = {
-
-const
-
-> +	[0] = {
-> +		[temp_min] = 0xff,
-> +		[temp_max] = 0xff,
-> +	},
-> +	[1] = {
-> +		[temp_min] = EMC1812_EXT1_LOW_LIMIT_LOW_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT1_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +	},
-> +	[2] = {
-> +		[temp_min] = EMC1812_EXT2_LOW_LIMIT_LOW_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT2_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +	},
-> +	[3] = {
-> +		[temp_min] = EMC1812_EXT3_LOW_LIMIT_LOW_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT3_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +	},
-> +	[4] = {
-> +		[temp_min] = EMC1812_EXT4_LOW_LIMIT_LOW_BYTE_ADDR,
-> +		[temp_max] = EMC1812_EXT4_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +	},
-> +};
-> +
-> +/* Lookup table for temperature conversion times in msec */
-> +static const u16 emc1812_conv_time[] = {
-> +	16000, 8000, 4000, 2000, 1000, 500, 250, 125, 62, 31, 16
-> +};
-> +
-> +/**
-> + * struct emc1812_data - information about chip parameters
-> + * @labels:		labels of the channels
-> + * @active_ch_mask:	active channels
-> + * @chip:		pointer to structure holding chip features
-> + * @regmap:		device register map
-> + * @recd34_en:		state of Resistance Error Correction (REC) on channels 3 and 4
-> + * @recd12_en:		state of Resistance Error Correction (REC) on channels 1 and 2
-> + * @apdd_en:		state of anti-parallel diode mode
-> + */
-> +struct emc1812_data {
-> +	const char *labels[EMC1812_MAX_NUM_CHANNELS];
-> +	unsigned long active_ch_mask;
-> +	const struct emc1812_features *chip;
-> +	struct regmap *regmap;
-> +	bool recd34_en;
-> +	bool recd12_en;
-> +	bool apdd_en;
-> +};
-> +
-> +/* emc1812 regmap configuration */
-> +static const struct regmap_range emc1812_regmap_writable_ranges[] = {
-> +	regmap_reg_range(EMC1812_CFG_ADDR, EMC1812_ONE_SHOT_ADDR),
-> +	regmap_reg_range(EMC1812_EXT1_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +			 EMC1812_EXT_DIODE_FAULT_STATUS_ADDR),
-> +	regmap_reg_range(EMC1812_DIODE_FAULT_MASK_ADDR, EMC1812_CONSEC_ALERT_ADDR),
-> +	regmap_reg_range(EMC1812_EXT1_BETA_CONFIG_ADDR, EMC1812_FILTER_SEL_ADDR),
-> +	regmap_reg_range(EMC1812_HOTTEST_STATUS_ADDR, EMC1812_HOTTEST_CFG_ADDR),
-> +};
-
-Several of those registers (such as EMC1812_EXT_DIODE_FAULT_STATUS_ADDR and
-EMC1812_HIGH_LIMIT_STATUS_ADDR) are actually read-only.
-
-> +
-> +static const struct regmap_access_table emc1812_regmap_wr_table = {
-> +	.yes_ranges = emc1812_regmap_writable_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(emc1812_regmap_writable_ranges),
-> +};
-> +
-> +static const struct regmap_range emc1812_regmap_rd_ranges[] = {
-> +	regmap_reg_range(EMC1812_STATUS_ADDR, EMC1812_CONFIG_LO_ADDR),
-> +	regmap_reg_range(EMC1812_CFG_ADDR, EMC1812_ONE_SHOT_ADDR),
-> +	regmap_reg_range(EMC1812_EXT1_HIGH_LIMIT_LOW_BYTE_ADDR,
-> +			 EMC1812_EXT_DIODE_FAULT_STATUS_ADDR),
-> +	regmap_reg_range(EMC1812_DIODE_FAULT_MASK_ADDR, EMC1812_CONSEC_ALERT_ADDR),
-> +	regmap_reg_range(EMC1812_EXT1_BETA_CONFIG_ADDR, EMC1812_FILTER_SEL_ADDR),
-> +	regmap_reg_range(EMC1812_INT_HIGH_BYTE_ADDR, EMC1812_HOTTEST_CFG_ADDR),
-> +	regmap_reg_range(EMC1812_PRODUCT_ID_ADDR, EMC1812_REVISION_ADDR),
-> +};
-> +
-> +static const struct regmap_access_table emc1812_regmap_rd_table = {
-> +	.yes_ranges = emc1812_regmap_rd_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(emc1812_regmap_rd_ranges),
-> +};
-> +
-> +static bool emc1812_is_volatile_reg(struct device *dev, unsigned int reg)
+> +static bool ltc4283_writable_reg(struct device *dev, unsigned int reg)
 > +{
 > +	switch (reg) {
-> +	case EMC1812_STATUS_ADDR:
-> +	case EMC1812_EXT_DIODE_FAULT_STATUS_ADDR:
-> +	case EMC1812_DIODE_FAULT_MASK_ADDR:
-> +	case EMC1812_EXT1_BETA_CONFIG_ADDR:
-> +	case EMC1812_EXT2_BETA_CONFIG_ADDR:
-> +	case EMC1812_HIGH_LIMIT_STATUS_ADDR:
-> +	case EMC1812_LOW_LIMIT_STATUS_ADDR:
-> +	case EMC1812_THERM_LIMIT_STATUS_ADDR:
-> +	case EMC1812_ROC_STATUS_ADDR:
-> +	case EMC1812_PER_MAXTH_1_ADDR:
-> +	case EMC1812_PER_MAXT1L_ADDR:
-> +	case EMC1812_PER_MAXTH_2_ADDR:
-> +	case EMC1812_PER_MAXT2_3L_ADDR:
-> +	case EMC1812_GBL_MAXT1H_ADDR:
-> +	case EMC1812_GBL_MAXT1L_ADDR:
-> +	case EMC1812_GBL_MAXT2H_ADDR:
-> +	case EMC1812_GBL_MAXT2L_ADDR:
-> +	case EMC1812_INT_HIGH_BYTE_ADDR:
-> +	case EMC1812_INT_LOW_BYTE_ADDR:
-> +	case EMC1812_EXT1_HIGH_BYTE_ADDR:
-> +	case EMC1812_EXT1_LOW_BYTE_ADDR:
-> +	case EMC1812_EXT2_HIGH_BYTE_ADDR:
-> +	case EMC1812_EXT2_LOW_BYTE_ADDR:
-> +	case EMC1812_EXT3_HIGH_BYTE_ADDR:
-> +	case EMC1812_EXT3_LOW_BYTE_ADDR:
-> +	case EMC1812_EXT4_HIGH_BYTE_ADDR:
-> +	case EMC1812_EXT4_LOW_BYTE_ADDR:
-> +	case EMC1812_HOTTEST_DIODE_HIGH_BYTE_ADDR:
-> +	case EMC1812_HOTTEST_DIODE_LOW_BYTE_ADDR:
-> +	case EMC1812_HOTTEST_STATUS_ADDR:
-> +		return true;
-> +	default:
+> +	case LTC4283_SYSTEM_STATUS ... LTC4283_FAULT_STATUS:
 > +		return false;
+> +	case LTC4283_RESERVED_OC:
+> +		return false;
+> +	case LTC4283_RESERVED_86 ... LTC4283_RESERVED_8F:
+> +		return false;
+> +	case LTC4283_RESERVED_91 ... LTC4283_RESERVED_A1:
+> +		return false;
+> +	case LTC4283_RESERVED_A3:
+> +		return false;
+> +	case LTC4283_RESERVED_AC:
+> +		return false;
+> +	case LTC4283_POWER_PLAY_MSB ... LTC4283_POWER_PLAY_LSB:
+> +		return false;
+> +	case LTC4283_RESERVED_F1 ... LTC4283_RESERVED_FF:
+> +		return false;
+> +	default:
+> +		return true;
 > +	}
 > +}
 > +
-> +static const struct regmap_config emc1812_regmap_config = {
+> +static const struct regmap_config ltc4283_regmap_config = {
 > +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.rd_table = &emc1812_regmap_rd_table,
-> +	.wr_table = &emc1812_regmap_wr_table,
-> +	.volatile_reg = emc1812_is_volatile_reg,
-> +	.max_register = EMC1812_REVISION_ADDR,
-> +	.cache_type = REGCACHE_MAPLE,
+> +	.val_bits = 16,
+> +	.max_register = 0xFF,
+> +	.writeable_reg = ltc4283_writable_reg,
 > +};
 > +
-> +static umode_t emc1812_is_visible(const void *_data, enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
+> +static int ltc4283_probe(struct i2c_client *client)
 > +{
-> +	const struct emc1812_data *data = _data;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		/* Don't show channels which are not described into the device tree */
-> +		if (!(data->active_ch_mask & BIT(channel)))
-> +			return 0;
-> +
-> +		/* Don't show channels which are not physically connected */
-> +		if (channel >= data->chip->phys_channels)
-> +			return 0;
-> +
-> +		switch (attr) {
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max:
-> +		case hwmon_temp_crit:
-> +		case hwmon_temp_crit_hyst:
-> +			return 0644;
-> +		case hwmon_temp_crit_alarm:
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_fault:
-> +		case hwmon_temp_max_alarm:
-> +		case hwmon_temp_max_hyst:
-> +		case hwmon_temp_min_alarm:
-> +			return 0444;
-> +		case hwmon_temp_label:
-> +			if (data->labels[channel])
-> +				return 0444;
-> +			return 0;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			return 0644;
-> +		default:
-> +			return 0;
-> +		}
-> +	default:
-> +		return 0;
-> +	}
-> +};
-> +
-> +static int emc1812_get_temp(struct emc1812_data *data, int channel, long *val)
-> +{
-> +	__be16 tmp_be16;
+> +	struct device *dev = &client->dev, *hwmon;
+> +	struct auxiliary_device *adev;
+> +	struct ltc4283_hwmon *st;
 > +	int ret;
 > +
-> +	ret = regmap_bulk_read(data->regmap, EMC1812_TEMP_CH_ADDR(channel),
-> +			       &tmp_be16, sizeof(tmp_be16));
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Range is always -64 to 191.875°C */
-> +	*val = ((be16_to_cpu(tmp_be16) >> 5) - (EMC1812_TEMP_OFFSET << 3)) * 125;
-> +
-> +	return 0;
-> +}
-> +
-> +static int emc1812_get_crit_limit_temp(struct emc1812_data *data, int channel, long *val)
-> +{
-> +	unsigned int tmp;
-> +	int ret;
-> +
-> +	/* Critical register is 8bits long and keeps only integer part of temperature */
-> +	ret = regmap_read(data->regmap, emc1812_temp_crit_regs[channel], &tmp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = tmp;
-> +	/* Range is always -64 to 191°C */
-> +	*val = (*val - EMC1812_TEMP_OFFSET) * 1000;
-> +
-> +	return 0;
-> +}
-> +
-> +static int emc1812_get_limit_temp(struct emc1812_data *data, int ch,
-> +				  enum emc1812_limit_type type, long *val)
-> +{
-> +	unsigned int regvalh;
-> +	unsigned int regvall = 0;
-> +	int ret;
-> +
-> +	ret = regmap_read(data->regmap, emc1812_limit_regs[ch][type], &regvalh);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ch) {
-> +		ret = regmap_read(data->regmap, emc1812_limit_regs_low[ch][type], &regvall);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	/* Range is always -64 to 191.875°C */
-> +	*val = ((regvalh << 3) | (regvall >> 5));
-> +	*val = (*val - (EMC1812_TEMP_OFFSET << 3)) * 125;
-> +
-> +	return 0;
-> +}
-> +
-> +static int emc1812_read_reg(struct device *dev, struct emc1812_data *data, u32 attr,
-> +			    int channel, long *val)
-> +{
-> +	int hyst, ret;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_min:
-> +	case hwmon_temp_max:
-> +		return emc1812_get_limit_temp(data, channel, emc1812_temp_map[attr], val);
-> +	case hwmon_temp_crit:
-> +		return emc1812_get_crit_limit_temp(data, channel, val);
-> +	case hwmon_temp_input:
-> +		return emc1812_get_temp(data, channel, val);
-> +	case hwmon_temp_max_hyst:
-> +		ret = emc1812_get_limit_temp(data, channel, temp_max, val);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = regmap_read(data->regmap, EMC1812_THRM_HYS_ADDR, &hyst);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		*val -= hyst * 1000;
-> +
-> +		return 0;
-> +	case hwmon_temp_crit_hyst:
-> +		ret = emc1812_get_crit_limit_temp(data, channel, val);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = regmap_read(data->regmap, EMC1812_THRM_HYS_ADDR, &hyst);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		*val -= hyst * 1000;
-> +
-> +		return 0;
-> +	case hwmon_temp_min_alarm:
-> +		*val = regmap_test_bits(data->regmap, EMC1812_LOW_LIMIT_STATUS_ADDR,
-> +					BIT(channel));
-> +		if (*val < 0)
-> +			return *val;
-> +
-> +		return 0;
-> +	case hwmon_temp_max_alarm:
-> +		*val = regmap_test_bits(data->regmap, EMC1812_HIGH_LIMIT_STATUS_ADDR,
-> +					BIT(channel));
-> +		if (*val < 0)
-> +			return *val;
-> +
-> +		return 0;
-> +	case hwmon_temp_crit_alarm:
-> +		*val = regmap_test_bits(data->regmap, EMC1812_THERM_LIMIT_STATUS_ADDR,
-> +					BIT(channel));
-> +		if (*val < 0)
-> +			return *val;
-> +
-> +		return 0;
-> +	case hwmon_temp_fault:
-> +		*val = regmap_test_bits(data->regmap, EMC1812_EXT_DIODE_FAULT_STATUS_ADDR,
-> +					BIT(channel));
-> +		if (*val < 0)
-> +			return *val;
-> +
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int emc1812_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +			int channel, long *val)
-> +{
-> +	struct emc1812_data *data = dev_get_drvdata(dev);
-> +	unsigned int convrate;
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return emc1812_read_reg(dev, data, attr, channel, val);
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			ret = regmap_read(data->regmap, EMC1812_CONV_ADDR, &convrate);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			if (convrate > 10)
-> +				convrate = 4;
-> +
-> +			*val = DIV_ROUND_CLOSEST(16000, 1 << convrate);
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int emc1812_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, const char **str)
-> +{
-> +	struct emc1812_data *data = dev_get_drvdata(dev);
-> +
-> +	if (channel >= data->chip->phys_channels)
-> +		return 0;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_label:
-> +			*str = data->labels[channel];
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int emc1812_set_hyst(struct emc1812_data *data, int channel, int val)
-> +{
-> +	int hyst, ret;
-> +	int limit;
-> +
-> +	/* Critical register is 8bits long and keeps only integer part of temperature */
-> +	ret = regmap_read(data->regmap, emc1812_temp_crit_regs[channel], &limit);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hyst = clamp_val(limit - val, 0, 255);
-> +
-> +	ret = regmap_write(data->regmap, EMC1812_THRM_HYS_ADDR, hyst);
-> +
-> +	return ret;
-> +}
-> +
-> +static int emc1812_set_temp(struct emc1812_data *data, int channel,
-> +			    enum emc1812_limit_type map, int val)
-> +{
-> +	long valh, vall;
-> +	u8 regh, regl;
-> +	int ret;
-> +
-> +	regh = emc1812_limit_regs[channel][map];
-> +	regl = emc1812_limit_regs_low[channel][map];
-> +
-> +	if (channel) {
-> +		val = DIV_ROUND_CLOSEST(val, 125);
-> +		valh = (val >> 3) & 0xff;
-> +		vall = (val & 0x07) << 5;
-> +	} else {
-> +		/* Temperature limit for internal channel is stored on 8bits */
-> +		valh = DIV_ROUND_CLOSEST(val, 1000);
-> +		valh = clamp_val(valh, 0, 255);
-> +	}
-> +
-> +	ret = regmap_write(data->regmap, regh, valh);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (channel)
-> +		ret = regmap_write(data->regmap, regl, vall);
-> +
-> +	return ret;
-> +}
-> +
-> +static int emc1812_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +			 int channel, long val)
-> +{
-> +	struct emc1812_data *data = dev_get_drvdata(dev);
-> +	unsigned int interval;
-> +	int convrate;
-> +
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		/* Range should be -64000 to 191875°C + (EMC1812_TEMP_OFFSET * 1000) */
-> +		val = clamp_val(val, -64000, 191875);
-> +		val = val + (EMC1812_TEMP_OFFSET * 1000);
-> +
-> +		switch (attr) {
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max:
-> +			return emc1812_set_temp(data, channel, emc1812_temp_map[attr], val);
-> +		case hwmon_temp_crit:
-> +			/* Critical temperature limit is stored on 8bits */
-> +			val = DIV_ROUND_CLOSEST(val, 1000);
-> +			val = clamp_val(val, 0, 255);
-> +			return regmap_write(data->regmap, emc1812_temp_crit_regs[channel], val);
-> +		case hwmon_temp_crit_hyst:
-> +			/* Critical temperature hysteresis is stored on 8bits */
-> +			val = DIV_ROUND_CLOSEST(val, 1000);
-> +			val = clamp_val(val, 0, 255);
-> +			return emc1812_set_hyst(data, channel, val);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	case hwmon_chip:
-> +		switch (attr) {
-> +		case hwmon_chip_update_interval:
-> +			interval = clamp_val(val, 0, 16000);
-> +			convrate = find_closest_descending(interval, emc1812_conv_time,
-> +							   ARRAY_SIZE(emc1812_conv_time));
-> +			return regmap_write(data->regmap, EMC1812_CONV_ADDR, convrate);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int emc1812_init(struct emc1812_data *priv)
-> +{
-> +	int ret;
-> +	u8 val;
-> +
-> +	/*
-> +	 * Set default values in registers. APDD, RECD12 and RECD34 are active
-> +	 * on 0. Set ALERT pin to be in comparator mode.
-> +	 * Set the device to be in Run (Active) state and converting on all
-> +	 * channels.
-> +	 * Don't change conversion rate. After reset, default is 4 conversions/seconds.
-> +	 * The temperature measurement range is -64°C to +191.875°C.
-> +	 */
-> +	val = FIELD_PREP(EMC1812_CFG_MSKAL, 1) |
-> +	      FIELD_PREP(EMC1812_CFG_RS, 0) |
-> +	      FIELD_PREP(EMC1812_CFG_ATTHM, 1) |
-> +	      FIELD_PREP(EMC1812_CFG_RECD12, !priv->recd12_en) |
-> +	      FIELD_PREP(EMC1812_CFG_RECD34, !priv->recd34_en) |
-> +	      FIELD_PREP(EMC1812_CFG_RANGE, 1) |
-> +	      FIELD_PREP(EMC1812_CFG_DA_ENA, 0) |
-> +	      FIELD_PREP(EMC1812_CFG_APDD, !priv->apdd_en);
-> +
-
-I assume it is on purpose that the defaults for EMC1812_CFG_RECD12 and
-EMC1812_CFG_RECD34 deviate from the chip default (chip: enabled; driver:
-disabled).
-
-> +	ret = regmap_write(priv->regmap, EMC1812_CFG_ADDR, val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_THRM_HYS_ADDR, 0x0A);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_CONSEC_ALERT_ADDR, 0x70);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_FILTER_SEL_ADDR, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_HOTTEST_CFG_ADDR, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Enables the beta compensation factor auto-detection function for beta1 and beta2 */
-> +	ret = regmap_write(priv->regmap, EMC1812_EXT1_BETA_CONFIG_ADDR,
-> +			   EMC1812_BETA_LOCK_VAL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_EXT2_BETA_CONFIG_ADDR,
-
-AI review thinks that this register only exists on EMC1812. I don't
-find that detail in the datasheet, but it is odd that there are two registers
-with supposedly the same functionality.
-
-> +			   EMC1812_BETA_LOCK_VAL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Set ideality factor for all external channels */
-> +	ret = regmap_write(priv->regmap, EMC1812_EXT1_IDEALITY_FACTOR_ADDR,
-> +			   EMC1812_DEFAULT_IDEALITY_FACTOR);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Set the ideality factor only for the channels supported by the chip */
-> +	if (priv->chip->phys_channels < 3)
-> +		return 0;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_EXT2_IDEALITY_FACTOR_ADDR,
-> +			   EMC1812_DEFAULT_IDEALITY_FACTOR);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (priv->chip->phys_channels < 4)
-> +		return 0;
-> +
-> +	ret = regmap_write(priv->regmap, EMC1812_EXT3_IDEALITY_FACTOR_ADDR,
-> +			   EMC1812_DEFAULT_IDEALITY_FACTOR);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (priv->chip->phys_channels < 5)
-> +		return 0;
-> +
-> +	return regmap_write(priv->regmap, EMC1812_EXT4_IDEALITY_FACTOR_ADDR,
-> +			    EMC1812_DEFAULT_IDEALITY_FACTOR);
-> +}
-> +
-> +static int emc1812_parse_fw_config(struct emc1812_data *data, struct device *dev)
-> +{
-> +	unsigned int reg_nr = 0;
-> +	int num_channels, ret;
-> +
-> +	/* To be able to load the driver in case we don't have device tree */
-> +	if (!dev_fwnode(dev)) {
-> +		data->active_ch_mask = BIT(data->chip->phys_channels) - 1;
-> +		return 0;
-> +	}
-> +
-> +	data->apdd_en = device_property_read_bool(dev, "microchip,enable-anti-parallel");
-> +	data->recd12_en = device_property_read_bool(dev, "microchip,parasitic-res-on-channel1-2");
-> +	data->recd34_en = device_property_read_bool(dev, "microchip,parasitic-res-on-channel3-4");
-> +
-> +	num_channels = device_get_child_node_count(dev) + 1;
-> +
-> +	if (num_channels > data->chip->phys_channels)
-> +		return dev_err_probe(dev, -EINVAL, "More channels than the chip supports\n");
-> +
-> +	/* Internal temperature channel is always active */
-> +	data->labels[reg_nr] = "internal_diode";
-> +	set_bit(reg_nr, &data->active_ch_mask);
-> +
-> +	device_for_each_child_node_scoped(dev, child) {
-> +		ret = fwnode_property_read_u32(child, "reg", &reg_nr);
-> +		if (ret || reg_nr >= data->chip->phys_channels)
-> +			return dev_err_probe(dev, -EINVAL,
-> +				     "The index of the channels does not match the chip\n");
-> +		/* Mark external channel as active */
-> +		set_bit(reg_nr, &data->active_ch_mask);
-> +
-> +		fwnode_property_read_string(child, "label", &data->labels[reg_nr]);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int emc1812_chip_identify(struct emc1812_data *data, struct i2c_client *client)
-> +{
-> +	const struct emc1812_features *chip;
-> +	struct device *dev = &client->dev;
-> +	int ret, tmp;
-> +
-> +	ret = regmap_read(data->regmap, EMC1812_PRODUCT_ID_ADDR, &tmp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (tmp) {
-> +	case EMC1812_PID:
-> +		data->chip = &emc1812_chip_config;
-> +		break;
-> +	case EMC1813_PID:
-> +		data->chip = &emc1813_chip_config;
-> +		break;
-> +	case EMC1814_PID:
-> +		data->chip = &emc1814_chip_config;
-> +		break;
-> +	case EMC1815_PID:
-> +		data->chip = &emc1815_chip_config;
-> +		break;
-> +	case EMC1833_PID:
-> +		data->chip = &emc1833_chip_config;
-> +		break;
-> +	default:
-> +		/*
-> +		 * If failed to identify the hardware based on internal registers,
-> +		 * try using fallback compatible in device tree to deal with some
-> +		 * newer part number.
-> +		 */
-> +		chip = i2c_get_match_data(client);
-> +		if (!chip)
-> +			return -ENODEV;
-> +
-> +		dev_warn(dev, "Unrecognized hardware ID 0x%x, using %s from devicetree data\n",
-> +			 tmp, chip->name);
-> +
-> +		data->chip = chip;
-> +
-> +		return 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops emc1812_ops = {
-> +	.is_visible = emc1812_is_visible,
-> +	.read = emc1812_read,
-> +	.read_string = emc1812_read_string,
-> +	.write = emc1812_write,
-> +};
-> +
-> +static const struct hwmon_chip_info emc1812_chip_info = {
-> +	.ops = &emc1812_ops,
-> +	.info = emc1812_info,
-> +};
-> +
-> +static int emc1812_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct emc1812_data *data;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
+> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+> +	if (!st)
 > +		return -ENOMEM;
 > +
-> +	data->regmap = devm_regmap_init_i2c(client, &emc1812_regmap_config);
-> +	if (IS_ERR(data->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(data->regmap),
-> +				     "Cannot initialize register map\n");
+> +	if (!i2c_check_functionality(client->adapter,
+> +				     I2C_FUNC_SMBUS_BYTE_DATA |
+> +				     I2C_FUNC_SMBUS_WORD_DATA |
+> +				     I2C_FUNC_SMBUS_READ_I2C_BLOCK))
+> +		return -EOPNOTSUPP;
 > +
-> +	ret = emc1812_chip_identify(data, client);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Chip identification fails\n");
+> +	st->client = client;
+> +	st->map = devm_regmap_init(dev, &ltc4283_regmap_bus, client,
+> +				   &ltc4283_regmap_config);
+> +	if (IS_ERR(st->map))
+> +		return dev_err_probe(dev, PTR_ERR(st->map),
+> +				     "Failed to create regmap\n");
 > +
-> +	ret = emc1812_parse_fw_config(data, dev);
+> +	ret = ltc4283_setup(st, dev);
 > +	if (ret)
 > +		return ret;
 > +
-> +	ret = emc1812_init(data);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Cannot initialize device\n");
+> +	hwmon = devm_hwmon_device_register_with_info(dev, "ltc4283", st,
+> +						     &ltc4283_chip_info, NULL);
 > +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
-> +							 &emc1812_chip_info, NULL);
+> +	if (IS_ERR(hwmon))
+> +		return PTR_ERR(hwmon);
 > +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +	ltc4283_debugfs_init(st, client);
+> +
+> +	if (!st->gpio_mask)
+> +		return 0;
+> +
+> +	adev = devm_auxiliary_device_create(dev, "gpio", &st->gpio_mask);
+> +	if (!adev)
+> +		return dev_err_probe(dev, -ENODEV, "Failed to add GPIO device\n");
+> +
+> +	return 0;
 > +}
 > +
-> +static const struct i2c_device_id emc1812_id[] = {
-> +	{ .name = "emc1812", .driver_data = (kernel_ulong_t)&emc1812_chip_config },
-> +	{ .name = "emc1813", .driver_data = (kernel_ulong_t)&emc1813_chip_config },
-> +	{ .name = "emc1814", .driver_data = (kernel_ulong_t)&emc1814_chip_config },
-> +	{ .name = "emc1815", .driver_data = (kernel_ulong_t)&emc1815_chip_config },
-> +	{ .name = "emc1833", .driver_data = (kernel_ulong_t)&emc1833_chip_config },
+> +static const struct of_device_id ltc4283_of_match[] = {
+> +	{ .compatible = "adi,ltc4283" },
 > +	{ }
 > +};
-> +MODULE_DEVICE_TABLE(i2c, emc1812_id);
 > +
-> +static const struct of_device_id emc1812_of_match[] = {
-> +	{
-> +		.compatible = "microchip,emc1812",
-> +		.data = &emc1812_chip_config
-> +	},
-> +	{
-> +		.compatible = "microchip,emc1813",
-> +		.data = &emc1813_chip_config
-> +	},
-> +	{
-> +		.compatible = "microchip,emc1814",
-> +		.data = &emc1814_chip_config
-> +	},
-> +	{
-> +		.compatible = "microchip,emc1815",
-> +		.data = &emc1815_chip_config
-> +	},
-> +	{
-> +		.compatible = "microchip,emc1833",
-> +		.data = &emc1833_chip_config
-> +	},
+> +static const struct i2c_device_id ltc4283_i2c_id[] = {
+> +	{ "ltc4283" },
 > +	{ }
 > +};
-> +MODULE_DEVICE_TABLE(of, emc1812_of_match);
+> +MODULE_DEVICE_TABLE(i2c, ltc4283_i2c_id);
 > +
-> +static struct i2c_driver emc1812_driver = {
-> +	.driver	 = {
-> +		.name = "emc1812",
-> +		.of_match_table = emc1812_of_match,
+> +static struct i2c_driver ltc4283_driver = {
+> +	.driver	= {
+> +		.name = "ltc4283",
+> +		.of_match_table = ltc4283_of_match,
 > +	},
-> +	.probe = emc1812_probe,
-> +	.id_table = emc1812_id,
+> +	.probe = ltc4283_probe,
+> +	.id_table = ltc4283_i2c_id,
 > +};
-> +module_i2c_driver(emc1812_driver);
+> +module_i2c_driver(ltc4283_driver);
 > +
-> +MODULE_AUTHOR("Marius Cristea <marius.cristea@microchip.com>");
-> +MODULE_DESCRIPTION("EMC1812/13/14/15/33 high-accuracy remote diode temperature monitor Driver");
+> +MODULE_AUTHOR("Nuno Sá <nuno.sa@analog.com>");
+> +MODULE_DESCRIPTION("LTC4283 Hot Swap Controller driver");
 > +MODULE_LICENSE("GPL");
-> 
-> -- 
-> 2.51.0
-> 
-> 
