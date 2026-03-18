@@ -1,66 +1,67 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE5130EF84
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 17:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3A2D7804
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 17:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773855250; cv=none; b=Ru4yxBEvb9XJAtFKBhCIhkVQetdmcPn3n3YiO7K7oJnlqfmugXUEPvZeZR1QzMIo8J4UMhzDcCfi8XqCDiCyAcnA0obC5pe5yW8cXXTe/4HVie48AlalOUuDQVF2ubJlRYsvJbafKV8v0CIE3YWNfmKraYS2hWOkPnGz76uYupI=
+	t=1773855450; cv=none; b=E7JRNXdg6PZeNGLkuPTOTngit6E4dH9CmJXvt6rCxczNODFUnKsEINCsHmrBGkjyBkeKjg3blNjFnDwhwx7P/lD902A7ak8/eVzrm2mpU+CEVo8ga+tvUyOgBYRUR58+SAi2Bc/ICLOQ49hq1vVCRWsTMUuJOVTrn7CjqjbFhpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773855250; c=relaxed/simple;
-	bh=8VMNYnpVHaNRAEX/drpWt4PsdIMVh+ZoUPG/IH5ILAk=;
+	s=arc-20240116; t=1773855450; c=relaxed/simple;
+	bh=9N0p1gHJ4/ldCRjXubOfQ1J+k+6ttdTdb0EsZzoophk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SXFJIP0b7zSx2jthRakBN6kahVe3Y5Daa17ZUTsF6xAV5T4bpeQrUgkQCUgh+gS1sl0BLcrvMrHzhVyi7+hneyb2efHjeqroA0K+aUFCEGMVFJsoalsG0vDK2Rna94Eui/SeE5D7Evhz6jlDDZ/FAJk0IgiTsrlL4L/TzfCucKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YiIZSNhe; arc=none smtp.client-ip=209.85.216.50
+	 In-Reply-To:Content-Type; b=WLdTjnCCBZIvHpre8fnINJAyxmhfX7fTkB/tkLUdU3coJ+Su20bN7a/zdae4yMQaKauNO0Lz+13lrNpydqqXnKTRTkLHfXjeRInWCj33oZAd/+icro4IKq4t4pVieX5hYx7YFTern3YG0J1UGgvw/vleZpJWk0H8T8P5OXtOueQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Srzpw+pT; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YiIZSNhe"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-359fea895b5so146675a91.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 10:34:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Srzpw+pT"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b061b6cf36so407645ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 10:37:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773855246; x=1774460046; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773855449; x=1774460249; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPgwoRrC7+QQkTKwjUbOhwycwkaqrufAa2TwHnGOJoA=;
-        b=YiIZSNhecEvRGOqutfd9hM/EMlmogo28LF58oXP44nK5gmxn0S2ySfMpb7uxnnl6Rp
-         Z6ldG5iB1G46L0rUkLDrL0QBD+BlyKCii4Hk47qrPwM+pOtkuH1GZ3d7eXiPKnTiyyBq
-         90w6X68RLfAe3UM4omy2A+S/ORYTGM/NUd8xvvheOn0MYS4ZV3tUnx8n0PPsfqy1Gmef
-         F6atxGYCdGu4ODuJQqWWY4AFy7zmo8+S4K90ecGCt/6kjHnJ+rgs60UAA9NjA2iQk6V3
-         RzG7n/zadIJnBcg4TuOSjxU7TeysX9TwSSmXUJB+0clQE8k8sK0FwQjXhWukAgdAFogS
-         DR6g==
+        bh=OJEyn7i7B9+B9dY5m7w6oyTeXs0Qvwqbo+nm6YMirEU=;
+        b=Srzpw+pTOJVMZnh0BUC8kvo+IU9Fhbs7Ex9hOjEWXe3SeGnIq0nYjP9N/5YAzmF6u9
+         /3yNfOgdysOH84sd/o7dKe36M4sxQVBAynJj0cwhJwwKODoTN42gyHAOB6fWTjEYrFkl
+         7+eXrb9xCoQWZizvvUftMZdLRoF6BlQaujaqDe+b7Hgek4wRc4ZjnmnCGJ1yykhw27f+
+         TMVs3pFdCveloHlCY22hQYhfQJKzG73sln9W9m04exHZfJ7eAgxhSVASdQAwiX8//LCk
+         wAwZ70ruy63MAQplkhnJGZ/DAsV35I295EvieVBMWFBoMEZWD7YxxwCO/7c40lPXOeaj
+         YN6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773855246; x=1774460046;
+        d=1e100.net; s=20251104; t=1773855449; x=1774460249;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EPgwoRrC7+QQkTKwjUbOhwycwkaqrufAa2TwHnGOJoA=;
-        b=LrfMu0Qfl5pRn2FJgAnG+cYiGc6CKdVMmEU0XxNitz7NSLLip3JRlgj+9pZ/bOQwZP
-         npa1NBS5llI58VO1k/ilEes0uxgD5L8Ox8nERQEP7ZhO2u41WOQ+lVHs993qPBgEnhXg
-         FWNumDmzqLxAZn4Bk/f5Cwuwa1SV4R9fy4IxyXacnBcORRQivc1s/1KKNhaV2piIkDbh
-         XvrQ39a+dLcxPda88JLhQLJ96Sh/86yDqrYVQplPJUuLczb042hTXTRHxFNe2hSGyaB8
-         8fRyF+GqtLDY++ql8CJWPgybYcgdV4oRT+ifaX21oxuCeEcsp00iyH+Wr5mpOn986OWc
-         yaeQ==
-X-Gm-Message-State: AOJu0YxQWggXL78gwEnVdIU2/g4OrC/2Ihq/sJ/uF9COgMjDesEBTaF1
-	KoPSXulVPPoHZ9O9bmAQwQVUKA4Nu+jDp80T9048I5XKdpl3deKn+e/T
-X-Gm-Gg: ATEYQzykFNSCxznKknuHI4FD2+05NJufZstnp7aD6bzlS1LdkmtJAjPy+Wf1bOBGi4F
-	b7Me8HTuDhpWHdpjn9sefqm2wxzkYEb0r72HDGDsRd6UawXSylJRjqfNxnIKrF0mJUy9lnhIDgj
-	qUyGPuQco+/jAjoXpb4UUqEdqX5dGt7eTAFQI6kEpRpct5eEn4w8+ulTn/J/24UrcyYjR9bEG0L
-	/3HTOwlEuLFRuy6MRDBXV1LndTevskUiZC98wlaSfZwbSmWyA1savY1FlYmPyZqTcJp9aJdNTFk
-	emQVpvJZHhLw0RPLJtePX4ZpJCJ/p/TS7SU+vFhZ0+IwBRs7M1Qohea5s5Ntd6DvWnizVh+YfNC
-	CJI/X06m53owL+Q18gDv6UetxlbPKQdJZXX+hl6G2SWg2VS4BSpRJZS/p+Evn16aNEhoALbXDyo
-	ULu0RgY/gvtSzw/vpiz1cg1B2lB7S38xUdY4U9yyzJ91JXta2fnn3p3caTh8C7ZFmP6zTLBRc5
-X-Received: by 2002:a17:90b:2781:b0:35b:99f8:966d with SMTP id 98e67ed59e1d1-35bb9f0f790mr3715953a91.24.1773855245704;
-        Wed, 18 Mar 2026 10:34:05 -0700 (PDT)
+        bh=OJEyn7i7B9+B9dY5m7w6oyTeXs0Qvwqbo+nm6YMirEU=;
+        b=MorEWtdJ2sValWtjLPNVQTbZp0EbIvIp+XHR1QF/9GWbsSzJKERKO+B2LD3iS2+UyJ
+         wCNwqtFp2hkV5EsAWbzUyCqVo/By/zmeQQyXYomUiV6KPN4/ub5+anna7eAI8TkbJZbg
+         4Zfh/A8hQdohcweoW7yWhsnwhnxUyk20vHwT3wvFCAVsxYJkyyl458sQsZCpJgM8xSW5
+         rCo1hX6t0ZPAQQHpeFY8LIhtSZbY1Hic+dcLb1dZPoDRlq8SjbXUgMeLRYmGH6VGJV1H
+         rUFRxXmKe+x+Xt1DYaLRU03Nng1L2SZYdwoiai4n4zAyoN9r/dcKPrclFgbdf1bO7o7S
+         A7Fw==
+X-Gm-Message-State: AOJu0YyapC8GkSpF0wWkl2vwNVF0x8s4eMIUBt9AAYTfCGMrOAOJ4BTD
+	Klo+8f6GhEQ1rVarH7gttBW5MQVcRaj4vlH03iaTQl6tPauvaxvJUe3H
+X-Gm-Gg: ATEYQzzeCZp0ywzXT2MWYOYQnPBrfXESRaT0NDdvj7gSPkqa2P8S3jZB+5sTX2a0iHR
+	tB2MgYItahHVBueNQ1pQ6xvLKYui70yabQAY297ae0y1vIv267GGTseB0UhPEfh1/Sr+qH4/0iw
+	dcj/Iu8fQDLjjlhwUggh/opK8/0GVNDfiC3Ksp/f/6DGP4mN5/pYVRu4ijvTGlORYFWeLlPeJhF
+	BZKhSPXSmtj+paZvLg8GIilDO+2TzDkrUG8M6CSSy51nATBLlGGK6nyC9rmZw5pEpNePC1yIREU
+	UgyHptbkF7AzDLmBA6K5yfpiMziQVkCxzdgSjCW8GUSGOIpRvJDik4Wq5DBlfdhshmlkyF801CO
+	M+u/o7jJC34mF5tlJzQUa3sxaueOu2ajVcN/Z5sttn0ZEz2lKrGnz6UeYkBhj4vl3PDjgXnb7+f
+	pM0CuM1wAynEOoyEsPOrX6qT7ABIw/HSPIo4uFrAK7Gsbm51NXqgLjAoOXQ7a/gd99emnyZqhw0
+	gcJagAOz6M=
+X-Received: by 2002:a17:902:ebc2:b0:2b0:400a:c77c with SMTP id d9443c01a7336-2b06e417f21mr54217035ad.44.1773855448985;
+        Wed, 18 Mar 2026 10:37:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bbae5e139sm1034514a91.8.2026.03.18.10.34.04
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e5ef42asm40025865ad.40.2026.03.18.10.37.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 10:34:05 -0700 (PDT)
+        Wed, 18 Mar 2026 10:37:28 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3b9a3b0e-9a52-462b-853e-3f557a422879@roeck-us.net>
-Date: Wed, 18 Mar 2026 10:34:03 -0700
+Message-ID: <5dce0ef8-d61a-4429-aa42-c857b3fd8690@roeck-us.net>
+Date: Wed, 18 Mar 2026 10:37:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,15 +69,15 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: pmbus: mpq8785: add mpm3695-20
- and mpm3690s-15 support
+Subject: Re: [PATCH 2/2] hwmon: pmbus: mpq8785: add support for mpm3695-20 and
+ mpm3690s-15
 To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, paweldembicki@gmail.com,
  carl.lee@amd.com, ythsu0511@gmail.com
 Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, wyx137120466@gmail.com
 References: <20260318094635.1873-1-Yuxi.Wang@monolithicpower.com>
- <0111019d00581351-82f8e649-34b4-4f57-b08c-cebf9d486454-000000@us-west-1.amazonses.com>
+ <0111019d00586e60-e3a938c5-6b1d-47c8-9856-0fc717ece565-000000@us-west-1.amazonses.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -122,38 +123,74 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <0111019d00581351-82f8e649-34b4-4f57-b08c-cebf9d486454-000000@us-west-1.amazonses.com>
+In-Reply-To: <0111019d00586e60-e3a938c5-6b1d-47c8-9856-0fc717ece565-000000@us-west-1.amazonses.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/18/26 02:47, Yuxi Wang wrote:
-> Add device type support for mpm3695-20 and mpm3690s-15.
+On 3/18/26 02:48, Yuxi Wang wrote:
+> Add support for the MPS mpm3695-20 and mpm3690s-15.
 > 
 > Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
 > ---
->   Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml | 2 ++
->   1 file changed, 2 insertions(+)
+>   drivers/hwmon/pmbus/mpq8785.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> index 90970a0433e9..86e979cf0a00 100644
-> --- a/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/mps,mpq8785.yaml
-> @@ -19,6 +19,8 @@ properties:
->         - mps,mpm3695-25
->         - mps,mpm82504
->         - mps,mpq8785
-> +      - mps,mpm3695-20
+> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
+> index 87bd039c77b9..03889a197c4f 100644
+> --- a/drivers/hwmon/pmbus/mpq8785.c
+> +++ b/drivers/hwmon/pmbus/mpq8785.c
+> @@ -12,13 +12,15 @@
+>   
+>   #define MPM82504_READ_TEMPERATURE_1_SIGN_POS	9
+>   
+> -enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785 };
+> +enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785, mpm3695_20, mpm3690s_15 };
+>   
+>   static u16 voltage_scale_loop_max_val[] = {
+>   	[mpm3695] = GENMASK(9, 0),
+>   	[mpm3695_25] = GENMASK(11, 0),
+>   	[mpm82504] = GENMASK(9, 0),
+>   	[mpq8785] = GENMASK(10, 0),
+> +	[mpm3695_20] = GENMASK(9, 0),
+> +	[mpm3690s_15] = GENMASK(9, 0),
+>   };
+>   
+>   static int mpq8785_identify(struct i2c_client *client,
+> @@ -114,6 +116,8 @@ static const struct i2c_device_id mpq8785_id[] = {
+>   	{ "mpm3695-25", mpm3695_25 },
+>   	{ "mpm82504", mpm82504 },
+>   	{ "mpq8785", mpq8785 },
+> +	{ "mpm3695-20", mpm3695_20 },
+> +	{ "mpm3690s-15", mpm3690s_15 },
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(i2c, mpq8785_id);
+> @@ -123,6 +127,8 @@ static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
+>   	{ .compatible = "mps,mpm3695-25", .data = (void *)mpm3695_25 },
+>   	{ .compatible = "mps,mpm82504", .data = (void *)mpm82504 },
+>   	{ .compatible = "mps,mpq8785", .data = (void *)mpq8785 },
+> +	{ .compatible = "mps,mpm3695-20", .data = (void *)mpm3695_20 },
+> +	{ .compatible = "mps,mpm3690s-15", .data = (void *)mpm3690s_15 },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, mpq8785_of_match);
+> @@ -148,6 +154,8 @@ static int mpq8785_probe(struct i2c_client *client)
+>   	case mpm3695:
+>   	case mpm3695_25:
+>   	case mpm82504:
+> +	case mpm3695_20:
+> +	case mpm3690s_15:
+>   		info->format[PSC_VOLTAGE_OUT] = direct;
+>   		info->m[PSC_VOLTAGE_OUT] = 8;
+>   		info->b[PSC_VOLTAGE_OUT] = 0;
 
-Alphabetic order, please.
+I don't think those changes are needed since both chips appear to be fully
+register-compatible to other chips supported by the driver (specifically the
+generic mpm3695 entry for both chips).
 
-We already have mps,mpm3695 and mps,mpm3695-25. The -20 model is covered by
-mps,mpm3695, and a separate entry should therefore not be needed.
-
-> +      - mps,mpm3690s-15
-
-Unless there are other differences, that seems to be register compatible
-to mps,mpm3695 and should therefore also not need a separate property entry.
-It should instead be listed as compatible to mps,mpm3695.
+Obviously I can not say for sure if that is really the case for mpm3690s_15
+since its complete datasheet is not available, so my statement is based on
+the code above.
 
 Thanks,
 Guenter
