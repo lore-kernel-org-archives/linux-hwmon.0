@@ -1,67 +1,68 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C3A2D7804
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 17:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA6F355F4A
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 17:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773855450; cv=none; b=E7JRNXdg6PZeNGLkuPTOTngit6E4dH9CmJXvt6rCxczNODFUnKsEINCsHmrBGkjyBkeKjg3blNjFnDwhwx7P/lD902A7ak8/eVzrm2mpU+CEVo8ga+tvUyOgBYRUR58+SAi2Bc/ICLOQ49hq1vVCRWsTMUuJOVTrn7CjqjbFhpg=
+	t=1773856154; cv=none; b=rc4h7mHjqw5wmqBbsym727z5c1K2Qksju2DPgfOHT+lzvm+3ugl03yd2DGSl7A6nCfVrDTycoekL7ZraoywRpI0zeGQD5VpJ2w2zKkoze71nOw1UfUiGdJnqPOWyWsUZ7sF7EhC4a4/4Uk3jwLw6S2PDJn4fqVAh/BbEV3UbmkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773855450; c=relaxed/simple;
-	bh=9N0p1gHJ4/ldCRjXubOfQ1J+k+6ttdTdb0EsZzoophk=;
+	s=arc-20240116; t=1773856154; c=relaxed/simple;
+	bh=7foqOo4PO1+dY1J9snRPo3pULD+nFZ65/Jc53Tf6BUE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WLdTjnCCBZIvHpre8fnINJAyxmhfX7fTkB/tkLUdU3coJ+Su20bN7a/zdae4yMQaKauNO0Lz+13lrNpydqqXnKTRTkLHfXjeRInWCj33oZAd/+icro4IKq4t4pVieX5hYx7YFTern3YG0J1UGgvw/vleZpJWk0H8T8P5OXtOueQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Srzpw+pT; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:Content-Type; b=nvCk2Skheg6TRYRoeiyZz9swu5jmlYaCiZhGJmUJykoghriXqPoyLI1ByvWQLvSvab6vUAWO87q0x+VceCWLYjMLMTCVfBTDTolMuimlg9ZCge/vkknuak7L2ZCcax9BmHkCNZb+xdVJlPDpgXZfbRpOqf+ZiCDtCoh4tOiNiJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2pRfzic; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Srzpw+pT"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b061b6cf36so407645ad.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 10:37:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2pRfzic"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2aecefc7503so438165ad.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773855449; x=1774460249; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773856152; x=1774460952; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJEyn7i7B9+B9dY5m7w6oyTeXs0Qvwqbo+nm6YMirEU=;
-        b=Srzpw+pTOJVMZnh0BUC8kvo+IU9Fhbs7Ex9hOjEWXe3SeGnIq0nYjP9N/5YAzmF6u9
-         /3yNfOgdysOH84sd/o7dKe36M4sxQVBAynJj0cwhJwwKODoTN42gyHAOB6fWTjEYrFkl
-         7+eXrb9xCoQWZizvvUftMZdLRoF6BlQaujaqDe+b7Hgek4wRc4ZjnmnCGJ1yykhw27f+
-         TMVs3pFdCveloHlCY22hQYhfQJKzG73sln9W9m04exHZfJ7eAgxhSVASdQAwiX8//LCk
-         wAwZ70ruy63MAQplkhnJGZ/DAsV35I295EvieVBMWFBoMEZWD7YxxwCO/7c40lPXOeaj
-         YN6A==
+        bh=kweWB3MHB0sQFqv3t56LlX9dg8y07f5j3ZR4fhpqzGk=;
+        b=R2pRfzicrEth/rmvQIt78s2xyxoRCQd63voZ+mMyEJnGU9WX7jxOySDIWfDcvm0JtZ
+         wRgZ5vbDgCfLaw9MzbBTZWYMB+wBZvblhyZvsIl+OUFCBowxwp5I8A/lUphHO619vqfi
+         S4Dnuk+2wTmhOiUsbmRDbppKWK7e6Vn61jpPNEJBnPd313pbyelMdPpv5MVpZr5V45DC
+         QMbZNzwVohf/ehlo/yI8wcpqdUZH98eomckDA0+jkgMsECYAG9hXceZhQis2pgofskEz
+         X776OXl+WZdaiZuLZVPiizbjnHuSh9SQTaVV4hv57DDhj2EkBj9mSFA0ELpJqLPNAyj6
+         CIlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773855449; x=1774460249;
+        d=1e100.net; s=20251104; t=1773856152; x=1774460952;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OJEyn7i7B9+B9dY5m7w6oyTeXs0Qvwqbo+nm6YMirEU=;
-        b=MorEWtdJ2sValWtjLPNVQTbZp0EbIvIp+XHR1QF/9GWbsSzJKERKO+B2LD3iS2+UyJ
-         wCNwqtFp2hkV5EsAWbzUyCqVo/By/zmeQQyXYomUiV6KPN4/ub5+anna7eAI8TkbJZbg
-         4Zfh/A8hQdohcweoW7yWhsnwhnxUyk20vHwT3wvFCAVsxYJkyyl458sQsZCpJgM8xSW5
-         rCo1hX6t0ZPAQQHpeFY8LIhtSZbY1Hic+dcLb1dZPoDRlq8SjbXUgMeLRYmGH6VGJV1H
-         rUFRxXmKe+x+Xt1DYaLRU03Nng1L2SZYdwoiai4n4zAyoN9r/dcKPrclFgbdf1bO7o7S
-         A7Fw==
-X-Gm-Message-State: AOJu0YyapC8GkSpF0wWkl2vwNVF0x8s4eMIUBt9AAYTfCGMrOAOJ4BTD
-	Klo+8f6GhEQ1rVarH7gttBW5MQVcRaj4vlH03iaTQl6tPauvaxvJUe3H
-X-Gm-Gg: ATEYQzzeCZp0ywzXT2MWYOYQnPBrfXESRaT0NDdvj7gSPkqa2P8S3jZB+5sTX2a0iHR
-	tB2MgYItahHVBueNQ1pQ6xvLKYui70yabQAY297ae0y1vIv267GGTseB0UhPEfh1/Sr+qH4/0iw
-	dcj/Iu8fQDLjjlhwUggh/opK8/0GVNDfiC3Ksp/f/6DGP4mN5/pYVRu4ijvTGlORYFWeLlPeJhF
-	BZKhSPXSmtj+paZvLg8GIilDO+2TzDkrUG8M6CSSy51nATBLlGGK6nyC9rmZw5pEpNePC1yIREU
-	UgyHptbkF7AzDLmBA6K5yfpiMziQVkCxzdgSjCW8GUSGOIpRvJDik4Wq5DBlfdhshmlkyF801CO
-	M+u/o7jJC34mF5tlJzQUa3sxaueOu2ajVcN/Z5sttn0ZEz2lKrGnz6UeYkBhj4vl3PDjgXnb7+f
-	pM0CuM1wAynEOoyEsPOrX6qT7ABIw/HSPIo4uFrAK7Gsbm51NXqgLjAoOXQ7a/gd99emnyZqhw0
-	gcJagAOz6M=
-X-Received: by 2002:a17:902:ebc2:b0:2b0:400a:c77c with SMTP id d9443c01a7336-2b06e417f21mr54217035ad.44.1773855448985;
-        Wed, 18 Mar 2026 10:37:28 -0700 (PDT)
+        bh=kweWB3MHB0sQFqv3t56LlX9dg8y07f5j3ZR4fhpqzGk=;
+        b=MSNo9IWtUXzcZ8U7C1lyVpzwjxyNQX1TM9MQdDoWnbmx3bCpoctEk5uGv4K2+CAXmB
+         wU+YD6JqcNQcUt01Fa3/o5tyhY3QTpWo8HNd81CuGSlEqSCRhtL9OkLy55jbVfcWb3Z8
+         8jzaODaEuyw6g/eti9tezla/L0g7saeEEATfw/z0wdrUEgNkHOUrUbqBLVD9XrmlGLnq
+         77Rdr2Xj/AnI36kuvmdeGJbqQkDS1eM2iNkFPopawywJ6UaN9oVI+RixuD2qTyC9kXfv
+         NJ7WsX2Tuw0hpmd4NAIgnHOzG4F4be/qwNq3WK0jrBuU8rHBnw0RTgnmi1aUHbEZWqx3
+         C07Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUh3nmA/wq0T19OsS1cpUsE8qTwCkv865pGXatX9hnWeD2C3bb7hVPJix3tC134POJcQSqKJuaStHhrGg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJCuHJIkdeAYxV86TluHjTb+hztAWKhqnfms6lJQZKyQDlfWLj
+	IaOcaGbO9aRGqs+tol1NlHbwZuTT6WzzP6YHQxIA8CJ2tCULm4xTEiZT
+X-Gm-Gg: ATEYQzyCynN1a1XoH3XFC87Oit7Bi/dbeU9BuhThf/llSmjumlOMr34kRSCcn4S1qIt
+	v/qN3UHBXAkgdseSCHt7sba0TJKAaU303fLgo1crTBIewQTVNKAKf3NH0ekEKn2nEkllI+2g68L
+	FHK8L7uq+URyzma4CoZB83tgd/c9pgZ3FAIVLrMeADDw9pMCSuzdGewyElm/+8EmZkpi+Tktpg9
+	7R3dhi/5GOx9//Vce0u6Gj436LSQav6AYGuPLoWCTJFnqntRIMnt2Joj1b3ZFbY2p4c0iDHpWAE
+	DQZbGiWjVH/q4SbOfRUYFv0L9gEJUBUCNPEqDfNoIT+08Enb3Y8SvakPXymlon6kTOOR2zYp2x+
+	JSt2mFLzvxP4AsBeLfZPpqxHS+Gmm8CinstSMz+bQLjVoOn7aIbVH7eli4qvxvMk0HzSTYYK1DX
+	yXQjmtWilaHlBfSNQUOfNqlNf4TgcfTuoJJko20ND1AG2jaMDzGfvn6XXTnU2lNCqR+gNgb5R+8
+	z+6if/Bu14=
+X-Received: by 2002:a17:903:1a67:b0:2b0:5a4c:726a with SMTP id d9443c01a7336-2b06e41afc9mr40969735ad.43.1773856152438;
+        Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e5ef42asm40025865ad.40.2026.03.18.10.37.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e603937sm34123755ad.57.2026.03.18.10.49.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 10:37:28 -0700 (PDT)
+        Wed, 18 Mar 2026 10:49:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5dce0ef8-d61a-4429-aa42-c857b3fd8690@roeck-us.net>
-Date: Wed, 18 Mar 2026 10:37:27 -0700
+Message-ID: <f6101afc-b1df-4f6d-9e32-09b09e17afa9@roeck-us.net>
+Date: Wed, 18 Mar 2026 10:49:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +70,20 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] hwmon: pmbus: mpq8785: add support for mpm3695-20 and
- mpm3690s-15
-To: Yuxi Wang <Yuxi.Wang@monolithicpower.com>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, paweldembicki@gmail.com,
- carl.lee@amd.com, ythsu0511@gmail.com
-Cc: linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, wyx137120466@gmail.com
-References: <20260318094635.1873-1-Yuxi.Wang@monolithicpower.com>
- <0111019d00586e60-e3a938c5-6b1d-47c8-9856-0fc717ece565-000000@us-west-1.amazonses.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/isl68137) Add support for Renesas
+ RAA228942 and RAA228943
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Dawei Liu <dawei.liu.jy@renesas.com>, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+ skhan@linuxfoundation.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+ grant.peltier.jg@renesas.com, linda.xin.jg@renesas.com, tabreztalks@gmail.com
+References: <20260316053541.3903-1-dawei.liu.jy@renesas.com>
+ <20260318021921.75-1-dawei.liu.jy@renesas.com>
+ <20260318021921.75-3-dawei.liu.jy@renesas.com>
+ <9ec35dce-5f6a-454a-9ab5-e61b22796325@roeck-us.net>
+ <20260318-elite-archetypal-porcupine-a5d2a5@quoll>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -123,75 +129,37 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <0111019d00586e60-e3a938c5-6b1d-47c8-9856-0fc717ece565-000000@us-west-1.amazonses.com>
+In-Reply-To: <20260318-elite-archetypal-porcupine-a5d2a5@quoll>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/18/26 02:48, Yuxi Wang wrote:
-> Add support for the MPS mpm3695-20 and mpm3690s-15.
+On 3/18/26 01:25, Krzysztof Kozlowski wrote:
+> On Tue, Mar 17, 2026 at 10:23:57PM -0700, Guenter Roeck wrote:
+>> On 3/17/26 19:19, Dawei Liu wrote:
+>>> Both RAA228942 and RAA228943 are digital dual-output 16-Phase
+>>> (X+Y <= 16) PWM controllers. They are PMBus command compatible
+>>> with the RAA228228/RAA228244/RAA228246 family and use the same
+>>> 2-rail non-TC driver configuration.
+>>>
+>>> Signed-off-by: Dawei Liu <dawei.liu.jy@renesas.com>
+>>
+>> For my reference:
+>>
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> Note that technically the devicetree patch should come first,
+>> and I can not apply this and the next patch because you dropped
+>> Krzysztof's Acked-by: tag from that patch.
 > 
-> Signed-off-by: Yuxi Wang <Yuxi.Wang@monolithicpower.com>
-> ---
->   drivers/hwmon/pmbus/mpq8785.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
+> Was there an Ack? I see only one reply from me, but maybe something is
+> lost because entire posting is completely mixed up (v2 being part of v1)
+> so it all appears mixed in my inbox.
 > 
-> diff --git a/drivers/hwmon/pmbus/mpq8785.c b/drivers/hwmon/pmbus/mpq8785.c
-> index 87bd039c77b9..03889a197c4f 100644
-> --- a/drivers/hwmon/pmbus/mpq8785.c
-> +++ b/drivers/hwmon/pmbus/mpq8785.c
-> @@ -12,13 +12,15 @@
->   
->   #define MPM82504_READ_TEMPERATURE_1_SIGN_POS	9
->   
-> -enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785 };
-> +enum chips { mpm3695, mpm3695_25, mpm82504, mpq8785, mpm3695_20, mpm3690s_15 };
->   
->   static u16 voltage_scale_loop_max_val[] = {
->   	[mpm3695] = GENMASK(9, 0),
->   	[mpm3695_25] = GENMASK(11, 0),
->   	[mpm82504] = GENMASK(9, 0),
->   	[mpq8785] = GENMASK(10, 0),
-> +	[mpm3695_20] = GENMASK(9, 0),
-> +	[mpm3690s_15] = GENMASK(9, 0),
->   };
->   
->   static int mpq8785_identify(struct i2c_client *client,
-> @@ -114,6 +116,8 @@ static const struct i2c_device_id mpq8785_id[] = {
->   	{ "mpm3695-25", mpm3695_25 },
->   	{ "mpm82504", mpm82504 },
->   	{ "mpq8785", mpq8785 },
-> +	{ "mpm3695-20", mpm3695_20 },
-> +	{ "mpm3690s-15", mpm3690s_15 },
->   	{ },
->   };
->   MODULE_DEVICE_TABLE(i2c, mpq8785_id);
-> @@ -123,6 +127,8 @@ static const struct of_device_id __maybe_unused mpq8785_of_match[] = {
->   	{ .compatible = "mps,mpm3695-25", .data = (void *)mpm3695_25 },
->   	{ .compatible = "mps,mpm82504", .data = (void *)mpm82504 },
->   	{ .compatible = "mps,mpq8785", .data = (void *)mpq8785 },
-> +	{ .compatible = "mps,mpm3695-20", .data = (void *)mpm3695_20 },
-> +	{ .compatible = "mps,mpm3690s-15", .data = (void *)mpm3690s_15 },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, mpq8785_of_match);
-> @@ -148,6 +154,8 @@ static int mpq8785_probe(struct i2c_client *client)
->   	case mpm3695:
->   	case mpm3695_25:
->   	case mpm82504:
-> +	case mpm3695_20:
-> +	case mpm3690s_15:
->   		info->format[PSC_VOLTAGE_OUT] = direct;
->   		info->m[PSC_VOLTAGE_OUT] = 8;
->   		info->b[PSC_VOLTAGE_OUT] = 0;
 
-I don't think those changes are needed since both chips appear to be fully
-register-compatible to other chips supported by the driver (specifically the
-generic mpm3695 entry for both chips).
+My sincere apologies. No, there wasn't. Not a good excuse, but I got confused
+with another submission.
 
-Obviously I can not say for sure if that is really the case for mpm3690s_15
-since its complete datasheet is not available, so my statement is based on
-the code above.
+Sorry for that.
 
-Thanks,
 Guenter
 
