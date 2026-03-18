@@ -1,67 +1,67 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1691137107C
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 20:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C962733121F
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 21:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773867554; cv=none; b=filh7MEGzJzK56XXbsG6l7O9P8hYSt/DDIyPV3WiD2axU58TaQ6xEpsjx0j7iH2vq17VQ0VjEyS1Hq+cAWo/Qf8rmuKkDNxMv2BxalnOXPNtFow0Axl1jCs8CVPe7dELQ6k1+0drar1n3d3ZOTBo5TGfqQN5iBTGAjMUDNx1P+A=
+	t=1773867749; cv=none; b=l9GS3qIsVKbyORoWlAH5uxyCOSvx/+rplblpku14xB6UWmDIVdeCugOew79yGg5s4QH9v2A5r/aCSuc0Jp6W/jewWRe+Gg5iWglQPv0P4vVLA8gZiuKf2SxwD4Yz/MgaCwyWVVNNhEOuGPs0NEc6qUoA9J2jSH2T/7GxTatTg9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773867554; c=relaxed/simple;
-	bh=cJWzYAjyoBL4GOzfvAlz65oUZNwjJAArmwntnjEoNH8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J7RINRY1Jaax/PcvyFsSHuIzFuKh8OWBOj4zgRDmUukG6WdOaxWpboUlExZPREfNpYiUkuLgH2EgqkrZRuTis0XpFmxpblghpFB1JEWrYVK2+kVLjn7CiM69/rOI/TtUyUc0wXNzn5BHqlEVGSPR95bul15Oy4/eH87AJeURQX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TbopzgM2; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1773867749; c=relaxed/simple;
+	bh=bbPyi1IKHrvlXZz3YSEW14vKIhJmfnptk7rYFjuOiME=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=r95XJ2NsuD3qqoP0tEqh8JHtwlhTNbtMs581YbSjLtxzafQbiucmaaxolOJwL91DH4MoGgs0Kp8EKISSBkBpsddA7m70A8iqIkiL2o+an3BNfwphMeB0ZiKwff1pXYwsIl6NI8S8WjLePbwISbjNJpBUu6Q7wK1JOzckEnBVoFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvraS4ZD; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TbopzgM2"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82a15b44c3cso221012b3a.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 13:59:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvraS4ZD"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b04e6a989eso1946265ad.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 14:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773867552; x=1774472352; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mqu4xVf1YdbA8AJaMa0q/oDWwwC3EBtlmRCnbS4Hd+I=;
-        b=TbopzgM2yKcw8JwX3nkgE0o1kiT85aVAG/WS5+jTl3Rh9eMp/on07KMtNxtRXEQpJL
-         U7DBcsbTEIlaY/5HpVZgi7M2w5VwcOFhVgu0g6VXx3/tmPiyvR1J5bEJSZDk26c0e8d8
-         /zq1fATjGNho4vI965HtYEZ1BLEUbsJxKB5pfj1ZjlMhgMbc07mN/tZl1rc1rBondKDa
-         DPwaKtDNLFkTMv+cuI52KuEE6L2yOC9Hv3kjeMn4w58arjysszuP5sdq34BSqbQ8XGv8
-         tvuzAVCMPg0jLpiZkweFiOfIpYH50Yhv3cXEw+WdqtbswlBMbinnEKFp+qDbZYAA4Oht
-         ePNw==
+        d=gmail.com; s=20230601; t=1773867748; x=1774472548; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=LH7Lbg95H8piwE83tNqFN5qewvTimlo17X7rwRxawuU=;
+        b=LvraS4ZDRlVpdqP/iF7TMfwj6kQ3dq8g3c9evO0LfayR4bCJmzi/vmujokkQyas7wy
+         de0qoif3RoAHdT3AJ7nowd1enFIRLu3d3GAamhaFxeLHM2iMbekpjxq+1L5Tt9/7l+Zu
+         XDlGiFZL+Vfd6cHnCSUwrlYIErSm8PxsGUZzOG5B8qBwE6N3R77W/aR4nPkbQNQXvOvx
+         Fy8DcGM507A0aufeUpMa1Lal3T6mVYvSYJxlfM+kHsiE1nMjDg+hSG21WnAl7g8s7WbY
+         TOdXIOXnsRg/M8EPQxRb2kNhtjea2eN9YWKtrYgI7wfSz59gHnVzqN/3fh3ex0pTND2i
+         +rBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773867552; x=1774472352;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mqu4xVf1YdbA8AJaMa0q/oDWwwC3EBtlmRCnbS4Hd+I=;
-        b=ijqdviCbhYDtvUPilpoAK1rulQ07sbUuL/hugePeWFRM6St7/uy+o3SfPp9b+9hHdt
-         DAnf8gv0K0hH9lgsLHwtBe+XNJpi8kw3YF7/4NHatXIs/pTW3TLlDvXcP1AlmX+NcKQa
-         TAwdPshJBhjuuBTioZZbBw8x2QLfNqVy61lF6XtGl6fOJgCX8Y05k0pjEJefX4Go/eU7
-         56C0HSHXAUC7wp9cYoV4GPHV75tmgrnj1TME0cTYU4n4EGOiB42R/w+lx6arhLGRtB3F
-         5rV8J75EkArneS7FJNC8oa74Lm7vrggsDd7QEXIHF9jZ8i+USm2Rs/4vOEzcYMJQlulH
-         R6Og==
-X-Forwarded-Encrypted: i=1; AJvYcCUtARMwf0A+ppBjVSdk4ZJm8xRPzTERKaQdH9Ic867GbIksQCUhBSjaXNxjVsyy5OwktwrcGoBOdFpFqQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1RkOEk34pcCLdvszKPTAbm7UdQL3CVMT5qRqUh2h1BiAZeXA9
-	SqHutluJ7paMs+DIhIxalayxtaiWuPLBnVQnREY0b03/Mcj54SLfjuz9
-X-Gm-Gg: ATEYQzy5GZUX/o9k+SVHf4yXYVeEFZvQoJte/PBW73jySw/w4XkOodGpbck+74oyyAa
-	CvUekwk4XBgI/2lVN5PICfX1QNoEQF589qyqcgsvtpvdEi8qmBon4rgZXo4y/XuViE+HUEaKfzG
-	Kr2LM/qAL+Zpk/+cBqIzIbRKHYvHsWTbWDFZzG2CAKCoyJc0XNa4HUhRHnCPuo+2VRlaJ9GsJUd
-	v3pUi86cStsiAaJkkjAQVqFIU+glxkOp2aZ/5t8lN8e8rV16bUyIILTUMKY7EFxAnUlKqQY1WZO
-	Suy/6863FI3YZGLDTYaC6kPB9UOBhG9EBV5kDWIJqDML4ouMyTpXwCpTLPUrru42UzbiEHSxRzs
-	7w5+2MluT7+mYZauNpK59th8wcbH5asjc67JZsvIeBS2WZxkFQnMbzZzmPjAs+DWfBroeHzygA6
-	Xovw5un6FipDlbyhXqniwC6qv+o2SgYja3cACjptWNWvTThqtGGifX4F1ddLVKyioKouer+u8j
-X-Received: by 2002:aa7:8896:0:b0:81d:dd3a:b8f5 with SMTP id d2e1a72fcca58-82a6aed7753mr4734501b3a.38.1773867552348;
-        Wed, 18 Mar 2026 13:59:12 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1773867748; x=1774472548;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LH7Lbg95H8piwE83tNqFN5qewvTimlo17X7rwRxawuU=;
+        b=p2MHX0QN8lBztOTK4NY+h2LnbJwqQ8WHjO4KfuPfu7pO9KiaWtlpWa6xagW7jZzVUQ
+         IMH34yOo4SgE98vPm4reue1XFT6PDa1+rJVJsxRdqTXofQELEoW6fE/xjh93uYqP2sMi
+         QMk01nvu1/X+J6TLaldkxIzwWALwZ5M+jmiXCPhYu2LSRqHr6hmFwd4xPq6B/v+LdsjL
+         kTKoeMA3CSfSppsv1n8eVgCdSNGVkAVKbOiovyyh3mEEcKoUJlHgGQgipvK6OYQjMHn8
+         LlZW0/e9QqsrRGXkfummVvBR+91WLOyq8XuPQl1dkZ+NeuAK/OyMkqjynaUkjYnq6Onh
+         l9YA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOfORR35GEOlPZ4NcZquSFzXY0jVQsEFoibnaEPmYDim6EpyPjAiuCMHFy6QuOQigvy6L25z4w8Mp38w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyovjJqSKseVJGw+Cg/Pvvlgc4Z5ilWw2cAClF+nqbGMEZBt0zT
+	fDT9/LQGmloLDrsTqQ2XlDCazKKJBMWLt8WN8hGNm6Ol5ml2ePZRdfaI
+X-Gm-Gg: ATEYQzxWzxNYWXHecqtYaIjvJjNY7x2+GNYvSK02v9afCGQQhdF/P0iKhcJMfYhIWwH
+	ucVQWO9YHrvI3RvnSeg0sYPnucJgw1ErQv7E9Msc2ZV34DsbxvbLe6HM/ApDj14azbqlNV/9tc1
+	A278RIrMylUtgJqsQUuhFcHenoBFeicgVXH+DOjXLgyweG3+i8SVGV3AUnTvrH1Puq8wr/JnTux
+	Llmrkr3aQ4H/VIhomOuQhh5ha+JvrPGl3hihR8gwiB3psjP4gIdgQkCLvdk7SvfePwbGGf8gamo
+	9rYILbVVYJ/qw5Huu8vJzHDvTzaL1vuaKbp1PRbXV9Rm4FqhYjJt6aXHePiZkTglf41onsjz+3K
+	pVYQNUzuhBoz+cKYkyCrA8Ul7igPACbvb41q6q2m7fJFZRJt0r5dl7vVMFSaOB/Vz89DwsZMZ9E
+	CNPi8ja6FCA5CiZCFWtmJeyAY1ofihnmA/kKitayUsdUX+F2Gu0YVAtr9Aagex1ad4a19S5pBY
+X-Received: by 2002:a17:902:fc4e:b0:2b0:6a22:5159 with SMTP id d9443c01a7336-2b06e2da3b4mr49002875ad.1.1773867748075;
+        Wed, 18 Mar 2026 14:02:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6b541cafsm3803925b3a.12.2026.03.18.13.59.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e4199dfsm37621765ad.6.2026.03.18.14.02.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2026 13:59:10 -0700 (PDT)
+        Wed, 18 Mar 2026 14:02:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f8fb6c22-1841-432c-bc57-f1f9f7d5b8b6@roeck-us.net>
-Date: Wed, 18 Mar 2026 13:59:09 -0700
+Message-ID: <b0a878be-4c35-4725-abd7-80701a7a14ff@roeck-us.net>
+Date: Wed, 18 Mar 2026 14:02:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,15 +69,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] hwmon: (pmbus) Follow-up fixes for isl68137 and
- ina233
+Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/ina233) Handle sign extension for
+ negative shunt voltage
+From: Guenter Roeck <linux@roeck-us.net>
 To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
  "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
 Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Sanman Pradhan <psanman@juniper.net>
+ Sanman Pradhan <psanman@juniper.net>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
 References: <20260318193952.47908-1-sanman.pradhan@hpe.com>
+ <20260318193952.47908-3-sanman.pradhan@hpe.com>
+ <a3f02648-9e6c-4a14-922f-13fb27f87354@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -121,46 +124,51 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260318193952.47908-1-sanman.pradhan@hpe.com>
+In-Reply-To: <a3f02648-9e6c-4a14-922f-13fb27f87354@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/18/26 12:40, Pradhan, Sanman wrote:
-> From: Sanman Pradhan <psanman@juniper.net>
+On 3/18/26 13:20, Guenter Roeck wrote:
+> On 3/18/26 12:40, Pradhan, Sanman wrote:
+>> From: Sanman Pradhan <psanman@juniper.net>
+>>
+>> ina233_read_word_data() reads MFR_READ_VSHUNT, which is a 16-bit
+>> two's complement value. Because pmbus_read_word_data() returns an
+>> integer, negative voltages (values > 32767) are currently treated as
+>> large positive values, leading to incorrect scaling in DIV_ROUND_CLOSEST().
+>>
+>> Add a cast to (s16) to ensure negative shunt voltages are correctly
+>> sign-extended before the scaling calculation is performed.
+>>
+>> Fixes: b64b6cb163f16 ("hwmon: Add driver for TI INA233 Current and Power Monitor")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+>> ---
+>> v2:
+>>    - Added (s16) cast to fix sign-extension for negative shunt voltages,
+>>      complementing the error check fix applied in v1
+>> ---
+>>   drivers/hwmon/pmbus/ina233.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/ina233.c b/drivers/hwmon/pmbus/ina233.c
+>> index dde1e16783943..819f4e8aeab61 100644
+>> --- a/drivers/hwmon/pmbus/ina233.c
+>> +++ b/drivers/hwmon/pmbus/ina233.c
+>> @@ -70,7 +70,7 @@ static int ina233_read_word_data(struct i2c_client *client, int page,
+>>           /* Adjust returned value to match VIN coefficients */
+>>           /* VIN: 1.25 mV VSHUNT: 2.5 uV LSB */
+>> -        ret = DIV_ROUND_CLOSEST(ret * 25, 12500);
+>> +        ret = DIV_ROUND_CLOSEST((s16)ret * 25, 12500);
 > 
-> This series provides follow-up fixes for the PMBus error handling series.
-> 
-> Patch 1 is a revised version of the previous isl68137 patch. It restores
-> the original bitmask logic for AVS enable reporting while retaining the
-> modernization to sysfs_emit() and the new error check.
-> 
-> Patch 2 is an incremental fix for the ina233 driver. It ensures that
-> negative shunt voltages read from MFR_READ_VSHUNT are correctly
-> sign-extended before being scaled, addressing a data integrity issue
-> identified during the previous review.
+> This may end up reporting a negative error value to the caller.
+> Should the result be masked against 0xffff ?
 > 
 
-I applied the first patch of the series, but Sashiko found more problems.
-Please have a look at
-https://sashiko.dev/#/patchset/20260318193952.47908-1-sanman.pradhan%40hpe.com
-
-It looks like we'll need to add locking for the non-standard attributes
-in the driver.
+Also, as Sashiko reports, "ret" can be a negative error code which needs
+to be checked and handled first. And the mask would be wrong - I think it
+needs a clamp_val().
 
 Thanks,
 Guenter
-
-> v2:
-> - isl68137: Reverted Boolean logic to (val & MASK) == MASK
-> - ina233: Added (s16) cast for proper two's complement handling
-> 
-> Sanman Pradhan (2):
->    hwmon: (pmbus/isl68137) Fix unchecked return value and use
->      sysfs_emit()
->    hwmon: (pmbus/ina233) Handle sign extension for negative shunt voltage
-> 
->   drivers/hwmon/pmbus/ina233.c   | 2 +-
->   drivers/hwmon/pmbus/isl68137.c | 7 +++++--
->   2 files changed, 6 insertions(+), 3 deletions(-)
-> 
 
