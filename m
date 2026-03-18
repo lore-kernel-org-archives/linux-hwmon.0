@@ -1,125 +1,168 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAA73644BC
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 20:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAEB36AB50
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 20:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773864212; cv=none; b=dKpAUqgLWshDj4dv+KkL2NWGNEdBDE5QxfsrQt9w/B5Wl1xMoTwmiLGsnXB7DP3wJUQVc2HEptDqpVvQY45lU2XMKCKc2xh+B3fqoqh8PEc7KQtZB+rHhOCntUdpNr8NNtIYdvDocyVgIDX1WF4j5VjmRXclKROXd0szWzI3VkY=
+	t=1773865241; cv=none; b=NdKJcQ30cJs22jzD+OnCNXTPFUZpsYDkC0Xjyiew2Nb9Hb5HENYMXUqXs4DJq8qsb9p+/0k2Lqv2AZAcx3Sx/+1nFa7FHTEATl0aV3VLaW3DlR+ScAnEe0OFdoa5q8IT/s3UQxXGzul8uIoSPp5vXVY04plxEZFvGficDjO1+Ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773864212; c=relaxed/simple;
-	bh=Mn2lWQS7ei0UHnIv8m0YFo6PIODlXriq+9GlB928c/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sq5DwufyG/MFKoaRiaGCf8UYFEH/Nbe1nt4w6bSy2xBegIdgq21hIWZf/1sPXdzs+cpBEKw3GQ61Rhvu7QUAzroAO7SlRN0ypSqlB4ZNhHmP5fgvCZaf7azyFAUM3Ve9x5+LTRTD+ZsbU/Np/BRsw8hDyARh5EL4XBAg/y5wFsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwiNPjyy; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1773865241; c=relaxed/simple;
+	bh=p12yy0f4g8Mtf3zJ6FM5DG5zprWTPjAYHz209DX9/T8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Aw5CSph02qtyCeUPe/D9zibOEuVO3IsXVXBIExaxzIdBnN4KuA+bfaBXNZe2ZOZTlHWo3vZRHcFxgzOu7IJ8uwww2qjAJ5k+L5EMjNqBFf/gCf2J08b+2IhDT2bY58uf1y8hbAbCzmUJjJs867nXf5CQ1yHDf05xLpHQajVBswE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UaWt2gnC; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwiNPjyy"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-485409ab264so1162485e9.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 13:03:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UaWt2gnC"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35a09e0dd63so350934a91.3
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 13:20:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773864210; x=1774469010; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mn2lWQS7ei0UHnIv8m0YFo6PIODlXriq+9GlB928c/g=;
-        b=OwiNPjyyTXRp00k+cXuusiEu22o1mZjlCo+VKENocNkL6Bj74dMr2OwBOZggIPFgwQ
-         ozSiGAT+HfijhgKMDotdHf5lKuBkFhCz5q7w+w+SP/lyl2cpAHuHJyLgU/aeI/AMrqaq
-         CPo8aORBkir2iX4xVBf3ab8T/8hrlkSZD3T9l/oSdW6xfitl1AHUkc5FI0YNXPGCp6EJ
-         0gyN981uRO2aX3DvkfdzC4tqAnJQi+jVOTIHy9a7YeGBWd5p9H3xYugaTktgUDfAPTi9
-         0MX7hCeq205IPnG+GfmxMfU1KSqbmX+wo1oDwkuoKAdR8/XlDiPfKgM1OBCCzQuArpHZ
-         A5mw==
+        d=gmail.com; s=20230601; t=1773865239; x=1774470039; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CW70/xxfLi68rSnAskwg4XChX2bmrTWuZZHh8hh8PjU=;
+        b=UaWt2gnC7TPLYUl0FW1H5OJEG7i8VlGyA1/5F6rBF5sGANNRNOxyDJYaUEIIkuwtor
+         g1ku27h8zdkiDQyzOXUyQWie+e2faBJQkP5cAk9qFDOqM7W22srxGt6egGiGy7h2aSkc
+         urSArp/3fxK+jfcvyyq9P2/R2TUkodiW0IhfaTEhASNnnlRsEZvibkkwr/kBJZs88SVF
+         mGco/wlY07V/uV7kDtqIBwt10Vf6mOc5yMjTF2GsYN7VRc0sfeJ+C3jgPr8Nink7VVQ4
+         uHPC7YPDzmNMB99OnObhhdu5WPFv9iEuf9NZ9Se7AIpn9qsZieU1GM5Pf853e/uoU9Wt
+         mpeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773864210; x=1774469010;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Mn2lWQS7ei0UHnIv8m0YFo6PIODlXriq+9GlB928c/g=;
-        b=cX/o3onm/SdsWbP97Q19XfnopsEE1mkOHjdukRKTIDCcMD3lQOX2GQIgXYcHkLp4SQ
-         BmXZohka0Kby+shf6UB55EQcuMkghMK82uuAVNJwoQhsfsZNZe5WEObUsqqloJpUPUKF
-         FkBsoBfHOF9LinTuxIJilIAKl5hHegurJlDvTjv9Sh8ZFC1Xcu21OPsBQKmpv7JJXdIO
-         GppI2GEO0s9vjuIeX2bZl2E8z7mv+cAvlrnTE/CkDlnag7uBWYPRvhLhiUdY/9M+Hgyr
-         YQaK3bv/00K4wPzgWPyohJtuNQgM5gdF5nMLmFjX8MJaRCn5v28KD23okTKowXX7Qbug
-         Z8Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCVhDMezivUc5EWGxNmiO2/rRSq2NHhvKX7AIWKR/yClR3QjWxo2hWIBF15RAof6M9cHHN6BEVvlfP5YgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCK6Tj2Bs1enmKOcTti4WKov2sJ8zEUcwNhACgipAH4VPNYnXv
-	N4PPp1HdOoJpZ7qFGGvovdjT5gnMakiudEwzfJvU6SLS+HFfbLm2E1ZY
-X-Gm-Gg: ATEYQzxFl/NCX4FAoNi/ZETuQTAjErsp6bT3/Ysx9H0hoUbX3Cor3UdpAEs+EC0C6BR
-	ZeHdqLEkjN2uFnpUl8GzjVPP7CW9bAsGJkLvOUu5pnSeLQy//eJ1kHhtg8hng3oEP3RMi7aDSic
-	3paBHIJWBeZUXvzljjkEIjORxrz1eL7YTMQwz1q3jVu7q7TrHPTV10fzk5O6Cof1nTQra2/O/rl
-	YNKJWDqTX9I2vVsCWTiHRQMSBOjify9IwxMbumNRA9Qzocw5T+7q2ZmSoHuV+Fguk95Wkyz1J8P
-	H2KJUC0zVXn1EwcFX8552TLpsDbFlTO2cq8FpzcZLOLh51m20vdDC6hMPA4NeSWkg/90geYrTyx
-	Ynqwmj7omqG+sJ48B9RIt1eTTWkqmIXaOagB/sNWfkrJ8GmCstpiyW2nY7ZsgnnqaH8I5Gw+VRg
-	7iaWMjtPczoUqhfVa9UAz5vUcKu5yxxyod1fpdmgN14NcV5kiXX2uGCwnuiaTA5xiWbjCu3H3/
-X-Received: by 2002:a05:600c:64c3:b0:485:38f1:5cec with SMTP id 5b1f17b1804b1-486f8b324a1mr15085255e9.7.1773864209194;
-        Wed, 18 Mar 2026 13:03:29 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.232.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f45d8e3dsm27444815e9.0.2026.03.18.13.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2026 13:03:28 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Flaviu Nistor <flaviu.nistor@gmail.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: lm75: Add label property
-Date: Wed, 18 Mar 2026 22:03:24 +0200
-Message-ID: <20260318200324.4365-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <e82aefd4-384e-43e6-a830-c7728f642ae2@kernel.org>
-References: <e82aefd4-384e-43e6-a830-c7728f642ae2@kernel.org>
+        d=1e100.net; s=20251104; t=1773865239; x=1774470039;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CW70/xxfLi68rSnAskwg4XChX2bmrTWuZZHh8hh8PjU=;
+        b=aJ2ZUBndS16CakuqayPEDAfStrf86HvPLSEThLqCijtcFXVHcE6ryQ8cB76C/U9Epa
+         O0LHhV77Fq25TH+l/lMXxK5pxRcRspXRDr37G2tRHwBS+gyDgiPUbLeziXJclljRJ+VJ
+         Gb8/49CNvcOvSAy0M6P61TarNb8QNEvHeAD6Bu9OStXO2mfk7TXPibPhka86grUefmGZ
+         dDJ1NumG/hP07n6s9QG+87LJQEbDXrO0TohL4WhnD3rzUXxWRoAYdl4nQ+t+RnscJHY9
+         feG0t2lChZVR99cfw3VjXY118eIDjujRq8vjJPAo3JZqX0qNRl53qDQnZAC+F+HKHZp2
+         6Orw==
+X-Forwarded-Encrypted: i=1; AJvYcCVIA4vI9oNVE6uh+BKbqa5z0YWZ0q9Us5w1GJTrm96A1iEVsmOwjfMpDqctQnSM8XL90RER6Wb0bSdKFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylM9eWENLNM/Yx6X4XgbveveEAdOl7eeAR+UDwnbNgu7J99xMK
+	luajJp0Eb1EERlsj0bkbLb4Vve1e+4zTeG/nEbntABfGAHmvVAGSyIiV
+X-Gm-Gg: ATEYQzz6zWnlQQCXOb6hzZ+cPHOHRAKmCsu1OYRSPmwF9ri5vXlp8kfC9AdcoM/ukyN
+	m/EOW6mTRJ0Mbip8rY7cPiebizJwHxLg955+g0E5AIBAtv1k1Uofny7//372tB5oOmM/hCq21YO
+	nstND5mxGQEco/jf4QPHlrzT0nYplE7UKwtjWMVQbWbX2StGXOnz1Uwv1Zi2xxgCtZmuTz+0DMY
+	hXFm7mSDh+CwpZMAmF8sPqAFmfdX8EGNxZ1Utqs7f435NNHhFZVGOWx3dcEk3Fm9zrMndWzuJvc
+	C93NUIWRHzurnqJvKbJ5FcGqnQ6zkvD8ygsWZQM1rrHWLKU2cptPtq1v82MmquAUS6U1Ce44VxS
+	HwrxgOv2jA8THviV9LS6myVfVDZGC1diI7+0DpECHX5z2Bnain0heg/cEbaKl/G4kqKujVeZAOg
+	NltCLhBTV++5ZhP/UWY332wfBZvL52EPfGQc4m6arHJ5E7hwF1KA2nCc5m11dcugm6uaj3wA5e
+X-Received: by 2002:a17:90b:35cb:b0:35b:a44f:b82 with SMTP id 98e67ed59e1d1-35bb9e51084mr4491544a91.11.1773865239052;
+        Wed, 18 Mar 2026 13:20:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bbae5e139sm1127992a91.8.2026.03.18.13.20.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Mar 2026 13:20:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a3f02648-9e6c-4a14-922f-13fb27f87354@roeck-us.net>
+Date: Wed, 18 Mar 2026 13:20:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] hwmon: (pmbus/ina233) Handle sign extension for
+ negative shunt voltage
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20260318193952.47908-1-sanman.pradhan@hpe.com>
+ <20260318193952.47908-3-sanman.pradhan@hpe.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260318193952.47908-3-sanman.pradhan@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Mar 14, 2026 at 10:50 AM, Krzysztof Kozlowski wrote:=0D
->On 14/03/2026 08:48, Flaviu Nistor wrote:=0D
->> On Fri, 13 Mar 2026 14:26:35 +0100, Krzysztof Kozlowski wrote:=0D
->>> On Wed, Mar 11, 2026 at 12:58:07PM +0200, Flaviu Nistor wrote:=0D
->>>> Add support for an optional label property similar to other hwmon devi=
-ces.=0D
->>>=0D
->>> I do not see any support being added here.=0D
->>>=0D
->>> Subject is not accurate either. You did not add the label property.=0D
->>>=0D
->>> Best regards,=0D
->>> Krzysztof=0D
->> =0D
->> Hello and thanks for the reply.=0D
->> I probably did not use the best description and subject name, =0D
->> I wanted to be linked to the other patch in the series).=0D
->> The label property is already added by you via the hwmon-common.yaml.=0D
->> I will have to send out a v2 for this series so I will change the subjec=
-t to=0D
->> "Add examples for label property" and also specify in the description mo=
-re clear=0D
->> that is just a simple "Add label property in the two examples."=0D
->=0D
->Your commit msg must explain WHY you are doing this.=0D
-My initial intention was to make sure that dtbs_check is not generating err=
-ors,=0D
-but since then I got to understand that the example section is not actually=
- used=0D
-during the validation of DT source files.=0D
-My second intention was to add the label property to the example section as=
- a good=0D
-practice, but I also have seen that this is not a general rule. As I unders=
-tand=0D
-this is not a mandatory change, I will drop the binding patch from v2.=0D
-=0D
-Best regards,=0D
-Flaviu =0D
->=0D
->Best regards,=0D
->Krzysztof=
+On 3/18/26 12:40, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
+> 
+> ina233_read_word_data() reads MFR_READ_VSHUNT, which is a 16-bit
+> two's complement value. Because pmbus_read_word_data() returns an
+> integer, negative voltages (values > 32767) are currently treated as
+> large positive values, leading to incorrect scaling in DIV_ROUND_CLOSEST().
+> 
+> Add a cast to (s16) to ensure negative shunt voltages are correctly
+> sign-extended before the scaling calculation is performed.
+> 
+> Fixes: b64b6cb163f16 ("hwmon: Add driver for TI INA233 Current and Power Monitor")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
+> ---
+> v2:
+>    - Added (s16) cast to fix sign-extension for negative shunt voltages,
+>      complementing the error check fix applied in v1
+> ---
+>   drivers/hwmon/pmbus/ina233.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ina233.c b/drivers/hwmon/pmbus/ina233.c
+> index dde1e16783943..819f4e8aeab61 100644
+> --- a/drivers/hwmon/pmbus/ina233.c
+> +++ b/drivers/hwmon/pmbus/ina233.c
+> @@ -70,7 +70,7 @@ static int ina233_read_word_data(struct i2c_client *client, int page,
+>   
+>   		/* Adjust returned value to match VIN coefficients */
+>   		/* VIN: 1.25 mV VSHUNT: 2.5 uV LSB */
+> -		ret = DIV_ROUND_CLOSEST(ret * 25, 12500);
+> +		ret = DIV_ROUND_CLOSEST((s16)ret * 25, 12500);
+
+This may end up reporting a negative error value to the caller.
+Should the result be masked against 0xffff ?
+
+Thanks,
+Guenter
+
