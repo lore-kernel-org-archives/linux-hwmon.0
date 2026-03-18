@@ -1,33 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5F83D3CEF;
-	Wed, 18 Mar 2026 18:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26BD3EBF16
+	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 18:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773858916; cv=none; b=Z86Eok9V5SNjsJ8M7uFkCBoJMKGybhxdz4pA5VvIE0YRmSerPPZNoPl3x6r6a9ZJ6m5uzA70koJEWPU23NZ3AQTQRrxk5lIYfpgtvyB5FMb+kgrRyOHtfteuIZASNMJtEF2QGxgpU96ERXD12u5Nn6Ghru281xKkhUTtJq6ZBCk=
+	t=1773860035; cv=none; b=it/RYw4sIi2VsgIjyA7VaLEP1qOzs1xaGitagGsRYFwwYIIQQfC/qIxDOuBQfkCKeh6ukQQKdpVss5uFjbCE4Z6+Y6m5qWqz27HT4Q+HeK/KxlfhNjHTfwut9tAQYf5GVVzVMd18hcjrCGJOAmnMDflFf3Yw9YUczTr1UbR5VAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773858916; c=relaxed/simple;
-	bh=g9xPF23vWHeA4DwcNyqPPwXvju79N3on/sKSBLUCJRQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rNYv/9hcuYRiblDMLEARjA3AHKMHwTQdwpXuCzcfLIG9fcs+OCrJA3SA0/w9HxBSST/7XedD2zPmbYpAaf7BBHie3K6tNqLemP4JVh9IIId+gVsMDXRnRnlfBgLEFPI0jNe6M1omMzLySwqlhgHBGxfcf9Dlpt1Nw6DeMQ9tnec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfKKa0b6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773860035; c=relaxed/simple;
+	bh=4vwHuZhCBdWEo7/LYVTBkP2edEov7tQ4NKjrZQI1un0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=i/nZ0k9excj9KcHNEUrHqbq6bo8wOxZcFbzo0sqlBdFh6ZrJrcATnCNzCQ7s5wM/rJerIc0VMaogSTDIc+FU5zc4iPEUETqh8VcuM0GJ9lmZfvrQBeAFjZ0o5NCzM8IN+1M7kgYhSQTSb0uExFz+hHYipYfvt/PuMNki5c0pC9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dFnmzUm7; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfKKa0b6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08742C19421;
-	Wed, 18 Mar 2026 18:35:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773858916;
-	bh=g9xPF23vWHeA4DwcNyqPPwXvju79N3on/sKSBLUCJRQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UfKKa0b6zIbGQjwirkB3zzmhO7vekRFySNzAsXtJtWz34DDfwGd5vYpH7C4Vwwcl9
-	 T/HRUmcKIuGxaxAiSfCI/kHOvnjcN+rW6igWK/IGZhmQhpwf0bsFHF3djZpOIg7XTH
-	 Lp81jFs7R7O1ZPWDh32HLQk/awsqpBODVKZkeQG/Xai8FU7iYLhq9qlag6Lb4skLGA
-	 4vy2TmVV3zTT2lPh50jiLxOvJa51sLza9fs1I8LfN3WWDAfrBp3rwslULCnErExHXN
-	 GdlwqyVhPtOujPqjhUMtTzNA5S99VnpGDIblUYt/6IeFxuY5DjDjhgHHU9tP6/lS0r
-	 rrnfjIywFymMw==
-Message-ID: <f02d5bbb-3f26-4ad5-a4d7-e3b34e20ed32@kernel.org>
-Date: Wed, 18 Mar 2026 19:35:10 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dFnmzUm7"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-82a655cfab5so266118b3a.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 11:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773860032; x=1774464832; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hh3HXSaRNZYrgfFy6kO/5eGwrNgWsuUWpuE42iqN3sY=;
+        b=dFnmzUm7Q/T8KTO+2gZFv3w1kpjxn7af63bpeJvmcD5EDG5ph8xj0RPq2xnaeHJAE9
+         LdZrUuGhDdXN4mowdLLuCdS1Ig5QkcXTObbOo5v2qvziu4i1iTj5ruHD6mLQhIELywdc
+         /m9/e02wrAUvhyDeSZWVhvCfoCzeYungQ08ygftcvz1dLrrmWW6o6cElOTL4VlxudvVe
+         Z8drn+lnglP6Bb1AxFJPL3TNogFR2jVDj76jOp8X/WzIx/heQMvHR1negc6CdJo7Pg10
+         mrVwVhLz8CQ+39C2h+SwHvGBGxbn5vlFSdGBukQgdFel6r7Nx76YBiUaDYBgJD7pkWMM
+         2xjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773860032; x=1774464832;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hh3HXSaRNZYrgfFy6kO/5eGwrNgWsuUWpuE42iqN3sY=;
+        b=eCnJgdiMtX1hKSV6I7APOSW5cSwHH2W3zGGwRehGv30s4TrplgigK5c/yIZUdeyroV
+         /TSTq6XW2vvs52BASpJfQcTh0jB2R78K6etFg15Awpj8m6eXfOKUkh5TdZEDhf/oJS5P
+         WUkKegsjgDjCrw+NSz9qBFbn6bwElts/Vww2Y8gMrt/1FJpHWNDUlqAQLYd7fI4Ouv7m
+         stfbi/bj0dtzrSnKXX3CqH0a9tbhEtM582ER8LIbisL2rSZh/0+bBxb2fIaNRP8u7kcU
+         bgqyRbHqn1dMWAmk0EXdaJ+mBMSYPn5SqoTkFrV5rtJgcgUBMMMP3Wp4aKRWVh6xSa0G
+         fcAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWqF/YvErtvkyeceJNOmJk4f1ppe7f4B7DERU87vAxfiAbIDOvRmotumIf6pvmMdv1u9Tpn7HjdJHpMw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrKIQTX52LJGiDV4SIoD6eqXrV7Qu5yQ04m++/6dlmZn4S+B0F
+	l6J6GDOqrOaZTyF5L/p1rmFudIVfzIyaPP3PW3qoD1YaJNHqMO4ArGsz
+X-Gm-Gg: ATEYQzz1YL8AelyaFGLjf46wLFec6qXlyn5UqWR0DER7ZLfC7W/5MtBuoFZzj9REdJu
+	NeI0oQmx30za56rgkeNYEnC4h5dIQSHS86wC9/Y8FF/RQwHOsKnKJ3+lzNZCi7EtL/8wUb6DBr0
+	wo7j7deMdEPPujlmTpupl/4v7amFsXKz1vGxVH7g5XqlWG1EX6FvApr1xa0yz22GWoEPytAZLVu
+	N/zgbjk6H7RkIUh7gHO1PF8VnpTS55mnoZYJvdmons5rqUgqxMSM0cDw0pl7dQNM7+BH3/JhLCF
+	e2cFWKRvomsTqo4Xw4rAOp3FM6vBkEvA8m4ijVPF0OmHWa/XVrkzozMwZiLVSsPKTagtrEmqG0I
+	IT1P+mu/6AeLyjTAd9E7k7/qCu/m8NDLOcy3NID5RWJvjMsLitmtkkHXaJDIIiJy8iG+JPYI8jI
+	lJtpBEQ1i6EG5VJwGHLnxUALKwtvx2pu5+KT6o9PydTmRPsq0cloOoJz9MdFhJX4I9pTvXx1B8M
+	JIOrtXjlis=
+X-Received: by 2002:a05:6a00:3698:b0:824:9848:b020 with SMTP id d2e1a72fcca58-82a6b26e7a3mr3958271b3a.52.1773860032113;
+        Wed, 18 Mar 2026 11:53:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82a6af06bd7sm3517633b3a.0.2026.03.18.11.53.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Mar 2026 11:53:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <df8086b1-8834-4bf2-ac4b-cb921beb8471@roeck-us.net>
+Date: Wed, 18 Mar 2026 11:53:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,94 +70,221 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: isl68137: Add compatible string
- for RAA228942 and RAA228943
-To: Dawei Liu <dawei.liu.jy@renesas.com>
-Cc: "linux@roeck-us.net" <linux@roeck-us.net>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "corbet@lwn.net" <corbet@lwn.net>,
- "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm" <magnus.damm@gmail.com>,
- Grant Peltier <grant.peltier.jg@renesas.com>
-References: <20260316053541.3903-1-dawei.liu.jy@renesas.com>
- <20260316053541.3903-2-dawei.liu.jy@renesas.com>
- <20260316-intrepid-koala-of-snow-33eceb@quoll>
- <OS7PR01MB11926C7139DE648454D744DA2D540A@OS7PR01MB11926.jpnprd01.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 11/12] hwmon: spd5118: Add I3C support
+To: Akhil R <akhilrajeev@nvidia.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Eric Biggers <ebiggers@kernel.org>,
+ Fredrik Markstrom <fredrik.markstrom@est.tech>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Thierry Reding <thierry.reding@kernel.org>, Jon Hunter
+ <jonathanh@nvidia.com>, Suresh Mangipudi <smangipudi@nvidia.com>,
+ linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+ linux-hwmon@vger.kernel.org
+References: <20260318172820.13771-1-akhilrajeev@nvidia.com>
+ <20260318172820.13771-12-akhilrajeev@nvidia.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <OS7PR01MB11926C7139DE648454D744DA2D540A@OS7PR01MB11926.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20260318172820.13771-12-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 16/03/2026 10:00, Dawei Liu wrote:
-> Hi Krzysztof,
+On 3/18/26 10:27, Akhil R wrote:
+> Add a regmap config and a probe function to support for I3C based
+> communication to SPD5118 devices.
 > 
-> Thank you for the review.
+> On an I3C bus, SPD5118 are enumerated via SETAASA and always require an
+> ACPI or device tree entry. The device matching is hence through the OF
+> match tables only and do not need an I3C class match table. The device
+> identity is verified in the type registers before proceeding to the
+> common probe function.
 > 
-> The RAA228942/228943 are register-compatible with RAA228228/244/246
-> family, using the same PMBus command set and the raa_dmpvr2_2rail_nontc 
-> driver configuration (2-rail without TEMP3 sensor). 
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> ---
+>   drivers/hwmon/Kconfig   |  7 +++--
+>   drivers/hwmon/spd5118.c | 66 ++++++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 70 insertions(+), 3 deletions(-)
 > 
-> In the driver code, they reuse the existing device configuration, so no 
-> special handling is needed. That's why they're added to the enum list in 
-> the binding.
-> 
-> I will send v2 with improved commit messages to clarify this.
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8af80e17d25e..23604c05ad22 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -2300,10 +2300,13 @@ config SENSORS_SPD5118
+>   	tristate "SPD5118 Compliant Temperature Sensors"
+>   	depends on I2C
+>   	select REGMAP_I2C
 
+I also had
+	depends on I3C || I3C=n
+in my version at
 
-Please respond inline, instead of top-posting, because it makes your
-emails hard to follow.
-https://elixir.bootlin.com/linux/v6.8-rc7/source/Documentation/process/submitting-patches.rst#L340
+https://patchwork.kernel.org/project/linux-hwmon/patch/20250419161356.2528986-6-linux@roeck-us.net/
 
-Best regards,
-Krzysztof
+which I guess matches the more recent "depends on I3C_OR_I2C".
+
+> +	select REGMAP_I3C if I3C
+>   	help
+>   	  If you say yes here you get support for SPD5118 (JEDEC JESD300)
+> -	  compliant temperature sensors. Such sensors are found on DDR5 memory
+> -	  modules.
+> +	  compliant temperature sensors using I2C or I3C bus interface.
+> +	  Such sensors are found on DDR5 memory modules.
+> +
+> +	  This driver supports both I2C and I3C interfaces.
+>   
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called spd5118.
+> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+> index 5da44571b6a0..d70123e10616 100644
+> --- a/drivers/hwmon/spd5118.c
+> +++ b/drivers/hwmon/spd5118.c
+> @@ -18,6 +18,7 @@
+>   #include <linux/bits.h>
+>   #include <linux/err.h>
+>   #include <linux/i2c.h>
+> +#include <linux/i3c/device.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/module.h>
+>   #include <linux/mutex.h>
+> @@ -482,6 +483,25 @@ static const struct regmap_config spd5118_regmap16_config = {
+>   	.cache_type = REGCACHE_MAPLE,
+>   };
+>   
+> +/*
+> + * I3C uses 2-byte register addressing -
+> + *   Byte 1: MemReg | BlkAddr[0] | Address[5:0]
+> + *   Byte 2: 0000   | BlkAddr[4:1]
+> + *
+> + * The low byte carries the register/NVM address and the high byte carries the
+> + * upper block address bits, so little-endian format is required. No range
+> + * config is needed since I3C does not use MR11 page switching.
+> + */
+> +static const struct regmap_config spd5118_regmap_i3c_config = {
+> +	.reg_bits = 16,
+> +	.val_bits = 8,
+> +	.max_register = 0x7ff,
+> +	.reg_format_endian = REGMAP_ENDIAN_LITTLE,
+
+Should this be added to spd5118_regmap16_config instead, or is there reason
+to assume that I2C 16-bit addressing differs from I3C addressing ?
+
+> +	.writeable_reg = spd5118_writeable_reg,
+> +	.volatile_reg = spd5118_volatile_reg,
+> +	.cache_type = REGCACHE_MAPLE,
+> +};
+> +
+>   static int spd5118_suspend(struct device *dev)
+>   {
+>   	struct spd5118_data *data = dev_get_drvdata(dev);
+> @@ -770,7 +790,51 @@ static struct i2c_driver spd5118_i2c_driver = {
+>   	.address_list	= IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ? normal_i2c : NULL,
+>   };
+>   
+> -module_i2c_driver(spd5118_i2c_driver);
+> +/* I3C */
+> +
+> +static int spd5118_i3c_probe(struct i3c_device *i3cdev)
+> +{
+> +	struct device *dev = i3cdev_to_dev(i3cdev);
+> +	struct regmap *regmap;
+> +	unsigned int regval;
+> +	int err;
+> +
+> +	regmap = devm_regmap_init_i3c(i3cdev, &spd5118_regmap_i3c_config);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
+> +
+> +	/* Verify this is a SPD5118 device */
+> +	err = regmap_read(regmap, SPD5118_REG_TYPE, &regval);
+> +	if (err)
+> +		return err;
+> +
+> +	if (regval != 0x51) {
+> +		dev_err(dev, "unexpected device type 0x%02x, expected 0x51\n", regval);
+> +		return -ENODEV;
+> +	}
+> +
+> +	err = regmap_read(regmap, SPD5118_REG_TYPE + 1, &regval);
+> +	if (err)
+> +		return err;
+> +
+> +	if (regval != 0x18) {
+> +		dev_err(dev, "unexpected device type 0x%02x, expected 0x18\n", regval);
+> +		return -ENODEV;
+> +	}
+> +
+
+I don't think this should dump error messages. Also, it might be desirable
+to use a single regmap operation to read both values.
+
+> +	return spd5118_common_probe(dev, regmap, false);
+
+Why is_16bit=false ?
+
+Thanks,
+Guenter
+
+> +}
+> +
+> +static struct i3c_driver spd5118_i3c_driver = {
+> +	.driver = {
+> +		.name	= "spd5118_i3c",
+> +		.of_match_table = spd5118_of_ids,
+> +		.pm = pm_sleep_ptr(&spd5118_pm_ops),
+> +	},
+> +	.probe		= spd5118_i3c_probe,
+> +};
+> +
+> +module_i3c_i2c_driver(spd5118_i3c_driver, &spd5118_i2c_driver);
+>   
+>   MODULE_AUTHOR("René Rebe <rene@exactcode.de>");
+>   MODULE_AUTHOR("Guenter Roeck <linux@roeck-us.net>");
+
