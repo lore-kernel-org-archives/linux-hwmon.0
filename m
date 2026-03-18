@@ -1,47 +1,50 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497BD36CE0E
-	for <linux-hwmon@vger.kernel.org>; Wed, 18 Mar 2026 08:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3FF37D132;
+	Wed, 18 Mar 2026 08:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773821627; cv=none; b=hTpLK1JC6NZnx5PhZoOMPmOFKhSrtmDq6H9KVYGTvc0hEq2lbWCoCH29wt/A/lGe+dZztG4MMPuT4ACDw9JDYMwMWVyeQz+RohnTnnvF6dA1RQMN0YZiDwWg4Sz0REfa9uLzFvKazfFrFCZbVtor3tKyKJoa0Iwd88ZoyMkxynE=
+	t=1773822236; cv=none; b=WYzqsFshLm5QDuQrz3QGgll/hiMMUcKZiE2IpNjuAvIyZIPxaBbmch791mKYG/woME6w+z6NFn8bmRxdneUEUnRElETtlWJhYK9HhJuh9UfAfZ4UJ5bEmJdRrn5CrJHaj23IEUDoFyGVUtK+4dQ81Xf9UITShEn5hHJaN5vTlLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773821627; c=relaxed/simple;
-	bh=MmkOXjYBLk3W+cn5pndelBU7hiWffECq0yY9Pl0anTk=;
+	s=arc-20240116; t=1773822236; c=relaxed/simple;
+	bh=Le0U2Y1VQsiAeth5ZUAWVvNLY7ryaX06wNoqTJ2H5Rg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NauV9kfuIK0E/q3CIr0YlsnBSt/wo+u5+/47mgqaSJVIdSzsqnNu3xPkZusdNeSLduWoPR1uzWPT6Uv8ZCSATfADEnpgk5at0yBrSg7UFv2T4GgHcLDvZcOK5MOFQvZit51+X8GqgRz5ac25wJxAJTdH0wpCKmAhy7Ok+xpcfqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w2m1f-0001D1-MD; Wed, 18 Mar 2026 09:13:11 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w2m1e-000sRb-3C;
-	Wed, 18 Mar 2026 09:13:11 +0100
-Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.98.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1w2m1e-000000097Ag-3gyK;
-	Wed, 18 Mar 2026 09:13:10 +0100
-Date: Wed, 18 Mar 2026 09:13:10 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Linus Walleij <linusw@kernel.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-gpio@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH v5 0/7] mfd: Add support for NXP MC33978/MC34978 MSDI
-Message-ID: <abpelu6kqbvOb2mx@pengutronix.de>
-References: <20260316140514.1406588-1-o.rempel@pengutronix.de>
- <e2466bab-4147-4fb3-99ba-68d36c0f18c1@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XtDKC2BI1HG+9nenKhOsk9ug1PvtspsROCPHjBRs0UOMyN7OGjayKD7xuMy8rqP6QStwE7+CDmaJA9JaN3uhl+yJxeCFIkDwYfIOBlNZxJZzXdzejSD9pkHsC9y7//KdkYZjaTQGnDUv29MwvoG7mfAP58q+dLLXaYIvPQBISJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zgva8rw/; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zgva8rw/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7026C19421;
+	Wed, 18 Mar 2026 08:23:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773822235;
+	bh=Le0U2Y1VQsiAeth5ZUAWVvNLY7ryaX06wNoqTJ2H5Rg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zgva8rw/5k/0Dh4QnHBpUHyuL6bnuEHy7r79/4mlQJt3zl9VOXKviytWvtq7JmKUS
+	 yOIxb3crr5caAEILYo7vTxqKjk1GIjrvtRH5MVi8aVMrTiVOdGQus1NAFhYl2eicVa
+	 PMN7ANS7yv37dqjJFTualnG+UOBrOuEDsbIp+z/uo1cxrd3tSE6veTSScPW4Hx9UM1
+	 wFTjqMYEosUfwfXk1T0JovH8kQsTFy0U+/zANK0YwHXX1/JD0jg1QKYa5aicU5I60E
+	 lKS8JUsvFwPtSyjwDMzJ93FXPSZu84fd0QCoGc/PuUSvOLTgPZYOH27LnnesgLrr/H
+	 BDS8nl/xxr7aw==
+Date: Wed, 18 Mar 2026 09:23:52 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Dawei Liu <dawei.liu.jy@renesas.com>
+Cc: "linux@roeck-us.net" <linux@roeck-us.net>, 
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, "robh@kernel.org" <robh@kernel.org>, 
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, 
+	"geert+renesas@glider.be" <geert+renesas@glider.be>, "magnus.damm" <magnus.damm@gmail.com>, 
+	Grant Peltier <grant.peltier.jg@renesas.com>, Linda Xin <linda.xin.jg@renesas.com>, 
+	"tabreztalks@gmail.com" <tabreztalks@gmail.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: isl68137: Add compatible
+ strings for RAA228942 and RAA228943
+Message-ID: <20260318-neon-blazing-swallow-f7b60a@quoll>
+References: <20260316053541.3903-1-dawei.liu.jy@renesas.com>
+ <20260318021921.75-1-dawei.liu.jy@renesas.com>
+ <20260318021921.75-4-dawei.liu.jy@renesas.com>
+ <TYWPR01MB11935C44C0ACE3F319FC2ABC8D54EA@TYWPR01MB11935.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -50,51 +53,39 @@ List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e2466bab-4147-4fb3-99ba-68d36c0f18c1@roeck-us.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <TYWPR01MB11935C44C0ACE3F319FC2ABC8D54EA@TYWPR01MB11935.jpnprd01.prod.outlook.com>
 
-On Tue, Mar 17, 2026 at 03:12:11PM -0700, Guenter Roeck wrote:
-> Hi,
+On Wed, Mar 18, 2026 at 05:43:00AM +0000, Dawei Liu wrote:
+> Hi Krzysztof,
 > 
-> On 3/16/26 07:05, Oleksij Rempel wrote:
-> > This series adds support for the NXP MC33978/MC34978 Multiple Switch Detection
-> > Interface (MSDI) via the MFD framework.
-> > 
-> > Architecture overview:
-> > * mfd: Core driver handling 2-frame pipelined SPI, regulator sequencing, and
-> >    linear irq_domain. Harvests status bits from SPI MISO MSB.
-> > * pinctrl: Exposes 22 physical switch inputs as standard GPIOs. Proxies IRQs to
-> >    the MFD domain.
-> > * hwmon: Exposes thermal limits, VBATP/VDDQ voltage boundaries, and dynamic
-> >    fault alarms.
-> > * mux: Controls the 24-to-1 AMUX routing analog signals (switch voltages,
-> >    temperature, VBATP) to an external ADC.
-> > 
-> > Initial pinctrl implementation by David Jander, reworked into this MFD
-> > architecture.
-> > 
+> I've updated the commit message in v2 to clarify the compatibility,
+> as you suggested in your v1 review. The commit message now reads:
 > 
-> Please have a look at the AI review feedback at
-> https://sashiko.dev/#/patchset/20260316140514.1406588-1-o.rempel%40pengutronix.de
+>   "Both RAA228942 and RAA228943 are PMBus command compatible with the
+>    RAA228228/RAA228244/RAA228246 family and use the same 2-rail non-TC
+>    driver configuration."
 > 
-> It didn't run on all patches of the series, and I don't know how accurate
-> the feedback for the non-hwmon patches is, but at least for the hwmon
-> patch I agree with its findings.
+> Could you please review this v2 dt-bindings patch and provide your
+> Acked-by if it looks good to you?
+
+Why do you ping few hours after sending a patch? No, I will not Ack it
+becuse I have bunch of other patches to do and pinging after few hours
+makes a very bad impression. I have two weeks to respond to your patch.
+
+Considering that recently some Renesas contributors did not review patches
+still on the list but sent a fix to them, I find your request even less
+appropriate. Start reviewing patches on the list.
+(above is of course not a request to Renesas maintainers)
+
+> 
+> Best Regards
+> Dawei Liu
+> 
+> -----Original Message-----
+> From: Dawei Liu 
+> Sent: Wednesday, March 18, 2026 10:20 AM
 
 
-There are valid findings. I'll address them. Thx!
+Best regards,
+Krzysztof
 
-Best Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
