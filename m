@@ -1,67 +1,68 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730D13932D5
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 19:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274AC37419B
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 19:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773948563; cv=none; b=Y240bhPpzUyf3qtRRGSw1sNp/rtttKpc6Ai5V/D0siA6KPYrqB+dmTb50C3zneFOG32VbMCySwPUG+TJtCS6Hmtt8yc9S29wizMHPstm7IdaVKIbDsMrG4ONB3VAVA+zEiKhQQHFeMPUNE4l7Uw9vYu3n/GltbXgh7a07lf2MIY=
+	t=1773948841; cv=none; b=QwLgv4e/3f2JbvkfVMUanYV7sgLI2/BxK+yO4g12TdJ/KzoUiWbNgm2DhXWTiT+wu0kaBKcFRlIIXPOeqAcauvbNwv9c6tfoyZ5Kh1AF8OmjPjkxNYetTrRDJBorCtxyivOy2xGbsD0at0aQyug2uJ+D9APmgNWun4IEywqAmHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773948563; c=relaxed/simple;
-	bh=lJEt97rA6YJ3x59EYCjjBBJRzcw2T84iEhdz7sJxGOs=;
+	s=arc-20240116; t=1773948841; c=relaxed/simple;
+	bh=CsPW5FWxD7CCAajcBs2GMKCVGjaHMoDxdTmmVRCnX8o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P1/AeZb7n+PLZU6FpgFFABp5s87HxoPhoq0MwVGXQBISvHdCfIj+anzh9xyVhjxE/WEt/yYGozBOqwPdvgUHluQIXsMXX/irh+JN0bN2ibU/F4n3aTiQaadWZraVfEVfmIh2aOPayp9rKHQGmm2rZU/APxzvg6fYfBBQJbHukco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bmtlaoo7; arc=none smtp.client-ip=74.125.82.53
+	 In-Reply-To:Content-Type; b=ux8Ei59E8OKrzZxilimwZtMuJu4uNrGw036IRCAuwxtZ9puFjPMvqR8IJC1JQN5EzMt5FqyB/gwoclBFhluqHEbSsg7zu0ZhytFr5UhF+psCjel8dniore6Qv7wnvHLS4nP5tJcg91AntQn2eUb9SudPQmPAXybSQQmsNg3Zzeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CdFMWoBn; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bmtlaoo7"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12a695044a4so2184973c88.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 12:29:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CdFMWoBn"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ba895adfeaso1505639eec.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 12:34:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773948561; x=1774553361; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773948839; x=1774553639; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tn4p/PNavXSgVVfNdg0wirCLJpgdLt4any0Z9oblRk=;
-        b=Bmtlaoo7K3Zl5Ql1xOaLJ+g9uOnrfcUE3kx9gwe/aUhg7hCHKlqlgupCxf7cidtutp
-         jty9bd3s/qRKZ9p2IVRiG+BMvaFz6fW0hgLk+sLYmCW3o7HxooDA6TwjmK5Tpxk+OC5Z
-         drm1Xt1RlPLI4RNeUQmwzRkkUXrTJRvbyOLHQpat07ng7Wj02Dlq5AfMA/B3zQlGSe+c
-         0gFQ8QIF1imO+i/9++BbP1TxED6eGxIsdjQZy9h/njLgq6HSHXwWc5+y//kW59PB7p3L
-         NtPfIdFyyQ8wQsYTcXoP4iA5dJQlvEzhVPP7nznwwOPiWznqVOa8AJhtvdtkb3eY4lw2
-         Exxw==
+        bh=GVz6VDm3FG8aSgFPzgKeXVLaT91jHQ5dIvUoadUIGNo=;
+        b=CdFMWoBnczhd2qYd4vvsU7hJRgldjJcz2u6bKM2H4ZOhPiXdNk7+vlVD3aki/mMQtq
+         i0xGjiNSRTHOlcgb4Udz1L7TDWJMQFb5VWUDa7fuh00kkv5svE+QdAuT6GUpf+BJYWe8
+         WAhxx4HCYZ9Hf1RUmrpwmk/c5WKq2Ij1/8kOgNYmZX+IwH6aQ8ir8MlDcoLL12sIfv/Q
+         hWX4eZbzjJ9AaedwTXoo90RO738xO3/b5zVOgdNzyrBDuxV35GdkO6pm+uTsLHxbaAtc
+         fEXgvWBD2bO5WczggkmeKbZN/brTROb2WL3wdBhiYbeQ5DMiF4u8a6zwYwABKQJAq2/w
+         YBNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773948561; x=1774553361;
+        d=1e100.net; s=20251104; t=1773948839; x=1774553639;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8Tn4p/PNavXSgVVfNdg0wirCLJpgdLt4any0Z9oblRk=;
-        b=MmpW0fFUNFeajY+/qygqvrtPzJaTAxEjyUIh2+jyoO2Rj6hRPP3R9C2h1MGMyPEFaO
-         q+i3rMGJ90aTmi2OMbGwYNNOv5V042JeSc34NQH1S0KXpklOuXsUTkhpSOmJHnGbEA6s
-         6hAdyWkLD/I1qVHIlRQc2gJgBZmiy5zn+qFuzwQIC9Frge8nMSLnezdiOIOulakh38om
-         YuRHV8GKePhAF/83pwoJkYBSWv7ooh9j5C6lu8jei/U9ACGZX3H62kVyCjle6BN19gUs
-         1wNl50Bq5EhngMrtYscC06rhlORaZz6SzMJDMDg7p3iXfY4AzC3vjFWsVLbpOpNJrtPV
-         zU9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUUKtV03j5+QFsJbZQHJO3we/NQ/8Ld03n+dlo0Y2c5XAB3Ug3SKpElM+eNdrvHAz4bnyL0QcoiRs/SSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwewiiaCRfCrHmuQgCU5IdTdBGBrvYZIjvxoA+1OZAEU8Br1N1I
-	Sk7JRPEqlAWWk1/5TxXoefa7Nqd3fxpk09uhK9UkrJkruKJR1WwGhKGsPCs9Ag==
-X-Gm-Gg: ATEYQzyvEkCTZrytK2EznLY9LCJHyyJGemfhaLbacifdPe+UZUFsZVvQPQVwO2be/EW
-	l2CJu5/Javx7daRbCbQbAC0gKAI8C8dhfwMpaiqqlyNbKjoso/q3+A7Y5AUvxG8p1iwprURxf6m
-	9rg+jEYiF3XhjLYiT1CyySXvZNOhu+G5IYrONcGYTehe4rTz0o8yfORRQo2dcxPXhtGP/gKFzlI
-	ghqiJ275ENzvp5tAXVRsvfk7H439OGZNxHBuwpnqz6uY+9MjXhiQHVm7Qjfy/2yNjhLRJiZ22KC
-	lvvj35gTZCOMKecHjQ41DjWYgr20g9G4ZOg0l7GOtQfuUY44SFE7DEkUx9XSFPgvwwxeo5ZTB6p
-	iHkmhRYP2Br1+tZf4lTQcadya+Fv+F3s5CYo5nz66k+Q6jf5ImvbZ8QVKDls6QZ03fj59o2yokr
-	12btaAzcoMLp8TBAiQWQlcSFtWKYdANn1wxUNeymOXuXg9U04l5i/WIr+lzRyqBWztk02yRNaZ
-X-Received: by 2002:a05:7022:4590:b0:122:153:d161 with SMTP id a92af1059eb24-12a7267f80bmr191352c88.17.1773948560327;
-        Thu, 19 Mar 2026 12:29:20 -0700 (PDT)
+        bh=GVz6VDm3FG8aSgFPzgKeXVLaT91jHQ5dIvUoadUIGNo=;
+        b=WKCVIRikz9kfuiGYarGQ88Nru3n0A1e+8yk504OD8pfxdP0gqVkil53I4MYJ3ambjh
+         BJtkPgtxOwsdvzVg/Y72CJD4hQQDF6H4xOtFHywPV3muCeHqnsJff/SP2ylHxW90WyUk
+         qbEjn3M9ipmeCFqrYfjauJhlCPh4fNpPHNt4Gucg03BgWPNv2knU98ZI+d9mebAyrA9e
+         12HhHobn5CEeZsvEx8EdBKi0t+td2LZf2wNp8IUvbaO/glcWWSwZzHpWNRmZ/nRSzxbE
+         pgNYXt4vt8kJcERzEhQ3uYKq00/hkDfkQS3FfU6oyR/PvcdCcXSCXrmlD+qgABfiMEWo
+         2V/A==
+X-Forwarded-Encrypted: i=1; AJvYcCV4wazO7pr5t10fi/pT0e/oDPZzwvFxQLtxh9sk0Q+eAngofm82ekKjzI3mMerJm5SBt4K6E8mY+TklSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTt6GEG3D/OykTyQeQSbcltdP/FlfpA8NXj0v9H3+xJAuV2bNx
+	+KlJ7l4zE8wpV9sDr46CvQMxd/GpcV3iqodXHrSnwrsu5jSlymZ9hOVluGxJ1Q==
+X-Gm-Gg: ATEYQzxJKBUMl6PlGiLRMJ9axNJmu72zwaqNnUb60fM9nlARZFQBx5gBLnnSwN+UXbp
+	Ev8Sz1p6st3aBEZiUdjpM34pqgUGZXpJY5RRcqXRIG4Qx/362cDVOA27TW0eLuIZgC28NTcBWJU
+	bBjOsoTvbCexYBb+Y95KqAT270w6n+hvEH5YxSX7YRCzvtX4w0zMo9DehGzan1EvmVPES+fybq/
+	mULFBGF2Zx7x+mhEhCo0V4bOQVFTCZWJe8E6bpHu07wWyWGXLXJeAJPtKiG4VUbqRXZiaoywktc
+	cEPs9ueCjcoGAayTKDoN02odzlM8KmIAxZ4SZzzOU7glHgA/9r5KVAAAJMlxhSkyr6hd3IXlGc7
+	21l2VF/fcekNjUbI9adEIPYa2qFpWNcLbKMN9XUKAwW7yypt4N3EBTk+4pB0PnyKlpj7shTryYx
+	Svwr1i6wbYnExIe9IHMY1mrbfpMaHX3HQKA2Ldr22RBu/ZkF/MppT0olw0P++ihqvf3NtkAkh+/
+	Q8UYx5e7jM=
+X-Received: by 2002:a05:7300:548:b0:2c0:fd7c:ddf4 with SMTP id 5a478bee46e88-2c109752dd0mr315707eec.21.1773948839009;
+        Thu, 19 Mar 2026 12:33:59 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14c99bsm38135eec.1.2026.03.19.12.29.19
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b3253d0sm4528eec.29.2026.03.19.12.33.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 12:29:19 -0700 (PDT)
+        Thu, 19 Mar 2026 12:33:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fafaa8e9-1dd8-441b-9085-c0cc75739aea@roeck-us.net>
-Date: Thu, 19 Mar 2026 12:29:18 -0700
+Message-ID: <c0acce91-ffba-4ca8-8bd7-df4ad50ee4fb@roeck-us.net>
+Date: Thu, 19 Mar 2026 12:33:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,12 +70,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: add driver for ARCTIC Fan Controller
-To: Aureo Serrano de Souza <aureo.serrano@arctic.de>,
- linux-hwmon@vger.kernel.org
-Cc: linux@weissschuh.net, corbet@lwn.net, skhan@linuxfoundation.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260319103509.243653-1-aureo.serrano@arctic.de>
+Subject: Re: [PATCH v2 2/2] hwmon: add MP2985 driver
+To: wenswang@yeah.net, krzk+dt@kernel.org, conor+dt@kernel.org,
+ corbet@lwn.net, skhan@linuxfoundation.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20260319060118.643352-1-wenswang@yeah.net>
+ <20260319060318.643572-1-wenswang@yeah.net>
+ <20260319060318.643572-2-wenswang@yeah.net>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -120,463 +123,642 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260319103509.243653-1-aureo.serrano@arctic.de>
+In-Reply-To: <20260319060318.643572-2-wenswang@yeah.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 3/19/26 03:34, Aureo Serrano de Souza wrote:
-> Add hwmon driver for the ARCTIC Fan Controller, a USB HID device
-> (VID 0x3904, PID 0xF001) with 10 fan channels. Exposes fan speed in
-> RPM (read-only) and PWM duty cycle (0-255, read/write) via sysfs.
+On 3/18/26 23:03, wenswang@yeah.net wrote:
+> From: Wensheng Wang <wenswang@yeah.net>
 > 
-> The device pushes IN reports at ~1 Hz containing RPM readings. PWM is
-> set via OUT reports; the device applies the new duty cycle and sends
-> back a 2-byte ACK (Report ID 0x02). The driver waits up to 1 s for
-> the ACK using a completion. Measured device latency: max ~563 ms over
-> 500 iterations. PWM control is manual-only: the device never changes
-> duty cycle autonomously.
+> Add support for MPS mp2985 controller. This driver exposes
+> telemetry and limit value readings and writtings.
 > 
-> raw_event() may run in hardirq context, so fan_rpm[] is protected by
-> a spinlock with irq-save. pwm_duty[] and the report buffer are
-> serialized by the hwmon core, which holds its lock for the duration of
-> the read/write callbacks.
-> 
-> Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> Signed-off-by: Wensheng Wang <wenswang@yeah.net>
 
-Feedback from Sashiko:
+Please check:
 
-https://sashiko.dev/#/patchset/20260319103509.243653-1-aureo.serrano%40arctic.de
+https://sashiko.dev/#/patchset/20260319060318.643572-1-wenswang%40yeah.net
 
-Regarding DMA alignment: Please use ____cacheline_aligned to ensure that
-the buffer is DMA-aligned.
+It appears to me that the findings are real. Please have a look.
 
 Thanks,
 Guenter
 
 > ---
-> Thanks to the reviewers for their feedback.
+> v1 -> v2:
+>      1. remove duplicate entry in mp2985.rst
+>      2. clamp vout value to 32767
+>      3. simplify the code for obtaining PMBUS_VOUT_MODE bit value
+>      4. add comment for explaining MP2985 supported vout mode
+>      5. switch back to previous page after obtaining vid scale to avoid
+>         confusing the PMBus core
 > 
-> Changes since v2:
-> - buf[]: add __aligned(8) for DMA safety
-> - ARCTIC_ACK_TIMEOUT_MS: add comment noting observed max ~563 ms
-> - arctic_fan_parse_report(): replace hwmon_lock/hwmon_unlock with
->    spin_lock_irqsave; hwmon_lock() may sleep and is unsafe when
->    raw_event() runs in hardirq/softirq context
-> - arctic_fan_raw_event(): use spin_lock_irqsave for ACK path
-> - arctic_fan_write(): use spin_lock_irqsave for completion reinit
-> - arctic_fan_write(): clamp val to [0, 255] before u8 cast
-> - hardware teardown: register arctic_fan_hw_stop() via
->    devm_add_action_or_reset() before hwmon; devm LIFO order ensures
->    hwmon unregisters before hid_hw_close/stop; remove() is a no-op
-> - remove priv->hwmon_dev (no longer needed)
+>   Documentation/hwmon/index.rst  |   1 +
+>   Documentation/hwmon/mp2985.rst | 147 +++++++++++++
+>   MAINTAINERS                    |   7 +
+>   drivers/hwmon/pmbus/Kconfig    |   9 +
+>   drivers/hwmon/pmbus/Makefile   |   1 +
+>   drivers/hwmon/pmbus/mp2985.c   | 377 +++++++++++++++++++++++++++++++++
+>   6 files changed, 542 insertions(+)
+>   create mode 100644 Documentation/hwmon/mp2985.rst
+>   create mode 100644 drivers/hwmon/pmbus/mp2985.c
 > 
-> Changes since v1:
-> - Use hid_dbg() instead of module_param debug flag
-> - Move hid_device_id table adjacent to hid_driver struct
-> - Use get_unaligned_le16() for RPM parsing
-> - Remove impossible bounds/NULL checks; remove retry loop
-> - Add hid_is_usb() guard
-> - Do not update pwm_duty from IN reports (device is manual-only)
-> - Add completion/ACK mechanism for OUT report acknowledgement
-> - Add Documentation/hwmon/arctic_fan_controller.rst and MAINTAINERS
-> 
-> diff --git a/Documentation/hwmon/arctic_fan_controller.rst b/Documentation/hwmon/arctic_fan_controller.rst
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index b2ca8513cfcd..1b7007f41b39 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -183,6 +183,7 @@ Hardware Monitoring Kernel Drivers
+>      mp2925
+>      mp29502
+>      mp2975
+> +   mp2985
+>      mp2993
+>      mp5023
+>      mp5920
+> diff --git a/Documentation/hwmon/mp2985.rst b/Documentation/hwmon/mp2985.rst
 > new file mode 100644
-> index 0000000000..e417f54b62
+> index 000000000000..87a39c8a300c
 > --- /dev/null
-> +++ b/Documentation/hwmon/arctic_fan_controller.rst
-> @@ -0,0 +1,34 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/Documentation/hwmon/mp2985.rst
+> @@ -0,0 +1,147 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +Kernel driver arctic_fan_controller
-> +===================================
+> +Kernel driver mp2985
+> +====================
 > +
-> +Supported devices:
+> +Supported chips:
 > +
-> +* ARCTIC Fan Controller (USB HID, VID 0x3904, PID 0xF001)
+> +  * MPS mp2985
 > +
-> +Author: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> +    Prefix: 'mp2985'
+> +
+> +Author:
+> +
+> +	Wensheng Wang <wenswang@yeah.net>
 > +
 > +Description
 > +-----------
 > +
-> +This driver provides hwmon support for the ARCTIC Fan Controller, a USB Custom HID
-> +device with 10 fan channels. The device sends IN reports about once per second
-> +containing current PWM (bytes 1–10) and RPM (bytes 11–30). PWM is set via OUT reports
-> +(bytes 1–10, 0–100% per channel). Fan control is manual-only: the device does not
-> +change PWM autonomously, only when it receives an OUT report from the host.
+> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
+> +MP2985 Dual Loop Digital Multi-phase Controller.
 > +
-> +Usage notes
-> +-----------
+> +Device compliant with:
 > +
-> +Since it is a USB device, hotplug is supported. The device is autodetected.
+> +- PMBus rev 1.3 interface.
 > +
-> +Sysfs entries
-> +-------------
+> +The driver exports the following attributes via the 'sysfs' files
+> +for input voltage:
 > +
-> +================ ===============================================================
-> +fan[1-10]_input   Fan speed in RPM (read-only, from device IN reports).
-> +pwm[1-10]         PWM duty cycle. Sysfs uses 0–255 (0%–100%); the device uses
-> +                  0–100% internally. Read: current duty from IN report (scaled
-> +                  to 0–255). Write: set duty via OUT report (value 0–255).
-> +================ ===============================================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b2ca8513cf..c34713040e 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -42,6 +42,7 @@ Hardware Monitoring Kernel Drivers
->      aht10
->      amc6821
->      aquacomputer_d5next
-> +   arctic_fan_controller
->      asb100
->      asc7621
->      aspeed-g6-pwm-tach
+> +**in1_input**
+> +
+> +**in1_label**
+> +
+> +**in1_crit**
+> +
+> +**in1_crit_alarm**
+> +
+> +**in1_lcrit**
+> +
+> +**in1_lcrit_alarm**
+> +
+> +**in1_max**
+> +
+> +**in1_max_alarm**
+> +
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +**in2_crit**
+> +
+> +**in2_crit_alarm**
+> +
+> +**in2_lcrit**
+> +
+> +**in2_lcrit_alarm**
+> +
+> +**in3_input**
+> +
+> +**in3_label**
+> +
+> +**in3_crit**
+> +
+> +**in3_crit_alarm**
+> +
+> +**in3_lcrit**
+> +
+> +**in3_lcrit_alarm**
+> +
+> +The driver provides the following attributes for input current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr2_input**
+> +
+> +**curr2_label**
+> +
+> +**curr2_crit**
+> +
+> +**curr2_crit_alarm**
+> +
+> +**curr2_max**
+> +
+> +**curr2_max_alarm**
+> +
+> +**curr3_input**
+> +
+> +**curr3_label**
+> +
+> +**curr3_crit**
+> +
+> +**curr3_crit_alarm**
+> +
+> +**curr3_max**
+> +
+> +**curr3_max_alarm**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> +
+> +**power2_input**
+> +
+> +**power2_label**
+> +
+> +The driver provides the following attributes for output power:
+> +
+> +**power3_input**
+> +
+> +**power3_label**
+> +
+> +**power4_input**
+> +
+> +**power4_label**
+> +
+> +The driver provides the following attributes for temperature:
+> +
+> +**temp1_input**
+> +
+> +**temp1_crit**
+> +
+> +**temp1_crit_alarm**
+> +
+> +**temp1_max**
+> +
+> +**temp1_max_alarm**
+> +
+> +**temp2_input**
+> +
+> +**temp2_crit**
+> +
+> +**temp2_crit_alarm**
+> +
+> +**temp2_max**
+> +
+> +**temp2_max_alarm**
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 96ea84948d..ec3112bd41 100644
+> index d7241695df96..ac62dbaef34d 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -2053,6 +2053,13 @@ S:	Maintained
->   F:	drivers/net/arcnet/
->   F:	include/uapi/linux/if_arcnet.h
-> 
-> +ARCTIC FAN CONTROLLER DRIVER
-> +M:	Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> @@ -17920,6 +17920,13 @@ S:	Maintained
+>   F:	Documentation/hwmon/mp29502.rst
+>   F:	drivers/hwmon/pmbus/mp29502.c
+>   
+> +MPS MP2985 DRIVER
+> +M:	Wensheng Wang <wenswang@yeah.net>
 > +L:	linux-hwmon@vger.kernel.org
 > +S:	Maintained
-> +F:	Documentation/hwmon/arctic_fan_controller.rst
-> +F:	drivers/hwmon/arctic_fan_controller.c
+> +F:	Documentation/hwmon/mp2985.rst
+> +F:	drivers/hwmon/pmbus/mp2985.c
 > +
->   ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
->   M:	Arnd Bergmann <arnd@arndb.de>
->   M:	Krzysztof Kozlowski <krzk@kernel.org>
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 328867242c..6c90a8dd40 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -388,6 +388,18 @@ config SENSORS_APPLESMC
->   	  Say Y here if you have an applicable laptop and want to experience
->   	  the awesome power of applesmc.
-> 
-> +config SENSORS_ARCTIC_FAN_CONTROLLER
-> +	tristate "ARCTIC Fan Controller"
-> +	depends on USB_HID
+>   MPS MP2993 DRIVER
+>   M:	Noah Wang <noahwang.wang@outlook.com>
+>   L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index fc1273abe357..83fe5866c083 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -447,6 +447,15 @@ config SENSORS_MP2975
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called mp2975.
+>   
+> +config SENSORS_MP2985
+> +	tristate "MPS MP2985"
 > +	help
-> +	  If you say yes here you get support for the ARCTIC Fan Controller,
-> +	  a USB HID device (VID 0x3904, PID 0xF001) with 10 fan channels.
-> +	  The driver exposes fan speed (RPM) and PWM control via the hwmon
-> +	  sysfs interface.
+> +	  If you say yes here you get hardware monitoring support for MPS
+> +	  MP2985 Dual Loop Digital Multi-Phase Controller.
 > +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called arctic_fan_controller.
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called mp2985.
 > +
->   config SENSORS_ARM_SCMI
->   	tristate "ARM SCMI Sensors"
->   	depends on ARM_SCMI_PROTOCOL
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 5833c807c6..ef831c3375 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -49,6 +49,7 @@ obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
->   obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
->   obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
->   obj-$(CONFIG_SENSORS_AQUACOMPUTER_D5NEXT) += aquacomputer_d5next.o
-> +obj-$(CONFIG_SENSORS_ARCTIC_FAN_CONTROLLER)	+= arctic_fan_controller.o
->   obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
->   obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
->   obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
-> diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_fan_controller.c
+>   config SENSORS_MP2993
+>   	tristate "MPS MP2993"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index d6c86924f887..24505bbee2b0 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
+>   obj-$(CONFIG_SENSORS_MP2925)	+= mp2925.o
+>   obj-$(CONFIG_SENSORS_MP29502)	+= mp29502.o
+>   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+> +obj-$(CONFIG_SENSORS_MP2985)	+= mp2985.o
+>   obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
+>   obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+>   obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
+> diff --git a/drivers/hwmon/pmbus/mp2985.c b/drivers/hwmon/pmbus/mp2985.c
 > new file mode 100644
-> index 0000000000..d71b323e0b
+> index 000000000000..df0934ebcaa0
 > --- /dev/null
-> +++ b/drivers/hwmon/arctic_fan_controller.c
-> @@ -0,0 +1,288 @@
+> +++ b/drivers/hwmon/pmbus/mp2985.c
+> @@ -0,0 +1,377 @@
 > +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * Linux hwmon driver for ARCTIC Fan Controller
+> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2985)
 > + *
-> + * USB Custom HID device with 10 fan channels.
-> + * Exposes fan RPM (input) and PWM (0-255) via hwmon. Device pushes IN reports
-> + * at ~1 Hz; no GET_REPORT. OUT reports set PWM duty (bytes 1-10, 0-100%).
-> + * PWM is manual-only: the device does not change duty autonomously, only
-> + * when it receives an OUT report from the host.
+> + * Copyright (C) 2026 MPS
 > + */
 > +
-> +#include <linux/completion.h>
-> +#include <linux/err.h>
-> +#include <linux/hid.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/minmax.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/i2c.h>
 > +#include <linux/module.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/unaligned.h>
+> +#include <linux/of_device.h>
+> +#include "pmbus.h"
 > +
-> +#define ARCTIC_VID			0x3904
-> +#define ARCTIC_PID			0xF001
-> +#define ARCTIC_NUM_FANS			10
-> +#define ARCTIC_OUTPUT_REPORT_ID		0x01
-> +#define ARCTIC_REPORT_LEN		32
-> +#define ARCTIC_RPM_OFFSET		11	/* bytes 11-30: 10 x uint16 LE */
-> +/* ACK report: device sends Report ID 0x02, 2 bytes (ID + status) after applying OUT report */
-> +#define ARCTIC_ACK_REPORT_ID		0x02
-> +#define ARCTIC_ACK_REPORT_LEN		2
 > +/*
-> + * Time to wait for ACK report after send.
-> + * Measured over 500 iterations: max ~563 ms. Keep 1 s as margin.
+> + * Vender specific register READ_PIN_EST(0x93), READ_IIN_EST(0x8E),
+> + * MFR_VR_MULTI_CONFIG_R1(0x0D) and MFR_VR_MULTI_CONFIG_R2(0x1D).
+> + * The READ_PIN_EST is used to read pin telemetry, the READ_IIN_EST
+> + * is used to read iin telemetry and the MFR_VR_MULTI_CONFIG_R1,
+> + * MFR_VR_MULTI_CONFIG_R2 are used to obtain vid scale.
 > + */
-> +#define ARCTIC_ACK_TIMEOUT_MS		1000
+> +#define READ_PIN_EST	0x93
+> +#define READ_IIN_EST	0x8E
+> +#define MFR_VR_MULTI_CONFIG_R1	0x0D
+> +#define MFR_VR_MULTI_CONFIG_R2	0x1D
 > +
-> +struct arctic_fan_data {
-> +	struct hid_device *hdev;
-> +	spinlock_t in_report_lock;	/* protects fan_rpm[], ack_status, in_report_received */
-> +	struct completion in_report_received; /* ACK (ID 0x02) received in raw_event */
-> +	int ack_status;			/* 0 = OK, negative errno on device error */
-> +	u32 fan_rpm[ARCTIC_NUM_FANS];
-> +	u8 pwm_duty[ARCTIC_NUM_FANS];	/* 0-255 matching sysfs range; converted to 0-100 on send */
-> +	/* OUT report buffer; DMA-safe alignment; hwmon core serializes write callbacks */
-> +	u8 buf[ARCTIC_REPORT_LEN] __aligned(8);
+> +#define MP2985_VOUT_DIV	512
+> +#define MP2985_VOUT_OVUV_UINT	195
+> +#define MP2985_VOUT_OVUV_DIV	100
+> +
+> +#define MP2985_PAGE_NUM	2
+> +
+> +#define MP2985_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_PIN | \
+> +							 PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
+> +							 PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP | \
+> +							 PMBUS_HAVE_STATUS_VOUT | \
+> +							 PMBUS_HAVE_STATUS_IOUT | \
+> +							 PMBUS_HAVE_STATUS_TEMP | \
+> +							 PMBUS_HAVE_STATUS_INPUT)
+> +
+> +#define MP2985_RAIL2_FUNC	(PMBUS_HAVE_PIN | PMBUS_HAVE_VOUT | \
+> +							 PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | \
+> +							 PMBUS_HAVE_TEMP | PMBUS_HAVE_IIN | \
+> +							 PMBUS_HAVE_STATUS_VOUT | \
+> +							 PMBUS_HAVE_STATUS_IOUT | \
+> +							 PMBUS_HAVE_STATUS_TEMP | \
+> +							 PMBUS_HAVE_STATUS_INPUT)
+> +
+> +struct mp2985_data {
+> +	struct pmbus_driver_info info;
+> +	int vout_scale[MP2985_PAGE_NUM];
+> +	int vid_offset[MP2985_PAGE_NUM];
 > +};
 > +
-> +/*
-> + * Parse RPM values from the periodic status report (10 x uint16 LE at rpm_off).
-> + * pwm_duty is not updated from the report: the device is manual-only, so the
-> + * host cache is the authoritative source for PWM.
-> + * Called from raw_event which may run in IRQ context; must not sleep.
-> + */
-> +static void arctic_fan_parse_report(struct arctic_fan_data *priv, u8 *buf,
-> +				    int len, int rpm_off)
+> +#define to_mp2985_data(x) container_of(x, struct mp2985_data, info)
+> +
+> +static u16 mp2985_linear_exp_transfer(u16 word, u16 expect_exponent)
 > +{
-> +	unsigned long flags;
-> +	int i;
+> +	s16 exponent, mantissa, target_exponent;
 > +
-> +	if (len < rpm_off + 20)
-> +		return;
+> +	exponent = ((s16)word) >> 11;
+> +	mantissa = ((s16)((word & 0x7ff) << 5)) >> 5;
+> +	target_exponent = (s16)((expect_exponent & 0x1f) << 11) >> 11;
 > +
-> +	spin_lock_irqsave(&priv->in_report_lock, flags);
-> +	for (i = 0; i < ARCTIC_NUM_FANS; i++)
-> +		priv->fan_rpm[i] = get_unaligned_le16(&buf[rpm_off + i * 2]);
-> +	spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +	if (exponent > target_exponent)
+> +		mantissa = mantissa << (exponent - target_exponent);
+> +	else
+> +		mantissa = mantissa >> (target_exponent - exponent);
+> +
+> +	return (mantissa & 0x7ff) | ((expect_exponent << 11) & 0xf800);
 > +}
 > +
-> +/*
-> + * raw_event: IN reports.
-> + *
-> + * Status report: Report ID 0x01, 32 bytes:
-> + *   byte 0 = report ID, bytes 1-10 = PWM 0-100%, bytes 11-30 = 10 x RPM uint16 LE.
-> + *   Device pushes these at ~1 Hz; no GET_REPORT.
-> + *
-> + * ACK report: Report ID 0x02, 2 bytes:
-> + *   byte 0 = 0x02, byte 1 = status (0x00 = OK, 0x01 = ERROR).
-> + *   Sent once after accepting and applying an OUT report (ID 0x01).
-> + */
-> +static int arctic_fan_raw_event(struct hid_device *hdev,
-> +				struct hid_report *report, u8 *data, int size)
+> +static int mp2985_read_byte_data(struct i2c_client *client, int page, int reg)
 > +{
-> +	struct arctic_fan_data *priv = hid_get_drvdata(hdev);
-> +	unsigned long flags;
+> +	int ret;
 > +
-> +	hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d\n", report->id, size);
-> +
-> +	if (report->id == ARCTIC_ACK_REPORT_ID && size == ARCTIC_ACK_REPORT_LEN) {
-> +		spin_lock_irqsave(&priv->in_report_lock, flags);
-> +		priv->ack_status = data[1] == 0x00 ? 0 : -EIO;
-> +		complete(&priv->in_report_received);
-> +		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-> +		return 0;
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/*
+> +		 * The MP2985 does not follow standard PMBus protocol completely,
+> +		 * and the calculation of vout in this driver is based on direct
+> +		 * format. As a result, the format of vout is enforced to direct.
+> +		 */
+> +		ret = PB_VOUT_MODE_DIRECT;
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
 > +	}
 > +
-> +	if (report->id != ARCTIC_OUTPUT_REPORT_ID || size != ARCTIC_REPORT_LEN) {
-> +		hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d ignored\n",
-> +			report->id, size);
-> +		return 0;
-> +	}
-> +
-> +	arctic_fan_parse_report(priv, data, size, ARCTIC_RPM_OFFSET);
-> +	return 0;
+> +	return ret;
 > +}
 > +
-> +static umode_t arctic_fan_is_visible(const void *data,
-> +				     enum hwmon_sensor_types type,
-> +				     u32 attr, int channel)
+> +static int mp2985_read_word_data(struct i2c_client *client, int page, int phase,
+> +				 int reg)
 > +{
-> +	if (type == hwmon_fan && attr == hwmon_fan_input)
-> +		return 0444;
-> +	if (type == hwmon_pwm && attr == hwmon_pwm_input)
-> +		return 0644;
-> +	return 0;
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2985_data *data = to_mp2985_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_READ_VOUT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/*
+> +		 * The MP2985 supports three vout mode, direct, linear11 and vid mode.
+> +		 * In vid mode, the MP2985 vout telemetry has 49 vid step offset, but
+> +		 * PMBUS_VOUT_OV_FAULT_LIMIT and PMBUS_VOUT_UV_FAULT_LIMIT do not take
+> +		 * this into consideration, its resolution is 1.95mV/LSB, as a result,
+> +		 * format[PSC_VOLTAGE_OUT] can not be set to vid directly. Adding extra
+> +		 * vid_offset variable for vout telemetry.
+> +		 */
+> +		ret = clamp_val(DIV_ROUND_CLOSEST(((ret & GENMASK(11, 0)) +
+> +									data->vid_offset[page]) *
+> +							data->vout_scale[page], MP2985_VOUT_DIV),
+> +							0, 0x7FFF);
+> +		break;
+> +	case PMBUS_READ_IIN:
+> +		/*
+> +		 * The MP2985 has standard PMBUS_READ_IIN register(0x89), but this is
+> +		 * not used to read the input current of per rail. The input current
+> +		 * is read through the vender redefined register READ_IIN_EST(0x8E).
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, READ_IIN_EST);
+> +		break;
+> +	case PMBUS_READ_PIN:
+> +		/*
+> +		 * The MP2985 has standard PMBUS_READ_PIN register(0x97), but this
+> +		 * is not used to read the input power of per rail. The input power
+> +		 * of per rail is read through the vender redefined register
+> +		 * READ_PIN_EST(0x93).
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, phase, READ_PIN_EST);
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST((ret & GENMASK(11, 0)) * MP2985_VOUT_OVUV_UINT,
+> +					MP2985_VOUT_OVUV_DIV);
+> +		break;
+> +	case PMBUS_STATUS_WORD:
+> +	case PMBUS_READ_VIN:
+> +	case PMBUS_READ_IOUT:
+> +	case PMBUS_READ_POUT:
+> +	case PMBUS_READ_TEMPERATURE_1:
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +		ret = -ENODATA;
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
 > +}
 > +
-> +static int arctic_fan_read(struct device *dev, enum hwmon_sensor_types type,
-> +			   u32 attr, int channel, long *val)
+> +static int mp2985_write_word_data(struct i2c_client *client, int page, int reg,
+> +				  u16 word)
 > +{
-> +	struct arctic_fan_data *priv = dev_get_drvdata(dev);
-> +	unsigned long flags;
+> +	int ret;
 > +
-> +	if (type == hwmon_fan && attr == hwmon_fan_input) {
-> +		spin_lock_irqsave(&priv->in_report_lock, flags);
-> +		*val = priv->fan_rpm[channel];
-> +		spin_unlock_irqrestore(&priv->in_report_lock, flags);
-> +		return 0;
+> +	switch (reg) {
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +		/*
+> +		 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
+> +		 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
+> +		 * of MP2985 is linear11 format, and the exponent is a
+> +		 * constant value(5'b11101)， so the exponent of word
+> +		 * parameter should be converted to 5'b11101(0x1D).
+> +		 */
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    mp2985_linear_exp_transfer(word, 0x1D));
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		/*
+> +		 * The bit0-bit11 is the limit value, and bit12-bit15
+> +		 * should not be changed.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    (ret & ~GENMASK(11, 0)) |
+> +				FIELD_PREP(GENMASK(11, 0),
+> +					   DIV_ROUND_CLOSEST(word * MP2985_VOUT_OVUV_DIV,
+> +							     MP2985_VOUT_OVUV_UINT)));
+> +		break;
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +	case PMBUS_OT_WARN_LIMIT:
+> +		/*
+> +		 * The PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT of
+> +		 * MP2985 is linear11 format, and the exponent is a
+> +		 * constant value(5'b00000), so the exponent of word
+> +		 * parameter should be converted to 5'b00000.
+> +		 */
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    mp2985_linear_exp_transfer(word, 0x00));
+> +		break;
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +		/*
+> +		 * The PMBUS_IOUT_OC_FAULT_LIMIT and PMBUS_IOUT_OC_WARN_LIMIT
+> +		 * of MP2985 is linear11 format, and the exponent can not be
+> +		 * changed.
+> +		 */
+> +		ret = pmbus_read_word_data(client, page, 0xff, reg);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = pmbus_write_word_data(client, page, reg,
+> +					    mp2985_linear_exp_transfer(word,
+> +								       FIELD_GET(GENMASK(15, 11),
+> +										 ret)));
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
 > +	}
-> +	if (type == hwmon_pwm && attr == hwmon_pwm_input) {
-> +		/* pwm_duty is modified only in write(), which the hwmon core serializes */
-> +		*val = priv->pwm_duty[channel];
-> +		return 0;
-> +	}
-> +	return -EINVAL;
+> +
+> +	return ret;
 > +}
 > +
-> +static int arctic_fan_write(struct device *dev, enum hwmon_sensor_types type,
-> +			    u32 attr, int channel, long val)
+> +static int
+> +mp2985_identify_vout_scale(struct i2c_client *client, struct pmbus_driver_info *info,
+> +			   int page)
 > +{
-> +	struct arctic_fan_data *priv = dev_get_drvdata(dev);
-> +	unsigned long flags;
-> +	long t;
-> +	int i, ret;
+> +	struct mp2985_data *data = to_mp2985_data(info);
+> +	int ret;
 > +
-> +	/*
-> +	 * The hwmon core holds its lock for the duration of this callback,
-> +	 * serializing concurrent writes. priv->buf is heap-allocated (embedded
-> +	 * in the devm_kzalloc'd struct), satisfying usb_hcd_map_urb_for_dma().
-> +	 */
-> +	priv->pwm_duty[channel] = (u8)clamp_val(val, 0, 255);
-> +	priv->buf[0] = ARCTIC_OUTPUT_REPORT_ID;
-> +	for (i = 0; i < ARCTIC_NUM_FANS; i++)
-> +		priv->buf[1 + i] = DIV_ROUND_CLOSEST(
-> +			(unsigned int)priv->pwm_duty[i] * 100, 255);
-> +
-> +	/*
-> +	 * Serialized by the hwmon core: only one arctic_fan_write() runs at a
-> +	 * time, so reinit_completion() and wait_for_completion_*() below are
-> +	 * not racy against another concurrent write.
-> +	 * Use irqsave to match the IRQ context in which raw_event may run.
-> +	 */
-> +	spin_lock_irqsave(&priv->in_report_lock, flags);
-> +	priv->ack_status = -ETIMEDOUT;
-> +	reinit_completion(&priv->in_report_received);
-> +	spin_unlock_irqrestore(&priv->in_report_lock, flags);
-> +
-> +	ret = hid_hw_output_report(priv->hdev, priv->buf, ARCTIC_REPORT_LEN);
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
 > +	if (ret < 0)
 > +		return ret;
 > +
-> +	t = wait_for_completion_interruptible_timeout(&priv->in_report_received,
-> +						      msecs_to_jiffies(ARCTIC_ACK_TIMEOUT_MS));
-> +	if (t < 0)
-> +		return t; /* interrupted by signal */
-> +	if (!t)
-> +		return -ETIMEDOUT;
-> +	return priv->ack_status; /* 0=OK, -EIO=device error */
-> +}
-> +
-> +static const struct hwmon_ops arctic_fan_ops = {
-> +	.is_visible = arctic_fan_is_visible,
-> +	.read = arctic_fan_read,
-> +	.write = arctic_fan_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *arctic_fan_info[] = {
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-> +			   HWMON_F_INPUT),
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
-> +			   HWMON_PWM_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info arctic_fan_chip_info = {
-> +	.ops = &arctic_fan_ops,
-> +	.info = arctic_fan_info,
-> +};
-> +
-> +static void arctic_fan_hw_stop(void *data)
-> +{
-> +	struct hid_device *hdev = data;
-> +
-> +	hid_hw_close(hdev);
-> +	hid_hw_stop(hdev);
-> +}
-> +
-> +static int arctic_fan_probe(struct hid_device *hdev,
-> +			    const struct hid_device_id *id)
-> +{
-> +	struct arctic_fan_data *priv;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	if (!hid_is_usb(hdev))
-> +		return -ENODEV;
-> +
-> +	ret = hid_parse(hdev);
-> +	if (ret)
+> +	ret = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
+> +	if (ret < 0)
 > +		return ret;
-> +
-> +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->hdev = hdev;
-> +	spin_lock_init(&priv->in_report_lock);
-> +	init_completion(&priv->in_report_received);
-> +	hid_set_drvdata(hdev, priv);
-> +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hid_hw_open(hdev);
-> +	if (ret) {
-> +		hid_hw_stop(hdev);
-> +		return ret;
-> +	}
 > +
 > +	/*
-> +	 * Register hardware teardown before hwmon so that devm cleanup runs in
-> +	 * LIFO order: hwmon unregistered first, then hid_hw_close/stop. This
-> +	 * ensures no userspace sysfs write can reach an already stopped device.
+> +	 * The MP2985 supports three vout mode. If PMBUS_VOUT_MODE
+> +	 * bit5 is 1, it is vid mode. If PMBUS PMBUS_VOUT_MODE bit4
+> +	 * is 1, it is linear11 mode. If PMBUS PMBUS_VOUT_MODE bit6
+> +	 * is 1, it is direct mode. In vid mode, the MP2985 vout
+> +	 * telemetry has 49 vid step offset.
 > +	 */
-> +	ret = devm_add_action_or_reset(&hdev->dev, arctic_fan_hw_stop, hdev);
-> +	if (ret)
-> +		return ret;
+> +	if (FIELD_GET(BIT(5), ret)) {
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +		if (ret < 0)
+> +			return ret;
 > +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&hdev->dev, "arctic_fan",
-> +							 priv, &arctic_fan_chip_info,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return PTR_ERR(hwmon_dev);
+> +		ret = i2c_smbus_read_word_data(client, page == 0 ?
+> +									MFR_VR_MULTI_CONFIG_R1 :
+> +									MFR_VR_MULTI_CONFIG_R2);
+> +		if (ret < 0)
+> +			return ret;
 > +
-> +	hid_device_io_start(hdev);
+> +		if (page == 0) {
+> +			if (FIELD_GET(BIT(4), ret))
+> +				data->vout_scale[page] = 2560;
+> +			else
+> +				data->vout_scale[page] = 5120;
+> +		} else {
+> +			if (FIELD_GET(BIT(3), ret))
+> +				data->vout_scale[page] = 2560;
+> +			else
+> +				data->vout_scale[page] = 5120;
+> +		}
+> +
+> +		data->vid_offset[page] = 49;
+> +
+> +		/*
+> +		 * For vid mode, the MP2985 should be changed to page 2
+> +		 * to obtain vout scale value, this may confuse the PMBus
+> +		 * core. To avoid this, switch back to the previous page
+> +		 * again.
+> +		 */
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +		if (ret < 0)
+> +			return ret;
+> +	} else if (FIELD_GET(BIT(4), ret)) {
+> +		data->vout_scale[page] = 1;
+> +		data->vid_offset[page] = 0;
+> +	} else {
+> +		data->vout_scale[page] = 512;
+> +		data->vid_offset[page] = 0;
+> +	}
+> +
 > +	return 0;
 > +}
 > +
-> +static void arctic_fan_remove(struct hid_device *hdev)
+> +static int mp2985_identify(struct i2c_client *client, struct pmbus_driver_info *info)
 > +{
-> +	/* devm cleanup (LIFO) handles hid_hw_close/stop after hwmon unregistration */
+> +	int ret;
+> +
+> +	ret = mp2985_identify_vout_scale(client, info, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return mp2985_identify_vout_scale(client, info, 1);
 > +}
 > +
-> +static const struct hid_device_id arctic_fan_id_table[] = {
-> +	{ HID_USB_DEVICE(ARCTIC_VID, ARCTIC_PID) },
-> +	{ }
+> +static struct pmbus_driver_info mp2985_info = {
+> +	.pages = MP2985_PAGE_NUM,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +
+> +	.func[0] = MP2985_RAIL1_FUNC,
+> +	.func[1] = MP2985_RAIL2_FUNC,
+> +	.read_word_data = mp2985_read_word_data,
+> +	.read_byte_data = mp2985_read_byte_data,
+> +	.write_word_data = mp2985_write_word_data,
+> +	.identify = mp2985_identify,
 > +};
-> +MODULE_DEVICE_TABLE(hid, arctic_fan_id_table);
 > +
-> +static struct hid_driver arctic_fan_driver = {
-> +	.name = "arctic_fan",
-> +	.id_table = arctic_fan_id_table,
-> +	.probe = arctic_fan_probe,
-> +	.remove = arctic_fan_remove,
-> +	.raw_event = arctic_fan_raw_event,
+> +static int mp2985_probe(struct i2c_client *client)
+> +{
+> +	struct mp2985_data *data;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2985_data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&data->info, &mp2985_info, sizeof(mp2985_info));
+> +
+> +	return pmbus_do_probe(client, &data->info);
+> +}
+> +
+> +static const struct i2c_device_id mp2985_id[] = {
+> +	{"mp2985", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mp2985_id);
+> +
+> +static const struct of_device_id __maybe_unused mp2985_of_match[] = {
+> +	{.compatible = "mps,mp2985"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2985_of_match);
+> +
+> +static struct i2c_driver mp2985_driver = {
+> +	.driver = {
+> +		.name = "mp2985",
+> +		.of_match_table = mp2985_of_match,
+> +	},
+> +	.probe = mp2985_probe,
+> +	.id_table = mp2985_id,
 > +};
 > +
-> +module_hid_driver(arctic_fan_driver);
+> +module_i2c_driver(mp2985_driver);
 > +
-> +MODULE_AUTHOR("Aureo Serrano de Souza <aureo.serrano@arctic.de>");
-> +MODULE_DESCRIPTION("HID hwmon driver for ARCTIC Fan Controller");
+> +MODULE_AUTHOR("Wensheng Wang <wenswang@yeah.net>");
+> +MODULE_DESCRIPTION("PMBus driver for MPS MP2985 device");
 > +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS("PMBUS");
 
