@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9944F3E9F80;
-	Thu, 19 Mar 2026 17:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F183469E0;
+	Thu, 19 Mar 2026 17:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773940488; cv=none; b=GIEdcrgOvphPEDZWS/xUx72PPbmU2nB4jz6H3QYzhas3m2obKeLdAkwQYC7EO/8dAF8zhEVtsZCaVPgsr1Rf+BQGbu/8IVyzt0sQbTVgL+Vo1wGGWptPUs8fw+0wN7XXppyLlhmcOt2fuQ2QWmeeUSafjIShGcAeW29Nu9GpQd8=
+	t=1773940521; cv=none; b=OK3Xiw0CGt4e0kdg2B5N6WQpMZ2YQt9kfiLlNdbuQ18DCfDkfo7WiL2M0Pazqh1ifcngQ4Xpnf+25fSnI61/KAnBSJeYFew8RszA12OaksRSGEF8tR6QceAsQp4myqZBIX2xt0VRlWGFxwFGKMJNMmfD6y7xVvK8DYi5q196bNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773940488; c=relaxed/simple;
-	bh=n4GjjoPb3ph6TdK09rRdkzcw8wuRkRmPhqitOkkqNLg=;
+	s=arc-20240116; t=1773940521; c=relaxed/simple;
+	bh=uKygPlvSKYPHJXuYh9Pp9MitMHciwR5qiLRKQjQSO/A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QhhIuqOoF7RvDjG5IHTXsEtZcTk+HlA6L0d+3UNQ0hxPxAvg1IB1/2HfGslCKcfjARza9TsNDSyJbhbektfUovL7CVFMfvc8KhfxXoT9CRWvwrItJsV2PbJqWbEAzuOW82Jo6yhzzjPSrvS9IPS0BBP12XEGKOlE+R+oBAMl3Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MB+s890L; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=sCdIxYJEOovk7rvh/nJokb2aufgg0dwl/ecxBpqHPcMfszpWJv9ENZHkL27VPiJuTlNVCsZytwFQfOWFKaLA27krnK5dI493wflXB8qQNYZaE+NYUl1woUjBc2mvygoKoiC52tI9jeNbK+aUH0BpGEeeM7GE5ghJm1JO1krIqz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJFbASpx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MB+s890L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1E8C19424;
-	Thu, 19 Mar 2026 17:14:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJFbASpx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745F5C19424;
+	Thu, 19 Mar 2026 17:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773940488;
-	bh=n4GjjoPb3ph6TdK09rRdkzcw8wuRkRmPhqitOkkqNLg=;
+	s=k20201202; t=1773940521;
+	bh=uKygPlvSKYPHJXuYh9Pp9MitMHciwR5qiLRKQjQSO/A=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MB+s890L+t3IUYhTYQF+y+D+Z45wflxq954axlDMGUeWZtdTS+X288PVxpRoSckpq
-	 HTjYpfwSw9BtBvdEBGAbGbvFSlmBRV8Kv8LsTqJPetR8bdNfuBZlhKfUpRLdGzYxtZ
-	 QGF73T6uP6XYuzY7jideVqw/N3QSdsGZEaZ3UKVus9M68Pz1fLt8zRUPKAasY5SImN
-	 COl0k9xltraiw8PiQkDduL5/CxMBl6WwCnqTYr7zl7NaQLi6FnVld2Mz5KM5/Hnqxb
-	 hnjpDCC4Ew9nzR/4gHiaZuc8aTwZn99MbGScrxJqqrJky0fdCh5/SQ+3NeQil8VfqZ
-	 cVruSEozn5WXQ==
-Message-ID: <d36ef5bc-8f9d-48db-a868-f3683fce0d7b@kernel.org>
-Date: Thu, 19 Mar 2026 18:14:41 +0100
+	b=EJFbASpxyCOnhL5NB7UhGtGiSobz+L3lUODxULsJmL+NN1ae4vs3+x4/DzUyiMyPo
+	 BW++zhloffWCHd9AJ/ZcwESZZB/F2LLeU5Yud190AmenxeI1OgABnWUuw1sPVSxrat
+	 6dZX1klKc7vkxR6gdhm+nM7GceSgDmWSb/qwl9J7rVAQ+Kd4d9J/eCXwihARO94fRK
+	 7VMU3DN1jnqWRbYOB+70cCmPNa27NBXbXb7i3q8hZVJkmQiTzxcw1cL7bB6+HXDr9X
+	 e9vHnuYziAs6ICI10o3Hv3+DAnkTjaHjXzm4XtQiL+vXXMr5UzIw23FdWF/PkdRLlD
+	 Tm9IqiGljQH1Q==
+Message-ID: <67165a1f-9fa3-4853-b530-b1f9d6e4c2cf@kernel.org>
+Date: Thu, 19 Mar 2026 18:15:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,21 +35,19 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/12] dt-bindings: i3c: Add mipi-i3c-static-method to
- support SETAASA
+Subject: Re: [PATCH 12/12] arm64: defconfig: Enable I3C and SPD5118 hwmon
 To: Akhil R <akhilrajeev@nvidia.com>
 Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
- alexandre.belloni@bootlin.com, conor+dt@kernel.org, conor@kernel.org,
+ alexandre.belloni@bootlin.com, conor+dt@kernel.org,
  devicetree@vger.kernel.org, ebiggers@kernel.org, fredrik.markstrom@est.tech,
  jonathanh@nvidia.com, krzk+dt@kernel.org, lenb@kernel.org,
  linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
  linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-tegra@vger.kernel.org, linux@roeck-us.net, miquel.raynal@bootlin.com,
  p.zabel@pengutronix.de, rafael@kernel.org, robert.moore@intel.com,
- robh@kernel.org, smangipudi@nvidia.com, thierry.reding@kernel.org,
- andriy.shevchenko@linux.intel.com
-References: <20260319-spiritual-defiant-galago-9bed7e@quoll>
- <20260319170129.13441-1-akhilrajeev@nvidia.com>
+ robh@kernel.org, smangipudi@nvidia.com, thierry.reding@kernel.org
+References: <20260319-nano-manatee-of-vastness-fbafa1@quoll>
+ <20260319170929.14543-1-akhilrajeev@nvidia.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -95,26 +93,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260319170129.13441-1-akhilrajeev@nvidia.com>
+In-Reply-To: <20260319170929.14543-1-akhilrajeev@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 19/03/2026 18:01, Akhil R wrote:
+On 19/03/2026 18:09, Akhil R wrote:
+> On Thu, 19 Mar 2026 10:40:34 +0100, Krzysztof Kozlowski wrote:
+>> On Wed, Mar 18, 2026 at 10:57:25PM +0530, Akhil R wrote:
+>>> Add I3C subsystem support, DesignWare I3C master controller, and
+>>> SPD5118 hwmon sensor as modules to the defconfig.
 >>
->>> more than one method. It also cannot represent the vendor extensions (Bit 2)
->>> cleanly. Would this be better if we use macros instead of raw numbers?
->>
->> Hoes does setting bit 2 differ from a string "vendor"?
+>> Why? If there is no user of that, why would we want it? Your commit msg
+>> should explain that.
 > 
-> Okay, a string array would handle those cases.
-> 
-> I am concerned if this can be a string array for the ACPI because the MIPI
-> specification defines the property differently. Would it be fine to deviate
-> from that specification in the ACPI? Or do you suggest to keep it as bitmap
-> for the ACPI and use strings in DT?
+> Ack. This is for Tegra410 which has a DesignWare I3C host controller.
+> I will add this in the commit message.
 
-We are not defining here a property for the ACPI. I don't suggest
-anything for ACPI.
+Board or products. Not SoCs.
 
 Best regards,
 Krzysztof
