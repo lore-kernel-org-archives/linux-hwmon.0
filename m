@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A796393DEE;
-	Thu, 19 Mar 2026 20:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F709176ADE;
+	Thu, 19 Mar 2026 20:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773951250; cv=none; b=bqvifDXsHslzWHEAcfPe4kXyJY6w9R/ZMiW5QT1Oqo2bZfzA5O3LqHv3la+Q3KtRlmyUMDpoAMRaiCU6TM1tXgMalJU+Hd6w9iW7YE0uv79xVAmGpx9EKFt6005jYiyS7rbVEfnlo+ODJSwlu/K7XZJr2GIoO8xgbF04tCaQydk=
+	t=1773951357; cv=none; b=GtPUYeNkgh1EAbG1NLvnD5FbEI0DOrwJ0XQVz9FRfDu5VuDi/ifP28rEwVi6F8jk9ZRwr9BcK3jVftEW3/0slfh8EEviREB720qlMd3XmiPrNdCtOZQ5WsqHrjnPxwUrzkKPcVzHvsXgp1ZyvK7YtHBWyirIrTTZEQ9UyZd+UzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773951250; c=relaxed/simple;
-	bh=baHxXKmmrekE+wmORgzIlyCdbkSg0eTvOx6vwAaoCf4=;
+	s=arc-20240116; t=1773951357; c=relaxed/simple;
+	bh=ywnjeKneIzeDq0+1Nvp2mDYWnxKSqJdiRkjFzjbrMzk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GsyL0pfUkslNZju/6V5BNGfmHPma7GDM9ZeyD2zPcHU25paqpXlhsQH/nXrWB6aIG4AWoHSzqBpXANlbHpQg62UF9/QVJdBfxwh8oRejhFofw+YzwL362bmNCIy1cpBJoKGq6m6fmrS2Aiq8LdSPgj8ckefo3LqLKnpmENoIiL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n8xGZglW; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=g762nthgz9lGkqCMmoxFqANimAEOoAehx4fl0JRYvk3+/Ctym3+lZTeOaT5mtdt1F1dil1uHpuCyz625tCDTpAAQ8gICBukEqmiLo+8rMfe+6YKEWIVjltan4SvmlN5O+0TbRo9Hu5J3ZLgj/Uk+DP3Vkdezw4I4aUGKSQ6hQL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESTZ+860; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n8xGZglW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48750C19424;
-	Thu, 19 Mar 2026 20:14:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESTZ+860"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410F6C19424;
+	Thu, 19 Mar 2026 20:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773951250;
-	bh=baHxXKmmrekE+wmORgzIlyCdbkSg0eTvOx6vwAaoCf4=;
+	s=k20201202; t=1773951357;
+	bh=ywnjeKneIzeDq0+1Nvp2mDYWnxKSqJdiRkjFzjbrMzk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=n8xGZglWvRVW4W3N9+zHZkb7SCx0JXep+wcsj3thCLMJWEj2vj15ZZtfjvOtbRAuT
-	 Iws3NvZNjcT9bKVqGzU22XNOVKKE5a4kqgox5t8SWXAmGr9owPNOHtXfp+kaWKVX8d
-	 2m/dCSbII7gN4IznSHovVvKyLHZG6LQPaj2Fo9Rd1B4B2fG/rFvIEDddF0f7C3B78m
-	 KbpRjbShc+2Zw3+6pK0X2Jvi9ir1XpRfdniqOAfmrdJh8vwOC6WRzzNQBcNrHpsuc5
-	 XvNJszPx0dqLiuBxuZyiSdQA0FY2EVhsQ1lJq9hYs+AMx1CDHjLVRDp2Iapsrkj/ad
-	 2PGWYv5BwLRLw==
-Message-ID: <b60be557-fea9-4ab9-ad48-965ead3ec8b2@kernel.org>
-Date: Thu, 19 Mar 2026 21:14:06 +0100
+	b=ESTZ+860x7YZvkYDCjy94ojWTCDx/I9gIXPo9ryv0CLSn/tYG4VKCJ91/1shaBLNf
+	 TNL6iEFYnyQRwJ4OkkoCf5FH13uvbeMCarEtms0/zFKiJXY+zfBLW0Iuyaa7p95Wr4
+	 ByjOn6Icalpn8QXCtxBq8ZdiQhB1deg+KCpyFWSCqkmNReD+dlCpWsNHcDYeeCJUdB
+	 gBsJFGkaS09YobYGZGZbakyDq+1KVOMBYPU3O3um66vBozhzARsdCty4Ng4T3PB2Oz
+	 7MjJDlSVT32RfEpjvUCm5qFd/4Dvc23zhc33hnILBNQqlkauwM2MpwwvCS6LUsE13o
+	 D66Tn/5etK70Q==
+Message-ID: <0237522f-a01d-45f3-8c7f-cfc9b5c5f0ff@kernel.org>
+Date: Thu, 19 Mar 2026 21:15:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,13 +35,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: Add GXCAS Technology
+Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add Sensirion SHT3x and GXCAS
+ GXHT30
 To: Zaixiang Xu <zaixiang.xu.dev@gmail.com>, linux@roeck-us.net
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <1773919186-17515-1-git-send-email-zaixiang.xu.dev@gmail.com>
- <1773919186-17515-2-git-send-email-zaixiang.xu.dev@gmail.com>
+ <1773919186-17515-3-git-send-email-zaixiang.xu.dev@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -87,20 +88,91 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <1773919186-17515-2-git-send-email-zaixiang.xu.dev@gmail.com>
+In-Reply-To: <1773919186-17515-3-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 19/03/2026 12:19, Zaixiang Xu wrote:
-> Add vendor prefix for Beijing Galaxy-CAS Technology Co., Ltd. (GXCAS).
+> Add YAML devicetree binding schema for Sensirion SHT3x series and GXCAS GXHT30 humidity and temperature sensors.
+
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+
 > 
 > Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 > ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../bindings/hwmon/sensirion,sht3x.yaml       | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+> new file mode 100644
+> index 000000000000..47dbb743e2ee
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
+> +$schema: http://devicetree.org/meta-schema.yaml#
+> +
+> +title: Sensirion SHT3x Humidity and Temperature Sensor
+> +
+> +maintainers:
+> +  - Zaixiang Xu <zaixiang.xu.dev@gmail.com>
+> +
+> +description: |
+
+Do not need '|' unless you need to preserve formatting.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> +  The SHT3x series is a family of humidity and temperature sensors by Sensirion.
+> +  It also includes compatible sensors like GXCAS GXHT30.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sensirion,sht3x
+
+What the 'x' stands for? Wildcard?
+
+> +      - sensirion,sts3x
+> +      - sensirion,sht85
+> +      - gxcas,gxht30
+
+Keep alphabetical order.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: I2C address (usually 0x44 or 0x45)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@44 {
+> +            compatible = "gxcas,gxht30";
+> +            reg = <0x44>;
+> +        };
+> +    };
+> \ No newline at end of file
+
+You have patch warnings.
+
+No resources? No pins, supplies? Then it looks like trivial device so
+should go to trivial-devices.
+
 
 Best regards,
 Krzysztof
