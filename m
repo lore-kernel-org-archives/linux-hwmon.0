@@ -1,60 +1,60 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD44A38F231
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 11:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3959138F94A
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 11:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773920347; cv=none; b=CwaM6IYHIesrNAcil+CgEaQCkD8n9wQOvOu7E1pkPrGGfxAkTHM9VrOgMAfj9GYhEFcT0b8xph6cxXoWSHdqQtJA2qukIJzoW29+jrZZienD3p+FWQwBTWbCn4txpYHh40Scgu9t4btrLqPaqH8CxmYcCZPfMuxVC8mrxryEbLs=
+	t=1773920351; cv=none; b=lOCdvsgAOvCBuu5lbFCqRRPipIJGlsJVyKMv01WIywTQwwgy8Yxjb9NZcLBm5nBjPYNl8h/2wezaZRQ82+BL4hfV6cqLYYnmhEvW1xMCs+L/qALpXyBxSZdGm5ZY3v6yrIZG5KHbHx9WpHa0RPyAZk2JBkz7xWwHJ80QktKtstE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773920347; c=relaxed/simple;
-	bh=WgahGU/Pdizw5BXW+8aqmvvAzDg7Xgrdm1f9qWuR/Is=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=sMvMWFnbcfIJ3WoHH8fHBGGUnpprMvCzAssqWDq2TH0vjUfjb77UNSv5vCNcU4iVnGhmippRmqy3RKju24RF+iFAZ9Rvw1io+HO//hederK7xRPvybYa+Hv07xBv8XuGDTka7YrpcJkKmLuPqT50KYe9X1uU7+rQK93ELn91868=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TmGxBpkq; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1773920351; c=relaxed/simple;
+	bh=ciHLf7bevgqHXVV1Zx/xu9fwtsFudEQfZfvHtZh2a7I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=uiMqDwgOzyWhuu04+IEbxyCYT+FAdjwLHqTwCcerZ0wiYx8UDWMXSOjbb0VzUnQgR/rg2M2/NgY6d3/9oc+zoqyPQByB/YZE3nbiTLo1CQDt1R2qlqbGHNqoDEyMfMqMHdXsyXh4FN7AEFmbps6efeQFXkkUty1TS7UneHmwR0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PCzGSb84; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TmGxBpkq"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c70fb6aa323so345865a12.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 04:39:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PCzGSb84"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-829b2018c94so523673b3a.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 04:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773920343; x=1774525143; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773920346; x=1774525146; darn=vger.kernel.org;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=v39neei8o25k4D0ZjuJhQ38mRivgsoMoltQsRcBYuB4=;
-        b=TmGxBpkqCCHXKKJl7uFiGOuNKP2Qf2ns77pyInXAcxWa54xov+WF6AIuRruT/h2kzg
-         wmp+mDWumUSU2c0koZ+CYYl5hDPJVig/73PTxFdFFxGOBbmJeSlL4/k+lUFdN9C+tQZq
-         D+Yb+lcheyxdQl/JTiZIaaKVyeL1hPowMwgZgeW2ZHIn/e7XEd62ape7CCEft5qPIPqm
-         ZDGAuBWaQUjpC7CSYezNIfsafTTiEMbTVGtiroKuRpf5VUMfVf/XEZiuIijDcB24XQE4
-         YG7v+3ARKbodnBWmzThxSSel4kQL2/1enm+HbABCHtAgFMTVqp3iM2LmjUI9hUEzlpgj
-         Y+IQ==
+        bh=tFWl6KgxoNw3rtXQXYIsDCxT8H3n54d3r9FBVbrDtcA=;
+        b=PCzGSb84hnhOnX8XOkBQwbjJgH0VWxyK1DCEFgUQyWtbniok9InjsKNk8Ei7lT63ht
+         V33Btb8u8xC6d/m7A/ddpkjYiUt6UpU74+nvBSPtxQmChXm/p2Bpx77AyZuJA3Aa1hwA
+         QzRfldYZBxFoOdaf4G2M5vnJcLoXDRWFj8n37c2nWCsBlBWy4eq5f+WSzeEYG1hpxdjQ
+         Xp3OMqgq01+tdVnH62CmlDQKBq8GJ5s1YED49NXzZhDUyhK4N3Inq8OiUhhZblMbhonR
+         BkJs1/FMnhF6HIORnIUrAhpl0+AkD3jtA8IDk5yKi/fbNKwoWL5wtqyBXsVwqhBb1+QA
+         OZEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773920343; x=1774525143;
+        d=1e100.net; s=20251104; t=1773920346; x=1774525146;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v39neei8o25k4D0ZjuJhQ38mRivgsoMoltQsRcBYuB4=;
-        b=aCNIwP1DYbTQRTlEyhHCX5fNHr4e3Kjx1Zzm3Vj4brEmSLunk082Z+VvrI4lldZdNh
-         vHxqXMYHZ7zT5NqwXF8RWX4ZHCfSRCiaywWBsI6czMqOCsKUNbsgzEnxf/8FlWGZVlzY
-         ToY2uRxS3MwcsTJzyosevC2+/b4RRFahgPX8tVEKy9uhUHi2bKwQL9ick50mX6EjFp2G
-         Qmc82wFMX01ebyCwPgevQX2dKPbO3EXhFrAmU8VoCyxz4P3S0fEVt0ODJ1Nvgp0NPtG9
-         8ju8/sl10qWbuTyXH7/Wz5kjuPUNuZBi97NasXyt+ot5eG2dnLdXDlBdzbntGY0koJR4
-         2YKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUtUIQypL611+YSvunskqDfF71zpRnEB22jB3uaZEqnwwA8AuQr9cywoBrQsBS+vEGEDeGk2gGgW6Ojyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVntHaTMISBGNXuDiQOKIooQFjYmKOePGpRfGUR8lEtl7zw2yi
-	9gmsoXzffsJ3MPVO709YfABCmlC9YhqFldmwpNalZpTyC5Lng5R0kP5H
-X-Gm-Gg: ATEYQzxS16t6LHTlF+QFw1EVlCHIgErnLA0RC/Z2yQzbTR112+FEqewKG8gN3z8+LIN
-	iWpdE0gV1sv1VHKrk5sSyilo1WKz7/PQSsskCXJ/9e2loZIKinSqKGsj59x9FS4becA7Vgy6QLz
-	FdI2zYdWtv6+02Ss0Alcm6wpXb/9dxiHQwhR0q/v2CcfAMwRm8hGvb18zZl3TznhZ/XM51xHNqJ
-	QBEbYslspDz7jJvVxuCla/PXB4C+p3/fbUGojMVgTbTLONYlyKgk1m7A4z/ItvvrbNrzJiKIkwC
-	sH2zKhnDNWci2NbGD0WSuPJYeIja8hoNAvtTdAUwhyMO+ZJe5E7hoBI49R64Nu1ufX7RRXZua/K
-	9sAZZ0+oCa22ZZN2mPVwquriWX4myztLoTZmmpjthTOykHxKNgIkhVdUmCUetWNKMWGVvNFKFiX
-	ym7A+HYvXt5iKrL7cHP2W5bLK4OAIk+DK1VQcgCHi+VJxuGVcB5qj1XfMFuAVKzB8=
-X-Received: by 2002:a05:6a21:4916:b0:398:840d:39b3 with SMTP id adf61e73a8af0-39b99e03c20mr6603350637.30.1773920342955;
-        Thu, 19 Mar 2026 04:39:02 -0700 (PDT)
+        bh=tFWl6KgxoNw3rtXQXYIsDCxT8H3n54d3r9FBVbrDtcA=;
+        b=lNiNUn47W0qswBpUB3mlqmwTgyTVTy9CSSppvGViIVWVsA1y+ZO8RiZ7VqLXqb988n
+         tl1RACgpLmx0tyBIZgZJaSCCcI82y09G+iEkHbHqcZQzJvHZGqzm2RgFwUC5Pm0QYTcD
+         haNmWgB2zdb7vNV34oaiXnhgil4PyWBytElsawbzquv1nMmBwmzRg0UF2N0R4CxtmKl3
+         Ax3MzQPWV3UwQqnjcR01g9t/dhdoYwit85QFBOe/yhSl2BGfg909nhfRNcwsS9+lAq/N
+         LcmTnYT9rEGflWPouBbG3w1jqg0StnAlLT6P5ncH9jVVlJA1/finQbBIUyWcqWqal6dA
+         YSZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVmTYNgrPt6s31cGhQEVd9LrZAh44xXPGDSV40qwT7qH46Ez5v46Xgznv8lmdu+WYKbD5uUGlmxMaBcPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVVf7CBEQrzaHfVXm6J02q5pqqu9VL8j4be9YZK+c+nAq1Qilv
+	or3RikxlHtH3udKSKrTRsU/v3QNl5WI4YZer6XYJ3sB6lTLm6RU+tw4k
+X-Gm-Gg: ATEYQzyckHnejuoJoYvRienz9gdDhelaRzJ/UiLphT00auawoO7RKmwGwMhRbsUKgPH
+	TO/BghORaEikcR3ER6wrLdn/xCKcIyV5V09x5/PQbvGMQ6uQwv6+1lkNOBNqRit0u/rh+grh0Yl
+	2wjf6QQbIXpWmQYSUyR0Ibpji7Q27wE8MuGamY7oKuYaprlXRvpmW3lVJpOBUFfoTCmnJHQWbDt
+	CLv9G9jrsHF9WK0JWRjqqSRhr7/+VPIYPFEYLlWqdqcr6qsJGwwoQYYAuZqnPNZBwYvIvvlZFQ1
+	zAt/6c7/cDDgYp7m1W0kX/Q8CmxLD5d9SYoWAeyN4Tyw0YqCFh3iCSY+QQYno8IRGJuS2n8OVaS
+	/ArLLszCh6aH19LcXyOA6Mge5ei3+AQCtLSkwk89L4S/BNzkqhLQNtBAbIH20YjRVWqquQak1Z/
+	F/GArJ6qlYLwUwB1/O+GqxJaNA7Ypec9CwQFC1AJrA7lFCjKbUnbi2
+X-Received: by 2002:a05:6a21:102:b0:38e:87b7:5f88 with SMTP id adf61e73a8af0-39b99d4c7a7mr6720256637.27.1773920346247;
+        Thu, 19 Mar 2026 04:39:06 -0700 (PDT)
 Received: from ubuntu.localdomain ([27.217.83.168])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c741e545d38sm4985706a12.19.2026.03.19.04.39.00
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c741e545d38sm4985706a12.19.2026.03.19.04.39.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Mar 2026 04:39:02 -0700 (PDT)
+        Thu, 19 Mar 2026 04:39:06 -0700 (PDT)
 From: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 To: linux@roeck-us.net
 Cc: robh@kernel.org,
@@ -64,9 +64,9 @@ Cc: robh@kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	zaixiang.xu.dev@gmail.com
-Subject: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add GXCAS Technology
-Date: Thu, 19 Mar 2026 19:38:32 +0800
-Message-Id: <1773920314-17755-2-git-send-email-zaixiang.xu.dev@gmail.com>
+Subject: [PATCH v2 2/3] dt-bindings: hwmon: Add Sensirion SHT3x and GXCAS GXHT30
+Date: Thu, 19 Mar 2026 19:38:33 +0800
+Message-Id: <1773920314-17755-3-git-send-email-zaixiang.xu.dev@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1773920314-17755-1-git-send-email-zaixiang.xu.dev@gmail.com>
 References: <1773920314-17755-1-git-send-email-zaixiang.xu.dev@gmail.com>
@@ -76,26 +76,65 @@ List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 
-Add vendor prefix for Beijing Galaxy-CAS Technology Co., Ltd. (GXCAS).
+Add YAML devicetree binding schema for Sensirion SHT3x series and GXCAS GXHT30 humidity and temperature sensors.
 
 Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/hwmon/sensirion,sht3x.yaml       | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ee7fd3cfe203..354836eb8e72 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -676,6 +676,8 @@ patternProperties:
-     description: Gateworks Corporation
-                  use "gateworks" vendor prefix
-     deprecated: true
-+  "^gxcas,.*":
-+    description: Beijing Galaxy-CAS Technology Co., Ltd.
-   "^hannstar,.*":
-     description: HannStar Display Corporation
-   "^haochuangyi,.*":
+diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+new file mode 100644
+index 000000000000..47dbb743e2ee
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
++$schema: http://devicetree.org/meta-schema.yaml#
++
++title: Sensirion SHT3x Humidity and Temperature Sensor
++
++maintainers:
++  - Zaixiang Xu <zaixiang.xu.dev@gmail.com>
++
++description: |
++  The SHT3x series is a family of humidity and temperature sensors by Sensirion.
++  It also includes compatible sensors like GXCAS GXHT30.
++
++properties:
++  compatible:
++    enum:
++      - sensirion,sht3x
++      - sensirion,sts3x
++      - sensirion,sht85
++      - gxcas,gxht30
++
++  reg:
++    maxItems: 1
++    description: I2C address (usually 0x44 or 0x45)
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        sensor@44 {
++            compatible = "gxcas,gxht30";
++            reg = <0x44>;
++        };
++    };
+\ No newline at end of file
 -- 
 2.34.1
 
