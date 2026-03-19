@@ -1,101 +1,157 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011012.outbound.protection.outlook.com [52.101.52.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2785391E40
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 17:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773941917; cv=none; b=TlFcUr+XzFzFtlVE7hKFgfWXh7m6bAdI60yTjG+zeqb3DmKzvoTOZB44/Bs+Up+4jgVyciXSL3dDcAmJr9S01knFNGM0MTFQqFhyKKDmJmrZ1Fh/LEy5R25xDYOOoZSpMNqYdS1bBVGFKEIE5+95o/h2Fy+CQuEruXj+LtHNo9M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773941917; c=relaxed/simple;
-	bh=F9Y9xO9DqV+DTrRKmMdh/09Zd9Svfi3FPfzr+d+05JM=;
-	h=Message-ID:Date:From:To:Subject; b=rhCyPvowreKmUl1wsHnWx1f9uRY0rmOjuduL6ahiwS/9XmSJQ+HcZcqnVE9eF7vmBsqxWEeBom0ZzUo9HOQJBHyslUyJ0rDPBUBtrhNPbhZmwaAvKm5wsnEaVihGyxtIoDV/9mBYV4damq90eC8yoBaw7e+5E0PxPXIs2FAtX7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NC2B7ebr; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188053E1D12;
+	Thu, 19 Mar 2026 17:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773942379; cv=fail; b=bFtf/icXm/MQks81GRmRbsLKPMfTooyTcECuD+jmGFiEDyoRPxsn+rHwClfApfNvJJAQph86P1/n6twRPAqEK27vIuaZu8eWgmhowID2T9ZflmZM1fEM8JXGmBT4fcKznqAoDtf5NN/W1dl2v5URwjKc6bHly4ZNa9zQUXgv9LE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773942379; c=relaxed/simple;
+	bh=9UfSM7JwRxfD0VmYUcVxCJeYyovzW7HgtT7czmheHMI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mGTQfu+oMnVuu2+KTmxzUAP1Ry7g0p2BsAEgzVtr7AsKrG7vP3NPJwI5/oArukMqCgfAC5ZAsqJh46hGaDBJ2wlVEE3N9CtI+UTgnNwsfs5CWlddQ9uhUor9Q3AGplk1dc0THDGxMYCIiPRo1aCH8m6Hs97TUCmEFgAkqylYPN0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=k2nFkS3C; arc=fail smtp.client-ip=52.101.52.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NC2B7ebr"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-50b29c4e554so9963371cf.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 10:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773941912; x=1774546712; darn=vger.kernel.org;
-        h=subject:to:from:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F9Y9xO9DqV+DTrRKmMdh/09Zd9Svfi3FPfzr+d+05JM=;
-        b=NC2B7ebrBG8VHCSzQWWwIrjQ4kJEGr4PS+f6GVlloXOPOq2+WsO8h5Qei9Fu7CCJ4j
-         7kSve2WN21NBMSPMIUgwK7EeWxnf1QeIcTZrGDycp09CVfZ20S2PLLVSQ6IdbrXBcFnc
-         KMwmvp9WnYuksSCaRcWSjLAP1mGr+hULTNsZV42Bq6+9E/79E9lbr3v8IeXCCdoQoclA
-         F9UeVcYPoNGgSiYqOtpLDG3Z0gMEykzyn+R2nka2jS1ahgdxHqDlx60q5O3jVINmA88w
-         ipYBamcg0Mt/0yv14W4HdKKud8eATt/Fek9WHk++v9LyE3ooXThAS/EOLPaCdrgl4DWR
-         YsQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773941912; x=1774546712;
-        h=subject:to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=F9Y9xO9DqV+DTrRKmMdh/09Zd9Svfi3FPfzr+d+05JM=;
-        b=J/P79Od9hUJ5jCzswCCqJyTGVBfJvG/bZXaEaQArS5vXULGR1X8F06XsvgCtjGUjsV
-         yVnCOVtAOh6u3iCh1u+K8xK/HUybjC2WOOhABRzukl2kWkRsZfkF8SMsL7yaNJsseaIw
-         DXOUHEpogM5MHyWmQ+glmJGXsH2EBmVMf6ddiXn3PgDqW431Qx888L6FRe110pae/zs2
-         5NzL6f2JP+/yCUFHqWN7PtmlBO6/zYj9arVBqPgmYJ72q6cePFDht2lAqdcL/e+7tirl
-         AKoQCNtY9hTj3fEqT5iSOoUlxThdJgPitE3R+Aab7Mbmn6xUmfLXdRaJa1mQJidMJVVW
-         a1oQ==
-X-Gm-Message-State: AOJu0YylCS53e0hNJekXDwvaXIWUKLZ7lP9J/MDtuaPQbFt9NEQobKag
-	UoEGOLrnUayEH5CJLPUAWel3pBuu3Ckrg9tAjTJGTFlTMTGCAvHaCDqany7tqg7wJIM=
-X-Gm-Gg: ATEYQzwQyyW5snh3fs0qy1uugifKVS31E/UCKC+a6lyfIqzW53ONZCNDmAH0UsnrK0r
-	TuqRW8iKPU3yd6MajPZ8IN3kAxGkxG3XN9juJfFmaDnANzg49e8SprZhtrM6aUjWoeVJODj7ulp
-	tzK+qeEPNOKFOL7lORyQgby0Rs3L2ZQaqXX/d9/e0rXHPhDdPW/tOX1USX+4iwjCSpvw4hwMA49
-	7Ub9MB0zDnroY8Mo6ocI3wwu4EvgNaFZYLrEi9ZaypZ8Rn9WbHLZ9ylgRSHaV7Y3mSDC5OWfRp8
-	1fUOaZBkgTx1ayyb2iSQHpqsSskn3YcjjzxX16dGWdZjRNyVBfgR/IBD9iOG3TyYe3lbmxttFlJ
-	Ipqxzb3oud9w4vu587JFT2KTyUVyoPqhA0qDNdxefuu8W6Lk5bORP63A8wPsm7SIMIWJCqw+2jK
-	Mtb1u1uAq6FEdsHevm4CYFHCbN2eqNzIq2nBj0nbeDphI7dPHbkAlgCCNkbdnE91wPuhcVupeYX
-	yhAyRq6SYhPnbCWeJHYT7m030GnIY0f
-X-Received: by 2002:a05:622a:1e8b:b0:509:3c33:9d2a with SMTP id d75a77b69052e-50b3742562fmr1612301cf.23.1773941911827;
-        Thu, 19 Mar 2026 10:38:31 -0700 (PDT)
-Received: from localhost (ec2-18-188-34-132.us-east-2.compute.amazonaws.com. [18.188.34.132])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-50b36d23237sm2322191cf.13.2026.03.19.10.38.31
-        for <linux-hwmon@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 10:38:31 -0700 (PDT)
-Message-ID: <69bc3497.050a0220.f2e2c.5d15@mx.google.com>
-Date: Thu, 19 Mar 2026 10:38:31 -0700 (PDT)
-From: jinginajo@gmail.com
-X-Google-Original-From: PayPal,LLC
-To: linux-hwmon@vger.kernel.org
-Subject: Account B1lling Update – PayPal,LLC
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="k2nFkS3C"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GdnKL197F33qOGZBQNbuemgz4SEw/GhPPdaK3Jexq9bZm8u6s+9haqyRC2siQsBnha5MVGsugRTJfuNoYgbRowh3dyLlbAilyTn2s+pPKnKUb5Utaop/D5zisnRgTMS3QqMOmG78r0Z+kGwvD1piNbe0YENV3BL2YFXqOHPDbp+jlgSGG6M4EZqehqgT6zmBMrtpxTTjNzPmjFsOzdmELlXGHnTtjcdwFTvDmkaCKQ4p8QN00RkR+7Cog9+X5aMm9rHFVlWHbbHErYJ+YgA45zEFkds6vxL130mhBrK/SbNjXom8AB8qbTj/zREIErCZQgmA2qnbIdLOF0PVZXVqwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ep14gkdCOaBf8X4yx6FJqtjw6IeGTdaSDwtg4ALrv4A=;
+ b=c1xIwFNJHXHuSrnGyfXgPYQ4YVoKGqeg9xQ1HOYpEgcG7SbeV70xLR6pBKQMlhy42ugox+GJ9DpZBQpTCSjjH0b7swmmyYsv5FQqON4eh9wprtvdrZCnBzL6KZ4WGKCah1wpEa1tL250oIsktT88R7Y0DG+VJb7yd//fj2ODRTLgFnhZlWCigLhvNVNmXAjRVWOqWV2/QiIncZw/O+5S6eid6iXL0/LA62ARlmSnb/+78N5XzpphOlKrTWdUQRl1XEww7HfrDN37/6jPKQRz8a0mXWKduZg5M11K19noAbVV2NJcsEludpKNIiyC7b2NsP7LanNkF1E8+KoXjUppNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=nxp.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ep14gkdCOaBf8X4yx6FJqtjw6IeGTdaSDwtg4ALrv4A=;
+ b=k2nFkS3C3oOsQUSfS+7qjvqGckJl95hi1eSWpf+CiSnyT/Dqor9fIzhh65VYBKjs7/CYBO77jUgGUeMZ8C0fQVxU2YuBQEgj8dYiigF9kOwHRNSex0cVe2dzT7rawQ3f7Ao7EXPei/9nZAKM+RydpmqblKCpnnq2IvlGQ9rvIeDxr3it2+rH1Opeo7pYOfOmiJUe1oaZPZEhu8B7QhO/Zfia5S9DBy3pqmLxwA+7RtXhUVWgdpGitOB9CzyYKDF5WXYk3R5xpwiYpYNf2S1nfRqxHlvuWTqVCANwVitw/ziSK1f0CThHT0F5iCQ6AQq7RSGtGKKPjSZlWJwCCEwjWA==
+Received: from SJ0PR13CA0233.namprd13.prod.outlook.com (2603:10b6:a03:2c1::28)
+ by BL1PR12MB5876.namprd12.prod.outlook.com (2603:10b6:208:398::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.13; Thu, 19 Mar
+ 2026 17:46:03 +0000
+Received: from SJ1PEPF00002310.namprd03.prod.outlook.com
+ (2603:10b6:a03:2c1:cafe::88) by SJ0PR13CA0233.outlook.office365.com
+ (2603:10b6:a03:2c1::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9723.19 via Frontend Transport; Thu,
+ 19 Mar 2026 17:46:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SJ1PEPF00002310.mail.protection.outlook.com (10.167.242.164) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9723.19 via Frontend Transport; Thu, 19 Mar 2026 17:46:02 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 19 Mar
+ 2026 10:45:53 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Thu, 19 Mar 2026 10:45:53 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Thu, 19 Mar 2026 10:45:47 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <frank.li@nxp.com>
+CC: <acpica-devel@lists.linux.dev>, <akhilrajeev@nvidia.com>,
+	<alexandre.belloni@bootlin.com>, <conor+dt@kernel.org>,
+	<devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
+	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk+dt@kernel.org>,
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux@roeck-us.net>, <miquel.raynal@bootlin.com>, <p.zabel@pengutronix.de>,
+	<rafael@kernel.org>, <robert.moore@intel.com>, <robh@kernel.org>,
+	<smangipudi@nvidia.com>, <thierry.reding@kernel.org>
+Subject: Re: [PATCH 04/12] i3c: master: Support ACPI enumeration
+Date: Thu, 19 Mar 2026 23:15:46 +0530
+Message-ID: <20260319174546.18329-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <abwIUmXfapfi1k3D@lizhi-Precision-Tower-5810>
+References: <abwIUmXfapfi1k3D@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002310:EE_|BL1PR12MB5876:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b411289-d40a-48ab-b0ac-08de85df635f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|36860700016|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	3tA3VluoEOjjYvpkzuNOuYqUD7udRa+EISr0nVZQ0S3rOiHNEI9sgXMQpa/b2kHSPMaSSBRy5K41au5RjZjzlLFuWBU/KSfi7RKT9QTzHuYi4hMMOkyMjxTozBQ0BF8xiaBOdmgm7FrPvRlyRT4nbxF6WfkdywQZY8VD0U/8gttcQGiAKpmdhAy/gESSQTFCN9v8AxXd/XwQiCyum7KfjNcRQkmlLEM5H8h2IbA581ndSu/teC+ximbSCpOA/0OEB+eAsgSy3RuZcRzgy77MXcfh1qzR1II8DS0W4emzonQIzrR3HF6q5ScZEBE0h3yEuHGT10qTLmxqBacqYmECGNKmgcsHTV1S+03mH8nW0mJp+s4npfZ5N1i03EV0ULoqcu+QXr2Ri0tdEI76L/Vvjw7hCJ/4jKETmtf3fIfFLRKtiHctdHyCIv5rUp/Pgq4EQLwZV67CpH2ytlbltJV9Rrt+9oENSPqAa9C+6s8FQWlmCTpgkJzU05mHdfNneJqutdTb30QiJhVZnO43WAbgYashgZsZIxNdixO05gUBHT9Qhux1fABdiFe90kOgcPyvhrM/xaIEHxkUqcb+kXOu0xdROYjOi7VldcAO9UNMKhzGpbL5/mgwk1TFsyWhzw+OmSu6cqKj94zJ7OL/V33I1bInqVs+8DfSS+40sMMRqiBvXU35U3UshlgJxYYSnV/fneRl0iUM2B+WIdg9E7RyQs00a8Al8ZsJD7lOFgzJCqx6SxT6GWpIAT4M9djQBa/3HY2RABGXLdYXeCvKyU8PeQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(36860700016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	VKFzw6thxBZjESDrEYNHBhHwQDWBiIjdXhV02FH84i1bxHOH7KZES2Co2FnSSRjJwGGEKMzq0TmRgPak0zv9+FHGVdhT5EbKUH1hxjSMyej/JnH/QuB3k0HPPG4zzdc3okdkPCGV1a1pHsQ3LoiuaepymjCXbeLHGZ2TJkY3W/husmEvbmYduZoe7r137qrvVFmLKHnm3ZbpFznDzoWic7PdL1Hv5KMPtr2lTfGvplJ9gD3+jbuxACaxJ6UrcLNGKZjD9fVw2rWLws2Uv4qMiGBTdM8Ho+Adqpdf5qD1WZhAGJIj95Dl+TgZcV5WTC+T0wvQH717IPFVkY/iGgsBRjB7f4/KHN6kW5ZxeIs6ExgcIX6cFSq4A61xmFZLnIkMK7zKaRpkC5KNikNLIcNk3NjRnucIV8LX3U4Uus6rcYLx7LzrdGzHKydaYmpHqlex
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 17:46:02.4334
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b411289-d40a-48ab-b0ac-08de85df635f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00002310.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5876
 
-Subject: Upcoming Subscription Renewal – PayPal,LLC
+On Thu, 19 Mar 2026 10:29:38 -0400, Frank Li wrote:
+> On Wed, Mar 18, 2026 at 10:57:17PM +0530, Akhil R wrote:
+>> Support ACPI enumeration for I2C and I3C devices on an I3C bus.
+>> Read _ADR and LVR from the ACPI resources and extract the data
+> 
+> ADR have _, but not _ before LVR, I am not familary with ACPI.
 
-Dear Customer,
+'_ADR' is a static ACPI object (or method), but LVR is not.
+LVR (Legacy Virtual Register) has to be read by parsing the
+ACPI I2C serial resource.
 
-Your PayPal,LLC subscription is scheduled for automatic renewal. The payment of 413.2 will be processed shortly.
+> 
+>> as per the ACPI specification for an I3C bus. Also read
+>> mipi-i3c-static-address as per the MIPI DISCO specifications [1]
+>> to get the static address to be used.
+>>
+>> Although the existing subsystem allows host controllers to register
+>> through the ACPI table, it was not possible to describe I3C or I2C
+>> devices there.
+> 
+> why?
 
-Subscription Details:
+The existing code relied on the 'reg' property to get PID, static address etc.
+ACPI table entries do not use reg property, instead use _ADR or other resource
+objects. Also for ACPI, MIPI recommends a different format which encodes the
+details in the _ADR object. The specification also includes a few additional
+properties like mipi-i3c-static-address, mipi-i3c-static-method etc. which
+the new code follows.
 
-Subscription ID: 9549-WV-1276
+> 
+>> This change enables describing the I3C or I2C devices
+> 
+> Don't use "This commit/change/" just Enable ...
 
-Member ID: 84994-7675
+Ack. Will update.
 
-Renewal Amount: 413.2
-
-If you wish to cancel or make changes to your subscription, please contact us before the renewal date.
-
-Customer Support:
-📞 +1 (805) 609 6469
-
-Note:
-
-This is an automated notification; no reply is needed.
-
-PayPal,LLC will never ask for sensitive information via email.
-
-Thank you for your continued membership.
-
-Best regards,
-The PayPal,LLC Team
-303 Andover St Morgantown WV 26505 United States
-+1 (805) 609 6469
+Best Regards,
+Akhil
