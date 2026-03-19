@@ -1,483 +1,205 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010071.outbound.protection.outlook.com [52.101.193.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B8D40DFA4
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 07:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341DF35837B;
+	Thu, 19 Mar 2026 08:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773905127; cv=pass; b=SToyJqn/4noue/tGH7MwjU4dg5Je2unTtsApTKQ0wdm5h8mg4Yjyvuz1hGFOLBc6ngkRuTj7ZkkOV6x7MQAlK/jbTmOHQTvGJmAL8W45kq94ip5pLm8bI8S2Lb+/meMFJnmb+fYJ61jPWsABgLuHiPH3tPWUNBnYsHabp+97t5Y=
+	t=1773910039; cv=fail; b=KHlhDE9m8iG5/4uIpZVgxd5okkU49zRYMYrW8kIMjto/qeGsa1SYloenodV49Tgd5tOoabWU4pcA2xX/a43BIwqfDe1W2Ume98/x0ctW/vkPtjrpPNLUyhI3YaXDdvhwgUQxEaut5naBkCzfh2eXIdkqU4hlbegoxXjXjflfSlU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773905127; c=relaxed/simple;
-	bh=Ulpnr03mFLvLKusrbO73atFJEMh9LNrmQqNXlOezIe0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nKUyibP4cmhsQhY9hecFq6Z6d3OjVTiBydCy7JuOQrcZoSsnu58IMuz6sHICOxE+kU7rkmZPsnkk0jsKzInvTT2xmIQ5EdMS/hs4VfgHUrqogwb2oOhOoVkDEVroFim6+1UXHisnrWDZRNAdZkhpdPLB+1pL+Zba865BVROJn4Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcVLwWY9; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773910039; c=relaxed/simple;
+	bh=b3PZ3nszum98d4XZv3RZracFjYaqsUaPDmxgLw/U/i0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TVbxR7mqkB0P0RWBRfNHBIeBKr8ncpmdtDMt3SyB1cLPmAgbj5tQmNzh72UTBa4YkDjgCeFsQ9eNz+y1tRlA0Pmf41zfya0Lsa/58773mcMkvv8cttaf1cuc6GKCT9lI6jdeng4Q7bDB/Xm4izUwgwaeUmTk2iCbDO7gg2F6BzA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=owUEmC+m; arc=fail smtp.client-ip=52.101.193.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcVLwWY9"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64ca1ba0089so702684d50.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 00:25:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773905124; cv=none;
-        d=google.com; s=arc-20240605;
-        b=K1VHzmWR1qjw4VldAtmfmITLFJeq7fESb50E3ES5mPLOh7ajbDHAH/g7365mRDQ2zO
-         /3HHnb5iXf5Th2r8t1O6HllTRjkwF1sB85vXWfPkCjjdgPVracr5VkNcbiWSlzpM7Oti
-         wwT85bISflPKDf/tWHJdjykn1GWnKhl45jRGagwg5XiN4UHrDM2W4/rHzXzxfs0B+5R1
-         dHsdSF7odHqEZji4wNJzxEV8dN2rOER/aTnOD46LECq+KUBtTofcQOh3WvHpwYcl/WEF
-         g0OU0nPFBhA6Ku5hg+fTChjLuW5+sLoiH7Wy1eshts4BwPQ6J+dXTOBjmJ6VDgSryMbp
-         3izw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
-        fh=eyzG4ellQQ8yGAT2M3u4KbSMCRIK9+OQb9lWVPtXqXo=;
-        b=YzD+ztL3qcJZ+SmnqgOGZj2XxRgA4Ieri3pfjyp+ikAOgYydkMg3Em0jviCWHIW8Jy
-         lBRIapI7X43oSctdpidtM73hK0GQMzcxupCdLt7IqFchUj+12oOIjWDkO5y4qhgjZb+m
-         gB4KqZcR2dcAp4PoNy3oZZCuJw6gFxg7KrcKMolS91yC6KA0wHnxZlyC6poRzqi3CvOk
-         oD3RGTzYNa6MifqLCX/9ttlDoab/64kMevOKN60GMyIYRqjyGrPQbvfsz2acClyU05oM
-         h2gkGrKog7gPuZwjTUt3yvJMTcsFl7qgBiG8T1WIRLui5Zz0pDfXRlDzKvBDkVQqIR4I
-         7KEw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773905124; x=1774509924; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
-        b=JcVLwWY9Fj+mQA+hy+GUbvk/xDc1dJZZXnaQ7hmq/mAPJzd/lLkGpWBicYeGDKAgPS
-         0GUGMk/zhSMj982j6Scs991DHFcj4qjWM4j5YY5tjGVL0SiX8f20yQsHaoFuA3pA2/TJ
-         d4LBRH8WtDC4Q2cC4bI/o1yyz1/aPJmFKnFcx1/mZ4Za0KicaD/TVzvSryViG1oKHmE2
-         kFYMtguBz00+LiEQ7q1AK/tnjn9i7QiOxqaweAP15K4YvIT+QawTO58k1qnlmElkeZR1
-         Y+LinksAdKMpSgchw+i5J8vDvpKLNAiPjV21lNL7l+6gl9veaDbcF/JDde4s+ovHqps2
-         Gggg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773905124; x=1774509924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
-        b=ReJ59RRyGJp9e7KVkf5E0JwHndFj0gutFv5lQbnksOIuNQq5av5xwlb34xn5KzDrB6
-         ujDeZlMztbajvrNROcYh3L9x04UWeb9BKj1M81MmlmnhdDlqHHeE5/m0rrOr2HxgY5ln
-         Jg/LYuHThYRpJz2ZjTho1P/AEq0Ns8Vqq8DRREe9U9a0BdX2dwYNLQpmrBpFWnQNx4IE
-         eqYYdfRzz0rMbYZdcgq7qpMH2sXGHJXeSzethe5VPVeYIfbfDOeFO61zSYOT5GWKfG7M
-         NAVbFcrfTfeGaOgE+SD6bQoN/DwVIMwXKLwQIVuoMRdfZkflp39jjDZlBjVjQyMhpS5B
-         sUvg==
-X-Gm-Message-State: AOJu0Yw7kOBwPU03J7UOqrPjfuNOg9viXQ2ynAvz0VLMa3347eT6mCGz
-	fJVDOFqU5Z+DsTWSqQNx/kJGuHgSudDm98J+CaYPoe1M0eLuwvAxOf7S+w3c8b2xIPnTowrKPiM
-	rUhXxMPQz1Bck09csr1J40UizFnBjjoY=
-X-Gm-Gg: ATEYQzzvFivHlfdCl+/olpr/VDF4oQyy/VQ6LbMzMRI+KzMUfhPRuLZpezT53IEOqka
-	W8NPvHKEM7p2uaUErzvQfjgy7HctaDBXe8fCNOdFLqbuqziySyQkFdHAsCbuQ+UH9tVQ4XiGasF
-	vRR3zQ/X7mxwKWyDbQgFy0QnLxAx4YI7I6TwMkKFho+K2eiUvkQVnYa6jTTMW7JSzlNyEUenaLZ
-	tVY9RuYtQR6mGt2lDi2nDO7RYuBFn9pBRyuR2lpyVNDx4XhBuyS4iHU3fuC93qQei2ayNG/ErnQ
-	EtzzRmzq
-X-Received: by 2002:a05:690e:d07:b0:64e:a36d:9290 with SMTP id
- 956f58d0204a3-64ea36d96d4mr518597d50.27.1773905124365; Thu, 19 Mar 2026
- 00:25:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="owUEmC+m"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BbI5mi1P8XyvvcaHkLOvIjjzopJ0dQa5FfSu31FyegXqglWgpZ22Koz2+55a6x2G4yDIKYJ9XqAOP0fG7ZwSotmEA3SuCvQXjd9Y1rMKrI/KBDFct3tQjdALOIWMeD3BBDSx6m8PssAxaKuslENQmY9XR90gPc+O4neSRApCumrCp5WbLAeH0JMmoGIFXqcECs5ekdyrsWjv45wk99nuUWtsmDmwhSgdvod8SFLI4wn51YokhisR8V1uh4KNeMzwavGs5V78Ay6ZFhV3fChUd219Nx51hHOEqCwNwINhIrV1QmtVxVcv98P5o9tIQEgVfrebhUiMVrDvIILLc2H51g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hyX1PGEh5Fmb3+9LJsAql7p93k6+7CRPemknitksSsM=;
+ b=NRyU4i5a0w7Pt065QzZ4D1zD4FrVpxbgxBnvMiAI/L8hXjMguNq0X6hR/BIUQYGBpTG0wao7dB84lv9tjWuWq+0D1AWVb13b2OteNBWF18vJyktlXfkAeRsNQC55P6rCtKRNBofg0mFi1iHlJRzsBJGaurD5u7dgr0qTfPbPdWGe026oBsKa5bBpg6+JAzSUB32H/HrsCA5eAQWOuhThfq3v2eSKfNqv4lbTg61usZnGCd8jHVsObxc7IzrsnHXBuLzzqpMxdUNxKo7a8T71Waws4BSwXHKjXdH6wCgSlYdG1jbzoU77/NJGRU8vbzvFp/BJFPEz/fB7LpkuPk++QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hyX1PGEh5Fmb3+9LJsAql7p93k6+7CRPemknitksSsM=;
+ b=owUEmC+m9cwtdq8hkRP3SpCd31R/flGUZl71y9jqlK3cEfgD2dlBczad0Sab8vbq4VRZFGmbmh17M6Ijt+0QXor3AWQy/fAjfHtvOi52CIwNdXuAsJdQ6mdW+FCff7sNRa/SyN2x4wDl/si39+YtWWgC3F8S5ymRrffNUnosf+bRfVNErb2b5u9TXm/i6q1qwnUUg8DU8kRef3rp6l2Ktfxheq+/Q9LFzE87Cksv6PKNXigKeXB50LomTxt+TlkovcWu4CQxrPYC+/NRtjGIKT0g0Xnd5fI0KKknvJYKNqOU27mb8SOMJNR2m3PFmjOKQgzIh92gpmTfx7ZpRQZ3dA==
+Received: from DS7PR03CA0182.namprd03.prod.outlook.com (2603:10b6:5:3b6::7) by
+ IA1PR12MB6556.namprd12.prod.outlook.com (2603:10b6:208:3a0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.9; Thu, 19 Mar
+ 2026 08:47:06 +0000
+Received: from CH3PEPF00000012.namprd21.prod.outlook.com
+ (2603:10b6:5:3b6:cafe::ed) by DS7PR03CA0182.outlook.office365.com
+ (2603:10b6:5:3b6::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.27 via Frontend Transport; Thu,
+ 19 Mar 2026 08:47:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH3PEPF00000012.mail.protection.outlook.com (10.167.244.117) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9745.0 via Frontend Transport; Thu, 19 Mar 2026 08:47:05 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 19 Mar
+ 2026 01:46:49 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 19 Mar
+ 2026 01:46:49 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Thu, 19 Mar 2026 01:46:42 -0700
+From: Akhil R <akhilrajeev@nvidia.com>
+To: <conor@kernel.org>
+CC: <Frank.Li@nxp.com>, <acpica-devel@lists.linux.dev>,
+	<akhilrajeev@nvidia.com>, <alexandre.belloni@bootlin.com>,
+	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, <ebiggers@kernel.org>,
+	<fredrik.markstrom@est.tech>, <jonathanh@nvidia.com>, <krzk+dt@kernel.org>,
+	<lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-hwmon@vger.kernel.org>, <linux-i3c@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+	<linux@roeck-us.net>, <miquel.raynal@bootlin.com>, <p.zabel@pengutronix.de>,
+	<rafael@kernel.org>, <robert.moore@intel.com>, <robh@kernel.org>,
+	<smangipudi@nvidia.com>, <thierry.reding@kernel.org>
+Subject: Re: [PATCH 01/12] dt-bindings: i3c: Add mipi-i3c-static-method to support SETAASA
+Date: Thu, 19 Mar 2026 14:16:41 +0530
+Message-ID: <20260319084641.57672-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260318-tweed-herbicide-eb924ef056b8@spud>
+References: <20260318-tweed-herbicide-eb924ef056b8@spud>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260318172518.91336-1-sergiomelas@gmail.com> <ba6bc890-b6b1-4035-872f-0b15281eaa05@roeck-us.net>
-In-Reply-To: <ba6bc890-b6b1-4035-872f-0b15281eaa05@roeck-us.net>
-From: Sergio Melas <sergiomelas@gmail.com>
-Date: Thu, 19 Mar 2026 08:25:12 +0100
-X-Gm-Features: AaiRm51cSci696eKKvRyXbp7gtKKlLEZDLAuleuM7-8zyWPq8V8Xa3tBDiiZCnA
-Message-ID: <CAP8e=sLRDCCbwDtb4wdw-g3yWCyXCiKKguJ6GyDOXY89BMJKrA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (yogafan) V3.0 Universal refactor and RLLag filter
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sergio Melas <sergio.melas@syensqo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000012:EE_|IA1PR12MB6556:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60fce4d6-bff6-4ee8-82af-08de8594192e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700016|82310400026|13003099007|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	2DDDrwlVz+GzI9iq3LtH1kRgfVkRhGL9uHQOqnY7Z1mhzRspHtjryZpVov9VJiBHyi63s8mgKX0yE524MHnY5/zQim7m4dkcdgl/s1XIGmNAMXE6mMi9WrisdYg/n/y+rgQhklCSfAVhDfGnJsDjcNrlt9wKMRhA0IGmRwUcxHxUCYjVyIm0y80sPBy19hvudnQQ6JmiVLAdISwCVMgIXQsNJ25lDXndoR/2XbN/i3Bk2+wA3vDtAm6hKVm5oXadXMSOztdMkg0nA3yZ5sii2HTrlDKApORI2FEMhI656Ofcebhzr9lxkSoMWDOVkMpkYEIFKhr6q+YGBdV7ca+Ry5aGfagMW5Td0bNoJYWvOUPr96yWAneFJfQpDjm9VzCUzEGhHWn0fbjhKkFCMYmNDxLflKsq3gnjTDG4QM0yt/o1Wv9WZiUzY+8VF24/psVeraYXuX1J4f3VdNfYK8C04XJXmkHw91tHiSJuOQwHP6P7OQAQLc+9UsVZC9MdBWy///NJEumpC5VEDj6NoS1lRIQ1w+iPHAvLa6SAe1bXmDQdlUVuja/SYMTtZGkjX5mKHSZngo2ZTWUfqsSrv8KhfghqvNy4Iw8xB8EKEwu6mwhPUCGNe5zbqCdUqq/zylrDzLV0K0EGk5YXJ4P01gv5tERr2rk6B4fUj8khKvyt9bW6186qmvmiGlgFZmzUohEe7WfO0DtqUI3zsBwFxcD1p566ZHU+iKLa6h600C1318wLNKy54RtKUWBoLqUxYb8Cw3XC3Y4DU6Ykd+NGQfch9g==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700016)(82310400026)(13003099007)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	fhEVPWLuM/Uj1hXThH3kIJG3xvYqoyZOqKWkv4oUHfSyt33T/77KnNhZ7/g52nchZ6m4+1fI3GZniaKcB0y/S8HxxSQ+ANz2c75V1WOP0ZLMAP2zjBhxHvX47MBNjj8kRXBK9LXV+Z5WfoC2F04O3KyUV+JSSmwDQHhRsrfOBCdQmEyGeUaTwbKPFC7CuPHABAju01Cnr5J3vQyZclA3NgK+5SSiHdOFO3MwKcSKcPv4pJ7N1oRn4OM8TqwT/u+ZsY5zTQEEP0vBnyvTY7EATQVNjPZLWkGz27FUD2Rz3WmxFWuqsjUa65iqRjvHvQlCWr9wj6BdnRKnIechdGK71uh0tqRklzgRmlYfxiL3xJHD9pd6kH/MPEIA53SO5P8RhLBuDXRNZun0eOFTfJ3JZbaTNd4gmwsfChLedMVuVlAvBXyRy0E8OoKs0sy4xY4L
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 08:47:05.5733
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60fce4d6-bff6-4ee8-82af-08de8594192e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF00000012.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6556
 
-Hi Guenter,
+On Wed, 18 Mar 2026 17:31:50 +0000, Conor Dooley wrote:
+> On Wed, Mar 18, 2026 at 10:57:14PM +0530, Akhil R wrote:
+>> Add the 'mipi-i3c-static-method' property mentioned in the MIPI I3C
+>> Discovery and Configuration Specification [1] to specify which discovery
+>> method an I3C device supports during bus initialization. The property is
+>> a bitmap, where a bit value of 1 indicates support for that method, and 0
+>> indicates lack of support.
+>> Bit 0: SETDASA CCC (Direct)
+>> Bit 1: SETAASA CCC (Broadcast)
+>> Bit 2: Other CCC (vendor / standards extension)
+>> All other bits are reserved.
+>> 
+>> It is specifically needed when an I3C device requires SETAASA for the
+>> address assignment. SETDASA will be supported by default if this property
+>> is absent - which means for now the property just serves as a flag to
+>> enable SETAASA, but keep the property as a bitmap to align with the
+>> specifications.
+>> 
+>> [1] https://www.mipi.org/specifications/disco
+>> 
+>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+>> ---
+>>  .../devicetree/bindings/i3c/i3c.yaml          | 30 ++++++++++++++++---
+>>  1 file changed, 26 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/i3c/i3c.yaml b/Documentation/devicetree/bindings/i3c/i3c.yaml
+>> index e25fa72fd785..1705d90d4d79 100644
+>> --- a/Documentation/devicetree/bindings/i3c/i3c.yaml
+>> +++ b/Documentation/devicetree/bindings/i3c/i3c.yaml
+>> @@ -31,10 +31,12 @@ properties:
+>>        described in the device tree, which in turn means we have to describe
+>>        I3C devices.
+>>  
+>> -      Another use case for describing an I3C device in the device tree is when
+>> -      this I3C device has a static I2C address and we want to assign it a
+>> -      specific I3C dynamic address before the DAA takes place (so that other
+>> -      devices on the bus can't take this dynamic address).
+>> +      Other use-cases for describing an I3C device in the device tree are:
+>> +      - When the I3C device has a static I2C address and we want to assign
+>> +        it a specific I3C dynamic address before the DAA takes place (so
+>> +        that other devices on the bus can't take this dynamic address).
+>> +      - When the I3C device requires SETAASA for its discovery and uses a
+>> +        pre-defined static address.
+>>  
+>>    "#size-cells":
+>>      const: 0
+>> @@ -147,6 +149,26 @@ patternProperties:
+>>            through SETDASA. If static address is not present, this address is assigned
+>>            through SETNEWDA after assigning a temporary address via ENTDAA.
+>>  
+>> +      mipi-i3c-static-method:
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        minimum: 0x1
+>> +        maximum: 0xff
+>> +        default: 1
+>> +        description: |
+>> +          Bitmap describing which methods of Dynamic Address Assignment from a
+>> +          static address are supported by this I3C Target. A bit value of 1
+>> +          indicates support for that method, and 0 indicates lack of support.
+> 
+> I really am not keen on properties that are bitmaps, why can't we just
+> use the strings "setdasa", "setaasa" etc?
 
-Thank you for the review and for your patience with my first
-submission to the kernel. I apologize for the structural errors; I
-will address the missing Kconfig, Makefile, and documentation ASAP.
+The intention was to mirror the property described in the specification. Using
+strings would not allow to use a combination of methods when a device supports
+more than one method. It also cannot represent the vendor extensions (Bit 2)
+cleanly. Would this be better if we use macros instead of raw numbers?
+Please let me know your thoughts.
 
-Regarding your specific comments:
+> 
+>> +          Bit 0: SETDASA CCC (Direct)
+>> +          Bit 1: SETAASA CCC (Broadcast)
+>> +          Bit 2: Other CCC (vendor / standards extension)
+>> +          All other bits are reserved.
+>> +
+>> +          This property follows the MIPI I3C specification. The primary use
+>> +          of this property is to indicate support for SETAASA, i.e Bit 1, but
+>> +          will allow all values so that it is aligned with the specifications.
+>> +          SETDASA will remain as the default method even if this property is
+>> +          not present.
+>> +
+>>      required:
+>>        - reg
 
-** > That is an odd subject line and description for a new driver.
-
-I understand. I will change the subject to the standard "hwmon:
-(yogafan) Add new Lenovo Yoga/Legion fan driver" and rewrite the
-description to focus on the hardware support rather than my internal
-versioning.
-
-** > That doesn't explain why this is needed. Running a background
-task is expensive.
-** > [...]
-** > This will need some explanation. Why is this worker needed, what
-exactly does it do,
-** > and why not just read the current fan speed from ACPI when requested?
-
-I am a control engineer by trade, so my approach was to implement a
-discrete-time physical model for the fan behavior.
-
-The Lenovo Embedded Controller (EC) often reports "jumpy" or
-oscillating RPM values due to low-resolution tachometer sampling. A
-simple instantaneous read from ACPI results in a very jittery UI in
-userspace. The 100ms background worker provided a constant-frequency
-heartbeat (10 Hz) necessary for the RLLag (Rate Limited Lag) filter to
-function correctly.
-
-This filter mimics the physical inertia of the fan by combining a
-first-order lag with a slew-rate limit. This effectively filters out
-EC measurement noise while ensuring the reported value follows a
-realistic physical trajectory.
-
-However, I understand your concern about the cost of a background task
-on a laptop. For the next version, I will refactor this into a
-"passive" filter that calculates the state transition (dt) only when
-the sensor is read, eliminating the background worker entirely while
-maintaining the integrity of the control model.
-
-** > The hardware monitoring subsystem supports synchronization which
-should be relied on.
-
-Understood. I will remove my manual mutex locking and rely on the
-hwmon core synchronization.
-
-** > Why limit the number of supported fans to 2?
-
-This was an assumption based on the Yoga/Legion models I had access
-to. I will refactor this to support a dynamic number of fans to make
-the driver more universal.
-
-** > This doesn't stop the delayed worker on driver removal, which I
-am sure would
-** > have interesting consequences.
-
-You are correct; that was a significant oversight. By moving to the
-"passive" filter mentioned above, I will be able to remove the worker
-entirely, which solves this safety issue.
-
-I will prepare a new version of the patch incorporating these fixes
-and the missing build system files.
-
-Best regards,
-Sergio Melas
-
-PS: I am a loyal user of Linux since version 2. I have developed
-several private drivers for my own hardware over the years and finally
-decided to take the leap and contribute upstream. Sorry again for my
-newbie errors regarding the submission process. I will do better in
-the future
-
-On Wed, Mar 18, 2026 at 7:21=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 3/18/26 10:25, Sergio Melas wrote:
-> > - Refactor driver to V3.0 Universal Platform Mode for cross-model compa=
-tibility.
-> > - Add support for dual-fan ACPI paths (FANS, FA2S, FANX) for Legion/Yog=
-a series.
-> > - Implement 100ms (10Hz) background heartbeat for constant-frequency sa=
-mpling.
-> > - Implement RLLag (Rate Limited Lag) filter to stabilize jumpy EC RPM d=
-ata.
-> > - Use 10-bit fixed-point integer math to avoid forbidden SSE/floating-p=
-oint registers.
-> > - Integrate DSTS ACPI modifications to ensure sensor stability during S=
-3 sleep cycles.
-> > - Provide full documentation for KDE 6 Plasma Sensor compatibility and =
-scaling.
-> >
->
-> That is an odd subject line and description for a new driver.
->
-> > Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
-> > ---
-> >   drivers/hwmon/yoga_fan.c | 222 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   1 file changed, 222 insertions(+)
-> >   create mode 100644 drivers/hwmon/yoga_fan.c
-> >
-> No Makefile update, no Kconfig update, no documentation.
->
-> Am I missing something ?
->
-> Some more (hight level) comments inline. This is not a complete
-> review.
->
-> Guenter
->
-> > diff --git a/drivers/hwmon/yoga_fan.c b/drivers/hwmon/yoga_fan.c
-> > new file mode 100644
-> > index 000000000..5a9ae631c
-> > --- /dev/null
-> > +++ b/drivers/hwmon/yoga_fan.c
-> > @@ -0,0 +1,222 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/**
-> > + * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
-> > + *
-> > + * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
-> > + *
-> > + * This driver provides fan speed monitoring for modern Lenovo Yoga, L=
-egion,
-> > + * and IdeaPad laptops by interfacing with the Embedded Controller (EC=
-)
-> > + * via ACPI. It registers a platform device to ensure compatibility wi=
-th
-> > + * modern HWMON consumers like KDE Plasma 6.
-> > + *
-> > + * Supported Models:
-> > + * - Lenovo Yoga 7 / 14c series (Ryzen/Intel)
-> > + * - Lenovo Legion 5 / 7 / Pro series (Dual-fan support)
-> > + * - Lenovo Yoga Slim 7 / Pro / Carbon / Nano
-> > + * - Lenovo IdeaPad 5 / ThinkBook series
-> > + *
-> > + * Implementation Details:
-> > + * - Fixed static HWMON channel definition for kernel 6.0+ compatibili=
-ty.
->
-> This patch implements a new driver and thus can not fix anything.
->
-> > + * - Implements a 100ms background worker to ensure RLLag filter consi=
-stency.
-> > + * - RLLag Formula: x(t) =3D x(t-dt) + clamp(step, -limit, limit)
-> > + * where step =3D (input - x) * alpha
->
-> That doesn't explain why this is needed. Running a background task is exp=
-ensive.
->
-> > + */
-> > +
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/init.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/acpi.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/dmi.h>
-> > +#include <linux/workqueue.h>
-> > +#include <linux/mutex.h>
-> > +
-> > +#define DRVNAME "yogafan"
-> > +#define MAX_FANS 2
-> > +
-> > +/* --- RLLAG CONFIGURATION --- */
-> > +#define TS_MS            100
-> > +#define TAU_MS           1000
-> > +#define MAX_SPEED_RPM_S  500
-> > +
-> > +#define ALPHA_SCALED ((TS_MS * 1024) / (TAU_MS + TS_MS))
-> > +#define STEP_LIMIT ((MAX_SPEED_RPM_S * TS_MS) / 1000)
-> > +
-> > +struct yoga_fan_data {
-> > +     const char *active_paths[MAX_FANS];
-> > +     long filtered_val[MAX_FANS];
-> > +     struct delayed_work heartbeat;
-> > +     struct mutex lock;
->
-> The hardware monitoring subsystem supports synchronization which should b=
-e
-> relied on.
->
-> > +     int fan_count;
-> > +};
-> > +
-> > +static void yoga_fan_worker(struct work_struct *work)
-> > +{
-> > +     struct yoga_fan_data *data =3D container_of(work, struct yoga_fan=
-_data, heartbeat.work);
-> > +     unsigned long long raw_acpi;
-> > +     long rpm, delta, lag_step;
-> > +     int i;
-> > +
-> > +     mutex_lock(&data->lock);
-> > +     for (i =3D 0; i < data->fan_count; i++) {
-> > +             if (ACPI_SUCCESS(acpi_evaluate_integer(NULL, (char *)data=
-->active_paths[i], NULL, &raw_acpi))) {
-> > +                     rpm =3D (raw_acpi > 0 && raw_acpi <=3D 255) ? ((l=
-ong)raw_acpi * 100) : (long)raw_acpi;
-> > +
-> > +                     delta =3D rpm - data->filtered_val[i];
-> > +                     lag_step =3D (delta * ALPHA_SCALED) >> 10;
-> > +
-> > +                     if (lag_step > (long)STEP_LIMIT)
-> > +                             lag_step =3D (long)STEP_LIMIT;
-> > +                     else if (lag_step < -(long)STEP_LIMIT)
-> > +                             lag_step =3D -(long)STEP_LIMIT;
-> > +
-> > +                     data->filtered_val[i] +=3D lag_step;
-> > +
-> > +                     if (data->filtered_val[i] < 50)
-> > +                             data->filtered_val[i] =3D 0;
-> > +             }
->
-> This will need some explanation. Why is this worker needed, what exactly =
-does it do,
-> and why not just read the current fan speed from ACPI when requested ?
->
-> > +     }
-> > +     mutex_unlock(&data->lock);
-> > +
-> > +     schedule_delayed_work(&data->heartbeat, msecs_to_jiffies(TS_MS));
-> > +}
-> > +
-> > +static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types t=
-ype,
-> > +                      u32 attr, int channel, long *val)
-> > +{
-> > +     struct yoga_fan_data *data =3D dev_get_drvdata(dev);
-> > +
-> > +     if (type !=3D hwmon_fan || attr !=3D hwmon_fan_input)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     if (channel >=3D data->fan_count)
-> > +             return -EINVAL;
-> > +
-> > +     mutex_lock(&data->lock);
-> > +     *val =3D data->filtered_val[channel];
-> > +     mutex_unlock(&data->lock);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor=
-_types type,
-> > +                                u32 attr, int channel)
-> > +{
-> > +     const struct yoga_fan_data *fan_data =3D data;
-> > +
-> > +     if (type =3D=3D hwmon_fan && channel < fan_data->fan_count)
-> > +             return 0444;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct hwmon_ops yoga_fan_hwmon_ops =3D {
-> > +     .is_visible =3D yoga_fan_is_visible,
-> > +     .read =3D yoga_fan_read,
-> > +};
-> > +
-> > +static const struct hwmon_channel_info *yoga_fan_info[] =3D {
-> > +     HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT, HWMON_F_INPUT),
-> > +     NULL
-> > +};
-> > +
-> > +static const struct hwmon_chip_info yoga_fan_chip_info =3D {
-> > +     .ops =3D &yoga_fan_hwmon_ops,
-> > +     .info =3D yoga_fan_info,
-> > +};
-> > +
-> > +static int yoga_fan_probe(struct platform_device *pdev)
-> > +{
-> > +     struct yoga_fan_data *data;
-> > +     struct device *hwmon_dev;
-> > +     acpi_handle handle;
-> > +     unsigned long long init_raw;
-> > +     int i;
-> > +     static const char * const fan_paths[] =3D {
-> > +             "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S",
-> > +             "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC.EC.FAN0",
-> > +             "\\_SB.PCI0.LPC0.EC.FAN0"
-> > +     };
-> > +
-> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +
-> > +     mutex_init(&data->lock);
-> > +
-> > +     for (i =3D 0; i < ARRAY_SIZE(fan_paths); i++) {
-> > +             if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[=
-i], &handle))) {
-> > +                     data->active_paths[data->fan_count] =3D fan_paths=
-[i];
-> > +
-> > +                     if (ACPI_SUCCESS(acpi_evaluate_integer(NULL, (cha=
-r *)data->active_paths[data->fan_count], NULL, &init_raw)))
-> > +                             data->filtered_val[data->fan_count] =3D (=
-init_raw > 0 && init_raw <=3D 255) ? ((long)init_raw * 100) : (long)init_ra=
-w;
-> > +
-> > +                     data->fan_count++;
-> > +                     if (data->fan_count >=3D MAX_FANS)
-> > +                             break;
->
-> Can this happen in practice ? If so, why limit the number of supported fa=
-ns to 2 ?
->
-> > +             }
-> > +     }
-> > +
-> > +     if (data->fan_count =3D=3D 0)
-> > +             return -ENODEV;
-> > +
-> > +     hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, DR=
-VNAME,
-> > +                                                      data, &yoga_fan_=
-chip_info, NULL);
-> > +
-> > +     INIT_DELAYED_WORK(&data->heartbeat, yoga_fan_worker);
-> > +     schedule_delayed_work(&data->heartbeat, msecs_to_jiffies(TS_MS));
-> > +
->
-> This doesn't stop the delayed worker on driver removal, which I am sure w=
-ould
-> have interesting consequences.
->
-> > +     return PTR_ERR_OR_ZERO(hwmon_dev);
-> > +}
-> > +
-> > +static struct platform_driver yoga_fan_driver =3D {
-> > +     .driver =3D { .name =3D DRVNAME },
-> > +     .probe =3D yoga_fan_probe,
-> > +};
-> > +
-> > +static struct platform_device *yoga_fan_device;
-> > +
-> > +static const struct dmi_system_id yoga_dmi_table[] __initconst =3D {
-> > +     { .ident =3D "Lenovo", .matches =3D { DMI_MATCH(DMI_SYS_VENDOR, "=
-LENOVO") } },
-> > +     { }
-> > +};
-> > +MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
-> > +
-> > +static int __init yoga_fan_init(void)
-> > +{
-> > +     int ret;
-> > +
-> > +     if (!dmi_check_system(yoga_dmi_table))
-> > +             return -ENODEV;
-> > +
-> > +     ret =3D platform_driver_register(&yoga_fan_driver);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     yoga_fan_device =3D platform_device_register_simple(DRVNAME, 0, N=
-ULL, 0);
-> > +     if (IS_ERR(yoga_fan_device)) {
-> > +             platform_driver_unregister(&yoga_fan_driver);
-> > +             return PTR_ERR(yoga_fan_device);
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void __exit yoga_fan_exit(void)
-> > +{
-> > +     struct yoga_fan_data *data =3D platform_get_drvdata(yoga_fan_devi=
-ce);
-> > +
-> > +     if (data)
-> > +             cancel_delayed_work_sync(&data->heartbeat);
-> > +
-> > +     platform_device_unregister(yoga_fan_device);
-> > +     platform_driver_unregister(&yoga_fan_driver);
-> > +}
-> > +
-> > +module_init(yoga_fan_init);
-> > +module_exit(yoga_fan_exit);
-> > +
-> > +MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
-> > +MODULE_DESCRIPTION("Universal Lenovo Fan Driver v3.0.0");
-> > +MODULE_LICENSE("GPL v2");
->
+Best Regards,
+Akhil
