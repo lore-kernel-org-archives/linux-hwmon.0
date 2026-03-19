@@ -1,67 +1,68 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3663A5E62
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 14:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A0A3E8C78
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 15:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773930865; cv=none; b=hmttIZvbV9iJnWxl7+yGvK2Uzp1l1qCvkQ7LdWxKFHsnntXHOxzRtcls+gmdOEmhuXEsAohze+5lAuFHqsK2tUAXO6j1D/lFLQJI+6b/p2pPVjhjXo8tB1jP4v2AjnnhAVb8Z4V8nlkZCFg6j5egr8GaWQ5GCz1meAd4emkJqhw=
+	t=1773935577; cv=none; b=PDxaS/flPJriH3cYra/Ayn/LEuotbjNr2KIO0ROxDk4AUqx2OdlkCpax5/C4C+/GSw8F5NRSCv2yRX1Qmm4QcslkqaFfhfKkbYkl925zrmkJMtvigRYKkkXOauE3b5kw7tMwRHRbwd3C/q2km9jiGHxvrRdt6nrh3YLjdcvDeLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773930865; c=relaxed/simple;
-	bh=zrILEl1jzgUmvztQxq+EyGuX5tkMYJUxVVQLCPC0j1w=;
+	s=arc-20240116; t=1773935577; c=relaxed/simple;
+	bh=IT/s5VKLjYTCg7i0Xr82AeLxC1hHDWELGucUDsq959s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cg5vJcLzREYhZb4mLdr9jLIFiGEiSnHH6Rb9moC7UGFYfKMQ/7hJSgU9M8+ISrtaLfCd1JZqfJWZE4Pb9wtGl1tns6vahEtbKtKrxohtF13uW6qanjKm74bkYG3SPVNdp/u79VzExfBlDLbKs3XDw3+6ulFzfXcaEM9+aOznWOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epha8F88; arc=none smtp.client-ip=74.125.82.171
+	 In-Reply-To:Content-Type; b=S6KQTBniOiOJ0AR0F8SLKxwfXZyZckM4wdttZsxTjS/eYW4PMSL6Dbq/a9n1Cy5p8P+b3zzOMi4KYEC8x9hihUQ6DtI1wrPUVLq9KfmdWiDhnSO1NbsYC2TOGy5Sb6zJhIFGcSPnCjliejlWewfDDVZtl8QnFeTLR+2dqiNby38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DybeF4Uw; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epha8F88"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2b4520f6b32so1711655eec.0
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 07:34:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DybeF4Uw"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2b04fc8851cso10201695ad.0
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 08:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773930862; x=1774535662; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1773935575; x=1774540375; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+wGnZ5ViKkIq9WuGANaT/zAJ2GOoEtdDiWRCIVt3Is=;
-        b=epha8F883wPc256rnCRfGlizcu3OVM2H2sbipClME5BkDy5M5BFE9OTTMQfDjU0ULr
-         TSPop45k2uXBcZSW+AVmdQ6clUGg9drSRhOxHM/nDhloBg3bMsK2GUMIDD0pHXKJ3CAM
-         1sr2Es3gG4zU0IHTvCeImoduu99+CWT4kYrQJ7wfUBLwGfTARlu+E5KQg4LxNVzRxRE8
-         +a/D741WTYNe7tScTc2maG0wRMjNRiAXD5n2ISojswORL7lgRr4Iu1xZMNIwY9yd5UHD
-         JDaxIecg+LzF4zU4e+Xbg+pTsSEpBmcSM1iZf53jIZwlIGC/J2qc9UtoM+pYqQxdfWML
-         5QTA==
+        bh=i9z69/Cx6EsWFci3JfA2BtA2ZBRfiZMB8gO4oaevv4o=;
+        b=DybeF4UwGSrO0MhrFIxZSnbHk0iMF4w2gz0AfQTgIneNr8fUuGpedPzW0YJDkIfGg/
+         tF+br0uHlIZTMqYXQmfx9IHXeOX6bkG9/LFnqiofW9SLoTKLNmLCQeM1LmreE1y06pjg
+         NnI/veREaEcI+JZw2Jk9pUnZmXCJi+36ORoq+/D6HGxFhu/M9E4Xxh9yl8HuK6E8TNCT
+         76xXg3KbpM5/XglpsXYthZXcVulEmIArgtYydZpsiau8nWeW1XC+nmY95BDp6rF6iBTA
+         h4vtiEbqjjyTXRFP6l+spFLYEeP6wK90OBu1tz3vry3n/QiVTahlAErQstTuaTWVqJXO
+         WEog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773930862; x=1774535662;
+        d=1e100.net; s=20251104; t=1773935575; x=1774540375;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C+wGnZ5ViKkIq9WuGANaT/zAJ2GOoEtdDiWRCIVt3Is=;
-        b=hxNud9Kzy1aQU72+HdoPbyffmEK+K7+cORf4Bm7zKrXPL8FYq4XffBbuu0SuKOA7r1
-         NMLMkxczRKBDmbYdova68dTInwOA0YGlTVF0/kkdQRUQu1qZdW6BSpbw5zCw+/Ow+XBu
-         rHZUUyT9bun6JU7yHOLExAe7tGcm/ZnlgORjhsmqRra9c2Ie2taCamo68mMTpc5X9W+y
-         KgxMBEjxsDCmmXOfNbuRw5g+XBQkfFgpGnE1I2RpD/NlCDOPmHvCfvXOmEPZ6tAR9WgM
-         SLXrQmTbTTKNSvWHwY/g6++L5FI/WldF320gh1pVhJ7efwT9d0+HvEmR7HhiRfRgvgHe
-         wDZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6fgBPB5biUO4nSBGAhqJ89nktVvyPzlNOqSBdh+mUq6isN49Jnt7BaB4Hkst0m4cJaA3n7PK1vkMvWg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNyKMSv1dhHlC5f8bvx+FwYKr0ROxbn1euvQRCQm6U/WQSyFbK
-	rN25AQ/MHmV4F2D7EVaRV5fwfLcKbhZCXCXSrsfx9pDRhlnb97eW3XtL
-X-Gm-Gg: ATEYQzzP/OIiL5b2FDTagFQ4+2r/c/F9V8z6eEmtdo8A6vkIZ+pLj40IDOhlataf7FA
-	Q+Pjk1TJsFXP3V88RpKsuHyFFrl3//5licJBU+te6/qyGTF3bOkyHzdzofz7lPbg7Oc5SwV9lvW
-	wcWNIUxT88Gc9zuQ9nwAlZoYH/HRP7CasnUr2oVC+/66KT8z5s/gQa5Gq1OA2qnQ7ywq85kopz3
-	aXN8MlYzETTmasSxJLz18Rf57/JB6P7lGFAeQOUJ8+LE/3INtCd3JLxoA9yIzd3lKZ4ESxpXc4H
-	mtYxYuxrm9b13SBx8fPBktBoDr54HWPV0bHMn+JdBZxtkqS+SZ+43+HAa484xfNmIN6rqsJn+5u
-	IPWNwW3dmcYJi1k6RLzrqaBUvqujnJSlIlW71H7Aey5eP19zHOS0bC9q3z5ElHILLsiW0cgg8JS
-	uKqT6s81rh5Lt6BthSXcA1J9dfoFy1G5TILHhY3vauHLxAkGx8KLDh70AHFS4rGJ+EOKOeazNp
-X-Received: by 2002:a05:7301:4187:b0:2be:8216:57cb with SMTP id 5a478bee46e88-2c0e508dfa9mr3188822eec.29.1773930862015;
-        Thu, 19 Mar 2026 07:34:22 -0700 (PDT)
+        bh=i9z69/Cx6EsWFci3JfA2BtA2ZBRfiZMB8gO4oaevv4o=;
+        b=eQ/mO0yAAaDhPtVpCFswYoXr3+N8RSvVOhwNittxr8VyEqjyPS2rFrr3e87MfoP7vd
+         64OFmz5x9AplFPntndQILgrmfWwvZQ+aVH7XexHrx6cXawCuWVBLko6MEpXPAGkfQ1RT
+         Ek+Yu8CobpLzhM1TTrUxgQwnpqD8gLENX0akahybjei/qKpJ2zthqvf2CCS45WwI1ZD4
+         reh22Zg5ygr/Odr/im6Z6ds6oJ4FvOO7r3S0yo75b+8IV8Qk362O5giRyn59eEtvjgZd
+         ERFgp+bZmvQqKLef0U1fBmp93Io4Dnojp1mwLuSRAy93lpgDZpnWqBG6Gs7Nfiu65faK
+         wV/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVVykdYqCx2qaCLtDshygMB9r8WYet32q5i2dqv5MAi5EbopdVb/CyRhyrNELXyezJ+XDU4FODkb/YvQQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxAwW+TwY2WzYsZWhZzGlrLWab4NuwsSEAi3wkoxIfChp3Tz6L
+	dqa8Q/jyjf/bmJGraVKAgJOkNz/6TqXFmMwYHvdpyjMDeltPUg9423EaqwQC4A==
+X-Gm-Gg: ATEYQzyQq+xiK7Cvd33XRQjVDa194kjX9cR2ZTRv0Njnt9QbJxhFjhqYEkA8h/r/CPE
+	Yd8646H6DQZb6WC6oAibJLqKA3nQNpSZ0m2+DlhLi1FySceFdMSFsxmQMlOOFp3MFyonqPMdm6p
+	ihTjY3NSsNMdna5RW8c+EcZESIKTj6wL5KKSVZLWFtk8eOQ9MI4+XKY350XumOIhWAhLukK98+a
+	PMKet6/lkJ8QKDlgM/LOo7NvZwOqvZjLouNBK+IjvJ7EzZuQ5x1fTidUw/mARSyyoU3vR9dTdzB
+	s/piL7Ob2aNZbFKaMqYqF09pEhGr7+7cvxI3hfKU4PzJEcCTSxO5S80PK2VNYC+VPpx4NfLZuke
+	CM/uqctVnCCmrkotmfCz7jJzfz1XRBAvqfJKbl295PeO+emv02X296pUuvIHXQyCBHuTRo7k9wv
+	dnS599JmtmV4Vzk9BKGAziXH3TaQ2X1bCfhX6QyeDbhhQUgBbPFZH1GvMhIXxiCC4MKReKqiPqa
+	HDZAaeNz2Q=
+X-Received: by 2002:a17:902:e88e:b0:2b0:5cb3:e4bc with SMTP id d9443c01a7336-2b06e3528bamr69375555ad.16.1773935575259;
+        Thu, 19 Mar 2026 08:52:55 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c0e56062e4sm8436720eec.30.2026.03.19.07.34.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b06e61c4dfsm61241845ad.70.2026.03.19.08.52.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2026 07:34:21 -0700 (PDT)
+        Thu, 19 Mar 2026 08:52:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7cc8ab1f-6c9a-4e3f-a1bc-266e020d8179@roeck-us.net>
-Date: Thu, 19 Mar 2026 07:34:18 -0700
+Message-ID: <c25f34cb-6069-42c4-a7af-bca27c6a411f@roeck-us.net>
+Date: Thu, 19 Mar 2026 08:52:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,19 +70,18 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/12] hwmon: spd5118: Add I3C support
-To: Akhil R <akhilrajeev@nvidia.com>
-Cc: Frank.Li@nxp.com, acpica-devel@lists.linux.dev,
- alexandre.belloni@bootlin.com, conor+dt@kernel.org,
- devicetree@vger.kernel.org, ebiggers@kernel.org, fredrik.markstrom@est.tech,
- jonathanh@nvidia.com, krzk+dt@kernel.org, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org, miquel.raynal@bootlin.com,
- p.zabel@pengutronix.de, rafael@kernel.org, robert.moore@intel.com,
- robh@kernel.org, smangipudi@nvidia.com, thierry.reding@kernel.org
-References: <df8086b1-8834-4bf2-ac4b-cb921beb8471@roeck-us.net>
- <20260319043541.39291-1-akhilrajeev@nvidia.com>
+Subject: Re: Weird Dell SMM bug since 6.18
+To: Guy Boldon <gb@guyboldon.com>, linux-hwmon@vger.kernel.org
+Cc: W_Armin@gmx.de, jan.claussen10@web.de
+References: <b476fdf2-1ce6-46ca-8c98-13e0ae1613b3@web.de>
+ <97b6c751-0115-4d00-b212-352f37e5914d@roeck-us.net>
+ <DH1W16PFES8U.3MBLJIJPV48JQ@web.de>
+ <f9bcdb69-6ad7-409a-afc3-bb5f277ef0ba@gmx.de>
+ <02d1330f-1439-4291-bbb2-289122eedd7c@roeck-us.net>
+ <DH4H9QQI4OQ9.30PQ935ZJERT0@web.de>
+ <62d86acf-6a3f-4bb2-9d81-cf47bd1461e9@roeck-us.net>
+ <fd277150-af4b-4bd5-af7e-868c9678eb1e@gmx.de>
+ <20260319094944.239871-1-gb@guyboldon.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -127,188 +127,95 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260319043541.39291-1-akhilrajeev@nvidia.com>
+In-Reply-To: <20260319094944.239871-1-gb@guyboldon.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/18/26 21:35, Akhil R wrote:
-> On Wed, 18 Mar 2026 11:53:49 -0700, Guenter Roeck wrote:
->> On 3/18/26 10:27, Akhil R wrote:
->>> Add a regmap config and a probe function to support for I3C based
->>> communication to SPD5118 devices.
->>>
->>> On an I3C bus, SPD5118 are enumerated via SETAASA and always require an
->>> ACPI or device tree entry. The device matching is hence through the OF
->>> match tables only and do not need an I3C class match table. The device
->>> identity is verified in the type registers before proceeding to the
->>> common probe function.
->>>
->>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
->>> ---
->>>    drivers/hwmon/Kconfig   |  7 +++--
->>>    drivers/hwmon/spd5118.c | 66 ++++++++++++++++++++++++++++++++++++++++-
->>>    2 files changed, 70 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>> index 8af80e17d25e..23604c05ad22 100644
->>> --- a/drivers/hwmon/Kconfig
->>> +++ b/drivers/hwmon/Kconfig
->>> @@ -2300,10 +2300,13 @@ config SENSORS_SPD5118
->>>    	tristate "SPD5118 Compliant Temperature Sensors"
->>>    	depends on I2C
->>>    	select REGMAP_I2C
->>
->> I also had
->> 	depends on I3C || I3C=n
->> in my version at
->>
->> https://patchwork.kernel.org/project/linux-hwmon/patch/20250419161356.2528986-6-linux@roeck-us.net/
->>
->> which I guess matches the more recent "depends on I3C_OR_I2C".
+Hi,
+
+On 3/19/26 02:49, Guy Boldon wrote:
+> From: gb@guyboldon.com
 > 
-> Ack. Will update.
+> Hi, I'm the CoolerControl maintainer, a few notes from the userspace side.
 > 
->>
->>> +	select REGMAP_I3C if I3C
->>>    	help
->>>    	  If you say yes here you get support for SPD5118 (JEDEC JESD300)
->>> -	  compliant temperature sensors. Such sensors are found on DDR5 memory
->>> -	  modules.
->>> +	  compliant temperature sensors using I2C or I3C bus interface.
->>> +	  Such sensors are found on DDR5 memory modules.
->>> +
->>> +	  This driver supports both I2C and I3C interfaces.
->>>    
->>>    	  This driver can also be built as a module. If so, the module
->>>    	  will be called spd5118.
->>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
->>> index 5da44571b6a0..d70123e10616 100644
->>> --- a/drivers/hwmon/spd5118.c
->>> +++ b/drivers/hwmon/spd5118.c
->>> @@ -18,6 +18,7 @@
->>>    #include <linux/bits.h>
->>>    #include <linux/err.h>
->>>    #include <linux/i2c.h>
->>> +#include <linux/i3c/device.h>
->>>    #include <linux/hwmon.h>
->>>    #include <linux/module.h>
->>>    #include <linux/mutex.h>
->>> @@ -482,6 +483,25 @@ static const struct regmap_config spd5118_regmap16_config = {
->>>    	.cache_type = REGCACHE_MAPLE,
->>>    };
->>>    
->>> +/*
->>> + * I3C uses 2-byte register addressing -
->>> + *   Byte 1: MemReg | BlkAddr[0] | Address[5:0]
->>> + *   Byte 2: 0000   | BlkAddr[4:1]
->>> + *
->>> + * The low byte carries the register/NVM address and the high byte carries the
->>> + * upper block address bits, so little-endian format is required. No range
->>> + * config is needed since I3C does not use MR11 page switching.
->>> + */
->>> +static const struct regmap_config spd5118_regmap_i3c_config = {
->>> +	.reg_bits = 16,
->>> +	.val_bits = 8,
->>> +	.max_register = 0x7ff,
->>> +	.reg_format_endian = REGMAP_ENDIAN_LITTLE,
->>
->> Should this be added to spd5118_regmap16_config instead, or is there reason
->> to assume that I2C 16-bit addressing differs from I3C addressing ?
+Thanks a lot for the feedback.
+
+> On Mon, Mar 16, 2026 at 17:55:01 -0700, Guenter Roeck wrote:
+>> Not really. -ENODATA seems to be the correct response if the current pwm
+>> value is not readable. Returning 0 or any other number would be misleading
+>> and trigger other problems (such as some userspace code believing that it
+>> can write the value back with no impact, which would be worse).
 > 
-> I did not see any difference for I2C in the specification, but I assumed the
-> existing format would have been working and I thought not to change them.
-> Changing the I2C format would also require a change in the is_16bit nvmem_read
-> formula.
-> 
->>
->>> +	.writeable_reg = spd5118_writeable_reg,
->>> +	.volatile_reg = spd5118_volatile_reg,
->>> +	.cache_type = REGCACHE_MAPLE,
->>> +};
->>> +
->>>    static int spd5118_suspend(struct device *dev)
->>>    {
->>>    	struct spd5118_data *data = dev_get_drvdata(dev);
->>> @@ -770,7 +790,51 @@ static struct i2c_driver spd5118_i2c_driver = {
->>>    	.address_list	= IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ? normal_i2c : NULL,
->>>    };
->>>    
->>> -module_i2c_driver(spd5118_i2c_driver);
->>> +/* I3C */
->>> +
->>> +static int spd5118_i3c_probe(struct i3c_device *i3cdev)
->>> +{
->>> +	struct device *dev = i3cdev_to_dev(i3cdev);
->>> +	struct regmap *regmap;
->>> +	unsigned int regval;
->>> +	int err;
->>> +
->>> +	regmap = devm_regmap_init_i3c(i3cdev, &spd5118_regmap_i3c_config);
->>> +	if (IS_ERR(regmap))
->>> +		return dev_err_probe(dev, PTR_ERR(regmap), "regmap init failed\n");
->>> +
->>> +	/* Verify this is a SPD5118 device */
->>> +	err = regmap_read(regmap, SPD5118_REG_TYPE, &regval);
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	if (regval != 0x51) {
->>> +		dev_err(dev, "unexpected device type 0x%02x, expected 0x51\n", regval);
->>> +		return -ENODEV;
->>> +	}
->>> +
->>> +	err = regmap_read(regmap, SPD5118_REG_TYPE + 1, &regval);
->>> +	if (err)
->>> +		return err;
->>> +
->>> +	if (regval != 0x18) {
->>> +		dev_err(dev, "unexpected device type 0x%02x, expected 0x18\n", regval);
->>> +		return -ENODEV;
->>> +	}
->>> +
->>
->> I don't think this should dump error messages. Also, it might be desirable
->> to use a single regmap operation to read both values.
-> 
-> Ack. Will use regmap_bulk_read() and will remove the error dump.
-> 
->>
->>> +	return spd5118_common_probe(dev, regmap, false);
->>
->> Why is_16bit=false ?
-> 
-> We don't need the encoding formula for the nvmem address with I3C. Since it
-> uses little-endian, (page * 0x100 + SPD5118_EEPROM_BASE) translates to the
-> correct address. Or did I overlook something?
+> For context: thinkpad_acpi has long returned 255 as a dummy value for pwmX
+> when in auto mode (pwmX_enable=2), since it similarly cannot retrieve the
+
+That driver is located outside drivers/hwmon/ and thus not in hwmon subsystem
+control. Such drivers often implement functionality / attributes which would
+not be acceptable in drivers/hwmon/. Non-standard functionality of such drivers
+is often fiercely defended by driver authors, so I gave up even trying.
+
+> real PWM value during BIOS control. This was likely motivated by fancontrol
+> compatibility, which AFAIR requires a readable pwmX. CoolerControl reads pwmX to
+> confirm a channel is functional and to track data values over time, hence why we
+> need it readable. We can however adapt our handling for -ENODATA.
 > 
 
-Testing of the 16-bit code was limited: I had to set the SPD on a system
-manually to 16-bit mode to get it working, and that only worked until the system
-was reset. Its whole point was to prepare for I3C mode. If that fails, the entire
-16-bit code in the driver is potentially wrong and should be pulled out before
-adding I3C code. It can be added back later if/when a system actually utilizing
-it is found.
+hwmon drivers exist since the beginning of Linux. You'll find _lots_ of
+inconsistencies across different drivers.
+
+The use of -ENODATA in hwmon to report that a value is not available is
+relatively new and isn't even fully documented in the sysfs ABI (admittedly
+a major oversight). The major driver for its use is that it more accurately
+reflects reality as reported by the "sensors" command if an attribute value
+is not available (sensors reports "N/A" instead of an error message if it
+gets an -ENODATA error).
+
+> On the write concern: several drivers I'm familiar with (e.g. nct67xx, it87,
+> thinkpad_acpi) do not implicitly switch to manual mode on a pwmX write.
+> Writing pwmX having no effect when pwmX_enable != 1 is expected, normal
+> behavior from our perspective.
+
+It always depends on the chip in question. For some chips, it is actually
+necessary or at least desirable to write the pwm value before switching to
+manual mode since otherwise the chip might behave erratically. That does not
+mean it makes sense or is even possible for all chips. Anyway, the problem
+here is (potentially) writing back a value which isn't based on real data.
+The question is also what to report when _reading_ a value, not how to handle
+writing it.
+
+> 
+> On Tue, Mar 17, 2026 at 02:29:39 +0100, Armin Wolf wrote:
+>> I suspect that the successful reads happen after the pwmX attribute has
+>> been set manually using "cat". The driver will enter manual fan control
+>> mode automatically in such a case to keep compatibility with legacy
+>> userspace applications.
+> 
+> That makes sense. Might be worth noting in the docs either way.
+> 
+> As a related point: gpd_fan returns -EOPNOTSUPP rather than -ENODATA
+> when in auto mode, and documents that behavior in the kernel docs. The
+
+Please feel free to submit a patch to fix that.
+
+> inconsistency between drivers, different errors for the same condition,
+> means userspace ends up needing per-driver handling for the same use case.
+> Not ideal, but at least documentation helps.
+> 
+
+I can only repeat what I said above: hwmon drivers exist since the beginning
+of Linux. You'll find _lots_ of inconsistencies across different drivers.
+
+The best we can do is to find a means to improve consistency, but as you
+can see here even that is difficult because different people will have
+different opinions on how that consistency should look like. Error response
+will vary, as will attribute visibility.
+
+If you would like to get actively involved, please feel free to submit patches
+improving the documentation (Documentation/hwmon/sysfs-interface.rst,
+Documentation/ABI/testing/sysfs-class-hwmon, and or driver specific
+documentation) as well as driver patches to help improve consistency across
+drivers.
 
 Thanks,
 Guenter
-
->>
->>> +}
->>> +
->>> +static struct i3c_driver spd5118_i3c_driver = {
->>> +	.driver = {
->>> +		.name	= "spd5118_i3c",
->>> +		.of_match_table = spd5118_of_ids,
->>> +		.pm = pm_sleep_ptr(&spd5118_pm_ops),
->>> +	},
->>> +	.probe		= spd5118_i3c_probe,
->>> +};
->>> +
->>> +module_i3c_i2c_driver(spd5118_i3c_driver, &spd5118_i2c_driver);
->>>    
->>>    MODULE_AUTHOR("René Rebe <rene@exactcode.de>");
->>>    MODULE_AUTHOR("Guenter Roeck <linux@roeck-us.net>");
-> 
-> Best Regards,
-> Akhil
 
