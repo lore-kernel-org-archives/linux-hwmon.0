@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F709176ADE;
-	Thu, 19 Mar 2026 20:15:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186914207A;
+	Thu, 19 Mar 2026 20:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773951357; cv=none; b=GtPUYeNkgh1EAbG1NLvnD5FbEI0DOrwJ0XQVz9FRfDu5VuDi/ifP28rEwVi6F8jk9ZRwr9BcK3jVftEW3/0slfh8EEviREB720qlMd3XmiPrNdCtOZQ5WsqHrjnPxwUrzkKPcVzHvsXgp1ZyvK7YtHBWyirIrTTZEQ9UyZd+UzI=
+	t=1773951425; cv=none; b=pSWlFttm0ZTOS1lN9EsTkuLCIGgIJUZCnWl9jE6mSx7vU8Nv2hZXHfJ0txaPGvJ3IW6rv4jI5pkaajPUcrld4pk8TIysUNHrLsn1VZpJ1tPSeQzY5lQWUIi/niZzkpNer74HjOzonShRT2Jvvv9mKjyq82FobGDTZMvdAuiFjqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773951357; c=relaxed/simple;
-	bh=ywnjeKneIzeDq0+1Nvp2mDYWnxKSqJdiRkjFzjbrMzk=;
+	s=arc-20240116; t=1773951425; c=relaxed/simple;
+	bh=UEKFw10HNYR+CnbFlqaDj3B2T2m8yoDnNnkH8LFTx0Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g762nthgz9lGkqCMmoxFqANimAEOoAehx4fl0JRYvk3+/Ctym3+lZTeOaT5mtdt1F1dil1uHpuCyz625tCDTpAAQ8gICBukEqmiLo+8rMfe+6YKEWIVjltan4SvmlN5O+0TbRo9Hu5J3ZLgj/Uk+DP3Vkdezw4I4aUGKSQ6hQL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESTZ+860; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=U8H33E/aNVvB5hMifa0oW4WVEZM9UlHXLls/WmMqKtHaaB7N9R2mOd0zifhtrGdJDJclrgjcZ1aFeE2g79JhMX6O1aCzlGlOL481waSu805dtuUCMmSjid7+rxPKuu5XFt57nTwMukbYVm/oHFHR9ywrluvI3wSwqqwzfiZpDGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSOKbBpu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESTZ+860"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410F6C19424;
-	Thu, 19 Mar 2026 20:15:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSOKbBpu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B7DC19424;
+	Thu, 19 Mar 2026 20:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773951357;
-	bh=ywnjeKneIzeDq0+1Nvp2mDYWnxKSqJdiRkjFzjbrMzk=;
+	s=k20201202; t=1773951424;
+	bh=UEKFw10HNYR+CnbFlqaDj3B2T2m8yoDnNnkH8LFTx0Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ESTZ+860x7YZvkYDCjy94ojWTCDx/I9gIXPo9ryv0CLSn/tYG4VKCJ91/1shaBLNf
-	 TNL6iEFYnyQRwJ4OkkoCf5FH13uvbeMCarEtms0/zFKiJXY+zfBLW0Iuyaa7p95Wr4
-	 ByjOn6Icalpn8QXCtxBq8ZdiQhB1deg+KCpyFWSCqkmNReD+dlCpWsNHcDYeeCJUdB
-	 gBsJFGkaS09YobYGZGZbakyDq+1KVOMBYPU3O3um66vBozhzARsdCty4Ng4T3PB2Oz
-	 7MjJDlSVT32RfEpjvUCm5qFd/4Dvc23zhc33hnILBNQqlkauwM2MpwwvCS6LUsE13o
-	 D66Tn/5etK70Q==
-Message-ID: <0237522f-a01d-45f3-8c7f-cfc9b5c5f0ff@kernel.org>
-Date: Thu, 19 Mar 2026 21:15:53 +0100
+	b=dSOKbBpuzRnDA4S9IKhvA8Q1W5c2OkwMGqIMtm9gYPdmfuhF/Fg/3xsVad8bCZte8
+	 Hh6LzTl6E7wONqN5GXqFgMsla21IaiKV0nb2HEKrYa/vIDgBqPjzz728zwPuEKARGL
+	 EWOcJ/m7KZrwji81VdXkNue3+9CwAkC7GAWhpFm5NhGiYiStii3IWANzgZmx+QG53L
+	 Cr9DJLC3tFjSTYi7qz5vFOATtJEQRN2VZYbTC7+VX8x6xQDP4F2yjdgSCpsmqdWNdd
+	 /fy3SOMMH5l7ldiWESE9P7Cbcm6iGq/tZRMhsEQjQjKn02sIR4JyFwOzKxO0VywKy1
+	 4RcRgK2hniXdg==
+Message-ID: <082fc1db-c4b6-405f-b85e-81b9afcbd8cf@kernel.org>
+Date: Thu, 19 Mar 2026 21:17:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -35,14 +35,13 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: Add Sensirion SHT3x and GXCAS
- GXHT30
+Subject: Re: [PATCH 3/3] hwmon: (sht3x) Add support for GXCAS GXHT30
 To: Zaixiang Xu <zaixiang.xu.dev@gmail.com>, linux@roeck-us.net
 Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <1773919186-17515-1-git-send-email-zaixiang.xu.dev@gmail.com>
- <1773919186-17515-3-git-send-email-zaixiang.xu.dev@gmail.com>
+ <1773919186-17515-4-git-send-email-zaixiang.xu.dev@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -88,12 +87,12 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <1773919186-17515-3-git-send-email-zaixiang.xu.dev@gmail.com>
+In-Reply-To: <1773919186-17515-4-git-send-email-zaixiang.xu.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 19/03/2026 12:19, Zaixiang Xu wrote:
-> Add YAML devicetree binding schema for Sensirion SHT3x series and GXCAS GXHT30 humidity and temperature sensors.
+> Add support for GXCAS GXHT30 sensor to the sht3x driver. The GXHT30 is software compatible with the Sensirion SHT3x series.
 
 Please wrap commit message according to Linux coding style / submission
 process (neither too early nor over the limit):
@@ -102,76 +101,55 @@ https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submittin
 > 
 > Signed-off-by: Zaixiang Xu <zaixiang.xu.dev@gmail.com>
 > ---
->  .../bindings/hwmon/sensirion,sht3x.yaml       | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
+>  drivers/hwmon/sht3x.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> new file mode 100644
-> index 000000000000..47dbb743e2ee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,sht3x.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/sensirion,sht3x.yaml#
-> +$schema: http://devicetree.org/meta-schema.yaml#
-> +
-> +title: Sensirion SHT3x Humidity and Temperature Sensor
-> +
-> +maintainers:
-> +  - Zaixiang Xu <zaixiang.xu.dev@gmail.com>
-> +
-> +description: |
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index 08306ccb6d0b..4e2e5671610a 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -934,13 +934,26 @@ static const struct i2c_device_id sht3x_ids[] = {
+>  	{"sht3x", sht3x},
+>  	{"sts3x", sts3x},
+>  	{"sht85", sht3x},
+> +	{"gxht30", sht3x},
+>  	{}
+>  };
+>  
+>  MODULE_DEVICE_TABLE(i2c, sht3x_ids);
+>  
+> +static const struct of_device_id sht3x_of_match[] = {
+> +	{ .compatible = "sensirion,sht3x" },
+> +	{ .compatible = "sensirion,sts3x" },
+> +	{ .compatible = "sensirion,sht85" },
+> +	{ .compatible = "gxcas,gxht30" },
 
-Do not need '|' unless you need to preserve formatting.
+If this does not go to trivial devices, then they all look compatible so
+this should be expressed with fallback.
 
-
-> +  The SHT3x series is a family of humidity and temperature sensors by Sensirion.
-> +  It also includes compatible sensors like GXCAS GXHT30.
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sht3x_of_match);
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sensirion,sht3x
+>  static struct i2c_driver sht3x_i2c_driver = {
+> -	.driver.name = "sht3x",
+> +	.driver = {
+> +		.name = "sht3x",
+> +		.of_match_table = sht3x_of_match,
+> +	},
+>  	.probe       = sht3x_probe,
+>  	.id_table    = sht3x_ids,
+>  };
+> @@ -948,5 +961,6 @@ module_i2c_driver(sht3x_i2c_driver);
+>  
+>  MODULE_AUTHOR("David Frey <david.frey@sensirion.com>");
+>  MODULE_AUTHOR("Pascal Sachs <pascal.sachs@sensirion.com>");
+> +MODULE_AUTHOR("Your Name <zaixiang.xu.dev@gmail.com>");
 
-What the 'x' stands for? Wildcard?
+Your or my name?
 
-> +      - sensirion,sts3x
-> +      - sensirion,sht85
-> +      - gxcas,gxht30
-
-Keep alphabetical order.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: I2C address (usually 0x44 or 0x45)
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        sensor@44 {
-> +            compatible = "gxcas,gxht30";
-> +            reg = <0x44>;
-> +        };
-> +    };
-> \ No newline at end of file
-
-You have patch warnings.
-
-No resources? No pins, supplies? Then it looks like trivial device so
-should go to trivial-devices.
+>  MODULE_DESCRIPTION("Sensirion SHT3x humidity and temperature sensor driver");
+>  MODULE_LICENSE("GPL");
 
 
 Best regards,
