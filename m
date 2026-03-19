@@ -1,623 +1,447 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011066.outbound.protection.outlook.com [40.107.130.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B821639023F
-	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 13:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773926985; cv=none; b=SS5x4E5fF62BGYEEz1F1fjJ8j+z/GtoUr40xk43Z2RGwohKdBbIjPnlTGeNC5snqa0ltXv4krK5BmmPufCoQcMSKRHAbJxfo3UNtYjCIVEDzhn0UQICN3skQj6rMoErjsbekZ1PukBjPtgZVOvpxOwlbNQcBvhZOr8+AgQWgKa4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773926985; c=relaxed/simple;
-	bh=tYIWjxUGjfNKOqEwbymIthAPsZ1FZcs6udQywmZ8BL0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aq0VI15ZaYH4+7a8hyrKYKz/2gQ8Iv7QdbLIfvBrzQdW9J1r9ogOvpe10byioxH4jSm+GjlxoJMELyk9glqDUevUJXWjZgItIvlfg01He9y2nMPMNoMwdMw3PFNXXFKtYyGjjTBnKeND8jcBYK6UC8FX6BNhHoa02xiOsKQAC4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwW0FYFX; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074D32D9EF4;
+	Thu, 19 Mar 2026 14:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773930181; cv=fail; b=ioGcdvo5y/iHcFGnRYMs0Q3CSle8ZONk31SpFSIaYQighWy2WGGtT2T6TuqBZW9b6V9Iosc14v+8h11S493hJ+uzaj8ukFEcBJSpRN9QJsJpjYNHOV7Dnyg80h4gNV1WobO57567Wwj1n0AZHxeeTQmrBb9AYR9IqbSR4gG8buE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773930181; c=relaxed/simple;
+	bh=JJdjyswDZ8kjJ/f4qrpSP5TEOi2grh5Ksy+C+gVWYCM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Tq8POupR+Ea2leNt7PCQU1DQVJk7nwkwe2SqosyQ7qrOaX/h9AeCO0MRZRYoPpyoPU1FVfb7rtwCd9ggDpwTZiVX3yxCHpl5XeWth1SMFYyQ4UYtbpBhXndhzQuw1Do9BZCK1kDrNcBhek+921CcOGDMXwfkrbXHO8Pz/LP44r8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=MEYmk60L; arc=fail smtp.client-ip=40.107.130.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwW0FYFX"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-485410a0a8aso8429685e9.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 06:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773926982; x=1774531782; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZSos5A2cxMur7uXRdTUr1JZpSXMZ6e+vR3GpO0nzsGg=;
-        b=RwW0FYFXrg4YylGNWr5NdWx6WPFVTqX58DnsjtuBMa/tlvlAf6mFxQG3+PYk/T/BSH
-         F85N7XgOHukTUy/WOhqoHwh7+Ia/zywlcJxGnrGBPh0Tjx32IiuJqWzcVaISNWW8ADMF
-         eWOC4nxsu9c/8YaNQeFMNP2RJvPh3kz+TX0heWlYSrv/zMlbM4/wP7tNyTDtjMgz8xyK
-         /L6GMl/FNWKEWL53TlaXUNTu9v8spzhm6tkZXVgGZ1Kkhj8rE44FNCZbo1zBm4Z22GuY
-         4BAIiXWo8u78IBlZXGYD53G9uycw3toifkQyAadEYFN1/+tXmkQtM23QOIVHyUn/u52U
-         gNQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773926982; x=1774531782;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZSos5A2cxMur7uXRdTUr1JZpSXMZ6e+vR3GpO0nzsGg=;
-        b=E3u+aQBhmfPRyxi4NOdarFJjMIqzoGMrFogl1T13Bu/TD/TZhNB9jKmVIvwlsvGptz
-         aBDjztU65PB7ux6W/BiGO73cFwl6n3Qm05w/o5r7XIUgE5G7tabFdLuyvSD4qz52tBoI
-         EWsYpXs6OOzFu+SsVaWUEmzwjprhQ8+AWd+ZMGcTbqailuCao32RD01qo/hfHoegiE7m
-         /mrl2M93ffDIk37udy4BlBdyh/LclU5C7nOZVEAQXlkJL98mZp8uHmLOULxGzIlktoqv
-         57AsnV+OHLqQLoixP1Qa7B8moCzthzrttuq8oOk3D7YCzrZFLMLhwDZJ7aOfkXvA3XCT
-         eUtg==
-X-Gm-Message-State: AOJu0YwipImmvy+cphP4l0HUCN3w+hLOUxx6Q5Xv2n8QRd9yiHTwlDP+
-	2BXU9r/H22TAwljgb2GyMOYAg+W+U2rTq+2Fl8eYvABsPqUFr3pgeh59uCSWXVgT3pCISgey
-X-Gm-Gg: ATEYQzxI2dCNaCdO42njJD3WNoV5MpCYRh6afMK8sC2SjeqBPWgGFz7Ik0Y25z5gdid
-	+nfaw/2B0pFUByxWXISmMwCF2iTzNVd0uQIxWYgyZ7bnZUv2YJPPEh2l0N0UjMrObARuHO7kUME
-	Ns97hQ8y2fZwYm3ZE2gPKlySwkNF4wb/ZEDN9fCUSTJJOUAHMnaZsWA670Ny4etKuekve+NIgjd
-	GBHWtXknHtQFRM7DocfYYwtmO6y90DOxTdekd0Yvyco2yQoT1P51meCQIYqKQfgT/3faFLztl7Y
-	wzNYbTkRmejIwjUeCtH6Ngp3OoxJkJruAK/7CdkhyJw0jbCetoArspMQSf5++5Di6GyocQoE0Ed
-	LRf6mec3C3UFCH14jy7xz+8ZFruhldZ+5ccNYPxg6/MEzvSDbQp36pOt44JKHCCO/srvyBbRDSv
-	ytEBoj1Znowvom4MSaOhddENsZLU3liKdMO6MAJTo=
-X-Received: by 2002:a05:600c:c8f:b0:483:1403:c47f with SMTP id 5b1f17b1804b1-486f4422060mr132654755e9.6.1773926981559;
-        Thu, 19 Mar 2026 06:29:41 -0700 (PDT)
-Received: from sergio-82n7.fritz.box ([2a01:b600:83d8:1:eddb:b262:41cc:374a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486f4b74abdsm70405415e9.5.2026.03.19.06.29.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2026 06:29:41 -0700 (PDT)
-From: Sergio Melas <sergiomelas@gmail.com>
-To: linux-hwmon@vger.kernel.org,
-	groeck@gmail.com,
-	sergiomelas@gmail.com
-Cc: platform-driver-x86@vger.kernel.org,
-	jdelvare@suse.com
-Subject: [PATCH 1/1] hwmon: (yogafan) Add universal Lenovo Yoga/Legion fan driver
-Date: Thu, 19 Mar 2026 14:29:20 +0100
-Message-ID: <20260319132920.275755-2-sergiomelas@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260319132920.275755-1-sergiomelas@gmail.com>
-References: <20260319132920.275755-1-sergiomelas@gmail.com>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="MEYmk60L"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i9MmapC5umykwL6kwdyuVeumvDLlQ/ecAg42txZo3A6pQuPTT4CzkswoWXHscX+KdgspXML0m5iksxM4g9ZTDABcQHC+bu/nArEhT6fauu8P63/XAFw6R+RXePJbZ93W1E/fO3mvQ9ksa3Zvj8qGElsZjJxCZbnFR8dwkuygQwHukEDWWuX7C5vfQwzANBlK/iHRaBbGEeRHYGCrKOLKPtfK1XtiwO6lHR7Mccm9zJ2qetow2ADkoDVTgPoCj35rGjXDJqtLOsrT8hQBoJLN/MSLzjyF/HbNSu+s1++GxtMG6XlcRp5RD28eeq2lGJ3Z5qepcAJh8b/LgdA3PWRiIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KMql4daNQ5mP2+uWpgytvud9fYkRBNok6N9mz5koM2I=;
+ b=cD7KyPr1huD0GKRjR1FHIEU/j17vCUaWl5nOxmClf43crB66VJOx+WfHmO0IakBh6JODy5kUTRokrJiM1GTLFVe3oHu3yCVc4EMUOGMbWUSFbvr6VeLXvSKXfRW6EpcSrZmUMTQD8cBG9NsKO2oN7Ut6FABIl0odwg/j535k1tnBBPqUwLGeK2CHH4mt5A2Lo45NPGAR0KdWnui5Qc2NdRX2E8zlPy4ZhSyDXlUaUGGDLkZCwMVP96uzHwKn2gkSxx3JLHEguSdezKHJGSdoYk/LBH+e3nauptr16wNZVXVBrDA54Q0kjtjcJ6FfvNZId6LS9hGWXu+s5fYJDsjcYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KMql4daNQ5mP2+uWpgytvud9fYkRBNok6N9mz5koM2I=;
+ b=MEYmk60LDUm0aca99t269N4ua0uIG4eVKW97Iw7NQr1zPzMqUXdTWJPsDYrOz/DFPM/PzdwA3yNusywDOv/8mlpZVge+VZvMSGcNKWYXqIovDwP02IxQVYtHZRjUlpcjBp17A9bnMUNptyyuKzRiW+5m8gqsIGUjcazWTNJoXo4ys92A6VGvuJVhLJPu6/ybKIhHIu7m6efEp6VC5OQL97UR+8neU/EwZF7zfLrnsnSq3SEFQ+E9LAuBIr16W62YeD20524YV0mC5lYlivbDakCrMzWoXOWyYfDYRkyOm3+chaOIL/o6GSizJmKF4w8nAp7DRUV/P5ONsorwPJie4Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
+ by PA4PR04MB9710.eurprd04.prod.outlook.com (2603:10a6:102:268::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Thu, 19 Mar
+ 2026 14:22:55 +0000
+Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
+ ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9723.018; Thu, 19 Mar 2026
+ 14:22:54 +0000
+Date: Thu, 19 Mar 2026 10:22:47 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Akhil R <akhilrajeev@nvidia.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Robert Moore <robert.moore@intel.com>, Len Brown <lenb@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Fredrik Markstrom <fredrik.markstrom@est.tech>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Thierry Reding <thierry.reding@kernel.org>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Suresh Mangipudi <smangipudi@nvidia.com>,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 03/12] i3c: master: Use unified device property interface
+Message-ID: <abwGt8IyQxb5A4vg@lizhi-Precision-Tower-5810>
+References: <20260318172820.13771-1-akhilrajeev@nvidia.com>
+ <20260318172820.13771-4-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260318172820.13771-4-akhilrajeev@nvidia.com>
+X-ClientProxiedBy: SN7PR18CA0021.namprd18.prod.outlook.com
+ (2603:10b6:806:f3::12) To PA4PR04MB9366.eurprd04.prod.outlook.com
+ (2603:10a6:102:2a9::8)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|PA4PR04MB9710:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e131c6a-33c8-43ff-8ece-08de85c302ac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|1800799024|366016|376014|7416014|52116014|38350700014|22082099003|56012099003|18002099003|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	9L0Eec0uk9ZaOBVq+H0y/rukxWyK3ezgRk05usIn0mkzLoiJCpVDIsvGea09tSmGnfsFGO4C0fUx+gP1q6unu5bKOue/hYGoVRRnRhw53MbgXsNn7vIobvZhuVDM/0EswwR59mbXHbxJRhqhLHdNvQc/OnjeWF11UxgqIzRfI3qnSFq4QcmeuiakIWtSD7cvmd9Q/vXaWPw04Z9Sj5aH0iGCmb6Vmk3vlTkXwwMp34fg50o1g5aRiOMIVcYx3eBCDwdpx73y65YAb9+l9cSl5qQc/iOJ/jaj/1q9LFIt/Nq0OW5r73TwNpGB5OjikuKiIFje0RzBxzA4jT0ozHTaJIL+QeA9A4foIgbJqVWD08nDSe7CUc4A3pg1gGZA/bNj0bBEc5hWvSOU38dWr3J46uGN4M9/0mATDGF7yDn6yooIBn3qg0f8naehxPvndHcKX9sGAe+2ZDUHzCHgsosa8WP3Wx05g5sX9wqYKTzrIFlZO116A7SEQo6sG/JJ/h0E4/vZwfGPPK/jjyaSggbKKR69oFY0a2Ky4f+ymMQpxQKoty47E2QAkxVYd2iHzEMITrWmsOO4kFmj3iFN99YgWvO6gJkNCWSZ7i18frTEDuunERePfffV1Jym5INtfbXfWiCbAJ60rW6PIT8/acuQcaVQIJOyF0l0Ns+sMEe15VDv+tN7LA2V1epSGNeQCTaKZIS6jJ5joosZEmMfZxf3GGbf6OXvd5VYzAeVFg4EcpSqJbegJ9pyWhnb8cYT2F1vcG74ATYFIwkWRq9hhmCtaaYrxa11cG4d6nTCAW1VTP4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(376014)(7416014)(52116014)(38350700014)(22082099003)(56012099003)(18002099003)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?iW+RoJ1br3hNO2AeQAKNo43NAinAHEJKu3m2XkRmrX9VFUWCt/n4uz46c39C?=
+ =?us-ascii?Q?SXviorWH6TVJhCaAcNJjvvXCAi0w8offHdrBwz1WUTXPI3Vm/GDNqo69ZJkU?=
+ =?us-ascii?Q?L0efFOIw645l1g2BIBZPl3dZ/cvGrgmU2kbGv6blN6WOs04KBuYXo3KdkmXu?=
+ =?us-ascii?Q?EJGSiPDi1Ql9OpfZLlHbOfth005pMhyu0YHCX3PTEs2gUD7AT7R3+1i1mevX?=
+ =?us-ascii?Q?sHiUX16nXYT6h3pVh74aNRZB5KDNvufbPwmMKPvVxrJnxyTbwisqU1W9CVqZ?=
+ =?us-ascii?Q?xnX0Jaw2M2vH47CM0LmCZFLyQOoAeudnUA4jWciSHVUpEiRahvjgP4m9wxg8?=
+ =?us-ascii?Q?dzFI9O3dSu3Qj5HNKXj1Z1JhWNEysocds2RUVh0PC/CU7GFSMONirE2pv9e5?=
+ =?us-ascii?Q?HytR5aihQcnOHlVEa/njgYljdzblGv/sbxOlYe6cgB241fUplzFP/thtYikL?=
+ =?us-ascii?Q?P0uBCZzM5xUKXsiARAcJeS5y0UEpTZrI2ZbyWAZlnbzr12cNXpC4JQ8BN/X/?=
+ =?us-ascii?Q?vunJlkKfQxLqhOm0gt8kwsMlNLm3k7tsA5Y0i/x6YtXy0m/mpImhcxGvoeom?=
+ =?us-ascii?Q?fzbNqwM4bQHsTNbkVm0qvjWMey1jLAW+GivRTEsN3y2nC72nUhan9XphR+J5?=
+ =?us-ascii?Q?jEq/C+aM1EUWdmvnirS42nQxcvSIx6ndfoTV5QbsNTs2jVexK5eKQS51yuTy?=
+ =?us-ascii?Q?2tu6ogXrmTXKtTd3EFWR1SA9z3mLSFfV9RCk5xgPc67dLCsBQtKYkOG3thJ4?=
+ =?us-ascii?Q?fHlfWB22ytdT/pf/j/7IK2Aw089aorwnuwknykB9OWN8CiFbwC1ZWwIVYntN?=
+ =?us-ascii?Q?bPPZcR5F6asU8qjPmqU9GsD0A9BzBfNOloIu19avIGYWp+23/e8yKu005Hw0?=
+ =?us-ascii?Q?sKH3GDpsPKxpckmQ/37kwedNeTIZ9YBUE5LIYnVs43SZGjW0iYVhGUGCtg/d?=
+ =?us-ascii?Q?JXwUUT4R9LxSmg3ilR/8PeAwQXIXmQPIb2Nntx2m0Rf2kfxA1pk8vTA606YE?=
+ =?us-ascii?Q?91lZJCUR7qoQkxMGKm/61mS6L9/aFx6eaxb/+7RghzGo7bAiUegeaXSNRXFP?=
+ =?us-ascii?Q?J/7fddlh2eXBTjs43lTtlnqty+s66MlZaJhpnZBEHAVwMpxJHhRIvSWFsLwQ?=
+ =?us-ascii?Q?h27J8zap6gtElcDJVhB+/HvBVJntQiXUdYllA0lS2APA1FLMcSOvqWR68Z2B?=
+ =?us-ascii?Q?iSIzDKeDnvladNHCOX2M3lRib/0LzPnjzEif2ReAZrrenbVd9nDnQFpINIZ5?=
+ =?us-ascii?Q?dIqUaBgNaJl47Ku4GjqYSu76K5zGaxkDwdQ/AfS9Sq2KLP9HkRZ9Wd/SaG2Q?=
+ =?us-ascii?Q?8qXPuXsF3tlkF7uPNMdEh0t/CYiyGAiyvq91Whn2zHWa19Nt+CvrKO6ACccO?=
+ =?us-ascii?Q?ciMvM7NO9SzSti8O4OHtMxxVRLQQ5jn1LeP7UmCdmqK/WjDpf+gNAXrBL3c3?=
+ =?us-ascii?Q?RGer3h96tPu5avMLxBbdpy7j3nf9ZFyll0a7OTUa4iO1iTtamtizwdIR8v2S?=
+ =?us-ascii?Q?RbPvwpVViwSk+lmy8zbMAOYErz1mgzpO7el/P9Det62bmSeHqxSHttmS5wRh?=
+ =?us-ascii?Q?kbpdltPUOyUdZj44NlIMXVczwZ1SrqTQ3Abp/HsogjOJqi2OwoUk5dWBQGhr?=
+ =?us-ascii?Q?BVyOxzvU6z8XIM654xIP7WpgCmcBqxeZo+5L4bscHluaFViDvRFMa/whubNo?=
+ =?us-ascii?Q?0CsZ9SlPJaSZpviD/+uL2CzHKMclMw99LzQwFmf0xhvG7R0e?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e131c6a-33c8-43ff-8ece-08de85c302ac
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2026 14:22:54.8599
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VlxZsFnnSSghjsW1Y9qRMezLvzaC/7oceXlyxnOSRSMA7mZiUMqeQEQydFSMg4/Jk0SYbXOLPxKkvU/uHgaMIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9710
 
-- Support universal ACPI fan monitoring for up to 8 fans.
-- Support various ACPI path naming conventions (FANS, FA2S, FANX).
-- Implement a passive RLLag (Rate Limited Lag) filter for jumpy EC data.
-- Use dt-based scaling for physical consistency across read intervals.
-- Filter parameters verified via tachometer and FOPTD identification.
-- Use 10-bit fixed-point integer math to avoid floating-point registers.
-- Support KDE 6 Plasma Sensor compatibility and stable S3 sleep cycles.
+On Wed, Mar 18, 2026 at 10:57:16PM +0530, Akhil R wrote:
+> Replace all OF-specific functions with unified device property functions
+> as a prerequisite to support both ACPI and device tree.
+>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
----
- Documentation/hwmon/yoga_fan.rst    |  36 +++++
- auto_compile_rust_lenovo_drivers.sh | 196 -----------------------
- drivers/hwmon/Kconfig               |  14 ++
- drivers/hwmon/Makefile              |   1 +
- drivers/hwmon/yoga_fan.c            | 237 ++++++++++++++++++++++++++++
- 5 files changed, 288 insertions(+), 196 deletions(-)
- create mode 100644 Documentation/hwmon/yoga_fan.rst
- delete mode 100755 auto_compile_rust_lenovo_drivers.sh
- create mode 100644 drivers/hwmon/yoga_fan.c
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-diff --git a/Documentation/hwmon/yoga_fan.rst b/Documentation/hwmon/yoga_fan.rst
-new file mode 100644
-index 000000000..37eec7647
---- /dev/null
-+++ b/Documentation/hwmon/yoga_fan.rst
-@@ -0,0 +1,36 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+Kernel driver yogafan
-+=====================
-+
-+Supported chips:
-+  * Lenovo Yoga / Legion / IdeaPad Embedded Controllers
-+    Prefix: 'yogafan'
-+    Addresses: ACPI (Dynamic probing of FANS, FA2S, FANX, etc.)
-+
-+Description
-+-----------
-+
-+This driver provides fan speed monitoring for modern Lenovo laptops.
-+It interfaces with the Lenovo Embedded Controller (EC) via ACPI to
-+retrieve fan tachometer data.
-+
-+Many Lenovo ECs report RPM values that oscillate rapidly due to
-+low-resolution internal sampling. To provide a stable reading in
-+userspace (e.g., KDE Plasma, MangoHud), this driver implements a
-+"Passive RLLag" (Rate Limited Lag) filter.
-+
-+Filter Logic:
-+The filter is "passive," meaning it performs no background work.
-+It calculates the state transition based on the ktime delta (dt)
-+between read requests. This ensures physical model consistency
-+while maximizing CPU sleep states and battery life.
-+
-+Probing:
-+The driver dynamically searches for common Lenovo ACPI fan handles.
-+It does not assume a fixed number of fans, making it compatible
-+across various Yoga and Legion generations.
-+
-+Usage Note:
-+If your device shows more fans than physically present, the EC is likely
-+exposing a virtual or secondary hardware channel.
-diff --git a/auto_compile_rust_lenovo_drivers.sh b/auto_compile_rust_lenovo_drivers.sh
-deleted file mode 100755
-index a3df04f65..000000000
---- a/auto_compile_rust_lenovo_drivers.sh
-+++ /dev/null
-@@ -1,196 +0,0 @@
--#!/bin/bash
--# auto_compile_rust_lenovo_drivers.sh
--
--##################################################################"
--#                                                                #"
--#                     Kernel Compile Script                      #"
--#             Developed by Sergio Melas 2021-26                  #"
--#                                                                #"
--#                  Email: sergiomelas@gmail.com                  #"
--#                      Released under GPL V2.0                   #"
--#                                                                #"
--##################################################################"
--
--
--
--# Fix for dpkg-source email warning
--export DEBFULLNAME="Sergio Melas"
--export DEBEMAIL="sergiomelas@gmail.com"
--
--
--# Your kernel personalization string
--postfix="yoga"
--
--# ANSI Color Codes
--CYAN='\033[0;36m'
--GOLD='\033[1;33m'
--GREEN='\033[0;32m'
--BLUE='\033[1;34m'
--NC='\033[0m'
--
--echo -e "${GOLD} "
--echo -e " ##################################################################"
--echo -e " #                                                                #"
--echo -e " # ${CYAN}                    Kernel Compile Script                ${GOLD}      #"
--echo -e " # ${CYAN}            Developed by Sergio Melas 2021-26            ${GOLD}      #"
--echo -e " #                                                                #"
--echo -e " # ${BLUE}                 Email: ${GREEN}sergiomelas@gmail.com ${GOLD}                 #"
--echo -e " # ${BLUE}                     Released under GPL V2.0             ${GOLD}      #"
--echo -e " #                                                                #"
--echo -e " ##################################################################"
--echo -e " ${NC}"
--
--
--
--# 1. Change to local directory
--VAR=$0
--DIR="$(dirname "${VAR}")"
--cd  "${DIR}"
--
--# 2. Automated Architecture Detection
--ARCH_TYPE=$(uname -m)
--case "$ARCH_TYPE" in
--    x86_64)    ARCH_SUFFIX="amd64" ;;
--    aarch64)   ARCH_SUFFIX="arm64" ;;
--    armv7l)    ARCH_SUFFIX="armhf" ;;
--    i386|i686) ARCH_SUFFIX="i386" ;;
--    *)         ARCH_SUFFIX="$ARCH_TYPE" ;;
--esac
--
--# 3. Combine for the final string
--full_postfix="${postfix}-${ARCH_SUFFIX}"
--
--
--# Admin login
--sudo ls >/dev/null
--
--# Install libs
--sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev dwarves debhelper rustc rust-src bindgen rustfmt rust-clippy clang libdw-dev:native bc
--
--# Configure kernel base
--LATEST_CONFIG=$(ls -v /boot/config-* 2>/dev/null | grep -v "$postfix" | tail -n 1)
--if [ -n "$LATEST_CONFIG" ]; then
--    cp -v "$LATEST_CONFIG" .config
--else
--    cp -v /boot/config-$(uname -r) .config
--fi
--
--# --- DRIVER INJECTION (Yoga Fan v4.3) ---
--echo -e "${BLUE}Injecting Yoga Fan Driver v4.3...${NC}"
--SOURCE_CODE="../../Lenovo Drivers/yoga_fan.c"
--TARGET_FILE="./drivers/hwmon/yoga_fan.c"
--
--if [ -f "$SOURCE_CODE" ]; then
--    cp "$SOURCE_CODE" "$TARGET_FILE"
--else
--    echo -e "${GOLD}Error: Source not found!${NC}"
--    exit 1
--fi
--
--if ! grep -q "yoga_fan.o" ./drivers/hwmon/Makefile; then
--    echo "obj-\$(CONFIG_SENSORS_YOGA_FAN) += yoga_fan.o" >> ./drivers/hwmon/Makefile
--fi
--
--if ! grep -q "config SENSORS_YOGA_FAN" ./drivers/hwmon/Kconfig; then
--    cat <<EOF >> ./drivers/hwmon/Kconfig
--config SENSORS_YOGA_FAN
--	tristate "Lenovo Yoga Fan Hardware Monitoring"
--	depends on ACPI && HWMON
--	help
--	  Support for fan RPM on modern Lenovo laptops.
--EOF
--fi
--
--# --- START OF OPTIMIZED MODULE CONFIGURATION (YOGA 14c ACN) ---
--
--# 1. AMD Zen 3 & Power (For Ryzen 5800U)
--scripts/config --set-val CONFIG_MZEN3 y                               # Zen 3 microarchitecture optimization
--scripts/config --enable  CONFIG_X86_AMD_PSTATE                        # Modern AMD P-State driver
--scripts/config --set-val CONFIG_X86_AMD_PSTATE_DEFAULT_MODE 3         # "Active" mode for performance/watt balance
--scripts/config --enable  CONFIG_AMD_PMC                               # Vital for s2idle (Modern Standby) sleep support
--scripts/config --enable  CONFIG_SENSORS_K10TEMP                       # Accurate CPU temperature monitoring
--scripts/config --enable  CONFIG_PINCTRL_AMD                           # Crucial for Touchpad/GPIO interrupts
--
--# 2. Graphics (AMD Radeon Vega/Cezanne)
--scripts/config --enable CONFIG_DRM_AMDGPU                             # Main Radeon driver
--scripts/config --enable CONFIG_DRM_AMDGPU_USERPTR                     # Support for OpenCL/ROCm
--scripts/config --enable CONFIG_DRM_DISPLAY_HDMI_HELPER                # Essential for HDMI/HDR
--scripts/config --enable CONFIG_DRM_DISPLAY_DP_HELPER                  # Essential for DisplayPort/USB-C Alt Mode
--
--# 3. Lenovo Yoga 14c Hardware Logic (The Fan & Sensor Fix)
--scripts/config --set-val CONFIG_HWMON y                               # REQUIRED: Base framework for all sensors
--scripts/config --set-val CONFIG_ACPI_WMI y                            # REQUIRED: Bridge for Lenovo BIOS
--scripts/config --enable  CONFIG_WMI_BMOF                              # REQUIRED: Interpret ACPI binary data
--scripts/config --set-val CONFIG_SENSORS_YOGA_FAN m                    # Compiles Yoga Fan driver as module
--scripts/config --enable  CONFIG_LEDS_CLASS                            # Needed for status LEDs
--scripts/config --enable  CONFIG_LEDS_TRIGGERS                         # Allows hardware events to trigger LEDs
--scripts/config --set-val CONFIG_IDEAPAD_LAPTOP y                      # Main driver for Yoga Fn keys
--scripts/config --enable  CONFIG_LENOVO_YMC                            # Yoga Mode Control (Tablet mode)
--scripts/config --enable  CONFIG_ACPI_PLATFORM_PROFILE                 # Enables Fn+Q power modes
--scripts/config --enable  CONFIG_AMD_SFH_HID                           # Needed for screen auto-rotation
--scripts/config --enable  CONFIG_HID_WACOM                             # Supports the internal stylus
--scripts/config --enable  CONFIG_HID_MULTITOUCH                        # Enables 10-point touch screen
--
--# 4. Enable Rust (2026 Toolchain)
--scripts/config --set-val CONFIG_RUST y                                # Enables Rust infrastructure
--scripts/config --set-val MODVERSIONS n                                # Required for Rust compatibility
--scripts/config --set-val GENDWARFKSYMS y                              # Safe Rust module loading
--scripts/config --set-val RANDSTRUCT n                                 # Prevents C-to-Rust memory mismatches
--scripts/config --set-val DEBUG_INFO_BTF n                             # Prevents Rust symbol length conflicts
--
--# 5. Rust-Powered "Blue Screen" (DRM Panic)
--scripts/config --enable CONFIG_DRM_PANIC                              # Graphical panic core
--scripts/config --enable CONFIG_DRM_PANIC_SCREEN_USER                  # Blue background
--scripts/config --enable CONFIG_DRM_PANIC_SCREEN_QR_CODE               # Rust-generated scannable QR code
--
--# 6. Build Tweaks & Strict Debug Stripping
--scripts/config --set-str CONFIG_LOCALVERSION "-$full_postfix"         # Identifies as -yoga-amd64
--scripts/config --set-val CONFIG_LOCALVERSION_AUTO n                   # Cleaner versioning
--scripts/config --undefine CONFIG_DEBUG_INFO                           # Strip primary debug symbols
--scripts/config --undefine CONFIG_DEBUG_INFO_BTF                       # Disable BPF Type Format bloat
--scripts/config --set-val CONFIG_DEBUG_INFO_NONE y                     # Explicitly select 'None'
--scripts/config --disable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT    # Kills bloated symbols
--scripts/config --disable CONFIG_DEBUG_INFO_DWARF4                     # Disables old DWARF v4
--scripts/config --disable CONFIG_DEBUG_INFO_DWARF5                     # Disables heavy DWARF v5
--scripts/config --disable CONFIG_GDB_SCRIPTS                           # No Python helpers
--
--# --- END OF OPTIMIZED MODULE CONFIGURATION ---
--
--make olddefconfig
--
--# Get kernel version (e.g., 7.0.0-rc4)
--VERSION_BASE=$(make kernelversion)
--FULL_VER="${VERSION_BASE}-${full_postfix}"
--PKG_VER="${VERSION_BASE}-${full_postfix}"
--
--echo -e "${BLUE}Starting Kernel Build (uname -r: ${FULL_VER})${NC}"
--
--# Compile using your naming logic
--make -j$(nproc) bindeb-pkg \
--    KDEB_PKGVERSION="${PKG_VER}" \
--    KDEB_SOURCENAME=linux-upstream \
--    DEBUG_INFO=n \
--    NO_VMLINUX_DEBUG=1
--
--# Change to parent directory
--cd ../
--
--echo -e "${BLUE}Post-Processing: Cleaning up filenames...${NC}"
--
--# Perform the exact renaming to remove the redundant version_arch string
--# e.g., linux-image-VER_VER_amd64.deb -> linux-image-VER.deb
--mv "linux-image-${FULL_VER}_${PKG_VER}_${ARCH_SUFFIX}.deb" "linux-image-${FULL_VER}.deb"
--mv "linux-headers-${FULL_VER}_${PKG_VER}_${ARCH_SUFFIX}.deb" "linux-headers-${FULL_VER}.deb"
--mv "linux-libc-dev_${PKG_VER}_${ARCH_SUFFIX}.deb" "linux-libc-dev_${FULL_VER}.deb"
--
--# Clean up
--rm -f *.buildinfo *.changes
--
--# Install the cleaned packages
--sudo apt-mark unhold linux-libc-dev
--sudo dpkg -i "linux-image-${FULL_VER}.deb" \
--             "linux-headers-${FULL_VER}.deb" \
--             "linux-libc-dev_${FULL_VER}.deb"
--sudo apt-mark hold linux-libc-dev
--
--echo -e "${CYAN}Success! kernel ${FULL_VER} installed.${NC}"
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 342aa97bf..7d938308d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2454,6 +2454,20 @@ config SENSORS_VEXPRESS
- 	  the ARM Ltd's Versatile Express platform. It can provide wide
- 	  range of information like temperature, power, energy.
- 
-+config SENSORS_YOGAFAN
-+	tristate "Lenovo Yoga/Legion Fan Monitor"
-+	depends on ACPI && DMI
-+	help
-+	  If you say yes here you get support for the fan sensors on
-+	  modern Lenovo Yoga, Legion, and IdeaPad laptops.
-+
-+	  This driver implements a passive RLLag filter to smooth out
-+	  oscillating RPM data reported by the Embedded Controller without
-+	  the power overhead of a background worker.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called yoga_fan.
-+
- config SENSORS_VIA_CPUTEMP
- 	tristate "VIA CPU temperature sensor"
- 	depends on X86
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 7ac7711f9..d8d4ff834 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -252,3 +252,4 @@ obj-$(CONFIG_PMBUS)		+= pmbus/
- 
- ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
- obj-$(CONFIG_SENSORS_YOGA_FAN) += yoga_fan.o
-+
-diff --git a/drivers/hwmon/yoga_fan.c b/drivers/hwmon/yoga_fan.c
-new file mode 100644
-index 000000000..31e657146
---- /dev/null
-+++ b/drivers/hwmon/yoga_fan.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/**
-+ * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
-+ *
-+ * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
-+ * laptops by interfacing with the Embedded Controller (EC) via ACPI.
-+ *
-+ * The driver implements a passive discrete-time first-order lag filter
-+ * with slew-rate limiting (RLLag). This filter addresses low-resolution
-+ * tachometer sampling in the EC by smoothing RPM readings based on
-+ * the time delta (dt) between userspace requests, ensuring physical
-+ * consistency without background task overhead.
-+ *
-+ * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/err.h>
-+#include <linux/hwmon.h>
-+#include <linux/init.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#define DRVNAME "yogafan"
-+#define MAX_FANS 8
-+
-+/* Filter Configuration Constants */
-+#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
-+#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
-+
-+struct yoga_fan_data {
-+	const char *active_paths[MAX_FANS];
-+	long filtered_val[MAX_FANS];
-+	ktime_t last_update[MAX_FANS];
-+	int fan_count;
-+};
-+
-+/**
-+ * apply_rllag_filter - Discrete-time filter update (Passive)
-+ * @data: pointer to driver data
-+ * @idx: fan index
-+ * @raw_rpm: new raw value from ACPI
-+ */
-+static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
-+{
-+	ktime_t now = ktime_get();
-+	s64 dt_ms;
-+	long delta, step, limit, alpha;
-+
-+	if (data->last_update[idx] == 0) {
-+		data->filtered_val[idx] = raw_rpm;
-+		data->last_update[idx] = now;
-+		return;
-+	}
-+
-+	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
-+
-+	if (dt_ms > 5000) {
-+		data->filtered_val[idx] = raw_rpm;
-+		data->last_update[idx] = now;
-+		return;
-+	}
-+
-+	if (dt_ms < 1)
-+		return;
-+
-+	delta = raw_rpm - data->filtered_val[idx];
-+
-+	/* Alpha = dt / (Tau + dt) using 10-bit fixed point math */
-+	alpha = (dt_ms << 10) / (TAU_MS + dt_ms);
-+	step = (delta * alpha) >> 10;
-+
-+	/* Slew Limit = (MaxSlew * dt) / 1000 */
-+	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
-+
-+	if (step > limit)
-+		step = limit;
-+	else if (step < -limit)
-+		step = -limit;
-+
-+	data->filtered_val[idx] += step;
-+
-+	if (data->filtered_val[idx] < 50)
-+		data->filtered_val[idx] = 0;
-+
-+	data->last_update[idx] = now;
-+}
-+
-+static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct yoga_fan_data *data = dev_get_drvdata(dev);
-+	unsigned long long raw_acpi;
-+	acpi_status status;
-+	long rpm;
-+
-+	if (type != hwmon_fan || attr != hwmon_fan_input)
-+		return -EOPNOTSUPP;
-+
-+	status = acpi_evaluate_integer(NULL, (char *)data->active_paths[channel], NULL, &raw_acpi);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	rpm = (raw_acpi > 0 && raw_acpi <= 255) ? ((long)raw_acpi * 100) : (long)raw_acpi;
-+
-+	apply_rllag_filter(data, channel, rpm);
-+
-+	*val = data->filtered_val[channel];
-+	return 0;
-+}
-+
-+static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	const struct yoga_fan_data *fan_data = data;
-+
-+	if (type == hwmon_fan && channel < fan_data->fan_count)
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops yoga_fan_hwmon_ops = {
-+	.is_visible = yoga_fan_is_visible,
-+	.read = yoga_fan_read,
-+};
-+
-+static const struct hwmon_channel_info *yoga_fan_info[] = {
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-+			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info yoga_fan_chip_info = {
-+	.ops = &yoga_fan_hwmon_ops,
-+	.info = yoga_fan_info,
-+};
-+
-+static int yoga_fan_probe(struct platform_device *pdev)
-+{
-+	struct yoga_fan_data *data;
-+	struct device *hwmon_dev;
-+	acpi_handle handle;
-+	int i;
-+
-+	static const char * const fan_paths[] = {
-+		"\\_SB.PCI0.LPC0.EC0.FANS",  // Primary Fan (Yoga 14c)
-+		"\\_SB.PCI0.LPC0.EC0.FA2S",  // Secondary Fan (Legion)
-+		"\\_SB.PCI0.LPC0.EC0.FAN0",  // IdeaPad / Slim
-+		"\\_SB.PCI0.LPC.EC.FAN0",    // Legacy
-+		"\\_SB.PCI0.LPC0.EC.FAN0",   // Alternate
-+	};
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->fan_count = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
-+		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
-+			data->active_paths[data->fan_count] = fan_paths[i];
-+			data->fan_count++;
-+
-+			if (data->fan_count >= MAX_FANS)
-+				break;
-+		}
-+	}
-+
-+	if (data->fan_count == 0)
-+		return -ENODEV;
-+
-+	dev_set_drvdata(&pdev->dev, data);
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
-+							 data, &yoga_fan_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+
-+static struct platform_driver yoga_fan_driver = {
-+	.driver = {
-+		.name = DRVNAME,
-+	},
-+	.probe = yoga_fan_probe,
-+};
-+
-+static struct platform_device *yoga_fan_device;
-+
-+static const struct dmi_system_id yoga_dmi_table[] __initconst = {
-+	{
-+		.ident = "Lenovo",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+		},
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
-+
-+static int __init yoga_fan_init(void)
-+{
-+	int ret;
-+
-+	if (!dmi_check_system(yoga_dmi_table))
-+		return -ENODEV;
-+
-+	ret = platform_driver_register(&yoga_fan_driver);
-+	if (ret)
-+		return ret;
-+
-+	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
-+	if (IS_ERR(yoga_fan_device)) {
-+		platform_driver_unregister(&yoga_fan_driver);
-+		return PTR_ERR(yoga_fan_device);
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit yoga_fan_exit(void)
-+{
-+	platform_device_unregister(yoga_fan_device);
-+	platform_driver_unregister(&yoga_fan_driver);
-+}
-+
-+module_init(yoga_fan_init);
-+module_exit(yoga_fan_exit);
-+
-+MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
-+MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.53.0
-
+> ---
+>  drivers/i3c/master.c       | 91 ++++++++++++++++++++++----------------
+>  include/linux/i3c/master.h |  5 ++-
+>  2 files changed, 55 insertions(+), 41 deletions(-)
+>
+> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+> index c32847bc4d0d..2c479fecbfdf 100644
+> --- a/drivers/i3c/master.c
+> +++ b/drivers/i3c/master.c
+> @@ -5,16 +5,19 @@
+>   * Author: Boris Brezillon <boris.brezillon@bootlin.com>
+>   */
+>
+> +#include <linux/acpi.h>
+>  #include <linux/atomic.h>
+>  #include <linux/bug.h>
+>  #include <linux/device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/err.h>
+>  #include <linux/export.h>
+> +#include <linux/i2c.h>
+>  #include <linux/kernel.h>
+>  #include <linux/list.h>
+>  #include <linux/of.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/workqueue.h>
+> @@ -497,7 +500,7 @@ static void i3c_bus_cleanup(struct i3c_bus *i3cbus)
+>  	mutex_unlock(&i3c_core_lock);
+>  }
+>
+> -static int i3c_bus_init(struct i3c_bus *i3cbus, struct device_node *np)
+> +static int i3c_bus_init(struct i3c_bus *i3cbus, struct fwnode_handle *fwnode)
+>  {
+>  	int ret, start, end, id = -1;
+>
+> @@ -507,8 +510,8 @@ static int i3c_bus_init(struct i3c_bus *i3cbus, struct device_node *np)
+>  	i3c_bus_init_addrslots(i3cbus);
+>  	i3cbus->mode = I3C_BUS_MODE_PURE;
+>
+> -	if (np)
+> -		id = of_alias_get_id(np, "i3c");
+> +	if (fwnode && is_of_node(fwnode))
+> +		id = of_alias_get_id(to_of_node(fwnode), "i3c");
+>
+>  	mutex_lock(&i3c_core_lock);
+>  	if (id >= 0) {
+> @@ -811,7 +814,7 @@ static void i3c_masterdev_release(struct device *dev)
+>  	WARN_ON(!list_empty(&bus->devs.i2c) || !list_empty(&bus->devs.i3c));
+>  	i3c_bus_cleanup(bus);
+>
+> -	of_node_put(dev->of_node);
+> +	fwnode_handle_put(dev->fwnode);
+>  }
+>
+>  static const struct device_type i3c_masterdev_type = {
+> @@ -995,7 +998,7 @@ static void i3c_device_release(struct device *dev)
+>
+>  	WARN_ON(i3cdev->desc);
+>
+> -	of_node_put(i3cdev->dev.of_node);
+> +	fwnode_handle_put(dev->fwnode);
+>  	kfree(i3cdev);
+>  }
+>
+> @@ -1783,7 +1786,7 @@ i3c_master_register_new_i3c_devs(struct i3c_master_controller *master)
+>  			     desc->info.pid);
+>
+>  		if (desc->boardinfo)
+> -			desc->dev->dev.of_node = desc->boardinfo->of_node;
+> +			device_set_node(&desc->dev->dev, desc->boardinfo->fwnode);
+>
+>  		ret = device_register(&desc->dev->dev);
+>  		if (ret) {
+> @@ -2402,8 +2405,8 @@ EXPORT_SYMBOL_GPL(i3c_master_add_i3c_dev_locked);
+>  #define OF_I3C_REG1_IS_I2C_DEV			BIT(31)
+>
+>  static int
+> -of_i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+> -				struct device_node *node, u32 *reg)
+> +i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+> +			     struct fwnode_handle *fwnode, u32 *reg)
+>  {
+>  	struct i2c_dev_boardinfo *boardinfo;
+>  	struct device *dev = &master->dev;
+> @@ -2413,9 +2416,13 @@ of_i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+>  	if (!boardinfo)
+>  		return -ENOMEM;
+>
+> -	ret = of_i2c_get_board_info(dev, node, &boardinfo->base);
+> -	if (ret)
+> -		return ret;
+> +	if (is_of_node(fwnode)) {
+> +		ret = of_i2c_get_board_info(dev, to_of_node(fwnode), &boardinfo->base);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		return -EINVAL;
+> +	}
+>
+>  	/*
+>  	 * The I3C Specification does not clearly say I2C devices with 10-bit
+> @@ -2431,14 +2438,14 @@ of_i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
+>  	boardinfo->lvr = reg[2];
+>
+>  	list_add_tail(&boardinfo->node, &master->boardinfo.i2c);
+> -	of_node_get(node);
+> +	fwnode_handle_get(fwnode);
+>
+>  	return 0;
+>  }
+>
+>  static int
+> -of_i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+> -				struct device_node *node, u32 *reg)
+> +i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+> +			     struct fwnode_handle *fwnode, u32 *reg)
+>  {
+>  	struct i3c_dev_boardinfo *boardinfo;
+>  	struct device *dev = &master->dev;
+> @@ -2461,7 +2468,7 @@ of_i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+>
+>  	boardinfo->static_addr = reg[0];
+>
+> -	if (!of_property_read_u32(node, "assigned-address", &init_dyn_addr)) {
+> +	if (!fwnode_property_read_u32(fwnode, "assigned-address", &init_dyn_addr)) {
+>  		if (init_dyn_addr > I3C_MAX_ADDR)
+>  			return -EINVAL;
+>
+> @@ -2478,14 +2485,14 @@ of_i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+>  		return -EINVAL;
+>
+>  	boardinfo->init_dyn_addr = init_dyn_addr;
+> -	boardinfo->of_node = of_node_get(node);
+> +	boardinfo->fwnode = fwnode_handle_get(fwnode);
+>  	list_add_tail(&boardinfo->node, &master->boardinfo.i3c);
+>
+>  	return 0;
+>  }
+>
+> -static int of_i3c_master_add_dev(struct i3c_master_controller *master,
+> -				 struct device_node *node)
+> +static int i3c_master_add_dev(struct i3c_master_controller *master,
+> +			      struct fwnode_handle *fwnode)
+>  {
+>  	u32 reg[3];
+>  	int ret;
+> @@ -2493,7 +2500,7 @@ static int of_i3c_master_add_dev(struct i3c_master_controller *master,
+>  	if (!master)
+>  		return -EINVAL;
+>
+> -	ret = of_property_read_u32_array(node, "reg", reg, ARRAY_SIZE(reg));
+> +	ret = fwnode_property_read_u32_array(fwnode, "reg", reg, ARRAY_SIZE(reg));
+>  	if (ret)
+>  		return ret;
+>
+> @@ -2502,25 +2509,25 @@ static int of_i3c_master_add_dev(struct i3c_master_controller *master,
+>  	 * dealing with an I2C device.
+>  	 */
+>  	if (!reg[1])
+> -		ret = of_i3c_master_add_i2c_boardinfo(master, node, reg);
+> +		ret = i3c_master_add_i2c_boardinfo(master, fwnode, reg);
+>  	else
+> -		ret = of_i3c_master_add_i3c_boardinfo(master, node, reg);
+> +		ret = i3c_master_add_i3c_boardinfo(master, fwnode, reg);
+>
+>  	return ret;
+>  }
+>
+> -static int of_populate_i3c_bus(struct i3c_master_controller *master)
+> +static int fwnode_populate_i3c_bus(struct i3c_master_controller *master)
+>  {
+>  	struct device *dev = &master->dev;
+> -	struct device_node *i3cbus_np = dev->of_node;
+> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+>  	int ret;
+>  	u32 val;
+>
+> -	if (!i3cbus_np)
+> +	if (!fwnode)
+>  		return 0;
+>
+> -	for_each_available_child_of_node_scoped(i3cbus_np, node) {
+> -		ret = of_i3c_master_add_dev(master, node);
+> +	fwnode_for_each_available_child_node_scoped(fwnode, child) {
+> +		ret = i3c_master_add_dev(master, child);
+>  		if (ret)
+>  			return ret;
+>  	}
+> @@ -2530,10 +2537,10 @@ static int of_populate_i3c_bus(struct i3c_master_controller *master)
+>  	 * on the bus are not supporting typical rates, or if the bus topology
+>  	 * prevents it from using max possible rate.
+>  	 */
+> -	if (!of_property_read_u32(i3cbus_np, "i2c-scl-hz", &val))
+> +	if (!device_property_read_u32(dev, "i2c-scl-hz", &val))
+>  		master->bus.scl_rate.i2c = val;
+>
+> -	if (!of_property_read_u32(i3cbus_np, "i3c-scl-hz", &val))
+> +	if (!device_property_read_u32(dev, "i3c-scl-hz", &val))
+>  		master->bus.scl_rate.i3c = val;
+>
+>  	return 0;
+> @@ -2588,7 +2595,7 @@ static u8 i3c_master_i2c_get_lvr(struct i2c_client *client)
+>  	u8 lvr = I3C_LVR_I2C_INDEX(2) | I3C_LVR_I2C_FM_MODE;
+>  	u32 reg[3];
+>
+> -	if (!of_property_read_u32_array(client->dev.of_node, "reg", reg, ARRAY_SIZE(reg)))
+> +	if (!fwnode_property_read_u32_array(client->dev.fwnode, "reg", reg, ARRAY_SIZE(reg)))
+>  		lvr = reg[2];
+>
+>  	return lvr;
+> @@ -2707,7 +2714,8 @@ static int i3c_master_i2c_adapter_init(struct i3c_master_controller *master)
+>  	struct i2c_adapter *adap = i3c_master_to_i2c_adapter(master);
+>  	struct i2c_dev_desc *i2cdev;
+>  	struct i2c_dev_boardinfo *i2cboardinfo;
+> -	int ret, id;
+> +	struct fwnode_handle *fwnode = dev_fwnode(&master->dev);
+> +	int ret, id = -1;
+>
+>  	adap->dev.parent = master->dev.parent;
+>  	adap->owner = master->dev.parent->driver->owner;
+> @@ -2716,7 +2724,9 @@ static int i3c_master_i2c_adapter_init(struct i3c_master_controller *master)
+>  	adap->timeout = HZ;
+>  	adap->retries = 3;
+>
+> -	id = of_alias_get_id(master->dev.of_node, "i2c");
+> +	if (fwnode && is_of_node(fwnode))
+> +		id = of_alias_get_id(to_of_node(fwnode), "i2c");
+> +
+>  	if (id >= 0) {
+>  		adap->nr = id;
+>  		ret = i2c_add_numbered_adapter(adap);
+> @@ -3017,7 +3027,7 @@ int i3c_master_register(struct i3c_master_controller *master,
+>  		return ret;
+>
+>  	master->dev.parent = parent;
+> -	master->dev.of_node = of_node_get(parent->of_node);
+> +	device_set_node(&master->dev, fwnode_handle_get(dev_fwnode(parent)));
+>  	master->dev.bus = &i3c_bus_type;
+>  	master->dev.type = &i3c_masterdev_type;
+>  	master->dev.release = i3c_masterdev_release;
+> @@ -3036,13 +3046,13 @@ int i3c_master_register(struct i3c_master_controller *master,
+>  	master->dev.coherent_dma_mask = parent->coherent_dma_mask;
+>  	master->dev.dma_parms = parent->dma_parms;
+>
+> -	ret = i3c_bus_init(i3cbus, master->dev.of_node);
+> +	ret = i3c_bus_init(i3cbus, dev_fwnode(&master->dev));
+>  	if (ret)
+>  		goto err_put_dev;
+>
+>  	dev_set_name(&master->dev, "i3c-%d", i3cbus->id);
+>
+> -	ret = of_populate_i3c_bus(master);
+> +	ret = fwnode_populate_i3c_bus(master);
+>  	if (ret)
+>  		goto err_put_dev;
+>
+> @@ -3300,11 +3310,14 @@ static int __init i3c_init(void)
+>  {
+>  	int res;
+>
+> -	res = of_alias_get_highest_id("i3c");
+> -	if (res >= 0) {
+> -		mutex_lock(&i3c_core_lock);
+> -		__i3c_first_dynamic_bus_num = res + 1;
+> -		mutex_unlock(&i3c_core_lock);
+> +	/* of_alias_get_highest_id is DT-specific, only call for DT systems */
+> +	if (IS_ENABLED(CONFIG_OF)) {
+> +		res = of_alias_get_highest_id("i3c");
+> +		if (res >= 0) {
+> +			mutex_lock(&i3c_core_lock);
+> +			__i3c_first_dynamic_bus_num = res + 1;
+> +			mutex_unlock(&i3c_core_lock);
+> +		}
+>  	}
+>
+>  	res = bus_register_notifier(&i2c_bus_type, &i2cdev_notifier);
+> diff --git a/include/linux/i3c/master.h b/include/linux/i3c/master.h
+> index 592b646f6134..6b03a3ce574c 100644
+> --- a/include/linux/i3c/master.h
+> +++ b/include/linux/i3c/master.h
+> @@ -177,7 +177,8 @@ struct i3c_device_ibi_info {
+>   * @pid: I3C Provisioned ID exposed by the device. This is a unique identifier
+>   *	 that may be used to attach boardinfo to i3c_dev_desc when the device
+>   *	 does not have a static address
+> - * @of_node: optional DT node in case the device has been described in the DT
+> + * @fwnode: Firmware node (DT or ACPI) in case the device has been
+> + *	    described in firmware
+>   *
+>   * This structure is used to attach board-level information to an I3C device.
+>   * Not all I3C devices connected on the bus will have a boardinfo. It's only
+> @@ -189,7 +190,7 @@ struct i3c_dev_boardinfo {
+>  	u8 init_dyn_addr;
+>  	u8 static_addr;
+>  	u64 pid;
+> -	struct device_node *of_node;
+> +	struct fwnode_handle *fwnode;
+>  };
+>
+>  /**
+> --
+> 2.50.1
+>
