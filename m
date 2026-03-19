@@ -1,686 +1,483 @@
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 301612248B3;
-	Thu, 19 Mar 2026 06:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773900405; cv=none; b=msOVD1RtD26IMv/VH2nWPmn960q5I7RxTJW/kGBBTUmfocv1syqjpcdAFrAavLDKXgXhXf0shO0FgDRejg6AzvspllNOfcPKSUQFrB4wkjEVz75ADTqH8zxkikCA+ixquUjYymXg7gvn3KTiejlwmdJm38lWfOpabp3EapqW1/Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773900405; c=relaxed/simple;
-	bh=qZjo5S2qvbZn2+YzLEJyG4KN2eJF3Q1MUXjqTJyCMk8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L7PpxMNi+blevX5IUdlZ8g7F4t/US5mhCthqeBjcXT9ey/1dBbTe0qWwVrHmSD1TisuZ224SWIYcx8VSXOV9pJWYJ2nZwWzO43oHL2r17CK/VKV5tJ/4RLDUrtzZHqnoyjer3h8J6PAiGZoHlR7N7HJHJSPw5Mzdr5t7lWl8OE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=NzkEjuZt; arc=none smtp.client-ip=220.197.32.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B8D40DFA4
+	for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 07:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773905127; cv=pass; b=SToyJqn/4noue/tGH7MwjU4dg5Je2unTtsApTKQ0wdm5h8mg4Yjyvuz1hGFOLBc6ngkRuTj7ZkkOV6x7MQAlK/jbTmOHQTvGJmAL8W45kq94ip5pLm8bI8S2Lb+/meMFJnmb+fYJ61jPWsABgLuHiPH3tPWUNBnYsHabp+97t5Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773905127; c=relaxed/simple;
+	bh=Ulpnr03mFLvLKusrbO73atFJEMh9LNrmQqNXlOezIe0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nKUyibP4cmhsQhY9hecFq6Z6d3OjVTiBydCy7JuOQrcZoSsnu58IMuz6sHICOxE+kU7rkmZPsnkk0jsKzInvTT2xmIQ5EdMS/hs4VfgHUrqogwb2oOhOoVkDEVroFim6+1UXHisnrWDZRNAdZkhpdPLB+1pL+Zba865BVROJn4Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcVLwWY9; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="NzkEjuZt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
-	Content-Type; bh=LETSMKYyHs+LoySl5sV9aBtWDwN+ocqIrAW9kP/ES4s=;
-	b=NzkEjuZt+uYlHQvmN6WqBoNKKDwwJfwtKRMwqRCVyUNAUTJ/B928Ta3+tlWByA
-	Bl8mdtdkjOm839ZLL7dbXjUq0XqPiRz1ZxlsLZKzzzLyA9CReoxOEDajl/QU3Sbd
-	Um6IgOZwbbtby/ZOp5D0bqn8izTgM06pS+r6BwZXnRKMo=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with UTF8SMTPA id Ms8vCgCXP9evkbtpNPn0Ag--.45701S3;
-	Thu, 19 Mar 2026 14:03:32 +0800 (CST)
-From: wenswang@yeah.net
-To: krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux@roeck-us.net,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Wensheng Wang <wenswang@yeah.net>
-Subject: [PATCH v2 2/2] hwmon: add MP2985 driver
-Date: Thu, 19 Mar 2026 14:03:18 +0800
-Message-Id: <20260319060318.643572-2-wenswang@yeah.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260319060318.643572-1-wenswang@yeah.net>
-References: <20260319060118.643352-1-wenswang@yeah.net>
- <20260319060318.643572-1-wenswang@yeah.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcVLwWY9"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64ca1ba0089so702684d50.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2026 00:25:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773905124; cv=none;
+        d=google.com; s=arc-20240605;
+        b=K1VHzmWR1qjw4VldAtmfmITLFJeq7fESb50E3ES5mPLOh7ajbDHAH/g7365mRDQ2zO
+         /3HHnb5iXf5Th2r8t1O6HllTRjkwF1sB85vXWfPkCjjdgPVracr5VkNcbiWSlzpM7Oti
+         wwT85bISflPKDf/tWHJdjykn1GWnKhl45jRGagwg5XiN4UHrDM2W4/rHzXzxfs0B+5R1
+         dHsdSF7odHqEZji4wNJzxEV8dN2rOER/aTnOD46LECq+KUBtTofcQOh3WvHpwYcl/WEF
+         g0OU0nPFBhA6Ku5hg+fTChjLuW5+sLoiH7Wy1eshts4BwPQ6J+dXTOBjmJ6VDgSryMbp
+         3izw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
+        fh=eyzG4ellQQ8yGAT2M3u4KbSMCRIK9+OQb9lWVPtXqXo=;
+        b=YzD+ztL3qcJZ+SmnqgOGZj2XxRgA4Ieri3pfjyp+ikAOgYydkMg3Em0jviCWHIW8Jy
+         lBRIapI7X43oSctdpidtM73hK0GQMzcxupCdLt7IqFchUj+12oOIjWDkO5y4qhgjZb+m
+         gB4KqZcR2dcAp4PoNy3oZZCuJw6gFxg7KrcKMolS91yC6KA0wHnxZlyC6poRzqi3CvOk
+         oD3RGTzYNa6MifqLCX/9ttlDoab/64kMevOKN60GMyIYRqjyGrPQbvfsz2acClyU05oM
+         h2gkGrKog7gPuZwjTUt3yvJMTcsFl7qgBiG8T1WIRLui5Zz0pDfXRlDzKvBDkVQqIR4I
+         7KEw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773905124; x=1774509924; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
+        b=JcVLwWY9Fj+mQA+hy+GUbvk/xDc1dJZZXnaQ7hmq/mAPJzd/lLkGpWBicYeGDKAgPS
+         0GUGMk/zhSMj982j6Scs991DHFcj4qjWM4j5YY5tjGVL0SiX8f20yQsHaoFuA3pA2/TJ
+         d4LBRH8WtDC4Q2cC4bI/o1yyz1/aPJmFKnFcx1/mZ4Za0KicaD/TVzvSryViG1oKHmE2
+         kFYMtguBz00+LiEQ7q1AK/tnjn9i7QiOxqaweAP15K4YvIT+QawTO58k1qnlmElkeZR1
+         Y+LinksAdKMpSgchw+i5J8vDvpKLNAiPjV21lNL7l+6gl9veaDbcF/JDde4s+ovHqps2
+         Gggg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773905124; x=1774509924;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TluwqS4HKRFmCQc0rjx5guREKmOm0AKQPj8ePyZUfxA=;
+        b=ReJ59RRyGJp9e7KVkf5E0JwHndFj0gutFv5lQbnksOIuNQq5av5xwlb34xn5KzDrB6
+         ujDeZlMztbajvrNROcYh3L9x04UWeb9BKj1M81MmlmnhdDlqHHeE5/m0rrOr2HxgY5ln
+         Jg/LYuHThYRpJz2ZjTho1P/AEq0Ns8Vqq8DRREe9U9a0BdX2dwYNLQpmrBpFWnQNx4IE
+         eqYYdfRzz0rMbYZdcgq7qpMH2sXGHJXeSzethe5VPVeYIfbfDOeFO61zSYOT5GWKfG7M
+         NAVbFcrfTfeGaOgE+SD6bQoN/DwVIMwXKLwQIVuoMRdfZkflp39jjDZlBjVjQyMhpS5B
+         sUvg==
+X-Gm-Message-State: AOJu0Yw7kOBwPU03J7UOqrPjfuNOg9viXQ2ynAvz0VLMa3347eT6mCGz
+	fJVDOFqU5Z+DsTWSqQNx/kJGuHgSudDm98J+CaYPoe1M0eLuwvAxOf7S+w3c8b2xIPnTowrKPiM
+	rUhXxMPQz1Bck09csr1J40UizFnBjjoY=
+X-Gm-Gg: ATEYQzzvFivHlfdCl+/olpr/VDF4oQyy/VQ6LbMzMRI+KzMUfhPRuLZpezT53IEOqka
+	W8NPvHKEM7p2uaUErzvQfjgy7HctaDBXe8fCNOdFLqbuqziySyQkFdHAsCbuQ+UH9tVQ4XiGasF
+	vRR3zQ/X7mxwKWyDbQgFy0QnLxAx4YI7I6TwMkKFho+K2eiUvkQVnYa6jTTMW7JSzlNyEUenaLZ
+	tVY9RuYtQR6mGt2lDi2nDO7RYuBFn9pBRyuR2lpyVNDx4XhBuyS4iHU3fuC93qQei2ayNG/ErnQ
+	EtzzRmzq
+X-Received: by 2002:a05:690e:d07:b0:64e:a36d:9290 with SMTP id
+ 956f58d0204a3-64ea36d96d4mr518597d50.27.1773905124365; Thu, 19 Mar 2026
+ 00:25:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Ms8vCgCXP9evkbtpNPn0Ag--.45701S3
-X-Coremail-Antispam: 1Uf129KBjvAXoWfJF1kJr4kuF1UXFy7WF1xZrb_yoW8WrWrto
-	Za9FyrZwn8Jr18ZFZ5KF4I9F97XF1q9FZ5A3W2yrs8WFy3Ar45KF9rA3yaqa4ayF4rXa18
-	u3y8A3s3t3y7Z3srn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4Rpa0PUUUUU
-X-CM-SenderInfo: 5zhq24xdqjq5hhdkh0dhw/1tbiORXaf2m7kbVKdAAA3B
+References: <20260318172518.91336-1-sergiomelas@gmail.com> <ba6bc890-b6b1-4035-872f-0b15281eaa05@roeck-us.net>
+In-Reply-To: <ba6bc890-b6b1-4035-872f-0b15281eaa05@roeck-us.net>
+From: Sergio Melas <sergiomelas@gmail.com>
+Date: Thu, 19 Mar 2026 08:25:12 +0100
+X-Gm-Features: AaiRm51cSci696eKKvRyXbp7gtKKlLEZDLAuleuM7-8zyWPq8V8Xa3tBDiiZCnA
+Message-ID: <CAP8e=sLRDCCbwDtb4wdw-g3yWCyXCiKKguJ6GyDOXY89BMJKrA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (yogafan) V3.0 Universal refactor and RLLag filter
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sergio Melas <sergio.melas@syensqo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Wensheng Wang <wenswang@yeah.net>
+Hi Guenter,
 
-Add support for MPS mp2985 controller. This driver exposes
-telemetry and limit value readings and writtings.
+Thank you for the review and for your patience with my first
+submission to the kernel. I apologize for the structural errors; I
+will address the missing Kconfig, Makefile, and documentation ASAP.
 
-Signed-off-by: Wensheng Wang <wenswang@yeah.net>
----
-v1 -> v2:
-    1. remove duplicate entry in mp2985.rst
-    2. clamp vout value to 32767
-    3. simplify the code for obtaining PMBUS_VOUT_MODE bit value
-    4. add comment for explaining MP2985 supported vout mode
-    5. switch back to previous page after obtaining vid scale to avoid
-       confusing the PMBus core
+Regarding your specific comments:
 
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/mp2985.rst | 147 +++++++++++++
- MAINTAINERS                    |   7 +
- drivers/hwmon/pmbus/Kconfig    |   9 +
- drivers/hwmon/pmbus/Makefile   |   1 +
- drivers/hwmon/pmbus/mp2985.c   | 377 +++++++++++++++++++++++++++++++++
- 6 files changed, 542 insertions(+)
- create mode 100644 Documentation/hwmon/mp2985.rst
- create mode 100644 drivers/hwmon/pmbus/mp2985.c
+** > That is an odd subject line and description for a new driver.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b2ca8513cfcd..1b7007f41b39 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -183,6 +183,7 @@ Hardware Monitoring Kernel Drivers
-    mp2925
-    mp29502
-    mp2975
-+   mp2985
-    mp2993
-    mp5023
-    mp5920
-diff --git a/Documentation/hwmon/mp2985.rst b/Documentation/hwmon/mp2985.rst
-new file mode 100644
-index 000000000000..87a39c8a300c
---- /dev/null
-+++ b/Documentation/hwmon/mp2985.rst
-@@ -0,0 +1,147 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver mp2985
-+====================
-+
-+Supported chips:
-+
-+  * MPS mp2985
-+
-+    Prefix: 'mp2985'
-+
-+Author:
-+
-+	Wensheng Wang <wenswang@yeah.net>
-+
-+Description
-+-----------
-+
-+This driver implements support for Monolithic Power Systems, Inc. (MPS)
-+MP2985 Dual Loop Digital Multi-phase Controller.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_crit**
-+
-+**in1_crit_alarm**
-+
-+**in1_lcrit**
-+
-+**in1_lcrit_alarm**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_crit**
-+
-+**in2_crit_alarm**
-+
-+**in2_lcrit**
-+
-+**in2_lcrit_alarm**
-+
-+**in3_input**
-+
-+**in3_label**
-+
-+**in3_crit**
-+
-+**in3_crit_alarm**
-+
-+**in3_lcrit**
-+
-+**in3_lcrit_alarm**
-+
-+The driver provides the following attributes for input current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr2_input**
-+
-+**curr2_label**
-+
-+**curr2_crit**
-+
-+**curr2_crit_alarm**
-+
-+**curr2_max**
-+
-+**curr2_max_alarm**
-+
-+**curr3_input**
-+
-+**curr3_label**
-+
-+**curr3_crit**
-+
-+**curr3_crit_alarm**
-+
-+**curr3_max**
-+
-+**curr3_max_alarm**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+**power2_input**
-+
-+**power2_label**
-+
-+The driver provides the following attributes for output power:
-+
-+**power3_input**
-+
-+**power3_label**
-+
-+**power4_input**
-+
-+**power4_label**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp2_input**
-+
-+**temp2_crit**
-+
-+**temp2_crit_alarm**
-+
-+**temp2_max**
-+
-+**temp2_max_alarm**
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d7241695df96..ac62dbaef34d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17920,6 +17920,13 @@ S:	Maintained
- F:	Documentation/hwmon/mp29502.rst
- F:	drivers/hwmon/pmbus/mp29502.c
- 
-+MPS MP2985 DRIVER
-+M:	Wensheng Wang <wenswang@yeah.net>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/mp2985.rst
-+F:	drivers/hwmon/pmbus/mp2985.c
-+
- MPS MP2993 DRIVER
- M:	Noah Wang <noahwang.wang@outlook.com>
- L:	linux-hwmon@vger.kernel.org
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index fc1273abe357..83fe5866c083 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -447,6 +447,15 @@ config SENSORS_MP2975
- 	  This driver can also be built as a module. If so, the module will
- 	  be called mp2975.
- 
-+config SENSORS_MP2985
-+	tristate "MPS MP2985"
-+	help
-+	  If you say yes here you get hardware monitoring support for MPS
-+	  MP2985 Dual Loop Digital Multi-Phase Controller.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called mp2985.
-+
- config SENSORS_MP2993
- 	tristate "MPS MP2993"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index d6c86924f887..24505bbee2b0 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
- obj-$(CONFIG_SENSORS_MP2925)	+= mp2925.o
- obj-$(CONFIG_SENSORS_MP29502)	+= mp29502.o
- obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
-+obj-$(CONFIG_SENSORS_MP2985)	+= mp2985.o
- obj-$(CONFIG_SENSORS_MP2993)	+= mp2993.o
- obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
- obj-$(CONFIG_SENSORS_MP5920)	+= mp5920.o
-diff --git a/drivers/hwmon/pmbus/mp2985.c b/drivers/hwmon/pmbus/mp2985.c
-new file mode 100644
-index 000000000000..df0934ebcaa0
---- /dev/null
-+++ b/drivers/hwmon/pmbus/mp2985.c
-@@ -0,0 +1,377 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2985)
-+ *
-+ * Copyright (C) 2026 MPS
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include "pmbus.h"
-+
-+/*
-+ * Vender specific register READ_PIN_EST(0x93), READ_IIN_EST(0x8E),
-+ * MFR_VR_MULTI_CONFIG_R1(0x0D) and MFR_VR_MULTI_CONFIG_R2(0x1D).
-+ * The READ_PIN_EST is used to read pin telemetry, the READ_IIN_EST
-+ * is used to read iin telemetry and the MFR_VR_MULTI_CONFIG_R1,
-+ * MFR_VR_MULTI_CONFIG_R2 are used to obtain vid scale.
-+ */
-+#define READ_PIN_EST	0x93
-+#define READ_IIN_EST	0x8E
-+#define MFR_VR_MULTI_CONFIG_R1	0x0D
-+#define MFR_VR_MULTI_CONFIG_R2	0x1D
-+
-+#define MP2985_VOUT_DIV	512
-+#define MP2985_VOUT_OVUV_UINT	195
-+#define MP2985_VOUT_OVUV_DIV	100
-+
-+#define MP2985_PAGE_NUM	2
-+
-+#define MP2985_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_PIN | \
-+							 PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
-+							 PMBUS_HAVE_POUT | PMBUS_HAVE_TEMP | \
-+							 PMBUS_HAVE_STATUS_VOUT | \
-+							 PMBUS_HAVE_STATUS_IOUT | \
-+							 PMBUS_HAVE_STATUS_TEMP | \
-+							 PMBUS_HAVE_STATUS_INPUT)
-+
-+#define MP2985_RAIL2_FUNC	(PMBUS_HAVE_PIN | PMBUS_HAVE_VOUT | \
-+							 PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | \
-+							 PMBUS_HAVE_TEMP | PMBUS_HAVE_IIN | \
-+							 PMBUS_HAVE_STATUS_VOUT | \
-+							 PMBUS_HAVE_STATUS_IOUT | \
-+							 PMBUS_HAVE_STATUS_TEMP | \
-+							 PMBUS_HAVE_STATUS_INPUT)
-+
-+struct mp2985_data {
-+	struct pmbus_driver_info info;
-+	int vout_scale[MP2985_PAGE_NUM];
-+	int vid_offset[MP2985_PAGE_NUM];
-+};
-+
-+#define to_mp2985_data(x) container_of(x, struct mp2985_data, info)
-+
-+static u16 mp2985_linear_exp_transfer(u16 word, u16 expect_exponent)
-+{
-+	s16 exponent, mantissa, target_exponent;
-+
-+	exponent = ((s16)word) >> 11;
-+	mantissa = ((s16)((word & 0x7ff) << 5)) >> 5;
-+	target_exponent = (s16)((expect_exponent & 0x1f) << 11) >> 11;
-+
-+	if (exponent > target_exponent)
-+		mantissa = mantissa << (exponent - target_exponent);
-+	else
-+		mantissa = mantissa >> (target_exponent - exponent);
-+
-+	return (mantissa & 0x7ff) | ((expect_exponent << 11) & 0xf800);
-+}
-+
-+static int mp2985_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VOUT_MODE:
-+		/*
-+		 * The MP2985 does not follow standard PMBus protocol completely,
-+		 * and the calculation of vout in this driver is based on direct
-+		 * format. As a result, the format of vout is enforced to direct.
-+		 */
-+		ret = PB_VOUT_MODE_DIRECT;
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mp2985_read_word_data(struct i2c_client *client, int page, int phase,
-+				 int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct mp2985_data *data = to_mp2985_data(info);
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_READ_VOUT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		/*
-+		 * The MP2985 supports three vout mode, direct, linear11 and vid mode.
-+		 * In vid mode, the MP2985 vout telemetry has 49 vid step offset, but
-+		 * PMBUS_VOUT_OV_FAULT_LIMIT and PMBUS_VOUT_UV_FAULT_LIMIT do not take
-+		 * this into consideration, its resolution is 1.95mV/LSB, as a result,
-+		 * format[PSC_VOLTAGE_OUT] can not be set to vid directly. Adding extra
-+		 * vid_offset variable for vout telemetry.
-+		 */
-+		ret = clamp_val(DIV_ROUND_CLOSEST(((ret & GENMASK(11, 0)) +
-+									data->vid_offset[page]) *
-+							data->vout_scale[page], MP2985_VOUT_DIV),
-+							0, 0x7FFF);
-+		break;
-+	case PMBUS_READ_IIN:
-+		/*
-+		 * The MP2985 has standard PMBUS_READ_IIN register(0x89), but this is
-+		 * not used to read the input current of per rail. The input current
-+		 * is read through the vender redefined register READ_IIN_EST(0x8E).
-+		 */
-+		ret = pmbus_read_word_data(client, page, phase, READ_IIN_EST);
-+		break;
-+	case PMBUS_READ_PIN:
-+		/*
-+		 * The MP2985 has standard PMBUS_READ_PIN register(0x97), but this
-+		 * is not used to read the input power of per rail. The input power
-+		 * of per rail is read through the vender redefined register
-+		 * READ_PIN_EST(0x93).
-+		 */
-+		ret = pmbus_read_word_data(client, page, phase, READ_PIN_EST);
-+		break;
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = DIV_ROUND_CLOSEST((ret & GENMASK(11, 0)) * MP2985_VOUT_OVUV_UINT,
-+					MP2985_VOUT_OVUV_DIV);
-+		break;
-+	case PMBUS_STATUS_WORD:
-+	case PMBUS_READ_VIN:
-+	case PMBUS_READ_IOUT:
-+	case PMBUS_READ_POUT:
-+	case PMBUS_READ_TEMPERATURE_1:
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+	case PMBUS_VIN_OV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_FAULT_LIMIT:
-+	case PMBUS_IOUT_OC_FAULT_LIMIT:
-+	case PMBUS_IOUT_OC_WARN_LIMIT:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+		ret = -ENODATA;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int mp2985_write_word_data(struct i2c_client *client, int page, int reg,
-+				  u16 word)
-+{
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+	case PMBUS_VIN_OV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_WARN_LIMIT:
-+	case PMBUS_VIN_UV_FAULT_LIMIT:
-+		/*
-+		 * The PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_OV_WARN_LIMIT,
-+		 * PMBUS_VIN_UV_WARN_LIMIT and PMBUS_VIN_UV_FAULT_LIMIT
-+		 * of MP2985 is linear11 format, and the exponent is a
-+		 * constant value(5'b11101)， so the exponent of word
-+		 * parameter should be converted to 5'b11101(0x1D).
-+		 */
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    mp2985_linear_exp_transfer(word, 0x1D));
-+		break;
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		/*
-+		 * The bit0-bit11 is the limit value, and bit12-bit15
-+		 * should not be changed.
-+		 */
-+		ret = pmbus_read_word_data(client, page, 0xff, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    (ret & ~GENMASK(11, 0)) |
-+				FIELD_PREP(GENMASK(11, 0),
-+					   DIV_ROUND_CLOSEST(word * MP2985_VOUT_OVUV_DIV,
-+							     MP2985_VOUT_OVUV_UINT)));
-+		break;
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+		/*
-+		 * The PMBUS_OT_FAULT_LIMIT and PMBUS_OT_WARN_LIMIT of
-+		 * MP2985 is linear11 format, and the exponent is a
-+		 * constant value(5'b00000), so the exponent of word
-+		 * parameter should be converted to 5'b00000.
-+		 */
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    mp2985_linear_exp_transfer(word, 0x00));
-+		break;
-+	case PMBUS_IOUT_OC_FAULT_LIMIT:
-+	case PMBUS_IOUT_OC_WARN_LIMIT:
-+		/*
-+		 * The PMBUS_IOUT_OC_FAULT_LIMIT and PMBUS_IOUT_OC_WARN_LIMIT
-+		 * of MP2985 is linear11 format, and the exponent can not be
-+		 * changed.
-+		 */
-+		ret = pmbus_read_word_data(client, page, 0xff, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = pmbus_write_word_data(client, page, reg,
-+					    mp2985_linear_exp_transfer(word,
-+								       FIELD_GET(GENMASK(15, 11),
-+										 ret)));
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int
-+mp2985_identify_vout_scale(struct i2c_client *client, struct pmbus_driver_info *info,
-+			   int page)
-+{
-+	struct mp2985_data *data = to_mp2985_data(info);
-+	int ret;
-+
-+	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * The MP2985 supports three vout mode. If PMBUS_VOUT_MODE
-+	 * bit5 is 1, it is vid mode. If PMBUS PMBUS_VOUT_MODE bit4
-+	 * is 1, it is linear11 mode. If PMBUS PMBUS_VOUT_MODE bit6
-+	 * is 1, it is direct mode. In vid mode, the MP2985 vout
-+	 * telemetry has 49 vid step offset.
-+	 */
-+	if (FIELD_GET(BIT(5), ret)) {
-+		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = i2c_smbus_read_word_data(client, page == 0 ?
-+									MFR_VR_MULTI_CONFIG_R1 :
-+									MFR_VR_MULTI_CONFIG_R2);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (page == 0) {
-+			if (FIELD_GET(BIT(4), ret))
-+				data->vout_scale[page] = 2560;
-+			else
-+				data->vout_scale[page] = 5120;
-+		} else {
-+			if (FIELD_GET(BIT(3), ret))
-+				data->vout_scale[page] = 2560;
-+			else
-+				data->vout_scale[page] = 5120;
-+		}
-+
-+		data->vid_offset[page] = 49;
-+
-+		/*
-+		 * For vid mode, the MP2985 should be changed to page 2
-+		 * to obtain vout scale value, this may confuse the PMBus
-+		 * core. To avoid this, switch back to the previous page
-+		 * again.
-+		 */
-+		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-+		if (ret < 0)
-+			return ret;
-+	} else if (FIELD_GET(BIT(4), ret)) {
-+		data->vout_scale[page] = 1;
-+		data->vid_offset[page] = 0;
-+	} else {
-+		data->vout_scale[page] = 512;
-+		data->vid_offset[page] = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mp2985_identify(struct i2c_client *client, struct pmbus_driver_info *info)
-+{
-+	int ret;
-+
-+	ret = mp2985_identify_vout_scale(client, info, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	return mp2985_identify_vout_scale(client, info, 1);
-+}
-+
-+static struct pmbus_driver_info mp2985_info = {
-+	.pages = MP2985_PAGE_NUM,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+
-+	.m[PSC_VOLTAGE_OUT] = 1,
-+	.R[PSC_VOLTAGE_OUT] = 3,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+
-+	.func[0] = MP2985_RAIL1_FUNC,
-+	.func[1] = MP2985_RAIL2_FUNC,
-+	.read_word_data = mp2985_read_word_data,
-+	.read_byte_data = mp2985_read_byte_data,
-+	.write_word_data = mp2985_write_word_data,
-+	.identify = mp2985_identify,
-+};
-+
-+static int mp2985_probe(struct i2c_client *client)
-+{
-+	struct mp2985_data *data;
-+
-+	data = devm_kzalloc(&client->dev, sizeof(struct mp2985_data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	memcpy(&data->info, &mp2985_info, sizeof(mp2985_info));
-+
-+	return pmbus_do_probe(client, &data->info);
-+}
-+
-+static const struct i2c_device_id mp2985_id[] = {
-+	{"mp2985", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, mp2985_id);
-+
-+static const struct of_device_id __maybe_unused mp2985_of_match[] = {
-+	{.compatible = "mps,mp2985"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mp2985_of_match);
-+
-+static struct i2c_driver mp2985_driver = {
-+	.driver = {
-+		.name = "mp2985",
-+		.of_match_table = mp2985_of_match,
-+	},
-+	.probe = mp2985_probe,
-+	.id_table = mp2985_id,
-+};
-+
-+module_i2c_driver(mp2985_driver);
-+
-+MODULE_AUTHOR("Wensheng Wang <wenswang@yeah.net>");
-+MODULE_DESCRIPTION("PMBus driver for MPS MP2985 device");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("PMBUS");
--- 
-2.25.1
+I understand. I will change the subject to the standard "hwmon:
+(yogafan) Add new Lenovo Yoga/Legion fan driver" and rewrite the
+description to focus on the hardware support rather than my internal
+versioning.
 
+** > That doesn't explain why this is needed. Running a background
+task is expensive.
+** > [...]
+** > This will need some explanation. Why is this worker needed, what
+exactly does it do,
+** > and why not just read the current fan speed from ACPI when requested?
+
+I am a control engineer by trade, so my approach was to implement a
+discrete-time physical model for the fan behavior.
+
+The Lenovo Embedded Controller (EC) often reports "jumpy" or
+oscillating RPM values due to low-resolution tachometer sampling. A
+simple instantaneous read from ACPI results in a very jittery UI in
+userspace. The 100ms background worker provided a constant-frequency
+heartbeat (10 Hz) necessary for the RLLag (Rate Limited Lag) filter to
+function correctly.
+
+This filter mimics the physical inertia of the fan by combining a
+first-order lag with a slew-rate limit. This effectively filters out
+EC measurement noise while ensuring the reported value follows a
+realistic physical trajectory.
+
+However, I understand your concern about the cost of a background task
+on a laptop. For the next version, I will refactor this into a
+"passive" filter that calculates the state transition (dt) only when
+the sensor is read, eliminating the background worker entirely while
+maintaining the integrity of the control model.
+
+** > The hardware monitoring subsystem supports synchronization which
+should be relied on.
+
+Understood. I will remove my manual mutex locking and rely on the
+hwmon core synchronization.
+
+** > Why limit the number of supported fans to 2?
+
+This was an assumption based on the Yoga/Legion models I had access
+to. I will refactor this to support a dynamic number of fans to make
+the driver more universal.
+
+** > This doesn't stop the delayed worker on driver removal, which I
+am sure would
+** > have interesting consequences.
+
+You are correct; that was a significant oversight. By moving to the
+"passive" filter mentioned above, I will be able to remove the worker
+entirely, which solves this safety issue.
+
+I will prepare a new version of the patch incorporating these fixes
+and the missing build system files.
+
+Best regards,
+Sergio Melas
+
+PS: I am a loyal user of Linux since version 2. I have developed
+several private drivers for my own hardware over the years and finally
+decided to take the leap and contribute upstream. Sorry again for my
+newbie errors regarding the submission process. I will do better in
+the future
+
+On Wed, Mar 18, 2026 at 7:21=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> On 3/18/26 10:25, Sergio Melas wrote:
+> > - Refactor driver to V3.0 Universal Platform Mode for cross-model compa=
+tibility.
+> > - Add support for dual-fan ACPI paths (FANS, FA2S, FANX) for Legion/Yog=
+a series.
+> > - Implement 100ms (10Hz) background heartbeat for constant-frequency sa=
+mpling.
+> > - Implement RLLag (Rate Limited Lag) filter to stabilize jumpy EC RPM d=
+ata.
+> > - Use 10-bit fixed-point integer math to avoid forbidden SSE/floating-p=
+oint registers.
+> > - Integrate DSTS ACPI modifications to ensure sensor stability during S=
+3 sleep cycles.
+> > - Provide full documentation for KDE 6 Plasma Sensor compatibility and =
+scaling.
+> >
+>
+> That is an odd subject line and description for a new driver.
+>
+> > Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> > ---
+> >   drivers/hwmon/yoga_fan.c | 222 ++++++++++++++++++++++++++++++++++++++=
++
+> >   1 file changed, 222 insertions(+)
+> >   create mode 100644 drivers/hwmon/yoga_fan.c
+> >
+> No Makefile update, no Kconfig update, no documentation.
+>
+> Am I missing something ?
+>
+> Some more (hight level) comments inline. This is not a complete
+> review.
+>
+> Guenter
+>
+> > diff --git a/drivers/hwmon/yoga_fan.c b/drivers/hwmon/yoga_fan.c
+> > new file mode 100644
+> > index 000000000..5a9ae631c
+> > --- /dev/null
+> > +++ b/drivers/hwmon/yoga_fan.c
+> > @@ -0,0 +1,222 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/**
+> > + * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
+> > + *
+> > + * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
+> > + *
+> > + * This driver provides fan speed monitoring for modern Lenovo Yoga, L=
+egion,
+> > + * and IdeaPad laptops by interfacing with the Embedded Controller (EC=
+)
+> > + * via ACPI. It registers a platform device to ensure compatibility wi=
+th
+> > + * modern HWMON consumers like KDE Plasma 6.
+> > + *
+> > + * Supported Models:
+> > + * - Lenovo Yoga 7 / 14c series (Ryzen/Intel)
+> > + * - Lenovo Legion 5 / 7 / Pro series (Dual-fan support)
+> > + * - Lenovo Yoga Slim 7 / Pro / Carbon / Nano
+> > + * - Lenovo IdeaPad 5 / ThinkBook series
+> > + *
+> > + * Implementation Details:
+> > + * - Fixed static HWMON channel definition for kernel 6.0+ compatibili=
+ty.
+>
+> This patch implements a new driver and thus can not fix anything.
+>
+> > + * - Implements a 100ms background worker to ensure RLLag filter consi=
+stency.
+> > + * - RLLag Formula: x(t) =3D x(t-dt) + clamp(step, -limit, limit)
+> > + * where step =3D (input - x) * alpha
+>
+> That doesn't explain why this is needed. Running a background task is exp=
+ensive.
+>
+> > + */
+> > +
+> > +
+> > +#include <linux/module.h>
+> > +#include <linux/init.h>
+> > +#include <linux/hwmon.h>
+> > +#include <linux/acpi.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/dmi.h>
+> > +#include <linux/workqueue.h>
+> > +#include <linux/mutex.h>
+> > +
+> > +#define DRVNAME "yogafan"
+> > +#define MAX_FANS 2
+> > +
+> > +/* --- RLLAG CONFIGURATION --- */
+> > +#define TS_MS            100
+> > +#define TAU_MS           1000
+> > +#define MAX_SPEED_RPM_S  500
+> > +
+> > +#define ALPHA_SCALED ((TS_MS * 1024) / (TAU_MS + TS_MS))
+> > +#define STEP_LIMIT ((MAX_SPEED_RPM_S * TS_MS) / 1000)
+> > +
+> > +struct yoga_fan_data {
+> > +     const char *active_paths[MAX_FANS];
+> > +     long filtered_val[MAX_FANS];
+> > +     struct delayed_work heartbeat;
+> > +     struct mutex lock;
+>
+> The hardware monitoring subsystem supports synchronization which should b=
+e
+> relied on.
+>
+> > +     int fan_count;
+> > +};
+> > +
+> > +static void yoga_fan_worker(struct work_struct *work)
+> > +{
+> > +     struct yoga_fan_data *data =3D container_of(work, struct yoga_fan=
+_data, heartbeat.work);
+> > +     unsigned long long raw_acpi;
+> > +     long rpm, delta, lag_step;
+> > +     int i;
+> > +
+> > +     mutex_lock(&data->lock);
+> > +     for (i =3D 0; i < data->fan_count; i++) {
+> > +             if (ACPI_SUCCESS(acpi_evaluate_integer(NULL, (char *)data=
+->active_paths[i], NULL, &raw_acpi))) {
+> > +                     rpm =3D (raw_acpi > 0 && raw_acpi <=3D 255) ? ((l=
+ong)raw_acpi * 100) : (long)raw_acpi;
+> > +
+> > +                     delta =3D rpm - data->filtered_val[i];
+> > +                     lag_step =3D (delta * ALPHA_SCALED) >> 10;
+> > +
+> > +                     if (lag_step > (long)STEP_LIMIT)
+> > +                             lag_step =3D (long)STEP_LIMIT;
+> > +                     else if (lag_step < -(long)STEP_LIMIT)
+> > +                             lag_step =3D -(long)STEP_LIMIT;
+> > +
+> > +                     data->filtered_val[i] +=3D lag_step;
+> > +
+> > +                     if (data->filtered_val[i] < 50)
+> > +                             data->filtered_val[i] =3D 0;
+> > +             }
+>
+> This will need some explanation. Why is this worker needed, what exactly =
+does it do,
+> and why not just read the current fan speed from ACPI when requested ?
+>
+> > +     }
+> > +     mutex_unlock(&data->lock);
+> > +
+> > +     schedule_delayed_work(&data->heartbeat, msecs_to_jiffies(TS_MS));
+> > +}
+> > +
+> > +static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types t=
+ype,
+> > +                      u32 attr, int channel, long *val)
+> > +{
+> > +     struct yoga_fan_data *data =3D dev_get_drvdata(dev);
+> > +
+> > +     if (type !=3D hwmon_fan || attr !=3D hwmon_fan_input)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     if (channel >=3D data->fan_count)
+> > +             return -EINVAL;
+> > +
+> > +     mutex_lock(&data->lock);
+> > +     *val =3D data->filtered_val[channel];
+> > +     mutex_unlock(&data->lock);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor=
+_types type,
+> > +                                u32 attr, int channel)
+> > +{
+> > +     const struct yoga_fan_data *fan_data =3D data;
+> > +
+> > +     if (type =3D=3D hwmon_fan && channel < fan_data->fan_count)
+> > +             return 0444;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct hwmon_ops yoga_fan_hwmon_ops =3D {
+> > +     .is_visible =3D yoga_fan_is_visible,
+> > +     .read =3D yoga_fan_read,
+> > +};
+> > +
+> > +static const struct hwmon_channel_info *yoga_fan_info[] =3D {
+> > +     HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT, HWMON_F_INPUT),
+> > +     NULL
+> > +};
+> > +
+> > +static const struct hwmon_chip_info yoga_fan_chip_info =3D {
+> > +     .ops =3D &yoga_fan_hwmon_ops,
+> > +     .info =3D yoga_fan_info,
+> > +};
+> > +
+> > +static int yoga_fan_probe(struct platform_device *pdev)
+> > +{
+> > +     struct yoga_fan_data *data;
+> > +     struct device *hwmon_dev;
+> > +     acpi_handle handle;
+> > +     unsigned long long init_raw;
+> > +     int i;
+> > +     static const char * const fan_paths[] =3D {
+> > +             "\\_SB.PCI0.LPC0.EC0.FANS", "\\_SB.PCI0.LPC0.EC0.FA2S",
+> > +             "\\_SB.PCI0.LPC0.EC0.FAN0", "\\_SB.PCI0.LPC.EC.FAN0",
+> > +             "\\_SB.PCI0.LPC0.EC.FAN0"
+> > +     };
+> > +
+> > +     data =3D devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     mutex_init(&data->lock);
+> > +
+> > +     for (i =3D 0; i < ARRAY_SIZE(fan_paths); i++) {
+> > +             if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[=
+i], &handle))) {
+> > +                     data->active_paths[data->fan_count] =3D fan_paths=
+[i];
+> > +
+> > +                     if (ACPI_SUCCESS(acpi_evaluate_integer(NULL, (cha=
+r *)data->active_paths[data->fan_count], NULL, &init_raw)))
+> > +                             data->filtered_val[data->fan_count] =3D (=
+init_raw > 0 && init_raw <=3D 255) ? ((long)init_raw * 100) : (long)init_ra=
+w;
+> > +
+> > +                     data->fan_count++;
+> > +                     if (data->fan_count >=3D MAX_FANS)
+> > +                             break;
+>
+> Can this happen in practice ? If so, why limit the number of supported fa=
+ns to 2 ?
+>
+> > +             }
+> > +     }
+> > +
+> > +     if (data->fan_count =3D=3D 0)
+> > +             return -ENODEV;
+> > +
+> > +     hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, DR=
+VNAME,
+> > +                                                      data, &yoga_fan_=
+chip_info, NULL);
+> > +
+> > +     INIT_DELAYED_WORK(&data->heartbeat, yoga_fan_worker);
+> > +     schedule_delayed_work(&data->heartbeat, msecs_to_jiffies(TS_MS));
+> > +
+>
+> This doesn't stop the delayed worker on driver removal, which I am sure w=
+ould
+> have interesting consequences.
+>
+> > +     return PTR_ERR_OR_ZERO(hwmon_dev);
+> > +}
+> > +
+> > +static struct platform_driver yoga_fan_driver =3D {
+> > +     .driver =3D { .name =3D DRVNAME },
+> > +     .probe =3D yoga_fan_probe,
+> > +};
+> > +
+> > +static struct platform_device *yoga_fan_device;
+> > +
+> > +static const struct dmi_system_id yoga_dmi_table[] __initconst =3D {
+> > +     { .ident =3D "Lenovo", .matches =3D { DMI_MATCH(DMI_SYS_VENDOR, "=
+LENOVO") } },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
+> > +
+> > +static int __init yoga_fan_init(void)
+> > +{
+> > +     int ret;
+> > +
+> > +     if (!dmi_check_system(yoga_dmi_table))
+> > +             return -ENODEV;
+> > +
+> > +     ret =3D platform_driver_register(&yoga_fan_driver);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     yoga_fan_device =3D platform_device_register_simple(DRVNAME, 0, N=
+ULL, 0);
+> > +     if (IS_ERR(yoga_fan_device)) {
+> > +             platform_driver_unregister(&yoga_fan_driver);
+> > +             return PTR_ERR(yoga_fan_device);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void __exit yoga_fan_exit(void)
+> > +{
+> > +     struct yoga_fan_data *data =3D platform_get_drvdata(yoga_fan_devi=
+ce);
+> > +
+> > +     if (data)
+> > +             cancel_delayed_work_sync(&data->heartbeat);
+> > +
+> > +     platform_device_unregister(yoga_fan_device);
+> > +     platform_driver_unregister(&yoga_fan_driver);
+> > +}
+> > +
+> > +module_init(yoga_fan_init);
+> > +module_exit(yoga_fan_exit);
+> > +
+> > +MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
+> > +MODULE_DESCRIPTION("Universal Lenovo Fan Driver v3.0.0");
+> > +MODULE_LICENSE("GPL v2");
+>
