@@ -1,68 +1,67 @@
 Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EA634EF06
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 20:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835503CEB85
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 20:07:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774037169; cv=none; b=LhNGuQKXxJlpMTMEEoDhXsGmyVzkOdztck4YbrBC5pwy2RLvC4LL+DUkpQiVYwcZW3GEO2uhGUuLWPm7Okw6AepHF/RwQeExD5UzVhVpiK+b/DoNxNtjolw+gGlaYrqMu9WmASpD/52WawXwD2lMtrevz5B6jn5SOwD5/EYDFZc=
+	t=1774037278; cv=none; b=O+P9uQMIPygzoxYmSsmzDa6/EcAFRcM6UYC6X0DNRL01Wb4jxrvDbpIKhoLyAQq6kc/Am2R9UMph9Ep5AiCdJrWsQ5cK1TN/luUqaMbvZZtou9QTBwyRKGOlPOCQ210mx1LtiynlcZPf9mGwLbL+Wgc9v6heFfHyqPlpFw3lUuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774037169; c=relaxed/simple;
-	bh=1qmaFxDccZRzs0QTOM1bUCGgFCittjZZSZ136PK2yWo=;
+	s=arc-20240116; t=1774037278; c=relaxed/simple;
+	bh=KCs2JcjMH0RXYBu3NfXAwrv0K072hU3rKwA6jGlDMHg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EthSllT1Gdl8hRB+o5Maol/Uq+tqaj9s30qMsuMzVMaJZs8Ai0ko430YM42Z5xaCqH6IGuAMxdEepqPeZ+SIQyuJF4RQQJu7V/W85j8x5VRMBs9ccj8CGnAuzvT8leZidhzNwCFP59lgdm9Y2GJlKOmt6pUHGERqzmRfwiM4KuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jz7E7ng7; arc=none smtp.client-ip=74.125.82.173
+	 In-Reply-To:Content-Type; b=htUPZvTD1mwVivq7cT6j0KAl/PtHcg/0T7MBOfcbo2v7apfleOh/jUauV2P+AjtimMowsvEtxNog4EiJy5uOF6mfmuDvtZ3/0TRuAbCP3TyO/cKzgBXuhmLzXU05oMi8+Nlv6jwzcioIGU26SkVvgQSaKhNomBsoDn/vtvj+HAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4PZgs7T; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jz7E7ng7"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c107ef474fso823713eec.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 13:06:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4PZgs7T"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c10a2e2cd1so2742297eec.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 13:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774037168; x=1774641968; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774037275; x=1774642075; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=w0eYaGcB3V+rZa//1YtvXJWbgZGhvz6cAIvDXCZsJEQ=;
-        b=jz7E7ng78r4lBRJXaRlRG74j50yq7ksUuY0c/mQd6gVZ7VFQlGofgppk/y/Olu7Gxb
-         jIi4vUbr9oayMgj1wyFQJ7PGMy7O/pdU37oSbS9R33wPzCf0HNQs6u5Gfg4PGZ+82sKK
-         R1pwuq+XeLFdEprXacIXRt4Pong4L9zPo+fVIxgoJg7FBt6oVS1NkMuHQ1ruo+w4MlXk
-         tYf4AhAp5QVCvFHyO8l/kG9axEZn3J/S6dPpR47HKjKbLi2qkEXEwrepKWQpchIG1wNV
-         T4VoVJWs0a0jKH8yDJBQhGFtW7fWtC7odorCYhfI8mNzwCZJ3orneBxzb+AMSqlo75Ys
-         q0Jw==
+        bh=k29BR/qYLc7EBuf2Es6msoD8R0ogDdsJRfnpAqA5zCE=;
+        b=P4PZgs7TeeMTDfjcQsY9pmwDsSGpPH/pb0pM3xDIcsxfTuJyjWZtmMm6HVk6FQqoyl
+         knWz71rE9qwXtvnrxPvfnaNt4I/LeQXEL+cUo69Vns/WGEH7v58C8syu9h7MvAhBzoMN
+         iv2v5GARuSy9aXno+PxcW0u9sUk4bg7UTuOzy2a5jykQNLpGKKX5RKxg1d9k4fDMVRqz
+         Oqhp8FJO54rbeSxLJskYqCiP2J1S557ZiPKY7oPaQEBeoaufaOZx6PusXaMvcA0Qbqra
+         YVjjWwzgc0LEsoHhFdRohnzFRclFvIxtHgDqyVG9GNBi1y8sndrdoHQDVJgMHbmdp/qS
+         kYZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774037168; x=1774641968;
+        d=1e100.net; s=20251104; t=1774037275; x=1774642075;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w0eYaGcB3V+rZa//1YtvXJWbgZGhvz6cAIvDXCZsJEQ=;
-        b=sTZLfa7XwD7Ta3VduYpRlHBSo4HRzrLXqp7LU0G/eFgotPfL5eLskOMntCmoupx0x0
-         DX4cwMzLIVCIWBPV3Ggunwi+oZYPYcWMg7O3Q/wQZMHb8v0DbCHHobHI66gCXSBxPG/2
-         dtsh02iiPpT1yxsbW8jcwB5kxcFMlCLxL2wUHme55dJj31yKhNjCUwcBoyXF6qSOtEmZ
-         FTPm0ar6yJBsXF2or+G2Wl5HGLWd6jGMNWBOc73r4OMU4KAl7GSIA6GEAOrmNHKAUW78
-         CTon9XS5hOY4TU5C0eGbJkx9XbOc9i2hvP3fLwQ/LAYMtlALxzGaJXL2UW9t86eaudxU
-         bFGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVieORNHRxCh0VGlPxYsGnYhp4rcTWLiI+cnCJf4/s0XRrAs7FAtqhF9d9ppn0xDiIq7Sa4nUXA6l47ew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHAAxKKxBFpHus+x75qU49jBNK5pDqhLUnIh81luYrwO7CtHj4
-	5UqSlQSqKQ8pmBnYtb2zszxVq9RUckk1DbaK8Z15GvfR1ekCRnYlax77
-X-Gm-Gg: ATEYQzxFwMv323YyyzjtmFdN9CPZChgz5V0QCH2AKa8mPciUq3RR5ZMYeknGrY/9zPa
-	t6LB3iS5jAM7+hUnKP4PuAVsbUu8SCMIMWwxj+akiAAtZDD+wRA4xSgEFuO1Fe1Y88P8xh+ibAg
-	ecWOTamh3miIg/of4bp+6KY9h/cmqK/b4vUdqBJLoQn1ega01YvsPG/OoILJxAUs32bp7VmhEH3
-	YtHeSi2DQl5h0oQxbDJ3L7qkGkZKpDfcbUeWhlfx7p0A7PYXkgL8iwMS58slP7oKIq1Lm/88iio
-	dOdTbNucaCCO2rNyLOUKZ7HYUh9AFqSx+Fz/9/gCj5DP8QaIvXyNvvKawpt2uJ2RxsDXYwqcxCd
-	gtISKBlHi/5aFUUKJqBusf7QWk9jFjX0uxQjTalorsJUIa7vGSSJRpLPS6kj5tenZBs+4HHhu3l
-	eK9JMD66EiqYo9GnE7GuwusSBRrnI8ikdcosgOD/2r1QnRb4VIco/Dc/M00zgI8EqZiIDiPRJ3Z
-	BX1TB5XfU0=
-X-Received: by 2002:a05:693c:300b:b0:2c0:d92c:2c68 with SMTP id 5a478bee46e88-2c1098092b8mr2171432eec.31.1774037167545;
-        Fri, 20 Mar 2026 13:06:07 -0700 (PDT)
+        bh=k29BR/qYLc7EBuf2Es6msoD8R0ogDdsJRfnpAqA5zCE=;
+        b=XXvpXFywG1EiIU7w8i7FEGh8zqsIgwfBywNY8EV8tdgVko2hw1K/J/HVn2V8sDNTJm
+         P5dFZhLiDLbhRhxdl6agu39/3n17vGsU9YKAm+D6NJwWAdPWJWl63gBCv9tox8JQQQx7
+         C2rzDmmwsCLBzIsfQxBDF7IyiFrwOvaPuqBAFYGXw/nsh6qlxpjAoeHa8qNQvxtQgoAE
+         pF24jYBtj6OcSmIEU8gH/J3Iqqyrsr05bBlje18EQxzXseVY8DefzHS5p229sboFSizN
+         oAVaJ3Ar9CnFPKgo9eIyA7uVPsdNPBFL3mPTW51YyY+M8H5vI7LIqLF+/tLHlWHmW8IM
+         XWBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXM0WUjTjG3xskUHyrEMM2IgBUao1FYoaAyRnG/Cos/Lzbdnog0O0H5pbAY+4V+WOd6fSiFGXkFUE8HQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzElB3SU+8BxSZE8y+fW3ip6Pcemkxg564JZxVSm1mEDumQ8ZVB
+	YOn1vcQi9OTSmFbUL0YQfX3XfjIwJ/ttR8YU6ebMfW0Ro1t8fQBhgjt6
+X-Gm-Gg: ATEYQzzq2thl9lcL/o8wCilSvwG0ptBLSWiCjcRIzX9UmKmhhF+vTteco2YfBQJy75c
+	/zseVk4uoiNgjqCyNJNUhxpi+wvszgwIZp+gG1gqDV2bHaehj5d1jKW9xx3h5DvYCN9BjIXvrXp
+	3i2kzNRXaizjoDUDNR2Vof12bR6xs9/2GUhWbGf7VQuPqh6Zzly9H7ICsjgJzUULcwAP38+zNI0
+	PhYaX/MXD4f1kNgfWv+UElk+xRUCt2Ez4Xs58JPCItfVRPE12ZHTOTANPi3E+/r0ePB8BpnVVfP
+	Q33ZlgAev5I5r9pZzofGtI0iZw7/7euD87kd6um8cPhuL0bdhcNPhDCnm8Fkc4vRNUJl8vC7CNv
+	inK68m34yMs2aXfdwEtRUL4aw7vtXdClCbk0psx5r7/OjJKteVCBvz3NTC1YJ2ZFPogQozJHEzF
+	A2VY+xwSgJXSxzMMKXdc0zI6Hr0LStJ90iNpbULnB0A0Pb/517ku2Z91jnb26nVSXOzYOj9cI2
+X-Received: by 2002:a05:7300:e208:b0:2bd:f280:58d4 with SMTP id 5a478bee46e88-2c109585241mr2319894eec.6.1774037274491;
+        Fri, 20 Mar 2026 13:07:54 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14bac4sm5869488eec.4.2026.03.20.13.06.05
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b17b1b8sm4822629eec.8.2026.03.20.13.07.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 13:06:06 -0700 (PDT)
+        Fri, 20 Mar 2026 13:07:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <52642e6e-cd86-46e2-ad73-3775ff9531b0@roeck-us.net>
-Date: Fri, 20 Mar 2026 13:06:04 -0700
+Message-ID: <db707904-2ec3-4169-9cb6-59d80415dec4@roeck-us.net>
+Date: Fri, 20 Mar 2026 13:07:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -70,17 +69,11 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] hwmon: emc2305: Support configurable fan PWM at
- shutdown
-To: florin.leotescu@oss.nxp.com, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Michael Shych <michaelsh@nvidia.com>,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: daniel.baluta@nxp.com, viorel.suman@nxp.com,
- linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
- festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
-References: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
+Subject: Re: [PATCH v2] hwmon: (it87) Add support for IT8689E
+To: Markus Hoffmann <markus@thehoffs.at>, linux-hwmon@vger.kernel.org
+Cc: jdelvare@suse.com, linux-kernel@vger.kernel.org
+References: <20260309223103.175443-1-markus@thehoffs.at>
+ <20260320144323.4870-1-markus@thehoffs.at>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -126,50 +119,96 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
+In-Reply-To: <20260320144323.4870-1-markus@thehoffs.at>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/20/26 08:29, florin.leotescu@oss.nxp.com wrote:
-> From: Florin Leotescu <florin.leotescu@nxp.com>
+On 3/20/26 07:43, Markus Hoffmann wrote:
+> Add support for the ITE IT8689E Super I/O chip. The IT8689E supports
+> newer autopwm, 12mV ADC, 16-bit fans, six fans, six PWM channels,
+> PWM frequency 2, six temperature inputs, and AVCC3.
 > 
-> This series adds support for configuring the fan PWM duty cycle applied
-> during system shutdown for the EMC2305 fan controller.
-> 
-> Some platforms require fans to transition to a predefined safe state
-> during shutdown or reboot handoff until firmware or the next boot stage
-> reconfigures the controller.
-> 
-> The new optional Device Tree property "fan-shutdown-percent" allows the
-> shutdown PWM duty cycle to be configured per fan output.
+> Signed-off-by: Markus Hoffmann <markus@thehoffs.at>
+> ---
+> Changes in v2:
+>    - Add it8689 to the it8620/it8628 GPIO pin multiplexing checks in
+>      it87_find() to avoid exposing ghost fans, garbage tachometer data,
+>      and non-functional PWM controls on boards where those pins are
+>      multiplexed as general-purpose I/O.
 > 
 
-Sashiko stil finds some problems. Please check.
+Sashiko still finds some problems:
 
-https://sashiko.dev/#/patchset/20260320152959.1575978-1-florin.leotescu%40oss.nxp.com
+https://sashiko.dev/#/patchset/20260320144323.4870-1-markus%40thehoffs.at
 
 Thanks,
 Guenter
 
-> Changes in v4:
-> - Initialize pwm_shudown array to EMC2305_PWM_SHUTDOWN_UNSET in probe,
->    to avoid treating unconfigured channels as valid and written 0
->    during shutdown
-> Changes in v3:
-> - Rebased on current upstream
-> - Dropped already upstreamed of_node_put(child) fix
-> Changes in v2:
-> - Address feedback from Guenter Roeck
-> - Make shutdown behavior configurable via Device Tree
-> - Add optional fan-shutdown-percent property
-> - Apply shutdown PWM only for channels defining the property
+>   drivers/hwmon/it87.c | 18 ++++++++++++++++--
+>   1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> Florin Leotescu (2):
->    dt-bindings: hwmon: emc2305: Add fan-shutdown-percent property
->    hwmon: emc2305: Support configurable fan PWM at shutdown
-> 
->   .../bindings/hwmon/microchip,emc2305.yaml     |  8 +++++
->   drivers/hwmon/emc2305.c                       | 35 +++++++++++++++++++
->   2 files changed, 43 insertions(+)
-> 
+> diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+> index 5cfb98a05..0dcf6bbac 100644
+> --- a/drivers/hwmon/it87.c
+> +++ b/drivers/hwmon/it87.c
+> @@ -16,6 +16,7 @@
+>    *            IT8622E  Super I/O chip w/LPC interface
+>    *            IT8623E  Super I/O chip w/LPC interface
+>    *            IT8628E  Super I/O chip w/LPC interface
+> + *            IT8689E  Super I/O chip w/LPC interface
+>    *            IT8705F  Super I/O chip w/LPC interface
+>    *            IT8712F  Super I/O chip w/LPC interface
+>    *            IT8716F  Super I/O chip w/LPC interface
+> @@ -64,7 +65,7 @@
+>   
+>   enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+>   	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
+> -	     it8792, it8603, it8620, it8622, it8628, it87952 };
+> +	     it8792, it8603, it8620, it8622, it8628, it8689, it87952 };
+>   
+>   static struct platform_device *it87_pdev[2];
+>   
+> @@ -162,6 +163,7 @@ static inline void superio_exit(int ioreg, bool noexit)
+>   #define IT8622E_DEVID 0x8622
+>   #define IT8623E_DEVID 0x8623
+>   #define IT8628E_DEVID 0x8628
+> +#define IT8689E_DEVID 0x8689
+>   #define IT87952E_DEVID 0x8695
+>   
+>   /* Logical device 4 (Environmental Monitor) registers */
+> @@ -502,6 +504,14 @@ static const struct it87_devices it87_devices[] = {
+>   		  | FEAT_SIX_TEMP | FEAT_VIN3_5V | FEAT_FANCTL_ONOFF,
+>   		.peci_mask = 0x07,
+>   	},
+> +	[it8689] = {
+> +		.name = "it8689",
+> +		.model = "IT8689E",
+> +		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
+> +		  | FEAT_SIX_FANS | FEAT_IN7_INTERNAL | FEAT_SIX_PWM
+> +		  | FEAT_PWM_FREQ2 | FEAT_SIX_TEMP | FEAT_AVCC3,
+> +		.smbus_bitmap = BIT(1) | BIT(2),
+> +	},
+>   	[it87952] = {
+>   		.name = "it87952",
+>   		.model = "IT87952E",
+> @@ -2785,6 +2795,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>   	case IT8628E_DEVID:
+>   		sio_data->type = it8628;
+>   		break;
+> +	case IT8689E_DEVID:
+> +		sio_data->type = it8689;
+> +		break;
+>   	case IT87952E_DEVID:
+>   		sio_data->type = it87952;
+>   		break;
+> @@ -2952,7 +2965,8 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+>   
+>   		sio_data->beep_pin = superio_inb(sioaddr,
+>   						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
+> -	} else if (sio_data->type == it8620 || sio_data->type == it8628) {
+> +	} else if (sio_data->type == it8620 || sio_data->type == it8628 ||
+> +		   sio_data->type == it8689) {
+>   		int reg;
+>   
+>   		superio_select(sioaddr, GPIO);
 
