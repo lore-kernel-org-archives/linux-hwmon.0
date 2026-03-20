@@ -1,251 +1,230 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013068.outbound.protection.outlook.com [40.107.162.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D31C3A7590;
-	Fri, 20 Mar 2026 15:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774019673; cv=fail; b=u7dyaZ7fodG1wlNrFPSFZAonoRLkt5/IPAVGetulnX959cNlQ+vLuth17UoevuN6ZMA66kYbzBLOc1m10Rjn0l6xaqzAKQ+1xssCTCdvFFFSsB7h0ieQsu9KnyQS8NvgBs6/Kfj4Myp4W5fGWlXzqyzZdswOoZGkoj/yaxKnJ1Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774019673; c=relaxed/simple;
-	bh=4AharuZuwJ3KIJFDimS0Fn4Kr+HnUnH6CFBWDsF30+Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=r1oAsws1HP60lcgi5V+NVDGWRUA3/6q1s3wbTW7YsUNaD/iY2ySCP4u7smQN9fS0p9GNsQK21GsjYsdAZZDX9ZSxibsCbb2JTrkXiX+CwgWQBFQ5kfRy6NK2AbD+P62HMaGZp5DAFfQj/NYykQSoxgA4T7VXg4I+PEMG/bDfsYk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=qcY+lSeb; arc=fail smtp.client-ip=40.107.162.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CA73C7E03
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 15:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774020142; cv=none; b=Ww2UtV5qQSsUvwXkMw6uECU3exlMVjUvLpDBs7zwB57isElfQXjb699anKrw/2WMP6iVFKetpengdcgAyqPSNhEzl1Xye3AoP+QCMlHBUb0wMJGVdB3nto/rs9Hl/VEliMY88Ff00BXJazj66pXcgc4pzOU8T5FTc1307y4ORwM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774020142; c=relaxed/simple;
+	bh=UgR6Ndg9uIN+GlcSMo5nrbnxzdPyRtxdyxaRymn3PjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sw/Xu/t01PMheoDDS4eZwMqUqOSXJNDdNozb5wR8+UmoOu4/5hzzhdP/DajE27+E6E9KSfuZHYu8e7aCvScoKLbyru1xJfMVY6ROoYhn4lTV5aWZem6A5vxrCENBdwYIWN0Sd+fkElQUrYgZULn+572VuVlRAb0MHUyIHRvhXHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etb/22JS; arc=none smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="qcY+lSeb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CFVheAqDgtk1myv+CIy4/x5X1udfPxnb6PsyvnG6b8kotRz2J+aTEleah07sFfFXTey6AeIT+zCQRGmStRCXX46FqQgGEmcpBcGmkVDwq9AT0bl69nwBJc2q76ChrV99MvslPLYhvyyzM+8YfBFJRJg9pocQk+zQ+84Z/KrmcVqs3qkSK5KCDEqJvFzTZU25RkVp9yQgmorNdnHP8minrpAMYmjLryZMsJ6l72WSmflnmbtoyy2QOFajvRKVERWEUbyHH2NZHUbFSyQ5S4Zm9WWfpeD7oqOaab/j9HEddtYTuO8DqBAwTDgKmTIYBfsv8ip+jvv1yHHMRaraGOmGVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gbeB6gjUTTi09/FT8jvKb8J4ZHzUMZc8MRjRQE+jUG4=;
- b=nk9GUDozikJlOe7/q7Wv7ZyqguK5eKfDZ8qkl34yMJ254ds2shrGH9b/lAmqUIMaE2OvvmzA6oSY/mTep8sAc57En9LvkVJa0mwIlpyBYNa2F/6DnbgngmrXCNE5JFXIXiKxyGWLHXAc6hcFjID893WUeOl7A/1DbuqgcoWY99QbP4Fnxkf0bz1I14li3nmYcUbkaIdT6N3EnKieLtK6bZAOwYiNx3g3pHYNcd7TyYdFySFQ2LF+3/13KRVvFLoQU0CAgCxYQLYrUOvay5ublhv0hyDOGmevmK41Sax7ISUgIJ9FaZQ/w4Jfq1wf4LmfCI8APmpuWaTD1pYZiFbFLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gbeB6gjUTTi09/FT8jvKb8J4ZHzUMZc8MRjRQE+jUG4=;
- b=qcY+lSebHfmnlcyke6GObL/SdKeJKpcLPjArWo+ezoEZFFkes5An8XasxsFUldjSYMVNW2eRMoZ5mQEHiQIFGIsRIXsFSD1xERt7zgObSOHLxLG6SAAl9GTJWE5+d6pk8bP2a7PM41PIpRNg44MW4gbFbyoSgpI54cZpuqwF/El1jZd+pu89k0TyFxQKllpJn91gQLWoLAal+sE4SdwniGX3yoImeB73wAVcWAOHcO8dsd7jBfl8bPjR3vSxe4EUuuiw/m2WEus9Ti3BMZvf4D8NLrhRVyQtQb5nB6kbQN7p5rVVNgO3w9QgvkzRCVggRzxNxaLYuOe7Nk0sPOHpkA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
- by GV1PR04MB10630.eurprd04.prod.outlook.com (2603:10a6:150:212::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.23; Fri, 20 Mar
- 2026 15:14:19 +0000
-Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
- ([fe80::93f5:4ff3:2f4c:183a]) by DU7PR04MB11163.eurprd04.prod.outlook.com
- ([fe80::93f5:4ff3:2f4c:183a%6]) with mapi id 15.20.9723.022; Fri, 20 Mar 2026
- 15:14:18 +0000
-From: florin.leotescu@oss.nxp.com
-To: Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Shych <michaelsh@nvidia.com>,
-	linux-hwmon@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: daniel.baluta@nxp.com,
-	viorel.suman@nxp.com,
-	linux-arm-kernel@lists.infradead.org,
-	imx@lists.linux.dev,
-	festevam@gmail.com,
-	Florin Leotescu <florin.leotescu@nxp.com>
-Subject: [PATCH v4 2/2] hwmon: emc2305: Support configurable fan PWM at shutdown
-Date: Fri, 20 Mar 2026 17:29:59 +0200
-Message-Id: <20260320152959.1575978-3-florin.leotescu@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
-References: <20260320152959.1575978-1-florin.leotescu@oss.nxp.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0268.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e8::13) To DU7PR04MB11163.eurprd04.prod.outlook.com
- (2603:10a6:10:5b3::14)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etb/22JS"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-128e4d0cc48so810897c88.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 08:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1774020140; x=1774624940; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLivAihLgNnoUtQTgzoVTgm03POcgTePUmAJyh0fy7M=;
+        b=etb/22JSbN7fvE0ycHXItKMqS+dhcRAYlzUA12l+sUaRynrkmLiqlrxOuARf8LP1IG
+         xQK2Y7vYLXOie0loa6jTRlLiAwESQpNv4iv+/lJNoiWmtJkZS5//Rq/aIN4xoQ9g78wJ
+         4LeNsFLMFX5eoaaUxWXFx0bxyjlscdAeKKF10GutRwGpXpNmicIZRe/z8nvKjJ9Y7IF/
+         WZX1jM6sfUoJlZCgyKbqvt24/E4JeBf90cpEHiOtyVI3C1XHkZFAvTcaNPcLm6fx/Xto
+         mjpNKNtXZX6lk0uenkalRzsKvhvTF7ODaD8GU35CppRI6hNgSL1LNGrwH4aYttvQb5KT
+         kSyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774020140; x=1774624940;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wLivAihLgNnoUtQTgzoVTgm03POcgTePUmAJyh0fy7M=;
+        b=nkoZtuzaOxWTsXSUWBJXRxmoZwMLcTLZ3fP4oMeZQ+gMFIwkVTKZ1OSqHNtqgCghHu
+         A++/z4Ohe2huurEg+oVLSWbr4H1j0TPfWxUamE+oQFPB2ekv99yRkEMnuxWGnESbqaOi
+         SS2XrthePXFtdJfRjpcTBhQRn71VyTE87ZHWfQ7scykjiosvlsuOs0jazcmiU6RZEg3Q
+         xA7nbhaeS+V1MoQ2EnTbTeFQAtuZjzaUmdt0+Rfuxhq5/IcdYPqKnx7qko1hvxsVJkek
+         8tAbMx5vpTsw3hbENtpNZfOSgq6p+62JgMB/N8Z5Wn2QAwRSfr2qiHoE5kt8mbG6pDKc
+         MbVg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7N5MA9bmhjz9WROoc5TpWgHdyYQxq0pBX9JEYEFM/ipO4oAJoRTxwdMS2z7VLPg4mrXsBKCqZZlIucw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLAkx1pUnDjw9fzMg3vsIK17Rh/uuPNcAWpzErMJJXi4gi8Gp9
+	BZqsrLeS9q8Qf17JMkwrzpBZ8a9BvuxUCMdfHz8yGRJRPpi8D5h+bgna
+X-Gm-Gg: ATEYQzwBZ1r4ZUXPGrZ/YZcllE71VPbB1AdXPWpRy/p1ilZ4dJteykfiK4sLdnsjP88
+	i/wlax7kpTzpk+CRyo08QjZ7I+rX6sgAzncAkucfpIX2Q7qlxqyzIRVZJQmJl1a9GHqJaAKCfpe
+	vGpWxVkAK3aHZq2BcXElZCvJZNMBx4UVMQOO6NNR+Zok5g9Mvd8N2UE1+YPY7NbzzyA5t34T0yu
+	bfM1LXVPSxoT4/c2TVhU86x+jecYDOjsNkqHnyRKtqqNtyrUy/3pJNr/jdZPWAAZLSDbj6Ei/0B
+	j1gFbOWpRJE5uCbBr22Defma+GMrMNIlZLiETnDuWaiAJR/LJknaExOsaW9ad8G7JVyhx6BsJE6
+	HawhdslyigSxLrwmK4w0KiUt3i/i/j/ltTRiW8Oypiq04go/p0itMR8Kk9FP+9kRGsJdhIkwIMn
+	ekmifHICDHoypa/74gv0WCNfnmm4Bmq4sRSY0qOxFAXlB0apkYC5QY9U0TR+vqrtW6XoSYYtN9
+X-Received: by 2002:a05:693c:300b:b0:2be:1f56:ed21 with SMTP id 5a478bee46e88-2c109563b70mr1476492eec.7.1774020140180;
+        Fri, 20 Mar 2026 08:22:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10aefd778sm4707452eec.0.2026.03.20.08.22.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Mar 2026 08:22:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a922cf55-ebe7-4256-b3bb-cc732e45e1ff@roeck-us.net>
+Date: Fri, 20 Mar 2026 08:22:17 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|GV1PR04MB10630:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7c6a5be-f024-4d68-52cc-08de86935b00
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|376014|7416014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	hTGWyrzB+cHpm/x7Lt/+J2DUYy9KHy3rVbUWls/fUMybQz306cpm+OLwvjjmf9244D5aRxJuvz6mj9npJ4qpOswcjiOawNA2OyOJvPvvd4a3PV73p/s55b+bc7V7CfcWnfBNP3I1GE5C9D7+dsLm7xHtdM26oVtguBBBSgh3QN/NLt6E64yJHYzrukh3ES1tjs54omEw8RtMaqY87h3/vVkF1FdIL/7IGVytTFcFfw6Fpz2o/ObF/xIxBYFLIsJrKdqGUo+NC9Qqxkq1PitfD5Qfl3iahW7TKCYZJ4hbkS8b2k9wCQypSommeSh+OTZUwKAtvPvbAL1fRU0CseIC/iKDvVFq10ylay4T2u29RcTAmBMwa9IPx74LlWhvuQix+JvscKCwFkb5Gj+KCSrn81x+yIClaLa/x80foZx5jEGXsJppTz0ICQkQ8Y6Q63vjm5hommgbAj4MgDIsC8FtA1ZCZAUxAVI9FSYM0M7H45gUfHm66m98Gu6StOQOPh0t9a8Rf3uNaKe2p8ockS5IcNNlIktSeO9CIKQGZlTUuzSOSnyU/1flW89o47K+t3GOVXZoCINMsW8cnyrhOjCuAPFHo9p06zyNE3EQYRVFW4d38nzutDKbPgyINAdue6ggnqx5/d8Kqf33qOHCnVbVOLZ7/KUSF8jElTaz5N6A4M0wGZi6XNC+HDt2AeF0JBS3K/O6oD7iH7rz2phBU3n13AJbUFd5qsvhaXzYL0SySjM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(376014)(7416014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?wYFurlf0M3MC7NE+uflNPRgl4Rs5lOaGf2QnX+49b3N2Wkmo+o8kYohYG4?=
- =?iso-8859-1?Q?Muzlugt/7bXqpKxc2/ifSyLu8wlaS7rNHFDfGTXKKCUVJhflgmRB8qOWus?=
- =?iso-8859-1?Q?U88GIrrjsBdJbC4zbQMe6ko08m7NDP9wf5jfDO2jwM2PVO7zp8Mp3bqnJM?=
- =?iso-8859-1?Q?+rEQIh7iC5EG4cS/Sc11UntuGU3sC3wEQaqCrSLC5K9tP71FOjC9bR4jAZ?=
- =?iso-8859-1?Q?v6EzbRl1uHxKbBd1tCR45GO/mWmlCM5OE/XbCpVmo3kIrCXJcvKMB+I2nc?=
- =?iso-8859-1?Q?LSViuDt9QYyUb27gjyKDxMamW/ScJNVIa+6/GSQHfPQF5OlQDHdN0wbwp1?=
- =?iso-8859-1?Q?H3NvEENsXkrjRRL56M61V9Asll0gpOp8p8U133Z7rC3niGk3RZKinhwWTR?=
- =?iso-8859-1?Q?Li5z27AgSPcMI+jtgilQlfAiHNqwg/FvtFVHgys1IEqXtwrMT+p4NglPU6?=
- =?iso-8859-1?Q?mf9ThLp2Iyi4kpr9PLNf3ruCRhkw427TL6wW6LrnwDc5prTd0Ne979NyE6?=
- =?iso-8859-1?Q?WcGWQi9PBHWO9m976V0D1nA+DRTJYJ7IrBQyluK3IZG4UJS2cR75toshvp?=
- =?iso-8859-1?Q?9rKE9y2zJXcAQg3guxf32F+dLpX2aCE9H6sFnFKONdenjW0JNfzFGBOERB?=
- =?iso-8859-1?Q?5Leow8H02RibNA2vTbskpgxvsNHJScTAL5+/QtMzWCULub1kCcwp+7cj+c?=
- =?iso-8859-1?Q?JSu13qkSNBFfBkXnLBW+Yu3OkkimAkcyon/0izVhSHuOqan8+2P66QHFQh?=
- =?iso-8859-1?Q?9T+MqjQQi5yARswWKkBloY+CSEn4V9wUtDWLp1kFbi47qCeav2Lsvz7Y7I?=
- =?iso-8859-1?Q?2lhgvYSnTFOXf3ZAiI9dynShFyqMjBGT4bBR4bwfOR7RdIL/aWxe0x8bRK?=
- =?iso-8859-1?Q?+1J1vthuwbR1Lc4cakV6HwYrAieUcsrWb+Yj4qswxpAV5i013nqhdIrg22?=
- =?iso-8859-1?Q?WcczT+fHqNdgv82ree1sBY+FFI7fIKtdibzRS0PEgclWWvyPLJCLeNZdCG?=
- =?iso-8859-1?Q?GunD0ogD6tyfubX44qCaMSZZ3gJwXmhPPz0LdIhFlKxQlDtYBCx+JvwDWs?=
- =?iso-8859-1?Q?/HknkUl42koEfjwzK/eszIjsQikrnWb5GGlFkcZ1FUx5tQ3HxgTKEkgu5y?=
- =?iso-8859-1?Q?/8ROvcJt6getItkLTZE5HDBtpnXkPXXUVg02REO/debA4k/1Qob9Byx7j3?=
- =?iso-8859-1?Q?GbFWf4pyOYgxOHp9RkvKaJM9Y697jitRkEBmAWCT99g1Xgx/WdjRRGdYpV?=
- =?iso-8859-1?Q?L1PfhDABCQVwnMvwiZzgsaP49/V+AUcRkosWkAKWIENjm7LsI1ov00jzMR?=
- =?iso-8859-1?Q?U3AQXziWGq7VxhySQ/PnSg0bgm9WE76ctIsUq4fHBfkqpW0+qgEjpg0nUA?=
- =?iso-8859-1?Q?boqK49H5aNcW4iFGc9lpeq0P+1mNpts/OSF/9gSXkVSG35hlssYkJHmzmF?=
- =?iso-8859-1?Q?P01PMJTE0sNmnmtT9+ZwFI38lgTc5j5jBJAHVLTKV9xKEs236+G1M7Tfqe?=
- =?iso-8859-1?Q?hCU0vcUcJZz+Y8ANTOhpmjD4Pf6jItUhBHa38NBjvMdwD17gdGCM18jqZZ?=
- =?iso-8859-1?Q?mES5VFgsZ2KwtKfuoFsYvpzBAhbEACgAqV2JoVM9VVjmTgf+SjgFtaE61B?=
- =?iso-8859-1?Q?r+pIa8DMoZy2Wd2P4P9ZkUhtEs3xbifaKPchOJ0cETs0xGppB14mc3BOgL?=
- =?iso-8859-1?Q?AilUMS0f5yTYyxM+fjsJOFkVfWdMSLhfbn5yc95bp7Plzd4ITStl0Jxmh/?=
- =?iso-8859-1?Q?eP5dKSqy30pVmmukCh91kN7iOgm336CpSP211cXWQguO9J9tD59HXtRal3?=
- =?iso-8859-1?Q?eh2f/85mXw=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7c6a5be-f024-4d68-52cc-08de86935b00
-X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 15:14:18.0856
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XBEGx9t8RXG1SCUGBGJZAjrzOQ+7xQvR/rI4sxuuvv9HD+yk1jaoEK2B7z3AHIiDExcglRKw5U7jjvH/XDCiIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10630
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] hwmon: Add Qualcomm PMIC BCL hardware monitor driver
+To: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>,
+ Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>, amit.kucheria@oss.qualcomm.com,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, linux-hwmon@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260206-qcom-bcl-hwmon-v1-0-7b426f0b77a1@oss.qualcomm.com>
+ <20260206-qcom-bcl-hwmon-v1-2-7b426f0b77a1@oss.qualcomm.com>
+ <ab1fSWx7pqlSANph@mai.linaro.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <ab1fSWx7pqlSANph@mai.linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Florin Leotescu <florin.leotescu@nxp.com>
+On 3/20/26 07:52, Daniel Lezcano wrote:
+> Hi Manaf,
+> 
+> On Fri, Feb 06, 2026 at 02:44:06AM +0530, Manaf Meethalavalappu Pallikunhi wrote:
+>> Add support for Qualcomm PMIC Battery Current Limiting (BCL) hardware
+>> monitor driver. The BCL peripheral is present in Qualcomm PMICs and
+>> provides real-time monitoring and protection against battery
+>> overcurrent and under voltage conditions.
+>>
+>> The driver monitors:
+>> - Battery voltage with configurable low voltage thresholds
+>> - Battery current with configurable high current thresholds
+>> - Two limit alarm interrupts (max/min, critical)
+> 
+> Can you describe the behavior of the alarm ?
+> 
+> I assume the alarm is raised when a threshold is crossed from normal
+> to anormal condition leading to a hwmon event.
+> 
+>   * Does the BCL trigger an interrupt when going back to the normal condition ?
+> 
+>   * When is the alarm flag reset ?
+> 
+>   * Can we have a flood of events if the current / voltage is wavering
+>     around the thresholds ?
+> 
+> Overall, the driver is too big, so hard to review. It is better to
+> provide a simplified version with one version supported.
+> 
+>> The driver integrates with the Linux hwmon subsystem and provides
+>> standard hwmon attributes for monitoring battery conditions.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
+>> ---
+>>   MAINTAINERS                    |   9 +
+>>   drivers/hwmon/Kconfig          |   9 +
+>>   drivers/hwmon/Makefile         |   1 +
+>>   drivers/hwmon/qcom-bcl-hwmon.c | 982 +++++++++++++++++++++++++++++++++++++++++
+>>   drivers/hwmon/qcom-bcl-hwmon.h | 311 +++++++++++++
+>>   5 files changed, 1312 insertions(+)
+> 
+> [ ... ]
+> 
+>> diff --git a/drivers/hwmon/qcom-bcl-hwmon.c b/drivers/hwmon/qcom-bcl-hwmon.c
+>> new file mode 100644
+>> index 000000000000..a7e3b865de5c
+>> --- /dev/null
+>> +++ b/drivers/hwmon/qcom-bcl-hwmon.c
+>> @@ -0,0 +1,982 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Qualcomm pmic BCL hardware driver for battery overcurrent and
+>> + * battery or system under voltage monitor
+>> + *
+>> + * Copyright (c) 2026, Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+> 
+> Old copyright format
+> 
+>> +#include <linux/devm-helpers.h>
+>> +#include <linux/err.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/property.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/workqueue.h>
+>> +
+>> +#include "qcom-bcl-hwmon.h"
+>> +
+>> +ADD_BCL_HWMON_ALARM_MAPS(in, min, lcrit);
+>> +ADD_BCL_HWMON_ALARM_MAPS(curr, max, crit);
+>> +
+>> +/* Interrupt names for each alarm level */
+>> +static const char * const bcl_int_names[ALARM_MAX] = {
+>> +	[LVL0] = "bcl-max-min",
+>> +	[LVL1] = "bcl-critical",
+>> +};
+> 
+> IIUC there are three levels of alarms but the hwmon only has max/min
+> and critical. Would it make sense to do adaptative min / max ? So when
 
-Some systems require fans to enter in a defined safe state during system
-shutdown or reboot handoff.
+hwmon has lcrit, min, max, and crit alarms for all sensor types, plus
+an additional _cap_alarm for power attributes and _emergency_alarm
+for temperature attributes. There is also a generic _alarm attribute
+for each sensor, which is supposed to be used if the specific alarm
+type is not known.
 
-Add support for the optional Device Tree property "fan-shutdown-percent"
-to configure the shutdown PWM duty cycle per fan output.
+What exactly are the three levels of alarms ?
 
-If the property is present for a fan channel, the driver converts the
-configured percentage value to the corresponding PWM duty cycle and
-applies it during driver shutdown.
-
-If the property is not present, the fan state remains unchanged.
-
-Signed-off-by: Florin Leotescu <florin.leotescu@nxp.com>
----
- drivers/hwmon/emc2305.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
-index 64b213e1451e..58249b49e264 100644
---- a/drivers/hwmon/emc2305.c
-+++ b/drivers/hwmon/emc2305.c
-@@ -32,6 +32,7 @@
- #define EMC2305_REG_DRIVE_PWM_OUT	0x2b
- #define EMC2305_OPEN_DRAIN		0x0
- #define EMC2305_PUSH_PULL		0x1
-+#define EMC2305_PWM_SHUTDOWN_UNSET      -1
- 
- #define EMC2305_PWM_DUTY2STATE(duty, max_state, pwm_max) \
- 	DIV_ROUND_CLOSEST((duty) * (max_state), (pwm_max))
-@@ -104,6 +105,7 @@ struct emc2305_cdev_data {
-  * @pwm_output_mask: PWM output mask
-  * @pwm_polarity_mask: PWM polarity mask
-  * @pwm_separate: separate PWM settings for every channel
-+ * @pwm_shutdown: Set shutdown PWM.
-  * @pwm_min: array of minimum PWM per channel
-  * @pwm_freq: array of PWM frequency per channel
-  * @cdev_data: array of cooling devices data
-@@ -116,6 +118,7 @@ struct emc2305_data {
- 	u8 pwm_output_mask;
- 	u8 pwm_polarity_mask;
- 	bool pwm_separate;
-+	s16 pwm_shutdown[EMC2305_PWM_MAX];
- 	u8 pwm_min[EMC2305_PWM_MAX];
- 	u16 pwm_freq[EMC2305_PWM_MAX];
- 	struct emc2305_cdev_data cdev_data[EMC2305_PWM_MAX];
-@@ -539,6 +542,7 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
- 				      struct device_node *child,
- 				      struct emc2305_data *data)
- {	u32 ch;
-+	u32 pwm_shutdown_percent;
- 	int ret;
- 	struct of_phandle_args args;
- 
-@@ -579,6 +583,16 @@ static int emc2305_of_parse_pwm_child(struct device *dev,
- 	}
- 
- 	of_node_put(args.np);
-+
-+	ret = of_property_read_u32(child, "fan-shutdown-percent",
-+				   &pwm_shutdown_percent);
-+
-+	if (!ret) {
-+		pwm_shutdown_percent = clamp(pwm_shutdown_percent, 0, 100);
-+		data->pwm_shutdown[ch] =
-+			DIV_ROUND_CLOSEST(pwm_shutdown_percent * EMC2305_FAN_MAX, 100);
-+	}
-+
- 	return 0;
- }
- 
-@@ -631,6 +645,9 @@ static int emc2305_probe(struct i2c_client *client)
- 	if (ret)
- 		return ret;
- 
-+	for (i = 0; i < EMC2305_PWM_MAX; i++)
-+		data->pwm_shutdown[i] = EMC2305_PWM_SHUTDOWN_UNSET;
-+
- 	pwm_childs = emc2305_probe_childs_from_dt(dev);
- 
- 	pdata = dev_get_platdata(&client->dev);
-@@ -714,6 +731,23 @@ static int emc2305_probe(struct i2c_client *client)
- 	return 0;
- }
- 
-+static void emc2305_shutdown(struct i2c_client *client)
-+{
-+	int i;
-+	int ret;
-+	struct emc2305_data *data = i2c_get_clientdata(client);
-+
-+	for (i = 0; i < data->pwm_num; i++) {
-+		if (data->pwm_shutdown[i] != EMC2305_PWM_SHUTDOWN_UNSET) {
-+			ret = i2c_smbus_write_byte_data(client, EMC2305_REG_FAN_DRIVE(i),
-+							data->pwm_shutdown[i]);
-+			if (ret < 0)
-+				dev_warn(&client->dev,
-+					 "Failed to set shutdown PWM for ch %d\n", i);
-+		}
-+	}
-+}
-+
- static const struct of_device_id of_emc2305_match_table[] = {
- 	{ .compatible = "microchip,emc2305", },
- 	{},
-@@ -726,6 +760,7 @@ static struct i2c_driver emc2305_driver = {
- 		.of_match_table = of_emc2305_match_table,
- 	},
- 	.probe = emc2305_probe,
-+	.shutdown = emc2305_shutdown,
- 	.id_table = emc2305_ids,
- };
- 
--- 
-2.34.1
+Thanks,
+Guenter
 
