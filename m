@@ -1,66 +1,67 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F15E298CB2
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 13:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6272A296BCD
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 13:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774014100; cv=none; b=N8wBaVumGUwsdLA/JRMleV8KaHvw4GqQM/pQik5SWt2FalN2BukCPFuViAIdBy37BPHFxGWkIdSkJMvB83XqoDbx+Zt4RmI3RaIFvkGX1zR7/xbO6aepvugbK3YES4Vlx5tf5MpgvgKzTghmwiu48ErzVouZWMBAR+ATxTYy8Jk=
+	t=1774014451; cv=none; b=XQ2urKB4fgnjAKLV9s8k7eW0EctjOqXBDLPOT1kCn93pMGuH8BTu/dGc6dvTn0w2JkU0i1jJMBEDprDUXIRs0SROa5O5Y0XgkLe+5mCiz1UndRlClG5o7vIJnDh45IMPzSc2db2++iyu1ON6yfh/LiD+pHsS+ugbzFFaCNZKpjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774014100; c=relaxed/simple;
-	bh=AG5SLgaXHOGtqnxzB/LgKFnn89QGFELDmMMRhT5X0Mg=;
+	s=arc-20240116; t=1774014451; c=relaxed/simple;
+	bh=1jqzhw0TW5GDonx289rUl94T8xcZI5Hu0OLZ/EdHJzY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r0S1ydPC9fV35rYx9UsdWAjbf+QNIqHh2k9uYRwI6btWvDFq1MOutyw79G2tQBFtqZqf1JPZQWK+AVYVro6Rkkz9/iv/OAL5QpgJSozG399HmHAK4b0oW3B43aj/q6v3M3dNK8VD5JO4JJXKa0ZmBic9WQZThsg7P+IcvZn4VcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GIHEEXme; arc=none smtp.client-ip=209.85.216.44
+	 In-Reply-To:Content-Type; b=AbKpvfCPPbsMwBUKHQzKbQjaZLdhCusqYB6CVClB3Pw4S7rVYLG7Y3TpMvBGwHnngSv/FdYTuGi+N0zLhMQRpWgAPuV74VnkGpDVhhqXqKYo7+gRxFDleQBzA/na5b95GBbIB1qekGoyjy1gH/T73UxhWQVtjTl0kzQpYvwYZXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YuzChMbA; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GIHEEXme"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35691a231a7so1207331a91.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 06:41:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YuzChMbA"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a871daa98fso5113835ad.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 06:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774014098; x=1774618898; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774014449; x=1774619249; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jr6O4/PxsSurjW2p9eceRBdtEHgeqQ0Gb6vR0xYFtXU=;
-        b=GIHEEXme/gG9kLhTa7ZzeFGEKc4XUQxzhB2QdQy78Z2Dmhbu1p+dytifupiLOB+3CA
-         /NhtiJG9VigpmX/rfXBgWwxdBYt83X+IL/xzQLcypHo3WOd+mBMVxf8EtTPz27W8J5J8
-         L7gaXv9zcBbgFBmnqYL8O6HfNEr+c0eRJuPuloc57uhCrV3+MBZ5D0Zho5BCM/A+U4AG
-         kbGaSv9xWX/BVOe6tU+QICUlp907MEaP7Wl7Xg6OgTSsU+AnLr9ogJyt/eQf+wqpz1dl
-         P+WX/qW53koOUwraMIw48PiBcoAOmZ61mshBKqhp/eW9Xfuv8aot/YFrIlVGfpaxodud
-         P+dA==
+        bh=edLwQfqe8+tWcgYw6ppVD184WsgAvvH7A46+wh4YSjQ=;
+        b=YuzChMbApgPkCQs/kpD7r8/O0yuhp0ZgKafRzC+SMAi7c69lSR90IYCVXYKcRqdxPp
+         6Z185C5ZoQzqbqPyBHjfk6saR9xb42dOH3SwlzNP/opwBMR5ZdFXb3ON1kYWJtIxk/gD
+         bhvw4BK5io2+nl6eCj7XHfEmHDYkxjWuPkwgJazF22hzO8YYIPejVNAXM2DtmUNBClAD
+         dBBEn/iIAM09a3xL5rBbH2dlP3VOmGarIz2HDWvUlJvuHjA8W3S1AXgt9+PrOpdvTI6e
+         q171CbIQpuFuJiiePohnEAqch3RX/iRtnVeY3NKGkiGGn0lS45+fGvFtke53k9fJa7CQ
+         TECQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774014098; x=1774618898;
+        d=1e100.net; s=20251104; t=1774014449; x=1774619249;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jr6O4/PxsSurjW2p9eceRBdtEHgeqQ0Gb6vR0xYFtXU=;
-        b=CMGgEzrDICfS9X1/FoJNl6SgrvB7pC5tBMj5u8n/6fkubPoA/OM7SmvzbXO6iai20i
-         O5dLRCn8VoYBQIPuZxWe536uSyVMVAaJtKXIP1xj/ex78CLx85mISGb/2/wdnrx9QUR3
-         r3nydm9EdwHyyshAXSz69EVjVuuvqTcM5sanE33Qyu0Kvzi4e19a3Lrxq10RNVG3oDfF
-         lqohjjfMFIK3og54GIus4a13BL9+oTrnZPx98tQVroDe3QLhKR5ZFJKtoTPrbOZo0ENM
-         snFVKvKQSCSKxMramsR5cgmeJIlFuwKVc4t8nvOqveKYRuM33lUM+POfnSpHflU0727A
-         iJUw==
-X-Gm-Message-State: AOJu0Yxl6KTbUoXoekKdA0LXPSqBWEX4r2LB8D8t6Gc7ZHCCrYF0o9kh
-	i38sms7qCseXBN6qZf85eHzBfEavKd7QniydA9JHAh7SxrCcJladhFlw
-X-Gm-Gg: ATEYQzxRr6t9aPs8KCOgtdbry6LxF3RH5R8r15O94LDLWghhn5LFDfSiqX8t6t3Xmua
-	4VnTIqgXoDTdxLWfyW5ClWQ+WItJpVdHCywnxmPTdCybZhn8PDq9VkswqAi3ZQaTN+nCXjTbFZJ
-	nO9RWIXXsZhxMnFk6sezdJ0FYmpHbHT355uxyMcDOJBud7OERYSg+Gkz4uQNLBozk8hxJsI0LNL
-	GyE8301siFn4rg+QjgTDuAKQa0WE99qceep4dGlHbtzWB4llS/PlmqxNf1D36uFtx/HNwlzPVnH
-	RIphs48tSlagD96H8tp9rVxNzZMuGF5N9Yu7yTcGbdwNsdTTee0qOwwRx2TXNwS1rr5Wc4Nl2Io
-	cBLvQcO0ngjL1Hto4ak8dAsJSr/wmIXZ7JIRn0vKnyNV9CUpMXDG0NgAfR6AnFjuHPpVtSnWK6l
-	VzqRVfG+4Z8mWFYtSKKI2H98oPDxGQm2LwG5db13yEv6AzQtyXPvmePByDaaRdA1llWF/px6AJ
-X-Received: by 2002:a17:90a:d2c7:b0:35b:92c1:8a3a with SMTP id 98e67ed59e1d1-35bd2bf5326mr2460905a91.14.1774014097684;
-        Fri, 20 Mar 2026 06:41:37 -0700 (PDT)
+        bh=edLwQfqe8+tWcgYw6ppVD184WsgAvvH7A46+wh4YSjQ=;
+        b=TaTw2D8AImLmpzxdLknOrAOtxIUjVVv3cj2LnilHe4GBYtjxyLHPWw+A7/FYKbsLCf
+         1si16sbSb+8eYSowNP1XsQIs6+Vcj25CHd+CYW43tnblJXYsu3JQ7RtqLX5awDbRy2H7
+         uz+3G8pWur1nzLVIOuD58mREaEup8S5iCcwmmzMvHT5NVmhpN00Qm6SBQGJ6c1rHfXK2
+         3C4fMN9V3kVwplCTgNL8LiH1w0YvC9OA1sXiQ0Ng0OvHHdc5KtGh2U4NhFcoCitX/SJr
+         fBO7jk8hFjMyWwpk/RQ1d9I/PluKlDPzAChzE6D+PZbzNYV4Zn9Wknnrex6dau7ca3pw
+         7v9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUkxi/vblbfqII432Vz6PDGP0VW0bzgscSBY2dHaSaEEteORbIw+op9JIELaHEnpLDKKfhjXCNrDUzxuA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAn6y4AxMWhS4k8DAq8e+xnCa8dAkD/rCMNfzu3LDXnmpadEoN
+	1g8IiQHxnMNpFkSqkK9M07umwsGHsWgkKkvV4pr1LdGaZi85M6DkMTPc
+X-Gm-Gg: ATEYQzxMSsPIJtXoaXyrit4gkFDjtoK2o2PcxCkKuEGcNBTrpCe4l9SxQjeG7hRTBZH
+	qjSX3ENV85HQHdjdFUNYrefZE81nY7YQPw5EPyXsXzmGWkN3snKoBBT5N5DN/sFQyTf8FzL+2rq
+	RClAWU1XW88qJVUWzujZ5TbIhBrDn+S5AAwU8tPCXBVPGL0AAnPu1C4ZWl+bXgO9hYeH2zwGEbE
+	kJdCxucuwOJs82MeerKJkXvFd6/hqrATMoOBQ3+6g0/I3zWM5lcfiXI+DajDEvWrqZmCohqt31d
+	TmDMXcwL3SH6n8TSgQG91g2xMGHb77neSDUreDIVULJ7h0OLdk8teamJ/casZEsews067wtfpZW
+	26jdkBNg4f7mjAkK2kWWJTsdnlanfhSLaFFmjt4fuVsMYrdyOUsMxXjHU40IEIg+bV2FDHAZa2W
+	QJsHUYPS7/ZJ0vUWC9WLErXA9gMaRbA4sSPb7W4m/q4bH5TezA+fyADlZ0yO6eDq2zHiUS2rmF
+X-Received: by 2002:a17:902:f78d:b0:2ae:59d0:bf20 with SMTP id d9443c01a7336-2b08278b9f4mr25489685ad.31.1774014448471;
+        Fri, 20 Mar 2026 06:47:28 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35bc5ed0777sm5517899a91.0.2026.03.20.06.41.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b08352a17asm23124685ad.24.2026.03.20.06.47.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 06:41:37 -0700 (PDT)
+        Fri, 20 Mar 2026 06:47:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e77a16b5-13a6-48ab-8da9-dd7de141053c@roeck-us.net>
-Date: Fri, 20 Mar 2026 06:41:36 -0700
+Message-ID: <aaa359dc-86fe-43a2-9b55-6829838f8443@roeck-us.net>
+Date: Fri, 20 Mar 2026 06:47:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -68,11 +69,12 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] hwmon: (yogafan) Add universal Lenovo Yoga/Legion fan
- driver
-To: Sergio Melas <sergiomelas@gmail.com>
-Cc: linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260320102442.150416-1-sergiomelas@gmail.com>
+Subject: Re: [PATCH v4] hwmon: add driver for ARCTIC Fan Controller
+To: Aureo Serrano de Souza <aureo.serrano@arctic.de>,
+ linux-hwmon@vger.kernel.org
+Cc: linux@weissschuh.net, corbet@lwn.net, skhan@linuxfoundation.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260320080840.333968-1-aureo.serrano@arctic.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -118,454 +120,537 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260320102442.150416-1-sergiomelas@gmail.com>
+In-Reply-To: <20260320080840.333968-1-aureo.serrano@arctic.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/20/26 03:24, Sergio Melas wrote:
-> This driver provides fan speed monitoring for modern Lenovo Yoga,
-> Legion, and IdeaPad laptops via ACPI.
+On 3/20/26 01:08, Aureo Serrano de Souza wrote:
+> Add hwmon driver for the ARCTIC Fan Controller, a USB HID device
+> (VID 0x3904, PID 0xF001) with 10 fan channels. Exposes fan speed in
+> RPM (read-only) and PWM duty cycle (0-255, read/write) via sysfs.
 > 
-> This version (v3) replaces the previous background-worker approach with
-> a passive RLLag (Rate Limited Lag) filter to maximize CPU sleep states
-> and improve power efficiency.
+> The device pushes IN reports at ~1 Hz containing RPM readings. PWM is
+> set via OUT reports; the device applies the new duty cycle and sends
+> back a 2-byte ACK (Report ID 0x02). The driver waits up to 1 s for
+> the ACK using a completion. Measured device latency: max ~563 ms over
+> 500 iterations. PWM control is manual-only: the device never changes
+> duty cycle autonomously.
 > 
-
-Change log and validation should be after "---"
-
-> Technical Validation:
-> - Filter constants (TAU_MS = 3000) verified via physical tachometer
->    and FOPTD (First Order Plus Time Delay) identification.
-> - Uses 10-bit fixed-point math for the Taylor-approximated
->    alpha = Ts / (Tau + Ts) calculation.
-> - Renamed to 'yogafan' for hwmon compliance.
-> - Added MAINTAINERS entry and linked documentation to the build system.
+> raw_event() may run in hardirq context, so fan_rpm[] is protected by
+> a spinlock with irq-save. pwm_duty[] and the report buffer are
+> serialized by the hwmon core, which holds its lock for the duration of
+> the read/write callbacks.
 > 
-> Signed-off-by: Sergio Melas <sergiomelas@gmail.com>
+> Signed-off-by: Aureo Serrano de Souza <aureo.serrano@arctic.de>
+> ---
 
-Your patch is still not based on the upstream kernel, does not apply,
-and therefore can not be reviewed.
+Getting there, but Sashiko still finds problems.
 
+https://sashiko.dev/#/patchset/20260320080840.333968-1-aureo.serrano%40arctic.de
+
+Those are valid concerns far as I can see.
+
+Thanks,
 Guenter
 
-> ---
->   Documentation/hwmon/index.rst   |   1 +
->   Documentation/hwmon/yogafan.rst |  51 ++++++
->   MAINTAINERS                     |   7 +
->   drivers/hwmon/Kconfig           |   7 +-
->   drivers/hwmon/Makefile          |   2 +-
->   drivers/hwmon/yogafan.c         | 273 ++++++++++++++++++++++++++++++++
->   6 files changed, 335 insertions(+), 6 deletions(-)
->   create mode 100644 Documentation/hwmon/yogafan.rst
->   create mode 100644 drivers/hwmon/yogafan.c
+> Thanks to Guenter Roeck and Thomas Weißschuh for the reviews.
 > 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b2ca8513c..ca438f294 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -282,4 +282,5 @@ Hardware Monitoring Kernel Drivers
->      xdp710
->      xdpe12284
->      xdpe152c4
-> +   yogafan
->      zl6100
-> diff --git a/Documentation/hwmon/yogafan.rst b/Documentation/hwmon/yogafan.rst
+> Changes since v3:
+> - buf[]: upgrade from __aligned(8) to ____cacheline_aligned so the
+>    DMA buffer occupies its own cache line, preventing false sharing with
+>    adjacent fan_rpm[]/pwm_duty[] fields on non-coherent architectures
+> - arctic_fan_write(): add write_pending flag (protected by
+>    in_report_lock) so raw_event() delivers ACKs only while a write is
+>    in flight; prevents a late ACK from a signal-interrupted write from
+>    satisfying a subsequent write's completion wait
+> - arctic_fan_write(): commit pwm_duty[channel] only after the device
+>    ACKs the command; a failed or timed-out write no longer leaves a
+>    stale value in the cached duty state
+> - arctic_fan_probe(): start IO (hid_device_io_start) before registering
+>    with hwmon; previously a sysfs write arriving between hwmon
+>    registration and io_start could send an OUT report whose ACK would be
+>    discarded by the HID core, causing a spurious timeout
+> - Documentation/hwmon/arctic_fan_controller.rst: document that cached
+>    PWM values start at 0 (hardware state unknown at probe) and that each
+>    OUT report carries all 10 channel values
+> 
+> Changes since v2:
+> - buf[]: add __aligned(8) for DMA safety
+> - ARCTIC_ACK_TIMEOUT_MS: restore 1000 ms; note observed max ~563 ms
+> - arctic_fan_parse_report(): replace hwmon_lock/hwmon_unlock with
+>    spin_lock_irqsave; hwmon_lock() may sleep and is unsafe when
+>    raw_event() runs in hardirq/softirq context
+> - arctic_fan_raw_event(): use spin_lock_irqsave for ACK path
+> - arctic_fan_write(): use spin_lock_irqsave for completion reinit
+> - arctic_fan_write(): clamp val to [0, 255] before u8 cast
+> - hardware teardown: register arctic_fan_hw_stop() via
+>    devm_add_action_or_reset() before hwmon; devm LIFO order ensures
+>    hwmon unregisters before hid_hw_close/stop; remove() is a no-op
+> - remove priv->hwmon_dev (no longer needed)
+> 
+> Changes since v1:
+> - Use hid_dbg() instead of module_param debug flag
+> - Move hid_device_id table adjacent to hid_driver struct
+> - Use get_unaligned_le16() for RPM parsing
+> - Remove impossible bounds/NULL checks; remove retry loop
+> - Add hid_is_usb() guard
+> - Do not update pwm_duty from IN reports (device is manual-only)
+> - Add completion/ACK mechanism for OUT report acknowledgement
+> - Add Documentation/hwmon/arctic_fan_controller.rst and MAINTAINERS
+> 
+> diff --git a/Documentation/hwmon/arctic_fan_controller.rst b/Documentation/hwmon/arctic_fan_controller.rst
 > new file mode 100644
-> index 000000000..c1614f502
+> index 0000000000..834f09c813
 > --- /dev/null
-> +++ b/Documentation/hwmon/yogafan.rst
-> @@ -0,0 +1,51 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
+> +++ b/Documentation/hwmon/arctic_fan_controller.rst
+> @@ -0,0 +1,49 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
 > +
-> +Kernel driver yogafan
-> +=====================
+> +Kernel driver arctic_fan_controller
+> +=====================================
 > +
-> +Supported chips:
-> +  * Lenovo Yoga / Legion / IdeaPad Embedded Controllers
-> +    Prefix: 'yogafan'
-> +    Addresses: ACPI (Dynamic probing of FANS, FA2S, FANX, etc.)
+> +Supported devices:
+> +
+> +* ARCTIC Fan Controller (USB HID, VID 0x3904, PID 0xF001)
+> +
+> +Author: Aureo Serrano de Souza <aureo.serrano@arctic.de>
 > +
 > +Description
 > +-----------
 > +
-> +This driver provides fan speed monitoring for modern Lenovo laptops.
-> +It interfaces with the Lenovo Embedded Controller (EC) via ACPI to
-> +retrieve fan tachometer data.
+> +This driver provides hwmon support for the ARCTIC Fan Controller, a USB
+> +Custom HID device with 10 fan channels. The device sends IN reports about
+> +once per second containing current RPM values (bytes 11-30, 10 x uint16 LE).
+> +Fan speed control is manual-only: the device does not change PWM
+> +autonomously; it only applies a new duty cycle when it receives an OUT
+> +report from the host.
 > +
-> +Many Lenovo ECs report RPM values that oscillate rapidly due to
-> +low-resolution internal sampling. To provide a stable reading in
-> +userspace (e.g., KDE Plasma, MangoHud), this driver implements a
-> +"Passive RLLag" (Rate Limited Lag) filter.
+> +After the device applies an OUT report, it sends back a 2-byte ACK IN
+> +report (Report ID 0x02, byte 1 = 0x00 on success) confirming the command
+> +was applied.
 > +
-> +Filter Logic:
-> +he driver implements a Rate-Limited Lag (RLLag) filter using a multirate
-> +approach. Instead of a fixed-interval background worker, the sampling
-> +time (Ts) is calculated dynamically as the ktime delta between userspace
-> +read requests.
+> +Usage notes
+> +-----------
 > +
-> +This mimics a continuous-time First Order Plus Time Delay (FOPTD) model:
-> +    rpm_k+1 = rpm_k + clamp(step, -limit, limit)
+> +Since it is a USB device, hotplug is supported. The device is autodetected.
 > +
-> +Where:
-> +    step = alpha * (raw_rpm - rpm_k)
-> +    alpha = Ts / (Tau + Ts)  [First-order Taylor approximation of 1-exp(-Ts/Tau)]
-> +    limit = MaxSlew * Ts
+> +The device does not support GET_REPORT, so the driver cannot read back the
+> +current hardware PWM state at probe time. The cached PWM values (readable
+> +via pwm[1-10]) start at 0 and reflect only values that have been
+> +successfully written. Because each OUT report carries all 10 channel values,
+> +writing a single channel also sends the cached values for all other channels.
+> +Users should set all channels to the desired values before relying on the
+> +cached state.
 > +
-> +This ensures physical consistency of the signal regardless of the
-> +userspace polling rate, while maximizing CPU sleep states.
+> +Sysfs entries
+> +-------------
 > +
-> +Probing:
-> +The driver dynamically searches for common Lenovo ACPI fan handles.
-> +It does not assume a fixed number of fans, making it compatible
-> +across various Yoga and Legion generations.
-> +
-> +Usage Note:
-> +If your device shows more fans than physically present, the EC is likely
-> +exposing a virtual or secondary hardware channel.
-> +
-> +
-> +
-> +
-
-Unnecessary empty lines
-
+> +================ ==============================================================
+> +fan[1-10]_input  Fan speed in RPM (read-only). Updated from IN reports at ~1 Hz.
+> +pwm[1-10]        PWM duty cycle (0-255). Write: sends an OUT report setting the
+> +                 duty cycle (scaled from 0-255 to 0-100% for the device);
+> +                 the cached value is updated only after the device ACKs the
+> +                 command. Read: returns the last successfully written value;
+> +                 initialized to 0 at driver load (hardware state unknown).
+> +================ ==============================================================
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index b2ca8513cf..c34713040e 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -42,6 +42,7 @@ Hardware Monitoring Kernel Drivers
+>      aht10
+>      amc6821
+>      aquacomputer_d5next
+> +   arctic_fan_controller
+>      asb100
+>      asc7621
+>      aspeed-g6-pwm-tach
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 96ea84948..dd16c882c 100644
+> index 96ea84948d..ec3112bd41 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -29070,6 +29070,13 @@ S:	Maintained
->   F:	Documentation/input/devices/yealink.rst
->   F:	drivers/input/misc/yealink.*
->   
-> +YOGAFAN HARDWARE MONITORING DRIVER
-> +M:	Sergio Melas <sergiomelas@gmail.com>
+> @@ -2053,6 +2053,13 @@ S:	Maintained
+>   F:	drivers/net/arcnet/
+>   F:	include/uapi/linux/if_arcnet.h
+> 
+> +ARCTIC FAN CONTROLLER DRIVER
+> +M:	Aureo Serrano de Souza <aureo.serrano@arctic.de>
 > +L:	linux-hwmon@vger.kernel.org
 > +S:	Maintained
-> +F:	Documentation/hwmon/yogafan.rst
-> +F:	drivers/hwmon/yogafan.c
+> +F:	Documentation/hwmon/arctic_fan_controller.rst
+> +F:	drivers/hwmon/arctic_fan_controller.c
 > +
->   Z8530 DRIVER FOR AX.25
->   M:	Joerg Reuter <jreuter@yaina.de>
->   L:	linux-hams@vger.kernel.org
+>   ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)
+>   M:	Arnd Bergmann <arnd@arndb.de>
+>   M:	Krzysztof Kozlowski <krzk@kernel.org>
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7d938308d..d276763d6 100644
+> index 328867242c..6c90a8dd40 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -2468,6 +2468,7 @@ config SENSORS_YOGAFAN
->   	  This driver can also be built as a module. If so, the module
->   	  will be called yoga_fan.
->   
+> @@ -388,6 +388,18 @@ config SENSORS_APPLESMC
+>   	  Say Y here if you have an applicable laptop and want to experience
+>   	  the awesome power of applesmc.
+> 
+> +config SENSORS_ARCTIC_FAN_CONTROLLER
+> +	tristate "ARCTIC Fan Controller"
+> +	depends on USB_HID
+> +	help
+> +	  If you say yes here you get support for the ARCTIC Fan Controller,
+> +	  a USB HID device (VID 0x3904, PID 0xF001) with 10 fan channels.
+> +	  The driver exposes fan speed (RPM) and PWM control via the hwmon
+> +	  sysfs interface.
 > +
-
-No.
-
->   config SENSORS_VIA_CPUTEMP
->   	tristate "VIA CPU temperature sensor"
->   	depends on X86
-> @@ -2753,8 +2754,4 @@ config SENSORS_HP_WMI
->   endif # ACPI
->   
->   endif # HWMON
-> -config SENSORS_YOGA_FAN
-> -	tristate "Lenovo Yoga Fan Hardware Monitoring"
-> -	depends on ACPI && HWMON
-> -	help
-> -	  Support for fan RPM on modern Lenovo laptops.
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called arctic_fan_controller.
 > +
-
-Huh ?
-
+>   config SENSORS_ARM_SCMI
+>   	tristate "ARM SCMI Sensors"
+>   	depends on ARM_SCMI_PROTOCOL
 > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index d8d4ff834..c74b71ec2 100644
+> index 5833c807c6..ef831c3375 100644
 > --- a/drivers/hwmon/Makefile
 > +++ b/drivers/hwmon/Makefile
-> @@ -251,5 +251,5 @@ obj-$(CONFIG_SENSORS_PECI)	+= peci/
->   obj-$(CONFIG_PMBUS)		+= pmbus/
->   
->   ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> -obj-$(CONFIG_SENSORS_YOGA_FAN) += yoga_fan.o
-
-Huh ?
-
-> +obj-$(CONFIG_SENSORS_YOGAFAN) += yogafan.o
->   
-> diff --git a/drivers/hwmon/yogafan.c b/drivers/hwmon/yogafan.c
+> @@ -49,6 +49,7 @@ obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
+>   obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
+>   obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
+>   obj-$(CONFIG_SENSORS_AQUACOMPUTER_D5NEXT) += aquacomputer_d5next.o
+> +obj-$(CONFIG_SENSORS_ARCTIC_FAN_CONTROLLER)	+= arctic_fan_controller.o
+>   obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+>   obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
+>   obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
+> diff --git a/drivers/hwmon/arctic_fan_controller.c b/drivers/hwmon/arctic_fan_controller.c
 > new file mode 100644
-> index 000000000..a260f4cf6
+> index 0000000000..7b991735ed
 > --- /dev/null
-> +++ b/drivers/hwmon/yogafan.c
-> @@ -0,0 +1,273 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/**
-> + * yoga_fan.c - Lenovo Yoga/Legion Fan Hardware Monitoring Driver
+> +++ b/drivers/hwmon/arctic_fan_controller.c
+> @@ -0,0 +1,328 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Linux hwmon driver for ARCTIC Fan Controller
 > + *
-> + * Provides fan speed monitoring for Lenovo Yoga, Legion, and IdeaPad
-> + * laptops by interfacing with the Embedded Controller (EC) via ACPI.
-> + *
-> + * The driver implements a passive discrete-time first-order lag filter
-> + * with slew-rate limiting (RLLag). This addresses low-resolution
-> + * tachometer sampling in the EC by smoothing RPM readings based on
-> + * the time delta (dt) between userspace requests, ensuring physical
-> + * consistency without background task overhead or race conditions.
-> + * The filter has been removed implementing multirate filtering with autoreset in case
-> + * of lage sampling time
-> + *
-> + * Copyright (C) 2021-2026 Sergio Melas <sergiomelas@gmail.com>
+> + * USB Custom HID device with 10 fan channels.
+> + * Exposes fan RPM (input) and PWM (0-255) via hwmon. Device pushes IN reports
+> + * at ~1 Hz; no GET_REPORT. OUT reports set PWM duty (bytes 1-10, 0-100%).
+> + * PWM is manual-only: the device does not change duty autonomously, only
+> + * when it receives an OUT report from the host.
 > + */
 > +
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
+> +#include <linux/cache.h>
+> +#include <linux/completion.h>
 > +#include <linux/err.h>
+> +#include <linux/hid.h>
 > +#include <linux/hwmon.h>
-> +#include <linux/init.h>
-> +#include <linux/ktime.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/minmax.h>
 > +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/unaligned.h>
 > +
-> +#define DRVNAME "yogafan"
-> +#define MAX_FANS 8
-> +
-> +/* Filter Configuration Constants */
-> +#define TAU_MS          3000    /* Time constant for the first-order lag (ms) */
-> +#define MAX_SLEW_RPM_S  100     /* Maximum allowed change in RPM per second */
-> +#define MAX_SAMPLING    5000    /* Maximum allowed Ts for reset */
-> +
-> +struct yoga_fan_data {
-> +	const char *active_paths[MAX_FANS];
-> +	long filtered_val[MAX_FANS];
-> +	ktime_t last_update[MAX_FANS];
-> +	int fan_count;
-> +};
-> +
-> +/**
-> + * apply_rllag_filter - Discrete-time filter update (Passive Multirate)
-> + * @data: pointer to driver data
-> + * @idx: fan index
-> + * @raw_rpm: new raw value from ACPI
-> + *
-> + * Implements a Rate-Limited Lag (RLLag) filter using a multirate approach.
-> + * Instead of a fixed-interval heartbeat, the sampling time (Ts) is calculated
-> + * dynamically as the ktime delta between userspace read requests.
-> + *
-> + * This mimics a continuous-time First Order Plus Time Delay (FOPTD) model:
-> + * rpm_k+1 = rpm_k + clamp(step, -limit, limit)
-> + * where:
-> + * step = (alpha * (raw_rpm - rpm_k))
-> + * alpha = 1-exp(-Ts/Tau)
-> + * Appling first order taylor approximation we get
-> + * alpha = Ts / (Tau + Ts)
-> + * limit = MaxSlew * Ts
-> + *
-> + * This ensures physical consistency of the signal regardless of the
-> + * userspace polling rate.
+> +#define ARCTIC_VID			0x3904
+> +#define ARCTIC_PID			0xF001
+> +#define ARCTIC_NUM_FANS			10
+> +#define ARCTIC_OUTPUT_REPORT_ID		0x01
+> +#define ARCTIC_REPORT_LEN		32
+> +#define ARCTIC_RPM_OFFSET		11	/* bytes 11-30: 10 x uint16 LE */
+> +/* ACK report: device sends Report ID 0x02, 2 bytes (ID + status) after applying OUT report */
+> +#define ARCTIC_ACK_REPORT_ID		0x02
+> +#define ARCTIC_ACK_REPORT_LEN		2
+> +/*
+> + * Time to wait for ACK report after send.
+> + * Measured over 500 iterations: max ~563 ms. Keep 1 s as margin.
 > + */
+> +#define ARCTIC_ACK_TIMEOUT_MS		1000
 > +
-> +static void apply_rllag_filter(struct yoga_fan_data *data, int idx, long raw_rpm)
-> +{
-> +	ktime_t now = ktime_get();
-> +	s64 dt_ms;
-> +	long delta, step, limit, alpha;
-> +
-> +	/* Initialize on first read to avoid starting from zero */
-> +	if (data->last_update[idx] == 0) {
-> +		data->filtered_val[idx] = raw_rpm;
-> +		data->last_update[idx] = now;
-> +		return;
-> +	}
-> +
-> +	dt_ms = ktime_to_ms(ktime_sub(now, data->last_update[idx]));
-> +
-> +	/* * SANITATION: Reset filter if no reads occurred for MAX_SAMPLING
-> +	 * millisecond. This prevents massive 'lag_steps' if userspace polling resumes
-> +	 * after a long pause or system suspend.
+> +struct arctic_fan_data {
+> +	struct hid_device *hdev;
+> +	spinlock_t in_report_lock;	/* protects fan_rpm[], ack_status, write_pending */
+> +	struct completion in_report_received; /* ACK (ID 0x02) received in raw_event */
+> +	int ack_status;			/* 0 = OK, negative errno on device error */
+> +	bool write_pending;		/* true while an OUT report ACK is in flight */
+> +	u32 fan_rpm[ARCTIC_NUM_FANS];
+> +	u8 pwm_duty[ARCTIC_NUM_FANS];	/* 0-255 matching sysfs range; converted to 0-100 on send */
+> +	/*
+> +	 * OUT report buffer. Cache-line aligned so it occupies its own cache
+> +	 * line, preventing DMA cache-coherency issues with adjacent fields
+> +	 * (fan_rpm[], pwm_duty[]) on non-coherent architectures.
+> +	 * Embedded in the devm_kzalloc'd struct so it is heap-allocated and
+> +	 * passes usb_hcd_map_urb_for_dma(). Serialized by the hwmon core.
 > +	 */
-> +	if (dt_ms > MAX_SAMPLING) {
-> +		data->filtered_val[idx] = raw_rpm;
-> +		data->last_update[idx] = now;
-> +		return;
-> +	}
-> +
-> +	/* SANITATION: Avoid division by zero or jitter from sub-millisecond reads */
-> +	if (dt_ms < 1)
-> +		return;
-> +
-> +	delta = raw_rpm - data->filtered_val[idx];
-> +
-> +	/* * Alpha = dt / (Tau + dt) using 10-bit fixed point math.
-> +	 * This mimics the physical inertia (FOPTD) of the fan blades.
-> +	 */
-> +	alpha = (dt_ms << 10) / (TAU_MS + dt_ms);
-> +	step = (delta * alpha) >> 10;
-> +
-> +	/* Slew Limit = (MaxSlew * dt) / 1000 - Bound the rate of change */
-> +	limit = (MAX_SLEW_RPM_S * (long)dt_ms) / 1000;
-> +
-> +	if (step > limit)
-> +		step = limit;
-> +	else if (step < -limit)
-> +		step = -limit;
-> +
-> +	data->filtered_val[idx] += step;
-> +
-> +	/* SANITATION: Floor the value to zero if RPM is negligible */
-> +	if (data->filtered_val[idx] < 50)
-> +		data->filtered_val[idx] = 0;
-> +
-> +	data->last_update[idx] = now;
-> +}
-> +
-> +static int yoga_fan_read(struct device *dev, enum hwmon_sensor_types type,
-> +			 u32 attr, int channel, long *val)
-> +{
-> +	struct yoga_fan_data *data = dev_get_drvdata(dev);
-> +	unsigned long long raw_acpi;
-> +	acpi_status status;
-> +	long rpm;
-> +
-> +	if (type != hwmon_fan || attr != hwmon_fan_input)
-> +		return -EOPNOTSUPP;
-> +
-> +	/* Implemnt better casting of staus using ACPI typedef */
-> +	status = acpi_evaluate_integer(NULL,
-> +				       (acpi_string)data->active_paths[channel], NULL, &raw_acpi);
-> +
-> +	if (ACPI_FAILURE(status))
-> +		return -EIO;
-> +
-> +	/* * SANITATION: Lenovo EC typically reports RPM in hundreds for values <= 255.
-> +	 * Values > 255 are treated as raw RPM. This handles different EC firmware styles.
-> +	 */
-> +	rpm = (raw_acpi > 0 && raw_acpi <= 255) ? ((long)raw_acpi * 100) : (long)raw_acpi;
-> +
-> +	apply_rllag_filter(data, channel, rpm);
-> +
-> +	*val = data->filtered_val[channel];
-> +	return 0;
-> +}
-> +
-> +static umode_t yoga_fan_is_visible(const void *data, enum hwmon_sensor_types type,
-> +				   u32 attr, int channel)
-> +{
-> +	const struct yoga_fan_data *fan_data = data;
-> +
-> +	if (type == hwmon_fan && channel < fan_data->fan_count)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops yoga_fan_hwmon_ops = {
-> +	.is_visible = yoga_fan_is_visible,
-> +	.read = yoga_fan_read,
+> +	u8 buf[ARCTIC_REPORT_LEN] ____cacheline_aligned;
 > +};
 > +
-> +static const struct hwmon_channel_info *yoga_fan_info[] = {
+> +/*
+> + * Parse RPM values from the periodic status report (10 x uint16 LE at rpm_off).
+> + * pwm_duty is not updated from the report: the device is manual-only, so the
+> + * host cache is the authoritative source for PWM.
+> + * Called from raw_event which may run in IRQ context; must not sleep.
+> + */
+> +static void arctic_fan_parse_report(struct arctic_fan_data *priv, u8 *buf,
+> +				    int len, int rpm_off)
+> +{
+> +	unsigned long flags;
+> +	int i;
+> +
+> +	if (len < rpm_off + 20)
+> +		return;
+> +
+> +	spin_lock_irqsave(&priv->in_report_lock, flags);
+> +	for (i = 0; i < ARCTIC_NUM_FANS; i++)
+> +		priv->fan_rpm[i] = get_unaligned_le16(&buf[rpm_off + i * 2]);
+> +	spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +}
+> +
+> +/*
+> + * raw_event: IN reports.
+> + *
+> + * Status report: Report ID 0x01, 32 bytes:
+> + *   byte 0 = report ID, bytes 1-10 = PWM 0-100%, bytes 11-30 = 10 x RPM uint16 LE.
+> + *   Device pushes these at ~1 Hz; no GET_REPORT.
+> + *
+> + * ACK report: Report ID 0x02, 2 bytes:
+> + *   byte 0 = 0x02, byte 1 = status (0x00 = OK, 0x01 = ERROR).
+> + *   Sent once after accepting and applying an OUT report (ID 0x01).
+> + */
+> +static int arctic_fan_raw_event(struct hid_device *hdev,
+> +				struct hid_report *report, u8 *data, int size)
+> +{
+> +	struct arctic_fan_data *priv = hid_get_drvdata(hdev);
+> +	unsigned long flags;
+> +
+> +	hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d\n", report->id, size);
+> +
+> +	if (report->id == ARCTIC_ACK_REPORT_ID && size == ARCTIC_ACK_REPORT_LEN) {
+> +		spin_lock_irqsave(&priv->in_report_lock, flags);
+> +		/*
+> +		 * Only deliver if a write is in flight. This prevents a
+> +		 * late-arriving ACK from a signal-interrupted write from
+> +		 * erroneously satisfying a subsequent write's completion wait.
+> +		 */
+> +		if (priv->write_pending) {
+> +			priv->ack_status = data[1] == 0x00 ? 0 : -EIO;
+> +			complete(&priv->in_report_received);
+> +		}
+> +		spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +		return 0;
+> +	}
+> +
+> +	if (report->id != ARCTIC_OUTPUT_REPORT_ID || size != ARCTIC_REPORT_LEN) {
+> +		hid_dbg(hdev, "arctic_fan: raw_event id=%u size=%d ignored\n",
+> +			report->id, size);
+> +		return 0;
+> +	}
+> +
+> +	arctic_fan_parse_report(priv, data, size, ARCTIC_RPM_OFFSET);
+> +	return 0;
+> +}
+> +
+> +static umode_t arctic_fan_is_visible(const void *data,
+> +				     enum hwmon_sensor_types type,
+> +				     u32 attr, int channel)
+> +{
+> +	if (type == hwmon_fan && attr == hwmon_fan_input)
+> +		return 0444;
+> +	if (type == hwmon_pwm && attr == hwmon_pwm_input)
+> +		return 0644;
+> +	return 0;
+> +}
+> +
+> +static int arctic_fan_read(struct device *dev, enum hwmon_sensor_types type,
+> +			   u32 attr, int channel, long *val)
+> +{
+> +	struct arctic_fan_data *priv = dev_get_drvdata(dev);
+> +	unsigned long flags;
+> +
+> +	if (type == hwmon_fan && attr == hwmon_fan_input) {
+> +		spin_lock_irqsave(&priv->in_report_lock, flags);
+> +		*val = priv->fan_rpm[channel];
+> +		spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +		return 0;
+> +	}
+> +	if (type == hwmon_pwm && attr == hwmon_pwm_input) {
+> +		/* pwm_duty is modified only in write(), which the hwmon core serializes */
+> +		*val = priv->pwm_duty[channel];
+> +		return 0;
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+> +static int arctic_fan_write(struct device *dev, enum hwmon_sensor_types type,
+> +			    u32 attr, int channel, long val)
+> +{
+> +	struct arctic_fan_data *priv = dev_get_drvdata(dev);
+> +	u8 new_duty = (u8)clamp_val(val, 0, 255);
+> +	unsigned long flags;
+> +	long t;
+> +	int i, ret;
+> +
+> +	/*
+> +	 * The hwmon core holds its lock for the duration of this callback,
+> +	 * serializing concurrent writes. priv->buf is heap-allocated (embedded
+> +	 * in the devm_kzalloc'd struct), satisfying usb_hcd_map_urb_for_dma().
+> +	 *
+> +	 * Use new_duty for the target channel and the cached value for all
+> +	 * others. pwm_duty[channel] is committed only after a confirmed ACK so
+> +	 * a failed or timed-out write does not corrupt the cached duty state.
+> +	 */
+> +	priv->buf[0] = ARCTIC_OUTPUT_REPORT_ID;
+> +	for (i = 0; i < ARCTIC_NUM_FANS; i++)
+> +		priv->buf[1 + i] = DIV_ROUND_CLOSEST(
+> +			(unsigned int)(i == channel ? new_duty : priv->pwm_duty[i]) * 100, 255);
+> +
+> +	/*
+> +	 * Set write_pending before sending the report and clear it in every
+> +	 * exit path. raw_event() calls complete() only when write_pending is
+> +	 * true, so a stale ACK from a signal-interrupted write cannot
+> +	 * satisfy the next write's completion wait.
+> +	 * Serialized by the hwmon core: only one arctic_fan_write() at a time.
+> +	 * Use irqsave to match the IRQ context in which raw_event may run.
+> +	 */
+> +	spin_lock_irqsave(&priv->in_report_lock, flags);
+> +	priv->ack_status = -ETIMEDOUT;
+> +	priv->write_pending = true;
+> +	reinit_completion(&priv->in_report_received);
+> +	spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +
+> +	ret = hid_hw_output_report(priv->hdev, priv->buf, ARCTIC_REPORT_LEN);
+> +	if (ret < 0) {
+> +		spin_lock_irqsave(&priv->in_report_lock, flags);
+> +		priv->write_pending = false;
+> +		spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +		return ret;
+> +	}
+> +
+> +	t = wait_for_completion_interruptible_timeout(&priv->in_report_received,
+> +						      msecs_to_jiffies(ARCTIC_ACK_TIMEOUT_MS));
+> +	spin_lock_irqsave(&priv->in_report_lock, flags);
+> +	priv->write_pending = false;
+> +	spin_unlock_irqrestore(&priv->in_report_lock, flags);
+> +
+> +	if (t < 0)
+> +		return t; /* interrupted by signal */
+> +	if (!t)
+> +		return -ETIMEDOUT;
+> +
+> +	/* Commit the new duty only after hardware has acknowledged it */
+> +	priv->pwm_duty[channel] = new_duty;
+> +	return priv->ack_status; /* 0=OK, -EIO=device error */
+> +}
+> +
+> +static const struct hwmon_ops arctic_fan_ops = {
+> +	.is_visible = arctic_fan_is_visible,
+> +	.read = arctic_fan_read,
+> +	.write = arctic_fan_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *arctic_fan_info[] = {
 > +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
-> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT),
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
+> +			   HWMON_F_INPUT, HWMON_F_INPUT, HWMON_F_INPUT,
+> +			   HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT, HWMON_PWM_INPUT, HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT),
 > +	NULL
 > +};
 > +
-> +static const struct hwmon_chip_info yoga_fan_chip_info = {
-> +	.ops = &yoga_fan_hwmon_ops,
-> +	.info = yoga_fan_info,
+> +static const struct hwmon_chip_info arctic_fan_chip_info = {
+> +	.ops = &arctic_fan_ops,
+> +	.info = arctic_fan_info,
 > +};
 > +
-> +static int yoga_fan_probe(struct platform_device *pdev)
+> +static void arctic_fan_hw_stop(void *data)
 > +{
-> +	struct yoga_fan_data *data;
-> +	struct device *hwmon_dev;
-> +	acpi_handle handle;
-> +	int i;
+> +	struct hid_device *hdev = data;
 > +
-> +	static const char * const fan_paths[] = {
-> +		"\\_SB.PCI0.LPC0.EC0.FANS",  /* Primary Fan (Yoga 14c) */
-> +		"\\_SB.PCI0.LPC0.EC0.FA2S",  /* Secondary Fan (Legion) */
-> +		"\\_SB.PCI0.LPC0.EC0.FAN0",  /* IdeaPad / Slim */
-> +		"\\_SB.PCI0.LPC.EC.FAN0",    /* Legacy */
-> +		"\\_SB.PCI0.LPC0.EC.FAN0",   /* Alternate */
-> +	};
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->fan_count = 0;
-> +
-> +	/* SANITATION: Verify ACPI path existence before indexing */
-> +	for (i = 0; i < ARRAY_SIZE(fan_paths); i++) {
-> +		if (ACPI_SUCCESS(acpi_get_handle(NULL, (char *)fan_paths[i], &handle))) {
-> +			data->active_paths[data->fan_count] = fan_paths[i];
-> +			data->fan_count++;
-> +
-> +			if (data->fan_count >= MAX_FANS)
-> +				break;
-> +		}
-> +	}
-> +
-> +	if (data->fan_count == 0)
-> +		return -ENODEV;
-> +
-> +	/* SANITATION: Anchoring drvdata to avoid NULL returns during unload */
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, DRVNAME,
-> +							 data, &yoga_fan_chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +	hid_hw_close(hdev);
+> +	hid_hw_stop(hdev);
 > +}
 > +
-> +static struct platform_driver yoga_fan_driver = {
-> +	.driver = {
-> +		.name = DRVNAME,
-> +	},
-> +	.probe = yoga_fan_probe,
-> +};
-> +
-> +static struct platform_device *yoga_fan_device;
-> +
-> +static const struct dmi_system_id yoga_dmi_table[] __initconst = {
-> +	{
-> +		.ident = "Lenovo",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +		},
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(dmi, yoga_dmi_table);
-> +
-> +static int __init yoga_fan_init(void)
+> +static int arctic_fan_probe(struct hid_device *hdev,
+> +			    const struct hid_device_id *id)
 > +{
+> +	struct arctic_fan_data *priv;
+> +	struct device *hwmon_dev;
 > +	int ret;
 > +
-> +	if (!dmi_check_system(yoga_dmi_table))
+> +	if (!hid_is_usb(hdev))
 > +		return -ENODEV;
 > +
-> +	ret = platform_driver_register(&yoga_fan_driver);
+> +	ret = hid_parse(hdev);
 > +	if (ret)
 > +		return ret;
 > +
-> +	yoga_fan_device = platform_device_register_simple(DRVNAME, 0, NULL, 0);
-> +	if (IS_ERR(yoga_fan_device)) {
-> +		platform_driver_unregister(&yoga_fan_driver);
-> +		return PTR_ERR(yoga_fan_device);
+> +	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->hdev = hdev;
+> +	spin_lock_init(&priv->in_report_lock);
+> +	init_completion(&priv->in_report_received);
+> +	hid_set_drvdata(hdev, priv);
+> +
+> +	ret = hid_hw_start(hdev, HID_CONNECT_DRIVER);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hid_hw_open(hdev);
+> +	if (ret) {
+> +		hid_hw_stop(hdev);
+> +		return ret;
 > +	}
+> +
+> +	/*
+> +	 * Register hardware teardown before hwmon so that devm cleanup runs in
+> +	 * LIFO order: hwmon unregistered first, then hid_hw_close/stop. This
+> +	 * ensures no userspace sysfs write can reach an already stopped device.
+> +	 */
+> +	ret = devm_add_action_or_reset(&hdev->dev, arctic_fan_hw_stop, hdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Start IO before registering with hwmon. If IO were started after
+> +	 * hwmon registration, a sysfs write arriving in that narrow window
+> +	 * would send an OUT report but the ACK could not be delivered (the HID
+> +	 * core discards events until io_started), causing a spurious timeout.
+> +	 */
+> +	hid_device_io_start(hdev);
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&hdev->dev, "arctic_fan",
+> +							 priv, &arctic_fan_chip_info,
+> +							 NULL);
+> +	if (IS_ERR(hwmon_dev))
+> +		return PTR_ERR(hwmon_dev);
 > +
 > +	return 0;
 > +}
 > +
-> +static void __exit yoga_fan_exit(void)
+> +static void arctic_fan_remove(struct hid_device *hdev)
 > +{
-> +	platform_device_unregister(yoga_fan_device);
-> +	platform_driver_unregister(&yoga_fan_driver);
+> +	/* devm cleanup (LIFO) handles hid_hw_close/stop after hwmon unregistration */
 > +}
 > +
-> +module_init(yoga_fan_init);
-> +module_exit(yoga_fan_exit);
+> +static const struct hid_device_id arctic_fan_id_table[] = {
+> +	{ HID_USB_DEVICE(ARCTIC_VID, ARCTIC_PID) },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(hid, arctic_fan_id_table);
 > +
-> +MODULE_AUTHOR("Sergio Melas <sergiomelas@gmail.com>");
-> +MODULE_DESCRIPTION("Lenovo Yoga/Legion Fan Monitor Driver");
+> +static struct hid_driver arctic_fan_driver = {
+> +	.name = "arctic_fan",
+> +	.id_table = arctic_fan_id_table,
+> +	.probe = arctic_fan_probe,
+> +	.remove = arctic_fan_remove,
+> +	.raw_event = arctic_fan_raw_event,
+> +};
+> +
+> +module_hid_driver(arctic_fan_driver);
+> +
+> +MODULE_AUTHOR("Aureo Serrano de Souza <aureo.serrano@arctic.de>");
+> +MODULE_DESCRIPTION("HID hwmon driver for ARCTIC Fan Controller");
 > +MODULE_LICENSE("GPL");
+> 
 
