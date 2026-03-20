@@ -1,164 +1,175 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013022.outbound.protection.outlook.com [40.107.162.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FA83A8722
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 12:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774010955; cv=none; b=fvRbbd7kpLLivKGo4cP/jvZuk2WAidRQ8XdfzEZOukEo7d9Gy0Z2sTsHzygivIjW5aEMhLEaMI7hHFeTgi5KgXn75nC3VjgT/6nUxshtOfglx6qsUy+IS5tBCSZCej6GSzgRxaKNmcrjF4woFi3nF11u8WKzlP0wRXrScLkPW9Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774010955; c=relaxed/simple;
-	bh=4WNfPB1oOVci+kDiTm4FMmLY9ISecVRBfgDS8DYveSo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jo0yFFlcYH57vsKjgrLhH8gfdex0JZQmB+50xUD5q4brLajyi7YegmlV1/bccA4g7N30kqHswKgyWpfnApgGUTic8FNmJil1X5Kk/+N9LPha5od6rg7mLWDNQkqJ+RgwzkjTBsFV5JuwK2gb6LTydXe9WIrYkYGc3FAlNyi7MYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jSFdDI+P; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02F6275B03;
+	Fri, 20 Mar 2026 13:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.22
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774013784; cv=fail; b=LYiFn0cpugEQq4KOAbC8Ktmom2LdCnv0zkbNqRn/oi2eZOaZ+YLDf8tNnlVQFq/Fv5ZvXJYSDC7kBtYQprozVW+xBzfGFQ1414Q6rBW8BD8WXa0tz3uxTeK+vwEZ3WMSGfGp0ktt6l5WowMzV/lKt/BYeFROsgUeF9jNrEsK0l4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774013784; c=relaxed/simple;
+	bh=+vTGVRmGKdPpcebyjw8aQZWJ9ik+3lN6ASN04TqR5WU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ugsWDPYgEPy4FETtP26AjDRamw8CGr0xeIov3YTuHFVz16kKtHCwJfI6ttWpobFoaIKcUmWlgCQnjZkTU4olZBhIam5GKnx1zeRcaV2kom6QxIn62WVHjUSntCc0WPX7cMZ5RC5vqbleDdYb+HM0tY00om3WwbhPCUnbi3CIIps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=F+ehEIYU; arc=fail smtp.client-ip=40.107.162.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jSFdDI+P"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-827270d50d4so1850438b3a.3
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 05:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774010954; x=1774615754; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=PF/zN9HYX2sfMAO4a39ch3NifHykq9InyeMIQBNxxPM=;
-        b=jSFdDI+PyMik//A2frlYckmAzMGbS31h7PzRkvTLd5X3QO8ohpkVs1+c0ErujoV/BB
-         24+Hz0sCXSqm/oNQuZfgBoU3GHsFZYCDTP7QtTE1IgKptfNIn+VwKDVtdvLn68zFJumw
-         jCoqKfScFHXzd+9uzncjdWJ+vfvLrLyvbZ2QTQnAwycFXoYjuTO1VgK3MHcbcHEeuPUG
-         lepOW8f2bPO0pOna38B2LulsBkhqhvUfBuEYUlcM+iFY+oJieCooJBNQG/kVoDbPsSbB
-         gYhZCgboob+tKT8YvWlSu6lYq/GZuPbGJPuRnFnb03P1e2l5uLvKZUvP8OI9+/YX4Fub
-         Tnwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774010954; x=1774615754;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PF/zN9HYX2sfMAO4a39ch3NifHykq9InyeMIQBNxxPM=;
-        b=j35EdJHTbQIMdCXyiNqs5yI7yHlU8STTSAYout3Zomxva8zZmrwxmVUMgLopJCtz4Y
-         P6g3b2yg6jbEORJOwP1d4wEz9UfCryDtUfO21fLvg9EnX7Y78Gn9xmWvE9RVO1z2arD0
-         wkMAUe9ge5Vpar4aVnXoeE3apKznDFjVYRoJDmme7rOK7YKir9H6e3Chhz6hiZxXa40H
-         FW0kHpUZGwwC3D4M/P6Pc179n1AAsjtRS/PAqCyxWjgwfTUwaHhuABoPr1W+gjmOiU/y
-         DMcW318lOZK7lQc2RoBfYfyhPia/i/fPz36Pu1n/UkBQU2C3UK51Icn1k8V/PAmvAo3a
-         lVcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWRb3bHA+ugBtlZaW2hKoANUe8fgHkU4ImHVYuOK97zkP3QR1Uq+FBAu110BsC+7f5yhlGx7bH3j+q48w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVLXDVYw07kEUz4w6dMwxQbar81mZDEfKQgRrEydI5bRec48bY
-	6JEw0Fwx46I1IrpmDdzyKoojJTKeANcXxRKriBSTb38q6zsGSuxe3P9M
-X-Gm-Gg: ATEYQzw7Evxte8f6VFjdQ/rRMj3XSxbrHzry9uzDqMhw1SY1ExGcxOBHl0NZgYM0dwe
-	62mtNWpQwsNyt1AW6bT7k3w7pOa7V13SHRCMfnd67h0pPHDpPRCuhuRSgFlV4aRji5kj9eQ8UJA
-	pQoukUJikdp0u4B8qfwTj4221pLvrszahcIhpFi6CgNuRH+cAZdvwqasxpx6Np0JSCJMUGBaa7D
-	7N2b7byvp/rd2ycQ9EIVS8hjvBa1jFoaL+h4+Mz0ABao/dh4CSfxOXKj9Fki0AT+wfQ7Ysb5ZV2
-	rebEg7cq/z2bRP2aOQFXx0AZfKb7nh2U3yzIRQuolLabx0nV9Y/CapzNF/tUCEKRcvO4aYG2FPN
-	Y+nbaEmTjlKpII3x8bY+yVTX5UxUIQ1EaxyHk6mdRS0Shb78J410NWY9XB6ifPl5UQvKQm5hes6
-	7eSwyfYLg+x6lt7P7BEdYID9lDTdi2h2LA7gx2shXq/6tQZtTNBhNSbux3PW1nUUaWYqCGdQsU
-X-Received: by 2002:a05:6a00:8510:b0:82c:20ee:452d with SMTP id d2e1a72fcca58-82c20ee5580mr512605b3a.40.1774010953749;
-        Fri, 20 Mar 2026 05:49:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa79c6sm2127289b3a.10.2026.03.20.05.49.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 05:49:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9f1263f8-d242-487a-a266-41ce7a9cb1b6@roeck-us.net>
-Date: Fri, 20 Mar 2026 05:49:12 -0700
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="F+ehEIYU"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=f9CxcHjVxW6BIICyL0XvAC+1MF0yf8foJmOj4k2sorHOYkEIUOwxiE+iL+/ydJMY3psJ0CA7makCbHSopxqOX/vqN7oBle8qiMFPGsfALUAJOhcmdEhyuCMxAc5M149wIsOOEbz1yDddEGcYRq5Ay3yoyGtYfetcWtuJqytqdIjMwI/yCaOqJzMKob+DUmuTgkyIY52BW8YlqezUMZwaAO6CTHZMclPq3Xr5eJYrYSR1vXozi0ZLUbZKSkQqNrKBhdI6F482JPZ02jz2Nexx9E0o9mJ26R0mj951+iijhNdvx27AhDDLQ09l1sAxMeW+uc+S9LCl3R4Zns5EO4t+3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=feDe8HW1W8DysZTnYHAgiAddexYRgDVJYHAg/cE6S/c=;
+ b=FoU03FU575lqK+p54praafG4BLLvtgRKPy5Mv0I+0eTdFki15W920vM0yTrLELK7tzGLUGCIU9o/ivuiy+yc/QlkQlIrOzULEO+eBw1b3AxZdgoSJytAZhL4gZMZ4qBcl+okCnHERobW/+rtCQmQ25NnO7rW+YyRNh4HORmIb9eV23cAbdHetnTcRFKemdxCPPQdCzEHGKb/XmhvvVZ8K7OyvaEADlX/UOBnGMyTge5qpK8gI74Pw24ruEu83ccOOCzkrGfR3qR0xYEaakbynxX3ZuNEwpeC3xnAaxSAl1Ci4GBaq9zUcUv8RjOtWumPJr4LHuKZjanVkGr7SZG22Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=feDe8HW1W8DysZTnYHAgiAddexYRgDVJYHAg/cE6S/c=;
+ b=F+ehEIYUKcPO3pax01ZBb3afftB5uNBkZOjSbh8v6lOpJSZZUrJJ3ZahfrvqBCawZF4apjj8Q/cSzkvGN4+rTVGgJlRVaWF1JH8YtB2CwX71ZzadzTn5eM86G+ku7QikCjiWgCxM6/2Y5KAXqzQQzC+884linRGl5J6PgVn4kdG2ta7L5bBndgDAuxZ/ybmnUqV3LgEINwj+gBDUHNr9shChtjlL+NW2K/p8uM2R2kDPW+AIE8RtirKivENFBy7Wn9Cc3D06+dGN4nMQB8BK4tQn5VaRq5O2RAKbyfKvA9LiYR9ano3Vz8EB68I/OYsmnXyBt8APdLMTlzZja7GxTw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com (2603:10a6:10:5b3::14)
+ by VI1PR04MB6781.eurprd04.prod.outlook.com (2603:10a6:803:13d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Fri, 20 Mar
+ 2026 13:36:16 +0000
+Received: from DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a]) by DU7PR04MB11163.eurprd04.prod.outlook.com
+ ([fe80::93f5:4ff3:2f4c:183a%6]) with mapi id 15.20.9723.022; Fri, 20 Mar 2026
+ 13:36:06 +0000
+Date: Fri, 20 Mar 2026 15:52:01 +0200
+From: Florin Leotescu <florin.leotescu@oss.nxp.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Shych <michaelsh@nvidia.com>, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	daniel.baluta@nxp.com, viorel.suman@nxp.com,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	festevam@gmail.com, Florin Leotescu <florin.leotescu@nxp.com>
+Subject: Re: [RFC PATCH v3 0/2] hwmon: emc2305: Support configurable fan PWM
+ at shutdown
+Message-ID: <ab1RAT6cEYqeHrgD@ro-kernel-workstation>
+References: <20260312144325.1311314-1-florin.leotescu@oss.nxp.com>
+ <a3ec42e5-d151-4d54-9625-fffeb0399431@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3ec42e5-d151-4d54-9625-fffeb0399431@roeck-us.net>
+X-ClientProxiedBy: AM0P190CA0013.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:208:190::23) To DU7PR04MB11163.eurprd04.prod.outlook.com
+ (2603:10a6:10:5b3::14)
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] hwmon: (pmbus) add spinlock to protect 64-bit
- timestamp
-To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Sanman Pradhan <psanman@juniper.net>
-References: <20260319234945.151487-1-sanman.pradhan@hpe.com>
- <20260319234945.151487-2-sanman.pradhan@hpe.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260319234945.151487-2-sanman.pradhan@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU7PR04MB11163:EE_|VI1PR04MB6781:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00ec8aa5-fffc-46cd-88a0-08de8685a349
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|1800799024|366016|7416014|376014|83080400003|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	bQ21bjYKHY3XCZebpk1T4/Xse0RB2u51KKlBjgfJ4Otc0Oe6GkrJdGP73MWxgidyNNg8UuB2OLXq6i9BfLgMZWtLhpKmyBtnx/39kyhassIqGe7MyDE6AB3RU4VlQU/0vXRNRpMGvurXy44juXDlZO9omCWbnZlhDD0DE2jUYLd2t3lzjvQx79p0RYPr9Iv+7WPlds1ebLwQQd2MM1eBxFqqxE5k9tHe8pKtJjTa9sS+hxCRBOsaoybp794h1mJ8BwBiWH2UQFYYarPr8ae8c6+CMvWp12Yn9AW/g6iTYu6GL9O7OEPkWZ9QBP4/RTTW90i5EGNdyIm47LXhHOff+iZxOJWOw67JrnrUFv5XlLuTPsvZCKmCuqweS13aNqAC/Q4XYAwoStdeCHmpa/WE/iWyUvR+EXFiuVS6+SdbI8ADaLW2lNjJ45RocQn5DmG5vcyJHf2f+tL4/UTmQeheD/wQtpKYZ4NkBRqkddPgddXywRM+SB9mw/eq5/9uwZcXNYwEq9jl/NHJf4/U2LWGCpjhYAEyRcdIN2ej4eaIx7dNIJmxhC5k7qPMy0fnt8+f5xl6VHOSR5tLcDvdwok+Kfz1K6PHMq5ge5XuhH/mpLyWsOSGZk2kNVmsYIBrS06E1KMj5bJwK8jPKROAgxGirxwJrWmS9R0uRyTGnTjaKdCAGUQBaFFVA+R+c69UPKBlkNvFFnelqN+jRRnQBedlsY6CdQ/LJZEztMKfYZSab6k=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU7PR04MB11163.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(7416014)(376014)(83080400003)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?9xNi33y+1QDYL+aRboGPvW8LJUcOwCTlDmtKJycQzkfQWAejmQVp9Bd/2LVM?=
+ =?us-ascii?Q?ZewB1C1uikg2QZmB+02FUNGtxm0dV/U3zWB7tcPNCRBQgoRHxoKv8SWKSNQF?=
+ =?us-ascii?Q?qhQHXubVYYThFfUd87TuvtSKnVr0PJIrwt7R+MEJHhDqTOkz3wovlcB2WJ1Q?=
+ =?us-ascii?Q?EXMukvq29H/N0zVhut0IwICCFMqQV5BWJN3h/+J7Euh90oYWfY+vs+CHjabf?=
+ =?us-ascii?Q?IogTxw0JfK2HmvAZ1S3CyyVTfUPjl2kO2BjKujx1CjLaK21aDFZQoX7d9aP+?=
+ =?us-ascii?Q?NA2Y5Vcr5Pef9mfb5WTqp9XhdAP4d3xrO2w/WRfRSOx1FfbK5PjWx1pdlxQ2?=
+ =?us-ascii?Q?SPpY1voG6mYCckqt/C66MJi72/NuwLB3+IDhpsY3/e4g9qTlMdINqcj8GzrO?=
+ =?us-ascii?Q?cdcQF5zarfw4v/Wf7SohjZwQZGRSAcFqpV9agioaY9tIdasvl0Jv73Yy1E89?=
+ =?us-ascii?Q?NHWingz1CjOzFL+eEYWc6D3Xo7EPLRF9sWSzZPnAAQvi3SwXtxPmPi58YIos?=
+ =?us-ascii?Q?bFwvoZnr6FRyRHekMQwjrYu2XwumtasKs8mBA9IAFp5MIc9JybNO/Zet04wB?=
+ =?us-ascii?Q?3c/p6LNFjcZOWw6NSWdr2z5zd5D+OS+L87GAAPVkoBEZokbT71gilMP6bpXp?=
+ =?us-ascii?Q?2FB8ekpICnLYUXFusz3e+8Rtnxs0ysLk6ETMxA/Ui6uaSjfpu5JQlo/TackM?=
+ =?us-ascii?Q?nDqV4lXlEvrjLHyf93o6rhZCcSlYwb7dM/8s3Xw7KWo/isYS1v5Ks8wMcIAp?=
+ =?us-ascii?Q?Fv6dZPKcE+ZTpAwXayBLpnaRo541216WyrSJnEazuqqSl3RmlkD+AthDeKEH?=
+ =?us-ascii?Q?eyylp/NyVOByAuRHixfLuQRai0ibcINAfGMgO4WlZRb6PaKGcgmCfkm61Wiu?=
+ =?us-ascii?Q?yZrVDksV4+0fQDXjN3Z2xLC7BTXuG+l5ODF9qaDlsuYfTjbtXsuaYceqdpJl?=
+ =?us-ascii?Q?Frh1mRzcCSVA+5Q1la6J59aK/ooRkV0V/AzHRHQyfl0KqIltmHOORaDwUbqn?=
+ =?us-ascii?Q?8kQHyiZRKpUNlUdbYSsX/o97dJOsF2luz0C4nHxFy85RIRLHB3KFnq4lcGLL?=
+ =?us-ascii?Q?YtMaeZr3yPhNMgtAkSyo1ddg9mtTbFQ9cBJ4oDwu+0/X5eulrIGCYBfI1Y63?=
+ =?us-ascii?Q?gpke3yaJGhPxrJPaDJbfBIvOIM1GESN+x+y7Z3E4QWUKMnkNkTsfhwCUqx7Q?=
+ =?us-ascii?Q?qtILxTGK+j8CW2aPJDVmssVQxcGHJBsqbvV5/RnI9tUqNC4TUtvI0wZ55Xox?=
+ =?us-ascii?Q?e2OJjX0EXXD2CPbIUSRh6kEiYtEXSqNLv6qFdGEwshuG2ZHj5FRbMBiJZR3N?=
+ =?us-ascii?Q?Sxp6xOcmrzNSKiMnymRxe43juO6/VnCsta+vE5N2w3zt4JcKVOrWSVCm0l49?=
+ =?us-ascii?Q?UEhf8eFgpO9ID5CSja2iRhCpcw0AjLHF8Dn/fNlfAtrdHguEmNMTJx5MPS2G?=
+ =?us-ascii?Q?PWs/A13SuLqvQrC7jy1h1wgH2NzT1W+oeGYL+Uh696HzQnVdsggmN8Vawut2?=
+ =?us-ascii?Q?zrDAbUganiKiz4A/jcgavSiCTgvmeXih/sUkVR3PGjqst0ykwcr5naJ9w1LG?=
+ =?us-ascii?Q?FXhnZ8SFZVkAgNMIsz+9h7a24zkQQYb4/X3FB9CvNiXPpkN+NscV64pRcgK6?=
+ =?us-ascii?Q?ybi1FjrmnMfMXT6+gRD/0F5XwfAaFWzZjQUHFYO68X7AGUnjidzMVZrd7YCv?=
+ =?us-ascii?Q?veUvT19ekR6mW9crvbeeKOgY/o1IjDYetVLcXJqtt7tme/6jQsX/FAFb/EjH?=
+ =?us-ascii?Q?x8amfM0T1A=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00ec8aa5-fffc-46cd-88a0-08de8685a349
+X-MS-Exchange-CrossTenant-AuthSource: DU7PR04MB11163.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Mar 2026 13:36:06.3857
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P6htDhDGkGFQ6+IS1tsP9t4W0W6/4dMmK74U1LakPY+rTetoeI0JBtpd6DSXbp+UyHSwRxaCym38JdQRYX/H9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6781
 
-On 3/19/26 16:50, Pradhan, Sanman wrote:
-> From: Sanman Pradhan <psanman@juniper.net>
+On Tue, Mar 17, 2026 at 09:17:21AM -0700, Guenter Roeck wrote:
+> On 3/12/26 07:43, florin.leotescu@oss.nxp.com wrote:
+> > From: Florin Leotescu <florin.leotescu@nxp.com>
+> > 
+> > This series adds support for configuring the fan PWM duty cycle applied
+> > during system shutdown for the EMC2305 fan controller.
+> > 
+> > Some platforms require fans to transition to a predefined safe state
+> > during shutdown or reboot handoff until firmware or the next boot stage
+> > reconfigures the controller.
+> > 
+> > The new optional Device Tree property "fan-shutdown-percent" allows the
+> > shutdown PWM duty cycle to be configured per fan output.
+> > 
+> > Changes in v3:
+> > - Rebased on current upstream
+> > - Dropped already upstreamed of_node_put(child) fix
+> > Changes in v2:
+> > - Address feedback from Guenter Roeck
+> > - Make shutdown behavior configurable via Device Tree
+> > - Add optional fan-shutdown-percent property
+> > - Apply shutdown PWM only for channels defining the property
+> > 
+> > Florin Leotescu (2):
+> >    dt-bindings: hwmon: emc2305: Add fan-shutdown-percent property
+> >    hwmon: emc2305: Support configurable fan PWM at shutdown
+> > 
+> >   .../bindings/hwmon/microchip,emc2305.yaml     |  8 +++++
+> >   drivers/hwmon/emc2305.c                       | 34 +++++++++++++++++++
+> >   2 files changed, 42 insertions(+)
+> > 
+> AI review of series is here:
 > 
-> The next_access_backoff variable is a 64-bit ktime_t. On 32-bit
-> architectures, accesses to 64-bit variables are not atomic, which can
-> result in "torn" reads or writes if accessed concurrently from
-> different subsystems (e.g., hwmon sysfs reads vs. regulator updates).
+> https://sashiko.dev/#/patchset/20260312144325.1311314-1-florin.leotescu%40oss.nxp.com
 > 
-> Introduce a spinlock in struct pmbus_data to protect accesses to
-> next_access_backoff and prevent torn reads/writes on 32-bit systems.
-> This change addresses atomicity of the timestamp field itself as the
-> timing helpers become callable from more paths, including PMBus chip
-> drivers using the exported helpers.
+> Please take a look.
+>
+Hi Guenter,
+
+Thanks for pointing this out.
+You're right, since the pwm_shutdown array is zero-initialized by devm_kzalloc,
+the channels that are not explicitly configured, will be treated as valid
+and written as 0 during shutdown. I'll fix it in next revision.
+
+> Thanks,
+> Guenter
 > 
-> This does not attempt to serialize the full wait/transfer/update
-> sequence across concurrent callers; it only protects the timestamp
-> field from torn access.
-> 
-> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
-> ---
-> v4:
-> - New patch in the series. Introduces a spinlock to protect the 64-bit
->    next_access_backoff timestamp from torn reads/writes on 32-bit
->    architectures.
-
-Unfortunately that makes timestamp handling very expensive, even for
-architectures not needing it.
-
-We'll have to make sure that all accesses (sysfs, thermal, and regulator)
-are serialized instead. I just browsed through the core code. Most of
-the accesses are already serialized, but I think the locking is missing
-in the regulator operations. We'll need to add the missing locks there.
-
-Thanks,
-Guenter
-
