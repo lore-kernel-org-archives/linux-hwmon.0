@@ -1,67 +1,67 @@
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1036396B82
-	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 12:21:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FA83A8722
+	for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 12:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774009298; cv=none; b=Dp0yFZeQ223bInrSV4tO4tToI2LW1CSat35bR4+HprTrl3qcSFUHMN+5G4DTd7EOAijvEVVEKyz8r3llW+EBwlv5Rzu6auqS12tqFAPupUZcDDdgTlNB4AlYJoEt+bWvz6GEMom0hCBkQRvsTDCSUK7GmiAd4FU+X9QVBQbwcyo=
+	t=1774010955; cv=none; b=fvRbbd7kpLLivKGo4cP/jvZuk2WAidRQ8XdfzEZOukEo7d9Gy0Z2sTsHzygivIjW5aEMhLEaMI7hHFeTgi5KgXn75nC3VjgT/6nUxshtOfglx6qsUy+IS5tBCSZCej6GSzgRxaKNmcrjF4woFi3nF11u8WKzlP0wRXrScLkPW9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774009298; c=relaxed/simple;
-	bh=ykocg146Do2pEWysqYkydaVeCQLhtlf6ZIEbVFr8ff4=;
+	s=arc-20240116; t=1774010955; c=relaxed/simple;
+	bh=4WNfPB1oOVci+kDiTm4FMmLY9ISecVRBfgDS8DYveSo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MZwexJjIUnvCb5VrPBRAjSAjBM8hQsi8xSOE7whcu8utmJRfCNTh2g5TxEKGbxouAqoCv/e3V+IuZG6DQP9RRGSwvWnGCPpHdcjQyhKrDL7hPXFoGRpPXk1ol7FHN1M2IGkZKGr8C23abh2G80IjVbRhL6+lETzXoIQcZtIBlmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kIktvUeW; arc=none smtp.client-ip=74.125.82.52
+	 In-Reply-To:Content-Type; b=Jo0yFFlcYH57vsKjgrLhH8gfdex0JZQmB+50xUD5q4brLajyi7YegmlV1/bccA4g7N30kqHswKgyWpfnApgGUTic8FNmJil1X5Kk/+N9LPha5od6rg7mLWDNQkqJ+RgwzkjTBsFV5JuwK2gb6LTydXe9WIrYkYGc3FAlNyi7MYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jSFdDI+P; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kIktvUeW"
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-127380532eeso5106068c88.1
-        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 05:21:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jSFdDI+P"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-827270d50d4so1850438b3a.3
+        for <linux-hwmon@vger.kernel.org>; Fri, 20 Mar 2026 05:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1774009296; x=1774614096; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1774010954; x=1774615754; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTnsliriz9CfNRUwq9oMEwFIbuR4aChiZL67F1kmMW4=;
-        b=kIktvUeWxxSkiT6dFH2krg+UlowwEscpBMwKlcu8wXdXfVWcYBnupiFqOjZdCbFtVw
-         lEMfOiA5HbJx0VrAz1nAU0fYgYMlRoQOmPDjxeeplg9yY51Ju9yCorpO2YIldu3hP0b5
-         JSqdh3i7NhuJwnAGykiCqh1rKAND0l3raceSFllnLKWskw0JWXzOg22yLQcpJeDFqOhb
-         e92EMSbqhObp1eC/SagnXhUrteqfa/NLfFvceZodGXjo6p9A86LdWoI5dsMM/Q8INvgM
-         gi5A9lN4VN+9SE0+5jGGxj/87SAisYyJ4Xl5Oj74NeAw6rU75iVU79rk9N8/D6XVfy54
-         f1xw==
+        bh=PF/zN9HYX2sfMAO4a39ch3NifHykq9InyeMIQBNxxPM=;
+        b=jSFdDI+PyMik//A2frlYckmAzMGbS31h7PzRkvTLd5X3QO8ohpkVs1+c0ErujoV/BB
+         24+Hz0sCXSqm/oNQuZfgBoU3GHsFZYCDTP7QtTE1IgKptfNIn+VwKDVtdvLn68zFJumw
+         jCoqKfScFHXzd+9uzncjdWJ+vfvLrLyvbZ2QTQnAwycFXoYjuTO1VgK3MHcbcHEeuPUG
+         lepOW8f2bPO0pOna38B2LulsBkhqhvUfBuEYUlcM+iFY+oJieCooJBNQG/kVoDbPsSbB
+         gYhZCgboob+tKT8YvWlSu6lYq/GZuPbGJPuRnFnb03P1e2l5uLvKZUvP8OI9+/YX4Fub
+         Tnwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774009296; x=1774614096;
+        d=1e100.net; s=20251104; t=1774010954; x=1774615754;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rTnsliriz9CfNRUwq9oMEwFIbuR4aChiZL67F1kmMW4=;
-        b=OR39yq6DBvILn08wFe/V8bJX8oyyHlqvatq+rydQyA5nIfAK354OuaT6vmwkbWv4Ty
-         EkqXMVXBqNJXew3yytWlVxL7GF43pdywOYvMWwWbupVSSbn7QuMI7uGmUS/y63F0emBh
-         OSZUu5K9tqP9mUPxQ716sgCw2XSRlU91Ty2SM0fZZSNUrfUbhD3Y4Ue4YWlbre75iNPD
-         +LaDY97FUfjDOxP+J/ev4jn0v8p7WLcEQUDUz8XHJ4GUsxLOqJqZ8HFuOM6pWsvScUEM
-         ceuQM33xui5DN+Pid4crxo1L5W/4ky8CA2u2WSl0SbPJbtWsX/Fied/+ii2BfhugN+iN
-         LWZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIaVffP2YtoqliJbDRc0hAERkkTBmD8hx8VxKQbQk7HypwktUXjvd2ZyCvBRv0korlNPEwJ7xvkWyQ3g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVSgFLiKnxcdBXE0BzXbg3662SHkhMsEzOKSkYNGsl+Re2iQW1
-	YVT2sXxhqe0RMEuhUBgx/I21OZHbNyA5AQ5NUT6cH1uearlWvdH+tYFS
-X-Gm-Gg: ATEYQzx50ZPJXTs8dDraVP8WpAIjgIzU2Ek916bxenX1TA0KIxZrq5lGMQX8t7qEKPj
-	SHTYJUXNYKWju8f9JOYuda9DgVQayNUClTZgMOJa6xn+pAtrlDROm18Gzy4K9Vm+nEganEUEM0L
-	IuREgZpnYPk99Orv8roaFXXH6Agjd7EAGUaAp2+OZwAdlvP79se9N3AUCztWHe+WQzzUn77DaBA
-	BqzelDdl7hzjDlLTgd73oUanb4I4nGvuLKQCftOKkHppYTt9fZG1tM05FGKcnSltz5X/rDY/9mH
-	DpnnSi6gno9mp/jx/oAo+JKL/J8afFLfL2Kyvrkk6h7Q6pl+0cvAyYWtCp4dpVg7kB6qxXAijKj
-	98xhPBgNq9CHAWURnlI0Wxei8RZD0gYFgFNLy/bQKqme0Z3cQOyvoA18GRAsRSnDBYdmvziazDT
-	tXRzOaWmYfloR5NTDKGqBzfsxP9FH7Fc+86MKhEwi+ftH9On2jfUsciE4hvQ32j3Skjo72EYVf
-X-Received: by 2002:a05:7300:bc08:b0:2be:a2d8:e9e3 with SMTP id 5a478bee46e88-2c1097bff99mr1487868eec.29.1774009295865;
-        Fri, 20 Mar 2026 05:21:35 -0700 (PDT)
+        bh=PF/zN9HYX2sfMAO4a39ch3NifHykq9InyeMIQBNxxPM=;
+        b=j35EdJHTbQIMdCXyiNqs5yI7yHlU8STTSAYout3Zomxva8zZmrwxmVUMgLopJCtz4Y
+         P6g3b2yg6jbEORJOwP1d4wEz9UfCryDtUfO21fLvg9EnX7Y78Gn9xmWvE9RVO1z2arD0
+         wkMAUe9ge5Vpar4aVnXoeE3apKznDFjVYRoJDmme7rOK7YKir9H6e3Chhz6hiZxXa40H
+         FW0kHpUZGwwC3D4M/P6Pc179n1AAsjtRS/PAqCyxWjgwfTUwaHhuABoPr1W+gjmOiU/y
+         DMcW318lOZK7lQc2RoBfYfyhPia/i/fPz36Pu1n/UkBQU2C3UK51Icn1k8V/PAmvAo3a
+         lVcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWRb3bHA+ugBtlZaW2hKoANUe8fgHkU4ImHVYuOK97zkP3QR1Uq+FBAu110BsC+7f5yhlGx7bH3j+q48w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVLXDVYw07kEUz4w6dMwxQbar81mZDEfKQgRrEydI5bRec48bY
+	6JEw0Fwx46I1IrpmDdzyKoojJTKeANcXxRKriBSTb38q6zsGSuxe3P9M
+X-Gm-Gg: ATEYQzw7Evxte8f6VFjdQ/rRMj3XSxbrHzry9uzDqMhw1SY1ExGcxOBHl0NZgYM0dwe
+	62mtNWpQwsNyt1AW6bT7k3w7pOa7V13SHRCMfnd67h0pPHDpPRCuhuRSgFlV4aRji5kj9eQ8UJA
+	pQoukUJikdp0u4B8qfwTj4221pLvrszahcIhpFi6CgNuRH+cAZdvwqasxpx6Np0JSCJMUGBaa7D
+	7N2b7byvp/rd2ycQ9EIVS8hjvBa1jFoaL+h4+Mz0ABao/dh4CSfxOXKj9Fki0AT+wfQ7Ysb5ZV2
+	rebEg7cq/z2bRP2aOQFXx0AZfKb7nh2U3yzIRQuolLabx0nV9Y/CapzNF/tUCEKRcvO4aYG2FPN
+	Y+nbaEmTjlKpII3x8bY+yVTX5UxUIQ1EaxyHk6mdRS0Shb78J410NWY9XB6ifPl5UQvKQm5hes6
+	7eSwyfYLg+x6lt7P7BEdYID9lDTdi2h2LA7gx2shXq/6tQZtTNBhNSbux3PW1nUUaWYqCGdQsU
+X-Received: by 2002:a05:6a00:8510:b0:82c:20ee:452d with SMTP id d2e1a72fcca58-82c20ee5580mr512605b3a.40.1774010953749;
+        Fri, 20 Mar 2026 05:49:13 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2c10b14cadbsm3498874eec.3.2026.03.20.05.21.34
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b03aa79c6sm2127289b3a.10.2026.03.20.05.49.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Mar 2026 05:21:35 -0700 (PDT)
+        Fri, 20 Mar 2026 05:49:13 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <964752ec-8e6d-444a-aad0-80da3acb2dab@roeck-us.net>
-Date: Fri, 20 Mar 2026 05:21:33 -0700
+Message-ID: <9f1263f8-d242-487a-a266-41ce7a9cb1b6@roeck-us.net>
+Date: Fri, 20 Mar 2026 05:49:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
@@ -69,17 +69,14 @@ List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] dpll: zl3073x: add hwmon support for input
- reference frequencies
-To: Ivan Vecera <ivecera@redhat.com>, netdev@vger.kernel.org
-Cc: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
- Jiri Pirko <jiri@resnulli.us>,
- Prathosh Satish <Prathosh.Satish@microchip.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>, linux-kernel@vger.kernel.org,
- linux-hwmon@vger.kernel.org, Michal Schmidt <mschmidt@redhat.com>,
- Petr Oros <poros@redhat.com>, Simon Horman <horms@kernel.org>
-References: <20260320105915.149068-1-ivecera@redhat.com>
- <20260320105915.149068-4-ivecera@redhat.com>
+Subject: Re: [PATCH v4 1/3] hwmon: (pmbus) add spinlock to protect 64-bit
+ timestamp
+To: "Pradhan, Sanman" <sanman.pradhan@hpe.com>,
+ "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Sanman Pradhan <psanman@juniper.net>
+References: <20260319234945.151487-1-sanman.pradhan@hpe.com>
+ <20260319234945.151487-2-sanman.pradhan@hpe.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -125,187 +122,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
  FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
  np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260320105915.149068-4-ivecera@redhat.com>
+In-Reply-To: <20260319234945.151487-2-sanman.pradhan@hpe.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/20/26 03:59, Ivan Vecera wrote:
-> Expose measured input reference frequencies via the hwmon interface
-> using custom sysfs attributes (freqN_input and freqN_label) since
-> hwmon has no native frequency sensor type. The frequency values are
-> read from the cached measurements updated by the periodic work thread.
+On 3/19/26 16:50, Pradhan, Sanman wrote:
+> From: Sanman Pradhan <psanman@juniper.net>
 > 
-> Cache the device ready state in struct zl3073x_dev so that
-> freq_input_show() can return -ENODATA without an I2C access when
-> the device firmware is not configured.
+> The next_access_backoff variable is a 64-bit ktime_t. On 32-bit
+> architectures, accesses to 64-bit variables are not atomic, which can
+> result in "torn" reads or writes if accessed concurrently from
+> different subsystems (e.g., hwmon sysfs reads vs. regulator updates).
 > 
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-
-"frequency" is not a hardware monitoring attribute. I understand that it is
-convenient to report it as one, and that other drivers implement it as well,
-but that doesn't change that.
-
-I understand that the code lives outside the hardware monitoring subsystem and is
-thus not in control of its maintainers, so you can essentially do whatever you want,
-even if it is wrong. That doesn't change the fact that it is wrong.
-
-However, do _not_ try to add it into the official list of hardware monitoring
-attributes. I would NACK that.
-
-Guenter
-
+> Introduce a spinlock in struct pmbus_data to protect accesses to
+> next_access_backoff and prevent torn reads/writes on 32-bit systems.
+> This change addresses atomicity of the timestamp field itself as the
+> timing helpers become callable from more paths, including PMBus chip
+> drivers using the exported helpers.
+> 
+> This does not attempt to serialize the full wait/transfer/update
+> sequence across concurrent callers; it only protects the timestamp
+> field from torn access.
+> 
+> Signed-off-by: Sanman Pradhan <psanman@juniper.net>
 > ---
->   drivers/dpll/zl3073x/core.c  |  4 +-
->   drivers/dpll/zl3073x/core.h  |  2 +
->   drivers/dpll/zl3073x/hwmon.c | 86 +++++++++++++++++++++++++++++++++++-
->   3 files changed, 90 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dpll/zl3073x/core.c b/drivers/dpll/zl3073x/core.c
-> index 67e65f8e7e7d4..5805f87167c20 100644
-> --- a/drivers/dpll/zl3073x/core.c
-> +++ b/drivers/dpll/zl3073x/core.c
-> @@ -874,7 +874,9 @@ int zl3073x_dev_start(struct zl3073x_dev *zldev, bool full)
->   		return rc;
->   	}
->   
-> -	if (!FIELD_GET(ZL_INFO_READY, info)) {
-> +	zldev->ready = !!FIELD_GET(ZL_INFO_READY, info);
-> +
-> +	if (!zldev->ready) {
->   		/* The ready bit indicates that the firmware was successfully
->   		 * configured and is ready for normal operation. If it is
->   		 * cleared then the configuration stored in flash is wrong
-> diff --git a/drivers/dpll/zl3073x/core.h b/drivers/dpll/zl3073x/core.h
-> index 99440620407da..a416b8a65f41b 100644
-> --- a/drivers/dpll/zl3073x/core.h
-> +++ b/drivers/dpll/zl3073x/core.h
-> @@ -48,6 +48,7 @@ struct zl3073x_chip_info {
->    * @regmap: regmap to access device registers
->    * @info: detected chip info
->    * @multiop_lock: to serialize multiple register operations
-> + * @ready: true if device firmware is configured and ready for normal operation
->    * @ref: array of input references' invariants
->    * @out: array of outs' invariants
->    * @synth: array of synths' invariants
-> @@ -63,6 +64,7 @@ struct zl3073x_dev {
->   	struct regmap			*regmap;
->   	const struct zl3073x_chip_info	*info;
->   	struct mutex			multiop_lock;
-> +	bool				ready;
->   
->   	/* Invariants */
->   	struct zl3073x_ref	ref[ZL3073X_NUM_REFS];
-> diff --git a/drivers/dpll/zl3073x/hwmon.c b/drivers/dpll/zl3073x/hwmon.c
-> index 4b44df4def820..96879609ce100 100644
-> --- a/drivers/dpll/zl3073x/hwmon.c
-> +++ b/drivers/dpll/zl3073x/hwmon.c
-> @@ -2,9 +2,11 @@
->   
->   #include <linux/device.h>
->   #include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
->   
->   #include "core.h"
->   #include "hwmon.h"
-> +#include "ref.h"
->   #include "regs.h"
->   
->   static int zl3073x_hwmon_read(struct device *dev,
-> @@ -55,6 +57,88 @@ static const struct hwmon_chip_info zl3073x_hwmon_chip_info = {
->   	.info = zl3073x_hwmon_info,
->   };
->   
-> +static ssize_t freq_input_show(struct device *dev,
-> +			       struct device_attribute *devattr, char *buf)
-> +{
-> +	struct zl3073x_dev *zldev = dev_get_drvdata(dev);
-> +	int index = to_sensor_dev_attr(devattr)->index;
-> +	const struct zl3073x_ref *ref;
-> +
-> +	if (!zldev->ready)
-> +		return -ENODATA;
-> +
-> +	ref = zl3073x_ref_state_get(zldev, index);
-> +
-> +	return sysfs_emit(buf, "%u\n", zl3073x_ref_meas_freq_get(ref));
-> +}
-> +
-> +static ssize_t freq_label_show(struct device *dev,
-> +			       struct device_attribute *devattr, char *buf)
-> +{
-> +	static const char * const labels[] = {
-> +		"REF0P", "REF0N", "REF1P", "REF1N", "REF2P",
-> +		"REF2N", "REF3P", "REF3N", "REF4P", "REF4N",
-> +	};
-> +	int index = to_sensor_dev_attr(devattr)->index;
-> +
-> +	return sysfs_emit(buf, "%s\n", labels[index]);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR_RO(freq0_input, freq_input, 0);
-> +static SENSOR_DEVICE_ATTR_RO(freq1_input, freq_input, 1);
-> +static SENSOR_DEVICE_ATTR_RO(freq2_input, freq_input, 2);
-> +static SENSOR_DEVICE_ATTR_RO(freq3_input, freq_input, 3);
-> +static SENSOR_DEVICE_ATTR_RO(freq4_input, freq_input, 4);
-> +static SENSOR_DEVICE_ATTR_RO(freq5_input, freq_input, 5);
-> +static SENSOR_DEVICE_ATTR_RO(freq6_input, freq_input, 6);
-> +static SENSOR_DEVICE_ATTR_RO(freq7_input, freq_input, 7);
-> +static SENSOR_DEVICE_ATTR_RO(freq8_input, freq_input, 8);
-> +static SENSOR_DEVICE_ATTR_RO(freq9_input, freq_input, 9);
-> +
-> +static SENSOR_DEVICE_ATTR_RO(freq0_label, freq_label, 0);
-> +static SENSOR_DEVICE_ATTR_RO(freq1_label, freq_label, 1);
-> +static SENSOR_DEVICE_ATTR_RO(freq2_label, freq_label, 2);
-> +static SENSOR_DEVICE_ATTR_RO(freq3_label, freq_label, 3);
-> +static SENSOR_DEVICE_ATTR_RO(freq4_label, freq_label, 4);
-> +static SENSOR_DEVICE_ATTR_RO(freq5_label, freq_label, 5);
-> +static SENSOR_DEVICE_ATTR_RO(freq6_label, freq_label, 6);
-> +static SENSOR_DEVICE_ATTR_RO(freq7_label, freq_label, 7);
-> +static SENSOR_DEVICE_ATTR_RO(freq8_label, freq_label, 8);
-> +static SENSOR_DEVICE_ATTR_RO(freq9_label, freq_label, 9);
-> +
-> +static struct attribute *zl3073x_freq_attrs[] = {
-> +	&sensor_dev_attr_freq0_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq0_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq1_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq1_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq2_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq2_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq3_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq3_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq4_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq4_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq5_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq5_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq6_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq6_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq7_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq7_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq8_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq8_label.dev_attr.attr,
-> +	&sensor_dev_attr_freq9_input.dev_attr.attr,
-> +	&sensor_dev_attr_freq9_label.dev_attr.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group zl3073x_freq_group = {
-> +	.attrs = zl3073x_freq_attrs,
-> +};
-> +
-> +static const struct attribute_group *zl3073x_hwmon_groups[] = {
-> +	&zl3073x_freq_group,
-> +	NULL,
-> +};
-> +
->   int zl3073x_hwmon_init(struct zl3073x_dev *zldev)
->   {
->   	struct device *hwmon;
-> @@ -62,6 +146,6 @@ int zl3073x_hwmon_init(struct zl3073x_dev *zldev)
->   	hwmon = devm_hwmon_device_register_with_info(zldev->dev, "zl3073x",
->   						     zldev,
->   						     &zl3073x_hwmon_chip_info,
-> -						     NULL);
-> +						     zl3073x_hwmon_groups);
->   	return PTR_ERR_OR_ZERO(hwmon);
->   }
+> v4:
+> - New patch in the series. Introduces a spinlock to protect the 64-bit
+>    next_access_backoff timestamp from torn reads/writes on 32-bit
+>    architectures.
+
+Unfortunately that makes timestamp handling very expensive, even for
+architectures not needing it.
+
+We'll have to make sure that all accesses (sysfs, thermal, and regulator)
+are serialized instead. I just browsed through the core code. Most of
+the accesses are already serialized, but I think the locking is missing
+in the regulator operations. We'll need to add the missing locks there.
+
+Thanks,
+Guenter
 
