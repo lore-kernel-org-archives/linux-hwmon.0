@@ -1,174 +1,288 @@
-Received: from quail.birch.relay.mailchannels.net (quail.birch.relay.mailchannels.net [23.83.209.151])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E7B757EA
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 10:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.209.151
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774175334; cv=pass; b=D29EmuDIv+n87owFMbWrGe6RhhUXQG+SeZ4jKBMm+zk54jqpTMXp5ogGNtSYrnVbjw8Zqs9rB98bXcvrJ84U26T0UgW71FrlmuZgi0dCr0CRsHk4HMInAwz8Bhrf8cym1Yw5E5q7idIth+TNvK+QOF3Q21BkbPGtUfkPzAEWYCU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774175334; c=relaxed/simple;
-	bh=v47EJn/kU7yPCqr5LvpX1/aD/tlYt1h3dsqODYDVgyE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=qd7TsdfATc+c8/p1IBpAoSvYYNyntgfZb0HIlQBs8nXyloeHfEqMK02rexNQEkypr2S/mRXRE0CLubwz/rN9X9vsy+ZdO7mvmSh2Cd0ajkaD9+DW3ZlJDWnX3vXEaWNw9nZvGrb0zf5I/fF2HaATzNlqVAc27ahR4g/E/uuxAQs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=guyboldon.com; spf=fail smtp.mailfrom=guyboldon.com; dkim=pass (2048-bit key) header.d=guyboldon.com header.i=@guyboldon.com header.b=Qx76WBgZ; arc=pass smtp.client-ip=23.83.209.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=guyboldon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=guyboldon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B758218AD4;
+	Sun, 22 Mar 2026 10:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774175591; cv=none; b=ZTbiXqnWjAMbyaA6a7YoS0Sz4Z4Vz1+7jkInWcBswmvPv0uwZ26jPtwBBZlAHZjDWoDQoUpd1tNmVTwnpi3aynX/OeCAA/tdwgYoGUxFYIGnQWHRFaNF8DRfvWy+RyFcw667zGv359kt9NK6dILyn77fJZznZ8sygD8gzDt8WiA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774175591; c=relaxed/simple;
+	bh=n5mS/0qW5g8GLERK26e6XbCnHHzgW4MYru319kurdTk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YuBuU61wnMqFMsoNADG28vafyD9GBskF/6l9WXiYe2VPCNJnhU2bncMNFvOxMtTi6POlhec3jNTlBslJ52Dj2tsdfD1XB5f4LpoVxclsckXJLY6kQMf5JEbTL8ZVi5N3YW/bjEMDa5yPttl+5SpCTOG49NkIVdBpP9vMjo0R/zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thehoffs.at; spf=pass smtp.mailfrom=thehoffs.at; dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b=MsP74pr6; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thehoffs.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thehoffs.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=guyboldon.com header.i=@guyboldon.com header.b="Qx76WBgZ"
-X-Sender-Id: a2hosting|x-authuser|gb@guyboldon.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 6F4F880056A
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 10:18:53 +0000 (UTC)
-Received: from nl1-sr2.supercp.com (trex-green-4.trex.outbound.svc.cluster.local [100.113.227.94])
-	(Authenticated sender: a2hosting)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 86464801157
-	for <linux-hwmon@vger.kernel.org>; Sun, 22 Mar 2026 10:18:52 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; d=mailchannels.net; s=arc-2022; cv=none;
-	t=1774174732;
-	b=d+9VJm0cHHbq/GUEPH7DtJM7QRe07Jy3AoY/Ccf0wPVCu8YCb/9plEQ34+gNYnLacY0LVP
-	eZ/9oMbpDTBagXWU+iRqLkOJUu3ZSrQR7SC4gK4Cf9j/Vtb6FzvmD+bpOcAvFz+t+ho7G5
-	UGxwV3BpssGbducHS1wWpqna1d5Fr3pNTWak1mGosH4wy6UmK3FZQMpzzIQuMGr+/KuSq+
-	23yWjW5xJJihEh6EY40IoSjWCknN9OPnK+zFViFSLJZwgfI/Pmf+Z3AvP8BtazPo5ONuys
-	thi8rMvjNr5bQ9nXrd4TqVDrspg6Pa5RK2m120F7HeSesIEaokUK65gLUA+dTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1774174732;
+	dkim=pass (2048-bit key) header.d=thehoffs.at header.i=@thehoffs.at header.b="MsP74pr6"
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4fdt1D6TmQz9tBc;
+	Sun, 22 Mar 2026 11:33:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thehoffs.at; s=MBO0001;
+	t=1774175584;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=v47EJn/kU7yPCqr5LvpX1/aD/tlYt1h3dsqODYDVgyE=;
-	b=YPCGOV+aUEViXqf50z8WK3oceLaoZWLrvI9l09YEI7zfrsAxWcBhLASi9QFYrpFJqolfC0
-	r1m39lth8g920YJ1KOpwNIW7V9juDuI3PUIogOn9l1eqbop1zuV7+VzpfR1HaJFRYDMPzG
-	hZDsLbTUre4gfoqkMFQm2Q9ZSsEdqYqir3aEY1OW0sifRJT8AnnZNjep1nVcaUBbG0+oQz
-	gV32l46mHxYR3slBFIrGjNcj0gqw6iTuRC83A0Wr5pFgQVTk4vkxlvly2dCE9WinTJrntF
-	Dpg62K+HLrIqWqysdEhq+0Mu8sWjyME0vcuTgxnggyNSo33/AfjDZfQEfSTbeQ==
-ARC-Authentication-Results: i=1;
-	rspamd-6d4cb6745-wtrg2;
-	auth=pass smtp.auth=a2hosting smtp.mailfrom=gb@guyboldon.com
-X-Sender-Id: a2hosting|x-authuser|gb@guyboldon.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: a2hosting|x-authuser|gb@guyboldon.com
-X-MailChannels-Auth-Id: a2hosting
-X-Shrill-Thoughtful: 4099a78a6ca5a101_1774174733237_1534262079
-X-MC-Loop-Signature: 1774174733237:3891133390
-X-MC-Ingress-Time: 1774174733236
-Received: from nl1-sr2.supercp.com (nl1-sr2.supercp.com [68.66.248.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-	by 100.113.227.94 (trex/7.1.5);
-	Sun, 22 Mar 2026 10:18:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=guyboldon.com; s=default; h=In-Reply-To:References:To:From:Subject:Cc:
-	Message-Id:Date:Content-Type:Content-Transfer-Encoding:Mime-Version:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=v47EJn/kU7yPCqr5LvpX1/aD/tlYt1h3dsqODYDVgyE=; b=Qx76WBgZuxuFZ7bMh5xZaRdiS+
-	VdpgoEajpIy43UKq8hXu6+DaCjb7j2GzzlS8dYd3CrYIwgaK3uYV7/voBklzb4DjJ3PEGxYr+wXIM
-	lNWf5yY1o0UpgM7fm1R0DepqUr+o+JmP5fURPShW7uqAxtXPCE9YA+2SBNWkLw4B1gNDK2X+/iivN
-	DGJAkPxYeaQHVdctFygXAnKYcWKWqomwj0liZKBrYg4tdLJ6kS/UJU/IyL2gVkMMD79TcHvFAP3m2
-	wmhzQvl/gkAODar4CsgrYZj9km8Jh0ylNkSq6HY4SXr4li/pldOQ3UIDdDrejkTl5A/sNT+uAfKV6
-	a4TaGyyA==;
-Received: from mailnull by nl1-sr2.supercp.com with spam-scanner (Exim 4.99.1)
-	(envelope-from <gb@guyboldon.com>)
-	id 1w4FtS-000000006SY-2LQm
-	for linux-hwmon@vger.kernel.org;
-	Sun, 22 Mar 2026 11:18:50 +0100
-X-ImunifyEmail-Filter-Score: -2.89
-X-ImunifyEmail-Filter-Version: 3.8.21/202603171242
-X-ImunifyEmail-Filter-Action: no action
-X-ImunifyEmail-Filter-Info: UkNWRF9UTFNfQUxMIEJBWUVTX0hBTSBBU04gTVZfQ0FTRSBJRV9WTF9
- 	BR0VfRE9NQUlOXzJXIElFX1ZMX0FHRV9FTUFJTF8yVyBGUk9NX0hBU1
- 	9ETiBUT19ETl9TT01FIFRPX01BVENIX0VOVlJDUFRfU09NRSBWRVJJT
- 	E9DS19DQiBGUk9NX0VRX0VOVkZST00gTUlNRV9VTktOT1dOIFJDVkRf
- 	Q09VTlRfT05FIE1JTUVfVFJBQ0UgSUVfVkxfQUdFX0FDQ09VTlRfMlc
- 	gQVJDX05BIF9EUlVHU19NTV9NQUxFIFJDVkRfVklBX1NNVFBfQVVUSC
- 	BNSURfUkhTX01BVENIX0ZST00gUkNQVF9DT1VOVF9GSVZF
-Received: from ip588648bf.dynamic.kabel-deutschland.de ([88.134.72.191]:52722 helo=localhost)
-	by nl1-sr2.supercp.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.99.1)
-	(envelope-from <gb@guyboldon.com>)
-	id 1w4FtR-000000006S0-2J9F;
-	Sun, 22 Mar 2026 11:18:49 +0100
+	 in-reply-to:in-reply-to:references:references;
+	bh=M8oPzVQc+tZ5nUk2ot2sdlgt2xlC3Dhg+iyDIXyIbgU=;
+	b=MsP74pr6WiuT3WbQrggeuBl13ivhk/IARMTAGZH9NaO4PLn1boZFoiXEt2JCQBStWRrCsq
+	njjLJD/nzdueZPXBbr0icIJikdH0F/ldxQ432JDVhAhwzRxXhSgonYFURQw0AzCHQhtk66
+	LbhyJVs/LaDvwdf6ozB4fbPqcExi21FF8FHtwYXCDEhOIs2OU3Ut8sFkGX9CB4xhSdgaru
+	bb1UNrMD+5ZfeS2P4AlWD5zCPW8eZDanGAq9tIGZzZuztXekVTMumjoxR4nm4O+eaAoT0z
+	JGMR/YcWLHAGVt3pDsKNE80zWaJ9YFWq3N3GigNQm+XXOsJR1z1GAQFk9/9XBQ==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of markus@thehoffs.at designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=markus@thehoffs.at
+From: Markus Hoffmann <markus@thehoffs.at>
+To: linux-hwmon@vger.kernel.org
+Cc: jdelvare@suse.com,
+	linux@roeck-us.net,
+	linux-kernel@vger.kernel.org,
+	Markus Hoffmann <markus@thehoffs.at>
+Subject: [PATCH v3] hwmon: (it87) Add support for IT8689E
+Date: Sun, 22 Mar 2026 10:33:01 +0000
+Message-ID: <20260322103301.18112-1-markus@thehoffs.at>
+In-Reply-To: <20260320144323.4870-1-markus@thehoffs.at>
+References: <20260320144323.4870-1-markus@thehoffs.at>
 Precedence: bulk
 X-Mailing-List: linux-hwmon@vger.kernel.org
 List-Id: <linux-hwmon.vger.kernel.org>
 List-Subscribe: <mailto:linux-hwmon+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-hwmon+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 22 Mar 2026 11:18:49 +0100
-Message-Id: <DH98GAR01T3A.2T18C7CAX3Q0Q@guyboldon.com>
-Cc: <W_Armin@gmx.de>, <jan.claussen10@web.de>
-Subject: Re: Weird Dell SMM bug since 6.18
-From: "Guy Boldon" <gb@guyboldon.com>
-To: "Guenter Roeck" <linux@roeck-us.net>, "Guy Boldon" <gb@guyboldon.com>,
- <linux-hwmon@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <b476fdf2-1ce6-46ca-8c98-13e0ae1613b3@web.de>
- <97b6c751-0115-4d00-b212-352f37e5914d@roeck-us.net>
- <DH1W16PFES8U.3MBLJIJPV48JQ@web.de>
- <f9bcdb69-6ad7-409a-afc3-bb5f277ef0ba@gmx.de>
- <02d1330f-1439-4291-bbb2-289122eedd7c@roeck-us.net>
- <DH4H9QQI4OQ9.30PQ935ZJERT0@web.de>
- <62d86acf-6a3f-4bb2-9d81-cf47bd1461e9@roeck-us.net>
- <fd277150-af4b-4bd5-af7e-868c9678eb1e@gmx.de>
- <20260319094944.239871-1-gb@guyboldon.com>
- <c25f34cb-6069-42c4-a7af-bca27c6a411f@roeck-us.net>
-In-Reply-To: <c25f34cb-6069-42c4-a7af-bca27c6a411f@roeck-us.net>
-X-AuthUser: gb@guyboldon.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4fdt1D6TmQz9tBc
 
-Hi Guenter,
+Add support for the ITE IT8689E Super I/O chip. The IT8689E supports
+newer autopwm, 12mV ADC, 16-bit fans, six fans, six PWM channels,
+PWM frequency 2, six temperature inputs, AVCC3, temperature offset,
+and fan on/off control.
 
-Thank you for the explanations, much appreciated.=20
+Give it8689 its own GPIO configuration block in it87_find() rather
+than sharing the it8620/it8628 block. The shared block reads
+IT87_SIO_PINX2_REG and either marks IN3 as internal AVCC or skips
+IN9. Because it8689 declares FEAT_AVCC3, IN9 is already marked as
+always-internal before the GPIO block is reached; applying the PINX2
+check would either create duplicate AVCC labels on IN3 and IN9 or
+incorrectly skip IN9.
 
+Also update Documentation/hwmon/it87.rst and drivers/hwmon/Kconfig to
+document the newly supported chip.
 
-On Thu Mar 19, 2026 at 4:52 PM CET, Guenter Roeck wrote:
-> The use of -ENODATA in hwmon to report that a value is not available is
-> relatively new and isn't even fully documented in the sysfs ABI (admitted=
-ly
-> a major oversight). The major driver for its use is that it more accurate=
-ly
-> reflects reality as reported by the "sensors" command if an attribute val=
-ue
-> is not available (sensors reports "N/A" instead of an error message if it
-> gets an -ENODATA error).
+Signed-off-by: Markus Hoffmann <markus@thehoffs.at>
+---
+Changes in v3:
+- Fix AVCC/PINX2 conflict: give it8689 its own GPIO block instead of
+  sharing the it8620/it8628 block. The shared block applies an
+  IT87_SIO_PINX2_REG check that is incompatible with FEAT_AVCC3:
+  it either creates duplicate AVCC labels on IN3 and IN9, or skips
+  IN9 while its label remains visible. it8622 (also FEAT_AVCC3) is
+  handled the same way for the same reason.
+- Add FEAT_TEMP_OFFSET: verified on hardware, temp[1-3]_offset sysfs
+  attributes respond correctly.
+- Add FEAT_FANCTL_ONOFF: verified on hardware, writing 0 to
+  pwm1_enable is accepted.
+- Add Documentation/hwmon/it87.rst entry for IT8689E, update the chip
+  list in the Description section, add IT8689E description paragraph,
+  and fix the in9 note to also list IT8622E (which also has FEAT_AVCC3).
+- Add IT8689E to drivers/hwmon/Kconfig help text.
 
-Ah, it seemed somewhat new and that makes sense. -ENODATA converts to
-a clean N/A without an error message. We will adjust to handle -ENODATA=20
-going forward.
+Changes in v2:
+- Add it8689 to the GPIO pin multiplexing checks in it87_find() to
+  avoid ghost fans and non-functional PWM controls.
 
->> As a related point: gpd_fan returns -EOPNOTSUPP rather than -ENODATA
->> when in auto mode, and documents that behavior in the kernel docs. The
->
-> Please feel free to submit a patch to fix that.
+ Documentation/hwmon/it87.rst | 26 +++++++++++----
+ drivers/hwmon/Kconfig        |  4 +--
+ drivers/hwmon/it87.c         | 61 +++++++++++++++++++++++++++++++++++-
+ 3 files changed, 82 insertions(+), 9 deletions(-)
 
-I'll submit a patch for that.
-
-> The best we can do is to find a means to improve consistency, but as you
-> can see here even that is difficult because different people will have
-> different opinions on how that consistency should look like. Error respon=
-se
-> will vary, as will attribute visibility.
->
-> If you would like to get actively involved, please feel free to submit pa=
-tches
-> improving the documentation (Documentation/hwmon/sysfs-interface.rst,
-> Documentation/ABI/testing/sysfs-class-hwmon, and or driver specific
-> documentation) as well as driver patches to help improve consistency acro=
-ss
-> drivers.
-
-I agree and I would like to help improve consistency for the interface. I'l=
-l
-look at the docs as well. CoolerControl is a direct consumer of this interf=
-ace
-across a large range of drivers, but improving consistency, I think, benefi=
-ts=20
-anyone interacting with more than a handful of drivers.
-
-Thanks again,
-Guy
+diff --git a/Documentation/hwmon/it87.rst b/Documentation/hwmon/it87.rst
+index 5cef4f265..fc1c90b02 100644
+--- a/Documentation/hwmon/it87.rst
++++ b/Documentation/hwmon/it87.rst
+@@ -25,6 +25,14 @@ Supported chips:
+ 
+     Datasheet: Not publicly available
+ 
++  * IT8689E
++
++    Prefix: 'it8689'
++
++    Addresses scanned: from Super I/O config space (8 I/O ports)
++
++    Datasheet: Not publicly available
++
+   * IT8705F
+ 
+     Prefix: 'it87'
+@@ -228,9 +236,9 @@ Description
+ -----------
+ 
+ This driver implements support for the IT8603E, IT8620E, IT8623E, IT8628E,
+-IT8705F, IT8712F, IT8716F, IT8718F, IT8720F, IT8721F, IT8726F, IT8728F, IT8732F,
+-IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E,
+-IT8792E/IT8795E, IT87952E and SiS950 chips.
++IT8689E, IT8705F, IT8712F, IT8716F, IT8718F, IT8720F, IT8721F, IT8726F,
++IT8728F, IT8732F, IT8758E, IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F,
++IT8786E, IT8790E, IT8792E/IT8795E, IT87952E and SiS950 chips.
+ 
+ These chips are 'Super I/O chips', supporting floppy disks, infrared ports,
+ joysticks and other miscellaneous stuff. For hardware monitoring, they
+@@ -274,6 +282,9 @@ of the fan is not supported (value 0 of pwmX_enable).
+ The IT8620E and IT8628E are custom designs, hardware monitoring part is similar
+ to IT8728F. It only supports 16-bit fan mode. Both chips support up to 6 fans.
+ 
++The IT8689E supports newer autopwm, 12mV ADC, 16-bit fans, six fans, six PWM
++channels, PWM frequency 2, six temperature inputs, and AVCC3 (in9).
++
+ The IT8790E, IT8792E/IT8795E and IT87952E support up to 3 fans. 16-bit fan
+ mode is always enabled.
+ 
+@@ -301,12 +312,15 @@ of 0.016 volt.  IT8603E, IT8721F/IT8758E and IT8728F can measure between 0 and
+ 2.8 volts with a resolution of 0.0109 volt.  The battery voltage in8 does not
+ have limit registers.
+ 
+-On the IT8603E, IT8620E, IT8628E, IT8721F/IT8758E, IT8732F, IT8781F, IT8782F,
+-and IT8783E/F, some voltage inputs are internal and scaled inside the chip:
++On the IT8603E, IT8620E, IT8628E, IT8689E, IT8721F/IT8758E, IT8732F, IT8781F,
++IT8782F, and IT8783E/F, some voltage inputs are internal and scaled inside the
++chip:
++
+ * in3 (optional)
+ * in7 (optional for IT8781F, IT8782F, and IT8783E/F)
+ * in8 (always)
+-* in9 (relevant for IT8603E only)
++* in9 (IT8603E, IT8622E, and IT8689E: always AVCC3; others: optional)
++
+ The driver handles this transparently so user-space doesn't have to care.
+ 
+ The VID lines (IT8712F/IT8716F/IT8718F/IT8720F) encode the core voltage value:
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 328867242..85e29be93 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -936,8 +936,8 @@ config SENSORS_IT87
+ 	  If you say yes here you get support for ITE IT8705F, IT8712F, IT8716F,
+ 	  IT8718F, IT8720F, IT8721F, IT8726F, IT8728F, IT8732F, IT8758E,
+ 	  IT8771E, IT8772E, IT8781F, IT8782F, IT8783E/F, IT8786E, IT8790E,
+-	  IT8603E, IT8620E, IT8623E, and IT8628E sensor chips, and the SiS950
+-	  clone.
++	  IT8603E, IT8620E, IT8623E, IT8628E, and IT8689E sensor chips, and
++	  the SiS950 clone.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called it87.
+diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
+index 5cfb98a05..5fd310662 100644
+--- a/drivers/hwmon/it87.c
++++ b/drivers/hwmon/it87.c
+@@ -16,6 +16,7 @@
+  *            IT8622E  Super I/O chip w/LPC interface
+  *            IT8623E  Super I/O chip w/LPC interface
+  *            IT8628E  Super I/O chip w/LPC interface
++ *            IT8689E  Super I/O chip w/LPC interface
+  *            IT8705F  Super I/O chip w/LPC interface
+  *            IT8712F  Super I/O chip w/LPC interface
+  *            IT8716F  Super I/O chip w/LPC interface
+@@ -64,7 +65,7 @@
+ 
+ enum chips { it87, it8712, it8716, it8718, it8720, it8721, it8728, it8732,
+ 	     it8771, it8772, it8781, it8782, it8783, it8786, it8790,
+-	     it8792, it8603, it8620, it8622, it8628, it87952 };
++	     it8792, it8603, it8620, it8622, it8628, it8689, it87952 };
+ 
+ static struct platform_device *it87_pdev[2];
+ 
+@@ -162,6 +163,7 @@ static inline void superio_exit(int ioreg, bool noexit)
+ #define IT8622E_DEVID 0x8622
+ #define IT8623E_DEVID 0x8623
+ #define IT8628E_DEVID 0x8628
++#define IT8689E_DEVID 0x8689
+ #define IT87952E_DEVID 0x8695
+ 
+ /* Logical device 4 (Environmental Monitor) registers */
+@@ -502,6 +504,15 @@ static const struct it87_devices it87_devices[] = {
+ 		  | FEAT_SIX_TEMP | FEAT_VIN3_5V | FEAT_FANCTL_ONOFF,
+ 		.peci_mask = 0x07,
+ 	},
++	[it8689] = {
++		.name = "it8689",
++		.model = "IT8689E",
++		.features = FEAT_NEWER_AUTOPWM | FEAT_12MV_ADC | FEAT_16BIT_FANS
++		  | FEAT_TEMP_OFFSET | FEAT_SIX_FANS | FEAT_IN7_INTERNAL
++		  | FEAT_SIX_PWM | FEAT_PWM_FREQ2 | FEAT_SIX_TEMP | FEAT_AVCC3
++		  | FEAT_FANCTL_ONOFF,
++		.smbus_bitmap = BIT(1) | BIT(2),
++	},
+ 	[it87952] = {
+ 		.name = "it87952",
+ 		.model = "IT87952E",
+@@ -2785,6 +2796,9 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 	case IT8628E_DEVID:
+ 		sio_data->type = it8628;
+ 		break;
++	case IT8689E_DEVID:
++		sio_data->type = it8689;
++		break;
+ 	case IT87952E_DEVID:
+ 		sio_data->type = it87952;
+ 		break;
+@@ -3000,6 +3014,51 @@ static int __init it87_find(int sioaddr, unsigned short *address,
+ 		else
+ 			sio_data->skip_in |= BIT(9);
+ 
++		sio_data->beep_pin = superio_inb(sioaddr,
++						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
++	} else if (sio_data->type == it8689) {
++		int reg;
++
++		superio_select(sioaddr, GPIO);
++
++		/* Check for pwm5 */
++		reg = superio_inb(sioaddr, IT87_SIO_GPIO1_REG);
++		if (reg & BIT(6))
++			sio_data->skip_pwm |= BIT(4);
++
++		/* Check for fan4, fan5 */
++		reg = superio_inb(sioaddr, IT87_SIO_GPIO2_REG);
++		if (!(reg & BIT(5)))
++			sio_data->skip_fan |= BIT(3);
++		if (!(reg & BIT(4)))
++			sio_data->skip_fan |= BIT(4);
++
++		/* Check for pwm3, fan3 */
++		reg = superio_inb(sioaddr, IT87_SIO_GPIO3_REG);
++		if (reg & BIT(6))
++			sio_data->skip_pwm |= BIT(2);
++		if (reg & BIT(7))
++			sio_data->skip_fan |= BIT(2);
++
++		/* Check for pwm4 */
++		reg = superio_inb(sioaddr, IT87_SIO_GPIO4_REG);
++		if (reg & BIT(2))
++			sio_data->skip_pwm |= BIT(3);
++
++		/* Check for pwm2, fan2 */
++		reg = superio_inb(sioaddr, IT87_SIO_GPIO5_REG);
++		if (reg & BIT(1))
++			sio_data->skip_pwm |= BIT(1);
++		if (reg & BIT(2))
++			sio_data->skip_fan |= BIT(1);
++		/* Check for pwm6, fan6 */
++		if (!(reg & BIT(7))) {
++			sio_data->skip_pwm |= BIT(5);
++			sio_data->skip_fan |= BIT(5);
++		}
++
++		/* in9 (AVCC3) is always internal, no PINX2 check needed */
++
+ 		sio_data->beep_pin = superio_inb(sioaddr,
+ 						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
+ 	} else if (sio_data->type == it8622) {
+-- 
+2.53.0
 
